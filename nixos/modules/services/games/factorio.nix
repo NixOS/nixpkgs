@@ -294,6 +294,10 @@ in
       };
     };
 
+<<<<<<< HEAD
     networking.firewall.allowedUDPPorts = optional cfg.openFirewall cfg.port;
+=======
+    networking.firewall.allowedUDPPorts = if cfg.openFirewall then [ cfg.port ] else [];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

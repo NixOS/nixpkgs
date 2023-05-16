@@ -18,7 +18,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gst-editing-services";
+<<<<<<< HEAD
   version = "1.22.5";
+=======
+  version = "1.22.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   outputs = [
     "out"
@@ -27,7 +31,11 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://gstreamer.freedesktop.org/src/${pname}/${pname}-${version}.tar.xz";
+<<<<<<< HEAD
     hash = "sha256-vM3TvWHYaCmxbODiBtthsz95SsF5JCP558xl110aMbU=";
+=======
+    hash = "sha256-RTsUZPw4V94mmnyw69lmr+Ahcdl772cqC4oKbUPgzr8=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [
@@ -45,6 +53,10 @@ stdenv.mkDerivation rec {
   buildInputs = [
     bash-completion
     libxml2
+<<<<<<< HEAD
+=======
+    gobject-introspection
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     gst-devtools
     python3
   ];
@@ -68,6 +80,9 @@ stdenv.mkDerivation rec {
     homepage = "https://gstreamer.freedesktop.org";
     license = licenses.lgpl2Plus;
     platforms = platforms.unix;
+<<<<<<< HEAD
     maintainers = with maintainers; [ lilyinstarlight ];
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

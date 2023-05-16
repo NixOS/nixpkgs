@@ -30,13 +30,21 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-greeter";
+<<<<<<< HEAD
   version = "7.0.0";
+=======
+  version = "6.1.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "greeter";
     rev = version;
+<<<<<<< HEAD
     sha256 = "sha256-m/xuaMCAPoqhl/M547mdafBPBu3UhHmVmBIUKQoS5L8=";
+=======
+    sha256 = "sha256-6rjZOX9JOTjZwqWVWTtKjGNy8KgWllE9VQZzwhuBAwE=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   patches = [

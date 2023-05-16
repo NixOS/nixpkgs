@@ -37,6 +37,9 @@ in {
     ] ++ extraFlags);
 
     ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
+<<<<<<< HEAD
     RestrictAddressFamilies = [ "AF_INET" "AF_INET6" "AF_UNIX" ];
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

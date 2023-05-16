@@ -1,6 +1,12 @@
+<<<<<<< HEAD
 { lib, stdenv, fetchurl, unzip, graylog-5_1 }:
 
 with lib;
+=======
+{ pkgs,  lib, stdenv, fetchurl, unzip, graylog }:
+
+with pkgs.lib;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 let
   glPlugin = a@{
@@ -17,7 +23,11 @@ let
       dontUnpack = true;
       nativeBuildInputs = [ unzip ];
       meta = a.meta // {
+<<<<<<< HEAD
         platforms = graylog-5_1.meta.platforms;
+=======
+        platforms = graylog.meta.platforms;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         maintainers = (a.meta.maintainers or []) ++ [ maintainers.fadenb ];
         sourceProvenance = with sourceTypes; [ binaryBytecode ];
       };
@@ -216,6 +226,7 @@ in {
       description = "Can notify Slack or Mattermost channels about triggered alerts in Graylog (Alarm Callback)";
     };
   };
+<<<<<<< HEAD
   smseagle = glPlugin rec {
     name = "graylog-smseagle-${version}";
     pluginName = "graylog-plugin-smseagle";
@@ -230,6 +241,8 @@ in {
       license = lib.licenses.gpl3Only;
     };
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   snmp = glPlugin rec {
     name = "graylog-snmp-${version}";
     pluginName = "graylog-plugin-snmp";
@@ -256,6 +269,7 @@ in {
       description = "Correlate proton density to the response time of your app and the ion temperature to your exception rate.";
     };
   };
+<<<<<<< HEAD
   splunk = glPlugin rec {
     name = "graylog-splunk-${version}";
     pluginName = "graylog-plugin-splunk";
@@ -270,6 +284,8 @@ in {
       license = lib.licenses.gpl3Only;
     };
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   twiliosms = glPlugin rec {
     name = "graylog-twiliosms-${version}";
     pluginName = "graylog-plugin-twiliosms";

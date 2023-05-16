@@ -47,6 +47,7 @@ self: super: {
   unix = null;
   # GHC only bundles the xhtml library if haddock is enabled, check if this is
   # still the case when updating: https://gitlab.haskell.org/ghc/ghc/-/blob/0198841877f6f04269d6050892b98b5c3807ce4c/ghc.mk#L463
+<<<<<<< HEAD
   xhtml = if self.ghc.hasHaddock or true then null else self.xhtml_3000_3_0_0;
 
   # Need the Cabal-syntax-3.6.0.0 fake package for Cabal < 3.8 to allow callPackage and the constraint solver to work
@@ -74,6 +75,12 @@ self: super: {
   # For GHC < 9.4, some packages need data-array-byte as an extra dependency
   hashable = addBuildDepends [ self.data-array-byte ] super.hashable;
   primitive = addBuildDepends [ self.data-array-byte ] super.primitive;
+=======
+  xhtml = if self.ghc.hasHaddock or true then null else self.xhtml_3000_2_2_1;
+
+  # weeder == 2.5.* requires GHC 9.4
+  weeder = doDistribute self.weeder_2_4_1;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   # Jailbreaks & Version Updates
   hashable-time = doJailbreak super.hashable-time;
@@ -98,6 +105,7 @@ self: super: {
   # For "ghc-lib" flag see https://github.com/haskell/haskell-language-server/issues/3185#issuecomment-1250264515
   hlint = enableCabalFlag "ghc-lib" super.hlint;
 
+<<<<<<< HEAD
   # 0.2.2.3 requires Cabal >= 3.8
   shake-cabal = doDistribute self.shake-cabal_0_2_2_2;
 
@@ -108,6 +116,11 @@ self: super: {
   # https://github.com/clash-lang/clash-compiler/blob/f0f6275e19b8c672f042026c478484c5fd45191d/README.md#ghc-compatibility
   clash-prelude = dontDistribute (markBroken super.clash-prelude);
 
+=======
+  # https://github.com/sjakobi/bsb-http-chunked/issues/38
+  bsb-http-chunked = dontCheck super.bsb-http-chunked;
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   # 2022-08-01: Tests are broken on ghc 9.2.4: https://github.com/wz1000/HieDb/issues/46
   hiedb = dontCheck super.hiedb;
 
@@ -119,10 +132,13 @@ self: super: {
   inline-c-cpp =
     (if isDarwin then appendConfigureFlags ["--ghc-option=-fcompact-unwind"] else x: x)
     super.inline-c-cpp;
+<<<<<<< HEAD
 
   # A given major version of ghc-exactprint only supports one version of GHC.
   ghc-exactprint = super.ghc-exactprint_1_5_0;
 
   # Requires GHC < 9.4
   ghc-source-gen = doDistribute (unmarkBroken super.ghc-source-gen);
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }

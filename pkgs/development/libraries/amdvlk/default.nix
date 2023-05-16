@@ -25,13 +25,21 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "amdvlk";
+<<<<<<< HEAD
   version = "2023.Q3.1";
+=======
+  version = "2023.Q2.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchRepoProject {
     name = "${pname}-src";
     manifest = "https://github.com/GPUOpen-Drivers/AMDVLK.git";
     rev = "refs/tags/v-${version}";
+<<<<<<< HEAD
     sha256 = "W+igZbdQG1L62oGJa2Rz0n8YkTsZFqSm7w8VFfPu8k0=";
+=======
+    sha256 = "znjv50seqN2Rdzwnu/5ks6q1uiUacM/Z5fzMyCgv0b8=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   buildInputs = [

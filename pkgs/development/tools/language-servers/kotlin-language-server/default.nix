@@ -2,10 +2,17 @@
 
 stdenv.mkDerivation rec {
   pname = "kotlin-language-server";
+<<<<<<< HEAD
   version = "1.3.5";
   src = fetchzip {
     url = "https://github.com/fwcd/kotlin-language-server/releases/download/${version}/server.zip";
     hash = "sha256-hoZDbhedauW1TK78rX37Gwn/6OWLXZzy8wKsUrbTmKI=";
+=======
+  version = "1.3.3";
+  src = fetchzip {
+    url = "https://github.com/fwcd/kotlin-language-server/releases/download/${version}/server.zip";
+    hash = "sha256-m0AgPJ8KgzOxHPB33pgSFe7JQxidPkhDUga56LuaDBA=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   dontBuild = true;
@@ -34,6 +41,9 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/fwcd/kotlin-language-server/blob/${version}/CHANGELOG.md";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
+<<<<<<< HEAD
     sourceProvenance = [ lib.sourceTypes.binaryBytecode ];
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

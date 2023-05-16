@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 { lib, buildPackages, callPackage, fetchFromGitHub, fetchYarnDeps, mkYarnPackage }:
 let
   common = callPackage ./common.nix { };
@@ -14,6 +15,11 @@ let
 
     vendorHash = "sha256-+BfxCyg0KkDQpHt/wycy/8CTG6YBA/VJvJFhhzUnSiQ=";
   });
+=======
+{ lib, callPackage, fetchFromGitHub, fetchYarnDeps, mkYarnPackage }:
+let
+  common = callPackage ./common.nix { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 in
 mkYarnPackage {
   pname = "woodpecker-frontend";
@@ -22,6 +28,7 @@ mkYarnPackage {
   src = "${common.src}/web";
 
   packageJSON = ./woodpecker-package.json;
+<<<<<<< HEAD
   yarnLock = ./yarn.lock;
 
   offlineCache = fetchYarnDeps {
@@ -35,6 +42,17 @@ mkYarnPackage {
     runHook preBuild
 
     yarn --offline build
+=======
+  offlineCache = fetchYarnDeps {
+    yarnLock = "${common.src}/web/yarn.lock";
+    sha256 = common.yarnSha256;
+  };
+
+  buildPhase = ''
+    runHook preBuild
+
+    yarn build
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     runHook postBuild
   '';

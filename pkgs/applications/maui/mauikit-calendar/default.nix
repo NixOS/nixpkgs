@@ -14,6 +14,11 @@
 mkDerivation {
   pname = "mauikit-calendar";
 
+<<<<<<< HEAD
+=======
+  patches = [ ./add-akonadi-calendar.patch ];
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nativeBuildInputs = [
     cmake
     extra-cmake-modules

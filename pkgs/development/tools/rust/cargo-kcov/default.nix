@@ -30,6 +30,10 @@ rustPlatform.buildRustPackage rec {
     description = "Cargo subcommand to run kcov to get coverage report on Linux";
     homepage = "https://github.com/kennytm/cargo-kcov";
     license = with licenses; [ mit ];
+<<<<<<< HEAD
     maintainers = with maintainers; [ saschagrunert matthiasbeyer ];
+=======
+    maintainers = with maintainers; [ saschagrunert ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

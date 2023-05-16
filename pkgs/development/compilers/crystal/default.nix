@@ -17,8 +17,12 @@
 , libxml2
 , libyaml
 , libffi
+<<<<<<< HEAD
 , llvmPackages_13
 , llvmPackages_15
+=======
+, llvmPackages
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , makeWrapper
 , openssl
 , pcre2
@@ -42,6 +46,10 @@ let
   };
 
   arch = archs.${stdenv.system} or (throw "system ${stdenv.system} not supported");
+<<<<<<< HEAD
+=======
+  isAarch64Darwin = stdenv.system == "aarch64-darwin";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nativeCheckInputs = [ git gmp openssl readline libxml2 libyaml libffi ];
 
@@ -54,6 +62,7 @@ let
       "https://github.com/crystal-lang/crystal/releases/download/${version}/crystal-${version}-${toString rel}-${arch}.tar.gz";
 
   genericBinary = { version, sha256s, rel ? 1 }:
+<<<<<<< HEAD
   stdenv.mkDerivation rec {
     pname = "crystal-binary";
     inherit version;
@@ -77,11 +86,39 @@ let
     , sha256
     , binary
     , llvmPackages
+=======
+    stdenv.mkDerivation rec {
+      pname = "crystal-binary";
+      inherit version;
+
+      src = fetchurl {
+        url = binaryUrl version rel;
+        sha256 = sha256s.${stdenv.system};
+      };
+
+      buildCommand = ''
+        mkdir -p $out
+        tar --strip-components=1 -C $out -xf ${src}
+        patchShebangs $out/bin/crystal
+      '';
+
+      meta.platforms = lib.attrNames sha256s;
+    };
+
+  generic = (
+    { version
+    , sha256
+    , binary
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     , doCheck ? true
     , extraBuildInputs ? [ ]
     , buildFlags ? [ "all" "docs" "release=1"]
     }:
+<<<<<<< HEAD
     stdenv.mkDerivation (finalAttrs: {
+=======
+    lib.fix (compiler: stdenv.mkDerivation (finalAttrs: {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       pname = "crystal";
       inherit buildFlags doCheck version;
 
@@ -199,9 +236,12 @@ let
         wrapProgram $bin/bin/crystal \
           --suffix PATH : ${lib.makeBinPath [ pkg-config llvmPackages.clang which ]} \
           --suffix CRYSTAL_PATH : lib:$lib/crystal \
+<<<<<<< HEAD
           --suffix PKG_CONFIG_PATH : ${
             lib.makeSearchPathOutput "dev" "lib/pkgconfig" finalAttrs.buildInputs
           } \
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           --suffix CRYSTAL_LIBRARY_PATH : ${
             lib.makeLibraryPath finalAttrs.buildInputs
           }
@@ -239,7 +279,11 @@ let
 
       passthru.buildBinary = binary;
       passthru.buildCrystalPackage = callPackage ./build-package.nix {
+<<<<<<< HEAD
         crystal = finalAttrs.finalPackage;
+=======
+        crystal = compiler;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       };
 
       meta = with lib; {
@@ -247,9 +291,17 @@ let
         description = "A compiled language with Ruby like syntax and type inference";
         homepage = "https://crystal-lang.org/";
         license = licenses.asl20;
+<<<<<<< HEAD
         maintainers = with maintainers; [ david50407 manveru peterhoeg donovanglover ];
       };
     });
+=======
+        maintainers = with maintainers; [ david50407 manveru peterhoeg ];
+      };
+    }))
+  );
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 in
 rec {
   binaryCrystal_1_2 = genericBinary {
@@ -266,7 +318,10 @@ rec {
     version = "1.2.2";
     sha256 = "sha256-nyOXhsutVBRdtJlJHe2dALl//BUXD1JeeQPgHU4SwiU=";
     binary = binaryCrystal_1_2;
+<<<<<<< HEAD
     llvmPackages = llvmPackages_13;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     extraBuildInputs = [ libatomic_ops ];
   };
 
@@ -274,6 +329,7 @@ rec {
     version = "1.7.3";
     sha256 = "sha256-ULhLGHRIZbsKhaMvNhc+W74BwNgfEjHcMnVNApWY+EE=";
     binary = binaryCrystal_1_2;
+<<<<<<< HEAD
     llvmPackages = llvmPackages_13;
   };
 
@@ -292,4 +348,15 @@ rec {
   };
 
   crystal = crystal_1_9;
+=======
+  };
+
+  crystal_1_8 = generic {
+    version = "1.8.1";
+    sha256 = "sha256-t+1vM1m62UftCvfa90Dg6nqt6Zseh/GP/Gc1VfOa4+c=";
+    binary = binaryCrystal_1_2;
+  };
+
+  crystal = crystal_1_8;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }

@@ -2,7 +2,11 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "victor-mono";
+<<<<<<< HEAD
   version = "1.5.5";
+=======
+  version = "1.5.4";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   # Upstream prefers we download from the website,
   # but we really insist on a more versioned resource.
@@ -14,7 +18,11 @@ stdenvNoCC.mkDerivation rec {
   src = fetchzip {
     url = "https://github.com/rubjo/victor-mono/raw/v${version}/public/VictorMonoAll.zip";
     stripRoot = false;
+<<<<<<< HEAD
     hash = "sha256-l8XeKE9PtluiazZO0PXfkGCcnm5o+VZdL7NZ6w0tp80=";
+=======
+    hash = "sha256-E8j1bfYrM8yRtasiwgTvyE4EYx2LyAbmw3MXH1l+owk=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   installPhase = ''

@@ -10,12 +10,20 @@
 
 stdenv.mkDerivation rec {
   pname = "flac";
+<<<<<<< HEAD
   version = "1.4.3";
+=======
+  version = "1.4.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchurl {
     url = "http://downloads.xiph.org/releases/flac/${pname}-${version}.tar.xz";
     # Official checksum is published at https://github.com/xiph/flac/releases/tag/${version}
+<<<<<<< HEAD
     hash = "sha256-bFjmnNIjSPRBuGEJK4JeWR0Lgi4QbebrDuTQXScgW3A=";
+=======
+    sha256 = "sha256-4yLVih9I0j2d049DJnKGX2955zpvnMWl9X/KqD61qOQ=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

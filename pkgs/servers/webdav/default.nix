@@ -11,7 +11,11 @@ buildGoModule rec {
     sha256 = "sha256-4rgDO1vItmmCRXRiO24MPa9IPzrsfzCWLH6hl6oKkxk=";
   };
 
+<<<<<<< HEAD
   vendorHash = "sha256-az+EasmKitFPWD5JfKaSKZGok/n/dPmIv90RiL750KY=";
+=======
+  vendorSha256 = "sha256-az+EasmKitFPWD5JfKaSKZGok/n/dPmIv90RiL750KY=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   meta = with lib; {
     description = "Simple WebDAV server";

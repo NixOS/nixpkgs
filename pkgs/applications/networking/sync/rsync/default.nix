@@ -56,8 +56,13 @@ stdenv.mkDerivation rec {
     description = "Fast incremental file transfer utility";
     homepage = "https://rsync.samba.org/";
     license = licenses.gpl3Plus;
+<<<<<<< HEAD
     mainProgram = "rsync";
     maintainers = with lib.maintainers; [ ehmry kampfschlaefer ivan ];
     platforms = platforms.unix;
+=======
+    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [ ehmry kampfschlaefer ivan ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

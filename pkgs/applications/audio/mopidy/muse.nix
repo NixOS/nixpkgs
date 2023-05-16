@@ -1,10 +1,18 @@
+<<<<<<< HEAD
 { lib, pythonPackages, fetchPypi, mopidy }:
+=======
+{ lib, pythonPackages, mopidy }:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 pythonPackages.buildPythonApplication rec {
   pname = "mopidy-muse";
   version = "0.0.27";
 
+<<<<<<< HEAD
   src = fetchPypi {
+=======
+  src = pythonPackages.fetchPypi {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     inherit version;
     pname = "Mopidy-Muse";
     sha256 = "0jx9dkgxr07avzz9zskzhqy98zsxkdrf7iid2ax5vygwf8qsx8ks";

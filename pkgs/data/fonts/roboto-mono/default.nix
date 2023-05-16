@@ -51,7 +51,11 @@ stdenv.mkDerivation {
     })
   ];
 
+<<<<<<< HEAD
   sourceRoot = ".";
+=======
+  sourceRoot = "./";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   unpackCmd = ''
     ttfName=$(basename $(stripHash $curSrc))

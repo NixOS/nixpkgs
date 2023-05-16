@@ -32,9 +32,12 @@ in appleDerivation {
 
     substituteInPlace Makefile --replace perl true
 
+<<<<<<< HEAD
     substituteInPlace colldef.tproj/scan.l \
       --replace 'static orderpass = 0;' 'static int orderpass = 0;'
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     for subproject in colldef mklocale monetdef msgdef numericdef timedef; do
       substituteInPlace usr-share-locale.tproj/$subproject/BSDmakefile \
         --replace /usr/share/locale "" \
@@ -45,10 +48,13 @@ in appleDerivation {
 
   preBuild = ''
     cp -r --no-preserve=all ${recentAdvCmds}/colldef .
+<<<<<<< HEAD
 
     substituteInPlace colldef/scan.l \
       --replace 'static orderpass = 0;' 'static int orderpass = 0;'
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     pushd colldef
     mv locale/collate.h .
     flex -t -8 -i scan.l > scan.c

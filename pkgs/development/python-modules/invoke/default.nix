@@ -2,7 +2,11 @@
 , bash
 , buildPythonPackage
 , fetchPypi
+<<<<<<< HEAD
 , stdenv
+=======
+, pythonOlder
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 buildPythonPackage rec {
@@ -26,6 +30,7 @@ buildPythonPackage rec {
     "invoke"
   ];
 
+<<<<<<< HEAD
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     mkdir -p $out/share/{bash-completion/completions,fish/vendor_completions.d,zsh/site-functions}
     $out/bin/inv --print-completion-script=zsh >$out/share/zsh/site-functions/_inv
@@ -33,6 +38,8 @@ buildPythonPackage rec {
     $out/bin/inv --print-completion-script=fish >$out/share/fish/vendor_completions.d/inv.fish
   '';
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   meta = with lib; {
     description = "Pythonic task execution";
     homepage = "https://www.pyinvoke.org/";

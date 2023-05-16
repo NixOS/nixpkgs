@@ -30,6 +30,9 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = with maintainers; [ pSub globin ];
     platforms = platforms.all;
+<<<<<<< HEAD
     mainProgram = "dmenu";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

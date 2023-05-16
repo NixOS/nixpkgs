@@ -15,7 +15,11 @@
 
 buildPythonPackage rec {
   pname = "mkdocs-jupyter";
+<<<<<<< HEAD
   version = "0.24.2";
+=======
+  version = "0.24.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -23,7 +27,11 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "mkdocs_jupyter";
     inherit version;
+<<<<<<< HEAD
     hash = "sha256-XgwQnVNdSHlyMHGbaUH00I3pWno8lb8VhmLEEvwVyy4=";
+=======
+    hash = "sha256-lncDf7fpMSaPPfdZn8CCjCYSR989FXW87TILqLfR1G0=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   postPatch = ''

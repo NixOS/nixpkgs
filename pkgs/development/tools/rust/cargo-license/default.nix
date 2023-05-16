@@ -15,6 +15,10 @@ rustPlatform.buildRustPackage rec {
     description = "Cargo subcommand to see license of dependencies";
     homepage = "https://github.com/onur/cargo-license";
     license = with licenses; [ mit ];
+<<<<<<< HEAD
     maintainers = with maintainers; [ basvandijk figsoda matthiasbeyer ];
+=======
+    maintainers = with maintainers; [ basvandijk figsoda ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

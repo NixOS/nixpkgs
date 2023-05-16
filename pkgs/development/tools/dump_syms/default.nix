@@ -16,7 +16,11 @@
 
 let
   pname = "dump_syms";
+<<<<<<< HEAD
   version = "2.2.2";
+=======
+  version = "2.2.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 in
 rustPlatform.buildRustPackage {
   inherit pname version;
@@ -25,10 +29,17 @@ rustPlatform.buildRustPackage {
     owner = "mozilla";
     repo = pname;
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-8kyicTtY7h1CDM4UGOHsppRRTraU6JLe24MKtoduiz0=";
   };
 
   cargoSha256 = "sha256-5WiGckh/jq7AHH3JWZL8tIsj1Gqr8iLX7IyppKsW96k=";
+=======
+    hash = "sha256-YzGFzmAGHev3gM6+l0sC+nCdyEYZI2G30U1JBrZ2uSU=";
+  };
+
+  cargoSha256 = "sha256-gWLd1MUpCeVRUgzqkA5USmlYDq8BmmB/EQfiFl9JsjA=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nativeBuildInputs = [
     pkg-config

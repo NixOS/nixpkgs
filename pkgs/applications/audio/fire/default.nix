@@ -11,7 +11,10 @@
 , libXcursor
 , freetype
 , alsa-lib
+<<<<<<< HEAD
 , Accelerate
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , Cocoa
 , WebKit
 , CoreServices
@@ -77,7 +80,10 @@ stdenv.mkDerivation rec {
     freetype
     alsa-lib
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
+<<<<<<< HEAD
     Accelerate
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     Cocoa
     WebKit
     CoreServices

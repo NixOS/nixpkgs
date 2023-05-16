@@ -16,6 +16,46 @@ let
     self = py;
     packageOverrides = lib.foldr lib.composeExtensions (self: super: { }) (
       [
+<<<<<<< HEAD
+=======
+        (
+          # with version 3 of flask-limiter octoprint 1.8.7 fails to start with
+          #  TypeError: Limiter.__init__() got multiple values for argument 'key_func'
+          self: super: {
+            flask-limiter = super.flask-limiter.overridePythonAttrs (oldAttrs: rec {
+              version = "2.6.2";
+              src = fetchFromGitHub {
+                owner = "alisaifee";
+                repo = "flask-limiter";
+                rev = version;
+                sha256 = "sha256-eWOdJ7m3cY08ASN/X+7ILJK99iLJJwCY8294fwJiDew=";
+              };
+            });
+            flask-babel = super.flask-babel.overridePythonAttrs (oldAttrs: rec {
+              version = "2.0.0";
+              src = super.fetchPypi {
+                pname = "Flask-Babel";
+                inherit version;
+                sha256 = "sha256-+fr0XNsuGjLqLsFEA1h9QpUQjzUBenghorGsuM/ZJX0=";
+              };
+              nativeBuildInputs = [ ];
+              format = "setuptools";
+              outputs = [ "out" ];
+              patches = [ ];
+            });
+            # downgrade needed for flask-babel 2.0.0
+            babel = super.babel.overridePythonAttrs (oldAttrs: rec {
+              version = "2.11.0";
+              src = super.fetchPypi {
+                pname = "Babel";
+                inherit version;
+                hash = "sha256-XvSzImsBgN7d7UIpZRyLDho6aig31FoHMnLzE+TPl/Y=";
+              };
+              propagatedBuildInputs = [ self.pytz ];
+            });
+          }
+        )
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         # Built-in dependency
         (
           self: super: {
@@ -56,14 +96,22 @@ let
           self: super: {
             octoprint-pisupport = self.buildPythonPackage rec {
               pname = "OctoPrint-PiSupport";
+<<<<<<< HEAD
               version = "2023.5.24";
+=======
+              version = "2022.6.13";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
               format = "setuptools";
 
               src = fetchFromGitHub {
                 owner = "OctoPrint";
                 repo = "OctoPrint-PiSupport";
                 rev = version;
+<<<<<<< HEAD
                 hash = "sha256-KfkZXJ2f02G2ee+J1w+YQRKz+LSWwxVIIwmdevDGhew=";
+=======
+                hash = "sha256-3z5Btl287W3j+L+MQG8FOWt21smML0vpmu9BP48B9A0=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
               };
 
               # requires octoprint itself during tests
@@ -80,13 +128,21 @@ let
           self: super: {
             octoprint = self.buildPythonPackage rec {
               pname = "OctoPrint";
+<<<<<<< HEAD
               version = "1.9.2";
+=======
+              version = "1.8.7";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
               src = fetchFromGitHub {
                 owner = "OctoPrint";
                 repo = "OctoPrint";
                 rev = version;
+<<<<<<< HEAD
                 hash = "sha256-DSngV8nWHNqfPEBIfGq3HQeC1p9s6Q+GX+LcJiAiS4E=";
+=======
+                hash = "sha256-g4PYB9YbkX0almRPgMFlb8D633Y5fc3H+Boa541suqc=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
               };
 
               propagatedBuildInputs = with self; [
@@ -100,7 +156,11 @@ let
                 filetype
                 flask
                 flask-babel
+<<<<<<< HEAD
                 flask-assets
+=======
+                flask_assets
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
                 flask-login
                 flask-limiter
                 frozendict
@@ -138,8 +198,11 @@ let
                 wrapt
                 zeroconf
                 zipstream-ng
+<<<<<<< HEAD
                 class-doc
                 pydantic
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
               ] ++ lib.optionals stdenv.isDarwin [
                 py.pkgs.appdirs
               ];
@@ -181,7 +244,10 @@ let
                     "werkzeug"
                     "flask"
                     "Flask-Limiter"
+<<<<<<< HEAD
                     "blinker"
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
                   ];
                 in
                 ''

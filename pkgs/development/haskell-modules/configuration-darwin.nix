@@ -117,12 +117,15 @@ self: super: ({
 
   yesod-bin = addBuildDepend darwin.apple_sdk.frameworks.Cocoa super.yesod-bin;
 
+<<<<<<< HEAD
   yesod-core = super.yesod-core.overrideAttrs (drv: {
     # Allow access to local networking when the Darwin sandbox is enabled, so yesod-core can
     # run tests that access localhost.
     __darwinAllowLocalNetworking = true;
   });
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   hmatrix = addBuildDepend darwin.apple_sdk.frameworks.Accelerate super.hmatrix;
 
   blas-hs = overrideCabal (drv: {
@@ -282,12 +285,15 @@ self: super: ({
     '' + drv.postPatch or "";
   }) super.http-client-tls;
 
+<<<<<<< HEAD
   http2 = super.http2.overrideAttrs (drv: {
     # Allow access to local networking when the Darwin sandbox is enabled, so http2 can run tests
     # that access localhost.
     __darwinAllowLocalNetworking = true;
   });
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   foldl = overrideCabal (drv: {
     postPatch = ''
       # This comment has been inserted, so the derivation hash changes, forcing
@@ -300,6 +306,7 @@ self: super: ({
     '' + drv.postPatch or "";
   }) super.foldl;
 
+<<<<<<< HEAD
   # https://hydra.nixos.org/build/230964714/nixlog/1
   inline-c-cpp = appendPatch (pkgs.fetchpatch {
     url = "https://github.com/fpco/inline-c/commit/e8dc553b13bb847409fdced649a6a863323cff8a.patch";
@@ -309,6 +316,8 @@ self: super: ({
     stripLen = 1;
   }) super.inline-c-cpp;
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 } // lib.optionalAttrs pkgs.stdenv.isAarch64 {  # aarch64-darwin
 
   # https://github.com/fpco/unliftio/issues/87

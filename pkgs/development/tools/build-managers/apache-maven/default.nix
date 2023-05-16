@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 { lib
 , stdenvNoCC
 , fetchurl
@@ -41,10 +42,36 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     mainProgram = "mvn";
+=======
+{ lib, stdenv, fetchurl, jdk, makeWrapper }:
+
+assert jdk != null;
+
+stdenv.mkDerivation rec {
+  pname = "apache-maven";
+  version = "3.8.6";
+
+  builder = ./builder.sh;
+
+  src = fetchurl {
+    url = "mirror://apache/maven/maven-3/${version}/binaries/${pname}-${version}-bin.tar.gz";
+    sha256 = "sha256-xwR6SN62Jqvyb3GrNkPSltubHmfx+qfZiGN96sh2tak=";
+  };
+
+  nativeBuildInputs = [ makeWrapper ];
+
+  inherit jdk;
+
+  meta = with lib; {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     description = "Build automation tool (used primarily for Java projects)";
     homepage = "https://maven.apache.org/";
     license = licenses.asl20;
     platforms = platforms.unix;
     maintainers = with maintainers; [ cko ];
   };
+<<<<<<< HEAD
 })
+=======
+}
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)

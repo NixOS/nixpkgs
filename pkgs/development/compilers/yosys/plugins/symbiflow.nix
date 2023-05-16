@@ -11,16 +11,28 @@
 , capnproto
 , surelog
 , antlr4
+<<<<<<< HEAD
 , pkg-config
 }: let
 
   version = "1.20230808";
+=======
+, flatbuffers
+, pkg-config
+}: let
+
+  version = "1.20230425";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "chipsalliance";
     repo  = "yosys-f4pga-plugins";
     rev   = "v${version}";
+<<<<<<< HEAD
     hash  = "sha256-wksAHLgLjVZE4Vk2QVcJN1mnQ9mxWCZHk55oO99cVJ0=";
+=======
+    hash  = "sha256-KNkmhvpKTby85P88+DqCOOGxIKpzbw5KF9ymqy40pfw=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   # Supported symbiflow plugins.

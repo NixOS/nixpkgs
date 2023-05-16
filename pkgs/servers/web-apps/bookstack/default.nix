@@ -16,13 +16,21 @@ let
 
 in package.override rec {
   pname = "bookstack";
+<<<<<<< HEAD
   version = "23.08.2";
+=======
+  version = "23.01.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "bookstackapp";
     repo = pname;
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "0qg4isivyxinbccac4gga1ym43wh80qhs0308l5hk8dc3zvi7d5q";
+=======
+    sha256 = "sha256-S4yGys1Lc2FAd3RKI4KdE9X12rsQyVcPQ+Biwwrnb0I=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   meta = with lib; {

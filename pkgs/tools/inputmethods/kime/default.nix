@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 { lib, stdenv, rustPlatform, rustc, cargo, fetchFromGitHub, pkg-config, cmake, extra-cmake-modules
+=======
+{ lib, stdenv, rustPlatform, rustc, cargo, fetchFromGitHub, pkg-config, cmake, extra-cmake-modules, llvmPackages
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , withWayland ? true
 , withIndicator ? true, dbus, libdbusmenu
 , withXim ? true, xorg, cairo
@@ -94,15 +98,27 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     pkg-config
+<<<<<<< HEAD
     cmake
     extra-cmake-modules
     rustPlatform.bindgenHook
+=======
+    llvmPackages.clang
+    llvmPackages.libclang
+    llvmPackages.bintools
+    cmake
+    extra-cmake-modules
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     rustPlatform.cargoSetupHook
     rustc
     cargo
   ];
 
   RUST_BACKTRACE = 1;
+<<<<<<< HEAD
+=======
+  LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   meta = with lib; {
     homepage = "https://github.com/Riey/kime";

@@ -3,7 +3,10 @@
 , borgbackup
 , coreutils
 , python3Packages
+<<<<<<< HEAD
 , fetchPypi
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , systemd
 , enableSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
 , installShellFiles
@@ -13,11 +16,19 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "borgmatic";
+<<<<<<< HEAD
   version = "1.7.15";
 
   src = fetchPypi {
     inherit pname version;
     sha256 = "sha256-esTvcybCPTayA9LCSukNc9ba8eGCTyjB883eZYy91II=";
+=======
+  version = "1.7.9";
+
+  src = python3Packages.fetchPypi {
+    inherit pname version;
+    sha256 = "sha256-v3Qxwy7V6rqX90G4/Xp6mVTUkrqDXmudgh3th0GCjuk=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeCheckInputs = with python3Packages; [ flexmock pytestCheckHook pytest-cov ];
@@ -34,7 +45,10 @@ python3Packages.buildPythonApplication rec {
     borgbackup
     colorama
     jsonschema
+<<<<<<< HEAD
     packaging
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     ruamel-yaml
     requests
     setuptools
@@ -57,13 +71,20 @@ python3Packages.buildPythonApplication rec {
 
   passthru.tests.version = testers.testVersion { package = borgmatic; };
 
+<<<<<<< HEAD
   __darwinAllowLocalNetworking = true;
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   meta = with lib; {
     description = "Simple, configuration-driven backup software for servers and workstations";
     homepage = "https://torsion.org/borgmatic/";
     license = licenses.gpl3Plus;
+<<<<<<< HEAD
     platforms = platforms.all;
+=======
+    platforms = platforms.linux;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     maintainers = with maintainers; [ imlonghao ];
   };
 }

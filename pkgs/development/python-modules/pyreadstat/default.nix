@@ -13,7 +13,11 @@
 
 buildPythonPackage rec {
   pname = "pyreadstat";
+<<<<<<< HEAD
   version = "1.2.2";
+=======
+  version = "1.2.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -22,7 +26,11 @@ buildPythonPackage rec {
     owner = "Roche";
     repo = "pyreadstat";
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-CvovylOTTyXm0ucTwNSFZzkcA0H8H76BSg4vjB2Pe4M=";
+=======
+    hash = "sha256-7DpmWIRzhB32YZCDpR+rEIAzn5OuZqt7wvS0GnxnT/g=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

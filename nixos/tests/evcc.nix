@@ -46,7 +46,11 @@ import ./make-test-python.nix ({ pkgs, lib, ...} :
             type = "custom";
             status = {
               source = "script";
+<<<<<<< HEAD
               cmd = "/bin/sh -c 'echo charger status A'";
+=======
+              cmd = "/bin/sh -c 'echo charger status F'";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
             };
             enabled = {
               source = "script";

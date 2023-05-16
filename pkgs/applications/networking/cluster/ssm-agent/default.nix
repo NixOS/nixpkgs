@@ -3,6 +3,10 @@
 , buildGoPackage
 , makeWrapper
 , fetchFromGitHub
+<<<<<<< HEAD
+=======
+, fetchpatch
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , coreutils
 , nettools
 , dmidecode
@@ -27,7 +31,11 @@ let
 in
 buildGoPackage rec {
   pname = "amazon-ssm-agent";
+<<<<<<< HEAD
   version = "3.2.1297.0";
+=======
+  version = "3.0.755.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   goPackagePath = "github.com/aws/${pname}";
 
@@ -37,7 +45,11 @@ buildGoPackage rec {
     rev = version;
     owner = "aws";
     repo = "amazon-ssm-agent";
+<<<<<<< HEAD
     hash = "sha256-zRs7RsShZPH3hb5MsADUNrTfHbJVwCELE9mCqEWaTng=";
+=======
+    hash = "sha256-yVQJL1MJ1JlAndlrXfEbNLQihlbLhSoQXTKzJMRzhao=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   patches = [
@@ -47,6 +59,7 @@ buildGoPackage rec {
     # They used constants from another package that I couldn't figure
     # out how to resolve, so hardcoded the constants.
     ./0002-version-gen-don-t-use-unnecessary-constants.patch
+<<<<<<< HEAD
   ];
 
   # See the list https://github.com/aws/amazon-ssm-agent/blob/3.2.1297.0/makefile#L120-L138
@@ -66,6 +79,18 @@ buildGoPackage rec {
   ];
 
   preConfigure = ''
+=======
+
+    (fetchpatch {
+      name = "CVE-2022-29527.patch";
+      url = "https://github.com/aws/amazon-ssm-agent/commit/0fe8ae99b2ff25649c7b86d3bc05fc037400aca7.patch";
+      sha256 = "sha256-5g14CxhsHLIgs1Vkfw8FCKEJ4AebNqZKf3ZzoAN/T9U=";
+    })
+  ];
+
+  preConfigure = ''
+    rm -r ./Tools/src/goreportcard
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     printf "#!/bin/sh\ntrue" > ./Tools/src/checkstyle.sh
 
     substituteInPlace agent/platform/platform_unix.go \
@@ -86,6 +111,11 @@ buildGoPackage rec {
   '';
 
   preBuild = ''
+<<<<<<< HEAD
+=======
+    cp -r go/src/${goPackagePath}/vendor/src go
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     pushd go/src/${goPackagePath}
 
     # Note: if this step fails, please patch the code to fix it! Please only skip
@@ -101,6 +131,11 @@ buildGoPackage rec {
   postBuild = ''
     pushd go/bin
 
+<<<<<<< HEAD
+=======
+    rm integration-cli versiongenerator generator
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     mv core amazon-ssm-agent
     mv agent ssm-agent-worker
     mv cli-main ssm-cli

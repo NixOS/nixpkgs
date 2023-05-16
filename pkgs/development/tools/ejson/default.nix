@@ -18,7 +18,11 @@ buildGoModule rec {
     sha256 = "sha256-M2Gk+/l1tNlIAe1/fR1WLEOey+tjCUmMAujc76gmeZA=";
   };
 
+<<<<<<< HEAD
   vendorHash = "sha256-9+x7HrbXRoS/7ZADWwhsbynQLr3SyCbcsp9QnSubov0=";
+=======
+  vendorSha256 = "sha256-9+x7HrbXRoS/7ZADWwhsbynQLr3SyCbcsp9QnSubov0=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nativeBuildInputs = [ gems ];
 

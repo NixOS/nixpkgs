@@ -2,13 +2,21 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "autocorrect";
+<<<<<<< HEAD
   version = "2.8.4";
+=======
+  version = "2.6.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "huacnlee";
     repo = pname;
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-njgngDowyRfOY9+BnBSNWow5GkdGhRu2YPXkA6n23qE=";
+=======
+    sha256 = "sha256-QHQQrUQCfDAlAtDcfrAkOwRhQkO+HcwnPfJ5+jb1290=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   cargoLock = {

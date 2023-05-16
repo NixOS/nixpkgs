@@ -3,8 +3,11 @@
 , fetchPypi
 , nose
 , setuptools
+<<<<<<< HEAD
 , setuptools-scm
 , wheel
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , arrow
 , requests
 , units
@@ -24,12 +27,15 @@ buildPythonPackage rec {
     hash = "sha256-P00oxUz0oVQB969c/N2wpKLe09wtvQWPH4DH4EZUaxc=";
   };
 
+<<<<<<< HEAD
   nativeBuildInputs = [
     setuptools
     setuptools-scm
     wheel
   ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nativeCheckInputs = [
     nose
   ];
@@ -41,6 +47,10 @@ buildPythonPackage rec {
     pint
     pydantic
     pytz
+<<<<<<< HEAD
+=======
+    setuptools
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     six
   ];
 
@@ -52,6 +62,10 @@ buildPythonPackage rec {
     description = "Python library for interacting with Strava v3 REST API";
     homepage = "https://github.com/stravalib/stravalib";
     license = licenses.asl20;
+<<<<<<< HEAD
     maintainers = [ ];
+=======
+    maintainers = [ maintainers.costrouc ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

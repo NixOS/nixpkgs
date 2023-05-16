@@ -21,7 +21,11 @@ buildGoModule rec {
     cp ${./go.sum} go.sum
   '';
 
+<<<<<<< HEAD
   vendorHash = "sha256-fOIzJuTXiDNJak5ilgI2KnPOCogbFWTlPL3yNQdzUUI=";
+=======
+  vendorSha256 = "sha256-fOIzJuTXiDNJak5ilgI2KnPOCogbFWTlPL3yNQdzUUI=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   buildInputs = [
     pam

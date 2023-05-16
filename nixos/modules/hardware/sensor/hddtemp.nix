@@ -43,7 +43,11 @@ in
       };
 
       unit = mkOption {
+<<<<<<< HEAD
         description = lib.mdDoc "Celsius or Fahrenheit";
+=======
+        description = lib.mdDoc "Celcius or Fahrenheit";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         type = types.enum [ "C" "F" ];
         default = "C";
       };

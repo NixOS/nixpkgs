@@ -78,6 +78,7 @@ stdenv.mkDerivation rec {
       "CVE-2019-9587: loop in PDF objects"
       "CVE-2019-9588: loop in PDF objects"
       "CVE-2019-16088: loop in PDF objects"
+<<<<<<< HEAD
       "CVE-2022-38334"
       "CVE-2022-38928"
       "CVE-2022-41842"
@@ -99,6 +100,8 @@ stdenv.mkDerivation rec {
       "CVE-2023-26938"
       "CVE-2023-27655"
       "CVE-2023-31557"
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     ];
   };
 }

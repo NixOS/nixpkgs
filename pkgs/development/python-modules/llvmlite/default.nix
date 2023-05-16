@@ -1,6 +1,10 @@
 { lib
 , stdenv
+<<<<<<< HEAD
 , fetchFromGitHub
+=======
+, fetchPypi
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , buildPythonPackage
 , python
 , llvm
@@ -12,6 +16,7 @@
 
 buildPythonPackage rec {
   pname = "llvmlite";
+<<<<<<< HEAD
   # The main dependency of llvmlite is numba, which we currently package an
   # untagged version of it (for numpy>1.25 support). That numba version
   # requires at least this version of llvmlite (also not yet officially
@@ -25,6 +30,15 @@ buildPythonPackage rec {
     repo = "llvmlite";
     rev = "v${version}";
     hash = "sha256-fsH+rqouweNENU+YlWr7m0bC0YdreQLNp1n2rwrOiFw=";
+=======
+  version = "0.39.1";
+
+  disabled = isPyPy || !isPy3k;
+
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-tDq9fILoBSYcQl1QM1vppsT4QmTjTW1uR1IHMAAF1XI=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ llvm ];

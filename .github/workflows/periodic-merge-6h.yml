@@ -38,7 +38,11 @@ jobs:
             into: staging
     name: ${{ matrix.pairs.from }} → ${{ matrix.pairs.into }}
     steps:
+<<<<<<< HEAD
       - uses: actions/checkout@v4
+=======
+      - uses: actions/checkout@v3
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
       - name: ${{ matrix.pairs.from }} → ${{ matrix.pairs.into }}
         uses: devmasx/merge-branch@1.4.0

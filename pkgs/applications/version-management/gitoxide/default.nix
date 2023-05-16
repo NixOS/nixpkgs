@@ -13,12 +13,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "gitoxide";
+<<<<<<< HEAD
   version = "0.29.0";
+=======
+  version = "0.23.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "Byron";
     repo = "gitoxide";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-Ry5QvOoj4iSQZr1O+Y6qSHzhmm77nbkLjCcdPOhxR18=";
   };
 
@@ -26,12 +31,24 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ cmake pkg-config ];
 
+=======
+    sha256 = "sha256-HmynsnlTj08vwYwckFdq+0u1nquC7bDOGcq2vCeqdhA=";
+  };
+
+  cargoHash = "sha256-5JvDqp3dZ9rcOS17YzwgNwJYQGQ021cpd0ClrR+1+5Y=";
+
+  nativeBuildInputs = [ cmake pkg-config ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   buildInputs = [ curl ] ++ (if stdenv.isDarwin
     then [ libiconv Security SystemConfiguration ]
     else [ openssl ]);
 
   # Needed to get openssl-sys to use pkg-config.
+<<<<<<< HEAD
   env.OPENSSL_NO_VENDOR = 1;
+=======
+  OPENSSL_NO_VENDOR = 1;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   meta = with lib; {
     description = "A command-line application for interacting with git repositories";

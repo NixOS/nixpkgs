@@ -1,19 +1,34 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+<<<<<<< HEAD
 , flit-core
+=======
+, bootstrapped-pip
+, setuptools
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 buildPythonPackage rec {
   pname = "wheel";
+<<<<<<< HEAD
   version = "0.41.1";
   format = "pyproject";
+=======
+  version = "0.38.4";
+  format = "other";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "pypa";
     repo = pname;
     rev = version;
+<<<<<<< HEAD
     hash = "sha256-/EaDJ2zI/ly2BrrGhiZGwiBYDVPYWTki+87UqtCS3bw=";
+=======
+    hash = "sha256-yZLU0t/nz6kfnnoLL15bybOxN4+SJUaTJsCpGffl1QU=";
+    name = "${pname}-${version}-source";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     postFetch = ''
       cd $out
       mv tests/testdata/unicode.dist/unicodedist/åäö_日本語.py \
@@ -23,14 +38,27 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [
+<<<<<<< HEAD
     flit-core
+=======
+    bootstrapped-pip
+    setuptools
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   # No tests in archive
   doCheck = false;
+<<<<<<< HEAD
 
   pythonImportsCheck = [ "wheel" ];
 
+=======
+  pythonImportsCheck = [ "wheel" ];
+
+  # We add this flag to ignore the copy installed by bootstrapped-pip
+  pipInstallFlags = [ "--ignore-installed" ];
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   meta = with lib; {
     homepage = "https://github.com/pypa/wheel";
     description = "A built-package format for Python";

@@ -12,14 +12,22 @@
 
 buildPythonPackage rec {
   pname = "vertica-python";
+<<<<<<< HEAD
   version = "1.3.5";
+=======
+  version = "1.3.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
+<<<<<<< HEAD
     hash = "sha256-KzvJcBR6Bc+z6IAmJ0KR88aSQMjRx1UilS28oBv9nTE=";
+=======
+    hash = "sha256-NmTwYQwWzV1ga4u+XApQNZsel52Tg8B5Z7vUnUmQoC8=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [

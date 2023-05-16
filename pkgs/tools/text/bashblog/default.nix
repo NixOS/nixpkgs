@@ -1,5 +1,9 @@
 { stdenv
 , lib
+<<<<<<< HEAD
+=======
+, fetchzip
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , fetchFromGitHub
 , makeWrapper
 , substituteAll
@@ -16,7 +20,11 @@ let
   markdownpl_path = "${perlPackages.TextMarkdown}/bin/Markdown.pl";
   pandoc_path = "${pandoc}/bin/pandoc";
 
+<<<<<<< HEAD
 in stdenv.mkDerivation {
+=======
+in stdenv.mkDerivation rec {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pname = "bashblog";
   version = "unstable-2022-03-26";
 

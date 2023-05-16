@@ -8,13 +8,21 @@ buildDunePackage rec {
   minimalOCamlVersion = "4.08";
 
   pname = "x509";
+<<<<<<< HEAD
   version = "0.16.5";
+=======
+  version = "0.16.4";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   duneVersion = "3";
 
   src = fetchurl {
     url = "https://github.com/mirleft/ocaml-x509/releases/download/v${version}/x509-${version}.tbz";
+<<<<<<< HEAD
     hash = "sha256-FJ4lpf6jf2GfsmkL7lwA8BydzzHTNfj/yqs5p1OMzZk=";
+=======
+    hash = "sha256-XegxhdASQK/I7Xd0gJSLumTGbCYFpWsjR7PlZSWqaVo=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   checkInputs = [ alcotest cstruct-unix ];

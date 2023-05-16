@@ -4,12 +4,20 @@
 , freetype
 , zlib
 , openssl
+<<<<<<< HEAD
+=======
+, dpkg
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , fetchurl
 , gcc-unwrapped
 , libjpeg8
 , libpng
 , fontconfig
 , stdenv
+<<<<<<< HEAD
+=======
+, wkhtmltopdf
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , xar
 , xorg
 }:

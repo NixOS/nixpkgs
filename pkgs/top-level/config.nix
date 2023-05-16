@@ -117,12 +117,15 @@ let
       '';
     };
 
+<<<<<<< HEAD
     cudaSupport = mkMassRebuild {
       type = types.bool;
       default = false;
       feature = "build packages with CUDA support by default";
     };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     showDerivationWarnings = mkOption {
       type = types.listOf (types.enum [ "maintainerless" ]);
       default = [];
@@ -141,7 +144,11 @@ let
     checkMeta = mkOption {
       type = types.bool;
       default = false;
+<<<<<<< HEAD
       description = lib.mdDoc ''
+=======
+      description = ''
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         Whether to check that the `meta` attribute of derivations are correct during evaluation time.
       '';
     };

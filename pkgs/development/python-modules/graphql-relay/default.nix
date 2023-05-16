@@ -27,6 +27,7 @@ buildPythonPackage rec {
     hash = "sha256-H/HFEpg1bkgaC+AJzN/ySYMs5T8wVZwTOPIqDg0XJQw=";
   };
 
+<<<<<<< HEAD
   # This project doesn't seem to actually need setuptools. To find out why it
   # specifies it, follow up in:
   #
@@ -37,6 +38,8 @@ buildPythonPackage rec {
       --replace ', "setuptools>=59,<70"' ""
   '';
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nativeBuildInputs = [
     poetry-core
   ];
@@ -59,6 +62,10 @@ buildPythonPackage rec {
     description = "A library to help construct a graphql-py server supporting react-relay";
     homepage = "https://github.com/graphql-python/graphql-relay-py/";
     license = licenses.mit;
+<<<<<<< HEAD
     maintainers = with maintainers; [ ];
+=======
+    maintainers = with maintainers; [ SuperSandro2000 ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

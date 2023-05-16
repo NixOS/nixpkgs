@@ -116,7 +116,11 @@ stdenv.mkDerivation (rec {
     # Remove in-tree qemu stuff in case we build from a tar-ball
     rm -rf tools/qemu-xen tools/qemu-xen-traditional
 
+<<<<<<< HEAD
     # Fix shebangs, mainly for build-scripts
+=======
+    # Fix shebangs, mainly for build-scipts
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     # We want to do this before getting prefetched stuff to speed things up
     # (prefetched stuff has lots of files)
     find . -type f | xargs sed -i 's@/usr/bin/\(python\|perl\)@/usr/bin/env \1@g'

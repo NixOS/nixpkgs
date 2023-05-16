@@ -1,7 +1,10 @@
 { lib
 , stdenv
 , fetchurl
+<<<<<<< HEAD
 , fetchpatch
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , meson
 , ninja
 , pkg-config
@@ -24,12 +27,17 @@
 
 stdenv.mkDerivation rec {
   pname = "at-spi2-core";
+<<<<<<< HEAD
   version = "2.48.3";
+=======
+  version = "2.48.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+<<<<<<< HEAD
     sha256 = "NzFt9DypmJzlOdVM9CmnaMKLs4oLNJUL6t0EIYJ+31U=";
   };
 
@@ -41,6 +49,11 @@ stdenv.mkDerivation rec {
     })
   ];
 
+=======
+    sha256 = "kFpbbxeQto7oA7/6n1+rTOtZH7T64LL4xhLFTx1OijA=";
+  };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nativeBuildInputs = [
     glib
     meson

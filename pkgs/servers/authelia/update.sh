@@ -80,6 +80,10 @@ clean_up
 OLD_GO_VENDOR_HASH="$(instantiateClean authelia.vendorHash)"
 echo "Old go vendor hash $OLD_GO_VENDOR_HASH"
 replace "$OLD_GO_VENDOR_HASH" "$TMP_HASH" "$DRV_DIR/sources.nix"
+<<<<<<< HEAD
 NEW_GO_VENDOR_HASH="$(fetchNewSha authelia.goModules)"
+=======
+NEW_GO_VENDOR_HASH="$(fetchNewSha authelia.go-modules)"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 echo "New go vendor hash $NEW_GO_VENDOR_HASH"
 replace "$TMP_HASH" "$NEW_GO_VENDOR_HASH" "$DRV_DIR/sources.nix"

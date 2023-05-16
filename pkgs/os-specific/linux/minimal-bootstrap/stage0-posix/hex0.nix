@@ -1,5 +1,6 @@
 { lib
 , derivationWithMeta
+<<<<<<< HEAD
 , hostPlatform
 , src
 , version
@@ -22,12 +23,22 @@ let
     inherit hash;
   };
 in
+=======
+, hex0-seed
+, src
+, version
+}:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 derivationWithMeta {
   inherit version;
   pname = "hex0";
   builder = hex0-seed;
   args = [
+<<<<<<< HEAD
     "${src}/${stage0Arch}/hex0_${stage0Arch}.hex0"
+=======
+    "${src}/bootstrap-seeds/POSIX/x86/hex0_x86.hex0"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     (placeholder "out")
   ];
 
@@ -35,6 +46,7 @@ derivationWithMeta {
     description = "Minimal assembler for bootstrapping";
     homepage = "https://github.com/oriansj/stage0-posix";
     license = licenses.gpl3Plus;
+<<<<<<< HEAD
     maintainers = teams.minimal-bootstrap.members;
     inherit platforms;
   };
@@ -45,4 +57,14 @@ derivationWithMeta {
   outputHashMode = "recursive";
   outputHashAlgo = "sha256";
   outputHash = hash;
+=======
+    maintainers = with maintainers; [ emilytrau ];
+    platforms = [ "i686-linux" ];
+  };
+
+  # Ensure the untrusted hex0-seed binary produces a known-good hex0
+  outputHashMode = "recursive";
+  outputHashAlgo = "sha256";
+  outputHash = "sha256-QU3RPGy51W7M2xnfFY1IqruKzusrSLU+L190ztN6JW8=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }

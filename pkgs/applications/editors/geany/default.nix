@@ -64,6 +64,9 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
     maintainers = with maintainers; [ frlan ];
     platforms = platforms.all;
+<<<<<<< HEAD
     mainProgram = "geany";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

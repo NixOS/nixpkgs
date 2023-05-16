@@ -13,24 +13,39 @@
 
 stdenv.mkDerivation rec {
   pname = "bulky";
+<<<<<<< HEAD
   version = "2.10";
+=======
+  version = "2.7";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "bulky";
     rev = version;
+<<<<<<< HEAD
     hash = "sha256-3hpg9a5HU7mSSlMOWvmB/p0Mlyla5PDiS0J9iYJLr6Q=";
+=======
+    hash = "sha256-Ps7ql6EAdoljQ6S8D2JxNSh0+jtEVZpnQv3fpvWkQSk=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [
     wrapGAppsHook
     gsettings-desktop-schemas
     gettext
+<<<<<<< HEAD
     gobject-introspection
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   buildInputs = [
     (python3.withPackages (p: with p; [ pygobject3 magic setproctitle ]))
+<<<<<<< HEAD
+=======
+    gobject-introspection
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     gsettings-desktop-schemas
     gtk3
     glib

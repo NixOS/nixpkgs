@@ -159,6 +159,7 @@ in
         type = types.bool;
       };
 
+<<<<<<< HEAD
       enableLsColors = mkOption {
         default = true;
         description = lib.mdDoc ''
@@ -167,6 +168,8 @@ in
         type = types.bool;
       };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
 
   };
@@ -271,11 +274,14 @@ in
 
         ${cfg.interactiveShellInit}
 
+<<<<<<< HEAD
         ${optionalString cfg.enableLsColors ''
           # Extra colors for directory listings.
           eval "$(${pkgs.coreutils}/bin/dircolors -b)"
         ''}
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         # Setup aliases.
         ${zshAliases}
 

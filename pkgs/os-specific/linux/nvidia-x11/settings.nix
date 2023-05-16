@@ -1,5 +1,6 @@
 nvidia_x11: sha256:
 
+<<<<<<< HEAD
 { stdenv
 , lib
 , fetchFromGitHub
@@ -20,6 +21,12 @@ nvidia_x11: sha256:
 , addOpenGLRunpath
 , withGtk2 ? false
 , withGtk3 ? true
+=======
+{ stdenv, lib, fetchFromGitHub, fetchpatch, pkg-config, m4, jansson, gtk2, dbus, gtk3
+, libXv, libXrandr, libXext, libXxf86vm, libvdpau
+, librsvg, wrapGAppsHook
+, withGtk2 ? false, withGtk3 ? true
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 let
@@ -68,12 +75,15 @@ stdenv.mkDerivation {
       # fixes "multiple definition of `VDPAUDeviceFunctions'" linking errors
       url = "https://github.com/NVIDIA/nvidia-settings/commit/a7c1f5fce6303a643fadff7d85d59934bd0cf6b6.patch";
       hash = "sha256-ZwF3dRTYt/hO8ELg9weoz1U/XcU93qiJL2d1aq1Jlak=";
+<<<<<<< HEAD
     })
     ++ lib.optional (lib.versionAtLeast nvidia_x11.settingsVersion "515.43.04")
     (fetchpatch {
       # fix wayland support for compositors that use wl_output version 4
       url = "https://github.com/NVIDIA/nvidia-settings/pull/99/commits/2e0575197e2b3247deafd2a48f45afc038939a06.patch";
       hash = "sha256-wKuO5CUTUuwYvsP46Pz+6fI0yxLNpZv8qlbL0TFkEFE=";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     });
 
   postPatch = lib.optionalString nvidia_x11.useProfiles ''
@@ -91,10 +101,17 @@ stdenv.mkDerivation {
     fi
   '';
 
+<<<<<<< HEAD
   nativeBuildInputs = [ pkg-config m4 addOpenGLRunpath ];
 
   buildInputs = [ jansson libXv libXrandr libXext libXxf86vm libvdpau nvidia_x11 gtk2 dbus ]
     ++ lib.optionals withGtk3 [ gtk3 librsvg wrapGAppsHook ];
+=======
+  nativeBuildInputs = [ pkg-config m4 ];
+
+  buildInputs = [ jansson libXv libXrandr libXext libXxf86vm libvdpau nvidia_x11 gtk2 dbus ]
+             ++ lib.optionals withGtk3 [ gtk3 librsvg wrapGAppsHook ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   installFlags = [ "PREFIX=$(out)" ];
 
@@ -122,8 +139,11 @@ stdenv.mkDerivation {
   postFixup = ''
     patchelf --set-rpath "$(patchelf --print-rpath $out/bin/$binaryName):$out/lib:${libXv}/lib" \
       $out/bin/$binaryName
+<<<<<<< HEAD
 
     addOpenGLRunpath $out/bin/$binaryName
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '';
 
   passthru = {
@@ -135,7 +155,10 @@ stdenv.mkDerivation {
     description = "Settings application for NVIDIA graphics cards";
     license = licenses.unfreeRedistributable;
     platforms = nvidia_x11.meta.platforms;
+<<<<<<< HEAD
     mainProgram = "nvidia-settings";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     maintainers = with maintainers; [ abbradar ];
   };
 }

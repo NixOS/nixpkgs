@@ -14,17 +14,30 @@
 
 buildPythonPackage rec {
   pname = "osc-lib";
+<<<<<<< HEAD
   version = "2.8.0";
+=======
+  version = "unstable-2022-03-09";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "openstack";
     repo = "osc-lib";
+<<<<<<< HEAD
     rev = version;
     hash = "sha256-ijL/m9BTAgDUjqy77nkl3rDppeUPBycmEqlL6uMruIA=";
   };
 
   # fake version to make pbr.packaging happy and not reject it...
   PBR_VERSION = version;
+=======
+    rev = "65c73fd5030276e34f3d52c03ddb9d27cd8ec6f5";
+    hash = "sha256-CLE9lrMMlvVrihe+N4wvIKe8t9IZ1TpHHVdn2dnvAOI=";
+  };
+
+  # fake version to make pbr.packaging happy and not reject it...
+  PBR_VERSION = "2.5.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nativeBuildInputs = [
     pbr

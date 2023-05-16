@@ -4,10 +4,17 @@
 , v4l-utils }:
 mkDerivation rec {
   pname = "webcamoid";
+<<<<<<< HEAD
   version = "9.1.1";
 
   src = fetchFromGitHub {
     sha256 = "sha256-E2hHFrksJtdDLWiX7wL1z9LBbBKT04a853V8u+WiwbA=";
+=======
+  version = "9.0.0";
+
+  src = fetchFromGitHub {
+    sha256 = "sha256-NV1BmG+fgy+ZcvHl+05VX5J1BAz8PxKiZ3z9BxjhMU0=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     rev = version;
     repo = "webcamoid";
     owner = "webcamoid";

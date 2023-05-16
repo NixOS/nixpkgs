@@ -38,9 +38,13 @@ with lib;
       gpsd = super.gpsd.override { guiSupport = false; };
       graphviz = super.graphviz-nox;
       gst_all_1 = super.gst_all_1 // {
+<<<<<<< HEAD
         gst-plugins-bad = super.gst_all_1.gst-plugins-bad.override { guiSupport = false; };
         gst-plugins-base = super.gst_all_1.gst-plugins-base.override { enableWayland = false; enableX11 = false; };
         gst-plugins-good = super.gst_all_1.gst-plugins-good.override { enableX11 = false; };
+=======
+        gst-plugins-base = super.gst_all_1.gst-plugins-base.override { enableX11 = false; };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       };
       imagemagick = super.imagemagick.override { libX11Support = false; libXtSupport = false; };
       imagemagickBig = super.imagemagickBig.override { libX11Support = false; libXtSupport = false; };
@@ -62,12 +66,15 @@ with lib;
       pango = super.pango.override { x11Support = false; };
       pinentry = super.pinentry.override { enabledFlavors = [ "curses" "tty" "emacs" ]; withLibsecret = false; };
       pipewire = super.pipewire.override { x11Support = false; };
+<<<<<<< HEAD
       pythonPackagesExtensions = super.pythonPackagesExtensions ++ [
         (python-final: python-prev: {
           # tk feature requires wayland which fails to compile
           matplotlib = python-prev.matplotlib.override { enableTk = false; };
         })
       ];
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       qemu = super.qemu.override { gtkSupport = false; spiceSupport = false; sdlSupport = false; };
       qrencode = super.qrencode.overrideAttrs (_: { doCheck = false; });
       qt5 = super.qt5.overrideScope (const (super': {

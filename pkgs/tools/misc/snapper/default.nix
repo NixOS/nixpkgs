@@ -6,13 +6,21 @@
 
 stdenv.mkDerivation rec {
   pname = "snapper";
+<<<<<<< HEAD
   version = "0.10.5";
+=======
+  version = "0.10.4";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "openSUSE";
     repo = "snapper";
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-PJ1KfZZdo+wyeK1NyEg6SSqs/dxqNdiZ4z/BKuVFwSc=";
+=======
+    sha256 = "sha256-Eq9b49zEIb3wMHUw9/jpfYDaMXBY5JHZ2u5RTTtD5I8=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [
@@ -62,8 +70,13 @@ stdenv.mkDerivation rec {
     description = "Tool for Linux filesystem snapshot management";
     homepage = "http://snapper.io";
     license = licenses.gpl2Only;
+<<<<<<< HEAD
     mainProgram = "snapper";
     maintainers = with maintainers; [ markuskowa ];
     platforms = platforms.linux;
+=======
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ markuskowa ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

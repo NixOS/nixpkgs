@@ -1,7 +1,11 @@
 { lib, buildPythonPackage, fetchPypi, pythonOlder
 , attrs
 , sortedcontainers
+<<<<<<< HEAD
 , async-generator
+=======
+, async_generator
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , exceptiongroup
 , idna
 , outcome
@@ -30,7 +34,11 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     attrs
     sortedcontainers
+<<<<<<< HEAD
     async-generator
+=======
+    async_generator
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     idna
     outcome
     sniffio

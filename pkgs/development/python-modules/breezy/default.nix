@@ -27,14 +27,22 @@
 
 buildPythonPackage rec {
   pname = "breezy";
+<<<<<<< HEAD
   version = "3.3.4";
+=======
+  version = "3.3.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "pyproject";
 
   disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
+<<<<<<< HEAD
     hash = "sha256-fEEvOfo8YWhx+xuiqD/KNstlso5/K1XJnGY64tkLIwE=";
+=======
+    hash = "sha256-TqaUn8uwdrl4VFsJn6xoq6011voYmd7vT2uCo9uiV8E=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   cargoDeps = rustPlatform.importCargoLock {
@@ -45,6 +53,11 @@ buildPythonPackage rec {
     ln -s ${./Cargo.lock} Cargo.lock
   '';
 
+<<<<<<< HEAD
+=======
+  cargoHash = "sha256-xYZh/evNp036/wRlNWWUYeD2EkleM+OeY4qbYMCE00I=";
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nativeBuildInputs = [
     cython
     installShellFiles
@@ -115,7 +128,10 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Friendly distributed version control system";
     homepage = "https://www.breezy-vcs.org/";
+<<<<<<< HEAD
     changelog = "https://github.com/breezy-team/breezy/blob/brz-${version}/doc/en/release-notes/brz-${versions.majorMinor version}.txt";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     license = licenses.gpl2Only;
     maintainers = [ maintainers.marsam ];
     mainProgram = "brz";

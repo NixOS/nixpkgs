@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 { lib, fetchPypi, fetchpatch, buildPythonPackage, dos2unix, pyasn1 }:
+=======
+{ lib, fetchPypi, buildPythonPackage, pyasn1 }:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 buildPythonPackage rec {
   pname = "ldap3";
@@ -9,6 +13,7 @@ buildPythonPackage rec {
     sha256 = "f3e7fc4718e3f09dda568b57100095e0ce58633bcabbed8667ce3f8fbaa4229f";
   };
 
+<<<<<<< HEAD
   prePatch = ''
     # patch fails to apply because of line endings
     dos2unix ldap3/utils/asn1.py
@@ -25,6 +30,8 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ dos2unix ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   propagatedBuildInputs = [ pyasn1 ];
 
   doCheck = false; # requires network
@@ -33,6 +40,9 @@ buildPythonPackage rec {
     homepage = "https://pypi.python.org/pypi/ldap3";
     description = "A strictly RFC 4510 conforming LDAP V3 pure Python client library";
     license = licenses.lgpl3;
+<<<<<<< HEAD
     maintainers = with maintainers; [ ];
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

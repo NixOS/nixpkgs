@@ -100,7 +100,12 @@ stdenv.mkDerivation rec {
     sha256 = "0w8z21ml79kblv20wh5lz037g130pxkgs8ll9s3bi94zn2pbrhim";
   };
 
+<<<<<<< HEAD
   nativeBuildInputs = [ makeWrapper wrapGAppsHook copyDesktopItems gobject-introspection ];
+=======
+  nativeBuildInputs = [ makeWrapper wrapGAppsHook copyDesktopItems ];
+  buildInputs = [ gobject-introspection ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   sourceRoot = ".";
 

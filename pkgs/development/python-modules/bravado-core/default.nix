@@ -1,4 +1,8 @@
 { lib
+<<<<<<< HEAD
+=======
+, stdenv
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , buildPythonPackage
 , fetchFromGitHub
 , pythonOlder
@@ -20,7 +24,11 @@
 
 buildPythonPackage rec {
   pname = "bravado-core";
+<<<<<<< HEAD
   version = "6.1.0";
+=======
+  version = "5.17.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -29,7 +37,11 @@ buildPythonPackage rec {
     owner = "Yelp";
     repo = pname;
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-/ePs3znbwamMHHzb/PD4UHq+7v0j1r1X3J3Bnb4S2VU=";
+=======
+    hash = "sha256-7LnKNR1/YIzw2iIPYXAuoC6G7fdm4D3frkSl/wJhYG4=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [

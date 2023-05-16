@@ -33,7 +33,10 @@ let
     generic = callPackage ../development/libraries/agda/generic { };
 
     agdarsec = callPackage ../development/libraries/agda/agdarsec { };
+<<<<<<< HEAD
 
     _1lab = callPackage ../development/libraries/agda/1lab { };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 in mkAgdaPackages Agda

@@ -32,8 +32,11 @@ import ./make-test-python.nix ({ lib, ... }:
 
   testScript = ''
     machine.wait_for_unit('var-swapfile.swap')
+<<<<<<< HEAD
     # Ensure the swap file creation script ran to completion without failing when creating the swap file
     machine.fail("systemctl is-failed --quiet mkswap-var-swapfile.service")
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     machine.succeed("stat --file-system --format=%T /var/swapfile | grep btrfs")
     # First run. Auto creation.
     machine.succeed("swapon --show | grep /var/swapfile")
@@ -43,8 +46,11 @@ import ./make-test-python.nix ({ lib, ... }:
 
     # Second run. Use it as-is.
     machine.wait_for_unit('var-swapfile.swap')
+<<<<<<< HEAD
     # Ensure the swap file creation script ran to completion without failing when the swap file already exists
     machine.fail("systemctl is-failed --quiet mkswap-var-swapfile.service")
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     machine.succeed("swapon --show | grep /var/swapfile")
   '';
 })

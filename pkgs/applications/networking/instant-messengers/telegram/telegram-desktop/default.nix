@@ -6,7 +6,10 @@
 , cmake
 , ninja
 , python3
+<<<<<<< HEAD
 , gobject-introspection
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , wrapGAppsHook
 , wrapQtAppsHook
 , extra-cmake-modules
@@ -14,9 +17,14 @@
 , qtwayland
 , qtsvg
 , qtimageformats
+<<<<<<< HEAD
 , gtk3
 , boost
 , fmt
+=======
+, qt5compat
+, gtk3
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , libdbusmenu
 , lz4
 , xxHash
@@ -54,10 +62,16 @@
 , libsysprof-capture
 , libpsl
 , brotli
+<<<<<<< HEAD
 , microsoft-gsl
 , rlottie
 , stdenv
 , nix-update-script
+=======
+, microsoft_gsl
+, rlottie
+, stdenv
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 # Main reference:
@@ -76,14 +90,23 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "telegram-desktop";
+<<<<<<< HEAD
   version = "4.8.4";
+=======
+  version = "4.8.1";
+  # Note: Update via pkgs/applications/networking/instant-messengers/telegram/tdesktop/update.py
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "telegramdesktop";
     repo = "tdesktop";
     rev = "v${version}";
     fetchSubmodules = true;
+<<<<<<< HEAD
     hash = "sha256-DRVFngQ4geJx2/7pT1VJzkcBZnVGgDvcGGUr9r38gSU=";
+=======
+    sha256 = "0mxxfh70dffkrq76nky3pwrk10s1q4ahxx2ddb58dz8igq6pl4zi";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   patches = [
@@ -116,7 +139,10 @@ stdenv.mkDerivation rec {
     cmake
     ninja
     python3
+<<<<<<< HEAD
     gobject-introspection
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     wrapGAppsHook
     wrapQtAppsHook
     extra-cmake-modules
@@ -127,9 +153,14 @@ stdenv.mkDerivation rec {
     qtwayland
     qtsvg
     qtimageformats
+<<<<<<< HEAD
     gtk3
     boost
     fmt
+=======
+    qt5compat
+    gtk3
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     libdbusmenu
     lz4
     xxHash
@@ -165,7 +196,11 @@ stdenv.mkDerivation rec {
     libsysprof-capture
     libpsl
     brotli
+<<<<<<< HEAD
     microsoft-gsl
+=======
+    microsoft_gsl
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     rlottie
   ];
 
@@ -178,11 +213,14 @@ stdenv.mkDerivation rec {
     "-DDESKTOP_APP_USE_PACKAGED_FONTS=OFF"
   ];
 
+<<<<<<< HEAD
   preBuild = ''
     # for cppgir to locate gir files
     export GI_GIR_PATH="$XDG_DATA_DIRS"
   '';
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   postFixup = ''
     # This is necessary to run Telegram in a pure environment.
     # We also use gappsWrapperArgs from wrapGAppsHook.
@@ -195,7 +233,11 @@ stdenv.mkDerivation rec {
 
   passthru = {
     inherit tg_owt;
+<<<<<<< HEAD
     updateScript = nix-update-script { };
+=======
+    updateScript = ./update.py;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   meta = with lib; {
@@ -209,6 +251,9 @@ stdenv.mkDerivation rec {
     homepage = "https://desktop.telegram.org/";
     changelog = "https://github.com/telegramdesktop/tdesktop/releases/tag/v${version}";
     maintainers = with maintainers; [ nickcao ];
+<<<<<<< HEAD
     mainProgram = "telegram-desktop";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

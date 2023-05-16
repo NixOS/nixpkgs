@@ -29,7 +29,11 @@ stdenv.mkDerivation rec {
     popt
   ];
 
+<<<<<<< HEAD
   sourceRoot = "${src.name}/xmlroff";
+=======
+  sourceRoot = "source/xmlroff/";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   enableParallelBuilding = true;
 

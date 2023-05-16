@@ -1,7 +1,11 @@
 { lib, stdenv, fetchFromGitHub, cmake }:
 stdenv.mkDerivation rec {
   pname = "vulkan-headers";
+<<<<<<< HEAD
   version = "1.3.261";
+=======
+  version = "1.3.249";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nativeBuildInputs = [ cmake ];
 
@@ -9,7 +13,11 @@ stdenv.mkDerivation rec {
     owner = "KhronosGroup";
     repo = "Vulkan-Headers";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-zKHew7SGUq1C3XGp/HrCle6KyqB4cziPcTYVqAr814s=";
+=======
+    hash = "sha256-PLqF9lO7vWvgRZvXLmOcNhTgkB+3TXUa0eoALwDc5Ws=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   passthru.updateScript = ./update.sh;

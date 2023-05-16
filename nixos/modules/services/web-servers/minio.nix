@@ -30,8 +30,13 @@ in
 
     dataDir = mkOption {
       default = [ "/var/lib/minio/data" ];
+<<<<<<< HEAD
       type = types.listOf (types.either types.path types.str);
       description = lib.mdDoc "The list of data directories or nodes for storing the objects. Use one path for regular operation and the minimum of 4 endpoints for Erasure Code mode.";
+=======
+      type = types.listOf types.path;
+      description = lib.mdDoc "The list of data directories for storing the objects. Use one path for regular operation and the minimum of 4 endpoints for Erasure Code mode.";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
 
     configDir = mkOption {
@@ -99,7 +104,11 @@ in
     systemd = lib.mkMerge [{
       tmpfiles.rules = [
         "d '${cfg.configDir}' - minio minio - -"
+<<<<<<< HEAD
       ] ++ (map (x: "d '" + x + "' - minio minio - - ") (builtins.filter lib.types.path.check cfg.dataDir));
+=======
+      ] ++ (map (x: "d '" + x + "' - minio minio - - ") cfg.dataDir);
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
       services.minio = {
         description = "Minio Object Storage";

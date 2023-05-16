@@ -9,6 +9,10 @@
 , gsettings-desktop-schemas
 , gtk3
 , python3
+<<<<<<< HEAD
+=======
+, substituteAll
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , wrapGAppsHook
 }:
 

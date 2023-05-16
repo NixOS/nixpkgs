@@ -8,13 +8,21 @@
 
 stdenv.mkDerivation rec {
   pname = "pt2-clone";
+<<<<<<< HEAD
   version = "1.62.2";
+=======
+  version = "1.57";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "8bitbubsy";
     repo = "pt2-clone";
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-k2rX5ysV3jgCWn0ffe5xSYo9oO6RLakTapE/SnvOPVI=";
+=======
+    sha256 = "sha256-YUGTcL/k+MbAnB/kcWPEmrGxGF/kSHdIgdBVUqCsDWM=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ cmake ];

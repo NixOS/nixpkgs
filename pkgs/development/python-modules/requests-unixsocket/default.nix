@@ -1,7 +1,10 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+<<<<<<< HEAD
 , fetchpatch
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , pbr
 , requests
 , pytestCheckHook
@@ -18,6 +21,7 @@ buildPythonPackage rec {
     hash = "sha256-KDBCg+qTV9Rf/1itWxHkdwjPv1gGgXqlmyo2Mijulx4=";
   };
 
+<<<<<<< HEAD
   patches = [
     # https://github.com/msabramo/requests-unixsocket/pull/69
     (fetchpatch {
@@ -27,6 +31,8 @@ buildPythonPackage rec {
     })
   ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nativeBuildInputs = [
     pbr
   ];

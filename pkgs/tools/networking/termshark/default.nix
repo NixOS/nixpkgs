@@ -14,7 +14,11 @@ buildGoModule rec {
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ wireshark-cli ];
 
+<<<<<<< HEAD
   vendorHash = "sha256-C9XOiNjo+TZ+erdnypRhhfpbuBhB3yEqNpbtwjEv14g=";
+=======
+  vendorSha256 = "sha256-C9XOiNjo+TZ+erdnypRhhfpbuBhB3yEqNpbtwjEv14g=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   doCheck = false;
 

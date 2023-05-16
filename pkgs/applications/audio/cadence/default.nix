@@ -107,6 +107,9 @@ mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ ];
     platforms = [ "x86_64-linux" ];
+<<<<<<< HEAD
     mainProgram = "cadence";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

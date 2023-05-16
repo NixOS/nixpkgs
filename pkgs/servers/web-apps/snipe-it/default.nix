@@ -5,13 +5,20 @@
 , dataDir ? "/var/lib/snipe-it"
 , mariadb
 , nixosTests
+<<<<<<< HEAD
 , php
 , phpPackages
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 let
   package = (import ./composition.nix {
+<<<<<<< HEAD
     inherit pkgs php phpPackages;
+=======
+    inherit pkgs;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     inherit (stdenv.hostPlatform) system;
     noDev = true; # Disable development dependencies
   }).overrideAttrs (attrs : {
@@ -36,17 +43,28 @@ let
 
 in package.override rec {
   pname = "snipe-it";
+<<<<<<< HEAD
   version = "6.1.1";
+=======
+  version = "6.1.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "snipe";
     repo = pname;
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "0kqrq0blamqbfh8dxfyvn2m4q7yphamh4yvpfs7iyb3lb7z7a75i";
   };
 
   passthru.tests = nixosTests.snipe-it;
   passthru.phpPackage = php;
+=======
+    sha256 = "0c8cjywhyiywfav2syjkah777qj5f1jrckgri70ypqyxbwgb4rpm";
+  };
+
+  passthru.tests = nixosTests.snipe-it;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   meta = with lib; {
     description = "A free open source IT asset/license management system";

@@ -24,11 +24,19 @@
 
 stdenv.mkDerivation rec {
   pname = "liferea";
+<<<<<<< HEAD
   version = "1.15.2";
 
   src = fetchurl {
     url = "https://github.com/lwindolf/${pname}/releases/download/v${version}/${pname}-${version}.tar.bz2";
     sha256 = "TpuET1VLOXwZHdpYg6vXT1MDGpV0IKbSIduf3bkNbeI=";
+=======
+  version = "1.15.0";
+
+  src = fetchurl {
+    url = "https://github.com/lwindolf/${pname}/releases/download/v${version}/${pname}-${version}.tar.bz2";
+    sha256 = "1a7dlwuUOHeCsB+ofAOPlbyuh/QAB8kf50MsocMNz70=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [
@@ -36,7 +44,10 @@ stdenv.mkDerivation rec {
     python3Packages.wrapPython
     intltool
     pkg-config
+<<<<<<< HEAD
     gobject-introspection
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   buildInputs = [
@@ -50,6 +61,10 @@ stdenv.mkDerivation rec {
     libpeas
     gsettings-desktop-schemas
     json-glib
+<<<<<<< HEAD
+=======
+    gobject-introspection
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     libsecret
     glib-networking
     libnotify
@@ -79,7 +94,11 @@ stdenv.mkDerivation rec {
     description = "A GTK-based news feed aggregator";
     homepage = "http://lzone.de/liferea/";
     license = licenses.gpl2Plus;
+<<<<<<< HEAD
     maintainers = with maintainers; [ romildo yayayayaka ];
+=======
+    maintainers = with maintainers; [ romildo ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     platforms = platforms.linux;
 
     longDescription = ''

@@ -16,7 +16,11 @@
 
 buildPythonPackage rec {
   pname = "orjson";
+<<<<<<< HEAD
   version = "3.9.4";
+=======
+  version = "3.8.11";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -25,13 +29,21 @@ buildPythonPackage rec {
     owner = "ijl";
     repo = pname;
     rev = "refs/tags/${version}";
+<<<<<<< HEAD
     hash = "sha256-WS4qynQmJIVdDf0sYK/HFVQ+F5nfoJwx/zzmaL6YTRc=";
+=======
+    hash = "sha256-TFoagWUtd/nJceNaptgPp4aTR/tBCmxpiZIVJwOlia4=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
+<<<<<<< HEAD
     hash = "sha256-hGUXPTiKvKygxQzxXAO/+bD34eLnpkhQ7r/g27E+d4I=";
+=======
+    hash = "sha256-/x+0/I3WFxPwVu2LliTgr42SuJX7VjOLe/SGai5OgAw=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

@@ -22,6 +22,10 @@ rustPlatform.buildRustPackage rec {
     description = "A simple cargo plugin to get a list of features for a specific crate";
     homepage = "https://github.com/museun/cargo-whatfeatures";
     license = with licenses; [ mit asl20 ];
+<<<<<<< HEAD
     maintainers = with maintainers; [ ivan-babrou matthiasbeyer ];
+=======
+    maintainers = with maintainers; [ ivan-babrou ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

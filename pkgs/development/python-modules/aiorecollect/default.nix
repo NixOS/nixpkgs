@@ -3,7 +3,10 @@
 , aresponses
 , buildPythonPackage
 , fetchFromGitHub
+<<<<<<< HEAD
 , fetchpatch
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , freezegun
 , poetry-core
 , pytest-asyncio
@@ -13,14 +16,22 @@
 
 buildPythonPackage rec {
   pname = "aiorecollect";
+<<<<<<< HEAD
   version = "2023.09.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
+=======
+  version = "2022.10.0";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.7";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "bachya";
     repo = pname;
+<<<<<<< HEAD
     rev = "refs/tags/${version}";
     hash = "sha256-45LgfCA8037GqP4WfEjE4hj2YdKUGu2hGrQ/f0r1PAI=";
   };
@@ -30,6 +41,12 @@ buildPythonPackage rec {
     sed -i '/certifi =/d' pyproject.toml
   '';
 
+=======
+    rev = version;
+    hash = "sha256-JIh6jr4pFXGZTUi6K7VsymaCxCrTNBevk9xo9TsrFnM=";
+  };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nativeBuildInputs = [
     poetry-core
   ];
@@ -38,8 +55,11 @@ buildPythonPackage rec {
     aiohttp
   ];
 
+<<<<<<< HEAD
   __darwinAllowLocalNetworking = true;
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nativeCheckInputs = [
     aresponses
     freezegun
@@ -65,7 +85,10 @@ buildPythonPackage rec {
       and more.
     '';
     homepage = "https://github.com/bachya/aiorecollect";
+<<<<<<< HEAD
     changelog = "https://github.com/bachya/aiorecollect/releases/tag/${version}";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };

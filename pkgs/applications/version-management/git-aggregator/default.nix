@@ -1,10 +1,18 @@
+<<<<<<< HEAD
 { lib, python3Packages, fetchPypi, git }:
+=======
+{ lib, git, python3Packages }:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 python3Packages.buildPythonApplication rec {
   pname = "git-aggregator";
   version = "2.1.0";
 
+<<<<<<< HEAD
   src = fetchPypi {
+=======
+  src = python3Packages.fetchPypi {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     inherit pname version;
     sha256 = "sha256-79xNPzYP1j71sU5wZM5e2xTqQExqQEdxXPxbk4T/Scw=";
   };

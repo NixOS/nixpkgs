@@ -32,13 +32,22 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "wayst";
+<<<<<<< HEAD
   version = "unstable-2023-07-16";
+=======
+  version = "unstable-2021-04-05";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "91861";
     repo = pname;
+<<<<<<< HEAD
     rev = "f8b218eec1af706fd5ae287f5073e6422eb8b6d8";
     hash = "sha256-tA2R6Snk5nqWkPXSbs7wmovWkT97xafdK0e/pKBUIUg=";
+=======
+    rev = "e72ca78ef72c7b1e92473a98d435a3c85d7eab98";
+    hash = "sha256-UXAVSfVpk/8KSg4oMw2tVWImD6HqJ7gEioR2MqhUUoQ=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   makeFlags = [ "INSTALL_DIR=\${out}/bin" ];
@@ -56,7 +65,15 @@ stdenv.mkDerivation rec {
     utf8proc
     wayland
   ];
+<<<<<<< HEAD
   enableParallelBuilding = true;
+=======
+
+  # This patch forces the Makefile to use utf8proc
+  # The makefile relies on ldconfig to find the utf8proc libraries
+  # which is not possible on nixpkgs
+  patches = [ ./utf8proc.patch ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   postPatch = ''
     substituteInPlace src/settings.c \

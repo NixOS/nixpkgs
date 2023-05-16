@@ -25,7 +25,11 @@
 , udev
 , libxcb
 , libxkbcommon
+<<<<<<< HEAD
 , libxcrypt-legacy
+=======
+, libxcrypt
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , lshw
 , mesa
 , nspr
@@ -49,13 +53,17 @@
 , xcbutilrenderutil
 , xcbutilwm
 , p7zip
+<<<<<<< HEAD
 , tbb
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , wayland
 , libXScrnSaver
 }:
 
 stdenv.mkDerivation rec {
   pname = "webex";
+<<<<<<< HEAD
   version = "43.8.0.26955";
 
   src = fetchurl {
@@ -67,6 +75,15 @@ stdenv.mkDerivation rec {
     p7zip
   ];
 
+=======
+  version = "43.2.0.25211";
+
+  src = fetchurl {
+    url = "https://binaries.webex.com/WebexDesktop-Ubuntu-Gold/20230214022524/Webex_ubuntu.7z";
+    sha256 = "c58a0da26c8f64302cc612c60980dbd68c074d6d8a567b3d870d7d6d06b420ad";
+  };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   buildInputs = [
     alsa-lib
     at-spi2-atk
@@ -97,7 +114,11 @@ stdenv.mkDerivation rec {
     udev
     libxcb
     libxkbcommon
+<<<<<<< HEAD
     libxcrypt-legacy
+=======
+    libxcrypt
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     libX11
     libXcomposite
     libXcursor
@@ -115,7 +136,11 @@ stdenv.mkDerivation rec {
     xcbutilkeysyms
     xcbutilrenderutil
     xcbutilwm
+<<<<<<< HEAD
     tbb
+=======
+    p7zip
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     wayland
   ];
 

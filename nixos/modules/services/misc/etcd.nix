@@ -15,8 +15,11 @@ in {
       type = types.bool;
     };
 
+<<<<<<< HEAD
     package = mkPackageOptionMD pkgs "etcd" { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     name = mkOption {
       description = lib.mdDoc "Etcd unique node name.";
       default = config.networking.hostName;
@@ -169,11 +172,18 @@ in {
         ETCD_LISTEN_CLIENT_URLS = concatStringsSep "," cfg.listenClientUrls;
         ETCD_LISTEN_PEER_URLS = concatStringsSep "," cfg.listenPeerUrls;
         ETCD_INITIAL_ADVERTISE_PEER_URLS = concatStringsSep "," cfg.initialAdvertisePeerUrls;
+<<<<<<< HEAD
         ETCD_PEER_CLIENT_CERT_AUTH = toString cfg.peerClientCertAuth;
         ETCD_PEER_TRUSTED_CA_FILE = cfg.peerTrustedCaFile;
         ETCD_PEER_CERT_FILE = cfg.peerCertFile;
         ETCD_PEER_KEY_FILE = cfg.peerKeyFile;
         ETCD_CLIENT_CERT_AUTH = toString cfg.clientCertAuth;
+=======
+        ETCD_PEER_TRUSTED_CA_FILE = cfg.peerTrustedCaFile;
+        ETCD_PEER_CERT_FILE = cfg.peerCertFile;
+        ETCD_PEER_KEY_FILE = cfg.peerKeyFile;
+        ETCD_CLIENT_CERT_AUTH = toString cfg.peerClientCertAuth;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         ETCD_TRUSTED_CA_FILE = cfg.trustedCaFile;
         ETCD_CERT_FILE = cfg.certFile;
         ETCD_KEY_FILE = cfg.keyFile;
@@ -189,13 +199,21 @@ in {
 
       serviceConfig = {
         Type = "notify";
+<<<<<<< HEAD
         ExecStart = "${cfg.package}/bin/etcd";
+=======
+        ExecStart = "${pkgs.etcd}/bin/etcd";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         User = "etcd";
         LimitNOFILE = 40000;
       };
     };
 
+<<<<<<< HEAD
     environment.systemPackages = [ cfg.package ];
+=======
+    environment.systemPackages = [ pkgs.etcd ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     users.users.etcd = {
       isSystemUser = true;

@@ -5,7 +5,11 @@ self-hostable cloud platform. The server setup can be automated using
 [services.nextcloud](#opt-services.nextcloud.enable). A
 desktop client is packaged at `pkgs.nextcloud-client`.
 
+<<<<<<< HEAD
 The current default by NixOS is `nextcloud27` which is also the latest
+=======
+The current default by NixOS is `nextcloud26` which is also the latest
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 major version available.
 
 ## Basic usage {#module-services-nextcloud-basic-usage}
@@ -17,12 +21,20 @@ and optionally supports
 
 For the database, you can set
 [`services.nextcloud.config.dbtype`](#opt-services.nextcloud.config.dbtype) to
+<<<<<<< HEAD
 either `sqlite` (the default), `mysql`, or `pgsql`. The simplest is `sqlite`,
 which will be automatically created and managed by the application. For the
 last two, you can easily create a local database by setting
 [`services.nextcloud.database.createLocally`](#opt-services.nextcloud.database.createLocally)
 to `true`, Nextcloud will automatically be configured to connect to it through
 socket.
+=======
+either `sqlite` (the default), `mysql`, or `pgsql`. For the last two, by
+default, a local database will be created and nextcloud will connect to it via
+socket; this can be disabled by setting
+[`services.nextcloud.database.createLocally`](#opt-services.nextcloud.database.createLocally)
+to `false`.
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 A very basic configuration may look like this:
 ```
@@ -31,7 +43,10 @@ A very basic configuration may look like this:
   services.nextcloud = {
     enable = true;
     hostName = "nextcloud.tld";
+<<<<<<< HEAD
     database.createLocally = true;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     config = {
       dbtype = "pgsql";
       adminpassFile = "/path/to/admin-pass-file";

@@ -32,15 +32,25 @@ in {
     # This patch is the merged commit from the above PR.
     (fetchpatch {
       name   = "CVE-2018-19876.patch";
+<<<<<<< HEAD
       url    = "https://gitlab.freedesktop.org/cairo/cairo/-/commit/6edf572ebb27b00d3c371ba5ae267e39d27d5b6d.patch";
       hash = "sha256-wZ51BZWlXByFY3/CTn7el2A9aYkwL1FygJ2zqnN+UIQ=";
+=======
+      url    = "https://gitlab.freedesktop.org/cairo/cairo/commit/6edf572ebb27b00d3c371ba5ae267e39d27d5b6d.patch";
+      sha256 = "112hgrrsmcwxh1r52brhi5lksq4pvrz4xhkzcf2iqp55jl2pb7n1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     })
 
     # Fix PDF output.
     # https://gitlab.freedesktop.org/cairo/cairo/issues/342
     (fetchpatch {
+<<<<<<< HEAD
       url = "https://gitlab.freedesktop.org/cairo/cairo/-/commit/5e34c5a9640e49dcc29e6b954c4187cfc838dbd1.patch";
       hash = "sha256-yCwsDUY7efVvOZkA6a0bPS+RrVc8Yk9bfPwWHeOjq5o=";
+=======
+      url = "https://gitlab.freedesktop.org/cairo/cairo/commit/5e34c5a9640e49dcc29e6b954c4187cfc838dbd1.patch";
+      sha256 = "yCwsDUY7efVvOZkA6a0bPS+RrVc8Yk9bfPwWHeOjq5o=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     })
 
     # Fixes CVE-2020-35492; see https://github.com/NixOS/nixpkgs/issues/120364.
@@ -49,8 +59,13 @@ in {
     (fetchpatch {
       name = "CVE-2020-35492.patch";
       includes = [ "src/cairo-image-compositor.c" ];
+<<<<<<< HEAD
       url = "https://gitlab.freedesktop.org/cairo/cairo/-/commit/78266cc8c0f7a595cfe8f3b694bfb9bcc3700b38.patch";
       hash = "sha256-cXKzLMENx4/BHXLZg3Kfkx3esCnaNaB7WvjNfL77FhE=";
+=======
+      url = "https://github.com/freedesktop/cairo/commit/78266cc8c0f7a595cfe8f3b694bfb9bcc3700b38.patch";
+      sha256 = "048nzfz7rkgqb9xs0dfs56qdw7ckkxr87nbj3p0qziqdq4nb6wki";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     })
 
     # Workaround https://gitlab.freedesktop.org/cairo/cairo/-/issues/121
@@ -60,6 +75,7 @@ in {
     # Upstream PR: https://gitlab.freedesktop.org/cairo/cairo/-/issues/420
     (fetchpatch {
       url = "https://gitlab.freedesktop.org/cairo/cairo/-/commit/e22d7212acb454daccc088619ee147af03883974.diff";
+<<<<<<< HEAD
       hash = "sha256-8G98nsPz3MLEWPDX9F0jKgXC4hC4NNdFQLSpmW3ay2s=";
     })
 
@@ -69,6 +85,9 @@ in {
       name = "fix-types.patch";
       url = "https://gitlab.freedesktop.org/cairo/cairo/-/commit/38e486b34d435130f2fb38c429e6016c3c82cd53.patch";
       hash = "sha256-vmluOJSuTRiQHmbBBVCxOIkZ0O0ZEo0J4mgrUPn0SIo=";
+=======
+      sha256 = "sha256-8G98nsPz3MLEWPDX9F0jKgXC4hC4NNdFQLSpmW3ay2s=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     })
 
     # Fix unexpected color addition on grayscale images (usually text).
@@ -77,9 +96,14 @@ in {
     (fetchpatch {
       name = "fix-grayscale-anialias.patch";
       url = "https://gitlab.freedesktop.org/cairo/cairo/-/commit/4f4d89506f58a64b4829b1bb239bab9e46d63727.diff";
+<<<<<<< HEAD
       hash = "sha256-mbTg67e7APfdELsuMAgXdY3xokWbGtHF7VDD5UyYqKM=";
     })
 
+=======
+      sha256 = "sha256-mbTg67e7APfdELsuMAgXdY3xokWbGtHF7VDD5UyYqKM=";
+    })
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   outputs = [ "out" "dev" "devdoc" ];

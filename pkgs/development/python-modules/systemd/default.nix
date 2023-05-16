@@ -51,6 +51,10 @@ buildPythonPackage rec {
     homepage = "https://www.freedesktop.org/software/systemd/python-systemd/";
     changelog = "https://github.com/systemd/python-systemd/blob/v${version}/NEWS";
     license = licenses.lgpl21Plus;
+<<<<<<< HEAD
     maintainers = with maintainers; [ ];
+=======
+    maintainers = with maintainers; [ SuperSandro2000 ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

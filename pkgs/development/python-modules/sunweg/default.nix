@@ -8,7 +8,11 @@
 
 buildPythonPackage rec {
   pname = "sunweg";
+<<<<<<< HEAD
   version = "2.0.0";
+=======
+  version = "1.0.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -17,7 +21,11 @@ buildPythonPackage rec {
     owner = "rokam";
     repo = pname;
     rev = "refs/tags/${version}";
+<<<<<<< HEAD
     hash = "sha256-S92PybN+pReI9WtJr9as95uceicsSMadMQfh9JxsE8U=";
+=======
+    hash = "sha256-fGaPn4pp1nDL4MX7K8zP2Vq2R/uRtd8rHSaWEG5Ye7s=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [

@@ -3,8 +3,11 @@
 , buildPythonPackage
 , dateparser
 , fetchFromGitHub
+<<<<<<< HEAD
 , fetchpatch
 , pycryptodome
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , pytestCheckHook
 , pythonOlder
 , requests
@@ -28,6 +31,7 @@ buildPythonPackage rec {
     hash = "sha256-e88INUEkjOSVOD0KSs9LmstuQ7dQZdJk8K6VqFEusww=";
   };
 
+<<<<<<< HEAD
   patches = [
     (fetchpatch {
       name = "fix-unable-to-determine-version-error.patch";
@@ -36,11 +40,16 @@ buildPythonPackage rec {
     })
   ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   propagatedBuildInputs = [
     aiohttp
     dateparser
     requests
+<<<<<<< HEAD
     pycryptodome
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     six
     ujson
     websockets

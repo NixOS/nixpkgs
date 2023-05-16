@@ -11,7 +11,11 @@ buildGoModule rec {
     sha256 = "sha256-jXC2dENXuqicNQqTHyZKsjibDvjta/npQmf3+uivjX0=";
   };
 
+<<<<<<< HEAD
   vendorHash = "sha256-UNeH3zxgssXxFpJws6nAL8EgXt0DRyAQfmlJWz/qyDg=";
+=======
+  vendorSha256 = "sha256-UNeH3zxgssXxFpJws6nAL8EgXt0DRyAQfmlJWz/qyDg=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   meta = with lib; {
     description =

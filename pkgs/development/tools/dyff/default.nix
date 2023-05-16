@@ -2,16 +2,27 @@
 
 buildGoModule rec {
   pname = "dyff";
+<<<<<<< HEAD
   version = "1.5.8";
+=======
+  version = "1.5.7";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "homeport";
     repo = "dyff";
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-CnSccws3loqfbtjGKe3tkXNVOmNtQX/0+szODMErgxE=";
   };
 
   vendorHash = "sha256-PgQvckmqewzE2QXlP9xtzP5s2S6DDl2o8KWrNXFhEO4=";
+=======
+    sha256 = "sha256-iavJgJnmUFNjdCwVifNP1K5gQ94Rth4wbZ99VXFgNpA=";
+  };
+
+  vendorHash = "sha256-48IpEBA5EaGZBhrRqAwGcf8xQuP/IlzWPFhh+7bFlPc=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   subPackages = [
     "cmd/dyff"

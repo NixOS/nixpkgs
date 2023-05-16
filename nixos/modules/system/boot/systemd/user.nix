@@ -42,7 +42,11 @@ let
 
   writeTmpfiles = { rules, user ? null }:
     let
+<<<<<<< HEAD
       suffix = optionalString (user != null) "-${user}";
+=======
+      suffix = if user == null then "" else "-${user}";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     in
     pkgs.writeTextFile {
       name = "nixos-user-tmpfiles.d${suffix}";
@@ -230,9 +234,12 @@ in {
           });
         })
         cfg.tmpfiles.users;
+<<<<<<< HEAD
 
     system.userActivationScripts.tmpfiles = ''
       ${config.systemd.package}/bin/systemd-tmpfiles --user --create --remove
     '';
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

@@ -2,13 +2,21 @@ generic: {
   v60 = generic {
     version = "6.0.14";
     sha256 = "sha256-YxrVl12OBxkB/cEvlGR+mV7bTBe6nRi71wLCtZPCzlg=";
+<<<<<<< HEAD
     vendorHash = null;
+=======
+    vendorSha256 = null;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   v50 = generic {
     version = "5.0.33";
     sha256 = "sha256-VimTMcnYaFXeBW3zkDRGMxmtOFgPBU2ANKXLjgtr0GE=";
+<<<<<<< HEAD
     vendorHash = "sha256-RG6tSQk3dGaoTG/LHsZkayYCHbguSNOOuAFCmpSwElQ=";
+=======
+    vendorSha256 = "sha256-RG6tSQk3dGaoTG/LHsZkayYCHbguSNOOuAFCmpSwElQ=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   v40 = generic {

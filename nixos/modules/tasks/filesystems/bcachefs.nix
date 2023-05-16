@@ -6,6 +6,7 @@ let
 
   bootFs = filterAttrs (n: fs: (fs.fsType == "bcachefs") && (utils.fsNeededForBoot fs)) config.fileSystems;
 
+<<<<<<< HEAD
   mountCommand = pkgs.runCommand "mount.bcachefs" {} ''
     mkdir -p $out/bin
     cat > $out/bin/mount.bcachefs <<EOF
@@ -15,6 +16,8 @@ let
     chmod +x $out/bin/mount.bcachefs
   '';
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   commonFunctions = ''
     prompt() {
         local name="$1"
@@ -25,7 +28,11 @@ let
         local path="$2"
         if bcachefs unlock -c $path > /dev/null 2> /dev/null; then    # test for encryption
             prompt $name
+<<<<<<< HEAD
             until bcachefs unlock $path 2> /dev/null; do              # repeat until successfully unlocked
+=======
+            until bcachefs unlock $path 2> /dev/null; do              # repeat until sucessfully unlocked
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
                 printf "unlocking failed!\n"
                 prompt $name
             done
@@ -67,12 +74,21 @@ in
 
       boot.initrd.systemd.extraBin = {
         "bcachefs" = "${pkgs.bcachefs-tools}/bin/bcachefs";
+<<<<<<< HEAD
         "mount.bcachefs" = "${mountCommand}/bin/mount.bcachefs";
+=======
+        "mount.bcachefs" = pkgs.runCommand "mount.bcachefs" {} ''
+          cp -pdv ${pkgs.bcachefs-tools}/bin/.mount.bcachefs.sh-wrapped $out
+        '';
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       };
 
       boot.initrd.extraUtilsCommands = lib.mkIf (!config.boot.initrd.systemd.enable) ''
         copy_bin_and_libs ${pkgs.bcachefs-tools}/bin/bcachefs
+<<<<<<< HEAD
         copy_bin_and_libs ${mountCommand}/bin/mount.bcachefs
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       '';
       boot.initrd.extraUtilsCommandsTest = ''
         $out/bin/bcachefs version

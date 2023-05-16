@@ -24,6 +24,10 @@ buildPythonPackage rec {
     description = "Formulate and solve resource-constrained scheduling problems";
     homepage = "https://github.com/timnon/pyschedule";
     license = licenses.asl20;
+<<<<<<< HEAD
     maintainers = [ ];
+=======
+    maintainers = [ maintainers.costrouc ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

@@ -32,6 +32,10 @@ done
 
 for region in "${regions[@]}"; do
     for hook in "${fixupHooks[@]}"; do
+<<<<<<< HEAD
         eval "$hook" "$region"
+=======
+        eval "$hook" "$i"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     done
 done

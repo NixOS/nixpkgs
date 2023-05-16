@@ -8,6 +8,7 @@
 
 let versions = [
   {
+<<<<<<< HEAD
     version = "13.3.0";
     lang = "en";
     language = "English";
@@ -22,6 +23,8 @@ let versions = [
     installer = "Mathematica_13.3.0_BNDL_LINUX.sh";
   }
   {
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     version = "13.2.1";
     lang = "en";
     language = "English";

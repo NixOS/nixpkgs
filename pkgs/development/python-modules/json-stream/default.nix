@@ -12,14 +12,22 @@
 
 buildPythonPackage rec {
   pname = "json-stream";
+<<<<<<< HEAD
   version = "2.3.2";
+=======
+  version = "2.3.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
+<<<<<<< HEAD
     hash = "sha256-uLRQ6o6OPCOenn440S/tk053o1PBSyl/juNFpc6yW5E=";
+=======
+    hash = "sha256-MwDpX3ISJxo0Am3t/uuUC8GTyZFuUFGt1g7BeTY1z/0=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

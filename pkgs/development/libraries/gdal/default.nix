@@ -1,5 +1,6 @@
 { lib
 , stdenv
+<<<<<<< HEAD
 , callPackage
 , fetchFromGitHub
 
@@ -18,6 +19,11 @@
 , bison
 , cmake
 , gtest
+=======
+, fetchFromGitHub
+, bison
+, cmake
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , doxygen
 , graphviz
 , pkg-config
@@ -67,6 +73,10 @@
 , libspatialite
 , sqlite
 , libtiff
+<<<<<<< HEAD
+=======
+, useTiledb ? !(stdenv.isDarwin && stdenv.isx86_64)
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , tiledb
 , libwebp
 , xercesc
@@ -74,15 +84,26 @@
 , zstd
 }:
 
+<<<<<<< HEAD
 stdenv.mkDerivation (finalAttrs: {
   pname = "gdal";
   version = "3.7.1";
+=======
+stdenv.mkDerivation rec {
+  pname = "gdal";
+  version = "3.6.4";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "OSGeo";
     repo = "gdal";
+<<<<<<< HEAD
     rev = "v${finalAttrs.version}";
     hash = "sha256-RXX21tCq0xJQli3NTertM9IweONrJfGeaFj3utMFjpM=";
+=======
+    rev = "v${version}";
+    hash = "sha256-pGdZmQBUuNCk9/scUvq4vduINu5gqtCRLaz7QE2e6WU=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [
@@ -102,8 +123,11 @@ stdenv.mkDerivation (finalAttrs: {
     "-DGEOTIFF_LIBRARY_RELEASE=${lib.getLib libgeotiff}/lib/libgeotiff${stdenv.hostPlatform.extensions.sharedLibrary}"
     "-DMYSQL_INCLUDE_DIR=${lib.getDev libmysqlclient}/include/mysql"
     "-DMYSQL_LIBRARY=${lib.getLib libmysqlclient}/lib/${lib.optionalString (libmysqlclient.pname != "mysql") "mysql/"}libmysqlclient${stdenv.hostPlatform.extensions.sharedLibrary}"
+<<<<<<< HEAD
   ] ++ lib.optionals finalAttrs.doInstallCheck [
     "-DBUILD_TESTING=ON"
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ] ++ lib.optionals (!stdenv.isDarwin) [
     "-DCMAKE_SKIP_BUILD_RPATH=ON" # without, libgdal.so can't find libmariadb.so
   ] ++ lib.optionals stdenv.isDarwin [
@@ -112,6 +136,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-DGDAL_USE_TILEDB=OFF"
   ];
 
+<<<<<<< HEAD
   buildInputs =
     let
       tileDbDeps = lib.optionals useTiledb [ tiledb ];
@@ -189,6 +214,64 @@ stdenv.mkDerivation (finalAttrs: {
       ++ armadilloDeps
       ++ darwinDeps
       ++ nonDarwinDeps;
+=======
+  buildInputs = [
+    armadillo
+    c-blosc
+    brunsli
+    cfitsio
+    crunch
+    curl
+    cryptopp
+    libdeflate
+    expat
+    libgeotiff
+    geos
+    giflib
+    libheif
+    dav1d  # required by libheif
+    libaom  # required by libheif
+    libde265  # required by libheif
+    rav1e  # required by libheif
+    x265  # required by libheif
+    hdf4
+    hdf5-cpp
+    libjpeg
+    json_c
+    libjxl
+    libhwy  # required by libjxl
+    lerc
+    xz
+    libxml2
+    lz4
+    libmysqlclient
+    netcdf
+    openjpeg
+    openssl
+    pcre2
+    libpng
+    poppler
+    postgresql
+    proj
+    qhull
+    libspatialite
+    sqlite
+    libtiff
+  ] ++ lib.optionals useTiledb [
+    tiledb
+  ] ++ [
+    libwebp
+    zlib
+    zstd
+    python3
+    python3.pkgs.numpy
+  ] ++ lib.optionals (!stdenv.isDarwin) [
+    # tests for formats enabled by these packages fail on macos
+    arrow-cpp
+    openexr
+    xercesc
+  ] ++ lib.optional stdenv.isDarwin libiconv;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   postInstall = ''
     wrapPythonPrograms
@@ -200,6 +283,7 @@ stdenv.mkDerivation (finalAttrs: {
   # preCheck rather than preInstallCheck because this is what pytestCheckHook
   # calls (coming from the python world)
   preCheck = ''
+<<<<<<< HEAD
     pushd autotest
 
     export HOME=$(mktemp -d)
@@ -209,11 +293,20 @@ stdenv.mkDerivation (finalAttrs: {
     # the issue was not investigated
     # https://github.com/OSGeo/gdal/blob/v3.7.0/autotest/gdrivers/bag.py#L61
     export BUILD_NAME=fedora
+=======
+    pushd ../autotest
+
+    export HOME=$(mktemp -d)
+    export PYTHONPATH="$out/${python3.sitePackages}:$PYTHONPATH"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '';
   nativeInstallCheckInputs = with python3.pkgs; [
     pytestCheckHook
     pytest-env
+<<<<<<< HEAD
     filelock
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     lxml
   ];
   disabledTestPaths = [
@@ -230,7 +323,11 @@ stdenv.mkDerivation (finalAttrs: {
     "test_transformer_dem_overrride_srs"
     "test_osr_ct_options_area_of_interest"
     # ZIP does not support timestamps before 1980
+<<<<<<< HEAD
     "test_sentinel2_zipped"
+=======
+    " test_sentinel2_zipped"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     # tries to call unwrapped executable
     "test_SetPROJAuxDbPaths"
   ] ++ lib.optionals (!stdenv.isx86_64) [
@@ -241,6 +338,7 @@ stdenv.mkDerivation (finalAttrs: {
     "test_rda_download_queue"
   ] ++ lib.optionals (lib.versionOlder proj.version "8") [
     "test_ogr_parquet_write_crs_without_id_in_datum_ensemble_members"
+<<<<<<< HEAD
   ] ++ lib.optionals (!usePoppler) [
     "test_pdf_jpx_compression"
   ];
@@ -263,3 +361,21 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = platforms.unix;
   };
 })
+=======
+  ];
+  postCheck = ''
+    popd # ../autotest
+  '';
+
+  __darwinAllowLocalNetworking = true;
+
+  meta = {
+    description = "Translator library for raster geospatial data formats";
+    homepage = "https://www.gdal.org/";
+    changelog = "https://github.com/OSGeo/gdal/blob/${src.rev}/NEWS.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ marcweber dotlambda ];
+    platforms = lib.platforms.unix;
+  };
+}
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)

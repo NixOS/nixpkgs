@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 { stdenv, lib, fetchurl, undmg }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -8,6 +9,18 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (finalAttrs) version;
     url = "mirror://sourceforge/grandperspectiv/GrandPerspective-${lib.replaceStrings [ "." ] [ "_" ] finalAttrs.version}.dmg";
     hash = "sha256-iTtvP6iONcfDWJ3qMh+TUJMN+3spwCQ/5S+A307BJCM=";
+=======
+{ stdenv, lib, fetchurl, undmg, ... }:
+
+stdenv.mkDerivation rec {
+  version = "3.0.1";
+  pname = "grandperspective";
+
+  src = fetchurl {
+    inherit version;
+    url = "mirror://sourceforge/grandperspectiv/GrandPerspective-${builtins.replaceStrings [ "." ] [ "_" ] version}.dmg";
+    sha256 = "sha256-ZPqrlN9aw5q7656GmmxCnTRBw3lu9n952rIyun8MsiI=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   sourceRoot = "GrandPerspective.app";
@@ -26,6 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
       the file's size. Files in the same folder appear together, but their placement is otherwise arbitrary.
     '';
     homepage = "https://grandperspectiv.sourceforge.net";
+<<<<<<< HEAD
     license = licenses.gpl2Only;
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     maintainers = with maintainers; [ eliandoran ];
@@ -33,3 +47,11 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
 })
+=======
+    license = licenses.gpl2;
+    maintainers = with maintainers; [ eliandoran ];
+    platforms = [ "x86_64-darwin" ];
+  };
+
+}
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)

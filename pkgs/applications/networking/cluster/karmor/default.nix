@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 { lib
 , buildGoModule
 , fetchFromGitHub
@@ -9,11 +10,19 @@
 buildGoModule rec {
   pname = "karmor";
   version = "0.13.16";
+=======
+{ buildGoModule, fetchFromGitHub, installShellFiles, lib }:
+
+buildGoModule rec {
+  pname = "karmor";
+  version = "0.13.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "kubearmor";
     repo = "kubearmor-client";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-MEP7OlmsPe5qpdFBEOzCsJqLdZ5t7bMwPE/JhP9bGTY=";
   };
 
@@ -28,6 +37,15 @@ buildGoModule rec {
     "-X=github.com/kubearmor/kubearmor-client/selfupdate.GitSummary=${version}"
   ];
 
+=======
+    hash = "sha256-HSMyGA4S8VjEA2u4TbmH+qS5ZCsWBg+aTNhAbt4S6yY=";
+  };
+
+  vendorHash = "sha256-Rxm96sgdZFKuyQzT76WJHvzEM0tG2rvqnl7+umoFIMY=";
+
+  nativeBuildInputs = [ installShellFiles ];
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   # integration tests require network access
   doCheck = false;
 
@@ -39,6 +57,7 @@ buildGoModule rec {
       --zsh  <($out/bin/karmor completion zsh)
   '';
 
+<<<<<<< HEAD
   passthru.tests = {
     version = testers.testVersion {
       package = karmor;
@@ -46,11 +65,17 @@ buildGoModule rec {
     };
   };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   meta = with lib; {
     description = "A client tool to help manage KubeArmor";
     homepage = "https://kubearmor.io";
     changelog = "https://github.com/kubearmor/kubearmor-client/releases/v${version}";
     license = licenses.asl20;
+<<<<<<< HEAD
     maintainers = with maintainers; [ urandom kashw2 ];
+=======
+    maintainers = with maintainers; [ urandom ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

@@ -75,6 +75,7 @@ let
     else
       throw "buildRubyGem: don't know how to build a gem of type \"${type}\""
   );
+<<<<<<< HEAD
 
   # See: https://github.com/rubygems/rubygems/blob/7a7b234721c375874b7e22b1c5b14925b943f04e/bundler/lib/bundler/source/git.rb#L103
   suffix =
@@ -83,6 +84,8 @@ let
     else
       version;
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   documentFlag =
     if document == []
     then "-N"
@@ -94,7 +97,10 @@ stdenv.mkDerivation ((builtins.removeAttrs attrs ["source"]) // {
   inherit ruby;
   inherit dontBuild;
   inherit dontStrip;
+<<<<<<< HEAD
   inherit suffix;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   gemType = type;
 
   nativeBuildInputs = [
@@ -109,7 +115,11 @@ stdenv.mkDerivation ((builtins.removeAttrs attrs ["source"]) // {
     ++ buildInputs;
 
   #name = builtins.trace (attrs.name or "no attr.name" ) "${namePrefix}${gemName}-${version}";
+<<<<<<< HEAD
   name = attrs.name or "${namePrefix}${gemName}-${suffix}";
+=======
+  name = attrs.name or "${namePrefix}${gemName}-${version}";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   inherit src;
 
@@ -145,7 +155,11 @@ stdenv.mkDerivation ((builtins.removeAttrs attrs ["source"]) // {
 
   # As of ruby 3.0, ruby headers require -fdeclspec when building with clang
   # Introduced in https://github.com/ruby/ruby/commit/0958e19ffb047781fe1506760c7cbd8d7fe74e57
+<<<<<<< HEAD
   env.NIX_CFLAGS_COMPILE = toString (lib.optionals (ruby.rubyEngine == "ruby" && stdenv.cc.isClang && lib.versionAtLeast ruby.version.major "3") [
+=======
+  env.NIX_CFLAGS_COMPILE = toString (lib.optionals (stdenv.cc.isClang && lib.versionAtLeast ruby.version.major "3") [
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "-fdeclspec"
   ]);
 
@@ -233,7 +247,11 @@ stdenv.mkDerivation ((builtins.removeAttrs attrs ["source"]) // {
     pushd $out/${ruby.gemPath}
     find doc/ -iname created.rid -delete -print
     find gems/*/ext/ extensions/ \( -iname Makefile -o -iname mkmf.log -o -iname gem_make.out \) -delete -print
+<<<<<<< HEAD
     ${lib.optionalString (!keepGemCache) "rm -fvr cache"}
+=======
+    ${if keepGemCache then "" else "rm -fvr cache"}
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     popd
 
     # write out metadata and binstubs

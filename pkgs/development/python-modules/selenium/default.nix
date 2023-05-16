@@ -54,6 +54,10 @@ buildPythonPackage rec {
     description = "Bindings for Selenium WebDriver";
     homepage = "https://selenium.dev/";
     license = licenses.asl20;
+<<<<<<< HEAD
     maintainers = with maintainers; [ jraygauthier ];
+=======
+    maintainers = with maintainers; [ jraygauthier SuperSandro2000 ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

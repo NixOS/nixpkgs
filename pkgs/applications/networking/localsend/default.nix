@@ -2,6 +2,7 @@
 
 let
   pname = "localsend";
+<<<<<<< HEAD
   version = "1.11.0";
 
   srcs = rec {
@@ -16,6 +17,21 @@ let
     aarch64-darwin = x86_64-darwin;
   };
   src = srcs.${stdenv.hostPlatform.system} or (throw "Unsupported system for package localsend: ${stdenv.hostPlatform.system}");
+=======
+  version = "1.9.1";
+
+  srcs = {
+    x86_64-linux = fetchurl {
+      url = "https://github.com/localsend/localsend/releases/download/v${version}/LocalSend-${version}.AppImage";
+      hash = "sha256-YAhGkJwDno8GeOepyokHv068IhY8H+L88VrKP76VHjU=";
+    };
+    x86_64-darwin = fetchurl {
+      url = "https://github.com/localsend/localsend/releases/download/v${version}/LocalSend-${version}.dmg";
+      hash = "sha256-GXyFSsTK3S8nhwixDgZTQEwRt3SOcsnbARzb/BhTk8w=";
+    };
+  };
+  src = srcs.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   appimageContents = appimageTools.extract { inherit pname version src; };
 
@@ -30,10 +46,18 @@ let
       install -m 444 -D ${appimageContents}/org.localsend.localsend_app.desktop \
         $out/share/applications/${pname}.desktop
       substituteInPlace $out/share/applications/${pname}.desktop \
+<<<<<<< HEAD
         --replace 'Exec=localsend_app' "Exec=$out/bin/localsend"
 
       install -m 444 -D ${appimageContents}/localsend.png \
         $out/share/icons/hicolor/256x256/apps/localsend.png
+=======
+        --replace 'Icon=application-vnd.appimage' 'Icon=${pname}' \
+        --replace 'Exec=localsend_app' 'Exec=$out/bin/localsend'
+
+      install -m 444 -D ${appimageContents}/application-vnd.appimage.svg \
+        $out/share/icons/hicolor/scalable/apps/${pname}.svg
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     '';
   };
 

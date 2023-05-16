@@ -13,13 +13,21 @@
 }:
 
 let
+<<<<<<< HEAD
   spark = { pname, version, hash, extraMeta ? {} }:
+=======
+  spark = { pname, version, sha256, extraMeta ? {} }:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     stdenv.mkDerivation rec {
       inherit pname version;
       jdk = if hadoopSupport then hadoop.jdk else jdk8;
       src = fetchzip {
         url = "mirror://apache/spark/${pname}-${version}/${pname}-${version}-bin-without-hadoop.tgz";
+<<<<<<< HEAD
         inherit hash;
+=======
+        sha256 = sha256;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       };
       nativeBuildInputs = [ makeWrapper ];
       buildInputs = [ jdk python3Packages.python ]
@@ -74,6 +82,7 @@ in
   spark_3_4 = spark rec {
     pname = "spark";
     version = "3.4.0";
+<<<<<<< HEAD
     hash = "sha256-0y80dRYzb6Ceu6MlGQHtpMdzOob/TBg6kf8dtF6KyCk=";
   };
   spark_3_3 = spark rec {
@@ -87,5 +96,8 @@ in
     version = "3.2.4";
     hash = "sha256-xL4W+dTWbvmmncq3/8iXmhp24rp5SftvoRfkTyxCI8E=";
     extraMeta.knownVulnerabilities = [ "CVE-2023-22946" ];
+=======
+    sha256 = "sha256-0y80dRYzb6Ceu6MlGQHtpMdzOob/TBg6kf8dtF6KyCk=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

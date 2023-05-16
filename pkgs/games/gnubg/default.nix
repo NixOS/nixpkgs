@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 { lib, stdenv, fetchurl, pkg-config, glib, python3, gtk2, readline,
   copyDesktopItems, makeDesktopItem }:
 
@@ -11,6 +12,20 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ copyDesktopItems pkg-config python3 glib ];
+=======
+{ lib, stdenv, fetchurl, pkg-config, glib, python2, gtk2, readline }:
+
+stdenv.mkDerivation rec {
+  pname = "gnubg";
+  version = "1.06.002";
+
+  src = fetchurl {
+    url = "http://gnubg.org/media/sources/gnubg-release-${version}-sources.tar.gz";
+    sha256 = "11xwhcli1h12k6rnhhyq4jphzrhfik7i8ah3k32pqw803460n6yf";
+  };
+
+  nativeBuildInputs = [ pkg-config python2 glib ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   buildInputs = [ gtk2 readline ];
 
@@ -18,6 +33,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--with-gtk" "--with--board3d" ];
 
+<<<<<<< HEAD
   desktopItems = makeDesktopItem {
     desktopName = "GNU Backgammon";
     name = pname;
@@ -31,6 +47,11 @@ stdenv.mkDerivation rec {
   meta = with lib;
     { description = "World class backgammon application";
       homepage = "https://www.gnu.org/software/gnubg/";
+=======
+  meta = with lib;
+    { description = "World class backgammon application";
+      homepage = "http://www.gnubg.org/";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       license = licenses.gpl3;
       maintainers = [ maintainers.ehmry ];
       platforms = platforms.linux;

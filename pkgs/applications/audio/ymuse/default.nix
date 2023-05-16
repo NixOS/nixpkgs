@@ -1,4 +1,9 @@
+<<<<<<< HEAD
 { lib
+=======
+{ stdenv
+, lib
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , fetchFromGitHub
 , buildGoModule
 , wrapGAppsHook
@@ -19,10 +24,16 @@ buildGoModule rec {
     owner = "yktoo";
     repo = "ymuse";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-3QgBbK7AK9/uQ6Z7DNIJxa1oXrxvvHDQ/Z2QOf7yfS4=";
   };
 
   vendorHash = "sha256-7oYYZWpvWzeHlp6l9bLeHcLITLZPVY5eZdfHSE+ZHW8=";
+=======
+    sha256 = "sha256-3QgBbK7AK9/uQ6Z7DNIJxa1oXrxvvHDQ/Z2QOf7yfS4=";
+  };
+  vendorSha256 = "sha256-7oYYZWpvWzeHlp6l9bLeHcLITLZPVY5eZdfHSE+ZHW8=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nativeBuildInputs = [
     pkg-config

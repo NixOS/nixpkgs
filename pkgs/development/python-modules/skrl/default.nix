@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+<<<<<<< HEAD
 , fetchpatch
 , pythonOlder
 , pytestCheckHook
@@ -10,13 +11,25 @@
 , tensorboard
 , tqdm
 , wandb
+=======
+, pythonOlder
+, pytestCheckHook
+, gym
+, torch
+, tensorboard
+, tqdm
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , packaging
 }:
 
 buildPythonPackage rec {
   pname = "skrl";
+<<<<<<< HEAD
   version = "0.10.2";
   format = "setuptools";
+=======
+  version = "0.10.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   disabled = pythonOlder "3.6";
 
@@ -24,6 +37,7 @@ buildPythonPackage rec {
     owner = "Toni-SM";
     repo = pname;
     rev = "refs/tags/${version}";
+<<<<<<< HEAD
     hash = "sha256-OY5+bUPg+G1eKFMvHlXSHwc2WWHTpyoyCKjY3MvlLyM=";
   };
 
@@ -43,6 +57,16 @@ buildPythonPackage rec {
     tensorboard
     tqdm
     wandb
+=======
+    hash = "sha256-/fFKotDibc+wcoGteloh5OEKbQdN/W1NdF+mWf8mSNw=";
+  };
+
+  propagatedBuildInputs = [
+    gym
+    torch
+    tensorboard
+    tqdm
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     packaging
   ];
 

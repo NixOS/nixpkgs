@@ -19,7 +19,11 @@ pkgs.releaseTools.sourceTarball {
   versionSuffix = "pre${
     if nixpkgs ? lastModified
     then builtins.substring 0 8 (nixpkgs.lastModifiedDate or nixpkgs.lastModified)
+<<<<<<< HEAD
     else toString (nixpkgs.revCount or 0)}.${nixpkgs.shortRev or "dirty"}";
+=======
+    else toString nixpkgs.revCount}.${nixpkgs.shortRev or "dirty"}";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   buildInputs = with pkgs; [ nix.out jq lib-tests brotli ];
 

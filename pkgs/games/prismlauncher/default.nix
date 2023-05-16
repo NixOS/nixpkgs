@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+<<<<<<< HEAD
 , fetchpatch
 , canonicalize-jars-hook
 , cmake
@@ -19,6 +20,33 @@
 , gamemodeSupport ? stdenv.isLinux
 ,
 }:
+=======
+, cmake
+, ninja
+, jdk8
+, jdk17
+, zlib
+, file
+, wrapQtAppsHook
+, xorg
+, libpulseaudio
+, qtbase
+, qtsvg
+, qtwayland
+, libGL
+, quazip
+, glfw
+, openal
+, extra-cmake-modules
+, tomlplusplus
+, ghc_filesystem
+, msaClientID ? ""
+, jdks ? [ jdk17 jdk8 ]
+, gamemodeSupport ? true
+, gamemode
+}:
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 let
   libnbtplusplus = fetchFromGitHub {
     owner = "PrismLauncher";
@@ -28,17 +56,24 @@ let
   };
 in
 
+<<<<<<< HEAD
 assert lib.assertMsg (stdenv.isLinux || !gamemodeSupport) "gamemodeSupport is only available on Linux";
 
 stdenv.mkDerivation
 rec {
   pname = "prismlauncher-unwrapped";
   version = "7.2";
+=======
+stdenv.mkDerivation rec {
+  pname = "prismlauncher";
+  version = "6.3";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "PrismLauncher";
     repo = "PrismLauncher";
     rev = version;
+<<<<<<< HEAD
     sha256 = "sha256-RArg60S91YKp1Mt97a5JNfBEOf2cmuX4pK3VAx2WfqM=";
   };
 
@@ -96,6 +131,56 @@ rec {
   '';
 
   dontWrapQtApps = true;
+=======
+    sha256 = "sha256-7tptHKWkbdxTn6VIPxXE1K3opKRiUW2zv9r6J05dcS8=";
+  };
+
+  nativeBuildInputs = [ extra-cmake-modules cmake file jdk17 ninja wrapQtAppsHook ];
+  buildInputs = [
+    qtbase
+    qtsvg
+    zlib
+    quazip
+    ghc_filesystem
+    tomlplusplus
+  ]
+  ++ lib.optional (lib.versionAtLeast qtbase.version "6") qtwayland
+  ++ lib.optional gamemodeSupport gamemode.dev;
+
+  cmakeFlags = lib.optionals (msaClientID != "") [ "-DLauncher_MSA_CLIENT_ID=${msaClientID}" ]
+    ++ lib.optionals (lib.versionAtLeast qtbase.version "6") [ "-DLauncher_QT_VERSION_MAJOR=6" ];
+
+  postUnpack = ''
+    rm -rf source/libraries/libnbtplusplus
+    mkdir source/libraries/libnbtplusplus
+    ln -s ${libnbtplusplus}/* source/libraries/libnbtplusplus
+    chmod -R +r+w source/libraries/libnbtplusplus
+    chown -R $USER: source/libraries/libnbtplusplus
+  '';
+
+  qtWrapperArgs =
+    let
+      libpath = with xorg;
+        lib.makeLibraryPath ([
+          libX11
+          libXext
+          libXcursor
+          libXrandr
+          libXxf86vm
+          libpulseaudio
+          libGL
+          glfw
+          openal
+          stdenv.cc.cc.lib
+        ] ++ lib.optional gamemodeSupport gamemode.lib);
+    in
+    [
+      "--set LD_LIBRARY_PATH /run/opengl-driver/lib:${libpath}"
+      "--prefix PRISMLAUNCHER_JAVA_PATHS : ${lib.makeSearchPath "bin/java" jdks}"
+      # xorg.xrandr needed for LWJGL [2.9.2, 3) https://github.com/LWJGL/lwjgl/issues/128
+      "--prefix PATH : ${lib.makeBinPath [xorg.xrandr]}"
+    ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   meta = with lib; {
     homepage = "https://prismlauncher.org/";
@@ -105,9 +190,16 @@ rec {
       their own mods, texture packs, saves, etc) and helps you manage them and
       their associated options with a simple interface.
     '';
+<<<<<<< HEAD
     platforms = with platforms; linux ++ darwin;
     changelog = "https://github.com/PrismLauncher/PrismLauncher/releases/tag/${version}";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ minion3665 Scrumplex getchoo ];
+=======
+    platforms = platforms.linux;
+    changelog = "https://github.com/PrismLauncher/PrismLauncher/releases/tag/${version}";
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ minion3665 Scrumplex ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

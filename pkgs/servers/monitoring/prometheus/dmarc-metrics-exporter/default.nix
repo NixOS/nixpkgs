@@ -5,7 +5,11 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "dmarc-metrics-exporter";
+<<<<<<< HEAD
   version = "0.9.4";
+=======
+  version = "0.9.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   disabled = python3.pythonOlder "3.8";
 
@@ -15,7 +19,11 @@ python3.pkgs.buildPythonApplication rec {
     owner = "jgosmann";
     repo = "dmarc-metrics-exporter";
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-doKG191rQvUpjOb3HvkzZP9XbtQXYGFtDJIdDSFRLSU=";
+=======
+    hash = "sha256-o22Jn2x2mFczjQTttKEfrzGBAKpXSe9JT8kIA5WGjmA=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   pythonRelaxDeps = true;

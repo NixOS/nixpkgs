@@ -56,6 +56,7 @@ buildPythonPackage rec {
   disabledTests = [
     # Expected: (<class 'wormhole.errors.WrongPasswordError'>,) Got: Failure instance: Traceback (failure with no frames): <class 'wormhole.errors.LonelyError'>:
     "test_welcome"
+<<<<<<< HEAD
   ] ++ lib.optionals stdenv.isDarwin [
     # These tests doesn't work within Darwin's sandbox
     "test_version"
@@ -81,6 +82,8 @@ buildPythonPackage rec {
     # These tests doesn't work within Darwin's sandbox
     "src/wormhole/test/test_xfer_util.py"
     "src/wormhole/test/test_wormhole.py"
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   postPatch = lib.optionalString stdenv.isLinux ''
@@ -95,7 +98,11 @@ buildPythonPackage rec {
     description = "Securely transfer data between computers";
     homepage = "https://github.com/magic-wormhole/magic-wormhole";
     license = licenses.mit;
+<<<<<<< HEAD
     maintainers = with maintainers; [ asymmetric ];
+=======
+    maintainers = with maintainers; [ asymmetric SuperSandro2000 ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     mainProgram = "wormhole";
   };
 }

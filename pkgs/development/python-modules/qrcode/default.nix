@@ -7,8 +7,11 @@
 , typing-extensions
 , mock
 , pytestCheckHook
+<<<<<<< HEAD
 , testers
 , qrcode
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 buildPythonPackage rec {
@@ -28,8 +31,11 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     typing-extensions
     pypng
+<<<<<<< HEAD
     # imports pkg_resouces in console_scripts.py
     setuptools
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   passthru.optional-dependencies.pil = [
@@ -41,6 +47,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ] ++ passthru.optional-dependencies.pil;
 
+<<<<<<< HEAD
   passthru.tests = {
     version = testers.testVersion {
       package = qrcode;
@@ -48,6 +55,8 @@ buildPythonPackage rec {
     };
   };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   meta = with lib; {
     description = "Python QR Code image generator";
     homepage = "https://github.com/lincolnloop/python-qrcode";

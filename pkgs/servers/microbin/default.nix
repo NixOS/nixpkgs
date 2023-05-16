@@ -1,15 +1,20 @@
 { lib
 , rustPlatform
+<<<<<<< HEAD
 , fetchFromGitHub
 , pkg-config
 , oniguruma
 , openssl
 , stdenv
 , darwin
+=======
+, fetchCrate
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "microbin";
+<<<<<<< HEAD
   version = "2.0.4";
 
   src = fetchFromGitHub {
@@ -36,6 +41,17 @@ rustPlatform.buildRustPackage rec {
     OPENSSL_NO_VENDOR = true;
     RUSTONIG_SYSTEM_LIBONIG = true;
   };
+=======
+  version = "1.2.1";
+
+  # The GitHub source is outdated
+  src = fetchCrate {
+    inherit pname version;
+    hash = "sha256-OLg0ejs9nanMNlY0lcnJ/RoRwefrXEaaROwx5aPx4u8=";
+  };
+
+  cargoHash = "sha256-XdHP0XruqtyLyGbLHielnmTAc3ZgeIyyZnknO+5k4Xo=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   meta = with lib; {
     description = "A tiny, self-contained, configurable paste bin and URL shortener written in Rust";

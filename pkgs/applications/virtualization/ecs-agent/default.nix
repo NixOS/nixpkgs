@@ -2,13 +2,21 @@
 
 buildGoModule rec {
   pname = "amazon-ecs-agent";
+<<<<<<< HEAD
   version = "1.75.0";
+=======
+  version = "1.71.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     rev = "v${version}";
     owner = "aws";
     repo = pname;
+<<<<<<< HEAD
     hash = "sha256-pjBAu7QyDZdZbGK2pmvF75C6M3liS0KixupUx+iCEjA=";
+=======
+    hash = "sha256-+/aeLI1+VE80NdeAqc7ctZsS6i0Ymj/GXssduP8X//c=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   vendorHash = null;

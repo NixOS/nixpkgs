@@ -14,21 +14,36 @@
 
 buildGoModule rec {
   pname = "pulumi";
+<<<<<<< HEAD
   version = "3.72.2";
 
   # Used in pulumi-language packages, which inherit this prop
   sdkVendorHash = "sha256-S8eb2V7ZHhQ0xas+88lwxjL50+22dbyJ0aM60dAtb5k=";
+=======
+  version = "3.60.1";
+
+  # Used in pulumi-language packages, which inherit this prop
+  sdkVendorHash = "sha256-oXsU4h4CwukJHttYLT7JiW2He8Yq5qAwnxL8+G5FIpc=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-g/8l/ebtb1Gs6TKtg0joe55TyWj1/SAiA4Ds1NHKLFI=";
+=======
+    hash = "sha256-bSuntT5b8UVrYw4ds4AfZB3Plvav5zGaEQpe34FefXk=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     # Some tests rely on checkout directory name
     name = "pulumi";
   };
 
+<<<<<<< HEAD
   vendorHash = "sha256-eOxlTsvC/B+YTFlmT7MtiBBSJIntI4vogdiZ1gOkehw=";
+=======
+  vendorHash = "sha256-QDF2z8AjULQYvlxah/JgmbzoPuKQrgQng/33S+7K1Bw=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   sourceRoot = "${src.name}/pkg";
 

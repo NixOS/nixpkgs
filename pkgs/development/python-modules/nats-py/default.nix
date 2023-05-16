@@ -7,14 +7,22 @@
 , nats-server
 , pytestCheckHook
 , pythonOlder
+<<<<<<< HEAD
 , setuptools
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , uvloop
 }:
 
 buildPythonPackage rec {
   pname = "nats-py";
+<<<<<<< HEAD
   version = "2.3.1";
   format = "pyproject";
+=======
+  version = "2.2.0";
+  format = "setuptools";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   disabled = pythonOlder "3.7";
 
@@ -22,6 +30,7 @@ buildPythonPackage rec {
     owner = "nats-io";
     repo = "nats.py";
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-vcTkQeaWBsPlPCp53VqI3inH0PkdxkKWDTW/vtrD/xw=";
   };
 
@@ -34,6 +43,11 @@ buildPythonPackage rec {
     setuptools
   ];
 
+=======
+    hash = "sha256-w+YySX9RNXUttt7iLg/Efh8bNzmhIQTKMXcoPO1k4lI=";
+  };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   propagatedBuildInputs = [
     aiohttp
     ed25519
@@ -45,6 +59,14 @@ buildPythonPackage rec {
     uvloop
   ];
 
+<<<<<<< HEAD
+=======
+  postPatch = ''
+    substituteInPlace setup.cfg \
+      --replace "--cov=nats --cov-report html" ""
+  '';
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   disabledTests = [
     # AssertionError: assert 5 == 0
     "test_pull_subscribe_limits"

@@ -43,7 +43,11 @@ rustPlatform.buildRustPackage rec {
     '';
     homepage = "https://github.com/imsnif/bandwhich";
     license = licenses.mit;
+<<<<<<< HEAD
     maintainers = with maintainers; [ Br1ght0ne figsoda ];
+=======
+    maintainers = with maintainers; [ Br1ght0ne SuperSandro2000 ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     platforms = platforms.unix;
   };
 }

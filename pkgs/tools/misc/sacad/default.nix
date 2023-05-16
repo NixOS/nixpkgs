@@ -1,10 +1,18 @@
+<<<<<<< HEAD
 { lib, python3Packages, fetchPypi, jpegoptim, optipng }:
+=======
+{ lib, python3Packages, jpegoptim, optipng }:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 python3Packages.buildPythonApplication rec {
   pname = "sacad";
   version = "2.4.0";
 
+<<<<<<< HEAD
   src = fetchPypi {
+=======
+  src = python3Packages.fetchPypi {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     inherit pname version;
     sha256 = "sha256-KLVkyiXjpqskM67W9uPl9aPKc3pYMu0nAfwI0OpOniE=";
   };

@@ -265,10 +265,17 @@
       elpaBuild {
         pname = "auctex";
         ename = "auctex";
+<<<<<<< HEAD
         version = "13.2.1";
         src = fetchurl {
           url = "https://elpa.gnu.org/packages/auctex-13.2.1.tar";
           sha256 = "0q914q1qm5w0yx9cqfmyxzbzxmrdkz321cazy7g7l4mc5qndb9nm";
+=======
+        version = "13.1.10";
+        src = fetchurl {
+          url = "https://elpa.gnu.org/packages/auctex-13.1.10.tar";
+          sha256 = "0vxf3aw7j73d0cbfh8d5fp5gyi7vxq9vb7fqxmxxs24pvdnlym15";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         };
         packageRequires = [ emacs ];
         meta = {
@@ -400,10 +407,17 @@
       elpaBuild {
         pname = "beframe";
         ename = "beframe";
+<<<<<<< HEAD
         version = "0.3.0";
         src = fetchurl {
           url = "https://elpa.gnu.org/packages/beframe-0.3.0.tar";
           sha256 = "0naa3agr4h0z1fc3fwnsq4k57zpzvg7ganbr6dyp7c70ja8x32h0";
+=======
+        version = "0.2.0";
+        src = fetchurl {
+          url = "https://elpa.gnu.org/packages/beframe-0.2.0.tar";
+          sha256 = "1nj35r59zpa5hadw9axjassrixx91yqgiffpk9yfhjwnz2s93l15";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         };
         packageRequires = [ emacs ];
         meta = {
@@ -565,6 +579,7 @@
           license = lib.licenses.free;
         };
       }) {};
+<<<<<<< HEAD
     buildbot = callPackage ({ elpaBuild, emacs, fetchurl, lib }:
       elpaBuild {
         pname = "buildbot";
@@ -595,14 +610,23 @@
           license = lib.licenses.free;
         };
       }) {};
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     cape = callPackage ({ compat, elpaBuild, emacs, fetchurl, lib }:
       elpaBuild {
         pname = "cape";
         ename = "cape";
+<<<<<<< HEAD
         version = "0.17";
         src = fetchurl {
           url = "https://elpa.gnu.org/packages/cape-0.17.tar";
           sha256 = "1kby5qbw2z5c6629vfx6dx4f1a8gx58ciif9b9589drc6fnnsnlr";
+=======
+        version = "0.15";
+        src = fetchurl {
+          url = "https://elpa.gnu.org/packages/cape-0.15.tar";
+          sha256 = "1gy99a7zg8kbh7f4fqqq7cpwjmq7af066m6z6c1wrv438sfsd3kz";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         };
         packageRequires = [ compat emacs ];
         meta = {
@@ -749,10 +773,17 @@
       elpaBuild {
         pname = "comint-mime";
         ename = "comint-mime";
+<<<<<<< HEAD
         version = "0.3";
         src = fetchurl {
           url = "https://elpa.gnu.org/packages/comint-mime-0.3.tar";
           sha256 = "0dlzwzmiwq9z8riq6h1gpq1g713x09kxgaz2m4anxkbmgb95r7hf";
+=======
+        version = "0.2";
+        src = fetchurl {
+          url = "https://elpa.gnu.org/packages/comint-mime-0.2.tar";
+          sha256 = "06sxsrmxr2l63cslaqmsc03birkcsqbnwbjkhn0f8y3afb4pafkf";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         };
         packageRequires = [ emacs ];
         meta = {
@@ -847,10 +878,17 @@
       elpaBuild {
         pname = "compat";
         ename = "compat";
+<<<<<<< HEAD
         version = "29.1.4.2";
         src = fetchurl {
           url = "https://elpa.gnu.org/packages/compat-29.1.4.2.tar";
           sha256 = "1njvbvvx2gl10psswb8md2s9diiy476gy4yj6vwips40r0n96l3g";
+=======
+        version = "29.1.4.1";
+        src = fetchurl {
+          url = "https://elpa.gnu.org/packages/compat-29.1.4.1.tar";
+          sha256 = "1r8laxmdyrpz4nmzjrndd668bks4fgmbya04m0bfzwvhlrsca940";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         };
         packageRequires = [ emacs seq ];
         meta = {
@@ -862,10 +900,17 @@
       elpaBuild {
         pname = "consult";
         ename = "consult";
+<<<<<<< HEAD
         version = "0.35";
         src = fetchurl {
           url = "https://elpa.gnu.org/packages/consult-0.35.tar";
           sha256 = "00rw4d9k16wx55pk7fyj4z718vmqjq18jy0xiv7izzkdkkkk3l7p";
+=======
+        version = "0.34";
+        src = fetchurl {
+          url = "https://elpa.gnu.org/packages/consult-0.34.tar";
+          sha256 = "12dljbs0x5gbayibzb0mb3bn78wlfx9078b8l0fyfpvbhd9lxhfl";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         };
         packageRequires = [ compat emacs ];
         meta = {
@@ -907,10 +952,17 @@
       elpaBuild {
         pname = "corfu";
         ename = "corfu";
+<<<<<<< HEAD
         version = "0.38";
         src = fetchurl {
           url = "https://elpa.gnu.org/packages/corfu-0.38.tar";
           sha256 = "1pj7zdcqfk77fvfqgvp1gri4m11akn5hd87av28k745i7s0nq0i6";
+=======
+        version = "0.36";
+        src = fetchurl {
+          url = "https://elpa.gnu.org/packages/corfu-0.36.tar";
+          sha256 = "15ysg54rallbdx6la8q8yjdj9rag91wkga8agrwf0xh7pp3nij9d";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         };
         packageRequires = [ compat emacs ];
         meta = {
@@ -1042,10 +1094,17 @@
       elpaBuild {
         pname = "cursory";
         ename = "cursory";
+<<<<<<< HEAD
         version = "1.0.1";
         src = fetchurl {
           url = "https://elpa.gnu.org/packages/cursory-1.0.1.tar";
           sha256 = "0m6q7x5144l2q582gdaqgirvgy30ljd1qyjf82l3v1jkc5qf9wfr";
+=======
+        version = "0.3.0";
+        src = fetchurl {
+          url = "https://elpa.gnu.org/packages/cursory-0.3.0.tar";
+          sha256 = "1mgvdncqgf0ll2mn5zp47lvvbzrzgdga9dbbjwqaapzy6llfg51x";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         };
         packageRequires = [ emacs ];
         meta = {
@@ -1117,10 +1176,17 @@
       elpaBuild {
         pname = "debbugs";
         ename = "debbugs";
+<<<<<<< HEAD
         version = "0.36";
         src = fetchurl {
           url = "https://elpa.gnu.org/packages/debbugs-0.36.tar";
           sha256 = "1rzv13shadbvy583vjj4zg13v920zpiqrsnn10r3cqqyli89ivn2";
+=======
+        version = "0.35";
+        src = fetchurl {
+          url = "https://elpa.gnu.org/packages/debbugs-0.35.tar";
+          sha256 = "1w6y02ikjshfk12sdgbryfgj2z4yia2mpifa7g13ab7v9phpqpl1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         };
         packageRequires = [ emacs soap-client ];
         meta = {
@@ -1147,10 +1213,17 @@
       elpaBuild {
         pname = "denote";
         ename = "denote";
+<<<<<<< HEAD
         version = "2.0.0";
         src = fetchurl {
           url = "https://elpa.gnu.org/packages/denote-2.0.0.tar";
           sha256 = "1wrfbirkzf9szss1rgpmgdr0gy2dvhnbzlnyhw3sp2jvw5sb1xz9";
+=======
+        version = "1.2.0";
+        src = fetchurl {
+          url = "https://elpa.gnu.org/packages/denote-1.2.0.tar";
+          sha256 = "09xbyh22xll82ywqmlbsvqhxlqawfivaqydha0gs5qc4yn71kp0k";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         };
         packageRequires = [ emacs ];
         meta = {
@@ -1293,6 +1366,7 @@
           license = lib.licenses.free;
         };
       }) {};
+<<<<<<< HEAD
     dired-preview = callPackage ({ elpaBuild, emacs, fetchurl, lib }:
       elpaBuild {
         pname = "dired-preview";
@@ -1308,6 +1382,8 @@
           license = lib.licenses.free;
         };
       }) {};
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     disk-usage = callPackage ({ elpaBuild, emacs, fetchurl, lib }:
       elpaBuild {
         pname = "disk-usage";
@@ -1507,10 +1583,17 @@
       elpaBuild {
         pname = "ef-themes";
         ename = "ef-themes";
+<<<<<<< HEAD
         version = "1.3.0";
         src = fetchurl {
           url = "https://elpa.gnu.org/packages/ef-themes-1.3.0.tar";
           sha256 = "1cchc1cfp2y32d736r4523gjzvg4rd1nqddxsjsk5kialz06alms";
+=======
+        version = "0.11.0";
+        src = fetchurl {
+          url = "https://elpa.gnu.org/packages/ef-themes-0.11.0.tar";
+          sha256 = "06nkglshklsdr8xcdbrwbp402p260n6g3zk3mn9kv3ynf35wv2wv";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         };
         packageRequires = [ emacs ];
         meta = {
@@ -1532,10 +1615,17 @@
       elpaBuild {
         pname = "eglot";
         ename = "eglot";
+<<<<<<< HEAD
         version = "1.15";
         src = fetchurl {
           url = "https://elpa.gnu.org/packages/eglot-1.15.tar";
           sha256 = "05brq76xbdkbhbn572n0hyz80lwc3ly5waaqsaan5l1apxgl6ww7";
+=======
+        version = "1.14";
+        src = fetchurl {
+          url = "https://elpa.gnu.org/packages/eglot-1.14.tar";
+          sha256 = "0aw28gdx90k87czxf436r9bva58bal55cdnp90ga36c89wzdjznj";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         };
         packageRequires = [
           eldoc
@@ -1552,7 +1642,11 @@
           license = lib.licenses.free;
         };
       }) {};
+<<<<<<< HEAD
     el-search = callPackage ({ cl-print ? null
+=======
+    el-search = callPackage ({ cl-print
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
                              , elpaBuild
                              , emacs
                              , fetchurl
@@ -1632,6 +1726,7 @@
           license = lib.licenses.free;
         };
       }) {};
+<<<<<<< HEAD
     emacs-gc-stats = callPackage ({ elpaBuild, emacs, fetchurl, lib }:
       elpaBuild {
         pname = "emacs-gc-stats";
@@ -1647,6 +1742,8 @@
           license = lib.licenses.free;
         };
       }) {};
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     embark = callPackage ({ compat, elpaBuild, emacs, fetchurl, lib }:
       elpaBuild {
         pname = "embark";
@@ -1696,10 +1793,17 @@
       elpaBuild {
         pname = "ement";
         ename = "ement";
+<<<<<<< HEAD
         version = "0.11";
         src = fetchurl {
           url = "https://elpa.gnu.org/packages/ement-0.11.tar";
           sha256 = "0hsing0iwb69qmnzqii66rqb0cwy3k35ybl68a9jh7iw97jcxm73";
+=======
+        version = "0.8.3";
+        src = fetchurl {
+          url = "https://elpa.gnu.org/packages/ement-0.8.3.tar";
+          sha256 = "074ah73y2v285rlgzn3q2kcqmbra2qdz4hmjs8xd5hpk7za53c7w";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         };
         packageRequires = [
           emacs
@@ -1725,10 +1829,17 @@
       elpaBuild {
         pname = "emms";
         ename = "emms";
+<<<<<<< HEAD
         version = "16";
         src = fetchurl {
           url = "https://elpa.gnu.org/packages/emms-16.tar";
           sha256 = "1c18lrrfg1n5vn1av9p7q3jys27pdmxq8pq5gqb6397jnv9xywby";
+=======
+        version = "15";
+        src = fetchurl {
+          url = "https://elpa.gnu.org/packages/emms-15.tar";
+          sha256 = "0kd9qx93cgcxyqsnbp95xx414s08rd5bb35aif3c7qyab5w05yi6";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         };
         packageRequires = [ cl-lib nadvice seq ];
         meta = {
@@ -1824,6 +1935,7 @@
                                , lib
                                , nadvice
                                , soap-client
+<<<<<<< HEAD
                                , url-http-ntlm
                                , url-http-oauth }:
       elpaBuild {
@@ -1833,6 +1945,16 @@
         src = fetchurl {
           url = "https://elpa.gnu.org/packages/excorporate-1.1.1.tar";
           sha256 = "06ilfkrlx6ca0qfqq3w1w07kdwak556i1wgf1875py2d5xkg4r90";
+=======
+                               , url-http-ntlm }:
+      elpaBuild {
+        pname = "excorporate";
+        ename = "excorporate";
+        version = "1.0.0";
+        src = fetchurl {
+          url = "https://elpa.gnu.org/packages/excorporate-1.0.0.tar";
+          sha256 = "1g0wc2kp15ra323b4rxvdh58q9c4h7m20grw6a0cs53m7l9xi62f";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         };
         packageRequires = [
           cl-lib
@@ -1841,7 +1963,10 @@
           nadvice
           soap-client
           url-http-ntlm
+<<<<<<< HEAD
           url-http-oauth
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         ];
         meta = {
           homepage = "https://elpa.gnu.org/packages/excorporate.html";
@@ -1863,6 +1988,7 @@
           license = lib.licenses.free;
         };
       }) {};
+<<<<<<< HEAD
     expreg = callPackage ({ elpaBuild, emacs, fetchurl, lib }:
       elpaBuild {
         pname = "expreg";
@@ -1878,6 +2004,8 @@
           license = lib.licenses.free;
         };
       }) {};
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     external-completion = callPackage ({ elpaBuild, fetchurl, lib }:
       elpaBuild {
         pname = "external-completion";
@@ -1923,6 +2051,7 @@
           license = lib.licenses.free;
         };
       }) {};
+<<<<<<< HEAD
     face-shift = callPackage ({ elpaBuild, emacs, fetchurl, lib }:
       elpaBuild {
         pname = "face-shift";
@@ -1938,6 +2067,8 @@
           license = lib.licenses.free;
         };
       }) {};
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     filladapt = callPackage ({ elpaBuild, emacs, fetchurl, lib }:
       elpaBuild {
         pname = "filladapt";
@@ -1953,6 +2084,7 @@
           license = lib.licenses.free;
         };
       }) {};
+<<<<<<< HEAD
     firefox-javascript-repl = callPackage ({ elpaBuild
                                            , emacs
                                            , fetchurl
@@ -1971,6 +2103,8 @@
           license = lib.licenses.free;
         };
       }) {};
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     flylisp = callPackage ({ cl-lib ? null, elpaBuild, emacs, fetchurl, lib }:
       elpaBuild {
         pname = "flylisp";
@@ -2539,10 +2673,17 @@
       elpaBuild {
         pname = "inspector";
         ename = "inspector";
+<<<<<<< HEAD
         version = "0.33";
         src = fetchurl {
           url = "https://elpa.gnu.org/packages/inspector-0.33.tar";
           sha256 = "1kap3z68sjjaszmmznl4kk6mr31yd99cqv4yj34zb94vsb2xb6xj";
+=======
+        version = "0.28";
+        src = fetchurl {
+          url = "https://elpa.gnu.org/packages/inspector-0.28.tar";
+          sha256 = "0n7s9wai63p42ximiknmi8ryvnj71v6b1dnhafpapka8ymkkdwsb";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         };
         packageRequires = [ emacs ];
         meta = {
@@ -2724,10 +2865,17 @@
       elpaBuild {
         pname = "jinx";
         ename = "jinx";
+<<<<<<< HEAD
         version = "0.9";
         src = fetchurl {
           url = "https://elpa.gnu.org/packages/jinx-0.9.tar";
           sha256 = "0q9g3agql5gm95r64lpcwcs9scwhmwcjjnkiykzxdzpnkjn0mjgb";
+=======
+        version = "0.7";
+        src = fetchurl {
+          url = "https://elpa.gnu.org/packages/jinx-0.7.tar";
+          sha256 = "0kfi5sjzrbxkbcql3h5qi0gd4dsbrxbjg5wldid8vjgqm9cnzvw4";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         };
         packageRequires = [ compat emacs ];
         meta = {
@@ -2870,6 +3018,7 @@
           license = lib.licenses.free;
         };
       }) {};
+<<<<<<< HEAD
     latex-table-wizard = callPackage ({ auctex
                                       , elpaBuild
                                       , emacs
@@ -2890,6 +3039,8 @@
           license = lib.licenses.free;
         };
       }) {};
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     leaf = callPackage ({ elpaBuild, emacs, fetchurl, lib }:
       elpaBuild {
         pname = "leaf";
@@ -3029,10 +3180,17 @@
       elpaBuild {
         pname = "logos";
         ename = "logos";
+<<<<<<< HEAD
         version = "1.1.1";
         src = fetchurl {
           url = "https://elpa.gnu.org/packages/logos-1.1.1.tar";
           sha256 = "1lg4disxfzw9nf438j32q1cna447mlxy3sg523cqzhimh1mk5s9f";
+=======
+        version = "1.0.1";
+        src = fetchurl {
+          url = "https://elpa.gnu.org/packages/logos-1.0.1.tar";
+          sha256 = "1kmfsgapinx6p8zyxd2s81j703iiril9c907r576z5k498pfifb6";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         };
         packageRequires = [ emacs ];
         meta = {
@@ -3089,10 +3247,17 @@
       elpaBuild {
         pname = "marginalia";
         ename = "marginalia";
+<<<<<<< HEAD
         version = "1.3";
         src = fetchurl {
           url = "https://elpa.gnu.org/packages/marginalia-1.3.tar";
           sha256 = "14wk3ld9zaj05dmsyhq70kdl0h4bk4gl6sn7x5cckq3av78idh39";
+=======
+        version = "1.2";
+        src = fetchurl {
+          url = "https://elpa.gnu.org/packages/marginalia-1.2.tar";
+          sha256 = "1hhq09ghc8pcphgjhp5mc81i7j4xkkf5sc0swd6xr6mrxd044fnj";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         };
         packageRequires = [ compat emacs ];
         meta = {
@@ -3269,10 +3434,17 @@
       elpaBuild {
         pname = "modus-themes";
         ename = "modus-themes";
+<<<<<<< HEAD
         version = "4.2.0";
         src = fetchurl {
           url = "https://elpa.gnu.org/packages/modus-themes-4.2.0.tar";
           sha256 = "0bki4h3rs1ch47sygb4nib8960lyvvgs7yxgsy009il3hfxzdgsq";
+=======
+        version = "4.1.1";
+        src = fetchurl {
+          url = "https://elpa.gnu.org/packages/modus-themes-4.1.1.tar";
+          sha256 = "06lp7mpazby7iiwzw4naym983plg9r63ba9vmaszh3609d2gm0s9";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         };
         packageRequires = [ emacs ];
         meta = {
@@ -3409,10 +3581,17 @@
       elpaBuild {
         pname = "nano-modeline";
         ename = "nano-modeline";
+<<<<<<< HEAD
         version = "1.0.1";
         src = fetchurl {
           url = "https://elpa.gnu.org/packages/nano-modeline-1.0.1.tar";
           sha256 = "1bjxsqbi540cx2zxzrps2bdwj3hkaxw1s9wha1lrldhvckq7dm91";
+=======
+        version = "0.7.2";
+        src = fetchurl {
+          url = "https://elpa.gnu.org/packages/nano-modeline-0.7.2.tar";
+          sha256 = "14405gj7fh14incbpsg75fwzxfzazqp9lfk60i4w731kfwhlc727";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         };
         packageRequires = [ emacs ];
         meta = {
@@ -3503,10 +3682,17 @@
       elpaBuild {
         pname = "notmuch-indicator";
         ename = "notmuch-indicator";
+<<<<<<< HEAD
         version = "1.0.1";
         src = fetchurl {
           url = "https://elpa.gnu.org/packages/notmuch-indicator-1.0.1.tar";
           sha256 = "1n5k2ikk93mdwqqysf6l7gd8i6iazk8yvbqpf8xnz5zny248cc2x";
+=======
+        version = "0.2.2";
+        src = fetchurl {
+          url = "https://elpa.gnu.org/packages/notmuch-indicator-0.2.2.tar";
+          sha256 = "1jca5zm8vd91ivk5c6n2210ybp1i8rb8cpi1dymbxkcjxc61fzgp";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         };
         packageRequires = [ emacs ];
         meta = {
@@ -3653,10 +3839,17 @@
       elpaBuild {
         pname = "org";
         ename = "org";
+<<<<<<< HEAD
         version = "9.6.8";
         src = fetchurl {
           url = "https://elpa.gnu.org/packages/org-9.6.8.tar";
           sha256 = "1drkpwpjkbi5q6hnifi1x6ib0fp51isga2gl0hj7q0shy161ajv0";
+=======
+        version = "9.6.4";
+        src = fetchurl {
+          url = "https://elpa.gnu.org/packages/org-9.6.4.tar";
+          sha256 = "1g0yi308bviw9fypikx67n2g4hvr63cin4pxnhv8s70np7754kf2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         };
         packageRequires = [ emacs ];
         meta = {
@@ -3698,10 +3891,17 @@
       elpaBuild {
         pname = "org-modern";
         ename = "org-modern";
+<<<<<<< HEAD
         version = "0.10";
         src = fetchurl {
           url = "https://elpa.gnu.org/packages/org-modern-0.10.tar";
           sha256 = "0y17n6ac1b8rsa91qbisagp5mpmpnlni3j78x55z5dnpbi31yn1l";
+=======
+        version = "0.9";
+        src = fetchurl {
+          url = "https://elpa.gnu.org/packages/org-modern-0.9.tar";
+          sha256 = "1aq02w1mbqfx370d18a21w6jhnwad55v73yhlvqyghkh1xdi3h0j";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         };
         packageRequires = [ compat emacs ];
         meta = {
@@ -3743,10 +3943,17 @@
       elpaBuild {
         pname = "org-remark";
         ename = "org-remark";
+<<<<<<< HEAD
         version = "1.2.1";
         src = fetchurl {
           url = "https://elpa.gnu.org/packages/org-remark-1.2.1.tar";
           sha256 = "0xf10kgb0g4y9i4s1d3a1i5a119a1pijzhp5xxj2b2wyvjs2g3yk";
+=======
+        version = "1.0.5";
+        src = fetchurl {
+          url = "https://elpa.gnu.org/packages/org-remark-1.0.5.tar";
+          sha256 = "01pgfg9j5wrhggjklkc9nbfiwjd5qnmhcbcccc06jz3hmd0rnxr2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         };
         packageRequires = [ emacs org ];
         meta = {
@@ -3818,10 +4025,17 @@
       elpaBuild {
         pname = "osm";
         ename = "osm";
+<<<<<<< HEAD
         version = "0.13";
         src = fetchurl {
           url = "https://elpa.gnu.org/packages/osm-0.13.tar";
           sha256 = "13bdp8cz1w396vdfxvv8ygla7cbln178rjliknhfl3kqggg32kqx";
+=======
+        version = "0.11";
+        src = fetchurl {
+          url = "https://elpa.gnu.org/packages/osm-0.11.tar";
+          sha256 = "17bll1p3s5gkhaiisab8w5q9ygsmqgmzfq5irghl71vlac0r2gsk";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         };
         packageRequires = [ compat emacs ];
         meta = {
@@ -3938,10 +4152,17 @@
       elpaBuild {
         pname = "perl-doc";
         ename = "perl-doc";
+<<<<<<< HEAD
         version = "0.81";
         src = fetchurl {
           url = "https://elpa.gnu.org/packages/perl-doc-0.81.tar";
           sha256 = "1hbf36zrpjx0xx257370axxfs1yb3iz6g9kc4wg83gcag09j3lci";
+=======
+        version = "0.6";
+        src = fetchurl {
+          url = "https://elpa.gnu.org/packages/perl-doc-0.6.tar";
+          sha256 = "0xmk09pfvdzkrjfsa2l78bd6akcbdhcbnpvwnm6r83h65gpld79f";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         };
         packageRequires = [ emacs ];
         meta = {
@@ -3998,10 +4219,17 @@
       elpaBuild {
         pname = "plz";
         ename = "plz";
+<<<<<<< HEAD
         version = "0.7";
         src = fetchurl {
           url = "https://elpa.gnu.org/packages/plz-0.7.tar";
           sha256 = "00xm6hp51m4cmlw15qgqrspwgs3d9z1hw9pbpva9sa4v7vsbipd2";
+=======
+        version = "0.5.4";
+        src = fetchurl {
+          url = "https://elpa.gnu.org/packages/plz-0.5.4.tar";
+          sha256 = "0dmjza49135x3baczk6q0lv9ib8lvfkdbbw4ps5hkr45wfxr64vc";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         };
         packageRequires = [ emacs ];
         meta = {
@@ -4013,10 +4241,17 @@
       elpaBuild {
         pname = "poke";
         ename = "poke";
+<<<<<<< HEAD
         version = "3.2";
         src = fetchurl {
           url = "https://elpa.gnu.org/packages/poke-3.2.tar";
           sha256 = "0rhcz7kg20j72hf9rhq5zacdak8ayhn4cnwhgq9qwr18z00bxxm7";
+=======
+        version = "3.0";
+        src = fetchurl {
+          url = "https://elpa.gnu.org/packages/poke-3.0.tar";
+          sha256 = "08ajbhwj4sdph9ay7wbd807slzxg6360kpqkyyvhdzl8kqh67wc7";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         };
         packageRequires = [ emacs ];
         meta = {
@@ -4058,10 +4293,17 @@
       elpaBuild {
         pname = "posframe";
         ename = "posframe";
+<<<<<<< HEAD
         version = "1.4.2";
         src = fetchurl {
           url = "https://elpa.gnu.org/packages/posframe-1.4.2.tar";
           sha256 = "0ca43wgbr0n5ri7cyxjmn7blq59xq43rx9z9q02a2j4yn05w8nss";
+=======
+        version = "1.4.1";
+        src = fetchurl {
+          url = "https://elpa.gnu.org/packages/posframe-1.4.1.tar";
+          sha256 = "02kw3d6760015q61sryw8k3zqdnzhcwwyfjfysbfs07cljkqpjnh";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         };
         packageRequires = [ emacs ];
         meta = {
@@ -4118,10 +4360,17 @@
       elpaBuild {
         pname = "pulsar";
         ename = "pulsar";
+<<<<<<< HEAD
         version = "1.0.1";
         src = fetchurl {
           url = "https://elpa.gnu.org/packages/pulsar-1.0.1.tar";
           sha256 = "0qknyd6ihqg4n940yll5v2hz3w07fsp4mbdfh7drbws13c1ivnly";
+=======
+        version = "0.5.0";
+        src = fetchurl {
+          url = "https://elpa.gnu.org/packages/pulsar-0.5.0.tar";
+          sha256 = "1bs6f8j1a7vypwm087zsrccv5kbahxyg3nhc65ffgpwrnxfp4v96";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         };
         packageRequires = [ emacs ];
         meta = {
@@ -4463,10 +4712,17 @@
       elpaBuild {
         pname = "relint";
         ename = "relint";
+<<<<<<< HEAD
         version = "1.23";
         src = fetchurl {
           url = "https://elpa.gnu.org/packages/relint-1.23.tar";
           sha256 = "0cyv9hjlyxy1c2394544ljq5d4prhi296y9j2zy6p1lq6irncmv9";
+=======
+        version = "1.22";
+        src = fetchurl {
+          url = "https://elpa.gnu.org/packages/relint-1.22.tar";
+          sha256 = "1525hk961q4af06c5a60m7ryp5g8yvfxjp5nmmgkci7vl3ing8zi";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         };
         packageRequires = [ emacs xr ];
         meta = {
@@ -4551,7 +4807,11 @@
       }) {};
     rudel = callPackage ({ cl-generic
                          , cl-lib ? null
+<<<<<<< HEAD
                          , cl-print ? null
+=======
+                         , cl-print
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
                          , elpaBuild
                          , emacs
                          , fetchurl
@@ -4619,10 +4879,17 @@
       elpaBuild {
         pname = "sed-mode";
         ename = "sed-mode";
+<<<<<<< HEAD
         version = "1.1";
         src = fetchurl {
           url = "https://elpa.gnu.org/packages/sed-mode-1.1.tar";
           sha256 = "1vpfzr95xfvjiq7x1pkhjm96936yzsy9bzm1v8p3hyr486bar0mp";
+=======
+        version = "1.0";
+        src = fetchurl {
+          url = "https://elpa.gnu.org/packages/sed-mode-1.0.el";
+          sha256 = "1zpdai5k9zhy5hw0a5zx7qv3rcf8cn29hncfjnhk9k6sjq0302lg";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         };
         packageRequires = [];
         meta = {
@@ -4848,10 +5115,17 @@
       elpaBuild {
         pname = "soap-client";
         ename = "soap-client";
+<<<<<<< HEAD
         version = "3.2.3";
         src = fetchurl {
           url = "https://elpa.gnu.org/packages/soap-client-3.2.3.tar";
           sha256 = "0z6af253iwimam03jnpai2h989i6vyv05wdz7dadna6amdryfznc";
+=======
+        version = "3.2.1";
+        src = fetchurl {
+          url = "https://elpa.gnu.org/packages/soap-client-3.2.1.tar";
+          sha256 = "0v3aj059cvfv5yc9fx8naq8ygphlpbasc1nksgfim8iyk9wg7l3n";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         };
         packageRequires = [ cl-lib emacs ];
         meta = {
@@ -4889,6 +5163,7 @@
           license = lib.licenses.free;
         };
       }) {};
+<<<<<<< HEAD
     spacious-padding = callPackage ({ elpaBuild, emacs, fetchurl, lib }:
       elpaBuild {
         pname = "spacious-padding";
@@ -4904,6 +5179,8 @@
           license = lib.licenses.free;
         };
       }) {};
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     spinner = callPackage ({ elpaBuild, emacs, fetchurl, lib }:
       elpaBuild {
         pname = "spinner";
@@ -4983,10 +5260,17 @@
       elpaBuild {
         pname = "ssh-deploy";
         ename = "ssh-deploy";
+<<<<<<< HEAD
         version = "3.1.16";
         src = fetchurl {
           url = "https://elpa.gnu.org/packages/ssh-deploy-3.1.16.tar";
           sha256 = "0ajmsg4r9yba2m9wn08dsdzl8pr3pjixyqqp263mpwsh02h8im2g";
+=======
+        version = "3.1.14";
+        src = fetchurl {
+          url = "https://elpa.gnu.org/packages/ssh-deploy-3.1.14.tar";
+          sha256 = "079g5g3640hyqdikszkz8kmfqdnqdbkl8rwd6k3kkck39ng63zy6";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         };
         packageRequires = [ emacs ];
         meta = {
@@ -5028,10 +5312,17 @@
       elpaBuild {
         pname = "substitute";
         ename = "substitute";
+<<<<<<< HEAD
         version = "0.2.1";
         src = fetchurl {
           url = "https://elpa.gnu.org/packages/substitute-0.2.1.tar";
           sha256 = "1p9lhgi4y224aghwnnjxm14da461pj0ym4a7asla02hf33y61i5j";
+=======
+        version = "0.1.8";
+        src = fetchurl {
+          url = "https://elpa.gnu.org/packages/substitute-0.1.8.tar";
+          sha256 = "1xa1ny4iblifrylxkj2i99vnayrxh669dlbpcbk4rb7alvv1npnz";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         };
         packageRequires = [ emacs ];
         meta = {
@@ -5073,10 +5364,17 @@
       elpaBuild {
         pname = "svg-lib";
         ename = "svg-lib";
+<<<<<<< HEAD
         version = "0.2.7";
         src = fetchurl {
           url = "https://elpa.gnu.org/packages/svg-lib-0.2.7.tar";
           sha256 = "0vq7a1hh6am5a1hqc1fay4cra7944zch5m5vadwhsnqgnrylm2gw";
+=======
+        version = "0.2.6";
+        src = fetchurl {
+          url = "https://elpa.gnu.org/packages/svg-lib-0.2.6.tar";
+          sha256 = "121wnk9g1dbpkx2w7di5f5czvv17wf67sacqpfpn53185z6mwwf3";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         };
         packageRequires = [ emacs ];
         meta = {
@@ -5148,10 +5446,17 @@
       elpaBuild {
         pname = "system-packages";
         ename = "system-packages";
+<<<<<<< HEAD
         version = "1.0.12";
         src = fetchurl {
           url = "https://elpa.gnu.org/packages/system-packages-1.0.12.tar";
           sha256 = "1q962z0lbdz7qw60lbhzqs8cqc66rhvsyjghy6rs7iqmq6h2sf8c";
+=======
+        version = "1.0.11";
+        src = fetchurl {
+          url = "https://elpa.gnu.org/packages/system-packages-1.0.11.tar";
+          sha256 = "0xf2q5bslxpw0wycgi2k983lnfpw182rgdzq0f99f64kb7ifns9y";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         };
         packageRequires = [ emacs ];
         meta = {
@@ -5228,10 +5533,17 @@
       elpaBuild {
         pname = "tempel";
         ename = "tempel";
+<<<<<<< HEAD
         version = "0.8";
         src = fetchurl {
           url = "https://elpa.gnu.org/packages/tempel-0.8.tar";
           sha256 = "1ppvkwy7c31p4ibshfralwz02xnxmssf6lgikahpimrg928zcd80";
+=======
+        version = "0.7";
+        src = fetchurl {
+          url = "https://elpa.gnu.org/packages/tempel-0.7.tar";
+          sha256 = "05yhsrricaxlz67w1j0s1gbzpbsw4iqryfvks25v25pm95xrr7c4";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         };
         packageRequires = [ compat emacs ];
         meta = {
@@ -5337,10 +5649,17 @@
       elpaBuild {
         pname = "tramp";
         ename = "tramp";
+<<<<<<< HEAD
         version = "2.6.1.1.1";
         src = fetchurl {
           url = "https://elpa.gnu.org/packages/tramp-2.6.1.1.1.tar";
           sha256 = "1aclan50xl0cgsxy9l7c1dd73w4kklmap9c74gndcssdi6p1mw69";
+=======
+        version = "2.6.0.3";
+        src = fetchurl {
+          url = "https://elpa.gnu.org/packages/tramp-2.6.0.3.tar";
+          sha256 = "0hcm20qk62k9irqdfcb44js9jkff43fji07la33arnjqvswrqs6n";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         };
         packageRequires = [ emacs ];
         meta = {
@@ -5393,6 +5712,7 @@
           license = lib.licenses.free;
         };
       }) {};
+<<<<<<< HEAD
     transient = callPackage ({ compat, elpaBuild, emacs, fetchurl, lib }:
       elpaBuild {
         pname = "transient";
@@ -5403,6 +5723,18 @@
           sha256 = "1aqw7fr5p2f1xs5pvfpmhhvh16491qvcbg40993siqkdi05w4i1j";
         };
         packageRequires = [ compat emacs ];
+=======
+    transient = callPackage ({ elpaBuild, emacs, fetchurl, lib }:
+      elpaBuild {
+        pname = "transient";
+        ename = "transient";
+        version = "0.3.7";
+        src = fetchurl {
+          url = "https://elpa.gnu.org/packages/transient-0.3.7.tar";
+          sha256 = "0x4xjbaw98dma7232bzw53rbq9q70vms6lvvramng7vfaz0mcy2a";
+        };
+        packageRequires = [ emacs ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         meta = {
           homepage = "https://elpa.gnu.org/packages/transient.html";
           license = lib.licenses.free;
@@ -5423,6 +5755,7 @@
           license = lib.licenses.free;
         };
       }) {};
+<<<<<<< HEAD
     tree-inspector = callPackage ({ elpaBuild, emacs, fetchurl, lib, treeview }:
       elpaBuild {
         pname = "tree-inspector";
@@ -5438,6 +5771,8 @@
           license = lib.licenses.free;
         };
       }) {};
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     trie = callPackage ({ elpaBuild, fetchurl, heap, lib, tNFA }:
       elpaBuild {
         pname = "trie";
@@ -5457,10 +5792,17 @@
       elpaBuild {
         pname = "triples";
         ename = "triples";
+<<<<<<< HEAD
         version = "0.3.5";
         src = fetchurl {
           url = "https://elpa.gnu.org/packages/triples-0.3.5.tar";
           sha256 = "086w3izri2fvg2w9lq4srjcq9gc6amz5vj2iihhysd10ypj3zxwy";
+=======
+        version = "0.2.7";
+        src = fetchurl {
+          url = "https://elpa.gnu.org/packages/triples-0.2.7.tar";
+          sha256 = "1p980liprsnir4wqvf0ixzykv61iaaprkc6wc0vi7a4q2pj7ra6f";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         };
         packageRequires = [ emacs seq ];
         meta = {
@@ -5483,6 +5825,7 @@
           license = lib.licenses.free;
         };
       }) {};
+<<<<<<< HEAD
     ulisp-repl = callPackage ({ elpaBuild, emacs, fetchurl, lib }:
       elpaBuild {
         pname = "ulisp-repl";
@@ -5498,6 +5841,8 @@
           license = lib.licenses.free;
         };
       }) {};
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     undo-tree = callPackage ({ elpaBuild, emacs, fetchurl, lib, queue }:
       elpaBuild {
         pname = "undo-tree";
@@ -5543,6 +5888,7 @@
           license = lib.licenses.free;
         };
       }) {};
+<<<<<<< HEAD
     urgrep = callPackage ({ compat, elpaBuild, emacs, fetchurl, lib, project }:
       elpaBuild {
         pname = "urgrep";
@@ -5558,6 +5904,8 @@
           license = lib.licenses.free;
         };
       }) {};
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     url-http-ntlm = callPackage ({ cl-lib ? null
                                  , elpaBuild
                                  , fetchurl
@@ -5577,6 +5925,7 @@
           license = lib.licenses.free;
         };
       }) {};
+<<<<<<< HEAD
     url-http-oauth = callPackage ({ elpaBuild, fetchurl, lib }:
       elpaBuild {
         pname = "url-http-oauth";
@@ -5592,6 +5941,8 @@
           license = lib.licenses.free;
         };
       }) {};
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     url-scgi = callPackage ({ elpaBuild, emacs, fetchurl, lib }:
       elpaBuild {
         pname = "url-scgi";
@@ -5753,10 +6104,17 @@
       elpaBuild {
         pname = "verilog-mode";
         ename = "verilog-mode";
+<<<<<<< HEAD
         version = "2023.6.6.141322628";
         src = fetchurl {
           url = "https://elpa.gnu.org/packages/verilog-mode-2023.6.6.141322628.tar";
           sha256 = "14qls4v5yxrgyiimvvggimw5ddlx0ll387a1r6awm274rj4p3d19";
+=======
+        version = "2022.12.18.181110314";
+        src = fetchurl {
+          url = "https://elpa.gnu.org/packages/verilog-mode-2022.12.18.181110314.tar";
+          sha256 = "0vy2lfscirj7as106m94yi88n8pwp4d2ngaclsf0axyrbcagzkjn";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         };
         packageRequires = [];
         meta = {
@@ -5768,10 +6126,17 @@
       elpaBuild {
         pname = "vertico";
         ename = "vertico";
+<<<<<<< HEAD
         version = "1.4";
         src = fetchurl {
           url = "https://elpa.gnu.org/packages/vertico-1.4.tar";
           sha256 = "0jv4adwi18j14yjasqndsgyxgrd1jnjhwrw90hyplfii08f6gmdq";
+=======
+        version = "1.2";
+        src = fetchurl {
+          url = "https://elpa.gnu.org/packages/vertico-1.2.tar";
+          sha256 = "1vf2nh2wrjj6ig5iq7kx1p85a1m494lxfvhlqrl5nhi2hjbgnqy3";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         };
         packageRequires = [ compat emacs ];
         meta = {
@@ -5788,10 +6153,17 @@
       elpaBuild {
         pname = "vertico-posframe";
         ename = "vertico-posframe";
+<<<<<<< HEAD
         version = "0.7.3";
         src = fetchurl {
           url = "https://elpa.gnu.org/packages/vertico-posframe-0.7.3.tar";
           sha256 = "1gfapchkj9jkzlyz3hzkb9kpifcak0fn4y5jw6f2cs6379sjwvzm";
+=======
+        version = "0.7.2";
+        src = fetchurl {
+          url = "https://elpa.gnu.org/packages/vertico-posframe-0.7.2.tar";
+          sha256 = "1sbgg0syyk24phwzji40lyw5dmwxssgvwv2fs8mbmkhv0q44f9ny";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         };
         packageRequires = [ emacs posframe vertico ];
         meta = {
@@ -5866,10 +6238,17 @@
       elpaBuild {
         pname = "vundo";
         ename = "vundo";
+<<<<<<< HEAD
         version = "2.1.0";
         src = fetchurl {
           url = "https://elpa.gnu.org/packages/vundo-2.1.0.tar";
           sha256 = "1inm6kvh5j47nsrmq6wpf30dqmx0arzdpa6vdcn834g50i4fh8kc";
+=======
+        version = "2.0.0";
+        src = fetchurl {
+          url = "https://elpa.gnu.org/packages/vundo-2.0.0.tar";
+          sha256 = "032aqcqq2xhh12qcpp8p3qldv0r9cnqr2y11jk1m5cvgal1cbb68";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         };
         packageRequires = [ emacs ];
         meta = {
@@ -5941,10 +6320,17 @@
       elpaBuild {
         pname = "websocket";
         ename = "websocket";
+<<<<<<< HEAD
         version = "1.15";
         src = fetchurl {
           url = "https://elpa.gnu.org/packages/websocket-1.15.tar";
           sha256 = "0mvvq9gsx856ip2gkrvjw4k8a85vrrkp27dcpkvamxq93lfd7hin";
+=======
+        version = "1.14";
+        src = fetchurl {
+          url = "https://elpa.gnu.org/packages/websocket-1.14.tar";
+          sha256 = "0g75kaw9bdk30apiyk09583amnw9458kkmgbbcl2myqfqspywnva";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         };
         packageRequires = [ cl-lib ];
         meta = {
@@ -5967,6 +6353,7 @@
           license = lib.licenses.free;
         };
       }) {};
+<<<<<<< HEAD
     window-commander = callPackage ({ elpaBuild, emacs, fetchurl, lib }:
       elpaBuild {
         pname = "window-commander";
@@ -5982,6 +6369,8 @@
           license = lib.licenses.free;
         };
       }) {};
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     windower = callPackage ({ elpaBuild, emacs, fetchurl, lib }:
       elpaBuild {
         pname = "windower";
@@ -6126,10 +6515,17 @@
       elpaBuild {
         pname = "xr";
         ename = "xr";
+<<<<<<< HEAD
         version = "1.24";
         src = fetchurl {
           url = "https://elpa.gnu.org/packages/xr-1.24.tar";
           sha256 = "04g7qx6qmhp98pw5iwdhspln9sg9jzjq2zp3nmq3q1yl82pzd214";
+=======
+        version = "1.23";
+        src = fetchurl {
+          url = "https://elpa.gnu.org/packages/xr-1.23.tar";
+          sha256 = "1nz3fhd4qx8fxib78y41jvnzn27lf7mlvpkz565d5zc9q4mr300z";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         };
         packageRequires = [ emacs ];
         meta = {

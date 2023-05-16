@@ -1,7 +1,10 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+<<<<<<< HEAD
 , fetchpatch
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 # build-system
 , setuptools
@@ -44,6 +47,7 @@ buildPythonPackage rec {
     hash = "sha256-MXzPIcbG8b1JwhEyAZG4DRObGaHq+ipVHMrZCzaxLdE=";
   };
 
+<<<<<<< HEAD
   patches = [
     # https://github.com/librosa/librosa/pull/1731
     (fetchpatch {
@@ -53,6 +57,8 @@ buildPythonPackage rec {
     })
   ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nativeBuildInputs = [
     setuptools
   ];

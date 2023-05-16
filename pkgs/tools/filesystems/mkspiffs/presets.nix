@@ -4,10 +4,17 @@
 
 lib.mapAttrs (
   name: { CPPFLAGS }:
+<<<<<<< HEAD
   mkspiffs.overrideAttrs {
     inherit CPPFLAGS;
     BUILD_CONFIG_NAME = "-${name}";
   }
+=======
+  mkspiffs.overrideAttrs (drv: {
+    inherit CPPFLAGS;
+    BUILD_CONFIG_NAME = "-${name}";
+  })
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 ) {
   arduino-esp8266.CPPFLAGS = [
     "-DSPIFFS_USE_MAGIC_LENGTH=0"

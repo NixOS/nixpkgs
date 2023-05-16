@@ -15,7 +15,11 @@ buildGoModule rec {
     hash = "sha256-jIbL6prOUII8o9FghIYa80BytJ9SSuyj/TZmAxwAbJk=";
   };
 
+<<<<<<< HEAD
   vendorHash = "sha256-nzPHx+c369T4h9KETqMurxZK3LsJAhwBaunkcWIW3Ps=";
+=======
+  vendorSha256 = "sha256-nzPHx+c369T4h9KETqMurxZK3LsJAhwBaunkcWIW3Ps=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   postPatch = ''
     substituteInPlace confluencePot.go \

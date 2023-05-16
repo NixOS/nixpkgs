@@ -6,7 +6,10 @@
 , gnumake
 , highlight
 , libgit2
+<<<<<<< HEAD
 , libxcrypt
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , man
 , openssl
 , pkg-config
@@ -18,13 +21,17 @@
 , EmailAddressXS
 , EmailMIME
 , IOSocketSSL
+<<<<<<< HEAD
 # FIXME: to be packaged
 #, IOSocketSocks
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , IPCRun
 , Inline
 , InlineC
 , LinuxInotify2
 , MailIMAPClient
+<<<<<<< HEAD
 # FIXME: to be packaged
 #, NetNetrc
 # FIXME: to be packaged
@@ -38,13 +45,32 @@
 , TimeDate
 , URI
 , XMLTreePP
+=======
+, ParseRecDescent
+, Plack
+, PlackMiddlewareReverseProxy
+, SearchXapian
+, TimeDate
+, URI
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 let
 
   skippedTests = [
+<<<<<<< HEAD
     # fatal: Could not make /tmp/pi-search-9188-DGZM/a.git/branches/ writable by group
     "search"
+=======
+    # These tests would fail, and produce "Operation not permitted"
+    # errors from git, because they use git init --shared.  This tries
+    # to set the setgid bit, which isn't permitted inside build
+    # sandboxes.
+    #
+    # These tests were indentified with
+    #     grep -r shared t/
+    "convert-compact" "search" "v2writable" "www_listing"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     # perl5.32.0-public-inbox> t/eml.t ...................... 1/? Cannot parse parameter '=?ISO-8859-1?Q?=20charset=3D=1BOF?=' at t/eml.t line 270.
     # perl5.32.0-public-inbox> #   Failed test 'got wide character by assuming utf-8'
     # perl5.32.0-public-inbox> #   at t/eml.t line 272.
@@ -55,9 +81,12 @@ let
     #        got: 'makefile'
     #   expected: 'make'
     "hl_mod"
+<<<<<<< HEAD
     # Hangs on "inbox unlocked on initial fetch, waiting for IDLE".
     # Fixed in HEAD: 7234e671 ("t/imapd: workaround a Perl 5.36.0 readline regression")
     "imapd"
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     # Failed test 'clone + index v1 synced ->created_at'
     # at t/lei-mirror.t line 175.
     #        got: '1638378723'
@@ -74,8 +103,11 @@ let
     #   expected: anything else
     # waiting for child to reap grandchild...
     "spawn"
+<<<<<<< HEAD
     # Failed to connect to 127.0.0.1
     "v2mirror"
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   testConditions = with lib;
@@ -85,11 +117,19 @@ in
 
 buildPerlPackage rec {
   pname = "public-inbox";
+<<<<<<< HEAD
   version = "1.9.0";
 
   src = fetchurl {
     url = "https://public-inbox.org/public-inbox.git/snapshot/public-inbox-${version}.tar.gz";
     sha256 = "sha256-ENnT2YK7rpODII9TqiEYSCp5mpWOnxskeSuAf8Ilqro=";
+=======
+  version = "1.8.0";
+
+  src = fetchurl {
+    url = "https://public-inbox.org/public-inbox.git/snapshot/public-inbox-${version}.tar.gz";
+    sha256 = "sha256-laJOOCk5NecIGWesv4D30cLGfijQHVkeo55eNqNKzew=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   outputs = [ "out" "devdoc" "sa_config" ];
@@ -108,6 +148,7 @@ buildPerlPackage rec {
     DBDSQLite
     DBI
     EmailAddressXS
+<<<<<<< HEAD
     highlight
     IOSocketSSL
     #IOSocketSocks
@@ -117,6 +158,14 @@ buildPerlPackage rec {
     MailIMAPClient
     #NetNetrc
     #NetNNTP
+=======
+    EmailMIME
+    highlight
+    IOSocketSSL
+    IPCRun
+    Inline
+    InlineC
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     ParseRecDescent
     Plack
     PlackMiddlewareReverseProxy
@@ -129,16 +178,23 @@ buildPerlPackage rec {
 
   doCheck = !stdenv.isDarwin;
   nativeCheckInputs = [
+<<<<<<< HEAD
+=======
+    MailIMAPClient
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     curl
     git
     openssl
     pkg-config
     sqlite
     xapian
+<<<<<<< HEAD
     EmailMIME
     PlackTestExternalServer
     TestSimple13
     XMLTreePP
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ] ++ lib.optionals stdenv.isLinux [
     LinuxInotify2
   ];
@@ -152,6 +208,7 @@ buildPerlPackage rec {
   installTargets = [ "install" ];
   postInstall = ''
     for prog in $out/bin/*; do
+<<<<<<< HEAD
         wrapProgram $prog \
             --set NIX_CFLAGS_COMPILE_${stdenv.cc.suffixSalt} -I${lib.getDev libxcrypt}/include \
             --prefix PATH : ${lib.makeBinPath [
@@ -161,6 +218,14 @@ buildPerlPackage rec {
               gnumake
               stdenv.cc
             ]}
+=======
+        wrapProgram $prog --prefix PATH : ${lib.makeBinPath [
+          git
+          /* for InlineC */
+          gnumake
+          stdenv.cc.cc
+        ]}
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     done
 
     mv sa_config $sa_config

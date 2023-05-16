@@ -7,13 +7,22 @@
 
 stdenv.mkDerivation rec {
   pname = "rtl8821ce";
+<<<<<<< HEAD
   version = "${kernel.version}-unstable-2023-05-04";
+=======
+  version = "${kernel.version}-unstable-2023-01-01";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "tomaspinho";
     repo = "rtl8821ce";
+<<<<<<< HEAD
     rev = "a478095a45d8aa957b45be4f9173c414efcacc6f";
     hash = "sha256-xqVxylKhL7vbC7m5Av6ven5i7OBkS2RHxrKzLOVBlgE=";
+=======
+    rev = "a3e2f7c1f91e92f2dc788e8fcd7f2986af3d19b6";
+    sha256 = "sha256-eR4iTkRMnhNEBrUEC+fKlwq3hezNC9mSAQ7D0Wwss/0=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   hardeningDisable = [ "pic" ];

@@ -2,11 +2,19 @@
 
 stdenv.mkDerivation rec {
   pname = "dos2unix";
+<<<<<<< HEAD
   version = "7.5.1";
 
   src = fetchurl {
     url = "https://waterlan.home.xs4all.nl/dos2unix/${pname}-${version}.tar.gz";
     sha256 = "sha256-2gd4i7LgKbDWP2Rx0Wb2hSis2Nos8UgjoYjoqdXB/BU=";
+=======
+  version = "7.4.4";
+
+  src = fetchurl {
+    url = "https://waterlan.home.xs4all.nl/dos2unix/${pname}-${version}.tar.gz";
+    sha256 = "sha256-KKhB2wvVgn1kXKup2AFeOnGYPcbjmAcLUofuE3rkQ24=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ perl gettext ];

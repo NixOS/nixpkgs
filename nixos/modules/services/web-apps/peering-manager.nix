@@ -1,5 +1,10 @@
 { config, lib, pkgs, buildEnv, ... }:
 
+<<<<<<< HEAD
+=======
+with lib;
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 let
   cfg = config.services.peering-manager;
   configFile = pkgs.writeTextFile {
@@ -39,12 +44,17 @@ let
   pkg = (pkgs.peering-manager.overrideAttrs (old: {
     postInstall = ''
       ln -s ${configFile} $out/opt/peering-manager/peering_manager/configuration.py
+<<<<<<< HEAD
     '' + lib.optionalString cfg.enableLdap ''
+=======
+    '' + optionalString cfg.enableLdap ''
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       ln -s ${cfg.ldapConfigPath} $out/opt/peering-manager/peering_manager/ldap_config.py
     '';
   })).override {
     inherit (cfg) plugins;
   };
+<<<<<<< HEAD
   peeringManagerManageScript = pkgs.writeScriptBin "peering-manager-manage" ''
     #!${pkgs.stdenv.shell}
     export PYTHONPATH=${pkg.pythonPath}
@@ -57,6 +67,20 @@ in {
       type = types.bool;
       default = false;
       description = mdDoc ''
+=======
+  peeringManagerManageScript = with pkgs; (writeScriptBin "peering-manager-manage" ''
+    #!${stdenv.shell}
+    export PYTHONPATH=${pkg.pythonPath}
+    sudo -u peering-manager ${pkg}/bin/peering-manager "$@"
+  '');
+
+in {
+  options.services.peering-manager = {
+    enable = mkOption {
+      type = lib.types.bool;
+      default = false;
+      description = lib.mdDoc ''
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         Enable Peering Manager.
 
         This module requires a reverse proxy that serves `/static` separately.
@@ -67,7 +91,11 @@ in {
     listenAddress = mkOption {
       type = types.str;
       default = "[::1]";
+<<<<<<< HEAD
       description = mdDoc ''
+=======
+      description = lib.mdDoc ''
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         Address the server will listen on.
       '';
     };
@@ -75,7 +103,11 @@ in {
     port = mkOption {
       type = types.port;
       default = 8001;
+<<<<<<< HEAD
       description = mdDoc ''
+=======
+      description = lib.mdDoc ''
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         Port the server will listen on.
       '';
     };
@@ -86,14 +118,22 @@ in {
       defaultText = literalExpression ''
         python3Packages: with python3Packages; [];
       '';
+<<<<<<< HEAD
       description = mdDoc ''
+=======
+      description = lib.mdDoc ''
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         List of plugin packages to install.
       '';
     };
 
     secretKeyFile = mkOption {
       type = types.path;
+<<<<<<< HEAD
       description = mdDoc ''
+=======
+      description = lib.mdDoc ''
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         Path to a file containing the secret key.
       '';
     };
@@ -101,7 +141,11 @@ in {
     peeringdbApiKeyFile = mkOption {
       type = with types; nullOr path;
       default = null;
+<<<<<<< HEAD
       description = mdDoc ''
+=======
+      description = lib.mdDoc ''
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         Path to a file containing the PeeringDB API key.
       '';
     };
@@ -109,7 +153,11 @@ in {
     extraConfig = mkOption {
       type = types.lines;
       default = "";
+<<<<<<< HEAD
       description = mdDoc ''
+=======
+      description = lib.mdDoc ''
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         Additional lines of configuration appended to the `configuration.py`.
         See the [documentation](https://peering-manager.readthedocs.io/en/stable/configuration/optional-settings/) for more possible options.
       '';
@@ -118,7 +166,11 @@ in {
     enableLdap = mkOption {
       type = types.bool;
       default = false;
+<<<<<<< HEAD
       description = mdDoc ''
+=======
+      description = lib.mdDoc ''
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         Enable LDAP-Authentication for Peering Manager.
 
         This requires a configuration file being pass through `ldapConfigPath`.
@@ -127,15 +179,24 @@ in {
 
     ldapConfigPath = mkOption {
       type = types.path;
+<<<<<<< HEAD
       description = mdDoc ''
+=======
+      description = lib.mdDoc ''
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         Path to the Configuration-File for LDAP-Authentication, will be loaded as `ldap_config.py`.
         See the [documentation](https://peering-manager.readthedocs.io/en/stable/setup/6-ldap/#configuration) for possible options.
       '';
     };
   };
 
+<<<<<<< HEAD
   config = lib.mkIf cfg.enable {
     services.peering-manager.plugins = lib.mkIf cfg.enableLdap (ps: [ ps.django-auth-ldap ]);
+=======
+  config = mkIf cfg.enable {
+    services.peering-manager.plugins = mkIf cfg.enableLdap (ps: [ ps.django-auth-ldap ]);
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     system.build.peeringManagerPkg = pkg;
 
@@ -260,6 +321,9 @@ in {
     users.groups.peering-manager = {};
     users.groups."${config.services.redis.servers.peering-manager.user}".members = [ "peering-manager" ];
   };
+<<<<<<< HEAD
 
   meta.maintainers = with lib.maintainers; [ yuka ];
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }

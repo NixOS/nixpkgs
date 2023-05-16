@@ -12,13 +12,21 @@
 
 stdenv.mkDerivation rec {
   pname = "hypnotix";
+<<<<<<< HEAD
   version = "3.6";
+=======
+  version = "3.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "hypnotix";
     rev = version;
+<<<<<<< HEAD
     hash = "sha256-hi3ppYDzFEp4FGZHlGgwEFqyOqzX+d0JK674EyibB/c=";
+=======
+    hash = "sha256-R9bp1RQHHCrIE/3rIAHzWHXpXBUDUpJTkO53n+xZw3Q=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   patches = [

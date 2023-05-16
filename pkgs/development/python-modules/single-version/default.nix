@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 { lib
 , buildPythonPackage
 , fetchFromGitHub
@@ -5,6 +6,9 @@
 , poetry-core
 , pytestCheckHook
 }:
+=======
+{ lib, buildPythonPackage, fetchFromGitHub, poetry-core, pytestCheckHook }:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 buildPythonPackage rec {
   pname = "single-version";
@@ -19,12 +23,16 @@ buildPythonPackage rec {
   };
 
   patches = [
+<<<<<<< HEAD
     # https://github.com/hongquan/single-version/pull/4
     (fetchpatch {
       name = "use-poetry-core.patch";
       url = "https://github.com/hongquan/single-version/commit/0cdf9795cb0522e90a8dc00306f1ff7bb85621ad.patch";
       hash = "sha256-eT9G1XvkNF0+NKgx+yN7ei53xIEMvnc7V/KtPLqlWik=";
     })
+=======
+    ./0001-set-poetry-core.patch
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   nativeBuildInputs = [ poetry-core ];

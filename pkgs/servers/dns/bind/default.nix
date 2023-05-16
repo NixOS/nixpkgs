@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 { stdenv
 , lib
 , fetchurl
@@ -20,15 +21,32 @@
 , cmocka
 , tzdata
 , gitUpdater
+=======
+{ config, stdenv, lib, fetchurl, fetchpatch
+, perl, pkg-config
+, libcap, libtool, libxml2, openssl, libuv, nghttp2, jemalloc
+, enablePython ? false, python3
+, enableGSSAPI ? true, libkrb5
+, buildPackages, nixosTests
+, cmocka, tzdata
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 stdenv.mkDerivation rec {
   pname = "bind";
+<<<<<<< HEAD
   version = "9.18.18";
 
   src = fetchurl {
     url = "https://downloads.isc.org/isc/bind9/${version}/${pname}-${version}.tar.xz";
     hash = "sha256-1zXNwSemxXCb3kdbW/FvohM/Nv26IC98PDfRNOUZIWA=";
+=======
+  version = "9.18.14";
+
+  src = fetchurl {
+    url = "https://downloads.isc.org/isc/bind9/${version}/${pname}-${version}.tar.xz";
+    sha256 = "sha256-muEu32rDxDCzPs0afAwMYIddJVGF64eFD6ml55SmSgk=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   outputs = [ "out" "lib" "dev" "man" "dnsutils" "host" ];
@@ -38,7 +56,11 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [ perl pkg-config ];
+<<<<<<< HEAD
   buildInputs = [ libidn2 libtool libxml2 openssl libuv nghttp2 jemalloc ]
+=======
+  buildInputs = [ libtool libxml2 openssl libuv nghttp2 jemalloc ]
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     ++ lib.optional stdenv.isLinux libcap
     ++ lib.optional enableGSSAPI libkrb5
     ++ lib.optional enablePython (python3.withPackages (ps: with ps; [ ply ]));
@@ -48,9 +70,14 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--localstatedir=/var"
     "--without-lmdb"
+<<<<<<< HEAD
     "--with-libidn2"
   ] ++ lib.optional enableGSSAPI "--with-gssapi=${libkrb5.dev}/bin/krb5-config"
   ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) "BUILD_CC=$(CC_FOR_BUILD)";
+=======
+  ] ++ lib.optional enableGSSAPI "--with-gssapi=${libkrb5.dev}/bin/krb5-config"
+    ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) "BUILD_CC=$(CC_FOR_BUILD)";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   postInstall = ''
     moveToOutput bin/bind9-config $dev
@@ -79,9 +106,13 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
   # TODO: investigate the aarch64-linux failures; see this and linked discussions:
   # https://github.com/NixOS/nixpkgs/pull/192962
+<<<<<<< HEAD
   doCheck = with stdenv.hostPlatform; !isStatic && !(isAarch64 && isLinux)
     # https://gitlab.isc.org/isc-projects/bind9/-/issues/4269
     && !is32bit;
+=======
+  doCheck = with stdenv.hostPlatform; !isStatic && !(isAarch64 && isLinux);
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   checkTarget = "unit";
   checkInputs = [
     cmocka
@@ -93,6 +124,7 @@ stdenv.mkDerivation rec {
     sed -i '/^ISC_TEST_ENTRY(isc_time_formatISO8601L/d' tests/isc/time_test.c
   '';
 
+<<<<<<< HEAD
   passthru = {
     tests = {
       inherit (nixosTests) bind;
@@ -108,6 +140,13 @@ stdenv.mkDerivation rec {
       # Avoid unstable 9.19 releases.
       odd-unstable = true;
     };
+=======
+  passthru.tests = {
+    inherit (nixosTests) bind;
+    prometheus-exporter = nixosTests.prometheus-exporters.bind;
+    kubernetes-dns-single-node = nixosTests.kubernetes.dns-single-node;
+    kubernetes-dns-multi-node = nixosTests.kubernetes.dns-multi-node;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   meta = with lib; {

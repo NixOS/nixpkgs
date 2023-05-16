@@ -1,4 +1,5 @@
 { buildPackages
+<<<<<<< HEAD
 , buildPythonPackage
 , fetchpatch
 , isPyPy
@@ -9,6 +10,14 @@
 , pythonAtLeast
 , substituteAll
 , tzdata
+=======
+, lib
+, buildPythonPackage
+, protobuf
+, isPyPy
+, fetchpatch
+, pythonAtLeast
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 let
@@ -25,6 +34,7 @@ buildPythonPackage {
     then "${toString (lib.toInt versionMajor + 1)}.${versionMinor}.${versionPatch}"
     else protobuf.version;
 
+<<<<<<< HEAD
   sourceRoot = "${protobuf.src.name}/python";
 
   patches = lib.optionals (lib.versionAtLeast protobuf.version "3.22") [
@@ -40,6 +50,18 @@ buildPythonPackage {
       url = "https://github.com/protocolbuffers/protobuf/commit/2206b63c4649cf2e8a06b66c9191c8ef862ca519.diff";
       stripLen = 1; # because sourceRoot above
       hash = "sha256-3GaoEyZIhS3QONq8LEvJCH5TdO9PKnOgcQF0GlEiwFo=";
+=======
+  disabled = isPyPy;
+
+  sourceRoot = "source/python";
+
+  patches = lib.optionals (pythonAtLeast "3.11") [
+    (fetchpatch {
+      url = "https://github.com/protocolbuffers/protobuf/commit/da973aff2adab60a9e516d3202c111dbdde1a50f.patch";
+      stripLen = 2;
+      extraPrefix = "";
+      hash = "sha256-a/12C6yIe1tEKjsMxcfDAQ4JHolA8CzkN7sNG8ZspPs=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     })
   ];
 
@@ -50,6 +72,7 @@ buildPythonPackage {
     fi
   '';
 
+<<<<<<< HEAD
   # Remove the line in setup.py that forces compiling with C++14. Upstream's
   # CMake build has been updated to support compiling with other versions of
   # C++, but the Python build has not. Without this, we observe compile-time
@@ -65,6 +88,8 @@ buildPythonPackage {
 
   nativeBuildInputs = lib.optional isPyPy tzdata;
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   buildInputs = [ protobuf ];
 
   propagatedNativeBuildInputs = [
@@ -74,6 +99,7 @@ buildPythonPackage {
 
   setupPyGlobalFlags = [ "--cpp_implementation" ];
 
+<<<<<<< HEAD
   nativeCheckInputs = [
     pytestCheckHook
   ] ++ lib.optionals (lib.versionAtLeast protobuf.version "3.22") [
@@ -102,6 +128,8 @@ buildPythonPackage {
     "google/protobuf/internal/generator_test.py"
   ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pythonImportsCheck = [
     "google.protobuf"
     "google.protobuf.internal._api_implementation" # Verify that --cpp_implementation worked

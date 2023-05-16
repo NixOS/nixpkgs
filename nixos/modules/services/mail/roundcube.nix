@@ -72,7 +72,11 @@ in
         type = types.str;
         description = lib.mdDoc ''
           Password file for the postgresql connection.
+<<<<<<< HEAD
           Must be formatted according to PostgreSQL .pgpass standard (see https://www.postgresql.org/docs/current/libpq-pgpass.html)
+=======
+          Must be formated according to PostgreSQL .pgpass standard (see https://www.postgresql.org/docs/current/libpq-pgpass.html)
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           but only one line, no comments and readable by user `nginx`.
           Ignored if `database.host` is set to `localhost`, as peer authentication will be used.
         '';

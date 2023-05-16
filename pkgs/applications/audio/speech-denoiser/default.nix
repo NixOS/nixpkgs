@@ -12,7 +12,11 @@ let
     pname = "rnnoise-nu";
     version = "unstable-07-10-2019";
     src = speech-denoiser-src;
+<<<<<<< HEAD
     sourceRoot = "${speech-denoiser-src.name}/rnnoise";
+=======
+    sourceRoot = "source/rnnoise";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     nativeBuildInputs = [ autoreconfHook ];
     configureFlags = [ "--disable-examples" "--disable-doc" "--disable-shared" "--enable-static" ];
     installTargets = [ "install-rnnoise-nu" ];

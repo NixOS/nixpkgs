@@ -1,6 +1,10 @@
 from collections.abc import Mapping, Sequence
 from dataclasses import dataclass
+<<<<<<< HEAD
 from typing import cast, Optional
+=======
+from typing import Any, cast, Optional
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 from .md import md_escape, md_make_code, Renderer
 
@@ -184,7 +188,10 @@ class CommonMarkRenderer(Renderer):
     def ordered_list_close(self, token: Token, tokens: Sequence[Token], i: int) -> str:
         self._list_stack.pop()
         return ""
+<<<<<<< HEAD
     def image(self, token: Token, tokens: Sequence[Token], i: int) -> str:
         if title := cast(str, token.attrs.get('title', '')):
             title = ' "' + title.replace('"', '\\"') + '"'
         return f'![{token.content}]({token.attrs["src"]}{title})'
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)

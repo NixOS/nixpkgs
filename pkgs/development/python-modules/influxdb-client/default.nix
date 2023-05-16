@@ -16,7 +16,11 @@
 
 buildPythonPackage rec {
   pname = "influxdb-client";
+<<<<<<< HEAD
   version = "1.37.0";
+=======
+  version = "1.36.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -25,7 +29,11 @@ buildPythonPackage rec {
     owner = "influxdata";
     repo = "influxdb-client-python";
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-paS+/miraJ9vRL1ZEAWJRSVd1hGvrYJe+0YD/F4sGDs=";
+=======
+    hash = "sha256-O10q/ResES3mE26LZQLgGPSLjhUCEOwZpm6vZj6H5mQ=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [

@@ -22,12 +22,15 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "sha256-EoRCmEe9SAySZCm+QhaR4ngik4Arnm4SZjgDM5fSRmk=";
 
+<<<<<<< HEAD
   prePatch = ''sed -i "s,ExecStart=.*/bin,ExecStart=$out/bin," etc/below.service'';
   postInstall = ''
     install -d $out/lib/systemd/system
     install -t $out/lib/systemd/system etc/below.service
   '';
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   # bpf code compilation
   hardeningDisable = [ "stackprotector" ];
 
@@ -43,6 +46,9 @@ rustPlatform.buildRustPackage rec {
     description = "A time traveling resource monitor for modern Linux systems";
     license = licenses.asl20;
     homepage = "https://github.com/facebookincubator/below";
+<<<<<<< HEAD
     mainProgram = "below";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

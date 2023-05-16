@@ -11,14 +11,22 @@
 
 buildPythonPackage rec {
   pname = "west";
+<<<<<<< HEAD
   version = "1.1.0";
+=======
+  version = "1.0.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
+<<<<<<< HEAD
     hash = "sha256-40h/VLa9kEWASJtgPvGm4JnG8uZWAUwrg8SzwhdfpN8=";
+=======
+    hash = "sha256-ZvhwIhkoES71jyv8Xv0dd44Z7tFAZzmE2XsiH7wFJfQ=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [

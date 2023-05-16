@@ -9,13 +9,21 @@
 
 stdenv.mkDerivation rec {
   pname = "libcint";
+<<<<<<< HEAD
   version = "5.4.0";
+=======
+  version = "5.2.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "sunqm";
     repo = "libcint";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-U+ZlD/I7RHtdYNbFhAmeU4qREe45dYJDIAC3Bup2tr0=";
+=======
+    hash = "sha256-sFdigOlS5fAi2dV4dhcPg3roqFdvpnh580WDqTA6DGg=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ cmake ];

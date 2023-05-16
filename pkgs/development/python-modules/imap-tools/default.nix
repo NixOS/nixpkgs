@@ -1,15 +1,25 @@
 { lib
 , buildPythonPackage
+<<<<<<< HEAD
 , pythonOlder
+=======
+, isPy27
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , fetchFromGitHub
 , pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "imap-tools";
+<<<<<<< HEAD
   version = "1.2.0";
 
   disabled = pythonOlder "3.5";
+=======
+  version = "1.0.0";
+
+  disabled = isPy27;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   format = "setuptools";
 
@@ -17,7 +27,11 @@ buildPythonPackage rec {
     owner = "ikvk";
     repo = "imap_tools";
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-FC4uvBqQ9Lqpvj94ByM7LYiqqjAQQljYduBxwum49lI=";
+=======
+    hash = "sha256-JAMEJv0Vc5iunuKusyD+rxLiubEIDgHsr7FrMZgLy9Q=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeCheckInputs = [

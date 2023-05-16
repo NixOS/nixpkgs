@@ -30,6 +30,9 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = with maintainers; [ svend ];
     platforms = platforms.linux;
+<<<<<<< HEAD
     mainProgram = "dual-function-keys";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

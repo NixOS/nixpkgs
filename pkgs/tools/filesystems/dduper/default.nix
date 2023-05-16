@@ -1,7 +1,11 @@
 { lib, stdenv, fetchpatch, fetchFromGitHub, btrfs-progs, python3 }:
 
 let
+<<<<<<< HEAD
   btrfsProgsPatched = btrfs-progs.overrideAttrs {
+=======
+  btrfsProgsPatched = btrfs-progs.overrideAttrs (oldAttrs: {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     patches = [
       (fetchpatch {
         name = "0001-Print-csum-for-a-given-file-on-stdout.patch";
@@ -9,7 +13,11 @@ let
         sha256 = "sha256-M4LT7G6gwBfSXf6EL4pxNoQJMyUTOA+ojxEJqw2yss4=";
       })
     ];
+<<<<<<< HEAD
   };
+=======
+  });
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   py3 = python3.withPackages (ps: with ps; [
     prettytable
     numpy

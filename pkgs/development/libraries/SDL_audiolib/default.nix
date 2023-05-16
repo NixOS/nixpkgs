@@ -48,6 +48,10 @@ stdenv.mkDerivation rec {
     description = "Audio decoding, resampling and mixing library for SDL";
     homepage = "https://github.com/realnc/SDL_audiolib";
     license = licenses.lgpl3Plus;
+<<<<<<< HEAD
     maintainers = with maintainers; [ ];
+=======
+    maintainers = with maintainers; [ SuperSandro2000 ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

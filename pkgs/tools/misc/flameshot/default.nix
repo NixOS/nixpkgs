@@ -6,7 +6,10 @@
 , qttools
 , qtsvg
 , nix-update-script
+<<<<<<< HEAD
 , fetchpatch
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 mkDerivation rec {
@@ -20,6 +23,7 @@ mkDerivation rec {
     sha256 = "sha256-omyMN8d+g1uYsEw41KmpJCwOmVWLokEfbW19vIvG79w=";
   };
 
+<<<<<<< HEAD
   patches = [
     # https://github.com/flameshot-org/flameshot/pull/3166
     (fetchpatch {
@@ -29,6 +33,8 @@ mkDerivation rec {
     })
   ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   passthru = {
     updateScript = nix-update-script { };
   };
@@ -39,7 +45,10 @@ mkDerivation rec {
   meta = with lib; {
     description = "Powerful yet simple to use screenshot software";
     homepage = "https://github.com/flameshot-org/flameshot";
+<<<<<<< HEAD
     mainProgram = "flameshot";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     maintainers = with maintainers; [ scode oxalica ];
     license = licenses.gpl3Plus;
     platforms = platforms.linux ++ platforms.darwin;

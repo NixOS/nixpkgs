@@ -26,7 +26,11 @@ buildPythonPackage rec {
     msrestazure
   ];
 
+<<<<<<< HEAD
   postInstall = pkgs.lib.optionalString (!isPy3k) ''
+=======
+  postInstall = if isPy3k then "" else ''
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     echo "__import__('pkg_resources').declare_namespace(__name__)" >> "$out/lib/${python.libPrefix}"/site-packages/azure/mgmt/__init__.py
     echo "__import__('pkg_resources').declare_namespace(__name__)" >> "$out/lib/${python.libPrefix}"/site-packages/azure/__init__.py
   '';

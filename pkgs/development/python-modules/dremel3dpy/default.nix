@@ -1,7 +1,10 @@
 { lib
 , async-timeout
 , buildPythonPackage
+<<<<<<< HEAD
 , decorator
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , fetchPypi
 , imageio
 , imutils
@@ -27,7 +30,10 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     async-timeout
+<<<<<<< HEAD
     decorator
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     imageio
     imutils
     requests

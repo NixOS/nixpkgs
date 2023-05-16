@@ -29,6 +29,10 @@ buildPythonPackage rec {
     description = "Minimalistic C kernel for Jupyter";
     homepage = "https://github.com/brendanrius/jupyter-c-kernel/";
     license = licenses.mit;
+<<<<<<< HEAD
     maintainers = [ ];
+=======
+    maintainers = [ maintainers.costrouc ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

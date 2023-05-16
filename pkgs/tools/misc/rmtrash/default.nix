@@ -3,13 +3,21 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "rmtrash";
+<<<<<<< HEAD
   version = "1.15";
+=======
+  version = "1.14";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "PhrozenByte";
     repo = pname;
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-vCtIM6jAYfrAOopiTcb4M5GNtucVnK0XEEKbMq1Cbc4=";
+=======
+    sha256 = "0wfb2ykzlsxyqn9krfsis9jxhaxy3pxl71a4f15an1ngfndai694";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ makeWrapper ];

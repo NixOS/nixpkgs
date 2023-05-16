@@ -17,25 +17,40 @@
 , stdenv
 , testers
 , wrapGAppsHook4
+<<<<<<< HEAD
 , clippy
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "citations";
   version = "0.5.2";
+=======
+}:
+stdenv.mkDerivation (finalAttrs: {
+  pname = "citations";
+  version = "0.5.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = finalAttrs.pname;
     rev = finalAttrs.version;
+<<<<<<< HEAD
     hash = "sha256-QofsVqulFMiyYKci2vHdQAUJoIIgnPyTRizoBDvYG+g=";
+=======
+    hash = "sha256-QPK6Nw0tDdttUDFKMgThTYMTxGXsn5OReqf1LNAai7g=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   cargoDeps = rustPlatform.importCargoLock {
     lockFile = ./Cargo.lock;
     outputHashes = {
+<<<<<<< HEAD
       "nom-bibtex-0.4.0" = "sha256-hulMoH3gkhD2HurrXdIqqkfKkZGujV9We0m0jsgHFfM=";
+=======
+      "nom-bibtex-0.3.0" = "sha256-Dy7xauwXGnMtK/w/T5gZgqJ8fPyyd/FfZTLjvwMODFI=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
   };
 
@@ -64,12 +79,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
+<<<<<<< HEAD
   nativeCheckInputs = [ clippy ];
 
   preCheck = ''
     sed -i -e '/PATH=/d' ../src/meson.build
   '';
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   passthru.tests.version = testers.testVersion {
     package = finalAttrs.finalPackage;
     command = "citations --help";

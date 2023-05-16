@@ -1,20 +1,32 @@
+<<<<<<< HEAD
 { lib
 , stdenv
 , fetchurl
 , dpkg
 , makeWrapper
 , buildFHSEnv
+=======
+{ lib, stdenv, fetchurl, dpkg, makeWrapper, buildFHSEnv
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , extraPkgs ? pkgs: [ ]
 , extraLibs ? pkgs: [ ]
 }:
 
 stdenv.mkDerivation rec {
   pname = "unityhub";
+<<<<<<< HEAD
   version = "3.5.1";
 
   src = fetchurl {
     url = "https://hub-dist.unity3d.com/artifactory/hub-debian-prod-local/pool/main/u/unity/unityhub_amd64/unityhub-amd64-${version}.deb";
     sha256 = "sha256-R/Ehf379Vbh/fN6iJO6BKsUuGMe2ogJdlWosElR+7f8=";
+=======
+  version = "3.4.2";
+
+  src = fetchurl {
+    url = "https://hub-dist.unity3d.com/artifactory/hub-debian-prod-local/pool/main/u/unity/unityhub_amd64/unityhub-amd64-${version}.deb";
+    sha256 = "sha256-I1qtrD94IpMut0a6JUHErHaksoZ+z8/dDG8U68Y5zJE=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [
@@ -27,9 +39,13 @@ stdenv.mkDerivation rec {
     runScript = "";
 
     targetPkgs = pkgs: with pkgs; [
+<<<<<<< HEAD
       # Unity Hub binary dependencies
       xorg.libXrandr
       xdg-utils
+=======
+      xorg.libXrandr
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
       # GTK filepicker
       gsettings-desktop-schemas
@@ -50,7 +66,11 @@ stdenv.mkDerivation rec {
       lttng-ust_2_12
       krb5
       alsa-lib
+<<<<<<< HEAD
       nss
+=======
+      nss_latest
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       libdrm
       mesa
       nspr
@@ -69,8 +89,14 @@ stdenv.mkDerivation rec {
 
       # Unity Hub additional dependencies
       libva
+<<<<<<< HEAD
       openssl
       cairo
+=======
+      openssl_1_1
+      cairo
+      xdg-utils
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       libnotify
       libuuid
       libsecret
@@ -81,7 +107,11 @@ stdenv.mkDerivation rec {
       icu
       libpulseaudio
 
+<<<<<<< HEAD
       # Unity Editor dependencies
+=======
+      # Editor dependencies
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       libglvnd # provides ligbl
       xorg.libX11
       xorg.libXcursor
@@ -91,12 +121,15 @@ stdenv.mkDerivation rec {
       zlib
       clang
       git # for git-based packages in unity package manager
+<<<<<<< HEAD
 
       # Unity Editor 2019 specific dependencies
       xorg.libXi
       xorg.libXrender
       gnome2.GConf
       libcap
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     ] ++ extraLibs pkgs;
   };
 
@@ -132,6 +165,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Official Unity3D app to download and manage Unity Projects and installations";
+<<<<<<< HEAD
     homepage = "https://unity.com/";
     downloadPage = "https://unity.com/unity-hub";
     changelog = "https://unity.com/unity-hub/release-notes";
@@ -139,5 +173,11 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ tesq0 huantian ];
     platforms = [ "x86_64-linux" ];
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+=======
+    homepage = "https://unity3d.com/";
+    license = licenses.unfree;
+    maintainers = with maintainers; [ tesq0 huantian ];
+    platforms = [ "x86_64-linux" ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

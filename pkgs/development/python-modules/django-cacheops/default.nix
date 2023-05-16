@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 { stdenv
 , lib
 , buildPythonPackage
@@ -16,17 +17,34 @@
 , pythonOlder
 , nettools
 , pkgs
+=======
+{ lib
+, buildPythonPackage
+, fetchPypi
+, django
+, funcy
+, redis
+, pytest-django
+, pytestCheckHook
+, pythonOlder
+, six
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 buildPythonPackage rec {
   pname = "django-cacheops";
+<<<<<<< HEAD
   version = "7.0.1";
+=======
+  version = "6.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
+<<<<<<< HEAD
     hash = "sha256-Ed3qh90DlWiXikCD2JyJ37hm6lWnpI+2haaPwZiotlA=";
   };
 
@@ -35,6 +53,11 @@ buildPythonPackage rec {
   ];
   pythonRelaxDeps = [ "funcy" ];
 
+=======
+    hash = "sha256-zHP9ChwUeZJT/yCopFeRo8jSgCIXswHnDPoIroGeQ48=";
+  };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   propagatedBuildInputs = [
     django
     funcy
@@ -42,6 +65,7 @@ buildPythonPackage rec {
     six
   ];
 
+<<<<<<< HEAD
   __darwinAllowLocalNetworking = true;
 
   nativeCheckInputs = [
@@ -67,6 +91,28 @@ buildPythonPackage rec {
   postCheck = ''
     kill $REDIS_PID
   '';
+=======
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-django
+  ];
+
+  disabledTests = [
+    # Tests require networking
+    "test_cached_as"
+    "test_invalidation_signal"
+    "test_queryset"
+    "test_queryset_empty"
+    "test_lock"
+    "test_context_manager"
+    "test_decorator"
+    "test_in_transaction"
+    "test_nested"
+    "test_unhashable_args"
+    "test_db_agnostic_by_default"
+    "test_db_agnostic_disabled"
+  ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   DJANGO_SETTINGS_MODULE = "tests.settings";
 

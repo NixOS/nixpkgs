@@ -10,7 +10,11 @@
 
 buildPythonPackage rec {
   pname = "pydrive2";
+<<<<<<< HEAD
   version = "1.17.0";
+=======
+  version = "1.15.3";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -18,7 +22,11 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "PyDrive2";
     inherit version;
+<<<<<<< HEAD
     hash = "sha256-aP6pNDR7thK3qEiBHUgUnbhAvPtfpNeothYbLSrf7HA=";
+=======
+    hash = "sha256-qPUNmWydx25RwAO8wHcP6XIi+gH7Dm6p0CfwrPfs564=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [

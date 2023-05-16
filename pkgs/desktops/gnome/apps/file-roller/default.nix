@@ -73,6 +73,9 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = teams.gnome.members ++ teams.pantheon.members;
+<<<<<<< HEAD
     mainProgram = "file-roller";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

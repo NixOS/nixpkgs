@@ -15,8 +15,11 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
+<<<<<<< HEAD
   enableParallelBuilding = true;
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   configureFlags = lib.optional exampleSupport "--enable-example";
 
   meta = with lib; {

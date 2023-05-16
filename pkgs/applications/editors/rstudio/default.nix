@@ -30,7 +30,10 @@
 , postgresql
 , nodejs
 , mkYarnModules
+<<<<<<< HEAD
 , fetchYarnDeps
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , qmake
 , server ? false # build server version
 , sqlite
@@ -65,6 +68,7 @@ let
     sha256 = "sha256-ULyWdSgGPSAwMt0t4QPuzeUE6Bo6IJh+5BMgW1bFN+Y=";
   };
 
+<<<<<<< HEAD
   panmirrorModules = mkYarnModules rec {
     inherit pname version;
     packageJSON = ./package.json;
@@ -73,6 +77,13 @@ let
       inherit yarnLock;
       hash = "sha256-v05Up6VMlYlvgUYQVYo+YfpcsMohliNfMgyjq6QymCI=";
     };
+=======
+  panmirrorModules = mkYarnModules {
+    inherit pname version;
+    packageJSON = ./package.json;
+    yarnLock = ./yarn.lock;
+    yarnNix = ./yarndeps.nix;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   description = "Set of integrated tools for the R language";
@@ -152,8 +163,11 @@ in
 
       substituteInPlace src/cpp/session/include/session/SessionConstants.hpp \
         --replace '@pandoc@' ${pandoc}/bin/pandoc
+<<<<<<< HEAD
 
       sed '1i#include <set>' -i src/cpp/core/include/core/Thread.hpp
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     '';
 
     hunspellDictionaries = with lib; filter isDerivation (unique (attrValues hunspellDicts));

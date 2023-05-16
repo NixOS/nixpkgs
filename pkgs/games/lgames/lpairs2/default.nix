@@ -10,11 +10,19 @@
 
 stdenv.mkDerivation rec {
   pname = "lpairs2";
+<<<<<<< HEAD
   version = "2.2.1";
 
   src = fetchurl {
     url = "mirror://sourceforge/lgames/${pname}-${version}.tar.gz";
     hash = "sha256-n2/3QxsnRzVgzKzOUF6RLzpHJ2R8z67Mkjwdh2ghn28=";
+=======
+  version = "2.2";
+
+  src = fetchurl {
+    url = "mirror://sourceforge/lgames/${pname}-${version}.tar.gz";
+    hash = "sha256-swe/cB9RqxHSNSShiryJ8XfwZk2X6qIDxFURbwNOd58=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   buildInputs = [

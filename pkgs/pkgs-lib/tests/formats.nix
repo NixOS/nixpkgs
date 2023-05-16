@@ -210,6 +210,10 @@ in runBuildTests {
       list = [1, 2]
       str = "foo"
       true = true
+<<<<<<< HEAD
+=======
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       [attrs]
       foo = "foo"
 

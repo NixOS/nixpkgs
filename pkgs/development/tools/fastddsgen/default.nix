@@ -1,14 +1,22 @@
 { lib, stdenv, runtimeShell, writeText, fetchFromGitHub, gradle_7, openjdk17, git, perl, cmake }:
 let
   pname = "fastddsgen";
+<<<<<<< HEAD
   version = "2.5.1";
+=======
+  version = "2.3.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "eProsima";
     repo = "Fast-DDS-Gen";
     rev = "v${version}";
     fetchSubmodules = true;
+<<<<<<< HEAD
     hash = "sha256-3x99FfdxSfqa2+BNZ3lZQzRgjwGhbm5PKezoS6fs5Ts=";
+=======
+    hash = "sha256-lxMv1hXjHFslJts63/FJPjj0mAKTluY/pNTvf15Oo9o=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   gradle = gradle_7;
@@ -35,7 +43,11 @@ let
 
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
+<<<<<<< HEAD
     outputHash = "sha256-ZGWTK665wIX/Biz4JDrbaU4EZNqT7Q8o6DSpziUd/SM=";
+=======
+    outputHash = "sha256-wnnoyaO1QndAYrqmYu1fO6OJrP1NQs8IX4uh37dVntY=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 in
 stdenv.mkDerivation {

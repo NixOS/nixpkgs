@@ -15,6 +15,7 @@
 , withJson ? true
 }:
 
+<<<<<<< HEAD
 stdenv.mkDerivation (finalAttrs: {
   pname = "fossil";
   version = "2.22";
@@ -22,6 +23,15 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://www.fossil-scm.org/home/tarball/version-${finalAttrs.version}/fossil-${finalAttrs.version}.tar.gz";
     hash = "sha256-gdgj/29dF1s4TfqE7roNBS2nOjfNZs1yt4bnFnEhDWs=";
+=======
+stdenv.mkDerivation rec {
+  pname = "fossil";
+  version = "2.21";
+
+  src = fetchurl {
+    url = "https://www.fossil-scm.org/home/tarball/version-${version}/fossil-${version}.tar.gz";
+    hash = "sha256-wf7sp4ISTN52mSQHxw8s7//L4beLZtwkaJDYMVnvgIQ=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   # required for build time tool `./tools/translate.c`
@@ -67,4 +77,8 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with maintainers; [ maggesi viric ];
     platforms = platforms.all;
   };
+<<<<<<< HEAD
 })
+=======
+}
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)

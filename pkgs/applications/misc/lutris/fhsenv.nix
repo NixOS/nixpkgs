@@ -18,9 +18,12 @@ in buildFHSEnv {
 
   runScript = "lutris";
 
+<<<<<<< HEAD
   # Many native and WINE games need 32bit
   multiArch = true;
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   targetPkgs = pkgs: with pkgs; [
     lutris-unwrapped
 
@@ -51,7 +54,11 @@ in buildFHSEnv {
     fluidsynth hidapi mesa libdrm
 
     # MAME
+<<<<<<< HEAD
     fontconfig SDL2_ttf
+=======
+    qt48 fontconfig SDL2_ttf
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     # Mednafen
     freeglut mesa_glu
@@ -65,6 +72,12 @@ in buildFHSEnv {
     # Mupen64Plus
     boost dash
 
+<<<<<<< HEAD
+=======
+    # Osmose
+    qt4
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     # Overwatch 2
     libunwind
 

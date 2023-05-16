@@ -16,7 +16,11 @@ buildGoModule rec {
     sha256 = "sha256-aD1HEdoAPFFpJL++fLZIk+pIs+qDNYbTGDMlcRjV6M4=";
   };
 
+<<<<<<< HEAD
   vendorHash = "sha256-pqwJPo3ZhsXU1RF4BKPOWQS71+9EitSSTE1+sKlc9+s=";
+=======
+  vendorSha256 = "sha256-pqwJPo3ZhsXU1RF4BKPOWQS71+9EitSSTE1+sKlc9+s=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   # Tests require a Github API token, and networking
   doCheck = false;

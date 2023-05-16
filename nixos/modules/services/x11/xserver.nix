@@ -22,7 +22,11 @@ let
   };
 
   fontsForXServer =
+<<<<<<< HEAD
     config.fonts.packages ++
+=======
+    config.fonts.fonts ++
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     # We don't want these fonts in fonts.conf, because then modern,
     # fontconfig-based applications will get horrible bitmapped
     # Helvetica fonts.  It's better to get a substitution (like Nimbus
@@ -725,7 +729,11 @@ in
     systemd.defaultUnit = mkIf cfg.autorun "graphical.target";
 
     systemd.services.display-manager =
+<<<<<<< HEAD
       { description = "Display Manager";
+=======
+      { description = "X11 Server";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
         after = [ "acpid.service" "systemd-logind.service" "systemd-user-sessions.service" ];
 
@@ -776,7 +784,11 @@ in
         xorg.xf86inputevdev.out
       ];
 
+<<<<<<< HEAD
     system.checks = singleton (pkgs.runCommand "xkb-validated" {
+=======
+    system.extraDependencies = singleton (pkgs.runCommand "xkb-validated" {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       inherit (cfg) xkbModel layout xkbVariant xkbOptions;
       nativeBuildInputs = with pkgs.buildPackages; [ xkbvalidate ];
       preferLocalBuild = true;
@@ -883,8 +895,13 @@ in
         ${cfg.extraConfig}
       '';
 
+<<<<<<< HEAD
     fonts.enableDefaultPackages = mkDefault true;
     fonts.packages = [
+=======
+    fonts.enableDefaultFonts = mkDefault true;
+    fonts.fonts = [
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       (if cfg.upscaleDefaultCursor then fontcursormisc_hidpi else pkgs.xorg.fontcursormisc)
       pkgs.xorg.fontmiscmisc
     ];

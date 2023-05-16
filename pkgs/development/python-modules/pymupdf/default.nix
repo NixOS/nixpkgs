@@ -17,7 +17,11 @@
 
 buildPythonPackage rec {
   pname = "pymupdf";
+<<<<<<< HEAD
   version = "1.22.5";
+=======
+  version = "1.21.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -25,7 +29,11 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "PyMuPDF";
     inherit version;
+<<<<<<< HEAD
     hash = "sha256-XsjVEGdSKXUp0NaNRs/EzpmRSqvZm+hD8VmaGELWP+k=";
+=======
+    hash = "sha256-+BV0GkNcYqADa7y/X6bFM1Z71pxTONQTcU/FeyLbk+A=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   postPatch = ''

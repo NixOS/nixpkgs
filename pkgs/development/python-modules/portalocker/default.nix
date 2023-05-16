@@ -2,6 +2,10 @@
 , buildPythonPackage
 , fetchPypi
 , pytestCheckHook
+<<<<<<< HEAD
+=======
+, pytest-mypy
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , pythonOlder
 , redis
 }:
@@ -24,6 +28,10 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
+<<<<<<< HEAD
+=======
+    pytest-mypy
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   disabledTests = [
@@ -39,5 +47,9 @@ buildPythonPackage rec {
     homepage = "https://github.com/WoLpH/portalocker";
     license = licenses.psfl;
     maintainers = with maintainers; [ jonringer ];
+<<<<<<< HEAD
+=======
+    platforms = platforms.unix; # Windows has a dependency on pypiwin32
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

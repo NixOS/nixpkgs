@@ -4,6 +4,7 @@
 
 let
   sources = {
+<<<<<<< HEAD
     "@types/node-20.5.0" = {
       name = "_at_types_slash_node";
       packageName = "@types/node";
@@ -11,6 +12,15 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/@types/node/-/node-20.5.0.tgz";
         sha512 = "Mgq7eCtoTjT89FqNoTzzXg2XvCi5VMhRV6+I2aYanc6kQCBImeNaAYRs/DyoVqk1YEUJK5gN9VO7HRIdz4Wo3Q==";
+=======
+    "@types/node-18.15.11" = {
+      name = "_at_types_slash_node";
+      packageName = "@types/node";
+      version = "18.15.11";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/@types/node/-/node-18.15.11.tgz";
+        sha512 = "E5Kwq2n4SbMzQOn6wnmBjuK9ouqlURrcZDVfbo9ftDDTFt3nk7ZKK4GMOzoYgnpQJKcxwQw+lGaBvvlMo0qN/Q==";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       };
     };
     "fsevents-2.3.2" = {
@@ -22,6 +32,7 @@ let
         sha512 = "xiqMQR4xAeHTuB9uWm+fFRcIOgKBMiOBP+eXiyT7jsgVCq1bkVygt00oASowB7EdtpOHaaPgKt812P9ab+DDKA==";
       };
     };
+<<<<<<< HEAD
     "playwright-core-1.37.0" = {
       name = "playwright-core";
       packageName = "playwright-core";
@@ -29,11 +40,21 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/playwright-core/-/playwright-core-1.37.0.tgz";
         sha512 = "1c46jhTH/myQw6sesrcuHVtLoSNfJv8Pfy9t3rs6subY7kARv0HRw5PpyfPYPpPtQvBOmgbE6K+qgYUpj81LAA==";
+=======
+    "playwright-core-1.31.1" = {
+      name = "playwright-core";
+      packageName = "playwright-core";
+      version = "1.31.1";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/playwright-core/-/playwright-core-1.31.1.tgz";
+        sha512 = "JTyX4kV3/LXsvpHkLzL2I36aCdml4zeE35x+G5aPc4bkLsiRiQshU5lWeVpHFAuC8xAcbI6FDcw/8z3q2xtJSQ==";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       };
     };
   };
 in
 {
+<<<<<<< HEAD
   "@playwright/test-1.37.0" = nodeEnv.buildNodePackage {
     name = "_at_playwright_slash_test";
     packageName = "@playwright/test";
@@ -46,6 +67,20 @@ in
       sources."@types/node-20.5.0"
       sources."fsevents-2.3.2"
       sources."playwright-core-1.37.0"
+=======
+  "@playwright/test-1.31.1" = nodeEnv.buildNodePackage {
+    name = "_at_playwright_slash_test";
+    packageName = "@playwright/test";
+    version = "1.31.1";
+    src = fetchurl {
+      url = "https://registry.npmjs.org/@playwright/test/-/test-1.31.1.tgz";
+      sha512 = "IsytVZ+0QLDh1Hj83XatGp/GsI1CDJWbyDaBGbainsh0p2zC7F4toUocqowmjS6sQff2NGT3D9WbDj/3K2CJiA==";
+    };
+    dependencies = [
+      sources."@types/node-18.15.11"
+      sources."fsevents-2.3.2"
+      sources."playwright-core-1.31.1"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     ];
     buildInputs = globalBuildInputs;
     meta = {

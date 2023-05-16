@@ -2,7 +2,13 @@
 import ./make-test-python.nix (
   { lib, ... }: {
     name = "doas";
+<<<<<<< HEAD
     meta.maintainers = with lib.maintainers; [ cole-h ];
+=======
+    meta = with lib.maintainers; {
+      maintainers = [ cole-h ];
+    };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     nodes.machine =
       { ... }:

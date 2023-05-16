@@ -35,7 +35,10 @@ let param =
   "4.13" = v6_6;
   "4.14" = v6_6;
   "5.0" = v6_6;
+<<<<<<< HEAD
   "5.1" = v6_6;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }.${ocaml.meta.branch};
 in
 

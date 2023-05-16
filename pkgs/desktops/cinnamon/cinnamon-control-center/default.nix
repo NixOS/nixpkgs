@@ -35,13 +35,21 @@
 
 stdenv.mkDerivation rec {
   pname = "cinnamon-control-center";
+<<<<<<< HEAD
   version = "5.8.2";
+=======
+  version = "5.6.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = pname;
     rev = version;
+<<<<<<< HEAD
     hash = "sha256-7AXm4ZTpI/4Xa2lwDmEvomNdwmgVoXSKqojpFZMuoVQ=";
+=======
+    hash = "sha256-rp3K7SqGw8da2U61VjKiqUyT5vCUVk4XZdRYtLwRtfQ=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   buildInputs = [

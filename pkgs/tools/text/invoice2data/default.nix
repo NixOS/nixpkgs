@@ -1,6 +1,9 @@
 { lib
 , fetchFromGitHub
+<<<<<<< HEAD
 , fetchpatch
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , ghostscript
 , imagemagick
 , poppler_utils
@@ -17,6 +20,7 @@ python3.pkgs.buildPythonApplication rec {
     owner = "invoice-x";
     repo = pname;
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-ss2h8cg0sga+lzJyQHckrZB/Eb63Oj3FkqmGqWCzCQ8=";
   };
 
@@ -34,12 +38,33 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   propagatedBuildInputs = with python3.pkgs; [
+=======
+    sha256 = "sha256-ss2h8cg0sga+lzJyQHckrZB/Eb63Oj3FkqmGqWCzCQ8=";
+  };
+
+  buildInputs = with python3.pkgs; [ setuptools-git ];
+
+  propagatedBuildInputs = with python3.pkgs; [
+    chardet
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     dateparser
     pdfminer-six
     pillow
     pyyaml
+<<<<<<< HEAD
   ];
 
+=======
+    setuptools
+    unidecode
+  ];
+
+  postPatch = ''
+    substituteInPlace setup.cfg \
+      --replace "pytest-runner" ""
+  '';
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   makeWrapperArgs = ["--prefix" "PATH" ":" (lib.makeBinPath [
     ghostscript
     imagemagick

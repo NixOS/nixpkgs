@@ -1,7 +1,10 @@
 { lib
 , buildPythonPackage
 , aiocoap
+<<<<<<< HEAD
 , async-interrupt
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , bleak
 , bleak-retry-connector
 , chacha20poly1305
@@ -19,7 +22,11 @@
 
 buildPythonPackage rec {
   pname = "aiohomekit";
+<<<<<<< HEAD
   version = "3.0.3";
+=======
+  version = "2.6.3";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -28,7 +35,11 @@ buildPythonPackage rec {
     owner = "Jc2k";
     repo = pname;
     rev = "refs/tags/${version}";
+<<<<<<< HEAD
     hash = "sha256-6fNsiHddnsdjei0/wqx5ifWhM3bALlYG5Gli69+FmnM=";
+=======
+    hash = "sha256-bVvz5ruc1OpRnSKso3XHAnppnN/4ySfRHodE787eLFw=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [
@@ -37,7 +48,10 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     aiocoap
+<<<<<<< HEAD
     async-interrupt
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     bleak
     bleak-retry-connector
     chacha20poly1305

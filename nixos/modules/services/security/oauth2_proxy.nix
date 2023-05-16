@@ -579,7 +579,11 @@ in
       description = "OAuth2 Proxy";
       path = [ cfg.package ];
       wantedBy = [ "multi-user.target" ];
+<<<<<<< HEAD
       after = [ "network-online.target" ];
+=======
+      after = [ "network.target" ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
       serviceConfig = {
         User = "oauth2_proxy";

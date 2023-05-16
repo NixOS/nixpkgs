@@ -5,6 +5,10 @@
 , dvc-objects
 , fetchFromGitHub
 , funcy
+<<<<<<< HEAD
+=======
+, nanotime
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , pygtrie
 , pythonOlder
 , setuptools-scm
@@ -14,7 +18,11 @@
 
 buildPythonPackage rec {
   pname = "dvc-data";
+<<<<<<< HEAD
   version = "2.16.1";
+=======
+  version = "0.49.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -23,7 +31,11 @@ buildPythonPackage rec {
     owner = "iterative";
     repo = pname;
     rev = "refs/tags/${version}";
+<<<<<<< HEAD
     hash = "sha256-hnKOSo/RUzGnj7JbdKOGogVN925LZQiL3uvy5+dQfPw=";
+=======
+    hash = "sha256-+bVDfjfWLJKCYVM5B0cy5E7hzdjHQSG/UIHaxus4D6E=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
@@ -37,6 +49,10 @@ buildPythonPackage rec {
     diskcache
     dvc-objects
     funcy
+<<<<<<< HEAD
+=======
+    nanotime
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     pygtrie
     shortuuid
     sqltrie

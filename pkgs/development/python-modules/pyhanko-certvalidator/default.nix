@@ -1,4 +1,5 @@
 { lib
+<<<<<<< HEAD
 , aiohttp
 , asn1crypto
 , buildPythonPackage
@@ -12,10 +13,26 @@
 , requests
 , setuptools
 , uritools
+=======
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, aiohttp
+, asn1crypto
+, cryptography
+, freezegun
+, oscrypto
+, requests
+, uritools
+, openssl
+, pytest-asyncio
+, pytestCheckHook
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 buildPythonPackage rec {
   pname = "pyhanko-certvalidator";
+<<<<<<< HEAD
   version = "0.23.0";
   format = "pyproject";
 
@@ -37,6 +54,21 @@ buildPythonPackage rec {
     setuptools
   ];
 
+=======
+  version = "0.20.1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
+
+  # Tests are only available on GitHub
+  src = fetchFromGitHub {
+    owner = "MatthiasValvekens";
+    repo = "certvalidator";
+    rev = version;
+    hash = "sha256-0RSveoSZb7R6d4cMlF1mIrDfnTx2DYNwfTMMtmg+RpM=";
+  };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   propagatedBuildInputs = [
     asn1crypto
     cryptography
@@ -79,7 +111,10 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python library for validating X.509 certificates and paths";
     homepage = "https://github.com/MatthiasValvekens/certvalidator";
+<<<<<<< HEAD
     changelog = "https://github.com/MatthiasValvekens/certvalidator/blob/v${version}/changelog.md";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     license = licenses.mit;
     maintainers = with maintainers; [ wolfangaukang ];
   };

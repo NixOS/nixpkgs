@@ -20,7 +20,11 @@ buildPythonPackage rec {
     hash = "sha256-69encHMk0eXE2Av87ysKvxoiXog5o68qCUlOx/lgHFU=";
   };
 
+<<<<<<< HEAD
   sourceRoot = "${src.name}/python/src";
+=======
+  sourceRoot = "source/python/src";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   propagatedBuildInputs = [
     google-api-core

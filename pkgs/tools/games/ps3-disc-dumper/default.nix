@@ -1,5 +1,9 @@
 { lib
 , buildDotnetModule
+<<<<<<< HEAD
+=======
+, dotnetCorePackages
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , fetchFromGitHub
 , zlib
 , openssl

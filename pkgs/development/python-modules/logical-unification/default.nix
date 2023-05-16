@@ -11,13 +11,22 @@
 
 buildPythonPackage rec {
   pname = "logical-unification";
+<<<<<<< HEAD
   version = "0.4.6";
+=======
+  version = "0.4.5";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "pythological";
     repo = "unification";
+<<<<<<< HEAD
     rev = "refs/tags/v${version}";
     hash = "sha256-uznmlkREFONU1YoI/+mcfb+Yg30NinWvsMxTfHCXzOU=";
+=======
+    rev = "707cf4a39e27a4a8bf06b7e7dce7223085574e65";
+    hash = "sha256-3wqO0pWWFRQeoGNvbSDdLNYFyjNnv+O++F7+vTBUJoI=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [

@@ -32,7 +32,11 @@ buildPythonPackage rec {
     inherit src version;
     pname = "todosrht-api";
     modRoot = "api";
+<<<<<<< HEAD
     vendorHash = "sha256-LB1H4jwnvoEyaaYJ09NI/M6IkgZwRet/fkso6b9EPV0=";
+=======
+    vendorSha256 = "sha256-LB1H4jwnvoEyaaYJ09NI/M6IkgZwRet/fkso6b9EPV0=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   } // import ./fix-gqlgen-trimpath.nix { inherit unzip; });
 
   propagatedBuildInputs = [

@@ -2,10 +2,17 @@
 
 let
   pname = "jicofo";
+<<<<<<< HEAD
   version = "1.0-1038";
   src = fetchurl {
     url = "https://download.jitsi.org/stable/${pname}_${version}-1_all.deb";
     sha256 = "9VO3bKOoHtl/q6gEmwi8Lc4GXgJSyFJ7jxKfaKQ549c=";
+=======
+  version = "1.0-987";
+  src = fetchurl {
+    url = "https://download.jitsi.org/stable/${pname}_${version}-1_all.deb";
+    sha256 = "VK4Ck+OU6xv/Lma4YpXduPThej2wopbs+OkBC2SOkJU=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 in
 stdenv.mkDerivation {

@@ -62,6 +62,10 @@
     ],
     "volume-scroller": [
       "volume_scroller@trflynn89.pm.me",
+<<<<<<< HEAD
+=======
+      "volume_scroller@noskoski",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       "volume_scroller@francislavoie.github.io"
     ]
   },
@@ -137,6 +141,10 @@
     ],
     "volume-scroller": [
       "volume_scroller@trflynn89.pm.me",
+<<<<<<< HEAD
+=======
+      "volume_scroller@noskoski",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       "volume_scroller@francislavoie.github.io"
     ],
     "floating-panel": [
@@ -165,10 +173,13 @@
       "noannoyance@sindex.com",
       "noannoyance@daase.net"
     ],
+<<<<<<< HEAD
     "somafm-internet-radio": [
       "SomaFm-Radio@alireza6677.gmail.com",
       "SomaFm-Radio@cajhne.gmail.com"
     ],
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "fuzzy-clock": [
       "fuzzy-clock@keepawayfromfire.co.uk",
       "FuzzyClock@johngoetz"
@@ -199,6 +210,10 @@
     ],
     "volume-scroller": [
       "volume_scroller@trflynn89.pm.me",
+<<<<<<< HEAD
+=======
+      "volume_scroller@noskoski",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       "volume_scroller@francislavoie.github.io"
     ],
     "floating-panel": [
@@ -219,10 +234,13 @@
       "lockkeys@vaina.lt",
       "lockkeys@fawtytoo"
     ],
+<<<<<<< HEAD
     "persian-calendar": [
       "PersianCalendar@oxygenws.com",
       "persian-calendar@iamrezamousavi.gmail.com"
     ],
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "clipboard-indicator": [
       "clipboard-indicator@tudmotu.com",
       "clipboard-indicator@Dieg0Js.github.io"
@@ -231,10 +249,13 @@
       "noannoyance@sindex.com",
       "noannoyance@daase.net"
     ],
+<<<<<<< HEAD
     "somafm-internet-radio": [
       "SomaFm-Radio@alireza6677.gmail.com",
       "SomaFm-Radio@cajhne.gmail.com"
     ],
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "virtualbox-applet": [
       "vbox-applet@gs.eros2.info",
       "vbox-applet@buba98"
@@ -253,6 +274,10 @@
     ],
     "volume-scroller": [
       "volume_scroller@trflynn89.pm.me",
+<<<<<<< HEAD
+=======
+      "volume_scroller@noskoski",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       "volume_scroller@francislavoie.github.io"
     ],
     "auto-activities": [
@@ -273,10 +298,13 @@
       "workspace-indicator@gnome-shell-extensions.gcampax.github.com",
       "horizontal-workspace-indicator@tty2.io"
     ],
+<<<<<<< HEAD
     "lock-keys": [
       "lockkeys@vaina.lt",
       "lockkeys@fawtytoo"
     ],
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "persian-calendar": [
       "PersianCalendar@oxygenws.com",
       "persian-calendar@iamrezamousavi.gmail.com"
@@ -297,10 +325,13 @@
       "vbox-applet@gs.eros2.info",
       "vbox-applet@buba98"
     ],
+<<<<<<< HEAD
     "panel-date-format": [
       "panel-date-format@keiii.github.com",
       "panel-date-format@atareao.es"
     ],
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "battery-time": [
       "batime@martin.zurowietz.de",
       "batterytime@typeof.pw"
@@ -323,10 +354,13 @@
       "workspace-indicator@gnome-shell-extensions.gcampax.github.com",
       "horizontal-workspace-indicator@tty2.io"
     ],
+<<<<<<< HEAD
     "persian-calendar": [
       "PersianCalendar@oxygenws.com",
       "persian-calendar@iamrezamousavi.gmail.com"
     ],
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "clipboard-indicator": [
       "clipboard-indicator@tudmotu.com",
       "clipboard-indicator@Dieg0Js.github.io"
@@ -334,6 +368,7 @@
     "virtualbox-applet": [
       "vbox-applet@gs.eros2.info",
       "vbox-applet@buba98"
+<<<<<<< HEAD
     ],
     "panel-date-format": [
       "panel-date-format@keiii.github.com",
@@ -342,6 +377,8 @@
     "battery-time": [
       "batime@martin.zurowietz.de",
       "batterytime@typeof.pw"
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     ]
   }
 }

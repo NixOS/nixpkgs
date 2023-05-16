@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 { lib, stdenv, fetchurl, autoreconfHook
+=======
+{ lib, stdenv, fetchurl
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , cxxSupport ? true
 , compat185 ? true
 , dbmSupport ? false
@@ -19,14 +23,18 @@ stdenv.mkDerivation (rec {
     sha256 = sha256;
   };
 
+<<<<<<< HEAD
   # The provided configure script features `main` returning implicit `int`, which causes
   # configure checks to work incorrectly with clang 16.
   nativeBuildInputs = [ autoreconfHook ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   patches = extraPatches;
 
   outputs = [ "bin" "out" "dev" ];
 
+<<<<<<< HEAD
   # Required when regenerated the configure script to make sure the vendored macros are found.
   autoreconfFlags = [ "-fi" "-Iaclocal" "-Iaclocal_java" ];
 
@@ -61,6 +69,8 @@ stdenv.mkDerivation (rec {
     popd
   '';
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   configureFlags =
     [
       (if cxxSupport then "--enable-cxx" else "--disable-cxx")

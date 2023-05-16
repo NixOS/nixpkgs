@@ -14,6 +14,11 @@
 , python3
 , which
 , nodejs
+<<<<<<< HEAD
+=======
+, qtbase
+, perl
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , xorg
 , libXcursor
 , libXScrnSaver
@@ -49,6 +54,11 @@
 , systemd
 , pipewire
 , gn
+<<<<<<< HEAD
+=======
+, runCommand
+, writeScriptBin
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , ffmpeg_4
 , lib
 , stdenv
@@ -56,11 +66,21 @@
 , libxml2
 , libxslt
 , lcms2
+<<<<<<< HEAD
 , libkrb5
 , mesa
 , enableProprietaryCodecs ? true
   # darwin
 , llvmPackages_14
+=======
+, re2
+, libkrb5
+, mesa
+, xkeyboard_config
+, enableProprietaryCodecs ? true
+  # darwin
+, clang_14
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , bootstrap_cmds
 , cctools
 , xcbuild
@@ -107,7 +127,11 @@ qtModule {
     gn
     nodejs
   ] ++ lib.optionals stdenv.isDarwin [
+<<<<<<< HEAD
     llvmPackages_14.clang
+=======
+    clang_14
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     bootstrap_cmds
     cctools
     xcbuild
@@ -129,11 +153,14 @@ qtModule {
     # environment variable, since NixOS relies on it working.
     # See https://github.com/NixOS/nixpkgs/issues/226484 for more context.
     ../patches/qtwebengine-xkb-includes.patch
+<<<<<<< HEAD
 
     ../patches/qtwebengine-link-pulseaudio.patch
 
     # Override locales install path so they go to QtWebEngine's $out
     ../patches/qtwebengine-locales-path.patch
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   postPatch = ''
@@ -223,6 +250,10 @@ qtModule {
     libxml2
     libxslt
     lcms2
+<<<<<<< HEAD
+=======
+    re2
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     libevent
     ffmpeg_4
@@ -307,6 +338,10 @@ qtModule {
   meta = with lib; {
     description = "A web engine based on the Chromium web browser";
     platforms = platforms.unix;
+<<<<<<< HEAD
+=======
+    broken = stdenv.isDarwin && stdenv.isx86_64;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     # This build takes a long time; particularly on slow architectures
     # 1 hour on 32x3.6GHz -> maybe 12 hours on 4x2.4GHz
     timeout = 24 * 3600;

@@ -3,6 +3,7 @@
 , libsndfile, portaudio, libmysqlclient, fontconfig
 }:
 
+<<<<<<< HEAD
 stdenv.mkDerivation (finalAttrs: {
   pname = "libagar";
   version = "1.5.0";
@@ -11,6 +12,12 @@ stdenv.mkDerivation (finalAttrs: {
     url = "http://stable.hypertriton.com/agar/agar-${finalAttrs.version}.tar.gz";
     sha256 = "001wcqk5z67qg0raw9zlwmv62drxiwqykvsbk10q2mrc6knjsd42";
   };
+=======
+let srcs = import ./srcs.nix { inherit fetchurl; }; in
+stdenv.mkDerivation {
+  pname = "libagar";
+  inherit (srcs) version src;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   preConfigure = ''
     substituteInPlace configure.in \
@@ -44,4 +51,8 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with maintainers; [ ramkromberg ];
     platforms = with platforms; linux;
   };
+<<<<<<< HEAD
 })
+=======
+}
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)

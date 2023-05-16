@@ -3,10 +3,15 @@
 , fetchFromGitHub
 , cmake
 , kwindowsystem
+<<<<<<< HEAD
 , libexif
 , libfm-qt
 , lxqt-qtplugin
 , menu-cache
+=======
+, libfm-qt
+, lxqt-qtplugin
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , qtx11extras
 , gitUpdater
 , extraQtStyles ? []
@@ -29,10 +34,15 @@ mkDerivation rec {
 
   buildInputs = [
     kwindowsystem
+<<<<<<< HEAD
     libexif
     libfm-qt
     lxqt-qtplugin
     menu-cache
+=======
+    libfm-qt
+    lxqt-qtplugin
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     qtx11extras
   ]
   ++ extraQtStyles;

@@ -1,4 +1,5 @@
 { lib
+<<<<<<< HEAD
 , mkYarnPackage
 , fetchFromGitHub
 , fetchYarnDeps
@@ -11,10 +12,24 @@
 mkYarnPackage rec {
   pname = "mjolnir";
   version = "1.6.4";
+=======
+, nixosTests
+, stdenv
+, fetchFromGitHub
+, makeWrapper
+, nodejs
+, pkgs
+}:
+
+stdenv.mkDerivation rec {
+  pname = "mjolnir";
+  version = "1.5.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "matrix-org";
     repo = "mjolnir";
+<<<<<<< HEAD
     rev = "refs/tags/v${version}";
     hash = "sha256-/vnojWLpu/fktqPUhAdL1QTESxDwFrBVYAkyF79Fj9w=";
   };
@@ -45,12 +60,59 @@ mkYarnPackage rec {
   postInstall = ''
     makeWrapper ${nodejs}/bin/node "$out/bin/mjolnir" \
       --add-flags "$out/libexec/mjolnir/deps/mjolnir/lib/index.js"
+=======
+    rev = "v${version}";
+    sha256 = "YmP+r9W5e63Aw66lSQeTTbYwSF/vjPyHkoehJxtcRNw=";
+  };
+
+  nativeBuildInputs = [
+    nodejs
+    makeWrapper
+  ];
+
+  buildPhase =
+    let
+      nodeDependencies = ((import ./node-composition.nix {
+        inherit pkgs nodejs;
+        inherit (stdenv.hostPlatform) system;
+      }).nodeDependencies.override (old: {
+        # access to path '/nix/store/...-source' is forbidden in restricted mode
+        src = src;
+        dontNpmInstall = true;
+      }));
+    in
+    ''
+      runHook preBuild
+
+      ln -s ${nodeDependencies}/lib/node_modules .
+      export HOME=$(mktemp -d)
+      export PATH="${nodeDependencies}/bin:$PATH"
+      npm run build
+
+      runHook postBuild
+    '';
+
+  installPhase = ''
+    runHook preInstall
+
+    mkdir -p $out/share
+    cp -a . $out/share/mjolnir
+
+    makeWrapper ${nodejs}/bin/node $out/bin/mjolnir \
+      --add-flags $out/share/mjolnir/lib/index.js
+
+    runHook postInstall
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '';
 
   passthru = {
     tests = {
       inherit (nixosTests) mjolnir;
     };
+<<<<<<< HEAD
+=======
+    updateScript = ./update.sh;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   meta = with lib; {

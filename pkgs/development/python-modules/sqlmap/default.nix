@@ -8,14 +8,22 @@
 
 buildPythonPackage rec {
   pname = "sqlmap";
+<<<<<<< HEAD
   version = "1.7.9";
+=======
+  version = "1.7.5";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
+<<<<<<< HEAD
     hash = "sha256-k07Dpkpa1MO9ICMl4a2YI2ONgcUG0vLOzC+wsoHxI3s=";
+=======
+    hash = "sha256-PQk3uEY1gjvs5BerfEAEZe4v6uZYpCZqCo+Qc7mSUw8=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   postPatch = ''

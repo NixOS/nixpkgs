@@ -21,9 +21,13 @@ buildDunePackage {
     bigstringaf
   ];
 
+<<<<<<< HEAD
   # Tests fail with git 2.41
   # see https://github.com/mirage/ocaml-git/issues/617
   doCheck = false;
+=======
+  doCheck = true;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nativeCheckInputs = [
     git-binary
   ];

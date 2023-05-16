@@ -75,7 +75,10 @@ my $backgroundColor = get("backgroundColor");
 my $configurationLimit = int(get("configurationLimit"));
 my $copyKernels = get("copyKernels") eq "true";
 my $timeout = int(get("timeout"));
+<<<<<<< HEAD
 my $timeoutStyle = get("timeoutStyle");
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 my $defaultEntry = get("default");
 my $fsIdentifier = get("fsIdentifier");
 my $grubEfi = get("grubEfi");
@@ -214,7 +217,11 @@ sub GrubFs {
             $search .= $matches[0];
         }
 
+<<<<<<< HEAD
         # BTRFS is a special case in that we need to fix the referenced path based on subvolumes
+=======
+        # BTRFS is a special case in that we need to fix the referrenced path based on subvolumes
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         if ($fs->type eq 'btrfs') {
             my ($status, @id_info) = runCommand("@btrfsprogs@/bin/btrfs", "subvol", "show", @{[$fs->mount]});
             if ($status != 0) {
@@ -320,7 +327,10 @@ $conf .= "
       set default=$defaultEntryText
       set timeout=$timeout
     fi
+<<<<<<< HEAD
     set timeout_style=$timeoutStyle
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     function savedefault {
         if [ -z \"\${boot_once}\"]; then
@@ -385,6 +395,7 @@ rmtree("$bootPath/theme") or die "cannot clean up theme folder in $bootPath\n" i
 if ($theme) {
     # Copy theme
     rcopy($theme, "$bootPath/theme") or die "cannot copy $theme to $bootPath\n";
+<<<<<<< HEAD
 
     # Detect which modules will need to be loaded
     my $with_png = 0;
@@ -410,6 +421,8 @@ if ($theme) {
         "
     }
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     $conf .= "
         # Sets theme.
         set theme=" . ($grubBoot->path eq "/" ? "" : $grubBoot->path) . "/theme/theme.txt
@@ -516,6 +529,7 @@ sub addEntry {
     $conf .= "}\n\n";
 }
 
+<<<<<<< HEAD
 sub addGeneration {
     my ($name, $nameSuffix, $path, $options, $current) = @_;
 
@@ -555,14 +569,47 @@ sub addGeneration {
         $conf .= "}\n";
     }
 }
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 # Add default entries.
 $conf .= "$extraEntries\n" if $extraEntriesBeforeNixOS;
 
+<<<<<<< HEAD
 addGeneration("@distroName@", "", $defaultConfig, $entryOptions, 1);
 
 $conf .= "$extraEntries\n" unless $extraEntriesBeforeNixOS;
 
+=======
+addEntry("@distroName@ - Default", $defaultConfig, $entryOptions, 1);
+
+$conf .= "$extraEntries\n" unless $extraEntriesBeforeNixOS;
+
+# Find all the children of the current default configuration
+# Do not search for grand children
+my @links = sort (glob "$defaultConfig/specialisation/*");
+foreach my $link (@links) {
+
+    my $entryName = "";
+
+    my $cfgName = readFile("$link/configuration-name");
+
+    my $date = strftime("%F", localtime(lstat($link)->mtime));
+    my $version =
+        -e "$link/nixos-version"
+        ? readFile("$link/nixos-version")
+        : basename((glob(dirname(Cwd::abs_path("$link/kernel")) . "/lib/modules/*"))[0]);
+
+    if ($cfgName) {
+        $entryName = $cfgName;
+    } else {
+        my $linkname = basename($link);
+        $entryName = "($linkname - $date - $version)";
+    }
+    addEntry("@distroName@ - $entryName", $link, "", 1);
+}
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 my $grubBootPath = $grubBoot->path;
 # extraEntries could refer to @bootRoot@, which we have to substitute
 $conf =~ s/\@bootRoot\@/$grubBootPath/g;
@@ -592,7 +639,11 @@ sub addProfile {
             -e "$link/nixos-version"
             ? readFile("$link/nixos-version")
             : basename((glob(dirname(Cwd::abs_path("$link/kernel")) . "/lib/modules/*"))[0]);
+<<<<<<< HEAD
         addGeneration("@distroName@ - Configuration " . nrFromGen($link), " ($date - $version)", $link, $subEntryOptions, 0);
+=======
+        addEntry("@distroName@ - Configuration " . nrFromGen($link) . " ($date - $version)", $link, $subEntryOptions, 0);
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     }
 
     $conf .= "}\n";
@@ -628,7 +679,11 @@ sub getEfiTarget {
         if (($grubTarget eq "") || ($grubTargetEfi eq "")) { die }
         else { return "both" }
     } elsif (($grub ne "") && ($grubEfi eq "")) {
+<<<<<<< HEAD
         # TODO: It would be safer to disallow non-EFI grub installation if no target is given.
+=======
+        # TODO: It would be safer to disallow non-EFI grub installation if no taget is given.
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         #       If no target is given, then grub auto-detects the target which can lead to errors.
         #       E.g. it seems as if grub would auto-detect a EFI target based on the availability
         #       of a EFI partition.
@@ -767,8 +822,14 @@ if (($requireNewInstall != 0) && ($efiTarget eq "only" || $efiTarget eq "both"))
     if ($forceInstall eq "true") {
         push @command, "--force";
     }
+<<<<<<< HEAD
     push @command, "--bootloader-id=$bootloaderId";
     if ($canTouchEfiVariables ne "true") {
+=======
+    if ($canTouchEfiVariables eq "true") {
+        push @command, "--bootloader-id=$bootloaderId";
+    } else {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         push @command, "--no-nvram";
         push @command, "--removable" if $efiInstallAsRemovable eq "true";
     }

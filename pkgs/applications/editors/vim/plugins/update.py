@@ -74,7 +74,11 @@ class VimEditor(pluginupdate.Editor):
         with open(outfile, "w+") as f:
             f.write(HEADER)
             f.write(textwrap.dedent("""
+<<<<<<< HEAD
                 { lib, buildVimPluginFrom2Nix, buildNeovimPlugin, fetchFromGitHub, fetchgit }:
+=======
+                { lib, buildVimPluginFrom2Nix, buildNeovimPluginFrom2Nix, fetchFromGitHub, fetchgit }:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
                 final: prev:
                 {
@@ -103,7 +107,11 @@ class VimEditor(pluginupdate.Editor):
   }};
 
 """.format(
+<<<<<<< HEAD
         buildFn="buildNeovimPlugin" if isNeovim else "buildVimPluginFrom2Nix", plugin=plugin, src_nix=src_nix, repo=repo)
+=======
+        buildFn="buildNeovimPluginFrom2Nix" if isNeovim else "buildVimPluginFrom2Nix", plugin=plugin, src_nix=src_nix, repo=repo)
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         log.debug(content)
         return content
 

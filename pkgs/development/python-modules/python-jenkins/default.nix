@@ -12,17 +12,28 @@
 , requests
 , requests-mock
 , stestr
+<<<<<<< HEAD
 , multiprocess
 , pythonRelaxDepsHook
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 buildPythonPackage rec {
   pname = "python-jenkins";
+<<<<<<< HEAD
   version = "1.8.1";
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-/18dklOdkD+GmwLq8rExREfm1tePdn7c/dkpZ9UyucY=";
+=======
+  version = "1.7.0";
+
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "01jid5s09lr3kayr2h1z9n8h9nhyw3jxv9c4b5hrlxijknkqzvfy";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   # test uses timeout mechanism unsafe for use with the "spawn"
@@ -32,6 +43,7 @@ buildPythonPackage rec {
       --replace test_jenkins_open_no_timeout dont_test_jenkins_open_no_timeout
   '';
 
+<<<<<<< HEAD
   nativeBuildInputs = [
     pythonRelaxDepsHook
   ];
@@ -51,6 +63,15 @@ buildPythonPackage rec {
     # https://github.com/pypa/setuptools/issues/2497 for details.
     stestr run -E "tests.test_plugins.(PluginsTestScenarios.test_plugin_version_comparison|PluginsTestScenarios.test_plugin_version_object_comparison|PluginsTest.test_plugin_equal|PluginsTest.test_plugin_not_equal)"
   '';
+=======
+  buildInputs = [ mock ];
+  propagatedBuildInputs = [ pbr pyyaml setuptools six multi_key_dict requests ];
+
+   nativeCheckInputs = [ stestr testscenarios requests-mock ];
+   checkPhase = ''
+     stestr run
+   '';
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   meta = with lib; {
     description = "Python bindings for the remote Jenkins API";

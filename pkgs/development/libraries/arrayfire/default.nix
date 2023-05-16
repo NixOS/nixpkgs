@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 { lib
 , stdenv
 , fetchFromGitHub
@@ -23,6 +24,14 @@
 , cudaSupport ? config.cudaSupport
 , cudatoolkit
 , darwin
+=======
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config
+, opencl-clhpp, ocl-icd, fftw, fftwFloat
+, blas, lapack, boost, mesa, libGLU, libGL
+, freeimage, python3, clfft, clblas
+, doxygen, buildDocs ? false
+, cudaSupport ? false, cudatoolkit
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 stdenv.mkDerivation rec {
@@ -67,6 +76,7 @@ stdenv.mkDerivation rec {
   strictDeps = true;
 
   buildInputs = [
+<<<<<<< HEAD
     opencl-clhpp
     fftw
     fftwFloat
@@ -87,6 +97,16 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals stdenv.isDarwin [
     darwin.apple_sdk_11_0.frameworks.Accelerate
   ];
+=======
+    opencl-clhpp fftw fftwFloat
+    blas lapack
+    libGLU libGL
+    mesa freeimage
+    boost.out boost.dev
+  ] ++ (lib.optional stdenv.isLinux ocl-icd)
+    ++ (lib.optional cudaSupport cudatoolkit)
+    ++ (lib.optional buildDocs doxygen);
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   meta = with lib; {
     description = "A general-purpose library for parallel and massively-parallel computations";

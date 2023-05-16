@@ -1,5 +1,8 @@
 { lib
+<<<<<<< HEAD
 , stdenv
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , anytree
 , buildPythonPackage
 , cached-property
@@ -19,8 +22,13 @@
 , pytest-xdist
 , pytestCheckHook
 , pythonOlder
+<<<<<<< HEAD
 , pythonRelaxDepsHook
 , scipy
+=======
+, scipy
+, stdenv
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , sympy
 }:
 
@@ -38,6 +46,7 @@ buildPythonPackage rec {
     hash = "sha256-LzqY//205XEOd3/f8k1g4OYndRHMTVplBogGJf5Forw=";
   };
 
+<<<<<<< HEAD
   pythonRemoveDeps = [
     "codecov"
     "flake8"
@@ -50,6 +59,22 @@ buildPythonPackage rec {
   nativeBuildInputs = [
     pythonRelaxDepsHook
   ];
+=======
+  postPatch = ''
+    # Removing unecessary dependencies
+    sed -e "s/flake8.*//g" \
+        -e "s/codecov.*//g" \
+        -e "s/pytest.*//g" \
+        -e "s/pytest-runner.*//g" \
+        -e "s/pytest-cov.*//g" \
+        -i requirements.txt
+
+    # Relaxing dependencies requirements
+    sed -e "s/>.*//g" \
+        -e "s/<.*//g" \
+        -i requirements.txt
+  '';
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   propagatedBuildInputs = [
     anytree
@@ -70,6 +95,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+<<<<<<< HEAD
     gcc
     matplotlib
     pytest-xdist
@@ -78,10 +104,19 @@ buildPythonPackage rec {
 
   pytestFlagsArray = [ "-x" ];
 
+=======
+    pytestCheckHook
+    pytest-xdist
+    matplotlib
+    gcc
+  ];
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   # I've had to disable the following tests since they fail while using nix-build, but they do pass
   # outside the build. They mostly related to the usage of MPI in a sandboxed environment.
   disabledTests = [
     "test_assign_parallel"
+<<<<<<< HEAD
     "test_cache_blocking_structure_distributed"
     "test_codegen_quality0"
     "test_coefficients_w_xreplace"
@@ -99,6 +134,23 @@ buildPythonPackage rec {
     "test_setupWOverQ"
     "test_shortcuts"
     "test_subdomainset_mpi"
+=======
+    "test_gs_parallel"
+    "test_if_parallel"
+    "test_if_halo_mpi"
+    "test_cache_blocking_structure_distributed"
+    "test_mpi"
+    "test_codegen_quality0"
+    "test_new_distributor"
+    "test_subdomainset_mpi"
+    "test_init_omp_env_w_mpi"
+    "test_mpi_nocomms"
+    "test_shortcuts"
+    "est_docstrings"
+    "test_docstrings[finite_differences.coefficients]"
+    "test_coefficients_w_xreplace"
+    "test_loop_bounds_forward"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   disabledTestPaths = [

@@ -15,13 +15,21 @@ in
 
 stdenv.mkDerivation rec {
   pname = "sqlite${lib.optionalString interactive "-interactive"}";
+<<<<<<< HEAD
   version = "3.42.0";
+=======
+  version = "3.41.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   # nixpkgs-update: no auto update
   # NB! Make sure to update ./tools.nix src (in the same directory).
   src = fetchurl {
     url = "https://sqlite.org/2023/sqlite-autoconf-${archiveVersion version}.tar.gz";
+<<<<<<< HEAD
     hash = "sha256-erz9FhxuJ0LKXGwIldH4U8lA8gMwSgtJ2k4eyl0IjKY=";
+=======
+    hash = "sha256-6YwQDdHaTjD6Rgdh2rfAuRpQt4XhZ/jFesxGUU+ulJk=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   outputs = [ "bin" "dev" "out" ];
@@ -101,6 +109,9 @@ stdenv.mkDerivation rec {
     mainProgram = "sqlite3";
     maintainers = with maintainers; [ eelco np ];
     platforms = platforms.unix ++ platforms.windows;
+<<<<<<< HEAD
     pkgConfigModules = [ "sqlite3" ];
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

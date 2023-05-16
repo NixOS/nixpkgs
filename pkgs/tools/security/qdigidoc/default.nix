@@ -10,8 +10,13 @@
 , openssl
 , pcsclite
 , qtbase
+<<<<<<< HEAD
 , qtsvg
 , qttools
+=======
+, qttranslations
+, qtsvg
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 mkDerivation rec {
@@ -29,7 +34,11 @@ mkDerivation rec {
     sha256 = "1cikz36w9phgczcqnwk4k3mx3kk919wy2327jksmfa4cjfjq4a8d";
   };
 
+<<<<<<< HEAD
   nativeBuildInputs = [ cmake gettext pkg-config qttools ];
+=======
+  nativeBuildInputs = [ cmake gettext pkg-config ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   postPatch = ''
     substituteInPlace client/CMakeLists.txt \
@@ -44,6 +53,10 @@ mkDerivation rec {
     pcsclite
     qtbase
     qtsvg
+<<<<<<< HEAD
+=======
+    qttranslations
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   # qdigidoc4's `QPKCS11::reload()` dlopen()s "opensc-pkcs11.so" in QLibrary,

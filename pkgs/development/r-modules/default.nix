@@ -327,7 +327,11 @@ let
     chebpol = [ pkgs.fftw.dev ];
     ChemmineOB = with pkgs; [ openbabel pkg-config ];
     curl = [ pkgs.curl.dev ];
+<<<<<<< HEAD
     data_table = with pkgs; [ pkg-config zlib.dev ] ++ lib.optional stdenv.isDarwin pkgs.llvmPackages.openmp;
+=======
+    data_table = [ pkgs.zlib.dev ] ++ lib.optional stdenv.isDarwin pkgs.llvmPackages.openmp;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     devEMF = with pkgs; [ xorg.libXft.dev ];
     diversitree = with pkgs; [ gsl fftw ];
     exactextractr = [ pkgs.geos ];
@@ -357,7 +361,10 @@ let
     kza = [ pkgs.fftw.dev ];
     lpsymphony = with pkgs; [ pkg-config gfortran gettext ];
     lwgeom = with pkgs; [ proj geos gdal ];
+<<<<<<< HEAD
     rvg = [ pkgs.libpng.dev ];
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     magick = [ pkgs.imagemagick.dev ];
     ModelMetrics = lib.optional stdenv.isDarwin pkgs.llvmPackages.openmp;
     mvabund = [ pkgs.gsl ];
@@ -371,7 +378,11 @@ let
     pander = with pkgs; [ pandoc which ];
     pbdMPI = [ pkgs.mpi ];
     pbdPROF = [ pkgs.mpi ];
+<<<<<<< HEAD
     pbdZMQ = [ pkgs.pkg-config ] ++ lib.optionals stdenv.isDarwin [ pkgs.which ];
+=======
+    pbdZMQ = lib.optionals stdenv.isDarwin [ pkgs.which ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     pdftools = [ pkgs.poppler.dev ];
     phytools = [ pkgs.which ];
     PKI = [ pkgs.openssl.dev ];
@@ -412,7 +423,10 @@ let
     Rssa = [ pkgs.fftw.dev ];
     rsvg = [ pkgs.pkg-config ];
     runjags = [ pkgs.jags ];
+<<<<<<< HEAD
     xslt = [ pkgs.pkg-config ];
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     RVowpalWabbit = with pkgs; [ zlib.dev boost ];
     rzmq = with pkgs; [ zeromq pkg-config ];
     httpuv = [ pkgs.zlib.dev ];
@@ -421,7 +435,10 @@ let
     sdcTable = with pkgs; [ gmp glpk ];
     seewave = with pkgs; [ fftw.dev libsndfile.dev ];
     seqinr = [ pkgs.zlib.dev ];
+<<<<<<< HEAD
     webp = [ pkgs.pkg-config ];
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     seqminer = with pkgs; [ zlib.dev bzip2 ];
     sf = with pkgs; [ gdal proj geos ];
     terra = with pkgs; [ gdal proj geos ];
@@ -505,10 +522,16 @@ let
     svKomodo = [ pkgs.which ];
     nat = [ pkgs.which ];
     nat_templatebrains = [ pkgs.which ];
+<<<<<<< HEAD
     pbdZMQ = [ pkgs.zeromq ] ++ lib.optionals stdenv.isDarwin [ pkgs.darwin.binutils ];
     bigmemory = lib.optionals stdenv.isLinux [ pkgs.libuuid.dev ];
     clustermq = [  pkgs.pkg-config ];
     webp = [ pkgs.libwebp ];
+=======
+    pbdZMQ = lib.optionals stdenv.isDarwin [ pkgs.darwin.binutils ];
+    bigmemory = lib.optionals stdenv.isLinux [ pkgs.libuuid.dev ];
+    clustermq = [  pkgs.pkg-config ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     RMark = [ pkgs.which ];
     RPushbullet = [ pkgs.which ];
     RCurl = [ pkgs.curl.dev ];
@@ -555,7 +578,10 @@ let
     ArrayExpressHTS = with pkgs; [ zlib.dev curl.dev which ];
     bbl = with pkgs; [ gsl ];
     writexl = with pkgs; [ zlib.dev ];
+<<<<<<< HEAD
     xslt = with pkgs; [ libxslt libxml2 ];
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     qpdf = with pkgs; [ libjpeg.dev zlib.dev ];
     vcfR = with pkgs; [ zlib.dev ];
     bio3d = with pkgs; [ zlib.dev ];
@@ -589,7 +615,10 @@ let
     qrqc = [ pkgs.zlib.dev ];
     rJPSGCS = [ pkgs.zlib.dev ];
     rhdf5filters = with pkgs; [ zlib.dev bzip2.dev ];
+<<<<<<< HEAD
     symengine = with pkgs; [ mpfr symengine flint ];
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     rtk = [ pkgs.zlib.dev ];
     scPipe = [ pkgs.zlib.dev ];
     seqTools = [ pkgs.zlib.dev ];
@@ -627,12 +656,18 @@ let
     PING = [ pkgs.gsl ];
     RcppAlgos = [ pkgs.gmp.dev ];
     RcppBigIntAlgos = [ pkgs.gmp.dev ];
+<<<<<<< HEAD
     spaMM = [ pkgs.gsl ];
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     HilbertVisGUI = [ pkgs.gtkmm2.dev ];
     textshaping = with pkgs; [ harfbuzz.dev freetype.dev fribidi libpng ];
     DropletUtils = [ pkgs.zlib.dev ];
     RMariaDB = [ pkgs.libmysqlclient.dev ];
+<<<<<<< HEAD
     ijtiff = [ pkgs.libtiff ];
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     ragg = with pkgs; [ freetype.dev libpng.dev libtiff.dev zlib.dev libjpeg.dev bzip2.dev ];
     qqconf = [ pkgs.fftw.dev ];
   };
@@ -1288,6 +1323,7 @@ let
       '';
     });
 
+<<<<<<< HEAD
     ROracle = old.ROracle.overrideAttrs (attrs: {
       configureFlags = [
         "--with-oci-lib=${pkgs.oracle-instantclient.lib}/lib"
@@ -1295,6 +1331,8 @@ let
       ];
     });
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     sparklyr = old.sparklyr.overrideAttrs (attrs: {
       # Pyspark's spark is full featured and better maintained than pkgs.spark
       preConfigure = ''
@@ -1327,6 +1365,7 @@ let
 
     Rrdrand = old.Rrdrand.override { platforms = lib.platforms.x86_64 ++ lib.platforms.x86; };
 
+<<<<<<< HEAD
     symengine = old.symengine.overrideAttrs (_: {
       preConfigure = ''
         rm configure
@@ -1337,6 +1376,8 @@ let
       '';
     });
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     RandomFieldsUtils = old.RandomFieldsUtils.override { platforms = lib.platforms.x86_64 ++ lib.platforms.x86; };
 
     flowClust = old.flowClust.override { platforms = lib.platforms.x86_64 ++ lib.platforms.x86; };
@@ -1362,6 +1403,7 @@ let
       patches = [ ./patches/rhdf5.patch ];
     });
 
+<<<<<<< HEAD
     redland = old.redland.overrideAttrs (_: {
       PKGCONFIG_CFLAGS="-I${pkgs.redland}/include -I${pkgs.librdf_raptor2}/include/raptor2 -I${pkgs.librdf_rasqal}/include/rasqal";
       PKGCONFIG_LIBS="-L${pkgs.redland}/lib -L${pkgs.librdf_raptor2}/lib -L${pkgs.librdf_rasqal}/lib -lrdf -lraptor2 -lrasqal";
@@ -1382,6 +1424,11 @@ let
         patchShebangs configure
       '';
     });
+=======
+    textshaping = old.textshaping.overrideAttrs (attrs: {
+      env.NIX_LDFLAGS = "-lfribidi -lharfbuzz";
+    });
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 in
   self

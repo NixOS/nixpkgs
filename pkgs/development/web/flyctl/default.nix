@@ -2,16 +2,27 @@
 
 buildGoModule rec {
   pname = "flyctl";
+<<<<<<< HEAD
   version = "0.1.90";
+=======
+  version = "0.1.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "superfly";
     repo = "flyctl";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-dgfPhx2IJxkMji6nw+GSg1xHxyh3xjSr7KLdVv9PbUI=";
   };
 
   vendorHash = "sha256-DnTjkv3lPUNB1WIQ2ncUaafdUP+y1t0UfaPfV4PW7VM=";
+=======
+    hash = "sha256-0nassGiVjBb/KLMwj/DWSDdW/ymkIJSfoA6fdLyq8YE=";
+  };
+
+  vendorHash = "sha256-w/8cCtu+SKhooutKt810pnbGR1a3hWHjhNmzLVU0Zxk=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   subPackages = [ "." ];
 
@@ -25,8 +36,11 @@ buildGoModule rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
+<<<<<<< HEAD
   patches = [ ./disable-auto-update.patch ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   preBuild = ''
     go generate ./...
   '';

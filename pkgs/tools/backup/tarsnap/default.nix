@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 { lib, stdenv, fetchurl, openssl, zlib, e2fsprogs, bzip2 }:
+=======
+{ lib, stdenv, fetchurl, openssl, zlib, e2fsprogs, bash, bzip2 }:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 let
   zshCompletion = fetchurl {
@@ -40,6 +44,9 @@ stdenv.mkDerivation rec {
     license     = lib.licenses.unfree;
     platforms   = lib.platforms.unix;
     maintainers = with lib.maintainers; [ thoughtpolice roconnor ];
+<<<<<<< HEAD
     mainProgram = "tarsnap";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

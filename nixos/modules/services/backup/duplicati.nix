@@ -10,8 +10,11 @@ in
     services.duplicati = {
       enable = mkEnableOption (lib.mdDoc "Duplicati");
 
+<<<<<<< HEAD
       package = mkPackageOptionMD pkgs "duplicati" { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       port = mkOption {
         default = 8200;
         type = types.port;
@@ -55,7 +58,11 @@ in
   };
 
   config = mkIf cfg.enable {
+<<<<<<< HEAD
     environment.systemPackages = [ cfg.package ];
+=======
+    environment.systemPackages = [ pkgs.duplicati ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     systemd.services.duplicati = {
       description = "Duplicati backup";
@@ -65,7 +72,11 @@ in
         {
           User = cfg.user;
           Group = "duplicati";
+<<<<<<< HEAD
           ExecStart = "${cfg.package}/bin/duplicati-server --webservice-interface=${cfg.interface} --webservice-port=${toString cfg.port} --server-datafolder=${cfg.dataDir}";
+=======
+          ExecStart = "${pkgs.duplicati}/bin/duplicati-server --webservice-interface=${cfg.interface} --webservice-port=${toString cfg.port} --server-datafolder=${cfg.dataDir}";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           Restart = "on-failure";
         }
         (mkIf (cfg.dataDir == "/var/lib/duplicati") {
@@ -85,3 +96,7 @@ in
 
   };
 }
+<<<<<<< HEAD
+=======
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)

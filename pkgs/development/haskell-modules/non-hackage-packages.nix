@@ -9,6 +9,11 @@ self: super: {
 
   dconf2nix = self.callPackage ../tools/haskell/dconf2nix/dconf2nix.nix { };
 
+<<<<<<< HEAD
+=======
+  ldgallery-compiler = self.callPackage ../../tools/graphics/ldgallery/compiler { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   # Used by maintainers/scripts/regenerate-hackage-packages.sh, and generated
   # from the latest master instead of the current version on Hackage.
   cabal2nix-unstable = self.callPackage ./cabal2nix-unstable.nix { };

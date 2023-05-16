@@ -19,6 +19,10 @@ buildPythonPackage rec {
     homepage = "https://github.com/joe-jordan/pyvoro";
     description = "2D and 3D Voronoi tessellations: a python entry point for the voro++ library";
     license = licenses.mit;
+<<<<<<< HEAD
     maintainers = [ ];
+=======
+    maintainers = [ maintainers.costrouc ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

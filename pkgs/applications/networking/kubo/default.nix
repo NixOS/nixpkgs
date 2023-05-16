@@ -2,15 +2,26 @@
 
 buildGoModule rec {
   pname = "kubo";
+<<<<<<< HEAD
   version = "0.22.0"; # When updating, also check if the repo version changed and adjust repoVersion below
   rev = "v${version}";
 
   passthru.repoVersion = "14"; # Also update kubo-migrator when changing the repo version
+=======
+  version = "0.19.2"; # When updating, also check if the repo version changed and adjust repoVersion below
+  rev = "v${version}";
+
+  passthru.repoVersion = "13"; # Also update kubo-migrator when changing the repo version
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   # Kubo makes changes to it's source tarball that don't match the git source.
   src = fetchurl {
     url = "https://github.com/ipfs/kubo/releases/download/${rev}/kubo-source.tar.gz";
+<<<<<<< HEAD
     hash = "sha256-TX5ZM8Kyj3LZ12Ro7MsHRd+P5XLk/mU7DUxZaopSEV0=";
+=======
+    hash = "sha256-HPhlKAavINaN0SJHWmeJRx43jfeHeYDZb3/dZ55kMLI=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   # tarball contains multiple files/directories
@@ -25,6 +36,13 @@ buildGoModule rec {
 
   subPackages = [ "cmd/ipfs" ];
 
+<<<<<<< HEAD
+=======
+  buildInputs = [ openssl ];
+  nativeBuildInputs = [ pkg-config ];
+  tags = [ "openssl" ];
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   passthru.tests.kubo = nixosTests.kubo;
 
   vendorSha256 = null;

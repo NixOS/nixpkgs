@@ -19,11 +19,19 @@
 
 stdenv.mkDerivation rec {
   pname = "dbus";
+<<<<<<< HEAD
   version = "1.14.8";
 
   src = fetchurl {
     url = "https://dbus.freedesktop.org/releases/dbus/dbus-${version}.tar.xz";
     sha256 = "sha256-pr1brFzxnww8WUva4lZaCVaWmApoOg7zfLYhLgk73jU=";
+=======
+  version = "1.14.6";
+
+  src = fetchurl {
+    url = "https://dbus.freedesktop.org/releases/dbus/dbus-${version}.tar.xz";
+    sha256 = "sha256-/SvfG7idw2WkZTG/9jFTbyKw0cbVzixcXlm1UmWz1ms=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   patches = lib.optional stdenv.isSunOS ./implement-getgrouplist.patch;
@@ -67,8 +75,11 @@ stdenv.mkDerivation rec {
     ++ lib.optionals stdenv.isLinux [ audit libapparmor ];
   # ToDo: optional selinux?
 
+<<<<<<< HEAD
   __darwinAllowLocalNetworking = true;
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   configureFlags = [
     "--enable-user-session"
     "--enable-xml-docs"
@@ -115,7 +126,10 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Simple interprocess messaging system";
     homepage = "http://www.freedesktop.org/wiki/Software/dbus/";
+<<<<<<< HEAD
     changelog = "https://gitlab.freedesktop.org/dbus/dbus/-/blob/dbus-${version}/NEWS";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     license = licenses.gpl2Plus; # most is also under AFL-2.1
     maintainers = teams.freedesktop.members ++ (with maintainers; [ ]);
     platforms = platforms.unix;

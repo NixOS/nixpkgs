@@ -29,9 +29,12 @@ stdenv.mkDerivation rec {
     "--disable-exec-static-tramp"
   ];
 
+<<<<<<< HEAD
   # with fortify3, tests fail for some reason
   hardeningDisable = [ "fortify3" ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   preCheck = ''
     # The tests use -O0 which is not compatible with -D_FORTIFY_SOURCE.
     NIX_HARDENING_ENABLE=''${NIX_HARDENING_ENABLE/fortify/}

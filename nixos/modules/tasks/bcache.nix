@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 { config, lib, pkgs, ... }: let
   cfg = config.boot.bcache;
 in {
@@ -14,6 +15,16 @@ in {
   };
 
   config = lib.mkIf cfg.enable {
+=======
+{ config, lib, pkgs, ... }:
+
+{
+  options.boot.initrd.services.bcache.enable = (lib.mkEnableOption (lib.mdDoc "bcache support in the initrd")) // {
+    visible = false; # only works with systemd stage 1
+  };
+
+  config = {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     environment.systemPackages = [ pkgs.bcache-tools ];
 

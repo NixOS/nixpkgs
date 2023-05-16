@@ -12,7 +12,11 @@
 
 buildPythonPackage rec {
   pname = "p1monitor";
+<<<<<<< HEAD
   version = "2.3.1";
+=======
+  version = "2.3.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -21,7 +25,11 @@ buildPythonPackage rec {
     owner = "klaasnicolaas";
     repo = "python-p1monitor";
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-2NlFXeI+6ooh4D1OxUWwYrmM4zpL9gg8vhnseLjj2dM=";
+=======
+    hash = "sha256-4/zaD+0Tuy5DvcwmH5BurGWCCjQlRYOJT77toEPS06k=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

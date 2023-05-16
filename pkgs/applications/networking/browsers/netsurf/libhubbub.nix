@@ -1,12 +1,17 @@
+<<<<<<< HEAD
 { lib
 , stdenv
 , fetchurl
 , perl
 , pkg-config
+=======
+{ lib, stdenv, fetchurl, pkg-config, perl
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , buildsystem
 , libparserutils
 }:
 
+<<<<<<< HEAD
 stdenv.mkDerivation (finalAttrs: {
   pname = "netsurf-libhubbub";
   version = "0.3.7";
@@ -23,13 +28,34 @@ stdenv.mkDerivation (finalAttrs: {
     buildsystem
     libparserutils
   ];
+=======
+stdenv.mkDerivation rec {
+  pname = "netsurf-${libname}";
+  libname = "libhubbub";
+  version = "0.3.7";
+
+  src = fetchurl {
+    url = "http://download.netsurf-browser.org/libs/releases/${libname}-${version}-src.tar.gz";
+    sha256 = "sha256-nnriU+bJBp51frmtTkhG84tNtSwMoBUURqn6Spd3NbY=";
+  };
+
+  nativeBuildInputs = [ pkg-config ];
+  buildInputs = [
+    perl
+    libparserutils
+    buildsystem ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   makeFlags = [
     "PREFIX=$(out)"
     "NSSHARED=${buildsystem}/share/netsurf-buildsystem"
   ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     homepage = "https://www.netsurf-browser.org/projects/hubbub/";
     description = "HTML5 parser library for netsurf browser";
     longDescription = ''
@@ -42,7 +68,15 @@ stdenv.mkDerivation (finalAttrs: {
       parse all markup, both valid and invalid. As a result, Hubbub parses web
       content well.
     '';
+<<<<<<< HEAD
     license = lib.licenses.mit;
     inherit (buildsystem.meta) maintainers platforms;
   };
 })
+=======
+    license = licenses.mit;
+    maintainers = [ maintainers.vrthra maintainers.AndersonTorres ];
+    platforms = platforms.linux;
+  };
+}
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)

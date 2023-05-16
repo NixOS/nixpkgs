@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 { lib
 , stdenv
 , fetchFromGitHub
@@ -13,6 +14,9 @@
 , imagemagick
 , python3
 }:
+=======
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, lcms2, pkg-config }:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 stdenv.mkDerivation rec {
   pname = "libraw";
@@ -25,6 +29,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-K9mULf6V/TCl5Vu4iuIdSGF9HzQlgNQLRFHIpNbmAlY";
   };
 
+<<<<<<< HEAD
   patches = [
     (fetchpatch {
       name = "CVE-2023-1729.patch";
@@ -33,6 +38,8 @@ stdenv.mkDerivation rec {
     })
   ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   outputs = [ "out" "lib" "dev" "doc" ];
 
   propagatedBuildInputs = [ lcms2 ];
@@ -41,12 +48,15 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+<<<<<<< HEAD
   passthru.tests = {
     inherit imagemagick hdrmerge freeimage;
     inherit (deepin) deepin-image-viewer;
     inherit (python3.pkgs) rawkit;
   };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   meta = with lib; {
     description = "Library for reading RAW files obtained from digital photo cameras (CRW/CR2, NEF, RAF, DNG, and others)";
     homepage = "https://www.libraw.org/";

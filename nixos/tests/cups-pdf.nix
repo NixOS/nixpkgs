@@ -4,7 +4,11 @@ import ./make-test-python.nix ({ lib, pkgs, ... }: {
   nodes.machine = { pkgs, ... }: {
     imports = [ ./common/user-account.nix ];
     environment.systemPackages = [ pkgs.poppler_utils ];
+<<<<<<< HEAD
     fonts.packages = [ pkgs.dejavu_fonts ];  # yields more OCR-able pdf
+=======
+    fonts.fonts = [ pkgs.dejavu_fonts ];  # yields more OCR-able pdf
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     services.printing.cups-pdf.enable = true;
     services.printing.cups-pdf.instances = {
       opt = {};

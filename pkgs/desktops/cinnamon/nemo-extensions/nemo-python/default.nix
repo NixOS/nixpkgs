@@ -11,12 +11,25 @@
 , substituteAll
 }:
 
+<<<<<<< HEAD
 let
   srcs = import ../srcs.nix { inherit fetchFromGitHub; };
 in
 stdenv.mkDerivation rec {
   pname = "nemo-python";
   inherit (srcs) version src;
+=======
+stdenv.mkDerivation rec {
+  pname = "nemo-python";
+  version = "5.6.0";
+
+  src = fetchFromGitHub {
+    owner = "linuxmint";
+    repo = "nemo-extensions";
+    rev = version;
+    sha256 = "sha256-cxutiz5bc/dZ9D7XzvMWodWNYvNJPj+5IhJDPJwnb5I=";
+  };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   sourceRoot = "${src.name}/nemo-python";
 

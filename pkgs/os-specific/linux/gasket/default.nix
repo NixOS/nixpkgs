@@ -21,7 +21,11 @@ stdenv.mkDerivation rec {
   installFlags = [ "INSTALL_MOD_PATH=${placeholder "out"}" ];
   installTargets = [ "modules_install" ];
 
+<<<<<<< HEAD
   sourceRoot = "${src.name}/src";
+=======
+  sourceRoot = "source/src";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   hardeningDisable = [ "pic" "format" ];
   nativeBuildInputs = kernel.moduleBuildDependencies;
 

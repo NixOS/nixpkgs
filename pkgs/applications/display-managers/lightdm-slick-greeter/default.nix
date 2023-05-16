@@ -7,12 +7,18 @@
 , intltool
 , autoreconfHook
 , wrapGAppsHook
+<<<<<<< HEAD
 , cinnamon
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , lightdm
 , gtk3
 , pixman
 , libcanberra
+<<<<<<< HEAD
 , libgnomekbd
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , libX11
 , libXext
 , linkFarm
@@ -22,13 +28,21 @@
 
 stdenv.mkDerivation rec {
   pname = "lightdm-slick-greeter";
+<<<<<<< HEAD
   version = "1.8.2";
+=======
+  version = "1.6.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "slick-greeter";
     rev = version;
+<<<<<<< HEAD
     sha256 = "sha256-OSL4Ls3bCua5ut8zWodeIH1SfevCbsS7BgBJYdcJaVE=";
+=======
+    sha256 = "sha256-k/E3bR63kesHQ/we+ctC0UEYE5YdZ6Lv5lYuXqCOvKA=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [
@@ -42,12 +56,18 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+<<<<<<< HEAD
     cinnamon.xapp
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     lightdm
     gtk3
     pixman
     libcanberra
+<<<<<<< HEAD
     libgnomekbd # needed by XApp.KbdLayoutController
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     libX11
     libXext
   ];
@@ -66,10 +86,13 @@ stdenv.mkDerivation rec {
     substituteInPlace src/session-list.vala \
       --replace "/usr/share" "${placeholder "out"}/share"
 
+<<<<<<< HEAD
     # We prefer stable path here.
     substituteInPlace data/x.dm.slick-greeter.gschema.xml \
       --replace "/usr/share/onboard" "/run/current-system/sw/share/onboard"
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     patchShebangs files/usr/bin/*
   '';
 

@@ -33,7 +33,10 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
+<<<<<<< HEAD
     mainProgram = "stremio";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     description = "A modern media center that gives you the freedom to watch everything you want.";
     homepage = "https://www.stremio.com/";
     # (Server-side) web UI is closed source now, apparently they work on open-sourcing it.

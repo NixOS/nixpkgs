@@ -9,14 +9,22 @@
 
 beamPackages.mixRelease rec {
   pname = "pleroma";
+<<<<<<< HEAD
   version = "3.10.4";
+=======
+  version = "3.8.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitea {
     domain = "akkoma.dev";
     owner = "AkkomaGang";
     repo = "akkoma";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-MPUZFcIxZ21fe3edwi+/Kt8qpwNBCh40wheC3QMqw2M=";
+=======
+    hash = "sha256-KpaJ2xx3XEibMv1G8o9Lw7+LcnxPCUiWlmdcoi5wklQ=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   postPatch = ''
@@ -31,6 +39,12 @@ beamPackages.mixRelease rec {
     mix phx.digest --no-deps-check
   '';
 
+<<<<<<< HEAD
+=======
+  # cf. https://github.com/whitfin/cachex/issues/205
+  stripDebug = false;
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   mixNixDeps = import ./mix.nix {
     inherit beamPackages lib;
     overrides = (final: prev: {
@@ -45,6 +59,7 @@ beamPackages.mixRelease rec {
           group = "pleroma";
           owner = "elixir-libraries";
           repo = "elixir-captcha";
+<<<<<<< HEAD
           rev = "3bbfa8b5ea13accc1b1c40579a380d8e5cfd6ad2";
           hash = "sha256-skZ0QwF46lUTfsgACMR0AR5ymY2F50BQy1AUBjWVdro=";
         };
@@ -59,6 +74,21 @@ beamPackages.mixRelease rec {
           repo = "concurrent-limiter";
           rev = "a9e0b3d64574bdba761f429bb4fba0cf687b3338";
           hash = "sha256-A7ucZnXks4K+JDVY5vV2cT5KfEOUOo/OHO4rga5mGys=";
+=======
+          rev = "e0f16822d578866e186a0974d65ad58cddc1e2ab";
+          sha256 = "0qbf86l59kmpf1nd82v4141ba9ba75xwmnqzpgbm23fa1hh8pi9c";
+        };
+      };
+      credo = beamPackages.buildMix rec {
+        name = "credo";
+        version = "1.7.0-dev";
+
+        src = fetchFromGitHub {
+          owner = "rrrene";
+          repo = "credo";
+          rev = "1c1b99ea41a457761383d81aaf6a606913996fe7";
+          hash = "sha256-NdOg6p2J1D8VGGWabAMLs/qRVbi4BzN2DTHci++dJnA=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         };
       };
       elasticsearch = beamPackages.buildMix rec {

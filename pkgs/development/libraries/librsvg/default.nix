@@ -4,7 +4,10 @@
 , pkg-config
 , glib
 , gdk-pixbuf
+<<<<<<< HEAD
 , installShellFiles
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , pango
 , cairo
 , libxml2
@@ -29,6 +32,7 @@
 , common-updater-scripts
 , jq
 , nix
+<<<<<<< HEAD
 
 # for passthru.tests
 , enlightenment
@@ -44,12 +48,20 @@
 stdenv.mkDerivation (finalAttrs: {
   pname = "librsvg";
   version = "2.56.3";
+=======
+}:
+
+stdenv.mkDerivation rec {
+  pname = "librsvg";
+  version = "2.55.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   outputs = [ "out" "dev" ] ++ lib.optionals withIntrospection [
     "devdoc"
   ];
 
   src = fetchurl {
+<<<<<<< HEAD
     url = "mirror://gnome/sources/librsvg/${lib.versions.majorMinor finalAttrs.version}/librsvg-${finalAttrs.version}.tar.xz";
     hash = "sha256-WjKASKAtAUZFzSf2EUD04LESgPssfyohhk/gxZrBzog=";
   };
@@ -58,12 +70,23 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (finalAttrs) src;
     name = "librsvg-deps-${finalAttrs.version}";
     hash = "sha256-s7eNMSdajr2VhB/BPVUFftHhHKCqpR9sTfxfWwag1mI=";
+=======
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "a69IqdOlb9E7v7ufH3Z1myQLcKH6Ig/SOEdNZqkm+Yw=";
+  };
+
+  cargoDeps = rustPlatform.fetchCargoTarball {
+    inherit src;
+    name = "${pname}-${version}";
+    hash = "sha256-nRmOB9Jo+mmB0+wXrQvoII4e0ucV7bNCDeuk6CbcPdk=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     # TODO: move this to fetchCargoTarball
     dontConfigure = true;
   };
 
   strictDeps = true;
 
+<<<<<<< HEAD
   depsBuildBuild = [
     pkg-config
   ];
@@ -71,6 +94,12 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     gdk-pixbuf
     installShellFiles
+=======
+  depsBuildBuild = [ pkg-config ];
+
+  nativeBuildInputs = [
+    gdk-pixbuf
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     pkg-config
     rustc
     cargo-auditable-cargo-wrapper
@@ -114,12 +143,15 @@ stdenv.mkDerivation (finalAttrs: {
     ${lib.optionalString (stdenv.hostPlatform.emulatorAvailable buildPackages) (stdenv.hostPlatform.emulator buildPackages)} ${lib.getDev gdk-pixbuf}/bin/gdk-pixbuf-query-loaders
   '';
 
+<<<<<<< HEAD
   # librsvg only links Foundation, but it also requiers libobjc. The Framework.tbd in the 11.0 SDK
   # reexports libobjc, but the one in the 10.12 SDK does not, so link it manually.
   env = lib.optionalAttrs (stdenv.isDarwin && stdenv.isx86_64) {
     NIX_LDFLAGS = "-lobjc";
   };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   preConfigure = ''
     PKG_CONFIG_VAPIGEN_VAPIGEN="$(type -p vapigen)"
     export PKG_CONFIG_VAPIGEN_VAPIGEN
@@ -133,10 +165,19 @@ stdenv.mkDerivation (finalAttrs: {
   postConfigure = ''
     GDK_PIXBUF=$out/lib/gdk-pixbuf-2.0/2.10.0
     mkdir -p $GDK_PIXBUF/loaders
+<<<<<<< HEAD
     sed -i gdk-pixbuf-loader/Makefile \
       -e "s#gdk_pixbuf_moduledir = .*#gdk_pixbuf_moduledir = $GDK_PIXBUF/loaders#" \
       -e "s#gdk_pixbuf_cache_file = .*#gdk_pixbuf_cache_file = $GDK_PIXBUF/loaders.cache#" \
       -e "s#\$(GDK_PIXBUF_QUERYLOADERS)#GDK_PIXBUF_MODULEDIR=$GDK_PIXBUF/loaders \$(GDK_PIXBUF_QUERYLOADERS)#"
+=======
+    sed -e "s#gdk_pixbuf_moduledir = .*#gdk_pixbuf_moduledir = $GDK_PIXBUF/loaders#" \
+        -i gdk-pixbuf-loader/Makefile
+    sed -e "s#gdk_pixbuf_cache_file = .*#gdk_pixbuf_cache_file = $GDK_PIXBUF/loaders.cache#" \
+        -i gdk-pixbuf-loader/Makefile
+    sed -e "s#\$(GDK_PIXBUF_QUERYLOADERS)#GDK_PIXBUF_MODULEDIR=$GDK_PIXBUF/loaders \$(GDK_PIXBUF_QUERYLOADERS)#" \
+         -i gdk-pixbuf-loader/Makefile
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     # Fix thumbnailer path
     sed -e "s#@bindir@\(/gdk-pixbuf-thumbnailer\)#${gdk-pixbuf}/bin\1#g" \
@@ -151,6 +192,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   # Not generated when cross compiling.
+<<<<<<< HEAD
   postInstall = let emulator = stdenv.hostPlatform.emulator buildPackages; in
     lib.optionalString (stdenv.hostPlatform.emulatorAvailable buildPackages) ''
       # Merge gdkpixbuf and librsvg loaders
@@ -162,6 +204,13 @@ stdenv.mkDerivation (finalAttrs: {
         --fish <(${emulator} $out/bin/rsvg-convert --completion fish) \
         --zsh <(${emulator} $out/bin/rsvg-convert --completion zsh)
     '';
+=======
+  postInstall = lib.optionalString (stdenv.hostPlatform.emulatorAvailable buildPackages) ''
+    # Merge gdkpixbuf and librsvg loaders
+    cat ${lib.getLib gdk-pixbuf}/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache $GDK_PIXBUF/loaders.cache > $GDK_PIXBUF/loaders.cache.tmp
+    mv $GDK_PIXBUF/loaders.cache.tmp $GDK_PIXBUF/loaders.cache
+  '';
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   postFixup = lib.optionalString withIntrospection ''
     # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
@@ -203,6 +252,7 @@ stdenv.mkDerivation (finalAttrs: {
         updateSource
         updateLockfile
       ];
+<<<<<<< HEAD
     tests = {
       inherit
         gegl
@@ -214,6 +264,8 @@ stdenv.mkDerivation (finalAttrs: {
       inherit (xfce) xfwm4;
       ffmpeg = ffmpeg.override { withSvg = true; };
     };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   meta = with lib; {
@@ -224,4 +276,8 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "rsvg-convert";
     platforms = platforms.unix;
   };
+<<<<<<< HEAD
 })
+=======
+}
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)

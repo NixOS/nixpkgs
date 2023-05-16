@@ -5,7 +5,11 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
   nodes.machine = {
     imports = [ ./common/x11.nix ];
     fonts = {
+<<<<<<< HEAD
       enableDefaultPackages = false;
+=======
+      enableDefaultFonts = false;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       fonts = [ pkgs.noto-fonts-cjk-sans ];
     };
   };

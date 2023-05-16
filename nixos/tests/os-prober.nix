@@ -8,7 +8,11 @@ let
       ${parted}/bin/parted --script /dev/vda mklabel msdos
       ${parted}/sbin/parted --script /dev/vda -- mkpart primary ext2 1M -1s
       mkdir /mnt
+<<<<<<< HEAD
       ${e2fsprogs}/bin/mkfs.ext4 -O '^metadata_csum_seed' /dev/vda1
+=======
+      ${e2fsprogs}/bin/mkfs.ext4 /dev/vda1
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       ${util-linux}/bin/mount -t ext4 /dev/vda1 /mnt
 
       if test -e /mnt/.debug; then
@@ -76,7 +80,10 @@ in {
       # nixos-rebuild needs must be included in the VM.
       system.extraDependencies = with pkgs;
         [
+<<<<<<< HEAD
           bintools
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           brotli
           brotli.dev
           brotli.lib
@@ -84,8 +91,11 @@ in {
           docbook5
           docbook_xsl_ns
           grub2
+<<<<<<< HEAD
           kbd
           kbd.dev
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           kmod.dev
           libarchive
           libarchive.dev

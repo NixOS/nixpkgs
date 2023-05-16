@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 { lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, libcap }:
+=======
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config }:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 stdenv.mkDerivation rec {
   pname = "n2n";
@@ -13,10 +17,13 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];
 
+<<<<<<< HEAD
   buildInputs = [
     libcap
   ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   postPatch = ''
     patchShebangs autogen.sh
   '';

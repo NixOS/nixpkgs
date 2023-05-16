@@ -12,7 +12,11 @@ buildGoModule rec {
     sha256 = "sha256-mL2Xs7eyldoZK4zrX6WFlFtwdLN0iVyl1Qh8X6b2u9c=";
   };
 
+<<<<<<< HEAD
   vendorHash = "sha256-R/LuZkA2xHmu7SO3BVyK1C6n9U+pYn50kNkyLltn2ng=";
+=======
+  vendorSha256 = "sha256-R/LuZkA2xHmu7SO3BVyK1C6n9U+pYn50kNkyLltn2ng=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   patches = [ ./disable_httptest.patch ];
 

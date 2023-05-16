@@ -1,7 +1,10 @@
 { stdenv
 , lib
 , fetchFromGitHub
+<<<<<<< HEAD
 , fetchpatch
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , meson
 , ninja
 , pkg-config
@@ -28,6 +31,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-bGasT3XCa7QHV3D7z59TSHoqWksNSIgaO0z9zYfHHuw=";
   };
 
+<<<<<<< HEAD
   patches = [
     # Fix build with meson 1.2. We use the gentoo patch intead of the
     # usptream one because the latter only applies on the libsoup_3 based
@@ -39,6 +43,8 @@ stdenv.mkDerivation rec {
     })
   ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nativeBuildInputs = [
     meson
     ninja

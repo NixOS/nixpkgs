@@ -16,7 +16,11 @@ buildGoModule rec {
 
   doCheck = false;  # grpc tests are flaky
 
+<<<<<<< HEAD
   vendorHash = "sha256-L1BxxSI2t0qWXizge+X3BrpGPaSy5Dk81vKuI0N5Ywg=";
+=======
+  vendorSha256 = "sha256-L1BxxSI2t0qWXizge+X3BrpGPaSy5Dk81vKuI0N5Ywg=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   meta = {
     homepage = "https://github.com/kubemq-io/kubemq-community";

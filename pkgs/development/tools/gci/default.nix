@@ -5,13 +5,21 @@
 }:
 buildGoModule rec {
   pname = "gci";
+<<<<<<< HEAD
   version = "0.11.1";
+=======
+  version = "0.10.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "daixiang0";
     repo = pname;
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-qNkSAbVhX4P+DqCtxXSnxYjZwq/nMYsDpEif+q1oTIA=";
+=======
+    sha256 = "sha256-/YR61lovuYw+GEeXIgvyPbesz2epmQVmSLWjWwKT4Ag=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   vendorHash = "sha256-g7htGfU6C2rzfu8hAn6SGr0ZRwB8ZzSf9CgHYmdupE8=";

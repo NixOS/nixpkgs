@@ -15,11 +15,19 @@
 
 stdenv.mkDerivation rec {
   pname = "libgepub";
+<<<<<<< HEAD
   version = "0.7.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "o+SzGiMmWdJqVLkSGziCw9c5fDz0SuXGS4ZwCYC8f2A=";
+=======
+  version = "0.7.0";
+
+  src = fetchurl {
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "IQpMeJXC6E8BpWglArpej6PqiWrzFw+yWS/OHdpW4C4=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

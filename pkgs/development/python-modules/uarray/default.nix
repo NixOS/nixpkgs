@@ -44,6 +44,10 @@ buildPythonPackage rec {
     description = "Universal array library";
     homepage = "https://github.com/Quansight-Labs/uarray";
     license = licenses.bsd0;
+<<<<<<< HEAD
     maintainers = [ ];
+=======
+    maintainers = [ maintainers.costrouc ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

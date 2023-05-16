@@ -19,6 +19,10 @@ buildPythonPackage rec {
     description = "gRPC extensions for Google Cloud Platform";
     homepage = "https://grpc.io";
     license = licenses.asl20;
+<<<<<<< HEAD
     maintainers = [ ];
+=======
+    maintainers = [ maintainers.costrouc ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

@@ -3,7 +3,11 @@
 , fetchPypi
 , isPy3k
 , zope_event
+<<<<<<< HEAD
 , zope-component
+=======
+, zope_component
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 buildPythonPackage rec {
@@ -15,7 +19,11 @@ buildPythonPackage rec {
     hash = "sha256-9ahU6J/5fe6ke/vqN4u77yeJ0uDMkKHB2lfZChzmfLU=";
   };
 
+<<<<<<< HEAD
   propagatedBuildInputs = [ zope_event zope-component ];
+=======
+  propagatedBuildInputs = [ zope_event zope_component ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   # namespace colides with local directory
   doCheck = false;

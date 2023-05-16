@@ -50,7 +50,11 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
     # Now, we have installed the machine, let's verify we still have the right configuration.
     assert 'nixos' in machine.succeed("cat /var/lib/dolibarr/conf.php")
     # We do not want any redirect now as we have installed the machine.
+<<<<<<< HEAD
     machine.succeed('curl -f -X GET http://localhost')
+=======
+    machine.succeed('curl -f -X POST http://localhost')
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     # Test authentication to the webservice.
     parser = TokenParser()
     parser.feed(machine.succeed('curl -f -X GET http://localhost/index.php?mainmenu=login&username=root'))

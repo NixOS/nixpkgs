@@ -1,4 +1,5 @@
 { lib
+<<<<<<< HEAD
 , argcomplete
 , buildPythonPackage
 , fetchPypi
@@ -9,15 +10,35 @@
 , substituteAll
 , tomlkit
 , xmltodict
+=======
+, buildPythonPackage
+, fetchPypi
+, substituteAll
+, argcomplete
+, pyyaml
+, toml
+, xmltodict
+, jq
+, setuptools-scm
+, pytestCheckHook
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 buildPythonPackage rec {
   pname = "yq";
+<<<<<<< HEAD
   version = "3.2.2";
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-jbt6DJN92/w90XXmR49AlgwUDT6LHxoDFd52OE1mZQo=";
+=======
+  version = "3.1.1";
+
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-hT80KxVi3e6XkDjsjs7lQFzdm2p8uB7WzbgBjJ6AJjM=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   patches = [
@@ -32,10 +53,17 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
+<<<<<<< HEAD
     argcomplete
     pyyaml
     tomlkit
     xmltodict
+=======
+    pyyaml
+    xmltodict
+    toml
+    argcomplete
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   nativeCheckInputs = [

@@ -68,15 +68,27 @@ let
       pythonImportsCheck = [ "${lib.replaceStrings ["-"] ["_"] pname}" ];
 
       meta = with lib; {
+<<<<<<< HEAD
+=======
+        broken = stdenv.isDarwin;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         description = "Python extension to run WebAssembly binaries";
         homepage = "https://github.com/wasmerio/wasmer-python";
         license = licenses.mit;
         platforms = platforms.unix;
+<<<<<<< HEAD
         maintainers = [ ];
       };
     };
 in
 {
+=======
+        maintainers = with maintainers; [ SuperSandro2000 ];
+      };
+    };
+in
+rec {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   wasmer = common {
     pname = "wasmer";
     buildAndTestSubdir = "packages/api";

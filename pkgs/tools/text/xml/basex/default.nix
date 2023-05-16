@@ -2,11 +2,19 @@
 
 stdenv.mkDerivation rec {
   pname = "basex";
+<<<<<<< HEAD
   version = "10.6";
 
   src = fetchurl {
     url = "http://files.basex.org/releases/${version}/BaseX${builtins.replaceStrings ["."] [""] version}.zip";
     hash = "sha256-8C1fsoXcihMA+JXQ+aQTIi08+hZEk1cRZKg2vRB/j0k=";
+=======
+  version = "10.4";
+
+  src = fetchurl {
+    url = "http://files.basex.org/releases/${version}/BaseX${builtins.replaceStrings ["."] [""] version}.zip";
+    hash = "sha256-lwPEy4VVe2D36T3t0vnEodL6L8/Q6adOTGqWI0m7YpM=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ unzip copyDesktopItems ];

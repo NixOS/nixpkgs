@@ -130,7 +130,11 @@ in stdenv.mkDerivation (rec {
   meta = with lib; {
     description = "Sophisticated text editor for code, markup and prose";
     homepage = "https://www.sublimetext.com/";
+<<<<<<< HEAD
     maintainers = with maintainers; [ wmertens demin-dmitriy zimbatm ];
+=======
+    maintainers = with maintainers; [ jtojnar wmertens demin-dmitriy zimbatm ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     platforms = [ "x86_64-linux" "i686-linux" ];

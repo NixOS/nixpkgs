@@ -31,13 +31,21 @@ let
   ];
 in stdenv.mkDerivation rec {
   pname = "gjs";
+<<<<<<< HEAD
   version = "1.76.2";
+=======
+  version = "1.76.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   outputs = [ "out" "dev" "installedTests" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/gjs/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+<<<<<<< HEAD
     sha256 = "sha256-99jJ1lPqb9eK/kpQcg4EaqK/wHj9pjXdEwZ90ZnGJdQ=";
+=======
+    sha256 = "sha256-pj8VaWSxNgU+q1HqATEU59fBk7dRjSjAQLawLDyTOm0=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   patches = [

@@ -8,6 +8,10 @@
 , freezegun
 , jsonpickle
 , munch
+<<<<<<< HEAD
+=======
+, mypy
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , pyserial
 , pytest-aiohttp
 , pytest-asyncio
@@ -20,7 +24,11 @@
 
 buildPythonPackage rec {
   pname = "plugwise";
+<<<<<<< HEAD
   version = "0.32.2";
+=======
+  version = "0.31.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -29,7 +37,11 @@ buildPythonPackage rec {
     owner = pname;
     repo = "python-plugwise";
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-kJ7HbGwmA6/OtSxpkvajf+VzjYK+uq6kMaja9CmVBt4=";
+=======
+    hash = "sha256-lxeOGNO5OF4lLIQf/7TrrF091RKjdq8k80bBA/v5O4A=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [
@@ -47,6 +59,10 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     freezegun
     jsonpickle
+<<<<<<< HEAD
+=======
+    mypy
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     pytest-aiohttp
     pytest-asyncio
     pytestCheckHook

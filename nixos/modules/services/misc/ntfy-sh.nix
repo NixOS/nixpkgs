@@ -32,6 +32,7 @@ in
     };
 
     settings = mkOption {
+<<<<<<< HEAD
       type = types.submodule {
         freeformType = settingsFormat.type;
         options = {
@@ -51,6 +52,9 @@ in
           };
         };
       };
+=======
+      type = types.submodule { freeformType = settingsFormat.type; };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
       default = { };
 
@@ -79,6 +83,7 @@ in
 
       services.ntfy-sh.settings = {
         auth-file = mkDefault "/var/lib/ntfy-sh/user.db";
+<<<<<<< HEAD
         listen-http = mkDefault "127.0.0.1:2586";
         attachment-cache-dir = mkDefault "/var/lib/ntfy-sh/attachments";
         cache-file = mkDefault "/var/lib/ntfy-sh/cache-file.db";
@@ -90,6 +95,10 @@ in
         "f ${cfg.settings.cache-file} 0600 ${cfg.user} ${cfg.group} - -"
       ];
 
+=======
+      };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       systemd.services.ntfy-sh = {
         description = "Push notifications server";
 
@@ -101,7 +110,10 @@ in
           User = cfg.user;
           StateDirectory = "ntfy-sh";
 
+<<<<<<< HEAD
           DynamicUser = true;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           AmbientCapabilities = "CAP_NET_BIND_SERVICE";
           PrivateTmp = true;
           NoNewPrivileges = true;
@@ -116,8 +128,11 @@ in
           RestrictNamespaces = true;
           RestrictRealtime = true;
           MemoryDenyWriteExecute = true;
+<<<<<<< HEAD
           # Upstream Recommandation
           LimitNOFILE = 20500;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         };
       };
 

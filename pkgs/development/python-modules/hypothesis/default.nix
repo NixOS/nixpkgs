@@ -8,21 +8,34 @@
 , doCheck ? true
 , pytestCheckHook
 , pytest-xdist
+<<<<<<< HEAD
 , python
 , sortedcontainers
 , stdenv
+=======
+, sortedcontainers
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , pythonOlder
 , sphinxHook
 , sphinx-rtd-theme
 , sphinx-hoverxref
 , sphinx-codeautolink
 , tzdata
+<<<<<<< HEAD
+=======
+# Used to break internal dependency loop.
+, enableDocumentation ? true
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 buildPythonPackage rec {
   pname = "hypothesis";
   version = "6.68.2";
+<<<<<<< HEAD
   outputs = [ "out" ];
+=======
+  outputs = [ "out" ] ++ lib.optional enableDocumentation "doc";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -49,6 +62,16 @@ buildPythonPackage rec {
 
   postUnpack = "sourceRoot=$sourceRoot/hypothesis-python";
 
+<<<<<<< HEAD
+=======
+  nativeBuildInputs = lib.optionals enableDocumentation [
+    sphinxHook
+    sphinx-rtd-theme
+    sphinx-hoverxref
+    sphinx-codeautolink
+  ];
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   propagatedBuildInputs = [
     attrs
     sortedcontainers
@@ -60,7 +83,11 @@ buildPythonPackage rec {
     pexpect
     pytest-xdist
     pytestCheckHook
+<<<<<<< HEAD
   ] ++ lib.optionals isPyPy [
+=======
+  ] ++ lib.optionals (isPyPy) [
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     tzdata
   ];
 
@@ -79,6 +106,7 @@ buildPythonPackage rec {
     "hypothesis"
   ];
 
+<<<<<<< HEAD
   passthru = {
     doc = stdenv.mkDerivation {
       # Forge look and feel of multi-output derivation as best as we can.
@@ -103,11 +131,17 @@ buildPythonPackage rec {
     };
   };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   meta = with lib; {
     description = "Library for property based testing";
     homepage = "https://github.com/HypothesisWorks/hypothesis";
     changelog = "https://hypothesis.readthedocs.io/en/latest/changes.html#v${lib.replaceStrings [ "." ] [ "-" ] version}";
     license = licenses.mpl20;
+<<<<<<< HEAD
     maintainers = with maintainers; [ ];
+=======
+    maintainers = with maintainers; [ SuperSandro2000 ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

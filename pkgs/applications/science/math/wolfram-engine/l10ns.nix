@@ -8,6 +8,7 @@ let allVersions = with lib; flip map
   # N.B. Versions in this list should be ordered from newest to oldest.
   [
     {
+<<<<<<< HEAD
       version = "13.3.0";
       lang = "en";
       language = "English";
@@ -22,6 +23,8 @@ let allVersions = with lib; flip map
       installer = "WolframEngine_13.2.0_LINUX.sh";
     }
     {
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       version = "13.1.0";
       lang = "en";
       language = "English";

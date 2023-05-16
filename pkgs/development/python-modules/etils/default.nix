@@ -28,14 +28,22 @@
 
 buildPythonPackage rec {
   pname = "etils";
+<<<<<<< HEAD
   version = "1.4.1";
+=======
+  version = "1.1.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
+<<<<<<< HEAD
     hash = "sha256-Uxk7V7KP8UxO4rJ/yh0JxME1bOuTJLQW6dnC7vX239s=";
+=======
+    hash = "sha256-eipJUHeaKB70x+WVriFZkLFcHYxviwonhQCSr1rSxkE=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

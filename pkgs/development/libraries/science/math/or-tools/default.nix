@@ -88,7 +88,11 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [
     abseil-cpp
     protobuf
+<<<<<<< HEAD
     (python.pkgs.protobuf.override { protobuf = protobuf; })
+=======
+    python.pkgs.protobuf
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     python.pkgs.numpy
   ];
   nativeCheckInputs = [

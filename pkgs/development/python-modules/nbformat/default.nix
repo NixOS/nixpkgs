@@ -15,6 +15,7 @@
 
 buildPythonPackage rec {
   pname = "nbformat";
+<<<<<<< HEAD
   version = "5.9.1";
   format = "pyproject";
   disabled = pythonOlder "3.8";
@@ -22,6 +23,17 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-On9S0EBjnL2KOJAhjIsP+5MhFYjFdEbJAJXjK6WIG10=";
+=======
+  version = "5.7.3";
+
+  disabled = pythonOlder "3.7";
+
+  format = "pyproject";
+
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-SwIfyiTTp0e/TmJmlAM9eS1ZRwWCnl41sU7jNp+fZHc=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

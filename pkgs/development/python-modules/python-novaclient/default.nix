@@ -17,14 +17,22 @@
 
 buildPythonPackage rec {
   pname = "python-novaclient";
+<<<<<<< HEAD
   version = "18.4.0";
+=======
+  version = "18.3.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
+<<<<<<< HEAD
     hash = "sha256-a2tq4sEescEI469V6qchGw/JGZk1oimmuj4N5RTBK1A=";
+=======
+    hash = "sha256-UPdYfHorJSj3NQWBf5Q3rFwdBNV26b4mTS3u/9t0WnY=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [

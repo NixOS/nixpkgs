@@ -25,16 +25,34 @@
 
 rustPlatform.buildRustPackage.override { stdenv = clangStdenv; } rec {
   pname = "neovide";
+<<<<<<< HEAD
   version = "0.11.2";
+=======
+  version = "0.10.4";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "neovide";
     repo = "neovide";
     rev = version;
+<<<<<<< HEAD
     sha256 = "sha256-JCSFG7W4I1uXsVM7J059tHYq/DB16AZfGjsG0UvfctE=";
   };
 
   cargoSha256 = "sha256-rH4jjbd0C1MKu3RE0bLvLo4iqyUXr0DvCudvFs1F+AA=";
+=======
+    sha256 = "sha256-0vIq8vJPvcmA7hRyGY4qQRxwmgQAKHVU+452iMohGCA=";
+  };
+
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "glutin-0.26.0" = "sha256-Ie4Jb3wCMZSmF1MUzkLG2TqsLrXXzzi6ATjzCjevZBc=";
+      "winit-0.24.0" = "sha256-p/eAaDVmTHzfZ+0DiBA/9v06Z5o1dXVNoCgWRqC1ed0=";
+      "xkbcommon-dl-0.1.0" = "sha256-ojokJF7ivN8JpXo+JAfX3kUOeXneNek7pzIy8D1n4oU=";
+    };
+  };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   SKIA_SOURCE_DIR =
     let
@@ -42,8 +60,13 @@ rustPlatform.buildRustPackage.override { stdenv = clangStdenv; } rec {
         owner = "rust-skia";
         repo = "skia";
         # see rust-skia:skia-bindings/Cargo.toml#package.metadata skia
+<<<<<<< HEAD
         rev = "m113-0.61.8";
         sha256 = "sha256-xGfkc1JLBGQW4WcblFyluZ2paEuisCVPNDU4Rfkv3BE=";
+=======
+        rev = "m103-0.51.1";
+        sha256 = "sha256-w5dw/lGm40gKkHPR1ji/L82Oa808Kuh8qaCeiqBLkLw=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       };
       # The externals for skia are taken from skia/DEPS
       externals = linkFarm "skia-externals" (lib.mapAttrsToList
@@ -115,6 +138,10 @@ rustPlatform.buildRustPackage.override { stdenv = clangStdenv; } rec {
     homepage = "https://github.com/neovide/neovide";
     changelog = "https://github.com/neovide/neovide/releases/tag/${version}";
     license = with licenses; [ mit ];
+<<<<<<< HEAD
     maintainers = with maintainers; [ ck3d multisn8 ];
+=======
+    maintainers = with maintainers; [ ck3d ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

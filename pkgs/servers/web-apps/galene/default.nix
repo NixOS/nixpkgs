@@ -2,16 +2,27 @@
 
 buildGoModule rec {
   pname = "galene";
+<<<<<<< HEAD
   version = "0.7.1";
+=======
+  version = "0.7.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "jech";
     repo = "galene";
     rev = "galene-${version}";
+<<<<<<< HEAD
     hash = "sha256-dqve8ZQgJZYVyB43Dk2y966sn3zC2xtD2/jMFtcUj24=";
   };
 
   vendorHash = "sha256-+itNqxEy0S2g5UGpUIthJE2ILQzToISref/8F4zTmYg=";
+=======
+    hash = "sha256-P1KW9JUHzH/aK3wehVMSVJcUmMqDEGc8zVg8P6F828s=";
+  };
+
+  vendorSha256 = "sha256-+itNqxEy0S2g5UGpUIthJE2ILQzToISref/8F4zTmYg=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   ldflags = [ "-s" "-w" ];
   preCheck = "export TZ=UTC";

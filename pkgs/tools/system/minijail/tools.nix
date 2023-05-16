@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 { lib, buildPythonApplication, pkgsBuildTarget, python, minijail }:
+=======
+{ lib, stdenv, buildPythonApplication, pkgsBuildTarget, python, minijail }:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 let
   targetClang = pkgsBuildTarget.targetPackages.clangStdenv.cc;

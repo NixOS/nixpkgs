@@ -13,7 +13,11 @@
 
 buildPythonPackage rec {
   pname = "dissect-squashfs";
+<<<<<<< HEAD
   version = "1.3";
+=======
+  version = "1.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -22,7 +26,11 @@ buildPythonPackage rec {
     owner = "fox-it";
     repo = "dissect.squashfs";
     rev = "refs/tags/${version}";
+<<<<<<< HEAD
     hash = "sha256-MJKC05/8NnJFdyBB5YPbqe8mp1zlIoS2FglKEPSSYd8=";
+=======
+    hash = "sha256-fcL0kPuJaole9EkrqU8Gouh3yquT2QaO8//R0ixMuP8=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;

@@ -6,8 +6,13 @@ let
   };
 in
 buildMongoDB {
+<<<<<<< HEAD
   version = "4.4.23";
   sha256 = "sha256-3Jo5i2kA37FI3j9bj9MVPL9LU0E1bGhu3I6GhM6zqLY=";
+=======
+  version = "4.4.19";
+  sha256 = "sha256-DqkEOsTGB9gDYPxdEi9Kv3xJDz6XBe3fI59pnI1Upnk=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   patches = [
     ./forget-build-dependencies-4-4.patch
     ./fix-build-with-boost-1.79-4_4.patch

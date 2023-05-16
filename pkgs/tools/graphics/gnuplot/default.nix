@@ -21,11 +21,19 @@ let
 in
 (if withQt then mkDerivation else stdenv.mkDerivation) rec {
   pname = "gnuplot";
+<<<<<<< HEAD
   version = "5.4.8";
 
   src = fetchurl {
     url = "mirror://sourceforge/gnuplot/${pname}-${version}.tar.gz";
     sha256 = "sha256-kxJ5x8qtGv99RstHZvH/QcJtm+na8Lzwx53u7j2R9c8=";
+=======
+  version = "5.4.6";
+
+  src = fetchurl {
+    url = "mirror://sourceforge/gnuplot/${pname}-${version}.tar.gz";
+    sha256 = "sha256-AvwnkYIA7WTY8MO4T+gblbWc1HrZnycJOa5JfBnydBk=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ makeWrapper pkg-config texinfo ] ++ lib.optional withQt qttools;
@@ -66,12 +74,15 @@ in
        --run '. ${./set-gdfontpath-from-fontconfig.sh}'
   '';
 
+<<<<<<< HEAD
   # When cross-compiling, don't build docs and demos.
   # Inspiration taken from https://sourceforge.net/p/gnuplot/gnuplot-main/merge-requests/10/
   makeFlags = lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
     "-C src"
   ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   enableParallelBuilding = true;
 
   meta = with lib; {

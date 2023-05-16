@@ -3,18 +3,31 @@
 with lib;
 
 let
+<<<<<<< HEAD
   cfg = config.services.ceph;
+=======
+  cfg  = config.services.ceph;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   # function that translates "camelCaseOptions" to "camel case options", credits to tilpner in #nixos@freenode
   expandCamelCase = replaceStrings upperChars (map (s: " ${s}") lowerChars);
   expandCamelCaseAttrs = mapAttrs' (name: value: nameValuePair (expandCamelCase name) value);
 
+<<<<<<< HEAD
   makeServices = daemonType: daemonIds:
     mkMerge (map (daemonId:
       { "ceph-${daemonType}-${daemonId}" = makeService daemonType daemonId cfg.global.clusterName cfg.${daemonType}.package; })
       daemonIds);
 
   makeService = daemonType: daemonId: clusterName: ceph:
+=======
+  makeServices = (daemonType: daemonIds:
+    mkMerge (map (daemonId:
+      { "ceph-${daemonType}-${daemonId}" = makeService daemonType daemonId cfg.global.clusterName pkgs.ceph; })
+      daemonIds));
+
+  makeService = (daemonType: daemonId: clusterName: ceph:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     let
       stateDirectory = "ceph/${if daemonType == "rgw" then "radosgw" else daemonType}/${clusterName}-${daemonId}"; in {
     enable = true;
@@ -54,9 +67,15 @@ let
     } // optionalAttrs ( daemonType == "mon") {
       RestartSec = "10";
     };
+<<<<<<< HEAD
   };
 
   makeTarget = daemonType:
+=======
+  });
+
+  makeTarget = (daemonType:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     {
       "ceph-${daemonType}" = {
         description = "Ceph target allowing to start/stop all ceph-${daemonType} services at once";
@@ -65,7 +84,12 @@ let
         before = [ "ceph.target" ];
         unitConfig.StopWhenUnneeded = true;
       };
+<<<<<<< HEAD
     };
+=======
+    }
+  );
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 in
 {
   options.services.ceph = {
@@ -210,7 +234,10 @@ in
           to the id part in ceph i.e. [ "name1" ] would result in mgr.name1
         '';
       };
+<<<<<<< HEAD
       package = mkPackageOptionMD pkgs "ceph" { };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       extraConfig = mkOption {
         type = with types; attrsOf str;
         default = {};
@@ -231,7 +258,10 @@ in
           to the id part in ceph i.e. [ "name1" ] would result in mon.name1
         '';
       };
+<<<<<<< HEAD
       package = mkPackageOptionMD pkgs "ceph" { };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       extraConfig = mkOption {
         type = with types; attrsOf str;
         default = {};
@@ -252,7 +282,11 @@ in
           to the id part in ceph i.e. [ "name1" ] would result in osd.name1
         '';
       };
+<<<<<<< HEAD
       package = mkPackageOptionMD pkgs "ceph" { };
+=======
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       extraConfig = mkOption {
         type = with types; attrsOf str;
         default = {
@@ -280,7 +314,10 @@ in
           to the id part in ceph i.e. [ "name1" ] would result in mds.name1
         '';
       };
+<<<<<<< HEAD
       package = mkPackageOptionMD pkgs "ceph" { };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       extraConfig = mkOption {
         type = with types; attrsOf str;
         default = {};
@@ -292,7 +329,10 @@ in
 
     rgw = {
       enable = mkEnableOption (lib.mdDoc "Ceph RadosGW daemon");
+<<<<<<< HEAD
       package = mkPackageOptionMD pkgs "ceph" { };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       daemons = mkOption {
         type = with types; listOf str;
         default = [];
@@ -331,6 +371,7 @@ in
       { assertion = cfg.global.fsid != "";
         message = "fsid has to be set to a valid uuid for the cluster to function";
       }
+<<<<<<< HEAD
       { assertion = cfg.mon.enable -> cfg.mon.daemons != [];
         message = "have to set id of atleast one MON if you're going to enable Monitor";
       }
@@ -341,6 +382,18 @@ in
         message = "have to set id of atleast one OSD if you're going to enable OSD";
       }
       { assertion = cfg.mgr.enable -> cfg.mgr.daemons != [];
+=======
+      { assertion = cfg.mon.enable == true -> cfg.mon.daemons != [];
+        message = "have to set id of atleast one MON if you're going to enable Monitor";
+      }
+      { assertion = cfg.mds.enable == true -> cfg.mds.daemons != [];
+        message = "have to set id of atleast one MDS if you're going to enable Metadata Service";
+      }
+      { assertion = cfg.osd.enable == true -> cfg.osd.daemons != [];
+        message = "have to set id of atleast one OSD if you're going to enable OSD";
+      }
+      { assertion = cfg.mgr.enable == true -> cfg.mgr.daemons != [];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         message = "have to set id of atleast one MGR if you're going to enable MGR";
       }
     ];

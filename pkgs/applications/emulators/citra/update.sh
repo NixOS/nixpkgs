@@ -44,8 +44,13 @@ updateNightly() {
 
     echo "  Successfully fetched. hash: ${NEW_NIGHTLY_HASH}"
 
+<<<<<<< HEAD
     sed -i "s|${OLD_NIGHTLY_VERSION}|${NEW_NIGHTLY_VERSION}|" ./default.nix
     sed -i "s|${OLD_NIGHTLY_HASH}|${NEW_NIGHTLY_HASH}|" ./default.nix
+=======
+    sed -i "s/${OLD_NIGHTLY_VERSION}/${NEW_NIGHTLY_VERSION}/" ./default.nix
+    sed -i "s/${OLD_NIGHTLY_HASH}/${NEW_NIGHTLY_HASH}/" ./default.nix
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }
 
 updateCanary() {
@@ -69,8 +74,13 @@ updateCanary() {
 
     echo "  Successfully fetched. hash: ${NEW_CANARY_HASH}"
 
+<<<<<<< HEAD
     sed -i "s|${OLD_CANARY_VERSION}|${NEW_CANARY_VERSION}|" ./default.nix
     sed -i "s|${OLD_CANARY_HASH}|${NEW_CANARY_HASH}|" ./default.nix
+=======
+    sed -i "s/${OLD_CANARY_VERSION}/${NEW_CANARY_VERSION}/" ./default.nix
+    sed -i "s/${OLD_CANARY_HASH}/${NEW_CANARY_HASH}/" ./default.nix
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }
 
 if [[ "$BRANCH" = "nightly" ]]; then

@@ -2,6 +2,7 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-bolero";
+<<<<<<< HEAD
   version = "0.9.0";
 
   src = fetchCrate {
@@ -10,6 +11,16 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoSha256 = "sha256-+TxMOKoId13meXqmr1QjDZMNqBnPEDQF1VSPheq8Ji0=";
+=======
+  version = "0.8.0";
+
+  src = fetchCrate {
+    inherit pname version;
+    sha256 = "sha256-j6fWCIXfVS5b3NZizhg9pI+kJkWlR1eGUSW9hJO1/mQ=";
+  };
+
+  cargoSha256 = "sha256-ycvGw99CcE29axG9UWD0lkQp5kxD6Eguco5Fh9Vfj6E=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   buildInputs = [ libbfd libopcodes libunwind ];
 

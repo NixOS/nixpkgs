@@ -1,7 +1,11 @@
 # This builder is for FoundationDB CMake build system.
 
 { lib, fetchFromGitHub
+<<<<<<< HEAD
 , cmake, ninja, python3, openjdk8, mono, pkg-config
+=======
+, cmake, ninja, python3, openjdk, mono, pkg-config
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , msgpack, toml11
 
 , gccStdenv, llvmPackages
@@ -12,6 +16,11 @@
 let
   stdenv = if useClang then llvmPackages.libcxxStdenv else gccStdenv;
 
+<<<<<<< HEAD
+=======
+  tests = builtins.replaceStrings [ "\n" ] [ " " ] (lib.fileContents ./test-list.txt);
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   # Only even numbered versions compile on aarch64; odd numbered versions have avx enabled.
   avxEnabled = version:
     let
@@ -21,7 +30,11 @@ let
 
   makeFdb =
     { version
+<<<<<<< HEAD
     , hash
+=======
+    , sha256
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     , rev ? "refs/tags/${version}"
     , officialRelease ? true
     , patches ? []
@@ -34,12 +47,22 @@ let
         src = fetchFromGitHub {
           owner = "apple";
           repo  = "foundationdb";
+<<<<<<< HEAD
           inherit rev hash;
         };
 
         buildInputs = [ ssl boost msgpack toml11 ];
 
         nativeBuildInputs = [ pkg-config cmake ninja python3 openjdk8 mono ]
+=======
+          inherit rev sha256;
+        };
+
+        buildInputs = [ ssl boost ]
+          ++ lib.optionals (lib.versionAtLeast version "7.1.0") [ msgpack toml11 ];
+
+        nativeBuildInputs = [ pkg-config cmake ninja python3 openjdk mono ]
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           ++ lib.optionals useClang [ llvmPackages.lld ];
 
         separateDebugInfo = true;
@@ -68,7 +91,18 @@ let
             # Same with LLD when Clang is available.
             (lib.optionalString useClang    "-DUSE_LD=LLD")
             (lib.optionalString (!useClang) "-DUSE_LD=GOLD")
+<<<<<<< HEAD
           ] ++ lib.optionals (lib.versionOlder version "7.2.0")
+=======
+          ] ++ lib.optionals (lib.versionOlder version "7.0.0")
+          [ # FIXME: why can't libressl be found automatically?
+            "-DLIBRESSL_USE_STATIC_LIBS=FALSE"
+            "-DLIBRESSL_INCLUDE_DIR=${ssl.dev}"
+            "-DLIBRESSL_CRYPTO_LIBRARY=${ssl.out}/lib/libcrypto.so"
+            "-DLIBRESSL_SSL_LIBRARY=${ssl.out}/lib/libssl.so"
+            "-DLIBRESSL_TLS_LIBRARY=${ssl.out}/lib/libtls.so"
+          ] ++ lib.optionals (lib.versionAtLeast version "7.1.0" && lib.versionOlder version "7.2.0")
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           [ # FIXME: why can't openssl be found automatically?
             "-DOPENSSL_USE_STATIC_LIBS=FALSE"
             "-DOPENSSL_CRYPTO_LIBRARY=${ssl.out}/lib/libcrypto.so"
@@ -90,9 +124,23 @@ let
         # coherently install packages as most linux distros expect -- it's designed to build
         # packaged artifacts that are shipped in RPMs, etc. we need to add some extra code to
         # cmake upstream to fix this, and if we do, i think most of this can go away.
+<<<<<<< HEAD
         postInstall = ''
           mv $out/sbin/fdbmonitor $out/bin/fdbmonitor
           mkdir $out/libexec && mv $out/usr/lib/foundationdb/backup_agent/backup_agent $out/libexec/backup_agent
+=======
+        postInstall = lib.optionalString (lib.versionOlder version "7.0.0") ''
+          mv $out/fdbmonitor/fdbmonitor $out/bin/fdbmonitor && rm -rf $out/fdbmonitor
+          mkdir $out/libexec && ln -sfv $out/bin/fdbbackup $out/libexec/backup_agent
+          rm -rf $out/Library
+          rm -rf $out/lib/foundationdb/
+          mkdir $out/include/foundationdb && \
+            mv $out/include/*.h $out/include/*.options $out/include/foundationdb
+        '' + lib.optionalString (lib.versionAtLeast version "7.0.0") ''
+          mv $out/sbin/fdbmonitor $out/bin/fdbmonitor
+          mkdir $out/libexec && mv $out/usr/lib/foundationdb/backup_agent/backup_agent $out/libexec/backup_agent
+        '' + ''
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           mv $out/sbin/fdbserver $out/bin/fdbserver
 
           rm -rf $out/etc $out/lib/foundationdb $out/lib/systemd $out/log $out/sbin $out/usr $out/var
@@ -126,7 +174,11 @@ let
           homepage    = "https://www.foundationdb.org";
           license     = licenses.asl20;
           platforms   = [ "x86_64-linux" ]
+<<<<<<< HEAD
             ++ lib.optionals (!(avxEnabled version)) [ "aarch64-linux" ];
+=======
+            ++ lib.optionals (lib.versionAtLeast version "7.1.0" && !(avxEnabled version)) [ "aarch64-linux" ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           maintainers = with maintainers; [ thoughtpolice lostnet ];
        };
     };

@@ -1,13 +1,20 @@
 { lib
 , stdenv
 , fetchFromGitHub
+<<<<<<< HEAD
 , fetchpatch
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , pkg-config
 , cmake
 , ninja
 , yasm
 , libjpeg
+<<<<<<< HEAD
 , openssl
+=======
+, openssl_1_1
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , libopus
 , ffmpeg_4
 , protobuf
@@ -45,6 +52,7 @@
 , ApplicationServices
 }:
 
+<<<<<<< HEAD
 let
   libsrtp = fetchFromGitHub {
     owner = "cisco";
@@ -56,6 +64,8 @@ let
   };
 in
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 stdenv.mkDerivation {
   pname = "tg_owt";
   version = "unstable-2022-04-13";
@@ -70,6 +80,7 @@ stdenv.mkDerivation {
 
   patches = [
     ./tg_owt.patch
+<<<<<<< HEAD
 
     (fetchpatch {
       url = "https://github.com/desktop-app/tg_owt/commit/0614aac699b1a53242ffe2664e3724533bf64f97.patch";
@@ -80,6 +91,8 @@ stdenv.mkDerivation {
       url = "https://github.com/desktop-app/tg_owt/commit/9d120195334db4f232c925529aa7601656dc59d7.patch";
       hash = "sha256-k99OBCdE2eQVyXEyvreEqVtzC8Xfdolbgd1Z7lV2ceE=";
     })
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   postPatch = lib.optionalString stdenv.isLinux ''
@@ -88,9 +101,12 @@ stdenv.mkDerivation {
       --replace '"libGL.so.1"' '"${libGL}/lib/libGL.so.1"' \
       --replace '"libgbm.so.1"' '"${mesa}/lib/libgbm.so.1"' \
       --replace '"libdrm.so.2"' '"${libdrm}/lib/libdrm.so.2"'
+<<<<<<< HEAD
 
     rm -r src/third_party/libsrtp
     cp -r --no-preserve=mode ${libsrtp} src/third_party/libsrtp
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '';
 
   outputs = [ "out" "dev" ];
@@ -99,7 +115,11 @@ stdenv.mkDerivation {
 
   propagatedBuildInputs = [
     libjpeg
+<<<<<<< HEAD
     openssl
+=======
+    openssl_1_1
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     libopus
     ffmpeg_4
     protobuf

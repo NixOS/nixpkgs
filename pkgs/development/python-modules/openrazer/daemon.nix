@@ -17,13 +17,23 @@ let
   common = import ./common.nix { inherit lib fetchFromGitHub; };
 in
 buildPythonPackage (common // {
+<<<<<<< HEAD
   pname = "openrazer-daemon";
+=======
+  pname = "openrazer_daemon";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   disabled = !isPy3k;
 
   outputs = [ "out" "man" ];
 
+<<<<<<< HEAD
   sourceRoot = "${common.src.name}/daemon";
+=======
+  prePatch = ''
+    cd daemon
+  '';
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   postPatch = ''
     substituteInPlace openrazer_daemon/daemon.py --replace "plugdev" "openrazer"
@@ -41,8 +51,13 @@ buildPythonPackage (common // {
     setproctitle
   ];
 
+<<<<<<< HEAD
   postInstall = ''
     DESTDIR="$out" PREFIX="" make manpages install-resources install-systemd
+=======
+  postBuild = ''
+    DESTDIR="$out" PREFIX="" make install manpages
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '';
 
   # no tests run

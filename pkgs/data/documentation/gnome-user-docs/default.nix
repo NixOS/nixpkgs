@@ -9,11 +9,19 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-user-docs";
+<<<<<<< HEAD
   version = "44.3";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-user-docs/${lib.versions.major version}/${pname}-${version}.tar.xz";
     sha256 = "lOBECCNjQ4vNv6hUlImrarKWoJHotlL1chM/102xaSw=";
+=======
+  version = "44.1";
+
+  src = fetchurl {
+    url = "mirror://gnome/sources/gnome-user-docs/${lib.versions.major version}/${pname}-${version}.tar.xz";
+    sha256 = "k/MpTUP9IvmWLM9r0X/2Tq54psoGP+bB6bxY0A8046g=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

@@ -3,13 +3,21 @@
 
 stdenv.mkDerivation rec {
   pname = "thc-hydra";
+<<<<<<< HEAD
   version = "9.5";
+=======
+  version = "9.4";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "vanhauser-thc";
     repo = "thc-hydra";
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-gdMxdFrBGVHA1ZBNFW89PBXwACnXTGJ/e/Z5+xVV5F0=";
+=======
+    sha256 = "sha256-+UkMJmIUIt/yTGY07Q4nu1zbWQq5chTvMNQSh5U/fTU=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   postPatch = let
@@ -45,6 +53,10 @@ stdenv.mkDerivation rec {
     license = licenses.agpl3Plus;
     maintainers = with maintainers; [ offline ];
     platforms = platforms.unix;
+<<<<<<< HEAD
     badPlatforms = platforms.darwin; # fails to build since v9.5
+=======
+    badPlatforms = platforms.darwin; # fails to build since v9.4
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

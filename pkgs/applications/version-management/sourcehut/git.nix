@@ -22,35 +22,55 @@ let
     inherit src version;
     pname = "gitsrht-api";
     modRoot = "api";
+<<<<<<< HEAD
     vendorHash = "sha256-cCs9FUBusaAou9w4TDOg8GKxhRcsPbSNcQpxvFH/+so=";
+=======
+    vendorSha256 = "sha256-cCs9FUBusaAou9w4TDOg8GKxhRcsPbSNcQpxvFH/+so=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   } // import ./fix-gqlgen-trimpath.nix { inherit unzip; });
 
   gitDispatch = buildGoModule {
     inherit src version;
     pname = "gitsrht-dispatch";
     modRoot = "gitsrht-dispatch";
+<<<<<<< HEAD
     vendorHash = "sha256-qWXPHo86s6iuRBhRMtmD5jxnAWKdrWHtA/iSUkdw89M=";
+=======
+    vendorSha256 = "sha256-qWXPHo86s6iuRBhRMtmD5jxnAWKdrWHtA/iSUkdw89M=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   gitKeys = buildGoModule {
     inherit src version;
     pname = "gitsrht-keys";
     modRoot = "gitsrht-keys";
+<<<<<<< HEAD
     vendorHash = "sha256-9pojS69HCKVHUceyOpGtv9ewcxFD4WsOVsEzkmWJkF4=";
+=======
+    vendorSha256 = "sha256-9pojS69HCKVHUceyOpGtv9ewcxFD4WsOVsEzkmWJkF4=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   gitShell = buildGoModule {
     inherit src version;
     pname = "gitsrht-shell";
     modRoot = "gitsrht-shell";
+<<<<<<< HEAD
     vendorHash = "sha256-WqfvSPuVsOHA//86u33atMfeA11+DJhjLmWy8Ivq0NI=";
+=======
+    vendorSha256 = "sha256-WqfvSPuVsOHA//86u33atMfeA11+DJhjLmWy8Ivq0NI=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   gitUpdateHook = buildGoModule {
     inherit src version;
     pname = "gitsrht-update-hook";
     modRoot = "gitsrht-update-hook";
+<<<<<<< HEAD
     vendorHash = "sha256-Bc3yPabS2S+qiroHFKrtkII/CfzBDYQ6xWxKHAME+Tc=";
+=======
+    vendorSha256 = "sha256-Bc3yPabS2S+qiroHFKrtkII/CfzBDYQ6xWxKHAME+Tc=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
 in

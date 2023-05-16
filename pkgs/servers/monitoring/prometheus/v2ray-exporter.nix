@@ -11,7 +11,11 @@ buildGoModule rec {
     sha256 = "12mzng3cw24fyyh8zjfi26gh853k5blzg3zbxcccnv5lryh2r0yi";
   };
 
+<<<<<<< HEAD
   vendorHash = "sha256-+jrD+QatTrMaAdbxy5mpCm8lF37XDIy1GFyEiUibA2k=";
+=======
+  vendorSha256 = "sha256-+jrD+QatTrMaAdbxy5mpCm8lF37XDIy1GFyEiUibA2k=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   meta = with lib; {
     description = "Prometheus exporter for V2Ray daemon";

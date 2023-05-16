@@ -2,13 +2,21 @@
 
 stdenv.mkDerivation rec {
   pname = "uncrustify";
+<<<<<<< HEAD
   version = "0.77.1";
+=======
+  version = "0.76.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "uncrustify";
     repo = "uncrustify";
     rev = "uncrustify-${version}";
+<<<<<<< HEAD
     sha256 = "sha256-9U6PTeU/LVFL9XzP9XSFjDx18CR3athThEz+h2+5qZ8=";
+=======
+    sha256 = "sha256-th3lp4WqqruHx2/ym3I041y2wLbYM1b+V6yXNOWuUvM=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ cmake python3 ];

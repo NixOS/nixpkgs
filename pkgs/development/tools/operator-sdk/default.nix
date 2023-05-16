@@ -7,16 +7,27 @@
 
 buildGoModule rec {
   pname = "operator-sdk";
+<<<<<<< HEAD
   version = "1.31.0";
+=======
+  version = "1.28.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "operator-framework";
     repo = pname;
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-v/7nqZg/lwiK2k92kQWSZCSjEZhTAQHCGBcTfxQX2r0=";
   };
 
   vendorHash = "sha256-geKWTsDLx5drTleTnneg2JIbe5sMS5JUQxTX9Bcm+IQ=";
+=======
+    hash = "sha256-YzkPAKwkV8io0lz7JxIX4lciv85iqldkyitrLicbFJc=";
+  };
+
+  vendorHash = "sha256-ZWOIF3vmtoXzdGHHzjPy/351bHzMTTXcgSRBso+ixyM=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nativeBuildInputs = [
     makeWrapper

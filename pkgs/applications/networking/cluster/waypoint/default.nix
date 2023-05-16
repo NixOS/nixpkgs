@@ -2,16 +2,27 @@
 
 buildGoModule rec {
   pname = "waypoint";
+<<<<<<< HEAD
   version = "0.11.4";
+=======
+  version = "0.11.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "hashicorp";
     repo = pname;
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-Zn11mVQV8lN62BVYfhXauKets7/mIqA0r+mG2TkRyPk=";
   };
 
   vendorHash = "sha256-z0qe8zSQ9PopGeyvMDhRpU+3jUgHoh+8jTsYGLPk3i4=";
+=======
+    sha256 = "sha256-FI6QXQ0n/vvzUJTBbPDh9nMyAdcfTzpX79RxQEbFDUs=";
+  };
+
+  vendorHash = "sha256-t8PzimNW7JWvWU3lZHo+b5K3R6he35HhBQPu1hxK51U=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nativeBuildInputs = [ go-bindata installShellFiles ];
 

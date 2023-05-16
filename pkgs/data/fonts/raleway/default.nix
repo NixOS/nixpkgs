@@ -35,6 +35,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     '';
     homepage = "https://www.theleagueofmoveabletype.com/raleway";
     license = lib.licenses.ofl;
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [ minijackson ];
+=======
+    maintainers = with lib.maintainers; [ minijackson Profpatsch ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 })

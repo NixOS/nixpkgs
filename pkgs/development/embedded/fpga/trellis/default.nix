@@ -4,6 +4,7 @@ let
   rev = "488f4e71073062de314c55a037ede7cf03a3324c";
   # git describe --tags
   realVersion = "1.2.1-14-g${builtins.substring 0 7 rev}";
+<<<<<<< HEAD
 
   main_src = fetchFromGitHub {
     owner  = "YosysHQ";
@@ -21,12 +22,35 @@ let
     name   = "trellis-database";
   };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 in stdenv.mkDerivation rec {
   pname = "trellis";
   version = "unstable-2022-09-14";
 
+<<<<<<< HEAD
   srcs = [ main_src database_src ];
   sourceRoot = main_src.name;
+=======
+  srcs = [
+    (fetchFromGitHub {
+       owner  = "YosysHQ";
+       repo   = "prjtrellis";
+       inherit rev;
+       hash   = "sha256-Blbu+0rlM/3izbF0XCvkNpSAND0IclWEwK7anzyrpvw=";
+       name   = "trellis";
+     })
+
+    (fetchFromGitHub {
+      owner  = "YosysHQ";
+      repo   = "prjtrellis-db";
+      rev    = "35d900a94ff0db152679a67bf6e4fbf40ebc34aa";
+      hash   = "sha256-r6viR8y9ZjURGNbsa0/YY8lzy9kGzjuu408ntxwpqm0=";
+      name   = "trellis-database";
+    })
+  ];
+  sourceRoot = "trellis";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   buildInputs = [ boost ];
   nativeBuildInputs = [ cmake python3 ];
@@ -37,7 +61,11 @@ in stdenv.mkDerivation rec {
   ];
 
   preConfigure = ''
+<<<<<<< HEAD
     rmdir database && ln -sfv ${database_src} ./database
+=======
+    rmdir database && ln -sfv ${builtins.elemAt srcs 1} ./database
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     cd libtrellis
   '';

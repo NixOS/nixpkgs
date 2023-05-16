@@ -1,6 +1,7 @@
 { lib, stdenv, fetchFromGitHub, autoreconfHook, autogen, pkg-config, python3
 , flac, lame, libmpg123, libogg, libopus, libvorbis
 , alsa-lib, Carbon, AudioToolbox
+<<<<<<< HEAD
 
 # for passthru.tests
 , audacity
@@ -10,17 +11,27 @@
 , moc
 , pipewire
 , pulseaudio
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 stdenv.mkDerivation rec {
   pname = "libsndfile";
+<<<<<<< HEAD
   version = "1.2.2";
+=======
+  version = "1.2.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = version;
+<<<<<<< HEAD
     hash = "sha256-MOOX/O0UaoeMaQPW9PvvE0izVp+6IoE5VbtTx0RvMkI=";
+=======
+    hash = "sha256-zd0HDUzVYLyFjhIudBJQaKJUtYMjZeQRLALSkyD9tXU=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ autoreconfHook autogen pkg-config python3 ];
@@ -42,6 +53,7 @@ stdenv.mkDerivation rec {
   # Needed on Darwin.
   NIX_CFLAGS_LINK = "-logg -lvorbis";
 
+<<<<<<< HEAD
   doCheck = true;
   preCheck = ''
     patchShebangs tests/test_wrapper.sh tests/pedantic-header-test.sh
@@ -65,6 +77,8 @@ stdenv.mkDerivation rec {
     lame = (lame.override { sndfileFileIOSupport = true; });
   };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   meta = with lib; {
     description = "A C library for reading and writing files containing sampled sound";
     homepage    = "https://libsndfile.github.io/libsndfile/";

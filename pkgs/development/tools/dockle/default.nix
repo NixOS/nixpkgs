@@ -2,24 +2,39 @@
 
 buildGoModule rec {
   pname = "dockle";
+<<<<<<< HEAD
   version = "0.4.13";
+=======
+  version = "0.4.5";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "goodwithtech";
     repo = pname;
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-45VRA3IBGlbMoRbAh6F+KuAM5CIlU00ZzG7N62aikGE=";
   };
 
   vendorHash = "sha256-t66SRFDJT32dwRFqborir+mSQJlpekbicDNhmkeqork=";
+=======
+    sha256 = "sha256-QC0WAM+qitee0dyJorl5Hio3COy4JiIHmFgBIj7S2yM=";
+  };
+
+  vendorSha256 = "sha256-9n/782uKu7qNV/WEpbEV3aHcPXipyOhGdAhT/F4O2xc=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ btrfs-progs lvm2 ];
 
   ldflags = [
+<<<<<<< HEAD
     "-s"
     "-w"
     "-X github.com/goodwithtech/dockle/pkg.version=${version}"
+=======
+    "-s" "-w" "-X main.version=${version}"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   preCheck = ''

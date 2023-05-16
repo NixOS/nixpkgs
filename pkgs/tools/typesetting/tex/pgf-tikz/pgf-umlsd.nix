@@ -3,7 +3,11 @@
 , fetchFromGitHub
 }:
 
+<<<<<<< HEAD
 stdenvNoCC.mkDerivation {
+=======
+stdenvNoCC.mkDerivation (finalAttrs: {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pname = "pgf-umlcd";
   version = "unstable-2020-05-28";
 
@@ -30,4 +34,8 @@ stdenvNoCC.mkDerivation {
     maintainers = with maintainers; [ AndersonTorres ];
     platforms = platforms.unix;
   };
+<<<<<<< HEAD
 }
+=======
+})
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)

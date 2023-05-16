@@ -13,13 +13,21 @@
 
 stdenv.mkDerivation rec {
   pname = "libzim";
+<<<<<<< HEAD
   version = "8.2.1";
+=======
+  version = "8.2.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "openzim";
     repo = pname;
     rev = "refs/tags/${version}";
+<<<<<<< HEAD
     hash = "sha256-bhztigbiIGdVxBV5cpuHuuRGBN5UgC39w51uwLEq47w=";
+=======
+    hash = "sha256-Xh1SQNmG4lQ3f/g+i5m36LJO9JlPzP4bNqhyyKT7NEA=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

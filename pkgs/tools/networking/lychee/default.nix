@@ -9,12 +9,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "lychee";
+<<<<<<< HEAD
   version = "0.13.0";
+=======
+  version = "0.11.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "lycheeverse";
     repo = pname;
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-JUyoOtlypDWK6HxsonVzbfQAdcXk728a8gVI/5GI2fs=";
   };
 
@@ -24,12 +29,19 @@ rustPlatform.buildRustPackage rec {
       "criterion-0.4.0" = "sha256-0EKLRdxbH2czkZjmuaYLzkTBU687y6Iw9yqNV2TbsDw=";
     };
   };
+=======
+    sha256 = "sha256-fOD28O6ycRIniQz841PGJzEFGtYord/y44mdqyAmNDg=";
+  };
+
+  cargoHash = "sha256-r089P2VOeIIW0FjkO4oqVXbrxDND4loagVfVMm5EtaE=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ openssl ]
     ++ lib.optionals stdenv.isDarwin [ Security ];
 
+<<<<<<< HEAD
   checkFlags = [
     #  Network errors for all of these tests
     # "error reading DNS system conf: No such file or directory (os error 2)" } }
@@ -51,5 +63,15 @@ rustPlatform.buildRustPackage rec {
     downloadPage = "https://github.com/lycheeverse/lychee/releases/tag/v${version}";
     license = with licenses; [ asl20 mit ];
     maintainers = with maintainers; [ totoroot tuxinaut ];
+=======
+  # Disabled because they currently fail
+  doCheck = false;
+
+  meta = with lib; {
+    description = "A fast, async, resource-friendly link checker written in Rust.";
+    homepage = "https://github.com/lycheeverse/lychee";
+    license = with licenses; [ asl20 mit ];
+    maintainers = with maintainers; [ tuxinaut ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

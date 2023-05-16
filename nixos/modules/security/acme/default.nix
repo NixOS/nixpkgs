@@ -1,8 +1,11 @@
 { config, lib, pkgs, options, ... }:
 with lib;
 let
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   cfg = config.security.acme;
   opt = options.security.acme;
   user = if cfg.useRoot then "root" else "acme";
@@ -16,6 +19,7 @@ let
   mkAccountHash = acmeServer: data: mkHash "${toString acmeServer} ${data.keyType} ${data.email}";
   accountDirRoot = "/var/lib/acme/.lego/accounts/";
 
+<<<<<<< HEAD
   lockdir = "/run/acme/";
   concurrencyLockfiles = map (n: "${toString n}.lock") (lib.range 1 cfg.maxConcurrentRenewals);
   # Assign elements of `baseList` to each element of `needAssignmentList`, until the latter is exhausted.
@@ -46,6 +50,8 @@ let
     + ''echo "Releasing lock ${lockfilePath}"  # only released after process exit'';
 
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   # There are many services required to make cert renewals work.
   # They all follow a common structure:
   #   - They inherit this commonServiceConfig
@@ -63,7 +69,10 @@ let
     ProtectSystem = "strict";
     ReadWritePaths = [
       "/var/lib/acme"
+<<<<<<< HEAD
       lockdir
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     ];
     PrivateTmp = true;
 
@@ -151,8 +160,12 @@ let
       # We don't want this to run every time a renewal happens
       RemainAfterExit = true;
 
+<<<<<<< HEAD
       # StateDirectory entries are a cleaner, service-level mechanism
       # for dealing with persistent service data
+=======
+      # These StateDirectory entries negate the need for tmpfiles
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       StateDirectory = [ "acme" "acme/.lego" "acme/.lego/accounts" ];
       StateDirectoryMode = 755;
       WorkingDirectory = "/var/lib/acme";
@@ -161,6 +174,7 @@ let
       ExecStart = "+" + (pkgs.writeShellScript "acme-fixperms" script);
     };
   };
+<<<<<<< HEAD
   lockfilePrepareService = {
     description = "Manage lock files for acme services";
 
@@ -180,6 +194,8 @@ let
     };
   };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   certToConfig = cert: data: let
     acmeServer = data.server;
@@ -282,10 +298,17 @@ let
       };
     };
 
+<<<<<<< HEAD
     selfsignService = lockfileName: {
       description = "Generate self-signed certificate for ${cert}";
       after = [ "acme-selfsigned-ca.service" "acme-fixperms.service" ] ++ optional (cfg.maxConcurrentRenewals > 0) "acme-lockfiles.service";
       requires = [ "acme-selfsigned-ca.service" "acme-fixperms.service" ] ++ optional (cfg.maxConcurrentRenewals > 0) "acme-lockfiles.service";
+=======
+    selfsignService = {
+      description = "Generate self-signed certificate for ${cert}";
+      after = [ "acme-selfsigned-ca.service" "acme-fixperms.service" ];
+      requires = [ "acme-selfsigned-ca.service" "acme-fixperms.service" ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
       path = with pkgs; [ minica ];
 
@@ -309,7 +332,11 @@ let
       # Working directory will be /tmp
       # minica will output to a folder sharing the name of the first domain
       # in the list, which will be ${data.domain}
+<<<<<<< HEAD
       script = (if (lockfileName == null) then lib.id else wrapInFlock "${lockdir}${lockfileName}") ''
+=======
+      script = ''
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         minica \
           --ca-key ca/key.pem \
           --ca-cert ca/cert.pem \
@@ -330,10 +357,17 @@ let
       '';
     };
 
+<<<<<<< HEAD
     renewService = lockfileName: {
       description = "Renew ACME certificate for ${cert}";
       after = [ "network.target" "network-online.target" "acme-fixperms.service" "nss-lookup.target" ] ++ selfsignedDeps ++ optional (cfg.maxConcurrentRenewals > 0) "acme-lockfiles.service";
       wants = [ "network-online.target" "acme-fixperms.service" ] ++ selfsignedDeps ++ optional (cfg.maxConcurrentRenewals > 0) "acme-lockfiles.service";
+=======
+    renewService = {
+      description = "Renew ACME certificate for ${cert}";
+      after = [ "network.target" "network-online.target" "acme-fixperms.service" "nss-lookup.target" ] ++ selfsignedDeps;
+      wants = [ "network-online.target" "acme-fixperms.service" ] ++ selfsignedDeps;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
       # https://github.com/NixOS/nixpkgs/pull/81371#issuecomment-605526099
       wantedBy = optionals (!config.boot.isContainer) [ "multi-user.target" ];
@@ -362,6 +396,7 @@ let
           "/var/lib/acme/.lego/${cert}/${certDir}:/tmp/certificates"
         ];
 
+<<<<<<< HEAD
         # Only try loading the environmentFile if the dns challenge is enabled
         EnvironmentFile = mkIf useDns data.environmentFile;
 
@@ -370,6 +405,10 @@ let
 
         LoadCredential = mkIf useDns
           (mapAttrsToList (k: v: "${k}:${v}") data.credentialFiles);
+=======
+        # Only try loading the credentialsFile if the dns challenge is enabled
+        EnvironmentFile = mkIf useDns data.credentialsFile;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
         # Run as root (Prefixed with +)
         ExecStartPost = "+" + (pkgs.writeShellScript "acme-postrun" ''
@@ -382,13 +421,21 @@ let
             }
           fi
         '');
+<<<<<<< HEAD
       } // optionalAttrs (data.listenHTTP != null && toInt (last (splitString ":" data.listenHTTP)) < 1024) {
+=======
+      } // optionalAttrs (data.listenHTTP != null && toInt (elemAt (splitString ":" data.listenHTTP) 1) < 1024) {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         CapabilityBoundingSet = [ "CAP_NET_BIND_SERVICE" ];
         AmbientCapabilities = [ "CAP_NET_BIND_SERVICE" ];
       };
 
       # Working directory will be /tmp
+<<<<<<< HEAD
       script = (if (lockfileName == null) then lib.id else wrapInFlock "${lockdir}${lockfileName}") ''
+=======
+      script = ''
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         ${optionalString data.enableDebugLogs "set -x"}
         set -euo pipefail
 
@@ -502,10 +549,13 @@ let
       defaultText = if isDefaults then default else literalExpression "config.security.acme.defaults.${name}";
     };
   in {
+<<<<<<< HEAD
     imports = [
       (mkRenamedOptionModule [ "credentialsFile" ] [ "environmentFile" ])
     ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     options = {
       validMinDays = mkOption {
         type = types.int;
@@ -617,9 +667,15 @@ let
         '';
       };
 
+<<<<<<< HEAD
       environmentFile = mkOption {
         type = types.nullOr types.path;
         inherit (defaultAndText "environmentFile" null) default defaultText;
+=======
+      credentialsFile = mkOption {
+        type = types.nullOr types.path;
+        inherit (defaultAndText "credentialsFile" null) default defaultText;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         description = lib.mdDoc ''
           Path to an EnvironmentFile for the cert's service containing any required and
           optional environment variables for your selected dnsProvider.
@@ -629,6 +685,7 @@ let
         example = "/var/src/secrets/example.org-route53-api-token";
       };
 
+<<<<<<< HEAD
       credentialFiles = mkOption {
         type = types.attrsOf (types.path);
         inherit (defaultAndText "credentialFiles" {}) default defaultText;
@@ -647,6 +704,8 @@ let
         '';
       };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       dnsPropagationCheck = mkOption {
         type = types.bool;
         inherit (defaultAndText "dnsPropagationCheck" true) default defaultText;
@@ -836,6 +895,7 @@ in {
           }
         '';
       };
+<<<<<<< HEAD
       maxConcurrentRenewals = mkOption {
         default = 5;
         type = types.int;
@@ -847,6 +907,8 @@ in {
           Set to `0` to allow unlimited number of concurrent job runs."
           '';
       };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
   };
 
@@ -957,6 +1019,7 @@ in {
             `security.acme.certs.${cert}.listenHTTP` must be provided.
           '';
         }
+<<<<<<< HEAD
         {
           assertion = all (hasSuffix "_FILE") (attrNames data.credentialFiles);
           message = ''
@@ -964,6 +1027,8 @@ in {
             used for variables suffixed by "_FILE".
           '';
         }
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       ]) cfg.certs));
 
       users.users.acme = {
@@ -974,6 +1039,7 @@ in {
 
       users.groups.acme = {};
 
+<<<<<<< HEAD
       # for lock files, still use tmpfiles as they should better reside in /run
       systemd.tmpfiles.rules = [
         "d ${lockdir} 0700 ${user} - - -"
@@ -996,6 +1062,14 @@ in {
         // (optionalAttrs (cfg.preliminarySelfsigned) ({
         "acme-selfsigned-ca" = selfsignCAService;
       } // selfsignServices));
+=======
+      systemd.services = {
+        "acme-fixperms" = userMigrationService;
+      } // (mapAttrs' (cert: conf: nameValuePair "acme-${cert}" conf.renewService) certConfigs)
+        // (optionalAttrs (cfg.preliminarySelfsigned) ({
+        "acme-selfsigned-ca" = selfsignCAService;
+      } // (mapAttrs' (cert: conf: nameValuePair "acme-selfsigned-${cert}" conf.selfsignService) certConfigs)));
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
       systemd.timers = mapAttrs' (cert: conf: nameValuePair "acme-${cert}" conf.renewTimer) certConfigs;
 

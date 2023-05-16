@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 { lib, stdenv, fetchFromGitHub, rustPlatform, makeWrapper, networkmanager, iw, Security }:
+=======
+{ lib, stdenv, fetchFromGitHub, rustPlatform, makeWrapper, darwin, networkmanager, iw, Security }:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 rustPlatform.buildRustPackage rec {
   pname = "ifwifi";
@@ -7,7 +11,11 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "araujobsd";
     repo = "ifwifi";
+<<<<<<< HEAD
     rev = version;
+=======
+    rev = "${version}";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     sha256 = "sha256-DPMCwyKqGJrav0wASBky9bS1bvJ3xaGsDzsk1bKaH1U=";
   };
 

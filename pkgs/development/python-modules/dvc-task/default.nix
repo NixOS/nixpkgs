@@ -15,7 +15,11 @@
 
 buildPythonPackage rec {
   pname = "dvc-task";
+<<<<<<< HEAD
   version = "0.3.0";
+=======
+  version = "0.2.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -24,7 +28,11 @@ buildPythonPackage rec {
     owner = "iterative";
     repo = pname;
     rev = "refs/tags/${version}";
+<<<<<<< HEAD
     hash = "sha256-nrE8PdvzhH7lO0flvNkGC61NOVT4aj2E2gKEDRkp+b4=";
+=======
+    hash = "sha256-DIjS56QDdjH8lp8yZE8UIccOM+OoafJK3DWZ1d/q29k=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;

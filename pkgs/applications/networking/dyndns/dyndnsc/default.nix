@@ -1,10 +1,18 @@
+<<<<<<< HEAD
 { lib, python3Packages, fetchPypi, stdenv }:
+=======
+{ stdenv, lib, python3Packages }:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 python3Packages.buildPythonApplication rec {
   pname = "dyndnsc";
   version = "0.6.1";
 
+<<<<<<< HEAD
   src = fetchPypi {
+=======
+  src = python3Packages.fetchPypi {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     inherit pname version;
     sha256 = "13078d29eea2f9a4ca01f05676c3309ead5e341dab047e0d51c46f23d4b7fbb4";
   };

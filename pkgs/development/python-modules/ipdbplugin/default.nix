@@ -20,7 +20,11 @@ buildPythonPackage rec {
     homepage = "https://github.com/flavioamieiro/nose-ipdb/tree/master";
     description = "Nose plugin to use iPdb instead of Pdb when tests fail";
     license = licenses.lgpl2;
+<<<<<<< HEAD
     maintainers = [ ];
+=======
+    maintainers = [ maintainers.costrouc ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
 }

@@ -52,6 +52,9 @@ stdenv.mkDerivation {
     license = licenses.bsd0;
     maintainers = with maintainers; [ fgaz ];
     platforms = platforms.all;
+<<<<<<< HEAD
     mainProgram = "pikchr";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

@@ -1,6 +1,9 @@
 { lib
 , python3
+<<<<<<< HEAD
 , fetchPypi
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , mopidy
 }:
 
@@ -9,7 +12,11 @@ let
     packageOverrides = self: super: {
       ytmusicapi = super.ytmusicapi.overridePythonAttrs (old: rec {
         version = "0.25.1";
+<<<<<<< HEAD
         src = fetchPypi {
+=======
+        src = self.fetchPypi {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           inherit (old) pname;
           inherit version;
           hash = "sha256-uc/fgDetSYaCRzff0SzfbRhs3TaKrfE2h6roWkkj8yQ=";
@@ -21,7 +28,11 @@ in python.pkgs.buildPythonApplication rec {
   pname = "mopidy-ytmusic";
   version = "0.3.8";
 
+<<<<<<< HEAD
   src = fetchPypi {
+=======
+  src = python.pkgs.fetchPypi {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     inherit version;
     pname = "mopidy_ytmusic";
     sha256 = "6b4d8ff9c477dbdd30d0259a009494ebe104cad3f8b37241ae503e5bce4ec2e8";

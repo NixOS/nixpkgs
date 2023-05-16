@@ -50,7 +50,11 @@ let
   # lispLibs ofpackages in this file.
   ql = quicklispPackagesFor spec;
 
+<<<<<<< HEAD
   packages = ql.overrideScope (self: super: {
+=======
+  packages = ql.overrideScope' (self: super: {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   cffi = let
     jna = pkgs.fetchMavenArtifact {
@@ -141,6 +145,63 @@ let
     };
   };
 
+<<<<<<< HEAD
+=======
+  cl-tar-file = build-asdf-system {
+    pname = "cl-tar-file";
+    version = "v0.2.1";
+    src = pkgs.fetchzip {
+      url = let
+        rev = "0c10bc82f14702c97a26dc25ce075b5d3a2347d1";
+      in "https://gitlab.common-lisp.net/cl-tar/cl-tar-file/-/archive/${rev}/cl-tar-file-${rev}.tar.gz";
+      sha256 = "0i8j05fkgdqy4c4pqj0c68sh4s3klpx9kc5wp73qwzrl3xqd2svy";
+    };
+    lispLibs = with super; [
+      alexandria
+      babel
+      trivial-gray-streams
+      _40ants-doc
+      salza2
+      chipz
+      flexi-streams
+      parachute
+    ];
+    systems = [ "tar-file" "tar-file/test" ];
+  };
+
+  cl-tar = build-asdf-system {
+    pname = "cl-tar";
+    version = "v0.2.1";
+    src = pkgs.fetchzip {
+      url = let
+        rev = "7c6e07a10c93d9e311f087b5f6328cddd481669a";
+      in "https://gitlab.common-lisp.net/cl-tar/cl-tar/-/archive/${rev}/cl-tar-${rev}.tar.gz";
+      sha256 = "0wp23cs3i6a89dibifiz6559la5nk58d1n17xvbxq4nrl8cqsllf";
+    };
+    lispLibs = with super; [
+      alexandria
+      babel
+      local-time
+      split-sequence
+      _40ants-doc
+      parachute
+      osicat
+    ] ++ [ self.cl-tar-file ];
+    systems = [
+      "tar"
+      "tar/common-extract"
+      "tar/simple-extract"
+      "tar/extract"
+      "tar/create"
+      "tar/docs"
+      "tar/test"
+      "tar/create-test"
+      "tar/extract-test"
+      "tar/simple-extract-test"
+    ];
+  };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   lessp = build-asdf-system {
     pname = "lessp";
     version = "0.2-f8a9e4664";
@@ -163,8 +224,13 @@ let
     pname = "facts";
     version = "0.1-632217602";
     src = pkgs.fetchzip {
+<<<<<<< HEAD
       url = "https://beta.quicklisp.org/archive/cl-facts/2022-11-06/cl-facts-20221106-git.tgz";
       sha256 = "sha256-PBpyyJYkq1NjKK9VikSAL4TmrGRwUJlEWRSeKj/f4Sc=";
+=======
+      url = "https://github.com/facts-db/cl-lessp/archive/632217602b85b679e8d420654a0aa39e798ca3b5.tar.gz";
+      sha256 = "09z1vwzjm7hlb529jl3hcjnfd11gh128lmdg51im7ar4jv4746iw";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
     lispLibs = [ self.lessp self.rollback ] ++ [ super.local-time ];
   };
@@ -207,6 +273,7 @@ let
     lispLibs = super.mathkit.lispLibs ++ [ super.sb-cga ];
   };
 
+<<<<<<< HEAD
   cl-colors2_0_5_4 = build-asdf-system {
     inherit (super.cl-colors2) pname systems lispLibs;
     version = "0.5.4";
@@ -450,6 +517,19 @@ let
       repo = "nyxt";
       rev = "3.7.0";
       sha256 = "sha256-viiyO4fX3uyGuvojQ1rYYKBldRdVNzeJX1KYlYwfWVU=";
+=======
+  nyxt-gtk = build-asdf-system {
+    inherit (super.nyxt) pname;
+    version = "2.2.4";
+
+    lispLibs = super.nyxt.lispLibs ++ (with super; [
+      cl-cffi-gtk cl-webkit2 mk-string-metrics cl-css
+    ]);
+
+    src = pkgs.fetchzip {
+      url = "https://github.com/atlas-engineer/nyxt/archive/2.2.4.tar.gz";
+      sha256 = "12l7ir3q29v06jx0zng5cvlbmap7p709ka3ik6x29lw334qshm9b";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
 
     nativeBuildInputs = [ pkgs.makeWrapper ];
@@ -462,6 +542,7 @@ let
       pkgs.gnome.adwaita-icon-theme
     ];
 
+<<<<<<< HEAD
     # This patch removes the :build-operation component from the nyxt/gi-gtk-application system.
     # This is done because if asdf:operate is used and the operation matches the system's :build-operation
     # then output translations are ignored, causing the result of the operation to be placed where
@@ -479,14 +560,36 @@ let
     installPhase = ''
       mkdir -pv $out
       cp -r * $out
+=======
+    buildScript = pkgs.writeText "build-nyxt.lisp" ''
+      (load "${super.nyxt.asdfFasl}/asdf.${super.nyxt.faslExt}")
+      (asdf:load-system :nyxt/gtk-application)
+      (sb-ext:save-lisp-and-die "nyxt" :executable t
+                                       #+sb-core-compression :compression
+                                       #+sb-core-compression t
+                                       :toplevel #'nyxt:entry-point)
+    '';
+
+    # Run with WEBKIT_FORCE_SANDBOX=0 if getting a runtime error
+    # See https://github.com/atlas-engineer/nyxt/issues/1781
+    # TODO(kasper): use wrapGAppsHook
+    installPhase = super.nyxt.installPhase + ''
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       rm -v $out/nyxt
       mkdir -p $out/bin
       cp -v nyxt $out/bin
       wrapProgram $out/bin/nyxt \
+<<<<<<< HEAD
         --prefix LD_LIBRARY_PATH : $LD_LIBRARY_PATH \
         --prefix XDG_DATA_DIRS : $XDG_ICON_DIRS \
         --prefix XDG_DATA_DIRS : $GSETTINGS_SCHEMAS_PATH \
         --prefix GI_TYPELIB_PATH : $GI_TYPELIB_PATH \
+=======
+        --set WEBKIT_FORCE_SANDBOX 0 \
+        --prefix LD_LIBRARY_PATH : $LD_LIBRARY_PATH \
+        --prefix XDG_DATA_DIRS : $XDG_ICON_DIRS \
+        --prefix XDG_DATA_DIRS : $GSETTINGS_SCHEMAS_PATH \
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         --prefix GIO_EXTRA_MODULES ":" ${pkgs.dconf.lib}/lib/gio/modules/ \
         --prefix GIO_EXTRA_MODULES ":" ${pkgs.glib-networking}/lib/gio/modules/
     '';
@@ -504,6 +607,7 @@ let
     };
     buildScript = pkgs.writeText "build-stumpwm.lisp" ''
       (load "${super.stumpwm.asdfFasl}/asdf.${super.stumpwm.faslExt}")
+<<<<<<< HEAD
 
       (asdf:load-system 'stumpwm)
 
@@ -525,6 +629,15 @@ let
         #+sb-core-compression :compression
         #+sb-core-compression t
         :toplevel #'stumpwm:stumpwm)
+=======
+      (asdf:load-system 'stumpwm/build)
+      (sb-ext:save-lisp-and-die
+        "stumpwm"
+        :executable t
+        #+sb-core-compression :compression
+        #+sb-core-compression t
+        :toplevel #'stumpwm:main)
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     '';
     installPhase = ''
       mkdir -p $out/bin
@@ -532,8 +645,11 @@ let
     '';
   });
 
+<<<<<<< HEAD
   stumpwm-unwrapped = super.stumpwm;
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ltk = super.ltk.overrideLispAttrs (o: {
     src = pkgs.fetchzip {
       url = "https://github.com/uthar/ltk/archive/f19162e76d6c7c2f51bd289b811d9ba20dd6555e.tar.gz";
@@ -543,6 +659,91 @@ let
   });
 
 
+<<<<<<< HEAD
+=======
+  qt = let
+    rev = "dffff3ee3dbd0686c85c323f579b8bbf4881e60e";
+  in build-with-compile-into-pwd rec {
+    pname = "commonqt";
+    version = builtins.substring 0 7 rev;
+    src = pkgs.fetchFromGitHub {
+      inherit rev;
+      owner = pname;
+      repo = pname;
+      hash = "sha256-GAgwT0D9mIkYPTHfCH/KxxIv7b6QGwcxwZE7ehH5xug=";
+    };
+
+    buildInputs = [ pkgs.qt4 ];
+    nativeBuildInputs = [ pkgs.smokegen pkgs.smokeqt ];
+    nativeLibs = [ pkgs.qt4 pkgs.smokegen pkgs.smokeqt ];
+
+    systems = [ "qt" ];
+
+    lispLibs = with super; [
+      cffi named-readtables cl-ppcre alexandria
+      closer-mop iterate trivial-garbage bordeaux-threads
+    ];
+  };
+
+  qt-libs = build-with-compile-into-pwd {
+    inherit (super.qt-libs) pname version src;
+    patches = [ ./patches/qt-libs-dont-download.patch ];
+    prePatch = ''
+      substituteInPlace systems/*.asd --replace ":qt+libs" ":qt"
+    '';
+    lispLibs = super.qt-libs.lispLibs ++ [ self.qt ];
+    systems = [
+      "qt-libs"
+      "commonqt"
+      # "phonon"
+      # "qimageblitz"
+      # "qsci"
+      "qt3support"
+      "qtcore"
+      "qtdbus"
+      "qtdeclarative"
+      "qtgui"
+      "qthelp"
+      "qtnetwork"
+      "qtopengl"
+      "qtscript"
+      "qtsql"
+      "qtsvg"
+      "qttest"
+      "qtuitools"
+      # "qtwebkit"
+      "qtxml"
+      "qtxmlpatterns"
+      # "qwt"
+      "smokebase"
+    ];
+  };
+
+  commonqt = self.qt-libs;
+  qt3support = self.qt-libs;
+  qtcore = self.qt-libs;
+  qtdbus = self.qt-libs;
+  qtdeclarative = self.qt-libs;
+  qtgui = self.qt-libs;
+  qthelp = self.qt-libs;
+  qtnetwork = self.qt-libs;
+  qtopengl = self.qt-libs;
+  qtscript = self.qt-libs;
+  qtsql = self.qt-libs;
+  qtsvg = self.qt-libs;
+  qttest = self.qt-libs;
+  qtuitools = self.qt-libs;
+  qtxml = self.qt-libs;
+  qtxmlpatterns = self.qt-libs;
+  smokebase = self.qt-libs;
+
+  qtools = build-with-compile-into-pwd {
+    inherit (super.qtools) pname version src nativeLibs;
+    lispLibs = [ self.qt ] ++ remove super.qt_plus_libs super.qtools.lispLibs ++ [ self.qt-libs ];
+    patches = [ ./patches/qtools-use-nix-libs.patch ];
+  };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   magicl = build-with-compile-into-pwd {
     inherit (super.magicl) pname version src lispLibs;
     nativeBuildInputs = [ pkgs.gfortran ];
@@ -638,8 +839,11 @@ let
     nativeLibs = [
       pkgs.webkitgtk_6_0
     ];
+<<<<<<< HEAD
     # Requires old webkitgtk_5_0 which was replaced by webkitgtk_6_0
     meta.broken = true;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   cl-avro = build-asdf-system {
@@ -726,6 +930,7 @@ let
     ];
   };
 
+<<<<<<< HEAD
   sb-cga = build-asdf-system {
     pname = "sb-cga";
     version = "1.0.1";
@@ -742,6 +947,8 @@ let
     lispLibs = oa.lispLibs ++ [ self.sb-cga ];
   });
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   });
 
 in packages

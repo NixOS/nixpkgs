@@ -137,8 +137,13 @@ let
   '';
 
   yesOrNo = b: if b then "yes" else "no";
+<<<<<<< HEAD
   maybeString = prefix: x: optionalString (x != null) ''${prefix} "${x}"'';
   maybeToString = prefix: x: optionalString (x != null) ''${prefix} ${toString x}'';
+=======
+  maybeString = prefix: x: if x == null then "" else ''${prefix} "${x}"'';
+  maybeToString = prefix: x: if x == null then "" else ''${prefix} ${toString x}'';
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   forEach = pre: l: concatMapStrings (x: pre + x + "\n") l;
 
 

@@ -19,7 +19,11 @@
 
 buildPythonPackage rec {
   pname = "watchfiles";
+<<<<<<< HEAD
   version = "0.20.0";
+=======
+  version = "0.19.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -28,13 +32,21 @@ buildPythonPackage rec {
     owner = "samuelcolvin";
     repo = pname;
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-eoKF6uBHgML63DrDlC1zPfDu/mAMoaevttwqHLCKh+M=";
+=======
+    hash = "sha256-NmmeoaIfFMNKCcjH6tPnkpflkN35bKlT76MqF9W8LBc=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
+<<<<<<< HEAD
     hash = "sha256-4XqR6pZqPAftZoJqZf+iZWp0c8xv00MDJDDETiGGEDo=";
+=======
+    hash = "sha256-9ruk3PMcWNLOIGth5fo91/miyF17lgERWL3F4y4as18=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   buildInputs = lib.optionals stdenv.isDarwin [
@@ -53,11 +65,14 @@ buildPythonPackage rec {
     anyio
   ];
 
+<<<<<<< HEAD
   # Tests need these permissions in order to use the FSEvents API on macOS.
   sandboxProfile = ''
     (allow mach-lookup (global-name "com.apple.FSEvents"))
   '';
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nativeCheckInputs = [
     dirty-equals
     pytest-mock

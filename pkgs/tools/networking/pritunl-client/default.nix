@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 { lib
 , stdenv
 , fetchFromGitHub
@@ -17,10 +18,19 @@
 , electron
 }: let
   version = "1.3.3584.5";
+=======
+{ lib, buildGoModule, fetchFromGitHub }:
+
+buildGoModule rec {
+  pname = "pritunl-client";
+  version = "1.3.3484.2";
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   src = fetchFromGitHub {
     owner = "pritunl";
     repo = "pritunl-client-electron";
     rev = version;
+<<<<<<< HEAD
     sha256 = "sha256-wWpP2u+oQSESjkRvAn5by7efvssYtKBYg2E+FZ/+tg0=";
   };
 
@@ -139,5 +149,22 @@ in stdenv.mkDerivation {
     homepage = "https://client.pritunl.com/";
     license = licenses.unfree;
     maintainers = with maintainers; [ minizilla andrevmatos ];
+=======
+    sha256 = "sha256-thIbw/Iek2vNNmkOBHrzEhTbaOm05CsbjqORQKC2jIs=";
+  };
+
+  modRoot = "cli";
+  vendorHash = "sha256-miwGLWpoaavg/xcw/0pNBYCdovBnvjP5kdaaGPcRuWk=";
+
+  postInstall = ''
+    mv $out/bin/cli $out/bin/pritunl-client
+  '';
+
+  meta = with lib; {
+    description = "Pritunl OpenVPN client CLI";
+    homepage = "https://github.com/pritunl/pritunl-client-electron/tree/master/cli";
+    license = licenses.unfree;
+    maintainers = with maintainers; [ minizilla ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

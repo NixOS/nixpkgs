@@ -41,13 +41,21 @@
 
 buildPythonPackage rec {
   pname = "wxPython";
+<<<<<<< HEAD
   version = "4.2.1";
+=======
+  version = "4.2.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "other";
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
+<<<<<<< HEAD
     hash = "sha256-5I3iEaZga/By7D+neHcda3RsALf0uXDrWHKN31bRPVw=";
+=======
+    hash = "sha256-ZjzrxFCdfl0RNRiGX+J093+VQ0xdV7w4btWNZc7thsc=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   patches = [
@@ -127,7 +135,10 @@ buildPythonPackage rec {
 
 
   meta = with lib; {
+<<<<<<< HEAD
     changelog = "https://github.com/wxWidgets/Phoenix/blob/wxPython-${version}/CHANGES.rst";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     description = "Cross platform GUI toolkit for Python, Phoenix version";
     homepage = "http://wxpython.org/";
     license = licenses.wxWindows;

@@ -97,7 +97,11 @@ chroot_add_resolv_conf "$mountPoint" || echo "$0: failed to set up resolv.conf" 
         exec 2>/dev/null
     fi
 
+<<<<<<< HEAD
     # Run the activation script. Set $LOCALE_ARCHIVE to suppress some Perl locale warnings.
+=======
+    # Run the activation script. Set $LOCALE_ARCHIVE to supress some Perl locale warnings.
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     LOCALE_ARCHIVE="$system/sw/lib/locale/locale-archive" IN_NIXOS_ENTER=1 chroot "$mountPoint" "$system/activate" 1>&2 || true
 
     # Create /tmp. This is needed for nix-build and the NixOS activation script to work.

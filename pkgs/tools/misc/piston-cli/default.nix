@@ -1,11 +1,19 @@
+<<<<<<< HEAD
 { stdenv, lib, python3Packages, fetchPypi }:
+=======
+{ stdenv, lib, python3Packages }:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 python3Packages.buildPythonApplication rec {
   pname = "piston-cli";
   version = "1.4.3";
   format = "pyproject";
 
+<<<<<<< HEAD
   src = fetchPypi {
+=======
+  src = python3Packages.fetchPypi {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     inherit pname version;
     sha256 = "qvDGVJcaMXUajdUQWl4W1dost8k0PsS9XX/o8uQrtfY=";
   };
@@ -18,6 +26,7 @@ python3Packages.buildPythonApplication rec {
 
   nativeBuildInputs = with python3Packages; [
     poetry-core
+<<<<<<< HEAD
     pythonRelaxDepsHook
   ];
 
@@ -26,6 +35,15 @@ python3Packages.buildPythonApplication rec {
     "more-itertools"
     "PyYAML"
   ];
+=======
+  ];
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'rich = "^10.1.0"' 'rich = "*"' \
+      --replace 'PyYAML = "^5.4.1"' 'PyYAML = "*"'
+  '';
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   meta = with lib; {
     broken = stdenv.isDarwin;

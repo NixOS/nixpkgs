@@ -36,7 +36,11 @@ in {
         name = "cmsd";
         protocol = "udp";
         user = "root";
+<<<<<<< HEAD
         server = "${pkgs.cdesktopenv}/bin/rpc.cmsd";
+=======
+        server = "${pkgs.cdesktopenv}/opt/dt/bin/rpc.cmsd";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         extraConfig = ''
           type  = RPC UNLISTED
           rpc_number  = 100068
@@ -64,7 +68,11 @@ in {
     services.xserver.desktopManager.session = [
     { name = "CDE";
       start = ''
+<<<<<<< HEAD
         exec ${pkgs.cdesktopenv}/bin/Xsession
+=======
+        exec ${pkgs.cdesktopenv}/opt/dt/bin/Xsession
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       '';
     }];
   };

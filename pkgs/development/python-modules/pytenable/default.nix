@@ -1,4 +1,8 @@
 { lib
+<<<<<<< HEAD
+=======
+, appdirs
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , buildPythonPackage
 , defusedxml
 , fetchFromGitHub
@@ -32,22 +36,42 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
+<<<<<<< HEAD
+=======
+    semver
+  ];
+
+  buildInputs = [
+    appdirs
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     defusedxml
     marshmallow
     python-box
     python-dateutil
     requests
+<<<<<<< HEAD
     restfly
     semver
+=======
+    requests-pkcs12
+    restfly
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     typing-extensions
   ];
 
   nativeCheckInputs = [
+<<<<<<< HEAD
     pytest-datafiles
     pytest-vcr
     pytestCheckHook
     requests-pkcs12
     responses
+=======
+    responses
+    pytest-datafiles
+    pytest-vcr
+    pytestCheckHook
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   disabledTests = [

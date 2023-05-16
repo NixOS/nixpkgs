@@ -313,6 +313,7 @@ in let
       # what stdenv we use here, as long as CMake is happy.
       cxx-headers = callPackage ./libcxx {
         inherit llvm_meta;
+<<<<<<< HEAD
         # Note that if we use the regular stdenv here we'll get cycle errors
         # when attempting to use this compiler in the stdenv.
         #
@@ -326,6 +327,8 @@ in let
         # Because we only use `cxx-headers` in `libcxxabi` (which depends on the
         # clang stdenv _anyways_), this is okay.
         stdenv = stdenv_;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         headersOnly = true;
       };
 
@@ -362,6 +365,11 @@ in let
       inherit llvm_meta targetLlvm;
     };
   });
+<<<<<<< HEAD
   noExtend = extensible: lib.attrsets.removeAttrs extensible [ "extend" ];
 
 in { inherit tools libraries release_version; } // (noExtend libraries) // (noExtend tools)
+=======
+
+in { inherit tools libraries release_version; } // libraries // tools
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)

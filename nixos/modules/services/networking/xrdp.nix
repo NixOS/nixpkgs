@@ -121,7 +121,11 @@ in
       icons.enable = true;
     };
 
+<<<<<<< HEAD
     fonts.enableDefaultPackages = mkDefault true;
+=======
+    fonts.enableDefaultFonts = mkDefault true;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     systemd = {
       services.xrdp = {

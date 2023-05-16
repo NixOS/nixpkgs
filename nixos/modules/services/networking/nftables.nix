@@ -2,6 +2,7 @@
 with lib;
 let
   cfg = config.networking.nftables;
+<<<<<<< HEAD
 
   tableSubmodule = { name, ... }: {
     options = {
@@ -31,6 +32,8 @@ let
       name = mkDefault name;
     };
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 in
 {
   ###### interface
@@ -70,6 +73,7 @@ in
       '';
     };
 
+<<<<<<< HEAD
     networking.nftables.checkRulesetRedirects = mkOption {
       type = types.addCheck (types.attrsOf types.path) (attrs: all types.path.check (attrNames attrs));
       default = {
@@ -90,6 +94,8 @@ in
       '';
     };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     networking.nftables.preCheckRuleset = mkOption {
       type = types.lines;
       default = "";
@@ -103,6 +109,7 @@ in
       '';
     };
 
+<<<<<<< HEAD
     networking.nftables.flushRuleset = mkEnableOption (lib.mdDoc "Flush the entire ruleset on each reload.");
 
     networking.nftables.extraDeletions = mkOption {
@@ -121,6 +128,8 @@ in
         '';
     };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     networking.nftables.ruleset = mkOption {
       type = types.lines;
       default = "";
@@ -170,10 +179,14 @@ in
         lib.mdDoc ''
           The ruleset to be used with nftables.  Should be in a format that
           can be loaded using "/bin/nft -f".  The ruleset is updated atomically.
+<<<<<<< HEAD
           Note that if the tables should be cleaned first, either:
           - networking.nftables.flushRuleset = true; needs to be set (flushes all tables)
           - networking.nftables.extraDeletions needs to be set
           - or networking.nftables.tables can be used, which will clean up the table automatically
+=======
+          This option conflicts with rulesetFile.
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         '';
     };
     networking.nftables.rulesetFile = mkOption {
@@ -183,6 +196,7 @@ in
         lib.mdDoc ''
           The ruleset file to be used with nftables.  Should be in a format that
           can be loaded using "nft -f".  The ruleset is updated atomically.
+<<<<<<< HEAD
         '';
     };
     networking.nftables.tables = mkOption {
@@ -241,6 +255,11 @@ in
         };
       };
     };
+=======
+          This option conflicts with ruleset and nftables based firewall.
+        '';
+    };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   ###### implementation
@@ -249,8 +268,11 @@ in
     boot.blacklistedKernelModules = [ "ip_tables" ];
     environment.systemPackages = [ pkgs.nftables ];
     networking.networkmanager.firewallBackend = mkDefault "nftables";
+<<<<<<< HEAD
     # versionOlder for backportability, remove afterwards
     networking.nftables.flushRuleset = mkDefault (versionOlder config.system.stateVersion "23.11" || (cfg.rulesetFile != null || cfg.ruleset != ""));
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     systemd.services.nftables = {
       description = "nftables firewall";
       before = [ "network-pre.target" ];
@@ -258,6 +280,7 @@ in
       wantedBy = [ "multi-user.target" ];
       reloadIfChanged = true;
       serviceConfig = let
+<<<<<<< HEAD
         enabledTables = filterAttrs (_: table: table.enable) cfg.tables;
         deletionsScript = pkgs.writeScript "nftables-deletions" ''
           #! ${pkgs.nftables}/bin/nft -f
@@ -279,11 +302,14 @@ in
         cleanupDeletionsScript = pkgs.writeShellScript "nftables-cleanup-deletions" ''
           rm ${deletionsScriptVar}
         '';
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         rulesScript = pkgs.writeTextFile {
           name =  "nftables-rules";
           executable = true;
           text = ''
             #! ${pkgs.nftables}/bin/nft -f
+<<<<<<< HEAD
             # previous deletions, if any
             include "${deletionsScriptVar}"
             # current deletions
@@ -303,6 +329,17 @@ in
             sed 's|include "${deletionsScriptVar}"||' -i ruleset.conf
             ${cfg.preCheckRuleset}
             export NIX_REDIRECTS=${escapeShellArg (concatStringsSep ":" (mapAttrsToList (n: v: "${n}=${v}") cfg.checkRulesetRedirects))}
+=======
+            flush ruleset
+            ${if cfg.rulesetFile != null then ''
+              include "${cfg.rulesetFile}"
+            '' else cfg.ruleset}
+          '';
+          checkPhase = lib.optionalString cfg.checkRuleset ''
+            cp $out ruleset.conf
+            ${cfg.preCheckRuleset}
+            export NIX_REDIRECTS=/etc/protocols=${pkgs.buildPackages.iana-etc}/etc/protocols:/etc/services=${pkgs.buildPackages.iana-etc}/etc/services
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
             LD_PRELOAD="${pkgs.buildPackages.libredirect}/lib/libredirect.so ${pkgs.buildPackages.lklWithFirewall.lib}/lib/liblkl-hijack.so" \
               ${pkgs.buildPackages.nftables}/bin/nft --check --file ruleset.conf
           '';
@@ -310,11 +347,17 @@ in
       in {
         Type = "oneshot";
         RemainAfterExit = true;
+<<<<<<< HEAD
         ExecStart = [ ensureDeletions rulesScript ];
         ExecStartPost = saveDeletionsScript;
         ExecReload = [ ensureDeletions rulesScript saveDeletionsScript ];
         ExecStop = [ deletionsScriptVar cleanupDeletionsScript ];
         StateDirectory = "nftables";
+=======
+        ExecStart = rulesScript;
+        ExecReload = rulesScript;
+        ExecStop = "${pkgs.nftables}/bin/nft flush ruleset";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       };
     };
   };

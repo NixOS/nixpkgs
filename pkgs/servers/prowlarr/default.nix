@@ -21,15 +21,26 @@ let
   }.${stdenv.hostPlatform.system} or unsupported;
 
   hash = {
+<<<<<<< HEAD
     aarch64-darwin = "sha256-3dKTYw37kmIq9DG4S5qOtjK1QzZeSSCWKeXsfrXctFs=";
     aarch64-linux = "sha256-SWt1XTWlWcxF3pcSkiyIXBKllwmVkJvoxB3NrIAj9KQ=";
     x86_64-darwin = "sha256-YC6cH5KHzNVdWaNp4vGoGBM8UzVaiE9WfWj5vL/NZ2w=";
     x86_64-linux = "sha256-lSar09oOHr2M3pAbF9JlQhYqyd2GoNmVAGmSjm0ZpOg=";
+=======
+    aarch64-darwin = "sha256-Fk0JTHapmvf0FWDC/V+IoCDpjU0stVxo9XfAOXqMECM=";
+    aarch64-linux = "sha256-s2TP8t+87ZQka9q0AQBfxpBwryx/qNqXfxYojvJEaAU=";
+    x86_64-darwin = "sha256-nhWyAlc7vuM2c66lJ2e2sXFZlw7vWL9cKiDNrUS6LEs=";
+    x86_64-linux = "sha256-GbEQuTKCVfLd0oZbPKbVVbgGMi+eooBpc9zL2k/L3zY=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   }.${stdenv.hostPlatform.system} or unsupported;
 
 in stdenv.mkDerivation rec {
   inherit pname;
+<<<<<<< HEAD
   version = "1.7.4.3769";
+=======
+  version = "1.4.1.3258";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchurl {
     url = "https://github.com/Prowlarr/Prowlarr/releases/download/v${version}/Prowlarr.master.${version}.${os}-core-${arch}.tar.gz";
@@ -63,7 +74,10 @@ in stdenv.mkDerivation rec {
     changelog = "https://github.com/Prowlarr/Prowlarr/releases/tag/v${version}";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ jdreaver ];
+<<<<<<< HEAD
     mainProgram = "Prowlarr";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     platforms = [
       "aarch64-darwin"
       "aarch64-linux"

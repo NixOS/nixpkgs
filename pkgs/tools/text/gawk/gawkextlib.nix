@@ -1,7 +1,14 @@
+<<<<<<< HEAD
 { lib, stdenv, recurseIntoAttrs, fetchgit, pkg-config, autoreconfHook
 , autoconf, automake, libiconv, libtool, texinfo, gettext, gawk, rapidjson, gd
 , libharu, lmdb, gmp, glibcLocales, mpfr, more, postgresql, hiredis
 , expat, tre }:
+=======
+{ lib, stdenv, recurseIntoAttrs, fetchgit, writeText, pkg-config, autoreconfHook
+, autoconf, automake, libiconv, libtool, texinfo, gettext, gawk, rapidjson, gd
+, shapelib, libharu, lmdb, gmp, glibcLocales, mpfr, more, postgresql, hiredis
+, expat, tre, makeWrapper }:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 let
   buildExtension = lib.makeOverridable
@@ -9,12 +16,21 @@ let
       let is_extension = gawkextlib != null;
       in stdenv.mkDerivation rec {
         pname = "gawkextlib-${name}";
+<<<<<<< HEAD
         version = "unstable-2022-10-20";
 
         src = fetchgit {
           url = "git://git.code.sf.net/p/gawkextlib/code";
           rev = "f6c75b4ac1e0cd8d70c2f6c7a8d58b4d94cfde97";
           sha256 = "sha256-0p3CrQ3TBl7UcveZytK/9rkAzn69RRM2GwY2eCeqlkg=";
+=======
+        version = "unstable-2019-11-21";
+
+        src = fetchgit {
+          url = "git://git.code.sf.net/p/gawkextlib/code";
+          rev = "f70f10da2804e4fd0a0bac57736e9c1cf21e345d";
+          sha256 = "0r8fz89n3l4dfszs1980yqj0ah95430lj0y1lb7blfkwxa6c2xik";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         };
 
         postPatch = ''
@@ -83,12 +99,20 @@ let
       name = "gd";
       extraBuildInputs = [ gd ];
     };
+<<<<<<< HEAD
     # Build has been broken: https://github.com/NixOS/nixpkgs/issues/191072
     # haru = buildExtension {
     #   inherit gawkextlib;
     #   name = "haru";
     #   extraBuildInputs = [ libharu ];
     # };
+=======
+    haru = buildExtension {
+      inherit gawkextlib;
+      name = "haru";
+      extraBuildInputs = [ libharu ];
+    };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     json = buildExtension {
       inherit gawkextlib;
       name = "json";

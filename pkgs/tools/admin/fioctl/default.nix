@@ -2,13 +2,21 @@
 
 buildGoModule rec {
   pname = "fioctl";
+<<<<<<< HEAD
   version = "0.35";
+=======
+  version = "0.32.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "foundriesio";
     repo = "fioctl";
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-4lAoUmbNsC0d+yaB+DqHVqz3UMI08rhXIm7rgueeXik=";
+=======
+    sha256 = "sha256-3k3FoRU1yCtntVe3WTGUuhIBTD6KRvSsDISbjmNvzQI=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   vendorHash = "sha256-hSllpWjiYOBbANCX7usdAAF1HNAJ79ELK92qEyn8G1c=";

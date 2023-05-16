@@ -8,14 +8,22 @@
 
 buildPythonPackage rec {
   pname = "msal";
+<<<<<<< HEAD
   version = "1.23.0";
+=======
+  version = "1.22.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
+<<<<<<< HEAD
     hash = "sha256-JcmjOs+EMB+T0f2+nxqcYM04rw1f/9v6N4E4/HvB6Gs=";
+=======
+    hash = "sha256-ioL1N1ZCwWJciQWAGEMClMEJRA3OQupmfUZsLKtSCs0=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [

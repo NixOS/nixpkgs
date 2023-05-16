@@ -20,7 +20,11 @@ stdenv.mkDerivation rec {
     domain = "gitlab.freedesktop.org";
     owner = "libdecor";
     repo = "libdecor";
+<<<<<<< HEAD
     rev = version;
+=======
+    rev = "${version}";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     hash = "sha256-8b6qCqOSDDbhYwAeAaUyI71tSopTkGtCJaxZaJw1vQQ=";
   };
 

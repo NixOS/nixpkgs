@@ -14,11 +14,19 @@
 
 stdenv.mkDerivation rec {
   pname = "mate-media";
+<<<<<<< HEAD
   version = "1.26.1";
 
   src = fetchurl {
     url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "KLKiGiltkVx8BtnSFvSahUHNPOyJWzJZvKBoqF4m6ws=";
+=======
+  version = "1.26.0";
+
+  src = fetchurl {
+    url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "0fiwzsir8i1bqz7g7b20g5zs28qq63j41v9c5z69q8fq7wh1nwwb";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   buildInputs = [

@@ -3,7 +3,10 @@
 , aresponses
 , buildPythonPackage
 , fetchFromGitHub
+<<<<<<< HEAD
 , fetchpatch
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , poetry-core
 , pydantic
 , pytest-aiohttp
@@ -15,7 +18,11 @@
 
 buildPythonPackage rec {
   pname = "aionotion";
+<<<<<<< HEAD
   version = "2023.05.5";
+=======
+  version = "2023.05.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -24,6 +31,7 @@ buildPythonPackage rec {
     owner = "bachya";
     repo = pname;
     rev = version;
+<<<<<<< HEAD
     hash = "sha256-/2sF8m5R8YXkP89bi5zR3h13r5LrFOl1OsixAcX0D4o=";
   };
 
@@ -41,6 +49,11 @@ buildPythonPackage rec {
     })
   ];
 
+=======
+    hash = "sha256-gCHJBgPWe5aSzTvvETjfn3zoEuuCJV1s4lMQLP72a/8=";
+  };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nativeBuildInputs = [
     poetry-core
   ];
@@ -50,8 +63,11 @@ buildPythonPackage rec {
     pydantic
   ];
 
+<<<<<<< HEAD
   __darwinAllowLocalNetworking = true;
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nativeCheckInputs = [
     aresponses
     pytest-aiohttp

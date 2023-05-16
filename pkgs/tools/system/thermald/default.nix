@@ -18,7 +18,11 @@
 
 stdenv.mkDerivation rec {
   pname = "thermald";
+<<<<<<< HEAD
   version = "2.5.4";
+=======
+  version = "2.5.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   outputs = [ "out" "devdoc" ];
 
@@ -26,7 +30,11 @@ stdenv.mkDerivation rec {
     owner = "intel";
     repo = "thermal_daemon";
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-5UILKdv+HhilY+NsbMwqqvYjbM3mAeec/lX+CGY0CPE=";
+=======
+    sha256 = "sha256-Ex3HSGJJDPPciX0Po9TpySVPUL257wz1ZjaLCa2igCM=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

@@ -7,11 +7,19 @@
 # Optional dependencies
 , enableApp ? with stdenv.hostPlatform; !isWindows && !isStatic
 , c-aresMinimal, libev, openssl, zlib
+<<<<<<< HEAD
 , enableGetAssets ? false, libxml2
 , enableHpack ? false, jansson
 , enableHttp3 ? false, ngtcp2, nghttp3, quictls
 , enableJemalloc ? false, jemalloc
 , enablePython ? false, python3, ncurses
+=======
+, enableAsioLib ? false, boost
+, enableGetAssets ? false, libxml2
+, enableHpack ? false, jansson
+, enableJemalloc ? false, jemalloc
+, enablePython ? false, python3Packages, ncurses
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 # Unit tests ; we have to set TZDIR, which is a GNUism.
 , enableTests ? stdenv.hostPlatform.isGnu, cunit, tzdata
@@ -27,11 +35,15 @@
 
 assert enableGetAssets -> enableApp;
 assert enableHpack -> enableApp;
+<<<<<<< HEAD
 assert enableHttp3 -> enableApp;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 assert enableJemalloc -> enableApp;
 
 stdenv.mkDerivation rec {
   pname = "nghttp2";
+<<<<<<< HEAD
   version = "1.54.0";
 
   src = fetchurl {
@@ -51,14 +63,44 @@ stdenv.mkDerivation rec {
     ++ lib.optionals (enableJemalloc) [ jemalloc ]
     ++ lib.optionals (enableHttp3) [ ngtcp2 nghttp3 quictls ]
     ++ lib.optionals (enablePython) [ python3 ];
+=======
+  version = "1.51.0";
+
+  src = fetchurl {
+    url = "https://github.com/${pname}/${pname}/releases/download/v${version}/${pname}-${version}.tar.bz2";
+    sha256 = "sha256-6z6m9bYMbT7b8GXgT0NOjtYpGlyxoHkZxBcwqx/MAOA=";
+  };
+
+  outputs = [ "bin" "out" "dev" "lib" ]
+    ++ lib.optionals (enablePython) [ "python" ];
+
+  nativeBuildInputs = [ pkg-config ]
+    ++ lib.optionals (enableApp) [ installShellFiles ]
+    ++ lib.optionals (enablePython) [ python3Packages.cython ];
+
+  buildInputs = lib.optionals enableApp [ c-aresMinimal libev openssl zlib ]
+    ++ lib.optionals (enableAsioLib) [ boost ]
+    ++ lib.optionals (enableGetAssets) [ libxml2 ]
+    ++ lib.optionals (enableHpack) [ jansson ]
+    ++ lib.optionals (enableJemalloc) [ jemalloc ]
+    ++ lib.optionals (enablePython) [ python3Packages.python ncurses python3Packages.setuptools ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   enableParallelBuilding = true;
 
   configureFlags = [
     "--disable-examples"
     (lib.enableFeature enableApp "app")
+<<<<<<< HEAD
     (lib.enableFeature enableHttp3 "http3")
   ];
+=======
+  ] ++ lib.optionals (enableAsioLib) [ "--enable-asio-lib" "--with-boost-libdir=${boost}/lib" ]
+    ++ lib.optionals (enablePython) [
+      "--enable-python-bindings"
+      "--with-cython=${python3Packages.cython}/bin/cython"
+    ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   # Unit tests require CUnit and setting TZDIR environment variable
   doCheck = enableTests;
@@ -67,6 +109,7 @@ stdenv.mkDerivation rec {
     export TZDIR=${tzdata}/share/zoneinfo
   '';
 
+<<<<<<< HEAD
   postInstall = lib.optionalString (enableApp) ''
     installShellCompletion --bash doc/bash_completion/{h2load,nghttp,nghttpd,nghttpx}
   '' + lib.optionalString (!enableApp) ''
@@ -75,10 +118,27 @@ stdenv.mkDerivation rec {
     patchShebangs $out/share/nghttp2
   '' + lib.optionalString (!enablePython) ''
     rm -r $out/share
+=======
+  preInstall = lib.optionalString (enablePython) ''
+    mkdir -p $out/${python3Packages.python.sitePackages}
+    # convince installer it's ok to install here
+    export PYTHONPATH="$PYTHONPATH:$out/${python3Packages.python.sitePackages}"
+  '';
+  postInstall = lib.optionalString (enablePython) ''
+    mkdir -p $python/${python3Packages.python.sitePackages}
+    mv $out/${python3Packages.python.sitePackages}/* $python/${python3Packages.python.sitePackages}
+    rm -r $out/lib
+  '' + lib.optionalString (enableApp) ''
+    installShellCompletion --bash doc/bash_completion/{h2load,nghttp,nghttpd,nghttpx}
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '';
 
   passthru.tests = {
     inherit curl libsoup;
+<<<<<<< HEAD
+=======
+    python-nghttp2 = python3Packages.nghttp2;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   meta = with lib; {

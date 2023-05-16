@@ -611,6 +611,9 @@ in {
     (mkRenamedOptionModule [ "services" "gitlab-runner" "sessionServer" "advertiseAddress" ] [ "services" "gitlab-runner" "settings" "session_server" "advertise_address" ] )
     (mkRenamedOptionModule [ "services" "gitlab-runner" "sessionServer" "sessionTimeout" ] [ "services" "gitlab-runner" "settings" "session_server" "session_timeout" ] )
   ];
+<<<<<<< HEAD
 
   meta.maintainers = teams.gitlab.members;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }

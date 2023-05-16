@@ -57,11 +57,19 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "cardboard";
+<<<<<<< HEAD
   version = "unstable=2021-05-10";
 
   src = fetchFromGitLab {
     owner = "cardboardwm";
     repo = "cardboard";
+=======
+  version = "0.pre+unstable=2021-05-10";
+
+  src = fetchFromGitLab {
+    owner = "cardboardwm";
+    repo = pname;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     rev = "b54758d85164fb19468f5ca52588ebea576cd027";
     hash = "sha256-Kn5NyQSDyX7/nn2bKZPnsuepkoppi5XIkdu7IDy5r4w=";
   };
@@ -73,7 +81,10 @@ stdenv.mkDerivation rec {
     pkg-config
     unzip
   ];
+<<<<<<< HEAD
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   buildInputs = [
     ffmpeg
     libGL
@@ -94,12 +105,21 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
+<<<<<<< HEAD
     pushd subprojects
     tar xvf ${cereal-wrap}
     unzip ${cereal-wrapdb}
     cp -r ${expected-wrap} ${expected-wrap.name}
     cp -r ${wlroots-wrap} ${wlroots-wrap.name}
     popd
+=======
+    (cd subprojects
+     tar xvf ${cereal-wrap}
+     unzip ${cereal-wrapdb}
+     cp -r ${expected-wrap} ${expected-wrap.name}
+     cp -r ${wlroots-wrap} ${wlroots-wrap.name}
+    )
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     sed '1i#include <functional>' -i cardboard/ViewAnimation.h # gcc12
   '';
@@ -113,6 +133,7 @@ stdenv.mkDerivation rec {
 
   env.NIX_CFLAGS_COMPILE = toString [ "-Wno-error=array-bounds" ]; # gcc12
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://gitlab.com/cardboardwm/cardboard";
     description = "A scrollable, tiling Wayland compositor inspired on PaperWM";
@@ -123,5 +144,13 @@ stdenv.mkDerivation rec {
       "CVE-2020-11104 (inherited from cereal 1.3.0)"
       "CVE-2020-11105 (inherited from cereal 1.3.0)"
     ];
+=======
+  meta = with lib; {
+    homepage = "https://gitlab.com/cardboardwm/cardboard";
+    description = "A scrollable, tiling Wayland compositor inspired on PaperWM";
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ AndersonTorres ];
+    platforms = with platforms; unix;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

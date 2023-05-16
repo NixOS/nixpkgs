@@ -1,7 +1,10 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+<<<<<<< HEAD
 , pythonAtLeast
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , isPy27
 , futures ? null
 , gevent
@@ -16,10 +19,13 @@ buildPythonPackage rec {
   version = "2.4.0";
   format = "setuptools";
 
+<<<<<<< HEAD
   # incompatible with asyncio changes in 3.11 and deprecated
   # https://github.com/opentracing/specification/issues/163
   disabled = pythonAtLeast "3.11";
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   src = fetchPypi {
     inherit pname version;
     sha256 = "a173117e6ef580d55874734d1fa7ecb6f3655160b8b8974a2a1e98e5ec9c840d";

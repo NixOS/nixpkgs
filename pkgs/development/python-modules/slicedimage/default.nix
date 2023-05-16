@@ -8,7 +8,11 @@
 , pathlib
 , numpy
 , requests
+<<<<<<< HEAD
 , scikit-image
+=======
+, scikitimage
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , six
 , pytestCheckHook
 , isPy27
@@ -32,7 +36,11 @@ buildPythonPackage rec {
     packaging
     numpy
     requests
+<<<<<<< HEAD
     scikit-image
+=======
+    scikitimage
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     six
     tifffile
   ] ++ lib.optionals isPy27 [ pathlib enum34 ];
@@ -50,6 +58,10 @@ buildPythonPackage rec {
     description = "Library to access sliced imaging data";
     homepage = "https://github.com/spacetx/slicedimage";
     license = licenses.mit;
+<<<<<<< HEAD
     maintainers = [ ];
+=======
+    maintainers = [ maintainers.costrouc ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

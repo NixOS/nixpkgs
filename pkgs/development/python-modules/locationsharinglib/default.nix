@@ -13,14 +13,22 @@
 
 buildPythonPackage rec {
   pname = "locationsharinglib";
+<<<<<<< HEAD
   version = "5.0.2";
+=======
+  version = "5.0.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
+<<<<<<< HEAD
     hash = "sha256-ydwtcIJ2trQ6xg2r5kU/ogvjdBwUZhYhBdc6nBmSGcg=";
+=======
+    hash = "sha256-KT/q1UIJ/DzGqz8T08MXG9UCstAcpDydM4Tkn33pruI=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [

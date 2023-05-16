@@ -10,7 +10,11 @@ stdenv.mkDerivation rec {
     sha256 = "1bqh3vam7y805xrmdw7k0ckcfwjg88wypxgv3njkkwyn7kxnfnqp";
   };
 
+<<<<<<< HEAD
   sourceRoot = "${src.name}/tags/${version}";
+=======
+  sourceRoot = "welkin-r9638/tags/${version}";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ jre ];

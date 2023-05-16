@@ -9,7 +9,10 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
     imports = [ ./common/user-account.nix ];
 
     environment.systemPackages = with pkgs; [
+<<<<<<< HEAD
       wget
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       curl
       pgadmin4-desktopmode
     ];
@@ -41,10 +44,15 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
     with subtest("Check pgadmin module"):
       machine.wait_for_unit("postgresql")
       machine.wait_for_unit("pgadmin")
+<<<<<<< HEAD
       machine.wait_until_succeeds("curl -sS localhost:5051")
       machine.wait_until_succeeds("curl -sS localhost:5051/login | grep \"<title>pgAdmin 4</title>\" > /dev/null")
       # check for missing support files (css, js etc). Should catch not-generated files during build. See e.g. https://github.com/NixOS/nixpkgs/pull/229184
       machine.succeed("wget -nv --level=1 --spider --recursive localhost:5051/login")
+=======
+      machine.wait_until_succeeds("curl -s localhost:5051")
+      machine.wait_until_succeeds("curl -s localhost:5051/login | grep \"<title>pgAdmin 4</title>\" > /dev/null")
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     # pgadmin4 module saves the configuration to /etc/pgadmin/config_system.py
     # pgadmin4-desktopmode tries to read that as well. This normally fails with a PermissionError, as the config file
@@ -54,8 +62,13 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
     # because of the wrong config for desktopmode.
     with subtest("Check pgadmin standalone desktop mode"):
       machine.execute("sudo -u alice pgadmin4 >&2 &", timeout=60)
+<<<<<<< HEAD
       machine.wait_until_succeeds("curl -sS localhost:5050")
       machine.wait_until_succeeds("curl -sS localhost:5050/browser/ | grep \"<title>pgAdmin 4</title>\" > /dev/null")
       machine.succeed("wget -nv --level=1 --spider --recursive localhost:5050/browser")
+=======
+      machine.wait_until_succeeds("curl -s localhost:5050")
+      machine.wait_until_succeeds("curl -s localhost:5050/browser/ | grep \"<title>pgAdmin 4</title>\" > /dev/null")
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '';
 })

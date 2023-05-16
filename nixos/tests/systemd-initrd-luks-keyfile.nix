@@ -14,8 +14,11 @@ in {
     virtualisation = {
       emptyDiskImages = [ 512 ];
       useBootLoader = true;
+<<<<<<< HEAD
       # Necessary to boot off the encrypted disk because it requires a init script coming from the Nix store
       mountHostNixStore = true;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       useEFIBoot = true;
     };
     boot.loader.systemd-boot.enable = true;
@@ -34,7 +37,10 @@ in {
         };
       };
       virtualisation.rootDevice = "/dev/mapper/cryptroot";
+<<<<<<< HEAD
       virtualisation.fileSystems."/".autoFormat = true;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       boot.initrd.secrets."/etc/cryptroot.key" = keyfile;
     };
   };

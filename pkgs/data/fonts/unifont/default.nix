@@ -4,16 +4,28 @@
 
 stdenv.mkDerivation rec {
   pname = "unifont";
+<<<<<<< HEAD
   version = "15.0.04";
 
   ttf = fetchurl {
     url = "mirror://gnu/unifont/${pname}-${version}/${pname}-${version}.ttf";
     hash = "sha256-kkSbEvWBrvcnBgHDdKJjpSYF6BJDEwmYSxVQbPkQ6so=";
+=======
+  version = "15.0.01";
+
+  ttf = fetchurl {
+    url = "mirror://gnu/unifont/${pname}-${version}/${pname}-${version}.ttf";
+    hash = "sha256-KZRZvDTpFbHBjdOGd3OfQdCyptebk/SAzRV+8k2mdas=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   pcf = fetchurl {
     url = "mirror://gnu/unifont/${pname}-${version}/${pname}-${version}.pcf.gz";
+<<<<<<< HEAD
     hash = "sha256-rdzJuOkXYojgm5VfpshtJuCJYM0/iS+HnWMXEDsLQPg=";
+=======
+    hash = "sha256-77rkcU0YajAVugWHnGscaFvcFTgWm+1WPLknQZvTjN0=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ libfaketime xorg.fonttosfnt xorg.mkfontscale ];

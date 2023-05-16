@@ -1,14 +1,26 @@
+<<<<<<< HEAD
 { lib, stdenv, fetchFromGitHub, ninja, makeWrapper, CoreFoundation, Foundation, ditto }:
 
 stdenv.mkDerivation rec {
   pname = "lua-language-server";
   version = "3.7.0";
+=======
+{ lib, stdenv, fetchFromGitHub, ninja, makeWrapper, CoreFoundation, Foundation }:
+
+stdenv.mkDerivation rec {
+  pname = "lua-language-server";
+  version = "3.6.19";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "luals";
     repo = "lua-language-server";
     rev = version;
+<<<<<<< HEAD
     sha256 = "sha256-kUtiMNwJJN7ZAktSC7tZriAcTDFhvcfSwBE6KFzceMg=";
+=======
+    sha256 = "sha256-AKPCS2w8PAW2jm5pquCouIHHq5PYFtrPWtIM5N6VAwA=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     fetchSubmodules = true;
   };
 
@@ -20,7 +32,10 @@ stdenv.mkDerivation rec {
   buildInputs = lib.optionals stdenv.isDarwin [
     CoreFoundation
     Foundation
+<<<<<<< HEAD
     ditto
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   postPatch = ''
@@ -81,7 +96,10 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/LuaLS/lua-language-server/blob/${version}/changelog.md";
     license = licenses.mit;
     maintainers = with maintainers; [ figsoda sei40kr ];
+<<<<<<< HEAD
     mainProgram = "lua-language-server";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     platforms = platforms.linux ++ platforms.darwin;
   };
 }

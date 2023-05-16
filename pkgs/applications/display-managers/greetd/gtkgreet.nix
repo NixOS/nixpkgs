@@ -1,7 +1,10 @@
 { stdenv
 , lib
 , fetchFromSourcehut
+<<<<<<< HEAD
 , wrapGAppsHook
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , pkg-config
 , cmake
 , meson
@@ -9,7 +12,10 @@
 , gtk3
 , gtk-layer-shell
 , json_c
+<<<<<<< HEAD
 , librsvg
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , scdoc
 }:
 
@@ -29,7 +35,10 @@ stdenv.mkDerivation rec {
     meson
     ninja
     cmake
+<<<<<<< HEAD
     wrapGAppsHook
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   buildInputs = [
@@ -37,7 +46,10 @@ stdenv.mkDerivation rec {
     gtk-layer-shell
     json_c
     scdoc
+<<<<<<< HEAD
     librsvg
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   mesonFlags = [
@@ -53,6 +65,9 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ luc65r ];
     platforms = platforms.linux;
+<<<<<<< HEAD
     mainProgram = "gtkgreet";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

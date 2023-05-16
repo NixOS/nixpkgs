@@ -150,11 +150,14 @@ stdenv.mkDerivation {
       done)> $out/lib/factor/ld.so.cache
 
     make -j$NIX_BUILD_CORES linux-x86-64
+<<<<<<< HEAD
     printf "First build from upstream boot image\n" >&2
     ./build.sh bootstrap
     printf "Rebuild boot image\n" >&2
     ./factor -script -e='"unix-x86.64" USING: system bootstrap.image memory ; make-image save 0 exit'
     printf "Second build from local boot image\n" >&2
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     ./build.sh bootstrap
     runHook postBuild
   '';
@@ -219,6 +222,9 @@ stdenv.mkDerivation {
     license = licenses.bsd2;
     maintainers = with maintainers; [ vrthra spacefrogg ];
     platforms = lib.intersectLists platforms.x86_64 platforms.linux;
+<<<<<<< HEAD
     mainProgram = "factor";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

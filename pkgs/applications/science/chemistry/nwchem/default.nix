@@ -3,7 +3,10 @@
 , pkgs
 , fetchFromGitHub
 , fetchurl
+<<<<<<< HEAD
 , mpiCheckPhaseHook
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , which
 , openssh
 , gcc
@@ -191,15 +194,27 @@ stdenv.mkDerivation rec {
   doCheck = false;
 
   doInstallCheck = true;
+<<<<<<< HEAD
   nativeCheckInputs = [ mpiCheckPhaseHook ];
   installCheckPhase = ''
     runHook preInstallCheck
+=======
+  installCheckPhase = ''
+    export OMP_NUM_THREADS=1
+
+    # Fix to make mpich run in a sandbox
+    export HYDRA_IFACE=lo
+    export OMPI_MCA_rmaps_base_oversubscribe=1
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     # run a simple water test
     mpirun -np 2 $out/bin/nwchem $out/share/nwchem/QA/tests/h2o/h2o.nw > h2o.out
     grep "Total SCF energy" h2o.out  | grep 76.010538
+<<<<<<< HEAD
 
     runHook postInstallCheck
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '';
 
   passthru = { inherit mpi; };

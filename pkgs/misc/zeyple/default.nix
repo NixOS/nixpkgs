@@ -13,7 +13,11 @@ python3Packages.buildPythonApplication rec {
     sha256 = "0r2d1drg2zvwmn3zg0qb32i9mh03r5di9q1yszx23r32rsax9mxh";
   };
 
+<<<<<<< HEAD
   propagatedBuildInputs = [ python3Packages.gpgme ];
+=======
+  propagatedBuildInputs = [ python3Packages.pygpgme ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   installPhase = ''
     install -Dm755 $src/zeyple/zeyple.py $out/bin/zeyple
   '';

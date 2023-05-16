@@ -4,9 +4,13 @@
 , alsa-lib
 , cmake
 , ffmpeg
+<<<<<<< HEAD
 , fribidi
 , game-music-emu
 , libXdmcp
+=======
+, game-music-emu
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , libXv
 , libass
 , libcddb
@@ -14,7 +18,10 @@
 , libpulseaudio
 , libsidplayfp
 , libva
+<<<<<<< HEAD
 , libxcb
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , pkg-config
 , qtbase
 , qttools
@@ -26,14 +33,23 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "qmplay2";
+<<<<<<< HEAD
   version = "23.08.22";
+=======
+  version = "23.02.05";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "zaps166";
     repo = "QMPlay2";
     rev = finalAttrs.version;
+<<<<<<< HEAD
     fetchSubmodules = true;
     hash = "sha256-Ug7WAqZ+BxspQUXweL/OnVBGCsU60DOWNexbi0GpDo0=";
+=======
+    sha256 = "sha256-ZDpUgD9qTvjopGFVrwTBSEmrXn+4aKq2zeqoTnXwmI8=";
+    fetchSubmodules = true;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [
@@ -45,9 +61,13 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     alsa-lib
     ffmpeg
+<<<<<<< HEAD
     fribidi
     game-music-emu
     libXdmcp
+=======
+    game-music-emu
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     libXv
     libass
     libcddb
@@ -55,7 +75,10 @@ stdenv.mkDerivation (finalAttrs: {
     libpulseaudio
     libsidplayfp
     libva
+<<<<<<< HEAD
     libxcb
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     qtbase
     qttools
     taglib
@@ -79,7 +102,11 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     changelog = "https://github.com/zaps166/QMPlay2/releases/tag/${finalAttrs.version}";
     license = lib.licenses.lgpl3Plus;
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [ AndersonTorres kashw2 ];
+=======
+    maintainers = with lib.maintainers; [ AndersonTorres ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     platforms = lib.platforms.linux;
   };
 })

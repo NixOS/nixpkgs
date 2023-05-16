@@ -15,7 +15,11 @@
 
 buildPythonPackage rec {
   pname = "yabadaba";
+<<<<<<< HEAD
   version = "0.2.1";
+=======
+  version = "0.2.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -24,7 +28,11 @@ buildPythonPackage rec {
     owner = "usnistgov";
     repo = pname;
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-D3dzO+vhf1utBMmX2RUgvxuaPneFnXDseqfz6CMDmv4=";
+=======
+    hash = "sha256-PXmkRbCFag2WAtodwgb3kX+hRDZdCKKi/YwAMSQePxQ=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [

@@ -11,9 +11,14 @@
 , setuptools
 , six
 , libgpuarray
+<<<<<<< HEAD
 , config
 , cudaSupport ? config.cudaSupport, cudaPackages ? { }
 , cudnnSupport ? cudaSupport
+=======
+, cudaSupport ? false, cudaPackages ? {}
+, cudnnSupport ? false
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 let

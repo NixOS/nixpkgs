@@ -39,6 +39,7 @@
 # allow docbook option docs if `true`. only markdown documentation is allowed when set to
 # `false`, and a different renderer may be used with different bugs and performance
 # characteristics but (hopefully) indistinguishable output.
+<<<<<<< HEAD
 # deprecated since 23.11.
 # TODO remove in a while.
 , allowDocBook ? false
@@ -50,6 +51,14 @@
 
 assert markdownByDefault && ! allowDocBook;
 
+=======
+, allowDocBook ? true
+# whether lib.mdDoc is required for descriptions to be read as markdown.
+# !!! when this is eventually flipped to true, `lib.doRename` should also default to emitting Markdown
+, markdownByDefault ? false
+}:
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 let
   rawOpts = lib.optionAttrSetToDocList options;
   transformedOpts = map transformOptions rawOpts;
@@ -139,6 +148,7 @@ in rec {
       TOUCH_IF_DB=$dst/.used-docbook \
       python ${./mergeJSON.py} \
         ${lib.optionalString warningsAreErrors "--warnings-are-errors"} \
+<<<<<<< HEAD
         $baseJSON $options \
         > $dst/options.json
 
@@ -150,6 +160,12 @@ in rec {
       exit 1
     fi
 
+=======
+        ${if allowDocBook then "--warn-on-docbook" else "--error-on-docbook"} \
+        $baseJSON $options \
+        > $dst/options.json
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       brotli -9 < $dst/options.json > $dst/options.json.br
 
       mkdir -p $out/nix-support
@@ -157,6 +173,7 @@ in rec {
       echo "file json-br $dst/options.json.br" >> $out/nix-support/hydra-build-products
     '';
 
+<<<<<<< HEAD
   optionsDocBook = lib.warn "optionsDocBook is deprecated since 23.11 and will be removed in 24.05"
     (pkgs.runCommand "options-docbook.xml" {
       nativeBuildInputs = [
@@ -172,4 +189,40 @@ in rec {
         ${optionsJSON}/share/doc/nixos/options.json \
         "$out"
     '');
+=======
+  optionsUsedDocbook = pkgs.runCommand "options-used-docbook" {} ''
+    if [ -e ${optionsJSON}/share/doc/nixos/.used-docbook ]; then
+      echo 1
+    else
+      echo 0
+    fi >"$out"
+  '';
+
+  optionsDocBook = pkgs.runCommand "options-docbook.xml" {
+    nativeBuildInputs = [
+      pkgs.nixos-render-docs
+    ];
+  } ''
+    nixos-render-docs -j $NIX_BUILD_CORES options docbook \
+      --manpage-urls ${pkgs.path + "/doc/manpage-urls.json"} \
+      --revision ${lib.escapeShellArg revision} \
+      --document-type ${lib.escapeShellArg documentType} \
+      --varlist-id ${lib.escapeShellArg variablelistId} \
+      --id-prefix ${lib.escapeShellArg optionIdPrefix} \
+      ${lib.optionalString markdownByDefault "--markdown-by-default"} \
+      ${optionsJSON}/share/doc/nixos/options.json \
+      options.xml
+
+    if grep /nixpkgs/nixos/modules options.xml; then
+      echo "The manual appears to depend on the location of Nixpkgs, which is bad"
+      echo "since this prevents sharing via the NixOS channel.  This is typically"
+      echo "caused by an option default that refers to a relative path (see above"
+      echo "for hints about the offending path)."
+      exit 1
+    fi
+
+    ${pkgs.libxslt.bin}/bin/xsltproc \
+      -o "$out" ${./postprocess-option-descriptions.xsl} options.xml
+  '';
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }

@@ -3,14 +3,83 @@
 , patches
 , dart
 , src
+<<<<<<< HEAD
 , lib
 , stdenv
 , darwin
+=======
+, includedEngineArtifacts ? {
+    common = [
+      "flutter_patched_sdk"
+      "flutter_patched_sdk_product"
+    ];
+    platform = {
+      android = lib.optionalAttrs stdenv.hostPlatform.isx86_64
+        ((lib.genAttrs [ "arm" "arm64" "x64" ] (architecture: [ "profile" "release" ])) // { x86 = [ "jit-release" ]; });
+      linux = lib.optionals stdenv.hostPlatform.isLinux
+        (lib.genAttrs ((lib.optional stdenv.hostPlatform.isx86_64 "x64") ++ (lib.optional stdenv.hostPlatform.isAarch64 "arm64"))
+          (architecture: [ "debug" "profile" "release" ]));
+    };
+  }
+
+, lib
+, callPackage
+, stdenv
+, runCommandLocal
+, symlinkJoin
+, lndir
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , git
 , which
 }:
 
 let
+<<<<<<< HEAD
+=======
+  engineArtifactDirectory =
+    let
+      engineArtifacts = callPackage ./engine-artifacts { inherit engineVersion; };
+    in
+    runCommandLocal "flutter-engine-artifacts-${version}" { }
+      (
+        let
+          mkCommonArtifactLinkCommand = { artifact }:
+            ''
+              mkdir -p $out/common
+              ${lndir}/bin/lndir -silent ${artifact} $out/common
+            '';
+          mkPlatformArtifactLinkCommand = { artifact, os, architecture, variant ? null }:
+            let
+              artifactDirectory = "${os}-${architecture}${lib.optionalString (variant != null) "-${variant}"}";
+            in
+            ''
+              mkdir -p $out/${artifactDirectory}
+                ${lndir}/bin/lndir -silent ${artifact} $out/${artifactDirectory}
+            '';
+        in
+        ''
+          ${
+            builtins.concatStringsSep "\n"
+              ((map (name: mkCommonArtifactLinkCommand {
+                artifact = engineArtifacts.common.${name};
+              }) (if includedEngineArtifacts ? common then includedEngineArtifacts.common else [ ])) ++
+              (builtins.foldl' (commands: os: commands ++
+                (builtins.foldl' (commands: architecture: commands ++
+                  (builtins.foldl' (commands: variant: commands ++
+                    (map (artifact: mkPlatformArtifactLinkCommand {
+                      inherit artifact os architecture variant;
+                    }) engineArtifacts.platform.${os}.${architecture}.variants.${variant}))
+                  (map (artifact: mkPlatformArtifactLinkCommand {
+                    inherit artifact os architecture;
+                  }) engineArtifacts.platform.${os}.${architecture}.base)
+                  includedEngineArtifacts.platform.${os}.${architecture}))
+                [] (builtins.attrNames includedEngineArtifacts.platform.${os})))
+              [] (builtins.attrNames (if includedEngineArtifacts ? platform then includedEngineArtifacts.platform else { }))))
+          }
+        ''
+      );
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   unwrapped =
     stdenv.mkDerivation {
       name = "flutter-${version}-unwrapped";
@@ -19,8 +88,11 @@ let
       outputs = [ "out" "cache" ];
 
       buildInputs = [ git ];
+<<<<<<< HEAD
       nativeBuildInputs = [ ]
         ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.DarwinTools ];
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
       preConfigure = ''
         if [ "$(< bin/internal/engine.version)" != '${engineVersion}' ]; then
@@ -72,8 +144,13 @@ let
 
         # Certain prebuilts should be replaced with Nix-built (or at least Nix-patched) equivalents.
         rm -r \
+<<<<<<< HEAD
           $FLUTTER_ROOT/bin/cache/dart-sdk \
           $FLUTTER_ROOT/bin/cache/artifacts/engine
+=======
+          bin/cache/dart-sdk \
+          bin/cache/artifacts/engine
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       '';
 
       installPhase = ''
@@ -82,13 +159,21 @@ let
         mkdir -p $out
         cp -r . $out
         ln -sf ${dart} $out/bin/cache/dart-sdk
+<<<<<<< HEAD
+=======
+        ln -sf ${engineArtifactDirectory} $out/bin/cache/artifacts/engine
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
         runHook postInstall
       '';
 
       doInstallCheck = true;
+<<<<<<< HEAD
       nativeInstallCheckInputs = [ which ]
         ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.DarwinTools ];
+=======
+      nativeInstallCheckInputs = [ which ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       installCheckPhase = ''
         runHook preInstallCheck
 
@@ -101,7 +186,11 @@ let
       '';
 
       passthru = {
+<<<<<<< HEAD
         inherit dart engineVersion;
+=======
+        inherit dart;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         # The derivation containing the original Flutter SDK files.
         # When other derivations wrap this one, any unmodified files
         # found here should be included as-is, for tooling compatibility.
@@ -116,7 +205,11 @@ let
         '';
         homepage = "https://flutter.dev";
         license = licenses.bsd3;
+<<<<<<< HEAD
         platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
+=======
+        platforms = [ "x86_64-linux" "aarch64-linux" ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         maintainers = with maintainers; [ babariviere ericdallo FlafyDev gilice hacker1024 ];
       };
     };

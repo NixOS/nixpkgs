@@ -17,14 +17,24 @@
 , zlib
 }:
 
+<<<<<<< HEAD
 stdenv.mkDerivation (finalAttrs:{
+=======
+
+stdenv.mkDerivation rec {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pname = "fs-uae";
   version = "3.1.66";
 
   src = fetchFromGitHub {
     owner = "FrodeSolheim";
+<<<<<<< HEAD
     repo = "fs-uae";
     rev = "v${finalAttrs.version}";
+=======
+    repo = pname;
+    rev = "v${version}";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     hash = "sha256-zPVRPazelmNaxcoCStB0j9b9qwQDTgv3O7Bg3VlW9ys=";
   };
 
@@ -48,6 +58,7 @@ stdenv.mkDerivation (finalAttrs:{
     zlib
   ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://fs-uae.net";
     description = "An accurate, customizable Amiga Emulator";
@@ -62,3 +73,19 @@ stdenv.mkDerivation (finalAttrs:{
     platforms = [ "i686-linux" "x86_64-linux" ];
   };
 })
+=======
+  meta = with lib; {
+    homepage = "https://fs-uae.net";
+    description = "An accurate, customizable Amiga Emulator";
+    longDescription = ''
+      FS-UAE integrates the most accurate Amiga emulation code available
+      from WinUAE. FS-UAE emulates A500, A500+, A600, A1200, A1000, A3000
+      and A4000 models, but you can tweak the hardware configuration and
+      create customized Amigas.
+    '';
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ AndersonTorres ];
+    platforms = [ "i686-linux" "x86_64-linux" ];
+  };
+}
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)

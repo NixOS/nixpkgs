@@ -45,11 +45,19 @@ in
 
 stdenv.mkDerivation rec {
   pname = "libreswan";
+<<<<<<< HEAD
   version = "4.12";
 
   src = fetchurl {
     url = "https://download.libreswan.org/${pname}-${version}.tar.gz";
     hash = "sha256-roWr5BX3vs9LaiuYl+FxLyflqsnDXfvd28zgrX39mfc=";
+=======
+  version = "4.10";
+
+  src = fetchurl {
+    url = "https://download.libreswan.org/${pname}-${version}.tar.gz";
+    sha256 = "sha256-WpQAwlqO26B0IEJvtV3Lqv2qNwLlsPLBkgWmxWckins=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   strictDeps = true;

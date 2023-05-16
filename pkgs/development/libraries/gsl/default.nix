@@ -40,6 +40,10 @@ stdenv.mkDerivation rec {
       fitting.  There are over 1000 functions in total with an
       extensive test suite.
     '';
+<<<<<<< HEAD
     platforms = lib.platforms.all;
+=======
+    platforms = lib.platforms.unix;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

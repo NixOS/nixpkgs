@@ -27,8 +27,12 @@ please refer to the
 { pkgs, lib, config, ... }:
 let
   fqdn = "${config.networking.hostName}.${config.networking.domain}";
+<<<<<<< HEAD
   baseUrl = "https://${fqdn}";
   clientConfig."m.homeserver".base_url = baseUrl;
+=======
+  clientConfig."m.homeserver".base_url = "https://${fqdn}";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   serverConfig."m.server" = "${fqdn}:443";
   mkWellKnown = data: ''
     add_header Content-Type application/json;
@@ -98,11 +102,14 @@ in {
   services.matrix-synapse = {
     enable = true;
     settings.server_name = config.networking.domain;
+<<<<<<< HEAD
     # The public base URL value must match the `base_url` value set in `clientConfig` above.
     # The default value here is based on `server_name`, so if your `server_name` is different
     # from the value of `fqdn` above, you will likely run into some mismatched domain names
     # in client applications.
     settings.public_baseurl = baseUrl;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     settings.listeners = [
       { port = 8008;
         bind_addresses = [ "::1" ];

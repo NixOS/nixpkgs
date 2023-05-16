@@ -1,8 +1,14 @@
 { lib
 , stdenv
+<<<<<<< HEAD
 , aiohttp
 , aioresponses
 , buildPythonPackage
+=======
+, buildPythonPackage
+, aiohttp
+, aioresponses
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , cachetools
 , cryptography
 , fetchPypi
@@ -27,14 +33,22 @@
 
 buildPythonPackage rec {
   pname = "google-auth";
+<<<<<<< HEAD
   version = "2.21.0";
+=======
+  version = "2.17.3";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
+<<<<<<< HEAD
     hash = "sha256-so6ASOV3J+fPDlvY5ydrISrvR2ZUoJURNUqoJ1O0XGY=";
+=======
+    hash = "sha256-zjEeK8WLEw/d8xbfV8mzlDwqe09uwx3pZjqTM+QGTvw=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [
@@ -42,7 +56,10 @@ buildPythonPackage rec {
     pyasn1-modules
     rsa
     six
+<<<<<<< HEAD
     urllib3
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   passthru.optional-dependencies = {
@@ -76,6 +93,10 @@ buildPythonPackage rec {
     pytest-localserver
     pytestCheckHook
     responses
+<<<<<<< HEAD
+=======
+    urllib3
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ] ++ passthru.optional-dependencies.aiohttp
   # `cryptography` is still required on `aarch64-darwin` for `tests/crypt/*`
   ++ (if (stdenv.isDarwin && stdenv.isAarch64) then [ cryptography ] else passthru.optional-dependencies.enterprise_cert)
@@ -105,6 +126,10 @@ buildPythonPackage rec {
     homepage = "https://github.com/googleapis/google-auth-library-python";
     changelog = "https://github.com/googleapis/google-auth-library-python/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
+<<<<<<< HEAD
     maintainers = with maintainers; [ ];
+=======
+    maintainers = with maintainers; [ SuperSandro2000 ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

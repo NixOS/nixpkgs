@@ -14,7 +14,11 @@ buildGoModule rec {
     hash = "sha256-ZJG5KlIlzaztG27NoSlILj0I94cm2xZq28qx1ebrSmc=";
   };
 
+<<<<<<< HEAD
   vendorHash = "sha256-NzgFwPvuEZ2/Ks5dZNRJjzzCNPRGelQP/A6eZltqkmM=";
+=======
+  vendorSha256 = "sha256-NzgFwPvuEZ2/Ks5dZNRJjzzCNPRGelQP/A6eZltqkmM=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   meta = with lib; {
     description = "Web crawler for the discovery of endpoints and assets";

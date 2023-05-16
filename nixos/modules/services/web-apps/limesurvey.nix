@@ -226,7 +226,11 @@ in
 
     services.phpfpm.pools.limesurvey = {
       inherit user group;
+<<<<<<< HEAD
       phpPackage = pkgs.php81;
+=======
+      phpPackage = pkgs.php80;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       phpEnv.DBENGINE = "${cfg.database.dbEngine}";
       phpEnv.LIMESURVEY_CONFIG = "${limesurveyConfig}";
       settings = {
@@ -288,8 +292,13 @@ in
       environment.LIMESURVEY_CONFIG = limesurveyConfig;
       script = ''
         # update or install the database as required
+<<<<<<< HEAD
         ${pkgs.php81}/bin/php ${pkg}/share/limesurvey/application/commands/console.php updatedb || \
         ${pkgs.php81}/bin/php ${pkg}/share/limesurvey/application/commands/console.php install admin password admin admin@example.com verbose
+=======
+        ${pkgs.php80}/bin/php ${pkg}/share/limesurvey/application/commands/console.php updatedb || \
+        ${pkgs.php80}/bin/php ${pkg}/share/limesurvey/application/commands/console.php install admin password admin admin@example.com verbose
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       '';
       serviceConfig = {
         User = user;

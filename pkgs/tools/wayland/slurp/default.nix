@@ -47,6 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
   mesonFlags = [ (lib.mesonEnable "man-pages" buildDocs) ];
 
   meta = with lib; {
+<<<<<<< HEAD
     changelog = "https://github.com/emersion/slurp/releases/tag/v${finalAttrs.version}";
     description = "Select a region in a Wayland compositor";
     inherit (wayland.meta) platforms;
@@ -54,5 +55,13 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.mit;
     mainProgram = "slurp";
     maintainers = with maintainers; [ buffet ];
+=======
+    homepage = "https://github.com/emersion/slurp";
+    description = "Select a region in a Wayland compositor";
+    changelog = "https://github.com/emersion/slurp/releases/tag/v${finalAttrs.version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ buffet ];
+    inherit (wayland.meta) platforms;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 })

@@ -5,7 +5,11 @@
 
 python3.pkgs.buildPythonPackage rec {
   pname = "hid-tools";
+<<<<<<< HEAD
   version = "0.4";
+=======
+  version = "0.3.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   format = "setuptools";
 
@@ -14,7 +18,11 @@ python3.pkgs.buildPythonPackage rec {
     owner = "libevdev";
     repo = "hid-tools";
     rev = version;
+<<<<<<< HEAD
     hash = "sha256-pxU1BvB+rjc5sptafMGnWi+vWPNDyCyUv8gTWg6z5hU=";
+=======
+    sha256 = "r496SKBGgHriIhriWYhhCSiChQUKhnHT/lEx9sEoT/0=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = with python3.pkgs; [

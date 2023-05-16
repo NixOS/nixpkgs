@@ -4,6 +4,10 @@
 , fetchFromGitHub
 , pkg-config
 , openssl
+<<<<<<< HEAD
+=======
+, llvmPackages
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , rocksdb
 , testers
 , surrealdb
@@ -13,12 +17,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "surrealdb";
+<<<<<<< HEAD
   version = "1.0.0";
+=======
+  version = "1.0.0-beta.9";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "surrealdb";
     repo = "surrealdb";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-rBqg8tMcdc9VavYQDiKQwNp2IxYvpDNB/Qb74uiMmO4=";
   };
 
@@ -28,6 +37,14 @@ rustPlatform.buildRustPackage rec {
   postPatch = ''
     rm .cargo/config.toml
   '';
+=======
+    sha256 = "sha256-GgRsRGYnaE2TssoXdubEuMEbLjM4woE3vxTxSlufquU=";
+  };
+
+  cargoSha256 = "sha256-eLJ+sxsK45pkgNUYrNuUOAqutwIjvEhGGjsvwGzfVKI=";
+
+  LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   PROTOC = "${protobuf}/bin/protoc";
   PROTOC_INCLUDE = "${protobuf}/include";
@@ -37,7 +54,12 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [
     pkg-config
+<<<<<<< HEAD
     rustPlatform.bindgenHook
+=======
+    # needed on top of LIBCLANG_PATH to compile rquickjs
+    llvmPackages.clang
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   buildInputs = [ openssl ]

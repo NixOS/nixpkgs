@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 { lib, pythonPackages, fetchFromGitHub, makeWrapper
+=======
+{ lib, pythonPackages, fetchFromGitHub, makeWrapper, git
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , sshfs-fuse, torsocks, sshuttle, conntrack-tools , openssh, coreutils
 , iptables, bash }:
 

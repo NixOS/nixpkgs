@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 { lib, stdenv, fetchurl, electron_10, makeDesktopItem, makeWrapper, asar, autoPatchelfHook}:
+=======
+{ lib, stdenv, fetchurl, electron_10, makeDesktopItem, makeWrapper, nodePackages, autoPatchelfHook}:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 let
   electron = electron_10;
@@ -15,7 +19,11 @@ stdenv.mkDerivation rec {
   dontBuild = true;
   dontStrip = true;
 
+<<<<<<< HEAD
   nativeBuildInputs = [ autoPatchelfHook makeWrapper asar ];
+=======
+  nativeBuildInputs = [ autoPatchelfHook makeWrapper nodePackages.asar ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   installPhase = ''
     mkdir -p $out/bin $out/opt/teleprompter $out/share/applications
     asar e resources/app.asar $out/opt/teleprompter/resources/app.asar.unpacked

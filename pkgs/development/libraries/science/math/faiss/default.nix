@@ -5,7 +5,11 @@
 , stdenv
 , cmake
 , cudaPackages ? { }
+<<<<<<< HEAD
 , cudaSupport ? config.cudaSupport
+=======
+, cudaSupport ? config.cudaSupport or false
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , nvidia-thrust
 , useThrustSourceBuild ? true
 , pythonSupport ? true
@@ -131,7 +135,11 @@ stdenv.mkDerivation {
   '';
 
   # Need buildPythonPackage for this one
+<<<<<<< HEAD
   # pythonImportsCheck = [
+=======
+  # pythonCheckImports = [
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   #   "faiss"
   # ];
 

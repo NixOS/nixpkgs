@@ -7,14 +7,24 @@
 
 stdenv.mkDerivation rec {
   pname = "mint-artwork";
+<<<<<<< HEAD
   version = "1.7.5";
+=======
+  version = "1.7.3";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchurl {
     urls = [
       "http://packages.linuxmint.com/pool/main/m/mint-artwork/mint-artwork_${version}.tar.xz"
+<<<<<<< HEAD
       "https://web.archive.org/web/20230601120342/http://packages.linuxmint.com/pool/main/m/mint-artwork/mint-artwork_${version}.tar.xz"
     ];
     hash = "sha256-yd2FyGAznXGnHJLkMsSNqIx0sbKHl3cNMr7tpue7BlA=";
+=======
+      "https://web.archive.org/web/20221206154838/http://packages.linuxmint.com/pool/main/m/mint-artwork/mint-artwork_${version}.tar.xz"
+    ];
+    hash = "sha256-lusYlmTL71VTGSJFssuIZVu7xJMuZQ7wj2rMtO1lhZ8=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

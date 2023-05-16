@@ -293,7 +293,11 @@ let
             script = ''
               # Remove Dead Interfaces
               echo "Removing old bridge ${n}..."
+<<<<<<< HEAD
               ip link show dev "${n}" >/dev/null 2>&1 && ip link del "${n}"
+=======
+              ip link show "${n}" >/dev/null 2>&1 && ip link del "${n}"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
               echo "Adding bridge ${n}..."
               ip link add name "${n}" type bridge
@@ -396,7 +400,11 @@ let
             '';
             postStop = ''
               echo "Cleaning Open vSwitch ${n}"
+<<<<<<< HEAD
               echo "Shutting down internal ${n} interface"
+=======
+              echo "Shuting down internal ${n} interface"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
               ip link set ${n} down || true
               echo "Deleting flows for ${n}"
               ovs-ofctl --protocols=${v.openFlowVersion} del-flows ${n} || true
@@ -459,7 +467,11 @@ let
             path = [ pkgs.iproute2 ];
             script = ''
               # Remove Dead Interfaces
+<<<<<<< HEAD
               ip link show dev "${n}" >/dev/null 2>&1 && ip link delete "${n}"
+=======
+              ip link show "${n}" >/dev/null 2>&1 && ip link delete "${n}"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
               ip link add link "${v.interface}" name "${n}" type macvlan \
                 ${optionalString (v.mode != null) "mode ${v.mode}"}
               ip link set "${n}" up
@@ -517,7 +529,11 @@ let
             path = [ pkgs.iproute2 ];
             script = ''
               # Remove Dead Interfaces
+<<<<<<< HEAD
               ip link show dev "${n}" >/dev/null 2>&1 && ip link delete "${n}"
+=======
+              ip link show "${n}" >/dev/null 2>&1 && ip link delete "${n}"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
               ip link add name "${n}" type sit \
                 ${optionalString (v.remote != null) "remote \"${v.remote}\""} \
                 ${optionalString (v.local != null) "local \"${v.local}\""} \
@@ -551,7 +567,11 @@ let
             path = [ pkgs.iproute2 ];
             script = ''
               # Remove Dead Interfaces
+<<<<<<< HEAD
               ip link show dev "${n}" >/dev/null 2>&1 && ip link delete "${n}"
+=======
+              ip link show "${n}" >/dev/null 2>&1 && ip link delete "${n}"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
               ip link add name "${n}" type ${v.type} \
                 ${optionalString (v.remote != null) "remote \"${v.remote}\""} \
                 ${optionalString (v.local != null) "local \"${v.local}\""} \
@@ -579,7 +599,11 @@ let
             path = [ pkgs.iproute2 ];
             script = ''
               # Remove Dead Interfaces
+<<<<<<< HEAD
               ip link show dev "${n}" >/dev/null 2>&1 && ip link delete "${n}"
+=======
+              ip link show "${n}" >/dev/null 2>&1 && ip link delete "${n}"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
               ip link add link "${v.interface}" name "${n}" type vlan id "${toString v.id}"
 
               # We try to bring up the logical VLAN interface. If the master

@@ -10,7 +10,11 @@
 
 buildPythonPackage rec {
   pname = "paste";
+<<<<<<< HEAD
   version = "3.5.3";
+=======
+  version = "3.5.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -19,7 +23,11 @@ buildPythonPackage rec {
     owner = "cdent";
     repo = "paste";
     rev = "refs/tags/${version}";
+<<<<<<< HEAD
     hash = "sha256-W02UY9P3qjIFhR/DCpQZyvjEmJYl0MvMcGt9N4xgbaY=";
+=======
+    hash = "sha256-lpQMzrRpcG5TqWm/FJn4oo9TV8Skf0ypZVeQC4y8p1U=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   postPatch = ''
@@ -35,10 +43,22 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+<<<<<<< HEAD
   preCheck = ''
     # needs to be modified after Sat, 1 Jan 2005 12:00:00 GMT
     touch tests/urlparser_data/secured.txt
   '';
+=======
+  disabledTests = [
+    # broken test
+    "test_file_cache"
+    # requires network connection
+    "test_proxy_to_website"
+  ] ++ lib.optionals (pythonAtLeast "3.11") [
+    # https://github.com/cdent/paste/issues/72
+    "test_form"
+  ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   pythonNamespaces = [
     "paste"

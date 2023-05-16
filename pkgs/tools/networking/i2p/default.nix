@@ -13,7 +13,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "i2p";
+<<<<<<< HEAD
   version = "2.3.0";
+=======
+  version = "2.2.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchurl {
     urls = map (mirror: "${mirror}/${finalAttrs.version}/i2psource_${finalAttrs.version}.tar.bz2") [
@@ -21,7 +25,11 @@ stdenv.mkDerivation (finalAttrs: {
       "https://files.i2p-projekt.de"
       "https://download.i2p2.no/releases"
     ];
+<<<<<<< HEAD
     sha256 = "sha256-oKj7COnHLq7yLxVbnJqg6pD7Mx0rvPdvgmSfC57+X1s=";
+=======
+    sha256 = "sha256-5LoGpuKTWheZDwV6crjXnkUqJVamzv5QEtXdY0Zv7r8=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   buildInputs = [ jdk ant gettext which ];
@@ -64,6 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
       fromSource
       binaryBytecode # source bundles dependencies as jars
     ];
+<<<<<<< HEAD
     license = with licenses; [
       asl20
       boost
@@ -79,6 +88,9 @@ stdenv.mkDerivation (finalAttrs: {
       mit
       publicDomain
     ];
+=======
+    license = licenses.gpl2;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     platforms = [ "x86_64-linux" "i686-linux" ];
     maintainers = with maintainers; [ joelmo ];
   };

@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 { lib, stdenv, hspell }:
+=======
+{ stdenv, hspell }:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 let
   dict = variant: a: stdenv.mkDerivation ({
@@ -8,7 +12,11 @@ let
     meta = hspell.meta // {
       broken = true;
       description = "${variant} Hebrew dictionary";
+<<<<<<< HEAD
     } // (lib.optionalAttrs (a ? meta) a.meta);
+=======
+    } // (if a ? meta then a.meta else {});
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   } // (removeAttrs a ["meta"]));
 in
 {

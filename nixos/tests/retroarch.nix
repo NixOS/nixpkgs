@@ -30,8 +30,13 @@ import ./make-test-python.nix ({ pkgs, ... }:
       in ''
         with subtest("Wait for login"):
             start_all()
+<<<<<<< HEAD
             machine.wait_for_file("/tmp/xauth_*")
             machine.succeed("xauth merge /tmp/xauth_*")
+=======
+            machine.wait_for_file("${user.home}/.Xauthority")
+            machine.succeed("xauth merge ${user.home}/.Xauthority")
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
         with subtest("Check RetroArch started"):
             machine.wait_until_succeeds("pgrep retroarch")

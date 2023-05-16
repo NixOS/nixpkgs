@@ -7,11 +7,19 @@
 
 buildPythonPackage rec {
   pname = "jupyter-lsp";
+<<<<<<< HEAD
   version = "2.2.0";
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-jrvLUzrbQeXWNeuP6ClWsKr78P1EO2xL+pBu3uuGNaE=";
+=======
+  version = "2.0.0";
+
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-89n1mdSOCTpLq/vawZTDAzLmJIzkoD1z+nEviMd55Rk=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [

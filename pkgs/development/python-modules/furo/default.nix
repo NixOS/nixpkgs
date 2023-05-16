@@ -2,7 +2,10 @@
 , buildPythonPackage
 , pythonOlder
 , fetchPypi
+<<<<<<< HEAD
 , pythonRelaxDepsHook
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , sphinx
 , beautifulsoup4
 , sphinx-basic-ng
@@ -10,7 +13,11 @@
 
 buildPythonPackage rec {
   pname = "furo";
+<<<<<<< HEAD
   version = "2023.7.26";
+=======
+  version = "2023.3.27";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "wheel";
 
   disable = pythonOlder "3.7";
@@ -19,6 +26,7 @@ buildPythonPackage rec {
     inherit pname version format;
     dist = "py3";
     python = "py3";
+<<<<<<< HEAD
     hash = "sha256-HHk2kp7FfF3ezHyF8H+oss5Ta1yJE3dkzKUIvpDhHv0=";
   };
 
@@ -30,6 +38,11 @@ buildPythonPackage rec {
     "sphinx"
   ];
 
+=======
+    hash = "sha256-SrK+JUotXlJ5LQynk6EsNVgt0JiXIopt1HiF2r1clSE=";
+  };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   propagatedBuildInputs = [
     sphinx
     beautifulsoup4

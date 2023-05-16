@@ -9,7 +9,11 @@
 
 buildPythonPackage rec {
   pname = "twitchapi";
+<<<<<<< HEAD
   version = "3.11.0";
+=======
+  version = "3.10.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   disabled = pythonOlder "3.7";
 
@@ -18,7 +22,11 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "twitchAPI";
     inherit version;
+<<<<<<< HEAD
     hash = "sha256-TkQzF32nt89uBvC6aj/b5f2DQkOVDz7UyeUXRyVYumM=";
+=======
+    hash = "sha256-zYcAuPVbPAqGpLwRfHozM6RTpH9CkIyjlKi9Jtqp9ug=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [

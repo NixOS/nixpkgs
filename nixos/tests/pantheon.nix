@@ -3,7 +3,13 @@ import ./make-test-python.nix ({ pkgs, lib, ...} :
 {
   name = "pantheon";
 
+<<<<<<< HEAD
   meta.maintainers = lib.teams.pantheon.members;
+=======
+  meta = with lib; {
+    maintainers = teams.pantheon.members;
+  };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nodes.machine = { ... }:
 
@@ -60,9 +66,12 @@ import ./make-test-python.nix ({ pkgs, lib, ...} :
     with subtest("Open elementary terminal"):
         machine.execute("su - ${user.name} -c 'DISPLAY=:0 io.elementary.terminal >&2 &'")
         machine.wait_for_window("io.elementary.terminal")
+<<<<<<< HEAD
 
     with subtest("Check if gala has ever coredumped"):
         machine.fail("coredumpctl --json=short | grep gala")
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         machine.sleep(20)
         machine.screenshot("screen")
   '';

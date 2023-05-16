@@ -4,6 +4,18 @@
 , gdk-pixbuf, wrapGAppsHook
 }:
 
+<<<<<<< HEAD
+=======
+let why3_1_5 = why3.overrideAttrs (o: rec {
+    version = "1.5.1";
+    src = fetchurl {
+      url = "https://why3.gitlabpages.inria.fr/releases/${o.pname}-${version}.tar.gz";
+      hash = "sha256-vNR7WeiSvg+763GcovoZBFDfncekJMeqNegP4fVw06I=";
+    };
+  }); in
+let why3 = why3_1_5; in
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 let
   mkocamlpath = p: "${p}/lib/ocaml/${ocamlPackages.ocaml.version}/site-lib";
   runtimeDeps = with ocamlPackages; [
@@ -36,6 +48,7 @@ in
 
 stdenv.mkDerivation rec {
   pname = "frama-c";
+<<<<<<< HEAD
   version = "27.1";
   slang   = "Cobalt";
 
@@ -44,17 +57,43 @@ stdenv.mkDerivation rec {
     hash = "sha256-WxNXShaliXHCeQm+6Urn83sX2JeFK0DHaKPU4uCeOdI=";
   };
 
+=======
+  version = "26.1";
+  slang   = "Iron";
+
+  src = fetchurl {
+    url  = "https://frama-c.com/download/frama-c-${version}-${slang}.tar.gz";
+    hash = "sha256-UT7ajIyu8e5vzrz2oBKDDrtZqUacgUP/TRi0/kz9Qkg=";
+  };
+
+  patches = [
+    (fetchpatch {
+      name = "fixes-yojson-2_1-support.patch";
+      url = "https://git.frama-c.com/pub/frama-c/-/commit/647eace02ed8dac46e75452898c3470f82576818.patch";
+      hash = "sha256-XfLi4kW1Y2MCLjHHQZAD8DvXvfZuDH3OKd9hlTV0XCw=";
+    })
+  ];
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   postConfigure = "patchShebangs src/plugins/eva/gen-api.sh";
 
   strictDeps = true;
 
+<<<<<<< HEAD
   nativeBuildInputs = [ wrapGAppsHook ] ++ (with ocamlPackages; [ ocaml findlib dune_3 menhir ]);
+=======
+  nativeBuildInputs = [ wrapGAppsHook ] ++ (with ocamlPackages; [ ocaml findlib dune_3 ]);
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   buildInputs = with ocamlPackages; [
     dune-site dune-configurator
     ltl2ba ocamlgraph yojson menhirLib camlzip
     lablgtk3 lablgtk3-sourceview3 coq graphviz zarith apron why3 mlgmpidl doxygen
+<<<<<<< HEAD
     ppx_deriving ppx_import ppx_deriving_yaml ppx_deriving_yojson
+=======
+    ppx_deriving ppx_import ppx_deriving_yojson
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     gdk-pixbuf
   ];
 

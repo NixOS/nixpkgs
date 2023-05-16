@@ -24,7 +24,11 @@ in
             patches = [
               (super.fetchpatch {
                 url = "https://dwm.suckless.org/patches/steam/dwm-steam-6.2.diff";
+<<<<<<< HEAD
                 sha256 = "sha256-f3lffBjz7+0Khyn9c9orzReoLTqBb/9gVGshYARGdVc=";
+=======
+                sha256 = "1ld1z3fh6p5f8gr62zknx3axsinraayzxw3rz1qwg73mx2zk5y1f";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
               })
             ];
           })
@@ -45,7 +49,10 @@ in
       { name = "dwm";
         start =
           ''
+<<<<<<< HEAD
             export _JAVA_AWT_WM_NONREPARENTING=1
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
             dwm &
             waitPID=$!
           '';

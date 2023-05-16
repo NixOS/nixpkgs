@@ -22,7 +22,11 @@
 
 stdenv.mkDerivation rec {
   pname = "xapp";
+<<<<<<< HEAD
   version = "2.6.1";
+=======
+  version = "2.4.3";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   outputs = [ "out" "dev" ];
 
@@ -30,6 +34,7 @@ stdenv.mkDerivation rec {
     owner = "linuxmint";
     repo = pname;
     rev = version;
+<<<<<<< HEAD
     hash = "sha256-ZxIPiDLcMHEmlnrImctI2ZfH3AIOjB4m/RPGipJ7koM=";
   };
 
@@ -37,6 +42,11 @@ stdenv.mkDerivation rec {
   # https://github.com/linuxmint/xapp/issues/169#issuecomment-1574962071
   mesonBuildType = "debugoptimized";
 
+=======
+    hash = "sha256-j04vy/uVWY08Xdxqfo2MMUAlqsUMJTsAt67+XjkdhFg=";
+  };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nativeBuildInputs = [
     meson
     ninja
@@ -44,10 +54,17 @@ stdenv.mkDerivation rec {
     python3
     vala
     wrapGAppsHook
+<<<<<<< HEAD
     gobject-introspection
   ];
 
   buildInputs = [
+=======
+  ];
+
+  buildInputs = [
+    gobject-introspection
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     (python3.withPackages (ps: with ps; [
       pygobject3
       setproctitle # mate applet
@@ -74,15 +91,31 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     chmod +x schemas/meson_install_schemas.py # patchShebangs requires executable file
+<<<<<<< HEAD
     patchShebangs schemas/meson_install_schemas.py
+=======
+
+    patchShebangs \
+      libxapp/g-codegen.py \
+      meson-scripts/g-codegen.py \
+      schemas/meson_install_schemas.py
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     # Patch pastebin & inxi location
     sed "s|/usr/bin/pastebin|$out/bin/pastebin|" -i scripts/upload-system-info
     sed "s|'inxi'|'${inxi}/bin/inxi'|" -i scripts/upload-system-info
+<<<<<<< HEAD
   '';
 
   # Fix gtk3 module target dir. Proper upstream solution should be using define_variable.
   PKG_CONFIG_GTK__3_0_LIBDIR = "${placeholder "out"}/lib";
+=======
+
+    # Patch gtk3 module target dir
+    substituteInPlace libxapp/meson.build \
+         --replace "gtk3_dep.get_pkgconfig_variable('libdir')" "'$out'"
+  '';
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   meta = with lib; {
     homepage = "https://github.com/linuxmint/xapp";

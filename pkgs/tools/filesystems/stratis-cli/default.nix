@@ -6,14 +6,22 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "stratis-cli";
+<<<<<<< HEAD
   version = "3.5.3";
   format = "pyproject";
+=======
+  version = "3.5.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "stratis-storage";
     repo = pname;
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-YoPi2AtP6qZPMrlxbDAD0sDEKrSBHLLRcHbNLxlXXCk=";
+=======
+    hash = "sha256-aDWHXKmlKKJo+ckW1vA0bm4q5z2g/Zx5frVDR6Kwgjw=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = with python3Packages; [
@@ -33,6 +41,10 @@ python3Packages.buildPythonApplication rec {
   disabledTestPaths = [
     # tests below require dbus daemon
     "tests/whitebox/integration"
+<<<<<<< HEAD
+=======
+    "tests/whitebox/monkey_patching"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   pythonImportsCheck = [ "stratis_cli" ];

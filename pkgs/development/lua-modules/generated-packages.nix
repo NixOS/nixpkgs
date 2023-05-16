@@ -2416,6 +2416,7 @@ buildLuarocksPackage {
   };
 }) {};
 
+<<<<<<< HEAD
 magick = callPackage({ fetchgit, buildLuarocksPackage, lua }:
 buildLuarocksPackage {
   pname = "magick";
@@ -2447,6 +2448,8 @@ buildLuarocksPackage {
   };
 }) {};
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 markdown = callPackage({ buildLuarocksPackage, luaAtLeast, fetchgit, luaOlder, lua }:
 buildLuarocksPackage {
   pname = "markdown";

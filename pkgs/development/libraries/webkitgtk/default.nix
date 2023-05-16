@@ -71,7 +71,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "webkitgtk";
+<<<<<<< HEAD
   version = "2.40.5";
+=======
+  version = "2.40.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   name = "${finalAttrs.pname}-${finalAttrs.version}+abi=${if lib.versionAtLeast gtk3.version "4.0" then "6.0" else "4.${if lib.versions.major libsoup.version == "2" then "0" else "1"}"}";
 
   outputs = [ "out" "dev" "devdoc" ];
@@ -82,7 +86,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://webkitgtk.org/releases/webkitgtk-${finalAttrs.version}.tar.xz";
+<<<<<<< HEAD
     hash = "sha256-feBRomNmhiHZGmGl6xw3cdGnzskABD1K/vBsMmwWA38=";
+=======
+    hash = "sha256-ZOUmmE+M0hYe8DrpSa+ZwAL/Mz1hXmOGtGAWSjwbfvY=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   patches = lib.optionals stdenv.isLinux [
@@ -173,11 +181,19 @@ stdenv.mkDerivation (finalAttrs: {
       install -Dm444 "${lib.getDev apple_sdk.sdk}"/include/libproc.h "$out"/include/libproc.h
     ''
   ) ++ lib.optionals stdenv.isLinux [
+<<<<<<< HEAD
+=======
+    bubblewrap
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     libseccomp
     libmanette
     wayland
     libwpe
     libwpe-fdo
+<<<<<<< HEAD
+=======
+    xdg-dbus-proxy
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ] ++ lib.optionals systemdSupport [
     systemd
   ] ++ lib.optionals enableGeoLocation [
@@ -202,11 +218,14 @@ stdenv.mkDerivation (finalAttrs: {
     "-DUSE_LIBHYPHEN=OFF"
     "-DUSE_SOUP2=${cmakeBool (lib.versions.major libsoup.version == "2")}"
     "-DUSE_LIBSECRET=${cmakeBool withLibsecret}"
+<<<<<<< HEAD
   ] ++ lib.optionals stdenv.isLinux [
     # Have to be explicitly specified when cross.
     # https://github.com/WebKit/WebKit/commit/a84036c6d1d66d723f217a4c29eee76f2039a353
     "-DBWRAP_EXECUTABLE=${lib.getExe bubblewrap}"
     "-DDBUS_PROXY_EXECUTABLE=${lib.getExe xdg-dbus-proxy}"
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ] ++ lib.optionals stdenv.isDarwin [
     "-DENABLE_GAMEPAD=OFF"
     "-DENABLE_GTKDOC=OFF"

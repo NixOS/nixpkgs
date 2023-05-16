@@ -9,6 +9,7 @@ let
 in {
   options = {
     services.jenkins.jobBuilder = {
+<<<<<<< HEAD
       enable = mkEnableOption (mdDoc ''
         the Jenkins Job Builder (JJB) service. It
         allows defining jobs for Jenkins in a declarative manner.
@@ -23,6 +24,27 @@ in {
         Please see the Jenkins Job Builder documentation for more info:
         <https://jenkins-job-builder.readthedocs.io/>
       '');
+=======
+      enable = mkOption {
+        type = types.bool;
+        default = false;
+        description = lib.mdDoc ''
+          Whether or not to enable the Jenkins Job Builder (JJB) service. It
+          allows defining jobs for Jenkins in a declarative manner.
+
+          Jobs managed through the Jenkins WebUI (or by other means) are left
+          unchanged.
+
+          Note that it really is declarative configuration; if you remove a
+          previously defined job, the corresponding job directory will be
+          deleted.
+
+          Please see the Jenkins Job Builder documentation for more info:
+          [
+          http://docs.openstack.org/infra/jenkins-job-builder/](http://docs.openstack.org/infra/jenkins-job-builder/)
+        '';
+      };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
       accessUser = mkOption {
         default = "admin";

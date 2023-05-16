@@ -13,13 +13,21 @@
 }:
 buildGoModule rec {
   pname = "cosign";
+<<<<<<< HEAD
   version = "2.2.0";
+=======
+  version = "2.0.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "sigstore";
     repo = pname;
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-VE/rm85KZs3JWMsidIlUGJ9JrtZ4VBI+Go1yujq7z1s=";
+=======
+    hash = "sha256-jJHLCN9hEQy4ijFm6g2E9WvTT43kvPhdRW1aczvEcFs=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   buildInputs =
@@ -28,7 +36,11 @@ buildGoModule rec {
 
   nativeBuildInputs = [ pkg-config installShellFiles ];
 
+<<<<<<< HEAD
   vendorHash = "sha256-mpT4/BS/NofMueBbwhh4v6pNEONEpWM9RDKuYZ+9BtA=";
+=======
+  vendorHash = "sha256-X5CY8U3IgxWD3zpb1f9R9Xk/25x1zxfYXkvXbelFBQc=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   subPackages = [
     "cmd/cosign"

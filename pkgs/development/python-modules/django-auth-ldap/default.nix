@@ -17,14 +17,22 @@
 
 buildPythonPackage rec {
   pname = "django-auth-ldap";
+<<<<<<< HEAD
   version = "4.5.0";
+=======
+  version = "4.3.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "pyproject";
 
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
+<<<<<<< HEAD
     hash = "sha256-B6L+NbQCUIluErjWLROW0eQ3AEYwNwN2BJPOzXkfqI8=";
+=======
+    hash = "sha256-eItbHucAVGgdf659CF3qp28vpvZMyf49152u9iwvYSE=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

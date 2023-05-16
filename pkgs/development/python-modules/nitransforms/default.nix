@@ -13,12 +13,20 @@
 
 buildPythonPackage rec {
   pname = "nitransforms";
+<<<<<<< HEAD
   version = "23.0.1";
+=======
+  version = "22.0.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
+<<<<<<< HEAD
     hash = "sha256-Lty4aPzSlwRJSqCXeIVICF+gudYqto1OS4cVZyrB2nY=";
+=======
+    hash = "sha256-iV9TEIGogIfbj+fmOGftoQqEdtZiewbHEw3hYlMEP4c=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ pythonRelaxDepsHook ];

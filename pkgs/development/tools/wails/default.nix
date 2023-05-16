@@ -14,16 +14,27 @@
 
 buildGoModule rec {
   pname = "wails";
+<<<<<<< HEAD
   version = "2.6.0";
+=======
+  version = "2.4.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "wailsapp";
     repo = pname;
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-jY+2I4SOr6gr2MCLrBBE9H0T1sTB13kEb1OJ717kWqg=";
   } + "/v2";
 
   vendorHash = "sha256-56LZQQzfFQTa4fo5bdZtK/VzNDBPyI9hDG4RkP38gcI=";
+=======
+    sha256 = "sha256-ei+bp4fwlxZ9ZiXW/FqpqICXpFxpmOKkZZYW0LxHh1s=";
+  } + "/v2";
+
+  vendorSha256 = "sha256-RiectpUhm24xjgfPZEMDVFSEzPtIjn7L/qC2KE2s5aw=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   proxyVendor = true;
 

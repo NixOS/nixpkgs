@@ -19,11 +19,19 @@
 
 stdenv.mkDerivation rec {
   pname = "gnote";
+<<<<<<< HEAD
   version = "44.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
     hash = "sha256-aWelUGgiMguuGcHrC8dFFmRPnp61TtwslCU+rhDHYE0=";
+=======
+  version = "44.0";
+
+  src = fetchurl {
+    url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
+    hash = "sha256-3DvXkmj+mdTtVmeawHbMnZqq9ieWE403HPCIFffmSS0=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   buildInputs = [

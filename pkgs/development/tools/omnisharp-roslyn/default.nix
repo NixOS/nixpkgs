@@ -11,20 +11,32 @@ let
 in
 let finalPackage = buildDotnetModule rec {
   pname = "omnisharp-roslyn";
+<<<<<<< HEAD
   version = "1.39.8";
+=======
+  version = "1.39.6";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "OmniSharp";
     repo = pname;
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-QjkZg3BsI8oDeEe455GqBpM/3H3b89bRBKDjQIc8cO4=";
+=======
+    sha256 = "6KCHZ5I5OkDaensqHO//owI/nrQkOoF60f/n3YV7jaE=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   projectFile = "src/OmniSharp.Stdio.Driver/OmniSharp.Stdio.Driver.csproj";
   nugetDeps = ./deps.nix;
 
+<<<<<<< HEAD
   dotnet-sdk = sdk_6_0;
   dotnet-runtime = sdk_6_0;
+=======
+  useAppHost = false;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   dotnetInstallFlags = [ "--framework net6.0" ];
   dotnetBuildFlags = [ "--framework net6.0" "--no-self-contained" ];
@@ -40,8 +52,13 @@ let finalPackage = buildDotnetModule rec {
 
   postPatch = ''
     # Relax the version requirement
+<<<<<<< HEAD
     rm global.json
 
+=======
+    substituteInPlace global.json \
+      --replace '7.0.100-rc.1.22431.12' '${sdk_6_0.version}'
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     # Patch the project files so we can compile them properly
     for project in src/OmniSharp.Http.Driver/OmniSharp.Http.Driver.csproj src/OmniSharp.LanguageServerProtocol/OmniSharp.LanguageServerProtocol.csproj src/OmniSharp.Stdio.Driver/OmniSharp.Stdio.Driver.csproj; do
       substituteInPlace $project \
@@ -49,8 +66,29 @@ let finalPackage = buildDotnetModule rec {
     done
   '';
 
+<<<<<<< HEAD
   useDotnetFromEnv = true;
   executables = [ "OmniSharp" ];
+=======
+  dontDotnetFixup = true; # we'll fix it ourselves
+  preFixup = ''
+    # We create a wrapper that will run the OmniSharp dll using the `dotnet`
+    # executable from PATH. Doing it this way allows it to run using newer SDK
+    # versions than it was build with, which allows it to properly find those SDK
+    # versions - OmniSharp only finds SDKs with the same version or newer as
+    # itself. We still provide a fallback, in case no `dotnet` is provided in
+    # PATH
+    mkdir -p "$out/bin"
+
+    cat << EOF > "$out/bin/OmniSharp"
+    #!${stdenv.shell}
+    export PATH="\''${PATH}:${sdk_6_0}/bin"
+    dotnet "$out/lib/omnisharp-roslyn/OmniSharp.dll" "\$@"
+    EOF
+
+    chmod +x "$out/bin/OmniSharp"
+  '';
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   passthru.tests = let
     with-sdk = sdk: runCommand "with-${if sdk ? version then sdk.version else "no"}-sdk"

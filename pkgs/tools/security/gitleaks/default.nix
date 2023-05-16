@@ -8,16 +8,27 @@
 
 buildGoModule rec {
   pname = "gitleaks";
+<<<<<<< HEAD
   version = "8.18.0";
+=======
+  version = "8.16.3";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "zricethezav";
     repo = pname;
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-659wQBv8DuYB4vI+qnBLS9u22kGlg4ne4DyKFoomlOw=";
   };
 
   vendorHash = "sha256-PPEEQ2Bt20UK+mQL59jVnX8HtzCsqW4uRwR3mOdhDis=";
+=======
+    hash = "sha256-WukTYi7iqagOLpx8KATEittlM6OvIfxDYiNTdsotjTY=";
+  };
+
+  vendorHash = "sha256-Ev0/CSpwJDmc+Dvu/bFDzsgsq80rWImJWXNAUqYHgoE=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   ldflags = [
     "-s"

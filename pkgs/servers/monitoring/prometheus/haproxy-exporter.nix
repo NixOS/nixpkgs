@@ -20,5 +20,9 @@ buildGoModule rec {
     homepage = "https://github.com/prometheus/haproxy_exporter";
     license = licenses.asl20;
     maintainers = with maintainers; [ benley ];
+<<<<<<< HEAD
+=======
+    platforms = platforms.unix;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

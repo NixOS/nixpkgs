@@ -21,8 +21,12 @@ stdenv.mkDerivation rec {
   pname = "libportal" + lib.optionalString (variant != null) "-${variant}";
   version = "0.6";
 
+<<<<<<< HEAD
   outputs = [ "out" "dev" ]
     ++ lib.optional (variant != "qt5") "devdoc";
+=======
+  outputs = [ "out" "dev" "devdoc" ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "flatpak";
@@ -63,14 +67,20 @@ stdenv.mkDerivation rec {
     gtk4
   ] ++ lib.optionals (variant == "qt5") [
     libsForQt5.qtbase
+<<<<<<< HEAD
     libsForQt5.qtx11extras
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   mesonFlags = [
     "-Dbackends=${lib.optionalString (variant != null) variant}"
     "-Dvapi=${if variant != "qt5" then "true" else "false"}"
     "-Dintrospection=${if variant != "qt5" then "true" else "false"}"
+<<<<<<< HEAD
     "-Ddocs=${if variant != "qt5" then "true" else "false"}" # requires introspection=true
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   postFixup = ''
@@ -78,9 +88,12 @@ stdenv.mkDerivation rec {
     moveToOutput "share/doc" "$devdoc"
   '';
 
+<<<<<<< HEAD
   # we don't have any binaries
   dontWrapQtApps = true;
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   meta = with lib; {
     description = "Flatpak portal library";
     homepage = "https://github.com/flatpak/libportal";

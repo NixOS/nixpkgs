@@ -25,6 +25,7 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "slint-lsp";
+<<<<<<< HEAD
   version = "1.1.1";
 
   src = fetchCrate {
@@ -33,6 +34,16 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoHash = "sha256-wL46QhY3Cq2KFLETPRhUWb77o1vNrRA2w1NBAtBc0yo=";
+=======
+  version = "1.0.0";
+
+  src = fetchCrate {
+    inherit pname version;
+    sha256 = "sha256-Ua8ENLxmfYv6zF/uihT49ZpphFaC3zS882cttJ/rvc4=";
+  };
+
+  cargoHash = "sha256-IzjOAy9zTtsD4jHjI1oVXBg7Si1AeDNH8ATK4yO8WVw=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nativeBuildInputs = [ cmake pkg-config fontconfig ];
   buildInputs = rpathLibs ++ [ xorg.libxcb.dev ]

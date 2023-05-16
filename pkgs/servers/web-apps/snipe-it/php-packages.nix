@@ -492,6 +492,7 @@ let
         };
       };
     };
+<<<<<<< HEAD
     "laravel/socialite" = {
       targetDir = "";
       src = composerEnv.buildZipPackage {
@@ -502,6 +503,8 @@ let
         };
       };
     };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "laravel/tinker" = {
       targetDir = "";
       src = composerEnv.buildZipPackage {
@@ -632,6 +635,7 @@ let
         };
       };
     };
+<<<<<<< HEAD
     "league/oauth1-client" = {
       targetDir = "";
       src = composerEnv.buildZipPackage {
@@ -642,6 +646,8 @@ let
         };
       };
     };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "league/oauth2-server" = {
       targetDir = "";
       src = composerEnv.buildZipPackage {

@@ -13,7 +13,11 @@
 
 buildPythonPackage rec {
   pname = "invocations";
+<<<<<<< HEAD
   version = "3.3.0";
+=======
+  version = "3.1.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -22,7 +26,11 @@ buildPythonPackage rec {
     owner = "pyinvoke";
     repo = pname;
     rev = "refs/tags/${version}";
+<<<<<<< HEAD
     hash = "sha256-JnhdcxhBNsYgDMcljtGKjOT1agujlao/66QifGuh6I0=";
+=======
+    hash = "sha256-NlYoikv43oD5+Iz2CeeCGG3Fm648UgA3YZQFOfWSy58=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   postPatch = ''

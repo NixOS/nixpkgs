@@ -31,13 +31,21 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "firewalld";
+<<<<<<< HEAD
   version = "2.0.0";
+=======
+  version = "1.3.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "firewalld";
     repo = "firewalld";
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-seOokeFbjCuwUsB6MbrxaeTlPUzwNzkJPbByM9/oDDU=";
+=======
+    sha256 = "sha256-xQQRhrbO1m80cgtO3JD4Nq42lh4HGA+a+yZvFYvbyaQ=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   patches = [
@@ -99,6 +107,10 @@ stdenv.mkDerivation rec {
     description = "Firewall daemon with D-Bus interface";
     homepage = "https://github.com/firewalld/firewalld";
     license = licenses.gpl2Plus;
+<<<<<<< HEAD
     maintainers = with maintainers; [ ];
+=======
+    maintainers = with maintainers; [ SuperSandro2000 ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

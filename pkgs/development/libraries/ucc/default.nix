@@ -1,6 +1,10 @@
 { stdenv, lib, fetchFromGitHub, libtool, automake, autoconf, ucx
+<<<<<<< HEAD
 , config
 , enableCuda ? config.cudaSupport
+=======
+, enableCuda ? false
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , cudatoolkit
 , enableAvx ? stdenv.hostPlatform.avxSupport
 , enableSse41 ? stdenv.hostPlatform.sse4_1Support
@@ -9,13 +13,21 @@
 
 stdenv.mkDerivation rec {
   pname = "ucc";
+<<<<<<< HEAD
   version = "1.2.0";
+=======
+  version = "1.1.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "openucx";
     repo = "ucc";
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-7Mo9zU0sogGyDdWIfTgUPoR5Z8D722asC2y7sHnKbzs=";
+=======
+    sha256 = "sha256-5rf08SXy+vCfnz4zLJ0cMnxwso4WpZOt0jRRAUviVFU=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   enableParallelBuilding = true;

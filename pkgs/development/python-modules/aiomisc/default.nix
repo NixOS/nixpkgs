@@ -22,14 +22,22 @@
 
 buildPythonPackage rec {
   pname = "aiomisc";
+<<<<<<< HEAD
   version = "17.3.21";
+=======
+  version = "17.2.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
+<<<<<<< HEAD
     hash = "sha256-NaSwjU4SfUYeUe/3nWQxfgMYrN4Ez1Dc/PE4ffJmlSs=";
+=======
+    hash = "sha256-e8E2FOsHvTzjnUnF6jNX0skl7szRuC3ByMPfsqtcVno=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

@@ -4,7 +4,11 @@ import ./make-test-python.nix (
   {
     name = "zammad";
 
+<<<<<<< HEAD
     meta.maintainers = with lib.maintainers; [ garbas taeer n0emis ];
+=======
+    meta.maintainers = with lib.maintainers; [ garbas taeer ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     nodes.machine = { config, ... }: {
       services.zammad.enable = true;

@@ -6,6 +6,11 @@
 , texinfo
 }:
 
+<<<<<<< HEAD
+=======
+assert stdenv ? cc && stdenv.cc.isGNU;
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 stdenv.mkDerivation rec {
   pname = "guile-lib";
   version = "0.2.7";
@@ -23,9 +28,13 @@ stdenv.mkDerivation rec {
     texinfo
   ];
 
+<<<<<<< HEAD
   makeFlags = [ "GUILE_AUTO_COMPILE=0" ];
 
   doCheck = !stdenv.isDarwin;
+=======
+  doCheck = true;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   preCheck = ''
     # Make `libgcc_s.so' visible for `pthread_cancel'.
@@ -44,6 +53,10 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ vyp ];
+<<<<<<< HEAD
     platforms = guile.meta.platforms;
+=======
+    platforms = platforms.gnu ++ platforms.linux;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

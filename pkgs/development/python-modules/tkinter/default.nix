@@ -25,6 +25,7 @@ buildPythonPackage {
     patchelf --set-rpath $new_rpath $out/${py.sitePackages}/_tkinter*
   '';
 
+<<<<<<< HEAD
   meta = py.meta // {
     # Based on first sentence from https://docs.python.org/3/library/tkinter.html
     description = "The standard Python interface to the Tcl/Tk GUI toolkit";
@@ -50,5 +51,8 @@ buildPythonPackage {
       documentation for details that are unchanged.
     '';
   };
+=======
+  meta = py.meta;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 }

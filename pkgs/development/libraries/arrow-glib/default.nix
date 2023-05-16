@@ -18,12 +18,19 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
+<<<<<<< HEAD
     gobject-introspection
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   buildInputs = [
     arrow-cpp
     glib
+<<<<<<< HEAD
+=======
+    gobject-introspection
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   meta = with lib; {

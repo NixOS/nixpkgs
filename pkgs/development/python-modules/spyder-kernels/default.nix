@@ -14,14 +14,22 @@
 
 buildPythonPackage rec {
   pname = "spyder-kernels";
+<<<<<<< HEAD
   version = "2.4.4";
+=======
+  version = "2.4.3";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
+<<<<<<< HEAD
     hash = "sha256-NjuwoOFZTLaRY3RkGS9PGZaQlUaSUiQrQ8CSvzBaJd0=";
+=======
+    hash = "sha256-0aNkq4nacW2RZxup2J748ZZgaLug5HB5ekiWU4KcqvM=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [

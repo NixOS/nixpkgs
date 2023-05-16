@@ -1,10 +1,15 @@
+<<<<<<< HEAD
 { lib, stdenv, appleDerivation', launchd, bootstrap_cmds, xnu, xpc, ppp, IOKit, eap8021x, Security
+=======
+{ lib, stdenv, appleDerivation', launchd, bootstrap_cmds, xnu, ppp, IOKit, eap8021x, Security
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , headersOnly ? false }:
 
 appleDerivation' stdenv {
   meta.broken = stdenv.cc.nativeLibc;
 
   nativeBuildInputs = lib.optionals (!headersOnly) [ bootstrap_cmds ];
+<<<<<<< HEAD
   buildInputs = lib.optionals (!headersOnly) [ launchd ppp xpc IOKit eap8021x ];
 
   propagatedBuildInputs = lib.optionals (!headersOnly) [ Security ];
@@ -20,14 +25,71 @@ appleDerivation' stdenv {
   patchPhase = lib.optionalString (!headersOnly) ''
     substituteInPlace SystemConfiguration.fproj/reachability/SCNetworkReachabilityServer_client.c \
       --replace '#include <xpc/private.h>' ""
+=======
+  buildInputs = lib.optionals (!headersOnly) [ launchd ppp IOKit eap8021x ];
+
+  propagatedBuildInputs = lib.optionals (!headersOnly) [ Security ];
+
+  patchPhase = lib.optionalString (!headersOnly) ''
+    HACK=$PWD/hack
+    mkdir $HACK
+    cp -r ${xnu}/Library/Frameworks/System.framework/Versions/B/PrivateHeaders/net $HACK
+
+
+    substituteInPlace SystemConfiguration.fproj/SCNetworkReachabilityInternal.h \
+      --replace '#include <xpc/xpc.h>' ""
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     substituteInPlace SystemConfiguration.fproj/SCNetworkReachability.c \
       --replace ''$'#define\tHAVE_VPN_STATUS' ""
 
+<<<<<<< HEAD
+=======
+    substituteInPlace SystemConfiguration.fproj/reachability/SCNetworkReachabilityServer_client.c \
+      --replace '#include <xpc/xpc.h>' '#include "fake_xpc.h"' \
+      --replace '#include <xpc/private.h>' "" \
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     # Our neutered CoreFoundation doesn't have this function, but I think we'll live...
     substituteInPlace SystemConfiguration.fproj/SCNetworkConnectionPrivate.c \
       --replace 'CFPreferencesAppValueIsForced(serviceID, USER_PREFERENCES_APPLICATION_ID)' 'FALSE' \
       --replace 'CFPreferencesAppValueIsForced(userPrivate->serviceID, USER_PREFERENCES_APPLICATION_ID)' 'FALSE'
+<<<<<<< HEAD
+=======
+
+    cat >SystemConfiguration.fproj/fake_xpc.h <<EOF
+    typedef void *xpc_type_t;
+    typedef void *xpc_object_t;
+    typedef void *xpc_connection_t;
+
+    xpc_type_t xpc_get_type(xpc_object_t object);
+    xpc_object_t xpc_dictionary_create(const char * const *keys, const xpc_object_t *values, size_t count);
+    char *xpc_copy_description(xpc_object_t object);
+    int64_t  xpc_dictionary_get_int64(xpc_object_t xdict, const char *key);
+    uint64_t xpc_dictionary_get_uint64(xpc_object_t xdict, const char *key);
+    void xpc_connection_set_event_handler(xpc_connection_t connection, void *handler);
+
+    extern const struct _xpc_type_s _xpc_type_error;
+    #define XPC_TYPE_ERROR (&_xpc_type_error)
+
+    extern const struct _xpc_type_s _xpc_type_dictionary;
+    #define XPC_TYPE_DICTIONARY (&_xpc_type_dictionary)
+
+    extern const struct _xpc_type_s _xpc_type_array;
+    #define XPC_TYPE_ARRAY (&_xpc_type_array)
+
+    extern const struct _xpc_dictionary_s _xpc_error_connection_interrupted;
+    #define XPC_ERROR_CONNECTION_INTERRUPTED (&_xpc_error_connection_interrupted)
+
+    extern const struct _xpc_dictionary_s _xpc_error_connection_invalid;
+    #define XPC_ERROR_CONNECTION_INVALID (&_xpc_error_connection_invalid)
+
+    extern const char *const _xpc_error_key_description;
+    #define XPC_ERROR_KEY_DESCRIPTION _xpc_error_key_description
+
+    #define XPC_CONNECTION_MACH_SERVICE_PRIVILEGED (1 << 1)
+    EOF
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '';
 
   dontBuild = headersOnly;
@@ -143,9 +205,15 @@ appleDerivation' stdenv {
     $CC -I. -Ihelper -Iderived -F. -c DHCP.c -o DHCP.o
     $CC -I. -Ihelper -Iderived -F. -c moh.c -o moh.o
     $CC -I. -Ihelper -Iderived -F. -c DeviceOnHold.c -o DeviceOnHold.o
+<<<<<<< HEAD
     $CC -I. -Ihelper -Iderived -F. -c LinkConfiguration.c -o LinkConfiguration.o
     $CC -I. -Ihelper -Iderived -F. -c dy_framework.c -o dy_framework.o
     $CC -I. -Ihelper -Iderived -F. -c VLANConfiguration.c -o VLANConfiguration.o
+=======
+    $CC -I. -Ihelper -Iderived -I $HACK -F. -c LinkConfiguration.c -o LinkConfiguration.o
+    $CC -I. -Ihelper -Iderived -F. -c dy_framework.c -o dy_framework.o
+    $CC -I. -Ihelper -Iderived -I $HACK -F. -c VLANConfiguration.c -o VLANConfiguration.o
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     $CC -I. -Ihelper -Iderived -F. -c derived/configUser.c -o configUser.o
     $CC -I. -Ihelper -Iderived -F. -c SCPreferencesPathKey.c -o SCPreferencesPathKey.o
     $CC -I. -Ihelper -Iderived -I../dnsinfo -F. -c derived/shared_dns_infoUser.c -o shared_dns_infoUser.o
@@ -154,8 +222,13 @@ appleDerivation' stdenv {
     $CC -I. -Ihelper -Iderived -F. -c SCNetworkProtocol.c -o SCNetworkProtocol.o
     $CC -I. -Ihelper -Iderived -F. -c SCNetworkService.c -o SCNetworkService.o
     $CC -I. -Ihelper -Iderived -F. -c SCNetworkSet.c -o SCNetworkSet.o
+<<<<<<< HEAD
     $CC -I. -Ihelper -Iderived -F. -c BondConfiguration.c -o BondConfiguration.o
     $CC -I. -Ihelper -Iderived -F. -c BridgeConfiguration.c -o BridgeConfiguration.o
+=======
+    $CC -I. -Ihelper -Iderived -I $HACK -F. -c BondConfiguration.c -o BondConfiguration.o
+    $CC -I. -Ihelper -Iderived -I $HACK -F. -c BridgeConfiguration.c -o BridgeConfiguration.o
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     $CC -I. -Ihelper -Iderived -F. -c helper/SCHelper_client.c -o SCHelper_client.o
     $CC -I. -Ihelper -Iderived -F. -c SCPreferencesKeychainPrivate.c -o SCPreferencesKeychainPrivate.o
     $CC -I. -Ihelper -Iderived -F. -c SCNetworkSignature.c -o SCNetworkSignature.o

@@ -123,7 +123,11 @@ in
         RestrictNamespaces = true;
         RestrictRealtime = true;
         SystemCallArchitectures = "native";
+<<<<<<< HEAD
         SystemCallFilter = [ "@system-service" "~@setuid @keyring" ];
+=======
+        SystemCallFilter = [ "@system-service" "~@privileged @setuid @keyring" ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         UMask = "0066";
       } // lib.optionalAttrs (cfg.port < 1024) {
         AmbientCapabilities = [ "CAP_NET_BIND_SERVICE" ];

@@ -10,6 +10,10 @@
 , wayland-protocols
 , wl-clipboard
 , libxkbcommon
+<<<<<<< HEAD
+=======
+, cmake
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , libressl
 }:
 stdenv.mkDerivation rec {

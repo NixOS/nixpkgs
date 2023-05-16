@@ -88,7 +88,11 @@ mkDerivation rec {
     "-DPLUGIN_STANDARD_QM3C2=ON"
     "-DPLUGIN_STANDARD_QMPLANE=ON"
     "-DPLUGIN_STANDARD_QPOISSON_RECON=ON"
+<<<<<<< HEAD
     "-DPLUGIN_STANDARD_QRANSAC_SD=OFF" # not compatible with GPL, broken on non-x86
+=======
+    "-DPLUGIN_STANDARD_QRANSAC_SD=ON"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "-DPLUGIN_STANDARD_QSRA=ON"
     "-DPLUGIN_STANDARD_QCLOUDLAYERS=ON"
   ];

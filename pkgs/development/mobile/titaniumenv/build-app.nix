@@ -158,7 +158,12 @@ stdenv.mkDerivation ({
 
   installPhase = ''
     ${if target == "android" then ''
+<<<<<<< HEAD
       ${lib.optionalString (!release) ''
+=======
+      ${if release then ""
+      else ''
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         cp "$(ls build/android/bin/*.apk | grep -v '\-unsigned.apk')" $out
       ''}
 

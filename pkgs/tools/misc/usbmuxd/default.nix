@@ -9,13 +9,22 @@
 
 stdenv.mkDerivation rec {
   pname = "usbmuxd";
+<<<<<<< HEAD
   version = "1.1.1+date=2023-05-05";
+=======
+  version = "1.1.1+date=2022-04-04";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "libimobiledevice";
     repo = pname;
+<<<<<<< HEAD
     rev = "01c94c77f59404924f1c46d99c4e5e0c7817281b";
     hash = "sha256-WqbobkzlJ9g5fb9S2QPi3qdpCLx3pxtNlT7qDI63Zp4=";
+=======
+    rev = "2839789bdb581ede7c331b9b4e07e0d5a89d7d18";
+    hash = "sha256-wYW6hI0Ti9gKtk/wxIbdY5KaPMs/p+Ve9ceeRqXihQI=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [
@@ -28,10 +37,13 @@ stdenv.mkDerivation rec {
     libusb1
   ];
 
+<<<<<<< HEAD
   preAutoreconf = ''
     export RELEASE_VERSION=${version}
   '';
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   configureFlags = [
     "--with-udevrulesdir=${placeholder "out"}/lib/udev/rules.d"
     "--with-systemdsystemunitdir=${placeholder "out"}/lib/systemd/system"

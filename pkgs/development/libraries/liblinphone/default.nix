@@ -20,7 +20,11 @@
 
 stdenv.mkDerivation rec {
   pname = "liblinphone";
+<<<<<<< HEAD
   version = "5.2.98";
+=======
+  version = "5.2.17";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitLab {
     domain = "gitlab.linphone.org";
@@ -28,7 +32,11 @@ stdenv.mkDerivation rec {
     group = "BC";
     repo = pname;
     rev = version;
+<<<<<<< HEAD
     hash = "sha256-kQZePMa7MTaSJLEObM8khfSFYLqhlgTcVyKfTPLwKYU=";
+=======
+    hash = "sha256-zxp+jcClfKm+VsylRtydF2rlDCkO+sa9vw8GpwAfKHM=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   postPatch = ''
@@ -40,7 +48,10 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     "-DENABLE_STATIC=NO" # Do not build static libraries
     "-DENABLE_UNIT_TESTS=NO" # Do not build test executables
+<<<<<<< HEAD
     "-DENABLE_STRICT=NO" # Do not build with -Werror
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   buildInputs = [

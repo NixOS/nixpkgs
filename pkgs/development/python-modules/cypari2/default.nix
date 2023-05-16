@@ -24,7 +24,11 @@ buildPythonPackage rec {
     # (https://trac.sagemath.org/ticket/27267). depends on Cython patch.
     (fetchpatch {
       name = "use-trashcan-for-gen.patch";
+<<<<<<< HEAD
       url = "https://raw.githubusercontent.com/sagemath/sage/b6ea17ef8e4d652de0a85047bac8d41e90b25555/build/pkgs/cypari/patches/trashcan.patch";
+=======
+      url = "https://git.sagemath.org/sage.git/plain/build/pkgs/cypari/patches/trashcan.patch?id=b6ea17ef8e4d652de0a85047bac8d41e90b25555";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       hash = "sha256-w4kktWb9/aR9z4CjrUvAMOxEwRN2WkubaKzQttN8rU8=";
     })
   ];
@@ -37,12 +41,19 @@ buildPythonPackage rec {
     export PYTHONPATH="$out/${python.sitePackages}:$PYTHONPATH"
 
     # install "." instead of "*.whl"
+<<<<<<< HEAD
     pip install . --no-index --no-warn-script-location --prefix="$out" --no-cache
+=======
+    ${python.pythonForBuild.pkgs.bootstrapped-pip}/bin/pip install . --no-index --no-warn-script-location --prefix="$out" --no-cache
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '';
 
   nativeBuildInputs = [
     pari
+<<<<<<< HEAD
     python.pythonForBuild.pkgs.pip
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   buildInputs = [

@@ -7,9 +7,15 @@ import ./make-test-python.nix ({ lib, ... }:
   ];
 
   nodes.machine = { config, pkgs, ... }: {
+<<<<<<< HEAD
     fonts.enableDefaultPackages = true; # Background fonts
     fonts.packages = with pkgs; [
       noto-fonts-color-emoji
+=======
+    fonts.enableDefaultFonts = true; # Background fonts
+    fonts.fonts = with pkgs; [
+      noto-fonts-emoji
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       cantarell-fonts
       twitter-color-emoji
       source-code-pro

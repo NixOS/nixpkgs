@@ -13,11 +13,19 @@
 
 stdenv.mkDerivation rec {
   pname = "gnunet-gtk";
+<<<<<<< HEAD
   version = "0.19.0";
 
   src = fetchurl {
     url = "mirror://gnu/gnunet/${pname}-${version}.tar.gz";
     sha256 = "sha256-MwAWs1rHXYlRUcAWX8LnCLTwEOSI68aA0s7uZGgYR3w=";
+=======
+  version = "0.15.0";
+
+  src = fetchurl {
+    url = "mirror://gnu/gnunet/${pname}-${version}.tar.gz";
+    sha256 = "sha256-FLLlqpQ7Bf+oNRUvx7IniVxFusy/tPYxEP2T6VGF7h8=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs= [

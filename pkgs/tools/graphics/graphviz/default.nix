@@ -1,6 +1,10 @@
 { lib
 , stdenv
 , fetchFromGitLab
+<<<<<<< HEAD
+=======
+, fetchpatch
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , autoreconfHook
 , pkg-config
 , cairo
@@ -9,6 +13,10 @@
 , fontconfig
 , gd
 , gts
+<<<<<<< HEAD
+=======
+, libdevil
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , libjpeg
 , libpng
 , libtool
@@ -28,13 +36,21 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "graphviz";
+<<<<<<< HEAD
   version = "8.1.0";
+=======
+  version = "7.1.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitLab {
     owner = "graphviz";
     repo = "graphviz";
     rev = version;
+<<<<<<< HEAD
     hash = "sha256-xTdrtwSpizqf5tNRX0Q0w10mEk4S0X7cmxHj3Us14kY=";
+=======
+    hash = "sha256-y91YiBJT45slK266UGfow7MFdrdMXZQm3FYBWs1YuuE=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [
@@ -52,6 +68,10 @@ stdenv.mkDerivation rec {
     fontconfig
     gd
     gts
+<<<<<<< HEAD
+=======
+    libdevil
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     pango
     bash
   ] ++ optionals withXorg (with xorg; [ libXrender libXaw libXpm ])

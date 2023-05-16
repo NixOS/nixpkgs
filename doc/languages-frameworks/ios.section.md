@@ -104,7 +104,11 @@ The above function takes a variety of parameters:
   and the location where the source code resides
 * `sdkVersion` specifies which version of the iOS SDK to use.
 
+<<<<<<< HEAD
 It also possible to adjust the `xcodebuild` parameters. This is only needed in
+=======
+It also possile to adjust the `xcodebuild` parameters. This is only needed in
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 rare circumstances. In most cases the default values should suffice:
 
 * Specifies which `xcodebuild` target to build. By default it takes the target
@@ -130,7 +134,11 @@ In addition, you need to set the following parameters:
   store certificates.
 * `generateIPA` specifies that we want to produce an IPA file (this is probably
   what you want)
+<<<<<<< HEAD
 * `generateXCArchive` specifies that we want to produce an xcarchive file.
+=======
+* `generateXCArchive` specifies thet we want to produce an xcarchive file.
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 When building IPA files on Hydra and when it is desired to allow iOS devices to
 install IPAs by browsing to the Hydra build products page, you can enable the

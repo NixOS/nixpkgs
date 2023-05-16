@@ -17,13 +17,21 @@ let
   self =
     stdenv.mkDerivation rec {
       pname = "kcov";
+<<<<<<< HEAD
       version = "42";
+=======
+      version = "41";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
       src = fetchFromGitHub {
         owner = "SimonKagstrom";
         repo = "kcov";
         rev = "v${version}";
+<<<<<<< HEAD
         sha256 = "sha256-8/182RjuNuyFzSyCgyyximGaveDyhStwIQg29S5U/pI=";
+=======
+        sha256 = "sha256-Kit4Yn5Qeg3uAc6+RxwlVEhDKN6at+Uc7V38yhDPrAY=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       };
 
       preConfigure = "patchShebangs src/bin-to-c-source.py";

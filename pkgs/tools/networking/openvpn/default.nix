@@ -9,6 +9,10 @@
 , useSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
 , systemd
 , update-systemd-resolved
+<<<<<<< HEAD
+=======
+, util-linux
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , pkcs11Support ? false
 , pkcs11helper
 }:

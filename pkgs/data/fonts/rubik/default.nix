@@ -66,7 +66,11 @@ stdenv.mkDerivation {
     })
   ];
 
+<<<<<<< HEAD
   sourceRoot = ".";
+=======
+  sourceRoot = "./";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   unpackCmd = ''
     ttfName=$(basename $(stripHash $curSrc))
@@ -95,7 +99,11 @@ stdenv.mkDerivation {
       spacing and other design details.
 
       Cyrillic was initially designed by Philipp and Sebastian, and then revised and
+<<<<<<< HEAD
       expanded by Cyreal Fonts Team (Alexei Vanyashin and Nikita Kanarev). Existing
+=======
+      expanded by Cyreal Fonts Team (Alexei Vanyashin and Nikita Kanarev). Exising
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       glyphs were improved, and glyph set was expanded to GF Cyrillic Plus.
     '';
     platforms = platforms.all;

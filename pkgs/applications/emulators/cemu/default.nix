@@ -23,7 +23,11 @@
 , wayland
 , wxGTK32
 , zarchive
+<<<<<<< HEAD
 , gamemode
+=======
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , vulkan-loader
 
 , nix-update-script
@@ -31,13 +35,21 @@
 
 stdenv.mkDerivation rec {
   pname = "cemu";
+<<<<<<< HEAD
   version = "2.0-45";
+=======
+  version = "2.0-36";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "cemu-project";
     repo = "Cemu";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-Bi2ws08e+6rNv83ypLrgB/KZWt95i7UkFrqhCr/0Zko=";
+=======
+    hash = "sha256-RO8c9gLK00LLwDzcD8UOS3kh3kwTwFyrpuRlIXcInPo=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   patches = [
@@ -80,7 +92,10 @@ stdenv.mkDerivation rec {
     "-DCMAKE_C_FLAGS_RELEASE=-DNDEBUG"
     "-DCMAKE_CXX_FLAGS_RELEASE=-DNDEBUG"
     "-DENABLE_VCPKG=OFF"
+<<<<<<< HEAD
     "-DENABLE_FERAL_GAMEMODE=ON"
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     # PORTABLE:
     # "All data created and maintained by Cemu will be in the directory where the executable file is located"
@@ -92,8 +107,12 @@ stdenv.mkDerivation rec {
   in ''
     rm -rf dependencies/imgui
     ln -s ${imgui}/include/imgui dependencies/imgui
+<<<<<<< HEAD
     substituteInPlace src/Common/version.h --replace " (experimental)" "-${tag} (experimental)"
     substituteInPlace dependencies/gamemode/lib/gamemode_client.h --replace "libgamemode.so.0" "${gamemode.lib}/lib/libgamemode.so.0"
+=======
+    sed 's/\(EMULATOR_VERSION_SUFFIX\).*experimental.*/\1 "-${tag} (experimental)"/' -i src/Common/version.h
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '';
 
   installPhase = ''
@@ -128,6 +147,9 @@ stdenv.mkDerivation rec {
     license = licenses.mpl20;
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ zhaofengli baduhai ];
+<<<<<<< HEAD
     mainProgram = "cemu";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

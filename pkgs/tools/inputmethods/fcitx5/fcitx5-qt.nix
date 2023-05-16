@@ -13,13 +13,21 @@
 
 mkDerivation rec {
   pname = "fcitx5-qt";
+<<<<<<< HEAD
   version = "5.1.0";
+=======
+  version = "5.0.17";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "fcitx";
     repo = pname;
     rev = version;
+<<<<<<< HEAD
     sha256 = "sha256-LWOELt1uo5TtM85ppxt6MK7fvUuocHkWXYjUE1yyOV4=";
+=======
+    sha256 = "sha256-Pi5Xb7H/h89OcTzYX7X3Xw8FQIczkWd6rMrbwnHr/L4=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   preConfigure = ''

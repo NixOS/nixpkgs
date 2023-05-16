@@ -8,7 +8,11 @@ buildDunePackage rec {
   src = fetchFromGitLab {
     owner = "nomadic-labs";
     repo = "json-data-encoding";
+<<<<<<< HEAD
     rev = version;
+=======
+    rev = "${version}";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     hash = "sha256-ticulOKiFNQIZNFOQE9UQOw/wqRfygQwLVIc4kkmwg4=";
   };
 

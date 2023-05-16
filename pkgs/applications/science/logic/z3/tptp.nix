@@ -5,7 +5,11 @@ stdenv.mkDerivation rec {
 
   src = z3.src;
 
+<<<<<<< HEAD
   sourceRoot = "${src.name}/examples/tptp";
+=======
+  sourceRoot = "source/examples/tptp";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nativeBuildInputs = [cmake];
   buildInputs = [z3];

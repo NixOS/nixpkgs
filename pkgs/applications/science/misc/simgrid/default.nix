@@ -20,14 +20,22 @@ in
 
 stdenv.mkDerivation rec {
   pname = "simgrid";
+<<<<<<< HEAD
   version = "3.34";
+=======
+  version = "3.32";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitLab {
     domain = "framagit.org";
     owner = pname;
     repo = pname;
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-EVTpW9jD1h8T2KRlDIqptKS6Wv1dVDfyJbXxrpsgmoo=";
+=======
+    sha256 = "sha256-o25wOROkUm07JPdNTJQcJw6apeoysnjd+YBMHlPpAYI=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [ boost ];

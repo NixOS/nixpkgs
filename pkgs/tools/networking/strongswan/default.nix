@@ -16,13 +16,21 @@
 
 stdenv.mkDerivation rec {
   pname = "strongswan";
+<<<<<<< HEAD
   version = "5.9.11"; # Make sure to also update <nixpkgs/nixos/modules/services/networking/strongswan-swanctl/swanctl-params.nix> when upgrading!
+=======
+  version = "5.9.10"; # Make sure to also update <nixpkgs/nixos/modules/services/networking/strongswan-swanctl/swanctl-params.nix> when upgrading!
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "strongswan";
     repo = "strongswan";
     rev = version;
+<<<<<<< HEAD
     hash = "sha256-DjVmDUEEJnf5kaia1f+Yow9g4+l3itOmoXR8/vVSssU=";
+=======
+    hash = "sha256-vYM3RVS6/yDNbY6X8lZT0GK0dczjw8hs3NplFEzq0fg=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   dontPatchELF = true;

@@ -37,7 +37,11 @@ stdenv.mkDerivation rec {
     description = "Gthree port of HexGL";
     homepage = "https://github.com/alexlarsson/gnome-hexgl";
     license = licenses.mit;
+<<<<<<< HEAD
     maintainers = with maintainers; [ ];
+=======
+    maintainers = with maintainers; [ jtojnar ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     platforms = platforms.unix;
   };
 }

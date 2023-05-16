@@ -1,4 +1,5 @@
 diff --git a/go.mod b/go.mod
+<<<<<<< HEAD
 index bebd23f..2ad575f 100644
 --- a/go.mod
 +++ b/go.mod
@@ -35,3 +36,17 @@ index 6b2e5c3..452bcf9 100644
  golang.org/x/sys v0.0.0-20210615035016-665e8c7367d1/go.mod h1:oPkhp1MJrh7nUepCBck5+mAzfO9JrbApNNgaTdGDITg=
 --
 2.40.1
+=======
+index 660463a..5249458 100644
+--- a/go.mod
++++ b/go.mod
+@@ -2,7 +2,7 @@ module github.com/rs/curlie
+ 
+ require (
+ 	golang.org/x/crypto v0.0.0-20180524125353-159ae71589f3
+-	golang.org/x/sys v0.0.0-20191026070338-33540a1f6037
++	golang.org/x/sys v0.0.0-20211110154304-99a53858aa08
+ )
+ 
+ go 1.13
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)

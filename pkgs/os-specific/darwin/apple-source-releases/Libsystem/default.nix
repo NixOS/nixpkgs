@@ -1,7 +1,14 @@
+<<<<<<< HEAD
 { lib, stdenv, buildPackages, fetchzip, fetchFromGitHub
 , appleDerivation', xnu, Libc, Libm, libdispatch, Libinfo
 , dyld, Csu, architecture, libclosure, CarbonHeaders, ncurses, CommonCrypto
 , copyfile, removefile, libresolvHeaders, libresolv, Libnotify, libmalloc, libplatform, libpthread
+=======
+{ lib, stdenv, buildPackages, fetchzip
+, appleDerivation', xnu, Libc, Libm, libdispatch, Libinfo
+, dyld, Csu, architecture, libclosure, CarbonHeaders, ncurses, CommonCrypto
+, copyfile, removefile, libresolvHeaders, libresolv, Libnotify, libplatform, libpthread
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , mDNSResponder, launchd, libutilHeaders, hfsHeaders, darwin-stubs
 , headersOnly ? false
 , withLibresolv ? !headersOnly
@@ -30,6 +37,7 @@ let
       fi
     '';
   };
+<<<<<<< HEAD
 
   # Libsystem needs `asl.h` from syslog. This is the version corresponding to the 10.12 SDK
   # source release, but it hasn’t changed in newer versions.
@@ -39,6 +47,8 @@ let
     rev = "syslog-349.50.5";
     hash = "sha256-tXLW/TNsluhO1X9Rv3FANyzyOe5TE/hZz0gVo7JGvHA=";
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 in
 appleDerivation' stdenv {
   dontBuild = true;
@@ -66,12 +76,17 @@ appleDerivation' stdenv {
                ${libclosure} ${CarbonHeaders} ${libdispatch} ${ncurses.dev} \
                ${CommonCrypto} ${copyfile} ${removefile} ${libresolvHeaders} \
                ${Libnotify} ${libplatform} ${mDNSResponder} ${launchd} \
+<<<<<<< HEAD
                ${libutilHeaders} ${libmalloc} ${libpthread} ${hfsHeaders}; do
+=======
+               ${libutilHeaders} ${libpthread} ${hfsHeaders}; do
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       (cd $dep/include && find . -name '*.h' | copyHierarchy $out/include)
     done
 
     (cd ${buildPackages.darwin.cctools.dev}/include/mach-o && find . -name '*.h' | copyHierarchy $out/include/mach-o)
 
+<<<<<<< HEAD
     for header in pthread.h pthread_impl.h pthread_spis.h sched.h; do
       ln -s "$out/include/pthread/$header" "$out/include/$header"
     done
@@ -79,6 +94,8 @@ appleDerivation' stdenv {
     # Copy `asl.h` from the syslog sources since it is no longer provided as part of Libc.
     cp ${syslog.src}/libsystem_asl.tproj/include/asl.h $out/include
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     mkdir -p $out/include/os
 
     cp ${darling.src}/src/libc/os/activity.h $out/include/os

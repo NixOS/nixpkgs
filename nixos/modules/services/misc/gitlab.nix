@@ -9,10 +9,19 @@ let
   toml = pkgs.formats.toml {};
   yaml = pkgs.formats.yaml {};
 
+<<<<<<< HEAD
   postgresqlPackage = if config.services.postgresql.enable then
                         config.services.postgresql.package
                       else
                         pkgs.postgresql_13;
+=======
+  ruby = cfg.packages.gitlab.ruby;
+
+  postgresqlPackage = if config.services.postgresql.enable then
+                        config.services.postgresql.package
+                      else
+                        pkgs.postgresql_12;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   gitlabSocket = "${cfg.statePath}/tmp/sockets/gitlab.socket";
   gitalySocket = "${cfg.statePath}/tmp/sockets/gitaly.socket";
@@ -45,6 +54,12 @@ let
     [git]
     bin_path = "${pkgs.git}/bin/git"
 
+<<<<<<< HEAD
+=======
+    [gitaly-ruby]
+    dir = "${cfg.packages.gitaly.ruby}"
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     [gitlab-shell]
     dir = "${cfg.packages.gitlab-shell}"
 
@@ -84,9 +99,12 @@ let
     };
   };
 
+<<<<<<< HEAD
   # Redis configuration file
   resqueYml = pkgs.writeText "resque.yml" (builtins.toJSON redisConfig);
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   gitlabConfig = {
     # These are the default settings from config/gitlab.example.yml
     production = flip recursiveUpdate cfg.extraConfig {
@@ -152,7 +170,10 @@ let
         api_url = "http://${config.services.dockerRegistry.listenAddress}:${toString config.services.dockerRegistry.port}/";
         issuer = cfg.registry.issuer;
       };
+<<<<<<< HEAD
       elasticsearch.indexer_path = "${pkgs.gitlab-elasticsearch-indexer}/bin/gitlab-elasticsearch-indexer";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       extra = {};
       uploads.storage_path = cfg.statePath;
       pages = optionalAttrs cfg.pages.enable {
@@ -171,6 +192,10 @@ let
     SCHEMA = "${cfg.statePath}/db/structure.sql";
     GITLAB_UPLOADS_PATH = "${cfg.statePath}/uploads";
     GITLAB_LOG_PATH = "${cfg.statePath}/log";
+<<<<<<< HEAD
+=======
+    GITLAB_REDIS_CONFIG_FILE = pkgs.writeText "redis.yml" (builtins.toJSON redisConfig);
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     prometheus_multiproc_dir = "/run/gitlab";
     RAILS_ENV = "production";
     MALLOC_ARENA_MAX = "2";
@@ -554,6 +579,7 @@ in {
           default = false;
           description = lib.mdDoc "Enable GitLab container registry.";
         };
+<<<<<<< HEAD
         package = mkOption {
           type = types.package;
           default =
@@ -568,6 +594,8 @@ in {
             anymore since GitLab 16.0.0.
           '';
         };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         host = mkOption {
           type = types.str;
           default = config.services.gitlab.host;
@@ -1082,6 +1110,7 @@ in {
   };
 
   config = mkIf cfg.enable {
+<<<<<<< HEAD
     warnings = [
       (mkIf
         (cfg.registry.enable && versionAtLeast (getVersion cfg.packages.gitlab) "16.0.0" && cfg.registry.package == pkgs.docker-distribution)
@@ -1094,6 +1123,8 @@ in {
         Check the upstream documentation for a workaround: https://docs.gitlab.com/ee/update/versions/gitlab_16_changes.html#undefined-column-error-upgrading-to-162-or-later''
       )
     ];
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     assertions = [
       {
@@ -1125,8 +1156,13 @@ in {
         message = "services.gitlab.secrets.jwsFile must be set!";
       }
       {
+<<<<<<< HEAD
         assertion = versionAtLeast postgresqlPackage.version "13.6.0";
         message = "PostgreSQL >=13.6 is required to run GitLab 16. Follow the instructions in the manual section for upgrading PostgreSQL here: https://nixos.org/manual/nixos/stable/index.html#module-services-postgres-upgrading";
+=======
+        assertion = versionAtLeast postgresqlPackage.version "12.0.0";
+        message = "PostgreSQL >=12 is required to run GitLab 14. Follow the instructions in the manual section for upgrading PostgreSQL here: https://nixos.org/manual/nixos/stable/index.html#module-services-postgres-upgrading";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       }
     ];
 
@@ -1237,7 +1273,10 @@ in {
     services.dockerRegistry = optionalAttrs cfg.registry.enable {
       enable = true;
       enableDelete = true; # This must be true, otherwise GitLab won't manage it correctly
+<<<<<<< HEAD
       package = cfg.registry.package;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       extraConfig = {
         auth.token = {
           realm = "http${optionalString (cfg.https == true) "s"}://${cfg.host}/jwt/auth";
@@ -1287,7 +1326,10 @@ in {
       "d ${gitlabConfig.production.shared.path}/pages 0750 ${cfg.user} ${cfg.group} -"
       "d ${gitlabConfig.production.shared.path}/registry 0750 ${cfg.user} ${cfg.group} -"
       "d ${gitlabConfig.production.shared.path}/terraform_state 0750 ${cfg.user} ${cfg.group} -"
+<<<<<<< HEAD
       "d ${gitlabConfig.production.shared.path}/ci_secure_files 0750 ${cfg.user} ${cfg.group} -"
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       "L+ /run/gitlab/config - - - - ${cfg.statePath}/config"
       "L+ /run/gitlab/log - - - - ${cfg.statePath}/log"
       "L+ /run/gitlab/tmp - - - - ${cfg.statePath}/tmp"
@@ -1341,7 +1383,10 @@ in {
           cp -rf --no-preserve=mode ${cfg.packages.gitlab}/share/gitlab/db/* ${cfg.statePath}/db
           ln -sf ${extraGitlabRb} ${cfg.statePath}/config/initializers/extra-gitlab.rb
           ln -sf ${cableYml} ${cfg.statePath}/config/cable.yml
+<<<<<<< HEAD
           ln -sf ${resqueYml} ${cfg.statePath}/config/resque.yml
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
           ${cfg.packages.gitlab-shell}/bin/install
 
@@ -1489,7 +1534,14 @@ in {
       partOf = [ "gitlab.target" ];
       path = with pkgs; [
         openssh
+<<<<<<< HEAD
         git
+=======
+        procps  # See https://gitlab.com/gitlab-org/gitaly/issues/1562
+        git
+        cfg.packages.gitaly.rubyEnv
+        cfg.packages.gitaly.rubyEnv.wrappedRuby
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         gzip
         bzip2
       ];
@@ -1640,7 +1692,11 @@ in {
         "gitlab-config.service"
         "gitlab-db-config.service"
       ] ++ optional (cfg.databaseHost == "") "postgresql.service";
+<<<<<<< HEAD
       requiredBy = [ "gitlab.target" ];
+=======
+      wantedBy = [ "gitlab.target" ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       partOf = [ "gitlab.target" ];
       environment = gitlabEnv;
       path = with pkgs; [
@@ -1650,7 +1706,10 @@ in {
         nodejs
         procps
         gnupg
+<<<<<<< HEAD
         gzip
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       ];
       serviceConfig = {
         Type = "notify";
@@ -1660,7 +1719,11 @@ in {
         Restart = "on-failure";
         WorkingDirectory = "${cfg.packages.gitlab}/share/gitlab";
         ExecStart = concatStringsSep " " [
+<<<<<<< HEAD
           "${cfg.packages.gitlab.rubyEnv}/bin/bundle" "exec" "puma"
+=======
+          "${cfg.packages.gitlab.rubyEnv}/bin/puma"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           "-e production"
           "-C ${cfg.statePath}/config/puma.rb"
           "-w ${cfg.puma.workers}"
@@ -1690,5 +1753,9 @@ in {
   };
 
   meta.doc = ./gitlab.md;
+<<<<<<< HEAD
   meta.maintainers = teams.gitlab.members;
+=======
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }

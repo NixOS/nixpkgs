@@ -9,7 +9,10 @@
 , zlib, minizip, libjpeg, libpng, libtiff, libwebp, libopus
 , jsoncpp, protobuf, libvpx, srtp, snappy, nss, libevent
 , alsa-lib
+<<<<<<< HEAD
 , pulseaudio
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , libcap
 , pciutils
 , systemd
@@ -146,7 +149,10 @@ qtModule {
 
     # Audio formats
     alsa-lib
+<<<<<<< HEAD
     pulseaudio
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     # Text rendering
     fontconfig freetype

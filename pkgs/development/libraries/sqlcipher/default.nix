@@ -13,13 +13,21 @@
 
 stdenv.mkDerivation rec {
   pname = "sqlcipher";
+<<<<<<< HEAD
   version = "4.5.5";
+=======
+  version = "4.5.4";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "sqlcipher";
     repo = "sqlcipher";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-amWYkVQr+Rmcj+32lFDRq43Q+Ojj8V8B6KoURqdwGt0=";
+=======
+    hash = "sha256-n9KPtTj/mHXrnFJnbWPO3H+Vol3Z2mg7XLl55ynyLwY=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

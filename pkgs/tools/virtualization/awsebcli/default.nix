@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 { lib, python3, fetchFromGitHub, glibcLocales, docker-compose_1, git }:
+=======
+{ lib, python3, glibcLocales, docker-compose_1 }:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 let
   docker_compose = changeVersion (with localPython.pkgs; docker-compose_1.override {
     inherit colorama pyyaml six dockerpty docker jsonschema requests websocket-client paramiko;
@@ -18,11 +22,28 @@ let
         cement = changeVersion super.cement.overridePythonAttrs "2.8.2" "sha256-h2XtBSwGHXTk0Bia3cM9Jo3lRMohmyWdeXdB9yXkItI=";
         wcwidth = changeVersion super.wcwidth.overridePythonAttrs "0.1.9" "sha256-7nOGKGKhVr93/5KwkDT8SCXdOvnPgbxbNgZo1CXzxfE=";
         semantic-version = changeVersion super.semantic-version.overridePythonAttrs "2.8.5" "sha256-0sst4FWHYpNGebmhBOguynr0SMn0l00fPuzP9lHfilQ=";
+<<<<<<< HEAD
+=======
+        pyyaml = super.pyyaml.overridePythonAttrs (oldAttrs: rec {
+          version = "5.4.1";
+          checkPhase = ''
+            runHook preCheck
+            PYTHONPATH="tests/lib3:$PYTHONPATH" ${localPython.interpreter} -m test_all
+            runHook postCheck
+          '';
+          src = localPython.pkgs.fetchPypi {
+            pname = "PyYAML";
+            inherit version;
+            hash = "sha256-YHd0y7oocyv6gCtUuqdIQhX1MJkQVbtWLvvtWy8gpF4=";
+          };
+        });
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       };
     };
 in
 with localPython.pkgs; buildPythonApplication rec {
   pname = "awsebcli";
+<<<<<<< HEAD
   version = "3.20.9";
   format = "setuptools";
 
@@ -41,11 +62,44 @@ with localPython.pkgs; buildPythonApplication rec {
   nativeBuildInputs = [
     pythonRelaxDepsHook
   ];
+=======
+  version = "3.20.6";
+
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-9n6nObYoZlOKgQvSdNqHLRr+RlDoKfR3fgD7Xa9wPzM=";
+  };
+
+
+  preConfigure = ''
+    substituteInPlace requirements.txt \
+      --replace "six>=1.11.0,<1.15.0" "six==1.16.0" \
+      --replace "requests>=2.20.1,<=2.26" "requests<3" \
+      --replace "pathspec==0.10.1" "pathspec>=0.10.0,<1" \
+      --replace "colorama>=0.2.5,<0.4.4" "colorama>=0.2.5,<=0.4.6" \
+      --replace "termcolor == 1.1.0" "termcolor>=2.0.0,<3"
+  '';
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   buildInputs = [
     glibcLocales
   ];
 
+<<<<<<< HEAD
+=======
+  nativeCheckInputs = [
+    pytest
+    mock
+    nose
+    pathspec
+    colorama
+    requests
+    docutils
+  ];
+
+  doCheck = true;
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   propagatedBuildInputs = [
     blessed
     botocore
@@ -63,6 +117,7 @@ with localPython.pkgs; buildPythonApplication rec {
     docker_compose
   ];
 
+<<<<<<< HEAD
   pythonRelaxDeps = [
     "botocore"
     "colorama"
@@ -95,6 +150,8 @@ with localPython.pkgs; buildPythonApplication rec {
     "test_generate_and_upload_keypair__ssh_keygen_not_present"
   ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   meta = with lib; {
     homepage = "https://aws.amazon.com/elasticbeanstalk/";
     description = "A command line interface for Elastic Beanstalk";

@@ -6,7 +6,10 @@
 , colour
 , email-validator
 , enum34
+<<<<<<< HEAD
 , fetchpatch
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , fetchPypi
 , flask
 , flask-babelex
@@ -40,6 +43,7 @@ buildPythonPackage rec {
     hash = "sha256-JMrir4MramEaAdfcNfQtJmwdbHWkJrhp2MskG3gjM2k=";
   };
 
+<<<<<<< HEAD
   patches = [
     # https://github.com/flask-admin/flask-admin/pull/2374
     (fetchpatch {
@@ -49,6 +53,8 @@ buildPythonPackage rec {
     })
   ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   propagatedBuildInputs = [
     flask
     wtforms
@@ -118,6 +124,10 @@ buildPythonPackage rec {
     homepage = "https://github.com/flask-admin/flask-admin/";
     changelog = "https://github.com/flask-admin/flask-admin/releases/tag/v${version}";
     license = licenses.bsd3;
+<<<<<<< HEAD
     maintainers = with maintainers; [ ];
+=======
+    maintainers = with maintainers; [ costrouc ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

@@ -3,12 +3,20 @@ electron, libsecret }:
 
 stdenv.mkDerivation rec {
   pname = "tutanota-desktop";
+<<<<<<< HEAD
   version = "3.115.2";
+=======
+  version = "3.112.6";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchurl {
     url = "https://github.com/tutao/tutanota/releases/download/tutanota-desktop-release-${version}/${pname}-${version}-unpacked-linux.tar.gz";
     name = "tutanota-desktop-${version}.tar.gz";
+<<<<<<< HEAD
     sha256 = "sha256-PdVvrb+sC8LF4tZXAHt2CevyoXhxTXJB01Fe64YI6BI=";
+=======
+    sha256 = "sha256-Kqj6XQkwPU7pmR8JY8f7iMqpOYjvWxS5Yir/YTBPXjM=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

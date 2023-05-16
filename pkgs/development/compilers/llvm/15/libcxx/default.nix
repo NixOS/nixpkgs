@@ -1,8 +1,15 @@
 { lib, stdenv, llvm_meta
+<<<<<<< HEAD
 , monorepoSrc, runCommand, fetchpatch
 , cmake, ninja, python3, fixDarwinDylibNames, version
 , cxxabi ? if stdenv.hostPlatform.isFreeBSD then libcxxrt else libcxxabi
 , libcxxabi, libcxxrt, libunwind
+=======
+, monorepoSrc, runCommand
+, cmake, ninja, python3, fixDarwinDylibNames, version
+, cxxabi ? if stdenv.hostPlatform.isFreeBSD then libcxxrt else libcxxabi
+, libcxxabi, libcxxrt
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , enableShared ? !stdenv.hostPlatform.isStatic
 
 # If headersOnly is true, the resulting package would only include the headers.
@@ -47,6 +54,7 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./gnu-install-dirs.patch
+<<<<<<< HEAD
     # See:
     #   - https://reviews.llvm.org/D133566
     #   - https://github.com/NixOS/nixpkgs/issues/214524#issuecomment-1429146432
@@ -56,6 +64,8 @@ stdenv.mkDerivation rec {
       hash = "sha256-AaM9A6tQ4YAw7uDqCIV4VaiUyLZv+unwcOqbakwW9/k=";
       relative = "libcxx";
     })
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ] ++ lib.optionals stdenv.hostPlatform.isMusl [
     ../../libcxx-0001-musl-hacks.patch
   ];
@@ -71,9 +81,13 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ninja python3 ]
     ++ lib.optional stdenv.isDarwin fixDarwinDylibNames;
 
+<<<<<<< HEAD
   buildInputs =
     lib.optionals (!headersOnly) [ cxxabi ]
     ++ lib.optionals (stdenv.hostPlatform.useLLVM or false) [ libunwind ];
+=======
+  buildInputs = lib.optionals (!headersOnly) [ cxxabi ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   cmakeFlags = let
     # See: https://libcxx.llvm.org/BuildingLibcxx.html#cmdoption-arg-libcxx-cxx-abi-string
@@ -86,6 +100,7 @@ stdenv.mkDerivation rec {
     "-DLIBCXX_CXX_ABI=${if headersOnly then "none" else libcxx_cxx_abi_opt}"
   ] ++ lib.optional (!headersOnly && cxxabi.libName == "c++abi") "-DLIBCXX_CXX_ABI_INCLUDE_PATHS=${cxxabi.dev}/include/c++/v1"
     ++ lib.optional (stdenv.hostPlatform.isMusl || stdenv.hostPlatform.isWasi) "-DLIBCXX_HAS_MUSL_LIBC=1"
+<<<<<<< HEAD
     ++ lib.optionals (stdenv.hostPlatform.useLLVM or false) [
       "-DLIBCXX_USE_COMPILER_RT=ON"
       # (Backport fix from 16, which has LIBCXX_ADDITIONAL_LIBRARIES, but 15
@@ -98,6 +113,10 @@ stdenv.mkDerivation rec {
       # "-DLIBCXX_ADDITIONAL_LIBRARIES=unwind"
       "-DCMAKE_SHARED_LINKER_FLAGS=-lunwind"
     ] ++ lib.optionals stdenv.hostPlatform.isWasm [
+=======
+    ++ lib.optional (stdenv.hostPlatform.useLLVM or false) "-DLIBCXX_USE_COMPILER_RT=ON"
+    ++ lib.optionals stdenv.hostPlatform.isWasm [
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       "-DLIBCXX_ENABLE_THREADS=OFF"
       "-DLIBCXX_ENABLE_FILESYSTEM=OFF"
       "-DLIBCXX_ENABLE_EXCEPTIONS=OFF"

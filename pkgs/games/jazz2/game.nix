@@ -16,13 +16,21 @@
 
 stdenv.mkDerivation rec {
   pname = "jazz2";
+<<<<<<< HEAD
   version = "2.1.0";
+=======
+  version = "1.8.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "deathkiller";
     repo = "jazz2-native";
     rev = version;
+<<<<<<< HEAD
     sha256 = "nJha7+geP2Ov7ciEDzJ+XWdiF1jzv4Oeis1DwxcpJXo=";
+=======
+    sha256 = "fi1waoLAcnZB0lX+8+wQFoBYOSvVXYK3JKiu81GGF4U=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   patches = [ ./nocontent.patch ];

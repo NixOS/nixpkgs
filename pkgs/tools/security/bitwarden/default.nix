@@ -1,8 +1,14 @@
 { lib
+<<<<<<< HEAD
 , applyPatches
 , buildNpmPackage
 , dbus
 , electron_24
+=======
+, buildNpmPackage
+, dbus
+, electron
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , fetchFromGitHub
 , glib
 , gnome
@@ -12,7 +18,11 @@
 , makeDesktopItem
 , makeWrapper
 , moreutils
+<<<<<<< HEAD
 , nodejs_18
+=======
+, nodejs_16
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , pkg-config
 , python3
 , rustPlatform
@@ -23,6 +33,7 @@ let
   description = "A secure and free password manager for all of your devices";
   icon = "bitwarden";
 
+<<<<<<< HEAD
   buildNpmPackage' = buildNpmPackage.override { nodejs = nodejs_18; };
   electron = electron_24;
 
@@ -36,13 +47,30 @@ let
     };
 
     patches = [ ];
+=======
+  buildNpmPackage' = buildNpmPackage.override { nodejs = nodejs_16; };
+
+  version = "2023.3.2";
+  src = fetchFromGitHub {
+    owner = "bitwarden";
+    repo = "clients";
+    rev = "desktop-v${version}";
+    sha256 = "sha256-KQDM7XDUA+yRv8y1K//rMCs4J36df42RVsiAXazJeYQ=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   desktop-native = rustPlatform.buildRustPackage {
     pname = "bitwarden-desktop-native";
     inherit src version;
+<<<<<<< HEAD
     sourceRoot = "${src.name}/apps/desktop/desktop_native";
     cargoSha256 = "sha256-8U4E5q2OSZGXy2ZRn0y4Skm5Y+FiOJVU1mtzObO9UqY=";
+=======
+    sourceRoot = "source/apps/desktop/desktop_native";
+    cargoSha256 = "sha256-XsAmVYWPPnY0cgBzpO2aWx/fh85fKr8kMO98cDMzOKk=";
+
+    patchFlags = [ "-p4" ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     nativeBuildInputs = [
       pkg-config
@@ -95,7 +123,11 @@ buildNpmPackage' {
   npmBuildFlags = [
     "--workspace apps/desktop"
   ];
+<<<<<<< HEAD
   npmDepsHash = "sha256-USXWA/7wuu3i9/+/pMXREgcB+4yOpQGG5RGuUyJvuQw=";
+=======
+  npmDepsHash = "sha256-RmkTWhakZstCCMLQ3iJ8KD5Yt5ZafXc8NDgncJMLaxs=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
 
@@ -107,11 +139,14 @@ buildNpmPackage' {
   ];
 
   preBuild = ''
+<<<<<<< HEAD
     if [[ $(jq --raw-output '.devDependencies.electron' < package.json | grep -E --only-matching '^[0-9]+') != ${lib.escapeShellArg (lib.versions.major electron.version)} ]]; then
       echo 'ERROR: electron version mismatch'
       exit 1
     fi
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     jq 'del(.scripts.postinstall)' apps/desktop/package.json | sponge apps/desktop/package.json
     jq '.scripts.build = ""' apps/desktop/desktop_native/package.json | sponge apps/desktop/desktop_native/package.json
     cp ${desktop-native}/lib/libdesktop_native.so apps/desktop/desktop_native/desktop_native.linux-x64-musl.node
@@ -120,9 +155,15 @@ buildNpmPackage' {
   postBuild = ''
     pushd apps/desktop
 
+<<<<<<< HEAD
     npm exec electron-builder -- \
       --dir \
       -c.electronDist=${electron}/libexec/electron \
+=======
+    "$(npm bin)"/electron-builder \
+      --dir \
+      -c.electronDist=${electron}/lib/electron \
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       -c.electronVersion=${electron.version}
 
     popd

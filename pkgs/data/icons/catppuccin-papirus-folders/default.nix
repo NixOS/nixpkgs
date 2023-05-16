@@ -16,13 +16,22 @@ in
 
   stdenvNoCC.mkDerivation {
     inherit pname;
+<<<<<<< HEAD
     version = "unstable-2023-08-02";
+=======
+    version = "unstable-2022-12-04";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     src = fetchFromGitHub {
       owner = "catppuccin";
       repo = "papirus-folders";
+<<<<<<< HEAD
       rev = "fcf96737fffc343a1bf129732c37d19f2d77fa5c";
       sha256 = "sha256-3yjIGzN+/moP2OVGDIAy4zPqUroSjx3c2mJjdZGhTsY=";
+=======
+      rev = "1a367642df9cf340770bd7097fbe85b9cea65bcb";
+      sha256 = "sha256-mFDfRVDA9WyriyFVzsI7iqmPopN56z54FvLkZDS2Dv8=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
 
     nativeBuildInputs = [ gtk3 ];

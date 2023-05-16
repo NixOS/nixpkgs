@@ -20,13 +20,21 @@ let
   # Use the plugin version as in vscode marketplace, updated by update script.
   inherit (vsix) version;
 
+<<<<<<< HEAD
   releaseTag = "2023-07-31";
+=======
+  releaseTag = "2023-03-06";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "rust-lang";
     repo = "rust-analyzer";
     rev = releaseTag;
+<<<<<<< HEAD
     sha256 = "sha256-PWEdqI+iiHbx4dkIwWHZCGJuTpRfJI3MLSHf3gQEJt4=";
+=======
+    sha256 = "sha256-Njlus+vY3N++qWE0JXrGjwcXY2QDFuOV/7NruBBMETY=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   build-deps = nodePackages."rust-analyzer-build-deps-../../applications/editors/vscode/extensions/rust-lang.rust-analyzer/build-deps";
@@ -88,4 +96,7 @@ vscode-utils.buildVscodeExtension {
     platforms = lib.platforms.all;
   };
 }
+<<<<<<< HEAD
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)

@@ -2,7 +2,10 @@
 , vte, avahi, dconf, gobject-introspection, libvirt-glib, system-libvirt
 , gsettings-desktop-schemas, libosinfo, gnome, gtksourceview4, docutils, cpio
 , e2fsprogs, findutils, gzip, cdrtools, xorriso, fetchpatch
+<<<<<<< HEAD
 , desktopToDarwinBundle, stdenv
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , spiceSupport ? true, spice-gtk ? null
 }:
 
@@ -21,7 +24,11 @@ python3.pkgs.buildPythonApplication rec {
     intltool file
     gobject-introspection # for setup hook populating GI_TYPELIB_PATH
     docutils
+<<<<<<< HEAD
   ] ++ lib.optional stdenv.isDarwin desktopToDarwinBundle;
+=======
+  ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   buildInputs = [
     wrapGAppsHook
@@ -92,7 +99,10 @@ python3.pkgs.buildPythonApplication rec {
     '';
     license = licenses.gpl2;
     platforms = platforms.unix;
+<<<<<<< HEAD
     mainProgram = "virt-manager";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     maintainers = with maintainers; [ qknight offline fpletz globin ];
   };
 }

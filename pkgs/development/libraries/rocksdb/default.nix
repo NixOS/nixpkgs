@@ -12,19 +12,31 @@
 , windows
 , enableJemalloc ? false
 , jemalloc
+<<<<<<< HEAD
+=======
+, enableLite ? false
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , enableShared ? !stdenv.hostPlatform.isStatic
 , sse42Support ? stdenv.hostPlatform.sse4_2Support
 }:
 
 stdenv.mkDerivation rec {
   pname = "rocksdb";
+<<<<<<< HEAD
   version = "8.3.2";
+=======
+  version = "7.10.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = pname;
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-mfIRQ8nkUbZ3Bugy3NAvOhcfzFY84J2kBUIUBcQ2/Qg=";
+=======
+    sha256 = "sha256-U2ReSrJwjAXUdRmwixC0DQXht/h/6rV8SOf5e2NozIs=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ cmake ninja ];
@@ -67,6 +79,10 @@ stdenv.mkDerivation rec {
     "-DUSE_RTTI=1"
     "-DROCKSDB_INSTALL_ON_WINDOWS=YES" # harmless elsewhere
     (lib.optional sse42Support "-DFORCE_SSE42=1")
+<<<<<<< HEAD
+=======
+    (lib.optional enableLite "-DROCKSDB_LITE=1")
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "-DFAIL_ON_WARNINGS=${if stdenv.hostPlatform.isMinGW then "NO" else "YES"}"
   ] ++ lib.optional (!enableShared) "-DROCKSDB_BUILD_SHARED=0";
 
@@ -77,7 +93,11 @@ stdenv.mkDerivation rec {
     mkdir -p $tools/bin
     cp tools/{ldb,sst_dump}${stdenv.hostPlatform.extensions.executable} $tools/bin/
   '' + lib.optionalString stdenv.isDarwin ''
+<<<<<<< HEAD
     ls -1 $tools/bin/* | xargs -I{} install_name_tool -change "@rpath/librocksdb.${lib.versions.major version}.dylib" $out/lib/librocksdb.dylib {}
+=======
+    ls -1 $tools/bin/* | xargs -I{} install_name_tool -change "@rpath/librocksdb.7.dylib" $out/lib/librocksdb.dylib {}
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '' + lib.optionalString (stdenv.isLinux && enableShared) ''
     ls -1 $tools/bin/* | xargs -I{} patchelf --set-rpath $out/lib:${stdenv.cc.cc.lib}/lib {}
   '';

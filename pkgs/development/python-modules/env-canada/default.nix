@@ -15,7 +15,11 @@
 
 buildPythonPackage rec {
   pname = "env-canada";
+<<<<<<< HEAD
   version = "0.5.36";
+=======
+  version = "0.5.34";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -24,7 +28,11 @@ buildPythonPackage rec {
     owner = "michaeldavie";
     repo = "env_canada";
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-5eA9fqL748VigNgy1G7bZtMstV7EI9LLPhv6xZnCEFA=";
+=======
+    hash = "sha256-gnNncWhrqGTWq8cNVmNMzkgqW0hoglzVGrLjqyUvOIc=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [

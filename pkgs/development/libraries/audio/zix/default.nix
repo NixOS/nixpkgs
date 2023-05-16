@@ -35,8 +35,13 @@ stdenv.mkDerivation rec {
     license = licenses.isc;
     platforms = platforms.unix;
     maintainers = with maintainers; [
+<<<<<<< HEAD
       fogti
       yuu
+=======
+      yuu
+      zseri
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     ];
   };
 }

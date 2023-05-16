@@ -1,5 +1,6 @@
 { sage-src
 , env-locations
+<<<<<<< HEAD
 , python
 , buildPythonPackage
 , m4
@@ -20,10 +21,29 @@
 , fflas-ffpack
 , flint
 , gap
+=======
+, perl
+, buildPythonPackage
+, m4
+, arb
+, blas
+, lapack
+, brial
+, cliquer
+, cypari2
+, cysignals
+, cython
+, lisp-compiler
+, eclib
+, ecm
+, flint
+, gd
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , giac
 , givaro
 , glpk
 , gsl
+<<<<<<< HEAD
 , lapack
 , lcalc
 , libbraiding
@@ -78,6 +98,59 @@
 , sphinx
 , sympy
 , typing-extensions
+=======
+, iml
+, jinja2
+, libpng
+, lcalc
+, lrcalc
+, gap
+, linbox
+, m4ri
+, m4rie
+, memory-allocator
+, libmpc
+, mpfi
+, ntl
+, numpy
+, pari
+, pkgconfig # the python module, not the pkg-config alias
+, pkg-config
+, planarity
+, ppl
+, primecountpy
+, python
+, ratpoints
+, readline
+, rankwidth
+, symmetrica
+, zn_poly
+, fflas-ffpack
+, boost
+, singular
+, pip
+, jupyter-core
+, sage-setup
+, libhomfly
+, libbraiding
+, gmpy2
+, pplpy
+, sqlite
+, jupyter-client
+, ipywidgets
+, mpmath
+, rpy2
+, fpylll
+, scipy
+, sympy
+, matplotlib
+, pillow
+, ipykernel
+, networkx
+, ptyprocess
+, lrcalc-python
+, sphinx # TODO: this is in setup.cfg, should we override it?
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 assert (!blas.isILP64) && (!lapack.isILP64);
@@ -94,16 +167,27 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     iml
+<<<<<<< HEAD
     lisp-compiler
     m4
     perl
     pip # needed to query installed packages
     pkg-config
     sage-setup
+=======
+    perl
+    jupyter-core
+    pkg-config
+    sage-setup
+    pip # needed to query installed packages
+    lisp-compiler
+    m4
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   buildInputs = [
     gd
+<<<<<<< HEAD
     iml
     libpng
     readline
@@ -116,15 +200,36 @@ buildPythonPackage rec {
     boost
     brial
     cliquer
+=======
+    readline
+    iml
+    libpng
+  ];
+
+  propagatedBuildInputs = [
+    cypari2
+    jinja2
+    numpy
+    pkgconfig
+    boost
+    arb
+    brial
+    cliquer
+    lisp-compiler
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     eclib
     ecm
     fflas-ffpack
     flint
+<<<<<<< HEAD
     gap
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     giac
     givaro
     glpk
     gsl
+<<<<<<< HEAD
     lapack
     lcalc
     libbraiding
@@ -181,6 +286,51 @@ buildPythonPackage rec {
     sphinx
     sympy
     typing-extensions
+=======
+    lcalc
+    gap
+    libmpc
+    linbox
+    lrcalc
+    m4ri
+    m4rie
+    memory-allocator
+    mpfi
+    ntl
+    blas
+    lapack
+    pari
+    planarity
+    ppl
+    primecountpy
+    rankwidth
+    ratpoints
+    singular
+    symmetrica
+    zn_poly
+    pip
+    cython
+    cysignals
+    libhomfly
+    libbraiding
+    gmpy2
+    pplpy
+    sqlite
+    mpmath
+    rpy2
+    scipy
+    sympy
+    matplotlib
+    pillow
+    ipykernel
+    fpylll
+    networkx
+    jupyter-client
+    ipywidgets
+    ptyprocess
+    lrcalc-python
+    sphinx
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   preBuild = ''

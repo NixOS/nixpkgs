@@ -23,6 +23,10 @@ buildPythonPackage rec {
     description = "A python implementation of jordansissel's grok regular expression library";
     homepage = "https://github.com/garyelephant/pygrok";
     license = licenses.mit;
+<<<<<<< HEAD
     platforms = platforms.unix;
+=======
+    platforms = platforms.linux;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

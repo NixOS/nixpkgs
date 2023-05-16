@@ -2,13 +2,21 @@
 
 stdenv.mkDerivation rec {
   pname = "kubetail";
+<<<<<<< HEAD
   version = "1.6.18";
+=======
+  version = "1.6.16";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "johanhaleby";
     repo = "kubetail";
     rev = version;
+<<<<<<< HEAD
     sha256 = "sha256-Gde5thEpMX3h0e1eoC8SeDdkZfa02CmQf3ELLMeEWGU=";
+=======
+    sha256 = "sha256-kkbhhAaiKP01LR7F5JVMgy6Ujji8JDc+Aaho1vft3XQ=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ installShellFiles makeWrapper ];
@@ -29,7 +37,11 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://github.com/johanhaleby/kubetail";
     license = licenses.asl20;
+<<<<<<< HEAD
     maintainers = with maintainers; [ kalbasit qjoly ];
+=======
+    maintainers = with maintainers; [ kalbasit ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     platforms = platforms.all;
   };
 }

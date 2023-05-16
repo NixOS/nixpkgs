@@ -15,8 +15,12 @@ with lib;
 assert (lib.assertOneOf "vc" vc [ "hg" "git" ]);
 
 let
+<<<<<<< HEAD
   urlFor = resource: "https://${resource}.${domain}/${owner}/${repo}";
   baseUrl = urlFor vc;
+=======
+  baseUrl = "https://${vc}.${domain}/${owner}/${repo}";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   baseArgs = {
     inherit name;
   } // removeAttrs args [
@@ -43,9 +47,12 @@ let
         postFetch = optionalString (vc == "hg") ''
           rm -f "$out/.hg_archival.txt"
         ''; # impure file; see #12002
+<<<<<<< HEAD
         passthru = {
           gitRepoUrl = urlFor "git";
         };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       };
     };
   };

@@ -13,6 +13,7 @@ let
   };
 
   customEtc = {
+<<<<<<< HEAD
     "fwupd/fwupd.conf" = {
       source = format.generate "fwupd.conf" {
         fwupd = cfg.daemonSettings;
@@ -20,6 +21,18 @@ let
       };
       # fwupd tries to chmod the file if it doesn't have the right permissions
       mode = "0640";
+=======
+    "fwupd/daemon.conf" = {
+      source = format.generate "daemon.conf" {
+        fwupd = cfg.daemonSettings;
+      };
+    };
+
+    "fwupd/uefi_capsule.conf" = {
+      source = format.generate "uefi_capsule.conf" {
+        uefi_capsule = cfg.uefiCapsuleSettings;
+      };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
   };
 
@@ -50,7 +63,11 @@ let
     # to install it because it would create a cyclic dependency between
     # the outputs. We also need to enable the remote,
     # which should not be done by default.
+<<<<<<< HEAD
     lib.optionalAttrs cfg.enableTestRemote (enableRemote cfg.package.installedTests "fwupd-tests")
+=======
+    if cfg.enableTestRemote then (enableRemote cfg.package.installedTests "fwupd-tests") else {}
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   );
 
 in {

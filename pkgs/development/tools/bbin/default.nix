@@ -2,7 +2,12 @@
 , stdenvNoCC
 , fetchFromGitHub
 , makeWrapper
+<<<<<<< HEAD
 , babashka-unwrapped
+=======
+, babashka
+, graalvm17-ce
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 stdenvNoCC.mkDerivation rec {
@@ -28,7 +33,11 @@ stdenvNoCC.mkDerivation rec {
     mkdir -p $out/share
     cp -r docs $out/share/docs
     wrapProgram $out/bin/bbin \
+<<<<<<< HEAD
       --prefix PATH : "${lib.makeBinPath [ babashka-unwrapped babashka-unwrapped.graalvmDrv ]}"
+=======
+      --prefix PATH : "${lib.makeBinPath [ babashka babashka.graalvmDrv ]}"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     runHook postInstall
   '';
@@ -37,7 +46,11 @@ stdenvNoCC.mkDerivation rec {
     homepage = "https://github.com/babashka/bbin";
     description = "Install any Babashka script or project with one command";
     license = licenses.mit;
+<<<<<<< HEAD
     inherit (babashka-unwrapped.meta) platforms;
+=======
+    inherit (babashka.meta) platforms;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     maintainers = with maintainers; [ sohalt ];
   };
 }

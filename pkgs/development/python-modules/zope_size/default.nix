@@ -1,7 +1,11 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+<<<<<<< HEAD
 , zope-i18nmessageid
+=======
+, zope_i18nmessageid
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , zope_interface
 }:
 
@@ -14,7 +18,11 @@ buildPythonPackage rec {
     hash = "sha256-bhv3QJdZtNpyAuL6/aZXWD1Acx8661VweWaItJPpkHk=";
   };
 
+<<<<<<< HEAD
   propagatedBuildInputs = [ zope-i18nmessageid zope_interface ];
+=======
+  propagatedBuildInputs = [ zope_i18nmessageid zope_interface ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   meta = with lib; {
     homepage = "https://github.com/zopefoundation/zope.size";

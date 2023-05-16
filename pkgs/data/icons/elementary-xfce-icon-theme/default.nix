@@ -2,13 +2,21 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-xfce-icon-theme";
+<<<<<<< HEAD
   version = "0.18";
+=======
+  version = "0.17";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "shimmerproject";
     repo = "elementary-xfce";
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-OgQtqBrYKDgU4mhXLFO8YwiPv2lKqGSdZnfKCd9ri4g=";
+=======
+    sha256 = "sha256-9WdVUCwHFX6wlu3++QqzV0RgTDYDnUYqK7yUl83liko=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

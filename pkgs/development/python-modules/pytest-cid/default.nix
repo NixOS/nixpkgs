@@ -9,15 +9,24 @@
 
 buildPythonPackage rec {
   pname = "pytest-cid";
+<<<<<<< HEAD
   version = "1.1.2";
+=======
+  version = "1.1.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "flit";
   disabled = pythonOlder "3.5";
 
   src = fetchFromGitHub {
     owner = "ntninja";
     repo = pname;
+<<<<<<< HEAD
     rev = "refs/tags/v${version}";
     hash = "sha256-dcL/i5+scmdXh7lfE8+32w9PdHWf+mkunJL1vpJ5+Co=";
+=======
+    rev = "1ff9ec43ac9eaf76352ea7e7a060cd081cb8b68a"; # Version has no git tag
+    hash = "sha256-H2RtMGYWukowTTfqZSx+hikxzkqw1v5bA4AfZfiVl8U=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   postPatch = ''

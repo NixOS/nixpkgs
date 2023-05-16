@@ -22,7 +22,11 @@ stdenv.mkDerivation rec {
   '';
 
   postInstall = ''
+<<<<<<< HEAD
     installShellCompletion --cmd nb etc/nb-completion.{bash,zsh,fish}
+=======
+    installShellCompletion etc/nb-completion.{bash,zsh}
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '';
 
   meta = with lib; {

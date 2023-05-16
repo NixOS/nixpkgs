@@ -36,11 +36,19 @@
 
 stdenv.mkDerivation rec {
   pname = "epiphany";
+<<<<<<< HEAD
   version = "44.6";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
     sha256 = "UzXdVzWB22HhJthU3BauUZZXpbh5B4mkfSXkPhfNOkM=";
+=======
+  version = "44.2";
+
+  src = fetchurl {
+    url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
+    sha256 = "sfbfFftqYX/t1hmLLcqr1EENJYNECdpRVwndd8/FazM=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

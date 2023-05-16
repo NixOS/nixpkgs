@@ -19,13 +19,21 @@
 
 stdenv.mkDerivation rec {
   pname = "xed-editor";
+<<<<<<< HEAD
   version = "3.4.3";
+=======
+  version = "3.2.8";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "xed";
     rev = version;
+<<<<<<< HEAD
     sha256 = "sha256-nc8YS1PcmtM37TJpGl691SlxJliyI2gSGJtNzkWbk9A=";
+=======
+    sha256 = "sha256-ax769qjV0oZ6tnEE5FsXNbHETI6KNgvh0WviBsPs9j8=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

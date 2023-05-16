@@ -19,7 +19,10 @@ stdenv.mkDerivation rec {
     description = "Insanely fast image printing in your terminal";
     maintainers = with maintainers; [ ryantm ];
     platforms = platforms.unix;
+<<<<<<< HEAD
     mainProgram = "catimg";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
 }

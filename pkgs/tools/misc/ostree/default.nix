@@ -1,6 +1,10 @@
 { stdenv
 , lib
 , fetchurl
+<<<<<<< HEAD
+=======
+, fetchpatch
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , substituteAll
 , pkg-config
 , gtk-doc
@@ -37,9 +41,15 @@
 }:
 
 let
+<<<<<<< HEAD
   testPython = python3.withPackages (p: with p; [
     pyyaml
   ]);
+=======
+  testPython = (python3.withPackages (p: with p; [
+    pyyaml
+  ]));
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 in stdenv.mkDerivation rec {
   pname = "ostree";
   version = "2023.2";

@@ -15,7 +15,11 @@ buildGoModule rec {
     sha256 = "sha256-+FCb5TV9MUcRyex2M4rn2RhcIsXQFbtm1T4r7MpcRQs=";
   };
 
+<<<<<<< HEAD
   vendorHash = "sha256-lU39kj/uz0l7Rodsu6+UMv2o579eu1KUbutUNZni7bM=";
+=======
+  vendorSha256 = "sha256-lU39kj/uz0l7Rodsu6+UMv2o579eu1KUbutUNZni7bM=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   postInstall = lib.optionalString (!stdenv.isDarwin) ''
     mv $out/bin/ADReaper $out/bin/$pname

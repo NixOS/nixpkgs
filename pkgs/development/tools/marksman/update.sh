@@ -15,4 +15,8 @@ fi
 
 update-source-version marksman "$version"
 
+<<<<<<< HEAD
 $(nix-build -A marksman.fetch-deps --no-out-link)
+=======
+$(nix-build -A marksman.fetch-deps --no-out-link) "$(dirname -- "${BASH_SOURCE[0]}")/deps.nix"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)

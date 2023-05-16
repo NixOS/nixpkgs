@@ -1,14 +1,25 @@
 { lib, stdenv, fetchFromGitHub, openssl }:
 
+<<<<<<< HEAD
 stdenv.mkDerivation rec {
   pname = "xilinx-bootgen";
   version = "xilinx_v2023.1";
+=======
+stdenv.mkDerivation {
+  pname = "xilinx-bootgen";
+  version = "unstable-2019-10-23";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "xilinx";
     repo = "bootgen";
+<<<<<<< HEAD
     rev = version;
     sha256 = "sha256-pEkpZachZX2tOhH2Odb2fZWqJehLILE/0Z500xRuRzU=";
+=======
+    rev = "f9f477adf243fa40bc8c7316a7aac37a0efd426d";
+    sha256 = "1qciz3jkzy0z0lcgqnhch9pqj0202mk5ghzp2m9as5pzk8n8hrbz";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   buildInputs = [ openssl ];

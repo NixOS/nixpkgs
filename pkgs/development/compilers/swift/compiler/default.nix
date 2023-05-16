@@ -2,7 +2,10 @@
 , stdenv
 , callPackage
 , cmake
+<<<<<<< HEAD
 , bash
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , coreutils
 , gnugrep
 , perl
@@ -134,8 +137,12 @@ let
     sed < '${clang}/bin/clang' > "$targetFile" \
       -e 's|^\s*exec|exec -a "$0"|g' \
       -e 's|^\[\[ "${clang.cc}/bin/clang" = \*++ ]]|[[ "$0" = *++ ]]|' \
+<<<<<<< HEAD
       -e "s|${clang.cc}/bin/clang|$unwrappedClang|g" \
       -e "s|^\(\s*\)\($unwrappedClang\) \"@\\\$responseFile\"|\1argv0=\$0\n\1${bash}/bin/bash -c \"exec -a '\$argv0' \2 '@\$responseFile'\"|"
+=======
+      -e "s|${clang.cc}/bin/clang|$unwrappedClang|g"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     chmod a+x "$targetFile"
   '';
 

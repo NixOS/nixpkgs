@@ -23,6 +23,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "man" ];
 
+<<<<<<< HEAD
   # Based on hostapd's defconfig. Only differences are tracked.
   extraConfig = ''
     # Use epoll(7) instead of select(2) on linux
@@ -33,11 +34,19 @@ stdenv.mkDerivation rec {
     CONFIG_DRIVER_NONE=y
 
     # Integrated EAP server
+=======
+  extraConfig = ''
+    CONFIG_DRIVER_WIRED=y
+    CONFIG_LIBNL32=y
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     CONFIG_EAP_SIM=y
     CONFIG_EAP_AKA=y
     CONFIG_EAP_AKA_PRIME=y
     CONFIG_EAP_PAX=y
+<<<<<<< HEAD
     CONFIG_EAP_PSK=y
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     CONFIG_EAP_PWD=y
     CONFIG_EAP_SAKE=y
     CONFIG_EAP_GPSK=y
@@ -46,6 +55,7 @@ stdenv.mkDerivation rec {
     CONFIG_EAP_IKEV2=y
     CONFIG_EAP_TNC=y
     CONFIG_EAP_EKE=y
+<<<<<<< HEAD
 
     CONFIG_TLS=openssl
     CONFIG_TLSV11=y
@@ -78,16 +88,39 @@ stdenv.mkDerivation rec {
     CONFIG_IEEE80211N=y
     CONFIG_IEEE80211AC=y
     CONFIG_IEEE80211AX=y
+=======
+    CONFIG_RADIUS_SERVER=y
+    CONFIG_IEEE80211R=y
+    CONFIG_IEEE80211N=y
+    CONFIG_IEEE80211AC=y
+    CONFIG_FULL_DYNAMIC_VLAN=y
+    CONFIG_VLAN_NETLINK=y
+    CONFIG_TLS=openssl
+    CONFIG_TLSV11=y
+    CONFIG_TLSV12=y
+    CONFIG_INTERNETWORKING=y
+    CONFIG_HS20=y
+    CONFIG_ACS=y
+    CONFIG_GETRANDOM=y
+    CONFIG_SAE=y
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '' + lib.optionalString (sqlite != null) ''
     CONFIG_SQLITE=y
   '';
 
+<<<<<<< HEAD
   passAsFile = [ "extraConfig" ];
 
   configurePhase = ''
     cd hostapd
     cp -v defconfig .config
     cat $extraConfigPath >> .config
+=======
+  configurePhase = ''
+    cd hostapd
+    cp -v defconfig .config
+    echo "$extraConfig" >> .config
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     cat -n .config
     substituteInPlace Makefile --replace /usr/local $out
     export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE $(pkg-config --cflags libnl-3.0)"

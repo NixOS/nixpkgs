@@ -8,7 +8,11 @@
 # special snowflake due to different authors writing in different times.]
 #
 # The second goal is consistency across each stdenv's stage functions. By
+<<<<<<< HEAD
 # writing each stage in terms of the previous stage, commonalities between them
+=======
+# writing each stage it terms of the previous stage, commonalities between them
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 # are more easily observable. [Before, there usually was a big attribute set
 # with each stage, and stages would access the previous stage by name.]
 #

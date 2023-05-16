@@ -25,6 +25,10 @@ buildPythonPackage rec {
     description = "Jupyter Widgets JupyterLab Extension";
     homepage = "https://github.com/jupyter-widgets/ipywidgets";
     license = licenses.bsd3;
+<<<<<<< HEAD
     maintainers = with maintainers; [ jonringer ];
+=======
+    maintainers = with maintainers; [ jonringer SuperSandro2000 ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

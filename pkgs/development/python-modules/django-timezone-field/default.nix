@@ -13,7 +13,11 @@
 
 buildPythonPackage rec {
   pname = "django-timezone-field";
+<<<<<<< HEAD
   version = "5.1";
+=======
+  version = "5.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   disabled = pythonOlder "3.5";
   format = "pyproject";
 
@@ -21,7 +25,11 @@ buildPythonPackage rec {
     owner = "mfogel";
     repo = pname;
     rev = version;
+<<<<<<< HEAD
     hash = "sha256-FAYO8OEE/h4rsbC4Oc57ylWV7TqQ6DOd6/2M+mb/AsM=";
+=======
+    hash = "sha256-GXkvF/kAOU1JK0GDpUT1irCQlkxIWieYRqPd0fr2HXw=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

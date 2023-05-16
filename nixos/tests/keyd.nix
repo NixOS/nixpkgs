@@ -32,7 +32,11 @@ let
     nodes.machine = {
       services.keyd = {
         enable = true;
+<<<<<<< HEAD
         keyboards.default = { inherit settings; };
+=======
+        inherit settings;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       };
     };
 

@@ -62,6 +62,7 @@ in {
         Whether to open the firewall for the default ports.
       '';
     };
+<<<<<<< HEAD
 
     extraArgs = mkOption {
       type = types.listOf types.str;
@@ -72,6 +73,8 @@ in {
         or {command}`vmagent -help` for more information.
       '';
     };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   config = mkIf cfg.enable {
@@ -100,7 +103,11 @@ in {
         Type = "simple";
         Restart = "on-failure";
         WorkingDirectory = cfg.dataDir;
+<<<<<<< HEAD
         ExecStart = "${cfg.package}/bin/vmagent -remoteWrite.url=${cfg.remoteWriteUrl} -promscrape.config=${prometheusConfig} ${escapeShellArgs cfg.extraArgs}";
+=======
+        ExecStart = "${cfg.package}/bin/vmagent -remoteWrite.url=${cfg.remoteWriteUrl} -promscrape.config=${prometheusConfig}";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       };
     };
 

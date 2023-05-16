@@ -1,5 +1,9 @@
 { lib, stdenv
 , curl
+<<<<<<< HEAD
+=======
+, darwin
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , hiredis
 , iptables
 , jdk
@@ -18,6 +22,10 @@
 , libsigrok
 , libvirt
 , libxml2
+<<<<<<< HEAD
+=======
+, libapparmor, libcap_ng, numactl
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , lua
 , lvm2
 , lm_sensors

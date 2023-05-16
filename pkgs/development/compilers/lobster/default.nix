@@ -18,13 +18,21 @@
 
 stdenv.mkDerivation rec {
   pname = "lobster";
+<<<<<<< HEAD
   version = "2023.11";
+=======
+  version = "2023.6";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "aardappel";
     repo = "lobster";
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-c0EElDvoFzIZvYZpjWd9az+KUxDXTETOp89I/tRCrQ0=";
+=======
+    sha256 = "sha256-10QucCDHL7Hk3P4NI94J4Kw6L5+8BNd90DKX6LN7D+E=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ cmake ];

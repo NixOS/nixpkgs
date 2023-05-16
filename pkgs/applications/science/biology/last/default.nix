@@ -9,13 +9,21 @@
 
 stdenv.mkDerivation rec {
   pname = "last";
+<<<<<<< HEAD
   version = "1471";
+=======
+  version = "1453";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitLab {
     owner = "mcfrith";
     repo = "last";
     rev = "refs/tags/${version}";
+<<<<<<< HEAD
     hash = "sha256-HQ2C7SFfJS6TOJZUm6szhu+hMm41BnH8A7DZE5yh9fM=";
+=======
+    hash = "sha256-r8bWk1+weSyQ5QPGKKwdAzMkzh3DgzTUr5YCMUq5UUM=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

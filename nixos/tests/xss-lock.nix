@@ -1,6 +1,16 @@
+<<<<<<< HEAD
 import ./make-test-python.nix ({ pkgs, lib, ... }: {
   name = "xss-lock";
   meta.maintainers = [ ];
+=======
+import ./make-test-python.nix ({ pkgs, lib, ... }:
+
+with lib;
+
+{
+  name = "xss-lock";
+  meta.maintainers = with pkgs.lib.maintainers; [ ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nodes = {
     simple = {

@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 { lib, buildNimPackage, fetchFromGitHub, illwill }:
+=======
+{ lib, buildNimPackage, fetchFromGitHub }:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 buildNimPackage rec {
   pname = "illwillwidgets";
@@ -11,9 +15,12 @@ buildNimPackage rec {
     hash = "sha256-YVNdgs8jquJ58qbcyNMMJt+hJYcvahYpkSrDBbO4ILU=";
   };
 
+<<<<<<< HEAD
   propagatedBuildInputs = [ illwill ];
   doCheck = false;
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   meta = with lib;
     src.meta // {
       description = "Mouse enabled widgets for illwill";

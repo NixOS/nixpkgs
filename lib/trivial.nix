@@ -179,7 +179,11 @@ rec {
      they take effect as soon as the oldest release reaches end of life. */
   oldestSupportedRelease =
     # Update on master only. Do not backport.
+<<<<<<< HEAD
     2305;
+=======
+    2211;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   /* Whether a feature is supported in all supported releases (at the time of
      release branch-off, if applicable). See `oldestSupportedRelease`. */
@@ -195,7 +199,11 @@ rec {
      On each release the first letter is bumped and a new animal is chosen
      starting with that new letter.
   */
+<<<<<<< HEAD
   codeName = "Tapir";
+=======
+  codeName = "Stoat";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   /* Returns the current nixpkgs version suffix as string. */
   versionSuffix =
@@ -307,14 +315,22 @@ rec {
 
   /* Reads a JSON file.
 
+<<<<<<< HEAD
      Type: importJSON :: path -> any
+=======
+     Type :: path -> any
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   */
   importJSON = path:
     builtins.fromJSON (builtins.readFile path);
 
   /* Reads a TOML file.
 
+<<<<<<< HEAD
      Type: importTOML :: path -> any
+=======
+     Type :: path -> any
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   */
   importTOML = path:
     builtins.fromTOML (builtins.readFile path);

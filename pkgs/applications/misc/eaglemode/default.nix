@@ -1,5 +1,6 @@
 { lib, stdenv, fetchurl, perl, libX11, libXinerama, libjpeg, libpng, libtiff
 , libwebp, pkg-config, librsvg, glib, gtk2, libXext, libXxf86vm, poppler, vlc
+<<<<<<< HEAD
 , ghostscript, makeWrapper, tzdata, makeDesktopItem, copyDesktopItems
 , directoryListingUpdater }:
 
@@ -10,6 +11,17 @@ stdenv.mkDerivation rec {
   src = fetchurl {
     url = "mirror://sourceforge/eaglemode/${pname}-${version}.tar.bz2";
     hash = "sha256-FIhCcMghzLg7Odcsou9hBw7kIaqLVUFEAKUk9uwRNNw=";
+=======
+, ghostscript, makeWrapper, tzdata, makeDesktopItem, copyDesktopItems }:
+
+stdenv.mkDerivation rec {
+  pname = "eaglemode";
+  version = "0.96.0";
+
+  src = fetchurl {
+    url = "mirror://sourceforge/eaglemode/${pname}-${version}.tar.bz2";
+    hash = "sha256-aMVXJpfws9rh2Eaa/EzSLwtwvn0pVJlEbhxzvXME1hs=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   # Fixes "Error: No time zones found." on the clock
@@ -56,11 +68,14 @@ stdenv.mkDerivation rec {
     })
   ];
 
+<<<<<<< HEAD
   passthru.updateScript = directoryListingUpdater {
     url = "https://eaglemode.sourceforge.net/download.html";
     extraRegex = "(?!.*(x86_64|setup64|livecd)).*";
   };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   meta = with lib; {
     homepage = "https://eaglemode.sourceforge.net";
     description = "Zoomable User Interface";

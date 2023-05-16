@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 { stdenv, lib, fetchFromGitHub, makeWrapper, installShellFiles, bash, curl, git, writeScript }:
+=======
+{ stdenv, lib, fetchFromGitHub, makeWrapper, installShellFiles, bash, coreutils, curl, git, writeScript }:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 let
   asdfReshimFile = writeScript "asdf-reshim" ''
@@ -37,13 +41,21 @@ ${asdfReshimFile}
   '';
 in stdenv.mkDerivation rec {
   pname = "asdf-vm";
+<<<<<<< HEAD
   version = "0.12.0";
+=======
+  version = "0.11.3";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "asdf-vm";
     repo = "asdf";
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-9U8B6KRn27RrMqWXAUTTy+hrOgMv5Ii4YGsOZeX5Bl0=";
+=======
+    sha256 = "sha256-4y0XamKIZ7kftrsSb87qLizTBO6b2fdAyPauslwzo8c=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

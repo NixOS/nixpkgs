@@ -15,5 +15,9 @@ stdenv.mkDerivation (args // {
 
     maintainers = with lib.maintainers; [ ashalkhakov matthewbauer ];
     platforms = lib.platforms.linux;
+<<<<<<< HEAD
   } // (lib.optionalAttrs (builtins.hasAttr "meta" args) args.meta);
+=======
+  } // (if builtins.hasAttr "meta" args then args.meta else {});
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 })

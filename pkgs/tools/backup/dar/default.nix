@@ -29,12 +29,20 @@ let
 in
 
 stdenv.mkDerivation rec {
+<<<<<<< HEAD
   version = "2.7.10";
+=======
+  version = "2.7.9";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pname = "dar";
 
   src = fetchzip {
     url = "mirror://sourceforge/dar/${pname}-${version}.tar.gz";
+<<<<<<< HEAD
     sha256 = "sha256-cvEeV4e19gVgz5vctQUgA4Atj37dgFg3iH789DWtVZU=";
+=======
+    sha256 = "sha256-q5ZfX0bybyvJ0NjrJQ2/+o0n7dBLGxdIDevls3xOQMg=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   outputs = [ "out" "dev" ];

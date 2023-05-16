@@ -21,12 +21,20 @@
 
 stdenv.mkDerivation rec {
   pname = "libcamera";
+<<<<<<< HEAD
   version = "0.0.5";
+=======
+  version = "0.0.3";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchgit {
     url = "https://git.libcamera.org/libcamera/libcamera.git";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-rd1YIEosg4+H/FJBYCoxdQlV9F0evU5fckHJrSdVPOE=";
+=======
+    hash = "sha256-0/wvH07bJRKFwYnOARRJNzH8enIX3TNnWQnJdfpfvgE=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   outputs = [ "out" "dev" "doc" ];

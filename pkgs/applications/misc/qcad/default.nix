@@ -18,14 +18,22 @@
 
 mkDerivation rec {
   pname = "qcad";
+<<<<<<< HEAD
   version = "3.28.1.3";
+=======
+  version = "3.28.1.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     name = "qcad-${version}-src";
     owner = "qcad";
     repo = "qcad";
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-4Kr/zKE2VqAblNvxT9dg1325V0OCMca3MPEiG3fTxT4=";
+=======
+    sha256 = "sha256-NizAUyj6YbfjxXDQkVaqzkp11WMJlt4FMr72i3Cn564=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   patches = [

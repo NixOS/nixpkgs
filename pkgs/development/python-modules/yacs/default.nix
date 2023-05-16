@@ -26,7 +26,11 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Yet Another Configuration System";
     homepage = "https://github.com/rbgirshick/yacs";
+<<<<<<< HEAD
     license = licenses.asl20;
+=======
+    license = licenses.apsl20;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     maintainers = with maintainers; [ lucasew ];
   };
 }

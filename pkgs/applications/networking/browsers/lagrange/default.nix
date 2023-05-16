@@ -17,13 +17,21 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lagrange";
+<<<<<<< HEAD
   version = "1.16.7";
+=======
+  version = "1.15.9";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "skyjake";
     repo = "lagrange";
     rev = "v${finalAttrs.version}";
+<<<<<<< HEAD
     hash = "sha256-d9QmFXDDeYDR1KFtOyQKfaYvex8TFDiYJUrKEp7H5K8=";
+=======
+    hash = "sha256-tR3qffGB83iyg3T7YRD1YRX/PG4YGLOnElHJ0ju47Y8=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ cmake pkg-config zip ];

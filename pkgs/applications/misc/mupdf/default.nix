@@ -27,12 +27,15 @@
 , freeglut
 , libGLU
 , xcbuild
+<<<<<<< HEAD
 , gitUpdater
 
 # for passthru.tests
 , cups-filters
 , python3
 , zathura
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 let
 
@@ -53,12 +56,20 @@ let
 
 in
 stdenv.mkDerivation rec {
+<<<<<<< HEAD
   version = "1.23.0";
+=======
+  version = "1.21.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pname = "mupdf";
 
   src = fetchurl {
     url = "https://mupdf.com/downloads/archive/${pname}-${version}-source.tar.gz";
+<<<<<<< HEAD
     sha256 = "sha256-3kFAaS5pMULDEeAwrBVuOO4XXXq2wb4QxcmuljhGFk4=";
+=======
+    sha256 = "sha256-sk3b4SUGzILeCNXNSUYUugg0b4F12x2YvPk4/5SSWlQ=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   patches = [ ./0001-Use-command-v-in-favor-of-which.patch
@@ -152,6 +163,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+<<<<<<< HEAD
   passthru = {
     tests = {
       inherit cups-filters zathura;
@@ -172,5 +184,13 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ vrthra fpletz ];
     platforms = platforms.unix;
     mainProgram = "mupdf";
+=======
+  meta = with lib; {
+    homepage = "https://mupdf.com";
+    description = "Lightweight PDF, XPS, and E-book viewer and toolkit written in portable C";
+    license = licenses.agpl3Plus;
+    maintainers = with maintainers; [ vrthra fpletz ];
+    platforms = platforms.unix;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

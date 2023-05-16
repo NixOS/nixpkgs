@@ -23,6 +23,7 @@ in
         '';
       };
 
+<<<<<<< HEAD
       apiTokenFile = mkOption {
         default = null;
         type = types.nullOr types.str;
@@ -32,6 +33,8 @@ in
         '';
       };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       apikeyFile = mkOption {
         default = null;
         type = types.nullOr types.str;
@@ -64,15 +67,22 @@ in
         Group = config.ids.gids.cfdyndns;
       };
       environment = {
+<<<<<<< HEAD
+=======
+        CLOUDFLARE_EMAIL="${cfg.email}";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         CLOUDFLARE_RECORDS="${concatStringsSep "," cfg.records}";
       };
       script = ''
         ${optionalString (cfg.apikeyFile != null) ''
           export CLOUDFLARE_APIKEY="$(cat ${escapeShellArg cfg.apikeyFile})"
+<<<<<<< HEAD
           export CLOUDFLARE_EMAIL="${cfg.email}"
         ''}
         ${optionalString (cfg.apiTokenFile != null) ''
           export CLOUDFLARE_APITOKEN="$(cat ${escapeShellArg cfg.apiTokenFile})"
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         ''}
         ${pkgs.cfdyndns}/bin/cfdyndns
       '';

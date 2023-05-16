@@ -11,7 +11,11 @@ buildGoModule rec {
     sha256 = "sha256-svM/TzGQU/QgjqHboy0470+A6p4kR76typ9gnfjfAJk=";
   };
 
+<<<<<<< HEAD
   vendorHash = "sha256-rQS3QH9vnEbQZszG3FOr1P5HYgS63BurCNCFQTTdvZs=";
+=======
+  vendorSha256 = "sha256-rQS3QH9vnEbQZszG3FOr1P5HYgS63BurCNCFQTTdvZs=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   meta = with lib; {
     description = "Convert images into ASCII art on the console";

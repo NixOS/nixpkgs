@@ -2,6 +2,7 @@
 
 stdenv.mkDerivation rec {
   pname = "ibus-table-others";
+<<<<<<< HEAD
   version = "1.3.17";
 
   src = fetchurl {
@@ -11,6 +12,17 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config python3 ];
   buildInputs = [ ibus ibus-table ];
+=======
+  version = "1.3.15";
+
+  src = fetchurl {
+    url = "https://github.com/moebiuscurve/ibus-table-others/releases/download/${version}/${pname}-${version}.tar.gz";
+    sha256 = "sha256-nOj5gwhFodZv29hAN6S8EhQ+XlWp31FDOGIXtyAOM1E=";
+  };
+
+  nativeBuildInputs = [ pkg-config ];
+  buildInputs = [ ibus ibus-table python3 ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   preBuild = ''
     export HOME=$TMPDIR
@@ -22,6 +34,10 @@ stdenv.mkDerivation rec {
     homepage     = "https://github.com/moebiuscurve/ibus-table-others";
     license      = licenses.gpl3;
     platforms    = platforms.linux;
+<<<<<<< HEAD
     maintainers  = with maintainers; [ mudri McSinyx ];
+=======
+    maintainers  = with maintainers; [ mudri ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

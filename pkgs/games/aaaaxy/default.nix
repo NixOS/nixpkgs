@@ -12,24 +12,39 @@
 , libXxf86vm
 , go-licenses
 , pkg-config
+<<<<<<< HEAD
 , zip
 , advancecomp
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , nixosTests
 }:
 
 buildGoModule rec {
   pname = "aaaaxy";
+<<<<<<< HEAD
   version = "1.4.45";
+=======
+  version = "1.3.524";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "divVerent";
     repo = pname;
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-93ffxzYSVumfk7J8K9Ma2WYWaGQLBIxSkds8OKzOCcw=";
     fetchSubmodules = true;
   };
 
   vendorHash = "sha256-wUH0ohccMjdeGpm9bcw8K7Ss0FZGXaPfxeJCKYkEhJ8=";
+=======
+    hash = "sha256-9g0wTvG6XSKI7e3RP6e3RoYyvE5UjOYxI5hVINI9Fq8=";
+    fetchSubmodules = true;
+  };
+
+  vendorHash = "sha256-slvBpweXRLsDegJDQ0ysZ0pugx5fdOOnD/OxWUfUnno=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   buildInputs = [
     alsa-lib
@@ -41,8 +56,11 @@ buildGoModule rec {
   nativeBuildInputs = [
     go-licenses
     pkg-config
+<<<<<<< HEAD
     zip
     advancecomp
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   outputs = [ "out" "testing_infra" ];

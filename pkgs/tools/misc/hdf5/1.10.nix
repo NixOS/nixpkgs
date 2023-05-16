@@ -9,7 +9,11 @@
 , jdk
 }:
 
+<<<<<<< HEAD
 let inherit (lib) optional; in
+=======
+let inherit (lib) optional optionals; in
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 stdenv.mkDerivation rec {
   version = "1.10.9";
@@ -51,11 +55,14 @@ stdenv.mkDerivation rec {
     license = lib.licenses.bsd3; # Lawrence Berkeley National Labs BSD 3-Clause variant
     homepage = "https://www.hdfgroup.org/HDF5/";
     platforms = lib.platforms.unix;
+<<<<<<< HEAD
     knownVulnerabilities = [
       "CVE-2020-10809"
       "CVE-2020-10810"
       "CVE-2020-10811"
       "CVE-2020-10812"
     ];
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

@@ -2,7 +2,11 @@
 
 let
   pname = "allure";
+<<<<<<< HEAD
   version = "2.24.0";
+=======
+  version = "2.22.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 in
 stdenv.mkDerivation rec {
   inherit pname version;
@@ -12,7 +16,11 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://github.com/allure-framework/allure2/releases/download/${version}/allure-${version}.tgz";
+<<<<<<< HEAD
     sha256 = "sha256-rLVvLqLC2hSxXWDxrw/PFq4o9DeDGU9aBxZuRHkxWfo=";
+=======
+    sha256 = "sha256-zt8O4hl7/G2kb4PbYOUs9R6+M3xl37URAE/Ccp2dPUk=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
   dontConfigure = true;
   dontBuild = true;

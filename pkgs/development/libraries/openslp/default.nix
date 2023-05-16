@@ -12,12 +12,20 @@ stdenv.mkDerivation rec {
   patches = [
     (fetchpatch {
       name = "openslp-2.0.0-null-pointer-deref.patch";
+<<<<<<< HEAD
       url = "https://src.fedoraproject.org/rpms/openslp/raw/696fd55ae4fcea7beda0a25131dca8bfb14bbdf9/f/openslp-2.0.0-null-pointer-deref.patch";
+=======
+      url = "https://src.fedoraproject.org/cgit/rpms/openslp.git/plain/openslp-2.0.0-null-pointer-deref.patch";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       sha256 = "186f3rj3z2lf5h1lpbhqk0szj2a9far1p3mjqg6422f29yjfnz6a";
     })
     (fetchpatch {
       name = "openslp-2.0.0-CVE-2016-7567.patch";
+<<<<<<< HEAD
       url = "https://src.fedoraproject.org/rpms/openslp/raw/696fd55ae4fcea7beda0a25131dca8bfb14bbdf9/f/openslp-2.0.0-cve-2016-7567.patch";
+=======
+      url = "https://src.fedoraproject.org/cgit/rpms/openslp.git/plain/openslp-2.0.0-cve-2016-7567.patch";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       sha256 = "0zp61axx93b7nrbsyhn2x4dnw7n9y6g4rys21hyqxk4khrnc2yr9";
     })
     ./CVE-2016-4912.patch

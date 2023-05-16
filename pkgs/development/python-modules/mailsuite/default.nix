@@ -15,14 +15,22 @@
 
 buildPythonPackage rec {
   pname = "mailsuite";
+<<<<<<< HEAD
   version = "1.9.15";
+=======
+  version = "1.9.14";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
+<<<<<<< HEAD
     hash = "sha256-R4nAphydamZojQR7pro5Y3dZg3nYK0+X5lFBMJUpCfw=";
+=======
+    hash = "sha256-8vybabJPQyR0XMXaNp8lQFyuPajrhucgdfazt2ci8Gs=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

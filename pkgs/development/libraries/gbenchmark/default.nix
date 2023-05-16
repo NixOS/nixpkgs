@@ -8,13 +8,21 @@
 
 stdenv.mkDerivation rec {
   pname = "gbenchmark";
+<<<<<<< HEAD
   version = "1.8.0";
+=======
+  version = "1.7.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "benchmark";
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-pUW9YVaujs/y00/SiPqDgK4wvVsaM7QUp/65k0t7Yr0=";
+=======
+    sha256 = "sha256-gg3g/0Ki29FnGqKv9lDTs5oA9NjH23qQ+hTdVtSU+zo=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ cmake ];

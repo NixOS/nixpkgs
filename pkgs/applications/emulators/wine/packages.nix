@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 { stdenv_32bit, lib, pkgs, pkgsi686Linux, pkgsCross, callPackage, substituteAll, moltenvk,
+=======
+{ stdenv_32bit, lib, pkgs, pkgsi686Linux, pkgsCross, callPackage, moltenvk,
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   wineRelease ? "stable",
   supportFlags
 }:
@@ -34,6 +38,7 @@ in with src; {
     geckos = [ gecko32 gecko64 ];
     mingwGccs = with pkgsCross; [ mingw32.buildPackages.gcc mingwW64.buildPackages.gcc ];
     monos =  [ mono ];
+<<<<<<< HEAD
     buildScript = substituteAll {
         src = ./builder-wow.sh;
         # pkgconfig has trouble picking the right architecture
@@ -53,4 +58,10 @@ in with src; {
     platforms = [ "x86_64-linux" "x86_64-darwin" ];
     mainProgram = "wine";
   };
+=======
+    buildScript = ./builder-wow.sh;
+    platforms = [ "x86_64-linux" ];
+    mainProgram = "wine64";
+  };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }

@@ -4,6 +4,10 @@
 , flask
 , flask-login
 , flask-sqlalchemy
+<<<<<<< HEAD
+=======
+, flexmock
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , psycopg2
 , pymysql
 , pytestCheckHook
@@ -15,7 +19,11 @@
 
 buildPythonPackage rec {
   pname = "sqlalchemy-continuum";
+<<<<<<< HEAD
   version = "1.4.0";
+=======
+  version = "1.3.14";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -23,7 +31,11 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "SQLAlchemy-Continuum";
     inherit version;
+<<<<<<< HEAD
     hash = "sha256-Rk+aWxBjUrXuRPE5MSyzWMWS0l7qrjU3wOrHLC+vteU=";
+=======
+    hash = "sha256-1+k/lx6R8tW9gM3M2kqaVEwpmx8cMhDXeqCjyd8O2hM=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [
@@ -41,6 +53,12 @@ buildPythonPackage rec {
     flask-sqlalchemy = [
       flask-sqlalchemy
     ];
+<<<<<<< HEAD
+=======
+    flexmock = [
+      flexmock
+    ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     i18n = [
       sqlalchemy-i18n
     ];
@@ -53,7 +71,16 @@ buildPythonPackage rec {
   ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
 
   # Indicate tests that we don't have a database server at hand
+<<<<<<< HEAD
   env.DB = "sqlite";
+=======
+  DB = "sqlite";
+
+  disabledTestPaths = [
+    # Test doesn't support latest SQLAlchemy
+    "tests/plugins/test_flask.py"
+  ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   pythonImportsCheck = [
     "sqlalchemy_continuum"
@@ -65,5 +92,11 @@ buildPythonPackage rec {
     changelog = "https://github.com/kvesteri/sqlalchemy-continuum/blob/${version}/CHANGES.rst";
     license = licenses.bsd3;
     maintainers = with maintainers; [ ];
+<<<<<<< HEAD
+=======
+
+    # https://github.com/kvesteri/sqlalchemy-continuum/issues/326
+    broken = versionAtLeast sqlalchemy.version "2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

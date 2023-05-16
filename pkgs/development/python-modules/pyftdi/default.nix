@@ -8,7 +8,11 @@
 
 buildPythonPackage rec {
   pname = "pyftdi";
+<<<<<<< HEAD
   version = "0.55.0";
+=======
+  version = "0.54.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -17,7 +21,11 @@ buildPythonPackage rec {
     owner = "eblot";
     repo = pname;
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-EEMHY5EKftci72huF5UmJyh2wJAc8uNh/QhGSSAVXIU=";
+=======
+    hash = "sha256-vL8jSgTtDvaHuCvaCYmFixILQFasTl82yINL5yRtOwU=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [

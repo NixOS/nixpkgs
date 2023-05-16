@@ -49,14 +49,22 @@
 
 stdenv.mkDerivation rec {
   pname = "tenacity";
+<<<<<<< HEAD
   version = "1.3.1";
+=======
+  version = "1.3-beta2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "tenacityteam";
     repo = pname;
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-wesnay+UQiPSDaRuSo86MgHdElN4s0rPIvokZhKM7GI=";
+=======
+    sha256 = "sha256-9gWoqFa87neIvRnezWI3RyCAOU4wKEHPn/Hgj3/fol0=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   postPatch = ''
@@ -69,7 +77,11 @@ stdenv.mkDerivation rec {
   '';
 
   postFixup = ''
+<<<<<<< HEAD
     rm $out/tenacity
+=======
+    rm $out/audacity
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     wrapProgram "$out/bin/tenacity" \
       --suffix AUDACITY_PATH : "$out/share/tenacity" \
       --suffix AUDACITY_MODULES_PATH : "$out/lib/tenacity/modules" \

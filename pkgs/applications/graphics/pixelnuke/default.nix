@@ -1,6 +1,10 @@
 { lib, stdenv, fetchFromGitHub, libevent, glew, glfw }:
 
+<<<<<<< HEAD
 stdenv.mkDerivation (finalAttrs: {
+=======
+stdenv.mkDerivation {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pname = "pixelnuke";
   version = "unstable-2019-05-19";
 
@@ -11,7 +15,11 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = "03dp0p00chy00njl4w02ahxqiwqpjsrvwg8j4yi4dgckkc3gbh40";
   };
 
+<<<<<<< HEAD
   sourceRoot = "${finalAttrs.src.name}/pixelnuke";
+=======
+  sourceRoot = "source/pixelnuke";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   buildInputs = [ libevent glew glfw ];
 
@@ -26,4 +34,8 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = platforms.linux;
     maintainers = with maintainers; [ mrVanDalo ];
   };
+<<<<<<< HEAD
 })
+=======
+}
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)

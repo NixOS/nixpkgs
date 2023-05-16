@@ -110,6 +110,10 @@ buildPythonPackage rec {
     homepage = "http://datastax.github.io/python-driver";
     changelog = "https://github.com/datastax/python-driver/blob/${version}/CHANGELOG.rst";
     license = licenses.asl20;
+<<<<<<< HEAD
     maintainers = with maintainers; [ ris ];
+=======
+    maintainers = with maintainers; [ turion ris ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

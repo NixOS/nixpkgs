@@ -13,13 +13,21 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "doublecmd";
+<<<<<<< HEAD
   version = "1.1.1";
+=======
+  version = "1.0.11";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "doublecmd";
     repo = "doublecmd";
     rev = "v${finalAttrs.version}";
+<<<<<<< HEAD
     hash = "sha256-IccM7AwPiOtGHjAzvjQ99mrLFh8iZu8G7Rf71LJHB/g=";
+=======
+    hash = "sha256-UV5LooVkCBzUk9E7dYje6t19HOuMCO8jY+fNGTES0KA=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

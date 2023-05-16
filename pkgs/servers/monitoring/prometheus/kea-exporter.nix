@@ -1,11 +1,19 @@
+<<<<<<< HEAD
 { lib, python3Packages, fetchPypi, nixosTests }:
+=======
+{ lib, python3Packages, nixosTests }:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 python3Packages.buildPythonApplication rec {
   pname = "kea-exporter";
   version = "0.5.1";
   format = "pyproject";
 
+<<<<<<< HEAD
   src = fetchPypi {
+=======
+  src = python3Packages.fetchPypi {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     inherit pname version;
     hash = "sha256-rNGA5XEx9xVUP1SeDPgXcaqgDhgX6JFhRX9GM454P5A=";
   };

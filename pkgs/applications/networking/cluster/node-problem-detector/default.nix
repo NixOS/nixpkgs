@@ -2,13 +2,21 @@
 
 buildGoModule rec {
   pname = "node-problem-detector";
+<<<<<<< HEAD
   version = "0.8.14";
+=======
+  version = "0.8.13";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "kubernetes";
     repo = pname;
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-kh9rYg6UszBMCWYfVU+tP4ZRoigEm6+Z+7pnZWdbcwU=";
+=======
+    sha256 = "sha256-nNi4YahrO4zwqwR90tIpQCAydGdQbfy5PXCifpP/T7Q=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   vendorHash = null;

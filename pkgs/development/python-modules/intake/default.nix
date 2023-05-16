@@ -26,7 +26,11 @@
 
 buildPythonPackage rec {
   pname = "intake";
+<<<<<<< HEAD
   version = "unstable-2023-08-24";
+=======
+  version = "0.6.8";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -34,8 +38,13 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
+<<<<<<< HEAD
     rev = "81b1567a2030adfb22b856b4f63cefe35de68983";
     hash = "sha256-S2PoUN0Bao5VULfHhgbXXowopPLm/njAHO3dIM8ILno=";
+=======
+    rev = "refs/tags/${version}";
+    hash = "sha256-7A9wuuOQyGhdGj6T5VY+NrZjEOf/y8dCzSkHuPhNsKI=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [
@@ -79,8 +88,11 @@ buildPythonPackage rec {
       --replace "'pytest-runner'" ""
   '';
 
+<<<<<<< HEAD
   __darwinAllowLocalNetworking = true;
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   preCheck = ''
     export HOME=$(mktemp -d);
     export PATH="$PATH:$out/bin";
@@ -108,6 +120,7 @@ buildPythonPackage rec {
     "test_ndarray"
     "test_python"
     # Timing-based, flaky on darwin and possibly others
+<<<<<<< HEAD
     "test_idle_timer"
     # arrow-cpp-13 related
     "test_read"
@@ -119,6 +132,9 @@ buildPythonPackage rec {
     "test_columns"
     "test_df_transform"
     "test_pipeline_apply"
+=======
+    "TestServerV1Source.test_idle_timer"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ] ++ lib.optionals (stdenv.isDarwin && lib.versionOlder stdenv.hostPlatform.darwinMinVersion "10.13") [
     # Flaky with older low-res mtime on darwin < 10.13 (#143987)
     "test_second_load_timestamp"
@@ -133,6 +149,10 @@ buildPythonPackage rec {
     homepage = "https://github.com/ContinuumIO/intake";
     changelog = "https://github.com/intake/intake/blob/${version}/docs/source/changelog.rst";
     license = licenses.bsd2;
+<<<<<<< HEAD
     maintainers = with maintainers; [ ];
+=======
+    maintainers = with maintainers; [ costrouc ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

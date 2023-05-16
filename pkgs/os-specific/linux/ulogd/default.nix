@@ -1,6 +1,9 @@
 { stdenv, lib, fetchurl, gnumake, libnetfilter_acct, libnetfilter_conntrack
 , libnetfilter_log, libmnl, libnfnetlink, automake, autoconf, autogen, libtool
+<<<<<<< HEAD
 , postgresql, libmysqlclient, sqlite
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , pkg-config, libpcap, linuxdoc-tools, autoreconfHook, nixosTests }:
 
 stdenv.mkDerivation rec {
@@ -38,9 +41,12 @@ stdenv.mkDerivation rec {
     libmnl
     libnfnetlink
     libpcap
+<<<<<<< HEAD
     postgresql
     libmysqlclient
     sqlite
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   nativeBuildInputs = [

@@ -15,7 +15,11 @@
 
 buildPythonPackage rec {
   pname = "praw";
+<<<<<<< HEAD
   version = "7.7.1";
+=======
+  version = "7.7.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -24,7 +28,11 @@ buildPythonPackage rec {
     owner = "praw-dev";
     repo = pname;
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-L7wTHD/ypXVc8GMfl9u16VNb9caLJoXpaMEIzaVVUgo=";
+=======
+    hash = "sha256-reJW1M1yDSQ1SvZJeOc0jwHj6ydl1AmMl5VZqRHxXZA=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [

@@ -6,13 +6,21 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "barman";
+<<<<<<< HEAD
   version = "3.7.0";
+=======
+  version = "3.4.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "EnterpriseDB";
     repo = pname;
     rev = "refs/tags/release/${version}";
+<<<<<<< HEAD
     hash = "sha256-5mecCg5c+fu6WUgmNEL4BR+JCild02YAuYgLwO1MGnI=";
+=======
+    hash = "sha256-K5y5C+K/fMhgOcSsCMaIgY6ce9UUPszoyumsfNHKjBo=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   patches = [

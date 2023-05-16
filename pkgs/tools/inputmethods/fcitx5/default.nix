@@ -2,7 +2,10 @@
 , stdenv
 , fetchurl
 , fetchFromGitHub
+<<<<<<< HEAD
 , fetchpatch
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , pkg-config
 , cmake
 , extra-cmake-modules
@@ -32,7 +35,10 @@
 , xcbutilwm
 , xcb-imdkit
 , libxkbfile
+<<<<<<< HEAD
 , nixosTests
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 let
   enDictVer = "20121020";
@@ -43,13 +49,21 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "fcitx5";
+<<<<<<< HEAD
   version = "5.1.0";
+=======
+  version = "5.0.23";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "fcitx";
     repo = pname;
     rev = version;
+<<<<<<< HEAD
     hash = "sha256-tnYyHhldPmMZcygpcOcbaYFQbRQjPr/FlvyYfRylTmQ=";
+=======
+    hash = "sha256-zS25XeNtBN7QIi+Re/p1uLoH/Q4xKAsFrEmgk2LYRu8=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   prePatch = ''
@@ -91,12 +105,16 @@ stdenv.mkDerivation rec {
     libxkbfile
   ];
 
+<<<<<<< HEAD
   passthru = {
     updateScript = ./update.py;
     tests = {
       inherit (nixosTests) fcitx5;
     };
   };
+=======
+  passthru.updateScript = ./update.py;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   meta = with lib; {
     description = "Next generation of fcitx";

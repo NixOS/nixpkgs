@@ -11,7 +11,11 @@
 , setuptools
 , setuptools-scm
 , pythonOlder
+<<<<<<< HEAD
 , sip
+=======
+, sip_4
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 buildPythonPackage rec {
@@ -43,7 +47,11 @@ buildPythonPackage rec {
     pegen
     ply
     qtpy
+<<<<<<< HEAD
     sip
+=======
+    sip_4
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   # qt bindings cannot be found during tests

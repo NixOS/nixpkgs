@@ -35,10 +35,14 @@ stdenv.mkDerivation rec {
     cp -a out/public-include/smbios_c $out/include/
   '';
 
+<<<<<<< HEAD
   # remove forbidden reference to $TMPDIR
   preFixup = ''
     patchelf --shrink-rpath --allowed-rpath-prefixes "$NIX_STORE" "$out/sbin/smbios-sys-info-lite"
   '';
+=======
+  preFixup = ''rm -rf "$(pwd)" ''; # Hack to avoid TMPDIR in RPATHs
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   meta = with lib; {
     homepage = "https://github.com/dell/libsmbios";

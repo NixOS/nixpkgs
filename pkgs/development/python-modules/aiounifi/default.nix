@@ -8,22 +8,33 @@
 , pytest-asyncio
 , pytestCheckHook
 , pythonOlder
+<<<<<<< HEAD
 , segno
 , setuptools
 , wheel
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 buildPythonPackage rec {
   pname = "aiounifi";
+<<<<<<< HEAD
   version = "62";
   format = "pyproject";
 
   disabled = pythonOlder "3.11";
+=======
+  version = "47";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.9";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "Kane610";
     repo = pname;
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-5XCF67YuelS4RDUxfImSAELfdb3rJWGprIYQeQPp+yk=";
   };
 
@@ -44,6 +55,14 @@ buildPythonPackage rec {
     aiohttp
     orjson
     segno
+=======
+    hash = "sha256-/BdSB7CD/ob8vinYDZVy0FNU23PSCiHF8jHGQUDsm1w=";
+  };
+
+  propagatedBuildInputs = [
+    aiohttp
+    orjson
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   nativeCheckInputs = [

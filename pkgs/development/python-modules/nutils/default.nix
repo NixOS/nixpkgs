@@ -5,16 +5,24 @@
 , numpy
 , treelog
 , stringly
+<<<<<<< HEAD
 , flit-core
 , bottombar
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , pytestCheckHook
 , pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "nutils";
+<<<<<<< HEAD
   version = "7.3";
   format = "pyproject";
+=======
+  version = "7.2";
+  format = "setuptools";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   disabled = pythonOlder "3.7";
 
@@ -22,6 +30,7 @@ buildPythonPackage rec {
     owner = "evalf";
     repo = "nutils";
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-3VtQFnR8vihxoIyRkbE1a1Rs8Np3/79PWNKReTBZDg8=";
   };
 
@@ -29,11 +38,19 @@ buildPythonPackage rec {
     flit-core
   ];
 
+=======
+    hash = "sha256-KCvUBE3qbX6v1HahBj4/jjM8ujvFGtWNuH1D+bTHrQ0=";
+  };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   propagatedBuildInputs = [
     numpy
     treelog
     stringly
+<<<<<<< HEAD
     bottombar
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   nativeCheckInputs = [
@@ -51,9 +68,15 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Numerical Utilities for Finite Element Analysis";
+<<<<<<< HEAD
     changelog = "https://github.com/evalf/nutils/releases/tag/v${version}";
     homepage = "https://www.nutils.org/";
     license = licenses.mit;
+=======
+    homepage = "https://www.nutils.org/";
+    license = licenses.mit;
+    broken = stdenv.hostPlatform.isAarch64;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     maintainers = with maintainers; [ Scriptkiddi ];
   };
 }

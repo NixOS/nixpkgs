@@ -27,13 +27,21 @@
 
 stdenv.mkDerivation rec {
   pname = "xviewer";
+<<<<<<< HEAD
   version = "3.4.1";
+=======
+  version = "3.2.12";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = pname;
     rev = version;
+<<<<<<< HEAD
     sha256 = "sha256-HVxCBqaKtsEGhGAB+dBCOnjAjLZHv0XqTifPrvoYdj8=";
+=======
+    sha256 = "sha256-tiZeC862gHbZt76sbxseUu9vWN+1huftXpE7lQLkGKU=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

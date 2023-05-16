@@ -2,13 +2,21 @@
 
 stdenv.mkDerivation rec {
   pname = "pgtap";
+<<<<<<< HEAD
   version = "1.3.0";
+=======
+  version = "1.2.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "theory";
     repo = "pgtap";
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-RaafUnrMRbvyf2m2Z+tK6XxVXDGnaOkYkSMxIJLnf6A=";
+=======
+    sha256 = "sha256-lb0PRffwo6J5a6Hqw1ggvn0cW7gPZ02OEcLPi9ineI8=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ postgresql perl perlPackages.TAPParserSourceHandlerpgTAP which ];

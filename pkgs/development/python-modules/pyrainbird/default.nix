@@ -1,5 +1,8 @@
 { lib
+<<<<<<< HEAD
 , aiohttp-retry
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , buildPythonPackage
 , fetchFromGitHub
 , freezegun
@@ -22,16 +25,27 @@
 
 buildPythonPackage rec {
   pname = "pyrainbird";
+<<<<<<< HEAD
   version = "4.0.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.10";
+=======
+  version = "2.0.1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.9";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "allenporter";
     repo = pname;
     rev = "refs/tags/${version}";
+<<<<<<< HEAD
     hash = "sha256-VwcYyD9JtLDU2Bgp2hlptDz3vPoX4revTRKTA8OkWEw=";
+=======
+    hash = "sha256-ssm/nFciUeWexgsKUpF4qZHz/grG8OYJV7roBAjMsac=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   postPatch = ''
@@ -43,7 +57,10 @@ buildPythonPackage rec {
   '';
 
   propagatedBuildInputs = [
+<<<<<<< HEAD
     aiohttp-retry
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     ical
     pycryptodome
     pydantic
@@ -52,8 +69,11 @@ buildPythonPackage rec {
     requests
   ];
 
+<<<<<<< HEAD
   __darwinAllowLocalNetworking = true;
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nativeCheckInputs = [
     freezegun
     parameterized

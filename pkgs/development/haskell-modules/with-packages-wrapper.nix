@@ -55,12 +55,15 @@ let
   libDir        = if isHaLVM then "$out/lib/HaLVM-${ghc.version}"
                   else "$out/lib/${ghc.targetPrefix}${ghc.haskellCompilerName}"
                     + lib.optionalString (ghc ? hadrian) "/lib";
+<<<<<<< HEAD
   # Boot libraries for GHC are present in a separate directory.
   bootLibDir    = let arch = if stdenv.targetPlatform.isAarch64
                              then "aarch64"
                              else "x86_64";
                       platform = if stdenv.targetPlatform.isDarwin then "osx" else "linux";
                   in "${ghc}/lib/${ghc.haskellCompilerName}/lib/${arch}-${platform}-${ghc.haskellCompilerName}";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   docDir        = "$out/share/doc/ghc/html";
   packageCfgDir = "${libDir}/package.conf.d";
   paths         = lib.concatLists (
@@ -137,17 +140,24 @@ symlinkJoin {
   '' + (lib.optionalString (stdenv.targetPlatform.isDarwin && !isGhcjs && !stdenv.targetPlatform.isiOS) ''
     # Work around a linker limit in macOS Sierra (see generic-builder.nix):
     local packageConfDir="${packageCfgDir}";
+<<<<<<< HEAD
     local dynamicLinksDir="$out/lib/links";
+=======
+    local dynamicLinksDir="$out/lib/links"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     mkdir -p $dynamicLinksDir
     # Clean up the old links that may have been (transitively) included by
     # symlinkJoin:
     rm -f $dynamicLinksDir/*
+<<<<<<< HEAD
 
     # Boot libraries are located differently than other libraries since GHC 9.6, so handle them separately.
     if [[ -x "${bootLibDir}" ]]; then
       ln -s "${bootLibDir}"/*.dylib $dynamicLinksDir
     fi
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     for d in $(grep -Poz "dynamic-library-dirs:\s*\K .+\n" $packageConfDir/*|awk '{print $2}'|sort -u); do
       ln -s $d/*.dylib $dynamicLinksDir
     done
@@ -158,7 +168,11 @@ symlinkJoin {
       # $dynamicLinksDir
       cp $f $f-tmp
       rm $f
+<<<<<<< HEAD
       sed "N;s,dynamic-library-dirs:\s*.*\n,dynamic-library-dirs: $dynamicLinksDir\n," $f-tmp > $f
+=======
+      sed "N;s,dynamic-library-dirs:\s*.*,dynamic-library-dirs: $dynamicLinksDir," $f-tmp > $f
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       rm $f-tmp
     done
   '') + ''

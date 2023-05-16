@@ -17,6 +17,10 @@ rustPlatform.buildRustPackage rec {
     description = "Cargo extension for running Criterion.rs benchmarks";
     homepage = "https://github.com/bheisler/cargo-criterion";
     license = with licenses; [ asl20 /* or */ mit ];
+<<<<<<< HEAD
     maintainers = with maintainers; [ humancalico matthiasbeyer ];
+=======
+    maintainers = with maintainers; [ humancalico ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

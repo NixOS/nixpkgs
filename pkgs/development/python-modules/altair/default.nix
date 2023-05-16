@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 { lib
 , buildPythonPackage
 , fetchFromGitHub
@@ -19,10 +20,29 @@
 , pytestCheckHook
 , vega_datasets
 , sphinx
+=======
+{ lib, buildPythonPackage, fetchPypi, isPy27
+, entrypoints
+, glibcLocales
+, ipython
+, jinja2
+, jsonschema
+, numpy
+, pandas
+, pytestCheckHook
+, pythonOlder
+, recommonmark
+, six
+, sphinx
+, toolz
+, typing ? null
+, vega_datasets
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 buildPythonPackage rec {
   pname = "altair";
+<<<<<<< HEAD
   # current version, 5.0.1, is broken with jsonschema>=4.18
   # we use unstable version instead of patch due to many changes
   version = "unstable-2023-08-12";
@@ -55,10 +75,38 @@ buildPythonPackage rec {
     sphinx
     vega_datasets
     pytestCheckHook
+=======
+  version = "4.2.2";
+  disabled = isPy27;
+
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-OTmaJnxJsw0QLBBBHmerJjdBVqhLGuufzRUUBCm6ScU=";
+  };
+
+  propagatedBuildInputs = [
+    entrypoints
+    jsonschema
+    numpy
+    pandas
+    six
+    toolz
+    jinja2
+  ] ++ lib.optionals (pythonOlder "3.5") [ typing ];
+
+  nativeCheckInputs = [
+    glibcLocales
+    ipython
+    pytestCheckHook
+    recommonmark
+    sphinx
+    vega_datasets
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   pythonImportsCheck = [ "altair" ];
 
+<<<<<<< HEAD
   disabledTestPaths = [
     # Disabled because it requires internet connectivity
     "tests/test_examples.py"
@@ -76,5 +124,18 @@ buildPythonPackage rec {
     downloadPage = "https://github.com/altair-viz/altair";
     license = licenses.bsd3;
     maintainers = with maintainers; [ teh vinetos ];
+=======
+  # avoid examples directory, which fetches web resources
+  preCheck = ''
+    cd altair/tests
+  '';
+
+  meta = with lib; {
+    description = "A declarative statistical visualization library for Python.";
+    homepage = "https://github.com/altair-viz/altair";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ teh ];
+    platforms = platforms.unix;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

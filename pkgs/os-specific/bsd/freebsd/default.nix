@@ -1,5 +1,9 @@
 { stdenv, lib, stdenvNoCC
+<<<<<<< HEAD
 , makeScopeWithSplicing', generateSplicesForMkScope
+=======
+, makeScopeWithSplicing, generateSplicesForMkScope
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , buildPackages
 , bsdSetupHook, makeSetupHook
 , fetchgit, fetchzip, coreutils, groff, mandoc, byacc, flex, which, m4, gawk, substituteAll, runtimeShell
@@ -66,9 +70,17 @@ let
     done
   '';
 
+<<<<<<< HEAD
 in makeScopeWithSplicing' {
   otherSplices = generateSplicesForMkScope "freebsd";
   f = (self: let
+=======
+in makeScopeWithSplicing
+  (generateSplicesForMkScope "freebsd")
+  (_: {})
+  (_: {})
+  (self: let
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     inherit (self) mkDerivation;
   in {
   inherit freebsdSrc;
@@ -896,5 +908,9 @@ in makeScopeWithSplicing' {
     '';
   });
 
+<<<<<<< HEAD
 });
 }
+=======
+})
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)

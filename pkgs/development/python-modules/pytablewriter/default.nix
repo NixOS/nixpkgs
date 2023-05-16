@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 { lib
 , buildPythonPackage
 , dataproperty
@@ -19,18 +20,40 @@
 , typepy
 , xlsxwriter
 , xlwt
+=======
+{ buildPythonPackage
+, fetchFromGitHub
+, lib
+, dataproperty
+, mbstrdecoder
+, pathvalidate
+, setuptools
+, tabledata
+, tcolorpy
+, typepy
+, pytestCheckHook
+, pyyaml
+, toml
+, elasticsearch
+, dominate
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 buildPythonPackage rec {
   pname = "pytablewriter";
+<<<<<<< HEAD
   version = "1.0.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
+=======
+  version = "0.64.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "thombashi";
     repo = pname;
+<<<<<<< HEAD
     rev = "refs/tags/v${version}";
     hash = "sha256-VDx7/kKRBho4oWvUXYe5K9CC4vUCDs91G05Wlpa47OE=";
   };
@@ -39,6 +62,12 @@ buildPythonPackage rec {
     setuptools
   ];
 
+=======
+    rev = "v${version}";
+    hash = "sha256-+IOHnmdd9g3SoHyITJJtbJ0/SAAmwWmwX5XeqsO34EM=";
+  };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   propagatedBuildInputs = [
     dataproperty
     mbstrdecoder
@@ -48,6 +77,7 @@ buildPythonPackage rec {
     typepy
   ];
 
+<<<<<<< HEAD
   passthru.optional-dependencies = {
     all = [
       dominate
@@ -114,16 +144,33 @@ buildPythonPackage rec {
     "test_normal"
   ];
 
+=======
+  checkInputs = [ pyyaml toml elasticsearch dominate ];
+  nativeCheckInputs = [ pytestCheckHook ];
+  # Circular dependency
+  disabledTests = [
+    "test_normal_from_file"
+    "test_normal_from_text"
+    "test_normal_clear_theme"
+  ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   disabledTestPaths = [
     "test/writer/binary/test_excel_writer.py"
     "test/writer/binary/test_sqlite_writer.py"
   ];
 
   meta = with lib; {
+<<<<<<< HEAD
     description = "A library to write a table in various formats";
     homepage = "https://github.com/thombashi/pytablewriter";
     changelog = "https://github.com/thombashi/pytablewriter/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ genericnerdyusername ];
+=======
+    homepage = "https://github.com/thombashi/pytablewriter";
+    description = "A library to write a table in various formats";
+    maintainers = with maintainers; [ genericnerdyusername ];
+    license = licenses.mit;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

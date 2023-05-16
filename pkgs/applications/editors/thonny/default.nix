@@ -1,16 +1,28 @@
+<<<<<<< HEAD
 { lib, fetchFromGitHub, python3, tk, makeDesktopItem, copyDesktopItems }:
+=======
+{ lib, fetchFromGitHub, python3, makeDesktopItem, copyDesktopItems }:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 with python3.pkgs;
 
 buildPythonApplication rec {
   pname = "thonny";
+<<<<<<< HEAD
   version = "4.1.2";
+=======
+  version = "4.0.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-vVDTizU+WDWJ75Ln93TAFYn7PJq5qc3hxVJiNGtK24g=";
+=======
+    sha256 = "sha256-TxfpzKAsU/5ble4VzJ+4pokCiyJsdisjmNwWfxOMKzE=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ copyDesktopItems ];
@@ -63,6 +75,10 @@ buildPythonApplication rec {
     homepage = "https://www.thonny.org/";
     license = licenses.mit;
     maintainers = with maintainers; [ leenaars ];
+<<<<<<< HEAD
     platforms = platforms.unix;
+=======
+    platforms = platforms.linux;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

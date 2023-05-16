@@ -11,7 +11,11 @@ buildGoModule rec {
     sha256 = "sha256-jO4otde/m52L2NrE88aXRjdGDBNxnbP1Zt+5fEqfNIc=";
   };
 
+<<<<<<< HEAD
   vendorHash = "sha256-VlpdZcqg7yWUADN8oD/IAgAXVdzJeIeymx2Pu/7E21o=";
+=======
+  vendorSha256 = "sha256-VlpdZcqg7yWUADN8oD/IAgAXVdzJeIeymx2Pu/7E21o=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   subPackages = [ "." "rice" ];
 

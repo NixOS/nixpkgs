@@ -2,10 +2,13 @@ import ./make-test-python.nix ({ pkgs, ... }:
   let
     certs = import ./common/acme/server/snakeoil-certs.nix;
     serverDomain = certs.domain;
+<<<<<<< HEAD
 
     testCredentials = {
       password = "Password1_cZPEwpCWvrReripJmAZdmVIZd8HHoHcl";
     };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   in
   {
     name = "kanidm";
@@ -67,6 +70,7 @@ import ./make-test-python.nix ({ pkgs, ... }:
       ''
         start_all()
         server.wait_for_unit("kanidm.service")
+<<<<<<< HEAD
         client.wait_for_unit("network-online.target")
 
         with subtest("Test HTTP interface"):
@@ -124,5 +128,14 @@ import ./make-test-python.nix ({ pkgs, ... }:
             client.wait_until_succeeds("systemctl is-active user@$(id -u testuser).service")
             client.send_chars("touch done\n")
             client.wait_for_file("/home/testuser@${serverDomain}/done")
+=======
+        server.wait_until_succeeds("curl -sf https://${serverDomain} | grep Kanidm")
+        server.succeed("ldapsearch -H ldaps://${serverDomain}:636 -b '${ldapBaseDN}' -x '(name=test)'")
+        client.succeed("kanidm login -D anonymous && kanidm self whoami | grep anonymous@${serverDomain}")
+        rv, result = server.execute("kanidmd recover_account -c ${serverConfigFile} idm_admin 2>&1 | rg -o '[A-Za-z0-9]{48}'")
+        assert rv == 0
+        client.wait_for_unit("kanidm-unixd.service")
+        client.succeed("kanidm_unixd_status | grep working!")
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       '';
   })

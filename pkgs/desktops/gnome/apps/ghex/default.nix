@@ -22,13 +22,21 @@
 
 stdenv.mkDerivation rec {
   pname = "ghex";
+<<<<<<< HEAD
   version = "44.2";
+=======
+  version = "44.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/ghex/${lib.versions.major version}/${pname}-${version}.tar.xz";
+<<<<<<< HEAD
     sha256 = "6+y0xoo30zk3uewmPIV23x2MaascHT4S1WaP0gB+kws=";
+=======
+    sha256 = "QEvfZJ6qE5IqgK4y8Z/kDnHw7g9GHEXtrHKIigDq1sI=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

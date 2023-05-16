@@ -33,7 +33,11 @@ rustPlatform.buildRustPackage rec {
     description = "du + rust = dust. Like du but more intuitive";
     homepage = "https://github.com/bootandy/dust";
     license = licenses.asl20;
+<<<<<<< HEAD
     maintainers = with maintainers; [ infinisil ];
+=======
+    maintainers = with maintainers; [ infinisil SuperSandro2000 ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     mainProgram = "dust";
   };
 }

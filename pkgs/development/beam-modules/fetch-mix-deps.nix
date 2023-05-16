@@ -2,8 +2,12 @@
 
 { pname
 , version
+<<<<<<< HEAD
 , hash ? ""
 , sha256 ? ""
+=======
+, sha256
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , src
 , mixEnv ? "prod"
 , debug ? false
@@ -14,12 +18,15 @@
 , ...
 }@attrs:
 
+<<<<<<< HEAD
 let
   hash_ =
     if hash != "" then { outputHashAlgo = null; outputHash = hash; }
     else if sha256 != "" then { outputHashAlgo = "sha256"; outputHash = sha256; }
     else { outputHashAlgo = "sha256"; outputHash = lib.fakeSha256; };
 in
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 stdenvNoCC.mkDerivation (attrs // {
   nativeBuildInputs = [ elixir hex cacert git ];
 
@@ -58,8 +65,18 @@ stdenvNoCC.mkDerivation (attrs // {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   outputHashMode = "recursive";
 
   impureEnvVars = lib.fetchers.proxyImpureEnvVars;
   inherit meta;
 } // hash_)
+=======
+  outputHashAlgo = "sha256";
+  outputHashMode = "recursive";
+  outputHash = sha256;
+
+  impureEnvVars = lib.fetchers.proxyImpureEnvVars;
+  inherit meta;
+})
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)

@@ -35,13 +35,21 @@
 
 let
   pname = "psycopg";
+<<<<<<< HEAD
   version = "3.1.10";
+=======
+  version = "3.1.9";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "psycopg";
     repo = pname;
     rev = "refs/tags/${version}";
+<<<<<<< HEAD
     hash = "sha256-GdgzHmzPCK3wq/8sCc1NaPEVwl4Q5OBZMp86RXkhE0M=";
+=======
+    hash = "sha256-yRb6yRpX1vDmXpYu4O50MYMpP2j75aSqhXCWMF1xVH0=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   patches = [

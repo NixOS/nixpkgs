@@ -11,7 +11,11 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-zyDkUb+bFsVnxAE4UODbnRtDim7gqUNuY22vuxMsLZM=";
   };
 
+<<<<<<< HEAD
   sourceRoot = "${src.name}/example/unpfs";
+=======
+  sourceRoot = "source/example/unpfs";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   cargoSha256 = "sha256-v8hbxKuxux0oYglEIK5dM9q0oBQzjyYDP1JB1cYR/T0=";
 

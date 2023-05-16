@@ -35,16 +35,27 @@ let
 in
 buildGoModule rec {
   pname = "argo";
+<<<<<<< HEAD
   version = "3.4.10";
+=======
+  version = "3.4.7";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "argoproj";
     repo = "argo";
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-uhXwCaAVFLlGeqkBbeA5DINo9CjNMzU9rRmOYoYJASI=";
   };
 
   vendorHash = "sha256-0563OHMNkKZcmLY1nHS70pbtrufY1d1WNXrxcCl6MKY=";
+=======
+    hash = "sha256-jvrt8CwYkeZky5xg9a2U/CuenoBe86yX31x2iCb/7EY=";
+  };
+
+  vendorHash = "sha256-6vHZxBcmhu6s3qQSX0iNIAR0hvXQB/bbpTA1/R08pj0=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   doCheck = false;
 

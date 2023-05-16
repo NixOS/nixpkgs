@@ -8,6 +8,7 @@ A package set is available for each CUDA version, so for example
 `cudaPackages_11_6`. Within each set is a matching version of the above listed
 packages. Additionally, other versions of the packages that are packaged and
 compatible are available as well. For example, there can be a
+<<<<<<< HEAD
 `cudaPackages.cudnn_8_3` package.
 
 To use one or more CUDA packages in an expression, give the expression a `cudaPackages` parameter, and in case CUDA is optional
@@ -17,6 +18,14 @@ To use one or more CUDA packages in an expression, give the expression a `cudaPa
 , cudaPackages ? { }
 , ...
 }:
+=======
+`cudaPackages.cudnn_8_3_2` package.
+
+To use one or more CUDA packages in an expression, give the expression a `cudaPackages` parameter, and in case CUDA is optional
+```nix
+cudaSupport ? false
+cudaPackages ? {}
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 ```
 
 When using `callPackage`, you can choose to pass in a different variant, e.g.
@@ -30,8 +39,13 @@ package set to make it the default. This guarantees you get a consistent package
 set.
 ```nix
 mypkg = let
+<<<<<<< HEAD
   cudaPackages = cudaPackages_11_5.overrideScope (final: prev: {
     cudnn = prev.cudnn_8_3;
+=======
+  cudaPackages = cudaPackages_11_5.overrideScope' (final: prev: {
+    cudnn = prev.cudnn_8_3_2;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   }});
 in callPackage { inherit cudaPackages; };
 ```
@@ -54,6 +68,7 @@ for your specific card(s).
 
 Library maintainers should consult [NVCC Docs](https://docs.nvidia.com/cuda/cuda-compiler-driver-nvcc/)
 and release notes for their software package.
+<<<<<<< HEAD
 
 ## Adding a new CUDA release {#adding-a-new-cuda-release}
 
@@ -116,3 +131,5 @@ All new projects should use the CUDA redistributables available in [`cudaPackage
 | Find libraries | `buildPhase` or `patchelf` | Missing dependency on a `lib` or `static` output | Add the missing dependency | The `lib` or `static` output typically contain the libraries |
 
 In the scenario you are unable to run the resulting binary: this is arguably the most complicated as it could be any combination of the previous reasons. This type of failure typically occurs when a library attempts to load or open a library it depends on that it does not declare in its `DT_NEEDED` section. As a first step, ensure that dependencies are patched with [`cudaPackages.autoAddOpenGLRunpath`](https://search.nixos.org/packages?channel=unstable&type=packages&query=cudaPackages.autoAddOpenGLRunpath). Failing that, try running the application with [`nixGL`](https://github.com/guibou/nixGL) or a similar wrapper tool. If that works, it likely means that the application is attempting to load a library that is not in the `RPATH` or `RUNPATH` of the binary.
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)

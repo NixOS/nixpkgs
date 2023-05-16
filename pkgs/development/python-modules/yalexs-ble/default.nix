@@ -1,5 +1,8 @@
 { lib
+<<<<<<< HEAD
 , async-interrupt
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , async-timeout
 , bleak
 , bleak-retry-connector
@@ -15,7 +18,11 @@
 
 buildPythonPackage rec {
   pname = "yalexs-ble";
+<<<<<<< HEAD
   version = "2.3.0";
+=======
+  version = "2.1.16";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -24,7 +31,11 @@ buildPythonPackage rec {
     owner = "bdraco";
     repo = pname;
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-QL8S5fDNi6msyaV14E6tgN0C/nvXqV0+Mx+4AY0um4o=";
+=======
+    hash = "sha256-dA0g5HAvbnN1t2D+JTfphxZUEbUT7NBLY6oCKFNf5E8=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [
@@ -32,7 +43,10 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
+<<<<<<< HEAD
     async-interrupt
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     async-timeout
     bleak
     bleak-retry-connector

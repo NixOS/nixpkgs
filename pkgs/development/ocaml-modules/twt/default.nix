@@ -1,8 +1,11 @@
 { lib, stdenv, fetchFromGitHub, ocaml, findlib }:
 
+<<<<<<< HEAD
 lib.throwIf (lib.versionAtLeast ocaml.version "5.0")
   "twt is not available for OCaml ${ocaml.version}"
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 stdenv.mkDerivation rec {
   pname = "ocaml${ocaml.version}-twt";
   version = "0.94.0";

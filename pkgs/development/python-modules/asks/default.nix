@@ -3,7 +3,11 @@
 , pythonOlder
 , fetchFromGitHub
 , anyio
+<<<<<<< HEAD
 , async-generator
+=======
+, async_generator
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , h11
 , curio
 , overly
@@ -28,7 +32,11 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     anyio
+<<<<<<< HEAD
     async-generator
+=======
+    async_generator
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     h11
   ];
 

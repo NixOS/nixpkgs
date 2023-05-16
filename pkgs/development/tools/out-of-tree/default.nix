@@ -12,7 +12,11 @@ buildGoModule rec {
     sha256 = "sha256-D2LiSDnF7g1h0XTulctCnZ+I6FZSLA0XRd9LQLOMP9c=";
   };
 
+<<<<<<< HEAD
   vendorHash = "sha256-p1dqzng3ak9lrnzrEABhE1TP1lM2Ikc8bmvp5L3nUp0=";
+=======
+  vendorSha256 = "sha256-p1dqzng3ak9lrnzrEABhE1TP1lM2Ikc8bmvp5L3nUp0=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   doCheck = false;
 

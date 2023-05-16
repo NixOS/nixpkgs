@@ -27,6 +27,10 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/rust-secure-code/cargo-supply-chain";
     changelog = "https://github.com/rust-secure-code/cargo-supply-chain/blob/${src.rev}/CHANGELOG.md";
     license = with licenses; [ asl20 mit zlib ]; # any of three
+<<<<<<< HEAD
     maintainers = with maintainers; [ figsoda matthiasbeyer ];
+=======
+    maintainers = with maintainers; [ figsoda ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

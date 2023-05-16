@@ -90,7 +90,10 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
 
     license = lib.licenses.gpl3Plus;
+<<<<<<< HEAD
 
     mainProgram = "find";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

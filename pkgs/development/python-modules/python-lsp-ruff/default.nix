@@ -10,14 +10,22 @@
 
 buildPythonPackage rec {
   pname = "python-lsp-ruff";
+<<<<<<< HEAD
   version = "1.5.1";
+=======
+  version = "1.4.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "pyproject";
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit version;
     pname = "python-lsp-ruff";
+<<<<<<< HEAD
     sha256 = "sha256-yvG4Qn9aym0rTDALURxHrWtDhO7g2VYsI+zLgb8z+gE=";
+=======
+    sha256 = "sha256-TqTeQc/lT5DcPcJbZXbEiUGbYjFP8idpzdSZlXD59Y4=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   postPatch = ''

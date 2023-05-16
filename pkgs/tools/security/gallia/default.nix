@@ -1,4 +1,8 @@
 { lib
+<<<<<<< HEAD
+=======
+, stdenv
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , fetchFromGitHub
 , python3
 , cacert
@@ -18,7 +22,10 @@ python3.pkgs.buildPythonApplication rec {
 
   pythonRelaxDeps = [
     "aiofiles"
+<<<<<<< HEAD
     "argcomplete"
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "msgspec"
   ];
 

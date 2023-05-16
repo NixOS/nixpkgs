@@ -1,7 +1,10 @@
 { lib
 , python3
+<<<<<<< HEAD
 , fetchFromGitHub
 , fetchPypi
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 let
@@ -25,6 +28,7 @@ let
           ];
         };
       });
+<<<<<<< HEAD
       django-extensions = super.django-extensions.overridePythonAttrs (old: rec {
         version = "3.1.5";
         src = fetchFromGitHub {
@@ -35,6 +39,8 @@ let
           hash = "sha256-NAMa78KhAuoJfp0Cb0Codz84sRfRQ1JhSLNYRI4GBPM=";
         };
       });
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
   };
 in
@@ -43,7 +49,11 @@ python.pkgs.buildPythonApplication rec {
   pname = "archivebox";
   version = "0.6.2";
 
+<<<<<<< HEAD
   src = fetchPypi {
+=======
+  src = python.pkgs.fetchPypi {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     inherit pname version;
     sha256 = "sha256-zHty7lTra6yab9d0q3EqsPG3F+lrnZL6PjQAbL1A2NY=";
   };

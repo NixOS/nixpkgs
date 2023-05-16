@@ -2,13 +2,21 @@
 
 buildGoModule rec {
   pname = "VictoriaMetrics";
+<<<<<<< HEAD
   version = "1.93.3";
+=======
+  version = "1.89.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-FR1EeRg9epVCnYF8QmyXGTdv3dITa3Cj50PAY500bJk=";
+=======
+    hash = "sha256-s5Fo0Bsy9cAoNLRMAYjNrSLJ0vX4HdbQ+T3cj6ebNPE=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   vendorHash = null;
@@ -34,8 +42,11 @@ buildGoModule rec {
     export ldflags=''${ldflags//=${version}/=}
   '';
 
+<<<<<<< HEAD
   __darwinAllowLocalNetworking = true;
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   passthru.tests = { inherit (nixosTests) victoriametrics; };
 
   meta = with lib; {

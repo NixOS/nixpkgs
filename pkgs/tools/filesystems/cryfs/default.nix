@@ -1,6 +1,10 @@
 { lib, stdenv, fetchFromGitHub
 , cmake, pkg-config, python3
+<<<<<<< HEAD
 , boost, curl, fuse, openssl, range-v3, spdlog
+=======
+, boost175, curl, fuse, openssl, range-v3, spdlog
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 # cryptopp and gtest on standby - using the vendored ones for now
 # see https://github.com/cryfs/cryfs/issues/369
 , llvmPackages
@@ -8,13 +12,21 @@
 
 stdenv.mkDerivation rec {
   pname = "cryfs";
+<<<<<<< HEAD
   version = "0.11.4";
+=======
+  version = "0.11.3";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = version;
+<<<<<<< HEAD
     hash = "sha256-OkJhLg+YzS3kDhlpUQe9A+OiVBPG/iKs6OU7aKFJ5wY=";
+=======
+    hash = "sha256-7luTCDjrquG8aBZ841VPwV9/ea8faHGLQtmRahqGTss=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   postPatch = ''
@@ -41,7 +53,11 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
+<<<<<<< HEAD
   buildInputs = [ boost curl fuse openssl range-v3 spdlog ]
+=======
+  buildInputs = [ boost175 curl fuse openssl range-v3 spdlog ]
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     ++ lib.optional stdenv.cc.isClang llvmPackages.openmp;
 
   #nativeCheckInputs = [ gtest ];

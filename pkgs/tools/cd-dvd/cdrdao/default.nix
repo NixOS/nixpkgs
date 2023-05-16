@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 {
   lib,
   stdenv,
@@ -13,16 +14,26 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
+=======
+{lib, stdenv, fetchurl, libvorbis, libmad, pkg-config, libao}:
+
+stdenv.mkDerivation rec {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pname = "cdrdao";
   version = "1.2.5";
 
   src = fetchurl {
+<<<<<<< HEAD
     url = "mirror://sourceforge/cdrdao/cdrdao-${finalAttrs.version}.tar.bz2";
+=======
+    url = "mirror://sourceforge/cdrdao/cdrdao-${version}.tar.bz2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     hash = "sha256-0ZtnyFPF26JAavqrbNeI53817r5jTKxGeVKEd8e+AbY=";
   };
 
   makeFlags = [ "RM=rm" "LN=ln" "MV=mv" ];
 
+<<<<<<< HEAD
   nativeBuildInputs = [
     pkg-config
   ];
@@ -55,6 +66,13 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
+=======
+  nativeBuildInputs = [ pkg-config ];
+  buildInputs = [ libvorbis libmad libao ];
+
+  hardeningDisable = [ "format" ];
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   # we have glibc/include/linux as a symlink to the kernel headers,
   # and the magic '..' points to kernelheaders, and not back to the glibc/include
   postPatch = ''
@@ -64,6 +82,7 @@ stdenv.mkDerivation (finalAttrs: {
   # Needed on gcc >= 6.
   env.NIX_CFLAGS_COMPILE = "-Wno-narrowing";
 
+<<<<<<< HEAD
   meta = {
     description = "A tool for recording audio or data CD-Rs in disk-at-once (DAO) mode";
     homepage = "https://cdrdao.sourceforge.net/";
@@ -71,3 +90,12 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl2;
   };
 })
+=======
+  meta = with lib; {
+    description = "A tool for recording audio or data CD-Rs in disk-at-once (DAO) mode";
+    homepage = "https://cdrdao.sourceforge.net/";
+    platforms = platforms.linux;
+    license = licenses.gpl2;
+  };
+}
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)

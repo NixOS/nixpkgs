@@ -44,6 +44,10 @@ buildPythonPackage rec {
     description = "Python Tools for Robot Framework and Test Libraries";
     homepage = "https://github.com/userzimmermann/robotframework-tools";
     license = licenses.gpl3Plus;
+<<<<<<< HEAD
     maintainers = [ ];
+=======
+    maintainers = [ maintainers.costrouc ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

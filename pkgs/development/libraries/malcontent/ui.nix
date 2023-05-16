@@ -66,6 +66,15 @@ stdenv.mkDerivation rec {
     "-Dui=enabled"
   ];
 
+<<<<<<< HEAD
+=======
+  postPatch = ''
+    # https://gitlab.freedesktop.org/pwithnall/malcontent/-/merge_requests/148
+    substituteInPlace build-aux/meson_post_install.py \
+      --replace gtk-update-icon-cache gtk4-update-icon-cache
+  '';
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   meta = with lib; {
     description = "UI components for parental controls library";
     homepage = "https://gitlab.freedesktop.org/pwithnall/malcontent";

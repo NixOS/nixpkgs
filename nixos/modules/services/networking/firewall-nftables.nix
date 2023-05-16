@@ -70,8 +70,15 @@ in
       }
     ];
 
+<<<<<<< HEAD
     networking.nftables.tables."nixos-fw".family = "inet";
     networking.nftables.tables."nixos-fw".content = ''
+=======
+    networking.nftables.ruleset = ''
+
+      table inet nixos-fw {
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         ${optionalString (cfg.checkReversePath != false) ''
           chain rpfilter {
             type filter hook prerouting priority mangle + 10; policy drop;
@@ -167,6 +174,12 @@ in
 
           }
         ''}
+<<<<<<< HEAD
+=======
+
+      }
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     '';
 
   };

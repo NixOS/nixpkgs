@@ -1,6 +1,9 @@
 { lib
 , python3
+<<<<<<< HEAD
 , fetchPypi
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , pkgsCross
 , avrdude
 , dfu-programmer
@@ -15,7 +18,11 @@ python3.pkgs.buildPythonApplication rec {
   version = "1.1.2";
   format = "pyproject";
 
+<<<<<<< HEAD
   src = fetchPypi {
+=======
+  src = python3.pkgs.fetchPypi {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     inherit pname version;
     hash = "sha256-+HH4jxoMoxujGgCdcWQX5GvFOKT4347eaoAckHbCKZg=";
   };

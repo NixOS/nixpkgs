@@ -27,7 +27,11 @@
 
 buildPythonPackage rec {
   pname = "exchangelib";
+<<<<<<< HEAD
   version = "5.1.0";
+=======
+  version = "5.0.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -36,7 +40,11 @@ buildPythonPackage rec {
     owner = "ecederstrand";
     repo = pname;
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-WKQgfmEbil55WO3tWVq4n9wiJNw0Op/jbI7xt5vtKpA=";
+=======
+    hash = "sha256-DaTe6MI3dfBswa0DcICtbjM44MeEhJpucFy0ME08Iv4=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   patches = [

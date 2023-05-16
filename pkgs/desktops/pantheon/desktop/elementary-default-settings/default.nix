@@ -10,17 +10,29 @@
 , dbus
 , polkit
 , accountsservice
+<<<<<<< HEAD
+=======
+, python3
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 stdenv.mkDerivation rec {
   pname = "elementary-default-settings";
+<<<<<<< HEAD
   version = "7.1.0";
+=======
+  version = "7.0.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "default-settings";
     rev = version;
+<<<<<<< HEAD
     sha256 = "sha256-j4K8qYwfu6/s4qnTSzwv6KRsk9f+Qr/l1bhLywKMHMU=";
+=======
+    sha256 = "sha256-RPnERK93GCfWyw1sIW5BitCIo11/t1koV4r1+NF5NdI=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [
@@ -31,6 +43,10 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     polkit
+<<<<<<< HEAD
+=======
+    python3
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   mesonFlags = [
@@ -39,6 +55,14 @@ stdenv.mkDerivation rec {
     "-Dplank-dockitems=false"
   ];
 
+<<<<<<< HEAD
+=======
+  postPatch = ''
+    chmod +x meson/post_install.py
+    patchShebangs meson/post_install.py
+  '';
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   preInstall = ''
     # Install our override for plank dockitems as the desktop file path is different.
     schema_dir=$out/share/glib-2.0/schemas

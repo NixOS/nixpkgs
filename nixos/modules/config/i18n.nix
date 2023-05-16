@@ -66,7 +66,10 @@ with lib;
             (builtins.map (l: (replaceStrings [ "utf8" "utf-8" "UTF8" ] [ "UTF-8" "UTF-8" "UTF-8" ] l) + "/UTF-8") (
               [
                 "C.UTF-8"
+<<<<<<< HEAD
                 "en_US.UTF-8"
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
                 config.i18n.defaultLocale
               ] ++ (attrValues (filterAttrs (n: v: n != "LANGUAGE") config.i18n.extraLocaleSettings))
             ))

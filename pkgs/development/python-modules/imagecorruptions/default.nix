@@ -1,7 +1,11 @@
 { buildPythonPackage
 , fetchPypi
 , numpy
+<<<<<<< HEAD
 , scikit-image
+=======
+, scikitimage
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , lib
 , opencv3
 }:
@@ -22,7 +26,11 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     numpy
+<<<<<<< HEAD
     scikit-image
+=======
+    scikitimage
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     opencv3
   ];
 

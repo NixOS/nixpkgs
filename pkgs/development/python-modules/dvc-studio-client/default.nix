@@ -11,7 +11,11 @@
 
 buildPythonPackage rec {
   pname = "dvc-studio-client";
+<<<<<<< HEAD
   version = "0.13.0";
+=======
+  version = "0.9.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -20,7 +24,11 @@ buildPythonPackage rec {
     owner = "iterative";
     repo = pname;
     rev = "refs/tags/${version}";
+<<<<<<< HEAD
     hash = "sha256-m4UJRRwY+aJdPIMHPIWe3En7FCADeT1qCZnu3BJeYXc=";
+=======
+    hash = "sha256-yiNhvemeN3Dbs8/UvdTsy0K/FORoAy27tvT4ElwFxRk=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;

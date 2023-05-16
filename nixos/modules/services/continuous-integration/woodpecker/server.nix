@@ -28,7 +28,11 @@ in
               WOODPECKER_GITEA_URL = "https://git.example.com";
             }
           '';
+<<<<<<< HEAD
         description = lib.mdDoc "woodpecker-server config environment variables, for other options read the [documentation](https://woodpecker-ci.org/docs/administration/server-config)";
+=======
+        description = lib.mdDoc "woodpecker-server config envrionment variables, for other options read the [documentation](https://woodpecker-ci.org/docs/administration/server-config)";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       };
       environmentFile = lib.mkOption {
         type = lib.types.nullOr lib.types.path;

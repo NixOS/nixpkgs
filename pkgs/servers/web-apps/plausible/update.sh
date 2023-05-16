@@ -33,6 +33,7 @@ echo "$package_json" \
   > $dir/package.json
 
 tarball_meta="$(nix-prefetch-github plausible analytics --rev "$latest")"
+<<<<<<< HEAD
 tarball_hash="$(jq -r '.hash' <<< "$tarball_meta")"
 tarball_path="$(nix-build -E 'with import ./. {}; { p }: fetchFromGitHub (builtins.fromJSON p)' --argstr p "$tarball_meta")"
 fake_hash="$(nix-instantiate --eval -A lib.fakeHash | xargs echo)"
@@ -45,6 +46,20 @@ sed -i "$dir/default.nix" \
 mix_hash="$(nix-build -A plausible.mixFodDeps 2>&1 | tail -n3 | grep 'got:' | cut -d: -f2- | xargs echo || true)"
 
 sed -i "$dir/default.nix" -e '/^  mixFodDeps =/,+3{;s#hash = "\(.*\)"#hash = "'"$mix_hash"'"#}'
+=======
+tarball_hash="$(nix to-base32 sha256-$(jq -r '.sha256' <<< "$tarball_meta"))"
+tarball_path="$(nix-build -E 'with import ./. {}; { p }: fetchFromGitHub (builtins.fromJSON p)' --argstr p "$tarball_meta")"
+fake_hash="$(nix-instantiate --eval -A lib.fakeSha256 | xargs echo)"
+
+sed -i "$dir/default.nix" \
+  -e 's,version = ".*",version = "'"$nix_version"'",' \
+  -e '/^  src = fetchFromGitHub/,+4{;s/sha256 = "\(.*\)"/sha256 = "'"$tarball_hash"'"/}' \
+  -e '/^  mixFodDeps =/,+3{;s/sha256 = "\(.*\)"/sha256 = "'"$fake_hash"'"/}'
+
+mix_hash="$(nix to-base32 $(nix-build -A plausible.mixFodDeps 2>&1 | tail -n3 | grep 'got:' | cut -d: -f2- | xargs echo || true))"
+
+sed -i "$dir/default.nix" -e '/^  mixFodDeps =/,+3{;s/sha256 = "\(.*\)"/sha256 = "'"$mix_hash"'"/}'
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 tmp_setup_dir="$(mktemp -d)"
 trap "rm -rf $tmp_setup_dir" EXIT

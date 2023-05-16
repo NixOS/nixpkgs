@@ -1,13 +1,19 @@
 { stdenv
 , lib
 , fetchFromGitHub
+<<<<<<< HEAD
 , gitUpdater
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , pkg-config
 , qmake
 , qt5compat ? null
 , qtbase
 , qttools
+<<<<<<< HEAD
 , qtwayland
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , rtaudio
 , rtmidi
 , wrapQtAppsHook
@@ -15,16 +21,28 @@
 
 assert lib.versionAtLeast qtbase.version "6.0" -> qt5compat != null;
 
+<<<<<<< HEAD
 stdenv.mkDerivation (finalAttrs: {
   pname = "bambootracker";
   version = "0.6.3";
+=======
+stdenv.mkDerivation rec {
+  pname = "bambootracker";
+  version = "0.6.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "BambooTracker";
     repo = "BambooTracker";
+<<<<<<< HEAD
     rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
     hash = "sha256-rMYs2jixzoMGem9lxAjDMbFOMrnK8BLFjZIagdZk/Ok=";
+=======
+    rev = "v${version}";
+    fetchSubmodules = true;
+    hash = "sha256-Ymi1tjJCgStF0Rtseelq/YuTtBs2PrbF898TlbjyYUw=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   postPatch = lib.optionalString (lib.versionAtLeast qtbase.version "6.0") ''
@@ -43,6 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     qtbase
+<<<<<<< HEAD
     rtmidi
   ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     qtwayland
@@ -53,6 +72,16 @@ stdenv.mkDerivation (finalAttrs: {
   qmakeFlags = [
     # we don't have RtAudio 6 yet: https://github.com/NixOS/nixpkgs/pull/245075
     # "CONFIG+=system_rtaudio"
+=======
+    rtaudio
+    rtmidi
+  ] ++ lib.optionals (lib.versionAtLeast qtbase.version "6.0") [
+    qt5compat
+  ];
+
+  qmakeFlags = [
+    "CONFIG+=system_rtaudio"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "CONFIG+=system_rtmidi"
   ];
 
@@ -68,12 +97,15 @@ stdenv.mkDerivation (finalAttrs: {
     wrapQtApp $out/Applications/BambooTracker.app/Contents/MacOS/BambooTracker
   '';
 
+<<<<<<< HEAD
   passthru = {
     updateScript = gitUpdater {
       rev-prefix = "v";
     };
   };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   meta = with lib; {
     description = "A tracker for YM2608 (OPNA) which was used in NEC PC-8801/9801 series computers";
     homepage = "https://bambootracker.github.io/BambooTracker/";
@@ -81,4 +113,8 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = platforms.all;
     maintainers = with maintainers; [ OPNA2608 ];
   };
+<<<<<<< HEAD
 })
+=======
+}
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)

@@ -23,12 +23,17 @@
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-keyboard";
+<<<<<<< HEAD
   version = "3.2.1";
+=======
+  version = "3.1.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
+<<<<<<< HEAD
     sha256 = "sha256-4LfS2F8pLbZw+HhnEVmZqbEaNCM96q+lqnf4sUBDVJI=";
   };
 
@@ -37,6 +42,13 @@ stdenv.mkDerivation rec {
     # https://github.com/elementary/switchboard-plug-keyboard/issues/324
     ./hide-install-unlisted-engines-button.patch
 
+=======
+    sha256 = "sha256-DofAOv7sCe7RAJpgz9PEYm+C8RAl0a1KgFm9jToMsEY=";
+  };
+
+  patches = [
+    ./0001-Remove-Install-Unlisted-Engines-function.patch
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     (substituteAll {
       src = ./fix-paths.patch;
       inherit ibus onboard libgnomekbd;

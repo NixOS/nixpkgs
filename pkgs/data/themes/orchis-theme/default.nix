@@ -26,13 +26,21 @@ lib.checkListOfEnum "${pname}: theme tweaks" validTweaks tweaks
 stdenvNoCC.mkDerivation
 rec {
   inherit pname;
+<<<<<<< HEAD
   version = "2023-05-27";
+=======
+  version = "2023-04-08";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     repo = "Orchis-theme";
     owner = "vinceliuice";
     rev = version;
+<<<<<<< HEAD
     hash = "sha256-I1a8y9dAJqFgnhyMqfupSdGvbbScf6tSYKlAhAzY4Dk=";
+=======
+    hash = "sha256-/X4Hr2M/7pf6JxTUvPoG5VkQd+rweEPeTNe9glSLh78=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ gtk3 sassc ];

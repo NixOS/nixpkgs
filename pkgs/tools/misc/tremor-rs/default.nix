@@ -2,6 +2,10 @@
 , rustPlatform
 , pkg-config
 , cmake
+<<<<<<< HEAD
+=======
+, llvmPackages
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , openssl
 , fetchFromGitHub
 , installShellFiles
@@ -32,7 +36,11 @@ rustPlatform.buildRustPackage rec {
     };
   };
 
+<<<<<<< HEAD
   nativeBuildInputs = [ cmake pkg-config installShellFiles rustPlatform.bindgenHook ];
+=======
+  nativeBuildInputs = [ cmake pkg-config installShellFiles ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   buildInputs = [ openssl ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [ Security libiconv ];
@@ -56,6 +64,11 @@ rustPlatform.buildRustPackage rec {
       --zsh <($out/bin/tremor completions zsh)
   '';
 
+<<<<<<< HEAD
+=======
+  LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   # OPENSSL_NO_VENDOR - If set, always find OpenSSL in the system, even if the vendored feature is enabled.
   OPENSSL_NO_VENDOR = 1;
 
@@ -63,6 +76,7 @@ rustPlatform.buildRustPackage rec {
   PROTOC = "${protobuf}/bin/protoc";
   PROTOC_INCLUDE = "${protobuf}/include";
 
+<<<<<<< HEAD
   env = lib.optionalAttrs (stdenv.system == "x86_64-darwin") {
     RUSTFLAGS = "-C target-feature=+avx,+avx2,+sse4.2";
   };
@@ -70,6 +84,8 @@ rustPlatform.buildRustPackage rec {
   # tests failed on x86_64-darwin with SIGILL: illegal instruction
   doCheck = !(stdenv.system == "x86_64-darwin");
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   checkFlags = [
     # all try to make a network access
     "--skip=connectors::tests::http::server::https_server_test"
@@ -84,12 +100,20 @@ rustPlatform.buildRustPackage rec {
   cargoBuildFlags = [ "-p tremor-cli" ];
 
   meta = with lib; {
+<<<<<<< HEAD
+=======
+    broken = stdenv.isDarwin;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     description = ''
       Early stage event processing system for unstructured data with rich
       support for structural pattern matching, filtering and transformation
     '';
     homepage = "https://www.tremor.rs/";
     license = licenses.asl20;
+<<<<<<< HEAD
+=======
+    platforms = platforms.x86_64;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     maintainers = with maintainers; [ humancalico happysalada ];
   };
 }

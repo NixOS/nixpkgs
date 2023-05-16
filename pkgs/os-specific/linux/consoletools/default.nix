@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 { lib, stdenv, fetchurl, pkg-config, SDL, SDL2 }:
 
 stdenv.mkDerivation rec {
@@ -11,6 +12,20 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ SDL SDL2 ];
+=======
+{ lib, stdenv, fetchurl, SDL }:
+
+stdenv.mkDerivation rec {
+  pname = "linuxconsoletools";
+  version = "1.6.1";
+
+  src = fetchurl {
+    url = "mirror://sourceforge/linuxconsole/${pname}-${version}.tar.bz2";
+    sha256 = "0d2r3j916fl2y7pk1y82b9fvbr10dgs1gw7rqwzfpispdidb1mp9";
+  };
+
+  buildInputs = [ SDL ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   makeFlags = [ "DESTDIR=$(out)"];
 

@@ -221,7 +221,10 @@ in
         ProtectHome = "read-only";
         AmbientCapabilities = "cap_ipc_lock";
         NoNewPrivileges = true;
+<<<<<<< HEAD
         LimitCORE = 0;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         KillSignal = "SIGINT";
         TimeoutStopSec = "30s";
         Restart = "on-failure";

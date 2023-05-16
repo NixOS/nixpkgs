@@ -19,11 +19,19 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "briar-desktop";
+<<<<<<< HEAD
   version = "0.5.0-beta";
 
   src = fetchurl {
     url = "https://desktop.briarproject.org/jars/linux/${version}/briar-desktop-linux-${version}.jar";
     hash = "sha256-J93ODYAiRbQxG2BF7P3H792ymAcJ3f07l7zRSw8kM+E=";
+=======
+  version = "0.4.0-beta";
+
+  src = fetchurl {
+    url = "https://desktop.briarproject.org/jars/linux/${version}/briar-desktop-linux-${version}.jar";
+    hash = "sha256-7zeIWsdPvROHGaf5igodlZss6Gow3kp6PX+QAzmxMnw=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   dontUnpack = true;

@@ -1,27 +1,47 @@
+<<<<<<< HEAD
 { lib, elixir, fetchFromGitHub, fetchMixDeps, mixRelease, nix-update-script }:
+=======
+{ lib, elixir, fetchFromGitHub, fetchMixDeps, mixRelease }:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 # Based on the work of Hauleth
 # None of this would have happened without him
 
 let
   pname = "elixir-ls";
+<<<<<<< HEAD
   version = "0.16.0";
+=======
+  pinData = lib.importJSON ./pin.json;
+  version = pinData.version;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   src = fetchFromGitHub {
     owner = "elixir-lsp";
     repo = "elixir-ls";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-tEKwM5o3uXJ0cLY5USnQJ+HOGTSv6NDJvq+F/iqFEWs=";
+=======
+    sha256 = pinData.sha256;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     fetchSubmodules = true;
   };
 in
 mixRelease  {
   inherit pname version src elixir;
 
+<<<<<<< HEAD
   stripDebug = true;
 
   mixFodDeps = fetchMixDeps {
     pname = "mix-deps-${pname}";
     inherit src version elixir;
     hash = "sha256-jpjqMIQ9fS4nkkKWZ80Mx5vULm5bvnNHy52ZQcR0y8c=";
+=======
+  mixFodDeps = fetchMixDeps {
+    pname = "mix-deps-${pname}";
+    inherit src version elixir;
+    sha256 = pinData.depsSha256;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   # elixir-ls is an umbrella app
@@ -70,8 +90,14 @@ mixRelease  {
     '';
     license = licenses.asl20;
     platforms = platforms.unix;
+<<<<<<< HEAD
     mainProgram = "elixir-ls";
     maintainers = teams.beam.members;
   };
   passthru.updateScript = nix-update-script { };
+=======
+    maintainers = teams.beam.members;
+  };
+  passthru.updateScript = ./update.sh;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }

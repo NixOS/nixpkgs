@@ -1,13 +1,22 @@
+<<<<<<< HEAD
 { lib, buildGoModule, fetchFromGitHub, callPackage, stuffbin, nixosTests, fetchpatch }:
 
 buildGoModule rec {
   pname = "listmonk";
   version = "2.5.1";
+=======
+{ lib, buildGoModule, fetchFromGitHub, callPackage, stuffbin, nixosTests }:
+
+buildGoModule rec {
+  pname = "listmonk";
+  version = "2.2.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "knadh";
     repo = "listmonk";
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-gCnIblc83CmG1auvYYxqW/xBl6Oy1KHGkqSY/3yIm3I=";
   };
 
@@ -20,6 +29,12 @@ buildGoModule rec {
   ];
 
   vendorHash = "sha256-0sgC1+ueZTUCP+7JwI/OKLktfMHQq959GEk1mC0TQgE=";
+=======
+    sha256 = "sha256-dtIM0dkr8y+GbyCqrBlR5VRq6qMiZdmQyFvIoVY1eUg=";
+  };
+
+  vendorSha256 = "sha256-qeBuDM3REUxgu3ty02d7qsULH04USE0JUvBrtVnW8vg=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nativeBuildInputs = [
     stuffbin

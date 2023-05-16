@@ -16,13 +16,21 @@
 
 stdenv.mkDerivation rec {
   pname = "swtpm";
+<<<<<<< HEAD
   version = "0.8.1";
+=======
+  version = "0.8.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "stefanberger";
     repo = "swtpm";
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-QKR5S7FlMFDw4+VpyRdqixMWyzLpQkf3QCUceQvsliU=";
+=======
+    sha256 = "sha256-O+sHkmQ47FbqsgWpaqAc/j2AJ5xzsvpBj/p0Zea1nSI=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

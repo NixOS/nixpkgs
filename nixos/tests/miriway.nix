@@ -3,6 +3,14 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
 
   meta = {
     maintainers = with lib.maintainers; [ OPNA2608 ];
+<<<<<<< HEAD
+=======
+    # Natively running Mir has problems with capturing the first registered libinput device.
+    # In our VM  runners on ARM and on some hardware configs (my RPi4, distro-independent), this misses the keyboard.
+    # It can be worked around by dis- and reconnecting the affected hardware, but we can't do this in these tests.
+    # https://github.com/MirServer/mir/issues/2837
+    broken = pkgs.stdenv.hostPlatform.isAarch;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nodes.machine = { config, ... }: {
@@ -83,7 +91,11 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
       };
     };
 
+<<<<<<< HEAD
     fonts.packages = [ pkgs.inconsolata ];
+=======
+    fonts.fonts = [ pkgs.inconsolata ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   enableOCR = true;

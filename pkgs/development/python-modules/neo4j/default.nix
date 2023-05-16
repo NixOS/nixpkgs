@@ -8,7 +8,11 @@
 
 buildPythonPackage rec {
   pname = "neo4j";
+<<<<<<< HEAD
   version = "5.12.0";
+=======
+  version = "5.8.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -17,7 +21,11 @@ buildPythonPackage rec {
     owner = "neo4j";
     repo = "neo4j-python-driver";
     rev = "refs/tags/${version}";
+<<<<<<< HEAD
     hash = "sha256-feKKBbULkWxEgUaMROvmQph2YTAgSOVDRz/OnpzG9Ac=";
+=======
+    hash = "sha256-11fa6scRcC+bQxEccCgxSJaMjwkUVs4DQj1NSaXlpb8=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [

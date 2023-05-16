@@ -10,7 +10,11 @@
 
 buildPythonPackage rec {
   pname = "pycm";
+<<<<<<< HEAD
   version = "4.0";
+=======
+  version = "3.8";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.5";
@@ -19,7 +23,11 @@ buildPythonPackage rec {
     owner = "sepandhaghighi";
     repo = pname;
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-GyH06G7bArFBTzV/Sx/KmoJvcoed0sswW7qGqsSULHo=";
+=======
+    hash = "sha256-L0WPZomOU/I/x8QrdAerG0S2wnHyP661XTaDzzWeruk=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [

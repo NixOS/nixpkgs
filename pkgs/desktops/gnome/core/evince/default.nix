@@ -43,13 +43,21 @@
 
 stdenv.mkDerivation rec {
   pname = "evince";
+<<<<<<< HEAD
   version = "44.3";
+=======
+  version = "44.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/evince/${lib.versions.major version}/${pname}-${version}.tar.xz";
+<<<<<<< HEAD
     sha256 = "O4uhWBpHpun1f2tqoI8PtnVJxgEhqiTjEUDpOUe4NiI=";
+=======
+    sha256 = "Fa/TuxX/s4/sqzTCM1CVCtJwqwOoW5TjM9ndfuanQxQ=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [
@@ -137,7 +145,11 @@ stdenv.mkDerivation rec {
     '';
 
     license = licenses.gpl2Plus;
+<<<<<<< HEAD
     platforms = platforms.unix;
+=======
+    platforms = platforms.linux;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     maintainers = teams.gnome.members ++ teams.pantheon.members;
   };
 }

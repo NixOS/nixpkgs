@@ -1,14 +1,25 @@
 { lib, stdenv, fetchFromGitHub, kernel, bc, nukeReferences }:
 
+<<<<<<< HEAD
 stdenv.mkDerivation {
   pname = "rtl8812au";
   version = "${kernel.version}-unstable-2023-07-22";
+=======
+stdenv.mkDerivation rec {
+  pname = "rtl8812au";
+  version = "${kernel.version}-unstable-2023-01-17";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "morrownr";
     repo = "8812au-20210629";
+<<<<<<< HEAD
     rev = "b5f4e6e894eca8fea38661e2fc22a2570e0274ad";
     hash = "sha256-3uPowesJVh/cnagMz/Uadb+U5rDUAWfU39tZaDNCoqg=";
+=======
+    rev = "0a8bb3cec3ef91e6ef8cf549ca926016ba0a8acd";
+    sha256 = "sha256-25NaMQq9H6mqVynNQJXpqISAslxfEVSt3ELzG7s4mV4=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ bc nukeReferences ] ++ kernel.moduleBuildDependencies;

@@ -9,7 +9,11 @@
 
 buildPythonPackage rec {
   pname = "yaspin";
+<<<<<<< HEAD
   version = "3.0.1";
+=======
+  version = "2.3.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -18,7 +22,11 @@ buildPythonPackage rec {
     owner = "pavdmyt";
     repo = pname;
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-cYTCJyHZ9yNg6BfpZ+g3P0yMWFhYUxgYtlbANNgfohQ=";
+=======
+    hash = "sha256-TURfjhEqkg8TT7dsoIOn2iAeD7+lX8+s9hItritf1GU=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

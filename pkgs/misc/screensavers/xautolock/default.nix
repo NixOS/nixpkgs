@@ -2,7 +2,11 @@
 , imake, gccmakedep, libX11, libXext, libXScrnSaver, xorgproto
 }:
 
+<<<<<<< HEAD
 stdenv.mkDerivation (finalAttrs: {
+=======
+stdenv.mkDerivation rec {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pname = "xautolock";
   version = "2.2-7-ga23dd5c";
 
@@ -11,8 +15,13 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "peti";
     repo = "xautolock";
+<<<<<<< HEAD
     rev = "v${finalAttrs.version}";
     hash = "sha256-T2zAbRqSTxRp9u6EdZmIZfVxaGveeZkJgjp1DWgORoI=";
+=======
+    rev = "v${version}";
+    sha256 = "10j61rl0sx9sh84rjyfyddl73xb5i2cpb17fyrli8kwj39nw0v2g";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ imake gccmakedep ];
@@ -31,6 +40,11 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with maintainers; [ peti ];
     platforms = platforms.linux;
     license = licenses.gpl2;
+<<<<<<< HEAD
     mainProgram = "xautolock";
   };
 })
+=======
+  };
+}
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)

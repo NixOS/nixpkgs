@@ -2,7 +2,10 @@
 , stdenv
 , installShellFiles
 , fetchFromGitHub
+<<<<<<< HEAD
 , fetchurl
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , freetype
 , gumbo
 , harfbuzz
@@ -27,6 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = "sha256-GFZaTXJhoBB+rSe7Qk6H6FZJVXr3nO9XgM+LAbS4te4=";
   };
 
+<<<<<<< HEAD
   patches = [
     # Fixed compatibility with mupdf-0.23.0
     # https://github.com/ahrm/sioyek/issues/804
@@ -36,6 +40,8 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   buildInputs = [
     gumbo
     harfbuzz

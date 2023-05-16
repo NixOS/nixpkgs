@@ -25,12 +25,19 @@ let
           hash = "sha256-zT2afl3QNE2dO3JXjsZXqSmm1lv3EorG3mYZLQQMQ2Q=";
         };
 
+<<<<<<< HEAD
         sourceRoot = "${src.name}/premium/backend";
 
         doCheck = false;
       };
 
       django = super.django_3;
+=======
+        sourceRoot = "source/premium/backend";
+
+        doCheck = false;
+      };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
   };
 in
@@ -47,6 +54,7 @@ with python.pkgs; buildPythonApplication rec {
     hash = "sha256-zT2afl3QNE2dO3JXjsZXqSmm1lv3EorG3mYZLQQMQ2Q=";
   };
 
+<<<<<<< HEAD
   sourceRoot = "${src.name}/backend";
 
   postPatch = ''
@@ -59,6 +67,15 @@ with python.pkgs; buildPythonApplication rec {
       -e 's/[~<>=].*//' -i requirements/base.txt \
       -e 's/zope-interface/zope.interface/' \
       -e 's/\[standard\]//'
+=======
+  sourceRoot = "source/backend";
+
+  postPatch = ''
+    # remove dependency constraints
+    sed 's/[~<>=].*//' -i requirements/base.in requirements/base.txt
+    sed 's/zope-interface/zope.interface/' -i requirements/base.in requirements/base.txt
+    sed 's/\[standard\]//' -i requirements/base.in requirements/base.txt
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '';
 
   nativeBuildInputs = [

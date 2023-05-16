@@ -3,13 +3,21 @@ use std::env;
 use std::ffi::{OsStr, OsString};
 use std::fs;
 use std::hash::Hash;
+<<<<<<< HEAD
 use std::io::{BufRead, BufReader};
 use std::iter::FromIterator;
+=======
+use std::iter::FromIterator;
+use std::io::{BufRead, BufReader, Error};
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 use std::os::unix;
 use std::path::{Component, Path, PathBuf};
 use std::process::Command;
 
+<<<<<<< HEAD
 use eyre::Context;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 use goblin::{elf::Elf, Object};
 
 struct NonRepeatingQueue<T> {
@@ -88,6 +96,7 @@ fn add_dependencies<P: AsRef<Path> + AsRef<OsStr>>(
     }
 }
 
+<<<<<<< HEAD
 fn copy_file<
     P: AsRef<Path> + AsRef<OsStr> + std::fmt::Debug,
     S: AsRef<Path> + AsRef<OsStr> + std::fmt::Debug,
@@ -101,17 +110,33 @@ fn copy_file<
 
     let contents =
         fs::read(&source).wrap_err_with(|| format!("failed to read from {:?}", source))?;
+=======
+fn copy_file<P: AsRef<Path> + AsRef<OsStr>, S: AsRef<Path> + AsRef<OsStr>>(
+    source: P,
+    target: S,
+    queue: &mut NonRepeatingQueue<Box<Path>>,
+) -> Result<(), Error> {
+    fs::copy(&source, &target)?;
+
+    let contents = fs::read(&source)?;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     if let Ok(Object::Elf(e)) = Object::parse(&contents) {
         add_dependencies(source, e, queue);
 
         // Make file writable to strip it
+<<<<<<< HEAD
         let mut permissions = fs::metadata(&target)
             .wrap_err_with(|| format!("failed to get metadata for {:?}", target))?
             .permissions();
         permissions.set_readonly(false);
         fs::set_permissions(&target, permissions)
             .wrap_err_with(|| format!("failed to set readonly flag to false for {:?}", target))?;
+=======
+        let mut permissions = fs::metadata(&target)?.permissions();
+        permissions.set_readonly(false);
+        fs::set_permissions(&target, permissions)?;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
         // Strip further than normal
         if let Ok(strip) = env::var("STRIP") {
@@ -130,6 +155,7 @@ fn copy_file<
     Ok(())
 }
 
+<<<<<<< HEAD
 fn queue_dir<P: AsRef<Path> + std::fmt::Debug>(
     source: P,
     queue: &mut NonRepeatingQueue<Box<Path>>,
@@ -137,6 +163,13 @@ fn queue_dir<P: AsRef<Path> + std::fmt::Debug>(
     for entry in
         fs::read_dir(&source).wrap_err_with(|| format!("failed to read dir {:?}", source))?
     {
+=======
+fn queue_dir<P: AsRef<Path>>(
+    source: P,
+    queue: &mut NonRepeatingQueue<Box<Path>>,
+) -> Result<(), Error> {
+    for entry in fs::read_dir(source)? {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         let entry = entry?;
         // No need to recurse. The queue will bring us back round here on its own.
         queue.push_back(Box::from(entry.path().as_path()));
@@ -149,7 +182,11 @@ fn handle_path(
     root: &Path,
     p: &Path,
     queue: &mut NonRepeatingQueue<Box<Path>>,
+<<<<<<< HEAD
 ) -> eyre::Result<()> {
+=======
+) -> Result<(), Error> {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     let mut source = PathBuf::new();
     let mut target = Path::new(root).to_path_buf();
     let mut iter = p.components().peekable();
@@ -172,17 +209,27 @@ fn handle_path(
             Component::Normal(name) => {
                 target.push(name);
                 source.push(name);
+<<<<<<< HEAD
                 let typ = fs::symlink_metadata(&source)
                     .wrap_err_with(|| format!("failed to get symlink metadata for {:?}", source))?
                     .file_type();
+=======
+                let typ = fs::symlink_metadata(&source)?.file_type();
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
                 if typ.is_file() && !target.exists() {
                     copy_file(&source, &target, queue)?;
 
                     if let Some(filename) = source.file_name() {
                         source.set_file_name(OsString::from_iter([
+<<<<<<< HEAD
                             OsStr::new("."),
                             filename,
                             OsStr::new("-wrapped"),
+=======
+                                OsStr::new("."),
+                                filename,
+                                OsStr::new("-wrapped"),
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
                         ]));
 
                         let wrapped_path = source.as_path();
@@ -191,6 +238,7 @@ fn handle_path(
                         }
                     }
                 } else if typ.is_symlink() {
+<<<<<<< HEAD
                     let link_target = fs::read_link(&source)
                         .wrap_err_with(|| format!("failed to resolve symlink of {:?}", source))?;
 
@@ -199,6 +247,13 @@ fn handle_path(
                         unix::fs::symlink(&link_target, &target).wrap_err_with(|| {
                             format!("failed to symlink {:?} to {:?}", link_target, target)
                         })?;
+=======
+                    let link_target = fs::read_link(&source)?;
+
+                    // Create the link, then push its target to the queue
+                    if !target.exists() {
+                        unix::fs::symlink(&link_target, &target)?;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
                     }
                     source.pop();
                     source.push(link_target);
@@ -212,14 +267,22 @@ fn handle_path(
                     break;
                 } else if typ.is_dir() {
                     if !target.exists() {
+<<<<<<< HEAD
                         fs::create_dir(&target)
                             .wrap_err_with(|| format!("failed to create dir {:?}", target))?;
+=======
+                        fs::create_dir(&target)?;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
                     }
 
                     // Only recursively copy if the directory is the target object
                     if iter.peek().is_none() {
+<<<<<<< HEAD
                         queue_dir(&source, queue)
                             .wrap_err_with(|| format!("failed to queue dir {:?}", source))?;
+=======
+                        queue_dir(&source, queue)?;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
                     }
                 }
             }
@@ -229,10 +292,16 @@ fn handle_path(
     Ok(())
 }
 
+<<<<<<< HEAD
 fn main() -> eyre::Result<()> {
     let args: Vec<String> = env::args().collect();
     let input =
         fs::File::open(&args[1]).wrap_err_with(|| format!("failed to open file {:?}", &args[1]))?;
+=======
+fn main() -> Result<(), Error> {
+    let args: Vec<String> = env::args().collect();
+    let input = fs::File::open(&args[1])?;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     let output = &args[2];
     let out_path = Path::new(output);
 
@@ -254,10 +323,15 @@ fn main() -> eyre::Result<()> {
             let link_path = Path::new(&link_string);
             let mut link_parent = link_path.to_path_buf();
             link_parent.pop();
+<<<<<<< HEAD
             fs::create_dir_all(&link_parent)
                 .wrap_err_with(|| format!("failed to create directories to {:?}", link_parent))?;
             unix::fs::symlink(obj_path, link_path)
                 .wrap_err_with(|| format!("failed to symlink {:?} to {:?}", obj_path, link_path))?;
+=======
+            fs::create_dir_all(link_parent)?;
+            unix::fs::symlink(obj_path, link_path)?;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         }
     }
     while let Some(obj) = queue.pop_front() {

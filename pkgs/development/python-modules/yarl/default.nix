@@ -1,7 +1,10 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+<<<<<<< HEAD
 , fetchpatch
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , pythonAtLeast
 , pythonOlder
 , idna
@@ -12,7 +15,11 @@
 
 buildPythonPackage rec {
   pname = "yarl";
+<<<<<<< HEAD
   version = "1.9.2";
+=======
+  version = "1.8.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   disabled = pythonOlder "3.7";
 
@@ -20,6 +27,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
+<<<<<<< HEAD
     hash = "sha256-BKudS59YfAbYAcKr/pMXt3zfmWxlqQ1ehOzEUBCCNXE=";
   };
 
@@ -31,6 +39,11 @@ buildPythonPackage rec {
     })
   ];
 
+=======
+    hash = "sha256-SdQ0AsbjATrQl4YCv2v1MoU1xI0ZIwS5G5ejxnkLFWI=";
+  };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   postPatch = ''
     sed -i '/^addopts/d' setup.cfg
   '';
@@ -51,6 +64,13 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+<<<<<<< HEAD
+=======
+  disabledTests = lib.optionals (pythonAtLeast "3.11") [
+    "test_not_a_scheme2"
+  ];
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   postCheck = ''
     popd
   '';

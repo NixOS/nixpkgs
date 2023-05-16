@@ -28,7 +28,11 @@
 , libtool
 , automake
 , fetchpatch
+<<<<<<< HEAD
 , python3
+=======
+, python39
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , writeScript
 , withOpus ? true
 , ldapSupport ? false
@@ -48,11 +52,14 @@ let
       url = "https://github.com/pjsip/pjproject/commit/bc4812d31a67d5e2f973fbfaf950d6118226cf36.patch";
       sha256 = "sha256-bpc8e8VAQpfyl5PX96G++6fzkFpw3Or1PJKNPKl7N5k=";
     })
+<<<<<<< HEAD
     (fetchpatch {
       name = "CVE-2023-27585.patch";
       url = "https://github.com/pjsip/pjproject/commit/d1c5e4da5bae7f220bc30719888bb389c905c0c5.patch";
       hash = "sha256-+yyKKTKG2FnfyLWnc4S80vYtDzmiu9yRmuqb5eIulPg=";
     })
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   common = { version, sha256, externals, pjsip_patches ? [ ] }: stdenv.mkDerivation {
@@ -156,7 +163,10 @@ let
       description = "Software implementation of a telephone private branch exchange (PBX)";
       homepage = "https://www.asterisk.org/";
       license = licenses.gpl2Only;
+<<<<<<< HEAD
       mainProgram = "asterisk";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       maintainers = with maintainers; [ auntie DerTim1 yorickvp ];
     };
   };
@@ -199,7 +209,11 @@ let
       })
     (lib.importJSON ./versions.json);
 
+<<<<<<< HEAD
   updateScript_python = python3.withPackages (p: with p; [ packaging beautifulsoup4 requests ]);
+=======
+  updateScript_python = python39.withPackages (p: with p; [ packaging beautifulsoup4 requests ]);
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   updateScript = writeScript "asterisk-update" ''
     #!/usr/bin/env bash
     exec ${updateScript_python}/bin/python ${toString ./update.py}

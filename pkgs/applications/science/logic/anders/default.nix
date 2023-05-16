@@ -9,7 +9,11 @@ ocamlPackages.buildDunePackage rec {
   src = fetchFromGitHub {
     owner = "groupoid";
     repo = "anders";
+<<<<<<< HEAD
     rev = version;
+=======
+    rev = "${version}";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     sha256 = "sha256-JUiZoo2rNLfgs94TlJqUNzul/7ODisCjSFAzhgSp1z4=";
   };
 

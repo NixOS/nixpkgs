@@ -11,7 +11,11 @@
 
 buildPythonPackage rec {
   pname = "deploykit";
+<<<<<<< HEAD
   version = "1.1.0";
+=======
+  version = "1.0.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -20,7 +24,11 @@ buildPythonPackage rec {
     owner = "numtide";
     repo = pname;
     rev = version;
+<<<<<<< HEAD
     hash = "sha256-re7r2K9F5FTTVn84WC+wZX30JA9AXQcHK3pLjYglMs8=";
+=======
+    hash = "sha256-I1vAefWQBBRNykDw38LTNwdiPFxpPkLzCcevYAXO+Zo=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   buildInputs = [

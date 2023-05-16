@@ -6,13 +6,21 @@
 
 stdenv.mkDerivation rec {
   pname = "nsync";
+<<<<<<< HEAD
   version = "1.26.0";
+=======
+  version = "1.25.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "google";
     repo = pname;
     rev = version;
+<<<<<<< HEAD
     hash = "sha256-pE9waDI+6LQwbyPJ4zROoF93Vt6+SETxxJ/UxeZE5WE=";
+=======
+    sha256 = "sha256-bdnYrMnBnpnEKGuMlDLILfzgwfu/e5tyMdSDWqreyto=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ cmake ];

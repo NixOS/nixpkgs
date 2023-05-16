@@ -6,13 +6,21 @@
 }:
 
 buildPythonPackage rec {
+<<<<<<< HEAD
   version = "3.2.0";
+=======
+  version = "3.1.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pname = "azure-mgmt-kusto";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
+<<<<<<< HEAD
     hash = "sha256-zgkFMrufHoX3gq9QXo8SlJYZOfV5GlY3pVQXmIWyx7c=";
+=======
+    hash = "sha256-dkuVCFR+w3Yr764izDqxGfKtDvgRmAuziSPpkKDWcxc=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     extension = "zip";
   };
 

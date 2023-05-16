@@ -1,6 +1,10 @@
 { lib
 , stdenv
+<<<<<<< HEAD
 , boost179 # probably needs to match the one from ndn-cxx
+=======
+, boost
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , fetchFromGitHub
 , libpcap
 , ndn-cxx
@@ -8,7 +12,11 @@
 , pkg-config
 , sphinx
 , systemd
+<<<<<<< HEAD
 , waf
+=======
+, wafHook
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , websocketpp
 , withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
 , withWebSocket ? true
@@ -26,12 +34,21 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
+<<<<<<< HEAD
   nativeBuildInputs = [ pkg-config sphinx waf.hook ];
   buildInputs = [ libpcap ndn-cxx openssl websocketpp ] ++ lib.optional withSystemd systemd;
 
   wafConfigureFlags = [
     "--boost-includes=${boost179.dev}/include"
     "--boost-libs=${boost179.out}/lib"
+=======
+  nativeBuildInputs = [ pkg-config sphinx wafHook ];
+  buildInputs = [ libpcap ndn-cxx openssl websocketpp ] ++ lib.optional withSystemd systemd;
+
+  wafConfigureFlags = [
+    "--boost-includes=${boost.dev}/include"
+    "--boost-libs=${boost.out}/lib"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "--with-tests"
   ] ++ lib.optional (!withWebSocket) "--without-websocket";
 

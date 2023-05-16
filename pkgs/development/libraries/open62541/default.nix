@@ -31,13 +31,21 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "open62541";
+<<<<<<< HEAD
   version = "1.3.7";
+=======
+  version = "1.3.5";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "open62541";
     repo = "open62541";
     rev = "v${finalAttrs.version}";
+<<<<<<< HEAD
     hash = "sha256-XmoLmBGTMA6cejLiNU8hAVnHd35eh6lTIu9csmiR+4U=";
+=======
+    sha256 = "sha256-X0kdMKSqKAJvmrd1YcYe1mJpFONqPCALA09xwd6o7BQ=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     fetchSubmodules = true;
   };
 
@@ -90,7 +98,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   preCheck = let
     disabledTests =
+<<<<<<< HEAD
       lib.optionals withPubSub [
+=======
+      lib.optionals (withEncryption == "mbedtls") [
+        "encryption_basic128rsa15"
+      ]
+      ++ lib.optionals withPubSub [
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         # "Cannot set socket option IP_ADD_MEMBERSHIP"
         "pubsub_publish"
         "check_pubsub_get_state"

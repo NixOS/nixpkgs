@@ -2,15 +2,25 @@
 
 buildGoModule rec {
   pname = "gitsign";
+<<<<<<< HEAD
   version = "0.7.1";
+=======
+  version = "0.6.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "sigstore";
     repo = pname;
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-99JpuABkPHTNy9OpvRL7aIe1ZTrs2uZvxtxZf8346Ao=";
   };
   vendorHash = "sha256-+EKC/Up48EjwfVhLTpoxctWCSMDL0kLZaRPLBl0JGFQ=";
+=======
+    hash = "sha256-VgkTFYnHKpqZOack5SabOFu2BRespVRhgrsepo0V1mI=";
+  };
+  vendorHash = "sha256-zalysp+90+QM5hX7yUudJW61h+3tQOab7ZpcF5kZSB0=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   subPackages = [
     "."

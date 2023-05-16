@@ -9,7 +9,11 @@
 
 buildPythonPackage rec {
   pname = "django-tables2";
+<<<<<<< HEAD
   version = "2.6.0";
+=======
+  version = "2.4.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
   disabled = pythonOlder "3.6";
 
@@ -17,7 +21,11 @@ buildPythonPackage rec {
     owner = "jieter";
     repo = pname;
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-n8qvsm/i+2VclFc00jQGO0Z4l6Ke8qZ03EYuEQcPuVQ=";
+=======
+    sha256 = "04vvgf18diwp0mgp14b71a0dxhgrcslv1ljybi300gvzvzjnp3qv";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [

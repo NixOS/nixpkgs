@@ -2,14 +2,22 @@
 
 buildDunePackage rec {
   pname = "menhirLib";
+<<<<<<< HEAD
   version = "20230608";
+=======
+  version = "20220210";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitLab {
     domain = "gitlab.inria.fr";
     owner = "fpottier";
     repo = "menhir";
     rev = version;
+<<<<<<< HEAD
     sha256 = "sha256-dUPoIUVr3gqvE5bniyQh/b37tNfRsZN8X3e99GFkyLY=";
+=======
+    sha256 = "sha256:0f31isr3cyiishflz6qr4xc3gp9xwf32r3vxdvm5wnr2my1fnn1n";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   meta = with lib; {

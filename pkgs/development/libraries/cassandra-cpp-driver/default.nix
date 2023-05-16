@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 { fetchFromGitHub
 , lib
 , stdenv
@@ -10,11 +11,21 @@
 }: stdenv.mkDerivation rec {
     pname = "cassandra-cpp-driver";
     version = "2.17.0";
+=======
+{ fetchFromGitHub,
+  lib, stdenv,
+  cmake, zlib, libuv, openssl,
+  examples ? false
+}: stdenv.mkDerivation rec {
+    pname = "cassandra-cpp-driver";
+    version = "2.16.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     src = fetchFromGitHub {
       owner = "datastax";
       repo = "cpp-driver";
       rev = "refs/tags/${version}";
+<<<<<<< HEAD
       sha256 = "sha256-sLKLaBFnGq3NIQV7Tz5aAfsL+LeLw8XDbcJt//H468k=";
     };
 
@@ -25,6 +36,19 @@
       (name: value: "-DCASS_BUILD_${name}:BOOL=${if value then "ON" else "OFF"}") {
         EXAMPLES = examples;
       }) ++ [ "-DLIBUV_INCLUDE_DIR=${lib.getDev libuv}/include" ];
+=======
+      sha256 = "sha256-NAvaRLhEvFjSmXcyM039wLC6IfLws2rkeRpbE5eL/rQ=";
+    };
+
+    LIBUV_ROOT_DIR = "${libuv}/";
+    nativeBuildInputs = [ cmake ];
+    buildInputs = [ zlib libuv openssl.dev ];
+
+    cmakeFlags = lib.attrsets.mapAttrsToList
+      (name: value: "-DCASS_BUILD_${name}:BOOL=${if value then "ON" else "OFF"}") {
+        EXAMPLES = examples;
+      };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     meta = with lib; {
       description = "DataStax CPP cassandra driver";

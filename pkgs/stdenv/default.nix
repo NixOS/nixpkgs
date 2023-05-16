@@ -28,7 +28,11 @@ let
   # the GNU C compiler, and so on.
   stagesLinux = import ./linux args;
 
+<<<<<<< HEAD
   stagesDarwin = import ./darwin args;
+=======
+  inherit (import ./darwin args) stagesDarwin;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   stagesCross = import ./cross args;
 

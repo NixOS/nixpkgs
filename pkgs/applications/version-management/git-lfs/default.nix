@@ -2,16 +2,27 @@
 
 buildGoModule rec {
   pname = "git-lfs";
+<<<<<<< HEAD
   version = "3.4.0";
+=======
+  version = "3.3.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "git-lfs";
     repo = "git-lfs";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-lZx+sJQttclZPET0jkv3dmpQysCpsYani+La7yfSUlI=";
   };
 
   vendorHash = "sha256-VmPeQYWOHFqFLHKcKH3WHz50yx7GMHVIDPzqiVwwjSg=";
+=======
+    hash = "sha256-r1z97sgqo1IyR0oW5b3bMGTUHGE8U+hrWgQ0Su9FRrw=";
+  };
+
+  vendorHash = "sha256-did6qAUawmQ/juLzJWIXGzmErj9tBKgM7HROTezX+tw=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nativeBuildInputs = [ asciidoctor installShellFiles ];
 
@@ -39,10 +50,13 @@ buildGoModule rec {
 
   postInstall = ''
     installManPage man/man*/*
+<<<<<<< HEAD
     installShellCompletion --cmd git-lfs \
       --bash <($out/bin/git-lfs completion bash) \
       --fish <($out/bin/git-lfs completion fish) \
       --zsh <($out/bin/git-lfs completion zsh)
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '';
 
   passthru.tests.version = testers.testVersion {

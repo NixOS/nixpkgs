@@ -20,13 +20,21 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "mygui";
+<<<<<<< HEAD
   version = "3.4.2";
+=======
+  version = "3.4.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "MyGUI";
     repo = "mygui";
     rev = "MyGUI${version}";
+<<<<<<< HEAD
     hash = "sha256-yBV0ImOFJlqBPqqOjXYe4SFO2liSGZCEwvehED5Ubj4=";
+=======
+    hash = "sha256-5u9whibYKPj8tCuhdLOhL4nDisbFAB0NxxdjU/8izb8=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   patches = [

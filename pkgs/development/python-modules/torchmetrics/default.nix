@@ -3,7 +3,11 @@
 , fetchFromGitHub
 , cloudpickle
 , scikit-learn
+<<<<<<< HEAD
 , scikit-image
+=======
+, scikitimage
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , packaging
 , psutil
 , py-deprecate
@@ -40,7 +44,11 @@ buildPythonPackage {
   nativeCheckInputs = [
     pytorch-lightning
     scikit-learn
+<<<<<<< HEAD
     scikit-image
+=======
+    scikitimage
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     cloudpickle
     psutil
     pytestCheckHook

@@ -1,9 +1,15 @@
+<<<<<<< HEAD
 { stdenv, fetchurl, libxml2, xar, cpio, pkgs, python3Minimal, pbzx, lib, darwin-stubs, print-reexports }:
 
 let
   xarMinimal = xar.override {
     libxml2 = libxml2.override { pythonSupport = false; };
   };
+=======
+{ stdenv, fetchurl, xar, cpio, pkgs, python3, pbzx, lib, darwin-stubs, print-reexports }:
+
+let
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   # sadly needs to be exported because security_tool needs it
   sdk = stdenv.mkDerivation rec {
     pname = "MacOS_SDK";
@@ -19,7 +25,11 @@ let
       sha256 = "13xq34sb7383b37hwy076gnhf96prpk1b4087p87xnwswxbrisih";
     };
 
+<<<<<<< HEAD
     nativeBuildInputs = [ xarMinimal cpio python3Minimal pbzx ];
+=======
+    nativeBuildInputs = [ xar cpio python3 pbzx ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     outputs = [ "out" "dev" "man" ];
 
@@ -323,6 +333,7 @@ in rec {
       '';
     });
 
+<<<<<<< HEAD
     System = lib.overrideDerivation super.System (drv: {
       installPhase = ''
         mkdir -p $out/Library/Frameworks/System.framework/Versions/B
@@ -332,6 +343,8 @@ in rec {
       '';
     });
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     WebKit = lib.overrideDerivation super.WebKit (drv: {
       extraTBDFiles = [
         "Versions/A/Frameworks/WebCore.framework/Versions/A/WebCore.tbd"

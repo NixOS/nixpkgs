@@ -14,7 +14,11 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+<<<<<<< HEAD
   sourceRoot = "${src.name}/SP";
+=======
+  sourceRoot = "source/SP";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   makeFlags = [
     "USE_INTERNAL_LIBS=0"

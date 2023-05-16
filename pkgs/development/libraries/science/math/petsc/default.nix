@@ -18,11 +18,19 @@ assert petsc-withp4est -> p4est.mpiSupport;
 
 stdenv.mkDerivation rec {
   pname = "petsc";
+<<<<<<< HEAD
   version = "3.19.2";
 
   src = fetchurl {
     url = "http://ftp.mcs.anl.gov/pub/petsc/release-snapshots/petsc-${version}.tar.gz";
     sha256 = "sha256-EU82P3ebsWg5slwOcPiwrg2UfVDnL3xs3csRsAEHmxY=";
+=======
+  version = "3.17.4";
+
+  src = fetchurl {
+    url = "http://ftp.mcs.anl.gov/pub/petsc/release-snapshots/petsc-${version}.tar.gz";
+    sha256 = "sha256-mcEnSGcio//ZWiaLTOsJdsvyF5JsaBqWMb1yRuq4yyo=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   mpiSupport = !withp4est || p4est.mpiSupport;
@@ -42,12 +50,15 @@ stdenv.mkDerivation rec {
       --replace /usr/bin/install_name_tool ${darwin.cctools}/bin/install_name_tool
   '';
 
+<<<<<<< HEAD
   # Both OpenMPI and MPICH get confused by the sandbox environment and spew errors like this (both to stdout and stderr):
   #     [hwloc/linux] failed to find sysfs cpu topology directory, aborting linux discovery.
   #     [1684747490.391106] [localhost:14258:0]       tcp_iface.c:837  UCX  ERROR opendir(/sys/class/net) failed: No such file or directory
   # These messages contaminate test output, which makes the quicktest suite to fail. The patch adds filtering for these messages.
   patches = [ ./filter_mpi_warnings.patch ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   preConfigure = ''
     export FC="${gfortran}/bin/gfortran" F77="${gfortran}/bin/gfortran"
     patchShebangs ./lib/petsc/bin

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 { lib
 , stdenv
 , apscheduler
@@ -21,6 +22,30 @@
 , waitress
 , webtest
 , yoyo-migrations
+=======
+{ stdenv
+, lib
+, buildPythonPackage
+, fetchFromGitHub
+, poetry-core
+, apscheduler
+, bitstring
+, cffi
+, ecdsa
+, monero
+, pypng
+, pyqrcode
+, pyramid
+, pyramid_jinja2
+, pysocks
+, requests
+, tzlocal
+, waitress
+, yoyo-migrations
+, pytestCheckHook
+, pytest-cov
+, webtest
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 buildPythonPackage rec {
@@ -28,8 +53,11 @@ buildPythonPackage rec {
   version = "1.0.16";
   format = "pyproject";
 
+<<<<<<< HEAD
   disabled = pythonOlder "3.7";
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   src = fetchFromGitHub {
     owner = "CypherpunkPay";
     repo = "CypherpunkPay";
@@ -37,6 +65,7 @@ buildPythonPackage rec {
     hash = "sha256-X0DB0PVwR0gRnt3jixFzglWAOPKBMvqTOG6pK6OJ03w=";
   };
 
+<<<<<<< HEAD
   pythonRelaxDeps = [
     "bitstring"
     "cffi"
@@ -49,6 +78,19 @@ buildPythonPackage rec {
   nativeBuildInputs = [
     poetry-core
     pythonRelaxDepsHook
+=======
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace "bitstring = '^3.1.9'" "bitstring = '>=3.1.9'" \
+      --replace 'cffi = "1.15.0"' 'cffi = ">=1.15.0"' \
+      --replace 'ecdsa = "^0.17.0"' 'ecdsa = ">=0.17.0"' \
+      --replace 'pypng = "^0.0.20"' 'pypng = ">=0.0.20"' \
+      --replace 'tzlocal = "2.1"' 'tzlocal = ">=2.1"'
+  '';
+
+  nativeBuildInputs = [
+    poetry-core
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   propagatedBuildInputs = [
@@ -60,7 +102,11 @@ buildPythonPackage rec {
     pypng
     pyqrcode
     pyramid
+<<<<<<< HEAD
     pyramid-jinja2
+=======
+    pyramid_jinja2
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     pysocks
     requests
     tzlocal
@@ -70,6 +116,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
+<<<<<<< HEAD
     webtest
   ];
 
@@ -78,6 +125,12 @@ buildPythonPackage rec {
     "ignore::DeprecationWarning"
   ];
 
+=======
+    pytest-cov
+    webtest
+  ];
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   disabledTestPaths = [
     # performance test
     "tests/unit/tools/pbkdf2_test.py"
@@ -102,6 +155,7 @@ buildPythonPackage rec {
     "tests/acceptance/views_dummystore"
   ];
 
+<<<<<<< HEAD
   pythonImportsCheck = [
     "cypherpunkpay"
   ];
@@ -110,6 +164,11 @@ buildPythonPackage rec {
     description = "Modern self-hosted software for accepting Bitcoin";
     homepage = "https://github.com/CypherpunkPay/CypherpunkPay";
     changelog = "https://github.com/CypherpunkPay/CypherpunkPay/releases/tag/v${version}";
+=======
+  meta = with lib; {
+    description = "Modern self-hosted software for accepting Bitcoin";
+    homepage = "https://cypherpunkpay.org";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     license = with licenses; [ mit /* or */ unlicense ];
     maintainers = with maintainers; [ prusnak ];
   };

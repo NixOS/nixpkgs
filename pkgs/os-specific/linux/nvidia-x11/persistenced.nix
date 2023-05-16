@@ -44,6 +44,9 @@ stdenv.mkDerivation rec {
     license = licenses.unfreeRedistributable;
     platforms = nvidia_x11.meta.platforms;
     maintainers = with maintainers; [ abbradar ];
+<<<<<<< HEAD
     mainProgram = pname;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

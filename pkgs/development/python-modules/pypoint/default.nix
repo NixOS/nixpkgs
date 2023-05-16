@@ -7,14 +7,22 @@
 
 buildPythonPackage rec {
   pname = "pypoint";
+<<<<<<< HEAD
   version = "2.3.1";
+=======
+  version = "2.3.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "fredrike";
     repo = "pypoint";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-fO0un6YIK3jutzUxbu9mSqPZHfLa3pMtfxOy1iV3Qio=";
+=======
+    hash = "sha256-609Zme9IUl8eHNxzrYsRAg7bgZho/OklGM7oI+imyZQ=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [

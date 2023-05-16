@@ -6,6 +6,7 @@
 
 let
   pname = "trilium-desktop";
+<<<<<<< HEAD
   version = "0.60.4";
 
   linuxSource.url = "https://github.com/zadam/trilium/releases/download/v${version}/trilium-linux-x64-${version}.tar.xz";
@@ -13,6 +14,15 @@ let
 
   darwinSource.url = "https://github.com/zadam/trilium/releases/download/v${version}/trilium-mac-x64-${version}.zip";
   darwinSource.sha256 = "0z6dk16xdzkiyxrm1yh3iz5351c8sdzvk8v5l3jdqy7davxw9f86";
+=======
+  version = "0.59.4";
+
+  linuxSource.url = "https://github.com/zadam/trilium/releases/download/v${version}/trilium-linux-x64-${version}.tar.xz";
+  linuxSource.sha256 = "0vv58bcwx62slrc6f7ra61m71nqh6pb2rg4h99f8krj2h56zhrij";
+
+  darwinSource.url = "https://github.com/zadam/trilium/releases/download/v${version}/trilium-mac-x64-${version}.zip";
+  darwinSource.sha256 = "18jdz32i0blh3hrdyh558fmqncjrnv1j1g3hwjcph8hi90pqycdr";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   meta = metaCommon // {
     mainProgram = "trilium";
@@ -42,7 +52,10 @@ let
         comment = meta.description;
         desktopName = "Trilium Notes";
         categories = [ "Office" ];
+<<<<<<< HEAD
         startupWMClass = "trilium notes";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       })
     ];
 

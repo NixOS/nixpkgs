@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 { lib, stdenv, rustPlatform, fetchFromBitbucket, Libsystem, SystemConfiguration, installShellFiles }:
+=======
+{ lib, stdenv, rustPlatform, fetchFromBitbucket, llvmPackages, Libsystem, SystemConfiguration, installShellFiles }:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 rustPlatform.buildRustPackage rec {
   pname = "bore";
@@ -14,21 +18,33 @@ rustPlatform.buildRustPackage rec {
   cargoSha256 = "1xlbfzmy0wjyz3jpr17r4ma4i79d9b32yqwwi10vrcjzr7vsyhmx";
   cargoBuildFlags = [ "-p" pname ];
 
+<<<<<<< HEAD
   # error[E0793]: reference to packed field is unaligned
   doCheck = !stdenv.isDarwin;
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   # FIXME can’t test --all-targets and --doc in a single invocation
   cargoTestFlags = [ "--all-targets" "--workspace" ];
   checkFeatures = [ "std" ];
 
   nativeBuildInputs = [ installShellFiles ]
+<<<<<<< HEAD
     ++ lib.optional stdenv.isDarwin rustPlatform.bindgenHook;
+=======
+    ++ lib.optional stdenv.isDarwin llvmPackages.libclang;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   buildInputs = lib.optionals stdenv.isDarwin [
     Libsystem
     SystemConfiguration
   ];
 
+<<<<<<< HEAD
+=======
+  LIBCLANG_PATH="${llvmPackages.libclang.lib}/lib";
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   postInstall = ''
     installManPage $src/bore/doc/bore.1
   '';

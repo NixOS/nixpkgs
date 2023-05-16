@@ -2,7 +2,10 @@
 , buildPythonPackage
 , pythonOlder
 , fetchFromGitHub
+<<<<<<< HEAD
 , fetchpatch
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , poetry-core
 , aiohttp
 , pytest
@@ -20,6 +23,7 @@ buildPythonPackage rec {
     owner = "Gr1N";
     repo = pname;
     rev = version;
+<<<<<<< HEAD
     hash = "sha256-Mb3wSbambC1h+lFI+fafwZzm78IvADNAsF/Uw60DFHc=";
   };
 
@@ -31,6 +35,15 @@ buildPythonPackage rec {
       hash = "sha256-/5X3xjJwt2gs3t6f/6n1QZ+CTBq/5+cQE+MgNWyz+Hs=";
     })
   ];
+=======
+    sha256 = "0xql0fnw7m2zn103601gqbpyd761kzvgjj2iz9hjsv56nr4z1g9i";
+  };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace "poetry.masonry.api" "poetry.core.masonry.api"
+  '';
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nativeBuildInputs = [
     poetry-core
@@ -45,8 +58,11 @@ buildPythonPackage rec {
     pytest-asyncio
   ];
 
+<<<<<<< HEAD
   __darwinAllowLocalNetworking = true;
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nativeCheckInputs = [
     pytestCheckHook
   ];

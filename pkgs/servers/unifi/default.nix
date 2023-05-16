@@ -38,7 +38,11 @@ let
       sourceProvenance = with sourceTypes; [ binaryBytecode ];
       license = licenses.unfree;
       platforms = platforms.unix;
+<<<<<<< HEAD
       maintainers = with maintainers; [ globin patryk27 ];
+=======
+      maintainers = with maintainers; [ globin patryk27 pennae ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
   });
 
@@ -66,7 +70,12 @@ in rec {
   };
 
   unifi7 = generic {
+<<<<<<< HEAD
     version = "7.4.156";
     sha256 = "sha256-UJjzSC2qKi2ABwH5p0s/5fXfB3NVfYBb3wBfE/8NlK4=";
+=======
+    version = "7.3.83";
+    sha256 = "sha256-mDbF9vfoWjvABxcOIRngStji7xBllgZfUhVA9kF6ERU=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

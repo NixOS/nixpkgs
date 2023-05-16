@@ -18,7 +18,11 @@ stdenv.mkDerivation rec {
   inherit version;
 
   inherit src;
+<<<<<<< HEAD
   sourceRoot = "${src.name}/libcxx";
+=======
+  sourceRoot = "source/libcxx";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   outputs = [ "out" ] ++ lib.optional (!headersOnly) "dev";
 

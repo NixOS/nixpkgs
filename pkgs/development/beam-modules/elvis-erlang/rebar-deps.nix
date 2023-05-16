@@ -16,11 +16,19 @@ let
     };
     ssl_verify_fun = builder {
       name = "ssl_verify_fun";
+<<<<<<< HEAD
       version = "1.1.7";
       src = fetchHex {
         pkg = "ssl_verify_fun";
         version = "1.1.7";
         sha256 = "sha256-/kwZDo83QB0wFnyMQF7aGUafNFd5h8dt3mE+g4u8Z/g=";
+=======
+      version = "1.1.6";
+      src = fetchHex {
+        pkg = "ssl_verify_fun";
+        version = "1.1.6";
+        sha256 = "sha256-vbDSRx9FPIj/OQjnaG+G+b4yfQZcwewW+kVAGX6gRoA=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       };
       beamDeps = [ ];
     };
@@ -66,11 +74,19 @@ let
     };
     certifi = builder {
       name = "certifi";
+<<<<<<< HEAD
       version = "2.11.0";
       src = fetchHex {
         pkg = "certifi";
         version = "2.11.0";
         sha256 = "sha256-njfgVC7D+rqhmgc0s5ANwJV5f6xIxAoql0HYrV48m7c=";
+=======
+      version = "2.8.0";
+      src = fetchHex {
+        pkg = "certifi";
+        version = "2.8.0";
+        sha256 = "sha256-asfvwcb4YAsI1iUpLUu/WE4UhHzhtrXETZg9Jz4Ql+o=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       };
       beamDeps = [ ];
     };
@@ -96,11 +112,19 @@ let
     };
     katana_code = builder {
       name = "katana_code";
+<<<<<<< HEAD
       version = "2.0.2";
       src = fetchHex {
         pkg = "katana_code";
         version = "2.0.2";
         sha256 = "sha256-Plf+1jXgsWpfvazNyHLsU96yHtn8bn65tkFf8Zm3sTg=";
+=======
+      version = "1.1.2";
+      src = fetchHex {
+        pkg = "katana_code";
+        version = "1.1.2";
+        sha256 = "sha256-5+YWKkToJqA/aLUDt9kpgbiUv4NMHvDmR3g/fWaIAhw=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       };
       beamDeps = [ ];
     };
@@ -146,11 +170,19 @@ let
     };
     elvis_core = builder {
       name = "elvis_core";
+<<<<<<< HEAD
       version = "3.0.1";
       src = fetchHex {
         pkg = "elvis_core";
         version = "3.0.1";
         sha256 = "sha256-TPc1QB50ZcEIUcYkXB4+jnZJhNjAtZSdVpexS1+urUk=";
+=======
+      version = "1.3.1";
+      src = fetchHex {
+        pkg = "elvis_core";
+        version = "1.3.1";
+        sha256 = "sha256-eoiQv4GFoyUs1OvYJv5fita5MCTt+IV26yeunl3BnWk=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       };
       beamDeps = [ katana_code zipper ];
     };

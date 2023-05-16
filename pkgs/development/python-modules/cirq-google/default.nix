@@ -10,7 +10,11 @@ buildPythonPackage rec {
   pname = "cirq-google";
   inherit (cirq-core) version src meta;
 
+<<<<<<< HEAD
   sourceRoot = "${src.name}/${pname}";
+=======
+  sourceRoot = "source/${pname}";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   postPatch = ''
     substituteInPlace requirements.txt \

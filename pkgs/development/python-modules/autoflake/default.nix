@@ -4,9 +4,14 @@
 , hatchling
 , pyflakes
 , pytestCheckHook
+<<<<<<< HEAD
 , pythonOlder
 , tomli
 }:
+=======
+}:
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 buildPythonPackage rec {
   pname = "autoflake";
   version = "2.0.1";
@@ -23,8 +28,12 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     pyflakes
+<<<<<<< HEAD
   ]
   ++ lib.optional (pythonOlder "3.11") tomli;
+=======
+  ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nativeCheckInputs = [
     pytestCheckHook

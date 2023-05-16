@@ -19,8 +19,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   outputs = [ "out" "dev" ];
 
+<<<<<<< HEAD
   enableParallelBuilding = true;
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 
   meta = {

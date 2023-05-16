@@ -1,4 +1,5 @@
 { lib
+<<<<<<< HEAD
 , atk
 , buildPythonApplication
 , fetchFromGitHub
@@ -28,11 +29,41 @@
 buildPythonApplication rec {
   pname = "cobang";
   version = "0.10.1";
+=======
+, buildPythonApplication
+, fetchFromGitHub
+, wrapGAppsHook
+, atk
+, gdk-pixbuf
+, gobject-introspection
+, gtk3
+, gst-plugins-good
+, libhandy
+, librsvg
+, networkmanager
+, pango
+, gst-python
+, kiss-headers
+, logbook
+, pillow
+, poetry-core
+, pygobject3
+, python
+, python-zbar
+, requests
+, single-version
+, pytestCheckHook }:
+
+buildPythonApplication rec {
+  pname = "cobang";
+  version = "0.9.6";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "hongquan";
     repo = "CoBang";
+<<<<<<< HEAD
     rev = "refs/tags/v${version}";
     hash = "sha256-yNDnBTBmwcP3g51UkkLNyF4eHYjblwxPxS2lMwbFKUM=";
   };
@@ -40,10 +71,19 @@ buildPythonApplication rec {
   pythonRelaxDeps = [
     "logbook"
     "Pillow"
+=======
+    rev = "v${version}";
+    sha256 = "sha256-YcXQ2wAgFSsJEqcaDQotpX1put4pQaF511kwq/c2yHw=";
+  };
+
+  patches = [
+    ./0001-Poetry-core-and-pillow-9.patch
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   nativeBuildInputs = [
     gobject-introspection
+<<<<<<< HEAD
     pythonRelaxDepsHook
     wrapGAppsHook
   ];
@@ -57,6 +97,11 @@ buildPythonApplication rec {
     pango
   ];
 
+=======
+    wrapGAppsHook
+  ];
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   propagatedBuildInputs = [
     gst-python
     kiss-headers
@@ -69,6 +114,20 @@ buildPythonApplication rec {
     single-version
   ];
 
+<<<<<<< HEAD
+=======
+  buildInputs = [
+    atk
+    gdk-pixbuf
+    # Needed to detect namespaces
+    gobject-introspection
+    gst-plugins-good
+    libhandy
+    networkmanager
+    pango
+  ];
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nativeCheckInputs = [
     pytestCheckHook
   ];

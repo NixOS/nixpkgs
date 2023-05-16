@@ -12,11 +12,19 @@
 
 stdenv.mkDerivation rec {
   pname = "klavaro";
+<<<<<<< HEAD
   version = "3.14";
 
   src = fetchurl {
     url = "mirror://sourceforge/klavaro/${pname}-${version}.tar.bz2";
     hash = "sha256-hxh+SdMBxRDmlkCYzbYSEmvwMNKodf15nq3K0+rlbas=";
+=======
+  version = "3.13";
+
+  src = fetchurl {
+    url = "mirror://sourceforge/klavaro/${pname}-${version}.tar.bz2";
+    sha256 = "0z6c3lqikk50mkz3ipm93l48qj7b98lxyip8y6ndg9y9k0z0n878";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ intltool makeWrapper pkg-config ];
@@ -26,6 +34,11 @@ stdenv.mkDerivation rec {
     substituteInPlace src/tutor.c --replace '"espeak ' '"${espeak}/bin/espeak '
   '';
 
+<<<<<<< HEAD
+=======
+  patches = [ ./icons.patch ./trans_lang_get_similar.patch ];
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   postInstall = ''
     wrapProgram $out/bin/klavaro \
       --prefix LD_LIBRARY_PATH : $out/lib
@@ -37,6 +50,7 @@ stdenv.mkDerivation rec {
       --replace "/usr/bin/file" "${file}/bin/file"
   '';
 
+<<<<<<< HEAD
   # remove forbidden references to $TMPDIR
   preFixup = lib.optionalString stdenv.isLinux ''
     for f in "$out"/bin/*; do
@@ -45,6 +59,10 @@ stdenv.mkDerivation rec {
       fi
     done
   '';
+=======
+  # Hack to avoid TMPDIR in RPATHs.
+  preFixup = ''rm -rf "$(pwd)" '';
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   meta = with lib; {
     description = "Free touch typing tutor program";

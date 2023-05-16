@@ -6,6 +6,11 @@ buildDunePackage rec {
 
   minimalOCamlVersion = "4.03";
 
+<<<<<<< HEAD
+=======
+  duneVersion = "3";
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   src = fetchFromGitHub {
     owner = "aantron";
     repo = pname;
@@ -15,7 +20,11 @@ buildDunePackage rec {
 
   propagatedBuildInputs = [ camlp-streams markup ];
 
+<<<<<<< HEAD
   doCheck = lib.versionAtLeast ocaml.version "4.08";
+=======
+  doCheck = lib.versionAtLeast ocaml.version "4.04";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   checkInputs = [ ounit2 ];
 
   meta = {

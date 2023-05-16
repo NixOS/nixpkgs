@@ -9,21 +9,32 @@
 , systemd
 , meson
 , ninja
+<<<<<<< HEAD
 , makeWrapper
 , testers
 , tang
 , gitUpdater
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 stdenv.mkDerivation rec {
   pname = "tang";
+<<<<<<< HEAD
   version = "14";
+=======
+  version = "13";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "latchset";
     repo = "tang";
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-QKURKb2g71pZvuZlJk3Rc26H3oU0WSkjgQtJQLrYGbw=";
+=======
+    hash = "sha256-SOdgMUWavTaDUiVvpEyE9ac+9aDmZs74n7ObugksBcc=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [
@@ -31,7 +42,10 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
+<<<<<<< HEAD
     makeWrapper
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   buildInputs = [
@@ -46,6 +60,7 @@ stdenv.mkDerivation rec {
     "man"
   ];
 
+<<<<<<< HEAD
   postFixup = ''
     wrapProgram $out/bin/tang-show-keys --prefix PATH ":" ${lib.makeBinPath [ jose ]}
     wrapProgram $out/libexec/tangd-keygen --prefix PATH ":" ${lib.makeBinPath [ jose ]}
@@ -61,6 +76,8 @@ stdenv.mkDerivation rec {
     updateScript = gitUpdater { };
   };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   meta = {
     description = "Server for binding data to network presence";
     homepage = "https://github.com/latchset/tang";

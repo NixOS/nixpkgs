@@ -43,5 +43,9 @@ buildGoModule rec {
     homepage = "https://kompose.io";
     license = licenses.asl20;
     maintainers = with maintainers; [ thpham vdemeester ];
+<<<<<<< HEAD
+=======
+    platforms = platforms.unix;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

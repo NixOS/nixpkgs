@@ -1,5 +1,10 @@
+<<<<<<< HEAD
 { lib, stdenv, fetchFromGitHub, fetchpatch, cmake
 , openssh, mpiCheckPhaseHook, mpi, blas, lapack
+=======
+{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake, openssh
+, mpi, blas, lapack
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 } :
 
 assert blas.isILP64 == lapack.isILP64;
@@ -35,7 +40,11 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ cmake ];
+<<<<<<< HEAD
   nativeCheckInputs = [ openssh mpiCheckPhaseHook ];
+=======
+  nativeCheckInputs = [ openssh ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   buildInputs = [ blas lapack ];
   propagatedBuildInputs = [ mpi ];
   hardeningDisable = lib.optionals (stdenv.isAarch64 && stdenv.isDarwin) [ "stackprotector" ];
@@ -61,6 +70,20 @@ stdenv.mkDerivation rec {
   # sometimes fail due to this
   checkFlagsArray = [ "ARGS=--timeout 10000" ];
 
+<<<<<<< HEAD
+=======
+  preCheck = ''
+    # make sure the test starts even if we have less than 4 cores
+    export OMPI_MCA_rmaps_base_oversubscribe=1
+
+    # Fix to make mpich run in a sandbox
+    export HYDRA_IFACE=lo
+
+    # Run single threaded
+    export OMP_NUM_THREADS=1
+  '';
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   meta = with lib; {
     homepage = "http://www.netlib.org/scalapack/";
     description = "Library of high-performance linear algebra routines for parallel distributed memory machines";

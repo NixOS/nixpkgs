@@ -29,16 +29,27 @@
 , x11Support ? true
 }:
 
+<<<<<<< HEAD
 assert (x11Support || waylandSupport);
 stdenv.mkDerivation (finalAttrs: {
   pname = "yambar";
   version = "1.10.0";
+=======
+let
+  inherit (lib) mesonEnable;
+in
+assert (x11Support || waylandSupport);
+stdenv.mkDerivation (finalAttrs: {
+  pname = "yambar";
+  version = "1.9.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "dnkl";
     repo = "yambar";
     rev = finalAttrs.version;
+<<<<<<< HEAD
     hash = "sha256-+bNTEPGV5xaVXhsejyK+FCcJ9J06KS6x7/qo6P2DnZI=";
   };
 
@@ -46,6 +57,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   depsBuildBuild = [ pkg-config ];
 
+=======
+    hash = "sha256-0bgRnZYLGWJ9PE62i04hPBcgzWyd30DK7AUuejSgta4=";
+  };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nativeBuildInputs = [
     bison
     flex
@@ -77,6 +93,7 @@ stdenv.mkDerivation (finalAttrs: {
     xcbutilwm
   ];
 
+<<<<<<< HEAD
   strictDeps = true;
 
   mesonBuildType = "release";
@@ -88,6 +105,18 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://codeberg.org/dnkl/yambar";
+=======
+  mesonBuildType = "release";
+
+  mesonFlags = [
+    (mesonEnable "backend-x11" x11Support)
+    (mesonEnable "backend-wayland" waylandSupport)
+  ];
+
+  meta = with lib; {
+    homepage = "https://codeberg.org/dnkl/yambar";
+    changelog = "https://codeberg.org/dnkl/yambar/releases/tag/${finalAttrs.version}";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     description = "Modular status panel for X11 and Wayland";
     longDescription = ''
       yambar is a lightweight and configurable status panel (bar, for short) for
@@ -114,9 +143,15 @@ stdenv.mkDerivation (finalAttrs: {
       To summarize: a bar displays information provided by modules, using
       particles and decorations. How is configured by you.
     '';
+<<<<<<< HEAD
     changelog = "https://codeberg.org/dnkl/yambar/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ AndersonTorres ];
     platforms = lib.platforms.linux;
+=======
+    license = licenses.mit;
+    maintainers = with maintainers; [ AndersonTorres ];
+    platforms = platforms.linux;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 })

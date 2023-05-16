@@ -1,12 +1,17 @@
+<<<<<<< HEAD
 { lib
 , buildPythonPackage
 , fetchPypi
 , pytestCheckHook
 }:
+=======
+{ lib, buildPythonPackage, fetchPypi, d2to1 }:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 buildPythonPackage rec {
   pname = "colour";
   version = "0.1.5";
+<<<<<<< HEAD
   format = "setuptools";
 
   src = fetchPypi {
@@ -31,6 +36,15 @@ buildPythonPackage rec {
   pythonImportsCheck = [
     "colour"
   ];
+=======
+
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "af20120fefd2afede8b001fbef2ea9da70ad7d49fafdb6489025dae8745c3aee";
+  };
+
+  buildInputs = [ d2to1 ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   meta = with lib; {
     description = "Converts and manipulates common color representation (RGB, HSV, web, ...)";

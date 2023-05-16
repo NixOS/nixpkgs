@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 { lib, buildNimPackage, fetchFromGitHub, unicodedb }:
 
 buildNimPackage (finalAttrs: {
@@ -17,3 +18,13 @@ buildNimPackage (finalAttrs: {
     maintainers = with lib.maintainers; [ ehmry ];
   };
 })
+=======
+{ fetchFromGitHub }:
+
+fetchFromGitHub {
+  owner = "nitely";
+  repo = "nim-segmentation";
+  rev = "v0.1.0";
+  sha256 = "007bkx8dwy8n340zbp6wyqfsq9bh6q5ykav1ywdlwykyp1n909bh";
+}
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)

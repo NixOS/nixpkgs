@@ -45,6 +45,10 @@ python3.pkgs.buildPythonApplication rec {
   buildInputs = [
     gtk4
     glib
+<<<<<<< HEAD
+=======
+    gobject-introspection
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     gst_all_1.gstreamer
     gst_all_1.gst-plugins-base
     libsoup_3
@@ -69,7 +73,13 @@ python3.pkgs.buildPythonApplication rec {
   # handle setup hooks better
   strictDeps = false;
 
+<<<<<<< HEAD
   passthru.updateScript = nix-update-script { };
+=======
+  passthru.updateScript = nix-update-script {
+    attrPath = pname;
+  };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   meta = with lib; {
     homepage = "https://github.com/dialect-app/dialect";

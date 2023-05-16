@@ -70,6 +70,9 @@ rustPlatform.buildRustPackage rec {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ ehmry ];
     platforms = platforms.linux;
+<<<<<<< HEAD
     broken = stdenv.isAarch64;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

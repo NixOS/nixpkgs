@@ -10,7 +10,11 @@
 , dbus
 , libusb1
 , ncurses
+<<<<<<< HEAD
 , kppsSupport ? stdenv.isLinux, pps-tools
+=======
+, pps-tools
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , python3Packages
 
 # optional deps for GUI packages
@@ -53,9 +57,14 @@ stdenv.mkDerivation rec {
     dbus
     libusb1
     ncurses
+<<<<<<< HEAD
     python3Packages.python
   ] ++ lib.optionals kppsSupport [
     pps-tools
+=======
+    pps-tools
+    python3Packages.python
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ] ++ lib.optionals guiSupport [
     atk
     dbus-glib
@@ -136,7 +145,11 @@ stdenv.mkDerivation rec {
     homepage = "https://gpsd.gitlab.io/gpsd/index.html";
     changelog = "https://gitlab.com/gpsd/gpsd/-/blob/release-${version}/NEWS";
     license = licenses.bsd2;
+<<<<<<< HEAD
     platforms = platforms.unix;
+=======
+    platforms = platforms.linux;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     maintainers = with maintainers; [ bjornfor rasendubi ];
   };
 }

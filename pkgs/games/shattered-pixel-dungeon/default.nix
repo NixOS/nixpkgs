@@ -2,21 +2,33 @@
 , makeWrapper
 , fetchFromGitHub
 , nixosTests
+<<<<<<< HEAD
 , gradle
 , perl
 , jre
 , libpulseaudio
 , makeDesktopItem
 , copyDesktopItems
+=======
+, gradle_6
+, perl
+, jre
+, libpulseaudio
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 let
   pname = "shattered-pixel-dungeon";
+<<<<<<< HEAD
   version = "2.1.4";
+=======
+  version = "1.1.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "00-Evan";
     repo = "shattered-pixel-dungeon";
+<<<<<<< HEAD
     rev = "v${version}";
     hash = "sha256-WbRvsHxTYYlhJavYVGMGK25fXEfSfnIztJ6KuCgBjF8=";
   };
@@ -25,6 +37,14 @@ let
     ./disable-beryx.patch
   ];
 
+=======
+    # NOTE: always use the commit sha, not the tag. Tags _will_ disappear!
+    # https://github.com/00-Evan/shattered-pixel-dungeon/issues/596
+    rev = "5d1a2dce6b554b40f6737ead45d411fd98f4c67d";
+    sha256 = "sha256-Vu7K0NnqFY298BIQV9AwNEahV0eJl14tAeq+rw6KrtM=";
+  };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   postPatch = ''
     # disable gradle plugins with native code and their targets
     perl -i.bak1 -pe "s#(^\s*id '.+' version '.+'$)#// \1#" build.gradle
@@ -36,8 +56,13 @@ let
   # fake build to pre-download deps into fixed-output derivation
   deps = stdenv.mkDerivation {
     pname = "${pname}-deps";
+<<<<<<< HEAD
     inherit version src patches postPatch;
     nativeBuildInputs = [ gradle perl ];
+=======
+    inherit version src postPatch;
+    nativeBuildInputs = [ gradle_6 perl ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     buildPhase = ''
       export GRADLE_USER_HOME=$(mktemp -d)
       # https://github.com/gradle/gradle/issues/4426
@@ -51,6 +76,7 @@ let
         | sh
     '';
     outputHashMode = "recursive";
+<<<<<<< HEAD
     outputHash = "sha256-i4k5tdo07E1NJwywroaGvRjZ+/xrDp6ra+GTYwTB7uk=";
   };
 
@@ -75,12 +101,24 @@ in stdenv.mkDerivation rec {
   buildPhase = ''
     runHook preBuild
 
+=======
+    outputHash = "sha256-UI5/ZJbUtEz1Fr+qn6a8kzi9rrP+lVrpBbuDv8TG5y0=";
+  };
+
+in stdenv.mkDerivation rec {
+  inherit pname version src postPatch;
+
+  nativeBuildInputs = [ gradle_6 perl makeWrapper ];
+
+  buildPhase = ''
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     export GRADLE_USER_HOME=$(mktemp -d)
     # https://github.com/gradle/gradle/issues/4426
     ${lib.optionalString stdenv.isDarwin "export TERM=dumb"}
     # point to offline repo
     sed -ie "s#repositories {#repositories { maven { url '${deps}' };#g" build.gradle
     gradle --offline --no-daemon desktop:release
+<<<<<<< HEAD
 
     runHook postBuild
   '';
@@ -88,11 +126,17 @@ in stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
+=======
+  '';
+
+  installPhase = ''
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     install -Dm644 desktop/build/libs/desktop-${version}.jar $out/share/shattered-pixel-dungeon.jar
     mkdir $out/bin
     makeWrapper ${jre}/bin/java $out/bin/shattered-pixel-dungeon \
       --prefix LD_LIBRARY_PATH : ${libpulseaudio}/lib \
       --add-flags "-jar $out/share/shattered-pixel-dungeon.jar"
+<<<<<<< HEAD
 
     for s in 16 32 48 64 128 256; do
       install -Dm644 desktop/src/main/assets/icons/icon_$s.png \
@@ -100,6 +144,8 @@ in stdenv.mkDerivation rec {
     done
 
     runHook postInstall
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '';
 
   passthru.tests = {

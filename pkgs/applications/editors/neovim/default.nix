@@ -1,10 +1,18 @@
+<<<<<<< HEAD
 { lib, stdenv, fetchFromGitHub, cmake, gettext, msgpack-c, libtermkey, libiconv
+=======
+{ lib, stdenv, fetchFromGitHub, cmake, gettext, msgpack, libtermkey, libiconv
+, fetchpatch
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , libuv, lua, ncurses, pkg-config
 , unibilium, gperf
 , libvterm-neovim
 , tree-sitter
 , fetchurl
+<<<<<<< HEAD
 , buildPackages
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , treesitter-parsers ? import ./treesitter-parsers.nix { inherit fetchurl; }
 , CoreServices
 , glibcLocales ? null, procps ? null
@@ -16,6 +24,7 @@
 }:
 
 let
+<<<<<<< HEAD
   requiredLuaPkgs = ps: (with ps; [
     lpeg
     luabitop
@@ -37,23 +46,48 @@ let
       then
         let deterministicLuajit =
           lua.luaOnBuild.override {
+=======
+  neovimLuaEnv = lua.withPackages(ps:
+    (with ps; [ lpeg luabitop mpack ]
+    ++ lib.optionals doCheck [
+        nvim-client luv coxpcall busted luafilesystem penlight inspect
+      ]
+    ));
+  codegenLua =
+    if lua.pkgs.isLuaJIT
+      then
+        let deterministicLuajit =
+          lua.override {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
             deterministicStringIds = true;
             self = deterministicLuajit;
           };
         in deterministicLuajit.withPackages(ps: [ ps.mpack ps.lpeg ])
+<<<<<<< HEAD
       else lua.luaOnBuild;
+=======
+      else lua;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   pyEnv = python3.withPackages(ps: with ps; [ pynvim msgpack ]);
 in
   stdenv.mkDerivation rec {
     pname = "neovim-unwrapped";
+<<<<<<< HEAD
     version = "0.9.2";
+=======
+    version = "0.9.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     src = fetchFromGitHub {
       owner = "neovim";
       repo = "neovim";
       rev = "v${version}";
+<<<<<<< HEAD
       hash = "sha256-kKstlq1BzoBAy+gy9iL1auRViJ223cVpAt5X7pUWT1U=";
+=======
+      hash = "sha256-4uCPWnjSMU7ac6Q3LT+Em8lVk1MuSegxHMLGQRtFqAs=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
 
     patches = [
@@ -61,6 +95,17 @@ in
       # necessary so that nix can handle `UpdateRemotePlugins` for the plugins
       # it installs. See https://github.com/neovim/neovim/issues/9413.
       ./system_rplugin_manifest.patch
+<<<<<<< HEAD
+=======
+
+      # fix bug with the gsub directive
+      # https://github.com/neovim/neovim/pull/23015
+      (fetchpatch {
+        name = "use-the-correct-replacement-args-for-gsub-directive.patch";
+        url = "https://github.com/neovim/neovim/commit/ccc0980f86c6ef9a86b0e5a3a691f37cea8eb776.patch";
+        hash = "sha256-sZWM6M8jCL1e72H0bAc51a6FrH0mFFqTV1gGLwKT7Zo=";
+      })
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     ];
 
     dontFixCmake = true;
@@ -77,7 +122,11 @@ in
       # https://github.com/luarocks/luarocks/issues/1402#issuecomment-1080616570
       # and it's definition at: pkgs/development/lua-modules/overrides.nix
       lua.pkgs.libluv
+<<<<<<< HEAD
       msgpack-c
+=======
+      msgpack
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       ncurses
       neovimLuaEnv
       tree-sitter
@@ -110,11 +159,14 @@ in
     # nvim --version output retains compilation flags and references to build tools
     postPatch = ''
       substituteInPlace src/nvim/version.c --replace NVIM_VERSION_CFLAGS "";
+<<<<<<< HEAD
     '' + lib.optionalString (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
       sed -i runtime/CMakeLists.txt \
         -e "s|\".*/bin/nvim|\${stdenv.hostPlatform.emulator buildPackages} &|g"
       sed -i src/nvim/po/CMakeLists.txt \
         -e "s|\$<TARGET_FILE:nvim|\${stdenv.hostPlatform.emulator buildPackages} &|g"
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     '';
     # check that the above patching actually works
     disallowedReferences = [ stdenv.cc ] ++ lib.optional (lua != codegenLua) codegenLua;
@@ -133,7 +185,10 @@ in
       cmakeFlagsArray+=(
         "-DLUAC_PRG=${codegenLua}/bin/luajit -b -s %s -"
         "-DLUA_GEN_PRG=${codegenLua}/bin/luajit"
+<<<<<<< HEAD
         "-DLUA_PRG=${neovimLuaEnvOnBuild}/bin/luajit"
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       )
     '' + lib.optionalString stdenv.isDarwin ''
       substituteInPlace src/nvim/CMakeLists.txt --replace "    util" ""

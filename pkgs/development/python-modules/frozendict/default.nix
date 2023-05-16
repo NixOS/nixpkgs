@@ -8,7 +8,11 @@
 
 buildPythonPackage rec {
   pname = "frozendict";
+<<<<<<< HEAD
   version = "2.3.8";
+=======
+  version = "2.3.5";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -17,7 +21,11 @@ buildPythonPackage rec {
     owner = "Marco-Sulla";
     repo = "python-frozendict";
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-4a0DvZOzNJqpop7wi+FagUR+8oaekz4EDNIYdUaAWC8=";
+=======
+    hash = "sha256-IlKhqQvNaYz4+U8UJ/fGUNNTC3RjyGKCJUzJ6J431Vw=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   postPatch = ''

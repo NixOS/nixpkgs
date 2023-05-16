@@ -1,10 +1,14 @@
 { lib
 , stdenv
 , appdirs
+<<<<<<< HEAD
 , azure-containerregistry
 , azure-core
 , azure-identity
 , azure-storage-blob
+=======
+, azure-core
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , bokeh
 , boto3
 , buildPythonPackage
@@ -14,7 +18,10 @@
 , flask
 , git
 , gitpython
+<<<<<<< HEAD
 , google-cloud-artifact-registry
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , google-cloud-compute
 , google-cloud-storage
 , hypothesis
@@ -29,10 +36,17 @@
 , pandas
 , parameterized
 , pathtools
+<<<<<<< HEAD
 , protobuf
 , psutil
 , pydantic
 , pyfakefs
+=======
+, promise
+, protobuf
+, psutil
+, pydantic
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , pytest-mock
 , pytest-xdist
 , pytestCheckHook
@@ -45,15 +59,26 @@
 , sentry-sdk
 , setproctitle
 , setuptools
+<<<<<<< HEAD
 , substituteAll
+=======
+, shortuuid
+, substituteAll
+, tensorflow
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , torch
 , tqdm
 }:
 
 buildPythonPackage rec {
   pname = "wandb";
+<<<<<<< HEAD
   version = "0.15.10";
   format = "pyproject";
+=======
+  version = "0.15.0";
+  format = "setuptools";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   disabled = pythonOlder "3.6";
 
@@ -61,7 +86,11 @@ buildPythonPackage rec {
     owner = pname;
     repo = pname;
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-MuYaeg7+lMOOSalnLyKsCw+f44daDDayvyKvY8z697c=";
+=======
+    hash = "sha256-UULsvvk9BsWUrJ8eD7uD2UnUJqmPrmjrJvCA7WRC/Cw=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   patches = [
@@ -74,7 +103,10 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     pythonRelaxDepsHook
+<<<<<<< HEAD
     setuptools
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   # setuptools is necessary since pkg_resources is required at runtime.
@@ -84,6 +116,10 @@ buildPythonPackage rec {
     docker_pycreds
     gitpython
     pathtools
+<<<<<<< HEAD
+=======
+    promise
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     protobuf
     psutil
     pyyaml
@@ -91,6 +127,7 @@ buildPythonPackage rec {
     sentry-sdk
     setproctitle
     setuptools
+<<<<<<< HEAD
   ];
 
   __darwinAllowLocalNetworking = true;
@@ -104,6 +141,16 @@ buildPythonPackage rec {
     boto3
     flask
     google-cloud-artifact-registry
+=======
+    shortuuid
+  ];
+
+  nativeCheckInputs = [
+    azure-core
+    bokeh
+    boto3
+    flask
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     google-cloud-compute
     google-cloud-storage
     hypothesis
@@ -118,12 +165,19 @@ buildPythonPackage rec {
     pandas
     parameterized
     pydantic
+<<<<<<< HEAD
     pyfakefs
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     pytest-mock
     pytest-xdist
     pytestCheckHook
     responses
     scikit-learn
+<<<<<<< HEAD
+=======
+    tensorflow
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     torch
     tqdm
   ];
@@ -136,6 +190,7 @@ buildPythonPackage rec {
 
   pythonRelaxDeps = [ "protobuf" ];
 
+<<<<<<< HEAD
   pytestFlagsArray = [
     # We want to run only unit tests
     "tests/pytest_tests"
@@ -144,6 +199,10 @@ buildPythonPackage rec {
   disabledTestPaths = [
     # Tests that try to get chatty over sockets or spin up servers, not possible in the nix build environment.
     "tests/pytest_tests/system_tests/test_notebooks/test_notebooks.py"
+=======
+  disabledTestPaths = [
+    # Tests that try to get chatty over sockets or spin up servers, not possible in the nix build environment.
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "tests/pytest_tests/unit_tests_old/test_cli.py"
     "tests/pytest_tests/unit_tests_old/test_data_types.py"
     "tests/pytest_tests/unit_tests_old/test_file_stream.py"
@@ -167,7 +226,13 @@ buildPythonPackage rec {
     "tests/pytest_tests/unit_tests_old/tests_launch/test_launch_aws.py"
     "tests/pytest_tests/unit_tests_old/tests_launch/test_launch_cli.py"
     "tests/pytest_tests/unit_tests_old/tests_launch/test_launch_docker.py"
+<<<<<<< HEAD
     "tests/pytest_tests/unit_tests_old/tests_launch/test_launch.py"
+=======
+    "tests/pytest_tests/unit_tests_old/tests_launch/test_launch_kubernetes.py"
+    "tests/pytest_tests/unit_tests_old/tests_launch/test_launch.py"
+    "tests/pytest_tests/unit_tests_old/tests_s_nb/test_notebooks.py"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "tests/pytest_tests/unit_tests/test_cli.py"
     "tests/pytest_tests/unit_tests/test_data_types.py"
     "tests/pytest_tests/unit_tests/test_internal_api.py"
@@ -208,7 +273,10 @@ buildPythonPackage rec {
     "tests/pytest_tests/system_tests/test_core/test_time_resolution.py"
     "tests/pytest_tests/system_tests/test_core/test_torch_full.py"
     "tests/pytest_tests/system_tests/test_core/test_validation_data_logger.py"
+<<<<<<< HEAD
     "tests/pytest_tests/system_tests/test_core/test_wandb_init.py"
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "tests/pytest_tests/system_tests/test_core/test_wandb_integration.py"
     "tests/pytest_tests/system_tests/test_core/test_wandb_run.py"
     "tests/pytest_tests/system_tests/test_core/test_wandb_settings.py"
@@ -216,6 +284,7 @@ buildPythonPackage rec {
     "tests/pytest_tests/system_tests/test_core/test_wandb_verify.py"
     "tests/pytest_tests/system_tests/test_core/test_wandb.py"
     "tests/pytest_tests/system_tests/test_importers/test_import_mlflow.py"
+<<<<<<< HEAD
     "tests/pytest_tests/system_tests/test_nexus/test_nexus.py"
     "tests/pytest_tests/system_tests/test_sweep/test_public_api.py"
     "tests/pytest_tests/system_tests/test_sweep/test_sweep_scheduler.py"
@@ -236,6 +305,23 @@ buildPythonPackage rec {
     "tests/pytest_tests/system_tests/test_launch/test_launch_sweep.py"
     "tests/pytest_tests/system_tests/test_launch/test_launch.py"
     "tests/pytest_tests/system_tests/test_launch/test_wandb_reference.py"
+=======
+    "tests/pytest_tests/system_tests/test_sweep/test_public_api.py"
+    "tests/pytest_tests/system_tests/test_sweep/test_sweep_scheduler.py"
+    "tests/pytest_tests/system_tests/test_sweep/test_wandb_agent_full.py"
+    "tests/pytest_tests/system_tests/test_sweep/test_wandb_agent.py"
+    "tests/pytest_tests/system_tests/test_sweep/test_wandb_sweep.py"
+    "tests/pytest_tests/system_tests/tests_launch/test_github_reference.py"
+    "tests/pytest_tests/system_tests/tests_launch/test_job.py"
+    "tests/pytest_tests/system_tests/tests_launch/test_launch_add.py"
+    "tests/pytest_tests/system_tests/tests_launch/test_launch_cli.py"
+    "tests/pytest_tests/system_tests/tests_launch/test_launch_kubernetes.py"
+    "tests/pytest_tests/system_tests/tests_launch/test_launch_local_container.py"
+    "tests/pytest_tests/system_tests/tests_launch/test_launch_run.py"
+    "tests/pytest_tests/system_tests/tests_launch/test_launch_sweep.py"
+    "tests/pytest_tests/system_tests/tests_launch/test_launch.py"
+    "tests/pytest_tests/system_tests/tests_launch/test_wandb_reference.py"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     # Tries to access /homeless-shelter
     "tests/pytest_tests/unit_tests/test_tables.py"
@@ -245,7 +331,11 @@ buildPythonPackage rec {
     "tests/pytest_tests/unit_tests_old/tests_launch/test_launch_jobs.py"
 
     # Requires google-cloud-aiplatform which is not packaged as of 2023-04-25.
+<<<<<<< HEAD
     "tests/pytest_tests/unit_tests/test_launch/test_runner/test_vertex.py"
+=======
+    "tests/pytest_tests/unit_tests_old/tests_launch/test_launch_gcp.py"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     # Requires google-cloud-artifact-registry which is not packaged as of 2023-04-25.
     "tests/pytest_tests/unit_tests_old/tests_launch/test_kaniko_build.py"
@@ -257,29 +347,42 @@ buildPythonPackage rec {
     # Requires metaflow which is not packaged as of 2023-04-25.
     "tests/pytest_tests/unit_tests/test_metaflow.py"
 
+<<<<<<< HEAD
     # Requires tensorflow which is broken as of 2023-09-03
     "tests/pytest_tests/unit_tests/test_keras.py"
 
     # Try to get hardware information, not possible in the nix build environment
     "tests/pytest_tests/unit_tests/test_system_metrics/test_disk.py"
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     # See https://github.com/wandb/wandb/issues/5423
     "tests/pytest_tests/unit_tests/test_docker.py"
     "tests/pytest_tests/unit_tests/test_library_public.py"
   ] ++ lib.optionals stdenv.isLinux [
     # Same as above
     "tests/pytest_tests/unit_tests/test_artifacts/test_storage.py"
+<<<<<<< HEAD
   ] ++ lib.optionals stdenv.isDarwin [
+=======
+  ] ++ lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     # Same as above
     "tests/pytest_tests/unit_tests/test_lib/test_filesystem.py"
   ];
 
+<<<<<<< HEAD
   disabledTests = [
     # Timing sensitive
     "test_login_timeout"
   ] ++ lib.optionals stdenv.isDarwin [
     # Disable test that fails on darwin due to issue with python3Packages.psutil:
     # https://github.com/giampaolo/psutil/issues/1219
+=======
+  # Disable test that fails on darwin due to issue with python3Packages.psutil:
+  # https://github.com/giampaolo/psutil/issues/1219
+  disabledTests = lib.optionals stdenv.isDarwin [
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "test_tpu_system_stats"
   ];
 

@@ -9,13 +9,21 @@
 
 stdenv.mkDerivation rec {
   pname = "dlib";
+<<<<<<< HEAD
   version = "19.24.2";
+=======
+  version = "19.24";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "davisking";
     repo = "dlib";
     rev ="v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-Z1fScuaIHjj2L1uqLIvsZ7ARKNjM+iaA8SAtWUTPFZk=";
+=======
+    sha256 = "sha256-YhIjP9TIIyQF6lBj85gyVRIAAwgIodzh0ViQL8v2ACA=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   postPatch = ''

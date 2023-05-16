@@ -6,12 +6,19 @@
 , itstool
 , libxml2
 , gtk3
+<<<<<<< HEAD
+=======
+, file
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , mate
 , hicolor-icon-theme
 , wrapGAppsHook
 , mateUpdateScript
+<<<<<<< HEAD
 # can be defaulted to true once engrampa builds with meson (version > 1.27.0)
 , withMagic ? stdenv.buildPlatform.canExecute stdenv.hostPlatform, file
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 stdenv.mkDerivation rec {
@@ -27,22 +34,37 @@ stdenv.mkDerivation rec {
     pkg-config
     gettext
     itstool
+<<<<<<< HEAD
     libxml2  # for xmllint
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     wrapGAppsHook
   ];
 
   buildInputs = [
+<<<<<<< HEAD
     gtk3
     mate.caja
     hicolor-icon-theme
     mate.mate-desktop
   ] ++ lib.optionals withMagic [
     file
+=======
+    libxml2
+    gtk3
+    file #libmagic
+    mate.caja
+    hicolor-icon-theme
+    mate.mate-desktop
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   configureFlags = [
     "--with-cajadir=$$out/lib/caja/extensions-2.0"
+<<<<<<< HEAD
   ] ++ lib.optionals withMagic [
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "--enable-magic"
   ];
 

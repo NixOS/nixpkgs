@@ -4,7 +4,11 @@
 , fetchFromGitHub
 , pythonOlder
 , cmake
+<<<<<<< HEAD
 , cython_3
+=======
+, cython
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , pytestCheckHook
 , rapidfuzz
 , rapidfuzz-cpp
@@ -13,7 +17,11 @@
 
 buildPythonPackage rec {
   pname = "levenshtein";
+<<<<<<< HEAD
   version = "0.21.1";
+=======
+  version = "0.21.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
@@ -22,12 +30,20 @@ buildPythonPackage rec {
     owner = "maxbachmann";
     repo = "Levenshtein";
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-I1kVGbZI1hQRNv0e44giWiMqmeqaqFZks20IyFQ9VIU=";
+=======
+    hash = "sha256-j28OQkJymkh6tIGYLoZLad7OUUImjZqXdqM2zU3haac=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [
     cmake
+<<<<<<< HEAD
     cython_3
+=======
+    cython
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     scikit-build
   ];
 

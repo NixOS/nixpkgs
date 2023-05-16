@@ -28,14 +28,22 @@
 
 stdenv.mkDerivation rec {
   pname = "rygel";
+<<<<<<< HEAD
   version = "0.42.4";
+=======
+  version = "0.42.3";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   # TODO: split out lib
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+<<<<<<< HEAD
     sha256 = "YxDfqi0zK2YRm5sCD61qS9J9m8Yfr3gMpcoLYoEzA/c=";
+=======
+    sha256 = "D97CEoU36LVcPFQNCoDcfCSaspFT9L4Bl6XzECWlpaA=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   patches = [

@@ -23,6 +23,10 @@ buildPythonPackage rec {
     description = "A Python module to bypass Cloudflare's anti-bot page";
     license = licenses.mit;
     platforms = platforms.linux;
+<<<<<<< HEAD
     maintainers = with maintainers; [ ];
+=======
+    maintainers = with maintainers; [ WeebSorceress ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

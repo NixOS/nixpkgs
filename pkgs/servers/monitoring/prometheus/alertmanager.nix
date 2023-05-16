@@ -45,5 +45,9 @@ buildGoModule rec {
     changelog = "https://github.com/prometheus/alertmanager/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ benley fpletz globin Frostman ];
+<<<<<<< HEAD
+=======
+    platforms = platforms.unix;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

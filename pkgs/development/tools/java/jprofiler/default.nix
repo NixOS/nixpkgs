@@ -86,7 +86,11 @@ let
       runHook postUnpack
     '';
 
+<<<<<<< HEAD
     sourceRoot = nameApp;
+=======
+    sourceRoot = "${nameApp}";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     installPhase = ''
       runHook preInstall

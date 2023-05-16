@@ -39,7 +39,11 @@
 
 stdenv.mkDerivation rec {
   pname = "armcord";
+<<<<<<< HEAD
   version = "3.2.4";
+=======
+  version = "3.1.7";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src =
     let
@@ -48,11 +52,19 @@ stdenv.mkDerivation rec {
       {
         x86_64-linux = fetchurl {
           url = "${base}/v${version}/ArmCord_${version}_amd64.deb";
+<<<<<<< HEAD
           hash = "sha256-IUHcDHIJeGx7QKjxl3fUFHqUfs1JdIFxesvDXt3mVw0=";
         };
         aarch64-linux = fetchurl {
           url = "${base}/v${version}/ArmCord_${version}_arm64.deb";
           hash = "sha256-TWVlEjakdRyZmOuBq9HLO+R7y5jmgstFtyEHjf8nxxM=";
+=======
+          sha256 = "sha256-c0ejSivQbxpPUQ6P0YUya3q1EJ1yF4RFGur11BMwz3o=";
+        };
+        aarch64-linux = fetchurl {
+          url = "${base}/v${version}/ArmCord_${version}_arm64.deb";
+          sha256 = "sha256-4yqe4eIO4AxsZNYCn99KTBqjQURB+G+gpT0Q17pcEvU=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         };
       }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
@@ -131,6 +143,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Lightweight, alternative desktop client for Discord";
+<<<<<<< HEAD
     homepage = "https://armcord.app";
     downloadPage = "https://github.com/ArmCord/ArmCord";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
@@ -138,5 +151,12 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ ludovicopiero wrmilling ];
     platforms = [ "x86_64-linux" "aarch64-linux" ];
     mainProgram = "armcord";
+=======
+    homepage = "https://github.com/ArmCord/ArmCord";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    license = licenses.osl3;
+    maintainers = with maintainers; [ wrmilling ];
+    platforms = [ "x86_64-linux" "aarch64-linux" ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

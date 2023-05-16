@@ -1,7 +1,10 @@
 { lib
 , aiohttp
 , aresponses
+<<<<<<< HEAD
 , backoff
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , buildPythonPackage
 , fetchFromGitHub
 , packaging
@@ -16,7 +19,11 @@
 
 buildPythonPackage rec {
   pname = "python-bsblan";
+<<<<<<< HEAD
   version = "0.5.16";
+=======
+  version = "0.5.11";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -25,6 +32,7 @@ buildPythonPackage rec {
     owner = "liudger";
     repo = pname;
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-m80lnNd1ANddV0d/w3S7+QWzIPRklDZsWMO2g1hgEoQ=";
   };
 
@@ -36,13 +44,21 @@ buildPythonPackage rec {
     sed -i "/ruff/d" pyproject.toml
   '';
 
+=======
+    hash = "sha256-fTjeJZhKPFi0cxZStegVdq7a48rQ236DnnCGngwZ5GU=";
+  };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nativeBuildInputs = [
     poetry-core
   ];
 
   propagatedBuildInputs = [
     aiohttp
+<<<<<<< HEAD
     backoff
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     packaging
     pydantic
     yarl
@@ -55,6 +71,15 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+<<<<<<< HEAD
+=======
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'version = "0.0.0"' 'version = "${version}"' \
+      --replace "--cov" ""
+  '';
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pythonImportsCheck = [
     "bsblan"
   ];

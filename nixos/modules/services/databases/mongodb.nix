@@ -142,7 +142,11 @@ in
           User = cfg.user;
           PIDFile = cfg.pidFile;
           Type = "forking";
+<<<<<<< HEAD
           TimeoutStartSec=120; # initial creating of journal can take some time
+=======
+          TimeoutStartSec=120; # intial creating of journal can take some time
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           PermissionsStartOnly = true;
         };
 

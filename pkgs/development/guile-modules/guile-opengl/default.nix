@@ -7,11 +7,19 @@
 
 stdenv.mkDerivation rec {
   pname = "guile-opengl";
+<<<<<<< HEAD
   version = "0.2.0";
 
   src = fetchurl {
     url = "mirror://gnu/${pname}/${pname}-${version}.tar.gz";
     hash = "sha256-uPCH7CiCPQmfuELDupQQS7BPqecIFmSHpHGYnhwXbGU=";
+=======
+  version = "0.1.0";
+
+  src = fetchurl {
+    url = "mirror://gnu/${pname}/${pname}-${version}.tar.gz";
+    hash = "sha256-NdK5UwUszX5B0kKbynG8oD2PCKIGpZ1x91ktBDvpDo8=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

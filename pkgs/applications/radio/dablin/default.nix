@@ -4,13 +4,21 @@
 
 stdenv.mkDerivation rec {
   pname = "dablin";
+<<<<<<< HEAD
   version = "1.15.0";
+=======
+  version = "1.14.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "Opendigitalradio";
     repo = "dablin";
     rev = version;
+<<<<<<< HEAD
     sha256 = "sha256-tmmOk7nOkuSCjPNHiwAqP5yf1r8+fsCeDGCxhZUImD4=";
+=======
+    sha256 = "02mhxaqpj0094sbb3c28r5xznw9z8ayvlkczknizlk75ag895zz2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ cmake pkg-config ];

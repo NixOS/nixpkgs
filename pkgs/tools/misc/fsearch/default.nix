@@ -15,13 +15,21 @@
 
 stdenv.mkDerivation rec {
   pname = "fsearch";
+<<<<<<< HEAD
   version = "0.2.3";
+=======
+  version = "0.2.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "cboxdoerfer";
     repo = pname;
     rev = version;
+<<<<<<< HEAD
     hash = "sha256-VBcoDxh4ip2zLBcXVHDe9s1lVRQF4bZJKsGUt6sPcos=";
+=======
+    hash = "sha256-1nu6J5eHVpPHGXcFKHSnUhAJccxABBht5H2bpBx42og=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

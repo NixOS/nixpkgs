@@ -13,12 +13,20 @@
 
 buildPythonPackage rec {
   pname = "astropy-healpix";
+<<<<<<< HEAD
   version = "1.0.0";
+=======
+  version = "0.7";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchPypi {
     inherit version;
     pname = lib.replaceStrings ["-"] ["_"] pname;
+<<<<<<< HEAD
     hash = "sha256-9ILvYqEOaGMD84xm8I3xe53e5a2CIZwjVx7oDXar7qM=";
+=======
+    hash = "sha256-iMOE60MimXpY3ok46RrJ/5D2orbLKuI+IWnHQFrdOtg=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

@@ -11,6 +11,16 @@ if [[ "$currentVersion" == "$latestVersion" ]]; then
   exit 0
 fi
 
+<<<<<<< HEAD
 update-source-version jellyfin "$latestVersion"
 
 $(nix-build . -A jellyfin.fetch-deps --no-out-link)
+=======
+pushd "$(dirname "${BASH_SOURCE[0]}")"
+nugetDepsFile=$(realpath ./nuget-deps.nix)
+popd
+
+update-source-version jellyfin "$latestVersion"
+
+$(nix-build . -A jellyfin.fetch-deps --no-out-link) "$nugetDepsFile"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)

@@ -11,7 +11,11 @@ let
     mapAttrsToList (n: v: ''"${n}": "${(concatStringsSep "," (map convType v))}"'')
       (foldAttrs (n: a: [n] ++ a) [] cfg.hardware);
   mergedConfig = with builtins;
+<<<<<<< HEAD
     mapAttrsToList (n: v: ''"${n}":  ${if isBool v then convType v else ''"${convType v}"''}'')
+=======
+    mapAttrsToList (n: v: ''"${n}":  ${if isBool v then "" else ''"''}${convType v}${if isBool v then "" else ''"''}'')
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       cfg.config;
 
   cgminerConfig = pkgs.writeText "cgminer.conf" ''

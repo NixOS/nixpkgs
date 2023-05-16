@@ -1,5 +1,6 @@
 { lib
 , buildPythonPackage
+<<<<<<< HEAD
 , fetchFromGitHub
 , gdal
 , h5py
@@ -10,6 +11,17 @@
 , pyplatec
 , six
 , isPy27
+=======
+, isPy27
+, fetchFromGitHub
+, noise
+, numpy
+, pyplatec
+, protobuf
+, purepng
+, h5py
+, gdal
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , pytestCheckHook
 }:
 
@@ -35,6 +47,7 @@ buildPythonPackage rec {
     ln -s ${src-data} worldengine-data
   '';
 
+<<<<<<< HEAD
   propagatedBuildInputs = [
     gdal
     h5py
@@ -45,6 +58,9 @@ buildPythonPackage rec {
     pyplatec
     six
   ];
+=======
+  propagatedBuildInputs = [ noise numpy pyplatec protobuf purepng h5py gdal ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   prePatch = ''
     substituteInPlace setup.py \
@@ -54,10 +70,13 @@ buildPythonPackage rec {
       --replace 'protobuf==3.0.0a3' 'protobuf' \
       --replace 'noise==1.2.2' 'noise' \
       --replace 'PyPlatec==1.4.0' 'PyPlatec' \
+<<<<<<< HEAD
 
     substituteInPlace \
       worldengine/{draw.py,hdf5_serialization.py} \
       --replace numpy.float float
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '';
 
   doCheck = !isPy27; # google namespace clash
@@ -68,10 +87,18 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
+<<<<<<< HEAD
     broken = true;
     homepage = "https://github.com/mindwerks/worldengine";
+=======
+    homepage = "http://world-engine.org";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     description = "World generator using simulation of plates, rain shadow, erosion, etc";
     license = licenses.mit;
     maintainers = with maintainers; [ rardiol ];
   };
+<<<<<<< HEAD
+=======
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }

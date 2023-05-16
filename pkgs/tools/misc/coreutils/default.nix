@@ -32,6 +32,7 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "coreutils" + (optionalString (!minimal) "-full");
+<<<<<<< HEAD
   version = "9.3";
 
   src = fetchurl {
@@ -39,6 +40,20 @@ stdenv.mkDerivation rec {
     hash = "sha256-rbz8/omSNbceh2jc8HzVMlILf1T5qAZIQ/jRmakEu6o=";
   };
 
+=======
+  version = "9.1";
+
+  src = fetchurl {
+    url = "mirror://gnu/coreutils/coreutils-${version}.tar.xz";
+    sha256 = "sha256-YaH0ENeLp+fzelpPUObRMgrKMzdUhKMlXt3xejhYBCM=";
+  };
+
+  patches = lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [
+    # Workaround for https://debbugs.gnu.org/cgi/bugreport.cgi?bug=51433
+    ./disable-seek-hole.patch
+  ];
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   postPatch = ''
     # The test tends to fail on btrfs, f2fs and maybe other unusual filesystems.
     sed '2i echo Skipping dd sparse test && exit 77' -i ./tests/dd/sparse.sh

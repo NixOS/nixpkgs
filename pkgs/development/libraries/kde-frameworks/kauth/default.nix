@@ -1,7 +1,13 @@
 {
+<<<<<<< HEAD
   lib, stdenv, mkDerivation, propagate,
   extra-cmake-modules, kcoreaddons, qttools,
   enablePolkit ? stdenv.isLinux, polkit-qt
+=======
+  lib, mkDerivation, propagate,
+  extra-cmake-modules, kcoreaddons, qttools,
+  enablePolkit ? true, polkit-qt
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 mkDerivation {

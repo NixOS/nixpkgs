@@ -8,14 +8,22 @@
 
 buildPythonPackage rec {
   pname = "atenpdu";
+<<<<<<< HEAD
   version = "0.6.1";
+=======
+  version = "0.6.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
+<<<<<<< HEAD
     hash = "sha256-Of7tQJNqaLDgO8nie6rSd1saMbauXJBp8vWfXYAziEE=";
+=======
+    hash = "sha256-E/cRjbispHiS38BdIvOKD4jOFrDmpx8L4eAlMV8Re70=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [

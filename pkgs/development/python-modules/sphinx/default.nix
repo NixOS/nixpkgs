@@ -3,7 +3,11 @@
 , buildPythonPackage
 , pythonOlder
 , fetchFromGitHub
+<<<<<<< HEAD
 , isPyPy
+=======
+, fetchpatch
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 # nativeBuildInputs
 , flit-core
@@ -144,6 +148,7 @@ buildPythonPackage rec {
     "test_auth_header_no_match"
     "test_follows_redirects_on_GET"
     "test_connect_to_selfsigned_fails"
+<<<<<<< HEAD
   ] ++ lib.optionals isPyPy [
     # PyPy has not __builtins__ which get asserted
     # https://doc.pypy.org/en/latest/cpython_differences.html#miscellaneous
@@ -157,6 +162,8 @@ buildPythonPackage rec {
     "test_isattributedescriptor"
     "test_methoddescriptor"
     "test_partialfunction"
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   meta = with lib; {

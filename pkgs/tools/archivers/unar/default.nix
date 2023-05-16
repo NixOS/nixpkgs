@@ -67,7 +67,11 @@ stdenv.mkDerivation rec {
 
   dontConfigure = true;
 
+<<<<<<< HEAD
   sourceRoot = "${src.name}/XADMaster";
+=======
+  sourceRoot = "./source/XADMaster";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   installPhase = ''
     runHook preInstall

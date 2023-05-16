@@ -7,11 +7,19 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "txr";
+<<<<<<< HEAD
   version = "291";
 
   src = fetchurl {
     url = "https://www.kylheku.com/cgit/txr/snapshot/txr-${finalAttrs.version}.tar.bz2";
     hash = "sha256-Btk3PanJa6hyoM+hfQq+EhIMaL2edyhfxx96Kpy+aaA=";
+=======
+  version = "285";
+
+  src = fetchurl {
+    url = "http://www.kylheku.com/cgit/txr/snapshot/txr-${finalAttrs.version}.tar.bz2";
+    hash = "sha256-cI1wjxKPivTXwCSuhl6sIuRk68ZBUsOWTjQktGmmP6M=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   buildInputs = [ libffi ];
@@ -69,6 +77,9 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ AndersonTorres dtzWill ];
     platforms = lib.platforms.all;
+<<<<<<< HEAD
     broken = stdenv.isDarwin && stdenv.isx86_64; # ofborg fails while testing
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 })

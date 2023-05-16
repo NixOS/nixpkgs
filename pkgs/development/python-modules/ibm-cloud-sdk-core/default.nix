@@ -11,14 +11,22 @@
 
 buildPythonPackage rec {
   pname = "ibm-cloud-sdk-core";
+<<<<<<< HEAD
   version = "3.16.7";
+=======
+  version = "3.16.5";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
+<<<<<<< HEAD
     hash = "sha256-qYXxR+jXjMfqrxJ62j5do33EbjfeoYSq+IeMrO14FnQ=";
+=======
+    hash = "sha256-wEBD1AILyVGK+ofQf/zZTu7keBUphVZ5HyOMbugvA+Y=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [

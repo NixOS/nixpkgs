@@ -16,7 +16,11 @@ buildGoModule rec {
     sha256 = "sha256-XLXANN9TOmrNOixWtlqnIC27u+0TW2P3s9MyeyVUcAQ=";
   };
 
+<<<<<<< HEAD
   vendorHash = "sha256-QTgWicN2m2ughtLsEBMaQWfpDbmbL0nS5qaIKF3mTJM=";
+=======
+  vendorSha256 = "sha256-QTgWicN2m2ughtLsEBMaQWfpDbmbL0nS5qaIKF3mTJM=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   allowGoReference = true;
 

@@ -50,7 +50,10 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals enableVideo [
     wrapGAppsHook
     wrapQtAppsHook
+<<<<<<< HEAD
     qtbase
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   buildInputs = [

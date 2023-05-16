@@ -3,11 +3,19 @@
 
 stdenv.mkDerivation rec {
   pname = "epubcheck";
+<<<<<<< HEAD
   version = "5.1.0";
 
   src = fetchzip {
     url = "https://github.com/w3c/epubcheck/releases/download/v${version}/epubcheck-${version}.zip";
     sha256 = "sha256-gskQ02lGka3nBHSDXO3TpKSQzaoaJUQY9AvWG7L+1YM=";
+=======
+  version = "5.0.1";
+
+  src = fetchzip {
+    url = "https://github.com/w3c/epubcheck/releases/download/v${version}/epubcheck-${version}.zip";
+    sha256 = "sha256-X4/aIcGd/heNjpTurRHYcawcoZW/utTxYHcUtktsH8o=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ makeWrapper ];

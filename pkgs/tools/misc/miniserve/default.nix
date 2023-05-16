@@ -9,16 +9,27 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "miniserve";
+<<<<<<< HEAD
   version = "0.24.0";
+=======
+  version = "0.23.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "svenstaro";
     repo = "miniserve";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-dTJK+M7kccyqNWAz/cYoPTNM3pew7cT21hZhjCf2jDA=";
   };
 
   cargoHash = "sha256-lMqoBQRK0Wop1sAdydTVYFR3pzwtQDluDVXFJ4v+GHM=";
+=======
+    hash = "sha256-nHcJw5RwvXoBQRS/AtUqCuoFRc9FnYtehkMSWn7GiKI=";
+  };
+
+  cargoHash = "sha256-97eNe+gmRXhmfw+pkHAfG8TTxOgBZOPPuXeKT0fWGr4=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nativeBuildInputs = [
     installShellFiles

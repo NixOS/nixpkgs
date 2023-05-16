@@ -5,6 +5,7 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "grass";
+<<<<<<< HEAD
   version = "0.13.1";
 
   src = fetchCrate {
@@ -13,6 +14,16 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoHash = "sha256-WRXoXB/HJkAnUKboCR9Gl2Au/1EivYQhF5rKr7PFe+s=";
+=======
+  version = "0.12.3";
+
+  src = fetchCrate {
+    inherit pname version;
+    hash = "sha256-qx63icK4g/5LqKUsJpXs2Jpv30RuvIeLF6JNrTTkcLs=";
+  };
+
+  cargoHash = "sha256-v2ikP+zujj6GWN1ZwPIKK0jtF8Na5PaR1ZNelGdLzMM=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   # tests require rust nightly
   doCheck = false;

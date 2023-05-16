@@ -4,13 +4,21 @@
 
 stdenv.mkDerivation rec {
   pname = "partclone";
+<<<<<<< HEAD
   version = "0.3.25";
+=======
+  version = "0.3.23";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "Thomas-Tsai";
     repo = "partclone";
     rev = version;
+<<<<<<< HEAD
     sha256 = "sha256-DLO0mKQ7Ab+4hwRANnipkaCbS7qldGnfTotAYDy//XU=";
+=======
+    sha256 = "sha256-na9k26+GDdASZ37n0QtFuRDMtq338QOlXTf0X4raOJI=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];

@@ -5,22 +5,33 @@
 
 let
   throwUnsupportedSystem = throw "Unsupported system: ${stdenv.hostPlatform.system}";
+<<<<<<< HEAD
 in
 stdenv.mkDerivation(finalAttrs:
   let versionMap =
     let url = "https://github.com/alire-project/GNAT-FSF-builds/releases/download/gnat-${finalAttrs.version}/gnat-${stdenv.hostPlatform.system}-${finalAttrs.version}.tar.gz";
     in {
+=======
+
+  versionMap = rec {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "11" = {
       gccVersion = "11.2.0";
       alireRevision = "4";
     } // {
       x86_64-darwin = {
+<<<<<<< HEAD
         inherit url;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         hash = "sha256-FmBgD20PPQlX/ddhJliCTb/PRmKxe9z7TFPa2/SK4GY=";
         upstreamTriplet = "x86_64-apple-darwin19.6.0";
       };
       x86_64-linux = {
+<<<<<<< HEAD
         inherit url;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         hash = "sha256-8fMBJp6igH+Md5jE4LMubDmC4GLt4A+bZG/Xcz2LAJQ=";
         upstreamTriplet = "x86_64-pc-linux-gnu";
       };
@@ -30,17 +41,24 @@ stdenv.mkDerivation(finalAttrs:
       alireRevision = "2";
     } // {
       x86_64-darwin = {
+<<<<<<< HEAD
         inherit url;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         hash = "sha256-zrcVFvFZMlGUtkG0p1wST6kGInRI64Icdsvkcf25yVs=";
         upstreamTriplet = "x86_64-apple-darwin19.6.0";
       };
       x86_64-linux = {
+<<<<<<< HEAD
         inherit url;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         hash = "sha256-EPDPOOjWJnJsUM7GGxj20/PXumjfLoMIEFX1EDtvWVY=";
         upstreamTriplet = "x86_64-pc-linux-gnu";
       };
     }.${stdenv.hostPlatform.system} or throwUnsupportedSystem;
   };
+<<<<<<< HEAD
   inherit (versionMap.${majorVersion}) gccVersion alireRevision upstreamTriplet;
 in {
   pname = "gnat-bootstrap";
@@ -50,6 +68,20 @@ in {
 
   src = fetchzip {
     inherit (versionMap.${majorVersion}) url hash;
+=======
+
+in with versionMap.${majorVersion};
+
+stdenv.mkDerivation rec {
+  pname = "gnat-bootstrap";
+  inherit gccVersion alireRevision;
+
+  version = "${gccVersion}-${alireRevision}";
+
+  src = fetchzip {
+    url = "https://github.com/alire-project/GNAT-FSF-builds/releases/download/gnat-${version}/gnat-${stdenv.hostPlatform.system}-${version}.tar.gz";
+    inherit hash;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [
@@ -146,4 +178,8 @@ in {
     platforms = [ "x86_64-linux" "x86_64-darwin" ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
+<<<<<<< HEAD
 })
+=======
+}
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)

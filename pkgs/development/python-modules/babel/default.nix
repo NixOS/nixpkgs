@@ -1,10 +1,15 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+<<<<<<< HEAD
 , isPyPy
 , pythonAtLeast
 , pythonOlder
 , tzdata
+=======
+, pythonAtLeast
+, pythonOlder
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 # tests
 , freezegun
@@ -33,12 +38,20 @@ buildPythonPackage rec {
   doCheck = pythonAtLeast "3.9";
 
   nativeCheckInputs = [
+<<<<<<< HEAD
     freezegun
     pytestCheckHook
     # https://github.com/python-babel/babel/issues/988#issuecomment-1521765563
     pytz
   ] ++ lib.optionals isPyPy [
     tzdata
+=======
+    # via setup.py
+    freezegun
+    pytestCheckHook
+    # via tox.ini
+    pytz
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   disabledTests = [
@@ -52,6 +65,10 @@ buildPythonPackage rec {
     changelog = "https://github.com/python-babel/babel/releases/tag/v${version}";
     description = "Collection of internationalizing tools";
     license = licenses.bsd3;
+<<<<<<< HEAD
     maintainers = with maintainers; [ ];
+=======
+    maintainers = with maintainers; [ SuperSandro2000 ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

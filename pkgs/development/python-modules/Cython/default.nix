@@ -24,12 +24,20 @@ let
 
 in buildPythonPackage rec {
   pname = "cython";
+<<<<<<< HEAD
   version = "0.29.36";
+=======
+  version = "0.29.34";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchPypi {
     pname = "Cython";
     inherit version;
+<<<<<<< HEAD
     hash = "sha256-QcDP0tdU44PJ7rle/8mqSrhH0Ml0cHfd18Dctow7wB8=";
+=======
+    hash = "sha256-GQloj117Uhpgw5bSC7qeR6Gy0nhL+whUAeHh59KaKag=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

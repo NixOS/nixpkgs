@@ -20,7 +20,10 @@
 , qtwebsockets
 , kitemmodels
 , pimcommon
+<<<<<<< HEAD
 , mpv
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 mkDerivation {
@@ -48,7 +51,10 @@ mkDerivation {
     qtwebsockets
     kitemmodels
     pimcommon
+<<<<<<< HEAD
     mpv
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   meta = with lib; {

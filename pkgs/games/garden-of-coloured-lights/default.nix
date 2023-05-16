@@ -26,7 +26,11 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Old-school vertical shoot-em-up / bullet hell";
     homepage = "https://garden.sourceforge.net/drupal/";
+<<<<<<< HEAD
     maintainers = with maintainers; [ ];
+=======
+    maintainers = with maintainers; [ Profpatsch ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     license = licenses.gpl3;
   };
 

@@ -16,13 +16,21 @@
 
 stdenv.mkDerivation rec {
   pname = "libopenmpt";
+<<<<<<< HEAD
   version = "0.7.2";
+=======
+  version = "0.6.10";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   outputs = [ "out" "dev" "bin" ];
 
   src = fetchurl {
     url = "https://lib.openmpt.org/files/libopenmpt/src/libopenmpt-${version}+release.autotools.tar.gz";
+<<<<<<< HEAD
     hash = "sha256-UJFD5aTzsT3Zjq4om/7BtWTt3XG7x8p4ZLgoNeMTMOE=";
+=======
+    sha256 = "wlvo3A2sI87AJUh+WPGV5NFPfZSu3dX+RrIcBPHOJ3Q=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   enableParallelBuilding = true;
@@ -39,6 +47,7 @@ stdenv.mkDerivation rec {
     portaudio
     libsndfile
     flac
+<<<<<<< HEAD
   ] ++ lib.optionals usePulseAudio [
     libpulseaudio
   ];
@@ -48,6 +57,13 @@ stdenv.mkDerivation rec {
   ];
 
   doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
+=======
+  ] ++ lib.optional usePulseAudio libpulseaudio;
+
+  configureFlags = lib.optional (!usePulseAudio) "--without-pulseaudio";
+
+  doCheck = true;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   postFixup = ''
     moveToOutput share/doc $dev

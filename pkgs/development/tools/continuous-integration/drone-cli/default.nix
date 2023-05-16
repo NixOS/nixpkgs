@@ -15,7 +15,11 @@ buildGoModule rec {
     hash = "sha256-PZ0M79duSctPepD5O+NdJZKhkyR21g/4P6loJtoWZiU=";
   };
 
+<<<<<<< HEAD
   vendorHash = "sha256-JC7OR4ySDsVWmrBBTjpwZrkJlM8RJehbsvXW/VtA4VA=";
+=======
+  vendorSha256 = "sha256-JC7OR4ySDsVWmrBBTjpwZrkJlM8RJehbsvXW/VtA4VA=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   # patch taken from https://patch-diff.githubusercontent.com/raw/harness/drone-cli/pull/179.patch
   # but with go.mod changes removed due to conflict

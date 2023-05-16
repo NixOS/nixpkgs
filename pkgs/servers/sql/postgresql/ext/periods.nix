@@ -2,13 +2,21 @@
 
 stdenv.mkDerivation rec {
   pname = "periods";
+<<<<<<< HEAD
   version = "1.2.2";
+=======
+  version = "1.2.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "xocolatl";
     repo = pname;
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-ezt+MtDqPM8OmJCD6oQTS644l+XHZoxuivq0PUIXOY8=";
+=======
+    sha256 = "sha256-XAqjP8Cih+HzqlI8XjgCNzSVQSbaetLRvJReiwHdaIc=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   buildInputs = [ postgresql ];

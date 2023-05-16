@@ -58,6 +58,7 @@
 , runCommandLocal
 , makeWrapper
 }:
+<<<<<<< HEAD
 let
   # run gsettings with desktop schemas for using in "kcm_access" kcm
   # and in kaccess
@@ -66,6 +67,9 @@ let
     makeWrapper ${glib}/bin/gsettings $out/bin/gsettings --prefix XDG_DATA_DIRS : ${gsettings-desktop-schemas.out}/share/gsettings-schemas/${gsettings-desktop-schemas.name}
   '';
 in
+=======
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 mkDerivation {
   pname = "plasma-desktop";
   nativeBuildInputs = [ extra-cmake-modules kdoctools wayland-scanner ];
@@ -127,19 +131,36 @@ mkDerivation {
     ./hwclock-path.patch
     ./tzdir.patch
     ./kcm-access.patch
+<<<<<<< HEAD
     ./no-discover-shortcut.patch
   ];
   CXXFLAGS =
     [
       ''-DNIXPKGS_HWCLOCK=\"${lib.getBin util-linux}/bin/hwclock\"''
       ''-DNIXPKGS_GSETTINGS=\"${gsettings-wrapper}/bin/gsettings\"''
+=======
+  ];
+  CXXFLAGS =
+    let
+      # run gsettings with desktop schemas for using in kcm_accces kcm
+      gsettings-wrapper = runCommandLocal "gsettings-wrapper" { nativeBuildInputs = [ makeWrapper ]; } ''
+        makeWrapper ${glib}/bin/gsettings $out --prefix XDG_DATA_DIRS : ${gsettings-desktop-schemas.out}/share/gsettings-schemas/${gsettings-desktop-schemas.name}
+      '';
+    in
+    [
+      ''-DNIXPKGS_HWCLOCK=\"${lib.getBin util-linux}/bin/hwclock\"''
+      ''-DNIXPKGS_GSETTINGS=\"${gsettings-wrapper}\"''
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     ];
   postInstall = ''
     # Display ~/Desktop contents on the desktop by default.
     sed -i "''${!outputBin}/share/plasma/shells/org.kde.plasma.desktop/contents/defaults" \
         -e 's/Containment=org.kde.desktopcontainment/Containment=org.kde.plasma.folder/'
   '';
+<<<<<<< HEAD
 
   # wrap kaccess with wrapped gsettings so it can access accessibility schemas
   qtWrapperArgs = [ "--prefix PATH : ${lib.makeBinPath [ gsettings-wrapper ]}" ];
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }

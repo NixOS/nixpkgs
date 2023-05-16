@@ -1,6 +1,10 @@
 { stdenv, lib, pkgs, fetchurl, buildEnv
 , coreutils, findutils, gnugrep, gnused, getopt, git, tree, gnupg, openssl
+<<<<<<< HEAD
 , which, openssh, procps, qrencode, makeWrapper, pass
+=======
+, which, openssh, procps, qrencode, makeWrapper, pass, symlinkJoin
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 , xclip ? null, xdotool ? null, dmenu ? null
 , x11Support ? !stdenv.isDarwin , dmenuSupport ? (x11Support || waylandSupport)
@@ -29,7 +33,12 @@ let
       selected = [ pass ] ++ extensions passExtensions
         ++ lib.optional tombPluginSupport passExtensions.tomb;
     in buildEnv {
+<<<<<<< HEAD
       name = "pass-env";
+=======
+      # lib.getExe looks for name, so we keep it the same as mainProgram
+      name = "pass";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       paths = selected;
       nativeBuildInputs = [ makeWrapper ];
       buildInputs = lib.concatMap (x: x.buildInputs) selected;
@@ -50,7 +59,10 @@ let
         wrapProgram $out/bin/pass \
           --set SYSTEM_EXTENSION_DIR "$out/lib/password-store/extensions"
       '';
+<<<<<<< HEAD
       meta.mainProgram = "pass";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
 in
 
@@ -72,7 +84,16 @@ stdenv.mkDerivation rec {
 
   installFlags = [ "PREFIX=$(out)" "WITH_ALLCOMP=yes" ];
 
+<<<<<<< HEAD
   postInstall = lib.optionalString dmenuSupport ''
+=======
+  postInstall = ''
+    # Install Emacs Mode. NOTE: We can't install the necessary
+    # dependencies (s.el) here. The user has to do this themselves.
+    mkdir -p "$out/share/emacs/site-lisp"
+    cp "contrib/emacs/password-store.el" "$out/share/emacs/site-lisp/"
+  '' + lib.optionalString dmenuSupport ''
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     cp "contrib/dmenu/passmenu" "$out/bin/"
   '';
 

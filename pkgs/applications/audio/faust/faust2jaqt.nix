@@ -1,5 +1,6 @@
 { faust
 , jack2
+<<<<<<< HEAD
 , qtbase
 , libsndfile
 , alsa-lib
@@ -22,6 +23,14 @@ let
     done
   '';
 in
+=======
+, qt4
+, libsndfile
+, alsa-lib
+, which
+}:
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 faust.wrapWithBuildEnv {
 
   baseName = "faust2jaqt";
@@ -33,12 +42,17 @@ faust.wrapWithBuildEnv {
 
   propagatedBuildInputs = [
     jack2
+<<<<<<< HEAD
     qtbase
+=======
+    qt4
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     libsndfile
     alsa-lib
     which
   ];
 
+<<<<<<< HEAD
 
   dontWrapQtApps = true;
 
@@ -50,4 +64,6 @@ faust.wrapWithBuildEnv {
       sed -i "/QMAKE=/c\ QMAKE="${qtbase.dev}/bin/qmake"" $script
     done
   '';
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }

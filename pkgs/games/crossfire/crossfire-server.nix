@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 { stdenv
 , lib
 , fetchsvn
@@ -16,6 +17,11 @@
 , maps
 , arch
 }:
+=======
+{ stdenv, lib, fetchsvn, autoreconfHook,
+  autoconf, automake, libtool, flex, perl, check, pkg-config, python3,
+  version, rev, sha256, maps, arch }:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 stdenv.mkDerivation rec {
   pname = "crossfire-server";
@@ -27,7 +33,11 @@ stdenv.mkDerivation rec {
     rev = "r${rev}";
   };
 
+<<<<<<< HEAD
   nativeBuildInputs = [ autoconf automake libtool flex perl check pkg-config python39 ];
+=======
+  nativeBuildInputs = [ autoconf automake libtool flex perl check pkg-config python3 ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   hardeningDisable = [ "format" ];
 
   preConfigure = ''
@@ -36,7 +46,11 @@ stdenv.mkDerivation rec {
     sh autogen.sh
   '';
 
+<<<<<<< HEAD
   configureFlags = [ "--with-python=${python39}" ];
+=======
+  configureFlags = [ "--with-python=${python3}" ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   postInstall = ''
     ln -s ${maps} "$out/share/crossfire/maps"

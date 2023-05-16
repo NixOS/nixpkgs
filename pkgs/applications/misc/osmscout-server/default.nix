@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 { lib
 , mkDerivation
 , fetchFromGitHub
@@ -18,6 +19,12 @@
 , qtlocation
 , sqlite
 , valhalla
+=======
+{ lib, mkDerivation, fetchFromGitHub, pkg-config
+, qmake, qttools, kirigami2, qtquickcontrols2, qtlocation
+, libosmscout, valhalla, libpostal, osrm-backend, protobuf
+, libmicrohttpd, sqlite, marisa, kyotocabinet, boost
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 let
@@ -47,6 +54,7 @@ mkDerivation rec {
     libpostal sqlite marisa kyotocabinet boost protobuf date
   ];
 
+<<<<<<< HEAD
   patches = [
     # Valhalla 3.2.1 support. Only required for next patch to apply cleanly
     (fetchpatch {
@@ -60,6 +68,8 @@ mkDerivation rec {
     })
   ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   qmakeFlags = [
     "SCOUT_FLAVOR=kirigami" # Choose to build the kirigami UI variant
     "CONFIG+=disable_mapnik" # Disable the optional mapnik backend

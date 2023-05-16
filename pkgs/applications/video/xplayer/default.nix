@@ -67,13 +67,20 @@ stdenv.mkDerivation rec {
     itstool
     pkg-config
     yelp-tools
+<<<<<<< HEAD
     gobject-introspection
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   buildInputs = [
     clutter-gst
     clutter-gtk
     glib
+<<<<<<< HEAD
+=======
+    gobject-introspection
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     gst-plugins-bad
     gst-plugins-base
     gst-plugins-good

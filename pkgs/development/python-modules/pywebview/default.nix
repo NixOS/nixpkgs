@@ -16,7 +16,11 @@
 
 buildPythonPackage rec {
   pname = "pywebview";
+<<<<<<< HEAD
   version = "4.1";
+=======
+  version = "4.0.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.5";
@@ -25,7 +29,11 @@ buildPythonPackage rec {
     owner = "r0x0r";
     repo = "pywebview";
     rev = "refs/tags/${version}";
+<<<<<<< HEAD
     hash = "sha256-oqyWT0GaZ201OMVRcRpm1dma6NonTMmTx5SKnjzQl3M=";
+=======
+    hash = "sha256-awgX862p1jU/LWdg7QMC9by0OJMkzGwnC0yrc93I/c0=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

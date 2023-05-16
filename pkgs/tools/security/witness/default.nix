@@ -2,16 +2,27 @@
 
 buildGoModule rec {
   pname = "witness";
+<<<<<<< HEAD
   version = "0.1.14";
+=======
+  version = "0.1.12";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "testifysec";
     repo = pname;
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-TUEbFkrS0OztTiY0OXiZsqraq3TINtC/DQEyCGPNXpE=";
   };
   proxyVendor = true;
   vendorHash = "sha256-L2NaEt64mgFZVta/F8/uUQ4djlra59JPcHJLGbFCQJs=";
+=======
+    sha256 = "sha256-MH4ByPoHZHIq2b/QGA/fFa3P1a28BbkaX/p48pwnl1Q=";
+  };
+  proxyVendor = true;
+  vendorSha256 = "sha256-CUiex+ljzpbkqbXCmOjO62YTcgqOIE9Cg3JB6CWUbsk=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nativeBuildInputs = [ installShellFiles ];
 

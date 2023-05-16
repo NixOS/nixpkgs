@@ -7,7 +7,11 @@ stdenv.mkDerivation rec {
   pname = "micronucleus";
   version = "2.04";
 
+<<<<<<< HEAD
   sourceRoot = "${src.name}/commandline";
+=======
+  sourceRoot = "source/commandline";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "micronucleus";

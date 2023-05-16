@@ -1,7 +1,14 @@
+<<<<<<< HEAD
 { lib, python3, fetchPypi }:
 
 let
   inherit (python3.pkgs) buildPythonApplication requests;
+=======
+{ lib, python3 }:
+
+let
+  inherit (python3.pkgs) buildPythonApplication fetchPypi requests;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 in
 buildPythonApplication rec {
   pname = "tzupdate";

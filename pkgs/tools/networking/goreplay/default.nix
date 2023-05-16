@@ -19,7 +19,11 @@ buildGoModule rec {
     })
   ];
 
+<<<<<<< HEAD
   vendorHash = "sha256-jDMAtcq3ZowFdky5BdTkVNxq4ltkhklr76nXYJgGALg=";
+=======
+  vendorSha256 = "sha256-jDMAtcq3ZowFdky5BdTkVNxq4ltkhklr76nXYJgGALg=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   ldflags = [ "-s" "-w" ];
 
@@ -31,6 +35,10 @@ buildGoModule rec {
     homepage = "https://github.com/buger/goreplay";
     license = lib.licenses.lgpl3Only;
     description = "Open-source tool for capturing and replaying live HTTP traffic";
+<<<<<<< HEAD
+=======
+    platforms = lib.platforms.unix;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     maintainers = with lib.maintainers; [ lovek323 ];
   };
 }

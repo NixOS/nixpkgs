@@ -22,7 +22,12 @@
 , luajit
 , lz4
 , nspr
+<<<<<<< HEAD
 , pcre2
+=======
+, nss
+, pcre
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , python
 , zlib
 , redisSupport ? true, redis, hiredis
@@ -33,11 +38,19 @@
 in
 stdenv.mkDerivation rec {
   pname = "suricata";
+<<<<<<< HEAD
   version = "7.0.0";
 
   src = fetchurl {
     url = "https://www.openinfosecfoundation.org/download/${pname}-${version}.tar.gz";
     hash = "sha256-e80TExGDZkUUZdw/g4Wj9qrdCE/+RN0lfdqBBYY7t2k=";
+=======
+  version = "6.0.11";
+
+  src = fetchurl {
+    url = "https://www.openinfosecfoundation.org/download/${pname}-${version}.tar.gz";
+    sha256 = "sha256-TaXk6R5JmSYzpgJM4Qr+ZEElWyd1qPIPHvGIvREprGY=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [
@@ -66,7 +79,12 @@ stdenv.mkDerivation rec {
     luajit
     lz4
     nspr
+<<<<<<< HEAD
     pcre2
+=======
+    nss
+    pcre
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     python
     zlib
   ]
@@ -99,6 +117,10 @@ stdenv.mkDerivation rec {
     "--enable-nflog"
     "--enable-nfqueue"
     "--enable-pie"
+<<<<<<< HEAD
+=======
+    "--disable-prelude"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "--enable-python"
     "--enable-unix-socket"
     "--localstatedir=/var"
@@ -124,7 +146,10 @@ stdenv.mkDerivation rec {
   hardeningDisable = [ "stackprotector" ];
 
   installFlags = [
+<<<<<<< HEAD
     "e_datadir=\${TMPDIR}"
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "e_localstatedir=\${TMPDIR}"
     "e_logdir=\${TMPDIR}"
     "e_logcertsdir=\${TMPDIR}"

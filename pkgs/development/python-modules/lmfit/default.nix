@@ -14,13 +14,21 @@
 
 buildPythonPackage rec {
   pname = "lmfit";
+<<<<<<< HEAD
   version = "1.2.2";
+=======
+  version = "1.2.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
+<<<<<<< HEAD
     hash = "sha256-BEoFKhGmHaBXYnRQTBfrfigDtBEo4lgh6WYyIH8jyIw=";
+=======
+    hash = "sha256-AM71vRRb+BtzYwt4kmrySyTxgFQh5iEcpYVYiqfMQVs=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   postPatch = ''

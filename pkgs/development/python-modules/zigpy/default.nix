@@ -12,15 +12,24 @@
 , pytest-timeout
 , pytestCheckHook
 , pythonOlder
+<<<<<<< HEAD
 , setuptools
 , voluptuous
 , wheel
+=======
+, voluptuous
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 buildPythonPackage rec {
   pname = "zigpy";
+<<<<<<< HEAD
   version = "0.57.1";
   format = "pyproject";
+=======
+  version = "0.55.0";
+  format = "setuptools";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   disabled = pythonOlder "3.8";
 
@@ -28,6 +37,7 @@ buildPythonPackage rec {
     owner = "zigpy";
     repo = "zigpy";
     rev = "refs/tags/${version}";
+<<<<<<< HEAD
     hash = "sha256-aVrLiWPjc4xn2GvKmZCrRJGGbxP545PKqAH9rPq8IPo=";
   };
 
@@ -42,6 +52,11 @@ buildPythonPackage rec {
     wheel
   ];
 
+=======
+    hash = "sha256-fc98V6KJ7zROgNktHZlWj9/BQRbCIWYT5Px09mFrwHQ=";
+  };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   propagatedBuildInputs = [
     aiohttp
     aiosqlite

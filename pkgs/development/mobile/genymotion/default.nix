@@ -24,11 +24,19 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "genymotion";
+<<<<<<< HEAD
   version = "3.5.0";
   src = fetchurl {
     url = "https://dl.genymotion.com/releases/genymotion-${version}/genymotion-${version}-linux_x64.bin";
     name = "genymotion-${version}-linux_x64.bin";
     sha256 = "sha256-rZyTdVn0mnNLrGPehah62/AvTgUpNEtzn+Di1O3G3Sg=";
+=======
+  version = "3.3.3";
+  src = fetchurl {
+    url = "https://dl.genymotion.com/releases/genymotion-${version}/genymotion-${version}-linux_x64.bin";
+    name = "genymotion-${version}-linux_x64.bin";
+    sha256 = "sha256-8NJgYILOR63tWZc3tHDie79uM1hBnAwJNwGp/h2RHCo=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ makeWrapper ];

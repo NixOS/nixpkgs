@@ -45,7 +45,11 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Web APIs for Django, made easy";
     homepage = "https://www.django-rest-framework.org/";
+<<<<<<< HEAD
     maintainers = with maintainers; [ desiderius ];
+=======
+    maintainers = with maintainers; [ desiderius SuperSandro2000 ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     license = licenses.bsd2;
   };
 }

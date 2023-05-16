@@ -10,22 +10,38 @@
 , makeWrapper
 , mplayer
 , mpv
+<<<<<<< HEAD
+=======
+, ncurses
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , procps
 , scdoc
 , stdenv
 , streamlink
+<<<<<<< HEAD
+=======
+, sudo
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , vlc
 }:
 
 stdenv.mkDerivation rec {
   pname = "wtwitch";
+<<<<<<< HEAD
   version = "2.6.3";
+=======
+  version = "2.6.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "krathalan";
     repo = pname;
     rev = version;
+<<<<<<< HEAD
     hash = "sha256-2YLBuxGwGkav3zB2qMqM6yRXf7ZLqgULoJV4s5p+hSw=";
+=======
+    hash = "sha256-kXUocEBxEyjWOEUPVO1oPWEu7MAVoD2r4Umi1LPNKjc=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   # hardcode SCRIPT_NAME because #150841

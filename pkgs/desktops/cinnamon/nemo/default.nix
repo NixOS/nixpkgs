@@ -23,13 +23,21 @@
 
 stdenv.mkDerivation rec {
   pname = "nemo";
+<<<<<<< HEAD
   version = "5.8.4";
+=======
+  version = "5.6.5";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = pname;
     rev = version;
+<<<<<<< HEAD
     sha256 = "sha256-WjgQXQe8iCzkc4pmeTIx6mSlsg88xy3FTPMokJWo3fg=";
+=======
+    sha256 = "sha256-HdDe2VE9LQqiwFrUSIctOi/ffNOmLy6SyG30EL8UA5Q=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   patches = [
@@ -49,6 +57,10 @@ stdenv.mkDerivation rec {
     libexif
     exempi
     gvfs
+<<<<<<< HEAD
+=======
+    gobject-introspection
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     libgsf
   ];
 
@@ -59,7 +71,10 @@ stdenv.mkDerivation rec {
     wrapGAppsHook
     intltool
     shared-mime-info
+<<<<<<< HEAD
     gobject-introspection
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   mesonFlags = [
@@ -67,6 +82,7 @@ stdenv.mkDerivation rec {
     "--localedir=${cinnamon-translations}/share/locale"
   ];
 
+<<<<<<< HEAD
   preFixup = ''
     # Used for some non-fd.o icons (e.g. xapp-text-case-symbolic)
     gappsWrapperArgs+=(
@@ -74,6 +90,8 @@ stdenv.mkDerivation rec {
     )
   '';
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   # Taken from libnemo-extension.pc.
   passthru.extensiondir = "lib/nemo/extensions-3.0";
 

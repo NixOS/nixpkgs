@@ -1,5 +1,9 @@
 { lib
 , fetchFromSourcehut
+<<<<<<< HEAD
+=======
+, makeWrapper
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , rustPlatform
 , wayland
 }:

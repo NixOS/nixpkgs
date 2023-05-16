@@ -5,13 +5,21 @@
 
 stdenv.mkDerivation rec {
   pname = "bonzomatic";
+<<<<<<< HEAD
   version = "2023-06-15";
+=======
+  version = "2022-08-20";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "Gargaj";
     repo = pname;
     rev = version;
+<<<<<<< HEAD
     sha256 = "sha256-hwK3C+p1hRwnuY2/vBrA0QsJGIcJatqq+U5/hzVCXEg=";
+=======
+    sha256 = "sha256-AaUMefxQd00O+MAH4OLoyQIXZCRQQbt2ucgt7pVvN24=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ cmake makeWrapper ];

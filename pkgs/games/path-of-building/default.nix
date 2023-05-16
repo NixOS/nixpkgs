@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 { stdenv, lib, fetchFromGitHub, unzip, meson, ninja, pkg-config, qtbase, qttools, wrapQtAppsHook, luajit }:
 let
   data = stdenv.mkDerivation(finalAttrs: {
@@ -34,6 +35,16 @@ in
 stdenv.mkDerivation {
   pname = "path-of-building";
   version = "${data.version}-unstable-2023-04-09";
+=======
+{ stdenv, lib, fetchFromGitHub, runCommand, unzip, meson, ninja, pkg-config, qtbase, qttools, wrapQtAppsHook, luajit }:
+let
+  dataVersion = "2.30.1";
+  frontendVersion = "unstable-2023-04-09";
+in
+stdenv.mkDerivation {
+  pname = "path-of-building";
+  version = "${dataVersion}-${frontendVersion}";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "ernstp";
@@ -42,8 +53,41 @@ stdenv.mkDerivation {
     hash = "sha256-zhw2PZ6ZNMgZ2hG+a6AcYBkeg7kbBHNc2eSt4if17Wk=";
   };
 
+<<<<<<< HEAD
   nativeBuildInputs = [ meson ninja pkg-config qttools wrapQtAppsHook ];
   buildInputs = [ qtbase luajit luajit.pkgs.lua-curl ];
+=======
+  data = runCommand "path-of-building-data" {
+    src = fetchFromGitHub {
+      owner = "PathOfBuildingCommunity";
+      repo = "PathOfBuilding";
+      rev = "v${dataVersion}";
+      hash = "sha256-2itcALgl8eDkZylb/hmePDMILM4RxW2u5LYLbg+NNJ4=";
+    };
+
+    nativeBuildInputs = [ unzip ];
+  }
+  ''
+    # I have absolutely no idea how this file is generated
+    # and I don't think I want to know. The Flatpak also does this.
+    unzip -j -d $out $src/runtime-win32.zip lua/sha1.lua
+
+    # Install the actual data
+    cp -r $src/src $src/runtime/lua/*.lua $src/manifest.xml $out
+
+    # Pretend this is an official build so we don't get the ugly "dev mode" warning
+    substituteInPlace $out/manifest.xml --replace '<Version' '<Version platform="nixos"'
+    touch $out/installed.cfg
+
+    # Completely stub out the update check
+    chmod +w $out/src/UpdateCheck.lua
+    echo 'return "none"' > $out/src/UpdateCheck.lua
+  '';
+
+  nativeBuildInputs = [ meson ninja pkg-config qttools wrapQtAppsHook ];
+  buildInputs = [ qtbase luajit luajit.pkgs.lua-curl ];
+  dontWrapQtApps = true;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   installPhase = ''
     runHook preInstall
@@ -51,6 +95,7 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   preFixup = ''
     qtWrapperArgs+=(
       --set LUA_PATH "$LUA_PATH"
@@ -61,6 +106,15 @@ stdenv.mkDerivation {
 
   passthru.data = data;
 
+=======
+  postFixup = ''
+    wrapQtApp $out/bin/pobfrontend \
+      --set LUA_PATH "$LUA_PATH" \
+      --set LUA_CPATH "$LUA_CPATH" \
+      --chdir "$data"
+  '';
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   meta = {
     description = "Offline build planner for Path of Exile";
     homepage = "https://pathofbuilding.community/";

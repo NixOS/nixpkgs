@@ -16,7 +16,11 @@ buildGoModule rec {
     hash = "sha256-jJwRIfxmjlhfS/0+IN2IdQPlO9FkTb64PWUiLwkarfM=";
   };
 
+<<<<<<< HEAD
   sourceRoot = "${src.name}/client";
+=======
+  sourceRoot = "source/client";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   vendorHash = "sha256-f7FPeR+us3WvwqzcSQLbkKv905CCIAAm+HNV2FFF8OY=";
 

@@ -11,7 +11,10 @@ let
     "armv6l" = "armv6l";
     "armv7l" = "armv6l";
     "powerpc64le" = "ppc64le";
+<<<<<<< HEAD
     "riscv64" = "riscv64";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   }.${platform.parsed.cpu.name} or (throw "Unsupported CPU ${platform.parsed.cpu.name}");
 
   toGoPlatform = platform: "${toGoKernel platform}-${toGoCPU platform}";

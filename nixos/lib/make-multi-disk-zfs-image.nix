@@ -261,8 +261,13 @@ let
           mv $bootDiskImage $out/${bootFilename}
           mv $rootDiskImage $out/${rootFilename}
         '' else ''
+<<<<<<< HEAD
           ${pkgs.qemu_kvm}/bin/qemu-img convert -f raw -O ${formatOpt} ${compress} $bootDiskImage $out/${bootFilename}
           ${pkgs.qemu_kvm}/bin/qemu-img convert -f raw -O ${formatOpt} ${compress} $rootDiskImage $out/${rootFilename}
+=======
+          ${pkgs.qemu}/bin/qemu-img convert -f raw -O ${formatOpt} ${compress} $bootDiskImage $out/${bootFilename}
+          ${pkgs.qemu}/bin/qemu-img convert -f raw -O ${formatOpt} ${compress} $rootDiskImage $out/${rootFilename}
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         ''}
           bootDiskImage=$out/${bootFilename}
           rootDiskImage=$out/${rootFilename}

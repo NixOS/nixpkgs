@@ -1,9 +1,18 @@
+<<<<<<< HEAD
 { callPackage, ... }@_args:
 
 let
   base = callPackage ./generic.nix (_args // {
     version = "8.2.10";
     hash = "sha256-zJg06PG2E9dneviEPDZR6YKavKjr/pB5JR0Nhdmgqj4=";
+=======
+{ callPackage, lib, stdenv, fetchurl, ... }@_args:
+
+let
+  base = callPackage ./generic.nix (_args // {
+    version = "8.2.6";
+    hash = "sha256-RKcMUvU3ZiwQ2R7tv1H9dlyZYb5rolCO1jv3omzdMQA=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   });
 
 in

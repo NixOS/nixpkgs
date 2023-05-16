@@ -1,6 +1,12 @@
 import ./make-test-python.nix ({ pkgs, lib, ...} : {
   name = "gnome";
+<<<<<<< HEAD
   meta.maintainers = lib.teams.gnome.members;
+=======
+  meta = with lib; {
+    maintainers = teams.gnome.members;
+  };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nodes.machine =
     { ... }:
@@ -39,7 +45,11 @@ import ./make-test-python.nix ({ pkgs, lib, ...} : {
     };
 
   testScript = { nodes, ... }: let
+<<<<<<< HEAD
     # Keep line widths somewhat manageable
+=======
+    # Keep line widths somewhat managable
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     user = nodes.machine.config.users.users.alice;
     uid = toString user.uid;
     bus = "DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/${uid}/bus";

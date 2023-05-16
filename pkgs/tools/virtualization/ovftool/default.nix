@@ -1,6 +1,11 @@
 { lib, stdenv, fetchurl, system ? builtins.currentSystem, ovftoolBundles ? {}
+<<<<<<< HEAD
 , autoPatchelfHook, makeWrapper, unzip
 , glibc, c-ares, libxcrypt-legacy, expat, icu60, xercesc, zlib
+=======
+, requireFile, autoPatchelfHook, makeWrapper, unzip
+, glibc, c-ares, libxcrypt, expat, icu60, xercesc, zlib
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 let
@@ -60,7 +65,11 @@ stdenv.mkDerivation rec {
   # Some dependencies are not loaded until operations actually occur!
   buildInputs = [
     glibc
+<<<<<<< HEAD
     libxcrypt-legacy
+=======
+    libxcrypt
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     c-ares
     expat
     icu60

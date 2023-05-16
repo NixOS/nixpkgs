@@ -3,6 +3,10 @@
 , fetchzip
 , fetchFromGitHub
 , cmake
+<<<<<<< HEAD
+=======
+, spirv-headers
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , vulkan-headers
 , vulkan-loader
 , glslang
@@ -20,7 +24,11 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     sha256 = "sha256-eLAIlOl1sUxijeVPFG+NscZGxDdtrQqVkMuxhegESHk=";
   };
+<<<<<<< HEAD
   sourceRoot = "${src.name}/src";
+=======
+  sourceRoot = "source/src";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   models = fetchzip {
     # Choose the newst release from https://github.com/xinntao/Real-ESRGAN/releases to update

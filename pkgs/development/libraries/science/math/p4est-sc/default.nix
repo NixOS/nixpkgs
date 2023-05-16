@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 { lib, stdenv, fetchFromGitHub, mpiCheckPhaseHook
+=======
+{ lib, stdenv, fetchFromGitHub
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , autoreconfHook, pkg-config
 , p4est-sc-debugEnable ? true, p4est-sc-mpiSupport ? true
 , mpi, openssh, zlib
@@ -47,10 +51,17 @@ stdenv.mkDerivation {
   enableParallelBuilding = true;
   makeFlags = [ "V=0" ];
 
+<<<<<<< HEAD
   nativeCheckInputs = lib.optionals mpiSupport [
     mpiCheckPhaseHook
     openssh
   ];
+=======
+  preCheck = ''
+    export OMPI_MCA_rmaps_base_oversubscribe=1
+    export HYDRA_IFACE=lo
+  '';
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   # disallow Darwin checks due to prototype incompatibility of qsort_r
   # to be fixed in a future version of the source code

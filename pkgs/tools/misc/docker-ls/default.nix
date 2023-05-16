@@ -11,7 +11,11 @@ buildGoModule rec {
     sha256 = "sha256-4+REt0NH4S367qFsyJncVedUrC4t1zw5o0CLTiQfIz8=";
   };
 
+<<<<<<< HEAD
   vendorHash = "sha256-UulcjQOLEIP++eoYQTEIbCJW51jyE312dMxB8+AKcdU=";
+=======
+  vendorSha256 = "sha256-UulcjQOLEIP++eoYQTEIbCJW51jyE312dMxB8+AKcdU=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   meta = with lib; {
     description = "Tools for browsing and manipulating docker registries";

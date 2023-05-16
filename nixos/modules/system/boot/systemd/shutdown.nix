@@ -30,11 +30,15 @@ in {
   };
 
   config = lib.mkIf cfg.enable {
+<<<<<<< HEAD
     systemd.shutdownRamfs.contents = {
       "/shutdown".source = "${config.systemd.package}/lib/systemd/systemd-shutdown";
       "/etc/initrd-release".source = config.environment.etc.os-release.source;
       "/etc/os-release".source = config.environment.etc.os-release.source;
     };
+=======
+    systemd.shutdownRamfs.contents."/shutdown".source = "${config.systemd.package}/lib/systemd/systemd-shutdown";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     systemd.shutdownRamfs.storePaths = [pkgs.runtimeShell "${pkgs.coreutils}/bin"];
 
     systemd.mounts = [{

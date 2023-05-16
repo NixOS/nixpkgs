@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 {lib, stdenv, fetchurl, fetchpatch, xz, dpkg
+=======
+{lib, stdenv, fetchurl, xz, dpkg
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , libxslt, docbook_xsl, makeWrapper, writeShellScript
 , python3Packages
 , perlPackages, curl, gnupg, diffutils, nano, pkg-config, bash-completion, help2man
@@ -11,11 +15,16 @@ let
     exec ''${EDITOR-${nano}/bin/nano} "$@"
   '';
 in stdenv.mkDerivation rec {
+<<<<<<< HEAD
   version = "2.23.5";
+=======
+  version = "2.22.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pname = "debian-devscripts";
 
   src = fetchurl {
     url = "mirror://debian/pool/main/d/devscripts/devscripts_${version}.tar.xz";
+<<<<<<< HEAD
     hash = "sha256-j0fUVTS/lPKFdgeMhksiJz2+E5koB07IK2uEj55EWG0=";
   };
 
@@ -27,6 +36,11 @@ in stdenv.mkDerivation rec {
     })
   ];
 
+=======
+    hash = "sha256-Fflalt2JxqLS0gq0wy88pXCqiNvHj7sfP7fLwdSmUCs=";
+  };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   postPatch = ''
     substituteInPlace scripts/Makefile --replace /usr/share/dpkg ${dpkg}/share/dpkg
     substituteInPlace scripts/debrebuild.pl --replace /usr/bin/perl ${perlPackages.perl}/bin/perl
@@ -84,6 +98,10 @@ in stdenv.mkDerivation rec {
     description = "Debian package maintenance scripts";
     license = licenses.free; # Mix of public domain, Artistic+GPL, GPL1+, GPL2+, GPL3+, and GPL2-only... TODO
     maintainers = with maintainers; [raskin];
+<<<<<<< HEAD
     platforms = platforms.unix;
+=======
+    platforms = with platforms; linux;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

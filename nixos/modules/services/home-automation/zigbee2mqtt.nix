@@ -66,10 +66,16 @@ in
         server = mkDefault "mqtt://localhost:1883";
       };
       serial.port = mkDefault "/dev/ttyACM0";
+<<<<<<< HEAD
       # reference device/group configuration, that is kept in a separate file
       # to prevent it being overwritten in the units ExecStartPre script
       devices = mkDefault "devices.yaml";
       groups = mkDefault "groups.yaml";
+=======
+      # reference device configuration, that is kept in a separate file
+      # to prevent it being overwritten in the units ExecStartPre script
+      devices = mkDefault "devices.yaml";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
 
     systemd.services.zigbee2mqtt = {

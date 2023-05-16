@@ -6,16 +6,27 @@
 
 buildGoModule rec {
   pname = "naabu";
+<<<<<<< HEAD
   version = "2.1.7";
+=======
+  version = "2.1.6";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "projectdiscovery";
     repo = "naabu";
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-x6TmV8c5p9Uuc9uJG3+FNNpdmzdzgQpsyO29dly7PuU=";
   };
 
   vendorHash = "sha256-9LIPRiLKszfz9Gj26G03TPHOqCXi1s3CYiaadInlD84=";
+=======
+    hash = "sha256-STykmBsKLcuPhNrk/RHwvlkz9L+IwiALY7Iuvuu3dPM=";
+  };
+
+  vendorHash = "sha256-yY5zVlZolc8NLiySBOwKIIa+UN/hsqe9/Pf6iLG1H38=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   buildInputs = [
     libpcap

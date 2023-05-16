@@ -38,7 +38,11 @@ stdenv.mkDerivation rec {
   ];
 
   # go to the source directory after unpacking the sources
+<<<<<<< HEAD
   sourceRoot = "rox-filer-${version}/ROX-Filer";
+=======
+  setSourceRoot = "export sourceRoot=rox-filer-${version}/ROX-Filer/";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   # account for 'setSourceRoot' offset
   patchFlags = [ "-p2" ];

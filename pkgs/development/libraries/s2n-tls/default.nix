@@ -8,13 +8,21 @@
 
 stdenv.mkDerivation rec {
   pname = "s2n-tls";
+<<<<<<< HEAD
   version = "1.3.48";
+=======
+  version = "1.3.43";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = pname;
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-7C1syZAhMv0N+AuE/SuXqhatKhlzDOix4ZDxLRyuWOs=";
+=======
+    sha256 = "sha256-o2e2AWCQ4IGDfdQ6zvAddKs40/BENj1Xbrw8IKNytCw=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ cmake ];

@@ -23,6 +23,7 @@ in
         description = lib.mdDoc "The Klipper package.";
       };
 
+<<<<<<< HEAD
       logFile = mkOption {
         type = types.nullOr types.path;
         default = null;
@@ -33,6 +34,8 @@ in
         '';
       };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       inputTTY = mkOption {
         type = types.path;
         default = "/run/klipper/tty";
@@ -111,11 +114,16 @@ in
           (submodule {
             options = {
               enable = mkEnableOption (lib.mdDoc ''
+<<<<<<< HEAD
                 building of firmware for manual flashing.
               '');
               enableKlipperFlash = mkEnableOption (lib.mdDoc ''
                 flashings scripts for firmware. This will add `klipper-flash-$mcu` scripts to your environment which can be called to flash the firmware.
                 Please check the configs at [klipper](https://github.com/Klipper3d/klipper/tree/master/config) whether your board supports flashing via `make flash`.
+=======
+                building of firmware and addition of klipper-flash tools for manual flashing.
+                This will add `klipper-flash-$mcu` scripts to your environment which can be called to flash the firmware.
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
               '');
               serial = mkOption {
                 type = types.nullOr path;
@@ -164,9 +172,13 @@ in
     systemd.services.klipper =
       let
         klippyArgs = "--input-tty=${cfg.inputTTY}"
+<<<<<<< HEAD
           + optionalString (cfg.apiSocket != null) " --api-server=${cfg.apiSocket}"
           + optionalString (cfg.logFile != null) " --logfile=${cfg.logFile}"
         ;
+=======
+          + optionalString (cfg.apiSocket != null) " --api-server=${cfg.apiSocket}";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         printerConfigPath =
           if cfg.mutableConfig
           then cfg.mutableConfigFolder + "/printer.cfg"
@@ -192,7 +204,11 @@ in
         '';
 
         serviceConfig = {
+<<<<<<< HEAD
           ExecStart = "${cfg.package}/bin/klippy ${klippyArgs} ${printerConfigPath}";
+=======
+          ExecStart = "${cfg.package}/lib/klipper/klippy.py ${klippyArgs} ${printerConfigPath}";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           RuntimeDirectory = "klipper";
           StateDirectory = "klipper";
           SupplementaryGroups = [ "dialout" ];
@@ -216,6 +232,7 @@ in
       with pkgs;
       let
         default = a: b: if a != null then a else b;
+<<<<<<< HEAD
         firmwares = filterAttrs (n: v: v != null) (mapAttrs
           (mcu: { enable, enableKlipperFlash, configFile, serial }:
             if enable then
@@ -224,6 +241,13 @@ in
                   mcu = lib.strings.sanitizeDerivationName mcu;
                   firmwareConfig = configFile;
                 } else null)
+=======
+        firmwares = filterAttrs (n: v: v!= null) (mapAttrs
+          (mcu: { enable, configFile, serial }: if enable then pkgs.klipper-firmware.override {
+            mcu = lib.strings.sanitizeDerivationName mcu;
+            firmwareConfig = configFile;
+          } else null)
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           cfg.firmwares);
         firmwareFlasher = mapAttrsToList
           (mcu: firmware: pkgs.klipper-flash.override {
@@ -232,7 +256,11 @@ in
             flashDevice = default cfg.firmwares."${mcu}".serial cfg.settings."${mcu}".serial;
             firmwareConfig = cfg.firmwares."${mcu}".configFile;
           })
+<<<<<<< HEAD
           (filterAttrs (mcu: firmware: cfg.firmwares."${mcu}".enableKlipperFlash) firmwares);
+=======
+          firmwares;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       in
       [ klipper-genconf ] ++ firmwareFlasher ++ attrValues firmwares;
   };

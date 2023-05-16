@@ -2,7 +2,11 @@
 
 let
   baseName = "scalafmt";
+<<<<<<< HEAD
   version = "3.7.9";
+=======
+  version = "3.7.3";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   deps = stdenv.mkDerivation {
     name = "${baseName}-deps-${version}";
     buildCommand = ''
@@ -12,7 +16,11 @@ let
       cp $(< deps) $out/share/java/
     '';
     outputHashMode = "recursive";
+<<<<<<< HEAD
     outputHash = "sha256-r4vv62H0AryjZb+34fVHvqvndipOYyf6XpQC9u8Dxso=";
+=======
+    outputHash     = "sha256-iV6tj7pLXWJU0uV0xAk2gJrH5vPIqojDQuCk6NxAAw4=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 in
 stdenv.mkDerivation {
@@ -42,6 +50,9 @@ stdenv.mkDerivation {
     homepage = "http://scalameta.org/scalafmt";
     license = licenses.asl20;
     maintainers = [ maintainers.markus1189 ];
+<<<<<<< HEAD
     mainProgram = "scalafmt";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

@@ -6,8 +6,12 @@
 , fixDarwinDylibNames
 , gmp
 , mpfr
+<<<<<<< HEAD
 , config
 , enableCuda ? config.cudaSupport
+=======
+, enableCuda ? false
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , cudatoolkit
 }:
 

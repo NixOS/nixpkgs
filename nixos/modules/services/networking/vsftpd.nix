@@ -305,7 +305,11 @@ in
 
     # If you really have to access root via FTP use mkOverride or userlistDeny
     # = false and whitelist root
+<<<<<<< HEAD
     services.vsftpd.userlist = optional cfg.userlistDeny "root";
+=======
+    services.vsftpd.userlist = if cfg.userlistDeny then ["root"] else [];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     systemd = {
       tmpfiles.rules = optional cfg.anonymousUser

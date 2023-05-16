@@ -9,10 +9,13 @@ buildDunePackage rec {
     hash = "sha256-q3OyGLajAmfSu8QzEtzzE5gbiwvsVV2SsGuHZkst0w4=";
   };
 
+<<<<<<< HEAD
   postPatch = ''
     substituteInPlace src/dune --replace 'libraries unix bytes' 'libraries unix'
   '';
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   doCheck = true;
 
   meta = with lib; {

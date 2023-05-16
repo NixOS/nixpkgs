@@ -5,11 +5,19 @@
 
 stdenv.mkDerivation rec {
   pname = "xdaliclock";
+<<<<<<< HEAD
   version = "2.48";
 
   src = fetchurl {
     url = "https://www.jwz.org/xdaliclock/${pname}-${version}.tar.gz";
     hash = "sha256-BZiqjTSSAgvT/56OJDcKh4pDP9uqVhR5cCx89H+5FLQ=";
+=======
+  version = "2.47";
+
+  src = fetchurl {
+    url = "https://www.jwz.org/xdaliclock/${pname}-${version}.tar.gz";
+    hash = "sha256-1Jkv9iulvyY+b5KryDr8s+v8LU95hcVi7PJQsL1rUL4=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   # Note: don't change this to set sourceRoot, or updateAutotoolsGnuConfigScriptsHook

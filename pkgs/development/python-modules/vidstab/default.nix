@@ -27,6 +27,10 @@ buildPythonPackage rec {
     homepage = "https://github.com/AdamSpannbauer/python_video_stab";
     description = "Video Stabilization using OpenCV";
     license = licenses.mit;
+<<<<<<< HEAD
     maintainers = [ ];
+=======
+    maintainers = [ maintainers.costrouc ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

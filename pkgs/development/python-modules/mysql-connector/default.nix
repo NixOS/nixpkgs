@@ -6,18 +6,27 @@
 , fetchFromGitHub
 , protobuf
 , pythonOlder
+<<<<<<< HEAD
 , mysql80
 , openssl
 , pkgs
+=======
+, fetchpatch
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 buildPythonPackage rec {
   pname = "mysql-connector";
+<<<<<<< HEAD
   version = "8.0.33";
+=======
+  version = "8.0.29";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
+<<<<<<< HEAD
   setupPyBuildFlags = [
     "--with-mysql-capi=\"${mysql80}\""
     "--with-openssl-include-dir=\"${openssl.dev}/include\""
@@ -25,11 +34,17 @@ buildPythonPackage rec {
     "-L \"${lib.getLib pkgs.zstd}/lib:${lib.getLib mysql80}/lib\""
   ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   src = fetchFromGitHub {
     owner = "mysql";
     repo = "mysql-connector-python";
     rev = version;
+<<<<<<< HEAD
     hash = "sha256-GtMq7E2qBqFu54hjUotzPyxScTKXNdEQcmgHnS7lBhc=";
+=======
+    hash = "sha256-X0qiXNYkNoR00ESUdByPj4dPnEnjLyopm25lm1JvkAk=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   patches = [
@@ -39,6 +54,7 @@ buildPythonPackage rec {
     # 10.12. The patch reverts
     # https://github.com/mysql/mysql-connector-python/commit/d1e89fd3d7391084cdf35b0806cb5d2a4b413654
     ./0001-Revert-Fix-MacOS-wheels-platform-tag.patch
+<<<<<<< HEAD
   ];
 
   nativeBuildInputs = [
@@ -52,6 +68,19 @@ buildPythonPackage rec {
     mysql80
     openssl
     pkgs.zstd
+=======
+
+    # Allow for clang to be used to build native extensions
+    (fetchpatch {
+      url = "https://github.com/mysql/mysql-connector-python/commit/fd24ce9dc8c60cc446a8e69458f7851d047c7831.patch";
+      hash = "sha256-WvU1iB53MavCsksKCjGvUl7R3Ww/38alxxMVzjpr5Xg=";
+    })
+  ];
+
+  propagatedBuildInputs = [
+    dnspython
+    protobuf
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   pythonImportsCheck = [

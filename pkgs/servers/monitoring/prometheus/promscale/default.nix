@@ -16,7 +16,11 @@ buildGoModule rec {
     sha256 = "sha256-JizUI9XRzOEHF1kAblYQRYB11z9KWX7od3lPiRN+JNI=";
   };
 
+<<<<<<< HEAD
   vendorHash = "sha256-lnyKsipr/f9W9LWLb2lizKGLvIbS3XnSlOH1u1B87OY=";
+=======
+  vendorSha256 = "sha256-lnyKsipr/f9W9LWLb2lizKGLvIbS3XnSlOH1u1B87OY=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   ldflags = [
     "-s"
@@ -50,6 +54,10 @@ buildGoModule rec {
     homepage = "https://github.com/timescale/promscale";
     changelog = "https://github.com/timescale/promscale/blob/${version}/CHANGELOG.md";
     license = licenses.asl20;
+<<<<<<< HEAD
+=======
+    platforms = platforms.unix;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     maintainers = with maintainers; [ _0x4A6F anpin ];
   };
 }

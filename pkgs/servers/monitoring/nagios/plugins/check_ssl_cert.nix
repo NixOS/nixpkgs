@@ -17,13 +17,21 @@
 
 stdenv.mkDerivation rec {
   pname = "check_ssl_cert";
+<<<<<<< HEAD
   version = "2.72.0";
+=======
+  version = "2.68.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "matteocorti";
     repo = "check_ssl_cert";
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-0FKxZL+PY9cU64OzzfoxaHv6/neAJPwqOKcBsiSY3dw=";
+=======
+    hash = "sha256-yigg2C1FkdS/O+GCAkbQhXwARO0583V8MREzVCNsoGA=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

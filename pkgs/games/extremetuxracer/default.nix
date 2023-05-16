@@ -5,12 +5,20 @@
 }:
 
 stdenv.mkDerivation rec {
+<<<<<<< HEAD
   version = "0.8.3";
+=======
+  version = "0.8.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pname = "extremetuxracer";
 
   src = fetchurl {
     url = "mirror://sourceforge/extremetuxracer/etr-${version}.tar.xz";
+<<<<<<< HEAD
     sha256 = "sha256-LuQvP1/C+NSap1BW6xFvbKuE1lZBIOaWGuWSc2ckURM=";
+=======
+    sha256 = "sha256-HIdJZeniSVM78VwI2rxh5gwFuz/VeJF4gBF/+KkQzU4=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ pkg-config intltool ];

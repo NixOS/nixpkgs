@@ -2,6 +2,10 @@
 , buildPackages
 , lib
 , fetchzip
+<<<<<<< HEAD
+=======
+, fetchpatch
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , gpm
 , libffi
 , libGL
@@ -14,16 +18,55 @@
 
 stdenv.mkDerivation rec {
   pname = "fbc";
+<<<<<<< HEAD
   version = "1.10.0";
+=======
+  version = "1.09.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchzip {
     # Bootstrap tarball has sources pretranslated from FreeBASIC to C
     url = "https://github.com/freebasic/fbc/releases/download/${version}/FreeBASIC-${version}-source-bootstrap.tar.xz";
+<<<<<<< HEAD
     hash = "sha256-7FmyEfykOAgHaL2AG8zIgftzOszhwVzNKEqskiLGpfk=";
   };
 
   postPatch = ''
     patchShebangs tests/warnings/test.sh
+=======
+    sha256 = "1q1gxp5kjz4vkcs9jl0x01v8qm1q2j789lgvxvikzd591ay0xini";
+  };
+
+  patches = [
+    # Fixes fbc_tests.udt_wstring_.midstmt ascii getting stuck due to stack corruption
+    # Remove when >1.09.0
+    (fetchpatch {
+      name = "fbc-tests-Fix-stack-corruption.patch";
+      url = "https://github.com/freebasic/fbc/commit/42f4f6dfdaafdd5302a647152f16cda78e4ec904.patch";
+      excludes = [ "changelog.txt" ];
+      sha256 = "sha256-Bn+mnTIkM2/uM2k/b9+Up4HJ7SJWwfD3bWLJsSycFRE=";
+    })
+    # Respect SOURCE_DATE_EPOCH when set
+    # Remove when >1.09.0
+    (fetchpatch {
+      name = "fbc-SOURCE_DATE_EPOCH-support.patch";
+      url = "https://github.com/freebasic/fbc/commit/74ea6efdcfe9a90d1c860f64d11ab4a6cd607269.patch";
+      excludes = [ "changelog.txt" ];
+      sha256 = "sha256-v5FTi4vKOvSV03kigZDiOH8SEGEphhzkBL6p1hd+NtU=";
+    })
+  ];
+
+  postPatch = ''
+    patchShebangs tests/warnings/test.sh
+
+    # Some tests lack proper dependency on libstdc++
+    for missingStdcpp in tests/cpp/{class,call2}-fbc.bas; do
+      sed -i -e "/'"' TEST_MODE : /a #inclib "stdc++"' $missingStdcpp
+    done
+
+    # Help compiler find libstdc++ with gcc backend
+    sed -i -e '/fbcAddLibPathFor( "libgcc.a" )/a fbcAddLibPathFor( "libstdc++.so" )' src/compiler/fbc.bas
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '';
 
   dontConfigure = true;

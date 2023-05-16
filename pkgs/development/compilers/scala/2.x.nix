@@ -18,14 +18,24 @@ let
     };
 
     "2.12" = {
+<<<<<<< HEAD
       version = "2.12.18";
       sha256 = "naIJCET+YPrbXln39F9aU3DBdnjcn7PYMmhDxETOA5g=";
+=======
+      version = "2.12.15";
+      sha256 = "F5RePKlHjQaoQ2BWqsa5r99g3q/cPjgsbAi2A5IberY=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       pname = "scala_2_12";
     };
 
     "2.13" = {
+<<<<<<< HEAD
       version = "2.13.11";
       sha256 = "YYLdgdICPM5SczPteFsaojqY6H3IVauji6SJLcaq8eM=";
+=======
+      version = "2.13.10";
+      sha256 = "sha256-sBRhWZzQeGBCxktTN5D0XlG6u5HFLcRl2EaDjpcBnMQ=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       pname = "scala_2_13";
     };
   };

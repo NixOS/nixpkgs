@@ -7,7 +7,11 @@ buildGoModule rec {
   version = "0.5.20";
 
   proxyVendor = true;
+<<<<<<< HEAD
   vendorHash = "sha256-aRZoAEnRai8i5H08ReW8lEFlbmarYxU0lBRhR/Llw+M=";
+=======
+  vendorSha256 = "sha256-aRZoAEnRai8i5H08ReW8lEFlbmarYxU0lBRhR/Llw+M=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "livepeer";

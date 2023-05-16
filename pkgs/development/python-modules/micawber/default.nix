@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 { lib
 , buildPythonPackage
 , fetchPypi
@@ -24,6 +25,24 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = "https://micawber.readthedocs.io/en/latest/";
     description = "Module for extracting rich content from URLs";
+=======
+{ lib, buildPythonPackage, fetchPypi, beautifulsoup4 }:
+
+buildPythonPackage rec {
+  pname = "micawber";
+  version = "0.5.4";
+
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "003c5345aafe84f6b60fd289c003e8b1fef04c14e015c2d52d792a6b88135c89";
+  };
+
+  propagatedBuildInputs = [ beautifulsoup4 ];
+
+  meta = with lib; {
+    homepage = "https://micawber.readthedocs.io/en/latest/";
+    description = "A small library for extracting rich content from urls";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     license = licenses.mit;
     longDescription = ''
       micawber supplies a few methods for retrieving rich metadata

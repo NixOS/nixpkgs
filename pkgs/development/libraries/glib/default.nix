@@ -56,11 +56,19 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "glib";
+<<<<<<< HEAD
   version = "2.76.4";
 
   src = fetchurl {
     url = "mirror://gnome/sources/glib/${lib.versions.majorMinor finalAttrs.version}/glib-${finalAttrs.version}.tar.xz";
     sha256 = "WloZHJaDbhZqd3H36myisAacYDx9o8uhzTjRaUo5Xdo=";
+=======
+  version = "2.76.2";
+
+  src = fetchurl {
+    url = "mirror://gnome/sources/glib/${lib.versions.majorMinor finalAttrs.version}/glib-${finalAttrs.version}.tar.xz";
+    sha256 = "JPOEeFex2GdM2wOJo27ewPE8ZmzTznJ+zTQOudqKyp4=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   patches = lib.optionals stdenv.isDarwin [

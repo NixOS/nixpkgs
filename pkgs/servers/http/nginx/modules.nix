@@ -15,7 +15,10 @@
 , geoip
 , libbsd
 , libiconv
+<<<<<<< HEAD
 , libkrb5
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , libmaxminddb
 , libmodsecurity
 , libuuid
@@ -663,15 +666,25 @@ let self = {
     };
   };
 
+<<<<<<< HEAD
   secure-token = rec {
     name = "secure-token";
     version = "1.5";
+=======
+  secure-token = {
+    name = "secure-token";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     src = fetchFromGitHub {
       name = "secure-token";
       owner = "kaltura";
       repo = "nginx-secure-token-module";
+<<<<<<< HEAD
       rev = "refs/tags/${version}";
       hash = "sha256-qYTjGS9pykRqMFmNls52YKxEdXYhHw+18YC2zzdjEpU=";
+=======
+      rev = "95bdc0d1aca06ea7fe42555f71e65910bd74914d";
+      sha256 = "19wzck1xzq4kz7nyabcwzlank1k7wi7w2wn2c1mwz374c79g8ggp";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
 
     inputs = [ openssl ];
@@ -690,8 +703,13 @@ let self = {
       name = "set-misc";
       owner = "openresty";
       repo = "set-misc-nginx-module";
+<<<<<<< HEAD
       rev = "v0.33";
       hash = "sha256-jMMj3Ki1uSfQzagoB/O4NarxPjiaF9YRwjSKo+cgMxo=";
+=======
+      rev = "v0.32";
+      sha256 = "048a6jwinbjgxiprjj9ml3fdp0mhkx89g6ggams57fsx9m5vaxax";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
 
     meta = with lib; {
@@ -784,8 +802,11 @@ let self = {
       sha256 = "05rw3a7cv651951li995r5l1yzz6kwkm2xpbd59jsfzd74bw941i";
     };
 
+<<<<<<< HEAD
     inputs = [ libkrb5 ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     meta = with lib; {
       description = "SPNEGO HTTP Authentication Module";
       homepage = "https://github.com/stnoonan/spnego-http-auth-nginx-module";
@@ -984,8 +1005,13 @@ let self = {
       name = "vod";
       owner = "kaltura";
       repo = "nginx-vod-module";
+<<<<<<< HEAD
       rev = "1.31";
       hash = "sha256-ZpeO8QWQ+fGkz08u/zFOq7vj4aHcodzSHNrc1SgGUyc=";
+=======
+      rev = "1.29";
+      sha256 = "1z0ka0cwqbgh3fv2d5yva395sf90626rdzx7lyfrgs89gy4h9nrr";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
 
     inputs = [ ffmpeg fdk_aac openssl libxml2 libiconv ];
@@ -1004,15 +1030,24 @@ let self = {
       name = "vts";
       owner = "vozlt";
       repo = "nginx-module-vts";
+<<<<<<< HEAD
       rev = "v0.2.2";
       sha256 = "sha256-ReTmYGVSOwtnYDMkQDMWwxw09vT4iHYfYZvgd8iBotk=";
+=======
+      rev = "v0.2.1";
+      sha256 = "sha256-x4ry5ljPeJQY+7Mp04/xYIGf22d6Nee7CSqHezdK4gQ=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
 
     meta = with lib; {
       description = "Virtual host traffic status module";
       homepage = "https://github.com/vozlt/nginx-module-vts";
       license = with licenses; [ bsd2 ];
+<<<<<<< HEAD
       maintainers = with maintainers; [ SuperSandro2000 ];
+=======
+      maintainers = with maintainers; [ ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
   };
 
@@ -1032,7 +1067,11 @@ let self = {
       description = "Nginx modules for the Zstandard compression";
       homepage = "https://github.com/tokers/zstd-nginx-module";
       license = with licenses; [ bsd2 ];
+<<<<<<< HEAD
       maintainers = with maintainers; [ SuperSandro2000 ];
+=======
+      maintainers = with maintainers; [ ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
   };
 }; in self // lib.optionalAttrs config.allowAliases {

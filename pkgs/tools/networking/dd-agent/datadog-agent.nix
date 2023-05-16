@@ -1,7 +1,11 @@
 { lib
 , stdenv
 , cmake
+<<<<<<< HEAD
 , buildGoModule
+=======
+, buildGo118Module
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , makeWrapper
 , fetchFromGitHub
 , pythonPackages
@@ -14,12 +18,20 @@
 
 let
   # keep this in sync with github.com/DataDog/agent-payload dependency
+<<<<<<< HEAD
   payloadVersion = "5.0.89";
+=======
+  payloadVersion = "4.78.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   python = pythonPackages.python;
   owner   = "DataDog";
   repo    = "datadog-agent";
   goPackagePath = "github.com/${owner}/${repo}";
+<<<<<<< HEAD
   version = "7.45.1";
+=======
+  version = "7.38.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     inherit owner repo;
@@ -35,13 +47,21 @@ let
     cmakeFlags = ["-DBUILD_DEMO=OFF" "-DDISABLE_PYTHON2=ON"];
   };
 
+<<<<<<< HEAD
 in buildGoModule rec {
+=======
+in buildGo118Module rec {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pname = "datadog-agent";
   inherit src version;
 
   doCheck = false;
 
+<<<<<<< HEAD
   vendorHash = "sha256-bGDf48wFa32hURZfGN5pCMmslC3PeLNayKcl5cfjq9M=";
+=======
+  vendorSha256 = "sha256-bGDf48wFa32hURZfGN5pCMmslC3PeLNayKcl5cfjq9M=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   subPackages = [
     "cmd/agent"
@@ -93,8 +113,12 @@ in buildGoModule rec {
   # into standard paths.
   postInstall = ''
     mkdir -p $out/${python.sitePackages} $out/share/datadog-agent
+<<<<<<< HEAD
     cp -R --no-preserve=mode $src/cmd/agent/dist/conf.d $out/share/datadog-agent
     rm -rf $out/share/datadog-agent/conf.d/{apm.yaml.default,process_agent.yaml.default,winproc.d}
+=======
+    cp -R $src/cmd/agent/dist/conf.d $out/share/datadog-agent
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     cp -R $src/cmd/agent/dist/{checks,utils,config.py} $out/${python.sitePackages}
 
     cp -R $src/pkg/status/templates $out/share/datadog-agent

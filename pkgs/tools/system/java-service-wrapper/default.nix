@@ -5,11 +5,19 @@
 
 stdenv.mkDerivation rec {
   pname = "java-service-wrapper";
+<<<<<<< HEAD
   version = "3.5.54";
 
   src = fetchurl {
     url = "https://wrapper.tanukisoftware.com/download/${version}/wrapper_${version}_src.tar.gz";
     hash = "sha256-t16i1WqvDqr4J5sDldeUk6+DAyN/6oWGV6eME5yj+i4=";
+=======
+  version = "3.5.53";
+
+  src = fetchurl {
+    url = "https://wrapper.tanukisoftware.com/download/${version}/wrapper_${version}_src.tar.gz";
+    hash = "sha256-mDXlsH+iu9CcqlMwtbrMicAwuRClK1WmPY2SYIF8USw=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   buildInputs = [ jdk ];

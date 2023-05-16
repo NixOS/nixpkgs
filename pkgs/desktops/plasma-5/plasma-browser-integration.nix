@@ -33,9 +33,12 @@ mkDerivation {
     kactivities
     plasma-workspace
   ];
+<<<<<<< HEAD
 
   meta = {
     description = "Components necessary to integrate browsers into the Plasma Desktop";
     homepage = "https://community.kde.org/Plasma/Browser_Integration";
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }

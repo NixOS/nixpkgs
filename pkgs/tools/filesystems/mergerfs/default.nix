@@ -2,13 +2,21 @@
 
 stdenv.mkDerivation rec {
   pname = "mergerfs";
+<<<<<<< HEAD
   version = "2.36.0";
+=======
+  version = "2.35.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "trapexit";
     repo = pname;
     rev = version;
+<<<<<<< HEAD
     sha256 = "sha256-oGgL3uMKMs66GTgWtMMX0M9ARXiJnV3l3Tnja373sCo=";
+=======
+    sha256 = "sha256-mUnjWMxeZJ9wIpJJDqQIUk2x7oifZ/b2HZlPtQ77q8U=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

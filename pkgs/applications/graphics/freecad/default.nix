@@ -1,9 +1,16 @@
 { lib
+<<<<<<< HEAD
 , fmt
 , stdenv
 , fetchFromGitHub
 , cmake
 , doxygen
+=======
+, stdenv
+, mkDerivation
+, fetchFromGitHub
+, cmake
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , ninja
 , gitpython
 , boost
@@ -47,15 +54,26 @@
 , zlib
 }:
 
+<<<<<<< HEAD
 stdenv.mkDerivation (finalAttrs: {
   pname = "freecad";
   version = "0.21.1";
+=======
+mkDerivation rec {
+  pname = "freecad";
+  version = "0.20.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "FreeCAD";
     repo = "FreeCAD";
+<<<<<<< HEAD
     rev = finalAttrs.version;
     hash = "sha256-rwt81Z+Bp8uZlR4iuGQEDKBu/Dr9Rqg7d9SsCdofTUU=";
+=======
+    rev = version;
+    hash = "sha256-v8hanhy0UE0o+XqqIH3ZUtVom3q0KGELcfXFRSDr0TA=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [
@@ -72,9 +90,13 @@ stdenv.mkDerivation (finalAttrs: {
     gitpython # for addon manager
     boost
     coin3d
+<<<<<<< HEAD
     doxygen
     eigen
     fmt
+=======
+    eigen
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     gts
     hdf5
     libGLU
@@ -146,8 +168,13 @@ stdenv.mkDerivation (finalAttrs: {
     ln -s $out/bin/FreeCADCmd $out/bin/freecadcmd
   '';
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://www.freecad.org";
+=======
+  meta = with lib; {
+    homepage = "https://www.freecadweb.org/";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     description = "General purpose Open Source 3D CAD/MCAD/CAx/CAE/PLM modeler";
     longDescription = ''
       FreeCAD is an open-source parametric 3D modeler made primarily to design
@@ -165,8 +192,16 @@ stdenv.mkDerivation (finalAttrs: {
       programmer, an experienced CAD user, a student or a teacher, you will feel
       right at home with FreeCAD.
     '';
+<<<<<<< HEAD
     license = lib.licenses.lgpl2Plus;
     maintainers = with lib.maintainers; [ viric gebner AndersonTorres ];
     platforms = lib.platforms.linux;
   };
 })
+=======
+    license = licenses.lgpl2Plus;
+    maintainers = with maintainers; [ viric gebner AndersonTorres ];
+    platforms = platforms.linux;
+  };
+}
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)

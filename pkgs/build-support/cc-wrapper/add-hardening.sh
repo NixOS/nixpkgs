@@ -1,5 +1,9 @@
+<<<<<<< HEAD
 declare -a hardeningCFlagsAfter=()
 declare -a hardeningCFlagsBefore=()
+=======
+declare -a hardeningCFlags=()
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 declare -A hardeningEnableMap=()
 
@@ -49,6 +53,7 @@ for flag in "${!hardeningEnableMap[@]}"; do
     fortify | fortify3)
       # Use -U_FORTIFY_SOURCE to avoid warnings on toolchains that explicitly
       # set -D_FORTIFY_SOURCE=0 (like 'clang -fsanitize=address').
+<<<<<<< HEAD
       hardeningCFlagsBefore+=('-O2' '-U_FORTIFY_SOURCE')
       # Unset any _FORTIFY_SOURCE values the command-line may have set before
       # enforcing our own value, avoiding (potentially fatal) redefinition
@@ -62,6 +67,17 @@ for flag in "${!hardeningEnableMap[@]}"; do
         fortify3)
           if (( "${NIX_DEBUG:-0}" >= 1 )); then echo HARDENING: enabling fortify3 >&2; fi
           hardeningCFlagsAfter+=('-D_FORTIFY_SOURCE=3')
+=======
+      hardeningCFlags+=('-O2' '-U_FORTIFY_SOURCE')
+      case $flag in
+        fortify)
+          if (( "${NIX_DEBUG:-0}" >= 1 )); then echo HARDENING: enabling fortify >&2; fi
+          hardeningCFlags+=('-D_FORTIFY_SOURCE=2')
+        ;;
+        fortify3)
+          if (( "${NIX_DEBUG:-0}" >= 1 )); then echo HARDENING: enabling fortify3 >&2; fi
+          hardeningCFlags+=('-D_FORTIFY_SOURCE=3')
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         ;;
         *)
           # Ignore unsupported.
@@ -70,19 +86,31 @@ for flag in "${!hardeningEnableMap[@]}"; do
       ;;
     stackprotector)
       if (( "${NIX_DEBUG:-0}" >= 1 )); then echo HARDENING: enabling stackprotector >&2; fi
+<<<<<<< HEAD
       hardeningCFlagsBefore+=('-fstack-protector-strong' '--param' 'ssp-buffer-size=4')
+=======
+      hardeningCFlags+=('-fstack-protector-strong' '--param' 'ssp-buffer-size=4')
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       ;;
     pie)
       # NB: we do not use `+=` here, because PIE flags must occur before any PIC flags
       if (( "${NIX_DEBUG:-0}" >= 1 )); then echo HARDENING: enabling CFlags -fPIE >&2; fi
+<<<<<<< HEAD
       hardeningCFlagsBefore=('-fPIE' "${hardeningCFlagsBefore[@]}")
       if [[ ! (" ${params[*]} " =~ " -shared " || " ${params[*]} " =~ " -static ") ]]; then
         if (( "${NIX_DEBUG:-0}" >= 1 )); then echo HARDENING: enabling LDFlags -pie >&2; fi
         hardeningCFlagsBefore=('-pie' "${hardeningCFlagsBefore[@]}")
+=======
+      hardeningCFlags=('-fPIE' "${hardeningCFlags[@]}")
+      if [[ ! (" $* " =~ " -shared " || " $* " =~ " -static ") ]]; then
+        if (( "${NIX_DEBUG:-0}" >= 1 )); then echo HARDENING: enabling LDFlags -pie >&2; fi
+        hardeningCFlags=('-pie' "${hardeningCFlags[@]}")
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       fi
       ;;
     pic)
       if (( "${NIX_DEBUG:-0}" >= 1 )); then echo HARDENING: enabling pic >&2; fi
+<<<<<<< HEAD
       hardeningCFlagsBefore+=('-fPIC')
       ;;
     strictoverflow)
@@ -102,6 +130,17 @@ for flag in "${!hardeningEnableMap[@]}"; do
     format)
       if (( "${NIX_DEBUG:-0}" >= 1 )); then echo HARDENING: enabling format >&2; fi
       hardeningCFlagsBefore+=('-Wformat' '-Wformat-security' '-Werror=format-security')
+=======
+      hardeningCFlags+=('-fPIC')
+      ;;
+    strictoverflow)
+       if (( "${NIX_DEBUG:-0}" >= 1 )); then echo HARDENING: enabling strictoverflow >&2; fi
+      hardeningCFlags+=('-fno-strict-overflow')
+      ;;
+    format)
+      if (( "${NIX_DEBUG:-0}" >= 1 )); then echo HARDENING: enabling format >&2; fi
+      hardeningCFlags+=('-Wformat' '-Wformat-security' '-Werror=format-security')
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       ;;
     *)
       # Ignore unsupported. Checked in Nix that at least *some*

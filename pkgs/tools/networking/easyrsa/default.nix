@@ -2,13 +2,21 @@
 
 stdenv.mkDerivation rec {
   pname = "easyrsa";
+<<<<<<< HEAD
   version = "3.1.6";
+=======
+  version = "3.1.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "OpenVPN";
     repo = "easy-rsa";
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-VbL2QXc4IaTe6u17nhByIk+SEsKLhl6sk85E5moGfjs=";
+=======
+    sha256 = "sha256-nZjEBAJnho2Qis5uzQs1sVZVFHHSgJVa5aJS+dAfFCg=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ makeWrapper ];

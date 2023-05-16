@@ -45,7 +45,11 @@ let
         ./configure \
           --build i686-pc-linux-gnu \
           --host i686-pc-linux-gnu \
+<<<<<<< HEAD
           CC="${tinycc.compiler}/bin/tcc -B ${tinycc.libs}/lib" \
+=======
+          CC="${tinycc-mes}/bin/tcc -static" \
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           ac_cv_func_dup=no
     - `ac_cv_func_dup` disabled as mes-libc doesn't implement tmpfile()
 
@@ -148,13 +152,21 @@ in
 kaem.runCommand "${pname}-${version}" {
   inherit pname version;
 
+<<<<<<< HEAD
   nativeBuildInputs = [ tinycc.compiler gnupatch ];
+=======
+  nativeBuildInputs = [ tinycc gnupatch ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   meta = with lib; {
     description = "A tool to control the generation of non-source files from sources";
     homepage = "https://www.gnu.org/software/make";
     license = licenses.gpl3Plus;
+<<<<<<< HEAD
     maintainers = teams.minimal-bootstrap.members;
+=======
+    maintainers = with maintainers; [ emilytrau ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     mainProgram = "make";
     platforms = platforms.unix;
   };
@@ -174,11 +186,19 @@ kaem.runCommand "${pname}-${version}" {
   cp lib/fnmatch.in.h lib/fnmatch.h
 
   # Compile
+<<<<<<< HEAD
   alias CC="tcc -B ${tinycc.libs}/lib ${lib.concatStringsSep " " CFLAGS}"
   ${lib.concatMapStringsSep "\n" (f: "CC -c ${f}") sources}
 
   # Link
   CC -o make ${lib.concatStringsSep " " objects}
+=======
+  alias CC="tcc ${lib.concatStringsSep " " CFLAGS}"
+  ${lib.concatMapStringsSep "\n" (f: "CC -c ${f}") sources}
+
+  # Link
+  CC -static -o make ${lib.concatStringsSep " " objects}
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   # Check
   ./make --version

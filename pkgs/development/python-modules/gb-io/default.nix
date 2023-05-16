@@ -26,7 +26,11 @@ buildPythonPackage rec {
     hash = "sha256-lPnOFbEJgcaPPl9bTngugubhW//AUFp9RAjyiFHxC70=";
   };
 
+<<<<<<< HEAD
   sourceRoot = src.name;
+=======
+  sourceRoot = "source";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nativeBuildInputs = [
     setuptools-rust

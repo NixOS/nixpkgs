@@ -20,14 +20,22 @@
 
 buildPythonPackage rec {
   pname = "asyncssh";
+<<<<<<< HEAD
   version = "2.13.2";
+=======
+  version = "2.13.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
+<<<<<<< HEAD
     hash = "sha256-mR5THEu32+xit1SHjZajJGM4qsEaKM48PpkBj7L1gow=";
+=======
+    hash = "sha256-67uDwFwLRc8jDeHvLwYFnjYPmvpcPd9g/JL697lP+Ic=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [
@@ -58,8 +66,11 @@ buildPythonPackage rec {
     ];
   };
 
+<<<<<<< HEAD
   __darwinAllowLocalNetworking = true;
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nativeCheckInputs = [
     openssh
     openssl

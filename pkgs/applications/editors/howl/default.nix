@@ -10,7 +10,11 @@ stdenv.mkDerivation rec {
     sha256 = "1qc58l3rkr37cj6vhf8c7bnwbz93nscyraz7jxqwjq6k4gj0cjw3";
   };
 
+<<<<<<< HEAD
   sourceRoot = "howl-${version}/src";
+=======
+  sourceRoot = "./howl-${version}/src";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   # The Makefile uses "/usr/local" if not explicitly overridden
   installFlags = [ "PREFIX=$(out)" ];

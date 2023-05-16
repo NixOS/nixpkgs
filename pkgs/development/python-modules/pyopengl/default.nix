@@ -18,14 +18,25 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ pillow ];
 
   patchPhase = let
+<<<<<<< HEAD
     ext = stdenv.hostPlatform.extensions.sharedLibrary; in lib.optionalString (!stdenv.isDarwin) ''
+=======
+    ext = stdenv.hostPlatform.extensions.sharedLibrary; in ''
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     # Theses lines are patching the name of dynamic libraries
     # so pyopengl can find them at runtime.
     substituteInPlace OpenGL/platform/glx.py \
       --replace "'GL'" "'${pkgs.libGL}/lib/libGL${ext}'" \
       --replace "'GLU'" "'${pkgs.libGLU}/lib/libGLU${ext}'" \
       --replace "'glut'" "'${pkgs.freeglut}/lib/libglut${ext}'"
+<<<<<<< HEAD
   '' + ''
+=======
+    substituteInPlace OpenGL/platform/darwin.py \
+      --replace "'OpenGL'" "'${pkgs.libGL}/lib/libGL${ext}'" \
+      --replace "'GLUT'" "'${pkgs.freeglut}/lib/libglut${ext}'"
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     # https://github.com/NixOS/nixpkgs/issues/76822
     # pyopengl introduced a new "robust" way of loading libraries in 3.1.4.
     # The later patch of the filepath does not work anymore because

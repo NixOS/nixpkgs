@@ -5,13 +5,21 @@
 
 buildGoModule rec {
   pname = "hyperledger-fabric";
+<<<<<<< HEAD
   version = "2.5.1";
+=======
+  version = "2.4.9";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "hyperledger";
     repo = "fabric";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-hZAGLSf/hez2pvfmaZJRD5b7GW3+exUXgLXUd2Awvpg=";
+=======
+    hash = "sha256-tHchOki5xlu87onUCqdK/OQxJ6lcvhlUlLcQM6Fap+A=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   vendorHash = null;

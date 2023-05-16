@@ -2,15 +2,25 @@
 
 buildGoModule rec {
   pname = "cloudfoundry-cli";
+<<<<<<< HEAD
   version = "8.7.2";
+=======
+  version = "8.6.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "cloudfoundry";
     repo = "cli";
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-6Ce9fmL0wZXCCRbJMqSD6xZQfDZl6EsiPpmfvYFT2tA=";
   };
   vendorHash = "sha256-5/aGyJ+SksnjuKsWVyz60OsAcz3z/BP+wCwlKEmxHb4=";
+=======
+    sha256 = "sha256-wW2oemRz+NI/+ke+4MFc8qCIiGIBYlb1KCEHvRbhZ/U=";
+  };
+  vendorHash = "sha256-xydewlruZvtWHm0IvVWuvv31+Z7/PLVC9gTZcQLaowk=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   subPackages = [ "." ];
 

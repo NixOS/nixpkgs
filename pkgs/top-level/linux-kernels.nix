@@ -46,11 +46,26 @@ let
           inherit sha256;
         };
         extraMeta = {
+<<<<<<< HEAD
           broken = kernel.meta.broken;
+=======
+          broken =
+            kernel.meta.broken ||
+            lib.versions.majorMinor version == "4.14" ||
+            (stdenv.isx86_64 && lib.versionAtLeast version "4.19" && lib.versionOlder version "5.5");
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         };
       };
       kernelPatches = kernel.kernelPatches ++ [
         kernelPatches.hardened.${kernel.meta.branch}
+<<<<<<< HEAD
+=======
+      ] ++ lib.optionals (lib.versionAtLeast version "5.15") [
+        # Needed as long as hardened kernels are behind the first patch release
+        # containing the fix for CVE-2023-32233. Can most likely be removed after the
+        # next hardened kernel update.
+        kernelPatches.CVE-2023-32233
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       ];
       isHardened = true;
   };
@@ -112,6 +127,10 @@ in {
         [ kernelPatches.bridge_stp_helper
           kernelPatches.request_key_helper
           kernelPatches.modinst_arg_list_too_long
+<<<<<<< HEAD
+=======
+          kernelPatches.CVE-2023-32233
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         ];
     };
 
@@ -120,6 +139,10 @@ in {
         kernelPatches.bridge_stp_helper
         kernelPatches.request_key_helper
         kernelPatches.rtl8761b_support
+<<<<<<< HEAD
+=======
+        kernelPatches.CVE-2023-32233
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       ];
     };
 
@@ -127,6 +150,10 @@ in {
       kernelPatches = [
         kernelPatches.bridge_stp_helper
         kernelPatches.request_key_helper
+<<<<<<< HEAD
+=======
+        kernelPatches.CVE-2023-32233
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       ];
     };
 
@@ -134,6 +161,10 @@ in {
       kernelPatches = [
         kernelPatches.bridge_stp_helper
         kernelPatches.request_key_helper
+<<<<<<< HEAD
+=======
+        kernelPatches.CVE-2023-32233
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       ];
     };
 
@@ -142,6 +173,10 @@ in {
         kernelPatches.bridge_stp_helper
         kernelPatches.request_key_helper
         kernelPatches.export-rt-sched-migrate
+<<<<<<< HEAD
+=======
+        kernelPatches.CVE-2023-32233
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       ];
     };
 
@@ -149,6 +184,10 @@ in {
       kernelPatches = [
         kernelPatches.bridge_stp_helper
         kernelPatches.request_key_helper
+<<<<<<< HEAD
+=======
+        kernelPatches.fix-em-ice-bonding
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       ];
     };
 
@@ -164,6 +203,10 @@ in {
       kernelPatches = [
         kernelPatches.bridge_stp_helper
         kernelPatches.request_key_helper
+<<<<<<< HEAD
+=======
+        kernelPatches.fix-em-ice-bonding
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       ];
     };
 
@@ -171,6 +214,7 @@ in {
       kernelPatches = [
         kernelPatches.bridge_stp_helper
         kernelPatches.request_key_helper
+<<<<<<< HEAD
         kernelPatches.export-rt-sched-migrate
       ];
     };
@@ -186,6 +230,27 @@ in {
       kernelPatches = [
         kernelPatches.bridge_stp_helper
         kernelPatches.request_key_helper
+=======
+        kernelPatches.fix-em-ice-bonding
+        kernelPatches.export-rt-sched-migrate
+        kernelPatches.CVE-2023-32233
+      ];
+    };
+
+    linux_6_2 = callPackage ../os-specific/linux/kernel/linux-6.2.nix {
+      kernelPatches = [
+        kernelPatches.bridge_stp_helper
+        kernelPatches.request_key_helper
+        kernelPatches.fix-em-ice-bonding
+      ];
+    };
+
+    linux_6_3 = callPackage ../os-specific/linux/kernel/linux-6.3.nix {
+      kernelPatches = [
+        kernelPatches.bridge_stp_helper
+        kernelPatches.request_key_helper
+        kernelPatches.fix-em-ice-bonding
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       ];
     };
 
@@ -203,8 +268,21 @@ in {
 
     linux_testing_bcachefs = callPackage ../os-specific/linux/kernel/linux-testing-bcachefs.nix {
       # Pinned on the last version which Kent's commits can be cleany rebased up.
+<<<<<<< HEAD
       kernel = linux_6_4;
       kernelPatches = linux_6_4.kernelPatches;
+=======
+      kernel = buildLinux rec {
+        version = "6.1.3";
+        modDirVersion = lib.versions.pad 3 version;
+        extraMeta.branch = lib.versions.majorMinor version;
+        src = fetchurl {
+          url = "mirror://kernel/linux/kernel/v6.x/linux-${version}.tar.xz";
+          hash = "sha256-bcia56dRPkM8WXxzRu1/9L/RFepDo7XiemvbOMVYAxc=";
+        };
+      };
+      kernelPatches = linux_6_1.kernelPatches;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
    };
 
     linux_hardkernel_4_14 = callPackage ../os-specific/linux/kernel/linux-hardkernel-4.14.nix {
@@ -251,6 +329,7 @@ in {
 
     linux_hardened = hardenedKernelFor packageAliases.linux_default.kernel { };
 
+<<<<<<< HEAD
     linux_4_14_hardened = hardenedKernelFor kernels.linux_4_14 {
       stdenv = gcc10Stdenv;
       buildPackages = buildPackages // { stdenv = buildPackages.gcc10Stdenv; };
@@ -267,14 +346,25 @@ in {
     linux_5_15_hardened = hardenedKernelFor kernels.linux_5_15 { };
     linux_6_1_hardened = hardenedKernelFor kernels.linux_6_1 { };
     linux_6_4_hardened = hardenedKernelFor kernels.linux_6_4 { };
+=======
+    linux_4_14_hardened = hardenedKernelFor kernels.linux_4_14 { };
+    linux_4_19_hardened = hardenedKernelFor kernels.linux_4_19 { };
+    linux_5_4_hardened = hardenedKernelFor kernels.linux_5_4 { };
+    linux_5_10_hardened = hardenedKernelFor kernels.linux_5_10 { };
+    linux_5_15_hardened = hardenedKernelFor kernels.linux_5_15 { };
+    linux_6_1_hardened = hardenedKernelFor kernels.linux_6_1 { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   } // lib.optionalAttrs config.allowAliases {
     linux_4_9 = throw "linux 4.9 was removed because it will reach its end of life within 22.11";
     linux_5_18 = throw "linux 5.18 was removed because it has reached its end of life upstream";
     linux_5_19 = throw "linux 5.19 was removed because it has reached its end of life upstream";
     linux_6_0 = throw "linux 6.0 was removed because it has reached its end of life upstream";
+<<<<<<< HEAD
     linux_6_2 = throw "linux 6.2 was removed because it has reached its end of life upstream";
     linux_6_3 = throw "linux 6.3 was removed because it has reached its end of life upstream";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     linux_xanmod_tt = throw "linux_xanmod_tt was removed because upstream no longer offers this option";
 
@@ -339,8 +429,11 @@ in {
 
     dddvb = callPackage ../os-specific/linux/dddvb { };
 
+<<<<<<< HEAD
     decklink = callPackage ../os-specific/linux/decklink { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     digimend = callPackage ../os-specific/linux/digimend { };
 
     dpdk-kmods = callPackage ../os-specific/linux/dpdk-kmods { };
@@ -351,11 +444,18 @@ in {
 
     evdi = callPackage ../os-specific/linux/evdi { };
 
+<<<<<<< HEAD
     fanout = callPackage ../os-specific/linux/fanout { };
 
     fwts-efi-runtime = callPackage ../os-specific/linux/fwts/module.nix { };
 
     gcadapter-oc-kmod = callPackage ../os-specific/linux/gcadapter-oc-kmod { };
+=======
+    fwts-efi-runtime = callPackage ../os-specific/linux/fwts/module.nix { };
+
+    gcadapter-oc-kmod = callPackage ../os-specific/linux/gcadapter-oc-kmod { };
+    hid-nintendo = callPackage ../os-specific/linux/hid-nintendo { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     hyperv-daemons = callPackage ../os-specific/linux/hyperv-daemons { };
 
@@ -379,10 +479,13 @@ in {
 
     kvdo = callPackage ../os-specific/linux/kvdo {};
 
+<<<<<<< HEAD
     lenovo-legion-module = callPackage ../os-specific/linux/lenovo-legion { };
 
     linux-gpib = callPackage ../applications/science/electronics/linux-gpib/kernel.nix { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     liquidtux = callPackage ../os-specific/linux/liquidtux {};
 
     lkrg = callPackage ../os-specific/linux/lkrg {};
@@ -410,8 +513,11 @@ in {
     nvidia_x11_legacy470   = nvidiaPackages.legacy_470;
     nvidia_x11_production  = nvidiaPackages.production;
     nvidia_x11_vulkan_beta = nvidiaPackages.vulkan_beta;
+<<<<<<< HEAD
     nvidia_dc              = nvidiaPackages.dc;
     nvidia_dc_520          = nvidiaPackages.dc_520;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     # this is not a replacement for nvidia_x11*
     # only the opensource kernel driver exposed for hydra to build
@@ -436,6 +542,11 @@ in {
 
     rtl8189fs = callPackage ../os-specific/linux/rtl8189fs { };
 
+<<<<<<< HEAD
+=======
+    rtl8723bs = callPackage ../os-specific/linux/rtl8723bs { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     rtl8723ds = callPackage ../os-specific/linux/rtl8723ds { };
 
     rtl8812au = callPackage ../os-specific/linux/rtl8812au { };
@@ -453,6 +564,10 @@ in {
     rtl8821cu = callPackage ../os-specific/linux/rtl8821cu { };
 
     rtw88 = callPackage ../os-specific/linux/rtw88 { };
+<<<<<<< HEAD
+=======
+    rtlwifi_new = rtw88;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     rtw89 = if lib.versionOlder kernel.version "5.16" then callPackage ../os-specific/linux/rtw89 { } else null;
 
@@ -460,8 +575,11 @@ in {
     # Current stable release; don't backport release updates!
     openafs = openafs_1_8;
 
+<<<<<<< HEAD
     opensnitch-ebpf = if lib.versionAtLeast kernel.version "5.10" then callPackage ../os-specific/linux/opensnitch-ebpf { } else null;
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     facetimehd = callPackage ../os-specific/linux/facetimehd { };
 
     tuxedo-keyboard = if lib.versionAtLeast kernel.version "4.14" then callPackage ../os-specific/linux/tuxedo-keyboard { } else null;
@@ -488,6 +606,11 @@ in {
 
     prl-tools = callPackage ../os-specific/linux/prl-tools { };
 
+<<<<<<< HEAD
+=======
+    sch_cake = callPackage ../os-specific/linux/sch_cake { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     isgx = callPackage ../os-specific/linux/isgx { };
 
     rr-zen_workaround = callPackage ../development/tools/analysis/rr/zen_workaround.nix { };
@@ -512,8 +635,11 @@ in {
 
     turbostat = callPackage ../os-specific/linux/turbostat { };
 
+<<<<<<< HEAD
     trelay = callPackage ../os-specific/linux/trelay { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     usbip = callPackage ../os-specific/linux/usbip { };
 
     v86d = callPackage ../os-specific/linux/v86d { };
@@ -551,6 +677,7 @@ in {
 
     zenpower = callPackage ../os-specific/linux/zenpower { };
 
+<<<<<<< HEAD
     zfsStable = callPackage ../os-specific/linux/zfs/stable.nix {
       configFile = "kernel";
       inherit pkgs kernel;
@@ -559,6 +686,12 @@ in {
       configFile = "kernel";
       inherit pkgs kernel;
     };
+=======
+    inherit (callPackage ../os-specific/linux/zfs {
+        configFile = "kernel";
+        inherit pkgs kernel;
+      }) zfsStable zfsUnstable;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     zfs = zfsStable;
 
     can-isotp = callPackage ../os-specific/linux/can-isotp { };
@@ -569,9 +702,12 @@ in {
 
   } // lib.optionalAttrs config.allowAliases {
     ati_drivers_x11 = throw "ati drivers are no longer supported by any kernel >=4.1"; # added 2021-05-18;
+<<<<<<< HEAD
     hid-nintendo = throw "hid-nintendo was added in mainline kernel version 5.16"; # Added 2023-07-30
     sch_cake = throw "sch_cake was added in mainline kernel version 4.19"; # Added 2023-06-14
     rtl8723bs = throw "rtl8723bs was added in mainline kernel version 4.12"; # Added 2023-06-14
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     xmm7360-pci = throw "Support for the XMM7360 WWAN card was added to the iosm kmod in mainline kernel version 5.18";
   });
 
@@ -585,15 +721,23 @@ in {
     linux_5_10 = recurseIntoAttrs (packagesFor kernels.linux_5_10);
     linux_5_15 = recurseIntoAttrs (packagesFor kernels.linux_5_15);
     linux_6_1 = recurseIntoAttrs (packagesFor kernels.linux_6_1);
+<<<<<<< HEAD
     linux_6_4 = recurseIntoAttrs (packagesFor kernels.linux_6_4);
     linux_6_5 = recurseIntoAttrs (packagesFor kernels.linux_6_5);
+=======
+    linux_6_2 = recurseIntoAttrs (packagesFor kernels.linux_6_2);
+    linux_6_3 = recurseIntoAttrs (packagesFor kernels.linux_6_3);
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   } // lib.optionalAttrs config.allowAliases {
     linux_4_9 = throw "linux 4.9 was removed because it will reach its end of life within 22.11"; # Added 2022-11-08
     linux_5_18 = throw "linux 5.18 was removed because it reached its end of life upstream"; # Added 2022-09-17
     linux_5_19 = throw "linux 5.19 was removed because it reached its end of life upstream"; # Added 2022-11-01
     linux_6_0 = throw "linux 6.0 was removed because it reached its end of life upstream"; # Added 2023-01-20
+<<<<<<< HEAD
     linux_6_2 = throw "linux 6.2 was removed because it reached its end of life upstream"; # Added 2023-05-26
     linux_6_3 = throw "linux 6.3 was removed because it reached its end of life upstream"; # Added 2023-07-22
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   rtPackages = {
@@ -617,6 +761,7 @@ in {
     linux_testing = packagesFor kernels.linux_testing;
     linux_testing_bcachefs = recurseIntoAttrs (packagesFor kernels.linux_testing_bcachefs);
 
+<<<<<<< HEAD
     linux_hardened = recurseIntoAttrs (packagesFor kernels.linux_hardened);
 
     linux_4_14_hardened = recurseIntoAttrs (packagesFor kernels.linux_4_14_hardened);
@@ -626,6 +771,25 @@ in {
     linux_5_15_hardened = recurseIntoAttrs (packagesFor kernels.linux_5_15_hardened);
     linux_6_1_hardened = recurseIntoAttrs (packagesFor kernels.linux_6_1_hardened);
     linux_6_4_hardened = recurseIntoAttrs (packagesFor kernels.linux_6_4_hardened);
+=======
+    linux_hardened = recurseIntoAttrs (hardenedPackagesFor packageAliases.linux_default.kernel { });
+
+    linux_4_14_hardened = recurseIntoAttrs (hardenedPackagesFor kernels.linux_4_14 {
+      stdenv = gcc10Stdenv;
+      buildPackages = buildPackages // { stdenv = buildPackages.gcc10Stdenv; };
+    });
+    linux_4_19_hardened = recurseIntoAttrs (hardenedPackagesFor kernels.linux_4_19 {
+      stdenv = gcc10Stdenv;
+      buildPackages = buildPackages // { stdenv = buildPackages.gcc10Stdenv; };
+    });
+    linux_5_4_hardened = recurseIntoAttrs (hardenedPackagesFor kernels.linux_5_4 {
+      stdenv = gcc10Stdenv;
+      buildPackages = buildPackages // { stdenv = buildPackages.gcc10Stdenv; };
+    });
+    linux_5_10_hardened = recurseIntoAttrs (hardenedPackagesFor kernels.linux_5_10 { });
+    linux_5_15_hardened = recurseIntoAttrs (hardenedPackagesFor kernels.linux_5_15 { });
+    linux_6_1_hardened = recurseIntoAttrs (hardenedPackagesFor kernels.linux_6_1 { });
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     linux_zen = recurseIntoAttrs (packagesFor kernels.linux_zen);
     linux_lqx = recurseIntoAttrs (packagesFor kernels.linux_lqx);
@@ -648,7 +812,11 @@ in {
   packageAliases = {
     linux_default = packages.linux_6_1;
     # Update this when adding the newest kernel major version!
+<<<<<<< HEAD
     linux_latest = packages.linux_6_5;
+=======
+    linux_latest = packages.linux_6_3;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     linux_mptcp = throw "'linux_mptcp' has been moved to https://github.com/teto/mptcp-flake";
     linux_rt_default = packages.linux_rt_5_4;
     linux_rt_latest = packages.linux_rt_6_1;

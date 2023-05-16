@@ -14,7 +14,11 @@
 
 buildPythonPackage rec {
   pname   = "pytorch-metric-learning";
+<<<<<<< HEAD
   version = "2.3.0";
+=======
+  version = "2.1.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   disabled = isPy27;
 
@@ -22,7 +26,11 @@ buildPythonPackage rec {
     owner = "KevinMusgrave";
     repo = pname;
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-eDQQPIyUUEkvpXjWAcyljlFgVlu9is4fPPUTudP7NF4=";
+=======
+    hash = "sha256-XQ7lHhtcsqANuNVmjNMRjVdvwVo5hIVqTeNrnMF80uE=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [

@@ -31,6 +31,10 @@ buildPythonPackage rec {
     description = "Pure-Python, bring-your-own-I/O implementation of HTTP/1.1";
     homepage = "https://github.com/python-hyper/h11";
     license = licenses.mit;
+<<<<<<< HEAD
     maintainers = with maintainers; [ ];
+=======
+    maintainers = with maintainers; [ SuperSandro2000 ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

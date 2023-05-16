@@ -12,7 +12,11 @@ let
     pname = "cpplite";
     inherit version src;
 
+<<<<<<< HEAD
     sourceRoot = "${src.name}/cpplite";
+=======
+    sourceRoot = "source/cpplite";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     patches = [ ./install-adls.patch ];
 
     cmakeFlags = [ "-DBUILD_ADLS=ON" "-DUSE_OPENSSL=OFF" ];

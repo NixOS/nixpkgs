@@ -21,7 +21,11 @@ in
       in
       {
         warnings = lib.mkIf config.xdg.portal.gtkUsePortal [
+<<<<<<< HEAD
           "The option `${lib.showOption from}' defined in ${lib.showFiles fromOpt.files} has been deprecated. Setting the variable globally with `environment.sessionVariables' NixOS option can have unforeseen side-effects."
+=======
+          "The option `${lib.showOption from}' defined in ${lib.showFiles fromOpt.files} has been deprecated. Setting the variable globally with `environment.sessionVariables' NixOS option can have unforseen side-effects."
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         ];
       }
     )

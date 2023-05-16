@@ -1,7 +1,10 @@
 { lib
 , pkgs
 , python3Packages
+<<<<<<< HEAD
 , fetchPypi
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , nixosTests
 }:
 
@@ -9,7 +12,11 @@ python3Packages.buildPythonApplication rec {
   pname = "steck";
   version = "0.7.0";
 
+<<<<<<< HEAD
   src = fetchPypi {
+=======
+  src = python3Packages.fetchPypi {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     inherit pname version;
     sha256 = "1a3l427ibwck9zzzy1sp10hmjgminya08i4r9j4559qzy7lxghs1";
   };

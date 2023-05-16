@@ -135,6 +135,7 @@ let
       inherit (libraries) libunwind;
     };
 
+<<<<<<< HEAD
     lldb = callPackage ../common/lldb.nix {
       src = fetch "lldb" "0g3pj1m3chafavpr35r9fynm85y2hdyla6klj0h28khxs2613i78";
       patches =
@@ -152,6 +153,13 @@ let
           ./lldb/gnu-install-dirs.patch
         ];
       inherit llvm_meta release_version;
+=======
+    lldb = callPackage ./lldb {
+      inherit llvm_meta;
+      inherit (darwin) libobjc bootstrap_cmds;
+      inherit (darwin.apple_sdk.libs) xpc;
+      inherit (darwin.apple_sdk.frameworks) Foundation Carbon Cocoa;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
 
     # Below, is the LLVM bootstrapping logic. It handles building a
@@ -294,6 +302,11 @@ let
       inherit llvm_meta targetLlvm;
     };
   });
+<<<<<<< HEAD
   noExtend = extensible: lib.attrsets.removeAttrs extensible [ "extend" ];
 
 in { inherit tools libraries release_version; } // (noExtend libraries) // (noExtend tools)
+=======
+
+in { inherit tools libraries release_version; } // libraries // tools
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)

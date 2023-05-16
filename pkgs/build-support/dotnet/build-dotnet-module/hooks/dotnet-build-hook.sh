@@ -15,7 +15,11 @@ dotnetBuildHook() {
     fi
 
     if [ "${selfContainedBuild-}" ]; then
+<<<<<<< HEAD
         dotnetBuildFlags+=("-p:SelfContained=true")
+=======
+        dotnetBuildFlags+=(--runtime "@runtimeId@" "-p:SelfContained=true")
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     else
         dotnetBuildFlags+=("-p:SelfContained=false")
     fi
@@ -30,12 +34,15 @@ dotnetBuildHook() {
 
     dotnetBuild() {
         local -r project="${1-}"
+<<<<<<< HEAD
 
         runtimeIdFlags=()
         if [[ "$project" == *.csproj ]] || [ "${selfContainedBuild-}" ]; then
             runtimeIdFlags+=("--runtime @runtimeId@")
         fi
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         env dotnet build ${project-} \
             -maxcpucount:$maxCpuFlag \
             -p:BuildInParallel=$parallelBuildFlag \
@@ -44,7 +51,10 @@ dotnetBuildHook() {
             --configuration "@buildType@" \
             --no-restore \
             ${versionFlag-} \
+<<<<<<< HEAD
             ${runtimeIdFlags[@]} \
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
             ${dotnetBuildFlags[@]}  \
             ${dotnetFlags[@]}
     }

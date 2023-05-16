@@ -1,7 +1,11 @@
 { lib, stdenv
 , buildPackages
 , fetchurl
+<<<<<<< HEAD
 , waf
+=======
+, wafHook
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , pkg-config
 , bison
 , flex
@@ -51,11 +55,19 @@ with lib;
 
 stdenv.mkDerivation rec {
   pname = "samba";
+<<<<<<< HEAD
   version = "4.18.6";
 
   src = fetchurl {
     url = "mirror://samba/pub/samba/stable/${pname}-${version}.tar.gz";
     hash = "sha256-KEyKmUzpich81oCMOQ/LnQDDayGg3BqKdUdLZ8nnFec=";
+=======
+  version = "4.17.7";
+
+  src = fetchurl {
+    url = "mirror://samba/pub/samba/stable/${pname}-${version}.tar.gz";
+    hash = "sha256-lcnBa2VKiM+u/ZWAUt1XPi+F7N8RTk7Owxh1N6CU2Rk=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   outputs = [ "out" "dev" "man" ];
@@ -70,7 +82,11 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     python3Packages.python
+<<<<<<< HEAD
     waf.hook
+=======
+    wafHook
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     pkg-config
     bison
     flex

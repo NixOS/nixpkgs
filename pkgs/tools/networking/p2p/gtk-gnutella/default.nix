@@ -1,5 +1,9 @@
 { lib, stdenv
 , fetchFromGitHub
+<<<<<<< HEAD
+=======
+, fetchpatch
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , bison
 , pkg-config
 , gettext
@@ -9,6 +13,10 @@
 , libxml2
 , libbfd
 , zlib
+<<<<<<< HEAD
+=======
+, binutils
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , gnutls
 , enableGui ? true
 }:
@@ -38,7 +46,11 @@ stdenv.mkDerivation rec {
     zlib
   ]
   ++
+<<<<<<< HEAD
     lib.optionals enableGui [ gtk2 ]
+=======
+    lib.optionals (enableGui) [ gtk2 ]
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ;
 
   configureScript = "./build.sh";

@@ -3,9 +3,14 @@
 , fetchFromGitHub
 , python
 , cython
+<<<<<<< HEAD
 , oldest-supported-numpy
 , setuptools
 , setuptools-scm
+=======
+, setuptools
+, substituteAll
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , numpy
 , pandas
 , cramjam
@@ -15,12 +20,19 @@
 , pytestCheckHook
 , pythonOlder
 , packaging
+<<<<<<< HEAD
 , wheel
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 buildPythonPackage rec {
   pname = "fastparquet";
+<<<<<<< HEAD
   version = "2023.7.0";
+=======
+  version = "2023.4.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -29,6 +41,7 @@ buildPythonPackage rec {
     owner = "dask";
     repo = pname;
     rev = version;
+<<<<<<< HEAD
     hash = "sha256-pJ0zK0upEV7TyuNMIcozugkwBlYpK/Dg6BdB0kBpn9k=";
   };
 
@@ -49,6 +62,29 @@ buildPythonPackage rec {
     sed -i \
       -e "/pytest-runner/d" \
       -e '/"git", "status"/d' setup.py
+=======
+    hash = "sha256-1hWiwXjTgflQlmy0Dk2phUa1cgYBvvH99tb0TdUmDRI=";
+  };
+
+  nativeBuildInputs = [
+    cython
+    setuptools
+  ];
+
+  patches = [
+    (substituteAll {
+      src = ./version.patch;
+      inherit version;
+    })
+  ];
+
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "'pytest-runner'," "" \
+      --replace "oldest-supported-numpy" "numpy"
+
+    sed -i '/"git", "status"/d' setup.py
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '';
 
   propagatedBuildInputs = [

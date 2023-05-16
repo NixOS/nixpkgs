@@ -1,7 +1,10 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+<<<<<<< HEAD
 , fetchpatch
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , pytestCheckHook
 , pythonOlder
 }:
@@ -16,6 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "adubkov";
     repo = "py-zabbix";
+<<<<<<< HEAD
     rev = "refs/tags/${version}";
     hash = "sha256-aPQc188pszfDQvNtsGYlRLHS5CG5VyqptSoe4/GJVvE=";
   };
@@ -29,6 +33,12 @@ buildPythonPackage rec {
     })
   ];
 
+=======
+    rev = version;
+    sha256 = "aPQc188pszfDQvNtsGYlRLHS5CG5VyqptSoe4/GJVvE=";
+  };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nativeCheckInputs = [
     pytestCheckHook
   ];

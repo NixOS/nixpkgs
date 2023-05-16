@@ -14,16 +14,27 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "git-branchless";
+<<<<<<< HEAD
   version = "0.8.0";
+=======
+  version = "0.7.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "arxanas";
     repo = "git-branchless";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-ev56NzrEF7xm3WmR2a0pHPs69Lvmb4He7+kIBYiJjKY=";
   };
 
   cargoHash = "sha256-Ppw5TN/6zMNxFAx90Q9hQ7RdGxV+TT8UlOm68ldK8oc=";
+=======
+    sha256 = "sha256-9kyC9Uwmc2WNHgfKpnS3v8vNF2o+168ULWqE+2eX1cE=";
+  };
+
+  cargoHash = "sha256-k+Jx5PcA8TaFQQDYqZ6dTy8bwNtYeALF75ucoFjVGUc=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -52,7 +63,10 @@ rustPlatform.buildRustPackage rec {
     description = "A suite of tools to help you visualize, navigate, manipulate, and repair your commit history";
     homepage = "https://github.com/arxanas/git-branchless";
     license = licenses.gpl2Only;
+<<<<<<< HEAD
     mainProgram = "git-branchless";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     maintainers = with maintainers; [ msfjarvis nh2 hmenke ];
   };
 }

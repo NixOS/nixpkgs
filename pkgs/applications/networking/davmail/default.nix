@@ -57,6 +57,9 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ peterhoeg ];
     platforms = platforms.all;
+<<<<<<< HEAD
     mainProgram = "davmail";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

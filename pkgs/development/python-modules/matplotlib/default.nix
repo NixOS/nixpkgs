@@ -3,22 +3,37 @@
 , fetchPypi
 , writeText
 , buildPythonPackage
+<<<<<<< HEAD
 , isPyPy
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , pythonOlder
 
 # https://github.com/matplotlib/matplotlib/blob/main/doc/devel/dependencies.rst
 # build-system
+<<<<<<< HEAD
 , certifi
 , oldest-supported-numpy
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , pkg-config
 , pybind11
 , setuptools
 , setuptools-scm
+<<<<<<< HEAD
 , wheel
 
 # native libraries
 , ffmpeg-headless
 , freetype
+=======
+
+# native libraries
+, ffmpeg-headless
+, fontconfig
+, freetype
+, imagemagick
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , qhull
 
 # propagates
@@ -44,8 +59,12 @@
 , pygobject3
 
 # Tk
+<<<<<<< HEAD
 # Darwin has its own "MacOSX" backend, PyPy has tkagg backend and does not support tkinter
 , enableTk ? (!stdenv.isDarwin && !isPyPy)
+=======
+, enableTk ? !stdenv.isDarwin # darwin has its own "MacOSX" backend
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , tcl
 , tk
 , tkinter
@@ -79,6 +98,7 @@ let
 in
 
 buildPythonPackage rec {
+<<<<<<< HEAD
   version = "3.7.2";
   pname = "matplotlib";
   format = "pyproject";
@@ -88,6 +108,17 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-qM25Hd2wRDa9LwmLj99LgTUuaM9NLGdW/MQUeRB2Vps=";
+=======
+  version = "3.7.0";
+  pname = "matplotlib";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.9";
+
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-j279MTQw1+9wo4oydigcsuhkazois7IesifaIOFeaBM=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   env.XDG_RUNTIME_DIR = "/tmp";
@@ -119,6 +150,7 @@ buildPythonPackage rec {
     '';
 
   nativeBuildInputs = [
+<<<<<<< HEAD
     certifi
     numpy
     oldest-supported-numpy # TODO remove after updating to 3.8.0
@@ -129,6 +161,11 @@ buildPythonPackage rec {
     wheel
   ] ++ lib.optionals enableGtk3 [
     gobject-introspection
+=======
+    pkg-config
+    pybind11
+    setuptools-scm
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   buildInputs = [
@@ -139,6 +176,10 @@ buildPythonPackage rec {
     ghostscript
   ] ++ lib.optionals enableGtk3 [
     cairo
+<<<<<<< HEAD
+=======
+    gobject-introspection
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     gtk3
   ] ++ lib.optionals enableTk [
     libX11

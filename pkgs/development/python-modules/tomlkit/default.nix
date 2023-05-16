@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+<<<<<<< HEAD
 
 # build-system
 , poetry-core
@@ -8,10 +9,18 @@
 # tests
 , pytestCheckHook
 , pyyaml
+=======
+, isPy27
+, enum34
+, functools32, typing ? null
+, pytestCheckHook
+, pyaml
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 buildPythonPackage rec {
   pname = "tomlkit";
+<<<<<<< HEAD
   version = "0.12.1";
   format = "pyproject";
 
@@ -26,6 +35,21 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pyyaml
+=======
+  version = "0.11.6";
+
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-cblS5XIWiJN/sCz501TbzweFBmFJ0oVeRFMevdK2XXM=";
+  };
+
+  propagatedBuildInputs =
+    lib.optionals isPy27 [ enum34 functools32 ]
+    ++ lib.optional isPy27 typing;
+
+  nativeCheckInputs = [
+    pyaml
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     pytestCheckHook
   ];
 

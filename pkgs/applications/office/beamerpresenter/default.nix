@@ -7,7 +7,10 @@
 , wrapQtAppsHook
 , gst_all_1
 , qtbase
+<<<<<<< HEAD
 , qtsvg
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , qtmultimedia
 , qttools
 , qtwayland
@@ -28,13 +31,22 @@
 
 stdenv.mkDerivation rec {
   pname = "beamerpresenter";
+<<<<<<< HEAD
   version = "0.2.4";
+=======
+  version = "0.2.3-1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "stiglers-eponym";
     repo = "BeamerPresenter";
+<<<<<<< HEAD
     rev = "v${version}";
     hash = "sha256-UQbyzkFjrIDPcrE6yGuOWsXNjz8jWyJEWiQwHmf91/8=";
+=======
+    rev = "dd41a00b3c6c8b881fa62945165c965634df66f0";
+    sha256 = "11yj1zl8hdnqbynkbyzg8kwyx1jl8c87x8f8qyllpk0s6cg304d0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [
@@ -52,7 +64,10 @@ stdenv.mkDerivation rec {
     gst_all_1.gst-plugins-good
     zlib
     qtbase
+<<<<<<< HEAD
     qtsvg
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     qtmultimedia
     qttools
   ] ++ lib.optionals stdenv.isLinux [
@@ -72,10 +87,17 @@ stdenv.mkDerivation rec {
     "-DUSE_POPPLER=${if usePoppler then "ON" else "OFF"}"
     "-DUSE_MUPDF=${if useMupdf then "ON" else "OFF"}"
     "-DUSE_QTPDF=OFF"
+<<<<<<< HEAD
     "-DLINK_MUPDF_THIRD=ON"
     "-DUSE_EXTERNAL_RENDERER=${if useExternalRenderer then "ON" else "OFF"}"
     "-DLINK_MUJS=OFF"
     "-DLINK_GUMBO=ON"
+=======
+    "-DUSE_MUPDF_THIRD=ON"
+    "-DUSE_EXTERNAL_RENDERER=${if useExternalRenderer then "ON" else "OFF"}"
+    "-DUSE_MUJS=OFF"
+    "-DUSE_GUMBO=ON"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "-DUSE_TRANSLATIONS=ON"
     "-DQT_VERSION_MAJOR=${lib.versions.major qtbase.version}"
   ];

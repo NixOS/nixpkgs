@@ -29,14 +29,22 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-terminal";
+<<<<<<< HEAD
   version = "3.48.2";
+=======
+  version = "3.48.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "GNOME";
     repo = "gnome-terminal";
     rev = version;
+<<<<<<< HEAD
     sha256 = "sha256-WvFKFh5BK6AS+Lqyh27xIfH1rxs1+YTkywX4w9UashQ=";
+=======
+    sha256 = "sha256-1t48JRESjAQubOmyK+QOhlp57iE5Ml0cqgy/2wjrLjE=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

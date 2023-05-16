@@ -4,12 +4,15 @@
 , pythonOlder
 , flit-core
 , unittestCheckHook
+<<<<<<< HEAD
 
 # for passthru.tests
 , awsebcli
 , black
 , hatchling
 , yamllint
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 buildPythonPackage rec {
@@ -34,10 +37,13 @@ buildPythonPackage rec {
     unittestCheckHook
   ];
 
+<<<<<<< HEAD
   passthru.tests = {
     inherit awsebcli black hatchling yamllint;
   };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   meta = {
     description = "Utility library for gitignore-style pattern matching of file paths";
     homepage = "https://github.com/cpburnz/python-path-specification";

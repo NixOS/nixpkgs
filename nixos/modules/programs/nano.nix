@@ -35,6 +35,7 @@ in
   ###### implementation
 
   config = lib.mkIf (cfg.nanorc != "" || cfg.syntaxHighlight) {
+<<<<<<< HEAD
     environment.etc.nanorc.text = lib.concatStringsSep LF (
       ( lib.optionals cfg.syntaxHighlight [
           "# The line below is added because value of programs.nano.syntaxHighlight is set to true"
@@ -46,6 +47,10 @@ in
         cfg.nanorc
       ])
     );
+=======
+    environment.etc.nanorc.text = lib.concatStrings [ cfg.nanorc
+      (lib.optionalString cfg.syntaxHighlight ''${LF}include "${pkgs.nano}/share/nano/*.nanorc"'') ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
 }

@@ -7,14 +7,22 @@
 
 buildPythonPackage rec {
   pname = "stripe";
+<<<<<<< HEAD
   version = "5.5.0";
+=======
+  version = "5.4.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
+<<<<<<< HEAD
     hash = "sha256-BKlzKzekYijs8OSWFjo+3ZNZaw5iAAKfvEiRFjhifhk=";
+=======
+    hash = "sha256-cr2nv5vnUo4bl6W7rLBxbN9qDJWXsT/b+jZM7DwTBxM=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [

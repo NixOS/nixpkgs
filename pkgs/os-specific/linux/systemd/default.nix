@@ -82,9 +82,12 @@
 , bpftools
 , libbpf
 
+<<<<<<< HEAD
   # Needed to produce a ukify that works for cross compiling UKIs.
 , targetPackages
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , withAcl ? true
 , withAnalyze ? true
 , withApparmor ? true
@@ -95,7 +98,10 @@
 , withDocumentation ? true
 , withEfi ? stdenv.hostPlatform.isEfi
 , withFido2 ? true
+<<<<<<< HEAD
 , withFirstboot ? false # conflicts with the NixOS /etc management
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , withHomed ? !stdenv.hostPlatform.isMusl
 , withHostnamed ? true
 , withHwdb ? true
@@ -122,7 +128,10 @@
 , withRemote ? !stdenv.hostPlatform.isMusl
 , withResolved ? true
 , withShellCompletions ? true
+<<<<<<< HEAD
 , withSysusers ? false # conflicts with the NixOS user management
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , withTimedated ? true
 , withTimesyncd ? true
 , withTpm2Tss ? true
@@ -150,7 +159,11 @@ assert withUkify -> withEfi;
 let
   wantCurl = withRemote || withImportd;
   wantGcrypt = withResolved || withImportd;
+<<<<<<< HEAD
   version = "253.6";
+=======
+  version = "253.3";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   # Bump this variable on every (major) version change. See below (in the meson options list) for why.
   # command:
@@ -167,7 +180,11 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "systemd";
     repo = "systemd-stable";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-LZs6QuBe23W643bTuz+MD2pzHiapsBJBHoFXi/QjzG4=";
+=======
+    hash = "sha256-iy1kyqiVeXIhFJAQ+nYorrXm/xb2gfakyrEfMyNR5l8=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   # On major changes, or when otherwise required, you *must* reformat the patches,
@@ -179,6 +196,7 @@ stdenv.mkDerivation (finalAttrs: {
     ./0001-Start-device-units-for-uninitialised-encrypted-devic.patch
     ./0002-Don-t-try-to-unmount-nix-or-nix-store.patch
     ./0003-Fix-NixOS-containers.patch
+<<<<<<< HEAD
     ./0004-Add-some-NixOS-specific-unit-directories.patch
     ./0005-Get-rid-of-a-useless-message-in-user-sessions.patch
     ./0006-hostnamed-localed-timedated-disable-methods-that-cha.patch
@@ -195,6 +213,24 @@ stdenv.mkDerivation (finalAttrs: {
     ./0017-core-don-t-taint-on-unmerged-usr.patch
     ./0018-tpm2_context_init-fix-driver-name-checking.patch
     ./0019-bootctl-also-print-efi-files-not-owned-by-systemd-in.patch
+=======
+    ./0004-fsck-look-for-fsck-binary-not-just-in-sbin.patch
+    ./0005-Add-some-NixOS-specific-unit-directories.patch
+    ./0006-Get-rid-of-a-useless-message-in-user-sessions.patch
+    ./0007-hostnamed-localed-timedated-disable-methods-that-cha.patch
+    ./0008-Fix-hwdb-paths.patch
+    ./0009-Change-usr-share-zoneinfo-to-etc-zoneinfo.patch
+    ./0010-localectl-use-etc-X11-xkb-for-list-x11.patch
+    ./0011-build-don-t-create-statedir-and-don-t-touch-prefixdi.patch
+    ./0012-add-rootprefix-to-lookup-dir-paths.patch
+    ./0013-systemd-shutdown-execute-scripts-in-etc-systemd-syst.patch
+    ./0014-systemd-sleep-execute-scripts-in-etc-systemd-system-.patch
+    ./0015-path-util.h-add-placeholder-for-DEFAULT_PATH_NORMAL.patch
+    ./0016-pkg-config-derive-prefix-from-prefix.patch
+    ./0017-inherit-systemd-environment-when-calling-generators.patch
+    ./0018-core-don-t-taint-on-unmerged-usr.patch
+    ./0019-tpm2_context_init-fix-driver-name-checking.patch
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ] ++ lib.optional stdenv.hostPlatform.isMusl (
     let
       oe-core = fetchzip {
@@ -214,6 +250,10 @@ stdenv.mkDerivation (finalAttrs: {
       (musl-patches + "/0012-don-t-fail-if-GLOB_BRACE-and-GLOB_ALTDIRFUNC-is-not-.patch")
       (musl-patches + "/0013-add-missing-FTW_-macros-for-musl.patch")
       (musl-patches + "/0014-Use-uintmax_t-for-handling-rlim_t.patch")
+<<<<<<< HEAD
+=======
+      (musl-patches + "/0015-test-sizeof.c-Disable-tests-for-missing-typedefs-in-.patch")
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       (musl-patches + "/0016-don-t-pass-AT_SYMLINK_NOFOLLOW-flag-to-faccessat.patch")
       (musl-patches + "/0017-Define-glibc-compatible-basename-for-non-glibc-syste.patch")
       (musl-patches + "/0018-Do-not-disable-buffering-when-writing-to-oom_score_a.patch")
@@ -239,6 +279,7 @@ stdenv.mkDerivation (finalAttrs: {
     # BPF does not work with stack protector
     substituteInPlace src/core/bpf/meson.build \
       --replace "clang_flags = [" "clang_flags = [ '-fno-stack-protector',"
+<<<<<<< HEAD
   '' + lib.optionalString withUkify ''
     substituteInPlace src/ukify/ukify.py \
       --replace \
@@ -249,6 +290,8 @@ stdenv.mkDerivation (finalAttrs: {
       --replace \
       "'objcopy'" \
       "'${targetPackages.stdenv.cc.bintools.targetPrefix}objcopy'"
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '' + (
     let
       # The following patches references to dynamic libraries to ensure that
@@ -496,8 +539,11 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dlibcurl=${lib.boolToString wantCurl}"
     "-Dlibidn=false"
     "-Dlibidn2=${lib.boolToString withLibidn2}"
+<<<<<<< HEAD
     "-Dfirstboot=${lib.boolToString withFirstboot}"
     "-Dsysusers=${lib.boolToString withSysusers}"
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "-Dquotacheck=false"
     "-Dldconfig=false"
     "-Dsmack=true"
@@ -524,10 +570,16 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dsysvinit-path="
     "-Dsysvrcnd-path="
 
+<<<<<<< HEAD
     "-Dsulogin-path=${util-linux.login}/bin/sulogin"
     "-Dnologin-path=${util-linux.login}/bin/nologin"
     "-Dmount-path=${lib.getOutput "mount" util-linux}/bin/mount"
     "-Dumount-path=${lib.getOutput "mount" util-linux}/bin/umount"
+=======
+    "-Dsulogin-path=${util-linux}/bin/sulogin"
+    "-Dmount-path=${util-linux}/bin/mount"
+    "-Dumount-path=${util-linux}/bin/umount"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "-Dcreate-log-dirs=false"
 
     # Use cgroupsv2. This is already the upstream default, but better be explicit.
@@ -578,8 +630,13 @@ stdenv.mkDerivation (finalAttrs: {
             "man/systemd-makefs@.service.xml"
           ];
         }
+<<<<<<< HEAD
         { search = "/sbin/swapon"; replacement = "${lib.getOutput "swap" util-linux}/sbin/swapon"; where = [ "src/core/swap.c" "src/basic/unit-def.h" ]; }
         { search = "/sbin/swapoff"; replacement = "${lib.getOutput "swap" util-linux}/sbin/swapoff"; where = [ "src/core/swap.c" ]; }
+=======
+        { search = "/sbin/swapon"; replacement = "${lib.getBin util-linux}/sbin/swapon"; where = [ "src/core/swap.c" "src/basic/unit-def.h" ]; }
+        { search = "/sbin/swapoff"; replacement = "${lib.getBin util-linux}/sbin/swapoff"; where = [ "src/core/swap.c" ]; }
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         {
           search = "/bin/echo";
           replacement = "${coreutils}/bin/echo";
@@ -740,11 +797,14 @@ stdenv.mkDerivation (finalAttrs: {
     done
   '' + lib.optionalString withEfi ''
     mv $out/dont-strip-me $out/lib/systemd/boot/efi
+<<<<<<< HEAD
   '' + lib.optionalString withUkify ''
     # To cross compile a derivation that builds a UKI with ukify, we need to wrap
     # ukify with the correct binutils. When wrapping, no splicing happens so we
     # have to explicitly pull binutils from targetPackages.
     wrapProgram $out/lib/systemd/ukify --set PATH ${lib.makeBinPath [ targetPackages.stdenv.cc.bintools ] }
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '';
 
   disallowedReferences = lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform)

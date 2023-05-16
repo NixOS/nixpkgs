@@ -5,14 +5,23 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "smbmap";
+<<<<<<< HEAD
   version = "1.9.1";
+=======
+  version = "unstable-2023-03-29";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "ShawnDEvans";
     repo = "smbmap";
+<<<<<<< HEAD
     rev = "refs/tags/v${version}";
     hash = "sha256-NsxmH1W5VUckGvqqTIrxhaVz0l7gsHmc8KJuvC/iVbA=";
+=======
+    rev = "ce60773320e11b2ecd1ce1b5ab2a62d43d4a4423";
+    hash = "sha256-4DdiICH3B7x8Wr5CcqiuhCHPv6W/5bT5MGdXkyE0OKA=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = with python3.pkgs; [

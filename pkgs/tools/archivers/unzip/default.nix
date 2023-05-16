@@ -60,9 +60,12 @@ stdenv.mkDerivation rec {
       ];
       sha256 = "sha256-on79jElQ+z2ULWAq14RpluAqr9d6itHiZwDkKubBzTc=";
     })
+<<<<<<< HEAD
     # Clang 16 makes implicit declarations an error by default for C99 and newer, causing the
     # configure script to fail to detect errno and the directory libraries on Darwin.
     ./implicit-declarations-fix.patch
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ] ++ lib.optional enableNLS
     (fetchurl {
       url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/app-arch/unzip/files/unzip-6.0-natspec.patch?id=56bd759df1d0c750a065b8c845e93d5dfa6b549d";
@@ -70,7 +73,10 @@ stdenv.mkDerivation rec {
       sha256 = "67ab260ae6adf8e7c5eda2d1d7846929b43562943ec4aff629bd7018954058b1";
     });
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nativeBuildInputs = [ bzip2 ];
   buildInputs = [ bzip2 ] ++ lib.optional enableNLS libnatspec;
 
@@ -102,6 +108,9 @@ stdenv.mkDerivation rec {
     description = "An extraction utility for archives compressed in .zip format";
     license = lib.licenses.free; # http://www.info-zip.org/license.html
     platforms = lib.platforms.all;
+<<<<<<< HEAD
     mainProgram = "unzip";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

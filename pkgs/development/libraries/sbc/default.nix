@@ -2,6 +2,7 @@
 
 stdenv.mkDerivation rec {
   pname = "sbc";
+<<<<<<< HEAD
   version = "2.0";
 
   src = fetchurl {
@@ -11,6 +12,15 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
+=======
+  version = "1.4";
+
+  src = fetchurl {
+    url = "https://www.kernel.org/pub/linux/bluetooth/${pname}-${version}.tar.xz";
+    sha256 = "1jal98pnrjkzxlkiqy0ykh4qmgnydz9bmsp1jn581p5kddpg92si";
+  };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libsndfile ];
 

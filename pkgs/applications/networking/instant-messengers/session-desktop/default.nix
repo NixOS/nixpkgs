@@ -8,12 +8,20 @@
 }:
 
 let
+<<<<<<< HEAD
   version = "1.11.0";
+=======
+  version = "1.10.8";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pname = "session-desktop";
 
   src = fetchurl {
     url = "https://github.com/oxen-io/session-desktop/releases/download/v${version}/session-desktop-linux-x86_64-${version}.AppImage";
+<<<<<<< HEAD
     sha256 = "sha256-QartWtp5/OtJqQq5GXRoIQ/ytK9/YCW1ixXTUrnGwqw=";
+=======
+    sha256 = "sha256-r/MQlZ3dmQmQZ/FCYIIF2sh9+VXwG97PFfTIXIQijx8=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
   appimage = appimageTools.wrapType2 {
     inherit version pname src;

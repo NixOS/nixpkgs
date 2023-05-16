@@ -14,7 +14,11 @@ buildGoModule {
 
   buildInputs = [ olm ];
 
+<<<<<<< HEAD
   vendorHash = "sha256-5Vg7aUkqiFIQuxmsDOJjvXoeA5NjMoBoD0XBhC+o4GA=";
+=======
+  vendorSha256 = "sha256-5Vg7aUkqiFIQuxmsDOJjvXoeA5NjMoBoD0XBhC+o4GA=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   doCheck = false;
 

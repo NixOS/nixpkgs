@@ -7,6 +7,10 @@
 , strongswanNM
 , gtk3
 , gtk4
+<<<<<<< HEAD
+=======
+, gnome
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , libsecret
 , libnma
 , libnma-gtk4

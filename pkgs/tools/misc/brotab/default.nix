@@ -1,9 +1,17 @@
+<<<<<<< HEAD
 { lib, fetchFromGitHub, fetchpatch, python }:
 
 python.pkgs.buildPythonApplication rec {
   pname = "brotab";
   version = "1.4.2";
   format = "setuptools";
+=======
+{ lib, fetchFromGitHub, python }:
+
+python.pkgs.buildPythonApplication rec {
+  version = "1.4.2";
+  pname = "brotab";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "balta2ar";
@@ -12,6 +20,7 @@ python.pkgs.buildPythonApplication rec {
     hash = "sha256-HKKjiW++FwjdorqquSCIdi1InE6KbMbFKZFYHBxzg8Q=";
   };
 
+<<<<<<< HEAD
   patches = [
     # https://github.com/balta2ar/brotab/pull/102
     (fetchpatch {
@@ -25,6 +34,12 @@ python.pkgs.buildPythonApplication rec {
     flask
     psutil
     requests
+=======
+  propagatedBuildInputs = with python.pkgs; [
+    requests
+    flask
+    psutil
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     setuptools
   ];
 
@@ -35,8 +50,11 @@ python.pkgs.buildPythonApplication rec {
       --replace "requests==2.24.0" "requests>=2.24.0"
   '';
 
+<<<<<<< HEAD
   __darwinAllowLocalNetworking = true;
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nativeCheckInputs = with python.pkgs; [
     pytestCheckHook
   ];

@@ -1,7 +1,11 @@
 { lib
 , buildPythonPackage
+<<<<<<< HEAD
 , fetchFromGitHub
 , setuptools
+=======
+, fetchPypi
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , pathspec
 , pytestCheckHook
 , pythonOlder
@@ -11,6 +15,7 @@
 
 buildPythonPackage rec {
   pname = "yamllint";
+<<<<<<< HEAD
   version = "1.32.0";
   format = "pyproject";
 
@@ -27,6 +32,18 @@ buildPythonPackage rec {
     setuptools
   ];
 
+=======
+  version = "1.31.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
+
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-LYPx0S9zPhYqh+BrF2FJ17ucW65Knl/OHHcdf3A/emU=";
+  };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   propagatedBuildInputs = [
     pyyaml
     pathspec

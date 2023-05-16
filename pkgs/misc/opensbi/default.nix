@@ -9,13 +9,21 @@
 
 stdenv.mkDerivation rec {
   pname = "opensbi";
+<<<<<<< HEAD
   version = "1.3.1";
+=======
+  version = "1.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "riscv-software-src";
     repo = "opensbi";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-JNkPvmKYd5xbGB2lsZKWrpI6rBIckWbkLYu98bw7+QY=";
+=======
+    sha256 = "sha256-Zcl+SE2nySMycV/ozsl4AvGipRsMblA5mt3oVZ81Z44=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   postPatch = ''

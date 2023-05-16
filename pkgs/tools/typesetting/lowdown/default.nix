@@ -1,5 +1,10 @@
+<<<<<<< HEAD
 { lib, stdenv, fetchurl, fixDarwinDylibNames, which, dieHook
 , enableShared ? !stdenv.hostPlatform.isStatic
+=======
+{ lib, stdenv, fetchurl, fixDarwinDylibNames, which
+, enableShared ? !(stdenv.hostPlatform.isStatic)
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , enableStatic ? stdenv.hostPlatform.isStatic
 # for passthru.tests
 , nix
@@ -7,16 +12,27 @@
 
 stdenv.mkDerivation rec {
   pname = "lowdown";
+<<<<<<< HEAD
   version = "1.0.2";
+=======
+  version = "1.0.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   outputs = [ "out" "lib" "dev" "man" ];
 
   src = fetchurl {
     url = "https://kristaps.bsd.lv/lowdown/snapshots/lowdown-${version}.tar.gz";
+<<<<<<< HEAD
     sha512 = "1cizrzmldi7lrgdkpn4b6skp1b5hz2jskkbcbv9k6lmz08clm02gyifh7fgd8j2rklqsim34n5ifyg83xhsjzd57xqjys1ccjdn3a5m";
   };
 
   nativeBuildInputs = [ which dieHook ]
+=======
+    sha512 = "2jsskdrx035vy5kyb371swcn23vj7ww1fmrsalmyp1jc3459vgh2lk4nlvrw74r93z9yyzsq9vra2sspx173cpjlr8lyyqdw5h91lms";
+  };
+
+  nativeBuildInputs = [ which ]
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     ++ lib.optionals stdenv.isDarwin [ fixDarwinDylibNames ];
 
   preConfigure = lib.optionalString (stdenv.isDarwin && stdenv.isAarch64) ''
@@ -44,6 +60,7 @@ stdenv.mkDerivation rec {
     "install_static"
   ];
 
+<<<<<<< HEAD
   postInstall =
     let
       soVersion = "3";
@@ -65,6 +82,22 @@ stdenv.mkDerivation rec {
         die "postInstall: expected $lib/lib/liblowdown.so to be a symlink"
       ln -s "$darwinDylib" "$lib/lib/liblowdown.dylib"
       rm "$lib/lib/liblowdown.so"
+=======
+  # Fix lib extension so that fixDarwinDylibNames detects it, see
+  # <https://github.com/kristapsdz/lowdown/issues/87#issuecomment-1532243650>.
+  postInstall =
+    let
+      inherit (stdenv.hostPlatform.extensions) sharedLibrary;
+    in
+
+    lib.optionalString (enableShared && stdenv.isDarwin) ''
+      darwinDylib="$lib/lib/liblowdown.2.dylib"
+      mv "$lib/lib/liblowdown.so.2" "$darwinDylib"
+
+      # Make sure we are re-creating a symbolic link here
+      test -L "$lib/lib/liblowdown.so"
+      ln -s "$darwinDylib" "$lib/lib/liblowdown.dylib"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     '';
 
   doInstallCheck = true;

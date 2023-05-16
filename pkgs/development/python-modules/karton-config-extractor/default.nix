@@ -8,7 +8,11 @@
 
 buildPythonPackage rec {
   pname = "karton-config-extractor";
+<<<<<<< HEAD
   version = "2.2.0";
+=======
+  version = "2.1.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -17,7 +21,11 @@ buildPythonPackage rec {
     owner = "CERT-Polska";
     repo = pname;
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-X2g/wgWLIY2ZIwH1l83EApyoeYQU5/MWq5S0qmYz+CA=";
+=======
+    hash = "sha256-ep69Rrm8Ek0lkgctz6vDAZ1MZ8kWKZSyIvMMAmzTngA=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [

@@ -44,9 +44,12 @@ class HTMLRenderer(Renderer):
         result += self._close_headings(None)
         return result
 
+<<<<<<< HEAD
     def _pull_image(self, path: str) -> str:
         raise NotImplementedError()
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     def text(self, token: Token, tokens: Sequence[Token], i: int) -> str:
         return escape(token.content)
     def paragraph_open(self, token: Token, tokens: Sequence[Token], i: int) -> str:
@@ -70,8 +73,12 @@ class HTMLRenderer(Renderer):
             if tokens[i + 1].type == 'link_close':
                 tag, text = "xref", xref.title_html
             if xref.title:
+<<<<<<< HEAD
                 # titles are not attribute-safe on their own, so we need to replace quotes.
                 title = 'title="{}"'.format(xref.title.replace('"', '&quot;'))
+=======
+                title = f'title="{escape(xref.title, True)}"'
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
             target, href = "", xref.href()
         return f'<a class="{tag}" href="{href}" {title} {target}>{text}'
     def link_close(self, token: Token, tokens: Sequence[Token], i: int) -> str:
@@ -215,7 +222,11 @@ class HTMLRenderer(Renderer):
         self._ordered_list_nesting += 1
         return f'<div class="orderedlist"><ol class="orderedlist {extra}" {start} type="{style}">'
     def ordered_list_close(self, token: Token, tokens: Sequence[Token], i: int) -> str:
+<<<<<<< HEAD
         self._ordered_list_nesting -= 1
+=======
+        self._ordered_list_nesting -= 1;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         return "</ol></div>"
     def example_open(self, token: Token, tokens: Sequence[Token], i: int) -> str:
         if id := cast(str, token.attrs.get('id', '')):
@@ -227,6 +238,7 @@ class HTMLRenderer(Renderer):
         return '<p class="title"><strong>'
     def example_title_close(self, token: Token, tokens: Sequence[Token], i: int) -> str:
         return '</strong></p><div class="example-contents">'
+<<<<<<< HEAD
     def image(self, token: Token, tokens: Sequence[Token], i: int) -> str:
         src = self._pull_image(cast(str, token.attrs['src']))
         alt = f'alt="{escape(token.content, True)}"' if token.content else ""
@@ -327,6 +339,8 @@ class HTMLRenderer(Renderer):
             f'<sup class="para">[{token.meta["id"] + 1}]</sup>'
             '</a>'
         )
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     def _make_hN(self, level: int) -> tuple[str, str]:
         return f"h{min(6, max(1, level + self._hlevel_offset))}", ""

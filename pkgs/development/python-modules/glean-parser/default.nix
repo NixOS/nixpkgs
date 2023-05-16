@@ -15,7 +15,11 @@
 
 buildPythonPackage rec {
   pname = "glean-parser";
+<<<<<<< HEAD
   version = "7.2.1";
+=======
+  version = "7.1.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -23,7 +27,11 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "glean_parser";
     inherit version;
+<<<<<<< HEAD
     hash = "sha256-EUlqwAT+QhuRTH+9yaHWIOSCHVbh2fZVI9OFjNuQe70=";
+=======
+    hash = "sha256-IgBaLVTVF4pGkC5EKZvLaa7U6Lwy2r/xit3E26kWEas=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   postPatch = ''

@@ -14,12 +14,20 @@ let
     # inherit testsForPackage;
   };
 
+<<<<<<< HEAD
   testsForPackage = args: lib.recurseIntoAttrs {
     legacyNetwork = testLegacyNetwork args;
     passthru.override = args': testsForPackage (args // args');
   };
 
   testLegacyNetwork = { nixopsPkg, ... }: pkgs.nixosTest ({
+=======
+  testsForPackage = lib.makeOverridable (args: lib.recurseIntoAttrs {
+    legacyNetwork = testLegacyNetwork args;
+  });
+
+  testLegacyNetwork = { nixopsPkg }: pkgs.nixosTest ({
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     name = "nixops-legacy-network";
     nodes = {
       deployer = { config, lib, nodes, pkgs, ... }: {
@@ -53,7 +61,11 @@ let
           chmod 0400 ~/.ssh/id_ed25519
         '';
         serverNetworkJSON = pkgs.writeText "server-network.json"
+<<<<<<< HEAD
           (builtins.toJSON nodes.server.system.build.networkConfig);
+=======
+          (builtins.toJSON nodes.server.config.system.build.networkConfig);
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       in
       ''
         import shlex

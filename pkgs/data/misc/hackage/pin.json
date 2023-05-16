@@ -1,6 +1,13 @@
 {
+<<<<<<< HEAD
   "commit": "4cdb9878496fdb36b8b9c5f2ab0ef8a44a0f859f",
   "url": "https://github.com/commercialhaskell/all-cabal-hashes/archive/4cdb9878496fdb36b8b9c5f2ab0ef8a44a0f859f.tar.gz",
   "sha256": "0yhymzcsls48hf44ncd79xn786rfh4k70h78w7b0ihn7lrjgsynv",
   "msg": "Update from Hackage at 2023-07-24T19:28:29Z"
+=======
+  "commit": "54b1e8a3a0447c7b969fd97816c4c0821ba9fec1",
+  "url": "https://github.com/commercialhaskell/all-cabal-hashes/archive/54b1e8a3a0447c7b969fd97816c4c0821ba9fec1.tar.gz",
+  "sha256": "1lryj166qysqkmdy9ll15dvg9f797zmy8brzpbavxb149pa6b0j9",
+  "msg": "Update from Hackage at 2023-04-29T17:51:14Z"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }

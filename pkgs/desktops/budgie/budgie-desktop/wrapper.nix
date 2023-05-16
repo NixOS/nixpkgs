@@ -4,7 +4,11 @@
 , xorg
 , wrapGAppsHook
 , budgie-desktop
+<<<<<<< HEAD
 , plugins ? [ ]
+=======
+, plugins ? []
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 stdenv.mkDerivation {

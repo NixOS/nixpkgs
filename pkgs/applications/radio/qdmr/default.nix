@@ -22,13 +22,21 @@ in
 
 stdenv.mkDerivation rec {
   pname = "qdmr";
+<<<<<<< HEAD
   version = "0.11.3";
+=======
+  version = "0.11.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "hmatuschek";
     repo = "qdmr";
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-YLGsKGcKIPd0ihd5IzlT71dYkxZfeH7BpnKQMEyY8dI=";
+=======
+    sha256 = "sha256-zT31tzsm5OM99vz8DzGCdPmnemiwiJpKccYwECnUgOQ=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

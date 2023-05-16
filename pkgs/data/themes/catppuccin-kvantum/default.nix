@@ -33,6 +33,10 @@ in
       homepage = "https://github.com/catppuccin/Kvantum";
       license = licenses.mit;
       platforms = platforms.linux;
+<<<<<<< HEAD
       maintainers = with maintainers; [ bastaynav ];
+=======
+      maintainers = with maintainers; [ggwpaiushtha];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
   }

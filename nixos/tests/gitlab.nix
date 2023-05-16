@@ -11,6 +11,11 @@
 
 { pkgs, lib, ... }:
 
+<<<<<<< HEAD
+=======
+with lib;
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 let
   inherit (import ./ssh-keys.nix pkgs) snakeOilPrivateKey snakeOilPublicKey;
   initialRootPassword = "notproduction";
@@ -19,16 +24,29 @@ let
   aliceUsername = "alice";
   aliceUserId = "2";
   alicePassword = "R5twyCgU0uXC71wT9BBTCqLs6HFZ7h3L";
+<<<<<<< HEAD
   aliceProjectId = "1";
+=======
+  aliceProjectId = "2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   aliceProjectName = "test-alice";
 
   bobUsername = "bob";
   bobUserId = "3";
   bobPassword = "XwkkBbl2SiIwabQzgcoaTbhsotijEEtF";
+<<<<<<< HEAD
   bobProjectId = "2";
 in {
   name = "gitlab";
   meta.maintainers = with lib.maintainers; [ globin yayayayaka ];
+=======
+  bobProjectId = "3";
+in {
+  name = "gitlab";
+  meta = with pkgs.lib.maintainers; {
+    maintainers = [ globin yayayayaka ];
+  };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nodes = {
     gitlab = { ... }: {
@@ -39,10 +57,17 @@ in {
       virtualisation.useNixStoreImage = true;
       virtualisation.writableStore = false;
 
+<<<<<<< HEAD
       systemd.services.gitlab.serviceConfig.Restart = lib.mkForce "no";
       systemd.services.gitlab-workhorse.serviceConfig.Restart = lib.mkForce "no";
       systemd.services.gitaly.serviceConfig.Restart = lib.mkForce "no";
       systemd.services.gitlab-sidekiq.serviceConfig.Restart = lib.mkForce "no";
+=======
+      systemd.services.gitlab.serviceConfig.Restart = mkForce "no";
+      systemd.services.gitlab-workhorse.serviceConfig.Restart = mkForce "no";
+      systemd.services.gitaly.serviceConfig.Restart = mkForce "no";
+      systemd.services.gitlab-sidekiq.serviceConfig.Restart = mkForce "no";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
       services.nginx = {
         enable = true;
@@ -191,7 +216,11 @@ in {
         gitlab.succeed(
             "echo \"Authorization: Bearer $(curl -X POST -H 'Content-Type: application/json' -d @${auth} http://gitlab/oauth/token | ${pkgs.jq}/bin/jq -r '.access_token')\" >/tmp/headers"
         )
+<<<<<<< HEAD
       '' + lib.optionalString doSetup ''
+=======
+      '' + optionalString doSetup ''
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         with subtest("Create user Alice"):
             gitlab.succeed(
                 """[ "$(curl -o /dev/null -w '%{http_code}' -X POST -H 'Content-Type: application/json' -H @/tmp/headers -d @${createUserAlice} http://gitlab/api/v4/users)" = "201" ]"""

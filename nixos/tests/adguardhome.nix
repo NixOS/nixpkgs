@@ -7,6 +7,10 @@
     emptyConf = { lib, ... }: {
       services.adguardhome = {
         enable = true;
+<<<<<<< HEAD
+=======
+        settings = {};
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       };
     };
 
@@ -39,6 +43,7 @@
         };
       };
     };
+<<<<<<< HEAD
 
     dhcpConf = { lib, ... }: {
       virtualisation.vlans = [ 1 ];
@@ -100,6 +105,8 @@
         };
       };
     };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   testScript = ''
@@ -123,6 +130,7 @@
         mixedConf.systemctl("restart adguardhome.service")
         mixedConf.wait_for_unit("adguardhome.service")
         mixedConf.wait_for_open_port(3000)
+<<<<<<< HEAD
 
     with subtest("Testing successful DHCP start"):
         dhcpConf.wait_for_unit("adguardhome.service")
@@ -131,5 +139,7 @@
         dhcpConf.wait_until_succeeds("ping -c 5 10.0.10.100")
         # Test hostname resolution over DHCP-provided DNS
         dhcpConf.wait_until_succeeds("ping -c 5 client.lan")
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '';
 }

@@ -1,9 +1,16 @@
+<<<<<<< HEAD
 { lib, fetchFromGitHub, fetchpatch, buildDunePackage, ocaml
 , calendar, camlp-streams, csv, hex, ppx_deriving, ppx_sexp_conv, re, rresult, sexplib
 }:
 
 let with-camlp-streams = lib.optional (lib.versionAtLeast ocaml.version "5.0"); in
 
+=======
+{ lib, fetchFromGitHub, buildDunePackage
+, calendar, csv, hex, ppx_deriving, ppx_sexp_conv, re, rresult, sexplib
+}:
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 buildDunePackage rec {
   pname = "pgocaml";
   version = "4.3.0";
@@ -14,6 +21,7 @@ buildDunePackage rec {
     hash = "sha256-W1fbRnU1l61qqxfVY2qiBnVpGD81xrBO8k0tWr+RXMY=";
   };
 
+<<<<<<< HEAD
   # Compatibility with OCaml ≥ 5.0
   patches = with-camlp-streams (fetchpatch {
     url = "https://github.com/darioteixeira/pgocaml/commit/906a289dc57da4971e312c31eedd26d81e902ed5.patch";
@@ -24,6 +32,12 @@ buildDunePackage rec {
 
   propagatedBuildInputs = [ calendar csv hex ppx_deriving ppx_sexp_conv re rresult sexplib ]
   ++ with-camlp-streams camlp-streams;
+=======
+  minimalOCamlVersion = "4.08";
+  duneVersion = "3";
+
+  propagatedBuildInputs = [ calendar csv hex ppx_deriving ppx_sexp_conv re rresult sexplib ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   meta = with lib; {
     description = "An interface to PostgreSQL databases for OCaml applications";

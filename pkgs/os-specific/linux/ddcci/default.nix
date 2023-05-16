@@ -12,6 +12,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-1Z6V/AorD4aslLKaaCZpmkD2OiQnmpu3iroOPlNPtLE=";
   };
 
+<<<<<<< HEAD
   patches = [
     # https://gitlab.com/ddcci-driver-linux/ddcci-driver-linux/-/merge_requests/12
     (fetchpatch {
@@ -21,6 +22,8 @@ stdenv.mkDerivation rec {
     })
   ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   hardeningDisable = [ "pic" ];
 
   nativeBuildInputs = kernel.moduleBuildDependencies;

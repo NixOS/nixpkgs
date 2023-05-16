@@ -11,7 +11,11 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ autoPatchelfHook ];
 
+<<<<<<< HEAD
   sourceRoot = ".";
+=======
+  setSourceRoot = "sourceRoot=$PWD";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   dontBuild = true;
 

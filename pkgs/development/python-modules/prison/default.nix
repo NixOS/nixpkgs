@@ -28,6 +28,10 @@ buildPythonPackage rec {
     description = "Rison encoder/decoder";
     homepage = "https://github.com/betodealmeida/python-rison";
     license = licenses.mit;
+<<<<<<< HEAD
     maintainers = [ ];
+=======
+    maintainers = [ maintainers.costrouc ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

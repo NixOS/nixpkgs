@@ -2,17 +2,29 @@
 
 buildPythonPackage rec {
   pname = "pyasn";
+<<<<<<< HEAD
   version = "1.6.2";
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-otVfs+5HlHYJ9QIRylsLrEEahvPJNfuSyksLirfGaP8=";
+=======
+  version = "1.6.1";
+
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-6UK1SRY2Pse4tw6urs0OtOQe8bz0ojl7KabXFfzN+SU=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   datasrc = fetchFromGitHub {
     owner = "hadiasghari";
     repo = "pyasn";
+<<<<<<< HEAD
     rev = version;
+=======
+    rev = "${version}";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     hash = "sha256-R7Vi1Mn44Mg3HQLDk9O43MkXXwbLRr/jjVKSHJvgYj0";
   };
 

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 { cmake
 , fetchFromGitHub
 , lib
@@ -43,17 +44,60 @@ in
 llvmPackages_16.stdenv.mkDerivation rec {
   pname = "pcsx2";
   version = "1.7.4658";
+=======
+{ alsa-lib
+, cmake
+, fetchFromGitHub
+, fmt
+, gettext
+, glib
+, gtk3
+, harfbuzz
+, lib
+, libaio
+, libpcap
+, libpng
+, libpulseaudio
+, libsamplerate
+, libXdmcp
+, openssl
+, pcre
+, perl
+, pkg-config
+, portaudio
+, SDL2
+, soundtouch
+, stdenv
+, udev
+, vulkan-headers
+, vulkan-loader
+, wrapGAppsHook
+, wxGTK
+, zlib
+, wayland
+}:
+
+stdenv.mkDerivation rec {
+  pname = "pcsx2";
+  version = "1.7.3331";
+  # nixpkgs-update: no auto update
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "PCSX2";
     repo = "pcsx2";
     fetchSubmodules = true;
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-5y7CYFWgNh9oCBuTITvw7Rn4sC6MbMczVMAwtWFkn9A=";
+=======
+    hash = "sha256-0RcmBMxKj/gnkNEjn2AUSSO1DzyNSf1lOZWPSUq6764=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   cmakeFlags = [
     "-DDISABLE_ADVANCE_SIMD=TRUE"
+<<<<<<< HEAD
     "-DUSE_SYSTEM_LIBS=ON"
     "-DUSE_LINKED_FFMPEG=ON"
     "-DDISABLE_BUILD_DATE=TRUE"
@@ -110,6 +154,48 @@ llvmPackages_16.stdenv.mkDerivation rec {
     ] ++ cubeb.passthru.backendLibs)}"
   ];
 
+=======
+    "-DDISABLE_PCSX2_WRAPPER=TRUE"
+    "-DPACKAGE_MODE=TRUE"
+    "-DWAYLAND_API=TRUE"
+    "-DXDG_STD=TRUE"
+    "-DUSE_VULKAN=TRUE"
+  ];
+
+  nativeBuildInputs = [ cmake perl pkg-config vulkan-headers wrapGAppsHook ];
+
+  buildInputs = [
+    alsa-lib
+    fmt
+    gettext
+    glib
+    gtk3
+    harfbuzz
+    libaio
+    libpcap
+    libpng
+    libpulseaudio
+    libsamplerate
+    libXdmcp
+    openssl
+    pcre
+    portaudio
+    SDL2
+    soundtouch
+    udev
+    vulkan-loader
+    wayland
+    wxGTK
+    zlib
+  ];
+
+  preFixup = ''
+    gappsWrapperArgs+=(
+      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ vulkan-loader ]}
+    )
+  '';
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   meta = with lib; {
     description = "Playstation 2 emulator";
     longDescription = ''
@@ -120,9 +206,19 @@ llvmPackages_16.stdenv.mkDerivation rec {
       PC, with many additional features and benefits.
     '';
     homepage = "https://pcsx2.net";
+<<<<<<< HEAD
     license = with licenses; [ gpl3 lgpl3 ];
     maintainers = with maintainers; [ hrdinka govanify ];
     mainProgram = "pcsx2-qt";
+=======
+    maintainers = with maintainers; [ hrdinka govanify ];
+
+    # PCSX2's source code is released under LGPLv3+. It However ships
+    # additional data files and code that are licensed differently.
+    # This might be solved in future, for now we should stick with
+    # license.free
+    license = licenses.free;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     platforms = platforms.x86_64;
   };
 }

@@ -42,6 +42,10 @@ buildPythonPackage rec {
     description = "ASN.1 parsing, encoding and decoding";
     homepage = "https://github.com/eerimoq/asn1tools";
     license = licenses.mit;
+<<<<<<< HEAD
     maintainers = with maintainers; [ ];
+=======
+    maintainers = with maintainers; [ SuperSandro2000 ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

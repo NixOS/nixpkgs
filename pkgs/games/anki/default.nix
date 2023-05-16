@@ -1,11 +1,19 @@
 { lib
 , stdenv
+<<<<<<< HEAD
 
 , buildEnv
 , cargo
 , fetchFromGitHub
 , fetchYarnDeps
 , fixup_yarn_lock
+=======
+, buildEnv
+, fetchFromGitHub
+, fetchYarnDeps
+, fixup_yarn_lock
+, cargo
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , installShellFiles
 , lame
 , mpv-unwrapped
@@ -19,29 +27,49 @@
 , rustPlatform
 , writeShellScriptBin
 , yarn
+<<<<<<< HEAD
 
 , AVKit
 , CoreAudio
 , swift
+=======
+, swift
+, AVKit
+, CoreAudio
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 let
   pname = "anki";
+<<<<<<< HEAD
   version = "2.1.66";
   rev = "70506aeb99d4afbe73321feaf75a2fabaa011d55";
+=======
+  version = "2.1.61";
+  rev = "0c1eaf4ce66c1b90867af9a79b95d9e507262cf8";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "ankitects";
     repo = "anki";
     rev = version;
+<<<<<<< HEAD
     hash = "sha256-eE64i/jTMvipakbQXzKu/dN+dyim7E4M+eP3d9GZhII=";
     fetchSubmodules = true;
   };
 
+=======
+    hash = "sha256-prTGilOw7SfxWevnMsuGq8Zp5uLfVHzTkoAU57NzqHk=";
+    fetchSubmodules = true;
+  };
+
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   cargoDeps = rustPlatform.importCargoLock {
     lockFile = ./Cargo.lock;
     outputHashes = {
       "csv-1.1.6" = "sha256-w728ffOVkI+IfK6FbmkGhr0CjuyqgJnPB1kutMJIUYg=";
+<<<<<<< HEAD
       "linkcheck-0.4.1" = "sha256-S93J1cDzMlzDjcvz/WABmv8CEC6x78E+f7nzhsN7NkE=";
       "percent-encoding-iri-2.2.0" = "sha256-kCBeS1PNExyJd4jWfDfctxq6iTdAq69jtxFQgCCQ8kQ=";
     };
@@ -53,6 +81,14 @@ let
   };
 
   anki-build-python = python3.withPackages (ps: with ps; [
+=======
+      "linkcheck-0.4.1-alpha.0" = "sha256-Fiom8oHW9y7vV2RLXW0ClzHOdIlBq3Z9jLP+p6Sk4GI=";
+    };
+  };
+
+  anki-build-python = python3.withPackages (ps: with ps; [
+    pip
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     mypy-protobuf
   ]);
 
@@ -93,16 +129,32 @@ let
     pathsToLink = [ "/bin" ];
   };
 
+<<<<<<< HEAD
   # https://discourse.nixos.org/t/mkyarnpackage-lockfile-has-incorrect-entry/21586/3
   anki-nodemodules = stdenv.mkDerivation {
     pname = "anki-nodemodules";
 
+=======
+  yarnOfflineCache = fetchYarnDeps {
+    yarnLock = "${src}/yarn.lock";
+    hash = "sha256-jP0ltYVB52LolGtN/GGjM4I7ira16rRTXfyJlrdjTX4=";
+  };
+
+  # https://discourse.nixos.org/t/mkyarnpackage-lockfile-has-incorrect-entry/21586/3
+  anki-nodemodules = stdenv.mkDerivation {
+    pname = "anki-nodemodules";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     inherit version src yarnOfflineCache;
 
     nativeBuildInputs = [
       fixup_yarn_lock
+<<<<<<< HEAD
       nodejs-slim
       yarn
+=======
+      yarn
+      nodejs-slim
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     ];
 
     configurePhase = ''
@@ -111,6 +163,10 @@ let
       fixup_yarn_lock yarn.lock
       yarn install --offline --frozen-lockfile --ignore-scripts --no-progress --non-interactive
       patchShebangs node_modules/
+<<<<<<< HEAD
+=======
+      yarn run postinstall --offline
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     '';
 
     installPhase = ''
@@ -119,25 +175,39 @@ let
   };
 in
 python3.pkgs.buildPythonApplication {
+<<<<<<< HEAD
   inherit pname version;
 
   outputs = [ "doc" "man" "out" ];
 
   inherit src;
+=======
+  inherit pname version src;
+
+  outputs = [ "out" "doc" "man" ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   patches = [
     ./patches/gl-fixup.patch
     ./patches/no-update-check.patch
+<<<<<<< HEAD
     ./patches/skip-formatting-python-code.patch
   ];
 
   inherit cargoDeps yarnOfflineCache;
+=======
+    ./patches/0001-Skip-formatting-python-code.patch
+  ];
+
+  inherit cargoDeps;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nativeBuildInputs = [
     fakeGit
     fixup_yarn_lock
     offlineYarn
 
+<<<<<<< HEAD
     cargo
     installShellFiles
     ninja
@@ -145,11 +215,24 @@ python3.pkgs.buildPythonApplication {
     rsync
     rustPlatform.cargoSetupHook
   ] ++ lib.optional stdenv.isDarwin swift;
+=======
+    installShellFiles
+    cargo
+    rustPlatform.cargoSetupHook
+    ninja
+    qt6.wrapQtAppsHook
+    rsync
+  ] ++ lib.optional stdenv.isDarwin swift;
+  nativeCheckInputs = with python3.pkgs; [ pytest mock astroid  ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   buildInputs = [
     qt6.qtbase
   ] ++ lib.optional stdenv.isLinux qt6.qtwayland;
+<<<<<<< HEAD
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   propagatedBuildInputs = with python3.pkgs; [
     # This rather long list came from running:
     #    grep --no-filename -oE "^[^ =]*" python/{requirements.base.txt,requirements.bundle.txt,requirements.qt6_4.txt} | \
@@ -177,13 +260,20 @@ python3.pkgs.buildPythonApplication {
     markupsafe
     orjson
     pep517
+<<<<<<< HEAD
+=======
+    python3.pkgs.protobuf
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     pyparsing
     pyqt6
     pyqt6-sip
     pyqt6-webengine
     pyrsistent
     pysocks
+<<<<<<< HEAD
     python3.pkgs.protobuf
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     requests
     send2trash
     six
@@ -197,6 +287,7 @@ python3.pkgs.buildPythonApplication {
     CoreAudio
   ];
 
+<<<<<<< HEAD
   nativeCheckInputs = with python3.pkgs; [ pytest mock astroid ];
 
   # tests fail with to many open files
@@ -215,12 +306,29 @@ python3.pkgs.buildPythonApplication {
     PYTHON_BINARY = lib.getExe python3;
     YARN_BINARY = lib.getExe offlineYarn;
   };
+=======
+  # Activate optimizations
+  RELEASE = true;
+
+  PROTOC_BINARY = lib.getExe protobuf;
+  NODE_BINARY = lib.getExe nodejs;
+  YARN_BINARY = lib.getExe offlineYarn;
+  PYTHON_BINARY = lib.getExe python3;
+
+  inherit yarnOfflineCache;
+  dontUseNinjaInstall = false;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   buildPhase = ''
     export RUST_BACKTRACE=1
     export RUST_LOG=debug
 
+<<<<<<< HEAD
     mkdir -p out/pylib/anki .git
+=======
+    mkdir -p out/pylib/anki \
+             .git
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     echo ${builtins.substring 0 8 rev} > out/buildhash
     touch out/env
@@ -238,6 +346,12 @@ python3.pkgs.buildPythonApplication {
     PIP_USER=1 ./ninja build wheels
   '';
 
+<<<<<<< HEAD
+=======
+  # tests fail with to many open files
+  # TODO: verify if this is still true (I can't, no mac)
+  doCheck = !stdenv.isDarwin;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   # mimic https://github.com/ankitects/anki/blob/76d8807315fcc2675e7fa44d9ddf3d4608efc487/build/ninja_gen/src/python.rs#L232-L250
   checkPhase = ''
     HOME=$TMP ANKI_TEST_MODE=1 PYTHONPATH=$PYTHONPATH:$PWD/out/pylib \
@@ -259,6 +373,10 @@ python3.pkgs.buildPythonApplication {
     installManPage qt/bundle/lin/anki.1
   '';
 
+<<<<<<< HEAD
+=======
+  dontWrapQtApps = true;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   preFixup = ''
     makeWrapperArgs+=(
       "''${qtWrapperArgs[@]}"
@@ -267,6 +385,10 @@ python3.pkgs.buildPythonApplication {
   '';
 
   meta = with lib; {
+<<<<<<< HEAD
+=======
+    homepage = "https://apps.ankiweb.net/";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     description = "Spaced repetition flashcard program";
     longDescription = ''
       Anki is a program which makes remembering things easy. Because it is a lot
@@ -280,11 +402,17 @@ python3.pkgs.buildPythonApplication {
       people's names and faces, brushing up on geography, mastering long poems,
       or even practicing guitar chords!
     '';
+<<<<<<< HEAD
     homepage = "https://apps.ankiweb.net";
     license = licenses.agpl3Plus;
     platforms = platforms.mesaPlatforms;
     maintainers = with maintainers; [ euank oxij paveloom ];
     # Reported to crash at launch on darwin (as of 2.1.65)
     broken = stdenv.isDarwin;
+=======
+    license = licenses.agpl3Plus;
+    platforms = platforms.mesaPlatforms;
+    maintainers = with maintainers; [ oxij Profpatsch euank ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

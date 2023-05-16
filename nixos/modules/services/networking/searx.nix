@@ -10,8 +10,11 @@ let
   settingsFile = pkgs.writeText "settings.yml"
     (builtins.toJSON cfg.settings);
 
+<<<<<<< HEAD
   limiterSettingsFile = (pkgs.formats.toml { }).generate "limiter.toml" cfg.limiterSettings;
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   generateConfig = ''
     cd ${runDir}
 
@@ -67,6 +70,7 @@ in
         '';
       };
 
+<<<<<<< HEAD
       redisCreateLocally = mkOption {
         type = types.bool;
         default = false;
@@ -76,6 +80,8 @@ in
         '';
       };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       settings = mkOption {
         type = types.attrsOf settingType;
         default = { };
@@ -122,6 +128,7 @@ in
         '';
       };
 
+<<<<<<< HEAD
       limiterSettings = mkOption {
         type = types.attrsOf settingType;
         default = { };
@@ -147,6 +154,8 @@ in
         '';
       };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       package = mkOption {
         type = types.package;
         default = pkgs.searx;
@@ -194,6 +203,7 @@ in
   ###### implementation
 
   config = mkIf cfg.enable {
+<<<<<<< HEAD
     assertions = [
       {
         assertion = (cfg.limiterSettings != { }) -> cfg.package.pname == "searxng";
@@ -205,6 +215,8 @@ in
       }
     ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     environment.systemPackages = [ cfg.package ];
 
     users.users.searx =
@@ -253,7 +265,10 @@ in
     services.searx.settings = {
       # merge NixOS settings with defaults settings.yml
       use_default_settings = mkDefault true;
+<<<<<<< HEAD
       redis.url = lib.mkIf cfg.redisCreateLocally "unix://${config.services.redis.servers.searx.unixSocket}";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
 
     services.uwsgi = mkIf (cfg.runInUwsgi) {
@@ -279,6 +294,7 @@ in
       } // cfg.uwsgiConfig;
     };
 
+<<<<<<< HEAD
     services.redis.servers.searx = lib.mkIf cfg.redisCreateLocally {
       enable = true;
       user = "searx";
@@ -291,4 +307,9 @@ in
   };
 
   meta.maintainers = with maintainers; [ rnhmjoj _999eagle ];
+=======
+  };
+
+  meta.maintainers = with maintainers; [ rnhmjoj ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }

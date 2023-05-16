@@ -50,6 +50,10 @@ buildPythonPackage rec {
     description = "Official API for https://www.kaggle.com, accessible using a command line tool implemented in Python 3";
     homepage = "https://github.com/Kaggle/kaggle-api";
     license = licenses.asl20;
+<<<<<<< HEAD
     maintainers = with maintainers; [ ];
+=======
+    maintainers = with maintainers; [ cdepillabout ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

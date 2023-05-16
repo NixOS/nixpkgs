@@ -1,7 +1,10 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+<<<<<<< HEAD
 , fetchpatch
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , packaging
 , poetry-core
 , pytestCheckHook
@@ -23,6 +26,7 @@ buildPythonPackage rec {
     hash = "sha256-27HWMzSzyAbiOW7OUhlupRWIVJG6DrpXObXmxlCsmxU=";
   };
 
+<<<<<<< HEAD
   patches = [
     # https://github.com/vemel/newversion/pull/9
     (fetchpatch {
@@ -32,6 +36,8 @@ buildPythonPackage rec {
     })
   ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nativeBuildInputs = [
     poetry-core
   ];

@@ -3,7 +3,11 @@
 buildGoModule rec {
   pname = "age";
   version = "1.1.1";
+<<<<<<< HEAD
   vendorHash = "sha256-MumPdRTz840+hoisJ7ADgBhyK3n8P6URobbRJYDFkDY=";
+=======
+  vendorSha256 = "sha256-MumPdRTz840+hoisJ7ADgBhyK3n8P6URobbRJYDFkDY=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "FiloSottile";
@@ -57,7 +61,10 @@ buildGoModule rec {
     homepage = "https://age-encryption.org/";
     description = "Modern encryption tool with small explicit keys";
     license = licenses.bsd3;
+<<<<<<< HEAD
     mainProgram = "age";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     maintainers = with maintainers; [ tazjin ];
   };
 }

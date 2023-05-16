@@ -1,4 +1,5 @@
 { lib
+<<<<<<< HEAD
 , stdenv
 , buildPythonPackage
 , fetchFromGitHub
@@ -9,19 +10,38 @@
 , LASzip
 , ninja
 , pythonOlder
+=======
+, buildPythonPackage
+, fetchFromGitHub
+, scikit-build-core
+, distlib
+, pytestCheckHook
+, pyproject-metadata
+, pathspec
+, pybind11
+, cmake
+, LASzip
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 buildPythonPackage rec {
   pname = "laszip-python";
+<<<<<<< HEAD
   version = "0.2.3";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
+=======
+  version = "0.2.1";
+
+  format = "pyproject";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "tmontaigu";
     repo = pname;
     rev = version;
+<<<<<<< HEAD
     hash = "sha256-MiPzL9TDCf1xnCv7apwdfcpkFnBRi4PO/atTQxqL8cw=";
   };
 
@@ -51,6 +71,30 @@ buildPythonPackage rec {
     LASzip
   ];
 
+=======
+    sha256 = "sha256-ujKoUm2Btu25T7ZrSGqjRc3NR1qqsQU8OwHQDSx8grY=";
+  };
+
+  nativeBuildInputs = [
+    scikit-build-core
+    scikit-build-core.optional-dependencies.pyproject
+    cmake
+  ];
+
+  buildInputs = [
+    pybind11
+    LASzip
+  ];
+
+  checkInputs = [
+    pytestCheckHook
+  ];
+
+  preBuild = ''
+    cd ..
+  '';
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   # There are no tests
   doCheck = false;
 
@@ -59,7 +103,10 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Unofficial bindings between Python and LASzip made using pybind11";
     homepage = "https://github.com/tmontaigu/laszip-python";
+<<<<<<< HEAD
     changelog = "https://github.com/tmontaigu/laszip-python/blob/${src.rev}/Changelog.md";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     license = licenses.mit;
     maintainers = with maintainers; [ matthewcroughan ];
   };

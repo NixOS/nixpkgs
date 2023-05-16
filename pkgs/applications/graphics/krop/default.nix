@@ -19,7 +19,10 @@ python3Packages.buildPythonApplication rec {
   ];
   buildInputs = [
     libsForQt5.poppler
+<<<<<<< HEAD
     libsForQt5.qtwayland
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   nativeBuildInputs = [ qt5.wrapQtAppsHook ];

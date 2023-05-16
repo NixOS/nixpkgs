@@ -5,11 +5,16 @@ with lib;
 let
   cfg = config.services.grafana;
   opt = options.services.grafana;
+<<<<<<< HEAD
   provisioningSettingsFormat = pkgs.formats.yaml { };
+=======
+  provisioningSettingsFormat = pkgs.formats.yaml {};
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   declarativePlugins = pkgs.linkFarm "grafana-plugins" (builtins.map (pkg: { name = pkg.pname; path = pkg; }) cfg.declarativePlugins);
   useMysql = cfg.settings.database.type == "mysql";
   usePostgresql = cfg.settings.database.type == "postgres";
 
+<<<<<<< HEAD
   # Prefer using the values from the default config file[0] directly. This way,
   # people reading the NixOS manual can see them without cross-referencing the
   # official documentation.
@@ -30,10 +35,14 @@ let
       }
       "=";
   };
+=======
+  settingsFormatIni = pkgs.formats.ini {};
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   configFile = settingsFormatIni.generate "config.ini" cfg.settings;
 
   mkProvisionCfg = name: attr: provisionCfg:
     if provisionCfg.path != null
+<<<<<<< HEAD
     then provisionCfg.path
     else
       provisioningSettingsFormat.generate "${name}.yaml"
@@ -43,6 +52,17 @@ let
           apiVersion = 1;
           ${attr} = [ ];
         });
+=======
+      then provisionCfg.path
+    else
+      provisioningSettingsFormat.generate "${name}.yaml"
+        (if provisionCfg.settings != null
+          then provisionCfg.settings
+          else {
+            apiVersion = 1;
+            ${attr} = [];
+          });
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   datasourceFileOrDir = mkProvisionCfg "datasource" "datasources" cfg.provision.datasources;
   dashboardFileOrDir = mkProvisionCfg "dashboard" "providers" cfg.provision.dashboards;
@@ -54,10 +74,16 @@ let
 
   notifierFileOrDir = pkgs.writeText "notifier.yaml" (builtins.toJSON notifierConfiguration);
 
+<<<<<<< HEAD
   generateAlertingProvisioningYaml = x:
     if (cfg.provision.alerting."${x}".path == null)
     then provisioningSettingsFormat.generate "${x}.yaml" cfg.provision.alerting."${x}".settings
     else cfg.provision.alerting."${x}".path;
+=======
+  generateAlertingProvisioningYaml = x: if (cfg.provision.alerting."${x}".path == null)
+                                        then provisioningSettingsFormat.generate "${x}.yaml" cfg.provision.alerting."${x}".settings
+                                        else cfg.provision.alerting."${x}".path;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   rulesFileOrDir = generateAlertingProvisioningYaml "rules";
   contactPointsFileOrDir = generateAlertingProvisioningYaml "contactPoints";
   policiesFileOrDir = generateAlertingProvisioningYaml "policies";
@@ -122,7 +148,11 @@ let
         description = lib.mdDoc "Datasource type. Required.";
       };
       access = mkOption {
+<<<<<<< HEAD
         type = types.enum [ "proxy" "direct" ];
+=======
+        type = types.enum ["proxy" "direct"];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         default = "proxy";
         description = lib.mdDoc "Access mode. proxy or direct (Server or Browser in the UI). Required.";
       };
@@ -141,11 +171,14 @@ let
         default = false;
         description = lib.mdDoc "Allow users to edit datasources from the UI.";
       };
+<<<<<<< HEAD
       jsonData = mkOption {
         type = types.nullOr types.attrs;
         default = null;
         description = lib.mdDoc "Extra data for datasource plugins.";
       };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       secureJsonData = mkOption {
         type = types.nullOr types.attrs;
         default = null;
@@ -190,7 +223,11 @@ let
         description = lib.mdDoc "Notifier name.";
       };
       type = mkOption {
+<<<<<<< HEAD
         type = types.enum [ "dingding" "discord" "email" "googlechat" "hipchat" "kafka" "line" "teams" "opsgenie" "pagerduty" "prometheus-alertmanager" "pushover" "sensu" "sensugo" "slack" "telegram" "threema" "victorops" "webhook" ];
+=======
+        type = types.enum ["dingding" "discord" "email" "googlechat" "hipchat" "kafka" "line" "teams" "opsgenie" "pagerduty" "prometheus-alertmanager" "pushover" "sensu" "sensugo" "slack" "telegram" "threema" "victorops" "webhook"];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         description = lib.mdDoc "Notifier type.";
       };
       uid = mkOption {
@@ -245,8 +282,12 @@ let
       };
     };
   };
+<<<<<<< HEAD
 in
 {
+=======
+in {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   imports = [
     (mkRenamedOptionModule [ "services" "grafana" "protocol" ] [ "services" "grafana" "settings" "server" "protocol" ])
     (mkRenamedOptionModule [ "services" "grafana" "addr" ] [ "services" "grafana" "settings" "server" "http_addr" ])
@@ -375,7 +416,11 @@ in
             protocol = mkOption {
               description = lib.mdDoc "Which protocol to listen.";
               default = "http";
+<<<<<<< HEAD
               type = types.enum [ "http" "https" "h2" "socket" ];
+=======
+              type = types.enum ["http" "https" "h2" "socket"];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
             };
 
             http_addr = mkOption {
@@ -397,16 +442,21 @@ in
             };
 
             domain = mkOption {
+<<<<<<< HEAD
               description = lib.mdDoc ''
                 The public facing domain name used to access grafana from a browser.
 
                 This setting is only used in the default value of the `root_url` setting.
                 If you set the latter manually, this option does not have to be specified.
               '';
+=======
+              description = lib.mdDoc "The public facing domain name used to access grafana from a browser.";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
               default = "localhost";
               type = types.str;
             };
 
+<<<<<<< HEAD
             enforce_domain = mkOption {
               description = lib.mdDoc ''
                 Redirect to correct domain if the host header does not match the domain.
@@ -424,10 +474,15 @@ in
                 This setting is also important if you have a reverse proxy in front of Grafana that exposes it through a subpath.
                 In that case add the subpath to the end of this URL setting.
               '';
+=======
+            root_url = mkOption {
+              description = lib.mdDoc "Full public facing url.";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
               default = "%(protocol)s://%(domain)s:%(http_port)s/";
               type = types.str;
             };
 
+<<<<<<< HEAD
             serve_from_sub_path = mkOption {
               description = lib.mdDoc ''
                 Serve Grafana from subpath specified in the `root_url` setting.
@@ -451,6 +506,8 @@ in
               type = types.bool;
             };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
             static_root_path = mkOption {
               description = lib.mdDoc "Root path for static assets.";
               default = "${cfg.package}/share/grafana/public";
@@ -460,14 +517,20 @@ in
 
             enable_gzip = mkOption {
               description = lib.mdDoc ''
+<<<<<<< HEAD
                 Set this option to `true` to enable HTTP compression, this can improve transfer speed and bandwidth utilization.
                 It is recommended that most users set it to `true`. By default it is set to `false` for compatibility reasons.
+=======
+                Set this option to true to enable HTTP compression, this can improve transfer speed and bandwidth utilization.
+                It is recommended that most users set it to true. By default it is set to false for compatibility reasons.
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
               '';
               default = false;
               type = types.bool;
             };
 
             cert_file = mkOption {
+<<<<<<< HEAD
               description = lib.mdDoc ''
                 Path to the certificate file (if `protocol` is set to `https` or `h2`).
               '';
@@ -503,10 +566,21 @@ in
               # If this was an int, people following tutorials or porting their
               # old config could stumble across nix not having octal literals.
               default = "0660";
+=======
+              description = lib.mdDoc "Cert file for ssl.";
+              default = "";
+              type = types.str;
+            };
+
+            cert_key = mkOption {
+              description = lib.mdDoc "Cert key for ssl.";
+              default = "";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
               type = types.str;
             };
 
             socket = mkOption {
+<<<<<<< HEAD
               description = lib.mdDoc ''
                 Path where the socket should be created when `protocol=socket`.
                 Make sure that Grafana has appropriate permissions before you change this setting.
@@ -536,12 +610,19 @@ in
               default = "0";
               type = types.str;
             };
+=======
+              description = lib.mdDoc "Path where the socket should be created when protocol=socket. Make sure that Grafana has appropriate permissions before you change this setting.";
+              default = "/run/grafana/grafana.sock";
+              type = types.str;
+            };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           };
 
           database = {
             type = mkOption {
               description = lib.mdDoc "Database type.";
               default = "sqlite3";
+<<<<<<< HEAD
               type = types.enum [ "mysql" "sqlite3" "postgres" ];
             };
 
@@ -552,27 +633,46 @@ in
                 For example, for MySQL running on the same host as Grafana: `host = "127.0.0.1:3306"`
                 or with Unix sockets: `host = "/var/run/mysqld/mysqld.sock"`
               '';
+=======
+              type = types.enum ["mysql" "sqlite3" "postgres"];
+            };
+
+            host = mkOption {
+              description = lib.mdDoc "Database host.";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
               default = "127.0.0.1:3306";
               type = types.str;
             };
 
             name = mkOption {
+<<<<<<< HEAD
               description = lib.mdDoc "The name of the Grafana database.";
+=======
+              description = lib.mdDoc "Database name.";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
               default = "grafana";
               type = types.str;
             };
 
             user = mkOption {
+<<<<<<< HEAD
               description = lib.mdDoc "The database user (not applicable for `sqlite3`).";
+=======
+              description = lib.mdDoc "Database user.";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
               default = "root";
               type = types.str;
             };
 
             password = mkOption {
               description = lib.mdDoc ''
+<<<<<<< HEAD
                 The database user's password (not applicable for `sqlite3`).
 
                 Please note that the contents of this option
+=======
+                Database password. Please note that the contents of this option
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
                 will end up in a world-readable Nix store. Use the file provider
                 pointing at a reasonably secured file in the local filesystem
                 to work around that. Look at the documentation for details:
@@ -582,6 +682,7 @@ in
               type = types.str;
             };
 
+<<<<<<< HEAD
             max_idle_conn = mkOption {
               description = lib.mdDoc "The maximum number of connections in the idle connection pool.";
               default = 2;
@@ -666,10 +767,15 @@ in
 
             path = mkOption {
               description = lib.mdDoc "Only applicable to `sqlite3` database. The file path where the database will be stored.";
+=======
+            path = mkOption {
+              description = lib.mdDoc "Only applicable to sqlite3 database. The file path where the database will be stored.";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
               default = "${cfg.dataDir}/data/grafana.db";
               defaultText = literalExpression ''"''${config.${opt.dataDir}}/data/grafana.db"'';
               type = types.path;
             };
+<<<<<<< HEAD
 
             cache_mode = mkOption {
               description = lib.mdDoc ''
@@ -720,6 +826,11 @@ in
               type = types.bool;
             };
 
+=======
+          };
+
+          security = {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
             admin_user = mkOption {
               description = lib.mdDoc "Default admin username.";
               default = "admin";
@@ -738,12 +849,15 @@ in
               type = types.str;
             };
 
+<<<<<<< HEAD
             admin_email = mkOption {
               description = lib.mdDoc "The email of the default Grafana Admin, created on startup.";
               default = "admin@localhost";
               type = types.str;
             };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
             secret_key = mkOption {
               description = lib.mdDoc ''
                 Secret key used for signing. Please note that the contents of this option
@@ -755,6 +869,7 @@ in
               default = "SW2YcwTIb9zpOOhoPsMm";
               type = types.str;
             };
+<<<<<<< HEAD
 
             disable_gravatar = mkOption {
               description = lib.mdDoc "Set to `true` to disable the use of Gravatar for user profile images.";
@@ -909,6 +1024,8 @@ in
               default = [ ];
               type = types.oneOf [ types.str (types.listOf types.str) ];
             };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           };
 
           smtp = {
@@ -917,12 +1034,16 @@ in
               default = false;
               type = types.bool;
             };
+<<<<<<< HEAD
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
             host = mkOption {
               description = lib.mdDoc "Host to connect to.";
               default = "localhost:25";
               type = types.str;
             };
+<<<<<<< HEAD
 
             user = mkOption {
               description = lib.mdDoc "User used for authentication.";
@@ -930,6 +1051,13 @@ in
               type = types.nullOr types.str;
             };
 
+=======
+            user = mkOption {
+              description = lib.mdDoc "User used for authentication.";
+              default = "";
+              type = types.str;
+            };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
             password = mkOption {
               description = lib.mdDoc ''
                 Password used for authentication. Please note that the contents of this option
@@ -941,6 +1069,7 @@ in
               default = "";
               type = types.str;
             };
+<<<<<<< HEAD
 
             cert_file = mkOption {
               description = lib.mdDoc "File path to a cert file.";
@@ -983,34 +1112,54 @@ in
               default = null;
               type = types.nullOr (types.enum [ "OpportunisticStartTLS" "MandatoryStartTLS" "NoStartTLS" ]);
             };
+=======
+            from_address = mkOption {
+              description = lib.mdDoc "Email address used for sending.";
+              default = "admin@grafana.localhost";
+              type = types.str;
+            };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           };
 
           users = {
             allow_sign_up = mkOption {
+<<<<<<< HEAD
               description = lib.mdDoc ''
                 Set to false to prohibit users from being able to sign up / create user accounts.
                 The admin user can still create users.
               '';
+=======
+              description = lib.mdDoc "Disable user signup / registration.";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
               default = false;
               type = types.bool;
             };
 
             allow_org_create = mkOption {
+<<<<<<< HEAD
               description = lib.mdDoc "Set to `false` to prohibit users from creating new organizations.";
+=======
+              description = lib.mdDoc "Whether user is allowed to create organizations.";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
               default = false;
               type = types.bool;
             };
 
             auto_assign_org = mkOption {
+<<<<<<< HEAD
               description = lib.mdDoc ''
                 Set to `true` to automatically add new users to the main organization (id 1).
                 When set to `false,` new users automatically cause a new organization to be created for that new user.
                 The organization will be created even if the `allow_org_create` setting is set to `false`.
               '';
+=======
+              description = lib.mdDoc "Whether to automatically assign new users to default org.";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
               default = true;
               type = types.bool;
             };
 
+<<<<<<< HEAD
             auto_assign_org_id = mkOption {
               description = lib.mdDoc ''
                 Set this value to automatically add new users to the provided org.
@@ -1147,6 +1296,19 @@ in
               default = true;
               type = types.bool;
             };
+=======
+            auto_assign_org_role = mkOption {
+              description = lib.mdDoc "Default role new users will be auto assigned.";
+              default = "Viewer";
+              type = types.enum ["Viewer" "Editor" "Admin"];
+            };
+          };
+
+          analytics.reporting_enabled = mkOption {
+            description = lib.mdDoc "Whether to allow anonymous usage reporting to stats.grafana.net.";
+            default = true;
+            type = types.bool;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           };
         };
       };
@@ -1159,7 +1321,11 @@ in
         description = lib.mdDoc ''
           Declaratively provision Grafana's datasources.
         '';
+<<<<<<< HEAD
         default = { };
+=======
+        default = {};
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         type = submodule' {
           options.settings = mkOption {
             description = lib.mdDoc ''
@@ -1179,13 +1345,21 @@ in
 
                 datasources = mkOption {
                   description = lib.mdDoc "List of datasources to insert/update.";
+<<<<<<< HEAD
                   default = [ ];
+=======
+                  default = [];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
                   type = types.listOf grafanaTypes.datasourceConfig;
                 };
 
                 deleteDatasources = mkOption {
                   description = lib.mdDoc "List of datasources that should be deleted from the database.";
+<<<<<<< HEAD
                   default = [ ];
+=======
+                  default = [];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
                   type = types.listOf (types.submodule {
                     options.name = mkOption {
                       description = lib.mdDoc "Name of the datasource to delete.";
@@ -1234,7 +1408,11 @@ in
         description = lib.mdDoc ''
           Declaratively provision Grafana's dashboards.
         '';
+<<<<<<< HEAD
         default = { };
+=======
+        default = {};
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         type = submodule' {
           options.settings = mkOption {
             description = lib.mdDoc ''
@@ -1253,7 +1431,11 @@ in
 
               options.providers = mkOption {
                 description = lib.mdDoc "List of dashboards to insert/update.";
+<<<<<<< HEAD
                 default = [ ];
+=======
+                default = [];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
                 type = types.listOf grafanaTypes.dashboardConfig;
               };
             });
@@ -1284,7 +1466,11 @@ in
 
       notifiers = mkOption {
         description = lib.mdDoc "Grafana notifier configuration.";
+<<<<<<< HEAD
         default = [ ];
+=======
+        default = [];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         type = types.listOf grafanaTypes.notifierConfig;
         apply = x: map _filter x;
       };
@@ -1320,7 +1506,11 @@ in
 
                 groups = mkOption {
                   description = lib.mdDoc "List of rule groups to import or update.";
+<<<<<<< HEAD
                   default = [ ];
+=======
+                  default = [];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
                   type = types.listOf (types.submodule {
                     freeformType = provisioningSettingsFormat.type;
 
@@ -1343,7 +1533,11 @@ in
 
                 deleteRules = mkOption {
                   description = lib.mdDoc "List of alert rule UIDs that should be deleted.";
+<<<<<<< HEAD
                   default = [ ];
+=======
+                  default = [];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
                   type = types.listOf (types.submodule {
                     options.orgId = mkOption {
                       description = lib.mdDoc "Organization ID, default = 1";
@@ -1444,7 +1638,11 @@ in
 
                 contactPoints = mkOption {
                   description = lib.mdDoc "List of contact points to import or update.";
+<<<<<<< HEAD
                   default = [ ];
+=======
+                  default = [];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
                   type = types.listOf (types.submodule {
                     freeformType = provisioningSettingsFormat.type;
 
@@ -1457,7 +1655,11 @@ in
 
                 deleteContactPoints = mkOption {
                   description = lib.mdDoc "List of receivers that should be deleted.";
+<<<<<<< HEAD
                   default = [ ];
+=======
+                  default = [];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
                   type = types.listOf (types.submodule {
                     options.orgId = mkOption {
                       description = lib.mdDoc "Organization ID, default = 1.";
@@ -1525,7 +1727,11 @@ in
 
                 policies = mkOption {
                   description = lib.mdDoc "List of contact points to import or update.";
+<<<<<<< HEAD
                   default = [ ];
+=======
+                  default = [];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
                   type = types.listOf (types.submodule {
                     freeformType = provisioningSettingsFormat.type;
                   });
@@ -1533,7 +1739,11 @@ in
 
                 resetPolicies = mkOption {
                   description = lib.mdDoc "List of orgIds that should be reset to the default policy.";
+<<<<<<< HEAD
                   default = [ ];
+=======
+                  default = [];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
                   type = types.listOf types.int;
                 };
               };
@@ -1595,7 +1805,11 @@ in
 
                 templates = mkOption {
                   description = lib.mdDoc "List of templates to import or update.";
+<<<<<<< HEAD
                   default = [ ];
+=======
+                  default = [];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
                   type = types.listOf (types.submodule {
                     freeformType = provisioningSettingsFormat.type;
 
@@ -1613,7 +1827,11 @@ in
 
                 deleteTemplates = mkOption {
                   description = lib.mdDoc "List of alert rule UIDs that should be deleted.";
+<<<<<<< HEAD
                   default = [ ];
+=======
+                  default = [];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
                   type = types.listOf (types.submodule {
                     options.orgId = mkOption {
                       description = lib.mdDoc "Organization ID, default = 1.";
@@ -1677,7 +1895,11 @@ in
 
                 muteTimes = mkOption {
                   description = lib.mdDoc "List of mute time intervals to import or update.";
+<<<<<<< HEAD
                   default = [ ];
+=======
+                  default = [];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
                   type = types.listOf (types.submodule {
                     freeformType = provisioningSettingsFormat.type;
 
@@ -1690,7 +1912,11 @@ in
 
                 deleteMuteTimes = mkOption {
                   description = lib.mdDoc "List of mute time intervals that should be deleted.";
+<<<<<<< HEAD
                   default = [ ];
+=======
+                  default = [];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
                   type = types.listOf (types.submodule {
                     options.orgId = mkOption {
                       description = lib.mdDoc "Organization ID, default = 1.";
@@ -1752,6 +1978,7 @@ in
   };
 
   config = mkIf cfg.enable {
+<<<<<<< HEAD
     warnings =
       let
         doesntUseFileProvider = opt: defaultValue:
@@ -1804,6 +2031,47 @@ in
       ++ deprecatedNotifiers
       ++ secureJsonDataWithoutFileProvider
       ++ notifierSecureSettingsWithoutFileProvider;
+=======
+    warnings = let
+      doesntUseFileProvider = opt: defaultValue:
+        let
+          regex = "${optionalString (defaultValue != null) "^${defaultValue}$|"}^\\$__(file|env)\\{.*}$|^\\$[^_\\$][^ ]+$";
+        in builtins.match regex opt == null;
+    in
+      # Ensure that no custom credentials are leaked into the Nix store. Unless the default value
+      # is specified, this can be achieved by using the file/env provider:
+      # https://grafana.com/docs/grafana/latest/setup-grafana/configure-grafana/#variable-expansion
+      (optional (
+        doesntUseFileProvider cfg.settings.database.password "" ||
+        doesntUseFileProvider cfg.settings.security.admin_password "admin"
+      ) ''
+        Grafana passwords will be stored as plaintext in the Nix store!
+        Use file provider or an env-var instead.
+      '')
+      # Warn about deprecated notifiers.
+      ++ (optional (cfg.provision.notifiers != []) ''
+        Notifiers are deprecated upstream and will be removed in Grafana 10.
+        Use `services.grafana.provision.alerting.contactPoints` instead.
+      '')
+      # Ensure that `secureJsonData` of datasources provisioned via `datasources.settings`
+      # only uses file/env providers.
+      ++ (optional (
+        let
+          datasourcesToCheck = optionals
+            (cfg.provision.datasources.settings != null)
+            cfg.provision.datasources.settings.datasources;
+          declarationUnsafe = { secureJsonData, ... }:
+            secureJsonData != null
+            && any (flip doesntUseFileProvider null) (attrValues secureJsonData);
+        in any declarationUnsafe datasourcesToCheck
+      ) ''
+        Declarations in the `secureJsonData`-block of a datasource will be leaked to the
+        Nix store unless a file-provider or an env-var is used!
+      '')
+      ++ (optional (
+        any (x: x.secure_settings != null) cfg.provision.notifiers
+      ) "Notifier secure settings will be stored as plaintext in the Nix store! Use file provider instead.");
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     environment.systemPackages = [ cfg.package ];
 
@@ -1813,12 +2081,20 @@ in
         message = "Cannot set both datasources settings and datasources path";
       }
       {
+<<<<<<< HEAD
         assertion =
           let
             prometheusIsNotDirect = opt: all
               ({ type, access, ... }: type == "prometheus" -> access != "direct")
               opt;
           in
+=======
+        assertion = let
+          prometheusIsNotDirect = opt: all
+          ({ type, access, ... }: type == "prometheus" -> access != "direct")
+          opt;
+        in
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           cfg.provision.datasources.settings == null || prometheusIsNotDirect cfg.provision.datasources.settings.datasources;
         message = "For datasources of type `prometheus`, the `direct` access mode is not supported anymore (since Grafana 9.2.0)";
       }
@@ -1850,8 +2126,13 @@ in
 
     systemd.services.grafana = {
       description = "Grafana Service Daemon";
+<<<<<<< HEAD
       wantedBy = [ "multi-user.target" ];
       after = [ "networking.target" ] ++ lib.optional usePostgresql "postgresql.service" ++ lib.optional useMysql "mysql.service";
+=======
+      wantedBy = ["multi-user.target"];
+      after = ["networking.target"] ++ lib.optional usePostgresql "postgresql.service" ++ lib.optional useMysql "mysql.service";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       script = ''
         set -o errexit -o pipefail -o nounset -o errtrace
         shopt -s inherit_errexit
@@ -1907,6 +2188,10 @@ in
       createHome = true;
       group = "grafana";
     };
+<<<<<<< HEAD
     users.groups.grafana = { };
+=======
+    users.groups.grafana = {};
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

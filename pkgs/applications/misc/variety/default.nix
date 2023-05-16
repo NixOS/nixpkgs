@@ -38,6 +38,10 @@ python3.pkgs.buildPythonApplication rec {
 
   buildInputs = [
     gexiv2
+<<<<<<< HEAD
+=======
+    gobject-introspection
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     gtk3
     hicolor-icon-theme
     libnotify
@@ -74,9 +78,16 @@ python3.pkgs.buildPythonApplication rec {
     substituteInPlace variety_lib/varietyconfig.py \
       --replace "__variety_data_directory__ = \"../data\"" \
                 "__variety_data_directory__ = \"$out/share/variety\""
+<<<<<<< HEAD
     substituteInPlace variety/VarietyWindow.py \
       --replace '[script,' '["${runtimeShell}", script,' \
       --replace 'check_output(script)' 'check_output(["${runtimeShell}", script])'
+=======
+    substituteInPlace data/scripts/set_wallpaper \
+      --replace /bin/bash ${runtimeShell}
+    substituteInPlace data/scripts/get_wallpaper \
+      --replace /bin/bash ${runtimeShell}
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '';
 
   meta = with lib; {

@@ -11,6 +11,10 @@ buildPythonPackage rec {
   };
 
   # the source zip has no prefix, so everything gets unpacked to /build otherwise
+<<<<<<< HEAD
+=======
+  sourceRoot = "source";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   unpackPhase = ''
     runHook preUnpack
     mkdir source
@@ -20,8 +24,11 @@ buildPythonPackage rec {
     runHook postUnpack
   '';
 
+<<<<<<< HEAD
   sourceRoot = "source";
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pythonImportsCheck = [ "hexdump" ];
 
   meta = with lib; {

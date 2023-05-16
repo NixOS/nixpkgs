@@ -5,16 +5,28 @@
 
 buildGoModule rec {
   pname = "uncover";
+<<<<<<< HEAD
   version = "1.0.6";
+=======
+  version = "1.0.4";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "projectdiscovery";
     repo = pname;
+<<<<<<< HEAD
     rev = "refs/tags/v${version}";
     hash = "sha256-FJtd73z6Cc56+nBderYncjrac3xRydDeoiJqn8xW29U=";
   };
 
   vendorHash = "sha256-mpojOzGedkTthD+fHl9Uhul7tOCN1EGIin+7USoaNmE=";
+=======
+    rev = "v${version}";
+    hash = "sha256-hugGRMxY0cmcfIjUOvmaTCC19VkxODZLwP2lYdrIfo8=";
+  };
+
+  vendorHash = "sha256-AzIncQtNhzOJDlEXr5tbxXpt6V7RAgoGxks/zZ3Uakw=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   meta = with lib; {
     description = "API wrapper to search for exposed hosts";

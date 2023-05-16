@@ -66,9 +66,12 @@ stdenv.mkDerivation rec {
     })
   ];
 
+<<<<<<< HEAD
   # https://github.com/root-project/root/issues/13216
   hardeningDisable = [ "fortify3" ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   preConfigure = ''
     # binutils 2.37 fixes
     fixupList=(

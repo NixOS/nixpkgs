@@ -21,12 +21,20 @@
 
 buildPythonPackage rec {
   pname = "pytest";
+<<<<<<< HEAD
   version = "7.4.0";
+=======
+  version = "7.2.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
+<<<<<<< HEAD
     hash = "sha256-tL+MRb1Zk07YQAGtUeEbTuQNQKEinSx5+cWSsKP2vYo=";
+=======
+    hash = "sha256-1F4JUvNyckGRi4/Q83b1/2swHMB3fG+aVWk1yS2KfUI=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   outputs = [

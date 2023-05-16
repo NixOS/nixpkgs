@@ -1,5 +1,6 @@
 { lib
 , buildPythonPackage
+<<<<<<< HEAD
 , pythonOlder
 , fetchPypi
 , hatch-fancy-pypi-readme
@@ -18,11 +19,32 @@
 , pytestCheckHook
 , pytest-mock
 , requests
+=======
+, fetchPypi
+, distro
+, packaging
+, python
+, setuptools
+, setuptools-scm
+, wheel
+  # Test Inputs
+, cmake
+, cython
+, flake8
+, ninja
+, path
+, pytestCheckHook
+, pytest-mock
+, pytest-virtualenv
+, requests
+, six
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , virtualenv
 }:
 
 buildPythonPackage rec {
   pname = "scikit-build";
+<<<<<<< HEAD
   version = "0.17.6";
   format = "pyproject";
 
@@ -32,6 +54,14 @@ buildPythonPackage rec {
     pname = "scikit_build";
     inherit version;
     hash = "sha256-tRpRo2s3xCZQmUtQR5EvWbIuMhCyPjIfKHYR+e9uXJ0=";
+=======
+  version = "0.16.7";
+  format = "pyproject";
+
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-qbnMdHm3HmyNQ0WW363gJSU6riOtsiqaLYWFD9Uc7P0=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   # This line in the filterwarnings section of the pytest configuration leads to this error:
@@ -40,28 +70,46 @@ buildPythonPackage rec {
     sed -i "/'error',/d" pyproject.toml
   '';
 
+<<<<<<< HEAD
   nativeBuildInputs = [
     hatch-fancy-pypi-readme
     hatch-vcs
     hatchling
   ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   propagatedBuildInputs = [
     distro
     packaging
     setuptools
+<<<<<<< HEAD
     wheel
   ] ++ lib.optionals (pythonOlder "3.11") [
     tomli
+=======
+    setuptools-scm
+    wheel
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   nativeCheckInputs = [
     cmake
     cython
+<<<<<<< HEAD
     git
     pytestCheckHook
     pytest-mock
     requests
+=======
+    ninja
+    path
+    pytestCheckHook
+    pytest-mock
+    pytest-virtualenv
+    requests
+    six
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     virtualenv
   ];
 
@@ -83,10 +131,20 @@ buildPythonPackage rec {
     "test_hello_sdist"
     "test_manifest_in_sdist"
     "test_sdist_with_symlinks"
+<<<<<<< HEAD
   ];
 
   meta = with lib; {
     changelog = "https://github.com/scikit-build/scikit-build/blob/${version}/CHANGES.rst";
+=======
+    # distutils.errors.DistutilsArgError: no commands supplied
+    "test_invalid_command"
+    "test_manifest_in_sdist"
+    "test_no_command"
+  ];
+
+  meta = with lib; {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     description = "Improved build system generator for CPython C/C++/Fortran/Cython extensions";
     homepage = "https://github.com/scikit-build/scikit-build";
     license = with licenses; [ mit bsd2 ]; # BSD due to reuses of PyNE code

@@ -1,11 +1,17 @@
 # Arguments that this derivation gets when it is created with `callPackage`
 { stdenv
+<<<<<<< HEAD
 , buildEnv
 , lib
 , makeWrapper
 , mpvScripts
 , symlinkJoin
 , writeTextDir
+=======
+, lib
+, makeWrapper
+, symlinkJoin
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , yt-dlp
 }:
 
@@ -74,6 +80,7 @@ let
 
       passthru.unwrapped = mpv;
 
+<<<<<<< HEAD
       passthru.tests.mpv-scripts-should-not-collide = buildEnv {
         name = "mpv-scripts-env";
         paths = lib.pipe mpvScripts [
@@ -88,6 +95,8 @@ let
         ];
       };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       postBuild = ''
         # wrapProgram can't operate on symlinks
         rm "$out/bin/mpv"

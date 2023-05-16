@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 { lib, stdenv, fetchurl, curl, hdf5, netcdf, eccodes, python3
+=======
+{ lib, stdenv, fetchurl, curl, hdf5, netcdf, eccodes
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , # build, install and link to a CDI library [default=no]
   enable_cdi_lib ? false
 , # build a completely statically linked CDO binary
@@ -9,6 +13,7 @@
 
 stdenv.mkDerivation rec {
   pname = "cdo";
+<<<<<<< HEAD
   version = "2.2.0";
 
   # Dependencies
@@ -17,6 +22,16 @@ stdenv.mkDerivation rec {
   src = fetchurl {
     url = "https://code.mpimet.mpg.de/attachments/download/28013/${pname}-${version}.tar.gz";
     sha256 = "sha256-Z5yNEFcGyv/LoJYOxd3EoTMsG0DFL4LDk3NWmZ2PrfI=";
+=======
+  version = "2.0.5";
+
+  # Dependencies
+  buildInputs = [ curl netcdf hdf5 ];
+
+  src = fetchurl {
+    url = "https://code.mpimet.mpg.de/attachments/download/26823/${pname}-${version}.tar.gz";
+    sha256 = "sha256-7e678cOxofDGQtrmvIx2JODFS6vkYQZNxcfaykpbDc4=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
  configureFlags = [
@@ -35,7 +50,11 @@ stdenv.mkDerivation rec {
       There are more than 600 operators available.
     '';
     homepage = "https://code.mpimet.mpg.de/projects/cdo/";
+<<<<<<< HEAD
     license = licenses.bsd3;
+=======
+    license = licenses.gpl2;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     maintainers = [ maintainers.ltavard ];
     platforms = with platforms; linux ++ darwin;
   };

@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 { lib, stdenv, fetchFromGitHub, fetchurl, makeSetupHook, cmake, ninja, pkg-config, launchd, libdispatch, python3, libxml2, objc4, icu }:
+=======
+{ lib, stdenv, fetchFromGitHub, fetchurl, ninja, python3, curl, libxml2, objc4, ICU }:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 let
   # 10.12 adds a new sysdir.h that our version of CF in the main derivation depends on, but
@@ -21,6 +25,7 @@ stdenv.mkDerivation {
     sha256 = "17kpql0f27xxz4jjw84vpas5f5sn4vdqwv10g151rc3rswbwln1z";
   };
 
+<<<<<<< HEAD
   nativeBuildInputs = [ cmake ninja pkg-config python3 ];
   buildInputs = [ (lib.getDev launchd) libdispatch libxml2 objc4 icu ];
 
@@ -48,12 +53,34 @@ stdenv.mkDerivation {
     # system Foundation used on Darwin.
     ./0008-Dont-link-libcurl.patch
   ];
+=======
+  nativeBuildInputs = [ ninja python3 ];
+  buildInputs = [ curl libxml2 objc4 ICU ];
+
+  patches = [ ./0001-Add-missing-TARGET_OS_-defines.patch ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   postPatch = ''
     cd CoreFoundation
 
     cp ${sysdir-free-system-directories} Base.subproj/CFSystemDirectories.c
 
+<<<<<<< HEAD
+=======
+    # In order, since I can't comment individual lines:
+    # 1. Disable dispatch support for now
+    # 2. For the linker too
+    # 3. Use the legit CoreFoundation.h, not the one telling you not to use it because of Swift
+    substituteInPlace build.py \
+      --replace "cf.CFLAGS += '-DDEPLOYMENT" '#' \
+      --replace "cf.LDFLAGS += '-ldispatch" '#'
+
+    # Fix sandbox impurities.
+    substituteInPlace ../lib/script.py \
+      --replace '/bin/cp' cp
+    patchShebangs --build ../configure
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     # Includes xpc for some initialization routine that they don't define anyway, so no harm here
     substituteInPlace PlugIn.subproj/CFBundlePriv.h \
       --replace '#if (TARGET_OS_MAC' '#if (0'
@@ -65,6 +92,7 @@ stdenv.mkDerivation {
     # The MIN macro doesn't seem to be defined sensibly for us. Not sure if our stdenv or their bug
     substituteInPlace Base.subproj/CoreFoundation_Prefix.h \
       --replace '#if DEPLOYMENT_TARGET_WINDOWS || DEPLOYMENT_TARGET_LINUX' '#if 1'
+<<<<<<< HEAD
   '';
 
   env.NIX_CFLAGS_COMPILE = toString [
@@ -87,5 +115,55 @@ stdenv.mkDerivation {
 
     mkdir -p "$out/nix-support"
     substituteAll ${./pure-corefoundation-hook.sh} "$out/nix-support/setup-hook"
+=======
+
+    # Somehow our ICU doesn't have this, probably because it's too old (we'll update it soon when we update the rest of the SDK)
+    substituteInPlace Locale.subproj/CFLocale.c \
+      --replace '#if U_ICU_VERSION_MAJOR_NUM' '#if 0 //'
+  '';
+
+  BUILD_DIR = "./Build";
+  CFLAGS = "-DINCLUDE_OBJC -I${libxml2.dev}/include/libxml2"; # They seem to assume we include objc in some places and not in others, make a PR; also not sure why but libxml2 include path isn't getting picked up from buildInputs
+
+  # I'm guessing at the version here. https://github.com/apple/swift-corelibs-foundation/commit/df3ec55fe6c162d590a7653d89ad669c2b9716b1 imported "high sierra"
+  # and this version is a version from there. No idea how accurate it is.
+  LDFLAGS = "-current_version 1454.90.0 -compatibility_version 150.0.0 -init ___CFInitialize";
+
+  configurePhase = ''
+    ../configure release --sysroot UNUSED
+  '';
+
+  enableParallelBuilding = true;
+
+  buildPhase = ''
+    runHook preBuild
+
+    ninja -j $NIX_BUILD_CORES
+
+    runHook postBuild
+  '';
+
+  # TODO: their build system sorta kinda can do this, but it doesn't seem to work right now
+  # Also, this includes a bunch of private headers in the framework, which is not what we want
+  installPhase = ''
+    base="$out/Library/Frameworks/CoreFoundation.framework"
+    mkdir -p $base/Versions/A/{Headers,PrivateHeaders,Modules}
+
+    cp ./Build/CoreFoundation/libCoreFoundation.dylib $base/Versions/A/CoreFoundation
+
+    # Note that this could easily live in the ldflags above as `-install_name @rpath/...` but
+    # https://github.com/NixOS/nixpkgs/issues/46434 thwarts that, so for now I'm hacking it up
+    # after the fact.
+    install_name_tool -id '@rpath/CoreFoundation.framework/Versions/A/CoreFoundation' $base/Versions/A/CoreFoundation
+
+    cp ./Build/CoreFoundation/usr/include/CoreFoundation/*.h $base/Versions/A/Headers
+    cp ./Build/CoreFoundation/usr/include/CoreFoundation/module.modulemap $base/Versions/A/Modules
+
+    ln -s A $base/Versions/Current
+
+    for i in CoreFoundation Headers Modules; do
+      ln -s Versions/Current/$i $base/$i
+    done
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '';
 }

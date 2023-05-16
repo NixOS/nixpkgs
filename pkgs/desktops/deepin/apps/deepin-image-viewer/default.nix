@@ -20,13 +20,21 @@
 
 stdenv.mkDerivation rec {
   pname = "deepin-image-viewer";
+<<<<<<< HEAD
   version = "5.9.13";
+=======
+  version = "5.9.11";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
+<<<<<<< HEAD
     sha256 = "sha256-T/hbygnbao5rbw0gHH0ULHOz/2j70ktyzYGWXPDCJoQ=";
+=======
+    sha256 = "sha256-IkjAW4bqQLEWF2tgccYCVnQgcEp9DJoXrEx2HDC25gs=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   patches = [

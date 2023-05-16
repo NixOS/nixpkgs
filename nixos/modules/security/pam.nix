@@ -446,6 +446,7 @@ let
         };
       };
 
+<<<<<<< HEAD
       zfs = mkOption {
         default = config.security.pam.zfs.enable;
         defaultText = literalExpression "config.security.pam.zfs.enable";
@@ -455,6 +456,8 @@ let
         '';
       };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       text = mkOption {
         type = types.nullOr types.lines;
         description = lib.mdDoc "Contents of the PAM service file.";
@@ -484,9 +487,12 @@ let
           optionalString cfg.mysqlAuth ''
             account sufficient ${pkgs.pam_mysql}/lib/security/pam_mysql.so config_file=/etc/security/pam_mysql.conf
           '' +
+<<<<<<< HEAD
           optionalString (config.services.kanidm.enablePam) ''
             account sufficient ${pkgs.kanidm}/lib/pam_kanidm.so ignore_unknown_user
           '' +
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           optionalString (config.services.sssd.enable && cfg.sssdStrictAccess==false) ''
             account sufficient ${pkgs.sssd}/lib/security/pam_sss.so
           '' +
@@ -548,9 +554,12 @@ let
           (let yubi = config.security.pam.yubico; in optionalString cfg.yubicoAuth ''
             auth ${yubi.control} ${pkgs.yubico-pam}/lib/security/pam_yubico.so mode=${toString yubi.mode} ${optionalString (yubi.challengeResponsePath != null) "chalresp_path=${yubi.challengeResponsePath}"} ${optionalString (yubi.mode == "client") "id=${toString yubi.id}"} ${optionalString yubi.debug "debug"}
           '') +
+<<<<<<< HEAD
           (let dp9ik = config.security.pam.dp9ik; in optionalString dp9ik.enable ''
             auth ${dp9ik.control} ${pkgs.pam_dp9ik}/lib/security/pam_p9.so ${dp9ik.authserver}
           '') +
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           optionalString cfg.fprintAuth ''
             auth sufficient ${pkgs.fprintd}/lib/security/pam_fprintd.so
           '' +
@@ -571,8 +580,12 @@ let
               || cfg.googleAuthenticator.enable
               || cfg.gnupg.enable
               || cfg.failDelay.enable
+<<<<<<< HEAD
               || cfg.duoSecurity.enable
               || cfg.zfs))
+=======
+              || cfg.duoSecurity.enable))
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
             (
               optionalString config.services.homed.enable ''
                 auth optional ${config.systemd.package}/lib/security/pam_systemd_home.so
@@ -586,9 +599,12 @@ let
               optionalString config.security.pam.enableFscrypt ''
                 auth optional ${pkgs.fscrypt-experimental}/lib/security/pam_fscrypt.so
               '' +
+<<<<<<< HEAD
               optionalString cfg.zfs ''
                 auth optional ${config.boot.zfs.package}/lib/security/pam_zfs_key.so homes=${config.security.pam.zfs.homes}
               '' +
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
               optionalString cfg.pamMount ''
                 auth optional ${pkgs.pam_mount}/lib/security/pam_mount.so disable_interactive
               '' +
@@ -623,9 +639,12 @@ let
           optionalString use_ldap ''
             auth sufficient ${pam_ldap}/lib/security/pam_ldap.so use_first_pass
           '' +
+<<<<<<< HEAD
           optionalString config.services.kanidm.enablePam ''
             auth sufficient ${pkgs.kanidm}/lib/pam_kanidm.so ignore_unknown_user use_first_pass
           '' +
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           optionalString config.services.sssd.enable ''
             auth sufficient ${pkgs.sssd}/lib/security/pam_sss.so use_first_pass
           '' +
@@ -650,9 +669,12 @@ let
           optionalString config.security.pam.enableFscrypt ''
             password optional ${pkgs.fscrypt-experimental}/lib/security/pam_fscrypt.so
           '' +
+<<<<<<< HEAD
           optionalString cfg.zfs ''
             password optional ${config.boot.zfs.package}/lib/security/pam_zfs_key.so homes=${config.security.pam.zfs.homes}
           '' +
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           optionalString cfg.pamMount ''
             password optional ${pkgs.pam_mount}/lib/security/pam_mount.so
           '' +
@@ -662,9 +684,12 @@ let
           optionalString cfg.mysqlAuth ''
             password sufficient ${pkgs.pam_mysql}/lib/security/pam_mysql.so config_file=/etc/security/pam_mysql.conf
           '' +
+<<<<<<< HEAD
           optionalString config.services.kanidm.enablePam ''
             password sufficient ${pkgs.kanidm}/lib/pam_kanidm.so
           '' +
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           optionalString config.services.sssd.enable ''
             password sufficient ${pkgs.sssd}/lib/security/pam_sss.so
           '' +
@@ -697,7 +722,11 @@ let
             session required ${config.systemd.package}/lib/security/pam_systemd_home.so
           '' +
           optionalString cfg.makeHomeDir ''
+<<<<<<< HEAD
             session required ${pkgs.pam}/lib/security/pam_mkhomedir.so silent skel=${config.security.pam.makeHomeDir.skelDirectory} umask=${config.security.pam.makeHomeDir.umask}
+=======
+            session required ${pkgs.pam}/lib/security/pam_mkhomedir.so silent skel=${config.security.pam.makeHomeDir.skelDirectory} umask=0077
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           '' +
           optionalString cfg.updateWtmp ''
             session required ${pkgs.pam}/lib/security/pam_lastlog.so silent
@@ -713,10 +742,13 @@ let
             session [success=1 default=ignore] pam_succeed_if.so service = systemd-user
             session optional ${pkgs.fscrypt-experimental}/lib/security/pam_fscrypt.so
           '' +
+<<<<<<< HEAD
           optionalString cfg.zfs ''
             session [success=1 default=ignore] pam_succeed_if.so service = systemd-user
             session optional ${config.boot.zfs.package}/lib/security/pam_zfs_key.so homes=${config.security.pam.zfs.homes} ${optionalString config.security.pam.zfs.noUnmount "nounmount"}
           '' +
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           optionalString cfg.pamMount ''
             session optional ${pkgs.pam_mount}/lib/security/pam_mount.so disable_interactive
           '' +
@@ -726,9 +758,12 @@ let
           optionalString cfg.mysqlAuth ''
             session optional ${pkgs.pam_mysql}/lib/security/pam_mysql.so config_file=/etc/security/pam_mysql.conf
           '' +
+<<<<<<< HEAD
           optionalString config.services.kanidm.enablePam ''
             session optional ${pkgs.kanidm}/lib/pam_kanidm.so
           '' +
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           optionalString config.services.sssd.enable ''
             session optional ${pkgs.sssd}/lib/security/pam_sss.so
           '' +
@@ -902,6 +937,7 @@ in
       '';
     };
 
+<<<<<<< HEAD
     security.pam.makeHomeDir.umask = mkOption {
       type = types.str;
       default = "0077";
@@ -912,6 +948,8 @@ in
       '';
     };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     security.pam.enableSSHAgentAuth = mkOption {
       type = types.bool;
       default = false;
@@ -926,6 +964,7 @@ in
 
     security.pam.enableOTPW = mkEnableOption (lib.mdDoc "the OTPW (one-time password) PAM module");
 
+<<<<<<< HEAD
     security.pam.dp9ik = {
       enable = mkEnableOption (
         lib.mdDoc ''
@@ -952,6 +991,8 @@ in
       };
     };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     security.pam.krb5 = {
       enable = mkOption {
         default = config.krb5.enable;
@@ -1273,6 +1314,7 @@ in
       };
     };
 
+<<<<<<< HEAD
     security.pam.zfs = {
       enable = mkOption {
         default = false;
@@ -1304,6 +1346,11 @@ in
     security.pam.enableEcryptfs = mkEnableOption (lib.mdDoc "eCryptfs PAM module (mounting ecryptfs home directory on login)");
     security.pam.enableFscrypt = mkEnableOption (lib.mdDoc ''
       fscrypt to automatically unlock directories with the user's login password.
+=======
+    security.pam.enableEcryptfs = mkEnableOption (lib.mdDoc "eCryptfs PAM module (mounting ecryptfs home directory on login)");
+    security.pam.enableFscrypt = mkEnableOption (lib.mdDoc ''
+      Enables fscrypt to automatically unlock directories with the user's login password.
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
       This also enables a service at security.pam.services.fscrypt which is used by
       fscrypt to verify the user's password when setting up a new protector. If you
@@ -1337,19 +1384,25 @@ in
           Only one of users.motd and users.motdFile can be set.
         '';
       }
+<<<<<<< HEAD
       {
         assertion = config.security.pam.zfs.enable -> (config.boot.zfs.enabled || config.boot.zfs.enableUnstable);
         message = ''
           `security.pam.zfs.enable` requires enabling ZFS (`boot.zfs.enabled` or `boot.zfs.enableUnstable`).
         '';
       }
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     ];
 
     environment.systemPackages =
       # Include the PAM modules in the system path mostly for the manpages.
       [ pkgs.pam ]
       ++ optional config.users.ldap.enable pam_ldap
+<<<<<<< HEAD
       ++ optional config.services.kanidm.enablePam pkgs.kanidm
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       ++ optional config.services.sssd.enable pkgs.sssd
       ++ optionals config.security.pam.krb5.enable [pam_krb5 pam_ccreds]
       ++ optionals config.security.pam.enableOTPW [ pkgs.otpw ]
@@ -1416,9 +1469,12 @@ in
       optionalString use_ldap ''
          mr ${pam_ldap}/lib/security/pam_ldap.so,
       '' +
+<<<<<<< HEAD
       optionalString config.services.kanidm.enablePam ''
         mr ${pkgs.kanidm}/lib/pam_kanidm.so,
       '' +
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       optionalString config.services.sssd.enable ''
         mr ${pkgs.sssd}/lib/security/pam_sss.so,
       '' +
@@ -1487,10 +1543,14 @@ in
         mr ${pkgs.plasma5Packages.kwallet-pam}/lib/security/pam_kwallet5.so,
       '' +
       optionalString config.virtualisation.lxc.lxcfs.enable ''
+<<<<<<< HEAD
         mr ${pkgs.lxc}/lib/security/pam_cgfs.so,
       '' +
       optionalString (isEnabled (cfg: cfg.zfs)) ''
         mr ${config.boot.zfs.package}/lib/security/pam_zfs_key.so,
+=======
+        mr ${pkgs.lxc}/lib/security/pam_cgfs.so
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       '' +
       optionalString config.services.homed.enable ''
         mr ${config.systemd.package}/lib/security/pam_systemd_home.so

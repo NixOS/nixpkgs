@@ -13,7 +13,11 @@ stdenv.mkDerivation rec {
     ];
     sha256 = "0sb3h3067pzf3a7mlxn1hikpcjrsvycjcnj9hl9b1c3ykcgvps7h";
   };
+<<<<<<< HEAD
   prePatch = ''
+=======
+  patchPhase = ''
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     substituteInPlace unix/Makefile --replace 'CC = cc' ""
   '';
 
@@ -26,6 +30,7 @@ stdenv.mkDerivation rec {
     "INSTALL=cp"
   ];
 
+<<<<<<< HEAD
   patches = [
     # Trying to use `memset` without declaring it is flagged as an error with clang 16, causing
     # the `configure` script to incorrectly define `ZMEM`. That causes the build to fail due to
@@ -34,6 +39,9 @@ stdenv.mkDerivation rec {
     # Implicit declaration of `closedir` and `opendir` cause dirent detection to fail with clang 16.
     ./fix-implicit-declarations.patch
   ] ++ lib.optionals (enableNLS && !stdenv.isCygwin) [ ./natspec-gentoo.patch.bz2 ];
+=======
+  patches = lib.optionals (enableNLS && !stdenv.isCygwin) [ ./natspec-gentoo.patch.bz2 ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   buildInputs = lib.optional enableNLS libnatspec
     ++ lib.optional stdenv.isCygwin libiconv;
@@ -44,6 +52,9 @@ stdenv.mkDerivation rec {
     license = licenses.bsdOriginal;
     platforms = platforms.all;
     maintainers = [ ];
+<<<<<<< HEAD
     mainProgram = "zip";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

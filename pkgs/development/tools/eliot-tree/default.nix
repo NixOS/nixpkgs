@@ -1,10 +1,18 @@
+<<<<<<< HEAD
 { lib, python3Packages, fetchPypi }:
+=======
+{ lib, python3Packages }:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 python3Packages.buildPythonApplication rec {
   pname = "eliot-tree";
   version = "19.0.1";
 
+<<<<<<< HEAD
   src = fetchPypi {
+=======
+  src = python3Packages.fetchPypi {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     inherit pname version;
     sha256 = "18gvijsm0vh3x83mv8dd80c3mpm80r7i111qsg4y7rj4i590phma";
   };

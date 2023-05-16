@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 let
   pkgs = import ../. {
     config = {};
@@ -18,3 +19,8 @@ in
       web-devmode
     ];
   }
+=======
+{ pkgs ? import ../. { } }:
+(import ./default.nix { }).overrideAttrs
+(x: { buildInputs = (x.buildInputs or [ ]) ++ [ pkgs.xmloscopy pkgs.ruby ]; })
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)

@@ -24,7 +24,10 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/tytso/pwgen";
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ fab ];
+<<<<<<< HEAD
     mainProgram = "pwgen";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     platforms = platforms.all;
   };
 }

@@ -141,7 +141,10 @@ let
     "tree-sitter-sql" = {
       orga = "derekstride";
       repo = "tree-sitter-sql";
+<<<<<<< HEAD
       branch = "gh-pages";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
     "tree-sitter-vim" = {
       orga = "vigoux";
@@ -367,6 +370,7 @@ let
       orga = "LhKipp";
       repo = "tree-sitter-nu";
     };
+<<<<<<< HEAD
     "tree-sitter-cue" = {
       orga = "eonpatapon";
       repo = "tree-sitter-cue";
@@ -375,6 +379,8 @@ let
       orga = "winglang";
       repo = "wing";
     };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   allGrammars =

@@ -30,7 +30,11 @@ buildPythonPackage rec {
   pname = "paperwork-backend";
   inherit (import ./src.nix { inherit fetchFromGitLab; }) version src;
 
+<<<<<<< HEAD
   sourceRoot = "${src.name}/paperwork-backend";
+=======
+  sourceRoot = "source/paperwork-backend";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   patches = [
     # disables a flaky test https://gitlab.gnome.org/World/OpenPaperwork/paperwork/-/issues/1035#note_1493700

@@ -1,5 +1,9 @@
 { lib, stdenv, rustPlatform, fetchFromGitea, openssl, pkg-config, protobuf
+<<<<<<< HEAD
 , cacert, Security, garage, nixosTests }:
+=======
+, cacert, testers, Security, garage, nixosTests }:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 let
   generic = { version, sha256, cargoSha256, eol ? false, broken ? false }: rustPlatform.buildRustPackage {
     pname = "garage";
@@ -57,7 +61,11 @@ let
       "sqlite"
     ]);
 
+<<<<<<< HEAD
     passthru.tests = nixosTests.garage;
+=======
+    passthru = nixosTests.garage;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     meta = {
       description = "S3-compatible object store for small self-hosted geo-distributed deployments";
@@ -83,6 +91,7 @@ in
 
     garage_0_7 = garage_0_7_3;
 
+<<<<<<< HEAD
     garage_0_8_4 = generic {
       version = "0.8.4";
       sha256 = "sha256-YgMw41ofM59h7OnHK1H8+Se5mZEdYypPIdkqbyX9qfs=";
@@ -90,6 +99,15 @@ in
     };
 
     garage_0_8 = garage_0_8_4;
+=======
+    garage_0_8_2 = generic {
+      version = "0.8.2";
+      sha256 = "sha256-IlDWbNWI1yXvPPF3HIqQvo79M2FQCtoX1wRLJrDbd9k=";
+      cargoSha256 = "sha256-6l4tDBMcOvckTkEO05rman4hHlmVbBt1nCeX5/dETKk=";
+    };
+
+    garage_0_8 = garage_0_8_2;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     garage = garage_0_8;
   }

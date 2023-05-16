@@ -2,14 +2,22 @@
 
 stdenv.mkDerivation rec {
   pname = "lmdb";
+<<<<<<< HEAD
   version = "0.9.31";
+=======
+  version = "0.9.30";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitLab {
     domain = "git.openldap.org";
     owner = "openldap";
     repo = "openldap";
     rev = "LMDB_${version}";
+<<<<<<< HEAD
     sha256 = "sha256-SBbo7MX3NST+OFPDtQshevIYrIsZD9bOkSsH91inMBw=";
+=======
+    sha256 = "sha256-zLa9BtSPzujHAIZKDl69lTo72cI3m/GZejFw5v8bFsg=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   postUnpack = "sourceRoot=\${sourceRoot}/libraries/liblmdb";
@@ -46,9 +54,12 @@ stdenv.mkDerivation rec {
     Cflags: -I$dev/include
     Libs: -L$out/lib -llmdb
     EOF
+<<<<<<< HEAD
 
     # Expected by Rust libraries.
     ln -s lmdb.pc "$dev/lib/pkgconfig/liblmdb.pc"
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '';
 
   meta = with lib; {

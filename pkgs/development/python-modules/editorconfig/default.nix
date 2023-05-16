@@ -48,6 +48,10 @@ buildPythonPackage rec {
     description = "EditorConfig File Locator and Interpreter for Python";
     homepage = "https://github.com/editorconfig/editorconfig-core-py";
     license = licenses.psfl;
+<<<<<<< HEAD
     maintainers = with maintainers; [ nickcao ];
+=======
+    maintainers = with maintainers; [ SuperSandro2000 ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

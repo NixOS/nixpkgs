@@ -1,6 +1,10 @@
 { lib, stdenv, fetchurl
 , darwin
+<<<<<<< HEAD
 , abseil-cpp
+=======
+, abseil-cpp_202111
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , meson
 , ninja
 }:
@@ -10,7 +14,11 @@ stdenv.mkDerivation rec {
   version = "1.0";
 
   src = fetchurl {
+<<<<<<< HEAD
     url = "https://gitlab.freedesktop.org/pulseaudio/webrtc-audio-processing/-/archive/v${version}/webrtc-audio-processing-v${version}.tar.gz";
+=======
+    url = "https://gitlab.freedesktop.org/pulseaudio/webrtc-audio-processing/-/archive/v1.0/webrtc-audio-processing-v${version}.tar.gz";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     sha256 = "sha256-dqRy1OfOG9TX2cgCD8cowU44zVanns/nPYZrilPfuiU=";
   };
 
@@ -20,7 +28,11 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+<<<<<<< HEAD
     abseil-cpp
+=======
+    abseil-cpp_202111
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ] ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [ ApplicationServices ]);
 
   patchPhase = ''

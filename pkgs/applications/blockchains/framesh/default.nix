@@ -2,10 +2,17 @@
 
 let
   pname = "framesh";
+<<<<<<< HEAD
   version = "0.6.7";
   src = fetchurl {
     url = "https://github.com/floating/frame/releases/download/v${version}/Frame-${version}.AppImage";
     sha256 = "sha256-yPNgrC9ZQcl1gCStMXMbZvk15jZylM2NgKM9H3XcJVQ=";
+=======
+  version = "0.6.2";
+  src = fetchurl {
+    url = "https://github.com/floating/frame/releases/download/v${version}/Frame-${version}.AppImage";
+    sha256 = "sha256-nN5+6SwfHcwhePlbsXjT3qNd/d6Xqnd85NVC8vw3ehk=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   appimageContents = appimageTools.extractType2 {

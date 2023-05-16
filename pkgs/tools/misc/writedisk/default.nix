@@ -2,6 +2,10 @@
 , rustPlatform
 , fetchCrate
 , pkg-config
+<<<<<<< HEAD
+=======
+, stdenv
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 rustPlatform.buildRustPackage rec {

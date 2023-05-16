@@ -10,7 +10,11 @@
 , python3
 , which
 , zopfli
+<<<<<<< HEAD
 , noto-fonts-color-emoji
+=======
+, noto-fonts-emoji
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 let
@@ -33,6 +37,7 @@ stdenv.mkDerivation rec {
   inherit version;
 
   srcs = [
+<<<<<<< HEAD
     noto-fonts-color-emoji.src
     twemojiSrc
   ];
@@ -42,6 +47,17 @@ stdenv.mkDerivation rec {
   postUnpack = ''
     chmod -R +w ${twemojiSrc.name}
     mv ${twemojiSrc.name} ${noto-fonts-color-emoji.src.name}
+=======
+    noto-fonts-emoji.src
+    twemojiSrc
+  ];
+
+  sourceRoot = noto-fonts-emoji.src.name;
+
+  postUnpack = ''
+    chmod -R +w ${twemojiSrc.name}
+    mv ${twemojiSrc.name} ${noto-fonts-emoji.src.name}
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '';
 
   nativeBuildInputs = [
@@ -67,7 +83,11 @@ stdenv.mkDerivation rec {
       "s#http://scripts.sil.org/OFL#http://creativecommons.org/licenses/by/4.0/#"
     ];
   in ''
+<<<<<<< HEAD
     ${noto-fonts-color-emoji.postPatch}
+=======
+    ${noto-fonts-emoji.postPatch}
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     sed '${templateSubstitutions}' NotoColorEmoji.tmpl.ttx.tmpl > TwitterColorEmoji.tmpl.ttx.tmpl
     pushd ${twemojiSrc.name}/assets/72x72/
@@ -111,6 +131,10 @@ stdenv.mkDerivation rec {
     # In Fedora twitter-twemoji-fonts source
     ## spec files are MIT: https://fedoraproject.org/wiki/Licensing:Main#License_of_Fedora_SPEC_Files
     license = with licenses; [ asl20 ofl cc-by-40 mit ];
+<<<<<<< HEAD
     maintainers = with maintainers; [ emily ];
+=======
+    maintainers = with maintainers; [ jtojnar emily ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

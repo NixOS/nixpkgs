@@ -6,13 +6,21 @@
 
 stdenv.mkDerivation rec {
   pname = "zim-tools";
+<<<<<<< HEAD
   version = "3.2.0";
+=======
+  version = "3.1.3";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "openzim";
     repo = "zim-tools";
     rev = version;
+<<<<<<< HEAD
     sha256 = "sha256-E4E2ETuhlzBZKXMy2hNA66Vq1z2VzomgCsQp2y00XHQ=";
+=======
+    sha256 = "sha256-dFZd+vr/PnC7WKTFitwBe1zd/1TUnCznI/eS+Q0ZZPg=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ meson ninja pkg-config ];

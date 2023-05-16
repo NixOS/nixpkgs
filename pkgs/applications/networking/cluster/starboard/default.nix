@@ -2,13 +2,21 @@
 
 buildGoModule rec {
   pname = "starboard";
+<<<<<<< HEAD
   version = "0.15.13";
+=======
+  version = "0.15.12";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "aquasecurity";
     repo = pname;
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-8sEhR32CaTYGHi6tdhjGl8c42QUbaaUDdFwtpEFwRHo=";
+=======
+    sha256 = "sha256-q4TucVRsRH8XRiudU6lRT5R9jAXg6AjEKezUElCCTbQ=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.
     leaveDotGit = true;
@@ -20,7 +28,11 @@ buildGoModule rec {
       find "$out" -name .git -print0 | xargs -0 rm -rf
     '';
   };
+<<<<<<< HEAD
   vendorHash = "sha256-JEji1wPXLfVireuIVD2Ct/1Nvf92ukwRpMDCrT/CbOE=";
+=======
+  vendorHash = "sha256-gDBMGn3gKbAvMU3V88tjAZJlAiUXXnXGzyCT06l+DZ8=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nativeBuildInputs = [ installShellFiles ];
 

@@ -65,7 +65,11 @@ import ./make-test-python.nix ({ pkgs, ...} :
         machine.screenshot("wizard7")
         machine.succeed("xdotool mousemove 512 740 click 1")  # Next
 
+<<<<<<< HEAD
         machine.wait_for_text("BlusZ")  # Bluetooth Management (default)
+=======
+        machine.wait_for_text("BlusZ")  # Bluetooh Management (default)
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         machine.screenshot("wizard8")
         machine.succeed("xdotool mousemove 512 740 click 1")  # Next
 

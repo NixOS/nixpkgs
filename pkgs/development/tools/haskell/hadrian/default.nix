@@ -4,10 +4,13 @@
 , extra, filepath, lib, mtl, parsec, shake, text, transformers
 , unordered-containers, cryptohash-sha256, base16-bytestring
 , userSettings ? null
+<<<<<<< HEAD
 # Whether to pass --hyperlinked-source to haddock or not. This is a custom
 # workaround as we wait for this to be configurable via userSettings or similar.
 # https://gitlab.haskell.org/ghc/ghc/-/issues/23625
 , enableHyperlinkedSource ? true
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , writeText
 }:
 
@@ -22,9 +25,12 @@ mkDerivation {
   postUnpack = ''
     sourceRoot="$sourceRoot/hadrian"
   '';
+<<<<<<< HEAD
   patches = lib.optionals (!enableHyperlinkedSource) [
     ./disable-hyperlinked-source.patch
   ];
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   # Overwrite UserSettings.hs with a provided custom one
   postPatch = lib.optionalString (userSettings != null) ''
     install -m644 "${writeText "UserSettings.hs" userSettings}" src/UserSettings.hs

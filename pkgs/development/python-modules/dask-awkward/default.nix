@@ -3,7 +3,10 @@
 , buildPythonPackage
 , dask
 , fetchFromGitHub
+<<<<<<< HEAD
 , fetchpatch
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , hatch-vcs
 , hatchling
 , pyarrow
@@ -14,7 +17,11 @@
 
 buildPythonPackage rec {
   pname = "dask-awkward";
+<<<<<<< HEAD
   version = "2023.8.1";
+=======
+  version = "2023.4.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -23,6 +30,7 @@ buildPythonPackage rec {
     owner = "dask-contrib";
     repo = pname;
     rev = "refs/tags/${version}";
+<<<<<<< HEAD
     hash = "sha256-sSsd35Psf3VEydkNxtd9mSBzV23S7fRM/jhbC9T62kY=";
   };
 
@@ -34,6 +42,11 @@ buildPythonPackage rec {
     })
   ];
 
+=======
+    hash = "sha256-c3NnARost/406cALQDKmeUsl2kFSQHAswAEwgreFXPc=";
+  };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   pythonRelaxDeps = [

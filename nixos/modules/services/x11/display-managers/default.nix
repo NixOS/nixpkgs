@@ -27,6 +27,7 @@ let
     Xft.hintstyle: ${fontconfig.hinting.style}
   '';
 
+<<<<<<< HEAD
   # FIXME: this is an ugly hack.
   # Some sessions (read: most WMs) don't activate systemd's `graphical-session.target`.
   # Other sessions (read: most non-WMs) expect `graphical-session.target` to be reached
@@ -51,6 +52,8 @@ let
       fi
   '';
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   # file provided by services.xserver.displayManager.sessionData.wrapper
   xsessionWrapper = pkgs.writeScript "xsession-wrapper"
     ''
@@ -114,7 +117,12 @@ let
 
       ${cfg.displayManager.sessionCommands}
 
+<<<<<<< HEAD
       ${fakeSession "start"}
+=======
+      # Start systemd user services for graphical sessions
+      /run/current-system/systemd/bin/systemctl --user start graphical-session.target
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
       # Allow the user to setup a custom session type.
       if test -x ~/.xsession; then
@@ -440,10 +448,17 @@ in
       "XDG_SESSION_ID"
     ];
 
+<<<<<<< HEAD
     systemd.user.targets.nixos-fake-graphical-session = {
       unitConfig = {
         Description = "Fake graphical-session target for non-systemd-aware sessions";
         BindsTo = "graphical-session.target";
+=======
+    systemd.user.targets.graphical-session = {
+      unitConfig = {
+        RefuseManualStart = false;
+        StopWhenUnneeded = false;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       };
     };
 
@@ -474,7 +489,11 @@ in
 
           test -n "$waitPID" && wait "$waitPID"
 
+<<<<<<< HEAD
           ${fakeSession "stop"}
+=======
+          /run/current-system/systemd/bin/systemctl --user stop graphical-session.target
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
           exit 0
         '';

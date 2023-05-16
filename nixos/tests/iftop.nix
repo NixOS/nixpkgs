@@ -1,8 +1,16 @@
 import ./make-test-python.nix ({ pkgs, lib, ... }:
 
+<<<<<<< HEAD
 {
   name = "iftop";
   meta.maintainers = with lib.maintainers; [ ma27 ];
+=======
+with lib;
+
+{
+  name = "iftop";
+  meta.maintainers = with pkgs.lib.maintainers; [ ma27 ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nodes = {
     withIftop = {

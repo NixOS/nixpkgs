@@ -33,6 +33,10 @@ buildPythonPackage rec {
     description = "Pure Python HDFS client";
     homepage = "https://github.com/spotify/snakebite";
     license = licenses.asl20;
+<<<<<<< HEAD
     maintainers = with maintainers; [ ];
+=======
+    maintainers = with maintainers; [ costrouc ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

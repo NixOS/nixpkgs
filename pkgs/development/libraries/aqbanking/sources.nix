@@ -15,8 +15,14 @@
 
   # https://www.aquamaniac.de/rdm/projects/aqbanking/files
   aqbanking = {
+<<<<<<< HEAD
     version = "6.5.4";
     hash = "sha256-DRbOrnbwcY5GZjj0VHqLFJJ/HY2YMiB5zWSBrd4wrJk=";
     releaseId = "499";
+=======
+    version = "6.5.3";
+    hash = "sha256-bGK/JqpC5psh4Yi1T2pdgl1to03hoUy8O2fYWpcFE24=";
+    releaseId = "467";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

@@ -110,7 +110,10 @@ stdenv.mkDerivation rec {
     homepage = "https://dovecot.org/";
     description = "Open source IMAP and POP3 email server written with security primarily in mind";
     license = with licenses; [ mit publicDomain lgpl21Only bsd3 bsdOriginal ];
+<<<<<<< HEAD
     mainProgram = "dovecot";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     maintainers = with maintainers; [ fpletz globin ajs124 ];
     platforms = platforms.unix;
   };

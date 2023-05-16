@@ -8,6 +8,10 @@
 , openssl
 , bash
 , nixosTests
+<<<<<<< HEAD
+=======
+, writeTextDir
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 stdenv.mkDerivation rec {

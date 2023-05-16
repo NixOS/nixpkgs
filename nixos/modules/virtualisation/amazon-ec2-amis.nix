@@ -536,6 +536,7 @@ let self = {
   "22.11".us-west-1.aarch64-linux.hvm-ebs = "ami-052d52b9e30a18562";
   "22.11".us-west-2.aarch64-linux.hvm-ebs = "ami-07418b6a4782c9521";
 
+<<<<<<< HEAD
   # 23.05.426.afc48694f2a
 
   "23.05".eu-west-1.x86_64-linux.hvm-ebs = "ami-0fc7825fe890f87d1";
@@ -585,4 +586,7 @@ let self = {
   "23.05".us-west-2.aarch64-linux.hvm-ebs = "ami-0d0979d889078d036";
 
   latest = self."23.05";
+=======
+  latest = self."22.11";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }; in self

@@ -16,10 +16,13 @@ stdenv.mkDerivation rec {
     })
   ];
 
+<<<<<<< HEAD
   postPatch = ''
     substituteInPlace inifiles.ml --replace 'String.lowercase ' 'String.lowercase_ascii '
   '';
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nativeBuildInputs = [ ocaml findlib ];
   propagatedBuildInputs = [ ocaml_pcre ];
 

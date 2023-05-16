@@ -46,11 +46,14 @@ buildPythonPackage rec {
     "quart"
   ];
 
+<<<<<<< HEAD
   disabledTestPaths = [
     # Smoke tests don't always work
     "tests/smoketests/test_run_smoketest.py"
   ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   __darwinAllowLocalNetworking = true;
 
   meta = with lib; {

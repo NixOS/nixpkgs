@@ -33,7 +33,11 @@ stdenvNoCC.mkDerivation rec {
     description = "utilities to deal with text based name service databases";
     homepage = "https://ytrizja.de/";
     license = licenses.gpl3Plus;
+<<<<<<< HEAD
     maintainers = [ maintainers.fogti ];
+=======
+    maintainers = with maintainers; [ zseri ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     platforms = platforms.all;
   };
 }

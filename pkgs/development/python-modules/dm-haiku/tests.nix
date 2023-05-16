@@ -1,4 +1,9 @@
+<<<<<<< HEAD
 { buildPythonPackage
+=======
+{ stdenv
+, buildPythonPackage
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , dm-haiku
 , chex
 , cloudpickle
@@ -11,6 +16,7 @@
 , bsuite
 , frozendict
 , dm-env
+<<<<<<< HEAD
 , scikit-image
 , rlax
 , distrax
@@ -19,6 +25,15 @@
 }:
 
 buildPythonPackage {
+=======
+, scikitimage
+, rlax
+, distrax
+, tensorflow-probability
+, optax }:
+
+buildPythonPackage rec {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pname = "dm-haiku-tests";
   inherit (dm-haiku) version;
 
@@ -42,7 +57,11 @@ buildPythonPackage {
     pytestCheckHook
     optax
     rlax
+<<<<<<< HEAD
     scikit-image
+=======
+    scikitimage
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     tensorflow
     tensorflow-probability
   ];

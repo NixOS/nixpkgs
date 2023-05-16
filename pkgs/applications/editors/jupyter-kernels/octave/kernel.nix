@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 { lib, python3Packages, fetchPypi }:
+=======
+{ lib, python3Packages }:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 with python3Packages;
 
@@ -18,11 +22,20 @@ buildPythonPackage rec {
   # There appears to be a similar problem with metakernel's tests
   doCheck = false;
 
+<<<<<<< HEAD
   meta = {
     description = "A Jupyter kernel for Octave.";
     homepage = "https://github.com/Calysto/octave_kernel";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ thomasjm ];
     platforms = lib.platforms.all;
+=======
+  meta = with lib; {
+    description = "A Jupyter kernel for Octave.";
+    homepage = "https://github.com/Calysto/octave_kernel";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ thomasjm ];
+    platforms = platforms.all;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

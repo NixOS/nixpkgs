@@ -9,7 +9,11 @@
 , enableDebug ? false
 , enableSingleThreaded ? false
 , enableMultiThreaded ? true
+<<<<<<< HEAD
 , enableShared ? !(with stdenv.hostPlatform; isStatic || isMinGW) # problems for now
+=======
+, enableShared ? !(with stdenv.hostPlatform; isStatic || libc == "msvcrt") # problems for now
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , enableStatic ? !enableShared
 , enablePython ? false
 , enableNumpy ? false
@@ -31,6 +35,12 @@ assert enableShared || enableStatic;
 
 assert enableNumpy -> enablePython;
 
+<<<<<<< HEAD
+=======
+# Boost <1.69 can't be built on linux with clang >8, because pth was removed
+assert with lib; (stdenv.isLinux && toolset == "clang" && versionAtLeast stdenv.cc.version "8.0.0") -> versionAtLeast version "1.69";
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 let
 
   variant = lib.concatStringsSep ","
@@ -72,10 +82,14 @@ let
                     then if lib.versionOlder version "1.78" then "mips1" else "mips"
                     else if stdenv.hostPlatform.parsed.cpu.name == "s390x" then "s390x"
                     else toString stdenv.hostPlatform.parsed.cpu.family}"
+<<<<<<< HEAD
     # env in host triplet for Mach-O is "macho", but boost binary format for Mach-O is "mach-o"
     "binary-format=${if stdenv.hostPlatform.parsed.kernel.execFormat == lib.systems.parse.execFormats.macho
                      then "mach-o"
                      else toString stdenv.hostPlatform.parsed.kernel.execFormat.name}"
+=======
+    "binary-format=${toString stdenv.hostPlatform.parsed.kernel.execFormat.name}"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "target-os=${toString stdenv.hostPlatform.parsed.kernel.name}"
 
     # adapted from table in boost manual
@@ -91,7 +105,11 @@ let
     ++ lib.optional (!enablePython) "--without-python"
     ++ lib.optional needUserConfig "--user-config=user-config.jam"
     ++ lib.optional (stdenv.buildPlatform.isDarwin && stdenv.hostPlatform.isLinux) "pch=off"
+<<<<<<< HEAD
     ++ lib.optionals stdenv.hostPlatform.isMinGW [
+=======
+    ++ lib.optionals (stdenv.hostPlatform.libc == "msvcrt") [
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "threadapi=win32"
   ] ++ extraB2Args
   );
@@ -107,11 +125,31 @@ stdenv.mkDerivation {
 
   patches = patches
   ++ lib.optional stdenv.isDarwin ./darwin-no-system-python.patch
+<<<<<<< HEAD
   ++ [ ./cmake-paths-173.patch ]
+=======
+  # Fix boost-context segmentation faults on ppc64 due to ABI violation
+  ++ lib.optional (lib.versionOlder version "1.71") (fetchpatch {
+    url = "https://github.com/boostorg/context/commit/2354eca9b776a6739112833f64754108cc0d1dc5.patch";
+    sha256 = "067m4bjpmcanqvg28djax9a10avmdwhlpfx6gn73kbqqq70dnz29";
+    stripLen = 1;
+    extraPrefix = "libs/context/";
+  })
+  ++ lib.optional (lib.versionOlder version "1.70") (fetchpatch {
+    # support for Mips64n64 appeared in boost-context 1.70
+    url = "https://github.com/boostorg/context/commit/e3f744a1862164062d579d1972272d67bdaa9c39.patch";
+    sha256 = "sha256-qjQy1b4jDsIRrI+UYtcguhvChrMbGWO0UlEzEJHYzRI=";
+    stripLen = 1;
+    extraPrefix = "libs/context/";
+  })
+  ++ lib.optional (lib.versionAtLeast version "1.70" && lib.versionOlder version "1.73") ./cmake-paths.patch
+  ++ lib.optional (lib.versionAtLeast version "1.73") ./cmake-paths-173.patch
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ++ lib.optional (version == "1.77.0") (fetchpatch {
     url = "https://github.com/boostorg/math/commit/7d482f6ebc356e6ec455ccb5f51a23971bf6ce5b.patch";
     relative = "include";
     sha256 = "sha256-KlmIbixcds6GyKYt1fx5BxDIrU7msrgDdYo9Va/KJR4=";
+<<<<<<< HEAD
   })
   # Fixes ABI detection
   ++ lib.optional (version == "1.83.0") (fetchpatch {
@@ -150,17 +188,31 @@ stdenv.mkDerivation {
       extraPrefix = "libs/python/";
     })
   ];
+=======
+  });
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   meta = with lib; {
     homepage = "http://boost.org/";
     description = "Collection of C++ libraries";
     license = licenses.boost;
     platforms = platforms.unix ++ platforms.windows;
+<<<<<<< HEAD
     # boost-context lacks support for the N32 ABI on mips64.  The build
     # will succeed, but packages depending on boost-context will fail with
     # a very cryptic error message.
     badPlatforms = [ lib.systems.inspect.patterns.isMips64n32 ];
     maintainers = with maintainers; [ hjones2199 ];
+=======
+    badPlatforms = optionals (versionOlder version "1.73") platforms.riscv;
+    maintainers = with maintainers; [ hjones2199 ];
+
+    broken =
+      # boost-context lacks support for the N32 ABI on mips64.  The build
+      # will succeed, but packages depending on boost-context will fail with
+      # a very cryptic error message.
+      stdenv.hostPlatform.isMips64n32;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   passthru = {
@@ -259,7 +311,11 @@ stdenv.mkDerivation {
     # Make boost header paths relative so that they are not runtime dependencies
     cd "$dev" && find include \( -name '*.hpp' -or -name '*.h' -or -name '*.ipp' \) \
       -exec sed '1s/^\xef\xbb\xbf//;1i#line 1 "{}"' -i '{}' \;
+<<<<<<< HEAD
   '' + lib.optionalString stdenv.hostPlatform.isMinGW ''
+=======
+  '' + lib.optionalString (stdenv.hostPlatform.libc == "msvcrt") ''
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     $RANLIB "$out/lib/"*.a
   '';
 

@@ -32,6 +32,9 @@ stdenv.mkDerivation rec {
     license = licenses.unlicense;
     maintainers = with maintainers; [ zowoq ];
     platforms = [ "aarch64-darwin" "x86_64-darwin" ];
+<<<<<<< HEAD
     broken = stdenv.isx86_64; # https://hydra.nixos.org/build/219354133/nixlog/3
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

@@ -5,7 +5,11 @@ in
 # This is a separate derivation, not just an additional output of
 # usbrelay, because otherwise, we have a cyclic dependency between
 # usbrelay (default.nix) and the python module (python.nix).
+<<<<<<< HEAD
 stdenv.mkDerivation {
+=======
+stdenv.mkDerivation rec {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pname = "usbrelayd";
 
   inherit (usbrelay) src version;

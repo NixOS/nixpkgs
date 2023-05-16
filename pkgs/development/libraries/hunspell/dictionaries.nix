@@ -914,6 +914,7 @@ rec {
     # the README doesn't specify versions of licenses :/
     license = with lib.licenses; [ gpl2Plus lgpl2Plus mpl10 asl20 cc-by-sa-25 ];
   };
+<<<<<<< HEAD
 
   /* PORTUGUESE */
 
@@ -934,4 +935,6 @@ rec {
     readmeFile = "README_pt_PT.txt";
     license = with lib.licenses; [ gpl2 lgpl21 mpl11 ];
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }

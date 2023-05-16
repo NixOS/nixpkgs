@@ -42,7 +42,11 @@ in
     };
 
     args = mkOption {
+<<<<<<< HEAD
       type = types.listOf types.str;
+=======
+      type = types.listOf types.string;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       default = [ ];
       example = [ "--rt" "--prefer-vk-device 8086:9bc4" ];
       description = mdDoc ''
@@ -51,7 +55,11 @@ in
     };
 
     env = mkOption {
+<<<<<<< HEAD
       type = types.attrsOf types.str;
+=======
+      type = types.attrsOf types.string;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       default = { };
       example = literalExpression ''
         # for Prime render offload on Nvidia laptops.

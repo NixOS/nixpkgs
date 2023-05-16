@@ -11,13 +11,21 @@
 
 buildPythonPackage rec {
   pname = "embedding-reader";
+<<<<<<< HEAD
   version = "1.5.1";
+=======
+  version = "1.5.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "rom1504";
     repo = pname;
     rev = "refs/tags/${version}";
+<<<<<<< HEAD
     hash = "sha256-isb7i+RfZvbtQWySiPatuvOTxNXyPhLhoZTQMZjdC24=";
+=======
+    hash = "sha256-uyeIcAW9O9PR4cqmifC6Lx+Hn6XPb1RH/ksmUWvbdtw=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ pythonRelaxDepsHook ];

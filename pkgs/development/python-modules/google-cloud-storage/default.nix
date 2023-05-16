@@ -16,14 +16,22 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-storage";
+<<<<<<< HEAD
   version = "2.10.0";
+=======
+  version = "2.9.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
+<<<<<<< HEAD
     hash = "sha256-k0sx6tXzmU5TYPn/V1CYLFtrEWBNwHK8RSwlll4Hbcc=";
+=======
+    hash = "sha256-m2rntQn8KUvay4TQ8+qOIOLFSotLvjnFcHY1/sIU7/M=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [
@@ -89,6 +97,10 @@ buildPythonPackage rec {
     homepage = "https://github.com/googleapis/python-storage";
     changelog = "https://github.com/googleapis/python-storage/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
+<<<<<<< HEAD
     maintainers = with maintainers; [ ];
+=======
+    maintainers = with maintainers; [ SuperSandro2000 ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

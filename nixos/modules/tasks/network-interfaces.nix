@@ -1396,12 +1396,22 @@ in
     security.apparmor.policies."bin.ping".profile = lib.mkIf config.security.apparmor.policies."bin.ping".enable (lib.mkAfter ''
       /run/wrappers/bin/ping {
         include <abstractions/base>
+<<<<<<< HEAD
         include <nixos/security.wrappers/ping>
+=======
+        include <nixos/security.wrappers>
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         rpx /run/wrappers/wrappers.*/ping,
       }
       /run/wrappers/wrappers.*/ping {
         include <abstractions/base>
+<<<<<<< HEAD
         include <nixos/security.wrappers/ping>
+=======
+        include <nixos/security.wrappers>
+        r /run/wrappers/wrappers.*/ping.real,
+        mrpx ${config.security.wrappers.ping.source},
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         capability net_raw,
         capability setpcap,
       }
@@ -1494,7 +1504,11 @@ in
           in
           ''
             # override to ${msg} for ${i.name}
+<<<<<<< HEAD
             ACTION=="add", SUBSYSTEM=="net", NAME=="${i.name}", RUN+="${pkgs.procps}/bin/sysctl net.ipv6.conf.${replaceStrings ["."] ["/"] i.name}.use_tempaddr=${val}"
+=======
+            ACTION=="add", SUBSYSTEM=="net", RUN+="${pkgs.procps}/bin/sysctl net.ipv6.conf.${replaceStrings ["."] ["/"] i.name}.use_tempaddr=${val}"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           '') (filter (i: i.tempAddress != cfg.tempAddresses) interfaces);
       })
     ] ++ lib.optional (cfg.wlanInterfaces != {})

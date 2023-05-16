@@ -8,7 +8,11 @@ buildDunePackage rec {
     domain = "gitlab.inria.fr";
     owner = "fpottier";
     repo = "fix";
+<<<<<<< HEAD
     rev = version;
+=======
+    rev = "${version}";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     sha256 = "sha256-suWkZDLnXEO/4QCGmNuyLFOV0LJsFOMD13gxOcgu6JQ=";
   };
 

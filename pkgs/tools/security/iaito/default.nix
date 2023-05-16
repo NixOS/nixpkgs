@@ -11,6 +11,7 @@
 , wrapQtAppsHook
 }:
 
+<<<<<<< HEAD
 let
   pname = "iaito";
   version = "5.8.8";
@@ -40,6 +41,32 @@ stdenv.mkDerivation rec {
 
   postUnpack = ''
     chmod -R u+w ${translations_src.name}
+=======
+stdenv.mkDerivation rec {
+  pname = "iaito";
+  version = "5.8.4";
+
+  srcs = [
+    (fetchFromGitHub rec {
+      owner = "radareorg";
+      repo = "iaito";
+      rev = version;
+      hash = "sha256-pt2vq+JN+Ccv+9o8s2y87xTVeQp2WJ0UfKdoWGsBkUI=";
+      name = repo;
+    })
+    (fetchFromGitHub rec {
+      owner = "radareorg";
+      repo = "iaito-translations";
+      rev = "e66b3a962a7fc7dfd730764180011ecffbb206bf";
+      hash = "sha256-6NRTZ/ydypsB5TwbivvwOH9TEMAff/LH69hCXTvMPp8=";
+      name = repo;
+    })
+  ];
+  sourceRoot = "iaito/src";
+
+  postUnpack = ''
+    chmod -R u+w iaito-translations
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '';
 
   postPatch = ''
@@ -65,7 +92,11 @@ stdenv.mkDerivation rec {
   env.NIX_CFLAGS_COMPILE = toString [ "-I" "${radare2.src}/shlr/sdb/include/sdb" ];
 
   postBuild = ''
+<<<<<<< HEAD
     pushd ../../../${translations_src.name}
+=======
+    pushd ../../../iaito-translations
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     make build -j$NIX_BUILD_CORES PREFIX=$out
     popd
   '';
@@ -78,7 +109,11 @@ stdenv.mkDerivation rec {
     install -m644 -Dt $out/share/applications ../org.radare.iaito.desktop
     install -m644 -Dt $out/share/pixmaps ../img/iaito-o.svg
 
+<<<<<<< HEAD
     pushd ../../../${translations_src.name}
+=======
+    pushd ../../../iaito-translations
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     make install -j$NIX_BUILD_CORES PREFIX=$out
     popd
 

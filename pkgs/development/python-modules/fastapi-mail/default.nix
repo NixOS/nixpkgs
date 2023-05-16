@@ -19,23 +19,42 @@
 
 buildPythonPackage rec {
   pname = "fastapi-mail";
+<<<<<<< HEAD
   version = "1.3.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
+=======
+  version = "1.2.8";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.7";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "sabuhish";
     repo = pname;
     rev = "refs/tags/${version}";
+<<<<<<< HEAD
     hash = "sha256-m8d4y75+mSh9A+YVaV/yZhN3ckOe2mV1jdtfeNFtU/w=";
+=======
+    hash = "sha256-9u7+TYO0TmzyLcCxZL86ibC3hNH5b722t5fWimRHaW0=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
+<<<<<<< HEAD
       --replace 'version = "1.2.5"' 'version = "${version}"' \
       --replace 'aiosmtplib = "^2.0"' 'aiosmtplib = "*"' \
       --replace 'pydantic = "^1.8"' 'pydantic = "*"' \
+=======
+      --replace 'version = "1.2.2"' 'version = "${version}"' \
+      --replace 'aiosmtplib = "^2.0"' 'aiosmtplib = "*"' \
+      --replace 'pydantic = "^1.8"' 'pydantic = "*"' \
+      --replace 'starlette = "^0.22.0"' 'starlette = "*"' \
+      --replace 'black = "^22.12.0"' ""
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '';
 
   nativeBuildInputs = [

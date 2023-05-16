@@ -30,6 +30,10 @@ buildPythonPackage rec {
     homepage = "https://github.com/daleroberts/hdmedians";
     description = "High-dimensional medians";
     license = licenses.gpl3;
+<<<<<<< HEAD
     maintainers = [ ];
+=======
+    maintainers = [ maintainers.costrouc ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

@@ -29,13 +29,21 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "megapixels";
+<<<<<<< HEAD
   version = "1.7.0";
+=======
+  version = "1.6.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitLab {
     owner = "postmarketOS";
     repo = "megapixels";
     rev = version;
+<<<<<<< HEAD
     hash = "sha256-ejTCYZMDkqz8P3vroq8XAl+pUGgcS56cm3tzOTE3rfc=";
+=======
+    hash = "sha256-xrO9Xr9DPjlDs4yaKy32yb4X8wFqLKfy8rsjtBuN+Rg=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

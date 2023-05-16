@@ -34,6 +34,10 @@ buildPythonPackage rec {
     description = "simple and sensible display of images";
     homepage = "https://github.com/freeman-lab/showit";
     license = licenses.mit;
+<<<<<<< HEAD
     maintainers = [ ];
+=======
+    maintainers = [ maintainers.costrouc ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

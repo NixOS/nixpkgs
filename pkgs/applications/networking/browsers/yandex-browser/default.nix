@@ -51,11 +51,19 @@
 
 stdenv.mkDerivation rec {
   pname = "yandex-browser";
+<<<<<<< HEAD
   version = "23.7.1.1148-1";
 
   src = fetchurl {
     url = "http://repo.yandex.ru/yandex-browser/deb/pool/main/y/${pname}-beta/${pname}-beta_${version}_amd64.deb";
     sha256 = "sha256-SJbuT2MnsXcqOSk4xCUokseDotjbWgAnvwnfNPF9zi4=";
+=======
+  version = "23.3.1.906-1";
+
+  src = fetchurl {
+    url = "http://repo.yandex.ru/yandex-browser/deb/pool/main/y/${pname}-beta/${pname}-beta_${version}_amd64.deb";
+    sha256 = "sha256-hQwAHtPUcGSDKD7SmWa8H1f/T4Imu9061tIvenw0KWQ=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [
@@ -136,5 +144,15 @@ stdenv.mkDerivation rec {
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     maintainers = with maintainers; [ dan4ik605743 ionutnechita ];
     platforms = [ "x86_64-linux" ];
+<<<<<<< HEAD
+=======
+
+    knownVulnerabilities = [
+      ''
+      Trusts a Russian government issued CA certificate for some websites.
+      See https://habr.com/en/company/yandex/blog/655185/ (Russian) for details.
+      ''
+    ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

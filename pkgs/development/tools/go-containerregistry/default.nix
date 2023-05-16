@@ -4,13 +4,21 @@ let bins = [ "crane" "gcrane" ]; in
 
 buildGoModule rec {
   pname = "go-containerregistry";
+<<<<<<< HEAD
   version = "0.16.1";
+=======
+  version = "0.15.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "google";
     repo = pname;
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-uqTWeA449MhHFWJwyqJgLsQHvjfk46S1YA+Yss5muSk=";
+=======
+    sha256 = "sha256-yXIFPLuqyWaWgbGbGOuBwWg/KWM9vuMnXnTBcgluzhI=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
   vendorHash = null;
 

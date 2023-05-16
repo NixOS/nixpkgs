@@ -7,15 +7,22 @@ mkCoqDerivation rec {
   domain = "gitlab.inria.fr";
   inherit version;
   defaultVersion = with lib.versions; lib.switch coq.coq-version [
+<<<<<<< HEAD
     { case = range "8.12" "8.17"; out = "4.8.0"; }
+=======
+    { case = range "8.12" "8.17"; out = "4.6.1"; }
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     { case = range "8.12" "8.16"; out = "4.6.0"; }
     { case = range "8.8" "8.16"; out = "4.5.2"; }
     { case = range "8.8" "8.12"; out = "4.0.0"; }
     { case = range "8.7" "8.11"; out = "3.4.2"; }
     { case = range "8.5" "8.6";  out = "3.3.0"; }
   ] null;
+<<<<<<< HEAD
   release."4.8.0".sha256 = "sha256-YPQ1tuUgGixAVdQUJ9a3lZUNVgm2pKK3RKvl3m+/8rY=";
   release."4.7.0".sha256 = "sha256-Cel25w4BeaNqu9KAW3N2KYO2IGY0EOAK5FQ6VHBPmFQ=";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   release."4.6.1".sha256 = "sha256-ZZSxt8ksz0g6dl/LEido5qJXgsaxHrVLqkGUHu90+e0=";
   release."4.6.0".sha256 = "sha256-n9ECKnV0L6XYcIcbYyOJKwlbisz/RRbNW5YESHo07X0=";
   release."4.5.2".sha256 = "sha256-r0yE9pkC4EYlqsimxkdlCXevRcwKa3HGFZiUH+ueUY8=";

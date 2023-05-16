@@ -2,8 +2,15 @@
 , stdenv
 , rustPlatform
 , fetchFromGitHub
+<<<<<<< HEAD
 , buildPackages
 , cargo
+=======
+
+, buildPackages
+, cargo
+, iproute2
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , lzo
 , openssl
 , pkg-config
@@ -14,13 +21,21 @@
 
 let
   pname = "zerotierone";
+<<<<<<< HEAD
   version = "1.12.1";
+=======
+  version = "1.10.6";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "zerotier";
     repo = "ZeroTierOne";
     rev = version;
+<<<<<<< HEAD
     sha256 = "sha256-430wdPrSNohM3sXewusjsW3tbE7EFGISGxABZF21yRc=";
+=======
+    sha256 = "sha256-mapFKeF+8jMGkxSuHaw5oUdTdSQgAdxEwF/S6iyVLbY=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
 in stdenv.mkDerivation {
@@ -57,6 +72,10 @@ in stdenv.mkDerivation {
     rustc
   ];
   buildInputs = [
+<<<<<<< HEAD
+=======
+    iproute2
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     lzo
     openssl
     zlib
@@ -93,6 +112,10 @@ in stdenv.mkDerivation {
     homepage = "https://www.zerotier.com";
     license = licenses.bsl11;
     maintainers = with maintainers; [ sjmackenzie zimbatm ehmry obadz danielfullmer ];
+<<<<<<< HEAD
     platforms = platforms.linux;
+=======
+    platforms = platforms.all;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

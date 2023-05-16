@@ -11,12 +11,20 @@
 }:
 stdenv.mkDerivation rec {
   pname = "nix-eval-jobs";
+<<<<<<< HEAD
   version = "2.17.0";
+=======
+  version = "2.14.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = pname;
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-5rhsYKYKKOxv9aL2dPcFehdHcO58+ptG4CWaSYR6lfo=";
+=======
+    hash = "sha256-fpksS7lbaYwjf7NuPFE44wvyGcT5d+ERBCJmZoKXaWA=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
   buildInputs = [
     boost

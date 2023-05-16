@@ -38,7 +38,11 @@ let cfg = config.services.networking.websockify; in {
       description = "Service to forward websocket connections to TCP connections (from port:to port %I)";
       script = ''
         IFS=':' read -a array <<< "$1"
+<<<<<<< HEAD
         ${pkgs.python3Packages.websockify}/bin/websockify --ssl-only \
+=======
+        ${pkgs.pythonPackages.websockify}/bin/websockify --ssl-only \
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           --cert=${cfg.sslCert} --key=${cfg.sslKey} 0.0.0.0:''${array[0]} 0.0.0.0:''${array[1]}
       '';
       scriptArgs = "%i";

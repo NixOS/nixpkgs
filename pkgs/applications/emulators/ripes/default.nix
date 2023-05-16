@@ -8,7 +8,10 @@
 , wrapQtAppsHook
 , cmake
 , python3
+<<<<<<< HEAD
 , stdenv
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 mkDerivation rec {
@@ -37,6 +40,7 @@ mkDerivation rec {
   ];
 
   installPhase = ''
+<<<<<<< HEAD
     runHook preInstall
   '' + lib.optionalString stdenv.isDarwin ''
     mkdir -p $out/Applications
@@ -47,13 +51,21 @@ mkDerivation rec {
   '' + ''
     cp -r ${src}/appdir/usr/share $out/share
     runHook postInstall
+=======
+    install -D Ripes $out/bin/Ripes
+    cp -r ${src}/appdir/usr/share $out/share
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '';
 
   meta = with lib; {
     description = "A graphical processor simulator and assembly editor for the RISC-V ISA";
     homepage = "https://github.com/mortbopet/Ripes";
     license = licenses.mit;
+<<<<<<< HEAD
     platforms = platforms.unix;
+=======
+    platforms = platforms.linux;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     maintainers = with maintainers; [ rewine ];
   };
 }

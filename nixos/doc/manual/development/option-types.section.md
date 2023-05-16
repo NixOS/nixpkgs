@@ -20,11 +20,14 @@ merging is handled.
     coerced to a string. Even if derivations can be considered as
     paths, the more specific `types.package` should be preferred.
 
+<<<<<<< HEAD
 `types.pathInStore`
 
 :   A path that is contained in the Nix store. This can be a top-level store
     path like `pkgs.hello` or a descendant like `"${pkgs.hello}/bin/hello"`.
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 `types.package`
 
 :   A top-level store path. This can be an attribute set pointing

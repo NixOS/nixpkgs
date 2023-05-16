@@ -272,6 +272,7 @@ in {
         Group = cfg.group;
         WorkingDirectory = cfg.home;
         # NOTE: call twistd directly with stdout logging for systemd
+<<<<<<< HEAD
         ExecStart = "${python.pkgs.twisted}/bin/twistd -o --nodaemon --pidfile= --logfile - --python ${cfg.buildbotDir}/buildbot.tac";
         # To reload on upgrade, set the following in your configuration:
         # systemd.services.buildbot-master.reloadIfChanged = true;
@@ -279,6 +280,9 @@ in {
           "${pkgs.coreutils}/bin/ln -sf ${tacFile} ${cfg.buildbotDir}/buildbot.tac"
           "${pkgs.coreutils}/bin/kill -HUP $MAINPID"
         ];
+=======
+        ExecStart = "${python.pkgs.twisted}/bin/twistd -o --nodaemon --pidfile= --logfile - --python ${tacFile}";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       };
     };
   };

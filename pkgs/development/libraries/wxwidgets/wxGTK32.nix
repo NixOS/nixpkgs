@@ -2,6 +2,12 @@
 , stdenv
 , expat
 , fetchFromGitHub
+<<<<<<< HEAD
+=======
+, fetchpatch
+, fetchurl
+, gnome2
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , gst_all_1
 , gtk3
 , libGL
@@ -20,7 +26,11 @@
 , compat28 ? false
 , compat30 ? true
 , unicode ? true
+<<<<<<< HEAD
 , withMesa ? !stdenv.isDarwin
+=======
+, withMesa ? lib.elem stdenv.hostPlatform.system lib.platforms.mesaPlatforms
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , withWebKit ? stdenv.isDarwin
 , webkitgtk
 , setfile
@@ -112,7 +122,11 @@ stdenv.mkDerivation rec {
     "--enable-webviewwebkit"
   ];
 
+<<<<<<< HEAD
   SEARCH_LIB = lib.optionalString (!stdenv.isDarwin) "${libGLU.out}/lib ${libGL.out}/lib";
+=======
+  SEARCH_LIB = "${libGLU.out}/lib ${libGL.out}/lib";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   preConfigure = ''
     cp -r ${catch}/* 3rdparty/catch/

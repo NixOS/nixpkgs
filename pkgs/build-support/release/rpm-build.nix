@@ -46,7 +46,11 @@ vmTools.buildRPM (
       done
     '';
 
+<<<<<<< HEAD
     meta = (lib.optionalAttrs (args ? meta) args.meta) // {
+=======
+    meta = (if args ? meta then args.meta else {}) // {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       description = "RPM package for ${diskImage.fullName}";
     };
   }

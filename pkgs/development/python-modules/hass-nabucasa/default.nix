@@ -17,7 +17,11 @@
 
 buildPythonPackage rec {
   pname = "hass-nabucasa";
+<<<<<<< HEAD
   version = "0.71.0";
+=======
+  version = "0.66.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -26,7 +30,11 @@ buildPythonPackage rec {
     owner = "nabucasa";
     repo = pname;
     rev = "refs/tags/${version}";
+<<<<<<< HEAD
     hash = "sha256-2v8LEVYY7PEzcIMaXcy9h+8O2KrU0zTKyZb2IrO35JQ=";
+=======
+    hash = "sha256-LlVT5WRd2uhUaghThJ5ghPbX40QjqTenUC4txMx3Jlo=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   postPatch = ''

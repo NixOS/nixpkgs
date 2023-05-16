@@ -45,6 +45,10 @@ buildPythonPackage rec {
     homepage = "http://blockdiag.com/";
     license = licenses.asl20;
     platforms = platforms.unix;
+<<<<<<< HEAD
     maintainers = with maintainers; [ bjornfor ];
+=======
+    maintainers = with maintainers; [ bjornfor SuperSandro2000 ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

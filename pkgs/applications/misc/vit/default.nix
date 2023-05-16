@@ -1,6 +1,9 @@
 { lib
 , python3Packages
+<<<<<<< HEAD
 , fetchPypi
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , taskwarrior
 , glibcLocales
 }:

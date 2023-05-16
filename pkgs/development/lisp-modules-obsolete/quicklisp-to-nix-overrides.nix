@@ -4,7 +4,12 @@ let
   skipBuildPhase = x: {
     overrides = y: ((x.overrides y) // { buildPhase = "true"; });
   };
+<<<<<<< HEAD
   multiOverride = l: x: pkgs.lib.optionalAttrs (l != []) (((builtins.head l) x) // (multiOverride (builtins.tail l) x));
+=======
+  multiOverride = l: x: if l == [] then {} else
+    ((builtins.head l) x) // (multiOverride (builtins.tail l) x);
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   lispName = (clwrapper.lisp.pname or (builtins.parseDrvName clwrapper.lisp.name).name);
   ifLispIn = l: f: if (pkgs.lib.elem lispName l) then f else (x: {});
   ifLispNotIn = l: f: if ! (pkgs.lib.elem lispName l) then f else (x: {});

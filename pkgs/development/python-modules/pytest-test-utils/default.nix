@@ -2,8 +2,11 @@
 , buildPythonPackage
 , fetchFromGitHub
 , setuptools
+<<<<<<< HEAD
 , setuptools-scm
 , wheel
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , pytestCheckHook
 , pytest
 , pythonOlder
@@ -23,12 +26,17 @@ buildPythonPackage rec {
     hash = "sha256-5gB+hnJR2+NQd/n7RGrX1bzfKt8Np7IbWw61SZgNVJY=";
   };
 
+<<<<<<< HEAD
   env.SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   nativeBuildInputs = [
     setuptools
     setuptools-scm
     wheel
+=======
+  nativeBuildInputs = [
+    setuptools
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   buildInputs = [

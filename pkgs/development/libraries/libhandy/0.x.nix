@@ -47,7 +47,11 @@ stdenv.mkDerivation rec {
     description = "A library full of GTK widgets for mobile phones";
     homepage = "https://source.puri.sm/Librem5/libhandy";
     license = licenses.lgpl21Plus;
+<<<<<<< HEAD
     maintainers = with maintainers; [ ];
+=======
+    maintainers = with maintainers; [ jtojnar ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     platforms = platforms.unix;
   };
 }

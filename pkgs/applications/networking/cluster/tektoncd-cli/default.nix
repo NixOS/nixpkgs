@@ -2,16 +2,27 @@
 
 buildGoModule rec {
   pname = "tektoncd-cli";
+<<<<<<< HEAD
   version = "0.31.2";
+=======
+  version = "0.30.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "tektoncd";
     repo = "cli";
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-QBJ8UoR61XOFT6u5glpL+DHaj5Kyqq73r0pyteINQNA=";
   };
 
   vendorHash = null;
+=======
+    sha256 = "sha256-tn7nK5YTdEYJf9UBajOZEc8fQ0cx3qM0X/7UYnDklj8=";
+  };
+
+  vendorSha256 = null;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   ldflags = [ "-s" "-w" "-X github.com/tektoncd/cli/pkg/cmd/version.clientVersion=${version}" ];
 

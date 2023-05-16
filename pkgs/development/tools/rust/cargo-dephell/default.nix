@@ -32,7 +32,11 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [
     openssl
+<<<<<<< HEAD
   ] ++ lib.optionals stdenv.isDarwin [
+=======
+  ] ++ lib.optional stdenv.isDarwin [
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     curl
     darwin.apple_sdk.frameworks.Security
     libgit2_1_3_0
@@ -47,6 +51,10 @@ rustPlatform.buildRustPackage rec {
     description = "A tool to analyze the third-party dependencies imported by a rust crate or rust workspace";
     homepage = "https://github.com/mimoo/cargo-dephell";
     license = with licenses; [ mit /* or */ asl20 ];
+<<<<<<< HEAD
     maintainers = with maintainers; [ figsoda matthiasbeyer ];
+=======
+    maintainers = with maintainers; [ figsoda ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

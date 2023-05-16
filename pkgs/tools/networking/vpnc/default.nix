@@ -1,6 +1,12 @@
+<<<<<<< HEAD
 { lib, stdenv, fetchFromGitHub
 , makeWrapper, pkg-config, perl
 , gnutls, libgcrypt, vpnc-scripts
+=======
+{ lib, stdenv, fetchFromGitHub, fetchpatch
+, makeWrapper, pkg-config, perl
+, gawk, gnutls, libgcrypt, openresolv, vpnc-scripts
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , opensslSupport ? false, openssl # Distributing this is a GPL violation.
 }:
 

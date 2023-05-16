@@ -1,5 +1,9 @@
 { lib, buildPythonApplication, fetchFromGitHub, wrapGAppsHook
 , pytestCheckHook
+<<<<<<< HEAD
+=======
+, fetchpatch
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , gtk3, gobject-introspection, libappindicator-gtk3, librsvg
 , evdev, pygobject3, pylibacl, bluez, vdf
 , linuxHeaders
@@ -8,13 +12,21 @@
 
 buildPythonApplication rec {
   pname = "sc-controller";
+<<<<<<< HEAD
   version = "0.4.8.11";
+=======
+  version = "0.4.8.9";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner  = "Ryochan7";
     repo   = pname;
     rev    = "v${version}";
+<<<<<<< HEAD
     sha256 = "xu9QqddJf0cXkhNPrOnE+L8CV5AfgcCyk9DSh+G94c0=";
+=======
+    sha256 = "sha256-ym5fkOTRhibBaUqT0+p/jyqqKOVsyMz5INgfkoz0IJA=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ wrapGAppsHook gobject-introspection ];
@@ -25,6 +37,17 @@ buildPythonApplication rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
+<<<<<<< HEAD
+=======
+  patches = [
+    # Fix a broken test
+    (fetchpatch {
+      url = "https://github.com/Ryochan7/sc-controller/pull/73.patch";
+      sha256 = "sha256-qU8hIReZE3cEPCMOFc4RCUCIhiS0gJ3PushMkfDlPns=";
+     })
+  ];
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   postPatch = ''
     substituteInPlace scc/paths.py --replace sys.prefix "'$out'"
     substituteInPlace scc/uinput.py --replace /usr/include ${linuxHeaders}/include

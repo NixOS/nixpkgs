@@ -5,14 +5,22 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "commix";
+<<<<<<< HEAD
   version = "3.8";
+=======
+  version = "3.7";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "commixproject";
     repo = pname;
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-S/2KzZb3YUF0VJharWV/+7IG+r1EnB2sOveMpd1ryEI=";
+=======
+    hash = "sha256-pqfb0CkWTPq6B8T7nn25lWuEQFRRziCDWYm5a1S3mIY=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   postInstall = ''

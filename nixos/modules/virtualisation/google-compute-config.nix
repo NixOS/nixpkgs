@@ -1,4 +1,5 @@
 { config, lib, pkgs, ... }:
+<<<<<<< HEAD
 
 let
   inherit (lib)
@@ -10,6 +11,9 @@ let
   ;
 in
 
+=======
+with lib;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 {
   imports = [
     ../profiles/headless.nix
@@ -75,7 +79,11 @@ in
   systemd.services.google-guest-agent = {
     wantedBy = [ "multi-user.target" ];
     restartTriggers = [ config.environment.etc."default/instance_configs.cfg".source ];
+<<<<<<< HEAD
     path = optional config.users.mutableUsers pkgs.shadow;
+=======
+    path = lib.optional config.users.mutableUsers pkgs.shadow;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
   systemd.services.google-startup-scripts.wantedBy = [ "multi-user.target" ];
   systemd.services.google-shutdown-scripts.wantedBy = [ "multi-user.target" ];
@@ -86,7 +94,11 @@ in
 
   users.groups.google-sudoers = mkIf config.users.mutableUsers { };
 
+<<<<<<< HEAD
   boot.extraModprobeConfig = readFile "${pkgs.google-guest-configs}/etc/modprobe.d/gce-blacklist.conf";
+=======
+  boot.extraModprobeConfig = lib.readFile "${pkgs.google-guest-configs}/etc/modprobe.d/gce-blacklist.conf";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   environment.etc."sysctl.d/60-gce-network-security.conf".source = "${pkgs.google-guest-configs}/etc/sysctl.d/60-gce-network-security.conf";
 

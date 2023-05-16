@@ -1,7 +1,15 @@
+<<<<<<< HEAD
 { stdenv, lib, callPackage, fetchFromGitHub, cmake, ninja, pkg-config
 , curl, freetype, giflib, libjpeg, libpng, libwebp, pixman, tinyxml, zlib
 , harfbuzzFull, glib, fontconfig, pcre
 , libX11, libXext, libXcursor, libXxf86vm, libGL, libXi
+=======
+{ stdenv, lib, callPackage, fetchFromGitHub, fetchpatch, cmake, ninja, pkg-config
+, curl, freetype, giflib, libjpeg, libpng, libwebp, pixman, tinyxml, zlib
+, harfbuzzFull, glib, fontconfig, pcre
+, libX11, libXext, libXcursor, libXxf86vm, libGL
+, unfree ? false
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , cmark
 }:
 
@@ -14,23 +22,39 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "aseprite";
+<<<<<<< HEAD
   version = "1.2.40";
+=======
+  version = if unfree then "1.2.16.3" else "1.1.7";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "aseprite";
     repo = "aseprite";
     rev = "v${version}";
     fetchSubmodules = true;
+<<<<<<< HEAD
     hash = "sha256-KUdJA6HTAKrLT8xrwFikVDbc5RODysclcsEyQekMRZo=";
   };
 
   nativeBuildInputs = [
     cmake pkg-config ninja
   ];
+=======
+    sha256 = if unfree
+      then "16yn7y9xdc5jd50cq7bmsm320gv23pp71lr8hg2nmynzc8ibyda8"
+      else "0gd49lns2bpzbkwax5jf9x1xmg1j8ij997kcxr2596cwiswnw4di";
+  };
+
+  nativeBuildInputs = [
+    cmake pkg-config
+  ] ++ lib.optionals unfree [ ninja ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   buildInputs = [
     curl freetype giflib libjpeg libpng libwebp pixman tinyxml zlib
     libX11 libXext libXcursor libXxf86vm
+<<<<<<< HEAD
     cmark
     harfbuzzFull glib fontconfig pcre
     skia libGL libXi
@@ -43,6 +67,29 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     sed -i src/ver/CMakeLists.txt -e "s-set(VERSION \".*\")-set(VERSION \"$version\")-"
+=======
+  ] ++ lib.optionals unfree [
+    cmark
+    harfbuzzFull glib fontconfig pcre
+    skia libGL
+  ];
+
+  patches = if !unfree then [
+    ./allegro-glibc-2.30.patch
+  ] else [
+    (fetchpatch {
+      url = "https://github.com/lfont/aseprite/commit/f1ebc47012d3fed52306ed5922787b4b98cc0a7b.patch";
+      sha256 = "03xg7x6b9iv7z18vzlqxhcfphmx4v3qhs9f5rgf38ppyklca5jyw";
+    })
+    (fetchpatch {
+      url = "https://github.com/orivej/aseprite/commit/ea87e65b357ad0bd65467af5529183b5a48a8c17.patch";
+      sha256 = "1vwn8ivap1pzdh444sdvvkndp55iz146nhmd80xbm8cyzn3qmg91";
+    })
+  ];
+
+  postPatch = ''
+    sed -i src/config.h -e "s-\\(#define VERSION\\) .*-\\1 \"$version\"-"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '';
 
   cmakeFlags = [
@@ -56,19 +103,34 @@ stdenv.mkDerivation rec {
     "-DUSE_SHARED_PIXMAN=ON"
     "-DUSE_SHARED_TINYXML=ON"
     "-DUSE_SHARED_ZLIB=ON"
+<<<<<<< HEAD
     "-DUSE_SHARED_CMARK=ON"
     "-DUSE_SHARED_HARFBUZZ=ON"
     "-DUSE_SHARED_WEBP=ON"
+=======
+    "-DWITH_DESKTOP_INTEGRATION=ON"
+    "-DWITH_WEBP_SUPPORT=ON"
+  ] ++ lib.optionals unfree [
+    "-DUSE_SHARED_CMARK=ON"
+    "-DUSE_SHARED_HARFBUZZ=ON"
+    # Aseprite needs internal freetype headers.
+    "-DUSE_SHARED_FREETYPE=OFF"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     # Disable libarchive programs.
     "-DENABLE_CAT=OFF"
     "-DENABLE_CPIO=OFF"
     "-DENABLE_TAR=OFF"
     # UI backend.
+<<<<<<< HEAD
     "-DLAF_WITH_EXAMPLES=OFF"
     "-DLAF_OS_BACKEND=skia"
     "-DENABLE_DESKTOP_INTEGRATION=ON"
     "-DSKIA_DIR=${skia}"
     "-DSKIA_LIBRARY_DIR=${skia}/out/Release"
+=======
+    "-DLAF_OS_BACKEND=skia"
+    "-DSKIA_DIR=${skia}"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   postInstall = ''
@@ -88,7 +150,11 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://www.aseprite.org/";
     description = "Animated sprite editor & pixel art tool";
+<<<<<<< HEAD
     license = licenses.unfree;
+=======
+    license = if unfree then licenses.unfree else licenses.gpl2;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     longDescription =
       ''Aseprite is a program to create animated sprites. Its main features are:
 
@@ -102,7 +168,12 @@ stdenv.mkDerivation rec {
           - Multiple editors support.
           - Pixel-art specific tools like filled Contour, Polygon, Shading mode, etc.
           - Onion skinning.
+<<<<<<< HEAD
 
+=======
+      '' + lib.optionalString unfree
+      ''
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         This version is not redistributable: https://dev.aseprite.org/2016/09/01/new-source-code-license/
         Consider supporting the developer: https://aseprite.org/#buy
       '';

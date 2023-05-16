@@ -87,13 +87,21 @@ in
       extraPackages = mkOption {
         type = types.listOf types.package;
         default = [];
+<<<<<<< HEAD
         example = literalExpression "with pkgs; [ intel-media-driver intel-ocl intel-vaapi-driver ]";
+=======
+        example = literalExpression "with pkgs; [ intel-media-driver intel-ocl vaapiIntel ]";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         description = lib.mdDoc ''
           Additional packages to add to OpenGL drivers.
           This can be used to add OpenCL drivers, VA-API/VDPAU drivers etc.
 
           ::: {.note}
+<<<<<<< HEAD
           intel-media-driver supports hardware Broadwell (2014) or newer. Older hardware should use the mostly unmaintained intel-vaapi-driver driver.
+=======
+          intel-media-driver supports hardware Broadwell (2014) or newer. Older hardware should use the mostly unmaintained vaapiIntel driver.
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           :::
         '';
       };
@@ -101,13 +109,21 @@ in
       extraPackages32 = mkOption {
         type = types.listOf types.package;
         default = [];
+<<<<<<< HEAD
         example = literalExpression "with pkgs.pkgsi686Linux; [ intel-media-driver intel-vaapi-driver ]";
+=======
+        example = literalExpression "with pkgs.pkgsi686Linux; [ intel-media-driver vaapiIntel ]";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         description = lib.mdDoc ''
           Additional packages to add to 32-bit OpenGL drivers on 64-bit systems.
           Used when {option}`driSupport32Bit` is set. This can be used to add OpenCL drivers, VA-API/VDPAU drivers etc.
 
           ::: {.note}
+<<<<<<< HEAD
           intel-media-driver supports hardware Broadwell (2014) or newer. Older hardware should use the mostly unmaintained intel-vaapi-driver driver.
+=======
+          intel-media-driver supports hardware Broadwell (2014) or newer. Older hardware should use the mostly unmaintained vaapiIntel driver.
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           :::
         '';
       };

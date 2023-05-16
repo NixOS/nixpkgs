@@ -19,7 +19,11 @@ let
   runAllTests = files == null;
   testArgs = if runAllTests then "--all" else testFileList;
   patienceSpecifier = lib.optionalString longTests "--long";
+<<<<<<< HEAD
   timeSpecifier = lib.optionalString (timeLimit != null) "--short ${toString timeLimit}";
+=======
+  timeSpecifier = if timeLimit == null then "" else "--short ${toString timeLimit}";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   relpathToArg = relpath: lib.escapeShellArg "${src}/${relpath}"; # paths need to be absolute
   testFileList = lib.concatStringsSep " " (map relpathToArg files);
 in

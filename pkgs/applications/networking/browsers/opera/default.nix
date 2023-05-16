@@ -51,11 +51,19 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "opera";
+<<<<<<< HEAD
   version = "100.0.4815.47";
 
   src = fetchurl {
     url = "${mirror}/${version}/linux/${pname}-stable_${version}_amd64.deb";
     hash = "sha256-746imLXqxzf9zK2QEVRuWkLA6m+HHXBYZFUwTD0HEVc=";
+=======
+  version = "98.0.4759.15";
+
+  src = fetchurl {
+    url = "${mirror}/${version}/linux/${pname}-stable_${version}_amd64.deb";
+    hash = "sha256-nv6/RXsF8rvYoCfsUC1xR79ssroAkfBqzADi02AfYH8=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   unpackPhase = "dpkg-deb -x $src .";

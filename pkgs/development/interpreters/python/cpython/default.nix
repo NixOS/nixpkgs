@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 { lib, stdenv, fetchurl, fetchpatch, fetchgit
+=======
+{ lib, stdenv, fetchurl, fetchpatch
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , bzip2
 , expat
 , libffi
@@ -18,7 +22,10 @@
 , self
 , configd
 , darwin
+<<<<<<< HEAD
 , windows
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , autoreconfHook
 , autoconf-archive
 , pkg-config
@@ -45,9 +52,12 @@
 , static ? stdenv.hostPlatform.isStatic
 , enableFramework ? false
 , enableOptimizations ? false
+<<<<<<< HEAD
 # these dont build for windows
 , withGdbm ? !stdenv.hostPlatform.isWindows
 , withReadline ? !stdenv.hostPlatform.isWindows
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 # enableNoSemanticInterposition is a subset of the enableOptimizations flag that doesn't harm reproducibility.
 # clang starts supporting `-fno-sematic-interposition` with version 10
 , enableNoSemanticInterposition ? (!stdenv.cc.isClang || (stdenv.cc.isClang && lib.versionAtLeast stdenv.cc.version "10"))
@@ -57,7 +67,10 @@
 , enableLTO ? stdenv.is64bit && stdenv.isLinux
 , reproducibleBuild ? false
 , pythonAttr ? "python${sourceVersion.major}${sourceVersion.minor}"
+<<<<<<< HEAD
 , noldconfigPatch ? ./. + "/${sourceVersion.major}.${sourceVersion.minor}/no-ldconfig.patch"
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 } @ inputs:
 
 # Note: this package is used for bootstrapping fetchurl, and thus
@@ -113,7 +126,11 @@ let
     pythonOnBuildForHost = override pkgsBuildHost.${pythonAttr};
     pythonOnBuildForTarget = override pkgsBuildTarget.${pythonAttr};
     pythonOnHostForHost = override pkgsHostHost.${pythonAttr};
+<<<<<<< HEAD
     pythonOnTargetForTarget = lib.optionalAttrs (lib.hasAttr pythonAttr pkgsTargetTarget) (override pkgsTargetTarget.${pythonAttr});
+=======
+    pythonOnTargetForTarget = if lib.hasAttr pythonAttr pkgsTargetTarget then (override pkgsTargetTarget.${pythonAttr}) else {};
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   version = with sourceVersion; "${major}.${minor}.${patch}${suffix}";
@@ -132,17 +149,24 @@ let
   ];
 
   buildInputs = filter (p: p != null) ([
+<<<<<<< HEAD
     zlib bzip2 expat xz libffi libxcrypt ]
     ++ optional withGdbm gdbm
     ++ [ sqlite ]
     ++ optional withReadline readline
     ++ [ ncurses openssl' ]
+=======
+    zlib bzip2 expat xz libffi libxcrypt gdbm sqlite readline ncurses openssl' ]
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     ++ optionals x11Support [ tcl tk libX11 xorgproto ]
     ++ optionals (bluezSupport && stdenv.isLinux) [ bluez ]
     ++ optionals stdenv.isDarwin [ configd ])
 
     ++ optionals enableFramework [ Cocoa ]
+<<<<<<< HEAD
     ++ optionals stdenv.hostPlatform.isMinGW [ windows.mingw_w64_pthreads windows.dlfcn ]
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     ++ optionals tzdataSupport [ tzdata ];  # `zoneinfo` module
 
   hasDistutilsCxxPatch = !(stdenv.cc.isGNU or false);
@@ -151,11 +175,14 @@ let
     "$out/bin/python"
   else pythonForBuild.interpreter;
 
+<<<<<<< HEAD
   src = fetchurl {
     url = with sourceVersion; "https://www.python.org/ftp/python/${major}.${minor}.${patch}/Python-${version}.tar.xz";
     inherit hash;
   };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   # The CPython interpreter contains a _sysconfigdata_<platform specific suffix>
   # module that is imported by the sysconfig and distutils.sysconfig modules.
   # The sysconfigdata module is generated at build time and contains settings
@@ -169,8 +196,11 @@ let
   # are not documented, and must be derived from the configure script (see links
   # below).
   sysconfigdataHook = with stdenv.hostPlatform; with passthru; let
+<<<<<<< HEAD
     machdep = if isWindows then "win32" else parsed.kernel.name; # win32 is added by Fedora’s patch
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     # https://github.com/python/cpython/blob/e488e300f5c01289c10906c2e53a8e43d6de32d8/configure.ac#L428
     # The configure script uses "arm" as the CPU name for all 32-bit ARM
     # variants when cross-compiling, but native builds include the version
@@ -187,7 +217,11 @@ let
         powerpc64 = "ppc64";
         powerpc64le = "ppc64le";
       }.${parsed.cpu.name} or parsed.cpu.name;
+<<<<<<< HEAD
     in "${machdep}-${cpu}";
+=======
+    in "${parsed.kernel.name}-${cpu}";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     # https://github.com/python/cpython/blob/e488e300f5c01289c10906c2e53a8e43d6de32d8/configure.ac#L724
     multiarchCpu =
@@ -195,8 +229,11 @@ let
         if parsed.cpu.significantByte.name == "littleEndian" then "arm" else "armeb"
       else if isx86_32 then "i386"
       else parsed.cpu.name;
+<<<<<<< HEAD
     # Python doesn't distinguish musl and glibc and always prefixes with "gnu"
     gnuAbiName = replaceStrings [ "musl" ] [ "gnu" ] parsed.abi.name;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     pythonAbiName =
       # python's build doesn't support every gnu<extension>, and doesn't
       # differentiate between musl and glibc, so we list those supported in
@@ -204,7 +241,11 @@ let
       # https://github.com/python/cpython/blob/e488e300f5c01289c10906c2e53a8e43d6de32d8/configure.ac#L724
       # Note: this is an approximation, as it doesn't take into account the CPU
       # family, or the nixpkgs abi naming conventions.
+<<<<<<< HEAD
       if elem gnuAbiName [
+=======
+      if elem parsed.abi.name [
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "gnux32"
         "gnueabihf"
         "gnueabi"
@@ -212,17 +253,29 @@ let
         "gnuabi64"
         "gnuspe"
       ]
+<<<<<<< HEAD
       then gnuAbiName
       else "gnu";
     multiarch =
       if isDarwin then "darwin"
       else if isWindows then ""
       else "${multiarchCpu}-${machdep}-${pythonAbiName}";
+=======
+      then parsed.abi.name
+      else "gnu";
+    multiarch =
+      if isDarwin then "darwin"
+      else "${multiarchCpu}-${parsed.kernel.name}-${pythonAbiName}";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     abiFlags = optionalString isPy37 "m";
 
     # https://github.com/python/cpython/blob/e488e300f5c01289c10906c2e53a8e43d6de32d8/configure.ac#L78
+<<<<<<< HEAD
     pythonSysconfigdataName = "_sysconfigdata_${abiFlags}_${machdep}_${multiarch}";
+=======
+    pythonSysconfigdataName = "_sysconfigdata_${abiFlags}_${parsed.kernel.name}_${multiarch}";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   in ''
     sysconfigdataHook() {
       if [ "$1" = '${placeholder "out"}' ]; then
@@ -234,6 +287,7 @@ let
     addEnvHooks "$hostOffset" sysconfigdataHook
   '';
 
+<<<<<<< HEAD
   execSuffix = stdenv.hostPlatform.extensions.executable;
 in with passthru; stdenv.mkDerivation {
   pname = "python3";
@@ -242,6 +296,19 @@ in with passthru; stdenv.mkDerivation {
   inherit nativeBuildInputs;
   buildInputs = lib.optionals (!stdenv.hostPlatform.isWindows) [ bash ] ++ buildInputs; # bash is only used for patchShebangs
 
+=======
+in with passthru; stdenv.mkDerivation {
+  pname = "python3";
+  inherit version;
+
+  inherit nativeBuildInputs;
+  buildInputs = [ bash ] ++ buildInputs; # bash is only for patchShebangs
+
+  src = fetchurl {
+    url = with sourceVersion; "https://www.python.org/ftp/python/${major}.${minor}.${patch}/Python-${version}.tar.xz";
+    inherit hash;
+  };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   prePatch = optionalString stdenv.isDarwin ''
     substituteInPlace configure --replace '`/usr/bin/arch`' '"i386"'
@@ -268,7 +335,11 @@ in with passthru; stdenv.mkDerivation {
     # ctypes.util.find_library during the loading of the uuid module
     # (since it will do a futile invocation of gcc (!) to find
     # libuuid, slowing down program startup a lot).
+<<<<<<< HEAD
     noldconfigPatch
+=======
+    (./. + "/${sourceVersion.major}.${sourceVersion.minor}/no-ldconfig.patch")
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     # Make sure that the virtualenv activation scripts are
     # owner-writable, so venvs can be recreated without permission
     # errors.
@@ -300,7 +371,11 @@ in with passthru; stdenv.mkDerivation {
           sha256 = "1h18lnpx539h5lfxyk379dxwr8m2raigcjixkf133l4xy3f4bzi2";
         }
     )
+<<<<<<< HEAD
   ] ++ optionals (pythonAtLeast "3.7" && pythonOlder "3.12") [
+=======
+  ] ++ optionals (pythonOlder "3.12") [
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     # LDSHARED now uses $CC instead of gcc. Fixes cross-compilation of extension modules.
     ./3.8/0001-On-all-posix-systems-not-just-Darwin-set-LDSHARED-if.patch
     # Use sysconfigdata to find headers. Fixes cross-compilation of extension modules.
@@ -308,6 +383,7 @@ in with passthru; stdenv.mkDerivation {
   ] ++ optionals stdenv.hostPlatform.isLoongArch64 [
     # https://github.com/python/cpython/issues/90656
     ./loongarch-support.patch
+<<<<<<< HEAD
   ] ++ optionals (stdenv.hostPlatform.isMinGW) (let
     # https://src.fedoraproject.org/rpms/mingw-python3
     mingw-patch = fetchgit {
@@ -321,6 +397,11 @@ in with passthru; stdenv.mkDerivation {
   ]);
 
   postPatch = optionalString (!stdenv.hostPlatform.isWindows) ''
+=======
+  ];
+
+  postPatch = ''
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     substituteInPlace Lib/subprocess.py \
       --replace "'/bin/sh'" "'${bash}/bin/sh'"
   '' + optionalString mimetypesSupport ''
@@ -383,9 +464,14 @@ in with passthru; stdenv.mkDerivation {
     "ac_cv_have_long_long_format=yes"
     "ac_cv_have_size_t_format=yes"
     "ac_cv_computed_gotos=yes"
+<<<<<<< HEAD
     # Both fail when building for windows, normally configure checks this by itself but on other platforms this is set to yes always.
     "ac_cv_file__dev_ptmx=${if stdenv.hostPlatform.isWindows then "no" else "yes"}"
     "ac_cv_file__dev_ptc=${if stdenv.hostPlatform.isWindows then "no" else "yes"}"
+=======
+    "ac_cv_file__dev_ptmx=yes"
+    "ac_cv_file__dev_ptc=yes"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ] ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform && pythonAtLeast "3.11") [
     "--with-build-python=${pythonForBuildInterpreter}"
   ] ++ optionals stdenv.hostPlatform.isLinux [
@@ -394,8 +480,12 @@ in with passthru; stdenv.mkDerivation {
     "ac_cv_func_lchmod=no"
   ] ++ optionals tzdataSupport [
     "--with-tzpath=${tzdata}/share/zoneinfo"
+<<<<<<< HEAD
   ] ++ optional static "LDFLAGS=-static"
   ++ optional (execSuffix != "") "--with-suffix=${execSuffix}";
+=======
+  ] ++ optional static "LDFLAGS=-static";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   preConfigure = optionalString (pythonOlder "3.12") ''
     for i in /usr /sw /opt /pkg; do	# improve purity
@@ -404,9 +494,12 @@ in with passthru; stdenv.mkDerivation {
   '' + optionalString stdenv.isDarwin ''
     # Override the auto-detection in setup.py, which assumes a universal build
     export PYTHON_DECIMAL_WITH_MACHINE=${if stdenv.isAarch64 then "uint128" else "x64"}
+<<<<<<< HEAD
   '' + optionalString (stdenv.isDarwin && x11Support && pythonAtLeast "3.11") ''
     export TCLTK_LIBS="-L${tcl}/lib -L${tk}/lib -l${tcl.libPrefix} -l${tk.libPrefix}"
     export TCLTK_CFLAGS="-I${tcl}/include -I${tk}/include"
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '' + optionalString (isPy3k && pythonOlder "3.7") ''
     # Determinism: The interpreter is patched to write null timestamps when compiling Python files
     #   so Python doesn't try to update the bytecode when seeing frozen timestamps in Nix's store.
@@ -463,10 +556,16 @@ in with passthru; stdenv.mkDerivation {
     # Use Python3 as default python
     ln -s "$out/bin/idle3" "$out/bin/idle"
     ln -s "$out/bin/pydoc3" "$out/bin/pydoc"
+<<<<<<< HEAD
     ln -s "$out/bin/python3${execSuffix}" "$out/bin/python${execSuffix}"
     ln -s "$out/bin/python3-config" "$out/bin/python-config"
     ln -s "$out/lib/pkgconfig/python3.pc" "$out/lib/pkgconfig/python.pc"
     ln -sL "$out/share/man/man1/python3.1.gz" "$out/share/man/man1/python.1.gz"
+=======
+    ln -s "$out/bin/python3" "$out/bin/python"
+    ln -s "$out/bin/python3-config" "$out/bin/python-config"
+    ln -s "$out/lib/pkgconfig/python3.pc" "$out/lib/pkgconfig/python.pc"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     # Get rid of retained dependencies on -dev packages, and remove
     # some $TMPDIR references to improve binary reproducibility.
@@ -529,6 +628,7 @@ in with passthru; stdenv.mkDerivation {
      To use Python with Nix and nixpkgs, have a look at the online documentation:
      <https://nixos.org/manual/nixpkgs/stable/#python>.
     EXTERNALLY_MANAGED
+<<<<<<< HEAD
   '' + optionalString stdenv.hostPlatform.isWindows ''
     # Shebang files that link against the build python. Shebang don’t work on windows
     rm $out/bin/2to3*
@@ -537,6 +637,8 @@ in with passthru; stdenv.mkDerivation {
 
     echo linking DLLs for python’s compiled librairies
     linkDLLsInfolder $out/lib/python*/lib-dynload/
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '';
 
   preFixup = lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
@@ -564,6 +666,7 @@ in with passthru; stdenv.mkDerivation {
 
   separateDebugInfo = true;
 
+<<<<<<< HEAD
   passthru = passthru // {
     doc = stdenv.mkDerivation {
       inherit src;
@@ -582,6 +685,9 @@ in with passthru; stdenv.mkDerivation {
       nativeBuildInputs = with pkgsBuildBuild.python3.pkgs; [ sphinxHook python_docs_theme ];
     };
   };
+=======
+  inherit passthru;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   enableParallelBuilding = true;
 
@@ -606,8 +712,13 @@ in with passthru; stdenv.mkDerivation {
       high level dynamic data types.
     '';
     license = licenses.psfl;
+<<<<<<< HEAD
     platforms = platforms.linux ++ platforms.darwin ++ platforms.windows;
     maintainers = with maintainers; [ fridh ];
     mainProgram = executable;
+=======
+    platforms = platforms.linux ++ platforms.darwin;
+    maintainers = with maintainers; [ fridh ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

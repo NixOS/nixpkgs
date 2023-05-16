@@ -59,7 +59,11 @@ buildPythonApplication rec {
     desktopName = "Gaphor";
   };
 
+<<<<<<< HEAD
   # Disable automatic wrapGAppsHook to prevent double wrapping
+=======
+  # We need to wrap it manually to resolve all icons
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   dontWrapGApps = true;
 
   postInstall = ''
@@ -67,11 +71,18 @@ buildPythonApplication rec {
   '';
 
   preFixup = ''
+<<<<<<< HEAD
     makeWrapperArgs+=(
       "''${gappsWrapperArgs[@]}" \
       --prefix XDG_DATA_DIRS : "${gtk3}/share/gsettings-schemas/${gtk3.name}/" \
       --set GDK_PIXBUF_MODULE_FILE "${librsvg.out}/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache"
     )
+=======
+    wrapProgram $out/bin/gaphor \
+        ''${gappsWrapperArgs[@]} \
+        --prefix XDG_DATA_DIRS : "${gtk3}/share/gsettings-schemas/${gtk3.name}/" \
+        --set GDK_PIXBUF_MODULE_FILE "${librsvg.out}/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '';
 
   meta = with lib; {

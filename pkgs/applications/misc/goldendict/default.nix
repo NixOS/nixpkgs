@@ -1,8 +1,14 @@
+<<<<<<< HEAD
 { lib, stdenv, fetchFromGitHub, pkg-config
 , libXtst, libvorbis, hunspell, lzo, xz, bzip2, libiconv
 , qtbase, qtsvg, qtwebkit, qtx11extras, qttools, qmake
 , wrapQtAppsHook
 , wrapGAppsHook
+=======
+{ lib, stdenv, mkDerivation, fetchFromGitHub, pkg-config
+, libXtst, libvorbis, hunspell, lzo, xz, bzip2, libiconv
+, qtbase, qtsvg, qtwebkit, qtx11extras, qttools, qmake
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , withCC ? true, opencc
 , withEpwing ? true, libeb
 , withExtraTiff ? true, libtiff
@@ -10,19 +16,34 @@
 , withMultimedia ? true
 , withZim ? true, zstd }:
 
+<<<<<<< HEAD
 stdenv.mkDerivation rec {
   pname = "goldendict";
   version = "1.5.0";
+=======
+mkDerivation rec {
+  pname = "goldendict";
+  version = "2022-05-10";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "goldendict";
     repo = pname;
+<<<<<<< HEAD
     rev = version;
     hash = "sha256-80o8y+mbzpyMQYUGHYs/zgQT23nLVCs7Jcr8FbbXn8M=";
+=======
+    rev = "f810c6bd724e61977b4e94ca2d8abfa5bd766379";
+    sha256 = "sha256-gNM+iahoGQy8TlNFLQx5ksITzQznv7MWMX/88QCTnL0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   patches = [
     ./0001-dont-check-for-updates.patch
+<<<<<<< HEAD
+=======
+  ] ++ lib.optionals stdenv.isDarwin [
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     ./0001-dont-use-maclibs.patch
   ];
 
@@ -32,7 +53,11 @@ stdenv.mkDerivation rec {
       --replace "opencc.2" "opencc"
   '';
 
+<<<<<<< HEAD
   nativeBuildInputs = [ pkg-config qmake wrapQtAppsHook wrapGAppsHook ];
+=======
+  nativeBuildInputs = [ pkg-config qmake ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   buildInputs = [
     qtbase qtsvg qtwebkit qttools
     libvorbis hunspell xz lzo
@@ -64,7 +89,10 @@ stdenv.mkDerivation rec {
     homepage = "http://goldendict.org/";
     description = "A feature-rich dictionary lookup program";
     platforms = with platforms; linux ++ darwin;
+<<<<<<< HEAD
     mainProgram = "goldendict";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     maintainers = with maintainers; [ gebner astsmtl sikmir ];
     license = licenses.gpl3Plus;
   };

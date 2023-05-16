@@ -1,6 +1,10 @@
 { lib
 , stdenv
 , fetchurl
+<<<<<<< HEAD
+=======
+, fetchpatch
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 # Point the environment variable $WALLABAG_DATA to a data directory
@@ -15,19 +19,42 @@
 
 let
   pname = "wallabag";
+<<<<<<< HEAD
   version = "2.6.6";
+=======
+  version = "2.5.4";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 in
 stdenv.mkDerivation {
   inherit pname version;
 
   # Release tarball includes vendored files
   src = fetchurl {
+<<<<<<< HEAD
     url = "https://github.com/wallabag/wallabag/releases/download/${version}/wallabag-${version}.tar.gz";
     hash = "sha256-0CkJFSHPnOz333+7uMUqXI3A9dsA9FchZXXmwq7F09o=";
+=======
+    urls = [
+      "https://static.wallabag.org/releases/wallabag-release-${version}.tar.gz"
+      "https://github.com/wallabag/wallabag/releases/download/${version}/wallabag-${version}.tar.gz"
+    ];
+    hash = "sha256-yVMQXjGB8Yv1klQaHEbDGMZmOtANRocFJnawKn10xhg=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   patches = [
     ./wallabag-data.patch # exposes $WALLABAG_DATA
+<<<<<<< HEAD
+=======
+
+    # Use sendmail from php.ini instead of FHS path.
+    (fetchpatch {
+      url = "https://github.com/symfony/swiftmailer-bundle/commit/31a4fed8f621f141ba70cb42ffb8f73184995f4c.patch";
+      stripLen = 1;
+      extraPrefix = "vendor/symfony/swiftmailer-bundle/";
+      sha256 = "rxHiGhKFd/ZWnIfTt6omFLLoNFlyxOYNCHIv/UtxCho=";
+    })
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   dontBuild = true;

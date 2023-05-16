@@ -2,13 +2,21 @@
 
 stdenv.mkDerivation rec {
   pname = "your-editor";
+<<<<<<< HEAD
   version = "1506";
+=======
+  version = "1505";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "your-editor";
     repo = "yed";
     rev = version;
+<<<<<<< HEAD
     sha256 = "sha256-QmUquXoDGhoan+Y1kdkTirdkIvYPBkeAEkMLkaE9QKk=";
+=======
+    sha256 = "sha256-4HPrBr1M8J484qu1cXpZyVdLu3+/IYoNnNV9vSd4SlY=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   installPhase = ''

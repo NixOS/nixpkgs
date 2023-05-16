@@ -6,7 +6,11 @@ let
   cfg = config.services.tailscale;
   isNetworkd = config.networking.useNetworkd;
 in {
+<<<<<<< HEAD
   meta.maintainers = with maintainers; [ danderson mbaillie twitchyliquid64 mfrw ];
+=======
+  meta.maintainers = with maintainers; [ danderson mbaillie twitchyliquid64 ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   options.services.tailscale = {
     enable = mkEnableOption (lib.mdDoc "Tailscale client daemon");
@@ -29,7 +33,16 @@ in {
       description = lib.mdDoc "Username or user ID of the user allowed to to fetch Tailscale TLS certificates for the node.";
     };
 
+<<<<<<< HEAD
     package = lib.mkPackageOptionMD pkgs "tailscale" {};
+=======
+    package = mkOption {
+      type = types.package;
+      default = pkgs.tailscale;
+      defaultText = literalExpression "pkgs.tailscale";
+      description = lib.mdDoc "The package to use for tailscale";
+    };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     useRoutingFeatures = mkOption {
       type = types.enum [ "none" "client" "server" "both" ];
@@ -44,6 +57,7 @@ in {
         When set to `server` or `both`, IP forwarding will be enabled.
       '';
     };
+<<<<<<< HEAD
 
     authKeyFile = mkOption {
       type = types.nullOr types.path;
@@ -60,6 +74,8 @@ in {
       default = [];
       example = ["--ssh"];
     };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   config = mkIf cfg.enable {
@@ -70,8 +86,12 @@ in {
       path = [
         config.networking.resolvconf.package # for configuring DNS in some configs
         pkgs.procps     # for collecting running services (opt-in feature)
+<<<<<<< HEAD
         pkgs.getent     # for `getent` to look up user shells
         pkgs.kmod       # required to pass tailscale's v6nat check
+=======
+        pkgs.glibc      # for `getent` to look up user shells
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       ];
       serviceConfig.Environment = [
         "PORT=${toString cfg.port}"
@@ -93,6 +113,7 @@ in {
       stopIfChanged = false;
     };
 
+<<<<<<< HEAD
     systemd.services.tailscaled-autoconnect = mkIf (cfg.authKeyFile != null) {
       after = ["tailscale.service"];
       wants = ["tailscale.service"];
@@ -108,6 +129,8 @@ in {
       '';
     };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     boot.kernel.sysctl = mkIf (cfg.useRoutingFeatures == "server" || cfg.useRoutingFeatures == "both") {
       "net.ipv4.conf.all.forwarding" = mkOverride 97 true;
       "net.ipv6.conf.all.forwarding" = mkOverride 97 true;

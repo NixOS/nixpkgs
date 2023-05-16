@@ -22,6 +22,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-5m4aeuCqSJNgerQKyP9M6Qf7P4ijCtCY4Efew6E09Bc=";
   };
 
+<<<<<<< HEAD
   postPatch = ''
     substituteInPlace Makefile \
       --replace "pkg-config" "$PKG_CONFIG"
@@ -39,6 +40,10 @@ stdenv.mkDerivation rec {
     pango
     wayland
   ];
+=======
+  nativeBuildInputs = [ pkg-config ];
+  buildInputs = [ wayland-scanner wayland pango glib harfbuzz cairo libxkbcommon ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   installFlags = [ "PREFIX=$(out)" ];
 
   meta = with lib; {

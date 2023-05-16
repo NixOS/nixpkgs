@@ -16,7 +16,11 @@ buildGoModule rec {
   ];
 
   deleteVendor = true;
+<<<<<<< HEAD
   vendorHash = "sha256-AJyxCE4DdAXRS+2sY4Zzu8NTEFKJoV1bopfOqOFKZfI=";
+=======
+  vendorSha256 = "sha256-AJyxCE4DdAXRS+2sY4Zzu8NTEFKJoV1bopfOqOFKZfI=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   meta = with lib; {
     description = "Merge YAML/JSON files in a in a convenient fashion";

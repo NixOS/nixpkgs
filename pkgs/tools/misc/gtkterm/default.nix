@@ -7,7 +7,11 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "Jeija";
     repo = "gtkterm";
+<<<<<<< HEAD
     rev = version;
+=======
+    rev = "${version}";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     sha256 = "sha256-4Z+8fs4VEk2+Ci1X3oUuInylTdIbQ5AiPenFqnyNXvc=";
   };
 

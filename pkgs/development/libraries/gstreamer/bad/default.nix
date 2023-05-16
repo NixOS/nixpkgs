@@ -14,8 +14,11 @@
 , enableZbar ? false
 , faacSupport ? false
 , faac
+<<<<<<< HEAD
 , opencvSupport ? false
 , opencv4
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , faad2
 , ldacbt
 , libass
@@ -25,6 +28,10 @@
 , lcms2
 , libnice
 , webrtc-audio-processing
+<<<<<<< HEAD
+=======
+, webrtc-audio-processing_1
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , lilv
 , lv2
 , serd
@@ -40,6 +47,10 @@
 , bluez
 , chromaprint
 , curl
+<<<<<<< HEAD
+=======
+, directfb
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , fdk_aac
 , flite
 , gsm
@@ -56,6 +67,10 @@
 , libusb1
 , neon
 , openal
+<<<<<<< HEAD
+=======
+, opencv4
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , openexr_3
 , openh264
 , libopenmpt
@@ -89,7 +104,10 @@
 , vo-aacenc
 , libfreeaptx
 , zxing-cpp
+<<<<<<< HEAD
 , usrsctp
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , VideoToolbox
 , AudioToolbox
 , AVFoundation
@@ -104,18 +122,29 @@
 , microdnsSupport ? false
 # Checks meson.is_cross_build(), so even canExecute isn't enough.
 , enableDocumentation ? stdenv.hostPlatform == stdenv.buildPlatform, hotdoc
+<<<<<<< HEAD
 , guiSupport ? true, directfb
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 stdenv.mkDerivation rec {
   pname = "gst-plugins-bad";
+<<<<<<< HEAD
   version = "1.22.5";
+=======
+  version = "1.22.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "https://gstreamer.freedesktop.org/src/${pname}/${pname}-${version}.tar.xz";
+<<<<<<< HEAD
     hash = "sha256-5k51za/X/y/H/DToVbBrHj7SJ8wG+jeNF7vNdngMM4w=";
+=======
+    hash = "sha256-PY+vHONALIU1zjqMThpslg5LVlXb2mtVlD25rHkCLQ8=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   patches = [
@@ -142,6 +171,10 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+<<<<<<< HEAD
+=======
+    gobject-introspection
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     gst-plugins-base
     orc
     json-glib
@@ -165,12 +198,19 @@ stdenv.mkDerivation rec {
     libde265
     libdvdnav
     libdvdread
+<<<<<<< HEAD
     libnice
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     qrencode
     libsndfile
     libusb1
     neon
     openal
+<<<<<<< HEAD
+=======
+    opencv4
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     openexr_3
     openh264
     rtmpdump
@@ -182,6 +222,12 @@ stdenv.mkDerivation rec {
     libwebp
     xvidcore
     gnutls
+<<<<<<< HEAD
+=======
+    libGL
+    libGLU
+    gtk3
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     game-music-emu
     openssl
     libxml2
@@ -190,10 +236,13 @@ stdenv.mkDerivation rec {
     vo-aacenc
     libfreeaptx
     zxing-cpp
+<<<<<<< HEAD
     usrsctp
     wildmidi
   ] ++ lib.optionals opencvSupport [
     opencv4
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ] ++ lib.optionals enableZbar [
     zbar
   ] ++ lib.optionals faacSupport [
@@ -212,13 +261,27 @@ stdenv.mkDerivation rec {
     wayland
     wayland-protocols
   ] ++ lib.optionals (!stdenv.isDarwin) [
+<<<<<<< HEAD
+=======
+    # wildmidi requires apple's OpenAL
+    # TODO: package apple's OpenAL, fix wildmidi, include on Darwin
+    wildmidi
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     # TODO: mjpegtools uint64_t is not compatible with guint64 on Darwin
     mjpegtools
 
     chromaprint
+<<<<<<< HEAD
     flite
     libdrm
     libgudev
+=======
+    directfb
+    flite
+    libdrm
+    libgudev
+    libnice
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     sbc
     spandsp
 
@@ -232,6 +295,7 @@ stdenv.mkDerivation rec {
     serd
     sord
     sratom
+<<<<<<< HEAD
 
     libGL
     libGLU
@@ -239,6 +303,8 @@ stdenv.mkDerivation rec {
     gtk3
   ] ++ lib.optionals (stdenv.isLinux && guiSupport) [
     directfb
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ] ++ lib.optionals stdenv.isDarwin [
     # For unknown reasons the order is important, e.g. if
     # VideoToolbox is last, we get:
@@ -279,6 +345,10 @@ stdenv.mkDerivation rec {
     "-Dmusepack=disabled"
     "-Dopenni2=disabled" # not packaged in nixpkgs as of writing
     "-Dopensles=disabled" # not packaged in nixpkgs as of writing
+<<<<<<< HEAD
+=======
+    "-Dsctp=disabled" # required `usrsctp` library not packaged in nixpkgs as of writing
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "-Dsvthevcenc=disabled" # required `SvtHevcEnc` library not packaged in nixpkgs as of writing
     "-Dteletext=disabled" # required `zvbi` library not packaged in nixpkgs as of writing
     "-Dtinyalsa=disabled" # not packaged in nixpkgs as of writing
@@ -291,7 +361,10 @@ stdenv.mkDerivation rec {
     "-Dgs=disabled" # depends on `google-cloud-cpp`
     "-Donnx=disabled" # depends on `libonnxruntime` not packaged in nixpkgs as of writing
     "-Dopenaptx=enabled" # since gstreamer-1.20.1 `libfreeaptx` is supported for circumventing the dubious license conflict with `libopenaptx`
+<<<<<<< HEAD
     "-Dopencv=${if opencvSupport then "enabled" else "disabled"}" # Reduces rebuild size when `config.cudaSupport = true`
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "-Dmicrodns=${if microdnsSupport then "enabled" else "disabled"}"
     "-Dbluez=${if bluezSupport then "enabled" else "disabled"}"
     (lib.mesonEnable "doc" enableDocumentation)
@@ -300,11 +373,18 @@ stdenv.mkDerivation rec {
     "-Ddoc=disabled" # needs gstcuda to be enabled which is Linux-only
     "-Dnvcodec=disabled" # Linux-only
     "-Dva=disabled" # see comment on `libva` in `buildInputs`
+<<<<<<< HEAD
   ] ++ lib.optionals (!stdenv.isLinux || !guiSupport) [
     "-Ddirectfb=disabled"
   ]
   ++ lib.optionals stdenv.isDarwin [
     "-Dchromaprint=disabled"
+=======
+  ]
+  ++ lib.optionals stdenv.isDarwin [
+    "-Dchromaprint=disabled"
+    "-Ddirectfb=disabled"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "-Dflite=disabled"
     "-Dkms=disabled" # renders to libdrm output
     "-Dlv2=disabled"
@@ -315,6 +395,11 @@ stdenv.mkDerivation rec {
     "-Duvch264=disabled" # requires gudev
     "-Dv4l2codecs=disabled" # requires gudev
     "-Dladspa=disabled" # requires lrdf
+<<<<<<< HEAD
+=======
+    "-Dwebrtc=disabled" # requires libnice, which as of writing doesn't work on Darwin in nixpkgs
+    "-Dwildmidi=disabled" # see dependencies above
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ] ++ lib.optionals (!stdenv.isLinux || !stdenv.isx86_64) [
     "-Dqsv=disabled" # Linux (and Windows) x86 only
   ] ++ lib.optionals (!gst-plugins-base.glEnabled) [
@@ -363,6 +448,10 @@ stdenv.mkDerivation rec {
     '';
     license = if enableGplPlugins then licenses.gpl2Plus else licenses.lgpl2Plus;
     platforms = platforms.linux ++ platforms.darwin;
+<<<<<<< HEAD
     maintainers = with maintainers; [ matthewbauer lilyinstarlight ];
+=======
+    maintainers = with maintainers; [ matthewbauer ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

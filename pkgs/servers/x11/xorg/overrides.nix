@@ -1,14 +1,23 @@
 { abiCompat ? null,
   callPackage,
+<<<<<<< HEAD
   lib, stdenv, makeWrapper, fetchurl, fetchpatch, fetchFromGitLab, buildPackages,
   automake, autoconf, libiconv, libtool, intltool, gettext, python3, perl,
+=======
+  lib, stdenv, makeWrapper, fetchurl, fetchpatch, fetchFromGitLab, buildPackages, substitute,
+  automake, autoconf, libiconv, libtool, intltool,
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   freetype, tradcpp, fontconfig, meson, ninja, ed, fontforge,
   libGL, spice-protocol, zlib, libGLU, dbus, libunwind, libdrm, netbsd,
   ncompress,
   mesa, udev, bootstrap_cmds, bison, flex, clangStdenv, autoreconfHook,
   mcpp, libepoxy, openssl, pkg-config, llvm, libxslt, libxcrypt,
   ApplicationServices, Carbon, Cocoa, Xplugin,
+<<<<<<< HEAD
   xorg, windows
+=======
+  xorg
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 let
@@ -80,6 +89,7 @@ self: super:
   mkfontdir = xorg.mkfontscale;
 
   libxcb = super.libxcb.overrideAttrs (attrs: {
+<<<<<<< HEAD
     # $dev/include/xcb/xcb.h includes pthread.h
     propagatedBuildInputs = attrs.propagatedBuildInputs or [ ] ++ lib.optional stdenv.hostPlatform.isMinGW windows.mingw_w64_pthreads;
     configureFlags = [ "--enable-xkb" "--enable-xinput" ]
@@ -114,6 +124,11 @@ self: super:
       ];
       platforms = lib.platforms.unix ++ lib.platforms.windows;
     };
+=======
+    configureFlags = [ "--enable-xkb" "--enable-xinput" ]
+      ++ lib.optional stdenv.hostPlatform.isStatic "--disable-shared";
+    outputs = [ "out" "dev" "man" "doc" ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   });
 
   libX11 = super.libX11.overrideAttrs (attrs: {
@@ -150,6 +165,7 @@ self: super:
 
   libXdmcp = super.libXdmcp.overrideAttrs (attrs: {
     outputs = [ "out" "dev" "doc" ];
+<<<<<<< HEAD
     meta = attrs.meta // {
       pkgConfigModules = [ "xdmcp" ];
     };
@@ -159,6 +175,8 @@ self: super:
     meta = attrs.meta // {
       pkgConfigModules = [ "xtst" ];
     };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   });
 
   libXfont = super.libXfont.overrideAttrs (attrs: {
@@ -201,12 +219,19 @@ self: super:
     + lib.optionalString stdenv.hostPlatform.isStatic ''
       export NIX_CFLAGS_LINK="$NIX_CFLAGS_LINK -lXau -lXdmcp"
     '';
+<<<<<<< HEAD
     meta = attrs.meta // {
       mainProgram = "xdpyinfo";
     };
   });
 
   xdm = super.xdm.overrideAttrs (attrs: {
+=======
+  });
+
+  xdm = super.xdm.overrideAttrs (attrs: {
+    patches = (attrs.patches or []) ++ [ ./xdm-fix-header-inclusion.patch ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     buildInputs = attrs.buildInputs ++ [ libxcrypt ];
     configureFlags = attrs.configureFlags or [] ++ [
       "ac_cv_path_RAWCPP=${stdenv.cc.targetPrefix}cpp"
@@ -390,11 +415,14 @@ self: super:
     };
   });
 
+<<<<<<< HEAD
   libpthreadstubs = super.libpthreadstubs.overrideAttrs (attrs: {
     # only contains a pkgconfig file on linux and windows
     meta = attrs.meta // { platforms = lib.platforms.unix ++ lib.platforms.windows; };
   });
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   setxkbmap = super.setxkbmap.overrideAttrs (attrs: {
     postInstall =
       ''
@@ -467,11 +495,15 @@ self: super:
     };
   });
 
+<<<<<<< HEAD
   xf86inputkeyboard = super.xf86inputkeyboard.overrideAttrs (attrs: {
     meta = attrs.meta // {
       platforms = lib.platforms.freebsd ++ lib.platforms.netbsd ++ lib.platforms.openbsd;
     };
   });
+=======
+  xf86inputkeyboard = brokenOnDarwin super.xf86inputkeyboard; # never worked: https://hydra.nixos.org/job/nixpkgs/trunk/xorg.xf86inputkeyboard.x86_64-darwin
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   xf86inputlibinput = super.xf86inputlibinput.overrideAttrs (attrs: {
     outputs = [ "out" "dev" ];
@@ -590,6 +622,7 @@ self: super:
   });
 
   xkeyboardconfig = super.xkeyboardconfig.overrideAttrs (attrs: {
+<<<<<<< HEAD
     prePatch = ''
       patchShebangs rules/merge.py rules/compat/map-variants.py rules/xml2lst.pl
     '';
@@ -604,6 +637,12 @@ self: super:
     mesonFlags = [
       (lib.mesonBool "xorg-rules-symlinks" true)
     ];
+=======
+    prePatch = "patchShebangs rules/merge.py";
+    nativeBuildInputs = attrs.nativeBuildInputs ++ [ intltool libxslt ];
+    configureFlags = [ "--with-xkb-rules-symlink=xorg" ];
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     # 1: compatibility for X11/xkb location
     # 2: I think pkg-config/ is supposed to be in /lib/
     postInstall = ''
@@ -627,6 +666,31 @@ self: super:
         ${optionalString (symbolsFile  != null) "cp '${symbolsFile}'  'symbols/${name}'"}
         ${optionalString (typesFile    != null) "cp '${typesFile}'    'types/${name}'"}
 
+<<<<<<< HEAD
+=======
+        # patch makefiles
+        for type in compat geometry keycodes symbols types; do
+          if ! test -f "$type/${name}"; then
+            continue
+          fi
+          test "$type" = geometry && type_name=geom || type_name=$type
+          ${ed}/bin/ed -v $type/Makefile.am <<EOF
+        /''${type_name}_DATA =
+        a
+        ${name} \\
+        .
+        w
+        EOF
+          ${ed}/bin/ed -v $type/Makefile.in <<EOF
+        /''${type_name}_DATA =
+        a
+        ${name} \\
+        .
+        w
+        EOF
+        done
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         # add model description
         ${ed}/bin/ed -v rules/base.xml <<EOF
         /<\/modelList>
@@ -679,6 +743,7 @@ self: super:
     nativeBuildInputs = attrs.nativeBuildInputs ++ [ meson ninja ];
     # adds support for printproto needed for libXp
     mesonFlags = [ "-Dlegacy=true" ];
+<<<<<<< HEAD
 
     patches = [
       (fetchpatch {
@@ -687,6 +752,8 @@ self: super:
       })
     ];
     meta = attrs.meta // { platforms = lib.platforms.unix ++ lib.platforms.windows; };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   });
 
   xorgserver = with xorg; super.xorgserver.overrideAttrs (attrs_passed:
@@ -818,6 +885,7 @@ self: super:
             name = "revert-fb-changes-2.patch";
           })
           ./darwin/bundle_main.patch
+<<<<<<< HEAD
           ./darwin/stub.patch
         ];
 
@@ -826,6 +894,14 @@ self: super:
             --subst-var-by XQUARTZ_APP "$out/Applications/XQuartz.app"
         '';
 
+=======
+          (substitute {
+            src = ./darwin/stub.patch;
+            replacements = ["--subst-var-by" "XQUARTZ_APP" "${placeholder "out"}/Applications/XQuartz.app"];
+          })
+        ];
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         configureFlags = [
           # note: --enable-xquartz is auto
           "CPPFLAGS=-I${./darwin/dri}"
@@ -870,7 +946,10 @@ self: super:
         --replace '_X_NORETURN' '__attribute__((noreturn))' \
         --replace 'n_dirs--;' ""
     '';
+<<<<<<< HEAD
     meta.mainProgram = "lndir";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   });
 
   twm = super.twm.overrideAttrs (attrs: {
@@ -904,6 +983,17 @@ self: super:
       "--with-launchdaemons-dir=\${out}/LaunchDaemons"
       "--with-launchagents-dir=\${out}/LaunchAgents"
     ];
+<<<<<<< HEAD
+=======
+    patches = [
+      # don't unset DBUS_SESSION_BUS_ADDRESS in startx
+      (fetchpatch {
+        name = "dont-unset-DBUS_SESSION_BUS_ADDRESS.patch";
+        url = "https://raw.githubusercontent.com/archlinux/svntogit-packages/40f3ac0a31336d871c76065270d3f10e922d06f3/trunk/fs46369.patch";
+        sha256 = "18kb88i3s9nbq2jxl7l2hyj6p56c993hivk8mzxg811iqbbawkp7";
+      })
+    ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     postPatch = ''
       # Avoid replacement of word-looking cpp's builtin macros in Nix's cross-compiled paths
       substituteInPlace Makefile.in --replace "PROGCPPDEFS =" "PROGCPPDEFS = -Dlinux=linux -Dunix=unix"
@@ -972,6 +1062,16 @@ self: super:
   });
 
   xorgcffiles = super.xorgcffiles.overrideAttrs (attrs: {
+<<<<<<< HEAD
+=======
+    patches = [
+      (fetchpatch {
+        name = "add-aarch64-darwin-support.patch";
+        url = "https://gitlab.freedesktop.org/xorg/util/cf/-/commit/8d88c559b177e832b581c8ac0aa383b6cf79e0d0.patch";
+        sha256 = "sha256-wCijdmlUtVgOh9Rp/LJrg1ObYm4OPTke5Xwu0xC0ap4=";
+      })
+    ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     postInstall = lib.optionalString stdenv.isDarwin ''
       substituteInPlace $out/lib/X11/config/darwin.cf --replace "/usr/bin/" ""
     '';
@@ -995,6 +1095,7 @@ self: super:
     postInstall = ''
       rm $out/bin/xkeystone
     '';
+<<<<<<< HEAD
     meta = attrs.meta // {
       mainProgram = "xrandr";
     };
@@ -1004,6 +1105,8 @@ self: super:
     meta = attrs.meta // {
       mainProgram = "xset";
     };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   });
 
   # convert Type1 vector fonts to OpenType fonts

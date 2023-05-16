@@ -1,8 +1,13 @@
 { lib, stdenv, stdenvNoCC, fetchFromGitHub, callPackage, makeWrapper
+<<<<<<< HEAD
 , clang, llvm, gcc, which, libcgroup, python3, perl, gmp
 , file, wine ? null
 , cmocka
 , llvmPackages
+=======
+, clang, llvm, gcc, which, libcgroup, python, perl, gmp
+, file, wine ? null, fetchpatch
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 # wine fuzzing is only known to work for win32 binaries, and using a mixture of
@@ -11,7 +16,11 @@
 assert (wine != null) -> (stdenv.targetPlatform.system == "i686-linux");
 
 let
+<<<<<<< HEAD
   aflplusplus-qemu = callPackage ./qemu.nix { };
+=======
+  aflplusplus-qemu = callPackage ./qemu.nix { inherit aflplusplus; };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   qemu-exe-name = if stdenv.targetPlatform.system == "x86_64-linux" then "qemu-x86_64"
     else if stdenv.targetPlatform.system == "i686-linux" then "qemu-i386"
     else throw "aflplusplus: no support for ${stdenv.targetPlatform.system}!";
@@ -19,19 +28,28 @@ let
   libtokencap = callPackage ./libtokencap.nix { inherit aflplusplus; };
   aflplusplus = stdenvNoCC.mkDerivation rec {
     pname = "aflplusplus";
+<<<<<<< HEAD
     version = "4.06c";
+=======
+    version = "2.65c";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     src = fetchFromGitHub {
       owner = "AFLplusplus";
       repo = "AFLplusplus";
       rev = version;
+<<<<<<< HEAD
       sha256 = "sha256-Gb1nYDBnwLS+m8e1UD0WLIrnp8KRgliGQVvQD22JXrQ=";
+=======
+      sha256 = "1np2a3kypb2m8nyv6qnij18yzn41pl8619jzydci40br4vxial9l";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
     enableParallelBuilding = true;
 
     # Note: libcgroup isn't needed for building, just for the afl-cgroup
     # script.
     nativeBuildInputs = [ makeWrapper which clang gcc ];
+<<<<<<< HEAD
     buildInputs = [ llvm python3 gmp llvmPackages.bintools ]
       ++ lib.optional (wine != null) python3.pkgs.wrapPython;
 
@@ -64,6 +82,27 @@ let
 
       substituteInPlace GNUmakefile.llvm \
         --replace "\$(LLVM_BINDIR)/clang" "${clang}/bin/clang"
+=======
+    buildInputs = [ llvm python gmp ]
+      ++ lib.optional (wine != null) python.pkgs.wrapPython;
+
+
+    postPatch = ''
+      # Replace the CLANG_BIN variables with the correct path
+      substituteInPlace llvm_mode/afl-clang-fast.c \
+        --replace "CLANGPP_BIN" '"${clang}/bin/clang++"' \
+        --replace "CLANG_BIN" '"${clang}/bin/clang"' \
+        --replace 'getenv("AFL_PATH")' "(getenv(\"AFL_PATH\") ? getenv(\"AFL_PATH\") : \"$out/lib/afl\")"
+
+      # Replace "gcc" and friends with full paths in afl-gcc
+      # Prevents afl-gcc picking up any (possibly incorrect) gcc from the path
+      substituteInPlace src/afl-gcc.c \
+        --replace '"gcc"' '"${gcc}/bin/gcc"' \
+        --replace '"g++"' '"${gcc}/bin/g++"' \
+        --replace '"gcj"' '"gcj-UNSUPPORTED"' \
+        --replace '"clang"' '"clang-UNSUPPORTED"' \
+        --replace '"clang++"' '"clang++-UNSUPPORTED"'
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     '';
 
     env.NIX_CFLAGS_COMPILE = toString [
@@ -71,6 +110,7 @@ let
       "-Wno-error=use-after-free"
     ];
 
+<<<<<<< HEAD
     makeFlags = [
       "PREFIX=$(out)"
       "USE_BINDIR=0"
@@ -84,6 +124,17 @@ let
       make -C qemu_mode/unsigaction $common
 
       runHook postBuild
+=======
+    makeFlags = [ "PREFIX=$(out)" ];
+    buildPhase = ''
+      common="$makeFlags -j$NIX_BUILD_CORES"
+      make all $common
+      make radamsa $common
+      make -C gcc_plugin CC=${gcc}/bin/gcc CXX=${gcc}/bin/g++ $common
+      make -C llvm_mode $common
+      make -C qemu_mode/libcompcov $common
+      make -C qemu_mode/unsigaction $common
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     '';
 
     postInstall = ''
@@ -94,7 +145,11 @@ let
       cp qemu_mode/unsigaction/unsigaction*.so $out/lib/afl/
 
       # Install the custom QEMU emulator for binary blob fuzzing.
+<<<<<<< HEAD
       ln -s ${aflplusplus-qemu}/bin/${qemu-exe-name} $out/bin/afl-qemu-trace
+=======
+      cp ${aflplusplus-qemu}/bin/${qemu-exe-name} $out/bin/afl-qemu-trace
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
       # give user a convenient way of accessing libcompconv.so, libdislocator.so, libtokencap.so
       cat > $out/bin/get-afl-qemu-libcompcov-so <<END
@@ -102,11 +157,19 @@ let
       echo $out/lib/afl/libcompcov.so
       END
       chmod +x $out/bin/get-afl-qemu-libcompcov-so
+<<<<<<< HEAD
       ln -s ${libdislocator}/bin/get-libdislocator-so $out/bin/
       ln -s ${libtokencap}/bin/get-libtokencap-so $out/bin/
 
       # Install the cgroups wrapper for asan-based fuzzing.
       cp utils/asan_cgroups/limit_memory.sh $out/bin/afl-cgroup
+=======
+      cp ${libdislocator}/bin/get-libdislocator-so $out/bin/
+      cp ${libtokencap}/bin/get-libtokencap-so $out/bin/
+
+      # Install the cgroups wrapper for asan-based fuzzing.
+      cp examples/asan_cgroups/limit_memory.sh $out/bin/afl-cgroup
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       chmod +x $out/bin/afl-cgroup
       substituteInPlace $out/bin/afl-cgroup \
         --replace "cgcreate" "${libcgroup}/bin/cgcreate" \
@@ -126,6 +189,7 @@ let
         if [ -x $winePath ]; then break; fi
       done
       makeWrapperArgs="--set-default 'AFL_WINE_PATH' '$winePath'" \
+<<<<<<< HEAD
         wrapPythonProgramsIn $out/bin ${python3.pkgs.pefile}
     '';
 
@@ -152,6 +216,21 @@ let
       cd test && ./test-all.sh
 
       runHook postInstallCheck
+=======
+        wrapPythonProgramsIn $out/bin ${python.pkgs.pefile}
+    '';
+
+    nativeInstallCheckInputs = [ perl file ];
+    doInstallCheck = true;
+    installCheckPhase = ''
+      # replace references to tools in build directory with references to installed locations
+      substituteInPlace test/test.sh \
+        --replace '../libcompcov.so' '`$out/bin/get-afl-qemu-libcompcov-so`' \
+        --replace '../libdislocator.so' '`$out/bin/get-libdislocator-so`' \
+        --replace '../libtokencap.so' '`$out/bin/get-libtokencap-so`'
+      perl -pi -e 's|(?<!\.)(?<!-I)(\.\./)([^\s\/]+?)(?<!\.c)(?<!\.s?o)(?=\s)|\$out/bin/\2|g' test/test.sh
+      cd test && ./test.sh
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     '';
 
     passthru = {

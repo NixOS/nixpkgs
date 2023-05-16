@@ -2,13 +2,21 @@
 
 buildPythonPackage rec {
   pname = "pycmarkgfm";
+<<<<<<< HEAD
   version = "1.2.1";
+=======
+  version = "1.2.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
+<<<<<<< HEAD
     hash = "sha256-oPklCB54aHn33ewTiSlXgx38T0RzLure5OzGuFwsLNo=";
+=======
+    hash = "sha256-qvTMXpQhC3Yx8LwbQDiELhgdkGzjirKT30N1NkXF5ps=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedNativeBuildInputs = [ cffi ];

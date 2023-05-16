@@ -28,6 +28,9 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/kamadorueda/alejandra/blob/${version}/CHANGELOG.md";
     license = licenses.unlicense;
     maintainers = with maintainers; [ _0x4A6F kamadorueda sciencentistguy ];
+<<<<<<< HEAD
     mainProgram = "alejandra";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

@@ -1,7 +1,14 @@
+<<<<<<< HEAD
 { lib
 , mopidy
 , python3Packages
 , fetchPypi
+=======
+{ stdenv
+, lib
+, mopidy
+, python3Packages
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , fetchpatch
 }:
 
@@ -9,7 +16,11 @@ python3Packages.buildPythonApplication rec {
   pname = "Mopidy-Local";
   version = "3.2.1";
 
+<<<<<<< HEAD
   src = fetchPypi {
+=======
+  src = python3Packages.fetchPypi {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     inherit pname version;
     sha256 = "18w39mxpv8p17whd6zfw5653d21q138f8xd6ili6ks2g2dbm25i9";
   };

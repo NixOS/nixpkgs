@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 { lib, stdenv, fetchurl
+=======
+{ lib, stdenv, fetchurl, fetchpatch
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , cmake, pkg-config, perl, go, python3
 , protobuf, zlib, gtest, brotli, lz4, zstd, libusb1, pcre2
 }:
@@ -9,6 +13,7 @@ in
 
 stdenv.mkDerivation rec {
   pname = "android-tools";
+<<<<<<< HEAD
   version = "34.0.1";
 
   src = fetchurl {
@@ -29,6 +34,15 @@ stdenv.mkDerivation rec {
     sed -i '/^find_package(Protobuf REQUIRED)$/i find_package(protobuf CONFIG)' vendor/CMakeLists.txt
   '';
 
+=======
+  version = "34.0.0";
+
+  src = fetchurl {
+    url = "https://github.com/nmeum/android-tools/releases/download/${version}/android-tools-${version}.tar.xz";
+    hash = "sha256-+I7FaGk39/svaJw7BQYSPyOZJ2oUZzFksPlUVKTHuXo=";
+  };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nativeBuildInputs = [ cmake pkg-config perl go ];
   buildInputs = [ protobuf zlib gtest brotli lz4 zstd libusb1 pcre2 ];
   propagatedBuildInputs = [ pythonEnv ];

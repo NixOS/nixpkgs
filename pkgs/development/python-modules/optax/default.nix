@@ -11,7 +11,11 @@
 
 buildPythonPackage rec {
   pname = "optax";
+<<<<<<< HEAD
   version = "0.1.7";
+=======
+  version = "0.1.5";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -20,7 +24,11 @@ buildPythonPackage rec {
     owner = "deepmind";
     repo = pname;
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-zSMJxagPe2rkhrawJ+TWXUzk6V58IY6MhWmEqLVtOoA=";
+=======
+    hash = "sha256-vhPpynKq0dboSt+fQ4lvVv9ytDXnZKRrc7lF03Mm39g=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   outputs = [

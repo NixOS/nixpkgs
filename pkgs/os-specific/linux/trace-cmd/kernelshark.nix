@@ -5,12 +5,20 @@
 
 mkDerivation rec {
   pname = "kernelshark";
+<<<<<<< HEAD
   version = "2.2.1";
+=======
+  version = "2.2.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchgit {
     url = "https://git.kernel.org/pub/scm/utils/trace-cmd/kernel-shark.git/";
     rev = "kernelshark-v${version}";
+<<<<<<< HEAD
     hash = "sha256-V25IzPDOt6V03wgIa/AJ0T8mRaGmXYuMCcvbSOKleY0=";
+=======
+    sha256 = "sha256-VkUah8qAlOck9245f/zngtVpHmJdx6eQXqwzLwK2xjU=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   outputs = [ "out" ];

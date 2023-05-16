@@ -6,7 +6,10 @@
 , numba
 , pytestCheckHook
 , pythonOlder
+<<<<<<< HEAD
 , pythonRelaxDepsHook
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 buildPythonPackage rec {
@@ -26,6 +29,7 @@ buildPythonPackage rec {
     numba
   ];
 
+<<<<<<< HEAD
   nativeCheckInputs = [
     pytestCheckHook
     pythonRelaxDepsHook
@@ -33,6 +37,16 @@ buildPythonPackage rec {
   pythonRelaxDeps = [
     "scipy"
     "numba"
+=======
+  postPatch = ''
+    # https://github.com/numba/numba-scipy/pull/76
+    substituteInPlace setup.py \
+      --replace "scipy>=0.16,<=1.7.3" "scipy>=0.16"
+  '';
+
+  nativeCheckInputs = [
+    pytestCheckHook
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   pythonImportsCheck = [

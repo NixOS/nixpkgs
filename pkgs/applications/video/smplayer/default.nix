@@ -6,6 +6,7 @@
 , wrapQtAppsHook
 }:
 
+<<<<<<< HEAD
 stdenv.mkDerivation (finalAttrs: {
   pname = "smplayer";
   version = "23.6.0";
@@ -15,6 +16,17 @@ stdenv.mkDerivation (finalAttrs: {
     repo = "smplayer";
     rev = "v${finalAttrs.version}";
     hash = "sha256-xGy6/9aUftBTSo9HJ3zyuRSagqimP9XvXKP/4oBQTo4=";
+=======
+stdenv.mkDerivation rec {
+  pname = "smplayer";
+  version = "22.7.0";
+
+  src = fetchFromGitHub {
+    owner = "smplayer-dev";
+    repo = pname;
+    rev = "v${version}";
+    hash = "sha256-vU+M5aCCGSA+IwJXTLMYvno/Qei+5Hwck3Q/Ah7N09s=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [
@@ -32,7 +44,11 @@ stdenv.mkDerivation (finalAttrs: {
     "PREFIX=${placeholder "out"}"
   ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     homepage = "https://www.smplayer.info";
     description = "A complete front-end for MPlayer";
     longDescription = ''
@@ -53,6 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
       options of MPlayer, SMPlayer adds other interesting features like the
       possibility to play Youtube videos or download subtitles.
     '';
+<<<<<<< HEAD
     changelog = "https://github.com/smplayer-dev/smplayer/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ AndersonTorres ];
@@ -60,3 +77,11 @@ stdenv.mkDerivation (finalAttrs: {
   };
 })
 # TODO [ AndersonTorres ]: create a wrapper including mplayer/mpv
+=======
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ AndersonTorres ];
+    platforms = platforms.linux;
+  };
+}
+# TODO [ AndersonTorres ]: some form of wrapping mplayer/mpv around it
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)

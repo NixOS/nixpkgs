@@ -1,7 +1,10 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+<<<<<<< HEAD
 , pythonAtLeast
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , pytestCheckHook
 }:
 
@@ -26,6 +29,7 @@ buildPythonPackage rec {
     "coqpit.coqpit"
   ];
 
+<<<<<<< HEAD
   # https://github.com/coqui-ai/coqpit/issues/40
   disabledTests = lib.optionals (pythonAtLeast "3.11")[
     "test_init_argparse_list_and_nested"
@@ -35,6 +39,8 @@ buildPythonPackage rec {
     "tests/test_nested_configs.py"
   ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   meta = with lib; {
     description = "Simple but maybe too simple config management through python data classes";
     longDescription = ''

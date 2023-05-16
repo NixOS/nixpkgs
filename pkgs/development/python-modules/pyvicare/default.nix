@@ -10,7 +10,11 @@
 
 buildPythonPackage rec {
   pname = "pyvicare";
+<<<<<<< HEAD
   version = "2.28.1";
+=======
+  version = "2.27.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -19,7 +23,11 @@ buildPythonPackage rec {
     owner = "somm15";
     repo = "PyViCare";
     rev = "refs/tags/${version}";
+<<<<<<< HEAD
     hash = "sha256-6tyFSKD8Igai9A5wn7vRJdTryy+lv2MkxaskNpCwqV8=";
+=======
+    hash = "sha256-BLvHZRIHj+HysdGcq51Ry3unbT2BQd7lwslAo9n9SdY=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;

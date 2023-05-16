@@ -10,9 +10,15 @@
 , imagemagick
 , makeWrapper
 , pkg-config
+<<<<<<< HEAD
 , enableEmacs ? false, emacs
 , enableLout ? stdenv.isLinux, lout
 , enablePloticus ? stdenv.isLinux, ploticus
+=======
+, ploticus
+, enableEmacs ? false, emacs
+, enableLout ? true, lout
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , enableTex ? true, tex
 }:
 
@@ -40,6 +46,7 @@ in stdenv.mkDerivation (finalAttrs: {
     guile-lib
     guile-reader
     imagemagick
+<<<<<<< HEAD
   ]
   ++ optional enableEmacs emacs
   ++ optional enableLout lout
@@ -51,6 +58,23 @@ in stdenv.mkDerivation (finalAttrs: {
       --prefix GUILE_LOAD_PATH : "$out/${guile.siteDir}:$GUILE_LOAD_PATH" \
       --prefix GUILE_LOAD_COMPILED_PATH : "$out/${guile.siteCcacheDir}:$GUILE_LOAD_COMPILED_PATH"
   '';
+=======
+    ploticus
+  ]
+  ++ optional enableEmacs emacs
+  ++ optional enableLout lout
+  ++ optional enableTex tex;
+
+  postInstall =
+    let
+      guileVersion = lib.versions.majorMinor guile.version;
+    in
+    ''
+      wrapProgram $out/bin/skribilo \
+        --prefix GUILE_LOAD_PATH : "$out/share/guile/site/${guileVersion}:$GUILE_LOAD_PATH" \
+        --prefix GUILE_LOAD_COMPILED_PATH : "$out/lib/guile/${guileVersion}/site-ccache:$GUILE_LOAD_COMPILED_PATH"
+    '';
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   meta = {
     homepage = "https://www.nongnu.org/skribilo/";

@@ -192,10 +192,13 @@ in
   ###### implementation
 
   config = mkIf cfg.enable {
+<<<<<<< HEAD
     assertions = [
       { assertion = cfg.package.pname != "sudo-rs";
         message = "The NixOS `sudo` module does not work with `sudo-rs` yet."; }
     ];
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     # We `mkOrder 600` so that the default rule shows up first, but there is
     # still enough room for a user to `mkBefore` it.
@@ -220,10 +223,17 @@ in
         ${concatStringsSep "\n" (
           lists.flatten (
             map (
+<<<<<<< HEAD
               rule: optionals (length rule.commands != 0) [
                 (map (user: "${toUserString user}	${rule.host}=(${rule.runAs})	${toCommandsString rule.commands}") rule.users)
                 (map (group: "${toGroupString group}	${rule.host}=(${rule.runAs})	${toCommandsString rule.commands}") rule.groups)
               ]
+=======
+              rule: if (length rule.commands != 0) then [
+                (map (user: "${toUserString user}	${rule.host}=(${rule.runAs})	${toCommandsString rule.commands}") rule.users)
+                (map (group: "${toGroupString group}	${rule.host}=(${rule.runAs})	${toCommandsString rule.commands}") rule.groups)
+              ] else []
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
             ) cfg.extraRules
           )
         )}

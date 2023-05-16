@@ -55,7 +55,11 @@ stdenv.mkDerivation rec {
       especially over Wi-Fi, cellular, and long-distance links.
     '';
     license = licenses.gpl3Plus;
+<<<<<<< HEAD
     maintainers = with maintainers; [ viric ];
+=======
+    maintainers = with maintainers; [ viric SuperSandro2000 ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     platforms = platforms.unix;
   };
 }

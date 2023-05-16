@@ -10,7 +10,11 @@
 
 buildPythonPackage rec {
   pname = "dissect-ole";
+<<<<<<< HEAD
   version = "3.6";
+=======
+  version = "3.4";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -19,7 +23,11 @@ buildPythonPackage rec {
     owner = "fox-it";
     repo = "dissect.ole";
     rev = "refs/tags/${version}";
+<<<<<<< HEAD
     hash = "sha256-4shxYKR6IrrMj2BIb5yFD7+C0SNyqsGOoBkWpad1EbI=";
+=======
+    hash = "sha256-bzm9NynNUxXefWBxPIqPcRD5E52IF4on6JMtJOrvvyk=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;

@@ -1,6 +1,10 @@
 { lib, stdenv, fetchFromGitHub, pkgsBuildBuild, cmake, python3, ncurses }:
 
+<<<<<<< HEAD
 stdenv.mkDerivation (finalAttrs: {
+=======
+stdenv.mkDerivation {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pname = "libtapi";
   version = "1100.0.11"; # determined by looking at VERSION.txt
 
@@ -11,7 +15,11 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = "1y1yl46msabfy14z0rln333a06087bk14f5h7q1cdawn8nmvbdbr";
   };
 
+<<<<<<< HEAD
   sourceRoot = "${finalAttrs.src.name}/src/llvm";
+=======
+  sourceRoot = "source/src/llvm";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   # Backported from newer llvm, fixes configure error when cross compiling.
   # Also means we don't have to manually fix the result with install_name_tool.
@@ -71,7 +79,14 @@ stdenv.mkDerivation (finalAttrs: {
   meta = with lib; {
     description = "Replaces the Mach-O Dynamic Library Stub files in Apple's SDKs to reduce the size";
     homepage = "https://github.com/tpoechtrager/apple-libtapi";
+<<<<<<< HEAD
     license = licenses.ncsa;
     maintainers = with maintainers; [ matthewbauer ];
   };
 })
+=======
+    license = licenses.apsl20;
+    maintainers = with maintainers; [ matthewbauer ];
+  };
+}
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)

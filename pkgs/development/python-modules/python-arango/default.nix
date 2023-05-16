@@ -9,7 +9,10 @@
 , mock
 , requests
 , requests-toolbelt
+<<<<<<< HEAD
 , setuptools
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 let
@@ -39,7 +42,10 @@ buildPythonPackage rec {
     requests
     requests-toolbelt
     pyjwt
+<<<<<<< HEAD
     setuptools
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   nativeCheckInputs = [

@@ -12,7 +12,10 @@ from markdown_it.token import Token
 from markdown_it.utils import OptionsDict
 from mdit_py_plugins.container import container_plugin # type: ignore[attr-defined]
 from mdit_py_plugins.deflist import deflist_plugin # type: ignore[attr-defined]
+<<<<<<< HEAD
 from mdit_py_plugins.footnote import footnote_plugin # type: ignore[attr-defined]
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 from mdit_py_plugins.myst_role import myst_role_plugin # type: ignore[attr-defined]
 
 _md_escape_table = {
@@ -41,7 +44,11 @@ def md_make_code(code: str, info: str = "", multiline: Optional[bool] = None) ->
     ticks, sep = ('`' * (longest + (3 if multiline else 1)), '\n' if multiline else ' ')
     return f"{ticks}{info}{sep}{code}{sep}{ticks}"
 
+<<<<<<< HEAD
 AttrBlockKind = Literal['admonition', 'example', 'figure']
+=======
+AttrBlockKind = Literal['admonition', 'example']
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 AdmonitionKind = Literal["note", "caution", "tip", "important", "warning"]
 
@@ -91,6 +98,7 @@ class Renderer:
             "example_close": self.example_close,
             "example_title_open": self.example_title_open,
             "example_title_close": self.example_title_close,
+<<<<<<< HEAD
             "image": self.image,
             "figure_open": self.figure_open,
             "figure_close": self.figure_close,
@@ -114,6 +122,8 @@ class Renderer:
             "footnote_open": self.footnote_open,
             "footnote_close": self.footnote_close,
             "footnote_anchor": self.footnote_anchor,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         }
 
         self._admonitions = {
@@ -249,6 +259,7 @@ class Renderer:
         raise RuntimeError("md token not supported", token)
     def example_title_close(self, token: Token, tokens: Sequence[Token], i: int) -> str:
         raise RuntimeError("md token not supported", token)
+<<<<<<< HEAD
     def image(self, token: Token, tokens: Sequence[Token], i: int) -> str:
         raise RuntimeError("md token not supported", token)
     def figure_open(self, token: Token, tokens: Sequence[Token], i: int) -> str:
@@ -295,6 +306,8 @@ class Renderer:
         raise RuntimeError("md token not supported", token)
     def footnote_anchor(self, token: Token, tokens: Sequence[Token], i: int) -> str:
         raise RuntimeError("md token not supported", token)
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 def _is_escaped(src: str, pos: int) -> bool:
     found = 0
@@ -337,8 +350,11 @@ def _parse_blockattrs(info: str) -> Optional[tuple[AttrBlockKind, Optional[str],
         return ('admonition', id, classes)
     if classes == ['example']:
         return ('example', id, classes)
+<<<<<<< HEAD
     elif classes == ['figure']:
         return ('figure', id, classes)
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     return None
 
 def _attr_span_plugin(md: markdown_it.MarkdownIt) -> None:
@@ -440,6 +456,7 @@ def _heading_ids(md: markdown_it.MarkdownIt) -> None:
 
     md.core.ruler.before("replacements", "heading_ids", heading_ids)
 
+<<<<<<< HEAD
 def _footnote_ids(md: markdown_it.MarkdownIt) -> None:
     """generate ids for footnotes, their refs, and their backlinks. the ids we
        generate here are derived from the footnote label, making numeric footnote
@@ -466,6 +483,8 @@ def _footnote_ids(md: markdown_it.MarkdownIt) -> None:
 
     md.core.ruler.after("footnote_tail", "footnote_ids", footnote_ids)
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 def _compact_list_attr(md: markdown_it.MarkdownIt) -> None:
     @dataclasses.dataclass
     class Entry:
@@ -514,11 +533,14 @@ def _block_attr(md: markdown_it.MarkdownIt) -> None:
                     if id is not None:
                         token.attrs['id'] = id
                     stack.append('example_close')
+<<<<<<< HEAD
                 elif kind == 'figure':
                     token.type = 'figure_open'
                     if id is not None:
                         token.attrs['id'] = id
                     stack.append('figure_close')
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
                 else:
                     assert_never(kind)
             elif token.type == 'container_blockattr_close':
@@ -526,6 +548,7 @@ def _block_attr(md: markdown_it.MarkdownIt) -> None:
 
     md.core.ruler.push("block_attr", block_attr)
 
+<<<<<<< HEAD
 def _block_titles(block: str) -> Callable[[markdown_it.MarkdownIt], None]:
     open, close = f'{block}_open', f'{block}_close'
     title_open, title_close = f'{block}_title_open', f'{block}_title_close'
@@ -557,6 +580,33 @@ def _block_titles(block: str) -> Callable[[markdown_it.MarkdownIt], None]:
         md.core.ruler.push(f"{block}_titles", block_titles)
 
     return do_add
+=======
+def _example_titles(md: markdown_it.MarkdownIt) -> None:
+    """
+    find title headings of examples and stick them into meta for renderers, then
+    remove them from the token stream. also checks whether any example contains a
+    non-title heading since those would make toc generation extremely complicated.
+    """
+    def example_titles(state: markdown_it.rules_core.StateCore) -> None:
+        in_example = [False]
+        for i, token in enumerate(state.tokens):
+            if token.type == 'example_open':
+                if state.tokens[i + 1].type == 'heading_open':
+                    assert state.tokens[i + 3].type == 'heading_close'
+                    state.tokens[i + 1].type = 'example_title_open'
+                    state.tokens[i + 3].type = 'example_title_close'
+                else:
+                    assert token.map
+                    raise RuntimeError(f"found example without title in line {token.map[0] + 1}")
+                in_example.append(True)
+            elif token.type == 'example_close':
+                in_example.pop()
+            elif token.type == 'heading_open' and in_example[-1]:
+                assert token.map
+                raise RuntimeError(f"unexpected non-title heading in example in line {token.map[0] + 1}")
+
+    md.core.ruler.push("example_titles", example_titles)
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 TR = TypeVar('TR', bound='Renderer')
 
@@ -587,24 +637,36 @@ class Converter(ABC, Generic[TR]):
             },
             renderer_cls=self.ForbiddenRenderer
         )
+<<<<<<< HEAD
         self._md.enable('table')
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         self._md.use(
             container_plugin,
             name="blockattr",
             validate=lambda name, *args: _parse_blockattrs(name),
         )
         self._md.use(deflist_plugin)
+<<<<<<< HEAD
         self._md.use(footnote_plugin)
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         self._md.use(myst_role_plugin)
         self._md.use(_attr_span_plugin)
         self._md.use(_inline_comment_plugin)
         self._md.use(_block_comment_plugin)
         self._md.use(_heading_ids)
+<<<<<<< HEAD
         self._md.use(_footnote_ids)
         self._md.use(_compact_list_attr)
         self._md.use(_block_attr)
         self._md.use(_block_titles("example"))
         self._md.use(_block_titles("figure"))
+=======
+        self._md.use(_compact_list_attr)
+        self._md.use(_block_attr)
+        self._md.use(_example_titles)
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         self._md.enable(["smartquotes", "replacements"])
 
     def _parse(self, src: str) -> list[Token]:

@@ -11,7 +11,11 @@ python3Packages.buildPythonApplication rec {
     sha256 = "19w92kipfhp5wvs47l0qpibn3x49sbmvkk91yxw6nwk6fafcdl17";
   };
 
+<<<<<<< HEAD
   sourceRoot = "${src.name}/python";
+=======
+  sourceRoot = "source/python";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nativeCheckInputs = [ python3Packages.ply ];
 

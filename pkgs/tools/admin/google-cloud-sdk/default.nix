@@ -7,7 +7,11 @@
 #   3) used by `google-cloud-sdk` only on GCE guests
 #
 
+<<<<<<< HEAD
 { stdenv, lib, fetchurl, makeWrapper, python, openssl, jq, callPackage, with-gce ? false }:
+=======
+{ stdenv, lib, fetchurl, makeWrapper, nixosTests, python, openssl, jq, callPackage, with-gce ? false }:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 let
   pythonEnv = python.withPackages (p: with p; [

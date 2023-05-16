@@ -7,11 +7,19 @@
 
 buildPythonPackage rec {
   pname = "pyworld";
+<<<<<<< HEAD
   version = "0.3.4";
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-EGxw7np9jJukiNgCLyAzcGkppA8CZCVrjofaWquYMDo=";
+=======
+  version = "0.3.2";
+
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-Zo0JhCw8+nSx9u2r2wBYpkwE+c8XuTiD5tqBHhIErU0=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

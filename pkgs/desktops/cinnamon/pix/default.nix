@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , fetchFromGitHub
+<<<<<<< HEAD
 , fetchpatch
 , pkg-config
 , meson
@@ -30,16 +31,47 @@
 , desktop-file-utils
 , itstool
 , xapp
+=======
+, autoreconfHook
+, cinnamon-desktop
+, file
+, gdk-pixbuf
+, glib
+, gobject-introspection
+, gtk-doc
+, gtk3
+, intltool
+, itstool
+, libtool
+, libxml2
+, pkg-config
+, shared-mime-info
+, wrapGAppsHook
+, xapp
+, yelp-tools
+, libsecret
+, webkitgtk
+, libwebp
+, librsvg
+, json-glib
+, gnome
+, clutter
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 stdenv.mkDerivation rec {
   pname = "pix";
+<<<<<<< HEAD
   version = "3.0.2";
+=======
+  version = "2.8.9";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = pname;
     rev = version;
+<<<<<<< HEAD
     sha256 = "sha256-iNUhcHG4nCZ4WNELodyLdztzfNg9g+F0eQrZHXS6Zj0=";
   };
 
@@ -103,6 +135,38 @@ stdenv.mkDerivation rec {
     gappsWrapperArgs+=(--prefix XDG_DATA_DIRS : "${shared-mime-info}/share")
   '';
 
+=======
+    sha256 = "sha256-7g0j1cWgNtWlqKWzBnngUA2WNr8Zh8YO/jJ8OdTII7Y=";
+  };
+
+  nativeBuildInputs = [
+    wrapGAppsHook
+    autoreconfHook
+    cinnamon-desktop
+    gdk-pixbuf
+    gnome.gnome-common
+    gobject-introspection
+    gtk-doc
+    intltool
+    itstool
+    libtool
+    pkg-config
+    yelp-tools
+  ];
+
+  buildInputs = [
+    glib
+    gtk3
+    xapp
+    libsecret
+    webkitgtk
+    libwebp
+    librsvg
+    json-glib
+    clutter
+  ];
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   meta = with lib; {
     description = "A generic image viewer from Linux Mint";
     homepage = "https://github.com/linuxmint/pix";

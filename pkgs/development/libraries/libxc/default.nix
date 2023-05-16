@@ -2,12 +2,17 @@
 
 stdenv.mkDerivation rec {
   pname = "libxc";
+<<<<<<< HEAD
   version = "6.2.2";
+=======
+  version = "6.1.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitLab {
     owner = "libxc";
     repo = "libxc";
     rev = version;
+<<<<<<< HEAD
     hash = "sha256-JYhuyW95I7Q0edLIe7H//+ej5vh6MdAGxXjmNxDMuhQ=";
   };
 
@@ -18,6 +23,11 @@ stdenv.mkDerivation rec {
         --replace "PROPERTIES TIMEOUT 1" "PROPERTIES TIMEOUT 30"
   '';
 
+=======
+    hash = "sha256-PqKqZbL9Y7lKu7tKo+DfAhoEeFSsYWEcwiFX41VhRIs=";
+  };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nativeBuildInputs = [ perl cmake gfortran ];
 
   preConfigure = ''
@@ -27,7 +37,10 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     "-DENABLE_FORTRAN=ON"
     "-DBUILD_SHARED_LIBS=ON"
+<<<<<<< HEAD
     "-DENABLE_XHOST=OFF"
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     # Force compilation of higher derivatives
     "-DDISABLE_VXC=0"
     "-DDISABLE_FXC=0"

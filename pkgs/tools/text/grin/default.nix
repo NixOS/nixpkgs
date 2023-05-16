@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 { lib, fetchFromGitHub, fetchpatch, python3Packages }:
+=======
+{ lib, fetchFromGitHub, python3Packages }:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 python3Packages.buildPythonApplication rec {
   pname = "grin";
@@ -9,6 +13,7 @@ python3Packages.buildPythonApplication rec {
     owner = "matthew-brett";
     repo = pname;
     rev = "1.3.0";
+<<<<<<< HEAD
     hash = "sha256-exKUy7LaDtpq0rJLSuNYsIcynpB4QLtLIE6T/ncB7RQ=";
   };
 
@@ -24,6 +29,12 @@ python3Packages.buildPythonApplication rec {
   nativeCheckInputs = with python3Packages; [
     nose3
   ];
+=======
+    sha256 = "057d05vzx4sf415vnh3qj2g351xhb3illjxjs9mdl3nsnb5r84kv";
+  };
+
+  buildInputs = with python3Packages; [ nose ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   meta = {
     homepage = "https://github.com/matthew-brett/grin";

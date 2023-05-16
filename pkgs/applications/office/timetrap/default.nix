@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 { stdenv
 , lib
 , pkgs
@@ -44,6 +45,16 @@ stdenv.mkDerivation {
       installShellCompletion --cmd $c --zsh ${ttGem}/lib/ruby/gems/*/gems/timetrap*/completions/zsh/*;
     done;
   '';
+=======
+{ lib, bundlerApp, bundlerUpdateScript }:
+
+bundlerApp {
+  pname = "timetrap";
+  gemdir = ./.;
+  exes = [ "t" "timetrap" ];
+
+  passthru.updateScript = bundlerUpdateScript "timetrap";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   meta = with lib; {
     description = "A simple command line time tracker written in ruby";

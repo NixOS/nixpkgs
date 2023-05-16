@@ -13,6 +13,7 @@
 
 stdenv.mkDerivation rec {
   pname = "c-ares";
+<<<<<<< HEAD
   version = "1.19.1";
 
   src = fetchurl {
@@ -22,6 +23,16 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" "man" ];
 
+=======
+  version = "1.19.0";
+  outputs = [ "out" "dev" ];
+
+  src = fetchurl {
+    url = "https://c-ares.haxx.se/download/${pname}-${version}.tar.gz";
+    sha256 = "sha256-v866N+I/1TEpOCkALKwEAe9JptxVkj9/kiNlhbetHdM=";
+  };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nativeBuildInputs = lib.optionals withCMake [ cmake ];
 
   cmakeFlags = [] ++ lib.optionals stdenv.hostPlatform.isStatic [
@@ -32,8 +43,12 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   passthru.tests = {
+<<<<<<< HEAD
     inherit grpc;
     curl = (curl.override { c-aresSupport = true; }).tests.withCheck;
+=======
+    inherit curl grpc;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   meta = with lib; {

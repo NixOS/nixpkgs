@@ -1,17 +1,32 @@
+<<<<<<< HEAD
 { lib, stdenv, fetchFromGitHub, cmake, qtsvg, qtwebengine, wrapQtAppsHook, qttools }:
 
 stdenv.mkDerivation rec {
   pname = "pageedit";
   version = "2.0.0";
+=======
+{ lib, stdenv, mkDerivation, fetchFromGitHub, cmake, qtsvg, qtwebengine, qttranslations, wrapQtAppsHook }:
+
+stdenv.mkDerivation rec {
+  pname = "pageedit";
+  version = "1.9.20";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "Sigil-Ebook";
     repo = pname;
     rev = version;
+<<<<<<< HEAD
     hash = "sha256-zwOSt1eyvuuqfQ1G2bCB4yj6GgixFRc2FLOgcCrdg3Q=";
   };
 
   nativeBuildInputs = [ cmake wrapQtAppsHook qttools ];
+=======
+    hash = "sha256-naoflFANeMwabbdrNL3+ndvEXYT4Yqf+Mo77HcCexHE=";
+  };
+
+  nativeBuildInputs = [ cmake qttranslations wrapQtAppsHook ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   propagatedBuildInputs = [ qtsvg qtwebengine ];
   cmakeFlags = [ "-DINSTALL_BUNDLED_DICTS=0" ];
 

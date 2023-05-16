@@ -2,13 +2,21 @@
 
 stdenv.mkDerivation rec {
   pname = "openxr-loader";
+<<<<<<< HEAD
   version = "1.0.28";
+=======
+  version = "1.0.27";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "OpenXR-SDK-Source";
     rev = "release-${version}";
+<<<<<<< HEAD
     sha256 = "sha256-rQ+Zkmvi4bWVp86KDPs7SLZ040stKUsC7Ycb9kltElk=";
+=======
+    sha256 = "sha256-QvwSNuIph/ea3dAGQ0VhOiOmPmQtnqleCEebRpH2SgE=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ cmake python3 pkg-config ];

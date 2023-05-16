@@ -1,7 +1,10 @@
 { lib
 , buildDunePackage
 , fetchFromGitHub
+<<<<<<< HEAD
 , fetchpatch
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , ocaml
 
 , ounit
@@ -19,6 +22,7 @@ buildDunePackage rec {
     sha256 = "sha256-mgZooyfxrKBVQFn01B8PULmFUW9Zq5HJfgHCSJSkJo4=";
   };
 
+<<<<<<< HEAD
   # Compatibility with OCaml 5.0
   patches = fetchpatch {
     url = "https://github.com/burgerdev/ocaml-rfc7748/commit/f66257bae0317c7b24c4b208ee27ab6eb68460e4.patch";
@@ -30,6 +34,16 @@ buildDunePackage rec {
   propagatedBuildInputs = [ zarith ];
 
   doCheck = lib.versionAtLeast ocaml.version "4.08";
+=======
+  useDune2 = true;
+
+  minimumOCamlVersion = "4.05";
+
+  propagatedBuildInputs = [ zarith ];
+
+  # the tests fail for 4.05
+  doCheck = lib.versionAtLeast ocaml.version "4.06";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   checkInputs = [ ounit ];
 
   meta = {

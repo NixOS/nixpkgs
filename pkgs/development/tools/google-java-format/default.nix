@@ -42,6 +42,9 @@ stdenv.mkDerivation rec {
     license = licenses.asl20;
     maintainers = [ maintainers.emptyflask ];
     platforms = platforms.all;
+<<<<<<< HEAD
     mainProgram = "google-java-format";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

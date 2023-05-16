@@ -6,14 +6,20 @@
 , dbus
 , dejavu_fonts
 , fetchurl
+<<<<<<< HEAD
 , fetchpatch
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , fontconfig
 , gawk
 , ghostscript
 , gnugrep
 , gnused
 , ijs
+<<<<<<< HEAD
 , libexif
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , libjpeg
 , liblouis
 , libpng
@@ -35,6 +41,7 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "cups-filters";
+<<<<<<< HEAD
   version = "1.28.17";
 
   src = fetchurl {
@@ -50,6 +57,15 @@ stdenv.mkDerivation rec {
     })
   ];
 
+=======
+  version = "1.28.15";
+
+  src = fetchurl {
+    url = "https://openprinting.org/download/cups-filters/${pname}-${version}.tar.xz";
+    sha256 = "sha256-qQfsdp+7cu+/v5tUCyUKCOM7bjc6inw0P5hA+6TQR4s=";
+  };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nativeBuildInputs = [ pkg-config makeWrapper ];
 
   buildInputs = [
@@ -58,7 +74,10 @@ stdenv.mkDerivation rec {
     fontconfig
     ghostscript
     ijs
+<<<<<<< HEAD
     libexif
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     libjpeg
     liblouis # braille embosser support
     libpng

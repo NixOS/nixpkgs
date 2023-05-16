@@ -8,7 +8,10 @@ import ./make-test-python.nix ({ lib, ... }: {
       initialPassword = "pass1";
       isNormalUser = true;
     };
+<<<<<<< HEAD
     systemd.user.tmpfiles.users.alice.rules = [ "r %h/file-to-remove" ];
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   testScript = ''
@@ -28,9 +31,14 @@ import ./make-test-python.nix ({ lib, ... }: {
     machine.wait_for_file("/home/alice/login-ok")
     verify_user_activation_run_count(1)
 
+<<<<<<< HEAD
     machine.succeed("touch /home/alice/file-to-remove")
     machine.succeed("/run/current-system/bin/switch-to-configuration test")
     verify_user_activation_run_count(2)
     machine.succeed("[[ ! -f /home/alice/file-to-remove ]] || false")
+=======
+    machine.succeed("/run/current-system/bin/switch-to-configuration test")
+    verify_user_activation_run_count(2)
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '';
 })

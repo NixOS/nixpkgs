@@ -10,7 +10,11 @@ rustPlatform.buildRustPackage {
   version = yabridge.version;
 
   src = yabridge.src;
+<<<<<<< HEAD
   sourceRoot = "${yabridge.src.name}/tools/yabridgectl";
+=======
+  sourceRoot = "source/tools/yabridgectl";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {

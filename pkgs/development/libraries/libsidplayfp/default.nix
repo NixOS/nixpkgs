@@ -1,7 +1,10 @@
 { stdenv
 , lib
 , fetchFromGitHub
+<<<<<<< HEAD
 , makeFontsConf
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , nix-update-script
 , autoreconfHook
 , pkg-config
@@ -17,30 +20,47 @@
 
 stdenv.mkDerivation rec {
   pname = "libsidplayfp";
+<<<<<<< HEAD
   version = "2.5.0";
+=======
+  version = "2.4.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "libsidplayfp";
     repo = "libsidplayfp";
     rev = "v${version}";
     fetchSubmodules = true;
+<<<<<<< HEAD
     sha256 = "sha256-KCp/8UjVl8e3+4s1FD4GvHP7AUAS+eIB7RWhmgm5GIA=";
+=======
+    sha256 = "sha256-e+blEdO2KA/noW9pq56qZ0/vvtqQwiDbBJoQR0cQeds=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   postPatch = ''
     patchShebangs .
   '';
 
+<<<<<<< HEAD
   strictDeps = true;
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nativeBuildInputs = [ autoreconfHook pkg-config perl xa ]
     ++ lib.optionals docSupport [ doxygen graphviz ];
 
   buildInputs = [ libgcrypt libexsid ];
 
+<<<<<<< HEAD
   doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 
   checkInputs = [ unittest-cpp ];
+=======
+  doCheck = true;
+
+  nativeCheckInputs = [ unittest-cpp ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   enableParallelBuilding = true;
 
@@ -57,6 +77,7 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optional doCheck "--enable-tests";
 
+<<<<<<< HEAD
   FONTCONFIG_FILE = lib.optionalString docSupport (makeFontsConf { fontDirectories = [ ]; });
 
   preBuild = ''
@@ -64,6 +85,8 @@ stdenv.mkDerivation rec {
     export XDG_CACHE_HOME=$TMPDIR
   '';
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   postInstall = lib.optionalString docSupport ''
     mkdir -p $doc/share/doc/libsidplayfp
     mv docs/html $doc/share/doc/libsidplayfp/

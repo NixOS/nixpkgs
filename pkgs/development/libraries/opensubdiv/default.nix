@@ -1,6 +1,10 @@
 { config, lib, stdenv, fetchFromGitHub, cmake, pkg-config, xorg, libGLU
 , libGL, glew, ocl-icd, python3
+<<<<<<< HEAD
 , cudaSupport ? config.cudaSupport, cudatoolkit
+=======
+, cudaSupport ? config.cudaSupport or false, cudatoolkit
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   # For visibility mostly. The whole approach to cuda architectures and capabilities
   # will be reworked soon.
 , cudaArch ? "compute_37"

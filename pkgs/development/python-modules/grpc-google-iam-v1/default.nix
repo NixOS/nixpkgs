@@ -28,6 +28,10 @@ buildPythonPackage rec {
     description = "GRPC library for the google-iam-v1 service";
     homepage = "https://github.com/googleapis/googleapis";
     license = licenses.asl20;
+<<<<<<< HEAD
     maintainers = with maintainers; [ ];
+=======
+    maintainers = with maintainers; [ SuperSandro2000 ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

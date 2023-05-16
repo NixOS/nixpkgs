@@ -7,16 +7,27 @@
 
 buildGoModule rec {
   pname = "seaweedfs";
+<<<<<<< HEAD
   version = "3.55";
+=======
+  version = "3.49";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "seaweedfs";
     repo = "seaweedfs";
     rev = version;
+<<<<<<< HEAD
     hash = "sha256-qAyvGisj6GOjyRmqpTsxX/Zy8bx6+cAtmEId5us70+k=";
   };
 
   vendorHash = "sha256-F6Fqv5tUsty/uGwBnKM4r671Gh2T1+9Z2LRGAMF+M2g=";
+=======
+    hash = "sha256-KmgElp+vnVWLFG+ZuxRmULg2VmbpKbgciCYA2pEQDRE=";
+  };
+
+  vendorHash = "sha256-bOBKtsZIVAwTmvjld2SccfqLQaLTW2vV0AXVGYLamFQ=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   subPackages = [ "weed" ];
 

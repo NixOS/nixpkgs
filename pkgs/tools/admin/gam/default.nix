@@ -15,7 +15,11 @@ python3.pkgs.buildPythonApplication rec {
     sha256 = "sha256-/VmBFMjCkd1xhudlcjYGGv+6tgEsyY/xqQoGdupJvOg=";
   };
 
+<<<<<<< HEAD
   sourceRoot = "${src.name}/src";
+=======
+  sourceRoot = "source/src";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   patches = [
     # Also disables update check

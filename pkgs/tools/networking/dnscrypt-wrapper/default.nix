@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 { lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, libsodium, libevent, nixosTests }:
+=======
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, libsodium, libevent }:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 stdenv.mkDerivation rec {
   pname = "dnscrypt-wrapper";
@@ -13,6 +17,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+<<<<<<< HEAD
   # causes `dnscrypt-wrapper --gen-provider-keypair` to crash
   hardeningDisable = [ "fortify3" ];
 
@@ -23,6 +28,11 @@ stdenv.mkDerivation rec {
     inherit (nixosTests) dnscrypt-wrapper;
   };
 
+=======
+  nativeBuildInputs = [ pkg-config autoreconfHook ];
+  buildInputs = [ libsodium libevent ];
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   meta = with lib; {
     description = "A tool for adding dnscrypt support to any name resolver";
     homepage = "https://dnscrypt.info/";

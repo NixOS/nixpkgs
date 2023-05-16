@@ -4,10 +4,15 @@
 , buildPythonPackage
 , cryptography
 , fetchFromGitHub
+<<<<<<< HEAD
 , fetchpatch
 , pythonOlder
 , setuptools
 , wheel
+=======
+, pythonOlder
+, setuptools
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 buildPythonPackage rec {
@@ -24,6 +29,7 @@ buildPythonPackage rec {
     hash = "sha256-1jIsKQa27XNVievU02jjanRWFtJDYsHolgPBab6qpM0=";
   };
 
+<<<<<<< HEAD
   patches = [
     # https://github.com/emontnemery/py-dormakaba-dkey/pull/45
     (fetchpatch {
@@ -36,6 +42,10 @@ buildPythonPackage rec {
   nativeBuildInputs = [
     setuptools
     wheel
+=======
+  nativeBuildInputs = [
+    setuptools
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   propagatedBuildInputs = [

@@ -320,10 +320,17 @@ stdenv.mkDerivation rec {
         sha256 = "1mm4awx6sa0myiz9j4hwp71rpr7yh8vihf3zm15n2ii6xb82r31k";
       };
 
+<<<<<<< HEAD
     in (lib.optionalAttrs (!stdenv.hostPlatform.isDarwin) {
       # `extracted` doesn’t work on darwin
       shebang = callPackage ../shebang-test.nix { inherit runLocal extracted bazelTest distDir; bazel = bazel_self; };
     }) // {
+=======
+    in (if !stdenv.hostPlatform.isDarwin then {
+      # `extracted` doesn’t work on darwin
+      shebang = callPackage ../shebang-test.nix { inherit runLocal extracted bazelTest distDir; bazel = bazel_self; };
+    } else {}) // {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       bashTools = callPackage ../bash-tools-test.nix { inherit runLocal bazelTest distDir; bazel = bazel_self; };
       cpp = callPackage ../cpp-test.nix { inherit runLocal bazelTest bazel-examples distDir; bazel = bazel_self; };
       java = callPackage ../java-test.nix { inherit runLocal bazelTest bazel-examples distDir; bazel = bazel_self; };

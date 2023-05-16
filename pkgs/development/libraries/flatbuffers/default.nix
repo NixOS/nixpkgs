@@ -7,13 +7,21 @@
 
 stdenv.mkDerivation rec {
   pname = "flatbuffers";
+<<<<<<< HEAD
   version = "23.3.3";
+=======
+  version = "22.11.23";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "flatbuffers";
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-h0lF7jf1cDVVyqhUCi7D0NoZ3b4X/vWXsFplND80lGs=";
+=======
+    sha256 = "sha256-I41bslYoSGPNm1+Xpf4kHFDnIqLN8vg5cEqbFIpDT5A=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ cmake python3 ];

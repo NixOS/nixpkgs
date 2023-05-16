@@ -16,8 +16,11 @@ buildDunePackage rec {
   };
 
   postPatch = lib.optionalString (lib.versionAtLeast ocaml.version "5.0") ''
+<<<<<<< HEAD
     substituteInPlace src/core/dune \
       --replace "(libraries bytes)" ""
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     substituteInPlace src/unix/dune \
       --replace "libraries bigarray lwt" "libraries lwt"
   '';

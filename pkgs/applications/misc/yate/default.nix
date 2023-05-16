@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 { stdenv, fetchurl, lib, openssl, pkg-config }:
+=======
+{ stdenv, fetchurl, lib, qt4, openssl, pkg-config }:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 stdenv.mkDerivation rec {
   pname = "yate";
@@ -11,7 +15,11 @@ stdenv.mkDerivation rec {
 
   # TODO zaptel ? postgres ?
   nativeBuildInputs = [ pkg-config ];
+<<<<<<< HEAD
   buildInputs = [ openssl ];
+=======
+  buildInputs = [ qt4 openssl ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   # /dev/null is used when linking which is a impure path for the wrapper
   postPatch =

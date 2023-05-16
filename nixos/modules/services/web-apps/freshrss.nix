@@ -7,7 +7,11 @@ let
   poolName = "freshrss";
 in
 {
+<<<<<<< HEAD
   meta.maintainers = with maintainers; [ etu stunkymonkey mattchrist ];
+=======
+  meta.maintainers = with maintainers; [ etu stunkymonkey ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   options.services.freshrss = {
     enable = mkEnableOption (mdDoc "FreshRSS feed reader");
@@ -27,8 +31,12 @@ in
     };
 
     passwordFile = mkOption {
+<<<<<<< HEAD
       type = types.nullOr types.path;
       default = null;
+=======
+      type = types.path;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       description = mdDoc "Password for the defaultUser for FreshRSS.";
       example = "/run/secrets/freshrss";
     };
@@ -121,6 +129,7 @@ in
     user = mkOption {
       type = types.str;
       default = "freshrss";
+<<<<<<< HEAD
       description = lib.mdDoc "User under which FreshRSS runs.";
     };
 
@@ -128,6 +137,9 @@ in
       type = types.enum [ "form" "http_auth" "none" ];
       default = "form";
       description = mdDoc "Authentication type for FreshRSS.";
+=======
+      description = lib.mdDoc "User under which Freshrss runs.";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
   };
 
@@ -167,6 +179,7 @@ in
       };
     in
     mkIf cfg.enable {
+<<<<<<< HEAD
       assertions = mkIf (cfg.authType == "form") [
         {
           assertion = cfg.passwordFile != null;
@@ -175,6 +188,8 @@ in
           '';
         }
       ];
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       # Set up a Nginx virtual host.
       services.nginx = mkIf (cfg.virtualHost != null) {
         enable = true;
@@ -242,7 +257,11 @@ in
           settingsFlags = concatStringsSep " \\\n    "
             (mapAttrsToList (k: v: "${k} ${toString v}") {
               "--default_user" = ''"${cfg.defaultUser}"'';
+<<<<<<< HEAD
               "--auth_type" = ''"${cfg.authType}"'';
+=======
+              "--auth_type" = ''"form"'';
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
               "--base_url" = ''"${cfg.baseUrl}"'';
               "--language" = ''"${cfg.language}"'';
               "--db-type" = ''"${cfg.database.type}"'';
@@ -270,6 +289,7 @@ in
             FRESHRSS_DATA_PATH = cfg.dataDir;
           };
 
+<<<<<<< HEAD
           script =
             let
               userScriptArgs = ''--user ${cfg.defaultUser} --password "$(cat ${cfg.passwordFile})"'';
@@ -294,6 +314,22 @@ in
                 ${createUserScript}
               fi
             '';
+=======
+          script = ''
+            # do installation or reconfigure
+            if test -f ${cfg.dataDir}/config.php; then
+              # reconfigure with settings
+              ./cli/reconfigure.php ${settingsFlags}
+              ./cli/update-user.php --user ${cfg.defaultUser} --password "$(cat ${cfg.passwordFile})"
+            else
+              # check correct folders in data folder
+              ./cli/prepare.php
+              # install with settings
+              ./cli/do-install.php ${settingsFlags}
+              ./cli/create-user.php --user ${cfg.defaultUser} --password "$(cat ${cfg.passwordFile})"
+            fi
+          '';
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         };
 
       systemd.services.freshrss-updater = {

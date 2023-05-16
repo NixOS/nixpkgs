@@ -47,6 +47,10 @@ buildPythonPackage rec {
     description = "Asynchronous FTP server library";
     homepage = "https://github.com/giampaolo/pyftpdlib/";
     license = licenses.mit;
+<<<<<<< HEAD
     maintainers = with maintainers; [ ];
+=======
+    maintainers = with maintainers; [ costrouc ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

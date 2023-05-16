@@ -29,7 +29,11 @@ let
 in
 buildDunePackage rec {
   pname = "mldoc";
+<<<<<<< HEAD
   version = "1.5.6";
+=======
+  version = "1.5.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   minimalOCamlVersion = "4.10";
 
@@ -38,8 +42,13 @@ buildDunePackage rec {
   src = fetchFromGitHub {
     owner = "logseq";
     repo = "mldoc";
+<<<<<<< HEAD
     rev = "2a700b2e4797e47505f423fd47dc07372bd7b04e"; # version not tagged
     hash = "sha256-OS06fb/Nz8grztFEVwWiqsQQt2PQjqcgQFxQuAEYC54=";
+=======
+    rev = "v${version}";
+    hash = "sha256-FiBlgTTGL5TQkbhpkOCKtBgDDxDs4S88Ps+XAHcNsJ4=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   buildInputs = [

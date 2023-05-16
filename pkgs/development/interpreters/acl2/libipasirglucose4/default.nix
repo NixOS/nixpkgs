@@ -24,7 +24,11 @@ stdenv.mkDerivation rec {
 
   postBuild = ''
     $CXX -shared -o ${libname} \
+<<<<<<< HEAD
         ${lib.optionalString (!stdenv.cc.isClang) "-Wl,-soname,${libname}"} \
+=======
+        ${if stdenv.cc.isClang then "" else "-Wl,-soname,${libname}"} \
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         ipasirglucoseglue.o libipasirglucose4.a
   '';
 

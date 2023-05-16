@@ -6,7 +6,10 @@
 , nose
 , ptyprocess
 }:
+<<<<<<< HEAD
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 buildPythonPackage rec {
   pname = "vncdo";
   version = "0.12.0";
@@ -33,7 +36,13 @@ buildPythonPackage rec {
     description = "A command line VNC client and python library";
     license = licenses.mit;
     maintainers = with maintainers; [ elitak ];
+<<<<<<< HEAD
     mainProgram = pname;
     platforms = with platforms; linux ++ darwin;
   };
+=======
+    platforms = with platforms; linux ++ darwin;
+  };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }

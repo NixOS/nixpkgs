@@ -9,7 +9,11 @@
 
 buildPythonPackage rec {
   pname = "semver";
+<<<<<<< HEAD
   version = "3.0.1";
+=======
+  version = "3.0.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -18,7 +22,11 @@ buildPythonPackage rec {
     owner = "python-semver";
     repo = "python-semver";
     rev = "refs/tags/${version}";
+<<<<<<< HEAD
     hash = "sha256-vVi0+Pq8VpYMy73JSrvi9ranOzvFaHpcPZRt8gMkkFs=";
+=======
+    hash = "sha256-ErLmKZswoNgsY82epNUmJDVs065JvSwz3zY+y8jQ0e8=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

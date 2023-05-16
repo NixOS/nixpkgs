@@ -1,6 +1,10 @@
 # Test configuration switching.
 
+<<<<<<< HEAD
 import ./make-test-python.nix ({ lib, pkgs, ...} : let
+=======
+import ./make-test-python.nix ({ pkgs, ...} : let
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   # Simple service that can either be socket-activated or that will
   # listen on port 1234 if not socket-activated.
@@ -70,6 +74,7 @@ in {
           };
         };
 
+<<<<<<< HEAD
         simpleServiceSeparateActivationScript.configuration = {
           system.activatable = false;
           systemd.services.test = {
@@ -83,6 +88,8 @@ in {
           };
         };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         simpleServiceDifferentDescription.configuration = {
           imports = [ simpleService.configuration ];
           systemd.services.test.description = "Test unit";
@@ -279,6 +286,7 @@ in {
           systemd.services.test-service.unitConfig.RefuseManualStart = true;
         };
 
+<<<<<<< HEAD
         unitWithTemplate.configuration = {
           systemd.services."instantiated@".serviceConfig = {
             Type = "oneshot";
@@ -301,6 +309,8 @@ in {
           systemd.services."instantiated@".serviceConfig.X-Test = "test";
         };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         restart-and-reload-by-activation-script.configuration = {
           systemd.services = rec {
             simple-service = {
@@ -312,30 +322,43 @@ in {
                 ExecReload = "${pkgs.coreutils}/bin/true";
               };
             };
+<<<<<<< HEAD
             "templated-simple-service@" = simple-service;
             "templated-simple-service@instance".overrideStrategy = "asDropin";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
             simple-restart-service = simple-service // {
               stopIfChanged = false;
             };
+<<<<<<< HEAD
             "templated-simple-restart-service@" = simple-restart-service;
             "templated-simple-restart-service@instance".overrideStrategy = "asDropin";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
             simple-reload-service = simple-service // {
               reloadIfChanged = true;
             };
+<<<<<<< HEAD
             "templated-simple-reload-service@" = simple-reload-service;
             "templated-simple-reload-service@instance".overrideStrategy = "asDropin";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
             no-restart-service = simple-service // {
               restartIfChanged = false;
             };
+<<<<<<< HEAD
             "templated-no-restart-service@" = no-restart-service;
             "templated-no-restart-service@instance".overrideStrategy = "asDropin";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
             reload-triggers = simple-service // {
               wantedBy = [ "multi-user.target" ];
             };
+<<<<<<< HEAD
             "templated-reload-triggers@" = simple-service;
             "templated-reload-triggers@instance" = {
               overrideStrategy = "asDropin";
@@ -345,17 +368,24 @@ in {
             reload-triggers-and-restart-by-as = simple-service;
             "templated-reload-triggers-and-restart-by-as@" = reload-triggers-and-restart-by-as;
             "templated-reload-triggers-and-restart-by-as@instance".overrideStrategy = "asDropin";
+=======
+
+            reload-triggers-and-restart-by-as = simple-service;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
             reload-triggers-and-restart = simple-service // {
               stopIfChanged = false; # easier to check for this
               wantedBy = [ "multi-user.target" ];
             };
+<<<<<<< HEAD
             "templated-reload-triggers-and-restart@" = simple-service;
             "templated-reload-triggers-and-restart@instance" = {
               overrideStrategy = "asDropin";
               stopIfChanged = false; # easier to check for this
               wantedBy = [ "multi-user.target" ];
             };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           };
 
           system.activationScripts.restart-and-reload-test = {
@@ -375,20 +405,26 @@ in {
               simple-reload-service.service
               no-restart-service.service
               reload-triggers-and-restart-by-as.service
+<<<<<<< HEAD
               templated-simple-service@instance.service
               templated-simple-restart-service@instance.service
               templated-simple-reload-service@instance.service
               templated-no-restart-service@instance.service
               templated-reload-triggers-and-restart-by-as@instance.service
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
               EOF
 
               cat <<EOF >> "$g"
               reload-triggers.service
               reload-triggers-and-restart-by-as.service
               reload-triggers-and-restart.service
+<<<<<<< HEAD
               templated-reload-triggers@instance.service
               templated-reload-triggers-and-restart-by-as@instance.service
               templated-reload-triggers-and-restart@instance.service
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
               EOF
             '';
           };
@@ -397,10 +433,13 @@ in {
         restart-and-reload-by-activation-script-modified.configuration = {
           imports = [ restart-and-reload-by-activation-script.configuration ];
           systemd.services.reload-triggers-and-restart.serviceConfig.X-Modified = "test";
+<<<<<<< HEAD
           systemd.services."templated-reload-triggers-and-restart@instance" = {
             overrideStrategy = "asDropin";
             serviceConfig.X-Modified = "test";
           };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         };
 
         simple-socket.configuration = {
@@ -450,7 +489,11 @@ in {
           ];
         };
 
+<<<<<<< HEAD
         mountOptionsModified.configuration = {
+=======
+        mountModified.configuration = {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           systemd.mounts = [
             {
               description = "Testmount";
@@ -463,6 +506,7 @@ in {
           ];
         };
 
+<<<<<<< HEAD
         mountModified.configuration = {
           systemd.mounts = [
             {
@@ -476,6 +520,8 @@ in {
           ];
         };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         timer.configuration = {
           systemd.timers.test-timer = {
             wantedBy = [ "timers.target" ];
@@ -563,9 +609,15 @@ in {
   };
 
   testScript = { nodes, ... }: let
+<<<<<<< HEAD
     originalSystem = nodes.machine.system.build.toplevel;
     otherSystem = nodes.other.system.build.toplevel;
     machine = nodes.machine.system.build.toplevel;
+=======
+    originalSystem = nodes.machine.config.system.build.toplevel;
+    otherSystem = nodes.other.config.system.build.toplevel;
+    machine = nodes.machine.config.system.build.toplevel;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     # Ensures failures pass through using pipefail, otherwise failing to
     # switch-to-configuration is hidden by the success of `tee`.
@@ -575,6 +627,7 @@ in {
       set -o pipefail
       exec env -i "$@" | tee /dev/stderr
     '';
+<<<<<<< HEAD
 
     # Returns a comma separated representation of the given list in sorted
     # order, that matches the output format of switch-to-configuration.pl
@@ -591,6 +644,16 @@ in {
     def run_switch(switcher, action="test", fail=False):
         out = machine.fail(f"{switcher} {action} 2>&1") if fail \
             else machine.succeed(f"{switcher} {action} 2>&1")
+=======
+  in /* python */ ''
+    def switch_to_specialisation(system, name, action="test", fail=False):
+        if name == "":
+            stc = f"{system}/bin/switch-to-configuration"
+        else:
+            stc = f"{system}/specialisation/{name}/bin/switch-to-configuration"
+        out = machine.fail(f"{stc} {action} 2>&1") if fail \
+            else machine.succeed(f"{stc} {action} 2>&1")
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         assert_lacks(out, "switch-to-configuration line")  # Perl warnings
         return out
 
@@ -728,6 +791,7 @@ in {
         assert_lacks(out, "the following new units were started:")
         assert_contains(out, "would start the following units: test.service\n")
 
+<<<<<<< HEAD
         out = switch_to_specialisation("${machine}", "", action="test")
 
         # Ensure the service can be started when the activation script isn't in toplevel
@@ -744,6 +808,8 @@ in {
         machine.succeed("! test -e /run/current-system/dry-activate")
         machine.succeed("! test -e /run/current-system/bin/switch-to-configuration")
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         # Ensure \ works in unit names
         out = switch_to_specialisation("${machine}", "unitWithBackslash")
         assert_contains(out, "stopping the following units: test.service\n")
@@ -805,6 +871,7 @@ in {
         assert_contains(out, "\nstarting the following units: required-service.service\n")
         assert_lacks(out, "the following new units were started:")
 
+<<<<<<< HEAD
         # Ensure templated units are restarted when the base unit changes
         switch_to_specialisation("${machine}", "unitWithTemplate")
         out = switch_to_specialisation("${machine}", "unitWithTemplateModified")
@@ -815,6 +882,8 @@ in {
         assert_contains(out, "\nstarting the following units: instantiated@one.service, instantiated@two.service\n")
         assert_lacks(out, "the following new units were started:")
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     with subtest("failing units"):
         # Let the simple service fail
         switch_to_specialisation("${machine}", "simpleServiceModified")
@@ -978,6 +1047,7 @@ in {
         assert_lacks(out, "NOT restarting the following changed units:")
         assert_lacks(out, "reloading the following units:")
         assert_lacks(out, "restarting the following units:")
+<<<<<<< HEAD
         assert_contains(out, "\nstarting the following units: ${sortedUnits [
           "no-restart-service.service"
           "reload-triggers-and-restart-by-as.service"
@@ -1013,11 +1083,16 @@ in {
           "templated-simple-restart-service@instance.service"
           "templated-simple-service@instance.service"
         ]}\n")
+=======
+        assert_contains(out, "\nstarting the following units: no-restart-service.service, reload-triggers-and-restart-by-as.service, simple-reload-service.service, simple-restart-service.service, simple-service.service\n")
+        assert_contains(out, "the following new units were started: no-restart-service.service, reload-triggers-and-restart-by-as.service, reload-triggers-and-restart.service, reload-triggers.service, simple-reload-service.service, simple-restart-service.service, simple-service.service\n")
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         # Switch to the same system where the example services get restarted
         # and reloaded by the activation script
         out = switch_to_specialisation("${machine}", "restart-and-reload-by-activation-script")
         assert_lacks(out, "stopping the following units:")
         assert_lacks(out, "NOT restarting the following changed units:")
+<<<<<<< HEAD
         assert_contains(out, "reloading the following units: ${sortedUnits [
           "reload-triggers-and-restart.service"
           "reload-triggers.service"
@@ -1034,6 +1109,10 @@ in {
           "templated-simple-restart-service@instance.service"
           "templated-simple-service@instance.service"
         ]}\n")
+=======
+        assert_contains(out, "reloading the following units: reload-triggers-and-restart.service, reload-triggers.service, simple-reload-service.service\n")
+        assert_contains(out, "restarting the following units: reload-triggers-and-restart-by-as.service, simple-restart-service.service, simple-service.service\n")
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         assert_lacks(out, "\nstarting the following units:")
         assert_lacks(out, "the following new units were started:")
         # Switch to the same system and see if the service gets restarted when it's modified
@@ -1041,6 +1120,7 @@ in {
         out = switch_to_specialisation("${machine}", "restart-and-reload-by-activation-script-modified")
         assert_lacks(out, "stopping the following units:")
         assert_lacks(out, "NOT restarting the following changed units:")
+<<<<<<< HEAD
         assert_contains(out, "reloading the following units: ${sortedUnits [
           "reload-triggers.service"
           "simple-reload-service.service"
@@ -1057,12 +1137,17 @@ in {
           "templated-simple-restart-service@instance.service"
           "templated-simple-service@instance.service"
         ]}\n")
+=======
+        assert_contains(out, "reloading the following units: reload-triggers.service, simple-reload-service.service\n")
+        assert_contains(out, "restarting the following units: reload-triggers-and-restart-by-as.service, reload-triggers-and-restart.service, simple-restart-service.service, simple-service.service\n")
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         assert_lacks(out, "\nstarting the following units:")
         assert_lacks(out, "the following new units were started:")
         # The same, but in dry mode
         out = switch_to_specialisation("${machine}", "restart-and-reload-by-activation-script", action="dry-activate")
         assert_lacks(out, "would stop the following units:")
         assert_lacks(out, "would NOT stop the following changed units:")
+<<<<<<< HEAD
         assert_contains(out, "would reload the following units: ${sortedUnits [
           "reload-triggers.service"
           "simple-reload-service.service"
@@ -1079,6 +1164,10 @@ in {
           "templated-simple-restart-service@instance.service"
           "templated-simple-service@instance.service"
         ]}\n")
+=======
+        assert_contains(out, "would reload the following units: reload-triggers.service, simple-reload-service.service\n")
+        assert_contains(out, "would restart the following units: reload-triggers-and-restart-by-as.service, reload-triggers-and-restart.service, simple-restart-service.service, simple-service.service\n")
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         assert_lacks(out, "\nwould start the following units:")
 
     with subtest("socket-activated services"):
@@ -1150,8 +1239,12 @@ in {
         switch_to_specialisation("${machine}", "mount")
         out = machine.succeed("mount | grep 'on /testmount'")
         assert_contains(out, "size=1024k")
+<<<<<<< HEAD
         # Changing options reloads the unit
         out = switch_to_specialisation("${machine}", "mountOptionsModified")
+=======
+        out = switch_to_specialisation("${machine}", "mountModified")
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         assert_lacks(out, "stopping the following units:")
         assert_lacks(out, "NOT restarting the following changed units:")
         assert_contains(out, "reloading the following units: testmount.mount\n")
@@ -1161,6 +1254,7 @@ in {
         # It changed
         out = machine.succeed("mount | grep 'on /testmount'")
         assert_contains(out, "size=10240k")
+<<<<<<< HEAD
         # Changing anything but `Options=` restarts the unit
         out = switch_to_specialisation("${machine}", "mountModified")
         assert_lacks(out, "stopping the following units:")
@@ -1172,6 +1266,8 @@ in {
         # It changed
         out = machine.succeed("mount | grep 'on /testmount'")
         assert_contains(out, "ramfs")
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     with subtest("timers"):
         switch_to_specialisation("${machine}", "timer")

@@ -21,14 +21,22 @@
 
 buildPythonPackage rec {
   pname = "protonvpn-nm-lib";
+<<<<<<< HEAD
   version = "3.16.0";
+=======
+  version = "3.14.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "ProtonVPN";
     repo = pname;
     rev = "refs/tags/${version}";
+<<<<<<< HEAD
     hash = "sha256-n3jfBHMYqyQZgvFFJcylNbTWZ3teuqhdelTfpNrwWuA=";
+=======
+    hash = "sha256-xpK3l8BI6/DUt46VR8DS89hzdHUljAbrYhEyf00giGg=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [

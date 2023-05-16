@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 { pkgs, lib, fetchurl, fetchpatch, perlPackages, rsync, which, installShellFiles, ... }:
 perlPackages.buildPerlPackage rec {
   pname = "Rex";
@@ -7,12 +8,24 @@ perlPackages.buildPerlPackage rec {
     hash = "sha256-An0wQu+UC2dZDlmJ6W8irh5nunRIlcXdPbVpwFE3Alw=";
   };
 
+=======
+{ pkgs, lib, fetchurl, perlPackages, rsync, installShellFiles, ... }:
+
+perlPackages.buildPerlPackage rec {
+  pname = "Rex";
+  version = "1.13.4";
+  src = fetchurl {
+    url = "mirror://cpan/authors/id/F/FE/FERKI/Rex-${version}.tar.gz";
+    sha256 = "a86e9270159b41c9a8fce96f9ddc97c5caa68167ca4ed33e97908bfce17098cf";
+  };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   buildInputs = with perlPackages; [
     FileShareDirInstall
     ParallelForkManager
     StringEscape
     TestDeep
     TestOutput
+<<<<<<< HEAD
     TestWarnings
     TestUseAllModules
     TestException
@@ -45,6 +58,11 @@ perlPackages.buildPerlPackage rec {
       url = "https://github.com/RexOps/Rex/commit/f0b312f42178e7e4271b5b010c00efb5cdba2970.patch";
       hash = "sha256-n/+huVCM8zpgx2LZgMB41PPIYgNhF6AK8+4FGPQH+FU=";
     })
+=======
+    TestUseAllModules
+
+    rsync
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   nativeBuildInputs = with perlPackages; [ installShellFiles ParallelForkManager ];
@@ -71,11 +89,17 @@ perlPackages.buildPerlPackage rec {
     YAML
   ];
 
+<<<<<<< HEAD
   outputs = [ "out" ];
 
   postPatch = ''
     patchShebangs bin
   '';
+=======
+  doCheck = false;
+
+  outputs = [ "out" ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   fixupPhase = ''
     for sh in bash zsh; do

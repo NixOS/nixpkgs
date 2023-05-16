@@ -2,7 +2,10 @@
 
 let
   cfg = config.services.nextcloud.notify_push;
+<<<<<<< HEAD
   cfgN = config.services.nextcloud;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 in
 {
   options.services.nextcloud.notify_push = {
@@ -26,6 +29,7 @@ in
       default = "error";
       description = lib.mdDoc "Log level";
     };
+<<<<<<< HEAD
 
     bendDomainToLocalhost = lib.mkOption {
       type = lib.types.bool;
@@ -36,6 +40,8 @@ in
         This is useful when nextcloud's domain is not a static IP address and when the reverse proxy cannot be bypassed because the backend connection is done via unix socket.
       '';
     };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   } // (
     lib.genAttrs [
       "dbtype"
@@ -55,6 +61,7 @@ in
 
   config = lib.mkIf cfg.enable {
     systemd.services.nextcloud-notify_push = let
+<<<<<<< HEAD
       nextcloudUrl = "http${lib.optionalString cfgN.https "s"}://${cfgN.hostName}";
     in {
       description = "Push daemon for Nextcloud clients";
@@ -63,6 +70,13 @@ in
         "phpfpm-nextcloud.service"
         "redis-nextcloud.service"
       ];
+=======
+      nextcloudUrl = "http${lib.optionalString config.services.nextcloud.https "s"}://${config.services.nextcloud.hostName}";
+    in {
+      description = "Push daemon for Nextcloud clients";
+      documentation = [ "https://github.com/nextcloud/notify_push" ];
+      after = [ "phpfpm-nextcloud.service" ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       wantedBy = [ "multi-user.target" ];
       environment = {
         NEXTCLOUD_URL = nextcloudUrl;
@@ -71,7 +85,11 @@ in
         LOG = cfg.logLevel;
       };
       postStart = ''
+<<<<<<< HEAD
         ${cfgN.occ}/bin/nextcloud-occ notify_push:setup ${nextcloudUrl}/push
+=======
+        ${config.services.nextcloud.occ}/bin/nextcloud-occ notify_push:setup ${nextcloudUrl}/push
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       '';
       script = let
         dbType = if cfg.dbtype == "pgsql" then "postgresql" else cfg.dbtype;
@@ -90,7 +108,11 @@ in
         export DATABASE_PASSWORD="$(<"${cfg.dbpassFile}")"
       '' + ''
         export DATABASE_URL="${dbUrl}"
+<<<<<<< HEAD
         ${cfg.package}/bin/notify_push '${cfgN.datadir}/config/config.php'
+=======
+        ${cfg.package}/bin/notify_push '${config.services.nextcloud.datadir}/config/config.php'
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       '';
       serviceConfig = {
         User = "nextcloud";
@@ -101,6 +123,7 @@ in
       };
     };
 
+<<<<<<< HEAD
     networking.hosts = lib.mkIf cfg.bendDomainToLocalhost {
       "127.0.0.1" = [ cfgN.hostName ];
       "::1" = [ cfgN.hostName ];
@@ -119,5 +142,12 @@ in
         nextcloud.extraOptions.trusted_proxies = [ "127.0.0.1" "::1" ];
       })
     ];
+=======
+    services.nginx.virtualHosts.${config.services.nextcloud.hostName}.locations."^~ /push/" = {
+      proxyPass = "http://unix:${cfg.socketPath}";
+      proxyWebsockets = true;
+      recommendedProxySettings = true;
+    };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

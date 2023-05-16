@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 { lib, stdenv, fetchurl, lv2, pkg-config, python3, serd, sord, sratom, waf
+=======
+{ lib, stdenv, fetchurl, lv2, pkg-config, python3, serd, sord, sratom, wafHook
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 # test derivations
 , pipewire
@@ -17,7 +21,11 @@ stdenv.mkDerivation rec {
 
   patches = [ ./lilv-pkgconfig.patch ];
 
+<<<<<<< HEAD
   nativeBuildInputs = [ pkg-config python3 waf.hook ];
+=======
+  nativeBuildInputs = [ pkg-config python3 wafHook ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   buildInputs = [ serd sord sratom ];
   propagatedBuildInputs = [ lv2 ];
   dontAddWafCrossFlags = true;

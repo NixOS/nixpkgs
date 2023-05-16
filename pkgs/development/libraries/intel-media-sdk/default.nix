@@ -3,13 +3,21 @@
 
 stdenv.mkDerivation rec {
   pname = "intel-media-sdk";
+<<<<<<< HEAD
   version = "23.2.2";
+=======
+  version = "23.2.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "Intel-Media-SDK";
     repo = "MediaSDK";
     rev = "intel-mediasdk-${version}";
+<<<<<<< HEAD
     hash = "sha256-wno3a/ZSKvgHvZiiJ0Gq9GlrEbfHCizkrSiHD6k/Loo=";
+=======
+    hash = "sha256-XxwB5C1NBjq6cjlfzYmvudH6dlItFYSU9dd5DwH7tH0=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ cmake pkg-config ];

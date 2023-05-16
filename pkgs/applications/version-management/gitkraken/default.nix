@@ -10,24 +10,40 @@ with lib;
 
 let
   pname = "gitkraken";
+<<<<<<< HEAD
   version = "9.5.1";
+=======
+  version = "9.3.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   throwSystem = throw "Unsupported system: ${stdenv.hostPlatform.system}";
 
   srcs = {
     x86_64-linux = fetchzip {
       url = "https://release.axocdn.com/linux/GitKraken-v${version}.tar.gz";
+<<<<<<< HEAD
       sha256 = "sha256-irKs0yvz2TrKvF34DMOBdmJvH+Lox/ZVbPSaHAl6Vyo=";
+=======
+      sha256 = "sha256-OX/taX+eYHPWTNNGfZhoiBEG8pFSnjCaTshM+z6MhDU=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
 
     x86_64-darwin = fetchzip {
       url = "https://release.axocdn.com/darwin/GitKraken-v${version}.zip";
+<<<<<<< HEAD
       sha256 = "sha256-3g49FBbolEhBgSPanLnrWhfxHR5jg4C1p+70rIrQ2GM=";
+=======
+      sha256 = "sha256-miUcV35HX73b5YnwMnkqYdQtxfSHJaMdMcgVVBkZs6A=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
 
     aarch64-darwin = fetchzip {
       url = "https://release.axocdn.com/darwin-arm64/GitKraken-v${version}.zip";
+<<<<<<< HEAD
       sha256 = "sha256-8ateh2LswWMOboPASWcYTy6OfK30h7wABIgoZXJ7GTM=";
+=======
+      sha256 = "sha256-yAwvuwxtGQh7/bV/7wShdCVHgZCtRCfmXrdT4dI6+cM=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
   };
 

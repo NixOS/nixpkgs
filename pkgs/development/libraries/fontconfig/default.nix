@@ -1,7 +1,10 @@
 { stdenv
 , lib
 , fetchurl
+<<<<<<< HEAD
 , fetchpatch2
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , pkg-config
 , python3
 , freetype
@@ -15,12 +18,17 @@
 
 stdenv.mkDerivation rec {
   pname = "fontconfig";
+<<<<<<< HEAD
   version = "2.14.2";
+=======
+  version = "2.14.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   outputs = [ "bin" "dev" "lib" "out" ]; # $out contains all the config
 
   src = fetchurl {
     url = "https://www.freedesktop.org/software/fontconfig/release/${pname}-${version}.tar.xz";
+<<<<<<< HEAD
     hash = "sha256-26aVtXvOFQI9LO7e+CBiwrkl5R9dTMSu9zbPE/YKRos=";
   };
 
@@ -34,6 +42,11 @@ stdenv.mkDerivation rec {
     })
   ];
 
+=======
+    sha256 = "3L64TJx0u/2xM9U1/hx77cnyIhqNrzkUuYTETFIOm6w=";
+  };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nativeBuildInputs = [
     autoreconfHook
     gperf

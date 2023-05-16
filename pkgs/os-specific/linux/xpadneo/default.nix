@@ -18,7 +18,11 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   setSourceRoot = ''
+<<<<<<< HEAD
     export sourceRoot=$(pwd)/${finalAttrs.src.name}/hid-xpadneo/src
+=======
+    export sourceRoot=$(pwd)/source/hid-xpadneo/src
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '';
 
   nativeBuildInputs = kernel.moduleBuildDependencies;

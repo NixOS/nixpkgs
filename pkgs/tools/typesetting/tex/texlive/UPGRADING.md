@@ -45,6 +45,7 @@ in Nixpkgs matches the one that generated from `texlive.tlpdb.xz`.
 
 ### Build packages locally and generate fix hashes
 
+<<<<<<< HEAD
 To prevent unnecessary rebuilds, texlive packages are built as fixed-output
 derivations whose hashes are contained in `fixed-hashes.nix`.
 
@@ -129,3 +130,26 @@ functionality of the package, then it should be made available in the bin
 containers (by patching `PATH`), or in `texlive.combine` (as we do for
 Ghostscript). Non-essential runtime dependencies should be ignored if they
 increase the closure substantially.
+=======
+To save disk space and prevent unnecessary rebuilds, texlive packages are built
+as fixed-output derivations whose hashes are contained in `fixedHashes.nix`.
+
+Updating the list of fixed hashes requires a local build of *all* packages,
+which is a resource-intensive process:
+
+
+```bash
+# move fixedHashes away, otherwise build will fail on updated packages
+mv fixedHashes.nix fixedHashes-old.nix
+# start with empty fixedHashes
+echo '{}' > fixedHashes.nix
+
+nix-build ../../../../.. -Q --no-out-link -A texlive.scheme-full.pkgs | ./fixHashes.awk > ./fixedHashes-new.nix
+
+mv fixedHashes-new.nix fixedHashes.nix
+```
+
+### Commit changes
+
+Commit the updated `tlpdb.nix` and `fixedHashes.nix` to the repository.
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)

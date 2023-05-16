@@ -24,7 +24,11 @@ buildGoModule rec {
         '';
       in [ fakeGit mage ];
 
+<<<<<<< HEAD
   vendorHash = "sha256-TY6xJnz6phIrybZ2Ix7xwuMzGQ1f0xk0KwgPnaTaKYw=";
+=======
+  vendorSha256 = "sha256-TY6xJnz6phIrybZ2Ix7xwuMzGQ1f0xk0KwgPnaTaKYw=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   # checks need to be disabled because of needed internet for some checks
   doCheck = false;

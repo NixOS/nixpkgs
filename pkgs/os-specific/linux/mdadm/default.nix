@@ -48,7 +48,10 @@ stdenv.mkDerivation rec {
     description = "Programs for managing RAID arrays under Linux";
     homepage = "http://neil.brown.name/blog/mdadm";
     license = licenses.gpl2;
+<<<<<<< HEAD
     mainProgram = "mdadm";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     maintainers = with maintainers; [ ekleog ];
     platforms = platforms.linux;
   };

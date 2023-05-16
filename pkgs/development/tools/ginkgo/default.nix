@@ -2,15 +2,25 @@
 
 buildGoModule rec {
   pname = "ginkgo";
+<<<<<<< HEAD
   version = "2.12.0";
+=======
+  version = "2.9.4";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "onsi";
     repo = "ginkgo";
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-ikZ3vuoGYCbjvcpqol11WZ1PfxqSm1VNfdLDJIlNeP0=";
   };
   vendorHash = "sha256-huXVFvSd2KkNqb6BWsTY2megnD9dJLy7edX2mGBv0rU=";
+=======
+    sha256 = "sha256-groih0LxtmB8k4/vfw2Ivtzm+SOyQqK1o7XASNplFvQ=";
+  };
+  vendorHash = "sha256-Rm5fpiTZMo/B9+yIpmEniJVRfKgHjpFIagELEjgFYwc=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   # integration tests expect more file changes
   # types tests are missing CodeLocation

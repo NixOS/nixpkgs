@@ -52,8 +52,11 @@ let
     set  -s escape-time       ${toString cfg.escapeTime}
     set  -g history-limit     ${toString cfg.historyLimit}
 
+<<<<<<< HEAD
     ${cfg.extraConfigBeforePlugins}
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     ${lib.optionalString (cfg.plugins != []) ''
     # Run plugins
     ${lib.concatMapStringsSep "\n" (x: "run-shell ${x.rtp}") cfg.plugins}
@@ -110,6 +113,7 @@ in {
         description = lib.mdDoc "Time in milliseconds for which tmux waits after an escape is input.";
       };
 
+<<<<<<< HEAD
       extraConfigBeforePlugins = mkOption {
         default = "";
         description = lib.mdDoc ''
@@ -122,6 +126,12 @@ in {
         default = "";
         description = lib.mdDoc ''
           Additional contents of /etc/tmux.conf, to be run after sourcing plugins.
+=======
+      extraConfig = mkOption {
+        default = "";
+        description = lib.mdDoc ''
+          Additional contents of /etc/tmux.conf
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         '';
         type = types.lines;
       };

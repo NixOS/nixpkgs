@@ -15,14 +15,22 @@
 
 buildPythonPackage rec {
   pname = "authcaptureproxy";
+<<<<<<< HEAD
   version = "1.2.0";
+=======
+  version = "1.1.5";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "alandtse";
     repo = "auth_capture_proxy";
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-OY6wT0xi7f6Bn8VOL9+6kyv5cENYbrGGTWWKc6o36cw=";
+=======
+    hash = "sha256-HYqbOyJlP1rd8jpqbN9I4JuVpBKxR9/Nvoh544t40uo=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

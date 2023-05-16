@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 { lib, stdenv, fetchurl, fetchpatch, removeReferencesTo
+=======
+{ lib, stdenv, fetchurl, fetchpatch, autoreconfHook, removeReferencesTo
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , file, openssl, perl, perlPackages, nettools
 , withPerlTools ? false }: let
 
@@ -10,6 +14,7 @@
 
 in stdenv.mkDerivation rec {
   pname = "net-snmp";
+<<<<<<< HEAD
   version = "5.9.4";
 
   src = fetchurl {
@@ -20,12 +25,27 @@ in stdenv.mkDerivation rec {
   patches =
     let fetchAlpinePatch = name: sha256: fetchurl {
       url = "https://git.alpinelinux.org/aports/plain/main/net-snmp/${name}?id=ebb21045c31f4d5993238bcdb654f21d8faf8123";
+=======
+  version = "5.9.3";
+
+  src = fetchurl {
+    url = "mirror://sourceforge/net-snmp/${pname}-${version}.tar.gz";
+    sha256 = "sha256-IJfym34b8/EwC0uuUvojCNC7jV05mNvgL5RipBOi7wo=";
+  };
+
+  patches =
+    let fetchAlpinePatch = name: sha256: fetchpatch {
+      url = "https://git.alpinelinux.org/aports/plain/main/net-snmp/${name}?id=f25d3fb08341b60b6ccef424399f060dfcf3f1a5";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       inherit name sha256;
     };
   in [
     (fetchAlpinePatch "fix-includes.patch" "0zpkbb6k366qpq4dax5wknwprhwnhighcp402mlm7950d39zfa3m")
     (fetchAlpinePatch "netsnmp-swinst-crash.patch" "0gh164wy6zfiwiszh58fsvr25k0ns14r3099664qykgpmickkqid")
+<<<<<<< HEAD
     (fetchAlpinePatch "fix-fd_mask.patch" "/i9ve61HjDzqZt+u1wajNtSQoizl+KePvhcAt24HKd0=")
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   outputs = [ "bin" "out" "dev" "lib" ];
@@ -45,7 +65,11 @@ in stdenv.mkDerivation rec {
     substituteInPlace testing/fulltests/support/simple_TESTCONF.sh --replace "/bin/netstat" "${nettools}/bin/netstat"
   '';
 
+<<<<<<< HEAD
   nativeBuildInputs = [ nettools removeReferencesTo file ];
+=======
+  nativeBuildInputs = [ autoreconfHook nettools removeReferencesTo file ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   buildInputs = [ openssl ]
     ++ lib.optional withPerlTools perlWithPkgs;
 

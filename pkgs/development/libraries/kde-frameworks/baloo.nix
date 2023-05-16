@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 { mkDerivation
 , lib
 , fetchpatch
@@ -16,11 +17,19 @@
 , qtdeclarative
 , solid
 ,
+=======
+{
+  mkDerivation, lib,
+  extra-cmake-modules,
+  kauth, kconfig, kcoreaddons, kcrash, kdbusaddons, kfilemetadata, ki18n,
+  kidletime, kio, lmdb, qtbase, qtdeclarative, solid,
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 mkDerivation {
   pname = "baloo";
   nativeBuildInputs = [ extra-cmake-modules ];
+<<<<<<< HEAD
   buildInputs = [ kauth kconfig kcrash kdbusaddons ki18n kio kidletime lmdb qtdeclarative solid ];
   outputs = [ "out" "dev" ];
   propagatedBuildInputs = [ kcoreaddons kfilemetadata qtbase ];
@@ -40,6 +49,15 @@ mkDerivation {
     })
   ];
 
+=======
+  buildInputs = [
+    kauth kconfig kcrash kdbusaddons ki18n kio kidletime lmdb qtdeclarative
+    solid
+  ];
+  outputs = [ "out" "dev" ];
+  propagatedBuildInputs = [ kcoreaddons kfilemetadata qtbase ];
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   # kde-baloo.service uses `ExecCondition=@KDE_INSTALL_FULL_BINDIR@/kde-systemd-start-condition ...`
   # which comes from the "plasma-workspace" derivation, but KDE_INSTALL_* all point at the "baloo" one
   # (`${lib.getBin pkgs.plasma-workspace}` would cause infinite recursion)

@@ -25,28 +25,39 @@ let
     mkdir -p ''${out}
     cd ''${out}
     untar --file ''${NIX_BUILD_TOP}/tinycc.tar
+<<<<<<< HEAD
 
     # Patch
     cd tinycc-${builtins.substring 0 7 rev}
     # Static link by default
     replace --file libtcc.c --output libtcc.c --match-on "s->ms_extensions = 1;" --replace-with "s->ms_extensions = 1; s->static_link = 1;"
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '') + "/tinycc-${builtins.substring 0 7 rev}";
 
   meta = with lib; {
     description = "Small, fast, and embeddable C compiler and interpreter";
     homepage = "https://repo.or.cz/w/tinycc.git";
     license = licenses.lgpl21Only;
+<<<<<<< HEAD
     maintainers = teams.minimal-bootstrap.members;
+=======
+    maintainers = with maintainers; [ emilytrau ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     platforms = [ "i686-linux" ];
   };
 
   tccdefs = kaem.runCommand "tccdefs-${version}" {} ''
     mkdir ''${out}
+<<<<<<< HEAD
     ${tinycc-bootstrappable.compiler}/bin/tcc \
       -B ${tinycc-bootstrappable.libs}/lib \
       -DC2STR \
       -o c2str \
       ${src}/conftest.c
+=======
+    ${tinycc-bootstrappable}/bin/tcc -static -DC2STR -o c2str ${src}/conftest.c
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     ./c2str ${src}/include/tccdefs.h ''${out}/tccdefs_.h
   '';
 

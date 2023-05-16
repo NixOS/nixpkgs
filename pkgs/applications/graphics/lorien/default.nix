@@ -2,17 +2,28 @@
 , stdenv
 , fetchFromGitHub
 
+<<<<<<< HEAD
 , autoPatchelfHook
 , copyDesktopItems
 , makeDesktopItem
 
 , godot3-export-templates
 , godot3-headless
+=======
+, copyDesktopItems
+, makeDesktopItem
+
+, godot-export-templates
+, godot-headless
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 , alsa-lib
 , libGL
 , libGLU
+<<<<<<< HEAD
 , libpulseaudio
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , libX11
 , libXcursor
 , libXext
@@ -43,9 +54,14 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
+<<<<<<< HEAD
     autoPatchelfHook
     copyDesktopItems
     godot3-headless
+=======
+    copyDesktopItems
+    godot-headless
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   buildInputs = [
@@ -86,11 +102,19 @@ stdenv.mkDerivation rec {
     # Link the export-templates to the expected location. The --export commands
     # expects the template-file at .../templates/{godot-version}.stable/linux_x11_64_release
     mkdir -p $HOME/.local/share/godot
+<<<<<<< HEAD
     ln -s ${godot3-export-templates}/share/godot/templates $HOME/.local/share/godot
 
     mkdir -p $out/share/lorien
 
     godot3-headless --path lorien --export "${preset}" $out/share/lorien/lorien
+=======
+    ln -s ${godot-export-templates}/share/godot/templates $HOME/.local/share/godot
+
+    mkdir -p $out/share/lorien
+
+    godot-headless --path lorien --export "${preset}" $out/share/lorien/lorien
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     runHook postBuild
   '';
@@ -113,12 +137,15 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   runtimeDependencies = map lib.getLib [
     alsa-lib
     libpulseaudio
     udev
   ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   meta = with lib; {
     homepage = "https://github.com/mbrlabs/Lorien";
     description = "An infinite canvas drawing/note-taking app";

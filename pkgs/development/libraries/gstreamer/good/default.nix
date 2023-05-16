@@ -1,6 +1,9 @@
 { lib, stdenv
 , fetchurl
+<<<<<<< HEAD
 , fetchpatch
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , meson
 , nasm
 , ninja
@@ -35,10 +38,20 @@
 , qt6Support ? false, qt6
 , raspiCameraSupport ? false, libraspberrypi
 , enableJack ? true, libjack2
+<<<<<<< HEAD
 , enableX11 ? stdenv.isLinux, xorg
 , ncurses
 , wayland
 , wayland-protocols
+=======
+, libXdamage
+, libXext
+, libXfixes
+, ncurses
+, wayland
+, wayland-protocols
+, xorg
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , libgudev
 , wavpack
 , glib
@@ -46,6 +59,7 @@
 , enableDocumentation ? stdenv.hostPlatform == stdenv.buildPlatform, hotdoc
 }:
 
+<<<<<<< HEAD
 # MMAL is not supported on aarch64, see:
 # https://github.com/raspberrypi/userland/issues/688
 assert raspiCameraSupport -> (stdenv.isLinux && stdenv.isAarch32);
@@ -53,11 +67,19 @@ assert raspiCameraSupport -> (stdenv.isLinux && stdenv.isAarch32);
 stdenv.mkDerivation rec {
   pname = "gst-plugins-good";
   version = "1.22.5";
+=======
+assert raspiCameraSupport -> (stdenv.isLinux && stdenv.isAarch64);
+
+stdenv.mkDerivation rec {
+  pname = "gst-plugins-good";
+  version = "1.22.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "https://gstreamer.freedesktop.org/src/${pname}/${pname}-${version}.tar.xz";
+<<<<<<< HEAD
     hash = "sha256-tnsxMTpUxpKbgpadQdPP3y9Y21c/tfSR5rul2ErqB3g=";
   };
 
@@ -72,6 +94,11 @@ stdenv.mkDerivation rec {
     })
   ];
 
+=======
+    hash = "sha256-fIzFlCXysjL2DKfRPlbt1hXaT3Eec90Bp8/6Rua8DN0=";
+  };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   strictDeps = true;
 
   depsBuildBuild = [ pkg-config ];
@@ -116,6 +143,7 @@ stdenv.mkDerivation rec {
     mpg123
     twolame
     libintl
+<<<<<<< HEAD
     ncurses
     wavpack
   ] ++ lib.optionals raspiCameraSupport [
@@ -124,6 +152,17 @@ stdenv.mkDerivation rec {
     xorg.libXext
     xorg.libXfixes
     xorg.libXdamage
+=======
+    libXdamage
+    libXext
+    libXfixes
+    ncurses
+    xorg.libXfixes
+    xorg.libXdamage
+    wavpack
+  ] ++ lib.optionals raspiCameraSupport [
+    libraspberrypi
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ] ++ lib.optionals gtkSupport [
     # for gtksink
     gtk3
@@ -159,8 +198,11 @@ stdenv.mkDerivation rec {
     "-Dqt6=disabled"
   ] ++ lib.optionals (!gtkSupport) [
     "-Dgtk3=disabled"
+<<<<<<< HEAD
   ] ++ lib.optionals (!enableX11) [
     "-Dximagesrc=disabled" # Linux-only
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ] ++ lib.optionals (!enableJack) [
     "-Djack=disabled"
   ] ++ lib.optionals (!stdenv.isLinux) [
@@ -170,11 +212,18 @@ stdenv.mkDerivation rec {
     "-Dpulse=disabled" # TODO check if we can keep this enabled
     "-Dv4l2-gudev=disabled" # Linux-only
     "-Dv4l2=disabled" # Linux-only
+<<<<<<< HEAD
   ] ++ (if raspiCameraSupport then [
     "-Drpi-lib-dir=${libraspberrypi}/lib"
   ] else [
     "-Drpicamsrc=disabled"
   ]);
+=======
+    "-Dximagesrc=disabled" # Linux-only
+  ] ++ lib.optionals (!raspiCameraSupport) [
+    "-Drpicamsrc=disabled"
+  ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   postPatch = ''
     patchShebangs \
@@ -203,6 +252,10 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.lgpl2Plus;
     platforms = platforms.linux ++ platforms.darwin;
+<<<<<<< HEAD
     maintainers = with maintainers; [ matthewbauer lilyinstarlight ];
+=======
+    maintainers = with maintainers; [ matthewbauer ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

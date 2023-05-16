@@ -1,5 +1,6 @@
 { config, lib, pkgs, ... }:
 
+<<<<<<< HEAD
 let
   cfg = config.programs.dconf;
 
@@ -193,11 +194,54 @@ in
       packages = lib.mkOption {
         type = lib.types.listOf lib.types.package;
         default = [ ];
+=======
+with lib;
+
+let
+  cfg = config.programs.dconf;
+  cfgDir = pkgs.symlinkJoin {
+    name = "dconf-system-config";
+    paths = map (x: "${x}/etc/dconf") cfg.packages;
+    postBuild = ''
+      mkdir -p $out/profile
+      mkdir -p $out/db
+    '' + (
+      concatStringsSep "\n" (
+        mapAttrsToList (
+          name: path: ''
+            ln -s ${path} $out/profile/${name}
+          ''
+        ) cfg.profiles
+      )
+    ) + ''
+      ${pkgs.dconf}/bin/dconf update $out/db
+    '';
+  };
+in
+{
+  ###### interface
+
+  options = {
+    programs.dconf = {
+      enable = mkEnableOption (lib.mdDoc "dconf");
+
+      profiles = mkOption {
+        type = types.attrsOf types.path;
+        default = {};
+        description = lib.mdDoc "Set of dconf profile files, installed at {file}`/etc/dconf/profiles/«name»`.";
+        internal = true;
+      };
+
+      packages = mkOption {
+        type = types.listOf types.package;
+        default = [];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         description = lib.mdDoc "A list of packages which provide dconf profiles and databases in {file}`/etc/dconf`.";
       };
     };
   };
 
+<<<<<<< HEAD
   config = lib.mkIf (cfg.profiles != { } || cfg.enable) {
     programs.dconf.packages = lib.mapAttrsToList mkDconfProfile cfg.profiles;
 
@@ -212,6 +256,13 @@ in
           fi
         '';
       };
+=======
+  ###### implementation
+
+  config = mkIf (cfg.profiles != {} || cfg.enable) {
+    environment.etc.dconf = mkIf (cfg.profiles != {} || cfg.packages != []) {
+      source = cfgDir;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
 
     services.dbus.packages = [ pkgs.dconf ];
@@ -221,9 +272,16 @@ in
     # For dconf executable
     environment.systemPackages = [ pkgs.dconf ];
 
+<<<<<<< HEAD
     environment.sessionVariables = lib.mkIf cfg.enable {
       # Needed for unwrapped applications
       GIO_EXTRA_MODULES = [ "${pkgs.dconf.lib}/lib/gio/modules" ];
     };
   };
+=======
+    # Needed for unwrapped applications
+    environment.sessionVariables.GIO_EXTRA_MODULES = mkIf cfg.enable [ "${pkgs.dconf.lib}/lib/gio/modules" ];
+  };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }

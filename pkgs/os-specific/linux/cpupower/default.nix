@@ -2,7 +2,11 @@
 
 stdenv.mkDerivation {
   pname = "cpupower";
+<<<<<<< HEAD
   inherit (kernel) version src patches;
+=======
+  inherit (kernel) version src;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nativeBuildInputs = [ gettext ];
   buildInputs = [ pciutils ];

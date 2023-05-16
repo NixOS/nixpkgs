@@ -10,7 +10,11 @@
 
 buildPythonPackage rec {
   pname = "jsonrpc-async";
+<<<<<<< HEAD
   version = "2.1.2";
+=======
+  version = "2.1.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -19,7 +23,11 @@ buildPythonPackage rec {
     owner = "emlove";
     repo = pname;
     rev = version;
+<<<<<<< HEAD
     hash = "sha256-KOnycsOZFDEVj8CJDwGbdtbOpMPQMVdrXbHG0fzr9PI=";
+=======
+    hash = "sha256-HhesXzxVjhWJkubiBi6sMoXi/zicqn99dqT5bilycS8=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [

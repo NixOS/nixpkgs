@@ -5,19 +5,31 @@
 , vulkan-loader
 , wayland
 , wrapQtAppsHook
+<<<<<<< HEAD
 , x11Support ? true
+=======
+, withX11 ? true
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , qtx11extras
 }:
 
 stdenv.mkDerivation rec {
   pname = "vulkan-caps-viewer";
+<<<<<<< HEAD
   version = "3.32";
+=======
+  version = "3.29";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "SaschaWillems";
     repo = "VulkanCapsViewer";
     rev = version;
+<<<<<<< HEAD
     hash = "sha256-SPz8AurANjNwtsPHdZ2lCaC3VEcEAKn93st/7DJ0oyU=";
+=======
+    hash = "sha256-c7jvlwvz85cf8lUlBPyRYvDkSlvkzSW6Jc6wlyKnHBc=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     # Note: this derivation strictly requires vulkan-header to be the same it was developed against.
     # To help us, they've put it in a git-submodule.
     # The result will work with any vulkan-loader version.
@@ -32,7 +44,11 @@ stdenv.mkDerivation rec {
   buildInputs = [
     vulkan-loader
     wayland
+<<<<<<< HEAD
   ] ++ lib.lists.optionals x11Support [ qtx11extras ];
+=======
+  ] ++ lib.lists.optionals withX11 [ qtx11extras ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   patchPhase = ''
     substituteInPlace vulkanCapsViewer.pro \

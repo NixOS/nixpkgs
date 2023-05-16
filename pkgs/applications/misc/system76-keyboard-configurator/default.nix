@@ -6,13 +6,21 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "system76-keyboard-configurator";
+<<<<<<< HEAD
   version = "1.3.9";
+=======
+  version = "1.3.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "keyboard-configurator";
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-06qiJ3NZZSvDBH7r6K1qnz0q4ngB45wBoaG6eTFiRtk=";
+=======
+    sha256 = "sha256-k9VmEg/HZECUwHaD491ZmfGUxZ14hLOaJD5x3zMK2jI=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [
@@ -28,7 +36,11 @@ rustPlatform.buildRustPackage rec {
     udev
   ];
 
+<<<<<<< HEAD
   cargoHash = "sha256-tcyLoXOrC+lrFVRzxWfWpvHpfA6tbEBXFj9mSeTLcbc=";
+=======
+  cargoHash = "sha256-0SFph9quh4QWR3nU5IJr4FyLGqrYvmHcZHDRli6phsc=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   meta = with lib; {
     description = "Keyboard configuration application for System76 keyboards and laptops";

@@ -22,6 +22,10 @@ buildPythonPackage rec {
     description = "A Python 2.* port of 3.4 Statistics Module";
     homepage = "https://github.com/digitalemagine/py-statistics";
     license = lib.licenses.asl20;
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [ ];
+=======
+    maintainers = with lib.maintainers; [ costrouc ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

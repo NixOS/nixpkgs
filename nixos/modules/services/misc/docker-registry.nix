@@ -15,7 +15,13 @@ let
     storage = {
       cache.blobdescriptor = blobCache;
       delete.enabled = cfg.enableDelete;
+<<<<<<< HEAD
     } // (optionalAttrs (cfg.storagePath != null) { filesystem.rootdirectory = cfg.storagePath; });
+=======
+    } // (if cfg.storagePath != null
+          then { filesystem.rootdirectory = cfg.storagePath; }
+          else {});
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     http = {
       addr = "${cfg.listenAddress}:${builtins.toString cfg.port}";
       headers.X-Content-Type-Options = ["nosniff"];
@@ -47,6 +53,7 @@ in {
   options.services.dockerRegistry = {
     enable = mkEnableOption (lib.mdDoc "Docker Registry");
 
+<<<<<<< HEAD
     package = mkOption {
       type = types.package;
       description = mdDoc "Which Docker registry package to use.";
@@ -55,6 +62,8 @@ in {
       example = literalExpression "pkgs.gitlab-container-registry";
     };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     listenAddress = mkOption {
       description = lib.mdDoc "Docker registry host or ip to bind to.";
       default = "127.0.0.1";
@@ -123,7 +132,11 @@ in {
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
       script = ''
+<<<<<<< HEAD
         ${cfg.package}/bin/registry serve ${configFile}
+=======
+        ${pkgs.docker-distribution}/bin/registry serve ${configFile}
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       '';
 
       serviceConfig = {
@@ -142,7 +155,11 @@ in {
       serviceConfig.Type = "oneshot";
 
       script = ''
+<<<<<<< HEAD
         ${cfg.package}/bin/registry garbage-collect ${configFile}
+=======
+        ${pkgs.docker-distribution}/bin/registry garbage-collect ${configFile}
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         /run/current-system/systemd/bin/systemctl restart docker-registry.service
       '';
 
@@ -150,10 +167,19 @@ in {
     };
 
     users.users.docker-registry =
+<<<<<<< HEAD
       (optionalAttrs (cfg.storagePath != null) {
         createHome = true;
         home = cfg.storagePath;
       }) // {
+=======
+      (if cfg.storagePath != null
+      then {
+        createHome = true;
+        home = cfg.storagePath;
+      }
+      else {}) // {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         group = "docker-registry";
         isSystemUser = true;
       };

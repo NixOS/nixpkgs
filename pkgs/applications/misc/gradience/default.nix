@@ -6,7 +6,10 @@
 , ninja
 , pkg-config
 , glib
+<<<<<<< HEAD
 , glib-networking
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , desktop-file-utils
 , gettext
 , librsvg
@@ -51,7 +54,10 @@ python3Packages.buildPythonApplication rec {
   ];
 
   buildInputs = [
+<<<<<<< HEAD
     glib-networking
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     libadwaita
     libportal
     libportal-gtk4

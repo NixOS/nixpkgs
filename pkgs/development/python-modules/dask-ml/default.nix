@@ -58,6 +58,10 @@ buildPythonPackage rec {
     description = "Scalable Machine Learn with Dask";
     homepage = "https://github.com/dask/dask-ml";
     license = licenses.bsd3;
+<<<<<<< HEAD
     maintainers = with maintainers; [ ];
+=======
+    maintainers = with maintainers; [ costrouc ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

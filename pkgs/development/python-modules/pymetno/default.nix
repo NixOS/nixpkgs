@@ -9,14 +9,22 @@
 
 buildPythonPackage rec {
   pname = "pymetno";
+<<<<<<< HEAD
   version = "0.11.0";
+=======
+  version = "0.10.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "Danielhiversen";
     repo = "PyMetno";
     rev = "refs/tags/${version}";
+<<<<<<< HEAD
     hash = "sha256-NikfHQwVviCKWGfY1atirFVaqWQHfXg8WAgZIDnGn4Q=";
+=======
+    hash = "sha256-Do9RQS4gE2BapQtKQsnMzJ8EJzzxkCBA5r3z1zHXIsA=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [

@@ -5,16 +5,27 @@
 
 buildGoModule rec {
   pname = "helm-cm-push";
+<<<<<<< HEAD
   version = "0.10.4";
+=======
+  version = "0.10.3";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "chartmuseum";
     repo = "helm-push";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-YnhI1/BDk9swr3YFm5ajGf4LLgPty7blA2tlsMH0erY=";
   };
 
   vendorHash = "sha256-7bUDKqkvBV1Upcrj4DQnVCP74QtKlSwF0Kl2sPFZpjc=";
+=======
+    hash = "sha256-GyVhjCosVaUS1DtztztFxKuuRlUdxlsOP4/QMQ7+TaU=";
+  };
+
+  vendorSha256 = "sha256-9LhokpQrREmcyBqwb33BSMyG8z7IAsl9NtE3B631PnM=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   subPackage = [ "cmd/helm-cm-push" ];
 

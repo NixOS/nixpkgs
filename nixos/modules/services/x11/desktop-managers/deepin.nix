@@ -67,7 +67,11 @@ in
       networking.networkmanager.enable = mkDefault true;
       programs.dconf.enable = mkDefault true;
 
+<<<<<<< HEAD
       fonts.packages = with pkgs; [ noto-fonts ];
+=======
+      fonts.fonts = with pkgs; [ noto-fonts ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       xdg.mime.enable = true;
       xdg.menus.enable = true;
       xdg.icons.enable = true;

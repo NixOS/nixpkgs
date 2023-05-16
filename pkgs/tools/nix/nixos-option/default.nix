@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 { lib
 , stdenv
 , boost
@@ -33,5 +34,19 @@ stdenv.mkDerivation {
     license = licenses.lgpl2Plus;
     maintainers = with maintainers; [ ];
     inherit (nix.meta) platforms;
+=======
+{lib, stdenv, boost, cmake, pkg-config, nix, ... }:
+
+stdenv.mkDerivation rec {
+  name = "nixos-option";
+  src = ./.;
+  strictDeps = true;
+  nativeBuildInputs = [ cmake pkg-config ];
+  buildInputs = [ boost nix ];
+  meta = with lib; {
+    license = licenses.lgpl2Plus;
+    maintainers = with maintainers; [ chkno ];
+    platforms = platforms.all;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

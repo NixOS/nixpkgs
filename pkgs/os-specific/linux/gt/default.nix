@@ -2,7 +2,11 @@
 , asciidoc
 , libusbgx
 }:
+<<<<<<< HEAD
 stdenv.mkDerivation (finalAttrs: {
+=======
+stdenv.mkDerivation {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pname = "gt";
   version = "unstable-2022-05-08";
 
@@ -13,7 +17,11 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = "sha256-km4U+t4Id2AZx6GpH24p2WNmvV5RVjJ14sy8tWLCQsk=";
   };
 
+<<<<<<< HEAD
   sourceRoot = "${finalAttrs.src.name}/source";
+=======
+  sourceRoot = "source/source";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   preConfigure = ''
     cmakeFlagsArray+=("-DBASH_COMPLETION_COMPLETIONSDIR=$out/share/bash-completions/completions")
@@ -29,4 +37,8 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [ lheckemann ];
     platforms = lib.platforms.linux;
   };
+<<<<<<< HEAD
 })
+=======
+}
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)

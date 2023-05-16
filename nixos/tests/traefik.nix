@@ -52,6 +52,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
             sendAnonymousUsage = false;
           };
 
+<<<<<<< HEAD
           entryPoints.web.address = ":\${HTTP_PORT}";
 
           providers.docker.exposedByDefault = false;
@@ -59,6 +60,12 @@ import ./make-test-python.nix ({ pkgs, ... }: {
         environmentFiles = [(pkgs.writeText "traefik.env" ''
           HTTP_PORT=80
         '')];
+=======
+          entryPoints.web.address = ":80";
+
+          providers.docker.exposedByDefault = false;
+        };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       };
 
       systemd.services.simplehttp = {

@@ -33,10 +33,14 @@ let
 
     echo '${userPassword}' | ${pkgs.toot}/bin/toot login_cli -i "akkoma.nixos.test" -e "jamy@nixos.test"
     echo "y" | ${pkgs.toot}/bin/toot post "hello world Jamy here"
+<<<<<<< HEAD
 
     # Retrieving timeline with toot currently broken due to incompatible timestamp format
     # cf. <https://akkoma.dev/AkkomaGang/akkoma/issues/637> and <https://github.com/ihabunek/toot/issues/399>
     #echo "y" | ${pkgs.toot}/bin/toot timeline | grep -F -q "hello world Jamy here"
+=======
+    echo "y" | ${pkgs.toot}/bin/toot timeline | grep -F -q "hello world Jamy here"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     # Test file upload
     echo "y" | ${pkgs.toot}/bin/toot upload <(dd if=/dev/zero bs=1024 count=1024 status=none) \

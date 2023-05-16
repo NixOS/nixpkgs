@@ -18,7 +18,10 @@ stdenv.mkDerivation {
   meta = with lib; {
     description = "Use external locker (such as i3lock) as X screen saver";
     license = licenses.mit;
+<<<<<<< HEAD
     mainProgram = "xss-lock";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     maintainers = with maintainers; [ malyn offline ];
     platforms = platforms.linux;
   };

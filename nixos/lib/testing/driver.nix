@@ -12,9 +12,13 @@ let
   };
 
 
+<<<<<<< HEAD
   vlans = map (m: (
     m.virtualisation.vlans ++
     (lib.mapAttrsToList (_: v: v.vlan) m.virtualisation.interfaces))) (lib.attrValues config.nodes);
+=======
+  vlans = map (m: m.virtualisation.vlans) (lib.attrValues config.nodes);
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   vms = map (m: m.system.build.vm) (lib.attrValues config.nodes);
 
   nodeHostNames =
@@ -65,8 +69,12 @@ let
           echo "${builtins.toString vlanNames}" >> testScriptWithTypes
           echo -n "$testScript" >> testScriptWithTypes
 
+<<<<<<< HEAD
           echo "Running type check (enable/disable: config.skipTypeCheck)"
           echo "See https://nixos.org/manual/nixos/stable/#test-opt-skipTypeCheck"
+=======
+          cat -n testScriptWithTypes
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
           mypy  --no-implicit-optional \
                 --pretty \
@@ -80,9 +88,12 @@ let
 
         ${testDriver}/bin/generate-driver-symbols
         ${lib.optionalString (!config.skipLint) ''
+<<<<<<< HEAD
           echo "Linting test script (enable/disable: config.skipLint)"
           echo "See https://nixos.org/manual/nixos/stable/#test-opt-skipLint"
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           PYFLAKES_BUILTINS="$(
             echo -n ${lib.escapeShellArg (lib.concatStringsSep "," pythonizedNames)},
             < ${lib.escapeShellArg "driver-symbols"}
@@ -175,12 +186,16 @@ in
   };
 
   config = {
+<<<<<<< HEAD
     _module.args = {
       hostPkgs =
         # Comment is in nixos/modules/misc/nixpkgs.nix
         lib.mkOverride lib.modules.defaultOverridePriority
           config.hostPkgs.__splicedPackages;
     };
+=======
+    _module.args.hostPkgs = config.hostPkgs;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     driver = withChecks driver;
 

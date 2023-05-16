@@ -8,7 +8,10 @@ mkCoqDerivation {
   repo = "coq-dpdgraph";
   inherit version;
   defaultVersion = lib.switch coq.coq-version [
+<<<<<<< HEAD
     { case = "8.17"; out = "1.0+8.17"; }
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     { case = "8.16"; out = "1.0+8.16"; }
     { case = "8.15"; out = "1.0+8.15"; }
     { case = "8.14"; out = "1.0+8.14"; }
@@ -23,7 +26,10 @@ mkCoqDerivation {
     { case = "8.5";  out = "0.6"; }
   ] null;
 
+<<<<<<< HEAD
   release."1.0+8.17".sha256 = "sha256-gcvL3vseLKEF9xinT0579jXBBaA5E3rJ5KaU8RfKtm4=";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   release."1.0+8.16".sha256 = "sha256-xy4xcVHaD1OHBdGUzUy3SeZnHtOf1+UIh6YjUYFINm0=";
   release."1.0+8.15".sha256 = "sha256:1pxr0gakcz297y8hhrnssv5j07ccd58pv7rh7qv5g7855pfqrkg7";
   release."1.0+8.14".sha256 = "sha256:01pmi7jcc77431jii6x6nd4m8jg4vycachiyi1h6dx9rp3a2508s";

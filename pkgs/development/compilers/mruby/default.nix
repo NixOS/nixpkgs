@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 { lib, stdenv, ruby, rake, fetchFromGitHub }:
+=======
+{ lib, stdenv, ruby, bison, rake, fetchFromGitHub }:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 stdenv.mkDerivation rec {
   pname = "mruby";
@@ -11,6 +15,7 @@ stdenv.mkDerivation rec {
     sha256  = "sha256-MmrbWeg/G29YBvVrOtceTOZChrQ2kx9+apl7u7BiGjA=";
   };
 
+<<<<<<< HEAD
   nativeBuildInputs = [ rake ];
 
   nativeCheckInputs = [ ruby ];
@@ -18,6 +23,13 @@ stdenv.mkDerivation rec {
   # Necessary so it uses `gcc` instead of `ld` for linking.
   # https://github.com/mruby/mruby/blob/e502fd88b988b0a8d9f31b928eb322eae269c45a/tasks/toolchains/gcc.rake#L30
   preBuild = "unset LD";
+=======
+  nativeBuildInputs = [ ruby bison rake ];
+
+  # Necessary so it uses `gcc` instead of `ld` for linking.
+  # https://github.com/mruby/mruby/blob/35be8b252495d92ca811d76996f03c470ee33380/tasks/toolchains/gcc.rake#L25
+  preBuild = if stdenv.isLinux then "unset LD" else null;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   installPhase = ''
     mkdir $out
@@ -26,13 +38,29 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
+<<<<<<< HEAD
   checkTarget = "test";
+=======
+  checkPhase = ''
+    runHook preCheck
+
+    rake test
+
+    runHook postCheck
+  '';
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   meta = with lib; {
     description = "An embeddable implementation of the Ruby language";
     homepage = "https://mruby.org";
+<<<<<<< HEAD
     maintainers = with maintainers; [ nicknovitski marsam ];
     license = licenses.mit;
     platforms = platforms.all;
+=======
+    maintainers = [ maintainers.nicknovitski ];
+    license = licenses.mit;
+    platforms = platforms.unix;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

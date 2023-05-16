@@ -14,7 +14,11 @@
 
 buildPythonPackage rec {
   pname = "aiobiketrax";
+<<<<<<< HEAD
   version = "1.1.1";
+=======
+  version = "0.5.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -23,7 +27,11 @@ buildPythonPackage rec {
     owner = "basilfx";
     repo = pname;
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-YvPWvdA4BslkOLt3IkzSgUgex8h1CjCOVZC6oxNf3ZA=";
+=======
+    hash = "sha256-exxpJJA+JnVuehCnWs/ihk/SSPUqV7ODXZxvbmuHe8U=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   postPatch = ''

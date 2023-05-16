@@ -1,17 +1,31 @@
 { lib
+<<<<<<< HEAD
 , python3
 , fetchPypi
 , nix-update-script
+=======
+, nix-update-script
+, python3
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "synadm";
+<<<<<<< HEAD
   version = "0.42";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-nfKXg4q+fOH0IwenEQ7P5x+YgwaooWpjn0gWHxK6tcc=";
+=======
+  version = "0.41.2";
+  format = "setuptools";
+
+  src = python3.pkgs.fetchPypi {
+    inherit pname version;
+    hash = "sha256-wSpgc1umBMLCc2ThfYSuNNnzqWXyEQM0XhTuOAQaiXg=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = with python3.pkgs; [

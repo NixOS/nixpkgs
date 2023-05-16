@@ -24,7 +24,10 @@ import ./make-test-python.nix ({ pkgs, ... }: {
 
       with subtest("works with static-auth-secret-file"):
           secretsfile.wait_for_unit("coturn.service")
+<<<<<<< HEAD
           secretsfile.wait_for_open_port(3478)
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           secretsfile.succeed("grep 'some-very-secret-string' /run/coturn/turnserver.cfg")
           # Forbidden IP, fails:
           secretsfile.fail("${pkgs.coturn}/bin/turnutils_uclient -W some-very-secret-string 127.0.0.1 -DgX -e 127.0.0.1 -n 1 -c -y")

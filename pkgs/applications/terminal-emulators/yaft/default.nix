@@ -4,8 +4,11 @@ stdenv.mkDerivation rec {
   version = "0.2.9";
   pname = "yaft";
 
+<<<<<<< HEAD
   outputs = [ "out" "terminfo" ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   src = fetchFromGitHub {
     owner = "uobikiemukot";
     repo = "yaft";
@@ -17,12 +20,15 @@ stdenv.mkDerivation rec {
 
   installFlags = [ "PREFIX=$(out)" "MANPREFIX=$(out)/share/man" ];
 
+<<<<<<< HEAD
   postInstall = ''
     mkdir -p $out/nix-support $terminfo/share
     mv $out/share/terminfo $terminfo/share/
     echo "$terminfo" >> $out/nix-support/propagated-user-env-packages
   '';
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   meta = {
     homepage = "https://github.com/uobikiemukot/yaft";
     description = "Yet another framebuffer terminal";

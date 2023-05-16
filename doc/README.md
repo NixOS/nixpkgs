@@ -1,4 +1,9 @@
+<<<<<<< HEAD
 # Contributing to the Nixpkgs manual
+=======
+
+# Nixpkgs/doc
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 This directory houses the sources files for the Nixpkgs manual.
 
@@ -6,6 +11,7 @@ You can find the [rendered documentation for Nixpkgs `unstable` on nixos.org](ht
 
 [Docs for Nixpkgs stable](https://nixos.org/manual/nixpkgs/stable/) are also available.
 
+<<<<<<< HEAD
 If you're only getting started with Nix, go to [nixos.org/learn](https://nixos.org/learn).
 
 ## Contributing to this documentation
@@ -113,3 +119,8 @@ pear
 watermelon
 :   green fruit with red flesh
 ```
+=======
+If you want to contribute to the documentation, [here's how to do it](https://nixos.org/manual/nixpkgs/unstable/#chap-contributing).
+
+If you're only getting started with Nix, go to [nixos.org/learn](https://nixos.org/learn).
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)

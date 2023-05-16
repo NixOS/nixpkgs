@@ -3,7 +3,11 @@
 { lib }:
 let
   inherit (lib.strings) toInt;
+<<<<<<< HEAD
   inherit (lib.trivial) compare min id;
+=======
+  inherit (lib.trivial) compare min;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   inherit (lib.attrsets) mapAttrs;
 in
 rec {
@@ -180,6 +184,7 @@ rec {
       else if len != 1 then multiple
       else head found;
 
+<<<<<<< HEAD
   /* Find the first index in the list matching the specified
      predicate or return `default` if no such element exists.
 
@@ -231,6 +236,8 @@ rec {
     else
       resultIndex;
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   /* Find the first element in the list matching the specified
      predicate or return `default` if no such element exists.
 
@@ -249,6 +256,7 @@ rec {
     default:
     # Input list
     list:
+<<<<<<< HEAD
     let
       index = findFirstIndex pred null list;
     in
@@ -256,6 +264,10 @@ rec {
       default
     else
       elemAt list index;
+=======
+    let found = filter pred list;
+    in if found == [] then default else head found;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   /* Return true if function `pred` returns true for at least one
      element of `list`.
@@ -638,6 +650,7 @@ rec {
     # Input list
     list: sublist count (length list) list;
 
+<<<<<<< HEAD
   /* Whether the first list is a prefix of the second list.
 
   Type: hasPrefix :: [a] -> [a] -> bool
@@ -672,6 +685,8 @@ rec {
     else
       throw "lib.lists.removePrefix: First argument is not a list prefix of the second argument";
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   /* Return a list consisting of at most `count` elements of `list`,
      starting at index `start`.
 
@@ -697,6 +712,7 @@ rec {
        else if start + count > len then len - start
        else count);
 
+<<<<<<< HEAD
   /* The common prefix of two lists.
 
   Type: commonPrefix :: [a] -> [a] -> [a]
@@ -723,6 +739,8 @@ rec {
     in
     take commonPrefixLength list1;
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   /* Return the last element of a list.
 
      This function throws an error if the list is empty.

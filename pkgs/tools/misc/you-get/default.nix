@@ -1,6 +1,9 @@
 { lib
 , python3
+<<<<<<< HEAD
 , fetchPypi
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , substituteAll
 , ffmpeg
 , installShellFiles
@@ -15,7 +18,11 @@ python3.pkgs.buildPythonApplication rec {
   # probably aren't suitable for a build environment anyway.
   doCheck = false;
 
+<<<<<<< HEAD
   src = fetchPypi {
+=======
+  src = python3.pkgs.fetchPypi {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     inherit pname version;
     sha256 = "sha256-s8lEz3pjzEaMzMiBbc5/wAjC5rW6Uq7+XOIIGBijrUc=";
   };

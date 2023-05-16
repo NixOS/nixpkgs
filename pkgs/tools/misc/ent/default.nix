@@ -11,7 +11,11 @@ stdenv.mkDerivation {
 
   # Work around the "unpacker appears to have produced no directories"
   # case that happens when the archive doesn't have a subdirectory.
+<<<<<<< HEAD
   sourceRoot = ".";
+=======
+  setSourceRoot = "sourceRoot=`pwd`";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nativeBuildInputs = [ unzip ];
 

@@ -15,7 +15,11 @@ buildGoModule rec {
     sha256 = "sha256-jIX0v6ujiQvEAb/mKkrpNgsY0YLkJYHy2sUfQnooE48=";
   };
 
+<<<<<<< HEAD
   vendorHash = "sha256-SSjHGJoW3I7r8emh3IwmiZQIVzdilAsA2ULdAqld2fA=";
+=======
+  vendorSha256 = "sha256-SSjHGJoW3I7r8emh3IwmiZQIVzdilAsA2ULdAqld2fA=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   subPackages = [ "cmd/cayley" ];
 

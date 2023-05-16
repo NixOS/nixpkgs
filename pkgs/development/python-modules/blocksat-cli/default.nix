@@ -14,14 +14,22 @@
 
 buildPythonPackage rec {
   pname = "blocksat-cli";
+<<<<<<< HEAD
   version = "0.4.6";
+=======
+  version = "0.4.5";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
+<<<<<<< HEAD
     hash = "sha256-uANAMNoAC4HUoUuR5ldxoiy+LLzZVpKosU5JttXLnqg=";
+=======
+    hash = "sha256-BLR1eivvlbSTx/jr7Rl778apPBcoFCaKOsYOqxS6Fo4=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [

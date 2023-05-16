@@ -2,7 +2,10 @@
 , lib
 , buildPythonPackage
 , fetchFromGitHub
+<<<<<<< HEAD
 , fetchpatch
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , pythonOlder
 , astroid
 , dill
@@ -19,17 +22,25 @@
 , pytest-timeout
 , pytest-xdist
 , pytestCheckHook
+<<<<<<< HEAD
 , wheel
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 buildPythonPackage rec {
   pname = "pylint";
+<<<<<<< HEAD
   version = "2.17.5";
+=======
+  version = "2.16.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "pyproject";
 
   disabled = pythonOlder "3.7.2";
 
   src = fetchFromGitHub {
+<<<<<<< HEAD
     owner = "pylint-dev";
     repo = pname;
     rev = "v${version}";
@@ -53,6 +64,16 @@ buildPythonPackage rec {
   nativeBuildInputs = [
     setuptools
     wheel
+=======
+    owner = "PyCQA";
+    repo = pname;
+    rev = "v${version}";
+    hash = "sha256-xNCGf4CsxEKScIn6dl2Ka31P6bhMo5fTs9TIQz+vPiM=";
+  };
+
+  nativeBuildInputs = [
+    setuptools
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   propagatedBuildInputs = [
@@ -85,7 +106,10 @@ buildPythonPackage rec {
     # implementation relies on the '__implements__'  attribute proposed
     # in PEP 245, which was rejected in 2006.
     "-W" "ignore::DeprecationWarning"
+<<<<<<< HEAD
     "-v"
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   dontUseSetuptoolsCheck = true;
@@ -121,7 +145,11 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
+<<<<<<< HEAD
     homepage = "https://pylint.readthedocs.io/en/stable/";
+=======
+    homepage = "https://pylint.pycqa.org/";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     description = "A bug and style checker for Python";
     longDescription = ''
       Pylint is a Python static code analysis tool which looks for programming errors,
@@ -133,6 +161,10 @@ buildPythonPackage rec {
       - epylint: Emacs and Flymake compatible Pylint
     '';
     license = licenses.gpl1Plus;
+<<<<<<< HEAD
     maintainers = with maintainers; [ ];
+=======
+    maintainers = with maintainers; [ SuperSandro2000 ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

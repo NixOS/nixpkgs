@@ -2,11 +2,19 @@
 
 stdenv.mkDerivation rec {
   pname = "exempi";
+<<<<<<< HEAD
   version = "2.6.4";
 
   src = fetchurl {
     url = "https://libopenraw.freedesktop.org/download/${pname}-${version}.tar.bz2";
     sha256 = "sha256-p1FJyWth45zcsEb9XlbYjP7qtuCPiU4V6//ZlECSv9A=";
+=======
+  version = "2.6.3";
+
+  src = fetchurl {
+    url = "https://libopenraw.freedesktop.org/download/${pname}-${version}.tar.bz2";
+    sha256 = "sha256-sHSdsYqeeM93FzeVSoOM3NsdVBWIi6wbqcr4y6d8ZWw=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   configureFlags = [

@@ -37,7 +37,11 @@ stdenv.mkDerivation rec {
     description = "Mount Android phones on Linux with adb, no root required";
     inherit (src.meta) homepage;
     license = licenses.bsd3;
+<<<<<<< HEAD
     maintainers = with maintainers; [ aleksana ];
+=======
+    maintainers = with maintainers; [ Profpatsch aleksana ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     platforms = platforms.unix;
   };
 }

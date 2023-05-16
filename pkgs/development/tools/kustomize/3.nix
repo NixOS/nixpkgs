@@ -22,9 +22,15 @@ buildGoModule rec {
   doCheck = true;
 
   # avoid finding test and development commands
+<<<<<<< HEAD
   sourceRoot = "${src.name}/kustomize";
 
   vendorHash = "sha256-xLeetcmzvpILLLMhMx7oahWLxguFjG3qbYpeeWpFUlw=";
+=======
+  sourceRoot = "source/kustomize";
+
+  vendorSha256 = "sha256-xLeetcmzvpILLLMhMx7oahWLxguFjG3qbYpeeWpFUlw=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   meta = with lib; {
     description = "Customization of kubernetes YAML configurations";

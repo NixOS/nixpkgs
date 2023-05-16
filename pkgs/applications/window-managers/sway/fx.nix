@@ -2,12 +2,17 @@
 
 sway-unwrapped.overrideAttrs (oldAttrs: rec {
   pname = "swayfx";
+<<<<<<< HEAD
   version = "0.3.2";
+=======
+  version = "0.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "WillPower3309";
     repo = "swayfx";
     rev = version;
+<<<<<<< HEAD
     sha256 = "sha256-Gwewb0yDVhEBrefSSGDf1hLtpWcntzifPCPJQhqLqI0=";
   };
 
@@ -26,6 +31,13 @@ sway-unwrapped.overrideAttrs (oldAttrs: rec {
 
   meta = with lib; {
     description = "Sway, but with eye candy!";
+=======
+    sha256 = "sha256-nVy7GdAnheWhjevcCPE407xWSLN8F4Le0uq2RDwv/Zc=";
+  };
+
+  meta = with lib; {
+    description = "A Beautiful Sway Fork";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     homepage = "https://github.com/WillPower3309/swayfx";
     maintainers = with maintainers; [ ricarch97 ];
     license = licenses.mit;

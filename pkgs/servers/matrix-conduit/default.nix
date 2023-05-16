@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 { lib
 , rustPlatform
 , fetchFromGitLab
@@ -12,12 +13,23 @@
 rustPlatform.buildRustPackage rec {
   pname = "matrix-conduit";
   version = "0.6.0";
+=======
+{ lib, rustPlatform, fetchFromGitLab, pkg-config, sqlite, stdenv, darwin, nixosTests, rocksdb_6_23 }:
+
+rustPlatform.buildRustPackage rec {
+  pname = "matrix-conduit";
+  version = "0.5.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitLab {
     owner = "famedly";
     repo = "conduit";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-TpNssMHvSKcxJMas5lQNWEbIv09u4/niBN2C27Mp0JY=";
+=======
+    sha256 = "sha256-GSCpmn6XRbmnfH31R9c6QW3/pez9KHPjI99dR+ln0P4=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   # We have to use importCargoLock here because `cargo vendor` currently doesn't support workspace
@@ -27,7 +39,11 @@ rustPlatform.buildRustPackage rec {
     outputHashes = {
       "heed-0.10.6" = "sha256-rm02pJ6wGYN4SsAbp85jBVHDQ5ITjZZd+79EC2ubRsY=";
       "reqwest-0.11.9" = "sha256-wH/q7REnkz30ENBIK5Rlxnc1F6vOyuEANMHFmiVPaGw=";
+<<<<<<< HEAD
       "ruma-0.8.2" = "sha256-GkHLY5unh7uyFNe0RS+3xQ4Ou8qBhzd+kEnCC7xUnMo=";
+=======
+      "ruma-0.7.4" = "sha256-ztobLdOXSGyK1YcPMMIycO3ZmnjxG5mLkHltf0Fbs8s=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
   };
 
@@ -46,10 +62,15 @@ rustPlatform.buildRustPackage rec {
     darwin.apple_sdk.frameworks.Security
   ];
 
+<<<<<<< HEAD
   env = {
     ROCKSDB_INCLUDE_DIR = "${rocksdb}/include";
     ROCKSDB_LIB_DIR = "${rocksdb}/lib";
   };
+=======
+  ROCKSDB_INCLUDE_DIR = "${rocksdb_6_23}/include";
+  ROCKSDB_LIB_DIR = "${rocksdb_6_23}/lib";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   # tests failed on x86_64-darwin with SIGILL: illegal instruction
   doCheck = !(stdenv.isx86_64 && stdenv.isDarwin);

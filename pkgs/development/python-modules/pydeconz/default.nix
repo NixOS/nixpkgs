@@ -12,7 +12,11 @@
 
 buildPythonPackage rec {
   pname = "pydeconz";
+<<<<<<< HEAD
   version = "113";
+=======
+  version = "111";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.9";
@@ -21,7 +25,11 @@ buildPythonPackage rec {
     owner = "Kane610";
     repo = "deconz";
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-Vf3nYUopaGY5JK//rqqsz47VRHwql1cQcslYbkH3owQ=";
+=======
+    hash = "sha256-QBun9VT42W9EMvNuLZoe6VnXKXAKEXstDKCU7LXEvNQ=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [

@@ -2556,7 +2556,11 @@ dependencies = [
 
 [[package]]
 name = "lapce"
+<<<<<<< HEAD
 version = "0.2.8"
+=======
+version = "0.2.7"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 dependencies = [
  "lapce-proxy",
  "lapce-ui",
@@ -2564,7 +2568,11 @@ dependencies = [
 
 [[package]]
 name = "lapce-core"
+<<<<<<< HEAD
 version = "0.2.8"
+=======
+version = "0.2.7"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 dependencies = [
  "anyhow",
  "arc-swap",
@@ -2637,7 +2645,11 @@ dependencies = [
 
 [[package]]
 name = "lapce-data"
+<<<<<<< HEAD
 version = "0.2.8"
+=======
+version = "0.2.7"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 dependencies = [
  "alacritty_terminal",
  "anyhow",
@@ -2689,7 +2701,11 @@ dependencies = [
 
 [[package]]
 name = "lapce-proxy"
+<<<<<<< HEAD
 version = "0.2.8"
+=======
+version = "0.2.7"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 dependencies = [
  "alacritty_terminal",
  "anyhow",
@@ -2742,7 +2758,11 @@ dependencies = [
 
 [[package]]
 name = "lapce-rpc"
+<<<<<<< HEAD
 version = "0.2.8"
+=======
+version = "0.2.7"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 dependencies = [
  "anyhow",
  "crossbeam-channel",
@@ -2758,7 +2778,11 @@ dependencies = [
 
 [[package]]
 name = "lapce-ui"
+<<<<<<< HEAD
 version = "0.2.8"
+=======
+version = "0.2.7"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 dependencies = [
  "Inflector",
  "alacritty_terminal",

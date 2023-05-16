@@ -6,18 +6,30 @@
 
 buildGoModule rec {
   pname = "v2ray-core";
+<<<<<<< HEAD
   version = "5.7.0";
+=======
+  version = "5.4.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "v2fly";
     repo = "v2ray-core";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-gdDV5Cd/DjEqSiOF7j5a8QLtdJiFeNCnHoA4XD+yiGA=";
+=======
+    hash = "sha256-LrsLkuLoiZb3Y5BUkg9lB+qd0HHbgRNrixm5BdQMKck=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   # `nix-update` doesn't support `vendorHash` yet.
   # https://github.com/Mic92/nix-update/pull/95
+<<<<<<< HEAD
   vendorHash = "sha256-uq0v14cRGmstJabrERsa+vFRX6Bg8+5CU6iV8swrL/I=";
+=======
+  vendorSha256 = "sha256-0uc+oncdOdIhIygr2ktT7f1qHIeyoVEnjyhzsUMjMBY=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   ldflags = [ "-s" "-w" "-buildid=" ];
 

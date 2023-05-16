@@ -7,7 +7,11 @@ Check for any minor version changes.
 
 */
 
+<<<<<<< HEAD
 { makeScopeWithSplicing', generateSplicesForMkScope
+=======
+{ makeScopeWithSplicing, generateSplicesForMkScope
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , lib, stdenv, fetchurl, fetchgit, fetchpatch, fetchFromGitHub, makeSetupHook, makeWrapper
 , bison, cups ? null, harfbuzz, libGL, perl, python3
 , gstreamer, gst-plugins-base, gtk3, dconf
@@ -46,13 +50,17 @@ let
       ./qtbase.patch.d/0009-qtbase-qtpluginpath.patch
       ./qtbase.patch.d/0010-qtbase-assert.patch
       ./qtbase.patch.d/0011-fix-header_module.patch
+<<<<<<< HEAD
       ./qtbase.patch.d/9999-backport-dbus-crash.patch
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     ];
     qtdeclarative = [
       ./qtdeclarative.patch
       # prevent headaches from stale qmlcache data
       ./qtdeclarative-default-disable-qmlcache.patch
     ];
+<<<<<<< HEAD
     qtpim = [
       ## Upstream patches after the Qt6 transition that apply without problems & fix bugs
 
@@ -145,6 +153,8 @@ let
         hash = "sha256-6wg/eVu9J83yvIO428U1FX3otz58tAy6pCvp7fqOBKU=";
       })
     ];
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     qtscript = [ ./qtscript.patch ];
     qtserialport = [ ./qtserialport.patch ];
     qtsystems = [
@@ -171,7 +181,10 @@ let
         extraPrefix = "src/3rdparty/";
         hash = "sha256-s4GsGMJTBNWw2gTJuIEP3tqT82AmTsR2mbj59m2p6rM=";
       })
+<<<<<<< HEAD
       ./qtwebengine-link-pulseaudio.patch
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     ] ++ lib.optionals stdenv.isDarwin [
       ./qtwebengine-darwin-no-platform-check.patch
       ./qtwebengine-mac-dont-set-dsymutil-path.patch
@@ -261,12 +274,18 @@ let
         inherit gstreamer gst-plugins-base;
       };
       qtnetworkauth = callPackage ../modules/qtnetworkauth.nix {};
+<<<<<<< HEAD
       qtpim = callPackage ../modules/qtpim.nix {};
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       qtpositioning = callPackage ../modules/qtpositioning.nix {};
       qtquick1 = null;
       qtquickcontrols = callPackage ../modules/qtquickcontrols.nix {};
       qtquickcontrols2 = callPackage ../modules/qtquickcontrols2.nix {};
+<<<<<<< HEAD
       qtremoteobjects = callPackage ../modules/qtremoteobjects.nix {};
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       qtscript = callPackage ../modules/qtscript.nix {};
       qtsensors = callPackage ../modules/qtsensors.nix {};
       qtserialbus = callPackage ../modules/qtserialbus.nix {};
@@ -332,6 +351,7 @@ let
         propagatedBuildInputs = [ self.qtbase.dev buildPackages.makeBinaryWrapper ]
           ++ lib.optional stdenv.isLinux self.qtwayland.dev;
       } ../hooks/wrap-qt-apps-hook.sh;
+<<<<<<< HEAD
     };
 
   baseScope = makeScopeWithSplicing' {
@@ -348,3 +368,11 @@ let
     qttranslations = bootstrapScope.qttranslations;
   });
 in finalScope
+=======
+    } // lib.optionalAttrs config.allowAliases {
+      # remove before 23.11
+      overrideScope' = lib.warn "qt5 now uses makeScopeWithSplicing which does not have \"overrideScope'\", use \"overrideScope\"." self.overrideScope;
+    };
+
+in makeScopeWithSplicing (generateSplicesForMkScope "qt5") (_: {}) (_: {}) addPackages
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)

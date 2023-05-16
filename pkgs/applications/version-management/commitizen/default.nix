@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 { lib
 , commitizen
 , fetchFromGitHub
@@ -12,10 +13,43 @@ python3.pkgs.buildPythonApplication rec {
   pname = "commitizen";
   version = "3.7.0";
   format = "pyproject";
+=======
+{ buildPythonApplication
+, charset-normalizer
+, colorama
+, commitizen
+, decli
+, fetchFromGitHub
+, git
+, jinja2
+, lib
+, packaging
+, poetry-core
+, py
+, pytest-freezer
+, pytest-mock
+, pytest-regressions
+, pytestCheckHook
+, pyyaml
+, questionary
+, termcolor
+, testers
+, tomlkit
+, typing-extensions
+, argcomplete
+, nix-update-script
+, pre-commit
+}:
+
+buildPythonApplication rec {
+  pname = "commitizen";
+  version = "2.42.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "commitizen-tools";
     repo = pname;
+<<<<<<< HEAD
     rev = "refs/tags/v${version}";
     hash = "sha256-KfPIGQ4kIjV/Vuza5wdzp0R62LUluJQ5tY6I8BPFmGk=";
   };
@@ -53,11 +87,54 @@ python3.pkgs.buildPythonApplication rec {
     pytest-mock
     pytest-regressions
     pytestCheckHook
+=======
+    rev = "v${version}";
+    hash = "sha256-lrZfMqmslwx3B2WkvFosm3EmCHgpZEA/fOzR6UYf6f8=";
+  };
+
+  format = "pyproject";
+
+  nativeBuildInputs = [ poetry-core ];
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'charset-normalizer = "^2.1.0"' 'charset-normalizer = "*"' \
+      --replace 'argcomplete = ">=1.12.1,<2.1"' 'argcomplete = ">=1.12.1"'
+  '';
+
+  propagatedBuildInputs = [
+    charset-normalizer
+    termcolor
+    questionary
+    colorama
+    decli
+    tomlkit
+    jinja2
+    pyyaml
+    argcomplete
+    typing-extensions
+    packaging
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   doCheck = true;
 
+<<<<<<< HEAD
   # The tests require a functional git installation
+=======
+  nativeCheckInputs = [
+    pre-commit
+    py
+    pytestCheckHook
+    pytest-freezer
+    pytest-mock
+    pytest-regressions
+    argcomplete
+    git
+  ];
+
+  # the tests require a functional git installation
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   # which requires a valid HOME directory.
   preCheck = ''
     export HOME="$(mktemp -d)"
@@ -80,6 +157,7 @@ python3.pkgs.buildPythonApplication rec {
     "test_commitizen_debug_excepthook"
   ];
 
+<<<<<<< HEAD
   postInstall =
     let
       argcomplete = lib.getExe' python3.pkgs.argcomplete "register-python-argcomplete";
@@ -92,11 +170,17 @@ python3.pkgs.buildPythonApplication rec {
           --fish <(${argcomplete} --shell fish $out/bin/cz)
       '';
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   passthru = {
     tests.version = testers.testVersion {
       package = commitizen;
       command = "cz version";
     };
+<<<<<<< HEAD
+=======
+    updateScript = nix-update-script { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   meta = with lib; {

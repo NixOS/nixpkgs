@@ -45,7 +45,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gst-plugins-base";
+<<<<<<< HEAD
   version = "1.22.5";
+=======
+  version = "1.22.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   outputs = [ "out" "dev" ];
 
@@ -53,7 +57,11 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (finalAttrs) pname version;
   in fetchurl {
     url = "https://gstreamer.freedesktop.org/src/${pname}/${pname}-${version}.tar.xz";
+<<<<<<< HEAD
     hash = "sha256-7dQzi0XCapryjA01qrlkoCTDiEum9SDYQo3wQhLIyTo=";
+=======
+    hash = "sha256-62USDE7nm3oVPDwZctXAFYwhUYd8xR7Hclu6V0lnnUk=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   strictDeps = true;
@@ -77,6 +85,10 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
+<<<<<<< HEAD
+=======
+    gobject-introspection
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     graphene
     orc
     libtheora
@@ -86,9 +98,15 @@ stdenv.mkDerivation (finalAttrs: {
     libpng
     libjpeg
     tremor
+<<<<<<< HEAD
     pango
   ] ++ lib.optionals (!stdenv.isDarwin) [
     libGL
+=======
+    libGL
+    pango
+  ] ++ lib.optionals (!stdenv.isDarwin) [
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     libvisual
   ] ++ lib.optionals stdenv.isDarwin [
     OpenGL
@@ -167,6 +185,10 @@ stdenv.mkDerivation (finalAttrs: {
       "gstreamer-video-1.0"
     ];
     platforms = platforms.unix;
+<<<<<<< HEAD
     maintainers = with maintainers; [ matthewbauer lilyinstarlight ];
+=======
+    maintainers = with maintainers; [ matthewbauer ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 })

@@ -22,7 +22,11 @@ stdenv.mkDerivation (args // {
   buildInputs = args.buildInputs or [ ];
   nativeBuildInputs = (args.nativeBuildInputs or [ ]) ++ [ cmake ninja perl ]
     ++ lib.optionals stdenv.isDarwin [ moveBuildTree ];
+<<<<<<< HEAD
   propagatedBuildInputs = (args.qtInputs or [ ]) ++ (args.propagatedBuildInputs or [ ]);
+=======
+  propagatedBuildInputs = args.qtInputs ++ (args.propagatedBuildInputs or [ ]);
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   moveToDev = false;
 

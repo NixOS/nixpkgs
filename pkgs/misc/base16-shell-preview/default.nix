@@ -1,6 +1,9 @@
 { lib
 , python3Packages
+<<<<<<< HEAD
 , fetchPypi
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 let
@@ -10,7 +13,11 @@ in
 python3Packages.buildPythonApplication {
   inherit pname version;
 
+<<<<<<< HEAD
   src = fetchPypi {
+=======
+  src = python3Packages.fetchPypi {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     inherit version;
     pname = "${lib.replaceStrings ["-"] ["_"] pname}";
     hash = "sha256-retnbxjdjo+NeA1B0+jpM9kToAX/Rh0ze0yNF9AfDiU=";

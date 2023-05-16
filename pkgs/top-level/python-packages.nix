@@ -8,6 +8,7 @@
 
 self: super: with self; {
 
+<<<<<<< HEAD
   bootstrap = lib.recurseIntoAttrs {
     flit-core = toPythonModule (callPackage ../development/python-modules/bootstrap/flit-core { });
     installer = toPythonModule (callPackage ../development/python-modules/bootstrap/installer {
@@ -18,20 +19,28 @@ self: super: with self; {
     });
   };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   bootstrapped-pip = toPythonModule (callPackage ../development/python-modules/bootstrapped-pip { });
 
   setuptools = callPackage ../development/python-modules/setuptools { };
 
+<<<<<<< HEAD
   a2wsgi = callPackage ../development/python-modules/a2wsgi { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   aadict = callPackage ../development/python-modules/aadict { };
 
   aafigure = callPackage ../development/python-modules/aafigure { };
 
   aardwolf = callPackage ../development/python-modules/aardwolf { };
 
+<<<<<<< HEAD
   about-time = callPackage ../development/python-modules/about-time { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   absl-py = callPackage ../development/python-modules/absl-py { };
 
   accessible-pygments = callPackage ../development/python-modules/accessible-pygments { };
@@ -42,6 +51,11 @@ self: super: with self; {
 
   accupy = callPackage ../development/python-modules/accupy { };
 
+<<<<<<< HEAD
+=======
+  acebinf = callPackage ../development/python-modules/acebinf { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   acme = callPackage ../development/python-modules/acme { };
 
   acme-tiny = callPackage ../development/python-modules/acme-tiny { };
@@ -52,8 +66,11 @@ self: super: with self; {
 
   actdiag = callPackage ../development/python-modules/actdiag { };
 
+<<<<<<< HEAD
   acunetix = callPackage ../development/python-modules/acunetix { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   adafruit-io = callPackage ../development/python-modules/adafruit-io { };
 
   adafruit-nrfutil = callPackage ../development/python-modules/adafruit-nrfutil { };
@@ -122,8 +139,11 @@ self: super: with self; {
 
   aggdraw = callPackage ../development/python-modules/aggdraw { };
 
+<<<<<<< HEAD
   aigpy = callPackage ../development/python-modules/aigpy { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   aio-geojson-client = callPackage ../development/python-modules/aio-geojson-client { };
 
   aio-geojson-generic-client = callPackage ../development/python-modules/aio-geojson-generic-client { };
@@ -144,8 +164,11 @@ self: super: with self; {
 
   aioairzone = callPackage ../development/python-modules/aioairzone { };
 
+<<<<<<< HEAD
   aioairzone-cloud = callPackage ../development/python-modules/aioairzone-cloud { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   aioairq = callPackage ../development/python-modules/aioairq { };
 
   aioaladdinconnect = callPackage ../development/python-modules/aioaladdinconnect { };
@@ -166,16 +189,22 @@ self: super: with self; {
 
   aioazuredevops = callPackage ../development/python-modules/aioazuredevops { };
 
+<<<<<<< HEAD
   aiobafi6 = callPackage ../development/python-modules/aiobafi6 { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   aioblescan = callPackage ../development/python-modules/aioblescan { };
 
   aiocache = callPackage ../development/python-modules/aiocache { };
 
   aiocoap = callPackage ../development/python-modules/aiocoap { };
 
+<<<<<<< HEAD
   aiocomelit = callPackage ../development/python-modules/aiocomelit { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   aioconsole = callPackage ../development/python-modules/aioconsole { };
 
   aiocontextvars = callPackage ../development/python-modules/aiocontextvars { };
@@ -214,8 +243,11 @@ self: super: with self; {
 
   aiogithubapi = callPackage ../development/python-modules/aiogithubapi { };
 
+<<<<<<< HEAD
   aiogram = callPackage ../development/python-modules/aiogram { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   aioharmony = callPackage ../development/python-modules/aioharmony { };
 
   aiohomekit = callPackage ../development/python-modules/aiohomekit { };
@@ -288,8 +320,11 @@ self: super: with self; {
 
   aiomodernforms = callPackage ../development/python-modules/aiomodernforms { };
 
+<<<<<<< HEAD
   aiomqtt = callPackage ../development/python-modules/aiomqtt { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   aiomultiprocess = callPackage ../development/python-modules/aiomultiprocess { };
 
   aiomusiccast = callPackage ../development/python-modules/aiomusiccast { };
@@ -332,8 +367,11 @@ self: super: with self; {
 
   aioquic = callPackage ../development/python-modules/aioquic { };
 
+<<<<<<< HEAD
   aioquic-mitmproxy = callPackage ../development/python-modules/aioquic-mitmproxy { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   aiorecollect = callPackage ../development/python-modules/aiorecollect { };
 
   aioredis = callPackage ../development/python-modules/aioredis { };
@@ -348,8 +386,11 @@ self: super: with self; {
 
   aiortm = callPackage ../development/python-modules/aiortm { };
 
+<<<<<<< HEAD
   aioruckus = callPackage ../development/python-modules/aioruckus { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   aiorun = callPackage ../development/python-modules/aiorun { };
 
   aioruuvigateway = callPackage ../development/python-modules/aioruuvigateway { };
@@ -358,7 +399,11 @@ self: super: with self; {
 
   aiosasl = callPackage ../development/python-modules/aiosasl { };
 
+<<<<<<< HEAD
   aiosql = callPackage ../development/python-modules/aiosql { };
+=======
+  aiosenseme = callPackage ../development/python-modules/aiosenseme { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   aiosenz = callPackage ../development/python-modules/aiosenz { };
 
@@ -400,12 +445,17 @@ self: super: with self; {
 
   aiovlc = callPackage ../development/python-modules/aiovlc { };
 
+<<<<<<< HEAD
   aiovodafone = callPackage ../development/python-modules/aiovodafone { };
 
   aiowatttime = callPackage ../development/python-modules/aiowatttime { };
 
   aiowaqi = callPackage ../development/python-modules/aiowaqi { };
 
+=======
+  aiowatttime = callPackage ../development/python-modules/aiowatttime { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   aioweenect = callPackage ../development/python-modules/aioweenect { };
 
   aiowebostv = callPackage ../development/python-modules/aiowebostv { };
@@ -436,20 +486,28 @@ self: super: with self; {
 
   alarmdecoder = callPackage ../development/python-modules/alarmdecoder { };
 
+<<<<<<< HEAD
   albumentations = callPackage ../development/python-modules/albumentations { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ale-py = callPackage ../development/python-modules/ale-py { };
 
   alectryon = callPackage ../development/python-modules/alectryon { };
 
   alembic = callPackage ../development/python-modules/alembic { };
 
+<<<<<<< HEAD
   alexapy = callPackage ../development/python-modules/alexapy { };
 
   algebraic-data-types = callPackage ../development/python-modules/algebraic-data-types { };
 
   alive-progress = callPackage ../development/python-modules/alive-progress { };
 
+=======
+  algebraic-data-types = callPackage ../development/python-modules/algebraic-data-types { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   aliyun-python-sdk-cdn = callPackage ../development/python-modules/aliyun-python-sdk-cdn { };
 
   aliyun-python-sdk-config = callPackage ../development/python-modules/aliyun-python-sdk-config { };
@@ -478,13 +536,20 @@ self: super: with self; {
 
   altair = callPackage ../development/python-modules/altair { };
 
+<<<<<<< HEAD
   altgraph = callPackage ../development/python-modules/altgraph { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   amarna = callPackage ../development/python-modules/amarna { };
 
   amazon-ion = callPackage ../development/python-modules/amazon-ion { };
 
+<<<<<<< HEAD
   amazon-kclpy = callPackage ../development/python-modules/amazon-kclpy { };
+=======
+  amazon_kclpy = callPackage ../development/python-modules/amazon_kclpy { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   ambee = callPackage ../development/python-modules/ambee { };
 
@@ -510,12 +575,17 @@ self: super: with self; {
 
   androidtv = callPackage ../development/python-modules/androidtv { };
 
+<<<<<<< HEAD
   androidtvremote2 = callPackage ../development/python-modules/androidtvremote2 { };
 
   androguard = callPackage ../development/python-modules/androguard { };
 
   anel-pwrctrl-homeassistant = callPackage ../development/python-modules/anel-pwrctrl-homeassistant { };
 
+=======
+  androguard = callPackage ../development/python-modules/androguard { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   angr = callPackage ../development/python-modules/angr { };
 
   angrcli = callPackage ../development/python-modules/angrcli {
@@ -528,22 +598,29 @@ self: super: with self; {
 
   annexremote = callPackage ../development/python-modules/annexremote { };
 
+<<<<<<< HEAD
   annotated-types = callPackage ../development/python-modules/annotated-types { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   annoy = callPackage ../development/python-modules/annoy { };
 
   anonip = callPackage ../development/python-modules/anonip { };
 
   ansi2html = callPackage ../development/python-modules/ansi2html { };
 
+<<<<<<< HEAD
   ansi2image = callPackage ../development/python-modules/ansi2image { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ansible = callPackage ../development/python-modules/ansible { };
 
   ansible-compat = callPackage ../development/python-modules/ansible-compat { };
 
   ansible-core = callPackage ../development/python-modules/ansible/core.nix { };
 
+<<<<<<< HEAD
   ansible-kernel = callPackage ../development/python-modules/ansible-kernel { };
 
   ansible-pylibssh = callPackage ../development/python-modules/ansible-pylibssh { };
@@ -552,6 +629,18 @@ self: super: with self; {
 
   ansible-vault-rw = callPackage ../development/python-modules/ansible-vault-rw { };
 
+=======
+  ansible-doctor = callPackage ../development/python-modules/ansible-doctor { };
+
+  ansible-kernel = callPackage ../development/python-modules/ansible-kernel { };
+
+  ansible-later = callPackage ../development/python-modules/ansible-later { };
+
+  ansible-lint = callPackage ../development/python-modules/ansible-lint { };
+
+  ansible-runner = callPackage ../development/python-modules/ansible-runner { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ansi = callPackage ../development/python-modules/ansi { };
 
   ansicolor = callPackage ../development/python-modules/ansicolor { };
@@ -578,22 +667,33 @@ self: super: with self; {
 
   anyio = callPackage ../development/python-modules/anyio { };
 
+<<<<<<< HEAD
   anyqt = callPackage ../development/python-modules/anyqt { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   anytree = callPackage ../development/python-modules/anytree {
     inherit (pkgs) graphviz;
   };
 
+<<<<<<< HEAD
   anywidget = callPackage ../development/python-modules/anywidget { };
 
   aocd = callPackage ../development/python-modules/aocd { };
 
+=======
+  aocd = callPackage ../development/python-modules/aocd { };
+
+  apache-airflow = callPackage ../development/python-modules/apache-airflow { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   apache-beam = callPackage ../development/python-modules/apache-beam { };
 
   apcaccess = callPackage ../development/python-modules/apcaccess { };
 
   apipkg = callPackage ../development/python-modules/apipkg { };
 
+<<<<<<< HEAD
   apischema = callPackage ../development/python-modules/apischema { };
 
   apispec = callPackage ../development/python-modules/apispec { };
@@ -602,6 +702,10 @@ self: super: with self; {
 
   apkit = callPackage ../development/python-modules/apkit { };
 
+=======
+  apispec = callPackage ../development/python-modules/apispec { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   aplpy = callPackage ../development/python-modules/aplpy { };
 
   app-model = callPackage ../development/python-modules/app-model { };
@@ -662,12 +766,16 @@ self: super: with self; {
 
   argh = callPackage ../development/python-modules/argh { };
 
+<<<<<<< HEAD
   argilla = callPackage ../development/python-modules/argilla { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   argon2-cffi = callPackage ../development/python-modules/argon2-cffi { };
 
   argon2-cffi-bindings = callPackage ../development/python-modules/argon2-cffi-bindings { };
 
+<<<<<<< HEAD
   argostranslate = callPackage ../development/python-modules/argostranslate {
     ctranslate2-cpp = pkgs.ctranslate2;
   };
@@ -678,6 +786,10 @@ self: super: with self; {
 
   argparse-dataclass = callPackage ../development/python-modules/argparse-dataclass { };
 
+=======
+  argparse-addons = callPackage ../development/python-modules/argparse-addons { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   args = callPackage ../development/python-modules/args { };
 
   aria2p = callPackage ../development/python-modules/aria2p { };
@@ -688,8 +800,11 @@ self: super: with self; {
 
   arnparse = callPackage ../development/python-modules/arnparse { };
 
+<<<<<<< HEAD
   array-record = callPackage ../development/python-modules/array-record { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   arrayqueues = callPackage ../development/python-modules/arrayqueues { };
 
   arris-tg2492lg = callPackage ../development/python-modules/arris-tg2492lg { };
@@ -698,8 +813,11 @@ self: super: with self; {
 
   arsenic = callPackage ../development/python-modules/arsenic { };
 
+<<<<<<< HEAD
   art = callPackage ../development/python-modules/art { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   arviz = callPackage ../development/python-modules/arviz { };
 
   arxiv2bib = callPackage ../development/python-modules/arxiv2bib { };
@@ -778,12 +896,19 @@ self: super: with self; {
 
   asyauth = callPackage ../development/python-modules/asyauth { };
 
+<<<<<<< HEAD
   async-dns = callPackage ../development/python-modules/async-dns { };
 
   async-generator = callPackage ../development/python-modules/async-generator { };
 
   async-interrupt = callPackage ../development/python-modules/async-interrupt { };
 
+=======
+  async_generator = callPackage ../development/python-modules/async_generator { };
+
+  async-dns = callPackage ../development/python-modules/async-dns { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   async-lru = callPackage ../development/python-modules/async-lru { };
 
   async-modbus = callPackage ../development/python-modules/async-modbus { };
@@ -792,11 +917,17 @@ self: super: with self; {
 
   asynccmd = callPackage ../development/python-modules/asynccmd { };
 
+<<<<<<< HEAD
   asyncinotify = callPackage ../development/python-modules/asyncinotify { };
 
   asyncio-dgram = callPackage ../development/python-modules/asyncio-dgram { };
 
   asyncio-mqtt = callPackage ../development/python-modules/asyncio-mqtt { };
+=======
+  asyncio-dgram = callPackage ../development/python-modules/asyncio-dgram { };
+
+  asyncio-mqtt = callPackage ../development/python-modules/asyncio_mqtt { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   asyncio-rlock = callPackage ../development/python-modules/asyncio-rlock { };
 
@@ -814,6 +945,7 @@ self: super: with self; {
 
   asyncstdlib = callPackage ../development/python-modules/asyncstdlib { };
 
+<<<<<<< HEAD
   async-stagger = callPackage ../development/python-modules/async-stagger { };
 
   asynctest = callPackage ../development/python-modules/asynctest { };
@@ -821,6 +953,13 @@ self: super: with self; {
   async-timeout = callPackage ../development/python-modules/async-timeout { };
 
   async-tkinter-loop = callPackage ../development/python-modules/async-tkinter-loop { };
+=======
+  async_stagger = callPackage ../development/python-modules/async_stagger { };
+
+  asynctest = callPackage ../development/python-modules/asynctest { };
+
+  async-timeout = callPackage ../development/python-modules/async_timeout { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   asyncua = callPackage ../development/python-modules/asyncua { };
 
@@ -912,8 +1051,11 @@ self: super: with self; {
 
   autopep8 = callPackage ../development/python-modules/autopep8 { };
 
+<<<<<<< HEAD
   autoslot = callPackage ../development/python-modules/autoslot { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   avahi = toPythonModule (pkgs.avahi.override {
     inherit python;
     withPython = true;
@@ -943,9 +1085,13 @@ self: super: with self; {
 
   awkward = callPackage ../development/python-modules/awkward { };
 
+<<<<<<< HEAD
   awkward-cpp = callPackage ../development/python-modules/awkward-cpp {
     inherit (pkgs) cmake ninja;
   };
+=======
+  awkward-cpp = callPackage ../development/python-modules/awkward-cpp { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   aws-adfs = callPackage ../development/python-modules/aws-adfs { };
 
@@ -1023,8 +1169,11 @@ self: super: with self; {
 
   azure-mgmt-appconfiguration = callPackage ../development/python-modules/azure-mgmt-appconfiguration { };
 
+<<<<<<< HEAD
   azure-mgmt-appcontainers = callPackage ../development/python-modules/azure-mgmt-appcontainers { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   azure-mgmt-applicationinsights = callPackage ../development/python-modules/azure-mgmt-applicationinsights { };
 
   azure-mgmt-authorization = callPackage ../development/python-modules/azure-mgmt-authorization { };
@@ -1227,6 +1376,7 @@ self: super: with self; {
 
   pad4pi = callPackage ../development/python-modules/pad4pi { };
 
+<<<<<<< HEAD
   paddle-bfloat = callPackage ../development/python-modules/paddle-bfloat { };
 
   paddle2onnx = callPackage ../development/python-modules/paddle2onnx { };
@@ -1235,6 +1385,8 @@ self: super: with self; {
 
   paddlepaddle = callPackage ../development/python-modules/paddlepaddle { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pulumi = callPackage ../development/python-modules/pulumi { inherit (pkgs) pulumi; };
 
   pulumi-aws = callPackage ../development/python-modules/pulumi-aws { };
@@ -1253,15 +1405,33 @@ self: super: with self; {
 
   backports-cached-property = callPackage ../development/python-modules/backports-cached-property { };
 
+<<<<<<< HEAD
+=======
+  backports_csv = callPackage ../development/python-modules/backports_csv { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   backports-datetime-fromisoformat = callPackage ../development/python-modules/backports-datetime-fromisoformat { };
 
   backports-entry-points-selectable = callPackage ../development/python-modules/backports-entry-points-selectable { };
 
+<<<<<<< HEAD
+=======
+  backports_functools_lru_cache = callPackage ../development/python-modules/backports_functools_lru_cache { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   backports_shutil_get_terminal_size = callPackage ../development/python-modules/backports_shutil_get_terminal_size { };
 
   backports-shutil-which = callPackage ../development/python-modules/backports-shutil-which { };
 
+<<<<<<< HEAD
   backports-strenum = callPackage ../development/python-modules/backports-strenum { };
+=======
+  backports_tempfile = callPackage ../development/python-modules/backports_tempfile { };
+
+  backports_unittest-mock = callPackage ../development/python-modules/backports_unittest-mock { };
+
+  backports_weakref = callPackage ../development/python-modules/backports_weakref { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   backports-zoneinfo = callPackage ../development/python-modules/backports-zoneinfo { };
 
@@ -1271,12 +1441,17 @@ self: super: with self; {
 
   banal = callPackage ../development/python-modules/banal { };
 
+<<<<<<< HEAD
   bandcamp-api = callPackage ../development/python-modules/bandcamp-api { };
 
   bandit = callPackage ../development/python-modules/bandit { };
 
   bangla = callPackage ../development/python-modules/bangla { };
 
+=======
+  bandit = callPackage ../development/python-modules/bandit { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   bap = callPackage ../development/python-modules/bap {
     inherit (pkgs.ocaml-ng.ocamlPackages) bap;
   };
@@ -1309,8 +1484,11 @@ self: super: with self; {
 
   batinfo = callPackage ../development/python-modules/batinfo { };
 
+<<<<<<< HEAD
   baycomp = callPackage ../development/python-modules/baycomp { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   bayesian-optimization = callPackage ../development/python-modules/bayesian-optimization { };
 
   bayespy = callPackage ../development/python-modules/bayespy { };
@@ -1325,12 +1503,15 @@ self: super: with self; {
 
   bcdoc = callPackage ../development/python-modules/bcdoc { };
 
+<<<<<<< HEAD
   bcf = callPackage ../development/python-modules/bcf { };
 
   bcg = callPackage ../development/python-modules/bcg { };
 
   bch = callPackage ../development/python-modules/bch { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   bcrypt = if stdenv.hostPlatform.system == "i686-linux" then
     callPackage ../development/python-modules/bcrypt/3.nix { }
   else
@@ -1338,8 +1519,11 @@ self: super: with self; {
 
   beaker = callPackage ../development/python-modules/beaker { };
 
+<<<<<<< HEAD
   before-after = callPackage ../development/python-modules/before-after { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   beancount = callPackage ../development/python-modules/beancount { };
 
   beancount-black = callPackage ../development/python-modules/beancount-black { };
@@ -1352,6 +1536,7 @@ self: super: with self; {
 
   beartype = callPackage ../development/python-modules/beartype { };
 
+<<<<<<< HEAD
   beautiful-date = callPackage ../development/python-modules/beautiful-date { };
 
   beautifulsoup4 = callPackage ../development/python-modules/beautifulsoup4 { };
@@ -1360,6 +1545,14 @@ self: super: with self; {
 
   beautysh = callPackage ../development/python-modules/beautysh { };
 
+=======
+  beautifulsoup4 = callPackage ../development/python-modules/beautifulsoup4 {
+    inherit (python.pythonForBuild.pkgs) sphinxHook; # hook splicing broken since #194205
+  };
+
+  beautifultable = callPackage ../development/python-modules/beautifultable { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   bech32 = callPackage ../development/python-modules/bech32 { };
 
   behave = callPackage ../development/python-modules/behave { };
@@ -1372,8 +1565,11 @@ self: super: with self; {
 
   beniget = callPackage ../development/python-modules/beniget { };
 
+<<<<<<< HEAD
   bentoml = callPackage ../development/python-modules/bentoml { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   bespon = callPackage ../development/python-modules/bespon { };
 
   betacode = callPackage ../development/python-modules/betacode { };
@@ -1410,8 +1606,11 @@ self: super: with self; {
 
   binwalk-full = self.binwalk.override { visualizationSupport = true; };
 
+<<<<<<< HEAD
   biopandas = callPackage ../development/python-modules/biopandas { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   biopython = callPackage ../development/python-modules/biopython { };
 
   biplist = callPackage ../development/python-modules/biplist { };
@@ -1486,8 +1685,11 @@ self: super: with self; {
 
   block-io = callPackage ../development/python-modules/block-io { };
 
+<<<<<<< HEAD
   blockfrost-python = callPackage ../development/python-modules/blockfrost-python { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   blocksat-cli = callPackage ../development/python-modules/blocksat-cli { };
 
   blosc2 = callPackage ../development/python-modules/blosc2 { };
@@ -1514,6 +1716,7 @@ self: super: with self; {
 
   bme680 = callPackage ../development/python-modules/bme680 { };
 
+<<<<<<< HEAD
   bnnumerizer = callPackage ../development/python-modules/bnnumerizer { };
 
   bnunicodenormalizer = callPackage ../development/python-modules/bnunicodenormalizer { };
@@ -1524,6 +1727,10 @@ self: super: with self; {
 
   boilerpy3 = callPackage ../development/python-modules/boilerpy3 { };
 
+=======
+  boa-api = callPackage ../development/python-modules/boa-api { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   bokeh = callPackage ../development/python-modules/bokeh { };
 
   boltons = callPackage ../development/python-modules/boltons { };
@@ -1549,8 +1756,11 @@ self: super: with self; {
 
   boschshcpy = callPackage ../development/python-modules/boschshcpy { };
 
+<<<<<<< HEAD
   bottombar = callPackage ../development/python-modules/bottombar { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   boost-histogram = callPackage ../development/python-modules/boost-histogram {
     inherit (pkgs) boost;
   };
@@ -1561,8 +1771,11 @@ self: super: with self; {
 
   botocore = callPackage ../development/python-modules/botocore { };
 
+<<<<<<< HEAD
   botocore-stubs = callPackage ../development/python-modules/botocore-stubs { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   botorch = callPackage ../development/python-modules/botorch { };
 
   bottle = callPackage ../development/python-modules/bottle { };
@@ -1575,10 +1788,13 @@ self: super: with self; {
 
   bpython = callPackage ../development/python-modules/bpython { };
 
+<<<<<<< HEAD
   bqplot = callPackage ../development/python-modules/bqplot { };
 
   bqscales = callPackage ../development/python-modules/bqscales { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   braceexpand = callPackage ../development/python-modules/braceexpand { };
 
   bracex = callPackage ../development/python-modules/bracex { };
@@ -1599,8 +1815,11 @@ self: super: with self; {
 
   brian2 = callPackage ../development/python-modules/brian2 { };
 
+<<<<<<< HEAD
   broadbean = callPackage ../development/python-modules/broadbean { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   broadlink = callPackage ../development/python-modules/broadlink { };
 
   brother = callPackage ../development/python-modules/brother { };
@@ -1609,8 +1828,11 @@ self: super: with self; {
 
   brotli = callPackage ../development/python-modules/brotli { };
 
+<<<<<<< HEAD
   brotli-asgi = callPackage ../development/python-modules/brotli-asgi { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   brotlicffi = callPackage ../development/python-modules/brotlicffi {
     inherit (pkgs) brotli;
   };
@@ -1693,8 +1915,11 @@ self: super: with self; {
 
   cachey = callPackage ../development/python-modules/cachey { };
 
+<<<<<<< HEAD
   cacheyou = callPackage ../development/python-modules/cacheyou { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   cachy = callPackage ../development/python-modules/cachy { };
 
   cadquery = callPackage ../development/python-modules/cadquery {
@@ -1713,6 +1938,11 @@ self: super: with self; {
 
   caio = callPackage ../development/python-modules/caio { };
 
+<<<<<<< HEAD
+=======
+  cairo-lang = callPackage ../development/python-modules/cairo-lang { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   cairocffi = callPackage ../development/python-modules/cairocffi { };
 
   cairosvg = callPackage ../development/python-modules/cairosvg { };
@@ -1723,12 +1953,17 @@ self: super: with self; {
 
   callee = callPackage ../development/python-modules/callee { };
 
+<<<<<<< HEAD
   calmjs = callPackage ../development/python-modules/calmjs { };
 
   calmjs-parse = callPackage ../development/python-modules/calmjs-parse { };
 
   calmjs-types = callPackage ../development/python-modules/calmjs-types { };
 
+=======
+  calmjs-parse = callPackage ../development/python-modules/calmjs-parse { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   calysto = callPackage ../development/python-modules/calysto { };
 
   calysto-scheme = callPackage ../development/python-modules/calysto-scheme { };
@@ -1737,22 +1972,31 @@ self: super: with self; {
 
   can = callPackage ../development/python-modules/can { };
 
+<<<<<<< HEAD
   canals = callPackage ../development/python-modules/canals { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   canmatrix = callPackage ../development/python-modules/canmatrix { };
 
   canonicaljson = callPackage ../development/python-modules/canonicaljson { };
 
   canopen = callPackage ../development/python-modules/canopen { };
 
+<<<<<<< HEAD
   camelot = callPackage ../development/python-modules/camelot { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   capstone = callPackage ../development/python-modules/capstone {
     inherit (pkgs) capstone;
   };
 
+<<<<<<< HEAD
   captcha = callPackage ../development/python-modules/captcha { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   capturer = callPackage ../development/python-modules/capturer { };
 
   carbon = callPackage ../development/python-modules/carbon { };
@@ -1795,10 +2039,13 @@ self: super: with self; {
 
   celery-redbeat = callPackage ../development/python-modules/celery-redbeat { };
 
+<<<<<<< HEAD
   celery-singleton = callPackage ../development/python-modules/celery-singleton { };
 
   celery-types = callPackage ../development/python-modules/celery-types { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   cement = callPackage ../development/python-modules/cement { };
 
   cemm = callPackage ../development/python-modules/cemm { };
@@ -1807,8 +2054,11 @@ self: super: with self; {
 
   cexprtk = callPackage ../development/python-modules/cexprtk { };
 
+<<<<<<< HEAD
   coffea = callPackage ../development/python-modules/coffea { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   cohere = callPackage ../development/python-modules/cohere { };
 
   coincurve = callPackage ../development/python-modules/coincurve {
@@ -1821,8 +2071,11 @@ self: super: with self; {
 
   connio = callPackage ../development/python-modules/connio { };
 
+<<<<<<< HEAD
   correctionlib = callPackage ../development/python-modules/correctionlib { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   coqpit = callPackage ../development/python-modules/coqpit { };
 
   cepa = callPackage ../development/python-modules/cepa { };
@@ -1849,8 +2102,11 @@ self: super: with self; {
 
   certipy = callPackage ../development/python-modules/certipy { };
 
+<<<<<<< HEAD
   certipy-ad = callPackage ../development/python-modules/certipy-ad { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   certomancer = callPackage ../development/python-modules/certomancer { };
 
   certvalidator = callPackage ../development/python-modules/certvalidator { };
@@ -1880,7 +2136,11 @@ self: super: with self; {
   chai = callPackage ../development/python-modules/chai { };
 
   chainer = callPackage ../development/python-modules/chainer {
+<<<<<<< HEAD
     inherit (pkgs.config) cudaSupport;
+=======
+    cudaSupport = pkgs.config.cudaSupport or false;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   chainmap = callPackage ../development/python-modules/chainmap { };
@@ -1905,8 +2165,11 @@ self: super: with self; {
 
   check-manifest = callPackage ../development/python-modules/check-manifest { };
 
+<<<<<<< HEAD
   checkdmarc = callPackage ../development/python-modules/checkdmarc { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   cheetah3 = callPackage ../development/python-modules/cheetah3 { };
 
   cheroot = callPackage ../development/python-modules/cheroot { };
@@ -1943,8 +2206,11 @@ self: super: with self; {
 
   circuitbreaker = callPackage ../development/python-modules/circuitbreaker { };
 
+<<<<<<< HEAD
   circus = callPackage ../development/python-modules/circus { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   cirq = callPackage ../development/python-modules/cirq { };
 
   cirq-aqt = callPackage ../development/python-modules/cirq-aqt { };
@@ -1973,10 +2239,13 @@ self: super: with self; {
 
   ckcc-protocol = callPackage ../development/python-modules/ckcc-protocol { };
 
+<<<<<<< HEAD
   clarifai = callPackage ../development/python-modules/clarifai { };
 
   clarifai-grpc = callPackage ../development/python-modules/clarifai-grpc { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   claripy = callPackage ../development/python-modules/claripy { };
 
   classify-imports = callPackage ../development/python-modules/classify-imports { };
@@ -1985,10 +2254,13 @@ self: super: with self; {
 
   cle = callPackage ../development/python-modules/cle { };
 
+<<<<<<< HEAD
   clean-fid = callPackage ../development/python-modules/clean-fid { };
 
   cleanlab = callPackage ../development/python-modules/cleanlab { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   cleo = callPackage ../development/python-modules/cleo { };
 
   clevercsv = callPackage ../development/python-modules/clevercsv { };
@@ -1997,6 +2269,7 @@ self: super: with self; {
 
   clip = callPackage ../development/python-modules/clip { };
 
+<<<<<<< HEAD
   clip-anytorch = callPackage ../development/python-modules/clip-anytorch { };
 
   clr-loader = callPackage ../development/python-modules/clr-loader { };
@@ -2009,12 +2282,19 @@ self: super: with self; {
 
   cliche = callPackage ../development/python-modules/cliche { };
 
+=======
+  cock = callPackage ../development/python-modules/cock { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   click = callPackage ../development/python-modules/click { };
 
   clickclick = callPackage ../development/python-modules/clickclick { };
 
+<<<<<<< HEAD
   click-aliases = callPackage ../development/python-modules/click-aliases { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   click-command-tree = callPackage ../development/python-modules/click-command-tree { };
 
   click-completion = callPackage ../development/python-modules/click-completion { };
@@ -2031,10 +2311,13 @@ self: super: with self; {
 
   click-log = callPackage ../development/python-modules/click-log { };
 
+<<<<<<< HEAD
   click-odoo = callPackage ../development/python-modules/click-odoo { };
 
   click-odoo-contrib = callPackage ../development/python-modules/click-odoo-contrib { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   click-option-group = callPackage ../development/python-modules/click-option-group { };
 
   click-plugins = callPackage ../development/python-modules/click-plugins { };
@@ -2053,8 +2336,11 @@ self: super: with self; {
 
   clickhouse-cli = callPackage ../development/python-modules/clickhouse-cli { };
 
+<<<<<<< HEAD
   clickhouse-connect = callPackage ../development/python-modules/clickhouse-connect { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   clickhouse-driver = callPackage ../development/python-modules/clickhouse-driver { };
 
   cliff = callPackage ../development/python-modules/cliff { };
@@ -2101,8 +2387,11 @@ self: super: with self; {
 
   cmaes = callPackage ../development/python-modules/cmaes { };
 
+<<<<<<< HEAD
   cmake = callPackage ../development/python-modules/cmake { inherit (pkgs) cmake; };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   cmarkgfm = callPackage ../development/python-modules/cmarkgfm { };
 
   cmd2 = callPackage ../development/python-modules/cmd2 { };
@@ -2111,8 +2400,11 @@ self: super: with self; {
 
   cmdline = callPackage ../development/python-modules/cmdline { };
 
+<<<<<<< HEAD
   cmdstanpy = callPackage ../development/python-modules/cmdstanpy { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   cmigemo = callPackage ../development/python-modules/cmigemo {
     inherit (pkgs) cmigemo;
   };
@@ -2253,16 +2545,22 @@ self: super: with self; {
 
   coreapi = callPackage ../development/python-modules/coreapi { };
 
+<<<<<<< HEAD
   coredis = callPackage ../development/python-modules/coredis { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   coreschema = callPackage ../development/python-modules/coreschema { };
 
   cornice = callPackage ../development/python-modules/cornice { };
 
   corsair-scan = callPackage ../development/python-modules/corsair-scan { };
 
+<<<<<<< HEAD
   cose = callPackage ../development/python-modules/cose { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   cot = callPackage ../development/python-modules/cot { };
 
   covCore = callPackage ../development/python-modules/cov-core { };
@@ -2343,23 +2641,31 @@ self: super: with self; {
 
   crytic-compile = callPackage ../development/python-modules/crytic-compile { };
 
+<<<<<<< HEAD
   cson  = callPackage ../development/python-modules/cson { };
 
   csrmesh  = callPackage ../development/python-modules/csrmesh { };
 
   cssbeautifier = callPackage ../development/python-modules/cssbeautifier { };
 
+=======
+  csrmesh  = callPackage ../development/python-modules/csrmesh { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   csscompressor = callPackage ../development/python-modules/csscompressor { };
 
   cssmin = callPackage ../development/python-modules/cssmin { };
 
   css-html-js-minify = callPackage ../development/python-modules/css-html-js-minify { };
 
+<<<<<<< HEAD
   css-inline = callPackage ../development/python-modules/css-inline {
     inherit (pkgs.darwin) libiconv;
     inherit (pkgs.darwin.apple_sdk.frameworks) Security;
   };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   css-parser = callPackage ../development/python-modules/css-parser { };
 
   cssselect2 = callPackage ../development/python-modules/cssselect2 { };
@@ -2374,10 +2680,13 @@ self: super: with self; {
 
   ctap-keyring-device = callPackage ../development/python-modules/ctap-keyring-device { };
 
+<<<<<<< HEAD
   ctranslate2 = callPackage ../development/python-modules/ctranslate2 {
     ctranslate2-cpp = pkgs.ctranslate2;
   };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   cu2qu = callPackage ../development/python-modules/cu2qu { };
 
   cucumber-tag-expressions = callPackage ../development/python-modules/cucumber-tag-expressions { };
@@ -2408,7 +2717,11 @@ self: super: with self; {
 
   cwlformat = callPackage ../development/python-modules/cwlformat { };
 
+<<<<<<< HEAD
   cx-freeze = callPackage ../development/python-modules/cx-freeze { };
+=======
+  cx_Freeze = callPackage ../development/python-modules/cx_freeze { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   cx_oracle = callPackage ../development/python-modules/cx_oracle { };
 
@@ -2429,16 +2742,28 @@ self: super: with self; {
   cython = callPackage ../development/python-modules/Cython { };
 
   cython_3 = self.cython.overridePythonAttrs (old: rec {
+<<<<<<< HEAD
     version = "3.0.0";
     src = old.src.override {
       inherit version;
       hash = "sha256-NQsY+Wc+YxAdu/z3dO4vV8IKxGNtJVdB12ynkBaxvYI=";
+=======
+    version = "3.0.0b2";
+    src = old.src.override {
+      inherit version;
+      hash = "sha256-bEKAZWV56STBGURyR2ZLsi+v7cfezKWTqOogvdV9Z1U=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
     patches = [ ];
   });
 
   cytoolz = callPackage ../development/python-modules/cytoolz { };
 
+<<<<<<< HEAD
+=======
+  d2to1 = callPackage ../development/python-modules/d2to1 { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   dacite = callPackage ../development/python-modules/dacite { };
 
   daemonize = callPackage ../development/python-modules/daemonize { };
@@ -2451,8 +2776,11 @@ self: super: with self; {
 
   daphne = callPackage ../development/python-modules/daphne { };
 
+<<<<<<< HEAD
   daqp = callPackage ../development/python-modules/daqp { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   dasbus = callPackage ../development/python-modules/dasbus { };
 
   dash = callPackage ../development/python-modules/dash { };
@@ -2465,8 +2793,11 @@ self: super: with self; {
 
   dash-table = callPackage ../development/python-modules/dash-table { };
 
+<<<<<<< HEAD
   dashing = callPackage ../development/python-modules/dashing { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   dask = callPackage ../development/python-modules/dask { };
 
   dask-awkward = callPackage ../development/python-modules/dask-awkward { };
@@ -2477,8 +2808,11 @@ self: super: with self; {
 
   dask-glm = callPackage ../development/python-modules/dask-glm { };
 
+<<<<<<< HEAD
   dask-histogram = callPackage ../development/python-modules/dask-histogram { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   dask-image = callPackage ../development/python-modules/dask-image { };
 
   dask-jobqueue = callPackage ../development/python-modules/dask-jobqueue { };
@@ -2497,10 +2831,13 @@ self: super: with self; {
 
   databricks-sql-connector = callPackage ../development/python-modules/databricks-sql-connector { };
 
+<<<<<<< HEAD
   dataclass-factory = callPackage ../development/python-modules/dataclass-factory { };
 
   dataclass-wizard = callPackage ../development/python-modules/dataclass-wizard { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   dataclasses-json = callPackage ../development/python-modules/dataclasses-json { };
 
   dataclasses-serialization = callPackage ../development/python-modules/dataclasses-serialization { };
@@ -2537,8 +2874,11 @@ self: super: with self; {
 
   datauri = callPackage ../development/python-modules/datauri { };
 
+<<<<<<< HEAD
   datefinder = callPackage ../development/python-modules/datefinder { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   dateparser = callPackage ../development/python-modules/dateparser { };
 
   datetime = callPackage ../development/python-modules/datetime { };
@@ -2553,6 +2893,7 @@ self: super: with self; {
 
   dbfread = callPackage ../development/python-modules/dbfread { };
 
+<<<<<<< HEAD
   dbt-bigquery = callPackage ../development/python-modules/dbt-bigquery { };
 
   dbt-core = callPackage ../development/python-modules/dbt-core { };
@@ -2565,6 +2906,8 @@ self: super: with self; {
 
   dbt-snowflake = callPackage ../development/python-modules/dbt-snowflake { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   dbus-client-gen = callPackage ../development/python-modules/dbus-client-gen { };
 
   dbus-deviation = callPackage ../development/python-modules/dbus-deviation { };
@@ -2597,8 +2940,11 @@ self: super: with self; {
 
   debian = callPackage ../development/python-modules/debian { };
 
+<<<<<<< HEAD
   debianbts = callPackage ../development/python-modules/debianbts { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   debian-inspector = callPackage ../development/python-modules/debian-inspector { };
 
   debtcollector = callPackage ../development/python-modules/debtcollector { };
@@ -2657,10 +3003,13 @@ self: super: with self; {
 
   deluge-client = callPackage ../development/python-modules/deluge-client { };
 
+<<<<<<< HEAD
   demes = callPackage ../development/python-modules/demes { };
 
   demesdraw = callPackage ../development/python-modules/demesdraw { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   demetriek = callPackage ../development/python-modules/demetriek { };
 
   demjson3 = callPackage ../development/python-modules/demjson3 { };
@@ -2681,12 +3030,20 @@ self: super: with self; {
 
   derpconf = callPackage ../development/python-modules/derpconf { };
 
+<<<<<<< HEAD
+=======
+  descartes = callPackage ../development/python-modules/descartes { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   desktop-notifier = callPackage ../development/python-modules/desktop-notifier { };
 
   detect-secrets = callPackage ../development/python-modules/detect-secrets { };
 
+<<<<<<< HEAD
   detectron2 = callPackage ../development/python-modules/detectron2 { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   devito = callPackage ../development/python-modules/devito { };
 
   devolo-home-control-api = callPackage ../development/python-modules/devolo-home-control-api { };
@@ -2721,10 +3078,13 @@ self: super: with self; {
 
   diff-match-patch = callPackage ../development/python-modules/diff-match-patch { };
 
+<<<<<<< HEAD
   diffimg = callPackage ../development/python-modules/diffimg { };
 
   diffsync = callPackage ../development/python-modules/diffsync { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   digital-ocean = callPackage ../development/python-modules/digitalocean { };
 
   digi-xbee = callPackage ../development/python-modules/digi-xbee { };
@@ -2759,8 +3119,11 @@ self: super: with self; {
 
   dissect-clfs = callPackage ../development/python-modules/dissect-clfs { };
 
+<<<<<<< HEAD
   dissect-cobaltstrike = callPackage ../development/python-modules/dissect-cobaltstrike { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   dissect-cstruct = callPackage ../development/python-modules/dissect-cstruct { };
 
   dissect-fat = callPackage ../development/python-modules/dissect-fat { };
@@ -2819,6 +3182,7 @@ self: super: with self; {
 
   distutils_extra = callPackage ../development/python-modules/distutils_extra { };
 
+<<<<<<< HEAD
   # LTS in extended support phase
   django_3 = callPackage ../development/python-modules/django/3.nix { };
 
@@ -2828,6 +3192,16 @@ self: super: with self; {
 
   django-admin-datta = callPackage ../development/python-modules/django-admin-datta { };
 
+=======
+  django = self.django_3;
+
+  # Current LTS
+  django_3 = callPackage ../development/python-modules/django/3.nix { };
+
+  # Current latest
+  django_4 = callPackage ../development/python-modules/django/4.nix { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   django-admin-sortable2 = callPackage ../development/python-modules/django-admin-sortable2 { };
 
   django-allauth = callPackage ../development/python-modules/django-allauth { };
@@ -2846,10 +3220,13 @@ self: super: with self; {
 
   django-bootstrap4 = callPackage ../development/python-modules/django-bootstrap4 { };
 
+<<<<<<< HEAD
   django-bootstrap5 = callPackage ../development/python-modules/django-bootstrap5 { };
 
   django-cachalot = callPackage ../development/python-modules/django-cachalot { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   django-cache-url = callPackage ../development/python-modules/django-cache-url { };
 
   django-cacheops = callPackage ../development/python-modules/django-cacheops { };
@@ -2862,11 +3239,21 @@ self: super: with self; {
 
   django-ckeditor = callPackage ../development/python-modules/django-ckeditor { };
 
+<<<<<<< HEAD
   django-classy-tags = callPackage ../development/python-modules/django-classy-tags { };
 
   django-cleanup = callPackage ../development/python-modules/django-cleanup { };
 
   django-colorful = callPackage ../development/python-modules/django-colorful { };
+=======
+  django_classytags = callPackage ../development/python-modules/django_classytags { };
+
+  django-cleanup = callPackage ../development/python-modules/django-cleanup { };
+
+  django_colorful = callPackage ../development/python-modules/django_colorful { };
+
+  django_compat = callPackage ../development/python-modules/django-compat { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   django-compressor = callPackage ../development/python-modules/django-compressor { };
 
@@ -2876,7 +3263,11 @@ self: super: with self; {
 
   django-context-decorator = callPackage ../development/python-modules/django-context-decorator { };
 
+<<<<<<< HEAD
   django-contrib-comments = callPackage ../development/python-modules/django-contrib-comments { };
+=======
+  django_contrib_comments = callPackage ../development/python-modules/django_contrib_comments { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   django-cors-headers = callPackage ../development/python-modules/django-cors-headers { };
 
@@ -2894,7 +3285,11 @@ self: super: with self; {
 
   django-encrypted-model-fields = callPackage ../development/python-modules/django-encrypted-model-fields { };
 
+<<<<<<< HEAD
   django-environ = callPackage ../development/python-modules/django-environ { };
+=======
+  django-environ = callPackage ../development/python-modules/django_environ { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   django-extensions = callPackage ../development/python-modules/django-extensions { };
 
@@ -2908,8 +3303,11 @@ self: super: with self; {
 
   django-gravatar2 = callPackage ../development/python-modules/django-gravatar2 { };
 
+<<<<<<< HEAD
   django-google-analytics-app = callPackage ../development/python-modules/django-google-analytics-app { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   django-guardian = callPackage ../development/python-modules/django-guardian { };
 
   django-haystack = callPackage ../development/python-modules/django-haystack { };
@@ -2920,7 +3318,14 @@ self: super: with self; {
 
   django-hierarkey = callPackage ../development/python-modules/django-hierarkey { };
 
+<<<<<<< HEAD
   django-hijack = callPackage ../development/python-modules/django-hijack { };
+=======
+  django_hijack_admin = callPackage ../development/python-modules/django-hijack-admin { };
+
+  django_hijack = callPackage ../development/python-modules/django-hijack { };
+  # This package may need an older version of Django. Override the package set and set e.g. `django = super.django_1_9`. See the Nixpkgs manual for examples on how to override the package set.
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   django-i18nfield = callPackage ../development/python-modules/django-i18nfield { };
 
@@ -2938,21 +3343,31 @@ self: super: with self; {
 
   django-libsass = callPackage ../development/python-modules/django-libsass { };
 
+<<<<<<< HEAD
   django-leaflet = callPackage ../development/python-modules/django-leaflet { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   django-logentry-admin = callPackage ../development/python-modules/django-logentry-admin { };
 
   django-login-required-middleware = callPackage ../development/python-modules/django-login-required-middleware { };
 
+<<<<<<< HEAD
   django-localflavor = callPackage ../development/python-modules/django-localflavor { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   django-mailman3 = callPackage ../development/python-modules/django-mailman3 { };
 
   django-markup = callPackage ../development/python-modules/django-markup { };
 
   django-model-utils = callPackage ../development/python-modules/django-model-utils { };
 
+<<<<<<< HEAD
   django-modelcluster = callPackage ../development/python-modules/django-modelcluster { };
+=======
+  django-modelcluster = callPackage ../development/python-modules/django_modelcluster { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   django-multiselectfield = callPackage ../development/python-modules/django-multiselectfield { };
 
@@ -2962,7 +3377,11 @@ self: super: with self; {
 
   django-mysql = callPackage ../development/python-modules/django-mysql { };
 
+<<<<<<< HEAD
   django-nose = callPackage ../development/python-modules/django-nose { };
+=======
+  django_nose = callPackage ../development/python-modules/django_nose { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   django-oauth-toolkit = callPackage ../development/python-modules/django-oauth-toolkit { };
 
@@ -3010,8 +3429,11 @@ self: super: with self; {
 
   django-rest-registration = callPackage ../development/python-modules/django-rest-registration { };
 
+<<<<<<< HEAD
   django-rosetta = callPackage ../development/python-modules/django-rosetta { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   django-rq = callPackage ../development/python-modules/django-rq { };
 
   djangorestframework = callPackage ../development/python-modules/djangorestframework { };
@@ -3028,6 +3450,7 @@ self: super: with self; {
 
   djangorestframework-simplejwt = callPackage ../development/python-modules/djangorestframework-simplejwt { };
 
+<<<<<<< HEAD
   djangorestframework-stubs = callPackage ../development/python-modules/djangorestframework-stubs { };
 
   django-reversion = callPackage ../development/python-modules/django-reversion { };
@@ -3042,6 +3465,16 @@ self: super: with self; {
 
   django-simple-history = callPackage ../development/python-modules/django-simple-history { };
 
+=======
+  django-reversion = callPackage ../development/python-modules/django-reversion { };
+
+  django-sesame = callPackage ../development/python-modules/django-sesame { };
+
+  django_silk = callPackage ../development/python-modules/django_silk { };
+
+  django-simple-captcha = callPackage ../development/python-modules/django-simple-captcha { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   django-sites = callPackage ../development/python-modules/django-sites { };
 
   django-sr = callPackage ../development/python-modules/django-sr { };
@@ -3056,7 +3489,11 @@ self: super: with self; {
 
   django-tables2 = callPackage ../development/python-modules/django-tables2 { };
 
+<<<<<<< HEAD
   django-tagging = callPackage ../development/python-modules/django-tagging { };
+=======
+  django_tagging = callPackage ../development/python-modules/django_tagging { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   django-taggit = callPackage ../development/python-modules/django-taggit { };
 
@@ -3064,7 +3501,11 @@ self: super: with self; {
 
   django-timezone-field = callPackage ../development/python-modules/django-timezone-field { };
 
+<<<<<<< HEAD
   django-treebeard = callPackage ../development/python-modules/django-treebeard { };
+=======
+  django_treebeard = callPackage ../development/python-modules/django_treebeard { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   django-two-factor-auth = callPackage ../development/python-modules/django-two-factor-auth { };
 
@@ -3086,8 +3527,11 @@ self: super: with self; {
 
   dj-search-url = callPackage ../development/python-modules/dj-search-url { };
 
+<<<<<<< HEAD
   dj-static = callPackage ../development/python-modules/dj-static { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   dkimpy = callPackage ../development/python-modules/dkimpy { };
 
   dlib = callPackage ../development/python-modules/dlib {
@@ -3109,7 +3553,11 @@ self: super: with self; {
   dm-sonnet = callPackage ../development/python-modules/dm-sonnet { };
 
   dm-tree = callPackage ../development/python-modules/dm-tree {
+<<<<<<< HEAD
     abseil-cpp = pkgs.abseil-cpp_202103.override {
+=======
+    abseil-cpp = pkgs.abseil-cpp.override {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       cxxStandard = "14";
     };
   };
@@ -3172,8 +3620,11 @@ self: super: with self; {
 
   doit-py = callPackage ../development/python-modules/doit-py { };
 
+<<<<<<< HEAD
   dokuwiki = callPackage ../development/python-modules/dokuwiki { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   domeneshop = callPackage ../development/python-modules/domeneshop { };
 
   dominate = callPackage ../development/python-modules/dominate { };
@@ -3188,8 +3639,11 @@ self: super: with self; {
     inherit (pkgs) graphviz;
   };
 
+<<<<<<< HEAD
   dotwiz = callPackage ../development/python-modules/dotwiz { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   dotmap = callPackage ../development/python-modules/dotmap { };
 
   downloader-cli = callPackage ../development/python-modules/downloader-cli { };
@@ -3232,8 +3686,11 @@ self: super: with self; {
 
   drms = callPackage ../development/python-modules/drms { };
 
+<<<<<<< HEAD
   dronecan = callPackage ../development/python-modules/dronecan { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   dropbox = callPackage ../development/python-modules/dropbox { };
 
   ds-store = callPackage ../development/python-modules/ds-store { };
@@ -3244,8 +3701,11 @@ self: super: with self; {
 
   dsmr-parser = callPackage ../development/python-modules/dsmr-parser { };
 
+<<<<<<< HEAD
   dsnap = callPackage ../development/python-modules/dsnap { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   dtlssocket = callPackage ../development/python-modules/dtlssocket { };
 
   dtschema = callPackage ../development/python-modules/dtschema { };
@@ -3260,8 +3720,11 @@ self: super: with self; {
 
   duckduckgo-search = callPackage ../development/python-modules/duckduckgo-search { };
 
+<<<<<<< HEAD
   duct-py = callPackage ../development/python-modules/duct-py { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   duecredit = callPackage ../development/python-modules/duecredit { };
 
   duet = callPackage ../development/python-modules/duet { };
@@ -3282,8 +3745,11 @@ self: super: with self; {
 
   durus = callPackage ../development/python-modules/durus {  };
 
+<<<<<<< HEAD
   dvc = callPackage ../development/python-modules/dvc {  };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   dvc-azure = callPackage ../development/python-modules/dvc-azure {  };
 
   dvc-data = callPackage ../development/python-modules/dvc-data {  };
@@ -3363,16 +3829,22 @@ self: super: with self; {
 
   editorconfig = callPackage ../development/python-modules/editorconfig { };
 
+<<<<<<< HEAD
   edk2-pytool-library = callPackage ../development/python-modules/edk2-pytool-library { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   edlib = callPackage ../development/python-modules/edlib {
     inherit (pkgs) edlib;
   };
 
   edward = callPackage ../development/python-modules/edward { };
 
+<<<<<<< HEAD
   effdet = callPackage ../development/python-modules/effdet { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   effect = callPackage ../development/python-modules/effect { };
 
   eggdeps = callPackage ../development/python-modules/eggdeps { };
@@ -3439,8 +3911,11 @@ self: super: with self; {
 
   enamlx = callPackage ../development/python-modules/enamlx { };
 
+<<<<<<< HEAD
   encodec = callPackage ../development/python-modules/encodec { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   energyflip-client = callPackage ../development/python-modules/energyflip-client { };
 
   energyflow = callPackage ../development/python-modules/energyflow { };
@@ -3453,8 +3928,11 @@ self: super: with self; {
 
   enocean = callPackage ../development/python-modules/enocean { };
 
+<<<<<<< HEAD
   enochecker-core = callPackage ../development/python-modules/enochecker-core { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   enrich = callPackage ../development/python-modules/enrich { };
 
   entrance = callPackage ../development/python-modules/entrance {
@@ -3501,8 +3979,11 @@ self: super: with self; {
 
   epson-projector = callPackage ../development/python-modules/epson-projector { };
 
+<<<<<<< HEAD
   equinox = callPackage ../development/python-modules/equinox { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   eradicate = callPackage ../development/python-modules/eradicate { };
 
   es-client = callPackage ../development/python-modules/es-client { };
@@ -3561,6 +4042,11 @@ self: super: with self; {
 
   evaluate = callPackage ../development/python-modules/evaluate { };
 
+<<<<<<< HEAD
+=======
+  ev3dev2 = callPackage ../development/python-modules/ev3dev2 { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   evdev = callPackage ../development/python-modules/evdev { };
 
   eve = callPackage ../development/python-modules/eve { };
@@ -3600,14 +4086,20 @@ self: super: with self; {
 
   exifread = callPackage ../development/python-modules/exifread { };
 
+<<<<<<< HEAD
   expandvars = callPackage ../development/python-modules/expandvars { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   expects = callPackage ../development/python-modules/expects { };
 
   expecttest = callPackage ../development/python-modules/expecttest { };
 
+<<<<<<< HEAD
   experiment-utilities = callPackage ../development/python-modules/experiment-utilities { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   expiring-dict = callPackage ../development/python-modules/expiring-dict { };
 
   expiringdict = callPackage ../development/python-modules/expiringdict { };
@@ -3644,10 +4136,13 @@ self: super: with self; {
 
   ezyrb = callPackage ../development/python-modules/ezyrb { };
 
+<<<<<<< HEAD
   f5-icontrol-rest = callPackage ../development/python-modules/f5-icontrol-rest { };
 
   f5-sdk = callPackage ../development/python-modules/f5-sdk { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   f90nml = callPackage ../development/python-modules/f90nml { };
 
   fabric = callPackage ../development/python-modules/fabric { };
@@ -3668,10 +4163,13 @@ self: super: with self; {
 
   factory_boy = callPackage ../development/python-modules/factory_boy { };
 
+<<<<<<< HEAD
   fairscale = callPackage ../development/python-modules/fairscale { };
 
   fairseq = callPackage ../development/python-modules/fairseq { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   faiss = toPythonModule (pkgs.faiss.override {
     pythonSupport = true;
     pythonPackages = self;
@@ -3713,16 +4211,22 @@ self: super: with self; {
 
   fastecdsa = callPackage ../development/python-modules/fastecdsa { };
 
+<<<<<<< HEAD
   fastembed = callPackage ../development/python-modules/fastembed { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   fasteners = callPackage ../development/python-modules/fasteners { };
 
   fastentrypoints = callPackage ../development/python-modules/fastentrypoints { };
 
+<<<<<<< HEAD
   faster-fifo = callPackage ../development/python-modules/faster-fifo { };
 
   faster-whisper = callPackage ../development/python-modules/faster-whisper { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   fastimport = callPackage ../development/python-modules/fastimport { };
 
   fastjet = toPythonModule (pkgs.fastjet.override {
@@ -3771,6 +4275,10 @@ self: super: with self; {
 
   fenics = callPackage ../development/python-modules/fenics {
     hdf5 = pkgs.hdf5_1_10;
+<<<<<<< HEAD
+=======
+    boost = pkgs.boost169;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   ffcv = callPackage ../development/python-modules/ffcv { };
@@ -3779,8 +4287,11 @@ self: super: with self; {
 
   ffmpeg-progress-yield = callPackage ../development/python-modules/ffmpeg-progress-yield { };
 
+<<<<<<< HEAD
   ffmpy = callPackage ../development/python-modules/ffmpy { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   fiblary3-fork = callPackage ../development/python-modules/fiblary3-fork { };
 
   fido2 = callPackage ../development/python-modules/fido2 { };
@@ -3795,8 +4306,11 @@ self: super: with self; {
 
   filecheck = callPackage ../development/python-modules/filecheck { };
 
+<<<<<<< HEAD
   filedepot = callPackage ../development/python-modules/filedepot { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   filelock = callPackage ../development/python-modules/filelock { };
 
   filetype = callPackage ../development/python-modules/filetype { };
@@ -3873,7 +4387,11 @@ self: super: with self; {
 
   flask-appbuilder = callPackage ../development/python-modules/flask-appbuilder { };
 
+<<<<<<< HEAD
   flask-assets = callPackage ../development/python-modules/flask-assets { };
+=======
+  flask_assets = callPackage ../development/python-modules/flask-assets { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   flask-autoindex = callPackage ../development/python-modules/flask-autoindex { };
 
@@ -3897,7 +4415,11 @@ self: super: with self; {
 
   flask-cors = callPackage ../development/python-modules/flask-cors { };
 
+<<<<<<< HEAD
   flask-elastic = callPackage ../development/python-modules/flask-elastic { };
+=======
+  flask_elastic = callPackage ../development/python-modules/flask-elastic { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   flask-expects-json = callPackage ../development/python-modules/flask-expects-json { };
 
@@ -3911,6 +4433,7 @@ self: super: with self; {
 
   flask-login = callPackage ../development/python-modules/flask-login { };
 
+<<<<<<< HEAD
   flask-mail = callPackage ../development/python-modules/flask-mail { };
 
   flask-mailman = callPackage ../development/python-modules/flask-mailman { };
@@ -3918,6 +4441,15 @@ self: super: with self; {
   flask-marshmallow = callPackage ../development/python-modules/flask-marshmallow { };
 
   flask-migrate = callPackage ../development/python-modules/flask-migrate { };
+=======
+  flask_mail = callPackage ../development/python-modules/flask-mail { };
+
+  flask-mailman = callPackage ../development/python-modules/flask-mailman { };
+
+  flask_marshmallow = callPackage ../development/python-modules/flask-marshmallow { };
+
+  flask_migrate = callPackage ../development/python-modules/flask-migrate { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   flask-mongoengine = callPackage ../development/python-modules/flask-mongoengine { };
 
@@ -3927,7 +4459,11 @@ self: super: with self; {
 
   flask-paranoid = callPackage ../development/python-modules/flask-paranoid { };
 
+<<<<<<< HEAD
   flask-principal = callPackage ../development/python-modules/flask-principal { };
+=======
+  flask_principal = callPackage ../development/python-modules/flask-principal { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   flask-pymongo = callPackage ../development/python-modules/Flask-PyMongo { };
 
@@ -3937,16 +4473,23 @@ self: super: with self; {
 
   flask-reverse-proxy-fix = callPackage ../development/python-modules/flask-reverse-proxy-fix { };
 
+<<<<<<< HEAD
   flask-script = callPackage ../development/python-modules/flask-script { };
+=======
+  flask_script = callPackage ../development/python-modules/flask-script { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   flask-seasurf = callPackage ../development/python-modules/flask-seasurf { };
 
   flask-session = callPackage ../development/python-modules/flask-session { };
 
+<<<<<<< HEAD
   flask-session-captcha = callPackage ../development/python-modules/flask-session-captcha { };
 
   flask-sessionstore = callPackage ../development/python-modules/flask-sessionstore { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   flask-security-too = callPackage ../development/python-modules/flask-security-too { };
 
   flask-silk = callPackage ../development/python-modules/flask-silk { };
@@ -3967,8 +4510,11 @@ self: super: with self; {
 
   flask-testing = callPackage ../development/python-modules/flask-testing { };
 
+<<<<<<< HEAD
   flask-themes2 = callPackage ../development/python-modules/flask-themes2 { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   flask-versioned = callPackage ../development/python-modules/flask-versioned { };
 
   flask-wtf = callPackage ../development/python-modules/flask-wtf { };
@@ -4017,8 +4563,11 @@ self: super: with self; {
 
   flux-led = callPackage ../development/python-modules/flux-led { };
 
+<<<<<<< HEAD
   flyingsquid = callPackage ../development/python-modules/flyingsquid { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   flynt = callPackage ../development/python-modules/flynt { };
 
   fn = callPackage ../development/python-modules/fn { };
@@ -4029,8 +4578,11 @@ self: super: with self; {
 
   folium = callPackage ../development/python-modules/folium { };
 
+<<<<<<< HEAD
   fontawesomefree = callPackage ../development/python-modules/fontawesomefree { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   fontforge = toPythonModule (pkgs.fontforge.override {
     withPython = true;
     inherit python;
@@ -4050,12 +4602,15 @@ self: super: with self; {
     inherit (pkgs.darwin.apple_sdk.frameworks) ApplicationServices OpenGL;
   };
 
+<<<<<<< HEAD
   openllm = callPackage ../development/python-modules/openllm { };
 
   openllm-client = callPackage ../development/python-modules/openllm-client { };
 
   openllm-core = callPackage ../development/python-modules/openllm-core { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   openstep-plist = callPackage ../development/python-modules/openstep-plist { };
 
   glyphslib = callPackage ../development/python-modules/glyphslib { };
@@ -4080,6 +4635,13 @@ self: super: with self; {
 
   formulaic = callPackage ../development/python-modules/formulaic { };
 
+<<<<<<< HEAD
+=======
+  foundationdb51 = callPackage ../servers/foundationdb/python.nix { foundationdb = pkgs.foundationdb51; };
+  foundationdb52 = callPackage ../servers/foundationdb/python.nix { foundationdb = pkgs.foundationdb52; };
+  foundationdb60 = callPackage ../servers/foundationdb/python.nix { foundationdb = pkgs.foundationdb60; };
+  foundationdb61 = callPackage ../servers/foundationdb/python.nix { foundationdb = pkgs.foundationdb61; };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   foundationdb71 = callPackage ../servers/foundationdb/python.nix { foundationdb = pkgs.foundationdb71; };
 
   fountains = callPackage ../development/python-modules/fountains { };
@@ -4100,8 +4662,11 @@ self: super: with self; {
 
   freezegun = callPackage ../development/python-modules/freezegun { };
 
+<<<<<<< HEAD
   frida-python = callPackage ../development/python-modules/frida-python { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   frigidaire = callPackage ../development/python-modules/frigidaire { };
 
   frilouz = callPackage ../development/python-modules/frilouz { };
@@ -4126,8 +4691,11 @@ self: super: with self; {
 
   ftputil = callPackage ../development/python-modules/ftputil { };
 
+<<<<<<< HEAD
   fugashi = callPackage ../development/python-modules/fugashi { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   func-timeout = callPackage ../development/python-modules/func-timeout { };
 
   funcparserlib = callPackage ../development/python-modules/funcparserlib { };
@@ -4140,8 +4708,11 @@ self: super: with self; {
 
   funcy = callPackage ../development/python-modules/funcy { };
 
+<<<<<<< HEAD
   funsor = callPackage ../development/python-modules/funsor { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   furl = callPackage ../development/python-modules/furl { };
 
   furo = callPackage ../development/python-modules/furo { };
@@ -4164,8 +4735,11 @@ self: super: with self; {
 
   fuzzywuzzy = callPackage ../development/python-modules/fuzzywuzzy { };
 
+<<<<<<< HEAD
   fvcore = callPackage ../development/python-modules/fvcore { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   fvs = callPackage ../development/python-modules/fvs { };
 
   fx2 = callPackage ../development/python-modules/fx2 { };
@@ -4209,8 +4783,11 @@ self: super: with self; {
 
   gcs-oauth2-boto-plugin = callPackage ../development/python-modules/gcs-oauth2-boto-plugin { };
 
+<<<<<<< HEAD
   gcsa = callPackage ../development/python-modules/gcsa { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   gcsfs = callPackage ../development/python-modules/gcsfs { };
 
   gdal = toPythonModule (pkgs.gdal.override { python3 = python; });
@@ -4299,8 +4876,11 @@ self: super: with self; {
 
   georss-wa-dfes-client = callPackage ../development/python-modules/georss-wa-dfes-client { };
 
+<<<<<<< HEAD
   getjump = callPackage ../development/python-modules/getjump { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   getmac = callPackage ../development/python-modules/getmac { };
 
   getkey = callPackage ../development/python-modules/getkey { };
@@ -4346,8 +4926,11 @@ self: super: with self; {
 
   git-sweep = callPackage ../development/python-modules/git-sweep { };
 
+<<<<<<< HEAD
   git-url-parse = callPackage ../development/python-modules/git-url-parse { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   gitdb = callPackage ../development/python-modules/gitdb { };
 
   github-to-sqlite = callPackage ../development/python-modules/github-to-sqlite { };
@@ -4356,8 +4939,11 @@ self: super: with self; {
 
   github3_py = callPackage ../development/python-modules/github3_py { };
 
+<<<<<<< HEAD
   gitignore-parser = callPackage ../development/python-modules/gitignore-parser { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   gitpython = callPackage ../development/python-modules/gitpython { };
 
   glad =  callPackage ../development/python-modules/glad { };
@@ -4370,9 +4956,13 @@ self: super: with self; {
 
   glean-parser = callPackage ../development/python-modules/glean-parser { };
 
+<<<<<<< HEAD
   glean-sdk = callPackage ../development/python-modules/glean-sdk {
     inherit (pkgs) lmdb;
   };
+=======
+  glean-sdk = callPackage ../development/python-modules/glean-sdk { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   glfw = callPackage ../development/python-modules/glfw { };
 
@@ -4400,18 +4990,24 @@ self: super: with self; {
 
   goalzero = callPackage ../development/python-modules/goalzero { };
 
+<<<<<<< HEAD
   gocardless-pro = callPackage ../development/python-modules/gocardless-pro { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   goobook = callPackage ../development/python-modules/goobook { };
 
   goocalendar = callPackage ../development/python-modules/goocalendar { };
 
   goodwe = callPackage ../development/python-modules/goodwe { };
 
+<<<<<<< HEAD
   google = callPackage ../development/python-modules/google { };
 
   google-ai-generativelanguage = callPackage ../development/python-modules/google-ai-generativelanguage { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   google-api-core = callPackage ../development/python-modules/google-api-core { };
 
   google-api-python-client = callPackage ../development/python-modules/google-api-python-client { };
@@ -4428,8 +5024,11 @@ self: super: with self; {
 
   google-cloud-appengine-logging = callPackage ../development/python-modules/google-cloud-appengine-logging { };
 
+<<<<<<< HEAD
   google-cloud-artifact-registry = callPackage ../development/python-modules/google-cloud-artifact-registry { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   google-cloud-asset = callPackage ../development/python-modules/google-cloud-asset { };
 
   google-cloud-audit-log = callPackage ../development/python-modules/google-cloud-audit-log { };
@@ -4524,8 +5123,11 @@ self: super: with self; {
     inherit (pkgs) crc32c;
   };
 
+<<<<<<< HEAD
   google-generativeai = callPackage ../development/python-modules/google-generativeai { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   google-i18n-address = callPackage ../development/python-modules/google-i18n-address { };
 
   google-nest-sdm = callPackage ../development/python-modules/google-nest-sdm { };
@@ -4540,8 +5142,11 @@ self: super: with self; {
 
   google-resumable-media = callPackage ../development/python-modules/google-resumable-media { };
 
+<<<<<<< HEAD
   google-search-results = callPackage ../development/python-modules/google-search-results { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   googletrans = callPackage ../development/python-modules/googletrans { };
 
   gorilla = callPackage ../development/python-modules/gorilla { };
@@ -4554,8 +5159,11 @@ self: super: with self; {
 
   gpaw = callPackage ../development/python-modules/gpaw { };
 
+<<<<<<< HEAD
   gpib-ctypes = callPackage ../development/python-modules/gpib-ctypes { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   gpiozero = callPackage ../development/python-modules/gpiozero { };
 
   gplaycli = callPackage ../development/python-modules/gplaycli { };
@@ -4585,7 +5193,11 @@ self: super: with self; {
 
   gpt-2-simple = callPackage ../development/python-modules/gpt-2-simple { };
 
+<<<<<<< HEAD
   gptcache = callPackage ../development/python-modules/gptcache { };
+=======
+  gpyopt = callPackage ../development/python-modules/gpyopt { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   gql = callPackage ../development/python-modules/gql { };
 
@@ -4597,10 +5209,13 @@ self: super: with self; {
 
   gradient_statsd = callPackage ../development/python-modules/gradient_statsd { };
 
+<<<<<<< HEAD
   gradio = callPackage ../development/python-modules/gradio { };
 
   gradio-client = callPackage ../development/python-modules/gradio/client.nix { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   grammalecte = callPackage ../development/python-modules/grammalecte { };
 
   grandalf = callPackage ../development/python-modules/grandalf { };
@@ -4662,6 +5277,7 @@ self: super: with self; {
 
   grpc-google-iam-v1 = callPackage ../development/python-modules/grpc-google-iam-v1 { };
 
+<<<<<<< HEAD
   grpc-interceptor = callPackage ../development/python-modules/grpc-interceptor { };
 
   grpcio = callPackage ../development/python-modules/grpcio { };
@@ -4674,6 +5290,12 @@ self: super: with self; {
 
   grpcio-reflection = callPackage ../development/python-modules/grpcio-reflection { };
 
+=======
+  grpcio = callPackage ../development/python-modules/grpcio { };
+
+  grpcio-gcp = callPackage ../development/python-modules/grpcio-gcp { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   grpcio-status = callPackage ../development/python-modules/grpcio-status { };
 
   grpcio-tools = callPackage ../development/python-modules/grpcio-tools { };
@@ -4690,8 +5312,11 @@ self: super: with self; {
 
   gsd = callPackage ../development/python-modules/gsd { };
 
+<<<<<<< HEAD
   gsm0338 = callPackage ../development/python-modules/gsm0338 { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   gspread = callPackage ../development/python-modules/gspread { };
 
   gssapi = callPackage ../development/python-modules/gssapi {
@@ -4718,8 +5343,11 @@ self: super: with self; {
 
   gudhi = callPackage ../development/python-modules/gudhi { };
 
+<<<<<<< HEAD
   guidance = callPackage ../development/python-modules/guidance { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   gumath = callPackage ../development/python-modules/gumath { };
 
   gunicorn = callPackage ../development/python-modules/gunicorn { };
@@ -4855,8 +5483,11 @@ self: super: with self; {
 
   hexdump = callPackage ../development/python-modules/hexdump { };
 
+<<<<<<< HEAD
   hfst = callPackage ../development/python-modules/hfst { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   hg-commitsigs = callPackage ../development/python-modules/hg-commitsigs { };
 
   hg-evolve = callPackage ../development/python-modules/hg-evolve { };
@@ -4875,8 +5506,11 @@ self: super: with self; {
     inherit (pkgs) udev libusb1;
   };
 
+<<<<<<< HEAD
   hid-parser = callPackage ../development/python-modules/hid-parser { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   hieroglyph = callPackage ../development/python-modules/hieroglyph { };
 
   hijri-converter = callPackage ../development/python-modules/hijri-converter { };
@@ -4903,10 +5537,13 @@ self: super: with self; {
 
   hlk-sw16 = callPackage ../development/python-modules/hlk-sw16 { };
 
+<<<<<<< HEAD
   hnswlib = callPackage ../development/python-modules/hnswlib {
     inherit (pkgs) hnswlib;
   };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   hmmlearn = callPackage ../development/python-modules/hmmlearn { };
 
   hocr-tools = callPackage ../development/python-modules/hocr-tools { };
@@ -4915,8 +5552,11 @@ self: super: with self; {
 
   holidays = callPackage ../development/python-modules/holidays { };
 
+<<<<<<< HEAD
   hologram = callPackage ../development/python-modules/hologram { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   holoviews = callPackage ../development/python-modules/holoviews { };
 
   home-assistant-bluetooth = callPackage ../development/python-modules/home-assistant-bluetooth { };
@@ -4947,11 +5587,14 @@ self: super: with self; {
 
   hpccm = callPackage ../development/python-modules/hpccm { };
 
+<<<<<<< HEAD
   hpp-fcl = toPythonModule (pkgs.hpp-fcl.override {
     pythonSupport = true;
     python3Packages = self;
   });
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   hs-dbus-signature = callPackage ../development/python-modules/hs-dbus-signature { };
 
   hsaudiotag3k = callPackage ../development/python-modules/hsaudiotag3k { };
@@ -4964,8 +5607,11 @@ self: super: with self; {
 
   html5lib = callPackage ../development/python-modules/html5lib { };
 
+<<<<<<< HEAD
   html5tagger = callPackage ../development/python-modules/html5tagger { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   html5-parser = callPackage ../development/python-modules/html5-parser { };
 
   htmllaundry = callPackage ../development/python-modules/htmllaundry { };
@@ -4974,12 +5620,17 @@ self: super: with self; {
 
   html-sanitizer = callPackage ../development/python-modules/html-sanitizer { };
 
+<<<<<<< HEAD
   html-tag-names = callPackage ../development/python-modules/html-tag-names { };
 
   html-text = callPackage ../development/python-modules/html-text { };
 
   html-void-elements = callPackage ../development/python-modules/html-void-elements { };
 
+=======
+  html-text = callPackage ../development/python-modules/html-text { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   htseq = callPackage ../development/python-modules/htseq { };
 
   httmock = callPackage ../development/python-modules/httmock { };
@@ -5068,8 +5719,11 @@ self: super: with self; {
 
   hyperopt = callPackage ../development/python-modules/hyperopt { };
 
+<<<<<<< HEAD
   hyperpyyaml = callPackage ../development/python-modules/hyperpyyaml { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   hypothesis-auto = callPackage ../development/python-modules/hypothesis-auto { };
 
   hypothesis = callPackage ../development/python-modules/hypothesis { };
@@ -5090,8 +5744,11 @@ self: super: with self; {
 
   i3-py = callPackage ../development/python-modules/i3-py { };
 
+<<<<<<< HEAD
   iammeter = callPackage ../development/python-modules/iammeter { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   iapws = callPackage ../development/python-modules/iapws { };
 
   iaqualink = callPackage ../development/python-modules/iaqualink { };
@@ -5152,18 +5809,28 @@ self: super: with self; {
 
   imagecorruptions = callPackage ../development/python-modules/imagecorruptions { };
 
+<<<<<<< HEAD
   imagededup = callPackage ../development/python-modules/imagededup { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   imagehash = callPackage ../development/python-modules/imagehash { };
 
   imageio = callPackage ../development/python-modules/imageio { };
 
   imageio-ffmpeg = callPackage ../development/python-modules/imageio-ffmpeg { };
 
+<<<<<<< HEAD
   image-diff = callPackage ../development/python-modules/image-diff { };
 
   image-go-nord = callPackage ../development/python-modules/image-go-nord { };
 
+=======
+  image-go-nord = callPackage ../development/python-modules/image-go-nord { };
+
+  image-match = callPackage ../development/python-modules/image-match { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   imagesize = callPackage ../development/python-modules/imagesize { };
 
   imantics = callPackage ../development/python-modules/imantics { };
@@ -5178,7 +5845,11 @@ self: super: with self; {
 
   img2pdf = callPackage ../development/python-modules/img2pdf { };
 
+<<<<<<< HEAD
   imgdiff = callPackage ../development/python-modules/imgdiff { };
+=======
+  imgaug = callPackage ../development/python-modules/imgaug { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   imgsize = callPackage ../development/python-modules/imgsize { };
 
@@ -5246,14 +5917,20 @@ self: super: with self; {
 
   inquirer = callPackage ../development/python-modules/inquirer { };
 
+<<<<<<< HEAD
   inquirerpy = callPackage ../development/python-modules/inquirerpy { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   inscriptis = callPackage ../development/python-modules/inscriptis { };
 
   insegel = callPackage ../development/python-modules/insegel { };
 
+<<<<<<< HEAD
   insightface = callPackage ../development/python-modules/insightface { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   installer = callPackage ../development/python-modules/installer { };
 
   insteon-frontend-home-assistant = callPackage ../development/python-modules/insteon-frontend-home-assistant { };
@@ -5294,14 +5971,20 @@ self: super: with self; {
 
   ionhash = callPackage ../development/python-modules/ionhash { };
 
+<<<<<<< HEAD
   iopath = callPackage ../development/python-modules/iopath { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   iotawattpy = callPackage ../development/python-modules/iotawattpy { };
 
   iowait = callPackage ../development/python-modules/iowait { };
 
+<<<<<<< HEAD
   ipadic = callPackage ../development/python-modules/ipadic { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ipaddr = callPackage ../development/python-modules/ipaddr { };
 
   ipdb = callPackage ../development/python-modules/ipdb { };
@@ -5320,24 +6003,35 @@ self: super: with self; {
 
   ipy = callPackage ../development/python-modules/IPy { };
 
+<<<<<<< HEAD
   ipycanvas = callPackage ../development/python-modules/ipycanvas { };
 
   ipydatawidgets = callPackage ../development/python-modules/ipydatawidgets { };
 
   ipynbname = callPackage ../development/python-modules/ipynbname { };
 
+=======
+  ipydatawidgets = callPackage ../development/python-modules/ipydatawidgets { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ipyniivue = callPackage ../development/python-modules/ipyniivue { };
 
   ipykernel = callPackage ../development/python-modules/ipykernel { };
 
+<<<<<<< HEAD
   ipymarkup = callPackage ../development/python-modules/ipymarkup { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ipympl = callPackage ../development/python-modules/ipympl { };
 
   ipyparallel = callPackage ../development/python-modules/ipyparallel { };
 
+<<<<<<< HEAD
   ipytablewidgets = callPackage ../development/python-modules/ipytablewidgets { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ipython_genutils = callPackage ../development/python-modules/ipython_genutils { };
 
   ipython = callPackage ../development/python-modules/ipython { };
@@ -5350,8 +6044,11 @@ self: super: with self; {
 
   ipywidgets = callPackage ../development/python-modules/ipywidgets { };
 
+<<<<<<< HEAD
   ipyxact = callPackage ../development/python-modules/ipyxact { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   irc = callPackage ../development/python-modules/irc { };
 
   ircrobots = callPackage ../development/python-modules/ircrobots { };
@@ -5406,8 +6103,11 @@ self: super: with self; {
 
   itypes = callPackage ../development/python-modules/itypes { };
 
+<<<<<<< HEAD
   iwlib = callPackage ../development/python-modules/iwlib { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   j2cli = callPackage ../development/python-modules/j2cli { };
 
   jaconv = callPackage ../development/python-modules/jaconv { };
@@ -5420,14 +6120,21 @@ self: super: with self; {
 
   jaraco-abode = callPackage ../development/python-modules/jaraco-abode { };
 
+<<<<<<< HEAD
   jaraco-classes = callPackage ../development/python-modules/jaraco-classes { };
 
   jaraco-collections = callPackage ../development/python-modules/jaraco-collections { };
+=======
+  jaraco_classes = callPackage ../development/python-modules/jaraco_classes { };
+
+  jaraco_collections = callPackage ../development/python-modules/jaraco_collections { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   jaraco-email = callPackage ../development/python-modules/jaraco-email { };
 
   jaraco-context = callPackage ../development/python-modules/jaraco-context { };
 
+<<<<<<< HEAD
   jaraco-functools = callPackage ../development/python-modules/jaraco-functools { };
 
   jaraco-itertools = callPackage ../development/python-modules/jaraco-itertools { };
@@ -5445,6 +6152,23 @@ self: super: with self; {
   jarowinkler = callPackage ../development/python-modules/jarowinkler {
     inherit (pkgs) cmake ninja;
   };
+=======
+  jaraco_functools = callPackage ../development/python-modules/jaraco_functools { };
+
+  jaraco_itertools = callPackage ../development/python-modules/jaraco_itertools { };
+
+  jaraco_logging = callPackage ../development/python-modules/jaraco_logging { };
+
+  jaraco-net = callPackage ../development/python-modules/jaraco-net { };
+
+  jaraco_stream = callPackage ../development/python-modules/jaraco_stream { };
+
+  jaraco-test = callPackage ../development/python-modules/jaraco-test { };
+
+  jaraco_text = callPackage ../development/python-modules/jaraco_text { };
+
+  jarowinkler = callPackage ../development/python-modules/jarowinkler { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   javaobj-py3 = callPackage ../development/python-modules/javaobj-py3 { };
 
@@ -5455,14 +6179,24 @@ self: super: with self; {
   jax-jumpy = callPackage ../development/python-modules/jax-jumpy { };
 
   jaxlib-bin = callPackage ../development/python-modules/jaxlib/bin.nix {
+<<<<<<< HEAD
     inherit (pkgs.config) cudaSupport;
+=======
+    cudaSupport = pkgs.config.cudaSupport or false;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   jaxlib-build = callPackage ../development/python-modules/jaxlib rec {
     inherit (pkgs.darwin) cctools;
     # Some platforms don't have `cudaSupport` defined, hence the need for 'or false'.
+<<<<<<< HEAD
     inherit (pkgs.config) cudaSupport;
     IOKit = pkgs.darwin.apple_sdk_11_0.IOKit;
+=======
+    cudaSupport = pkgs.config.cudaSupport or false;
+    IOKit = pkgs.darwin.apple_sdk_11_0.IOKit;
+    protobuf = pkgs.protobuf3_20; # jaxlib-build 0.3.15 won't build with protobuf 3.21
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   jaxlib = self.jaxlib-build;
@@ -5477,8 +6211,11 @@ self: super: with self; {
 
   jaxopt = callPackage ../development/python-modules/jaxopt { };
 
+<<<<<<< HEAD
   jaxtyping = callPackage ../development/python-modules/jaxtyping { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   jaydebeapi = callPackage ../development/python-modules/jaydebeapi { };
 
   jc = callPackage ../development/python-modules/jc { };
@@ -5493,8 +6230,11 @@ self: super: with self; {
 
   jeepney = callPackage ../development/python-modules/jeepney { };
 
+<<<<<<< HEAD
   jello = callPackage ../development/python-modules/jello { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   jellyfin-apiclient-python = callPackage ../development/python-modules/jellyfin-apiclient-python { };
 
   jellyfish = callPackage ../development/python-modules/jellyfish { };
@@ -5581,8 +6321,11 @@ self: super: with self; {
 
   json-stream-rs-tokenizer = callPackage ../development/python-modules/json-stream-rs-tokenizer { };
 
+<<<<<<< HEAD
   jsonable = callPackage ../development/python-modules/jsonable { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   jsonnet = buildPythonPackage { inherit (pkgs.jsonnet) name src; };
 
   jsonpatch = callPackage ../development/python-modules/jsonpatch { };
@@ -5613,9 +6356,15 @@ self: super: with self; {
 
   jsonschema = callPackage ../development/python-modules/jsonschema { };
 
+<<<<<<< HEAD
   jsonschema-spec = callPackage ../development/python-modules/jsonschema-spec { };
 
   jsonschema-specifications = callPackage ../development/python-modules/jsonschema-specifications { };
+=======
+  jsonschema_3 = callPackage ../development/python-modules/jsonschema/3_x.nix { };
+
+  jsonschema-spec = callPackage ../development/python-modules/jsonschema-spec { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   jsonstreams = callPackage ../development/python-modules/jsonstreams { };
 
@@ -5641,6 +6390,7 @@ self: super: with self; {
 
   jupyter-client = callPackage ../development/python-modules/jupyter-client { };
 
+<<<<<<< HEAD
   jupyter-collaboration = callPackage ../development/python-modules/jupyter-collaboration { };
 
   jupyter-contrib-core = callPackage ../development/python-modules/jupyter-contrib-core { };
@@ -5648,23 +6398,36 @@ self: super: with self; {
   jupyter-contrib-nbextensions = callPackage ../development/python-modules/jupyter-contrib-nbextensions { };
 
   jupyter-console = callPackage ../development/python-modules/jupyter-console { };
+=======
+  jupyter_console = callPackage ../development/python-modules/jupyter_console { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   jupyter-core = callPackage ../development/python-modules/jupyter-core { };
 
   jupyter-events = callPackage ../development/python-modules/jupyter-events { };
 
+<<<<<<< HEAD
   jupyter-highlight-selected-word = callPackage ../development/python-modules/jupyter-highlight-selected-word { };
 
   jupyter-lsp = callPackage ../development/python-modules/jupyter-lsp { };
 
   jupyter-nbextensions-configurator = callPackage ../development/python-modules/jupyter-nbextensions-configurator { };
 
+=======
+  jupyter-lsp = callPackage ../development/python-modules/jupyter-lsp { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   jupyter-server = callPackage ../development/python-modules/jupyter-server { };
 
   jupyter-server-fileid = callPackage ../development/python-modules/jupyter-server-fileid { };
 
   jupyter-server-terminals = callPackage ../development/python-modules/jupyter-server-terminals { };
 
+<<<<<<< HEAD
+=======
+  jupyter-server-ydoc = callPackage ../development/python-modules/jupyter-server-ydoc { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   jupyter-ui-poll = callPackage ../development/python-modules/jupyter-ui-poll { };
 
   jupyter-ydoc = callPackage ../development/python-modules/jupyter-ydoc { };
@@ -5717,10 +6480,15 @@ self: super: with self; {
 
   jxmlease = callPackage ../development/python-modules/jxmlease { };
 
+<<<<<<< HEAD
   k-diffusion = callPackage ../development/python-modules/k-diffusion { };
 
   k5test = callPackage ../development/python-modules/k5test {
     inherit (pkgs) krb5 findutils;
+=======
+  k5test = callPackage ../development/python-modules/k5test {
+    inherit (pkgs) krb5 findutils which;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   kaa-base = callPackage ../development/python-modules/kaa-base { };
@@ -5757,8 +6525,11 @@ self: super: with self; {
 
   karton-yaramatcher = callPackage ../development/python-modules/karton-yaramatcher { };
 
+<<<<<<< HEAD
   kasa-crypt = callPackage ../development/python-modules/kasa-crypt { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   kazoo = callPackage ../development/python-modules/kazoo { };
 
   kbcstorage = callPackage ../development/python-modules/kbcstorage { };
@@ -5840,10 +6611,13 @@ self: super: with self; {
 
   knack = callPackage ../development/python-modules/knack { };
 
+<<<<<<< HEAD
   kneed = callPackage ../development/python-modules/kneed { };
 
   knx-frontend = callPackage ../development/python-modules/knx-frontend { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   kombu = callPackage ../development/python-modules/kombu { };
 
   konnected = callPackage ../development/python-modules/konnected { };
@@ -5868,18 +6642,25 @@ self: super: with self; {
 
   langchain = callPackage ../development/python-modules/langchain { };
 
+<<<<<<< HEAD
   langchainplus-sdk = callPackage ../development/python-modules/langchainplus-sdk { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   langcodes = callPackage ../development/python-modules/langcodes { };
 
   langdetect = callPackage ../development/python-modules/langdetect { };
 
+<<<<<<< HEAD
   langsmith = callPackage ../development/python-modules/langsmith { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   language-data = callPackage ../development/python-modules/language-data { };
 
   language-tags = callPackage ../development/python-modules/language-tags { };
 
+<<<<<<< HEAD
   lanms-neo = callPackage ../development/python-modules/lanms-neo { };
 
   lark = callPackage ../development/python-modules/lark { };
@@ -5889,6 +6670,15 @@ self: super: with self; {
   laszip = callPackage ../development/python-modules/laszip {
     inherit (pkgs) cmake ninja;
   };
+=======
+  lark = callPackage ../development/python-modules/lark { };
+
+  larynx-train = callPackage ../development/python-modules/larynx-train { };
+
+  laspy = callPackage ../development/python-modules/laspy { };
+
+  laszip = callPackage ../development/python-modules/laszip { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   latex2mathml = callPackage ../development/python-modules/latex2mathml { };
 
@@ -5900,8 +6690,11 @@ self: super: with self; {
 
   laundrify-aio = callPackage ../development/python-modules/laundrify-aio { };
 
+<<<<<<< HEAD
   layoutparser = callPackage ../development/python-modules/layoutparser { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   lazr_config = callPackage ../development/python-modules/lazr/config.nix { };
 
   lazr_delegates = callPackage ../development/python-modules/lazr/delegates.nix { };
@@ -5914,8 +6707,11 @@ self: super: with self; {
 
   lazy_import = callPackage ../development/python-modules/lazy_import { };
 
+<<<<<<< HEAD
   lazy_imports = callPackage ../development/python-modules/lazy_imports { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   lazy-loader = callPackage ../development/python-modules/lazy-loader { };
 
   lazy-object-proxy = callPackage ../development/python-modules/lazy-object-proxy { };
@@ -5963,6 +6759,11 @@ self: super: with self; {
     igraph-c = pkgs.igraph;
   };
 
+<<<<<<< HEAD
+=======
+  lektor = callPackage ../development/python-modules/lektor { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   leveldb = callPackage ../development/python-modules/leveldb { };
 
   levenshtein = callPackage ../development/python-modules/levenshtein { };
@@ -5984,7 +6785,11 @@ self: super: with self; {
   };
 
   libarcus = callPackage ../development/python-modules/libarcus {
+<<<<<<< HEAD
     protobuf = pkgs.protobuf3_21;
+=======
+    inherit (pkgs) protobuf;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   libasyncns = callPackage ../development/python-modules/libasyncns {
@@ -6002,6 +6807,7 @@ self: super: with self; {
     pythonSupport = true;
   });
 
+<<<<<<< HEAD
   libgpiod = callPackage ../development/python-modules/libgpiod {
     inherit (pkgs) libgpiod;
   };
@@ -6015,6 +6821,19 @@ self: super: with self; {
     pythonSupport = true;
     inherit python;
   })).python;
+=======
+  libgpiod = toPythonModule (pkgs.libgpiod.override {
+    enablePython = true;
+    python3 = python;
+  });
+
+  libgpuarray = callPackage ../development/python-modules/libgpuarray {
+    clblas = pkgs.clblas.override { inherit (self) boost; };
+    cudaSupport = pkgs.config.cudaSupport or false;
+  };
+
+  libiio = (toPythonModule (pkgs.libiio.override { inherit python; })).python;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   libkeepass = callPackage ../development/python-modules/libkeepass { };
 
@@ -6068,10 +6887,13 @@ self: super: with self; {
     (p: p.py)
   ];
 
+<<<<<<< HEAD
   librespot = callPackage ../development/python-modules/librespot { };
 
   libretranslate = callPackage ../development/python-modules/libretranslate { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   librosa = callPackage ../development/python-modules/librosa { };
 
   librouteros = callPackage ../development/python-modules/librouteros { };
@@ -6138,8 +6960,11 @@ self: super: with self; {
     inherit (self) python libxml2;
   })).py;
 
+<<<<<<< HEAD
   liccheck = callPackage ../development/python-modules/liccheck { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   license-expression = callPackage ../development/python-modules/license-expression { };
 
   lief = (toPythonModule (pkgs.lief.override {
@@ -6162,8 +6987,11 @@ self: super: with self; {
 
   lima = callPackage ../development/python-modules/lima { };
 
+<<<<<<< HEAD
   lime = callPackage ../development/python-modules/lime { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   limiter= callPackage ../development/python-modules/limiter { };
 
   limitlessled = callPackage ../development/python-modules/limitlessled { };
@@ -6180,8 +7008,11 @@ self: super: with self; {
 
   line_profiler = callPackage ../development/python-modules/line_profiler { };
 
+<<<<<<< HEAD
   linetable = callPackage ../development/python-modules/linetable { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   lingua = callPackage ../development/python-modules/lingua { };
 
   linkify-it-py = callPackage ../development/python-modules/linkify-it-py { };
@@ -6202,10 +7033,13 @@ self: super: with self; {
 
   lit = callPackage ../development/python-modules/lit { };
 
+<<<<<<< HEAD
   litellm = callPackage ../development/python-modules/litellm { };
 
   litemapy = callPackage ../development/python-modules/litemapy { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   littleutils = callPackage ../development/python-modules/littleutils { };
 
   livelossplot = callPackage ../development/python-modules/livelossplot { };
@@ -6224,7 +7058,11 @@ self: super: with self; {
 
   llvmlite = callPackage ../development/python-modules/llvmlite {
     # llvmlite always requires a specific version of llvm.
+<<<<<<< HEAD
     llvm = pkgs.llvm_14;
+=======
+    llvm = pkgs.llvm_11;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   lmdb = callPackage ../development/python-modules/lmdb {
@@ -6299,8 +7137,11 @@ self: super: with self; {
 
   lsprotocol = callPackage ../development/python-modules/lsprotocol { };
 
+<<<<<<< HEAD
   ltpycld2 = callPackage ../development/python-modules/ltpycld2 { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   luddite = callPackage ../development/python-modules/luddite { };
 
   ludios_wpull = callPackage ../development/python-modules/ludios_wpull { };
@@ -6309,10 +7150,13 @@ self: super: with self; {
 
   luhn = callPackage ../development/python-modules/luhn { };
 
+<<<<<<< HEAD
   lunarcalendar = callPackage ../development/python-modules/lunarcalendar { };
 
   luqum = callPackage ../development/python-modules/luqum { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   luxor = callPackage ../development/python-modules/luxor { };
 
   luxtronik = callPackage ../development/python-modules/luxtronik { };
@@ -6331,8 +7175,11 @@ self: super: with self; {
 
   lz4 = callPackage ../development/python-modules/lz4 { };
 
+<<<<<<< HEAD
   lzallright = callPackage ../development/python-modules/lzallright { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   lzstring = callPackage ../development/python-modules/lzstring { };
 
   m2crypto = callPackage ../development/python-modules/m2crypto { };
@@ -6345,8 +7192,11 @@ self: super: with self; {
 
   mac-vendor-lookup = callPackage ../development/python-modules/mac-vendor-lookup { };
 
+<<<<<<< HEAD
   macaddress = callPackage ../development/python-modules/macaddress{ };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   macfsevents = callPackage ../development/python-modules/macfsevents {
     inherit (pkgs.darwin.apple_sdk.frameworks) CoreFoundation CoreServices;
   };
@@ -6359,8 +7209,11 @@ self: super: with self; {
 
   magicgui = callPackage ../development/python-modules/magicgui { };
 
+<<<<<<< HEAD
   magic-filter = callPackage ../development/python-modules/magic-filter { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   magic-wormhole = callPackage ../development/python-modules/magic-wormhole { };
 
   magic-wormhole-mailbox-server = callPackage ../development/python-modules/magic-wormhole-mailbox-server { };
@@ -6401,14 +7254,24 @@ self: super: with self; {
 
   manifest-ml = callPackage ../development/python-modules/manifest-ml { };
 
+<<<<<<< HEAD
   manifestoo = callPackage ../development/python-modules/manifestoo { };
 
   manifestoo-core = callPackage ../development/python-modules/manifestoo-core { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   manifestparser = callPackage ../development/python-modules/marionette-harness/manifestparser.nix { };
 
   manuel = callPackage ../development/python-modules/manuel { };
 
+<<<<<<< HEAD
+=======
+  manticore = callPackage ../development/python-modules/manticore {
+    inherit (pkgs) z3;
+  };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   mapbox = callPackage ../development/python-modules/mapbox { };
 
   mapbox-earcut = callPackage ../development/python-modules/mapbox-earcut { };
@@ -6433,6 +7296,13 @@ self: super: with self; {
 
   markdownify  = callPackage ../development/python-modules/markdownify { };
 
+<<<<<<< HEAD
+=======
+  markdownsuperscript = callPackage ../development/python-modules/markdownsuperscript { };
+
+  markerlib = callPackage ../development/python-modules/markerlib { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   markupsafe = callPackage ../development/python-modules/markupsafe { };
 
   markuppy = callPackage ../development/python-modules/markuppy { };
@@ -6451,7 +7321,11 @@ self: super: with self; {
 
   marshmallow-sqlalchemy = callPackage ../development/python-modules/marshmallow-sqlalchemy { };
 
+<<<<<<< HEAD
   mashumaro = callPackage ../development/python-modules/mashumaro { };
+=======
+  mask-rcnn = callPackage ../development/python-modules/mask-rcnn { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   masky = callPackage ../development/python-modules/masky { };
 
@@ -6475,10 +7349,13 @@ self: super: with self; {
 
   matplotlib-inline = callPackage ../development/python-modules/matplotlib-inline { };
 
+<<<<<<< HEAD
   matplotlib-sixel = callPackage ../development/python-modules/matplotlib-sixel { };
 
   matplotx = callPackage ../development/python-modules/matplotx { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   matrix-api-async = callPackage ../development/python-modules/matrix-api-async { };
 
   matrix-client = callPackage ../development/python-modules/matrix-client { };
@@ -6489,8 +7366,11 @@ self: super: with self; {
 
   mattermostdriver = callPackage ../development/python-modules/mattermostdriver { };
 
+<<<<<<< HEAD
   maubot = callPackage ../tools/networking/maubot { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   mautrix = callPackage ../development/python-modules/mautrix { };
 
   mautrix-appservice = self.mautrix; # alias 2019-12-28
@@ -6502,7 +7382,11 @@ self: super: with self; {
   maya = callPackage ../development/python-modules/maya { };
 
   mayavi = pkgs.libsForQt5.callPackage ../development/python-modules/mayavi {
+<<<<<<< HEAD
     inherit buildPythonPackage pythonOlder;
+=======
+    inherit buildPythonPackage pythonOlder fetchPypi;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     inherit (self) pyface pygments numpy packaging vtk traitsui envisage apptools pyqt5;
   };
 
@@ -6514,8 +7398,11 @@ self: super: with self; {
 
   mcstatus = callPackage ../development/python-modules/mcstatus { };
 
+<<<<<<< HEAD
   mcuuid = callPackage ../development/python-modules/mcuuid { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   md-toc = callPackage ../development/python-modules/md-toc { };
 
   mdx-truly-sane-lists = callPackage ../development/python-modules/mdx-truly-sane-lists { };
@@ -6523,6 +7410,7 @@ self: super: with self; {
   md2gemini = callPackage ../development/python-modules/md2gemini { };
 
   mdformat = callPackage ../development/python-modules/mdformat { };
+<<<<<<< HEAD
   mdformat-admon = callPackage ../development/python-modules/mdformat-admon { };
   mdformat-beautysh = callPackage ../development/python-modules/mdformat-beautysh { };
   mdformat-footnote = callPackage ../development/python-modules/mdformat-footnote { };
@@ -6533,6 +7421,8 @@ self: super: with self; {
   mdformat-simple-breaks = callPackage ../development/python-modules/mdformat-simple-breaks { };
   mdformat-tables = callPackage ../development/python-modules/mdformat-tables { };
   mdformat-toc = callPackage ../development/python-modules/mdformat-toc { };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   mdit-py-plugins = callPackage ../development/python-modules/mdit-py-plugins { };
 
@@ -6556,8 +7446,11 @@ self: super: with self; {
 
   mediapy = callPackage ../development/python-modules/mediapy { };
 
+<<<<<<< HEAD
   meeko = callPackage ../development/python-modules/meeko { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   meep = callPackage ../development/python-modules/meep { };
 
   meilisearch = callPackage ../development/python-modules/meilisearch { };
@@ -6566,8 +7459,11 @@ self: super: with self; {
 
   meld3 = callPackage ../development/python-modules/meld3 { };
 
+<<<<<<< HEAD
   memestra = callPackage ../development/python-modules/memestra { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   memory-allocator = callPackage ../development/python-modules/memory-allocator { };
 
   memory_profiler = callPackage ../development/python-modules/memory_profiler { };
@@ -6611,9 +7507,13 @@ self: super: with self; {
 
   mesonpep517 = callPackage ../development/python-modules/mesonpep517 { };
 
+<<<<<<< HEAD
   meson-python = callPackage ../development/python-modules/meson-python {
     inherit (pkgs) ninja;
   };
+=======
+  meson-python = callPackage ../development/python-modules/meson-python { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   messagebird = callPackage ../development/python-modules/messagebird { };
 
@@ -6621,8 +7521,11 @@ self: super: with self; {
 
   metar = callPackage ../development/python-modules/metar { };
 
+<<<<<<< HEAD
   metawear = callPackage ../development/python-modules/metawear { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   meteoalertapi = callPackage ../development/python-modules/meteoalertapi { };
 
   meteocalc = callPackage ../development/python-modules/meteocalc { };
@@ -6633,10 +7536,13 @@ self: super: with self; {
 
   mf2py = callPackage ../development/python-modules/mf2py { };
 
+<<<<<<< HEAD
   mhcflurry = callPackage ../development/python-modules/mhcflurry { };
 
   mhcgnomes = callPackage ../development/python-modules/mhcgnomes { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   micawber = callPackage ../development/python-modules/micawber { };
 
   microdata = callPackage ../development/python-modules/microdata { };
@@ -6647,8 +7553,11 @@ self: super: with self; {
 
   migen = callPackage ../development/python-modules/migen { };
 
+<<<<<<< HEAD
   mike = callPackage ../development/python-modules/mike { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   milc = callPackage ../development/python-modules/milc { };
 
   milksnake = callPackage ../development/python-modules/milksnake { };
@@ -6664,8 +7573,11 @@ self: super: with self; {
     inherit (pkgs.darwin.apple_sdk.frameworks) AudioToolbox CoreAudio;
   };
 
+<<<<<<< HEAD
   minichain = callPackage ../development/python-modules/minichain { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   minidb = callPackage ../development/python-modules/minidb { };
 
   minidump = callPackage ../development/python-modules/minidump { };
@@ -6676,8 +7588,11 @@ self: super: with self; {
 
   minikerberos = callPackage ../development/python-modules/minikerberos { };
 
+<<<<<<< HEAD
   minimal-snowplow-tracker = callPackage ../development/python-modules/minimal-snowplow-tracker { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   minimock = callPackage ../development/python-modules/minimock { };
 
   mininet-python = (toPythonModule (pkgs.mininet.override {
@@ -6692,8 +7607,11 @@ self: super: with self; {
 
   mip = callPackage ../development/python-modules/mip { };
 
+<<<<<<< HEAD
   mir_eval = callPackage ../development/python-modules/mir_eval { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   misaka = callPackage ../development/python-modules/misaka { };
 
   misoc = callPackage ../development/python-modules/misoc { };
@@ -6720,9 +7638,12 @@ self: super: with self; {
   mkdocs-exclude = callPackage ../development/python-modules/mkdocs-exclude { };
   mkdocs-jupyter = callPackage ../development/python-modules/mkdocs-jupyter { };
   mkdocs-gitlab = callPackage ../development/python-modules/mkdocs-gitlab-plugin { };
+<<<<<<< HEAD
   mkdocs-git-authors-plugin = callPackage ../development/python-modules/mkdocs-git-authors-plugin { };
   mkdocs-git-revision-date-localized-plugin = callPackage ../development/python-modules/mkdocs-git-revision-date-localized-plugin { };
   mkdocs-linkcheck = callPackage ../development/python-modules/mkdocs-linkcheck { };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   mkdocs-macros = callPackage ../development/python-modules/mkdocs-macros { };
   mkdocs-material = callPackage ../development/python-modules/mkdocs-material { };
   mkdocs-material-extensions = callPackage ../development/python-modules/mkdocs-material/mkdocs-material-extensions.nix { };
@@ -6741,8 +7662,11 @@ self: super: with self; {
 
   ml-collections = callPackage ../development/python-modules/ml-collections { };
 
+<<<<<<< HEAD
   ml-dtypes = callPackage ../development/python-modules/ml-dtypes { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   mlflow = callPackage ../development/python-modules/mlflow { };
 
   mlrose = callPackage ../development/python-modules/mlrose { };
@@ -6754,18 +7678,26 @@ self: super: with self; {
     enablePython = true;
   });
 
+<<<<<<< HEAD
   mmcif-pdbx = callPackage ../development/python-modules/mmcif-pdbx { };
 
   mmcv = callPackage ../development/python-modules/mmcv { };
 
   mmengine = callPackage ../development/python-modules/mmengine { };
 
+=======
+  mmcv = callPackage ../development/python-modules/mmcv { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   mmh3 = callPackage ../development/python-modules/mmh3 { };
 
   mmpython = callPackage ../development/python-modules/mmpython { };
 
+<<<<<<< HEAD
   mmtf-python = callPackage ../development/python-modules/mmtf-python { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   mnemonic = callPackage ../development/python-modules/mnemonic { };
 
   mne-python = callPackage ../development/python-modules/mne-python { };
@@ -6790,10 +7722,13 @@ self: super: with self; {
 
   mockupdb = callPackage ../development/python-modules/mockupdb { };
 
+<<<<<<< HEAD
   moddb = callPackage ../development/python-modules/moddb { };
 
   model-bakery = callPackage ../development/python-modules/model-bakery { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   modeled = callPackage ../development/python-modules/modeled { };
 
   moderngl = callPackage ../development/python-modules/moderngl { };
@@ -6804,10 +7739,13 @@ self: super: with self; {
 
   mohawk = callPackage ../development/python-modules/mohawk { };
 
+<<<<<<< HEAD
   molecule = callPackage ../development/python-modules/molecule { };
 
   molecule-plugins = callPackage ../development/python-modules/molecule/plugins.nix { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   monai = callPackage ../development/python-modules/monai { };
 
   monai-deploy = callPackage ../development/python-modules/monai-deploy { };
@@ -6841,12 +7779,17 @@ self: super: with self; {
 
   more-properties = callPackage ../development/python-modules/more-properties { };
 
+<<<<<<< HEAD
   moreorless = callPackage ../development/python-modules/moreorless { };
 
   moretools = callPackage ../development/python-modules/moretools { };
 
   morfessor = callPackage ../development/python-modules/morfessor { };
 
+=======
+  moretools = callPackage ../development/python-modules/moretools { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   morphys = callPackage ../development/python-modules/morphys { };
 
   mortgage = callPackage ../development/python-modules/mortgage { };
@@ -6873,10 +7816,13 @@ self: super: with self; {
 
   mplfinance = callPackage ../development/python-modules/mplfinance { };
 
+<<<<<<< HEAD
   mplhep = callPackage ../development/python-modules/mplhep { };
 
   mplhep-data = callPackage ../development/python-modules/mplhep-data { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   mplleaflet = callPackage ../development/python-modules/mplleaflet { };
 
   mpmath = callPackage ../development/python-modules/mpmath { };
@@ -6889,6 +7835,11 @@ self: super: with self; {
 
   mrjob = callPackage ../development/python-modules/mrjob { };
 
+<<<<<<< HEAD
+=======
+  mrkd = callPackage ../development/python-modules/mrkd { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ms-active-directory = callPackage ../development/python-modules/ms-active-directory { };
 
   ms-cv = callPackage ../development/python-modules/ms-cv { };
@@ -6897,22 +7848,31 @@ self: super: with self; {
 
   msal-extensions = callPackage ../development/python-modules/msal-extensions { };
 
+<<<<<<< HEAD
   mscerts = callPackage ../development/python-modules/mscerts { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   msgpack = callPackage ../development/python-modules/msgpack { };
 
   msgpack-numpy = callPackage ../development/python-modules/msgpack-numpy { };
 
+<<<<<<< HEAD
   msg-parser = callPackage ../development/python-modules/msg-parser { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   msgspec = callPackage ../development/python-modules/msgspec { };
 
   msldap = callPackage ../development/python-modules/msldap { };
 
   msoffcrypto-tool = callPackage ../development/python-modules/msoffcrypto-tool { };
 
+<<<<<<< HEAD
   msprime = callPackage ../development/python-modules/msprime { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   mss = callPackage ../development/python-modules/mss { };
 
   msrestazure = callPackage ../development/python-modules/msrestazure { };
@@ -6923,8 +7883,11 @@ self: super: with self; {
 
   mullvad-api = callPackage ../development/python-modules/mullvad-api { };
 
+<<<<<<< HEAD
   mullvad-closest = callPackage ../development/python-modules/mullvad-closest { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   mulpyplexer = callPackage ../development/python-modules/mulpyplexer { };
 
   multidict = callPackage ../development/python-modules/multidict { };
@@ -6943,18 +7906,26 @@ self: super: with self; {
 
   munch = callPackage ../development/python-modules/munch { };
 
+<<<<<<< HEAD
   mung = callPackage ../development/python-modules/mung { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   munkres = callPackage ../development/python-modules/munkres { };
 
   murmurhash = callPackage ../development/python-modules/murmurhash { };
 
+<<<<<<< HEAD
   muscima = callPackage ../development/python-modules/muscima { };
 
   musicbrainzngs = callPackage ../development/python-modules/musicbrainzngs { };
 
   music-tag = callPackage ../development/python-modules/music-tag { };
 
+=======
+  musicbrainzngs = callPackage ../development/python-modules/musicbrainzngs { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   mutag = callPackage ../development/python-modules/mutag { };
 
   mutagen = callPackage ../development/python-modules/mutagen { };
@@ -6967,8 +7938,11 @@ self: super: with self; {
 
   mujson = callPackage ../development/python-modules/mujson { };
 
+<<<<<<< HEAD
   mwcli = callPackage ../development/python-modules/mwcli { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   mwclient = callPackage ../development/python-modules/mwclient { };
 
   mwdblib = callPackage ../development/python-modules/mwdblib { };
@@ -6977,10 +7951,13 @@ self: super: with self; {
 
   mwparserfromhell = callPackage ../development/python-modules/mwparserfromhell { };
 
+<<<<<<< HEAD
   mwtypes = callPackage ../development/python-modules/mwtypes { };
 
   mwxml = callPackage ../development/python-modules/mwxml { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   mxnet = callPackage ../development/python-modules/mxnet { };
 
   myfitnesspal = callPackage ../development/python-modules/myfitnesspal { };
@@ -6999,8 +7976,11 @@ self: super: with self; {
 
   mypy-boto3-builder = callPackage ../development/python-modules/mypy-boto3-builder { };
 
+<<<<<<< HEAD
   mypy-boto3-ebs = callPackage ../development/python-modules/mypy-boto3-ebs { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   mypy-boto3-s3 = callPackage ../development/python-modules/mypy-boto3-s3 { };
 
   mypy-extensions = callPackage ../development/python-modules/mypy/extensions.nix { };
@@ -7037,10 +8017,13 @@ self: super: with self; {
 
   nanoleaf = callPackage ../development/python-modules/nanoleaf { };
 
+<<<<<<< HEAD
   navec = callPackage ../development/python-modules/navec { };
 
   natasha = callPackage ../development/python-modules/natasha { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nomadnet = callPackage ../development/python-modules/nomadnet { };
 
   nox = callPackage ../development/python-modules/nox { };
@@ -7089,8 +8072,11 @@ self: super: with self; {
 
   nbdime = callPackage ../development/python-modules/nbdime { };
 
+<<<<<<< HEAD
   nbexec = callPackage ../development/python-modules/nbexec { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nbformat = callPackage ../development/python-modules/nbformat { };
 
   nbmerge = callPackage ../development/python-modules/nbmerge { };
@@ -7099,8 +8085,11 @@ self: super: with self; {
 
   nbsphinx = callPackage ../development/python-modules/nbsphinx { };
 
+<<<<<<< HEAD
   nbtlib = callPackage ../development/python-modules/nbtlib { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nbval = callPackage ../development/python-modules/nbval { };
 
   nbxmpp = callPackage ../development/python-modules/nbxmpp { };
@@ -7143,10 +8132,13 @@ self: super: with self; {
 
   netaddr = callPackage ../development/python-modules/netaddr { };
 
+<<<<<<< HEAD
   netapp-lib = callPackage ../development/python-modules/netapp-lib { };
 
   netapp-ontap = callPackage ../development/python-modules/netapp-ontap { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   netcdf4 = callPackage ../development/python-modules/netcdf4 { };
 
   netdata = callPackage ../development/python-modules/netdata { };
@@ -7173,8 +8165,11 @@ self: super: with self; {
 
   newversion = callPackage ../development/python-modules/newversion { };
 
+<<<<<<< HEAD
   newick = callPackage ../development/python-modules/newick { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nexia = callPackage ../development/python-modules/nexia { };
 
   nextcloudmonitor = callPackage ../development/python-modules/nextcloudmonitor { };
@@ -7190,7 +8185,16 @@ self: super: with self; {
     withPython = true;
   });
 
+<<<<<<< HEAD
   nh3 = callPackage ../development/python-modules/nh3 { };
+=======
+  nghttp2 = (toPythonModule (pkgs.nghttp2.override {
+    python3Packages = self;
+    inherit (pkgs) ncurses;
+    enableApp = false; # build only libnghttp2 ...
+    enablePython = true; # ... and its Python bindings
+  })).python;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   niaaml = callPackage ../development/python-modules/niaaml { };
 
@@ -7220,8 +8224,11 @@ self: super: with self; {
 
   nine = callPackage ../development/python-modules/nine { };
 
+<<<<<<< HEAD
   ninja = callPackage ../development/python-modules/ninja { inherit (pkgs) ninja; };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nipy = callPackage ../development/python-modules/nipy { };
 
   nipype = callPackage ../development/python-modules/nipype {
@@ -7280,11 +8287,17 @@ self: super: with self; {
 
   normality = callPackage ../development/python-modules/normality { };
 
+<<<<<<< HEAD
   nose = callPackage ../development/python-modules/nose { };
 
   nose2 = callPackage ../development/python-modules/nose2 { };
 
   nose3 = callPackage ../development/python-modules/nose3 { };
+=======
+  nose2 = callPackage ../development/python-modules/nose2 { };
+
+  nose = callPackage ../development/python-modules/nose { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nose-cov = callPackage ../development/python-modules/nose-cov { };
 
@@ -7355,7 +8368,11 @@ self: super: with self; {
   num2words = callPackage ../development/python-modules/num2words { };
 
   numba = callPackage ../development/python-modules/numba {
+<<<<<<< HEAD
     inherit (pkgs.config) cudaSupport;
+=======
+    cudaSupport = pkgs.config.cudaSupport or false;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   numbaWithCuda = self.numba.override {
@@ -7394,6 +8411,7 @@ self: super: with self; {
 
   python-jwt = callPackage ../development/python-modules/python-jwt { };
 
+<<<<<<< HEAD
   python-ndn = callPackage ../development/python-modules/python-ndn { };
 
   python-nvd3 = callPackage ../development/python-modules/python-nvd3 { };
@@ -7402,16 +8420,23 @@ self: super: with self; {
 
   python-youtube = callPackage ../development/python-modules/python-youtube { };
 
+=======
+  python-nvd3 = callPackage ../development/python-modules/python-nvd3 { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   py-deprecate = callPackage ../development/python-modules/py-deprecate { };
 
   py-ecc = callPackage ../development/python-modules/py-ecc { };
 
   py-eth-sig-utils = callPackage ../development/python-modules/py-eth-sig-utils { };
 
+<<<<<<< HEAD
   py-expression-eval = callPackage ../development/python-modules/py-expression-eval { };
 
   py-radix-sr = callPackage ../development/python-modules/py-radix-sr { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nwdiag = callPackage ../development/python-modules/nwdiag { };
 
   oasatelematics = callPackage ../development/python-modules/oasatelematics { };
@@ -7441,10 +8466,13 @@ self: super: with self; {
 
   obspy = callPackage ../development/python-modules/obspy { };
 
+<<<<<<< HEAD
   oca-port = callPackage ../development/python-modules/oca-port { };
 
   ochre = callPackage ../development/python-modules/ochre { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   oci = callPackage ../development/python-modules/oci { };
 
   ocifs = callPackage ../development/python-modules/ocifs { };
@@ -7471,30 +8499,41 @@ self: super: with self; {
 
   oemthermostat = callPackage ../development/python-modules/oemthermostat { };
 
+<<<<<<< HEAD
   okonomiyaki = callPackage ../development/python-modules/okonomiyaki { };
 
   okta = callPackage ../development/python-modules/okta { };
 
   oldest-supported-numpy = callPackage ../development/python-modules/oldest-supported-numpy { };
 
+=======
+  okta = callPackage ../development/python-modules/okta { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   olefile = callPackage ../development/python-modules/olefile { };
 
   oletools = callPackage ../development/python-modules/oletools { };
 
   omegaconf = callPackage ../development/python-modules/omegaconf { };
 
+<<<<<<< HEAD
   omemo-dr = callPackage ../development/python-modules/omemo-dr { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ome-zarr = callPackage ../development/python-modules/ome-zarr { };
 
   omnikinverter = callPackage ../development/python-modules/omnikinverter { };
 
   omnilogic = callPackage ../development/python-modules/omnilogic { };
 
+<<<<<<< HEAD
   omorfi = callPackage ../development/python-modules/omorfi { };
 
   omrdatasettools = callPackage ../development/python-modules/omrdatasettools { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ondilo = callPackage ../development/python-modules/ondilo { };
 
   onetimepass = callPackage ../development/python-modules/onetimepass { };
@@ -7507,6 +8546,7 @@ self: super: with self; {
 
   onlykey-solo-python = callPackage ../development/python-modules/onlykey-solo-python { };
 
+<<<<<<< HEAD
   onnx = callPackage ../development/python-modules/onnx {
     protobuf = protobuf3;
   };
@@ -7516,6 +8556,11 @@ self: super: with self; {
   };
 
   onnxmltools = callPackage ../development/python-modules/onnxmltools { };
+=======
+  onnx = callPackage ../development/python-modules/onnx { };
+
+  onnxconverter-common = callPackage ../development/python-modules/onnxconverter-common { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   onnxruntime = callPackage ../development/python-modules/onnxruntime {
     onnxruntime = pkgs.onnxruntime.override {
@@ -7524,14 +8569,20 @@ self: super: with self; {
     };
   };
 
+<<<<<<< HEAD
   onnxruntime-tools = callPackage ../development/python-modules/onnxruntime-tools { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   onvif-zeep-async = callPackage ../development/python-modules/onvif-zeep-async { };
 
   oocsi = callPackage ../development/python-modules/oocsi { };
 
+<<<<<<< HEAD
   opcua-widgets = callPackage ../development/python-modules/opcua-widgets { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   open-garage = callPackage ../development/python-modules/open-garage { };
 
   open-meteo = callPackage ../development/python-modules/open-meteo { };
@@ -7541,7 +8592,11 @@ self: super: with self; {
   openai-triton-bin = callPackage ../development/python-modules/openai-triton/bin.nix { };
 
   openai-whisper = callPackage ../development/python-modules/openai-whisper {
+<<<<<<< HEAD
     inherit (pkgs.config) cudaSupport;
+=======
+    cudaSupport = pkgs.config.cudaSupport or false;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   openant = callPackage ../development/python-modules/openant { };
@@ -7560,8 +8615,11 @@ self: super: with self; {
 
   opencensus-context = callPackage ../development/python-modules/opencensus-context { };
 
+<<<<<<< HEAD
   opencensus-ext-azure = callPackage ../development/python-modules/opencensus-ext-azure { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   opencontainers = callPackage ../development/python-modules/opencontainers { };
 
   opencv3 = toPythonModule (pkgs.opencv3.override {
@@ -7593,8 +8651,11 @@ self: super: with self; {
 
   openrazer-daemon = callPackage ../development/python-modules/openrazer/daemon.nix { };
 
+<<<<<<< HEAD
   openrgb-python = callPackage ../development/python-modules/openrgb-python { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   openrouteservice = callPackage ../development/python-modules/openrouteservice { };
 
   opensearch-py = callPackage ../development/python-modules/opensearch-py { };
@@ -7613,6 +8674,7 @@ self: super: with self; {
 
   opentimestamps = callPackage ../development/python-modules/opentimestamps { };
 
+<<<<<<< HEAD
   opentelemetry-api = callPackage ../development/python-modules/opentelemetry-api { };
 
   opentelemetry-exporter-otlp = callPackage ../development/python-modules/opentelemetry-exporter-otlp { };
@@ -7647,6 +8709,8 @@ self: super: with self; {
 
   opentelemetry-util-http = callPackage ../development/python-modules/opentelemetry-util-http { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   openturns = toPythonModule (pkgs.openturns.override {
     python3Packages = self;
     enablePython = true;
@@ -7654,8 +8718,11 @@ self: super: with self; {
 
   opentracing = callPackage ../development/python-modules/opentracing { };
 
+<<<<<<< HEAD
   opentsne = callPackage ../development/python-modules/opentsne { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   openvino = callPackage ../development/python-modules/openvino {
     openvino-native = pkgs.openvino.override {
       inherit python;
@@ -7668,16 +8735,22 @@ self: super: with self; {
 
   openwrt-ubus-rpc = callPackage ../development/python-modules/openwrt-ubus-rpc { };
 
+<<<<<<< HEAD
   opower = callPackage ../development/python-modules/opower { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   opsdroid_get_image_size = callPackage ../development/python-modules/opsdroid_get_image_size { };
 
   opt-einsum = callPackage ../development/python-modules/opt-einsum { };
 
   optax = callPackage ../development/python-modules/optax { };
 
+<<<<<<< HEAD
   optimum = callPackage ../development/python-modules/optimum { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   optuna = callPackage ../development/python-modules/optuna { };
 
   opuslib = callPackage ../development/python-modules/opuslib { };
@@ -7688,12 +8761,15 @@ self: super: with self; {
 
   oralb-ble = callPackage ../development/python-modules/oralb-ble { };
 
+<<<<<<< HEAD
   orange3 = callPackage ../development/python-modules/orange3 { };
 
   orange-canvas-core = callPackage ../development/python-modules/orange-canvas-core { };
 
   orange-widget-base = callPackage ../development/python-modules/orange-widget-base { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   orderedmultidict = callPackage ../development/python-modules/orderedmultidict { };
 
   ordered-set = callPackage ../development/python-modules/ordered-set { };
@@ -7786,8 +8862,11 @@ self: super: with self; {
 
   pallets-sphinx-themes = callPackage ../development/python-modules/pallets-sphinx-themes { };
 
+<<<<<<< HEAD
   python_docs_theme = callPackage ../development/python-modules/python_docs_theme { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pamela = callPackage ../development/python-modules/pamela { };
 
   pamqp = callPackage ../development/python-modules/pamqp { };
@@ -7796,9 +8875,13 @@ self: super: with self; {
 
   panasonic-viera = callPackage ../development/python-modules/panasonic-viera { };
 
+<<<<<<< HEAD
   pandas = callPackage ../development/python-modules/pandas {
     inherit (pkgs.darwin) adv_cmds;
   };
+=======
+  pandas = callPackage ../development/python-modules/pandas { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   pandas-datareader = callPackage ../development/python-modules/pandas-datareader { };
 
@@ -7823,8 +8906,11 @@ self: super: with self; {
 
   papis-python-rofi = callPackage ../development/python-modules/papis-python-rofi { };
 
+<<<<<<< HEAD
   para = callPackage ../development/python-modules/para { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   param = callPackage ../development/python-modules/param { };
 
   parameter-expansion-patched = callPackage ../development/python-modules/parameter-expansion-patched { };
@@ -7934,17 +9020,24 @@ self: super: with self; {
 
   pcpp = callPackage ../development/python-modules/pcpp { };
 
+<<<<<<< HEAD
   pdb2pqr = callPackage ../development/python-modules/pdb2pqr { };
 
   pdf2docx = callPackage ../development/python-modules/pdf2docx { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pdf2image = callPackage ../development/python-modules/pdf2image { };
 
   pdfkit = callPackage ../development/python-modules/pdfkit { };
 
   pdfminer-six = callPackage ../development/python-modules/pdfminer-six { };
 
+<<<<<<< HEAD
   pdfplumber = callPackage ../development/python-modules/pdfplumber { };
+=======
+  pdfposter = callPackage ../development/python-modules/pdfposter { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   pdfrw = callPackage ../development/python-modules/pdfrw { };
 
@@ -7982,8 +9075,11 @@ self: super: with self; {
     inherit (pkgs) glibcLocales git;
   };
 
+<<<<<<< HEAD
   pem = callPackage ../development/python-modules/pem { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pendulum = callPackage ../development/python-modules/pendulum { };
 
   pep440 = callPackage ../development/python-modules/pep440 { };
@@ -8020,10 +9116,13 @@ self: super: with self; {
 
   pexpect = callPackage ../development/python-modules/pexpect { };
 
+<<<<<<< HEAD
   pfzy = callPackage ../development/python-modules/pfzy { };
 
   ping3 = callPackage ../development/python-modules/ping3 { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pg8000 = callPackage ../development/python-modules/pg8000 { };
 
   pgcli = callPackage ../development/python-modules/pgcli { };
@@ -8038,8 +9137,11 @@ self: super: with self; {
 
   pgspecial = callPackage ../development/python-modules/pgspecial { };
 
+<<<<<<< HEAD
   pgvector = callPackage ../development/python-modules/pgvector { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   phe = callPackage ../development/python-modules/phe { };
 
   phik = callPackage ../development/python-modules/phik { };
@@ -8048,6 +9150,7 @@ self: super: with self; {
 
   phonenumbers = callPackage ../development/python-modules/phonenumbers { };
 
+<<<<<<< HEAD
   pkgutil-resolve-name = callPackage ../development/python-modules/pkgutil-resolve-name { };
 
   pkg-about = callPackage ../development/python-modules/pkg-about { };
@@ -8056,6 +9159,10 @@ self: super: with self; {
 
   mqtt2influxdb = callPackage ../development/python-modules/mqtt2influxdb { };
 
+=======
+  micloud = callPackage ../development/python-modules/micloud { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   msgraph-core = callPackage ../development/python-modules/msgraph-core { };
 
   multipart = callPackage ../development/python-modules/multipart { };
@@ -8082,8 +9189,11 @@ self: super: with self; {
 
   pencompy = callPackage ../development/python-modules/pencompy { };
 
+<<<<<<< HEAD
   pgmpy = callPackage ../development/python-modules/pgmpy { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   phonopy = callPackage ../development/python-modules/phonopy { };
 
   pixcat = callPackage ../development/python-modules/pixcat { };
@@ -8120,8 +9230,11 @@ self: super: with self; {
 
   picos = callPackage ../development/python-modules/picos { };
 
+<<<<<<< HEAD
   picosvg = callPackage ../development/python-modules/picosvg { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   piccolo-theme = callPackage ../development/python-modules/piccolo-theme { };
 
   pid = callPackage ../development/python-modules/pid { };
@@ -8173,11 +9286,14 @@ self: super: with self; {
 
   pipenv-poetry-migrate = callPackage ../development/python-modules/pipenv-poetry-migrate { };
 
+<<<<<<< HEAD
   piper-phonemize = callPackage ../development/python-modules/piper-phonemize {
     onnxruntime-native = pkgs.onnxruntime;
     piper-phonemize-native = pkgs.piper-phonemize;
   };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pip-api = callPackage ../development/python-modules/pip-api { };
 
   pip-tools = callPackage ../development/python-modules/pip-tools { };
@@ -8216,6 +9332,7 @@ self: super: with self; {
 
   prodict = callPackage ../development/python-modules/prodict { };
 
+<<<<<<< HEAD
   prophet = callPackage ../development/python-modules/prophet { };
 
   propka = callPackage ../development/python-modules/propka { };
@@ -8228,6 +9345,12 @@ self: super: with self; {
 
   py65 = callPackage ../development/python-modules/py65 { };
 
+=======
+  proxy_tools = callPackage ../development/python-modules/proxy_tools { };
+
+  py-nextbusnext = callPackage ../development/python-modules/py-nextbusnext { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pyaehw4a1 = callPackage ../development/python-modules/pyaehw4a1 { };
 
   pyatag = callPackage ../development/python-modules/pyatag { };
@@ -8238,8 +9361,11 @@ self: super: with self; {
 
   pycontrol4 = callPackage ../development/python-modules/pycontrol4 { };
 
+<<<<<<< HEAD
   pycookiecheat = callPackage ../development/python-modules/pycookiecheat { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pycoolmasternet-async = callPackage ../development/python-modules/pycoolmasternet-async { };
 
   pyfibaro = callPackage ../development/python-modules/pyfibaro { };
@@ -8250,12 +9376,16 @@ self: super: with self; {
 
   pyflick = callPackage ../development/python-modules/pyflick { };
 
+<<<<<<< HEAD
   pyfluidsynth = callPackage ../development/python-modules/pyfluidsynth { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pyfreedompro = callPackage ../development/python-modules/pyfreedompro { };
 
   pygments-style-github = callPackage ../development/python-modules/pygments-style-github { };
 
+<<<<<<< HEAD
   pygnmi = callPackage ../development/python-modules/pygnmi { };
 
   pygti = callPackage ../development/python-modules/pygti { };
@@ -8266,12 +9396,21 @@ self: super: with self; {
 
   pyhepmc = callPackage ../development/python-modules/pyhepmc { };
 
+=======
+  pygti = callPackage ../development/python-modules/pygti { };
+
+  pyheos = callPackage ../development/python-modules/pyheos { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pyhiveapi = callPackage ../development/python-modules/pyhiveapi { };
 
   pyhumps = callPackage ../development/python-modules/pyhumps { };
 
+<<<<<<< HEAD
   pyinstaller-versionfile = callPackage ../development/python-modules/pyinstaller-versionfile { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pyisy = callPackage ../development/python-modules/pyisy { };
 
   pykrakenapi = callPackage ../development/python-modules/pykrakenapi { };
@@ -8306,8 +9445,11 @@ self: super: with self; {
 
   pyrdfa3 = callPackage ../development/python-modules/pyrdfa3 { };
 
+<<<<<<< HEAD
   pyre-extensions = callPackage ../development/python-modules/pyre-extensions { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pyrevolve = callPackage ../development/python-modules/pyrevolve { };
 
   pyrfxtrx = callPackage ../development/python-modules/pyrfxtrx { };
@@ -8318,36 +9460,50 @@ self: super: with self; {
 
   pysbd = callPackage ../development/python-modules/pysbd { };
 
+<<<<<<< HEAD
   pysequoia = callPackage ../development/python-modules/pysequoia { };
 
   pyschemes = callPackage ../development/python-modules/pyschemes { };
 
   pyschlage = callPackage ../development/python-modules/pyschlage { };
 
+=======
+  pyschemes = callPackage ../development/python-modules/pyschemes { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pyshark = callPackage ../development/python-modules/pyshark { };
 
   pysiaalarm = callPackage ../development/python-modules/pysiaalarm { };
 
+<<<<<<< HEAD
   pysimplesoap = callPackage ../development/python-modules/pysimplesoap { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pyskyqhub = callPackage ../development/python-modules/pyskyqhub { };
 
   pyskyqremote = callPackage ../development/python-modules/pyskyqremote { };
 
   pysolcast = callPackage ../development/python-modules/pysolcast { };
 
+<<<<<<< HEAD
   pysubs2 = callPackage ../development/python-modules/pysubs2 { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pysqlitecipher = callPackage ../development/python-modules/pysqlitecipher { };
 
   pysyncthru = callPackage ../development/python-modules/pysyncthru { };
 
   pytest-mockito = callPackage ../development/python-modules/pytest-mockito { };
 
+<<<<<<< HEAD
   pytest-pudb = callPackage ../development/python-modules/pytest-pudb { };
 
   pytlv = callPackage ../development/python-modules/pytlv { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   python-codon-tables = callPackage ../development/python-modules/python-codon-tables { };
 
   python-creole = callPackage ../development/python-modules/python-creole { };
@@ -8372,8 +9528,11 @@ self: super: with self; {
 
   python-ipmi = callPackage ../development/python-modules/python-ipmi { };
 
+<<<<<<< HEAD
   python-ipware = callPackage ../development/python-modules/python-ipware { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   python-ironicclient = callPackage ../development/python-modules/python-ironicclient { };
 
   python-izone = callPackage ../development/python-modules/python-izone { };
@@ -8394,8 +9553,11 @@ self: super: with self; {
 
   python-openems = callPackage ../development/python-modules/python-openems { };
 
+<<<<<<< HEAD
   python-opensky = callPackage ../development/python-modules/python-opensky { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   python-openzwave-mqtt = callPackage ../development/python-modules/python-openzwave-mqtt { };
 
   python-owasp-zap-v2-4 = callPackage ../development/python-modules/python-owasp-zap-v2-4 { };
@@ -8414,14 +9576,20 @@ self: super: with self; {
 
   pyuca = callPackage ../development/python-modules/pyuca { };
 
+<<<<<<< HEAD
   pyunpack = callPackage ../development/python-modules/pyunpack { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pyutil = callPackage ../development/python-modules/pyutil { };
 
   pyzbar = callPackage ../development/python-modules/pyzbar { };
 
+<<<<<<< HEAD
   pyzipper = callPackage ../development/python-modules/pyzipper { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pkutils = callPackage ../development/python-modules/pkutils { };
 
   plac = callPackage ../development/python-modules/plac { };
@@ -8502,6 +9670,11 @@ self: super: with self; {
 
   poetry-dynamic-versioning = callPackage ../development/python-modules/poetry-dynamic-versioning { };
 
+<<<<<<< HEAD
+=======
+  poetry-plugin-export = callPackage ../development/python-modules/poetry-plugin-export { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   poetry-semver = callPackage ../development/python-modules/poetry-semver { };
 
   poezio = callPackage ../applications/networking/instant-messengers/poezio { };
@@ -8518,8 +9691,11 @@ self: super: with self; {
 
   polyline = callPackage ../development/python-modules/polyline { };
 
+<<<<<<< HEAD
   polygon3 = callPackage ../development/python-modules/polygon3 { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pomegranate = callPackage ../development/python-modules/pomegranate { };
 
   pontos = callPackage ../development/python-modules/pontos { };
@@ -8547,8 +9723,11 @@ self: super: with self; {
 
   posix_ipc = callPackage ../development/python-modules/posix_ipc { };
 
+<<<<<<< HEAD
   posthog = callPackage ../development/python-modules/posthog { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pot = callPackage ../development/python-modules/pot { };
 
   potentials = callPackage ../development/python-modules/potentials { };
@@ -8617,8 +9796,11 @@ self: super: with self; {
 
   process-tests = callPackage ../development/python-modules/process-tests { };
 
+<<<<<<< HEAD
   procmon-parser = callPackage ../development/python-modules/procmon-parser { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   proglog = callPackage ../development/python-modules/proglog { };
 
   progressbar2 = callPackage ../development/python-modules/progressbar2 { };
@@ -8637,8 +9819,11 @@ self: super: with self; {
 
   prompt-toolkit = callPackage ../development/python-modules/prompt-toolkit { };
 
+<<<<<<< HEAD
   prompthub-py = callPackage ../development/python-modules/prompthub-py { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   property-manager = callPackage ../development/python-modules/property-manager { };
 
   protego = callPackage ../development/python-modules/protego { };
@@ -8716,8 +9901,11 @@ self: super: with self; {
 
   pulp = callPackage ../development/python-modules/pulp { };
 
+<<<<<<< HEAD
   pulsectl-asyncio = callPackage ../development/python-modules/pulsectl-asyncio { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pulsectl = callPackage ../development/python-modules/pulsectl { };
 
   pure-cdb = callPackage ../development/python-modules/pure-cdb { };
@@ -8768,10 +9956,13 @@ self: super: with self; {
 
   py-nightscout = callPackage ../development/python-modules/py-nightscout { };
 
+<<<<<<< HEAD
   py-partiql-parser = callPackage ../development/python-modules/py-partiql-parser { };
 
   py-pdf-parser = callPackage ../development/python-modules/py-pdf-parser { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   py-serializable = callPackage ../development/python-modules/py-serializable { };
 
   py-synologydsm-api = callPackage ../development/python-modules/py-synologydsm-api { };
@@ -8796,8 +9987,11 @@ self: super: with self; {
 
   py3exiv2 = callPackage ../development/python-modules/py3exiv2 { };
 
+<<<<<<< HEAD
   py3nvml = callPackage ../development/python-modules/py3nvml { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   py3rijndael = callPackage ../development/python-modules/py3rijndael { };
 
   py3status = callPackage ../development/python-modules/py3status { };
@@ -8874,14 +10068,22 @@ self: super: with self; {
 
   pyblackbird = callPackage ../development/python-modules/pyblackbird { };
 
+<<<<<<< HEAD
+=======
+  pyblock = toPythonModule (callPackage ../development/python-modules/pyblock { });
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pybluez = callPackage ../development/python-modules/pybluez {
     inherit (pkgs) bluez;
   };
 
   pybotvac = callPackage ../development/python-modules/pybotvac { };
 
+<<<<<<< HEAD
   pybox2d = callPackage ../development/python-modules/pybox2d { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pybravia = callPackage ../development/python-modules/pybravia { };
 
   pybrowserid = callPackage ../development/python-modules/pybrowserid { };
@@ -8972,8 +10174,11 @@ self: super: with self; {
 
   py-cpuinfo = callPackage ../development/python-modules/py-cpuinfo { };
 
+<<<<<<< HEAD
   pycardano = callPackage ../development/python-modules/pycardano { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pycrc = callPackage ../development/python-modules/pycrc { };
 
   pycritty = callPackage ../development/python-modules/pycritty { };
@@ -9010,8 +10215,11 @@ self: super: with self; {
 
   pydantic = callPackage ../development/python-modules/pydantic { };
 
+<<<<<<< HEAD
   pydantic-core = callPackage ../development/python-modules/pydantic-core { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pydantic-scim = callPackage ../development/python-modules/pydantic-scim { };
 
   pydash = callPackage ../development/python-modules/pydash { };
@@ -9052,10 +10260,13 @@ self: super: with self; {
 
   pydigiham = callPackage ../development/python-modules/pydigiham { };
 
+<<<<<<< HEAD
   pydiscourse = callPackage ../development/python-modules/pydiscourse { };
 
   pydiscovergy = callPackage ../development/python-modules/pydiscovergy { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pydispatcher = callPackage ../development/python-modules/pydispatcher { };
 
   pydmd = callPackage ../development/python-modules/pydmd { };
@@ -9072,8 +10283,11 @@ self: super: with self; {
     inherit (pkgs) graphviz;
   };
 
+<<<<<<< HEAD
   pydrawise = callPackage ../development/python-modules/pydrawise { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pydrive2 = callPackage ../development/python-modules/pydrive2 { };
 
   pydroid-ipcam = callPackage ../development/python-modules/pydroid-ipcam  { };
@@ -9086,8 +10300,11 @@ self: super: with self; {
 
   pyduke-energy = callPackage ../development/python-modules/pyduke-energy { };
 
+<<<<<<< HEAD
   pyduotecno = callPackage ../development/python-modules/pyduotecno { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pydy = callPackage ../development/python-modules/pydy { };
 
   pydyf = callPackage ../development/python-modules/pydyf { };
@@ -9120,8 +10337,11 @@ self: super: with self; {
     inherit (pkgs) enchant2;
   };
 
+<<<<<<< HEAD
   pyenphase = callPackage ../development/python-modules/pyenphase { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pyenvisalink = callPackage ../development/python-modules/pyenvisalink { };
 
   pyephember = callPackage ../development/python-modules/pyephember { };
@@ -9211,6 +10431,11 @@ self: super: with self; {
 
   pygatt = callPackage ../development/python-modules/pygatt { };
 
+<<<<<<< HEAD
+=======
+  pygbm = callPackage ../development/python-modules/pygbm { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pygccxml = callPackage ../development/python-modules/pygccxml { };
 
   pygdbmi = callPackage ../development/python-modules/pygdbmi { };
@@ -9223,14 +10448,20 @@ self: super: with self; {
 
   pygit2 = callPackage ../development/python-modules/pygit2 { };
 
+<<<<<<< HEAD
   pygitguardian = callPackage ../development/python-modules/pygitguardian { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pygithub = callPackage ../development/python-modules/pygithub { };
 
   pyglet = callPackage ../development/python-modules/pyglet { };
 
+<<<<<<< HEAD
   pyglm = callPackage ../development/python-modules/pyglm { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pygls = callPackage ../development/python-modules/pygls { };
 
   pygmars = callPackage ../development/python-modules/pygmars { };
@@ -9250,8 +10481,11 @@ self: super: with self; {
     inherit (pkgs.buildPackages) meson;
   };
 
+<<<<<<< HEAD
   pygobject-stubs = callPackage ../development/python-modules/pygobject-stubs { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pygogo = callPackage ../development/python-modules/pygogo { };
 
   pygpgme = callPackage ../development/python-modules/pygpgme { };
@@ -9264,10 +10498,13 @@ self: super: with self; {
 
   pygrok = callPackage ../development/python-modules/pygrok { };
 
+<<<<<<< HEAD
   pygsl = callPackage ../development/python-modules/pygsl {
     inherit (pkgs) gsl swig;
   };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pygtfs = callPackage ../development/python-modules/pygtfs { };
 
   pygtail = callPackage ../development/python-modules/pygtail { };
@@ -9386,8 +10623,11 @@ self: super: with self; {
 
   pyld = callPackage ../development/python-modules/pyld { };
 
+<<<<<<< HEAD
   pyleri = callPackage ../development/python-modules/pyleri { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pylev = callPackage ../development/python-modules/pylev { };
 
   pylgnetcast = callPackage ../development/python-modules/pylgnetcast { };
@@ -9422,8 +10662,11 @@ self: super: with self; {
 
   pylint-venv = callPackage ../development/python-modules/pylint-venv { };
 
+<<<<<<< HEAD
   pylion = callPackage ../development/python-modules/pylion { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pylitterbot = callPackage ../development/python-modules/pylitterbot { };
 
   py-libzfs = callPackage ../development/python-modules/py-libzfs { };
@@ -9440,14 +10683,20 @@ self: super: with self; {
 
   pyls-isort = callPackage ../development/python-modules/pyls-isort { };
 
+<<<<<<< HEAD
   pyls-memestra = callPackage ../development/python-modules/pyls-memestra { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pyls-spyder = callPackage ../development/python-modules/pyls-spyder { };
 
   pylsp-mypy = callPackage ../development/python-modules/pylsp-mypy { };
 
+<<<<<<< HEAD
   pylsp-rope = callPackage ../development/python-modules/pylsp-rope { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pylpsd = callPackage ../development/python-modules/pylpsd { };
 
   pylti = callPackage ../development/python-modules/pylti { };
@@ -9478,7 +10727,11 @@ self: super: with self; {
 
   pymatgen = callPackage ../development/python-modules/pymatgen { };
 
+<<<<<<< HEAD
   pymatting = callPackage ../development/python-modules/pymatting { };
+=======
+  pymatgen-lammps = callPackage ../development/python-modules/pymatgen-lammps { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   pymaven-patch = callPackage ../development/python-modules/pymaven-patch { };
 
@@ -9614,8 +10867,11 @@ self: super: with self; {
 
   pynvim = callPackage ../development/python-modules/pynvim { };
 
+<<<<<<< HEAD
   pynvim-pp = callPackage ../development/python-modules/pynvim-pp { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pynvml = callPackage ../development/python-modules/pynvml { };
 
   pynzb = callPackage ../development/python-modules/pynzb { };
@@ -9707,16 +10963,22 @@ self: super: with self; {
 
   pyperclip = callPackage ../development/python-modules/pyperclip { };
 
+<<<<<<< HEAD
   pyperscan = callPackage ../development/python-modules/pyperscan { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pyperf = callPackage ../development/python-modules/pyperf { };
 
   pyphen = callPackage ../development/python-modules/pyphen { };
 
   pyphotonfile = callPackage ../development/python-modules/pyphotonfile { };
 
+<<<<<<< HEAD
   pypika = callPackage ../development/python-modules/pypika { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pypillowfight = callPackage ../development/python-modules/pypillowfight { };
 
   pypinyin = callPackage ../development/python-modules/pypinyin { };
@@ -9761,6 +11023,11 @@ self: super: with self; {
 
   pyqt-builder = callPackage ../development/python-modules/pyqt-builder { };
 
+<<<<<<< HEAD
+=======
+  pyqt4 = callPackage ../development/python-modules/pyqt/4.x.nix { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pyqt5 = callPackage ../development/python-modules/pyqt/5.x.nix { };
 
   pyqt5_sip = callPackage ../development/python-modules/pyqt/sip.nix { };
@@ -9786,6 +11053,7 @@ self: super: with self; {
 
   pyqt6-webengine = callPackage ../development/python-modules/pyqt6-webengine.nix { };
 
+<<<<<<< HEAD
   pyqt3d = pkgs.libsForQt5.callPackage ../development/python-modules/pyqt3d {
     inherit (self) buildPythonPackage pyqt5 pyqt-builder python pythonOlder
       setuptools sip;
@@ -9801,6 +11069,8 @@ self: super: with self; {
       setuptools sip;
   };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pyqtgraph = callPackage ../development/python-modules/pyqtgraph { };
 
   pyqtwebengine = pkgs.libsForQt5.callPackage ../development/python-modules/pyqtwebengine {
@@ -9821,10 +11091,17 @@ self: super: with self; {
 
   pyrad = callPackage ../development/python-modules/pyrad { };
 
+<<<<<<< HEAD
   pyradiomics = callPackage ../development/python-modules/pyradiomics { };
 
   pyradios = callPackage ../development/python-modules/pyradios { };
 
+=======
+  pyradios = callPackage ../development/python-modules/pyradios { };
+
+  py-radix = callPackage ../development/python-modules/py-radix { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pyrainbird = callPackage ../development/python-modules/pyrainbird { };
 
   pyramid_beaker = callPackage ../development/python-modules/pyramid_beaker { };
@@ -9835,16 +11112,23 @@ self: super: with self; {
 
   pyramid_exclog = callPackage ../development/python-modules/pyramid_exclog { };
 
+<<<<<<< HEAD
   pyramid-jinja2 = callPackage ../development/python-modules/pyramid-jinja2 { };
+=======
+  pyramid_jinja2 = callPackage ../development/python-modules/pyramid_jinja2 { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   pyramid_mako = callPackage ../development/python-modules/pyramid_mako { };
 
   pyramid_multiauth = callPackage ../development/python-modules/pyramid_multiauth { };
 
+<<<<<<< HEAD
   pyrate-limiter = callPackage ../development/python-modules/pyrate-limiter { };
 
   pyreaderwriterlock = callPackage ../development/python-modules/pyreaderwriterlock { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pyreadstat = callPackage ../development/python-modules/pyreadstat {
     inherit (pkgs.darwin) libiconv;
   };
@@ -9869,6 +11153,11 @@ self: super: with self; {
 
   pyregion = callPackage ../development/python-modules/pyregion { };
 
+<<<<<<< HEAD
+=======
+  pyres = callPackage ../development/python-modules/pyres { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pyric = callPackage ../development/python-modules/pyric { };
 
   pyrisco = callPackage ../development/python-modules/pyrisco { };
@@ -9899,6 +11188,11 @@ self: super: with self; {
 
   pyrtlsdr = callPackage ../development/python-modules/pyrtlsdr { };
 
+<<<<<<< HEAD
+=======
+  pyruckus = callPackage ../development/python-modules/pyruckus { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pysaj = callPackage ../development/python-modules/pysaj { };
 
   pysam = callPackage ../development/python-modules/pysam { };
@@ -9951,6 +11245,11 @@ self: super: with self; {
 
   pysftp = callPackage ../development/python-modules/pysftp { };
 
+<<<<<<< HEAD
+=======
+  pysha3 = callPackage ../development/python-modules/pysha3 { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pyshp = callPackage ../development/python-modules/pyshp { };
 
   pyside2-tools = toPythonModule (callPackage ../development/python-modules/pyside2-tools {
@@ -9962,9 +11261,25 @@ self: super: with self; {
   });
 
   pyside6 = toPythonModule (callPackage ../development/python-modules/pyside6 {
+<<<<<<< HEAD
     inherit (pkgs) cmake ninja;
   });
 
+=======
+    inherit (pkgs) cmake ninja qt6;
+  });
+
+  pyside = callPackage ../development/python-modules/pyside {
+    inherit (pkgs) mesa;
+  };
+
+  pysideShiboken = callPackage ../development/python-modules/pyside/shiboken.nix {
+    inherit (pkgs) libxml2 libxslt;
+  };
+
+  pysideTools = callPackage ../development/python-modules/pyside/tools.nix { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pysigma = callPackage ../development/python-modules/pysigma { };
 
   pysigma-backend-elasticsearch = callPackage ../development/python-modules/pysigma-backend-elasticsearch { };
@@ -9987,14 +11302,20 @@ self: super: with self; {
 
   pysigset = callPackage ../development/python-modules/pysigset { };
 
+<<<<<<< HEAD
   pysim = callPackage ../development/python-modules/pysim { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pysimplegui = callPackage ../development/python-modules/pysimplegui { };
 
   pysingleton = callPackage ../development/python-modules/pysingleton { };
 
+<<<<<<< HEAD
   pyslim = callPackage ../development/python-modules/pyslim { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pyslurm = callPackage ../development/python-modules/pyslurm {
     inherit (pkgs) slurm;
   };
@@ -10083,8 +11404,11 @@ self: super: with self; {
 
   pystache = callPackage ../development/python-modules/pystache { };
 
+<<<<<<< HEAD
   pystardict = callPackage ../development/python-modules/pystardict { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pystemd = callPackage ../development/python-modules/pystemd {
     inherit (pkgs) systemd;
   };
@@ -10202,8 +11526,11 @@ self: super: with self; {
 
   pytest-error-for-skips = callPackage ../development/python-modules/pytest-error-for-skips { };
 
+<<<<<<< HEAD
   pytest-examples = callPackage ../development/python-modules/pytest-examples { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pytest-expect = callPackage ../development/python-modules/pytest-expect { };
 
   pytest-factoryboy = callPackage ../development/python-modules/pytest-factoryboy { };
@@ -10226,8 +11553,11 @@ self: super: with self; {
 
   pytest-golden = callPackage ../development/python-modules/pytest-golden { };
 
+<<<<<<< HEAD
   pytest-grpc = callPackage ../development/python-modules/pytest-grpc { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pytest-helpers-namespace = callPackage ../development/python-modules/pytest-helpers-namespace { };
 
   pytest-html = callPackage ../development/python-modules/pytest-html { };
@@ -10238,8 +11568,11 @@ self: super: with self; {
 
   pytest-httpx = callPackage ../development/python-modules/pytest-httpx { };
 
+<<<<<<< HEAD
   pytest-image-diff = callPackage ../development/python-modules/pytest-image-diff { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pytest-instafail = callPackage ../development/python-modules/pytest-instafail { };
 
   pytest-isort = callPackage ../development/python-modules/pytest-isort { };
@@ -10272,9 +11605,15 @@ self: super: with self; {
 
   pytest-order = callPackage ../development/python-modules/pytest-order { };
 
+<<<<<<< HEAD
   pytest-param-files = callPackage ../development/python-modules/pytest-param-files { };
 
   pytest-parallel = callPackage ../development/python-modules/pytest-parallel { };
+=======
+  pytest-ordering = callPackage ../development/python-modules/pytest-ordering { };
+
+  pytest-param-files = callPackage ../development/python-modules/pytest-param-files { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   pytest-playwright = callPackage ../development/python-modules/pytest-playwright {};
 
@@ -10314,6 +11653,13 @@ self: super: with self; {
 
   pytest-runner = callPackage ../development/python-modules/pytest-runner { };
 
+<<<<<<< HEAD
+=======
+  pytest-sanic = callPackage ../development/python-modules/pytest-sanic {
+    sanic = self.sanic.override { doCheck = false; };
+  };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pytest-server-fixtures = callPackage ../development/python-modules/pytest-server-fixtures { };
 
   pytest-services = callPackage ../development/python-modules/pytest-services { };
@@ -10340,8 +11686,11 @@ self: super: with self; {
 
   pytest-test-utils = callPackage ../development/python-modules/pytest-test-utils { };
 
+<<<<<<< HEAD
   pytest-testinfra = callPackage ../development/python-modules/pytest-testinfra { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pytest-testmon = callPackage ../development/python-modules/pytest-testmon { };
 
   pytest-timeout = callPackage ../development/python-modules/pytest-timeout { };
@@ -10360,8 +11709,11 @@ self: super: with self; {
 
   pytest-virtualenv = callPackage ../development/python-modules/pytest-virtualenv { };
 
+<<<<<<< HEAD
   pytest-voluptuous = callPackage ../development/python-modules/pytest-voluptuous { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pytest-warnings = callPackage ../development/python-modules/pytest-warnings { };
 
   pytest-watch = callPackage ../development/python-modules/pytest-watch { };
@@ -10448,8 +11800,11 @@ self: super: with self; {
 
   python-ethtool = callPackage ../development/python-modules/python-ethtool { };
 
+<<<<<<< HEAD
   python-ev3dev2 = callPackage ../development/python-modules/python-ev3dev2 { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   python_fedora = callPackage ../development/python-modules/python_fedora { };
 
   python-fontconfig = callPackage ../development/python-modules/python-fontconfig { };
@@ -10489,14 +11844,22 @@ self: super: with self; {
 
   python-jsonrpc-server = callPackage ../development/python-modules/python-jsonrpc-server { };
 
+<<<<<<< HEAD
+=======
+  python_keyczar = callPackage ../development/python-modules/python_keyczar { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   python-ldap = callPackage ../development/python-modules/python-ldap {
     inherit (pkgs) openldap cyrus_sasl;
   };
 
   python-ldap-test = callPackage ../development/python-modules/python-ldap-test { };
 
+<<<<<<< HEAD
   python-libnmap = callPackage ../development/python-modules/python-libnmap { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   python-linux-procfs = callPackage ../development/python-modules/python-linux-procfs { };
 
   python-logstash = callPackage ../development/python-modules/python-logstash { };
@@ -10523,7 +11886,11 @@ self: super: with self; {
 
   python-mapnik = callPackage ../development/python-modules/python-mapnik rec {
     inherit (pkgs) pkg-config cairo icu libjpeg libpng libtiff libwebp proj zlib;
+<<<<<<< HEAD
     boost182 = pkgs.boost182.override {
+=======
+    boost = pkgs.boost.override {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       enablePython = true;
       inherit python;
     };
@@ -10555,7 +11922,15 @@ self: super: with self; {
 
   python-nest = callPackage ../development/python-modules/python-nest { };
 
+<<<<<<< HEAD
   pythonnet = callPackage ../development/python-modules/pythonnet { };
+=======
+  pythonnet = callPackage
+    ../development/python-modules/pythonnet {
+      # Using `mono > 5`, tests are failing..
+      mono = pkgs.mono5;
+    };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   python-nmap = callPackage ../development/python-modules/python-nmap { };
 
@@ -10603,6 +11978,11 @@ self: super: with self; {
 
   python-ptrace = callPackage ../development/python-modules/python-ptrace { };
 
+<<<<<<< HEAD
+=======
+  python-pushover = callPackage ../development/python-modules/pushover { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   python-rapidjson = callPackage ../development/python-modules/python-rapidjson { };
 
   python-rabbitair = callPackage ../development/python-modules/python-rabbitair { };
@@ -10614,7 +11994,11 @@ self: super: with self; {
   python-roborock = callPackage ../development/python-modules/python-roborock { };
 
   python-rtmidi = callPackage ../development/python-modules/python-rtmidi {
+<<<<<<< HEAD
     inherit (pkgs.darwin.apple_sdk.frameworks) CoreAudio CoreMIDI CoreServices Foundation;
+=======
+    inherit (pkgs.darwin.apple_sdk.frameworks) CoreAudio CoreMIDI CoreServices;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   python-sat = callPackage ../development/python-modules/python-sat { };
@@ -10697,8 +12081,11 @@ self: super: with self; {
 
   pytimeparse = callPackage ../development/python-modules/pytimeparse { };
 
+<<<<<<< HEAD
   pytimeparse2 = callPackage ../development/python-modules/pytimeparse2 { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pytm = callPackage ../development/python-modules/pytm { };
 
   pytmx = callPackage ../development/python-modules/pytmx { };
@@ -10788,6 +12175,11 @@ self: super: with self; {
 
   pyvcd = callPackage ../development/python-modules/pyvcd { };
 
+<<<<<<< HEAD
+=======
+  pyvcf = callPackage ../development/python-modules/pyvcf { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pyvera = callPackage ../development/python-modules/pyvera { };
 
   pyverilog = callPackage ../development/python-modules/pyverilog { };
@@ -10808,8 +12200,11 @@ self: super: with self; {
 
   pyvisa-py = callPackage ../development/python-modules/pyvisa-py { };
 
+<<<<<<< HEAD
   pyvisa-sim = callPackage ../development/python-modules/pyvisa-sim { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pyvista = callPackage ../development/python-modules/pyvista { };
 
   pyviz-comms = callPackage ../development/python-modules/pyviz-comms { };
@@ -10840,8 +12235,11 @@ self: super: with self; {
 
   pywayland = callPackage ../development/python-modules/pywayland { };
 
+<<<<<<< HEAD
   pywaze = callPackage ../development/python-modules/pywaze { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pywbem = callPackage ../development/python-modules/pywbem {
     inherit (pkgs) libxml2;
   };
@@ -10856,22 +12254,34 @@ self: super: with self; {
 
   pywerview = callPackage ../development/python-modules/pywerview { };
 
+<<<<<<< HEAD
+=======
+  pywick = callPackage ../development/python-modules/pywick { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pywilight = callPackage ../development/python-modules/pywilight { };
 
   pywinrm = callPackage ../development/python-modules/pywinrm { };
 
   pywizlight = callPackage ../development/python-modules/pywizlight { };
 
+<<<<<<< HEAD
   pywlroots = callPackage ../development/python-modules/pywlroots {
     wlroots = pkgs.wlroots_0_15;
   };
+=======
+  pywlroots = callPackage ../development/python-modules/pywlroots { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   pyws66i = callPackage ../development/python-modules/pyws66i { };
 
   pyxattr = callPackage ../development/python-modules/pyxattr { };
 
+<<<<<<< HEAD
   pyxlsb = callPackage ../development/python-modules/pyxlsb { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pyworld = callPackage ../development/python-modules/pyworld { };
 
   pyx = callPackage ../development/python-modules/pyx { };
@@ -10902,20 +12312,26 @@ self: super: with self; {
 
   pyzufall = callPackage ../development/python-modules/pyzufall { };
 
+<<<<<<< HEAD
   qbittorrent-api = callPackage ../development/python-modules/qbittorrent-api { };
 
   qasync = callPackage ../development/python-modules/qasync { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   qcelemental = callPackage ../development/python-modules/qcelemental { };
 
   qcengine = callPackage ../development/python-modules/qcengine { };
 
+<<<<<<< HEAD
   qcodes = callPackage ../development/python-modules/qcodes { };
 
   qcodes-contrib-drivers = callPackage ../development/python-modules/qcodes-contrib-drivers { };
 
   qcodes-loop = callPackage ../development/python-modules/qcodes-loop { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   qcs-api-client = callPackage ../development/python-modules/qcs-api-client { };
 
   qdarkstyle = callPackage ../development/python-modules/qdarkstyle { };
@@ -10926,8 +12342,11 @@ self: super: with self; {
 
   qds_sdk = callPackage ../development/python-modules/qds_sdk { };
 
+<<<<<<< HEAD
   qgrid = callPackage ../development/python-modules/qgrid { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   qiling = callPackage ../development/python-modules/qiling { };
 
   qimage2ndarray = callPackage ../development/python-modules/qimage2ndarray { };
@@ -10958,12 +12377,20 @@ self: super: with self; {
 
   qpageview = callPackage ../development/python-modules/qpageview { };
 
+<<<<<<< HEAD
   qpsolvers = callPackage ../development/python-modules/qpsolvers { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   qrcode = callPackage ../development/python-modules/qrcode { };
 
   qreactor = callPackage ../development/python-modules/qreactor { };
 
+<<<<<<< HEAD
+=======
+  qscintilla-qt4 = callPackage ../development/python-modules/qscintilla-qt4 { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   qscintilla-qt5 = pkgs.libsForQt5.callPackage ../development/python-modules/qscintilla-qt5 {
     pythonPackages = self;
   };
@@ -10974,17 +12401,23 @@ self: super: with self; {
 
   qt5reactor = callPackage ../development/python-modules/qt5reactor { };
 
+<<<<<<< HEAD
   qt6 = pkgs.qt6.override {
     python3 = self.python;
   };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   qtawesome = callPackage ../development/python-modules/qtawesome { };
 
   qtconsole = callPackage ../development/python-modules/qtconsole { };
 
+<<<<<<< HEAD
   qtile = callPackage ../development/python-modules/qtile {
     wlroots = pkgs.wlroots_0_15;
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   qtile-extras = callPackage ../development/python-modules/qtile-extras { };
 
   qtpy = callPackage ../development/python-modules/qtpy { };
@@ -11005,16 +12438,22 @@ self: super: with self; {
 
   quantum-gateway = callPackage ../development/python-modules/quantum-gateway { };
 
+<<<<<<< HEAD
   quantulum3 = callPackage ../development/python-modules/quantulum3 { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   quart = callPackage ../development/python-modules/quart { };
 
   quart-cors = callPackage ../development/python-modules/quart-cors { };
 
+<<<<<<< HEAD
   quaternion = callPackage ../development/python-modules/quaternion { };
 
   qudida = callPackage ../development/python-modules/qudida { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   querystring_parser = callPackage ../development/python-modules/querystring-parser { };
 
   questionary = callPackage ../development/python-modules/questionary { };
@@ -11027,6 +12466,11 @@ self: super: with self; {
 
   r2pipe = callPackage ../development/python-modules/r2pipe { };
 
+<<<<<<< HEAD
+=======
+  rabbitpy = callPackage ../development/python-modules/rabbitpy { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   rachiopy = callPackage ../development/python-modules/rachiopy { };
 
   radicale_infcloud = callPackage ../development/python-modules/radicale_infcloud {
@@ -11057,8 +12501,11 @@ self: super: with self; {
 
   rangehttpserver = callPackage ../development/python-modules/rangehttpserver { };
 
+<<<<<<< HEAD
   rank_bm25 = callPackage ../development/python-modules/rank_bm25 { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   rapidfuzz = callPackage ../development/python-modules/rapidfuzz { };
 
   rapidfuzz-capi = callPackage ../development/python-modules/rapidfuzz-capi { };
@@ -11077,16 +12524,22 @@ self: super: with self; {
 
   ratelimiter = callPackage ../development/python-modules/ratelimiter { };
 
+<<<<<<< HEAD
   rauth = callPackage ../development/python-modules/rauth { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   raven = callPackage ../development/python-modules/raven { };
 
   rawkit = callPackage ../development/python-modules/rawkit { };
 
   ray = callPackage ../development/python-modules/ray { redis = pkgs.redis; };
 
+<<<<<<< HEAD
   razdel = callPackage ../development/python-modules/razdel { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   rbtools = callPackage ../development/python-modules/rbtools { };
 
   rchitect = callPackage ../development/python-modules/rchitect { };
@@ -11095,12 +12548,16 @@ self: super: with self; {
 
   rdflib = callPackage ../development/python-modules/rdflib { };
 
+<<<<<<< HEAD
   rdkit = callPackage ../development/python-modules/rdkit {
     boost = pkgs.boost182.override {
       enablePython = true;
       inherit python;
     };
   };
+=======
+  rdkit = callPackage ../development/python-modules/rdkit { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   re-assert = callPackage ../development/python-modules/re-assert { };
 
@@ -11124,8 +12581,11 @@ self: super: with self; {
 
   recipe-scrapers = callPackage ../development/python-modules/recipe-scrapers { };
 
+<<<<<<< HEAD
   recline = callPackage ../development/python-modules/recline { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   recoll = toPythonModule (pkgs.recoll.override {
     python3Packages = self;
   });
@@ -11140,12 +12600,20 @@ self: super: with self; {
 
   redis = callPackage ../development/python-modules/redis { };
 
+<<<<<<< HEAD
+=======
+  rednose = callPackage ../development/python-modules/rednose { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   redshift-connector = callPackage ../development/python-modules/redshift-connector { };
 
   reedsolo = callPackage ../development/python-modules/reedsolo { };
 
+<<<<<<< HEAD
   referencing = callPackage ../development/python-modules/referencing { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   reflink = callPackage ../development/python-modules/reflink { };
 
   regenmaschine = callPackage ../development/python-modules/regenmaschine { };
@@ -11200,10 +12668,13 @@ self: super: with self; {
 
   reproject = callPackage ../development/python-modules/reproject { };
 
+<<<<<<< HEAD
   reprshed = callPackage ../development/python-modules/reprshed { };
 
   reptor = callPackage ../development/python-modules/reptor { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   reqif = callPackage ../development/python-modules/reqif { };
 
   requests-aws4auth = callPackage ../development/python-modules/requests-aws4auth { };
@@ -11250,8 +12721,11 @@ self: super: with self; {
 
   resampy = callPackage ../development/python-modules/resampy { };
 
+<<<<<<< HEAD
   resize-right = callPackage ../development/python-modules/resize-right { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   resolvelib = callPackage ../development/python-modules/resolvelib { };
 
   responses = callPackage ../development/python-modules/responses { };
@@ -11278,6 +12752,11 @@ self: super: with self; {
 
   returns = callPackage ../development/python-modules/returns { };
 
+<<<<<<< HEAD
+=======
+  retworkx = callPackage ../development/python-modules/retworkx { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   rfc3339 = callPackage ../development/python-modules/rfc3339 { };
 
   rfc3339-validator = callPackage ../development/python-modules/rfc3339-validator { };
@@ -11298,14 +12777,20 @@ self: super: with self; {
 
   rich = callPackage ../development/python-modules/rich { };
 
+<<<<<<< HEAD
   rich-argparse = callPackage ../development/python-modules/rich-argparse { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   rich-argparse-plus = callPackage ../development/python-modules/rich-argparse-plus { };
 
   rich-click = callPackage ../development/python-modules/rich-click { };
 
+<<<<<<< HEAD
   rich-pixels = callPackage ../development/python-modules/rich-pixels { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   rich-rst = callPackage ../development/python-modules/rich-rst { };
 
   ring-doorbell = callPackage ../development/python-modules/ring-doorbell { };
@@ -11404,8 +12889,11 @@ self: super: with self; {
 
   rouge-score = callPackage ../development/python-modules/rouge-score { };
 
+<<<<<<< HEAD
   routeros-api = callPackage ../development/python-modules/routeros-api { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   routes = callPackage ../development/python-modules/routes { };
 
   rova = callPackage ../development/python-modules/rova { };
@@ -11414,8 +12902,11 @@ self: super: with self; {
 
   rpdb = callPackage ../development/python-modules/rpdb { };
 
+<<<<<<< HEAD
   rpds-py = callPackage ../development/python-modules/rpds-py { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   rpi-bad-power = callPackage ../development/python-modules/rpi-bad-power { };
 
   rpi-gpio = callPackage ../development/python-modules/rpi-gpio { };
@@ -11476,6 +12967,11 @@ self: super: with self; {
 
   rubymarshal = callPackage ../development/python-modules/rubymarshal { };
 
+<<<<<<< HEAD
+=======
+  ruff-lsp = callPackage ../development/python-modules/ruff-lsp { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ruffus = callPackage ../development/python-modules/ruffus { };
 
   rules = callPackage ../development/python-modules/rules { };
@@ -11498,16 +12994,22 @@ self: super: with self; {
 
   s3-credentials = callPackage ../development/python-modules/s3-credentials { };
 
+<<<<<<< HEAD
   sabctools = callPackage ../development/python-modules/sabctools { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   sabyenc3 = callPackage ../development/python-modules/sabyenc3 { };
 
   sabyenc = callPackage ../development/python-modules/sabyenc { };
 
   sacn = callPackage ../development/python-modules/sacn { };
 
+<<<<<<< HEAD
   sacrebleu = callPackage ../development/python-modules/sacrebleu { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   sacremoses = callPackage ../development/python-modules/sacremoses { };
 
   safe = callPackage ../development/python-modules/safe { };
@@ -11592,7 +13094,11 @@ self: super: with self; {
 
   scikit-hep-testdata = callPackage ../development/python-modules/scikit-hep-testdata { };
 
+<<<<<<< HEAD
   scikit-image = callPackage ../development/python-modules/scikit-image { };
+=======
+  scikitimage = callPackage ../development/python-modules/scikit-image { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   scikit-learn = callPackage ../development/python-modules/scikit-learn {
     inherit (pkgs) gfortran glibcLocales;
@@ -11650,8 +13156,11 @@ self: super: with self; {
 
   sdds = callPackage ../development/python-modules/sdds { };
 
+<<<<<<< HEAD
   sdkmanager = callPackage ../development/python-modules/sdkmanager { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   sdnotify = callPackage ../development/python-modules/sdnotify { };
 
   seaborn = callPackage ../development/python-modules/seaborn { };
@@ -11696,8 +13205,11 @@ self: super: with self; {
 
   semantic-version = callPackage ../development/python-modules/semantic-version { };
 
+<<<<<<< HEAD
   semaphore-bot = callPackage ../development/python-modules/semaphore-bot { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   semver = callPackage ../development/python-modules/semver { };
 
   send2trash = callPackage ../development/python-modules/send2trash { };
@@ -11706,8 +13218,11 @@ self: super: with self; {
 
   sense-energy = callPackage ../development/python-modules/sense-energy { };
 
+<<<<<<< HEAD
   sensirion-ble = callPackage ../development/python-modules/sensirion-ble { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   sensor-state-data = callPackage ../development/python-modules/sensor-state-data { };
 
   sensorpro-ble = callPackage ../development/python-modules/sensorpro-ble { };
@@ -11732,9 +13247,18 @@ self: super: with self; {
 
   seqeval = callPackage ../development/python-modules/seqeval { };
 
+<<<<<<< HEAD
   serialio = callPackage ../development/python-modules/serialio { };
 
   serializable = callPackage ../development/python-modules/serializable { };
+=======
+  sequoia = disabledIf isPyPy (toPythonModule (pkgs.sequoia.override {
+    pythonPackages = self;
+    pythonSupport = true;
+  }));
+
+  serialio = callPackage ../development/python-modules/serialio { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   serpent = callPackage ../development/python-modules/serpent { };
 
@@ -11742,8 +13266,11 @@ self: super: with self; {
 
   servefile = callPackage ../development/python-modules/servefile { };
 
+<<<<<<< HEAD
   serverfiles = callPackage ../development/python-modules/serverfiles { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   serverlessrepo = callPackage ../development/python-modules/serverlessrepo { };
 
   service-identity = callPackage ../development/python-modules/service-identity { };
@@ -11758,12 +13285,17 @@ self: super: with self; {
 
   setuptools-git = callPackage ../development/python-modules/setuptools-git { };
 
+<<<<<<< HEAD
   setuptools-git-versioning = callPackage ../development/python-modules/setuptools-git-versioning { };
 
   setuptools-lint = callPackage ../development/python-modules/setuptools-lint { };
 
   setuptools-odoo = callPackage ../development/python-modules/setuptools-odoo { };
 
+=======
+  setuptools-lint = callPackage ../development/python-modules/setuptools-lint { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   setuptools-rust = callPackage ../development/python-modules/setuptools-rust { };
 
   setuptools-scm = callPackage ../development/python-modules/setuptools-scm { };
@@ -11794,8 +13326,11 @@ self: super: with self; {
 
   sharkiq = callPackage ../development/python-modules/sharkiq { };
 
+<<<<<<< HEAD
   shazamio = callPackage ../development/python-modules/shazamio { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   sh = callPackage ../development/python-modules/sh { };
 
   shlib = callPackage ../development/python-modules/shlib { };
@@ -11809,7 +13344,11 @@ self: super: with self; {
   });
 
   shiboken6 = toPythonModule (callPackage ../development/python-modules/shiboken6 {
+<<<<<<< HEAD
     inherit (pkgs) cmake llvmPackages;
+=======
+    inherit (pkgs) cmake llvmPackages qt6;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   });
 
   shippai = callPackage ../development/python-modules/shippai { };
@@ -11866,6 +13405,7 @@ self: super: with self; {
 
   simplekml = callPackage ../development/python-modules/simplekml { };
 
+<<<<<<< HEAD
   simplekv = callPackage ../development/python-modules/simplekv { };
 
   simplenote = callPackage ../development/python-modules/simplenote { };
@@ -11874,6 +13414,10 @@ self: super: with self; {
 
   simplesat = callPackage ../development/python-modules/simplesat { };
 
+=======
+  simplenote = callPackage ../development/python-modules/simplenote { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   simple-di = callPackage ../development/python-modules/simple-di { };
 
   simple-rest-client = callPackage ../development/python-modules/simple-rest-client { };
@@ -11890,8 +13434,11 @@ self: super: with self; {
 
   simpy = callPackage ../development/python-modules/simpy { };
 
+<<<<<<< HEAD
   single-source = callPackage ../development/python-modules/single-source { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   single-version = callPackage ../development/python-modules/single-version { };
 
   signify = callPackage ../development/python-modules/signify { };
@@ -11906,8 +13453,11 @@ self: super: with self; {
 
   sipyco = callPackage ../development/python-modules/sipyco { };
 
+<<<<<<< HEAD
   sisyphus-control = callPackage ../development/python-modules/sisyphus-control { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   siuba = callPackage ../development/python-modules/siuba { };
 
   six = callPackage ../development/python-modules/six { };
@@ -11918,9 +13468,13 @@ self: super: with self; {
 
   skidl = callPackage ../development/python-modules/skidl { };
 
+<<<<<<< HEAD
   skl2onnx = callPackage ../development/python-modules/skl2onnx {
     protobuf = protobuf3;
   };
+=======
+  skl2onnx = callPackage ../development/python-modules/skl2onnx { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   sklearn-deap = callPackage ../development/python-modules/sklearn-deap { };
 
@@ -11948,8 +13502,11 @@ self: super: with self; {
 
   skytemple-ssb-debugger = callPackage ../development/python-modules/skytemple-ssb-debugger { };
 
+<<<<<<< HEAD
   slack-bolt = callPackage ../development/python-modules/slack-bolt { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   slack-sdk = callPackage ../development/python-modules/slack-sdk { };
 
   slackclient = callPackage ../development/python-modules/slackclient { };
@@ -11974,8 +13531,11 @@ self: super: with self; {
 
   slob = callPackage ../development/python-modules/slob { };
 
+<<<<<<< HEAD
   slovnet = callPackage ../development/python-modules/slovnet { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   slowapi = callPackage ../development/python-modules/slowapi { };
 
   slugid = callPackage ../development/python-modules/slugid { };
@@ -12004,8 +13564,11 @@ self: super: with self; {
 
   smpplib = callPackage ../development/python-modules/smpplib { };
 
+<<<<<<< HEAD
   smpp_pdu = callPackage ../development/python-modules/smpp.pdu { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   snack = toPythonModule (pkgs.newt.override {
     inherit (self) python;
   });
@@ -12022,8 +13585,11 @@ self: super: with self; {
 
   snitun = callPackage ../development/python-modules/snitun { };
 
+<<<<<<< HEAD
   snorkel = callPackage ../development/python-modules/snorkel { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   snowballstemmer = callPackage ../development/python-modules/snowballstemmer { };
 
   snowflake-connector-python = callPackage ../development/python-modules/snowflake-connector-python { };
@@ -12100,8 +13666,11 @@ self: super: with self; {
 
   soupsieve = callPackage ../development/python-modules/soupsieve { };
 
+<<<<<<< HEAD
   sourmash = callPackage ../development/python-modules/sourmash { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   soxr = callPackage ../development/python-modules/soxr {
     libsoxr = pkgs.soxr;
   };
@@ -12114,8 +13683,11 @@ self: super: with self; {
 
   spacy-loggers = callPackage ../development/python-modules/spacy-loggers { };
 
+<<<<<<< HEAD
   spacy-lookups-data = callPackage ../development/python-modules/spacy/lookups-data.nix { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   spacy_models = callPackage ../development/python-modules/spacy/models.nix {
       inherit (pkgs) jq;
   };
@@ -12142,12 +13714,17 @@ self: super: with self; {
 
   spectral-cube = callPackage ../development/python-modules/spectral-cube { };
 
+<<<<<<< HEAD
   speechbrain = callPackage ../development/python-modules/speechbrain { };
 
   speedtest-cli = callPackage ../development/python-modules/speedtest-cli { };
 
   speg = callPackage ../development/python-modules/speg { };
 
+=======
+  speedtest-cli = callPackage ../development/python-modules/speedtest-cli { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   spglib = callPackage ../development/python-modules/spglib { };
 
   sphfile = callPackage ../development/python-modules/sphfile { };
@@ -12288,6 +13865,11 @@ self: super: with self; {
 
   sphinx-material = callPackage ../development/python-modules/sphinx-material { };
 
+<<<<<<< HEAD
+=======
+  sphinx-navtree = callPackage ../development/python-modules/sphinx-navtree { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   sphinx-mdinclude = callPackage ../development/python-modules/sphinx-mdinclude { };
 
   sphinx_pypi_upload = callPackage ../development/python-modules/sphinx_pypi_upload { };
@@ -12378,6 +13960,11 @@ self: super: with self; {
 
   sseclient-py = callPackage ../development/python-modules/sseclient-py { };
 
+<<<<<<< HEAD
+=======
+  ssh-mitm = callPackage ../development/python-modules/ssh-mitm { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   sshfs = callPackage ../development/python-modules/sshfs { };
 
   sshpubkeys = callPackage ../development/python-modules/sshpubkeys { };
@@ -12412,12 +13999,16 @@ self: super: with self; {
 
   statsmodels = callPackage ../development/python-modules/statsmodels { };
 
+<<<<<<< HEAD
   std2 = callPackage ../development/python-modules/std2 { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   stdiomask = callPackage ../development/python-modules/stdiomask { };
 
   stdlib-list = callPackage ../development/python-modules/stdlib-list { };
 
+<<<<<<< HEAD
   stdlibs = callPackage ../development/python-modules/stdlibs { };
 
   steamodd = callPackage ../development/python-modules/steamodd { };
@@ -12428,6 +14019,12 @@ self: super: with self; {
 
   stemming = callPackage ../development/python-modules/stemming { };
 
+=======
+  steamodd = callPackage ../development/python-modules/steamodd { };
+
+  stem = callPackage ../development/python-modules/stem { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   stestr = callPackage ../development/python-modules/stestr { };
 
   stevedore = callPackage ../development/python-modules/stevedore { };
@@ -12444,8 +14041,11 @@ self: super: with self; {
 
   stopit = callPackage ../development/python-modules/stopit { };
 
+<<<<<<< HEAD
   stransi = callPackage ../development/python-modules/stransi { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   strategies = callPackage ../development/python-modules/strategies { };
 
   stravalib = callPackage ../development/python-modules/stravalib { };
@@ -12458,8 +14058,11 @@ self: super: with self; {
 
   streamlabswater = callPackage ../development/python-modules/streamlabswater { };
 
+<<<<<<< HEAD
   streamlit = callPackage ../development/python-modules/streamlit { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   streamz = callPackage ../development/python-modules/streamz { };
 
   strenum =  callPackage ../development/python-modules/strenum { };
@@ -12472,8 +14075,11 @@ self: super: with self; {
 
   stringly = callPackage ../development/python-modules/stringly { };
 
+<<<<<<< HEAD
   stringparser = callPackage ../development/python-modules/stringparser { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   stripe = callPackage ../development/python-modules/stripe { };
 
   striprtf = callPackage ../development/python-modules/striprtf { };
@@ -12498,6 +14104,11 @@ self: super: with self; {
 
   subarulink = callPackage ../development/python-modules/subarulink { };
 
+<<<<<<< HEAD
+=======
+  subdownloader = callPackage ../development/python-modules/subdownloader { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   subliminal = callPackage ../development/python-modules/subliminal { };
 
   subprocess-tee = callPackage ../development/python-modules/subprocess-tee { };
@@ -12514,8 +14125,11 @@ self: super: with self; {
 
   sumtypes = callPackage ../development/python-modules/sumtypes { };
 
+<<<<<<< HEAD
   summarytools = callPackage ../development/python-modules/summarytools { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   sunpy = callPackage ../development/python-modules/sunpy { };
 
   sunwatcher = callPackage ../development/python-modules/sunwatcher { };
@@ -12544,8 +14158,11 @@ self: super: with self; {
 
   svgwrite = callPackage ../development/python-modules/svgwrite { };
 
+<<<<<<< HEAD
   sv-ttk = callPackage ../development/python-modules/sv-ttk { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   swagger-spec-validator = callPackage ../development/python-modules/swagger-spec-validator { };
 
   swagger-ui-bundle = callPackage ../development/python-modules/swagger-ui-bundle { };
@@ -12584,12 +14201,17 @@ self: super: with self; {
 
   syrupy = callPackage ../development/python-modules/syrupy { };
 
+<<<<<<< HEAD
   tabcmd = callPackage ../development/python-modules/tabcmd { };
 
   tableaudocumentapi = callPackage ../development/python-modules/tableaudocumentapi { };
 
   tableauserverclient = callPackage ../development/python-modules/tableauserverclient { };
 
+=======
+  tableaudocumentapi = callPackage ../development/python-modules/tableaudocumentapi { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   tabledata = callPackage ../development/python-modules/tabledata { };
 
   tables = callPackage ../development/python-modules/tables { };
@@ -12602,19 +14224,25 @@ self: super: with self; {
 
   tabview = callPackage ../development/python-modules/tabview { };
 
+<<<<<<< HEAD
   taco = toPythonModule (pkgs.taco.override {
     inherit (self) python;
     enablePython = true;
   });
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   tadasets = callPackage ../development/python-modules/tadasets { };
 
   tag-expressions = callPackage ../development/python-modules/tag-expressions { };
 
   tago = callPackage ../development/python-modules/tago { };
 
+<<<<<<< HEAD
   tagoio-sdk = callPackage ../development/python-modules/tagoio-sdk { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   tahoma-api = callPackage ../development/python-modules/tahoma-api { };
 
   tailer = callPackage ../development/python-modules/tailer { };
@@ -12691,12 +14319,20 @@ self: super: with self; {
   tensorboardx = callPackage ../development/python-modules/tensorboardx { };
 
   tensorflow-bin = callPackage ../development/python-modules/tensorflow/bin.nix {
+<<<<<<< HEAD
     inherit (pkgs.config) cudaSupport;
+=======
+    cudaSupport = pkgs.config.cudaSupport or false;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   tensorflow-build = callPackage ../development/python-modules/tensorflow {
     inherit (pkgs.darwin) cctools;
+<<<<<<< HEAD
     inherit (pkgs.config) cudaSupport;
+=======
+    cudaSupport = pkgs.config.cudaSupport or false;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     inherit (self.tensorflow-bin) cudaPackages;
     inherit (pkgs.darwin.apple_sdk.frameworks) Foundation Security;
     flatbuffers-core = pkgs.flatbuffers;
@@ -12730,8 +14366,11 @@ self: super: with self; {
 
   tensorrt = callPackage ../development/python-modules/tensorrt { };
 
+<<<<<<< HEAD
   tensorstore = callPackage ../development/python-modules/tensorstore { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   tellduslive = callPackage ../development/python-modules/tellduslive { };
 
   termcolor = callPackage ../development/python-modules/termcolor { };
@@ -12768,8 +14407,11 @@ self: super: with self; {
 
   textual = callPackage ../development/python-modules/textual { };
 
+<<<<<<< HEAD
   textual-universal-directorytree = callPackage ../development/python-modules/textual-universal-directorytree { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   testbook = callPackage ../development/python-modules/testbook { };
 
   testing-common-database = callPackage ../development/python-modules/testing-common-database { };
@@ -12806,18 +14448,27 @@ self: super: with self; {
 
   textx = callPackage ../development/python-modules/textx { };
 
+<<<<<<< HEAD
   tf2onnx = callPackage ../development/python-modules/tf2onnx { };
 
   tflearn = callPackage ../development/python-modules/tflearn { };
 
   tftpy = callPackage ../development/python-modules/tftpy { };
 
+=======
+  tflearn = callPackage ../development/python-modules/tflearn { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   tgcrypto = callPackage ../development/python-modules/tgcrypto { };
 
   theano-pymc = callPackage ../development/python-modules/theano-pymc { };
 
   theano = callPackage ../development/python-modules/theano rec {
+<<<<<<< HEAD
     inherit (pkgs.config) cudaSupport;
+=======
+    cudaSupport = pkgs.config.cudaSupport or false;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     cudnnSupport = cudaSupport;
   };
 
@@ -12843,8 +14494,11 @@ self: super: with self; {
     inherit (pkgs.darwin.apple_sdk.frameworks) Accelerate CoreFoundation CoreGraphics CoreVideo;
   };
 
+<<<<<<< HEAD
   thorlabspm100 = callPackage ../development/python-modules/thorlabspm100 { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   threadloop = callPackage ../development/python-modules/threadloop { };
 
   threadpool = callPackage ../development/python-modules/threadpool { };
@@ -12877,8 +14531,11 @@ self: super: with self; {
 
   tika = callPackage ../development/python-modules/tika { };
 
+<<<<<<< HEAD
   tika-client = callPackage ../development/python-modules/tika-client { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   tiktoken = callPackage ../development/python-modules/tiktoken { };
 
   tikzplotlib = callPackage ../development/python-modules/tikzplotlib { };
@@ -12919,8 +14576,11 @@ self: super: with self; {
     pythonSupport = true;
   });
 
+<<<<<<< HEAD
   tiny-proxy = callPackage ../development/python-modules/tiny-proxy { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   tinycss2 = callPackage ../development/python-modules/tinycss2 { };
 
   tinycss = callPackage ../development/python-modules/tinycss { };
@@ -12929,8 +14589,11 @@ self: super: with self; {
 
   tinyobjloader-py = callPackage ../development/python-modules/tinyobjloader-py { };
 
+<<<<<<< HEAD
   tinyrecord = callPackage ../development/python-modules/tinyrecord { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   tissue = callPackage ../development/python-modules/tissue { };
 
   titlecase = callPackage ../development/python-modules/titlecase { };
@@ -12967,8 +14630,11 @@ self: super: with self; {
 
   tokenlib = callPackage ../development/python-modules/tokenlib { };
 
+<<<<<<< HEAD
   tokentrim = callPackage ../development/python-modules/tokentrim { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   tololib = callPackage ../development/python-modules/tololib { };
 
   toml = callPackage ../development/python-modules/toml { };
@@ -12988,11 +14654,15 @@ self: super: with self; {
   toposort = callPackage ../development/python-modules/toposort { };
 
   torch = callPackage ../development/python-modules/torch {
+<<<<<<< HEAD
     inherit (pkgs.config) cudaSupport;
     magma =
       if pkgs.config.cudaSupport
       then pkgs.magma-cuda-static
       else pkgs.magma;
+=======
+    cudaSupport = pkgs.config.cudaSupport or false;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     inherit (pkgs.darwin.apple_sdk.frameworks) Accelerate CoreServices;
     inherit (pkgs.darwin) libobjc;
     inherit (pkgs.llvmPackages_rocm) openmp;
@@ -13003,7 +14673,11 @@ self: super: with self; {
   };
 
   torchWithCuda = self.torch.override {
+<<<<<<< HEAD
     magma = pkgs.magma-cuda-static;
+=======
+    magma = pkgs.magma-cuda;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     cudaSupport = true;
     rocmSupport = false;
   };
@@ -13028,8 +14702,11 @@ self: super: with self; {
 
   torchaudio-bin = callPackage ../development/python-modules/torchaudio/bin.nix { };
 
+<<<<<<< HEAD
   torchdiffeq = callPackage ../development/python-modules/torchdiffeq { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   torchgpipe = callPackage ../development/python-modules/torchgpipe { };
 
   torchmetrics = callPackage ../development/python-modules/torchmetrics { };
@@ -13040,8 +14717,11 @@ self: super: with self; {
 
   torchlibrosa = callPackage ../development/python-modules/torchlibrosa { };
 
+<<<<<<< HEAD
   torchsde = callPackage ../development/python-modules/torchsde { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   torchvision = callPackage ../development/python-modules/torchvision { };
 
   torchvision-bin = callPackage ../development/python-modules/torchvision/bin.nix { };
@@ -13056,8 +14736,11 @@ self: super: with self; {
 
   torpy = callPackage ../development/python-modules/torpy { };
 
+<<<<<<< HEAD
   torrent_parser = callPackage ../development/python-modules/torrent_parser { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   torrequest = callPackage ../development/python-modules/torrequest { };
 
   total-connect-client = callPackage ../development/python-modules/total-connect-client { };
@@ -13076,14 +14759,20 @@ self: super: with self; {
 
   traceback2 = callPackage ../development/python-modules/traceback2 { };
 
+<<<<<<< HEAD
   tracerite = callPackage ../development/python-modules/tracerite { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   tracing = callPackage ../development/python-modules/tracing { };
 
   trackpy = callPackage ../development/python-modules/trackpy { };
 
+<<<<<<< HEAD
   trailrunner = callPackage ../development/python-modules/trailrunner {};
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   trainer = callPackage ../development/python-modules/trainer {};
 
   traitlets = callPackage ../development/python-modules/traitlets { };
@@ -13094,8 +14783,11 @@ self: super: with self; {
 
   traittypes = callPackage ../development/python-modules/traittypes { };
 
+<<<<<<< HEAD
   trampoline = callPackage ../development/python-modules/trampoline { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   transaction = callPackage ../development/python-modules/transaction { };
 
   transformers = callPackage ../development/python-modules/transformers { };
@@ -13104,8 +14796,11 @@ self: super: with self; {
 
   transitions = callPackage ../development/python-modules/transitions { };
 
+<<<<<<< HEAD
   translatehtml = callPackage ../development/python-modules/translatehtml { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   translatepy = callPackage ../development/python-modules/translatepy { };
 
   translationstring = callPackage ../development/python-modules/translationstring { };
@@ -13144,8 +14839,11 @@ self: super: with self; {
 
   trio-websocket = callPackage ../development/python-modules/trio-websocket { };
 
+<<<<<<< HEAD
   tritonclient = callPackage ../development/python-modules/tritonclient { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   troposphere = callPackage ../development/python-modules/troposphere { };
 
   trove-classifiers = callPackage ../development/python-modules/trove-classifiers { };
@@ -13154,12 +14852,17 @@ self: super: with self; {
 
   trustme = callPackage ../development/python-modules/trustme { };
 
+<<<<<<< HEAD
   truststore = callPackage ../development/python-modules/truststore { };
 
   trytond = callPackage ../development/python-modules/trytond { };
 
   tskit = callPackage ../development/python-modules/tskit { };
 
+=======
+  trytond = callPackage ../development/python-modules/trytond { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ttach = callPackage ../development/python-modules/ttach { };
 
   ttls = callPackage ../development/python-modules/ttls { };
@@ -13168,8 +14871,11 @@ self: super: with self; {
 
   ttp-templates = callPackage ../development/python-modules/ttp-templates { };
 
+<<<<<<< HEAD
   ttstokenizer = callPackage ../development/python-modules/ttstokenizer { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   tubes = callPackage ../development/python-modules/tubes { };
 
   tunigo = callPackage ../development/python-modules/tunigo { };
@@ -13238,14 +14944,20 @@ self: super: with self; {
 
   txrequests = callPackage ../development/python-modules/txrequests { };
 
+<<<<<<< HEAD
   txtai = callPackage ../development/python-modules/txtai { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   txtorcon = callPackage ../development/python-modules/txtorcon { };
 
   txzmq = callPackage ../development/python-modules/txzmq { };
 
+<<<<<<< HEAD
   typechecks = callPackage ../development/python-modules/typechecks { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   typecode = callPackage ../development/python-modules/typecode { };
 
   typecode-libmagic = callPackage ../development/python-modules/typecode/libmagic.nix {
@@ -13262,22 +14974,28 @@ self: super: with self; {
 
   typer = callPackage ../development/python-modules/typer { };
 
+<<<<<<< HEAD
   types-appdirs = callPackage ../development/python-modules/types-appdirs { };
 
   types-awscrt = callPackage ../development/python-modules/types-awscrt { };
 
   types-beautifulsoup4 = callPackage ../development/python-modules/types-beautifulsoup4 { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   types-colorama = callPackage ../development/python-modules/types-colorama { };
 
   types-dateutil = callPackage ../development/python-modules/types-dateutil { };
 
   types-decorator = callPackage ../development/python-modules/types-decorator { };
 
+<<<<<<< HEAD
   types-deprecated = callPackage ../development/python-modules/types-deprecated { };
 
   types-docopt = callPackage ../development/python-modules/types-docopt { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   types-docutils = callPackage ../development/python-modules/types-docutils { };
 
   types-enum34 = callPackage ../development/python-modules/types-enum34 { };
@@ -13286,12 +15004,17 @@ self: super: with self; {
 
   types-futures = callPackage ../development/python-modules/types-futures { };
 
+<<<<<<< HEAD
   types-html5lib = callPackage ../development/python-modules/types-html5lib { };
 
   types-ipaddress = callPackage ../development/python-modules/types-ipaddress { };
 
   types-mock = callPackage ../development/python-modules/types-mock { };
 
+=======
+  types-ipaddress = callPackage ../development/python-modules/types-ipaddress { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   types-pillow = callPackage ../development/python-modules/types-pillow { };
 
   types-protobuf = callPackage ../development/python-modules/types-protobuf { };
@@ -13358,16 +15081,22 @@ self: super: with self; {
 
   uc-micro-py = callPackage ../development/python-modules/uc-micro-py { };
 
+<<<<<<< HEAD
   ucsmsdk = callPackage ../development/python-modules/ucsmsdk { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   udatetime = callPackage ../development/python-modules/udatetime { };
 
   ueberzug = callPackage ../development/python-modules/ueberzug {
     inherit (pkgs.xorg) libX11 libXext;
   };
 
+<<<<<<< HEAD
   ufmt = callPackage ../development/python-modules/ufmt { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ufo2ft = callPackage ../development/python-modules/ufo2ft { };
 
   ufoLib2 = callPackage ../development/python-modules/ufoLib2 { };
@@ -13428,8 +15157,11 @@ self: super: with self; {
 
   unidecode = callPackage ../development/python-modules/unidecode { };
 
+<<<<<<< HEAD
   unidic = callPackage ../development/python-modules/unidic { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   unidic-lite = callPackage ../development/python-modules/unidic-lite { };
 
   unidiff = callPackage ../development/python-modules/unidiff { };
@@ -13450,22 +15182,28 @@ self: super: with self; {
 
   univers = callPackage ../development/python-modules/univers { };
 
+<<<<<<< HEAD
   universal-pathlib = callPackage ../development/python-modules/universal-pathlib { };
 
   universal-silabs-flasher = callPackage ../development/python-modules/universal-silabs-flasher { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   unpaddedbase64 = callPackage ../development/python-modules/unpaddedbase64 { };
 
   unrardll = callPackage ../development/python-modules/unrardll { };
 
   unrpa = callPackage ../development/python-modules/unrpa { };
 
+<<<<<<< HEAD
   unstructured = callPackage ../development/python-modules/unstructured { };
 
   unstructured-api-tools = callPackage ../development/python-modules/unstructured-api-tools { };
 
   unstructured-inference = callPackage ../development/python-modules/unstructured-inference { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   untangle = callPackage ../development/python-modules/untangle { };
 
   untokenize = callPackage ../development/python-modules/untokenize { };
@@ -13520,8 +15258,11 @@ self: super: with self; {
 
   urwid-readline = callPackage ../development/python-modules/urwid-readline { };
 
+<<<<<<< HEAD
   urwid-mitmproxy = callPackage ../development/python-modules/urwid-mitmproxy { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   usb-devices = callPackage ../development/python-modules/usb-devices { };
 
   usbrelay-py = callPackage ../os-specific/linux/usbrelay/python.nix { };
@@ -13536,8 +15277,11 @@ self: super: with self; {
 
   ush = callPackage ../development/python-modules/ush { };
 
+<<<<<<< HEAD
   usort = callPackage ../development/python-modules/usort { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   utils = callPackage ../development/python-modules/utils { };
 
   uuid = callPackage ../development/python-modules/uuid { };
@@ -13556,6 +15300,11 @@ self: super: with self; {
 
   validators = callPackage ../development/python-modules/validators { };
 
+<<<<<<< HEAD
+=======
+  validictory = callPackage ../development/python-modules/validictory { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   validobj = callPackage ../development/python-modules/validobj { };
 
   validphys2 = callPackage ../development/python-modules/validphys2 { };
@@ -13572,8 +15321,11 @@ self: super: with self; {
 
   vat-moss = callPackage ../development/python-modules/vat-moss { };
 
+<<<<<<< HEAD
   vcard = callPackage ../development/python-modules/vcard { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   vcrpy = callPackage ../development/python-modules/vcrpy { };
 
   vcver = callPackage ../development/python-modules/vcver { };
@@ -13610,26 +15362,39 @@ self: super: with self; {
 
   versiontools = callPackage ../development/python-modules/versiontools { };
 
+<<<<<<< HEAD
   verspec = callPackage ../development/python-modules/verspec { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   vertica-python = callPackage ../development/python-modules/vertica-python { };
 
   veryprettytable = callPackage ../development/python-modules/veryprettytable { };
 
+<<<<<<< HEAD
   vg = callPackage ../development/python-modules/vg { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   videocr = callPackage ../development/python-modules/videocr { };
 
   vidstab = callPackage ../development/python-modules/vidstab { };
 
+<<<<<<< HEAD
   viennarna = toPythonModule pkgs.viennarna;
+=======
+  ViennaRNA = toPythonModule pkgs.ViennaRNA;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   viewstate = callPackage ../development/python-modules/viewstate { };
 
   vilfo-api-client = callPackage ../development/python-modules/vilfo-api-client { };
 
+<<<<<<< HEAD
   vina = callPackage ../applications/science/chemistry/autodock-vina/python-bindings.nix { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   vincenty = callPackage ../development/python-modules/vincenty { };
 
   vine = callPackage ../development/python-modules/vine { };
@@ -13658,8 +15423,11 @@ self: super: with self; {
 
   vobject = callPackage ../development/python-modules/vobject { };
 
+<<<<<<< HEAD
   volatile = callPackage ../development/python-modules/volatile { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   volkszaehler = callPackage ../development/python-modules/volkszaehler { };
 
   voluptuous = callPackage ../development/python-modules/voluptuous { };
@@ -13723,8 +15491,11 @@ self: super: with self; {
 
   wandb = callPackage ../development/python-modules/wandb { };
 
+<<<<<<< HEAD
   warble = callPackage ../development/python-modules/warble { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   warcio = callPackage ../development/python-modules/warcio { };
 
   ward = callPackage ../development/python-modules/ward { };
@@ -13741,6 +15512,11 @@ self: super: with self; {
 
   wasserstein = callPackage ../development/python-modules/wasserstein { };
 
+<<<<<<< HEAD
+=======
+  wasm = callPackage ../development/python-modules/wasm { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   wasmerPackages = pkgs.recurseIntoAttrs (callPackage ../development/python-modules/wasmer { });
   inherit (self.wasmerPackages) wasmer wasmer-compiler-cranelift wasmer-compiler-llvm wasmer-compiler-singlepass;
 
@@ -13842,8 +15618,11 @@ self: super: with self; {
 
   wheel-inspect = callPackage ../development/python-modules/wheel-inspect { };
 
+<<<<<<< HEAD
   wheezy-captcha = callPackage ../development/python-modules/wheezy-captcha { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   wheezy-template = callPackage ../development/python-modules/wheezy-template { };
 
   whichcraft = callPackage ../development/python-modules/whichcraft { };
@@ -13870,10 +15649,13 @@ self: super: with self; {
 
   wifi = callPackage ../development/python-modules/wifi { };
 
+<<<<<<< HEAD
   wikipedia = callPackage ../development/python-modules/wikipedia { };
 
   wikitextparser = callPackage ../development/python-modules/wikitextparser { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   willow = callPackage ../development/python-modules/willow { };
 
   winacl = callPackage ../development/python-modules/winacl { };
@@ -13892,6 +15674,11 @@ self: super: with self; {
 
   woodblock = callPackage ../development/python-modules/woodblock { };
 
+<<<<<<< HEAD
+=======
+  word2vec = callPackage ../development/python-modules/word2vec { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   wordcloud = callPackage ../development/python-modules/wordcloud { };
 
   wordfreq = callPackage ../development/python-modules/wordfreq { };
@@ -13936,8 +15723,11 @@ self: super: with self; {
     };
   };
 
+<<<<<<< HEAD
   wyoming = callPackage ../development/python-modules/wyoming { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   x-wr-timezone = callPackage ../development/python-modules/x-wr-timezone { };
 
   x11_hash = callPackage ../development/python-modules/x11_hash { };
@@ -13968,16 +15758,22 @@ self: super: with self; {
 
   xdg = callPackage ../development/python-modules/xdg { };
 
+<<<<<<< HEAD
   xdg-base-dirs = callPackage ../development/python-modules/xdg-base-dirs { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   xdis = callPackage ../development/python-modules/xdis { };
 
   xdot = callPackage ../development/python-modules/xdot {
     inherit (pkgs) graphviz;
   };
 
+<<<<<<< HEAD
   xformers = callPackage ../development/python-modules/xformers { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   xgboost = callPackage ../development/python-modules/xgboost {
     inherit (pkgs) xgboost;
   };
@@ -13992,8 +15788,11 @@ self: super: with self; {
 
   xknx = callPackage ../development/python-modules/xknx { };
 
+<<<<<<< HEAD
   xknxproject = callPackage ../development/python-modules/xknxproject { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   xlib = callPackage ../development/python-modules/xlib { };
 
   xlrd = callPackage ../development/python-modules/xlrd { };
@@ -14034,16 +15833,22 @@ self: super: with self; {
 
   xsdata = callPackage ../development/python-modules/xsdata { };
 
+<<<<<<< HEAD
   xstatic-asciinema-player = callPackage ../development/python-modules/xstatic-asciinema-player { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   xstatic-bootbox = callPackage ../development/python-modules/xstatic-bootbox { };
 
   xstatic-bootstrap = callPackage ../development/python-modules/xstatic-bootstrap { };
 
   xstatic = callPackage ../development/python-modules/xstatic { };
 
+<<<<<<< HEAD
   xstatic-font-awesome = callPackage ../development/python-modules/xstatic-font-awesome { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   xstatic-jquery = callPackage ../development/python-modules/xstatic-jquery { };
 
   xstatic-jquery-file-upload = callPackage ../development/python-modules/xstatic-jquery-file-upload { };
@@ -14100,8 +15905,11 @@ self: super: with self; {
 
   yarg = callPackage ../development/python-modules/yarg { };
 
+<<<<<<< HEAD
   yagry = callPackage ../development/python-modules/yargy { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   yark = callPackage ../development/python-modules/yark { };
 
   yarl = callPackage ../development/python-modules/yarl { };
@@ -14136,9 +15944,13 @@ self: super: with self; {
 
   yoyo-migrations = callPackage ../development/python-modules/yoyo-migrations { };
 
+<<<<<<< HEAD
   yt-dlp = callPackage ../tools/misc/yt-dlp {
     ffmpeg = pkgs.ffmpeg-headless;
   };
+=======
+  yt-dlp = callPackage ../tools/misc/yt-dlp { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   yt-dlp-light = callPackage ../tools/misc/yt-dlp {
     atomicparsleySupport = false;
@@ -14176,6 +15988,11 @@ self: super: with self; {
 
   zadnegoale = callPackage ../development/python-modules/zadnegoale { };
 
+<<<<<<< HEAD
+=======
+  zake = callPackage ../development/python-modules/zake { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   zamg = callPackage ../development/python-modules/zamg { };
 
   zarr = callPackage ../development/python-modules/zarr { };
@@ -14200,8 +16017,11 @@ self: super: with self; {
     python3 = python;
   })).py;
 
+<<<<<<< HEAD
   zephyr-python-api = callPackage ../development/python-modules/zephyr-python-api { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   zeroc-ice = callPackage ../development/python-modules/zeroc-ice { };
 
   zeroconf = callPackage ../development/python-modules/zeroconf { };
@@ -14236,8 +16056,11 @@ self: super: with self; {
 
   zimports = callPackage ../development/python-modules/zimports { };
 
+<<<<<<< HEAD
   zipfile2 = callPackage ../development/python-modules/zipfile2 { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   zipp = callPackage ../development/python-modules/zipp { };
 
   zipstream = callPackage ../development/python-modules/zipstream { };
@@ -14252,9 +16075,17 @@ self: super: with self; {
 
   zodbpickle = callPackage ../development/python-modules/zodbpickle { };
 
+<<<<<<< HEAD
   zope-cachedescriptors = callPackage ../development/python-modules/zope-cachedescriptors { };
 
   zope-component = callPackage ../development/python-modules/zope-component { };
+=======
+  zope_broken = callPackage ../development/python-modules/zope_broken { };
+
+  zope-cachedescriptors = callPackage ../development/python-modules/zope-cachedescriptors { };
+
+  zope_component = callPackage ../development/python-modules/zope_component { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   zope_configuration = callPackage ../development/python-modules/zope_configuration { };
 
@@ -14276,7 +16107,11 @@ self: super: with self; {
 
   zope-hookable = callPackage ../development/python-modules/zope-hookable { };
 
+<<<<<<< HEAD
   zope-i18nmessageid = callPackage ../development/python-modules/zope-i18nmessageid { };
+=======
+  zope_i18nmessageid = callPackage ../development/python-modules/zope_i18nmessageid { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   zope_interface = callPackage ../development/python-modules/zope_interface { };
 

@@ -4,7 +4,10 @@
 , gdk-pixbuf
 , glib
 , freetype
+<<<<<<< HEAD
 , libgepub
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , libgsf
 , poppler
 , gst_all_1
@@ -27,7 +30,10 @@ mkXfceDerivation {
     gdk-pixbuf
     glib
     gst_all_1.gst-plugins-base
+<<<<<<< HEAD
     libgepub # optional EPUB thumbnailer support
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     libgsf
     poppler # technically the glib binding
   ];

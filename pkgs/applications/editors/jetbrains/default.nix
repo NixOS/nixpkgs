@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 { lib
 , stdenv
 , callPackage
@@ -10,6 +11,12 @@
 , icu
 , lldb
 , dotnet-sdk_7
+=======
+{ lib, stdenv, callPackage, fetchurl
+, jdk, cmake, gdb, zlib, python3, icu
+, lldb
+, dotnet-sdk_6
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , maven
 , autoPatchelfHook
 , libdbusmenu
@@ -35,9 +42,15 @@ let
 
   # Sorted alphabetically
 
+<<<<<<< HEAD
   buildClion = { pname, version, src, license, description, wmClass, buildNumber, ... }:
     (mkJetBrainsProduct {
       inherit pname version src wmClass jdk buildNumber;
+=======
+  buildClion = { pname, version, src, license, description, wmClass, ... }:
+    (mkJetBrainsProduct {
+      inherit pname version src wmClass jdk;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       product = "CLion";
       meta = with lib; {
         homepage = "https://www.jetbrains.com/clion/";
@@ -46,6 +59,7 @@ let
           Enhancing productivity for every C and C++
           developer on Linux, macOS and Windows.
         '';
+<<<<<<< HEAD
         maintainers = with maintainers; [ edwtjo mic92 tymscar ];
       };
     }).overrideAttrs (attrs: {
@@ -53,6 +67,16 @@ let
         autoPatchelfHook
       ];
       buildInputs = (attrs.buildInputs or [ ]) ++ lib.optionals (stdenv.isLinux) [
+=======
+        maintainers = with maintainers; [ edwtjo mic92 ];
+      };
+    }).overrideAttrs (attrs: {
+      nativeBuildInputs = (attrs.nativeBuildInputs or []) ++ lib.optionals (stdenv.isLinux) [
+        autoPatchelfHook
+        patchelf
+      ];
+      buildInputs = (attrs.buildInputs or []) ++ lib.optionals (stdenv.isLinux) [
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         python3
         stdenv.cc.cc
         libdbusmenu
@@ -64,12 +88,21 @@ let
       postFixup = (attrs.postFixup or "") + lib.optionalString (stdenv.isLinux) ''
         (
           cd $out/clion
+<<<<<<< HEAD
 
           # I think the included gdb has a couple of patches, so we patch it instead of replacing
           ls -d $PWD/bin/gdb/linux/x64/lib/python3.8/lib-dynload/* |
           xargs patchelf \
             --replace-needed libssl.so.10 libssl.so \
             --replace-needed libcrypto.so.10 libcrypto.so
+=======
+          # bundled cmake does not find libc
+          rm -rf bin/cmake/linux
+          ln -s ${cmake} bin/cmake/linux
+          # bundled gdb does not find libcrypto 10
+          rm -rf bin/gdb/linux
+          ln -s ${gdb} bin/gdb/linux
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
           ls -d $PWD/bin/lldb/linux/x64/lib/python3.8/lib-dynload/* |
           xargs patchelf \
@@ -77,13 +110,25 @@ let
             --replace-needed libcrypto.so.10 libcrypto.so
 
           autoPatchelf $PWD/bin
+<<<<<<< HEAD
+=======
+
+          wrapProgram $out/bin/clion \
+            --set CL_JDK "${jdk}"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         )
       '';
     });
 
+<<<<<<< HEAD
   buildDataGrip = { pname, version, src, license, description, wmClass, buildNumber, ... }:
     (mkJetBrainsProduct {
       inherit pname version src wmClass jdk buildNumber;
+=======
+  buildDataGrip = { pname, version, src, license, description, wmClass, ... }:
+    (mkJetBrainsProduct {
+      inherit pname version src wmClass jdk;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       product = "DataGrip";
       meta = with lib; {
         homepage = "https://www.jetbrains.com/datagrip/";
@@ -97,6 +142,7 @@ let
       };
     });
 
+<<<<<<< HEAD
   buildDataSpell = { pname, version, src, license, description, wmClass, buildNumber, ... }:
     (mkJetBrainsProduct {
       inherit pname version src wmClass jdk buildNumber;
@@ -115,6 +161,11 @@ let
   buildGateway = { pname, version, src, license, description, wmClass, buildNumber, product, ... }:
     (mkJetBrainsProduct {
       inherit pname version src wmClass jdk buildNumber product;
+=======
+  buildGateway = { pname, version, src, license, description, wmClass, product, ... }:
+    (mkJetBrainsProduct {
+      inherit pname version src wmClass jdk product;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       productShort = "Gateway";
       meta = with lib; {
         homepage = "https://www.jetbrains.com/remote-development/gateway/";
@@ -128,6 +179,7 @@ let
       };
     });
 
+<<<<<<< HEAD
   buildGoland = { pname, version, src, license, description, wmClass, buildNumber, ... }:
     (mkJetBrainsProduct {
       inherit pname version src wmClass jdk buildNumber;
@@ -136,6 +188,12 @@ let
         # fortify source breaks build since delve compiles with -O0
         ''--prefix CGO_CPPFLAGS " " "-U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=0"''
       ];
+=======
+  buildGoland = { pname, version, src, license, description, wmClass, ... }:
+    (mkJetBrainsProduct {
+      inherit pname version src wmClass jdk;
+      product = "Goland";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       meta = with lib; {
         homepage = "https://www.jetbrains.com/go/";
         inherit description license platforms;
@@ -145,12 +203,17 @@ let
           The new IDE extends the IntelliJ platform with the coding assistance
           and tool integrations specific for the Go language
         '';
+<<<<<<< HEAD
         maintainers = with maintainers; [ tymscar ];
+=======
+        maintainers = [ ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       };
     }).overrideAttrs (attrs: {
       postFixup = (attrs.postFixup or "") + lib.optionalString stdenv.isLinux ''
         interp="$(cat $NIX_CC/nix-support/dynamic-linker)"
         patchelf --set-interpreter $interp $out/goland/plugins/go-plugin/lib/dlv/linux/dlv
+<<<<<<< HEAD
         chmod +x $out/goland/plugins/go-plugin/lib/dlv/linux/dlv
       '';
     });
@@ -158,6 +221,20 @@ let
   buildIdea = { pname, version, src, license, description, wmClass, buildNumber, product, ... }:
     (mkJetBrainsProduct {
       inherit pname version src wmClass jdk buildNumber product;
+=======
+
+        chmod +x $out/goland/plugins/go-plugin/lib/dlv/linux/dlv
+
+        # fortify source breaks build since delve compiles with -O0
+        wrapProgram $out/bin/goland \
+          --prefix CGO_CPPFLAGS " " "-U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=0"
+      '';
+    });
+
+  buildIdea = { pname, version, src, license, description, wmClass, product, ... }:
+    (mkJetBrainsProduct {
+      inherit pname version src wmClass jdk product;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       productShort = "IDEA";
       extraLdPath = [ zlib ];
       extraWrapperArgs = [
@@ -173,14 +250,24 @@ let
           with JUnit, TestNG, popular SCMs, Ant & Maven. Also known
           as IntelliJ.
         '';
+<<<<<<< HEAD
         maintainers = with maintainers; [ edwtjo gytis-ivaskevicius steinybot AnatolyPopov tymscar ];
+=======
+        maintainers = with maintainers; [ edwtjo gytis-ivaskevicius steinybot AnatolyPopov ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         platforms = ideaPlatforms;
       };
     });
 
+<<<<<<< HEAD
   buildMps = { pname, version, src, license, description, wmClass, product, buildNumber, ... }:
     (mkJetBrainsProduct rec {
       inherit pname version src wmClass jdk buildNumber product;
+=======
+  buildMps = { pname, version, src, license, description, wmClass, product, ... }:
+    (mkJetBrainsProduct rec {
+      inherit pname version src wmClass jdk product;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       productShort = "MPS";
       meta = with lib; {
         broken = (stdenv.isLinux && stdenv.isAarch64);
@@ -196,9 +283,15 @@ let
       };
     });
 
+<<<<<<< HEAD
   buildPhpStorm = { pname, version, src, license, description, wmClass, buildNumber, ... }:
     (mkJetBrainsProduct {
       inherit pname version src wmClass jdk buildNumber;
+=======
+  buildPhpStorm = { pname, version, src, license, description, wmClass, ... }:
+    (mkJetBrainsProduct {
+      inherit pname version src wmClass jdk;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       product = "PhpStorm";
       meta = with lib; {
         homepage = "https://www.jetbrains.com/phpstorm/";
@@ -208,6 +301,7 @@ let
           with on-the-fly code analysis, error prevention and
           automated refactorings for PHP and JavaScript code.
         '';
+<<<<<<< HEAD
         maintainers = with maintainers; [ dritter tymscar ];
       };
     });
@@ -215,6 +309,15 @@ let
   buildPycharm = { pname, version, src, license, description, wmClass, buildNumber, product, cythonSpeedup ? stdenv.isLinux, ... }:
     (mkJetBrainsProduct {
       inherit pname version src wmClass jdk buildNumber product;
+=======
+        maintainers = with maintainers; [ dritter ];
+      };
+    });
+
+  buildPycharm = { pname, version, src, license, description, wmClass, product, cythonSpeedup ? stdenv.isLinux, ... }:
+    (mkJetBrainsProduct {
+      inherit pname version src wmClass jdk product;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       productShort = "PyCharm";
       meta = with lib; {
         broken = (stdenv.isLinux && stdenv.isAarch64);
@@ -233,24 +336,43 @@ let
           providing you almost everything you need for your comfortable
           and productive development!
         '';
+<<<<<<< HEAD
         maintainers = with maintainers; [ genericnerdyusername tymscar ];
+=======
+        maintainers = with maintainers; [ ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       };
     }).overrideAttrs (finalAttrs: previousAttrs: lib.optionalAttrs cythonSpeedup {
       buildInputs = with python3.pkgs; [ python3 setuptools ];
       preInstall = ''
+<<<<<<< HEAD
         echo "compiling cython debug speedups"
         if [[ -d plugins/python-ce ]]; then
             ${python3.interpreter} plugins/python-ce/helpers/pydev/setup_cython.py build_ext --inplace
         else
             ${python3.interpreter} plugins/python/helpers/pydev/setup_cython.py build_ext --inplace
         fi
+=======
+      echo "compiling cython debug speedups"
+      if [[ -d plugins/python-ce ]]; then
+          ${python3.interpreter} plugins/python-ce/helpers/pydev/setup_cython.py build_ext --inplace
+      else
+          ${python3.interpreter} plugins/python/helpers/pydev/setup_cython.py build_ext --inplace
+      fi
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       '';
       # See https://www.jetbrains.com/help/pycharm/2022.1/cython-speedups.html
     });
 
+<<<<<<< HEAD
   buildRider = { pname, version, src, license, description, wmClass, buildNumber, ... }:
     (mkJetBrainsProduct {
       inherit pname version src wmClass jdk buildNumber;
+=======
+  buildRider = { pname, version, src, license, description, wmClass, ... }:
+    (mkJetBrainsProduct {
+      inherit pname version src wmClass jdk;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       product = "Rider";
       # icu is required by Rider.Backend
       extraLdPath = [ icu ];
@@ -275,6 +397,7 @@ let
           plugins/dotCommon/DotFiles/linux-x64/JetBrains.Profiler.PdbServer
 
         rm -rf lib/ReSharperHost/linux-x64/dotnet
+<<<<<<< HEAD
         ln -s ${dotnet-sdk_7} lib/ReSharperHost/linux-x64/dotnet
       '');
     });
@@ -282,11 +405,21 @@ let
   buildRubyMine = { pname, version, src, license, description, wmClass, buildNumber, ... }:
     (mkJetBrainsProduct {
       inherit pname version src wmClass jdk buildNumber;
+=======
+        ln -s ${dotnet-sdk_6} lib/ReSharperHost/linux-x64/dotnet
+      '');
+    });
+
+  buildRubyMine = { pname, version, src, license, description, wmClass, ... }:
+    (mkJetBrainsProduct {
+      inherit pname version src wmClass jdk;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       product = "RubyMine";
       meta = with lib; {
         homepage = "https://www.jetbrains.com/ruby/";
         inherit description license platforms;
         longDescription = description;
+<<<<<<< HEAD
         maintainers = with maintainers; [ edwtjo tymscar ];
       };
     });
@@ -294,6 +427,15 @@ let
   buildWebStorm = { pname, version, src, license, description, wmClass, buildNumber, ... }:
     (mkJetBrainsProduct {
       inherit pname version src wmClass jdk buildNumber;
+=======
+        maintainers = with maintainers; [ edwtjo ];
+      };
+    });
+
+  buildWebStorm = { pname, version, src, license, description, wmClass, ... }:
+    (mkJetBrainsProduct {
+      inherit pname version src wmClass jdk;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       product = "WebStorm";
       meta = with lib; {
         homepage = "https://www.jetbrains.com/webstorm/";
@@ -303,7 +445,11 @@ let
           and CSS with on-the-fly code analysis, error prevention and
           automated refactorings for JavaScript code.
         '';
+<<<<<<< HEAD
         maintainers = with maintainers; [ abaldeau tymscar ];
+=======
+        maintainers = with maintainers; [ abaldeau ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       };
     });
 
@@ -315,8 +461,12 @@ in
   clion = buildClion rec {
     pname = "clion";
     version = products.clion.version;
+<<<<<<< HEAD
     buildNumber = products.clion.build_number;
     description = "C/C++ IDE. New. Intelligent. Cross-platform";
+=======
+    description  = "C/C++ IDE. New. Intelligent. Cross-platform";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     license = lib.licenses.unfree;
     src = fetchurl {
       url = products.clion.url;
@@ -329,7 +479,10 @@ in
   datagrip = buildDataGrip rec {
     pname = "datagrip";
     version = products.datagrip.version;
+<<<<<<< HEAD
     buildNumber = products.datagrip.build_number;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     description = "Your Swiss Army Knife for Databases and SQL";
     license = lib.licenses.unfree;
     src = fetchurl {
@@ -340,6 +493,7 @@ in
     update-channel = products.datagrip.update-channel;
   };
 
+<<<<<<< HEAD
   dataspell = buildDataSpell rec {
     pname = "dataspell";
     version = products.dataspell.version;
@@ -354,11 +508,16 @@ in
     update-channel = products.dataspell.update-channel;
   };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   gateway = buildGateway rec {
     pname = "gateway";
     product = "JetBrains Gateway";
     version = products.gateway.version;
+<<<<<<< HEAD
     buildNumber = products.gateway.build_number;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     description = "Your single entry point to all remote development environments";
     license = lib.licenses.unfree;
     src = fetchurl {
@@ -372,7 +531,10 @@ in
   goland = buildGoland rec {
     pname = "goland";
     version = products.goland.version;
+<<<<<<< HEAD
     buildNumber = products.goland.build_number;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     description = "Up and Coming Go IDE";
     license = lib.licenses.unfree;
     src = fetchurl {
@@ -387,7 +549,10 @@ in
     pname = "idea-community";
     product = "IntelliJ IDEA CE";
     version = products.idea-community.version;
+<<<<<<< HEAD
     buildNumber = products.idea-community.build_number;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     description = "Integrated Development Environment (IDE) by Jetbrains, community edition";
     license = lib.licenses.asl20;
     src = fetchurl {
@@ -402,7 +567,10 @@ in
     pname = "idea-ultimate";
     product = "IntelliJ IDEA";
     version = products.idea-ultimate.version;
+<<<<<<< HEAD
     buildNumber = products.idea-ultimate.build_number;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     description = "Integrated Development Environment (IDE) by Jetbrains, requires paid license";
     license = lib.licenses.unfree;
     src = fetchurl {
@@ -417,7 +585,10 @@ in
     pname = "mps";
     product = "MPS ${products.mps.version}";
     version = products.mps.version;
+<<<<<<< HEAD
     buildNumber = products.mps.build_number;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     description = "Create your own domain-specific language";
     license = lib.licenses.asl20;
     src = fetchurl {
@@ -431,7 +602,10 @@ in
   phpstorm = buildPhpStorm rec {
     pname = "phpstorm";
     version = products.phpstorm.version;
+<<<<<<< HEAD
     buildNumber = products.phpstorm.build_number;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     description = "Professional IDE for Web and PHP developers";
     license = lib.licenses.unfree;
     src = fetchurl {
@@ -446,7 +620,10 @@ in
     pname = "pycharm-community";
     product = "PyCharm CE";
     version = products.pycharm-community.version;
+<<<<<<< HEAD
     buildNumber = products.pycharm-community.build_number;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     description = "PyCharm Community Edition";
     license = lib.licenses.asl20;
     src = fetchurl {
@@ -461,7 +638,10 @@ in
     pname = "pycharm-professional";
     product = "PyCharm";
     version = products.pycharm-professional.version;
+<<<<<<< HEAD
     buildNumber = products.pycharm-community.build_number;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     description = "PyCharm Professional Edition";
     license = lib.licenses.unfree;
     src = fetchurl {
@@ -475,7 +655,10 @@ in
   rider = buildRider rec {
     pname = "rider";
     version = products.rider.version;
+<<<<<<< HEAD
     buildNumber = products.rider.build_number;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     description = "A cross-platform .NET IDE based on the IntelliJ platform and ReSharper";
     license = lib.licenses.unfree;
     src = fetchurl {
@@ -489,7 +672,10 @@ in
   ruby-mine = buildRubyMine rec {
     pname = "ruby-mine";
     version = products.ruby-mine.version;
+<<<<<<< HEAD
     buildNumber = products.ruby-mine.build_number;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     description = "The Most Intelligent Ruby and Rails IDE";
     license = lib.licenses.unfree;
     src = fetchurl {
@@ -503,7 +689,10 @@ in
   webstorm = buildWebStorm rec {
     pname = "webstorm";
     version = products.webstorm.version;
+<<<<<<< HEAD
     buildNumber = products.webstorm.build_number;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     description = "Professional IDE for Web and JavaScript development";
     license = lib.licenses.unfree;
     src = fetchurl {
@@ -514,6 +703,9 @@ in
     update-channel = products.webstorm.update-channel;
   };
 
+<<<<<<< HEAD
   plugins = callPackage ./plugins { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }

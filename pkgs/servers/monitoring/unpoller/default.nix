@@ -6,16 +6,27 @@
 
 buildGoModule rec {
   pname = "unpoller";
+<<<<<<< HEAD
   version = "2.8.3";
+=======
+  version = "2.7.13";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "unpoller";
     repo = "unpoller";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-ONr8xwvCXLnAlJKbgt/O+lCEKbV2SJXW/1oJPYRtQ3s=";
   };
 
   vendorHash = "sha256-eLHtSEINxrqjlPyJZJwfSGA0gVaxcIolhWnqJxLXkew=";
+=======
+    hash = "sha256-X7ZolDmYXexmERiCUvzKqADpwT1W/pQcaIEwMzfSTR4=";
+  };
+
+  vendorHash = "sha256-VkVU+1zX8ENmq7qY7NAEQtLyqc8UNwRQF2wU65B9vpE=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   ldflags = [
     "-w" "-s"

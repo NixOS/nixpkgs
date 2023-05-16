@@ -15,7 +15,11 @@ stdenv.mkDerivation rec {
   buildInputs = [ gpsd libcap libnl ];
 
   preBuild = ''
+<<<<<<< HEAD
     makeFlags="PREFIX=$out"
+=======
+    makeFlags="PREFIX=$out PKG_CONFIG=${pkg-config}/bin/${pkg-config.targetPrefix}pkg-config"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '';
 
   meta = {

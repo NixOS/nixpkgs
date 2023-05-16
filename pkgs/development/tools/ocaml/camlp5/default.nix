@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 { lib, stdenv, fetchFromGitHub, ocaml, findlib, perl, makeWrapper
 , rresult, bos, ocaml_pcre, re, camlp-streams
 , legacy ? false
@@ -48,11 +49,40 @@ stdenv.mkDerivation (params // {
 
   strictDeps = true;
 
+=======
+{ lib, stdenv, fetchFromGitHub, ocaml, perl }:
+
+if lib.versionOlder ocaml.version "4.02"
+|| lib.versionOlder "4.13" ocaml.version
+then throw "camlp5 is not available for OCaml ${ocaml.version}"
+else
+
+stdenv.mkDerivation rec {
+
+  pname = "camlp5";
+  version = "7.14";
+
+  src = fetchFromGitHub {
+    owner = "camlp5";
+    repo = "camlp5";
+    rev = "rel${builtins.replaceStrings [ "." ] [ "" ] version}";
+    sha256 = "1dd68bisbpqn5lq2pslm582hxglcxnbkgfkwhdz67z4w9d5nvr7w";
+  };
+
+  strictDeps = true;
+
+  nativeBuildInputs = [ ocaml perl ];
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   prefixKey = "-prefix ";
 
   preConfigure = ''
     configureFlagsArray=(--strict --libdir $out/lib/ocaml/${ocaml.version}/site-lib)
+<<<<<<< HEAD
     patchShebangs ./config/find_stuffversion.pl etc/META.pl
+=======
+    patchShebangs ./config/find_stuffversion.pl
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '';
 
   buildFlags = [ "world.opt" ];
@@ -72,4 +102,8 @@ stdenv.mkDerivation (params // {
       maggesi vbgl
     ];
   };
+<<<<<<< HEAD
 })
+=======
+}
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)

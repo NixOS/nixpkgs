@@ -5,10 +5,18 @@
 }:
 
 let
+<<<<<<< HEAD
   maple-font = { pname, sha256, desc }:
     stdenv.mkDerivation rec{
       inherit pname;
       version = "6.4";
+=======
+  maple-font = { pname, sha256, desc }: stdenv.mkDerivation
+    rec{
+
+      inherit pname desc;
+      version = "6.3";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       src = fetchurl {
         url = "https://github.com/subframe7536/Maple-font/releases/download/v${version}/${pname}.zip";
         inherit sha256;
@@ -16,7 +24,11 @@ let
 
       # Work around the "unpacker appears to have produced no directories"
       # case that happens when the archive doesn't have a subdirectory.
+<<<<<<< HEAD
       sourceRoot = ".";
+=======
+      setSourceRoot = "sourceRoot=`pwd`";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       nativeBuildInputs = [ unzip ];
       installPhase = ''
         find . -name '*.ttf'    -exec install -Dt $out/share/fonts/truetype {} \;
@@ -38,31 +50,50 @@ let
 in
 {
   Mono = maple-font {
+<<<<<<< HEAD
     pname = "MapleMono-ttf";
     sha256 = "sha256-a06JLIP5aVb9SeEz6kw+LqKy0ydCgaUlPDFWA2Y0G8Q=";
     desc = "monospace TrueType";
+=======
+    pname = "MapleMono";
+    sha256 = "sha256-Ap4OwP/QGFz9+xn12rekia1/pwRxZvv+H+ZmZiXcxcY=";
+    desc = "monospace";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   NF = maple-font {
     pname = "MapleMono-NF";
+<<<<<<< HEAD
     sha256 = "sha256-fy+hdUYZDW5nkMVirhkmys3tIkWezPDrlpNxnRMl4WU=";
+=======
+    sha256 = "sha256-WZHFQRG+81TF5YgOT249c8VA8vAvYowiQx/pqsDuJ4o=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     desc = "Nerd Font";
   };
 
   SC-NF = maple-font {
     pname = "MapleMono-SC-NF";
+<<<<<<< HEAD
     sha256 = "sha256-SbXWkrpLJUrq+Jt1h3GBP9md5TbYpPchdiR0oEDMAgY=";
+=======
+    sha256 = "sha256-26odkmMljEwstRywDYJ7Dst5pfOXrtQTcrFFxbRwHcA=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     desc = "Nerd Font SC";
   };
 
   opentype = maple-font {
     pname = "MapleMono-otf";
+<<<<<<< HEAD
     sha256 = "sha256-fwfFlNbaWXFCjcno7NK3dZqAzsHLh9rdGkSq26xc9qw=";
+=======
+    sha256 = "sha256-u2IuymjiosoSbdIW7h2QalagTI+eDMRSuhLgXy5RdRA=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     desc = "OpenType";
   };
 
   woff2 = maple-font {
     pname = "MapleMono-woff2";
+<<<<<<< HEAD
     sha256 = "sha256-4akpZGGth4yZjI5wjO3ZXrXcWNxb7/6YChU7T5fNVKs=";
     desc = "WOFF2.0";
   };
@@ -72,6 +103,11 @@ in
     sha256 = "sha256-rSYIC42Bt+KFgxhwRhXS4sbh4etKYkCOo5nP2J2BHt4=";
     desc = "ttf autohint";
   };
+=======
+    sha256 = "sha256-iv6Q/aYMlAkhaem8tFWAzqc9mVgWQXghBzcHJz1dg/Y=";
+    desc = "WOFF2.0";
+  };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }
 
 

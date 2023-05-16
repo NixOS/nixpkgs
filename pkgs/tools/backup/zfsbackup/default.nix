@@ -1,6 +1,10 @@
 { lib
 , buildGoModule
 , fetchFromGitHub
+<<<<<<< HEAD
+=======
+, zfs
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 buildGoModule rec {
@@ -15,7 +19,11 @@ buildGoModule rec {
     sha256 = "sha256-ZJ7gtT4AdMLEs2+hJa2Sia0hSoQd3CftdqRsH/oJxd8=";
   };
 
+<<<<<<< HEAD
   vendorHash = "sha256-aYAficUFYYhZygfQZyczP49CeouAKKZJW8IFlkFh9lI=";
+=======
+  vendorSha256 = "sha256-aYAficUFYYhZygfQZyczP49CeouAKKZJW8IFlkFh9lI=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   ldflags = [ "-w" "-s" ];
 

@@ -11,7 +11,11 @@ py.toPythonApplication
       py.mysqlclient
     ];
 
+<<<<<<< HEAD
     postPatch = (old.postPatch or "") + ''
+=======
+    postPatch = ''
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       substituteInPlace mlflow/utils/process.py --replace \
         "child = subprocess.Popen(cmd, env=cmd_env, cwd=cwd, universal_newlines=True," \
         "cmd[0]='$out/bin/gunicornMlflow'; child = subprocess.Popen(cmd, env=cmd_env, cwd=cwd, universal_newlines=True,"

@@ -5,6 +5,7 @@
 , git, nix, nixfmt, jq, coreutils, gnused, curl, cacert, bash }:
 
 stdenv.mkDerivation rec {
+<<<<<<< HEAD
   version = "2023-06-26";
   pname = "oh-my-zsh";
 
@@ -13,6 +14,17 @@ stdenv.mkDerivation rec {
     repo = "ohmyzsh";
     rev = "8cbe98469d9862d37d43ca4229dc8e915ec377a9";
     sha256 = "sha256-/bFD1z/icQe4OfVcudMjIbkCh7MU6pEZiKBOYOFiCXs=";
+=======
+  version = "2023-04-21";
+  pname = "oh-my-zsh";
+  rev = "5d3e86e2a48adf7a308773f8f1b725d187c7c5ef";
+
+  src = fetchFromGitHub {
+    inherit rev;
+    owner = "ohmyzsh";
+    repo = "ohmyzsh";
+    sha256 = "pJRe3UEpXpfop4huOzWwxivyCRJKIDN/y+Slv8bKcmk=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   strictDeps = true;

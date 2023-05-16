@@ -1,11 +1,19 @@
 { lib
+<<<<<<< HEAD
 , buildPythonPackage
 , click
+=======
+, absl-py
+, buildPythonPackage
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , dm-tree
 , docutils
 , etils
 , fetchFromGitHub
+<<<<<<< HEAD
 , fetchpatch
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , numpy
 , pythonOlder
 , tabulate
@@ -28,6 +36,7 @@ buildPythonPackage rec {
     hash = "sha256-YSMeH5ZTfP1OdLBepsxXAVczBG/ghSjCWjoz/I+TFl8=";
   };
 
+<<<<<<< HEAD
   patches = [
     (fetchpatch {
       name = "replace-np-bool-with-np-bool_.patch";
@@ -36,6 +45,8 @@ buildPythonPackage rec {
     })
   ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   propagatedBuildInputs = [
     dm-tree
     etils
@@ -51,9 +62,13 @@ buildPythonPackage rec {
   };
 
   nativeCheckInputs = [
+<<<<<<< HEAD
     click
     docutils
     tensorflow
+=======
+    docutils
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     tensorflow-datasets
   ];
 

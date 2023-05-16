@@ -8,6 +8,7 @@
 , libjpeg
 , dav1d
 , libyuv
+<<<<<<< HEAD
 , gdk-pixbuf
 , makeWrapper
 }:
@@ -17,6 +18,10 @@ let
   gdkPixbufModuleFile = "${placeholder "out"}/${gdk-pixbuf.binaryDir}/avif-loaders.cache";
 in
 
+=======
+}:
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 stdenv.mkDerivation rec {
   pname = "libavif";
   version = "0.11.1";
@@ -36,18 +41,27 @@ stdenv.mkDerivation rec {
     "-DAVIF_CODEC_DAV1D=ON" # best decoder (fast)
     "-DAVIF_CODEC_AOM_DECODE=OFF"
     "-DAVIF_BUILD_APPS=ON"
+<<<<<<< HEAD
     "-DAVIF_BUILD_GDK_PIXBUF=ON"
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   nativeBuildInputs = [
     cmake
     pkg-config
+<<<<<<< HEAD
     gdk-pixbuf
     makeWrapper
   ];
 
   buildInputs = [
     gdk-pixbuf
+=======
+  ];
+
+  buildInputs = [
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     libaom
     zlib
     libpng
@@ -56,6 +70,7 @@ stdenv.mkDerivation rec {
     libyuv
   ];
 
+<<<<<<< HEAD
   postPatch = ''
     substituteInPlace contrib/gdk-pixbuf/avif.thumbnailer.in \
       --replace '@CMAKE_INSTALL_FULL_BINDIR@/gdk-pixbuf-thumbnailer' "$out/libexec/gdk-pixbuf-thumbnailer-avif"
@@ -76,6 +91,8 @@ stdenv.mkDerivation rec {
       --set GDK_PIXBUF_MODULE_FILE ${gdkPixbufModuleFile}
   '';
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   meta = with lib; {
     description  = "C implementation of the AV1 Image File Format";
     longDescription = ''

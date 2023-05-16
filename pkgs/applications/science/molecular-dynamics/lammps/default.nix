@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 { lib
 , stdenv
 , fetchFromGitHub
@@ -46,11 +47,29 @@
 stdenv.mkDerivation rec {
   # LAMMPS has weird versioning converted to ISO 8601 format
   version = "2Aug2023";
+=======
+{ lib, stdenv, fetchFromGitHub
+, libpng, gzip, fftw, blas, lapack
+, withMPI ? false
+, mpi
+}:
+let packages = [
+     "asphere" "body" "class2" "colloid" "compress" "coreshell"
+     "dipole" "granular" "kspace" "manybody" "mc" "misc" "molecule"
+     "opt" "peri" "qeq" "replica" "rigid" "shock" "snap" "srd" "user-reaxc"
+    ];
+    lammps_includes = "-DLAMMPS_EXCEPTIONS -DLAMMPS_GZIP -DLAMMPS_MEMALIGN=64";
+in
+stdenv.mkDerivation rec {
+  # LAMMPS has weird versioning converted to ISO 8601 format
+  version = "stable_29Oct2020";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pname = "lammps";
 
   src = fetchFromGitHub {
     owner = "lammps";
     repo = "lammps";
+<<<<<<< HEAD
     rev = "stable_${version}";
     hash = "sha256-6T4YAa4iN3pJpODGPW+faR16xxyYYdkHLavtiPUbZ4o=";
   };
@@ -96,6 +115,38 @@ stdenv.mkDerivation rec {
     install -Dm644 ../../tools/vim/filetype.vim $out/share/vim-plugins/lammps/ftdetect/lammps.vim
     mkdir -p $out/share/nvim
     ln -s $out/share/vim-plugins/lammps $out/share/nvim/site
+=======
+    rev = version;
+    sha256 = "1rmi9r5wj2z49wg43xyhqn9sm37n95cyli3g7vrqk3ww35mmh21q";
+  };
+
+  passthru = {
+    inherit mpi;
+    inherit packages;
+  };
+
+  buildInputs = [ fftw libpng blas lapack gzip ]
+    ++ (lib.optionals withMPI [ mpi ]);
+
+  configurePhase = ''
+    cd src
+    for pack in ${lib.concatStringsSep " " packages}; do make "yes-$pack" SHELL=$SHELL; done
+  '';
+
+  # Must do manual build due to LAMMPS requiring a separate build for
+  # the libraries and executable. Also non-typical make script
+  buildPhase = ''
+    make mode=exe ${if withMPI then "mpi" else "serial"} SHELL=$SHELL LMP_INC="${lammps_includes}" FFT_PATH=-DFFT_FFTW3 FFT_LIB=-lfftw3 JPG_LIB=-lpng
+    make mode=shlib ${if withMPI then "mpi" else "serial"} SHELL=$SHELL LMP_INC="${lammps_includes}" FFT_PATH=-DFFT_FFTW3 FFT_LIB=-lfftw3 JPG_LIB=-lpng
+  '';
+
+  installPhase = ''
+    mkdir -p $out/bin $out/include $out/lib
+
+    cp -v lmp_* $out/bin/
+    cp -v *.h $out/include/
+    cp -v liblammps* $out/lib/
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '';
 
   meta = with lib; {
@@ -110,11 +161,15 @@ stdenv.mkDerivation rec {
     homepage = "https://lammps.sandia.gov";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
+<<<<<<< HEAD
     # compiling lammps with 64 bit support blas and lapack might cause runtime
     # segfaults. In anycase both blas and lapack should have the same #bits
     # support.
     broken = (blas.isILP64 && lapack.isILP64);
     maintainers = [ maintainers.costrouc maintainers.doronbehar ];
     mainProgram = "lmp";
+=======
+    maintainers = [ maintainers.costrouc ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

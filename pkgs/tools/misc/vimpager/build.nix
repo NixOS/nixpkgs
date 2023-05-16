@@ -2,6 +2,10 @@
 , fetchFromGitHub
 , coreutils
 , sharutils
+<<<<<<< HEAD
+=======
+, runtimeShell
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , version
 , sha256
 }:

@@ -2,11 +2,19 @@
 
 stdenv.mkDerivation rec {
   pname = "fastjet-contrib";
+<<<<<<< HEAD
   version = "1.052";
 
   src = fetchurl {
     url = "https://fastjet.hepforge.org/contrib/downloads/fjcontrib-${version}.tar.gz";
     sha256 = "sha256-veY8KMvfmSvt6k3e38PNUsn+wkGnZ8xFXdStEOghDDk=";
+=======
+  version = "1.049";
+
+  src = fetchurl {
+    url = "https://fastjet.hepforge.org/contrib/downloads/fjcontrib-${version}.tar.gz";
+    sha256 = "sha256-ri7WIGvGJ4tl6ZpPeN8O6ykR8wGij7V7UMVzwNWGmYc=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   buildInputs = [ fastjet ];

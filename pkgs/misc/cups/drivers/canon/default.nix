@@ -16,15 +16,26 @@
 , coreutils
 , atk
 , pkg-config
+<<<<<<< HEAD
 , libxml2
 , runtimeShell
 , libredirect
 , ghostscript
 , pkgs
+=======
+, gnome2
+, libxml2
+, runtimeShell
+, proot
+, ghostscript
+, pkgs
+, pkgsi686Linux
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , zlib
 }:
 
 let
+<<<<<<< HEAD
   system =
     if stdenv.targetPlatform.system == "x86_64-linux" then "intel"
     else if stdenv.targetPlatform.system == "aarch64-linux" then "arm"
@@ -42,6 +53,26 @@ let
   };
 
   buildInputs = [ cups zlib jbigkit glib gtk3 libxml2 gdk-pixbuf pango cairo atk ];
+=======
+  i686_NIX_GCC = pkgsi686Linux.callPackage ({ gcc }: gcc) { };
+  ld32 =
+    if stdenv.hostPlatform.system == "x86_64-linux" then "${stdenv.cc}/nix-support/dynamic-linker-m32"
+    else if stdenv.hostPlatform.system == "i686-linux" then "${stdenv.cc}/nix-support/dynamic-linker"
+    else throw "Unsupported platform for Canon UFR2 Drivers: ${stdenv.hostPlatform.system}";
+  ld64 = "${stdenv.cc}/nix-support/dynamic-linker";
+  libs = pkgs: lib.makeLibraryPath buildInputs;
+
+  version = "5.40";
+  dl = "6/0100009236/10";
+
+  versionNoDots = builtins.replaceStrings [ "." ] [ "" ] version;
+  src_canon = fetchurl {
+    url = "http://gdlp01.c-wss.com/gds/${dl}/linux-UFRII-drv-v${versionNoDots}-usen-20.tar.gz";
+    sha256 = "sha256:069z6ijmql62mcdyxnzc9mf0dxa6z1107cd0ab4i1adk8kr3d75k";
+  };
+
+  buildInputs = [ cups zlib jbigkit glib gtk3 gnome2.libglade libxml2 gdk-pixbuf pango cairo atk ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 in
 stdenv.mkDerivation rec {
   pname = "canon-cups-ufr2";
@@ -51,11 +82,18 @@ stdenv.mkDerivation rec {
   postUnpack = ''
     (
       cd $sourceRoot
+<<<<<<< HEAD
       tar -xf Sources/cnrdrvcups-lb-${version}-1.11.tar.xz
       sed -ie "s@_prefix=/usr@_prefix=$out@" cnrdrvcups-common-${version}/allgen.sh
       sed -ie "s@_libdir=/usr/lib@_libdir=$out/lib@" cnrdrvcups-common-${version}/allgen.sh
       sed -ie "s@_bindir=/usr/bin@_bindir=$out/bin@" cnrdrvcups-common-${version}/allgen.sh
       sed -ie "s@/usr@$out@" cnrdrvcups-common-${version}/{{backend,rasterfilter}/Makefile.am,rasterfilter/cnrasterproc.h}
+=======
+      tar -xzf Sources/cnrdrvcups-lb-${version}-1.tar.gz
+      sed -ie "s@_prefix=/usr@_prefix=$out@" cnrdrvcups-common-${version}/allgen.sh
+      sed -ie "s@_libdir=/usr/lib@_libdir=$out/lib@" cnrdrvcups-common-${version}/allgen.sh
+      sed -ie "s@_bindir=/usr/bin@_bindir=$out/bin@" cnrdrvcups-common-${version}/allgen.sh
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       sed -ie "s@etc/cngplp@$out/etc/cngplp@" cnrdrvcups-common-${version}/cngplp/Makefile.am
       sed -ie "s@usr/share/cngplp@$out/usr/share/cngplp@" cnrdrvcups-common-${version}/cngplp/src/Makefile.am
       patchShebangs cnrdrvcups-common-${version}
@@ -65,7 +103,10 @@ stdenv.mkDerivation rec {
       sed -ie "s@_bindir=/usr/bin@_bindir=$out/bin@" cnrdrvcups-lb-${version}/allgen.sh
       sed -ie '/^cd \.\.\/cngplp/,/^cd files/{/^cd files/!{d}}' cnrdrvcups-lb-${version}/allgen.sh
       sed -ie "s@cd \.\./pdftocpca@cd pdftocpca@" cnrdrvcups-lb-${version}/allgen.sh
+<<<<<<< HEAD
       sed -ie "s@/usr@$out@" cnrdrvcups-lb-${version}/pdftocpca/Makefile.am
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       sed -i "/CNGPLPDIR/d" cnrdrvcups-lb-${version}/Makefile
       patchShebangs cnrdrvcups-lb-${version}
     )
@@ -85,8 +126,13 @@ stdenv.mkDerivation rec {
     )
     (
       cd cnrdrvcups-common-${version}/Rule
+<<<<<<< HEAD
       mkdir -p $out/share/cups/usb
       install -m 644 *.usb-quirks $out/share/cups/usb
+=======
+      mkdir -p $out/share/usb
+      install -m 644 *.usb-quirks $out/share/usb
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     )
     (
       cd cnrdrvcups-lb-${version}
@@ -96,6 +142,7 @@ stdenv.mkDerivation rec {
       mkdir -p $out/share/cups/model
       install -m 644 ppd/*.ppd $out/share/cups/model/
     )
+<<<<<<< HEAD
 
     (
       cd lib
@@ -134,10 +181,74 @@ stdenv.mkDerivation rec {
       ln -sf libcaepcmufr2.so.1.0 libcaepcmufr2.so.1
       ln -sf libcaiocnpkbidir.so.1.0.0 libcaiocnpkbidir.so
       ln -sf libcaiocnpkbidir.so.1.0.0 libcaiocnpkbidir.so.1
+=======
+    (
+      cd lib
+      mkdir -p $out/lib32
+      install -m 755 libs32/intel/libColorGearCufr2.so.2.0.0 $out/lib32
+      install -m 755 libs32/intel/libcaepcmufr2.so.1.0 $out/lib32
+      install -m 755 libs32/intel/libcaiocnpkbidir.so.1.0.0 $out/lib32
+      install -m 755 libs32/intel/libcaiousb.so.1.0.0 $out/lib32
+      install -m 755 libs32/intel/libcaiowrapufr2.so.1.0.0 $out/lib32
+      install -m 755 libs32/intel/libcanon_slimufr2.so.1.0.0 $out/lib32
+      install -m 755 libs32/intel/libcanonufr2r.so.1.0.0 $out/lib32
+      install -m 755 libs32/intel/libcnaccm.so.1.0 $out/lib32
+      install -m 755 libs32/intel/libcnlbcmr.so.1.0 $out/lib32
+      install -m 755 libs32/intel/libcnncapcmr.so.1.0 $out/lib32
+      install -m 755 libs32/intel/libufr2filterr.so.1.0.0 $out/lib32
+
+      mkdir -p $out/lib
+      install -m 755 libs64/intel/libColorGearCufr2.so.2.0.0 $out/lib
+      install -m 755 libs64/intel/libcaepcmufr2.so.1.0 $out/lib
+      install -m 755 libs64/intel/libcaiocnpkbidir.so.1.0.0 $out/lib
+      install -m 755 libs64/intel/libcaiousb.so.1.0.0 $out/lib
+      install -m 755 libs64/intel/libcaiowrapufr2.so.1.0.0 $out/lib
+      install -m 755 libs64/intel/libcanon_slimufr2.so.1.0.0 $out/lib
+      install -m 755 libs64/intel/libcanonufr2r.so.1.0.0 $out/lib
+      install -m 755 libs64/intel/libcnaccm.so.1.0 $out/lib
+      install -m 755 libs64/intel/libcnlbcmr.so.1.0 $out/lib
+      install -m 755 libs64/intel/libcnncapcmr.so.1.0 $out/lib
+      install -m 755 libs64/intel/libufr2filterr.so.1.0.0 $out/lib
+
+      install -m 755 libs64/intel/cnpdfdrv $out/bin
+      install -m 755 libs64/intel/cnpkbidir $out/bin
+      install -m 755 libs64/intel/cnpkmoduleufr2r $out/bin
+      install -m 755 libs64/intel/cnrsdrvufr2 $out/bin
+      install -m 755 libs64/intel/cnsetuputil2 $out/bin/cnsetuputil2
+
+      mkdir -p $out/share/cnpkbidir
+      install -m 644 libs64/intel/cnpkbidir_info* $out/share/cnpkbidir
+
+      mkdir -p $out/share/ufr2filter
+      install -m 644 libs64/intel/ThLB* $out/share/ufr2filter
+    )
+
+    (
+      cd $out/lib32
+      ln -sf libcaepcmufr2.so.1.0 libcaepcmufr2.so
+      ln -sf libcaepcmufr2.so.1.0 libcaepcmufr2.so.1
       ln -sf libcaiowrapufr2.so.1.0.0 libcaiowrapufr2.so
       ln -sf libcaiowrapufr2.so.1.0.0 libcaiowrapufr2.so.1
       ln -sf libcanon_slimufr2.so.1.0.0 libcanon_slimufr2.so
       ln -sf libcanon_slimufr2.so.1.0.0 libcanon_slimufr2.so.1
+      ln -sf libufr2filterr.so.1.0.0 libufr2filterr.so
+      ln -sf libufr2filterr.so.1.0.0 libufr2filterr.so.1
+
+      patchelf --set-rpath "$(cat ${i686_NIX_GCC}/nix-support/orig-cc)/lib:${libs pkgsi686Linux}:${pkgsi686Linux.stdenv.cc.libc}/lib:${pkgsi686Linux.libxml2.out}/lib:$out/lib32" libcanonufr2r.so.1.0.0
+      patchelf --set-rpath "$(cat ${i686_NIX_GCC}/nix-support/orig-cc)/lib:${libs pkgsi686Linux}:${pkgsi686Linux.stdenv.cc.libc}/lib" libcaepcmufr2.so.1.0
+      patchelf --set-rpath "$(cat ${i686_NIX_GCC}/nix-support/orig-cc)/lib:${libs pkgsi686Linux}:${pkgsi686Linux.stdenv.cc.libc}/lib" libColorGearCufr2.so.2.0.0
+    )
+
+    (
+      cd $out/lib
+      ln -sf libcaepcmufr2.so.1.0 libcaepcmufr2.so
+      ln -sf libcaepcmufr2.so.1.0 libcaepcmufr2.so.1
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
+      ln -sf libcaiowrapufr2.so.1.0.0 libcaiowrapufr2.so
+      ln -sf libcaiowrapufr2.so.1.0.0 libcaiowrapufr2.so.1
+      ln -sf libcanon_slimufr2.so.1.0.0 libcanon_slimufr2.so
+      ln -sf libcanon_slimufr2.so.1.0.0 libcanon_slimufr2.so.1
+<<<<<<< HEAD
       ln -sf libcanonufr2r.so.1.0.0 libcanonufr2r.so
       ln -sf libcanonufr2r.so.1.0.0 libcanonufr2r.so.1
       ln -sf libcnlbcmr.so.1.0 libcnlbcmr.so
@@ -146,6 +257,10 @@ stdenv.mkDerivation rec {
       ln -sf libufr2filterr.so.1.0.0 libufr2filterr.so.1
       ln -sf libuictlufr2r.so.1.0.0 libuictlufr2r.so
       ln -sf libuictlufr2r.so.1.0.0 libuictlufr2r.so.1
+=======
+      ln -sf libufr2filterr.so.1.0.0 libufr2filterr.so
+      ln -sf libufr2filterr.so.1.0.0 libufr2filterr.so.1
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
       patchelf --set-rpath "$(cat $NIX_CC/nix-support/orig-cc)/lib:${libs pkgs}:${stdenv.cc.cc.lib}/lib64:${stdenv.cc.libc}/lib64:$out/lib" libcanonufr2r.so.1.0.0
       patchelf --set-rpath "$(cat $NIX_CC/nix-support/orig-cc)/lib:${libs pkgs}:${stdenv.cc.cc.lib}/lib64:${stdenv.cc.libc}/lib64" libcaepcmufr2.so.1.0
@@ -154,6 +269,7 @@ stdenv.mkDerivation rec {
 
     (
       cd $out/bin
+<<<<<<< HEAD
       patchelf --set-interpreter "$(cat ${ld64})" --set-rpath "${lib.makeLibraryPath buildInputs}:${stdenv.cc.cc.lib}/lib64:${stdenv.cc.libc}/lib64" cnsetuputil2 cnpdfdrv
       patchelf --set-interpreter "$(cat ${ld64})" --set-rpath "${lib.makeLibraryPath buildInputs}:${stdenv.cc.cc.lib}/lib64:${stdenv.cc.libc}/lib64:$out/lib" cnpkbidir cnrsdrvufr2 cnpkmoduleufr2r cnjbigufr2
 
@@ -165,6 +281,17 @@ stdenv.mkDerivation rec {
       wrapProgram $out/bin/cnsetuputil2 \
         --set LD_PRELOAD "${libredirect}/lib/libredirect.so" \
         --set NIX_REDIRECTS /usr/share/cnsetuputil2=$out/usr/share/cnsetuputil2
+=======
+      patchelf --set-interpreter "$(cat ${ld64})" --set-rpath "${lib.makeLibraryPath buildInputs}:${stdenv.cc.cc.lib}/lib64:${stdenv.cc.libc}/lib64" cnsetuputil2
+      patchelf --set-interpreter "$(cat ${ld64})" --set-rpath "${lib.makeLibraryPath buildInputs}:${stdenv.cc.cc.lib}/lib64:${stdenv.cc.libc}/lib64" cnpdfdrv
+      patchelf --set-interpreter "$(cat ${ld64})" --set-rpath "${lib.makeLibraryPath buildInputs}:${stdenv.cc.cc.lib}/lib64:${stdenv.cc.libc}/lib64:$out/lib" cnpkbidir
+      patchelf --set-interpreter "$(cat ${ld64})" --set-rpath "${lib.makeLibraryPath buildInputs}:${stdenv.cc.cc.lib}/lib64:${stdenv.cc.libc}/lib64:$out/lib" cnrsdrvufr2
+
+      mv cnsetuputil2 cnsetuputil2.wrapped
+      echo "#!${runtimeShell} -e" > cnsetuputil2
+      echo "exec ${proot}/bin/proot -b $out/usr/share/cnsetuputil2:/usr/share/cnsetuputil2 -b ${coreutils}/bin/ls:/bin/ls -b ${cups}/share:/usr/share/cups $out/bin/cnsetuputil2.wrapped" > cnsetuputil2
+      chmod +x cnsetuputil2
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     )
 
     (
@@ -194,6 +321,12 @@ stdenv.mkDerivation rec {
     homepage = "http://www.canon.com/";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
+<<<<<<< HEAD
     maintainers = with maintainers; [ lluchs ];
+=======
+    maintainers = with maintainers; [
+      # please consider maintaining if you are updating this package
+    ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

@@ -244,7 +244,11 @@ let
             ${if formatOpt == "raw" then ''
             mv $rootDiskImage $out/${rootFilename}
           '' else ''
+<<<<<<< HEAD
             ${pkgs.qemu_kvm}/bin/qemu-img convert -f raw -O ${formatOpt} ${compress} $rootDiskImage $out/${rootFilename}
+=======
+            ${pkgs.qemu}/bin/qemu-img convert -f raw -O ${formatOpt} ${compress} $rootDiskImage $out/${rootFilename}
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           ''}
             rootDiskImage=$out/${rootFilename}
             set -x

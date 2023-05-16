@@ -26,8 +26,11 @@ stdenv.mkDerivation rec {
   doCheck = true;
   checkTarget = "test";
 
+<<<<<<< HEAD
   enableParallelBuilding = true;
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   meta = with lib; {
     description = "An HTTP message parser written in C";
     homepage = "https://github.com/nodejs/http-parser";

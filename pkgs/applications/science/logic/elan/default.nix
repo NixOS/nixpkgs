@@ -3,16 +3,27 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "elan";
+<<<<<<< HEAD
   version = "3.0.0";
+=======
+  version = "1.4.5";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "leanprover";
     repo = "elan";
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-VrCEwAoWKhb1qfJUv3OreTzuKEVQADwZpEQIVEhjwHA=";
   };
 
   cargoHash = "sha256-SMKFSu5C5mc3U266hEa6RB3GH5te3jIrUZAzj3YNa2E=";
+=======
+    sha256 = "sha256-KCRKVVNC2tJZWgqdQ8NPUzJHPexhF58cuO8Iyx81UJo=";
+  };
+
+  cargoHash = "sha256-nFaDWDmDskZ0TKFG5KZk/vLn6ZzU3+mPD6y1wFxhLXg=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nativeBuildInputs = [ pkg-config makeWrapper ];
 
@@ -61,9 +72,14 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "Small tool to manage your installations of the Lean theorem prover";
     homepage = "https://github.com/leanprover/elan";
+<<<<<<< HEAD
     changelog = "https://github.com/leanprover/elan/blob/v${version}/CHANGELOG.md";
     license = with licenses; [ asl20 /* or */ mit ];
     maintainers = with maintainers; [ gebner ];
     mainProgram = "elan";
+=======
+    license = with licenses; [ asl20 /* or */ mit ];
+    maintainers = with maintainers; [ gebner ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

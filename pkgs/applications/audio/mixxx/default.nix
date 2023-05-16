@@ -52,13 +52,21 @@
 
 mkDerivation rec {
   pname = "mixxx";
+<<<<<<< HEAD
   version = "2.3.6";
+=======
+  version = "2.3.4";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "mixxxdj";
     repo = "mixxx";
     rev = version;
+<<<<<<< HEAD
     hash = "sha256-VdgCsd/7vMFUleOU0ESoZDQ8yhQSsLZADVi4XI76Ouw=";
+=======
+    sha256 = "sha256-1hOMU/Mdk1vT0GQipn/WX2fm9ddN0mPIq7kf2i2w3xQ=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ cmake pkg-config ];
@@ -116,7 +124,11 @@ mkDerivation rec {
 
   # mixxx installs udev rules to DATADIR instead of SYSCONFDIR
   # let's disable this and install udev rules manually via postInstall
+<<<<<<< HEAD
   # see https://github.com/mixxxdj/mixxx/blob/2.3.5/CMakeLists.txt#L1381-L1392
+=======
+  # see https://github.com/mixxxdj/mixxx/blob/2.3.4/CMakeLists.txt#L1381-L1392
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   cmakeFlags = [
     "-DINSTALL_USER_UDEV_RULES=OFF"
   ];

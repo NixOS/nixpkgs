@@ -5,14 +5,22 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "snakemake";
+<<<<<<< HEAD
   version = "7.29.0";
+=======
+  version = "7.25.3";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "snakemake";
     repo = pname;
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-UfUzvDo5OE1LGCBBGoDpxG96RKOaShbqu5TOOILG3AY=";
+=======
+    hash = "sha256-KrstajTocVX5Tw7aiPoJ9vxJ0nKF+jqJcYJKrJvBt0Q=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = with python3.pkgs; [

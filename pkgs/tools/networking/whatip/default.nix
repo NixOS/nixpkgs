@@ -37,7 +37,10 @@ python3.pkgs.buildPythonApplication rec {
     wrapGAppsHook4
     appstream-glib
     desktop-file-utils
+<<<<<<< HEAD
     gobject-introspection
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   buildInputs = [
@@ -45,6 +48,10 @@ python3.pkgs.buildPythonApplication rec {
     gtk4
     librsvg
     libadwaita
+<<<<<<< HEAD
+=======
+    gobject-introspection
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   propagatedBuildInputs = with python3.pkgs; [

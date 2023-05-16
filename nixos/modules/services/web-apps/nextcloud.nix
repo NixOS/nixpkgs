@@ -8,6 +8,7 @@ let
 
   jsonFormat = pkgs.formats.json {};
 
+<<<<<<< HEAD
   defaultPHPSettings = {
     short_open_tag = "Off";
     expose_php = "Off";
@@ -23,6 +24,8 @@ let
     catch_workers_output = "yes";
   };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   inherit (cfg) datadir;
 
   phpPackage = cfg.phpPackage.buildEnv {
@@ -41,13 +44,29 @@ let
         ++ optional cfg.caching.memcached memcached
       )
       ++ cfg.phpExtraExtensions all; # Enabled by user
+<<<<<<< HEAD
     extraConfig = toKeyValue cfg.phpOptions;
+=======
+    extraConfig = toKeyValue phpOptions;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   toKeyValue = generators.toKeyValue {
     mkKeyValue = generators.mkKeyValueDefault {} " = ";
   };
 
+<<<<<<< HEAD
+=======
+  phpOptions = {
+    upload_max_filesize = cfg.maxUploadSize;
+    post_max_size = cfg.maxUploadSize;
+    memory_limit = cfg.maxUploadSize;
+  } // cfg.phpOptions
+    // optionalAttrs cfg.caching.apcu {
+      "apc.enable_cli" = "1";
+    };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   occ = pkgs.writeScriptBin "nextcloud-occ" ''
     #! ${pkgs.runtimeShell}
     cd ${cfg.package}
@@ -142,8 +161,13 @@ in {
       default = config.services.nextcloud.home;
       defaultText = literalExpression "config.services.nextcloud.home";
       description = lib.mdDoc ''
+<<<<<<< HEAD
         Nextcloud's data storage path.  Will be [](#opt-services.nextcloud.home) by default.
         This folder will be populated with a config.php file and a data folder which contains the state of the instance (excluding the database).";
+=======
+        Data storage path of nextcloud.  Will be [](#opt-services.nextcloud.home) by default.
+        This folder will be populated with a config.php and data folder which contains the state of the instance (excl the database).";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       '';
       example = "/mnt/nextcloud-file";
     };
@@ -176,8 +200,13 @@ in {
       type = types.bool;
       default = true;
       description = lib.mdDoc ''
+<<<<<<< HEAD
         Automatically enable the apps in [](#opt-services.nextcloud.extraApps) every time Nextcloud starts.
         If set to false, apps need to be enabled in the Nextcloud web user interface or with `nextcloud-occ app:enable`.
+=======
+        Automatically enable the apps in [](#opt-services.nextcloud.extraApps) every time nextcloud starts.
+        If set to false, apps need to be enabled in the Nextcloud user interface or with nextcloud-occ app:enable.
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       '';
     };
     appstoreEnable = mkOption {
@@ -185,15 +214,23 @@ in {
       default = null;
       example = true;
       description = lib.mdDoc ''
+<<<<<<< HEAD
         Allow the installation and updating of apps from the Nextcloud appstore.
         Enabled by default unless there are packages in [](#opt-services.nextcloud.extraApps).
         Set this to true to force enable the store even if [](#opt-services.nextcloud.extraApps) is used.
         Set this to false to disable the installation of apps from the global appstore. App management is always enabled regardless of this setting.
+=======
+        Allow the installation of apps and app updates from the store.
+        Enabled by default unless there are packages in [](#opt-services.nextcloud.extraApps).
+        Set to true to force enable the store even if [](#opt-services.nextcloud.extraApps) is used.
+        Set to false to disable the installation of apps from the global appstore. App management is always enabled regardless of this setting.
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       '';
     };
     logLevel = mkOption {
       type = types.ints.between 0 4;
       default = 2;
+<<<<<<< HEAD
       description = lib.mdDoc ''
         Log level value between 0 (DEBUG) and 4 (FATAL).
 
@@ -207,6 +244,9 @@ in {
 
         - 4 (fatal): Log only fatal errors that cause the server to stop.
       '';
+=======
+      description = lib.mdDoc "Log level value between 0 (DEBUG) and 4 (FATAL).";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
     logType = mkOption {
       type = types.enum [ "errorlog" "file" "syslog" "systemd" ];
@@ -220,16 +260,28 @@ in {
     https = mkOption {
       type = types.bool;
       default = false;
+<<<<<<< HEAD
       description = lib.mdDoc "Use HTTPS for generated links.";
+=======
+      description = lib.mdDoc "Use https for generated links.";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
     package = mkOption {
       type = types.package;
       description = lib.mdDoc "Which package to use for the Nextcloud instance.";
+<<<<<<< HEAD
       relatedPackages = [ "nextcloud25" "nextcloud26" "nextcloud27" ];
     };
     phpPackage = mkOption {
       type = types.package;
       relatedPackages = [ "php81" "php82" ];
+=======
+      relatedPackages = [ "nextcloud25" "nextcloud26" ];
+    };
+    phpPackage = mkOption {
+      type = types.package;
+      relatedPackages = [ "php80" "php81" ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       defaultText = "pkgs.php";
       description = lib.mdDoc ''
         PHP package to use for Nextcloud.
@@ -240,7 +292,11 @@ in {
       default = "512M";
       type = types.str;
       description = lib.mdDoc ''
+<<<<<<< HEAD
         The upload limit for files. This changes the relevant options
+=======
+        Defines the upload limit for files. This changes the relevant options
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         in php.ini and nginx if enabled.
       '';
     };
@@ -269,10 +325,17 @@ in {
       default = all: [];
       defaultText = literalExpression "all: []";
       description = lib.mdDoc ''
+<<<<<<< HEAD
         Additional PHP extensions to use for Nextcloud.
         By default, only extensions necessary for a vanilla Nextcloud installation are enabled,
         but you may choose from the list of available extensions and add further ones.
         This is sometimes necessary to be able to install a certain Nextcloud app that has additional requirements.
+=======
+        Additional PHP extensions to use for nextcloud.
+        By default, only extensions necessary for a vanilla nextcloud installation are enabled,
+        but you may choose from the list of available extensions and add further ones.
+        This is sometimes necessary to be able to install a certain nextcloud app that has additional requirements.
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       '';
       example = literalExpression ''
         all: [ all.pdlib all.bz2 ]
@@ -281,6 +344,7 @@ in {
 
     phpOptions = mkOption {
       type = types.attrsOf types.str;
+<<<<<<< HEAD
       defaultText = literalExpression (generators.toPretty { } defaultPHPSettings);
       description = lib.mdDoc ''
         Options for PHP's php.ini file for nextcloud.
@@ -308,6 +372,24 @@ in {
           };
         }
         ```
+=======
+      default = {
+        short_open_tag = "Off";
+        expose_php = "Off";
+        error_reporting = "E_ALL & ~E_DEPRECATED & ~E_STRICT";
+        display_errors = "stderr";
+        "opcache.enable_cli" = "1";
+        "opcache.interned_strings_buffer" = "8";
+        "opcache.max_accelerated_files" = "10000";
+        "opcache.memory_consumption" = "128";
+        "opcache.revalidate_freq" = "1";
+        "opcache.fast_shutdown" = "1";
+        "openssl.cafile" = "/etc/ssl/certs/ca-certificates.crt";
+        catch_workers_output = "yes";
+      };
+      description = lib.mdDoc ''
+        Options for PHP's php.ini file for nextcloud.
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       '';
     };
 
@@ -330,7 +412,11 @@ in {
       type = types.nullOr types.lines;
       default = null;
       description = lib.mdDoc ''
+<<<<<<< HEAD
         Options for Nextcloud's PHP pool. See the documentation on `php-fpm.conf` for details on configuration directives.
+=======
+        Options for nextcloud's PHP pool. See the documentation on `php-fpm.conf` for details on configuration directives.
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       '';
     };
 
@@ -346,9 +432,15 @@ in {
 
       createLocally = mkOption {
         type = types.bool;
+<<<<<<< HEAD
         default = false;
         description = lib.mdDoc ''
           Whether to create the database and database user locally.
+=======
+        default = true;
+        description = lib.mdDoc ''
+          Create the database and database user locally.
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         '';
       };
 
@@ -386,10 +478,16 @@ in {
           else "localhost";
         defaultText = "localhost";
         description = lib.mdDoc ''
+<<<<<<< HEAD
           Database host or socket path.
           If [](#opt-services.nextcloud.database.createLocally) is true and
           [](#opt-services.nextcloud.config.dbtype) is either `pgsql` or `mysql`,
           defaults to the correct Unix socket instead.
+=======
+          Database host or socket path. Defaults to the correct unix socket
+          instead if `services.nextcloud.database.createLocally` is true and
+          `services.nextcloud.config.dbtype` is either `pgsql` or `mysql`.
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         '';
       };
       dbport = mkOption {
@@ -400,23 +498,35 @@ in {
       dbtableprefix = mkOption {
         type = types.nullOr types.str;
         default = null;
+<<<<<<< HEAD
         description = lib.mdDoc "Table prefix in Nextcloud's database.";
+=======
+        description = lib.mdDoc "Table prefix in Nextcloud database.";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       };
       adminuser = mkOption {
         type = types.str;
         default = "root";
+<<<<<<< HEAD
         description = lib.mdDoc ''
           Username for the admin account. The username is only set during the
           initial setup of Nextcloud! Since the username also acts as unique
           ID internally, it cannot be changed later!
         '';
+=======
+        description = lib.mdDoc "Admin username.";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       };
       adminpassFile = mkOption {
         type = types.str;
         description = lib.mdDoc ''
           The full path to a file that contains the admin's password. Must be
+<<<<<<< HEAD
           readable by user `nextcloud`. The password is set only in the initial
           setup of Nextcloud by the systemd service `nextcloud-setup.service`.
+=======
+          readable by user `nextcloud`.
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         '';
       };
 
@@ -424,7 +534,11 @@ in {
         type = types.listOf types.str;
         default = [];
         description = lib.mdDoc ''
+<<<<<<< HEAD
           Trusted domains from which the Nextcloud installation will be
+=======
+          Trusted domains, from which the nextcloud installation will be
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           accessible.  You don't need to add
           `services.nextcloud.hostname` here.
         '';
@@ -434,8 +548,13 @@ in {
         type = types.listOf types.str;
         default = [];
         description = lib.mdDoc ''
+<<<<<<< HEAD
           Trusted proxies to provide if the Nextcloud installation is being
           proxied to secure against, e.g. spoofing.
+=======
+          Trusted proxies, to provide if the nextcloud installation is being
+          proxied to secure against e.g. spoofing.
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         '';
       };
 
@@ -445,10 +564,17 @@ in {
         example = "https";
 
         description = lib.mdDoc ''
+<<<<<<< HEAD
           Force Nextcloud to always use HTTP or HTTPS i.e. for link generation.
           Nextcloud uses the currently used protocol by default, but when
           behind a reverse-proxy, it may use `http` for everything although
           Nextcloud may be served via HTTPS.
+=======
+          Force Nextcloud to always use HTTPS i.e. for link generation. Nextcloud
+          uses the currently used protocol by default, but when behind a reverse-proxy,
+          it may use `http` for everything although Nextcloud
+          may be served via HTTPS.
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         '';
       };
 
@@ -457,12 +583,25 @@ in {
         type = types.nullOr types.str;
         example = "DE";
         description = lib.mdDoc ''
+<<<<<<< HEAD
           An [ISO 3166-1](https://www.iso.org/iso-3166-country-codes.html)
           country code which replaces automatic phone-number detection
           without a country code.
 
           As an example, with `DE` set as the default phone region,
           the `+49` prefix can be omitted for phone numbers.
+=======
+          ::: {.warning}
+          This option exists since Nextcloud 21! If older versions are used,
+          this will throw an eval-error!
+          :::
+
+          [ISO 3611-1](https://www.iso.org/iso-3166-country-codes.html)
+          country codes for automatic phone-number detection without a country code.
+
+          With e.g. `DE` set, the `+49` can be omitted for
+          phone-numbers.
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         '';
       };
 
@@ -582,6 +721,7 @@ in {
       default = true;
     };
 
+<<<<<<< HEAD
     configureRedis = lib.mkOption {
       type = lib.types.bool;
       default = config.services.nextcloud.notify_push.enable;
@@ -595,6 +735,8 @@ in {
       '';
     };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     caching = {
       apcu = mkOption {
         type = types.bool;
@@ -627,7 +769,11 @@ in {
         type = types.bool;
         default = false;
         description = lib.mdDoc ''
+<<<<<<< HEAD
           Run a regular auto-update of all apps installed from the Nextcloud app store.
+=======
+          Run regular auto update of all apps installed from the nextcloud app store.
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         '';
       };
       startAt = mkOption {
@@ -674,7 +820,11 @@ in {
       type = jsonFormat.type;
       default = {};
       description = lib.mdDoc ''
+<<<<<<< HEAD
         Extra options which should be appended to Nextcloud's config.php file.
+=======
+        Extra options which should be appended to nextcloud's config.php file.
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       '';
       example = literalExpression '' {
         redis = {
@@ -691,7 +841,11 @@ in {
       type = types.nullOr types.str;
       default = null;
       description = lib.mdDoc ''
+<<<<<<< HEAD
         Secret options which will be appended to Nextcloud's config.php file (written as JSON, in the same
+=======
+        Secret options which will be appended to nextcloud's config.php file (written as JSON, in the same
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         form as the [](#opt-services.nextcloud.extraOptions) option), for example
         `{"redis":{"password":"secret"}}`.
       '';
@@ -719,13 +873,21 @@ in {
 
   config = mkIf cfg.enable (mkMerge [
     { warnings = let
+<<<<<<< HEAD
         latest = 27;
+=======
+        latest = 26;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         upgradeWarning = major: nixos:
           ''
             A legacy Nextcloud install (from before NixOS ${nixos}) may be installed.
 
             After nextcloud${toString major} is installed successfully, you can safely upgrade
+<<<<<<< HEAD
             to ${toString (major + 1)}. The latest version available is Nextcloud${toString latest}.
+=======
+            to ${toString (major + 1)}. The latest version available is nextcloud${toString latest}.
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
             Please note that Nextcloud doesn't support upgrades across multiple major versions
             (i.e. an upgrade from 16 is possible to 17, but not 16 to 18).
@@ -738,9 +900,16 @@ in {
           Using config.services.nextcloud.poolConfig is deprecated and will become unsupported in a future release.
           Please migrate your configuration to config.services.nextcloud.poolSettings.
         '')
+<<<<<<< HEAD
         ++ (optional (versionOlder cfg.package.version "25") (upgradeWarning 24 "22.11"))
         ++ (optional (versionOlder cfg.package.version "26") (upgradeWarning 25 "23.05"))
         ++ (optional (versionOlder cfg.package.version "27") (upgradeWarning 26 "23.11"))
+=======
+        ++ (optional (versionOlder cfg.package.version "23") (upgradeWarning 22 "22.05"))
+        ++ (optional (versionOlder cfg.package.version "24") (upgradeWarning 23 "22.05"))
+        ++ (optional (versionOlder cfg.package.version "25") (upgradeWarning 24 "22.11"))
+        ++ (optional (versionOlder cfg.package.version "26") (upgradeWarning 25 "23.05"))
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         ++ (optional cfg.enableBrokenCiphersForSSE ''
           You're using PHP's openssl extension built against OpenSSL 1.1 for Nextcloud.
           This is only necessary if you're using Nextcloud's server-side encryption.
@@ -773,13 +942,18 @@ in {
             ''
           else if versionOlder stateVersion "22.11" then nextcloud24
           else if versionOlder stateVersion "23.05" then nextcloud25
+<<<<<<< HEAD
           else if versionOlder stateVersion "23.11" then nextcloud26
           else nextcloud27
+=======
+          else nextcloud26
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         );
 
       services.nextcloud.phpPackage =
         if versionOlder cfg.package.version "26" then pkgs.php81
         else pkgs.php82;
+<<<<<<< HEAD
 
       services.nextcloud.phpOptions = mkMerge [
         (mapAttrs (const mkOptionDefault) defaultPHPSettings)
@@ -792,13 +966,21 @@ in {
           "apc.enable_cli" = "1";
         })
       ];
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     }
 
     { assertions = [
       { assertion = cfg.database.createLocally -> cfg.config.dbpassFile == null;
         message = ''
+<<<<<<< HEAD
           Using `services.nextcloud.database.createLocally` with database
           password authentication is no longer supported.
+=======
+          Using `services.nextcloud.database.createLocally` (that now defaults
+          to true) with database password authentication is no longer
+          supported.
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
           If you use an external database (or want to use password auth for any
           other reason), set `services.nextcloud.database.createLocally` to
@@ -1099,6 +1281,7 @@ in {
         }];
       };
 
+<<<<<<< HEAD
       services.redis.servers.nextcloud = lib.mkIf cfg.configureRedis {
         enable = true;
         user = "nextcloud";
@@ -1116,6 +1299,8 @@ in {
         };
       };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       services.nginx.enable = mkDefault true;
 
       services.nginx.virtualHosts.${cfg.hostName} = {

@@ -10,8 +10,13 @@ mkDerivation rec {
     hash = "sha256:1w26ddxb1xirb7qjf7kv9llxzjhbhcb7warnxbx41qhbni46g26y";
   };
 
+<<<<<<< HEAD
   nativeBuildInputs = [ pkg-config cmake qttools ];
   buildInputs = [ libX11 libXtst qtbase qtx11extras ];
+=======
+  nativeBuildInputs = [ pkg-config cmake ];
+  buildInputs = [ libX11 libXtst qtbase qttools qtx11extras ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   meta = with lib; {
     description = "A program that lets you use gaming devices anywhere";

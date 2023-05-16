@@ -1,14 +1,28 @@
+<<<<<<< HEAD
 { lib, python3, fetchPypi }:
+=======
+{ lib, python3 }:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 with python3.pkgs;
 
 buildPythonPackage rec {
   pname = "postorius";
+<<<<<<< HEAD
   version = "1.3.8";
 
   src = fetchPypi {
     inherit pname version;
     sha256 = "sha256-1mSt+PVx3xUJDc5JwrCmKiRNIDwbsjjbM2Fi5Sgz6h8=";
+=======
+  # Note: Mailman core must be on the latest version before upgrading Postorious.
+  # See: https://gitlab.com/mailman/postorius/-/issues/516#note_544571309
+  version = "1.3.6";
+
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "sha256-KwzEU9IfcQ6YPZu3jPuFrd6ux/3e2pzoLfTrak/aGmg=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [ django-mailman3 readme_renderer ];

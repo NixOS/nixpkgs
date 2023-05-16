@@ -9,7 +9,11 @@ with pkgs.lib;
 let
   # A testScript fragment that prepares a disk with some empty, unpartitioned
   # space. and uses it to boot the test with. Takes a single argument `machine`
+<<<<<<< HEAD
   # from which the diskImage is extracted.
+=======
+  # from which the diskImage is extraced.
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   useDiskImage = machine: ''
     import os
     import shutil
@@ -21,7 +25,11 @@ let
     shutil.copyfile("${machine.system.build.diskImage}/nixos.img", tmp_disk_image.name)
 
     subprocess.run([
+<<<<<<< HEAD
       "${machine.config.virtualisation.qemu.package}/bin/qemu-img",
+=======
+      "${pkgs.qemu}/bin/qemu-img",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       "resize",
       "-f",
       "raw",
@@ -56,8 +64,13 @@ let
     # however, creates separate filesystem images without a partition table, so
     # we have to create a disk image manually.
     #
+<<<<<<< HEAD
     # This creates two partitions, an ESP available as /dev/vda1 and the root
     # partition available as /dev/vda2.
+=======
+    # This creates two partitions, an ESP mounted on /dev/vda1 and the root
+    # partition mounted on /dev/vda2
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     system.build.diskImage = import ../lib/make-disk-image.nix {
       inherit config pkgs lib;
       # Use a raw format disk so that it can be resized before starting the
@@ -131,6 +144,7 @@ in
       assert "Growing existing partition 1." in systemd_repart_logs
     '';
   };
+<<<<<<< HEAD
 
   create-root = makeTest {
     name = "systemd-repart-create-root";
@@ -189,4 +203,6 @@ in
       assert "Adding new partition 2 to partition table." in systemd_repart_logs
     '';
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }

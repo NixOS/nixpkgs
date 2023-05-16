@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 { lib, fetchFromGitHub, nix, ronn, rustPlatform }:
+=======
+{ lib, fetchFromGitHub, nix, openssl, pkg-config, ronn, rustPlatform }:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 let
   blake3-src = fetchFromGitHub {

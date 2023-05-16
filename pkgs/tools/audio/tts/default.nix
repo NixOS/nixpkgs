@@ -1,6 +1,10 @@
 { lib
 , python3
 , fetchFromGitHub
+<<<<<<< HEAD
+=======
+, fetchpatch
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , espeak-ng
 , tts
 }:
@@ -8,26 +12,52 @@
 let
   python = python3.override {
     packageOverrides = self: super: {
+<<<<<<< HEAD
       torch = super.torch-bin;
       torchvision = super.torchvision-bin;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
   };
 in
 python.pkgs.buildPythonApplication rec {
   pname = "tts";
+<<<<<<< HEAD
   version = "0.16.0";
+=======
+  version = "0.13.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "coqui-ai";
     repo = "TTS";
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-2JZyINyzy4X1DTp4ZsMLY/rCsH4JdQ8bF/3hoqtvNTU=";
   };
 
   postPatch = let
     relaxedConstraints = [
       "bnunicodenormalizer"
+=======
+    hash = "sha256-3t4JYEwQ+puGLhGl3nn93qsL8IeOwlYtHXTrnZ5Cf+w=";
+  };
+
+  patches = [
+    (fetchpatch {
+      # upgrade librosa to 0.10.0
+      url = "https://github.com/coqui-ai/TTS/commit/4c829e74a1399ab083b566a70c1b7e879eda6e1e.patch";
+      hash = "sha256-QP9AnMbdEpGJywiZBreojHUjq29ihqy6HxvUtS5OKvQ=";
+      excludes = [
+        "requirements.txt"
+      ];
+    })
+  ];
+
+  postPatch = let
+    relaxedConstraints = [
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       "cython"
       "gruut"
       "inflect"
@@ -41,6 +71,7 @@ python.pkgs.buildPythonApplication rec {
   in ''
     sed -r -i \
       ${lib.concatStringsSep "\n" (map (package:
+<<<<<<< HEAD
         ''-e 's/${package}\s*[<>=]+.+/${package}/g' \''
       ) relaxedConstraints)}
     requirements.txt
@@ -50,6 +81,11 @@ python.pkgs.buildPythonApplication rec {
         ''-e 's/${package}\s*[<>=]+[^"]+/${package}/g' \''
       ) relaxedConstraints)}
     pyproject.toml
+=======
+        ''-e 's/${package}.*[<>=]+.*/${package}/g' \''
+      ) relaxedConstraints)}
+    requirements.txt
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     # only used for notebooks and visualization
     sed -r -i -e '/umap-learn/d' requirements.txt
   '';
@@ -61,12 +97,16 @@ python.pkgs.buildPythonApplication rec {
 
   propagatedBuildInputs = with python.pkgs; [
     anyascii
+<<<<<<< HEAD
     bangla
     bnnumerizer
     bnunicodenormalizer
     coqpit
     einops
     encodec
+=======
+    coqpit
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     flask
     fsspec
     g2pkk
@@ -75,7 +115,10 @@ python.pkgs.buildPythonApplication rec {
     inflect
     jamo
     jieba
+<<<<<<< HEAD
     k-diffusion
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     librosa
     matplotlib
     mecab-python3
@@ -92,7 +135,10 @@ python.pkgs.buildPythonApplication rec {
     torchaudio-bin
     tqdm
     trainer
+<<<<<<< HEAD
     transformers
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     unidic-lite
     webrtcvad
   ];

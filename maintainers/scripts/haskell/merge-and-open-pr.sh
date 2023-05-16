@@ -53,10 +53,13 @@ if ! gh auth status 2>/dev/null ; then
   die "You must setup the \`gh\` command.  Run \`gh auth login\`."
 fi
 
+<<<<<<< HEAD
 # Make sure this is configured before we start doing anything
 push_remote="$(git config branch.haskell-updates.pushRemote \
   || die 'Can'\''t determine pushRemote for haskell-updates. Please set using `git config branch.haskell-updates.pushremote <remote name>`.')"
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 # Fetch nixpkgs to get an up-to-date origin/haskell-updates branch.
 echo "Fetching origin..."
 git fetch origin >/dev/null
@@ -93,8 +96,13 @@ echo "Regenerating Hackage packages..."
 ./maintainers/scripts/haskell/regenerate-hackage-packages.sh --fast --do-commit
 
 # Push these new commits to the haskell-updates branch
+<<<<<<< HEAD
 echo "Pushing commits just created to the remote $push_remote/haskell-updates branch..."
 git push "$push_remote" haskell-updates
+=======
+echo "Pushing commits just created to the remote haskell-updates branch..."
+git push
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 # Open new PR
 new_pr_body=$(cat <<EOF

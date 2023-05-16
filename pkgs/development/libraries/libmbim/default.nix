@@ -1,7 +1,10 @@
 { lib
 , stdenv
 , fetchFromGitLab
+<<<<<<< HEAD
 , fetchpatch
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , meson
 , ninja
 , pkg-config
@@ -32,6 +35,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-aaYjvJ2OMTzkUyqWCyHdmsKJ3VGqBmKQzb1DWK/1cPU=";
   };
 
+<<<<<<< HEAD
   patches = [
     # Intel Mutual Authentication - FCC lock. Part of 1.30, backported to
     # openSUSE and Fedora and ChromeOS.
@@ -50,6 +54,8 @@ stdenv.mkDerivation rec {
     })
   ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   mesonFlags = [
     "-Dudevdir=${placeholder "out"}/lib/udev"
     (lib.mesonBool "introspection" withIntrospection)

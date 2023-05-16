@@ -24,8 +24,13 @@
 }:
 let
   pname = "qFlipper";
+<<<<<<< HEAD
   version = "1.3.2";
   sha256 = "sha256-n/vvLR4p7ZmQC+FuYOvarmgydfYwxRBRktzs7CfiNQg=";
+=======
+  version = "1.3.0";
+  sha256 = "sha256-OkeufUPAQWfWCr/OG0h62E+Oo8KeqmVnC70SBEEaOfs=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   timestamp = "99999999999";
   commit = "nix-${version}";
 

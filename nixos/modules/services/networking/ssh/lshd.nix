@@ -165,7 +165,13 @@ in
         ${lsh}/sbin/lshd --daemonic \
           --password-helper="${lsh}/sbin/lsh-pam-checkpw" \
           -p ${toString portNumber} \
+<<<<<<< HEAD
           ${optionalString (interfaces != []) (concatStrings (map (i: "--interface=\"${i}\"") interfaces))} \
+=======
+          ${if interfaces == [] then ""
+            else (concatStrings (map (i: "--interface=\"${i}\"")
+                                     interfaces))} \
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           -h "${hostKey}" \
           ${optionalString (!syslog) "--no-syslog" } \
           ${if passwordAuthentication then "--password" else "--no-password" } \

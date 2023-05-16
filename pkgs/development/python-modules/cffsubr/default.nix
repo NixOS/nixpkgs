@@ -1,21 +1,32 @@
 { stdenv
 , lib
 , buildPythonPackage
+<<<<<<< HEAD
 , fetchpatch
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , fetchPypi
 , fonttools
 , pytestCheckHook
 , setuptools-scm
+<<<<<<< HEAD
 , wheel
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 buildPythonPackage rec {
   pname = "cffsubr";
   version = "0.2.9.post1";
+<<<<<<< HEAD
+=======
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
+<<<<<<< HEAD
     hash = "sha256-azFBLc9JyPqEZkvahn4u3cVbb+b6aW/yU8TxOp/y/Fw=";
   };
 
@@ -31,6 +42,13 @@ buildPythonPackage rec {
   nativeBuildInputs = [
     setuptools-scm
     wheel
+=======
+    sha256 = "azFBLc9JyPqEZkvahn4u3cVbb+b6aW/yU8TxOp/y/Fw=";
+  };
+
+  nativeBuildInputs = [
+    setuptools-scm
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   propagatedBuildInputs = [
@@ -48,6 +66,10 @@ buildPythonPackage rec {
     description = "Standalone CFF subroutinizer based on AFDKO tx";
     homepage = "https://github.com/adobe-type-tools/cffsubr";
     license = licenses.asl20;
+<<<<<<< HEAD
     maintainers = with maintainers; [ ];
+=======
+    maintainers = with maintainers; [ jtojnar ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

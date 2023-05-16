@@ -7,16 +7,28 @@
 , cloudpickle
 , cookiecutter
 , diff-match-patch
+<<<<<<< HEAD
+=======
+, flake8
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , intervaltree
 , jedi
 , jellyfish
 , keyring
 , matplotlib
+<<<<<<< HEAD
+=======
+, mccabe
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , nbconvert
 , numpy
 , numpydoc
 , psutil
 , pygments
+<<<<<<< HEAD
+=======
+, pylint
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , pylint-venv
 , pyls-spyder
 , pyopengl
@@ -25,6 +37,10 @@
 , python-lsp-server
 , pyxdg
 , pyzmq
+<<<<<<< HEAD
+=======
+, pycodestyle
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , qdarkstyle
 , qstylizer
 , qtawesome
@@ -41,14 +57,22 @@
 
 buildPythonPackage rec {
   pname = "spyder";
+<<<<<<< HEAD
   version = "5.4.5";
+=======
+  version = "5.4.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
+<<<<<<< HEAD
     hash = "sha256-/9p/8avjy1c3Dwos9Byx03kfVrRofVQus+Ae5beFnmo=";
+=======
+    hash = "sha256-L8zgT7M7N+P5/9FQgf6ab7afUQXC1afzwUjAp6yKxC8=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   patches = [

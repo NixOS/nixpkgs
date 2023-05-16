@@ -24,13 +24,21 @@
   } ./setup-hook.sh;
 in buildPythonPackage rec {
   pname = "pybind11";
+<<<<<<< HEAD
   version = "2.11.1";
+=======
+  version = "2.10.4";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "pybind";
     repo = pname;
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-sO/Fa+QrAKyq2EYyYMcjPrYI+bdJIrDoj6L3JHoDo3E=";
+=======
+    hash = "sha256-n7nLEG2+sSR9wnxM+C8FWc2B+Mx74Pan1+IQf+h2bGU=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   postPatch = ''
@@ -87,7 +95,11 @@ in buildPythonPackage rec {
     "tests/extra_setuptools/test_setuphelper.py"
   ];
 
+<<<<<<< HEAD
   disabledTests = lib.optionals stdenv.isDarwin [
+=======
+  disabledTests = lib.optionals (stdenv.isDarwin) [
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     # expects KeyError, gets RuntimeError
     # https://github.com/pybind/pybind11/issues/4243
     "test_cross_module_exception_translator"

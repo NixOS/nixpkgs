@@ -4,6 +4,10 @@
 , rustPlatform
 , installShellFiles
 , cmake
+<<<<<<< HEAD
+=======
+, fetchpatch
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , git
 , nixosTests
 , Security
@@ -13,13 +17,21 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "starship";
+<<<<<<< HEAD
   version = "1.16.0";
+=======
+  version = "1.14.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "starship";
     repo = pname;
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-CrD65nHE40n83HO+4QM1sLHvdFaqTvOb96hPBgXKuwk=";
+=======
+    hash = "sha256-t+Ur6QmemMz6WAZnii7f2O+9R7hPp+5oej4PuaifznE=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ installShellFiles cmake ];
@@ -35,7 +47,11 @@ rustPlatform.buildRustPackage rec {
       --zsh <($out/bin/starship completions zsh)
   '';
 
+<<<<<<< HEAD
   cargoHash = "sha256-ZHHrpepKZnSGufyEAjNDozaIKAt2GFRt+hU2ej7LceA=";
+=======
+  cargoHash = "sha256-NSUId0CXTRF1Qqo9XPDgxY2vMyMBuJtJYGGuQ0HHk90=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nativeCheckInputs = [ git ];
 
@@ -52,6 +68,9 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://starship.rs";
     license = licenses.isc;
     maintainers = with maintainers; [ bbigras danth davidtwco Br1ght0ne Frostman marsam ];
+<<<<<<< HEAD
     mainProgram = "starship";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

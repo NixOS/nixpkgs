@@ -18,13 +18,21 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-music";
+<<<<<<< HEAD
   version = "7.1.0";
+=======
+  version = "7.0.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "music";
     rev = version;
+<<<<<<< HEAD
     sha256 = "sha256-L+E5gDtIgVkfmOIhzS7x8vtyMJYqx/UQpYMChrt2Tgo=";
+=======
+    sha256 = "sha256-PttmC1Z3rX2XWCECc320HMs692hSBsxkmnh1Q8a/Mg8=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

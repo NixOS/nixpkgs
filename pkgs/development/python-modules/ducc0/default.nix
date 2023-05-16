@@ -2,7 +2,11 @@
 
 buildPythonPackage rec {
   pname = "ducc0";
+<<<<<<< HEAD
   version = "0.31.0";
+=======
+  version = "0.30.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   disabled = pythonOlder "3.7";
 
@@ -11,7 +15,11 @@ buildPythonPackage rec {
     owner = "mtr";
     repo = "ducc";
     rev = "ducc0_${lib.replaceStrings ["."] ["_"] version}";
+<<<<<<< HEAD
     hash = "sha256-4aNIq5RNo1Qqiqr2wjYB/FXKyvbARsRF1yW1ZzZlAOo=";
+=======
+    hash = "sha256-xYjgJGtWl9AjnzlFvdj/0chnIUDmoH85AtKXsNBwWUU=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   buildInputs = [ pybind11 ];

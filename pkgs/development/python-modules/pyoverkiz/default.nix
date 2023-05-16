@@ -2,7 +2,10 @@
 , aiohttp
 , attrs
 , backoff
+<<<<<<< HEAD
 , backports-strenum
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , boto3
 , buildPythonPackage
 , fetchFromGitHub
@@ -16,7 +19,11 @@
 
 buildPythonPackage rec {
   pname = "pyoverkiz";
+<<<<<<< HEAD
   version = "1.10.1";
+=======
+  version = "1.7.8";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -25,7 +32,11 @@ buildPythonPackage rec {
     owner = "iMicknl";
     repo = "python-overkiz-api";
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-tb0xU1H1VrWTuObCg1+mFkzawAzrknO3fER7cN2St7U=";
+=======
+    hash = "sha256-DZ9MpwlZvq6LHbvnesk7XtGsHOhZvc1tXb/xVDQuR48=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   postPatch = ''
@@ -38,12 +49,20 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
+<<<<<<< HEAD
     aiohttp
     attrs
     backoff
     backports-strenum
     boto3
     pyhumps
+=======
+    attrs
+    aiohttp
+    backoff
+    pyhumps
+    boto3
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     warrant-lite
   ];
 

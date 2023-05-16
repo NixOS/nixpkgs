@@ -16,7 +16,11 @@ let
              if v == true then ''"yes"''
         else if v == false then ''"no"''
         else if isString v then ''"${v}"''
+<<<<<<< HEAD
         # and delegates all other values to the default generator
+=======
+        # and delegats all other values to the default generator
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         else generators.mkValueStringDefault {} v;
     } ":";
   };

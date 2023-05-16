@@ -9,15 +9,26 @@
 , libxkbcommon
 }:
 
+<<<<<<< HEAD
 stdenv.mkDerivation (finalAttrs: {
   pname = "miriway";
   version = "unstable-2023-08-30";
+=======
+stdenv.mkDerivation rec {
+  pname = "miriway";
+  version = "unstable-2023-04-25";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "Miriway";
     repo = "Miriway";
+<<<<<<< HEAD
     rev = "2c9a0599e1a9b37f2a73a245eacce307a3e5b883";
     hash = "sha256-VCLl4GyUmzcC/OEfxXV0bI/6lxLP9eIAAOIjANEI1d8=";
+=======
+    rev = "55ef5bd188e2b86dfbd1b9b360d832d4cd454eb7";
+    hash = "sha256-kooyL5up+SBHmnv/eEnsg0ujJlHBqbE+n/YHqmpXscI=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   strictDeps = true;
@@ -68,4 +79,8 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = platforms.linux;
     maintainers = with maintainers; [ OPNA2608 ];
   };
+<<<<<<< HEAD
 })
+=======
+}
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)

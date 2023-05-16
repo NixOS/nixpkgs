@@ -2,11 +2,19 @@
 
 stdenv.mkDerivation rec {
   pname = "strace";
+<<<<<<< HEAD
   version = "6.5";
 
   src = fetchurl {
     url = "https://strace.io/files/${version}/${pname}-${version}.tar.xz";
     sha256 = "sha256-37BRcCOJ4ZeaFRiStZAa/J6Tu8HHDYTJBq3jIkypGYA=";
+=======
+  version = "6.3";
+
+  src = fetchurl {
+    url = "https://strace.io/files/${version}/${pname}-${version}.tar.xz";
+    sha256 = "sha256-4Xh44wFQbBzDAWERGK0U7+5/i872Oyes5dKQrM57tzE=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];

@@ -1,7 +1,10 @@
 { lib
 , stdenv
 , fetchFromGitHub
+<<<<<<< HEAD
 , fetchpatch
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , cmake
 # for passthru.tests
 , intel-compute-runtime
@@ -10,12 +13,17 @@
 
 stdenv.mkDerivation rec {
   pname = "intel-gmmlib";
+<<<<<<< HEAD
   version = "22.3.7";
+=======
+  version = "22.3.5";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "intel";
     repo = "gmmlib";
     rev = "intel-gmmlib-${version}";
+<<<<<<< HEAD
     sha256 = "sha256-/iwTPWRVTZk1dhZD2Grcnc76ItgXjf2VrFD+93h8YvM=";
   };
 
@@ -28,6 +36,11 @@ stdenv.mkDerivation rec {
     })
   ];
 
+=======
+    sha256 = "sha256-txh0HGtWc39bWesTfyUjG4n560w8iRLyiHec6JA7FJQ=";
+  };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nativeBuildInputs = [ cmake ];
 
   passthru.tests = {

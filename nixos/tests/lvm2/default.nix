@@ -2,7 +2,11 @@
 , config ? { }
 , pkgs ? import ../../.. { inherit system config; }
 , lib ? pkgs.lib
+<<<<<<< HEAD
 , kernelVersionsToTest ? [ "4.19" "5.4" "5.10" "5.15" "6.1" "latest" ]
+=======
+, kernelVersionsToTest ? [ "4.19" "5.4" "5.10" "5.15" "latest" ]
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 # For quickly running a test, the nixosTests.lvm2.lvm-thinpool-linux-latest attribute is recommended

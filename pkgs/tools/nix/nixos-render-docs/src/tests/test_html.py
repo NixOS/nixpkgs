@@ -1,5 +1,6 @@
 import nixos_render_docs as nrd
 import pytest
+<<<<<<< HEAD
 import textwrap
 
 from sample_md import sample1
@@ -12,6 +13,15 @@ class Converter(nrd.md.Converter[nrd.html.HTMLRenderer]):
     def __init__(self, manpage_urls: dict[str, str], xrefs: dict[str, nrd.manual_structure.XrefTarget]):
         super().__init__()
         self._renderer = Renderer(manpage_urls, xrefs)
+=======
+
+from sample_md import sample1
+
+class Converter(nrd.md.Converter[nrd.html.HTMLRenderer]):
+    def __init__(self, manpage_urls: dict[str, str], xrefs: dict[str, nrd.manual_structure.XrefTarget]):
+        super().__init__()
+        self._renderer = nrd.html.HTMLRenderer(manpage_urls, xrefs)
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 def unpretty(s: str) -> str:
     return "".join(map(str.strip, s.splitlines())).replace('␣', ' ').replace('↵', '\n')
@@ -74,6 +84,7 @@ def test_xrefs() -> None:
         c._render("[](#baz)")
     assert exc.value.args[0] == 'bad local reference, id #baz not known'
 
+<<<<<<< HEAD
 def test_images() -> None:
     c = Converter({}, {})
     assert c._render("![*alt text*](foo \"title text\")") == unpretty("""
@@ -146,6 +157,8 @@ def test_footnotes() -> None:
        </div>
     """)
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 def test_full() -> None:
     c = Converter({ 'man(1)': 'http://example.org' }, {})
     assert c._render(sample1) == unpretty("""

@@ -23,7 +23,11 @@ buildGoModule rec {
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ taglib zlib ];
+<<<<<<< HEAD
   vendorHash = "sha256-+PUKPqW+ER7mmZXrDIc0cE4opoTxA3po3WXSeZO+Xwo=";
+=======
+  vendorSha256 = "sha256-+PUKPqW+ER7mmZXrDIc0cE4opoTxA3po3WXSeZO+Xwo=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   # TODO(Profpatsch): write a test for transcoding support,
   # since it is prone to break
@@ -49,7 +53,11 @@ buildGoModule rec {
     homepage = "https://github.com/sentriz/gonic";
     description = "Music streaming server / subsonic server API implementation";
     license = lib.licenses.gpl3Plus;
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [ ];
+=======
+    maintainers = with lib.maintainers; [ Profpatsch ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     platforms = lib.platforms.linux;
   };
 }

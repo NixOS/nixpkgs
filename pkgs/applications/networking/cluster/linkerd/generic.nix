@@ -1,10 +1,18 @@
 { lib, fetchFromGitHub, buildGoModule, installShellFiles }:
 
+<<<<<<< HEAD
 { channel, version, sha256, vendorHash }:
 
 buildGoModule rec {
   pname = "linkerd-${channel}";
   inherit version vendorHash;
+=======
+{ channel, version, sha256, vendorSha256 }:
+
+buildGoModule rec {
+  pname = "linkerd-${channel}";
+  inherit version vendorSha256;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "linkerd";

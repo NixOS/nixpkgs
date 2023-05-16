@@ -19,7 +19,11 @@
 
 stdenv.mkDerivation rec {
   pname = "libjcat";
+<<<<<<< HEAD
   version = "0.1.14";
+=======
+  version = "0.1.13";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   outputs = [ "bin" "out" "dev" "devdoc" "man" "installedTests" ];
 
@@ -27,7 +31,11 @@ stdenv.mkDerivation rec {
     owner = "hughsie";
     repo = "libjcat";
     rev = version;
+<<<<<<< HEAD
     sha256 = "sha256-XN7/ZtWCCO7lSspXM4vNowoWN1U0NGQPUTM9KjTEHjY=";
+=======
+    sha256 = "sha256-VfI40dfZzNqR5sqTY4KvkYL8+3sLV0Z0u7w+QA34uek=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   patches = [

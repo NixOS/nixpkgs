@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 { lib
 , buildPythonPackage
 , fetchPypi
@@ -22,15 +23,32 @@ buildPythonPackage rec {
     numpy
     future
   ];
+=======
+{ lib, buildPythonPackage, fetchPypi, numpy, future }:
+
+buildPythonPackage rec {
+  pname = "autograd";
+  version = "1.5";
+
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-2AvSJRVNHbE8tOrM96GMNYvnIJJkG2hxf5b88dFqzQs=";
+  };
+
+  propagatedBuildInputs = [ numpy future ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   # Currently, the PyPI tarball doesn't contain the tests. When that has been
   # fixed, enable testing. See: https://github.com/HIPS/autograd/issues/404
   doCheck = false;
 
+<<<<<<< HEAD
   pythonImportsCheck = [
     "autograd"
   ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   meta = with lib; {
     homepage = "https://github.com/HIPS/autograd";
     description = "Compute derivatives of NumPy code efficiently";

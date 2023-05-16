@@ -11,7 +11,11 @@ buildGoModule rec {
     sha256 = "sha256-vWwRZVArmlTIGwD4zV3dEHN2kkoeCZuNIvjCBVAviPo=";
   };
 
+<<<<<<< HEAD
   vendorHash = "sha256-pYtP+Tkh2TcGsbk7zQNaoYLEQrqGOL0gkMG5dUkfpt4=";
+=======
+  vendorSha256 = "sha256-pYtP+Tkh2TcGsbk7zQNaoYLEQrqGOL0gkMG5dUkfpt4=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   postInstall = ''
     rm $out/bin/plugin*

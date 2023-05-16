@@ -3,13 +3,21 @@
 , cairo
 , libuuid
 , pango
+<<<<<<< HEAD
+=======
+, gdk-pixbuf
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , gtk3
 , stdenv
 , fetchurl
 , autoPatchelfHook
 }:
 
+<<<<<<< HEAD
 stdenv.mkDerivation {
+=======
+stdenv.mkDerivation rec {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pname = "libsciter";
   version = "4.4.8.23-bis"; # Version specified in GitHub commit title
 

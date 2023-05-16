@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 From 4bbbb640934aa653bcfec0335798b77a8935b815 Mon Sep 17 00:00:00 2001
+=======
+From 67f54fde2b1683aae3800f7a86a4e507c1125be8 Mon Sep 17 00:00:00 2001
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 From: Yureka <yuka@yuka.dev>
 Date: Sat, 7 Aug 2021 09:16:46 +0200
 Subject: [PATCH] emulate clang 'sysroot + /include' logic
@@ -20,6 +24,7 @@ but it doesn't appear to work
  1 file changed, 6 insertions(+), 1 deletion(-)
 
 diff --git a/emcc.py b/emcc.py
+<<<<<<< HEAD
 index ba8d1b556..7d89644c5 100755
 --- a/emcc.py
 +++ b/emcc.py
@@ -32,11 +37,29 @@ index ba8d1b556..7d89644c5 100755
 +    '--sysroot=' + cache.get_sysroot(absolute=True),
 +    '-resource-dir=@resourceDir@',
 +    '-idirafter' + cache.get_sysroot(absolute=True) + os.path.join('/include'),
+=======
+index 999314afc..0e23c066c 100755
+--- a/emcc.py
++++ b/emcc.py
+@@ -759,7 +759,12 @@ def emsdk_ldflags(user_args):
+ 
+ 
+ def emsdk_cflags(user_args):
+-  cflags = ['--sysroot=' + shared.Cache.get_sysroot(absolute=True)]
++  cflags = [
++    '--sysroot=' + shared.Cache.get_sysroot(absolute=True),
++    '-resource-dir=@resourceDir@',
++    '-idirafter' + shared.Cache.get_sysroot(absolute=True) + os.path.join('/include'),
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 +    '-iwithsysroot' + os.path.join('/include','c++','v1')
 +  ]
  
    def array_contains_any_of(hay, needles):
      for n in needles:
 -- 
+<<<<<<< HEAD
 2.40.0
+=======
+2.32.0
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 

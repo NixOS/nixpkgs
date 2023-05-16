@@ -1,8 +1,15 @@
 diff --git a/Makefile b/Makefile
+<<<<<<< HEAD
 index fa95b7b70..4d15ed721 100644
 --- a/Makefile
 +++ b/Makefile
 @@ -215,7 +215,7 @@ ABC_ARCHFLAGS += "-DABC_NO_RLIMIT"
+=======
+index 86abc6958..a72f7b792 100644
+--- a/Makefile
++++ b/Makefile
+@@ -187,7 +192,7 @@ endif
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  endif
  
  ifeq ($(CONFIG),clang)
@@ -10,6 +17,7 @@ index fa95b7b70..4d15ed721 100644
 +CXX = clang++
  LD = clang++
  CXXFLAGS += -std=$(CXXSTD) -Os
+<<<<<<< HEAD
  ABCMKARGS += ARCHFLAGS="-DABC_USE_STDINT_H -Wno-c++11-narrowing $(ABC_ARCHFLAGS)"
 diff --git a/tests/fmt/run-test.sh b/tests/fmt/run-test.sh
 index 914a72347..bc0b129d2 100644
@@ -33,3 +41,6 @@ index 914a72347..bc0b129d2 100644
  ./yosys-display_lm_cc >yosys-display_lm_cc.log
  for log in yosys-display_lm.log yosys-display_lm_cc.log; do
  	grep "^%l: \\\\bot\$" "$log"
+=======
+ ABCMKARGS += ARCHFLAGS="-DABC_USE_STDINT_H"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)

@@ -1,7 +1,16 @@
 import ./make-test-python.nix ({ lib, ... }:
+<<<<<<< HEAD
   {
     name = "nzbhydra2";
     meta.maintainers = with lib.maintainers; [ jamiemagee ];
+=======
+
+  with lib;
+
+  {
+    name = "nzbhydra2";
+    meta.maintainers = with maintainers; [ jamiemagee ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     nodes.machine = { pkgs, ... }: { services.nzbhydra2.enable = true; };
 

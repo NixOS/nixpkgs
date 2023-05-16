@@ -11,7 +11,11 @@ buildGoModule rec {
     sha256 = "sha256-hYyJtkwAzweH8boUY3vrvy6Ug+Ier5f6fvR52R+Di8o=";
   };
 
+<<<<<<< HEAD
   vendorHash = "sha256-T45abGVoiwxAEO60aPH3hUqiH6ON3aRhkrOFcOi+Bm8=";
+=======
+  vendorSha256 = "sha256-T45abGVoiwxAEO60aPH3hUqiH6ON3aRhkrOFcOi+Bm8=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   postInstall = ''
     mv $out/bin/{cmd,ec2-metadata-mock}

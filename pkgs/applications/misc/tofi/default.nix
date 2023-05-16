@@ -38,6 +38,9 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = with maintainers; [ fbergroth ];
     platforms = platforms.linux;
+<<<<<<< HEAD
     mainProgram = "tofi";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

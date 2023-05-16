@@ -11,10 +11,13 @@ buildDunePackage rec {
     sha256 = "sha256-YCPhZCYx8I9njrVyWCCHnte7Wj/+53fN7evCjB+F+ts=";
   };
 
+<<<<<<< HEAD
   preBuild = ''
     substituteInPlace src/dune --replace "bytes)" ")"
   '';
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   meta = {
     description = "Extensible Markdown library and tool in OCaml";
     homepage = "https://github.com/ocaml/omd";

@@ -5,13 +5,21 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "cfripper";
+<<<<<<< HEAD
   version = "1.13.2";
+=======
+  version = "1.13.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "Skyscanner";
     repo = pname;
     rev = "refs/tags/${version}";
+<<<<<<< HEAD
     hash = "sha256-wcOtj56l2bUYE+WdbDwtB3aWlP2zEAFaaqw4THcHxbY=";
+=======
+    hash = "sha256-V27eZoeg5r+h8W1H66eNauGOvV8tT/oo4fRfSLhz1MY=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = with python3.pkgs; [
@@ -43,11 +51,14 @@ python3.pkgs.buildPythonApplication rec {
     "tests/config/test_pluggy.py"
   ];
 
+<<<<<<< HEAD
   disabledTests = [
     # Assertion fails
     "test_multiple_resources_with_wildcard_resources_are_detected"
   ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pythonImportsCheck = [
     "cfripper"
   ];

@@ -37,6 +37,10 @@ buildPythonPackage rec {
     homepage = "https://github.com/dirkjanm/ldapdomaindump/";
     changelog = "https://github.com/dirkjanm/ldapdomaindump/releases/tag/v${version}";
     license = licenses.mit;
+<<<<<<< HEAD
     maintainers = with maintainers; [ ];
+=======
+    maintainers = with maintainers; [ SuperSandro2000 ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

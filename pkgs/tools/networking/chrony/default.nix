@@ -1,16 +1,27 @@
 { lib, stdenv, fetchurl, pkg-config
 , gnutls, libedit, nspr, nss, readline, texinfo
 , libcap, libseccomp, pps-tools
+<<<<<<< HEAD
 , nixosTests
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 stdenv.mkDerivation rec {
   pname = "chrony";
+<<<<<<< HEAD
   version = "4.4";
 
   src = fetchurl {
     url = "https://download.tuxfamily.org/chrony/${pname}-${version}.tar.gz";
     hash = "sha256-6vsH5tr5KxQiAPR4hW3+1u/J6i0Ubu3tXtywm5MScIg=";
+=======
+  version = "4.3";
+
+  src = fetchurl {
+    url = "https://download.tuxfamily.org/chrony/${pname}-${version}.tar.gz";
+    hash = "sha256-nQ2oiahl8ImlohYQ/7ZxPjyUOM4wOmO0nC+26v9biAQ=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   outputs = [ "out" "man" ];
@@ -37,8 +48,11 @@ stdenv.mkDerivation rec {
 
   hardeningEnable = [ "pie" ];
 
+<<<<<<< HEAD
   passthru.tests = { inherit (nixosTests) chrony chrony-ptp; };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   meta = with lib; {
     description = "Sets your computer's clock from time servers on the Net";
     homepage = "https://chrony.tuxfamily.org/";

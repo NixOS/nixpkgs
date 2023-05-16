@@ -52,9 +52,12 @@ stdenv.mkDerivation rec {
     "--enable-sage"
   ];
 
+<<<<<<< HEAD
   # https://github.com/linbox-team/linbox/issues/304
   hardeningDisable = [ "fortify3" ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   doCheck = true;
 
   enableParallelBuilding = true;

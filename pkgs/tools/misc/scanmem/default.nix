@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 { lib
 , stdenv
 , fetchFromGitHub
@@ -13,6 +14,13 @@
 stdenv.mkDerivation rec {
   pname = "scanmem";
   version = "0.17";
+=======
+{ lib, stdenv, autoconf, automake, intltool, libtool, fetchFromGitHub, readline }:
+
+stdenv.mkDerivation rec {
+  version = "0.17";
+  pname = "scanmem";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner  = "scanmem";
@@ -21,6 +29,7 @@ stdenv.mkDerivation rec {
     sha256 = "17p8sh0rj8yqz36ria5bp48c8523zzw3y9g8sbm2jwq7sc27i7s9";
   };
 
+<<<<<<< HEAD
   nativeBuildInputs = [ autoreconfHook gobject-introspection intltool wrapGAppsHook ];
   buildInputs = [ readline python3 ];
   configureFlags = ["--enable-gui"];
@@ -42,6 +51,14 @@ stdenv.mkDerivation rec {
     runHook postFixup
   '';
 
+=======
+  nativeBuildInputs = [ autoconf automake intltool libtool ];
+  buildInputs = [ readline ];
+
+  preConfigure = ''
+    ./autogen.sh
+  '';
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   meta = with lib; {
     homepage = "https://github.com/scanmem/scanmem";
     description = "Memory scanner for finding and poking addresses in executing processes";

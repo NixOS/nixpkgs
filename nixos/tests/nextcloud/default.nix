@@ -26,4 +26,8 @@ foldl
     };
   })
 { }
+<<<<<<< HEAD
   [ 25 26 27 ]
+=======
+  [ 25 26 ]
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)

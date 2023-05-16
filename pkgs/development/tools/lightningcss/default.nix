@@ -6,16 +6,27 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "lightningcss";
+<<<<<<< HEAD
   version = "1.21.8";
+=======
+  version = "1.19.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "parcel-bundler";
     repo = "lightningcss";
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     sha256 = "Y1eSi8/YX0iI43Zp6dCBYCZAzRnVO5nSXBykWrp9MjM=";
   };
 
   cargoHash = "sha256-OUfC0HPNsY0lBv2nM56uzFqfV3SZfOAR//VXDu6BJ+M=";
+=======
+    sha256 = "sha256-ncZ1tof8InP+8KLTQ2YOwaD/liwU1LNZkllBm53VYNo=";
+  };
+
+  cargoHash = "sha256-xxR80iizEej1vAzItaoqQnJDZ62dxPOeEdaUpgqhG7I=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   buildFeatures = [
     "cli"

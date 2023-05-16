@@ -19,13 +19,21 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-capnet-assist";
+<<<<<<< HEAD
   version = "2.4.4";
+=======
+  version = "2.4.3";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "capnet-assist";
     rev = version;
+<<<<<<< HEAD
     sha256 = "sha256-vnFrGHt/rtrDmXokYRoebVpNLfkZPe5IShRsXCWWsXs=";
+=======
+    sha256 = "sha256-06DWkLkVpdSYnKOR8zqA0tvWXYrglBM9R/XEIfIkwQU=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

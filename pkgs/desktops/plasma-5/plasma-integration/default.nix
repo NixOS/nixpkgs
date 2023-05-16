@@ -33,9 +33,12 @@ mkDerivation {
     wayland-protocols
     plasma-wayland-protocols
   ];
+<<<<<<< HEAD
 
   meta = {
     description = "A set of plugins responsible for better integration of Qt applications when running on a KDE Plasma workspace";
     homepage = "https://invent.kde.org/plasma/plasma-integration";
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }

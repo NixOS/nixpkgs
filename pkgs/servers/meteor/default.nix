@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 { stdenv, lib, fetchurl, zlib, curl, xz, patchelf, runtimeShell }:
+=======
+{ stdenv, lib, fetchurl, zlib, patchelf, runtimeShell }:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 let
   version = "2.7.3";
@@ -66,7 +70,11 @@ stdenv.mkDerivation {
     popd
     substituteInPlace $out/tools/cli/main.js \
       --replace "@INTERPRETER@" "$(cat $NIX_CC/nix-support/dynamic-linker)" \
+<<<<<<< HEAD
       --replace "@RPATH@" "${lib.makeLibraryPath [ stdenv.cc.cc zlib curl xz ]}" \
+=======
+      --replace "@RPATH@" "${lib.makeLibraryPath [ stdenv.cc.cc zlib ]}" \
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       --replace "@PATCHELF@" "${patchelf}/bin/patchelf"
 
     # Patch node.
@@ -79,7 +87,11 @@ stdenv.mkDerivation {
     for p in $out/dev_bundle/mongodb/bin/mongo{,d}; do
       patchelf \
         --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
+<<<<<<< HEAD
         --set-rpath "$(patchelf --print-rpath $p):${lib.makeLibraryPath [ stdenv.cc.cc zlib curl xz ]}" \
+=======
+        --set-rpath "$(patchelf --print-rpath $p):${lib.makeLibraryPath [ stdenv.cc.cc zlib ]}" \
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         $p
     done
 

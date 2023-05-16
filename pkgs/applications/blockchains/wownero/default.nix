@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 { lib
 , stdenv
 , fetchFromGitHub
@@ -70,6 +71,43 @@ stdenv.mkDerivation rec {
 
     rm -r $sourceRoot/external/supercop
     ln -s ${supercop} $sourceRoot/external/supercop
+=======
+{ lib, stdenv, fetchFromGitea, cmake, boost, miniupnpc, openssl, unbound
+, readline, libsodium, rapidjson
+}:
+
+stdenv.mkDerivation rec {
+  pname = "wownero";
+  version = "0.8.0.1";
+  randomwowVersion = "1.1.7";
+
+  src = fetchFromGitea {
+    domain = "git.wownero.com";
+    owner = "wownero";
+    repo = "wownero";
+    rev = "v${version}";
+    sha256 = "sha256-+cUdousEiZMNwqhTvjoqw/k21x3dg7Lhb/5KyNUGrjQ=";
+    fetchSubmodules = false;
+  };
+
+  randomwow = fetchFromGitea {
+    domain = "git.wownero.com";
+    owner = "wownero";
+    repo = "RandomWOW";
+    rev = randomwowVersion;
+    sha256 = "sha256-JzyRlHwM8rmJ5OaKHz+6vHGfpSz+X4zkFAKn4Jmo+EE=";
+  };
+
+  nativeBuildInputs = [ cmake ];
+
+  buildInputs = [
+    boost miniupnpc openssl unbound rapidjson readline libsodium
+  ];
+
+  postUnpack = ''
+    rm -r $sourceRoot/external/RandomWOW
+    ln -s ${randomwow} $sourceRoot/external/RandomWOW
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '';
 
   cmakeFlags = [
@@ -89,9 +127,16 @@ stdenv.mkDerivation rec {
       signatures using different participants for the same tx outputs on
       opposing forks.
     '';
+<<<<<<< HEAD
     homepage = "https://wownero.org/";
     license = licenses.bsd3;
     maintainers = with maintainers; [ ];
     platforms = platforms.unix;
+=======
+    homepage    = "https://wownero.org/";
+    license     = licenses.bsd3;
+    platforms   = platforms.linux;
+    maintainers = with maintainers; [ ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

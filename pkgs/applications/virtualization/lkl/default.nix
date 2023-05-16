@@ -34,9 +34,12 @@ stdenv.mkDerivation rec {
 
     # Fixup build with newer Linux headers: https://github.com/lkl/linux/pull/484
     sed '1i#include <linux/sockios.h>' -i tools/lkl/lib/hijack/xlate.c
+<<<<<<< HEAD
   '' + lib.optionalString stdenv.isi686 ''
     echo CONFIG_KALLSYMS=n >> arch/lkl/configs/defconfig
     echo CONFIG_KALLSYMS_BASE_RELATIVE=n >> arch/lkl/configs/defconfig
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '' + lib.optionalString firewallSupport ''
     cat ${./lkl-defconfig-enable-nftables} >> arch/lkl/configs/defconfig
   '';
@@ -56,10 +59,13 @@ stdenv.mkDerivation rec {
        tools/lkl/lib/hijack/liblkl-hijack.so $lib/lib
   '';
 
+<<<<<<< HEAD
   postFixup = ''
     ln -s $out/bin/lklfuse $out/bin/mount.fuse.lklfuse
   '';
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   # We turn off format and fortify because of these errors (fortify implies -O2, which breaks the jitter entropy code):
   #   fs/xfs/xfs_log_recover.c:2575:3: error: format not a string literal and no format arguments [-Werror=format-security]
   #   crypto/jitterentropy.c:54:3: error: #error "The CPU Jitter random number generator must not be compiled with optimizations. See documentation. Use the compiler switch -O0 for compiling jitterentropy.c."

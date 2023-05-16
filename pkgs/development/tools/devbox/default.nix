@@ -5,13 +5,21 @@
 }:
 buildGoModule rec {
   pname = "devbox";
+<<<<<<< HEAD
   version = "0.5.11";
+=======
+  version = "0.4.9";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "jetpack-io";
     repo = pname;
     rev = version;
+<<<<<<< HEAD
     hash = "sha256-eJpB1hZu6AGFE86uj2RAaoKHAwivwQhQNimFMglpBLM=";
+=======
+    hash = "sha256-JxpvUlBrC00zLEZAVVhNI0lP/whd61DcY+NZAoKR55I=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   ldflags = [
@@ -23,7 +31,11 @@ buildGoModule rec {
   # integration tests want file system access
   doCheck = false;
 
+<<<<<<< HEAD
   vendorHash = "sha256-UTGngCsiqMjxQSdA3QMA/fPC3k+OrjqJ1Q6stXerjQQ=";
+=======
+  vendorHash = "sha256-Ct1hftgMYAF8DPdnYTB1QQYD0HGC4wifIbMX+TrgDdk=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nativeBuildInputs = [ installShellFiles ];
 

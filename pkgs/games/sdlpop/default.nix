@@ -67,6 +67,9 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ iblech ];
     platforms = platforms.unix;
+<<<<<<< HEAD
     mainProgram = "prince";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

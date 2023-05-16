@@ -9,14 +9,22 @@
 
 buildPythonPackage rec {
   pname = "grpcio-status";
+<<<<<<< HEAD
   version = "1.57.0";
+=======
+  version = "1.54.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
+<<<<<<< HEAD
     hash = "sha256-sJjamd8e6+WDN/j3jlDfmQJzzKzBIm/d60fFkOPfngI=";
+=======
+    hash = "sha256-tQMF1SwN9haUk8yl8uObm013Oz8w1Kemtt18GMuJAHw=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   postPatch = ''

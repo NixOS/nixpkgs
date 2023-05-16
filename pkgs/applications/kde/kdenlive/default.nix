@@ -17,7 +17,10 @@
 , knotifyconfig
 , kplotting
 , ktextwidgets
+<<<<<<< HEAD
 , mediainfo
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , mlt
 , shared-mime-info
 , libv4l
@@ -59,7 +62,10 @@ mkDerivation {
     knotifyconfig
     kplotting
     ktextwidgets
+<<<<<<< HEAD
     mediainfo
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     mlt
     phonon-backend-gstreamer
     qtdeclarative
@@ -79,11 +85,17 @@ mkDerivation {
   # Both MLT and FFMpeg paths must be set or Kdenlive will complain that it
   # doesn't find them. See:
   # https://github.com/NixOS/nixpkgs/issues/83885
+<<<<<<< HEAD
   patches = [ ./dependency-paths.patch ];
 
   inherit mlt mediainfo;
   ffmpeg = ffmpeg-full;
 
+=======
+  patches = [ ./mlt-path.patch ./ffmpeg-path.patch ];
+  inherit mlt;
+  ffmpeg = ffmpeg-full;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   postPatch =
     # Module Qt5::Concurrent must be included in `find_package` before it is used.
     ''

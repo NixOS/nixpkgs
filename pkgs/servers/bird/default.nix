@@ -2,11 +2,19 @@
 
 stdenv.mkDerivation rec {
   pname = "bird";
+<<<<<<< HEAD
   version = "2.13.1";
 
   src = fetchurl {
     url = "ftp://bird.network.cz/pub/bird/${pname}-${version}.tar.gz";
     hash = "sha256-l7uNV76bxQg+K1ZkFtJ+MUFihWoSynx34gLkZ9INQIA=";
+=======
+  version = "2.13";
+
+  src = fetchurl {
+    url = "ftp://bird.network.cz/pub/bird/${pname}-${version}.tar.gz";
+    hash = "sha256-jYlePjEYgOnvuIi0OGy+wvfhi/uDNOjUyMp8Q0EJJjg=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ flex bison ];

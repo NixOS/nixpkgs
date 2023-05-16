@@ -45,12 +45,17 @@ let
   };
 in stdenv.mkDerivation rec {
   pname = "klee";
+<<<<<<< HEAD
   version = "3.0";
+=======
+  version = "2.3";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "klee";
     repo = "klee";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-y5lWmtIcLAthQ0oHYQNd+ir75YaxHZR9Jgiz+ZUFQjY=";
   };
 
@@ -58,11 +63,29 @@ in stdenv.mkDerivation rec {
   buildInputs = [
     cryptominisat
     gperftools
+=======
+    sha256 = "sha256-E1c6K6Q+LAWm342W8I00JI6+LMvqmULHZLkv9Kj5RmY=";
+  };
+
+  buildInputs = [
+    cryptominisat
+    gperftools
+    lit # Configure phase checking for lit
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     llvm
     sqlite
     stp
     z3
   ];
+<<<<<<< HEAD
+=======
+
+  nativeBuildInputs = [
+    clang
+    cmake
+  ];
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nativeCheckInputs = [
     gtest
 
@@ -77,9 +100,14 @@ in stdenv.mkDerivation rec {
   in [
     "-DCMAKE_BUILD_TYPE=${if debug then "Debug" else if !debug && includeDebugInfo then "RelWithDebInfo" else "MinSizeRel"}"
     "-DKLEE_RUNTIME_BUILD_TYPE=${if debugRuntime then "Debug" else "Release"}"
+<<<<<<< HEAD
     "-DLLVMCC=${clang}/bin/clang"
     "-DLLVMCXX=${clang}/bin/clang++"
     "-DKLEE_ENABLE_TIMESTAMP=${onOff false}"
+=======
+    "-DKLEE_ENABLE_TIMESTAMP=${onOff false}"
+    "-DENABLE_KLEE_UCLIBC=${onOff true}"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "-DKLEE_UCLIBC_PATH=${kleeuClibc}"
     "-DENABLE_KLEE_ASSERTS=${onOff asserts}"
     "-DENABLE_POSIX_RUNTIME=${onOff true}"

@@ -2,16 +2,27 @@
 
 buildGoModule rec {
   pname = "mani";
+<<<<<<< HEAD
   version = "0.25.0";
+=======
+  version = "0.23.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "alajmo";
     repo = "mani";
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-TqxoU2g4ZegJGHrnNO+ivPu209NDFcLnxpHGj8pOA4E=";
   };
 
   vendorHash = "sha256-mFan09oJ+BPVJHAxoROj282WJ+4e7TD0ZqeQH1kDabQ=";
+=======
+    sha256 = "sha256-PuoGuweuDcSM1qfjXABSdoqbMLc5a+lYGFr0kZZkgVE=";
+  };
+
+  vendorHash = "sha256-9DP6SRcvHtZhkk2XoYesC1mhfq06KsLs0X02AG9vwJ8=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nativeBuildInputs = [ installShellFiles makeWrapper ];
 

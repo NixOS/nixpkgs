@@ -7,11 +7,16 @@
 , python3
 }:
 
+<<<<<<< HEAD
 # Jupyter console:
 # nix run --impure --expr 'with import <nixpkgs> {}; jupyter-console.withSingleKernel octave-kernel.definition'
 
 # Jupyter notebook:
 # nix run --impure --expr 'with import <nixpkgs> {}; jupyter.override { definitions.octave = octave-kernel.definition; }'
+=======
+# To test:
+# $(nix-build -E 'with import <nixpkgs> {}; jupyter.override { definitions = { octave = octave-kernel.definition; }; }')/bin/jupyter-notebook
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 let
   kernel = callPackage ./kernel.nix {
@@ -45,7 +50,11 @@ rec {
     dontInstall = true;
 
     buildPhase = ''
+<<<<<<< HEAD
       convert ./libgui/src/icons/octave/128x128/logo.png -resize ${size}x${size} $out
+=======
+      convert ./libgui/src/icons/logo.png -resize ${size}x${size} $out
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     '';
   };
 

@@ -17,14 +17,22 @@
 
 stdenv.mkDerivation rec {
   pname = "gspell";
+<<<<<<< HEAD
   version = "1.12.2";
+=======
+  version = "1.12.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   outputs = [ "out" "dev" ];
   outputBin = "dev";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+<<<<<<< HEAD
     sha256 = "tOmTvYJ+TOtqdwsbXolQ/OO+nIsrDL6yL9+ZKAjdITk=";
+=======
+    sha256 = "jsRPMgUuiW/N1JJuuBSjJuOaUEfiUe7HuQVvvZREsPE=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   patches = [

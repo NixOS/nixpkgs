@@ -3,7 +3,10 @@
 , aresponses
 , buildPythonPackage
 , fetchFromGitHub
+<<<<<<< HEAD
 , fetchpatch
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , poetry-core
 , pydantic
 , pytest-aiohttp
@@ -26,6 +29,7 @@ buildPythonPackage rec {
     hash = "sha256-YmJH4brWkTpgzyHwu9UnIWrY5qlDCmMtvF+KxQFXwfk=";
   };
 
+<<<<<<< HEAD
   patches = [
     # This patch removes references to setuptools and wheel that are no longer
     # necessary and changes poetry to poetry-core, so that we don't need to add
@@ -40,6 +44,8 @@ buildPythonPackage rec {
     })
   ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace 'pydantic = "^1.10.2"' 'pydantic = "*"'
@@ -54,8 +60,11 @@ buildPythonPackage rec {
     pydantic
   ];
 
+<<<<<<< HEAD
   __darwinAllowLocalNetworking = true;
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nativeCheckInputs = [
     aresponses
     pytest-aiohttp

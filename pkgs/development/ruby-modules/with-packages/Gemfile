@@ -49,7 +49,10 @@ gem 'digest-sha3'
 gem 'dip'
 gem 'domain_name'
 gem 'do_sqlite3'
+<<<<<<< HEAD
 gem 'erb-formatter'
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 gem 'ethon'
 gem 'eventmachine'
 gem 'excon'
@@ -113,7 +116,10 @@ gem 'pry-byebug'
 gem 'pry-doc'
 gem 'public_suffix'
 gem 'puma'
+<<<<<<< HEAD
 gem 'pwntools'
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 gem 'rails'
 gem 'rainbow'
 # gem 'rbczmq' deprecated
@@ -129,7 +135,10 @@ gem 'rspec'
 gem 'rubocop'
 gem 'rubocop-performance'
 gem 'ruby-libvirt'
+<<<<<<< HEAD
 gem 'ruby-lsp'
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 gem 'ruby-lxc'
 gem 'ruby-progressbar'
 gem 'ruby-terminfo'

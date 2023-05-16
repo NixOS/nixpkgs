@@ -20,7 +20,10 @@ in
 
   nodes = {
     server = { config, ... }: {
+<<<<<<< HEAD
       security.apparmor.enable = true;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       services.murmur.enable = true;
       services.murmur.registerName = "NixOS tests";
       services.murmur.password = "$MURMURD_PASSWORD";
@@ -82,8 +85,11 @@ in
     server.sleep(5)  # wait to get screenshot
     client1.screenshot("screen1")
     client2.screenshot("screen2")
+<<<<<<< HEAD
 
     # check if apparmor denied anything
     server.fail('journalctl -b --no-pager --grep "^audit: .*apparmor=\\"DENIED\\""')
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '';
 })

@@ -2,13 +2,21 @@
 
 buildGoModule rec {
   pname = "kubergrunt";
+<<<<<<< HEAD
   version = "0.12.1";
+=======
+  version = "0.11.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "gruntwork-io";
     repo = "kubergrunt";
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-qd+7tYvRpRMg8Y83L/K8g8fWrfO4rAQj72EpunqfSsc=";
+=======
+    sha256 = "sha256-HVIPKfoAfBZH8wA2GMabhTkYxDLvP15XoZuTVSy2i8M=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   vendorHash = "sha256-AUw1wJNWjpNVsjw/Hr1ZCePYWQkf1SqRVnQgi8tOFG0=";

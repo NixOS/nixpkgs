@@ -15,7 +15,10 @@
 , speexdsp
 , hamlib_4
 , wxGTK32
+<<<<<<< HEAD
 , sioclient
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , pulseSupport ? config.pulseaudio or stdenv.isLinux
 , AppKit
 , AVFoundation
@@ -25,13 +28,21 @@
 
 stdenv.mkDerivation rec {
   pname = "freedv";
+<<<<<<< HEAD
   version = "1.9.1";
+=======
+  version = "1.8.9";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "drowe67";
     repo = "freedv-gui";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-4bkT853MZL6v0/PRh0RJBhqdFBXgWFSPDtIPLgcKR8A=";
+=======
+    hash = "sha256-HDHXVTkXC1fCqj4lnxURmXvQNtwDX4zA6/QFnYceUI4=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   postPatch = lib.optionalString stdenv.isDarwin ''
@@ -56,7 +67,10 @@ stdenv.mkDerivation rec {
     speexdsp
     hamlib_4
     wxGTK32
+<<<<<<< HEAD
     sioclient
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ] ++ (if pulseSupport then [ libpulseaudio ] else [ portaudio ])
   ++ lib.optionals stdenv.isDarwin [
     AppKit
@@ -69,8 +83,12 @@ stdenv.mkDerivation rec {
     "-DUSE_INTERNAL_CODEC2:BOOL=FALSE"
     "-DUSE_STATIC_DEPS:BOOL=FALSE"
     "-DUNITTEST=ON"
+<<<<<<< HEAD
     "-DUSE_PULSEAUDIO:BOOL=${if pulseSupport then "TRUE" else "FALSE"}"
   ];
+=======
+  ] ++ lib.optionals pulseSupport [ "-DUSE_PULSEAUDIO:BOOL=TRUE" ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   env.NIX_CFLAGS_COMPILE = toString (lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [
     "-DAPPLE_OLD_XCODE"

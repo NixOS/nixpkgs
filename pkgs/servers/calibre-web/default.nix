@@ -2,7 +2,11 @@
 , fetchFromGitHub
 , nixosTests
 , python3
+<<<<<<< HEAD
 , fetchPypi
+=======
+, fetchpatch
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 let
@@ -10,15 +14,22 @@ let
     packageOverrides = self: super: {
       sqlalchemy = super.sqlalchemy.overridePythonAttrs (old: rec {
         version = "1.4.46";
+<<<<<<< HEAD
         src = fetchPypi {
+=======
+        src = self.fetchPypi {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           pname = "SQLAlchemy";
           inherit version;
           hash = "sha256-aRO4JH2KKS74MVFipRkx4rQM6RaB8bbxj2lwRSAMSjA=";
         };
+<<<<<<< HEAD
         disabledTestPaths = [
            "test/aaa_profiling"
            "test/ext/mypy"
         ];
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       });
     };
   };
@@ -40,7 +51,11 @@ python.pkgs.buildPythonApplication rec {
     chardet
     flask-babel
     flask-login
+<<<<<<< HEAD
     flask-principal
+=======
+    flask_principal
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     flask-wtf
     flask-limiter
     iso-639
@@ -86,7 +101,11 @@ python.pkgs.buildPythonApplication rec {
       --replace "lxml>=3.8.0,<4.9.0" "lxml>=3.8.0" \
       --replace "tornado>=4.1,<6.2" "tornado>=4.1,<7" \
       --replace "PyPDF>=3.0.0,<3.6.0" "PyPDF>=3.0.0" \
+<<<<<<< HEAD
       --replace "requests>=2.11.1,<2.29.0" "requests" \
+=======
+      --replace "requests>=2.11.1,<2.28.0" "requests" \
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       --replace "unidecode>=0.04.19,<1.4.0" "unidecode>=0.04.19" \
       --replace "werkzeug<2.1.0" ""
   '';

@@ -106,6 +106,7 @@ def main() -> None:
         args.keep_vm_state,
     ) as driver:
         if args.interactive:
+<<<<<<< HEAD
             history_dir = os.getcwd()
             history_path = os.path.join(history_dir, ".nixos-test-history")
             ptpython.repl.embed(
@@ -113,6 +114,9 @@ def main() -> None:
                 {},
                 history_filename=history_path,
             )
+=======
+            ptpython.repl.embed(driver.test_symbols(), {})
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         else:
             tic = time.time()
             driver.run_tests()

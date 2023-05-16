@@ -45,6 +45,10 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.lgpl3Plus;
     maintainers = with maintainers; [ vyp ];
+<<<<<<< HEAD
     platforms = guile.meta.platforms;
+=======
+    platforms = platforms.linux;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

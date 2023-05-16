@@ -5,14 +5,22 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "apkid";
+<<<<<<< HEAD
   version = "2.1.5";
+=======
+  version = "2.1.4";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "rednaga";
     repo = "APKiD";
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-yO3k2kT043/KkiCjDnNUlqxX86kQqMZ+CghD+yon3r4=";
+=======
+    hash = "sha256-ASxly2dH+TnwvU3CYD52XbC79n2dku01j3+YHOZ745U=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = with python3.pkgs; [

@@ -26,12 +26,20 @@
 
 stdenv.mkDerivation rec {
   pname = "gnucash";
+<<<<<<< HEAD
   version = "5.3";
+=======
+  version = "5.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   # raw source code doesn't work out of box; fetchFromGitHub not usable
   src = fetchurl {
     url = "https://github.com/Gnucash/gnucash/releases/download/${version}/${pname}-${version}.tar.bz2";
+<<<<<<< HEAD
     hash = "sha256-FFjLCMWF6unXJL7G8oErzAO76D7SlKRqeJeqqwGm8Vo=";
+=======
+    hash = "sha256-imWB3ffHQJ22NlEGATUa9yTto2OrWbHV2o2YEDPyb3I=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [
@@ -137,7 +145,11 @@ stdenv.mkDerivation rec {
       - Financial Calculations
     '';
     license = licenses.gpl2Plus;
+<<<<<<< HEAD
     maintainers = with maintainers; [ domenkozar AndersonTorres rski nevivurn ];
+=======
+    maintainers = with maintainers; [ domenkozar AndersonTorres rski ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     platforms = platforms.unix;
   };
 }

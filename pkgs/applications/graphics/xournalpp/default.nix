@@ -6,11 +6,17 @@
 , wrapGAppsHook
 , pkg-config
 
+<<<<<<< HEAD
 , alsa-lib
 , glib
 , gsettings-desktop-schemas
 , gtk3
 , gtksourceview4
+=======
+, glib
+, gsettings-desktop-schemas
+, gtk3
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , librsvg
 , libsndfile
 , libxml2
@@ -25,23 +31,37 @@
 
 stdenv.mkDerivation rec {
   pname = "xournalpp";
+<<<<<<< HEAD
   version = "1.2.1";
+=======
+  version = "1.1.3";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "xournalpp";
     repo = pname;
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-dnFNGWPpK/eoW4Ib1E5w/kPy5okPxAja1v4rf0KpVKM=";
+=======
+    sha256 = "sha256-Hn7IDnbrmK3V+iz8UqdmHRV2TS4MwYSgYtnH6igbGJ8=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ cmake gettext pkg-config wrapGAppsHook ];
   buildInputs =
+<<<<<<< HEAD
     [
       alsa-lib
       glib
       gsettings-desktop-schemas
       gtk3
       gtksourceview4
+=======
+    [ glib
+      gsettings-desktop-schemas
+      gtk3
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       librsvg
       libsndfile
       libxml2

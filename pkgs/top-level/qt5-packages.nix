@@ -154,9 +154,13 @@ in (kdeFrameworks // plasmaMobileGear // plasma5 // plasma5.thirdParty // kdeGea
 
   maui-core = libsForQt5.callPackage ../development/libraries/maui-core { };
 
+<<<<<<< HEAD
   mlt = pkgs.mlt.override {
     enableQt = true;
   };
+=======
+  mlt = callPackage ../development/libraries/mlt/qt-5.nix { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   phonon = callPackage ../development/libraries/phonon { };
 

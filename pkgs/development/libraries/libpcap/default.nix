@@ -9,6 +9,7 @@
 , pkg-config
 , withBluez ? false
 , withRemote ? false
+<<<<<<< HEAD
 
 # for passthru.tests
 , ettercap
@@ -19,6 +20,8 @@
 , wireshark
 , python3
 , haskellPackages
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 stdenv.mkDerivation rec {
@@ -54,12 +57,15 @@ stdenv.mkDerivation rec {
     fi
   '';
 
+<<<<<<< HEAD
   passthru.tests = {
     inherit ettercap nmap ostinato tcpreplay vde2 wireshark;
     inherit (python3.pkgs) pcapy-ng scapy;
     haskell-pcap = haskellPackages.pcap;
   };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   meta = with lib; {
     homepage = "https://www.tcpdump.org";
     description = "Packet Capture Library";

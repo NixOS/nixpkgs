@@ -9,7 +9,10 @@
 , pantheon
 , python3
 , curl
+<<<<<<< HEAD
 , flatpak
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , gettext
 , glib
 , gtk3
@@ -28,13 +31,21 @@
 
 stdenv.mkDerivation rec {
   pname = "monitor";
+<<<<<<< HEAD
   version = "0.17.0";
+=======
+  version = "0.16.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "stsdc";
     repo = "monitor";
     rev = version;
+<<<<<<< HEAD
     sha256 = "sha256-GUNMA4CRO4cKBjNr7i8yRflstbT8g2ciDHppjUUbAOc=";
+=======
+    sha256 = "sha256-ZTsb1xcJ7eeCEPebZW0anmG1SUPAzZakw4WzJql9VTQ=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     fetchSubmodules = true;
   };
 
@@ -50,7 +61,10 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     curl
+<<<<<<< HEAD
     flatpak
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     glib
     gtk3
     json-glib
@@ -87,8 +101,12 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = gitUpdater {
+<<<<<<< HEAD
       # Upstream frequently tags these to fix CI, which are mostly irrelevant to us.
       ignoredVersions = "-";
+=======
+      ignoredVersions = "ci.*";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
   };
 

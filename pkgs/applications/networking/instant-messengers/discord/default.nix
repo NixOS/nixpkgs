@@ -1,10 +1,17 @@
 { branch ? "stable", callPackage, fetchurl, lib, stdenv }:
 let
   versions = if stdenv.isLinux then {
+<<<<<<< HEAD
     stable = "0.0.29";
     ptb = "0.0.45";
     canary = "0.0.166";
     development = "0.0.232";
+=======
+    stable = "0.0.27";
+    ptb = "0.0.42";
+    canary = "0.0.151";
+    development = "0.0.216";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   } else {
     stable = "0.0.273";
     ptb = "0.0.59";
@@ -16,6 +23,7 @@ let
     x86_64-linux = {
       stable = fetchurl {
         url = "https://dl.discordapp.net/apps/linux/${version}/discord-${version}.tar.gz";
+<<<<<<< HEAD
         sha256 = "sha256-3vjOvkqMD7qKX2zRUbKrw5gHtE/v8WfH557rtagWIWc=";
       };
       ptb = fetchurl {
@@ -29,6 +37,21 @@ let
       development = fetchurl {
         url = "https://dl-development.discordapp.net/apps/linux/${version}/discord-development-${version}.tar.gz";
         sha256 = "sha256-AsHdQvDLzflhuYO8V4R+2zjQYpRo+aPa8HYXc3taayY=";
+=======
+        sha256 = "sha256-6fHaiPBcv7TQVh+TatIEYXZ/LwPmnCmU/QWXKFgUR7U=";
+      };
+      ptb = fetchurl {
+        url = "https://dl-ptb.discordapp.net/apps/linux/${version}/discord-ptb-${version}.tar.gz";
+        sha256 = "ZAMyAqyFEBJeTUqQzr5wK+BOFGURqhoHL8w2hJvL0vI=";
+      };
+      canary = fetchurl {
+        url = "https://dl-canary.discordapp.net/apps/linux/${version}/discord-canary-${version}.tar.gz";
+        sha256 = "sha256-ZN+lEGtSajgYsyMoGRmyTZCpUGVmb9LKgVv89NA4m7U=";
+      };
+      development = fetchurl {
+        url = "https://dl-development.discordapp.net/apps/linux/${version}/discord-development-${version}.tar.gz";
+        sha256 = "sha256-lQnIQC7Wek7OYDzZvLIJfb8I4oATD8pSB+mjQMPyqYQ=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       };
     };
     x86_64-darwin = {
@@ -59,9 +82,14 @@ let
     downloadPage = "https://discordapp.com/download";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
+<<<<<<< HEAD
     maintainers = with maintainers; [ MP2E Scrumplex artturin infinidoge jopejoe1 ];
     platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-darwin" ];
     mainProgram = "discord";
+=======
+    maintainers = with maintainers; [ MP2E artturin infinidoge jopejoe1 ];
+    platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-darwin" ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
   package =
     if stdenv.isLinux

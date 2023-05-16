@@ -4,14 +4,20 @@
 , fetchPypi
 
 # build dependencies
+<<<<<<< HEAD
 , setuptools
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , setuptools-scm
 
 # dependencies
 , django
 
 # tests
+<<<<<<< HEAD
 , elasticsearch
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , geopy
 , nose
 , pysolr
@@ -23,8 +29,12 @@
 buildPythonPackage rec {
   pname = "django-haystack";
   version = "3.2.1";
+<<<<<<< HEAD
   format = "pyproject";
 
+=======
+  format = "setuptools";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   disabled = pythonOlder "3.5";
 
   src = fetchPypi {
@@ -38,6 +48,7 @@ buildPythonPackage rec {
   '';
 
   nativeBuildInputs = [
+<<<<<<< HEAD
     setuptools
     setuptools-scm
   ];
@@ -54,6 +65,15 @@ buildPythonPackage rec {
 
   doCheck = lib.versionOlder django.version "4";
 
+=======
+    setuptools-scm
+  ];
+
+  propagatedBuildInputs = [
+    django
+  ];
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nativeCheckInputs = [
     geopy
     nose
@@ -61,6 +81,7 @@ buildPythonPackage rec {
     python-dateutil
     requests
     whoosh
+<<<<<<< HEAD
   ]
   ++ passthru.optional-dependencies.elasticsearch;
 
@@ -69,6 +90,9 @@ buildPythonPackage rec {
     python test_haystack/run_tests.py
     runHook postCheck
   '';
+=======
+  ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   meta = with lib; {
     description = "Pluggable search for Django";

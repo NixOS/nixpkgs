@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 { lib, stdenv, fetchurl, appimageTools, makeWrapper, electron_25 }:
 
 stdenv.mkDerivation rec {
@@ -7,6 +8,17 @@ stdenv.mkDerivation rec {
   src = fetchurl {
     url = "https://github.com/JannisX11/blockbench/releases/download/v${version}/Blockbench_${version}.AppImage";
     sha256 = "sha256-CE2wDOt1WBcYmPs4sEyZ3LYvKLequFZH0B3huMYHlwA=";
+=======
+{ lib, stdenv, fetchurl, appimageTools, makeWrapper, electron_22 }:
+
+stdenv.mkDerivation rec {
+  pname = "blockbench-electron";
+  version = "4.5.2";
+
+  src = fetchurl {
+    url = "https://github.com/JannisX11/blockbench/releases/download/v${version}/Blockbench_${version}.AppImage";
+    sha256 = "sha256-uUgVBdYMCF31+L/FV4ADIpUdEAmnW59KfscQxUStPWM=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     name = "${pname}-${version}.AppImage";
   };
 
@@ -33,7 +45,11 @@ stdenv.mkDerivation rec {
   '';
 
   postFixup = ''
+<<<<<<< HEAD
     makeWrapper ${electron_25}/bin/electron $out/bin/${pname} \
+=======
+    makeWrapper ${electron_22}/bin/electron $out/bin/${pname} \
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       --add-flags $out/share/${pname}/resources/app.asar \
       --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ stdenv.cc.cc ]}"
   '';

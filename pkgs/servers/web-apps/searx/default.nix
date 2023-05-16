@@ -14,10 +14,13 @@ toPythonModule (buildPythonApplication rec {
     sha256 = "sha256-+Wsg1k/h41luk5aVfSn11/lGv8hZYVvpHLbbYHfsExw=";
   };
 
+<<<<<<< HEAD
   patches = [
    ./fix-flask-babel-3.0.patch
   ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   postPatch = ''
     sed -i 's/==.*$//' requirements.txt
   '';

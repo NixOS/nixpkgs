@@ -16,7 +16,11 @@ buildGoModule rec {
     rm -f geoip/geoip_test.go
   '';
 
+<<<<<<< HEAD
   vendorHash = "sha256-Rx5/oORink2QtRcD+JqbyFroWYhuYmuYDzZ391R4Jsw=";
+=======
+  vendorSha256 = "sha256-Rx5/oORink2QtRcD+JqbyFroWYhuYmuYDzZ391R4Jsw=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   buildInputs = [ xorg.libX11 xorg.libXrandr wayland.dev ];
 

@@ -1,10 +1,16 @@
+<<<<<<< HEAD
 { lib
 , stdenvNoCC
+=======
+{ stdenv
+, lib
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , fetchurl
 , jre
 , makeWrapper
 , unzip
 }:
+<<<<<<< HEAD
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "dex2jar";
@@ -13,6 +19,16 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/pxb1988/dex2jar/releases/download/v${finalAttrs.version}/dex2jar-${finalAttrs.version}.zip";
     hash = "sha256-epvfhD1D3k0elOwue29VglAXsMSn7jn/gmYOJJOkbwg=";
+=======
+stdenv.mkDerivation rec {
+  name = "${pname}-${version}";
+  pname = "dex2jar";
+  version  = "2.0";
+
+  src = fetchurl {
+    url = "mirror://sourceforge/${pname}/${name}.zip";
+    sha256 = "1g3mrbyl8sdw1nhp17z23qbfzqpa0w2yxrywgphvd04jdr6yn1vr";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ makeWrapper unzip ];
@@ -23,7 +39,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   '';
 
   installPhase = ''
+<<<<<<< HEAD
     f=$out/share/dex2jar/
+=======
+    f=$out/lib/dex2jar/
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     mkdir -p $f $out/bin
 
@@ -35,6 +55,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   '';
 
   meta = with lib; {
+<<<<<<< HEAD
     homepage = "https://github.com/pxb1988/dex2jar";
     description = "Tools to work with android .dex and java .class files";
     maintainers = with maintainers; [ makefu ];
@@ -43,3 +64,12 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     platforms = platforms.unix;
   };
 })
+=======
+    homepage = "https://sourceforge.net/projects/dex2jar/";
+    description = "Tools to work with android .dex and java .class files";
+    maintainers = with maintainers; [ makefu ];
+    license = licenses.asl20;
+    platforms = platforms.linux;
+  };
+}
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)

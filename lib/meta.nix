@@ -132,9 +132,16 @@ rec {
         { shortName = licstr; }
       );
 
+<<<<<<< HEAD
   /* Get the path to the main program of a package based on meta.mainProgram
 
      Type: getExe :: package -> string
+=======
+  /* Get the path to the main program of a derivation with either
+     meta.mainProgram or pname or name
+
+     Type: getExe :: derivation -> string
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
      Example:
        getExe pkgs.hello
@@ -143,6 +150,7 @@ rec {
        => "/nix/store/am9ml4f4ywvivxnkiaqwr0hyxka1xjsf-mustache-go-1.3.0/bin/mustache"
   */
   getExe = x:
+<<<<<<< HEAD
     let
       y = x.meta.mainProgram or (
         # This could be turned into an error when 23.05 is at end of life
@@ -163,4 +171,7 @@ rec {
        => "/nix/store/5rs48jamq7k6sal98ymj9l4k2bnwq515-imagemagick-7.1.1-15/bin/convert"
   */
   getExe' = x: y: "${lib.getBin x}/bin/${y}";
+=======
+    "${lib.getBin x}/bin/${x.meta.mainProgram or (lib.getName x)}";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }

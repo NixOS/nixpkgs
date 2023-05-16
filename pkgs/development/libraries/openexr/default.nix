@@ -28,6 +28,7 @@ stdenv.mkDerivation rec {
       extraPrefix = "OpenEXR/IlmImf/";
       sha256 = "1wa2jn6sa0n3phaqvklnlbgk1bz60y756ad4jk4d757pzpnannsy";
     })
+<<<<<<< HEAD
     (fetchpatch {
       name = "CVE-2021-3933.patch";
       url = "https://github.com/AcademySoftwareFoundation/openexr/commit/5db6f7aee79e3e75e8c3780b18b28699614dd08e.patch";
@@ -53,14 +54,22 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     "-DCMAKE_CTEST_ARGUMENTS=--timeout;3600"
   ] ++ lib.optional stdenv.hostPlatform.isStatic "-DCMAKE_SKIP_RPATH=ON";
+=======
+  ];
+
+  cmakeFlags = lib.optional stdenv.hostPlatform.isStatic "-DCMAKE_SKIP_RPATH=ON";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nativeBuildInputs = [ cmake ];
   propagatedBuildInputs = [ ilmbase zlib ];
 
+<<<<<<< HEAD
   # https://github.com/AcademySoftwareFoundation/openexr/issues/1400
   # https://github.com/AcademySoftwareFoundation/openexr/issues/1281
   doCheck = !stdenv.isAarch32 && !stdenv.isi686;
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   meta = with lib; {
     description = "A high dynamic-range (HDR) image file format";
     homepage = "https://www.openexr.com/";

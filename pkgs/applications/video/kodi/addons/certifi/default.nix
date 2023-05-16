@@ -2,11 +2,19 @@
 buildKodiAddon rec {
   pname = "certifi";
   namespace = "script.module.certifi";
+<<<<<<< HEAD
   version = "2023.5.7";
 
   src = fetchzip {
     url = "https://mirrors.kodi.tv/addons/nexus/${namespace}/${namespace}-${version}.zip";
     sha256 = "sha256-NQbjx+k9fnQMYLLMR5+N5NSuDcXEzZjlhGPA3qSmjfI=";
+=======
+  version = "2022.9.24";
+
+  src = fetchzip {
+    url = "https://mirrors.kodi.tv/addons/nexus/${namespace}/${namespace}-${version}.zip";
+    sha256 = "sha256-kIPGEjmnHlgVb11W2RKBlrMy3/+kUOcQZiLCcnHCcno=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   patches = [

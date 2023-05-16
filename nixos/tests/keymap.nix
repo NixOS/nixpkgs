@@ -29,10 +29,17 @@ let
   mkKeyboardTest = layout: { extraConfig ? {}, tests }: with pkgs.lib; makeTest {
     name = "keymap-${layout}";
 
+<<<<<<< HEAD
     nodes.machine.console.keyMap = mkOverride 900 layout;
     nodes.machine.services.xserver.desktopManager.xterm.enable = false;
     nodes.machine.services.xserver.layout = mkOverride 900 layout;
     nodes.machine.imports = [ ./common/x11.nix extraConfig ];
+=======
+    machine.console.keyMap = mkOverride 900 layout;
+    machine.services.xserver.desktopManager.xterm.enable = false;
+    machine.services.xserver.layout = mkOverride 900 layout;
+    machine.imports = [ ./common/x11.nix extraConfig ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     testScript = ''
       import json
@@ -201,6 +208,7 @@ in pkgs.lib.mapAttrs mkKeyboardTest {
     extraConfig.console.keyMap = "de";
     extraConfig.services.xserver.layout = "de";
   };
+<<<<<<< HEAD
 
   custom = {
     tests = {
@@ -230,4 +238,6 @@ in pkgs.lib.mapAttrs mkKeyboardTest {
         '';
       };
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }

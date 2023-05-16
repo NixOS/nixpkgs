@@ -17,11 +17,19 @@
 
 buildPythonPackage rec {
   pname = "python-cinderclient";
+<<<<<<< HEAD
   version = "9.4.0";
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-pT5kcKUWYntZ0iUFIioMhXlL4afyd06HeWEFvUfulpU=";
+=======
+  version = "9.3.0";
+
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-mmqjD+/0jAwP0Yjm1RUNvdkeP9WxDS2514uYEqsUr4g=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [

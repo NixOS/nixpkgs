@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 { lib, stdenv, fetchzip, pkg-config, glib, cairo, Carbon, fontconfig
 , libtiff, giflib, libjpeg, libpng
 , libXrender, libexif, autoreconfHook, fetchpatch }:
@@ -18,6 +19,23 @@ stdenv.mkDerivation (finalAttrs: {
     ./configure-pkg-config.patch
   ];
 
+=======
+{ lib, stdenv, fetchFromGitHub, pkg-config, glib, cairo, Carbon, fontconfig
+, libtiff, giflib, libjpeg, libpng
+, libXrender, libexif, autoreconfHook, fetchpatch }:
+
+stdenv.mkDerivation rec {
+  pname = "libgdiplus";
+  version = "6.0.5";
+
+  src = fetchFromGitHub {
+    owner = "mono";
+    repo = "libgdiplus";
+    rev = version;
+    sha256 = "1387lgph5r17viv3rkf5hbksdn435njzmra7s17q0nzk2mkkm68c";
+  };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   NIX_LDFLAGS = "-lgif";
 
   outputs = [ "out" "dev" ];
@@ -50,4 +68,8 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = platforms.unix;
     license = licenses.mit;
   };
+<<<<<<< HEAD
 })
+=======
+}
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)

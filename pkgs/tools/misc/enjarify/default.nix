@@ -30,6 +30,10 @@ stdenv.mkDerivation rec {
     description = "Tool for translating Dalvik bytecode to equivalent Java bytecode";
     homepage = "https://github.com/google/enjarify/";
     license = licenses.asl20;
+<<<<<<< HEAD
     maintainers = with maintainers; [ ];
+=======
+    maintainers = with maintainers; [ SuperSandro2000 ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

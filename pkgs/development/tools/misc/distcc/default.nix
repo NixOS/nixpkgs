@@ -26,7 +26,11 @@ let
       configureFlagsArray=( CFLAGS="-O2 -fno-strict-aliasing"
                             CXXFLAGS="-O2 -fno-strict-aliasing"
           --mandir=$out/share/man
+<<<<<<< HEAD
                             ${lib.optionalString (sysconfDir != "") "--sysconfdir=${sysconfDir}"}
+=======
+                            ${if sysconfDir == "" then "" else "--sysconfdir=${sysconfDir}"}
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
                             ${lib.optionalString static "LDFLAGS=-static"}
                             ${lib.withFeature (static == true || popt == null) "included-popt"}
                             ${lib.withFeature (avahi != null) "avahi"}

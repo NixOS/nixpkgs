@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 { lib
 , stdenv
 , fetchFromGitHub, fetchpatch
@@ -9,6 +10,10 @@
 , openimageio
 , fcitx5
 , spdlog
+=======
+{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake
+, enableShared ? !stdenv.hostPlatform.isStatic
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 let
@@ -36,10 +41,13 @@ let
 
       doCheck = true;
 
+<<<<<<< HEAD
       passthru.tests = {
         inherit mpd openimageio fcitx5 spdlog;
       };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       meta = with lib; {
         description = "Small, safe and fast formatting library";
         longDescription = ''
@@ -47,7 +55,10 @@ let
           used as a fast and safe alternative to printf and IOStreams.
         '';
         homepage = "https://fmt.dev/";
+<<<<<<< HEAD
         changelog = "https://github.com/fmtlib/fmt/blob/${version}/ChangeLog.rst";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         downloadPage = "https://github.com/fmtlib/fmt/";
         maintainers = [ maintainers.jdehaas ];
         license = licenses.mit;
@@ -65,9 +76,12 @@ in
     version = "9.1.0";
     sha256 = "sha256-rP6ymyRc7LnKxUXwPpzhHOQvpJkpnRFOt2ctvUNlYI0=";
   };
+<<<<<<< HEAD
 
   fmt_10 = generic {
     version = "10.1.0";
     sha256 = "sha256-t/Mcl3n2dj8UEnptQh4YgpvWrxSYN3iGPZ3LKwzlPAg=";
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }

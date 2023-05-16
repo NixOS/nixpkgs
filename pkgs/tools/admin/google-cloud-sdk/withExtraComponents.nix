@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 { lib, google-cloud-sdk, runCommand, components }:
+=======
+{ lib, google-cloud-sdk, callPackage, runCommand, components }:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 comps_:
 

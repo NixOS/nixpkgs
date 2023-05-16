@@ -13,14 +13,22 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-bigquery-logging";
+<<<<<<< HEAD
   version = "1.2.2";
+=======
+  version = "1.2.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
+<<<<<<< HEAD
     hash = "sha256-e6ZCsdEstzxMjaJdubslQ4Lchr3FmBCdtTZ0xVsCl14=";
+=======
+    hash = "sha256-zTVOt3175ruIHatHTemOAt9VF4pvJn/fQIvm/DXXw9M=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [

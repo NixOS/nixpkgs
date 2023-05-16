@@ -2,13 +2,21 @@
 
 stdenv.mkDerivation rec {
   pname = "cppzmq";
+<<<<<<< HEAD
   version = "4.10.0";
+=======
+  version = "4.9.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "zeromq";
     repo = "cppzmq";
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-HTdaV1cLbwGYuikS9EAVvAOdLmCoWlvVXlpYsUwY5IA=";
+=======
+    sha256 = "sha256-hKMHJF/FXPeQjkEXLTN6zjKMaVGa3LdIebXya3NRSzU=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ cmake ];

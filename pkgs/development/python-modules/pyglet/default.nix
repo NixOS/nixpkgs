@@ -18,13 +18,21 @@
 }:
 
 buildPythonPackage rec {
+<<<<<<< HEAD
   version = "2.0.9";
+=======
+  version = "2.0.6";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pname = "pyglet";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
+<<<<<<< HEAD
     hash = "sha256-oJIuQvLSWFBWeOL0o1XFR2waY1LD86N3VAQt23589y8=";
+=======
+    hash = "sha256-b5PyvebfgYCH4bXZEDMIbLL7aJwSILYyxG0fxKZoWgA=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     extension = "zip";
   };
 

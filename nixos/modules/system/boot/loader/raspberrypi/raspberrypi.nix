@@ -52,10 +52,13 @@ in
           Whether to create files with the system generations in
           `/boot`.
           `/boot/old` will hold files from old generations.
+<<<<<<< HEAD
 
           ::: {.note}
           These options are deprecated, unsupported, and may not work like expected.
           :::
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         '';
       };
 
@@ -71,10 +74,13 @@ in
           type = types.bool;
           description = lib.mdDoc ''
             Enable using uboot as bootmanager for the raspberry pi.
+<<<<<<< HEAD
 
             ::: {.note}
             These options are deprecated, unsupported, and may not work like expected.
             :::
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           '';
         };
 
@@ -84,10 +90,13 @@ in
           type = types.int;
           description = lib.mdDoc ''
             Maximum number of configurations in the boot menu.
+<<<<<<< HEAD
 
             ::: {.note}
             These options are deprecated, unsupported, and may not work like expected.
             :::
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           '';
         };
 
@@ -99,15 +108,19 @@ in
         description = lib.mdDoc ''
           Extra options that will be appended to `/boot/config.txt` file.
           For possible values, see: https://www.raspberrypi.com/documentation/computers/config_txt.html
+<<<<<<< HEAD
 
           ::: {.note}
           These options are deprecated, unsupported, and may not work like expected.
           :::
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         '';
       };
     };
   };
 
+<<<<<<< HEAD
   config = mkMerge[
     (mkIf cfg.uboot.enable {
       warnings = [
@@ -148,4 +161,16 @@ in
       system.boot.loader.kernelFile = pkgs.stdenv.hostPlatform.linux-kernel.target;
     })
   ];
+=======
+  config = mkIf cfg.enable {
+    assertions = singleton {
+      assertion = !pkgs.stdenv.hostPlatform.isAarch64 || cfg.version >= 3;
+      message = "Only Raspberry Pi >= 3 supports aarch64.";
+    };
+
+    system.build.installBootLoader = builder;
+    system.boot.loader.id = "raspberrypi";
+    system.boot.loader.kernelFile = pkgs.stdenv.hostPlatform.linux-kernel.target;
+  };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }

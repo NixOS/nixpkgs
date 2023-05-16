@@ -19,7 +19,11 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "iotas";
+<<<<<<< HEAD
   version = "0.2.2";
+=======
+  version = "0.1.14";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "other";
 
   src = fetchFromGitLab {
@@ -27,7 +31,11 @@ python3.pkgs.buildPythonApplication rec {
     owner = "cheywood";
     repo = pname;
     rev = version;
+<<<<<<< HEAD
     hash = "sha256-oThsyTsNM3283e4FViISdFzmeQnU7qXHh4xEJWA2fkc=";
+=======
+    hash = "sha256-IvKjvsHJdoFmDvsM1/kFPikYbBLUEQ57DKr1T+Jyw7w=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [
@@ -56,11 +64,18 @@ python3.pkgs.buildPythonApplication rec {
     requests
     markdown-it-py
     linkify-it-py
+<<<<<<< HEAD
     mdit-py-plugins
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   # prevent double wrapping
   dontWrapGApps = true;
+<<<<<<< HEAD
+=======
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   preFixup = ''
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';

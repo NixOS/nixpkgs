@@ -10,8 +10,11 @@ trivialBuild {
     sha256 = "0x6qsgs4hm87k0z9q3g4p6508kc3y123j5jayll3jf3lcl2vm6ks";
   };
 
+<<<<<<< HEAD
   version = "1.10";
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   meta = {
     broken = true;
     description = "Minor mode provides useful features for editing perl codes";

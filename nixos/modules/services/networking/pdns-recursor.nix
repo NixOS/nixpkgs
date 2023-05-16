@@ -159,8 +159,11 @@ in {
 
   config = mkIf cfg.enable {
 
+<<<<<<< HEAD
     environment.etc."pdns-recursor".source = configDir;
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     services.pdns-recursor.settings = mkDefaultAttrs {
       local-address = cfg.dns.address;
       local-port    = cfg.dns.port;

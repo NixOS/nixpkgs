@@ -15,16 +15,27 @@ let
 in
 buildGoModule rec {
   pname = "k3d";
+<<<<<<< HEAD
   version = "5.6.0";
+=======
+  version = "5.4.4";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "k3d-io";
     repo = "k3d";
+<<<<<<< HEAD
     rev = "refs/tags/v${version}";
     hash = "sha256-KIYwuDPkxhtQy989XW+DcI5NJPhfLP07mYUFc180Sdw=";
   };
 
   vendorHash = null;
+=======
+    rev = "v${version}";
+    sha256 = "sha256-3J25Aj/otKDCWJ+YqAsoJogU2vckZMy7fsS8XR2EMgE=";
+  };
+  vendorSha256 = null;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -55,8 +66,11 @@ buildGoModule rec {
     runHook postInstallCheck
   '';
 
+<<<<<<< HEAD
   env.GOWORK = "off";
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   meta = with lib; {
     homepage = "https://github.com/k3d-io/k3d/";
     changelog = "https://github.com/k3d-io/k3d/blob/v${version}/CHANGELOG.md";

@@ -6,8 +6,13 @@ let
   };
 in
 buildMongoDB {
+<<<<<<< HEAD
   version = "6.0.8";
   sha256 = "sha256-ZyTE/dZ86kJ+WRSDmc2it4SzAlwjNKhWUyYXpisNIS4=";
+=======
+  version = "6.0.5";
+  sha256 = "sha256-iUY5nbyaoMknBlWy3ItkgY87lHNVbZ1N9ricbzMpWX4=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   patches = [
     (fetchpatch {
       name = "mongodb-6.1.0-rc-more-specific-cache-alignment-types.patch";

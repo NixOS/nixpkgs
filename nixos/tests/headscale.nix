@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import ./make-test-python.nix ({ pkgs, lib, ... }:
   let
     tls-cert =
@@ -80,3 +81,22 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
       peer2.wait_until_succeeds("tailscale ping peer1")
     '';
   })
+=======
+import ./make-test-python.nix ({ pkgs, lib, ... }: {
+  name = "headscale";
+  meta.maintainers = with lib.maintainers; [ misterio77 ];
+
+  nodes.machine = { ... }: {
+    services.headscale.enable = true;
+    environment.systemPackages = [ pkgs.headscale ];
+  };
+
+  testScript = ''
+    machine.wait_for_unit("headscale")
+    machine.wait_for_open_port(8080)
+    # Test basic funcionality
+    machine.succeed("headscale namespaces create test")
+    machine.succeed("headscale preauthkeys -u test create")
+  '';
+})
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)

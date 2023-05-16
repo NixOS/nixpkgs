@@ -8,13 +8,21 @@
 
 buildPythonPackage rec {
   pname = "python-gnupg";
+<<<<<<< HEAD
   version = "0.5.1";
+=======
+  version = "0.5.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
+<<<<<<< HEAD
     hash = "sha256-VnS61Ok4dsCw0xl+MU1/lC05AYvzHiuDP2eIpoE8P7g=";
+=======
+    hash = "sha256-cHWOOH/A4MS628s5T2GsvmizSXCo/tfg98iUaf4XkSo=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   postPatch = ''
@@ -42,7 +50,10 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "API for the GNU Privacy Guard (GnuPG)";
     homepage = "https://github.com/vsajip/python-gnupg";
+<<<<<<< HEAD
     changelog = "https://github.com/vsajip/python-gnupg/releases/tag/${version}";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     license = licenses.bsd3;
     maintainers = with maintainers; [ copumpkin ];
   };

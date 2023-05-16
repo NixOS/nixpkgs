@@ -24,7 +24,11 @@ buildGoModule rec {
     })
   ];
 
+<<<<<<< HEAD
   vendorHash = "sha256-lV6dUl+OMUQfhlgNL38k0Re1Mr3VP9b8SI3vTJ8CP18=";
+=======
+  vendorSha256 = "sha256-lV6dUl+OMUQfhlgNL38k0Re1Mr3VP9b8SI3vTJ8CP18=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   meta = with lib; {
     description = "Tool to check missing hosted DNS zones";

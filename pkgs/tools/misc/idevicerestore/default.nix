@@ -12,15 +12,30 @@
 
 stdenv.mkDerivation rec {
   pname = "idevicerestore";
+<<<<<<< HEAD
   version = "1.0.0+date=2023-05-23";
+=======
+  version = "1.0.0+date=2022-05-22";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "libimobiledevice";
     repo = pname;
+<<<<<<< HEAD
     rev = "609f7f058487596597e8e742088119fdd46729df";
     hash = "sha256-VXtXAitPC1+pxZlkGBg+u6yYhyM/jVpSgDO/6dXh5V4=";
   };
 
+=======
+    rev = "f80a876b3598de4eb551bafcb279947c527fae33";
+    hash = "sha256-I9zZQcZFd0hfeEJM7jltJtVJ6V5C5rA/S8gINiCnJdY=";
+  };
+
+  postPatch = ''
+    echo '${version}' > .tarball-version
+  '';
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nativeBuildInputs = [
     autoreconfHook
     pkg-config
@@ -37,10 +52,13 @@ stdenv.mkDerivation rec {
     # because they are inherited `libimobiledevice`.
   ];
 
+<<<<<<< HEAD
   preAutoreconf = ''
     export RELEASE_VERSION=${version}
   '';
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   meta = with lib; {
     homepage = "https://github.com/libimobiledevice/idevicerestore";
     description = "Restore/upgrade firmware of iOS devices";

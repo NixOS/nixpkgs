@@ -11,11 +11,19 @@
 , keyring
 , requests
 , feedparser
+<<<<<<< HEAD
 , jaraco-text
 , jaraco-logging
 , jaraco-email
 , jaraco-functools
 , jaraco-collections
+=======
+, jaraco_text
+, jaraco_logging
+, jaraco-email
+, jaraco_functools
+, jaraco_collections
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , path
 , python-dateutil
 , pathvalidate
@@ -26,7 +34,10 @@
 , importlib-resources
 , pyparsing
 , requests-mock
+<<<<<<< HEAD
 , nettools
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 buildPythonPackage rec {
@@ -58,11 +69,19 @@ buildPythonPackage rec {
     keyring
     requests
     feedparser
+<<<<<<< HEAD
     jaraco-text
     jaraco-logging
     jaraco-email
     jaraco-functools
     jaraco-collections
+=======
+    jaraco_text
+    jaraco_logging
+    jaraco-email
+    jaraco_functools
+    jaraco_collections
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     path
     python-dateutil
     pathvalidate
@@ -79,8 +98,11 @@ buildPythonPackage rec {
     importlib-resources
     pyparsing
     requests-mock
+<<<<<<< HEAD
   ] ++ lib.optionals stdenv.isDarwin [
     nettools
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   disabledTestPaths = [
@@ -92,9 +114,12 @@ buildPythonPackage rec {
     "tests/test_cookies.py"
   ];
 
+<<<<<<< HEAD
   # cherrypy does not support Python 3.11
   doCheck = pythonOlder "3.11";
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   meta = {
     changelog = "https://github.com/jaraco/jaraco.net/blob/${src.rev}/CHANGES.rst";
     description = "Networking tools by jaraco";

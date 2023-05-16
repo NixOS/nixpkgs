@@ -2,13 +2,21 @@
 
 stdenv.mkDerivation rec {
   pname = "qpdf";
+<<<<<<< HEAD
   version = "11.5.0";
+=======
+  version = "11.3.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "qpdf";
     repo = "qpdf";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-lojvsCgBsT7wVRLWfkeOduEYUG7ztI/uryM0WueWiL0=";
+=======
+    hash = "sha256-UZq973X93E+Ll1IKjfJNPQuQwBFOU3egFGODgXV21x0=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ cmake perl ];

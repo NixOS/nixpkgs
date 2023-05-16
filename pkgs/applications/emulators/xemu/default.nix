@@ -12,7 +12,10 @@
 , libepoxy
 , libpcap
 , libsamplerate
+<<<<<<< HEAD
 , libslirp
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , makeDesktopItem
 , mesa
 , meson
@@ -28,13 +31,21 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xemu";
+<<<<<<< HEAD
   version = "0.7.111";
+=======
+  version = "0.7.88";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "xemu-project";
     repo = "xemu";
     rev = "v${finalAttrs.version}";
+<<<<<<< HEAD
     hash = "sha256-j7VNNKGm8mFEz+8779ylw1Yjd+jDuoL19Sw52kJll4s=";
+=======
+    hash = "sha256-rV90ISPaipczaJgGj0vAO1IJYDMJpncVGOdllO3Km2k=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     fetchSubmodules = true;
   };
 
@@ -61,7 +72,10 @@ stdenv.mkDerivation (finalAttrs: {
     libepoxy
     libpcap
     libsamplerate
+<<<<<<< HEAD
     libslirp
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     mesa
     openssl
     vte
@@ -132,7 +146,11 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/xemu-project/xemu/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ AndersonTorres genericnerdyusername ];
+<<<<<<< HEAD
     platforms = lib.platforms.linux;
     mainProgram = "xemu";
+=======
+    platforms = with lib.platforms; linux;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 })

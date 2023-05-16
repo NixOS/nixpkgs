@@ -11,7 +11,11 @@ buildGoModule {
     src
     ;
 
+<<<<<<< HEAD
   sourceRoot = "${mullvad.src.name}/wireguard/libwg";
+=======
+  sourceRoot = "source/wireguard/libwg";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   vendorSha256 = "QNde5BqkSuqp3VJQOhn7aG6XknRDZQ62PE3WGhEJ5LU=";
 

@@ -18,7 +18,10 @@ let
           ExecStart = "${pkgs.liquidsoap}/bin/liquidsoap ${stream}";
           User = "liquidsoap";
           LogsDirectory = "liquidsoap";
+<<<<<<< HEAD
           Restart = "always";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         };
       };
     };

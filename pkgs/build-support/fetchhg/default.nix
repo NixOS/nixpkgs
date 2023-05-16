@@ -2,12 +2,22 @@
 { name ? null
 , url
 , rev ? null
+<<<<<<< HEAD
+=======
+, md5 ? null
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , sha256 ? null
 , hash ? null
 , fetchSubrepos ? false
 , preferLocalBuild ? true }:
 
+<<<<<<< HEAD
 if hash != null && sha256 != null then
+=======
+if md5 != null then
+  throw "fetchhg does not support md5 anymore, please use sha256 or hash"
+else if hash != null && sha256 != null then
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   throw "Only one of sha256 or hash can be set"
 else
 # TODO: statically check if mercurial as the https support if the url starts woth https.

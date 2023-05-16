@@ -32,17 +32,29 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "diffsitter";
+<<<<<<< HEAD
   version = "0.8.1";
+=======
+  version = "0.7.3";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "afnanenayet";
     repo = pname;
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-8nKZ8zcZSSF7Qd36kA9IQjio+TIhlQWRgMqKrsdInj4=";
     fetchSubmodules = false;
   };
 
   cargoHash = "sha256-LEBAMb9tROpjrWEfucw+2ZaytnoyJE477IH3MyeUGEA=";
+=======
+    sha256 = "sha256-AJjgn+qFfy6/gjb8tQOJDmevZy1ZfpF0nTxAgunSabE=";
+    fetchSubmodules = false;
+  };
+
+  cargoSha256 = "sha256-U/XvllkzEVt4TpDPA5gSRKpIIQagATGdHh7YPFOo4CY=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   buildNoDefaultFeatures = true;
   buildFeatures = [
@@ -54,10 +66,13 @@ rustPlatform.buildRustPackage rec {
   ];
 
   postInstall = ''
+<<<<<<< HEAD
     # completions are not yet implemented
     # so we can safely remove this without installing the completions
     rm $out/bin/diffsitter_completions
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     wrapProgram "$out/bin/diffsitter" \
       --prefix LD_LIBRARY_PATH : "${libPath}"
   '';

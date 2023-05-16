@@ -12,16 +12,28 @@
 
 buildGoModule rec {
   pname = "step-ca";
+<<<<<<< HEAD
   version = "0.24.2";
+=======
+  version = "0.23.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "smallstep";
     repo = "certificates";
+<<<<<<< HEAD
     rev = "refs/tags/v${version}";
     hash = "sha256-499gPucDfABpajrPPLLyPLwFSlPsY+m4hUvaur39+ug=";
   };
 
   vendorHash = "sha256-aqDjL0bPRmEGmYU0XERvfxhk2IKWhs/GDCvh/PecIBw=";
+=======
+    rev = "v${version}";
+    sha256 = "sha256-BDJEvA6kDBxE43+l2GGaGJxv1BETZGJ9poAqXg/NfOY=";
+  };
+
+  vendorHash = "sha256-2uBrd1AJyKPJBgMp2ANng9dSjye3iTNaUg+tuLsKEts=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   ldflags = [ "-buildid=" ];
 
@@ -55,7 +67,10 @@ buildGoModule rec {
   meta = with lib; {
     description = "A private certificate authority (X.509 & SSH) & ACME server for secure automated certificate management, so you can use TLS everywhere & SSO for SSH";
     homepage = "https://smallstep.com/certificates/";
+<<<<<<< HEAD
     changelog = "https://github.com/smallstep/certificates/releases/tag/v${version}";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     license = licenses.asl20;
     maintainers = with maintainers; [ cmcdragonkai mohe2015 techknowlogick ];
   };

@@ -5,13 +5,21 @@
 
 buildGoModule rec {
   pname = "ferretdb";
+<<<<<<< HEAD
   version = "1.9.0";
+=======
+  version = "1.1.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "FerretDB";
     repo = "FerretDB";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-cDXdTFgSf126BuPG2h0xZFUTCgyg8IVmNySCQyJV4T4=";
+=======
+    sha256 = "sha256-V06NIjiT+uxN39vGhwvrU4hbrNezWReEtJdbW6BHIzE=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   postPatch = ''
@@ -19,7 +27,11 @@ buildGoModule rec {
     echo nixpkgs     > build/version/package.txt
   '';
 
+<<<<<<< HEAD
   vendorHash = "sha256-mzgj5VBggAqCFlLUcNE03B9jFHLKgfTzH6LI9wTe6Io=";
+=======
+  vendorSha256 = "sha256-/lM98VTQc6glhnpETW9XbxgN2fP6dBexueByFWwv5sk=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   CGO_ENABLED = 0;
 

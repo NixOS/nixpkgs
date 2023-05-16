@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 { stdenv
+=======
+{ mkDerivation
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , lib
 , pkg-config
 , zlib
@@ -7,6 +11,7 @@
 , qttools
 , qtmultimedia
 , qmake
+<<<<<<< HEAD
 , fetchpatch
 , fetchurl
 , wrapQtAppsHook
@@ -19,12 +24,27 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "mirror://sourceforge/chessx/chessx-${finalAttrs.version}.tgz";
     hash = "sha256-76YOe1WpB+vdEoEKGTHeaWJLpCVE4RoyYu1WLy3Dxhg=";
+=======
+, fetchurl
+}:
+
+mkDerivation rec {
+  pname = "chessx";
+  version = "1.5.8";
+
+  src = fetchurl {
+    url = "mirror://sourceforge/chessx/chessx-${version}.tgz";
+    sha256 = "sha256-ev+tK1CHLFt/RvmzyPVZ2c0nxfRwwb9ke7uTmm7REaM=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [
     pkg-config
     qmake
+<<<<<<< HEAD
     wrapQtAppsHook
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   buildInputs = [
@@ -35,6 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
     zlib
   ];
 
+<<<<<<< HEAD
   patches =
     # needed to backport patches to successfully build, due to broken release
     let
@@ -52,17 +73,29 @@ stdenv.mkDerivation (finalAttrs: {
     ];
 
   enableParallelBuilding = true;
+=======
+  # RCC: Error in 'resources.qrc': Cannot find file 'i18n/chessx_da.qm'
+  enableParallelBuilding = false;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   installPhase = ''
     runHook preInstall
 
+<<<<<<< HEAD
     install -Dm555 release/chessx -t "$out/bin"
     install -Dm444 unix/chessx.desktop -t "$out/share/applications"
+=======
+    mkdir -p "$out/bin"
+    mkdir -p "$out/share/applications"
+    cp -pr release/chessx "$out/bin"
+    cp -pr unix/chessx.desktop "$out/share/applications"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     runHook postInstall
   '';
 
   meta = with lib; {
+<<<<<<< HEAD
     homepage = "https://chessx.sourceforge.io/";
     description = "Browse and analyse chess games";
     license = licenses.gpl2Plus;
@@ -71,3 +104,12 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "chessx";
   };
 })
+=======
+    homepage = "http://chessx.sourceforge.net/";
+    description = "Browse and analyse chess games";
+    license = licenses.gpl2;
+    maintainers = [ maintainers.luispedro ];
+    platforms = platforms.linux;
+  };
+}
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)

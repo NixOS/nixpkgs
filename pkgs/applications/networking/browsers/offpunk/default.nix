@@ -14,7 +14,10 @@
 let
   pythonDependencies = with python3Packages; [
     beautifulsoup4
+<<<<<<< HEAD
     chardet
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     cryptography
     feedparser
     pillow
@@ -31,7 +34,11 @@ let
 in
 python3Packages.buildPythonPackage rec {
   pname = "offpunk";
+<<<<<<< HEAD
   version = "1.10";
+=======
+  version = "1.9.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "flit";
 
   disabled = python3Packages.pythonOlder "3.7";
@@ -40,7 +47,11 @@ python3Packages.buildPythonPackage rec {
     owner = "~lioploum";
     repo = "offpunk";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-+jGKPPnKZHn+l6VAwuae6kICwR7ymkYJjsM2OHQAEmU=";
+=======
+    sha256 = "sha256-CYsuoj5/BaaboDRtcOrGzJoZDCfOLs7ROVWLVjOAnRU=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ installShellFiles ];

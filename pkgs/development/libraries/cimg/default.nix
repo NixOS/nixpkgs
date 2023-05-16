@@ -7,13 +7,21 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cimg";
+<<<<<<< HEAD
   version = "3.2.6";
+=======
+  version = "3.2.4";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "GreycLab";
     repo = "CImg";
     rev = "v.${finalAttrs.version}";
+<<<<<<< HEAD
     hash = "sha256-HEqjvL16Ca3Al3I6VK50CU6zHFj9Nn/SAXXCfRU4rgo=";
+=======
+    hash = "sha256-CQYY5aKRDe6F7GrBJfqt0t/rjjdZnr/c/cqhr6yVACA=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   outputs = [ "out" "doc" ];

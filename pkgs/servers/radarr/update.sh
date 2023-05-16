@@ -40,4 +40,7 @@ updateVersion $latestVersion
 updateHash $latestVersion x64 linux
 updateHash $latestVersion arm64 linux
 updateHash $latestVersion x64 osx
+<<<<<<< HEAD
 updateHash $latestVersion arm64 osx
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)

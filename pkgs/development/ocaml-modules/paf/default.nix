@@ -1,6 +1,10 @@
 { buildDunePackage
 , lib
 , fetchurl
+<<<<<<< HEAD
+=======
+, mirage-stack
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , mirage-time
 , h2
 , tls-mirage
@@ -31,8 +35,15 @@ buildDunePackage rec {
   };
 
   minimalOCamlVersion = "4.08";
+<<<<<<< HEAD
 
   propagatedBuildInputs = [
+=======
+  duneVersion = "3";
+
+  propagatedBuildInputs = [
+    mirage-stack
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     mirage-time
     h2
     tls-mirage

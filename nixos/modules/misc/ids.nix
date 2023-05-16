@@ -69,7 +69,11 @@ in
       #dialout = 27; # unused
       polkituser = 28;
       #utmp = 29; # unused
+<<<<<<< HEAD
       # ddclient = 30; # software removed
+=======
+      # ddclient = 30; # converted to DynamicUser = true
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       davfs2 = 31;
       disnix = 33;
       osgi = 34;
@@ -394,7 +398,11 @@ in
       dialout = 27;
       #polkituser = 28; # currently unused, polkitd doesn't need a group
       utmp = 29;
+<<<<<<< HEAD
       # ddclient = 30; # software removed
+=======
+      # ddclient = 30; # converted to DynamicUser = true
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       davfs2 = 31;
       disnix = 33;
       osgi = 34;

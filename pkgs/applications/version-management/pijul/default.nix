@@ -12,6 +12,7 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "pijul";
+<<<<<<< HEAD
   version = "1.0.0-beta.6";
 
   src = fetchCrate {
@@ -20,6 +21,16 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoHash = "sha256-mRi0NUETTdYE/oM+Jo7gW/zNby8dPAKl6XhzP0Qzsf0=";
+=======
+  version = "1.0.0-beta.4";
+
+  src = fetchCrate {
+    inherit version pname;
+    sha256 = "sha256-Sx+ZbT1EONWiQmC/5f4thfE9mmTulhTmUWeqPkQgJh8=";
+  };
+
+  cargoSha256 = "sha256-vc7rkLCy489W7MjJYiN8vg4DNS65/ZSIEAcw0vaQJtU=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   doCheck = false;
   nativeBuildInputs = [ pkg-config ];

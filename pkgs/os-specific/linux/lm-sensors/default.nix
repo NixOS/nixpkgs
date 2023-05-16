@@ -48,10 +48,14 @@ stdenv.mkDerivation rec {
 
   # Making regexp to patch-out installing of .so symlinks from Makefile is
   # complicated, it is easier to remove them post-install.
+<<<<<<< HEAD
   postInstall = ''
     mkdir -p $out/share/doc/${pname}
     cp -r configs doc/* $out/share/doc/${pname}
   '' + lib.optionalString stdenv.hostPlatform.isStatic ''
+=======
+  postInstall = lib.optionalString stdenv.hostPlatform.isStatic ''
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     rm $out/lib/*.so*
   '';
 

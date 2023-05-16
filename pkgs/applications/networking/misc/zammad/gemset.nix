@@ -5,6 +5,7 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
+<<<<<<< HEAD
       sha256 = "1xnhpdpi11f7kkyngfspvd9jkkncqfpirz4sylzq32rh47kcd8p3";
       type = "gem";
     };
@@ -12,14 +13,30 @@
   };
   actioncable = {
     dependencies = ["actionpack" "activesupport" "nio4r" "websocket-driver"];
+=======
+      sha256 = "05j0rdhdzc628v5nyzrazp4704hh96j5sjbn48zxyk4v3a61f4m2";
+      type = "gem";
+    };
+    version = "5.2.0";
+  };
+  actioncable = {
+    dependencies = ["actionpack" "nio4r" "websocket-driver"];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     groups = ["default"];
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
+<<<<<<< HEAD
       sha256 = "0bndmmby5qxq8rs42fbb2ax3hhbjj2ds8wja08s0iadkbrn7shvf";
       type = "gem";
     };
     version = "6.1.7.3";
+=======
+      sha256 = "1csrylhksddsarr6wcsiyd0sni106djabswz5gwqqgm2hp992hkz";
+      type = "gem";
+    };
+    version = "6.0.4.7";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
   actionmailbox = {
     dependencies = ["actionpack" "activejob" "activerecord" "activestorage" "activesupport" "mail"];
@@ -27,6 +44,7 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
+<<<<<<< HEAD
       sha256 = "0cx00kf0syq5gdhlrmw0q9v92ki55drbsk4gzy86ls2q8xkd792s";
       type = "gem";
     };
@@ -34,14 +52,30 @@
   };
   actionmailer = {
     dependencies = ["actionpack" "actionview" "activejob" "activesupport" "mail" "rails-dom-testing"];
+=======
+      sha256 = "0wm2g9f9vppxpv7dyvi5y6dg2k3cdd3x8635cswhpxlfd707sr4p";
+      type = "gem";
+    };
+    version = "6.0.4.7";
+  };
+  actionmailer = {
+    dependencies = ["actionpack" "actionview" "activejob" "mail" "rails-dom-testing"];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     groups = ["default"];
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
+<<<<<<< HEAD
       sha256 = "0vbif021cyndq3v3m61dkmgdbbirqk9zcsszb9nisq24m3gx1aai";
       type = "gem";
     };
     version = "6.1.7.3";
+=======
+      sha256 = "1iv2hgqynqlynl2gfaxazb5zzz7qdvdbvl0w695s9ry36ap6mlyi";
+      type = "gem";
+    };
+    version = "6.0.4.7";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
   actionpack = {
     dependencies = ["actionview" "activesupport" "rack" "rack-test" "rails-dom-testing" "rails-html-sanitizer"];
@@ -49,10 +83,17 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
+<<<<<<< HEAD
       sha256 = "0k6hc7klvn8m88b88vykl83jrpqhn4zz67l2zx9v266xga6fhala";
       type = "gem";
     };
     version = "6.1.7.3";
+=======
+      sha256 = "01fc5lhy6g602xpwdc4pb0sbsfy3kpkc6w99k3fcrq1p14d4kbv5";
+      type = "gem";
+    };
+    version = "6.0.4.7";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
   actiontext = {
     dependencies = ["actionpack" "activerecord" "activestorage" "activesupport" "nokogiri"];
@@ -60,10 +101,17 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
+<<<<<<< HEAD
       sha256 = "16ldxyxlxl9scggpmkww2fxzim7sl2b4js610pvddcsr74z9fjs7";
       type = "gem";
     };
     version = "6.1.7.3";
+=======
+      sha256 = "11n4aaxwjq0iaddvlcdpfip1dpva7hhl2bd883gm0ijw2klaf17n";
+      type = "gem";
+    };
+    version = "6.0.4.7";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
   actionview = {
     dependencies = ["activesupport" "builder" "erubi" "rails-dom-testing" "rails-html-sanitizer"];
@@ -71,10 +119,17 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
+<<<<<<< HEAD
       sha256 = "0ck02cfc17s6g05qn0k7khwvvazwbf2rxbjcma8px2nw2j1ngvcn";
       type = "gem";
     };
     version = "6.1.7.3";
+=======
+      sha256 = "1gjcbrav25klh8gfj29hfd352if746v7rww77m1mj2adak02sjd1";
+      type = "gem";
+    };
+    version = "6.0.4.7";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
   activejob = {
     dependencies = ["activesupport" "globalid"];
@@ -82,10 +137,17 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
+<<<<<<< HEAD
       sha256 = "05bkw9qgjgj2nxzjj2fh6jp1fcvgff0aa4r77k0gcfmnzc1g8wdl";
       type = "gem";
     };
     version = "6.1.7.3";
+=======
+      sha256 = "1pvf0hl372y6lsar7svykbvdb3rn5jbis8z7vnqm57l2wvzzp6gv";
+      type = "gem";
+    };
+    version = "6.0.4.7";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
   activemodel = {
     dependencies = ["activesupport"];
@@ -93,10 +155,17 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
+<<<<<<< HEAD
       sha256 = "03hy5bwghdklcxbdylmsq70y0qzslck5slb2zkvp7g6mmvk86kwd";
       type = "gem";
     };
     version = "6.1.7.3";
+=======
+      sha256 = "0kznd1n0rffhd0vvhxzqdm4m9qp3y7xgqz34vmq2919m3zygqihx";
+      type = "gem";
+    };
+    version = "6.0.4.7";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
   activerecord = {
     dependencies = ["activemodel" "activesupport"];
@@ -104,10 +173,17 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
+<<<<<<< HEAD
       sha256 = "1alshkgbcxp9s4vqb2b0yrrnyg15kxhlp1slsb03a61w7h42pspw";
       type = "gem";
     };
     version = "6.1.7.3";
+=======
+      sha256 = "19kw1mcd6a1lyy8k3wk55pb2qdavwwpqn63ikfyb90ylvnr36g2q";
+      type = "gem";
+    };
+    version = "6.0.4.7";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
   activerecord-import = {
     dependencies = ["activerecord"];
@@ -115,10 +191,17 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
+<<<<<<< HEAD
       sha256 = "1cwm95795c6j5hk76csdkfg7ad228cmp086shkcmhnad4mycbh4m";
       type = "gem";
     };
     version = "1.4.1";
+=======
+      sha256 = "0nagy0b82ims0pc9mvg1fq8hlrnn6z8r9kpaas83f4yyrwr9h359";
+      type = "gem";
+    };
+    version = "1.3.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
   activerecord-nulldb-adapter = {
     dependencies = ["activerecord"];
@@ -143,15 +226,26 @@
     version = "2.0.0";
   };
   activestorage = {
+<<<<<<< HEAD
     dependencies = ["actionpack" "activejob" "activerecord" "activesupport" "marcel" "mini_mime"];
+=======
+    dependencies = ["actionpack" "activejob" "activerecord" "marcel"];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     groups = ["default"];
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
+<<<<<<< HEAD
       sha256 = "06w4wlabqqr9bwdig44r5vdwkcbbivwgwn2fl775w7h05vrccgp8";
       type = "gem";
     };
     version = "6.1.7.3";
+=======
+      sha256 = "0ync0w5mnmyk3pczc0k44iic35a5ij25fi5jwjhl9k7jr6wdhi2b";
+      type = "gem";
+    };
+    version = "6.0.4.7";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
   activesupport = {
     dependencies = ["concurrent-ruby" "i18n" "minitest" "tzinfo" "zeitwerk"];
@@ -159,10 +253,17 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
+<<<<<<< HEAD
       sha256 = "06mihpy83a5xmavvn7l8vbix472dsi0vh30xj6g594k0679m0ir6";
       type = "gem";
     };
     version = "6.1.7.3";
+=======
+      sha256 = "15pwg27li00rrzq4drmxx9l4w8fmxapnigvhh9m4xl0asmy1k207";
+      type = "gem";
+    };
+    version = "6.0.4.7";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
   acts_as_list = {
     dependencies = ["activerecord"];
@@ -170,10 +271,17 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
+<<<<<<< HEAD
       sha256 = "0qdb3g1ha8ir198rw6a7wmmdz4vm3gsk5j5j1s5sa50hdbgc9m06";
       type = "gem";
     };
     version = "1.1.0";
+=======
+      sha256 = "12p22h59c45dnccb51pqk275ziyi502azf9w3qcnkcsq827ma5jm";
+      type = "gem";
+    };
+    version = "1.0.4";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
   addressable = {
     dependencies = ["public_suffix"];
@@ -181,10 +289,17 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
+<<<<<<< HEAD
       sha256 = "1ypdmpdn20hxp5vwxz3zc04r5xcwqc25qszdlg41h8ghdqbllwmw";
       type = "gem";
     };
     version = "2.8.1";
+=======
+      sha256 = "022r3m9wdxljpbya69y2i3h9g3dhhfaqzidf95m6qjzms792jvgp";
+      type = "gem";
+    };
+    version = "2.8.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
   argon2 = {
     dependencies = ["ffi" "ffi-compiler"];
@@ -192,10 +307,17 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
+<<<<<<< HEAD
       sha256 = "1wdllcqlr81nzyf485ldv1p660xsi476p79ghbj7zsf3n9n86gwd";
       type = "gem";
     };
     version = "2.2.0";
+=======
+      sha256 = "0g4qsdq072fyrsa7r0sg456dhrb017jmzdbnnzl2c80ha40bbmhg";
+      type = "gem";
+    };
+    version = "2.1.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
   ast = {
     groups = ["default" "development" "test"];
@@ -226,10 +348,17 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
+<<<<<<< HEAD
       sha256 = "020v30xd1v2yvyfshbii497c83n4kafc6967pwmgl54sxkx04xwq";
       type = "gem";
     };
     version = "10.4.7.0";
+=======
+      sha256 = "1ssfcicmmwx50491wns3aa9i0yamp2x6qk04yrgn51h9kzhp7frf";
+      type = "gem";
+    };
+    version = "10.4.2.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
   binding_of_caller = {
     dependencies = ["debug_inspector"];
@@ -259,20 +388,34 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
+<<<<<<< HEAD
       sha256 = "1vcg52gwl64xhhal6kwk1pc01y1klzdlnv1awyk89kb91z010x7q";
       type = "gem";
     };
     version = "1.16.0";
+=======
+      sha256 = "0bjhh8pngmvnrsri2h6a753pgv0xdkbbgi1bmv6c7q137sp37jbg";
+      type = "gem";
+    };
+    version = "1.11.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
   brakeman = {
     groups = ["development" "test"];
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
+<<<<<<< HEAD
       sha256 = "0lcxxlrzgpi9z2mr2v19xda6fdysmn5psa9bsp2rksa915v91fds";
       type = "gem";
     };
     version = "5.4.0";
+=======
+      sha256 = "197bvfm4rpczyrpbjzn7zh4q6rxigwnxnnmvvgfg9451k3jjygyy";
+      type = "gem";
+    };
+    version = "5.2.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
   browser = {
     groups = ["default"];
@@ -314,6 +457,7 @@
     };
     version = "11.1.3";
   };
+<<<<<<< HEAD
   byk = {
     groups = ["default"];
     platforms = [];
@@ -324,16 +468,25 @@
     };
     version = "1.1.0";
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   capybara = {
     dependencies = ["addressable" "matrix" "mini_mime" "nokogiri" "rack" "rack-test" "regexp_parser" "xpath"];
     groups = ["development" "test"];
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
+<<<<<<< HEAD
       sha256 = "123198zk2ak8mziwa5jc3ckgpmsg08zn064n3aywnqm9s1bwjv3v";
       type = "gem";
     };
     version = "3.38.0";
+=======
+      sha256 = "1dv75hs45456mi76h720gxk959gpg4f6091hmk42y0ln6kp2x7i0";
+      type = "gem";
+    };
+    version = "3.36.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
   childprocess = {
     groups = ["default" "development" "test"];
@@ -399,7 +552,11 @@
   };
   coffee-script = {
     dependencies = ["coffee-script-source" "execjs"];
+<<<<<<< HEAD
     groups = ["assets" "default"];
+=======
+    groups = ["assets" "default" "development" "test"];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
@@ -409,7 +566,11 @@
     version = "2.4.1";
   };
   coffee-script-source = {
+<<<<<<< HEAD
     groups = ["assets" "default"];
+=======
+    groups = ["assets" "default" "development" "test"];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
@@ -418,26 +579,54 @@
     };
     version = "1.12.2";
   };
+<<<<<<< HEAD
+=======
+  coffeelint = {
+    dependencies = ["coffee-script" "execjs" "json"];
+    groups = ["development" "test"];
+    platforms = [];
+    source = {
+      remotes = ["https://rubygems.org"];
+      sha256 = "0k6nqia44m6jzzkav6wz1aafjipbygla3g6nl6i7sks854bwgdg1";
+      type = "gem";
+    };
+    version = "1.16.1";
+  };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   composite_primary_keys = {
     dependencies = ["activerecord"];
     groups = ["default"];
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
+<<<<<<< HEAD
       sha256 = "1izh9vf2rjjxphidgf00wdmvmvlrbsy4n2a99fds59qkbd5cy0i9";
       type = "gem";
     };
     version = "13.0.7";
+=======
+      sha256 = "08w8rns5dgjmvavqf1apfbd59dyqyv4igni940rklnqps297w2bn";
+      type = "gem";
+    };
+    version = "12.0.10";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
   concurrent-ruby = {
     groups = ["assets" "default" "development" "nulldb" "test"];
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
+<<<<<<< HEAD
       sha256 = "1qnsflsbjj38im8xq35g0vihlz96h09wjn2dad5g543l3vvrkrx5";
       type = "gem";
     };
     version = "1.2.0";
+=======
+      sha256 = "0nwad3211p7yv9sda31jmbyw6sdafzmdi2i2niaz6f0wk5nq9h0f";
+      type = "gem";
+    };
+    version = "1.1.9";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
   crack = {
     dependencies = ["rexml"];
@@ -465,10 +654,17 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
+<<<<<<< HEAD
       sha256 = "0l5f5cq8ki3h4djh7pb8yqdkywqd08vjy3vd64yqh7qd6pdwky6w";
       type = "gem";
     };
     version = "3.2.6";
+=======
+      sha256 = "0xqp6d3k3qcfybfibv6jx315800j1zvm1wwrdmfbs35g3wi9sb2c";
+      type = "gem";
+    };
+    version = "3.2.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
   daemons = {
     groups = ["default"];
@@ -485,6 +681,7 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
+<<<<<<< HEAD
       sha256 = "0xyza6gjci6qp83srcvsg3i225x17n27bwci4wqzpmn9bykjac2n";
       type = "gem";
     };
@@ -499,6 +696,12 @@
       type = "gem";
     };
     version = "3.3.3";
+=======
+      sha256 = "0wb7lqiza98cb76bq1jwvzr1j0r2nxkihaaa3dk17wjshd02jyn3";
+      type = "gem";
+    };
+    version = "3.2.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
   debug_inspector = {
     groups = ["default" "development" "test"];
@@ -516,10 +719,17 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
+<<<<<<< HEAD
       sha256 = "0s2xg72ljg4cwmr05zi67vcyz8zib46gvvf7rmrdhsyq387m2qcq";
       type = "gem";
     };
     version = "4.1.11";
+=======
+      sha256 = "1f1vzxi1xcm1mq7nw3xr9j4q6a5pr5xply15s0n1hl1gahsgnlfa";
+      type = "gem";
+    };
+    version = "4.1.10";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
   delayed_job_active_record = {
     dependencies = ["activerecord" "delayed_job"];
@@ -538,10 +748,17 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
+<<<<<<< HEAD
       sha256 = "0q7av58hr1armdn4nr9kw7hhgry2v576dwn4d80ngax9g0hdw9cv";
       type = "gem";
     };
     version = "2.0.3";
+=======
+      sha256 = "1fh4d98irhph3ri7c2rrvvmmjd4z14702r8baq9flh5f34dap8d8";
+      type = "gem";
+    };
+    version = "1.5.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
   diff-lcs = {
     groups = ["default" "development" "test"];
@@ -558,10 +775,17 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
+<<<<<<< HEAD
       sha256 = "1qcsv29ljfhy76gq4xi8zpn6dc6nv15c41r131bdr38kwpxjzd1n";
       type = "gem";
     };
     version = "3.4.2";
+=======
+      sha256 = "0nrg7kpgz6cn1gv2saj2fa5sfiykamvd7vn9lw2v625k7pjwf31l";
+      type = "gem";
+    };
+    version = "3.4.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
   domain_name = {
     dependencies = ["unf"];
@@ -580,16 +804,24 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
+<<<<<<< HEAD
       sha256 = "0fxrvqv3l5w9p20s129rg41zc6agf1n4yrmganancnvykbkygki2";
       type = "gem";
     };
     version = "5.6.4";
+=======
+      sha256 = "188ybg2cgghcp5r1jpfnbx3anf0z8fzlla72jra0vgwkdylk7qkz";
+      type = "gem";
+    };
+    version = "5.5.4";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
   dotenv = {
     groups = ["development" "test"];
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
+<<<<<<< HEAD
       sha256 = "1n0pi8x8ql5h1mijvm8lgn6bhq4xjb5a500p5r1krq4s6j9lg565";
       type = "gem";
     };
@@ -658,6 +890,12 @@
       type = "gem";
     };
     version = "1.7.0";
+=======
+      sha256 = "0iym172c5337sm1x2ykc2i3f961vj3wdclbyg1x6sxs3irgfsl94";
+      type = "gem";
+    };
+    version = "2.7.6";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
   eco = {
     dependencies = ["coffee-script" "eco-source" "execjs"];
@@ -682,7 +920,11 @@
   };
   em-websocket = {
     dependencies = ["eventmachine" "http_parser.rb"];
+<<<<<<< HEAD
     groups = ["default"];
+=======
+    groups = ["default" "development" "test"];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
@@ -691,6 +933,7 @@
     };
     version = "0.5.3";
   };
+<<<<<<< HEAD
   email_address = {
     dependencies = ["simpleidn"];
     groups = ["default"];
@@ -702,6 +945,8 @@
     };
     version = "0.2.4";
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   equalizer = {
     groups = ["default"];
     platforms = [];
@@ -717,6 +962,7 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
+<<<<<<< HEAD
       sha256 = "11bz1v1cxabm8672gabrw542zyg51dizlcvdck6vvwzagxbjv9zx";
       type = "gem";
     };
@@ -724,6 +970,15 @@
   };
   eventmachine = {
     groups = ["default"];
+=======
+      sha256 = "09l8lz3j00m898li0yfsnb6ihc63rdvhw3k5xczna5zrjk104f2l";
+      type = "gem";
+    };
+    version = "1.10.0";
+  };
+  eventmachine = {
+    groups = ["default" "development" "test"];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
@@ -733,7 +988,11 @@
     version = "1.2.7";
   };
   execjs = {
+<<<<<<< HEAD
     groups = ["assets"];
+=======
+    groups = ["assets" "development" "test"];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
@@ -770,6 +1029,7 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
+<<<<<<< HEAD
       sha256 = "1b8772jybi0vxzbcs5zw17k40z661c8adn2rd6vqqr7ay71bzl09";
       type = "gem";
     };
@@ -777,10 +1037,20 @@
   };
   faraday = {
     dependencies = ["faraday-net_http" "ruby2_keywords"];
+=======
+      sha256 = "1694ndj701a8q4c4bwxz53kx94ih1rr4pgr4gk7a6c8k4jsbjgwi";
+      type = "gem";
+    };
+    version = "2.20.0";
+  };
+  faraday = {
+    dependencies = ["faraday-em_http" "faraday-em_synchrony" "faraday-excon" "faraday-httpclient" "faraday-multipart" "faraday-net_http" "faraday-net_http_persistent" "faraday-patron" "faraday-rack" "faraday-retry" "ruby2_keywords"];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     groups = ["default" "development" "test"];
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
+<<<<<<< HEAD
       sha256 = "1f20vjx0ywx0zdb4dfx4cpa7kd51z6vg7dw5hs35laa45dy9g9pj";
       type = "gem";
     };
@@ -788,14 +1058,59 @@
   };
   faraday-mashify = {
     dependencies = ["faraday" "hashie"];
+=======
+      sha256 = "00palwawk897p5gypw5wjrh93d4p0xz2yl9w93yicb4kq7amh8d4";
+      type = "gem";
+    };
+    version = "1.10.0";
+  };
+  faraday-em_http = {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     groups = ["default" "development" "test"];
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
+<<<<<<< HEAD
       sha256 = "1fiy1bqwx7sj3dmydlyqzj4lapkb2p84pmp4f6i2g0ypj1wbrcml";
       type = "gem";
     };
     version = "0.1.1";
+=======
+      sha256 = "12cnqpbak4vhikrh2cdn94assh3yxza8rq2p9w2j34bqg5q4qgbs";
+      type = "gem";
+    };
+    version = "1.0.0";
+  };
+  faraday-em_synchrony = {
+    groups = ["default" "development" "test"];
+    platforms = [];
+    source = {
+      remotes = ["https://rubygems.org"];
+      sha256 = "1vgrbhkp83sngv6k4mii9f2s9v5lmp693hylfxp2ssfc60fas3a6";
+      type = "gem";
+    };
+    version = "1.0.0";
+  };
+  faraday-excon = {
+    groups = ["default" "development" "test"];
+    platforms = [];
+    source = {
+      remotes = ["https://rubygems.org"];
+      sha256 = "0h09wkb0k0bhm6dqsd47ac601qiaah8qdzjh8gvxfd376x1chmdh";
+      type = "gem";
+    };
+    version = "1.1.0";
+  };
+  faraday-httpclient = {
+    groups = ["default" "development" "test"];
+    platforms = [];
+    source = {
+      remotes = ["https://rubygems.org"];
+      sha256 = "0fyk0jd3ks7fdn8nv3spnwjpzx2lmxmg2gh4inz3by1zjzqg33sc";
+      type = "gem";
+    };
+    version = "1.0.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
   faraday-multipart = {
     dependencies = ["multipart-post"];
@@ -803,20 +1118,85 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
+<<<<<<< HEAD
       sha256 = "09871c4hd7s5ws1wl4gs7js1k2wlby6v947m2bbzg43pnld044lh";
       type = "gem";
     };
     version = "1.0.4";
+=======
+      sha256 = "03qfi9020ynf7hkdiaq01sd2mllvw7fg4qiin3pk028b4wv23j3j";
+      type = "gem";
+    };
+    version = "1.0.3";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
   faraday-net_http = {
     groups = ["default" "development" "test"];
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
+<<<<<<< HEAD
       sha256 = "13byv3mp1gsjyv8k0ih4612y6vw5kqva6i03wcg4w2fqpsd950k8";
       type = "gem";
     };
     version = "3.0.2";
+=======
+      sha256 = "1fi8sda5hc54v1w3mqfl5yz09nhx35kglyx72w7b8xxvdr0cwi9j";
+      type = "gem";
+    };
+    version = "1.0.1";
+  };
+  faraday-net_http_persistent = {
+    groups = ["default" "development" "test"];
+    platforms = [];
+    source = {
+      remotes = ["https://rubygems.org"];
+      sha256 = "0dc36ih95qw3rlccffcb0vgxjhmipsvxhn6cw71l7ffs0f7vq30b";
+      type = "gem";
+    };
+    version = "1.2.0";
+  };
+  faraday-patron = {
+    groups = ["default" "development" "test"];
+    platforms = [];
+    source = {
+      remotes = ["https://rubygems.org"];
+      sha256 = "19wgsgfq0xkski1g7m96snv39la3zxz6x7nbdgiwhg5v82rxfb6w";
+      type = "gem";
+    };
+    version = "1.0.0";
+  };
+  faraday-rack = {
+    groups = ["default" "development" "test"];
+    platforms = [];
+    source = {
+      remotes = ["https://rubygems.org"];
+      sha256 = "1h184g4vqql5jv9s9im6igy00jp6mrah2h14py6mpf9bkabfqq7g";
+      type = "gem";
+    };
+    version = "1.0.0";
+  };
+  faraday-retry = {
+    groups = ["default" "development" "test"];
+    platforms = [];
+    source = {
+      remotes = ["https://rubygems.org"];
+      sha256 = "153i967yrwnswqgvnnajgwp981k9p50ys1h80yz3q94rygs59ldd";
+      type = "gem";
+    };
+    version = "1.0.3";
+  };
+  faraday_middleware = {
+    dependencies = ["faraday"];
+    groups = ["default" "development" "test"];
+    platforms = [];
+    source = {
+      remotes = ["https://rubygems.org"];
+      sha256 = "1bw8mfh4yin2xk7138rg3fhb2p5g2dlmdma88k82psah9mbmvlfy";
+      type = "gem";
+    };
+    version = "1.2.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
   ffi = {
     groups = ["assets" "default" "development" "test"];
@@ -839,6 +1219,19 @@
     };
     version = "1.0.1";
   };
+<<<<<<< HEAD
+=======
+  formatador = {
+    groups = ["default" "development" "test"];
+    platforms = [];
+    source = {
+      remotes = ["https://rubygems.org"];
+      sha256 = "1l06bv4avphbdmr1y4g0rqlczr38k6r65b3zghrbj2ynyhm3xqjl";
+      type = "gem";
+    };
+    version = "1.1.0";
+  };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   gli = {
     groups = ["default" "development" "test"];
     platforms = [];
@@ -855,10 +1248,17 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
+<<<<<<< HEAD
       sha256 = "040bxzfd7mz1p6z4bc9vk5yrf762hdllvf98hmk848fq28xc5dsk";
       type = "gem";
     };
     version = "1.0.1";
+=======
+      sha256 = "1n5yc058i8xhi1fwcp1w7mfi6xaxfmrifdb4r4hjfff33ldn8lqj";
+      type = "gem";
+    };
+    version = "1.0.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
   gmail_xoauth = {
     dependencies = ["oauth"];
@@ -871,6 +1271,7 @@
     };
     version = "0.4.2";
   };
+<<<<<<< HEAD
   graphql = {
     groups = ["default"];
     platforms = [];
@@ -891,6 +1292,50 @@
       type = "gem";
     };
     version = "0.5.2";
+=======
+  guard = {
+    dependencies = ["formatador" "listen" "lumberjack" "nenv" "notiffany" "pry" "shellany" "thor"];
+    groups = ["development" "test"];
+    platforms = [];
+    source = {
+      remotes = ["https://rubygems.org"];
+      sha256 = "1zqy994fr0pf3pda0x3mmkhgnfg4hd12qp5bh1s1xm68l00viwhj";
+      type = "gem";
+    };
+    version = "2.18.0";
+  };
+  guard-compat = {
+    groups = ["default" "development" "test"];
+    platforms = [];
+    source = {
+      remotes = ["https://rubygems.org"];
+      sha256 = "1zj6sr1k8w59mmi27rsii0v8xyy2rnsi09nqvwpgj1q10yq1mlis";
+      type = "gem";
+    };
+    version = "1.2.1";
+  };
+  guard-livereload = {
+    dependencies = ["em-websocket" "guard" "guard-compat" "multi_json"];
+    groups = ["development" "test"];
+    platforms = [];
+    source = {
+      remotes = ["https://rubygems.org"];
+      sha256 = "0yd74gdbbv2yz2caqwpsavzw8d5fd5y446wp8rdjw8wan0yd6k8j";
+      type = "gem";
+    };
+    version = "2.5.2";
+  };
+  guard-symlink = {
+    dependencies = ["guard" "guard-compat"];
+    groups = ["development" "test"];
+    platforms = [];
+    source = {
+      remotes = ["https://rubygems.org"];
+      sha256 = "0s5lwl8v55lq0bbvj9k3fv0l4nkl0ydd7gr1k26ycs2a80cgd5mq";
+      type = "gem";
+    };
+    version = "0.1.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
   hashdiff = {
     groups = ["default" "development" "test"];
@@ -943,16 +1388,36 @@
     };
     version = "4.4.1";
   };
+<<<<<<< HEAD
+=======
+  http-accept = {
+    groups = ["default"];
+    platforms = [];
+    source = {
+      remotes = ["https://rubygems.org"];
+      sha256 = "09m1facypsdjynfwrcv19xcb1mqg8z6kk31g8r33pfxzh838c9n6";
+      type = "gem";
+    };
+    version = "1.7.0";
+  };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   http-cookie = {
     dependencies = ["domain_name"];
     groups = ["default"];
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
+<<<<<<< HEAD
       sha256 = "13rilvlv8kwbzqfb644qp6hrbsj82cbqmnzcvqip1p6vqx36sxbk";
       type = "gem";
     };
     version = "1.0.5";
+=======
+      sha256 = "19370bc97gsy2j4hanij246hv1ddc85hw0xjb6sj7n1ykqdlx9l9";
+      type = "gem";
+    };
+    version = "1.0.4";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
   http-form_data = {
     groups = ["default"];
@@ -976,7 +1441,11 @@
     version = "1.2.3";
   };
   "http_parser.rb" = {
+<<<<<<< HEAD
     groups = ["default"];
+=======
+    groups = ["default" "development" "test"];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
@@ -1001,10 +1470,17 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
+<<<<<<< HEAD
       sha256 = "1vdcchz7jli1p0gnc669a7bj3q1fv09y9ppf0y3k0vb1jwdwrqwi";
       type = "gem";
     };
     version = "1.12.0";
+=======
+      sha256 = "0b2qyvnk4yynlg17ymkq4g5xgr275637fhl1mjh0valw3cb1fhhg";
+      type = "gem";
+    };
+    version = "1.10.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
   icalendar = {
     dependencies = ["ice_cube"];
@@ -1012,10 +1488,17 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
+<<<<<<< HEAD
       sha256 = "11zfs0l8y2a6gpf0krm91d0ap2mnf04qky89dyzxwaspqxqgj174";
       type = "gem";
     };
     version = "2.8.0";
+=======
+      sha256 = "1wv5wq6pzq6434bnxfanvijswj2rnfvjmgisj1qg399mc42g46ls";
+      type = "gem";
+    };
+    version = "2.7.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
   icalendar-recurrence = {
     dependencies = ["icalendar" "ice_cube"];
@@ -1038,6 +1521,7 @@
     };
     version = "0.16.4";
   };
+<<<<<<< HEAD
   ice_nine = {
     groups = ["default"];
     platforms = [];
@@ -1048,6 +1532,8 @@
     };
     version = "0.11.2";
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   inflection = {
     groups = ["default"];
     platforms = [];
@@ -1083,10 +1569,17 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
+<<<<<<< HEAD
       sha256 = "0nalhin1gda4v8ybk6lq8f407cgfrj6qzn234yra4ipkmlbfmal6";
       type = "gem";
     };
     version = "2.6.3";
+=======
+      sha256 = "1z9grvjyfz16ag55hg522d3q4dh07hf391sf9s96npc0vfi85xkz";
+      type = "gem";
+    };
+    version = "2.6.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
   jwt = {
     groups = ["default"];
@@ -1109,11 +1602,16 @@
     version = "2.11.4";
   };
   koala = {
+<<<<<<< HEAD
     dependencies = ["addressable" "faraday" "faraday-multipart" "json" "rexml"];
+=======
+    dependencies = ["addressable" "faraday" "json" "rexml"];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     groups = ["default"];
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
+<<<<<<< HEAD
       sha256 = "14jq1q8314x5qncmfgs53iv1ycz1fm887gnp7w04h963gbwr3yhc";
       type = "gem";
     };
@@ -1129,6 +1627,33 @@
       type = "gem";
     };
     version = "3.8.0";
+=======
+      sha256 = "028cfg3i8kysv7vvrscakx5b809jbmlrbykr727sngh3hxq1wknb";
+      type = "gem";
+    };
+    version = "3.1.0";
+  };
+  libv8 = {
+    groups = ["mini_racer"];
+    platforms = [];
+    source = {
+      remotes = ["https://rubygems.org"];
+      sha256 = "0317sr3nrl51sp844bps71smkrwim3fjn47wdfpbycixnbxspivm";
+      type = "gem";
+    };
+    version = "8.4.255.0";
+  };
+  listen = {
+    dependencies = ["rb-fsevent" "rb-inotify"];
+    groups = ["default" "development" "test"];
+    platforms = [];
+    source = {
+      remotes = ["https://rubygems.org"];
+      sha256 = "0agybr37wpjv3xy4ipcmsvsibgdgphzrwbvcj4vfiykpmakwm01v";
+      type = "gem";
+    };
+    version = "3.7.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
   little-plugger = {
     groups = ["default"];
@@ -1146,10 +1671,17 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
+<<<<<<< HEAD
       sha256 = "1zflchpx4g8c110gjdcs540bk5a336nq6nmx379rdg56xw0pjd02";
       type = "gem";
     };
     version = "2.3.1";
+=======
+      sha256 = "0pkmhcxi8lp74bq5gz9lxrvaiv5w0745kk7s4bw2b1x07qqri0n9";
+      type = "gem";
+    };
+    version = "2.3.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
   loofah = {
     dependencies = ["crass" "nokogiri"];
@@ -1157,6 +1689,7 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
+<<<<<<< HEAD
       sha256 = "08qhzck271anrx9y6qa6mh8hwwdzsgwld8q0000rcd7yvvpnjr3c";
       type = "gem";
     };
@@ -1172,6 +1705,35 @@
       type = "gem";
     };
     version = "2.8.1";
+=======
+      sha256 = "0z8bdcmw66j3dy6ivcc02yq32lx3n9bavx497llln8qy014xjm4w";
+      type = "gem";
+    };
+    version = "2.14.0";
+  };
+  lumberjack = {
+    groups = ["default" "development" "test"];
+    platforms = [];
+    source = {
+      remotes = ["https://rubygems.org"];
+      sha256 = "06pybb23hypc9gvs2p839ildhn26q68drb6431ng3s39i3fkkba8";
+      type = "gem";
+    };
+    version = "1.2.8";
+  };
+  mail = {
+    dependencies = ["mini_mime"];
+    groups = ["default"];
+    platforms = [];
+    source = {
+      fetchSubmodules = false;
+      rev = "9265cf75bbe376f595944bd10d2dd953f863e765";
+      sha256 = "04jxql35kwijapl37h9an6127hzz0y4pnj82a9iw39kz9vva890s";
+      type = "git";
+      url = "https://github.com/zammad-deps/mail";
+    };
+    version = "2.7.2.edge";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
   marcel = {
     groups = ["default"];
@@ -1205,15 +1767,25 @@
     version = "0.4.2";
   };
   messagebird-rest = {
+<<<<<<< HEAD
     dependencies = ["jwt"];
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     groups = ["default"];
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
+<<<<<<< HEAD
       sha256 = "0zghnl12l22adm6lgswj4im3qm70lfnsyl9gg6gd9c89hj467hsk";
       type = "gem";
     };
     version = "4.0.0";
+=======
+      sha256 = "1nj994h4ziwb72g54ma3ivb3rbfkv3yk81wwcmgykl2ik3g7q2bm";
+      type = "gem";
+    };
+    version = "3.0.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
   method_source = {
     groups = ["assets" "default" "development" "test"];
@@ -1241,10 +1813,17 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
+<<<<<<< HEAD
       sha256 = "1pky3vzaxlgm9gw5wlqwwi7wsw3jrglrfflrppvvnsrlaiz043z9";
       type = "gem";
     };
     version = "3.2023.0218.1";
+=======
+      sha256 = "003gd7mcay800k2q4pb2zn8lwwgci4bhi42v2jvlidm8ksx03i6q";
+      type = "gem";
+    };
+    version = "3.2022.0105";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
   mini_mime = {
     groups = ["default" "development" "test"];
@@ -1261,16 +1840,35 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
+<<<<<<< HEAD
       sha256 = "1af4yarhbbx62f7qsmgg5fynrik0s36wjy3difkawy536xg343mp";
       type = "gem";
     };
     version = "2.8.1";
+=======
+      sha256 = "0rapl1sfmfi3bfr68da4ca16yhc0pp93vjwkj7y3rdqrzy3b41hy";
+      type = "gem";
+    };
+    version = "2.8.0";
+  };
+  mini_racer = {
+    dependencies = ["libv8"];
+    groups = ["mini_racer"];
+    platforms = [];
+    source = {
+      remotes = ["https://rubygems.org"];
+      sha256 = "0zi36qcg5qj4g1c11vwmc7lknjihirrmc6yxi6q8j6v4lfnyjbyg";
+      type = "gem";
+    };
+    version = "0.2.9";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
   minitest = {
     groups = ["assets" "default" "development" "nulldb" "test"];
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
+<<<<<<< HEAD
       sha256 = "1kjy67qajw4rnkbjs5jyk7kc3lyhz5613fwj1i8f6ppdk4zampy0";
       type = "gem";
     };
@@ -1285,12 +1883,19 @@
       type = "gem";
     };
     version = "0.0.2";
+=======
+      sha256 = "06xf558gid4w8lwx13jwfdafsch9maz8m0g85wnfymqj63x5nbbd";
+      type = "gem";
+    };
+    version = "5.15.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
   msgpack = {
     groups = ["default"];
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
+<<<<<<< HEAD
       sha256 = "1q03pb0vq8388s431nbxabsfxnch6p304c8vnjlk0zzpcv713yr3";
       type = "gem";
     };
@@ -1298,6 +1903,15 @@
   };
   multi_json = {
     groups = ["default"];
+=======
+      sha256 = "1cshgsx3hmpgx639xyqjqa2q3hgrhlyr9rpwhsglsx529alqq125";
+      type = "gem";
+    };
+    version = "1.4.5";
+  };
+  multi_json = {
+    groups = ["default" "development" "test"];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
@@ -1321,20 +1935,34 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
+<<<<<<< HEAD
       sha256 = "0lgyysrpl50wgcb9ahg29i4p01z0irb3p9lirygma0kkfr5dgk9x";
       type = "gem";
     };
     version = "2.3.0";
+=======
+      sha256 = "1zgw9zlwh2a6i1yvhhc4a84ry1hv824d6g2iw2chs3k5aylpmpfj";
+      type = "gem";
+    };
+    version = "2.1.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
   mysql2 = {
     groups = ["mysql"];
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
+<<<<<<< HEAD
       sha256 = "0xsy70mg4p854jska7ff7cy8fyn9nhlkrmfdvkkfmk8qxairbfq1";
       type = "gem";
     };
     version = "0.5.4";
+=======
+      sha256 = "0d14pcy5m4hjig0zdxnl9in5f4izszc7v9zcczf2gyi5kiyxk8jw";
+      type = "gem";
+    };
+    version = "0.5.3";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
   naught = {
     groups = ["default"];
@@ -1346,6 +1974,19 @@
     };
     version = "1.1.0";
   };
+<<<<<<< HEAD
+=======
+  nenv = {
+    groups = ["default" "development" "test"];
+    platforms = [];
+    source = {
+      remotes = ["https://rubygems.org"];
+      sha256 = "0r97jzknll9bhd8yyg2bngnnkj8rjhal667n7d32h8h7ny7nvpnr";
+      type = "gem";
+    };
+    version = "0.3.0";
+  };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nestful = {
     groups = ["default"];
     platforms = [];
@@ -1356,6 +1997,7 @@
     };
     version = "1.1.4";
   };
+<<<<<<< HEAD
   net-ftp = {
     dependencies = ["net-protocol" "time"];
     groups = ["default"];
@@ -1389,11 +2031,14 @@
     };
     version = "0.3.4";
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   net-ldap = {
     groups = ["default"];
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
+<<<<<<< HEAD
       sha256 = "1ycw0qsw3hap8svakl0i30jkj0ffd4lpyrn17a1j0w8mz5ainmsj";
       type = "gem";
     };
@@ -1401,10 +2046,19 @@
   };
   net-pop = {
     dependencies = ["net-protocol"];
+=======
+      sha256 = "1j19yxrz7h3hj7kiiln13c7bz7hvpdqr31bwi88dj64zifr7896n";
+      type = "gem";
+    };
+    version = "0.17.0";
+  };
+  netrc = {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     groups = ["default"];
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
+<<<<<<< HEAD
       sha256 = "1wyz41jd4zpjn0v1xsf9j778qx1vfrl24yc20cpmph8k42c4x2w4";
       type = "gem";
     };
@@ -1431,6 +2085,12 @@
       type = "gem";
     };
     version = "0.3.3";
+=======
+      sha256 = "0gzfmcywp1da8nzfqsql2zqi648mfnx6qwkig3cv36n9m0yy676y";
+      type = "gem";
+    };
+    version = "0.11.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
   nio4r = {
     groups = ["default" "puma"];
@@ -1448,10 +2108,17 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
+<<<<<<< HEAD
       sha256 = "0n79k78c5vdcyl0m3y3l5x9kxl6xf5lgriwi2vd665qmdkr01vnk";
       type = "gem";
     };
     version = "1.13.10";
+=======
+      sha256 = "1g43ii497cwdqhfnaxfl500bq5yfc5hfv5df1lvf6wcjnd708ihd";
+      type = "gem";
+    };
+    version = "1.13.4";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
   nori = {
     groups = ["default"];
@@ -1463,6 +2130,7 @@
     };
     version = "2.6.0";
   };
+<<<<<<< HEAD
   oauth = {
     dependencies = ["oauth-tty" "snaky_hash" "version_gem"];
     groups = ["default"];
@@ -1476,10 +2144,25 @@
   };
   oauth-tty = {
     dependencies = ["version_gem"];
+=======
+  notiffany = {
+    dependencies = ["nenv" "shellany"];
+    groups = ["default" "development" "test"];
+    platforms = [];
+    source = {
+      remotes = ["https://rubygems.org"];
+      sha256 = "0f47h3bmg1apr4x51szqfv3rh2vq58z3grh4w02cp3bzbdh6jxnk";
+      type = "gem";
+    };
+    version = "0.1.3";
+  };
+  oauth = {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     groups = ["default"];
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
+<<<<<<< HEAD
       sha256 = "05wb5n36i4h23hh9dx2m2cwjxx5vj0vgyrn2xr6rsl54glq5rqil";
       type = "gem";
     };
@@ -1487,14 +2170,30 @@
   };
   oauth2 = {
     dependencies = ["faraday" "jwt" "multi_xml" "rack" "snaky_hash" "version_gem"];
+=======
+      sha256 = "0h6nfg2pibc17fch0795d4bcy41a92im5zrsrgs31zdhrl6zf4w0";
+      type = "gem";
+    };
+    version = "0.5.8";
+  };
+  oauth2 = {
+    dependencies = ["faraday" "jwt" "multi_json" "multi_xml" "rack"];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     groups = ["default"];
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
+<<<<<<< HEAD
       sha256 = "1yzpaghh8kwzgmvmrlbzf36ks5s2hf34rayzw081dp2jrzprs7xj";
       type = "gem";
     };
     version = "2.0.9";
+=======
+      sha256 = "16sk9h6a6vzqxf8v1fisa8jq5cj9sw4mwc7azy5gj2w1whkfa5dp";
+      type = "gem";
+    };
+    version = "1.4.9";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
   omniauth = {
     dependencies = ["hashie" "rack"];
@@ -1502,10 +2201,17 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
+<<<<<<< HEAD
       sha256 = "1jn9j54l5h7xcba2vjq74l1dk0xrwvsjxam4qhylpi52nw0h5502";
       type = "gem";
     };
     version = "1.9.2";
+=======
+      sha256 = "002vi9gwamkmhf0dsj2im1d47xw2n1jfhnzl18shxf3ampkqfmyz";
+      type = "gem";
+    };
+    version = "1.9.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
   omniauth-facebook = {
     dependencies = ["omniauth-oauth2"];
@@ -1541,15 +2247,26 @@
     version = "2.0.0";
   };
   omniauth-google-oauth2 = {
+<<<<<<< HEAD
     dependencies = ["jwt" "omniauth" "omniauth-oauth2"];
+=======
+    dependencies = ["jwt" "oauth2" "omniauth" "omniauth-oauth2"];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     groups = ["default"];
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
+<<<<<<< HEAD
       sha256 = "17pgqasl048irs2c6w6g57zvk0ygb5ml1krwir4qi4b6y53zyr55";
       type = "gem";
     };
     version = "0.8.0";
+=======
+      sha256 = "10pnxvb6wpnf58dja3yz4ja527443x3q13hzhcbays4amnnp8i4a";
+      type = "gem";
+    };
+    version = "0.8.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
   omniauth-linkedin-oauth2 = {
     dependencies = ["omniauth-oauth2"];
@@ -1590,10 +2307,17 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
+<<<<<<< HEAD
       sha256 = "0ia73zcbmhf02krlkq2rxmksx93jp777ax5x58fzkq3jzacqyniz";
       type = "gem";
     };
     version = "1.7.3";
+=======
+      sha256 = "1ry65f309rnzhgdjvqybkd5i4qp9rpk1gbp4dz02h4l6bkk6ya10";
+      type = "gem";
+    };
+    version = "1.7.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
   omniauth-rails_csrf_protection = {
     dependencies = ["actionpack" "omniauth"];
@@ -1644,10 +2368,17 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
+<<<<<<< HEAD
       sha256 = "0c649921vg2l939z5cc3jwd8p1v49099pdhxfk7sb9qqx5wi5873";
       type = "gem";
     };
     version = "3.1.0";
+=======
+      sha256 = "1azzx975qr078isvg8i0hmsr2l98kgnlfrnbb2jdm9b5kwifx1h4";
+      type = "gem";
+    };
+    version = "3.0.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
   overcommit = {
     dependencies = ["childprocess" "iniparse" "rexml"];
@@ -1655,20 +2386,34 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
+<<<<<<< HEAD
       sha256 = "0slqmsycbqx746liwq0qw0c81xrp4051iff8s574a4fmj941gkia";
       type = "gem";
     };
     version = "0.60.0";
+=======
+      sha256 = "0wbczp2pxwiggx5n925mdr2q17c6m9hq7h0q7ml2spmla29609sr";
+      type = "gem";
+    };
+    version = "0.58.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
   parallel = {
     groups = ["default" "development" "test"];
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
+<<<<<<< HEAD
       sha256 = "07vnk6bb54k4yc06xnwck7php50l09vvlw1ga8wdz0pia461zpzb";
       type = "gem";
     };
     version = "1.22.1";
+=======
+      sha256 = "1hkfpm78c2vs1qblnva3k1grijvxh87iixcnyd83s3lxrxsjvag4";
+      type = "gem";
+    };
+    version = "1.21.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
   parser = {
     dependencies = ["ast"];
@@ -1676,20 +2421,34 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
+<<<<<<< HEAD
       sha256 = "0zk8mdyr0322r11d63rcp5jhz4lakxilhvyvdv0ql5dw4lb83623";
       type = "gem";
     };
     version = "3.2.0.0";
+=======
+      sha256 = "0zaghgvva2q4jqbachg8jvpwgbg3w1jqr0d00m8rqciqznjgsw3c";
+      type = "gem";
+    };
+    version = "3.1.1.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
   pg = {
     groups = ["postgres"];
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
+<<<<<<< HEAD
       sha256 = "13mfrysrdrh8cka1d96zm0lnfs59i5x2g6ps49r2kz5p3q81xrzj";
       type = "gem";
     };
     version = "1.2.3";
+=======
+      sha256 = "00vhasqwc4f98qb4wxqn2h07fjwzhp5lwyi41j2gndi2g02wrdqh";
+      type = "gem";
+    };
+    version = "0.21.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
   PoParser = {
     dependencies = ["simple_po_parser"];
@@ -1707,6 +2466,7 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
+<<<<<<< HEAD
       sha256 = "17yx4bc0k182lhydwa8aqn0kx776kqymziydpb2szmxzx5q2sghx";
       type = "gem";
     };
@@ -1721,6 +2481,12 @@
       type = "gem";
     };
     version = "0.7.4";
+=======
+      sha256 = "01z44m715rb6nzfrc90c5rkkdiy42dv3q94jw1q8baf9dg33nwi5";
+      type = "gem";
+    };
+    version = "2.0.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
   pry = {
     dependencies = ["coderay" "method_source"];
@@ -1782,10 +2548,17 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
+<<<<<<< HEAD
       sha256 = "0hz0bx2qs2pwb0bwazzsah03ilpf3aai8b7lk7s35jsfzwbkjq35";
       type = "gem";
     };
     version = "5.0.1";
+=======
+      sha256 = "1xqcgkl7bwws1qrlnmxgh8g4g9m10vg60bhlw40fplninb3ng6d9";
+      type = "gem";
+    };
+    version = "4.0.6";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
   puma = {
     dependencies = ["nio4r"];
@@ -1804,10 +2577,17 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
+<<<<<<< HEAD
       sha256 = "1wb03yzy1j41822rbfh9nn77im3zh1f5v8di05cd8rsrdpws542b";
       type = "gem";
     };
     version = "2.3.0";
+=======
+      sha256 = "17z2f7w3syh3c04c8m1v9pvb9pfpymk8b5plszr5l24hx374xvsd";
+      type = "gem";
+    };
+    version = "2.2.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
   pundit-matchers = {
     dependencies = ["rspec-rails"];
@@ -1815,30 +2595,51 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
+<<<<<<< HEAD
       sha256 = "0hs0z7flj8yibk8jm5x7pnnfnl0rh0rhrvmq27b6pxvqxxvywsq3";
       type = "gem";
     };
     version = "1.8.4";
+=======
+      sha256 = "10kvf0pj5339fh3dgf9lvsv94d74x7x1wxdb0hp8a1ac7w5l6vmm";
+      type = "gem";
+    };
+    version = "1.7.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
   racc = {
     groups = ["assets" "default" "development" "test"];
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
+<<<<<<< HEAD
       sha256 = "09jgz6r0f7v84a7jz9an85q8vvmp743dqcsdm3z9c8rqcqv6pljq";
       type = "gem";
     };
     version = "1.6.2";
+=======
+      sha256 = "0la56m0z26j3mfn1a9lf2l03qx1xifanndf9p3vx1azf6sqy7v9d";
+      type = "gem";
+    };
+    version = "1.6.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
   rack = {
     groups = ["assets" "default" "development" "test"];
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
+<<<<<<< HEAD
       sha256 = "1qgwkcb8kxns8d5187cxjaxf18b7dmg9gh6cr9c1125m0bj2pnfk";
       type = "gem";
     };
     version = "2.2.6.4";
+=======
+      sha256 = "0i5vs0dph9i5jn8dfc6aqd6njcafmb20rwqngrf759c9cvmyff16";
+      type = "gem";
+    };
+    version = "2.2.3";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
   rack-attack = {
     dependencies = ["rack"];
@@ -1846,6 +2647,7 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
+<<<<<<< HEAD
       sha256 = "049s3y3dpl6dn478g912y6f9nzclnnkl30psrbc2w5kaihj5szhq";
       type = "gem";
     };
@@ -1861,6 +2663,23 @@
       type = "gem";
     };
     version = "0.7.6";
+=======
+      sha256 = "1rc6simyql7ax5zzp667x6krl0xxxh3asc1av6gcn8j6cyl86wsx";
+      type = "gem";
+    };
+    version = "6.6.0";
+  };
+  rack-livereload = {
+    dependencies = ["rack"];
+    groups = ["development" "test"];
+    platforms = [];
+    source = {
+      remotes = ["https://rubygems.org"];
+      sha256 = "1slzlmvlapgp2pc7389i0zndq3nka0s6sh445vf21cxpz7vz3p5i";
+      type = "gem";
+    };
+    version = "0.3.17";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
   rack-test = {
     dependencies = ["rack"];
@@ -1868,10 +2687,17 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
+<<<<<<< HEAD
       sha256 = "0rjl709krgf499dhjdapg580l2qaj9d91pwzk8ck8fpnazlx1bdd";
       type = "gem";
     };
     version = "2.0.2";
+=======
+      sha256 = "0rh8h376mx71ci5yklnpqqn118z3bl67nnv5k801qaqn1zs62h8m";
+      type = "gem";
+    };
+    version = "1.1.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
   rails = {
     dependencies = ["actioncable" "actionmailbox" "actionmailer" "actionpack" "actiontext" "actionview" "activejob" "activemodel" "activerecord" "activestorage" "activesupport" "railties" "sprockets-rails"];
@@ -1879,10 +2705,17 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
+<<<<<<< HEAD
       sha256 = "07cs7qdkx6vwp66diwdy9g6mx52rsd8rxhbnsqf9bqam58g2aynj";
       type = "gem";
     };
     version = "6.1.7.3";
+=======
+      sha256 = "1r9b9bxa7s3mw8dz8bl61pyazk880jmpngy3rkpyjc5cckawqbnb";
+      type = "gem";
+    };
+    version = "6.0.4.7";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
   rails-controller-testing = {
     dependencies = ["actionpack" "actionview" "activesupport"];
@@ -1912,10 +2745,17 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
+<<<<<<< HEAD
       sha256 = "1mcb75qvldfz6zsr4inrfx7dmb0ngxy507awx28khqmnla3hqpc9";
       type = "gem";
     };
     version = "1.4.4";
+=======
+      sha256 = "09qrfi3pgllxb08r024lln9k0qzxs57v0slsj8616xf9c0cwnwbk";
+      type = "gem";
+    };
+    version = "1.4.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
   railties = {
     dependencies = ["actionpack" "activesupport" "method_source" "rake" "thor"];
@@ -1923,10 +2763,17 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
+<<<<<<< HEAD
       sha256 = "1d2snjnx1j848axppj2napy3zjgbka3fnw2528rcamhm6dp694nd";
       type = "gem";
     };
     version = "6.1.7.3";
+=======
+      sha256 = "03kwdd874sjaag082ia3zf4bng6dgsjk4nkkkn28l7n89i062ca3";
+      type = "gem";
+    };
+    version = "6.0.4.7";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
   rainbow = {
     groups = ["default" "development" "test"];
@@ -1959,6 +2806,7 @@
     version = "13.0.6";
   };
   rb-fsevent = {
+<<<<<<< HEAD
     groups = ["default" "development" "test"];
     platforms = [];
     source = {
@@ -1967,6 +2815,16 @@
       type = "gem";
     };
     version = "0.11.2";
+=======
+    groups = ["development" "test"];
+    platforms = [];
+    source = {
+      remotes = ["https://rubygems.org"];
+      sha256 = "06c50pvxib7wqnv6q0f3n7gzfcrp5chi3sa48hxpkfxc3hhy11fm";
+      type = "gem";
+    };
+    version = "0.11.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
   rb-inotify = {
     dependencies = ["ffi"];
@@ -1994,20 +2852,45 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
+<<<<<<< HEAD
       sha256 = "0fikjg6j12ka6hh36dxzhfkpqqmilzjfzcdf59iwkzsgd63f0ziq";
       type = "gem";
     };
     version = "4.8.1";
+=======
+      sha256 = "1lhdfkl4r6dnhlr8jpz4a21ca6c76jfy7fj7gf4j2qpbh8ld8qyb";
+      type = "gem";
+    };
+    version = "4.6.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
   regexp_parser = {
     groups = ["default" "development" "test"];
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
+<<<<<<< HEAD
       sha256 = "0d6241adx6drsfzz74nx1ld3394nm6fjpv3ammzr0g659krvgf7q";
       type = "gem";
     };
     version = "2.7.0";
+=======
+      sha256 = "155f6cr4rrfw5bs5xd3m5kfw32qhc5fsi4nk82rhif56rc6cs0wm";
+      type = "gem";
+    };
+    version = "2.2.1";
+  };
+  rest-client = {
+    dependencies = ["http-accept" "http-cookie" "mime-types" "netrc"];
+    groups = ["default"];
+    platforms = [];
+    source = {
+      remotes = ["https://rubygems.org"];
+      sha256 = "1qs74yzl58agzx9dgjhcpgmzfn61fqkk33k1js2y5yhlvc5l19im";
+      type = "gem";
+    };
+    version = "2.1.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
   rexml = {
     groups = ["default" "development" "test"];
@@ -2025,10 +2908,17 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
+<<<<<<< HEAD
       sha256 = "1ibb81slc35q5yp276sixp3yrvj9q92wlmi1glbnwlk6g49z8rn4";
       type = "gem";
     };
     version = "3.12.0";
+=======
+      sha256 = "118hkfw9b11hvvalr7qlylwal5h8dihagm9xg7k4gskg7587hca6";
+      type = "gem";
+    };
+    version = "3.11.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
   rspec-expectations = {
     dependencies = ["diff-lcs" "rspec-support"];
@@ -2036,10 +2926,17 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
+<<<<<<< HEAD
       sha256 = "0qldsmjhqr4344zdlamzggr3y98wdk2c4hihkhwx8imk800gkl8v";
       type = "gem";
     };
     version = "3.12.0";
+=======
+      sha256 = "001ihayil7jpfxdlxlhakvz02kx0nk5m1w0bz6z8izdx0nc8bh53";
+      type = "gem";
+    };
+    version = "3.11.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
   rspec-mocks = {
     dependencies = ["diff-lcs" "rspec-support"];
@@ -2047,10 +2944,17 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
+<<<<<<< HEAD
       sha256 = "1yvwnb0x5d6d4ff3wlgahk0wcw72ic51gd2snr1xxc5ify41kabv";
       type = "gem";
     };
     version = "3.12.0";
+=======
+      sha256 = "0y38dc66yhnfcf4ky3k47c20xak1rax940s4a96qkjxqrniy5ys3";
+      type = "gem";
+    };
+    version = "3.11.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
   rspec-rails = {
     dependencies = ["actionpack" "activesupport" "railties" "rspec-core" "rspec-expectations" "rspec-mocks" "rspec-support"];
@@ -2058,6 +2962,7 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
+<<<<<<< HEAD
       sha256 = "0d3fnabkaw8n0na2dpnlg2xygggj51djzpj9x6y5rkiqbfyqwv01";
       type = "gem";
     };
@@ -2073,22 +2978,36 @@
       type = "gem";
     };
     version = "0.6.2";
+=======
+      sha256 = "0jj5zs9h2ll8iz699ac4bysih7y4csnf8h5h80bm6ppbf02ly8fa";
+      type = "gem";
+    };
+    version = "5.1.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
   rspec-support = {
     groups = ["default" "development" "test"];
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
+<<<<<<< HEAD
       sha256 = "12y52zwwb3xr7h91dy9k3ndmyyhr3mjcayk0nnarnrzz8yr48kfx";
       type = "gem";
     };
     version = "3.12.0";
+=======
+      sha256 = "0xfk4pla77251n39zf4n792m1rhg5sn1kp63yvpvvysany34la03";
+      type = "gem";
+    };
+    version = "3.11.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
   rszr = {
     groups = ["default"];
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
+<<<<<<< HEAD
       sha256 = "080ykjdkviqi1l27pd7dzjvbrkf2ybfd89dlpkp7pp81kywbvzjw";
       type = "gem";
     };
@@ -2096,14 +3015,30 @@
   };
   rubocop = {
     dependencies = ["json" "parallel" "parser" "rainbow" "regexp_parser" "rexml" "rubocop-ast" "ruby-progressbar" "unicode-display_width"];
+=======
+      sha256 = "0ns5qxdkgbqw1d52nz29lwx6xgs5bqwx1js1227n6l4q36g3snpp";
+      type = "gem";
+    };
+    version = "0.5.2";
+  };
+  rubocop = {
+    dependencies = ["parallel" "parser" "rainbow" "regexp_parser" "rexml" "rubocop-ast" "ruby-progressbar" "unicode-display_width"];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     groups = ["development" "test"];
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
+<<<<<<< HEAD
       sha256 = "1jsiy93y5c2sx2sr5jmdah208idw038m2fpihgan4klmldm3r1pm";
       type = "gem";
     };
     version = "1.45.1";
+=======
+      sha256 = "03c6v6bfqdw8vnda0if0sx7aff0iq6xnv1adyfs0bi9msgggafcr";
+      type = "gem";
+    };
+    version = "1.26.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
   rubocop-ast = {
     dependencies = ["parser"];
@@ -2111,6 +3046,7 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
+<<<<<<< HEAD
       sha256 = "1pdzabz95hv3z5sfbkfqa8bdybsfl13gv7rjb32v3ss8klq99lbd";
       type = "gem";
     };
@@ -2126,6 +3062,12 @@
       type = "gem";
     };
     version = "2.17.0";
+=======
+      sha256 = "1bd2z82ly7fix8415gvfiwzb6bjialz5rs3sr72kv1lk68rd23wv";
+      type = "gem";
+    };
+    version = "1.16.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
   rubocop-faker = {
     dependencies = ["faker" "rubocop"];
@@ -2138,6 +3080,7 @@
     };
     version = "1.1.0";
   };
+<<<<<<< HEAD
   rubocop-graphql = {
     dependencies = ["rubocop"];
     groups = ["development" "test"];
@@ -2149,16 +3092,25 @@
     };
     version = "0.19.0";
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   rubocop-inflector = {
     dependencies = ["activesupport" "rubocop" "rubocop-rspec"];
     groups = ["development" "test"];
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
+<<<<<<< HEAD
       sha256 = "1qdhwixqiix90a4n52g2b26mi66mrkx8b91pf7yda60m331jfbfr";
       type = "gem";
     };
     version = "0.2.1";
+=======
+      sha256 = "1v5ijrpvvibkzfdbih0c0rvfpvifirj2fmy237ph48r5q0xm1fzl";
+      type = "gem";
+    };
+    version = "0.1.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
   rubocop-performance = {
     dependencies = ["rubocop" "rubocop-ast"];
@@ -2166,10 +3118,17 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
+<<<<<<< HEAD
       sha256 = "1n7g0vg06ldjaq4f8c11c7yqy99zng1qdrkkk4kfziippy24yxnc";
       type = "gem";
     };
     version = "1.16.0";
+=======
+      sha256 = "17ny81dy5gjrvris8mni7la8yjg57snphyg9nmvnc3al7yhwr74x";
+      type = "gem";
+    };
+    version = "1.13.3";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
   rubocop-rails = {
     dependencies = ["activesupport" "rack" "rubocop"];
@@ -2177,6 +3136,7 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
+<<<<<<< HEAD
       sha256 = "1nxyifly45y7dfiaf0ql8aq7xykrg0sh1l7dxmn3sb9p2jd18140";
       type = "gem";
     };
@@ -2184,14 +3144,30 @@
   };
   rubocop-rspec = {
     dependencies = ["rubocop" "rubocop-capybara"];
+=======
+      sha256 = "0vibx4jhpxaxa8w3wyhasskcgrxfjiyqdwrrc7l2lb0mbxqcs1ly";
+      type = "gem";
+    };
+    version = "2.13.2";
+  };
+  rubocop-rspec = {
+    dependencies = ["rubocop"];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     groups = ["development" "test"];
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
+<<<<<<< HEAD
       sha256 = "1vmmin3ymgq7bhv2hl4pd0zpwawy709p816axc4vi67w61b4bij1";
       type = "gem";
     };
     version = "2.18.1";
+=======
+      sha256 = "051gq9pz49iv4gq34d3n089iaa6cb418n2fhin6gd6fpysbi3nf6";
+      type = "gem";
+    };
+    version = "2.9.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
   ruby-progressbar = {
     groups = ["default" "development" "test"];
@@ -2267,15 +3243,36 @@
     version = "2.1.2";
   };
   selenium-webdriver = {
+<<<<<<< HEAD
     dependencies = ["rexml" "rubyzip" "websocket"];
+=======
+    dependencies = ["childprocess" "rexml" "rubyzip"];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     groups = ["development" "test"];
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
+<<<<<<< HEAD
       sha256 = "1dkcyq2hfvf4wdj7q5cqqlka1dw6gz28dckxf4r17jmd53ymwg28";
       type = "gem";
     };
     version = "4.8.0";
+=======
+      sha256 = "17hilxa40cj7q48k6wcx1cbdb1v3q9c4nx89fji7gyqpcfm16vq7";
+      type = "gem";
+    };
+    version = "4.1.0";
+  };
+  shellany = {
+    groups = ["default" "development" "test"];
+    platforms = [];
+    source = {
+      remotes = ["https://rubygems.org"];
+      sha256 = "1ryyzrj1kxmnpdzhlv4ys3dnl2r5r3d2rs2jwzbnd1v96a8pl4hf";
+      type = "gem";
+    };
+    version = "0.0.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
   shoulda-matchers = {
     dependencies = ["activesupport"];
@@ -2283,10 +3280,17 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
+<<<<<<< HEAD
       sha256 = "11igjgh16dl5pwqizdmclzlzpv7mbmnh8fx7m9b5kfsjhwxqdfpn";
       type = "gem";
     };
     version = "5.3.0";
+=======
+      sha256 = "01svmyma958sbqfz0v29lbqbr0ibvgcng352nhx6bsc9k5c207d0";
+      type = "gem";
+    };
+    version = "5.1.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
   simple_oauth = {
     groups = ["default"];
@@ -2308,6 +3312,7 @@
     };
     version = "1.1.6";
   };
+<<<<<<< HEAD
   simpleidn = {
     dependencies = ["unf"];
     groups = ["default"];
@@ -2319,6 +3324,8 @@
     };
     version = "0.2.1";
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   slack-notifier = {
     groups = ["default"];
     platforms = [];
@@ -2330,15 +3337,26 @@
     version = "2.4.0";
   };
   slack-ruby-client = {
+<<<<<<< HEAD
     dependencies = ["faraday" "faraday-mashify" "faraday-multipart" "gli" "hashie" "websocket-driver"];
+=======
+    dependencies = ["faraday" "faraday_middleware" "gli" "hashie" "websocket-driver"];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     groups = ["development" "test"];
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
+<<<<<<< HEAD
       sha256 = "110rhsxxf0g4qdrhy1ahyfjg1hqqwwwf4rjn8vrrbvpfd04b8xa5";
       type = "gem";
     };
     version = "2.0.0";
+=======
+      sha256 = "0i067a99sr4m80gimcrymkic9da7zrszlfr87mhlgy5s7z4j70gw";
+      type = "gem";
+    };
+    version = "1.0.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
   slop = {
     groups = ["default" "development" "test"];
@@ -2350,6 +3368,7 @@
     };
     version = "3.6.0";
   };
+<<<<<<< HEAD
   snaky_hash = {
     dependencies = ["hashie" "version_gem"];
     groups = ["default"];
@@ -2360,6 +3379,17 @@
       type = "gem";
     };
     version = "2.0.1";
+=======
+  spring = {
+    groups = ["development" "test"];
+    platforms = [];
+    source = {
+      remotes = ["https://rubygems.org"];
+      sha256 = "1ihmqcqylfx04bigg0fswmlvp0639f1j47kdir4g9lc76yw3c6ia";
+      type = "gem";
+    };
+    version = "4.0.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
   sprockets = {
     dependencies = ["concurrent-ruby" "rack"];
@@ -2393,22 +3423,35 @@
     };
     version = "0.2.2";
   };
+<<<<<<< HEAD
   telegram-bot-ruby = {
     dependencies = ["dry-struct" "faraday" "faraday-multipart" "zeitwerk"];
+=======
+  telegramAPI = {
+    dependencies = ["rest-client"];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     groups = ["default"];
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
+<<<<<<< HEAD
       sha256 = "1hbyr2c2i0bmyynchwg8nhxna64jr9xw6q5p8bxzj762hfj27gcj";
       type = "gem";
     };
     version = "1.0.0";
+=======
+      sha256 = "043blxqk5qps62jgjyr7hbf2y2fg5ldcmii8mxk09b3c6ps9ji6g";
+      type = "gem";
+    };
+    version = "1.4.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
   telephone_number = {
     groups = ["default"];
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
+<<<<<<< HEAD
       sha256 = "1c5cnx7w3wp6ddsw84s131asfs6pr650fhwqhzwx2v3987d38kz1";
       type = "gem";
     };
@@ -2424,6 +3467,12 @@
       type = "gem";
     };
     version = "1.1.13";
+=======
+      sha256 = "0ai25w1g5g6lr6mz2yxma2px78gfx50bk66kbakkx0dczdybxd1r";
+      type = "gem";
+    };
+    version = "1.4.14";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
   test-unit = {
     dependencies = ["power_assert"];
@@ -2431,10 +3480,17 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
+<<<<<<< HEAD
       sha256 = "1rdhpdi8mlk7jwv9pxz3mhchpd5q93jxzijqhw334w5yv1ajl5hf";
       type = "gem";
     };
     version = "3.5.7";
+=======
+      sha256 = "0h0gpi3fggfa76sbm5kh48ma79z41yh6y7n3lxmaqrbf3zqyjlcw";
+      type = "gem";
+    };
+    version = "3.5.3";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
   thor = {
     groups = ["assets" "default" "development" "test"];
@@ -2447,7 +3503,11 @@
     version = "1.2.1";
   };
   thread_safe = {
+<<<<<<< HEAD
     groups = ["default"];
+=======
+    groups = ["assets" "default" "development" "nulldb" "test"];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
@@ -2461,6 +3521,7 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
+<<<<<<< HEAD
       sha256 = "186nfbcsk0l4l86gvng1fw6jq6p6s7rc0caxr23b3pnbfb20y63v";
       type = "gem";
     };
@@ -2486,6 +3547,12 @@
       type = "gem";
     };
     version = "0.3.2";
+=======
+      sha256 = "0rn8z8hda4h41a64l0zhkiwz2vxw9b1nb70gl37h1dg2k874yrlv";
+      type = "gem";
+    };
+    version = "2.0.10";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
   twilio-ruby = {
     dependencies = ["faraday" "jwt" "nokogiri"];
@@ -2493,10 +3560,17 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
+<<<<<<< HEAD
       sha256 = "1wn7ybr54i8p6rrg79k0z4pga4n91d9rvrlvwgms8mx3aq9dpbib";
       type = "gem";
     };
     version = "5.74.3";
+=======
+      sha256 = "0x8md052pya691vjzzvpmpf0j42m017p3d8xr2js6j5ir69iya0j";
+      type = "gem";
+    };
+    version = "5.65.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
   twitter = {
     dependencies = ["addressable" "buftok" "equalizer" "http" "http-form_data" "http_parser.rb" "memoizable" "multipart-post" "naught" "simple_oauth"];
@@ -2510,11 +3584,16 @@
     version = "7.0.0";
   };
   tzinfo = {
+<<<<<<< HEAD
     dependencies = ["concurrent-ruby"];
+=======
+    dependencies = ["thread_safe"];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     groups = ["assets" "default" "development" "nulldb" "test"];
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
+<<<<<<< HEAD
       sha256 = "16w2g84dzaf3z13gxyzlzbf748kylk5bdgg3n1ipvkvvqy685bwd";
       type = "gem";
     };
@@ -2530,6 +3609,23 @@
       type = "gem";
     };
     version = "1.2022.7";
+=======
+      sha256 = "0zwqqh6138s8b321fwvfbywxy00lw1azw4ql3zr0xh1aqxf8cnvj";
+      type = "gem";
+    };
+    version = "1.2.9";
+  };
+  uglifier = {
+    dependencies = ["execjs"];
+    groups = ["assets"];
+    platforms = [];
+    source = {
+      remotes = ["https://rubygems.org"];
+      sha256 = "0wgh7bzy68vhv9v68061519dd8samcy8sazzz0w3k8kqpy3g4s5f";
+      type = "gem";
+    };
+    version = "4.2.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
   unf = {
     dependencies = ["unf_ext"];
@@ -2547,20 +3643,34 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
+<<<<<<< HEAD
       sha256 = "1yj2nz2l101vr1x9w2k83a0fag1xgnmjwp8w8rw4ik2rwcz65fch";
       type = "gem";
     };
     version = "0.0.8.2";
+=======
+      sha256 = "0jmbimpnpjdzz8hlrppgl9spm99qh3qzbx0b81k3gkgwba8nk3yd";
+      type = "gem";
+    };
+    version = "0.0.8";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
   unicode-display_width = {
     groups = ["default" "development" "test"];
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
+<<<<<<< HEAD
       sha256 = "1gi82k102q7bkmfi7ggn9ciypn897ylln1jk9q67kjhr39fj043a";
       type = "gem";
     };
     version = "2.4.2";
+=======
+      sha256 = "0csjm9shhfik0ci9mgimb7hf3xgh7nx45rkd9rzgdz6vkwr8rzxn";
+      type = "gem";
+    };
+    version = "2.1.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
   unicorn = {
     dependencies = ["kgio" "raindrops"];
@@ -2573,15 +3683,27 @@
     };
     version = "6.1.0";
   };
+<<<<<<< HEAD
   uri = {
+=======
+  valid_email2 = {
+    dependencies = ["activemodel" "mail"];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     groups = ["default"];
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
+<<<<<<< HEAD
       sha256 = "1vigw7nfszfqgikr6n574k9bfh0rvs74z8xq46rz2zsm8249l8cc";
       type = "gem";
     };
     version = "0.12.1";
+=======
+      sha256 = "0mm92c0p2cgsydcn1va624yzpsdp9bnh24c68lw45j43rca88kq7";
+      type = "gem";
+    };
+    version = "4.0.3";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
   vcr = {
     groups = ["development" "test"];
@@ -2593,6 +3715,7 @@
     };
     version = "6.1.0";
   };
+<<<<<<< HEAD
   version_gem = {
     groups = ["default"];
     platforms = [];
@@ -2603,6 +3726,8 @@
     };
     version = "1.1.1";
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   viewpoint = {
     dependencies = ["httpclient" "logging" "nokogiri" "rubyntlm"];
     groups = ["default"];
@@ -2614,6 +3739,7 @@
     };
     version = "1.1.1";
   };
+<<<<<<< HEAD
   vite_rails = {
     dependencies = ["railties" "vite_ruby"];
     groups = ["default"];
@@ -2636,12 +3762,15 @@
     };
     version = "3.2.14";
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   webmock = {
     dependencies = ["addressable" "crack" "hashdiff"];
     groups = ["development" "test"];
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
+<<<<<<< HEAD
       sha256 = "1myj44wvbbqvv18ragv3ihl0h61acgnfwrnj3lccdgp49bgmbjal";
       type = "gem";
     };
@@ -2656,6 +3785,12 @@
       type = "gem";
     };
     version = "1.2.9";
+=======
+      sha256 = "1l8vh8p0g92cqcvv0ra3mblsa4nczh0rz8nbwbkc3g3yzbva85xk";
+      type = "gem";
+    };
+    version = "3.14.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
   websocket-driver = {
     dependencies = ["websocket-extensions"];
@@ -2704,6 +3839,7 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
+<<<<<<< HEAD
       sha256 = "028ld9qmgdllxrl7d0qkl65s58wb1n3gv8yjs28g43a8b1hplxk1";
       type = "gem";
     };
@@ -2711,13 +3847,29 @@
   };
   zendesk_api = {
     dependencies = ["faraday" "faraday-multipart" "hashie" "inflection" "mini_mime" "multipart-post"];
+=======
+      sha256 = "09bq7j2p6mkbxnsg71s253dm2463kg51xc7bmjcxgyblqbh4ln7m";
+      type = "gem";
+    };
+    version = "2.5.4";
+  };
+  zendesk_api = {
+    dependencies = ["faraday" "hashie" "inflection" "mini_mime" "multipart-post"];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     groups = ["default"];
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
+<<<<<<< HEAD
       sha256 = "0yizpglgfwml6a2w696m97d1q50hq3v0vldja431rv93s9sjbgly";
       type = "gem";
     };
     version = "1.38.0.rc1";
+=======
+      sha256 = "1sl5a01sl58pxxcx9qdvjwm04my1waysaik7y6l5564wbx4xczyr";
+      type = "gem";
+    };
+    version = "1.35.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

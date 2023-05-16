@@ -1,7 +1,12 @@
 import ./make-test-python.nix ({ pkgs, lib, ...} : {
   name = "gnome-xorg";
+<<<<<<< HEAD
   meta = {
     maintainers = lib.teams.gnome.members;
+=======
+  meta = with lib; {
+    maintainers = teams.gnome.members;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nodes.machine = { nodes, ... }: let

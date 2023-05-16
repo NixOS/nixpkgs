@@ -11,13 +11,21 @@
 
 stdenv.mkDerivation rec {
   pname = "obs-vaapi";
+<<<<<<< HEAD
   version = "0.4.0";
+=======
+  version = "0.2.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "fzwoch";
     repo = pname;
     rev = version;
+<<<<<<< HEAD
     hash = "sha256-AbSI6HBdOEI54bUVqqF+b4LcCyzW30XlS9SXX2ajkas=";
+=======
+    hash = "sha256-wrbVuqIe+DY3R+Jp3zCy2Uw3fv5ejYHtRV2Sv+y/n0w=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ pkg-config meson ninja ];
@@ -48,7 +56,10 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "OBS Studio VAAPI support via GStreamer";
     homepage = "https://github.com/fzwoch/obs-vaapi";
+<<<<<<< HEAD
     changelog = "https://github.com/fzwoch/obs-vaapi/releases/tag/${version}";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     maintainers = with maintainers; [ ahuzik pedrohlc ];
     license = licenses.gpl2Plus;
     platforms = [ "x86_64-linux" "i686-linux" ];

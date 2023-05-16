@@ -47,6 +47,10 @@ buildPythonPackage rec {
     description = "Data structures, algorithms and educational resources for bioinformatics";
     license = licenses.bsd3;
     platforms = [ "x86_64-linux" "x86_64-darwin" ];
+<<<<<<< HEAD
     maintainers = [ ];
+=======
+    maintainers = [ maintainers.costrouc ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

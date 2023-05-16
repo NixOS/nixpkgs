@@ -31,7 +31,11 @@ evalConfigArgs@
 , prefix ? []
 , lib ? import ../../lib
 , extraModules ? let e = builtins.getEnv "NIXOS_EXTRA_MODULE_PATH";
+<<<<<<< HEAD
                  in lib.optional (e != "") (import e)
+=======
+                 in if e == "" then [] else [(import e)]
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 let pkgs_ = pkgs;
@@ -109,6 +113,7 @@ let
 
   nixosWithUserModules = noUserModules.extendModules { modules = allUserModules; };
 
+<<<<<<< HEAD
   withExtraArgs = nixosSystem: nixosSystem // {
     inherit extraArgs;
     inherit (nixosSystem._module.args) pkgs;
@@ -116,3 +121,10 @@ let
   };
 in
 withWarnings (withExtraArgs nixosWithUserModules)
+=======
+in
+withWarnings nixosWithUserModules // {
+  inherit extraArgs;
+  inherit (nixosWithUserModules._module.args) pkgs;
+}
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)

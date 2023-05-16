@@ -16,13 +16,21 @@
 
 stdenv.mkDerivation rec {
   pname = "openimageio";
+<<<<<<< HEAD
   version = "2.4.15.0";
+=======
+  version = "2.4.11.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "OpenImageIO";
     repo = "oiio";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-I2/JPmUBDb0bw7qbSZcAkYHB2q2Uo7En7ZurMwWhg/M=";
+=======
+    hash = "sha256-YWVKmvUHq1QSpTCP0UBfSxqWTIWjxOF0gVE7qljCOyY=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   outputs = [ "bin" "out" "dev" "doc" ];

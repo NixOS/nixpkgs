@@ -24,9 +24,12 @@ let
         # Name appended to menuentry defaults to params if no specific name given.
         option.name or (optionalString (option ? params) "(${option.params})")
         }' ${optionalString (option ? class) " --class ${option.class}"} {
+<<<<<<< HEAD
           # Fallback to UEFI console for boot, efifb sometimes has difficulties.
           terminal_output console
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           linux ${defaults.image} \''${isoboot} ${defaults.params} ${
             option.params or ""
           }
@@ -55,7 +58,11 @@ let
   buildMenuAdditionalParamsGrub2 = additional:
   let
     finalCfg = {
+<<<<<<< HEAD
       name = "${config.isoImage.prependToMenuLabel}${config.system.nixos.distroName} ${config.system.nixos.label}${config.isoImage.appendToMenuLabel}";
+=======
+      name = "${config.system.nixos.distroName} ${config.system.nixos.label}${config.isoImage.appendToMenuLabel}";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       params = "init=${config.system.build.toplevel}/init ${additional} ${toString config.boot.kernelParams}";
       image = "/boot/${config.system.boot.loader.kernelFile}";
       initrd = "/boot/initrd";
@@ -112,35 +119,55 @@ let
     DEFAULT boot
 
     LABEL boot
+<<<<<<< HEAD
     MENU LABEL ${config.isoImage.prependToMenuLabel}${config.system.nixos.distroName} ${config.system.nixos.label}${config.isoImage.appendToMenuLabel}
+=======
+    MENU LABEL ${config.system.nixos.distroName} ${config.system.nixos.label}${config.isoImage.appendToMenuLabel}
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     LINUX /boot/${config.system.boot.loader.kernelFile}
     APPEND init=${config.system.build.toplevel}/init ${toString config.boot.kernelParams}
     INITRD /boot/${config.system.boot.loader.initrdFile}
 
     # A variant to boot with 'nomodeset'
     LABEL boot-nomodeset
+<<<<<<< HEAD
     MENU LABEL ${config.isoImage.prependToMenuLabel}${config.system.nixos.distroName} ${config.system.nixos.label}${config.isoImage.appendToMenuLabel} (nomodeset)
+=======
+    MENU LABEL ${config.system.nixos.distroName} ${config.system.nixos.label}${config.isoImage.appendToMenuLabel} (nomodeset)
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     LINUX /boot/${config.system.boot.loader.kernelFile}
     APPEND init=${config.system.build.toplevel}/init ${toString config.boot.kernelParams} nomodeset
     INITRD /boot/${config.system.boot.loader.initrdFile}
 
     # A variant to boot with 'copytoram'
     LABEL boot-copytoram
+<<<<<<< HEAD
     MENU LABEL ${config.isoImage.prependToMenuLabel}${config.system.nixos.distroName} ${config.system.nixos.label}${config.isoImage.appendToMenuLabel} (copytoram)
+=======
+    MENU LABEL ${config.system.nixos.distroName} ${config.system.nixos.label}${config.isoImage.appendToMenuLabel} (copytoram)
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     LINUX /boot/${config.system.boot.loader.kernelFile}
     APPEND init=${config.system.build.toplevel}/init ${toString config.boot.kernelParams} copytoram
     INITRD /boot/${config.system.boot.loader.initrdFile}
 
     # A variant to boot with verbose logging to the console
     LABEL boot-debug
+<<<<<<< HEAD
     MENU LABEL ${config.isoImage.prependToMenuLabel}${config.system.nixos.distroName} ${config.system.nixos.label}${config.isoImage.appendToMenuLabel} (debug)
+=======
+    MENU LABEL ${config.system.nixos.distroName} ${config.system.nixos.label}${config.isoImage.appendToMenuLabel} (debug)
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     LINUX /boot/${config.system.boot.loader.kernelFile}
     APPEND init=${config.system.build.toplevel}/init ${toString config.boot.kernelParams} loglevel=7
     INITRD /boot/${config.system.boot.loader.initrdFile}
 
     # A variant to boot with a serial console enabled
     LABEL boot-serial
+<<<<<<< HEAD
     MENU LABEL ${config.isoImage.prependToMenuLabel}${config.system.nixos.distroName} ${config.system.nixos.label}${config.isoImage.appendToMenuLabel} (serial console=ttyS0,115200n8)
+=======
+    MENU LABEL ${config.system.nixos.distroName} ${config.system.nixos.label}${config.isoImage.appendToMenuLabel} (serial console=ttyS0,115200n8)
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     LINUX /boot/${config.system.boot.loader.kernelFile}
     APPEND init=${config.system.build.toplevel}/init ${toString config.boot.kernelParams} console=ttyS0,115200n8
     INITRD /boot/${config.system.boot.loader.initrdFile}
@@ -188,6 +215,7 @@ let
       # So instead we'll list a lot of possibly valid modes :/
       #"3840x2160"
       #"2560x1440"
+<<<<<<< HEAD
       "1920x1200"
       "1920x1080"
       "1366x768"
@@ -196,10 +224,17 @@ let
       "1200x1920"
       "1024x768"
       "800x1280"
+=======
+      "1920x1080"
+      "1366x768"
+      "1280x720"
+      "1024x768"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       "800x600"
       "auto"
     ]}
 
+<<<<<<< HEAD
     if [ "\$textmode" == "false" ]; then
       terminal_output gfxterm
       terminal_input  console
@@ -207,6 +242,27 @@ let
       terminal_output console
       terminal_input  console
       # Sets colors for console term.
+=======
+    # Fonts can be loaded?
+    # (This font is assumed to always be provided as a fallback by NixOS)
+    if loadfont (\$root)/EFI/boot/unicode.pf2; then
+      set with_fonts=true
+    fi
+    if [ "\$textmode" != "true" -a "\$with_fonts" == "true" ]; then
+      # Use graphical term, it can be either with background image or a theme.
+      # input is "console", while output is "gfxterm".
+      # This enables "serial" input and output only when possible.
+      # Otherwise the failure mode is to not even enable gfxterm.
+      if test "\$with_serial" == "yes"; then
+        terminal_output gfxterm serial
+        terminal_input  console serial
+      else
+        terminal_output gfxterm
+        terminal_input  console
+      fi
+    else
+      # Sets colors for the non-graphical term.
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       set menu_color_normal=cyan/blue
       set menu_color_highlight=white/blue
     fi
@@ -245,6 +301,7 @@ let
     touch $out/EFI/nixos-installer-image
 
     # ALWAYS required modules.
+<<<<<<< HEAD
     MODULES=(
       # Basic modules for filesystems and partition schemes
       "fat"
@@ -297,6 +354,20 @@ let
 
     echo "Building GRUB with modules:"
     for mod in ''${MODULES[@]}; do
+=======
+    MODULES="fat iso9660 part_gpt part_msdos \
+             normal boot linux configfile loopback chain halt \
+             efifwsetup efi_gop \
+             ls search search_label search_fs_uuid search_fs_file \
+             gfxmenu gfxterm gfxterm_background gfxterm_menu test all_video loadenv \
+             exfat ext2 ntfs btrfs hfsplus udf \
+             videoinfo png \
+             echo serial \
+            "
+
+    echo "Building GRUB with modules:"
+    for mod in $MODULES; do
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       echo " - $mod"
     done
 
@@ -305,27 +376,52 @@ let
     for mod in efi_uga; do
       if [ -f ${grubPkgs.grub2_efi}/lib/grub/${grubPkgs.grub2_efi.grubTarget}/$mod.mod ]; then
         echo " - $mod"
+<<<<<<< HEAD
         MODULES+=("$mod")
+=======
+        MODULES+=" $mod"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       fi
     done
 
     # Make our own efi program, we can't rely on "grub-install" since it seems to
     # probe for devices, even with --skip-fs-probe.
+<<<<<<< HEAD
     grub-mkimage \
       --directory=${grubPkgs.grub2_efi}/lib/grub/${grubPkgs.grub2_efi.grubTarget} \
       -o $out/EFI/boot/boot${targetArch}.efi \
       -p /EFI/boot \
       -O ${grubPkgs.grub2_efi.grubTarget} \
       ''${MODULES[@]}
+=======
+    grub-mkimage --directory=${grubPkgs.grub2_efi}/lib/grub/${grubPkgs.grub2_efi.grubTarget} -o $out/EFI/boot/boot${targetArch}.efi -p /EFI/boot -O ${grubPkgs.grub2_efi.grubTarget} \
+      $MODULES
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     cp ${grubPkgs.grub2_efi}/share/grub/unicode.pf2 $out/EFI/boot/
 
     cat <<EOF > $out/EFI/boot/grub.cfg
 
+<<<<<<< HEAD
     set textmode=${boolToString (config.isoImage.forceTextMode)}
     set timeout=${toString grubEfiTimeout}
 
     clear
     # This message will only be viewable on the default (UEFI) console.
+=======
+    set with_fonts=false
+    set textmode=false
+    # If you want to use serial for "terminal_*" commands, you need to set one up:
+    #   Example manual configuration:
+    #    → serial --unit=0 --speed=115200 --word=8 --parity=no --stop=1
+    # This uses the defaults, and makes the serial terminal available.
+    set with_serial=no
+    if serial; then set with_serial=yes ;fi
+    export with_serial
+    clear
+    set timeout=${toString grubEfiTimeout}
+
+    # This message will only be viewable when "gfxterm" is not used.
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     echo ""
     echo "Loading graphical boot menu..."
     echo ""
@@ -337,7 +433,11 @@ let
     hiddenentry 'Text mode' --hotkey 't' {
       loadfont (\$root)/EFI/boot/unicode.pf2
       set textmode=true
+<<<<<<< HEAD
       terminal_output console
+=======
+      terminal_output gfxterm console
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     }
     hiddenentry 'GUI mode' --hotkey 'g' {
       $(find ${config.isoImage.grubTheme} -iname '*.pf2' -printf "loadfont (\$root)/EFI/boot/grub-theme/%P\n")
@@ -431,8 +531,11 @@ let
     }
     EOF
 
+<<<<<<< HEAD
     grub-script-check $out/EFI/boot/grub.cfg
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     ${refind}
   '';
 
@@ -475,6 +578,12 @@ let
       fsck.vfat -vn "$out"
     ''; # */
 
+<<<<<<< HEAD
+=======
+  # Syslinux (and isolinux) only supports x86-based architectures.
+  canx86BiosBoot = pkgs.stdenv.hostPlatform.isx86;
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 in
 
 {
@@ -482,7 +591,10 @@ in
 
     isoImage.isoName = mkOption {
       default = "${config.isoImage.isoBaseName}.iso";
+<<<<<<< HEAD
       type = lib.types.str;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       description = lib.mdDoc ''
         Name of the generated ISO image file.
       '';
@@ -490,7 +602,10 @@ in
 
     isoImage.isoBaseName = mkOption {
       default = config.system.nixos.distroId;
+<<<<<<< HEAD
       type = lib.types.str;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       description = lib.mdDoc ''
         Prefix of the name of the generated ISO image file.
       '';
@@ -498,7 +613,10 @@ in
 
     isoImage.compressImage = mkOption {
       default = false;
+<<<<<<< HEAD
       type = lib.types.bool;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       description = lib.mdDoc ''
         Whether the ISO image should be compressed using
         {command}`zstd`.
@@ -512,16 +630,26 @@ in
                 + lib.optionalString isAarch "-Xbcj arm"
                 + lib.optionalString (isPower && is32bit && isBigEndian) "-Xbcj powerpc"
                 + lib.optionalString (isSparc) "-Xbcj sparc";
+<<<<<<< HEAD
       type = lib.types.str;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       description = lib.mdDoc ''
         Compression settings to use for the squashfs nix store.
       '';
       example = "zstd -Xcompression-level 6";
+<<<<<<< HEAD
+=======
+      type = types.str;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
 
     isoImage.edition = mkOption {
       default = "";
+<<<<<<< HEAD
       type = lib.types.str;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       description = lib.mdDoc ''
         Specifies which edition string to use in the volume ID of the generated
         ISO image.
@@ -531,7 +659,10 @@ in
     isoImage.volumeID = mkOption {
       # nixos-$EDITION-$RELEASE-$ARCH
       default = "nixos${optionalString (config.isoImage.edition != "") "-${config.isoImage.edition}"}-${config.system.nixos.release}-${pkgs.stdenv.hostPlatform.uname.processor}";
+<<<<<<< HEAD
       type = lib.types.str;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       description = lib.mdDoc ''
         Specifies the label or volume ID of the generated ISO image.
         Note that the label is used by stage 1 of the boot process to
@@ -562,7 +693,10 @@ in
 
     isoImage.includeSystemBuildDependencies = mkOption {
       default = false;
+<<<<<<< HEAD
       type = lib.types.bool;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       description = lib.mdDoc ''
         Set this option to include all the needed sources etc in the
         image. It significantly increases image size. Use that when
@@ -573,6 +707,7 @@ in
     };
 
     isoImage.makeBiosBootable = mkOption {
+<<<<<<< HEAD
       # Before this option was introduced, images were BIOS-bootable if the
       # hostPlatform was x86-based. This option is enabled by default for
       # backwards compatibility.
@@ -585,6 +720,9 @@ in
         e.g. i686 and x86_64.
       '';
       type = lib.types.bool;
+=======
+      default = false;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       description = lib.mdDoc ''
         Whether the ISO image should be a BIOS-bootable disk.
       '';
@@ -592,7 +730,10 @@ in
 
     isoImage.makeEfiBootable = mkOption {
       default = false;
+<<<<<<< HEAD
       type = lib.types.bool;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       description = lib.mdDoc ''
         Whether the ISO image should be an EFI-bootable volume.
       '';
@@ -600,7 +741,10 @@ in
 
     isoImage.makeUsbBootable = mkOption {
       default = false;
+<<<<<<< HEAD
       type = lib.types.bool;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       description = lib.mdDoc ''
         Whether the ISO image should be bootable from CD as well as USB.
       '';
@@ -665,6 +809,7 @@ in
       '';
     };
 
+<<<<<<< HEAD
     isoImage.prependToMenuLabel = mkOption {
       default = "";
       type = types.str;
@@ -681,6 +826,10 @@ in
     isoImage.appendToMenuLabel = mkOption {
       default = " Installer";
       type = types.str;
+=======
+    isoImage.appendToMenuLabel = mkOption {
+      default = " Installer";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       example = " Live System";
       description = lib.mdDoc ''
         The string to append after the menu label for the NixOS system.
@@ -691,6 +840,7 @@ in
       '';
     };
 
+<<<<<<< HEAD
     isoImage.forceTextMode = mkOption {
       default = false;
       type = types.bool;
@@ -705,6 +855,8 @@ in
       '';
     };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   # store them in lib so we can mkImageMediaOverride the
@@ -759,11 +911,14 @@ in
   config = {
     assertions = [
       {
+<<<<<<< HEAD
         # Syslinux (and isolinux) only supports x86-based architectures.
         assertion = config.isoImage.makeBiosBootable -> pkgs.stdenv.hostPlatform.isx86;
         message = "BIOS boot is only supported on x86-based architectures.";
       }
       {
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         assertion = !(stringLength config.isoImage.volumeID > 32);
         # https://wiki.osdev.org/ISO_9660#The_Primary_Volume_Descriptor
         # Volume Identifier can only be 32 bytes
@@ -781,7 +936,11 @@ in
     boot.loader.grub.enable = false;
 
     environment.systemPackages =  [ grubPkgs.grub2 grubPkgs.grub2_efi ]
+<<<<<<< HEAD
       ++ optional (config.isoImage.makeBiosBootable) pkgs.syslinux
+=======
+      ++ optional (config.isoImage.makeBiosBootable && canx86BiosBoot) pkgs.syslinux
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     ;
 
     # In stage 1 of the boot, mount the CD as the root FS by label so
@@ -832,7 +991,11 @@ in
         { source = pkgs.writeText "version" config.system.nixos.label;
           target = "/version.txt";
         }
+<<<<<<< HEAD
       ] ++ optionals (config.isoImage.makeBiosBootable) [
+=======
+      ] ++ optionals (config.isoImage.makeBiosBootable && canx86BiosBoot) [
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         { source = config.isoImage.splashImage;
           target = "/isolinux/background.png";
         }
@@ -859,7 +1022,11 @@ in
         { source = config.isoImage.efiSplashImage;
           target = "/EFI/boot/efi-background.png";
         }
+<<<<<<< HEAD
       ] ++ optionals (config.boot.loader.grub.memtest86.enable && config.isoImage.makeBiosBootable) [
+=======
+      ] ++ optionals (config.boot.loader.grub.memtest86.enable && config.isoImage.makeBiosBootable && canx86BiosBoot) [
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         { source = "${pkgs.memtest86plus}/memtest.bin";
           target = "/boot/memtest.bin";
         }
@@ -874,10 +1041,17 @@ in
     # Create the ISO image.
     system.build.isoImage = pkgs.callPackage ../../../lib/make-iso9660-image.nix ({
       inherit (config.isoImage) isoName compressImage volumeID contents;
+<<<<<<< HEAD
       bootable = config.isoImage.makeBiosBootable;
       bootImage = "/isolinux/isolinux.bin";
       syslinux = if config.isoImage.makeBiosBootable then pkgs.syslinux else null;
     } // optionalAttrs (config.isoImage.makeUsbBootable && config.isoImage.makeBiosBootable) {
+=======
+      bootable = config.isoImage.makeBiosBootable && canx86BiosBoot;
+      bootImage = "/isolinux/isolinux.bin";
+      syslinux = if config.isoImage.makeBiosBootable && canx86BiosBoot then pkgs.syslinux else null;
+    } // optionalAttrs (config.isoImage.makeUsbBootable && config.isoImage.makeBiosBootable && canx86BiosBoot) {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       usbBootable = true;
       isohybridMbrImage = "${pkgs.syslinux}/share/syslinux/isohdpfx.bin";
     } // optionalAttrs config.isoImage.makeEfiBootable {

@@ -24,13 +24,21 @@
 
 buildPythonPackage rec {
   pname = "trezor";
+<<<<<<< HEAD
   version = "0.13.7";
+=======
+  version = "0.13.6";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
+<<<<<<< HEAD
     hash = "sha256-dodeWIYBfclPUbu0Efkn8QO9nj7L8HVNXkSjU4mBSeA=";
+=======
+    hash = "sha256-/DWcB1Yv8ViuBP0j9lY6wV3ARlhvOmw3lTbd7w95C0g=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ installShellFiles ];

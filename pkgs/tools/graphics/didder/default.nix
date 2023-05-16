@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 { lib, buildGoModule, fetchFromGitHub, pandoc }:
+=======
+{ lib, stdenv, buildGoModule, fetchFromGitHub, pandoc }:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 buildGoModule rec {
   pname = "didder";

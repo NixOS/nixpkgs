@@ -13,7 +13,11 @@
 
 buildPythonPackage rec {
   pname = "oci";
+<<<<<<< HEAD
   version = "2.111.0";
+=======
+  version = "2.100.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -22,7 +26,11 @@ buildPythonPackage rec {
     owner = "oracle";
     repo = "oci-python-sdk";
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-7lkxk/oFb5DPH3LcOJLJByMaf4xQB8L6FLKrXOn+HsM=";
+=======
+    hash = "sha256-hzuuYRf9D0nWSyAPC66umDD2fKYZ+khHd6281UW6u9M=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   pythonRelaxDeps = [

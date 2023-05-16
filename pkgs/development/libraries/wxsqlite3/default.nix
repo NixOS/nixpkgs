@@ -12,13 +12,21 @@
 
 stdenv.mkDerivation rec {
   pname = "wxsqlite3";
+<<<<<<< HEAD
   version = "4.9.4";
+=======
+  version = "4.9.3";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "utelle";
     repo = "wxsqlite3";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-aM79DI/Kj1QEIJ1HMttlfqK/WZER9RJhQbrnbPto57U=";
+=======
+    hash = "sha256-HdsPCdZF1wMTGYFaXzq+f4bUFjgCAklsKhhdyMKaxp8=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ autoreconfHook ];

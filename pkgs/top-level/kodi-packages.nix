@@ -3,7 +3,11 @@
 with lib;
 
 let
+<<<<<<< HEAD
   inherit (libretro) fuse genesis-plus-gx mgba nestopia snes9x twenty-fortyeight;
+=======
+  inherit (libretro) genesis-plus-gx mgba snes9x;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 in
 
 let self = rec {
@@ -62,16 +66,22 @@ let self = rec {
 
   libretro = callPackage ../applications/video/kodi/addons/libretro { };
 
+<<<<<<< HEAD
   libretro-2048 = callPackage ../applications/video/kodi/addons/libretro-2048 { inherit twenty-fortyeight; };
 
   libretro-fuse = callPackage ../applications/video/kodi/addons/libretro-fuse { inherit fuse; };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   libretro-genplus = callPackage ../applications/video/kodi/addons/libretro-genplus { inherit genesis-plus-gx; };
 
   libretro-mgba = callPackage ../applications/video/kodi/addons/libretro-mgba { inherit mgba; };
 
+<<<<<<< HEAD
   libretro-nestopia = callPackage ../applications/video/kodi/addons/libretro-nestopia { inherit nestopia; };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   libretro-snes9x = callPackage ../applications/video/kodi/addons/libretro-snes9x { inherit snes9x; };
 
   jellyfin = callPackage ../applications/video/kodi/addons/jellyfin { };
@@ -102,6 +112,7 @@ let self = rec {
 
   osmc-skin = callPackage ../applications/video/kodi/addons/osmc-skin { };
 
+<<<<<<< HEAD
   vfs-libarchive = callPackage ../applications/video/kodi/addons/vfs-libarchive { };
 
   vfs-rar = callPackage ../applications/video/kodi/addons/vfs-rar { };
@@ -123,6 +134,11 @@ let self = rec {
   visualization-spectrum = callPackage ../applications/video/kodi/addons/visualization-spectrum { };
 
   visualization-starburst = callPackage ../applications/video/kodi/addons/visualization-starburst { };
+=======
+  vfs-sftp = callPackage ../applications/video/kodi/addons/vfs-sftp { };
+
+  vfs-libarchive = callPackage ../applications/video/kodi/addons/vfs-libarchive { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   visualization-waveform = callPackage ../applications/video/kodi/addons/visualization-waveform { };
 

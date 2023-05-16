@@ -10,7 +10,10 @@
 , texinfo
 , ncurses
 , pcre
+<<<<<<< HEAD
 , pkg-config
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , buildPackages }:
 
 let
@@ -30,6 +33,7 @@ stdenv.mkDerivation {
   patches = [
     # fix location of timezone data for TZ= completion
     ./tz_completion.patch
+<<<<<<< HEAD
     # Fixes configure misdetection when using clang 16, resulting in broken subshells on Darwin.
     # This patch can be dropped with the next release of zsh.
     (fetchpatch {
@@ -41,6 +45,12 @@ stdenv.mkDerivation {
 
   strictDeps = true;
   nativeBuildInputs = [ autoreconfHook perl groff texinfo pkg-config ]
+=======
+  ];
+
+  strictDeps = true;
+  nativeBuildInputs = [ autoreconfHook perl groff texinfo pcre]
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
                       ++ lib.optionals stdenv.isLinux [ util-linux yodl ];
 
   buildInputs = [ ncurses pcre ];
@@ -52,7 +62,10 @@ stdenv.mkDerivation {
     "--enable-pcre"
     "--enable-zshenv=${placeholder "out"}/etc/zshenv"
     "--disable-site-fndir"
+<<<<<<< HEAD
     "--enable-function-subdirs"
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform && !stdenv.hostPlatform.isStatic) [
     # Also see: https://github.com/buildroot/buildroot/commit/2f32e668aa880c2d4a2cce6c789b7ca7ed6221ba
     "zsh_cv_shared_environ=yes"
@@ -65,6 +78,7 @@ stdenv.mkDerivation {
     "zsh_cv_sys_dynamic_strip_lib=yes"
   ];
 
+<<<<<<< HEAD
   postPatch = ''
     substituteInPlace Src/Modules/pcre.mdd \
       --replace 'pcre-config' 'true'
@@ -75,6 +89,8 @@ stdenv.mkDerivation {
     configureFlagsArray+=("PCRECONF=''${PKG_CONFIG} libpcre")
   '';
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   # the zsh/zpty module is not available on hydra
   # so skip groups Y Z
   checkFlags = map (T: "TESTNUM=${T}") (lib.stringToCharacters "ABCDEVW");
@@ -120,10 +136,13 @@ EOF
   '';
   # XXX: patch zsh to take zwc if newer _or equal_
 
+<<<<<<< HEAD
   postFixup = ''
     HOST_PATH=$out/bin:$HOST_PATH patchShebangs --host $out/share/zsh/*/functions
   '';
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   meta = {
     description = "The Z shell";
     longDescription = ''
@@ -138,7 +157,10 @@ EOF
     homepage = "https://www.zsh.org/";
     maintainers = with lib.maintainers; [ pSub artturin ];
     platforms = lib.platforms.unix;
+<<<<<<< HEAD
     mainProgram = "zsh";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   passthru = {

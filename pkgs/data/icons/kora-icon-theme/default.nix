@@ -10,13 +10,21 @@
 
 stdenvNoCC.mkDerivation rec  {
   pname = "kora-icon-theme";
+<<<<<<< HEAD
   version = "1.5.8";
+=======
+  version = "1.5.6";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub  {
     owner = "bikass";
     repo = "kora";
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-ZPjtY6s3Sgl0aU2pAxagTMFIOcwDAZQRYtvOC0FBJaI=";
+=======
+    sha256 = "sha256-vAeml+upESUVlJ95Rm0+vlZ+NQZWEZl00scDkb3W7Yo=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

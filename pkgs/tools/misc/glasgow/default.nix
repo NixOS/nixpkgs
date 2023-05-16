@@ -9,15 +9,22 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "glasgow";
+<<<<<<< HEAD
   version = "unstable-2023-04-15";
   # python -m setuptools_scm
   realVersion = "0.1.dev2+g${lib.substring 0 7 src.rev}";
 
   patches = [ ./0001-Relax-Amaranth-git-dependency.patch ];
+=======
+  version = "unstable-2021-12-12";
+  # python software/setup.py --version
+  realVersion = "0.1.dev1679+g${lib.substring 0 7 src.rev}";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "GlasgowEmbedded";
     repo = "glasgow";
+<<<<<<< HEAD
     rev = "406e06fae5c85f6f773c9839747513874bc3ec77";
     sha256 = "sha256-s4fWpKJj6n2+CIAsD2bjr5K8RhJz1H1sFnjiartNGf0=";
   };
@@ -36,6 +43,23 @@ python3.pkgs.buildPythonApplication rec {
     libusb1
     pyvcd
     setuptools
+=======
+    rev = "e640a778c446b7e9812727e73c560d12aeb41d7c";
+    sha256 = "EsQ9ZjalKDQ54JOonra4yPDI56cF5n86y/Rd798cZsU=";
+  };
+
+  nativeBuildInputs = [ python3.pkgs.setuptools-scm sdcc ];
+
+  propagatedBuildInputs = with python3.pkgs; [
+    setuptools
+    amaranth
+    fx2
+    libusb1
+    aiohttp
+    pyvcd
+    bitarray
+    crcmod
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   nativeCheckInputs = [ yosys icestorm nextpnr ];

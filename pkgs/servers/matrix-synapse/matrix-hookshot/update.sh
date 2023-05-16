@@ -15,7 +15,11 @@ if [ -z "$version" ]; then
 fi
 
 src="https://raw.githubusercontent.com/matrix-org/matrix-hookshot/$version"
+<<<<<<< HEAD
 src_hash=$(nix-prefetch-github matrix-org matrix-hookshot --rev ${version} | jq -r .hash)
+=======
+src_hash=$(nix-prefetch-github matrix-org matrix-hookshot --rev ${version} | jq -r .sha256)
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 tmpdir=$(mktemp -d)
 trap 'rm -rf "$tmpdir"' EXIT
@@ -32,6 +36,10 @@ cat > pin.json << EOF
   "version": "$version",
   "srcHash": "$src_hash",
   "yarnHash": "$yarn_hash",
+<<<<<<< HEAD
   "cargoHash": "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="
+=======
+  "cargoHash": "0000000000000000000000000000000000000000000000000000"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }
 EOF

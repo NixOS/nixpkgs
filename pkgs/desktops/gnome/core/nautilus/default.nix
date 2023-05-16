@@ -38,13 +38,21 @@
 
 stdenv.mkDerivation rec {
   pname = "nautilus";
+<<<<<<< HEAD
   version = "44.2.1";
+=======
+  version = "44.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
+<<<<<<< HEAD
     sha256 = "2cYvAkcn96dvxqXaeIorAkffAaccKmARQ8YqrA/0Hkw=";
+=======
+    sha256 = "NggCpZXj7brZYsjOo1O2K6qL5AdRO1FiyJyTPKU4eqk=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   patches = [

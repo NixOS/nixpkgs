@@ -2,7 +2,11 @@
 
 buildPythonPackage rec {
   pname = "python3-application";
+<<<<<<< HEAD
   version = "3.0.6";
+=======
+  version = "3.0.4";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   disabled = !isPy3k;
 
@@ -10,7 +14,11 @@ buildPythonPackage rec {
     owner = "AGProjects";
     repo = pname;
     rev = "release-${version}";
+<<<<<<< HEAD
     hash = "sha256-L7KN6rKkbjNmkSoy8vdMYpXSBkWN7afNpreJO0twjq8=";
+=======
+    hash = "sha256-XXAKp/RlBVs3KmcnuiexdYfxf0zt2A/DrsJzdC9I4vA=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [ zope_interface twisted ];
@@ -18,7 +26,11 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "application" ];
 
   meta = with lib; {
+<<<<<<< HEAD
     broken = stdenv.isDarwin;
+=======
+    broken = (stdenv.isLinux && stdenv.isAarch64) || stdenv.isDarwin;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     description = "A collection of modules that are useful when building python applications";
     homepage = "https://github.com/AGProjects/python3-application";
     license = licenses.lgpl21Plus;

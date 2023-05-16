@@ -41,10 +41,18 @@ let
 in {
   matomo = matomoTest pkgs.matomo // {
     name = "matomo";
+<<<<<<< HEAD
     meta.maintainers = with maintainers; [ florianjacob kiwi mmilata twey boozedog ];
   };
   matomo-beta = matomoTest pkgs.matomo-beta // {
     name = "matomo-beta";
     meta.maintainers = with maintainers; [ florianjacob kiwi mmilata twey boozedog ];
+=======
+    meta.maintainers = with maintainers; [ florianjacob kiwi mmilata ];
+  };
+  matomo-beta = matomoTest pkgs.matomo-beta // {
+    name = "matomo-beta";
+    meta.maintainers = with maintainers; [ florianjacob kiwi mmilata ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

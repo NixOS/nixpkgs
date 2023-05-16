@@ -16,7 +16,11 @@ buildGoModule rec {
     sha256 = "pYiwGjgFMclPYTW0Qml7Pr/knT1gywUAGANra5aojYM=";
   };
 
+<<<<<<< HEAD
   vendorHash = "sha256-QPkBR+FscUc3jOvH7olcGUhM6OW4vxawmNJuRQxPuGs=";
+=======
+  vendorSha256 = "sha256-QPkBR+FscUc3jOvH7olcGUhM6OW4vxawmNJuRQxPuGs=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   passthru = {
     tests = {
@@ -29,6 +33,9 @@ buildGoModule rec {
     homepage = "https://github.com/netlify/esbuild";
     license = licenses.mit;
     maintainers = with maintainers; [ roberth ];
+<<<<<<< HEAD
     mainProgram = "esbuild";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

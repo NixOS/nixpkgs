@@ -2,7 +2,10 @@
 , lib
 , fetchFromGitHub
 , gitUpdater
+<<<<<<< HEAD
 , testers
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , cmake
 , pkg-config
 , python3
@@ -35,18 +38,41 @@
 , gtest
 , umockdev
 , wlcs
+<<<<<<< HEAD
 , validatePkgConfig
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mir";
   version = "2.14.1";
+=======
+}:
+
+let
+  doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
+  pythonEnv = python3.withPackages(ps: with ps; [
+    pillow
+  ] ++ lib.optionals doCheck [
+    pygobject3
+    python-dbusmock
+  ]);
+in
+
+stdenv.mkDerivation rec {
+  pname = "mir";
+  version = "2.13.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "MirServer";
     repo = "mir";
+<<<<<<< HEAD
     rev = "v${finalAttrs.version}";
     hash = "sha256-IEGeZVNxwzHn5GASCyjNuQsnCzzfQBHdC33MWVMeZws=";
+=======
+    rev = "v${version}";
+    hash = "sha256-Ip8p4mjcgmZQJTU4MNvWkTTtSJc+cCL3x1mMDFlZrVY=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   postPatch = ''
@@ -67,7 +93,11 @@ stdenv.mkDerivation (finalAttrs: {
 
     # Fix Xwayland default
     substituteInPlace src/miral/x11_support.cpp \
+<<<<<<< HEAD
       --replace '/usr/bin/Xwayland' '${lib.getExe xwayland}'
+=======
+      --replace '/usr/bin/Xwayland' '${xwayland}/bin/Xwayland'
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     # Fix paths for generating drm-formats
     substituteInPlace src/platform/graphics/CMakeLists.txt \
@@ -90,6 +120,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxslt
     lttng-ust # lttng-gen-tp
     pkg-config
+<<<<<<< HEAD
     (python3.withPackages (ps: with ps; [
       pillow
     ] ++ lib.optionals finalAttrs.doCheck [
@@ -97,6 +128,9 @@ stdenv.mkDerivation (finalAttrs: {
       python-dbusmock
     ]))
     validatePkgConfig
+=======
+    pythonEnv
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   buildInputs = [
@@ -125,23 +159,37 @@ stdenv.mkDerivation (finalAttrs: {
     xorg.libXcursor
     xorg.xorgproto
     xwayland
+<<<<<<< HEAD
+=======
+  ] ++ lib.optionals doCheck [
+    gtest
+    umockdev
+    wlcs
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   nativeCheckInputs = [
     dbus
   ];
 
+<<<<<<< HEAD
   checkInputs = [
     gtest
     umockdev
     wlcs
   ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   buildFlags = [ "all" "doc" ];
 
   cmakeFlags = [
     "-DMIR_PLATFORM='gbm-kms;x11;eglstream-kms;wayland'"
+<<<<<<< HEAD
     "-DMIR_ENABLE_TESTS=${if finalAttrs.doCheck then "ON" else "OFF"}"
+=======
+    "-DMIR_ENABLE_TESTS=${if doCheck then "ON" else "OFF"}"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     # BadBufferTest.test_truncated_shm_file *doesn't* throw an error as the test expected, mark as such
     # https://github.com/MirServer/mir/pull/1947#issuecomment-811810872
     "-DMIR_SIGBUS_HANDLER_ENVIRONMENT_BROKEN=ON"
@@ -152,7 +200,11 @@ stdenv.mkDerivation (finalAttrs: {
     "-DMIR_BUILD_PLATFORM_TEST_HARNESS=OFF"
   ];
 
+<<<<<<< HEAD
   doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
+=======
+  inherit doCheck;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   preCheck = ''
     # Needs to be exactly /tmp so some failing tests don't get run, don't know why they fail yet
@@ -163,7 +215,10 @@ stdenv.mkDerivation (finalAttrs: {
   outputs = [ "out" "dev" "doc" ];
 
   passthru = {
+<<<<<<< HEAD
     tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     updateScript = gitUpdater {
       rev-prefix = "v";
     };
@@ -180,6 +235,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = with lib; {
     description = "A display server and Wayland compositor developed by Canonical";
     homepage = "https://mir-server.io";
+<<<<<<< HEAD
     changelog = "https://github.com/MirServer/mir/releases/tag/v${finalAttrs.version}";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ onny OPNA2608 ];
@@ -199,3 +255,10 @@ stdenv.mkDerivation (finalAttrs: {
     ];
   };
 })
+=======
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ onny OPNA2608 ];
+    platforms = platforms.linux;
+  };
+}
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)

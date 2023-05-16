@@ -95,6 +95,10 @@ in python3.pkgs.buildPythonApplication rec {
     description = "A CD ripper aiming for accuracy over speed";
     maintainers = with maintainers; [ emily ];
     license = licenses.gpl3Plus;
+<<<<<<< HEAD
     platforms = platforms.unix;
+=======
+    platforms = platforms.linux;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

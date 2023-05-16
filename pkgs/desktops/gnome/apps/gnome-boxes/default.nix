@@ -48,11 +48,19 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-boxes";
+<<<<<<< HEAD
   version = "44.3";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
     sha256 = "ZIpBuODIdfBOOnh+pnA2vJIehYo25jQ6Q9tyQu5z4XE=";
+=======
+  version = "44.1";
+
+  src = fetchurl {
+    url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
+    sha256 = "OJcGDWlvf6LZEudywnYdvlNDOrXxnr+kvE6Jc4X6ulM=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   patches = [

@@ -3,23 +3,36 @@
 , stdenv
 , fetchFromGitHub
 , nix-update-script
+<<<<<<< HEAD
 , libvorbis
 , pkg-config
 , qmake
 , qtbase
 , qttools
 , qtmultimedia
+=======
+, qmake
+, pkg-config
+, qtbase
+, qtmultimedia
+, libvorbis
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , rtmidi
 }:
 
 mkDerivation rec {
   pname = "ptcollab";
+<<<<<<< HEAD
   version = "0.6.4.7";
+=======
+  version = "0.6.4.5";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "yuxshao";
     repo = "ptcollab";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-KYNov/HbKM2d8VVO8iyWA3XWFDE9iWeKkRCNC1xlPNw=";
   };
 
@@ -35,6 +48,14 @@ mkDerivation rec {
     qtmultimedia
     rtmidi
   ];
+=======
+    sha256 = "sha256-O7CNPMS0eRcqt2xAtyEFyLSV8U2xbxuV1DpBxZAFwQs=";
+  };
+
+  nativeBuildInputs = [ qmake pkg-config ];
+
+  buildInputs = [ qtbase qtmultimedia libvorbis rtmidi ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     # Move appbundles to Applications before wrapping happens

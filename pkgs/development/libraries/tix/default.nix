@@ -21,9 +21,12 @@ tcl.mkTclDerivation {
     })
     # Remove duplicated definition of XLowerWindow
     ./duplicated-xlowerwindow.patch
+<<<<<<< HEAD
     # Fix incompatible function pointer conversions and implicit definition of `panic`.
     # `panic` is just `Tcl_Panic`, but it is not defined on Darwin due to a conflict with `mach/mach.h`.
     ./fix-clang16.patch
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ] ++ lib.optional (tcl.release == "8.6")
   (fetchpatch {
     name = "tix-8.4.3-tcl8.6.patch";

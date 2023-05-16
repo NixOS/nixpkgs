@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 { buildPythonPackage, fetchurl, isPyPy, gmp, pythonAtLeast } :
+=======
+{ buildPythonPackage, fetchurl, isPyPy, gmp } :
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 let
   pname = "gmpy";
@@ -8,10 +12,14 @@ in
 buildPythonPackage {
   inherit pname version;
 
+<<<<<<< HEAD
   # Python 3.11 has finally made changes to its C API for which gmpy 1.17,
   # published in 2013, would require patching. It seems unlikely that any
   # patches will be forthcoming.
   disabled = isPyPy || pythonAtLeast "3.11";
+=======
+  disabled = isPyPy;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchurl {
     url = "mirror://pypi/g/gmpy/${pname}-${version}.zip";

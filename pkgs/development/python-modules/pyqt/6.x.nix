@@ -1,6 +1,10 @@
 { lib
 , stdenv
 , buildPythonPackage
+<<<<<<< HEAD
+=======
+, isPy27
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , fetchPypi
 , pkg-config
 , dbus
@@ -14,7 +18,13 @@
 , pythonOlder
 , withMultimedia ? true
 , withWebSockets ? true
+<<<<<<< HEAD
 , withLocation ? true
+=======
+# FIXME: Once QtLocation is available for Qt6 enable this
+# https://bugreports.qt.io/browse/QTBUG-96795
+#, withLocation ? true
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 # Not currently part of PyQt6
 #, withConnectivity ? true
 , withPrintSupport ? true
@@ -23,14 +33,22 @@
 
 buildPythonPackage rec {
   pname = "PyQt6";
+<<<<<<< HEAD
   version = "6.5.2";
+=======
+  version = "6.5.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
+<<<<<<< HEAD
     hash = "sha256-FIfuc1D5/7ZtYKtBdlGSUsKzcXYsvo+DQP2VH2OAEoA=";
+=======
+    hash = "sha256-uXy0vpssiZeQTqZozzsKSuWCIZb3eSWQ0F7N5iFqn7w=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   patches = [
@@ -80,7 +98,11 @@ buildPythonPackage rec {
   # ++ lib.optional withConnectivity qtconnectivity
   ++ lib.optional withMultimedia qtmultimedia
   ++ lib.optional withWebSockets qtwebsockets
+<<<<<<< HEAD
   ++ lib.optional withLocation qtlocation
+=======
+  # ++ lib.optional withLocation qtlocation
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ;
 
   buildInputs = with qt6Packages; [
@@ -94,7 +116,11 @@ buildPythonPackage rec {
   ]
   # ++ lib.optional withConnectivity qtconnectivity
   ++ lib.optional withWebSockets qtwebsockets
+<<<<<<< HEAD
   ++ lib.optional withLocation qtlocation
+=======
+  # ++ lib.optional withLocation qtlocation
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ;
 
   propagatedBuildInputs = [
@@ -129,7 +155,11 @@ buildPythonPackage rec {
   ++ lib.optional withWebSockets "PyQt6.QtWebSockets"
   ++ lib.optional withMultimedia "PyQt6.QtMultimedia"
   # ++ lib.optional withConnectivity "PyQt6.QtConnectivity"
+<<<<<<< HEAD
   ++ lib.optional withLocation "PyQt6.QtPositioning"
+=======
+  # ++ lib.optional withLocation "PyQt6.QtPositioning"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ;
 
   meta = with lib; {

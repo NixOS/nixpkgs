@@ -31,11 +31,18 @@ stdenv.mkDerivation rec {
     intltool
     itstool
     libxml2
+<<<<<<< HEAD
     gobject-introspection
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   buildInputs = [
     gtk3
+<<<<<<< HEAD
+=======
+    gobject-introspection
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     goocanvas2
     gtkspell3
     isocodes

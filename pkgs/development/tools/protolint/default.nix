@@ -10,7 +10,11 @@ buildGoModule rec {
     sha256 = "sha256-oKGA5FZpT3E5G7oREGAojdu4Xn8JPd7IYwfueK9QA34=";
   };
 
+<<<<<<< HEAD
   vendorHash = "sha256-iLQwx3B5n21ZXefWiGBBL9roa9LIFByzB8KXLywhvKs=";
+=======
+  vendorSha256 = "sha256-iLQwx3B5n21ZXefWiGBBL9roa9LIFByzB8KXLywhvKs=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   # Something about the way we run tests causes issues. It doesn't happen
   # when using "go test" directly:

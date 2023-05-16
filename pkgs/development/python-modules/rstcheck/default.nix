@@ -1,5 +1,9 @@
+<<<<<<< HEAD
 { stdenv
 , lib
+=======
+{ lib
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , buildPythonPackage
 , docutils
 , fetchFromGitHub
@@ -8,7 +12,10 @@
 , pydantic
 , pytestCheckHook
 , pythonOlder
+<<<<<<< HEAD
 , pythonRelaxDepsHook
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , rstcheck-core
 , typer
 , types-docutils
@@ -29,6 +36,7 @@ buildPythonPackage rec {
     hash = "sha256-UMByfnnP1va3v1IgyQL0f3kC+W6HoiWScb7U2FAvWkU=";
   };
 
+<<<<<<< HEAD
   pythonRelaxDeps = [
     "typer"
   ];
@@ -36,6 +44,10 @@ buildPythonPackage rec {
   nativeBuildInputs = [
     poetry-core
     pythonRelaxDepsHook
+=======
+  nativeBuildInputs = [
+    poetry-core
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   propagatedBuildInputs = [
@@ -54,12 +66,15 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+<<<<<<< HEAD
   disabledTests = lib.optionals stdenv.isDarwin [
     # Disabled until https://github.com/rstcheck/rstcheck-core/issues/19 is resolved.
     "test_error_without_config_file_macos"
     "test_file_1_is_bad_without_config_macos"
   ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pythonImportsCheck = [
     "rstcheck"
   ];

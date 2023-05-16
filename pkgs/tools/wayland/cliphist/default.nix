@@ -19,6 +19,9 @@ buildGoModule rec {
     license = licenses.gpl3Only;
     platforms = platforms.linux;
     maintainers = with maintainers; [ dit7ya ];
+<<<<<<< HEAD
     mainProgram = "cliphist";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

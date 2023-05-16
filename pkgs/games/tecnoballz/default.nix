@@ -64,6 +64,9 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ fgaz ];
     platforms = platforms.all;
+<<<<<<< HEAD
     broken = stdenv.isDarwin;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

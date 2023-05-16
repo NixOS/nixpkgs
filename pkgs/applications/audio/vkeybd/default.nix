@@ -19,6 +19,13 @@ stdenv.mkDerivation  rec {
 
   makeFlags = [ "TKLIB=-l${tk.libPrefix}" "TCLLIB=-l${tcl.libPrefix}" ];
 
+<<<<<<< HEAD
+=======
+  postInstall = ''
+    wrapProgram $out/bin/vkeybd --set TK_LIBRARY "${tk}/lib/${tk.libPrefix}"
+  '';
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   meta = with lib; {
     description = "Virtual MIDI keyboard";
     homepage = "https://www.alsa-project.org/~tiwai/alsa.html";

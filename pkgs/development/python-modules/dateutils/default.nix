@@ -20,6 +20,10 @@ buildPythonPackage rec {
     description = "Utilities for working with datetime objects.";
     homepage = "https://github.com/jmcantrell/python-dateutils";
     license = licenses.bsd0;
+<<<<<<< HEAD
     maintainers = with maintainers; [ ];
+=======
+    maintainers = with maintainers; [ SuperSandro2000 ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

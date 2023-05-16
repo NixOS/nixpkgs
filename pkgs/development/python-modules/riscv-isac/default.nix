@@ -15,7 +15,11 @@
 
 buildPythonPackage rec {
   pname = "riscv-isac";
+<<<<<<< HEAD
   version = "0.18.0";
+=======
+  version = "0.17.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -24,7 +28,11 @@ buildPythonPackage rec {
     owner = "riscv-software-src";
     repo = pname;
     rev = "refs/tags/${version}";
+<<<<<<< HEAD
     hash = "sha256-7CWUyYwzynFq/Qk5SzQB+ljsVVI98kPPDT63Emhqihw=";
+=======
+    hash = "sha256-I0RsvSCrSlNGVj8z+WUQx6vbdNkKCRyMFvNx+0mTBAE=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   postPatch = ''

@@ -5,9 +5,15 @@
 , aubio
 , boost
 , cmake
+<<<<<<< HEAD
 , ffmpeg
 , fmt
 , gettext
+=======
+, ffmpeg_4
+, gettext
+, git
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , glew
 , glibmm
 , glm
@@ -15,7 +21,10 @@
 , libepoxy
 , librsvg
 , libxmlxx
+<<<<<<< HEAD
 , nlohmann_json
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , pango
 , pkg-config
 , portaudio
@@ -23,6 +32,7 @@
 
 stdenv.mkDerivation rec {
   pname = "performous";
+<<<<<<< HEAD
   version = "1.3.0";
 
   src = fetchFromGitHub {
@@ -34,6 +44,19 @@ stdenv.mkDerivation rec {
 
   cedSrc = fetchFromGitHub {
     owner = "performous";
+=======
+  version = "1.2.0";
+
+  src = fetchFromGitHub {
+    owner = pname;
+    repo = pname;
+    rev = "refs/tags/${version}";
+    hash = "sha256-ueTSirov/lj4/IzaMqHitbOqx8qqUpsTghcb9DUnNEg=";
+  };
+
+  cedSrc = fetchFromGitHub {
+    owner = pname;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     repo = "compact_enc_det";
     rev = "9ca1351fe0b1e85992a407b0fc54a63e9b3adc6e";
     hash = "sha256-ztfeblR4YnB5+lb+rwOQJjogl+C9vtPH9IVnYO7oxec=";
@@ -47,9 +70,12 @@ stdenv.mkDerivation rec {
   postPatch = ''
     mkdir ced-src
     cp -R ${cedSrc}/* ced-src
+<<<<<<< HEAD
 
     substituteInPlace data/CMakeLists.txt \
       --replace "/usr" "$out"
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '';
 
   nativeBuildInputs = [
@@ -62,8 +88,12 @@ stdenv.mkDerivation rec {
     SDL2
     aubio
     boost
+<<<<<<< HEAD
     ffmpeg
     fmt
+=======
+    ffmpeg_4
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     glew
     glibmm
     glm
@@ -71,7 +101,10 @@ stdenv.mkDerivation rec {
     libepoxy
     librsvg
     libxmlxx
+<<<<<<< HEAD
     nlohmann_json
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     pango
     portaudio
   ];

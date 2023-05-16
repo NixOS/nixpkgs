@@ -18,6 +18,7 @@ in
 
 rustPlatform.buildRustPackage rec {
   pname = "patsh";
+<<<<<<< HEAD
   version = "0.2.1";
 
   src = fetchFromGitHub {
@@ -28,6 +29,23 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoHash = "sha256-hAWMm3YjwTB8ajn3QeXEOJYmPzbbitdwyO4k/IyhlOI=";
+=======
+  version = "0.2.0";
+
+  src = fetchFromGitHub {
+    owner = "nix-community";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "sha256-7HXJspebluQeejKYmVA7sy/F3dtU1gc4eAbKiPexMMA=";
+  };
+
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "tree-sitter-bash-0.19.0" = "sha256-gTsA874qpCI/N5tmBI5eT8KDaM25gXM4VbcCbUU2EeI=";
+    };
+  };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nativeCheckInputs = [ custom ];
 

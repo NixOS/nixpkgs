@@ -2,20 +2,33 @@
 , stdenv
 , fetchFromGitHub
 , rustPlatform
+<<<<<<< HEAD
 , nix-update-script
 , polaris-web
 , darwin
+=======
+, polaris-web
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "polaris";
+<<<<<<< HEAD
   version = "0.14.0";
+=======
+  version = "0.13.5";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "agersant";
     repo = "polaris";
+<<<<<<< HEAD
     rev = version;
     hash = "sha256-mLugPi3Xp46Lh48JQVeyOEGiovSF26gUt25MGBPFfkM=";
+=======
+    rev = "${version}";
+    sha256 = "sp1KDTzKvcGtuqL37fFnVgcnkIsmj5ZQji72BeyiFQE=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     # The polaris version upstream in Cargo.lock is "0.0.0".
     # We're unable to simply patch it in the patch phase due to
@@ -29,6 +42,7 @@ rustPlatform.buildRustPackage rec {
     '';
   };
 
+<<<<<<< HEAD
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
@@ -45,6 +59,13 @@ rustPlatform.buildRustPackage rec {
     POLARIS_WEB_DIR = "${polaris-web}/share/polaris-web";
     POLARIS_SWAGGER_DIR = "${placeholder "out"}/share/polaris-swagger";
   };
+=======
+  cargoSha256 = "sha256-0VHrlUoyYu+UTUQUioftBDlQJfLd/axz6bGJs+YXSmE=";
+
+  # Compile-time environment variables for where to find assets needed at runtime
+  POLARIS_WEB_DIR = "${polaris-web}/share/polaris-web";
+  POLARIS_SWAGGER_DIR = "${placeholder "out"}/share/polaris-swagger";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   postInstall = ''
     mkdir -p $out/share
@@ -56,11 +77,15 @@ rustPlatform.buildRustPackage rec {
     ulimit -n 4096
   '';
 
+<<<<<<< HEAD
   __darwinAllowLocalNetworking = true;
 
   passthru.updateScript = nix-update-script {
     attrPath = pname;
   };
+=======
+  passthru.updateScript = ./update.sh;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   meta = with lib; {
     description = "Self-host your music collection, and access it from any computer and mobile device";

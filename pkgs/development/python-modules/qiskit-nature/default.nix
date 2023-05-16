@@ -7,7 +7,11 @@
 , numpy
 , psutil
 , qiskit-terra
+<<<<<<< HEAD
 , rustworkx
+=======
+, retworkx
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , scikit-learn
 , scipy
 , withPyscf ? false
@@ -37,7 +41,11 @@ buildPythonPackage rec {
     numpy
     psutil
     qiskit-terra
+<<<<<<< HEAD
     rustworkx
+=======
+    retworkx
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     scikit-learn
     scipy
   ] ++ lib.optional withPyscf pyscf;

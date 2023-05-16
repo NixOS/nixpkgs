@@ -5,14 +5,22 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "sigma-cli";
+<<<<<<< HEAD
   version = "0.7.7";
+=======
+  version = "0.7.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "SigmaHQ";
     repo = pname;
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-Qqe9nJZfCb7xh93ERrV3XpqdtfeRECt7RDca9eQU3eQ=";
+=======
+    hash = "sha256-yzo/BotNzTBjdkaXI1lHntpI5AyW5AbpFu3XtkWpHU4=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   postPatch = ''

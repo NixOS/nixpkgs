@@ -14,12 +14,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "wasmer";
+<<<<<<< HEAD
   version = "4.0.0";
+=======
+  version = "3.1.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "wasmerio";
     repo = pname;
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-vpIvoKvIqXgJ6MtuqM3dryR8nxLB/diLyQYcuGkZDLU=";
   };
 
@@ -28,6 +33,14 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [
     rustPlatform.bindgenHook
   ];
+=======
+    hash = "sha256-797I3FBBfnAgNfOdMajm3WNkMo3MUXb1347LBggXrLk=";
+  };
+
+  cargoHash = "sha256-zUTwhfRLKUixgj3JXiz2QOuwbFhfget+GcFSRL1QJ3w=";
+
+  nativeBuildInputs = [ rustPlatform.bindgenHook ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   buildInputs = lib.optionals withLLVM [
     llvmPackages.llvm
@@ -39,8 +52,19 @@ rustPlatform.buildRustPackage rec {
     Security
   ];
 
+<<<<<<< HEAD
   # check references to `compiler_features` in Makefile on update
   buildFeatures = [
+=======
+  LLVM_SYS_120_PREFIX = lib.optionalString withLLVM llvmPackages.llvm.dev;
+
+  # check references to `compiler_features` in Makefile on update
+  buildFeatures = checkFeatures ++ [
+    "webc_runner"
+  ];
+
+  checkFeatures = [
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "cranelift"
     "wasmer-artifact-create"
     "static-artifact-create"
@@ -52,8 +76,11 @@ rustPlatform.buildRustPackage rec {
 
   cargoBuildFlags = [ "--manifest-path" "lib/cli/Cargo.toml" "--bin" "wasmer" ];
 
+<<<<<<< HEAD
   env.LLVM_SYS_140_PREFIX = lib.optionalString withLLVM llvmPackages.llvm.dev;
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   meta = with lib; {
     description = "The Universal WebAssembly Runtime";
     longDescription = ''

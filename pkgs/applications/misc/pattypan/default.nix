@@ -1,6 +1,11 @@
 { lib
 , stdenv
 , fetchFromGitHub
+<<<<<<< HEAD
+=======
+, unzip
+, jre
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , jdk
 , ant
 , makeWrapper
@@ -22,7 +27,11 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ copyDesktopItems jdk ant makeWrapper wrapGAppsHook ];
+<<<<<<< HEAD
   buildInputs = [ glib jdk ];
+=======
+  buildInputs = [ glib jre ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   buildPhase = ''
     runHook preBuild
@@ -35,7 +44,11 @@ stdenv.mkDerivation rec {
     runHook preInstall
     mkdir -p $out/bin $out/share/java
     cp pattypan.jar $out/share/java/pattypan.jar
+<<<<<<< HEAD
     makeWrapper ${jdk}/bin/java $out/bin/pattypan \
+=======
+    makeWrapper ${jre}/bin/java $out/bin/pattypan \
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       --add-flags "-cp $out/share/java/pattypan.jar pattypan.Launcher"
     runHook postInstall
   '';

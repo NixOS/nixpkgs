@@ -16,11 +16,16 @@ python3Packages.buildPythonPackage rec {
     sha256 = "0bij6cy96nhq7xzslx0fnhmiac629h0x4wgy67k4i4npwqw10680";
   };
 
+<<<<<<< HEAD
   nativeBuildInputs = [
     gobject-introspection
   ];
 
   buildInputs = [
+=======
+  buildInputs = [
+    gobject-introspection
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     gnome-online-accounts
   ];
 

@@ -1,5 +1,9 @@
 { stdenv, lib, fetchurl, gtk2, lv2, pkg-config, python3, serd, sord, sratom
+<<<<<<< HEAD
 , waf
+=======
+, wafHook
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , withQt5 ? true, qt5 ? null
 }:
 
@@ -12,7 +16,11 @@ stdenv.mkDerivation rec {
     sha256 = "0z4v01pjw4wh65x38w6icn28wdwxz13ayl8hvn4p1g9kmamp1z06";
   };
 
+<<<<<<< HEAD
   nativeBuildInputs = [ pkg-config waf.hook python3 ];
+=======
+  nativeBuildInputs = [ pkg-config wafHook python3 ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   buildInputs = [ gtk2 lv2 serd sord sratom ]
     ++ lib.optionals withQt5 (with qt5; [ qtbase qttools ]);
 

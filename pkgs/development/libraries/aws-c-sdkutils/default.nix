@@ -7,13 +7,21 @@
 
 stdenv.mkDerivation rec {
   pname = "aws-c-sdkutils";
+<<<<<<< HEAD
   version = "0.1.11";
+=======
+  version = "0.1.9";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "awslabs";
     repo = "aws-c-sdkutils";
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-xwPMuaaKzypxJK9mTKD4tJZjzl19pu60seGtS2QFjgI=";
+=======
+    sha256 = "sha256-iKHO8awWWB8tvYCr+/R6hhK8a/PnanYYEAJ7zNOJC3w=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

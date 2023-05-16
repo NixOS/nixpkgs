@@ -1,5 +1,8 @@
 { buildDunePackage
+<<<<<<< HEAD
 , ocaml
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , lib
 , ppxlib
 , fetchFromGitHub
@@ -11,6 +14,10 @@
 buildDunePackage rec {
   pname = "gen_js_api";
   version = "1.1.1";
+<<<<<<< HEAD
+=======
+  duneVersion = "3";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "LexiFi";
@@ -23,7 +30,11 @@ buildDunePackage rec {
 
   propagatedBuildInputs = [ ojs ppxlib ];
   nativeCheckInputs = [ js_of_ocaml-compiler nodejs ];
+<<<<<<< HEAD
   doCheck = lib.versionAtLeast ocaml.version "4.13";
+=======
+  doCheck = true;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   meta = {
     homepage = "https://github.com/LexiFi/gen_js_api";

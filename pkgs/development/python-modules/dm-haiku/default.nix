@@ -1,6 +1,9 @@
 { buildPythonPackage
 , fetchFromGitHub
+<<<<<<< HEAD
 , fetchpatch
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , callPackage
 , lib
 , jmp
@@ -10,12 +13,17 @@
 
 buildPythonPackage rec {
   pname = "dm-haiku";
+<<<<<<< HEAD
   version = "0.0.10";
+=======
+  version = "0.0.9";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "deepmind";
     repo = pname;
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-EZx3o6PgTeFjTwI9Ko9H39EqPSE0yLWWpsdqX6ALlo4=";
   };
 
@@ -34,6 +42,11 @@ buildPythonPackage rec {
     })
   ];
 
+=======
+    hash = "sha256-d5THbfMRrbBL/2sQ99l2yeaTI9gT+bSkcxmVdRJT5bA=";
+  };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   outputs = [
     "out"
     "testsout"

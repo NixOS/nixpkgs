@@ -3,7 +3,11 @@
 let
   python = python3.override {
     packageOverrides = self: super: {
+<<<<<<< HEAD
       pyparsing = super.pyparsing.overridePythonAttrs rec {
+=======
+      pyparsing = super.pyparsing.overridePythonAttrs (oldAttrs: rec {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         version = "2.4.7";
         src = fetchFromGitHub {
           owner = "pyparsing";
@@ -14,14 +18,21 @@ let
         nativeBuildInputs = [
           super.setuptools
         ];
+<<<<<<< HEAD
       };
+=======
+      });
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
   };
 in
 python.pkgs.buildPythonApplication rec {
   pname = "gixy";
   version = "0.1.20";
+<<<<<<< HEAD
   format = "setuptools";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   # package is only compatible with python 2.7 and 3.5+
   disabled = with python.pkgs; !(pythonAtLeast "3.5" || isPy27);
@@ -43,7 +54,11 @@ python.pkgs.buildPythonApplication rec {
     configargparse
     pyparsing
     jinja2
+<<<<<<< HEAD
     nose3
+=======
+    nose
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     setuptools
     six
   ];

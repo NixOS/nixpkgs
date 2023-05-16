@@ -44,12 +44,19 @@ python3.pkgs.buildPythonApplication rec {
     ninja
     pkg-config
     wrapGAppsHook
+<<<<<<< HEAD
     gobject-introspection
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   buildInputs = [
     libnotify
     librsvg
+<<<<<<< HEAD
+=======
+    gobject-introspection
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     gtk3
     gst_all_1.gst-plugins-base
     gst_all_1.gst-plugins-good

@@ -81,7 +81,11 @@ let
         pname = "antlr-runtime-cpp";
         inherit version;
         src = source;
+<<<<<<< HEAD
         sourceRoot = "${source.name}/runtime/Cpp";
+=======
+        sourceRoot = "source/runtime/Cpp";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
         outputs = [ "out" "dev" "doc" ];
 
@@ -103,6 +107,7 @@ let
   };
 
 in {
+<<<<<<< HEAD
   antlr4_13 = (mkAntlr {
     version = "4.13.0";
     sourceSha256 = "sha256-s1yAdScMYg1wFpYNsBAtpifIhQsnSAgJg7JjPDx+htc=";
@@ -117,6 +122,8 @@ in {
     ];
   }).antlr;
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   antlr4_12 = (mkAntlr {
     version = "4.12.0";
     sourceSha256 = "sha256-0JMG8UYFT+IAWvARY2KnuXSr5X6LlVZN4LJHy5d4x08=";

@@ -21,13 +21,21 @@
 
 stdenv.mkDerivation rec {
   pname = "opendht";
+<<<<<<< HEAD
   version = "2.5.5";
+=======
+  version = "2.4.12";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "savoirfairelinux";
     repo = "opendht";
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-OXLVuyPFlo7VD8f9wAN71p4PZpfM2ISq9UoUiAYEXUQ=";
+=======
+    sha256 = "sha256-PC3Oaa1i2emkTB6ooBxvjuKVikzWjfmj89t1HP8tUXo=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

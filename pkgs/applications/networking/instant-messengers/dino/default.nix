@@ -24,13 +24,21 @@
 
 stdenv.mkDerivation rec {
   pname = "dino";
+<<<<<<< HEAD
   version = "0.4.3";
+=======
+  version = "0.4.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "dino";
     repo = "dino";
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-smy/t6wTCnG0kuRFKwyeLENKqOQDhL0fZTtj3BHo6kw=";
+=======
+    sha256 = "sha256-85Sh3UwoMaa+bpL81gIKtkpCeRl1mXbs8Odux1FURdQ=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   postPatch = ''
@@ -46,11 +54,18 @@ stdenv.mkDerivation rec {
     pkg-config
     wrapGAppsHook
     gettext
+<<<<<<< HEAD
     gobject-introspection
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   buildInputs = [
     qrencode
+<<<<<<< HEAD
+=======
+    gobject-introspection
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     glib
     glib-networking # required for TLS support
     libadwaita

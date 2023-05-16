@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 { lib, fetchFromGitHub, buildGoModule, fetchpatch }:
+=======
+{ lib, fetchFromGitHub, buildGoModule }:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 buildGoModule rec {
   pname = "shadowfox";
@@ -11,6 +15,7 @@ buildGoModule rec {
     sha256 = "125mw70jidbp436arhv77201jdp6mpgqa2dzmrpmk55f9bf29sg6";
   };
 
+<<<<<<< HEAD
   patches = [
     # get vendoring to work with go1.20
     # https://github.com/arguablykomodo/shadowfox-updater/pull/70
@@ -21,6 +26,9 @@ buildGoModule rec {
   ];
 
   vendorHash = "sha256-3pHwyktSGxNM7mt0nPOe6uixS+bBJH9R8xqCyY6tlb0=";
+=======
+  vendorSha256 = null; #vendorSha256 = "";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   doCheck = false;
 
@@ -36,5 +44,9 @@ buildGoModule rec {
     license = licenses.mit;
     maintainers = with maintainers; [ infinisil ];
     mainProgram = "shadowfox-updater";
+<<<<<<< HEAD
+=======
+    broken = true; # vendor isn't reproducible with go > 1.17: nix-build -A $name.go-modules --check
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

@@ -15,18 +15,29 @@
 , wine
 , glxinfo
 , xrandr
+<<<<<<< HEAD
 , bash
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 python3Packages.buildPythonApplication rec  {
   pname = "grapejuice";
+<<<<<<< HEAD
   version = "7.20.11";
+=======
+  version = "7.8.3";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitLab {
     owner = "BrinkerVII";
     repo = "grapejuice";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-sDw67Xseeak1v5x0daznfdeNQahDTj21AVvXmuZlsgg=";
+=======
+    sha256 = "sha256-jNh3L6JDuJryFpHQaP8UesBmepmJopoHxb/XUfOwZz4=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [
@@ -34,14 +45,20 @@ python3Packages.buildPythonApplication rec  {
     desktop-file-utils
     glib
     wrapGAppsHook
+<<<<<<< HEAD
     python3Packages.pip
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   buildInputs = [
     cairo
     gettext
     gtk3
+<<<<<<< HEAD
     bash
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   propagatedBuildInputs = with python3Packages; [
@@ -60,6 +77,10 @@ python3Packages.buildPythonApplication rec  {
   dontWrapGApps = true;
 
   makeWrapperArgs = [
+<<<<<<< HEAD
+=======
+    "\${gappsWrapperArgs[@]}"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "--prefix PATH : ${lib.makeBinPath [ xdg-user-dirs wine winetricks pciutils glxinfo xrandr ]}"
     # make xdg-open overrideable at runtime
     "--suffix PATH : ${lib.makeBinPath [ xdg-utils ]}"
@@ -79,7 +100,11 @@ python3Packages.buildPythonApplication rec  {
       --replace \$GRAPEJUICE_EXECUTABLE "$out/bin/grapejuice" \
       --replace \$PLAYER_ICON "grapejuice-roblox-player"
 
+<<<<<<< HEAD
     substituteInPlace src/grapejuice_common/assets/desktop/roblox-studio.desktop src/grapejuice_common/assets/desktop/roblox-studio-auth.desktop \
+=======
+    substituteInPlace src/grapejuice_common/assets/desktop/roblox-studio.desktop \
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       --replace \$GRAPEJUICE_EXECUTABLE "$out/bin/grapejuice" \
       --replace \$STUDIO_ICON "grapejuice-roblox-studio"
 
@@ -88,6 +113,7 @@ python3Packages.buildPythonApplication rec  {
 
     substituteInPlace src/grapejuice_common/models/settings_model.py \
       --replace 'default_wine_home: Optional[str] = ""' 'default_wine_home: Optional[str] = "${wine}"'
+<<<<<<< HEAD
 
     substituteInPlace src/grapejuice_packaging/builders/linux_package_builder.py \
       --replace '"--no-dependencies",' '"--no-dependencies", "--no-build-isolation",'
@@ -120,6 +146,31 @@ python3Packages.buildPythonApplication rec  {
       --prefix PYTHONPATH : "$PYTHONPATH:$(toPythonPath $out)" \
       ''${makeWrapperArgs[@]} \
       ''${gappsWrapperArgs[@]}
+=======
+  '';
+
+  postInstall = ''
+    mkdir -p "$out/share/icons" "$out/share/applications" "$out/share/mime/packages"
+    cp -r src/grapejuice_common/assets/desktop/* $out/share/applications/
+    cp -r src/grapejuice_common/assets/icons $out/share/
+    cp src/grapejuice_common/assets/mime_xml/*.xml $out/share/mime/packages/
+
+    # compile locales (*.po -> *.mo)
+    # from https://gitlab.com/brinkervii/grapejuice/-/blob/master/src/grapejuice_common/util/mo_util.py
+    LOCALE_DIR="$out/share/locale"
+    PO_DIR="src/grapejuice_common/assets/po"
+    LINGUAS_FILE="src/grapejuice_common/assets/po/LINGUAS"
+
+    for lang in $(<"$LINGUAS_FILE") # extract langs from LINGUAS_FILE
+    do
+      po_file="$PO_DIR/$lang.po"
+      mo_file_dir="$LOCALE_DIR/$lang/LC_MESSAGES"
+
+      mkdir -p $mo_file_dir
+
+      mo_file="$mo_file_dir/grapejuice.mo"
+      msgfmt $po_file -o $mo_file # msgfmt from gettext
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     done
   '';
 

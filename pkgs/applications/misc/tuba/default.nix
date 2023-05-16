@@ -13,26 +13,40 @@
 , json-glib
 , glib
 , glib-networking
+<<<<<<< HEAD
 , gobject-introspection
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , gtksourceview5
 , libxml2
 , libgee
 , libsoup_3
 , libsecret
+<<<<<<< HEAD
 , libwebp
 , libspelling
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , gst_all_1
 , nix-update-script
 }:
 
 stdenv.mkDerivation rec {
   pname = "tuba";
+<<<<<<< HEAD
   version = "0.4.1";
+=======
+  version = "0.2.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   src = fetchFromGitHub {
     owner = "GeopJr";
     repo = "Tuba";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-1XbgsdIcnlXJtNEzDgEfHVJHF9naz3HplCPc2cKFUWw=";
+=======
+    hash = "sha256-LPhGGIHvN/hc71PL50TBw1Q0ysubdtJaEiUEI29HRrE=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [
@@ -43,7 +57,10 @@ stdenv.mkDerivation rec {
     python3
     wrapGAppsHook4
     desktop-file-utils
+<<<<<<< HEAD
     gobject-introspection
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   buildInputs = [
@@ -57,8 +74,11 @@ stdenv.mkDerivation rec {
     gtk4
     libadwaita
     libsecret
+<<<<<<< HEAD
     libwebp
     libspelling
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ] ++ (with gst_all_1; [
     gstreamer
     gst-libav
@@ -68,7 +88,13 @@ stdenv.mkDerivation rec {
   ]);
 
   passthru = {
+<<<<<<< HEAD
     updateScript = nix-update-script { };
+=======
+    updateScript = nix-update-script {
+      attrPath = "tuba";
+    };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   meta = with lib; {
@@ -77,6 +103,10 @@ stdenv.mkDerivation rec {
     mainProgram = "dev.geopjr.Tuba";
     license = licenses.gpl3Only;
     changelog = "https://github.com/GeopJr/Tuba/releases/tag/v${version}";
+<<<<<<< HEAD
     maintainers = with maintainers; [ chuangzhu aleksana ];
+=======
+    maintainers = with maintainers; [ chuangzhu ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

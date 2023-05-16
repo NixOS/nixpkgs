@@ -11,7 +11,11 @@
 , ipuVersion ? "ipu6"
 }:
 
+<<<<<<< HEAD
 stdenv.mkDerivation (finalAttrs: {
+=======
+stdenv.mkDerivation {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pname = "${ipuVersion}-camera-bin";
   version = "unstable-2023-02-08";
 
@@ -22,7 +26,11 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-QnedM2UBbGyd2wIF762Mi+VkDZYtC6MifK4XGGxlUzw=";
   };
 
+<<<<<<< HEAD
   sourceRoot = "${finalAttrs.src.name}/${ipuVersion}";
+=======
+  sourceRoot = "source/${ipuVersion}";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nativeBuildInputs = [
     autoPatchelfHook
@@ -76,4 +84,8 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     platforms = [ "x86_64-linux" ];
   };
+<<<<<<< HEAD
 })
+=======
+}
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)

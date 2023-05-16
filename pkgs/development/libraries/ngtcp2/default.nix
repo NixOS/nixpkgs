@@ -8,13 +8,21 @@
 
 stdenv.mkDerivation rec {
   pname = "ngtcp2";
+<<<<<<< HEAD
   version = "0.17.0";
+=======
+  version = "0.14.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "ngtcp2";
     repo = pname;
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-vY3RooC8ttezru6vAqbG1MU5uZhD8fLnlEYVYS3pFRk=";
+=======
+    hash = "sha256-VsacRYvjTWVx2ga952s1vs02GElXIW6umgcYr3UCcgE=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   outputs = [ "out" "dev" "doc" ];
@@ -27,6 +35,7 @@ stdenv.mkDerivation rec {
     "-DENABLE_STATIC_LIB=OFF"
   ];
 
+<<<<<<< HEAD
   preConfigure = ''
     # https://github.com/ngtcp2/ngtcp2/issues/858
     # Fix ngtcp2_crypto_openssl remnants.
@@ -34,6 +43,8 @@ stdenv.mkDerivation rec {
       --replace 'ngtcp2/ngtcp2_crypto_openssl.h' 'ngtcp2/ngtcp2_crypto_quictls.h'
   '';
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   doCheck = true;
   enableParallelBuilding = true;
 

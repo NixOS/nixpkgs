@@ -6,13 +6,17 @@
 , pytest-cov
 , pytest-httpserver
 , pytestCheckHook
+<<<<<<< HEAD
 , pythonOlder
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , setuptools-scm
 , voluptuous
 }:
 
 buildPythonPackage rec {
   pname = "solax";
+<<<<<<< HEAD
   version = "0.3.2";
   format = "setuptools";
 
@@ -31,6 +35,18 @@ buildPythonPackage rec {
     aiohttp
     voluptuous
   ];
+=======
+  version = "0.3.0";
+
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-lqzFY2Rfmc/9KUuFfq07DZkIIS2cJ1JqZ/8gP3+pu5U=";
+  };
+
+  nativeBuildInputs = [ setuptools-scm ];
+
+  propagatedBuildInputs = [ aiohttp voluptuous ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nativeCheckInputs = [
     pytest-asyncio
@@ -39,9 +55,13 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+<<<<<<< HEAD
   pythonImportsCheck = [
     "solax"
   ];
+=======
+  pythonImportsCheck = [ "solax" ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   meta = with lib; {
     description = "Python wrapper for the Solax Inverter API";

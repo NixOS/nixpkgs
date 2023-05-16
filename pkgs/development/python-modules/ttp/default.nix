@@ -18,14 +18,22 @@
 
 buildPythonPackage rec {
   pname = "ttp";
+<<<<<<< HEAD
   version = "0.9.5";
+=======
+  version = "0.9.4";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "dmulyalin";
     repo = pname;
     rev = "refs/tags/${version}";
+<<<<<<< HEAD
     hash = "sha256-IWqPFspERBVkjsTYTAkOTOrugq4fD65Q140G3SCEV0w=";
+=======
+    hash = "sha256-iZJ38NQnofW9awisY5cFBIN1rjXinA6CpJYSCCnNaOY=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

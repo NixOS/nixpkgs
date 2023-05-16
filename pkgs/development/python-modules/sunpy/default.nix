@@ -21,7 +21,11 @@
 , pytest-mock
 , python-dateutil
 , pythonOlder
+<<<<<<< HEAD
 , scikit-image
+=======
+, scikitimage
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , scipy
 , setuptools-scm
 , sqlalchemy
@@ -62,7 +66,11 @@ buildPythonPackage rec {
       sqlalchemy
     ];
     image = [
+<<<<<<< HEAD
       scikit-image
+=======
+      scikitimage
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       scipy
     ];
     net = [
@@ -158,7 +166,11 @@ buildPythonPackage rec {
     description = "Python for Solar Physics";
     homepage = "https://sunpy.org";
     license = licenses.bsd2;
+<<<<<<< HEAD
     maintainers = with maintainers; [ ];
+=======
+    maintainers = with maintainers; [ costrouc ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     broken = true;
   };
 }

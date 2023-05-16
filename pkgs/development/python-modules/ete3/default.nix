@@ -7,6 +7,10 @@
 , withTreeVisualization ? false
 , lxml
 , withXmlSupport ? false
+<<<<<<< HEAD
+=======
+, pyqt4
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , pyqt5
 }:
 
@@ -24,7 +28,11 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "ete3" ];
 
   propagatedBuildInputs = [ six numpy ]
+<<<<<<< HEAD
     ++ lib.optional withTreeVisualization pyqt5
+=======
+    ++ lib.optional withTreeVisualization (if isPy3k then pyqt5 else pyqt4)
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     ++ lib.optional withXmlSupport lxml;
 
   meta = with lib; {

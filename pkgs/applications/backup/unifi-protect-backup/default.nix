@@ -5,7 +5,11 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "unifi-protect-backup";
+<<<<<<< HEAD
   version = "0.9.4";
+=======
+  version = "0.9.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   format = "pyproject";
 
@@ -13,7 +17,11 @@ python3.pkgs.buildPythonApplication rec {
     owner = "ep1cman";
     repo = pname;
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-MFg518iodxdHbr7k5kpkTWI59Kk7pPwyIVswVcjasl8=";
+=======
+    hash = "sha256-L7uM5v2CYGFHYxzBUKlMF+ChtjBM24GZ8NuyoQaOU6U=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   pythonRelaxDeps = [
@@ -33,7 +41,10 @@ python3.pkgs.buildPythonApplication rec {
     aiorun
     aiosqlite
     apprise
+<<<<<<< HEAD
     async-lru
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     click
     expiring-dict
     python-dateutil

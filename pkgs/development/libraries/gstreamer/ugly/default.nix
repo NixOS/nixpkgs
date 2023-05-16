@@ -26,13 +26,21 @@
 
 stdenv.mkDerivation rec {
   pname = "gst-plugins-ugly";
+<<<<<<< HEAD
   version = "1.22.5";
+=======
+  version = "1.22.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "https://gstreamer.freedesktop.org/src/${pname}/${pname}-${version}.tar.xz";
+<<<<<<< HEAD
     hash = "sha256-JoBHOyGBWPGEZ8rD4cUCkbf/TgcQ3TUKWeqsvCnAmlQ=";
+=======
+    hash = "sha256-jzD0TbC9BjcJv2++VROOOpivCry2HDYPNVgrvhDoBpE=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [
@@ -93,6 +101,10 @@ stdenv.mkDerivation rec {
     '';
     license = if enableGplPlugins then licenses.gpl2Plus else licenses.lgpl2Plus;
     platforms = platforms.unix;
+<<<<<<< HEAD
     maintainers = with maintainers; [ matthewbauer lilyinstarlight ];
+=======
+    maintainers = with maintainers; [ matthewbauer ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

@@ -1,7 +1,10 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+<<<<<<< HEAD
 , fetchpatch
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , runtimeShell
 
 # build
@@ -28,6 +31,7 @@ buildPythonPackage rec {
     hash = "sha256-8pXOnLNjhIv0d+BqjW8wlb6BT6CmFHSsxn5wLOv3LBQ=";
   };
 
+<<<<<<< HEAD
   patches = [
     # https://github.com/jedie/python-creole/pull/77
     (fetchpatch {
@@ -37,11 +41,19 @@ buildPythonPackage rec {
     })
   ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nativeBuildInputs = [
     poetry-core
   ];
 
   postPatch = ''
+<<<<<<< HEAD
+=======
+    substituteInPlace pyproject.toml \
+      --replace "poetry.masonry.api" "poetry.core.masonry.api"
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     substituteInPlace Makefile \
       --replace "/bin/bash" "${runtimeShell}"
 

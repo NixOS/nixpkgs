@@ -115,7 +115,11 @@
     name = "test-reproducible-builds";
     buildCommand = ''
       # can't be tested more precisely because the value of random-seed changes depending on the output
+<<<<<<< HEAD
       [[ $NIX_CFLAGS_COMPILE =~ "-frandom-seed=" ]]
+=======
+      [[ $env.NIX_CFLAGS_COMPILE =~ "-frandom-seed=" ]]
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       touch $out
     '';
   };

@@ -15,7 +15,11 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake pkg-config copyDesktopItems ];
   buildInputs = [ bluez dbus glew glfw imgui ];
 
+<<<<<<< HEAD
   sourceRoot = "${src.name}/Client";
+=======
+  sourceRoot = "./source/Client";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   cmakeFlags = [ "-Wno-dev" ];
 

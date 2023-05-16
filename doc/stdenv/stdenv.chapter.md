@@ -257,7 +257,11 @@ propagated-dep(mapOffset(h0, t0, h1),
 ```
 let mapOffset(h, t, i) = i + (if i <= 0 then h else t - 1)
 
+<<<<<<< HEAD
 dep(h0, t0, A, B)
+=======
+dep(h0, _, A, B)
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 propagated-dep(h1, t1, B, C)
 h0 + h1 in {-1, 0, 1}
 h0 + t1 in {-1, 0, -1}
@@ -286,7 +290,11 @@ This is where “sum-like” comes in from above: We can just sum all of the hos
 
 Because of the bounds checks, the uncommon cases are `h = t` and `h + 2 = t`. In the former case, the motivation for `mapOffset` is that since its host and target platforms are the same, no transitive dependency of it should be able to “discover” an offset greater than its reduced target offsets. `mapOffset` effectively “squashes” all its transitive dependencies’ offsets so that none will ever be greater than the target offset of the original `h = t` package. In the other case, `h + 1` is skipped over between the host and target offsets. Instead of squashing the offsets, we need to “rip” them apart so no transitive dependencies’ offset is that one.
 
+<<<<<<< HEAD
 Overall, the unifying theme here is that propagation shouldn’t be introducing transitive dependencies involving platforms the depending package is unaware of. \[One can imagine the depending package asking for dependencies with the platforms it knows about; other platforms it doesn’t know how to ask for. The platform description in that scenario is a kind of unforgeable capability.\] The offset bounds checking and definition of `mapOffset` together ensure that this is the case. Discovering a new offset is discovering a new platform, and since those platforms weren’t in the derivation “spec” of the needing package, they cannot be relevant. From a capability perspective, we can imagine that the host and target platforms of a package are the capabilities a package requires, and the depending package must provide the capability to the dependency.
+=======
+Overall, the unifying theme here is that propagation shouldn’t be introducing transitive dependencies involving platforms the depending package is unaware of. \[One can imagine the dependending package asking for dependencies with the platforms it knows about; other platforms it doesn’t know how to ask for. The platform description in that scenario is a kind of unforagable capability.\] The offset bounds checking and definition of `mapOffset` together ensure that this is the case. Discovering a new offset is discovering a new platform, and since those platforms weren’t in the derivation “spec” of the needing package, they cannot be relevant. From a capability perspective, we can imagine that the host and target platforms of a package are the capabilities a package requires, and the depending package must provide the capability to the dependency.
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 #### Variables specifying dependencies {#variables-specifying-dependencies}
 
@@ -425,6 +433,7 @@ A script to be run by `maintainers/scripts/update.nix` when the package is match
   };
   ```
 
+<<<<<<< HEAD
 ::: {.tip}
 A common pattern is to use the [`nix-update-script`](https://github.com/NixOS/nixpkgs/blob/master/pkgs/common-updater/nix-update.nix) attribute provided in Nixpkgs, which runs [`nix-update`](https://github.com/Mic92/nix-update):
 
@@ -435,6 +444,8 @@ passthru.updateScript = nix-update-script { };
 For simple packages, this is often enough, and will ensure that the package is updated automatically by [`nixpkgs-update`](https://ryantm.github.io/nixpkgs-update) when a new version is released. The [update bot](https://nix-community.org/update-bot) runs periodically to attempt to automatically update packages, and will run `passthru.updateScript` if set. While not strictly necessary if the project is listed on [Repology](https://repology.org), using `nix-update-script` allows the package to update via many more sources (e.g. GitHub releases).
 :::
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 ##### How update scripts are executed? {#var-passthru-updateScript-execution}
 
 Update scripts are to be invoked by `maintainers/scripts/update.nix` script. You can run `nix-shell maintainers/scripts/update.nix` in the root of Nixpkgs repository for information on how to use it. `update.nix` offers several modes for selecting packages to update (e.g. select by attribute path, traverse Nixpkgs and filter by maintainer, etc.), and it will execute update scripts for all matched packages that have an `updateScript` attribute.
@@ -474,8 +485,15 @@ The commit object contains the following values:
 
 If the returned array contains exactly one object (e.g. `[{}]`), all values are optional and will be determined automatically.
 
+<<<<<<< HEAD
 ::: {.example #var-passthru-updateScript-example-commit}
 # Standard output of an update script using commit feature
+=======
+```{=docbook}
+<example>
+<title>Standard output of an update script using commit feature</title>
+```
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 ```json
 [
@@ -489,7 +507,14 @@ If the returned array contains exactly one object (e.g. `[{}]`), all values are 
   }
 ]
 ```
+<<<<<<< HEAD
 :::
+=======
+
+```{=docbook}
+</example>
+```
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 ### Recursive attributes in `mkDerivation` {#mkderivation-recursive-attributes}
 
@@ -624,19 +649,28 @@ The list of source files or directories to be unpacked or copied. One of these m
 
 ##### `sourceRoot` {#var-stdenv-sourceRoot}
 
+<<<<<<< HEAD
 After unpacking all of `src` and `srcs`, if neither of `sourceRoot` and `setSourceRoot` are set, `unpackPhase` of the generic builder checks that the unpacking produced a single directory and moves the current working directory into it.
 
 If `unpackPhase` produces multiple source directories, you should set `sourceRoot` to the name of the intended directory.
 You can also set `sourceRoot = ".";` if you want to control it yourself in a later phase.
 
 For example, if your want your build to start in a sub-directory inside your sources, and you are using `fetchzip`-derived `src` (like `fetchFromGitHub` or similar), you need to set `sourceRoot = "${src.name}/my-sub-directory"`.
+=======
+After running `unpackPhase`, the generic builder changes the current directory to the directory created by unpacking the sources. If there are multiple source directories, you should set `sourceRoot` to the name of the intended directory. Set `sourceRoot = ".";` if you use `srcs` and control the unpack phase yourself.
+
+By default the `sourceRoot` is set to `"source"`. If you want to point to a sub-directory inside your project, you therefore need to set `sourceRoot = "source/my-sub-directory"`.
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 ##### `setSourceRoot` {#var-stdenv-setSourceRoot}
 
 Alternatively to setting `sourceRoot`, you can set `setSourceRoot` to a shell command to be evaluated by the unpack phase after the sources have been unpacked. This command must set `sourceRoot`.
 
+<<<<<<< HEAD
 For example, if you are using `fetchurl` on an archive file that gets unpacked into a single directory the name of which changes between package versions, and you want your build to start in its sub-directory, you need to set `setSourceRoot = "sourceRoot=$(echo */my-sub-directory)";`, or in the case of multiple sources, you could use something more specific, like `setSourceRoot = "sourceRoot=$(echo ${pname}-*/my-sub-directory)";`.
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 ##### `preUnpack` {#var-stdenv-preUnpack}
 
 Hook executed at the start of the unpack phase.
@@ -981,8 +1015,12 @@ to `~/.gdbinit`. GDB will then be able to find debug information installed via `
 
 The installCheck phase checks whether the package was installed correctly by running its test suite against the installed directories. The default `installCheck` calls `make installcheck`.
 
+<<<<<<< HEAD
 It is often better to add tests that are not part of the source distribution to `passthru.tests` (see
 [](#var-meta-tests)). This avoids adding overhead to every build and enables us to run them independently.
+=======
+It is often better to add tests that are not part of the source distribution to `passthru.tests` (see <xref linkend="var-meta-tests"/>). This avoids adding overhead to every build and enables us to run them independently.
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 #### Variables controlling the installCheck phase {#variables-controlling-the-installcheck-phase}
 
@@ -1179,7 +1217,11 @@ someVar=$(stripHash $name)
 
 ### `wrapProgram` \<executable\> \<makeWrapperArgs\> {#fun-wrapProgram}
 
+<<<<<<< HEAD
 Convenience function for `makeWrapper` that replaces `<executable>` with a wrapper that executes the original program. It takes all the same arguments as `makeWrapper`, except for `--inherit-argv0` (used by the `makeBinaryWrapper` implementation) and `--argv0` (used by both `makeWrapper` and `makeBinaryWrapper` wrapper implementations).
+=======
+Convenience function for `makeWrapper` that replaces `<\executable\>` with a wrapper that executes the original program. It takes all the same arguments as `makeWrapper`, except for `--inherit-argv0` (used by the `makeBinaryWrapper` implementation) and `--argv0` (used by both `makeWrapper` and `makeBinaryWrapper` wrapper implementations).
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 If you will apply it multiple times, it will overwrite the wrapper file and you will end up with double wrapping, which should be avoided.
 
@@ -1215,7 +1257,11 @@ Nix itself considers a build-time dependency as merely something that should pre
 
 In order to alleviate this burden, the setup hook mechanism was written, where any package can include a shell script that \[by convention rather than enforcement by Nix\], any downstream reverse-dependency will source as part of its build process. That allows the downstream dependency to merely specify its dependencies, and lets those dependencies effectively initialize themselves. No boilerplate mirroring the list of dependencies is needed.
 
+<<<<<<< HEAD
 The setup hook mechanism is a bit of a sledgehammer though: a powerful feature with a broad and indiscriminate area of effect. The combination of its power and implicit use may be expedient, but isn’t without costs. Nix itself is unchanged, but the spirit of added dependencies being effect-free is violated even if the latter isn’t. For example, if a derivation path is mentioned more than once, Nix itself doesn’t care and simply makes sure the dependency derivation is already built just the same—depending is just needing something to exist, and needing is idempotent. However, a dependency specified twice will have its setup hook run twice, and that could easily change the build environment (though a well-written setup hook will therefore strive to be idempotent so this is in fact not observable). More broadly, setup hooks are anti-modular in that multiple dependencies, whether the same or different, should not interfere and yet their setup hooks may well do so.
+=======
+The setup hook mechanism is a bit of a sledgehammer though: a powerful feature with a broad and indiscriminate area of effect. The combination of its power and implicit use may be expedient, but isn’t without costs. Nix itself is unchanged, but the spirit of added dependencies being effect-free is violated even if the letter isn’t. For example, if a derivation path is mentioned more than once, Nix itself doesn’t care and simply makes sure the dependency derivation is already built just the same—depending is just needing something to exist, and needing is idempotent. However, a dependency specified twice will have its setup hook run twice, and that could easily change the build environment (though a well-written setup hook will therefore strive to be idempotent so this is in fact not observable). More broadly, setup hooks are anti-modular in that multiple dependencies, whether the same or different, should not interfere and yet their setup hooks may well do so.
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 The most typical use of the setup hook is actually to add other hooks which are then run (i.e. after all the setup hooks) on each dependency. For example, the C compiler wrapper’s setup hook feeds itself flags for each dependency that contains relevant libraries and headers. This is done by defining a bash function, and appending its name to one of `envBuildBuildHooks`, `envBuildHostHooks`, `envBuildTargetHooks`, `envHostHostHooks`, `envHostTargetHooks`, or `envTargetTargetHooks`. These 6 bash variables correspond to the 6 sorts of dependencies by platform (there’s 12 total but we ignore the propagated/non-propagated axis).
 
@@ -1245,7 +1291,11 @@ This runs the strip command on installed binaries and libraries. This removes un
 
 This setup hook patches installed scripts to add Nix store paths to their shebang interpreter as found in the build environment. The [shebang](https://en.wikipedia.org/wiki/Shebang_(Unix)) line tells a Unix-like operating system which interpreter to use to execute the script's contents.
 
+<<<<<<< HEAD
 ::: {.note}
+=======
+::: note
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 The [generic builder][generic-builder] populates `PATH` from inputs of the derivation.
 :::
 
@@ -1283,7 +1333,11 @@ patchShebangs --build configure
 
 Interpreter paths that point to a valid Nix store location are not changed.
 
+<<<<<<< HEAD
 ::: {.note}
+=======
+::: note
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 A script file must be marked as executable, otherwise it will not be
 considered.
 :::

@@ -1,5 +1,9 @@
+<<<<<<< HEAD
 { lib
 , buildPythonPackage
+=======
+{ buildPythonPackage
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , dj-database-url
 , django
 , django-rq
@@ -7,15 +11,22 @@
 , flit-core
 , freezegun
 , google-cloud-translate
+<<<<<<< HEAD
 , polib
 , python
 , pythonOlder
+=======
+, lib
+, polib
+, python
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , typing-extensions
 , wagtail
 }:
 
 buildPythonPackage rec {
   pname = "wagtail-localize";
+<<<<<<< HEAD
   version = "1.5.1";
   format = "pyproject";
 
@@ -32,6 +43,18 @@ buildPythonPackage rec {
     flit-core
   ];
 
+=======
+  version = "1.5";
+  format = "pyproject";
+
+  src = fetchFromGitHub {
+    repo = pname;
+    owner = "wagtail";
+    rev = "v${version}";
+    sha256 = "sha256-aNz4OoUUXWMCahMxuYBxvNWnw7Inxd5svBgwLgoirW8=";
+  };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   propagatedBuildInputs = [
     django
     wagtail
@@ -39,13 +62,18 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
+<<<<<<< HEAD
   nativeCheckInputs = [
+=======
+  checkInputs = [
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     dj-database-url
     django-rq
     freezegun
     google-cloud-translate
   ];
 
+<<<<<<< HEAD
   passthru.optional-dependencies = {
     google = [
       google-cloud-translate
@@ -55,6 +83,15 @@ buildPythonPackage rec {
   checkPhase = ''
     # test_translate_html fails with later Beautifulsoup releases
     rm wagtail_localize/machine_translators/tests/test_dummy_translator.py
+=======
+  nativeBuildInputs = [ flit-core ];
+
+  passthru.optional-dependencies = {
+    google = [ google-cloud-translate ];
+  };
+
+  checkPhase = ''
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     ${python.interpreter} testmanage.py test
   '';
 

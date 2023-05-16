@@ -54,6 +54,10 @@ buildGoModule rec {
     description = "Cross-distribution system package compiler";
     homepage = "https://holocm.org/";
     license = licenses.gpl3Plus;
+<<<<<<< HEAD
     maintainers = with maintainers; [ ];
+=======
+    maintainers = with maintainers; [ SuperSandro2000 ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

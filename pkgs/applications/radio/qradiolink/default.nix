@@ -23,13 +23,21 @@
 
 gnuradio3_8.pkgs.mkDerivation rec {
   pname = "qradiolink";
+<<<<<<< HEAD
   version = "0.8.10-1";
+=======
+  version = "0.8.9-1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "qradiolink";
     repo = "qradiolink";
     rev = version;
+<<<<<<< HEAD
     sha256 = "sha256-DOf5Ct8a9EGpO3YLef+Hw87m5tCVqD30weVOeis9agI=";
+=======
+    sha256 = "sha256-yY9sdLFaG0fX/4obImxVAyJk13RklYjX99Ch9hgzTe8=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   preBuild = ''

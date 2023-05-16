@@ -31,7 +31,11 @@
 
 buildPythonPackage rec {
   pname = "scikit-rf";
+<<<<<<< HEAD
   version = "0.28.0";
+=======
+  version = "0.25.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -39,8 +43,13 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "scikit-rf";
     repo = pname;
+<<<<<<< HEAD
     rev = "refs/tags/v${version}";
     hash = "sha256-cTvWNfIs2bAOYpXDg6ghZA4tRXlaNbUZwcaZMjCi/YY=";
+=======
+    rev = "v${version}";
+    hash = "sha256-drH1N1rKFu/zdLmLsD1jH5xUkzK37V/+nJqGQ38vsTI=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   buildInputs = [

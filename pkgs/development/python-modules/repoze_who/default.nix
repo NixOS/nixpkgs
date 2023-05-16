@@ -16,6 +16,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ zope_interface webob ];
 
+<<<<<<< HEAD
   # skip failing test
   # OSError: [Errno 22] Invalid argument
   preCheck = ''
@@ -29,4 +30,12 @@ buildPythonPackage rec {
     license = licenses.bsd0;
     maintainers = with maintainers; [ ];
   };
+=======
+  meta = with lib; {
+    description = "WSGI Authentication Middleware / API";
+    homepage = "http://www.repoze.org";
+    license = licenses.bsd0;
+  };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }

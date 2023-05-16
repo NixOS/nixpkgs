@@ -1,15 +1,24 @@
 import ./make-test-python.nix ({ pkgs, lib, ... }: {
   name = "deepin";
 
+<<<<<<< HEAD
   meta.maintainers = lib.teams.deepin.members;
+=======
+  meta = with lib; {
+    maintainers = teams.deepin.members;
+  };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nodes.machine = { ... }: {
     imports = [
       ./common/user-account.nix
     ];
 
+<<<<<<< HEAD
     virtualisation.memorySize = 2048;
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     services.xserver.enable = true;
 
     services.xserver.displayManager = {

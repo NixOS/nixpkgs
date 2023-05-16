@@ -5,14 +5,22 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "byacc";
+<<<<<<< HEAD
   version = "20230521";
+=======
+  version = "20230219";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchurl {
     urls = [
       "https://invisible-mirror.net/archives/byacc/byacc-${finalAttrs.version}.tgz"
       "ftp://ftp.invisible-island.net/byacc/byacc-${finalAttrs.version}.tgz"
     ];
+<<<<<<< HEAD
     hash = "sha256-WtkVp9WDOqOKXjG9B3UFZmApw142Xf+Faf5FmOqp/vI=";
+=======
+    hash = "sha256-NrlyptSul1hN0YaSX7vDl9JssgYyp2wvUqx2U80IG1g=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   configureFlags = [

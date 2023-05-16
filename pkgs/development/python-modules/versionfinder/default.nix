@@ -3,7 +3,10 @@
 , buildPythonPackage
 , fetchFromGitHub
 , gitpython
+<<<<<<< HEAD
 , pip
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , pytestCheckHook
 , pythonOlder
 , requests
@@ -29,7 +32,10 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+<<<<<<< HEAD
     pip
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     pytestCheckHook
     requests
   ];

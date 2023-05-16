@@ -16,11 +16,15 @@
 , chrome-trace
 , dune_3
 , csexp
+<<<<<<< HEAD
 , result
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , pp
 , cmdliner
 , ordering
 , ocamlformat-rpc-lib
+<<<<<<< HEAD
 , ocaml
 , version ?
     if lib.versionAtLeast ocaml.version "4.14" then
@@ -39,6 +43,13 @@ let jsonrpc_v = jsonrpc.override {
 buildDunePackage rec {
   pname = "lsp";
   inherit (jsonrpc_v) version src;
+=======
+}:
+
+buildDunePackage rec {
+  pname = "lsp";
+  inherit (jsonrpc) version src;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   duneVersion = "3";
   minimalOCamlVersion =
     if lib.versionAtLeast version "1.7.0" then
@@ -115,7 +126,10 @@ buildDunePackage rec {
       jsonrpc
       pp
       ppx_yojson_conv_lib
+<<<<<<< HEAD
       result
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       uutf
     ] else [
       csexp

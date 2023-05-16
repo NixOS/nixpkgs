@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 { stdenv, lib, dict, libfaketime }:
+=======
+{ stdenv, lib, dict }:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 ({ dictlist, allowList ? [ "127.0.0.1" ], denyList ? [ ] }:
 
 /*
@@ -56,8 +60,12 @@ let
         ln -s "$i".dict.dz
       else
         cp "$i".dict .
+<<<<<<< HEAD
         source_date=$(date --utc --date=@$SOURCE_DATE_EPOCH "+%F %T")
         faketime -f "$source_date" dictzip "$base".dict
+=======
+        dictzip "$base".dict
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       fi
       ln -s "$i".index .
       dictfmt_index2word --locale $locale < "$base".index > "$base".word || true
@@ -77,7 +85,10 @@ in
 stdenv.mkDerivation {
   name = "dictd-dbs";
 
+<<<<<<< HEAD
   nativeBuildInputs = [ libfaketime ];
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   buildInputs = [ dict ];
 
   dontUnpack = true;

@@ -42,7 +42,11 @@ buildPythonApplication rec {
     description = "A tool that converts RSS/Atom newsfeeds to email";
     homepage = "https://pypi.python.org/pypi/rss2email";
     license = licenses.gpl2;
+<<<<<<< HEAD
     maintainers = with maintainers; [ ekleog ];
+=======
+    maintainers = with maintainers; [ Profpatsch ekleog ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
   passthru.tests = {
     smoke-test = nixosTests.rss2email;

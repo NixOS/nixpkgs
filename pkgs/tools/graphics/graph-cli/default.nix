@@ -1,13 +1,20 @@
 { lib
 , python3Packages
+<<<<<<< HEAD
 , fetchPypi
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "graph-cli";
   version = "0.1.18";
 
+<<<<<<< HEAD
   src = fetchPypi {
+=======
+  src = python3Packages.fetchPypi {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     inherit version;
     pname = "graph_cli";
     sha256 = "sha256-0mxOc8RJ3GNgSbppLylIViqfYf6zwJ49pltnsyQUpSA=";

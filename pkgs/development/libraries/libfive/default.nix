@@ -1,5 +1,9 @@
 { lib
+<<<<<<< HEAD
 , stdenv
+=======
+, mkDerivation
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , wrapQtAppsHook
 , fetchFromGitHub
 , cmake
@@ -9,6 +13,7 @@
 , zlib
 , libpng
 , boost
+<<<<<<< HEAD
 , guile
 , qtbase
 , darwin
@@ -17,10 +22,20 @@
 stdenv.mkDerivation {
   pname = "libfive";
   version = "unstable-2023-06-07";
+=======
+, guile_3_0
+, stdenv
+}:
+
+mkDerivation {
+  pname = "libfive-unstable";
+  version = "2022-05-19";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "libfive";
     repo = "libfive";
+<<<<<<< HEAD
     rev = "c85ffe1ba1570c2551434c5bad731884aaf80598";
     hash = "sha256-OITy3fJx+Z6856V3D/KpSQRJztvOdJdqUv1c65wNgCc=";
   };
@@ -35,6 +50,19 @@ stdenv.mkDerivation {
                 '"libfive/bind/guile:${placeholder "out"}/${guile.siteCcacheDir}"' \
       --replace '(app_resource_dir + ":" + finder_build_dir).toLocal8Bit()' \
                 '"libfive/bind/guile:${placeholder "out"}/${guile.siteCcacheDir}"'
+=======
+    rev = "d83cc22709ff1f7c478be07ff2419e30e024834e";
+    sha256 = "lNJg2LCpFcTewSA00s7omUtzhVxycAXvo6wEM/JjrN0=";
+  };
+
+  nativeBuildInputs = [ wrapQtAppsHook cmake ninja pkg-config ];
+  buildInputs = [ eigen zlib libpng boost guile_3_0 ];
+
+  preConfigure = ''
+    substituteInPlace studio/src/guile/interpreter.cpp \
+      --replace "qputenv(\"GUILE_LOAD_COMPILED_PATH\", \"libfive/bind/guile\");" \
+                "qputenv(\"GUILE_LOAD_COMPILED_PATH\", \"libfive/bind/guile:$out/lib/guile/3.0/ccache\");"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     substituteInPlace libfive/bind/guile/CMakeLists.txt \
       --replace "LIBFIVE_FRAMEWORK_DIR=$<TARGET_FILE_DIR:libfive>" \
@@ -46,6 +74,7 @@ stdenv.mkDerivation {
   '';
 
   cmakeFlags = [
+<<<<<<< HEAD
     "-DGUILE_CCACHE_DIR=${placeholder "out"}/${guile.siteCcacheDir}"
   ] ++ lib.optionals (stdenv.isDarwin && lib.versionOlder stdenv.hostPlatform.darwinMinVersion "11") [
     # warning: 'aligned_alloc' is only available on macOS 10.15 or newer
@@ -53,14 +82,28 @@ stdenv.mkDerivation {
   ];
 
   postInstall = lib.optionalString stdenv.isDarwin ''
+=======
+    "-DGUILE_CCACHE_DIR=${placeholder "out"}/lib/guile/3.0/ccache"
+  ];
+
+  postInstall = if stdenv.isDarwin then ''
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     # No rules to install the mac app, so do it manually.
     mkdir -p $out/Applications
     cp -r studio/Studio.app $out/Applications/Studio.app
 
+<<<<<<< HEAD
     install_name_tool -add_rpath $out/lib $out/Applications/Studio.app/Contents/MacOS/Studio
 
     makeWrapper $out/Applications/Studio.app/Contents/MacOS/Studio $out/bin/Studio
   '' + ''
+=======
+    install_name_tool \
+      -change libfive.dylib $out/lib/libfive.dylib \
+      -change libfive-guile.dylib $out/lib/libfive-guile.dylib \
+      $out/Applications/Studio.app/Contents/MacOS/Studio
+  '' else ''
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     # Link "Studio" binary to "libfive-studio" to be more obvious:
     ln -s "$out/bin/Studio" "$out/bin/libfive-studio"
   '';
@@ -70,6 +113,10 @@ stdenv.mkDerivation {
     homepage = "https://libfive.com/";
     maintainers = with maintainers; [ hodapp kovirobi ];
     license = with licenses; [ mpl20 gpl2Plus ];
+<<<<<<< HEAD
     platforms = with platforms; all;
+=======
+    platforms = with platforms; linux ++ darwin;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

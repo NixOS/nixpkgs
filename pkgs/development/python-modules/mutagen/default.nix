@@ -2,6 +2,10 @@
 , buildPythonPackage
 , pythonOlder
 , fetchPypi
+<<<<<<< HEAD
+=======
+, fetchpatch
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 # docs
 , python
@@ -15,13 +19,18 @@
 
 buildPythonPackage rec {
   pname = "mutagen";
+<<<<<<< HEAD
   version = "1.47.0";
+=======
+  version = "1.46.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
+<<<<<<< HEAD
     hash = "sha256-cZ+t7wqXjDG0zzyVYmGzxYtpSLMgIweKIRex3gnw/Jk=";
   };
 
@@ -29,12 +38,30 @@ buildPythonPackage rec {
     "out"
     "doc"
   ];
+=======
+    hash = "sha256-bl+LqEg2uZ/mC+X7J/hL5K2Rm7trScqmroHnBYS1Xlg=";
+  };
+
+  outputs = [ "out" "doc" ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nativeBuildInputs = [
     sphinx
     sphinx-rtd-theme
   ];
 
+<<<<<<< HEAD
+=======
+  patches = [
+    (fetchpatch {
+      # docs: Make extlinks compatible with sphinx 6.0
+      # https://github.com/quodlibet/mutagen/pull/590
+      url = "https://github.com/quodlibet/mutagen/commit/37b4e6bddc03e1f715425c418ea84bac15116907.patch";
+      hash = "sha256-CnGfHY4RhRhOLvlRTH/NZwzCnAL3VhU6xosuh6fkqGQ=";
+    })
+  ];
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   postInstall = ''
     ${python.pythonForBuild.interpreter} setup.py build_sphinx --build-dir=$doc
   '';

@@ -7,11 +7,19 @@
 
 stdenv.mkDerivation rec {
   pname = "acpica-tools";
+<<<<<<< HEAD
   version = "20230628";
 
   src = fetchurl {
     url = "https://downloadmirror.intel.com/783534/acpica-unix-${version}.tar.gz";
     hash = "sha256-hodqdF49Ik3P0iLtPeRltHVZ6FgR3y25gg7wmp3/XM4=";
+=======
+  version = "20230331";
+
+  src = fetchurl {
+    url = "https://acpica.org/sites/acpica/files/acpica-unix-${version}.tar.gz";
+    hash = "sha256-DF1pXWBaqmFwnzxj9XoambiQIpFyOZhEawgTtXrDEOI=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ bison flex ];
@@ -51,7 +59,11 @@ stdenv.mkDerivation rec {
     homepage = "https://www.acpica.org/";
     description = "ACPICA Tools";
     license = with licenses; [ iasl gpl2Only bsd3 ];
+<<<<<<< HEAD
     maintainers = with maintainers; [ delroth tadfisher ];
+=======
+    maintainers = with maintainers; [ tadfisher ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     platforms = platforms.linux ++ platforms.darwin;
   };
 }

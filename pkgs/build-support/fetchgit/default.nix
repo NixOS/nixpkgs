@@ -11,7 +11,11 @@
   in "${if matched == null then base else builtins.head matched}${appendShort}";
 in
 lib.makeOverridable (
+<<<<<<< HEAD
 { url, rev ? "HEAD", sha256 ? "", hash ? "", leaveDotGit ? deepClone
+=======
+{ url, rev ? "HEAD", md5 ? "", sha256 ? "", hash ? "", leaveDotGit ? deepClone
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , fetchSubmodules ? true, deepClone ? false
 , branchName ? null
 , sparseCheckout ? []
@@ -54,6 +58,7 @@ lib.makeOverridable (
 */
 
 assert deepClone -> leaveDotGit;
+<<<<<<< HEAD
 assert nonConeMode -> (sparseCheckout != []);
 
 if hash != "" && sha256 != "" then
@@ -62,6 +67,18 @@ else if builtins.isString sparseCheckout then
   # Changed to throw on 2023-06-04
   throw "Please provide directories/patterns for sparse checkout as a list of strings. Passing a (multi-line) string is not supported any more."
 else
+=======
+assert nonConeMode -> !(sparseCheckout == "" || sparseCheckout == []);
+
+if md5 != "" then
+  throw "fetchgit does not support md5 anymore, please use sha256"
+else if hash != "" && sha256 != "" then
+  throw "Only one of sha256 or hash can be set"
+else
+# Added 2022-11-12
+lib.warnIf (builtins.isString sparseCheckout)
+  "Please provide directories/patterns for sparse checkout as a list of strings. Support for passing a (multi-line) string is deprecated and will be removed in the next release."
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 stdenvNoCC.mkDerivation {
   inherit name;
   builder = ./builder.sh;
@@ -82,7 +99,11 @@ stdenvNoCC.mkDerivation {
   # git-sparse-checkout(1) says:
   # > When the --stdin option is provided, the directories or patterns are read
   # > from standard in as a newline-delimited list instead of from the arguments.
+<<<<<<< HEAD
   sparseCheckout = builtins.concatStringsSep "\n" sparseCheckout;
+=======
+  sparseCheckout = if builtins.isString sparseCheckout then sparseCheckout else builtins.concatStringsSep "\n" sparseCheckout;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   inherit url rev leaveDotGit fetchLFS fetchSubmodules deepClone branchName nonConeMode postFetch;
 

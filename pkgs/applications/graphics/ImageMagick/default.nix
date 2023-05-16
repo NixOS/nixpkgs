@@ -47,13 +47,21 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "imagemagick";
+<<<<<<< HEAD
   version = "7.1.1-15";
+=======
+  version = "7.1.1-8";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "ImageMagick";
     repo = "ImageMagick";
     rev = finalAttrs.version;
+<<<<<<< HEAD
     hash = "sha256-/fI/RrwcgvKX5loIrDAur60VF5O4FgyPYN7BbcPP/bU=";
+=======
+    hash = "sha256-2wAm2y8YQwhgsPNqxGGJ65emL/kMYoVvF2phZMXTpZc=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   outputs = [ "out" "dev" "doc" ]; # bin/ isn't really big
@@ -124,7 +132,11 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru.tests = {
+<<<<<<< HEAD
     version = testers.testVersion { package = finalAttrs.finalPackage; };
+=======
+    version = testers.testVersion { package = imagemagick; };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     inherit (python3.pkgs) img2pdf;
     pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
   };

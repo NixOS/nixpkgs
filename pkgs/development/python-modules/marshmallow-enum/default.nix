@@ -39,6 +39,10 @@ buildPythonPackage rec {
     description = "Enum field for Marshmallow";
     homepage = "https://github.com/justanr/marshmallow_enum";
     license = licenses.mit;
+<<<<<<< HEAD
     maintainers = [ ];
+=======
+    maintainers = [ maintainers.costrouc ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

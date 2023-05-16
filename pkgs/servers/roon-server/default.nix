@@ -15,7 +15,11 @@
 , stdenv
 }:
 let
+<<<<<<< HEAD
   version = "2.0-1272";
+=======
+  version = "2.0-1259";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   urlVersion = builtins.replaceStrings [ "." "-" ] [ "00" "0" ] version;
 in
 stdenv.mkDerivation {
@@ -24,7 +28,11 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://download.roonlabs.com/updates/production/RoonServer_linuxx64_${urlVersion}.tar.bz2";
+<<<<<<< HEAD
     hash = "sha256-oLHdgOaGnu7hRm863ryf4r05nN8wQL7WKxN3ONG67J4=";
+=======
+    hash = "sha256-nd0dDiiUmwhuVivB78EXdj6LrK0ufdSrVYH/0Y++img=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   dontConfigure = true;

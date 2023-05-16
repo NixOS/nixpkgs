@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 { lib, fetchurl, buildPythonApplication, libjack2, pydbus, pyliblo, pyqt5, which, bash, qt5 }:
+=======
+{ lib, fetchurl, buildPythonApplication, libjack2, pydbus, pyliblo, pyqt5, qttools, which, bash }:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 buildPythonApplication rec {
   pname = "raysession";
@@ -20,9 +24,14 @@ buildPythonApplication rec {
 
   nativeBuildInputs = [
     pyqt5   # pyuic5 and pyrcc5 to build resources.
+<<<<<<< HEAD
     qt5.qttools # lrelease to build translations.
     which   # which to find lrelease.
     qt5.wrapQtAppsHook
+=======
+    qttools # lrelease to build translations.
+    which   # which to find lrelease.
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
   buildInputs = [ libjack2 bash ];
   propagatedBuildInputs = [ pydbus pyliblo pyqt5 ];
@@ -37,9 +46,12 @@ buildPythonApplication rec {
 
   postFixup = ''
     wrapPythonProgramsIn "$out/share/raysession/src" "$out $pythonPath"
+<<<<<<< HEAD
     for file in $out/bin/*; do
       wrapQtApp "$file"
     done
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '';
 
   meta = with lib; {

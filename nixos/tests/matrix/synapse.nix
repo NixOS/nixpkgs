@@ -65,7 +65,11 @@ in {
 
   nodes = {
     # Since 0.33.0, matrix-synapse doesn't allow underscores in server names
+<<<<<<< HEAD
     serverpostgres = { pkgs, nodes, config, ... }: let
+=======
+    serverpostgres = { pkgs, nodes, ... }: let
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       mailserverIP = nodes.mailserver.config.networking.primaryIPAddress;
     in
     {
@@ -77,11 +81,14 @@ in {
             name = "psycopg2";
             args.password = "synapse";
           };
+<<<<<<< HEAD
           redis = {
             enabled = true;
             host = "localhost";
             port = config.services.redis.servers.matrix-synapse.port;
           };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           tls_certificate_path = "${cert}";
           tls_private_key_path = "${key}";
           registration_shared_secret = registrationSharedSecret;
@@ -112,11 +119,14 @@ in {
         '';
       };
 
+<<<<<<< HEAD
       services.redis.servers.matrix-synapse = {
         enable = true;
         port = 6380;
       };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       networking.extraHosts = ''
         ${mailserverIP} ${mailerDomain}
       '';
@@ -218,9 +228,12 @@ in {
     serverpostgres.wait_until_succeeds(
         "curl --fail -L --cacert ${ca_pem} https://localhost:8448/"
     )
+<<<<<<< HEAD
     serverpostgres.wait_until_succeeds(
         "journalctl -u matrix-synapse.service | grep -q 'Connected to redis'"
     )
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     serverpostgres.require_unit_state("postgresql.service")
     serverpostgres.succeed("register_new_matrix_user -u ${testUser} -p ${testPassword} -a -k ${registrationSharedSecret} https://localhost:8448/")
     serverpostgres.succeed("obtain-token-and-register-email")

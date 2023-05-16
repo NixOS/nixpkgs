@@ -1,32 +1,52 @@
 { lib
 , stdenv
 , fetchFromGitHub
+<<<<<<< HEAD
 , autoconf-archive
 , autoreconfHook
 , makeWrapper
 , pkg-config
 , substituteAll
+=======
+, autoreconfHook
+, autoconf-archive
+, pkg-config
+, makeWrapper
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , curl
 , gtk3
 , libassuan
 , libbsd
 , libproxy
 , libxml2
+<<<<<<< HEAD
 , nssTools
 , openssl
 , p11-kit
 , pcsclite
+=======
+, openssl
+, p11-kit
+, pcsclite
+, nssTools
+, substituteAll
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 stdenv.mkDerivation rec {
   pname = "eid-mw";
   # NOTE: Don't just blindly update to the latest version/tag. Releases are always for a specific OS.
+<<<<<<< HEAD
   version = "5.1.11";
+=======
+  version = "5.1.10";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "Fedict";
     repo = "eid-mw";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-70UjfkH+rx1Q+2XEuAByoDsP5ZelyuGXaHdkjTe/sCY=";
   };
 
@@ -39,6 +59,13 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook autoconf-archive pkg-config makeWrapper ];
   buildInputs = [ curl gtk3 libassuan libbsd libproxy libxml2 openssl p11-kit pcsclite ];
 
+=======
+    hash = "sha256-2Xru/s7KawZlIxON5nO679P+L3okofE054WDfRsE3ZI=";
+  };
+
+  nativeBuildInputs = [ autoreconfHook autoconf-archive pkg-config makeWrapper ];
+  buildInputs = [ curl gtk3 libassuan libbsd libproxy libxml2 openssl p11-kit pcsclite ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   preConfigure = ''
     mkdir openssl
     ln -s ${lib.getLib openssl}/lib openssl
@@ -51,6 +78,13 @@ stdenv.mkDerivation rec {
   # pinentry uses hardcoded `/usr/bin/pinentry`, so use the built-in (uglier) dialogs for pinentry.
   configureFlags = [ "--disable-pinentry" ];
 
+<<<<<<< HEAD
+=======
+  postPatch = ''
+    sed 's@m4_esyscmd_s(.*,@[${version}],@' -i configure.ac
+  '';
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   postInstall =
     let
       eid-nssdb-in = substituteAll {

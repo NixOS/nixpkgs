@@ -126,7 +126,11 @@ sub findFiles {
     return if
         $relName eq "/propagated-build-inputs" ||
         $relName eq "/nix-support" ||
+<<<<<<< HEAD
         $relName =~ /info\/dir$/ ||
+=======
+        $relName =~ /info\/dir/ ||
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         ( $relName =~ /^\/share\/mime\// && !( $relName =~ /^\/share\/mime\/packages/ ) ) ||
         $baseName eq "perllocal.pod" ||
         $baseName eq "log" ||

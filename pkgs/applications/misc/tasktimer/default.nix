@@ -11,7 +11,11 @@ buildGoModule rec {
     sha256 = "sha256-CAqOsxmJxDgQRMx8cN23TajHd6BNiCFraFvhf5kKnzc=";
   };
 
+<<<<<<< HEAD
   vendorHash = "sha256-Tk0yI/WFr0FV0AxJDStlP3XLem3v78ueuXyadhrLAog=";
+=======
+  vendorSha256 = "sha256-Tk0yI/WFr0FV0AxJDStlP3XLem3v78ueuXyadhrLAog=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   postInstall = ''
     mv $out/bin/tasktimer $out/bin/tt

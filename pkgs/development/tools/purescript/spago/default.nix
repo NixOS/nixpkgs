@@ -15,6 +15,10 @@ let
       haskell.packages.ghc90.spago
       [ haskell.lib.compose.justStaticExecutables
         (haskell.lib.compose.overrideCabal (oldAttrs: {
+<<<<<<< HEAD
+=======
+          maintainers = (oldAttrs.maintainers or []) ++ [ lib.maintainers.cdepillabout ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           changelog = "https://github.com/purescript/spago/releases/tag/${oldAttrs.version}";
         }))
         haskell.lib.compose.unmarkBroken

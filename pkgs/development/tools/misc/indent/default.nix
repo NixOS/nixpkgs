@@ -16,10 +16,15 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ texinfo ];
   pkgsBuildBuild = [ buildPackages.stdenv.cc ]; # needed when cross-compiling
 
+<<<<<<< HEAD
   env.NIX_CFLAGS_COMPILE = toString (
     lib.optional stdenv.cc.isClang "-Wno-implicit-function-declaration"
     ++ lib.optional (stdenv.cc.isClang && lib.versionAtLeast (lib.getVersion stdenv.cc) "13")  "-Wno-unused-but-set-variable"
   );
+=======
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang
+    "-Wno-implicit-function-declaration";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   hardeningDisable = [ "format" ];
 

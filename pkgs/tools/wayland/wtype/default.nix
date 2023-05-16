@@ -31,6 +31,9 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     platforms = platforms.linux;
     maintainers = with maintainers; [ justinlovinger ];
+<<<<<<< HEAD
     mainProgram = "wtype";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

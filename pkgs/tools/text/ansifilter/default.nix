@@ -2,17 +2,29 @@
 
 stdenv.mkDerivation rec {
   pname = "ansifilter";
+<<<<<<< HEAD
   version = "2.20";
 
   src = fetchurl {
     url = "http://www.andre-simon.de/zip/ansifilter-${version}.tar.bz2";
     hash = "sha256-Neydcaf05WATN5N8dzSzKm40bA8FT00xY3aCPP5nkGc=";
+=======
+  version = "2.19";
+
+  src = fetchurl {
+    url = "http://www.andre-simon.de/zip/ansifilter-${version}.tar.bz2";
+    hash = "sha256-+cJ7GIORShsdSWX0xJsr5QLiqfyd0/YRI6vq6YnDVLw=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ boost lua ];
 
   postPatch = ''
+<<<<<<< HEAD
+=======
+    substituteInPlace src/makefile --replace "CC=g++" "CC=c++"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     # avoid timestamp non-determinism with '-n'
     substituteInPlace makefile --replace 'gzip -9f' 'gzip -9nf'
   '';

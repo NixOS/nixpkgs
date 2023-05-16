@@ -6,7 +6,10 @@
   repo = "Coq-Equations";
   inherit version;
   defaultVersion = lib.switch coq.coq-version [
+<<<<<<< HEAD
     { case = "8.18"; out = "1.3+8.18"; }
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     { case = "8.17"; out = "1.3+8.17"; }
     { case = "8.16"; out = "1.3+8.16"; }
     { case = "8.15"; out = "1.3+8.15"; }
@@ -58,8 +61,11 @@
     release."1.3+8.16".sha256         = "sha256-zyMGeRObtSGWh7n3WCqesBZL5EgLvKwmnTy09rYpxyE=";
     release."1.3+8.17".rev            = "v1.3-8.17";
     release."1.3+8.17".sha256         = "sha256-yNotSIxFkhTg3reZIchGQ7cV9WmTJ7p7hPfKGBiByDw=";
+<<<<<<< HEAD
     release."1.3+8.18".rev            = "v1.3-8.18";
     release."1.3+8.18".sha256         = "sha256-8MZO9vWdr8wlAov0lBTYMnde0RuMyhaiM99zp7Zwfao=";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   mlPlugin = true;
 

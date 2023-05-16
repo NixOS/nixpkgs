@@ -10,7 +10,11 @@
 
 buildPythonPackage rec {
   pname = "xmlschema";
+<<<<<<< HEAD
   version = "2.3.1";
+=======
+  version = "2.2.3";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -19,7 +23,11 @@ buildPythonPackage rec {
     owner = "sissaschool";
     repo = "xmlschema";
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-0xXA3IguVAyFp5dFvuzAQhzJlGMmNthmPXcja9FYV44=";
+=======
+    hash = "sha256-KTxVUYdflHiC96tALFcMA0JnLt0vj/nSD3ie53lMi50=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [

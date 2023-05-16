@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 { lib
 , buildPythonPackage
 , fetchpatch
@@ -71,6 +72,25 @@ buildPythonPackage rec {
     "vega/tests/test_entrypoint.py"
   ];
 
+=======
+{ lib, buildPythonPackage , fetchPypi, pythonOlder
+, jupyter-core, pandas, ipywidgets, jupyter }:
+
+buildPythonPackage rec {
+  pname = "vega";
+  version = "3.6.0";
+  disabled = pythonOlder "3.6";
+
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-cO+7Ynbv/+uoNUOPQvDNZji04llHUBlm95Cyfy+Ny80=";
+  };
+
+  propagatedBuildInputs = [ jupyter jupyter-core pandas ipywidgets ];
+
+  # currently, recommonmark is broken on python3
+  doCheck = false;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pythonImportsCheck = [ "vega" ];
 
   meta = with lib; {
@@ -84,5 +104,9 @@ buildPythonPackage rec {
     homepage = "https://github.com/vega/ipyvega";
     license = licenses.bsd3;
     maintainers = with maintainers; [ teh ];
+<<<<<<< HEAD
+=======
+    platforms = platforms.unix;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

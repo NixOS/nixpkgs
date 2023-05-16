@@ -25,14 +25,22 @@
 
 stdenv.mkDerivation rec {
   pname = "foxotron";
+<<<<<<< HEAD
   version = "2023-07-16";
+=======
+  version = "2023-02-23";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "Gargaj";
     repo = "Foxotron";
     rev = version;
     fetchSubmodules = true;
+<<<<<<< HEAD
     sha256 = "sha256-s1eWZMVitVSP7nJJ5wXvnV8uI6yto7LmvlvocOwVAxw=";
+=======
+    sha256 = "sha256-sPIXLZdtVK3phfMsZrU8o9qisOC5RKvHH19ECXMV0t0=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   postPatch = ''
@@ -51,9 +59,12 @@ stdenv.mkDerivation rec {
     "-Wno-error=array-bounds"
   ];
 
+<<<<<<< HEAD
   # error: writing 1 byte into a region of size 0
   hardeningDisable = [ "fortify3" ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   installPhase = ''
     runHook preInstall
 

@@ -11,13 +11,21 @@
 
 stdenv.mkDerivation rec {
   pname = "minimacy";
+<<<<<<< HEAD
   version = "1.1.0";
+=======
+  version = "0.6.4";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "ambermind";
     repo = pname;
     rev =  version;
+<<<<<<< HEAD
     hash = "sha256-VqcMdlptoMJEsPTny/E6ly7/xmHKcljIsSeZDzaA+ig=";
+=======
+    hash = "sha256-qIK7QnXZ9FmfarMZaHktZCHhvR8cctyKVpFS8PeOpLs=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ makeBinaryWrapper ];

@@ -1,7 +1,12 @@
 { cmake, cudatoolkit, fetchFromGitHub, gfortran, lib, llvmPackages, python3Packages, stdenv
+<<<<<<< HEAD
 , config
 , enableCfp ? true
 , enableCuda ? config.cudaSupport
+=======
+, enableCfp ? true
+, enableCuda ? false
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , enableFortran ? builtins.elem stdenv.targetPlatform.system gfortran.meta.platforms
 , enableOpenMP ? true
 , enablePython ? true

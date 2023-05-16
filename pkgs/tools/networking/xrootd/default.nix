@@ -16,27 +16,40 @@
 , systemd
 , voms
 , zlib
+<<<<<<< HEAD
   # Build bin/test-runner
 , enableTestRunner ? true
+=======
+, enableTests ? stdenv.isLinux
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   # If not null, the builder will
   # move "$out/etc" to "$out/etc.orig" and symlink "$out/etc" to externalEtc.
 , externalEtc ? "/etc"
 }:
 
+<<<<<<< HEAD
 stdenv.mkDerivation (finalAttrs: {
+=======
+stdenv.mkDerivation rec {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pname = "xrootd";
   version = "5.5.5";
 
   src = fetchFromGitHub {
     owner = "xrootd";
     repo = "xrootd";
+<<<<<<< HEAD
     rev = "v${finalAttrs.version}";
+=======
+    rev = "v${version}";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     fetchSubmodules = true;
     hash = "sha256-SLmxv8opN7z4V07S9kLGo8HG7Ql62iZQLtf3zGemwA8=";
   };
 
   outputs = [ "bin" "out" "dev" "man" ];
 
+<<<<<<< HEAD
   passthru.fetchxrd = callPackage ./fetchxrd.nix { xrootd = finalAttrs.finalPackage; };
   passthru.tests =
     lib.optionalAttrs stdenv.hostPlatform.isLinux {
@@ -52,6 +65,11 @@ stdenv.mkDerivation (finalAttrs: {
     };
   }
   ;
+=======
+  passthru.tests = lib.optionalAttrs enableTests {
+    test-runner = callPackage ./test-runner.nix { };
+  };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nativeBuildInputs = [
     cmake
@@ -73,7 +91,11 @@ stdenv.mkDerivation (finalAttrs: {
     systemd
     voms
   ]
+<<<<<<< HEAD
   ++ lib.optionals enableTestRunner [
+=======
+  ++ lib.optionals enableTests [
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     cppunit
   ];
 
@@ -97,7 +119,11 @@ stdenv.mkDerivation (finalAttrs: {
     install -m 644 -t "$out/lib/systemd/system" ../packaging/common/*.service ../packaging/common/*.socket
   '';
 
+<<<<<<< HEAD
   cmakeFlags = lib.optionals enableTestRunner [
+=======
+  cmakeFlags = lib.optionals enableTests [
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "-DENABLE_TESTS=TRUE"
   ];
 
@@ -113,4 +139,8 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = platforms.all;
     maintainers = with maintainers; [ ShamrockLee ];
   };
+<<<<<<< HEAD
 })
+=======
+}
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)

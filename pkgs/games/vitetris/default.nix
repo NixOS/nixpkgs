@@ -20,7 +20,10 @@ stdenv.mkDerivation rec {
     homepage = "http://www.victornils.net/tetris/";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ siers ];
+<<<<<<< HEAD
     mainProgram = "tetris";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     longDescription = ''
       vitetris is a terminal-based Tetris clone by Victor Nilsson. Gameplay is much

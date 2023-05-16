@@ -4,7 +4,11 @@
 
 stdenv.mkDerivation rec {
   pname = "qgroundcontrol";
+<<<<<<< HEAD
   version = "4.2.8";
+=======
+  version = "4.2.6";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   qtInputs = [
     qtbase qtcharts qtlocation qtserialport qtsvg qtquickcontrols2
@@ -67,7 +71,11 @@ stdenv.mkDerivation rec {
     owner = "mavlink";
     repo = pname;
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-EmGtVy/cHiZ2SqOOKmt9vCUQbyT5Sl8XnkRlhn9BdvA=";
+=======
+    sha256 = "sha256-mMeKDfylVEqLo1i2ucUBu287Og4472Ecp7Cge9Cw3kE=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     fetchSubmodules = true;
   };
 

@@ -43,5 +43,9 @@ if [[ "$chromium_version" != "$chromium_version_old" ]]; then
   (cd "$root" && update-source-version vivaldi-ffmpeg-codecs "$chromium_version")
 
   git add "${ffmpeg_nix}"
+<<<<<<< HEAD
   git commit -m "vivaldi-ffmpeg-codecs: $chromium_version_old -> $chromium_version"
+=======
+  git commit -m "vivaldi-ffmepg-codecs: $chromium_version_old -> $chromium_version"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 fi

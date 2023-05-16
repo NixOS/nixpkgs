@@ -1,6 +1,9 @@
 { lib
 , buildPythonPackage
+<<<<<<< HEAD
 , pythonAtLeast
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , fetchPypi
 , pycosat
 , requests
@@ -16,9 +19,12 @@ buildPythonPackage rec {
   pname = "conda";
   version = "4.3.16";
 
+<<<<<<< HEAD
   # this is a very outdated version of conda that isn't compatible with python 3.10+
   disabled = pythonAtLeast "3.10";
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   src = fetchPypi {
     inherit pname version;
     sha256 = "a91ef821343dea3ba9670f3d10b36c1ace4f4c36d70c175d8fc8886e94285953";
@@ -34,4 +40,8 @@ buildPythonPackage rec {
     homepage = "https://github.com/conda/conda";
     license = lib.licenses.bsd3;
   };
+<<<<<<< HEAD
+=======
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }

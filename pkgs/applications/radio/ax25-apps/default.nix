@@ -20,7 +20,10 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--sysconfdir=/etc"
+<<<<<<< HEAD
     "--localstatedir=/var/lib"
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "--program-transform-name=s@^call$@ax&@;s@^listen$@ax&@"
   ];
 

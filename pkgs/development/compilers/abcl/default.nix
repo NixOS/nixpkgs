@@ -9,11 +9,19 @@
 
 stdenv.mkDerivation rec {
   pname = "abcl";
+<<<<<<< HEAD
   version = "1.9.2";
 
   src = fetchurl {
     url = "https://common-lisp.net/project/armedbear/releases/${version}/${pname}-src-${version}.tar.gz";
     sha256 = "sha256-Ti9Lj4Xi2V2V5b282foXrWExoX4vzxK8Gf+5e0i8HTg=";
+=======
+  version = "1.9.1";
+
+  src = fetchurl {
+    url = "https://common-lisp.net/project/armedbear/releases/${version}/${pname}-src-${version}.tar.gz";
+    sha256 = "sha256-pbxnfJRB9KgzwgpUG93Rb/+SZIRmkd6aHa9mmfj/EeI=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   configurePhase = ''
@@ -68,7 +76,11 @@ stdenv.mkDerivation rec {
     description = "A JVM-based Common Lisp implementation";
     license = lib.licenses.gpl3 ;
     maintainers = lib.teams.lisp.members;
+<<<<<<< HEAD
     platforms = lib.platforms.darwin ++ lib.platforms.linux;
+=======
+    platforms = lib.platforms.linux;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     homepage = "https://common-lisp.net/project/armedbear/";
   };
 }

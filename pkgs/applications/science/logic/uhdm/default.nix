@@ -7,6 +7,7 @@
 , gtest
 }:
 
+<<<<<<< HEAD
 stdenv.mkDerivation (finalAttrs: {
   pname = "UHDM";
   version = "1.73";
@@ -17,6 +18,17 @@ stdenv.mkDerivation (finalAttrs: {
     rev = "v${finalAttrs.version}";
     hash = "sha256-VmRn51UrJTGEG4n2fi5kRv8khXakfGbqMtYPejsZCBI=";
     fetchSubmodules = false;  # we use all dependencies from nix
+=======
+stdenv.mkDerivation rec {
+  pname = "UHDM";
+  version = "1.57";
+
+  src = fetchFromGitHub {
+    owner = "chipsalliance";
+    repo = pname;
+    rev = "v${version}";
+    hash = "sha256-z3vURlKXCW5W2naVwJjBXcn94u80JsBxlUOIy9ylsJw=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [
@@ -44,4 +56,8 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [ matthuszagh ];
     platforms = lib.platforms.all;
   };
+<<<<<<< HEAD
 })
+=======
+}
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)

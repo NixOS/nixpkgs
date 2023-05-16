@@ -7,8 +7,11 @@ let
     concatStringsSep escapeShellArgs optionalString
     literalExpression mkEnableOption mkIf mkOption mkOptionDefault types;
 
+<<<<<<< HEAD
   requiresSetcapWrapper = config.boot.kernelPackages.kernelOlder "5.7" && cfg.bindInterface;
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   browserDefault = chromium: concatStringsSep " " [
     ''env XDG_CONFIG_HOME="$PREV_CONFIG_HOME"''
     ''${chromium}/bin/chromium''
@@ -25,11 +28,16 @@ let
   desktopItem = pkgs.makeDesktopItem {
     name = "captive-browser";
     desktopName = "Captive Portal Browser";
+<<<<<<< HEAD
     exec = "captive-browser";
+=======
+    exec = "/run/wrappers/bin/captive-browser";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     icon = "nix-snowflake";
     categories = [ "Network" ];
   };
 
+<<<<<<< HEAD
   captive-browser-configured = pkgs.writeShellScriptBin "captive-browser" ''
     export PREV_CONFIG_HOME="$XDG_CONFIG_HOME"
     export XDG_CONFIG_HOME=${pkgs.writeTextDir "captive-browser.toml" ''
@@ -42,6 +50,8 @@ let
     ''}
     exec ${cfg.package}/bin/captive-browser
   '';
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 in
 {
   ###### interface
@@ -115,7 +125,10 @@ in
       (pkgs.runCommand "captive-browser-desktop-item" { } ''
         install -Dm444 -t $out/share/applications ${desktopItem}/share/applications/*.desktop
       '')
+<<<<<<< HEAD
       captive-browser-configured
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     ];
 
     programs.captive-browser.dhcp-dns =
@@ -146,11 +159,30 @@ in
       source = "${pkgs.busybox}/bin/udhcpc";
     };
 
+<<<<<<< HEAD
     security.wrappers.captive-browser = mkIf requiresSetcapWrapper {
       owner = "root";
       group = "root";
       capabilities = "cap_net_raw+p";
       source = "${captive-browser-configured}/bin/captive-browser";
+=======
+    security.wrappers.captive-browser = {
+      owner = "root";
+      group = "root";
+      capabilities = "cap_net_raw+p";
+      source = pkgs.writeShellScript "captive-browser" ''
+        export PREV_CONFIG_HOME="$XDG_CONFIG_HOME"
+        export XDG_CONFIG_HOME=${pkgs.writeTextDir "captive-browser.toml" ''
+                                  browser = """${cfg.browser}"""
+                                  dhcp-dns = """${cfg.dhcp-dns}"""
+                                  socks5-addr = """${cfg.socks5-addr}"""
+                                  ${optionalString cfg.bindInterface ''
+                                    bind-device = """${cfg.interface}"""
+                                  ''}
+                                ''}
+        exec ${cfg.package}/bin/captive-browser
+      '';
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
   };
 }

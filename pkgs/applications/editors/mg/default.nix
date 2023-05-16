@@ -2,13 +2,21 @@
 
 stdenv.mkDerivation rec {
   pname = "mg";
+<<<<<<< HEAD
   version = "7.3";
+=======
+  version = "7.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "ibara";
     repo = "mg";
     rev = "mg-${version}";
+<<<<<<< HEAD
     sha256 = "sha256-88FrXN7h5uRLY8YMKSzUjBF4n18DEiiiDyoYr+7qXdQ=";
+=======
+    sha256 = "sha256-qnb0yB/NNJV257dsLmP84brajoRG03U+Ja1ACYbBvbE=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   postPatch = lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''

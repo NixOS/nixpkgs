@@ -60,7 +60,11 @@ let
 in
 stdenv.mkDerivation ({
   inherit buildInputs;
+<<<<<<< HEAD
   pname = "android-sdk-${lib.concatMapStringsSep "-" (package: package.name) sortedPackages}";
+=======
+  pname = lib.concatMapStringsSep "-" (package: package.name) sortedPackages;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   version = lib.concatMapStringsSep "-" (package: package.revision) sortedPackages;
   src = map (package:
     if os != null && builtins.hasAttr os package.archives then package.archives.${os} else package.archives.all

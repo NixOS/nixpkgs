@@ -31,7 +31,10 @@ let
                   maintainers = with lib.maintainers; [ adisbladis aminechikhaoui eelco rob domenkozar ];
                   platforms = lib.platforms.unix;
                   license = lib.licenses.lgpl3;
+<<<<<<< HEAD
                   mainProgram = "nixops";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
                 };
 
               }
@@ -74,12 +77,24 @@ let
           cryptography = super.cryptography.overridePythonAttrs (old: {
             meta = old.meta // {
               knownVulnerabilities = old.meta.knownVulnerabilities or [ ]
+<<<<<<< HEAD
                 ++ lib.optionals (lib.versionOlder old.version "41.0.0") [
                   "CVE-2023-2650"
                   "CVE-2023-2975"
                   "CVE-2023-3446"
                   "CVE-2023-3817"
                   "CVE-2023-38325"
+=======
+                ++ lib.optionals (lib.versionOlder old.version "39.0.1") [
+                  "CVE-2022-4304"
+                  "CVE-2023-0215"
+                  "CVE-2023-0216"
+                  "CVE-2023-0217"
+                  "CVE-2023-0401"
+                  "CVE-2022-4203"
+                  "CVE-2022-4450"
+                  "CVE-2023-23931"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
                 ];
             };
           });
@@ -89,7 +104,11 @@ let
     }
   ).python;
 
+<<<<<<< HEAD
   pkg = (interpreter.pkgs.nixops.withPlugins(ps: [
+=======
+  pkg = interpreter.pkgs.nixops.withPlugins(ps: [
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     ps.nixops-aws
     ps.nixops-digitalocean
     ps.nixops-encrypted-links
@@ -99,10 +118,20 @@ let
     ps.nixopsvbox
     ps.nixops-virtd
     ps.nixops-hetznercloud
+<<<<<<< HEAD
   ])).overrideAttrs (finalAttrs: prevAttrs: {
     passthru = prevAttrs.passthru or {} // {
       tests = prevAttrs.passthru.tests or {} //
         nixosTests.nixops.unstable.passthru.override { nixopsPkg = pkg; };
     };
   });
+=======
+  ]) // rec {
+    # Workaround for https://github.com/NixOS/nixpkgs/issues/119407
+    # TODO after #1199407: Use .overrideAttrs(pkg: old: { passthru.tests = .....; })
+    tests = nixosTests.nixops.unstable.override { nixopsPkg = pkg; };
+    # Not strictly necessary, but probably expected somewhere; part of the workaround:
+    passthru.tests = tests;
+  };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 in pkg

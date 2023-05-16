@@ -1,5 +1,10 @@
 # buildEnv creates a tree of symlinks to the specified paths.  This is
+<<<<<<< HEAD
 # a fork of the hardcoded buildEnv in the Nix distribution.
+=======
+# a fork of the buildEnv in the Nix distribution.  Most changes should
+# eventually be merged back into the Nix distribution.
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 { buildPackages, runCommand, lib, substituteAll }:
 

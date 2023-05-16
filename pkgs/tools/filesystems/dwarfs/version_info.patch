@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 diff --git a/cmake/package_version.cmake b/cmake/package_version.cmake
 new file mode 100644
 index 0000000..d4fdb9c
@@ -19,6 +20,11 @@ index 0000000..d4fdb9c
 diff --git a/include/dwarfs/version.h b/include/dwarfs/version.h
 new file mode 100644
 index 0000000..54cf86a
+=======
+diff --git a/include/dwarfs/version.h b/include/dwarfs/version.h
+new file mode 100755
+index 0000000..9b12c59
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 --- /dev/null
 +++ b/include/dwarfs/version.h
 @@ -0,0 +1,16 @@
@@ -39,8 +45,13 @@ index 0000000..54cf86a
 +
 +} // namespace dwarfs
 diff --git a/src/dwarfs/version.cpp b/src/dwarfs/version.cpp
+<<<<<<< HEAD
 new file mode 100644
 index 0000000..5759120
+=======
+new file mode 100755
+index 0000000..3af0215
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 --- /dev/null
 +++ b/src/dwarfs/version.cpp
 @@ -0,0 +1,12 @@
@@ -50,9 +61,16 @@ index 0000000..5759120
 +
 +namespace dwarfs {
 +
+<<<<<<< HEAD
 +char const* PRJ_GIT_REV = "@versionFull@";
 +char const* PRJ_GIT_DESC = "v@versionFull@";
 +char const* PRJ_GIT_BRANCH = "HEAD";
 +char const* PRJ_GIT_ID = "v@versionFull@";
+=======
++char const* PRJ_GIT_REV = "@gitRev@";
++char const* PRJ_GIT_DESC = "@gitDesc@";
++char const* PRJ_GIT_BRANCH = "@gitBranch@";
++char const* PRJ_GIT_ID = "@gitId@";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 +
 +} // namespace dwarfs

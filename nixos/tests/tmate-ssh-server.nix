@@ -24,7 +24,10 @@ in
         services.tmate-ssh-server = {
           enable = true;
           port = 2223;
+<<<<<<< HEAD
           openFirewall = true;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         };
       };
       client = { ... }: {

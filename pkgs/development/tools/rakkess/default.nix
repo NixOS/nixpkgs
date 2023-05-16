@@ -10,7 +10,11 @@ buildGoModule rec {
     rev = "v${version}";
     sha256 = "sha256-igovWWk8GfNmOS/NbZWfv9kox6QLNIbM09jdvA/lL3A=";
   };
+<<<<<<< HEAD
   vendorHash = "sha256-lVxJ4wFBhHc8JVpkmqphLYPE9Z8Cr6o+aAHvC1naqyE=";
+=======
+  vendorSha256 = "sha256-lVxJ4wFBhHc8JVpkmqphLYPE9Z8Cr6o+aAHvC1naqyE=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   ldflags = [ "-s" "-w" "-X github.com/corneliusweig/rakkess/internal/version.version=v${version}" ];
 

@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 { lib, stdenv, fetchurl, openssl, pkg-config, readline, zlib, libidn2, gmp, libiconv, libunistring, gettext }:
+=======
+{ lib, stdenv, fetchurl, gnutls, pkg-config, readline, zlib, libidn2, gmp, libiconv, libunistring, gettext }:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 stdenv.mkDerivation rec {
   pname = "lftp";
@@ -14,12 +18,19 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ];
 
+<<<<<<< HEAD
   buildInputs = [ openssl readline zlib libidn2 gmp libiconv libunistring gettext ];
+=======
+  buildInputs = [ gnutls readline zlib libidn2 gmp libiconv libunistring gettext ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   hardeningDisable = lib.optional stdenv.isDarwin "format";
 
   configureFlags = [
+<<<<<<< HEAD
     "--with-openssl"
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "--with-readline=${readline.dev}"
     "--with-zlib=${zlib.dev}"
     "--without-expat"

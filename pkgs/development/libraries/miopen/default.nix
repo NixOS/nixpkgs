@@ -171,8 +171,11 @@ in stdenv.mkDerivation (finalAttrs: {
     ln -s ${kdbs.gfx1030_36} $out/share/miopen/db/gfx1030_40.kdb
   '';
 
+<<<<<<< HEAD
   requiredSystemFeatures = [ "big-parallel" ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   passthru.updateScript = rocmUpdateScript {
     name = finalAttrs.pname;
     owner = finalAttrs.src.owner;

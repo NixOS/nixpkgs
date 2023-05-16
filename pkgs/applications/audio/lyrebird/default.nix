@@ -34,9 +34,15 @@ python3Packages.buildPythonApplication rec {
 
   propagatedBuildInputs = with python3Packages; [ toml pygobject3 ];
 
+<<<<<<< HEAD
   nativeBuildInputs = [ wrapGAppsHook gobject-introspection ];
 
   buildInputs = [ gtk3 sox ];
+=======
+  nativeBuildInputs = [ wrapGAppsHook ];
+
+  buildInputs = [ gtk3 gobject-introspection sox ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   dontWrapGApps = true;
   makeWrapperArgs = [

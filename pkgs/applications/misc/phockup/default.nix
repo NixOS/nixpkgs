@@ -4,13 +4,21 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "phockup";
+<<<<<<< HEAD
   version = "1.10.1";
+=======
+  version = "1.9.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "ivandokov";
     repo = "phockup";
     rev = version;
+<<<<<<< HEAD
     sha256 = "sha256-wnTdNzH/2Lcr3FXqm84ITiAmbKpFWLo/0/cf0fCv+4M=";
+=======
+    sha256 = "sha256-ge34Iv/+B0xdrSNc7w3nZJw0DHBUvuh2k/I8v/RRg10=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ makeWrapper ];

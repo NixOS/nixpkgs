@@ -24,7 +24,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gstreamer";
+<<<<<<< HEAD
   version = "1.22.5";
+=======
+  version = "1.22.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   outputs = [
     "bin"
@@ -36,7 +40,11 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (finalAttrs) pname version;
   in fetchurl {
     url = "https://gstreamer.freedesktop.org/src/${pname}/${pname}-${version}.tar.xz";
+<<<<<<< HEAD
     hash = "sha256-RAjXkw84GAnoWReswZcS8XMmG6hb3yDFVnsqIbEZO2E=";
+=======
+    hash = "sha256-sq/nNgOSHGCLpIlp27fXQ3dnRL/l2AWeziQRN7f4jiE=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   depsBuildBuild = [
@@ -64,6 +72,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     bash-completion
+<<<<<<< HEAD
+=======
+    gobject-introspection
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ] ++ lib.optionals stdenv.isLinux [
     libcap
     libunwind
@@ -119,6 +131,10 @@ stdenv.mkDerivation (finalAttrs: {
       "gstreamer-controller-1.0"
     ];
     platforms = platforms.unix;
+<<<<<<< HEAD
     maintainers = with maintainers; [ ttuegel matthewbauer lilyinstarlight ];
+=======
+    maintainers = with maintainers; [ ttuegel matthewbauer ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 })

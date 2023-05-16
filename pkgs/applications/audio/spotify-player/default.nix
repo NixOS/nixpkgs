@@ -4,6 +4,7 @@
 , pkg-config
 , openssl
 , cmake
+<<<<<<< HEAD
 # deps for audio backends
 , alsa-lib
 , libpulseaudio
@@ -34,26 +35,47 @@ assert lib.assertOneOf "withAudioBackend" withAudioBackend [ "" "alsa" "pulseaud
 rustPlatform.buildRustPackage rec {
   pname = "spotify-player";
   version = "0.15.0";
+=======
+, alsa-lib
+, dbus
+, fontconfig
+}:
+
+rustPlatform.buildRustPackage rec {
+  pname = "spotify-player";
+  version = "0.13.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "aome510";
     repo = pname;
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-5+YBlXHpAzGgw6MqgnMSggCASS++A/WWomftX8Jxe7g=";
   };
 
   cargoHash = "sha256-PIYaJC3rVbPjc2CASzMGWAzUdrBwFnKqhrZO6nywdN8=";
+=======
+    hash = "sha256-c+CbIDg4WlzRStiA+yBkjfSmMJ183tLBGiK340bZgnA=";
+  };
+
+  cargoHash = "sha256-nhRXFxSrzkq3SdJ4ZmWlKl7SwxwOz6ZYboIsBmgdFJ8=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nativeBuildInputs = [
     pkg-config
     cmake
+<<<<<<< HEAD
     rustPlatform.bindgenHook
   ] ++ lib.optionals stdenv.isDarwin [
     makeBinaryWrapper
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   buildInputs = [
     openssl
+<<<<<<< HEAD
     dbus
     fontconfig
   ]
@@ -98,5 +120,28 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "spotify_player";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dit7ya xyven1 ];
+=======
+    alsa-lib
+    dbus
+    fontconfig
+  ];
+
+  buildNoDefaultFeatures = true;
+
+  buildFeatures = [
+    "rodio-backend"
+    "media-control"
+    "image"
+    "lyric-finder"
+  ];
+
+  meta = with lib; {
+    description = "A command driven spotify player";
+    homepage = "https://github.com/aome510/spotify-player";
+    changelog = "https://github.com/aome510/spotify-player/releases/tag/v${version}";
+    mainProgram = "spotify_player";
+    license = licenses.mit;
+    maintainers = with maintainers; [ dit7ya ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

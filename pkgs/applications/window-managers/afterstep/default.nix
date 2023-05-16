@@ -60,7 +60,11 @@ stdenv.mkDerivation rec {
     export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE $(pkg-config dbus-1 --cflags)"
   '';
 
+<<<<<<< HEAD
   # Parallel build fails due to missing dependencies between private libraries:
+=======
+  # Parallel build fails due to missing dependencies between private libaries:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   #   ld: cannot find ../libAfterConf/libAfterConf.a: No such file or directory
   # Let's disable parallel builds until it's fixed upstream:
   #   https://github.com/afterstep/afterstep/issues/8

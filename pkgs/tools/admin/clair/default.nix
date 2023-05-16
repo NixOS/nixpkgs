@@ -8,16 +8,27 @@
 
 buildGoModule rec {
   pname = "clair";
+<<<<<<< HEAD
   version = "4.7.1";
+=======
+  version = "4.6.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "quay";
     repo = pname;
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-+ABZafDc2nmHHnJGXj4iCSheuWoksPwDblmdIusUJuo=";
   };
 
   vendorHash = "sha256-ptgHU/PrLqRG4h3C5x+XUy4+38Yu6h4gTeziaPJ2iWE=";
+=======
+    hash = "sha256-Nd73GQJUYkFMyvMLAUgu/LQuDEW74s9+YKwqnftPoPM=";
+  };
+
+  vendorHash = "sha256-V9Y+dZv3RKiyzGJB1o4+M4QQeRpBkCtJOr2zyjTCKTY=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nativeBuildInputs = [
     makeWrapper

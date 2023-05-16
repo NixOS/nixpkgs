@@ -75,9 +75,13 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "info" "man" ];
 
+<<<<<<< HEAD
   # Test segfault for static build
   doCheck = !stdenv.hostPlatform.isStatic;
 
+=======
+  doCheck = true;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   checkTarget = "test";
   # https://www.mail-archive.com/tinycc-devel@nongnu.org/msg10142.html
   preCheck = lib.optionalString (stdenv.isDarwin && stdenv.isx86_64) ''

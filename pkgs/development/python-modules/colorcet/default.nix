@@ -45,6 +45,10 @@ buildPythonPackage rec {
     description = "Collection of perceptually uniform colormaps";
     homepage = "https://colorcet.pyviz.org";
     license = licenses.cc-by-40;
+<<<<<<< HEAD
     maintainers = with maintainers; [ ];
+=======
+    maintainers = with maintainers; [ costrouc ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

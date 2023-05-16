@@ -20,6 +20,10 @@ rustPlatform.buildRustPackage rec {
     description = "Terminal disk space navigator";
     homepage = "https://github.com/imsnif/diskonaut";
     license = licenses.mit;
+<<<<<<< HEAD
     maintainers = with maintainers; [ evanjs figsoda ];
+=======
+    maintainers = with maintainers; [ evanjs SuperSandro2000 ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

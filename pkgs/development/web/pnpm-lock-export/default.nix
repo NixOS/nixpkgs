@@ -1,6 +1,7 @@
 { lib, buildNpmPackage, fetchFromGitHub }:
 buildNpmPackage rec {
   pname = "pnpm-lock-export";
+<<<<<<< HEAD
   version = "unstable-2023-07-31";
 
   src = fetchFromGitHub {
@@ -11,6 +12,18 @@ buildNpmPackage rec {
   };
 
   npmDepsHash = "sha256-nqkH7vFD78YvYr9Klguk2o7qHr5wr3ZjaywUKRRRjJo=";
+=======
+  version = "0.4.0";
+
+  src = fetchFromGitHub {
+    owner = "cvent";
+    repo = "pnpm-lock-export";
+    rev = "v${version}";
+    hash = "sha256-vS6AW3R4go1Fdr3PBOCnuN4JDrDkl1lWVF7q+q+xDGg=";
+  };
+
+  npmDepsHash = "sha256-3uW/lzB+UDhFQtRb3X8szNlgAWTcSdwVdtyZvLu+cjI=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   postPatch = ''
     cp ${./package-lock.json} package-lock.json

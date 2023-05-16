@@ -9,31 +9,51 @@
 }:
 
 let
+<<<<<<< HEAD
   version = "0.17.2";
+=======
+  version = "0.15.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   dist = {
     aarch64-darwin = rec {
       archSuffix = "Darwin-arm64";
       url = "https://github.com/lima-vm/lima/releases/download/v${version}/lima-${version}-${archSuffix}.tar.gz";
+<<<<<<< HEAD
       sha256 = "c7e328369e6842b15452b440daa5137e00da57ca7aa025b1cf7f80bd5c7843a9";
+=======
+      sha256 = "0da51d3c179e89bde404ea40be88b5c11aea8c7cf50cd030fd5b779e91462856";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
 
     x86_64-darwin = rec {
       archSuffix = "Darwin-x86_64";
       url = "https://github.com/lima-vm/lima/releases/download/v${version}/lima-${version}-${archSuffix}.tar.gz";
+<<<<<<< HEAD
       sha256 = "5b8954b3040b82016701091bed4ac99c668ffb8d362dc7a0fdf5cb9a6ed9ebb1";
+=======
+      sha256 = "c535bc21923bc290ac56fe3a9ea87e8740c7c51e030f05cc32d51e726a59673e";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
 
     aarch64-linux = rec {
       archSuffix = "Linux-aarch64";
       url = "https://github.com/lima-vm/lima/releases/download/v${version}/lima-${version}-${archSuffix}.tar.gz";
+<<<<<<< HEAD
       sha256 = "20df104067f255212cd6df82508961b20bf4c0a16a233a74d495a4b6ee3a62e8";
+=======
+      sha256 = "964c897f6dc2a6e203b0c109a7cd59102fe192837c792549b597d7ac301ecf54";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
 
     x86_64-linux = rec {
       archSuffix = "Linux-x86_64";
       url = "https://github.com/lima-vm/lima/releases/download/v${version}/lima-${version}-${archSuffix}.tar.gz";
+<<<<<<< HEAD
       sha256 = "a9af3aec848ed7bc490baff2f1d785334cbbc6cd94f981705cc0aeab833288b0";
+=======
+      sha256 = "5ec308716abe8833ce36d6e77cac44d98d7cfc8add8dbcbe053a91af01cecfa1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
   };
 in
@@ -108,6 +128,9 @@ stdenvNoCC.mkDerivation {
     description = "Linux virtual machines (on macOS, in most cases)";
     license = licenses.asl20;
     maintainers = with maintainers; [ tricktron ];
+<<<<<<< HEAD
     platforms = platforms.linux ++ platforms.darwin;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

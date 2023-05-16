@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 {
   git,
   gnutar,
@@ -16,6 +17,13 @@ let
   inherit (haskell.lib.compose) overrideCabal addBuildTools justStaticExecutables;
   inherit (lib) makeBinPath;
   bundledBins = [ gnutar gzip git openssh ] ++ lib.optional stdenv.isLinux runc;
+=======
+{ gnutar, gzip, git, haskell, haskellPackages, lib, makeWrapper, nixos, runc, stdenv }:
+let
+  inherit (haskell.lib.compose) overrideCabal addBuildTools justStaticExecutables;
+  inherit (lib) makeBinPath;
+  bundledBins = [ gnutar gzip git ] ++ lib.optional stdenv.isLinux runc;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   pkg =
     # justStaticExecutables is needed due to https://github.com/NixOS/nix/issues/2990
@@ -28,12 +36,18 @@ let
           makeWrapper $out/libexec/hercules-ci-agent $out/bin/hercules-ci-agent --prefix PATH : ${lib.escapeShellArg (makeBinPath bundledBins)}
         '';
       })
+<<<<<<< HEAD
       (addBuildTools [ makeBinaryWrapper ] (justStaticExecutables haskellPackages.hercules-ci-agent));
 in pkg.overrideAttrs (finalAttrs: o: {
+=======
+      (addBuildTools [ makeWrapper ] (justStaticExecutables haskellPackages.hercules-ci-agent));
+in pkg.overrideAttrs (o: {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     meta = o.meta // {
       position = toString ./default.nix + ":1";
     };
     passthru = o.passthru // {
+<<<<<<< HEAD
       tests = {
         version = testers.testVersion {
           package = finalAttrs.finalPackage;
@@ -67,6 +81,13 @@ in pkg.overrideAttrs (finalAttrs: o: {
           # Dummy value for testing only.
           system.stateVersion = lib.trivial.release; # TEST ONLY
         })).config.system.build.toplevel;
+=======
+      # Does not test the package, but evaluation of the related NixOS module.
+      tests.nixos-minimal-config = nixos {
+        boot.loader.grub.enable = false;
+        fileSystems."/".device = "bogus";
+        services.hercules-ci-agent.enable = true;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       };
     };
   })

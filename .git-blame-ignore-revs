@@ -39,6 +39,7 @@ d1c1a0c656ccd8bd3b25d3c4287f2d075faf3cf3
 
 # fix indentation in meteor default.nix
 a37a6de881ec4c6708e6b88fd16256bbc7f26bbd
+<<<<<<< HEAD
 
 # treewide: automatically md-convert option descriptions
 2e751c0772b9d48ff6923569adfa661b030ab6a2
@@ -96,3 +97,5 @@ fb0e5be84331188a69b3edd31679ca6576edb75a
 
 # nixos/*: add trivial defaultText for options with simple defaults
 25124556397ba17bfd70297000270de1e6523b0a
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)

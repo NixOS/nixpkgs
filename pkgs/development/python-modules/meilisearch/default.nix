@@ -9,7 +9,11 @@
 
 buildPythonPackage rec {
   pname = "meilisearch";
+<<<<<<< HEAD
   version = "0.28.2";
+=======
+  version = "0.26.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -18,7 +22,11 @@ buildPythonPackage rec {
     owner = "meilisearch";
     repo = "meilisearch-python";
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-S1ZBSkWqCU6EpFqLpxCN1ZNswJroF86+26WeyYPD0S0=";
+=======
+    hash = "sha256-DhArrKIA9S/huO3QRjZNZ2xOpHybZgj6tIBKfRX6ZYg=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

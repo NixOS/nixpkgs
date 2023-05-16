@@ -66,7 +66,11 @@ stdenv.mkDerivation rec {
   ];
 
   installPhase = ''
+<<<<<<< HEAD
     runHook preInstall
+=======
+    runHook preInstalli
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     install -D V4L_Frontend $out/bin/viper-gui
     install -D icons/viper.png $out/share/icons/viper.png
     runHook postInstall

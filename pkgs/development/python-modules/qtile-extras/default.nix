@@ -6,7 +6,11 @@
 , xorgserver
 , pulseaudio
 , pytest-asyncio
+<<<<<<< HEAD
 , qtile
+=======
+, qtile-unwrapped
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , keyring
 , requests
 , stravalib
@@ -34,7 +38,11 @@ buildPythonPackage rec {
   ];
   checkInputs = [
     pytest-asyncio
+<<<<<<< HEAD
     qtile
+=======
+    qtile-unwrapped
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     pulseaudio
     keyring
     requests

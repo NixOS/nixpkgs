@@ -17,6 +17,7 @@ let
     , withAda ? true
     }:
 
+<<<<<<< HEAD
     stdenvNoCC.mkDerivation {
       pname = "coreboot-toolchain-${arch}";
       version = "4.21";
@@ -25,6 +26,16 @@ let
         url = "https://review.coreboot.org/coreboot";
         rev = "c1386ef6128922f49f93de5690ccd130a26eecf2";
         hash = "sha256-tFGyI170vbhRgJZDix69DfOD5nIY8T4chSP+qTt3kC8=";
+=======
+    stdenvNoCC.mkDerivation rec {
+      pname = "coreboot-toolchain-${arch}";
+      version = "4.19";
+
+      src = fetchgit {
+        url = "https://review.coreboot.org/coreboot";
+        rev = version;
+        sha256 = "sha256-pGS+bfX2k/ot7sHL9aiaQpA0wtbHHZEObJ/h2JGF5/4=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         fetchSubmodules = false;
         leaveDotGit = true;
         postFetch = ''

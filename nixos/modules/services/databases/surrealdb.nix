@@ -47,6 +47,7 @@ in {
         example = 8000;
       };
 
+<<<<<<< HEAD
       extraFlags = mkOption {
         type = types.listOf types.str;
         default = [];
@@ -54,6 +55,19 @@ in {
         description = lib.mdDoc ''
           Specify a list of additional command line flags,
           which get escaped and are then passed to surrealdb.
+=======
+      userNamePath = mkOption {
+        type = types.path;
+        description = lib.mdDoc ''
+          Path to read the username from.
+        '';
+      };
+
+      passwordPath = mkOption {
+        type = types.path;
+        description = lib.mdDoc ''
+          Path to read the password from.
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         '';
       };
     };
@@ -69,8 +83,24 @@ in {
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
 
+<<<<<<< HEAD
       serviceConfig = {
         ExecStart = "${cfg.package}/bin/surreal start --bind ${cfg.host}:${toString cfg.port} ${escapeShellArgs cfg.extraFlags} -- ${cfg.dbPath}";
+=======
+      script = ''
+        ${cfg.package}/bin/surreal start \
+          --user $(${pkgs.systemd}/bin/systemd-creds cat SURREALDB_USERNAME) \
+          --pass $(${pkgs.systemd}/bin/systemd-creds cat SURREALDB_PASSWORD) \
+          --bind ${cfg.host}:${toString cfg.port} \
+          -- ${cfg.dbPath}
+      '';
+      serviceConfig = {
+        LoadCredential = [
+          "SURREALDB_USERNAME:${cfg.userNamePath}"
+          "SURREALDB_PASSWORD:${cfg.passwordPath}"
+        ];
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         DynamicUser = true;
         Restart = "on-failure";
         StateDirectory = "surrealdb";

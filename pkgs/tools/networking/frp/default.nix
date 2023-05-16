@@ -2,16 +2,27 @@
 
 buildGoModule rec {
   pname = "frp";
+<<<<<<< HEAD
   version = "0.51.3";
+=======
+  version = "0.48.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "fatedier";
     repo = pname;
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-ijcYSuB91I9lD4qx6ohVFDQgTE0+FTQ5Hr1heNwKyUo=";
   };
 
   vendorHash = "sha256-DFQ59E24LR5/qodtge0EsqajvrjPN0otpxGB8JQ0ERw=";
+=======
+    sha256 = "sha256-e9Qof+HxSJHzAUbLb+w5oWPTOslTPxnC8BVAmtMQGlE=";
+  };
+
+  vendorHash = "sha256-DhzirX+AGe8dE62M0hiE5SlWK8HqhNN0MMk9i2Ntrs8=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   doCheck = false;
 

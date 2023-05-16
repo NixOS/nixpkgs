@@ -48,11 +48,14 @@ let
     ''
   else
     cfg.staticConfigFile;
+<<<<<<< HEAD
 
   finalStaticConfigFile =
     if cfg.environmentFiles == []
     then staticConfigFile
     else "/run/traefik/config.toml";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 in {
   options.services.traefik = {
     enable = mkEnableOption (lib.mdDoc "Traefik web server");
@@ -132,6 +135,7 @@ in {
       type = types.package;
       description = lib.mdDoc "Traefik package to use.";
     };
+<<<<<<< HEAD
 
     environmentFiles = mkOption {
       default = [];
@@ -142,6 +146,8 @@ in {
         will be substituted into the static configuration file using envsubst.
       '';
     };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   config = mkIf cfg.enable {
@@ -154,6 +160,7 @@ in {
       startLimitIntervalSec = 86400;
       startLimitBurst = 5;
       serviceConfig = {
+<<<<<<< HEAD
         EnvironmentFile = cfg.environmentFiles;
         ExecStartPre = lib.optional (cfg.environmentFiles != [])
           (pkgs.writeShellScript "pre-start" ''
@@ -161,6 +168,10 @@ in {
             ${pkgs.envsubst}/bin/envsubst -i "${staticConfigFile}" > "${finalStaticConfigFile}"
           '');
         ExecStart = "${cfg.package}/bin/traefik --configfile=${finalStaticConfigFile}";
+=======
+        ExecStart =
+          "${cfg.package}/bin/traefik --configfile=${staticConfigFile}";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         Type = "simple";
         User = "traefik";
         Group = cfg.group;
@@ -175,7 +186,10 @@ in {
         ProtectHome = true;
         ProtectSystem = "full";
         ReadWriteDirectories = cfg.dataDir;
+<<<<<<< HEAD
         RuntimeDirectory = "traefik";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       };
     };
 

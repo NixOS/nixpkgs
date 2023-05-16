@@ -2,11 +2,19 @@
 
 stdenv.mkDerivation rec {
   pname = "fricas";
+<<<<<<< HEAD
   version = "1.3.9";
 
   src = fetchurl {
     url = "mirror://sourceforge/fricas/fricas/${version}/fricas-${version}-full.tar.bz2";
     sha256 = "sha256-5RPcffM0GN0l6r8IgHJlwdxwwp2y4kIdJ5M3JnGZCzc=";
+=======
+  version = "1.3.8";
+
+  src = fetchurl {
+    url = "mirror://sourceforge/fricas/fricas/${version}/fricas-${version}-full.tar.bz2";
+    sha256 = "sha256-amAGPLQo70nKATyZM7h3yX5mMUxCwOFwb/fTIWB5hUQ=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   buildInputs = [ sbcl libX11 libXpm libICE libSM libXt libXau libXdmcp ];

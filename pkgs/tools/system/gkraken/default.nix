@@ -42,6 +42,10 @@ python3Packages.buildPythonApplication rec {
   ];
 
   buildInputs = [
+<<<<<<< HEAD
+=======
+    gobject-introspection
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     glib
     gtk3
     libnotify

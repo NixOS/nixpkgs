@@ -6,11 +6,19 @@
 
 stdenv.mkDerivation rec {
   pname = "clamav";
+<<<<<<< HEAD
   version = "1.2.0";
 
   src = fetchurl {
     url = "https://www.clamav.net/downloads/production/${pname}-${version}.tar.gz";
     hash = "sha256-l6GS3/4UFIC1bKvxBj15qfxVzVkgMkH6Qb/HqYpUgCA=";
+=======
+  version = "1.0.1";
+
+  src = fetchurl {
+    url = "https://www.clamav.net/downloads/production/${pname}-${version}.tar.gz";
+    hash = "sha256-CHLcG4L/TNfo5DI/r17kGh9mroCGXQVCkIW5RjVdhu4=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   patches = [

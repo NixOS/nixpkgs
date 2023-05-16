@@ -7,7 +7,11 @@
 , openvpn
 , obfs4
 , iproute2
+<<<<<<< HEAD
 , dnscrypt-proxy
+=======
+, dnscrypt-proxy2
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , iptables
 , gawk
 , util-linux
@@ -74,7 +78,11 @@ builtins.mapAttrs (pname: attrs: buildGoModule (attrs // rec {
         --replace 'wgToolBinaryPath = path.Join(installDir, "wireguard-tools/wg")' \
         'wgToolBinaryPath = "${wireguard-tools}/bin/wg"' \
         --replace 'dnscryptproxyBinPath = path.Join(installDir, "dnscrypt-proxy/dnscrypt-proxy")' \
+<<<<<<< HEAD
         'dnscryptproxyBinPath = "${dnscrypt-proxy}/bin/dnscrypt-proxy"'
+=======
+        'dnscryptproxyBinPath = "${dnscrypt-proxy2}/bin/dnscrypt-proxy"'
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     '';
 
     postFixup = ''

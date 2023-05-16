@@ -3,6 +3,7 @@
 rec {
   # gcc.arch to its features (as in /proc/cpuinfo)
   features = {
+<<<<<<< HEAD
     # x86_64 Generic
     # Spec: https://gitlab.com/x86-psABIs/x86-64-ABI/
     default        = [ ];
@@ -12,6 +13,10 @@ rec {
     x86-64-v4      = [ "sse3" "ssse3" "sse4_1" "sse4_2"               "avx" "avx2" "avx512" "fma"        ];
     # x86_64 Intel
     nehalem        = [ "sse3" "ssse3" "sse4_1" "sse4_2"         "aes"                                    ];
+=======
+    default        = [ ];
+    # x86_64 Intel
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     westmere       = [ "sse3" "ssse3" "sse4_1" "sse4_2"         "aes"                                    ];
     sandybridge    = [ "sse3" "ssse3" "sse4_1" "sse4_2"         "aes" "avx"                              ];
     ivybridge      = [ "sse3" "ssse3" "sse4_1" "sse4_2"         "aes" "avx"                              ];
@@ -25,7 +30,10 @@ rec {
     cascadelake    = [ "sse3" "ssse3" "sse4_1" "sse4_2"         "aes" "avx" "avx2" "avx512" "fma"        ];
     cooperlake     = [ "sse3" "ssse3" "sse4_1" "sse4_2"         "aes" "avx" "avx2" "avx512" "fma"        ];
     tigerlake      = [ "sse3" "ssse3" "sse4_1" "sse4_2"         "aes" "avx" "avx2" "avx512" "fma"        ];
+<<<<<<< HEAD
     alderlake      = [ "sse3" "ssse3" "sse4_1" "sse4_2"         "aes" "avx" "avx2"          "fma"        ];
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     # x86_64 AMD
     btver1         = [ "sse3" "ssse3" "sse4_1" "sse4_2"                                                  ];
     btver2         = [ "sse3" "ssse3" "sse4_1" "sse4_2"         "aes" "avx"                              ];
@@ -36,7 +44,10 @@ rec {
     znver1         = [ "sse3" "ssse3" "sse4_1" "sse4_2" "sse4a" "aes" "avx" "avx2"          "fma"        ];
     znver2         = [ "sse3" "ssse3" "sse4_1" "sse4_2" "sse4a" "aes" "avx" "avx2"          "fma"        ];
     znver3         = [ "sse3" "ssse3" "sse4_1" "sse4_2" "sse4a" "aes" "avx" "avx2"          "fma"        ];
+<<<<<<< HEAD
     znver4         = [ "sse3" "ssse3" "sse4_1" "sse4_2" "sse4a" "aes" "avx" "avx2" "avx512" "fma"        ];
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     # other
     armv5te        = [ ];
     armv6          = [ ];
@@ -48,6 +59,7 @@ rec {
 
   # a superior CPU has all the features of an inferior and is able to build and test code for it
   inferiors = {
+<<<<<<< HEAD
     # x86_64 Generic
     default   = [ ];
     x86-64    = [ ];
@@ -77,6 +89,25 @@ rec {
     # CX16 does not exist on alderlake, while it does on nearly all other intel CPUs
     alderlake      = [ ];
 
+=======
+    # x86_64 Intel
+    # https://gcc.gnu.org/onlinedocs/gcc/x86-Options.html
+    default        = [ ];
+    westmere       = [ ];
+    sandybridge    = [ "westmere"       ] ++ inferiors.westmere;
+    ivybridge      = [ "sandybridge"    ] ++ inferiors.sandybridge;
+    haswell        = [ "ivybridge"      ] ++ inferiors.ivybridge;
+    broadwell      = [ "haswell"        ] ++ inferiors.haswell;
+    skylake        = [ "broadwell"      ] ++ inferiors.broadwell;
+    skylake-avx512 = [ "skylake"        ] ++ inferiors.skylake;
+    cannonlake     = [ "skylake-avx512" ] ++ inferiors.skylake-avx512;
+    icelake-client = [ "cannonlake"     ] ++ inferiors.cannonlake;
+    icelake-server = [ "icelake-client" ] ++ inferiors.icelake-client;
+    cascadelake    = [ "skylake-avx512" ] ++ inferiors.cannonlake;
+    cooperlake     = [ "cascadelake"    ] ++ inferiors.cascadelake;
+    tigerlake      = [ "icelake-server" ] ++ inferiors.icelake-server;
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     # x86_64 AMD
     # TODO: fill this (need testing)
     btver1         = [ ];
@@ -104,10 +135,16 @@ rec {
     # https://gcc.gnu.org/onlinedocs/gcc/x86-Options.html
     # https://en.wikichip.org/wiki/amd/microarchitectures/zen
     # https://en.wikichip.org/wiki/intel/microarchitectures/skylake
+<<<<<<< HEAD
     znver1         = [ "skylake" ] ++ inferiors.skylake; # Includes haswell and x86-64-v3
     znver2         = [ "znver1"  ] ++ inferiors.znver1;
     znver3         = [ "znver2"  ] ++ inferiors.znver2;
     znver4         = lib.unique ([ "znver3" "x86-64-v4" ] ++ inferiors.znver3 ++ inferiors.x86-64-v4);
+=======
+    znver1         = [ "skylake" ] ++ inferiors.skylake;
+    znver2         = [ "znver1"  ] ++ inferiors.znver1;
+    znver3         = [ "znver2"  ] ++ inferiors.znver2;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     # other
     armv5te        = [ ];

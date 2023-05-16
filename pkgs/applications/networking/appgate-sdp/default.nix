@@ -86,11 +86,19 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "appgate-sdp";
+<<<<<<< HEAD
   version = "6.2.2";
 
   src = fetchurl {
     url = "https://bin.appgate-sdp.com/${lib.versions.majorMinor version}/client/appgate-sdp_${version}_amd64.deb";
     sha256 = "sha256-5xbwBCLTlZ0cE273n3ErykZSEr59dZjQWhVTK91W9a4=";
+=======
+  version = "6.1.3";
+
+  src = fetchurl {
+    url = "https://bin.appgate-sdp.com/${lib.versions.majorMinor version}/client/appgate-sdp_${version}_amd64.deb";
+    sha256 = "sha256-uk7+XBKtTGnX/bHBQttmxlu9+gKvFqu3VhzC7uIYCNQ=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   # just patch interpreter

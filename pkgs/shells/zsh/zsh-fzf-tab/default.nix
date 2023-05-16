@@ -4,13 +4,22 @@ let
   INSTALL_PATH="${placeholder "out"}/share/fzf-tab";
 in stdenv.mkDerivation rec {
   pname = "zsh-fzf-tab";
+<<<<<<< HEAD
   version = "unstable-2023-06-11";
+=======
+  version = "unstable-2023-05-19";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "Aloxaf";
     repo = "fzf-tab";
+<<<<<<< HEAD
     rev = "c2b4aa5ad2532cca91f23908ac7f00efb7ff09c9";
     sha256 = "sha256-gvZp8P3quOtcy1Xtt1LAW1cfZ/zCtnAmnWqcwrKel6w=";
+=======
+    rev = "5a81e13792a1eed4a03d2083771ee6e5b616b9ab";
+    sha256 = "sha256-bIlnYKjjOC6h5/Gg7xBg+i2TBk+h82wmHgAJPhzMsek=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   strictDeps = true;

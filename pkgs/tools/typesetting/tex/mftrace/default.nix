@@ -3,6 +3,10 @@
 , lib
 , makeWrapper
 , autoreconfHook
+<<<<<<< HEAD
+=======
+, buildEnv
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , python3
 , fontforge
 , potrace

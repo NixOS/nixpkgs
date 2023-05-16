@@ -1,22 +1,38 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+<<<<<<< HEAD
 , fetchpatch
 , django
 , djangorestframework
 , pytestCheckHook
 , pytest-django
 , ipdb
+=======
+, setuptools
+, django
+, djangorestframework
+, pytest
+, pytest-cov
+, pytest-django
+, ipdb
+, python
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 buildPythonPackage rec {
   pname = "drf-nested-routers";
+<<<<<<< HEAD
   version = "0.93.4";
   format = "setuptools";
+=======
+  version = "0.93.3";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "alanjds";
     repo = "drf-nested-routers";
+<<<<<<< HEAD
     rev = "refs/tags/v${version}";
     hash = "sha256-qlXNDydoQJ9FZB6G7yV/pNmx3BEo+lvRqsfjrvlbdNY=";
   };
@@ -50,6 +66,18 @@ buildPythonPackage rec {
     pytestCheckHook
     pytest-django
   ];
+=======
+    rev = "v${version}";
+    sha256 = "1gmw6gwiqzfysx8qn7aan7xgkizxy64db94z30pm3bvn6jxv08si";
+  };
+
+  propagatedBuildInputs = [ django djangorestframework setuptools ];
+  nativeCheckInputs = [ pytest pytest-cov pytest-django ipdb ];
+
+  checkPhase = ''
+    ${python.interpreter} runtests.py --nolint
+  '';
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   meta = with lib; {
     homepage = "https://github.com/alanjds/drf-nested-routers";

@@ -52,11 +52,14 @@ mkDerivation rec {
     "APPDATA_INSTALL_PATH=${placeholder "out"}/share/appdata"
   ];
 
+<<<<<<< HEAD
   env = {
     # Fix build due to missing `std::option`.
     NIX_CFLAGS_COMPILE = "-std=c++17";
   };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   meta = with lib; {
     description = "A tabbed document viewer";
     license = licenses.gpl2Plus;

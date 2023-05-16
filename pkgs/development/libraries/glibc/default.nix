@@ -4,7 +4,10 @@
 , withGd ? false
 , withLibcrypt? false
 , buildPackages
+<<<<<<< HEAD
 , libgcc
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 let
@@ -17,7 +20,11 @@ in
 
 (callPackage ./common.nix { inherit stdenv; } {
   inherit withLinuxHeaders withGd profilingLibraries withLibcrypt;
+<<<<<<< HEAD
   pname = "glibc" + lib.optionalString withGd "-gd" + lib.optionalString (stdenv.cc.isGNU && libgcc==null) "-nolibgcc";
+=======
+  pname = "glibc" + lib.optionalString withGd "-gd";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }).overrideAttrs(previousAttrs: {
 
     # Note:
@@ -91,11 +98,19 @@ in
     #
     makeFlags =
       (previousAttrs.makeFlags or [])
+<<<<<<< HEAD
       ++ lib.optionals (libgcc != null) [
         "user-defined-trusted-dirs=${libgcc}/lib"
       ];
 
     postInstall = previousAttrs.postInstall + (if stdenv.hostPlatform == stdenv.buildPlatform then ''
+=======
+      ++ lib.optionals (stdenv.cc.cc?libgcc) [
+        "user-defined-trusted-dirs=${stdenv.cc.cc.libgcc}/lib"
+      ];
+
+    postInstall = (if stdenv.hostPlatform == stdenv.buildPlatform then ''
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       echo SUPPORTED-LOCALES=C.UTF-8/UTF-8 > ../glibc-2*/localedata/SUPPORTED
       make -j''${NIX_BUILD_CORES:-1} localedata/install-locales
     '' else lib.optionalString stdenv.buildPlatform.isLinux ''
@@ -167,8 +182,13 @@ in
 
     passthru =
       (previousAttrs.passthru or {})
+<<<<<<< HEAD
       // lib.optionalAttrs (libgcc != null) {
         inherit libgcc;
+=======
+      // lib.optionalAttrs (stdenv.cc.cc?libgcc) {
+        inherit (stdenv.cc.cc) libgcc;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       };
 
   meta = (previousAttrs.meta or {}) // { description = "The GNU C Library"; };

@@ -1,5 +1,6 @@
 { lib
 , buildPythonPackage
+<<<<<<< HEAD
 , fetchFromGitHub
 , setuptools
 , setuptools-scm
@@ -24,6 +25,24 @@ buildPythonPackage rec {
     setuptools
     setuptools-scm
     wheel
+=======
+, fetchPypi
+, setuptools
+}:
+
+buildPythonPackage rec {
+  version = "1.0.0";
+  pname = "python-vagrant";
+  format = "pyproject";
+
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-qP6TzPL/N+zJXsL0nqdKkabOc6TbShapjdJtOXz9CeU=";
+  };
+
+  nativeBuildInputs = [
+    setuptools
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   # The tests try to connect to qemu

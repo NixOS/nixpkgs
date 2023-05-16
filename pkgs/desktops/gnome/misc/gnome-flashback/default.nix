@@ -82,7 +82,11 @@ let
 
       rm -r $out/share/gnome-session
       rm -r $out/share/xsessions
+<<<<<<< HEAD
       rm $out/libexec/gnome-flashback-metacity
+=======
+      rm -r $out/libexec
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     '';
 
     nativeBuildInputs = [

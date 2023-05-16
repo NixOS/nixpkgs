@@ -71,9 +71,15 @@ let
     if ! keyValid; then
       echo "certificate soon to become invalid; backing up old cert"
       mkdir -p oldkeys
+<<<<<<< HEAD
       mv -v "${cfg.providerName}.key" "oldkeys/${cfg.providerName}-$(date +%F-%T).key"
       mv -v "${cfg.providerName}.crt" "oldkeys/${cfg.providerName}-$(date +%F-%T).crt"
       kill "$(pidof -s dnscrypt-wrapper)"
+=======
+      mv -v ${cfg.providerName}.key oldkeys/${cfg.providerName}-$(date +%F-%T).key
+      mv -v ${cfg.providerName}.crt oldkeys/${cfg.providerName}-$(date +%F-%T).crt
+      systemctl restart dnscrypt-wrapper
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     fi
   '';
 
@@ -222,6 +228,20 @@ in {
     };
     users.groups.dnscrypt-wrapper = { };
 
+<<<<<<< HEAD
+=======
+    security.polkit.extraConfig = ''
+      // Allow dnscrypt-wrapper user to restart dnscrypt-wrapper.service
+      polkit.addRule(function(action, subject) {
+          if (action.id == "org.freedesktop.systemd1.manage-units" &&
+              action.lookup("unit") == "dnscrypt-wrapper.service" &&
+              subject.user == "dnscrypt-wrapper") {
+              return polkit.Result.YES;
+          }
+        });
+    '';
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     systemd.services.dnscrypt-wrapper = {
       description = "dnscrypt-wrapper daemon";
       after    = [ "network.target" ];
@@ -231,7 +251,11 @@ in {
       serviceConfig = {
         User = "dnscrypt-wrapper";
         WorkingDirectory = dataDir;
+<<<<<<< HEAD
         Restart   = "always";
+=======
+        Restart   = "on-failure";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         ExecStart = "${pkgs.dnscrypt-wrapper}/bin/dnscrypt-wrapper ${toString daemonArgs}";
       };
 
@@ -244,7 +268,11 @@ in {
       requires = [ "dnscrypt-wrapper.service" ];
       description = "Rotates DNSCrypt wrapper keys if soon to expire";
 
+<<<<<<< HEAD
       path   = with pkgs; [ dnscrypt-wrapper dnscrypt-proxy1 gawk procps ];
+=======
+      path   = with pkgs; [ dnscrypt-wrapper dnscrypt-proxy1 gawk ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       script = rotateKeys;
       serviceConfig.User = "dnscrypt-wrapper";
     };

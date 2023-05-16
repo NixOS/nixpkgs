@@ -1,21 +1,33 @@
 { lib
 , buildPythonPackage
+<<<<<<< HEAD
 , cython
 , fetchpatch
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , fetchPypi
 , setuptools-scm
 , fonttools
 , pytestCheckHook
+<<<<<<< HEAD
 , wheel
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 buildPythonPackage rec {
   pname = "compreffor";
+<<<<<<< HEAD
   version = "0.5.4";
+=======
+  version = "0.5.3";
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
+<<<<<<< HEAD
     hash = "sha256-MGulQEUGPrQ30T3VYzwRRlvzvWkFqNzqsNzAjtjX9xU=";
   };
 
@@ -32,6 +44,13 @@ buildPythonPackage rec {
     cython
     setuptools-scm
     wheel
+=======
+    hash = "sha256-fUEpbU+wqh72lt/ZJdKvMifUAwYivpmzx9QQfcb4cTo=";
+  };
+
+  nativeBuildInputs = [
+    setuptools-scm
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   propagatedBuildInputs = [
@@ -53,6 +72,10 @@ buildPythonPackage rec {
     description = "CFF table subroutinizer for FontTools";
     homepage = "https://github.com/googlefonts/compreffor";
     license = licenses.asl20;
+<<<<<<< HEAD
     maintainers = with maintainers; [ ];
+=======
+    maintainers = with maintainers; [ jtojnar ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

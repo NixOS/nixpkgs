@@ -11,7 +11,11 @@ buildGoModule {
   pname = "gomobile";
   version = "unstable-2022-05-18";
 
+<<<<<<< HEAD
   vendorHash = "sha256-AmOy3X+d2OD7ZLbFuy+SptdlgWbZJaXYEgO79M64ufE=";
+=======
+  vendorSha256 = "sha256-AmOy3X+d2OD7ZLbFuy+SptdlgWbZJaXYEgO79M64ufE=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchgit {
     rev = "8578da9835fd365e78a6e63048c103b27a53a82c";

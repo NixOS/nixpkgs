@@ -44,11 +44,19 @@
 
 stdenv.mkDerivation rec {
   pname = "evolution";
+<<<<<<< HEAD
   version = "3.48.4";
 
   src = fetchurl {
     url = "mirror://gnome/sources/evolution/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "oC+Z66BQp3HyxH1D/FLgCyJg/IbQYyD79S68fozni7c=";
+=======
+  version = "3.48.1";
+
+  src = fetchurl {
+    url = "mirror://gnome/sources/evolution/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "tJpa3u3JGx0yVPAw9affjiYYLjNAzvd3Ecob9FU+5lA=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

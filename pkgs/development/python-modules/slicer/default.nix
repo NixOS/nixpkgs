@@ -1,10 +1,16 @@
 { lib
 , buildPythonPackage
+<<<<<<< HEAD
 , dos2unix
 , fetchpatch
 , fetchPypi
 , pytestCheckHook
 , pythonOlder
+=======
+, fetchPypi
+, isPy27
+, pytestCheckHook
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , pandas
 , torch
 , scipy
@@ -13,6 +19,7 @@
 buildPythonPackage rec {
   pname = "slicer";
   version = "0.0.7";
+<<<<<<< HEAD
   format = "setuptools";
   disabled = pythonOlder "3.6";
 
@@ -45,6 +52,15 @@ buildPythonPackage rec {
     dos2unix
   ];
 
+=======
+  disabled = isPy27;
+
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "f5d5f7b45f98d155b9c0ba6554fa9770c6b26d5793a3e77a1030fb56910ebeec";
+  };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nativeCheckInputs = [ pytestCheckHook pandas torch scipy ];
 
   disabledTests = [

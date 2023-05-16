@@ -221,8 +221,14 @@ let
   };
 
   qlpkgs =
+<<<<<<< HEAD
     lib.optionalAttrs (builtins.pathExists ./imported.nix)
       (import ./imported.nix { inherit (pkgs) runCommand fetchzip; pkgs = builtQlpkgs; });
+=======
+    if builtins.pathExists ./imported.nix
+    then import ./imported.nix { inherit (pkgs) runCommand fetchzip; pkgs = builtQlpkgs; }
+    else {};
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   builtQlpkgs = mapAttrs (n: v: build v) qlpkgs;
 

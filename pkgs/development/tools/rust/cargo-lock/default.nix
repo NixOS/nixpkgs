@@ -18,6 +18,10 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/rustsec/rustsec/tree/main/cargo-lock";
     changelog = "https://github.com/rustsec/rustsec/blob/cargo-lock/v${version}/cargo-lock/CHANGELOG.md";
     license = with licenses; [ asl20 /* or */ mit ];
+<<<<<<< HEAD
     maintainers = with maintainers; [ figsoda matthiasbeyer ];
+=======
+    maintainers = with maintainers; [ figsoda ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

@@ -2,6 +2,7 @@
 
 buildGoModule rec {
   pname = "harmonist";
+<<<<<<< HEAD
   version = "0.5.1";
 
   src = fetchurl {
@@ -10,6 +11,16 @@ buildGoModule rec {
   };
 
   vendorHash = "sha256-0DV32a2LYnfYzg/tqwear9uaaahNUIi0M8uWlXOQ5Ic=";
+=======
+  version = "0.4.1";
+
+  src = fetchurl {
+    url = "https://download.tuxfamily.org/harmonist/releases/${pname}-${version}.tar.gz";
+    hash = "sha256-mtvvdim0CNtdM+/VU2j+FE2oLpt0Tz1/tNTa9H/FS6U=";
+  };
+
+  vendorHash = "sha256-SrvJXTyLtPZ2PyhSZz/gJvuso9r7e5NbGe7EJRf2XlI=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   ldflags = [ "-s" "-w" ];
 
@@ -25,6 +36,10 @@ buildGoModule rec {
     '';
     homepage = "https://harmonist.tuxfamily.org/";
     license = licenses.isc;
+<<<<<<< HEAD
+=======
+    platforms = platforms.unix;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     maintainers = with maintainers; [ aaronjheng ];
   };
 }

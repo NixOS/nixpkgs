@@ -20,7 +20,11 @@
 
 buildPythonPackage rec {
   pname = "nvchecker";
+<<<<<<< HEAD
   version = "2.12";
+=======
+  version = "2.11";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -29,7 +33,11 @@ buildPythonPackage rec {
     owner = "lilydjwg";
     repo = pname;
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-6mhVDC2jpIIOZeoKz4AxxU7jj8dqPVBKRWupbuY/T7E=";
+=======
+    hash = "sha256-b/EGn26gTpnYuy2h6shnJI1dRwhl41eKJHzDJoFG1YI=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [
@@ -44,6 +52,7 @@ buildPythonPackage rec {
     pycurl
     setuptools
     structlog
+<<<<<<< HEAD
     tornado
   ] ++ lib.optionals (pythonOlder "3.11") [
     tomli
@@ -51,6 +60,12 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
+=======
+    tomli
+    tornado
+  ];
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nativeCheckInputs = [
     flaky
     pytest-asyncio
@@ -76,9 +91,14 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
+<<<<<<< HEAD
     description = "New version checker for software";
     homepage = "https://github.com/lilydjwg/nvchecker";
     changelog = "https://github.com/lilydjwg/nvchecker/releases/tag/v${version}";
+=======
+    homepage = "https://github.com/lilydjwg/nvchecker";
+    description = "New version checker for software";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     license = licenses.mit;
     maintainers = with maintainers; [ marsam ];
   };

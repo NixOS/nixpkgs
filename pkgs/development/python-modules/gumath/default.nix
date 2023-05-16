@@ -1,7 +1,10 @@
 { lib
 , stdenv
 , buildPythonPackage
+<<<<<<< HEAD
 , fetchpatch
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , python
 , numba
 , ndtypes
@@ -14,6 +17,7 @@
 
 buildPythonPackage {
   pname = "gumath";
+<<<<<<< HEAD
   format = "setuptools";
   disabled = isPy27;
   inherit (libgumath) src version meta;
@@ -34,6 +38,12 @@ buildPythonPackage {
 
   nativeCheckInputs = [ numba ];
 
+=======
+  disabled = isPy27;
+  inherit (libgumath) src version meta;
+
+  nativeCheckInputs = [ numba ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   propagatedBuildInputs = [ ndtypes xnd ];
 
   postPatch = ''
@@ -59,5 +69,9 @@ buildPythonPackage {
     python test_xndarray.py
     popd
   '';
+<<<<<<< HEAD
+=======
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }
 

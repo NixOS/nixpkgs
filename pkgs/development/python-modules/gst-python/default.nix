@@ -14,7 +14,11 @@
 
 buildPythonPackage rec {
   pname = "gst-python";
+<<<<<<< HEAD
   version = "1.22.5";
+=======
+  version = "1.22.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   format = "other";
 
@@ -22,7 +26,11 @@ buildPythonPackage rec {
 
   src = fetchurl {
     url = "${meta.homepage}/src/gst-python/${pname}-${version}.tar.xz";
+<<<<<<< HEAD
     hash = "sha256-vwUjJBXPYBgUKuUd07iXu3NDJoe1zheGv0btximM5bA=";
+=======
+    hash = "sha256-vvKz2Czkvka3dbG7VjBcEAPuAbU1pTqC+f6JJJchU60=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   # Python 2.x is not supported.
@@ -61,6 +69,9 @@ buildPythonPackage rec {
     homepage = "https://gstreamer.freedesktop.org";
     description = "Python bindings for GStreamer";
     license = licenses.lgpl2Plus;
+<<<<<<< HEAD
     maintainers = with maintainers; [ lilyinstarlight ];
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

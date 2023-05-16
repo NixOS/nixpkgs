@@ -1,6 +1,10 @@
 {
   lib, mkDerivation, fetchFromGitHub, cmake, extra-cmake-modules,
+<<<<<<< HEAD
   zlib, boost179, libunwind, elfutils, sparsehash, zstd,
+=======
+  zlib, boost, libunwind, elfutils, sparsehash, zstd,
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   qtbase, kio, kitemmodels, threadweaver, kconfigwidgets, kcoreaddons, kdiagram
 }:
 
@@ -17,7 +21,11 @@ mkDerivation rec {
 
   nativeBuildInputs = [ cmake extra-cmake-modules ];
   buildInputs = [
+<<<<<<< HEAD
     zlib boost179 libunwind elfutils sparsehash zstd
+=======
+    zlib boost libunwind elfutils sparsehash zstd
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     qtbase kio kitemmodels threadweaver kconfigwidgets kcoreaddons kdiagram
   ];
 

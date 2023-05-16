@@ -1,5 +1,11 @@
+<<<<<<< HEAD
 { lib
 , stdenv
+=======
+{ config
+, stdenv
+, lib
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , fetchFromGitHub
 , makeWrapper
 , makePerlPath

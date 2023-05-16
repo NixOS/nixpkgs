@@ -12,13 +12,21 @@
 
 stdenv.mkDerivation rec {
   pname = "pagmo2";
+<<<<<<< HEAD
   version = "2.19.0";
+=======
+  version = "2.18.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
      owner = "esa";
      repo = "pagmo2";
      rev = "v${version}";
+<<<<<<< HEAD
      sha256 = "sha256-z5kg2xKZ666EPK844yp+hi4iGisaIPme9xNdzsAEEjw=";
+=======
+     sha256 = "0rd8scs4hj6qd8ylmn5hafncml2vr4fvcgm3agz3jrvmnc7hadrj";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ cmake ];

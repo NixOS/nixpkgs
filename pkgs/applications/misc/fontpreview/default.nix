@@ -36,6 +36,9 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     platforms = platforms.unix;
     maintainers = [ maintainers.erictapen ];
+<<<<<<< HEAD
     mainProgram = "fontpreview";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

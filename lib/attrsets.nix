@@ -3,7 +3,11 @@
 
 let
   inherit (builtins) head tail length;
+<<<<<<< HEAD
   inherit (lib.trivial) id mergeAttrs;
+=======
+  inherit (lib.trivial) flip id mergeAttrs pipe;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   inherit (lib.strings) concatStringsSep concatMapStringsSep escapeNixIdentifier sanitizeDerivationName;
   inherit (lib.lists) foldr foldl' concatMap concatLists elemAt all partition groupBy take foldl;
 in
@@ -123,11 +127,15 @@ rec {
          { x = "a"; y = "b"; }
        => { x = "a"; xa = "a"; y = "b"; yb = "b"; }
   */
+<<<<<<< HEAD
   concatMapAttrs = f: v:
     foldl' mergeAttrs { }
       (attrValues
         (mapAttrs f v)
       );
+=======
+  concatMapAttrs = f: flip pipe [ (mapAttrs f) attrValues (foldl' mergeAttrs { }) ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 
   /* Update or set specific paths of an attribute set.
@@ -738,6 +746,7 @@ rec {
     sets:
     zipAttrsWith (name: values: values) sets;
 
+<<<<<<< HEAD
   /*
     Merge a list of attribute sets together using the `//` operator.
     In case of duplicate attributes, values from later list elements take precedence over earlier ones.
@@ -774,6 +783,8 @@ rec {
     else
       binaryMerge 0 (length list);
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   /* Does the same as the update operator '//' except that attributes are
      merged until the given predicate is verified.  The predicate should

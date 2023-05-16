@@ -8,16 +8,27 @@
 
 buildPythonPackage rec {
   pname = "aioairzone";
+<<<<<<< HEAD
   version = "0.6.8";
   format = "pyproject";
 
   disabled = pythonOlder "3.11";
+=======
+  version = "0.5.5";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.8";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "Noltari";
     repo = pname;
     rev = "refs/tags/${version}";
+<<<<<<< HEAD
     hash = "sha256-aCf0IO70t/QMmDmIwBKN3Um1HgHjHn1r6Dze/pWaQ5M=";
+=======
+    hash = "sha256-6PBNwCfh5ryR3Jub3GDykY6lRQt9wdkV8yWkvivuQpM=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

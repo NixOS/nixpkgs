@@ -24,9 +24,15 @@ let fetchurl = args@{url, hash, ...}:
 in rec {
 
   stable = fetchurl rec {
+<<<<<<< HEAD
     version = "8.0.2";
     url = "https://dl.winehq.org/wine/source/8.0/wine-${version}.tar.xz";
     hash = "sha256-bsj7byxy1XbLEfUrL41Zr2RASAIVRlHRIrmEZtkdyEc=";
+=======
+    version = "8.0";
+    url = "https://dl.winehq.org/wine/source/8.0/wine-${version}.tar.xz";
+    hash = "sha256-AnLCCTj4chrkUQr6qLNgN0V91XZh5NZkIxB5uekceS4=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     ## see http://wiki.winehq.org/Gecko
     gecko32 = fetchurl rec {
@@ -56,6 +62,10 @@ in rec {
       ${updateScriptPreamble}
       major=''${UPDATE_NIX_OLD_VERSION%%.*}
       latest_stable=$(get_latest_wine_version "$major.0")
+<<<<<<< HEAD
+=======
+      latest_gecko=$(get_latest_lib_version wine-gecko)
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
       # Can't use autobump on stable because we don't want the path
       # <source/7.0/wine-7.0.tar.xz> to become <source/7.0.1/wine-7.0.1.tar.xz>.
@@ -63,12 +73,19 @@ in rec {
           set_version_and_hash stable "$latest_stable" "$(nix-prefetch-url "$wine_url_base/source/$major.0/wine-$latest_stable.tar.xz")"
       fi
 
+<<<<<<< HEAD
+=======
+      autobump stable.gecko32 "$latest_gecko"
+      autobump stable.gecko64 "$latest_gecko"
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       do_update
     '');
   };
 
   unstable = fetchurl rec {
     # NOTE: Don't forget to change the hash for staging as well.
+<<<<<<< HEAD
     version = "8.14";
     url = "https://dl.winehq.org/wine/source/8.x/wine-${version}.tar.xz";
     hash = "sha256-4YNu9msYJfqdoEKDDASVsqw5SBVENkNGaXnuif3X+vQ=";
@@ -91,13 +108,27 @@ in rec {
       version = "8.0.0";
       url = "https://dl.winehq.org/wine/wine-mono/${version}/wine-mono-${version}-x86.msi";
       hash = "sha256-dbP0XcodyJhX/p6TLaeHEPZMxtSe8asMcjoXcIW0cRs=";
+=======
+    version = "8.5";
+    url = "https://dl.winehq.org/wine/source/8.x/wine-${version}.tar.xz";
+    hash = "sha256-wJdmQBswu0JeEy4RSyba+kJ2SX5AzL4V+3fnUfsJvhc=";
+    inherit (stable) gecko32 gecko64 patches;
+
+    mono = fetchurl rec {
+      version = "7.4.0";
+      url = "https://dl.winehq.org/wine/wine-mono/${version}/wine-mono-${version}-x86.msi";
+      hash = "sha256-ZBP/Mo679+x2icZI/rNUbYEC3thlB50fvwMxsUs6sOw=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
 
     updateScript = writeShellScript "update-wine-unstable" ''
       ${updateScriptPreamble}
       major=''${UPDATE_NIX_OLD_VERSION%%.*}
       latest_unstable=$(get_latest_wine_version "$major.x")
+<<<<<<< HEAD
       latest_gecko=$(get_latest_lib_version wine-gecko)
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       latest_mono=$(get_latest_lib_version wine-mono)
 
       update_staging() {
@@ -106,8 +137,11 @@ in rec {
       }
 
       autobump unstable "$latest_unstable" "" update_staging
+<<<<<<< HEAD
       autobump unstable.gecko32 "$latest_gecko"
       autobump unstable.gecko64 "$latest_gecko"
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       autobump unstable.mono "$latest_mono"
 
       do_update
@@ -117,7 +151,11 @@ in rec {
   staging = fetchFromGitHub rec {
     # https://github.com/wine-staging/wine-staging/releases
     inherit (unstable) version;
+<<<<<<< HEAD
     hash = "sha256-ct/RGXt9B6F3PHbirX8K03AZ0Kunitd2HmI0N5k6VHI=";
+=======
+    hash = "sha256-vHV7x2U9B4P0E4tcQuMXHSS4NqN7rlnhC6v/t+0Qlh0=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     owner = "wine-staging";
     repo = "wine-staging";
     rev = "v${version}";

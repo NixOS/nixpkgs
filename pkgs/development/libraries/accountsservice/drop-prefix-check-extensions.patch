@@ -1,8 +1,15 @@
 diff --git a/src/extensions.c b/src/extensions.c
+<<<<<<< HEAD
 index 354f476..8d020a6 100644
 --- a/src/extensions.c
 +++ b/src/extensions.c
 @@ -122,15 +122,7 @@ daemon_read_extension_directory (GHashTable  *ifaces,
+=======
+index 038dcb2..830465d 100644
+--- a/src/extensions.c
++++ b/src/extensions.c
+@@ -121,16 +121,7 @@ daemon_read_extension_directory (GHashTable  *ifaces,
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
                          continue;
                  }
  
@@ -10,7 +17,12 @@ index 354f476..8d020a6 100644
 -                const gchar * const prefix = "../../dbus-1/interfaces/";
 -                if (g_str_has_prefix (symlink, prefix) && g_str_equal (symlink + strlen (prefix), name)) {
 -                        daemon_read_extension_file (ifaces, filename);
+<<<<<<< HEAD
 -                } else {
+=======
+-                }
+-                else {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 -                        g_warning ("Found accounts service vendor extension symlink %s, but it must be exactly "
 -                                   "equal to '../../dbus-1/interfaces/%s' for forwards-compatibility reasons.",
 -                                   filename, name);

@@ -65,11 +65,19 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-control-center";
+<<<<<<< HEAD
   version = "44.3";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
     sha256 = "sha256-BmplBS/D7ProYAJehfeX5qsrh6WMT4q5xm7CBxioDHo=";
+=======
+  version = "44.1";
+
+  src = fetchurl {
+    url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
+    sha256 = "sha256-er02UBjihnne9gpezTBJ2w+4XebaSaltrdIfuo2wAuc=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   patches = [

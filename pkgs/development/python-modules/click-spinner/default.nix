@@ -25,6 +25,10 @@ buildPythonPackage rec {
     description = "Add support for showwing that command line app is active to Click";
     homepage = "https://github.com/click-contrib/click-spinner";
     license = licenses.mit;
+<<<<<<< HEAD
     maintainers = with maintainers; [ ];
+=======
+    maintainers = with maintainers; [ jtojnar ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

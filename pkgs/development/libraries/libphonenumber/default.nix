@@ -11,11 +11,14 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-xLxadSxVY3DjFDQrqj3BuOvdMaKdFSLjocfzovJCBB0=";
   };
 
+<<<<<<< HEAD
   patches = [
     # Submitted upstream: https://github.com/google/libphonenumber/pull/2921
     ./build-reproducibility.patch
   ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nativeBuildInputs = [
     cmake
     pkg-config

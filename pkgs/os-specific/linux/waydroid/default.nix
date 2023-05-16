@@ -11,6 +11,10 @@
 , iproute2
 , iptables
 , util-linux
+<<<<<<< HEAD
+=======
+, which
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , wrapGAppsHook
 , xclip
 , runtimeShell
@@ -18,14 +22,22 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "waydroid";
+<<<<<<< HEAD
   version = "1.4.1";
+=======
+  version = "1.3.4";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "other";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = version;
+<<<<<<< HEAD
     sha256 = "sha256-0AkNzMIumvgnVcLKX72E2+Eg54Y9j7tdIYPsroOTLWA=";
+=======
+    sha256 = "sha256-0GBob9BUwiE5cFGdK8AdwsTjTOdc+AIWqUGN/gFfOqI=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   buildInputs = [
@@ -38,7 +50,10 @@ python3Packages.buildPythonApplication rec {
   ];
 
   propagatedBuildInputs = with python3Packages; [
+<<<<<<< HEAD
     dbus-python
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     gbinder-python
     pyclip
     pygobject3
@@ -63,7 +78,10 @@ python3Packages.buildPythonApplication rec {
 
     wrapPythonProgramsIn $out/lib/waydroid/ "${lib.concatStringsSep " " [
       "$out"
+<<<<<<< HEAD
       python3Packages.dbus-python
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       python3Packages.gbinder-python
       python3Packages.pygobject3
       python3Packages.pyclip
@@ -71,11 +89,21 @@ python3Packages.buildPythonApplication rec {
       kmod
       lxc
       util-linux
+<<<<<<< HEAD
+=======
+      which
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       xclip
     ]}"
 
     substituteInPlace $out/lib/waydroid/tools/helpers/*.py \
       --replace '"sh"' '"${runtimeShell}"'
+<<<<<<< HEAD
+=======
+
+    substituteInPlace $out/share/applications/*.desktop \
+      --replace  "/usr" "$out"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '';
 
   meta = with lib; {

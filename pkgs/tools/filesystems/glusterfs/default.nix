@@ -2,7 +2,11 @@
  autoconf, automake, libtool, pkg-config, zlib, libaio, libxml2, acl, sqlite,
  liburcu, liburing, attr, makeWrapper, coreutils, gnused, gnugrep, which,
  openssh, gawk, findutils, util-linux, lvm2, btrfs-progs, e2fsprogs, xfsprogs, systemd,
+<<<<<<< HEAD
  rsync, getent, rpcsvc-proto, libtirpc, gperftools, nixosTests
+=======
+ rsync, glibc, rpcsvc-proto, libtirpc, gperftools, nixosTests
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 let
   # NOTE: On each glusterfs release, it should be checked if gluster added
@@ -42,7 +46,11 @@ let
     e2fsprogs # tune2fs
     findutils # find
     gawk # awk
+<<<<<<< HEAD
     getent # getent
+=======
+    glibc # getent
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     gnugrep # grep
     gnused # sed
     lvm2 # lvs

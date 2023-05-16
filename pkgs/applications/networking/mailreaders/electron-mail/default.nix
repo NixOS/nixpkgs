@@ -2,12 +2,20 @@
 
 let
   pname = "electron-mail";
+<<<<<<< HEAD
   version = "5.1.8";
+=======
+  version = "5.1.6";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   name = "ElectronMail-${version}";
 
   src = fetchurl {
     url = "https://github.com/vladimiry/ElectronMail/releases/download/v${version}/electron-mail-${version}-linux-x86_64.AppImage";
+<<<<<<< HEAD
     sha256 = "sha256-btqlxFrQUyb728i99IE65A9jwEFNvJ5b6zji0kwwATU=";
+=======
+    sha256 = "sha256-lsXVsx7U43czWFWxAgwTUYTnUXSL4KPFnXLzUklieAo=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   appimageContents = appimageTools.extract { inherit name src; };

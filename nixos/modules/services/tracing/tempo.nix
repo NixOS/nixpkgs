@@ -27,6 +27,7 @@ in {
         Specify a path to a configuration file that Tempo should use.
       '';
     };
+<<<<<<< HEAD
 
     extraFlags = mkOption {
       type = types.listOf types.str;
@@ -39,6 +40,8 @@ in {
         Additional flags to pass to the `ExecStart=` in `tempo.service`.
       '';
     };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   config = mkIf cfg.enable {
@@ -66,7 +69,11 @@ in {
                else cfg.configFile;
       in
       {
+<<<<<<< HEAD
         ExecStart = "${pkgs.tempo}/bin/tempo --config.file=${conf} ${lib.escapeShellArgs cfg.extraFlags}";
+=======
+        ExecStart = "${pkgs.tempo}/bin/tempo --config.file=${conf}";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         DynamicUser = true;
         Restart = "always";
         ProtectSystem = "full";

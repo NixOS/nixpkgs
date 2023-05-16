@@ -8,20 +8,28 @@
 , pytestCheckHook
 , pytest-cov
 , pythonOlder
+<<<<<<< HEAD
 , setuptools
 , setuptools-scm
 , wheel
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 buildPythonPackage rec {
   pname = "schwifty";
+<<<<<<< HEAD
   version = "2023.6.0";
+=======
+  version = "2023.3.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
+<<<<<<< HEAD
     hash = "sha256-hDNAoITt2Ak5aVWmMgqg2oA9rDFsiuum5JXc7v7sspU=";
   };
 
@@ -31,6 +39,11 @@ buildPythonPackage rec {
     wheel
   ];
 
+=======
+    hash = "sha256-Un9J1Yzt080vZ3rzoVURNpMcAObBS8Jsn5kEQKUVxf0=";
+  };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   propagatedBuildInputs = [
     iso3166
     pycountry

@@ -13,7 +13,11 @@
 cd "$(dirname $(readlink -f $0))"
 
 node2nix \
+<<<<<<< HEAD
   --nodejs-18 \
+=======
+  --nodejs-16 \
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   --strip-optional-dependencies \
   --node-env node-env.nix \
   --input package.json \

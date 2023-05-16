@@ -1,7 +1,10 @@
 { stdenv
 , lib
 , fetchurl
+<<<<<<< HEAD
 , fetchpatch
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , asciidoc
 , docbook-xsl-nons
 , docbook_xml_dtd_45
@@ -47,6 +50,7 @@
 
 stdenv.mkDerivation rec {
   pname = "tracker-miners";
+<<<<<<< HEAD
   version = "3.5.2";
 
   src = fetchurl {
@@ -63,6 +67,15 @@ stdenv.mkDerivation rec {
     })
   ];
 
+=======
+  version = "3.5.0";
+
+  src = fetchurl {
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "F5ZmA9xDKphSa0kFhqSKzX+fWZNfeJXfxRcppGppAaM=";
+  };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nativeBuildInputs = [
     asciidoc
     docbook-xsl-nons

@@ -6,14 +6,22 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "gyb";
+<<<<<<< HEAD
   version = "1.74";
+=======
+  version = "1.72";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "other";
 
   src = fetchFromGitHub {
     owner = "GAM-team";
     repo = "got-your-back";
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-JUI9BIDg7Z6z5ZtwBMsgTbYXp9w0jd1DKFAa1XjeEtQ=";
+=======
+    sha256 = "sha256-75ZU1qNFdiX9Uhb+tKN0438iHKvY4fuFVGvcgyFFgJo=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = with python3Packages; [

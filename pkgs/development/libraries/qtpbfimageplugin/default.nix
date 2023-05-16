@@ -2,13 +2,21 @@
 
 stdenv.mkDerivation rec {
   pname = "qtpbfimageplugin";
+<<<<<<< HEAD
   version = "2.4";
+=======
+  version = "2.3";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "tumic0";
     repo = "QtPBFImagePlugin";
     rev = version;
+<<<<<<< HEAD
     sha256 = "sha256-Ju22lCpwbNxiFeQoaUh3LmtI6RlTO3hOw2Z4/O8PQ6E=";
+=======
+    sha256 = "063agzcrcihasqqk2yqxqxg9xknjs99y6vx3n1v7md7dqnfv4iva";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ qmake ];

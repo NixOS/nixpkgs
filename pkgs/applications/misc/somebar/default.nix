@@ -23,7 +23,11 @@ stdenv.mkDerivation rec {
   src = fetchFromSourcehut {
     owner = "~raphi";
     repo = "somebar";
+<<<<<<< HEAD
     rev = version;
+=======
+    rev = "${version}";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     sha256 = "sha256-PBxCy1dZrOL1nmhVDQozvF0XL79uKMhhERGNpPPzaRU=";
   };
 

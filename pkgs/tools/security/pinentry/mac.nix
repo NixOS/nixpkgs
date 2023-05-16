@@ -32,11 +32,14 @@ stdenv.mkDerivation rec {
     chmod -R u+w macosx/*.nib
   '';
 
+<<<<<<< HEAD
   # Unfortunately, PlistBuddy from xcbuild is not compatible enough pinentry-mac’s build process.
   sandboxProfile = ''
     (allow process-exec (literal "/usr/libexec/PlistBuddy"))
   '';
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nativeBuildInputs = [ autoreconfHook texinfo ];
   buildInputs = [ libassuan libgpg-error libiconv Cocoa ];
 

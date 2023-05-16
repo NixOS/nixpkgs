@@ -11,7 +11,11 @@ buildGoModule rec {
     sha256 = "sha256-L0TuBDq5eEahQvzqd1WuvmXuQbbblCM+Nvj15IybnVo=";
   };
 
+<<<<<<< HEAD
   vendorHash = "sha256-BCrge2xLT4b4wpYA+zcsH64a/nfV8+HeZF7L49p2gEw=";
+=======
+  vendorSha256 = "sha256-BCrge2xLT4b4wpYA+zcsH64a/nfV8+HeZF7L49p2gEw=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   passthru.tests = { inherit (nixosTests.prometheus-exporters) shelly; };
 

@@ -511,7 +511,11 @@ let format' = format; in let
     ${if format == "raw" then ''
       mv $diskImage $out/${filename}
     '' else ''
+<<<<<<< HEAD
       ${pkgs.qemu-utils}/bin/qemu-img convert -f raw -O ${format} ${compress} $diskImage $out/${filename}
+=======
+      ${pkgs.qemu}/bin/qemu-img convert -f raw -O ${format} ${compress} $diskImage $out/${filename}
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     ''}
     diskImage=$out/${filename}
   '';
@@ -572,8 +576,12 @@ let format' = format; in let
       ${lib.optionalString installBootLoader ''
         # In this throwaway resource, we only have /dev/vda, but the actual VM may refer to another disk for bootloader, e.g. /dev/vdb
         # Use this option to create a symlink from vda to any arbitrary device you want.
+<<<<<<< HEAD
         ${optionalString (config.boot.loader.grub.enable && config.boot.loader.grub.device != "/dev/vda") ''
             mkdir -p $(dirname ${config.boot.loader.grub.device})
+=======
+        ${optionalString (config.boot.loader.grub.device != "/dev/vda") ''
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
             ln -s /dev/vda ${config.boot.loader.grub.device}
         ''}
 

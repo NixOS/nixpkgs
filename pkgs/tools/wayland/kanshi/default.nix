@@ -12,13 +12,21 @@
 
 stdenv.mkDerivation rec {
   pname = "kanshi";
+<<<<<<< HEAD
   version = "1.4.0";
+=======
+  version = "1.3.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromSourcehut {
     owner = "~emersion";
     repo = "kanshi";
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-5dIBQBA3OMlmaSYswwggFuedsb3i4uy9bcTZahIS2gQ=";
+=======
+    sha256 = "sha256-eGcgqj214fcfOrKqrAsxLG9LiNlAsWu0sgjxBB01u6Q=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   strictDeps = true;

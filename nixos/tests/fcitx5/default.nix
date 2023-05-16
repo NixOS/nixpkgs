@@ -1,8 +1,15 @@
+<<<<<<< HEAD
 import ../make-test-python.nix ({ lib, ... }:
 rec {
   name = "fcitx5";
   meta.maintainers = with lib.maintainers; [ nevivurn ];
 
+=======
+import ../make-test-python.nix ({ pkgs, ... }:
+# copy_from_host works only for store paths
+rec {
+  name = "fcitx5";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nodes.machine = { pkgs, ... }:
   {
     imports = [
@@ -31,6 +38,7 @@ rec {
     i18n.inputMethod = {
       enabled = "fcitx5";
       fcitx5.addons = [
+<<<<<<< HEAD
         pkgs.fcitx5-chinese-addons
         pkgs.fcitx5-hangul
         pkgs.fcitx5-m17n
@@ -73,6 +81,11 @@ rec {
           };
         };
       };
+=======
+        pkgs.fcitx5-m17n
+        pkgs.fcitx5-chinese-addons
+      ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
   };
 
@@ -80,6 +93,7 @@ rec {
     let
       user = nodes.machine.users.users.alice;
       xauth         = "${user.home}/.Xauthority";
+<<<<<<< HEAD
     in
       ''
             start_all()
@@ -94,6 +108,34 @@ rec {
 
             machine.succeed("su - ${user.name} -c 'alacritty >&2 &'")
             machine.succeed("su - ${user.name} -c 'fcitx5 >&2 &'")
+=======
+      fcitx_confdir = "${user.home}/.config/fcitx5";
+    in
+      ''
+            # We need config files before login session
+            # So copy first thing
+
+            # Point and click would be expensive,
+            # So configure using files
+            machine.copy_from_host(
+                "${./profile}",
+                "${fcitx_confdir}/profile",
+            )
+            machine.copy_from_host(
+                "${./config}",
+                "${fcitx_confdir}/config",
+            )
+
+            start_all()
+
+            machine.wait_for_file("${xauth}}")
+            machine.succeed("xauth merge ${xauth}")
+
+            machine.sleep(5)
+
+            machine.succeed("su - ${user.name} -c 'alacritty&'")
+            machine.succeed("su - ${user.name} -c 'fcitx5&'")
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
             machine.sleep(10)
 
             ### Type on terminal
@@ -102,6 +144,10 @@ rec {
 
             ### Start fcitx Unicode input
             machine.send_key("ctrl-alt-shift-u")
+<<<<<<< HEAD
+=======
+            machine.sleep(5)
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
             machine.sleep(1)
 
             ### Search for smiling face
@@ -121,6 +167,7 @@ rec {
             machine.sleep(1)
 
             ### Default wubi, enter 一下
+<<<<<<< HEAD
             machine.send_chars("gggh ")
             machine.sleep(1)
 
@@ -130,6 +177,11 @@ rec {
 
             ### Enter 한
             machine.send_chars("gks")
+=======
+            machine.send_chars("gggh")
+            machine.sleep(1)
+            machine.send_key("\n")
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
             machine.sleep(1)
 
             ### Switch to Harvard Kyoto
@@ -137,6 +189,7 @@ rec {
             machine.sleep(1)
 
             ### Enter क
+<<<<<<< HEAD
             machine.send_chars("ka")
             machine.sleep(1)
 
@@ -148,6 +201,14 @@ rec {
             machine.send_chars("ka\n")
             machine.sleep(1)
 
+=======
+            machine.send_chars("ka ")
+            machine.sleep(1)
+
+            machine.send_key("alt-shift")
+            machine.sleep(1)
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
             ### Turn off Fcitx
             machine.send_key("ctrl-spc")
             machine.sleep(1)
@@ -159,7 +220,12 @@ rec {
 
             ### Verify that file contents are as expected
             file_content = machine.succeed("cat ${user.home}/fcitx_test.out")
+<<<<<<< HEAD
             assert file_content == "☺一下한कか\n"
       ''
+=======
+            assert file_content == "☺一下क\n"
+            ''
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ;
 })

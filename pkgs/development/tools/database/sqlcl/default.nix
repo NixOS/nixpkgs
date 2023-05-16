@@ -1,5 +1,6 @@
 { lib, stdenv, makeWrapper, requireFile, unzip, jdk }:
 
+<<<<<<< HEAD
 stdenv.mkDerivation rec {
   pname = "sqlcl";
   version = "23.2.0.178.1027";
@@ -7,6 +8,20 @@ stdenv.mkDerivation rec {
   src = requireFile rec {
     url = "https://www.oracle.com/database/sqldeveloper/technologies/sqlcl/download/";
     name = "sqlcl-${version}.zip";
+=======
+let
+  version = "22.4.0.342.1212";
+  fileVersion = "1032835-01";
+in
+  stdenv.mkDerivation {
+
+  inherit version;
+  pname = "sqlcl";
+
+  src = requireFile rec {
+    url = "https://www.oracle.com/database/sqldeveloper/technologies/sqlcl/download/";
+    name = "V${fileVersion}.zip";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     message = ''
       This Nix expression requires that ${name} already be part of the store. To
       obtain it you need to
@@ -32,7 +47,11 @@ stdenv.mkDerivation rec {
 
         nix-prefetch-url --type sha256 file:///path/to/${name}
     '';
+<<<<<<< HEAD
     hash = "sha256-wGqLlV88yYJrVblKzeG6VerfsEgCi1JQd49ONZmUB4Y=";
+=======
+    sha256 = "0i4xsj502s465fgmlcqn80r8rqzr11mv74x9fzrlbqmkkh5c782k";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ makeWrapper unzip ];

@@ -8,13 +8,21 @@
 
 stdenv.mkDerivation rec {
   pname = "i2pd";
+<<<<<<< HEAD
   version = "2.48.0";
+=======
+  version = "2.47.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "PurpleI2P";
     repo = pname;
     rev = version;
+<<<<<<< HEAD
     sha256 = "sha256-MqkpzNUd2FZgt9TZPtEp+jIq7r3sr+EeTpHlqNCgatU=";
+=======
+    sha256 = "sha256-sgaNrRRAINMI0utLQ6o6zcI5ImaDrYho9WeFiJg7WuE=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   buildInputs = [ boost zlib openssl ]

@@ -14,13 +14,21 @@
 
 mkDerivation rec {
   pname = "librecad";
+<<<<<<< HEAD
   version = "2.2.0.2";
+=======
+  version = "2.2.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "LibreCAD";
     repo = "LibreCAD";
     rev = version;
+<<<<<<< HEAD
     sha256 = "sha256-Vj6nvOfmhzou2hhmujm47a7aKBzmgchDb/BbwCb3/hI=";
+=======
+    sha256 = "sha256-horKTegmvcMg4m5NbZ4nzy4J6Ac/6+E5OkiZl0v6TBc=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   buildInputs = [

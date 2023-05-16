@@ -33,13 +33,21 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "warpinator";
+<<<<<<< HEAD
   version = "1.6.4";
+=======
+  version = "1.6.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = pname;
     rev = version;
+<<<<<<< HEAD
     hash = "sha256-BKptTQbSBTQyc5V6WWdsPdC76sH0CFMXOyahfRmvQzc=";
+=======
+    hash = "sha256-H8bFSgx3IysHCoKrMZ9gbwRl9forEjY90a/PIC68E6k=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [
@@ -77,6 +85,14 @@ stdenv.mkDerivation rec {
       --replace '"/bin/python3"' '"${pythonEnv.interpreter}"' \
       --replace "/bin/bwrap" "${bubblewrap}/bin/bwrap" \
       --replace 'GLib.find_program_in_path("bwrap")' "True"
+<<<<<<< HEAD
+=======
+
+    # Typo fix that can be removed on next update
+    # https://github.com/linuxmint/warpinator/pull/174
+    substituteInPlace src/remote.py \
+      --replace "receiver.remaining_count" "op.remaining_count"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '';
 
   passthru.updateScript = gitUpdater {

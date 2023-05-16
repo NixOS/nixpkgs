@@ -1,11 +1,19 @@
+<<<<<<< HEAD
 { lib, stdenv, pythonPackages, fetchPypi, pkg-config
+=======
+{ lib, stdenv, pythonPackages, pkg-config
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , qmake, qtbase, qtsvg, qtwebengine
 , wrapQtAppsHook
 , darwin
 }:
 
 let
+<<<<<<< HEAD
   inherit (pythonPackages) buildPythonPackage python isPy27 pyqt5 sip pyqt-builder;
+=======
+  inherit (pythonPackages) buildPythonPackage python isPy27 pyqt5 enum34 sip pyqt-builder;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   inherit (darwin) autoSignDarwinBinariesHook;
 in buildPythonPackage rec {
   pname = "PyQtWebEngine";
@@ -14,7 +22,11 @@ in buildPythonPackage rec {
 
   disabled = isPy27;
 
+<<<<<<< HEAD
   src = fetchPypi {
+=======
+  src = pythonPackages.fetchPypi {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     inherit pname version;
     sha256 = "06fc35hzg346a9c86dk7vzm1fakkgzn5l52jfq3bix3587sjip6f";
   };

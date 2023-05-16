@@ -22,13 +22,21 @@
 
 resholve.mkDerivation rec {
   pname = "bats";
+<<<<<<< HEAD
   version = "1.10.0";
+=======
+  version = "1.9.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "bats-core";
     repo = "bats-core";
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-gy4dyoKRlf2WFmH1/mSNwhVR3df92BgpT4TjTpV4FyQ=";
+=======
+    sha256 = "sha256-nKBNbqJYRd/3tO85E6KrOh32yOaNKpLXxz5gQ5Uvmcc=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   patchPhase = ''
@@ -93,7 +101,10 @@ resholve.mkDerivation rec {
         "${placeholder "out"}/libexec/bats-core/bats-exec-test" = true;
         "$BATS_LINE_REFERENCE_FORMAT" = "comma_line";
         "$BATS_LOCKING_IMPLEMENTATION" = "${flock}/bin/flock";
+<<<<<<< HEAD
         "$parallel_binary_name" = "${parallel}/bin/parallel";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       };
       execer = [
         /*

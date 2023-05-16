@@ -7,14 +7,22 @@
 
 buildPythonPackage rec {
   pname = "sphinxcontrib-katex";
+<<<<<<< HEAD
   version = "0.9.7";
+=======
+  version = "0.9.4";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
+<<<<<<< HEAD
     hash = "sha256-OmdUsc/JDhQeP3Pgg16vyCYtpfr+ekxnT6cI+rec69c=";
+=======
+    hash = "sha256-Mcn+gcP6ywhVlguCggJkH4SA6n1ikmviRbah7LejDZE=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [

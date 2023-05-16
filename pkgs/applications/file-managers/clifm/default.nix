@@ -2,13 +2,21 @@
 
 stdenv.mkDerivation rec {
   pname = "clifm";
+<<<<<<< HEAD
   version = "1.13";
+=======
+  version = "1.10";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "leo-arch";
     repo = pname;
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-Y9z3HT36Z1fwweOnniRgyNQX1cbrLSGGgB5UAxkq9mI=";
+=======
+    sha256 = "sha256-kXnI8a1nGKBDc+isv9RYvputKk+/FHmM9j+G4UnI5Z4=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   buildInputs = [ libcap acl file readline ];

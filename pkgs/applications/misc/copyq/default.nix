@@ -17,13 +17,22 @@
 
 stdenv.mkDerivation rec {
   pname = "CopyQ";
+<<<<<<< HEAD
   version = "7.1.0";
+=======
+  version = "unstable-2023-04-14";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "hluk";
     repo = "CopyQ";
+<<<<<<< HEAD
     rev = "v${version}";
     hash = "sha256-aAmpFKIIFZLPWUaOcf4V1d/wVQ7xRcnXFsqFjROsabg=";
+=======
+    rev = "c4e481315be5a1fa35503c9717b396319b43aa9b";
+    hash = "sha256-XLuawTKzDi+ixEUcsllyW5tCVTPlzIozu1UzYOjTqDU=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

@@ -6,6 +6,10 @@ import ./make-test-python.nix ({ pkgs, ... } : {
 
   nodes.machine =
     { lib, pkgs, config, ... }:
+<<<<<<< HEAD
+=======
+    with lib;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     { users.users.alice = { isNormalUser = true; extraGroups = [ "proc" ]; };
       users.users.sybil = { isNormalUser = true; group = "wheel"; };
       imports = [ ../modules/profiles/hardened.nix ];

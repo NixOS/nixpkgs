@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 { lib, stdenv, fetchFromGitHub, fetchpatch, cmake, boost } :
+=======
+{ lib, stdenv, fetchFromGitHub, cmake, boost } :
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 stdenv.mkDerivation rec {
   pname = "cm256cc";
@@ -11,6 +15,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-T7ZUVVYGdzAialse//MoqWCVNBpbZvzWMAKc0cw7O9k=";
   };
 
+<<<<<<< HEAD
   patches = [
     # Pull fix pending upstream inclusion for gcc-13 support:
     #   https://github.com/f4exb/cm256cc/pull/18
@@ -21,6 +26,8 @@ stdenv.mkDerivation rec {
     })
   ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nativeBuildInputs = [ cmake ];
   buildInputs = [ boost ];
 

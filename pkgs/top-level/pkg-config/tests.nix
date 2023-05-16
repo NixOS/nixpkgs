@@ -9,7 +9,11 @@ let
   # unsupported platform problems.
   allPkgs = import ../default.nix {
     system = stdenv.hostPlatform.system;
+<<<<<<< HEAD
     localSystem = stdenv.buildPlatform.system;
+=======
+    localSystem = stdenv.hostPlatform.system;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     config = {
       allowUnsupportedSystem = true;
     };

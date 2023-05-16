@@ -7,12 +7,19 @@
 , openconnect
 , intltool
 , pkg-config
+<<<<<<< HEAD
+=======
+, autoreconfHook
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , networkmanager
 , gcr
 , libsecret
 , file
 , gtk3
+<<<<<<< HEAD
 , webkitgtk_4_1
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , libnma
 , libnma-gtk4
 , gtk4
@@ -23,11 +30,19 @@
 
 stdenv.mkDerivation rec {
   pname = "NetworkManager-openconnect";
+<<<<<<< HEAD
   version = "1.2.10";
 
   src = fetchurl {
     url = "mirror://gnome/sources/NetworkManager-openconnect/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "hEtr9k7K25e0pox3bbiapebuflm9JLAYAihAaGMTZGQ=";
+=======
+  version = "1.2.8";
+
+  src = fetchurl {
+    url = "mirror://gnome/sources/NetworkManager-openconnect/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "Xe2qeF2C2OI53dCCv6xSUMaR6WRGS+GAe2gnJjYzzcw=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   patches = [
@@ -42,7 +57,10 @@ stdenv.mkDerivation rec {
     libxml2
     openconnect
     networkmanager
+<<<<<<< HEAD
     webkitgtk_4_1 # required, for SSO
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ] ++ lib.optionals withGnome [
     gtk3
     libnma

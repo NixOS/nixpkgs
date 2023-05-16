@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 { lib, stdenv, mkDerivation, fetchFromGitHub, fetchpatch
+=======
+{ lib, stdenv, mkDerivation, fetchFromGitHub
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , pkg-config, autoreconfHook
 , openssl, db48, boost, zlib, miniupnpc
 , glib, protobuf, util-linux, qrencode
@@ -20,6 +24,7 @@ mkDerivation rec {
     sha256 = "sha256-TuDc47TZOEQA5Lr4DQkEhnO/Szp9h71xPjaBL3jFWuM=";
   };
 
+<<<<<<< HEAD
   patches = [
     (fetchpatch {
       name = "boost1770.patch";
@@ -28,6 +33,8 @@ mkDerivation rec {
     })
   ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nativeBuildInputs = [ pkg-config autoreconfHook ];
   buildInputs = [ openssl db48 boost zlib zeromq fmt
                   miniupnpc glib protobuf util-linux libevent ]

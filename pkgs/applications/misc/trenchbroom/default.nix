@@ -1,6 +1,12 @@
+<<<<<<< HEAD
 { lib, stdenv, fetchFromGitHub, writeText
 , cmake, ninja, curl, git, pandoc, pkg-config, unzip, zip
 , libGL, libGLU, freeimage, freetype, assimp
+=======
+{ lib, stdenv, fetchFromGitHub
+, cmake, ninja, git, pandoc, pkg-config
+, libGL, libGLU, freeimage
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , catch2, fmt, glew, miniz, tinyxml-2, xorg
 , qtbase, wrapQtAppsHook
 , copyDesktopItems, makeDesktopItem
@@ -8,12 +14,17 @@
 
 stdenv.mkDerivation rec {
   pname = "TrenchBroom";
+<<<<<<< HEAD
   version = "2023.1";
+=======
+  version = "2022.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "TrenchBroom";
     repo = "TrenchBroom";
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-62xcFKSqxPS+J54+kLo/hewM+Wu/rVBGD8oiECDCJpA=";
     fetchSubmodules = true;
   };
@@ -62,11 +73,17 @@ stdenv.mkDerivation rec {
       ln -s ${miniz}/lib/lib* $VCPKG_ROOT/installed/${vcpkg_target}/lib/
       ln -s ${tinyxml-2}/lib/lib* $VCPKG_ROOT/installed/${vcpkg_target}/lib/
     '';
+=======
+    sha256 = "sha256-FNpYBfKnY9foPq1+21+382KKXieHksr3tCox251iJn4=";
+    fetchSubmodules = true;
+  };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   postPatch = ''
     substituteInPlace common/src/Version.h.in \
       --subst-var-by APP_VERSION_YEAR ${lib.versions.major version} \
       --subst-var-by APP_VERSION_NUMBER ${lib.versions.minor version} \
       --subst-var-by GIT_DESCRIBE v${version}
+<<<<<<< HEAD
     substituteInPlace app/CMakeLists.txt \
       --replace 'set(CPACK_PACKAGING_INSTALL_PREFIX "/usr")' 'set(CPACK_PACKAGING_INSTALL_PREFIX "'$out'")'
   '';
@@ -76,20 +93,35 @@ stdenv.mkDerivation rec {
     libGL libGLU xorg.libXxf86vm xorg.libSM
     freeimage freetype qtbase catch2 fmt
     glew miniz tinyxml-2 assimp
+=======
+  '';
+
+  nativeBuildInputs = [ cmake git pandoc wrapQtAppsHook copyDesktopItems pkg-config ];
+  buildInputs = [
+    libGL libGLU xorg.libXxf86vm freeimage qtbase catch2 fmt glew miniz tinyxml-2
+    xorg.libSM
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
   QT_PLUGIN_PATH = "${qtbase}/${qtbase.qtPluginPrefix}";
   QT_QPA_PLATFORM = "offscreen";
 
   cmakeFlags = [
+<<<<<<< HEAD
     "-DCMAKE_MAKE_PROGRAM=ninja"
     "-DCMAKE_TOOLCHAIN_FILE=vcpkg/scripts/buildsystems/vcpkg.cmake"
     "-DVCPKG_MANIFEST_INSTALL=OFF"
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     # https://github.com/TrenchBroom/TrenchBroom/issues/4002#issuecomment-1125390780
     "-DCMAKE_PREFIX_PATH=cmake/packages"
   ];
   ninjaFlags = [
     "TrenchBroom"
   ];
+<<<<<<< HEAD
+=======
+  preBuild = "export HOME=$(mktemp -d)";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   postInstall = ''
     pushd $out/share/TrenchBroom/icons
@@ -121,6 +153,9 @@ stdenv.mkDerivation rec {
     description = "Level editor for Quake-engine based games";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ astro ];
+<<<<<<< HEAD
     platforms = [ "x86_64-linux" ];
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

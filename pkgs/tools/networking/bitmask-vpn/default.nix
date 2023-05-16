@@ -16,7 +16,10 @@
 , qmltermwidget
 , qtbase
 , qtdeclarative
+<<<<<<< HEAD
 , qtgraphicaleffects
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , qtinstaller
 , qtquickcontrols
 , qtquickcontrols2
@@ -26,21 +29,33 @@
 , provider ? "riseup"
 }:
 let
+<<<<<<< HEAD
   version = "0.21.11";
+=======
+  version = "0.21.6";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitLab {
     domain = "0xacab.org";
     owner = "leap";
     repo = "bitmask-vpn";
     rev = version;
+<<<<<<< HEAD
     sha256 = "sha256-mhmKG6Exxh64oeeeLezJYWEw61iIHLasHjLomd2L8P4=";
+=======
+    sha256 = "sha256-LMz+ZgQVFGujoLA8rlyZ3VnW/NSlPipD5KwCe+cFtnY=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   # bitmask-root is only used on GNU/Linux
   # and may one day be replaced by pkg/helper
   bitmask-root = mkDerivation {
     inherit src version;
+<<<<<<< HEAD
     sourceRoot = "${src.name}/helpers";
+=======
+    sourceRoot = "source/helpers";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     pname = "bitmask-root";
     nativeBuildInputs = [ python3Packages.wrapPython ];
     postPatch = ''
@@ -99,6 +114,10 @@ buildGoModule rec {
     pkg-config
     python3Packages.wrapPython
     qmake
+<<<<<<< HEAD
+=======
+    qtquickcontrols
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     qtquickcontrols2
     qttools
     which
@@ -109,9 +128,12 @@ buildGoModule rec {
     qtbase
     qmltermwidget
     qtdeclarative
+<<<<<<< HEAD
     qtgraphicaleffects
     qtquickcontrols
     qtquickcontrols2
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ] ++ lib.optionals stdenv.isDarwin [ CoreFoundation Security ];
   # FIXME: building on Darwin currently fails
   # due to missing debug symbols for Qt,

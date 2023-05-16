@@ -2,11 +2,16 @@
 
 stdenv.mkDerivation rec {
   pname = "spirv-tools";
+<<<<<<< HEAD
   version = "1.3.261.0";
+=======
+  version = "2023.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "SPIRV-Tools";
+<<<<<<< HEAD
     rev = "sdk-${version}";
     hash = "sha256-K7cv0mMNrXYOlJsxAPwz3rVX5FnsnBNvaU33k9hYnQc=";
   };
@@ -16,6 +21,12 @@ stdenv.mkDerivation rec {
   # description
   patches = lib.optional stdenv.hostPlatform.isStatic ./no-shared-libs.patch;
 
+=======
+    rev = "v${version}";
+    hash = "sha256-l44Ru0WjROQEDNU/2YQJGti1uDZP9osRdfsXus5EGX0=";
+  };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nativeBuildInputs = [ cmake python3 ];
 
   cmakeFlags = [
@@ -44,7 +55,11 @@ stdenv.mkDerivation rec {
     description = "The SPIR-V Tools project provides an API and commands for processing SPIR-V modules";
     homepage = "https://github.com/KhronosGroup/SPIRV-Tools";
     license = licenses.asl20;
+<<<<<<< HEAD
     platforms = with platforms; unix ++ windows;
+=======
+    platforms = platforms.unix;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     maintainers = [ maintainers.ralith ];
   };
 }

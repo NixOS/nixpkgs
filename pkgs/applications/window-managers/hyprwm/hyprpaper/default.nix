@@ -2,7 +2,10 @@
 , stdenv
 , fetchFromGitHub
 , cmake
+<<<<<<< HEAD
 , file
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , libjpeg
 , mesa
 , pango
@@ -14,13 +17,21 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hyprpaper";
+<<<<<<< HEAD
   version = "0.4.0";
+=======
+  version = "0.2.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = finalAttrs.pname;
     rev = "v${finalAttrs.version}";
+<<<<<<< HEAD
     hash = "sha256-V5ulB9CkGh1ghiC4BKvRdoYKZzpaiOKzAOUmJIFkgM0=";
+=======
+    hash = "sha256-rAKfgQJQRsw4QMOXdxfHIh/d5LPY6HHKBX1KtaPs2No=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [
@@ -30,7 +41,10 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
+<<<<<<< HEAD
     file
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     libjpeg
     mesa
     pango
@@ -62,6 +76,9 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with maintainers; [ wozeparrot fufexan ];
     inherit (wayland.meta) platforms;
     broken = stdenv.isDarwin;
+<<<<<<< HEAD
     mainProgram = "hyprpaper";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 })

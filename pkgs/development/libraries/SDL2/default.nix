@@ -55,11 +55,19 @@
 
 stdenv.mkDerivation rec {
   pname = "SDL2";
+<<<<<<< HEAD
   version = "2.28.2";
 
   src = fetchurl {
     url = "https://www.libsdl.org/release/${pname}-${version}.tar.gz";
     hash = "sha256-ZLEQL6Igk1FbAu8z3Yc53uG6V+nbumoJKUK4u+0aHF4=";
+=======
+  version = "2.26.5";
+
+  src = fetchurl {
+    url = "https://www.libsdl.org/release/${pname}-${version}.tar.gz";
+    sha256 = "sha256-rY/qPaG+ZMg8RbHTY6a0uo/WD1veOyPsc4VXCexeq/c=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
   dontDisableStatic = if withStatic then 1 else 0;
   outputs = [ "out" "dev" ];
@@ -88,7 +96,11 @@ stdenv.mkDerivation rec {
 
   dlopenPropagatedBuildInputs = [ ]
     # Propagated for #include <GLES/gl.h> in SDL_opengles.h.
+<<<<<<< HEAD
     ++ lib.optional (openglSupport && !stdenv.isDarwin) libGL
+=======
+    ++ lib.optional openglSupport libGL
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     # Propagated for #include <X11/Xlib.h> and <X11/Xatom.h> in SDL_syswm.h.
     ++ lib.optionals x11Support [ libX11 ];
 

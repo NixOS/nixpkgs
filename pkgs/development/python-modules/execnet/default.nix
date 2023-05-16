@@ -27,6 +27,7 @@ buildPythonPackage rec {
     })
   ];
 
+<<<<<<< HEAD
   postPatch = ''
     # remove vbox tests
     rm testing/test_termination.py
@@ -35,6 +36,15 @@ buildPythonPackage rec {
     rm testing/test_gateway.py
   '' + lib.optionalString isPyPy ''
     rm testing/test_multi.py
+=======
+  # remove vbox tests
+  postPatch = ''
+    rm -v testing/test_termination.py
+    rm -v testing/test_channel.py
+    rm -v testing/test_xspec.py
+    rm -v testing/test_gateway.py
+    ${lib.optionalString isPyPy "rm -v testing/test_multi.py"}
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '';
 
   nativeBuildInputs = [
@@ -45,11 +55,16 @@ buildPythonPackage rec {
     apipkg
   ];
 
+<<<<<<< HEAD
   # sometimes crashes with: OSError: [Errno 9] Bad file descriptor
   doCheck = !isPyPy;
 
   nativeCheckInputs = [
     py # no longer required with 1.10.0
+=======
+  nativeCheckInputs = [
+    py
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     pytestCheckHook
   ];
 
@@ -66,4 +81,8 @@ buildPythonPackage rec {
     license = licenses.mit;
     maintainers = with maintainers; [ ];
   };
+<<<<<<< HEAD
+=======
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }

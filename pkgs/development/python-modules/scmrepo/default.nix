@@ -17,7 +17,11 @@
 
 buildPythonPackage rec {
   pname = "scmrepo";
+<<<<<<< HEAD
   version = "1.3.1";
+=======
+  version = "1.0.3";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -26,7 +30,11 @@ buildPythonPackage rec {
     owner = "iterative";
     repo = pname;
     rev = "refs/tags/${version}";
+<<<<<<< HEAD
     hash = "sha256-/ZELaJrGgNKzAXi1SXAMgxi84R0UvZBD9AUVO7PTEbA=";
+=======
+    hash = "sha256-Ne0iN1rVbdxyoN8XiM9Xj8uyzlEL6WHPUZbFWt/qH40=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;

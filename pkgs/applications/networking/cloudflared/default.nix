@@ -7,13 +7,21 @@
 
 buildGoModule rec {
   pname = "cloudflared";
+<<<<<<< HEAD
   version = "2023.8.2";
+=======
+  version = "2023.5.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "cloudflare";
     repo = "cloudflared";
     rev = "refs/tags/${version}";
+<<<<<<< HEAD
     hash = "sha256-8khwpGOBSpbAHnKeKFZUrJoE0dgQB3bN6Y/W2gwRfCM=";
+=======
+    hash = "sha256-0zUKlacB6aTj0UQ8dIQSU8F6SvVOTAU/GdbUqbJ8okI=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   vendorHash = null;
@@ -78,7 +86,11 @@ buildGoModule rec {
     changelog = "https://github.com/cloudflare/cloudflared/releases/tag/${version}";
     license = licenses.asl20;
     platforms = platforms.unix ++ platforms.windows;
+<<<<<<< HEAD
     maintainers = with maintainers; [ bbigras enorris thoughtpolice piperswe qjoly ];
     mainProgram = "cloudflared";
+=======
+    maintainers = with maintainers; [ bbigras enorris thoughtpolice piperswe ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

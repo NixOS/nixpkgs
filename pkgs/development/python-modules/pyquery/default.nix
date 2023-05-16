@@ -33,8 +33,11 @@ buildPythonPackage rec {
     lxml
   ];
 
+<<<<<<< HEAD
   __darwinAllowLocalNetworking = true;
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pythonImportsCheck = [ "pyquery" ];
 
   checkInputs = [

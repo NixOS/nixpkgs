@@ -106,6 +106,7 @@ self: let
         };
       });
 
+<<<<<<< HEAD
       eglot = super.eglot.overrideAttrs (old: {
         postInstall = (old.postInstall or "") + ''
           local info_file=eglot.info
@@ -117,6 +118,8 @@ self: let
         '';
       });
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       jinx = super.jinx.overrideAttrs (old: let
         libExt = pkgs.stdenv.targetPlatform.extensions.sharedLibrary;
       in {
@@ -158,6 +161,7 @@ self: let
         }
       );
 
+<<<<<<< HEAD
       xeft = super.xeft.overrideAttrs (old: let
         libExt = pkgs.stdenv.targetPlatform.extensions.sharedLibrary;
       in {
@@ -175,6 +179,8 @@ self: let
       });
 
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
 
     elpaPackages = super // overrides;

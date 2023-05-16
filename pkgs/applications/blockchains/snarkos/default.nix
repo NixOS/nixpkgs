@@ -10,16 +10,27 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "snarkos";
+<<<<<<< HEAD
   version = "2.1.7";
+=======
+  version = "2.0.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "AleoHQ";
     repo = "snarkOS";
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-kW41SNbl2vckgUth+BZ6/aM03aT6MFeY4Hwi9OVWtTI=";
   };
 
   cargoHash = "sha256-znEAb4q9H0Doc+XYCf27hV/z2t74kjQUffl/aJzW6tI=";
+=======
+    sha256 = "sha256-sS8emB+uhWuoq5ISuT8FgSSzX7/WDoOY8hHzPE/EX3o=";
+  };
+
+  cargoSha256 = "sha256-XS6dw6BIoJdigEso/J1dUaAp7AIAda3HrKnCoBynRv8=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   # buildAndTestSubdir = "cli";
 

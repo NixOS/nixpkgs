@@ -2,6 +2,11 @@
 , stdenv
 , nixosTests
 , enableNvidiaCgToolkit ? false
+<<<<<<< HEAD
+=======
+, withAssets ? false
+, withCoreInfo ? false
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , withGamemode ? stdenv.isLinux
 , withVulkan ? stdenv.isLinux
 , withWayland ? stdenv.isLinux
@@ -59,6 +64,13 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
   };
 
+<<<<<<< HEAD
+=======
+  patches = [
+    ./use-default-values-for-libretro_info_path-assets_directory.patch
+  ];
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nativeBuildInputs = [ pkg-config wrapQtAppsHook ] ++
     lib.optional withWayland wayland ++
     lib.optional (runtimeLibs != [ ]) makeWrapper;
@@ -103,8 +115,19 @@ stdenv.mkDerivation rec {
     "--enable-systemmbedtls"
     "--disable-builtinzlib"
     "--disable-builtinflac"
+<<<<<<< HEAD
     "--disable-update_assets"
     "--disable-update_core_info"
+=======
+  ] ++
+  lib.optionals withAssets [
+    "--disable-update_assets"
+    "--with-assets_dir=${retroarch-assets}/share"
+  ] ++
+  lib.optionals withCoreInfo [
+    "--disable-update_core_info"
+    "--with-core_info_dir=${libretro-core-info}/share"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ] ++
   lib.optionals stdenv.isLinux [
     "--enable-dbus"

@@ -35,11 +35,14 @@ buildPythonPackage rec {
     description = "Utilities jointly used by devpi-server and devpi-client";
     license = licenses.mit;
     maintainers = with maintainers; [ lewo makefu ];
+<<<<<<< HEAD
     # It fails to build because it depends on packaging <22 while we
     # use packaging >22.
     # See the following issues for details:
     # - https://github.com/NixOS/nixpkgs/issues/231346
     # - https://github.com/devpi/devpi/issues/939
     broken = true;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

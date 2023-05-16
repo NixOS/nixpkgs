@@ -23,9 +23,16 @@ buildGoModule rec {
   buildInputs = [
     gtk4
     glib
+<<<<<<< HEAD
   ];
 
   nativeBuildInputs = [ pkg-config gobject-introspection ];
+=======
+    gobject-introspection
+  ];
+
+  nativeBuildInputs = [ pkg-config ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   # Checking requires a working display
   doCheck = false;

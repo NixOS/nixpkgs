@@ -100,7 +100,14 @@ rec {
     name: mkOption {
     default = false;
     example = true;
+<<<<<<< HEAD
     description = "Whether to enable ${name}.";
+=======
+    description =
+      if name ? _type && name._type == "mdDoc"
+      then lib.mdDoc "Whether to enable ${name.text}."
+      else "Whether to enable ${name}.";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     type = lib.types.bool;
   };
 
@@ -152,8 +159,11 @@ rec {
       # Name for the package, shown in option description
       name:
       {
+<<<<<<< HEAD
         # Whether the package can be null, for example to disable installing a package altogether.
         nullable ? false,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         # The attribute path where the default package is located (may be omitted)
         default ? name,
         # A string or an attribute path to use as an example (may be omitted)
@@ -163,15 +173,19 @@ rec {
       }:
       let
         name' = if isList name then last name else name;
+<<<<<<< HEAD
       in mkOption ({
         type = with lib.types; (if nullable then nullOr else lib.id) package;
         description = "The ${name'} package to use."
           + (if extraDescription == "" then "" else " ") + extraDescription;
       } // (if default != null then let
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         default' = if isList default then default else [ default ];
         defaultPath = concatStringsSep "." default';
         defaultValue = attrByPath default'
           (throw "${defaultPath} cannot be found in pkgs") pkgs;
+<<<<<<< HEAD
       in {
         default = defaultValue;
         defaultText = literalExpression ("pkgs." + defaultPath);
@@ -186,6 +200,22 @@ rec {
      documentation, which is no longer required.
   */
   mkPackageOptionMD = mkPackageOption;
+=======
+      in mkOption {
+        defaultText = literalExpression ("pkgs." + defaultPath);
+        type = lib.types.package;
+        description = "The ${name'} package to use."
+          + (if extraDescription == "" then "" else " ") + extraDescription;
+        ${if default != null then "default" else null} = defaultValue;
+        ${if example != null then "example" else null} = literalExpression
+          (if isList example then "pkgs." + concatStringsSep "." example else example);
+      };
+
+  /* Like mkPackageOption, but emit an mdDoc description instead of DocBook. */
+  mkPackageOptionMD = pkgs: name: extra:
+    let option = mkPackageOption pkgs name extra;
+    in option // { description = lib.mdDoc option.description; };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   /* This option accepts anything, but it does not produce any result.
 
@@ -341,12 +371,35 @@ rec {
     if ! isString text then throw "literalExpression expects a string."
     else { _type = "literalExpression"; inherit text; };
 
+<<<<<<< HEAD
   literalExample = lib.warn "literalExample is deprecated, use literalExpression instead, or use literalMD for a non-Nix description." literalExpression;
 
   /* Transition marker for documentation that's already migrated to markdown
      syntax. This is a no-op and no longer needed.
   */
   mdDoc = lib.id;
+=======
+  literalExample = lib.warn "literalExample is deprecated, use literalExpression instead, or use literalDocBook for a non-Nix description." literalExpression;
+
+
+  /* For use in the `defaultText` and `example` option attributes. Causes the
+     given DocBook text to be inserted verbatim in the documentation, for when
+     a `literalExpression` would be too hard to read.
+  */
+  literalDocBook = text:
+    if ! isString text then throw "literalDocBook expects a string."
+    else
+      lib.warnIf (lib.isInOldestRelease 2211)
+        "literalDocBook is deprecated, use literalMD instead"
+        { _type = "literalDocBook"; inherit text; };
+
+  /* Transition marker for documentation that's already migrated to markdown
+     syntax.
+  */
+  mdDoc = text:
+    if ! isString text then throw "mdDoc expects a string."
+    else { _type = "mdDoc"; inherit text; };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   /* For use in the `defaultText` and `example` option attributes. Causes the
      given MD text to be inserted verbatim in the documentation, for when

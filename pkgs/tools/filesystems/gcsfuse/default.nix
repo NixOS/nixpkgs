@@ -5,16 +5,27 @@
 
 buildGoModule rec {
   pname = "gcsfuse";
+<<<<<<< HEAD
   version = "1.0.1";
+=======
+  version = "0.42.4";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "googlecloudplatform";
     repo = "gcsfuse";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-9RqvEETRwcyK59AIWRgT3YNMu9MYZGD9rr5vyzTn0xg=";
   };
 
   vendorHash = "sha256-oTELdPPkKBQFBIRhjns6t3wj84RQhDVOi95seNyeeR0=";
+=======
+    hash = "sha256-Yv2IY+ZSyZDcgEpMGYZxqxKc6twmMh/18HlTKdyUGbk=";
+  };
+
+  vendorHash = null;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   subPackages = [ "." "tools/mount_gcsfuse" ];
 
@@ -42,6 +53,10 @@ buildGoModule rec {
     homepage = "https://cloud.google.com/storage/docs/gcs-fuse";
     changelog = "https://github.com/GoogleCloudPlatform/gcsfuse/releases/tag/v${version}";
     license = licenses.asl20;
+<<<<<<< HEAD
+=======
+    platforms = platforms.unix;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     maintainers = with maintainers; [ aaronjheng ];
   };
 }

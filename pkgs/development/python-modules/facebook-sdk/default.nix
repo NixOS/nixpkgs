@@ -27,6 +27,10 @@ buildPythonPackage rec {
     description = "Client library that supports the Facebook Graph API and the official Facebook JavaScript SDK";
     homepage = "https://github.com/pythonforfacebook/facebook-sdk";
     license = licenses.asl20 ;
+<<<<<<< HEAD
     maintainers = [ ];
+=======
+    maintainers = [ maintainers.costrouc ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

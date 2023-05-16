@@ -1,6 +1,10 @@
 { lib
 , stdenv
 , fetchurl
+<<<<<<< HEAD
+=======
+, fetchpatch
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , gperf
 , guile
 , guile-lib
@@ -27,9 +31,15 @@ stdenv.mkDerivation rec {
     libffi
   ];
 
+<<<<<<< HEAD
   env.GUILE_SITE = "${guile-lib}/${guile.siteDir}";
 
   configureFlags = [ "--with-guilemoduledir=$(out)/${guile.siteDir}" ];
+=======
+  GUILE_SITE="${guile-lib}/share/guile/site";
+
+  configureFlags = [ "--with-guilemoduledir=$(out)/share/guile/site" ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   meta = with lib; {
     homepage = "https://www.nongnu.org/guile-reader/";
@@ -45,6 +55,10 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.lgpl3Plus;
     maintainers = with maintainers; [ AndersonTorres ];
+<<<<<<< HEAD
     platforms = guile.meta.platforms;
+=======
+    platforms = platforms.gnu;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

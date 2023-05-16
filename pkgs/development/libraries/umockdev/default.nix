@@ -18,15 +18,26 @@
 , which
 }:
 
+<<<<<<< HEAD
 stdenv.mkDerivation (finalAttrs: {
   pname = "umockdev";
   version = "0.17.18";
+=======
+stdenv.mkDerivation rec {
+  pname = "umockdev";
+  version = "0.17.17";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   outputs = [ "bin" "out" "dev" "devdoc" ];
 
   src = fetchurl {
+<<<<<<< HEAD
     url = "https://github.com/martinpitt/umockdev/releases/download/${finalAttrs.version}/umockdev-${finalAttrs.version}.tar.xz";
     sha256 = "sha256-RmrT4McV5W9Q6mqWUWWCPQc6hBN6y4oeObZlc2SKmF8=";
+=======
+    url = "https://github.com/martinpitt/umockdev/releases/download/${version}/${pname}-${version}.tar.xz";
+    sha256 = "sha256-IOYhseRYsyADz+qZc5tngkuGZShUqLzjPiYSTjR/32w=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   patches = [
@@ -50,11 +61,16 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     glib
     systemd
+<<<<<<< HEAD
     libpcap
   ];
 
   checkInputs = lib.optionals finalAttrs.passthru.withGudev [
     libgudev
+=======
+    libgudev
+    libpcap
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   nativeCheckInputs = [
@@ -84,6 +100,7 @@ stdenv.mkDerivation (finalAttrs: {
     ln -s "$PWD/libumockdev-preload.so.0" "$out/lib/libumockdev-preload.so.0"
   '';
 
+<<<<<<< HEAD
   passthru = {
     # libgudev is needed for an optional test but it itself relies on umockdev for testing.
     withGudev = false;
@@ -100,9 +117,18 @@ stdenv.mkDerivation (finalAttrs: {
   meta = with lib; {
     homepage = "https://github.com/martinpitt/umockdev";
     changelog = "https://github.com/martinpitt/umockdev/releases/tag/${finalAttrs.version}";
+=======
+  meta = with lib; {
+    homepage = "https://github.com/martinpitt/umockdev";
+    changelog = "https://github.com/martinpitt/umockdev/releases/tag/${version}";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     description = "Mock hardware devices for creating unit tests";
     license = licenses.lgpl21Plus;
     maintainers = with maintainers; [ flokli ];
     platforms = with platforms; linux;
   };
+<<<<<<< HEAD
 })
+=======
+}
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)

@@ -1,13 +1,21 @@
 { lib, python3, fetchFromGitHub }:
 python3.pkgs.buildPythonApplication rec {
   pname = "joystickwake";
+<<<<<<< HEAD
   version = "0.4.1";
+=======
+  version = "0.4";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "foresto";
     repo = pname;
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-qf1owRdBGyU3q9ZJAzDEcMlnHfeUMSXga4v6QXdxXO0=";
+=======
+    sha256 = "sha256-0rVVxaaAFHkmJeG3e181x7faTIeFwupplWepoyxc51g=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = with python3.pkgs; [ dbus-next pyudev xlib ];

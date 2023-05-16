@@ -10,7 +10,11 @@ import ./make-test-python.nix ({ pkgs, ...} : {
     netdata =
       { pkgs, ... }:
         {
+<<<<<<< HEAD
           environment.systemPackages = with pkgs; [ curl jq netdata ];
+=======
+          environment.systemPackages = with pkgs; [ curl jq ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           services.netdata.enable = true;
         };
     };
@@ -34,8 +38,11 @@ import ./make-test-python.nix ({ pkgs, ...} : {
     filter = '[.data[range(10)][.labels | indices("root")[0]]] | add | . > 0'
     cmd = f"curl -s {url} | jq -e '{filter}'"
     netdata.wait_until_succeeds(cmd)
+<<<<<<< HEAD
 
     # check if the control socket is available
     netdata.succeed("sudo netdatacli ping")
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '';
 })

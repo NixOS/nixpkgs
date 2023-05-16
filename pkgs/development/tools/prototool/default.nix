@@ -30,5 +30,9 @@ buildGoModule rec {
     description = "Your Swiss Army Knife for Protocol Buffers";
     maintainers = [ maintainers.marsam ];
     license = licenses.mit;
+<<<<<<< HEAD
+=======
+    platforms = platforms.unix;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

@@ -6,15 +6,34 @@
 
 stdenv.mkDerivation rec {
   pname = "clight";
+<<<<<<< HEAD
   version = "4.10";
+=======
+  version = "4.9";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "FedeDP";
     repo = "Clight";
     rev = version;
+<<<<<<< HEAD
     sha256 = "sha256-IAoz4f4XrX8bgesWL4yLK6m5F+c75WNIMFgKBj+W61Q=";
   };
 
+=======
+    sha256 = "sha256-m1oKjyy7fMK6mIf5FRuWCbfAM8qlHXRR/rwHsCZADiY=";
+  };
+
+  # dbus-1.pc has datadir=/etc
+  SESSION_BUS_DIR = "${placeholder "out"}/share/dbus-1/services";
+
+  postPatch = ''
+    sed -i "s@/usr@$out@" CMakeLists.txt
+    sed -i "s@/etc@$out\0@" CMakeLists.txt
+    sed -i "s@pkg_get_variable(SESSION_BUS_DIR.*@set(SESSION_BUS_DIR $SESSION_BUS_DIR)@" CMakeLists.txt
+  '';
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nativeBuildInputs = [
     dbus
     cmake
@@ -35,7 +54,11 @@ stdenv.mkDerivation rec {
     ++ optional withUpower upower;
 
   cmakeFlags = [
+<<<<<<< HEAD
     "-DSESSION_BUS_DIR=${placeholder "out"}/share/dbus-1/services"
+=======
+    # bash-completion.pc completionsdir=${bash-completion.out}
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "-DBASH_COMPLETIONS_DIR=${placeholder "out"}/share/bash-completions/completions"
     "-DZSH_COMPLETIONS_DIR=${placeholder "out"}/share/zsh/site-functions"
   ];

@@ -3,12 +3,17 @@
 let
   defaultUser = "outline";
   cfg = config.services.outline;
+<<<<<<< HEAD
   inherit (lib) mkRemovedOptionModule;
 in
 {
   imports = [
     (mkRemovedOptionModule [ "services" "outline" "sequelizeArguments" ] "Database migration are run agains configurated database by outline directly")
   ];
+=======
+in
+{
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   # See here for a reference of all the options:
   #   https://github.com/outline/outline/blob/v0.67.0/.env.sample
   #   https://github.com/outline/outline/blob/v0.67.0/app.json
@@ -29,7 +34,11 @@ in
           # to still land in the same team. Note that this effectively makes
           # Outline a single-team instance.
           patchPhase = ${"''"}
+<<<<<<< HEAD
             sed -i 's/const domain = parts\.length && parts\[1\];/const domain = "example.com";/g' plugins/oidc/server/auth/oidc.ts
+=======
+            sed -i 's/const domain = parts\.length && parts\[1\];/const domain = "example.com";/g' server/routes/auth/providers/oidc.ts
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           ${"''"};
         })
       '';
@@ -55,6 +64,18 @@ in
       '';
     };
 
+<<<<<<< HEAD
+=======
+    sequelizeArguments = lib.mkOption {
+      type = lib.types.str;
+      default = "";
+      example = "--env=production-ssl-disabled";
+      description = lib.mdDoc ''
+        Optional arguments to pass to `sequelize` calls.
+      '';
+    };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     #
     # Required options
     #
@@ -578,6 +599,19 @@ in
     systemd.services.outline = let
       localRedisUrl = "redis+unix:///run/redis-outline/redis.sock";
       localPostgresqlUrl = "postgres://localhost/outline?host=/run/postgresql";
+<<<<<<< HEAD
+=======
+
+      # Create an outline-sequalize wrapper (a wrapper around the wrapper) that
+      # has the config file's path baked in. This is necessary because there is
+      # at least one occurrence of outline calling this from its own code.
+      sequelize = pkgs.writeShellScriptBin "outline-sequelize" ''
+        exec ${cfg.package}/bin/outline-sequelize \
+          --config $RUNTIME_DIRECTORY/database.json \
+          ${cfg.sequelizeArguments} \
+          "$@"
+      '';
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     in {
       description = "Outline wiki and knowledge base";
       wantedBy = [ "multi-user.target" ];
@@ -588,6 +622,10 @@ in
         ++ lib.optional (cfg.redisUrl == "local") "redis-outline.service";
       path = [
         pkgs.openssl # Required by the preStart script
+<<<<<<< HEAD
+=======
+        sequelize
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       ];
 
 
@@ -671,6 +709,47 @@ in
           openssl rand -hex 32 > ${lib.escapeShellArg cfg.utilsSecretFile}
         fi
 
+<<<<<<< HEAD
+=======
+        # The config file is required for the CLI, the DATABASE_URL environment
+        # variable is read by the app.
+        ${if (cfg.databaseUrl == "local") then ''
+          cat <<EOF > $RUNTIME_DIRECTORY/database.json
+          {
+            "production": {
+              "dialect": "postgres",
+              "host": "/run/postgresql",
+              "username": null,
+              "password": null
+            }
+          }
+          EOF
+          export DATABASE_URL=${lib.escapeShellArg localPostgresqlUrl}
+          export PGSSLMODE=disable
+        '' else ''
+          cat <<EOF > $RUNTIME_DIRECTORY/database.json
+          {
+            "production": {
+              "use_env_variable": "DATABASE_URL",
+              "dialect": "postgres",
+              "dialectOptions": {
+                "ssl": {
+                  "rejectUnauthorized": false
+                }
+              }
+            },
+            "production-ssl-disabled": {
+              "use_env_variable": "DATABASE_URL",
+              "dialect": "postgres"
+            }
+          }
+          EOF
+          export DATABASE_URL=${lib.escapeShellArg cfg.databaseUrl}
+        ''}
+
+        cd $RUNTIME_DIRECTORY
+        ${sequelize}/bin/outline-sequelize db:migrate
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       '';
 
       script = ''
@@ -727,7 +806,11 @@ in
         RuntimeDirectoryMode = "0750";
         # This working directory is required to find stuff like the set of
         # onboarding files:
+<<<<<<< HEAD
         WorkingDirectory = "${cfg.package}/share/outline";
+=======
+        WorkingDirectory = "${cfg.package}/share/outline/build";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       };
     };
   };

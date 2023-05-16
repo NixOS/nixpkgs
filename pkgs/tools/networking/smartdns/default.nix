@@ -2,13 +2,21 @@
 
 stdenv.mkDerivation rec {
   pname = "smartdns";
+<<<<<<< HEAD
   version = "43";
+=======
+  version = "41";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "pymumu";
     repo = pname;
     rev = "Release${version}";
+<<<<<<< HEAD
     hash = "sha256-gwbyP2duUvZafMclPwP4uZh7A7OzAvSyqjl6Eg1N6Gg=";
+=======
+    sha256 = "sha256-FVHOjW5SEShxTPPd4IuEfPV6vvqr0RepV976eJmxqwM=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   buildInputs = [ openssl ];

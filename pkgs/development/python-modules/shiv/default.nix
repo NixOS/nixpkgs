@@ -11,12 +11,20 @@
 
 buildPythonPackage rec {
   pname = "shiv";
+<<<<<<< HEAD
   version = "1.0.4";
+=======
+  version = "1.0.3";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
+<<<<<<< HEAD
     hash = "sha256-j2n3gXolRalMyOB6jsWXN1z4biwb0OWD7nU9bzH4UGA=";
+=======
+    hash = "sha256-vxRv8/Oryi6xIU6GAY82EkocItk1QO71JAMhys19f1c=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [ click pip setuptools wheel ];

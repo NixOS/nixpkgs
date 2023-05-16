@@ -15,16 +15,27 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "sniffnet";
+<<<<<<< HEAD
   version = "1.2.2";
+=======
+  version = "1.1.4";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "gyulyvgc";
     repo = "sniffnet";
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-wIyPb1RxvjkGu3Gs69HyL1WuLZUIFWB8URJjkz3oar0=";
   };
 
   cargoHash = "sha256-iB8KL0ad+rI4HuZLgb7KqfrUBTQuKRWjqaa6BnHU5eg=";
+=======
+    hash = "sha256-8G6cfp5/eXjwyNBk2SvE2XmUt7Y42E76IjDU5QHUK7s=";
+  };
+
+  cargoHash = "sha256-KN7jlB6PzRGpHBk5UvqPLhxRG7QAzOXLmEuFYNhdZJU=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nativeBuildInputs = [ pkg-config ];
 

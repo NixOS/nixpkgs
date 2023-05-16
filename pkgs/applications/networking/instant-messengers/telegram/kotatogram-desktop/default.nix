@@ -29,7 +29,11 @@
 , jemalloc
 , rnnoise
 , abseil-cpp
+<<<<<<< HEAD
 , microsoft-gsl
+=======
+, microsoft_gsl
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , wayland
 , libicns
 , Cocoa
@@ -140,7 +144,11 @@ stdenv.mkDerivation rec {
     tl-expected
     rnnoise
     tg_owt
+<<<<<<< HEAD
     microsoft-gsl
+=======
+    microsoft_gsl
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ] ++ lib.optionals stdenv.isLinux [
     kwayland
     alsa-lib
@@ -199,7 +207,11 @@ stdenv.mkDerivation rec {
   preFixup = ''
     binName=${if stdenv.isLinux then "kotatogram-desktop" else "Kotatogram"}
     remove-references-to -t ${stdenv.cc.cc} $out/bin/$binName
+<<<<<<< HEAD
     remove-references-to -t ${microsoft-gsl} $out/bin/$binName
+=======
+    remove-references-to -t ${microsoft_gsl} $out/bin/$binName
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     remove-references-to -t ${tg_owt.dev} $out/bin/$binName
   '';
 

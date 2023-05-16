@@ -41,6 +41,7 @@ in stdenv.mkDerivation {
 
   meta = with lib; {
     description = "A digital distribution platform";
+<<<<<<< HEAD
     longDescription = ''
       Steam is a video game digital distribution service and storefront from Valve.
 
@@ -50,5 +51,10 @@ in stdenv.mkDerivation {
     license = licenses.unfreeRedistributable;
     maintainers = with maintainers; [ jagajaga jonringer ];
     mainProgram = "steam";
+=======
+    homepage = "https://store.steampowered.com/";
+    license = licenses.unfreeRedistributable;
+    maintainers = with maintainers; [ jagajaga jonringer ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

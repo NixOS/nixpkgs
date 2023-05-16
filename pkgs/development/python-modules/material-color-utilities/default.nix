@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 { stdenv, lib, buildPythonPackage, fetchPypi, pythonRelaxDepsHook, pillow, regex }:
+=======
+{ stdenv, lib, buildPythonPackage, fetchPypi, pillow, regex }:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 buildPythonPackage rec {
   pname = "material-color-utilities-python";
@@ -9,6 +13,7 @@ buildPythonPackage rec {
     sha256 = "sha256-PG8C585wWViFRHve83z3b9NijHyV+iGY2BdMJpyVH64=";
   };
 
+<<<<<<< HEAD
   nativeBuildInputs = [
     pythonRelaxDepsHook
   ];
@@ -16,6 +21,8 @@ buildPythonPackage rec {
     "Pillow"
   ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   propagatedBuildInputs = [
     pillow
     regex

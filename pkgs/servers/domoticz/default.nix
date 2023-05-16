@@ -19,13 +19,21 @@
 
 stdenv.mkDerivation rec {
   pname = "domoticz";
+<<<<<<< HEAD
   version = "2023.2";
+=======
+  version = "2023.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "domoticz";
     repo = pname;
     rev = version;
+<<<<<<< HEAD
     sha256 = "sha256-DxY9rBeRc20wmt4pDdBS16vyoOjCzczuxhOdUX/Lxao=";
+=======
+    sha256 = "sha256-fXNS7EVMqGM4tYppgG+l/adBt9eyW8RBK3Cs/pb2kg4=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     fetchSubmodules = true;
   };
 

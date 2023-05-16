@@ -14,13 +14,21 @@ assert !blas.isILP64 && !lapack.isILP64;
 
 stdenv.mkDerivation rec {
   pname = "dftd4";
+<<<<<<< HEAD
   version = "3.6.0";
+=======
+  version = "3.5.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "dftd4";
     repo = pname;
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-VIV9953hx0MZupOARdH+P1h7JtZeJmTlqtO8si+lwdU=";
+=======
+    hash = "sha256-ZCoFbjTNQD7slq5sKwPRPkrHSHofsxU9C9h/bF5jmZI=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ cmake gfortran ];

@@ -32,13 +32,21 @@
 
 stdenv.mkDerivation rec {
   pname = "musikcube";
+<<<<<<< HEAD
   version = "3.0.1";
+=======
+  version = "3.0.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "clangen";
     repo = pname;
     rev = version;
+<<<<<<< HEAD
     hash = "sha512-ahKPmChHRVpOQcgt0fOYumlsMApeN4MWwywE9F0edeN0Xr3Vp830mWGzEBJvMvGI/lnU/1rd7tREaHfm1vCJaw==";
+=======
+    hash = "sha512-W+Zug1SiOGJ+o6FBf2jeDGHFj87vudR4drtjyXiOzdoM8fUCnCj4pp7+70eZGilg6CvBi7CYkbVn53LXJf5qWA==";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   outputs = [ "out" "dev" ];

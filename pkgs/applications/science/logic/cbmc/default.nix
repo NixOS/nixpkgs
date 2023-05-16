@@ -13,13 +13,21 @@
 
 stdenv.mkDerivation rec {
   pname = "cbmc";
+<<<<<<< HEAD
   version = "5.91.0";
+=======
+  version = "5.76.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "diffblue";
     repo = pname;
     rev = "${pname}-${version}";
+<<<<<<< HEAD
     sha256 = "sha256-7DzhGEDS9T6WIjGoxOw9Gf/q+tYNFJDPbQUBV3tbn/I=";
+=======
+    sha256 = "sha256-OVOoAfoqev33c7pIzBGK9HD+zgji/+BWKD33RYJaSDc=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

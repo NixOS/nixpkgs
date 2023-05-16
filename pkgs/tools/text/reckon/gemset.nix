@@ -14,6 +14,7 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
+<<<<<<< HEAD
       sha256 = "1f8cr014j7mdqpdb9q17fp5vb5b8n1pswqaif91s3ylg5x3pygfn";
       type = "gem";
     };
@@ -28,6 +29,12 @@
       type = "gem";
     };
     version = "0.4.2";
+=======
+      sha256 = "0yclf57n2j3cw8144ania99h1zinf8q3f5zrhqa754j6gl95rp9d";
+      type = "gem";
+    };
+    version = "2.0.3";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
   rchardet = {
     groups = ["default"];
@@ -40,14 +47,25 @@
     version = "1.8.0";
   };
   reckon = {
+<<<<<<< HEAD
     dependencies = ["chronic" "highline" "matrix" "rchardet"];
+=======
+    dependencies = ["chronic" "highline" "rchardet"];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     groups = ["default"];
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
+<<<<<<< HEAD
       sha256 = "0188k41lvz5vnn03qw1hbi6c2i88n5p3183rb0xz9rfjcngh2ly3";
       type = "gem";
     };
     version = "0.9.2";
+=======
+      sha256 = "0qnghypb9pj7888096xwyrx7myhzk85x69ympxkxki3kxcgcrdfn";
+      type = "gem";
+    };
+    version = "0.8.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

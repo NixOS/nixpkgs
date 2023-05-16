@@ -33,6 +33,10 @@ buildPythonPackage rec {
     description = "Asyncio support for PEP-567 contextvars backport";
     homepage = "https://github.com/fantix/aiocontextvars";
     license = licenses.bsd3;
+<<<<<<< HEAD
     maintainers = [ ];
+=======
+    maintainers = [ maintainers.costrouc ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

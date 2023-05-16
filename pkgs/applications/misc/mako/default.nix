@@ -5,13 +5,21 @@
 
 stdenv.mkDerivation rec {
   pname = "mako";
+<<<<<<< HEAD
   version = "1.8.0";
+=======
+  version = "1.7.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "emersion";
     repo = pname;
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-sUFMcCrc5iNPeAmRbqDaT/n8OIlFJEwJTzY1HMx94RU=";
+=======
+    sha256 = "sha256-/+XYf8FiH4lk7f7/pMt43hm13mRK+UqvaNOpf1TI6m4=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   depsBuildBuild = [ pkg-config ];

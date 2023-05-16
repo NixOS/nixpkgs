@@ -17,7 +17,11 @@
 
 let
   pname = "chacha20poly1305-reuseable";
+<<<<<<< HEAD
   version = "0.4.2";
+=======
+  version = "0.2.5";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 in
 
 buildPythonPackage {
@@ -30,7 +34,11 @@ buildPythonPackage {
     owner = "bdraco";
     repo = pname;
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-RBXEumw5A/XzB/LazUcvq8JM/Ahvcy9lCTYKpGcY7go=";
+=======
+    hash = "sha256-T5mmHUMNbdvexeSaIDZIm/3yQcDKnWdor9IK63FE0no=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

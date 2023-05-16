@@ -7,7 +7,11 @@
 , openjpeg
 , pytestCheckHook
 , pythonOlder
+<<<<<<< HEAD
 , scikit-image
+=======
+, scikitimage
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , setuptools
 }:
 
@@ -36,7 +40,11 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     lxml
     pytestCheckHook
+<<<<<<< HEAD
     scikit-image
+=======
+    scikitimage
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   postConfigure = ''
@@ -61,6 +69,10 @@ buildPythonPackage rec {
     homepage = "https://github.com/quintusdias/glymur";
     changelog = "https://github.com/quintusdias/glymur/blob/v${version}/CHANGES.txt";
     license = licenses.mit;
+<<<<<<< HEAD
     maintainers = with maintainers; [ ];
+=======
+    maintainers = with maintainers; [ costrouc ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

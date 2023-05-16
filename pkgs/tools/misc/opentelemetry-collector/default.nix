@@ -5,12 +5,17 @@
 
 buildGoModule rec {
   pname = "opentelemetry-collector";
+<<<<<<< HEAD
   version = "0.83.0";
+=======
+  version = "0.77.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "open-telemetry";
     repo = "opentelemetry-collector";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-e2wcRawTEyK/NwSwd2WUgOnQnAj8Z7DQrrx32ksfHeU=";
   };
   # there is a nested go.mod
@@ -21,6 +26,19 @@ buildGoModule rec {
   # additionally dependencies have had issues when GCO was enabled that weren't caught upstream
   # https://github.com/open-telemetry/opentelemetry-collector/blob/main/CONTRIBUTING.md#using-cgo
   CGO_ENABLED = 0;
+=======
+    hash = "sha256-koPkEOtB5KnePdx67hJ/WNBojNDqKvf9kqYb59bwh8k=";
+  };
+  # there is a nested go.mod
+  sourceRoot = "source/cmd/otelcorecol";
+  vendorHash = "sha256-M1fLrQFrcfCRCcunkgEzUicVfi5Mz/Or6tFpcGfWf4E=";
+
+  patches = [
+    # remove when fixed upstream
+    # https://github.com/open-telemetry/opentelemetry-collector/issues/7668
+    ./update_go-m1cpu_fix_aarch64-darwin.patch
+  ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   preBuild = ''
     # set the build version, can't be done via ldflags
@@ -42,6 +60,9 @@ buildGoModule rec {
     '';
     license = licenses.asl20;
     maintainers = with maintainers; [ uri-canva jk ];
+<<<<<<< HEAD
     mainProgram = "otelcorecol";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

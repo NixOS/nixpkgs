@@ -9,7 +9,10 @@
 outputs/
 result-*
 result
+<<<<<<< HEAD
 repl-result-*
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 !pkgs/development/python-modules/result
 /doc/NEWS.html
 /doc/NEWS.txt

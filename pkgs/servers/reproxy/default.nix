@@ -2,13 +2,21 @@
 
 buildGoModule rec {
   pname = "reproxy";
+<<<<<<< HEAD
   version = "1.0.0";
+=======
+  version = "0.11.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "umputun";
     repo = pname;
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-ac4fOOMht2WGlrXLN95NEIA8ivqghhVuxHnBumvajx0=";
+=======
+    hash = "sha256-3kpGeG60WSpcIqVLw437gkDT8XLsDyhGL8/sEnhTgBw=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   postPatch = ''
@@ -25,7 +33,11 @@ buildGoModule rec {
       --replace "TestFile_Events_BusyListener" "SkipFile_Events_BusyListener"
   '';
 
+<<<<<<< HEAD
   vendorHash = null;
+=======
+  vendorSha256 = null;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   ldflags = [
     "-s" "-w" "-X main.revision=${version}"

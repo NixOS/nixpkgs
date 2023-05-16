@@ -5,10 +5,17 @@
 , setuptools
 , setuptools-scm
 , toml
+<<<<<<< HEAD
 , jaraco-functools
 , jaraco-context
 , more-itertools
 , jaraco-collections
+=======
+, jaraco_functools
+, jaraco-context
+, more-itertools
+, jaraco_collections
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , pytestCheckHook
 }:
 
@@ -32,10 +39,17 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     toml
+<<<<<<< HEAD
     jaraco-functools
     jaraco-context
     more-itertools
     jaraco-collections
+=======
+    jaraco_functools
+    jaraco-context
+    more-itertools
+    jaraco_collections
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   nativeCheckInputs = [

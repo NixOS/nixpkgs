@@ -1,6 +1,10 @@
 { lib
 , stdenv
 , fetchurl
+<<<<<<< HEAD
+=======
+, fetchpatch
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , which
 , python3
 , gfortran
@@ -13,15 +17,32 @@
 
 stdenv.mkDerivation rec {
   pname = "julia";
+<<<<<<< HEAD
   version = "1.9.3";
 
   src = fetchurl {
     url = "https://github.com/JuliaLang/julia/releases/download/v${version}/julia-${version}-full.tar.gz";
     hash = "sha256-j8DJ3FRDoo01m9ed2jlA+pS6K3lmuJhlvrINqBEjwxY=";
+=======
+  version = "1.9.0";
+
+  src = fetchurl {
+    url = "https://github.com/JuliaLang/julia/releases/download/v${version}/julia-${version}-full.tar.gz";
+    hash = "sha256-Ii61M8ncVHNJSes6QWn1Su+hvCC+OF/Bz3mMghn+ZAA=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   patches = [
     ./patches/1.8/0002-skip-failing-and-flaky-tests.patch
+<<<<<<< HEAD
+=======
+    # https://github.com/JuliaLang/julia/issues/46530
+    (fetchpatch {
+      url = "https://github.com/JuliaLang/julia/commit/b9b60fcde61ff18d77cb548421b3f71a369b4e02.patch";
+      revert = true;
+      hash = "sha256-XXn4U8aWkWwZYwpvIx+Gk5E16prjeXooF9AafK0aEfg=";
+    })
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   strictDeps = true;
@@ -49,6 +70,11 @@ stdenv.mkDerivation rec {
   makeFlags = [
     "prefix=$(out)"
     "USE_BINARYBUILDER=0"
+<<<<<<< HEAD
+=======
+    # workaround for https://github.com/JuliaLang/julia/issues/47989
+    "USE_INTEL_JITEVENTS=0"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ] ++ lib.optionals stdenv.isx86_64 [
     # https://github.com/JuliaCI/julia-buildbot/blob/master/master/inventory.py
     "JULIA_CPU_TARGET=generic;sandybridge,-xsaveopt,clone_all;haswell,-rdrnd,base(1)"
@@ -63,7 +89,11 @@ stdenv.mkDerivation rec {
     done
   '';
 
+<<<<<<< HEAD
   doInstallCheck = !stdenv.hostPlatform.isAarch64; # tests are flaky for aarch64-linux on hydra
+=======
+  doInstallCheck = true;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   installCheckTarget = "testall";
 
   preInstallCheck = ''

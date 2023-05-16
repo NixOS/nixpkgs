@@ -18,7 +18,11 @@
 
 buildPythonPackage rec {
   pname = "graphene";
+<<<<<<< HEAD
   version = "3.3.0";
+=======
+  version = "3.2.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -27,7 +31,11 @@ buildPythonPackage rec {
     owner = "graphql-python";
     repo = "graphene";
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-DGxicCXZp9kW/OFkr0lAWaQ+GaECx+HD8+X4aW63vgQ=";
+=======
+    hash = "sha256-kwF6oXp06w7r1PbPoJTCQ9teTExYMoqvIZDhtv5QNn8=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [
@@ -60,6 +68,10 @@ buildPythonPackage rec {
     homepage = "https://github.com/graphql-python/graphene";
     changelog = "https://github.com/graphql-python/graphene/releases/tag/v${version}";
     license = licenses.mit;
+<<<<<<< HEAD
     maintainers = with maintainers; [ ];
+=======
+    maintainers = with maintainers; [ SuperSandro2000 ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

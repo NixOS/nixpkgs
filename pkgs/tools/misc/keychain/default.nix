@@ -53,6 +53,10 @@ stdenv.mkDerivation rec {
     homepage = "https://www.funtoo.org/Keychain";
     license = licenses.gpl2;
     platforms = platforms.unix;
+<<<<<<< HEAD
     maintainers = with maintainers; [ sigma ];
+=======
+    maintainers = with maintainers; [ sigma SuperSandro2000 ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

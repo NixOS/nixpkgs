@@ -50,13 +50,21 @@ in
 
 stdenv.mkDerivation rec {
   pname = "quickemu";
+<<<<<<< HEAD
   version = "4.8";
+=======
+  version = "4.7";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "quickemu-project";
     repo = "quickemu";
     rev = version;
+<<<<<<< HEAD
     hash = "sha256-QchY9inmBqAwNEhUL+uFCRX1laaM57ICbDJEBW7qTic=";
+=======
+    hash = "sha256-6ctO11dKUj+CnHPVdj705uTwx31zKNQp6AUb/0kCgK8=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   postPatch = ''

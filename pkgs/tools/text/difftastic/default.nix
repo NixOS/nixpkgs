@@ -16,13 +16,21 @@ in
 
 rustPlatform.buildRustPackage rec {
   pname = "difftastic";
+<<<<<<< HEAD
   version = "0.51.1";
+=======
+  version = "0.46.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "wilfred";
     repo = pname;
     rev = version;
+<<<<<<< HEAD
     hash = "sha256-u03UL5QB0mdMTgRtxVe4pgLlCeLx1cG7czo7uBKQI84=";
+=======
+    sha256 = "sha256-uXSmEJUpcw/PQ5I9nR1b6N1fcOdCSCM4KF0XnGNJkME=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   cargoLock = {

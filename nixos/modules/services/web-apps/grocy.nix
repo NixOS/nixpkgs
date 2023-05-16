@@ -115,9 +115,15 @@ in {
       user = "grocy";
       group = "nginx";
 
+<<<<<<< HEAD
       # PHP 8.1 and 8.2 are the only version which are supported/tested by upstream:
       # https://github.com/grocy/grocy/blob/v4.0.2/README.md#platform-support
       phpPackage = pkgs.php82;
+=======
+      # PHP 8.0 is the only version which is supported/tested by upstream:
+      # https://github.com/grocy/grocy/blob/v3.3.0/README.md#how-to-install
+      phpPackage = pkgs.php80;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
       inherit (cfg.phpfpm) settings;
 
@@ -130,6 +136,7 @@ in {
       };
     };
 
+<<<<<<< HEAD
     # After an update of grocy, the viewcache needs to be deleted. Otherwise grocy will not work
     # https://github.com/grocy/grocy#how-to-update
     systemd.services.grocy-setup = {
@@ -140,6 +147,8 @@ in {
       '';
     };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     services.nginx = {
       enable = true;
       virtualHosts."${cfg.hostName}" = mkMerge [
@@ -176,7 +185,11 @@ in {
   };
 
   meta = {
+<<<<<<< HEAD
     maintainers = with maintainers; [ n0emis ];
+=======
+    maintainers = with maintainers; [ ma27 ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     doc = ./grocy.md;
   };
 }

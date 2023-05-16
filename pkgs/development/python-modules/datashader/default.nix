@@ -25,14 +25,22 @@
 
 buildPythonPackage rec {
   pname = "datashader";
+<<<<<<< HEAD
   version = "0.15.2";
+=======
+  version = "0.14.4";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
+<<<<<<< HEAD
     hash = "sha256-lTlSk3kofWnBDpq04LKQDhoWAE1v8G3g2EqmLEgzsbs=";
+=======
+    hash = "sha256-AkHmEflRvjJFlycI5adpuxg6+/zu7Dzy7vbYCvd1b70=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [
@@ -98,6 +106,10 @@ buildPythonPackage rec {
     description = "Data visualization toolchain based on aggregating into a grid";
     homepage = "https://datashader.org";
     license = licenses.bsd3;
+<<<<<<< HEAD
     maintainers = with maintainers; [ ];
+=======
+    maintainers = with maintainers; [ costrouc ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

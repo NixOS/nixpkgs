@@ -27,10 +27,14 @@ let
     ${cfg.extraConfig}
   '';
 
+<<<<<<< HEAD
   chronyFlags =
     [ "-n" "-u" "chrony" "-f" "${configFile}" ]
     ++ optional cfg.enableMemoryLocking "-m"
     ++ cfg.extraFlags;
+=======
+  chronyFlags = [ "-n" "-m" "-u" "chrony" "-f" "${configFile}" ] ++ cfg.extraFlags;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 in
 {
   options = {
@@ -76,6 +80,7 @@ in
         '';
       };
 
+<<<<<<< HEAD
       enableMemoryLocking = mkOption {
         type = types.bool;
         default = config.environment.memoryAllocator.provider != "graphene-hardened";
@@ -85,6 +90,8 @@ in
         '';
       };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       enableNTS = mkOption {
         type = types.bool;
         default = false;

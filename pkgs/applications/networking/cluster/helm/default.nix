@@ -2,15 +2,25 @@
 
 buildGoModule rec {
   pname = "kubernetes-helm";
+<<<<<<< HEAD
   version = "3.12.2";
+=======
+  version = "3.11.3";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "helm";
     repo = "helm";
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-nUkUb41UX9kCIjBrz3AMnaHZSgNoEc+lS6J8Edy6lVA=";
   };
   vendorHash = "sha256-4NsGosKFyl3T3bIndYRP0hhJQ5oj6KuSv4kYH9b83WE=";
+=======
+    sha256 = "sha256-BIjbSHs0sOLYB+26EHy9f3YJtUYnzgdADIXB4n45Rv0=";
+  };
+  vendorHash = "sha256-uz3ZqCcT+rmhNCO+y3PuCXWjTxUx8u3XDgcJxt7A37g=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   subPackages = [ "cmd/helm" ];
   ldflags = [

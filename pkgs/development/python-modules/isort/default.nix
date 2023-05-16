@@ -1,6 +1,10 @@
+<<<<<<< HEAD
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+=======
+{ lib, buildPythonPackage, fetchFromGitHub
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , colorama
 , hypothesis
 , poetry-core
@@ -79,6 +83,9 @@ buildPythonPackage rec {
     homepage = "https://github.com/PyCQA/isort";
     license = licenses.mit;
     maintainers = with maintainers; [ couchemar ];
+<<<<<<< HEAD
     mainProgram = "isort";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

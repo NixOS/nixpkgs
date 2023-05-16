@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 { lib
 , stdenv
 , fetchurl
@@ -18,6 +19,12 @@
 , libdecor
 , glslang
 }:
+=======
+{ lib, stdenv, fetchurl
+, freeglut, glew, libGL, libGLU, libX11, libXext, mesa
+, meson, ninja, pkg-config, wayland, wayland-protocols
+, vulkan-loader, libxkbcommon, libdecor, glslang }:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 stdenv.mkDerivation rec {
   pname = "mesa-demos";
@@ -28,6 +35,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-MEaj0mp7BRr3690lel8jv+sWDK1u2VIynN/x6fHtSWs=";
   };
 
+<<<<<<< HEAD
   strictDeps = true;
 
   depsBuildBuild = [
@@ -55,6 +63,13 @@ stdenv.mkDerivation rec {
     libxkbcommon
     libdecor
   ] ++ lib.optional (mesa ? osmesa) mesa.osmesa;
+=======
+  buildInputs = [
+    freeglut glew libX11 libXext libGL libGLU mesa wayland
+    wayland-protocols vulkan-loader libxkbcommon libdecor glslang
+  ] ++ lib.optional (mesa ? osmesa) mesa.osmesa ;
+  nativeBuildInputs = [ meson ninja pkg-config wayland ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   mesonFlags = [
     "-Degl=${if stdenv.isDarwin then "disabled" else "auto"}"

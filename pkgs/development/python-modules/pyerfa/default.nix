@@ -1,10 +1,14 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+<<<<<<< HEAD
 , jinja2
 , oldest-supported-numpy
 , setuptools-scm
 , wheel
+=======
+, setuptools-scm
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , liberfa
 , packaging
 , numpy
@@ -19,6 +23,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
+<<<<<<< HEAD
     hash = "sha256-L9Rjf/4sHm7edILBP1g7p8cxGdeL75AXVEjOUGoO3jA=";
   };
 
@@ -28,6 +33,14 @@ buildPythonPackage rec {
     packaging
     setuptools-scm
     wheel
+=======
+    sha256 = "2fd4637ffe2c1e6ede7482c13f583ba7c73119d78bef90175448ce506a0ede30";
+  };
+
+  nativeBuildInputs = [
+    packaging
+    setuptools-scm
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   propagatedBuildInputs = [

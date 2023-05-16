@@ -7,8 +7,11 @@
 , fetchFromGitHub
 , fetchYarnDeps
 , nixosTests
+<<<<<<< HEAD
 , vips
 , nodePackages
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 let
@@ -23,6 +26,7 @@ let
         rm build/config.gypi
       '';
     };
+<<<<<<< HEAD
     sharp = {
       nativeBuildInputs = [ pkg-config nodePackages.semver ];
       buildInputs = [ vips ];
@@ -34,13 +38,23 @@ let
 
   name = "lemmy-ui";
   version = pinData.uiVersion;
+=======
+  };
+
+  name = "lemmy-ui";
+  version = pinData.version;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "LemmyNet";
     repo = name;
     rev = version;
     fetchSubmodules = true;
+<<<<<<< HEAD
     hash = pinData.uiHash;
+=======
+    sha256 = pinData.uiSha256;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 in
 mkYarnPackage {
@@ -52,6 +66,7 @@ mkYarnPackage {
   packageJSON = ./package.json;
   offlineCache = fetchYarnDeps {
     yarnLock = src + "/yarn.lock";
+<<<<<<< HEAD
     hash = pinData.uiYarnDepsHash;
   };
 
@@ -62,6 +77,11 @@ mkYarnPackage {
       --replace 'yarn run rimraf dist' 'yarn --offline run rimraf dist'
   '';
 
+=======
+    sha256 = pinData.uiYarnDepsSha256;
+  };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   yarnPreBuild = ''
     export npm_config_nodedir=${nodejs}
   '';
@@ -71,7 +91,10 @@ mkYarnPackage {
     export HOME=$PWD/yarn_home
 
     ln -sf $PWD/node_modules $PWD/deps/lemmy-ui/
+<<<<<<< HEAD
     echo 'export const VERSION = "${version}";' > $PWD/deps/lemmy-ui/src/shared/version.ts
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     yarn --offline build:prod
   '';
@@ -84,15 +107,25 @@ mkYarnPackage {
 
   distPhase = "true";
 
+<<<<<<< HEAD
   passthru.updateScript = ./update.py;
   passthru.tests.lemmy-ui = nixosTests.lemmy;
   passthru.commit_sha = src.rev;
+=======
+  passthru.updateScript = ./update.sh;
+  passthru.tests.lemmy-ui = nixosTests.lemmy;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   meta = with lib; {
     description = "Building a federated alternative to reddit in rust";
     homepage = "https://join-lemmy.org/";
     license = licenses.agpl3Only;
+<<<<<<< HEAD
     maintainers = with maintainers; [ happysalada billewanick adisbladis ];
     inherit (nodejs.meta) platforms;
+=======
+    maintainers = with maintainers; [ happysalada billewanick ];
+    platforms = platforms.linux;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

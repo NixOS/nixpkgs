@@ -38,7 +38,11 @@ stdenv.mkDerivation rec {
     cp contrib/vim.tigrc $out/etc/
 
     # Note: Until https://github.com/jonas/tig/issues/940 is resolved it is best
+<<<<<<< HEAD
     # not to install the ZSH completion so that the fallback implementation from
+=======
+    # not to install the ZSH completion so that the fallback implemenation from
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     # ZSH can be used (Completion/Unix/Command/_git: "_tig () { _git-log }"):
     #install -D contrib/tig-completion.zsh $out/share/zsh/site-functions/_tig
 

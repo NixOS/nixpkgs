@@ -19,7 +19,11 @@
 
 buildPythonPackage rec {
   pname = "emborg";
+<<<<<<< HEAD
   version = "1.37";
+=======
+  version = "1.35";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "flit";
 
   disabled = pythonOlder "3.7";
@@ -28,7 +32,11 @@ buildPythonPackage rec {
     owner = "KenKundert";
     repo = "emborg";
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-bHYs+vlNku/T5Hb9u77Xml9/FNj5vgqPeXSzcilsS+I=";
+=======
+    hash = "sha256-T6RfZNJ4k7ONYByy4J6Iuc7sVLKHlXti7p7x1QKgkNo=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [

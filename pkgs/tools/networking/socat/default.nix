@@ -41,6 +41,9 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
     license = with licenses; [ gpl2Only ];
     maintainers = with maintainers; [ eelco ];
+<<<<<<< HEAD
     mainProgram = "socat";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

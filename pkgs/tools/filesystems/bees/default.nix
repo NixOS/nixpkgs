@@ -75,8 +75,16 @@ in
   substituteAll ${./bees-service-wrapper} "$out"/bin/bees-service-wrapper
   chmod +x "$out"/bin/bees-service-wrapper
   ln -s ${bees}/bin/beesd "$out"/bin/beesd
+<<<<<<< HEAD
 '').overrideAttrs {
   passthru.tests = {
     smoke-test = nixosTests.bees;
   };
 }
+=======
+'').overrideAttrs (old: {
+  passthru.tests = {
+    smoke-test = nixosTests.bees;
+  };
+})
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)

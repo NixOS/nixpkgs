@@ -119,6 +119,7 @@ stdenv.mkDerivation rec {
 
     maintainers = with maintainers; [ raskin ] ++ teams.gnome.members;
     platforms = platforms.unix;
+<<<<<<< HEAD
 
     pkgConfigModules = [
       "pango"
@@ -128,5 +129,7 @@ stdenv.mkDerivation rec {
       "pangoot"
       "pangoxft"
     ];
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

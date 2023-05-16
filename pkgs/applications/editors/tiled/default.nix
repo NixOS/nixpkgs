@@ -20,13 +20,21 @@ in
 
 stdenv.mkDerivation rec {
   pname = "tiled";
+<<<<<<< HEAD
   version = "1.10.2";
+=======
+  version = "1.10.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "mapeditor";
     repo = pname;
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-4Ykr60u2t5cyIZdpFHiRirXg2FqSLCzJzsdvw6r/LK8=";
+=======
+    sha256 = "sha256-zrDka6yXJ++UuGFepn8glQ1r7ufBcjsnNZuH+jnkJw0=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ pkg-config qbs wrapQtAppsHook ];

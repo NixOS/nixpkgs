@@ -11,7 +11,11 @@ buildGoModule rec {
     hash = "sha256-hD4GudSkGZO41nR/CgcMg/SqKjpAO1yJDkfwa8AUges=";
   };
 
+<<<<<<< HEAD
   vendorHash = "sha256-oPkSWpqNozfSFLIFsJ+e2pOL6CcR91YHbqibEVF2aSk=";
+=======
+  vendorSha256 = "sha256-oPkSWpqNozfSFLIFsJ+e2pOL6CcR91YHbqibEVF2aSk=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   meta = with lib; {
     description = "M3U Proxy for Plex DVR and Emby Live TV";

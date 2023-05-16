@@ -3,13 +3,21 @@
 
 stdenv.mkDerivation rec {
   pname = "hyperrogue";
+<<<<<<< HEAD
   version = "12.1q";
+=======
+  version = "12.1o";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "zenorogue";
     repo = "hyperrogue";
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-dYkeAQBpnETbJiXZSejFPJVhXt3kJBBv6qBKPb7t9fU=";
+=======
+    sha256 = "sha256-p7F+A7+wjHb17nJqsULhBZMs2P64s9gDOk2Oh4dc/lQ=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   CXXFLAGS = [

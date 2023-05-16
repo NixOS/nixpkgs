@@ -14,19 +14,30 @@
 , curl
 , libuchardet
 , spdlog
+<<<<<<< HEAD
 , fribidi
 , vte
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 stdenv.mkDerivation rec {
   pname = "cherrytree";
+<<<<<<< HEAD
   version = "0.99.56";
+=======
+  version = "0.99.49";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "giuspen";
     repo = "cherrytree";
     rev = version;
+<<<<<<< HEAD
     hash = "sha256-kDbUn81YfSMAX7FKcw+nDSrsNvrhOX0+NmgZUYNqCqQ=";
+=======
+    sha256 = "sha256-p7kiOxy4o0RwmN3LFfLSpkz08KcYYMVxVAEUvAX1KEA=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [
@@ -46,8 +57,11 @@ stdenv.mkDerivation rec {
     curl
     libuchardet
     spdlog
+<<<<<<< HEAD
     fribidi
     vte
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   meta = with lib; {

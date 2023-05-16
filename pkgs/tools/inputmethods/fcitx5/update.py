@@ -1,6 +1,13 @@
 #!/usr/bin/env nix-shell
+<<<<<<< HEAD
 #!nix-shell -i python3 -p nix-update python3Packages.requests
 
+=======
+#!nix-shell -i python3 -p nix-update nix-prefetch-github python3Packages.requests
+
+from nix_prefetch_github import *
+import json
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 import requests
 import subprocess
 
@@ -32,6 +39,10 @@ def get_latest_tag(repo, owner=OWNER):
     return r.json()[0].get("name")
 
 def main():
+<<<<<<< HEAD
+=======
+    sources = dict()
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     for repo in REPOS:
         rev = get_latest_tag(repo)
         if repo == "fcitx5-qt":

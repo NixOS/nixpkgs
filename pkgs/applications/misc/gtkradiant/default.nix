@@ -61,6 +61,7 @@ let
     rev = 144;
     sha256 = "sha256-JfmDIUoDY7dYdMgwwUMgcwNhWxuxsdkv1taw8DXhPY4=";
   };
+<<<<<<< HEAD
   darkPlacesPack = fetchsvn {
     url = "svn://svn.icculus.org/gtkradiant-gamepacks/DarkPlacesPack/trunk";
     rev = 57;
@@ -136,6 +137,8 @@ let
     rev = 53;
     sha256 = "sha256-IQ12fEKnq0cJxef+ddvTXcwM8lQ8nlUoMJy81XJ7ANY=";
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   packs = runCommand "gtkradiant-packs" {} ''
     mkdir -p $out
     ln -s ${q3Pack} $out/Q3Pack
@@ -149,6 +152,7 @@ let
     ln -s ${wolfPack} $out/WolfPack
     ln -s ${unvanquishedPack} $out/UnvanquishedPack
     ln -s ${q1Pack} $out/Q1Pack
+<<<<<<< HEAD
     ln -s ${darkPlacesPack} $out/DarkPlacesPack
     ln -s ${doom3Pack} $out/Doom3Pack
     ln -s ${halfLifePack} $out/HalfLifePack
@@ -164,21 +168,43 @@ let
     ln -s ${tremulousPack} $out/TermulousPack
     ln -s ${ufoaiPack} $out/UFOAIPack
     ln -s ${warsowPack} $out/WarsowPack
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '';
 
 in
 stdenv.mkDerivation rec {
   pname = "gtkradiant";
 
+<<<<<<< HEAD
   version = "unstable-2023-04-24";
+=======
+  version = "unstable-2022-07-31";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "TTimo";
     repo = "GtkRadiant";
+<<<<<<< HEAD
     rev = "ddbaf03d723a633d53fa442c2f802f7ad164dd6c";
     sha256 = "sha256-qI+KGx73AbM5PLFR2JDXKDbiqmU0gS/43rhjRKm/Gms=";
   };
 
+=======
+    rev = "5b498bfa01bde6c2c9eb60fb94cf04666e52d22d";
+    sha256 = "sha256-407faeQnhxqbWgOUunQKj2JhHeqIzPPgrhz2K5O4CaM=";
+  };
+
+  # patch paths so that .game settings are put into the user's home instead of the read-only /nix/store
+  postPatch = ''
+    substituteInPlace radiant/preferences.cpp \
+      --replace 'gameFilePath += "games/";' 'gameFilePath = g_get_home_dir(); gameFilePath += "/.cache/radiant/games/";printf("gameFilePath: %s\\n", gameFilePath);' \
+      --replace 'radCreateDirectory( gameFilePath );' 'if (g_mkdir_with_parents( gameFilePath, 0777 ) == -1) {radCreateDirectory( gameFilePath );};' \
+      --replace 'strGamesPath = g_strAppPath.GetBuffer();' 'strGamesPath = g_get_home_dir();' \
+      --replace 'strGamesPath += "games";' 'strGamesPath += "/.cache/radiant/games";'
+  '';
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nativeBuildInputs =
     let
       python = python3.withPackages (ps: with ps; [
@@ -194,7 +220,11 @@ stdenv.mkDerivation rec {
           test -e $(readlink $3)
         elif [ "$1" = update ]; then
           # verify existence
+<<<<<<< HEAD
           test -e $(readlink $2)
+=======
+          test -e $(readlink $3)
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         else
           echo "$@"
           exit 1
@@ -226,6 +256,7 @@ stdenv.mkDerivation rec {
   postInstall = ''
     mkdir -p $out/{bin,lib}
     cp -ar install $out/lib/gtkradiant
+<<<<<<< HEAD
     for pack in ${packs}/* ; do
       name=$(basename "$pack")
       if ! [ -e $out/lib/gtkradiant/installs/$name ]; then
@@ -239,6 +270,10 @@ stdenv.mkDerivation rec {
     exec "$out/lib/gtkradiant/radiant.bin" "\$@"
     EOF
     chmod +x $out/bin/gtkradiant
+=======
+
+    ln -s ../lib/gtkradiant/radiant.bin $out/bin/gtkradiant
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     ln -s ../lib/gtkradiant/{q3map2,q3map2_urt,q3data} $out/bin/
 
     mkdir -p $out/share/pixmaps

@@ -16,12 +16,17 @@
 
 buildGoModule rec {
   pname = "evcc";
+<<<<<<< HEAD
   version = "0.118.11";
+=======
+  version = "0.117.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "evcc-io";
     repo = pname;
     rev = version;
+<<<<<<< HEAD
     hash = "sha256-gwFArZJX3DBUNaSpWD5n76VImWeDImR8b1s2czBrBaA=";
   };
 
@@ -30,6 +35,16 @@ buildGoModule rec {
   npmDeps = fetchNpmDeps {
     inherit src;
     hash = "sha256-/zpyU7x3cdmKrS7YiMe2BVJm0AC0P+yspiG9C3dMVAk=";
+=======
+    hash = "sha256-GRwh5sBp3GlR9cMqRAKI0wuAFV9hB+ek3VRijceh+AU=";
+  };
+
+  vendorHash = "sha256-3EHdjRCzrty7BnaSG4TAf52jRl0AVS6baSl2XhYUH0A=";
+
+  npmDeps = fetchNpmDeps {
+    inherit src;
+    hash = "sha256-GmNyjXt5eskf59e9dt1OLB4gayBFbk/pG+7dJ5qoO+Q=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

@@ -9,8 +9,11 @@ stdenv.mkDerivation rec {
     sha256 = "0d5qlq5ab95wh1xc87rqrh1vx6i8lddka1w3f1zcqvcqdxgyn8zx";
   };
 
+<<<<<<< HEAD
   outputs = [ "out" "dev" "doc" ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   patches = [ ./fix-includes.patch ];
 
   configureFlags = [ "--disable-lynx" ]

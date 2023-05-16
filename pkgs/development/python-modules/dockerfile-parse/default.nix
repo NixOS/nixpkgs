@@ -7,14 +7,22 @@
 
 buildPythonPackage rec {
   pname = "dockerfile-parse";
+<<<<<<< HEAD
   version = "2.0.1";
+=======
+  version = "2.0.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
+<<<<<<< HEAD
     hash = "sha256-MYTM3FEyIZg+UDrADhqlBKKqj4Tl3mc8RrC27umex7w=";
+=======
+    hash = "sha256-If59UQZC8rYamZ1Fw9l0X5UOEf5rokl1Vbj2N4K3jkU=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeCheckInputs = [

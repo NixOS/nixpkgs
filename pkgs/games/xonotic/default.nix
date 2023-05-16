@@ -16,7 +16,11 @@
 
 let
   pname = "xonotic";
+<<<<<<< HEAD
   version = "0.8.6";
+=======
+  version = "0.8.5";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   name = "${pname}-${version}";
   variant =
     if withSDL && withGLX then
@@ -61,7 +65,11 @@ let
 
     src = fetchurl {
       url = "https://dl.xonotic.org/xonotic-${version}-source.zip";
+<<<<<<< HEAD
       hash = "sha256-i5KseBz/SuicEhoj6s197AWiqr7azMI6GdGglYtAEqg=";
+=======
+      sha256 = "sha256-oagbpVqxUb8JdY5/WWFLLlFQ6EIkdT53lQvNB6KC6l0=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
 
     nativeBuildInputs = [ unzip ];
@@ -97,6 +105,7 @@ let
     enableParallelBuilding = true;
 
     installPhase = (''
+<<<<<<< HEAD
       install -Dm644 ../../misc/logos/xonotic_icon.svg \
         $out/share/icons/hicolor/scalable/apps/xonotic.svg
       pushd ../../misc/logos/icons_png
@@ -108,6 +117,12 @@ let
           $out/share/icons/hicolor/$dimensions/apps/xonotic.png
       done
       popd
+=======
+      for size in 16x16 24x24 32x32 48x48 64x64 72x72 96x96 128x128 192x192 256x256 512x512 1024x1024 scalable; do
+        install -Dm644 ../../misc/logos/xonotic_icon.svg \
+          $out/share/icons/hicolor/$size/xonotic.svg
+      done
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     '' + lib.optionalString withDedicated ''
       install -Dm755 darkplaces-dedicated "$out/bin/xonotic-dedicated"
     '' + lib.optionalString withGLX ''
@@ -152,7 +167,11 @@ in rec {
   xonotic-data = fetchzip {
     name = "xonotic-data";
     url = "https://dl.xonotic.org/xonotic-${version}.zip";
+<<<<<<< HEAD
     hash = "sha256-Lhjpyk7idmfQAVn4YUb7diGyyKZQBfwNXxk2zMOqiZQ=";
+=======
+    sha256 = "sha256-/malKGbDdUnqG+bJOJ2f3zHb7hAGiNZdprczr2Fgb5E=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     postFetch = ''
       cd $out
       rm -rf $(ls | grep -v "^data$" | grep -v "^key_0.d0pk$")

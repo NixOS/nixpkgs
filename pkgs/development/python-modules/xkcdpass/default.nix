@@ -9,14 +9,22 @@
 
 buildPythonPackage rec {
   pname = "xkcdpass";
+<<<<<<< HEAD
   version = "1.19.4";
+=======
+  version = "1.19.3";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
+<<<<<<< HEAD
     hash = "sha256-KTXVS0gtGby1Rla9oBy77J7kH/1C0jWlJwX9lcq3D9c=";
+=======
+    hash = "sha256-xaLpSHRtpv5QToQEKE9FfY6Y2m31BHxrs/cbGIgunSo=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

@@ -46,7 +46,11 @@ stdenv.mkDerivation {
     ++ lib.optional withMetis "--with-metis"
   ;
 
+<<<<<<< HEAD
   inherit (p4est-sc) makeFlags dontDisableStatic enableParallelBuilding doCheck;
+=======
+  inherit (p4est-sc) makeFlags dontDisableStatic enableParallelBuilding preCheck doCheck;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   meta = {
     branch = "prev3-develop";

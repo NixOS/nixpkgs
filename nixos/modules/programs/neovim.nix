@@ -138,8 +138,12 @@ in
             };
 
             source = mkOption {
+<<<<<<< HEAD
               default = null;
               type = types.nullOr types.path;
+=======
+              type = types.path;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
               description = lib.mdDoc "Path of the source file.";
             };
 
@@ -161,11 +165,17 @@ in
     environment.etc = listToAttrs (attrValues (mapAttrs
       (name: value: {
         name = "xdg/nvim/${name}";
+<<<<<<< HEAD
         value = removeAttrs
           (value // {
             target = "xdg/nvim/${value.target}";
           })
           (optionals (isNull value.source) [ "source" ]);
+=======
+        value = value // {
+          target = "xdg/nvim/${value.target}";
+        };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       })
       cfg.runtime));
 

@@ -3,6 +3,13 @@
 , buildPythonPackage
 , fetchFromGitHub
 , poetry-core
+<<<<<<< HEAD
+=======
+, python
+, lsof
+, glibcLocales
+, coreutils
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , pytestCheckHook
  }:
 
@@ -43,9 +50,12 @@ buildPythonPackage rec {
     "test_unicode_path"
     # fails to import itself after modifying the environment
     "test_environment"
+<<<<<<< HEAD
     # timing sensitive through usage of sleep(1) and signal handling
     # https://github.com/amoffat/sh/issues/684
     "test_general_signal"
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ] ++ lib.optionals stdenv.isDarwin [
     # Disable tests that fail on Darwin sandbox
     "test_background_exception"

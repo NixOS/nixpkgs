@@ -45,16 +45,24 @@ stdenv.mkDerivation rec {
   buildInputs = [
     ffmpeg
     glib
+<<<<<<< HEAD
+=======
+    libGLU
+    mesa
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     proj
     wxGTK32
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     Carbon
     Cocoa
   ] ++ lib.optionals stdenv.hostPlatform.isLinux [
+<<<<<<< HEAD
     # TODO: libGLU doesn't build for macOS because of Mesa issues
     # (#233265); is it required for anything?
     libGLU
     mesa
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     libICE
     libX11
   ];

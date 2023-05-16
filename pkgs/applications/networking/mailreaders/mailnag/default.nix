@@ -41,13 +41,20 @@ python3Packages.buildPythonApplication rec {
     gst_all_1.gst-plugins-base
     gst_all_1.gst-plugins-good
     gst_all_1.gst-plugins-bad
+<<<<<<< HEAD
+=======
+    gobject-introspection
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     libsecret
   ] ++ pluginsDeps;
 
   nativeBuildInputs = [
     gettext
     wrapGAppsHook
+<<<<<<< HEAD
     gobject-introspection
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     # To later add plugins to
     xorg.lndir
   ];

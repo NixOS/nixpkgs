@@ -66,13 +66,21 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mutter";
+<<<<<<< HEAD
   version = "44.4";
+=======
+  version = "44.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   outputs = [ "out" "dev" "man" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/mutter/${lib.versions.major finalAttrs.version}/mutter-${finalAttrs.version}.tar.xz";
+<<<<<<< HEAD
     sha256 = "M3IKWGywqacyr1oH7RPj89MqGml4EjURQKVLygBrlAw=";
+=======
+    sha256 = "lzrq+rQvBvk0oJlPyEh4lYzbTSdmpMhnpczcVH3VcFY=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   mesonFlags = [
@@ -81,7 +89,11 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dtests=false"
     "-Dwayland_eglstream=true"
     "-Dprofiler=true"
+<<<<<<< HEAD
     "-Dxwayland_path=${lib.getExe xwayland}"
+=======
+    "-Dxwayland_path=${xwayland}/bin/Xwayland"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     # This should be auto detected, but it looks like it manages a false
     # positive.
     "-Dxwayland_initfd=disabled"
@@ -108,7 +120,10 @@ stdenv.mkDerivation (finalAttrs: {
     wrapGAppsHook4
     gi-docgen
     xorgserver
+<<<<<<< HEAD
     gobject-introspection
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   buildInputs = [
@@ -117,6 +132,10 @@ stdenv.mkDerivation (finalAttrs: {
     glib
     gnome-desktop
     gnome-settings-daemon
+<<<<<<< HEAD
+=======
+    gobject-introspection
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     gsettings-desktop-schemas
     atk
     fribidi

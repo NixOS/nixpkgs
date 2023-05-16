@@ -5,16 +5,27 @@
 
 buildGoModule rec {
   pname = "tun2socks";
+<<<<<<< HEAD
   version = "2.5.1";
+=======
+  version = "2.5.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "xjasonlyu";
     repo = pname;
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-qRjVZF15CjFohv9PQO0bLAjS8ip//S7yncXOn9oS2XM=";
   };
 
   vendorHash = "sha256-zeiOcn33PnyoseYb0wynkn7MfGp3rHEYBStY98C6aR8=";
+=======
+    sha256 = "sha256-uu0FBhckZ06eXEEuKwN3MopGMDbMjjcABYa/lgM48n4=";
+  };
+
+  vendorHash = "sha256-QIXgRoxmJaeYGx77EB53zIb94InlQbUSOXE+cUdBttI=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   ldflags = [
     "-w" "-s" "-buildid="

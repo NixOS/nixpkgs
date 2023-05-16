@@ -1,3 +1,7 @@
 [
+<<<<<<< HEAD
   {"onlykey": "git+https://github.com/trustcrypto/OnlyKey-App.git#v5.5.0"}
+=======
+  {"onlykey": "git+https://github.com/trustcrypto/OnlyKey-App.git#v5.3.4"}
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 ]

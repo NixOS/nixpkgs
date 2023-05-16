@@ -4,6 +4,10 @@
 , fetchFromGitHub
 , hypothesis
 , pythonOlder
+<<<<<<< HEAD
+=======
+, importlib-metadata
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , jbig2dec
 , deprecation
 , lxml
@@ -18,13 +22,21 @@
 , python-xmp-toolkit
 , qpdf
 , setuptools
+<<<<<<< HEAD
+=======
+, setuptools-scm
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , substituteAll
 , wheel
 }:
 
 buildPythonPackage rec {
   pname = "pikepdf";
+<<<<<<< HEAD
   version = "8.3.0";
+=======
+  version = "7.2.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -39,7 +51,11 @@ buildPythonPackage rec {
     postFetch = ''
       rm "$out/.git_archival.txt"
     '';
+<<<<<<< HEAD
     hash = "sha256-d76s4iJFwhzWSySXTS53PQQuWfWIboIRecEyjzobsME=";
+=======
+    hash = "sha256-acGIhIWC1nUQiN0iwb1kLKxz+ytIqYIW4VXF45Tx50g=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   patches = [
@@ -55,6 +71,11 @@ buildPythonPackage rec {
       --replace "shims_enabled = not cflags_defined" "shims_enabled = False"
   '';
 
+<<<<<<< HEAD
+=======
+  SETUPTOOLS_SCM_PRETEND_VERSION = version;
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   buildInputs = [
     qpdf
   ];
@@ -62,6 +83,10 @@ buildPythonPackage rec {
   nativeBuildInputs = [
     pybind11
     setuptools
+<<<<<<< HEAD
+=======
+    setuptools-scm
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     wheel
   ];
 
@@ -80,6 +105,11 @@ buildPythonPackage rec {
     lxml
     packaging
     pillow
+<<<<<<< HEAD
+=======
+  ] ++ lib.optionals (pythonOlder "3.8") [
+    importlib-metadata
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   pythonImportsCheck = [ "pikepdf" ];

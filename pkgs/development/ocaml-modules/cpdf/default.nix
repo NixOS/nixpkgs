@@ -6,13 +6,21 @@ else
 
 stdenv.mkDerivation rec {
   pname = "ocaml${ocaml.version}-cpdf";
+<<<<<<< HEAD
   version = "2.6";
+=======
+  version = "2.5";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "johnwhitington";
     repo = "cpdf-source";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-5gEv/lmca3FR16m4uxbCJ3y/XtTSBvoIojeKszc24ss=";
+=======
+    sha256 = "sha256:1qmx229nij7g6qmiacmyy4mcgx3k9509p4slahivshqm79d6wiwl";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ ocaml findlib ];

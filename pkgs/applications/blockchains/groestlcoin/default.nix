@@ -32,13 +32,21 @@ let
 in
 stdenv.mkDerivation rec {
   pname = if withGui then "groestlcoin" else "groestlcoind";
+<<<<<<< HEAD
   version = "25.0";
+=======
+  version = "24.0.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "Groestlcoin";
     repo = "groestlcoin";
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "03w5n3qjha63mgj7zk8q17x5j63la3i4li7bf5i1yw59ijqpmnqg";
+=======
+    sha256 = "0k14y3iv5l26r820wzkwqxi67kwh26i0yq20ffd72shicjs1d3qc";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config ]

@@ -28,7 +28,11 @@ let
       sha256 = "sha256-fK5GsszNhz/WP0zVk2lOfU/gwYijdQa5qhNYO33RhXc=";
     };
 
+<<<<<<< HEAD
     vendorHash = "sha256-Duzjpl011mj/SNoX/jQGMXwqUHPDz7iIMygRmK1vC3Q=";
+=======
+    vendorSha256 = "sha256-Duzjpl011mj/SNoX/jQGMXwqUHPDz7iIMygRmK1vC3Q=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     buildPhase = ''
       runHook preBuild

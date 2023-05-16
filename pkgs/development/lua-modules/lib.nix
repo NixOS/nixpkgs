@@ -89,6 +89,7 @@ rec {
     , rocksSubdir
     }: let
       rocksTrees = lib.imap0
+<<<<<<< HEAD
         (i: dep: {
           name = "dep-${toString i}";
           root = "${dep}";
@@ -96,6 +97,9 @@ rec {
           # hence a default here
           rocks_dir = if dep ? rocksSubdir then "${dep}/${dep.rocksSubdir}" else "${dep.pname}-${dep.version}-rocks";
         })
+=======
+        (i: dep: { name = "dep-${toString i}"; root = "${dep}"; rocks_dir = "${dep}/${dep.rocksSubdir}"; })
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         requiredLuaRocks;
 
       # Explicitly point luarocks to the relevant locations for multiple-output

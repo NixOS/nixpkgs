@@ -17,10 +17,14 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-kqnLi1iobcufVWMPxUyaRsWKIPyTvtUkuMERGQs2qgY=";
   };
 
+<<<<<<< HEAD
   configureFlags = [
     "--sysconfdir=/etc"
     "--localstatedir=/var/lib"
   ];
+=======
+  configureFlags = [ "--sysconfdir=/etc" ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   meta = with lib; {
     description = "Non-GUI tools used to configure an AX.25 enabled computer";

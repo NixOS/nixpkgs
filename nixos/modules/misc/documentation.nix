@@ -107,7 +107,11 @@ let
             } >&2
         '';
 
+<<<<<<< HEAD
     inherit (cfg.nixos.options) warningsAreErrors;
+=======
+    inherit (cfg.nixos.options) warningsAreErrors allowDocBook;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
 
@@ -160,9 +164,12 @@ in
     (mkRenamedOptionModule [ "programs" "info" "enable" ] [ "documentation" "info" "enable" ])
     (mkRenamedOptionModule [ "programs" "man"  "enable" ] [ "documentation" "man"  "enable" ])
     (mkRenamedOptionModule [ "services" "nixosManual" "enable" ] [ "documentation" "nixos" "enable" ])
+<<<<<<< HEAD
     (mkRemovedOptionModule
       [ "documentation" "nixos" "options" "allowDocBook" ]
       "DocBook option documentation is no longer supported")
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   options = {
@@ -267,6 +274,26 @@ in
         '';
       };
 
+<<<<<<< HEAD
+=======
+      nixos.options.allowDocBook = mkOption {
+        type = types.bool;
+        default = true;
+        description = lib.mdDoc ''
+          Whether to allow DocBook option docs. When set to `false` all option using
+          DocBook documentation will cause a manual build error; additionally a new
+          renderer may be used.
+
+          ::: {.note}
+          The `false` setting for this option is not yet fully supported. While it
+          should work fine and produce the same output as the previous toolchain
+          using DocBook it may not work in all circumstances. Whether markdown option
+          documentation is allowed is independent of this option.
+          :::
+        '';
+      };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       nixos.options.warningsAreErrors = mkOption {
         type = types.bool;
         default = true;
@@ -345,8 +372,21 @@ in
     (mkIf cfg.nixos.enable {
       system.build.manual = manual;
 
+<<<<<<< HEAD
       environment.systemPackages = []
         ++ optional cfg.man.enable manual.nixos-configuration-reference-manpage
+=======
+      system.activationScripts.check-manual-docbook = ''
+        if [[ $(cat ${manual.optionsUsedDocbook}) = 1 ]]; then
+          echo -e "\e[31;1mwarning\e[0m: This configuration contains option documentation in docbook." \
+                  "Support for docbook is deprecated and will be removed after NixOS 23.05." \
+                  "See nix-store --read-log ${builtins.unsafeDiscardStringContext manual.optionsJSON.drvPath}"
+        fi
+      '';
+
+      environment.systemPackages = []
+        ++ optional cfg.man.enable manual.manpages
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         ++ optionals cfg.doc.enable [ manual.manualHTML nixos-help ];
     })
 

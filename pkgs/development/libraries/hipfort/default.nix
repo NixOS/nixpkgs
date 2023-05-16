@@ -9,13 +9,21 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hipfort";
+<<<<<<< HEAD
   version = "5.6.0";
+=======
+  version = "5.4.3";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "ROCmSoftwarePlatform";
     repo = "hipfort";
     rev = "rocm-${finalAttrs.version}";
+<<<<<<< HEAD
     hash = "sha256-x1pF9md7RIcobE/4UxHxOaURbljFZGOashW1KM0lmo0=";
+=======
+    hash = "sha256-cXzNOvWIU388AU5hzLwmIGaX5DvzIJJCvgkP2BA4jao=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

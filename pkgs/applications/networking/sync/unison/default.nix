@@ -13,14 +13,22 @@
 , Cocoa
 }:
 
+<<<<<<< HEAD
 stdenv.mkDerivation (finalAttrs: {
+=======
+stdenv.mkDerivation rec {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pname = "unison";
   version = "2.53.2";
 
   src = fetchFromGitHub {
     owner = "bcpierce00";
     repo = "unison";
+<<<<<<< HEAD
     rev = "v${finalAttrs.version}";
+=======
+    rev = "v${version}";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     sha256 = "sha256-H+70NZZP0cUsxetFcsjWEx2kENsgMdo/41wBwwaX6zg=";
   };
 
@@ -54,7 +62,11 @@ stdenv.mkDerivation (finalAttrs: {
   dontStrip = !ocamlPackages.ocaml.nativeCompilers;
 
   desktopItems = lib.optional enableX11 (makeDesktopItem {
+<<<<<<< HEAD
     name = finalAttrs.pname;
+=======
+    name = pname;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     desktopName = "Unison";
     comment = "Bidirectional file synchronizer";
     genericName = "File synchronization tool";
@@ -72,4 +84,8 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with maintainers; [ viric ];
     platforms = platforms.unix;
   };
+<<<<<<< HEAD
 })
+=======
+}
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)

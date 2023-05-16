@@ -2,16 +2,27 @@
 
 buildGoModule rec {
   pname = "pack";
+<<<<<<< HEAD
   version = "0.30.0";
+=======
+  version = "0.29.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "buildpacks";
     repo = pname;
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-o9c1MUxyZpqk10UbW5y9JqX2Z62K7hDeSEiFGIUnoAs=";
   };
 
   vendorHash = "sha256-k2ZgFjSO3yHS0pO7xZx6a5E4J35ou2AmjbiV2M9OGTk=";
+=======
+    hash = "sha256-A/LGn+CiqDja0gDuvydvu/fRJozrlnSV62kPjUdwEH8=";
+  };
+
+  vendorHash = "sha256-tiYF5Ni6GHRV3JdUkP6155lDN3NGId9/sA/iZSiD1II=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nativeBuildInputs = [ installShellFiles ];
 

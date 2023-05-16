@@ -18,13 +18,21 @@
 
 buildGoModule rec {
   pname = "skopeo";
+<<<<<<< HEAD
   version = "1.13.3";
+=======
+  version = "1.12.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     rev = "v${version}";
     owner = "containers";
     repo = "skopeo";
+<<<<<<< HEAD
     hash = "sha256-FTPBeq/WbrYDEmS1fR8rzDBHBsjdyMHcm+tCxXtYUPg=";
+=======
+    hash = "sha256-a4uM2WjDhjz4zTiM2HWoDHQQ9aT38HV9GNUJAJmZR+w=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   outputs = [ "out" "man" ];
@@ -36,7 +44,11 @@ buildGoModule rec {
   nativeBuildInputs = [ pkg-config go-md2man installShellFiles makeWrapper ];
 
   buildInputs = [ gpgme ]
+<<<<<<< HEAD
     ++ lib.optionals stdenv.isLinux [ lvm2 btrfs-progs ];
+=======
+  ++ lib.optionals stdenv.isLinux [ lvm2 btrfs-progs ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   buildPhase = ''
     runHook preBuild

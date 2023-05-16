@@ -14,7 +14,11 @@ buildGoModule rec {
     sha256 = "sha256-EY/Yfyaz2DeQKHJ4awpQDbrVkse9crIZlLzfviPy3Tk=";
   };
 
+<<<<<<< HEAD
   vendorHash = "sha256-RxrmYfEm1Maq8byoLXUr5RfXcwgqpCcAq5enMnl9V9E=";
+=======
+  vendorSha256 = "sha256-RxrmYfEm1Maq8byoLXUr5RfXcwgqpCcAq5enMnl9V9E=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   subPackages = [ "cmd/norouter" ];
   doInstallCheck = true;

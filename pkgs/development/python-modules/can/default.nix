@@ -19,7 +19,11 @@
 
 buildPythonPackage rec {
   pname = "can";
+<<<<<<< HEAD
   version = "4.2.2";
+=======
+  version = "4.2.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -28,7 +32,11 @@ buildPythonPackage rec {
     owner = "hardbyte";
     repo = "python-can";
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-MyVGjAy13Ne0PkVufB0JDNEZHhVBzeUYWWlH72ib/pI=";
+=======
+    hash = "sha256-KY+WViWcKbrO6SO6cIo5dWylyBDEdmAR6wYwJogeCjs=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   postPatch = ''

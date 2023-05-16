@@ -143,7 +143,11 @@ in {
               "curl -sSfL 'http://site2.local/doku.php?id=plugin-list' | (! grep 'plugin:tag')",
           )
 
+<<<<<<< HEAD
           # Test if theme is applied and working correctly (no weird relative PHP import errors)
+=======
+          # Test if theme is applied and working correctly (no weired relative PHP import errors)
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           machine.succeed(
             "curl -sSfL 'http://site1.local/doku.php' | grep 'bootstrap3/images/logo.png'",
             "curl -sSfL 'http://site1.local/lib/exe/css.php' | grep 'bootstrap3'",

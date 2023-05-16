@@ -7,7 +7,11 @@
 
 buildPythonPackage rec {
   pname = "overrides";
+<<<<<<< HEAD
   version = "7.4.0";
+=======
+  version = "7.3.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -16,7 +20,11 @@ buildPythonPackage rec {
     owner = "mkorpela";
     repo = pname;
     rev = "refs/tags/${version}";
+<<<<<<< HEAD
     hash = "sha256-7fbuBcb47BTVxAoKokZmGdIwHSyfyfSiCAZ4XZjWz60=";
+=======
+    hash = "sha256-mxMh1ifOnii2SqxYjupDKvslHVGwClGtRgyoJSCGfZo=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeCheckInputs = [

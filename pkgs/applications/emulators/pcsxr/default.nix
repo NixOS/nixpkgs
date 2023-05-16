@@ -92,6 +92,9 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ rardiol ];
     license = licenses.gpl2Plus;
     platforms = platforms.all;
+<<<<<<< HEAD
     mainProgram = "pcsxr";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

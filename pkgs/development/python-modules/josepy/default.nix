@@ -1,11 +1,18 @@
 { lib
 , buildPythonPackage
 , cryptography
+<<<<<<< HEAD
 , fetchpatch
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , fetchPypi
 , pyopenssl
 , pytestCheckHook
 , pythonOlder
+<<<<<<< HEAD
+=======
+, setuptools
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 buildPythonPackage rec {
@@ -20,6 +27,7 @@ buildPythonPackage rec {
     hash = "sha256-iTHa84+KTIUnSg6LfLJa3f2NHyj5+4++0FPdUa7HXck=";
   };
 
+<<<<<<< HEAD
   patches = [
     # https://github.com/certbot/josepy/pull/158
     (fetchpatch {
@@ -33,6 +41,12 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     pyopenssl
     cryptography
+=======
+  propagatedBuildInputs = [
+    pyopenssl
+    cryptography
+    setuptools
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   nativeCheckInputs = [

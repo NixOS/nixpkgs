@@ -26,15 +26,34 @@
 
 stdenv.mkDerivation rec {
   pname = "openturns";
+<<<<<<< HEAD
   version = "1.21";
+=======
+  version = "1.20";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "openturns";
     repo = "openturns";
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-zWCwuxJEiyhnllVCsfm3zNz2Xorvuj2Vl2fufS3qixY=";
   };
 
+=======
+    sha256 = "sha256-QeapH937yGnK6oD+rgIERePxz6ooxGpOx6x9LyFDt2A=";
+  };
+
+  patches = [
+    # Fix build with primesieve 11, https://github.com/openturns/openturns/pull/2187
+    # Remove with next version update.
+    (fetchpatch {
+      url = "https://github.com/openturns/openturns/commit/a85061f89a5763061467beac516c1355fe81b9be.patch";
+      hash = "sha256-z28ipBuX3b5UFEnKuDfp+kMI5cUcwXVz/8WZHlICnvE=";
+    })
+  ];
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nativeBuildInputs = [ cmake ] ++ lib.optional enablePython python3Packages.sphinx;
   buildInputs = [
     swig
@@ -75,7 +94,10 @@ stdenv.mkDerivation rec {
     description = "Multivariate probabilistic modeling and uncertainty treatment library";
     license = with licenses; [ lgpl3 gpl3 ];
     homepage = "https://openturns.github.io/www/";
+<<<<<<< HEAD
     changelog = "https://github.com/openturns/openturns/raw/v${version}/ChangeLog";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     maintainers = with maintainers; [ gdinh ];
     platforms = platforms.unix;
   };

@@ -1,9 +1,13 @@
+<<<<<<< HEAD
 { lib
 , python3
 , fetchFromGitHub
 , fetchpatch
 , nixosTests
 }:
+=======
+{ lib, python3, fetchFromGitHub, nixosTests }:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 python3.pkgs.buildPythonApplication rec {
   pname = "radicale";
@@ -16,6 +20,7 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-V0nqgxGUxcTRAYFuxpKUEVB/g/Mbvw+9OIcvAexXwuM=";
   };
 
+<<<<<<< HEAD
   patches = [
     # https://github.com/Kozea/Radicale/pull/1328
     (fetchpatch {
@@ -25,6 +30,8 @@ python3.pkgs.buildPythonApplication rec {
     })
   ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   postPatch = ''
     sed -i '/addopts/d' setup.cfg
   '';
@@ -37,8 +44,11 @@ python3.pkgs.buildPythonApplication rec {
     pytz # https://github.com/Kozea/Radicale/issues/816
   ] ++ passlib.optional-dependencies.bcrypt;
 
+<<<<<<< HEAD
   __darwinAllowLocalNetworking = true;
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nativeCheckInputs = with python3.pkgs; [
     pytestCheckHook
     waitress

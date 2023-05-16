@@ -7,8 +7,13 @@ let
   cfg = config.boot.initrd.network;
 
   dhcpInterfaces = lib.attrNames (lib.filterAttrs (iface: v: v.useDHCP == true) (config.networking.interfaces or {}));
+<<<<<<< HEAD
   doDhcp = cfg.udhcpc.enable || dhcpInterfaces != [];
   dhcpIfShellExpr = if config.networking.useDHCP || cfg.udhcpc.enable
+=======
+  doDhcp = config.networking.useDHCP || dhcpInterfaces != [];
+  dhcpIfShellExpr = if config.networking.useDHCP
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
                       then "$(ls /sys/class/net/ | grep -v ^lo$)"
                       else lib.concatMapStringsSep " " lib.escapeShellArg dhcpInterfaces;
 
@@ -79,6 +84,7 @@ in
       '';
     };
 
+<<<<<<< HEAD
     boot.initrd.network.udhcpc.enable = mkOption {
       default = config.networking.useDHCP;
       defaultText = "networking.useDHCP";
@@ -90,13 +96,21 @@ in
       '';
     };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     boot.initrd.network.udhcpc.extraArgs = mkOption {
       default = [];
       type = types.listOf types.str;
       description = lib.mdDoc ''
+<<<<<<< HEAD
         Additional command-line arguments passed verbatim to
         udhcpc if {option}`boot.initrd.network.enable` and
         {option}`boot.initrd.network.udhcpc.enable` are enabled.
+=======
+        Additional command-line arguments passed verbatim to udhcpc if
+        {option}`boot.initrd.network.enable` and {option}`networking.useDHCP`
+        are enabled.
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       '';
     };
 

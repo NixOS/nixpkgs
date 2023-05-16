@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 { lib, stdenv, fetchurl, makeWrapper, darwin, bootstrap-chicken ? null, testers }:
+=======
+{ lib, stdenv, fetchurl, makeWrapper, darwin, bootstrap-chicken ? null }:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 let
   platform = with stdenv;
@@ -8,13 +12,18 @@ let
     else if isSunOS then "solaris"
     else "linux"; # Should be a sane default
 in
+<<<<<<< HEAD
 stdenv.mkDerivation (finalAttrs: {
+=======
+stdenv.mkDerivation rec {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pname = "chicken";
   version = "5.3.0";
 
   binaryVersion = 11;
 
   src = fetchurl {
+<<<<<<< HEAD
     url = "https://code.call-cc.org/releases/${finalAttrs.version}/chicken-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-w62Z2PnhftgQkS75gaw7DC4vRvsOzAM7XDttyhvbDXY=";
   };
@@ -43,6 +52,25 @@ stdenv.mkDerivation (finalAttrs: {
     "POSTINSTALL_PROGRAM=install_name_tool"
   ]) ++ (lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     "HOSTSYSTEM=${stdenv.hostPlatform.config}"
+=======
+    url = "https://code.call-cc.org/releases/${version}/chicken-${version}.tar.gz";
+    sha256 = "sha256-w62Z2PnhftgQkS75gaw7DC4vRvsOzAM7XDttyhvbDXY=";
+  };
+
+  setupHook = lib.optional (bootstrap-chicken != null) ./setup-hook.sh;
+
+  # -fno-strict-overflow is not a supported argument in clang on darwin
+  hardeningDisable = lib.optionals stdenv.isDarwin ["strictoverflow"];
+
+  makeFlags = [
+    "PLATFORM=${platform}" "PREFIX=$(out)"
+  ] ++ (lib.optionals stdenv.isDarwin [
+    "XCODE_TOOL_PATH=${darwin.binutils.bintools}/bin"
+    "C_COMPILER=$(CC)"
+    "CXX_COMPILER=$(CXX)"
+    "LINKER_OPTIONS=-headerpad_max_install_names"
+    "POSTINSTALL_PROGRAM=install_name_tool"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ]);
 
   nativeBuildInputs = [
@@ -55,6 +83,7 @@ stdenv.mkDerivation (finalAttrs: {
     bootstrap-chicken
   ];
 
+<<<<<<< HEAD
   doCheck = !stdenv.isDarwin;
   postCheck = ''
     ./csi -R chicken.pathname -R chicken.platform \
@@ -65,6 +94,26 @@ stdenv.mkDerivation (finalAttrs: {
     package = finalAttrs.finalPackage;
     command = "csi -version";
   };
+=======
+  postInstall = ''
+    for f in $out/bin/*
+    do
+      wrapProgram $f \
+        --prefix PATH : ${lib.makeBinPath [ stdenv.cc ]}
+    done
+  '';
+
+  doCheck = !stdenv.isDarwin;
+  postCheck = ''
+    ./csi -R chicken.pathname -R chicken.platform \
+       -p "(assert (equal? \"${toString binaryVersion}\" (pathname-file (car (repository-path)))))"
+  '';
+
+  doInstallCheck = true;
+  installCheckPhase = ''
+    $out/bin/chicken -version
+  '';
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   meta = {
     homepage = "https://call-cc.org/";
@@ -80,4 +129,8 @@ stdenv.mkDerivation (finalAttrs: {
       Windows, and many Unix flavours.
     '';
   };
+<<<<<<< HEAD
 })
+=======
+}
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)

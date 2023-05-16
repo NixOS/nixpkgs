@@ -4,9 +4,13 @@
 , findutils
 , pytestCheckHook
 , pythonOlder
+<<<<<<< HEAD
 , pip
 , setuptools-scm
 , wheel
+=======
+, setuptools-scm
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 buildPythonPackage rec {
@@ -23,14 +27,20 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     setuptools-scm
+<<<<<<< HEAD
     wheel
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   patches = [ ./permissions.patch ];
 
   nativeCheckInputs = [
     findutils
+<<<<<<< HEAD
     pip
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     pytestCheckHook
   ];
 

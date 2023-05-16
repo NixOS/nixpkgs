@@ -9,7 +9,11 @@ stdenv.mkDerivation rec {
     sha256 = "1vbfrmnvib3cym0yyyabnd8xpx4f7wp20vnn09s6dln347fajqz7";
   };
 
+<<<<<<< HEAD
   # Boost 1.59 compatibility fix
+=======
+  # Boost 1.59 compatability fix
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   # Attempt removing when updating
   postPatch = ''
     sed -i 's,^CPPFLAGS.*,\0 -DBOOST_ERROR_CODE_HEADER_ONLY -DBOOST_SYSTEM_NO_DEPRECATED,' src/lib/Makefile.in

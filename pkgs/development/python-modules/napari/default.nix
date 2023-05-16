@@ -22,7 +22,11 @@
 , pillow
 , pythonOlder
 , pyyaml
+<<<<<<< HEAD
 , scikit-image
+=======
+, scikitimage
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , scipy
 , setuptools-scm
 , sphinx
@@ -38,7 +42,11 @@
 
 mkDerivationWith buildPythonPackage rec {
   pname = "napari";
+<<<<<<< HEAD
   version = "0.4.18";
+=======
+  version = "0.4.17";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -47,7 +55,11 @@ mkDerivationWith buildPythonPackage rec {
     owner = "napari";
     repo = pname;
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-xF0DYK+226MZpB050IukNvTg2iHMQAIZW0serKRJd/0=";
+=======
+    hash = "sha256-34FALCI7h0I295553Rv0KZxKIipuA2OMNsINGde7/oE=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
@@ -84,7 +96,11 @@ mkDerivationWith buildPythonPackage rec {
     pydantic
     pyopengl
     pyyaml
+<<<<<<< HEAD
     scikit-image
+=======
+    scikitimage
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     scipy
     sphinx
     superqt

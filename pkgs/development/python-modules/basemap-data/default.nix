@@ -17,7 +17,11 @@ buildPythonPackage rec {
   pname = "basemap-data";
   inherit (basemap) version src;
 
+<<<<<<< HEAD
   sourceRoot = "${src.name}/packages/basemap_data";
+=======
+  sourceRoot = "source/packages/basemap_data";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   # no tests
   doCheck = false;

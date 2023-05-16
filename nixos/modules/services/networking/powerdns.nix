@@ -38,8 +38,11 @@ in {
 
   config = mkIf cfg.enable {
 
+<<<<<<< HEAD
     environment.etc.pdns.source = finalConfigDir;
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     systemd.packages = [ pkgs.pdns ];
 
     systemd.services.pdns = {

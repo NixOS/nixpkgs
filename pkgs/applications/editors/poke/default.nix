@@ -1,6 +1,10 @@
 { lib
 , stdenv
 , fetchurl
+<<<<<<< HEAD
+=======
+, autoreconfHook
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , gettext
 , help2man
 , pkg-config
@@ -21,11 +25,19 @@ let
   isCross = stdenv.hostPlatform != stdenv.buildPlatform;
 in stdenv.mkDerivation rec {
   pname = "poke";
+<<<<<<< HEAD
   version = "3.2";
 
   src = fetchurl {
     url = "mirror://gnu/${pname}/${pname}-${version}.tar.gz";
     hash = "sha256-dY5VHdU6bM5U7JTY/CH6TWtSon0cJmcgbVmezcdPDZc=";
+=======
+  version = "2.4";
+
+  src = fetchurl {
+    url = "mirror://gnu/${pname}/${pname}-${version}.tar.gz";
+    sha256 = "sha256-hB4oWRfGc4zpgqaTDjDr6t7PsGVaedkYTxb4dqn+bkc=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   outputs = [ "out" "dev" "info" "lib" ]
@@ -40,6 +52,10 @@ in stdenv.mkDerivation rec {
   strictDeps = true;
 
   nativeBuildInputs = [
+<<<<<<< HEAD
+=======
+    autoreconfHook
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     gettext
     pkg-config
     texinfo

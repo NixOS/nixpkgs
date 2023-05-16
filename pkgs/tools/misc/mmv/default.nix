@@ -3,13 +3,21 @@
 
 stdenv.mkDerivation rec {
   pname = "mmv";
+<<<<<<< HEAD
   version = "2.5.1";
+=======
+  version = "2.3";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "rrthomas";
     repo = "mmv";
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-01MJjYVPfDaRkzitqKXTJZHbkkZTEaFoyYZEEMizHp0=";
+=======
+    sha256 = "sha256-lujar6QGlhNawGOIfM5RAUa4Sbs0BFgG8rEsCDLqDDE=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     fetchSubmodules = true;
   };
 

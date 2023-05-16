@@ -107,6 +107,7 @@ let
     '';
   };
 
+<<<<<<< HEAD
   # see https://github.com/NixOS/nixpkgs/issues/213453
   # this is a good test of a lot of tricky glibc/libgcc corner cases
   mbuffer = let
@@ -151,4 +152,9 @@ in {
   llvm = (lib.mapAttrs (_: mapMultiPlatformTest (system: system // {useLLVM = true;})) tests);
 
   inherit mbuffer sanity;
+=======
+in {
+  gcc = (lib.mapAttrs (_: mapMultiPlatformTest (system: system // {useLLVM = false;})) tests);
+  llvm = (lib.mapAttrs (_: mapMultiPlatformTest (system: system // {useLLVM = true;})) tests);
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }

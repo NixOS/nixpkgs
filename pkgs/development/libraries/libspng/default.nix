@@ -11,13 +11,21 @@
 
 stdenv.mkDerivation rec {
   pname = "libspng";
+<<<<<<< HEAD
   version = "0.7.4";
+=======
+  version = "0.7.3";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "randy408";
     repo = pname;
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-BiRuPQEKVJYYgfUsglIuxrBoJBFiQ0ygQmAFrVvCz4Q=";
+=======
+    sha256 = "sha256-t5qVhRxepl1rOQk/F5GhcvU1nk9oGb+kWXmybP+iAfY=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   doCheck = true;

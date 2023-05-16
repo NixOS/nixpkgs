@@ -2,6 +2,10 @@
 , lib
 , rustPlatform
 , fetchFromGitHub
+<<<<<<< HEAD
+=======
+, fetchpatch
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , pkg-config
 , makeWrapper
 , webkitgtk
@@ -14,12 +18,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "alfis";
+<<<<<<< HEAD
   version = "0.8.4";
+=======
+  version = "0.8.3";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "Revertron";
     repo = "Alfis";
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-BNpz4SjWeZ20CxjyEIaFI43X7P3uoyWqOQssFb38Gv8=";
   };
 
@@ -29,6 +38,20 @@ rustPlatform.buildRustPackage rec {
       "web-view-0.7.3" = "sha256-8C/2bXAbxP5tdo9RLvNn89krzy08+yKy3kERfz31HJE=";
     };
   };
+=======
+    sha256 = "sha256-QOKFnre5MW9EvrKrKBHWpOxi2fBKTDMhzCDX3ISd2cQ=";
+  };
+
+  cargoPatches = [
+    (fetchpatch {
+      name = "bump-rust-web-view.patch";
+      url = "https://github.com/Revertron/Alfis/commit/03b461a740ab6ccbacd576eafc7a3faf4a66648f.patch";
+      sha256 = "sha256-CSqSMdVD31w7QxxXWtjKmqlaEirmbs1EVuiefSf1NKY=";
+    })
+  ];
+
+  cargoSha256 = "sha256-B4xI++U6RCljXCyaOmNj/SwA6I16zoiZsgk2VTiKfkg=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   checkFlags = [
     # these want internet access, disable them

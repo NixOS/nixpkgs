@@ -14,8 +14,11 @@ stdenv.mkDerivation rec {
 
   patchPhase = "mv ${pname}_faust.dsp ${pname}.dsp";
 
+<<<<<<< HEAD
   dontWrapQtApps = true;
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   buildPhase = ''
     faust2jaqt -time -vec -t 0 ${pname}.dsp
     faust2lv2  -time -vec -t 0 -gui ${pname}.dsp
@@ -23,11 +26,17 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir -p $out/bin
+<<<<<<< HEAD
     for f in $(find . -executable -type f); do
       cp $f $out/bin/
     done
     mkdir -p $out/lib/lv2
     cp -r ${pname}.lv2 $out/lib/lv2
+=======
+    cp ${pname} $out/bin/
+      mkdir -p $out/lib/lv2
+      cp -r ${pname}.lv2 $out/lib/lv2
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '';
 
   meta = {

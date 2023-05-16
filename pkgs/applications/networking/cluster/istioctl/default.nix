@@ -2,15 +2,25 @@
 
 buildGoModule rec {
   pname = "istioctl";
+<<<<<<< HEAD
   version = "1.18.2";
+=======
+  version = "1.17.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "istio";
     repo = "istio";
     rev = version;
+<<<<<<< HEAD
     sha256 = "sha256-eSftWXwV8W/mpxZNvUUDS27z3vU36vJj/z0/Wo5qEts=";
   };
   vendorHash = "sha256-tuiQ11pcfoTOu+OVey+YmU4tTOj5C7p5bKP2ylEkUug=";
+=======
+    sha256 = "sha256-YEkvY+Z+zM+9t+vnVk0gXJRTJd0u/Ryk3hYkbSHwP8M=";
+  };
+  vendorHash = "sha256-LMmWhKwuy+HfqkLabTjlTd0f/6DYCGbEzpItQvckE9g=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -43,5 +53,9 @@ buildGoModule rec {
     homepage = "https://istio.io/latest/docs/reference/commands/istioctl";
     license = licenses.asl20;
     maintainers = with maintainers; [ bryanasdev000 veehaitch ];
+<<<<<<< HEAD
+=======
+    platforms = platforms.unix;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

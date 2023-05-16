@@ -10,7 +10,11 @@
 
 buildPythonPackage rec {
   pname = "weconnect-mqtt";
+<<<<<<< HEAD
   version = "0.46.0";
+=======
+  version = "0.42.3";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -19,12 +23,19 @@ buildPythonPackage rec {
     owner = "tillsteinbach";
     repo = "WeConnect-mqtt";
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-7TR6+woAV8f80t4epCnZj4jYYpTPKDkzwzNNsgofiwg=";
   };
 
   postPatch = ''
     substituteInPlace requirements.txt \
       --replace "weconnect[Images]~=" "weconnect>="
+=======
+    hash = "sha256-TEB2UtXH73CCJhbuQjnABcG3XLHB6VybDwjhixnpt0w=";
+  };
+
+  postPatch = ''
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     substituteInPlace weconnect_mqtt/__version.py \
       --replace "develop" "${version}"
     substituteInPlace pytest.ini \

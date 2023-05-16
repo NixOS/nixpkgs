@@ -118,7 +118,11 @@
         ;; system name? This looks like it uses a lot of memory.
         (let ((systems
                 (sql-query
+<<<<<<< HEAD
                  "with pkgs as (
+=======
+                 "with pkg as (
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
                     select
                       name, asd, url, deps,
                       ltrim(replace(prefix, r.project, ''), '-_') as version
@@ -128,11 +132,18 @@
                   select
                     name, version, asd, url,
                     (select json_group_array(
+<<<<<<< HEAD
                        json_array(value, (select version from pkgs where name=value))
                      )
                      from json_each(deps)
                      where value <> 'asdf') as deps
                   from pkgs"
+=======
+                       json_array(value, (select version from pkg where name=value))
+                     )
+                     from json_each(deps)) as deps
+                  from pkg"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
                  )))
 
           ;; First pass: insert system and source tarball informaton.

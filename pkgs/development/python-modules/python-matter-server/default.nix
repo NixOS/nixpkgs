@@ -1,12 +1,18 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+<<<<<<< HEAD
 , fetchpatch
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , pythonOlder
 
 # build
 , setuptools
+<<<<<<< HEAD
 , wheel
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 # propagates
 , aiohttp
@@ -29,7 +35,11 @@
 
 buildPythonPackage rec {
   pname = "python-matter-server";
+<<<<<<< HEAD
   version = "3.7.0";
+=======
+  version = "3.3.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "pyproject";
 
   disabled = pythonOlder "3.10";
@@ -38,6 +48,7 @@ buildPythonPackage rec {
     owner = "home-assistant-libs";
     repo = "python-matter-server";
     rev = "refs/tags/${version}";
+<<<<<<< HEAD
     hash = "sha256-t++7jQreibGpJRjJawicxjFIye5X6R1dpFqiM6yvRf0=";
   };
 
@@ -53,6 +64,13 @@ buildPythonPackage rec {
   nativeBuildInputs = [
     setuptools
     wheel
+=======
+    hash = "sha256-IsoqCG+xV8FKFVmOP60NBAdIJGlI/ThpOOr7PTUTHzo=";
+  };
+
+  nativeBuildInputs = [
+    setuptools
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   propagatedBuildInputs = [

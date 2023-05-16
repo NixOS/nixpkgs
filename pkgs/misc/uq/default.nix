@@ -20,6 +20,10 @@ rustPlatform.buildRustPackage rec {
     description = "A simple, user-friendly alternative to sort | uniq";
     homepage = "https://github.com/lostutils/uq";
     license = licenses.mit;
+<<<<<<< HEAD
     maintainers = with maintainers; [ doronbehar matthiasbeyer ];
+=======
+    maintainers = with maintainers; [ doronbehar ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

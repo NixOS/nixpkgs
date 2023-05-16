@@ -21,7 +21,11 @@
 
 stdenv.mkDerivation rec {
   pname = "libjxl";
+<<<<<<< HEAD
   version = "0.8.2";
+=======
+  version = "0.8.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   outputs = [ "out" "dev" ];
 
@@ -29,7 +33,11 @@ stdenv.mkDerivation rec {
     owner = "libjxl";
     repo = "libjxl";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-I3PGgh0XqRkCFz7lUZ3Q4eU0+0GwaQcVb6t4Pru1kKo=";
+=======
+    hash = "sha256-WWuvUTMrlR6ePbEs01ulLnuMiUqGrh4qELWFh0QMaGU=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     # There are various submodules in `third_party/`.
     fetchSubmodules = true;
   };

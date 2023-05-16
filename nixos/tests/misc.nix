@@ -1,5 +1,6 @@
 # Miscellaneous small tests that don't warrant their own VM run.
 
+<<<<<<< HEAD
 import ./make-test-python.nix ({ lib, pkgs, ...} : let
   foo = pkgs.writeText "foo" "Hello World";
 in {
@@ -12,6 +13,23 @@ in {
         [ { device = "/root/swapfile"; size = 128; } ];
       environment.variables.EDITOR = lib.mkOverride 0 "emacs";
       documentation.nixos.enable = lib.mkOverride 0 true;
+=======
+import ./make-test-python.nix ({ pkgs, ...} : let
+  foo = pkgs.writeText "foo" "Hello World";
+in {
+  name = "misc";
+  meta = with pkgs.lib.maintainers; {
+    maintainers = [ eelco ];
+  };
+
+  nodes.machine =
+    { lib, ... }:
+    with lib;
+    { swapDevices = mkOverride 0
+        [ { device = "/root/swapfile"; size = 128; } ];
+      environment.variables.EDITOR = mkOverride 0 "emacs";
+      documentation.nixos.enable = mkOverride 0 true;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       systemd.tmpfiles.rules = [ "d /tmp 1777 root root 10d" ];
       virtualisation.fileSystems = { "/tmp2" =
         { fsType = "tmpfs";
@@ -29,7 +47,11 @@ in {
           options = [ "bind" "rw" "noauto" ];
         };
       };
+<<<<<<< HEAD
       systemd.automounts = lib.singleton
+=======
+      systemd.automounts = singleton
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         { wantedBy = [ "multi-user.target" ];
           where = "/tmp2";
         };

@@ -6,7 +6,11 @@
 , asyncio-rlock
 , asyncio-throttle
 , ircstates
+<<<<<<< HEAD
 , async-stagger
+=======
+, async_stagger
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , async-timeout
 , python
 }:
@@ -35,7 +39,11 @@ buildPythonPackage rec {
     asyncio-rlock
     asyncio-throttle
     ircstates
+<<<<<<< HEAD
     async-stagger
+=======
+    async_stagger
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     async-timeout
   ];
 

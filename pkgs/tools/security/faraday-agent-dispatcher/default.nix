@@ -5,13 +5,18 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "faraday-agent-dispatcher";
+<<<<<<< HEAD
   version = "2.6.2";
+=======
+  version = "2.4.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "infobyte";
     repo = "faraday_agent_dispatcher";
     rev = "refs/tags/${version}";
+<<<<<<< HEAD
     hash = "sha256-+lsejepg/iBHo6CRAGNHjiUC7ZgboHbKu7EDmlN3lVk=";
   };
 
@@ -20,6 +25,11 @@ python3.pkgs.buildPythonApplication rec {
       --replace '"pytest-runner",' ""
   '';
 
+=======
+    hash = "sha256-gZXA+2zW25Dl8JmBgg7APZt6ZdpFOEFZXAkiZ+tn/4g=";
+  };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nativeBuildInputs = with python3.pkgs; [
     setuptools-scm
   ];
@@ -31,7 +41,10 @@ python3.pkgs.buildPythonApplication rec {
     faraday-plugins
     itsdangerous
     psutil
+<<<<<<< HEAD
     pytenable
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     python-gvm
     python-owasp-zap-v2-4
     pyyaml
@@ -45,6 +58,14 @@ python3.pkgs.buildPythonApplication rec {
     pytestCheckHook
   ];
 
+<<<<<<< HEAD
+=======
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace '"pytest-runner",' ""
+  '';
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   preCheck = ''
     export HOME=$(mktemp -d);
   '';

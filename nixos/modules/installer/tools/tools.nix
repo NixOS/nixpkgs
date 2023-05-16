@@ -9,19 +9,25 @@ let
   makeProg = args: pkgs.substituteAll (args // {
     dir = "bin";
     isExecutable = true;
+<<<<<<< HEAD
     nativeBuildInputs = [
       pkgs.installShellFiles
     ];
     postInstall = ''
       installManPage ${args.manPage}
     '';
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   });
 
   nixos-build-vms = makeProg {
     name = "nixos-build-vms";
     src = ./nixos-build-vms/nixos-build-vms.sh;
     inherit (pkgs) runtimeShell;
+<<<<<<< HEAD
     manPage = ./manpages/nixos-build-vms.8;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nixos-install = makeProg {
@@ -34,7 +40,10 @@ let
       nixos-enter
       pkgs.util-linuxMinimal
     ];
+<<<<<<< HEAD
     manPage = ./manpages/nixos-install.8;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nixos-rebuild = pkgs.nixos-rebuild.override { nix = config.nix.package.out; };
@@ -43,15 +52,28 @@ let
     name = "nixos-generate-config";
     src = ./nixos-generate-config.pl;
     perl = "${pkgs.perl.withPackages (p: [ p.FileSlurp ])}/bin/perl";
+<<<<<<< HEAD
     hostPlatformSystem = pkgs.stdenv.hostPlatform.system;
+=======
+    system = pkgs.stdenv.hostPlatform.system;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     detectvirt = "${config.systemd.package}/bin/systemd-detect-virt";
     btrfs = "${pkgs.btrfs-progs}/bin/btrfs";
     inherit (config.system.nixos-generate-config) configuration desktopConfiguration;
     xserverEnabled = config.services.xserver.enable;
+<<<<<<< HEAD
     manPage = ./manpages/nixos-generate-config.8;
   };
 
   inherit (pkgs) nixos-option;
+=======
+  };
+
+  nixos-option =
+    if lib.versionAtLeast (lib.getVersion config.nix.package) "2.4pre"
+    then null
+    else pkgs.nixos-option;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nixos-version = makeProg {
     name = "nixos-version";
@@ -66,7 +88,10 @@ let
     } // optionalAttrs (config.system.configurationRevision != null) {
       configurationRevision = config.system.configurationRevision;
     });
+<<<<<<< HEAD
     manPage = ./manpages/nixos-version.8;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nixos-enter = makeProg {
@@ -76,7 +101,10 @@ let
     path = makeBinPath [
       pkgs.util-linuxMinimal
     ];
+<<<<<<< HEAD
     manPage = ./manpages/nixos-enter.8;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
 in
@@ -137,7 +165,11 @@ in
       # your system.  Help is available in the configuration.nix(5) man page
       # and in the NixOS manual (accessible by running `nixos-help`).
 
+<<<<<<< HEAD
       { config, lib, pkgs, ... }:
+=======
+      { config, pkgs, ... }:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
       {
         imports =
@@ -240,10 +272,16 @@ in
         nixos-install
         nixos-rebuild
         nixos-generate-config
+<<<<<<< HEAD
         nixos-option
         nixos-version
         nixos-enter
       ];
+=======
+        nixos-version
+        nixos-enter
+      ] ++ lib.optional (nixos-option != null) nixos-option;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     documentation.man.man-db.skipPackages = [ nixos-version ];
 

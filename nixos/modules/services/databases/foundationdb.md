@@ -6,7 +6,11 @@
 
 *Maintainer:* Austin Seipp
 
+<<<<<<< HEAD
 *Available version(s):* 7.1.x
+=======
+*Available version(s):* 5.1.x, 5.2.x, 6.0.x
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 FoundationDB (or "FDB") is an open source, distributed, transactional
 key-value store.
@@ -17,7 +21,11 @@ To enable FoundationDB, add the following to your
 {file}`configuration.nix`:
 ```
 services.foundationdb.enable = true;
+<<<<<<< HEAD
 services.foundationdb.package = pkgs.foundationdb71; # FoundationDB 7.1.x
+=======
+services.foundationdb.package = pkgs.foundationdb52; # FoundationDB 5.2.x
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 ```
 
 The {option}`services.foundationdb.package` option is required, and
@@ -66,7 +74,11 @@ necessary Python modules).
 ```ShellSession
 a@link> cat fdb-status.py
 #! /usr/bin/env nix-shell
+<<<<<<< HEAD
 #! nix-shell -i python -p python pythonPackages.foundationdb71
+=======
+#! nix-shell -i python -p python pythonPackages.foundationdb52
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 import fdb
 import json

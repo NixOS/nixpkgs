@@ -2,7 +2,11 @@
 , glib
 , gobject-introspection
 , python3
+<<<<<<< HEAD
 , wrapGAppsNoGuiHook
+=======
+, wrapGAppsHook
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , lib
 }:
 
@@ -18,7 +22,11 @@ python3.pkgs.buildPythonApplication {
   strictDeps = false;
 
   nativeBuildInputs = [
+<<<<<<< HEAD
     wrapGAppsNoGuiHook
+=======
+    wrapGAppsHook
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     gobject-introspection
   ];
 

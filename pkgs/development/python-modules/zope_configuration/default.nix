@@ -1,7 +1,11 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+<<<<<<< HEAD
 , zope-i18nmessageid
+=======
+, zope_i18nmessageid
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , zope_schema
 , zope_testrunner
 , manuel
@@ -18,7 +22,11 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ zope_testrunner manuel ];
 
+<<<<<<< HEAD
   propagatedBuildInputs = [ zope-i18nmessageid zope_schema ];
+=======
+  propagatedBuildInputs = [ zope_i18nmessageid zope_schema ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   # Need to investigate how to run the tests with zope-testrunner
   doCheck = false;

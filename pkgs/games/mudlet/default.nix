@@ -54,14 +54,22 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "mudlet";
+<<<<<<< HEAD
   version = "4.17.2";
+=======
+  version = "4.17.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "Mudlet";
     repo = "Mudlet";
     rev = "Mudlet-${version}";
     fetchSubmodules = true;
+<<<<<<< HEAD
     hash = "sha256-K75frptePKfHeGQNXaX4lKsLwO6Rs6AAka6hvP8MA+k=";
+=======
+    hash = "sha256-j0d37C1TTb6ggXk1wTaqEcBKwsxE/B7Io90gTkc2q0M=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [
@@ -113,8 +121,11 @@ stdenv.mkDerivation rec {
     mkdir -pv $out/share/pixmaps
     cp -r ../mudlet.png $out/share/pixmaps/
 
+<<<<<<< HEAD
     cp -r ../translations $out/share/
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     makeQtWrapper $out/mudlet $out/bin/mudlet \
       --set LUA_CPATH "${luaEnv}/lib/lua/${lua.luaversion}/?.so" \
       --prefix LUA_PATH : "$NIX_LUA_PATH" \

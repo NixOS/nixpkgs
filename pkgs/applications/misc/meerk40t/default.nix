@@ -6,7 +6,14 @@
 , wrapGAppsHook
 }:
 
+<<<<<<< HEAD
 python3.pkgs.buildPythonApplication rec {
+=======
+let
+  inherit (python3.pkgs) buildPythonApplication buildPythonPackage fetchPypi;
+in
+buildPythonApplication rec {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pname = "MeerK40t";
   version = "0.8.1000";
   format = "setuptools";

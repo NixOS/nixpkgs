@@ -46,7 +46,11 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   passthru.tests = {
+<<<<<<< HEAD
     inherit (nixosTests) firefox firefox-esr-115;
+=======
+    inherit (nixosTests) firefox firefox-esr-91 firefox-esr-102;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   meta = with lib; {

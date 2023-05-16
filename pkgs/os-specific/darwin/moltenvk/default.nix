@@ -3,7 +3,10 @@
 , stdenv
 , fetchurl
 , fetchFromGitHub
+<<<<<<< HEAD
 , gitUpdater
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , cctools
 , sigtool
 , cereal
@@ -24,7 +27,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "MoltenVK";
+<<<<<<< HEAD
   version = "1.2.4";
+=======
+  version = "1.2.3";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   buildInputs = [
     AppKit
@@ -47,7 +54,11 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "KhronosGroup";
     repo = "MoltenVK";
     rev = "v${finalAttrs.version}";
+<<<<<<< HEAD
     hash = "sha256-BL46BgZHUpk0dpzmeZ/2W0msHxFwieeGDjmVB8Nb1J4=";
+=======
+    hash = "sha256-GPOF2lyo1eDf1GrPjcj0y1OuUHI/c80L9gSQM+4wEp0=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   patches = [
@@ -145,6 +156,7 @@ stdenv.mkDerivation (finalAttrs: {
   postFixup = ''
     install_name_tool -id "$out/lib/libMoltenVK.dylib" "$out/lib/libMoltenVK.dylib"
     codesign -s - -f "$out/lib/libMoltenVK.dylib"
+<<<<<<< HEAD
     codesign -s - -f "$bin/bin/MoltenVKShaderConverter"
   '';
 
@@ -152,6 +164,10 @@ stdenv.mkDerivation (finalAttrs: {
     rev-prefix = "v";
   };
 
+=======
+  '';
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   meta = {
     description = "A Vulkan Portability implementation built on top of Apple’s Metal API";
     homepage = "https://github.com/KhronosGroup/MoltenVK";

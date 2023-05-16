@@ -9,14 +9,23 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "todoman";
+<<<<<<< HEAD
   version = "4.3.1";
   format = "pyproject";
+=======
+  version = "4.1.0";
+  format = "setuptools";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "pimutils";
     repo = pname;
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-pa1zzu0ITJObzhSmohjgiGTCoautXrY+SQQ3hxEtQcE=";
+=======
+    hash = "sha256-MItFZ+4Q7UKeIWHl8KFiWOLNgFcfb0h1YWjPd+g48Wg=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
@@ -48,11 +57,22 @@ python3.pkgs.buildPythonApplication rec {
     hypothesis
     pytestCheckHook
     glibcLocales
+<<<<<<< HEAD
     pytest-cov
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   LC_ALL = "en_US.UTF-8";
 
+<<<<<<< HEAD
+=======
+  postPatch = ''
+    substituteInPlace setup.cfg \
+      --replace " --cov=todoman --cov-report=term-missing" ""
+  '';
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   postInstall = ''
     installShellCompletion --bash contrib/completion/bash/_todo
     substituteInPlace contrib/completion/zsh/_todo --replace "jq " "${jq}/bin/jq "
@@ -63,6 +83,10 @@ python3.pkgs.buildPythonApplication rec {
     # Testing of the CLI part and output
     "test_color_due_dates"
     "test_color_flag"
+<<<<<<< HEAD
+=======
+    "test_datetime_serialization"  # Will be fixed in versions after 4.1.0
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "test_default_command"
     "test_main"
     "test_missing_cache_dir"
@@ -93,6 +117,9 @@ python3.pkgs.buildPythonApplication rec {
     changelog = "https://github.com/pimutils/todoman/raw/v${version}/CHANGELOG.rst";
     license = licenses.isc;
     maintainers = with maintainers; [ leenaars ];
+<<<<<<< HEAD
     mainProgram = "todo";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

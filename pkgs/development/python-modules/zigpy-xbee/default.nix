@@ -1,6 +1,13 @@
 { lib
+<<<<<<< HEAD
 , buildPythonPackage
 , fetchFromGitHub
+=======
+, asynctest
+, buildPythonPackage
+, fetchFromGitHub
+, fetchpatch
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , pyserial
 , pyserial-asyncio
 , pytest-asyncio
@@ -11,7 +18,11 @@
 
 buildPythonPackage rec {
   pname = "zigpy-xbee";
+<<<<<<< HEAD
   version = "0.18.2";
+=======
+  version = "0.18.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   # https://github.com/Martiusweb/asynctest/issues/152
   # broken by upstream python bug with asynctest and
   # is used exclusively by home-assistant with python 3.8
@@ -21,7 +32,11 @@ buildPythonPackage rec {
     owner = "zigpy";
     repo = "zigpy-xbee";
     rev = "refs/tags/${version}";
+<<<<<<< HEAD
     hash = "sha256-aglKQWIMh0IyrcGt+PZVtzcgs88YbtZB7Tfg7hlB+18=";
+=======
+    hash = "sha256-zSaT9WdA4tR8tJAShSzqL+f/nTLQJbeIZnbSBe1EOks=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   buildInputs = [
@@ -31,6 +46,10 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+<<<<<<< HEAD
+=======
+    asynctest
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     pytest-asyncio
     pytestCheckHook
   ];

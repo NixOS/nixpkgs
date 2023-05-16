@@ -8,12 +8,20 @@
 
 buildPythonPackage rec {
   pname = "typing-inspect";
+<<<<<<< HEAD
   version = "0.9.0";
+=======
+  version = "0.8.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchPypi {
     inherit version;
     pname = "typing_inspect";
+<<<<<<< HEAD
     hash = "sha256-sj/EL/b272lU5IUsH7USzdGNvqAxNPkfhWqVzMlGH3g=";
+=======
+    hash = "sha256-ix/wxACUO2FF34EZxBwkTKggfx8QycBXru0VYOSAbj0=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [

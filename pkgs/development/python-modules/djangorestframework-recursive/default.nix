@@ -32,6 +32,10 @@ buildPythonPackage rec {
     description = " Recursive Serialization for Django REST framework ";
     homepage = "https://github.com/heywbj/django-rest-framework-recursive";
     license = licenses.isc;
+<<<<<<< HEAD
     maintainers = with maintainers; [ ];
+=======
+    maintainers = with maintainers; [ SuperSandro2000 ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

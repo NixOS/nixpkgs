@@ -36,6 +36,10 @@ rustPlatform.buildRustPackage rec {
     description = "A cargo subcommand that generates Debian packages from information in Cargo.toml";
     homepage = "https://github.com/kornelski/cargo-deb";
     license = licenses.mit;
+<<<<<<< HEAD
     maintainers = with maintainers; [ Br1ght0ne matthiasbeyer ];
+=======
+    maintainers = with maintainers; [ Br1ght0ne ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

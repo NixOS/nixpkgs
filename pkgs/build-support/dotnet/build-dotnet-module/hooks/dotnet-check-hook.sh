@@ -17,11 +17,14 @@ dotnetCheckHook() {
     fi
 
     for project in ${testProjectFile[@]-${projectFile[@]}}; do
+<<<<<<< HEAD
         runtimeIdFlags=()
         if [[ "$project" == *.csproj ]]; then
             runtimeIdFlags=("--runtime @runtimeId@")
         fi
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         env "LD_LIBRARY_PATH=@libraryPath@" \
             dotnet test "$project" \
               -maxcpucount:$maxCpuFlag \
@@ -31,7 +34,10 @@ dotnetCheckHook() {
               --no-build \
               --logger "console;verbosity=normal" \
               ${disabledTestsFlag-} \
+<<<<<<< HEAD
               ${runtimeIdFlags[@]} \
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
               "${dotnetTestFlags[@]}"  \
               "${dotnetFlags[@]}"
     done

@@ -46,7 +46,11 @@ let
 
     subPackages = [ "." ];
 
+<<<<<<< HEAD
     vendorHash = "sha256-GDoX5d2aDfaAx9JsKuS4r8137t3swT6rgcCghmaThSM=";
+=======
+    vendorSha256 = "sha256-GDoX5d2aDfaAx9JsKuS4r8137t3swT6rgcCghmaThSM=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     src = fetchFromGitHub {
       rev = "v${version}";

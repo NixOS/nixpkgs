@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 { lib
 , copyDesktopItems
 , fetchFromGitHub
@@ -10,6 +11,10 @@
 , strip-nondeterminism
 , zip
 }:
+=======
+{ lib, stdenv, fetchurl, fetchFromGitHub, love, zip, fetchpatch, makeWrapper
+, makeDesktopItem, copyDesktopItems }:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 stdenv.mkDerivation rec {
   pname = "orthorobot";
@@ -39,12 +44,16 @@ stdenv.mkDerivation rec {
     })
   ];
 
+<<<<<<< HEAD
   nativeBuildInputs = [
     copyDesktopItems
     makeWrapper
     strip-nondeterminism
     zip
   ];
+=======
+  nativeBuildInputs = [ makeWrapper zip copyDesktopItems ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   patches = [
     # support for love11
@@ -57,7 +66,10 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
     zip -9 -r orthorobot.love ./*
+<<<<<<< HEAD
     strip-nondeterminism --type zip orthorobot.love
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     install -Dm444 -t $out/share/games/lovegames/ orthorobot.love
     makeWrapper ${love}/bin/love $out/bin/orthorobot \
                 --add-flags $out/share/games/lovegames/orthorobot.love

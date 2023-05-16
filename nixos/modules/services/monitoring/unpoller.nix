@@ -47,7 +47,11 @@ in {
         type = types.bool;
         default = false;
         description = lib.mdDoc ''
+<<<<<<< HEAD
           Whether to disable the prometheus output plugin.
+=======
+          Whether to disable the prometheus ouput plugin.
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         '';
       };
       http_listen = mkOption {
@@ -71,7 +75,11 @@ in {
         type = types.bool;
         default = false;
         description = lib.mdDoc ''
+<<<<<<< HEAD
           Whether to disable the influxdb output plugin.
+=======
+          Whether to disable the influxdb ouput plugin.
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         '';
       };
       url = mkOption {

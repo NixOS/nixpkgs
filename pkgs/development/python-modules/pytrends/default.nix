@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+<<<<<<< HEAD
 , setuptools
 , setuptools-scm
 , wheel
@@ -10,10 +11,17 @@
 , pytestCheckHook
 , pytest-recording
 , responses
+=======
+, isPy27
+, requests
+, lxml
+, pandas
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 buildPythonPackage rec {
   pname = "pytrends";
+<<<<<<< HEAD
   version = "4.9.2";
   format = "pyproject";
 
@@ -45,6 +53,19 @@ buildPythonPackage rec {
     "--block-network"
   ];
 
+=======
+  version = "4.9.0";
+  disabled = isPy27; # python2 pandas is too old
+
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-pU/B4xcUQrPI9cCApeId+Ae8T6rXeQzGK33bBZ6wqUs=";
+  };
+
+  propagatedBuildInputs = [ requests lxml pandas ];
+
+  doCheck = false;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pythonImportsCheck = [ "pytrends" ];
 
   meta = with lib; {

@@ -1,4 +1,5 @@
 { lib
+<<<<<<< HEAD
 , stdenv
 , buildPythonPackage
 , cargo
@@ -11,17 +12,32 @@
 , setuptools
 , setuptools-rust
 , wheel
+=======
+, buildPythonPackage
+, fetchFromGitHub
+, rustPlatform
+, cargo
+, rustc
+, setuptools-rust
+, json-stream-rs-tokenizer
+, json-stream
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 buildPythonPackage rec {
   pname = "json-stream-rs-tokenizer";
+<<<<<<< HEAD
   version = "0.4.22";
+=======
+  version = "0.4.16";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "smheidrich";
     repo = "py-json-stream-rs-tokenizer";
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-EW726gUXTBX3gTxlFQ45RgkUa2Z4tIjUZxO4GBLXgEs=";
   };
 
@@ -43,6 +59,26 @@ buildPythonPackage rec {
 
   buildInputs = lib.optionals stdenv.isDarwin [
     darwin.libiconv
+=======
+    hash = "sha256-MnYkCAI8x65kU0EoTRf4ZVsbjNravjokepX4yViu7go=";
+  };
+
+  postPatch = ''
+    cp ${./Cargo.lock} ./Cargo.lock
+  '';
+
+  cargoDeps = rustPlatform.fetchCargoTarball {
+    inherit src postPatch;
+    name = "${pname}-${version}";
+    hash = "sha256-HwWH8/UWKWOdRmyCVQtNqJxXD55f6zxLY0LhR7JU9ro=";
+  };
+
+  nativeBuildInputs = [
+    setuptools-rust
+    rustPlatform.cargoSetupHook
+    cargo
+    rustc
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   # Tests depend on json-stream, which depends on this package.

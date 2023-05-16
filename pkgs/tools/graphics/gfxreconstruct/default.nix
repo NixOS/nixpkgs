@@ -17,13 +17,21 @@
 
 stdenv.mkDerivation rec {
   pname = "gfxreconstruct";
+<<<<<<< HEAD
   version = "1.0.0";
+=======
+  version = "0.9.18";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "LunarG";
     repo = "gfxreconstruct";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-dOmkNKURYgphbDHOmzcWf9PsIKMkPyN7ve579BE7fR0=";
+=======
+    hash = "sha256-9MDmeHid/faHeBjBfPgpRMjMMXZeHKP0VZZJtEQgBhs=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     fetchSubmodules = true;
   };
 
@@ -63,6 +71,9 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/LunarG/gfxreconstruct/";
     license = licenses.mit;
     maintainers = with maintainers; [ Flakebi ];
+<<<<<<< HEAD
     platforms = platforms.linux;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

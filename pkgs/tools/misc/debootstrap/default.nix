@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 { lib
 , stdenv
 , fetchFromGitLab
@@ -21,6 +22,10 @@
 , debootstrap
 }:
 
+=======
+{ lib, stdenv, fetchFromGitLab, dpkg, gawk, perl, wget, binutils, bzip2, coreutils, util-linux
+, gnugrep, gnupg1, gnutar, gnused, gzip, xz, makeWrapper }:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 # USAGE like this: debootstrap sid /tmp/target-chroot-directory
 # There is also cdebootstrap now. Is that easier to maintain?
 let binPath = lib.makeBinPath [
@@ -40,14 +45,23 @@ let binPath = lib.makeBinPath [
   ];
 in stdenv.mkDerivation rec {
   pname = "debootstrap";
+<<<<<<< HEAD
   version = "1.0.131";
+=======
+  version = "1.0.128";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitLab {
     domain = "salsa.debian.org";
     owner = "installer-team";
     repo = pname;
+<<<<<<< HEAD
     rev = "refs/tags/${version}";
     hash = "sha256-rwNcrS2GzVs0JYxeHcpLMG9FDwSpthNmZIemn95hC6g=";
+=======
+    rev = version;
+    sha256 = "sha256-WybWWyRPreokjUAdWfZ2MUjgZhF1GTncpbLajQ3rh0E=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -83,6 +97,7 @@ in stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   passthru = {
     updateScript = nix-update-script { };
     tests.version = testers.testVersion {
@@ -92,6 +107,9 @@ in stdenv.mkDerivation rec {
 
   meta = with lib; {
     changelog = "https://salsa.debian.org/installer-team/debootstrap/-/blob/${version}/debian/changelog";
+=======
+  meta = with lib; {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     description = "Tool to create a Debian system in a chroot";
     homepage = "https://wiki.debian.org/Debootstrap";
     license = licenses.mit;

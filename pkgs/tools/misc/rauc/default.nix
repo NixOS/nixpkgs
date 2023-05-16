@@ -1,6 +1,10 @@
 { curl
 , dbus
 , fetchFromGitHub
+<<<<<<< HEAD
+=======
+, fetchpatch
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , glib
 , json-glib
 , lib
@@ -17,22 +21,43 @@
 
 stdenv.mkDerivation rec {
   pname = "rauc";
+<<<<<<< HEAD
   version = "1.10.1";
+=======
+  version = "1.9";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-KxU8/ExRsyqhV3np1EqAzpFm0Uy4fY/oi9lS2GBYHZE=";
   };
 
+=======
+    sha256 = "sha256-VpHcJUTRZ5aJyfYypjVsYyRNrK0+9ci42mmlZQSkWAk=";
+  };
+
+  patches = [
+    (fetchpatch {
+      # Patch to install the man page when using meson, remove on package bump
+      url = "https://github.com/rauc/rauc/commit/756c677d031c435070a6900e6778d06961822261.patch";
+      hash = "sha256-QgIUagioRo61PeC0JyKjZtnauFiYP1Fz9wrxGEikBGI=";
+    })
+  ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   passthru = {
     updateScript = nix-update-script { };
   };
 
   enableParallelBuilding = true;
 
+<<<<<<< HEAD
   nativeBuildInputs = [ pkg-config meson ninja glib ];
+=======
+  nativeBuildInputs = [ pkg-config meson ninja ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   buildInputs = [ curl dbus glib json-glib openssl util-linux libnl systemd ];
 

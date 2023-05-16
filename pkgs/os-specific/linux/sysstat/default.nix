@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 { lib
 , stdenv
 , fetchFromGitHub
@@ -14,6 +15,17 @@ stdenv.mkDerivation rec {
     repo = pname;
     rev = "refs/tags/v${version}";
     hash = "sha256-ELmSzWnJ8vGwGPwY/5MFp/2gQhMXMjNG4bHtCplfQSc=";
+=======
+{ lib, stdenv, fetchurl, gettext, bzip2 }:
+
+stdenv.mkDerivation rec {
+  pname = "sysstat";
+  version = "12.6.2";
+
+  src = fetchurl {
+    url = "http://pagesperso-orange.fr/sebastien.godard/sysstat-${version}.tar.xz";
+    hash = "sha256-PncTSu2qb8V9l0XaZ+39iZDhmt7nGsRxliKSYcVj+0g=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   buildInputs = [ gettext ];

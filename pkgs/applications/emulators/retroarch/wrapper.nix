@@ -3,6 +3,7 @@
 , makeWrapper
 , retroarch
 , symlinkJoin
+<<<<<<< HEAD
 , runCommand
 , cores ? [ ]
 , settings ? { }
@@ -25,6 +26,18 @@ let
     (lib.lists.flatten (map (p: [ "--add-flags" "-L ${placeholder "out" + p}" ]) coresPath))
     ++ [ "--add-flags" "--appendconfig=${settingsPath}" ]
   );
+=======
+, cores ? [ ]
+}:
+
+let
+  # All cores should be located in the same path after symlinkJoin,
+  # but let's be safe here
+  coresPath = lib.lists.unique (map (c: c.libretroCore) cores);
+  wrapperArgs = lib.strings.escapeShellArgs
+    (lib.lists.flatten
+      (map (p: [ "--add-flags" "-L ${placeholder "out" + p}" ]) coresPath));
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 in
 symlinkJoin {
   name = "retroarch-with-cores-${lib.getVersion retroarch}";

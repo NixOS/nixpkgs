@@ -7,12 +7,15 @@
 , pyjwt
 , pytestCheckHook
 , pythonOlder
+<<<<<<< HEAD
 
 # for passthru.tests
 , django-allauth
 , django-oauth-toolkit
 , google-auth-oauthlib
 , requests-oauthlib
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 buildPythonPackage rec {
@@ -44,6 +47,7 @@ buildPythonPackage rec {
     "oauthlib"
   ];
 
+<<<<<<< HEAD
   passthru.tests = {
     inherit
       django-allauth
@@ -52,6 +56,8 @@ buildPythonPackage rec {
       requests-oauthlib;
   };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   meta = with lib; {
     description = "Generic, spec-compliant, thorough implementation of the OAuth request-signing logic";
     homepage = "https://github.com/idan/oauthlib";

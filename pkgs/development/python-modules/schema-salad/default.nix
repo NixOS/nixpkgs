@@ -1,6 +1,7 @@
 { lib
 , black
 , buildPythonPackage
+<<<<<<< HEAD
 , cachecontrol
 , fetchPypi
 , importlib-resources
@@ -13,18 +14,37 @@
 , ruamel-yaml
 , setuptools
 , setuptools-scm
+=======
+, fetchPypi
+, setuptools-scm
+, cachecontrol
+, lockfile
+, mistune
+, rdflib
+, ruamel-yaml
+, pytestCheckHook
+, pythonOlder
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 buildPythonPackage rec {
   pname = "schema-salad";
+<<<<<<< HEAD
   version = "8.4.20230808163024";
+=======
+  version = "8.4.20230213094415";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
+<<<<<<< HEAD
     hash = "sha256-ai4vv6EFX4yTR8sgRspiG+M8a8oa83LIlJPGX7q+Kd0=";
+=======
+    hash = "sha256-x2co8WjL+e4nBZd0pGUwv39nzNkO5G3dYrYJZeqP31o=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [
@@ -33,6 +53,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     cachecontrol
+<<<<<<< HEAD
     importlib-resources
     lockfile
     mistune
@@ -41,6 +62,13 @@ buildPythonPackage rec {
     ruamel-yaml
     setuptools # needs pkg_resources at runtime
   ] ++ cachecontrol.optional-dependencies.filecache;
+=======
+    lockfile
+    mistune
+    rdflib
+    ruamel-yaml
+  ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nativeCheckInputs = [
     pytestCheckHook

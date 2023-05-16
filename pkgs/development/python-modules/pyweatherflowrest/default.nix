@@ -8,7 +8,11 @@
 
 buildPythonPackage rec {
   pname = "pyweatherflowrest";
+<<<<<<< HEAD
   version = "1.0.11";
+=======
+  version = "1.0.9";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -17,7 +21,11 @@ buildPythonPackage rec {
     owner = "briis";
     repo = pname;
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-l1V3HgzqnnoY6sWHwfgBtcIR782RwKhekY2qOLrUMNY=";
+=======
+    hash = "sha256-LFA1GJCYFIWl7/YblRrYgAB4lbELpzhCJyjB8aCkJ/E=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

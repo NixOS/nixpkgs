@@ -10,11 +10,19 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lbreakouthd";
+<<<<<<< HEAD
   version = "1.1.3";
 
   src = fetchurl {
     url = "mirror://sourceforge/lgames/lbreakouthd-${finalAttrs.version}.tar.gz";
     hash = "sha256-BpF583f2if4FeJ2Fi/8GZYuh5T37GXdNq/Ww4LM65wY=";
+=======
+  version = "1.1.2";
+
+  src = fetchurl {
+    url = "mirror://sourceforge/lgames/lbreakouthd-${finalAttrs.version}.tar.gz";
+    hash = "sha256-fK7w5uS7zPJnbEmY3YpxoA9cGuooQbVlDB9Mu6yB8hw=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   buildInputs = [

@@ -10,9 +10,13 @@
 , rustPlatform
 , rustc
 , napi-rs-cli
+<<<<<<< HEAD
 , pkg-config
 , nodejs
 , openssl
+=======
+, nodejs
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 let
@@ -26,7 +30,11 @@ mkYarnPackage rec {
     owner = "matrix-org";
     repo = "matrix-hookshot";
     rev = data.version;
+<<<<<<< HEAD
     hash = data.srcHash;
+=======
+    sha256 = data.srcHash;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   packageJSON = ./package.json;
@@ -39,18 +47,27 @@ mkYarnPackage rec {
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
+<<<<<<< HEAD
     hash = data.cargoHash;
+=======
+    sha256 = data.cargoHash;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   packageResolutions = {
     "@matrix-org/matrix-sdk-crypto-nodejs" = "${matrix-sdk-crypto-nodejs}/lib/node_modules/@matrix-org/matrix-sdk-crypto-nodejs";
   };
 
+<<<<<<< HEAD
   extraBuildInputs = [ openssl ];
 
   nativeBuildInputs = [
     rustPlatform.cargoSetupHook
     pkg-config
+=======
+  nativeBuildInputs = [
+    rustPlatform.cargoSetupHook
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     cargo
     rustc
     napi-rs-cli
@@ -79,6 +96,9 @@ mkYarnPackage rec {
     description = "A bridge between Matrix and multiple project management services, such as GitHub, GitLab and JIRA";
     maintainers = with maintainers; [ chvp ];
     license = licenses.asl20;
+<<<<<<< HEAD
     platforms = platforms.linux;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

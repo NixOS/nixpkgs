@@ -6,7 +6,11 @@ import re
 import requests
 import sys
 
+<<<<<<< HEAD
 feature_versions = (8, 11, 16, 17, 18, 19, 20)
+=======
+feature_versions = (8, 11, 16, 17, 18, 19)
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 oses = ("mac", "linux", "alpine-linux")
 types = ("jre", "jdk")
 impls = ("hotspot")

@@ -41,7 +41,10 @@ let
 
     # serialization
     cli = callLibs ./cli.nix;
+<<<<<<< HEAD
     gvariant = callLibs ./gvariant.nix;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     generators = callLibs ./generators.nix;
 
     # misc
@@ -55,7 +58,10 @@ let
     # Eval-time filesystem handling
     path = callLibs ./path;
     filesystem = callLibs ./filesystem.nix;
+<<<<<<< HEAD
     fileset = callLibs ./fileset;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     sources = callLibs ./sources.nix;
 
     # back-compat aliases
@@ -114,6 +120,7 @@ let
       noDepEntry fullDepEntry packEntry stringAfter;
     inherit (self.customisation) overrideDerivation makeOverridable
       callPackageWith callPackagesWith extendDerivation hydraJob
+<<<<<<< HEAD
       makeScope makeScopeWithSplicing makeScopeWithSplicing';
     inherit (self.derivations) lazyDerivation;
     inherit (self.meta) addMetaAttrs dontDistribute setName updateName
@@ -124,6 +131,17 @@ let
       cleanSource sourceByRegex sourceFilesBySuffices
       commitIdFromGitRepo cleanSourceWith pathHasContext
       canCleanSource pathIsGitRepo;
+=======
+      makeScope makeScopeWithSplicing;
+    inherit (self.derivations) lazyDerivation;
+    inherit (self.meta) addMetaAttrs dontDistribute setName updateName
+      appendToName mapDerivationAttrset setPrio lowPrio lowPrioSet hiPrio
+      hiPrioSet getLicenseFromSpdxId getExe;
+    inherit (self.sources) pathType pathIsDirectory cleanSourceFilter
+      cleanSource sourceByRegex sourceFilesBySuffices
+      commitIdFromGitRepo cleanSourceWith pathHasContext
+      canCleanSource pathIsRegularFile pathIsGitRepo;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     inherit (self.modules) evalModules setDefaultModuleLocation
       unifyModuleSyntax applyModuleArgsIfFunction mergeModules
       mergeModules' mergeOptionDecls evalOptionValue mergeDefinitions
@@ -140,7 +158,11 @@ let
       mergeDefaultOption mergeOneOption mergeEqualOption mergeUniqueOption
       getValues getFiles
       optionAttrSetToDocList optionAttrSetToDocList'
+<<<<<<< HEAD
       scrubOptionValue literalExpression literalExample
+=======
+      scrubOptionValue literalExpression literalExample literalDocBook
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       showOption showOptionWithDefLocs showFiles
       unknownModule mkOption mkPackageOption mkPackageOptionMD
       mdDoc literalMD;

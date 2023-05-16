@@ -21,6 +21,10 @@ buildPythonPackage rec {
     description = "A Pythonic interface to the RabbitMQ Management HTTP API";
     homepage = "https://github.com/deslum/pyrabbit2";
     license = licenses.mit;
+<<<<<<< HEAD
     maintainers = [ ];
+=======
+    maintainers = [ maintainers.costrouc ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

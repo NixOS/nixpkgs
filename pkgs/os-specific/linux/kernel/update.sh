@@ -58,6 +58,7 @@ ls $NIXPKGS/pkgs/os-specific/linux/kernel | while read FILE; do
   echo "Updated $OLDVER -> $V"
 done
 
+<<<<<<< HEAD
 # Allowing errors again: one broken update script shouldn't inhibit the
 # update of other kernel variants.
 set +e
@@ -70,3 +71,13 @@ COMMIT=1 $NIXPKGS/pkgs/os-specific/linux/kernel/update-libre.sh || echo "update-
 
 echo Update linux-hardened
 COMMIT=1 $NIXPKGS/pkgs/os-specific/linux/kernel/hardened/update.py || echo "update-hardened failed with exit code $?"
+=======
+# Update linux-rt
+COMMIT=1 $NIXPKGS/pkgs/os-specific/linux/kernel/update-rt.sh
+
+# Update linux-libre
+COMMIT=1 $NIXPKGS/pkgs/os-specific/linux/kernel/update-libre.sh
+
+# Update linux-hardened
+COMMIT=1 $NIXPKGS/pkgs/os-specific/linux/kernel/hardened/update.py
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)

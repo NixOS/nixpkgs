@@ -7,13 +7,22 @@
 , enableSqlite ? true
 }: python3.pkgs.buildPythonApplication rec {
   pname = "mautrix-googlechat";
+<<<<<<< HEAD
   version = "unstable-2023-07-16";
+=======
+  version = "unstable-2023-01-25";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "mautrix";
     repo = "googlechat";
+<<<<<<< HEAD
     rev = "f4cddafd474b12be09efd15c6652c04d0650458e";
     sha256 = "sha256-WMJVAX5oUdYYuXoJKk7OoERR0LJM0Er5444xwqIUTm8=";
+=======
+    rev = "e2eb528745466468f059c506c22e500e0cd832aa";
+    sha256 = "sha256-FNlEHzuy89RuFUwZPmVA+4AmpQHGD+18BguGC6qBdBM=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   patches = [
@@ -54,7 +63,11 @@
     ruamel-yaml
     commonmark
     python-magic
+<<<<<<< HEAD
     protobuf
+=======
+    protobuf3
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     mautrix
   ] ++ lib.optionals enableE2be passthru.optional-dependencies.e2be
   ++ lib.optionals enableMetrics passthru.optional-dependencies.metrics

@@ -47,7 +47,10 @@ mapAliases (with prev; {
   solarized           = vim-colors-solarized;
   colors-solarized    = vim-colors-solarized;
   caw                 = caw-vim;
+<<<<<<< HEAD
   chad                = chadtree;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   colorsamplerpack    = Colour-Sampler-Pack;
   Colour_Sampler_Pack = Colour-Sampler-Pack;
   command_T           = command-t; # backwards compat, added 2014-10-18
@@ -127,7 +130,10 @@ mapAliases (with prev; {
   tlib                = tlib_vim;
   tmux-navigator      = vim-tmux-navigator;
   tmuxNavigator       = vim-tmux-navigator; # backwards compat, added 2014-10-18
+<<<<<<< HEAD
   todo-nvim           = throw "todo-nvim has been removed: abandoned by upstream"; # Added 2023-08-23
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   tslime              = tslime-vim;
   unite               = unite-vim;
   UltiSnips           = ultisnips;

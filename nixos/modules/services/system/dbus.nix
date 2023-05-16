@@ -22,7 +22,11 @@ in
   options = {
 
     boot.initrd.systemd.dbus = {
+<<<<<<< HEAD
       enable = mkEnableOption (lib.mdDoc "dbus in stage 1");
+=======
+      enable = mkEnableOption (lib.mdDoc "dbus in stage 1") // { visible = false; };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
 
     services.dbus = {

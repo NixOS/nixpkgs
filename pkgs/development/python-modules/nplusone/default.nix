@@ -1,7 +1,10 @@
 { lib
 , blinker
 , buildPythonPackage
+<<<<<<< HEAD
 , django
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , fetchFromGitHub
 , flake8
 , flask-sqlalchemy
@@ -80,6 +83,9 @@ buildPythonPackage rec {
     homepage = "https://github.com/jmcarp/nplusone";
     maintainers = with maintainers; [ cript0nauta ];
     license = licenses.mit;
+<<<<<<< HEAD
     broken = lib.versionAtLeast django.version "4";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

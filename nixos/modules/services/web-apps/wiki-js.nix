@@ -133,7 +133,11 @@ in {
         WorkingDirectory = "/var/lib/${cfg.stateDirectoryName}";
         DynamicUser = true;
         PrivateTmp = true;
+<<<<<<< HEAD
         ExecStart = "${pkgs.nodejs_18}/bin/node ${pkgs.wiki-js}/server";
+=======
+        ExecStart = "${pkgs.nodejs_16}/bin/node ${pkgs.wiki-js}/server";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       };
     };
   };

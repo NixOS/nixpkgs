@@ -12,8 +12,13 @@
 , update-python-libraries
 , setuptools
 , flitBuildHook
+<<<<<<< HEAD
 , pypaBuildHook
 , pypaInstallHook
+=======
+, pipBuildHook
+, pipInstallHook
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , pythonCatchConflictsHook
 , pythonImportsCheckHook
 , pythonNamespacesHook
@@ -118,7 +123,11 @@ let
 
     optionalLocation = let
         pos = builtins.unsafeGetAttrPos (if attrs ? "pname" then "pname" else "name") attrs;
+<<<<<<< HEAD
       in lib.optionalString (pos != null) " at ${pos.file}:${toString pos.line}:${toString pos.column}";
+=======
+      in if pos == null then "" else " at ${pos.file}:${toString pos.line}:${toString pos.column}";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     leftPadName = name: against: let
         len = lib.max (lib.stringLength name) (lib.stringLength against);
@@ -161,6 +170,7 @@ let
 
     in inputs: builtins.map (checkDrv) inputs;
 
+<<<<<<< HEAD
   isBootstrapInstallPackage = builtins.elem (attrs.pname or null) [
     "flit-core" "installer"
   ];
@@ -175,6 +185,8 @@ let
     "setuptools" "wheel"
   ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   # Keep extra attributes from `attrs`, e.g., `patchPhase', etc.
   self = toPythonModule (stdenv.mkDerivation ((builtins.removeAttrs attrs [
     "disabled" "checkPhase" "checkInputs" "nativeCheckInputs" "doCheck" "doInstallCheck" "dontWrapPythonPrograms" "catchConflicts" "format"
@@ -188,6 +200,7 @@ let
       wrapPython
       ensureNewerSourcesForZipFilesHook  # move to wheel installer (pip) or builder (setuptools, flit, ...)?
       pythonRemoveTestsDirHook
+<<<<<<< HEAD
     ] ++ lib.optionals (catchConflicts && !isBootstrapPackage && !isSetuptoolsDependency) [
       #
       # 1. When building a package that is also part of the bootstrap chain, we
@@ -197,6 +210,9 @@ let
       # 2. When a package is a dependency of setuptools, we must ignore conflicts
       #    because the hook that checks for conflicts uses setuptools.
       #
+=======
+    ] ++ lib.optionals catchConflicts [
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       pythonCatchConflictsHook
     ] ++ lib.optionals removeBinBytecode [
       pythonRemoveBinBytecodeHook
@@ -206,6 +222,7 @@ let
       setuptoolsBuildHook
     ] ++ lib.optionals (format == "flit") [
       flitBuildHook
+<<<<<<< HEAD
     ] ++ lib.optionals (format == "pyproject") [(
       if isBootstrapPackage then
         pypaBuildHook.override {
@@ -226,6 +243,17 @@ let
       else
         pypaInstallHook
     )] ++ lib.optionals (stdenv.buildPlatform == stdenv.hostPlatform) [
+=======
+    ] ++ lib.optionals (format == "pyproject") [
+      pipBuildHook
+    ] ++ lib.optionals (format == "wheel") [
+      wheelUnpackHook
+    ] ++ lib.optionals (format == "egg") [
+      eggUnpackHook eggBuildHook eggInstallHook
+    ] ++ lib.optionals (!(format == "other") || dontUsePipInstall) [
+      pipInstallHook
+    ] ++ lib.optionals (stdenv.buildPlatform == stdenv.hostPlatform) [
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       # This is a test, however, it should be ran independent of the checkPhase and checkInputs
       pythonImportsCheckHook
     ] ++ lib.optionals (python.pythonAtLeast "3.3") [

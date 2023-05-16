@@ -4,6 +4,7 @@ Maven is a well-known build tool for the Java ecosystem however it has some chal
 
 The following provides a list of common patterns with how to package a Maven project (or any JVM language that can export to Maven) as a Nix package.
 
+<<<<<<< HEAD
 ## Building a package using `maven.buildMavenPackage` {#maven-buildmavenpackage}
 
 Consider the following package:
@@ -85,6 +86,8 @@ To make sure that your package does not add extra manual effort when upgrading M
 This way is no longer recommended; see [](#maven-buildmavenpackage) for the simpler and preferred way.
 :::
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 For the purposes of this example let's consider a very basic Maven project with the following `pom.xml` with a single dependency on [emoji-java](https://github.com/vdurmont/emoji-java).
 
 ```xml
@@ -122,11 +125,22 @@ public class Main {
 }
 ```
 
+<<<<<<< HEAD
 You find this demo project at [https://github.com/fzakaria/nixos-maven-example](https://github.com/fzakaria/nixos-maven-example).
 
 ### Solving for dependencies {#solving-for-dependencies}
 
 #### buildMaven with NixOS/mvn2nix-maven-plugin {#buildmaven-with-nixosmvn2nix-maven-plugin}
+=======
+You find this demo project at https://github.com/fzakaria/nixos-maven-example
+
+## Solving for dependencies {#solving-for-dependencies}
+
+### buildMaven with NixOS/mvn2nix-maven-plugin {#buildmaven-with-nixosmvn2nix-maven-plugin}
+
+> ⚠️ Although `buildMaven` is the "blessed" way within nixpkgs, as of 2020, it hasn't seen much activity in quite a while.
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 `buildMaven` is an alternative method that tries to follow similar patterns of other programming languages by generating a lock file. It relies on the maven plugin [mvn2nix-maven-plugin](https://github.com/NixOS/mvn2nix-maven-plugin).
 
 First you generate a `project-info.json` file using the maven plugin.
@@ -183,10 +197,16 @@ The benefit over the _double invocation_ as we will see below, is that the _/nix
 │           ├── avalon-framework-4.1.3.jar -> /nix/store/iv5fp3955w3nq28ff9xfz86wvxbiw6n9-avalon-framework-4.1.3.jar
 ```
 
+<<<<<<< HEAD
 #### Double Invocation {#double-invocation}
 ::: {.note}
 This pattern is the simplest but may cause unnecessary rebuilds due to the output hash changing.
 :::
+=======
+### Double Invocation {#double-invocation}
+
+> ⚠️ This pattern is the simplest but may cause unnecessary rebuilds due to the output hash changing.
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 The double invocation is a _simple_ way to get around the problem that `nix-build` may be sandboxed and have no Internet connectivity.
 
@@ -194,9 +214,13 @@ It treats the entire Maven repository as a single source to be downloaded, relyi
 
 The first step will be to build the Maven project as a fixed-output derivation in order to collect the Maven repository -- below is an [example](https://github.com/fzakaria/nixos-maven-example/blob/main/double-invocation-repository.nix).
 
+<<<<<<< HEAD
 ::: {.note}
 Traditionally the Maven repository is at `~/.m2/repository`. We will override this to be the `$out` directory.
 :::
+=======
+> Traditionally the Maven repository is at `~/.m2/repository`. We will override this to be the `$out` directory.
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 ```nix
 { lib, stdenv, maven }:
@@ -228,9 +252,13 @@ stdenv.mkDerivation {
 
 The build will fail, and tell you the expected `outputHash` to place. When you've set the hash, the build will return with a `/nix/store` entry whose contents are the full Maven repository.
 
+<<<<<<< HEAD
 ::: {.warning}
 Some additional files are deleted that would cause the output hash to change potentially on subsequent runs.
 :::
+=======
+> Some additional files are deleted that would cause the output hash to change potentially on subsequent runs.
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 ```bash
 ❯ tree $(nix-build --no-out-link double-invocation-repository.nix) | head
@@ -248,7 +276,11 @@ Some additional files are deleted that would cause the output hash to change pot
 
 If your package uses _SNAPSHOT_ dependencies or _version ranges_; there is a strong likelihood that over-time your output hash will change since the resolved dependencies may change. Hence this method is less recommended then using `buildMaven`.
 
+<<<<<<< HEAD
 ### Building a JAR {#building-a-jar}
+=======
+## Building a JAR {#building-a-jar}
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 Regardless of which strategy is chosen above, the step to build the derivation is the same.
 
@@ -274,9 +306,13 @@ in stdenv.mkDerivation rec {
 }
 ```
 
+<<<<<<< HEAD
 ::: {.tip}
 We place the library in `$out/share/java` since JDK package has a _stdenv setup hook_ that adds any JARs in the `share/java` directories of the build inputs to the CLASSPATH environment.
 :::
+=======
+> We place the library in `$out/share/java` since JDK package has a _stdenv setup hook_ that adds any JARs in the `share/java` directories of the build inputs to the CLASSPATH environment.
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 ```bash
 ❯ tree $(nix-build --no-out-link build-jar.nix)
@@ -288,7 +324,11 @@ We place the library in `$out/share/java` since JDK package has a _stdenv setup 
 2 directories, 1 file
 ```
 
+<<<<<<< HEAD
 ### Runnable JAR {#runnable-jar}
+=======
+## Runnable JAR {#runnable-jar}
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 The previous example builds a `jar` file but that's not a file one can run.
 
@@ -300,9 +340,15 @@ We will use the same repository we built above (either _double invocation_ or _b
 
 The following two methods are more suited to Nix then building an [UberJar](https://imagej.net/Uber-JAR) which may be the more traditional approach.
 
+<<<<<<< HEAD
 #### CLASSPATH {#classpath}
 
 This method is ideal if you are providing a derivation for _nixpkgs_ and don't want to patch the project's `pom.xml`.
+=======
+### CLASSPATH {#classpath}
+
+> This is ideal if you are providing a derivation for _nixpkgs_ and don't want to patch the project's `pom.xml`.
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 We will read the Maven repository and flatten it to a single list. This list will then be concatenated with the _CLASSPATH_ separator to create the full classpath.
 
@@ -340,9 +386,15 @@ in stdenv.mkDerivation rec {
 }
 ```
 
+<<<<<<< HEAD
 #### MANIFEST file via Maven Plugin {#manifest-file-via-maven-plugin}
 
 This method is ideal if you are the project owner and want to change your `pom.xml` to set the CLASSPATH within it.
+=======
+### MANIFEST file via Maven Plugin {#manifest-file-via-maven-plugin}
+
+> This is ideal if you are the project owner and want to change your `pom.xml` to set the CLASSPATH within it.
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 Augment the `pom.xml` to create a JAR with the following manifest:
 
@@ -418,9 +470,14 @@ in stdenv.mkDerivation rec {
   '';
 }
 ```
+<<<<<<< HEAD
 ::: {.note}
 Our script produces a dependency on `jre` rather than `jdk` to restrict the runtime closure necessary to run the application.
 :::
+=======
+
+> Our script produces a dependency on `jre` rather than `jdk` to restrict the runtime closure necessary to run the application.
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 This will give you an executable shell-script that launches your JAR with all the dependencies available.
 

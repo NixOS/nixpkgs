@@ -18,13 +18,17 @@
 , avrdude
 , gdb
 , openocd
+<<<<<<< HEAD
 , runCommand
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , tinygoTests ? [ "smoketest" ]
 }:
 
 let
   llvmMajor = lib.versions.major llvm.version;
   inherit (llvmPackages) llvm clang compiler-rt lld;
+<<<<<<< HEAD
 
   # only doing this because only on darwin placing clang.cc in nativeBuildInputs
   # doesn't build
@@ -35,6 +39,8 @@ let
     ln -s ${lib.getBin lld}/bin/wasm-ld $out/wasm-ld-${llvmMajor}
     ln -s ${gdb}/bin/gdb $out/gdb-multiarch
   '';
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 in
 
 buildGoModule rec {
@@ -49,7 +55,11 @@ buildGoModule rec {
     fetchSubmodules = true;
   };
 
+<<<<<<< HEAD
   vendorHash = "sha256-ihQd/RAjAQhgQZHbNiWmAD0eOo1MvqAR/OwIOUWtdAM=";
+=======
+  vendorSha256 = "sha256-ihQd/RAjAQhgQZHbNiWmAD0eOo1MvqAR/OwIOUWtdAM=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   patches = [
     ./0001-Makefile.patch
@@ -111,13 +121,27 @@ buildGoModule rec {
     # Disable windows and darwin cross-compile tests
     sed -i "/GOOS=windows/d" Makefile
     sed -i "/GOOS=darwin/d" Makefile
+<<<<<<< HEAD
+=======
+
+    # tinygo needs versioned binaries
+    mkdir -p $out/libexec/tinygo
+    ln -s ${lib.getBin clang.cc}/bin/clang $out/libexec/tinygo/clang-${llvmMajor}
+    ln -s ${lib.getBin lld}/bin/ld.lld $out/libexec/tinygo/ld.lld-${llvmMajor}
+    ln -s ${lib.getBin lld}/bin/wasm-ld $out/libexec/tinygo/wasm-ld-${llvmMajor}
+    ln -s ${gdb}/bin/gdb $out/libexec/tinygo/gdb-multiarch
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '' + lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
     substituteInPlace Makefile \
       --replace "./build/tinygo" "${buildPackages.tinygo}/bin/tinygo"
   '';
 
   preBuild = ''
+<<<<<<< HEAD
     export PATH=${bootstrapTools}:$PATH
+=======
+    export PATH=$out/libexec/tinygo:$PATH
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     export HOME=$TMPDIR
   '';
 
@@ -153,7 +177,11 @@ buildGoModule rec {
     make build/release
 
     wrapProgram $out/bin/tinygo \
+<<<<<<< HEAD
       --prefix PATH : ${lib.makeBinPath [ go avrdude openocd avrgcc binaryen ]}:${bootstrapTools}
+=======
+      --prefix PATH : ${lib.makeBinPath [ go avrdude openocd avrgcc binaryen ]}:$out/libexec/tinygo
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     runHook postInstall
   '';

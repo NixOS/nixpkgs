@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 { cmake
 , fetchFromGitHub
 , fetchgit
@@ -34,6 +35,25 @@
 let
   stdenv = clangStdenv;
 
+=======
+{ lib
+, stdenv
+, python3
+, libffi
+, git
+, cmake
+, zlib
+, fetchgit
+, fetchFromGitHub
+, makeWrapper
+, runCommand
+, llvmPackages_9
+, glibc
+, ncurses
+}:
+
+let
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   # The LLVM 9 headers have a couple bugs we need to patch
   fixedLlvmDev = runCommand "llvm-dev-${llvmPackages_9.llvm.version}" { buildInputs = [git]; } ''
     mkdir $out
@@ -77,7 +97,11 @@ let
     ];
 
     nativeBuildInputs = [ python3 git cmake ];
+<<<<<<< HEAD
     buildInputs = [ libffi ncurses zlib ];
+=======
+    buildInputs = [ libffi zlib ncurses ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     strictDeps = true;
 
@@ -88,7 +112,10 @@ let
       "-DLLVM_MAIN_INCLUDE_DIR=${fixedLlvmDev}/include"
       "-DLLVM_TABLEGEN_EXE=${llvmPackages_9.llvm.out}/bin/llvm-tblgen"
       "-DLLVM_TOOLS_BINARY_DIR=${llvmPackages_9.llvm.out}/bin"
+<<<<<<< HEAD
       "-DLLVM_BUILD_TOOLS=Off"
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       "-DLLVM_TOOL_CLING_BUILD=ON"
 
       "-DLLVM_TARGETS_TO_BUILD=host;NVPTX"
@@ -98,6 +125,7 @@ let
       # see cling/tools/CMakeLists.txt
       "-DCLING_INCLUDE_TESTS=ON"
       "-DCLANG-TOOLS=OFF"
+<<<<<<< HEAD
     ] ++ lib.optionals debug [
       "-DCMAKE_BUILD_TYPE=Debug"
     ] ++ lib.optionals useLLVMLibcxx [
@@ -107,13 +135,21 @@ let
 
     CPPFLAGS = if useLLVMLibcxx then [ "-stdlib=libc++" ] else [];
 
+=======
+      # "--trace-expand"
+    ];
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     postInstall = lib.optionalString (!stdenv.isDarwin) ''
       mkdir -p $out/share/Jupyter
       cp -r /build/clang/tools/cling/tools/Jupyter/kernel $out/share/Jupyter
     '';
 
+<<<<<<< HEAD
     dontStrip = debug;
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     meta = with lib; {
       description = "The Interactive C++ Interpreter";
       homepage = "https://root.cern/cling/";
@@ -123,6 +159,7 @@ let
     };
   };
 
+<<<<<<< HEAD
   # Runtime flags for the C++ standard library
   cxxFlags = if useLLVMLibcxx then [
     "-I" "${lib.getDev llvmPackages_9.libcxx}/include/c++/v1"
@@ -159,13 +196,53 @@ let
     "-isystem" "${lib.getDev unwrapped}/include"
   ];
 
+=======
+  # The flags passed to the wrapped cling should
+  # a) prevent it from searching for system include files and libs, and
+  # b) provide it with the include files and libs it needs (C and C++ standard library)
+
+  # These are also exposed as cling.flags/cling.compilerIncludeFlags because it's handy to be
+  # able to pass them to tools that wrap Cling, particularly Jupyter kernels such as xeus-cling
+  # and the built-in jupyter-cling-kernel. Both of these use Cling as a library by linking against
+  # libclingJupyter.so, so the makeWrapper approach to wrapping the binary doesn't work.
+  # Thus, if you're packaging a Jupyter kernel, you either need to pass these flags as extra
+  # args to xcpp (for xeus-cling) or put them in the environment variable CLING_OPTS
+  # (for jupyter-cling-kernel)
+  flags = [
+    "-nostdinc"
+    "-nostdinc++"
+    "-isystem" "${lib.getDev stdenv.cc.libc}/include"
+    "-I" "${lib.getDev unwrapped}/include"
+    "-I" "${lib.getLib unwrapped}/lib/clang/9.0.1/include"
+  ];
+
+  # Autodetect the include paths for the compiler used to build Cling, in the same way Cling does at
+  # https://github.com/root-project/cling/blob/v0.7/lib/Interpreter/CIFactory.cpp#L107:L111
+  # Note: it would be nice to just put the compiler in Cling's PATH and let it do this by itself, but
+  # unfortunately passing -nostdinc/-nostdinc++ disables Cling's autodetection logic.
+  compilerIncludeFlags = runCommand "compiler-include-flags.txt" {} ''
+    export LC_ALL=C
+    ${stdenv.cc}/bin/c++ -xc++ -E -v /dev/null 2>&1 | sed -n -e '/^.include/,''${' -e '/^ \/.*++/p' -e '}' > tmp
+    sed -e 's/^/-isystem /' -i tmp
+    tr '\n' ' ' < tmp > $out
+  '';
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 in
 
 runCommand "cling-${unwrapped.version}" {
   nativeBuildInputs = [ makeWrapper ];
+<<<<<<< HEAD
   inherit unwrapped flags;
   inherit (unwrapped) meta;
 } ''
   makeWrapper $unwrapped/bin/cling $out/bin/cling \
+=======
+  inherit unwrapped flags compilerIncludeFlags;
+  inherit (unwrapped) meta;
+} ''
+  makeWrapper $unwrapped/bin/cling $out/bin/cling \
+    --add-flags "$(cat "$compilerIncludeFlags")" \
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     --add-flags "$flags"
 ''

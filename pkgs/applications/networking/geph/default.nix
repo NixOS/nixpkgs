@@ -59,7 +59,11 @@ in
       pname = "gephgui";
       inherit version src;
 
+<<<<<<< HEAD
       sourceRoot = "${src.name}/gephgui-wry/gephgui";
+=======
+      sourceRoot = "source/gephgui-wry/gephgui";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
       postPatch = "ln -s ${./package-lock.json} ./package-lock.json";
 
@@ -79,7 +83,11 @@ in
       pname = "gephgui-wry";
       inherit version src;
 
+<<<<<<< HEAD
       sourceRoot = "${src.name}/gephgui-wry";
+=======
+      sourceRoot = "source/gephgui-wry";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
       cargoHash = "sha256-lidlUUfHXKPUlICdaVv/SFlyyWsZ7cYHyTJ3kkMn3L4=";
 

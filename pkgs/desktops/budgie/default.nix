@@ -8,5 +8,8 @@ lib.makeScope pkgs.newScope (self: with self; {
   budgie-desktop-with-plugins = callPackage ./budgie-desktop/wrapper.nix { };
   budgie-gsettings-overrides = callPackage ./budgie-gsettings-overrides { };
   budgie-screensaver = callPackage ./budgie-screensaver { };
+<<<<<<< HEAD
   magpie = callPackage ./magpie { };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 })

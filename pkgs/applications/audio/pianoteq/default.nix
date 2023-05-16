@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 { lib
 , stdenv
 , curl
@@ -28,6 +29,13 @@ let
     , archdir ? if (stdenv.hostPlatform.system == "aarch64-linux") then "arm-64bit" else "x86-64bit"
     , ...
     }:
+=======
+{ lib, stdenv, curl, jq, htmlq, xorg, alsa-lib, freetype, p7zip, autoPatchelfHook, writeShellScript, zlib, libjack2, makeWrapper }:
+let
+  versionForFile = v: builtins.replaceStrings ["."] [""] v;
+
+  mkPianoteq = { name, src, version, archdir ? if (stdenv.hostPlatform.system == "aarch64-linux") then "arm-64bit" else "x86-64bit", ... }:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     stdenv.mkDerivation rec {
       inherit src version;
 
@@ -39,13 +47,18 @@ let
 
       nativeBuildInputs = [
         autoPatchelfHook
+<<<<<<< HEAD
         copyDesktopItems
         makeWrapper
         librsvg
+=======
+        makeWrapper
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       ];
 
       buildInputs = [
         stdenv.cc.cc.lib
+<<<<<<< HEAD
         xorg.libX11 # libX11.so.6
         xorg.libXext # libXext.so.6
         alsa-lib # libasound.so.2
@@ -67,6 +80,15 @@ let
 
       installPhase = ''
         runHook preInstall
+=======
+        xorg.libX11      # libX11.so.6
+        xorg.libXext     # libXext.so.6
+        alsa-lib          # libasound.so.2
+        freetype         # libfreetype.so.6
+      ];
+
+      installPhase = ''
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         mkdir -p $out/bin
         mv -t $out/bin Pianoteq*/${archdir}/*
         for f in $out/bin/Pianoteq*; do
@@ -82,6 +104,7 @@ let
             }
           fi
         done
+<<<<<<< HEAD
         install -Dm644 ${./pianoteq.svg} $out/share/icons/hicolor/scalable/apps/pianoteq.svg
         for size in 16 22 32 48 64 128 256; do
           dir=$out/share/icons/hicolor/"$size"x"$size"/apps
@@ -94,12 +117,15 @@ let
             ${./pianoteq.svg}
         done
         runHook postInstall
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       '';
 
       meta = with lib; {
         homepage = "https://www.modartt.com/pianoteq";
         description = "Software synthesizer that features real-time MIDI-control of digital physically modeled pianos and related instruments";
         license = licenses.unfree;
+<<<<<<< HEAD
         inherit mainProgram;
         platforms = [ "x86_64-linux" "aarch64-linux" ];
         maintainers = with maintainers; [ mausch ners ];
@@ -107,6 +133,14 @@ let
     };
 
   fetchWithCurlScript = { name, hash, script, impureEnvVars ? [ ] }:
+=======
+        platforms = [ "x86_64-linux" "aarch64-linux" ];
+        maintainers = [ maintainers.mausch ];
+      };
+    };
+
+  fetchWithCurlScript = { name, sha256, script, impureEnvVars ? [] }:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     stdenv.mkDerivation {
       inherit name;
       builder = writeShellScript "builder.sh" ''
@@ -135,7 +169,11 @@ let
       '';
       nativeBuildInputs = [ curl ];
       outputHashAlgo = "sha256";
+<<<<<<< HEAD
       outputHash = hash;
+=======
+      outputHash = sha256;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
       impureEnvVars = lib.fetchers.proxyImpureEnvVars ++ impureEnvVars ++ [
         # This variable allows the user to pass additional options to curl
@@ -143,9 +181,15 @@ let
       ];
     };
 
+<<<<<<< HEAD
   fetchPianoteqTrial = { name, hash }:
     fetchWithCurlScript {
       inherit name hash;
+=======
+  fetchPianoteqTrial = { name, sha256 }:
+    fetchWithCurlScript {
+      inherit name sha256;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       script = ''
         html=$(
           "''${curl[@]}" --silent --request GET \
@@ -176,9 +220,15 @@ let
       '';
     };
 
+<<<<<<< HEAD
   fetchPianoteqWithLogin = { name, hash }:
     fetchWithCurlScript {
       inherit name hash;
+=======
+  fetchPianoteqWithLogin = { name, sha256 }:
+    fetchWithCurlScript {
+      inherit name sha256;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
       impureEnvVars = [ "NIX_MODARTT_USERNAME" "NIX_MODARTT_PASSWORD" ];
 
@@ -218,6 +268,7 @@ let
       '';
     };
 
+<<<<<<< HEAD
 in
 {
   # TODO currently can't install more than one because `lame` clashes
@@ -229,31 +280,56 @@ in
     src = fetchPianoteqTrial {
       name = "pianoteq_stage_linux_trial_v${versionForFile version}.7z";
       hash = "sha256-jMGv95WiD7UHAuSzKgauLhlsNvO/RWVrHd2Yf3kiUTo=";
+=======
+in {
+  # TODO currently can't install more than one because `lame` clashes
+  stage-trial = mkPianoteq rec {
+    name = "stage-trial";
+    version = "8.0.8";
+    src = fetchPianoteqTrial {
+      name = "pianoteq_stage_linux_trial_v${versionForFile version}.7z";
+      sha256 = "sha256-dp0bTzzh4aQ2KQ3z9zk+3meKQY4YRYQ86rccHd3+hAQ=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
   };
   standard-trial = mkPianoteq rec {
     name = "standard-trial";
+<<<<<<< HEAD
     mainProgram = "Pianoteq 8";
     startupWMClass = "Pianoteq Trial";
     version = "8.1.1";
     src = fetchPianoteqTrial {
       name = "pianoteq_linux_trial_v${versionForFile version}.7z";
       hash = "sha256-pL4tJMV8OTVLT4fwABcImWO+iaVe9gCdDN3rbkL+noc=";
+=======
+    version = "8.0.8";
+    src = fetchPianoteqTrial {
+      name = "pianoteq_linux_trial_v${versionForFile version}.7z";
+      sha256 = "sha256-LSrnrjkEhsX9TirUUFs9tNqH2A3cTt3I7YTfcTT6EP8=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
   };
   stage-6 = mkPianoteq rec {
     name = "stage-6";
+<<<<<<< HEAD
     mainProgram = "Pianoteq 6 STAGE";
     startupWMClass = "Pianoteq STAGE";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     version = "6.7.3";
     archdir = if (stdenv.hostPlatform.system == "aarch64-linux") then throw "Pianoteq stage-6 is not supported on aarch64-linux" else "amd64";
     src = fetchPianoteqWithLogin {
       name = "pianoteq_stage_linux_v${versionForFile version}.7z";
+<<<<<<< HEAD
       hash = "0jy0hkdynhwv0zhrqkby0hdphgmcc09wxmy74rhg9afm1pzl91jy";
+=======
+      sha256 = "0jy0hkdynhwv0zhrqkby0hdphgmcc09wxmy74rhg9afm1pzl91jy";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
   };
   stage-7 = mkPianoteq rec {
     name = "stage-7";
+<<<<<<< HEAD
     mainProgram = "Pianoteq 7 STAGE";
     startupWMClass = "Pianoteq STAGE";
     version = "7.3.0";
@@ -270,6 +346,12 @@ in
     src = fetchPianoteqWithLogin {
       name = "pianoteq_linux_v${versionForFile version}.7z";
       hash = "sha256-vWvo+ctJ0yN6XeJZZVhA3Ul9eWJWAh7Qo54w0TpOiVw=";
+=======
+    version = "7.3.0";
+    src = fetchPianoteqWithLogin {
+      name = "pianoteq_stage_linux_v${versionForFile version}.7z";
+      sha256 = "05w7sv9v38r6ljz9xai816w5z2qqwx88hcfjm241fvgbs54125hx";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
   };
   # TODO other paid binaries, I don't own that so I don't know their hash.

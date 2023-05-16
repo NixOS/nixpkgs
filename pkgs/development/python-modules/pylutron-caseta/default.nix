@@ -12,7 +12,11 @@
 
 buildPythonPackage rec {
   pname = "pylutron-caseta";
+<<<<<<< HEAD
   version = "0.18.2";
+=======
+  version = "0.18.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -21,7 +25,11 @@ buildPythonPackage rec {
     owner = "gurumitts";
     repo = pname;
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-GyYJZIjvy4JYNCUUJpQxt32U8lMS/iQoz4llbCmJQhU=";
+=======
+    hash = "sha256-O4PNlL3lPSIyFw9MtPP678ggLBQRPedbZn1gWys7DPQ=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

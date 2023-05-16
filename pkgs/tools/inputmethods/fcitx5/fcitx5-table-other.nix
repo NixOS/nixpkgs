@@ -10,13 +10,21 @@
 
 stdenv.mkDerivation rec {
   pname = "fcitx5-table-other";
+<<<<<<< HEAD
   version = "5.1.0";
+=======
+  version = "5.0.11";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "fcitx";
     repo = pname;
     rev = version;
+<<<<<<< HEAD
     sha256 = "sha256-ymHAKaPmQckxM/XHoDOVSzEWpyQGb7zVG21CDwNfyjg=";
+=======
+    sha256 = "sha256-Km0c6so+Ed/lbK9t54stWjlkK70aEcf7EbQm7msPDKM=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

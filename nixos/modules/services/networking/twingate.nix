@@ -1,5 +1,6 @@
 { config, lib, pkgs, ... }:
 
+<<<<<<< HEAD
 let
   cfg = config.services.twingate;
 in
@@ -20,5 +21,31 @@ in
     services.resolved.enable = lib.mkIf (!config.networking.networkmanager.enable) true;
 
     environment.systemPackages = [ cfg.package ]; # For the CLI.
+=======
+with lib;
+
+let
+  cfg = config.services.twingate;
+
+in {
+
+  options.services.twingate = {
+    enable = mkEnableOption (lib.mdDoc "Twingate Client daemon");
+  };
+
+  config = mkIf cfg.enable {
+
+    networking.firewall.checkReversePath = lib.mkDefault false;
+    networking.networkmanager.enable = true;
+
+    environment.systemPackages = [ pkgs.twingate ]; # for the CLI
+    systemd.packages = [ pkgs.twingate ];
+
+    systemd.services.twingate.preStart = ''
+      cp -r -n ${pkgs.twingate}/etc/twingate/. /etc/twingate/
+    '';
+
+    systemd.services.twingate.wantedBy = [ "multi-user.target" ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

@@ -18,13 +18,21 @@
 
 stdenv.mkDerivation rec {
   pname = "qucs-s";
+<<<<<<< HEAD
   version = "2.0.0";
+=======
+  version = "1.0.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "ra3xdh";
     repo = "qucs_s";
     rev = version;
+<<<<<<< HEAD
     sha256 = "sha256-9/1sgxFqn9d9zlwrzjQosFO3m+2lC83qVcCtzfqY5XY=";
+=======
+    sha256 = "sha256-2YyVeeUnLBS1Si9gwEsQLZVG98715dz/v+WCYjB3QlI=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ flex bison wrapQtAppsHook cmake ];
@@ -48,7 +56,11 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://ra3xdh.github.io/";
     license = licenses.gpl2Plus;
+<<<<<<< HEAD
     maintainers = with maintainers; [ mazurel kashw2 ];
+=======
+    maintainers = with maintainers; [ mazurel ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     platforms = with platforms; linux;
   };
 }

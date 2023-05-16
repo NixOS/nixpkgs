@@ -6,6 +6,7 @@
 
 buildGoModule rec {
   pname = "changie";
+<<<<<<< HEAD
   version = "1.13.0";
 
   src = fetchFromGitHub {
@@ -16,6 +17,18 @@ buildGoModule rec {
   };
 
   vendorHash = "sha256-kSV4ruvPcDyqt+LgKkcAGMUJy8CGG6xpFneK+vKdI0Q=";
+=======
+  version = "1.12.0";
+
+  src = fetchFromGitHub {
+    rev = "v${version}";
+    owner = "miniscruff";
+    repo = pname;
+    sha256 = "sha256-lc9G5qZHjO2TxBKYP3fVr8Ui+hskhVon3xG7RznGhaw=";
+  };
+
+  vendorSha256 = "sha256-sak9MMqMXBO3j5uMouuiVnT8aCw04pyikgqzvdygB7U=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nativeBuildInputs = [
     installShellFiles

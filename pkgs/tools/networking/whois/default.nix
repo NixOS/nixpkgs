@@ -1,14 +1,22 @@
 { lib, stdenv, fetchFromGitHub, perl, gettext, pkg-config, libidn2, libiconv }:
 
 stdenv.mkDerivation rec {
+<<<<<<< HEAD
   version = "5.5.18";
+=======
+  version = "5.5.17";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pname = "whois";
 
   src = fetchFromGitHub {
     owner = "rfc1036";
     repo = "whois";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-KHOKjblyCP1GykQehmxSKf7vP52wRRH6oz9WbE9fbCk=";
+=======
+    sha256 = "sha256-Nqnbi2nS95nzyzFNdahSKY/Om30sZXRJhoCSrzRiD9c=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ perl gettext pkg-config ];

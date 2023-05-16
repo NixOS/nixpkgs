@@ -20,6 +20,10 @@ buildPythonPackage rec {
     description = "A Smart Download Manager for Python";
     license = licenses.unlicense;
     platforms = platforms.linux;
+<<<<<<< HEAD
     maintainers = with maintainers; [ ];
+=======
+    maintainers = with maintainers; [ WeebSorceress ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

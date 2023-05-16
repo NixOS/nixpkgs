@@ -3,13 +3,21 @@
 
 stdenv.mkDerivation rec {
   pname = "srt";
+<<<<<<< HEAD
   version = "1.5.2";
+=======
+  version = "1.5.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "Haivision";
     repo = "srt";
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-HW5l26k9w4F6IJrtiahU/8/CPY6M/cKn8AgESsntC6A=";
+=======
+    sha256 = "sha256-qVvoHtROtJjrUd+YpjN/0I6KmiH7c24+pQ4xYTUGPXk=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ cmake ];

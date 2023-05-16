@@ -11,13 +11,21 @@ assert enableWasmEval && stdenv.isDarwin -> builtins.throw "building with wasm o
 
 buildGoModule rec {
   pname = "open-policy-agent";
+<<<<<<< HEAD
   version = "0.55.0";
+=======
+  version = "0.52.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "open-policy-agent";
     repo = "opa";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-piQ8Cig2zG6UhzVbiDCTruAXNis8P5HUja4xiiol9jA=";
+=======
+    hash = "sha256-6mMFu4jkH9k9K836p0007a9rwbe9tBZZoW+Bw9Rfwek=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
   vendorHash = null;
 

@@ -15,8 +15,12 @@ let
 in
 buildPythonPackage rec {
   pname = "playwright";
+<<<<<<< HEAD
   # run ./pkgs/development/python-modules/playwright/update.sh to update
   version = "1.37.0";
+=======
+  version =  "1.32.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
   disabled = pythonOlder "3.7";
 
@@ -24,7 +28,11 @@ buildPythonPackage rec {
     owner = "microsoft";
     repo = "playwright-python";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-7egK76A3+C+JPbCNFXDd4qTjepBRSZgtQmFrE/jWJN4=";
+=======
+    hash = "sha256-rguobFaepTOL2duHRdFV5o2JSsBlYiA7rY3/RyHvoMc=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   patches = [
@@ -88,14 +96,21 @@ buildPythonPackage rec {
       driver = playwright-driver;
       browsers = playwright-driver.browsers;
     };
+<<<<<<< HEAD
     updateScript = ./update.sh;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   meta = with lib; {
     description = "Python version of the Playwright testing and automation library";
     homepage = "https://github.com/microsoft/playwright-python";
     license = licenses.asl20;
+<<<<<<< HEAD
     maintainers = with maintainers; [ techknowlogick yrd ];
+=======
+    maintainers = with maintainers; [ techknowlogick yrd SuperSandro2000 ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
   };
 }

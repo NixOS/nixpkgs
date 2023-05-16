@@ -15,13 +15,21 @@
 
 buildPythonPackage rec {
   pname = "ignite";
+<<<<<<< HEAD
   version = "0.4.12";
+=======
+  version = "0.4.11";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "pytorch";
     repo = pname;
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-cLlPUPzYyOpqk4qHsn22s3Xr/VkGjnHL4JVw2qy2iTc=";
+=======
+    hash = "sha256-iuaBuKoKlt7F7Z7fbVOZAUAoFnU3AOxYC/ANgqoQksU=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeCheckInputs = [ pytestCheckHook matplotlib mock pytest-xdist torchvision ];

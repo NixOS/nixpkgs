@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 { lib, mkDerivation, fetchFromGitHub, qmake }:
+=======
+{ lib, mkDerivation, fetchFromGitHub, gnumake, qmake }:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 mkDerivation rec {
   pname = "veikk-linux-driver-gui";

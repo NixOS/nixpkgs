@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 { lib, fetchFromGitHub, fetchpatch, python3 }:
+=======
+{ lib, fetchFromGitHub, fetchpatch, python3, openssl }:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 python3.pkgs.buildPythonApplication rec {
   pname = "esptool";
@@ -68,6 +72,10 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/espressif/esptool";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ hexa ];
+<<<<<<< HEAD
     platforms = with platforms; linux ++ darwin;
+=======
+    platforms = platforms.linux;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

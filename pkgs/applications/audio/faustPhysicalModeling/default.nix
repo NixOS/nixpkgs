@@ -1,19 +1,30 @@
 { stdenv, lib, fetchFromGitHub, faust2jaqt, faust2lv2 }:
 stdenv.mkDerivation rec {
   pname = "faustPhysicalModeling";
+<<<<<<< HEAD
   version = "2.60.3";
+=======
+  version = "2.54.9";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "grame-cncm";
     repo = "faust";
     rev = version;
+<<<<<<< HEAD
     sha256 = "sha256-kaKDZKs/UsrqYlGmGgpSRcqN7FypxLCcIF72klovD4k=";
+=======
+    sha256 = "sha256-1ZS7SVTWI1vNOGycZIDyKLgwfNooIGDa8Wmr6qfFSkU=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   buildInputs = [ faust2jaqt faust2lv2 ];
 
+<<<<<<< HEAD
   dontWrapQtApps = true;
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   buildPhase = ''
     cd examples/physicalModeling
 

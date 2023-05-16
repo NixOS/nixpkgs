@@ -7,14 +7,22 @@
 
 buildPythonPackage rec {
   pname = "aliyun-python-sdk-cdn";
+<<<<<<< HEAD
   version = "3.8.8";
+=======
+  version = "3.8.7";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
+<<<<<<< HEAD
     hash = "sha256-LMCNvjV85TvdSM0OXean4dPzAiV8apVdRLTvUISOKec=";
+=======
+    hash = "sha256-/fhHR/6nepDOKsL69lztUkPqXrV091BLMTSn7O0jvPk=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [

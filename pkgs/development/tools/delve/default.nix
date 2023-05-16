@@ -2,13 +2,21 @@
 
 buildGoModule rec {
   pname = "delve";
+<<<<<<< HEAD
   version = "1.21.0";
+=======
+  version = "1.20.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "go-delve";
     repo = "delve";
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-bDxpXm53PCdUQDq6pIigutY1JxrGWfsPkVSA+0i3vr0=";
+=======
+    sha256 = "sha256-NHVgNoMa/K1wVbXKycd7sdxfCpLYY6kn2uSfJWUpq1o=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   vendorHash = null;
@@ -44,7 +52,11 @@ buildGoModule rec {
   meta = with lib; {
     description = "debugger for the Go programming language";
     homepage = "https://github.com/go-delve/delve";
+<<<<<<< HEAD
     maintainers = with maintainers; [ vdemeester ];
+=======
+    maintainers = with maintainers; [ SuperSandro2000 vdemeester ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     license = licenses.mit;
     mainProgram = "dlv";
   };

@@ -99,6 +99,11 @@ stdenv.mkDerivation {
     export ANDROID_SERIAL="emulator-$port"
 
     # Create a virtual android device for testing if it does not exist
+<<<<<<< HEAD
+=======
+    ${sdk}/bin/avdmanager list target
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     if [ "$(${sdk}/bin/avdmanager list avd | grep 'Name: device')" = "" ]
     then
         # Create a virtual android device

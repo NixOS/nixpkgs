@@ -2,7 +2,10 @@
 
 with utils.systemdUtils.unitOptions;
 with utils.systemdUtils.lib;
+<<<<<<< HEAD
 with utils.systemdUtils.network.units;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 with lib;
 
 let
@@ -26,11 +29,17 @@ let
 
       sectionDHCPv4 = checkUnitConfig "DHCPv4" [
         (assertOnlyFields [
+<<<<<<< HEAD
           "ClientIdentifier"
           "DUIDType"
           "DUIDRawData"
         ])
         (assertValueOneOf "ClientIdentifier" ["mac" "duid" "duid-only"])
+=======
+          "DUIDType"
+          "DUIDRawData"
+        ])
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       ];
 
       sectionDHCPv6 = checkUnitConfig "DHCPv6" [
@@ -171,7 +180,11 @@ let
           "batadv"
         ])
         (assertByteFormat "MTUBytes")
+<<<<<<< HEAD
         (assertNetdevMacAddress "MACAddress")
+=======
+        (assertMacAddress "MACAddress")
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       ];
 
       sectionVLAN = checkUnitConfig "VLAN" [
@@ -223,7 +236,10 @@ let
           "PortRange"
           "FlowLabel"
           "IPDoNotFragment"
+<<<<<<< HEAD
           "Independent"
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         ])
         (assertInt "VNI")
         (assertRange "VNI" 1 16777215)
@@ -243,7 +259,10 @@ let
         (assertInt "FlowLabel")
         (assertRange "FlowLabel" 0 1048575)
         (assertValueOneOf "IPDoNotFragment" (boolValues + ["inherit"]))
+<<<<<<< HEAD
         (assertValueOneOf "Independent" boolValues)
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       ];
 
       sectionTunnel = checkUnitConfig "Tunnel" [
@@ -584,7 +603,10 @@ let
           "VLAN"
           "IPVLAN"
           "MACVLAN"
+<<<<<<< HEAD
           "MACVTAP"
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           "VXLAN"
           "Tunnel"
           "MACsec"
@@ -902,9 +924,12 @@ let
           "RelayTarget"
           "RelayAgentCircuitId"
           "RelayAgentRemoteId"
+<<<<<<< HEAD
           "BootServerAddress"
           "BootServerName"
           "BootFilename"
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         ])
         (assertInt "PoolOffset")
         (assertMinimum "PoolOffset" 0)
@@ -1904,7 +1929,11 @@ let
 
   bridgeVLANOptions = {
     options = {
+<<<<<<< HEAD
       bridgeVLANConfig = mkOption {
+=======
+      bridgeMDBConfig = mkOption {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         default = {};
         example = { VLAN = 20; };
         type = types.addCheck (types.attrsOf unitOption) check.network.sectionBridgeVLAN;
@@ -2395,6 +2424,20 @@ let
       '';
     };
 
+<<<<<<< HEAD
+=======
+    bridgeVLANConfig = mkOption {
+      default = {};
+      example = { VLAN = "10-20"; };
+      type = types.addCheck (types.attrsOf unitOption) check.network.sectionBridgeVLAN;
+      description = lib.mdDoc ''
+        Each attribute in this set specifies an option in the
+        `[BridgeVLAN]` section of the unit.  See
+        {manpage}`systemd.network(5)` for details.
+      '';
+    };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     bridgeVLANs = mkOption {
       default = [];
       example = [ { bridgeVLANConfig = { VLAN = "10-20"; }; } ];
@@ -2510,6 +2553,7 @@ let
       '';
     };
 
+<<<<<<< HEAD
     macvtap = mkOption {
       default = [ ];
       type = types.listOf types.str;
@@ -2519,6 +2563,8 @@ let
       '';
     };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     vxlan = mkOption {
       default = [ ];
       type = types.listOf types.str;
@@ -2620,6 +2666,98 @@ let
     };
   };
 
+<<<<<<< HEAD
+=======
+  commonMatchText = def: optionalString (def.matchConfig != { }) ''
+    [Match]
+    ${attrsToSection def.matchConfig}
+  '';
+
+  linkToUnit = name: def:
+    { inherit (def) enable;
+      text = commonMatchText def
+        + ''
+          [Link]
+          ${attrsToSection def.linkConfig}
+        ''
+        + def.extraConfig;
+    };
+
+  netdevToUnit = name: def:
+    { inherit (def) enable;
+      text = commonMatchText def
+        + ''
+          [NetDev]
+          ${attrsToSection def.netdevConfig}
+        ''
+        + optionalString (def.vlanConfig != { }) ''
+          [VLAN]
+          ${attrsToSection def.vlanConfig}
+        ''
+        + optionalString (def.macvlanConfig != { }) ''
+          [MACVLAN]
+          ${attrsToSection def.macvlanConfig}
+        ''
+        + optionalString (def.vxlanConfig != { }) ''
+          [VXLAN]
+          ${attrsToSection def.vxlanConfig}
+        ''
+        + optionalString (def.tunnelConfig != { }) ''
+          [Tunnel]
+          ${attrsToSection def.tunnelConfig}
+        ''
+        + optionalString (def.fooOverUDPConfig != { }) ''
+          [FooOverUDP]
+          ${attrsToSection def.fooOverUDPConfig}
+        ''
+        + optionalString (def.peerConfig != { }) ''
+          [Peer]
+          ${attrsToSection def.peerConfig}
+        ''
+        + optionalString (def.tunConfig != { }) ''
+          [Tun]
+          ${attrsToSection def.tunConfig}
+        ''
+        + optionalString (def.tapConfig != { }) ''
+          [Tap]
+          ${attrsToSection def.tapConfig}
+        ''
+        + optionalString (def.l2tpConfig != { }) ''
+          [L2TP]
+          ${attrsToSection def.l2tpConfig}
+        ''
+        + flip concatMapStrings def.l2tpSessions (x: ''
+          [L2TPSession]
+          ${attrsToSection x.l2tpSessionConfig}
+        '')
+        + optionalString (def.wireguardConfig != { }) ''
+          [WireGuard]
+          ${attrsToSection def.wireguardConfig}
+        ''
+        + flip concatMapStrings def.wireguardPeers (x: ''
+          [WireGuardPeer]
+          ${attrsToSection x.wireguardPeerConfig}
+        '')
+        + optionalString (def.bondConfig != { }) ''
+          [Bond]
+          ${attrsToSection def.bondConfig}
+        ''
+        + optionalString (def.xfrmConfig != { }) ''
+          [Xfrm]
+          ${attrsToSection def.xfrmConfig}
+        ''
+        + optionalString (def.vrfConfig != { }) ''
+          [VRF]
+          ${attrsToSection def.vrfConfig}
+        ''
+        + optionalString (def.batmanAdvancedConfig != { }) ''
+          [BatmanAdvanced]
+          ${attrsToSection def.batmanAdvancedConfig}
+        ''
+        + def.extraConfig;
+    };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   renderConfig = def:
     { text = ''
         [Network]
@@ -2634,6 +2772,238 @@ let
         ${attrsToSection def.dhcpV6Config}
       ''; };
 
+<<<<<<< HEAD
+=======
+  networkToUnit = name: def:
+    { inherit (def) enable;
+      text = commonMatchText def
+        + optionalString (def.linkConfig != { }) ''
+          [Link]
+          ${attrsToSection def.linkConfig}
+        ''
+        + ''
+          [Network]
+        ''
+        + attrsToSection def.networkConfig
+        + optionalString (def.address != [ ]) ''
+          ${concatStringsSep "\n" (map (s: "Address=${s}") def.address)}
+        ''
+        + optionalString (def.gateway != [ ]) ''
+          ${concatStringsSep "\n" (map (s: "Gateway=${s}") def.gateway)}
+        ''
+        + optionalString (def.dns != [ ]) ''
+          ${concatStringsSep "\n" (map (s: "DNS=${s}") def.dns)}
+        ''
+        + optionalString (def.ntp != [ ]) ''
+          ${concatStringsSep "\n" (map (s: "NTP=${s}") def.ntp)}
+        ''
+        + optionalString (def.bridge != [ ]) ''
+          ${concatStringsSep "\n" (map (s: "Bridge=${s}") def.bridge)}
+        ''
+        + optionalString (def.bond != [ ]) ''
+          ${concatStringsSep "\n" (map (s: "Bond=${s}") def.bond)}
+        ''
+        + optionalString (def.vrf != [ ]) ''
+          ${concatStringsSep "\n" (map (s: "VRF=${s}") def.vrf)}
+        ''
+        + optionalString (def.vlan != [ ]) ''
+          ${concatStringsSep "\n" (map (s: "VLAN=${s}") def.vlan)}
+        ''
+        + optionalString (def.macvlan != [ ]) ''
+          ${concatStringsSep "\n" (map (s: "MACVLAN=${s}") def.macvlan)}
+        ''
+        + optionalString (def.vxlan != [ ]) ''
+          ${concatStringsSep "\n" (map (s: "VXLAN=${s}") def.vxlan)}
+        ''
+        + optionalString (def.tunnel != [ ]) ''
+          ${concatStringsSep "\n" (map (s: "Tunnel=${s}") def.tunnel)}
+        ''
+        + optionalString (def.xfrm != [ ]) ''
+          ${concatStringsSep "\n" (map (s: "Xfrm=${s}") def.xfrm)}
+        ''
+        + ''
+
+        ''
+        + flip concatMapStrings def.addresses (x: ''
+          [Address]
+          ${attrsToSection x.addressConfig}
+        '')
+        + flip concatMapStrings def.routingPolicyRules (x: ''
+          [RoutingPolicyRule]
+          ${attrsToSection x.routingPolicyRuleConfig}
+        '')
+        + flip concatMapStrings def.routes (x: ''
+          [Route]
+          ${attrsToSection x.routeConfig}
+        '')
+        + optionalString (def.dhcpV4Config != { }) ''
+          [DHCPv4]
+          ${attrsToSection def.dhcpV4Config}
+        ''
+        + optionalString (def.dhcpV6Config != { }) ''
+          [DHCPv6]
+          ${attrsToSection def.dhcpV6Config}
+        ''
+        + optionalString (def.dhcpPrefixDelegationConfig != { }) ''
+          [DHCPPrefixDelegation]
+          ${attrsToSection def.dhcpPrefixDelegationConfig}
+        ''
+        + optionalString (def.ipv6AcceptRAConfig != { }) ''
+          [IPv6AcceptRA]
+          ${attrsToSection def.ipv6AcceptRAConfig}
+        ''
+        + optionalString (def.dhcpServerConfig != { }) ''
+          [DHCPServer]
+          ${attrsToSection def.dhcpServerConfig}
+        ''
+        + optionalString (def.ipv6SendRAConfig != { }) ''
+          [IPv6SendRA]
+          ${attrsToSection def.ipv6SendRAConfig}
+        ''
+        + flip concatMapStrings def.ipv6Prefixes (x: ''
+          [IPv6Prefix]
+          ${attrsToSection x.ipv6PrefixConfig}
+        '')
+        + flip concatMapStrings def.ipv6RoutePrefixes (x: ''
+          [IPv6RoutePrefix]
+          ${attrsToSection x.ipv6RoutePrefixConfig}
+        '')
+        + flip concatMapStrings def.dhcpServerStaticLeases (x: ''
+          [DHCPServerStaticLease]
+          ${attrsToSection x.dhcpServerStaticLeaseConfig}
+        '')
+        + optionalString (def.bridgeConfig != { }) ''
+          [Bridge]
+          ${attrsToSection def.bridgeConfig}
+        ''
+        + flip concatMapStrings def.bridgeFDBs (x: ''
+          [BridgeFDB]
+          ${attrsToSection x.bridgeFDBConfig}
+        '')
+        + flip concatMapStrings def.bridgeMDBs (x: ''
+          [BridgeMDB]
+          ${attrsToSection x.bridgeMDBConfig}
+        '')
+        + optionalString (def.lldpConfig != { }) ''
+          [LLDP]
+          ${attrsToSection def.lldpConfig}
+        ''
+        + optionalString (def.canConfig != { }) ''
+          [CAN]
+          ${attrsToSection def.canConfig}
+        ''
+        + optionalString (def.ipoIBConfig != { }) ''
+          [IPoIB]
+          ${attrsToSection def.ipoIBConfig}
+        ''
+        + optionalString (def.qdiscConfig != { }) ''
+          [QDisc]
+          ${attrsToSection def.qdiscConfig}
+        ''
+        + optionalString (def.networkEmulatorConfig != { }) ''
+          [NetworkEmulator]
+          ${attrsToSection def.networkEmulatorConfig}
+        ''
+        + optionalString (def.tokenBucketFilterConfig != { }) ''
+          [TokenBucketFilter]
+          ${attrsToSection def.tokenBucketFilterConfig}
+        ''
+        + optionalString (def.pieConfig != { }) ''
+          [PIE]
+          ${attrsToSection def.pieConfig}
+        ''
+        + optionalString (def.flowQueuePIEConfig != { }) ''
+          [FlowQueuePIE]
+          ${attrsToSection def.flowQueuePIEConfig}
+        ''
+        + optionalString (def.stochasticFairBlueConfig != { }) ''
+          [StochasticFairBlue]
+          ${attrsToSection def.stochasticFairBlueConfig}
+        ''
+        + optionalString (def.stochasticFairnessQueueingConfig != { }) ''
+          [StochasticFairnessQueueing]
+          ${attrsToSection def.stochasticFairnessQueueingConfig}
+        ''
+        + optionalString (def.bfifoConfig != { }) ''
+          [BFIFO]
+          ${attrsToSection def.bfifoConfig}
+        ''
+        + optionalString (def.pfifoConfig != { }) ''
+          [PFIFO]
+          ${attrsToSection def.pfifoConfig}
+        ''
+        + optionalString (def.pfifoHeadDropConfig != { }) ''
+          [PFIFOHeadDrop]
+          ${attrsToSection def.pfifoHeadDropConfig}
+        ''
+        + optionalString (def.pfifoFastConfig != { }) ''
+          [PFIFOFast]
+          ${attrsToSection def.pfifoFastConfig}
+        ''
+        + optionalString (def.cakeConfig != { }) ''
+          [CAKE]
+          ${attrsToSection def.cakeConfig}
+        ''
+        + optionalString (def.controlledDelayConfig != { }) ''
+          [ControlledDelay]
+          ${attrsToSection def.controlledDelayConfig}
+        ''
+        + optionalString (def.deficitRoundRobinSchedulerConfig != { }) ''
+          [DeficitRoundRobinScheduler]
+          ${attrsToSection def.deficitRoundRobinSchedulerConfig}
+        ''
+        + optionalString (def.deficitRoundRobinSchedulerClassConfig != { }) ''
+          [DeficitRoundRobinSchedulerClass]
+          ${attrsToSection def.deficitRoundRobinSchedulerClassConfig}
+        ''
+        + optionalString (def.enhancedTransmissionSelectionConfig != { }) ''
+          [EnhancedTransmissionSelection]
+          ${attrsToSection def.enhancedTransmissionSelectionConfig}
+        ''
+        + optionalString (def.genericRandomEarlyDetectionConfig != { }) ''
+          [GenericRandomEarlyDetection]
+          ${attrsToSection def.genericRandomEarlyDetectionConfig}
+        ''
+        + optionalString (def.fairQueueingControlledDelayConfig != { }) ''
+          [FairQueueingControlledDelay]
+          ${attrsToSection def.fairQueueingControlledDelayConfig}
+        ''
+        + optionalString (def.fairQueueingConfig != { }) ''
+          [FairQueueing]
+          ${attrsToSection def.fairQueueingConfig}
+        ''
+        + optionalString (def.trivialLinkEqualizerConfig != { }) ''
+          [TrivialLinkEqualizer]
+          ${attrsToSection def.trivialLinkEqualizerConfig}
+        ''
+        + optionalString (def.hierarchyTokenBucketConfig != { }) ''
+          [HierarchyTokenBucket]
+          ${attrsToSection def.hierarchyTokenBucketConfig}
+        ''
+        + optionalString (def.hierarchyTokenBucketClassConfig != { }) ''
+          [HierarchyTokenBucketClass]
+          ${attrsToSection def.hierarchyTokenBucketClassConfig}
+        ''
+        + optionalString (def.heavyHitterFilterConfig != { }) ''
+          [HeavyHitterFilter]
+          ${attrsToSection def.heavyHitterFilterConfig}
+        ''
+        + optionalString (def.quickFairQueueingConfig != { }) ''
+          [QuickFairQueueing]
+          ${attrsToSection def.quickFairQueueingConfig}
+        ''
+        + optionalString (def.quickFairQueueingConfigClass != { }) ''
+          [QuickFairQueueingClass]
+          ${attrsToSection def.quickFairQueueingConfigClass}
+        ''
+        + flip concatMapStrings def.bridgeVLANs (x: ''
+          [BridgeVLAN]
+          ${attrsToSection x.bridgeVLANConfig}
+        '')
+        + def.extraConfig;
+    };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   mkUnitFiles = prefix: cfg: listToAttrs (map (name: {
     name = "${prefix}systemd/network/${name}";
     value.source = "${cfg.units.${name}.unit}/${name}";
@@ -2746,6 +3116,7 @@ let
 
   };
 
+<<<<<<< HEAD
   commonConfig = config: let
     cfg = config.systemd.network;
     mkUnit = f: def: { inherit (def) enable; text = f def; };
@@ -2754,6 +3125,13 @@ let
     # .link units are honored by udev, no matter if systemd-networkd is enabled or not.
     {
       systemd.network.units = mapAttrs' (n: v: nameValuePair "${n}.link" (mkUnit linkToUnit v)) cfg.links;
+=======
+  commonConfig = config: let cfg = config.systemd.network; in mkMerge [
+
+    # .link units are honored by udev, no matter if systemd-networkd is enabled or not.
+    {
+      systemd.network.units = mapAttrs' (n: v: nameValuePair "${n}.link" (linkToUnit n v)) cfg.links;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
       systemd.network.wait-online.extraArgs =
         [ "--timeout=${toString cfg.wait-online.timeout}" ]
@@ -2763,8 +3141,13 @@ let
 
     (mkIf config.systemd.network.enable {
 
+<<<<<<< HEAD
       systemd.network.units = mapAttrs' (n: v: nameValuePair "${n}.netdev" (mkUnit netdevToUnit v)) cfg.netdevs
         // mapAttrs' (n: v: nameValuePair "${n}.network" (mkUnit networkToUnit v)) cfg.networks;
+=======
+      systemd.network.units = mapAttrs' (n: v: nameValuePair "${n}.netdev" (netdevToUnit n v)) cfg.netdevs
+        // mapAttrs' (n: v: nameValuePair "${n}.network" (networkToUnit n v)) cfg.networks;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
       # systemd-networkd is socket-activated by kernel netlink route change
       # messages. It is important to have systemd buffer those on behalf of
@@ -2815,6 +3198,7 @@ let
 
       environment.etc."systemd/networkd.conf" = renderConfig cfg.config;
 
+<<<<<<< HEAD
       systemd.services.systemd-networkd = let
         isReloadableUnitFileName = unitFileName: strings.hasSuffix ".network" unitFileName;
         reloadableUnitFiles = attrsets.filterAttrs (k: v: isReloadableUnitFileName k) unitFiles;
@@ -2824,6 +3208,11 @@ let
         wantedBy = [ "multi-user.target" ];
         reloadTriggers = unitFileSources reloadableUnitFiles;
         restartTriggers = unitFileSources nonReloadableUnitFiles ++ [
+=======
+      systemd.services.systemd-networkd = {
+        wantedBy = [ "multi-user.target" ];
+        restartTriggers = map (x: x.source) (attrValues unitFiles) ++ [
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           config.environment.etc."systemd/networkd.conf".source
         ];
         aliases = [ "dbus-org.freedesktop.network1.service" ];
@@ -2861,7 +3250,11 @@ let
 
     (mkIf cfg.enable {
 
+<<<<<<< HEAD
       systemd.package = mkDefault pkgs.systemdStage1Network;
+=======
+      systemd.package = pkgs.systemdStage1Network;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
       # For networkctl
       systemd.dbus.enable = mkDefault true;
@@ -2884,6 +3277,7 @@ let
 
       systemd.contents."/etc/systemd/networkd.conf" = renderConfig cfg.config;
 
+<<<<<<< HEAD
       systemd.services.systemd-networkd = {
         wantedBy = [ "initrd.target" ];
         # These before and conflicts lines can be removed when this PR makes it into a release:
@@ -2897,6 +3291,9 @@ let
         conflicts = ["initrd-switch-root.target"];
       };
 
+=======
+      systemd.services.systemd-networkd.wantedBy = [ "initrd.target" ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       systemd.services.systemd-network-generator.wantedBy = [ "sysinit.target" ];
 
       systemd.storePaths = [

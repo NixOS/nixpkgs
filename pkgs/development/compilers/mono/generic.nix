@@ -81,6 +81,7 @@ stdenv.mkDerivation rec {
     description = "Cross platform, open source .NET development framework";
     platforms = with platforms; darwin ++ linux;
     maintainers = with maintainers; [ thoughtpolice obadz vrthra ];
+<<<<<<< HEAD
     license = with licenses; [
       /* runtime, compilers, tools and most class libraries licensed */ mit
       /* runtime includes some code licensed */ bsd3
@@ -91,5 +92,8 @@ stdenv.mkDerivation rec {
       # https://www.mono-project.com/docs/faq/licensing/
       # https://github.com/mono/mono/blob/main/LICENSE
     ];
+=======
+    license = licenses.free; # Combination of LGPL/X11/GPL ?
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

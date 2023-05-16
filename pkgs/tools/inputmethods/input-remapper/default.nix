@@ -1,4 +1,8 @@
 { lib
+<<<<<<< HEAD
+=======
+, python3
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , pkgconfig
 , wrapGAppsHook
 , gettext

@@ -43,11 +43,19 @@
 
 stdenv.mkDerivation rec {
   pname = "xwayland";
+<<<<<<< HEAD
   version = "23.2.0";
 
   src = fetchurl {
     url = "mirror://xorg/individual/xserver/${pname}-${version}.tar.xz";
     sha256 = "sha256-fzPsKjTebmauG35Ehyw6IUYZKHLHGbms8ZKBTtur1MU=";
+=======
+  version = "23.1.1";
+
+  src = fetchurl {
+    url = "mirror://xorg/individual/xserver/${pname}-${version}.tar.xz";
+    sha256 = "sha256-+5Rh9cuf6l4H6RiCMRsMiLQ+iEOwF+usBeta9pqjTBU=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   depsBuildBuild = [
@@ -108,7 +116,10 @@ stdenv.mkDerivation rec {
     description = "An X server for interfacing X11 apps with the Wayland protocol";
     homepage = "https://wayland.freedesktop.org/xserver.html";
     license = licenses.mit;
+<<<<<<< HEAD
     mainProgram = "Xwayland";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     maintainers = with maintainers; [ emantor ];
     platforms = platforms.linux;
   };

@@ -2,13 +2,21 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "memtest86+";
+<<<<<<< HEAD
   version = "6.20";
+=======
+  version = "6.10";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "memtest86plus";
     repo = "memtest86plus";
     rev = "v${finalAttrs.version}";
+<<<<<<< HEAD
     hash = "sha256-JzQJrAnPsa3GKNdy1PidOAZk7IQvRBi/YtmK2O9rWfM=";
+=======
+    hash = "sha256-f40blxh/On/mC4m+eLNeWzdYzYoYpFOSBndVnREx68U=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   # Binaries are booted directly by BIOS/UEFI or bootloader

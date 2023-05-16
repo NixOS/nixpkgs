@@ -11,19 +11,33 @@
 , phonopy
 , potentials
 , pymatgen
+<<<<<<< HEAD
 , pytestCheckHook
 , pythonOlder
+=======
+, pytest
+, pytestCheckHook
+, pythonOlder
+, pythonAtLeast
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , requests
 , scipy
 , setuptools
 , toolz
+<<<<<<< HEAD
 , wheel
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , xmltodict
 , pythonRelaxDepsHook
 }:
 
 buildPythonPackage rec {
+<<<<<<< HEAD
   version = "unstable-2023-07-28";
+=======
+  version = "1.4.6";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pname = "atomman";
   format = "pyproject";
 
@@ -32,13 +46,21 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "usnistgov";
     repo = "atomman";
+<<<<<<< HEAD
     rev = "b8af21a9285959d38ee26173081db1b4488401bc";
     hash = "sha256-WfB+OY61IPprT6OCVHl8VA60p7lLVkRGuyYX+nm7bbA=";
+=======
+    rev = "v${version}";
+    hash = "sha256-tcsxtFbBdMC6+ixzqhnR+5UNwcQmnPQSvuyNA2IYelI=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [
     setuptools
+<<<<<<< HEAD
     wheel
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     pythonRelaxDepsHook
   ];
 
@@ -70,6 +92,10 @@ buildPythonPackage rec {
     ase
     phonopy
     pymatgen
+<<<<<<< HEAD
+=======
+    pytest
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     pytestCheckHook
   ];
 
@@ -85,6 +111,10 @@ buildPythonPackage rec {
     description = "Atomistic Manipulation Toolkit";
     homepage = "https://github.com/usnistgov/atomman/";
     license = licenses.mit;
+<<<<<<< HEAD
     maintainers = with maintainers; [ ];
+=======
+    maintainers = with maintainers; [ costrouc ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

@@ -12,7 +12,11 @@
 
 buildPythonPackage rec {
   pname = "rapt-ble";
+<<<<<<< HEAD
   version = "0.1.2";
+=======
+  version = "0.1.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -21,7 +25,11 @@ buildPythonPackage rec {
     owner = "sairon";
     repo = pname;
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-ozZwVgTV/xYl1nXLiybcPs6DQKocNdbxTEYDfYyQuvY=";
+=======
+    hash = "sha256-upTtVqxVHrqLSGTSGCiCVlDa2NEuuqe+0W2DM+UhTnc=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   postPatch = ''

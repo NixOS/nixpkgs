@@ -2,11 +2,19 @@
 
 stdenv.mkDerivation rec {
   pname = "libmilter";
+<<<<<<< HEAD
   version = "8.17.2";
 
   src = fetchurl {
     url = "ftp://ftp.sendmail.org/pub/sendmail/sendmail.${version}.tar.gz";
     sha256 = "sha256-kPWudMNahICIYZM7oJQgG5AbcMaykDaE3POb2uiloaI=";
+=======
+  version = "8.17.1";
+
+  src = fetchurl {
+    url = "ftp://ftp.sendmail.org/pub/sendmail/sendmail.${version}.tar.gz";
+    sha256 = "sha256-BLx2tsiG5tERvn/Y2qMrjOABKKKItrUuBnvCnzhUpuY=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   buildPhase = ''
@@ -37,7 +45,11 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ m4 ] ++ lib.optional stdenv.isDarwin fixDarwinDylibNames;
 
   postInstall = lib.optionalString stdenv.isDarwin ''
+<<<<<<< HEAD
     fixDarwinDylibNames $out/lib/libmilter.*.1
+=======
+    fixDarwinDylibNames $out/lib/libmilter.dylib.1
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '';
 
   meta = with lib; {

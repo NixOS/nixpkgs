@@ -38,7 +38,11 @@ buildPythonPackage rec {
     homepage = "https://github.com/miyakogi/m2r";
     description = "Markdown to reStructuredText converter";
     license = licenses.mit;
+<<<<<<< HEAD
     maintainers = with maintainers; [ AndersonTorres ];
+=======
+    maintainers = with maintainers; [ AndersonTorres SuperSandro2000 ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     # https://github.com/miyakogi/m2r/issues/66
     broken = versionAtLeast mistune.version "2";
   };

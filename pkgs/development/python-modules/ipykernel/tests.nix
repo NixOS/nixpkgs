@@ -10,10 +10,18 @@
 
 }:
 
+<<<<<<< HEAD
 buildPythonPackage {
   pname = "ipykernel-tests";
   inherit (ipykernel) version src;
   format = "other";
+=======
+buildPythonPackage rec {
+  pname = "ipykernel-tests";
+  inherit (ipykernel) version;
+
+  src = ipykernel.src;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   dontBuild = true;
   dontInstall = true;

@@ -9,16 +9,27 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "krill";
+<<<<<<< HEAD
   version = "0.13.1";
+=======
+  version = "0.12.3";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "NLnetLabs";
     repo = pname;
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-UwvSwV1EHcEsF+IScdDiuuU56sXojEWGObzPKrLvlEQ=";
   };
 
   cargoHash = "sha256-ts0yr1BY/StEmklUB29blR4K6RfHbH5WzIP2Zs2sVR4=";
+=======
+    hash = "sha256-N12Uc2Dh0JFCEOzFvU5YzPeupcaOetW6ehRuAYOYJn0=";
+  };
+
+  cargoHash = "sha256-pcoGFXano34Sc+iVqJfrUo+wWASpAA1gslCHfVcEoJ4=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   buildInputs = [ openssl ] ++ lib.optional stdenv.isDarwin Security;
   nativeBuildInputs = [ pkg-config ];

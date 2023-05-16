@@ -2,16 +2,27 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "martin";
+<<<<<<< HEAD
   version = "0.8.7";
+=======
+  version = "0.8.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "maplibre";
     repo = "martin";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-/t4SPZ4LoT3dR1jyqTmrBSRnWhyT7zSkx1Y10+JpMsI=";
   };
 
   cargoHash = "sha256-3yib8F6n6uxC8G7yO3I1TquAMK/FbvOwdNJT9VCk3+g=";
+=======
+    hash = "sha256-8Kdvwu8KLEMEYoRgkcgYYyX60am+P6jEF7e2W2/lICk=";
+  };
+
+  cargoHash = "sha256-XCKLi9m/MZXeBpzLFaxPtEsKQYw1wJlWQdspaRFR6Ug=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nativeBuildInputs = [ pkg-config ];
 

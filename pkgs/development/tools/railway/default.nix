@@ -3,16 +3,27 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "railway";
+<<<<<<< HEAD
   version = "3.4.0";
+=======
+  version = "3.3.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "railwayapp";
     repo = "cli";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-pydnIUqUBMLHonEGcvB+K+48QQYQuFfZxbAETJjU+3o=";
   };
 
   cargoHash = "sha256-VgLQfUk1xeAwr9KUo1Vz4Ndw0FAnYGw3af0v3ueNPuA=";
+=======
+    hash = "sha256-RxZa1NH3DpHmrGbNlm85Dv1dydCC344D3lgN0lGVFt8=";
+  };
+
+  cargoHash = "sha256-3ZP4D2cEYzqrupYtKANRaMNNIZ83fTDoUedKCruk6CY=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nativeBuildInputs = [ pkg-config ];
 

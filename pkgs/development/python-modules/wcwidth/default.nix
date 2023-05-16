@@ -1,4 +1,9 @@
 { lib, fetchPypi, buildPythonPackage, pytestCheckHook
+<<<<<<< HEAD
+=======
+, isPy3k
+, backports_functools_lru_cache
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , setuptools
 }:
 
@@ -13,7 +18,13 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
+<<<<<<< HEAD
   propagatedBuildInputs = [ setuptools ];
+=======
+  propagatedBuildInputs = [ setuptools ] ++ lib.optionals (!isPy3k) [
+    backports_functools_lru_cache
+  ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   # To prevent infinite recursion with pytest
   doCheck = false;

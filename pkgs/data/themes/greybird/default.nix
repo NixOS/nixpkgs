@@ -13,13 +13,21 @@
 
 stdenv.mkDerivation rec {
   pname = "greybird";
+<<<<<<< HEAD
   version = "3.23.3";
+=======
+  version = "3.23.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "shimmerproject";
     repo = pname;
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "+MZQ3FThuRFEfoARsF09B7POwytS5RgTs9zYzIHVtfg=";
+=======
+    sha256 = "h4sPjKpTufaunVP0d4Z5x/K+vRW1FpuLrMJjydx/a6w=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

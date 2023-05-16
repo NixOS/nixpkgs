@@ -66,10 +66,14 @@ rec {
         echo "Compiling a custom test"
         set -x
         emcc -O2 -s EMULATE_FUNCTION_POINTER_CASTS=1 xmllint.o \
+<<<<<<< HEAD
         ./.libs/''
       + pkgs.lib.optionalString pkgs.stdenv.isDarwin "libxml2.dylib "
       + pkgs.lib.optionalString (!pkgs.stdenv.isDarwin) "libxml2.a "
       + '' `pkg-config zlib --cflags` `pkg-config zlib --libs` -o ./xmllint.test.js \
+=======
+        ./.libs/libxml2.a `pkg-config zlib --cflags` `pkg-config zlib --libs` -o ./xmllint.test.js \
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         --embed-file ./test/xmlid/id_err1.xml
 
         echo "Using node to execute the test which basically outputs an error on stderr which we grep for"

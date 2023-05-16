@@ -11,13 +11,21 @@
 
 stdenv.mkDerivation rec {
   pname = "zchunk";
+<<<<<<< HEAD
   version = "1.3.1";
+=======
+  version = "1.3.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "zchunk";
     repo = pname;
     rev = version;
+<<<<<<< HEAD
     hash = "sha256-mZc8DC26c4hZzHsozhBmuvaIjL3ifQ7GYYGDEsBBPKc=";
+=======
+    hash = "sha256-9T1u2Qvy2gRUQzgAp81x+tSbHXuEoxhYhS1T9XntvKk=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

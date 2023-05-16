@@ -2,13 +2,21 @@
 
 stdenv.mkDerivation rec {
   pname = "wabt";
+<<<<<<< HEAD
   version = "1.0.33";
+=======
+  version = "1.0.32";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "WebAssembly";
     repo = "wabt";
     rev = version;
+<<<<<<< HEAD
     sha256 = "sha256-zSgV+lrNpQcR+V6Icyf3cPMeAdRDfsL2EErF8pxev5c=";
+=======
+    sha256 = "sha256-kLPs/9tQtvUEOGsLtnK0uqJnCWTHR6JU7BCwtFEmIlQ=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     fetchSubmodules = true;
   };
 

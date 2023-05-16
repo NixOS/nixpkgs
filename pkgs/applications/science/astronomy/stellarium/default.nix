@@ -1,7 +1,10 @@
 { lib
 , stdenv
 , fetchFromGitHub
+<<<<<<< HEAD
 , fetchpatch
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , cmake
 , perl
 , wrapGAppsHook
@@ -11,23 +14,35 @@
 , qtpositioning
 , qtmultimedia
 , qtserialport
+<<<<<<< HEAD
+=======
+, qttranslations
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , qtwayland
 , qtwebengine
 , calcmysky
 , qxlsx
 , indilib
 , libnova
+<<<<<<< HEAD
 , qttools
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 stdenv.mkDerivation rec {
   pname = "stellarium";
+<<<<<<< HEAD
   version = "23.2";
+=======
+  version = "23.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "Stellarium";
     repo = "stellarium";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-8Iheb/9wjf0u10ZQRkLMLNN2s7P++Fqcr26iatiKcTo=";
   };
 
@@ -39,6 +54,11 @@ stdenv.mkDerivation rec {
     })
   ];
 
+=======
+    hash = "sha256-7jzS3pRklPsCTgCr3nrywfHCNlBDHuyuGGvrVoI9+A0=";
+  };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   postPatch = lib.optionalString stdenv.isDarwin ''
     substituteInPlace CMakeLists.txt \
       --replace 'SET(CMAKE_INSTALL_PREFIX "''${PROJECT_BINARY_DIR}/Stellarium.app/Contents")' \
@@ -52,7 +72,10 @@ stdenv.mkDerivation rec {
     perl
     wrapGAppsHook
     wrapQtAppsHook
+<<<<<<< HEAD
     qttools
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   buildInputs = [
@@ -61,6 +84,10 @@ stdenv.mkDerivation rec {
     qtpositioning
     qtmultimedia
     qtserialport
+<<<<<<< HEAD
+=======
+    qttranslations
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     qtwebengine
     calcmysky
     qxlsx

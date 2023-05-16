@@ -11,7 +11,11 @@ buildGoModule rec {
     sha256 = "sha256-ibM3303pXnseAFP9qFTOzj0G/SxRPX+UeRfbJ+MCABk=";
   };
 
+<<<<<<< HEAD
   vendorHash = "sha256-5jzU4EybEGKoEXCFhnu7z4tFRS9fgf2wJXhkvigRM0E=";
+=======
+  vendorSha256 = "sha256-5jzU4EybEGKoEXCFhnu7z4tFRS9fgf2wJXhkvigRM0E=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   ldflags = [
     "-s"
@@ -25,6 +29,10 @@ buildGoModule rec {
     description = "MarkDown Renderer for the terminal";
     homepage = "https://github.com/MichaelMure/mdr";
     license = licenses.mit;
+<<<<<<< HEAD
     maintainers = with maintainers; [ figsoda ];
+=======
+    maintainers = with maintainers; [ SuperSandro2000 ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

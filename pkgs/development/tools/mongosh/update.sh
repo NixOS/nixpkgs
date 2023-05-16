@@ -1,5 +1,9 @@
 #!/usr/bin/env nix-shell
+<<<<<<< HEAD
 #! nix-shell -i bash -p nodejs libarchive prefetch-npm-deps moreutils jq
+=======
+#! nix-shell -i bash -p nodejs libarchive prefetch-npm-deps moreutils
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 # shellcheck shell=bash
 
 set -exuo pipefail

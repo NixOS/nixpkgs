@@ -2,7 +2,10 @@
 , rustPlatform
 , fetchCrate
 , pkg-config
+<<<<<<< HEAD
 , curl
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , openssl
 , stdenv
 , darwin
@@ -10,6 +13,7 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-public-api";
+<<<<<<< HEAD
   version = "0.32.0";
 
   src = fetchCrate {
@@ -22,6 +26,20 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ curl openssl ]
+=======
+  version = "0.29.1";
+
+  src = fetchCrate {
+    inherit pname version;
+    hash = "sha256-4UaLzYwOhVK3Ca4EqQTdi/cMozAeXLWALB5yTQCNi/k=";
+  };
+
+  cargoHash = "sha256-zDgohGKu7jbaWNkb/Nr6ZVkQFEiXzNdEReVBsVuvKDA=";
+
+  nativeBuildInputs = [ pkg-config ];
+
+  buildInputs = [ openssl ]
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Security ];
 
   # Tests fail

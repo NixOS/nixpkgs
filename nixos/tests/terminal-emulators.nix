@@ -35,8 +35,11 @@ let tests = {
 
       darktile.pkg = p: p.darktile;
 
+<<<<<<< HEAD
       deepin-terminal.pkg = p: p.deepin.deepin-terminal;
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       eterm.pkg = p: p.eterm;
       eterm.executable = "Eterm";
       eterm.pinkValue = "#D40055";
@@ -74,9 +77,12 @@ let tests = {
       qterminal.pkg = p: p.lxqt.qterminal;
       qterminal.kill = true;
 
+<<<<<<< HEAD
       rio.pkg = p: p.rio;
       rio.cmd = "rio -e $command";
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       roxterm.pkg = p: p.roxterm;
       roxterm.cmd = "roxterm -e $command";
 
@@ -123,7 +129,11 @@ in mapAttrs (name: { pkg, executable ? name, cmd ? "SHELL=$command ${executable}
     maintainers = [ jjjollyjim ];
   };
 
+<<<<<<< HEAD
   nodes.machine = { pkgsInner, ... }:
+=======
+  machine = { pkgsInner, ... }:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   {
     imports = [ ./common/x11.nix ./common/user-account.nix ];

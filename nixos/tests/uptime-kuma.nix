@@ -1,8 +1,16 @@
 import ./make-test-python.nix ({ lib, ... }:
 
+<<<<<<< HEAD
 {
   name = "uptime-kuma";
   meta.maintainers = with lib.maintainers; [ julienmalka ];
+=======
+with lib;
+
+{
+  name = "uptime-kuma";
+  meta.maintainers = with maintainers; [ julienmalka ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nodes.machine =
     { pkgs, ... }:

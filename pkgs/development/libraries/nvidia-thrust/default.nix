@@ -8,7 +8,11 @@
 , symlinkJoin
 , tbb
 , hostSystem ? "CPP"
+<<<<<<< HEAD
 , deviceSystem ? if config.cudaSupport then "CUDA" else "OMP"
+=======
+, deviceSystem ? if config.cudaSupport or false then "CUDA" else "OMP"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 # Policy for device_vector<T>

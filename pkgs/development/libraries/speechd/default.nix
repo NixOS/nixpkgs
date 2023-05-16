@@ -27,11 +27,19 @@ let
   inherit (python3Packages) python pyxdg wrapPython;
 in stdenv.mkDerivation rec {
   pname = "speech-dispatcher";
+<<<<<<< HEAD
   version = "0.11.5";
 
   src = fetchurl {
     url = "https://github.com/brailcom/speechd/releases/download/${version}/${pname}-${version}.tar.gz";
     sha256 = "sha256-HOR1n/q7rxrrQzpewHOb4Gdum9+66URKezvhsq8+wSs=";
+=======
+  version = "0.11.2";
+
+  src = fetchurl {
+    url = "https://github.com/brailcom/speechd/releases/download/${version}/${pname}-${version}.tar.gz";
+    sha256 = "sha256-i0ZJkl5oy+GntMCge7BBznc4s1yQamAr+CmG2xqg82Q=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   patches = [

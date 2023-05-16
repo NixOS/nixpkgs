@@ -43,7 +43,11 @@ in {
     machine.execute("su - alice -c signal-desktop >&2 &")
 
     # Wait for the Signal window to appear. Since usually the tests
+<<<<<<< HEAD
     # are run sandboxed and therefore with no internet, we can not wait
+=======
+    # are run sandboxed and therfore with no internet, we can not wait
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     # for the message "Link your phone ...". Nor should we wait for
     # the "Failed to connect to server" message, because when manually
     # running this test it will be not sandboxed.

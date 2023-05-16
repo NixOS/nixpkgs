@@ -4,8 +4,11 @@
 , pythonOlder
 , installShellFiles
 , setuptools
+<<<<<<< HEAD
 , setuptools-scm
 , wheel
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , docopt
 , hidapi
 , pyusb
@@ -19,15 +22,23 @@
 
 buildPythonPackage rec {
   pname = "liquidctl";
+<<<<<<< HEAD
   version = "1.13.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
+=======
+  version = "1.12.1";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.7";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-LU8rQmXrEIoOBTTFotGvMeHqksYGrtNo2YSl2l2e/UI=";
   };
 
@@ -38,6 +49,14 @@ buildPythonPackage rec {
     setuptools
     setuptools-scm
     wheel
+=======
+    hash = "sha256-0QjgnTxqB50JNjSUAgBrGyhN2XC/TDYiC1tvhw1Bl1M=";
+  };
+
+  nativeBuildInputs = [
+    installShellFiles
+    setuptools
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   propagatedBuildInputs = [

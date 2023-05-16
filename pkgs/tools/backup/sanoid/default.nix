@@ -3,13 +3,21 @@
 
 stdenv.mkDerivation rec {
   pname = "sanoid";
+<<<<<<< HEAD
   version = "2.2.0";
+=======
+  version = "2.1.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "jimsalterjrs";
     repo = pname;
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-qfRGZ10fhLL4tJL97VHrdOkO/4OVpa087AsL9t8LMmk=";
+=======
+    sha256 = "12g5cjx34ys6ix6ivahsbr3bbbi1fmjwdfdk382z6q71w3pyxxzf";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -50,7 +58,11 @@ stdenv.mkDerivation rec {
     description = "A policy-driven snapshot management tool for ZFS filesystems";
     homepage = "https://github.com/jimsalterjrs/sanoid";
     license = licenses.gpl3Plus;
+<<<<<<< HEAD
     maintainers = with maintainers; [ lopsided98 Frostman ];
+=======
+    maintainers = with maintainers; [ lopsided98 ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     platforms = platforms.all;
   };
 }

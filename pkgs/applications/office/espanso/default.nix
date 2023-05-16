@@ -3,11 +3,15 @@
 , rustPlatform
 , pkg-config
 , extra-cmake-modules
+<<<<<<< HEAD
 , dbus
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , libX11
 , libXi
 , libXtst
 , libnotify
+<<<<<<< HEAD
 , libxkbcommon
 , openssl
 , xclip
@@ -15,11 +19,17 @@
 , setxkbmap
 , wl-clipboard
 , wxGTK32
+=======
+, openssl
+, xclip
+, xdotool
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , makeWrapper
 , stdenv
 , AppKit
 , Cocoa
 , Foundation
+<<<<<<< HEAD
 , IOKit
 , Kernel
 , AVFoundation
@@ -57,11 +67,28 @@ rustPlatform.buildRustPackage rec {
   cargoPatches = lib.optionals stdenv.isDarwin [
     ./inject-wx-on-darwin.patch
   ];
+=======
+}:
+
+rustPlatform.buildRustPackage rec {
+  pname = "espanso";
+  version = "0.7.3";
+
+  src = fetchFromGitHub {
+    owner = "federico-terzi";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "1q47r43midkq9574gl8gdv3ylvrnbhdc39rrw4y4yk6jbdf5wwkm";
+  };
+
+  cargoSha256 = "0ba5skn5s6qh0blf6bvivzvqc2l8v488l9n3x98pmf6nygrikfdb";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nativeBuildInputs = [
     extra-cmake-modules
     pkg-config
     makeWrapper
+<<<<<<< HEAD
     wxGTK32
   ];
 
@@ -84,10 +111,24 @@ rustPlatform.buildRustPackage rec {
     dbus
     libnotify
     libxkbcommon
+=======
+  ];
+
+  buildInputs = [
+    libX11
+    libXtst
+    libXi
+    libnotify
+    xclip
+    openssl
+  ] ++ lib.optionals stdenv.isLinux [
+    xdotool
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ] ++ lib.optionals stdenv.isDarwin [
     AppKit
     Cocoa
     Foundation
+<<<<<<< HEAD
     IOKit
     Kernel
     AVFoundation
@@ -140,11 +181,27 @@ rustPlatform.buildRustPackage rec {
     package = espanso;
   };
 
+=======
+  ];
+
+  # Some tests require networking
+  doCheck = false;
+
+  postInstall = ''
+    wrapProgram $out/bin/espanso \
+      --prefix PATH : ${lib.makeBinPath [ libnotify xclip ]}
+  '';
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   meta = with lib; {
     description = "Cross-platform Text Expander written in Rust";
     homepage = "https://espanso.org";
     license = licenses.gpl3Plus;
+<<<<<<< HEAD
     maintainers = with maintainers; [ kimat thehedgeh0g ];
+=======
+    maintainers = with maintainers; [ kimat ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     platforms = platforms.unix;
 
     longDescription = ''

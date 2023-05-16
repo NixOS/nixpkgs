@@ -15,13 +15,21 @@
 
 buildPythonPackage rec {
   pname = "grad-cam";
+<<<<<<< HEAD
   version = "1.4.8";
+=======
+  version = "1.4.6";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   disabled = pythonOlder "3.6";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
+<<<<<<< HEAD
     hash = "sha256-BNcwDaEEmRsEoJ4nvvGfjZ9LdG0eRqZCFuY5/Gmp5N4=";
+=======
+    hash = "sha256-sL4+UUfC60JWAgJPvXeVGUHAskuoceVYwYDrYlibUOE=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   postPatch = ''

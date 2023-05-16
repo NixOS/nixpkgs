@@ -3,7 +3,11 @@
 }:
 
 let
+<<<<<<< HEAD
   version = "19";
+=======
+  version = "16";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   desktopItem = makeDesktopItem {
     name = "netbeans";
     exec = "netbeans";
@@ -19,7 +23,11 @@ stdenv.mkDerivation {
   inherit version;
   src = fetchurl {
     url = "mirror://apache/netbeans/netbeans/${version}/netbeans-${version}-bin.zip";
+<<<<<<< HEAD
     hash = "sha256-jfcO3WMH0Ir1+VfpZhaRcykTIoTmxA5DK8ZO8orP1Jg=";
+=======
+    hash = "sha512-k+Zj6TKW0tOSYvM6V1okF4Qz62gZMETC6XG98W23Vtz3+vdiaddd8BC2DBg7p9Z1CofRq8sbwtpeTJM3FaXv0g==";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   buildCommand = ''
@@ -68,7 +76,11 @@ stdenv.mkDerivation {
       binaryBytecode
       binaryNativeCode
     ];
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [ sander rszibele kashw2 ];
+=======
+    maintainers = with lib.maintainers; [ sander rszibele ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     platforms = lib.platforms.unix;
   };
 }

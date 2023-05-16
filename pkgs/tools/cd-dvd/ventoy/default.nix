@@ -1,6 +1,10 @@
 { lib
 , stdenv
 , fetchurl
+<<<<<<< HEAD
+=======
+, fetchpatch
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , autoPatchelfHook
 , bash
 , copyDesktopItems
@@ -50,6 +54,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "ventoy";
+<<<<<<< HEAD
   version = "1.0.95";
 
   src =
@@ -60,6 +65,16 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://github.com/ventoy/Ventoy/releases/download/v${version}/ventoy-${version}-linux.tar.gz";
       hash = "sha256-Tsi541GAMrWBl5xLo/K+uEyaoaDSWvwp5RMzZ5V6RAU=";
     };
+=======
+  version = "1.0.91";
+
+  src = let
+    inherit (finalAttrs) version;
+  in fetchurl {
+    url = "https://github.com/ventoy/Ventoy/releases/download/v${version}/ventoy-${version}-linux.tar.gz";
+    hash = "sha256-9vsFdOxsW1Cs06gVPvQusju2+wp4PpBwbHZUugwb3co=";
+  };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   patches = [
     ./000-nixos-sanitization.patch
@@ -113,8 +128,12 @@ stdenv.mkDerivation (finalAttrs: {
       terminal = false;
       categories = [ "Utility" ];
       startupNotify = true;
+<<<<<<< HEAD
     })
   ];
+=======
+    })];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   dontConfigure = true;
   dontBuild = true;

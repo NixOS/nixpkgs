@@ -85,6 +85,10 @@ in stdenv.mkDerivation rec {
     "--enable-mesh"
     "--enable-midi"
     "--enable-nfc"
+<<<<<<< HEAD
+=======
+    "--enable-sap"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "--enable-sixaxis"
     "--enable-btpclient"
     "--enable-hid2hci"

@@ -3,7 +3,12 @@
 , callPackage
 , fetchFromGitHub
 , fetchPypi
+<<<<<<< HEAD
 , python311
+=======
+, fetchpatch
+, python3
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , substituteAll
 , ffmpeg-headless
 , inetutils
@@ -17,6 +22,12 @@
 # Additional packages to add to propagatedBuildInputs
 , extraPackages ? ps: []
 
+<<<<<<< HEAD
+=======
+# Write out info about included extraComponents and extraPackages
+, writeText
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 # Override Python packages using
 # self: super: { pkg = super.pkg.overridePythonAttrs (oldAttrs: { ... }); }
 # Applied after defaultOverrides
@@ -43,13 +54,20 @@ let
       astral = super.astral.overridePythonAttrs (oldAttrs: rec {
         pname = "astral";
         version = "2.2";
+<<<<<<< HEAD
         src = fetchPypi {
+=======
+        src = self.fetchPypi {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           inherit pname version;
           hash = "sha256-5B2ZZ9XEi+QhNGVS8PTe2tQ/85qDV09f8q0ytmJ7b74=";
         };
         postPatch = ''
           substituteInPlace pyproject.toml \
+<<<<<<< HEAD
             --replace "poetry>=1.0.0b1" "poetry-core" \
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
             --replace "poetry.masonry" "poetry.core.masonry"
         '';
         propagatedBuildInputs = oldAttrs.propagatedBuildInputs ++ [
@@ -77,6 +95,7 @@ let
         doCheck = false;
       });
 
+<<<<<<< HEAD
       ha-av = super.av.overridePythonAttrs (oldAttrs: rec {
         pname = "ha-av";
         version = "10.1.1";
@@ -87,6 +106,8 @@ let
         };
       });
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       jaraco-abode = super.jaraco-abode.overridePythonAttrs (oldAttrs: rec {
         version = "3.3.0";
         src = fetchFromGitHub {
@@ -96,6 +117,20 @@ let
         };
       });
 
+<<<<<<< HEAD
+=======
+      # Pinned due to API changes in 10.0
+      mcstatus = super.mcstatus.overridePythonAttrs (oldAttrs: rec {
+        version = "9.3.0";
+        src = fetchFromGitHub {
+          owner = "py-mine";
+          repo = "mcstatus";
+          rev = "refs/tags/v${version}";
+          hash = "sha256-kNThVElEDqhbCitktBv5tQkjMaU4IsX0dJk63hvLhb0=";
+        };
+      });
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       # moto tests are a nuissance
       moto = super.moto.overridePythonAttrs (_: {
         doCheck = false;
@@ -134,6 +169,7 @@ let
         };
       });
 
+<<<<<<< HEAD
       plexapi = super.plexapi.overridePythonAttrs (oldAttrs: rec {
         version = "4.13.2";
         src = fetchFromGitHub {
@@ -148,6 +184,12 @@ let
       poolsense = super.poolsense.overridePythonAttrs (oldAttrs: rec {
         version = "0.0.8";
         src = fetchPypi {
+=======
+      # Pinned due to API changes in 0.1.0
+      poolsense = super.poolsense.overridePythonAttrs (oldAttrs: rec {
+        version = "0.0.8";
+        src = super.fetchPypi {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           pname = "poolsense";
           inherit version;
           hash = "sha256-17MHrYRmqkH+1QLtgq2d6zaRtqvb9ju9dvPt9gB2xCc=";
@@ -173,6 +215,7 @@ let
         };
       });
 
+<<<<<<< HEAD
       pyasn1 = super.pyasn1.overridePythonAttrs (oldAttrs: rec {
         version = "0.4.8";
         src = fetchPypi {
@@ -182,6 +225,8 @@ let
         };
       });
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       # Pinned due to API changes >0.3.5.3
       pyatag = super.pyatag.overridePythonAttrs (oldAttrs: rec {
         version = "0.3.5.3";
@@ -202,10 +247,27 @@ let
         };
       });
 
+<<<<<<< HEAD
       python-slugify = super.python-slugify.overridePythonAttrs (oldAttrs: rec {
         pname = "python-slugify";
         version = "4.0.1";
         src = fetchPypi {
+=======
+      python-roborock = super.python-roborock.overridePythonAttrs (oldAttrs: rec {
+        version = "0.8.3";
+        src = fetchFromGitHub {
+          owner = "humbertogontijo";
+          repo = "python-roborock";
+          rev = "refs/tags/v${version}";
+          hash = "sha256-O7MjxCQ4JwFFC2ibdU8hCPhFPQhV5/LsmDO6vRdyYL0=";
+        };
+      });
+
+      python-slugify = super.python-slugify.overridePythonAttrs (oldAttrs: rec {
+        pname = "python-slugify";
+        version = "4.0.1";
+        src = super.fetchPypi {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           inherit pname version;
           hash = "sha256-aaUXdm4AwSaOW7/A0BCgqFCN4LGNMK1aH/NX+K5yQnA=";
         };
@@ -250,6 +312,18 @@ let
         doCheck = false;
       });
 
+<<<<<<< HEAD
+=======
+      sqlalchemy = super.sqlalchemy.overridePythonAttrs (oldAttrs: rec {
+        version = "2.0.12";
+        src = super.fetchPypi {
+          pname = "SQLAlchemy";
+          inherit version;
+          hash = "sha256-vd/FvR3uXbD93J2rJvgAwoPzJD5ygbvxByAP7TASX5w=";
+        };
+      });
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       # Pinned due to API changes in 0.3.0
       tailscale = super.tailscale.overridePythonAttrs (oldAttrs: rec {
         version = "0.2.0";
@@ -261,14 +335,33 @@ let
         };
       });
 
+<<<<<<< HEAD
+=======
+      # Pinned due to API changes in 0.4.0
+      vilfo-api-client = super.vilfo-api-client.overridePythonAttrs (oldAttrs: rec {
+        version = "0.3.3";
+        src = fetchFromGitHub {
+          owner = "ManneW";
+          repo = "vilfo-api-client-python";
+          rev = "v${version}";
+          sha256 = "1gy5gpsg99rcm1cc3m30232za00r9i46sp74zpd12p3vzz1wyyqf";
+        };
+      });
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       # Pinned due to API changes ~1.0
       vultr = super.vultr.overridePythonAttrs (oldAttrs: rec {
         version = "0.1.2";
         src = fetchFromGitHub {
           owner = "spry-group";
           repo = "python-vultr";
+<<<<<<< HEAD
           rev = version;
           hash = "sha256-sHCZ8Csxs5rwg1ZG++hP3MfK7ldeAdqm5ta9tEXeW+I=";
+=======
+          rev = "v${version}";
+          sha256 = "1qjvvr2v9gfnwskdl0ayazpcmiyw9zlgnijnhgq9mcri5gq9jw5h";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         };
       });
 
@@ -282,6 +375,7 @@ let
         };
       });
 
+<<<<<<< HEAD
       zeroconf = super.zeroconf.overridePythonAttrs (oldAttrs: rec {
         version = "0.98.0";
         src = fetchFromGitHub {
@@ -292,13 +386,19 @@ let
         };
       });
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       # internal python packages only consumed by home-assistant itself
       home-assistant-frontend = self.callPackage ./frontend.nix { };
       home-assistant-intents = self.callPackage ./intents.nix { };
     })
   ];
 
+<<<<<<< HEAD
   python = python311.override {
+=======
+  python = python3.override {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     packageOverrides = lib.composeManyExtensions (defaultOverrides ++ [ packageOverrides ]);
   };
 
@@ -316,7 +416,11 @@ let
   extraBuildInputs = extraPackages python.pkgs;
 
   # Don't forget to run parse-requirements.py after updating
+<<<<<<< HEAD
   hassVersion = "2023.9.2";
+=======
+  hassVersion = "2023.5.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 in python.pkgs.buildPythonApplication rec {
   pname = "homeassistant";
@@ -332,7 +436,11 @@ in python.pkgs.buildPythonApplication rec {
   # Primary source is the pypi sdist, because it contains translations
   src = fetchPypi {
     inherit pname version;
+<<<<<<< HEAD
     hash = "sha256-pVW9NQYEf2pmGCp342lCzEiWfAyFCiWeRMVbhPd8wxQ=";
+=======
+    hash = "sha256-vBDYNnwx+9fjiVkMelDoaDtYwBKEq5BibLEs8iwIIFo=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   # Secondary source is git for tests
@@ -340,12 +448,20 @@ in python.pkgs.buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     rev = "refs/tags/${version}";
+<<<<<<< HEAD
     hash = "sha256-4sZBrGd5gz4W7c7Ok5Bj/47MaXAqAFC4qufcidbU5zA=";
   };
 
   nativeBuildInputs = with python.pkgs; [
     setuptools
     wheel
+=======
+    hash = "sha256-4YvGxBr8YmOz5kzPJ9ve7mlWxwe9BfkQgLxjst4IIJ8=";
+  };
+
+  nativeBuildInputs = with python3.pkgs; [
+    setuptools
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   # copy tests early, so patches apply as they would to the git repo
@@ -377,7 +493,10 @@ in python.pkgs.buildPythonApplication rec {
       "pip"
       "PyJWT"
       "pyOpenSSL"
+<<<<<<< HEAD
       "PyYAML"
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       "requests"
       "typing-extensions"
       "voluptuous-serialize"
@@ -390,9 +509,12 @@ in python.pkgs.buildPythonApplication rec {
       ) relaxedConstraints)}
       pyproject.toml
     substituteInPlace tests/test_config.py --replace '"/usr"' '"/build/media"'
+<<<<<<< HEAD
 
     sed -i 's/setuptools[~=]/setuptools>/' pyproject.toml
     sed -i 's/wheel[~=]/wheel>/' pyproject.toml
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '';
 
   propagatedBuildInputs = with python.pkgs; [
@@ -413,7 +535,10 @@ in python.pkgs.buildPythonApplication rec {
     jinja2
     lru-dict
     orjson
+<<<<<<< HEAD
     packaging
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     pip
     pyopenssl
     pyjwt
@@ -475,10 +600,13 @@ in python.pkgs.buildPythonApplication rec {
     "--deselect tests/test_config.py::test_merge"
     # AssertionError: assert 2 == 1
     "--deselect=tests/helpers/test_translation.py::test_caching"
+<<<<<<< HEAD
     # AssertionError: assert None == RegistryEntry
     "--deselect=tests/helpers/test_entity_registry.py::test_get_or_create_updates_data"
     # AssertionError: assert 2 == 1
     "--deselect=tests/helpers/test_entity_values.py::test_override_single_value"
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     # tests are located in tests/
     "tests"
   ];
@@ -509,7 +637,11 @@ in python.pkgs.buildPythonApplication rec {
       getPackages
       python
       supportedComponentsWithTests;
+<<<<<<< HEAD
     pythonPath = python.pkgs.makePythonPath (componentBuildInputs ++ extraBuildInputs);
+=======
+    pythonPath = python3.pkgs.makePythonPath (componentBuildInputs ++ extraBuildInputs);
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     frontend = python.pkgs.home-assistant-frontend;
     intents = python.pkgs.home-assistant-intents;
     tests = {

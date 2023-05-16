@@ -6,24 +6,41 @@ let
   pygments = python3Packages.pygments;
 in stdenv.mkDerivation rec {
   pname = "global";
+<<<<<<< HEAD
   version = "6.6.10";
 
   src = fetchurl {
     url = "mirror://gnu/global/${pname}-${version}.tar.gz";
     hash = "sha256-LdHmqUXpPAE5D7lBpOaU9McbvXVp1kFJwE6Se79NzOg=";
+=======
+  version = "6.6.7";
+
+  src = fetchurl {
+    url = "mirror://gnu/global/${pname}-${version}.tar.gz";
+    sha256 = "sha256-aaD3f1OCfFVoF2wdOCFm3zYedCY6BH8LMFiqLyrVijw=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ libtool makeWrapper ];
 
+<<<<<<< HEAD
   buildInputs = [ ncurses sqlite ];
+=======
+  buildInputs = [ ncurses ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   propagatedBuildInputs = [ pygments ];
 
   configureFlags = [
     "--with-ltdl-include=${libtool}/include"
     "--with-ltdl-lib=${libtool.lib}/lib"
+<<<<<<< HEAD
     "--with-ncurses=${ncurses}"
     "--with-sqlite3"
+=======
+    "--with-ncurses=${ncurses.dev}"
+    "--with-sqlite3=${sqlite.dev}"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "--with-exuberant-ctags=${ctags}/bin/ctags"
     "--with-universal-ctags=${universal-ctags}/bin/ctags"
     "--with-posix-sort=${coreutils}/bin/sort"
@@ -57,6 +74,9 @@ in stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ pSub peterhoeg ];
     platforms = platforms.unix;
+<<<<<<< HEAD
     changelog = "https://cvs.savannah.gnu.org/viewvc/global/global/NEWS?view=markup&pathrev=VERSION-${lib.replaceStrings [ "." ] [ "_" ] version}";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

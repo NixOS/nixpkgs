@@ -15,7 +15,11 @@ with python3Packages; buildPythonApplication rec {
     sha256 = "0zbrvvb957z2lwbfd39ixqdsnd2w4wfjirwkqdrqm27bjz308731";
   };
 
+<<<<<<< HEAD
   sourceRoot = "${src.name}/programmer";
+=======
+  sourceRoot = "source/programmer";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   propagatedBuildInputs = [
     pyserial

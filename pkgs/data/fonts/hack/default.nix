@@ -12,7 +12,11 @@ stdenvNoCC.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
+<<<<<<< HEAD
     install -Dm644 *.ttf -t $out/share/fonts/truetype
+=======
+    install -Dm644 *.ttf -t $out/share/fonts/hack
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     runHook postInstall
   '';

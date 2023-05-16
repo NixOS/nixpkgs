@@ -32,6 +32,9 @@ stdenv.mkDerivation rec {
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.matthiasbeyer ];
     platforms = with lib.platforms; linux;
+<<<<<<< HEAD
     mainProgram = "vis";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

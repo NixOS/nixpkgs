@@ -1,4 +1,9 @@
+<<<<<<< HEAD
 { targetPackages
+=======
+{ stdenv
+, targetPackages
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , lib
 , makeSetupHook
 , dieHook
@@ -10,7 +15,13 @@
 
 makeSetupHook {
   name = "make-binary-wrapper-hook";
+<<<<<<< HEAD
   propagatedBuildInputs = [ dieHook ];
+=======
+  propagatedBuildInputs = [ dieHook ]
+    # https://github.com/NixOS/nixpkgs/issues/148189
+    ++ lib.optional (stdenv.isDarwin && stdenv.isAarch64) cc;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   substitutions = {
     cc = "${cc}/bin/${cc.targetPrefix}cc ${lib.escapeShellArgs (map (s: "-fsanitize=${s}") sanitizers)}";

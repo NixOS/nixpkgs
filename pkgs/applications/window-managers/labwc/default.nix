@@ -17,20 +17,37 @@
 , wayland-scanner
 , wayland
 , wayland-protocols
+<<<<<<< HEAD
 , wlroots
+=======
+, wlroots_0_16
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , xcbutilwm
 , xwayland
 }:
 
+<<<<<<< HEAD
 stdenv.mkDerivation (finalAttrs: {
   pname = "labwc";
   version = "0.6.4";
+=======
+let
+  wlroots = wlroots_0_16;
+in
+stdenv.mkDerivation (finalAttrs: {
+  pname = "labwc";
+  version = "0.6.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "labwc";
     repo = "labwc";
     rev = finalAttrs.version;
+<<<<<<< HEAD
     hash = "sha256-8FMC0tq5Gp5qDPUmoJTCrHEergDMUbiTco17jPTJUgE=";
+=======
+    hash = "sha256-yZ1tXx7AA9pFc5C6c/J3B03/TfXw1PsAunNNiee3BGU=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

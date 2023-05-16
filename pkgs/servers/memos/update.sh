@@ -13,7 +13,11 @@ fi
 
 extractVendorHash() {
   original="${1?original hash missing}"
+<<<<<<< HEAD
   result="$(nix-build -A memos.goModules 2>&1 | tail -n3 | grep 'got:' | cut -d: -f2- | xargs echo || true)"
+=======
+  result="$(nix-build -A memos.go-modules 2>&1 | tail -n3 | grep 'got:' | cut -d: -f2- | xargs echo || true)"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   [ -z "$result" ] && { echo "$original"; } || { echo "$result"; }
 }
 
@@ -34,12 +38,21 @@ sed -e "s/version =.*;/version = \"$TARGET_VERSION\";/g" \
 
 # update hash
 SRC_HASH="$(nix-instantiate --eval -A memos.src.outputHash | tr -d '"')"
+<<<<<<< HEAD
 NEW_HASH="$(nix-prefetch-github usememos memos --rev v$TARGET_VERSION | jq -r .hash)"
 
 replaceHash "$SRC_HASH" "$NEW_HASH"
 
 GO_HASH="$(nix-instantiate --eval -A memos.vendorHash | tr -d '"')"
 EMPTY_HASH="$(nix-instantiate --eval -A lib.fakeHash | tr -d '"')"
+=======
+NEW_HASH="$(nix-prefetch-github usememos memos --rev v$TARGET_VERSION | jq -r .sha256)"
+
+replaceHash "$SRC_HASH" "$NEW_HASH"
+
+GO_HASH="$(nix-instantiate --eval -A memos.vendorSha256 | tr -d '"')"
+EMPTY_HASH="$(nix-instantiate --eval -A lib.fakeSha256 | tr -d '"')"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 replaceHash "$GO_HASH" "$EMPTY_HASH"
 replaceHash "$EMPTY_HASH" "$(extractVendorHash "$GO_HASH")"
 

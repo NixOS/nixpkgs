@@ -3,7 +3,11 @@
 
 stdenv.mkDerivation rec {
   pname = "vkd3d";
+<<<<<<< HEAD
   version = "1.8";
+=======
+  version = "1.7.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nativeBuildInputs = [ autoreconfHook pkg-config wine flex bison ];
   buildInputs = [ vulkan-loader vulkan-headers spirv-headers ];
@@ -13,7 +17,11 @@ stdenv.mkDerivation rec {
     owner = "wine";
     repo = pname;
     rev = "${pname}-${version}";
+<<<<<<< HEAD
     sha256 = "sha256-v2UhJvfB5Clupmgoykei3AoWYBOp5l9pQFkUEQVlajs=";
+=======
+    sha256 = "sha256-4WUD6bRG/XwrOb5tl0ZyaaR0uy85eYXcb16eDeumOAQ=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   meta = with lib; {

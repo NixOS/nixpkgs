@@ -19,13 +19,21 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "p2pool";
+<<<<<<< HEAD
   version = "3.5";
+=======
+  version = "3.3";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "SChernykh";
     repo = "p2pool";
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-qwdEmDfH+TE0WF2HIVCn23RlzelLBvCOu9VKpScdO68=";
+=======
+    sha256 = "sha256-sCG2Dr0gDznOyuSCVm/Zop+64elUZLt+XSDff2jQlwg=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     fetchSubmodules = true;
   };
 

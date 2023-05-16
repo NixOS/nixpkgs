@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 { stdenv, fetchzip, applyPatches, lib, ... }:
 { url
 , sha256
@@ -9,6 +10,22 @@
 , homepage ? null
 }:
 applyPatches ({
+=======
+{ stdenv, fetchzip, applyPatches, ... }:
+{ url
+, sha256
+, patches ? [ ]
+, name ? null
+, version ? null
+}:
+if name != null || version != null then throw ''
+  `pkgs.fetchNextcloudApp` has been changed to use `fetchzip`.
+  To update, please
+  * remove `name`/`version`
+  * update the hash
+''
+else applyPatches {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   inherit patches;
   src = fetchzip {
     inherit url sha256;
@@ -20,6 +37,7 @@ applyPatches ({
       fi
       popd &>/dev/null
     '';
+<<<<<<< HEAD
     meta = {
       license = lib.licenses.${license};
       longDescription = description;
@@ -33,3 +51,7 @@ applyPatches ({
 } // lib.optionalAttrs (appName != null && appVersion != null) {
   name = "nextcloud-app-${appName}-${appVersion}";
 })
+=======
+  };
+}
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)

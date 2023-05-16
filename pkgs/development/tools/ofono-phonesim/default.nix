@@ -34,7 +34,11 @@ mkDerivation {
     description = "Phone Simulator for modem testing";
     homepage = "https://01.org/ofono";
     license = licenses.gpl2;
+<<<<<<< HEAD
     maintainers = with maintainers; [ ];
+=======
+    maintainers = with maintainers; [ jtojnar ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     platforms = platforms.linux;
   };
 }

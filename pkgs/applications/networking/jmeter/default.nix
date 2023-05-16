@@ -2,10 +2,17 @@
 
 stdenv.mkDerivation rec {
   pname = "jmeter";
+<<<<<<< HEAD
   version = "5.6.2";
   src = fetchurl {
     url = "https://archive.apache.org/dist/jmeter/binaries/apache-${pname}-${version}.tgz";
     sha256 = "sha256-CGltO2J40nI0LRhgniFn7yjS0dX3G1koCcALvVfMjvA=";
+=======
+  version = "5.5";
+  src = fetchurl {
+    url = "https://archive.apache.org/dist/jmeter/binaries/apache-${pname}-${version}.tgz";
+    sha256 = "sha256-YOicfEUjcxRn/bcX8z1hQIbBDwMWNpy6pFZQrhxALh8=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ makeWrapper jre ];

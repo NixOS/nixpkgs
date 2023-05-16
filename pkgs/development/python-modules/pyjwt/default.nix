@@ -11,7 +11,11 @@
 
 buildPythonPackage rec {
   pname = "pyjwt";
+<<<<<<< HEAD
   version = "2.8.0";
+=======
+  version = "2.6.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -19,7 +23,11 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "PyJWT";
     inherit version;
+<<<<<<< HEAD
     hash = "sha256-V+KNFW49XBAIjgxoq7kL+sPfgrQKcb0NqiDGXM1cI94=";
+=======
+    hash = "sha256-aShcfjH8RPaKH+swnpSODfUyWdV5KV5s/isXkjKfBf0=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   postPatch = ''
@@ -45,6 +53,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ] ++ (lib.flatten (lib.attrValues passthru.optional-dependencies));
 
+<<<<<<< HEAD
   disabledTests = [
     # requires internet connection
     "test_get_jwt_set_sslcontext_default"
@@ -54,6 +63,11 @@ buildPythonPackage rec {
 
   meta = with lib; {
     changelog = "https://github.com/jpadilla/pyjwt/blob/${version}/CHANGELOG.rst";
+=======
+  pythonImportsCheck = [ "jwt" ];
+
+  meta = with lib; {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     description = "JSON Web Token implementation in Python";
     homepage = "https://github.com/jpadilla/pyjwt";
     license = licenses.mit;

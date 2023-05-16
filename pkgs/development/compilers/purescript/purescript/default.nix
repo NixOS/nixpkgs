@@ -7,7 +7,14 @@ let
   dynamic-linker = stdenv.cc.bintools.dynamicLinker;
 
   patchelf = libPath :
+<<<<<<< HEAD
     lib.optionalString (!stdenv.isDarwin) ''
+=======
+    if stdenv.isDarwin
+      then ""
+      else
+        ''
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           chmod u+w $PURS
           patchelf --interpreter ${dynamic-linker} --set-rpath ${libPath} $PURS
           chmod u-w $PURS
@@ -15,12 +22,17 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "purescript";
+<<<<<<< HEAD
   version = "0.15.10";
+=======
+  version = "0.15.9";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   # These hashes can be updated automatically by running the ./update.sh script.
   src =
     if stdenv.isDarwin
     then
+<<<<<<< HEAD
       (if stdenv.isAarch64
       then
       fetchurl {
@@ -36,6 +48,16 @@ in stdenv.mkDerivation rec {
     fetchurl {
       url = "https://github.com/${pname}/${pname}/releases/download/v${version}/linux64.tar.gz";
       sha256 = "03p5f2m5xvrqgiacs4yfc2dgz6frlxy90h6z1nm6wan40p2vd41r";
+=======
+    fetchurl {
+      url = "https://github.com/${pname}/${pname}/releases/download/v${version}/macos.tar.gz";
+      sha256 = "1xxg79rlf7li9f73wdbwif1dyy4hnzpypy6wx4zbnvap53habq9f";
+    }
+    else
+    fetchurl {
+      url = "https://github.com/${pname}/${pname}/releases/download/v${version}/linux64.tar.gz";
+      sha256 = "0rabinklsd8bs16f03zv7ij6d1lv4w2xwvzzgkwc862gpqvz9jq3";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
 
 
@@ -67,7 +89,11 @@ in stdenv.mkDerivation rec {
     license = licenses.bsd3;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     maintainers = with maintainers; [ justinwoo mbbx6spp cdepillabout ];
+<<<<<<< HEAD
     platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-darwin" ];
+=======
+    platforms = [ "x86_64-linux" "x86_64-darwin" ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     mainProgram = "purs";
     changelog = "https://github.com/purescript/purescript/releases/tag/v${version}";
   };

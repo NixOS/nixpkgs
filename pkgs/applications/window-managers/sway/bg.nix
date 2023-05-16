@@ -26,15 +26,25 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Wallpaper tool for Wayland compositors";
+<<<<<<< HEAD
     inherit (src.meta) homepage;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     longDescription = ''
       A wallpaper utility for Wayland compositors, that is compatible with any
       Wayland compositor which implements the following Wayland protocols:
       wlr-layer-shell, xdg-output, and xdg-shell.
     '';
+<<<<<<< HEAD
     license = licenses.mit;
     mainProgram = "swaybg";
     maintainers = with maintainers; [ primeos ];
     platforms = platforms.linux;
+=======
+    inherit (src.meta) homepage;
+    license = licenses.mit;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ primeos ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

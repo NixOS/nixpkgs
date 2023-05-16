@@ -16,7 +16,11 @@ buildPythonPackage rec {
     homepage = "https://github.com/dstufft/dj-search-url";
     description = "Use Search URLs in your Django Haystack Application";
     license = licenses.bsd0;
+<<<<<<< HEAD
     maintainers = [ ];
+=======
+    maintainers = [ maintainers.costrouc ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
 }

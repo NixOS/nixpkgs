@@ -22,18 +22,30 @@ in
 lib.checkListOfEnum "${pname}: theme variants" [ "default" "purple" "pink" "red" "orange" "yellow" "green" "teal" "blue" "all" ] themeVariants
 lib.checkListOfEnum "${pname}: color variants" [ "standard" "light" "dark" ] colorVariants
 lib.checkListOfEnum "${pname}: size variants" [ "standard" "compact" ] sizeVariants
+<<<<<<< HEAD
 lib.checkListOfEnum "${pname}: tweaks" [ "nord" "black" "darker" "rimless" "normal" "float" "colorful" ] tweaks
+=======
+lib.checkListOfEnum "${pname}: tweaks" [ "nord" "black" "dark" "rimless" "normal" ] tweaks
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 lib.checkListOfEnum "${pname}: grub screens" [ "1080p" "2k" "4k" ] grubScreens
 
 stdenvNoCC.mkDerivation rec {
   inherit pname;
+<<<<<<< HEAD
   version = "2023-05-17";
+=======
+  version = "2022-09-02";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "vinceliuice";
     repo = pname;
     rev = version;
+<<<<<<< HEAD
     sha256 = "hymOqtwMk6Yja5le6ADZl04yjbOJjhairiH7a4m7gMk=";
+=======
+    sha256 = "PaqEkl0E3pUEJDEv1WwUqcjzAcQniN8rUGhVgbOxuhA=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

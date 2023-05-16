@@ -19,7 +19,11 @@ rustPlatform.buildRustPackage rec {
     rev = "v${version}";
     hash = "sha256-ip0WuBn1b7uN/pAhOl5tfmToK73ZSHK7rucdtufsbCQ=";
   };
+<<<<<<< HEAD
   sourceRoot = "${src.name}/impl";
+=======
+  sourceRoot = "source/impl";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   cargoHash = "sha256-hNZgQwhm4UPqmANplZGxG0DYHa31tu06nmqYaCA7Vdg=";
 

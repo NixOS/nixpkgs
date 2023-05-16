@@ -51,6 +51,7 @@ stdenv.mkDerivation rec {
       url = "https://github.com/herbstluftwm/herbstluftwm/commit/8678168c7a3307b1271e94974e062799e745ab40.patch";
       hash = "sha256-uI6ErfDitT2Tw0txx4lMSBn/jjiiyL4Qw6AJa/CTh1E=";
     })
+<<<<<<< HEAD
     # Fix tests with recent Xorg, can be removed with the next release (<0.9.5)
     # Details here: https://github.com/herbstluftwm/herbstluftwm/issues/1560
     (fetchpatch {
@@ -58,6 +59,8 @@ stdenv.mkDerivation rec {
       hash = "sha256-srulWJQ9zTR4Kdxo40AdHND4nexDe2PDSR69yWsOpVA=";
     })
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   postPatch = ''

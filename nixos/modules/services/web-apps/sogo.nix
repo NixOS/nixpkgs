@@ -232,8 +232,13 @@ in {
         proxy_connect_timeout 90;
         proxy_send_timeout 90;
         proxy_read_timeout 90;
+<<<<<<< HEAD
         proxy_buffer_size 64k;
         proxy_buffers 8 64k;
+=======
+        proxy_buffer_size 4k;
+        proxy_buffers 4 32k;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         proxy_busy_buffers_size 64k;
         proxy_temp_file_write_size 64k;
         client_max_body_size 50m;

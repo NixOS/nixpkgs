@@ -49,7 +49,11 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://fwupd.org/";
+<<<<<<< HEAD
     maintainers = with maintainers; [ amaxine ];
+=======
+    maintainers = with maintainers; [ maxeaubrey ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
   };

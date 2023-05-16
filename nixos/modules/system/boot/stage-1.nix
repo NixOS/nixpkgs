@@ -91,7 +91,11 @@ let
   # we just copy what we need from Glibc and use patchelf to make it
   # work.
   extraUtils = pkgs.runCommand "extra-utils"
+<<<<<<< HEAD
     { nativeBuildInputs = with pkgs.buildPackages; [ nukeReferences bintools ];
+=======
+    { nativeBuildInputs = [pkgs.buildPackages.nukeReferences];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       allowedReferences = [ "out" ]; # prevent accidents like glibc being included in the initrd
     }
     ''
@@ -122,7 +126,11 @@ let
         # code, using default options and effectively ignore security relevant
         # ZFS properties such as `setuid=off` and `exec=off` (unless manually
         # duplicated in `fileSystems.*.options`, defeating "zfsutil"'s purpose).
+<<<<<<< HEAD
         copy_bin_and_libs ${lib.getOutput "mount" pkgs.util-linux}/bin/mount
+=======
+        copy_bin_and_libs ${pkgs.util-linux}/bin/mount
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         copy_bin_and_libs ${pkgs.zfs}/bin/mount.zfs
       ''}
 
@@ -133,6 +141,13 @@ let
       copy_bin_and_libs ${getBin pkgs.lvm2}/bin/dmsetup
       copy_bin_and_libs ${getBin pkgs.lvm2}/bin/lvm
 
+<<<<<<< HEAD
+=======
+      # Add RAID mdadm tool.
+      copy_bin_and_libs ${pkgs.mdadm}/sbin/mdadm
+      copy_bin_and_libs ${pkgs.mdadm}/sbin/mdmon
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       # Copy udev.
       copy_bin_and_libs ${udev}/bin/udevadm
       copy_bin_and_libs ${udev}/lib/systemd/systemd-sysctl
@@ -146,6 +161,15 @@ let
       copy_bin_and_libs ${pkgs.kmod}/bin/kmod
       ln -sf kmod $out/bin/modprobe
 
+<<<<<<< HEAD
+=======
+      # Copy resize2fs if any ext* filesystems are to be resized
+      ${optionalString (any (fs: fs.autoResize && (lib.hasPrefix "ext" fs.fsType)) fileSystems) ''
+        # We need mke2fs in the initrd.
+        copy_bin_and_libs ${pkgs.e2fsprogs}/sbin/resize2fs
+      ''}
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       # Copy multipath.
       ${optionalString config.services.multipath.enable ''
         copy_bin_and_libs ${config.services.multipath.package}/bin/multipath
@@ -221,6 +245,10 @@ let
       $out/bin/udevadm --version
       $out/bin/dmsetup --version 2>&1 | tee -a log | grep -q "version:"
       LVM_SYSTEM_DIR=$out $out/bin/lvm version 2>&1 | tee -a log | grep -q "LVM"
+<<<<<<< HEAD
+=======
+      $out/bin/mdadm --version
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       ${optionalString config.services.multipath.enable ''
         ($out/bin/multipath || true) 2>&1 | grep -q 'need to be root'
         ($out/bin/multipathd || true) 2>&1 | grep -q 'need to be root'
@@ -349,6 +377,12 @@ let
       [ { object = bootStage1;
           symlink = "/init";
         }
+<<<<<<< HEAD
+=======
+        { object = pkgs.writeText "mdadm.conf" config.boot.initrd.services.swraid.mdadmConf;
+          symlink = "/etc/mdadm.conf";
+        }
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         { object = pkgs.runCommand "initrd-kmod-blacklist-ubuntu" {
               src = "${pkgs.kmod-blacklist-ubuntu}/modprobe.conf";
               preferLocalBuild = true;
@@ -719,6 +753,10 @@ in
   };
 
   imports = [
+<<<<<<< HEAD
     (mkRenamedOptionModule [ "boot" "initrd" "mdadmConf" ] [ "boot" "swraid" "mdadmConf" ])
+=======
+    (mkRenamedOptionModule [ "boot" "initrd" "mdadmConf" ] [ "boot" "initrd" "services" "swraid" "mdadmConf" ])
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 }

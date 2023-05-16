@@ -18,10 +18,17 @@
 , wheel
 , jax
 , opt-einsum
+<<<<<<< HEAD
 , tensorflow-estimator-bin
 , tensorboard
 , config
 , cudaSupport ? config.cudaSupport
+=======
+, backports_weakref
+, tensorflow-estimator-bin
+, tensorboard
+, cudaSupport ? false
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , cudaPackages ? {}
 , zlib
 , python
@@ -49,8 +56,16 @@ in buildPythonPackage {
   inherit (packages) version;
   format = "wheel";
 
+<<<<<<< HEAD
   src = let
     pyVerNoDot = lib.strings.stringAsChars (x: lib.optionalString (x != ".") x) python.pythonVersion;
+=======
+  # Python 3.11 still unsupported
+  disabled = pythonAtLeast "3.11";
+
+  src = let
+    pyVerNoDot = lib.strings.stringAsChars (x: if x == "." then "" else x) python.pythonVersion;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     platform = if stdenv.isDarwin then "mac" else "linux";
     unit = if cudaSupport then "gpu" else "cpu";
     key = "${platform}_py_${pyVerNoDot}_${unit}";
@@ -79,7 +94,12 @@ in buildPythonPackage {
     keras-applications
     keras-preprocessing
     h5py
+<<<<<<< HEAD
   ] ++ lib.optional (!isPy3k) mock;
+=======
+  ] ++ lib.optional (!isPy3k) mock
+    ++ lib.optionals (pythonOlder "3.4") [ backports_weakref ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nativeBuildInputs = [ wheel ] ++ lib.optionals cudaSupport [ addOpenGLRunpath ];
 
@@ -149,6 +169,7 @@ in buildPythonPackage {
         "$out/${python.sitePackages}/tensorflow/compiler/tf2tensorrt/"
         "$out/${python.sitePackages}/tensorflow/compiler/tf2xla/ops/"
         "$out/${python.sitePackages}/tensorflow/lite/experimental/microfrontend/python/ops/"
+<<<<<<< HEAD
         "$out/${python.sitePackages}/tensorflow/lite/python/analyzer_wrapper/"
         "$out/${python.sitePackages}/tensorflow/lite/python/interpreter_wrapper/"
         "$out/${python.sitePackages}/tensorflow/lite/python/metrics/"
@@ -166,6 +187,16 @@ in buildPythonPackage {
         "$out/${python.sitePackages}/tensorflow/python/saved_model"
         "$out/${python.sitePackages}/tensorflow/python/util"
         "$out/${python.sitePackages}/tensorflow/tsl/python/lib/core"
+=======
+        "$out/${python.sitePackages}/tensorflow/lite/python/interpreter_wrapper/"
+        "$out/${python.sitePackages}/tensorflow/lite/python/optimize/"
+        "$out/${python.sitePackages}/tensorflow/python/"
+        "$out/${python.sitePackages}/tensorflow/python/framework/"
+        "$out/${python.sitePackages}/tensorflow/python/autograph/impl/testing"
+        "$out/${python.sitePackages}/tensorflow/python/data/experimental/service"
+        "$out/${python.sitePackages}/tensorflow/python/framework"
+        "$out/${python.sitePackages}/tensorflow/python/profiler/internal"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "${rpath}"
       )
 
@@ -206,7 +237,11 @@ in buildPythonPackage {
     homepage = "http://tensorflow.org";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.asl20;
+<<<<<<< HEAD
     maintainers = with maintainers; [ jyp abbradar ];
+=======
+    maintainers = with maintainers; [ jyp abbradar cdepillabout ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     platforms = [ "x86_64-linux" "x86_64-darwin" ];
   };
 }

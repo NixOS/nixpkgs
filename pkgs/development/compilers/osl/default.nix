@@ -4,7 +4,10 @@
 , cmake
 , clang
 , libclang
+<<<<<<< HEAD
 , libxml2
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , zlib
 , openexr
 , openimageio
@@ -24,13 +27,21 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "openshadinglanguage";
+<<<<<<< HEAD
   version = "1.12.13.0";
+=======
+  version = "1.12.12.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "AcademySoftwareFoundation";
     repo = "OpenShadingLanguage";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-EVV7YHovWwbRju+uv8IK2wpcpoK1ndZ8yNRHzU8LUuE=";
+=======
+    hash = "sha256-kxfDhqF8uTdLqt99rTOk8TWBdN5NF7zm98CT0DbLrW0=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   cmakeFlags = [
@@ -68,8 +79,11 @@ in stdenv.mkDerivation rec {
     python3.pkgs.pybind11
     util-linux # needed just for hexdump
     zlib
+<<<<<<< HEAD
   ] ++ lib.optionals stdenv.isDarwin [
     libxml2
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   postFixup = ''
@@ -82,6 +96,10 @@ in stdenv.mkDerivation rec {
     homepage = "https://opensource.imageworks.com/osl.html";
     maintainers = with maintainers; [ hodapp ];
     license = licenses.bsd3;
+<<<<<<< HEAD
     platforms = platforms.unix;
+=======
+    platforms = platforms.linux;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

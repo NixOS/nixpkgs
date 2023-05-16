@@ -8,11 +8,19 @@
 
 stdenv.mkDerivation rec {
   pname = "urbackup-client";
+<<<<<<< HEAD
   version = "2.5.24";
 
   src = fetchzip {
     url = "https://hndl.urbackup.org/Client/${version}/urbackup-client-${version}.tar.gz";
     sha256 = "sha256-n0/NVClZz6ANgEdPCtdZxsEvllIl32vwDjC2nq5R8Z4=";
+=======
+  version = "2.5.20";
+
+  src = fetchzip {
+    url = "https://hndl.urbackup.org/Client/${version}/urbackup-client-${version}.tar.gz";
+    sha256 = "sha256-i1g3xUhspqQRfIUhy6STOWNuncK3tMFocJw652r1X9g=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   buildInputs = [

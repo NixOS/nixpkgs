@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 { lib, stdenv, fetchFromGitHub, cmake, asciidoctor, installShellFiles }:
+=======
+{ lib, stdenv, fetchFromGitHub, cmake, asciidoctor }:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 stdenv.mkDerivation rec {
   pname = "timewarrior";
@@ -12,6 +16,7 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
+<<<<<<< HEAD
   nativeBuildInputs = [ cmake asciidoctor installShellFiles ];
 
   dontUseCmakeBuildDir = true;
@@ -21,6 +26,12 @@ stdenv.mkDerivation rec {
       --bash completion/timew-completion.bash
   '';
 
+=======
+  nativeBuildInputs = [ cmake asciidoctor ];
+
+  dontUseCmakeBuildDir = true;
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   meta = with lib; {
     description = "A command-line time tracker";
     homepage = "https://timewarrior.net";

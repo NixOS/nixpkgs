@@ -25,8 +25,12 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     sed -i "s|/usr/bin/env python.*|${python3}/bin/${python3.executable}|" "$out/bin/unoconv"
+<<<<<<< HEAD
     wrapProgram "$out/bin/unoconv" \
         --set-default UNO_PATH "${libreoffice-unwrapped}/lib/libreoffice/program/"
+=======
+    wrapProgram "$out/bin/unoconv" --set UNO_PATH "${libreoffice-unwrapped}/lib/libreoffice/program/"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '' + lib.optionalString installSymlinks ''
     make install-links prefix="$out"
   '';

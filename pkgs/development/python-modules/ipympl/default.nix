@@ -1,5 +1,6 @@
 { lib
 , buildPythonPackage
+<<<<<<< HEAD
 , pythonOlder
 , fetchPypi
 , ipykernel
@@ -9,6 +10,12 @@
 , numpy
 , pillow
 , traitlets
+=======
+, fetchPypi
+, ipykernel
+, ipywidgets
+, matplotlib
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 buildPythonPackage rec {
@@ -16,13 +23,17 @@ buildPythonPackage rec {
   version = "0.9.3";
   format = "wheel";
 
+<<<<<<< HEAD
   disabled = pythonOlder "3.5";
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   src = fetchPypi {
     inherit pname version format;
     hash = "sha256-0RPNVYkbr+myfvmbbdERqHvra7KuVQxAQpInIQO+gBM=";
   };
 
+<<<<<<< HEAD
   propagatedBuildInputs = [
     ipykernel
     ipython_genutils
@@ -32,6 +43,10 @@ buildPythonPackage rec {
     pillow
     traitlets
   ];
+=======
+
+  propagatedBuildInputs = [ ipykernel ipywidgets matplotlib ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   # There are no unit tests in repository
   doCheck = false;

@@ -38,6 +38,7 @@ final: prev: let
 
   cudaFlags = final.callPackage ./flags.nix {};
 
+<<<<<<< HEAD
   # Internal hook, used by cudatoolkit and cuda redist packages
   # to accommodate automatic CUDAToolkit_ROOT construction
   markForCudatoolkitRootHook = (final.callPackage
@@ -63,14 +64,20 @@ final: prev: let
         ./hooks/setup-cuda-hook.sh)
     { });
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 in
 {
   inherit
     backendStdenv
     cudatoolkit
+<<<<<<< HEAD
     cudaFlags
     markForCudatoolkitRootHook
     setupCudaHook;
 
     saxpy = final.callPackage ./saxpy { };
+=======
+    cudaFlags;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }

@@ -1,5 +1,9 @@
 {
   "version": "1.4.1",
+<<<<<<< HEAD
   "srcHash": "sha256-LDqlQfy1bm2xMNn1oulImfanQmJX57P48VaZn0Jxwpk=",
+=======
+  "srcSha256": "LDqlQfy1bm2xMNn1oulImfanQmJX57P48VaZn0Jxwpk=",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   "yarnSha256": "162aip7r5vcpfj1sn42qwwdlwnaii32bd2k0gp9py1z0zmw0lwlf"
 }

@@ -11,6 +11,7 @@
 
 buildGoModule rec {
   pname = "dive";
+<<<<<<< HEAD
   version = "0.11.0";
 
   src = fetchFromGitHub {
@@ -30,6 +31,25 @@ buildGoModule rec {
   ];
 
   vendorHash = "sha256-6KIbTrkvdugsUKdFBqtPUFzs/6h2xslLFpr6S2nSBiY=";
+=======
+  version = "0.10.0";
+
+  src = fetchFromGitHub {
+    owner = "wagoodman";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "sha256-1pmw8pUlek5FlI1oAuvLSqDow7hw5rw86DRDZ7pFAmA=";
+  };
+
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/wagoodman/dive/commit/fe9411c414418d839a8638bb9a12ccfc892b5845.patch";
+      sha256 = "sha256-c0TcUQ87CeOiXHoTQ3z/04i72aDr403DL7fIbXTJ9cY=";
+    })
+  ];
+
+  vendorSha256 = "sha256-YPkEei7d7mXP+5FhooNoMDARQLosH2fdSaLXGZ5C27o=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -41,6 +61,10 @@ buildGoModule rec {
     description = "A tool for exploring each layer in a docker image";
     homepage = "https://github.com/wagoodman/dive";
     license = licenses.mit;
+<<<<<<< HEAD
     maintainers = with maintainers; [ marsam SuperSandro2000 ];
+=======
+    maintainers = with maintainers; [ marsam spacekookie SuperSandro2000 ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

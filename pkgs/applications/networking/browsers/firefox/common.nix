@@ -55,7 +55,10 @@
 , gnum4
 , gtk3
 , icu
+<<<<<<< HEAD
 , icu72
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , libGL
 , libGLU
 , libevent
@@ -187,6 +190,10 @@ let
       # These values are exposed through telemetry
       "app.distributor" = "nixos";
       "app.distributor.channel" = "nixpkgs";
+<<<<<<< HEAD
+=======
+      "app.partner.nixos" = "nixos";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
   });
 
@@ -204,7 +211,11 @@ let
 
 in
 
+<<<<<<< HEAD
 buildStdenv.mkDerivation {
+=======
+buildStdenv.mkDerivation ({
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pname = "${pname}-unwrapped";
   inherit version;
 
@@ -238,6 +249,7 @@ buildStdenv.mkDerivation {
       hash = "sha256-fLUYaJwhrC/wF24HkuWn2PHqz7LlAaIZ1HYjRDB2w9A=";
     })
   ]
+<<<<<<< HEAD
   ++ lib.optionals (lib.versionOlder version "102.13") [
     # cherry-pick bindgen change to fix build with clang 16
     (fetchpatch {
@@ -249,6 +261,8 @@ buildStdenv.mkDerivation {
     # vendored to update checksums
     ./mp4parse-rust-170.patch
   ]
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ++ lib.optional (lib.versionOlder version "111") ./env_var_for_system_dir-ff86.patch
   ++ lib.optional (lib.versionAtLeast version "111") ./env_var_for_system_dir-ff111.patch
   ++ lib.optional (lib.versionAtLeast version "96") ./no-buildconfig-ffx96.patch
@@ -368,7 +382,10 @@ buildStdenv.mkDerivation {
     export MOZILLA_OFFICIAL=1
   '' + lib.optionalString stdenv.hostPlatform.isMusl ''
     # linking firefox hits the vm.max_map_count kernel limit with the default musl allocator
+<<<<<<< HEAD
     # TODO: Default vm.max_map_count has been increased, retest without this
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     export LD_PRELOAD=${mimalloc}/lib/libmimalloc.so
   '';
 
@@ -439,6 +456,10 @@ buildStdenv.mkDerivation {
     freetype
     glib
     gtk3
+<<<<<<< HEAD
+=======
+    icu
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     libffi
     libGL
     libGLU
@@ -466,10 +487,14 @@ buildStdenv.mkDerivation {
     zip
     zlib
   ]
+<<<<<<< HEAD
   # icu73 changed how it follows symlinks which breaks in the firefox sandbox
   # https://bugzilla.mozilla.org/show_bug.cgi?id=1839287
   ++ [ (if (lib.versionAtLeast version "115") then icu else icu72) ]
   ++ [ (if (lib.versionAtLeast version "116") then nss_latest else nss_esr/*3.90*/) ]
+=======
+  ++ [ (if (lib.versionAtLeast version "103") then nss_latest else nss_esr) ]
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ++ lib.optional  alsaSupport alsa-lib
   ++ lib.optional  jackSupport libjack2
   ++ lib.optional  pulseaudioSupport libpulseaudio # only headers are needed
@@ -587,4 +612,8 @@ buildStdenv.mkDerivation {
   dontUpdateAutotoolsGnuConfigScripts = true;
 
   requiredSystemFeatures = [ "big-parallel" ];
+<<<<<<< HEAD
 }
+=======
+})
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)

@@ -3,13 +3,21 @@
 
 stdenv.mkDerivation rec {
   pname = "yad";
+<<<<<<< HEAD
   version = "13.0";
+=======
+  version = "12.3";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "v1cont";
     repo = "yad";
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-iYAhiaGfC9/OQ5HrSjX2fhpbwdZun6sxyw8o+8svcvY=";
+=======
+    sha256 = "sha256-VaeA83Wk5N3uLf8Eb606w3KPwV/3be5D39wW2JuSdp0=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   configureFlags = [

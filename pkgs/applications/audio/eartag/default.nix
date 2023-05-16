@@ -18,15 +18,26 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "eartag";
+<<<<<<< HEAD
   version = "0.4.3";
+=======
+  version = "0.3.3";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "other";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
+<<<<<<< HEAD
     owner = "World";
     repo = pname;
     rev = version;
     hash = "sha256-0nkaKLkUnJiNTs7/qe+c4Lkst/ItHD1RKAERCo2O2ms=";
+=======
+    owner = "knuxify";
+    repo = pname;
+    rev = version;
+    sha256 = "sha256-120voKmlEDsVSxNfqmwBvTB90dQUwnf2CtxvOKqi8+U=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   postPatch = ''
@@ -60,7 +71,10 @@ python3Packages.buildPythonApplication rec {
     mutagen
     pytaglib
     python-magic
+<<<<<<< HEAD
     pyacoustid
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   dontWrapGApps = true;
@@ -69,7 +83,11 @@ python3Packages.buildPythonApplication rec {
   '';
 
   meta = with lib; {
+<<<<<<< HEAD
     homepage = "https://gitlab.gnome.org/World/eartag";
+=======
+    homepage = "https://gitlab.gnome.org/knuxify/eartag";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     description = "Simple music tag editor";
     # This seems to be using ICU license but we're flagging it to MIT license
     # since ICU license is a modified version of MIT and to prevent it from

@@ -3,6 +3,7 @@
 , fetchzip
 , makeWrapper
 , jre
+<<<<<<< HEAD
 , nixosTests
 , callPackage
 , confFile ? null
@@ -23,6 +24,23 @@ in stdenv.mkDerivation rec {
   src = fetchzip {
     url = "https://github.com/keycloak/keycloak/releases/download/${version}/keycloak-${version}.zip";
     hash = "sha256-I0tmCcXqS1nfA7ZQd0qUsSWEUYvNa/caCZU8AYWSO7Y=";
+=======
+, writeText
+, nixosTests
+, callPackage
+
+, confFile ? null
+, plugins ? [ ]
+}:
+
+stdenv.mkDerivation rec {
+  pname = "keycloak";
+  version = "20.0.5";
+
+  src = fetchzip {
+    url = "https://github.com/keycloak/keycloak/releases/download/${version}/keycloak-${version}.zip";
+    hash = "sha256-4h3q9J1+KufMaSuzbX9qaBwXPR8zhVpxQAXDBY3uPjM=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ makeWrapper jre ];
@@ -50,7 +68,11 @@ in stdenv.mkDerivation rec {
     patchShebangs bin/kc.sh
     export KC_HOME_DIR=$(pwd)
     export KC_CONF_DIR=$(pwd)/conf
+<<<<<<< HEAD
     bin/kc.sh build ${featuresSubcommand}
+=======
+    bin/kc.sh build
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     runHook postBuild
   '';

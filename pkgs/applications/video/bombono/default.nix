@@ -3,7 +3,11 @@
 , pkg-config
 , fetchpatch
 , scons
+<<<<<<< HEAD
 , boost
+=======
+, boost172
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , dvdauthor
 , dvdplusrwtools
 , enca
@@ -22,7 +26,11 @@ let
   fetchPatchFromAur = {name, sha256}:
     fetchpatch {
       inherit name sha256;
+<<<<<<< HEAD
       url = "https://aur.archlinux.org/cgit/aur.git/plain/${name}?h=766dd4ba1715fc921fe26ce1bdcf22c30f4fc073";
+=======
+      url = "https://aur.archlinux.org/cgit/aur.git/plain/${name}?h=e6cc6bc80c672aaa1a2260abfe8823da299a192c";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
 in
 stdenv.mkDerivation rec {
@@ -51,7 +59,10 @@ stdenv.mkDerivation rec {
     {name="fix_throw_specifications.patch";   sha256="sha256-NjCDGwXRCSLcuW2HbPOpXRgNvNQHy7i7hoOgyvGIr7g=";}
     {name="fix_operator_ambiguity.patch";     sha256="sha256-xx7WyrxEdDrDuz5YoFrM/u2qJru9u6X/4+Y5rJdmmmQ=";}
     {name="fix_ffmpeg30.patch";               sha256="sha256-vKEbvbjYVRzEaVYC8XOJBPmk6FDXI/WA0X/dldRRO8c=";}
+<<<<<<< HEAD
     {name="inc_boost_header.patch";           sha256="sha256-76vjkf62VsNJ5FmBEs+X7ZBqjvJ372mjSIreBxNQym8=";}
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ]);
 
   postPatch = ''
@@ -62,7 +73,11 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ wrapGAppsHook scons pkg-config gettext ];
 
   buildInputs = [
+<<<<<<< HEAD
     boost
+=======
+    boost172
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     dvdauthor
     dvdplusrwtools
     enca

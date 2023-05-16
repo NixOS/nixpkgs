@@ -17,14 +17,22 @@
 
 stdenv.mkDerivation rec {
   pname = "libxslt";
+<<<<<<< HEAD
   version = "1.1.38";
+=======
+  version = "1.1.37";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   outputs = [ "bin" "dev" "out" "doc" "devdoc" ] ++ lib.optional pythonSupport "py";
   outputMan = "bin";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+<<<<<<< HEAD
     sha256 = "HzJFBCWBmgmsr/Krelp/ii7HlW5QXXvutF6EPQ4eyrE=";
+=======
+    sha256 = "Oksn3IAnzNYUZyWVAzbx7FIJKPMg8UTrX6eZCuYSOrQ=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   strictDeps = true;

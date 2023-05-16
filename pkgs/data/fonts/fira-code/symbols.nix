@@ -25,7 +25,11 @@ stdenvNoCC.mkDerivation {
       See https://github.com/tonsky/FiraCode/issues/211.
     '';
     license = licenses.ofl;
+<<<<<<< HEAD
     maintainers = [ ];
+=======
+    maintainers = [ maintainers.Profpatsch ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     homepage = "https://github.com/tonsky/FiraCode/issues/211#issuecomment-239058632";
   };
 }

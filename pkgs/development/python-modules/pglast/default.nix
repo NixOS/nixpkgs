@@ -8,14 +8,22 @@
 
 buildPythonPackage rec {
   pname = "pglast";
+<<<<<<< HEAD
   version = "5.4";
+=======
+  version = "5.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
+<<<<<<< HEAD
     hash = "sha256-fyLvgaYHmTh9OaWXkuenKmNTHCVYFln/FbN+5u2a9+8=";
+=======
+    hash = "sha256-fHWJWgy/Ven5m2Cf81rG/ZKmFFWiLJsIPVxFe+rr+ms=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [

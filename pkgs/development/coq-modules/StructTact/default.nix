@@ -5,12 +5,18 @@ mkCoqDerivation {
   owner = "uwplse";
   inherit version;
   defaultVersion = with lib.versions; lib.switch coq.coq-version [
+<<<<<<< HEAD
     { case = range "8.9" "8.18"; out = "20230107"; }
     { case = range "8.6" "8.16"; out = "20210328"; }
     { case = range "8.5" "8.13"; out = "20181102"; }
   ] null;
   release."20230107".rev =    "2f2ff253be29bb09f36cab96d036419b18a95b00";
   release."20230107".sha256 = "sha256-4mWdnWD8m1ddgqWHqzjqclhinXJaB/YoLlmLeeL0yZA=";
+=======
+    { case = range "8.6" "8.16"; out = "20210328"; }
+    { case = range "8.5" "8.13"; out = "20181102"; }
+  ] null;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   release."20210328".rev =    "179bd5312e9d8b63fc3f4071c628cddfc496d741";
   release."20210328".sha256 = "sha256:1y5r1zm3hli10ah6lnj7n8hxad6rb6rgldd0g7m2fjibzvwqzhdg";
   release."20181102".rev =    "82a85b7ec07e71fa6b30cfc05f6a7bfb09ef2510";

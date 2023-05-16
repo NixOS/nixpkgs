@@ -6,6 +6,7 @@ let
     x86_64-linux = "x64";
     aarch64-linux = "arm64";
     x86_64-darwin = "x64";
+<<<<<<< HEAD
     aarch64-darwin = "arm64";
   }."${stdenv.hostPlatform.system}" or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
@@ -14,11 +15,23 @@ let
     arm64-linux_hash = "sha256-gswwyq9ZIObwrcs6PABhcN4saF8VDQHLpP2trAnVSck=";
     x64-osx_hash = "sha256-MxlUQLXiCg02AMTYsAWrM4l3IfgCRIPoU0cgwT8S98g=";
     arm64-osx_hash = "sha256-mZqP5hCJqSBY7BDooa+FGi6cdEey9DqVMV8fhp9/2IM=";
+=======
+  }."${stdenv.hostPlatform.system}" or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+
+  hash = {
+    x64-linux_hash = "sha256-Cx4cxpMoD1XY4GN3xBTCTxGwA3AbCQH3LLiqY1VyG68=";
+    arm64-linux_hash = "sha256-seJljPCfv/M6+0GpAeIyrxf9ueKy/83mMviP8Y1o390=";
+    x64-osx_hash = "sha256-J8w8ECHLWnlOcoB9X4qb8y19/W+nMQSxcPv/Ntq7FPY=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   }."${arch}-${os}_hash";
 
 in stdenv.mkDerivation rec {
   pname = "radarr";
+<<<<<<< HEAD
   version = "4.7.5.7809";
+=======
+  version = "4.4.4.7068";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchurl {
     url = "https://github.com/Radarr/Radarr/releases/download/v${version}/Radarr.master.${version}.${os}-core-${arch}.tar.gz";
@@ -52,6 +65,10 @@ in stdenv.mkDerivation rec {
     changelog = "https://github.com/Radarr/Radarr/releases/tag/v${version}";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ edwtjo purcell ];
+<<<<<<< HEAD
     platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
+=======
+    platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

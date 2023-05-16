@@ -7,7 +7,11 @@
 , openssl
 , pkg-config
 , sphinx
+<<<<<<< HEAD
 , waf
+=======
+, wafHook
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 stdenv.mkDerivation rec {
@@ -32,7 +36,11 @@ stdenv.mkDerivation rec {
     EOF
   '';
 
+<<<<<<< HEAD
   nativeBuildInputs = [ pkg-config sphinx waf.hook ];
+=======
+  nativeBuildInputs = [ pkg-config sphinx wafHook ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   buildInputs = [ libpcap ndn-cxx openssl ];
 
   wafConfigureFlags = [

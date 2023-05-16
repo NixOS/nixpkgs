@@ -1,14 +1,21 @@
 { lib
 , stdenv
 , fetchFromGitHub
+<<<<<<< HEAD
 , wrapGAppsHook
+=======
+, pkgs
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , pam
 , scdoc
 , gtk3
 , pkg-config
 , gtk-layer-shell
 , glib
+<<<<<<< HEAD
 , librsvg
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , wayland
 , wayland-scanner
 }:
@@ -24,12 +31,20 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-Jh+BmtKGaLgAcTXc44ydV83dp/W4wzByehUWyeyBoFI=";
   };
 
+<<<<<<< HEAD
+=======
+  strictDeps = true;
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nativeBuildInputs = [
     scdoc
     pkg-config
     wayland-scanner
     glib
+<<<<<<< HEAD
     wrapGAppsHook
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   buildInputs = [
@@ -37,7 +52,10 @@ stdenv.mkDerivation rec {
     gtk3
     pam
     gtk-layer-shell
+<<<<<<< HEAD
     librsvg
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   installFlags = [
@@ -54,6 +72,9 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3;
     maintainers = with maintainers; [ dit7ya ];
     platforms = platforms.linux;
+<<<<<<< HEAD
     mainProgram = "gtklock";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

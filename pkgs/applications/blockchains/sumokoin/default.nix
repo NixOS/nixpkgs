@@ -3,7 +3,11 @@
 , fetchFromGitHub
 , cmake
 , pkg-config
+<<<<<<< HEAD
 , boost179
+=======
+, boost
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , openssl
 , libsodium
 , libunwind
@@ -34,7 +38,11 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+<<<<<<< HEAD
     boost179
+=======
+    boost
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     openssl
     libsodium
     libunwind

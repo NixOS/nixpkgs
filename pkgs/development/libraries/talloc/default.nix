@@ -8,22 +8,38 @@
 , docbook-xsl-nons
 , docbook_xml_dtd_42
 , fixDarwinDylibNames
+<<<<<<< HEAD
 , waf
+=======
+, wafHook
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 stdenv.mkDerivation rec {
   pname = "talloc";
+<<<<<<< HEAD
   version = "2.4.1";
 
   src = fetchurl {
     url = "mirror://samba/talloc/${pname}-${version}.tar.gz";
     sha256 = "sha256-QQpUfwhVcAe+DogZTyGIaDWO3Aq5jJi6jBZ5MNs9M/k=";
+=======
+  version = "2.4.0";
+
+  src = fetchurl {
+    url = "mirror://samba/talloc/${pname}-${version}.tar.gz";
+    sha256 = "sha256-bfNoYsQkZu+I82BERROHDvRpNPkBbIQ4PMQAin0MRro=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [
     pkg-config
     python3
+<<<<<<< HEAD
     waf.hook
+=======
+    wafHook
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     docbook-xsl-nons
     docbook_xml_dtd_42
   ] ++ lib.optionals stdenv.isDarwin [
@@ -71,6 +87,9 @@ stdenv.mkDerivation rec {
     homepage = "https://tdb.samba.org/";
     license = licenses.gpl3;
     platforms = platforms.all;
+<<<<<<< HEAD
     maintainers = [ maintainers.matthiasbeyer ];
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

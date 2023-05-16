@@ -46,6 +46,15 @@ rec {
       //
       (drv.passthru or {})
       //
+<<<<<<< HEAD
+=======
+      # TODO(@Artturin): remove before release 23.05 and only have __spliced.
+      (lib.optionalAttrs (drv ? crossDrv && drv ? nativeDrv) {
+        crossDrv = overrideDerivation drv.crossDrv f;
+        nativeDrv = overrideDerivation drv.nativeDrv f;
+      })
+      //
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       lib.optionalAttrs (drv ? __spliced) {
         __spliced = {} // (lib.mapAttrs (_: sDrv: overrideDerivation sDrv f) drv.__spliced);
       });
@@ -269,15 +278,23 @@ rec {
     let self = f self // {
           newScope = scope: newScope (self // scope);
           callPackage = self.newScope {};
+<<<<<<< HEAD
           overrideScope = g: makeScope newScope (lib.fixedPoints.extends g f);
           # Remove after 24.11 is released.
           overrideScope' = g: lib.warnIf (lib.isInOldestRelease 2311)
             "`overrideScope'` (from `lib.makeScope`) has been renamed to `overrideScope`."
             (makeScope newScope (lib.fixedPoints.extends g f));
+=======
+          overrideScope = g: lib.warn
+            "`overrideScope` (from `lib.makeScope`) is deprecated. Do `overrideScope' (self: super: { … })` instead of `overrideScope (super: self: { … })`. All other overrides have the parameters in that order, including other definitions of `overrideScope`. This was the only definition violating the pattern."
+            (makeScope newScope (lib.fixedPoints.extends (lib.flip g) f));
+          overrideScope' = g: makeScope newScope (lib.fixedPoints.extends g f);
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           packages = f;
         };
     in self;
 
+<<<<<<< HEAD
   /* backward compatibility with old uncurried form; deprecated */
   makeScopeWithSplicing =
     splicePackages: newScope: otherSplices: keep: extra: f:
@@ -296,6 +313,11 @@ rec {
     , extra ? (_spliced0: {})
     , f
     }:
+=======
+  /* Like the above, but aims to support cross compilation. It's still ugly, but
+     hopefully it helps a little bit. */
+  makeScopeWithSplicing = splicePackages: newScope: otherSplices: keep: extra: f:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     let
       spliced0 = splicePackages {
         pkgsBuildBuild = otherSplices.selfBuildBuild;
@@ -311,11 +333,21 @@ rec {
         callPackage = newScope spliced; # == self.newScope {};
         # N.B. the other stages of the package set spliced in are *not*
         # overridden.
+<<<<<<< HEAD
         overrideScope = g: (makeScopeWithSplicing'
           { inherit splicePackages newScope; }
           { inherit otherSplices keep extra;
             f = lib.fixedPoints.extends g f;
           });
+=======
+        overrideScope = g: makeScopeWithSplicing
+          splicePackages
+          newScope
+          otherSplices
+          keep
+          extra
+          (lib.fixedPoints.extends g f);
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         packages = f;
       };
     in self;

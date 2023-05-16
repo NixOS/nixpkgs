@@ -1,21 +1,33 @@
 { lib
 , python3
+<<<<<<< HEAD
 , fetchPypi
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , enableTelemetry ? false
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "aws-sam-cli";
+<<<<<<< HEAD
   version = "1.90.0";
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-JXUfc37O6cTTOCTTtWE05m+GR4iDyBsmRPyXoTRxFmo=";
+=======
+  version = "1.53.0";
+
+  src = python3.pkgs.fetchPypi {
+    inherit pname version;
+    hash = "sha256-kIW+aGYuS+JgOMsPbeLgPSgLFNKLSqHaZ1CHpjs/IVI=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = with python3.pkgs; [
     aws-lambda-builders
     aws-sam-translator
+<<<<<<< HEAD
     boto3
     cfn-lint
     chevron
@@ -32,6 +44,22 @@ python3.pkgs.buildPythonApplication rec {
     typing-extensions
     tzlocal
     watchdog
+=======
+    chevron
+    click
+    cookiecutter
+    dateparser
+    python-dateutil
+    docker
+    flask
+    jmespath
+    requests
+    serverlessrepo
+    tomlkit
+    watchdog
+    typing-extensions
+    regex
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   postFixup = if enableTelemetry then "echo aws-sam-cli TELEMETRY IS ENABLED" else ''
@@ -39,6 +67,7 @@ python3.pkgs.buildPythonApplication rec {
     wrapProgram $out/bin/sam --set  SAM_CLI_TELEMETRY 0
   '';
 
+<<<<<<< HEAD
   postPatch = ''
     substituteInPlace requirements/base.txt \
       --replace 'PyYAML>=' 'PyYAML>=5.4.1 #' \
@@ -61,6 +90,46 @@ python3.pkgs.buildPythonApplication rec {
     description = "CLI tool for local development and testing of Serverless applications";
     homepage = "https://github.com/awslabs/aws-sam-cli";
     changelog = "https://github.com/aws/aws-sam-cli/releases/tag/v${version}";
+=======
+  patches = [
+    # Click 8.1 removed `get_terminal_size`, recommending
+    # `shutil.get_terminal_size` instead.
+    # (https://github.com/pallets/click/pull/2130)
+    ./support-click-8-1.patch
+    # Werkzeug >= 2.1.0 breaks the `sam local start-lambda` command because
+    # aws-sam-cli uses a "WERKZEUG_RUN_MAIN" hack to suppress flask output.
+    # (https://github.com/cs01/gdbgui/issues/425)
+    ./use_forward_compatible_log_silencing.patch
+  ];
+
+  # fix over-restrictive version bounds
+  postPatch = ''
+    substituteInPlace requirements/base.txt \
+      --replace "aws_lambda_builders==" "aws-lambda-builders #" \
+      --replace "aws-sam-translator==1.46.0" "aws-sam-translator~=1.46" \
+      --replace "click~=7.1" "click~=8.1" \
+      --replace "cookiecutter~=1.7.2" "cookiecutter>=1.7.2" \
+      --replace "dateparser~=1.0" "dateparser>=0.7" \
+      --replace "docker~=4.2.0" "docker>=4.2.0" \
+      --replace "Flask~=1.1.4" "Flask~=2.0" \
+      --replace "jmespath~=0.10.0" "jmespath" \
+      --replace "MarkupSafe==2.0.1" "MarkupSafe #" \
+      --replace "PyYAML~=5.3" "PyYAML #" \
+      --replace "regex==" "regex #" \
+      --replace "requests==" "requests #" \
+      --replace "typing_extensions==" "typing-extensions #" \
+      --replace "tzlocal==3.0" "tzlocal #" \
+      --replace "tomlkit==0.7.2" "tomlkit #" \
+      --replace "watchdog==" "watchdog #"
+  '';
+
+  # Tests are not included in the PyPI package
+  doCheck = false;
+
+  meta = with lib; {
+    homepage = "https://github.com/awslabs/aws-sam-cli";
+    description = "CLI tool for local development and testing of Serverless applications";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     license = licenses.asl20;
     maintainers = with maintainers; [ lo1tuma ];
   };

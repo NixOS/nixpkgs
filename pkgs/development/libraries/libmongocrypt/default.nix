@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 { lib
 , stdenv
 , fetchFromGitHub
@@ -9,6 +10,9 @@
 , darwin
 }:
 
+=======
+{ stdenv, lib, fetchFromGitHub, fetchpatch, cmake, pkg-config, mongoc, openssl }:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 stdenv.mkDerivation rec {
   pname = "libmongocrypt";
   version = "1.7.4";
@@ -30,12 +34,16 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [ cmake pkg-config ];
+<<<<<<< HEAD
   buildInputs = [
     mongoc
     openssl
   ] ++ lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.Security
   ];
+=======
+  buildInputs = [ mongoc openssl ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   cmakeFlags = [
     # all three of these are required to use system libbson

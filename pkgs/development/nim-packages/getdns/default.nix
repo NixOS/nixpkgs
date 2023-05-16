@@ -13,6 +13,10 @@ buildNimPackage rec {
   propagatedNativeBuildInputs = [ pkg-config ];
   propagatedBuildInputs = [ getdns ];
 
+<<<<<<< HEAD
+=======
+  doCheck = true;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   checkPhase = "nim c tests/test_example_synchronous";
     # The test requires network but check if it builds.
 

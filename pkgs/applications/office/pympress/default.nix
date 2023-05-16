@@ -1,7 +1,10 @@
 { lib
 , stdenv
 , python3Packages
+<<<<<<< HEAD
 , fetchPypi
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , wrapGAppsHook
 , gtk3
 , gobject-introspection
@@ -9,13 +12,21 @@
 , poppler_gi
 , withGstreamer ? stdenv.isLinux
 , withVLC ? stdenv.isLinux
+<<<<<<< HEAD
 }:
+=======
+ }:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 python3Packages.buildPythonApplication rec {
   pname = "pympress";
   version = "1.7.2";
 
+<<<<<<< HEAD
   src = fetchPypi {
+=======
+  src = python3Packages.fetchPypi {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     inherit pname version;
     sha256 = "LFUzrGHr8jmUqoIcKokC0gNDVmW1EUZlj9eI+GDycvI=";
   };

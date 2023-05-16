@@ -69,6 +69,7 @@ with lib;
           VM name
         '';
       };
+<<<<<<< HEAD
       additionalSpace = mkOption {
         type = types.str;
         default = "512M";
@@ -97,6 +98,8 @@ with lib;
           additionalSpace is taken into account.
         '';
       };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       net0 = mkOption {
         type = types.commas;
         default = "virtio=00:00:00:00:00:00,bridge=vmbr0,firewall=1";
@@ -126,12 +129,19 @@ with lib;
     qemuExtraConf = mkOption {
       type = with types; attrsOf (oneOf [ str int ]);
       default = {};
+<<<<<<< HEAD
       example = literalExpression ''
         {
           cpu = "host";
           onboot = 1;
         }
       '';
+=======
+      example = literalExpression ''{
+        cpu = "host";
+        onboot = 1;
+      }'';
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       description = lib.mdDoc ''
         Additional options appended to qemu-server.conf
       '';
@@ -197,7 +207,11 @@ with lib;
     ];
     system.build.VMA = import ../../lib/make-disk-image.nix {
       name = "proxmox-${cfg.filenameSuffix}";
+<<<<<<< HEAD
       inherit (cfg) partitionTableType;
+=======
+      inherit partitionTableType;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       postVM = let
         # Build qemu with PVE's patch that adds support for the VMA format
         vma = (pkgs.qemu_kvm.override {
@@ -217,20 +231,34 @@ with lib;
           guestAgentSupport = false;
         }).overrideAttrs ( super: rec {
 
+<<<<<<< HEAD
           version = "7.2.1";
           src = pkgs.fetchurl {
             url= "https://download.qemu.org/qemu-${version}.tar.xz";
             sha256 = "sha256-jIVpms+dekOl/immTN1WNwsMLRrQdLr3CYqCTReq1zs=";
+=======
+          version = "7.0.0";
+          src = pkgs.fetchurl {
+            url= "https://download.qemu.org/qemu-${version}.tar.xz";
+            sha256 = "sha256-9rN1x5UfcoQCeYsLqrsthkeMpT1Eztvvq74cRr9G+Dk=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           };
           patches = [
             # Proxmox' VMA tool is published as a particular patch upon QEMU
             (pkgs.fetchpatch {
               url =
                 let
+<<<<<<< HEAD
                   rev = "abb04bb6272c1202ca9face0827917552b9d06f6";
                   path = "debian/patches/pve/0027-PVE-Backup-add-vma-backup-format-code.patch";
                 in "https://git.proxmox.com/?p=pve-qemu.git;a=blob_plain;hb=${rev};f=${path}";
               hash = "sha256-3d0HHdvaExCry6zcULnziYnWIAnn24vECkI4sjj2BMg=";
+=======
+                  rev = "1976ca460796f28447b41e3618e5c1e234035dd5";
+                  path = "debian/patches/pve/0026-PVE-Backup-add-vma-backup-format-code.patch";
+                in "https://git.proxmox.com/?p=pve-qemu.git;a=blob_plain;hb=${rev};f=${path}";
+              hash = "sha256-2Dz+ceTwrcyYYxi76RtyY3v15/2pwGcDhFuoZWlgbjc=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
             })
 
             # Proxmox' VMA tool uses O_DIRECT which fails on tmpfs
@@ -250,7 +278,10 @@ with lib;
           ];
 
           buildInputs = super.buildInputs ++ [ pkgs.libuuid ];
+<<<<<<< HEAD
           nativeBuildInputs = super.nativeBuildInputs ++ [ pkgs.perl ];
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
         });
       in
@@ -264,7 +295,10 @@ with lib;
         mkdir -p $out/nix-support
         echo "file vma $out/vzdump-qemu-${cfg.filenameSuffix}.vma.zst" >> $out/nix-support/hydra-build-products
       '';
+<<<<<<< HEAD
       inherit (cfg.qemuConf) additionalSpace diskSize bootSize;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       format = "raw";
       inherit config lib pkgs;
     };

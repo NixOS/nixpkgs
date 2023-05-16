@@ -1,10 +1,20 @@
+<<<<<<< HEAD
 { lib
 , stdenv
+=======
+{ stdenv
+, lib
+, google-cloud-sdk
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , system
 , snapshotPath
 , autoPatchelfHook
 , python3
 , libxcrypt-legacy
+<<<<<<< HEAD
+=======
+, ...
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 let
@@ -141,7 +151,11 @@ let
             {
               url = src;
               inherit sha256;
+<<<<<<< HEAD
             });
+=======
+            }) ;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       dontUnpack = true;
       installPhase = ''
         mkdir -p $out/google-cloud-sdk/.install

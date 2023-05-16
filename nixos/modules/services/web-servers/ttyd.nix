@@ -78,12 +78,20 @@ in
       clientOptions = mkOption {
         type = types.attrsOf types.str;
         default = {};
+<<<<<<< HEAD
         example = literalExpression ''
           {
             fontSize = "16";
             fontFamily = "Fira Code";
           }
         '';
+=======
+        example = literalExpression ''{
+          fontSize = "16";
+          fontFamily = "Fira Code";
+
+        }'';
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         description = lib.mdDoc ''
           Attribute set of client options for xtermjs.
           <https://xtermjs.org/docs/api/terminal/interfaces/iterminaloptions/>

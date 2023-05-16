@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 { lib
 , stdenv
 , fetchFromGitHub
@@ -9,6 +10,9 @@
 , curl
 , openssl
 }:
+=======
+{ lib, stdenv, fetchFromGitHub, htslib, zlib, bzip2, xz, curl, openssl }:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 stdenv.mkDerivation rec {
   pname = "angsd";
@@ -18,6 +22,7 @@ stdenv.mkDerivation rec {
     owner = "ANGSD";
     repo = "angsd";
     sha256 = "sha256-Ppxgy54pAnqJUzNX5c12NHjKTQyEEcPSpCEEVOyZ/LA=";
+<<<<<<< HEAD
     rev = version;
   };
 
@@ -35,6 +40,13 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+=======
+    rev = "${version}";
+  };
+
+  buildInputs = [ htslib zlib bzip2 xz curl openssl ];
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   makeFlags = [ "HTSSRC=systemwide" "prefix=$(out)" ];
 
   meta = with lib; {

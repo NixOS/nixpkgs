@@ -1,14 +1,29 @@
+<<<<<<< HEAD
 import ./make-test-python.nix ({ lib, pkgs, ... }:
 
 {
   name = "binary-cache";
   meta.maintainers = with lib.maintainers; [ thomasjm ];
+=======
+import ./make-test-python.nix ({ lib, ... }:
+
+with lib;
+
+{
+  name = "binary-cache";
+  meta.maintainers = with maintainers; [ thomasjm ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nodes.machine =
     { pkgs, ... }: {
       imports = [ ../modules/installer/cd-dvd/channel.nix ];
+<<<<<<< HEAD
       environment.systemPackages = [ pkgs.python3 ];
       system.extraDependencies = [ pkgs.hello.inputDerivation ];
+=======
+      environment.systemPackages = with pkgs; [python3];
+      system.extraDependencies = with pkgs; [hello.inputDerivation];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       nix.extraOptions = ''
         experimental-features = nix-command
       '';

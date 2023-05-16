@@ -16,13 +16,21 @@
 
 buildPythonPackage rec {
   pname = "pyscf";
+<<<<<<< HEAD
   version = "2.3.0";
+=======
+  version = "2.2.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "pyscf";
     repo = pname;
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-x693NB0oc9X7SuDZlV3VKOmgnIgKA39O9yswDM0outk=";
+=======
+    hash = "sha256-3ylFz5j176hBQLklLmVKltE8whynzojsoBEWjEL2M14=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   # setup.py calls Cmake and passes the arguments in CMAKE_CONFIGURE_ARGS to cmake.
@@ -81,10 +89,13 @@ buildPythonPackage rec {
       -e libxc_cam_beta_bug \
       -e test_finite_diff_rks_eph \
       -e test_finite_diff_uks_eph \
+<<<<<<< HEAD
       -e test_finite_diff_roks_grad \
       -e test_finite_diff_df_roks_grad \
       -e test_frac_particles \
       -e test_nosymm_sa4_newton \
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       -e test_pipek \
       -e test_n3_cis_ewald \
       -e test_veff \

@@ -7,7 +7,10 @@ let
 
   defaultUser = "paperless";
   nltkDir = "/var/cache/paperless/nltk";
+<<<<<<< HEAD
   defaultFont = "${pkgs.liberation_ttf}/share/fonts/truetype/LiberationSerif-Regular.ttf";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   # Don't start a redis instance if the user sets a custom redis connection
   enableRedis = !hasAttr "PAPERLESS_REDIS" cfg.extraConfig;
@@ -18,7 +21,10 @@ let
     PAPERLESS_MEDIA_ROOT = cfg.mediaDir;
     PAPERLESS_CONSUMPTION_DIR = cfg.consumptionDir;
     PAPERLESS_NLTK_DIR = nltkDir;
+<<<<<<< HEAD
     PAPERLESS_THUMBNAIL_FONT_NAME = defaultFont;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     GUNICORN_CMD_ARGS = "--bind=${cfg.address}:${toString cfg.port}";
   } // optionalAttrs (config.time.timeZone != null) {
     PAPERLESS_TIME_ZONE = config.time.timeZone;
@@ -28,11 +34,22 @@ let
     lib.mapAttrs (_: toString) cfg.extraConfig
   );
 
+<<<<<<< HEAD
   manage = pkgs.writeShellScript "manage" ''
     set -o allexport # Export the following env vars
     ${lib.toShellVars env}
     exec ${pkg}/bin/paperless-ngx "$@"
   '';
+=======
+  manage =
+    let
+      setupEnv = lib.concatStringsSep "\n" (mapAttrsToList (name: val: "export ${name}=\"${val}\"") env);
+    in
+    pkgs.writeShellScript "manage" ''
+      ${setupEnv}
+      exec ${pkg}/bin/paperless-ngx "$@"
+    '';
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   # Secure the services
   defaultServiceConfig = {
@@ -43,8 +60,11 @@ let
       "-/etc/nsswitch.conf"
       "-/etc/hosts"
       "-/etc/localtime"
+<<<<<<< HEAD
       "-/etc/ssl/certs"
       "-/etc/static/ssl/certs"
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       "-/run/postgresql"
     ] ++ (optional enableRedis redisServer.unixSocket);
     BindPaths = [
@@ -87,11 +107,20 @@ let
     SupplementaryGroups = optional enableRedis redisServer.user;
     SystemCallArchitectures = "native";
     SystemCallFilter = [ "@system-service" "~@privileged @setuid @keyring" ];
+<<<<<<< HEAD
     UMask = "0066";
   };
 in
 {
   meta.maintainers = with maintainers; [ erikarvstedt Flakebi leona ];
+=======
+    # Does not work well with the temporary root
+    #UMask = "0066";
+  };
+in
+{
+  meta.maintainers = with maintainers; [ erikarvstedt Flakebi ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   imports = [
     (mkRenamedOptionModule [ "services" "paperless-ng" ] [ "services" "paperless" ])
@@ -173,13 +202,17 @@ in
       description = lib.mdDoc "Web interface port.";
     };
 
+<<<<<<< HEAD
     # FIXME this should become an RFC42-style settings attr
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     extraConfig = mkOption {
       type = types.attrs;
       default = { };
       description = lib.mdDoc ''
         Extra paperless config options.
 
+<<<<<<< HEAD
         See [the documentation](https://docs.paperless-ngx.com/configuration/)
         for available options.
 
@@ -199,6 +232,15 @@ in
           };
         };
       '';
+=======
+        See [the documentation](https://paperless-ngx.readthedocs.io/en/latest/configuration.html)
+        for available options.
+      '';
+      example = {
+        PAPERLESS_OCR_LANGUAGE = "deu+eng";
+        PAPERLESS_DBHOST = "/run/postgresql";
+      };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
 
     user = mkOption {

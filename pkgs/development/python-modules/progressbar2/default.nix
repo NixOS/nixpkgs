@@ -40,6 +40,10 @@ buildPythonPackage rec {
     description = "Text progressbar library";
     homepage = "https://progressbar-2.readthedocs.io/";
     license = licenses.bsd3;
+<<<<<<< HEAD
     maintainers = with maintainers; [ ashgillman ];
+=======
+    maintainers = with maintainers; [ ashgillman turion ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

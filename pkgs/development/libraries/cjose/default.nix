@@ -11,13 +11,21 @@
 
 stdenv.mkDerivation rec {
   pname = "cjose";
+<<<<<<< HEAD
   version = "0.6.2.2";
+=======
+  version = "0.6.2.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "zmartzone";
     repo = "cjose";
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-vDvCxMpgCdteGvNxy2HCNRaxbhxOuTadL0nM2wkFHtk=";
+=======
+    sha256 = "sha256-QgSO4jFouowDJeUTT4kUEXD+ctQ7JiY/5DkiPyb+Z/I=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config doxygen ];

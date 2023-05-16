@@ -226,8 +226,11 @@ rec {
     lib = import ./systemd-lib.nix { inherit lib config pkgs; };
     unitOptions = import ./systemd-unit-options.nix { inherit lib systemdUtils; };
     types = import ./systemd-types.nix { inherit lib systemdUtils pkgs; };
+<<<<<<< HEAD
     network = {
       units = import ./systemd-network-units.nix { inherit lib systemdUtils; };
     };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

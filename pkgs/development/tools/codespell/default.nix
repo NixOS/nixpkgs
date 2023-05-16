@@ -6,14 +6,22 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "codespell";
+<<<<<<< HEAD
   version = "2.2.5";
+=======
+  version = "2.2.4";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "codespell-project";
     repo = "codespell";
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-Cu1bbLzVOAvPNzTavaMUfW2SCnQHc9mOM+IHAgVHhT4=";
+=======
+    sha256 = "sha256-hyTy6zAH5WrW5Jn/g0irH9xGZErnXJMSUYZaNxMvq2Y=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   postPatch = ''

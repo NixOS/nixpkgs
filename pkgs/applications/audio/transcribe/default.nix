@@ -22,14 +22,23 @@
 
 stdenv.mkDerivation rec {
   pname = "transcribe";
+<<<<<<< HEAD
   version = "9.30.2";
+=======
+  version = "9.21";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src =
     if stdenv.hostPlatform.system == "x86_64-linux" then
       fetchzip
         {
+<<<<<<< HEAD
           url = "https://www.seventhstring.com/xscribe/downlo/xscsetup-${version}.tar.gz";
           sha256 = "sha256-EZyQsO3tSedMaZIhJWc7j3f7ikBf6XqXLUgdAiQdr14=";
+=======
+          url = "https://www.seventhstring.com/xscribe/downlo/xscsetup-9.21.0.tar.gz";
+          sha256 = "sha256-M0hOJOsTTRxPef8rTO+/KpiP4lr8mtplS9KITaFOFPA=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         }
     else throw "Platform not supported";
 

@@ -15,13 +15,22 @@
 
 stdenv.mkDerivation rec {
   pname = "libspatialite";
+<<<<<<< HEAD
   version = "5.1.0";
+=======
+  version = "5.0.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
+<<<<<<< HEAD
     url = "https://www.gaia-gis.it/gaia-sins/libspatialite-sources/libspatialite-${version}.tar.gz";
     hash = "sha256-Q74t00na/+AW3RQAxdEShYKMIv6jXKUQnyHz7VBgUIA=";
+=======
+    url = "https://www.gaia-gis.it/gaia-sins/libspatialite-${version}.tar.gz";
+    hash = "sha256-7svJQxHHgBLQWevA+uhupe9u7LEzA+boKzdTwbNAnpg=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

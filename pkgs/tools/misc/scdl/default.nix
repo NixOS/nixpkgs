@@ -1,11 +1,19 @@
+<<<<<<< HEAD
 { lib, python3Packages, fetchPypi }:
+=======
+{ lib, python3Packages }:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 python3Packages.buildPythonApplication rec {
   pname = "scdl";
   version = "2.7.3";
   format = "setuptools";
 
+<<<<<<< HEAD
   src = fetchPypi {
+=======
+  src = python3Packages.fetchPypi {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     inherit pname version;
     sha256 = "60284b7b058040d4847f2e4b0ab906b10e959d51f976a0188641e8e10685474f";
   };

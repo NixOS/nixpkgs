@@ -12,7 +12,11 @@
 , ocl-icd
 , opencl-headers
 , boost
+<<<<<<< HEAD
 , gpuSupport ? stdenv.isLinux
+=======
+, gpuSupport ? true
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 buildPythonPackage rec {
@@ -48,11 +52,15 @@ buildPythonPackage rec {
   ];
 
   buildPhase = ''
+<<<<<<< HEAD
     runHook preBuild
 
     ${python.pythonForBuild.interpreter} setup.py bdist_wheel ${lib.optionalString gpuSupport "--gpu"}
 
     runHook postBuild
+=======
+    ${python.pythonForBuild.interpreter} setup.py bdist_wheel ${lib.optionalString gpuSupport "--gpu"}
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '';
 
   postConfigure = ''
@@ -73,6 +81,10 @@ buildPythonPackage rec {
     homepage = "https://github.com/Microsoft/LightGBM";
     changelog = "https://github.com/microsoft/LightGBM/releases/tag/v${version}";
     license = lib.licenses.mit;
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [ teh ];
+=======
+    maintainers = with lib.maintainers; [ teh costrouc ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

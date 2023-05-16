@@ -13,14 +13,22 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-dlp";
+<<<<<<< HEAD
   version = "3.12.2";
+=======
+  version = "3.12.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
+<<<<<<< HEAD
     hash = "sha256-+Ab1XD45m3PqQ0LHBIRVId5wARJ9KOjClEk9C2c2NBY=";
+=======
+    hash = "sha256-KBqnGp56U2lGLo/2MWu5kfHr7pfIJJDT857+xnrK+iU=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [
@@ -51,6 +59,10 @@ buildPythonPackage rec {
     homepage = "https://github.com/googleapis/python-dlp";
     changelog = "https://github.com/googleapis/python-dlp/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
+<<<<<<< HEAD
     maintainers = with maintainers; [ ];
+=======
+    maintainers = with maintainers; [ SuperSandro2000 ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

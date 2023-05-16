@@ -1,6 +1,10 @@
 { lib
 , buildGoModule
 , fetchFromGitHub
+<<<<<<< HEAD
+=======
+, fetchgit
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , installShellFiles
 , testers
 , scorecard
@@ -8,13 +12,21 @@
 
 buildGoModule rec {
   pname = "scorecard";
+<<<<<<< HEAD
   version = "4.12.0";
+=======
+  version = "4.10.5";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "ossf";
     repo = pname;
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-Ys7uO+xMSlcD8OGw7fV+aR0+Q1UXrxPKVLQbphV4rKk=";
+=======
+    sha256 = "sha256-ysdgdU/Et87NxpdSTZuTtLJOv5uaYGVHDGyCj6kKuUQ=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     # populate values otherwise taken care of by goreleaser,
     # unfortunately these require us to use git. By doing
     # this in postFetch we can delete .git afterwards and
@@ -28,7 +40,11 @@ buildGoModule rec {
       find "$out" -name .git -print0 | xargs -0 rm -rf
     '';
   };
+<<<<<<< HEAD
   vendorHash = "sha256-L6HFZryniy3Gp8NKdjM4SK82ZG5eQPM7blkSE3YFhOw=";
+=======
+  vendorHash = "sha256-6wIzg9gbH+nAE4sZg+C3NZZbVzbEcovhGwajBZ7ZjdY=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nativeBuildInputs = [ installShellFiles ];
 

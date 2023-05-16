@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 { stdenv
 , lib
 , fetchFromGitHub
@@ -31,10 +32,35 @@ stdenv.mkDerivation (finalAttrs: {
     repo = "libuv";
     rev = "v${finalAttrs.version}";
     sha256 = "sha256-Lrsyh4qd3OkTw1cSPfahzfSGNt6+pRN1X21iiv1SsFo=";
+=======
+{ stdenv, lib, fetchFromGitHub, fetchpatch, autoconf, automake, libtool, pkg-config, ApplicationServices, CoreServices, pkgsStatic }:
+
+stdenv.mkDerivation rec {
+  version = "1.44.2";
+  pname = "libuv";
+
+  src = fetchFromGitHub {
+    owner = pname;
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "sha256-K6v+00basjI32ON27ZjC5spQi/zWCcslDwQwyosq2iY=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   outputs = [ "out" "dev" ];
 
+<<<<<<< HEAD
+=======
+  patches = [
+    # Fix tests for statically linked variant upstream PR is
+    # https://github.com/libuv/libuv/pull/3735
+    (fetchpatch {
+      url = "https://github.com/libuv/libuv/commit/9d898acc564351dde74e9ed9865144e5c41f5beb.patch";
+      sha256 = "sha256-6XsjrseD8a+ny887EKOX0NmHocLMXGf2YL13vkNHUZ0=";
+    })
+  ];
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   postPatch = let
     toDisable = [
       "getnameinfo_basic" "udp_send_hang_loop" # probably network-dependent
@@ -43,7 +69,11 @@ stdenv.mkDerivation (finalAttrs: {
       "getaddrinfo_fail" "getaddrinfo_fail_sync"
       "threadpool_multiple_event_loops" # times out on slow machines
       "get_passwd" # passed on NixOS but failed on other Linuxes
+<<<<<<< HEAD
       "tcp_writealot" "udp_multicast_join" "udp_multicast_join6" "metrics_pool_events" # times out sometimes
+=======
+      "tcp_writealot" "udp_multicast_join" "udp_multicast_join6" # times out sometimes
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       "fs_fstat" # https://github.com/libuv/libuv/issues/2235#issuecomment-1012086927
 
       # Assertion failed in test/test-tcp-bind6-error.c on line 60: r == UV_EADDRINUSE
@@ -62,7 +92,11 @@ stdenv.mkDerivation (finalAttrs: {
         "tcp_create_early" "tcp_close" "tcp_bind_error_inval"
         "tcp_bind_error_addrinuse" "tcp_shutdown_after_write"
         "tcp_open" "tcp_write_queue_order" "tcp_try_write" "tcp_writealot"
+<<<<<<< HEAD
         "multiple_listen" "delayed_accept" "udp_recv_in_a_row"
+=======
+        "multiple_listen" "delayed_accept"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "shutdown_close_tcp" "shutdown_eof" "shutdown_twice" "callback_stack"
         "tty_pty" "condvar_5" "hrtime" "udp_multicast_join"
         # Tests that fail when sandboxing is enabled.
@@ -76,7 +110,11 @@ stdenv.mkDerivation (finalAttrs: {
       "shutdown_close_pipe"
     ];
     tdRegexp = lib.concatStringsSep "\\|" toDisable;
+<<<<<<< HEAD
     in lib.optionalString (finalAttrs.doCheck) ''
+=======
+    in lib.optionalString doCheck ''
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       sed '/${tdRegexp}/d' -i test/test-list.h
     '';
 
@@ -98,6 +136,7 @@ stdenv.mkDerivation (finalAttrs: {
   # Some of the tests use localhost networking.
   __darwinAllowLocalNetworking = true;
 
+<<<<<<< HEAD
   passthru.tests = {
     inherit bind cmake knot-resolver mosquitto neovim nodejs;
     inherit (lispPackages) cl-libuv;
@@ -108,14 +147,25 @@ stdenv.mkDerivation (finalAttrs: {
     python-uvloop = python3.pkgs.uvloop;
     static = pkgsStatic.libuv;
   };
+=======
+  passthru.tests.static = pkgsStatic.libuv;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   meta = with lib; {
     description = "A multi-platform support library with a focus on asynchronous I/O";
     homepage    = "https://libuv.org/";
+<<<<<<< HEAD
     changelog   = "https://github.com/libuv/libuv/blob/v${finalAttrs.version}/ChangeLog";
+=======
+    changelog   = "https://github.com/libuv/libuv/blob/v${version}/ChangeLog";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     maintainers = with maintainers; [ cstrahan ];
     platforms   = platforms.all;
     license     = with licenses; [ mit isc bsd2 bsd3 cc-by-40 ];
   };
 
+<<<<<<< HEAD
 })
+=======
+}
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)

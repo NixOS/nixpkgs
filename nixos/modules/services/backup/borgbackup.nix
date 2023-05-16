@@ -33,7 +33,11 @@ let
     }
     trap on_exit EXIT
 
+<<<<<<< HEAD
     archiveName="${optionalString (cfg.archiveBaseName != null) (cfg.archiveBaseName + "-")}$(date ${cfg.dateFormat})"
+=======
+    archiveName="${if cfg.archiveBaseName == null then "" else cfg.archiveBaseName + "-"}$(date ${cfg.dateFormat})"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     archiveSuffix="${optionalString cfg.appendFailedSuffix ".failed"}"
     ${cfg.preHook}
   '' + optionalString cfg.doInit ''
@@ -109,7 +113,11 @@ let
       };
       environment = {
         BORG_REPO = cfg.repo;
+<<<<<<< HEAD
         inherit (cfg) extraArgs extraInitArgs extraCreateArgs extraPruneArgs extraCompactArgs;
+=======
+        inherit (cfg) extraArgs extraInitArgs extraCreateArgs extraPruneArgs;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       } // (mkPassEnv cfg) // cfg.environment;
     };
 

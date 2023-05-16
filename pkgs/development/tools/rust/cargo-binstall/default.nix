@@ -11,16 +11,27 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-binstall";
+<<<<<<< HEAD
   version = "1.3.0";
+=======
+  version = "0.23.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "cargo-bins";
     repo = "cargo-binstall";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-uT8nSsC8QstjbyO5Ve2jSug3Bd/DuUNoGzquDPVl++o=";
   };
 
   cargoHash = "sha256-rxQKU73ANokxLb42u3Zom+5Wbv/ayiQJaM9NsTWW8fU=";
+=======
+    hash = "sha256-PB7EZMJ9wXVneLTc8wiZVxeyE/XybuwUvcVkN6q04lo=";
+  };
+
+  cargoHash = "sha256-SxQSzY31m3eTDO38jRpvzwmV9d6puIZ3DwBlC2Zb4b0=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nativeBuildInputs = [
     pkg-config
@@ -37,7 +48,10 @@ rustPlatform.buildRustPackage rec {
   buildNoDefaultFeatures = true;
   buildFeatures = [
     "fancy-no-backtrace"
+<<<<<<< HEAD
     "git"
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "pkg-config"
     "rustls"
     "trust-dns"
@@ -54,6 +68,14 @@ rustPlatform.buildRustPackage rec {
     "--skip=gh_api_client::test::test_gh_api_client_cargo_binstall_v0_20_1"
   ];
 
+<<<<<<< HEAD
+=======
+  # remove cargo config so it can find the linker on aarch64-unknown-linux-gnu
+  postPatch = ''
+    rm .cargo/config
+  '';
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   meta = with lib; {
     description = "A tool for installing rust binaries as an alternative to building from source";
     homepage = "https://github.com/cargo-bins/cargo-binstall";

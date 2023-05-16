@@ -23,13 +23,21 @@ lib.checkListOfEnum "${pname}: tweaks" [ "solid" "float" "round" "blur" "noborde
 
 stdenvNoCC.mkDerivation rec {
   inherit pname;
+<<<<<<< HEAD
   version = "2023-06-20";
+=======
+  version = "2022-12-15";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "vinceliuice";
     repo = pname;
     rev = version;
+<<<<<<< HEAD
     hash = "sha256-hUXlzLdcWeOHEJx3+vCMpxvJst6Rr8ISvlzlsUgCrhg=";
+=======
+    hash = "sha256-lGT6MIpc7cdAznZlbSJJ7aBzZPHucyfR8ZNMdJI0LP8=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [
@@ -57,7 +65,10 @@ stdenvNoCC.mkDerivation rec {
       ${lib.optionalString (colorVariants != []) "--color " + builtins.toString colorVariants} \
       ${lib.optionalString (sizeVariants != []) "--size " + builtins.toString sizeVariants} \
       ${lib.optionalString (tweaks != []) "--tweaks " + builtins.toString tweaks} \
+<<<<<<< HEAD
       --icon nixos \
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       --dest $out/share/themes
 
     jdupes --quiet --link-soft --recurse $out/share

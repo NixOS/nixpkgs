@@ -18,25 +18,41 @@
 , staticOnly ? stdenv.hostPlatform.isStatic
 }:
 let
+<<<<<<< HEAD
   googleapisRev = "85f8c758016c279fb7fa8f0d51ddc7ccc0dd5e05";
+=======
+  googleapisRev = "13d5b3f3f9412f38427c8ad48068f04ad1ee9808";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   googleapis = fetchFromGitHub {
     name = "googleapis-src";
     owner = "googleapis";
     repo = "googleapis";
     rev = googleapisRev;
+<<<<<<< HEAD
     hash = "sha256-4Qiz0pBgW3OZi+Z8Zq6k9E94+8q6/EFMwPh8eQxDjdI=";
+=======
+    hash = "sha256-SiU7N1EQ/7LWhUwgf4c0CBfUzNGiLe4sSbbJmJF3sao=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
   excludedTests = builtins.fromTOML (builtins.readFile ./skipped_tests.toml);
 in
 stdenv.mkDerivation rec {
   pname = "google-cloud-cpp";
+<<<<<<< HEAD
   version = "2.14.0";
+=======
+  version = "2.4.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "googleapis";
     repo = "google-cloud-cpp";
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-0SoOaAqvk8cVC5W3ejTfe4O/guhrro3uAzkeIpAkCpg=";
+=======
+    sha256 = "sha256-o8aURM8fvxn0FZjuqJGclq9Brss8LOFZzD0FV2j/lUc=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   postPatch = ''
@@ -68,9 +84,12 @@ stdenv.mkDerivation rec {
     protobuf
   ];
 
+<<<<<<< HEAD
   # https://hydra.nixos.org/build/222679737/nixlog/3/tail
   NIX_CFLAGS_COMPILE = if stdenv.isAarch64 then "-Wno-error=maybe-uninitialized" else null;
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   doInstallCheck = true;
 
   preInstallCheck =
@@ -120,17 +139,27 @@ stdenv.mkDerivation rec {
     # this adds a good chunk of time to the build
     "-DBUILD_TESTING:BOOL=ON"
     "-DGOOGLE_CLOUD_CPP_ENABLE_EXAMPLES:BOOL=OFF"
+<<<<<<< HEAD
+=======
+    "-DCMAKE_CXX_STANDARD=${grpc.cxxStandard}"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ] ++ lib.optionals (apis != [ "*" ]) [
     "-DGOOGLE_CLOUD_CPP_ENABLE=${lib.concatStringsSep ";" apis}"
   ];
 
+<<<<<<< HEAD
   requiredSystemFeatures = [ "big-parallel" ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   meta = with lib; {
     license = with licenses; [ asl20 ];
     homepage = "https://github.com/googleapis/google-cloud-cpp";
     description = "C++ Idiomatic Clients for Google Cloud Platform services";
+<<<<<<< HEAD
     platforms = [ "x86_64-linux" "aarch64-linux" ];
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     maintainers = with maintainers; [ cpcloud ];
   };
 }

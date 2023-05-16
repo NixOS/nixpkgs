@@ -51,8 +51,11 @@
 
 # the derivation at which the `-B` and `-L` flags added by `useCcForLibs` will point
 , gccForLibs ? if useCcForLibs then cc else null
+<<<<<<< HEAD
 , fortify-headers ? null
 , includeFortifyHeaders ? null
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 with lib;
@@ -67,10 +70,13 @@ let
   stdenv = stdenvNoCC;
   inherit (stdenv) hostPlatform targetPlatform;
 
+<<<<<<< HEAD
   includeFortifyHeaders' = if includeFortifyHeaders != null
     then includeFortifyHeaders
     else (targetPlatform.libc == "musl" && isGNU);
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   # Prefix for binaries. Customarily ends with a dash separator.
   #
   # TODO(@Ericson2314) Make unconditional, or optional but always true by
@@ -81,14 +87,24 @@ let
   ccVersion = lib.getVersion cc;
   ccName = lib.removePrefix targetPrefix (lib.getName cc);
 
+<<<<<<< HEAD
   libc_bin = optionalString (libc != null) (getBin libc);
   libc_dev = optionalString (libc != null) (getDev libc);
   libc_lib = optionalString (libc != null) (getLib libc);
+=======
+  libc_bin = if libc == null then "" else getBin libc;
+  libc_dev = if libc == null then "" else getDev libc;
+  libc_lib = if libc == null then "" else getLib libc;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   cc_solib = getLib cc
     + optionalString (targetPlatform != hostPlatform) "/${targetPlatform.config}";
 
   # The wrapper scripts use 'cat' and 'grep', so we may need coreutils.
+<<<<<<< HEAD
   coreutils_bin = optionalString (!nativeTools) (getBin coreutils);
+=======
+  coreutils_bin = if nativeTools then "" else getBin coreutils;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   # The "suffix salt" is a arbitrary string added in the end of env vars
   # defined by cc-wrapper's hooks so that multiple cc-wrappers can be used
@@ -112,12 +128,16 @@ let
   isGccArchSupported = arch:
     if targetPlatform.isPower then false else # powerpc does not allow -march=
     if isGNU then
+<<<<<<< HEAD
       { # Generic
         x86-64-v2 = versionAtLeast ccVersion "11.0";
         x86-64-v3 = versionAtLeast ccVersion "11.0";
         x86-64-v4 = versionAtLeast ccVersion "11.0";
 
         # Intel
+=======
+      { # Intel
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         skylake        = versionAtLeast ccVersion "6.0";
         skylake-avx512 = versionAtLeast ccVersion "6.0";
         cannonlake     = versionAtLeast ccVersion "8.0";
@@ -127,12 +147,16 @@ let
         cooperlake     = versionAtLeast ccVersion "10.0";
         tigerlake      = versionAtLeast ccVersion "10.0";
         knm            = versionAtLeast ccVersion "8.0";
+<<<<<<< HEAD
         alderlake      = versionAtLeast ccVersion "12.0";
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         # AMD
         znver1         = versionAtLeast ccVersion "6.0";
         znver2         = versionAtLeast ccVersion "9.0";
         znver3         = versionAtLeast ccVersion "11.0";
+<<<<<<< HEAD
         znver4         = versionAtLeast ccVersion "13.0";
       }.${arch} or true
     else if isClang then
@@ -142,10 +166,16 @@ let
         x86-64-v4 = versionAtLeast ccVersion "12.0";
 
         # Intel
+=======
+      }.${arch} or true
+    else if isClang then
+      { # Intel
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         cannonlake     = versionAtLeast ccVersion "5.0";
         icelake-client = versionAtLeast ccVersion "7.0";
         icelake-server = versionAtLeast ccVersion "7.0";
         knm            = versionAtLeast ccVersion "7.0";
+<<<<<<< HEAD
         alderlake      = versionAtLeast ccVersion "16.0";
 
         # AMD
@@ -153,6 +183,11 @@ let
         znver2         = versionAtLeast ccVersion "9.0";
         znver3         = versionAtLeast ccVersion "12.0";
         znver4         = versionAtLeast ccVersion "16.0";
+=======
+        # AMD
+        znver1         = versionAtLeast ccVersion "4.0";
+        znver2         = versionAtLeast ccVersion "9.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       }.${arch} or true
     else
       false;
@@ -171,8 +206,11 @@ let
     stdenv.targetPlatform.darwinMinVersionVariable;
 in
 
+<<<<<<< HEAD
 assert includeFortifyHeaders' -> fortify-headers != null;
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 # Ensure bintools matches
 assert libc_bin == bintools.libc_bin;
 assert libc_dev == bintools.libc_dev;
@@ -184,7 +222,11 @@ assert nativePrefix == bintools.nativePrefix;
 stdenv.mkDerivation {
   pname = targetPrefix
     + (if name != "" then name else "${ccName}-wrapper");
+<<<<<<< HEAD
   version = optionalString (cc != null) ccVersion;
+=======
+  version = if cc == null then "" else ccVersion;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   preferLocalBuild = true;
 
@@ -197,7 +239,11 @@ stdenv.mkDerivation {
     # Binutils, and Apple's "cctools"; "bintools" as an attempt to find an
     # unused middle-ground name that evokes both.
     inherit bintools;
+<<<<<<< HEAD
     inherit cc libc libcxx nativeTools nativeLibc nativePrefix isGNU isClang;
+=======
+    inherit cc libc nativeTools nativeLibc nativePrefix isGNU isClang;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     emacsBufferSetup = pkgs: ''
       ; We should handle propagation here too
@@ -326,12 +372,17 @@ stdenv.mkDerivation {
     '';
 
   strictDeps = true;
+<<<<<<< HEAD
   propagatedBuildInputs = [ bintools ] ++ extraTools ++ optionals cc.langD or cc.langJava or false [ zlib ];
+=======
+  propagatedBuildInputs = [ bintools ] ++ extraTools ++ optionals cc.langD or false [ zlib ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   depsTargetTargetPropagated = optional (libcxx != null) libcxx ++ extraPackages;
 
   setupHooks = [
     ../setup-hooks/role.bash
   ] ++ lib.optional (cc.langC or true) ./setup-hook.sh
+<<<<<<< HEAD
     ++ lib.optional (cc.langFortran or false) ./fortran-hook.sh
     ++ lib.optional (targetPlatform.isWindows) (stdenv.mkDerivation {
       name = "win-dll-hook.sh";
@@ -342,6 +393,9 @@ stdenv.mkDerivation {
         echo addToSearchPath "LINK_DLL_FOLDERS" "${cc_solib}/lib32" >> $out
       '';
     });
+=======
+    ++ lib.optional (cc.langFortran or false) ./fortran-hook.sh;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   postFixup =
     # Ensure flags files exists, as some other programs cat them. (That these
@@ -351,7 +405,11 @@ stdenv.mkDerivation {
       touch "$out/nix-support/cc-ldflags"
     ''
 
+<<<<<<< HEAD
     # Backwards compatibility for packages expecting this file, e.g. with
+=======
+    # Backwards compatability for packages expecting this file, e.g. with
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     # `$NIX_CC/nix-support/dynamic-linker`.
     #
     # TODO(@Ericson2314): Remove this after stable release and force
@@ -431,6 +489,7 @@ stdenv.mkDerivation {
 
       echo "${libc_lib}" > $out/nix-support/orig-libc
       echo "${libc_dev}" > $out/nix-support/orig-libc-dev
+<<<<<<< HEAD
     ''
     # fortify-headers is a set of wrapper headers that augment libc
     # and use #include_next to pass through to libc's true
@@ -441,6 +500,8 @@ stdenv.mkDerivation {
     # hence -isystem here.
     + optionalString includeFortifyHeaders' ''
       echo "-isystem ${fortify-headers}/include" >> $out/nix-support/libc-cflags
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     '')
 
     ##
@@ -508,7 +569,11 @@ stdenv.mkDerivation {
     + optionalString propagateDoc ''
       ln -s ${cc.man} $man
       ln -s ${cc.info} $info
+<<<<<<< HEAD
     '' + optionalString (cc.langD or cc.langJava or false) ''
+=======
+    '' + optionalString (cc.langD or false) ''
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       echo "-B${zlib}${zlib.libdir or "/lib/"}" >> $out/nix-support/libc-cflags
     ''
 
@@ -636,6 +701,7 @@ stdenv.mkDerivation {
 
 
   env = {
+<<<<<<< HEAD
     inherit isClang;
 
     # for substitution in utils.bash
@@ -645,6 +711,15 @@ stdenv.mkDerivation {
     # stdenv.cc.cc should not be null and we have nothing better for now.
     # if the native impure bootstrap is gotten rid of this can become `inherit cc;` again.
     cc = optionalString (!nativeTools) cc;
+=======
+    # for substitution in utils.bash
+    expandResponseParams = "${expand-response-params}/bin/expand-response-params";
+    shell = getBin shell + shell.shellPath or "";
+    gnugrep_bin = if nativeTools then "" else gnugrep;
+    # stdenv.cc.cc should not be null and we have nothing better for now.
+    # if the native impure bootstrap is gotten rid of this can become `inherit cc;` again.
+    cc = if nativeTools then "" else cc;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     wrapperName = "CC_WRAPPER";
     inherit suffixSalt coreutils_bin bintools;
     inherit libc_bin libc_dev libc_lib;
@@ -652,12 +727,20 @@ stdenv.mkDerivation {
   };
 
   meta =
+<<<<<<< HEAD
     let cc_ = lib.optionalAttrs (cc != null) cc; in
     (lib.optionalAttrs (cc_ ? meta) (removeAttrs cc.meta ["priority"])) //
+=======
+    let cc_ = if cc != null then cc else {}; in
+    (if cc_ ? meta then removeAttrs cc.meta ["priority"] else {}) //
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     { description =
         lib.attrByPath ["meta" "description"] "System C compiler" cc_
         + " (wrapper script)";
       priority = 10;
+<<<<<<< HEAD
       mainProgram = if name != "" then name else ccName;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

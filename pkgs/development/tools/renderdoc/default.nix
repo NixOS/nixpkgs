@@ -32,13 +32,21 @@ let
 in
 mkDerivation rec {
   pname = "renderdoc";
+<<<<<<< HEAD
   version = "1.28";
+=======
+  version = "1.26";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "baldurk";
     repo = "renderdoc";
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-a8f/lbNcsWdYAmhNnTelyYX5J/XhINHRfguRFXQa3uY=";
+=======
+    sha256 = "sha256-z3qHW7hVde51TkRZO3Ld8DbUODa2Gbnh3zosW2O8eOQ=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   buildInputs = [

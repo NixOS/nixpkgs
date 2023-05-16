@@ -2,15 +2,21 @@ import ./make-test-python.nix ({ lib, pkgs, ... }: {
   name = "luks";
 
   nodes.machine = { pkgs, ... }: {
+<<<<<<< HEAD
     imports = [ ./common/auto-format-root-device.nix ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     # Use systemd-boot
     virtualisation = {
       emptyDiskImages = [ 512 512 ];
       useBootLoader = true;
       useEFIBoot = true;
+<<<<<<< HEAD
       # To boot off the encrypted disk, we need to have a init script which comes from the Nix store
       mountHostNixStore = true;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
     boot.loader.systemd-boot.enable = true;
 

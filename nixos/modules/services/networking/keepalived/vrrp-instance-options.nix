@@ -22,9 +22,15 @@ with lib;
     };
 
     virtualRouterId = mkOption {
+<<<<<<< HEAD
       type = types.ints.between 1 255;
       description = lib.mdDoc ''
         Arbitrary unique number 1..255. Used to differentiate multiple instances
+=======
+      type = types.int;
+      description = lib.mdDoc ''
+        Arbitrary unique number 0..255. Used to differentiate multiple instances
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         of vrrpd running on the same NIC (and hence same socket).
       '';
     };

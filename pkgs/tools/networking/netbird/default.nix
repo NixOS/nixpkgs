@@ -30,16 +30,27 @@ let
 in
 buildGoModule rec {
   pname = "netbird";
+<<<<<<< HEAD
   version = "0.23.1";
+=======
+  version = "0.19.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "netbirdio";
     repo = pname;
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-YCCkVNFRFoHkBGZ67VHOrw/hxMrwi3lkdbHwMCLE6Hg=";
   };
 
   vendorHash = "sha256-CwozOBAPFSsa1XzDOHBgmFSwGiNekWT8t7KGR2KOOX4=";
+=======
+    sha256 = "sha256-uz2WrPKNgYP8texn2wmGEnX4HS+HcF73iCJLTTAzX6g=";
+  };
+
+  vendorHash = "sha256-hXoHdcoXsT3ap0Ns2seAaoMeQlwbp0WrqjoSH6Y/H+E=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nativeBuildInputs = [ installShellFiles ] ++ lib.optional ui pkg-config;
 

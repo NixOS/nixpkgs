@@ -6,13 +6,21 @@
 
 mkDerivation rec {
   pname = "ostinato";
+<<<<<<< HEAD
   version = "1.2.0";
+=======
+  version = "1.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub  {
     owner  = "pstavirs";
     repo   = "ostinato";
     rev    = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-yhfhNfkiZulF0FxNT+3CeGqUTXLmwPQntl2TLdCcMTQ=";
+=======
+    sha256 = "0B3jOj5rA3/rD2gXS2praZImeP34zN06fOPy/IswXOg=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   ostinatoIcon = fetchurl {

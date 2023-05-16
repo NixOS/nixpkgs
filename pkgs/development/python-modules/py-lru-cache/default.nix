@@ -17,7 +17,11 @@ buildPythonPackage rec {
     description = "An in-memory LRU cache for python";
     homepage = "https://github.com/stucchio/Python-LRU-cache";
     license = licenses.gpl3;
+<<<<<<< HEAD
     maintainers = [ ];
+=======
+    maintainers = [ maintainers.costrouc ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
 }

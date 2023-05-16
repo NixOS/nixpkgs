@@ -22,7 +22,11 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoconf automake libtool m4 pkg-config makeWrapper ];
 
+<<<<<<< HEAD
   buildInputs = [ SDL ] ++ lib.optionals (!stdenv.isDarwin) [ gtk2 libGLU libGL ];
+=======
+  buildInputs = [ SDL gtk2 libGLU libGL ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   outputs = [ "out" "dev" ];
 

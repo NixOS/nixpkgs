@@ -19,6 +19,10 @@ buildPythonPackage rec {
     description = "Python 3 bindings for SQLCipher";
     homepage = "https://github.com/rigglemania/pysqlcipher3/";
     license = licenses.zlib;
+<<<<<<< HEAD
     maintainers = with maintainers; [ ];
+=======
+    maintainers = with maintainers; [ SuperSandro2000 ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

@@ -87,7 +87,11 @@ buildPythonPackage rec {
     "pyarrow"
   ];
 
+<<<<<<< HEAD
   sourceRoot = "${src.name}/sdks/python";
+=======
+  sourceRoot = "source/sdks/python";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nativeBuildInputs = [
     cython
@@ -209,7 +213,10 @@ buildPythonPackage rec {
     homepage = "https://beam.apache.org/";
     license = licenses.asl20;
     maintainers = with maintainers; [ ndl ];
+<<<<<<< HEAD
     # https://github.com/apache/beam/issues/27221
     broken = lib.versionAtLeast pandas.version "2";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

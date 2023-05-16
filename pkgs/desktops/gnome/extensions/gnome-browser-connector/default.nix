@@ -32,6 +32,10 @@ buildPythonApplication rec {
 
   buildInputs = [
     gnome.gnome-shell
+<<<<<<< HEAD
+=======
+    gobject-introspection # for Gio typelib
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   pythonPath = [

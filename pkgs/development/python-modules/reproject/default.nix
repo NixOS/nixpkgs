@@ -6,7 +6,10 @@
 , cython
 , fetchPypi
 , numpy
+<<<<<<< HEAD
 , oldest-supported-numpy
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , pytest-astropy
 , pytestCheckHook
 , pythonOlder
@@ -26,6 +29,7 @@ buildPythonPackage rec {
     hash = "sha256-OKxPPKcVVrEVUGR8Zaphn7ur9HOuqQKa9gnMo2RQQME=";
   };
 
+<<<<<<< HEAD
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace "cython==" "cython>="
@@ -36,6 +40,11 @@ buildPythonPackage rec {
     cython
     numpy
     oldest-supported-numpy
+=======
+  nativeBuildInputs = [
+    astropy-extension-helpers
+    cython
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     setuptools-scm
   ];
 

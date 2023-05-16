@@ -2,13 +2,21 @@
 
 stdenv.mkDerivation rec {
   pname = "aws-c-cal";
+<<<<<<< HEAD
   version = "0.6.0";
+=======
+  version = "0.5.21";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "awslabs";
     repo = pname;
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-qsYQViMto5j6piCg6gBjzFfPJlLkJt4949o217QsV6Q=";
+=======
+    sha256 = "sha256-WMCLVwRrgwFsaqoKtbQNt0bHVYi1LUZt5r0i3oAfWFE=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ cmake ];

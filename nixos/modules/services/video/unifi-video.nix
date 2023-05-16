@@ -123,7 +123,11 @@ in
 
     mongodbPackage = mkOption {
       type = types.package;
+<<<<<<< HEAD
       default = pkgs.mongodb-4_4;
+=======
+      default = pkgs.mongodb-4_2;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       defaultText = literalExpression "pkgs.mongodb";
       description = lib.mdDoc ''
         The mongodb package to use.

@@ -6,7 +6,11 @@
 }:
 
 let
+<<<<<<< HEAD
   tag = "0.3.3";
+=======
+  tag = "0.3.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 in
 stdenv.mkDerivation {
   pname = "apfs";
@@ -16,7 +20,11 @@ stdenv.mkDerivation {
     owner = "linux-apfs";
     repo = "linux-apfs-rw";
     rev = "v${tag}";
+<<<<<<< HEAD
     hash = "sha256-dxbpJ9Jdn8u16yD001zCZxrr/nPbxdpF7JvU+oD+hTw=";
+=======
+    sha256 = "sha256-KYPZsCAEqJl0VjV/TmJWi20Y7yApIJH0YMwQIL80Ep4=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   hardeningDisable = [ "pic" ];
@@ -28,7 +36,11 @@ stdenv.mkDerivation {
     "INSTALL_MOD_PATH=$(out)"
   ];
 
+<<<<<<< HEAD
   passthru.tests.apfs = nixosTests.apfs;
+=======
+  passthru.tests.test = nixosTests.apfs;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   meta = with lib; {
     description = "APFS module for linux";
@@ -44,6 +56,10 @@ stdenv.mkDerivation {
     homepage = "https://github.com/linux-apfs/linux-apfs-rw";
     license = licenses.gpl2Only;
     platforms = platforms.linux;
+<<<<<<< HEAD
+=======
+    broken = kernel.kernelOlder "4.9";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     maintainers = with maintainers; [ Luflosi ];
   };
 }

@@ -46,6 +46,10 @@ buildPythonPackage rec {
     description = "Add support for commands that use configuration files to Click";
     homepage = "https://github.com/click-contrib/click-configfile";
     license = licenses.bsd3;
+<<<<<<< HEAD
     maintainers = with maintainers; [ ];
+=======
+    maintainers = with maintainers; [ jtojnar ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

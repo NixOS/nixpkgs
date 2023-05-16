@@ -1,9 +1,15 @@
 { stdenv
 , lib
 , fetchFromGitHub
+<<<<<<< HEAD
 , fetchzip
 , python310
 , rtlcss
+=======
+, fetchurl
+, python310
+, nodePackages
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , wkhtmltopdf
 , nixosTests
 }:
@@ -44,14 +50,20 @@ let
     };
   };
 
+<<<<<<< HEAD
   odoo_version = "16.0";
   odoo_release = "20230722";
+=======
+  odoo_version = "15.0";
+  odoo_release = "20230317";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 in python.pkgs.buildPythonApplication rec {
   pname = "odoo";
   version = "${odoo_version}.${odoo_release}";
 
   format = "setuptools";
 
+<<<<<<< HEAD
   # latest release is at https://github.com/odoo/docker/blob/master/16.0/Dockerfile
   src = fetchzip {
     url = "https://nightly.odoo.com/${odoo_version}/nightly/src/odoo_${version}.zip";
@@ -59,11 +71,29 @@ in python.pkgs.buildPythonApplication rec {
     hash = "sha256-pSycpYSiqJ6DKENvCWwLz+JaPUXT5dmaq8x4Aency60="; # odoo
   };
 
+=======
+  # latest release is at https://github.com/odoo/docker/blob/master/15.0/Dockerfile
+  src = fetchurl {
+    url = "https://nightly.odoo.com/${odoo_version}/nightly/src/odoo_${version}.tar.gz";
+    name = "${pname}-${version}";
+    hash = "sha256-nJEFPtZhq7DLLDCL9xt0RV75d/a45o6hBKsUlQAWh1U="; # odoo
+  };
+
+  unpackPhase = ''
+    tar xfz $src
+    cd odoo*
+  '';
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   # needs some investigation
   doCheck = false;
 
   makeWrapperArgs = [
+<<<<<<< HEAD
     "--prefix" "PATH" ":" "${lib.makeBinPath [ wkhtmltopdf rtlcss ]}"
+=======
+    "--prefix" "PATH" ":" "${lib.makeBinPath [ wkhtmltopdf nodePackages.rtlcss ]}"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   propagatedBuildInputs = with python.pkgs; [

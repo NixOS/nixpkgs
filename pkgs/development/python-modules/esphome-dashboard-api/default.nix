@@ -2,7 +2,10 @@
 , buildPythonPackage
 , fetchFromGitHub
 , setuptools
+<<<<<<< HEAD
 , wheel
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , aiohttp
 }:
 
@@ -18,6 +21,7 @@ buildPythonPackage rec {
     hash = "sha256-RFfS0xzRXoM6ETXmviiMPxffPzspjTqpkvHOlTJXN9g=";
   };
 
+<<<<<<< HEAD
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace "setuptools~=65.6" "setuptools" \
@@ -27,6 +31,10 @@ buildPythonPackage rec {
   nativeBuildInputs = [
     setuptools
     wheel
+=======
+  nativeBuildInputs = [
+    setuptools
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   propagatedBuildInputs = [

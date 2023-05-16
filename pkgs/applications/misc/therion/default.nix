@@ -30,13 +30,21 @@
 
 stdenv.mkDerivation rec {
   pname = "therion";
+<<<<<<< HEAD
   version = "6.1.8";
+=======
+  version = "6.1.7";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "therion";
     repo = "therion";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-bmp0IZ4uAqDpe2e8UeIDUdFaaocx4OBIYuhnaHirqGc=";
+=======
+    hash = "sha256-q+p1akGfzBeZejeYiJ8lrSbEIMTsX5YuIG/u35oh0JI=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

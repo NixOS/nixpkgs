@@ -17,7 +17,10 @@
 , gtest
 , doxygen
 , fixDarwinDylibNames
+<<<<<<< HEAD
 , useAVX2 ? stdenv.hostPlatform.avx2Support
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 stdenv.mkDerivation rec {
@@ -35,7 +38,11 @@ stdenv.mkDerivation rec {
   # unaccelerated routines.
   cmakeFlags = [
     "-DTILEDB_WERROR=0"
+<<<<<<< HEAD
   ] ++ lib.optional (!useAVX2) "-DCOMPILER_SUPPORTS_AVX2=FALSE";
+=======
+  ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nativeBuildInputs = [
     clang-tools

@@ -10,7 +10,10 @@
 , fftw
 , fmt_8
 , libsndfile
+<<<<<<< HEAD
 , libX11
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , rtmidi
 , SDL2
 , zlib
@@ -22,13 +25,18 @@
 
 stdenv.mkDerivation rec {
   pname = "furnace";
+<<<<<<< HEAD
   version = "0.6pre9";
+=======
+  version = "0.6pre4-hotfix";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "tildearrow";
     repo = "furnace";
     rev = "v${version}";
     fetchSubmodules = true;
+<<<<<<< HEAD
     sha256 = "sha256-i7/NN179Wyr1FqNlgryyFtishFr5EY1HI6BRQKby/6E=";
   };
 
@@ -39,6 +47,11 @@ stdenv.mkDerivation rec {
       --replace 'libX11.so' '${lib.getLib libX11}/lib/libX11.so'
   '';
 
+=======
+    sha256 = "sha256-lJtV/0GnWN5mSjv2LaPEMnkuThaNeijBMjLGFPOJX4k=";
+  };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nativeBuildInputs = [
     cmake
     pkg-config
@@ -105,7 +118,10 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Multi-system chiptune tracker compatible with DefleMask modules";
     homepage = "https://github.com/tildearrow/furnace";
+<<<<<<< HEAD
     changelog = "https://github.com/tildearrow/furnace/releases/tag/v${version}";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     license = with licenses; [ gpl2Plus ];
     maintainers = with maintainers; [ OPNA2608 ];
     platforms = platforms.all;

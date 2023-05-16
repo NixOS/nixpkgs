@@ -9,7 +9,11 @@
 
 buildPythonPackage rec {
   pname = "pycfmodel";
+<<<<<<< HEAD
   version = "0.20.3";
+=======
+  version = "0.20.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -18,7 +22,11 @@ buildPythonPackage rec {
     owner = "Skyscanner";
     repo = pname;
     rev = "refs/tags/${version}";
+<<<<<<< HEAD
     hash = "sha256-dHgd6vnmlg+VXMp7QUZoT2aic1X05lJGm8hDrowALvk=";
+=======
+    hash = "sha256-TumqpNaxH9YET56PhTXJVG/OQw3syXaYNtHn+Vyh6xI=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [

@@ -2,11 +2,19 @@
 
 stdenv.mkDerivation rec {
   pname = "iso-codes";
+<<<<<<< HEAD
   version = "4.15.0";
 
   src = fetchurl {
     url = "https://salsa.debian.org/iso-codes-team/iso-codes/-/archive/v${version}/${pname}-v${version}.tar.gz";
     sha256 = "sha256-uDtUudfdbrh3OAs+xG83CwXa8sv6ExxhLwNZjWVMDvg=";
+=======
+  version = "4.11.0";
+
+  src = fetchurl {
+    url = "https://salsa.debian.org/iso-codes-team/iso-codes/-/archive/v${version}/${pname}-v${version}.tar.gz";
+    sha256 = "sha256-QI95nfQTVGj6fKNetrBcQAS+pEPYHKWLibLkgkAagrs=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ gettext python3 ];

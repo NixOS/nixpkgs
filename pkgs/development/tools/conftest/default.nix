@@ -6,15 +6,25 @@
 
 buildGoModule rec {
   pname = "conftest";
+<<<<<<< HEAD
   version = "0.45.0";
+=======
+  version = "0.42.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "open-policy-agent";
     repo = "conftest";
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-e8aKjW1SCpmYcfiI1uH5tOjmQqS5kbhPEtRVR/FeWwA=";
   };
   vendorHash = "sha256-kSweCT/8boHb6Go18FBpLtbYI0unUU59QWLgQCrbpfs=";
+=======
+    hash = "sha256-G17ehJlWLiFgH7g4KBzr/MJfP27/F2ESPOEMsHdVh7s=";
+  };
+  vendorHash = "sha256-v+OElsOgA5yzs9zOEntpCHIzekmANWTyYjIbsfjzkwo=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   ldflags = [
     "-s"

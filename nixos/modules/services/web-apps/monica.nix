@@ -367,7 +367,11 @@ in {
     };
 
     systemd.services.monica-setup = {
+<<<<<<< HEAD
       description = "Preparation tasks for monica";
+=======
+      description = "Preperation tasks for monica";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       before = ["phpfpm-monica.service"];
       after = optional db.createLocally "mysql.service";
       wantedBy = ["multi-user.target"];

@@ -1,5 +1,9 @@
 { lib, fetchFromGitHub, python3Packages, intltool, glib, itstool, gtk3
+<<<<<<< HEAD
 , wrapGAppsHook, gobject-introspection, pango, gdk-pixbuf, atk, waf }:
+=======
+, wrapGAppsHook, gobject-introspection, pango, gdk-pixbuf, atk, wafHook }:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 python3Packages.buildPythonApplication rec {
   pname = "hamster";
@@ -19,7 +23,11 @@ python3Packages.buildPythonApplication rec {
     wrapGAppsHook
     intltool
     itstool
+<<<<<<< HEAD
     waf.hook
+=======
+    wafHook
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     glib
     gobject-introspection
   ];

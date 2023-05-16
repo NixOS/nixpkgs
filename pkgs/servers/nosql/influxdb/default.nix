@@ -1,10 +1,18 @@
+<<<<<<< HEAD
 { lib, buildGoModule, fetchFromGitHub, stdenv, pkg-config, rustPlatform, libiconv, fetchpatch, nixosTests }:
+=======
+{ lib, buildGoModule, fetchFromGitHub, stdenv, pkg-config, rustPlatform, llvmPackages, libiconv, fetchpatch, nixosTests }:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 let
   libflux_version = "0.170.1";
 
   # This is copied from influxdb2 with flux version matching the needed by thi
+<<<<<<< HEAD
   flux = rustPlatform.buildRustPackage rec {
+=======
+  flux = rustPlatform.buildRustPackage {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     pname = "libflux";
     version = "v${libflux_version}";
     src = fetchFromGitHub {
@@ -23,10 +31,18 @@ let
         sha256 = "sha256-Fb4CuH9ZvrPha249dmLLI8MqSNQRKqKPxPbw2pjqwfY=";
       })
     ];
+<<<<<<< HEAD
     sourceRoot = "${src.name}/libflux";
     cargoSha256 = "sha256-kYiZ5ZRiFHRf1RQeeUGjIhnEkTvhNSZ0t4tidpRIDyk=";
     nativeBuildInputs = [ rustPlatform.bindgenHook ];
     buildInputs = lib.optional stdenv.isDarwin libiconv;
+=======
+    sourceRoot = "source/libflux";
+    cargoSha256 = "sha256-kYiZ5ZRiFHRf1RQeeUGjIhnEkTvhNSZ0t4tidpRIDyk=";
+    nativeBuildInputs = [ llvmPackages.libclang ];
+    buildInputs = lib.optional stdenv.isDarwin libiconv;
+    LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     pkgcfg = ''
       Name: flux
       Version: ${libflux_version}
@@ -56,7 +72,11 @@ buildGoModule rec {
     sha256 = "sha256-BMHR9EdYC+8oA0he7emzBRmNnHn15nO/5NqsLcr+R0k=";
   };
 
+<<<<<<< HEAD
   vendorHash = "sha256-AY04cmfg7vbrWR4+LBuCFYqBgQJBXlPpO+2oj0qqjM4=";
+=======
+  vendorSha256 = "sha256-AY04cmfg7vbrWR4+LBuCFYqBgQJBXlPpO+2oj0qqjM4=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nativeBuildInputs = [ pkg-config ];
 

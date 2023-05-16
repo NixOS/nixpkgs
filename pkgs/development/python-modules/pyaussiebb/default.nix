@@ -11,7 +11,11 @@
 
 buildPythonPackage rec {
   pname = "pyaussiebb";
+<<<<<<< HEAD
   version = "0.0.18";
+=======
+  version = "0.0.16";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -20,7 +24,11 @@ buildPythonPackage rec {
     owner = "yaleman";
     repo = "aussiebb";
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-tEdddVsLFCHRvyLCctDakioiop2xWaJlfGE16P1ukHc=";
+=======
+    hash = "sha256-dbu26QFboqVaSFYlTXsOFA4yhXXNcB4QBCA8PZTphns=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

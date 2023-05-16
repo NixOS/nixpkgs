@@ -8,11 +8,16 @@ least specific (the system profile)"
 ;;; Extend `load-path' to search for elisp files in subdirectories of all folders in `NIX_PROFILES'.
 ;;; Non-Nix distros have similar logic in /usr/share/emacs/site-lisp/subdirs.el.
 ;;; See https://www.gnu.org/software/emacs/manual/html_node/elisp/Library-Search.html
+<<<<<<< HEAD
 (dolist (profile (reverse (nix--profile-paths)))
   ;; `directory-file-name' is important to add sub dirs to the right place of `load-path'
   ;; see the source code of `normal-top-level-add-to-load-path'
   (let ((default-directory (directory-file-name
                             (expand-file-name "share/emacs/site-lisp/" profile))))
+=======
+(dolist (profile (nix--profile-paths))
+  (let ((default-directory (expand-file-name "share/emacs/site-lisp/" profile)))
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     (when (file-exists-p default-directory)
       (setq load-path (cons default-directory load-path))
       (normal-top-level-add-subdirs-to-load-path))))
@@ -40,6 +45,7 @@ least specific (the system profile)"
                                 (mapconcat 'identity new-env-list ":"))))))
 
 ;;; Set up native-comp load path.
+<<<<<<< HEAD
 (when (featurep 'native-compile)
   ;; Append native-comp subdirectories from `NIX_PROFILES'.
   ;; Emacs writes asynchronous native-compilation files to the first writable directory[1].
@@ -53,6 +59,15 @@ least specific (the system profile)"
                           (concat profile-dir "/share/emacs/native-lisp/"))
                         (nix--profile-paths))
                 (cdr native-comp-eln-load-path))))
+=======
+(when (featurep 'comp)
+  ;; Append native-comp subdirectories from `NIX_PROFILES'.
+  (setq native-comp-eln-load-path
+        (append (mapcar (lambda (profile-dir)
+                          (concat profile-dir "/share/emacs/native-lisp/"))
+                        (nix--profile-paths))
+                native-comp-eln-load-path)))
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 ;;; Make `woman' find the man pages
 (defvar woman-manpath)
@@ -64,6 +79,7 @@ least specific (the system profile)"
 
 ;;; Make tramp work for remote NixOS machines
 (defvar tramp-remote-path)
+<<<<<<< HEAD
 (eval-after-load 'tramp
   ;; TODO: We should also add the other `NIX_PROFILES' to this path.
   ;; However, these are user-specific, so we would need to discover
@@ -71,6 +87,13 @@ least specific (the system profile)"
   '(progn
      (add-to-list 'tramp-remote-path "/run/current-system/sw/bin")
      (add-to-list 'tramp-remote-path "/run/wrappers/bin")))
+=======
+(eval-after-load 'tramp-sh
+  ;; TODO: We should also add the other `NIX_PROFILES' to this path.
+  ;; However, these are user-specific, so we would need to discover
+  ;; them dynamically after connecting via `tramp'
+  '(add-to-list 'tramp-remote-path "/run/current-system/sw/bin"))
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 ;;; C source directory
 ;;;

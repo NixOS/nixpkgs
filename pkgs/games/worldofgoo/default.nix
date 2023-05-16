@@ -70,6 +70,10 @@ stdenv.mkDerivation rec {
     homepage = "https://worldofgoo.com";
     license = licenses.unfree;
     platforms = [ "i686-linux" "x86_64-linux" ];
+<<<<<<< HEAD
     maintainers = with maintainers; [ jcumming amaxine ];
+=======
+    maintainers = with maintainers; [ jcumming maxeaubrey ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

@@ -1,11 +1,18 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+<<<<<<< HEAD
 , fetchpatch
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , pythonOlder
 , asn1crypto
 , cffi
 , cryptography
+<<<<<<< HEAD
+=======
+, ibm-sw-tpm2
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , pkgconfig # see nativeBuildInputs
 , pkg-config # see nativeBuildInputs
 , pycparser
@@ -14,8 +21,11 @@
 , pyyaml
 , setuptools-scm
 , tpm2-tss
+<<<<<<< HEAD
 , tpm2-tools
 , swtpm
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 buildPythonPackage rec {
@@ -30,6 +40,7 @@ buildPythonPackage rec {
     hash = "sha256-W1tLFFb9wa7vPSw5cL6qB4yPfyZIyXppvPYMWi+VyJc=";
   };
 
+<<<<<<< HEAD
   patches = [
     # This patches the call to the C preprocessor not to include types
     # pycparser does not handle.
@@ -71,6 +82,8 @@ buildPythonPackage rec {
     "fortify"
   ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nativeBuildInputs = [
     cffi
     pkgconfig # this is the Python module
@@ -89,12 +102,21 @@ buildPythonPackage rec {
     pyyaml
   ];
 
+<<<<<<< HEAD
   doCheck = true;
 
   nativeCheckInputs = [
     pytestCheckHook
     tpm2-tools
     swtpm
+=======
+  # https://github.com/tpm2-software/tpm2-pytss/issues/341
+  doCheck = false;
+
+  nativeCheckInputs = [
+    ibm-sw-tpm2
+    pytestCheckHook
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   pythonImportsCheck = [

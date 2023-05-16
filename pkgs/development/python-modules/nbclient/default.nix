@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 { async-generator
+=======
+{ async_generator
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , buildPythonPackage
 , fetchFromGitHub
 , hatchling
@@ -36,7 +40,11 @@ let nbclient = buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
+<<<<<<< HEAD
     async-generator
+=======
+    async_generator
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     traitlets
     nbformat
     nest-asyncio

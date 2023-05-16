@@ -3,6 +3,10 @@
 , fetchFromGitHub
 , makeWrapper
 , babashka
+<<<<<<< HEAD
+=======
+, jdk
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 stdenv.mkDerivation rec {
@@ -23,7 +27,11 @@ stdenv.mkDerivation rec {
   installPhase = ''
     install -D neil $out/bin/neil
     wrapProgram $out/bin/neil \
+<<<<<<< HEAD
       --prefix PATH : "${lib.makeBinPath [ babashka ]}"
+=======
+      --prefix PATH : "${lib.makeBinPath [ babashka jdk ]}"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '';
 
   meta = with lib; {

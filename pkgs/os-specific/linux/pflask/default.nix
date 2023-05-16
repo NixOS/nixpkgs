@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 { lib, stdenv, fetchFromGitHub, fetchpatch, python3, waf }:
+=======
+{ lib, stdenv, fetchFromGitHub, fetchpatch, python3, wafHook }:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 stdenv.mkDerivation rec {
   pname = "pflask";
@@ -21,7 +25,11 @@ stdenv.mkDerivation rec {
     })
   ];
 
+<<<<<<< HEAD
   nativeBuildInputs = [ python3 waf.hook ];
+=======
+  nativeBuildInputs = [ python3 wafHook ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   postInstall = ''
     mkdir -p $out/bin

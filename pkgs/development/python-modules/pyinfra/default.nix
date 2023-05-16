@@ -18,7 +18,11 @@
 
 buildPythonPackage rec {
   pname = "pyinfra";
+<<<<<<< HEAD
   version = "2.7";
+=======
+  version = "2.6.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -27,7 +31,11 @@ buildPythonPackage rec {
     owner = "Fizzadar";
     repo = pname;
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-drfxNpdhqSxCeB0SbwyKOd3DDA7bFkmDmFQJS3JwOlA=";
+=======
+    hash = "sha256-8eYbsPBMcRhFk5eouSAHEr3q/Llj0RqR76iwn/TrSSg=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [

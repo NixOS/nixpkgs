@@ -28,9 +28,12 @@ buildPythonPackage rec {
     hash = "sha256-7Ta0BhtQSm228vvUa5z+pzM3UC7+BskgBNjxsbEb9P0=";
   };
 
+<<<<<<< HEAD
   # https://github.com/bamthomas/aioimaplib/issues/54
   doCheck = pythonOlder "3.11";
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nativeCheckInputs = [
     asynctest
     docutils

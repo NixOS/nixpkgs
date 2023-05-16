@@ -123,6 +123,9 @@ stdenv.mkDerivation rec {
       maintainers = with maintainers; [ qknight xfix thiagokokada ];
       platforms = platforms.unix;
       broken = (withGtk && stdenv.isDarwin);
+<<<<<<< HEAD
       mainProgram = "snes9x";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
 }

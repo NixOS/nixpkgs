@@ -11,7 +11,11 @@ buildGoModule rec {
     sha256 = "sha256-Wot+E+rDgXQ4FVgdfqe6a3O9oYUK3X1xImC33eDuUBo=";
   };
 
+<<<<<<< HEAD
   vendorHash = "sha256-DphGe9jbKo1aIfpF5kRYNSn/uIYHaRMrygda5t46svw=";
+=======
+  vendorSha256 = "sha256-DphGe9jbKo1aIfpF5kRYNSn/uIYHaRMrygda5t46svw=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   postPatch = ''
     for f in command.go command_test.go; do
@@ -25,6 +29,9 @@ buildGoModule rec {
     homepage = "https://gitlab.com/shackra/goimapnotify";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ wohanley ];
+<<<<<<< HEAD
     mainProgram = "goimapnotify";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

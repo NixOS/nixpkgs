@@ -386,7 +386,11 @@ let
     '';
 
     meta = with pkgs.lib.maintainers; {
+<<<<<<< HEAD
       maintainers = [ aszlig ];
+=======
+      maintainers = [ aszlig cdepillabout ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
   };
 
@@ -519,4 +523,8 @@ in mapAttrs (mkVBoxTest false vboxVMs) {
     destroy_vm_test1()
     destroy_vm_test2()
   '';
+<<<<<<< HEAD
 } // (optionalAttrs enableUnfree unfreeTests)
+=======
+} // (if enableUnfree then unfreeTests else {})
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)

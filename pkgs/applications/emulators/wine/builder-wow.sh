@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 ## build described at https://wiki.winehq.org/Building_Wine#Shared_WoW64
+=======
+## build described at http://wiki.winehq.org/Wine64
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 source $stdenv/setup
 preFlags="${configureFlags}"
@@ -17,6 +21,7 @@ configurePhase
 buildPhase
 # checkPhase
 
+<<<<<<< HEAD
 # Remove 64 bit gstreamer from PKG_CONFIG_PATH
 IFS=":" read -ra LIST_ARRAY <<< "$PKG_CONFIG_PATH"
 IFS=":" read -ra REMOVE_ARRAY <<< "@pkgconfig64remove@"
@@ -37,6 +42,8 @@ for ELEMENT in "${LIST_ARRAY[@]}"; do
 done
 PKG_CONFIG_PATH=$(IFS=":"; echo "${NEW_LIST_ARRAY[*]}")
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 cd $TMP/wine-wow
 sourceRoot=`pwd`
 configureFlags="${preFlags} --with-wine64=../wine64"
@@ -45,7 +52,12 @@ buildPhase
 # checkPhase
 
 eval "$preInstall"
+<<<<<<< HEAD
 cd $TMP/wine-wow && make install -j$NIX_BUILD_CORES
 cd $TMP/wine64 && make install -j$NIX_BUILD_CORES
+=======
+cd $TMP/wine-wow && make install
+cd $TMP/wine64 && make install
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 eval "$postInstall"
 fixupPhase

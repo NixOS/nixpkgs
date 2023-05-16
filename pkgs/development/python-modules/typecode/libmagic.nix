@@ -16,7 +16,11 @@ buildPythonPackage rec {
     sha256 = "xnUGDMS34iMVMGo/nZwRarGzzbj3X4Rt+YHvvKpmy6A=";
   };
 
+<<<<<<< HEAD
   sourceRoot = "${src.name}/builtins/typecode_libmagic-linux";
+=======
+  sourceRoot = "source/builtins/typecode_libmagic-linux";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   propagatedBuildInputs = [
     plugincode

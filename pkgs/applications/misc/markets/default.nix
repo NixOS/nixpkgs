@@ -17,10 +17,17 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     desktop-file-utils glib gtk3 meson ninja pkg-config python3 vala
+<<<<<<< HEAD
     wrapGAppsHook gobject-introspection
   ];
   buildInputs = [
     glib glib-networking gtk3 json-glib libgee libhandy
+=======
+    wrapGAppsHook
+  ];
+  buildInputs = [
+    glib glib-networking gobject-introspection gtk3 json-glib libgee libhandy
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     libsoup
   ];
 

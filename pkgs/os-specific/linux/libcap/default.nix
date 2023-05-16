@@ -1,6 +1,7 @@
 { stdenv, lib, buildPackages, fetchurl, attr, runtimeShell
 , usePam ? !isStatic, pam ? null
 , isStatic ? stdenv.hostPlatform.isStatic
+<<<<<<< HEAD
 
 # passthru.tests
 , bind
@@ -13,17 +14,27 @@
 , squid
 , tor
 , uwsgi
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 assert usePam -> pam != null;
 
 stdenv.mkDerivation rec {
   pname = "libcap";
+<<<<<<< HEAD
   version = "2.69";
 
   src = fetchurl {
     url = "mirror://kernel/linux/libs/security/linux-privs/libcap2/${pname}-${version}.tar.xz";
     sha256 = "sha256-8xH489rYRpnQVm0db37JQ6kpiyj3FMrjyTHf1XSS1+s=";
+=======
+  version = "2.68";
+
+  src = fetchurl {
+    url = "mirror://kernel/linux/libs/security/linux-privs/libcap2/${pname}-${version}.tar.xz";
+    sha256 = "sha256-kL47bUG+X4GuSwPsdgErDSfIKSk2hPbAW2XV+cznJLI=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   outputs = [ "out" "dev" "lib" "man" "doc" ]
@@ -69,6 +80,7 @@ stdenv.mkDerivation rec {
     mv "$lib"/lib/security "$pam/lib"
   '';
 
+<<<<<<< HEAD
   passthru.tests = {
     inherit
       bind
@@ -83,6 +95,8 @@ stdenv.mkDerivation rec {
       uwsgi;
   };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   meta = {
     description = "Library for working with POSIX capabilities";
     homepage = "https://sites.google.com/site/fullycapable";

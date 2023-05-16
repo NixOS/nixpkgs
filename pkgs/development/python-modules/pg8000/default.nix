@@ -7,7 +7,10 @@
 , pythonOlder
 , scramp
 , setuptools
+<<<<<<< HEAD
 , versioningit
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 buildPythonPackage rec {
@@ -24,7 +27,10 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     setuptools
+<<<<<<< HEAD
     versioningit
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   propagatedBuildInputs = [
@@ -35,6 +41,13 @@ buildPythonPackage rec {
     importlib-metadata
   ];
 
+<<<<<<< HEAD
+=======
+  postPatch = ''
+    sed '/^\[metadata\]/a version = ${version}' setup.cfg
+  '';
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   # Tests require a running PostgreSQL instance
   doCheck = false;
 

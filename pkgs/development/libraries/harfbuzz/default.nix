@@ -34,11 +34,19 @@
 
 stdenv.mkDerivation rec {
   pname = "harfbuzz${lib.optionalString withIcu "-icu"}";
+<<<<<<< HEAD
   version = "7.3.0";
 
   src = fetchurl {
     url = "https://github.com/harfbuzz/harfbuzz/releases/download/${version}/harfbuzz-${version}.tar.xz";
     hash = "sha256-IHcHiXSaybqEbfM5g9vaItuDbHDZ9dBQy5qlNHCUqPs=";
+=======
+  version = "7.2.0";
+
+  src = fetchurl {
+    url = "https://github.com/harfbuzz/harfbuzz/releases/download/${version}/harfbuzz-${version}.tar.xz";
+    hash = "sha256-/FVgyAfq4O/V+VtapMZYAMeo7tZkIAimsefj//94c8w=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   postPatch = ''

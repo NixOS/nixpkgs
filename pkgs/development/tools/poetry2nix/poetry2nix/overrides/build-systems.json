@@ -1077,9 +1077,12 @@
   "astunparse": [
     "setuptools"
   ],
+<<<<<<< HEAD
   "asv": [
     "setuptools"
   ],
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   "async-cache": [
     "setuptools"
   ],
@@ -1196,6 +1199,7 @@
     "setuptools"
   ],
   "attrs": [
+<<<<<<< HEAD
     {
       "buildSystem": "setuptools",
       "until": "23.1.0"
@@ -1212,6 +1216,9 @@
       "buildSystem": "hatch-fancy-pypi-readme",
       "from": "23.1.0"
     }
+=======
+    "setuptools"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ],
   "aubio": [
     "setuptools"
@@ -1267,7 +1274,10 @@
     "setuptools"
   ],
   "autoflake": [
+<<<<<<< HEAD
     "setuptools",
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "hatchling"
   ],
   "autograd": [
@@ -1311,9 +1321,12 @@
   "avro3k": [
     "setuptools"
   ],
+<<<<<<< HEAD
   "awacs": [
     "setuptools"
   ],
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   "awesome-slugify": [
     "setuptools"
   ],
@@ -1988,9 +2001,12 @@
   "baron": [
     "setuptools"
   ],
+<<<<<<< HEAD
   "base32-crockford": [
     "setuptools"
   ],
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   "base36": [
     "setuptools"
   ],
@@ -2056,9 +2072,12 @@
   "bcrypt": [
     "setuptools"
   ],
+<<<<<<< HEAD
   "beaker": [
     "setuptools"
   ],
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   "beancount": [
     "setuptools"
   ],
@@ -2073,7 +2092,10 @@
     "setuptools"
   ],
   "beautifulsoup4": [
+<<<<<<< HEAD
     "hatchling",
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "setuptools"
   ],
   "beautifultable": [
@@ -2184,9 +2206,12 @@
   "bitmath": [
     "setuptools"
   ],
+<<<<<<< HEAD
   "bitsandbytes": [
     "setuptools"
   ],
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   "bitstring": [
     "setuptools"
   ],
@@ -2505,6 +2530,7 @@
     "setuptools"
   ],
   "build": [
+<<<<<<< HEAD
     {
       "buildSystem": "setuptools",
       "until": "0.10.0"
@@ -2513,6 +2539,10 @@
       "buildSystem": "flit-core",
       "from": "0.10.0"
     }
+=======
+    "flit-core",
+    "setuptools"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ],
   "buildbot": [
     "setuptools"
@@ -2773,9 +2803,12 @@
   "cfn-lint": [
     "setuptools"
   ],
+<<<<<<< HEAD
   "cfnresponse": [
     "setuptools"
   ],
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   "cfscrape": [
     "setuptools"
   ],
@@ -3061,9 +3094,12 @@
     "poetry-core",
     "setuptools"
   ],
+<<<<<<< HEAD
   "cloudinary": [
     "setuptools"
   ],
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   "cloudpickle": [
     "setuptools"
   ],
@@ -3292,9 +3328,12 @@
   "confluent-kafka": [
     "setuptools"
   ],
+<<<<<<< HEAD
   "confusable-homoglyphs": [
     "setuptools"
   ],
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   "confuse": [
     "flit-core",
     "flitBuildHook",
@@ -3366,18 +3405,24 @@
     "poetry-core",
     "poetry-dynamic-versioning"
   ],
+<<<<<<< HEAD
   "copier-template-tester": [
     "poetry-core"
   ],
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   "coqpit": [
     "setuptools"
   ],
   "coqui-trainer": [
     "setuptools"
   ],
+<<<<<<< HEAD
   "corallium": [
     "poetry-core"
   ],
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   "coreapi": [
     "setuptools"
   ],
@@ -3511,9 +3556,12 @@
   "css-parser": [
     "setuptools"
   ],
+<<<<<<< HEAD
   "cssbeautifier": [
     "setuptools"
   ],
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   "csscompressor": [
     "setuptools"
   ],
@@ -3554,9 +3602,12 @@
   "curve25519-donna": [
     "setuptools"
   ],
+<<<<<<< HEAD
   "customerio": [
     "setuptools"
   ],
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   "cvxopt": [
     "setuptools"
   ],
@@ -3602,9 +3653,12 @@
   "cysimdjson": [
     "cython"
   ],
+<<<<<<< HEAD
   "cysystemd": [
     "setuptools"
   ],
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   "cython": [
     "setuptools"
   ],
@@ -3658,11 +3712,15 @@
     "setuptools"
   ],
   "dask": [
+<<<<<<< HEAD
     "setuptools",
     {
       "buildSystem": "versioneer",
       "from": "2.0.0"
     }
+=======
+    "setuptools"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ],
   "dask-gateway": [
     "setuptools"
@@ -4146,11 +4204,15 @@
     "setuptools"
   ],
   "distributed": [
+<<<<<<< HEAD
     "setuptools",
     {
       "buildSystem": "versioneer",
       "from": "2.0.0"
     }
+=======
+    "setuptools"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ],
   "distro": [
     "setuptools"
@@ -4198,9 +4260,12 @@
     "setuptools",
     "setuptools-scm"
   ],
+<<<<<<< HEAD
   "django-bootstrap-form": [
     "setuptools"
   ],
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   "django-cache-memoize": [
     "setuptools"
   ],
@@ -4377,10 +4442,13 @@
   "django-pglocks": [
     "setuptools"
   ],
+<<<<<<< HEAD
   "django-phonenumber-field": [
     "setuptools",
     "setuptools-scm"
   ],
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   "django-picklefield": [
     "setuptools"
   ],
@@ -4406,9 +4474,12 @@
   "django-redis": [
     "setuptools"
   ],
+<<<<<<< HEAD
   "django-registration": [
     "setuptools"
   ],
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   "django-rest-auth": [
     "setuptools"
   ],
@@ -4518,9 +4589,12 @@
   "djangorestframework-types": [
     "poetry"
   ],
+<<<<<<< HEAD
   "djlint": [
     "poetry"
   ],
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   "djmail": [
     "setuptools"
   ],
@@ -4620,9 +4694,12 @@
   "docrep": [
     "setuptools"
   ],
+<<<<<<< HEAD
   "docstr-coverage": [
     "setuptools"
   ],
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   "docstring-parser": [
     "poetry-core",
     "setuptools"
@@ -5188,9 +5265,12 @@
   "exifread": [
     "setuptools"
   ],
+<<<<<<< HEAD
   "expandvars": [
     "setuptools"
   ],
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   "expects": [
     "setuptools"
   ],
@@ -5242,9 +5322,12 @@
   "fabric2": [
     "setuptools"
   ],
+<<<<<<< HEAD
   "fabric3": [
     "setuptools"
   ],
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   "fabulous": [
     "setuptools"
   ],
@@ -5283,9 +5366,12 @@
     "cython",
     "setuptools"
   ],
+<<<<<<< HEAD
   "fancycompleter": [
     "setuptools"
   ],
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   "faraday-agent-parameters-types": [
     "setuptools"
   ],
@@ -5402,9 +5488,12 @@
   "ffmpeg-python": [
     "setuptools"
   ],
+<<<<<<< HEAD
   "ffmpy": [
     "setuptools"
   ],
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   "fhconfparser": [
     "poetry-core"
   ],
@@ -5529,6 +5618,7 @@
   "flake8-bugbear": [
     "setuptools"
   ],
+<<<<<<< HEAD
   "flake8-builtins": [
     "setuptools"
   ],
@@ -5541,10 +5631,13 @@
   "flake8-comprehensions": [
     "setuptools"
   ],
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   "flake8-debugger": [
     "poetry-core",
     "setuptools"
   ],
+<<<<<<< HEAD
   "flake8-deprecated": [
     "setuptools"
   ],
@@ -5554,6 +5647,11 @@
   "flake8-ensure-ascii": [
     "setuptools"
   ],
+=======
+  "flake8-docstrings": [
+    "setuptools"
+  ],
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   "flake8-future-import": [
     "setuptools"
   ],
@@ -5563,6 +5661,7 @@
   "flake8-length": [
     "setuptools"
   ],
+<<<<<<< HEAD
   "flake8-mock": [
     "setuptools"
   ],
@@ -5578,6 +5677,11 @@
   "flake8-plone-hasattr": [
     "setuptools"
   ],
+=======
+  "flake8-noqa": [
+    "setuptools"
+  ],
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   "flake8-plugin-utils": [
     "poetry"
   ],
@@ -5593,6 +5697,7 @@
   "flake8-pytest-style": [
     "poetry-core"
   ],
+<<<<<<< HEAD
   "flake8-quotes": [
     "setuptools"
   ],
@@ -5611,6 +5716,11 @@
   "flake8-tuple": [
     "setuptools"
   ],
+=======
+  "flake8-simplify": [
+    "setuptools"
+  ],
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   "flaky": [
     "setuptools"
   ],
@@ -5800,6 +5910,7 @@
   "fleep": [
     "setuptools"
   ],
+<<<<<<< HEAD
   "flet": [
     "poetry-core"
   ],
@@ -5807,6 +5918,8 @@
     "poetry-core",
     "setuptools"
   ],
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   "flexmock": [
     "setuptools"
   ],
@@ -5818,7 +5931,15 @@
     "setuptools"
   ],
   "flit": [
+<<<<<<< HEAD
     "flit-core"
+=======
+    "flit-core",
+    "setuptools"
+  ],
+  "flit-core": [
+    "setuptools"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ],
   "flit-scm": [
     "flit-core",
@@ -5919,6 +6040,12 @@
   "foundationdb61": [
     "setuptools"
   ],
+<<<<<<< HEAD
+=======
+  "foundationdb71": [
+    "setuptools"
+  ],
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   "fountains": [
     "setuptools"
   ],
@@ -6140,9 +6267,12 @@
     "cython",
     "setuptools"
   ],
+<<<<<<< HEAD
   "genson": [
     "setuptools"
   ],
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   "gentools": [
     "setuptools"
   ],
@@ -6269,9 +6399,12 @@
   "git-annex-adapter": [
     "setuptools"
   ],
+<<<<<<< HEAD
   "git-autoshare": [
     "setuptools-scm"
   ],
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   "git-filter-repo": [
     "setuptools",
     "setuptools-scm"
@@ -6732,9 +6865,12 @@
   "grpcio-gcp": [
     "setuptools"
   ],
+<<<<<<< HEAD
   "grpcio-reflection": [
     "setuptools"
   ],
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   "grpcio-status": [
     "setuptools"
   ],
@@ -6870,9 +7006,12 @@
   "hammett": [
     "setuptools"
   ],
+<<<<<<< HEAD
   "hammock": [
     "setuptools"
   ],
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   "handout": [
     "setuptools"
   ],
@@ -7075,12 +7214,15 @@
   "html-sanitizer": [
     "setuptools"
   ],
+<<<<<<< HEAD
   "html-tag-names": [
     "poetry"
   ],
   "html-void-elements": [
     "poetry"
   ],
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   "html2text": [
     "setuptools"
   ],
@@ -7372,9 +7514,12 @@
   "igraph": [
     "setuptools"
   ],
+<<<<<<< HEAD
   "ihatemoney": [
     "setuptools"
   ],
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   "ijson": [
     "setuptools"
   ],
@@ -7538,11 +7683,17 @@
   "insegel": [
     "setuptools"
   ],
+<<<<<<< HEAD
   "insights-core": [
     "setuptools"
   ],
   "installer": [
     "flit-core"
+=======
+  "installer": [
+    "flit-core",
+    "setuptools"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ],
   "insteon-frontend-home-assistant": [
     "setuptools"
@@ -7622,9 +7773,12 @@
     "flitBuildHook",
     "setuptools"
   ],
+<<<<<<< HEAD
   "ipwhois": [
     "setuptools"
   ],
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   "ipy": [
     "setuptools"
   ],
@@ -7991,6 +8145,7 @@
     "setuptools"
   ],
   "jsonref": [
+<<<<<<< HEAD
     {
       "buildSystem": "setuptools",
       "until": "0.3.0"
@@ -8004,6 +8159,9 @@
       "buildSystem": "pdm-pep517",
       "from": "1.1.0"
     }
+=======
+    "setuptools"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ],
   "jsonrpc-async": [
     "setuptools"
@@ -8165,6 +8323,7 @@
     "setuptools"
   ],
   "jupyterlab": [
+<<<<<<< HEAD
     {
       "buildSystem": "jupyter-packaging",
       "until": "4"
@@ -8181,6 +8340,10 @@
       "buildSystem": "hatch-jupyter-builder",
       "from": "4"
     }
+=======
+    "jupyter-packaging",
+    "setuptools"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ],
   "jupyterlab-code-formatter": [
     "jupyter-packaging"
@@ -8387,10 +8550,13 @@
   "konnected": [
     "setuptools"
   ],
+<<<<<<< HEAD
   "kopf": [
     "setuptools",
     "setuptools-scm"
   ],
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   "korean-lunar-calendar": [
     "setuptools"
   ],
@@ -8704,9 +8870,12 @@
   "liquidctl": [
     "setuptools"
   ],
+<<<<<<< HEAD
   "lit": [
     "setuptools"
   ],
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   "littleutils": [
     "setuptools"
   ],
@@ -8725,10 +8894,13 @@
   "lizard": [
     "setuptools"
   ],
+<<<<<<< HEAD
   "llama-cpp-python": [
     "setuptools",
     "scikit-build"
   ],
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   "llfuse": [
     "cython",
     "setuptools"
@@ -8876,9 +9048,12 @@
     "cython",
     "setuptools"
   ],
+<<<<<<< HEAD
   "lxml-stubs": [
     "setuptools"
   ],
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   "lyricwikia": [
     "setuptools"
   ],
@@ -9098,9 +9273,12 @@
   "maxminddb": [
     "setuptools"
   ],
+<<<<<<< HEAD
   "maxminddb-geolite2": [
     "setuptools"
   ],
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   "maya": [
     "setuptools"
   ],
@@ -9347,9 +9525,12 @@
   "mixer": [
     "setuptools"
   ],
+<<<<<<< HEAD
   "mixpanel": [
     "setuptools"
   ],
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   "mizani": [
     "setuptools"
   ],
@@ -9365,18 +9546,24 @@
     "poetry",
     "setuptools"
   ],
+<<<<<<< HEAD
   "mkdocs-awesome-pages-plugin": [
     "poetry"
   ],
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   "mkdocs-drawio-exporter": [
     "setuptools"
   ],
   "mkdocs-exclude": [
     "setuptools"
   ],
+<<<<<<< HEAD
   "mkdocs-exclude-search": [
     "setuptools"
   ],
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   "mkdocs-gen-files": [
     "poetry"
   ],
@@ -9773,18 +9960,24 @@
   "mypy-boto3-dynamodb": [
     "setuptools"
   ],
+<<<<<<< HEAD
   "mypy-boto3-ec2": [
     "setuptools"
   ],
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   "mypy-boto3-events": [
     "setuptools"
   ],
   "mypy-boto3-lambda": [
     "setuptools"
   ],
+<<<<<<< HEAD
   "mypy-boto3-logs": [
     "setuptools"
   ],
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   "mypy-boto3-rds": [
     "setuptools"
   ],
@@ -9794,9 +9987,12 @@
   "mypy-boto3-s3control": [
     "setuptools"
   ],
+<<<<<<< HEAD
   "mypy-boto3-secretsmanager": [
     "setuptools"
   ],
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   "mypy-boto3-sns": [
     "setuptools"
   ],
@@ -10055,9 +10251,12 @@
   "networkx": [
     "setuptools"
   ],
+<<<<<<< HEAD
   "newrelic": [
     "setuptools"
   ],
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   "newversion": [
     "poetry-core",
     "setuptools"
@@ -10262,9 +10461,12 @@
   "nplusone": [
     "setuptools"
   ],
+<<<<<<< HEAD
   "npm": [
     "setuptools"
   ],
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   "npyscreen": [
     "setuptools"
   ],
@@ -10722,9 +10924,12 @@
   "option": [
     "poetry-core"
   ],
+<<<<<<< HEAD
   "optional-django": [
     "setuptools"
   ],
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   "opuslib": [
     "setuptools"
   ],
@@ -10835,9 +11040,12 @@
   "overly": [
     "setuptools"
   ],
+<<<<<<< HEAD
   "overrides": [
     "setuptools"
   ],
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   "ovh": [
     "setuptools"
   ],
@@ -10864,6 +11072,7 @@
     "setuptools"
   ],
   "packaging": [
+<<<<<<< HEAD
     {
       "buildSystem": "setuptools",
       "until": "20.4"
@@ -10882,6 +11091,10 @@
       "buildSystem": "flit-core",
       "from": "22.0"
     }
+=======
+    "flit-core",
+    "setuptools"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ],
   "packbits": [
     "setuptools"
@@ -10934,11 +11147,15 @@
   ],
   "pandas": [
     "cython",
+<<<<<<< HEAD
     "setuptools",
     {
       "buildSystem": "versioneer",
       "from": "2.0.0"
     }
+=======
+    "setuptools"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ],
   "pandas-datareader": [
     "setuptools"
@@ -10962,9 +11179,12 @@
   "panflute": [
     "setuptools"
   ],
+<<<<<<< HEAD
   "pao": [
     "setuptools"
   ],
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   "papermill": [
     "setuptools"
   ],
@@ -11154,10 +11374,13 @@
   "pdb2pqr": [
     "setuptools"
   ],
+<<<<<<< HEAD
   "pdbpp": [
     "setuptools",
     "setuptools-scm"
   ],
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   "pdbtools": [
     "setuptools"
   ],
@@ -11218,6 +11441,7 @@
     "setuptools",
     "setuptools-scm"
   ],
+<<<<<<< HEAD
   "peft": [
     "setuptools"
   ],
@@ -11227,6 +11451,11 @@
   "pem": [
     "setuptools"
   ],
+=======
+  "pelican": [
+    "setuptools"
+  ],
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   "pencompy": [
     "setuptools"
   ],
@@ -11412,10 +11641,13 @@
   "pip-api": [
     "setuptools"
   ],
+<<<<<<< HEAD
   "pip-licenses": [
     "setuptools",
     "pytest-runner"
   ],
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   "pip-requirements-parser": [
     "setuptools",
     "setuptools-scm"
@@ -12034,10 +12266,13 @@
   "py-cid": [
     "setuptools"
   ],
+<<<<<<< HEAD
   "py-cord": [
     "setuptools",
     "setuptools-scm"
   ],
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   "py-cpuinfo": [
     "setuptools"
   ],
@@ -12081,9 +12316,12 @@
   "py-nightscout": [
     "setuptools"
   ],
+<<<<<<< HEAD
   "py-partiql-parser": [
     "setuptools"
   ],
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   "py-scrypt": [
     "setuptools"
   ],
@@ -12159,9 +12397,12 @@
     "poetry-core",
     "setuptools"
   ],
+<<<<<<< HEAD
   "pyairtable": [
     "setuptools"
   ],
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   "pyairvisual": [
     "poetry-core",
     "setuptools"
@@ -12979,9 +13220,12 @@
   "pykrakenapi": [
     "setuptools"
   ],
+<<<<<<< HEAD
   "pykube-ng": [
     "setuptools"
   ],
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   "pykulersky": [
     "setuptools"
   ],
@@ -13056,8 +13300,12 @@
     "setuptools"
   ],
   "pylint-plugin-utils": [
+<<<<<<< HEAD
     "setuptools",
     "poetry"
+=======
+    "setuptools"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ],
   "pylint-venv": [
     "poetry-core"
@@ -13123,9 +13371,12 @@
   "pymanopt": [
     "setuptools"
   ],
+<<<<<<< HEAD
   "pymarkdown": [
     "setuptools"
   ],
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   "pymarshal": [
     "setuptools"
   ],
@@ -13435,9 +13686,12 @@
   "pypck": [
     "setuptools"
   ],
+<<<<<<< HEAD
   "pypdf": [
     "flit"
   ],
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   "pypdf2": [
     "setuptools"
   ],
@@ -13608,6 +13862,7 @@
   "pyramid-chameleon": [
     "setuptools"
   ],
+<<<<<<< HEAD
   "pyramid-deferred-sqla": [
     "setuptools"
   ],
@@ -13635,12 +13890,27 @@
   "pyramid-mixpanel": [
     "setuptools"
   ],
+=======
+  "pyramid-exclog": [
+    "setuptools"
+  ],
+  "pyramid-hawkauth": [
+    "setuptools"
+  ],
+  "pyramid-jinja2": [
+    "setuptools"
+  ],
+  "pyramid-mako": [
+    "setuptools"
+  ],
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   "pyramid-multiauth": [
     "setuptools"
   ],
   "pyramid-openapi3": [
     "poetry"
   ],
+<<<<<<< HEAD
   "pyramid-redirect": [
     "setuptools"
   ],
@@ -13656,6 +13926,8 @@
   "pyramid-tm": [
     "setuptools"
   ],
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   "pyreadability": [
     "setuptools"
   ],
@@ -14123,8 +14395,12 @@
     "setuptools-scm"
   ],
   "pytest-bdd": [
+<<<<<<< HEAD
     "setuptools",
     "poetry-core"
+=======
+    "setuptools"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ],
   "pytest-benchmark": [
     "setuptools"
@@ -14373,9 +14649,12 @@
   "pytest-shutil": [
     "setuptools"
   ],
+<<<<<<< HEAD
   "pytest-skip-slow": [
     "setuptools"
   ],
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   "pytest-snapshot": [
     "setuptools",
     "setuptools-scm"
@@ -14384,12 +14663,15 @@
     "poetry-core",
     "setuptools"
   ],
+<<<<<<< HEAD
   "pytest-splinter": [
     "setuptools"
   ],
   "pytest-splinter4": [
     "setuptools"
   ],
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   "pytest-subprocess": [
     "setuptools"
   ],
@@ -14678,9 +14960,12 @@
     "pbr",
     "setuptools"
   ],
+<<<<<<< HEAD
   "python-language-server": [
     "setuptools"
   ],
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   "python-ldap": [
     "setuptools"
   ],
@@ -14840,6 +15125,12 @@
   "python-ptrace": [
     "setuptools"
   ],
+<<<<<<< HEAD
+=======
+  "python-pushover": [
+    "setuptools"
+  ],
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   "python-rabbitair": [
     "setuptools"
   ],
@@ -15003,9 +15294,12 @@
   "pythonnet": [
     "setuptools"
   ],
+<<<<<<< HEAD
   "pythonping": [
     "setuptools"
   ],
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   "pythran": [
     "setuptools"
   ],
@@ -15525,6 +15819,7 @@
   "rcssmin": [
     "setuptools"
   ],
+<<<<<<< HEAD
   "rdbms-subsetter": [
     "setuptools"
   ],
@@ -15537,6 +15832,10 @@
       "buildSystem": "poetry",
       "from": "6.3.0"
     }
+=======
+  "rdflib": [
+    "setuptools"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ],
   "rdkit": [
     "setuptools"
@@ -15642,9 +15941,12 @@
   "reparser": [
     "setuptools"
   ],
+<<<<<<< HEAD
   "repath": [
     "setuptools"
   ],
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   "repeated-test": [
     "setuptools-scm"
   ],
@@ -15759,9 +16061,12 @@
   "respx": [
     "setuptools"
   ],
+<<<<<<< HEAD
   "resteasy": [
     "setuptools"
   ],
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   "restfly": [
     "setuptools"
   ],
@@ -15828,9 +16133,12 @@
     "poetry-core",
     "setuptools"
   ],
+<<<<<<< HEAD
   "rich-argparse-plus": [
     "flit"
   ],
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   "rich-rst": [
     "setuptools"
   ],
@@ -16723,9 +17031,12 @@
   "skytemple-ssb-debugger": [
     "setuptools"
   ],
+<<<<<<< HEAD
   "slack-bolt": [
     "setuptools"
   ],
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   "slack-sdk": [
     "setuptools"
   ],
@@ -16893,9 +17204,12 @@
   "sonarr": [
     "setuptools"
   ],
+<<<<<<< HEAD
   "sonora": [
     "poetry-core"
   ],
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   "sopel": [
     "setuptools"
   ],
@@ -16980,7 +17294,10 @@
   ],
   "sphinx": [
     "cython",
+<<<<<<< HEAD
     "flit-core",
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "setuptools"
   ],
   "sphinx-argparse": [
@@ -17243,6 +17560,7 @@
     "setuptools"
   ],
   "sqlparse": [
+<<<<<<< HEAD
     {
       "buildSystem": "setuptools",
       "until": "0.4.4"
@@ -17251,6 +17569,9 @@
       "buildSystem": "flit-core",
       "from": "0.4.4"
     }
+=======
+    "setuptools"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ],
   "srp": [
     "setuptools"
@@ -17345,9 +17666,12 @@
     "cython",
     "setuptools"
   ],
+<<<<<<< HEAD
   "statuscake": [
     "setuptools"
   ],
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   "stdiomask": [
     "setuptools"
   ],
@@ -17488,9 +17812,12 @@
   "subzerod": [
     "setuptools"
   ],
+<<<<<<< HEAD
   "suds-community": [
     "setuptools"
   ],
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   "sumo": [
     "cython",
     "setuptools"
@@ -17614,10 +17941,13 @@
   "tabview": [
     "setuptools"
   ],
+<<<<<<< HEAD
   "tacacs-plus": [
     "setuptools",
     "pytest-runner"
   ],
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   "tadasets": [
     "setuptools"
   ],
@@ -17638,6 +17968,7 @@
     "setuptools"
   ],
   "tan": [
+<<<<<<< HEAD
     {
       "buildSystem": "setuptools",
       "until": "22.12.0"
@@ -17658,6 +17989,9 @@
       "buildSystem": "hatch-fancy-pypi-readme",
       "from": "22.12.0"
     }
+=======
+    "setuptools"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ],
   "tank-utility": [
     "setuptools"
@@ -18040,9 +18374,12 @@
     "setuptools",
     "setuptools-scm"
   ],
+<<<<<<< HEAD
   "tkcalendar": [
     "setuptools"
   ],
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   "tkinter": [
     "setuptools"
   ],
@@ -18101,6 +18438,7 @@
   "toml-sort": [
     "poetry"
   ],
+<<<<<<< HEAD
   "tomlcheck": [
     "poetry"
   ],
@@ -18113,6 +18451,11 @@
       "buildSystem": "flit-core",
       "from": "1.0.2"
     }
+=======
+  "tomli": [
+    "flit-core",
+    "setuptools"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ],
   "tomli-w": [
     "flit-core",
@@ -18143,9 +18486,12 @@
   "torchaudio-bin": [
     "setuptools"
   ],
+<<<<<<< HEAD
   "torchfile": [
     "setuptools"
   ],
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   "torchgpipe": [
     "setuptools"
   ],
@@ -18452,9 +18798,12 @@
   "typecode-libmagic": [
     "setuptools"
   ],
+<<<<<<< HEAD
   "typecov": [
     "setuptools"
   ],
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   "typed-argument-parser": [
     "setuptools"
   ],
@@ -18586,9 +18935,12 @@
   "types-pygments": [
     "setuptools"
   ],
+<<<<<<< HEAD
   "types-pyopenssl": [
     "setuptools"
   ],
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   "types-python-dateutil": [
     "setuptools"
   ],
@@ -18862,7 +19214,11 @@
     "setuptools"
   ],
   "url-normalize": [
+<<<<<<< HEAD
     "poetry",
+=======
+    "poetry-core",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "setuptools"
   ],
   "urlextract": [
@@ -18872,6 +19228,7 @@
     "setuptools"
   ],
   "urllib3": [
+<<<<<<< HEAD
     {
       "buildSystem": "flit-core",
       "until": "2.0.2"
@@ -18880,6 +19237,8 @@
       "buildSystem": "hatchling",
       "from": "2.0.2"
     },
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "setuptools"
   ],
   "urlpy": [
@@ -19110,9 +19469,12 @@
   "volvooncall": [
     "setuptools"
   ],
+<<<<<<< HEAD
   "vonage": [
     "setuptools"
   ],
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   "vowpalwabbit": [
     "setuptools"
   ],
@@ -19354,6 +19716,7 @@
     "setuptools"
   ],
   "wheel": [
+<<<<<<< HEAD
     {
       "buildSystem": "setuptools",
       "until": "0.40.0"
@@ -19362,6 +19725,9 @@
       "buildSystem": "flit-core",
       "from": "0.40.0"
     }
+=======
+    "setuptools"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ],
   "wheel-filename": [
     "setuptools"
@@ -19406,9 +19772,12 @@
   "wifi": [
     "setuptools"
   ],
+<<<<<<< HEAD
   "wikitextparser": [
     "setuptools"
   ],
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   "willow": [
     "setuptools"
   ],
@@ -19711,9 +20080,12 @@
   "yara-python": [
     "setuptools"
   ],
+<<<<<<< HEAD
   "yaralyzer": [
     "poetry"
   ],
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   "yarg": [
     "setuptools"
   ],
@@ -19969,9 +20341,12 @@
   "zope-size": [
     "setuptools"
   ],
+<<<<<<< HEAD
   "zope-sqlalchemy": [
     "setuptools"
   ],
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   "zope-testbrowser": [
     "setuptools"
   ],

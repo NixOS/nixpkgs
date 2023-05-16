@@ -11,13 +11,21 @@
 
 stdenv.mkDerivation rec {
   pname = "aws-c-http";
+<<<<<<< HEAD
   version = "0.7.11";
+=======
+  version = "0.7.6";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "awslabs";
     repo = "aws-c-http";
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-gKuWhXxWHqTS66yANdKLsCZRk7jeDmyYMlme4WXT5Wc=";
+=======
+    sha256 = "sha256-pJGzGbIuz8UJkfmTQEZgXSOMuYixMezNZmgaRlcnmfg=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

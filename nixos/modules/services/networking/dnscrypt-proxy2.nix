@@ -11,7 +11,11 @@ in
     settings = mkOption {
       description = lib.mdDoc ''
         Attrset that is converted and passed as TOML config file.
+<<<<<<< HEAD
         For available params, see: <https://github.com/DNSCrypt/dnscrypt-proxy/blob/${pkgs.dnscrypt-proxy.version}/dnscrypt-proxy/example-dnscrypt-proxy.toml>
+=======
+        For available params, see: <https://github.com/DNSCrypt/dnscrypt-proxy/blob/${pkgs.dnscrypt-proxy2.version}/dnscrypt-proxy/example-dnscrypt-proxy.toml>
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       '';
       example = literalExpression ''
         {
@@ -49,7 +53,11 @@ in
         passAsFile = [ "json" ];
       } ''
         ${if cfg.upstreamDefaults then ''
+<<<<<<< HEAD
           ${pkgs.remarshal}/bin/toml2json ${pkgs.dnscrypt-proxy.src}/dnscrypt-proxy/example-dnscrypt-proxy.toml > example.json
+=======
+          ${pkgs.remarshal}/bin/toml2json ${pkgs.dnscrypt-proxy2.src}/dnscrypt-proxy/example-dnscrypt-proxy.toml > example.json
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           ${pkgs.jq}/bin/jq --slurp add example.json $jsonPath > config.json # merges the two
         '' else ''
           cp $jsonPath config.json
@@ -80,7 +88,11 @@ in
         AmbientCapabilities = "CAP_NET_BIND_SERVICE";
         CacheDirectory = "dnscrypt-proxy";
         DynamicUser = true;
+<<<<<<< HEAD
         ExecStart = "${pkgs.dnscrypt-proxy}/bin/dnscrypt-proxy -config ${cfg.configFile}";
+=======
+        ExecStart = "${pkgs.dnscrypt-proxy2}/bin/dnscrypt-proxy -config ${cfg.configFile}";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         LockPersonality = true;
         LogsDirectory = "dnscrypt-proxy";
         MemoryDenyWriteExecute = true;

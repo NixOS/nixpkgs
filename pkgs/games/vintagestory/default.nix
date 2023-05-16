@@ -4,6 +4,10 @@
 , makeWrapper
 , makeDesktopItem
 , copyDesktopItems
+<<<<<<< HEAD
+=======
+, mono
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , xorg
 , gtk2
 , sqlite
@@ -12,14 +16,18 @@
 , libGLU
 , SDL2
 , freealut
+<<<<<<< HEAD
 , libglvnd
 , pipewire
 , libpulseaudio
 , dotnet-runtime_7
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 stdenv.mkDerivation rec {
   pname = "vintagestory";
+<<<<<<< HEAD
   version = "1.18.10";
 
   src = fetchurl {
@@ -31,6 +39,18 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper copyDesktopItems ];
 
   buildInputs = [ dotnet-runtime_7 ];
+=======
+  version = "1.17.11";
+
+  src = fetchurl {
+    url = "https://cdn.vintagestory.at/gamefiles/stable/vs_archive_${version}.tar.gz";
+    sha256 = "sha256-iIQRwnJX+7GJcOqXJutInqpSX2fKlPmwFFAq6TqNWWY=";
+  };
+
+  nativeBuildInputs = [ makeWrapper copyDesktopItems ];
+
+  buildInputs = [ mono ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   runtimeLibs = lib.makeLibraryPath ([
     gtk2
@@ -40,9 +60,12 @@ stdenv.mkDerivation rec {
     libGLU
     SDL2
     freealut
+<<<<<<< HEAD
     libglvnd
     pipewire
     libpulseaudio
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ] ++ (with xorg; [
     libX11
     libXi
@@ -69,6 +92,7 @@ stdenv.mkDerivation rec {
   '';
 
   preFixup = ''
+<<<<<<< HEAD
     makeWrapper ${dotnet-runtime_7}/bin/dotnet $out/bin/vintagestory \
       --prefix LD_LIBRARY_PATH : "${runtimeLibs}" \
       --add-flags $out/share/vintagestory/Vintagestory.dll
@@ -76,6 +100,15 @@ stdenv.mkDerivation rec {
       --prefix LD_LIBRARY_PATH : "${runtimeLibs}" \
       --add-flags $out/share/vintagestory/VintagestoryServer.dll
   '' + ''
+=======
+    makeWrapper ${mono}/bin/mono $out/bin/vintagestory \
+      --prefix LD_LIBRARY_PATH : "${runtimeLibs}" \
+      --add-flags $out/share/vintagestory/Vintagestory.exe
+    makeWrapper ${mono}/bin/mono $out/bin/vintagestory-server \
+      --prefix LD_LIBRARY_PATH : "${runtimeLibs}" \
+      --add-flags $out/share/vintagestory/VintagestoryServer.exe
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     find "$out/share/vintagestory/assets/" -not -path "*/fonts/*" -regex ".*/.*[A-Z].*" | while read -r file; do
       local filename="$(basename -- "$file")"
       ln -sf "$filename" "''${file%/*}"/"''${filename,,}"
@@ -86,6 +119,10 @@ stdenv.mkDerivation rec {
     description = "An in-development indie sandbox game about innovation and exploration";
     homepage = "https://www.vintagestory.at/";
     license = licenses.unfree;
+<<<<<<< HEAD
     maintainers = with maintainers; [ artturin gigglesquid ];
+=======
+    maintainers = with maintainers; [ artturin ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

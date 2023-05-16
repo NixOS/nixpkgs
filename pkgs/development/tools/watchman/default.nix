@@ -1,6 +1,10 @@
 { boost
 , cargo
 , cmake
+<<<<<<< HEAD
+=======
+, config
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , CoreServices
 , cpptoml
 , double-conversion
@@ -21,8 +25,14 @@
 , libunwind
 , lz4
 , openssl
+<<<<<<< HEAD
 , pcre2
 , pkg-config
+=======
+, pcre
+, pkg-config
+, python3
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , rustPlatform
 , rustc
 , stateDir ? "/tmp"
@@ -34,13 +44,21 @@
 
 stdenv.mkDerivation rec {
   pname = "watchman";
+<<<<<<< HEAD
   version = "2023.08.14.00";
+=======
+  version = "2023.01.30.00";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "watchman";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-41bBPFlLYFHySyX4/GUllT1pNywSRcH7x/pnb5iN/1o=";
+=======
+    sha256 = "sha256-ZtCUlxx3YgfwKa9J8o9GkdkHquJbh+EytLiGNRlABls=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   cmakeFlags = [
@@ -62,8 +80,14 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+<<<<<<< HEAD
     pcre2
     openssl
+=======
+    pcre
+    openssl
+    python3
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     gtest
     glog
     boost

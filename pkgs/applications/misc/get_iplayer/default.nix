@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 { lib
 , perlPackages
 , fetchFromGitHub
@@ -8,6 +9,9 @@
 , atomicparsley
 , ffmpeg
 }:
+=======
+{ lib, fetchFromGitHub, atomicparsley, flvstreamer, ffmpeg, makeWrapper, perl, perlPackages, rtmpdump}:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 perlPackages.buildPerlPackage rec {
   pname = "get_iplayer";
@@ -20,10 +24,17 @@ perlPackages.buildPerlPackage rec {
     sha256 = "+ChCF27nmPKbqaZVxsZ6TlbzSdEz6RfMs87NE8xaSRw=";
   };
 
+<<<<<<< HEAD
   nativeBuildInputs = [ makeWrapper ] ++ lib.optional stdenv.isDarwin shortenPerlShebang;
   buildInputs = [ perl ];
   propagatedBuildInputs = with perlPackages; [
     LWP LWPProtocolHttps XMLLibXML Mojolicious
+=======
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ perl ];
+  propagatedBuildInputs = with perlPackages; [
+    HTMLParser HTTPCookies LWP LWPProtocolHttps XMLLibXML XMLSimple Mojolicious
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   preConfigure = "touch Makefile.PL";
@@ -31,6 +42,7 @@ perlPackages.buildPerlPackage rec {
   outputs = [ "out" "man" ];
 
   installPhase = ''
+<<<<<<< HEAD
     runHook preInstall
     mkdir -p $out/bin $out/share/man/man1
     cp get_iplayer $out/bin
@@ -49,6 +61,20 @@ perlPackages.buildPerlPackage rec {
     homepage = "https://github.com/get-iplayer/get_iplayer";
     platforms = platforms.all;
     maintainers = with maintainers; [ rika jgarcia ];
+=======
+    mkdir -p $out/bin $out/share/man/man1
+    cp get_iplayer $out/bin
+    wrapProgram $out/bin/get_iplayer --suffix PATH : ${lib.makeBinPath [ atomicparsley ffmpeg flvstreamer rtmpdump ]} --prefix PERL5LIB : $PERL5LIB
+    cp get_iplayer.1 $out/share/man/man1
+  '';
+
+  meta = with lib; {
+    description = "Downloads TV and radio from BBC iPlayer";
+    license = licenses.gpl3Plus;
+    homepage = "https://squarepenguin.co.uk/";
+    platforms = platforms.all;
+    maintainers = with maintainers; [ rika ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
 }

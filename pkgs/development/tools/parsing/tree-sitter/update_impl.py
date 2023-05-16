@@ -3,7 +3,11 @@ import json
 import subprocess as sub
 import os
 import sys
+<<<<<<< HEAD
 from typing import Iterator, Any, Literal, TypedDict, Optional
+=======
+from typing import Iterator, Any, Literal, TypedDict
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 from tempfile import NamedTemporaryFile
 
 debug: bool = True if os.environ.get("DEBUG", False) else False
@@ -106,6 +110,7 @@ def fetchRepo() -> None:
             release: str
             match curl_result(out):
                 case "not found":
+<<<<<<< HEAD
                     if "branch" in jsonArg:
                         branch = jsonArg.get("branch")
                         release = f"refs/heads/{branch}"
@@ -113,6 +118,11 @@ def fetchRepo() -> None:
                         # github sometimes returns an empty list even tough there are releases
                         log(f"uh-oh, latest for {orga}/{repo} is not there, using HEAD")
                         release = "HEAD"
+=======
+                    # github sometimes returns an empty list even tough there are releases
+                    log(f"uh-oh, latest for {orga}/{repo} is not there, using HEAD")
+                    release = "HEAD"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
                 case {"tag_name": tag_name}:
                     release = tag_name
                 case _:
@@ -175,8 +185,12 @@ Grammar = TypedDict(
     {
         "nixRepoAttrName": str,
         "orga": str,
+<<<<<<< HEAD
         "repo": str,
         "branch": Optional[str]
+=======
+        "repo": str
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     }
 )
 

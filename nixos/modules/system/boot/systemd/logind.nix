@@ -11,12 +11,18 @@ let
   ];
 in
 {
+<<<<<<< HEAD
   options.services.logind = {
     extraConfig = mkOption {
+=======
+  options = {
+    services.logind.extraConfig = mkOption {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       default = "";
       type = types.lines;
       example = "IdleAction=lock";
       description = lib.mdDoc ''
+<<<<<<< HEAD
         Extra config options for systemd-logind.
         See [logind.conf(5)](https://www.freedesktop.org/software/systemd/man/logind.conf.html)
         for available options.
@@ -24,21 +30,36 @@ in
     };
 
     killUserProcesses = mkOption {
+=======
+        Extra config options for systemd-logind. See
+        [
+        logind.conf(5)](https://www.freedesktop.org/software/systemd/man/logind.conf.html) for available options.
+      '';
+    };
+
+    services.logind.killUserProcesses = mkOption {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       default = false;
       type = types.bool;
       description = lib.mdDoc ''
         Specifies whether the processes of a user should be killed
         when the user logs out.  If true, the scope unit corresponding
         to the session and all processes inside that scope will be
+<<<<<<< HEAD
         terminated.  If false, the scope is "abandoned"
         (see [systemd.scope(5)](https://www.freedesktop.org/software/systemd/man/systemd.scope.html#)),
         and processes are not killed.
+=======
+        terminated.  If false, the scope is "abandoned" (see
+        [systemd.scope(5)](https://www.freedesktop.org/software/systemd/man/systemd.scope.html#)), and processes are not killed.
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
         See [logind.conf(5)](https://www.freedesktop.org/software/systemd/man/logind.conf.html#KillUserProcesses=)
         for more details.
       '';
     };
 
+<<<<<<< HEAD
     powerKey = mkOption {
       default = "poweroff";
       example = "ignore";
@@ -80,11 +101,15 @@ in
     };
 
     suspendKey = mkOption {
+=======
+    services.logind.lidSwitch = mkOption {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       default = "suspend";
       example = "ignore";
       type = logindHandlerType;
 
       description = lib.mdDoc ''
+<<<<<<< HEAD
         Specifies what to do when the suspend key is pressed.
       '';
     };
@@ -110,11 +135,19 @@ in
     };
 
     hibernateKeyLongPress = mkOption {
+=======
+        Specifies what to be done when the laptop lid is closed.
+      '';
+    };
+
+    services.logind.lidSwitchDocked = mkOption {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       default = "ignore";
       example = "suspend";
       type = logindHandlerType;
 
       description = lib.mdDoc ''
+<<<<<<< HEAD
         Specifies what to do when the hibernate key is long-pressed.
       '';
     };
@@ -130,12 +163,21 @@ in
     };
 
     lidSwitchExternalPower = mkOption {
+=======
+        Specifies what to be done when the laptop lid is closed
+        and another screen is added.
+      '';
+    };
+
+    services.logind.lidSwitchExternalPower = mkOption {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       default = cfg.lidSwitch;
       defaultText = literalExpression "services.logind.lidSwitch";
       example = "ignore";
       type = logindHandlerType;
 
       description = lib.mdDoc ''
+<<<<<<< HEAD
         Specifies what to do when the laptop lid is closed
         and the system is on external power. By default use
         the same action as specified in services.logind.lidSwitch.
@@ -150,6 +192,11 @@ in
       description = lib.mdDoc ''
         Specifies what to do when the laptop lid is closed
         and another screen is added.
+=======
+        Specifies what to do when the laptop lid is closed and the system is
+        on external power. By default use the same action as specified in
+        services.logind.lidSwitch.
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       '';
     };
   };
@@ -175,6 +222,7 @@ in
       "systemd/logind.conf".text = ''
         [Login]
         KillUserProcesses=${if cfg.killUserProcesses then "yes" else "no"}
+<<<<<<< HEAD
         HandlePowerKey=${cfg.powerKey}
         HandlePowerKeyLongPress=${cfg.powerKeyLongPress}
         HandleRebootKey=${cfg.rebootKey}
@@ -186,6 +234,11 @@ in
         HandleLidSwitch=${cfg.lidSwitch}
         HandleLidSwitchExternalPower=${cfg.lidSwitchExternalPower}
         HandleLidSwitchDocked=${cfg.lidSwitchDocked}
+=======
+        HandleLidSwitch=${cfg.lidSwitch}
+        HandleLidSwitchDocked=${cfg.lidSwitchDocked}
+        HandleLidSwitchExternalPower=${cfg.lidSwitchExternalPower}
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         ${cfg.extraConfig}
       '';
     };

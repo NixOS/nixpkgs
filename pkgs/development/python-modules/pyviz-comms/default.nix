@@ -29,6 +29,10 @@ buildPythonPackage rec {
     description = "Launch jobs, organize the output, and dissect the results";
     homepage = "https://pyviz.org/";
     license = licenses.bsd3;
+<<<<<<< HEAD
     maintainers = [ ];
+=======
+    maintainers = [ maintainers.costrouc ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

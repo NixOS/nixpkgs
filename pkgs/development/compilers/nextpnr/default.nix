@@ -11,6 +11,7 @@
 
 let
   boostPython = boost.override { python = python3; enablePython = true; };
+<<<<<<< HEAD
 
   pname = "nextpnr";
   version = "0.6";
@@ -38,6 +39,31 @@ stdenv.mkDerivation rec {
   srcs = [ main_src test_src ];
 
   sourceRoot = main_src.name;
+=======
+in
+stdenv.mkDerivation rec {
+  pname = "nextpnr";
+  version = "0.5";
+
+  srcs = [
+    (fetchFromGitHub {
+      owner = "YosysHQ";
+      repo  = "nextpnr";
+      rev   = "${pname}-${version}";
+      hash  = "sha256-3/a6nVr2v9kK/FFmxZq9LQLAoE/yNRcTGojiFPGRkHU=";
+      name  = "nextpnr";
+    })
+    (fetchFromGitHub {
+      owner  = "YosysHQ";
+      repo   = "nextpnr-tests";
+      rev    = "00c55a9eb9ea2e062b51fe0d64741412b185d95d";
+      sha256 = "sha256-83suMftMtnaRFq3T2/I7Uahb11WZlXhwYt6Q/rqi2Yo=";
+      name   = "nextpnr-tests";
+    })
+  ];
+
+  sourceRoot = "nextpnr";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nativeBuildInputs
      = [ cmake ]
@@ -70,7 +96,11 @@ stdenv.mkDerivation rec {
   '';
 
   preBuild = ''
+<<<<<<< HEAD
     ln -s ../${test_src.name} tests
+=======
+    ln -s ../nextpnr-tests tests
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '';
 
   doCheck = true;

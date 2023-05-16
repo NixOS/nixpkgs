@@ -13,14 +13,22 @@
 
 buildPythonPackage rec {
   pname = "pyvex";
+<<<<<<< HEAD
   version = "9.2.66";
+=======
+  version = "9.2.50";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
+<<<<<<< HEAD
     hash = "sha256-NmOa/DH/EapcYCrpdcdn4CR9DiKuVnrDvKbnTiO3Ldc=";
+=======
+    hash = "sha256-DfC1POGV6bR3p0LqZBfmX2BkFvhdn4QjHgZkDwznSyE=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

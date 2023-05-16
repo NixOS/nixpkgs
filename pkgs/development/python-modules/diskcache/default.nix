@@ -55,6 +55,10 @@ buildPythonPackage rec {
     description = "Disk and file backed persistent cache";
     homepage = "http://www.grantjenks.com/docs/diskcache/";
     license = licenses.asl20;
+<<<<<<< HEAD
     maintainers = with maintainers; [ ];
+=======
+    maintainers = with maintainers; [ costrouc ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

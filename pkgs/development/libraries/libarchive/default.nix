@@ -30,7 +30,11 @@ let
   autoreconfHook = buildPackages.autoreconfHook269;
 in
 assert xarSupport -> libxml2 != null;
+<<<<<<< HEAD
 stdenv.mkDerivation (finalAttrs: {
+=======
+(stdenv.mkDerivation (finalAttrs: {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pname = "libarchive";
   version = "3.6.2";
 
@@ -43,6 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   outputs = [ "out" "lib" "dev" ];
 
+<<<<<<< HEAD
   patches = [
     # fixes static linking; upstream in releases after 3.6.2
     # https://github.com/libarchive/libarchive/pull/1825 merged upstream
@@ -53,6 +58,8 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   postPatch = let
     skipTestPaths = [
       # test won't work in nix sandbox
@@ -129,4 +136,20 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.tests = {
     inherit cmake nix samba;
   };
+<<<<<<< HEAD
 })
+=======
+})).overrideAttrs(previousAttrs:
+  assert previousAttrs.version == "3.6.2";
+  lib.optionalAttrs stdenv.hostPlatform.isStatic {
+    patches = [
+      # fixes static linking; upstream in releases after 3.6.2
+      # https://github.com/libarchive/libarchive/pull/1825 merged upstream
+      (fetchpatch {
+        name = "001-only-add-iconv-to-pc-file-if-needed.patch";
+        url = "https://github.com/libarchive/libarchive/commit/1f35c466aaa9444335a1b854b0b7223b0d2346c2.patch";
+        hash = "sha256-lb+zwWSH6/MLUIROvu9I/hUjSbb2jOWO755WC/r+lbY=";
+      })
+    ];
+  })
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)

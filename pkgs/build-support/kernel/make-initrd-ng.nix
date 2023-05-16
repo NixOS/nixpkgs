@@ -72,7 +72,11 @@ in
   ${if makeUInitrd then "uInitrdCompression" else null} = uInitrdCompression;
 
   passAsFile = ["contents"];
+<<<<<<< HEAD
   contents = lib.concatMapStringsSep "\n" ({ object, symlink, ... }: "${object}\n${lib.optionalString (symlink != null) symlink}") contents + "\n";
+=======
+  contents = lib.concatMapStringsSep "\n" ({ object, symlink, ... }: "${object}\n${if symlink == null then "" else symlink}") contents + "\n";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nativeBuildInputs = [makeInitrdNGTool cpio] ++ lib.optional makeUInitrd ubootTools ++ lib.optional strip binutils;
 

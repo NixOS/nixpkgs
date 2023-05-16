@@ -8,12 +8,17 @@
 
 stdenv.mkDerivation rec {
   pname = "geeqie";
+<<<<<<< HEAD
   version = "2.1";
+=======
+  version = "2.0.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "BestImageViewer";
     repo = "geeqie";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-qkM/7auZ9TMF2r8KLnitxmvlyPmIjh7q9Ugh+QKh8hw=";
   };
 
@@ -37,6 +42,16 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     patchShebangs .
+=======
+    sha256 = "sha256-0GOX77vZ4KZkvwnR1vlv52tlbR+ciwl3ycxbOIcDOqU=";
+  };
+
+  postPatch = ''
+    patchShebangs .
+    # libtiff detection is broken and looks for liblibtiff...
+    # fixed upstream, to remove for 2.1
+    substituteInPlace meson.build --replace 'libtiff' 'tiff'
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '';
 
   nativeBuildInputs =

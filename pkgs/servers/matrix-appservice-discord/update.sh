@@ -22,7 +22,11 @@ if [ -z "$tag" ]; then
 fi
 
 src="https://raw.githubusercontent.com/$ORG/$PROJ/$tag"
+<<<<<<< HEAD
 src_hash=$(nix-prefetch-github $ORG $PROJ --rev ${tag} | jq -r .hash)
+=======
+src_sha256=$(nix-prefetch-github $ORG $PROJ --rev ${tag} | jq -r .sha256)
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 tmpdir=$(mktemp -d)
 trap 'rm -rf "$tmpdir"' EXIT
@@ -36,7 +40,11 @@ curl -O "$src/package.json"
 cat > pin.json << EOF
 {
   "version": "$(echo $tag | grep -P '(\d|\.)+' -o)",
+<<<<<<< HEAD
   "srcSha256": "$src_hash",
+=======
+  "srcSha256": "$src_sha256",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   "yarnSha256": "$yarn_sha256"
 }
 EOF

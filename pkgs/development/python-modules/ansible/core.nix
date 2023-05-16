@@ -1,4 +1,5 @@
 { lib
+<<<<<<< HEAD
 , buildPythonPackage
 , fetchPypi
 , pythonOlder
@@ -7,14 +8,25 @@
 , ansible
 , cryptography
 , importlib-resources
+=======
+, callPackage
+, buildPythonPackage
+, fetchPypi
+, installShellFiles
+, ansible
+, cryptography
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , jinja2
 , junit-xml
 , lxml
 , ncclient
 , packaging
 , paramiko
+<<<<<<< HEAD
 , ansible-pylibssh
 , passlib
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , pexpect
 , psutil
 , pycrypto
@@ -28,11 +40,19 @@
 
 buildPythonPackage rec {
   pname = "ansible-core";
+<<<<<<< HEAD
   version = "2.15.4";
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-waiq7emF955ZMrohY2OTeffYAlv9myg3jbFkmk71Qe0=";
+=======
+  version = "2.14.2";
+
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-R/DUtBJbWO26ZDWkfzfL5qGNpUWU0Y+BKVi7DLWNTmU=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   # ansible_connection is already wrapped, so don't pass it through
@@ -45,8 +65,11 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     installShellFiles
+<<<<<<< HEAD
   ] ++ lib.optionals (pythonOlder "3.10") [
     pythonRelaxDepsHook
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   propagatedBuildInputs = [
@@ -56,7 +79,10 @@ buildPythonPackage rec {
     cryptography
     jinja2
     packaging
+<<<<<<< HEAD
     passlib
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     pyyaml
     resolvelib # This library is a PITA, since ansible requires a very old version of it
     # optional dependencies
@@ -64,13 +90,17 @@ buildPythonPackage rec {
     lxml
     ncclient
     paramiko
+<<<<<<< HEAD
     ansible-pylibssh
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     pexpect
     psutil
     pycrypto
     requests
     scp
     xmltodict
+<<<<<<< HEAD
   ] ++ lib.optionals windowsSupport [
     pywinrm
   ] ++ lib.optionals (pythonOlder "3.10") [
@@ -80,6 +110,9 @@ buildPythonPackage rec {
   pythonRelaxDeps = lib.optionals (pythonOlder "3.10") [
     "importlib-resources"
   ];
+=======
+  ] ++ lib.optional windowsSupport pywinrm;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   postInstall = ''
     installManPage docs/man/man1/*.1

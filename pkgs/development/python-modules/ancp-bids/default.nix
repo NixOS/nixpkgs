@@ -1,11 +1,17 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+<<<<<<< HEAD
 , fetchpatch
 , pythonOlder
 , pytestCheckHook
 , setuptools
 , wheel
+=======
+, pythonOlder
+, pytestCheckHook
+, setuptools
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , numpy
 , pandas
 }:
@@ -13,6 +19,7 @@
 buildPythonPackage rec {
   pname = "ancp-bids";
   version = "0.2.1";
+<<<<<<< HEAD
   format = "pyproject";
   disabled = pythonOlder "3.7";
 
@@ -44,12 +51,31 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+=======
+  disabled = pythonOlder "3.7";
+  format = "pyproject";
+
+  # `tests/data` dir missing from PyPI dist
+  src = fetchFromGitHub {
+     owner = "ANCPLabOldenburg";
+     repo = pname;
+     rev = "refs/tags/${version}";
+     hash = "sha256-Nu9pulVSZysgm/F7jl+VpoqMCiHeysZjQDQ1dT7AnpE=";
+  };
+
+  nativeBuildInputs = [ setuptools ] ;
+
+  checkInputs = [ numpy pandas pytestCheckHook ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pythonImportsCheck = [
     "ancpbids"
   ];
 
   pytestFlagsArray = [ "tests/auto" ];
+<<<<<<< HEAD
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   disabledTests = [ "test_fetch_dataset" ];
 
   meta = with lib; {

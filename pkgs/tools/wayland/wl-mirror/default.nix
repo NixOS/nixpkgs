@@ -28,17 +28,28 @@ in
 
 stdenv.mkDerivation rec {
   pname = "wl-mirror";
+<<<<<<< HEAD
   version = "0.13.2";
+=======
+  version = "0.13.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "Ferdi265";
     repo = "wl-mirror";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-dmdRe4GZ1W2gD7ZF1MudBqfZIm9HyBjISa+xB54BLz4=";
   };
 
   strictDeps = true;
   depsBuildBuild = [ pkg-config ];
+=======
+    hash = "sha256-qYJmcsID5qbUs27ZCU2HkWVVnBmxWmyzSgruLPB4jI8=";
+  };
+
+  strictDeps = true;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nativeBuildInputs = [ cmake pkg-config wayland-scanner scdoc makeWrapper ];
   buildInputs = [ libGL wayland wayland-protocols wlr-protocols bash ];
 

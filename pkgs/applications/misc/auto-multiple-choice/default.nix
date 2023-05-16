@@ -99,7 +99,10 @@ stdenv.mkDerivation (finalAttrs: rec {
     pkg-config
     makeWrapper
     wrapGAppsHook
+<<<<<<< HEAD
     gobject-introspection
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   buildInputs = [
@@ -107,6 +110,10 @@ stdenv.mkDerivation (finalAttrs: rec {
     cairo.dev
     dblatex
     gnumake
+<<<<<<< HEAD
+=======
+    gobject-introspection
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     graphicsmagick
     gsettings-desktop-schemas
     gtk3

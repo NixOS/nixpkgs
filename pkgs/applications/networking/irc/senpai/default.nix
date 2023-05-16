@@ -11,7 +11,11 @@ buildGoModule rec {
     sha256 = "sha256-q167og8S8YbLcREZ7DVbJhjMzx4iO0WgIFkOV2IpieM=";
   };
 
+<<<<<<< HEAD
   vendorHash = "sha256-PkoEHQEGKCiNbJsm7ieL65MtEult/wubLreJKA1gGpg=";
+=======
+  vendorSha256 = "sha256-PkoEHQEGKCiNbJsm7ieL65MtEult/wubLreJKA1gGpg=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   subPackages = [
     "cmd/senpai"

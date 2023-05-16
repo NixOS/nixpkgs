@@ -29,13 +29,21 @@ assert enableViewer -> wrapGAppsHook != null;
 
 stdenv.mkDerivation rec {
   pname = "aravis";
+<<<<<<< HEAD
   version = "0.8.28";
+=======
+  version = "0.8.26";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "AravisProject";
     repo = pname;
     rev = version;
+<<<<<<< HEAD
     sha256 = "sha256-EgKZcylg3Nx320BdeEz8PVadwo2pE6a3h0vt7YT4LVA=";
+=======
+    sha256 = "sha256-24FSq9qe8tAFGB4BOjD52BQiy8Rw6ZDE5Sq+VS5S638=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   outputs = [ "bin" "dev" "out" "lib" ];
@@ -45,11 +53,18 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     gi-docgen
+<<<<<<< HEAD
     gobject-introspection
   ] ++ lib.optional enableViewer wrapGAppsHook;
 
   buildInputs =
     [ glib libxml2 ]
+=======
+  ] ++ lib.optional enableViewer wrapGAppsHook;
+
+  buildInputs =
+    [ glib libxml2 gobject-introspection ]
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     ++ lib.optional enableUsb libusb1
     ++ lib.optionals (enableViewer || enableGstPlugin) (with gst_all_1; [ gstreamer gst-plugins-base (gst-plugins-good.override { gtkSupport = true; }) gst-plugins-bad ])
     ++ lib.optionals (enableViewer) [ gtk3 ];

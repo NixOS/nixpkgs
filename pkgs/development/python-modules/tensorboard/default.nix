@@ -2,6 +2,10 @@
 , fetchPypi
 , buildPythonPackage
 , pythonOlder
+<<<<<<< HEAD
+=======
+, pythonAtLeast
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , pythonRelaxDepsHook
 , numpy
 , wheel
@@ -25,7 +29,11 @@ buildPythonPackage rec {
   pname = "tensorboard";
   version = "2.11.0";
   format = "wheel";
+<<<<<<< HEAD
   disabled = pythonOlder "3.6";
+=======
+  disabled = pythonOlder "3.6" || pythonAtLeast "3.11";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchPypi {
     inherit pname version format;

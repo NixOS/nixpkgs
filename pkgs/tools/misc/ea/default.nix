@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 { lib
 , stdenv
 , fetchFromGitHub
@@ -6,6 +7,9 @@
 , installShellFiles
 , libiconv
 }:
+=======
+{ lib, stdenv, fetchFromGitHub, rustPlatform, installShellFiles, libiconv }:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 rustPlatform.buildRustPackage rec {
   pname = "ea";
@@ -15,6 +19,7 @@ rustPlatform.buildRustPackage rec {
     owner = "dduan";
     repo = "ea";
     rev = version;
+<<<<<<< HEAD
     hash = "sha256-VXSSe5d7VO3LfjumzN9a7rrKRedOtOzTdLVQWgV1ED8=";
   };
 
@@ -31,6 +36,14 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
+=======
+    sha256 = "VXSSe5d7VO3LfjumzN9a7rrKRedOtOzTdLVQWgV1ED8=";
+  };
+
+  cargoSha256 = "sha256-YP7OJaIWTXJHe3qF+a3zCFnCHnELX0rAWqnJPaC1T7I=";
+
+  nativeBuildInputs = [ installShellFiles ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   buildInputs = lib.optionals stdenv.isDarwin [
     libiconv
   ];

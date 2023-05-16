@@ -10,16 +10,28 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "skytemple";
+<<<<<<< HEAD
   version = "1.5.4";
+=======
+  version = "1.4.7";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "SkyTemple";
     repo = pname;
     rev = "refs/tags/${version}";
+<<<<<<< HEAD
     hash = "sha256-brt1bNQonAjbqCsMLHgOS8leDb3Y8MWKIxV+BXoJ1lY=";
   };
 
   buildInputs = [
+=======
+    hash = "sha256-NK0yLxs7/pVpl9LCz6ggYsaUDuEAj6edBEPC+4yCxNM=";
+  };
+
+  buildInputs = [
+    gobject-introspection
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     gtk3
     gtksourceview4
     # webkitgkt is used for rendering interactive statistics graph which

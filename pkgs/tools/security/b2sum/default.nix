@@ -18,7 +18,11 @@ stdenv.mkDerivation (finalAttrs: {
       --replace "FILES=b2sum.c ../sse/" "#FILES=b2sum.c ../sse/"
   '';
 
+<<<<<<< HEAD
   sourceRoot = "${finalAttrs.src.name}/b2sum";
+=======
+  sourceRoot = "source/b2sum";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   buildInputs = [ openmp ];
 

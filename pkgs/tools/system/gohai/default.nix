@@ -11,7 +11,11 @@ buildGoModule rec {
     sha256 = "sha256-vdzGGTg9SHYS0OQUn3VvrQGpKxzqxBRXDKOm0c7FvYY=";
   };
 
+<<<<<<< HEAD
   vendorHash = "sha256-aN1fwGbBm45e6qdRu+4wnv2ZI7SOsIPONB4vF9o2vlI=";
+=======
+  vendorSha256 = "sha256-aN1fwGbBm45e6qdRu+4wnv2ZI7SOsIPONB4vF9o2vlI=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   ldflags = [ "-s" "-w" ];
 
@@ -22,6 +26,11 @@ buildGoModule rec {
     homepage = "https://github.com/DataDog/gohai";
     license = licenses.mit;
     maintainers = with maintainers; [ tazjin ];
+<<<<<<< HEAD
+=======
+    platforms = platforms.unix;
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     longDescription = ''
       Gohai is a tool which collects an inventory of system
       information. It is used by the Datadog agent to provide detailed

@@ -78,11 +78,19 @@ with mikutterPaths; stdenv.mkDerivation rec {
     sha256 = "05253nz4i1lmnq6czj48qdab2ny4vx2mznj6nsn2l1m2z6zqkwk3";
   };
 
+<<<<<<< HEAD
   nativeBuildInputs = [ copyDesktopItems wrapGAppsHook gobject-introspection ]
+=======
+  nativeBuildInputs = [ copyDesktopItems wrapGAppsHook ]
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     ++ lib.optionals stdenv.isDarwin [ libicns ];
   buildInputs = [
     atk
     gtk2
+<<<<<<< HEAD
+=======
+    gobject-introspection
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     libnotify
     which # some plugins use it at runtime
     wrappedRuby

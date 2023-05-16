@@ -11,13 +11,21 @@
 
 buildGoModule rec {
   pname = "containerd";
+<<<<<<< HEAD
   version = "1.7.5";
+=======
+  version = "1.7.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "containerd";
     repo = "containerd";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-g+1JfXO1k0ijPpVTo+WxmXro4p4MbRCIZdgtgy58M60=";
+=======
+    hash = "sha256-WwedtcsrDQwMQcKFO5nnPiHyGJpl5hXZlmpbBe1/ftY=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   vendorHash = null;
@@ -50,7 +58,11 @@ buildGoModule rec {
     homepage = "https://containerd.io/";
     description = "A daemon to control runC";
     license = licenses.asl20;
+<<<<<<< HEAD
     maintainers = with maintainers; [ offline vdemeester endocrimes ];
+=======
+    maintainers = with maintainers; [ offline vdemeester endocrimes zowoq ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     platforms = platforms.linux;
   };
 }

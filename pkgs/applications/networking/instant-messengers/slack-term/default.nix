@@ -17,6 +17,9 @@ buildGoModule rec {
     homepage = "https://github.com/erroneousboat/slack-term";
     license = licenses.mit;
     maintainers = with maintainers; [ dtzWill ];
+<<<<<<< HEAD
     mainProgram = "slack-term";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

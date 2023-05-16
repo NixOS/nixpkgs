@@ -2,12 +2,20 @@
 
 stdenv.mkDerivation rec {
   pname = "ciao";
+<<<<<<< HEAD
   version = "1.22.0-m7";
+=======
+  version = "1.22.0-m1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   src = fetchFromGitHub {
     owner = "ciao-lang";
     repo = "ciao";
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-5LX+NVDAtdffQeLTD4Camp5aNm0K3Cwmavh7OF5XcZU=";
+=======
+    sha256 = "sha256-p7QNSsDI8hVMPPfkX3PNjJo01hsPGKZ7jMR9Kmj2qxY=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   configurePhase = ''

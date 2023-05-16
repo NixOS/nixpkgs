@@ -10,14 +10,22 @@
 
 buildPythonPackage rec {
   pname = "elasticsearch8";
+<<<<<<< HEAD
   version = "8.9.0";
+=======
+  version = "8.7.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
+<<<<<<< HEAD
     hash = "sha256-9j71MX3ITwfwFfIVvQIbXHu4r/3qz9SNAz8XfeAyWTc=";
+=======
+    hash = "sha256-mRy48OYsm+0M1/D+abs83RiqN8wQr/Z6SZUY4TNg190=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

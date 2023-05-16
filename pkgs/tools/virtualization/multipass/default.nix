@@ -25,6 +25,7 @@
 
 let
   pname = "multipass";
+<<<<<<< HEAD
   version = "1.12.1";
 
   # This is done here because a CMakeLists.txt from one of it's submodules tries
@@ -40,12 +41,18 @@ let
 in
 stdenv.mkDerivation
 {
+=======
+  version = "1.11.1";
+in
+stdenv.mkDerivation {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   inherit pname version;
 
   src = fetchFromGitHub {
     owner = "canonical";
     repo = "multipass";
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-8wRho/ECWxiE6rNqjBzaqFaIdhXzOzFuCcQ4zzfSmb4=";
     fetchSubmodules = true;
   };
@@ -57,10 +64,18 @@ stdenv.mkDerivation
 
   postPatch = ''
     # Make sure the version is reported correctly in the compiled binary.
+=======
+    sha256 = "sha256-AIZs+NRAn/r9EjTx9InDZzS4ycni4MZQXmC0A5rpaJk=";
+    fetchSubmodules = true;
+  };
+
+  preConfigure = ''
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     substituteInPlace ./CMakeLists.txt \
       --replace "determine_version(MULTIPASS_VERSION)" "" \
       --replace 'set(MULTIPASS_VERSION ''${MULTIPASS_VERSION})' 'set(MULTIPASS_VERSION "v${version}")'
 
+<<<<<<< HEAD
     # Patch the patch of the OVMF binaries to use paths from the nix store.
     substituteInPlace ./src/platform/backends/qemu/linux/qemu_platform_detail_linux.cpp \
       --replace "OVMF.fd" "${OVMF.fd}/FV/OVMF.fd" \
@@ -70,6 +85,27 @@ stdenv.mkDerivation
     cp -r --no-preserve=mode ${grpc_src} 3rd-party/grpc
 
     # Configure CMake to use gtest from the nix store since we disabled fetching from the internet.
+=======
+    substituteInPlace ./src/platform/backends/qemu/linux/qemu_platform_detail_linux.cpp \
+      --replace "OVMF.fd" "${OVMF.fd}/FV/OVMF.fd" \
+      --replace "QEMU_EFI.fd" "${OVMF.fd}/FV/QEMU_EFI.fd"
+  '';
+
+  postPatch = ''
+    # Patch all of the places where Multipass expects the LXD socket to be provided by a snap
+    substituteInPlace ./src/network/network_access_manager.cpp \
+      --replace "/var/snap/lxd/common/lxd/unix.socket" "/var/lib/lxd/unix.socket"
+
+    substituteInPlace ./src/platform/backends/lxd/lxd_virtual_machine.cpp \
+      --replace "/var/snap/lxd/common/lxd/unix.socket" "/var/lib/lxd/unix.socket"
+
+    substituteInPlace ./src/platform/backends/lxd/lxd_request.h \
+      --replace "/var/snap/lxd/common/lxd/unix.socket" "/var/lib/lxd/unix.socket"
+
+    substituteInPlace ./tests/CMakeLists.txt \
+      --replace "FetchContent_MakeAvailable(googletest)" ""
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     cat >> tests/CMakeLists.txt <<'EOF'
       add_library(gtest INTERFACE)
       target_include_directories(gtest INTERFACE ${gtest.dev}/include)

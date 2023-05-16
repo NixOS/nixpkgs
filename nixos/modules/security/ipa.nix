@@ -86,7 +86,11 @@ in {
       };
 
       ifpAllowedUids = mkOption {
+<<<<<<< HEAD
         type = types.listOf types.str;
+=======
+        type = types.listOf types.string;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         default = ["root"];
         description = lib.mdDoc "A list of users allowed to access the ifp dbus interface.";
       };

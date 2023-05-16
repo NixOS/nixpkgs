@@ -8,7 +8,10 @@
 , pkg-config
 , python3
 , SDL2
+<<<<<<< HEAD
 , bluez
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , dbus
 , eigen
 , ffmpeg
@@ -29,10 +32,15 @@
 , libuvc
 , libv4l
 , libxcb
+<<<<<<< HEAD
 , onnxruntime
 , opencv4
 , openhmd
 , openvr
+=======
+, opencv4
+, openhmd
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , udev
 , vulkan-headers
 , vulkan-loader
@@ -50,14 +58,23 @@
 
 stdenv.mkDerivation rec {
   pname = "monado";
+<<<<<<< HEAD
   version = "unstable-2023-08-22";
+=======
+  version = "unstable-2023-01-14";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "monado";
     repo = "monado";
+<<<<<<< HEAD
     rev = "4cc68f07c0f3c2fee57b01dde28a02e314d3bee6";
     sha256 = "sha256-VibdOSA/b4RmwwwXrwhivuiukNK10YazYF/p+YnqRZ8=";
+=======
+    rev = "1ef49b92f2d6cb519039edd7ba7f70e8073fbe88";
+    sha256 = "sha256-zieJmI6BKHpYyCPOOUora9qoWn+NXehbHKvoi4h81UA=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [
@@ -75,7 +92,10 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     SDL2
+<<<<<<< HEAD
     bluez
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     dbus
     eigen
     ffmpeg
@@ -96,10 +116,15 @@ stdenv.mkDerivation rec {
     libuvc
     libv4l
     libxcb
+<<<<<<< HEAD
     onnxruntime
     opencv4
     openhmd
     openvr
+=======
+    opencv4
+    openhmd
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     udev
     vulkan-headers
     vulkan-loader
@@ -110,6 +135,7 @@ stdenv.mkDerivation rec {
     zlib
   ];
 
+<<<<<<< HEAD
   # known disabled drivers:
   #  - DRIVER_DEPTHAI - Needs depthai-core https://github.com/luxonis/depthai-core
   #  - DRIVER_ILLIXR - needs ILLIXR headers https://github.com/ILLIXR/ILLIXR
@@ -117,6 +143,8 @@ stdenv.mkDerivation rec {
   #  - DRIVER_SIMULAVR - needs realsense
   #  - DRIVER_ULV2 - needs proprietary Leapmotion SDK https://api.leapmotion.com/documentation/v2/unity/devguide/Leap_SDK_Overview.html
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   # realsense is disabled, the build ends with the following error:
   #
   # CMake Error in src/xrt/drivers/CMakeLists.txt:
@@ -132,6 +160,7 @@ stdenv.mkDerivation rec {
     export XDG_CONFIG_DIRS=@out@/etc/xdg''${XDG_CONFIG_DIRS:+:''${XDG_CONFIG_DIRS}}
   '';
 
+<<<<<<< HEAD
   patches = [
     # We don't have $HOME/.steam when building
     ./force-enable-steamvr_lh.patch
@@ -140,6 +169,8 @@ stdenv.mkDerivation rec {
     ./steamvr_lh-use-old-interface.patch
   ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   meta = with lib; {
     description = "Open source XR runtime";
     homepage = "https://monado.freedesktop.org/";

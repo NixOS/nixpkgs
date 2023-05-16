@@ -28,6 +28,10 @@ buildPythonPackage rec {
     description = "Beautiful, idiomatic protocol buffers in Python";
     homepage = "https://github.com/googleapis/proto-plus-python";
     license = licenses.asl20;
+<<<<<<< HEAD
     maintainers = with maintainers; [ ruuda ];
+=======
+    maintainers = with maintainers; [ ruuda SuperSandro2000 ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

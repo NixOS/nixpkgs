@@ -90,9 +90,12 @@ with lib;
       serviceConfig = {
         DynamicUser = true;
         ExecStart = "${cfg.package}/bin/xray -config ${settingsFile}";
+<<<<<<< HEAD
         CapabilityBoundingSet = "CAP_NET_ADMIN CAP_NET_BIND_SERVICE";
         AmbientCapabilities = "CAP_NET_ADMIN CAP_NET_BIND_SERVICE";
         NoNewPrivileges = true;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       };
     };
   };

@@ -10,6 +10,11 @@ stdenv.mkDerivation rec {
 
   sourceRoot = "cpp";
 
+<<<<<<< HEAD
+=======
+  buildInputs = [ ];
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nativeBuildInputs = [ cmake ninja unzip ];
 
   meta = with lib; {

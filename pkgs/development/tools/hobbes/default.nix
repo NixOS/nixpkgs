@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 { lib
 , stdenv
 , llvmPackages_10
@@ -19,6 +20,19 @@ llvmPackages_10.stdenv.mkDerivation {
     repo = "hobbes";
     rev = "88a712b85bc896a4c87e60c12321445f1cdcfd00";
     hash = "sha256-2v0yk35/cLKTjX0Qbc8cjc7Y6bamRSa9GpPvGoxL2Cw=";
+=======
+{ lib, stdenv, fetchFromGitHub, cmake, llvm_12, ncurses, readline, zlib, libxml2 }:
+
+stdenv.mkDerivation {
+  pname = "hobbes";
+  version = "unstable-2021-04-28";
+
+  src = fetchFromGitHub {
+    owner = "morgan-stanley";
+    repo = "hobbes";
+    rev = "737c7ca63516f6b3dca0e659c3de75d4325472d6";
+    sha256 = "0fjsmz1sbrp6464mrb9ha7p615w2l2pdldsc2ayvcrvxfyi1r4gj";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   # TODO: re-enable Python tests once they work on Python 3
@@ -37,7 +51,10 @@ llvmPackages_10.stdenv.mkDerivation {
     readline
     zlib
     libxml2
+<<<<<<< HEAD
     python3
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   doCheck = true;

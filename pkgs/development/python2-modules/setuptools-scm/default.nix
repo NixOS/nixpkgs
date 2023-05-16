@@ -19,6 +19,10 @@ buildPythonPackage rec {
     homepage = "https://github.com/pypa/setuptools_scm/";
     description = "Handles managing your python package versions in scm metadata";
     license = licenses.mit;
+<<<<<<< HEAD
     maintainers = with maintainers; [ ];
+=======
+    maintainers = with maintainers; [ SuperSandro2000 ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

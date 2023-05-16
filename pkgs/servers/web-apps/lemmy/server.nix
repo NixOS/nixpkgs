@@ -12,7 +12,11 @@
 }:
 let
   pinData = lib.importJSON ./pin.json;
+<<<<<<< HEAD
   version = pinData.serverVersion;
+=======
+  version = pinData.version;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 in
 rustPlatform.buildRustPackage rec {
   inherit version;
@@ -22,6 +26,7 @@ rustPlatform.buildRustPackage rec {
     owner = "LemmyNet";
     repo = "lemmy";
     rev = version;
+<<<<<<< HEAD
     hash = pinData.serverHash;
     fetchSubmodules = true;
   };
@@ -31,6 +36,13 @@ rustPlatform.buildRustPackage rec {
   '';
 
   cargoHash = pinData.serverCargoHash;
+=======
+    sha256 = pinData.serverSha256;
+    fetchSubmodules = true;
+  };
+
+  cargoSha256 = pinData.serverCargoSha256;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   buildInputs = [ postgresql ]
     ++ lib.optionals stdenv.isDarwin [ libiconv Security ];
@@ -46,14 +58,22 @@ rustPlatform.buildRustPackage rec {
   PROTOC_INCLUDE = "${protobuf}/include";
   nativeBuildInputs = [ protobuf rustfmt ];
 
+<<<<<<< HEAD
   passthru.updateScript = ./update.py;
+=======
+  passthru.updateScript = ./update.sh;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   passthru.tests.lemmy-server = nixosTests.lemmy;
 
   meta = with lib; {
     description = "🐀 Building a federated alternative to reddit in rust";
     homepage = "https://join-lemmy.org/";
     license = licenses.agpl3Only;
+<<<<<<< HEAD
     maintainers = with maintainers; [ happysalada billewanick adisbladis ];
+=======
+    maintainers = with maintainers; [ happysalada billewanick ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     mainProgram = "lemmy_server";
   };
 }

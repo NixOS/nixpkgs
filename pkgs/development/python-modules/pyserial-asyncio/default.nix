@@ -20,8 +20,11 @@ buildPythonPackage rec {
     pyserial
   ];
 
+<<<<<<< HEAD
   __darwinAllowLocalNetworking = true;
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pythonImportsCheck = [
     "serial_asyncio"
   ];
@@ -31,5 +34,9 @@ buildPythonPackage rec {
     homepage = "https://github.com/pyserial/pyserial-asyncio";
     license = licenses.bsd3;
     maintainers = with maintainers; [ ];
+<<<<<<< HEAD
+=======
+    platforms = platforms.linux;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

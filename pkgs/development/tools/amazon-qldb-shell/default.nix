@@ -1,7 +1,14 @@
 { stdenv
 , lib
+<<<<<<< HEAD
 , cmake
 , fetchFromGitHub
+=======
+, clang
+, cmake
+, fetchFromGitHub
+, llvmPackages
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , rustPlatform
 , testers
 , Security
@@ -20,8 +27,14 @@ let
       sha256 = "sha256-aXScqJ1LijMSAy9YkS5QyXtTqxd19lLt3BbyVXlbw8o=";
     };
 
+<<<<<<< HEAD
     nativeBuildInputs = [ cmake rustPlatform.bindgenHook ];
     buildInputs = lib.optional stdenv.isDarwin Security;
+=======
+    nativeBuildInputs = [ clang cmake ];
+    buildInputs = [ llvmPackages.libclang ]
+      ++ lib.optional stdenv.isDarwin Security;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     cargoLock = {
       lockFile = ./Cargo.lock;
@@ -30,6 +43,11 @@ let
       };
     };
 
+<<<<<<< HEAD
+=======
+    LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     passthru.tests.version = testers.testVersion { inherit package; };
 
     meta = with lib; {

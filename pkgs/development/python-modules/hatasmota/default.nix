@@ -8,7 +8,11 @@
 
 buildPythonPackage rec {
   pname = "hatasmota";
+<<<<<<< HEAD
   version = "0.7.3";
+=======
+  version = "0.6.5";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -17,7 +21,11 @@ buildPythonPackage rec {
     owner = "emontnemery";
     repo = pname;
     rev = "refs/tags/${version}";
+<<<<<<< HEAD
     hash = "sha256-lsb92JsqIhq7zaNaolgV8dtSFIq+Enklb6hlBvT7/Ig=";
+=======
+    hash = "sha256-DqXGvn7vYC3SXOM/u+nMUshgBUe0O6Dcffaxh9vFohk=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [

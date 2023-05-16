@@ -15,7 +15,11 @@ buildGoModule rec {
     sha256 = "sha256-u8U/62LZEn1ffwdGsUCGam4HAk7b2LetomCLZzHuuas=";
   };
 
+<<<<<<< HEAD
   vendorHash = "sha256-DyysiVYFpncmyCzlHIOEtWlCMpm90AC3gdItI9WinSo=";
+=======
+  vendorSha256 = "sha256-DyysiVYFpncmyCzlHIOEtWlCMpm90AC3gdItI9WinSo=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   meta = with lib; {
     description = "A set of utilities for checking Go sources";

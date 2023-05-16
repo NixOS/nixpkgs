@@ -8,13 +8,21 @@
 
 buildGoModule rec {
   pname = "kubedog";
+<<<<<<< HEAD
   version = "0.9.12";
+=======
+  version = "0.9.11";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "werf";
     repo = "kubedog";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-B667EnlOD0kXqkW73XXcyQwROWh5SmsM8565sjcGinI=";
+=======
+    hash = "sha256-yHyCmUjxvMzeHpG5OqC3nAjWaiHErTXrbmS+/0Y4A7E=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   vendorHash = "sha256-OgfgCsysNtY7mZQXdmHFyJ0FqmBD3SeQdTLd5Lw3F7k=";

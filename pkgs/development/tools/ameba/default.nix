@@ -16,6 +16,7 @@ crystal.buildCrystalPackage rec {
       url = "https://github.com/crystal-ameba/ameba/commit/c7f2cba409787a1928fbb54494b4645ec11005cc.patch";
       hash = "sha256-tYEPke6omMdCGG2llJGXDZ3jTO4YAqpknzTPi2576UI=";
     })
+<<<<<<< HEAD
     (fetchpatch {
       # Fixes: Error: type must be Ameba::Severity, not (Ameba::Severity | Nil)
       name = "crystal-1.9-compatibility-1.patch";
@@ -34,6 +35,8 @@ crystal.buildCrystalPackage rec {
       url = "https://github.com/crystal-ameba/ameba/commit/db59b23f9bfcf53dbe53d2918bd9c3d79ac24bb6.patch";
       hash = "sha256-MKbEm9CR4+VzioCjcOFuFF0xnc1Ty0Ij4d3FcvQO6hY=";
     })
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   format = "make";

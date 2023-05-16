@@ -404,8 +404,13 @@ in
           {
             log_connections = true;
             log_statement = "all";
+<<<<<<< HEAD
             logging_collector = true;
             log_disconnections = true;
+=======
+            logging_collector = true
+            log_disconnections = true
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
             log_destination = lib.mkForce "syslog";
           }
         '';
@@ -489,7 +494,11 @@ in
      "/share/postgresql"
     ];
 
+<<<<<<< HEAD
     system.checks = lib.optional (cfg.checkConfig && pkgs.stdenv.hostPlatform == pkgs.stdenv.buildPlatform) configFileCheck;
+=======
+    system.extraDependencies = lib.optional (cfg.checkConfig && pkgs.stdenv.hostPlatform == pkgs.stdenv.buildPlatform) configFileCheck;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     systemd.services.postgresql =
       { description = "PostgreSQL Server";

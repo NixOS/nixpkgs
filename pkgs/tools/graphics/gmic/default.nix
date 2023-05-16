@@ -26,7 +26,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gmic";
+<<<<<<< HEAD
   version = "3.2.6";
+=======
+  version = "3.2.4";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   outputs = [ "out" "lib" "dev" "man" ];
 
@@ -34,7 +38,11 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "GreycLab";
     repo = "gmic";
     rev = "v.${finalAttrs.version}";
+<<<<<<< HEAD
     hash = "sha256-kaI5rcAz3Cw/xzWgJhMRu/cQwVrvLRAPiB5BhzPMOHY=";
+=======
+    hash = "sha256-ITKsPhfDfkHmE7a04cxrpIKsSVlrPN944ySu2DCnyEU=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   # TODO: build this from source
@@ -42,7 +50,11 @@ stdenv.mkDerivation (finalAttrs: {
   gmic_stdlib = fetchurl {
     name = "gmic_stdlib.h";
     url = "http://gmic.eu/gmic_stdlib${lib.replaceStrings ["."] [""] finalAttrs.version}.h";
+<<<<<<< HEAD
     hash = "sha256-7JzFU4HvAtC5Nz5vusKCnJ8VMuKfSi1yFmjj0Hh+vA4=";
+=======
+    hash = "sha256-ExMCxFkkctqrdSy5M/TXD5GBRmRA9YEdsYW8nWiTEYY=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

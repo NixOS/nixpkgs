@@ -162,7 +162,12 @@ stdenv.mkDerivation ((removeAttrs args [ "depsExtraArgs" "cargoUpdateHook" "carg
       # Platforms without host tools from
       # https://doc.rust-lang.org/nightly/rustc/platform-support.html
       "armv7a-darwin"
+<<<<<<< HEAD
       "armv5tel-linux" "armv7a-linux" "m68k-linux" "riscv32-linux"
+=======
+      "armv5tel-linux" "armv6l-linux" "armv7a-linux" "m68k-linux"
+      "riscv32-linux"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       "armv6l-netbsd"
       "x86_64-redox"
       "wasm32-wasi"

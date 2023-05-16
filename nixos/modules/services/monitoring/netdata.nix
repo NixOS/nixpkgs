@@ -159,6 +159,7 @@ in {
         '';
       };
 
+<<<<<<< HEAD
       claimTokenFile = mkOption {
         type = types.nullOr types.path;
         default = null;
@@ -168,6 +169,8 @@ in {
         '';
       };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       enableAnalyticsReporting = mkOption {
         type = types.bool;
         default = false;
@@ -214,7 +217,10 @@ in {
         ++ lib.optional config.virtualisation.libvirtd.enable (config.virtualisation.libvirtd.package);
       environment = {
         PYTHONPATH = "${cfg.package}/libexec/netdata/python.d/python_modules";
+<<<<<<< HEAD
         NETDATA_PIPENAME = "/run/netdata/ipc";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       } // lib.optionalAttrs (!cfg.enableAnalyticsReporting) {
         DO_NOT_TRACK = "1";
       };
@@ -226,7 +232,11 @@ in {
         ExecStart = "${cfg.package}/bin/netdata -P /run/netdata/netdata.pid -D -c /etc/netdata/netdata.conf";
         ExecReload = "${pkgs.util-linux}/bin/kill -s HUP -s USR1 -s USR2 $MAINPID";
         ExecStartPost = pkgs.writeShellScript "wait-for-netdata-up" ''
+<<<<<<< HEAD
           while [ "$(${cfg.package}/bin/netdatacli ping)" != pong ]; do sleep 0.5; done
+=======
+          while [ "$(${pkgs.netdata}/bin/netdatacli ping)" != pong ]; do sleep 0.5; done
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         '';
 
         TimeoutStopSec = cfg.deadlineBeforeStopSec;
@@ -270,6 +280,7 @@ in {
         PrivateTmp = true;
         ProtectControlGroups = true;
         PrivateMounts = true;
+<<<<<<< HEAD
       } // (lib.optionalAttrs (cfg.claimTokenFile != null) {
         LoadCredential = [
           "netdata_claim_token:${cfg.claimTokenFile}"
@@ -289,6 +300,9 @@ in {
             -daemon-not-running
         '';
       });
+=======
+      };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
 
     systemd.enableCgroupAccounting = true;

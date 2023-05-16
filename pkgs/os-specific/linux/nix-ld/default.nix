@@ -12,13 +12,21 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "nix-ld";
+<<<<<<< HEAD
   version = "1.2.2";
+=======
+  version = "1.1.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "mic92";
     repo = "nix-ld";
     rev = version;
+<<<<<<< HEAD
     hash = "sha256-+z9t7BLugZO1WhyYEq6FI38TMh2EwfgfAv3RDFSjwtc=";
+=======
+    sha256 = "sha256-dM9YPN+yq6sHmRhJQinYdAVXBkTgEtrVQcsd/mIIX0o=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   doCheck = true;

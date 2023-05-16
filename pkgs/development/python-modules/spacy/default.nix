@@ -1,5 +1,8 @@
 { lib
+<<<<<<< HEAD
 , stdenv
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , blis
 , buildPythonPackage
 , callPackage
@@ -18,7 +21,10 @@
 , pytest
 , python
 , pythonOlder
+<<<<<<< HEAD
 , pythonRelaxDepsHook
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , requests
 , setuptools
 , spacy-legacy
@@ -30,6 +36,10 @@
 , typing-extensions
 , wasabi
 , writeScript
+<<<<<<< HEAD
+=======
+, stdenv
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , nix
 , git
 , nix-update
@@ -37,13 +47,18 @@
 
 buildPythonPackage rec {
   pname = "spacy";
+<<<<<<< HEAD
   version = "3.5.4";
+=======
+  version = "3.5.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
+<<<<<<< HEAD
     hash = "sha256-mpwWfp3Ov++sx12sNKjnK+y+NI60W78GpsBSOuBaxCU=";
   };
 
@@ -55,6 +70,11 @@ buildPythonPackage rec {
     pythonRelaxDepsHook
   ];
 
+=======
+    hash = "sha256-IsH/qrKFt0dwA9S1sDhBTMMkaKaQ1HkBW5ppjFMcgTs=";
+  };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   propagatedBuildInputs = [
     blis
     catalogue
@@ -79,7 +99,13 @@ buildPythonPackage rec {
     wasabi
   ] ++ lib.optionals (pythonOlder "3.8") [
     typing-extensions
+<<<<<<< HEAD
   ];  postPatch = ''
+=======
+  ];
+
+  postPatch = ''
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     substituteInPlace setup.cfg \
       --replace "typer>=0.3.0,<0.5.0" "typer>=0.3.0"
   '';
@@ -89,7 +115,10 @@ buildPythonPackage rec {
   ];
 
   doCheck = false;
+<<<<<<< HEAD
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   checkPhase = ''
     ${python.interpreter} -m pytest spacy/tests --vectors --models --slow
   '';

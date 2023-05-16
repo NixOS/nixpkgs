@@ -19,12 +19,20 @@
 
 buildPythonPackage rec {
   pname = "flask";
+<<<<<<< HEAD
   version = "2.2.5";
+=======
+  version = "2.2.3";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchPypi {
     pname = "Flask";
     inherit version;
+<<<<<<< HEAD
     hash = "sha256-7e6bCn/yZiG9WowQ/0hK4oc3okENmbC7mmhQx/uXeqA=";
+=======
+    hash = "sha256-frNzmEvxx3ACP86dsWTtDDNTzQtT8TD0aT2gynVqLm0=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [
@@ -57,6 +65,10 @@ buildPythonPackage rec {
       Python web application frameworks.
     '';
     license = licenses.bsd3;
+<<<<<<< HEAD
     maintainers = with maintainers; [ nickcao ];
+=======
+    maintainers = with maintainers; [ SuperSandro2000 ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

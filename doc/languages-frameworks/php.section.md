@@ -22,7 +22,11 @@ NixOS - not necessarily the latest major release from upstream.
 
 All available PHP attributes are wrappers around their respective
 binary PHP package and provide commonly used extensions this way. The
+<<<<<<< HEAD
 real PHP 8.1 package, i.e. the unwrapped one, is available as
+=======
+real PHP 7.4 package, i.e. the unwrapped one, is available as
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 `php81.unwrapped`; see the next section for more details.
 
 Interactive tools built on PHP are put in `php.packages`; composer is

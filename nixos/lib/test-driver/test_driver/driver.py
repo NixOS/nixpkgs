@@ -163,6 +163,14 @@ class Driver:
                 machine.wait_for_shutdown()
 
     def create_machine(self, args: Dict[str, Any]) -> Machine:
+<<<<<<< HEAD
+=======
+        rootlog.warning(
+            "Using legacy create_machine(), please instantiate the"
+            "Machine class directly, instead"
+        )
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         tmp_dir = get_tmp_dir()
 
         if args.get("startCommand"):

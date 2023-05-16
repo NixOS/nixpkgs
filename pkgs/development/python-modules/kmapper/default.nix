@@ -44,7 +44,11 @@ buildPythonPackage rec {
     description = "Python implementation of Mapper algorithm for Topological Data Analysis";
     homepage = "https://kepler-mapper.scikit-tda.org/";
     license = licenses.mit;
+<<<<<<< HEAD
     maintainers = [ ];
     broken = true;
+=======
+    maintainers = [ maintainers.costrouc ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

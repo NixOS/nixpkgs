@@ -1,4 +1,8 @@
 { lib
+<<<<<<< HEAD
+=======
+, stdenv
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , fetchurl
 , tk
 , tcllib
@@ -7,7 +11,11 @@
 }:
 
 let
+<<<<<<< HEAD
   inherit (lib) optionals optionalString;
+=======
+  inherit (lib) optional optionals optionalString;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   tclLibraries = optionals tkremind [ tcllib tk ];
   tkremindPatch = optionalString tkremind ''
     substituteInPlace scripts/tkremind --replace "exec wish" "exec ${tk}/bin/wish"

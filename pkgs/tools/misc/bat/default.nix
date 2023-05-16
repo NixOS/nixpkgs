@@ -16,7 +16,11 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "sharkdp";
+<<<<<<< HEAD
     repo = "bat";
+=======
+    repo = pname;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     rev = "v${version}";
     hash = "sha256-cGHxB3Wp8yEcJBMtSOec6l7iBsMLhUtJ7nh5fijnWZs=";
   };
@@ -58,7 +62,10 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/sharkdp/bat";
     changelog = "https://github.com/sharkdp/bat/raw/v${version}/CHANGELOG.md";
     license = with licenses; [ asl20 /* or */ mit ];
+<<<<<<< HEAD
     mainProgram = "bat";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     maintainers = with maintainers; [ dywedir lilyball zowoq SuperSandro2000 ];
   };
 }

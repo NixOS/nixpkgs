@@ -1,7 +1,10 @@
 { lib
 , installShellFiles
 , python3
+<<<<<<< HEAD
 , fetchPypi
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , fetchFromGitHub
 , nix-update-script
 , testers
@@ -14,7 +17,11 @@ let
       fido2 = super.fido2.overridePythonAttrs (oldAttrs: rec {
         version = "0.9.3";
         format = "setuptools";
+<<<<<<< HEAD
         src = fetchPypi {
+=======
+        src = self.fetchPypi {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           inherit (oldAttrs) pname;
           inherit version;
           hash = "sha256-tF6JphCc/Lfxu1E3dqotZAjpXEgi+DolORi5RAg0Zuw=";
@@ -24,7 +31,11 @@ let
       okta = super.okta.overridePythonAttrs (oldAttrs: rec {
         version = "0.0.4";
         format = "setuptools";
+<<<<<<< HEAD
         src = fetchPypi {
+=======
+        src = self.fetchPypi {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           inherit (oldAttrs) pname;
           inherit version;
           hash = "sha256-U+eSxo02hP9BQLTLHAKvOCEJA2j4EQ/eVMC9tjhEkzI=";
@@ -42,14 +53,22 @@ let
 in
 python.pkgs.buildPythonApplication rec {
   pname = "gimme-aws-creds";
+<<<<<<< HEAD
   version = "2.7.2"; # N.B: if you change this, check if overrides are still up-to-date
+=======
+  version = "2.6.1"; # N.B: if you change this, check if overrides are still up-to-date
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "Nike-Inc";
     repo = "gimme-aws-creds";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-ydzGaUQ43vvQqU9xvhPJqHG/2PUtBbASIVpZCDnsR60=";
+=======
+    hash = "sha256-h54miRSZWT1mG63k7imJfQU1fdVr3Zc2gcyuP5511EQ=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = with python.pkgs; [
@@ -71,11 +90,14 @@ python.pkgs.buildPythonApplication rec {
     pyjwt
   ];
 
+<<<<<<< HEAD
   preCheck = ''
     # Disable using platform's keyring unavailable in sandbox
     export PYTHON_KEYRING_BACKEND="keyring.backends.fail.Keyring"
   '';
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   checkInputs = with python.pkgs; [
     pytestCheckHook
     responses
@@ -98,7 +120,13 @@ python.pkgs.buildPythonApplication rec {
 
   passthru = {
     inherit python;
+<<<<<<< HEAD
     updateScript = nix-update-script { };
+=======
+    updateScript = nix-update-script {
+      attrPath = pname;
+    };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     tests.version = testers.testVersion {
       package = gimme-aws-creds;
       command = ''touch tmp.conf && OKTA_CONFIG="tmp.conf" gimme-aws-creds --version'';

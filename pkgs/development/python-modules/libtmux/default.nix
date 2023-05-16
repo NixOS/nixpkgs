@@ -12,14 +12,22 @@
 
 buildPythonPackage rec {
   pname = "libtmux";
+<<<<<<< HEAD
   version = "0.23.2";
+=======
+  version = "0.21.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "tmux-python";
     repo = pname;
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-W1gBhukBooPo8uej6i8i3UxLuDeBBeSX5xU50SyjjlA=";
+=======
+    hash = "sha256-mWujuw2n5PfGdVnORTyYe83BGnwwZ/BFxt9BR5udZDA=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   postPatch = ''

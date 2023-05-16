@@ -30,8 +30,11 @@ stdenv.mkDerivation rec {
     substituteInPlace src/Core/Runner.cpp --replace "/bin/bash" "${runtimeShell}"
   '';
 
+<<<<<<< HEAD
   env.NIX_CFLAGS_COMPILE = "-std=c++14";
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   meta = with lib; {
     description = "An IDE specially designed for competitive programming";
     homepage = "https://cpeditor.org";

@@ -17,13 +17,21 @@
 
 stdenv.mkDerivation rec {
   pname = "osdlyrics";
+<<<<<<< HEAD
   version = "0.5.14";
+=======
+  version = "0.5.13";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "osdlyrics";
     repo = "osdlyrics";
     rev = version;
+<<<<<<< HEAD
     sha256 = "sha256-NVUQLmddXnpryt1AuHSwgPnWkgxWMBNJac09TJ12Yzo=";
+=======
+    sha256 = "sha256-E4pVXopqQYJW+a5nUf9dMabxJ9nYPu3C2ti8LlY470c=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [
@@ -81,7 +89,11 @@ stdenv.mkDerivation rec {
     description = "Standalone lyrics fetcher/displayer";
     homepage = "https://github.com/osdlyrics/osdlyrics";
     license = licenses.gpl3Plus;
+<<<<<<< HEAD
     maintainers = with maintainers; [ ];
+=======
+    maintainers = with maintainers; [ jtojnar ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     platforms = platforms.linux;
   };
 }

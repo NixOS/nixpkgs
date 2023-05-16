@@ -4,13 +4,21 @@
 
 stdenv.mkDerivation rec {
   pname = "poedit";
+<<<<<<< HEAD
   version = "3.3.2";
+=======
+  version = "3.2.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "vslavik";
     repo = "poedit";
     rev = "v${version}-oss";
+<<<<<<< HEAD
     hash = "sha256-4WImcTr2nWIdsYJ9ADztvjKEzHK4F8qpJ0QGMOfB3ng=";
+=======
+    sha256 = "sha256-kun1x1ql8KLS1+nh5+iItxYZnfvFcrx62cvX4OEczG4=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ autoconf automake asciidoc wrapGAppsHook

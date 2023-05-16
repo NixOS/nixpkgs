@@ -13,7 +13,11 @@ stdenv.mkDerivation {
 
   patches = [(fetchpatch {
     name = "clang5-support.patch";
+<<<<<<< HEAD
     url = "https://raw.githubusercontent.com/sagemath/sage/9.2/build/pkgs/ppl/patches/clang5-support.patch";
+=======
+    url = "https://git.sagemath.org/sage.git/plain/build/pkgs/ppl/patches/clang5-support.patch?h=9.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     sha256 = "1zj90hm25pkgvk4jlkfzh18ak9b98217gbidl3731fdccbw6hr87";
   })];
 

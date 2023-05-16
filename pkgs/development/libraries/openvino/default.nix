@@ -1,6 +1,10 @@
 { lib
 , stdenv
 , fetchFromGitHub
+<<<<<<< HEAD
+=======
+, fetchpatch
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , fetchurl
 , substituteAll
 
@@ -24,30 +28,62 @@
 }:
 
 let
+<<<<<<< HEAD
   # See GNA_VERSION in cmake/dependencies.cmake
   gna_version = "03.05.00.1906";
   gna = fetchurl {
     url = "https://storage.openvinotoolkit.org/dependencies/gna/gna_${gna_version}.zip";
     hash = "sha256-SlvobZwCaw4Qr6wqV/x8mddisw49UGq7OjOA+8/icm4=";
+=======
+  # See FIRMWARE_PACKAGE_VERSION in src/plugins/intel_myriad/myriad_dependencies.cmake
+  myriad_firmware_version = "20221129_35";
+  myriad_usb_firmware = fetchurl {
+    url = "https://storage.openvinotoolkit.org/dependencies/myriad/firmware_usb-ma2x8x_${myriad_firmware_version}.zip";
+    hash = "sha256-HKNWbSlMjSafOgrS9WmenbsmeaJKRVssw0NhIwPYZ70=";
+  };
+  myriad_pcie_firmware = fetchurl {
+    url = "https://storage.openvinotoolkit.org/dependencies/myriad/firmware_pcie-ma2x8x_${myriad_firmware_version}.zip";
+    hash = "sha256-VmfrAoKQ++ySIgAxWQul+Hd0p7Y4sTF44Nz4RHpO6Mo=";
+  };
+
+  # See GNA_VERSION in cmake/dependencies.cmake
+  gna_version = "03.00.00.1910";
+  gna = fetchurl {
+    url = "https://storage.openvinotoolkit.org/dependencies/gna/gna_${gna_version}.zip";
+    hash = "sha256-iU3bwK40WfBFE7hTsMq8MokN1Oo3IooCK2oyEBvbt/g=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   tbbbind_version = "2_5";
   tbbbind = fetchurl {
+<<<<<<< HEAD
     url = "https://storage.openvinotoolkit.org/dependencies/thirdparty/linux/tbbbind_${tbbbind_version}_static_lin_v3.tgz";
     hash = "sha256-053rJiwGmBteLS48WT6fyb5izk/rkd1OZI6SdTZZprM=";
+=======
+    url = "https://download.01.org/opencv/master/openvinotoolkit/thirdparty/linux/tbbbind_${tbbbind_version}_static_lin_v2.tgz";
+    hash = "sha256-hl54lMWEAiM8rw0bKIBW4OarK/fJ0AydxgVhxIS8kPQ=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 in
 
 stdenv.mkDerivation rec {
   pname = "openvino";
+<<<<<<< HEAD
   version = "2023.0.0";
+=======
+  version = "2022.3.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "openvinotoolkit";
     repo = "openvino";
     rev = "refs/tags/${version}";
     fetchSubmodules = true;
+<<<<<<< HEAD
     hash = "sha256-z88SgAZ0UX9X7BhBA7/NU/UhVLltb6ANKolruU8YiZQ=";
+=======
+    hash = "sha256-Ie58zTNatiYZZQJ8kJh/+HlSetQjhAtf2Us83z1jGv4=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   outputs = [
@@ -78,6 +114,17 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
+<<<<<<< HEAD
+=======
+    mkdir -p temp/vpu/firmware/{pcie,usb}-ma2x8x
+    pushd temp/vpu/firmware
+    bsdtar -xf ${myriad_pcie_firmware} -C pcie-ma2x8x
+    echo "${myriad_pcie_firmware.url}" > pcie-ma2x8x/ie_dependency.info
+    bsdtar -xf ${myriad_usb_firmware} -C usb-ma2x8x
+    echo "${myriad_usb_firmware.url}" > usb-ma2x8x/ie_dependency.info
+    popd
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     mkdir -p temp/gna_${gna_version}
     pushd temp/
     bsdtar -xf ${gna}
@@ -164,8 +211,12 @@ stdenv.mkDerivation rec {
     homepage = "https://docs.openvinotoolkit.org/";
     license = with licenses; [ asl20 ];
     platforms = platforms.all;
+<<<<<<< HEAD
     broken = (stdenv.isLinux && stdenv.isAarch64) # requires scons, then fails with *** Source directory cannot be under variant directory.
       || stdenv.isDarwin; # Cannot find macos sdk
+=======
+    broken = stdenv.isDarwin; # Cannot find macos sdk
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     maintainers = with maintainers; [ tfmoraes ];
   };
 }

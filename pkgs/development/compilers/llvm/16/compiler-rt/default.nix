@@ -9,7 +9,10 @@ let
   useLLVM = stdenv.hostPlatform.useLLVM or false;
   bareMetal = stdenv.hostPlatform.parsed.kernel.name == "none";
   haveLibc = stdenv.cc.libc != null;
+<<<<<<< HEAD
   isDarwinStatic = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isStatic;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   inherit (stdenv.hostPlatform) isMusl isGnu;
 
   baseName = "compiler-rt";
@@ -32,6 +35,7 @@ stdenv.mkDerivation {
     ++ lib.optional stdenv.isDarwin xcbuild.xcrun;
   buildInputs = lib.optional stdenv.hostPlatform.isDarwin libcxxabi;
 
+<<<<<<< HEAD
   env.NIX_CFLAGS_COMPILE = toString ([
     "-DSCUDO_DEFAULT_OPTIONS=DeleteSizeMismatch=0:DeallocationTypeMismatch=0"
   ] ++ lib.optionals (!haveLibc) [
@@ -42,6 +46,11 @@ stdenv.mkDerivation {
     # wrong, or perhaps there is a way to provide an assert.h.
     "-Wno-error=implicit-function-declaration"
   ]);
+=======
+  env.NIX_CFLAGS_COMPILE = toString [
+    "-DSCUDO_DEFAULT_OPTIONS=DeleteSizeMismatch=0:DeallocationTypeMismatch=0"
+  ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   cmakeFlags = [
     "-DCOMPILER_RT_DEFAULT_TARGET_ONLY=ON"
@@ -49,7 +58,11 @@ stdenv.mkDerivation {
     "-DCMAKE_ASM_COMPILER_TARGET=${stdenv.hostPlatform.config}"
   ] ++ lib.optionals (haveLibc && stdenv.hostPlatform.libc == "glibc") [
     "-DSANITIZER_COMMON_CFLAGS=-I${libxcrypt}/include"
+<<<<<<< HEAD
   ] ++ lib.optionals (useLLVM || bareMetal || isMusl || isDarwinStatic) [
+=======
+  ] ++ lib.optionals (useLLVM || bareMetal || isMusl) [
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "-DCOMPILER_RT_BUILD_SANITIZERS=OFF"
     "-DCOMPILER_RT_BUILD_XRAY=OFF"
     "-DCOMPILER_RT_BUILD_LIBFUZZER=OFF"
@@ -57,10 +70,16 @@ stdenv.mkDerivation {
     "-DCOMPILER_RT_BUILD_ORC=OFF" # may be possible to build with musl if necessary
   ] ++ lib.optionals (useLLVM || bareMetal) [
      "-DCOMPILER_RT_BUILD_PROFILE=OFF"
+<<<<<<< HEAD
   ] ++ lib.optionals ((useLLVM && !haveLibc) || bareMetal || isDarwinStatic ) [
     "-DCMAKE_CXX_COMPILER_WORKS=ON"
   ] ++ lib.optionals ((useLLVM && !haveLibc) || bareMetal) [
     "-DCMAKE_C_COMPILER_WORKS=ON"
+=======
+  ] ++ lib.optionals ((useLLVM && !haveLibc) || bareMetal) [
+    "-DCMAKE_C_COMPILER_WORKS=ON"
+    "-DCMAKE_CXX_COMPILER_WORKS=ON"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "-DCOMPILER_RT_BAREMETAL_BUILD=ON"
     "-DCMAKE_SIZEOF_VOID_P=${toString (stdenv.hostPlatform.parsed.cpu.bits / 8)}"
   ] ++ lib.optionals (useLLVM && !haveLibc) [
@@ -72,7 +91,10 @@ stdenv.mkDerivation {
   ] ++ lib.optionals (bareMetal) [
     "-DCOMPILER_RT_OS_DIR=baremetal"
   ] ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
+<<<<<<< HEAD
     "-DCMAKE_LIPO=${lib.getBin stdenv.cc.bintools.bintools}/bin/${stdenv.cc.targetPrefix}lipo"
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "-DDARWIN_macosx_OVERRIDE_SDK_VERSION=ON"
     "-DDARWIN_osx_ARCHS=${stdenv.hostPlatform.darwinArch}"
     "-DDARWIN_osx_BUILTIN_ARCHS=${stdenv.hostPlatform.darwinArch}"
@@ -107,9 +129,17 @@ stdenv.mkDerivation {
     substituteInPlace cmake/builtin-config-ix.cmake \
       --replace 'set(X86 i386)' 'set(X86 i386 i486 i586 i686)'
   '' + lib.optionalString stdenv.isDarwin ''
+<<<<<<< HEAD
     substituteInPlace cmake/config-ix.cmake \
       --replace 'set(COMPILER_RT_HAS_TSAN TRUE)' 'set(COMPILER_RT_HAS_TSAN FALSE)'
   '' + lib.optionalString (useLLVM && !haveLibc) ''
+=======
+    substituteInPlace cmake/builtin-config-ix.cmake \
+      --replace 'set(ARM64 arm64 arm64e)' 'set(ARM64)'
+    substituteInPlace cmake/config-ix.cmake \
+      --replace 'set(COMPILER_RT_HAS_TSAN TRUE)' 'set(COMPILER_RT_HAS_TSAN FALSE)'
+  '' + lib.optionalString (useLLVM) ''
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     substituteInPlace lib/builtins/int_util.c \
       --replace "#include <stdlib.h>" ""
     substituteInPlace lib/builtins/clear_cache.c \
@@ -124,12 +154,15 @@ stdenv.mkDerivation {
   '' + lib.optionalString (useLLVM) ''
     ln -s $out/lib/*/clang_rt.crtbegin-*.o $out/lib/crtbegin.o
     ln -s $out/lib/*/clang_rt.crtend-*.o $out/lib/crtend.o
+<<<<<<< HEAD
     # Note the history of crt{begin,end}S in previous versions of llvm in nixpkg:
     # The presence of crtbegin_shared has been added and removed; it's possible
     # people have added/removed it to get it working on their platforms.
     # Try each in turn for now.
     ln -s $out/lib/*/clang_rt.crtbegin-*.o $out/lib/crtbeginS.o
     ln -s $out/lib/*/clang_rt.crtend-*.o $out/lib/crtendS.o
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     ln -s $out/lib/*/clang_rt.crtbegin_shared-*.o $out/lib/crtbeginS.o
     ln -s $out/lib/*/clang_rt.crtend_shared-*.o $out/lib/crtendS.o
   '' + lib.optionalString doFakeLibgcc ''

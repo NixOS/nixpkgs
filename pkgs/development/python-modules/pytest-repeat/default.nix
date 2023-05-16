@@ -30,6 +30,10 @@ buildPythonPackage rec {
     description = "Pytest plugin for repeating tests";
     homepage = "https://github.com/pytest-dev/pytest-repeat";
     license = licenses.mpl20;
+<<<<<<< HEAD
     maintainers = with maintainers; [ ];
+=======
+    maintainers = with maintainers; [ costrouc ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

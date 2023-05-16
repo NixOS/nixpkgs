@@ -7,8 +7,14 @@
 , boost
 , cmake
 , double-conversion
+<<<<<<< HEAD
 , fmt
 , fuse3
+=======
+, fmt_8
+, fuse3
+, gflags
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , glog
 , gtest
 , jemalloc
@@ -20,19 +26,27 @@
 , pkg-config
 , ronn
 , xxHash
+<<<<<<< HEAD
 , utf8cpp
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , zstd
 }:
 
 stdenv.mkDerivation rec {
   pname = "dwarfs";
+<<<<<<< HEAD
   version = "0.7.2";
+=======
+  version = "0.6.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "mhx";
     repo = "dwarfs";
     rev = "v${version}";
     fetchSubmodules = true;
+<<<<<<< HEAD
     hash = "sha256-DcPRrATI2cpLZWAL+sSCoXvJ1R0O3yHqhlJW1aEpDpA=";
   };
 
@@ -41,6 +55,20 @@ stdenv.mkDerivation rec {
       src = ./version_info.patch;
 
       versionFull = version; # displayed as version number (with v prepended)
+=======
+    sha256 = "sha256-fA/3AooDndqYiK215cu/zTqCqeccHnwIX2CfJ9sC+Fc=";
+  };
+
+  patches = with lib.versions; [
+    (substituteAll {
+      src = ./version_info.patch;
+
+      gitRev = "v${version}";
+      gitDesc = "v${version}";
+      gitBranch = "v${version}";
+      gitId = "v${version}"; # displayed as version number
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       versionMajor = major version;
       versionMinor = minor version;
       versionPatch = patch version;
@@ -51,11 +79,21 @@ stdenv.mkDerivation rec {
     "-DPREFER_SYSTEM_ZSTD=ON"
     "-DPREFER_SYSTEM_XXHASH=ON"
     "-DPREFER_SYSTEM_GTEST=ON"
+<<<<<<< HEAD
     "-DPREFER_SYSTEM_LIBFMT=ON"
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     # may be added under an option in the future
     # "-DWITH_LEGACY_FUSE=ON"
     "-DWITH_TESTS=ON"
+<<<<<<< HEAD
+=======
+
+    # temporary hack until folly builds work on aarch64,
+    # see https://github.com/facebook/folly/issues/1880
+    "-DCMAKE_LIBRARY_ARCHITECTURE=${if stdenv.isx86_64 then "x86_64" else "dummy"}"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   nativeBuildInputs = [
@@ -68,13 +106,20 @@ stdenv.mkDerivation rec {
   buildInputs = [
     # dwarfs
     boost
+<<<<<<< HEAD
     fmt
+=======
+    fmt_8
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     fuse3
     jemalloc
     libarchive
     lz4
     xxHash
+<<<<<<< HEAD
     utf8cpp
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     zstd
 
     # folly
@@ -87,9 +132,15 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
   nativeCheckInputs = [ gtest ];
+<<<<<<< HEAD
   # these fail inside of the sandbox due to missing access
   # to the FUSE device
   GTEST_FILTER = "-dwarfs/tools_test.end_to_end/*:dwarfs/tools_test.mutating_ops/*";
+=======
+  # this fails inside of the sandbox due to missing access
+  # to the FUSE device
+  GTEST_FILTER = "-tools.everything";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   meta = with lib; {
     description = "A fast high compression read-only file system";

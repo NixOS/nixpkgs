@@ -28,18 +28,30 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "freetype";
+<<<<<<< HEAD
   version = "2.13.1";
 
   src = let inherit (finalAttrs) pname version; in fetchurl {
     url = "mirror://savannah/${pname}/${pname}-${version}.tar.xz";
     sha256 = "sha256-6mfjsBmxEE0WZ6onT13DB9jL1gazmbwy3zCKd/GlZL8=";
+=======
+  version = "2.13.0";
+
+  src = let inherit (finalAttrs) pname version; in fetchurl {
+    url = "mirror://savannah/${pname}/${pname}-${version}.tar.xz";
+    sha256 = "sha256-XuI6vQR2NsJLLUPGYl3K/GZmHRrKZN7J4NBd8pWSYkw=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [ zlib bzip2 brotli libpng ]; # needed when linking against freetype
 
   # dependence on harfbuzz is looser than the reverse dependence
+<<<<<<< HEAD
   nativeBuildInputs = [ pkg-config which ]
     ++ lib.optional (!stdenv.hostPlatform.isWindows) makeWrapper
+=======
+  nativeBuildInputs = [ pkg-config which makeWrapper ]
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     # FreeType requires GNU Make, which is not part of stdenv on FreeBSD.
     ++ lib.optional (!stdenv.isLinux) gnumake;
 
@@ -61,10 +73,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
+<<<<<<< HEAD
   postInstall = glib.flattenInclude
     # pkgsCross.mingwW64.pkg-config doesn't build
     # makeWrapper doesn't cross-compile to windows #120726
     + lib.optionalString (!stdenv.hostPlatform.isMinGW) ''
+=======
+  postInstall = glib.flattenInclude + ''
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     substituteInPlace $dev/bin/freetype-config \
       --replace ${buildPackages.pkg-config} ${pkgsHostHost.pkg-config}
 

@@ -23,10 +23,17 @@ let
       docbook2x
       docbook-xsl-nons
       wrapGAppsHook
+<<<<<<< HEAD
       gobject-introspection
     ];
     buildInputs = [
       gtk3
+=======
+    ];
+    buildInputs = [
+      gtk3
+      gobject-introspection
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       vala gtk-doc
     ];
   });
@@ -50,10 +57,17 @@ let
       python3
       glib
       wrapGAppsHook
+<<<<<<< HEAD
       gobject-introspection
     ];
     buildInputs = [
       gtk3
+=======
+    ];
+    buildInputs = [
+      gtk3
+      gobject-introspection
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       vala
       gtk-doc
       gst_all_1.gstreamer

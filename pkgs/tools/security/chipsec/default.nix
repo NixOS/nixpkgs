@@ -10,7 +10,11 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "chipsec";
+<<<<<<< HEAD
   version = "1.10.6";
+=======
+  version = "1.8.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   disabled = !stdenv.isLinux;
 
@@ -18,7 +22,11 @@ python3.pkgs.buildPythonApplication rec {
     owner = "chipsec";
     repo = "chipsec";
     rev = version;
+<<<<<<< HEAD
     hash = "sha256-+pbFG1SmSO/cnt1e+kel7ereC0I1OCJKKsS0KaJDWdc=";
+=======
+    hash = "sha256-bK8wlwhP0pi8rOs8ysbSZ+0aZOaX4mckfH/p4OLGnes=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   patches = lib.optionals withDriver [ ./ko-path.diff ./compile-ko.diff ];
@@ -28,7 +36,11 @@ python3.pkgs.buildPythonApplication rec {
   nativeBuildInputs = [
     libelf
     nasm
+<<<<<<< HEAD
   ] ++ lib.optionals withDriver kernel.moduleBuildDependencies;
+=======
+  ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nativeCheckInputs = with python3.pkgs; [
     distro
@@ -72,9 +84,14 @@ python3.pkgs.buildPythonApplication rec {
     '';
     license = licenses.gpl2Only;
     homepage = "https://github.com/chipsec/chipsec";
+<<<<<<< HEAD
     maintainers = with maintainers; [ johnazoidberg erdnaxe ];
     platforms = [ "x86_64-linux" ] ++ lib.optional (!withDriver) "x86_64-darwin";
     # https://github.com/chipsec/chipsec/issues/1793
     broken = withDriver && kernel.kernelOlder "5.4" && kernel.isHardened;
+=======
+    maintainers = with maintainers; [ johnazoidberg ];
+    platforms = [ "x86_64-linux" ] ++ lib.optional (!withDriver) "x86_64-darwin";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

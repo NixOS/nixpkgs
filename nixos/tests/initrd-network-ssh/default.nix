@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import ../make-test-python.nix ({ lib, pkgs, ... }:
 
 {
@@ -5,6 +6,17 @@ import ../make-test-python.nix ({ lib, pkgs, ... }:
   meta.maintainers = with lib.maintainers; [ willibutz emily ];
 
   nodes = {
+=======
+import ../make-test-python.nix ({ lib, ... }:
+
+{
+  name = "initrd-network-ssh";
+  meta = with lib.maintainers; {
+    maintainers = [ willibutz emily ];
+  };
+
+  nodes = with lib; {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     server =
       { config, ... }:
       {
@@ -15,7 +27,11 @@ import ../make-test-python.nix ({ lib, pkgs, ... }:
           enable = true;
           ssh = {
             enable = true;
+<<<<<<< HEAD
             authorizedKeys = [ (lib.readFile ./id_ed25519.pub) ];
+=======
+            authorizedKeys = [ (readFile ./id_ed25519.pub) ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
             port = 22;
             hostKeys = [ ./ssh_host_ed25519_key ];
           };
@@ -35,12 +51,21 @@ import ../make-test-python.nix ({ lib, pkgs, ... }:
       {
         environment.etc = {
           knownHosts = {
+<<<<<<< HEAD
             text = lib.concatStrings [
               "server,"
               "${toString (lib.head (lib.splitString " " (
                 toString (lib.elemAt (lib.splitString "\n" config.networking.extraHosts) 2)
               )))} "
               "${lib.readFile ./ssh_host_ed25519_key.pub}"
+=======
+            text = concatStrings [
+              "server,"
+              "${toString (head (splitString " " (
+                toString (elemAt (splitString "\n" config.networking.extraHosts) 2)
+              )))} "
+              "${readFile ./ssh_host_ed25519_key.pub}"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
             ];
           };
           sshKey = {

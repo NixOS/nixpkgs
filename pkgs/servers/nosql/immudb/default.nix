@@ -14,13 +14,21 @@ let
 in
 buildGoModule rec {
   pname = "immudb";
+<<<<<<< HEAD
   version = "1.5.0";
+=======
+  version = "1.4.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "codenotary";
     repo = pname;
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-xvbks6dUiS14cntydAjSNTujxsSwYzmf+B4Zh4V/NwI=";
+=======
+    sha256 = "sha256-G6Oy+veZGQYtRyeOSpFmQ3Ehro3Ra69iCQVl9YnerAk=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   preBuild = ''
@@ -29,7 +37,11 @@ buildGoModule rec {
     go generate -tags webconsole ./webconsole
   '';
 
+<<<<<<< HEAD
   vendorHash = "sha256-7mMutYx2/jmTx+7h9S412fYCFXiJnTGz0qwDSO7BIzM=";
+=======
+  vendorSha256 = "sha256-k2OwwGjuyfM3QIRz+/DgGD0xUYor4TDmfBmcQOkcA3A=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nativeBuildInputs = [ installShellFiles ];
 

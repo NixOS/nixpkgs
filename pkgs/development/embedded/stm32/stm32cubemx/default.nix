@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 { fdupes
 , fetchzip
 , icoutils
@@ -8,11 +9,20 @@
 , stdenv
 }:
 
+=======
+{ lib, stdenv, makeDesktopItem, copyDesktopItems, icoutils, fdupes, imagemagick, jdk11, fetchzip }:
+# TODO: JDK16 causes STM32CubeMX to crash right now, so we fixed the version to JDK11
+# This may be fixed in a future version of STM32CubeMX. This issue has been reported to ST:
+# https://community.st.com/s/question/0D53W00000jnOzPSAU/stm32cubemx-crashes-on-launch-with-openjdk16
+# If you're updating this derivation, check the link above to see if it's been fixed upstream
+# and try replacing all occurrences of jdk11 with jre and test whether it works.
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 let
   iconame = "STM32CubeMX";
 in
 stdenv.mkDerivation rec {
   pname = "stm32cubemx";
+<<<<<<< HEAD
   version = "6.9.1";
 
   src = fetchzip {
@@ -46,6 +56,35 @@ stdenv.mkDerivation rec {
     cat << EOF > $out/bin/${pname}
     #!${stdenv.shell}
     ${jdk17}/bin/java -jar $out/opt/STM32CubeMX/STM32CubeMX
+=======
+  version = "6.8.0";
+
+  src = fetchzip {
+    url = "https://sw-center.st.com/packs/resource/library/stm32cube_mx_v${builtins.replaceStrings ["."] [""] version}-lin.zip";
+    sha256 = "sha256-jJeJTg2cCO6fqQ4vFq2dXsfsWmlN5ncZJWMoekJXkLQ=";
+    stripRoot = false;
+  };
+
+  nativeBuildInputs = [ icoutils fdupes imagemagick copyDesktopItems];
+  desktopItems = [
+    (makeDesktopItem {
+      name = "stm32CubeMX";
+      exec = "stm32cubemx";
+      desktopName = "STM32CubeMX";
+      categories = [ "Development" ];
+      comment = "STM32Cube initialization code generator";
+      icon = "stm32cubemx";
+    })
+  ];
+
+  buildCommand = ''
+    mkdir -p $out/{bin,opt/STM32CubeMX}
+    cp -r $src/MX/. $out/opt/STM32CubeMX/
+    chmod +rx $out/opt/STM32CubeMX/STM32CubeMX
+    cat << EOF > $out/bin/${pname}
+    #!${stdenv.shell}
+    ${jdk11}/bin/java -jar $out/opt/STM32CubeMX/STM32CubeMX
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     EOF
     chmod +x $out/bin/${pname}
 
@@ -62,8 +101,11 @@ stdenv.mkDerivation rec {
           $out/share/icons/hicolor/"$size"x"$size"/apps/${pname}.png
       fi
     done;
+<<<<<<< HEAD
 
     cp ${desktopItem}/share/applications/*.desktop $out/share/applications
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '';
 
   meta = with lib; {
@@ -78,7 +120,11 @@ stdenv.mkDerivation rec {
     homepage = "https://www.st.com/en/development-tools/stm32cubemx.html";
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.unfree;
+<<<<<<< HEAD
     maintainers = with maintainers; [ angaz wucke13 ];
+=======
+    maintainers = with maintainers; [ wucke13 ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     platforms = platforms.all;
   };
 }

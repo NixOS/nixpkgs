@@ -1,5 +1,10 @@
+<<<<<<< HEAD
 { stdenv, fetchFromGitHub, lib
 , cmake, uthash, pkg-config
+=======
+{ stdenv, fetchpatch, fetchFromGitHub, lib
+, cmake, perl, uthash, pkg-config, gettext
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , python, freetype, zlib, glib, giflib, libpng, libjpeg, libtiff, libxml2, cairo, pango
 , readline, woff2, zeromq
 , withSpiro ? false, libspiro

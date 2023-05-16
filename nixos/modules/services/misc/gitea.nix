@@ -15,7 +15,10 @@ let
     APP_NAME = ${cfg.appName}
     RUN_USER = ${cfg.user}
     RUN_MODE = prod
+<<<<<<< HEAD
     WORK_PATH = ${cfg.stateDir}
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     ${generators.toINI {} cfg.settings}
 
@@ -440,8 +443,11 @@ in
       lfs = mkIf cfg.lfs.enable {
         PATH = cfg.lfs.contentDir;
       };
+<<<<<<< HEAD
 
       packages.CHUNKED_UPLOAD_PATH = "${cfg.stateDir}/tmp/package-upload";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
 
     services.postgresql = optionalAttrs (usePostgresql && cfg.database.createDatabase) {
@@ -470,8 +476,15 @@ in
     systemd.tmpfiles.rules = [
       "d '${cfg.dump.backupDir}' 0750 ${cfg.user} ${cfg.group} - -"
       "z '${cfg.dump.backupDir}' 0750 ${cfg.user} ${cfg.group} - -"
+<<<<<<< HEAD
       "d '${cfg.repositoryRoot}' 0750 ${cfg.user} ${cfg.group} - -"
       "z '${cfg.repositoryRoot}' 0750 ${cfg.user} ${cfg.group} - -"
+=======
+      "Z '${cfg.dump.backupDir}' - ${cfg.user} ${cfg.group} - -"
+      "d '${cfg.repositoryRoot}' 0750 ${cfg.user} ${cfg.group} - -"
+      "z '${cfg.repositoryRoot}' 0750 ${cfg.user} ${cfg.group} - -"
+      "Z '${cfg.repositoryRoot}' - ${cfg.user} ${cfg.group} - -"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       "d '${cfg.stateDir}' 0750 ${cfg.user} ${cfg.group} - -"
       "d '${cfg.stateDir}/conf' 0750 ${cfg.user} ${cfg.group} - -"
       "d '${cfg.customDir}' 0750 ${cfg.user} ${cfg.group} - -"
@@ -485,6 +498,10 @@ in
       "z '${cfg.customDir}/conf' 0750 ${cfg.user} ${cfg.group} - -"
       "z '${cfg.stateDir}/data' 0750 ${cfg.user} ${cfg.group} - -"
       "z '${cfg.stateDir}/log' 0750 ${cfg.user} ${cfg.group} - -"
+<<<<<<< HEAD
+=======
+      "Z '${cfg.stateDir}' - ${cfg.user} ${cfg.group} - -"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
       # If we have a folder or symlink with gitea locales, remove it
       # And symlink the current gitea locales in place
@@ -493,12 +510,20 @@ in
     ] ++ lib.optionals cfg.lfs.enable [
       "d '${cfg.lfs.contentDir}' 0750 ${cfg.user} ${cfg.group} - -"
       "z '${cfg.lfs.contentDir}' 0750 ${cfg.user} ${cfg.group} - -"
+<<<<<<< HEAD
+=======
+      "Z '${cfg.lfs.contentDir}' - ${cfg.user} ${cfg.group} - -"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     ];
 
     systemd.services.gitea = {
       description = "gitea";
+<<<<<<< HEAD
       after = [ "network.target" ] ++ optional usePostgresql "postgresql.service" ++ optional useMysql "mysql.service";
       requires = optional (cfg.database.createDatabase && usePostgresql) "postgresql.service" ++ optional (cfg.database.createDatabase && useMysql) "mysql.service";
+=======
+      after = [ "network.target" ] ++ lib.optional usePostgresql "postgresql.service" ++ lib.optional useMysql "mysql.service";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       wantedBy = [ "multi-user.target" ];
       path = [ cfg.package pkgs.git pkgs.gnupg ];
 
@@ -587,9 +612,12 @@ in
         # Runtime directory and mode
         RuntimeDirectory = "gitea";
         RuntimeDirectoryMode = "0755";
+<<<<<<< HEAD
         # Proc filesystem
         ProcSubset = "pid";
         ProtectProc = "invisible";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         # Access write directories
         ReadWritePaths = [ cfg.customDir cfg.dump.backupDir cfg.repositoryRoot cfg.stateDir cfg.lfs.contentDir ];
         UMask = "0027";
@@ -609,17 +637,28 @@ in
         ProtectKernelModules = true;
         ProtectKernelLogs = true;
         ProtectControlGroups = true;
+<<<<<<< HEAD
         RestrictAddressFamilies = [ "AF_UNIX" "AF_INET" "AF_INET6" ];
         RestrictNamespaces = true;
+=======
+        RestrictAddressFamilies = [ "AF_UNIX AF_INET AF_INET6" ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         LockPersonality = true;
         MemoryDenyWriteExecute = true;
         RestrictRealtime = true;
         RestrictSUIDSGID = true;
+<<<<<<< HEAD
         RemoveIPC = true;
         PrivateMounts = true;
         # System Call Filtering
         SystemCallArchitectures = "native";
         SystemCallFilter = [ "~@cpu-emulation @debug @keyring @mount @obsolete @privileged @setuid" "setrlimit" ];
+=======
+        PrivateMounts = true;
+        # System Call Filtering
+        SystemCallArchitectures = "native";
+        SystemCallFilter = "~@clock @cpu-emulation @debug @keyring @module @mount @obsolete @raw-io @reboot @setuid @swap";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       };
 
       environment = {
@@ -666,7 +705,10 @@ in
          USER = cfg.user;
          HOME = cfg.stateDir;
          GITEA_WORK_DIR = cfg.stateDir;
+<<<<<<< HEAD
          GITEA_CUSTOM = cfg.customDir;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
        };
 
        serviceConfig = {

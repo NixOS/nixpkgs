@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 { lib
 , stdenv
 , fetchFromGitHub
@@ -10,6 +11,9 @@
 , copyDesktopItems
 , desktopToDarwinBundle
 }:
+=======
+{ lib, stdenv, fetchFromGitHub, gradle, jdk, makeWrapper, perl }:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 let
   pname = "jadx";
@@ -57,11 +61,18 @@ let
     outputHashMode = "recursive";
     outputHash = "sha256-QebPRmfLtXy4ZlyKeGC5XNzhMTsYI0X36My+nTFvQpM=";
   };
+<<<<<<< HEAD
 in stdenv.mkDerivation (finalAttrs: {
   inherit pname version src;
 
   nativeBuildInputs = [ gradle jdk imagemagick makeWrapper copyDesktopItems ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [ desktopToDarwinBundle ];
+=======
+in stdenv.mkDerivation {
+  inherit pname version src;
+
+  nativeBuildInputs = [ gradle jdk makeWrapper ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   # Otherwise, Gradle fails with `java.net.SocketException: Operation not permitted`
   __darwinAllowLocalNetworking = true;
@@ -108,14 +119,18 @@ in stdenv.mkDerivation (finalAttrs: {
   '';
 
   installPhase = ''
+<<<<<<< HEAD
     runHook preInstall
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     mkdir $out $out/bin
     cp -R build/jadx/lib $out
     for prog in jadx jadx-gui; do
       cp build/jadx/bin/$prog $out/bin
       wrapProgram $out/bin/$prog --set JAVA_HOME ${jdk.home}
     done
+<<<<<<< HEAD
 
     for size in 16 32 48; do
       install -Dm444 \
@@ -141,6 +156,10 @@ in stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
+=======
+  '';
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   meta = with lib; {
     description = "Dex to Java decompiler";
     longDescription = ''
@@ -155,4 +174,8 @@ in stdenv.mkDerivation (finalAttrs: {
     platforms = platforms.unix;
     maintainers = with maintainers; [ delroth ];
   };
+<<<<<<< HEAD
 })
+=======
+}
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)

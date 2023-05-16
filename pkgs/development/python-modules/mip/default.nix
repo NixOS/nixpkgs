@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 { lib, stdenv
+=======
+{ lib
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , buildPythonPackage
 , cffi
 , dos2unix
@@ -8,9 +12,12 @@
 , numpy
 , pytestCheckHook
 , pythonOlder
+<<<<<<< HEAD
 , setuptools
 , setuptools-scm
 , wheel
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , gurobi
 , gurobipy
 # Enable support for the commercial Gurobi solver (requires a license)
@@ -23,9 +30,15 @@
 buildPythonPackage rec {
   pname = "mip";
   version = "1.15.0";
+<<<<<<< HEAD
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
+=======
+
+  disabled = pythonOlder "3.7";
+  format = "pyproject";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchPypi {
     inherit pname version;
@@ -33,6 +46,7 @@ buildPythonPackage rec {
   };
 
   nativeCheckInputs = [ matplotlib networkx numpy pytestCheckHook ];
+<<<<<<< HEAD
 
   nativeBuildInputs = [
     dos2unix
@@ -41,6 +55,9 @@ buildPythonPackage rec {
     wheel
   ];
 
+=======
+  nativeBuildInputs = [ dos2unix ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   propagatedBuildInputs = [
     cffi
   ] ++ lib.optionals gurobiSupport ([
@@ -83,7 +100,10 @@ buildPythonPackage rec {
     downloadPage = "https://github.com/coin-or/python-mip/releases";
     changelog = "https://github.com/coin-or/python-mip/releases/tag/${version}";
     license = licenses.epl20;
+<<<<<<< HEAD
     broken = stdenv.isAarch64;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     maintainers = with maintainers; [ nessdoor ];
   };
 }

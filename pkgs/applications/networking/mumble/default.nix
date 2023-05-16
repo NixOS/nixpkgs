@@ -7,6 +7,10 @@
 , flac
 , libogg
 , libvorbis
+<<<<<<< HEAD
+=======
+, grpcSupport ? false, grpc, which
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , iceSupport ? true, zeroc-ice
 , jackSupport ? false, libjack2
 , pipewireSupport ? true, pipewire
@@ -21,6 +25,7 @@ let
 
     patches = [
       ./0001-BUILD-crypto-Migrate-to-OpenSSL-3.0-compatible-API.patch
+<<<<<<< HEAD
       # fix crash caused by openssl3 thread unsafe evp implementation
       # see https://github.com/mumble-voip/mumble/issues/5361#issuecomment-1173001440
       (fetchpatch {
@@ -28,6 +33,8 @@ let
         hash = "sha256-xk8vBrPwvQxHCY8I6WQJAyaBGHmlH9NCixweP6FyakU=";
       })
       ./0002-FIX-positional-audio-Force-8-bytes-alignment-for-CCa.patch
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     ];
 
     nativeBuildInputs = [ cmake pkg-config python3 qt5.wrapQtAppsHook qt5.qttools ]
@@ -99,10 +106,19 @@ let
         "-D Ice_HOME=${lib.getDev zeroc-ice};${lib.getLib zeroc-ice}"
         "-D CMAKE_PREFIX_PATH=${lib.getDev zeroc-ice};${lib.getLib zeroc-ice}"
         "-D Ice_SLICE_DIR=${lib.getDev zeroc-ice}/share/ice/slice"
+<<<<<<< HEAD
       ];
 
     buildInputs = [ libcap ]
       ++ lib.optional iceSupport zeroc-ice;
+=======
+      ]
+      ++ lib.optional grpcSupport "-D grpc=ON";
+
+    buildInputs = [ libcap ]
+      ++ lib.optional iceSupport zeroc-ice
+      ++ lib.optionals grpcSupport [ grpc which ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   } source;
 
   source = rec {

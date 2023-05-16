@@ -11,14 +11,22 @@
 
 stdenv.mkDerivation rec {
   pname = "crypto++";
+<<<<<<< HEAD
   version = "8.8.0";
+=======
+  version = "8.7.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   underscoredVersion = lib.strings.replaceStrings ["."] ["_"] version;
 
   src = fetchFromGitHub {
     owner = "weidai11";
     repo = "cryptopp";
     rev = "CRYPTOPP_${underscoredVersion}";
+<<<<<<< HEAD
     hash = "sha256-hg7g56bIYaXxB28nAmSQ7EP9NEwd1Psf/2GUtbC27oU=";
+=======
+    hash = "sha256-KtZXW7+J9a4uKHnK8sqj5WVaIjG3d6tzBBDxa7Wv4AE=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   outputs = [ "out" "dev" ];

@@ -11,7 +11,11 @@ buildGoModule rec {
     sha256 = "sha256-93xNzYPoy8VsbY2JyvDXt4J/gIbI2wzrCD83JUaP150=";
   };
 
+<<<<<<< HEAD
   vendorHash = "sha256-XtiGj2Tr6sSBduIjBspeZpYaSTd6x6EVf3VEVMXDAD0=";
+=======
+  vendorSha256 = "sha256-XtiGj2Tr6sSBduIjBspeZpYaSTd6x6EVf3VEVMXDAD0=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   postInstall = lib.optionalString (!stdenv.isDarwin) ''
     sed -i "s:amfora:$out/bin/amfora:" amfora.desktop

@@ -6,7 +6,10 @@
 , writeText
 , asttokens
 , pycryptodome
+<<<<<<< HEAD
 , importlib-metadata
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , recommonmark
 , semantic-version
 , sphinx
@@ -28,14 +31,22 @@ let
 in
 buildPythonPackage rec {
   pname = "vyper";
+<<<<<<< HEAD
   version = "0.3.9";
+=======
+  version = "0.3.6";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
+<<<<<<< HEAD
     sha256 = "sha256-4UBSH4qRBgsy+VO9XzosWedM65R1lTo9ml2C95T9OAA=";
+=======
+    sha256 = "sha256-8jw92ttKhXubzDr0tt9/OoCsPEyB9yPRsueK+j4PO6Y=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [
@@ -54,7 +65,10 @@ buildPythonPackage rec {
     asttokens
     pycryptodome
     semantic-version
+<<<<<<< HEAD
     importlib-metadata
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     # docs
     recommonmark

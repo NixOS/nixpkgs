@@ -1,6 +1,9 @@
 { lib
 , buildPythonPackage
+<<<<<<< HEAD
 , fetchpatch
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , fetchPypi
 , re2
 }:
@@ -14,6 +17,7 @@ buildPythonPackage rec {
     sha256 = "83b2c2cd58d3874e6e3a784cf4cf2f1a57ce1969e50180f92b010eea24ef26cf";
   };
 
+<<<<<<< HEAD
   patches = [
     # Bump stdlib to c++17 to fix build with recent re2
     # https://github.com/facebook/pyre2/issues/24
@@ -24,6 +28,8 @@ buildPythonPackage rec {
     })
   ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   buildInputs = [ re2 ];
 
   # no tests in PyPI tarball

@@ -40,7 +40,10 @@
 , autoconf
 , automake
 , libtool
+<<<<<<< HEAD
 , seatd # =libseat
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , ...
 }:
 
@@ -173,11 +176,14 @@ in
     buildInputs = [ openssl zlib libgit2 ];
   };
 
+<<<<<<< HEAD
   libseat-sys = attrs: {
     nativeBuildInputs = [ pkg-config ];
     buildInputs = [ seatd ];
   };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   libsqlite3-sys = attrs: {
     nativeBuildInputs = [ pkg-config ];
     buildInputs = [ sqlite ];
@@ -199,8 +205,13 @@ in
   };
 
   graphene-sys = attrs: {
+<<<<<<< HEAD
     nativeBuildInputs = [ pkg-config gobject-introspection ];
     buildInputs = [ graphene ];
+=======
+    nativeBuildInputs = [ pkg-config ];
+    buildInputs = [ graphene gobject-introspection ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nettle-sys = attrs: {

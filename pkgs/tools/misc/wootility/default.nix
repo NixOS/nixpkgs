@@ -5,6 +5,7 @@
 , udev
 , wooting-udev-rules
 }:
+<<<<<<< HEAD
 
 appimageTools.wrapType2 rec {
   pname = "wootility";
@@ -13,6 +14,18 @@ appimageTools.wrapType2 rec {
   src = fetchurl {
     url = "https://s3.eu-west-2.amazonaws.com/wooting-update/wootility-lekker-linux-latest/wootility-lekker-${version}.AppImage";
     sha256 = "sha256-5V1OpQZk234iKXOlpoXCbWPyixXkrWT8KkrGB92lPro=";
+=======
+let
+  pname = "wootility";
+  version = "3.5.12";
+in
+appimageTools.wrapType2 rec {
+  name = "${pname}-${version}";
+
+  src = fetchurl {
+    url = "https://s3.eu-west-2.amazonaws.com/wooting-update/wootility-linux-latest/wootility-${version}.AppImage";
+    sha256 = "13bhckk25fzq9r9cdsg3yqjd4kn47asqdx8kw0in8iky4ri41vnc";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   profile = ''
@@ -26,7 +39,11 @@ appimageTools.wrapType2 rec {
       wooting-udev-rules
       xorg.libxkbfile
     ]);
+<<<<<<< HEAD
   extraInstallCommands = "mv $out/bin/{${pname}-${version},${pname}}";
+=======
+  extraInstallCommands = "mv $out/bin/{${name},${pname}}";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   meta = with lib; {
     homepage = "https://wooting.io/wootility";

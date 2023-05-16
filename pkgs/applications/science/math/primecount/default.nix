@@ -7,13 +7,21 @@
 
 stdenv.mkDerivation rec {
   pname = "primecount";
+<<<<<<< HEAD
   version = "7.9";
+=======
+  version = "7.8";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "kimwalisch";
     repo = "primecount";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-0sn6WnrI6Umrsz3lvFIzFi8/fEAqh1qhWxtNPPq5SyA=";
+=======
+    hash = "sha256-yKk+zXvA/MI7y9gCMwJNYHRYIYgeWyJHjyPi1uNWVnM=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

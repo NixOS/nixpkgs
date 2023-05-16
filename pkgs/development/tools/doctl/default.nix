@@ -2,7 +2,11 @@
 
 buildGoModule rec {
   pname = "doctl";
+<<<<<<< HEAD
   version = "1.98.0";
+=======
+  version = "1.94.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   vendorHash = null;
 
@@ -31,7 +35,11 @@ buildGoModule rec {
     owner = "digitalocean";
     repo = "doctl";
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-M9kSQoYcJudL/y/Yc6enVT/rJusd+oe3BdjkaLRQ0gU=";
+=======
+    sha256 = "sha256-R/dy//e+DfyANoNtiPoAI9CF7k8ZviFgsnMrWryf0LY=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   meta = with lib; {

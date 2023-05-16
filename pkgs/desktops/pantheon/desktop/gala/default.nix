@@ -21,18 +21,29 @@
 , gnome-settings-daemon
 , wrapGAppsHook
 , gexiv2
+<<<<<<< HEAD
 , systemd
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 stdenv.mkDerivation rec {
   pname = "gala";
+<<<<<<< HEAD
   version = "7.1.2";
+=======
+  version = "7.0.3";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
+<<<<<<< HEAD
     sha256 = "sha256-g+Zcdl6SJ4uO6I1x3Ru6efZkf+O3UaW790n/zxmGkHU=";
+=======
+    sha256 = "sha256-RLKPYDWVqT2WfjLPXRFPCNNvcW+fJ0OUKjSLLgPBqdw=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   patches = [
@@ -64,7 +75,16 @@ stdenv.mkDerivation rec {
     libgee
     mesa # for libEGL
     mutter
+<<<<<<< HEAD
     systemd
+=======
+  ];
+
+  mesonFlags = [
+    # TODO: enable this and remove --builtin flag from session-settings
+    # https://github.com/NixOS/nixpkgs/pull/140429
+    "-Dsystemd=false"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   postPatch = ''

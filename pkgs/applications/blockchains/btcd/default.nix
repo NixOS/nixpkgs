@@ -2,16 +2,27 @@
 
 buildGoModule rec {
   pname = "btcd";
+<<<<<<< HEAD
   version = "0.23.4";
+=======
+  version = "0.23.3";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "btcsuite";
     repo = pname;
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-X1kfr6jrVArm0HK0XiN/93OPxqPo8J4U+qglJAf23+A=";
   };
 
   vendorHash = "sha256-3w8rb0sfAIFCXqPXOKb4QwoLd7WsbFv3phu/rJCEjeY=";
+=======
+    sha256 = "sha256-LdK68Ianiyrs+HVMwrkiX2ruCWKkdpuY8ylxhNbm9qI=";
+  };
+
+  vendorSha256 = "sha256-3w8rb0sfAIFCXqPXOKb4QwoLd7WsbFv3phu/rJCEjeY=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   subPackages = [ "." "cmd/*" ];
 

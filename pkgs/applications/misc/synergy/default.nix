@@ -37,13 +37,21 @@
 
 stdenv.mkDerivation rec {
   pname = "synergy";
+<<<<<<< HEAD
   version = "1.14.6.19-stable";
+=======
+  version = "1.14.5.22";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "symless";
     repo = "synergy-core";
     rev = version;
+<<<<<<< HEAD
     sha256 = "sha256-0QqklfSsvcXh7I2jaHk82k0nY8gQOj9haA4WOjGqBqY=";
+=======
+    sha256 = "sha256-rqQ4n8P8pZSWRCxaQLa2PuduXMt2XeaFs051qcT3/o8=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     fetchSubmodules = true;
   };
 

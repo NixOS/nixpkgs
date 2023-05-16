@@ -7,6 +7,15 @@
 , preFixup ? ""
 , shellHook ? ""
 
+<<<<<<< HEAD
+=======
+# Go linker flags, passed to go via -ldflags
+, ldflags ? []
+
+# Go tags, passed to go via -tag
+, tags ? []
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 # We want parallel builds by default
 , enableParallelBuilding ? true
 
@@ -43,6 +52,12 @@
 
 , meta ? {}, ... } @ args:
 
+<<<<<<< HEAD
+=======
+
+with builtins;
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 let
   dep2src = goDep:
     {
@@ -86,7 +101,10 @@ let
     inherit CGO_ENABLED enableParallelBuilding;
 
     GO111MODULE = "off";
+<<<<<<< HEAD
     GOTOOLCHAIN = "local";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     GOFLAGS = lib.optionals (!allowGoReference) [ "-trimpath" ];
 
     GOARM = toString (lib.intersectLists [(stdenv.hostPlatform.parsed.cpu.version or "")] ["5" "6" "7"]);
@@ -164,7 +182,11 @@ let
 
         declare -a flags
         flags+=($buildFlags "''${buildFlagsArray[@]}")
+<<<<<<< HEAD
         flags+=(''${tags:+-tags=''${tags// /,}})
+=======
+        flags+=(''${tags:+-tags=${lib.concatStringsSep "," tags}})
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         flags+=(''${ldflags:+-ldflags="$ldflags"})
         flags+=("-p" "$NIX_BUILD_CORES")
 

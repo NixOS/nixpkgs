@@ -37,6 +37,10 @@ stdenv.mkDerivation rec {
     homepage = "https://notabug.org/cwebber/guile-gcrypt";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ ethancedwards8 ];
+<<<<<<< HEAD
     platforms = guile.meta.platforms;
+=======
+    platforms = platforms.linux;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

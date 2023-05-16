@@ -23,6 +23,7 @@ in {
     example = ["-d"];
   };
 
+<<<<<<< HEAD
   options.services.cage.environment = mkOption {
     type = types.attrsOf types.str;
     default = {};
@@ -32,6 +33,8 @@ in {
     description = lib.mdDoc "Additional environment variables to pass to Cage.";
   };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   options.services.cage.program = mkOption {
     type = types.path;
     default = "${pkgs.xterm}/bin/xterm";
@@ -88,7 +91,10 @@ in {
         # Set up a full (custom) user session for the user, required by Cage.
         PAMName = "cage";
       };
+<<<<<<< HEAD
       environment = cfg.environment;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
 
     security.polkit.enable = true;

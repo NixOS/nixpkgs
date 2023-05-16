@@ -10,15 +10,26 @@ let
     withGraphviz ? false
   }:
   let
+<<<<<<< HEAD
     # Build vala (valadoc) without graphviz support. Inspired from the openembedded-core project.
     # https://github.com/openembedded/openembedded-core/blob/a5440d4288e09d3e/meta/recipes-devtools/vala/vala/disable-graphviz.patch
+=======
+    # Patches from the openembedded-core project to build vala without graphviz
+    # support. We need to apply an additional patch to allow building when the
+    # header file isn't available at all, but that patch (./gvc-compat.patch)
+    # can be shared between all versions of Vala so far.
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     graphvizPatch =
       {
         "0.48" = ./disable-graphviz-0.46.1.patch;
 
         "0.54" = ./disable-graphviz-0.46.1.patch;
 
+<<<<<<< HEAD
         "0.56" = ./disable-graphviz-0.56.8.patch;
+=======
+        "0.56" = ./disable-graphviz-0.46.1.patch;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
       }.${lib.versions.majorMinor version} or (throw "no graphviz patch for this version of vala");
 
@@ -45,7 +56,11 @@ let
     # If we're disabling graphviz, apply the patches and corresponding
     # configure flag. We also need to override the path to the valac compiler
     # so that it can be used to regenerate documentation.
+<<<<<<< HEAD
     patches        = lib.optionals disableGraphviz [ graphvizPatch ];
+=======
+    patches        = lib.optionals disableGraphviz [ graphvizPatch ./gvc-compat.patch ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     configureFlags = lib.optional  disableGraphviz "--disable-graphviz";
     # when cross-compiling ./compiler/valac is valac for host
     # so add the build vala in nativeBuildInputs
@@ -85,7 +100,11 @@ let
       homepage = "https://wiki.gnome.org/Projects/Vala";
       license = licenses.lgpl21Plus;
       platforms = platforms.unix;
+<<<<<<< HEAD
       maintainers = with maintainers; [ antono jtojnar amaxine ] ++ teams.pantheon.members;
+=======
+      maintainers = with maintainers; [ antono jtojnar maxeaubrey ] ++ teams.pantheon.members;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
   });
 
@@ -101,8 +120,13 @@ in rec {
   };
 
   vala_0_56 = generic {
+<<<<<<< HEAD
     version = "0.56.9";
     sha256 = "VVeMfE8Ges4CjlQYBq8kD4CEy2/wzFVMqorAjL+Lzi8=";
+=======
+    version = "0.56.7";
+    sha256 = "PTnHWW1fqa6L/q5HZmn4EfcFe397kwhHiie2hEPYsAM=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   vala = vala_0_56;

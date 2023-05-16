@@ -11,7 +11,11 @@
 
 buildPythonPackage rec {
   pname = "dissect-etl";
+<<<<<<< HEAD
   version = "3.7";
+=======
+  version = "3.4";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -20,7 +24,11 @@ buildPythonPackage rec {
     owner = "fox-it";
     repo = "dissect.etl";
     rev = "refs/tags/${version}";
+<<<<<<< HEAD
     hash = "sha256-z6P7XpA+j9JIJJsp/Z4uewFw9OAPSZV+57eJu7rd17I=";
+=======
+    hash = "sha256-RNm6je3WW6ig+JCU4AlVYpAJZXq/l8U7Pbf/AGeAmXA=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;

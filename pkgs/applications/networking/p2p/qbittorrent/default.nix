@@ -11,13 +11,21 @@ assert trackerSearch -> (python3 != null);
 
 mkDerivation rec {
   pname = "qbittorrent" + lib.optionalString (!guiSupport) "-nox";
+<<<<<<< HEAD
   version = "4.5.5";
+=======
+  version = "4.5.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "qbittorrent";
     repo = "qBittorrent";
     rev = "release-${version}";
+<<<<<<< HEAD
     hash = "sha256-rWv+KGw+3385GOKK4MvoSP0CepotUZELiDVFpyDf+9k=";
+=======
+    hash = "sha256-U0JDLLyIrMBqP4EqRAj48sdv9Om9cwdx4vP/0Ob1QB8=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   enableParallelBuilding = true;
@@ -53,6 +61,10 @@ mkDerivation rec {
     changelog   = "https://github.com/qbittorrent/qBittorrent/blob/release-${version}/Changelog";
     license     = licenses.gpl2Plus;
     platforms   = platforms.unix;
+<<<<<<< HEAD
     maintainers = with maintainers; [ Anton-Latukha kashw2 ];
+=======
+    maintainers = with maintainers; [ Anton-Latukha ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

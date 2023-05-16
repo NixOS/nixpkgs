@@ -13,7 +13,11 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
+<<<<<<< HEAD
   sourceRoot = "${src.name}/orocos_kdl";
+=======
+  sourceRoot = "source/orocos_kdl";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nativeBuildInputs = [ cmake ];
   propagatedBuildInputs = [ eigen ];

@@ -2,13 +2,21 @@
 
 stdenv.mkDerivation rec {
   pname = "openrgb";
+<<<<<<< HEAD
   version = "0.9";
+=======
+  version = "0.8";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitLab {
     owner = "CalcProgrammer1";
     repo = "OpenRGB";
     rev = "release_${version}";
+<<<<<<< HEAD
     sha256 = "sha256-XBLj4EfupyeVHRc0pVI7hrXFoCNJ7ak2yO0QSfhBsGU=";
+=======
+    sha256 = "sha256-46dL1D5oVlw6mNuFDCbbrUDmq42yFXV/qFJ1JnPT5/s=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ qmake pkg-config wrapQtAppsHook ];
@@ -54,6 +62,9 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ jonringer ];
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
+<<<<<<< HEAD
     mainProgram = "openrgb";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

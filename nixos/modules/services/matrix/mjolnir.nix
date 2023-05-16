@@ -30,7 +30,11 @@ let
 
   # these config files will be merged one after the other to build the final config
   configFiles = [
+<<<<<<< HEAD
     "${pkgs.mjolnir}/libexec/mjolnir/deps/mjolnir/config/default.yaml"
+=======
+    "${pkgs.mjolnir}/share/mjolnir/config/default.yaml"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     moduleConfigFile
   ];
 
@@ -200,7 +204,11 @@ in
       wantedBy = [ "multi-user.target" ];
 
       serviceConfig = {
+<<<<<<< HEAD
         ExecStart = ''${pkgs.mjolnir}/bin/mjolnir --mjolnir-config ./config/default.yaml'';
+=======
+        ExecStart = ''${pkgs.mjolnir}/bin/mjolnir'';
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         ExecStartPre = [ generateConfig ];
         WorkingDirectory = cfg.dataPath;
         StateDirectory = "mjolnir";

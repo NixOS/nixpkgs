@@ -3,9 +3,13 @@
 , ansible-core
 , buildPythonPackage
 , fetchPypi
+<<<<<<< HEAD
 , fetchpatch
 , glibcLocales
 , importlib-metadata
+=======
+, glibcLocales
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , mock
 , openssh
 , pbr
@@ -23,6 +27,7 @@
 
 buildPythonPackage rec {
   pname = "ansible-runner";
+<<<<<<< HEAD
   version = "2.3.4";
   format = "setuptools";
 
@@ -42,6 +47,18 @@ buildPythonPackage rec {
     })
   ];
 
+=======
+  version = "2.3.1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
+
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-HS8C06Ylc/OOaKI3kBGLeYF5HCvtK18i96NqIhwoh1Y=";
+  };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nativeBuildInputs = [
     pbr
   ];
@@ -53,8 +70,11 @@ buildPythonPackage rec {
     python-daemon
     pyyaml
     six
+<<<<<<< HEAD
   ] ++ lib.optionals (pythonOlder "3.10") [
     importlib-metadata
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   nativeCheckInputs = [
@@ -83,6 +103,13 @@ buildPythonPackage rec {
     "test_large_stdout_blob"
     # Failed: DID NOT RAISE <class 'RuntimeError'>
     "test_validate_pattern"
+<<<<<<< HEAD
+=======
+  ] ++ lib.optionals stdenv.isDarwin [
+    # test_process_isolation_settings is currently broken on Darwin Catalina
+    # https://github.com/ansible/ansible-runner/issues/413
+    "process_isolation_settings"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   disabledTestPaths = [
@@ -105,6 +132,10 @@ buildPythonPackage rec {
     description = "Helps when interfacing with Ansible";
     homepage = "https://github.com/ansible/ansible-runner";
     license = licenses.asl20;
+<<<<<<< HEAD
     maintainers = with maintainers; [ ];
+=======
+    maintainers = with maintainers; [ costrouc ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

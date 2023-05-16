@@ -25,6 +25,9 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     homepage = "https://github.com/haslersn/any-nix-shell";
     maintainers = with maintainers; [ haslersn ];
+<<<<<<< HEAD
     mainProgram = "any-nix-shell";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

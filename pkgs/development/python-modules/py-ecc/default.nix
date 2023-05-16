@@ -38,6 +38,10 @@ buildPythonPackage rec {
     description = "ECC pairing and bn_128 and bls12_381 curve operations";
     homepage = "https://github.com/ethereum/py_ecc";
     license = licenses.mit;
+<<<<<<< HEAD
     maintainers = with maintainers; [ ];
+=======
+    maintainers = with maintainers; [ SuperSandro2000 ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

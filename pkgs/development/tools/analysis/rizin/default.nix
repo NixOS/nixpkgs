@@ -1,5 +1,8 @@
 { lib
+<<<<<<< HEAD
 , pkgs # for passthru.plugins
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , stdenv
 , fetchurl
 , pkg-config
@@ -9,12 +12,20 @@
 , perl
 , zlib
 , openssl
+<<<<<<< HEAD
 , file
 , libmspack
 , libzip
 , lz4
 , xxHash
 , xz
+=======
+, libuv
+, file
+, libzip
+, lz4
+, xxHash
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , meson
 , python3
 , cmake
@@ -23,6 +34,7 @@
 , tree-sitter
 }:
 
+<<<<<<< HEAD
 let rizin = stdenv.mkDerivation rec {
   pname = "rizin";
   version = "0.6.1";
@@ -30,6 +42,15 @@ let rizin = stdenv.mkDerivation rec {
   src = fetchurl {
     url = "https://github.com/rizinorg/rizin/releases/download/v${version}/rizin-src-v${version}.tar.xz";
     hash = "sha256-dgZHyvinimOKDgQL97icPtBk+r3+rE/kT/FdYrqsbJE=";
+=======
+stdenv.mkDerivation rec {
+  pname = "rizin";
+  version = "0.5.2";
+
+  src = fetchurl {
+    url = "https://github.com/rizinorg/rizin/releases/download/v${version}/rizin-src-v${version}.tar.xz";
+    hash = "sha256-cauA/DyKycgKEAANg4EoryigXTGg7hg5AMLFxuNQ7KM=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   mesonFlags = [
@@ -37,6 +58,7 @@ let rizin = stdenv.mkDerivation rec {
     "-Duse_sys_magic=enabled"
     "-Duse_sys_libzip=enabled"
     "-Duse_sys_zlib=enabled"
+<<<<<<< HEAD
     "-Duse_sys_lz4=enabled"
     "-Duse_sys_lzma=enabled"
     "-Duse_sys_xxhash=enabled"
@@ -54,6 +76,14 @@ let rizin = stdenv.mkDerivation rec {
   # the env var NIX_RZ_PREFIX
   patches = [ ./librz-wrapper-support.patch ];
 
+=======
+    "-Duse_sys_xxhash=enabled"
+    "-Duse_sys_lz4=enabled"
+    "-Duse_sys_openssl=enabled"
+    "-Duse_sys_tree_sitter=enabled"
+  ];
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nativeBuildInputs = [
     pkg-config
     meson
@@ -90,10 +120,16 @@ let rizin = stdenv.mkDerivation rec {
     zlib
     lz4
     openssl
+<<<<<<< HEAD
     libmspack
     tree-sitter
     xxHash
     xz
+=======
+    libuv
+    tree-sitter
+    xxHash
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   postPatch = ''
@@ -104,6 +140,7 @@ let rizin = stdenv.mkDerivation rec {
       --replace "import('python').find_installation()" "find_program('python3')"
   '';
 
+<<<<<<< HEAD
   passthru = rec {
     plugins = {
       jsdec = pkgs.callPackage ./jsdec.nix {
@@ -123,12 +160,21 @@ let rizin = stdenv.mkDerivation rec {
     };
   };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   meta = {
     description = "UNIX-like reverse engineering framework and command-line toolset.";
     homepage = "https://rizin.re/";
     license = lib.licenses.gpl3Plus;
+<<<<<<< HEAD
     mainProgram = "rizin";
     maintainers = with lib.maintainers; [ raskin makefu mic92 ];
     platforms = with lib.platforms; unix;
   };
 }; in rizin
+=======
+    maintainers = with lib.maintainers; [ raskin makefu mic92 ];
+    platforms = with lib.platforms; unix;
+  };
+}
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)

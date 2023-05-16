@@ -23,11 +23,19 @@
 
 stdenv.mkDerivation rec {
   pname = "vkdt";
+<<<<<<< HEAD
   version = "0.6.0";
 
   src = fetchurl {
     url = "https://github.com/hanatos/${pname}/releases/download/${version}/${pname}-${version}.tar.xz";
     sha256 = "sha256-Au0S+9Y+H0FuoHZacnN4azQFQB0tarT2bHNsLxujfLw=";
+=======
+  version = "0.5.4";
+
+  src = fetchurl {
+    url = "https://github.com/hanatos/${pname}/releases/download/${version}/${pname}-${version}.tar.xz";
+    sha256 = "sha256-lyljfJ4RZETEED4bofC/Rq88PMNhoHO1kgHmmaXPuhM=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   strictDeps = true;

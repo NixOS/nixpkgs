@@ -1,4 +1,13 @@
+<<<<<<< HEAD
 { lib, stdenv, fetchFromGitLab, nix-update-script, nwjs, wrapGAppsHook }:
+=======
+{ lib
+, stdenv
+, fetchFromGitLab
+, nix-update-script
+, nwjs
+}:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 stdenv.mkDerivation rec {
   pname = "gridtracker";
@@ -11,8 +20,11 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-6SQuFN8Fi0fbWCYrQIIeSaXR2haI7uux4txCPKEoJvo=";
   };
 
+<<<<<<< HEAD
   nativeBuildInputs = [ wrapGAppsHook ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   postPatch = ''
     substituteInPlace Makefile \
       --replace '$(DESTDIR)/usr' '$(DESTDIR)/'

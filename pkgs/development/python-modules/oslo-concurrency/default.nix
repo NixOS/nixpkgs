@@ -18,12 +18,20 @@
 
 buildPythonPackage rec {
   pname = "oslo-concurrency";
+<<<<<<< HEAD
   version = "5.2.0";
+=======
+  version = "5.1.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchPypi {
     pname = "oslo.concurrency";
     inherit version;
+<<<<<<< HEAD
     hash = "sha256-ihnsV07QV+k9UWdDJgX/h0xLkBelIV/QIaIDTGzVKpI=";
+=======
+    hash = "sha256-EQ+2Adgi3UsI7qJ5d9cNAfnxzR6vbezQQqIfQ78/KyU=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   postPatch = ''

@@ -33,5 +33,9 @@ buildGoModule rec {
     license = licenses.mit;
     homepage = "https://github.com/dbcdk/morph";
     maintainers = with maintainers; [adamt johanot];
+<<<<<<< HEAD
+=======
+    platforms = platforms.unix;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

@@ -14,17 +14,30 @@
 let
 
   pname = "mattermost-desktop";
+<<<<<<< HEAD
   version = "5.3.1";
+=======
+  version = "5.1.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   srcs = {
     "x86_64-linux" = {
       url = "https://releases.mattermost.com/desktop/${version}/${pname}-${version}-linux-x64.tar.gz";
+<<<<<<< HEAD
       hash = "sha256-rw+SYCFmN2W4t5iIWEpV9VHxcvwTLOckMV58WRa5dZE=";
     };
 
     "aarch64-linux" = {
       url = "https://releases.mattermost.com/desktop/${version}/${pname}-${version}-linux-arm64.tar.gz";
       hash = "sha256-FEIldkb3FbUfVAYRkjs7oPRJDHdsIGDW5iaC2Qz1dpc=";
+=======
+      hash = "sha256-KmtQUqg2ODbZ6zJjsnwlvB+vhR1xbK2X9qqmZpyTR78=";
+    };
+
+    "i686-linux" = {
+      url = "https://releases.mattermost.com/desktop/${version}/${pname}-${version}-linux-ia32.tar.gz";
+      hash = "sha256-X8Zrthw1hZOqmcYidt72l2vonh31iiA3EDGmCQr7e4c=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
   };
 
@@ -86,7 +99,11 @@ stdenv.mkDerivation {
     homepage = "https://about.mattermost.com/";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.asl20;
+<<<<<<< HEAD
     platforms = [ "x86_64-linux" "aarch64-linux" ];
+=======
+    platforms = [ "x86_64-linux" "i686-linux" ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     maintainers = [ maintainers.joko ];
   };
 }

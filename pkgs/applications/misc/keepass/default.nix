@@ -117,6 +117,9 @@ in buildDotnetPackage rec {
     maintainers = with lib.maintainers; [ amorsillo obadz ];
     platforms = with lib.platforms; all;
     license = lib.licenses.gpl2;
+<<<<<<< HEAD
     mainProgram = "keepass";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

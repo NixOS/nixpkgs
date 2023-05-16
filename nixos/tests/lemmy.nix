@@ -22,16 +22,26 @@ in
           # Without setup, the /feeds/* and /nodeinfo/* API endpoints won't return 200
           setup = {
             admin_username = "mightyiam";
+<<<<<<< HEAD
+=======
+            admin_password = "ThisIsWhatIUseEverywhereTryIt";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
             site_name = "Lemmy FTW";
             admin_email = "mightyiam@example.com";
           };
         };
+<<<<<<< HEAD
         adminPasswordFile = /etc/lemmy-admin-password.txt;
         caddy.enable = true;
       };
 
       environment.etc."lemmy-admin-password.txt".text = "ThisIsWhatIUseEverywhereTryIt";
 
+=======
+        caddy.enable = true;
+      };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       networking.firewall.allowedTCPPorts = [ 80 ];
 
       # pict-rs seems to need more than 1025114112 bytes
@@ -42,6 +52,7 @@ in
   testScript = ''
     server = ${lemmyNodeName}
 
+<<<<<<< HEAD
     with subtest("the merged config is secure"):
         server.wait_for_unit("lemmy.service")
         config_permissions = server.succeed("stat --format %A /run/lemmy/config.hjson").rstrip()
@@ -50,6 +61,10 @@ in
         assert directory_permissions[5] == directory_permissions[8] == "-", "merged config can be replaced"
 
     with subtest("the backend starts and responds"):
+=======
+    with subtest("the backend starts and responds"):
+        server.wait_for_unit("lemmy.service")
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         server.wait_for_open_port(${toString backendPort})
         server.succeed("curl --fail localhost:${toString backendPort}/api/v3/site")
 

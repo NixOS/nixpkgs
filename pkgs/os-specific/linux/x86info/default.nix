@@ -26,9 +26,12 @@ stdenv.mkDerivation rec {
     pciutils
   ];
 
+<<<<<<< HEAD
   # causes redefinition of _FORTIFY_SOURCE
   hardeningDisable = [ "fortify3" ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   postBuild = ''
     patchShebangs lsmsr/createheader.py
     make -C lsmsr

@@ -59,7 +59,11 @@ in stdenv.mkDerivation {
     '';
     homepage = "https://github.com/brettlangdon/git-vendor";
     license = lib.licenses.mit;
+<<<<<<< HEAD
     maintainers = [ ];
+=======
+    maintainers = [ lib.maintainers.Profpatsch ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     platforms = lib.platforms.all;
   };
 

@@ -12,14 +12,22 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-vision";
+<<<<<<< HEAD
   version = "3.4.4";
+=======
+  version = "3.4.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
+<<<<<<< HEAD
     hash = "sha256-QFdErlCFIDTMR7MqmxuuUNP7Cc0eIWABQYKJHvV2ZpU=";
+=======
+    hash = "sha256-VtBI7s8JvXGxMkbcRZfGsorH0RBQNGdf3O2T0lmi6f0=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [
@@ -49,6 +57,10 @@ buildPythonPackage rec {
     homepage = "https://github.com/googleapis/python-vision";
     changelog = "https://github.com/googleapis/python-vision/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
+<<<<<<< HEAD
     maintainers = with maintainers; [ ];
+=======
+    maintainers = with maintainers; [ SuperSandro2000 ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

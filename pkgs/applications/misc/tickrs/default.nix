@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 { lib
 , rustPlatform
 , fetchFromGitHub
@@ -11,11 +12,19 @@
 rustPlatform.buildRustPackage rec {
   pname = "tickrs";
   version = "0.14.9";
+=======
+{ lib, stdenv, rustPlatform, fetchFromGitHub, perl, Security }:
+
+rustPlatform.buildRustPackage rec {
+  pname = "tickrs";
+  version = "0.14.8";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "tarkah";
     repo = pname;
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-cN5GtU3bmsdJvfjVdWvWAshiU3Ged7L9pc8wid8GQwA=";
   };
 
@@ -35,6 +44,16 @@ rustPlatform.buildRustPackage rec {
   env = {
     OPENSSL_NO_VENDOR = true;
   };
+=======
+    hash = "sha256-8q/dL1Pv25TkL7PESybgIu+0lR0cr6qrK6ItE/r9pbI=";
+  };
+
+  cargoHash = "sha256-fOYxOiVpgflwIz9Z6ePhQKDa7DX4D/ZCnPOwq9vWOSk=";
+
+  nativeBuildInputs = [ perl ];
+
+  buildInputs = lib.optionals stdenv.isDarwin [ Security ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   meta = with lib; {
     description = "Realtime ticker data in your terminal";

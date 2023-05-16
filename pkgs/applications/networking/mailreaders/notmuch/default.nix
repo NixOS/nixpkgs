@@ -1,26 +1,46 @@
+<<<<<<< HEAD
 { fetchurl, lib, stdenv, makeWrapper
 , pkg-config, gnupg
 , xapian, gmime3, sfsexp, talloc, zlib
+=======
+{ fetchurl, lib, stdenv
+, pkg-config, gnupg
+, xapian, gmime3, talloc, zlib
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , doxygen, perl, texinfo
 , notmuch
 , pythonPackages
 , emacs
 , ruby
 , testers
+<<<<<<< HEAD
 , gitUpdater
 , which, dtach, openssl, bash, gdb, man, git
 , withEmacs ? true
 , withRuby ? true
 , withSfsexp ? true # also installs notmuch-git, which requires sexp-support
+=======
+, which, dtach, openssl, bash, gdb, man
+, withEmacs ? true
+, withRuby ? true
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 stdenv.mkDerivation rec {
   pname = "notmuch";
+<<<<<<< HEAD
   version = "0.38";
 
   src = fetchurl {
     url = "https://notmuchmail.org/releases/notmuch-${version}.tar.xz";
     sha256 = "sha256-oXkBrb5D9IGmv1PBWiogJovI3HrVzPaFoNF8FFbbr24=";
+=======
+  version = "0.37";
+
+  src = fetchurl {
+    url = "https://notmuchmail.org/releases/notmuch-${version}.tar.xz";
+    sha256 = "sha256-DnZt8ot4v064I1Ymqx9S8E8eNmZJMlqM6NPJCGAnhvY=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [
@@ -30,16 +50,24 @@ stdenv.mkDerivation rec {
     texinfo                   # (optional) documentation -> doc/INSTALL
     pythonPackages.cffi
   ] ++ lib.optional withEmacs emacs
+<<<<<<< HEAD
     ++ lib.optional withRuby ruby
     ++ lib.optional withSfsexp makeWrapper;
+=======
+    ++ lib.optional withRuby ruby;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   buildInputs = [
     gnupg                     # undefined dependencies
     xapian gmime3 talloc zlib  # dependencies described in INSTALL
     perl
     pythonPackages.python
+<<<<<<< HEAD
   ] ++ lib.optional withRuby ruby
     ++ lib.optional withSfsexp sfsexp;
+=======
+  ] ++ lib.optional withRuby ruby;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   postPatch = ''
     patchShebangs configure test/
@@ -79,12 +107,15 @@ stdenv.mkDerivation rec {
     ++ lib.optional withEmacs "emacs"
     ++ lib.optional withRuby "ruby";
 
+<<<<<<< HEAD
   # if notmuch is built with s-expression support, the testsuite (T-850.sh) only
   # passes if notmuch-git can be executed, so we need to patch its shebang.
   postBuild = lib.optionalString withSfsexp ''
     patchShebangs notmuch-git
   '';
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   preCheck = let
     test-database = fetchurl {
       url = "https://notmuchmail.org/releases/test-databases/database-v1.tar.xz";
@@ -103,12 +134,17 @@ stdenv.mkDerivation rec {
   checkTarget = "test";
   nativeCheckInputs = [
     which dtach openssl bash
+<<<<<<< HEAD
     gdb man
   ]
   # for the test T-850.sh for notmuch-git, which is skipped when notmuch is
   # built without sexp-support
   ++ lib.optional withEmacs emacs
   ++ lib.optional withSfsexp git;
+=======
+    gdb man emacs
+  ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   installTargets = [ "install" "install-man" "install-info" ];
 
@@ -120,29 +156,38 @@ stdenv.mkDerivation rec {
       SHELL=$SHELL \
       $makeFlags "''${makeFlagsArray[@]}" \
       $installFlags "''${installFlagsArray[@]}"
+<<<<<<< HEAD
   ''
   # notmuch-git (https://notmuchmail.org/doc/latest/man1/notmuch-git.html) does not work without
   # sexp-support, so there is no point in installing if we're building without it.
   + lib.optionalString withSfsexp ''
     cp notmuch-git $out/bin/notmuch-git
     wrapProgram $out/bin/notmuch-git --prefix PATH : $out/bin:${lib.getBin git}/bin
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '';
 
   passthru = {
     pythonSourceRoot = "notmuch-${version}/bindings/python";
     tests.version = testers.testVersion { package = notmuch; };
     inherit version;
+<<<<<<< HEAD
 
     updateScript = gitUpdater {
       url = "https://git.notmuchmail.org/git/notmuch";
       ignoredVersions = "_rc.*";
     };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   meta = with lib; {
     description = "Mail indexer";
     homepage    = "https://notmuchmail.org/";
+<<<<<<< HEAD
     changelog   = "https://git.notmuchmail.org/git?p=notmuch;a=blob_plain;f=NEWS;hb=${version}";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     license     = licenses.gpl3Plus;
     maintainers = with maintainers; [ flokli puckipedia ];
     platforms   = platforms.unix;

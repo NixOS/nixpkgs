@@ -19,9 +19,12 @@ stdenv.mkDerivation rec {
     patchShebangs platform2_preinstall.sh
   '';
 
+<<<<<<< HEAD
   # causes redefinition of _FORTIFY_SOURCE
   hardeningDisable = [ "fortify3" ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   installPhase = ''
     ./platform2_preinstall.sh ${version} $out/include/chromeos
 

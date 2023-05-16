@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 { lib, stdenv, bintools-unwrapped, llvmPackages, llvmPackages_13, coreutils }:
 
 let
@@ -7,6 +8,10 @@ let
     then llvmPackages
     else llvmPackages_13;
   in
+=======
+{ lib, stdenv, bintools-unwrapped, llvmPackages_13, coreutils }:
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 if stdenv.hostPlatform.isStatic
 then throw ''
   libredirect is not available on static builds.
@@ -46,11 +51,19 @@ else stdenv.mkDerivation rec {
     # and the library search directory for libdl.
     # We can't build this on x86_64, because the libSystem we point to doesn't
     # like arm64(e).
+<<<<<<< HEAD
     PATH=${bintools-unwrapped}/bin:${llvmPkgs.clang-unwrapped}/bin:$PATH \
       clang -arch x86_64 -arch arm64 -arch arm64e \
       -isystem ${llvmPkgs.clang.libc}/include \
       -isystem ${llvmPkgs.libclang.lib}/lib/clang/*/include \
       -L${llvmPkgs.clang.libc}/lib \
+=======
+    PATH=${bintools-unwrapped}/bin:${llvmPackages_13.clang-unwrapped}/bin:$PATH \
+      clang -arch x86_64 -arch arm64 -arch arm64e \
+      -isystem ${llvmPackages_13.clang.libc}/include \
+      -isystem ${llvmPackages_13.libclang.lib}/lib/clang/*/include \
+      -L${llvmPackages_13.clang.libc}/lib \
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       -Wl,-install_name,$libName \
       -Wall -std=c99 -O3 -fPIC libredirect.c \
       -shared -o "$libName"

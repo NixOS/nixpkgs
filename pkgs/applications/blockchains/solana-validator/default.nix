@@ -4,10 +4,21 @@
 , fetchFromGitHub
 , lib
 , rustPlatform
+<<<<<<< HEAD
+=======
+, IOKit
+, Security
+, AppKit
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , pkg-config
 , udev
 , zlib
 , protobuf
+<<<<<<< HEAD
+=======
+, clang
+, llvm
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , openssl
 , libclang
 , rustfmt
@@ -42,8 +53,13 @@
 let
   pinData = lib.importJSON ./pin.json;
   version = pinData.version;
+<<<<<<< HEAD
   hash = pinData.hash;
   cargoHash = pinData.cargoHash;
+=======
+  sha256 = pinData.sha256;
+  cargoSha256 = pinData.cargoSha256;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 in
 rustPlatform.buildRustPackage rec {
   pname = "solana-validator";
@@ -53,11 +69,20 @@ rustPlatform.buildRustPackage rec {
     owner = "solana-labs";
     repo = "solana";
     rev = "v${version}";
+<<<<<<< HEAD
     inherit hash;
   };
 
   # partly inspired by https://github.com/obsidiansystems/solana-bridges/blob/develop/default.nix#L29
   inherit cargoHash;
+=======
+    inherit sha256;
+  };
+
+  # partly inspired by https://github.com/obsidiansystems/solana-bridges/blob/develop/default.nix#L29
+  inherit cargoSha256;
+  verifyCargoDeps = true;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   cargoBuildFlags = builtins.map (n: "--bin=${n}") solanaPkgs;
 

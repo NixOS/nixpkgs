@@ -34,7 +34,11 @@ appleDerivation' (if headersOnly then stdenvNoCC else stdenv) (
       --replace "-Werror " ""
 
     substituteInPlace SETUP/kextsymboltool/Makefile \
+<<<<<<< HEAD
       --replace "-lstdc++" "-lc++ -lc++abi"
+=======
+      --replace "-lstdc++" "-lc++"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     substituteInPlace libsyscall/xcodescripts/mach_install_mig.sh \
       --replace "/usr/include" "/include" \
@@ -63,7 +67,10 @@ appleDerivation' (if headersOnly then stdenvNoCC else stdenv) (
   MIG = "mig";
   MIGCOM = "migcom";
   STRIP = "${stdenv.cc.bintools.targetPrefix or ""}strip";
+<<<<<<< HEAD
   RANLIB = "${stdenv.cc.bintools.targetPrefix or ""}ranlib";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   NM = "${stdenv.cc.bintools.targetPrefix or ""}nm";
   UNIFDEF = "unifdef";
   DSYMUTIL = "dsymutil";
@@ -117,9 +124,12 @@ appleDerivation' (if headersOnly then stdenvNoCC else stdenv) (
     cp EXTERNAL_HEADERS/Availability*.h $out/System/Library/Frameworks/Kernel.framework/Versions/A/Headers/
     cp -r EXTERNAL_HEADERS/corecrypto $out/include
 
+<<<<<<< HEAD
     # These headers are needed by Libsystem.
     cp libsyscall/wrappers/{spawn/spawn.h,libproc/libproc.h} $out/include
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     # Build the mach headers we crave
     export SRCROOT=$PWD/libsyscall
     export DERIVED_SOURCES_DIR=$out/include

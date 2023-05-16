@@ -11,10 +11,17 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" "doc" ];
 
+<<<<<<< HEAD
   nativeBuildInputs = [ pkg-config gobject-introspection ];
 
   buildInputs = [
     cairo glib
+=======
+  nativeBuildInputs = [ pkg-config ];
+
+  buildInputs = [
+    cairo glib gobject-introspection
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     gnome.gnome-common gtk3 gnome.libsoup
   ];
 

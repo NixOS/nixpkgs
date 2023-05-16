@@ -3,27 +3,40 @@
 , fetchzip
 , cimg
 , cmake
+<<<<<<< HEAD
 , coreutils
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , curl
 , fftw
 , gimp
 , gimpPlugins
 , gmic
+<<<<<<< HEAD
 , gnugrep
 , gnused
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , graphicsmagick
 , libjpeg
 , libpng
 , libtiff
 , ninja
+<<<<<<< HEAD
 , nix-update
+=======
+, nix-update-script
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , opencv3
 , openexr
 , pkg-config
 , qtbase
 , qttools
 , wrapQtAppsHook
+<<<<<<< HEAD
 , writeShellScript
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , zlib
 , variant ? "standalone"
 }:
@@ -55,11 +68,19 @@ assert lib.assertMsg
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gmic-qt${lib.optionalString (variant != "standalone") "-${variant}"}";
+<<<<<<< HEAD
   version = "3.2.6";
 
   src = fetchzip {
     url = "https://gmic.eu/files/source/gmic_${finalAttrs.version}.tar.gz";
     hash = "sha256-asB1YftHfdb7JG87WJ+ggyMCu7qb0f+aCanl5LLi9VE=";
+=======
+  version = "3.2.4";
+
+  src = fetchzip {
+    url = "https://gmic.eu/files/source/gmic_${finalAttrs.version}.tar.gz";
+    hash = "sha256-FJ2zlsah/3Jf5ie4UhQsPvMoxDMc6iHl3AkhKsZSuqE=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [
@@ -112,6 +133,7 @@ stdenv.mkDerivation (finalAttrs: {
       inherit cimg gmic;
     };
 
+<<<<<<< HEAD
     updateScript = writeShellScript "gmic-qt-update-script" ''
       set -euo pipefail
 
@@ -129,6 +151,9 @@ stdenv.mkDerivation (finalAttrs: {
 
       nix-update --version "$latestVersion"
     '';
+=======
+    updateScript = nix-update-script { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   meta = {

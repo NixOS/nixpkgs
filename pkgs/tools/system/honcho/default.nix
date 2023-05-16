@@ -1,7 +1,13 @@
 { lib, fetchFromGitHub, python3Packages }:
 
 let
+<<<<<<< HEAD
   pname = "honcho";
+=======
+  inherit (python3Packages) python;
+  pname = "honcho";
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 in
 
 python3Packages.buildPythonApplication rec {

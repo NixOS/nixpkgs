@@ -72,8 +72,11 @@ in
     # Disable YAMA by default to allow easy debugging.
     boot.kernel.sysctl."kernel.yama.ptrace_scope" = mkDefault 0;
 
+<<<<<<< HEAD
     # Improve compatibility with applications that allocate
     # a lot of memory, like modern games
     boot.kernel.sysctl."vm.max_map_count" = mkDefault 1048576;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

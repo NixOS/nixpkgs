@@ -19,7 +19,11 @@ buildPythonPackage rec {
     sha256 = "072s765jyzpdq8qqysdy0dld17m6sr9zfcs0ip2zk8c4imxaysnb";
   };
 
+<<<<<<< HEAD
   sourceRoot = "${src.name}/python";
+=======
+  sourceRoot = "source/python";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nativeBuildInputs = [
     cython

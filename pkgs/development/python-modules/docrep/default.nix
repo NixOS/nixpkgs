@@ -28,6 +28,10 @@ buildPythonPackage rec {
     description = "Python package for docstring repetition";
     homepage = "https://github.com/Chilipp/docrep";
     license = lib.licenses.gpl2;
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [ ];
+=======
+    maintainers = with lib.maintainers; [ costrouc ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

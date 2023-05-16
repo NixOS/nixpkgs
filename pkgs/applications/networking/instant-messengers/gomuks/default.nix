@@ -22,7 +22,11 @@ buildGoModule rec {
     sha256 = "sha256-gLyjqmGZudj8PmsYUGXHOjetZzi6u5CFI7Y50y2XAzk=";
   };
 
+<<<<<<< HEAD
   vendorHash = "sha256-FmQJG6hv0YPyHVjZ/DvkQExrGLc1hjoiPS59MnqG2gU=";
+=======
+  vendorSha256 = "sha256-FmQJG6hv0YPyHVjZ/DvkQExrGLc1hjoiPS59MnqG2gU=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   doCheck = false;
 
@@ -53,5 +57,9 @@ buildGoModule rec {
     description = "A terminal based Matrix client written in Go";
     license = licenses.agpl3Plus;
     maintainers = with maintainers; [ chvp emily ];
+<<<<<<< HEAD
+=======
+    platforms = platforms.unix;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

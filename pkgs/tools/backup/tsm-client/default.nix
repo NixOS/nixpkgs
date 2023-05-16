@@ -45,7 +45,11 @@
 # point to this derivations `/dsmi_dir` directory symlink.
 # Other environment variables might be necessary,
 # depending on local configuration or usage; see:
+<<<<<<< HEAD
 # https://www.ibm.com/docs/en/spectrum-protect/8.1.19?topic=solaris-set-api-environment-variables
+=======
+# https://www.ibm.com/docs/en/spectrum-protect/8.1.15?topic=solaris-set-api-environment-variables
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 
 # The newest version of TSM client should be discoverable by
@@ -53,28 +57,47 @@
 # Find the "Backup-archive client" table on that page.
 # Look for "Download Documents" of the latest release.
 # Follow the "Download Information" link.
+<<<<<<< HEAD
 # Look for the "Linux x86_64 ..." rows in the table at
+=======
+# Look for the "Linux x86_64 client ..." rows in the table at
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 # the bottom of the page and follow their "HTTPS" links (one
 # link per row -- each link might point to the latest release).
 # In the directory listings to show up,
 # check the big `.tar` file.
 #
+<<<<<<< HEAD
 # (as of 2023-07-01)
+=======
+# (as of 2022-12-10)
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 
 let
 
   meta = {
+<<<<<<< HEAD
     homepage = "https://www.ibm.com/products/storage-protect";
     downloadPage = "https://www.ibm.com/support/pages/ibm-storage-protect-downloads-latest-fix-packs-and-interim-fixes";
+=======
+    homepage = "https://www.ibm.com/products/data-protection-and-recovery";
+    downloadPage = "https://www.ibm.com/support/pages/ibm-spectrum-protect-downloads-latest-fix-packs-and-interim-fixes";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     platforms = [ "x86_64-linux" ];
     mainProgram = "dsmc";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfree;
     maintainers = [ lib.maintainers.yarny ];
+<<<<<<< HEAD
     description = "IBM Storage Protect (Tivoli Storage Manager) CLI and API";
     longDescription = ''
       IBM Storage Protect (Tivoli Storage Manager) provides
+=======
+    description = "IBM Spectrum Protect (Tivoli Storage Manager) CLI and API";
+    longDescription = ''
+      IBM Spectrum Protect (Tivoli Storage Manager) provides
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       a single point of control for backup and recovery.
       This package contains the client software, that is,
       a command line client and linkable libraries.
@@ -104,10 +127,17 @@ let
 
   unwrapped = stdenv.mkDerivation rec {
     name = "tsm-client-${version}-unwrapped";
+<<<<<<< HEAD
     version = "8.1.19.0";
     src = fetchurl {
       url = mkSrcUrl version;
       hash = "sha512-HF4w8R6R+7gfIFsYlO3R6mkDxMo4TvL/KeK7IuuspGLiajGnBU2B7yg9/oUiT11YUBHjklaINyceQWWJoFSQJw==";
+=======
+    version = "8.1.17.2";
+    src = fetchurl {
+      url = mkSrcUrl version;
+      hash = "sha512-DZCXb3fZO2VYJJJUdjGt9TSdrYNhf8w7QMgEERzX8xb74jjA+UPNI2dbNCeja/vrgRYLYipWZPyjTQJmkxlM/g==";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
     inherit meta passthru;
 

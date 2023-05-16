@@ -7,13 +7,21 @@
 
 stdenv.mkDerivation rec {
   pname = "kronosnet";
+<<<<<<< HEAD
   version = "1.26";
+=======
+  version = "1.25";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-LkV5bi1kMRP2ofBIe+hbOzbSRStWyr3afnNdZqpVDBA=";
+=======
+    sha256 = "sha256-NEmkgKTm+R4lzqjbQTyQ6TDpjoTQtMKiTpzn25HUfYk=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config doxygen ];

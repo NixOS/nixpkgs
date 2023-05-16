@@ -173,7 +173,11 @@ let
             }
             {
               assertion = config.usersFile != null -> config.mergedConfig.useacl != false;
+<<<<<<< HEAD
               message = "${showPath [ "settings" "useacl" ]} is required when ${showPath [ "usersFile" ]} is set (Currently defined as `${config.usersFile}' in ${showFiles options.usersFile.files}).";
+=======
+              message = "${showPath [ "settings" "useacl" ]} is required when ${showPath [ "usersFile" ]} is set (Currently defiend as `${config.usersFile}' in ${showFiles options.usersFile.files}).";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
             }
           ];
         })
@@ -337,7 +341,11 @@ let
 
         phpPackage = mkOption {
           type = types.package;
+<<<<<<< HEAD
           relatedPackages = [ "php81" "php82" ];
+=======
+          relatedPackages = [ "php80" "php81" ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           default = pkgs.php81;
           defaultText = "pkgs.php81";
           description = lib.mdDoc ''

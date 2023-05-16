@@ -32,8 +32,12 @@ stdenv.mkDerivation rec {
     owner = "ntop";
     repo = "ntopng";
     rev = "refs/tags/${version}";
+<<<<<<< HEAD
     hash = "sha256-pIm0C1+4JLVDdXxSaQtd6ON8R2l6KG8ZXuDDuRd6dQI=";
     fetchSubmodules = true;
+=======
+    hash = "sha256-iGqrS0AneKYwGMEpbKy9if8bnaEu6aEV+QaH+JrF9xs=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   preConfigure = ''

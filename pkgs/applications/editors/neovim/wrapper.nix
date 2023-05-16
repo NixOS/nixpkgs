@@ -6,7 +6,10 @@
 , callPackage
 , neovimUtils
 , vimUtils
+<<<<<<< HEAD
 , perl
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 neovim:
 
@@ -20,7 +23,10 @@ let
     , withPython2 ? false
     , withPython3 ? true,  python3Env ? python3
     , withNodeJs ? false
+<<<<<<< HEAD
     , withPerl ? false
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     , rubyEnv ? null
     , vimAlias ? false
     , viAlias ? false
@@ -34,7 +40,11 @@ let
     # entry to load in packpath
     , packpathDirs
     , ...
+<<<<<<< HEAD
   }:
+=======
+  }@args:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   let
 
     wrapperArgsStr = if lib.isString wrapperArgs then wrapperArgs else lib.escapeShellArgs wrapperArgs;
@@ -52,10 +62,15 @@ let
           ]
           ;
 
+<<<<<<< HEAD
     providerLuaRc = neovimUtils.generateProviderRc {
       inherit withPython3 withNodeJs withPerl;
       withRuby = rubyEnv != null;
     };
+=======
+    providerLuaRc = neovimUtils.generateProviderRc args;
+    # providerLuaRc = "toto";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     # If configure != {}, we can't generate the rplugin.vim file with e.g
     # NVIM_SYSTEM_RPLUGIN_MANIFEST *and* NVIM_RPLUGIN_MANIFEST env vars set in
@@ -69,8 +84,11 @@ let
       ++ lib.optionals wrapRc [ "--add-flags" "-u ${writeText "init.vim" neovimRcContent}" ]
       ++ commonWrapperArgs
       ;
+<<<<<<< HEAD
 
     perlEnv = perl.withPackages (p: [ p.NeovimExt p.Appcpanminus ]);
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   in
   assert withPython2 -> throw "Python2 support has been removed from the neovim wrapper, please remove withPython2 and python2Env.";
 
@@ -92,9 +110,12 @@ let
       + lib.optionalString withNodeJs ''
         ln -s ${nodePackages.neovim}/bin/neovim-node-host $out/bin/nvim-node
       ''
+<<<<<<< HEAD
       + lib.optionalString withPerl ''
         ln -s ${perlEnv}/bin/perl $out/bin/nvim-perl
       ''
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       + lib.optionalString vimAlias ''
         ln -s $out/bin/nvim $out/bin/vim
       ''

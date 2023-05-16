@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 { lib, stdenv, pkg-config, darwin, fetchurl, SDL2, freetype, harfbuzz, libGL }:
+=======
+{ lib, stdenv, pkg-config, darwin, fetchurl, SDL2, freetype, libGL }:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 stdenv.mkDerivation rec {
   pname = "SDL2_ttf";
@@ -9,6 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-ncce2TSHUhsQeixKnKa/Q/ti9r3dXCawVea5FBiiIFM=";
   };
 
+<<<<<<< HEAD
   configureFlags = [ "--disable-harfbuzz-builtin" ]
     ++ lib.optionals stdenv.isDarwin [ "--disable-sdltest" ];
 
@@ -16,6 +21,13 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ SDL2 freetype harfbuzz ]
     ++ lib.optional (!stdenv.isDarwin) libGL
+=======
+  configureFlags = lib.optional stdenv.isDarwin "--disable-sdltest";
+
+  nativeBuildInputs = [ pkg-config ];
+
+  buildInputs = [ SDL2 freetype libGL ]
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     ++ lib.optional stdenv.isDarwin darwin.libobjc;
 
   meta = with lib; {

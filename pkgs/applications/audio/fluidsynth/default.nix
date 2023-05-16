@@ -1,16 +1,25 @@
+<<<<<<< HEAD
 { stdenv, lib, fetchFromGitHub, fetchpatch, buildPackages, pkg-config, cmake
+=======
+{ stdenv, lib, fetchFromGitHub, buildPackages, pkg-config, cmake
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , alsa-lib, glib, libjack2, libsndfile, libpulseaudio
 , AppKit, AudioUnit, CoreAudio, CoreMIDI, CoreServices
 }:
 
 stdenv.mkDerivation rec {
   pname = "fluidsynth";
+<<<<<<< HEAD
   version = "2.3.3";
+=======
+  version = "2.3.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "FluidSynth";
     repo = "fluidsynth";
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-RqhlpvMbRSwdcY2uuFAdJnihN3aObcLVMuvCZ294dgo=";
   };
 
@@ -24,6 +33,11 @@ stdenv.mkDerivation rec {
     })
   ];
 
+=======
+    sha256 = "sha256-BSJu3jB7b5G2ThXBUHUNnBGl55EXe3nIzdBdgfOWDSM=";
+  };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   outputs = [ "out" "dev" "man" ];
 
   nativeBuildInputs = [ buildPackages.stdenv.cc pkg-config cmake ];
@@ -34,6 +48,11 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-Denable-framework=off"
+<<<<<<< HEAD
+=======
+    # set CMAKE_INSTALL_NAME_DIR to correct value on darwin
+    "-DCMAKE_INSTALL_LIBDIR=lib"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   meta = with lib; {

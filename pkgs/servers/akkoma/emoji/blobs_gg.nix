@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 { lib, stdenvNoCC, fetchurl, unzip }:
 
 let
@@ -24,6 +25,20 @@ stdenvNoCC.mkDerivation {
 
     runHook postInstall
   '';
+=======
+{ lib, fetchzip }:
+
+let
+  rev = "e764ba00b9c34524e3ff3ffd19a44fa2a5c296a5";
+in fetchzip {
+  pname = "blobs.gg";
+  version = "unstable-2019-07-24";
+
+  url = "https://git.pleroma.social/pleroma/emoji-index/-/raw/${rev}/packs/blobs_gg.zip";
+  hash = "sha256-dnOwW93xTyJKRnYgvPgsqZHNWod4y80aNhBSVKNk6do=";
+
+  stripRoot = false;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   meta = with lib; {
     description = "Blob emoji from blobs.gg repacked as APNG";

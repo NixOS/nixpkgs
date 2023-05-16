@@ -7,6 +7,7 @@
 , fsuae
 }:
 
+<<<<<<< HEAD
 stdenv.mkDerivation (finalAttrs: {
   pname = "fs-uae-launcher";
   version = "3.1.68";
@@ -14,6 +15,15 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://fs-uae.net/files/FS-UAE-Launcher/Stable/${finalAttrs.version}/fs-uae-launcher-${finalAttrs.version}.tar.xz";
     hash = "sha256-42EERC2yeODx0HPbwr4vmpN80z6WSWi3WzJMOT+OwDA=";
+=======
+stdenv.mkDerivation rec {
+  pname = "fs-uae-launcher";
+  version = "3.0.5";
+
+  src = fetchurl {
+    url = "https://fs-uae.net/stable/${version}/${pname}-${version}.tar.gz";
+    sha256 = "1dknra4ngz7bpppwqghmza1q68pn1yaw54p9ba0f42zwp427ly97";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [
@@ -33,6 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
   dontWrapQtApps = true;
 
   preFixup = ''
+<<<<<<< HEAD
     wrapQtApp "$out/bin/fs-uae-launcher" \
       --set PYTHONPATH "$PYTHONPATH"
 
@@ -49,4 +60,18 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = [ "i686-linux" "x86_64-linux" ];
   };
 })
+=======
+      wrapQtApp "$out/bin/fs-uae-launcher" --set PYTHONPATH "$PYTHONPATH" \
+        --prefix PATH : ${lib.makeBinPath [ fsuae ]}
+  '';
+
+  meta = with lib; {
+    homepage = "https://fs-uae.net";
+    description = "Graphical front-end for the FS-UAE emulator";
+    license = licenses.gpl2Plus;
+    maintainers = with  maintainers; [ sander AndersonTorres ];
+    platforms = [ "i686-linux" "x86_64-linux" ];
+  };
+}
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 

@@ -2,14 +2,22 @@
 
 let
   pname = "box";
+<<<<<<< HEAD
   version = "4.3.8";
+=======
+  version = "4.2.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 in
 mkDerivation {
   inherit pname version;
 
   src = fetchurl {
     url = "https://github.com/box-project/box/releases/download/${version}/box.phar";
+<<<<<<< HEAD
     sha256 = "sha256-g9Y92yTsyXU4NWuQwyB3PRrKJxLRSBO9J77jumXPOxg=";
+=======
+    sha256 = "sha256-9pPhqFq9t3MKI/y6/7iCYB8ddWFrafGVcV/k+Exb+KQ=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   dontUnpack = true;
@@ -30,6 +38,10 @@ mkDerivation {
     description = "An application for building and managing Phars";
     license = licenses.mit;
     homepage = "https://github.com/box-project/box";
+<<<<<<< HEAD
     maintainers = with maintainers; [ ] ++ teams.php.members;
+=======
+    maintainers = with maintainers; [ jtojnar ] ++ teams.php.members;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

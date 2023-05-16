@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 { config, lib, pkgs, ... }:
+=======
+{ config, lib, ... }:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 with lib;
 
@@ -31,6 +35,7 @@ in
       i2c = { };
     };
 
+<<<<<<< HEAD
     services.udev.packages = lib.singleton (pkgs.writeTextFile
       { name = "i2c-udev-rules";
         text = ''
@@ -39,6 +44,12 @@ in
         '';
         destination = "/etc/udev/rules.d/70-i2c.rules";
       });
+=======
+    services.udev.extraRules = ''
+      # allow group ${cfg.group} and users with a seat use of i2c devices
+      ACTION=="add", KERNEL=="i2c-[0-9]*", TAG+="uaccess", GROUP="${cfg.group}", MODE="660"
+    '';
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   };
 

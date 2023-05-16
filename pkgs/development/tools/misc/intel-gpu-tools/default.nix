@@ -1,5 +1,6 @@
 { lib
 , stdenv
+<<<<<<< HEAD
 , fetchFromGitLab
 , fetchpatch
 
@@ -39,10 +40,48 @@
 , valgrind
 , xmlrpc_c
 , xorgproto
+=======
+, fetchurl
+, fetchpatch
+, pkg-config
+, libdrm
+, libpciaccess
+, cairo
+, xorgproto
+, udev
+, libX11
+, libXext
+, libXv
+, libXrandr
+, glib
+, bison
+, libunwind
+, python3
+, kmod
+, procps
+, utilmacros
+, gtk-doc
+, docbook_xsl
+, openssl
+, peg
+, elfutils
+, meson
+, ninja
+, valgrind
+, xmlrpc_c
+, gsl
+, alsa-lib
+, curl
+, json_c
+, liboping
+, flex
+, docutils
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 stdenv.mkDerivation rec {
   pname = "intel-gpu-tools";
+<<<<<<< HEAD
   version = "1.27.1";
 
   src = fetchFromGitLab {
@@ -101,6 +140,53 @@ stdenv.mkDerivation rec {
     xorgproto
   ];
 
+=======
+  version = "1.26";
+
+  src = fetchurl {
+    url = "https://xorg.freedesktop.org/archive/individual/app/igt-gpu-tools-${version}.tar.xz";
+    sha256 = "1dwvxh1yplsh1a7h3gpp40g91v12cfxy6yy99s1v9yr2kwxikm1n";
+  };
+
+  patches = [
+    # fix build with meson 0.60
+    (fetchpatch {
+      url = "https://github.com/freedesktop/xorg-intel-gpu-tools/commit/963917a3565466832a3b2fc22e9285d34a0bf944.patch";
+      sha256 = "sha256-goO2N7aK2dJYMhFGS1DlvjEYMSijN6stV6Q5z/RP8Ko=";
+    })
+  ];
+
+  nativeBuildInputs = [ pkg-config utilmacros meson ninja flex bison gtk-doc docutils docbook_xsl ];
+  buildInputs = [
+    libdrm
+    libpciaccess
+    cairo
+    xorgproto
+    udev
+    libX11
+    kmod
+    libXext
+    libXv
+    libXrandr
+    glib
+    libunwind
+    python3
+    procps
+    openssl
+    peg
+    elfutils
+    valgrind
+    xmlrpc_c
+    gsl
+    alsa-lib
+    curl
+    json_c
+    liboping
+  ];
+
+  env.NIX_CFLAGS_COMPILE = toString [ "-Wno-error=array-bounds" ];
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   preConfigure = ''
     patchShebangs tests man
   '';
@@ -108,8 +194,12 @@ stdenv.mkDerivation rec {
   hardeningDisable = [ "bindnow" ];
 
   meta = with lib; {
+<<<<<<< HEAD
     changelog = "https://gitlab.freedesktop.org/drm/igt-gpu-tools/-/blob/v${version}/NEWS";
     homepage = "https://drm.pages.freedesktop.org/igt-gpu-tools/";
+=======
+    homepage = "https://01.org/linuxgraphics/";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     description = "Tools for development and testing of the Intel DRM driver";
     license = licenses.mit;
     platforms = [ "x86_64-linux" "i686-linux" ];

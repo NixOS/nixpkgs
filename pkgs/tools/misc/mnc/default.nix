@@ -7,7 +7,11 @@ buildGoModule rec {
   pname = "mnc";
   version = "0.4";
 
+<<<<<<< HEAD
   vendorHash = "sha256-H0KmGTWyjZOZLIEWophCwRYPeKLxBC050RI7cMXNbPs=";
+=======
+  vendorSha256 = "sha256-H0KmGTWyjZOZLIEWophCwRYPeKLxBC050RI7cMXNbPs=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromSourcehut {
     owner = "~anjan";

@@ -6,8 +6,11 @@ import ./make-test-python.nix ({ lib, pkgs, ... }: {
     virtualisation = {
       emptyDiskImages = [ 512 512 ];
       useBootLoader = true;
+<<<<<<< HEAD
       # Booting off the BTRFS RAID requires an available init script from the Nix store
       mountHostNixStore = true;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       useEFIBoot = true;
     };
     boot.loader.systemd-boot.enable = true;

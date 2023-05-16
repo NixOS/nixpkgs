@@ -20,12 +20,20 @@
 
 buildPythonPackage rec {
   pname = "bpycv";
+<<<<<<< HEAD
   version = "0.4.0";
+=======
+  version = "0.3.6";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
+<<<<<<< HEAD
     hash = "sha256-qqNGemDB0aagCXjrECuh6kLksf+KujPejpnXVqFG8GY=";
+=======
+    hash = "sha256-4N4rCVhbfJx7H7jS88QR3EcRupISIhnLuZ+cgfwIzg4=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [

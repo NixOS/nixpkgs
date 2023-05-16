@@ -61,7 +61,11 @@ in
       checkPhase = optionalString cfg.checkConfig ''
         ln -s $out bird2.conf
         ${cfg.preCheckConfig}
+<<<<<<< HEAD
         ${pkgs.buildPackages.bird}/bin/bird -d -p -c bird2.conf
+=======
+        ${pkgs.bird}/bin/bird -d -p -c bird2.conf
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       '';
     };
 

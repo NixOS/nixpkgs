@@ -171,8 +171,13 @@ fi
 source @out@/nix-support/add-hardening.sh
 
 # Add the flags for the C compiler proper.
+<<<<<<< HEAD
 extraAfter=(${hardeningCFlagsAfter[@]+"${hardeningCFlagsAfter[@]}"} $NIX_CFLAGS_COMPILE_@suffixSalt@)
 extraBefore=(${hardeningCFlagsBefore[@]+"${hardeningCFlagsBefore[@]}"} $NIX_CFLAGS_COMPILE_BEFORE_@suffixSalt@)
+=======
+extraAfter=($NIX_CFLAGS_COMPILE_@suffixSalt@)
+extraBefore=(${hardeningCFlags[@]+"${hardeningCFlags[@]}"} $NIX_CFLAGS_COMPILE_BEFORE_@suffixSalt@)
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 if [ "$dontLink" != 1 ]; then
 
@@ -246,6 +251,7 @@ if [[ -e @out@/nix-support/cc-wrapper-hook ]]; then
 fi
 
 if (( "${NIX_CC_USE_RESPONSE_FILE:-@use_response_file_by_default@}" >= 1 )); then
+<<<<<<< HEAD
     responseFile=$(mktemp --tmpdir cc-params.XXXXXX)
     trap 'rm -f -- "$responseFile"' EXIT
     printf "%q\n" \
@@ -253,6 +259,12 @@ if (( "${NIX_CC_USE_RESPONSE_FILE:-@use_response_file_by_default@}" >= 1 )); the
        ${params+"${params[@]}"} \
        ${extraAfter+"${extraAfter[@]}"} > "$responseFile"
     @prog@ "@$responseFile"
+=======
+    exec @prog@ @<(printf "%q\n" \
+       ${extraBefore+"${extraBefore[@]}"} \
+       ${params+"${params[@]}"} \
+       ${extraAfter+"${extraAfter[@]}"})
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 else
     exec @prog@ \
        ${extraBefore+"${extraBefore[@]}"} \

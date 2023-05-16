@@ -28,7 +28,11 @@ assert (versionAtLeast version "4.9");
   #
   # We set SECURITY_WRITABLE_HOOKS n primarily for documentation purposes; the
   # config builder fails to detect that it has indeed been unset.
+<<<<<<< HEAD
   SECURITY_SELINUX_DISABLE = whenOlder "6.4" no; # On 6.4: error: unused option: SECURITY_SELINUX_DISABLE
+=======
+  SECURITY_SELINUX_DISABLE = no;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   SECURITY_WRITABLE_HOOKS  = option no;
 
   STRICT_KERNEL_RWX = yes;
@@ -41,7 +45,11 @@ assert (versionAtLeast version "4.9");
   DEBUG_SG              = yes;
   SCHED_STACK_END_CHECK = yes;
 
+<<<<<<< HEAD
   REFCOUNT_FULL = whenOlder "5.4.208" yes;
+=======
+  REFCOUNT_FULL = whenOlder "5.5" yes;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   # Randomize page allocator when page_alloc.shuffle=1
   SHUFFLE_PAGE_ALLOCATOR = whenAtLeast "5.2" yes;

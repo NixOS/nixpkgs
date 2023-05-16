@@ -22,21 +22,27 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-tg4v9/Nnue7itWNNOmMwPd/t4OahjfyojESodw5+QjQ=";
   };
 
+<<<<<<< HEAD
   # Do not split 'dev' output until lib/cmake/libssh/libssh-config.cmake
   # is fixed to point INTERFACE_INCLUDE_DIRECTORIES to .dev output.
   # Otherwise it breaks `plasma5Packages.kio-extras`:
   #   https://hydra.nixos.org/build/221540008/nixlog/3/tail
   #outputs = [ "out" "dev" ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   postPatch = ''
     # Fix headers to use libsodium instead of NaCl
     sed -i 's,nacl/,sodium/,g' ./include/libssh/curve25519.h src/curve25519.c
   '';
 
+<<<<<<< HEAD
   # Don’t build examples, which are not installed and require additional dependencies not
   # included in `buildInputs` such as libX11.
   cmakeFlags = [ "-DWITH_EXAMPLES=OFF" ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   # single output, otherwise cmake and .pc files point to the wrong directory
   # outputs = [ "out" "dev" ];
 

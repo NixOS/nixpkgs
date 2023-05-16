@@ -11,11 +11,14 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
+<<<<<<< HEAD
   nativeBuildInputs = [
     # for patchShebangs below
     python3
   ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   unpackPhase = ''
     export SAGE_DOC_OVERRIDE="$PWD/share/doc/sage"
     export SAGE_DOC_SRC_OVERRIDE="$PWD/docsrc"
@@ -29,6 +32,7 @@ stdenv.mkDerivation rec {
     export HOME="$TMPDIR/sage_home"
     mkdir -p "$HOME"
 
+<<<<<<< HEAD
     # run bootstrap script to generate Sage spkg docs, because unfortunately some unrelated doc
     # pages link to them. it needs a few ugly (but self-contained) hacks for a standalone run.
     cp -r "${src}/build" "$HOME"
@@ -48,6 +52,17 @@ stdenv.mkDerivation rec {
     # needed to link them in the sage docs using intersphinx
     export PPLPY_DOCS=${python3.pkgs.pplpy.doc}/share/doc/pplpy
 
+=======
+    # needed to link them in the sage docs using intersphinx
+    export PPLPY_DOCS=${python3.pkgs.pplpy.doc}/share/doc/pplpy
+
+    # adapted from src/doc/bootstrap (which we don't run)
+    OUTPUT_DIR="$SAGE_DOC_SRC_OVERRIDE/en/reference/repl"
+    mkdir -p "$OUTPUT_DIR"
+    OUTPUT="$OUTPUT_DIR/options.txt"
+    ${sage-with-env}/bin/sage -advanced > "$OUTPUT"
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     # jupyter-sphinx calls the sagemath jupyter kernel during docbuild
     export JUPYTER_PATH=${jupyter-kernel-specs}
 

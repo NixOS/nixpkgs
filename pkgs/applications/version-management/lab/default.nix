@@ -13,7 +13,11 @@ buildGoModule rec {
 
   subPackages = [ "." ];
 
+<<<<<<< HEAD
   vendorHash = "sha256-ChysquNuUffcM3qaWUdqu3Av33gnKkdlotEoFKoedA0=";
+=======
+  vendorSha256 = "sha256-ChysquNuUffcM3qaWUdqu3Av33gnKkdlotEoFKoedA0=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   doCheck = false;
 
@@ -36,6 +40,10 @@ buildGoModule rec {
     description = "Lab wraps Git or Hub, making it simple to clone, fork, and interact with repositories on GitLab";
     homepage = "https://zaquestion.github.io/lab";
     license = licenses.cc0;
+<<<<<<< HEAD
     maintainers = with maintainers; [ marsam dtzWill ];
+=======
+    maintainers = with maintainers; [ marsam dtzWill SuperSandro2000 ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

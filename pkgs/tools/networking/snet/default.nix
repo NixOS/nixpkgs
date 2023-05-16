@@ -11,7 +11,11 @@ buildGoModule rec {
     sha256 = "sha256-lTbygQRABv+Dp4i7nDgXYqi4pwU2rtLNfpgtBgsq+7Y=";
   };
 
+<<<<<<< HEAD
   vendorHash = "sha256-dubmCLeD8Fwe1msfLN+5WzdbFkfTRnZDU3F49gjWTS4=";
+=======
+  vendorSha256 = "sha256-dubmCLeD8Fwe1msfLN+5WzdbFkfTRnZDU3F49gjWTS4=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   meta = with lib; {
     description = "Transparent proxy works on linux desktop, MacOS, router";

@@ -10,7 +10,11 @@
     if officialRelease
     then ""
     else "pre${toString (src.rev or src.revCount or "")}"
+<<<<<<< HEAD
 , src, lib, stdenv, autoconf, automake, libtool
+=======
+, src, stdenv, autoconf, automake, libtool
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , # By default, provide all the GNU Build System as input.
   bootstrapBuildInputs ? [ autoconf automake libtool ]
 , ... } @ args:
@@ -73,7 +77,11 @@ stdenv.mkDerivation (
   }
 
   # Then, the caller-supplied attributes.
+<<<<<<< HEAD
   // (builtins.removeAttrs args [ "lib" ]) //
+=======
+  // args //
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   # And finally, our own stuff.
   {
@@ -117,7 +125,11 @@ stdenv.mkDerivation (
       version = version + versionSuffix;
     };
 
+<<<<<<< HEAD
     meta = (lib.optionalAttrs (args ? meta) args.meta) // {
+=======
+    meta = (if args ? meta then args.meta else {}) // {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       description = "Source distribution";
 
       # Tarball builds are generally important, so give them a high

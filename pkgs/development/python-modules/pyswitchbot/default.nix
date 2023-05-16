@@ -14,7 +14,11 @@
 
 buildPythonPackage rec {
   pname = "pyswitchbot";
+<<<<<<< HEAD
   version = "0.39.1";
+=======
+  version = "0.37.6";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -23,7 +27,11 @@ buildPythonPackage rec {
     owner = "Danielhiversen";
     repo = "pySwitchbot";
     rev = "refs/tags/${version}";
+<<<<<<< HEAD
     hash = "sha256-wrn57mluIvUYBXOxw4NTFuq0UuOQwtC/WRWhfQpyRTA=";
+=======
+    hash = "sha256-LZkAyfcDX48hR7lak2mc27lTQQR3VX1ozpdi2btDzbY=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [

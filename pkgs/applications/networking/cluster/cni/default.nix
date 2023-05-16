@@ -11,7 +11,11 @@ buildGoModule rec {
     sha256 = "sha256-g7fVeoqquxPa17AfTu6wnB6PQJDluJ21T3ETrcvWtWg=";
   };
 
+<<<<<<< HEAD
   vendorHash = "sha256-nH/myA/KdTeFXvmBymXITyx5fdCGnWRn6hNRinXc3/s=";
+=======
+  vendorSha256 = "sha256-nH/myA/KdTeFXvmBymXITyx5fdCGnWRn6hNRinXc3/s=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   subPackages = [
     "./cnitool"

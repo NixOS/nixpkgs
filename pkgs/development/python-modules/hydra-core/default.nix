@@ -1,9 +1,17 @@
+<<<<<<< HEAD
 { lib
+=======
+{ stdenv
+, lib
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , antlr4
 , antlr4-python3-runtime
 , buildPythonPackage
 , fetchFromGitHub
+<<<<<<< HEAD
 , fetchpatch
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , importlib-resources
 , jre_headless
 , omegaconf
@@ -32,12 +40,15 @@ buildPythonPackage rec {
       src = ./antlr4.patch;
       antlr_jar = "${antlr4.out}/share/java/antlr-${antlr4.version}-complete.jar";
     })
+<<<<<<< HEAD
     # https://github.com/facebookresearch/hydra/pull/2731
     (fetchpatch {
       name = "setuptools-67.5.0-test-compatibility.patch";
       url = "https://github.com/facebookresearch/hydra/commit/25873841ed8159ab25a0c652781c75cc4a9d6e08.patch";
       hash = "sha256-oUfHlJP653o3RDtknfb8HaaF4fpebdR/OcbKHzJFK/Q=";
     })
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   postPatch = ''
@@ -82,6 +93,10 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
+<<<<<<< HEAD
+=======
+    broken = stdenv.isDarwin;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     description = "A framework for configuring complex applications";
     homepage = "https://hydra.cc";
     license = licenses.mit;

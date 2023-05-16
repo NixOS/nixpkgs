@@ -42,7 +42,11 @@ mkDerivation rec {
     homepage = "http://www.krusader.org";
     description = "Norton/Total Commander clone for KDE";
     license = licenses.gpl2Only;
+<<<<<<< HEAD
     maintainers = with maintainers; [ sander ];
     mainProgram = "krusader";
+=======
+    maintainers = with maintainers; [ sander turion ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

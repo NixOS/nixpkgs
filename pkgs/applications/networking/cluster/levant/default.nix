@@ -11,7 +11,11 @@ buildGoModule rec {
     sha256 = "sha256-UI8PVvTqk8D4S9kq3sgxrm8dkRokpgkLyTN6pzUXNV0=";
   };
 
+<<<<<<< HEAD
   vendorHash = "sha256-MzKttGfuIg0Pp/iz68EpXuk4I+tFozhIabKlsWuvJ48=";
+=======
+  vendorSha256 = "sha256-MzKttGfuIg0Pp/iz68EpXuk4I+tFozhIabKlsWuvJ48=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   # The tests try to connect to a Nomad cluster.
   doCheck = false;
@@ -21,5 +25,9 @@ buildGoModule rec {
     homepage = "https://github.com/hashicorp/levant";
     license = licenses.mpl20;
     maintainers = with maintainers; [ max-niederman ];
+<<<<<<< HEAD
+=======
+    platforms = platforms.unix;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

@@ -9,7 +9,11 @@
 
 buildPythonPackage rec {
   pname = "pysqueezebox";
+<<<<<<< HEAD
   version = "0.7.1";
+=======
+  version = "0.6.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -18,7 +22,11 @@ buildPythonPackage rec {
     owner = "rajlaud";
     repo = pname;
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-WnL9Va3uaWlUHVBtit4v+XdYOFmPpxG91mAHEGwI+7c=";
+=======
+    hash = "sha256-NCADVSsnaOJfLJ7i18i7d7wlWcyt1DoRFGOVXEEYHPI=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [

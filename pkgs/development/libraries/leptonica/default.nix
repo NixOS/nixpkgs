@@ -4,11 +4,19 @@
 
 stdenv.mkDerivation rec {
   pname = "leptonica";
+<<<<<<< HEAD
   version = "1.83.1";
 
   src = fetchurl {
     url = "https://github.com/DanBloomberg/${pname}/releases/download/${version}/${pname}-${version}.tar.gz";
     hash = "sha256-jxhhXgdDr3339QmFxzDfzwyTVIBz0fVmIeQVaotU090=";
+=======
+  version = "1.83.0";
+
+  src = fetchurl {
+    url = "http://www.leptonica.org/source/${pname}-${version}.tar.gz";
+    sha256 = "sha256-IGWR3VjPhO84CDba0TO1jJ0a+SSR9amCXDRqFiBEvP4=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];

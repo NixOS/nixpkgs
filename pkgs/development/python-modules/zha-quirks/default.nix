@@ -9,7 +9,11 @@
 
 buildPythonPackage rec {
   pname = "zha-quirks";
+<<<<<<< HEAD
   version = "0.0.103";
+=======
+  version = "0.0.99";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -18,7 +22,11 @@ buildPythonPackage rec {
     owner = "zigpy";
     repo = "zha-device-handlers";
     rev = "refs/tags/${version}";
+<<<<<<< HEAD
     hash = "sha256-H6LkCjpyj1uk05aIvO2TNJoAEXsPZlsIHo+t5rO5ikY=";
+=======
+    hash = "sha256-09heRXlaqc+qbQj+LKodu6Pq1pgQ5eVZbihOMeO5EWU=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [

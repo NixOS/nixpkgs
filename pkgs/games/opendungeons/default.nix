@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 { lib
 , stdenv
 , fetchFromGitHub
@@ -30,6 +31,19 @@ stdenv.mkDerivation {
     repo = "OpenDungeons";
     rev = "974378d75591214dccbe0fb26e6ec8a40c2156e0";
     hash = "sha256-vz9cT+rNcyKT3W9I9VRKcFol2SH1FhOhOALALjgKfIE=";
+=======
+{ lib, stdenv, fetchFromGitHub, ogre, cegui, boost, sfml, openal, cmake, ois, pkg-config }:
+
+stdenv.mkDerivation rec {
+  pname = "opendungeons";
+  version = "unstable-2021-11-06";
+
+  src = fetchFromGitHub {
+    owner = "OpenDungeons";
+    repo = "OpenDungeons";
+    rev = "c180ed1864eab5fbe847d1dd5c5c936c4e45444e";
+    sha256 = "0xf7gkpy8ll1h59wyaljf0hr8prg7p4ixz80mxqwcnm9cglpgn63";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   patches = [
@@ -42,6 +56,7 @@ stdenv.mkDerivation {
     cp source/utils/StackTrace{Stub,Unix}.cpp
   '';
 
+<<<<<<< HEAD
   strictDeps = true;
 
   nativeBuildInputs = [
@@ -61,6 +76,10 @@ stdenv.mkDerivation {
   cmakeFlags = [
     "-DOD_TREAT_WARNINGS_AS_ERRORS=FALSE"
   ];
+=======
+  nativeBuildInputs = [ cmake pkg-config ];
+  buildInputs = [ ogre cegui boost sfml openal ois ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   meta = with lib; {
     description = "An open source, real time strategy game sharing game elements with the Dungeon Keeper series and Evil Genius";

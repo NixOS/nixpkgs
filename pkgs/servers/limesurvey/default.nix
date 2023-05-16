@@ -2,13 +2,21 @@
 
 stdenv.mkDerivation rec {
   pname = "limesurvey";
+<<<<<<< HEAD
   version = "6.1.2+230606";
+=======
+  version = "5.6.9+230306";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "LimeSurvey";
     repo = "LimeSurvey";
     rev = version;
+<<<<<<< HEAD
     hash = "sha256-a89Kdr9XV1TSCoWxYrU0j8ec7rAcIlU/bgLtRjdzqbg=";
+=======
+    hash = "sha256-FBcpP9Zb4flr1AZlocRW8xx9UCXJAU9aaGXcWQE6iWc=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   phpConfig = writeText "config.php" ''

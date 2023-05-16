@@ -36,6 +36,10 @@ with import ./release-lib.nix { inherit supportedSystems nixpkgsArgs; };
   cron = linux;
   cups = linux;
   dbus = linux;
+<<<<<<< HEAD
+=======
+  dhcp = linux;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   diffutils = all;
   e2fsprogs = linux;
   emacs = linux;
@@ -88,7 +92,11 @@ with import ./release-lib.nix { inherit supportedSystems nixpkgsArgs; };
   man-pages = linux;
   mc = all;
   mdadm = linux;
+<<<<<<< HEAD
   mesa = linux;
+=======
+  mesa = mesaPlatforms;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   mingetty = linux;
   mktemp = all;
   monotone = linux;

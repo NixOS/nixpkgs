@@ -8,8 +8,11 @@
 , python3
 , vala
 , wrapGAppsHook4
+<<<<<<< HEAD
 , elementary-gtk-theme
 , elementary-icon-theme
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , granite7
 , gtk4
 , libgee
@@ -17,13 +20,21 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-calculator";
+<<<<<<< HEAD
   version = "2.0.2";
+=======
+  version = "2.0.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "calculator";
     rev = version;
+<<<<<<< HEAD
     sha256 = "sha256-PLdPu43ns03vhBwaGw4BWCLNvcJbhUA+5Gr5b//TqfA=";
+=======
+    sha256 = "sha256-7aKJDlpODIysrHtqtD5wfd+dULFpD+LfWsjzg3OAxkY=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [
@@ -36,7 +47,10 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+<<<<<<< HEAD
     elementary-icon-theme
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     granite7
     gtk4
     libgee
@@ -47,6 +61,7 @@ stdenv.mkDerivation rec {
     patchShebangs meson/post_install.py
   '';
 
+<<<<<<< HEAD
   preFixup = ''
     gappsWrapperArgs+=(
       # The GTK theme is hardcoded.
@@ -56,6 +71,8 @@ stdenv.mkDerivation rec {
     )
   '';
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   passthru = {
     updateScript = nix-update-script { };
   };

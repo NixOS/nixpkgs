@@ -91,6 +91,7 @@ in
         The package used in the service
       '';
     };
+<<<<<<< HEAD
 
     user = mkOption {
       type = types.str;
@@ -103,18 +104,29 @@ in
       default = "gollum";
       description = lib.mdDoc "Specifies the owner group of the wiki directory";
     };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   config = mkIf cfg.enable {
 
+<<<<<<< HEAD
     users.users.gollum = mkIf (cfg.user == "gollum") {
       group = cfg.group;
+=======
+    users.users.gollum = {
+      group = config.users.users.gollum.name;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       description = "Gollum user";
       createHome = false;
       isSystemUser = true;
     };
 
+<<<<<<< HEAD
     users.groups."${cfg.group}" = { };
+=======
+    users.groups.gollum = { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     systemd.tmpfiles.rules = [
       "d '${cfg.stateDir}' - ${config.users.users.gollum.name} ${config.users.groups.gollum.name} - -"
@@ -132,8 +144,13 @@ in
       '';
 
       serviceConfig = {
+<<<<<<< HEAD
         User = cfg.user;
         Group = cfg.group;
+=======
+        User = config.users.users.gollum.name;
+        Group = config.users.groups.gollum.name;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         WorkingDirectory = cfg.stateDir;
         ExecStart = ''
           ${cfg.package}/bin/gollum \
@@ -154,5 +171,9 @@ in
     };
   };
 
+<<<<<<< HEAD
   meta.maintainers = with lib.maintainers; [ erictapen bbenno joscha ];
+=======
+  meta.maintainers = with lib.maintainers; [ erictapen bbenno ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }

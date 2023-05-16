@@ -30,5 +30,9 @@ buildGoModule rec {
     description = "Google Drive client for the commandline";
     license = licenses.asl20;
     maintainers = with maintainers; [ aaronjheng ];
+<<<<<<< HEAD
+=======
+    platforms = platforms.unix;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

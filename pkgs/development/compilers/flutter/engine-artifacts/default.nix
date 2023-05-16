@@ -2,6 +2,7 @@
 , stdenv
 , hostPlatform
 , engineVersion
+<<<<<<< HEAD
 , fetchurl
 , fetchzip
 , autoPatchelfHook
@@ -9,11 +10,18 @@
 , flutterVersion
 , unzip
 , stdenvNoCC
+=======
+, fetchzip
+, autoPatchelfHook
+
+, gtk3
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 let
   hashes = (import ./hashes.nix).${engineVersion} or
     (throw "There are no known artifact hashes for Flutter engine version ${engineVersion}.");
+<<<<<<< HEAD
   noticeText = stdenvNoCC.mkDerivation (finalAttrs: {
     pname = "flutter-notice";
     version = engineVersion;
@@ -47,6 +55,9 @@ let
         EOF
       '';
   });
+=======
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   artifacts =
     {
       common = {
@@ -79,6 +90,7 @@ let
             };
           };
 
+<<<<<<< HEAD
         darwin = {
           "arm64" = {
             base = [
@@ -129,6 +141,8 @@ let
                 ];
               }));
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         linux = lib.genAttrs
           [ "arm64" "x64" ]
           (arch:
@@ -170,12 +184,16 @@ let
     let
       artifactDirectory = if platform == null then null else "${platform}${lib.optionalString (variant != null) "-${variant}"}";
       archiveBasename = lib.removeSuffix ".${(lib.last (lib.splitString "." archive))}" archive;
+<<<<<<< HEAD
       overrideUnpackCmd = builtins.elem archive [ "FlutterEmbedder.framework.zip" "FlutterMacOS.framework.zip" ];
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     in
     stdenv.mkDerivation ({
       pname = "flutter-artifact${lib.optionalString (platform != null) "-${artifactDirectory}"}-${archiveBasename}";
       version = engineVersion;
 
+<<<<<<< HEAD
       nativeBuildInputs = [ unzip ]
         ++ lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
 
@@ -193,12 +211,22 @@ let
 
       sourceRoot = if overrideUnpackCmd then "." else null;
       unpackCmd = if overrideUnpackCmd then "unzip -o $src -d $out" else null;
+=======
+      src = fetchzip {
+        url = "https://storage.googleapis.com/flutter_infra_release/flutter/${engineVersion}${lib.optionalString (platform != null) "/${artifactDirectory}"}/${archive}";
+        stripRoot = false;
+        hash = (if artifactDirectory == null then hashes else hashes.${artifactDirectory}).${archive};
+      };
+
+      nativeBuildInputs = [ autoPatchelfHook ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
       installPhase =
         let
           destination = "$out/${if subdirectory == true then archiveBasename else if subdirectory != null then subdirectory else "."}";
         in
         ''
+<<<<<<< HEAD
           # ship the notice near all artifacts. if the artifact directory is / multiple directories are nested in $src, link it there. If there isn't a directory, link it in root
           # this *isn't the same as the subdirectory variable above*
           DIR_CNT="$(echo */ | wc -w)"
@@ -210,6 +238,8 @@ let
               ln -s ${noticeText} "$dir/LICENSE.README"
             done
           fi
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           mkdir -p "${destination}"
           cp -r . "${destination}"
         '';
@@ -224,13 +254,21 @@ let
             (architecture: variants: {
               base = map
                 (args: mkArtifactDerivation ({
+<<<<<<< HEAD
                   platform = "${os}${lib.optionalString (architecture != "") "-${architecture}"}";
+=======
+                  platform = "${os}-${architecture}";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
                 } // args))
                 variants.base;
               variants = builtins.mapAttrs
                 (variant: variantArtifacts: map
                   (args: mkArtifactDerivation ({
+<<<<<<< HEAD
                     platform = "${os}${lib.optionalString (architecture != "") "-${architecture}"}";
+=======
+                    platform = "${os}-${architecture}";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
                     inherit variant;
                   } // args))
                   variantArtifacts)

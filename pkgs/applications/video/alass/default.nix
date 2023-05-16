@@ -25,10 +25,17 @@ rustPlatform.buildRustPackage rec {
   '';
 
   meta = with lib; {
+<<<<<<< HEAD
     description = "Automatic Language-Agnostic Subtitles Synchronization";
     homepage = "https://github.com/kaegi/alass";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ erictapen ];
     mainProgram = "alass-cli";
+=======
+    description = "Automatic Language-Agnostic Subtitle Synchronization";
+    homepage = "https://github.com/kaegi/alass";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ erictapen ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

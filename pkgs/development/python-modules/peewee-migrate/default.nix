@@ -17,14 +17,22 @@
 
 buildPythonPackage rec {
   pname = "peewee-migrate";
+<<<<<<< HEAD
   version = "1.10.1";
+=======
+  version = "1.7.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "klen";
     repo = "peewee_migrate";
     rev = "refs/tags/${version}";
+<<<<<<< HEAD
     hash = "sha256-SBHeXHfhYjyXr+tODryKQfxZKy7l4ez5C6eU6FjS2qI=";
+=======
+    hash = "sha256-s7/Ev4nAKUr5OBgziETVCtjlxvBoeoZXriUBuAUi4eE=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 { lib, buildGoModule, fetchFromGitHub, fetchpatch }:
+=======
+{ lib, buildGoModule, fetchFromGitHub }:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 buildGoModule rec {
   pname = "k2tf";
@@ -11,6 +15,7 @@ buildGoModule rec {
     sha256 = "sha256-zkkRzCTZCvbwBj4oIhTo5d3PvqLMJPzT3zV9jU3PEJs=";
   };
 
+<<<<<<< HEAD
   patches = [
     # update dependencies
     # https://github.com/sl1pm4t/k2tf/pull/111
@@ -21,6 +26,9 @@ buildGoModule rec {
   ];
 
   vendorHash = "sha256-yGuoE1bgwVHk3ym382OC93me9HPlVoNgGo/3JROVC2E=";
+=======
+  vendorSha256 = "sha256-iCRiBCppqCZrCUQipoVgc4jUnLkX6QVFjxI6sv6n7tU=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   ldflags = [ "-s" "-w" "-X main.version=${version}" "-X main.commit=v${version}" ];
 

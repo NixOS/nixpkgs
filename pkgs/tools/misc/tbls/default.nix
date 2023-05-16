@@ -7,16 +7,27 @@
 
 buildGoModule rec {
   pname = "tbls";
+<<<<<<< HEAD
   version = "1.68.2";
+=======
+  version = "1.65.3";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "k1LoW";
     repo = "tbls";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-yDWAKkzRb487iZ+5tmIH1qfuHj0TldOT+tTQwtVyX7s=";
   };
 
   vendorHash = "sha256-V6TF7Q+9XxBeSVXlotu8tUrNCWDr80BZsQcVSBGikl8=";
+=======
+    hash = "sha256-/RyDv256qbi1CMHmB2LZxMBqOM81nA3r5N8jRrww/mQ=";
+  };
+
+  vendorHash = "sha256-qT8YhNZ+9n9+VduW8a/tr74w3OyWue7a51667Q9dMCg=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   CGO_CFLAGS = [ "-Wno-format-security" ];
 

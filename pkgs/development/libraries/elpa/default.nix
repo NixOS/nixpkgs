@@ -1,14 +1,26 @@
+<<<<<<< HEAD
 { lib, stdenv, fetchurl, autoreconfHook, mpiCheckPhaseHook
 , gfortran, perl, mpi, blas, lapack, scalapack, openssh
+=======
+{ lib, stdenv, fetchurl, autoreconfHook, gfortran, perl
+, mpi, blas, lapack, scalapack, openssh
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 # CPU optimizations
 , avxSupport ? stdenv.hostPlatform.avxSupport
 , avx2Support ? stdenv.hostPlatform.avx2Support
 , avx512Support ? stdenv.hostPlatform.avx512Support
+<<<<<<< HEAD
 , config
 # Enable NIVIA GPU support
 # Note, that this needs to be built on a system with a GPU
 # present for the tests to succeed.
 , enableCuda ? config.cudaSupport
+=======
+# Enable NIVIA GPU support
+# Note, that this needs to be built on a system with a GPU
+# present for the tests to succeed.
+, enableCuda ? false
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 # type of GPU architecture
 , nvidiaArch ? "sm_60"
 , cudatoolkit
@@ -19,13 +31,21 @@ assert blas.isILP64 == scalapack.isILP64;
 
 stdenv.mkDerivation rec {
   pname = "elpa";
+<<<<<<< HEAD
   version = "2023.05.001";
+=======
+  version = "2022.11.001";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   passthru = { inherit (blas) isILP64; };
 
   src = fetchurl {
     url = "https://elpa.mpcdf.mpg.de/software/tarball-archive/Releases/${version}/elpa-${version}.tar.gz";
+<<<<<<< HEAD
     sha256 = "sha256-7GS+XWUigQ1gGjuOajFyDjw+tK8zpDTYpkVw125kYrY=";
+=======
+    sha256 = "sha256-NeOX18CvlbtDvHvvf/8pQlwdpAD6DNhq6NO9L/L52Zk=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   patches = [
@@ -41,7 +61,11 @@ stdenv.mkDerivation rec {
     substituteInPlace Makefile.am --replace '#!/bin/bash' '#!${stdenv.shell}'
   '';
 
+<<<<<<< HEAD
   nativeBuildInputs = [ autoreconfHook perl ];
+=======
+  nativeBuildInputs = [ autoreconfHook perl openssh ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   buildInputs = [ mpi blas lapack scalapack ]
     ++ lib.optional enableCuda cudatoolkit;
@@ -76,10 +100,22 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
+<<<<<<< HEAD
   nativeCheckInputs = [ mpiCheckPhaseHook openssh ];
   preCheck = ''
     #patchShebangs ./
 
+=======
+  preCheck = ''
+    #patchShebangs ./
+
+    # make sure the test starts even if we have less than 4 cores
+    export OMPI_MCA_rmaps_base_oversubscribe=1
+
+    # Fix to make mpich run in a sandbox
+    export HYDRA_IFACE=lo
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     # Run dual threaded
     export OMP_NUM_THREADS=2
 

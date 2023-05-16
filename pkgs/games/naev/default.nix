@@ -26,13 +26,21 @@
 
 stdenv.mkDerivation rec {
   pname = "naev";
+<<<<<<< HEAD
   version = "0.10.6";
+=======
+  version = "0.10.5";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "naev";
     repo = "naev";
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-nUQhpKl1aIsoJZtQGyHuwPhRBeb7nSs6+MfmTtX17mY=";
+=======
+    sha256 = "sha256-2jCGRZxa2N8J896YYPAN7it3uvNGYtoIH75HNqy0kEE=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     fetchSubmodules = true;
   };
 

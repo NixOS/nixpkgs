@@ -77,7 +77,11 @@ buildPythonPackage rec {
     homepage = "https://github.com/encode/databases";
     changelog = "https://github.com/encode/databases/releases/tag/${version}";
     license = licenses.bsd3;
+<<<<<<< HEAD
     maintainers = with maintainers; [ ];
+=======
+    maintainers = with maintainers; [ costrouc ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     # https://github.com/encode/databases/issues/530
     broken = lib.versionAtLeast sqlalchemy.version "2.0.0";
   };

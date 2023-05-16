@@ -13,7 +13,11 @@
 
 buildPythonPackage rec {
   pname = "bleak";
+<<<<<<< HEAD
   version = "0.21.1";
+=======
+  version = "0.20.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -22,7 +26,11 @@ buildPythonPackage rec {
     owner = "hbldh";
     repo = pname;
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-T0im8zKyNLbskAEDeUUFS/daJtvttlHlttjscqP8iSk=";
+=======
+    hash = "sha256-hiQSsQHq1hoCQhoWU50i2NXYR/LaTHAize9cfr1uZsY=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

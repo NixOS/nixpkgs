@@ -9,6 +9,7 @@
 , enableUnstable ? false
 }:
 
+<<<<<<< HEAD
 let
   stableVersion = "1.4.0";
 in
@@ -16,6 +17,11 @@ in
 stdenv.mkDerivation (finalAttrs: {
   pname = "ath9k-htc-blobless-firmware";
   version = if enableUnstable then "unstable-2022-05-22" else stableVersion;
+=======
+stdenv.mkDerivation (finalAttrs: {
+  pname = "ath9k-htc-blobless-firmware";
+  version = if enableUnstable then "unstable-2022-05-22" else "1.4.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub ({
     owner = "qca";
@@ -65,10 +71,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   installPhase = ''
     runHook preInstall
+<<<<<<< HEAD
     install -Dt "$out/lib/firmware/ath9k_htc/" target_firmware/*.fw
     # make symlinks so that firmware will be automatically found
     ln -s htc_7010.fw "$out/lib/firmware/ath9k_htc/htc_7010-${stableVersion}.fw"
     ln -s htc_9271.fw "$out/lib/firmware/ath9k_htc/htc_9271-${stableVersion}.fw"
+=======
+    install -Dt $out/lib/firmware/ath9k_htc/ target_firmware/*.fw
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     runHook postInstall
   '';
 

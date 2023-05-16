@@ -28,6 +28,7 @@
 
 stdenv.mkDerivation (finalAttrs: rec {
   pname = "SwayNotificationCenter";
+<<<<<<< HEAD
   version = "0.9.0";
 
   src = fetchFromGitHub {
@@ -41,6 +42,17 @@ stdenv.mkDerivation (finalAttrs: rec {
     ./001-backport-pr296.patch
   ];
 
+=======
+  version = "0.8.0";
+
+  src = fetchFromGitHub {
+    owner = "ErikReider";
+    repo = "SwayNotificationCenter";
+    rev = "v${version}";
+    hash = "sha256-E9CjNx/xzkkOZ39XbfIb1nJFheZVFpj/lwmITKtpb7A=";
+  };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nativeBuildInputs = [
     bash-completion
     # cmake # currently conflicts with meson
@@ -74,8 +86,11 @@ stdenv.mkDerivation (finalAttrs: rec {
   postPatch = ''
     chmod +x build-aux/meson/postinstall.py
     patchShebangs build-aux/meson/postinstall.py
+<<<<<<< HEAD
 
     substituteInPlace src/functions.vala --replace /usr/local/etc $out/etc
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '';
 
   passthru.tests.version = testers.testVersion {

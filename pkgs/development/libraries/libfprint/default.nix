@@ -19,7 +19,11 @@
 
 stdenv.mkDerivation rec {
   pname = "libfprint";
+<<<<<<< HEAD
   version = "1.94.6";
+=======
+  version = "1.94.5";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   outputs = [ "out" "devdoc" ];
 
   src = fetchFromGitLab {
@@ -27,7 +31,11 @@ stdenv.mkDerivation rec {
     owner = "libfprint";
     repo = pname;
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-lDnAXWukBZSo8X6UEVR2nOMeVUi/ahnJgx2cP+vykZ8=";
+=======
+    hash = "sha256-+eSvzbXxjemVKMeD8tp/0/tGBjw2EOlmyxb8KfyZKtA=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   postPatch = ''

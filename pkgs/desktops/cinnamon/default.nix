@@ -13,11 +13,16 @@ lib.makeScope pkgs.newScope (self: with self; {
   });
 
   # Extensions added here will be shipped by default
+<<<<<<< HEAD
   # We keep this in sync with a default Mint installation
   # Right now (only) nemo-share is missing
   nemoExtensions = [
     folder-color-switcher
     nemo-emblems
+=======
+  nemoExtensions = [
+    folder-color-switcher
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     nemo-fileroller
     nemo-python
   ];
@@ -36,7 +41,10 @@ lib.makeScope pkgs.newScope (self: with self; {
   cjs = callPackage ./cjs { };
   folder-color-switcher = callPackage ./folder-color-switcher { };
   nemo = callPackage ./nemo { };
+<<<<<<< HEAD
   nemo-emblems = callPackage ./nemo-extensions/nemo-emblems { };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nemo-fileroller = callPackage ./nemo-extensions/nemo-fileroller { };
   nemo-python = callPackage ./nemo-extensions/nemo-python { };
   nemo-with-extensions = callPackage ./nemo/wrapper.nix { };

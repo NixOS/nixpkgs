@@ -2,7 +2,10 @@
 , buildPythonPackage
 , lib
 , python
+<<<<<<< HEAD
 , fetchPypi
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , systemd
 , pytest
 , mock
@@ -11,7 +14,11 @@
 buildPythonPackage rec {
   pname = "pystemd";
   version = "0.10.0";
+<<<<<<< HEAD
   src = fetchPypi {
+=======
+  src = python.pkgs.fetchPypi {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     inherit pname version;
     hash = "sha256-10qBS/2gEIXbGorZC+PLJ9ryOlGrawPn4p7IEfoq6Fk=";
   };

@@ -1,6 +1,11 @@
 { lib
 , stdenv
+<<<<<<< HEAD
 , fetchFromGitLab
+=======
+, fetchurl
+, fetchpatch2
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , meson
 , ninja
 , pkg-config
@@ -13,11 +18,15 @@
 , libiconv
 , json-glib
 , libintl
+<<<<<<< HEAD
 , zathura
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 stdenv.mkDerivation rec {
   pname = "girara";
+<<<<<<< HEAD
   version = "0.4.0";
 
   outputs = [ "out" "dev" ];
@@ -30,6 +39,26 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-dzWdiFGJ45JcH+wNwq2P3NZeWwHXAvXR1eJC85mYy7M=";
   };
 
+=======
+  version = "0.3.9";
+
+  outputs = [ "out" "dev" ];
+
+  src = fetchurl {
+    url = "https://git.pwmt.org/pwmt/${pname}/-/archive/${version}/${pname}-${version}.tar.gz";
+    hash = "sha256-DoqYykR/N17BHQ90GoLvAYluQ3odWPwUGRTacN6BiWU=";
+  };
+
+  patches = [
+    # Fix memory management bug revealed by GLib 2.76.
+    # https://git.pwmt.org/pwmt/girara/-/issues/17
+    (fetchpatch2 {
+      url = "https://git.pwmt.org/pwmt/girara/-/commit/6926cc1234853ccf3010a1e2625aafcf462ed60e.patch";
+      hash = "sha256-uayT6ikXtaBPxhZFyskShug3Tbvy2a9qimLRwdiAsic=";
+    })
+  ];
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nativeBuildInputs = [
     meson
     ninja
@@ -69,10 +98,13 @@ stdenv.mkDerivation rec {
       meson test --print-errorlogs
   '';
 
+<<<<<<< HEAD
   passthru.tests = {
     inherit zathura;
   };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   meta = with lib; {
     homepage = "https://git.pwmt.org/pwmt/girara";
     description = "User interface library";

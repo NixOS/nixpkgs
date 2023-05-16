@@ -10,16 +10,27 @@
 
 buildGoModule rec {
   pname = "werf";
+<<<<<<< HEAD
   version = "1.2.253";
+=======
+  version = "1.2.231";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "werf";
     repo = "werf";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-cHMMLV2NdYueL3qV0wpB4n0+2XZTvg4mfKTSgGZHqqY=";
   };
 
   vendorHash = "sha256-vuEqimNRWQGwybzOkGVoevpyVpU8XyXqhAIa7I66ajs=";
+=======
+    hash = "sha256-tiIfdODyUH3RoB1Htono2ZgN8+kiM1BXpNPn2B9V/mk=";
+  };
+
+  vendorHash = "sha256-SRNxV3zRYfbMJB4iGic3lu25VXIrl5011rB6AYqZG8U=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   proxyVendor = true;
 
@@ -64,6 +75,13 @@ buildGoModule rec {
       integration/suites \
       pkg/true_git/*test.go \
       test/e2e
+<<<<<<< HEAD
+=======
+
+    # Remove failing tests.
+    rm -rf \
+      cmd/werf/docs/replacers/kubectl/kubectl_test.go
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '' + lib.optionalString (CGO_ENABLED == 0) ''
     # A workaround for osusergo.
     export USER=nixbld

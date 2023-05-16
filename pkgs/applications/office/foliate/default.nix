@@ -13,7 +13,11 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-Pr2YA2MHXD4W7lyCxGAVLKyoZarZ8t92RSkWle3LNuc=";
   };
 
+<<<<<<< HEAD
   nativeBuildInputs = [ meson ninja python3 wrapGAppsHook gobject-introspection ];
+=======
+  nativeBuildInputs = [ meson ninja python3 wrapGAppsHook ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   postPatch = ''
     patchShebangs build-aux/meson/postinstall.py
@@ -32,6 +36,10 @@ stdenv.mkDerivation rec {
     gtk3
     webkitgtk
     desktop-file-utils
+<<<<<<< HEAD
+=======
+    gobject-introspection
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     gsettings-desktop-schemas
   ];
 

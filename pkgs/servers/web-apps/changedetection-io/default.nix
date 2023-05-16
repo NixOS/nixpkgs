@@ -17,7 +17,10 @@ python3.pkgs.buildPythonApplication rec {
 
   postPatch = ''
     substituteInPlace requirements.txt \
+<<<<<<< HEAD
       --replace "apprise~=1.3.0" "apprise" \
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       --replace "cryptography~=3.4" "cryptography" \
       --replace "dnspython<2.3.0" "dnspython" \
       --replace "pytest ~=6.2" "" \
@@ -73,6 +76,10 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/dgtlmoon/changedetection.io";
     description = "Simplest self-hosted free open source website change detection tracking, monitoring and notification service";
     license = licenses.asl20;
+<<<<<<< HEAD
     maintainers = with maintainers; [ ];
+=======
+    maintainers = with maintainers; [ SuperSandro2000 ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

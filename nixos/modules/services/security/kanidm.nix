@@ -10,14 +10,22 @@ let
   certPaths = builtins.map builtins.dirOf [ cfg.serverSettings.tls_chain cfg.serverSettings.tls_key ];
 
   # Merge bind mount paths and remove paths where a prefix is already mounted.
+<<<<<<< HEAD
   # This makes sure that if e.g. the tls_chain is in the nix store and /nix/store is already in the mount
+=======
+  # This makes sure that if e.g. the tls_chain is in the nix store and /nix/store is alread in the mount
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   # paths, no new bind mount is added. Adding subpaths caused problems on ofborg.
   hasPrefixInList = list: newPath: lib.any (path: lib.hasPrefix (builtins.toString path) (builtins.toString newPath)) list;
   mergePaths = lib.foldl' (merged: newPath: let
       # If the new path is a prefix to some existing path, we need to filter it out
       filteredPaths = lib.filter (p: !lib.hasPrefix (builtins.toString newPath) (builtins.toString p)) merged;
       # If a prefix of the new path is already in the list, do not add it
+<<<<<<< HEAD
       filteredNew = lib.optional (!hasPrefixInList filteredPaths newPath) newPath;
+=======
+      filteredNew = if hasPrefixInList filteredPaths newPath then [] else [ newPath ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     in filteredPaths ++ filteredNew) [];
 
   defaultServiceConfig = {
@@ -69,8 +77,11 @@ in
     enableServer = lib.mkEnableOption (lib.mdDoc "the Kanidm server");
     enablePam = lib.mkEnableOption (lib.mdDoc "the Kanidm PAM and NSS integration");
 
+<<<<<<< HEAD
     package = lib.mkPackageOptionMD pkgs "kanidm" {};
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     serverSettings = lib.mkOption {
       type = lib.types.submodule {
         freeformType = settingsFormat.type;
@@ -124,8 +135,13 @@ in
           };
           log_level = lib.mkOption {
             description = lib.mdDoc "Log level of the server.";
+<<<<<<< HEAD
             default = "info";
             type = lib.types.enum [ "info" "debug" "trace" ];
+=======
+            default = "default";
+            type = lib.types.enum [ "default" "verbose" "perfbasic" "perffull" ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           };
           role = lib.mkOption {
             description = lib.mdDoc "The role of this server. This affects the replication relationship and thereby available features.";
@@ -137,7 +153,11 @@ in
       default = { };
       description = lib.mdDoc ''
         Settings for Kanidm, see
+<<<<<<< HEAD
         [the documentation](https://kanidm.github.io/kanidm/stable/server_configuration.html)
+=======
+        [the documentation](https://github.com/kanidm/kanidm/blob/master/kanidm_book/src/server_configuration.md)
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         and [example configuration](https://github.com/kanidm/kanidm/blob/master/examples/server.toml)
         for possible values.
       '';
@@ -155,7 +175,11 @@ in
       };
       description = lib.mdDoc ''
         Configure Kanidm clients, needed for the PAM daemon. See
+<<<<<<< HEAD
         [the documentation](https://kanidm.github.io/kanidm/stable/client_tools.html#kanidm-configuration)
+=======
+        [the documentation](https://github.com/kanidm/kanidm/blob/master/kanidm_book/src/client_tools.md#kanidm-configuration)
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         and [example configuration](https://github.com/kanidm/kanidm/blob/master/examples/config)
         for possible values.
       '';
@@ -173,7 +197,11 @@ in
       };
       description = lib.mdDoc ''
         Configure Kanidm unix daemon.
+<<<<<<< HEAD
         See [the documentation](https://kanidm.github.io/kanidm/stable/integrations/pam_and_nsswitch.html#the-unix-daemon)
+=======
+        See [the documentation](https://github.com/kanidm/kanidm/blob/master/kanidm_book/src/pam_and_nsswitch.md#the-unix-daemon)
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         and [example configuration](https://github.com/kanidm/kanidm/blob/master/examples/unixd)
         for possible values.
       '';
@@ -224,7 +252,11 @@ in
         }
       ];
 
+<<<<<<< HEAD
     environment.systemPackages = lib.mkIf cfg.enableClient [ cfg.package ];
+=======
+    environment.systemPackages = lib.mkIf cfg.enableClient [ pkgs.kanidm ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     systemd.services.kanidm = lib.mkIf cfg.enableServer {
       description = "kanidm identity management daemon";
@@ -238,6 +270,7 @@ in
         {
           StateDirectory = "kanidm";
           StateDirectoryMode = "0700";
+<<<<<<< HEAD
           RuntimeDirectory = "kanidmd";
           ExecStart = "${cfg.package}/bin/kanidmd server -c ${serverConfigFile}";
           User = "kanidm";
@@ -248,13 +281,23 @@ in
             "/run/kanidmd:/run/kanidmd"
           ];
 
+=======
+          ExecStart = "${pkgs.kanidm}/bin/kanidmd server -c ${serverConfigFile}";
+          User = "kanidm";
+          Group = "kanidm";
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           AmbientCapabilities = [ "CAP_NET_BIND_SERVICE" ];
           CapabilityBoundingSet = [ "CAP_NET_BIND_SERVICE" ];
           # This would otherwise override the CAP_NET_BIND_SERVICE capability.
           PrivateUsers = lib.mkForce false;
           # Port needs to be exposed to the host network
           PrivateNetwork = lib.mkForce false;
+<<<<<<< HEAD
           RestrictAddressFamilies = [ "AF_INET" "AF_INET6" "AF_UNIX" ];
+=======
+          RestrictAddressFamilies = [ "AF_INET" "AF_INET6" ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           TemporaryFileSystem = "/:ro";
         }
       ];
@@ -272,7 +315,11 @@ in
           CacheDirectory = "kanidm-unixd";
           CacheDirectoryMode = "0700";
           RuntimeDirectory = "kanidm-unixd";
+<<<<<<< HEAD
           ExecStart = "${cfg.package}/bin/kanidm_unixd";
+=======
+          ExecStart = "${pkgs.kanidm}/bin/kanidm_unixd";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           User = "kanidm-unixd";
           Group = "kanidm-unixd";
 
@@ -281,8 +328,11 @@ in
             "-/etc/static/kanidm"
             "-/etc/ssl"
             "-/etc/static/ssl"
+<<<<<<< HEAD
             "-/etc/passwd"
             "-/etc/group"
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           ];
           BindPaths = [
             # To create the socket
@@ -304,7 +354,11 @@ in
       partOf = [ "kanidm-unixd.service" ];
       restartTriggers = [ unixConfigFile clientConfigFile ];
       serviceConfig = {
+<<<<<<< HEAD
         ExecStart = "${cfg.package}/bin/kanidm_unixd_tasks";
+=======
+        ExecStart = "${pkgs.kanidm}/bin/kanidm_unixd_tasks";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
         BindReadOnlyPaths = [
           "/nix/store"
@@ -330,16 +384,22 @@ in
         ProtectHome = false;
         RestrictAddressFamilies = [ "AF_UNIX" ];
         TemporaryFileSystem = "/:ro";
+<<<<<<< HEAD
         Restart = "on-failure";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       };
       environment.RUST_LOG = "info";
     };
 
     # These paths are hardcoded
     environment.etc = lib.mkMerge [
+<<<<<<< HEAD
       (lib.mkIf cfg.enableServer {
         "kanidm/server.toml".source = serverConfigFile;
       })
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       (lib.mkIf options.services.kanidm.clientSettings.isDefined {
         "kanidm/config".source = clientConfigFile;
       })
@@ -348,7 +408,11 @@ in
       })
     ];
 
+<<<<<<< HEAD
     system.nssModules = lib.mkIf cfg.enablePam [ cfg.package ];
+=======
+    system.nssModules = lib.mkIf cfg.enablePam [ pkgs.kanidm ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     system.nssDatabases.group = lib.optional cfg.enablePam "kanidm";
     system.nssDatabases.passwd = lib.optional cfg.enablePam "kanidm";
@@ -367,7 +431,11 @@ in
           description = "Kanidm server";
           isSystemUser = true;
           group = "kanidm";
+<<<<<<< HEAD
           packages = [ cfg.package ];
+=======
+          packages = with pkgs; [ kanidm ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         };
       })
       (lib.mkIf cfg.enablePam {

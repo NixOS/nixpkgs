@@ -11,16 +11,27 @@
 
 buildGoModule rec {
   pname = "lima";
+<<<<<<< HEAD
   version = "0.17.2";
+=======
+  version = "0.15.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "lima-vm";
     repo = pname;
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-0yWQhyDSDGZT6K/SeVntTdqnDzyGD244+r5kG1MFh1c=";
   };
 
   vendorHash = "sha256-yA6qwnbRFR/V2Aaf53jLTejPKuNzbod2dVnLEQLoQkM=";
+=======
+    sha256 = "sha256-uZE827dc79i7JPxHDI3kmAANN9XUIuhR0c9BUe92DyQ=";
+  };
+
+  vendorHash = "sha256-CysPzlup8TVVR4rCm3cWTjnxwJznMv0wbaeCC0ofWSU=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nativeBuildInputs = [ makeWrapper installShellFiles ]
     ++ lib.optionals stdenv.isDarwin [ xcbuild.xcrun sigtool ];

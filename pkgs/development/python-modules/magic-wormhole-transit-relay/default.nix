@@ -27,6 +27,10 @@ buildPythonPackage rec {
     description = "Transit Relay server for Magic-Wormhole";
     homepage = "https://github.com/magic-wormhole/magic-wormhole-transit-relay";
     license = licenses.mit;
+<<<<<<< HEAD
     maintainers = with maintainers; [ ];
+=======
+    maintainers = with maintainers; [ SuperSandro2000 ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

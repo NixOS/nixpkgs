@@ -1,5 +1,9 @@
 { lib
 , aiohttp
+<<<<<<< HEAD
+=======
+, asynctest
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , buildPythonPackage
 , fetchFromGitHub
 , fetchpatch
@@ -33,6 +37,10 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     aiohttp
+<<<<<<< HEAD
+=======
+    asynctest
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     certifi
   ];
 

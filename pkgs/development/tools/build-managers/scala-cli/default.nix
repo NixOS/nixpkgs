@@ -73,7 +73,10 @@ stdenv.mkDerivation {
     license = licenses.asl20;
     description = "Command-line tool to interact with the Scala language";
     maintainers = [ maintainers.kubukoz ];
+<<<<<<< HEAD
     inherit platforms;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   passthru.updateScript = callPackage ./update.nix { } { inherit platforms pname version; };

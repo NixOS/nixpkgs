@@ -3,6 +3,7 @@
 
 let
   versionMap = {
+<<<<<<< HEAD
     "3.5" = {
       kafkaVersion = "3.5.0";
       scalaVersion = "2.13";
@@ -19,6 +20,12 @@ let
       kafkaVersion = "3.3.2";
       scalaVersion = "2.13";
       sha256 = "sha256-Gv5XrpXnEajH8fSbcfIfURz+QPcqTrJ1oe3SGXYLNRc=";
+=======
+    "3.3" = {
+      kafkaVersion = "3.3.1";
+      scalaVersion = "2.13";
+      sha256 = "sha256-GK2KNl+xEd4knTu4vzyWzRrwYOyPs+PR/Ep64Q2QQt4=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       jre = jdk17_headless;
     };
     "3.2" = {

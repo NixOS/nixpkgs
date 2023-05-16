@@ -1,17 +1,25 @@
 { lib
 , buildGoModule
 , fetchFromGitHub
+<<<<<<< HEAD
 , testers
 , sish
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 buildGoModule rec {
   pname = "sish";
+<<<<<<< HEAD
   version = "2.9.2";
+=======
+  version = "2.8.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "antoniomika";
     repo = pname;
+<<<<<<< HEAD
     rev = "refs/tags/v${version}";
     hash = "sha256-6PCZtiXsDQfPZFw3r1n3rwgxigSnWgggHXzZdBT/fxA=";
   };
@@ -31,11 +39,21 @@ buildGoModule rec {
       package = sish;
     };
   };
+=======
+    rev = "v${version}";
+    sha256 = "sha256-BzWpEkhLhTNt5C/1G0Hnkli2kMvRwGbRc1bCgsWdRUo=";
+  };
+
+  vendorSha256 = "sha256-SQKkhyUYuOuPb8SOtjgRTsGKg6T75Zcot5ufHSUaiCM=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   meta = with lib; {
     description = "HTTP(S)/WS(S)/TCP Tunnels to localhost";
     homepage = "https://github.com/antoniomika/sish";
+<<<<<<< HEAD
     changelog = "https://github.com/antoniomika/sish/releases/tag/v${version}";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };

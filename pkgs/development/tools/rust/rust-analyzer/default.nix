@@ -13,14 +13,23 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rust-analyzer-unwrapped";
+<<<<<<< HEAD
   version = "2023-09-11";
   cargoSha256 = "sha256-bdF88QG++8ieFLG9H6D6nR6d9GHna36HMskp6TnTA4c=";
+=======
+  version = "2023-05-01";
+  cargoSha256 = "sha256-ZjJ4EZYUyeO/IpiYcUaEsTx4aaNf36KoUHG3lt9gKbw=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "rust-lang";
     repo = "rust-analyzer";
     rev = version;
+<<<<<<< HEAD
     sha256 = "sha256-6GjjGVCn0lNlGQifjM8AqRRMzVxf/KNyQqmAl8a9HME=";
+=======
+    sha256 = "sha256-FPQKPvlHIU2DsDF6GMoRtrZhil0vHi6MFd8vpKEx/n8=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   cargoBuildFlags = [ "--bin" "rust-analyzer" "--bin" "rust-analyzer-proc-macro-srv" ];

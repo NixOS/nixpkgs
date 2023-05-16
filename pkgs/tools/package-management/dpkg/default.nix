@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 { lib
 , stdenv
 , fetchgit
@@ -14,25 +15,46 @@
 , pkg-config
 , diffutils
 , glibc ? !stdenv.isDarwin
+=======
+{ lib, stdenv, fetchgit, perl, gnutar, zlib, bzip2, xz, zstd
+, libmd, makeWrapper, coreutils, autoreconfHook, pkg-config
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 stdenv.mkDerivation rec {
   pname = "dpkg";
+<<<<<<< HEAD
   version = "1.22.0";
+=======
+  version = "1.21.21ubuntu1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchgit {
     url = "https://git.launchpad.net/ubuntu/+source/dpkg";
     rev = "applied/${version}";
+<<<<<<< HEAD
     hash = "sha256-q+kP0PuQyGKuKahA1/TwtJG380a/sNR433xZhxvGO9M=";
+=======
+    hash = "sha256-ZrJdf4oEvNeSMVHB8/TJgz5+YqLhih70ktLdnDurhUc=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   configureFlags = [
     "--disable-dselect"
+<<<<<<< HEAD
     "--disable-start-stop-daemon"
     "--with-admindir=/var/lib/dpkg"
     "PERL_LIBDIR=$(out)/${perl.libPrefix}"
     "TAR=${gnutar}/bin/tar"
   ] ++ lib.optional stdenv.isDarwin "--disable-linker-optimisations";
+=======
+    "--with-admindir=/var/lib/dpkg"
+    "PERL_LIBDIR=$(out)/${perl.libPrefix}"
+    "TAR=${gnutar}/bin/tar"
+    (lib.optionalString stdenv.isDarwin "--disable-linker-optimisations")
+    (lib.optionalString stdenv.isDarwin "--disable-start-stop-daemon")
+  ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   enableParallelBuilding = true;
 
@@ -50,7 +72,11 @@ stdenv.mkDerivation rec {
     done
   '';
 
+<<<<<<< HEAD
   postPatch = ''
+=======
+  patchPhase = ''
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     patchShebangs .
 
     # Dpkg commands sometimes calls out to shell commands
@@ -65,10 +91,14 @@ stdenv.mkDerivation rec {
        --replace '"debsig-verify"' \"$out/bin/debsig-verify\" \
        --replace '"rm"' \"${coreutils}/bin/rm\" \
        --replace '"cat"' \"${coreutils}/bin/cat\" \
+<<<<<<< HEAD
        --replace '"diff"' \"${diffutils}/bin/diff\"
   '' + lib.optionalString (!stdenv.isDarwin) ''
     substituteInPlace src/main/help.c \
        --replace '"ldconfig"' \"${glibc.bin}/bin/ldconfig\"
+=======
+       --replace '"diff"' \"${coreutils}/bin/diff\"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '';
 
   buildInputs = [ perl zlib bzip2 xz zstd libmd ];

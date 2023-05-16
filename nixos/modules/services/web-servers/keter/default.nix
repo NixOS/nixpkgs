@@ -1,37 +1,52 @@
 { config, pkgs, lib, ... }:
 let
   cfg = config.services.keter;
+<<<<<<< HEAD
   yaml = pkgs.formats.yaml { };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 in
 {
   meta = {
     maintainers = with lib.maintainers; [ jappie ];
   };
 
+<<<<<<< HEAD
   imports = [
     (lib.mkRenamedOptionModule [ "services" "keter" "keterRoot" ] [ "services" "keter" "root" ])
     (lib.mkRenamedOptionModule [ "services" "keter" "keterPackage" ] [ "services" "keter" "package" ])
   ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   options.services.keter = {
     enable = lib.mkEnableOption (lib.mdDoc ''keter, a web app deployment manager.
 Note that this module only support loading of webapps:
 Keep an old app running and swap the ports when the new one is booted.
 '');
 
+<<<<<<< HEAD
     root = lib.mkOption {
+=======
+    keterRoot = lib.mkOption {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       type = lib.types.str;
       default = "/var/lib/keter";
       description = lib.mdDoc "Mutable state folder for keter";
     };
 
+<<<<<<< HEAD
     package = lib.mkOption {
+=======
+    keterPackage = lib.mkOption {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       type = lib.types.package;
       default = pkgs.haskellPackages.keter;
       defaultText = lib.literalExpression "pkgs.haskellPackages.keter";
       description = lib.mdDoc "The keter package to be used";
     };
 
+<<<<<<< HEAD
 
     globalKeterConfig = lib.mkOption {
       type = lib.types.submodule {
@@ -77,6 +92,30 @@ Keep an old app running and swap the ports when the new one is booted.
         };
       };
       description = lib.mdDoc "Global config for keter, see <https://github.com/snoyberg/keter/blob/master/etc/keter-config.yaml> for reference";
+=======
+    globalKeterConfig = lib.mkOption {
+      type = lib.types.attrs;
+      default = {
+        ip-from-header = true;
+        listeners = [{
+          host = "*4";
+          port = 6981;
+        }];
+      };
+      # You want that ip-from-header in the nginx setup case
+      # so it's not set to 127.0.0.1.
+      # using a port above 1024 allows you to avoid needing CAP_NET_BIND_SERVICE
+      defaultText = lib.literalExpression ''
+        {
+          ip-from-header = true;
+          listeners = [{
+            host = "*4";
+            port = 6981;
+          }];
+        }
+      '';
+      description = lib.mdDoc "Global config for keter";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
 
     bundle = {
@@ -119,12 +158,20 @@ Keep an old app running and swap the ports when the new one is booted.
 
   config = lib.mkIf cfg.enable (
     let
+<<<<<<< HEAD
       incoming = "${cfg.root}/incoming";
+=======
+      incoming = "${cfg.keterRoot}/incoming";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 
       globalKeterConfigFile = pkgs.writeTextFile {
         name = "keter-config.yml";
+<<<<<<< HEAD
         text = (lib.generators.toYAML { } (cfg.globalKeterConfig // { root = cfg.root; }));
+=======
+        text = (lib.generators.toYAML { } (cfg.globalKeterConfig // { root = cfg.keterRoot; }));
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       };
 
       # If things are expected to change often, put it in the bundle!
@@ -151,7 +198,11 @@ Keep an old app running and swap the ports when the new one is booted.
         script = ''
           set -xe
           mkdir -p ${incoming}
+<<<<<<< HEAD
           ${lib.getExe cfg.package} ${globalKeterConfigFile};
+=======
+          { tail -F ${cfg.keterRoot}/log/keter/current.log -n 0 & ${cfg.keterPackage}/bin/keter ${globalKeterConfigFile}; }
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         '';
         wantedBy = [ "multi-user.target" "nginx.service" ];
 

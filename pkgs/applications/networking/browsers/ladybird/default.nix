@@ -10,7 +10,11 @@
 , nixosTests
 }:
 
+<<<<<<< HEAD
 stdenv.mkDerivation (finalAttrs: {
+=======
+stdenv.mkDerivation {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pname = "ladybird";
   version = "unstable-2023-01-17";
 
@@ -21,7 +25,11 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-n2mLg9wNfdMGsJuGj+ukjto9qYjGOIz4cZjgvMGQUrY=";
   };
 
+<<<<<<< HEAD
   sourceRoot = "${finalAttrs.src.name}/Ladybird";
+=======
+  sourceRoot = "source/Ladybird";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   postPatch = ''
     substituteInPlace CMakeLists.txt \
@@ -70,4 +78,8 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with maintainers; [ fgaz ];
     platforms = platforms.unix;
   };
+<<<<<<< HEAD
 })
+=======
+}
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)

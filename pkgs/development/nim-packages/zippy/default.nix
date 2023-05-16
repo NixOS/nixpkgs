@@ -13,6 +13,11 @@ buildNimPackage rec {
     hash = "sha256-w64ENRyP3mNTtESSt7CDDxUkjYSfziNVVedkO4HIuJ8=";
   };
 
+<<<<<<< HEAD
+=======
+  doCheck = true;
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   meta = with lib;
     src.meta // {
       description = "Pure Nim implementation of deflate, zlib, gzip and zip";

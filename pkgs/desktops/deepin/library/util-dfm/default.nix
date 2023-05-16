@@ -13,13 +13,21 @@
 
 stdenv.mkDerivation rec {
   pname = "util-dfm";
+<<<<<<< HEAD
   version = "1.2.12";
+=======
+  version = "1.2.8";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
+<<<<<<< HEAD
     hash = "sha256-juZQCRtr0SWrPAz6PAAw2m/MWoTg7831BizziHsId00=";
+=======
+    sha256 = "sha256-Mc3x0nTnEyMnruZotiT1J4BGOeNAQlCXGbO0yVJtqYM=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

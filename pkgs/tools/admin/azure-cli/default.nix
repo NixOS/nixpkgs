@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 { stdenv, lib, python3, fetchPypi, fetchFromGitHub, installShellFiles }:
 
 let
@@ -9,19 +10,43 @@ let
     repo = "azure-cli";
     rev = "azure-cli-${version}";
     hash = "sha256-wa0LmBMv3eQIsWEKMAHks+TvBZmTdFepPGG5XQRvZXk=";
+=======
+{ stdenv, lib, python3, fetchFromGitHub, installShellFiles }:
+
+let
+  version = "2.44.1";
+  srcName = "azure-cli-${version}-src";
+
+  src = fetchFromGitHub {
+    name = srcName;
+    owner = "Azure";
+    repo = "azure-cli";
+    rev = "azure-cli-${version}";
+    hash = "sha256-QcY08YxwGywFCXy3PslEzc5qZd62y4XAcuIC9Udp6Cc=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   # put packages that needs to be overridden in the py package scope
   py = import ./python-packages.nix {
+<<<<<<< HEAD
     inherit stdenv src version python3 fetchPypi;
   };
 in
 
+=======
+    inherit stdenv lib src version python3;
+  };
+in
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 py.pkgs.toPythonApplication (py.pkgs.buildAzureCliPackage {
   pname = "azure-cli";
   inherit version src;
 
+<<<<<<< HEAD
   sourceRoot = "${src.name}/src/azure-cli";
+=======
+  sourceRoot = "${srcName}/src/azure-cli";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   prePatch = ''
     substituteInPlace setup.py \
@@ -55,14 +80,20 @@ py.pkgs.toPythonApplication (py.pkgs.buildAzureCliPackage {
     azure-keyvault
     azure-keyvault-administration
     azure-keyvault-keys
+<<<<<<< HEAD
     azure-keyvault-certificates
     azure-keyvault-secrets
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     azure-loganalytics
     azure-mgmt-advisor
     azure-mgmt-apimanagement
     azure-mgmt-applicationinsights
     azure-mgmt-appconfiguration
+<<<<<<< HEAD
     azure-mgmt-appcontainers
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     azure-mgmt-authorization
     azure-mgmt-batch
     azure-mgmt-batchai
@@ -204,7 +235,10 @@ py.pkgs.toPythonApplication (py.pkgs.buildAzureCliPackage {
     "azure.mgmt.apimanagement"
     "azure.mgmt.applicationinsights"
     "azure.mgmt.appconfiguration"
+<<<<<<< HEAD
     "azure.mgmt.appcontainers"
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "azure.mgmt.authorization"
     "azure.mgmt.batch"
     "azure.mgmt.batchai"
@@ -269,6 +303,7 @@ py.pkgs.toPythonApplication (py.pkgs.buildAzureCliPackage {
   meta = with lib; {
     homepage = "https://github.com/Azure/azure-cli";
     description = "Next generation multi-platform command line experience for Azure";
+<<<<<<< HEAD
     downloadPage = "https://github.com/Azure/azure-cli/releases/tag/azure-cli-${version}";
     longDescription = ''
       The Azure Command-Line Interface (CLI) is a cross-platform
@@ -282,6 +317,10 @@ py.pkgs.toPythonApplication (py.pkgs.buildAzureCliPackage {
     mainProgram = "az";
     maintainers = with maintainers; [ akechishiro jonringer ];
     platforms = platforms.all;
+=======
+    license = licenses.mit;
+    maintainers = with maintainers; [ jonringer ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 })
 

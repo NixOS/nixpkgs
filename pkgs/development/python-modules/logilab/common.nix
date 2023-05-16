@@ -12,14 +12,22 @@
 
 buildPythonPackage rec {
   pname = "logilab-common";
+<<<<<<< HEAD
   version = "1.10.0";
+=======
+  version = "1.9.7";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
+<<<<<<< HEAD
     hash = "sha256-MoXt3tta5OimJUjOkWSMDCmXV0aS8N0W5bcANwAelYY=";
+=======
+    hash = "sha256-/JlN9RlIRLbi9TL9V6SgO6ddPeKqLzK402DqkLBRuxM=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [
@@ -27,7 +35,10 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
+<<<<<<< HEAD
     setuptools
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     mypy-extensions
     typing-extensions
   ] ++ lib.optionals (pythonOlder "3.8") [

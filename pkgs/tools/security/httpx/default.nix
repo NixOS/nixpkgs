@@ -5,12 +5,17 @@
 
 buildGoModule rec {
   pname = "httpx";
+<<<<<<< HEAD
   version = "1.3.4";
+=======
+  version = "1.3.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "projectdiscovery";
     repo = "httpx";
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-62WOeMnnr08k8pGUTqxiZqHQJxXYqUIh+PzHvJxnJAY=";
   };
 
@@ -24,6 +29,16 @@ buildGoModule rec {
     "-s"
     "-w"
   ];
+=======
+    hash = "sha256-QTD8aPpsqfMcCWT+b4V5z6dIrVW86sVi5WqShN055P0=";
+  };
+
+  vendorHash = "sha256-rXzAZTJtX9RhUjqo+Xllnh00fBaQH1Yne+gKqmxLXUU=";
+
+  subPackages = [ "cmd/httpx" ];
+
+  ldflags = [ "-s" "-w" ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   # Tests require network access
   doCheck = false;

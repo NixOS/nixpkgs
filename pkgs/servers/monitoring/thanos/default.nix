@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 { lib, buildGoModule, fetchFromGitHub, fetchpatch }:
+=======
+{ lib, buildGoModule, fetchFromGitHub }:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 buildGoModule rec {
   pname = "thanos";
   version = "0.31.0";
@@ -10,6 +14,7 @@ buildGoModule rec {
     sha256 = "sha256-EJZGc4thu0WhVSSRolIRYg39S81Cgm+JHwpW5eE7mDc=";
   };
 
+<<<<<<< HEAD
   patches = [
     # https://github.com/thanos-io/thanos/pull/6126
     (fetchpatch {
@@ -19,6 +24,9 @@ buildGoModule rec {
   ];
 
   vendorHash = "sha256-8+MUMux6v/O2syVyTx758yUBfJkertzibz6yFB05nWk=";
+=======
+  vendorHash = "sha256-bNQwDttJ7YuQFrpp0alqe37/lue0CX5gB2UDRWWtTXQ=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   doCheck = true;
 
@@ -37,5 +45,9 @@ buildGoModule rec {
     homepage = "https://github.com/thanos-io/thanos";
     license = licenses.asl20;
     maintainers = with maintainers; [ basvandijk ];
+<<<<<<< HEAD
+=======
+    platforms = platforms.unix;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

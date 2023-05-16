@@ -451,7 +451,10 @@ in {
           "eufylife_ble"
           "esphome"
           "fjaraskupan"
+<<<<<<< HEAD
           "gardena_bluetooth"
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           "govee_ble"
           "homekit_controller"
           "inkbird"

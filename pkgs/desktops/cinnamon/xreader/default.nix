@@ -1,7 +1,10 @@
 { stdenv
 , lib
 , fetchFromGitHub
+<<<<<<< HEAD
 , fetchpatch
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , glib
 , gobject-introspection
 , intltool
@@ -17,7 +20,11 @@
 , poppler
 , libspectre
 , libgxps
+<<<<<<< HEAD
 , webkitgtk_4_1
+=======
+, webkitgtk
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , nodePackages
 , ninja
 , gsettings-desktop-schemas
@@ -27,12 +34,17 @@
 
 stdenv.mkDerivation rec {
   pname = "xreader";
+<<<<<<< HEAD
   version = "3.8.2";
+=======
+  version = "3.6.3";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = pname;
     rev = version;
+<<<<<<< HEAD
     sha256 = "sha256-2zqlfoN4L+V237cQ3PVh49YaZfNKGiLqh2JIiGJE340=";
   };
 
@@ -45,6 +57,11 @@ stdenv.mkDerivation rec {
     })
   ];
 
+=======
+    sha256 = "sha256-KuCcOnhM8AzKC8hfBpdcnC/ubDVsElKMZuxEnTcJLn0=";
+  };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nativeBuildInputs = [
     shared-mime-info
     wrapGAppsHook
@@ -69,7 +86,11 @@ stdenv.mkDerivation rec {
     poppler
     libspectre
     libgxps
+<<<<<<< HEAD
     webkitgtk_4_1
+=======
+    webkitgtk
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     nodePackages.mathjax
     djvulibre
   ];

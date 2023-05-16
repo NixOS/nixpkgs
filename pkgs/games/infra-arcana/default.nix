@@ -1,20 +1,46 @@
+<<<<<<< HEAD
 { lib, stdenv, fetchFromGitLab, cmake, makeWrapper, SDL2, SDL2_image, SDL2_mixer
+=======
+{ lib
+, stdenv
+, fetchFromGitLab
+, cmake
+, makeWrapper
+, SDL2
+, SDL2_image
+, SDL2_mixer
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 stdenv.mkDerivation rec {
   pname = "infra-arcana";
+<<<<<<< HEAD
   version = "22.0.0";
+=======
+  version = "21.0.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitLab {
     owner = "martin-tornqvist";
     repo = "ia";
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-EFpeuzxhRriQOBtmw0D+SY6sOWGyY8iA5Xnm6PCaMX0=";
+=======
+    sha256 = "sha256-E2ssxdYa27qRk5cCmM7A5VqXGExwXHblR34y+rOUBRI=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ cmake makeWrapper ];
   buildInputs = [ SDL2 SDL2_image SDL2_mixer ];
 
+<<<<<<< HEAD
+=======
+  # Some parts of the game don't compile with glibc 2.34. As soon as
+  # this is fixed upstream we can switch to the default build flags.
+  buildFlags = [ "ia" ];
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   installPhase = ''
     runHook preInstall
 
@@ -24,7 +50,11 @@ stdenv.mkDerivation rec {
     rm -rf CMake* cmake* compile_commands.json CTest* Makefile
     cp -ra * $out/opt/ia
 
+<<<<<<< HEAD
     # IA uses relative paths when looking for assets
+=======
+    # Uses relative paths when looking for assets
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     wrapProgram $out/opt/ia/ia --run "cd $out/opt/ia"
     ln -s $out/opt/ia/ia $out/bin/infra-arcana
 

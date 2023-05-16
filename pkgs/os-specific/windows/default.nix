@@ -6,7 +6,11 @@ lib.makeScope newScope (self: with self; {
 
   cygwinSetup = callPackage ./cygwin-setup { };
 
+<<<<<<< HEAD
   dlfcn = callPackage ./dlfcn { };
+=======
+  jom = callPackage ./jom { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   w32api = callPackage ./w32api { };
 
@@ -20,7 +24,11 @@ lib.makeScope newScope (self: with self; {
   crossThreadsStdenv = overrideCC crossLibcStdenv
     (if stdenv.hostPlatform.useLLVM or false
      then buildPackages.llvmPackages_8.clangNoLibcxx
+<<<<<<< HEAD
      else buildPackages.gccWithoutTargetLibc.override (old: {
+=======
+     else buildPackages.gccCrossStageStatic.override (old: {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
        bintools = old.bintools.override {
          libc = libcCross;
        };
@@ -33,10 +41,13 @@ lib.makeScope newScope (self: with self; {
     stdenv = crossThreadsStdenv;
   };
 
+<<<<<<< HEAD
   mcfgthreads_pre_gcc_13 = callPackage ./mcfgthreads/pre_gcc_13.nix {
     stdenv = crossThreadsStdenv;
   };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   mcfgthreads = callPackage ./mcfgthreads {
     stdenv = crossThreadsStdenv;
   };

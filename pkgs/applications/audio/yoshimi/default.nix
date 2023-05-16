@@ -22,16 +22,27 @@
 
 stdenv.mkDerivation rec {
   pname = "yoshimi";
+<<<<<<< HEAD
   version = "2.3.0.2";
+=======
+  version = "2.2.3";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "Yoshimi";
     repo = pname;
     rev = version;
+<<<<<<< HEAD
     hash = "sha256-zFwfKy8CVecGhgr48T+eDNHfMdctfrNGenc/XJctyw8=";
   };
 
   sourceRoot = "${src.name}/src";
+=======
+    hash = "sha256-zVIOHm84wx6ZFK0seS9fWZfujDz259AXTv7zljbwrUk=";
+  };
+
+  sourceRoot = "source/src";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   postPatch = ''
     substituteInPlace Misc/Config.cpp --replace /usr $out

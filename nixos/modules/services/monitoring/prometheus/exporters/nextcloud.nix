@@ -33,6 +33,7 @@ in
         Make sure that this file is readable by the exporter user.
       '';
     };
+<<<<<<< HEAD
     tokenFile = mkOption {
       type = types.path;
       example = "/path/to/token-file";
@@ -42,6 +43,8 @@ in
         Make sure that this file is readable by the exporter user.
       '';
     };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     timeout = mkOption {
       type = types.str;
       default = "5s";
@@ -56,6 +59,7 @@ in
       ExecStart = ''
         ${pkgs.prometheus-nextcloud-exporter}/bin/nextcloud-exporter \
           --addr ${cfg.listenAddress}:${toString cfg.port} \
+<<<<<<< HEAD
           --timeout ${cfg.timeout} \
           --server ${cfg.url} \
           ${if cfg.tokenFile == "" then ''
@@ -64,6 +68,14 @@ in
          '' else ''
             --auth-token ${escapeShellArg "@${cfg.tokenFile}"} \
          ''} ${concatStringsSep " \\\n  " cfg.extraFlags}'';
+=======
+          --username ${cfg.username} \
+          --timeout ${cfg.timeout} \
+          --server ${cfg.url} \
+          --password ${escapeShellArg "@${cfg.passwordFile}"} \
+          ${concatStringsSep " \\\n  " cfg.extraFlags}
+      '';
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
   };
 }

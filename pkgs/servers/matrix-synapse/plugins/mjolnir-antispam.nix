@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 { lib, stdenv, buildPythonPackage, fetchFromGitHub, matrix-synapse-unwrapped }:
+=======
+{ lib, stdenv, buildPythonPackage, fetchFromGitHub, matrix-synapse }:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 buildPythonPackage rec {
   pname = "matrix-synapse-mjolnir-antispam";
@@ -11,9 +15,15 @@ buildPythonPackage rec {
     sha256 = "sha256-/vnojWLpu/fktqPUhAdL1QTESxDwFrBVYAkyF79Fj9w=";
   };
 
+<<<<<<< HEAD
   sourceRoot = "${src.name}/synapse_antispam";
 
   buildInputs = [ matrix-synapse-unwrapped ];
+=======
+  sourceRoot = "./source/synapse_antispam";
+
+  buildInputs = [ matrix-synapse ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   doCheck = false; # no tests
   pythonImportsCheck = [ "mjolnir" ];

@@ -6,11 +6,19 @@
 
 stdenv.mkDerivation rec {
   pname = "dnsdist";
+<<<<<<< HEAD
   version = "1.8.0";
 
   src = fetchurl {
     url = "https://downloads.powerdns.com/releases/dnsdist-${version}.tar.bz2";
     hash = "sha256-HA03XCVFPTSbiOA/9YmqJgPKhpL8mDZMBo6tNygEcE8=";
+=======
+  version = "1.7.3";
+
+  src = fetchurl {
+    url = "https://downloads.powerdns.com/releases/dnsdist-${version}.tar.bz2";
+    hash = "sha256-fq9vrC8mVlxdhljUKiE3meBfTTvGjnxxbnF030ExWIY=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   patches = [

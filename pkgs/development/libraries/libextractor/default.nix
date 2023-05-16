@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 { lib, stdenv, fetchurl, fetchpatch, substituteAll
+=======
+{ fetchurl, lib, stdenv, substituteAll
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , libtool, gettext, zlib, bzip2, flac, libvorbis
 , exiv2, libgsf, rpm, pkg-config
 , gstreamerSupport ? true, gst_all_1
@@ -25,6 +29,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-FvYzq4dGo4VHxKHaP0WRGSsIJa2DxDNvBXW4WEPYvY8=";
   };
 
+<<<<<<< HEAD
   patches = [
     (fetchpatch {
       name = "libextractor-exiv2-0.28.patch";
@@ -32,6 +37,9 @@ stdenv.mkDerivation rec {
       hash = "sha256-szAv2A+NmiQyj2+R7BO6fHX588vlTgljPtrnMR6mgGY=";
     })
   ] ++ lib.optionals gstreamerSupport [
+=======
+  patches = lib.optionals gstreamerSupport [
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     # Libraries cannot be wrapped so we need to hardcode the plug-in paths.
     (substituteAll {

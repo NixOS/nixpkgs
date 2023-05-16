@@ -9,7 +9,11 @@ mkCoqDerivation {
 
   defaultVersion = with lib.versions;
      lib.switch [ coq.coq-version mathcomp-algebra.version ] [
+<<<<<<< HEAD
        { cases = [ (range "8.16" "8.18") (isGe "1.15") ]; out = "1.1.1"; }
+=======
+       { cases = [ (range "8.16" "8.17") (isGe "1.15") ]; out = "1.1.1"; }
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
        { cases = [ (range "8.13" "8.16") (isGe "1.12") ]; out = "1.0.0"; }
      ] null;
 

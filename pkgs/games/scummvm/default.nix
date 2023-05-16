@@ -5,13 +5,21 @@
 
 stdenv.mkDerivation rec {
   pname = "scummvm";
+<<<<<<< HEAD
   version = "2.7.1";
+=======
+  version = "2.7.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "scummvm";
     repo = "scummvm";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-GVsvLAjb7pECd7uvPT9ubDFMIkiPWdU5owOafxk5iy0=";
+=======
+    hash = "sha256-kyWgy5Nm8v/zbnhNMUyy/wUIq0I6nQyM9UqympYfwvg=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ nasm ];

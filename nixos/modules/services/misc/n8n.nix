@@ -26,6 +26,7 @@ in
       '';
     };
 
+<<<<<<< HEAD
     webhookUrl = mkOption {
       type = types.str;
       default = "";
@@ -35,6 +36,8 @@ in
       '';
     };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   config = mkIf cfg.enable {
@@ -53,7 +56,10 @@ in
         N8N_USER_FOLDER = "/var/lib/n8n";
         HOME = "/var/lib/n8n";
         N8N_CONFIG_FILES = "${configFile}";
+<<<<<<< HEAD
         WEBHOOK_URL = "${cfg.webhookUrl}";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
         # Don't phone home
         N8N_DIAGNOSTICS_ENABLED = "false";

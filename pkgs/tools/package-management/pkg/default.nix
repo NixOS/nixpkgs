@@ -4,13 +4,21 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pkg";
+<<<<<<< HEAD
   version = "1.20.5";
+=======
+  version = "1.19.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "freebsd";
     repo = "pkg";
     rev = finalAttrs.version;
+<<<<<<< HEAD
     sha256 = "sha256-svAxEBRnqwWhmu3aRfeGeEjXfADbb1zWPj+REK9fsDM=";
+=======
+    sha256 = "WHR2evPn4Y0wzGwVUEuYPrDDnuPSsYHr4xIofAHeTJk=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   setOutputFlags = false;

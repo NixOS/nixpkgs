@@ -1,6 +1,14 @@
+<<<<<<< HEAD
 import ./make-test-python.nix ({ pkgs, lib, package ? pkgs.odoo, ...} : {
   name = "odoo";
   meta.maintainers = with lib.maintainers; [ mkg20001 ];
+=======
+import ./make-test-python.nix ({ pkgs, lib, ...} : with lib; {
+  name = "odoo";
+  meta = with pkgs.lib.maintainers; {
+    maintainers = [ mkg20001 ];
+  };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nodes = {
     server = { ... }: {
@@ -11,7 +19,10 @@ import ./make-test-python.nix ({ pkgs, lib, package ? pkgs.odoo, ...} : {
 
       services.odoo = {
         enable = true;
+<<<<<<< HEAD
         package = package;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         domain = "localhost";
       };
     };

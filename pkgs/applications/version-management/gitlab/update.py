@@ -1,8 +1,16 @@
 #!/usr/bin/env nix-shell
+<<<<<<< HEAD
 #! nix-shell -I nixpkgs=../../../.. -i python3 -p bundix bundler nix-update nix nix-universal-prefetch python3 python3Packages.requests python3Packages.click python3Packages.click-log python3Packages.packaging prefetch-yarn-deps git
 
 import click
 import click_log
+=======
+#! nix-shell -I nixpkgs=../../../.. -i python3 -p bundix bundler nix-update nix nix-universal-prefetch python3 python3Packages.requests python3Packages.click python3Packages.click-log python3Packages.packaging prefetch-yarn-deps
+
+import click
+import click_log
+import os
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 import re
 import logging
 import subprocess
@@ -14,6 +22,7 @@ from typing import Iterable
 
 import requests
 
+<<<<<<< HEAD
 NIXPKGS_PATH = pathlib.Path(__file__).parent / "../../../../"
 GITLAB_DIR = pathlib.Path(__file__).parent
 
@@ -25,6 +34,14 @@ class GitLabRepo:
     version_regex = re.compile(r"^v\d+\.\d+\.\d+(\-rc\d+)?(\-ee)?(\-gitlab)?")
 
     def __init__(self, owner: str = "gitlab-org", repo: str = "gitlab"):
+=======
+logger = logging.getLogger(__name__)
+
+
+class GitLabRepo:
+    version_regex = re.compile(r"^v\d+\.\d+\.\d+(\-rc\d+)?(\-ee)?")
+    def __init__(self, owner: str = 'gitlab-org', repo: str = 'gitlab'):
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         self.owner = owner
         self.repo = repo
 
@@ -34,13 +51,17 @@ class GitLabRepo:
 
     @property
     def tags(self) -> Iterable[str]:
+<<<<<<< HEAD
         """Returns a sorted list of repository tags"""
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         r = requests.get(self.url + "/refs?sort=updated_desc&ref=master").json()
         tags = r.get("Tags", [])
 
         # filter out versions not matching version_regex
         versions = list(filter(self.version_regex.match, tags))
 
+<<<<<<< HEAD
         # sort, but ignore v, -ee and -gitlab for sorting comparisons
         versions.sort(
             key=lambda x: Version(
@@ -77,6 +98,20 @@ class GitLabRepo:
                 .decode("utf-8")
                 .strip()
             )
+=======
+        # sort, but ignore v and -ee for sorting comparisons
+        versions.sort(key=lambda x: Version(x.replace("v", "").replace("-ee", "")), reverse=True)
+        return versions
+
+    def get_git_hash(self, rev: str):
+        return subprocess.check_output(['nix-universal-prefetch', 'fetchFromGitLab', '--owner', self.owner, '--repo', self.repo, '--rev', rev]).decode('utf-8').strip()
+
+    def get_yarn_hash(self, rev: str):
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            with open(tmp_dir + '/yarn.lock', 'w') as f:
+                f.write(self.get_file('yarn.lock', rev))
+            return subprocess.check_output(['prefetch-yarn-deps', tmp_dir + '/yarn.lock']).decode('utf-8').strip()
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     @staticmethod
     def rev2version(tag: str) -> str:
@@ -87,9 +122,15 @@ class GitLabRepo:
         :return: a normalized version number
         """
         # strip v prefix
+<<<<<<< HEAD
         version = re.sub(r"^v", "", tag)
         # strip -ee and -gitlab suffixes
         return re.sub(r"-(ee|gitlab)$", "", version)
+=======
+        version = re.sub(r"^v", '', tag)
+        # strip -ee suffix
+        return re.sub(r"-ee$", '', version)
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     def get_file(self, filepath, rev):
         """
@@ -103,6 +144,7 @@ class GitLabRepo:
     def get_data(self, rev):
         version = self.rev2version(rev)
 
+<<<<<<< HEAD
         passthru = {
             v: self.get_file(v, rev).strip()
             for v in [
@@ -128,14 +170,38 @@ class GitLabRepo:
 def _get_data_json():
     data_file_path = pathlib.Path(__file__).parent / "data.json"
     with open(data_file_path, "r") as f:
+=======
+        passthru = {v: self.get_file(v, rev).strip() for v in ['GITALY_SERVER_VERSION', 'GITLAB_PAGES_VERSION',
+                                                               'GITLAB_SHELL_VERSION']}
+
+        passthru["GITLAB_WORKHORSE_VERSION"] = version
+
+        return dict(version=self.rev2version(rev),
+                    repo_hash=self.get_git_hash(rev),
+                    yarn_hash=self.get_yarn_hash(rev),
+                    owner=self.owner,
+                    repo=self.repo,
+                    rev=rev,
+                    passthru=passthru)
+
+
+def _get_data_json():
+    data_file_path = pathlib.Path(__file__).parent / 'data.json'
+    with open(data_file_path, 'r') as f:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         return json.load(f)
 
 
 def _call_nix_update(pkg, version):
     """calls nix-update from nixpkgs root dir"""
+<<<<<<< HEAD
     return subprocess.check_output(
         ["nix-update", pkg, "--version", version], cwd=NIXPKGS_PATH
     )
+=======
+    nixpkgs_path = pathlib.Path(__file__).parent / '../../../../'
+    return subprocess.check_output(['nix-update', pkg, '--version', version], cwd=nixpkgs_path)
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 
 @click_log.simple_verbosity_option(logger)
@@ -144,6 +210,7 @@ def cli():
     pass
 
 
+<<<<<<< HEAD
 @cli.command("update-data")
 @click.option("--rev", default="latest", help="The rev to use (vX.Y.Z-ee), or 'latest'")
 def update_data(rev: str):
@@ -160,10 +227,32 @@ def update_data(rev: str):
     data = repo.get_data(rev)
 
     with open(data_file_path.as_posix(), "w") as f:
+=======
+@cli.command('update-data')
+@click.option('--rev', default='latest', help='The rev to use (vX.Y.Z-ee), or \'latest\'')
+def update_data(rev: str):
+    """Update data.nix"""
+    repo = GitLabRepo()
+
+    if rev == 'latest':
+        # filter out pre and re releases
+        rev = next(filter(lambda x: not ('rc' in x or x.endswith('pre')), repo.tags))
+    logger.debug(f"Using rev {rev}")
+
+    version = repo.rev2version(rev)
+    logger.debug(f"Using version {version}")
+
+    data_file_path = pathlib.Path(__file__).parent / 'data.json'
+
+    data = repo.get_data(rev)
+
+    with open(data_file_path.as_posix(), 'w') as f:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         json.dump(data, f, indent=2)
         f.write("\n")
 
 
+<<<<<<< HEAD
 @cli.command("update-rubyenv")
 def update_rubyenv():
     """Update rubyEnv"""
@@ -330,11 +419,92 @@ def update_all(ctx, rev: str, commit: bool):
 
     new_data_json = _get_data_json()
 
+=======
+@cli.command('update-rubyenv')
+def update_rubyenv():
+    """Update rubyEnv"""
+    repo = GitLabRepo()
+    rubyenv_dir = pathlib.Path(__file__).parent / f"rubyEnv"
+
+    # load rev from data.json
+    data = _get_data_json()
+    rev = data['rev']
+    version = data['version']
+
+    for fn in ['Gemfile.lock', 'Gemfile']:
+        with open(rubyenv_dir / fn, 'w') as f:
+            f.write(repo.get_file(fn, rev))
+
+    # Fetch vendored dependencies temporarily in order to build the gemset.nix
+    subprocess.check_output(['mkdir', '-p', 'vendor/gems'], cwd=rubyenv_dir)
+    subprocess.check_output(['sh', '-c', f'curl -L https://gitlab.com/gitlab-org/gitlab/-/archive/v{version}-ee/gitlab-v{version}-ee.tar.bz2?path=vendor/gems | tar -xj --strip-components=3'], cwd=f'{rubyenv_dir}/vendor/gems')
+
+    # Undo our gemset.nix patches so that bundix runs through
+    subprocess.check_output(['sed', '-i', '-e', '1d', '-e', 's:\\${src}/::g' , 'gemset.nix'], cwd=rubyenv_dir)
+
+    subprocess.check_output(['bundle', 'lock'], cwd=rubyenv_dir)
+    subprocess.check_output(['bundix'], cwd=rubyenv_dir)
+
+    subprocess.check_output(['sed', '-i', '-e', '1i\\src:', '-e', 's:path = \\(vendor/[^;]*\\);:path = "${src}/\\1";:g', 'gemset.nix'], cwd=rubyenv_dir)
+    subprocess.check_output(['rm', '-rf', 'vendor'], cwd=rubyenv_dir)
+
+
+
+@cli.command('update-gitaly')
+def update_gitaly():
+    """Update gitaly"""
+    data = _get_data_json()
+    gitaly_server_version = data['passthru']['GITALY_SERVER_VERSION']
+    repo = GitLabRepo(repo='gitaly')
+    gitaly_dir = pathlib.Path(__file__).parent / 'gitaly'
+
+    for fn in ['Gemfile.lock', 'Gemfile']:
+        with open(gitaly_dir / fn, 'w') as f:
+            f.write(repo.get_file(f"ruby/{fn}", f"v{gitaly_server_version}"))
+
+    subprocess.check_output(['bundle', 'lock'], cwd=gitaly_dir)
+    subprocess.check_output(['bundix'], cwd=gitaly_dir)
+
+    _call_nix_update('gitaly', gitaly_server_version)
+
+
+@cli.command('update-gitlab-pages')
+def update_gitlab_pages():
+    """Update gitlab-shell"""
+    data = _get_data_json()
+    gitlab_pages_version = data['passthru']['GITLAB_PAGES_VERSION']
+    _call_nix_update('gitlab-pages', gitlab_pages_version)
+
+
+@cli.command('update-gitlab-shell')
+def update_gitlab_shell():
+    """Update gitlab-shell"""
+    data = _get_data_json()
+    gitlab_shell_version = data['passthru']['GITLAB_SHELL_VERSION']
+    _call_nix_update('gitlab-shell', gitlab_shell_version)
+
+
+@cli.command('update-gitlab-workhorse')
+def update_gitlab_workhorse():
+    """Update gitlab-workhorse"""
+    data = _get_data_json()
+    gitlab_workhorse_version = data['passthru']['GITLAB_WORKHORSE_VERSION']
+    _call_nix_update('gitlab-workhorse', gitlab_workhorse_version)
+
+
+@cli.command('update-all')
+@click.option('--rev', default='latest', help='The rev to use (vX.Y.Z-ee), or \'latest\'')
+@click.pass_context
+def update_all(ctx, rev: str):
+    """Update all gitlab components to the latest stable release"""
+    ctx.invoke(update_data, rev=rev)
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     ctx.invoke(update_rubyenv)
     ctx.invoke(update_gitaly)
     ctx.invoke(update_gitlab_pages)
     ctx.invoke(update_gitlab_shell)
     ctx.invoke(update_gitlab_workhorse)
+<<<<<<< HEAD
     ctx.invoke(update_gitlab_elasticsearch_indexer)
     if commit:
         commit_gitlab(
@@ -391,4 +561,9 @@ def commit_container_registry(old_version: str, new_version: str) -> None:
 
 
 if __name__ == "__main__":
+=======
+
+
+if __name__ == '__main__':
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     cli()

@@ -20,6 +20,10 @@ buildDunePackage rec {
   pname = "torch";
   version = "0.17";
 
+<<<<<<< HEAD
+=======
+  duneVersion = "3";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   minimalOCamlVersion = "4.08";
 
   src = fetchFromGitHub {
@@ -56,6 +60,10 @@ buildDunePackage rec {
   preBuild = "export LIBTORCH=${torch.dev}/";
 
   doCheck = !stdenv.isAarch64;
+<<<<<<< HEAD
+=======
+  checkPhase = "dune runtest";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   meta = with lib; {
     inherit (src.meta) homepage;

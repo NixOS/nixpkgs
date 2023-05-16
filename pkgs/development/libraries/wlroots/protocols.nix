@@ -2,14 +2,23 @@
 
 stdenv.mkDerivation rec {
   pname = "wlr-protocols";
+<<<<<<< HEAD
   version = "unstable-2022-09-05";
+=======
+  version = "unstable-2021-11-01";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "wlroots";
     repo = "wlr-protocols";
+<<<<<<< HEAD
     rev = "4264185db3b7e961e7f157e1cc4fd0ab75137568";
     sha256 = "Ztc07RLg+BZPondP/r6Jo3Fw1QY/z1QsFvdEuOqQshA=";
+=======
+    rev = "d998ee6fc64ea7e066014023653d1271b7702c09";
+    sha256 = "1vw8b10d1pwsj6f4sr3imvwsy55d3435sp068sj4hdszkxc6axsr";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   strictDeps = true;

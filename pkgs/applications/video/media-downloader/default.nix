@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 { aria2
 , cmake
 , fetchFromGitHub
@@ -19,6 +20,29 @@ stdenv.mkDerivation (finalAttrs: {
     repo = "media-downloader";
     rev = finalAttrs.version;
     hash = "sha256-UmNaosunkNUTm4rsf4q29H+0cJAccUDx+ulcS2octIo=";
+=======
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, wrapQtAppsHook
+, qtbase
+, aria2
+, ffmpeg
+, python3
+, yt-dlp
+}:
+
+stdenv.mkDerivation rec {
+  pname = "media-downloader";
+  version = "3.1.0";
+
+  src = fetchFromGitHub {
+    owner = "mhogomchungu";
+    repo = pname;
+    rev = "${version}";
+    hash = "sha256-/oKvjmLFchR2B/mcLIUVIHBK78u2OQGf2aiwVR/ZoQc=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [
@@ -39,6 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
       ]}"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "A Qt/C++ GUI front end to youtube-dl";
     homepage = "https://github.com/mhogomchungu/media-downloader";
@@ -47,3 +72,13 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.linux;
   };
 })
+=======
+  meta = with lib; {
+    description = "A Qt/C++ GUI front end to youtube-dl";
+    homepage = "https://github.com/mhogomchungu/media-downloader";
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ zendo ];
+  };
+}
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)

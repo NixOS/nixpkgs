@@ -7,7 +7,10 @@
 , isodate
 , nest-asyncio
 , pytestCheckHook
+<<<<<<< HEAD
 , pythonOlder
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , mock
 , pyhamcrest
 , radish-bdd
@@ -15,6 +18,7 @@
 
 buildPythonPackage rec {
   pname = "gremlinpython";
+<<<<<<< HEAD
   version = "3.6.4";
   format = "setuptools";
 
@@ -28,11 +32,28 @@ buildPythonPackage rec {
   };
 
   sourceRoot = "${src.name}/gremlin-python/src/main/python";
+=======
+  version = "3.6.1";
+
+  # pypi tarball doesn't include tests
+  src = fetchFromGitHub {
+    owner = "apache";
+    repo = "tinkerpop";
+    rev = version;
+    hash = "sha256-FMA9hJdq7gYkDtQO04Bwpjq2Q7nXGuN9wrBD4b9GgwY=";
+  };
+
+  sourceRoot = "source/gremlin-python/src/main/python";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   postPatch = ''
     sed -i '/pytest-runner/d' setup.py
 
     substituteInPlace setup.py \
+<<<<<<< HEAD
+=======
+      --replace 'aiohttp>=3.8.0,<=3.8.1' 'aiohttp' \
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       --replace 'importlib-metadata<5.0.0' 'importlib-metadata' \
       --replace "os.getenv('VERSION', '?').replace('-SNAPSHOT', '.dev-%d' % timestamp)" '"${version}"'
   '';
@@ -79,6 +100,10 @@ buildPythonPackage rec {
     description = "Gremlin-Python implements Gremlin, the graph traversal language of Apache TinkerPop, within the Python language";
     homepage = "https://tinkerpop.apache.org/";
     license = licenses.asl20;
+<<<<<<< HEAD
     maintainers = with maintainers; [ ris ];
+=======
+    maintainers = with maintainers; [ turion ris ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

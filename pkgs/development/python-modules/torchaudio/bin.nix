@@ -14,7 +14,11 @@
 
 buildPythonPackage rec {
   pname = "torchaudio";
+<<<<<<< HEAD
   version = "2.0.2";
+=======
+  version = "2.0.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "wheel";
 
   src =

@@ -11,12 +11,17 @@
 
 buildGoModule rec {
   pname = "nwg-drawer";
+<<<<<<< HEAD
   version = "0.3.9";
+=======
+  version = "0.3.8";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "nwg-piotr";
     repo = pname;
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-RCryDei8Tw1f+7y8iIDC3mASv5nwq4qrWRc4CudS/Cg=";
   };
 
@@ -24,6 +29,15 @@ buildGoModule rec {
 
   buildInputs = [ cairo gtk3 gtk-layer-shell ];
   nativeBuildInputs = [ pkg-config wrapGAppsHook gobject-introspection ];
+=======
+    sha256 = "sha256-34C0JmsPuDqR3QGmGf14naGOu9xPtPbpdWUvkbilkqs=";
+  };
+
+  vendorHash = "sha256-RehZ86XuFs1kbm9V3cgPz1SPG3izK7/6fHQjPTHOYZs=";
+
+  buildInputs = [ cairo gobject-introspection gtk3 gtk-layer-shell ];
+  nativeBuildInputs = [ pkg-config wrapGAppsHook ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   doCheck = false;
 

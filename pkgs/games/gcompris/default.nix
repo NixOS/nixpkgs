@@ -20,11 +20,19 @@
 
 stdenv.mkDerivation rec {
   pname = "gcompris";
+<<<<<<< HEAD
   version = "3.3";
 
   src = fetchurl {
     url = "https://download.kde.org/stable/gcompris/qt/src/gcompris-qt-${version}.tar.xz";
     hash = "sha256-8hqiq1wYw4irbOXCrwcJqTMuLISzSmSqPuw2Rn8XzQA=";
+=======
+  version = "3.2";
+
+  src = fetchurl {
+    url = "https://download.kde.org/stable/gcompris/qt/src/gcompris-qt-${version}.tar.xz";
+    hash = "sha256-WopJB9p7GnfCtUoEKxtzzRXCogcx03ofRjGLhkvW0Rs=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   cmakeFlags = [

@@ -76,9 +76,15 @@ let
 in {
   imports = [ ../../resolver.nix ];
 
+<<<<<<< HEAD
   options.test-support.acme = {
     caDomain = lib.mkOption {
       type = lib.types.str;
+=======
+  options.test-support.acme = with lib; {
+    caDomain = mkOption {
+      type = types.str;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       readOnly = true;
       default = domain;
       description = lib.mdDoc ''
@@ -86,8 +92,13 @@ in {
         identify the CA server.
       '';
     };
+<<<<<<< HEAD
     caCert = lib.mkOption {
       type = lib.types.path;
+=======
+    caCert = mkOption {
+      type = types.path;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       readOnly = true;
       default = testCerts.ca.cert;
       description = lib.mdDoc ''

@@ -26,6 +26,9 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
     maintainers = [ ];
     platforms = platforms.linux;
+<<<<<<< HEAD
     mainProgram = "vlock";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

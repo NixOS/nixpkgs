@@ -5,7 +5,11 @@
 , doxygen
 , graphviz
 , makeWrapper
+<<<<<<< HEAD
 , boost179
+=======
+, boost17x
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , SDL2
 , python3
 , freetype
@@ -34,7 +38,11 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
+<<<<<<< HEAD
     (boost179.override { enablePython = true; python = python3; })
+=======
+    (boost17x.override { enablePython = true; python = python3; })
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     (python3.withPackages (p: with p; [ pycodestyle ]))
     SDL2
     freetype

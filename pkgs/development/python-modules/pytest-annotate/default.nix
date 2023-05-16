@@ -37,10 +37,18 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
+<<<<<<< HEAD
     broken = stdenv.isDarwin;
     description = "Generate PyAnnotate annotations from your pytest tests";
     homepage = "https://github.com/kensho-technologies/pytest-annotate";
     license = licenses.asl20;
     maintainers = with maintainers; [ ];
+=======
+    broken = (stdenv.isLinux && stdenv.isAarch64) || stdenv.isDarwin;
+    description = "Generate PyAnnotate annotations from your pytest tests";
+    homepage = "https://github.com/kensho-technologies/pytest-annotate";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ costrouc ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

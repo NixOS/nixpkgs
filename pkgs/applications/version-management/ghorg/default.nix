@@ -2,13 +2,21 @@
 
 buildGoModule rec {
   pname = "ghorg";
+<<<<<<< HEAD
   version = "1.9.9";
+=======
+  version = "1.9.4";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "gabrie30";
     repo = "ghorg";
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-yq95+MHMbzVg8i/55EZBVCVkE3uwD964fAaXWP5aWYw=";
+=======
+    sha256 = "sha256-J/oZrtm/Bs4SU/Wl9LEH0kMxkOEXR2g/Bod5QFoCudU=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   doCheck = false;

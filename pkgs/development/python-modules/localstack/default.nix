@@ -20,13 +20,21 @@
 
 buildPythonPackage rec {
   pname = "localstack";
+<<<<<<< HEAD
   version = "2.2.0";
+=======
+  version = "1.4.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "localstack";
     repo = "localstack";
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-hlK3pltajFRAtiwLOJQNmxRfoRAX5Jccygglbhb45O8=";
+=======
+    hash = "sha256-mfPlpB1CvYuhnfucDfJjZtNS+1Kz0/l3+3uUXxxGiF4=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   postPatch = ''

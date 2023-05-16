@@ -4,7 +4,11 @@ let
   inherit (lib)
     attrNames concatMap concatMapStrings flip forEach head
     listToAttrs mkDefault mkOption nameValuePair optionalString
+<<<<<<< HEAD
     range toLower types zipListsWith zipLists
+=======
+    range types zipListsWith zipLists
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     mdDoc
     ;
 
@@ -18,6 +22,7 @@ let
 
   networkModule = { config, nodes, pkgs, ... }:
     let
+<<<<<<< HEAD
       qemu-common = import ../qemu-common.nix { inherit lib pkgs; };
 
       # Convert legacy VLANs to named interfaces and merge with explicit interfaces.
@@ -35,24 +40,42 @@ let
       ipInterfaces = forEach assignIPs (i:
         nameValuePair i.name { ipv4.addresses =
           [ { address = "192.168.${toString i.vlan}.${toString config.virtualisation.test.nodeNumber}";
+=======
+      interfacesNumbered = zipLists config.virtualisation.vlans (range 1 255);
+      interfaces = forEach interfacesNumbered ({ fst, snd }:
+        nameValuePair "eth${toString snd}" {
+          ipv4.addresses =
+            [{
+              address = "192.168.${toString fst}.${toString config.virtualisation.test.nodeNumber}";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
               prefixLength = 24;
             }];
         });
 
+<<<<<<< HEAD
       qemuOptions = lib.flatten (forEach interfacesNumbered ({ fst, snd }:
         qemu-common.qemuNICFlags snd fst.vlan config.virtualisation.test.nodeNumber));
       udevRules = forEach interfacesNumbered ({ fst, snd }:
         # MAC Addresses for QEMU network devices are lowercase, and udev string comparison is case-sensitive.
         ''SUBSYSTEM=="net",ACTION=="add",ATTR{address}=="${toLower(qemu-common.qemuNicMac fst.vlan config.virtualisation.test.nodeNumber)}",NAME="${fst.name}"'');
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       networkConfig =
         {
           networking.hostName = mkDefault config.virtualisation.test.nodeName;
 
+<<<<<<< HEAD
           networking.interfaces = listToAttrs ipInterfaces;
 
           networking.primaryIPAddress =
             optionalString (ipInterfaces != [ ]) (head (head ipInterfaces).value.ipv4.addresses).address;
+=======
+          networking.interfaces = listToAttrs interfaces;
+
+          networking.primaryIPAddress =
+            optionalString (interfaces != [ ]) (head (head interfaces).value.ipv4.addresses).address;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
           # Put the IP addresses of all VMs in this machine's
           # /etc/hosts file.  If a machine has multiple
@@ -68,13 +91,25 @@ let
                     "${config.networking.hostName}.${config.networking.domain} " +
                   "${config.networking.hostName}\n"));
 
+<<<<<<< HEAD
           virtualisation.qemu.options = qemuOptions;
           boot.initrd.services.udev.rules = concatMapStrings (x: x + "\n") udevRules;
+=======
+          virtualisation.qemu.options =
+            let qemu-common = import ../qemu-common.nix { inherit lib pkgs; };
+            in
+            flip concatMap interfacesNumbered
+              ({ fst, snd }: qemu-common.qemuNICFlags snd fst config.virtualisation.test.nodeNumber);
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         };
 
     in
     {
+<<<<<<< HEAD
       key = "network-interfaces";
+=======
+      key = "ip-address";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       config = networkConfig // {
         # Expose the networkConfig items for tests like nixops
         # that need to recreate the network config.

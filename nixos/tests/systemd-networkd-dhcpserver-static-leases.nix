@@ -3,7 +3,11 @@
 import ./make-test-python.nix ({ lib, ... }: {
   name = "systemd-networkd-dhcpserver-static-leases";
   meta = with lib.maintainers; {
+<<<<<<< HEAD
     maintainers = [ veehaitch ];
+=======
+    maintainers = [ veehaitch tomfitzhenry ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
   nodes = {
     router = {

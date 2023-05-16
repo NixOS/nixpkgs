@@ -17,6 +17,9 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://nix-community.github.io/nixpkgs-fmt";
     license = licenses.asl20;
     maintainers = with maintainers; [ zimbatm ];
+<<<<<<< HEAD
     mainProgram = "nixpkgs-fmt";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

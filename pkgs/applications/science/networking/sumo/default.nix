@@ -5,13 +5,21 @@
 
 stdenv.mkDerivation rec {
   pname = "sumo";
+<<<<<<< HEAD
   version = "1.18.0";
+=======
+  version = "1.17.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "eclipse";
     repo = "sumo";
     rev = "v${lib.replaceStrings ["."] ["_"] version}";
+<<<<<<< HEAD
     sha256 = "sha256-/MKhec4nhz6juTCc5dNrrDAlzldodGjili4vWkzafPM=";
+=======
+    sha256 = "sha256-Br5ugEyGu3zLeylCvoVE92zOCpB5cuXLv1dGLpM3FwI=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     fetchSubmodules = true;
   };
 

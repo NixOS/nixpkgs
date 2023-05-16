@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 { lib, stdenv, fetchFromGitHub, bash, ocaml, ocamlPackages, dune_3, version }:
+=======
+{ lib, stdenv, fetchFromGitHub, bash, ocaml, dune_3, version }:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 stdenv.mkDerivation {
   pname = "rescript-editor-analysis";
@@ -8,10 +12,17 @@ stdenv.mkDerivation {
     owner = "rescript-lang";
     repo = "rescript-vscode";
     rev = version;
+<<<<<<< HEAD
     sha256 = "sha256-+Ht8qWwxtFWHFMiV/aoZIs2S3SxkOWgdwSKN+akp/LU=";
   };
 
   nativeBuildInputs = [ ocaml dune_3 ocamlPackages.cppo ];
+=======
+    sha256 = "sha256-a8otK0BxZbl0nOp4QWQRkjb5fM85JA4nVkLuKAz71xU=";
+  };
+
+  nativeBuildInputs = [ ocaml dune_3 ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   # Skip testing phases because they need to download and install node modules
   postPatch = ''

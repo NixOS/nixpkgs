@@ -33,9 +33,16 @@ stdenv.mkDerivation rec {
 
   configureScript = "sh autogen.sh";
 
+<<<<<<< HEAD
   nativeBuildInputs = [ pkg-config automake autoconf intltool gobject-introspection ];
   buildInputs = [
     libtool
+=======
+  nativeBuildInputs = [ pkg-config automake autoconf intltool ];
+  buildInputs = [
+    libtool
+    gobject-introspection glib
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     gtk2 gtk-doc clutter clutter-gtk
   ];
 

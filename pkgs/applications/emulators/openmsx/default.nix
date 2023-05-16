@@ -20,13 +20,21 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "openmsx";
+<<<<<<< HEAD
   version = "19.1";
+=======
+  version = "18.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "openMSX";
     repo = "openMSX";
     rev = "RELEASE_${builtins.replaceStrings ["."] ["_"] finalAttrs.version}";
+<<<<<<< HEAD
     sha256 = "sha256-5ULljLmEDGFp32rnrXKLfL6P3ad2STJUNngBuWlRCbc=";
+=======
+    sha256 = "sha256-4V2B+OQbPVRmkRuqfeqyd+7pz9Z1YISjI79WqZS0Qhc=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     fetchSubmodules = true;
   };
 

@@ -19,7 +19,10 @@
 , stdenv
 , pytest-regressions
 , pytestCheckHook
+<<<<<<< HEAD
 , pythonRelaxDepsHook
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , pythonOlder
 }:
 
@@ -37,6 +40,7 @@ buildPythonPackage rec {
     hash = "sha256-qdRU1BxczFDGoIEtl0ZMkKNn4p5tec8YuPt5ZwX5fYM=";
   };
 
+<<<<<<< HEAD
   # fix downstrem usage of markdown-it-py[linkify]
   pythonRelaxDeps = [
     "linkify-it-py"
@@ -44,6 +48,9 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     pythonRelaxDepsHook
+=======
+  nativeBuildInputs = [
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     flit-core
   ];
 

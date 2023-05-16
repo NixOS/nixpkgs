@@ -7,7 +7,10 @@
 , publicsuffix2
 , pythonOlder
 , pytestCheckHook
+<<<<<<< HEAD
 , setuptools
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 buildPythonPackage rec {
@@ -29,7 +32,10 @@ buildPythonPackage rec {
     dnspython
     dkimpy
     publicsuffix2
+<<<<<<< HEAD
     setuptools
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   nativeCheckInputs = [

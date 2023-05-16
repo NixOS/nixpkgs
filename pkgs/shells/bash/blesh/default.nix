@@ -8,11 +8,19 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "blesh";
+<<<<<<< HEAD
   version = "0.4.0-devel3";
 
   src = fetchzip {
     url = "https://github.com/akinomyoga/ble.sh/releases/download/v${version}/ble-${version}.tar.xz";
     sha256 = "sha256-kGLp8RaInYSrJEi3h5kWEOMAbZV/gEPFUjOLgBuMhCI=";
+=======
+  version = "0.3.4";
+
+  src = fetchzip {
+    url = "https://github.com/akinomyoga/ble.sh/releases/download/v${version}/ble-${version}.tar.xz";
+    sha256 = "sha256-MGCQirZvqGfjTTsbDfihY2il/u2suWBaZ6dX8mF1zLk=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   dontBuild = true;

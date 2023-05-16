@@ -98,8 +98,12 @@ stdenv.mkDerivation rec {
     "DEFAULT_CC=cc"
     "CROSS=${stdenv.cc.targetPrefix}"
     "HOST_CC=${buildStdenv.cc}/bin/cc"
+<<<<<<< HEAD
   ] ++ lib.optional enableJITDebugModule "INSTALL_LJLIBD=$(INSTALL_LMOD)"
     ++ lib.optional stdenv.hostPlatform.isStatic "BUILDMODE=static";
+=======
+  ] ++ lib.optional enableJITDebugModule "INSTALL_LJLIBD=$(INSTALL_LMOD)";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   enableParallelBuilding = true;
   env.NIX_CFLAGS_COMPILE = toString XCFLAGS;
 
@@ -128,7 +132,11 @@ stdenv.mkDerivation rec {
     luaOnBuildForHost = override pkgsBuildHost.${luaAttr};
     luaOnBuildForTarget = override pkgsBuildTarget.${luaAttr};
     luaOnHostForHost = override pkgsHostHost.${luaAttr};
+<<<<<<< HEAD
     luaOnTargetForTarget = lib.optionalAttrs (lib.hasAttr luaAttr pkgsTargetTarget) (override pkgsTargetTarget.${luaAttr});
+=======
+    luaOnTargetForTarget = if lib.hasAttr luaAttr pkgsTargetTarget then (override pkgsTargetTarget.${luaAttr}) else {};
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   meta = with lib; {

@@ -3,7 +3,11 @@
 , libjpeg, jxrlib, pkg-config
 , fixDarwinDylibNames, autoSignDarwinBinariesHook }:
 
+<<<<<<< HEAD
 stdenv.mkDerivation (finalAttrs: {
+=======
+stdenv.mkDerivation {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pname = "freeimage";
   version = "unstable-2021-11-01";
 
@@ -12,8 +16,12 @@ stdenv.mkDerivation (finalAttrs: {
     rev = "1900";
     sha256 = "rWoNlU/BWKZBPzRb1HqU6T0sT7aK6dpqKPe88+o/4sA=";
   };
+<<<<<<< HEAD
 
   sourceRoot = "${finalAttrs.src.name}/FreeImage/trunk";
+=======
+  sourceRoot = "svn-r1900/FreeImage/trunk";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   # Ensure that the bundled libraries are not used at all
   prePatch = ''
@@ -75,4 +83,8 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [viric l-as];
     platforms = with lib.platforms; unix;
   };
+<<<<<<< HEAD
 })
+=======
+}
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)

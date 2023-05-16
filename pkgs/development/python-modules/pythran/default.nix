@@ -4,10 +4,19 @@
 , fetchFromGitHub
 , openmp
 , ply
+<<<<<<< HEAD
 , gast
 , numpy
 , beniget
 , xsimd
+=======
+, networkx
+, decorator
+, gast
+, six
+, numpy
+, beniget
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , isPy3k
 , substituteAll
 }:
@@ -17,13 +26,21 @@ let
 
 in buildPythonPackage rec {
   pname = "pythran";
+<<<<<<< HEAD
   version = "0.13.1";
+=======
+  version = "0.11.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "serge-sans-paille";
     repo = "pythran";
     rev = version;
+<<<<<<< HEAD
     hash = "sha256-baDrReJgQXbaKA8KNhHiFjr0X34yb8WK/nUJmiM9EZs=";
+=======
+    hash = "sha256-F9gUZOTSuiqvfGoN4yQqwUg9mnCeBntw5eHO7ZnjpzI=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   patches = [
@@ -34,6 +51,7 @@ in buildPythonPackage rec {
     })
   ];
 
+<<<<<<< HEAD
   # xsimd: unvendor this header-only C++ lib
   postPatch = ''
     rm -r third_party/xsimd
@@ -43,6 +61,14 @@ in buildPythonPackage rec {
   propagatedBuildInputs = [
     ply
     gast
+=======
+  propagatedBuildInputs = [
+    ply
+    networkx
+    decorator
+    gast
+    six
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     numpy
     beniget
   ];

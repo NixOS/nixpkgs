@@ -12,19 +12,31 @@
 
 buildPythonPackage rec {
   pname = "eth-abi";
+<<<<<<< HEAD
   version = "4.1.0";
+=======
+  version = "3.0.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "ethereum";
     repo = "eth-abi";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-CGAfu3Ovz2WPJOD+4W2+cOAz+wYvuIyFL333Jw66ozA=";
+=======
+    hash = "sha256-xrZpT/9zwDtjSwSPDDse+Aq8plPm26OR/cIrliZUpLY=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   postPatch = ''
     substituteInPlace setup.py \
+<<<<<<< HEAD
       --replace "parsimonious>=0.9.0,<0.10.0" "parsimonious"
+=======
+      --replace "parsimonious>=0.8.0,<0.9.0" "parsimonious"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '';
 
   propagatedBuildInputs = [
@@ -56,6 +68,10 @@ buildPythonPackage rec {
     description = "Ethereum ABI utilities";
     homepage = "https://github.com/ethereum/eth-abi";
     license = licenses.mit;
+<<<<<<< HEAD
     maintainers = with maintainers; [ ];
+=======
+    maintainers = with maintainers; [ SuperSandro2000 ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

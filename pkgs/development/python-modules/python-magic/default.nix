@@ -29,6 +29,7 @@ buildPythonPackage rec {
       url = "https://github.com/ahupp/python-magic/commit/4ffcd59113fa26d7c2e9d5897b1eef919fd4b457.patch";
       hash = "sha256-67GpjlGiR4/os/iZ69V+ZziVLpjmid+7t+gQ2aQy9I0=";
     })
+<<<<<<< HEAD
 
     # Upstream patch to amend test suite for-5.45:
     #   https://github.com/ahupp/python-magic/pull/290
@@ -37,6 +38,8 @@ buildPythonPackage rec {
       url = "https://github.com/ahupp/python-magic/commit/3d2405ca80cd39b2a91decd26af81dcf181390a4.patch";
       hash = "sha256-HRsnO9MGfMD9BkJdC4SrEFQ1OZEaXpwakXFLoaCPK94=";
     })
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   preCheck = ''
@@ -51,6 +54,10 @@ buildPythonPackage rec {
     description = "A python interface to the libmagic file type identification library";
     homepage = "https://github.com/ahupp/python-magic";
     license = licenses.mit;
+<<<<<<< HEAD
     maintainers = with maintainers; [ ];
+=======
+    maintainers = with maintainers; [ SuperSandro2000 ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

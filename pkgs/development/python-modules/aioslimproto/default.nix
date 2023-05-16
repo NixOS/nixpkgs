@@ -1,4 +1,5 @@
 { lib
+<<<<<<< HEAD
 , async-timeout
 , buildPythonPackage
 , fetchFromGitHub
@@ -9,19 +10,33 @@
 , pythonOlder
 , setuptools
 , wheel
+=======
+, buildPythonPackage
+, fetchFromGitHub
+, pytestCheckHook
+, pythonOlder
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 buildPythonPackage rec {
   pname = "aioslimproto";
+<<<<<<< HEAD
   version = "2.3.3";
   format = "pyproject";
 
   disabled = pythonOlder "3.10";
+=======
+  version = "2.2.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.9";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "home-assistant-libs";
     repo = pname;
     rev = "refs/tags/${version}";
+<<<<<<< HEAD
     hash = "sha256-d+PEzCF1Cw/7NmumxIRRlr3hojpNsZM/JMQ0KWdosXk=";
   };
 
@@ -49,6 +64,20 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+=======
+    hash = "sha256-3aLAAUaoGkdzjUHFb6aiyVv0fzO8DojN0Y3DTf6h2Ow=";
+  };
+
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
+
+  disabledTests = [
+    # AssertionError: assert ['mixer', 'volume', '50'] == ['volume', '50']
+    "test_msg_instantiation"
+  ];
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pythonImportsCheck = [
     "aioslimproto"
   ];

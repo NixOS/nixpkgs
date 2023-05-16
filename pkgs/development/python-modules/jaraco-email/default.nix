@@ -3,11 +3,18 @@
 , buildPythonPackage
 , pythonOlder
 , fetchFromGitHub
+<<<<<<< HEAD
 , fetchpatch
 , setuptools
 , setuptools-scm
 , jaraco-text
 , jaraco-collections
+=======
+, setuptools
+, setuptools-scm
+, jaraco_text
+, jaraco_collections
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , keyring
 , pytestCheckHook
 }:
@@ -27,6 +34,7 @@ buildPythonPackage rec {
     hash = "sha256-MR/SX5jmZvEMULgvQbh0JBZjIosNCPWl1wvEoJbdw4Y=";
   };
 
+<<<<<<< HEAD
   patches = [
     (fetchpatch {
       name = "dos2unix-line-endings.patch";
@@ -40,6 +48,8 @@ buildPythonPackage rec {
     })
   ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nativeBuildInputs = [
     setuptools
     setuptools-scm
@@ -48,8 +58,13 @@ buildPythonPackage rec {
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   propagatedBuildInputs = [
+<<<<<<< HEAD
     jaraco-text
     jaraco-collections
+=======
+    jaraco_text
+    jaraco_collections
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     keyring
   ];
 

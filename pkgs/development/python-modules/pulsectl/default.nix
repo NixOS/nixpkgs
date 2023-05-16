@@ -2,11 +2,19 @@
 
 buildPythonPackage rec {
   pname = "pulsectl";
+<<<<<<< HEAD
   version = "23.5.2";
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-6RHTmOrwU5zzxjtCFzV7UaPRt+SlBgfRWRzytJ9dLGo=";
+=======
+  version = "23.5.1";
+
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-jvwmDtchLuT55QqLhWyEkRJl9OrELMbALHs3yFGig0s=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   patches = [

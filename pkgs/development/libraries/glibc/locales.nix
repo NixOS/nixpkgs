@@ -10,22 +10,36 @@
 , allLocales ? true, locales ? [ "en_US.UTF-8/UTF-8" ]
 }:
 
+<<<<<<< HEAD
 (callPackage ./common.nix { inherit stdenv; } {
   pname = "glibc-locales";
   extraNativeBuildInputs = [ glibc ];
 }).overrideAttrs(finalAttrs: previousAttrs: {
+=======
+callPackage ./common.nix { inherit stdenv; } {
+  pname = "glibc-locales";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   builder = ./locales-builder.sh;
 
   outputs = [ "out" ];
 
+<<<<<<< HEAD
+=======
+  extraNativeBuildInputs = [ glibc ];
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   LOCALEDEF_FLAGS = [
     (if stdenv.hostPlatform.isLittleEndian
     then "--little-endian"
     else "--big-endian")
   ];
 
+<<<<<<< HEAD
   preBuild = (previousAttrs.preBuild or "") + ''
+=======
+  buildPhase = ''
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       # Awful hack: `localedef' doesn't allow the path to `locale-archive'
       # to be overriden, but you *can* specify a prefix, i.e. it will use
       # <prefix>/<path-to-glibc>/lib/locale/locale-archive.  So we use
@@ -57,6 +71,7 @@
       fi
 
       echo SUPPORTED-LOCALES='${toString locales}' > ../glibc-2*/localedata/SUPPORTED
+<<<<<<< HEAD
     '';
 
   # Current `nixpkgs` way of building locales is not compatible with
@@ -70,6 +85,13 @@
     "localedir=${builtins.placeholder "out"}/lib/locale"
   ];
 
+=======
+    '' + ''
+      make localedata/install-locales \
+          localedir=$out/lib/locale \
+    '';
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   installPhase =
     ''
       mkdir -p "$out/lib/locale" "$out/share/i18n"
@@ -83,4 +105,8 @@
     '';
 
   meta.description = "Locale information for the GNU C Library";
+<<<<<<< HEAD
 })
+=======
+}
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)

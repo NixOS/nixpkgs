@@ -16,14 +16,22 @@
 
 buildPythonPackage rec {
   pname = "knack";
+<<<<<<< HEAD
   version = "0.11.0";
+=======
+  version = "0.10.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
+<<<<<<< HEAD
     hash = "sha256-62VoAB6RELGzIJQUMcUQM9EEzJjNoiVKXCsJulaf1JQ=";
+=======
+    hash = "sha256-xXKBKCl+bSaXkQhc+Wwv/fzvWM+DxjSly5LrA7KSmDg=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [

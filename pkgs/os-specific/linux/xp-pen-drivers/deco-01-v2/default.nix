@@ -5,7 +5,10 @@
 , glibc
 , libGL
 , xorg
+<<<<<<< HEAD
 , makeWrapper
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , qtx11extras
 , wrapQtAppsHook
 , autoPatchelfHook
@@ -21,18 +24,30 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "xp-pen-deco-01-v2-driver";
+<<<<<<< HEAD
   version = "3.2.3.230215-1";
 
   src = fetchzip {
     url = "https://download01.xp-pen.com/file/2023/03/XPPen-pentablet-${version}.x86_64.tar.gz";
     name = "xp-pen-deco-01-v2-driver-${version}.tar.gz";
     sha256 = "sha256-CV4ZaGCFFcfy2J0O8leYgcyzFVwJQFQJsShOv9B7jfI=";
+=======
+  version = "3.3.9.230222-1";
+
+  src = fetchzip {
+    url = "https://www.xp-pen.com/download/file/id/1936/pid/440/ext/gz.html#.tar.gz";
+    name = "xp-pen-deco-01-v2-driver-${version}.tar.gz";
+    sha256 = "sha256-xrRDxH7e00dISXb+lTtrnui+fNFpX7bLke2o+aTjJNk=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [
     wrapQtAppsHook
     autoPatchelfHook
+<<<<<<< HEAD
     makeWrapper
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   dontBuild = true;

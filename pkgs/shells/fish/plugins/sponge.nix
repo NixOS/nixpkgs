@@ -7,7 +7,11 @@ buildFishPlugin rec {
   src = fetchFromGitHub {
     owner = "meaningful-ooo";
     repo = pname;
+<<<<<<< HEAD
     rev = version;
+=======
+    rev = "${version}";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     sha256 = "sha256-MdcZUDRtNJdiyo2l9o5ma7nAX84xEJbGFhAVhK+Zm1w=";
   };
 

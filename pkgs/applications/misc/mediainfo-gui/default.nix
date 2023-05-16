@@ -6,11 +6,19 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "mediainfo-gui";
+<<<<<<< HEAD
   version = "23.07";
 
   src = fetchurl {
     url = "https://mediaarea.net/download/source/mediainfo/${version}/mediainfo_${version}.tar.xz";
     hash = "sha256-ttfanimZX9NKIhAIJbhD50wyx7xnrbARZrG+7epJ9dA=";
+=======
+  version = "23.04";
+
+  src = fetchurl {
+    url = "https://mediaarea.net/download/source/mediainfo/${version}/mediainfo_${version}.tar.xz";
+    sha256 = "sha256-Uiut1rHk6LV+giW6e0nvgn35ffTLaLbU/HkQ92xf32k=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];
@@ -18,7 +26,11 @@ stdenv.mkDerivation rec {
   buildInputs = [ libmediainfo wxGTK32 desktop-file-utils libSM imagemagick ]
     ++ lib.optionals stdenv.isDarwin [ Cocoa ];
 
+<<<<<<< HEAD
   sourceRoot = "MediaInfo/Project/GNU/GUI";
+=======
+  sourceRoot = "./MediaInfo/Project/GNU/GUI/";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   enableParallelBuilding = true;
 
@@ -32,6 +44,9 @@ stdenv.mkDerivation rec {
     license = licenses.bsd2;
     platforms = platforms.unix;
     maintainers = [ maintainers.devhell ];
+<<<<<<< HEAD
     mainProgram = "mediainfo-gui";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

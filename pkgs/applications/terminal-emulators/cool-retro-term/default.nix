@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 { lib
 , stdenv
 , fetchFromGitHub
@@ -13,19 +14,32 @@
 
 mkDerivation rec {
   version = "1.2.0";
+=======
+{ lib, stdenv, fetchFromGitHub, mkDerivation, qtbase, qtquick1, qmltermwidget
+, qtquickcontrols, qtgraphicaleffects, qmake, nixosTests }:
+
+mkDerivation rec {
+  version = "1.1.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pname = "cool-retro-term";
 
   src = fetchFromGitHub {
     owner = "Swordfish90";
     repo = "cool-retro-term";
+<<<<<<< HEAD
     rev = "refs/tags/${version}";
     hash = "sha256-PewHLVmo+RTBHIQ/y2FBkgXsIvujYd7u56JdFC10B4c=";
+=======
+    rev = version;
+    sha256 = "0mird4k88ml6y61hky2jynrjmnxl849fvhsr5jfdlnv0i7r5vwi5";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   patchPhase = ''
     sed -i -e '/qmltermwidget/d' cool-retro-term.pro
   '';
 
+<<<<<<< HEAD
   buildInputs = [
     qtbase
     qtquick1
@@ -34,6 +48,9 @@ mkDerivation rec {
     qtgraphicaleffects
   ];
 
+=======
+  buildInputs = [ qtbase qtquick1 qmltermwidget qtquickcontrols qtgraphicaleffects ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nativeBuildInputs = [ qmake ];
 
   installFlags = [ "INSTALL_ROOT=$(out)" ];

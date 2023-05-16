@@ -6,16 +6,27 @@
 
 buildGoModule rec {
   pname = "swego";
+<<<<<<< HEAD
   version = "1.0";
+=======
+  version = "0.98";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "nodauf";
     repo = "Swego";
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-OlaNDXKaIim5n0niqYIpRliVo7lse76vNxPKF6B6yF0=";
   };
 
   vendorHash = "sha256-N4HDngQFNCzQ74W52R0khetN6+J7npvBC/bYZBAgLB4=";
+=======
+    sha256 = "sha256-fS1mrB4379hnnkLMkpKqV2QB680t5T0QEqsvqOp9pzY=";
+  };
+
+  vendorSha256 = "sha256-N4HDngQFNCzQ74W52R0khetN6+J7npvBC/bYZBAgLB4=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   postInstall = ''
     mv $out/bin/src $out/bin/$pname

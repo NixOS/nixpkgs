@@ -70,6 +70,10 @@ buildPythonPackage rec {
     description = "A multi-tenant server for securely deploying and managing multiple Dask clusters";
     homepage = "https://gateway.dask.org/";
     license = licenses.bsd3;
+<<<<<<< HEAD
     maintainers = with maintainers; [ ];
+=======
+    maintainers = with maintainers; [ costrouc ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

@@ -5,7 +5,11 @@ dotnetCombined = with dotnetCorePackages; combinePackages [ sdk_6_0 aspnetcore_7
 Hashes and urls are retrieved from:
 https://dotnet.microsoft.com/download/dotnet
 */
+<<<<<<< HEAD
 { callPackage }:
+=======
+{ callPackage,}:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 let
   buildDotnet = attrs: callPackage (import ./build-dotnet.nix attrs) {};
   buildAttrs = {
@@ -31,7 +35,11 @@ let
   # Convert a "stdenv.hostPlatform.system" to a dotnet RID
   systemToDotnetRid = system: runtimeIdentifierMap.${system} or (throw "unsupported platform ${system}");
 in
+<<<<<<< HEAD
 {
+=======
+rec {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   inherit systemToDotnetRid;
 
   combinePackages = attrs: callPackage (import ./combine-packages.nix attrs) {};

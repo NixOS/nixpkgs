@@ -26,14 +26,22 @@ let
   });
 in
 stdenv.mkDerivation rec {
+<<<<<<< HEAD
   version = "2.2.0";
+=======
+  version = "2.1.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pname = "openmvs";
 
   src = fetchFromGitHub {
     owner = "cdcseacave";
     repo = "openmvs";
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-j/tGkR73skZiU+bP4j6aZ5CxkbIcHtqKcaUTgNvj0C8=";
+=======
+    sha256 = "sha256-eqNprBgR0hZnbLKLZLJqjemKxHhDtGblmaSxYlmegsc=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     fetchSubmodules = true;
   };
 

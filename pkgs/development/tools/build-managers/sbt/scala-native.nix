@@ -1,9 +1,20 @@
 { lib, sbt, makeWrapper, boehmgc, libunwind, re2, llvmPackages, zlib }:
 
+<<<<<<< HEAD
 sbt.overrideAttrs(previousAttrs: {
   nativeBuildInputs = (previousAttrs.nativeBuildInputs or [ ]) ++ [ makeWrapper ];
 
   postFixup = (previousAttrs.postFixup or "") + ''
+=======
+sbt.overrideDerivation(old: {
+  nativeBuildInputs = [ makeWrapper ];
+
+  version = "0.13.16";
+
+  sha256 = "033nvklclvbirhpsiy28d3ccmbm26zcs9vb7j8jndsc1ln09awi2";
+
+  postFixup = ''
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     wrapProgram $out/bin/sbt \
       --set CLANG_PATH      "${llvmPackages.clang}/bin/clang" \
       --set CLANGPP_PATH    "${llvmPackages.clang}/bin/clang" \

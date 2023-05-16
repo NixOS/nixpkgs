@@ -1,8 +1,15 @@
 diff --git a/include/iprt/mangling.h b/include/iprt/mangling.h
+<<<<<<< HEAD
 index 991dd9e..defc781 100644
 --- a/include/iprt/mangling.h
 +++ b/include/iprt/mangling.h
 @@ -1802,6 +1802,7 @@
+=======
+index 25b918d1..1420ff1d 100644
+--- a/include/iprt/mangling.h
++++ b/include/iprt/mangling.h
+@@ -1695,6 +1695,7 @@
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  # define RTPathStripSuffix                              RT_MANGLER(RTPathStripSuffix)
  # define RTPathStripFilename                            RT_MANGLER(RTPathStripFilename)
  # define RTPathStripTrailingSlash                       RT_MANGLER(RTPathStripTrailingSlash)
@@ -10,7 +17,11 @@ index 991dd9e..defc781 100644
  # define RTPathTemp                                     RT_MANGLER(RTPathTemp)
  # define RTPathTraverseList                             RT_MANGLER(RTPathTraverseList)
  # define RTPathUnlink                                   RT_MANGLER(RTPathUnlink)
+<<<<<<< HEAD
 @@ -1842,6 +1843,7 @@
+=======
+@@ -1734,6 +1735,7 @@
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  # define RTProcGetAffinityMask                          RT_MANGLER(RTProcGetAffinityMask)
  # define RTProcGetExecutablePath                        RT_MANGLER(RTProcGetExecutablePath)
  # define RTProcGetPriority                              RT_MANGLER(RTProcGetPriority)
@@ -19,10 +30,17 @@ index 991dd9e..defc781 100644
  # define RTProcQueryParent                              RT_MANGLER(RTProcQueryParent)
  # define RTProcQueryUsername                            RT_MANGLER(RTProcQueryUsername)
 diff --git a/include/iprt/path.h b/include/iprt/path.h
+<<<<<<< HEAD
 index 89bf8f6..5caa578 100644
 --- a/include/iprt/path.h
 +++ b/include/iprt/path.h
 @@ -1235,6 +1235,15 @@ RTDECL(int) RTPathCalcRelative(char *pszPathDst, size_t cbPathDst, const char *p
+=======
+index 99060e35..ccfbeb76 100644
+--- a/include/iprt/path.h
++++ b/include/iprt/path.h
+@@ -1221,6 +1221,15 @@ RTDECL(int) RTPathCalcRelative(char *pszPathDst, size_t cbPathDst, const char *p
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   */
  RTDECL(int) RTPathExecDir(char *pszPath, size_t cchPath);
  
@@ -39,10 +57,17 @@ index 89bf8f6..5caa578 100644
   * Gets the user home directory.
   *
 diff --git a/include/iprt/process.h b/include/iprt/process.h
+<<<<<<< HEAD
 index 4ca981e..058ae7a 100644
 --- a/include/iprt/process.h
 +++ b/include/iprt/process.h
 @@ -384,6 +384,16 @@ RTR3DECL(const char *) RTProcExecutablePath(void);
+=======
+index f4f67dd4..ab882a19 100644
+--- a/include/iprt/process.h
++++ b/include/iprt/process.h
+@@ -352,6 +352,16 @@ RTR3DECL(const char *) RTProcExecutablePath(void);
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   */
  RTR3DECL(char *) RTProcGetExecutablePath(char *pszExecPath, size_t cbExecPath);
  
@@ -60,10 +85,17 @@ index 4ca981e..058ae7a 100644
   * Daemonize the current process, making it a background process.
   *
 diff --git a/src/VBox/HostDrivers/Support/SUPR3HardenedVerify.cpp b/src/VBox/HostDrivers/Support/SUPR3HardenedVerify.cpp
+<<<<<<< HEAD
 index e78a397..ff5b541 100644
 --- a/src/VBox/HostDrivers/Support/SUPR3HardenedVerify.cpp
 +++ b/src/VBox/HostDrivers/Support/SUPR3HardenedVerify.cpp
 @@ -1541,9 +1541,9 @@ static int supR3HardenedVerifyFsObject(PCSUPR3HARDENEDFSOBJSTATE pFsObjState, bo
+=======
+index 75ff8572..18a077b7 100644
+--- a/src/VBox/HostDrivers/Support/SUPR3HardenedVerify.cpp
++++ b/src/VBox/HostDrivers/Support/SUPR3HardenedVerify.cpp
+@@ -1531,9 +1531,9 @@ static int supR3HardenedVerifyFsObject(PCSUPR3HARDENEDFSOBJSTATE pFsObjState, bo
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
          bool fBad = !fRelaxed || pFsObjState->Stat.st_gid != 2 /*bin*/ || suplibHardenedStrCmp(pszPath, "/usr/lib/iconv");
  # else
          NOREF(fRelaxed);
@@ -76,10 +108,17 @@ index e78a397..ff5b541 100644
                                            "An unknown (and thus untrusted) group has write access to '", pszPath,
                                            "' and we therefore cannot trust the directory content or that of any subdirectory");
 diff --git a/src/VBox/Main/src-all/MachineLaunchVMCommonWorker.cpp b/src/VBox/Main/src-all/MachineLaunchVMCommonWorker.cpp
+<<<<<<< HEAD
 index 01d7a9f..e52a291 100644
 --- a/src/VBox/Main/src-all/MachineLaunchVMCommonWorker.cpp
 +++ b/src/VBox/Main/src-all/MachineLaunchVMCommonWorker.cpp
 @@ -100,7 +100,7 @@ int MachineLaunchVMCommonWorker(const Utf8Str &aNameOrId,
+=======
+index 2991d3a7..d042a08b 100644
+--- a/src/VBox/Main/src-all/MachineLaunchVMCommonWorker.cpp
++++ b/src/VBox/Main/src-all/MachineLaunchVMCommonWorker.cpp
+@@ -90,7 +90,7 @@ int MachineLaunchVMCommonWorker(const Utf8Str &aNameOrId,
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  
      /* Get the path to the executable directory w/ trailing slash: */
      char szPath[RTPATH_MAX];
@@ -89,10 +128,17 @@ index 01d7a9f..e52a291 100644
      size_t cbBufLeft = RTPathEnsureTrailingSeparator(szPath, sizeof(szPath));
      AssertReturn(cbBufLeft > 0, VERR_FILENAME_TOO_LONG);
 diff --git a/src/VBox/Main/src-server/NetworkServiceRunner.cpp b/src/VBox/Main/src-server/NetworkServiceRunner.cpp
+<<<<<<< HEAD
 index 773d27f..874ec2d 100644
 --- a/src/VBox/Main/src-server/NetworkServiceRunner.cpp
 +++ b/src/VBox/Main/src-server/NetworkServiceRunner.cpp
 @@ -198,7 +198,7 @@ int NetworkServiceRunner::start(bool aKillProcessOnStop)
+=======
+index 2e57690a..3272c840 100644
+--- a/src/VBox/Main/src-server/NetworkServiceRunner.cpp
++++ b/src/VBox/Main/src-server/NetworkServiceRunner.cpp
+@@ -188,7 +188,7 @@ int NetworkServiceRunner::start(bool aKillProcessOnStop)
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       * ASSUME it is relative to the directory that holds VBoxSVC.
       */
      char szExePath[RTPATH_MAX];
@@ -102,6 +148,7 @@ index 773d27f..874ec2d 100644
      int vrc = RTPathAppend(szExePath, sizeof(szExePath), m->pszProcName);
      AssertLogRelRCReturn(vrc, vrc);
 diff --git a/src/VBox/Main/src-server/generic/NetIf-generic.cpp b/src/VBox/Main/src-server/generic/NetIf-generic.cpp
+<<<<<<< HEAD
 index 1e2eb61..893344c 100644
 --- a/src/VBox/Main/src-server/generic/NetIf-generic.cpp
 +++ b/src/VBox/Main/src-server/generic/NetIf-generic.cpp
@@ -124,6 +171,30 @@ index 1e2eb61..893344c 100644
      {
          LogRel(("NetIfAdpCtlOut: Failed to get program path, vrc=%Rrc\n", vrc));
 @@ -224,7 +224,7 @@ int NetIfCreateHostOnlyNetworkInterface(VirtualBox *pVirtualBox,
+=======
+index af155966..3b8e793d 100644
+--- a/src/VBox/Main/src-server/generic/NetIf-generic.cpp
++++ b/src/VBox/Main/src-server/generic/NetIf-generic.cpp
+@@ -48,7 +48,7 @@ static int NetIfAdpCtl(const char * pcszIfName, const char *pszAddr, const char
+     const char *args[] = { NULL, pcszIfName, pszAddr, pszOption, pszMask, NULL };
+ 
+     char szAdpCtl[RTPATH_MAX];
+-    int rc = RTPathExecDir(szAdpCtl, sizeof(szAdpCtl) - sizeof("/" VBOXNETADPCTL_NAME));
++    int rc = RTPathSuidDir(szAdpCtl, sizeof(szAdpCtl) - sizeof("/" VBOXNETADPCTL_NAME));
+     if (RT_FAILURE(rc))
+     {
+         LogRel(("NetIfAdpCtl: failed to get program path, rc=%Rrc.\n", rc));
+@@ -95,7 +95,7 @@ static int NetIfAdpCtl(HostNetworkInterface * pIf, const char *pszAddr, const ch
+ int NetIfAdpCtlOut(const char * pcszName, const char * pcszCmd, char *pszBuffer, size_t cBufSize)
+ {
+     char szAdpCtl[RTPATH_MAX];
+-    int rc = RTPathExecDir(szAdpCtl, sizeof(szAdpCtl) - sizeof("/" VBOXNETADPCTL_NAME " ") - strlen(pcszCmd));
++    int rc = RTPathSuidDir(szAdpCtl, sizeof(szAdpCtl) - sizeof("/" VBOXNETADPCTL_NAME " ") - strlen(pcszCmd));
+     if (RT_FAILURE(rc))
+     {
+         LogRel(("NetIfAdpCtlOut: Failed to get program path, rc=%Rrc\n", rc));
+@@ -210,7 +210,7 @@ int NetIfCreateHostOnlyNetworkInterface(VirtualBox *pVirtualBox,
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
              progress.queryInterfaceTo(aProgress);
  
              char szAdpCtl[RTPATH_MAX];
@@ -133,10 +204,17 @@ index 1e2eb61..893344c 100644
              {
                  progress->i_notifyComplete(E_FAIL,
 diff --git a/src/VBox/Runtime/r3/path.cpp b/src/VBox/Runtime/r3/path.cpp
+<<<<<<< HEAD
 index bcd8deb..46ecd1e 100644
 --- a/src/VBox/Runtime/r3/path.cpp
 +++ b/src/VBox/Runtime/r3/path.cpp
 @@ -91,6 +91,12 @@ RTDECL(int) RTPathExecDir(char *pszPath, size_t cchPath)
+=======
+index 4b1a0ada..7f6dd707 100644
+--- a/src/VBox/Runtime/r3/path.cpp
++++ b/src/VBox/Runtime/r3/path.cpp
+@@ -81,6 +81,12 @@ RTDECL(int) RTPathExecDir(char *pszPath, size_t cchPath)
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  }
  
  
@@ -150,10 +228,17 @@ index bcd8deb..46ecd1e 100644
  {
  #if !defined(RT_OS_WINDOWS) && defined(RTPATH_APP_PRIVATE)
 diff --git a/src/VBox/Runtime/r3/process.cpp b/src/VBox/Runtime/r3/process.cpp
+<<<<<<< HEAD
 index f9d1ecf..042e599 100644
 --- a/src/VBox/Runtime/r3/process.cpp
 +++ b/src/VBox/Runtime/r3/process.cpp
 @@ -127,6 +127,25 @@ RTR3DECL(const char *) RTProcExecutablePath(void)
+=======
+index 5f7c7a87..59461cfa 100644
+--- a/src/VBox/Runtime/r3/process.cpp
++++ b/src/VBox/Runtime/r3/process.cpp
+@@ -117,6 +117,25 @@ RTR3DECL(const char *) RTProcExecutablePath(void)
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
      return g_szrtProcExePath;
  }
  

@@ -2,13 +2,21 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "volctl";
+<<<<<<< HEAD
   version = "0.9.4";
+=======
+  version = "0.9.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "buzz";
     repo = pname;
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-jzS97KV17wKeBI6deKE4rEj5lvqC38fq1JGundHn2So=";
+=======
+    sha256 = "sha256-ill0rwqrgAH7lbzh86DQc1Q71lkYh8PCKZvi4XadsW8=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   postPatch = ''

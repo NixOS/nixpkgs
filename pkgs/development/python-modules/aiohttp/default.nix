@@ -6,7 +6,10 @@
 , pythonOlder
 # build_requires
 , setuptools
+<<<<<<< HEAD
 , wheel
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 # install_requires
 , attrs
 , charset-normalizer
@@ -22,7 +25,11 @@
 , typing-extensions
 , idna-ssl
 # tests_require
+<<<<<<< HEAD
 , async-generator
+=======
+, async_generator
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , freezegun
 , gunicorn
 , pytest-mock
@@ -33,18 +40,27 @@
 
 buildPythonPackage rec {
   pname = "aiohttp";
+<<<<<<< HEAD
   version = "3.8.5";
+=======
+  version = "3.8.4";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
+<<<<<<< HEAD
     hash = "sha256-uVUuxSzBR9vxlErHrJivdgLlHqLc0HbtGUyjwNHH0Lw=";
+=======
+    hash = "sha256-vy4akWLB5EG/gFof0WbiSdV0ygTgOzT5fikodp6Rq1w=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   patches = [
     (fetchpatch {
+<<<<<<< HEAD
       # https://github.com/aio-libs/aiohttp/pull/7260
       # Merged upstream, should likely be dropped post-3.8.5
       url = "https://github.com/aio-libs/aiohttp/commit/7dcc235cafe0c4521bbbf92f76aecc82fee33e8b.patch";
@@ -52,15 +68,30 @@ buildPythonPackage rec {
     })
     # https://github.com/aio-libs/aiohttp/pull/7454 but does not merge cleanly
     ./setuptools-67.5.0-compatibility.diff
+=======
+      # https://github.com/aio-libs/aiohttp/pull/7178
+      url = "https://github.com/aio-libs/aiohttp/commit/5718879cdb6a98bf48810a994b78bc02abaf3e07.patch";
+      hash = "sha256-4UynkTZOzWzusQ2+MPZszhFA8I/PJNLeT/hHF/fASy8=";
+    })
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   postPatch = ''
     sed -i '/--cov/d' setup.cfg
+<<<<<<< HEAD
+=======
+
+    substituteInPlace setup.cfg \
+      --replace "charset-normalizer >=2.0, < 3.0" "charset-normalizer >=2.0, < 4.0"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '';
 
   nativeBuildInputs = [
     setuptools
+<<<<<<< HEAD
     wheel
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   propagatedBuildInputs = [
@@ -84,7 +115,11 @@ buildPythonPackage rec {
 
   # NOTE: pytest-xdist cannot be added because it is flaky. See https://github.com/NixOS/nixpkgs/issues/230597 for more info.
   nativeCheckInputs = [
+<<<<<<< HEAD
     async-generator
+=======
+    async_generator
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     freezegun
     gunicorn
     pytest-mock
@@ -105,10 +140,13 @@ buildPythonPackage rec {
     "test_async_with_session"
     "test_session_close_awaitable"
     "test_close_run_until_complete_not_deprecated"
+<<<<<<< HEAD
     # https://github.com/aio-libs/aiohttp/issues/7130
     "test_static_file_if_none_match"
     "test_static_file_if_match"
     "test_static_file_if_modified_since_past_date"
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ] ++ lib.optionals stdenv.is32bit [
     "test_cookiejar"
   ] ++ lib.optionals stdenv.isDarwin [

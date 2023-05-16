@@ -37,7 +37,10 @@ buildPythonPackage rec {
     description = "Alternative implementation of django sites framework";
     homepage = "https://github.com/niwinz/django-sites";
     license = lib.licenses.bsd3;
+<<<<<<< HEAD
     # has not been updated for django>=4.0
     broken = lib.versionAtLeast django.version "4";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

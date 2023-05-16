@@ -50,14 +50,22 @@ in
 
 stdenv.mkDerivation rec {
   pname = "busybox";
+<<<<<<< HEAD
   version = "1.36.1";
+=======
+  version = "1.36.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   # Note to whoever is updating busybox: please verify that:
   # nix-build pkgs/stdenv/linux/make-bootstrap-tools.nix -A test
   # still builds after the update.
   src = fetchurl {
     url = "https://busybox.net/downloads/${pname}-${version}.tar.bz2";
+<<<<<<< HEAD
     sha256 = "sha256-uMwkyVdNgJ5yecO+NJeVxdXOtv3xnKcJ+AzeUOR94xQ=";
+=======
+    sha256 = "sha256-VCdQyK98smMOIBeAtPmfPczusG9QW0eexoJBweavYaU=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   hardeningDisable = [ "format" "pie" ]

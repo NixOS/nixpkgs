@@ -124,12 +124,15 @@ builder rec {
 
   setupHook = ./setup-hook-2.2.sh;
 
+<<<<<<< HEAD
   passthru = rec {
     effectiveVersion = lib.versions.majorMinor version;
     siteCcacheDir = "lib/guile/${effectiveVersion}/site-ccache";
     siteDir = "share/guile/site/${effectiveVersion}";
   };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   meta = with lib; {
     homepage = "https://www.gnu.org/software/guile/";
     description = "Embeddable Scheme implementation";

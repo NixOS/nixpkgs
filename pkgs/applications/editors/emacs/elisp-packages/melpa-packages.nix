@@ -474,6 +474,7 @@ let
         # part of a larger package
         notmuch = dontConfigure super.notmuch;
 
+<<<<<<< HEAD
         pikchr-mode = super.pikchr-mode.overrideAttrs (attrs: {
           postPatch = attrs.postPatch or "" + ''
             substituteInPlace pikchr-mode.el \
@@ -481,6 +482,8 @@ let
           '';
         });
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         rtags = dontConfigure (externalSrc super.rtags pkgs.rtags);
 
         rtags-xref = dontConfigure super.rtags;
@@ -542,6 +545,7 @@ let
             (attrs.nativeBuildInputs or [ ]) ++ [ pkgs.git ];
         });
 
+<<<<<<< HEAD
         typst-mode = super.typst-mode.overrideAttrs (attrs: {
           postPatch = attrs.postPatch or "" + ''
             substituteInPlace typst-mode.el \
@@ -549,6 +553,8 @@ let
           '';
         });
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         vdiff-magit = super.vdiff-magit.overrideAttrs (attrs: {
           nativeBuildInputs =
             (attrs.nativeBuildInputs or [ ]) ++ [ pkgs.git ];

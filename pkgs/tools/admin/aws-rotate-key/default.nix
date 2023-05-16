@@ -24,5 +24,9 @@ buildGoModule rec {
     homepage = "https://github.com/Fullscreen/aws-rotate-key";
     license = licenses.mit;
     maintainers = [ maintainers.mbode ];
+<<<<<<< HEAD
+=======
+    platforms = platforms.unix;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

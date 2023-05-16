@@ -7,16 +7,24 @@
 , v2ray-geoip
 , v2ray-domain-list-community
 , symlinkJoin
+<<<<<<< HEAD
 , fetchYarnDeps
 }:
 let
   pname = "v2raya";
   version = "2.0.5";
+=======
+}:
+let
+  pname = "v2raya";
+  version = "2.0.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "v2rayA";
     repo = "v2rayA";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-oMH4FutgI5mLz2sxDdPFUyDd80xT32r51HEQYhhnvcU=";
     postFetch = "sed -i -e 's/npmmirror/yarnpkg/g' $out/gui/yarn.lock";
   };
@@ -45,6 +53,23 @@ let
 
     distPhase = "true";
 
+=======
+    sha256 = "sha256-C7N23s/GA66gQ5SVXtXcM9lXIjScR3pLYCrf0w2nHfY=";
+  };
+
+  web = mkYarnPackage {
+    inherit pname version;
+    src = "${src}/gui";
+    yarnNix = ./yarn.nix;
+    packageJSON = ./package.json;
+    yarnLock = ./yarn.lock;
+    buildPhase = ''
+      export NODE_OPTIONS=--openssl-legacy-provider
+      ln -s $src/postcss.config.js postcss.config.js
+      OUTPUT_DIR=$out yarn --offline build
+    '';
+    distPhase = "true";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     dontInstall = true;
     dontFixup = true;
   };
@@ -59,7 +84,11 @@ buildGoModule {
   inherit pname version;
 
   src = "${src}/service";
+<<<<<<< HEAD
   vendorHash = "sha256-nI+nqftJybAGcHCTMVjYPuLHxqE/kyjUzkspnkzUi+g=";
+=======
+  vendorSha256 = "sha256-vnhqI9G/p+SLLA4sre2wfmg1RKIYZmzeL0pSTbHb+Ck=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   ldflags = [
     "-s"

@@ -4,19 +4,31 @@
 
 let
   pname = "bcompare";
+<<<<<<< HEAD
   version = "4.4.6.27483";
+=======
+  version = "4.4.4.27058";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   throwSystem = throw "Unsupported system: ${stdenv.hostPlatform.system}";
 
   srcs = {
     x86_64-linux = fetchurl {
       url = "https://www.scootersoftware.com/${pname}-${version}_amd64.deb";
+<<<<<<< HEAD
       sha256 = "sha256-1+f/AfyJ8Z80WR4cs1JDjTquTR1mGAUOd27vniSeA0k=";
+=======
+      sha256 = "sha256-8wJzCCfekr/mrDJCDgoIqMRz21wWjfp5c5sPavZma3g=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
 
     x86_64-darwin = fetchurl {
       url = "https://www.scootersoftware.com/BCompareOSX-${version}.zip";
+<<<<<<< HEAD
       sha256 = "sha256-hUzJfUgfCuvB6ADHbsgmEXXgntm01hPnfSjwl7jI70c=";
+=======
+      sha256 = "sha256-UopkyKHvbIZb9rNAJ+l3dEmOX33lQwakNypWCgYDT04=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
 
     aarch64-darwin = srcs.x86_64-darwin;

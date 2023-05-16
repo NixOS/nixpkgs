@@ -10,7 +10,10 @@
 , gobject-introspection
 , gtk3
 , kissfft
+<<<<<<< HEAD
 , libappindicator
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , libnotify
 , libsamplerate
 , libvorbis
@@ -24,15 +27,26 @@
 , withDiscordRPC ? false
 }:
 
+<<<<<<< HEAD
 stdenv.mkDerivation (finalAttrs: {
   pname = "tauon";
   version = "7.6.6";
+=======
+stdenv.mkDerivation rec {
+  pname = "tauon";
+  version = "7.6.4";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "Taiko2k";
     repo = "TauonMusicBox";
+<<<<<<< HEAD
     rev = "v${finalAttrs.version}";
     hash = "sha256-yt5sMvYau43WwVerQlaOrvzJ4HnBOEVQqbql9UH8jnM=";
+=======
+    rev = "v${version}";
+    hash = "sha256-xMUQ2LabxuvCdd7dsoXPN3tjkDxfXIQ8UrJcsGQ+EEU=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   postUnpack = ''
@@ -70,13 +84,21 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     pkg-config
     python3Packages.wrapPython
+<<<<<<< HEAD
     gobject-introspection
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   buildInputs = [
     flac
+<<<<<<< HEAD
     gtk3
     libappindicator
+=======
+    gobject-introspection
+    gtk3
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     libnotify
     libopenmpt
     librsvg
@@ -135,9 +157,17 @@ stdenv.mkDerivation (finalAttrs: {
   meta = with lib; {
     description = "The Linux desktop music player from the future";
     homepage = "https://tauonmusicbox.rocks/";
+<<<<<<< HEAD
     changelog = "https://github.com/Taiko2k/TauonMusicBox/releases/tag/v${finalAttrs.version}";
+=======
+    changelog = "https://github.com/Taiko2k/TauonMusicBox/releases/tag/v${version}";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     license = licenses.gpl3;
     maintainers = with maintainers; [ jansol ];
     platforms = platforms.linux ++ platforms.darwin;
   };
+<<<<<<< HEAD
 })
+=======
+}
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)

@@ -33,7 +33,12 @@ let
     ${cfg.extraConfig}
     EOL
 
+<<<<<<< HEAD
     sshd -G -f $out
+=======
+    ssh-keygen -q -f mock-hostkey -N ""
+    sshd -t -f $out -h mock-hostkey
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '';
 
   cfg  = config.services.openssh;
@@ -278,12 +283,19 @@ in
       settings = mkOption {
         description = lib.mdDoc "Configuration for `sshd_config(5)`.";
         default = { };
+<<<<<<< HEAD
         example = literalExpression ''
           {
             UseDns = true;
             PasswordAuthentication = false;
           }
         '';
+=======
+        example = literalExpression ''{
+          UseDns = true;
+          PasswordAuthentication = false;
+        }'';
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         type = types.submodule ({name, ...}: {
           freeformType = settingsFormat.type;
           options = {
@@ -376,6 +388,7 @@ in
                 <https://infosec.mozilla.org/guidelines/openssh#modern-openssh-67>
               '';
             };
+<<<<<<< HEAD
             StrictModes = mkOption {
               type = types.bool;
               default = true;
@@ -383,6 +396,8 @@ in
                 Whether sshd should check file modes and ownership of directories
               '';
             };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
             Ciphers = mkOption {
               type = types.listOf types.str;
               default = [
@@ -529,7 +544,11 @@ in
 
       };
 
+<<<<<<< HEAD
     networking.firewall.allowedTCPPorts = optionals cfg.openFirewall cfg.ports;
+=======
+    networking.firewall.allowedTCPPorts = if cfg.openFirewall then cfg.ports else [];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     security.pam.services.sshd =
       { startSession = true;
@@ -577,6 +596,7 @@ in
       '';
 
     assertions = [{ assertion = if cfg.settings.X11Forwarding then cfgc.setXAuthLocation else true;
+<<<<<<< HEAD
                     message = "cannot enable X11 forwarding without setting xauth location";}
                   (let
                     duplicates =
@@ -594,10 +614,17 @@ in
                     assertion = lib.length duplicates == 0;
                     message = ''Duplicate sshd config key; does your capitalization match the option's? Duplicate keys: ${formattedDuplicates}'';
                   })]
+=======
+                    message = "cannot enable X11 forwarding without setting xauth location";}]
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       ++ forEach cfg.listenAddresses ({ addr, ... }: {
         assertion = addr != null;
         message = "addr must be specified in each listenAddresses entry";
       });
+<<<<<<< HEAD
+=======
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
 }

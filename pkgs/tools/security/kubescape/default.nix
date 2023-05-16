@@ -2,23 +2,38 @@
 , buildGoModule
 , fetchFromGitHub
 , installShellFiles
+<<<<<<< HEAD
 , kubescape
 , testers
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 buildGoModule rec {
   pname = "kubescape";
+<<<<<<< HEAD
   version = "2.9.1";
+=======
+  version = "2.3.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "kubescape";
     repo = pname;
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-FKWR3pxFtJBEa14Mn3RKsLvrliHaj6TuF4F2JLtw2qA=";
     fetchSubmodules = true;
   };
 
   vendorHash = "sha256-zcv8oYm6srwkwT3pUECtTewyqVVpCIcs3i0VRTRft68=";
+=======
+    hash = "sha256-TMK+9C1L+pNIjWg/lahVQk1G4CdfgRLH68XKAfszTys=";
+    fetchSubmodules = true;
+  };
+
+  vendorHash = "sha256-SPIMI9HJRF9r5wZfdynwcTTZiZ7SxuJjfcfPg6dMsGo=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nativeBuildInputs = [
     installShellFiles
@@ -27,7 +42,11 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
+<<<<<<< HEAD
     "-X=github.com/kubescape/kubescape/v2/core/cautils.BuildNumber=v${version}"
+=======
+    "-X github.com/kubescape/kubescape/v2/core/cautils.BuildNumber=v${version}"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   subPackages = [ "." ];
@@ -44,7 +63,10 @@ buildGoModule rec {
     # remove tests that use networking
     rm core/pkg/resourcehandler/urlloader_test.go
     rm core/pkg/opaprocessor/*_test.go
+<<<<<<< HEAD
     rm core/cautils/getter/downloadreleasedpolicy_test.go
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     # remove tests that use networking
     substituteInPlace core/pkg/resourcehandler/repositoryscanner_test.go \
@@ -63,11 +85,22 @@ buildGoModule rec {
       --zsh <($out/bin/kubescape completion zsh)
   '';
 
+<<<<<<< HEAD
   passthru.tests.version = testers.testVersion {
     package = kubescape;
     command = "kubescape version";
     version = "v${version}";
   };
+=======
+  doInstallCheck = true;
+
+  installCheckPhase = ''
+    runHook preInstallCheck
+    $out/bin/kubescape --help
+    $out/bin/kubescape version | grep "v${version}"
+    runHook postInstallCheck
+  '';
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   meta = with lib; {
     description = "Tool for testing if Kubernetes is deployed securely";

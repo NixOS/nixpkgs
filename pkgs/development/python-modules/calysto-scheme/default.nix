@@ -8,14 +8,23 @@
 
 buildPythonPackage rec {
   pname = "calysto-scheme";
+<<<<<<< HEAD
   version = "1.4.8";
+=======
+  version = "1.4.7";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "Calysto";
     repo = "calysto_scheme";
+<<<<<<< HEAD
     rev = "refs/tags/v${version}";
     hash = "sha256-gTBXdjm6Ry6DpjO9tP+acYxM+DQDh4dZQF+pyXrUCiI=";
+=======
+    rev = "v${version}";
+    hash = "sha256-5InImTbucggjf/tl8K31ZtLrwu5hqvggl7sYb0eqIEg=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [

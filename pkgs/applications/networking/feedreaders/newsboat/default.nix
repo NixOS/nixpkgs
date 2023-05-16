@@ -3,16 +3,27 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "newsboat";
+<<<<<<< HEAD
   version = "2.32";
+=======
+  version = "2.31";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "newsboat";
     repo = "newsboat";
     rev = "r${version}";
+<<<<<<< HEAD
     hash = "sha256-ACPnCm2cu9BEpMd02t+G4mg6DZ8jCydfK4p+Ad87Hek=";
   };
 
   cargoHash = "sha256-HHc8HSNWoBkDR7lQgvXUML5ly8sShDn16DWNf/Jig2g=";
+=======
+    hash = "sha256-e06QsfcAo/iYlvtdYZ8hX0EIMCDcwRrsJGjUxCrthUo=";
+  };
+
+  cargoHash = "sha256-MJkiC+UoiO4DiSvHLAklBdla+RmMYaxA/8oXNblYMF4=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   # TODO: Check if that's still needed
   postPatch = lib.optionalString stdenv.isDarwin ''

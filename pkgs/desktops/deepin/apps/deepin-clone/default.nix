@@ -16,17 +16,29 @@
 
 stdenv.mkDerivation rec {
   pname = "deepin-clone";
+<<<<<<< HEAD
   version = "5.0.15";
+=======
+  version = "5.0.11";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
+<<<<<<< HEAD
     hash = "sha256-yxYmRSiw/pjgHftu75S9yx0ZXrWRz0VbU8jPjl4baqQ=";
   };
 
   postPatch = ''
     substituteInPlace app/{deepin-clone-ionice,deepin-clone-pkexec,com.deepin.pkexec.deepin-clone.policy.tmp} \
+=======
+    sha256 = "sha256-ZOJc8R82R9q87Qpf/J4CXE+xL6nvbsXRIs0boNY+2uk=";
+  };
+
+  postPatch = ''
+    substituteInPlace app/{deepin-clone-ionice,deepin-clone-pkexec,deepin-clone.desktop,com.deepin.pkexec.deepin-clone.policy.tmp} \
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       --replace "/usr" "$out"
 
     substituteInPlace app/src/corelib/ddevicediskinfo.cpp \

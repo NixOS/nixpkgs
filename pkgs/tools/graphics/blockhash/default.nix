@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 { lib, stdenv, fetchFromGitHub, python3, pkg-config, imagemagick, waf }:
+=======
+{ lib, stdenv, fetchFromGitHub, python3, pkg-config, imagemagick, wafHook }:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 stdenv.mkDerivation rec {
   pname = "blockhash";
@@ -11,7 +15,11 @@ stdenv.mkDerivation rec {
     sha256 = "0x3lvhnkb4c3pyq6p81qnnqimz35wpippiac506dgjx3b1848v35";
   };
 
+<<<<<<< HEAD
   nativeBuildInputs = [ python3 pkg-config waf.hook ];
+=======
+  nativeBuildInputs = [ python3 pkg-config wafHook ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   buildInputs = [ imagemagick ];
 
   strictDeps = true;

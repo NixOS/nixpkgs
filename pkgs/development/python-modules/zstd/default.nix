@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 { lib
 , pkg-config
 , fetchPypi
@@ -14,6 +15,19 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-HvmAq/Dh4HKwKNLXbvlbR2YyZRyWIlzzC2Gcbu9iVnI=";
+=======
+{ lib, pkg-config, fetchPypi, buildPythonPackage
+, buildPackages
+, zstd, pytest }:
+
+buildPythonPackage rec {
+  pname = "zstd";
+  version = "1.5.4.0";
+
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-oNEd9wqXhSk0G1duaaTwsqI+dGaG4k+bkCYKM85JBC0=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   postPatch = ''

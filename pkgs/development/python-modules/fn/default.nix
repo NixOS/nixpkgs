@@ -2,17 +2,23 @@
 , buildPythonPackage
 , fetchpatch
 , fetchPypi
+<<<<<<< HEAD
 , pythonAtLeast
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 buildPythonPackage rec {
   pname = "fn";
   version = "0.4.3";
 
+<<<<<<< HEAD
   # Python 3.11 changed the API of the `inspect` module and fn was never
   # updated to adapt; last commit was in 2014.
   disabled = pythonAtLeast "3.11";
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   src = fetchPypi {
     inherit pname version;
     sha256 = "1nmsjmn8jb4gp22ksx0j0hhdf4y0zm8rjykyy2i6flzimg6q1kgq";

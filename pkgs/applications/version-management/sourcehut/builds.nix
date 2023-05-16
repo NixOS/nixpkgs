@@ -30,7 +30,11 @@ let
 
   buildsrht-worker = buildGoModule {
     inherit src version;
+<<<<<<< HEAD
     sourceRoot = "${src.name}/worker";
+=======
+    sourceRoot = "source/worker";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     pname = "buildsrht-worker";
     vendorHash = "sha256-y5RFPbtaGmgPpiV2Q3njeWORGZF1TJRjAbY6VgC1hek=";
   };

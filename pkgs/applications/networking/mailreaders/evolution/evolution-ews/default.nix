@@ -22,11 +22,19 @@
 
 stdenv.mkDerivation rec {
   pname = "evolution-ews";
+<<<<<<< HEAD
   version = "3.48.2";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "UE2YAPW6vMXBcO9QxUZOTrwSAOQZAs2mn+j6v/L7cMA=";
+=======
+  version = "3.48.1";
+
+  src = fetchurl {
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "vqakEdZAHXOqTh3oHUN5LwPAQ54DBZxVSn+YTEptmtg=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   patches = [

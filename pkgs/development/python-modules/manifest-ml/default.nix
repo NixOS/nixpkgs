@@ -27,7 +27,11 @@
 
 buildPythonPackage rec {
   pname = "manifest-ml";
+<<<<<<< HEAD
   version = "0.1.8";
+=======
+  version = "0.1.5";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disalbed = pythonOlder "3.8";
@@ -36,7 +40,11 @@ buildPythonPackage rec {
     owner = "HazyResearch";
     repo = "manifest";
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-d34TIZYDB8EDEIZUH5mDzfDHzFT290DwjPLJkNneklc=";
+=======
+    hash = "sha256-WKibIJv4eJ0IOCRgTl02Zusf0XNTPLBIyme6HMANr8I=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [
@@ -95,12 +103,15 @@ buildPythonPackage rec {
     "test_get"
     # this test has network access
     "test_retry_handling"
+<<<<<<< HEAD
     # Test is time-senstive
     "test_timing"
   ];
 
   pythonImportsCheck = [
     "manifest"
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   meta = with lib; {

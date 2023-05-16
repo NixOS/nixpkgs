@@ -24,6 +24,10 @@ buildPythonPackage rec {
     description = "Typing stubs for typed-ast";
     homepage = "https://github.com/python/typeshed";
     license = licenses.asl20;
+<<<<<<< HEAD
     maintainers = with maintainers; [ veehaitch ];
+=======
+    maintainers = with maintainers; [ SuperSandro2000 veehaitch ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

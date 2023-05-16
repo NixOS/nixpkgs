@@ -24,6 +24,10 @@ buildPythonPackage rec {
     description = "Allows you to specify timeouts when calling any existing function. Also provides support for stoppable-threads";
     homepage = "https://github.com/kata198/func_timeout";
     license = licenses.lgpl3Only;
+<<<<<<< HEAD
     maintainers = with maintainers; [ ];
+=======
+    maintainers = with maintainers; [ SuperSandro2000 ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

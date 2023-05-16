@@ -28,10 +28,17 @@ stdenv.mkDerivation ({
 
   stripDebugList = [ "parser" ];
 
+<<<<<<< HEAD
   configurePhase = lib.optionalString (location != null) ''
     cd ${location}
   '' + lib.optionalString generate ''
     tree-sitter generate
+=======
+  configurePhase = lib.optionalString generate ''
+    tree-sitter generate
+  '' + lib.optionalString (location != null) ''
+    cd ${location}
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '';
 
   # When both scanner.{c,cc} exist, we should not link both since they may be the same but in

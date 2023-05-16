@@ -10,7 +10,11 @@
 
 buildPythonPackage rec {
   pname = "azure-eventgrid";
+<<<<<<< HEAD
   version = "4.13.0";
+=======
+  version = "4.10.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -18,7 +22,11 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
+<<<<<<< HEAD
     hash = "sha256-Za/cyt/tCvzLTfIgS5Ifjbb9jPtdCojNzzI5WeBiO6I=";
+=======
+    hash = "sha256-PWl+rA/JAe0rUKU24oQuYlt7U4Cyi14T7cVlA/B60VY=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [

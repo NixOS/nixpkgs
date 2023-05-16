@@ -14,19 +14,31 @@
 
 stdenv.mkDerivation rec {
   pname = "drawio";
+<<<<<<< HEAD
   version = "21.6.8";
+=======
+  version = "21.2.8";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "jgraph";
     repo = "drawio-desktop";
     rev = "v${version}";
     fetchSubmodules = true;
+<<<<<<< HEAD
     hash = "sha256-k16npV8N4zPIXjc8ZJcQHgv76h2VhbqtT2ZCzDqkF8U";
+=======
+    hash = "sha256-XXtAd29r161rcamZM8QnkJ9mhQeJvqTL4Escdu95me8=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   offlineCache = fetchYarnDeps {
     yarnLock = src + "/yarn.lock";
+<<<<<<< HEAD
     hash = "sha256-rJvwXhtO/HsfpbDyOh+jFc6E9wQ+sZMT8vnhJpGlkF8";
+=======
+    hash = "sha256-H77BfiH3Nqi1a2Uek8N8BgODzMBGgXrBvrcahrKisNo=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [
@@ -56,7 +68,11 @@ stdenv.mkDerivation rec {
 
     yarn --offline run electron-builder --dir \
       --config electron-builder-linux-mac.json \
+<<<<<<< HEAD
       -c.electronDist=${electron}/libexec/electron \
+=======
+      -c.electronDist=${electron}/lib/electron \
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       -c.electronVersion=${electron.version}
 
     runHook postBuild

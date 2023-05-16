@@ -13,6 +13,10 @@
 , twisted
 
 # tests
+<<<<<<< HEAD
+=======
+, mock
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , parameterized
 , psutil
 , setuptoolsTrial
@@ -27,7 +31,11 @@ buildPythonPackage (rec {
 
   src = fetchPypi {
     inherit pname version;
+<<<<<<< HEAD
     hash = "sha256-jI38ZhCcHbjah6lST6YtSZAwaeZPBWsgY3VTUf6s2x8=";
+=======
+    hash = "sha256-et0R0pNxtL5QCgHRT1/q5t+hb6cLl6NU3AowzT/WC90=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   postPatch = ''
@@ -47,6 +55,10 @@ buildPythonPackage (rec {
   ];
 
   nativeCheckInputs = [
+<<<<<<< HEAD
+=======
+    mock
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     parameterized
     psutil
   ];

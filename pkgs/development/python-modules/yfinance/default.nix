@@ -5,7 +5,10 @@
 , cryptography
 , fetchFromGitHub
 , frozendict
+<<<<<<< HEAD
 , html5lib
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , multitasking
 , numpy
 , pandas
@@ -16,7 +19,11 @@
 
 buildPythonPackage rec {
   pname = "yfinance";
+<<<<<<< HEAD
   version = "0.2.28";
+=======
+  version = "0.2.19b1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -25,7 +32,11 @@ buildPythonPackage rec {
     owner = "ranaroussi";
     repo = pname;
     rev = "refs/tags/${version}";
+<<<<<<< HEAD
     hash = "sha256-kTbQnpha4OHu5Xguo6v90uFpcXY1e8JJsJUo4ZbaCfk=";
+=======
+    hash = "sha256-kqNit24Fdi6rk0WIJnTIata3o+pkGOGAVWZkzTlZdsQ=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [
@@ -33,7 +44,10 @@ buildPythonPackage rec {
     beautifulsoup4
     cryptography
     frozendict
+<<<<<<< HEAD
     html5lib
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     multitasking
     numpy
     pandas

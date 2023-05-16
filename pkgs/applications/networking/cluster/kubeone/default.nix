@@ -8,16 +8,27 @@
 
 buildGoModule rec {
   pname = "kubeone";
+<<<<<<< HEAD
   version = "1.7.0";
+=======
+  version = "1.6.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "kubermatic";
     repo = "kubeone";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-izUjiRQAdTpdk86s1lQwLfpHy4eJo3mGAgTwWfGkNAQ=";
   };
 
   vendorHash = "sha256-AFyvTv1uVeq2KtRG6VToTBnX+8tHorDZPSturJhsrG4=";
+=======
+    hash = "sha256-dLpe3C1gMnEyajJFPawDlTchYKA8cAy2QUAae6+7QBQ=";
+  };
+
+  vendorHash = "sha256-aCRrf/E4UVL6PwUPRRzLjD+MzL8gcNJrc2IgKKyIIHI=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   ldflags = [
     "-s"

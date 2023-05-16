@@ -145,13 +145,21 @@ in
 
 stdenv.mkDerivation rec {
   pname = "inspircd";
+<<<<<<< HEAD
   version = "3.16.1";
+=======
+  version = "3.16.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-UpDjxF4zRrtiY4Z1tRML1uWQdklfgCeLsJtxCKfHOdw=";
+=======
+    sha256 = "sha256-TKjUgy8S76gn9a9hbrWehb6BGI+dSFn1gYc0MCppyJk=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   outputs = [ "bin" "lib" "man" "doc" "out" ];

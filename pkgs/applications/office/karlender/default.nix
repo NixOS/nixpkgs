@@ -11,16 +11,27 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "karlender";
+<<<<<<< HEAD
   version = "0.9.2";
+=======
+  version = "0.9.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitLab {
     owner = "floers";
     repo = pname;
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-txPMOWwxgs9PH1Scnwr/X4cuMIUa+eoLW3K2aqmqRMQ=";
   };
 
   cargoHash = "sha256-OyyzzkoYBed2XFCesj3QBodT9e/BaapGl/z0f6+cDZA=";
+=======
+    hash = "sha256-mtkVdVxO796hZZJrGohNTeZfC43rdvEUgUZvBG92f8c=";
+  };
+
+  cargoHash = "sha256-jbdQ1dwTRJuA4F89YfxsO2PaHVef8bvxAj13veDteNM=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nativeBuildInputs = [
     pkg-config

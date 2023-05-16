@@ -7,6 +7,7 @@
 
 buildPythonPackage rec {
   pname = "jupyterhub-tmpauthenticator";
+<<<<<<< HEAD
   version = "1.0.0";
   format = "setuptools";
 
@@ -20,10 +21,22 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     jupyterhub
   ];
+=======
+  version = "0.6";
+  disabled = pythonOlder "3.5";
+
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "064x1ypxwx1l270ic97p8czbzb7swl9758v40k3w2gaqf9762f0l";
+  };
+
+  propagatedBuildInputs = [ jupyterhub ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   # No tests available in the package
   doCheck = false;
 
+<<<<<<< HEAD
   pythonImportsCheck = [
     "tmpauthenticator"
   ];
@@ -33,6 +46,14 @@ buildPythonPackage rec {
     homepage = "https://github.com/jupyterhub/tmpauthenticator";
     changelog = "https://github.com/jupyterhub/tmpauthenticator/blob/v${version}/CHANGELOG.md";
     license = with licenses; [ bsd3 ];
+=======
+  pythonImportsCheck = [ "tmpauthenticator" ];
+
+  meta = with lib; {
+    description = "Simple Jupyterhub authenticator that allows anyone to log in.";
+    license = with licenses; [ bsd3 ];
+    homepage = "https://github.com/jupyterhub/tmpauthenticator";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     maintainers = with maintainers; [ chiroptical ];
   };
 }

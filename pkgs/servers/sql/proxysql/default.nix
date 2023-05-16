@@ -31,6 +31,7 @@
 , texinfo
 }:
 
+<<<<<<< HEAD
 stdenv.mkDerivation (finalAttrs: {
   pname = "proxysql";
   version = "2.5.5";
@@ -40,6 +41,17 @@ stdenv.mkDerivation (finalAttrs: {
     repo = "proxysql";
     rev = finalAttrs.version;
     hash = "sha256-+3cOEM5b5HBQhuI+92meupvQnrUj8jgbedzPJqMoXc8=";
+=======
+stdenv.mkDerivation rec {
+  pname = "proxysql";
+  version = "2.5.1";
+
+  src = fetchFromGitHub {
+    owner = "sysown";
+    repo = pname;
+    rev = version;
+    hash = "sha256-Z85/oSV2TUKEoum09G6OHNw6K/Evt1wMCcleTcc96EY=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   patches = [
@@ -69,7 +81,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
+<<<<<<< HEAD
   GIT_VERSION = finalAttrs.version;
+=======
+  GIT_VERSION = version;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   dontConfigure = true;
 
@@ -165,6 +181,7 @@ stdenv.mkDerivation (finalAttrs: {
     sed -i s_/usr/bin/proxysql_$out/bin/proxysql_ $out/lib/systemd/system/*.service
   '';
 
+<<<<<<< HEAD
   meta = {
     broken = stdenv.isDarwin;
     description = "High-performance MySQL proxy";
@@ -174,3 +191,13 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.unix;
   };
 })
+=======
+  meta = with lib; {
+    homepage = "https://proxysql.com/";
+    broken = stdenv.isDarwin;
+    description = "High-performance MySQL proxy";
+    license = with licenses; [ gpl3Only ];
+    maintainers = with maintainers; [ ajs124 ];
+  };
+}
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)

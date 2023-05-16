@@ -8,6 +8,10 @@
   "fetchSubmodules": false,
   "deepClone": false,
   "leaveDotGit": false,
+<<<<<<< HEAD
   "version": "7.2.2",
   "npmDepsHash": "sha256-IzEO7TFqIZUkhNGf0pnHbK/WFexF27RPD9lkYvmFmDw="
+=======
+  "version": "7.2.2"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }

@@ -11,7 +11,11 @@ buildGoModule rec {
     sha256 = "sha256-wRpITbxtn2sHw7kkQ8rnCPQCU0JS6smdQLq1Z/RyeHo=";
   };
 
+<<<<<<< HEAD
   vendorHash = "sha256-b77Sje5OsysTRRbzgdLnTlLLyLIACjD4c/oS9zyI0d8=";
+=======
+  vendorSha256 = "sha256-b77Sje5OsysTRRbzgdLnTlLLyLIACjD4c/oS9zyI0d8=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   ldflags = [ "-s" "-w" "-X main.version=${version}" ];
 
@@ -20,5 +24,9 @@ buildGoModule rec {
     description = "Modern cross-platform HTTP load-testing tool written in Go";
     license = licenses.mit;
     maintainers = with maintainers; [ hugoreeves ];
+<<<<<<< HEAD
+=======
+    platforms = platforms.unix;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

@@ -5,7 +5,11 @@ _nixos-container() {
     COMPREPLY=()
     cur="${COMP_WORDS[COMP_CWORD]}"
     prev="${COMP_WORDS[COMP_CWORD-1]}"
+<<<<<<< HEAD
     opts="list create destroy restart start stop status update login root-login run show-ip show-host-key"
+=======
+    opts="list create destroy start stop status update login root-login run show-ip show-host-key"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     startstop_opts=$(nixos-container list)
     update_opts="--config"
 

@@ -28,6 +28,12 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" "man" ];
 
+<<<<<<< HEAD
+=======
+  # fix build with gcc9
+  NIX_CFLAGS_LINK = lib.optional (stdenv.system == "i686-linux") "-lgcc";
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   # Even when statically linking, libstdc++.la is put in dependency_libs here,
   # and hence libstdc++.so passed to the linker, just pass -lstdc++ and let the
   # compiler do what it does best.  (libaudiofile.la is a generated file, so we

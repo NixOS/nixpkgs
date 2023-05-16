@@ -38,6 +38,7 @@ let
         '';
       };
 
+<<<<<<< HEAD
       keySize = mkOption {
         default = null;
         example = "512";
@@ -66,6 +67,8 @@ let
         '';
       };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       source = mkOption {
         default = "/dev/urandom";
         example = "/dev/random";
@@ -185,11 +188,19 @@ let
 
     };
 
+<<<<<<< HEAD
     config = {
       device = mkIf options.label.isDefined
         "/dev/disk/by-label/${config.label}";
       deviceName = lib.replaceStrings ["\\"] [""] (escapeSystemdPath config.device);
       realDevice = if config.randomEncryption.enable then "/dev/mapper/${config.deviceName}" else config.device;
+=======
+    config = rec {
+      device = mkIf options.label.isDefined
+        "/dev/disk/by-label/${config.label}";
+      deviceName = lib.replaceStrings ["\\"] [""] (escapeSystemdPath config.device);
+      realDevice = if config.randomEncryption.enable then "/dev/mapper/${deviceName}" else config.device;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
 
   };
@@ -252,11 +263,14 @@ in
           let realDevice' = escapeSystemdPath sw.realDevice;
           in nameValuePair "mkswap-${sw.deviceName}"
           { description = "Initialisation of swap device ${sw.device}";
+<<<<<<< HEAD
             # The mkswap service fails for file-backed swap devices if the
             # loop module has not been loaded before the service runs.
             # We add an ordering constraint to run after systemd-modules-load to
             # avoid this race condition.
             after = [ "systemd-modules-load.service" ];
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
             wantedBy = [ "${realDevice'}.swap" ];
             before = [ "${realDevice'}.swap" ];
             path = [ pkgs.util-linux pkgs.e2fsprogs ]
@@ -280,11 +294,15 @@ in
                 ''}
                 ${optionalString sw.randomEncryption.enable ''
                   cryptsetup plainOpen -c ${sw.randomEncryption.cipher} -d ${sw.randomEncryption.source} \
+<<<<<<< HEAD
                   ${concatStringsSep " \\\n" (flatten [
                     (optional (sw.randomEncryption.sectorSize != null) "--sector-size=${toString sw.randomEncryption.sectorSize}")
                     (optional (sw.randomEncryption.keySize != null) "--key-size=${toString sw.randomEncryption.keySize}")
                     (optional sw.randomEncryption.allowDiscards "--allow-discards")
                   ])} ${sw.device} ${sw.deviceName}
+=======
+                    ${optionalString sw.randomEncryption.allowDiscards "--allow-discards"} ${sw.device} ${sw.deviceName}
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
                   mkswap ${sw.realDevice}
                 ''}
               '';

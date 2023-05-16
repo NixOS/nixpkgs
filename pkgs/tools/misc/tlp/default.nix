@@ -24,13 +24,21 @@
 , networkmanager
 }: stdenv.mkDerivation rec {
   pname = "tlp";
+<<<<<<< HEAD
   version = "1.6.0";
+=======
+  version = "1.5.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "linrunner";
     repo = "TLP";
     rev = version;
+<<<<<<< HEAD
     hash = "sha256-XAyko2MxFyo5RyioaexhoFAR3E+I3t/8vD2K3WYNmsI=";
+=======
+    sha256 = "sha256-hHel3BVMzTYfE59kxxADnm8tqtUFntqS3RzmJSZlWjM=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   # XXX: See patch files for relevant explanations.
@@ -127,7 +135,10 @@
     description = "Advanced Power Management for Linux";
     homepage =
       "https://linrunner.de/en/tlp/docs/tlp-linux-advanced-power-management.html";
+<<<<<<< HEAD
     changelog = "https://github.com/linrunner/TLP/releases/tag/${version}";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     platforms = platforms.linux;
     maintainers = with maintainers; [ abbradar lovesegfault ];
     license = licenses.gpl2Plus;

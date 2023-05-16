@@ -14,7 +14,11 @@
 
 buildPythonPackage rec {
   pname = "ezyrb";
+<<<<<<< HEAD
   version = "1.3.0.post2305";
+=======
+  version = "1.3.0.post2302";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -23,7 +27,11 @@ buildPythonPackage rec {
     owner = "mathLab";
     repo = "EZyRB";
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-uYwLz5NY+8lO8hZnAhqv+5PlcCSm6OOFWra47pwQhxg=";
+=======
+    hash = "sha256-ZVmQnxqLHKr275Xx0lOID3BZZFTmn/PMHpYhBFSxT7I=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [

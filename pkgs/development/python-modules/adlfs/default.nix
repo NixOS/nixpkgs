@@ -12,7 +12,11 @@
 
 buildPythonPackage rec {
   pname = "adlfs";
+<<<<<<< HEAD
   version = "2023.8.0";
+=======
+  version = "2023.4.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -21,7 +25,11 @@ buildPythonPackage rec {
     owner = "fsspec";
     repo = pname;
     rev = "refs/tags/${version}";
+<<<<<<< HEAD
     hash = "sha256-ZPHB01CiBYiNoii73zVecq1l0WCqB2CzhhhaBeetb4g=";
+=======
+    hash = "sha256-olXOMmUBfamOrwtS0SEFGW3Z7g+ExWHxON9SKKSxnbc=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [

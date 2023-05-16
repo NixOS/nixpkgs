@@ -18,17 +18,29 @@
 , fmt_8
 , nlohmann_json
 , yara
+<<<<<<< HEAD
 , rsync
 }:
 
 let
   version = "1.30.1";
+=======
+}:
+
+let
+  # when bumping the version, check if imhex has gotten support for the capstone version in nixpkgs
+  version = "1.27.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   patterns_src = fetchFromGitHub {
     owner = "WerWolv";
     repo = "ImHex-Patterns";
     rev = "ImHex-v${version}";
+<<<<<<< HEAD
     hash = "sha256-lTTXu9RxoD582lXWI789gNcWvJmxmBIlBRIiyY3DseM=";
+=======
+    hash = "sha256-7Aaj+W+zXjHO8A2gmWtp5Pa/i5Uk8lXzX2WHjPIPRZI=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
 in
@@ -41,10 +53,17 @@ stdenv.mkDerivation rec {
     owner = "WerWolv";
     repo = pname;
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-3s9Dgdhl+k2KjMoSHNl59YOoCEwqK+37DOzKdGP88/4=";
   };
 
   nativeBuildInputs = [ cmake llvm python3 perl pkg-config rsync ];
+=======
+    hash = "sha256-meOx8SkufXbXuBIVefr/mO9fsUi3zeQmqmf86+aDMaI=";
+  };
+
+  nativeBuildInputs = [ cmake llvm python3 perl pkg-config ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   buildInputs = [
     capstone
@@ -63,7 +82,12 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DIMHEX_OFFLINE_BUILD=ON"
+<<<<<<< HEAD
     "-DUSE_SYSTEM_CAPSTONE=ON"
+=======
+    # see comment at the top about our version of capstone
+    "-DUSE_SYSTEM_CAPSTONE=OFF"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "-DUSE_SYSTEM_CURL=ON"
     "-DUSE_SYSTEM_FMT=ON"
     "-DUSE_SYSTEM_LLVM=ON"
@@ -71,17 +95,29 @@ stdenv.mkDerivation rec {
     "-DUSE_SYSTEM_YARA=ON"
   ];
 
+<<<<<<< HEAD
   # rsync is used here so we can not copy the _schema.json files
   postInstall = ''
     mkdir -p $out/share/imhex
     rsync -av --exclude="*_schema.json" ${patterns_src}/{constants,encodings,includes,magic,patterns} $out/share/imhex
+=======
+  postInstall = ''
+    mkdir -p $out/share/imhex
+    for d in ${patterns_src}/{constants,encodings,includes,magic,patterns}; do
+      cp -r $d $out/share/imhex/
+    done
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '';
 
   meta = with lib; {
     description = "Hex Editor for Reverse Engineers, Programmers and people who value their retinas when working at 3 AM";
     homepage = "https://github.com/WerWolv/ImHex";
     license = with licenses; [ gpl2Only ];
+<<<<<<< HEAD
     maintainers = with maintainers; [ luis kashw2 ];
+=======
+    maintainers = with maintainers; [ luis ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     platforms = platforms.linux;
   };
 }

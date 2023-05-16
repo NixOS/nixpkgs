@@ -6,14 +6,22 @@
 
 buildPythonPackage rec {
   pname = "striprtf";
+<<<<<<< HEAD
   version = "0.0.26";
+=======
+  version = "0.0.22";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
+<<<<<<< HEAD
     hash = "sha256-/bK7p6xEAHLRxB6rUNjXSuiPYKi2V1xuLHgF3EYgk6o=";
+=======
+    hash = "sha256-T7rb6EJPQStbJjv3L7PA2rTdtXTWCd1NCE9uK4sEQCs=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   pythonImportsCheck = [

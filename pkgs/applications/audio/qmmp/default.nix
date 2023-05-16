@@ -26,11 +26,19 @@
 
 stdenv.mkDerivation rec {
   pname = "qmmp";
+<<<<<<< HEAD
   version = "2.1.4";
 
   src = fetchurl {
     url = "https://qmmp.ylsoftware.com/files/qmmp/2.1/${pname}-${version}.tar.bz2";
     hash = "sha256-gbQkDZgyo22VTWpEixuS2WaiwwXgKDsnXbB6Q0U0OeM=";
+=======
+  version = "2.1.3";
+
+  src = fetchurl {
+    url = "https://qmmp.ylsoftware.com/files/qmmp/2.1/${pname}-${version}.tar.bz2";
+    hash = "sha256-+bHnvwXUmdBbQcO3Unybqou/MZgcf6CXhlAcBjNFCNQ=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ cmake pkg-config wrapQtAppsHook ];

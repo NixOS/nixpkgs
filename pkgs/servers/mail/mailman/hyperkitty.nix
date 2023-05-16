@@ -1,22 +1,51 @@
 { lib
 , python3
+<<<<<<< HEAD
 , fetchPypi
+=======
+, fetchpatch
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 with python3.pkgs;
 
 buildPythonPackage rec {
   pname = "HyperKitty";
+<<<<<<< HEAD
   version = "1.3.7";
+=======
+  # Note: Mailman core must be on the latest version before upgrading HyperKitty.
+  # See: https://gitlab.com/mailman/postorius/-/issues/516#note_544571309
+  version = "1.3.5";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
+<<<<<<< HEAD
     sha256 = "sha256-TXSso+wwVGdBymIzns5yOS4pj1EdConmm87b/NyBAss=";
   };
 
   patches = [
     ./0001-Disable-broken-test_help_output-testcase.patch
+=======
+    sha256 = "sha256-gmkiK8pIHfubbbxNdm/D6L2o722FptxYgINYdIUOn4Y=";
+  };
+
+  patches = [
+    # FIXME: backport Python 3.10 support fix, remove for next release
+    (fetchpatch {
+      url = "https://gitlab.com/mailman/hyperkitty/-/commit/551a44a76e46931fc5c1bcb341235d8f579820be.patch";
+      sha256 = "sha256-5XCrvyrDEqH3JryPMoOXSlVVDLQ+PdYBqwGYxkExdvk=";
+      includes = [ "hyperkitty/*" ];
+    })
+
+    # Fix for Python >=3.9.13
+    (fetchpatch {
+      url = "https://gitlab.com/mailman/hyperkitty/-/commit/3efe7507944dbdbfcfa4c182d332528712476b28.patch";
+      sha256 = "sha256-yXuhTbmfDiYEXEsnz+zp+xLHRqI4GtkOhGHN+37W0iQ=";
+    })
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   postPatch = ''
@@ -53,7 +82,11 @@ buildPythonPackage rec {
     elasticsearch
     mock
     whoosh
+<<<<<<< HEAD
   ] ++ beautifulsoup4.optional-dependencies.lxml;
+=======
+  ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   checkPhase = ''
     cd $NIX_BUILD_TOP/$sourceRoot

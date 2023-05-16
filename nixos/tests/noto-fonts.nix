@@ -1,5 +1,6 @@
 import ./make-test-python.nix ({ pkgs, lib, ... }: {
   name = "noto-fonts";
+<<<<<<< HEAD
   meta.maintainers = with lib.maintainers; [ nickcao midchildan ];
 
   nodes.machine = {
@@ -7,11 +8,26 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
     environment.systemPackages = [ pkgs.gedit ];
     fonts = {
       enableDefaultPackages = false;
+=======
+  meta = {
+    maintainers = with lib.maintainers; [ nickcao midchildan ];
+  };
+
+  nodes.machine = {
+    imports = [ ./common/x11.nix ];
+    environment.systemPackages = [ pkgs.gnome.gedit ];
+    fonts = {
+      enableDefaultFonts = false;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       fonts = with pkgs;[
         noto-fonts
         noto-fonts-cjk-sans
         noto-fonts-cjk-serif
+<<<<<<< HEAD
         noto-fonts-color-emoji
+=======
+        noto-fonts-emoji
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       ];
       fontconfig.defaultFonts = {
         serif = [ "Noto Serif" "Noto Serif CJK SC" ];

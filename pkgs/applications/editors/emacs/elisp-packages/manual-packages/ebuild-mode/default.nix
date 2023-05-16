@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 { lib, melpaBuild, fetchurl, writeText }:
 
 melpaBuild rec {
@@ -17,6 +18,19 @@ melpaBuild rec {
       :fetcher git)
   '';
 
+=======
+{ lib, trivialBuild, fetchurl }:
+
+trivialBuild rec {
+  pname = "ebuild-mode";
+  version = "1.63";
+
+  src = fetchurl {
+    url = "https://dev.gentoo.org/~ulm/emacs/${pname}-${version}.tar.xz";
+    sha256 = "sha256-Ar11zz0IVMu0g9+PN9dXvj8yeKnUGi8M+CTJfGP3bd4=";
+  };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   meta = with lib; {
     description = "Major modes for Gentoo package files";
     license = licenses.gpl2Plus;

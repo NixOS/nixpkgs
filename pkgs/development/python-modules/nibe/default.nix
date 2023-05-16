@@ -16,7 +16,11 @@
 
 buildPythonPackage rec {
   pname = "nibe";
+<<<<<<< HEAD
   version = "2.3.0";
+=======
+  version = "2.2.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -25,7 +29,11 @@ buildPythonPackage rec {
     owner = "yozik04";
     repo = pname;
     rev = "refs/tags/${version}";
+<<<<<<< HEAD
     hash = "sha256-IrPEXrrnbxJcIuy+Xq4iVEEblJ85d7M99zGr1DDJS2M=";
+=======
+    hash = "sha256-wuW8No3G+l5rG2xoqBi1lhIcqqgfrQ5CrkaEtSct38k=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

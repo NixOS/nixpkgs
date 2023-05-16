@@ -1,6 +1,10 @@
 { stdenv, lib, fetchFromGitHub, writeText, openjdk17_headless, gradle_7
 , pkg-config, perl, cmake, gperf, gtk2, gtk3, libXtst, libXxf86vm, glib, alsa-lib
+<<<<<<< HEAD
 , ffmpeg_4-headless, python3, ruby, icu71, fetchurl, runCommand
+=======
+, ffmpeg_4-headless, python3, ruby, icu68
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , withMedia ? true
 , withWebKit ? false
 }:
@@ -14,6 +18,7 @@ let
     java = openjdk17_headless;
   });
 
+<<<<<<< HEAD
   dashed-icu-version = lib.concatStringsSep "-" (lib.splitString "." (lib.getVersion icu71));
   underscored-icu-version = lib.concatStringsSep "_" (lib.splitString "." (lib.getVersion icu71));
   icu-data = fetchurl {
@@ -26,6 +31,8 @@ let
     cp ${icu-data} $out/download/release-${dashed-icu-version}/icu4c-${underscored-icu-version}-data-bin-l.zip
   '';
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   makePackage = args: stdenv.mkDerivation ({
     version = "${major}${update}${build}";
 
@@ -36,7 +43,11 @@ let
       sha256 = "sha256-9VfXk2EfMebMyVKPohPRP2QXRFf8XemUtfY0JtBCHyw=";
     };
 
+<<<<<<< HEAD
     buildInputs = [ gtk2 gtk3 libXtst libXxf86vm glib alsa-lib ffmpeg_4-headless icu71 ];
+=======
+    buildInputs = [ gtk2 gtk3 libXtst libXxf86vm glib alsa-lib ffmpeg_4-headless icu68 ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     nativeBuildInputs = [ gradle_ perl pkg-config cmake gperf python3 ruby ];
 
     dontUseCmakeConfigure = true;
@@ -83,7 +94,10 @@ in makePackage {
   gradleProperties = ''
     COMPILE_MEDIA = ${lib.boolToString withMedia}
     COMPILE_WEBKIT = ${lib.boolToString withWebKit}
+<<<<<<< HEAD
     ${lib.optionalString withWebKit "icuRepositoryURL = file://${fakeRepository}"}
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '';
 
   preBuild = ''

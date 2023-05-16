@@ -11,11 +11,14 @@ buildPythonApplication rec {
     sha256 = "1miabaxd5pwxn0va4drzj1d4ppxvyqsrrd4xw1j6qr52yci0lms8";
   };
 
+<<<<<<< HEAD
   postPatch = ''
     substituteInPlace imgp \
       --replace "Image.ANTIALIAS" "Image.Resampling.LANCZOS"
   '';
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   propagatedBuildInputs = [ pillow ];
 
   installFlags = [

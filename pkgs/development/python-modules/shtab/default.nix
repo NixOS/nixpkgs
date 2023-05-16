@@ -4,15 +4,23 @@
 , pytest-timeout
 , pytestCheckHook
 , pythonOlder
+<<<<<<< HEAD
 , setuptools
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , setuptools-scm
 , bashInteractive
 }:
 
 buildPythonPackage rec {
   pname = "shtab";
+<<<<<<< HEAD
   version = "1.6.4";
   format = "pyproject";
+=======
+  version = "1.6.1";
+  format = "setuptools";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   disabled = pythonOlder "3.7";
 
@@ -20,11 +28,16 @@ buildPythonPackage rec {
     owner = "iterative";
     repo = pname;
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-BMwi3a7CPq58G30XlkJdSfSP6oc6u2AuSPAwEExI9zM=";
+=======
+    hash = "sha256-5qjavFzwFH75SlTQxxhMoJjBRIjGz9oogdvSw9dkjz0=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
+<<<<<<< HEAD
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace " --cov=shtab --cov-report=term-missing --cov-report=xml" ""
@@ -32,6 +45,9 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     setuptools
+=======
+  nativeBuildInputs = [
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     setuptools-scm
   ];
 
@@ -41,6 +57,14 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+<<<<<<< HEAD
+=======
+  postPatch = ''
+    substituteInPlace setup.cfg \
+      --replace " --cov=shtab --cov-report=term-missing --cov-report=xml" ""
+  '';
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pythonImportsCheck = [
     "shtab"
   ];

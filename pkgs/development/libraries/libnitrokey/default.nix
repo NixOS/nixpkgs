@@ -15,11 +15,15 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "Nitrokey";
     repo = "libnitrokey";
     rev = "v${finalAttrs.version}";
+<<<<<<< HEAD
     hash = "sha256-4PEZ31QyVOmdhpKqTN8fwcHoLuu+w+OJ3fZeqwlE+io=";
     # On OSX, libnitrokey depends on a custom version of hidapi in a submodule.
     # Monitor https://github.com/Nitrokey/libnitrokey/issues/140 to see if we
     # can remove this extra work one day.
     fetchSubmodules = true;
+=======
+    hash = "sha256-9ZMR1g04gNzslax6NpD6KykfUfjpKFIizaMMn06iJa0=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

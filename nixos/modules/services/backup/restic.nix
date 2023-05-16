@@ -145,7 +145,10 @@ in
           type = types.attrsOf unitOption;
           default = {
             OnCalendar = "daily";
+<<<<<<< HEAD
             Persistent = true;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           };
           description = lib.mdDoc ''
             When to run the backup. See {manpage}`systemd.timer(5)` for details.
@@ -153,7 +156,10 @@ in
           example = {
             OnCalendar = "00:05";
             RandomizedDelaySec = "5h";
+<<<<<<< HEAD
             Persistent = true;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           };
         };
 
@@ -260,6 +266,7 @@ in
             Restic package to use.
           '';
         };
+<<<<<<< HEAD
 
         createWrapper = lib.mkOption {
           type = lib.types.bool;
@@ -270,6 +277,8 @@ in
             having to manually specify most options.
           '';
         };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       };
     }));
     default = { };
@@ -308,7 +317,11 @@ in
           let
             extraOptions = concatMapStrings (arg: " -o ${arg}") backup.extraOptions;
             resticCmd = "${backup.package}/bin/restic${extraOptions}";
+<<<<<<< HEAD
             excludeFlags = optional (backup.exclude != []) "--exclude-file=${pkgs.writeText "exclude-patterns" (concatStringsSep "\n" backup.exclude)}";
+=======
+            excludeFlags = if (backup.exclude != []) then ["--exclude-file=${pkgs.writeText "exclude-patterns" (concatStringsSep "\n" backup.exclude)}"] else [];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
             filesFromTmpFile = "/run/restic-backups-${name}/includes";
             backupPaths =
               if (backup.dynamicFilesFrom == null)
@@ -326,8 +339,12 @@ in
           in
           nameValuePair "restic-backups-${name}" ({
             environment = {
+<<<<<<< HEAD
               # not %C, because that wouldn't work in the wrapper script
               RESTIC_CACHE_DIR = "/var/cache/restic-backups-${name}";
+=======
+              RESTIC_CACHE_DIR = "%C/restic-backups-${name}";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
               RESTIC_PASSWORD_FILE = backup.passwordFile;
               RESTIC_REPOSITORY = backup.repository;
               RESTIC_REPOSITORY_FILE = backup.repositoryFile;
@@ -342,10 +359,15 @@ in
                 nameValuePair (rcloneAttrToConf name) (toRcloneVal value)
               )
               backup.rcloneConfig);
+<<<<<<< HEAD
             path = [ config.programs.ssh.package ];
             restartIfChanged = false;
             wants = [ "network-online.target" ];
             after = [ "network-online.target" ];
+=======
+            path = [ pkgs.openssh ];
+            restartIfChanged = false;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
             serviceConfig = {
               Type = "oneshot";
               ExecStart = (optionals (backupPaths != "") [ "${resticCmd} backup ${concatStringsSep " " (backup.extraBackupArgs ++ excludeFlags)} ${backupPaths}" ])
@@ -389,6 +411,7 @@ in
           timerConfig = backup.timerConfig;
         })
         config.services.restic.backups;
+<<<<<<< HEAD
 
     # generate wrapper scripts, as described in the createWrapper option
     environment.systemPackages = lib.mapAttrsToList (name: backup: let
@@ -406,5 +429,7 @@ in
 
       exec ${resticCmd} $@
     '') (lib.filterAttrs (_: v: v.createWrapper) config.services.restic.backups);
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

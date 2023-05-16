@@ -5,13 +5,22 @@ let
 in
 stdenv.mkDerivation {
   pname = "rtw88";
+<<<<<<< HEAD
   version = "unstable-2023-07-23";
+=======
+  version = "unstable-2022-11-05";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "lwfinger";
     repo = "rtw88";
+<<<<<<< HEAD
     rev = "9b6fe04a741a6b0a1edc5ca134927784bff033a5";
     hash = "sha256-OzaIy+WTrljwAhC73wEIRUXrkz1NrGNJAS3zofQyV6E=";
+=======
+    rev = "c0dfe571fd7b307e036f186ef5711b4c0d9f3f08";
+    sha256 = "1gc5nv5pyrfag826z36vsrbirg6iww99yx45pcgpp7rmrpbwamvg";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
@@ -30,7 +39,11 @@ stdenv.mkDerivation {
   '';
 
   meta = with lib; {
+<<<<<<< HEAD
     description = "Backport of the latest Realtek RTW88 driver from wireless-next for older kernels";
+=======
+    description = "The newest Realtek rtlwifi codes";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     homepage = "https://github.com/lwfinger/rtw88";
     license = with licenses; [ bsd3 gpl2Only ];
     maintainers = with maintainers; [ tvorog atila ];

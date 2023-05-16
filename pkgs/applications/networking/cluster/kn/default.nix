@@ -2,13 +2,21 @@
 
 buildGoModule rec {
   pname = "kn";
+<<<<<<< HEAD
   version = "1.11.0";
+=======
+  version = "1.10.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "knative";
     repo = "client";
     rev = "knative-v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-Aiu8SedWCP2yIw51+aVEFcskJKee8RvUcW6yGtagSnI=";
+=======
+    sha256 = "sha256-LkjE3GMHoD+PmB4J09xf71nBrY1KPvh13l2O3QN9EH0=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   vendorHash = null;

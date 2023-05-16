@@ -213,7 +213,11 @@ let lispPackages = rec {
     src = pkgs.fetchFromGitHub {
       owner = "atlas-engineer";
       repo = "nyxt";
+<<<<<<< HEAD
       rev = version;
+=======
+      rev = "${version}";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       sha256 = "12l7ir3q29v06jx0zng5cvlbmap7p709ka3ik6x29lw334qshm9b";
     };
 

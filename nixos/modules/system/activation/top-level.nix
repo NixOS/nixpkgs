@@ -4,9 +4,51 @@ with lib;
 
 let
   systemBuilder =
+<<<<<<< HEAD
     ''
       mkdir $out
 
+=======
+    let
+      kernelPath = "${config.boot.kernelPackages.kernel}/" +
+        "${config.system.boot.loader.kernelFile}";
+      initrdPath = "${config.system.build.initialRamdisk}/" +
+        "${config.system.boot.loader.initrdFile}";
+    in ''
+      mkdir $out
+
+      # Containers don't have their own kernel or initrd.  They boot
+      # directly into stage 2.
+      ${optionalString config.boot.kernel.enable ''
+        if [ ! -f ${kernelPath} ]; then
+          echo "The bootloader cannot find the proper kernel image."
+          echo "(Expecting ${kernelPath})"
+          false
+        fi
+
+        ln -s ${kernelPath} $out/kernel
+        ln -s ${config.system.modulesTree} $out/kernel-modules
+        ${optionalString (config.hardware.deviceTree.package != null) ''
+          ln -s ${config.hardware.deviceTree.package} $out/dtbs
+        ''}
+
+        echo -n "$kernelParams" > $out/kernel-params
+
+        ln -s ${initrdPath} $out/initrd
+
+        ln -s ${config.system.build.initialRamdiskSecretAppender}/bin/append-initrd-secrets $out
+
+        ln -s ${config.hardware.firmware}/lib/firmware $out/firmware
+      ''}
+
+      echo "$activationScript" > $out/activate
+      echo "$dryActivationScript" > $out/dry-activate
+      substituteInPlace $out/activate --subst-var out
+      substituteInPlace $out/dry-activate --subst-var out
+      chmod u+x $out/activate $out/dry-activate
+      unset activationScript dryActivationScript
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       ${if config.boot.initrd.systemd.enable then ''
         cp ${config.system.build.bootStage2} $out/prepare-root
         substituteInPlace $out/prepare-root --subst-var-by systemConfig $out
@@ -27,9 +69,28 @@ let
       echo -n "$nixosLabel" > $out/nixos-version
       echo -n "${config.boot.kernelPackages.stdenv.hostPlatform.system}" > $out/system
 
+<<<<<<< HEAD
       ${config.system.systemBuilderCommands}
 
       cp "$extraDependenciesPath" "$out/extra-dependencies"
+=======
+      mkdir $out/bin
+      export localeArchive="${config.i18n.glibcLocales}/lib/locale/locale-archive"
+      export distroId=${config.system.nixos.distroId};
+      substituteAll ${./switch-to-configuration.pl} $out/bin/switch-to-configuration
+      chmod +x $out/bin/switch-to-configuration
+      ${optionalString (pkgs.stdenv.hostPlatform == pkgs.stdenv.buildPlatform) ''
+        if ! output=$($perl/bin/perl -c $out/bin/switch-to-configuration 2>&1); then
+          echo "switch-to-configuration syntax is not valid:"
+          echo "$output"
+          exit 1
+        fi
+      ''}
+
+      ${config.system.systemBuilderCommands}
+
+      echo -n "$extraDependencies" > $out/extra-dependencies
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
       ${optionalString (!config.boot.isContainer && config.boot.bootspec.enable) ''
         ${config.boot.bootspec.writer}
@@ -44,11 +105,16 @@ let
   # symlinks to the various parts of the built configuration (the
   # kernel, systemd units, init scripts, etc.) as well as a script
   # `switch-to-configuration' that activates the configuration and
+<<<<<<< HEAD
   # makes it bootable. See `activatable-system.nix`.
+=======
+  # makes it bootable.
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   baseSystem = pkgs.stdenvNoCC.mkDerivation ({
     name = "nixos-system-${config.system.name}-${config.system.nixos.label}";
     preferLocalBuild = true;
     allowSubstitutes = false;
+<<<<<<< HEAD
     passAsFile = [ "extraDependencies" ];
     buildCommand = systemBuilder;
 
@@ -57,6 +123,26 @@ let
     nixosLabel = config.system.nixos.label;
 
     inherit (config.system) extraDependencies;
+=======
+    buildCommand = systemBuilder;
+
+    inherit (pkgs) coreutils;
+    systemd = config.systemd.package;
+    shell = "${pkgs.bash}/bin/sh";
+    su = "${pkgs.shadow.su}/bin/su";
+    utillinux = pkgs.util-linux;
+
+    kernelParams = config.boot.kernelParams;
+    installBootLoader = config.system.build.installBootLoader;
+    activationScript = config.system.activationScripts.script;
+    dryActivationScript = config.system.dryActivationScript;
+    nixosLabel = config.system.nixos.label;
+
+    inherit (config.system) extraDependencies;
+
+    # Needed by switch-to-configuration.
+    perl = pkgs.perl.withPackages (p: with p; [ ConfigIniFiles FileSlurp ]);
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   } // config.system.systemBuilderArgs);
 
   # Handle assertions and warnings
@@ -118,6 +204,29 @@ in
     };
 
     system.build = {
+<<<<<<< HEAD
+=======
+      installBootLoader = mkOption {
+        internal = true;
+        # "; true" => make the `$out` argument from switch-to-configuration.pl
+        #             go to `true` instead of `echo`, hiding the useless path
+        #             from the log.
+        default = "echo 'Warning: do not know how to make this configuration bootable; please enable a boot loader.' 1>&2; true";
+        description = lib.mdDoc ''
+          A program that writes a bootloader installation script to the path passed in the first command line argument.
+
+          See `nixos/modules/system/activation/switch-to-configuration.pl`.
+        '';
+        type = types.unique {
+          message = ''
+            Only one bootloader can be enabled at a time. This requirement has not
+            been checked until NixOS 22.05. Earlier versions defaulted to the last
+            definition. Change your configuration to enable only one bootloader.
+          '';
+        } (types.either types.str types.package);
+      };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       toplevel = mkOption {
         type = types.package;
         readOnly = true;
@@ -180,6 +289,7 @@ in
     };
 
     system.extraDependencies = mkOption {
+<<<<<<< HEAD
       type = types.listOf types.pathInStore;
       default = [];
       description = lib.mdDoc ''
@@ -201,6 +311,14 @@ in
 
         Unlike `system.extraDependencies`, these store paths do not
         become part of the built system configuration.
+=======
+      type = types.listOf types.package;
+      default = [];
+      description = lib.mdDoc ''
+        A list of packages that should be included in the system
+        closure but not otherwise made available to users. This is
+        primarily used by the installation tests.
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       '';
     };
 
@@ -299,6 +417,7 @@ in
           fi
         '';
 
+<<<<<<< HEAD
     system.systemBuilderArgs = {
 
       # Legacy environment variables. These were used by the activation script,
@@ -320,6 +439,9 @@ in
       passedChecks = concatStringsSep " " config.system.checks;
     }
     // lib.optionalAttrs (config.system.forbiddenDependenciesRegex != "") {
+=======
+    system.systemBuilderArgs = lib.optionalAttrs (config.system.forbiddenDependenciesRegex != "") {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       inherit (config.system) forbiddenDependenciesRegex;
       closureInfo = pkgs.closureInfo { rootPaths = [
         # override to avoid  infinite recursion (and to allow using extraDependencies to add forbidden dependencies)
@@ -327,7 +449,10 @@ in
       ]; };
     };
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     system.build.toplevel = if config.system.includeBuildDependencies then systemWithBuildDeps else system;
 
   };

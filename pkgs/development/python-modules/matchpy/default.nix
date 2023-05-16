@@ -50,6 +50,10 @@ buildPythonPackage rec {
     description = "A library for pattern matching on symbolic expressions";
     homepage = "https://github.com/HPAC/matchpy";
     license = licenses.mit;
+<<<<<<< HEAD
     maintainers = with maintainers; [ ];
+=======
+    maintainers = with maintainers; [ costrouc ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

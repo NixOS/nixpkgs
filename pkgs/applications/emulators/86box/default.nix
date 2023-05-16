@@ -1,6 +1,10 @@
 { stdenv, lib, fetchFromGitHub, cmake, pkg-config, makeWrapper, freetype, SDL2
 , glib, pcre2, openal, rtmidi, fluidsynth, jack2, alsa-lib, qt5, libvncserver
+<<<<<<< HEAD
 , discord-gamesdk, libpcap, libslirp
+=======
+, discord-gamesdk, libpcap
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 , enableDynarec ? with stdenv.hostPlatform; isx86 || isAarch
 , enableNewDynarec ? enableDynarec && stdenv.hostPlatform.isAarch
@@ -10,13 +14,21 @@
 
 stdenv.mkDerivation rec {
   pname = "86Box";
+<<<<<<< HEAD
   version = "4.0";
+=======
+  version = "3.11";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "86Box";
     repo = "86Box";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-VTfYCVEbArcYVzh3NkX1yBXhtRnGZ/+khk0KG42fs24=";
+=======
+    hash = "sha256-n3Q/NUiaC6/EZyBUn6jUomnQCqr8tvYKPI5JrRRFScI=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [
@@ -28,7 +40,10 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     freetype
+<<<<<<< HEAD
     fluidsynth
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     SDL2
     glib
     openal
@@ -36,7 +51,10 @@ stdenv.mkDerivation rec {
     pcre2
     jack2
     libpcap
+<<<<<<< HEAD
     libslirp
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     qt5.qtbase
     qt5.qttools
   ] ++ lib.optional stdenv.isLinux alsa-lib
@@ -48,6 +66,7 @@ stdenv.mkDerivation rec {
     ++ lib.optional (!enableDynarec) "-DDYNAREC=OFF"
     ++ lib.optional (!unfreeEnableDiscord) "-DDISCORD=OFF";
 
+<<<<<<< HEAD
   postInstall = lib.optional stdenv.isLinux ''
     install -Dm644 -t $out/share/applications $src/src/unix/assets/net.86box.86Box.desktop
 
@@ -57,11 +76,17 @@ stdenv.mkDerivation rec {
     done;
   '';
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   # Some libraries are loaded dynamically, but QLibrary doesn't seem to search
   # the runpath, so use a wrapper instead.
   postFixup = let
     libPath = lib.makeLibraryPath ([
       libpcap
+<<<<<<< HEAD
+=======
+      fluidsynth
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     ] ++ lib.optional unfreeEnableDiscord discord-gamesdk);
     libPathVar = if stdenv.isDarwin then "DYLD_LIBRARY_PATH" else "LD_LIBRARY_PATH";
   in

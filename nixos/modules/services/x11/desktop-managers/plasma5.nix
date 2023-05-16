@@ -332,7 +332,11 @@ in
       # Enable GTK applications to load SVG icons
       services.xserver.gdk-pixbuf.modulePackages = [ pkgs.librsvg ];
 
+<<<<<<< HEAD
       fonts.packages = with pkgs; [ cfg.notoPackage hack-font ];
+=======
+      fonts.fonts = with pkgs; [ cfg.notoPackage hack-font ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       fonts.fontconfig.defaultFonts = {
         monospace = [ "Hack" "Noto Sans Mono" ];
         sansSerif = [ "Noto Sans" ];

@@ -29,13 +29,21 @@
 }:
 mkDerivation rec {
   pname = "vaultenv";
+<<<<<<< HEAD
   version = "0.16.0";
+=======
+  version = "0.15.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "channable";
     repo = "vaultenv";
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-EPu4unzXIg8naFUEZwbJ2VJXD/TeCiKzPHCXnRkdyBE=";
+=======
+    sha256 = "sha256-yoYkAypH+HQSVTvd/qKNFkL5krbB5mZw3ec9ojvy+Pw=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   buildTools = [ hpack ];

@@ -18,6 +18,10 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/devinr528/cargo-sort";
     changelog = "https://github.com/devinr528/cargo-sort/blob/v${version}/changelog.md";
     license = with licenses; [ mit /* or */ asl20 ];
+<<<<<<< HEAD
     maintainers = with maintainers; [ figsoda matthiasbeyer ];
+=======
+    maintainers = with maintainers; [ figsoda ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

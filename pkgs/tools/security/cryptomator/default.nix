@@ -4,6 +4,7 @@
 , maven, jdk, makeShellWrapper, glib, wrapGAppsHook
 }:
 
+<<<<<<< HEAD
 
 let
   mavenJdk = maven.override {
@@ -14,11 +15,17 @@ assert stdenv.isLinux; # better than `called with unexpected argument 'enableJav
 mavenJdk.buildMavenPackage rec {
   pname = "cryptomator";
   version = "1.9.4";
+=======
+let
+  pname = "cryptomator";
+  version = "1.8.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "cryptomator";
     repo = "cryptomator";
     rev = version;
+<<<<<<< HEAD
     hash = "sha256-63UXn1ejL/wDx6S2lugwwthu+C+vJovPypgM0iak78I=";
   };
 
@@ -28,6 +35,45 @@ mavenJdk.buildMavenPackage rec {
   preBuild = ''
     VERSION=${version}
     SEMVER_STR=${version}
+=======
+    sha256 = "sha256-4MjF2PDH0JB1biY4HO2wOC0i6EIGSlzkK6tDm8nzvIo=";
+  };
+
+  # perform fake build to make a fixed-output derivation out of the files downloaded from maven central (120MB)
+  deps = stdenv.mkDerivation {
+    name = "cryptomator-${version}-deps";
+    inherit src;
+
+    nativeBuildInputs = [ jdk maven ];
+    buildInputs = [ jdk ];
+
+    buildPhase = ''
+      while mvn -Plinux package -Dmaven.test.skip=true -Dmaven.repo.local=$out/.m2 -Dmaven.wagon.rto=5000; [ $? = 1 ]; do
+        echo "timeout, restart maven to continue downloading"
+      done
+    '';
+
+    # keep only *.{pom,jar,sha1,nbm} and delete all ephemeral files with lastModified timestamps inside
+    installPhase = ''
+      find $out/.m2 -type f -regex '.+\(\.lastUpdated\|resolver-status\.properties\|_remote\.repositories\)' -delete
+      find $out/.m2 -type f -iname '*.pom' -exec sed -i -e 's/\r\+$//' {} \;
+    '';
+
+    outputHashMode = "recursive";
+    outputHash = "sha256-2nCaSL7OlS9f+PZPh0YiMvnjOaAqlQimkKWDSjSP+bQ=";
+
+    doCheck = false;
+  };
+
+in stdenv.mkDerivation rec {
+  inherit pname version src;
+
+  buildPhase = ''
+    VERSION=${version}
+    SEMVER_STR=${version}
+
+    mvn -Plinux package --offline -Dmaven.test.skip=true -Dmaven.repo.local=$(cp -dpR ${deps}/.m2 ./ && chmod +w -R .m2 && pwd)/.m2
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '';
 
 
@@ -74,6 +120,10 @@ mavenJdk.buildMavenPackage rec {
 
   nativeBuildInputs = [
     autoPatchelfHook
+<<<<<<< HEAD
+=======
+    maven
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     makeShellWrapper
     wrapGAppsHook
     jdk

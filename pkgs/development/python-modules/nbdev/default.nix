@@ -15,13 +15,21 @@
 
 buildPythonPackage rec {
   pname = "nbdev";
+<<<<<<< HEAD
   version = "2.3.12";
+=======
+  version = "2.3.11";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
+<<<<<<< HEAD
     sha256 = "sha256-AQWNqCq9IEWMKkkG5bw0pkvWtvIMKkBbAotfTRRTMCQ=";
+=======
+    sha256 = "sha256-ITMCmuAb1lXONbP5MREpk8vfNSztoTEmT87W1o+fbIU=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [

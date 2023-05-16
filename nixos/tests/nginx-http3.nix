@@ -76,6 +76,7 @@ in
     server.wait_for_open_port(443)
 
     # Check http connections
+<<<<<<< HEAD
     client.succeed("curl --verbose --http3-only https://acme.test | grep 'Hello World!'")
 
     # Check downloadings
@@ -89,6 +90,21 @@ in
 
     # Check change User-Agent
     client.succeed("curl --verbose --http3-only --user-agent 'Curl test 3.0' https://acme.test")
+=======
+    client.succeed("curl --verbose --http3 https://acme.test | grep 'Hello World!'")
+
+    # Check downloadings
+    client.succeed("curl --verbose --http3 https://acme.test/example.txt --output /tmp/example.txt")
+    client.succeed("cat /tmp/example.txt | grep 'Check http3 protocol.'")
+
+    # Check header reading
+    client.succeed("curl --verbose --http3 --head https://acme.test | grep 'content-type'")
+    client.succeed("curl --verbose --http3 --head https://acme.test | grep 'HTTP/3 200'")
+    client.succeed("curl --verbose --http3 --head https://acme.test/error | grep 'HTTP/3 404'")
+
+    # Check change User-Agent
+    client.succeed("curl --verbose --http3 --user-agent 'Curl test 3.0' https://acme.test")
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     server.succeed("cat /var/log/nginx/access.log | grep 'Curl test 3.0'")
 
     server.shutdown()

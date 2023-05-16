@@ -5,7 +5,11 @@
 
 ocamlPackages.buildDunePackage rec {
   pname = "stanc";
+<<<<<<< HEAD
   version = "2.32.2";
+=======
+  version = "2.32.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   minimalOCamlVersion = "4.12";
   duneVersion = "3";

@@ -4,6 +4,10 @@
 , substituteAll
 , gettext
 , pkg-config
+<<<<<<< HEAD
+=======
+, fetchpatch
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , dbus
 , gnome
 , systemd
@@ -57,11 +61,19 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "networkmanager";
+<<<<<<< HEAD
   version = "1.42.8";
 
   src = fetchurl {
     url = "mirror://gnome/sources/NetworkManager/${lib.versions.majorMinor version}/NetworkManager-${version}.tar.xz";
     sha256 = "sha256-AzfnWD0uxa3iui6MYl0vCe7M2h0ig27imqcpJdOZw1M=";
+=======
+  version = "1.42.6";
+
+  src = fetchurl {
+    url = "mirror://gnome/sources/NetworkManager/${lib.versions.majorMinor version}/NetworkManager-${version}.tar.xz";
+    sha256 = "sha256-jDiKw3daxrzrYF+uIb4sPiYcr+YGeZSonw36RhDtAnk=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   outputs = [ "out" "dev" "devdoc" "man" "doc" ];
@@ -125,9 +137,22 @@ stdenv.mkDerivation rec {
     # Meson does not support using different directories during build and
     # for installation like Autotools did with flags passed to make install.
     ./fix-install-paths.patch
+<<<<<<< HEAD
   ];
 
   buildInputs = [
+=======
+
+    # Support for building with ppp 2.5.0
+    (fetchpatch {
+      url = "https://gitlab.freedesktop.org/NetworkManager/NetworkManager/-/commit/5df19f5b26c5921a401e63fb329e844a02d6b1f2.diff";
+      hash = "sha256-BDm0P2U4HENAtq7OowWVDxqALNbG0nr9k/CLdE61Sck=";
+    })
+  ];
+
+  buildInputs = [
+    gobject-introspection
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     systemd
     libselinux
     audit
@@ -209,7 +234,11 @@ stdenv.mkDerivation rec {
     description = "Network configuration and management tool";
     license = licenses.gpl2Plus;
     changelog = "https://gitlab.freedesktop.org/NetworkManager/NetworkManager/-/raw/${version}/NEWS";
+<<<<<<< HEAD
     maintainers = teams.freedesktop.members ++ (with maintainers; [ domenkozar obadz amaxine ]);
+=======
+    maintainers = teams.freedesktop.members ++ (with maintainers; [ domenkozar obadz maxeaubrey ]);
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     platforms = platforms.linux;
   };
 }

@@ -2,16 +2,27 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rustic-rs";
+<<<<<<< HEAD
   version = "0.5.4";
+=======
+  version = "0.5.3";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "rustic-rs";
     repo = "rustic";
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-LAOU2cnKb+TEWNiXJkpgqNxuU16g/Kc3swGIUc8t9x0=";
   };
 
   cargoHash = "sha256-OTIdl2x5m90rEwNBu3LL3rFQ0FVS3GDYU7gf8P7CTaQ=";
+=======
+    hash = "sha256-OZ80foq6DQZoJuJsQT4hxAHvzYn+uJbqG29wiZ7mPi8=";
+  };
+
+  cargoHash = "sha256-xdSAdw6YY6mYZDBKkH20wfB1oNiKecC7XhRKLUaHsTQ=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nativeBuildInputs = [ installShellFiles ];
 

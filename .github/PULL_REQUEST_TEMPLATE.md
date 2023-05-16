@@ -1,11 +1,19 @@
+<<<<<<< HEAD
 ## Description of changes
+=======
+###### Description of changes
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 <!--
 For package updates please link to a changelog or describe changes, this helps your fellow maintainers discover breaking updates.
 For new packages please briefly describe the package or provide a link to its homepage.
 -->
 
+<<<<<<< HEAD
 ## Things done
+=======
+###### Things done
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 <!-- Please check what applies. Note that these are not hard requirements but merely serve as information for reviewers. -->
 
@@ -22,7 +30,11 @@ For new packages please briefly describe the package or provide a link to its ho
   - made sure NixOS tests are [linked](https://nixos.org/manual/nixpkgs/unstable/#ssec-nixos-tests-linking) to the relevant packages
 - [ ] Tested compilation of all packages that depend on this change using `nix-shell -p nixpkgs-review --run "nixpkgs-review rev HEAD"`. Note: all changes have to be committed, also see [nixpkgs-review usage](https://github.com/Mic92/nixpkgs-review#usage)
 - [ ] Tested basic functionality of all binary files (usually in `./result/bin/`)
+<<<<<<< HEAD
 - [23.11 Release Notes](https://github.com/NixOS/nixpkgs/blob/master/nixos/doc/manual/release-notes/rl-2311.section.md) (or backporting [23.05 Release notes](https://github.com/NixOS/nixpkgs/blob/master/nixos/doc/manual/release-notes/rl-2305.section.md))
+=======
+- [23.05 Release Notes (or backporting 22.11 Release notes)](https://github.com/NixOS/nixpkgs/blob/master/CONTRIBUTING.md#generating-2305-release-notes)
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   - [ ] (Package updates) Added a release notes entry if the change is major or breaking
   - [ ] (Module updates) Added a release notes entry if the change is significant
   - [ ] (Module addition) Added a release notes entry if adding a new NixOS module

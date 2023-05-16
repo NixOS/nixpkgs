@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 { lib, stdenv, fetchFromSourcehut, meson, ninja, pkg-config, wayland
+=======
+{ lib, stdenv, fetchFromSourcehut, meson, ninja, pkg-config, wlroots, wayland, wayland-protocols
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , libX11, libGL }:
 
 stdenv.mkDerivation rec {

@@ -1,6 +1,9 @@
 { lib
 , fetchurl
+<<<<<<< HEAD
 , fetchpatch
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , stdenv
 , testers
 , cmake
@@ -15,6 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-sfB3ZpSBxaPmKv/EnpbrBvKBmHpdNv2rIlIX5bgl5Mw=";
   };
 
+<<<<<<< HEAD
   patches = [
     # Pull upstream fix of `gcc-13` build failure:
     #   https://github.com/libgeos/geos/pull/805
@@ -25,6 +29,8 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nativeBuildInputs = [ cmake ];
 
   doCheck = true;
@@ -32,11 +38,21 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 
   meta = with lib; {
+<<<<<<< HEAD
     description = "C/C++ library for computational geometry with a focus on algorithms used in geographic information systems (GIS) software";
     homepage = "https://libgeos.org";
     license = licenses.lgpl21Only;
     maintainers = teams.geospatial.members;
     pkgConfigModules = [ "geos" ];
     mainProgram = "geosop";
+=======
+    description = "C++ port of the Java Topology Suite (JTS)";
+    homepage = "https://trac.osgeo.org/geos";
+    license = licenses.lgpl21Only;
+    pkgConfigModules = [ "geos" ];
+    maintainers = with lib.maintainers; [
+      willcohen
+    ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 })

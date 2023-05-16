@@ -12,13 +12,21 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "xdgmenumaker";
+<<<<<<< HEAD
   version = "2.1";
+=======
+  version = "2.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "gapan";
     repo = pname;
     rev = version;
+<<<<<<< HEAD
     sha256 = "K+IecWWRjnY/5TBJydTuEPqNRSg1OIE1t0u6HkLS9uI=";
+=======
+    sha256 = "CLFFsc/F6I8UOY/XbViWCAlnnu32E5gtEXg9+KSJqI0=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   format = "other";

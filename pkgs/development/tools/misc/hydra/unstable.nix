@@ -4,8 +4,15 @@
 , perlPackages
 , buildEnv
 , makeWrapper
+<<<<<<< HEAD
 , unzip
 , pkg-config
+=======
+, libtool
+, unzip
+, pkg-config
+, sqlite
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , libpqxx
 , top-git
 , mercurial
@@ -20,6 +27,10 @@
 , prometheus-cpp
 , nukeReferences
 , git
+<<<<<<< HEAD
+=======
+, boehmgc
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , nlohmann_json
 , docbook_xsl
 , openssh
@@ -123,13 +134,22 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "hydra";
+<<<<<<< HEAD
   version = "2023-08-23";
+=======
+  version = "2023-03-27";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "NixOS";
     repo = "hydra";
+<<<<<<< HEAD
     rev = "00d30874da759eb0f44f446415b2469920ff41b5";
     sha256 = "sha256-e+68WCN1e1h2rf1pmwNNukTt5EBtF9KQNXhqJtoyJzo=";
+=======
+    rev = "082495e34e094cae1eb49dbfc5648938e23c6355";
+    sha256 = "sha256-Nj9U0V7Zv7XoRDdO7ECphTk6jHfOgeZe6G0x4FQLpJ0=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   buildInputs = [
@@ -245,7 +265,10 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Nix-based continuous build system";
+<<<<<<< HEAD
     homepage = "https://nixos.org/hydra";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ lheckemann mindavi das_j ];

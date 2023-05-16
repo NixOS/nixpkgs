@@ -1,12 +1,23 @@
+<<<<<<< HEAD
 { channel
 , version
 , hash
+=======
+{ stable
+, branch
+, version
+, sha256Hash
+, mkOverride
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 { lib
 , python3
 , fetchFromGitHub
+<<<<<<< HEAD
 , pkgsStatic
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 python3.pkgs.buildPythonApplication {
@@ -14,6 +25,7 @@ python3.pkgs.buildPythonApplication {
   inherit version;
 
   src = fetchFromGitHub {
+<<<<<<< HEAD
     inherit hash;
     owner = "GNS3";
     repo = "gns3-server";
@@ -24,20 +36,41 @@ python3.pkgs.buildPythonApplication {
   prePatch = ''
     cp ${pkgsStatic.busybox}/bin/busybox gns3server/compute/docker/resources/bin/busybox
   '';
+=======
+    owner = "GNS3";
+    repo = "gns3-server";
+    rev = "refs/tags/v${version}";
+    sha256 = sha256Hash;
+  };
+
+  pythonRelaxDeps = [
+    "aiofiles"
+    "jsonschema"
+    "psutil"
+    "sentry-sdk"
+  ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nativeBuildInputs = with python3.pkgs; [
     pythonRelaxDepsHook
   ];
 
+<<<<<<< HEAD
   pythonRelaxDeps = [
     "jsonschema"
   ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   propagatedBuildInputs = with python3.pkgs; [
     aiofiles
     aiohttp
     aiohttp-cors
+<<<<<<< HEAD
     async-generator
+=======
+    async_generator
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     distro
     importlib-resources
     jinja2
@@ -48,7 +81,10 @@ python3.pkgs.buildPythonApplication {
     py-cpuinfo
     sentry-sdk
     setuptools
+<<<<<<< HEAD
     truststore
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     yarl
     zipstream
   ];
@@ -61,7 +97,11 @@ python3.pkgs.buildPythonApplication {
   '';
 
   meta = with lib; {
+<<<<<<< HEAD
     description = "Graphical Network Simulator 3 server (${channel} release)";
+=======
+    description = "Graphical Network Simulator 3 server (${branch} release)";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     longDescription = ''
       The GNS3 server manages emulators such as Dynamips, VirtualBox or
       Qemu/KVM. Clients like the GNS3 GUI control the server using a HTTP REST

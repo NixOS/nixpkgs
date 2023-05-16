@@ -2,29 +2,48 @@
 
 buildGoModule rec {
   pname = "go-mockery";
+<<<<<<< HEAD
   version = "2.33.2";
+=======
+  version = "2.20.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "vektra";
     repo = "mockery";
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-VhzU/18xLmimhRyEqAEi0+B8uiXJFb+ri/0MuugogzI=";
+=======
+    sha256 = "sha256-MIEVAEjXM3QNz3PnjB/g5Ury+N9NJhxtcXF+SLAvqR4=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   preCheck = ''
     substituteInPlace ./pkg/generator_test.go --replace 0.0.0-dev ${version}
+<<<<<<< HEAD
     substituteInPlace ./pkg/logging/logging_test.go --replace v0.0 v${lib.versions.majorMinor version}
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '';
 
   ldflags = [
     "-s" "-w"
+<<<<<<< HEAD
     "-X" "github.com/vektra/mockery/v2/pkg/logging.SemVer=v${version}"
+=======
+    "-X" "github.com/vektra/mockery/v2/pkg/config.SemVer=v${version}"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   CGO_ENABLED = false;
 
+<<<<<<< HEAD
   proxyVendor = true;
   vendorHash = "sha256-c8HsrcS3x16x3x/VQjQ2XWxfMVYHJ6pbQWztqFj0ju4=";
+=======
+  vendorHash = "sha256-3lx3wHnPQ/slRXnlVAnI1ZqSykDXNivjwg1WUITGj64=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   passthru.tests = {
     generateMock = runCommand "${pname}-test" {

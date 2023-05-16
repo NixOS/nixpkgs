@@ -13,13 +13,21 @@
 
 stdenv.mkDerivation rec {
   pname = "ibus-m17n";
+<<<<<<< HEAD
   version = "1.4.22";
+=======
+  version = "1.4.19";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "ibus";
     repo = "ibus-m17n";
     rev = version;
+<<<<<<< HEAD
     sha256 = "sha256-wjWDqhhLqj77IxVpelChOEdUtneaGmL+IK2Sp3eObkA=";
+=======
+    sha256 = "sha256-e/nw6UGaxWpDCKwI5r8MuSZjrE6u/S5njZYilFa4zJI=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

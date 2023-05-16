@@ -1,12 +1,21 @@
+<<<<<<< HEAD
 { lib, stdenv, fetchFromGitHub, fetchpatch, cmake, obs-studio }:
 
 stdenv.mkDerivation rec {
   pname = "obs-source-record";
   version = "0.3.2";
+=======
+{ lib, stdenv, fetchFromGitHub, cmake, obs-studio }:
+
+stdenv.mkDerivation rec {
+  pname = "obs-source-record";
+  version = "unstable-2022-11-10";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "exeldro";
     repo = "obs-source-record";
+<<<<<<< HEAD
     rev = version;
     sha256 = "sha256-H65uQ9HnKmHs52v3spG92ayeYH/TvmwcMoePMmBMqN8=";
   };
@@ -19,13 +28,22 @@ stdenv.mkDerivation rec {
     })
   ];
 
+=======
+    rev = "4a543d3577d56a27f5f2b9aa541a466b37dafde0";
+    sha256 = "sha256-LoMgrWZ7r6lu2fisNvqrAiFvxWQQDE6lSxUHkMB/ZPY=";
+  };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nativeBuildInputs = [ cmake ];
   buildInputs = [
     obs-studio
   ];
 
+<<<<<<< HEAD
   NIX_CFLAGS_COMPILE = [ "-Wno-error=deprecated-declarations" ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   cmakeFlags = [
     "-DBUILD_OUT_OF_TREE=On"
   ];

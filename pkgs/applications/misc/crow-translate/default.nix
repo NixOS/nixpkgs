@@ -1,6 +1,10 @@
 { lib
 , stdenv
 , fetchzip
+<<<<<<< HEAD
+=======
+, substituteAll
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , cmake
 , extra-cmake-modules
 , qttools
@@ -9,6 +13,10 @@
 , tesseract4
 , qtmultimedia
 , qtx11extras
+<<<<<<< HEAD
+=======
+, qttranslations
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , wrapQtAppsHook
 , gst_all_1
 , testers
@@ -17,6 +25,7 @@
 
 stdenv.mkDerivation rec {
   pname = "crow-translate";
+<<<<<<< HEAD
   version = "2.10.10";
 
   src = fetchzip {
@@ -24,6 +33,23 @@ stdenv.mkDerivation rec {
     hash = "sha256-PvfruCqmTBFLWLeIL9NV6+H2AifXcY97ImHzD1zEs28=";
   };
 
+=======
+  version = "2.10.4";
+
+  src = fetchzip {
+    url = "https://github.com/${pname}/${pname}/releases/download/${version}/${pname}-${version}-source.tar.gz";
+    hash = "sha256-M2vAH1YAvNOhDsz+BWxvteR8YX89FHtbUcQZr1uVoCs=";
+  };
+
+  patches = [
+    (substituteAll {
+      # See https://github.com/NixOS/nixpkgs/issues/86054
+      src = ./fix-qttranslations-path.patch;
+      inherit qttranslations;
+    })
+  ];
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   postPatch = ''
     substituteInPlace data/io.crow_translate.CrowTranslate.desktop \
       --replace "Exec=qdbus" "Exec=${lib.getBin qttools}/bin/qdbus"

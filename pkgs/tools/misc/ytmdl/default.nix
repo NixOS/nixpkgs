@@ -1,18 +1,30 @@
 { lib
 , python3Packages
+<<<<<<< HEAD
 , fetchPypi
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , yt-dlp
 , ffmpeg
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "ytmdl";
+<<<<<<< HEAD
   version = "2023.07.27";
 
   src = fetchPypi {
     inherit pname;
     version = builtins.replaceStrings [ ".0" ] [ "." ] version;
     sha256 = "sha256-sBRzbUR+zqS8Zzg/uU4bjJUr/n1/tb0K6u/FVTEIRsk=";
+=======
+  version = "2022.03.16";
+
+  src = python3Packages.fetchPypi {
+    inherit pname;
+    version = builtins.replaceStrings [ ".0" ] [ "." ] version;
+    sha256 = "sha256-2lEOgwSi4fAVK+gJXvjWQDBWIb1cODFmUiq0FUfpyXA=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   postPatch = ''

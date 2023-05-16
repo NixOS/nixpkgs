@@ -13,7 +13,11 @@
 
 buildPythonPackage rec {
   pname = "deezer-python";
+<<<<<<< HEAD
   version = "6.1.0";
+=======
+  version = "5.9.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -22,7 +26,11 @@ buildPythonPackage rec {
     owner = "browniebroke";
     repo = pname;
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-9uFKrr0C/RIklpW5KZj8pSv4oEibzSaAJWnTwYKyxD8=";
+=======
+    hash = "sha256-S2OC2OvXoc7LDTX0ZkVtaLHflio+3u1Ic/i9TtQN4Ac=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

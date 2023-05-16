@@ -21,11 +21,19 @@
 
 let
   pname = "sparrow";
+<<<<<<< HEAD
   version = "1.7.9";
 
   src = fetchurl {
     url = "https://github.com/sparrowwallet/${pname}/releases/download/${version}/${pname}-${version}-x86_64.tar.gz";
     sha256 = "0bz8mx6mszqadx7nlb4ini45r2r57grdgmrq6k9lxgrgcpd8gasy";
+=======
+  version = "1.7.6";
+
+  src = fetchurl {
+    url = "https://github.com/sparrowwallet/${pname}/releases/download/${version}/${pname}-${version}-x86_64.tar.gz";
+    sha256 = "01ksl790i8swvj8nvl2r27bbd8kad80shsbw3di39925841dp8z3";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   launcher = writeScript "sparrow" ''
@@ -47,11 +55,17 @@ let
       --add-opens javafx.controls/com.sun.javafx.scene.control=centerdevice.nsmenufx
       --add-opens javafx.graphics/com.sun.javafx.menu=centerdevice.nsmenufx
       --add-opens javafx.graphics/com.sun.glass.ui=com.sparrowwallet.sparrow
+<<<<<<< HEAD
       --add-opens=javafx.graphics/javafx.scene.input=com.sparrowwallet.sparrow
       --add-opens javafx.graphics/com.sun.javafx.application=com.sparrowwallet.sparrow
       --add-opens java.base/java.net=com.sparrowwallet.sparrow
       --add-opens java.base/java.io=com.google.gson
       --add-opens=java.smartcardio/sun.security.smartcardio=com.sparrowwallet.sparrow
+=======
+      --add-opens javafx.graphics/com.sun.javafx.application=com.sparrowwallet.sparrow
+      --add-opens java.base/java.net=com.sparrowwallet.sparrow
+      --add-opens java.base/java.io=com.google.gson
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       --add-reads com.sparrowwallet.merged.module=java.desktop
       --add-reads com.sparrowwallet.merged.module=java.sql
       --add-reads com.sparrowwallet.merged.module=com.sparrowwallet.sparrow
@@ -167,9 +181,15 @@ stdenv.mkDerivation rec {
 
   desktopItems = [
     (makeDesktopItem {
+<<<<<<< HEAD
       name = "sparrow-desktop";
       exec = "sparrow-desktop";
       icon = "sparrow-desktop";
+=======
+      name = "Sparrow";
+      exec = pname;
+      icon = pname;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       desktopName = "Sparrow Bitcoin Wallet";
       genericName = "Bitcoin Wallet";
       categories = [ "Finance" "Network" ];
@@ -187,7 +207,11 @@ stdenv.mkDerivation rec {
       for n in 16 24 32 48 64 96 128 256; do
         size=$n"x"$n
         mkdir -p $out/hicolor/$size/apps
+<<<<<<< HEAD
         convert lib/Sparrow.png -resize $size $out/hicolor/$size/apps/sparrow-desktop.png
+=======
+        convert lib/Sparrow.png -resize $size $out/hicolor/$size/apps/sparrow.png
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         done;
     '';
   };
@@ -197,9 +221,15 @@ stdenv.mkDerivation rec {
 
     mkdir -p $out/bin $out
     ln -s ${sparrow-modules}/modules $out/lib
+<<<<<<< HEAD
     install -D -m 777 ${launcher} $out/bin/sparrow-desktop
     substituteAllInPlace $out/bin/sparrow-desktop
     substituteInPlace $out/bin/sparrow-desktop --subst-var-by jdkModules ${jdk-modules}
+=======
+    install -D -m 777 ${launcher} $out/bin/sparrow
+    substituteAllInPlace $out/bin/sparrow
+    substituteInPlace $out/bin/sparrow --subst-var-by jdkModules ${jdk-modules}
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     mkdir -p $out/share/icons
     ln -s ${sparrow-icons}/hicolor $out/share/icons
@@ -222,6 +252,9 @@ stdenv.mkDerivation rec {
     license = licenses.asl20;
     maintainers = with maintainers; [ emmanuelrosa _1000101 ];
     platforms = [ "x86_64-linux" ];
+<<<<<<< HEAD
     mainProgram = "sparrow-desktop";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

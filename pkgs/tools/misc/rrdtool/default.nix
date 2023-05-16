@@ -1,5 +1,9 @@
 { fetchurl, lib, stdenv, gettext, perl, pkg-config, libxml2, pango, cairo, groff
+<<<<<<< HEAD
 , tcl, darwin }:
+=======
+, tcl-8_5, darwin }:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 perl.pkgs.toPerlModule (stdenv.mkDerivation rec {
   pname = "rrdtool";
@@ -13,7 +17,11 @@ perl.pkgs.toPerlModule (stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ gettext perl libxml2 pango cairo groff ]
+<<<<<<< HEAD
     ++ lib.optionals stdenv.isDarwin [ tcl darwin.apple_sdk.frameworks.ApplicationServices ];
+=======
+    ++ lib.optionals stdenv.isDarwin [ tcl-8_5 darwin.apple_sdk.frameworks.ApplicationServices ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   postInstall = ''
     # for munin and rrdtool support

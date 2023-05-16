@@ -71,7 +71,11 @@ in rec {
     yarnFlags ? [ ],
     ignoreScripts ? true,
     nodejs ? inputs.nodejs,
+<<<<<<< HEAD
     yarn ? inputs.yarn.override { inherit nodejs; },
+=======
+    yarn ? inputs.yarn.override { nodejs = nodejs; },
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     pkgConfig ? {},
     preBuild ? "",
     postBuild ? "",
@@ -88,7 +92,11 @@ in rec {
           (key: pkgConfig.${key}.buildInputs or [])
           (builtins.attrNames pkgConfig);
 
+<<<<<<< HEAD
       postInstall = builtins.map (key:
+=======
+      postInstall = (builtins.map (key:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         if (pkgConfig.${key} ? postInstall) then
           ''
             for f in $(find -L -path '*/node_modules/${key}' -type d); do
@@ -97,7 +105,11 @@ in rec {
           ''
         else
           ""
+<<<<<<< HEAD
       ) (builtins.attrNames pkgConfig);
+=======
+      ) (builtins.attrNames pkgConfig));
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
       # build-time JSON generation to avoid IFD
       # see https://nixos.wiki/wiki/Import_From_Derivation
@@ -180,7 +192,11 @@ in rec {
     packageJSON ? src + "/package.json",
     yarnLock ? src + "/yarn.lock",
     nodejs ? inputs.nodejs,
+<<<<<<< HEAD
     yarn ? inputs.yarn.override { inherit nodejs; },
+=======
+    yarn ? inputs.yarn.override { nodejs = nodejs; },
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     packageOverrides ? {},
     ...
   }@attrs:
@@ -254,7 +270,11 @@ in rec {
     yarnNix ? mkYarnNix { inherit yarnLock; },
     offlineCache ? importOfflineCache yarnNix,
     nodejs ? inputs.nodejs,
+<<<<<<< HEAD
     yarn ? inputs.yarn.override { inherit nodejs; },
+=======
+    yarn ? inputs.yarn.override { nodejs = nodejs; },
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     yarnFlags ? [ ],
     yarnPreBuild ? "",
     yarnPostBuild ? "",
@@ -267,8 +287,13 @@ in rec {
   }@attrs:
     let
       package = lib.importJSON packageJSON;
+<<<<<<< HEAD
       pname = attrs.pname or package.name;
       safeName = reformatPackageName package.name;
+=======
+      pname = package.name;
+      safeName = reformatPackageName pname;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       version = attrs.version or package.version;
       baseName = unlessNull name "${safeName}-${version}";
 
@@ -278,15 +303,25 @@ in rec {
       );
 
       deps = mkYarnModules {
+<<<<<<< HEAD
         pname = package.name;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         name = "${safeName}-modules-${version}";
         preBuild = yarnPreBuild;
         postBuild = yarnPostBuild;
         workspaceDependencies = workspaceDependenciesTransitive;
+<<<<<<< HEAD
         inherit packageJSON version yarnLock offlineCache nodejs yarn yarnFlags pkgConfig packageResolutions;
       };
 
       publishBinsFor_ = unlessNull publishBinsFor [ package.name ];
+=======
+        inherit packageJSON pname version yarnLock offlineCache nodejs yarn yarnFlags pkgConfig packageResolutions;
+      };
+
+      publishBinsFor_ = unlessNull publishBinsFor [pname];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
       linkDirFunction = ''
         linkDirToDirLinks() {
@@ -308,17 +343,29 @@ in rec {
       workspaceDependencyCopy = lib.concatMapStringsSep "\n"
         (dep: ''
           # ensure any existing scope directory is not a symlink
+<<<<<<< HEAD
           linkDirToDirLinks "$(dirname node_modules/${dep.package.name})"
           mkdir -p "deps/${dep.package.name}"
           tar -xf "${dep}/tarballs/${dep.name}.tgz" --directory "deps/${dep.package.name}" --strip-components=1
           if [ ! -e "deps/${dep.package.name}/node_modules" ]; then
             ln -s "${deps}/deps/${dep.package.name}/node_modules" "deps/${dep.package.name}/node_modules"
+=======
+          linkDirToDirLinks "$(dirname node_modules/${dep.pname})"
+          mkdir -p "deps/${dep.pname}"
+          tar -xf "${dep}/tarballs/${dep.name}.tgz" --directory "deps/${dep.pname}" --strip-components=1
+          if [ ! -e "deps/${dep.pname}/node_modules" ]; then
+            ln -s "${deps}/deps/${dep.pname}/node_modules" "deps/${dep.pname}/node_modules"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           fi
         '')
         workspaceDependenciesTransitive;
 
     in stdenv.mkDerivation (builtins.removeAttrs attrs ["yarnNix" "pkgConfig" "workspaceDependencies" "packageResolutions"] // {
+<<<<<<< HEAD
       inherit pname version src;
+=======
+      inherit src version pname;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
       name = baseName;
 
@@ -336,6 +383,7 @@ in rec {
           fi
         done
 
+<<<<<<< HEAD
         # move convent of . to ./deps/${package.name}
         mv $PWD $NIX_BUILD_TOP/temp
         mkdir -p "$PWD/deps/${package.name}"
@@ -344,19 +392,38 @@ in rec {
         cd $PWD
 
         ln -s ${deps}/deps/${package.name}/node_modules "deps/${package.name}/node_modules"
+=======
+        # move convent of . to ./deps/${pname}
+        mv $PWD $NIX_BUILD_TOP/temp
+        mkdir -p "$PWD/deps/${pname}"
+        rm -fd "$PWD/deps/${pname}"
+        mv $NIX_BUILD_TOP/temp "$PWD/deps/${pname}"
+        cd $PWD
+
+        ln -s ${deps}/deps/${pname}/node_modules "deps/${pname}/node_modules"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
         cp -r $node_modules node_modules
         chmod -R +w node_modules
 
         ${linkDirFunction}
 
+<<<<<<< HEAD
         linkDirToDirLinks "$(dirname node_modules/${package.name})"
         ln -s "deps/${package.name}" "node_modules/${package.name}"
+=======
+        linkDirToDirLinks "$(dirname node_modules/${pname})"
+        ln -s "deps/${pname}" "node_modules/${pname}"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
         ${workspaceDependencyCopy}
 
         # Help yarn commands run in other phases find the package
+<<<<<<< HEAD
         echo "--cwd deps/${package.name}" > .yarnrc
+=======
+        echo "--cwd deps/${pname}" > .yarnrc
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         runHook postConfigure
       '';
 
@@ -365,11 +432,19 @@ in rec {
       installPhase = attrs.installPhase or ''
         runHook preInstall
 
+<<<<<<< HEAD
         mkdir -p $out/{bin,libexec/${package.name}}
         mv node_modules $out/libexec/${package.name}/node_modules
         mv deps $out/libexec/${package.name}/deps
 
         node ${./internal/fixup_bin.js} $out/bin $out/libexec/${package.name}/node_modules ${lib.concatStringsSep " " publishBinsFor_}
+=======
+        mkdir -p $out/{bin,libexec/${pname}}
+        mv node_modules $out/libexec/${pname}/node_modules
+        mv deps $out/libexec/${pname}/deps
+
+        node ${./internal/fixup_bin.js} $out/bin $out/libexec/${pname}/node_modules ${lib.concatStringsSep " " publishBinsFor_}
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
         runHook postInstall
       '';
@@ -379,13 +454,21 @@ in rec {
       distPhase = attrs.distPhase or ''
         # pack command ignores cwd option
         rm -f .yarnrc
+<<<<<<< HEAD
         cd $out/libexec/${package.name}/deps/${package.name}
+=======
+        cd $out/libexec/${pname}/deps/${pname}
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         mkdir -p $out/tarballs/
         yarn pack --offline --ignore-scripts --filename $out/tarballs/${baseName}.tgz
       '';
 
       passthru = {
+<<<<<<< HEAD
         inherit package packageJSON deps;
+=======
+        inherit pname package packageJSON deps;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         workspaceDependencies = workspaceDependenciesTransitive;
       } // (attrs.passthru or {});
 
@@ -404,7 +487,11 @@ in rec {
 
         mkFilter = { dirsToInclude, filesToInclude, root }: path: type:
           let
+<<<<<<< HEAD
             inherit (lib) elem elemAt splitString;
+=======
+            inherit (pkgs.lib) any flip elem hasSuffix hasPrefix elemAt splitString;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
             subpath = elemAt (splitString "${toString root}/" path) 1;
             spdir = elemAt (splitString "/" subpath) 0;

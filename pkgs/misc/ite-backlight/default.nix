@@ -7,7 +7,11 @@
 , boost
 , fetchFromGitHub
 , pkg-config
+<<<<<<< HEAD
 , microsoft-gsl
+=======
+, microsoft_gsl
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 stdenv.mkDerivation rec {
@@ -25,7 +29,11 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     meson
+<<<<<<< HEAD
     microsoft-gsl
+=======
+    microsoft_gsl
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   buildInputs = [

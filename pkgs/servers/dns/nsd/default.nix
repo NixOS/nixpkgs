@@ -16,11 +16,19 @@
 
 stdenv.mkDerivation rec {
   pname = "nsd";
+<<<<<<< HEAD
   version = "4.7.0";
 
   src = fetchurl {
     url = "https://www.nlnetlabs.nl/downloads/${pname}/${pname}-${version}.tar.gz";
     sha256 = "sha256-j6ykTima0pFfoACIerFjJjHqaHCcYs418RC/5yHs8hQ=";
+=======
+  version = "4.6.1";
+
+  src = fetchurl {
+    url = "https://www.nlnetlabs.nl/downloads/${pname}/${pname}-${version}.tar.gz";
+    sha256 = "sha256-P2CjoT7D9o6Ev6fhna/2Y8grzx3pbk9T8iRlJedzono=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   prePatch = ''

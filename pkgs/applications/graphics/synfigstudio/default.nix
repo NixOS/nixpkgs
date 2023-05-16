@@ -39,7 +39,11 @@ let
     pname = "ETL";
     inherit version src;
 
+<<<<<<< HEAD
     sourceRoot = "${src.name}/ETL";
+=======
+    sourceRoot = "source/ETL";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     nativeBuildInputs = [
       pkg-config
@@ -54,7 +58,11 @@ let
     pname = "synfig";
     inherit version src;
 
+<<<<<<< HEAD
     sourceRoot = "${src.name}/synfig-core";
+=======
+    sourceRoot = "source/synfig-core";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     configureFlags = [
       "--with-boost=${boost.dev}"
@@ -89,7 +97,11 @@ stdenv.mkDerivation {
   pname = "synfigstudio";
   inherit version src;
 
+<<<<<<< HEAD
   sourceRoot = "${src.name}/synfig-studio";
+=======
+  sourceRoot = "source/synfig-studio";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   postPatch = ''
     patchShebangs images/splash_screen_development.sh

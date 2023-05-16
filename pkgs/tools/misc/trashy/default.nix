@@ -27,7 +27,10 @@ rustPlatform.buildRustPackage rec {
     license = with licenses; [ asl20 /* or */ mit ];
     maintainers = with maintainers; [ oberblastmeister ];
     mainProgram = "trash";
+<<<<<<< HEAD
     # darwin is unsupported due to https://github.com/Byron/trash-rs/issues/8
     platforms = platforms.linux;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

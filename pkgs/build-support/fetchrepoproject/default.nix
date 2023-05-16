@@ -60,7 +60,11 @@ in stdenvNoCC.mkDerivation {
     ${optionalString (local_manifests != []) ''
       mkdir .repo/local_manifests
       for local_manifest in ${concatMapStringsSep " " toString local_manifests}; do
+<<<<<<< HEAD
         cp $local_manifest .repo/local_manifests/$(stripHash $local_manifest)
+=======
+        cp $local_manifest .repo/local_manifests/$(stripHash $local_manifest; echo $strippedName)
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       done
     ''}
 

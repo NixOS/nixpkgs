@@ -62,7 +62,13 @@ in {
         frontend = {};
 
         # include some popular integrations, that absolutely shouldn't break
+<<<<<<< HEAD
         knx = {};
+=======
+        esphome = {};
+        knx = {};
+        matter = {};
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         shelly = {};
         zha = {};
 
@@ -197,7 +203,11 @@ in {
 
     with subtest("Check that new components get setup after restart"):
         journal = get_journal_since(cursor)
+<<<<<<< HEAD
         for domain in ["backup"]:
+=======
+        for domain in ["esphome"]:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
             assert f"Setup of domain {domain} took" in journal, f"{domain} setup missing"
 
     with subtest("Check that no errors were logged"):

@@ -1,5 +1,9 @@
 /* An environment for development that bundles ruby, bundler and bundix
+<<<<<<< HEAD
    together. This avoids version conflicts where each is using a different
+=======
+   together. This avoids version conflicts where each is using a diferent
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
    version of each-other.
 */
 { buildEnv, ruby, bundler, bundix }:

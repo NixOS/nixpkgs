@@ -1,4 +1,9 @@
+<<<<<<< HEAD
 { lib
+=======
+{ stdenv
+, lib
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , fetchPypi
 , buildPythonPackage
 , pythonOlder
@@ -11,14 +16,22 @@
 
 buildPythonPackage rec {
   pname = "browser-cookie3";
+<<<<<<< HEAD
   version = "0.19.1";
+=======
+  version = "0.18.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
+<<<<<<< HEAD
     hash = "sha256-MDGtFLlrR+8eTIVF8vRj4QrYRO+DTc0Ova42HjHGEZo=";
+=======
+    hash = "sha256-bSP6likSwEbxN4S9qbJmPcs8joc5e10FiqVL9gE7ni8=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [
@@ -42,5 +55,9 @@ buildPythonPackage rec {
     changelog = "https://github.com/borisbabic/browser_cookie3/blob/master/CHANGELOG.md";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ borisbabic ];
+<<<<<<< HEAD
+=======
+    broken = stdenv.isDarwin;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

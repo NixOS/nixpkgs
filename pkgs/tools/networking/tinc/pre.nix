@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 { lib, stdenv, fetchFromGitHub, autoreconfHook, texinfo, ncurses, readline, zlib, lzo, openssl }:
+=======
+{ lib, stdenv, fetchFromGitHub, fetchpatch, autoreconfHook, texinfo, ncurses, readline, zlib, lzo, openssl }:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 stdenv.mkDerivation rec {
   pname = "tinc";

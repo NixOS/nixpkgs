@@ -5,16 +5,27 @@
 
 buildGoModule rec {
   pname = "zarf";
+<<<<<<< HEAD
   version = "0.29.1";
+=======
+  version = "0.26.3";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "defenseunicorns";
     repo = "zarf";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-m/eyy3MpHHlxlWU9Y7tsQw5jGGZIKCvBkIgoRmvecBI=";
   };
 
   vendorHash = "sha256-p1QLNbkNlIwqHzLjGX5YGC2Xxu0nAjmMfGwKXhi9XkU=";
+=======
+    hash = "sha256-gJpXdT0Uj+7UecPPuRphbtbh8v80UztKmiOAP+U7Tpc=";
+  };
+
+  vendorHash = "sha256-5k2NnQ18bL0v7YHTvw2nz5H5n5DQOmozkUhyf97eKl8=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   proxyVendor = true;
 
   preBuild = ''

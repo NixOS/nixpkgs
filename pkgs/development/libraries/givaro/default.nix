@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 { lib
 , stdenv
 , fetchFromGitHub
@@ -8,6 +9,9 @@
 , autoreconfHook
 , gmpxx
 }:
+=======
+{ lib, stdenv, fetchFromGitHub, automake, autoconf, libtool, autoreconfHook, gmpxx }:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 stdenv.mkDerivation rec {
   pname = "givaro";
   version = "4.2.0";
@@ -17,6 +21,7 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     sha256 = "sha256-KR0WJc0CSvaBnPRott4hQJhWNBb/Wi6MIhcTExtVobQ=";
   };
+<<<<<<< HEAD
   patches = [
     # Pull upstream fix for gcc-13:
     #   https://github.com/linbox-team/givaro/pull/218
@@ -26,6 +31,8 @@ stdenv.mkDerivation rec {
       hash = "sha256-aAA5o8Va10v0Pqgcpx7qM0TAZiNQgXoR6N9xecj7tDA=";
     })
   ];
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   enableParallelBuilding = true;
 

@@ -32,7 +32,11 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/Koihik/LuaFormatter";
     license = licenses.asl20;
     platforms = platforms.all;
+<<<<<<< HEAD
     maintainers = with maintainers; [ figsoda ];
+=======
+    maintainers = with maintainers; [ figsoda SuperSandro2000 ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     mainProgram = "lua-format";
   };
 }

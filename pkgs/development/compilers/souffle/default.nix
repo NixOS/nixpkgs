@@ -10,17 +10,33 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "souffle";
+<<<<<<< HEAD
   version = "2.4";
+=======
+  version = "2.3";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner  = "souffle-lang";
     repo   = "souffle";
     rev    = version;
+<<<<<<< HEAD
     sha256 = "sha256-5g2Ikbfm5nQrsgGntZZ/VbjqSDOj0AP/mnH1nW2b4co=";
+=======
+    sha256 = "sha256-wdTBSmyA2I+gaSV577NNKA2oY2fdVTGmvV7h15NY1tU=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   patches = [
     ./threads.patch
+<<<<<<< HEAD
+=======
+    (fetchpatch {
+      name = "missing-override.patch";
+      url = "https://github.com/souffle-lang/souffle/commit/da2d778f0cca94f206686546fa56b9ffc738ad75.patch";
+      sha256 = "Oefm3vRRwOyom94oGSOK2w9m23gkbJ++9gcWrdLlkyk=";
+    })
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   hardeningDisable = lib.optionals stdenv.isDarwin [ "strictoverflow" ];

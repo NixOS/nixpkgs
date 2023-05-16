@@ -3,6 +3,10 @@
   "arcmenu@arcmenu.com" = callPackage ./arcmenu { };
   "argos@pew.worldwidemann.com" = callPackage ./argos { };
   "clock-override@gnomeshell.kryogenix.org" = callPackage ./clock-override { };
+<<<<<<< HEAD
+=======
+  "dash-to-dock@micxgx.gmail.com" = callPackage ./dash-to-dock { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   "drop-down-terminal@gs-extensions.zzrough.org" = callPackage ./drop-down-terminal { };
   "EasyScreenCast@iacopodeenosee.gmail.com" = callPackage ./EasyScreenCast { };
   "gsconnect@andyholmes.github.io" = callPackage ./gsconnect { };

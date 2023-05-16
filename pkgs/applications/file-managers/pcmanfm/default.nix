@@ -39,6 +39,9 @@ stdenv.mkDerivation rec {
     description = "File manager with GTK interface";
     maintainers = [ maintainers.ttuegel ];
     platforms = platforms.linux;
+<<<<<<< HEAD
     mainProgram = "pcmanfm";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

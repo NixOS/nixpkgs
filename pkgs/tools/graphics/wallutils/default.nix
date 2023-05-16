@@ -13,16 +13,27 @@
 
 buildGoModule rec {
   pname = "wallutils";
+<<<<<<< HEAD
   version = "5.12.7";
+=======
+  version = "5.12.5";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "xyproto";
     repo = "wallutils";
     rev = version;
+<<<<<<< HEAD
     hash = "sha256-7UqZr/DEiHDgg3XwvsKk/gc6FNtLh3aj5NWVz/A3J4o=";
   };
 
   vendorHash = null;
+=======
+    hash = "sha256-qC+AF+NFXSrUZAYaiFPwvfZtsAGhKE4XFDOUcfXUAbM=";
+  };
+
+  vendorSha256 = null;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   patches = [
     ./000-add-nixos-dirs-to-default-wallpapers.patch

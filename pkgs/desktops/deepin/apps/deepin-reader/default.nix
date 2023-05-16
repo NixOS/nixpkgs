@@ -17,17 +17,25 @@
 , openjpeg
 , djvulibre
 , qtbase
+<<<<<<< HEAD
 , gtest
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 stdenv.mkDerivation rec {
   pname = "deepin-reader";
+<<<<<<< HEAD
   version = "6.0.2";
+=======
+  version = "5.10.29";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
+<<<<<<< HEAD
     hash = "sha256-69NCxa20wp/tyyGGH/FbHhZ83LECbJWAzaLRo7iYreA=";
   };
 
@@ -37,6 +45,16 @@ stdenv.mkDerivation rec {
       --replace "SUBDIRS += htmltopdf" " "
     substituteInPlace reader/document/Model.cpp \
       --replace "/usr/lib/deepin-reader/htmltopdf" "htmltopdf"
+=======
+    sha256 = "sha256-IpgmTmnrPWc9EFZVM+S2nFxdpPjbgXqEWUnK/O9FmUg=";
+  };
+
+  patches = [ ./use-pkg-config.diff ];
+
+  postPatch = ''
+    substituteInPlace reader/{reader.pro,document/Model.cpp} htmltopdf/htmltopdf.pro 3rdparty/deepin-pdfium/src/src.pro \
+      --replace "/usr" "$out"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '';
 
   nativeBuildInputs = [
@@ -58,7 +76,10 @@ stdenv.mkDerivation rec {
     libspectre
     djvulibre
     openjpeg
+<<<<<<< HEAD
     gtest
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   qmakeFlags = [

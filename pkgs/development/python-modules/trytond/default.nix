@@ -25,14 +25,22 @@
 
 buildPythonPackage rec {
   pname = "trytond";
+<<<<<<< HEAD
   version = "6.8.3";
+=======
+  version = "6.6.7";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
+<<<<<<< HEAD
     hash = "sha256-n0Fdu2IjdyAt9qJ40l9kVRbV8NMXU1R5aR+9rmXEgC8=";
+=======
+    hash = "sha256-pnFsIv7Rl6NHUV0ETqaN7UYQuRlV3G68F5p4gzHzihQ=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [

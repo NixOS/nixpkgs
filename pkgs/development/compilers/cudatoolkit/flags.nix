@@ -11,7 +11,11 @@ let
   inherit (lib) attrsets lists strings trivial versions;
 
   # Flags are determined based on your CUDA toolkit by default.  You may benefit
+<<<<<<< HEAD
   # from improved performance, reduced file size, or greater hardware support by
+=======
+  # from improved performance, reduced file size, or greater hardware suppport by
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   # passing a configuration based on your specific GPU environment.
   #
   # config.cudaCapabilities :: List Capability

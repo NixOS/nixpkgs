@@ -27,7 +27,12 @@
 , # If enabled, use -fPIC when compiling static libs.
   enableRelocatedStaticLibs ? stdenv.targetPlatform != stdenv.hostPlatform
 
+<<<<<<< HEAD
 , enableProfiledLibs ? true
+=======
+  # aarch64 outputs otherwise exceed 2GB limit
+, enableProfiledLibs ? !stdenv.targetPlatform.isAarch64
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 , # Whether to build dynamic libs for the standard library (on the target
   # platform). Static libs are always built.

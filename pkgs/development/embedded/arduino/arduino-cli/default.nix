@@ -4,13 +4,21 @@ let
 
   pkg = buildGoModule rec {
     pname = "arduino-cli";
+<<<<<<< HEAD
     version = "0.33.0";
+=======
+    version = "0.32.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     src = fetchFromGitHub {
       owner = "arduino";
       repo = pname;
       rev = version;
+<<<<<<< HEAD
       hash = "sha256-iwVxaNkz4AgLXPRjzD3vNJ7k+whWvpQUl66nSmRFW+U=";
+=======
+      hash = "sha256-Em8L2ZYS1rgW46/MP5hs/EBWGcb5GP3EDEzWi072F/I=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
 
     nativeBuildInputs = [
@@ -23,7 +31,11 @@ let
 
     subPackages = [ "." ];
 
+<<<<<<< HEAD
     vendorHash = "sha256-efZnuxXbC31u7FciULGYvpaWiCm9boQRLUpxW9evyJQ=";
+=======
+    vendorSha256 = "sha256-+5Cj6wdX25fK+Y9czTwRRqCdY+0iarvii9nD3QMDh+c=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     postPatch = let
       skipTests = [

@@ -2,10 +2,18 @@
 , klipper
 , python3
 , gnumake
+<<<<<<< HEAD
+=======
+, pkgsCross
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }: writeShellApplication {
   name = "klipper-genconf";
   runtimeInputs = [
     python3
+<<<<<<< HEAD
+=======
+    pkgsCross.avr.stdenv.cc
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     gnumake
   ];
   text = ''

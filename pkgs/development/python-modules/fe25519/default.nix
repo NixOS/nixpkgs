@@ -7,24 +7,38 @@
 , pytestCheckHook
 , pythonOlder
 , setuptools
+<<<<<<< HEAD
 , wheel
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 buildPythonPackage rec {
   pname = "fe25519";
+<<<<<<< HEAD
   version = "1.5.0";
+=======
+  version = "1.4.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
+<<<<<<< HEAD
     hash = "sha256-la+17tPHjceMTe7Wk8DGVaSptk8XJa+l7GTeqLIFDvs=";
+=======
+    hash = "sha256-VwCw/sS8Pzhscoa6yCRGbB9X+CtRVn8xyBEpKfGyhhY=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [
     setuptools
+<<<<<<< HEAD
     wheel
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   propagatedBuildInputs = [

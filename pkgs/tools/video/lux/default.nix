@@ -2,12 +2,20 @@
 
 buildGoModule rec {
   pname = "lux";
+<<<<<<< HEAD
   version = "0.19.0";
+=======
+  version = "0.18.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   src = fetchFromGitHub {
     owner = "iawia002";
     repo = "lux";
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-klm1985qBErFfYIWPjr1/n6nYr/jA9dbrDMfw4bf1tM=";
+=======
+    sha256 = "sha256-A3DDKpoaZlDUpafAGs5zCknhTeCuwMPnyBHtxke0Bi8=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ makeWrapper ];

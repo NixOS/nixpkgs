@@ -6,7 +6,11 @@ stdenv.mkDerivation {
   pname = "tinywl";
   inherit (wlroots) version src;
 
+<<<<<<< HEAD
   sourceRoot = "${wlroots.src.name}/tinywl";
+=======
+  sourceRoot = "source/tinywl";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nativeBuildInputs = [ pkg-config wayland-scanner ];
   buildInputs = [ libxkbcommon pixman udev wayland wayland-protocols wlroots ];

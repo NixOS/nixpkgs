@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 { stdenv, lib, fetchFromGitHub, glib, gjs, typescript }:
+=======
+{ stdenv, lib, fetchFromGitHub, glib, nodePackages, gjs }:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 stdenv.mkDerivation rec {
   pname = "gnome-shell-extension-pop-shell";
@@ -11,7 +15,11 @@ stdenv.mkDerivation rec {
     hash = "sha256-w6EBHKWJ4L3ZRVmFqZhCqHGumbElQXk9udYSnwjIl6c=";
   };
 
+<<<<<<< HEAD
   nativeBuildInputs = [ glib gjs typescript ];
+=======
+  nativeBuildInputs = [ glib nodePackages.typescript gjs ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   buildInputs = [ gjs ];
 

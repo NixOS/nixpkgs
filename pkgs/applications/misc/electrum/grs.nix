@@ -9,11 +9,19 @@
 }:
 
 let
+<<<<<<< HEAD
   version = "4.4.4";
 
   libsecp256k1_name =
     if stdenv.isLinux then "libsecp256k1.so.{v}"
     else if stdenv.isDarwin then "libsecp256k1.{v}.dylib"
+=======
+  version = "4.3.1";
+
+  libsecp256k1_name =
+    if stdenv.isLinux then "libsecp256k1.so.0"
+    else if stdenv.isDarwin then "libsecp256k1.0.dylib"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     else "libsecp256k1${stdenv.hostPlatform.extensions.sharedLibrary}";
 
   libzbar_name =
@@ -31,7 +39,11 @@ python3.pkgs.buildPythonApplication {
     owner = "Groestlcoin";
     repo = "electrum-grs";
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     sha256 = "0fl01qdvb1z6l6kwipj1lj0qmjk3mzw25wv7yh5j1hh1f5lng0s8";
+=======
+    sha256 = "1h9r32wdn0p7br36r719x96c8gay83dijw80y2ks951mam16mkkb";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = lib.optionals enableQt [ wrapQtAppsHook ];
@@ -55,7 +67,10 @@ python3.pkgs.buildPythonApplication {
     tlslite-ng
     # plugins
     btchip-python
+<<<<<<< HEAD
     ledger-bitcoin
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     ckcc-protocol
     keepkey
     trezor
@@ -67,7 +82,11 @@ python3.pkgs.buildPythonApplication {
   postPatch = ''
     # make compatible with protobuf4 by easing dependencies ...
     substituteInPlace ./contrib/requirements/requirements.txt \
+<<<<<<< HEAD
       --replace "protobuf>=3.20,<4" "protobuf>=3.20"
+=======
+      --replace "protobuf>=3.12,<4" "protobuf>=3.12"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     # ... and regenerating the paymentrequest_pb2.py file
     protoc --python_out=. electrum_grs/paymentrequest.proto
 

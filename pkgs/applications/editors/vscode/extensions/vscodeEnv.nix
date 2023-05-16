@@ -19,13 +19,21 @@
 , keybindings                      ? {}
 , createKeybindingsIfDoesNotExists ? true
 , user-data-dir ? ''"''${TMP}''${name}"/vscode-data-dir''
+<<<<<<< HEAD
 # if file exists will use it and import the extensions in it into this derivation else will use empty extensions list
+=======
+# if file exists will use it and import the extensions in it into this dervation else will use empty extensions list
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 # this file will be created/updated by vscodeExts2nix when vscode exists
 , mutableExtensionsFile
 }:
 let
   mutableExtensionsFilePath = toString mutableExtensionsFile;
+<<<<<<< HEAD
   mutableExtensions = lib.optionals (builtins.pathExists mutableExtensionsFile) (import mutableExtensionsFilePath);
+=======
+  mutableExtensions = lib.optionals builtins.pathExists mutableExtensionsFile (import mutableExtensionsFilePath);
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   vscodeWithConfiguration = import ./vscodeWithConfiguration.nix {
     inherit lib writeShellScriptBin extensionsFromVscodeMarketplace;
     vscodeDefault = vscode;

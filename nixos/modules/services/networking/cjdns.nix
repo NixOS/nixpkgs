@@ -239,7 +239,11 @@ in
       after = [ "network-online.target" ];
       bindsTo = [ "network-online.target" ];
 
+<<<<<<< HEAD
       preStart = optionalString (cfg.confFile == null) ''
+=======
+      preStart = if cfg.confFile != null then "" else ''
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         [ -e /etc/cjdns.keys ] && source /etc/cjdns.keys
 
         if [ -z "$CJDNS_PRIVATE_KEY" ]; then

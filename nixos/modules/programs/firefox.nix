@@ -53,7 +53,11 @@ in
     };
 
     preferences = mkOption {
+<<<<<<< HEAD
       type = with types; attrsOf (oneOf [ bool int str ]);
+=======
+      type = with types; attrsOf (oneOf [ bool int string ]);
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       default = { };
       description = mdDoc ''
         Preferences to set from `about:config`.
@@ -233,6 +237,10 @@ in
     nixpkgs.config.firefox = {
       enableBrowserpass = nmh.browserpass;
       enableBukubrow = nmh.bukubrow;
+<<<<<<< HEAD
+=======
+      enableEUWebID = nmh.euwebid;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       enableTridactylNative = nmh.tridactyl;
       enableUgetIntegrator = nmh.ugetIntegrator;
       enableFXCastBridge = nmh.fxCast;

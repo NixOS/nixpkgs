@@ -8,10 +8,17 @@ in rebar3Relx rec {
   releaseType = "escript";
   # The package name "elvis" is already taken
   pname = "elvis-erlang";
+<<<<<<< HEAD
   version = "3.0.1";
   src = fetchFromGitHub {
     inherit owner repo;
     sha256 = "vXCsGLTpqoKBAN2K35Zl9W82uKbZAFFFzpXh+HTEAwA=";
+=======
+  version = "1.1.0";
+  src = fetchFromGitHub {
+    inherit owner repo;
+    sha256 = "6vNxr3AYpFuXaIVH9bWw7K5KiF1swfI+CSI43RoMQEA=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     rev = version;
   };
   beamDeps = builtins.attrValues (import ./rebar-deps.nix {

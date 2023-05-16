@@ -10,13 +10,21 @@
 
 stdenv.mkDerivation rec {
   pname = "freeciv";
+<<<<<<< HEAD
   version = "3.0.8";
+=======
+  version = "3.0.4";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "freeciv";
     repo = "freeciv";
     rev = "R${lib.replaceStrings [ "." ] [ "_" ] version}";
+<<<<<<< HEAD
     hash = "sha256-6DWVou4d1oAOlhHb2A2vxR4Fy+1q7Xz9w9VK9rEzZxA=";
+=======
+    sha256 = "sha256-hhX+aM/NHdqOM0qSKSJyW2FAWTsyAHrjaNhxtP2vbVA=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   postPatch = ''
@@ -24,9 +32,12 @@ stdenv.mkDerivation rec {
       substituteInPlace $f \
         --replace '/usr/bin/env python3' ${python3.interpreter}
     done
+<<<<<<< HEAD
     for f in bootstrap/*.sh; do
       patchShebangs $f
     done
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '';
 
   nativeBuildInputs = [ autoreconfHook pkg-config ]

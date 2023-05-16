@@ -10,7 +10,11 @@
 
 buildPythonPackage rec {
   pname = "nomadnet";
+<<<<<<< HEAD
   version = "0.3.6";
+=======
+  version = "0.3.5";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -19,7 +23,11 @@ buildPythonPackage rec {
     owner = "markqvist";
     repo = "NomadNet";
     rev = "refs/tags/${version}";
+<<<<<<< HEAD
     hash = "sha256-3b6uwojekWthH5AsAVfS/ue+yAoIMac1LQff1mrM9PM=";
+=======
+    hash = "sha256-SPQ/3ntdD+EBW2YZJKfg2lornlg1ktnvTd1PNAqNSIg=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [

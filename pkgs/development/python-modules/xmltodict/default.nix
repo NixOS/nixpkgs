@@ -26,6 +26,10 @@ buildPythonPackage rec {
     description = "Makes working with XML feel like you are working with JSON";
     homepage = "https://github.com/martinblech/xmltodict";
     license = licenses.mit;
+<<<<<<< HEAD
     maintainers = with maintainers; [ ];
+=======
+    maintainers = with maintainers; [ SuperSandro2000 ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

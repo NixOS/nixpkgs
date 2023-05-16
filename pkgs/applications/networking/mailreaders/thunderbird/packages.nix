@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 { stdenv, lib, buildMozillaMach, callPackage, fetchurl, fetchpatch, nixosTests, icu, fetchpatch2 }:
 
 rec {
@@ -6,12 +7,26 @@ rec {
   thunderbird-102 = (buildMozillaMach rec {
     pname = "thunderbird";
     version = "102.14.0";
+=======
+{ stdenv, lib, buildMozillaMach, callPackage, fetchurl, fetchpatch, nixosTests }:
+
+rec {
+  thunderbird = thunderbird-102;
+
+  thunderbird-102 = (buildMozillaMach rec {
+    pname = "thunderbird";
+    version = "102.10.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     application = "comm/mail";
     applicationName = "Mozilla Thunderbird";
     binaryName = pname;
     src = fetchurl {
       url = "mirror://mozilla/thunderbird/releases/${version}/source/thunderbird-${version}.source.tar.xz";
+<<<<<<< HEAD
       sha512 = "4ae3f216833aec55421f827d55bc1b5fc2f0ad4fefecb27724a5be3318c351df24d30a4897b924e733ed2e3995be284b6d135049d46001143fb1c961fefc1830";
+=======
+      sha512 = "dfe62f0d8b7750e54793e32e78fb0784c7c8e39b95dc4c03ac393e51195ec8883edc2536afc2cf2011005312a40805f7dc617c90bfb4a77d22393f1d9b719b23";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
     extraPatches = [
       # The file to be patched is different from firefox's `no-buildconfig-ffx90.patch`.
@@ -22,7 +37,10 @@ rec {
       changelog = "https://www.thunderbird.net/en-US/thunderbird/${version}/releasenotes/";
       description = "A full-featured e-mail client";
       homepage = "https://thunderbird.net/";
+<<<<<<< HEAD
       mainProgram = "thunderbird";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       maintainers = with maintainers; [ eelco lovesegfault pierron vcunat ];
       platforms = platforms.unix;
       badPlatforms = platforms.darwin;
@@ -40,6 +58,7 @@ rec {
 
     pgoSupport = false; # console.warn: feeds: "downloadFeed: network connection unavailable"
   };
+<<<<<<< HEAD
 
   thunderbird-115 = (buildMozillaMach rec {
     pname = "thunderbird";
@@ -89,4 +108,6 @@ rec {
       })];
     });
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }

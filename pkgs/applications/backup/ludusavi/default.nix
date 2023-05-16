@@ -18,16 +18,27 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "ludusavi";
+<<<<<<< HEAD
   version = "0.20.0";
+=======
+  version = "0.17.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "mtkennerly";
     repo = pname;
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-6wwBXgR0jutkM3L7Ihi4qryuOeBRItQTyKn2lNcvfdQ=";
   };
 
   cargoSha256 = "sha256-9ksstWNqc2Rq5fdb4/LLHGMUXQgri9BAo2LlkFl3Irg=";
+=======
+    sha256 = "sha256-LTqorrZ7hp9hFGcQ0rdc/U6st9YraXEftDpH7VEShs8=";
+  };
+
+  cargoSha256 = "sha256-3SijgvIPb+QBAWZaTivw8P5aYjctGfgnVrFYcGl8PyE=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nativeBuildInputs = [
     cmake

@@ -9,11 +9,19 @@
 
 stdenv.mkDerivation rec {
   pname = "guile-ncurses";
+<<<<<<< HEAD
   version = "3.1";
 
   src = fetchurl {
     url = "mirror://gnu/${pname}/${pname}-${version}.tar.gz";
     hash = "sha256-7onozq/Kud0O8/wazJsQ9NIbpLJW0ynYQtYYPmP41zM=";
+=======
+  version = "1.7";
+
+  src = fetchurl {
+    url = "mirror://gnu/${pname}/${pname}-${version}.tar.gz";
+    hash = "sha256-JZPNoQuIl5XayUpm0RdWNg8TT2LZGDOuFoae9crZe5Q=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [
@@ -25,6 +33,7 @@ stdenv.mkDerivation rec {
     ncurses
   ];
 
+<<<<<<< HEAD
   configureFlags = [
     "--with-gnu-filesystem-hierarchy"
   ];
@@ -33,6 +42,16 @@ stdenv.mkDerivation rec {
     for f in $out/${guile.siteDir}/ncurses/**.scm; do \
       substituteInPlace $f \
         --replace "libguile-ncurses" "$out/lib/guile/${guile.effectiveVersion}/libguile-ncurses"; \
+=======
+  preConfigure = ''
+    configureFlags="$configureFlags --with-guilesitedir=$out/share/guile/site"
+  '';
+
+  postFixup = ''
+    for f in $out/share/guile/site/ncurses/**.scm; do \
+      substituteInPlace $f \
+        --replace "libguile-ncurses" "$out/lib/libguile-ncurses"; \
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     done
   '';
 
@@ -50,6 +69,10 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.lgpl3Plus;
     maintainers = with maintainers; [ vyp ];
+<<<<<<< HEAD
     platforms = guile.meta.platforms;
+=======
+    platforms = platforms.gnu ++ platforms.linux;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

@@ -1,6 +1,12 @@
 { lib
 , fetchFromGitHub
 , rustPlatform
+<<<<<<< HEAD
+=======
+, llvm
+, clang
+, libclang
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , pipewire
 , pkg-config
 , bcc
@@ -19,9 +25,16 @@ in rustPlatform.buildRustPackage {
   };
   cargoSha256 = "sha256-hpFDAhOzm4v3lBWwAl/10pS5xvKCScdKsp5wpCeQ+FE=";
 
+<<<<<<< HEAD
   nativeBuildInputs = [ pkg-config rustPlatform.bindgenHook ];
   buildInputs = [ dbus pipewire ];
 
+=======
+  nativeBuildInputs = [ pkg-config llvm clang ];
+  buildInputs = [ dbus pipewire ];
+
+  LIBCLANG_PATH = "${libclang.lib}/lib";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   EXECSNOOP_PATH = "${bcc}/bin/execsnoop";
 
   # tests don't build

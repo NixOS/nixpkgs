@@ -95,7 +95,10 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://looking-glass.io/";
     license = licenses.gpl2Plus;
+<<<<<<< HEAD
     mainProgram = "looking-glass-client";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     maintainers = with maintainers; [ alexbakker babbaj j-brn ];
     platforms = [ "x86_64-linux" ];
   };

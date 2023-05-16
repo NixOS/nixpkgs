@@ -9,6 +9,7 @@ in
 nodePackages.n8n.override {
   nativeBuildInputs = [
     pkgs.nodePackages.node-pre-gyp
+<<<<<<< HEAD
     pkgs.which
   ];
 
@@ -16,6 +17,13 @@ nodePackages.n8n.override {
     pkgs.libkrb5
     pkgs.libmongocrypt
     pkgs.postgresql
+=======
+  ];
+
+  buildInputs = [
+    pkgs.postgresql
+    pkgs.libmongocrypt
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   # Oracle's official package on npm is binary only (WHY?!) and doesn't provide binaries for aarch64.
@@ -40,6 +48,16 @@ nodePackages.n8n.override {
   meta = with lib; {
     description = "Free and source-available fair-code licensed workflow automation tool. Easily automate tasks across different services.";
     maintainers = with maintainers; [ freezeboy k900 ];
+<<<<<<< HEAD
     license = licenses.sustainableUse;
+=======
+    license = {
+      fullName = "Sustainable Use License";
+      url = "https://github.com/n8n-io/n8n/blob/master/LICENSE.md";
+      free = false;
+      # only free to redistribute "for non-commercial purposes"
+      redistributable = false;
+    };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

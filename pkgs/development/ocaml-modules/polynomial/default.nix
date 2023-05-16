@@ -9,7 +9,10 @@ buildDunePackage rec {
   pname = "polynomial";
   version = "0.4.0";
   duneVersion = "3";
+<<<<<<< HEAD
   minimalOCamlVersion = "4.08";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   src = fetchFromGitLab {
     owner = "nomadic-labs";
     repo = "cryptography/ocaml-polynomial";

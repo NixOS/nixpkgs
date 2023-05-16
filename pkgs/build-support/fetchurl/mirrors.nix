@@ -57,8 +57,13 @@
 
   # GCC
   gcc = [
+<<<<<<< HEAD
     "https://mirror.koddos.net/gcc/"
     "https://bigsearcher.com/mirrors/gcc/"
+=======
+    "https://bigsearcher.com/mirrors/gcc/"
+    "https://mirror.koddos.net/gcc/"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "ftp://ftp.nluug.nl/mirror/languages/gcc/"
     "ftp://ftp.fu-berlin.de/unix/languages/gcc/"
     "ftp://ftp.irisa.fr/pub/mirrors/gcc.gnu.org/gcc/"
@@ -175,6 +180,15 @@
     "https://download.qt.io/"
   ];
 
+<<<<<<< HEAD
+=======
+  # Roy marples mirrors
+  roy = [
+    "https://roy.marples.name/downloads/"
+    "https://cflags.cc/roy/"
+  ];
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   # Sage mirrors (https://www.sagemath.org/mirrors.html)
   sageupstream = [
     # Africa (HTTPS)
@@ -263,6 +277,10 @@
     "https://versaweb.dl.sourceforge.net/sourceforge/"
     "https://freefr.dl.sourceforge.net/sourceforge/"
     "https://osdn.dl.sourceforge.net/sourceforge/"
+<<<<<<< HEAD
+=======
+    "https://kent.dl.sourceforge.net/sourceforge/"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   # Steam Runtime

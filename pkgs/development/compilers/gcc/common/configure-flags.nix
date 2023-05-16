@@ -1,7 +1,11 @@
 { lib, stdenv
 , targetPackages
 
+<<<<<<< HEAD
 , withoutTargetLibc, libcCross
+=======
+, crossStageStatic, libcCross
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , threadsCross
 , version
 
@@ -47,7 +51,11 @@ let
   # See https://github.com/NixOS/nixpkgs/pull/209870#issuecomment-1500550903
   disableBootstrap' = disableBootstrap && !langFortran && !langGo;
 
+<<<<<<< HEAD
   crossMingw = targetPlatform != hostPlatform && targetPlatform.isMinGW;
+=======
+  crossMingw = targetPlatform != hostPlatform && targetPlatform.libc == "msvcrt";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   crossDarwin = targetPlatform != hostPlatform && targetPlatform.libc == "libSystem";
 
   targetPrefix = lib.optionalString (stdenv.targetPlatform != stdenv.hostPlatform)
@@ -59,14 +67,22 @@ let
       "--with-as=${if targetPackages.stdenv.cc.bintools.isLLVM then binutils else targetPackages.stdenv.cc.bintools}/bin/${targetPlatform.config}-as"
       "--with-ld=${targetPackages.stdenv.cc.bintools}/bin/${targetPlatform.config}-ld"
     ]
+<<<<<<< HEAD
     ++ (if withoutTargetLibc then [
+=======
+    ++ (if crossStageStatic then [
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       "--disable-libssp"
       "--disable-nls"
       "--without-headers"
       "--disable-threads"
       "--disable-libgomp"
       "--disable-libquadmath"
+<<<<<<< HEAD
       (lib.enableFeature enableShared "shared")
+=======
+      "--disable-shared"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       "--disable-libatomic" # requires libc
       "--disable-decimal-float" # requires libc
       "--disable-libmpx" # requires libc
@@ -112,7 +128,11 @@ let
       "--with-mpfr-lib=${mpfr.out}/lib"
       "--with-mpc=${libmpc}"
     ]
+<<<<<<< HEAD
     ++ lib.optionals (!withoutTargetLibc) [
+=======
+    ++ lib.optionals (!crossStageStatic) [
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       (if libcCross == null
        then "--with-native-system-header-dir=${lib.getDev stdenv.cc.libc}/include"
        else "--with-native-system-header-dir=${lib.getDev libcCross}${libcCross.incdir or "/include"}")
@@ -244,11 +264,14 @@ let
     ++ lib.optionals (langD) [
       "--with-target-system-zlib=yes"
     ]
+<<<<<<< HEAD
     # On mips64-unknown-linux-gnu libsanitizer defines collide with
     # glibc's definitions and fail the build. It was fixed in gcc-13+.
     ++ lib.optionals (targetPlatform.isMips && targetPlatform.parsed.abi.name == "gnu" && lib.versions.major version == "12") [
       "--disable-libsanitizer"
     ]
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ;
 
 in configureFlags

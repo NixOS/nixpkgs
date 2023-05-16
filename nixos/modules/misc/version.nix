@@ -9,10 +9,17 @@ let
     literalExpression mkRenamedOptionModule mkDefault mkOption trivial types;
 
   needsEscaping = s: null != builtins.match "[a-zA-Z0-9]+" s;
+<<<<<<< HEAD
   escapeIfNecessary = s: if needsEscaping s then s else ''"${lib.escape [ "\$" "\"" "\\" "\`" ] s}"'';
   attrsToText = attrs:
     concatStringsSep "\n" (
       mapAttrsToList (n: v: ''${n}=${escapeIfNecessary (toString v)}'') attrs
+=======
+  escapeIfNeccessary = s: if needsEscaping s then s else ''"${lib.escape [ "\$" "\"" "\\" "\`" ] s}"'';
+  attrsToText = attrs:
+    concatStringsSep "\n" (
+      mapAttrsToList (n: v: ''${n}=${escapeIfNeccessary (toString v)}'') attrs
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     ) + "\n";
 
   osReleaseContents = {
@@ -32,7 +39,11 @@ let
     VARIANT_ID = cfg.variant_id;
   };
 
+<<<<<<< HEAD
   initrdReleaseContents = (removeAttrs osReleaseContents [ "BUILD_ID" ]) // {
+=======
+  initrdReleaseContents = osReleaseContents // {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     PRETTY_NAME = "${osReleaseContents.PRETTY_NAME} (Initrd)";
   };
   initrdRelease = pkgs.writeText "initrd-release" (attrsToText initrdReleaseContents);
@@ -140,6 +151,16 @@ in
       '';
     };
 
+<<<<<<< HEAD
+=======
+    defaultChannel = mkOption {
+      internal = true;
+      type = types.str;
+      default = "https://nixos.org/channels/nixos-unstable";
+      description = lib.mdDoc "Default NixOS channel to which the root user is subscribed.";
+    };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     configurationRevision = mkOption {
       type = types.nullOr types.str;
       default = null;

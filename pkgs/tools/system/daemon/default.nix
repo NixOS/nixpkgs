@@ -2,11 +2,19 @@
 
 stdenv.mkDerivation rec {
   pname = "daemon";
+<<<<<<< HEAD
   version = "0.8.4";
 
   src = fetchurl {
     url = "http://libslack.org/daemon/download/daemon-${version}.tar.gz";
     sha256 = "sha256-+iiFmtNBywoLASwRwnGBT4cEggE7SfcQYAMh03mIfNE=";
+=======
+  version = "0.8";
+
+  src = fetchurl {
+    url = "http://libslack.org/daemon/download/daemon-${version}.tar.gz";
+    sha256 = "sha256-dPEubUs8hWMkib0IQx09mXvBcmS/V7cgI4Ty6AnP9ZY=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   makeFlags = [

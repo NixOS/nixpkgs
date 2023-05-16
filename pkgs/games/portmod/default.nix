@@ -1,10 +1,23 @@
 { lib
 , bubblewrap
 , cacert
+<<<<<<< HEAD
 , fetchFromGitLab
 , git
 , imagemagick
 , openmw
+=======
+, callPackage
+, fetchFromGitLab
+, fetchurl
+, fetchzip
+, git
+, imagemagick
+, jre
+, makeWrapper
+, openmw
+, perlPackages
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , python3Packages
 , rustPlatform
 , tes3cmd

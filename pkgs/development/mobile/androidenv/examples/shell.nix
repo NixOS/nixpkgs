@@ -25,6 +25,7 @@ let
   # versions may be used in multiple places in this Nix expression.
   android = {
     versions = {
+<<<<<<< HEAD
       cmdLineToolsVersion = "11.0";
       platformTools = "34.0.4";
       buildTools = "34.0.0";
@@ -37,6 +38,20 @@ let
     };
 
     platforms = [ "23" "24" "25" "26" "27" "28" "29" "30" "31" "32" "33" "34" ];
+=======
+      cmdLineToolsVersion = "8.0";
+      platformTools = "33.0.3";
+      buildTools = "30.0.3";
+      ndk = [
+        "25.1.8937393" # LTS NDK
+        "24.0.8215888"
+      ];
+      cmake = "3.22.1";
+      emulator = "31.3.14";
+    };
+
+    platforms = ["23" "24" "25" "26" "27" "28" "29" "30" "31" "32" "33"];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     abis = ["armeabi-v7a" "arm64-v8a"];
     extras = ["extras;google;gcm"];
   };
@@ -165,6 +180,7 @@ pkgs.mkShell rec {
       installed_packages_section=$(echo "''${output%%Available Packages*}" | awk 'NR>4 {print $1}')
 
       packages=(
+<<<<<<< HEAD
         "build-tools;34.0.0" "platform-tools" \
         "platforms;android-23" "platforms;android-24" "platforms;android-25" "platforms;android-26" \
         "platforms;android-27" "platforms;android-28" "platforms;android-29" "platforms;android-30" \
@@ -172,13 +188,26 @@ pkgs.mkShell rec {
         "sources;android-23" "sources;android-24" "sources;android-25" "sources;android-26" \
         "sources;android-27" "sources;android-28" "sources;android-29" "sources;android-30" \
         "sources;android-31" "sources;android-32" "sources;android-33" "sources;android-34" \
+=======
+        "build-tools;30.0.3" "platform-tools" \
+        "platforms;android-23" "platforms;android-24" "platforms;android-25" "platforms;android-26" \
+        "platforms;android-27" "platforms;android-28" "platforms;android-29" "platforms;android-30" \
+        "platforms;android-31" "platforms;android-32" "platforms;android-33" \
+        "sources;android-23" "sources;android-24" "sources;android-25" "sources;android-26" \
+        "sources;android-27" "sources;android-28" "sources;android-29" "sources;android-30" \
+        "sources;android-31" "sources;android-32" "sources;android-33" \
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "system-images;android-28;google_apis_playstore;arm64-v8a" \
         "system-images;android-29;google_apis_playstore;arm64-v8a" \
         "system-images;android-30;google_apis_playstore;arm64-v8a" \
         "system-images;android-31;google_apis_playstore;arm64-v8a" \
         "system-images;android-32;google_apis_playstore;arm64-v8a" \
+<<<<<<< HEAD
         "system-images;android-33;google_apis_playstore;arm64-v8a" \
         "system-images;android-34;google_apis_playstore;arm64-v8a"
+=======
+        "system-images;android-33;google_apis_playstore;arm64-v8a"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       )
 
       for package in "''${packages[@]}"; do

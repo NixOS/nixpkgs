@@ -5,9 +5,16 @@ import ./make-test-python.nix (
       port = 3142;
       defaultPort = 8083;
     in
+<<<<<<< HEAD
       {
         name = "calibre-web";
         meta.maintainers = with lib.maintainers; [ pborzenkov ];
+=======
+      with lib;
+      {
+        name = "calibre-web";
+        meta.maintainers = with pkgs.lib.maintainers; [ pborzenkov ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
         nodes = {
           customized = { pkgs, ... }: {

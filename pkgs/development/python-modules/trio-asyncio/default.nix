@@ -6,7 +6,10 @@
 , sniffio
 , pytest-trio
 , pytestCheckHook
+<<<<<<< HEAD
 , pythonAtLeast
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , pythonOlder
 }:
 
@@ -50,10 +53,13 @@ buildPythonPackage rec {
     "tests/python" # tries to import internal API test.test_asyncio
   ];
 
+<<<<<<< HEAD
   disabledTests = lib.optionals (pythonAtLeast "3.11") [
     "test_run_task"
   ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pythonImportsCheck = [
     "trio_asyncio"
   ];

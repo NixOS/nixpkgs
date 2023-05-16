@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 { lib, stdenv, fetchurl, iconv, skktools }:
+=======
+{ lib, stdenv, fetchurl, buildPackages, iconv, skktools }:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 let
   # kana to kanji

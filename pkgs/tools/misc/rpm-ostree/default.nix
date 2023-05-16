@@ -40,13 +40,21 @@
 
 stdenv.mkDerivation rec {
   pname = "rpm-ostree";
+<<<<<<< HEAD
   version = "2023.7";
+=======
+  version = "2023.3";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   outputs = [ "out" "dev" "man" "devdoc" ];
 
   src = fetchurl {
     url = "https://github.com/coreos/${pname}/releases/download/v${version}/${pname}-${version}.tar.xz";
+<<<<<<< HEAD
     hash = "sha256-OL1PEXGqPbMWFcCTkjRAUk+7zbGTQiwQqmgmkEgfgHE=";
+=======
+    hash = "sha256-qIkGQqU+6EbSKmHwjZe+A1XsIZVnBQyM28DN9GFP/qE=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

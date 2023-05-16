@@ -39,7 +39,11 @@ stdenv.mkDerivation rec {
     python3
   ];
   propagatedBuildInputs = [
+<<<<<<< HEAD
     (python3.pkgs.protobuf.override { protobuf = protobuf; })
+=======
+    python3.pkgs.protobuf
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     python3.pkgs.numpy
   ];
 

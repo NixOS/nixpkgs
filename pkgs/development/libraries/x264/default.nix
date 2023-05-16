@@ -34,7 +34,11 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "lib" "dev" ];
 
+<<<<<<< HEAD
   preConfigure = lib.optionalString stdenv.hostPlatform.isx86 ''
+=======
+  preConfigure = lib.optionalString (stdenv.buildPlatform.isx86_64 || stdenv.hostPlatform.isi686) ''
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     # `AS' is set to the binutils assembler, but we need nasm
     unset AS
   '' + lib.optionalString stdenv.hostPlatform.isAarch ''

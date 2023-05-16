@@ -2,6 +2,10 @@
 , buildDotnetModule
 , fetchFromGitHub
 , fetchurl
+<<<<<<< HEAD
+=======
+, dotnetCorePackages
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , gtk3
 , libX11
 , libXrandr
@@ -18,18 +22,30 @@
 
 buildDotnetModule rec {
   pname = "OpenTabletDriver";
+<<<<<<< HEAD
   version = "0.6.3.0";
+=======
+  version = "0.6.0.4";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "OpenTabletDriver";
     repo = "OpenTabletDriver";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-v41qYNBgOXcFnDOJpQYitql1IZP3p8b3may5Pr04dbg=";
+=======
+    sha256 = "sha256-VvxW8Ck+XC4nXSUyDhcbGoeSr5uSAZ66jtZNoADuVR8=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   debPkg = fetchurl {
     url = "https://github.com/OpenTabletDriver/OpenTabletDriver/releases/download/v${version}/OpenTabletDriver.deb";
+<<<<<<< HEAD
     hash = "sha256-zWSJlkn7K/meTycWNTinC0hp0JubF22dJNOJeEIfGtI=";
+=======
+    sha256 = "sha256-LJqH3+JckPF7S/1uBE2X81jxWg0MF9ff92Ei8WPEA2w=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   dotnetInstallFlags = [ "--framework=net6.0" ];

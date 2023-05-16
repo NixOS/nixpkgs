@@ -12,8 +12,11 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ faust2jaqt faust2lv2 ];
 
+<<<<<<< HEAD
   dontWrapQtApps = true;
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   buildPhase = ''
     echo "hack out autoComp.dsp due to https://github.com/grame-cncm/faust/407/issues "
     rm autoComp.dsp
@@ -35,7 +38,12 @@ stdenv.mkDerivation rec {
     mv *.lv2/ $out/lib/lv2
     mkdir -p $out/bin
     rm newlib.sh
+<<<<<<< HEAD
     for f in $(find . -executable -type f); do
+=======
+    for f in $(find . -executable -type f);
+    do
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       cp $f $out/bin/
     done
   '';

@@ -16,7 +16,11 @@ let
     generate = name: value:
       let mkParam = k: v:
             if v == null then []
+<<<<<<< HEAD
             else if isBool v then optional v ("--"+k)
+=======
+            else if isBool v then if v then [("--"+k)] else []
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
             else [("--"+k) v];
           mkParams = k: v: map (mkParam k) (if isList v then v else [v]);
       in escapeShellArgs (concatLists (concatLists (mapAttrsToList mkParams value)));

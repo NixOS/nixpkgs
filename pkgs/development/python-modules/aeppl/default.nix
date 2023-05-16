@@ -11,7 +11,11 @@
 
 buildPythonPackage rec {
   pname = "aeppl";
+<<<<<<< HEAD
   version = "0.1.5";
+=======
+  version = "0.1.4";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -20,7 +24,11 @@ buildPythonPackage rec {
     owner = "aesara-devs";
     repo = pname;
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-mqBbXwWJwQA2wSHuEdBeXQMfTIcgwYEjpq8AVmOjmHM=";
+=======
+    hash = "sha256-y2JQxHztLEORoqVikOD/pSF5+WJRo/f8XyZKVDx2Ybs=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [

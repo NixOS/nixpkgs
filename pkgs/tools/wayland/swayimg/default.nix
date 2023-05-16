@@ -1,7 +1,10 @@
 { lib
 , stdenv
 , fetchFromGitHub
+<<<<<<< HEAD
 , fetchpatch
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , meson
 , ninja
 , pkg-config
@@ -33,6 +36,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-UwIufR3EwbpNVHD1GypV3qNgiqDRllwtxAM0CZPodn0=";
   };
 
+<<<<<<< HEAD
   patches = [
     (fetchpatch {
       name = "link-libwebp-1.3.1.patch";
@@ -41,6 +45,8 @@ stdenv.mkDerivation rec {
     })
   ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   strictDeps = true;
 
   depsBuildBuild = [

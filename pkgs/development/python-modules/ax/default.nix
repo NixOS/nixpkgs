@@ -6,10 +6,15 @@
 , jinja2
 , pandas
 , plotly
+<<<<<<< HEAD
 , setuptools
 , setuptools-scm
 , typeguard
 , wheel
+=======
+, setuptools-scm
+, typeguard
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , hypothesis
 , mercurial
 , pyfakefs
@@ -19,13 +24,18 @@
 
 buildPythonPackage rec {
   pname = "ax";
+<<<<<<< HEAD
   version = "0.3.4";
+=======
+  version = "0.3.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = pname;
     rev = version;
+<<<<<<< HEAD
     hash = "sha256-Yc6alEKXbtQ0hitIdPhkJWhZQg150b0NJJRLZ+f1hdY=";
   };
 
@@ -35,12 +45,21 @@ buildPythonPackage rec {
     wheel
   ];
 
+=======
+    hash = "sha256-1KLLjeUktXvIDOlTQzMmpbL/On8PTxZQ44Qi4BT3nPk=";
+  };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   propagatedBuildInputs = [
     botorch
     ipywidgets
     jinja2
     pandas
     plotly
+<<<<<<< HEAD
+=======
+    setuptools-scm
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     typeguard
   ];
 
@@ -66,10 +85,13 @@ buildPythonPackage rec {
     "--ignore=ax/service/tests/test_with_db_settings_base.py"
     "--ignore=ax/storage"
   ];
+<<<<<<< HEAD
   disabledTests = [
     # exact comparison of floating points
     "test_optimize_l0_homotopy"
   ];
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pythonImportsCheck = [ "ax" ];
 
   meta = with lib; {

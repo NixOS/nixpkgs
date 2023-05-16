@@ -5,7 +5,11 @@ index 824c59c..f13754e 100644
 @@ -110,7 +110,7 @@ class LibUSBHIDAPI(Transport):
  
              search_library_names = {
+<<<<<<< HEAD
                  "Windows": ["hidapi.dll", "libhidapi-0.dll", "./hidapi.dll"],
+=======
+                 "Windows": ["hidapi.dll", "libhidapi-0.dll"],
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 -                "Linux": ["libhidapi-libusb.so", "libhidapi-libusb.so.0"],
 +                "Linux": ["@libusb@"],
                  "Darwin": ["libhidapi.dylib"],

@@ -11,7 +11,11 @@ buildGoModule rec {
     sha256 = "sha256-6FqupoYWRvex7XhM7ly8f7ICnuS9JvCRIVEBIJe+64k=";
   };
 
+<<<<<<< HEAD
   vendorHash = "sha256-2raOUOPiMUMydIsfSsnwUAAiM7WyMio1NgL1EoADr2s=";
+=======
+  vendorSha256 = "sha256-2raOUOPiMUMydIsfSsnwUAAiM7WyMio1NgL1EoADr2s=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   meta = with lib; {
     description = "Export network flows from kafka to Prometheus";

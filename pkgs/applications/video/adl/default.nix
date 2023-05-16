@@ -38,6 +38,10 @@ stdenv.mkDerivation rec {
     description = "popcorn anime-downloader + trackma wrapper";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
+<<<<<<< HEAD
     maintainers = with maintainers; [ ];
+=======
+    maintainers = with maintainers; [ WeebSorceress ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

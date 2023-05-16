@@ -9,13 +9,21 @@
 
 stdenv.mkDerivation rec {
   pname = "vdo";
+<<<<<<< HEAD
   version = "8.2.2.2";  # bump this version with kvdo
+=======
+  version = "8.2.0.2";  # kvdo uses this!
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "dm-vdo";
     repo = pname;
     rev = version;
+<<<<<<< HEAD
     hash = "sha256-+2w9jzJemI2xr+i/Jd5TIBZ/o8Zv+Ett0fbJbkOD7KI=";
+=======
+    hash = "sha256-IP/nL4jQ+rIWuUxXUiBtlIKTMZCNelvxgTfTcaB1it0=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [
@@ -57,8 +65,12 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/dm-vdo/vdo";
     description = "A set of userspace tools for managing pools of deduplicated and/or compressed block storage";
+<<<<<<< HEAD
     # platforms are defined in https://github.com/dm-vdo/vdo/blob/master/utils/uds/atomicDefs.h
     platforms = [ "x86_64-linux" "aarch64-linux" "s390-linux" "powerpc64-linux" "powerpc64le-linux" ];
+=======
+    platforms = platforms.linux;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     license = with licenses; [ gpl2Plus ];
     maintainers = with maintainers; [ ajs124 ];
   };

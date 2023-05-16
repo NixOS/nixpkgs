@@ -1,10 +1,16 @@
 { lib, stdenv
+<<<<<<< HEAD
 , bottle
 , buildPythonPackage
 , fetchpatch
 , fetchPypi
 , pytestCheckHook
 , pythonAtLeast
+=======
+, buildPythonPackage
+, fetchPypi
+, pytestCheckHook
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 buildPythonPackage rec {
@@ -16,6 +22,7 @@ buildPythonPackage rec {
     sha256 = "993f1a3599ca3f4fcd7160c7545ad06310c9e12f70174ae7ae8d4e25f6c5d3fa";
   };
 
+<<<<<<< HEAD
   patches = [
     # Fixes a TypeError on Python 3.11
     # (see https://github.com/pympler/pympler/issues/148)
@@ -26,10 +33,13 @@ buildPythonPackage rec {
     })
   ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nativeCheckInputs = [
     pytestCheckHook
   ];
 
+<<<<<<< HEAD
   # There is a version of bottle bundled with Pympler, but it is broken on
   # Python 3.11. Fortunately, Pympler will preferentially import an external
   # bottle if it is available, so we make it an explicit dependency.
@@ -37,15 +47,20 @@ buildPythonPackage rec {
     bottle
   ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   disabledTests = [
     # 'AssertionError: 'function (test.muppy.test_summary.func)' != 'function (muppy.test_summary.func)'
     # https://github.com/pympler/pympler/issues/134
     "test_repr_function"
+<<<<<<< HEAD
   ] ++ lib.optionals (pythonAtLeast "3.11") [
     # https://github.com/pympler/pympler/issues/148
     "test_findgarbage"
     "test_get_tree"
     "test_prune"
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   doCheck = stdenv.hostPlatform.isLinux;

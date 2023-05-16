@@ -9,7 +9,11 @@
 assert release -> keyStore != null && keyAlias != null && keyStorePassword != null && keyAliasPassword != null;
 
 let
+<<<<<<< HEAD
   androidSdkFormalArgs = lib.functionArgs composeAndroidPackages;
+=======
+  androidSdkFormalArgs = builtins.functionArgs composeAndroidPackages;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   androidArgs = builtins.intersectAttrs androidSdkFormalArgs args;
   androidsdk = (composeAndroidPackages androidArgs).androidsdk;
 

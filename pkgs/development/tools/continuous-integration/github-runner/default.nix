@@ -9,10 +9,15 @@
 , glibcLocales
 , lib
 , nixosTests
+<<<<<<< HEAD
+=======
+, nodejs_16
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , stdenv
 , which
 , buildPackages
 , runtimeShell
+<<<<<<< HEAD
   # List of Node.js runtimes the package should support
 , nodeRuntimes ? [ "node20" ]
 , nodejs_16
@@ -25,12 +30,22 @@ assert builtins.all (x: builtins.elem x [ "node16" "node20" ]) nodeRuntimes;
 buildDotnetModule rec {
   pname = "github-runner";
   version = "2.308.0";
+=======
+}:
+buildDotnetModule rec {
+  pname = "github-runner";
+  version = "2.304.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "actions";
     repo = "runner";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-LrHScQbBkRPSNsfPxvE2+K9tON8xuR0e4JpKVuI+Gu0=";
+=======
+    hash = "sha256-5amc0oVcFCPFrUcX5iITjnN9Mtpzi4wWsJe7Kdm9YxA=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     leaveDotGit = true;
     postFetch = ''
       git -C $out rev-parse --short HEAD > $out/.git-revision
@@ -38,7 +53,11 @@ buildDotnetModule rec {
     '';
   };
 
+<<<<<<< HEAD
   # The git commit is read during the build and some tests depend on a git repo to be present
+=======
+  # The git commit is read during the build and some tests depends on a git repo to be present
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   # https://github.com/actions/runner/blob/22d1938ac420a4cb9e3255e47a91c2e43c38db29/src/dir.proj#L5
   unpackPhase = ''
     cp -r $src $TMPDIR/src
@@ -138,10 +157,14 @@ buildDotnetModule rec {
 
   # Fully qualified name of disabled tests
   disabledTests =
+<<<<<<< HEAD
     [
       "GitHub.Runner.Common.Tests.Listener.SelfUpdaterL0.TestSelfUpdateAsync"
       "GitHub.Runner.Common.Tests.ProcessInvokerL0.OomScoreAdjIsInherited"
     ]
+=======
+    [ "GitHub.Runner.Common.Tests.Listener.SelfUpdaterL0.TestSelfUpdateAsync" ]
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     ++ map (x: "GitHub.Runner.Common.Tests.Listener.SelfUpdaterL0.TestSelfUpdateAsync_${x}") [
       "Cancel_CloneHashTask_WhenNotNeeded"
       "CloneHash_RuntimeAndExternals"
@@ -185,7 +208,10 @@ buildDotnetModule rec {
     ++ lib.optionals (stdenv.hostPlatform.system == "aarch64-linux") [
       # "JavaScript Actions in Alpine containers are only supported on x64 Linux runners. Detected Linux Arm64"
       "GitHub.Runner.Common.Tests.Worker.StepHostL0.DetermineNodeRuntimeVersionInAlpineContainerAsync"
+<<<<<<< HEAD
       "GitHub.Runner.Common.Tests.Worker.StepHostL0.DetermineNode20RuntimeVersionInAlpineContainerAsync"
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     ]
     ++ lib.optionals DOTNET_SYSTEM_GLOBALIZATION_INVARIANT [
       "GitHub.Runner.Common.Tests.ProcessExtensionL0.SuccessReadProcessEnv"
@@ -193,19 +219,26 @@ buildDotnetModule rec {
       "GitHub.Runner.Common.Tests.Worker.VariablesL0.Constructor_SetsOrdinalIgnoreCaseComparer"
       "GitHub.Runner.Common.Tests.Worker.WorkerL0.DispatchCancellation"
       "GitHub.Runner.Common.Tests.Worker.WorkerL0.DispatchRunNewJob"
+<<<<<<< HEAD
     ]
     ++ lib.optionals (!lib.elem "node16" nodeRuntimes) [
       "GitHub.Runner.Common.Tests.ProcessExtensionL0.SuccessReadProcessEnv"
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     ];
 
   testProjectFile = [ "src/Test/Test.csproj" ];
 
   preCheck = ''
     mkdir -p _layout/externals
+<<<<<<< HEAD
   '' + lib.optionalString (lib.elem "node16" nodeRuntimes) ''
     ln -s ${nodejs_16} _layout/externals/node16
   '' + lib.optionalString (lib.elem "node20" nodeRuntimes) ''
     ln -s ${nodejs_20} _layout/externals/node20
+=======
+    ln -s ${nodejs_16} _layout/externals/node16
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '';
 
   postInstall = ''
@@ -238,6 +271,7 @@ buildDotnetModule rec {
       --replace './externals' "$out/lib/externals" \
       --replace './bin/RunnerService.js' "$out/lib/github-runner/RunnerService.js"
 
+<<<<<<< HEAD
     # The upstream package includes Node and expects it at the path
     # externals/node$version. As opposed to the official releases, we don't
     # link the Alpine Node flavors.
@@ -247,6 +281,14 @@ buildDotnetModule rec {
   '' + lib.optionalString (lib.elem "node20" nodeRuntimes) ''
     ln -s ${nodejs_20} $out/lib/externals/node20
   '' + ''
+=======
+    # The upstream package includes Node 16 and expects it at the path
+    # externals/node16. As opposed to the official releases, we don't
+    # link the Alpine Node flavors.
+    mkdir -p $out/lib/externals
+    ln -s ${nodejs_16} $out/lib/externals/node16
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     # Install Nodejs scripts called from workflows
     install -D src/Misc/layoutbin/hashFiles/index.js $out/lib/github-runner/hashFiles/index.js
     mkdir -p $out/lib/github-runner/checkScripts

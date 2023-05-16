@@ -8,8 +8,13 @@ let
 
   x11Fonts = pkgs.runCommand "X11-fonts" { preferLocalBuild = true; } ''
     mkdir -p "$out/share/X11/fonts"
+<<<<<<< HEAD
     font_regexp='.*\.\(ttf\|ttc\|otb\|otf\|pcf\|pfa\|pfb\|bdf\)\(\.gz\)?'
     find ${toString config.fonts.packages} -regex "$font_regexp" \
+=======
+    font_regexp='.*\.\(ttf\|ttc\|otf\|pcf\|pfa\|pfb\|bdf\)\(\.gz\)?'
+    find ${toString config.fonts.fonts} -regex "$font_regexp" \
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       -exec ln -sf -t "$out/share/X11/fonts" '{}' \;
     cd "$out/share/X11/fonts"
     ${optionalString cfg.decompressFonts ''

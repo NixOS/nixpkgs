@@ -107,6 +107,9 @@ in
   malcontent = callInstalledTest ./malcontent.nix {};
   ostree = callInstalledTest ./ostree.nix {};
   pipewire = callInstalledTest ./pipewire.nix {};
+<<<<<<< HEAD
   upower = callInstalledTest ./upower.nix {};
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   xdg-desktop-portal = callInstalledTest ./xdg-desktop-portal.nix {};
 }

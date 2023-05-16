@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 { stdenv, lib, fetchFromGitHub, makeWrapper
+=======
+{ stdenv, lib, fetchFromGitHub, makeWrapper, substituteAll
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , ipcalc, iproute2, util-linux, coreutils, ethtool, gnugrep, gnused, nvme-cli }:
 
 stdenv.mkDerivation rec {

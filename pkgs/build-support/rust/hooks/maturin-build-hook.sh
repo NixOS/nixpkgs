@@ -24,6 +24,11 @@ maturinBuildHook() {
         ${maturinBuildFlags-}
     )
 
+<<<<<<< HEAD
+=======
+    runHook postBuild
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     if [ ! -z "${buildAndTestSubdir-}" ]; then
         popd
     fi
@@ -32,9 +37,12 @@ maturinBuildHook() {
     mkdir -p dist
     mv target/wheels/*.whl dist/
 
+<<<<<<< HEAD
     # These are python build hooks and may depend on ./dist
     runHook postBuild
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     echo "Finished maturinBuildHook"
 }
 

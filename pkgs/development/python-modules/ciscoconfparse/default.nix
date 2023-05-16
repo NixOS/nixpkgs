@@ -1,20 +1,32 @@
 { lib
 , buildPythonPackage
+<<<<<<< HEAD
 , deprecat
 , dnspython
+=======
+, dnspython
+, deprecat
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , fetchFromGitHub
 , loguru
 , passlib
 , poetry-core
 , pytestCheckHook
 , pythonOlder
+<<<<<<< HEAD
 , pythonRelaxDepsHook
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , toml
 }:
 
 buildPythonPackage rec {
   pname = "ciscoconfparse";
+<<<<<<< HEAD
   version = "1.7.24";
+=======
+  version = "1.7.18";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -23,6 +35,7 @@ buildPythonPackage rec {
     owner = "mpenning";
     repo = pname;
     rev = "refs/tags/${version}";
+<<<<<<< HEAD
     hash = "sha256-vL/CQdYcOP356EyRToviWylP1EBtxmeov6qkhfQNZ2Y=";
   };
 
@@ -39,12 +52,21 @@ buildPythonPackage rec {
     substituteInPlace pyproject.toml \
       --replace '"poetry>=1.3.2",' ""
 
+=======
+    hash = "sha256-jWInSqvMuwYJTPqHnrYWhMH/HvaQc2dFRqQu4RGFr28=";
+  };
+
+  postPatch = ''
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     patchShebangs tests
   '';
 
   nativeBuildInputs = [
     poetry-core
+<<<<<<< HEAD
     pythonRelaxDepsHook
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   propagatedBuildInputs = [

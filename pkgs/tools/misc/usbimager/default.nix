@@ -14,13 +14,21 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-CEGUXJXqXmD8uT93T9dg49Lf5vTpAzQjdnhYmbR5zTI=";
   };
 
+<<<<<<< HEAD
   sourceRoot = "${src.name}/src";
+=======
+  sourceRoot = "source/src/";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nativeBuildInputs = [ pkg-config wrapGAppsHook ];
   buildInputs = lib.optionals withUdisks [ udisks glib ]
     ++ lib.optional (!withLibui) libX11
     ++ lib.optional withLibui gtk3;
+<<<<<<< HEAD
     # libui is bundled with the source of usbimager as a compiled static library
+=======
+    # libui is bundled with the source of usbimager as a compiled static libary
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   postPatch = ''
     sed -i \

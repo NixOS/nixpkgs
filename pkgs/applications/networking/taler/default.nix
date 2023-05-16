@@ -4,17 +4,26 @@
 }:
 
 let
+<<<<<<< HEAD
   version = "0.9.2";
 
   taler-wallet-core = fetchgit {
     url = "https://git.taler.net/wallet-core.git";
     rev = "v${version}";
     sha256 = "sha256-DTnwj/pkowR1b1+N94pnuLykD2O37Nh8AKhUIzY7NaU=";
+=======
+  taler-merchant-backoffice = fetchgit {
+    url = "https://git.taler.net/merchant-backoffice.git";
+    # branch "prebuilt" as of 2022-07-01
+    rev = "1ef7150f32960cb65ebea67839cd5023f29a3d1d";
+    sha256 = "sha256-ZtLYWHi6l5DxFvDm8RFGUD0BiAfJXCZr/ggrP3Uw7/0=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
 in rec {
   taler-exchange = stdenv.mkDerivation rec {
     pname = "taler-exchange";
+<<<<<<< HEAD
     inherit version;
 
     src = fetchgit {
@@ -22,6 +31,15 @@ in rec {
       rev = "v${version}";
       fetchSubmodules = true;
       sha256 = "sha256-c0cX38hDIZGVhHrD9LgDU70dF2AYuZmsakC8yDyZE54=";
+=======
+    version = "unstable-2022-07-17";
+
+    src = fetchgit {
+      url = "https://git.taler.net/exchange.git";
+      rev = "93b45e62eef254eae68bc119b9770e97bae2c9fa";
+      fetchSubmodules = true;
+      sha256 = "sha256-BQxbwEf0wIkBOBVsPgMkMvUj4kFReXMUFTiSG0jXOJ0=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
 
     nativeBuildInputs = [
@@ -43,6 +61,10 @@ in rec {
     ];
     propagatedBuildInputs = [ gnunet ];
 
+<<<<<<< HEAD
+=======
+    configureFlags = [ "--with-gnunet=${gnunet}" ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     preConfigure = ''
       ./contrib/gana-update.sh
     '';
@@ -73,6 +95,7 @@ in rec {
 
   taler-merchant = stdenv.mkDerivation rec {
     pname = "taler-merchant";
+<<<<<<< HEAD
     inherit version;
 
     src = fetchgit {
@@ -82,6 +105,17 @@ in rec {
     };
     postUnpack = ''
       ln -s ${taler-wallet-core}/spa.html $sourceRoot/contrib/
+=======
+    version = "unstable-2022-07-11";
+
+    src = fetchgit {
+      url = "https://git.taler.net/merchant.git";
+      rev = "960dcacf25e51cc2bff359ea1fc86cdd3d9e6083";
+      sha256 = "sha256-Wn11z6YjnylZl3z2JjBlrtZ1KHfQUHLIYWo5F+mAmNo=";
+    };
+    postUnpack = ''
+      ln -s ${taler-merchant-backoffice}/spa.html $sourceRoot/contrib/
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     '';
 
     nativeBuildInputs = [ pkg-config autoreconfHook ];

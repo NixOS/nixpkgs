@@ -6,7 +6,10 @@
 , fetchFromGitHub
 , flake8
 , flaky
+<<<<<<< HEAD
 , importlib-metadata
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , jedi
 , matplotlib
 , mccabe
@@ -19,9 +22,15 @@
 , pylint
 , pyqt5
 , pytestCheckHook
+<<<<<<< HEAD
 , python-lsp-jsonrpc
 , pythonOlder
 , pythonRelaxDepsHook
+=======
+, pythonRelaxDepsHook
+, python-lsp-jsonrpc
+, pythonOlder
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , rope
 , setuptools
 , setuptools-scm
@@ -29,32 +38,53 @@
 , ujson
 , websockets
 , whatthepatch
+<<<<<<< HEAD
 , wheel
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , yapf
 }:
 
 buildPythonPackage rec {
   pname = "python-lsp-server";
+<<<<<<< HEAD
   version = "1.8.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
+=======
+  version = "1.7.2";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.7";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "python-lsp";
     repo = pname;
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-hLgMGZumuNY70/qyD9t5pMpYI/g70sqFIt1LEfIEALY=";
   };
 
+=======
+    hash = "sha256-jsWk2HDDRjOAPGX1K9NqhWkA5xD2fM830z7g7Kee0yQ=";
+  };
+
+  SETUPTOOLS_SCM_PRETEND_VERSION = version;
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace "--cov-report html --cov-report term --junitxml=pytest.xml" "" \
       --replace "--cov pylsp --cov test" ""
   '';
 
+<<<<<<< HEAD
   env.SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pythonRelaxDeps = [
     "autopep8"
     "flake8"
@@ -67,7 +97,10 @@ buildPythonPackage rec {
   nativeBuildInputs = [
     pythonRelaxDepsHook
     setuptools-scm
+<<<<<<< HEAD
     wheel
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   propagatedBuildInputs = [
@@ -77,8 +110,11 @@ buildPythonPackage rec {
     python-lsp-jsonrpc
     setuptools # `pkg_resources`imported in pylsp/config/config.py
     ujson
+<<<<<<< HEAD
   ] ++ lib.optionals (pythonOlder "3.10") [
     importlib-metadata
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   passthru.optional-dependencies = {

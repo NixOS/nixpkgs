@@ -33,13 +33,21 @@
 
 stdenv.mkDerivation rec {
   pname = "cheese";
+<<<<<<< HEAD
   version = "44.1";
+=======
+  version = "44.0.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   outputs = [ "out" "man" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/cheese/${lib.versions.major version}/${pname}-${version}.tar.xz";
+<<<<<<< HEAD
     sha256 = "XyGFxMmeVN3yuLr2DIKBmVDlSVLhMuhjmHXz7cv49o4=";
+=======
+    sha256 = "2SJAEnLN1BXCknA+UsazZEZqCyDuHbMgJRZEwoNgb9Q=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

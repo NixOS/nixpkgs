@@ -130,6 +130,7 @@ in
       environment = cfg.config;
     };
     environment.systemPackages = [ cfg.package ];
+<<<<<<< HEAD
 
     security.apparmor.policies."bin.miniflux".profile = ''
       include <tunables/global>
@@ -142,5 +143,7 @@ in
         r @{sys}/kernel/mm/transparent_hugepage/hpage_pmd_size,
       }
     '';
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

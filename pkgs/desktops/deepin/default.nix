@@ -57,7 +57,10 @@ let
     deepin-terminal = callPackage ./apps/deepin-terminal { };
     deepin-reader = callPackage ./apps/deepin-reader { };
     deepin-voice-note = callPackage ./apps/deepin-voice-note { };
+<<<<<<< HEAD
     deepin-screensaver = callPackage ./apps/deepin-screensaver { };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     #### Go Packages
     go-lib = callPackage ./go-package/go-lib { };

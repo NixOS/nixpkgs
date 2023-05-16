@@ -2,8 +2,14 @@ import nixos_render_docs as nrd
 
 from sample_md import sample1
 
+<<<<<<< HEAD
 from typing import Mapping
 
+=======
+from typing import Mapping, Optional
+
+import markdown_it
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 class Converter(nrd.md.Converter[nrd.manpage.ManpageRenderer]):
     def __init__(self, manpage_urls: Mapping[str, str], options_by_id: dict[str, str] = {}):

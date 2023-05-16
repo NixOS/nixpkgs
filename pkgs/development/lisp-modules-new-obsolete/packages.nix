@@ -11,6 +11,12 @@ let
     optionals
     hasSuffix
     splitString
+<<<<<<< HEAD
+=======
+    remove
+    optionalString
+    stringLength
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ;
 
   # Used by builds that would otherwise attempt to write into storeDir.
@@ -42,6 +48,14 @@ let
       # Patches are already applied in `build`
       patches = [];
       src = build;
+<<<<<<< HEAD
+=======
+      # TODO(kasper): handle this with a setup hook
+      LD_LIBRARY_PATH =
+        build.LD_LIBRARY_PATH
+        + (optionalString (stringLength build.LD_LIBRARY_PATH != 0) ":")
+        + "${build}";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     });
 
   # A little hacky
@@ -332,5 +346,101 @@ let
     };
     version = "f19162e76";
   });
+<<<<<<< HEAD
   };
+=======
+
+  qt = let
+    rev = "dffff3ee3dbd0686c85c323f579b8bbf4881e60e";
+  in build-with-compile-into-pwd rec {
+    pname = "commonqt";
+    version = builtins.substring 0 7 rev;
+
+    src = pkgs.fetchFromGitHub {
+      inherit rev;
+      owner = pname;
+      repo = pname;
+      hash = "sha256-GAgwT0D9mIkYPTHfCH/KxxIv7b6QGwcxwZE7ehH5xug=";
+    };
+
+    buildInputs = [ pkgs.qt4 ];
+    nativeBuildInputs = [ pkgs.smokegen pkgs.smokeqt ];
+    nativeLibs = [ pkgs.qt4 pkgs.smokegen pkgs.smokeqt ];
+
+    systems = [ "qt" ];
+
+    lispLibs = with ql; [
+      cffi named-readtables cl-ppcre alexandria
+      closer-mop iterate trivial-garbage bordeaux-threads
+    ];
+  };
+
+  qt-libs = build-with-compile-into-pwd {
+    inherit (ql.qt-libs) pname version src;
+    patches = [ ./patches/qt-libs-dont-download.patch ];
+    prePatch = ''
+      substituteInPlace systems/*.asd --replace ":qt+libs" ":qt"
+      echo "LD Path: $LD_LIBRARY_PATH"
+    '';
+    lispLibs = ql.qt-libs.lispLibs ++ [ qt ];
+    systems = [
+      "qt-libs"
+      "commonqt"
+      # "phonon"
+      # "qimageblitz"
+      # "qsci"
+      "qt3support"
+      "qtcore"
+      "qtdbus"
+      "qtdeclarative"
+      "qtgui"
+      "qthelp"
+      "qtnetwork"
+      "qtopengl"
+      "qtscript"
+      "qtsql"
+      "qtsvg"
+      "qttest"
+      "qtuitools"
+      # "qtwebkit"
+      "qtxml"
+      "qtxmlpatterns"
+      # "qwt"
+      "smokebase"
+    ];
+  };
+  commonqt = qt-libs;
+  qt3support = qt-libs;
+  qtcore = qt-libs;
+  qtdbus = qt-libs;
+  qtdeclarative = qt-libs;
+  qtgui = qt-libs;
+  qthelp = qt-libs;
+  qtnetwork = qt-libs;
+  qtopengl = qt-libs;
+  qtscript = qt-libs;
+  qtsql = qt-libs;
+  qtsvg = qt-libs;
+  qttest = qt-libs;
+  qtuitools = qt-libs;
+  qtxml = qt-libs;
+  qtxmlpatterns = qt-libs;
+  smokebase = qt-libs;
+
+  qtools = build-with-compile-into-pwd {
+    inherit (ql.qtools) pname version src nativeLibs;
+    lispLibs = [ qt ] ++ remove ql.qt_plus_libs ql.qtools.lispLibs ++ [ qt-libs ];
+    patches = [ ./patches/qtools-use-nix-libs.patch ];
+  };
+
+  magicl = build-with-compile-into-pwd {
+    inherit (ql.magicl) pname version src lispLibs;
+    nativeBuildInputs = [ pkgs.gfortran ];
+    nativeLibs = [ pkgs.openblas ];
+    patches = [ ./patches/magicl-dont-build-fortran-twice.patch ];
+  };
+
+  };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 in packages

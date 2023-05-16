@@ -1,6 +1,10 @@
 { lib, stdenv, fetchFromGitHub, cmake, bash, gnugrep
 , fixDarwinDylibNames
 , file
+<<<<<<< HEAD
+=======
+, fetchpatch
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , legacySupport ? false
 , static ? stdenv.hostPlatform.isStatic
 # these need to be ran on the host, thus disable when cross-compiling

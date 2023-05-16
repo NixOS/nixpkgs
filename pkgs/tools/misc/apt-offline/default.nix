@@ -26,7 +26,11 @@ python3Packages.buildPythonApplication rec {
 
   doCheck = false;
 
+<<<<<<< HEAD
   pythonImportsCheck = [ "apt_offline_core" ];
+=======
+  pythonimportsCheck = [ "apt-offline" ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   passthru.updateScript = nix-update-script { };
 

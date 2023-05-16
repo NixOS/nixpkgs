@@ -16,7 +16,11 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = "sha256-OetDAZ6zC8r7e82FILpQQnM+JHG9eludwhEuPaklrnw=";
   };
 
+<<<<<<< HEAD
   sourceRoot = "${finalAttrs.src.name}/javascript/net/grpc/web/generator";
+=======
+  sourceRoot = "source/javascript/net/grpc/web/generator";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   enableParallelBuilding = true;
   strictDeps = true;

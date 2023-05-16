@@ -11,9 +11,13 @@ buildGoModule rec {
     sha256 = "sha256-ZkAfAQsaFX7npyDcBDFS4Xa8kOMVH6yGfxGD7c0iQ+o=";
   };
 
+<<<<<<< HEAD
   vendorHash = "sha256-K/QAG9mCIHe7PQhex3TntlGYAK9l0bESWk616N97dBs=";
 
   ldflags = [ "-s" "-w" "-X main.gronVersion=${version}" ];
+=======
+  vendorSha256 = "sha256-K/QAG9mCIHe7PQhex3TntlGYAK9l0bESWk616N97dBs=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   meta = with lib; {
     description = "Make JSON greppable!";
@@ -26,5 +30,9 @@ buildGoModule rec {
     homepage = "https://github.com/tomnomnom/gron";
     license = licenses.mit;
     maintainers = with maintainers; [ fgaz SuperSandro2000 ];
+<<<<<<< HEAD
+=======
+    platforms = platforms.unix;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

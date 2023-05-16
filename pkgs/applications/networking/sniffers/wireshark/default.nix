@@ -49,7 +49,11 @@
 assert withQt -> qt6 != null;
 
 let
+<<<<<<< HEAD
   version = "4.0.8";
+=======
+  version = "4.0.5";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   variant = if withQt then "qt" else "cli";
 in
 stdenv.mkDerivation {
@@ -61,7 +65,11 @@ stdenv.mkDerivation {
     repo = "wireshark";
     owner = "wireshark";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-bNg0yhNb1GRsTclNWWO+Bamm2wOnUjVKU+JftJu+LTo=";
+=======
+    hash = "sha256-9U0V2oLVyzq+3HxvOuD8Uzj1tjoMtYBws43fn5RfGhQ=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   cmakeFlags = [
@@ -82,7 +90,11 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ asciidoctor bison cmake ninja flex makeWrapper pkg-config python3 perl ]
     ++ lib.optionals withQt [ qt6.wrapQtAppsHook wrapGAppsHook ];
 
+<<<<<<< HEAD
   depsBuildBuild = lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [ buildPackages.stdenv.cc ];
+=======
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   buildInputs = [
     gettext
@@ -177,7 +189,11 @@ stdenv.mkDerivation {
     '';
 
     platforms = platforms.linux ++ platforms.darwin;
+<<<<<<< HEAD
     maintainers = with maintainers; [ bjornfor fpletz paveloom ];
+=======
+    maintainers = with maintainers; [ bjornfor fpletz ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     mainProgram = if withQt then "wireshark" else "tshark";
   };
 }

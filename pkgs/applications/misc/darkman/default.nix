@@ -11,7 +11,11 @@ buildGoModule rec {
     sha256 = "sha256-6SNXVe6EfVwcXH9O6BxNw+v4/uhKhCtVS3XE2GTc2Sc=";
   };
 
+<<<<<<< HEAD
   vendorHash = "sha256-xEPmNnaDwFU4l2G4cMvtNeQ9KneF5g9ViQSFrDkrafY=";
+=======
+  vendorSha256 = "sha256-xEPmNnaDwFU4l2G4cMvtNeQ9KneF5g9ViQSFrDkrafY=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nativeBuildInputs = [ scdoc ];
 

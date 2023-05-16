@@ -6,19 +6,27 @@ let
   im = config.i18n.inputMethod;
   cfg = im.fcitx5;
   fcitx5Package = pkgs.fcitx5-with-addons.override { inherit (cfg) addons; };
+<<<<<<< HEAD
   settingsFormat = pkgs.formats.ini { };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 in
 {
   options = {
     i18n.inputMethod.fcitx5 = {
       addons = mkOption {
         type = with types; listOf package;
+<<<<<<< HEAD
         default = [ ];
+=======
+        default = [];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         example = literalExpression "with pkgs; [ fcitx5-rime ]";
         description = lib.mdDoc ''
           Enabled Fcitx5 addons.
         '';
       };
+<<<<<<< HEAD
       quickPhrase = mkOption {
         type = with types; attrsOf str;
         default = { };
@@ -79,6 +87,8 @@ in
           and loaded.
         '';
       };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
   };
 
@@ -91,6 +101,7 @@ in
   config = mkIf (im.enabled == "fcitx5") {
     i18n.inputMethod.package = fcitx5Package;
 
+<<<<<<< HEAD
     i18n.inputMethod.fcitx5.addons = lib.optionals (cfg.quickPhrase != { }) [
       (pkgs.writeTextDir "share/fcitx5/data/QuickPhrase.mb"
         (lib.concatStringsSep "\n"
@@ -117,13 +128,18 @@ in
           cfg.settings.addons)
       ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     environment.variables = {
       GTK_IM_MODULE = "fcitx";
       QT_IM_MODULE = "fcitx";
       XMODIFIERS = "@im=fcitx";
       QT_PLUGIN_PATH = [ "${fcitx5Package}/${pkgs.qt6.qtbase.qtPluginPrefix}" ];
+<<<<<<< HEAD
     } // lib.optionalAttrs cfg.ignoreUserConfig {
       SKIP_FCITX_USER_PATH = "1";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
   };
 }

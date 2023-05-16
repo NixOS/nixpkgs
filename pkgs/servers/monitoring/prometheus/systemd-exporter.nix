@@ -4,7 +4,11 @@ buildGoModule rec {
   pname = "systemd_exporter";
   version = "0.5.0";
 
+<<<<<<< HEAD
   vendorHash = "sha256-XkwBhj2M1poirPkWzS71NbRTshc8dTKwaHoDfFxpykU=";
+=======
+  vendorSha256 = "sha256-XkwBhj2M1poirPkWzS71NbRTshc8dTKwaHoDfFxpykU=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "povilasv";
@@ -20,5 +24,9 @@ buildGoModule rec {
     homepage = "https://github.com/povilasv/systemd_exporter";
     license = licenses.asl20;
     maintainers = with maintainers; [ chkno ];
+<<<<<<< HEAD
+=======
+    platforms = platforms.unix;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

@@ -1,10 +1,15 @@
 { stdenv
 , lib
 , fetchurl
+<<<<<<< HEAD
 , fetchpatch
 , gettext
 , meson
 , mesonEmulatorHook
+=======
+, gettext
+, meson
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , ninja
 , pkg-config
 , asciidoc
@@ -33,12 +38,17 @@
 
 stdenv.mkDerivation rec {
   pname = "tracker";
+<<<<<<< HEAD
   version = "3.5.3";
+=======
+  version = "3.5.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+<<<<<<< HEAD
     sha256 = "FGbIsIl75dngVth+EK1YkntYgDPwGvLxplaokhw6KO4=";
   };
 
@@ -52,6 +62,11 @@ stdenv.mkDerivation rec {
     })
   ];
 
+=======
+    sha256 = "+XLVCse6/czxE7HrmdyuNUBGhameVb/vFvOsg7Tel00=";
+  };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   strictDeps = true;
 
   depsBuildBuild = [
@@ -72,8 +87,11 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals withIntrospection [
     gobject-introspection
     vala
+<<<<<<< HEAD
   ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
     mesonEmulatorHook
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   buildInputs = [

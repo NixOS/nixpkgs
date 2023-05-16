@@ -2,13 +2,21 @@
 
 buildGoModule rec {
   pname = "exoscale-cli";
+<<<<<<< HEAD
   version = "1.72.2";
+=======
+  version = "1.68.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "exoscale";
     repo = "cli";
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-EUHjkhorfqRPStwThO5rdBVtl+NltEv18Bno4zu+5Us=";
+=======
+    sha256 = "sha256-GDnHwHKbe+8Qv2zxcKqHQ9s9dS9jvE6qNXe35FeQEKQ=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   vendorHash = null;

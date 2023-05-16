@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 { lib, fetchFromGitHub, ocamlPackages, buildOasisPackage, extlib, num }:
+=======
+{ lib, fetchFromGitHub, ocamlPackages, buildOasisPackage, ounit, extlib, num }:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 buildOasisPackage rec {
   pname = "tcslib";
@@ -13,6 +17,10 @@ buildOasisPackage rec {
     sha256 = "05g6m82blsccq8wx8knxv6a5fzww7hi624jx91f9h87nk2fsplhi";
   };
 
+<<<<<<< HEAD
+=======
+  buildInputs = [ ounit ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   propagatedBuildInputs = [ extlib num ];
 
   meta = {

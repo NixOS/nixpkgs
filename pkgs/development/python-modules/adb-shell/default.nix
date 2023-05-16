@@ -1,6 +1,9 @@
 { lib
 , aiofiles
+<<<<<<< HEAD
 , async-timeout
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , buildPythonPackage
 , cryptography
 , fetchFromGitHub
@@ -16,7 +19,11 @@
 
 buildPythonPackage rec {
   pname = "adb-shell";
+<<<<<<< HEAD
   version = "0.4.4";
+=======
+  version = "0.4.3";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = !isPy3k;
@@ -25,7 +32,11 @@ buildPythonPackage rec {
     owner = "JeffLIrion";
     repo = "adb_shell";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-pOkFUh3SEu/ch9R1lVoQn50nufQp8oI+D4/+Ybal5CA=";
+=======
+    hash = "sha256-+RU3nyJpHq0r/9erEbjUILpwIPWq14HdOX7LkSxySs4=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [
@@ -37,7 +48,10 @@ buildPythonPackage rec {
   passthru.optional-dependencies = {
     async = [
       aiofiles
+<<<<<<< HEAD
       async-timeout
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     ];
     usb = [
       libusb1
@@ -48,7 +62,13 @@ buildPythonPackage rec {
     mock
     pycryptodome
     pytestCheckHook
+<<<<<<< HEAD
   ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+=======
+  ]
+  ++ passthru.optional-dependencies.async
+  ++ passthru.optional-dependencies.usb;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   pythonImportsCheck = [
     "adb_shell"

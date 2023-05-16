@@ -8,6 +8,7 @@ let
   smokepingPidDir = "/run";
   configFile =
     if cfg.config == null
+<<<<<<< HEAD
     then
       ''
         *** General ***
@@ -38,6 +39,38 @@ let
       ''
     else
       cfg.config;
+=======
+      then
+        ''
+          *** General ***
+          cgiurl   = ${cfg.cgiUrl}
+          contact = ${cfg.ownerEmail}
+          datadir  = ${smokepingHome}/data
+          imgcache = ${smokepingHome}/cache
+          imgurl   = ${cfg.imgUrl}
+          linkstyle = ${cfg.linkStyle}
+          ${lib.optionalString (cfg.mailHost != "") "mailhost = ${cfg.mailHost}"}
+          owner = ${cfg.owner}
+          pagedir = ${smokepingHome}/cache
+          piddir  = ${smokepingPidDir}
+          ${lib.optionalString (cfg.sendmail != null) "sendmail = ${cfg.sendmail}"}
+          smokemail = ${cfg.smokeMailTemplate}
+          *** Presentation ***
+          template = ${cfg.presentationTemplate}
+          ${cfg.presentationConfig}
+          *** Alerts ***
+          ${cfg.alertConfig}
+          *** Database ***
+          ${cfg.databaseConfig}
+          *** Probes ***
+          ${cfg.probeConfig}
+          *** Targets ***
+          ${cfg.targetConfig}
+          ${cfg.extraConfig}
+        ''
+      else
+        cfg.config;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   configPath = pkgs.writeText "smokeping.conf" configFile;
   cgiHome = pkgs.writeScript "smokeping.fcgi" ''
@@ -141,7 +174,11 @@ in
         '';
       };
       linkStyle = mkOption {
+<<<<<<< HEAD
         type = types.enum [ "original" "absolute" "relative" ];
+=======
+        type = types.enum ["original" "absolute" "relative"];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         default = "relative";
         example = "absolute";
         description = lib.mdDoc "DNS name for the urls generated in the cgi.";
@@ -301,8 +338,12 @@ in
     ];
     security.wrappers = {
       fping =
+<<<<<<< HEAD
         {
           setuid = true;
+=======
+        { setuid = true;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           owner = "root";
           group = "root";
           source = "${pkgs.fping}/bin/fping";
@@ -340,16 +381,27 @@ in
       };
       preStart = ''
         mkdir -m 0755 -p ${smokepingHome}/cache ${smokepingHome}/data
+<<<<<<< HEAD
         ln -snf ${cfg.package}/htdocs/css ${smokepingHome}/css
         ln -snf ${cfg.package}/htdocs/js ${smokepingHome}/js
         ln -snf ${cgiHome} ${smokepingHome}/smokeping.fcgi
+=======
+        ln -sf ${cfg.package}/htdocs/css ${smokepingHome}/css
+        ln -sf ${cfg.package}/htdocs/js ${smokepingHome}/js
+        ln -sf ${cgiHome} ${smokepingHome}/smokeping.fcgi
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         ${cfg.package}/bin/smokeping --check --config=${configPath}
         ${cfg.package}/bin/smokeping --static --config=${configPath}
       '';
     };
     systemd.services.thttpd = mkIf cfg.webService {
+<<<<<<< HEAD
       requiredBy = [ "multi-user.target" ];
       requires = [ "smokeping.service" ];
+=======
+      requiredBy = [ "multi-user.target"];
+      requires = [ "smokeping.service"];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       path = with pkgs; [ bash rrdtool smokeping thttpd ];
       serviceConfig = {
         Restart = "always";

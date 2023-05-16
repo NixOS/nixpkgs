@@ -2,7 +2,10 @@
 , buildPythonPackage
 , fetchPypi
 , python
+<<<<<<< HEAD
 , pythonAtLeast
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , pythonOlder
 , unittestCheckHook
 }:
@@ -12,9 +15,13 @@ buildPythonPackage rec {
   version = "21.6.0";
   format = "setuptools";
 
+<<<<<<< HEAD
   # Python 3.11 not currently supported
   # https://github.com/jazzband/contextlib2/issues/43
   disabled = pythonOlder "3.6" || pythonAtLeast "3.11";
+=======
+  disabled = pythonOlder "3.6";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchPypi {
     inherit pname version;

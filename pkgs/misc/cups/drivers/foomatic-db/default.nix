@@ -13,15 +13,24 @@
 
 stdenv.mkDerivation rec {
   pname = "foomatic-db";
+<<<<<<< HEAD
   version = "unstable-2023-09-02";
+=======
+  version = "unstable-2023-03-30";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     # there is also a daily snapshot at the `downloadPage`,
     # but it gets deleted quickly and would provoke 404 errors
     owner = "OpenPrinting";
     repo = "foomatic-db";
+<<<<<<< HEAD
     rev = "4e6ab90da63afddee33d80115acb44149d2d292b";
     hash = "sha256-wtDGJUyViiCenCY4zvr0Ia4ecZpoDsDSWwlYYs3YMT8=";
+=======
+    rev = "d883a215dc062e478c64d4e2eee9b0e39e6c629d";
+    hash = "sha256-eFgHTbj4pNfLG2ftU29FQ8rgRMbX+44UytfoZ4vdgZ4=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   buildInputs = [ cups cups-filters ghostscript gnused perl ];

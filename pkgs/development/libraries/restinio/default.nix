@@ -2,11 +2,19 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "restinio";
+<<<<<<< HEAD
   version = "0.6.19";
 
   src = fetchurl {
     url = "https://github.com/Stiffstream/restinio/releases/download/v.${version}/${pname}-${version}.tar.bz2";
     hash = "sha256-fyHuvrlm4XDWq1TpsZiskn1DkJASFzngN8D6O7NnskA=";
+=======
+  version = "0.6.18";
+
+  src = fetchurl {
+    url = "https://github.com/Stiffstream/restinio/releases/download/v.${version}/${pname}-${version}.tar.bz2";
+    hash = "sha256-4OksmaW6NBpZ8npqLiZGn6zmCB7KxXlU5NKfKmA7Zr8=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   sourceRoot = ".";

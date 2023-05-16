@@ -50,6 +50,7 @@ let
     '';
   };
 
+<<<<<<< HEAD
   mkCc = cc:
     if stdenv.isAarch64 then cc
     else
@@ -63,6 +64,18 @@ let
     else
       (overrideCC stdenv (mkCc stdenv.cc)).override {
         extraBuildInputs = [ pkgs.darwin.apple_sdk_11_0.frameworks.CoreFoundation ];
+=======
+  mkStdenv = stdenv:
+    let
+      cc = stdenv.cc.override {
+        bintools = stdenv.cc.bintools.override { libc = packages.Libsystem; };
+        libc = packages.Libsystem;
+      };
+    in
+    if stdenv.isAarch64 then stdenv
+    else
+      (overrideCC stdenv cc).override {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         targetPlatform = stdenv.targetPlatform // {
           darwinMinVersion = "10.12";
           darwinSdkVersion = "11.0";
@@ -72,6 +85,7 @@ let
   stdenvs = {
     stdenv = mkStdenv stdenv;
   } // builtins.listToAttrs (map
+<<<<<<< HEAD
     (v: {
       name = "llvmPackages_${v}";
       value = pkgs."llvmPackages_${v}" // {
@@ -79,6 +93,9 @@ let
         clang = mkCc pkgs."llvmPackages_${v}".clang;
       };
     })
+=======
+    (v: { name = "clang${v}Stdenv"; value = mkStdenv pkgs."llvmPackages_${v}".stdenv; })
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     [ "12" "13" "14" "15" "16" ]
   );
 
@@ -113,12 +130,15 @@ let
     rustPlatform = pkgs.makeRustPlatform {
       inherit (pkgs.darwin.apple_sdk_11_0) stdenv;
       inherit (pkgs) rustc cargo;
+<<<<<<< HEAD
     } // {
       inherit (pkgs.callPackage ../../../build-support/rust/hooks {
         inherit (pkgs.darwin.apple_sdk_11_0) stdenv;
         inherit (pkgs) cargo rustc;
         clang = mkCc pkgs.clang;
       }) bindgenHook;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
 
     callPackage = newScope (lib.optionalAttrs stdenv.isDarwin (stdenvs // rec {

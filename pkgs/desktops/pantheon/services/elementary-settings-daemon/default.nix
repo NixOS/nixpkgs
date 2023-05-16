@@ -10,7 +10,10 @@
 , accountsservice
 , dbus
 , desktop-file-utils
+<<<<<<< HEAD
 , fwupd
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , geoclue2
 , glib
 , gobject-introspection
@@ -23,13 +26,21 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-settings-daemon";
+<<<<<<< HEAD
   version = "1.3.1";
+=======
+  version = "1.2.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "settings-daemon";
     rev = version;
+<<<<<<< HEAD
     sha256 = "sha256-mEmc9uLwUTObsP70P0G2vcRdQF6do/wMTQjvfLUU//o=";
+=======
+    sha256 = "sha256-5QdCj2Z31t7dxZi7ZZ5g6qLgsMyw7rM5dRw0G8uoC6o=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [
@@ -46,7 +57,10 @@ stdenv.mkDerivation rec {
   buildInputs = [
     accountsservice
     dbus
+<<<<<<< HEAD
     fwupd
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     geoclue2
     glib
     gtk3

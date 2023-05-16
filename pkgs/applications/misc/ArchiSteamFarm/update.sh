@@ -1,8 +1,17 @@
 #!/usr/bin/env nix-shell
+<<<<<<< HEAD
 #!nix-shell -I nixpkgs=./. -i bash -p curl gnused jq common-updater-scripts nix-prefetch prefetch-npm-deps
 set -euo pipefail
 cd "$(dirname "${BASH_SOURCE[0]}")"
 
+=======
+#!nix-shell -I nixpkgs=./. -i bash -p curl gnused jq common-updater-scripts
+set -euo pipefail
+cd "$(dirname "${BASH_SOURCE[0]}")"
+
+deps_file="$(realpath ./deps.nix)"
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 new_version="$(curl ${GITHUB_TOKEN:+" -u \":$GITHUB_TOKEN\""} -s "https://api.github.com/repos/JustArchiNET/ArchiSteamFarm/releases" | jq -r  'map(select(.prerelease == false)) | .[0].tag_name')"
 old_version="$(sed -nE 's/\s*version = "(.*)".*/\1/p' ./default.nix)"
 
@@ -20,7 +29,11 @@ if [[ "${1:-}" != "--deps-only" ]]; then
     update-source-version ArchiSteamFarm "$new_version"
 fi
 
+<<<<<<< HEAD
 $(nix-build -A ArchiSteamFarm.fetch-deps --no-out-link)
+=======
+$(nix-build -A ArchiSteamFarm.fetch-deps --no-out-link) "$deps_file"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 popd
 "$asf_path/web-ui/update.sh"

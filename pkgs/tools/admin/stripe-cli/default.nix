@@ -2,15 +2,25 @@
 
 buildGoModule rec {
   pname = "stripe-cli";
+<<<<<<< HEAD
   version = "1.17.2";
+=======
+  version = "1.14.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "stripe";
     repo = pname;
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-MzzjrGtqbtZMvfL7dPAsKHF2ZTneSdtDuwHQQcyrQDw=";
   };
   vendorHash = "sha256-DYA6cu2KzEBZ4wsT7wjcdY1endQQOZlj2aOwu6iGLew=";
+=======
+    hash = "sha256-zP5QR1K8BAga+dEqGZKpZRYrpNLIBm6RNdf9VD9PaCk=";
+  };
+  vendorHash = "sha256-rjYV69BWkqIkgyeauAo4KEfbB7cxnwn3VSjLrMrCu1c=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -29,7 +39,11 @@ buildGoModule rec {
     rm pkg/cmd/resources_test.go
     rm pkg/cmd/root_test.go
 
+<<<<<<< HEAD
     # TODO: no clue why it's broken (1.17.1), remove for now.
+=======
+    # TODO: no clue why it's broken (1.14.1), remove for now.
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     rm pkg/login/client_login_test.go
     rm pkg/git/editor_test.go
     rm pkg/rpcservice/sample_create_test.go
@@ -72,7 +86,11 @@ buildGoModule rec {
       Create, retrieve, update, or delete API objects.
     '';
     license = with licenses; [ asl20 ];
+<<<<<<< HEAD
     maintainers = with maintainers; [ RaghavSood jk kashw2 ];
+=======
+    maintainers = with maintainers; [ RaghavSood jk ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     mainProgram = "stripe";
   };
 }

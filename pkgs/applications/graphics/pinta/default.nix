@@ -26,6 +26,10 @@ buildDotnetModule rec {
   # How-to update deps:
   # $ nix-build -A pinta.fetch-deps
   # $ ./result
+<<<<<<< HEAD
+=======
+  # $ cp /tmp/Pinta-deps.nix ./pkgs/applications/graphics/pinta/deps.nix
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   # TODO: create update script
   nugetDeps = ./deps.nix;
 

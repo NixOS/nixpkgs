@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 { runCommand, lib }:
 
 firmware:
@@ -7,6 +8,13 @@ let
 in
 
 runCommand "${firmware.name}-xz" args ''
+=======
+{ runCommand }:
+
+firmware:
+
+runCommand "${firmware.name}-xz" {} ''
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   mkdir -p $out/lib
   (cd ${firmware} && find lib/firmware -type d -print0) |
       (cd $out && xargs -0 mkdir -v --)

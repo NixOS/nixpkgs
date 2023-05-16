@@ -3,6 +3,10 @@
 buildDunePackage rec {
   pname = "hack_parallel";
   version = "1.0.1";
+<<<<<<< HEAD
+=======
+  duneVersion = "3";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   minimalOCamlVersion = "4.08";
 
   src = fetchFromGitHub {
@@ -14,6 +18,7 @@ buildDunePackage rec {
 
   patches = [ ./hack_parallel.patch ];
 
+<<<<<<< HEAD
   postPatch = ''
     substituteInPlace src/third-party/hack_core/hack_caml.ml --replace 'include Pervasives' ""
     substituteInPlace \
@@ -31,6 +36,8 @@ buildDunePackage rec {
     substituteInPlace src/utils/sys_utils.ml --replace String.create Bytes.create
   '';
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nativeBuildInputs = [ pkg-config ];
 
   propagatedBuildInputs = [ core core_unix sqlite ];

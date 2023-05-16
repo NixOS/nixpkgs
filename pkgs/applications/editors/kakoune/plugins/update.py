@@ -55,6 +55,14 @@ packages = ( self:
 {"""
             )
             for pluginDesc, plugin in sorted_plugins:
+<<<<<<< HEAD
+=======
+                if plugin.has_submodules:
+                    submodule_attr = "\n      fetchSubmodules = true;"
+                else:
+                    submodule_attr = ""
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
                 f.write(
                     f"""
   {plugin.normalized_name} = buildKakounePluginFrom2Nix {{

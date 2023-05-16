@@ -4,14 +4,22 @@
 
 stdenv.mkDerivation rec {
   pname = "xterm";
+<<<<<<< HEAD
   version = "384";
+=======
+  version = "379";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchurl {
     urls = [
       "ftp://ftp.invisible-island.net/xterm/${pname}-${version}.tgz"
       "https://invisible-mirror.net/archives/xterm/${pname}-${version}.tgz"
     ];
+<<<<<<< HEAD
     hash = "sha256-Me+HB0DOrgIMPEtKlgHH9Hv9RmcsGq8tITpWXWTLw3M=";
+=======
+    hash = "sha256-p93ydO6EuX+xKDZ1AJ1Tyi0CoP/VzlpRGNr8NiPrsxA=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   strictDeps = true;

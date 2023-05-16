@@ -12,7 +12,11 @@
 
 buildPythonPackage rec {
   pname = "ruuvitag-ble";
+<<<<<<< HEAD
   version = "0.1.2";
+=======
+  version = "0.1.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -21,7 +25,11 @@ buildPythonPackage rec {
     owner = "Bluetooth-Devices";
     repo = pname;
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-J+807p2mE+VZ0oqldFtjdcNGsRTkAU54s6byQSGrng4=";
+=======
+    hash = "sha256-WkPYlEkUH1xvGjBVr6JkLx5CfIPvAa9vX50OjCOmTME=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

@@ -7,15 +7,25 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "trust-dns";
+<<<<<<< HEAD
   version = "0.23.0";
+=======
+  version = "0.22.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "bluejekyll";
     repo = "trust-dns";
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-CfFEhZEk1Z7VG0n8EvyQwHvZIOEES5GKpm5tMeqhRVY=";
   };
   cargoHash = "sha256-jmow/jtdbuKFovXWA5xbgM67iJmkwP35hiOivIJ5JdM=";
+=======
+    sha256 = "sha256-b9tK1JbTwB3ZuRPh0wb3cOFj9dMW7URXIaFzUq0Yipw=";
+  };
+  cargoHash = "sha256-mpobdeTRWJzIEmhwtcM6UE66qRD5ot/0yLeQM6Tec+0=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   buildInputs = [ openssl ];
   nativeBuildInputs = [ pkg-config ];

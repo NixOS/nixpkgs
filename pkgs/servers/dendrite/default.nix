@@ -1,18 +1,33 @@
+<<<<<<< HEAD
 { lib, buildGoModule, fetchFromGitHub, nix-update-script
+=======
+{ lib, buildGoModule, fetchFromGitHub
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , nixosTests, postgresql, postgresqlTestHook }:
 
 buildGoModule rec {
   pname = "matrix-dendrite";
+<<<<<<< HEAD
   version = "0.13.2";
+=======
+  version = "0.12.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "matrix-org";
     repo = "dendrite";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-I8k3E/7RXJFIaEX1Zw6oFDT6UkQvZBZuyTxUZZQYr+s=";
   };
 
   vendorHash = "sha256-H2wtGjGTzqN8OXAI2ksCBgTJsmJYLQu5aFu9OP03/DA=";
+=======
+    hash = "sha256-syOLrw4ig8rmFDkxJ9KSAuzUVO8UokekV17mT1bJNNM=";
+  };
+
+  vendorHash = "sha256-nvGhKCUiyHSD0VpE4OtT9YQSHxv0d7iwOChCJl2D3zk=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   subPackages = [
     # The server
@@ -47,9 +62,12 @@ buildGoModule rec {
   passthru.tests = {
     inherit (nixosTests) dendrite;
   };
+<<<<<<< HEAD
   passthru.updateScript = nix-update-script {
     extraArgs = [ "--version-regex" "v(.+)" ];
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   meta = with lib; {
     homepage = "https://matrix-org.github.io/dendrite";

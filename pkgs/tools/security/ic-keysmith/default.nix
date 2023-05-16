@@ -11,7 +11,11 @@ buildGoModule rec {
     sha256 = "sha256-+wYWIoPYc7qpTRS4Zlxp50Up8obZOmfQpiT0SWwVJE0=";
   };
 
+<<<<<<< HEAD
   vendorHash = "sha256-rIH10TRWOgmJM8bnKXYTsmmAtlrMMxHc8rnaCmMJGdw=";
+=======
+  vendorSha256 = "sha256-rIH10TRWOgmJM8bnKXYTsmmAtlrMMxHc8rnaCmMJGdw=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   meta = with lib; {
     description = "Hierarchical Deterministic Key Derivation for the Internet Computer";

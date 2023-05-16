@@ -2,6 +2,7 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "svd2rust";
+<<<<<<< HEAD
   version = "0.30.0";
 
   src = fetchCrate {
@@ -15,6 +16,16 @@ rustPlatform.buildRustPackage rec {
   postPatch = ''
     rm .cargo/config.toml
   '';
+=======
+  version = "0.28.0";
+
+  src = fetchCrate {
+    inherit pname version;
+    sha256 = "sha256-/Pt0eKS6Rfrh18nb1lR/T+T+b73rmX4jmGIjbXJtcMA=";
+  };
+
+  cargoSha256 = "sha256-Vum7Ltq9h6BMXvIESO9jC2B775BZlCWmatazk1bavQs=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   meta = with lib; {
     description = "Generate Rust register maps (`struct`s) from SVD files";

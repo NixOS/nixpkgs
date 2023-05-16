@@ -71,6 +71,7 @@ in
 
     environment.systemPackages = [ pkgs.udisks2 ];
 
+<<<<<<< HEAD
     environment.etc = (mapAttrs' (name: value: nameValuePair "udisks2/${name}" { source = value; } ) configFiles) // (
     let
       libblockdev = pkgs.udisks2.libblockdev;
@@ -81,6 +82,14 @@ in
       "libblockdev/${majorVer}/conf.d/00-default.cfg".source = "${libblockdev}/etc/libblockdev/${majorVer}/conf.d/00-default.cfg";
       "libblockdev/${majorVer}/conf.d/10-lvm-dbus.cfg".source = "${libblockdev}/etc/libblockdev/${majorVer}/conf.d/10-lvm-dbus.cfg";
     });
+=======
+    environment.etc = (mapAttrs' (name: value: nameValuePair "udisks2/${name}" { source = value; } ) configFiles) // {
+      # We need to make sure /etc/libblockdev/conf.d is populated to avoid
+      # warnings
+      "libblockdev/conf.d/00-default.cfg".source = "${pkgs.libblockdev}/etc/libblockdev/conf.d/00-default.cfg";
+      "libblockdev/conf.d/10-lvm-dbus.cfg".source = "${pkgs.libblockdev}/etc/libblockdev/conf.d/10-lvm-dbus.cfg";
+    };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     security.polkit.enable = true;
 

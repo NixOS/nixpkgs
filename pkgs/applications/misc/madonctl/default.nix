@@ -32,6 +32,10 @@ buildGoModule rec {
     description = "CLI for the Mastodon social network API";
     homepage = "https://github.com/McKael/madonctl";
     license = licenses.mit;
+<<<<<<< HEAD
+=======
+    platforms = platforms.unix;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     maintainers = with maintainers; [ aaronjheng ];
   };
 }

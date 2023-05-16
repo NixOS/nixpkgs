@@ -119,8 +119,13 @@ stdenv.mkDerivation {
   };
 
   meta =
+<<<<<<< HEAD
     let pkg-config_ = lib.optionalAttrs (pkg-config != null) pkg-config; in
     (lib.optionalAttrs (pkg-config_ ? meta) (removeAttrs pkg-config.meta ["priority"])) //
+=======
+    let pkg-config_ = if pkg-config != null then pkg-config else {}; in
+    (if pkg-config_ ? meta then removeAttrs pkg-config.meta ["priority"] else {}) //
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     { description =
         lib.attrByPath ["meta" "description"] "pkg-config" pkg-config_
         + " (wrapper script)";

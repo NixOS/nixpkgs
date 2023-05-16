@@ -11,7 +11,11 @@ stdenvNoCC.mkDerivation rec {
   version = source.version;
 
   src = fetchzip {
+<<<<<<< HEAD
     url = "https://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git/snapshot/linux-firmware-${source.revision}.tar.gz";
+=======
+    url = "https://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git/snapshot/linux-firmware-${version}.tar.gz";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     hash = source.sourceHash;
   };
 

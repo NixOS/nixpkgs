@@ -33,6 +33,7 @@
 , xapian
 , zlib
 , withGui ? true
+<<<<<<< HEAD
 , withPython ? with stdenv; buildPlatform.canExecute hostPlatform
 }:
 
@@ -64,6 +65,10 @@ let filters = {
     filterPath = lib.makeBinPath (map lib.getBin (builtins.attrValues filters));
 in
 
+=======
+}:
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 mkDerivation rec {
   pname = "recoll";
   version = "1.33.4";
@@ -77,6 +82,7 @@ mkDerivation rec {
     "--enable-recollq"
     "--disable-webkit"
     "--without-systemd"
+<<<<<<< HEAD
 
     # this leaks into the final `librecoll-*.so` binary, so we need
     # to be sure it is taken from `pkgs.file` rather than `stdenv`,
@@ -92,6 +98,16 @@ mkDerivation rec {
   ] ++ [
     (lib.withFeature stdenv.isLinux "inotify")
   ];
+=======
+  ] ++ lib.optionals (!withGui) [
+    "--disable-qtgui"
+    "--disable-x11mon"
+  ] ++ (if stdenv.isLinux then [
+    "--with-inotify"
+  ] else [
+    "--without-inotify"
+  ]);
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   env.NIX_CFLAGS_COMPILE = toString [ "-DNIXPKGS" ];
 
@@ -100,6 +116,7 @@ mkDerivation rec {
     ./fix-datadir.patch
   ];
 
+<<<<<<< HEAD
   nativeBuildInputs = lib.optionals withGui [
     qtbase
   ] ++ [
@@ -107,6 +124,12 @@ mkDerivation rec {
   ] ++ lib.optionals withPython [
     python3Packages.setuptools
   ] ++ [
+=======
+  nativeBuildInputs = [
+    file
+    pkg-config
+    python3Packages.setuptools
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     makeWrapper
     which
   ];
@@ -114,6 +137,7 @@ mkDerivation rec {
   buildInputs = [
     bison
     chmlib
+<<<<<<< HEAD
   ] ++ lib.optionals withPython [
     python3Packages.python
     python3Packages.mutagen
@@ -121,6 +145,12 @@ mkDerivation rec {
     xapian
     zlib
     file
+=======
+    python3Packages.python
+    python3Packages.mutagen
+    xapian
+    zlib
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ] ++ lib.optionals withGui [
     qtbase
   ] ++ lib.optionals stdenv.isDarwin [
@@ -135,6 +165,7 @@ mkDerivation rec {
     substituteInPlace $out/share/recoll/filters/rclconfig.py       --replace /usr/share/recoll $out/share/recoll
     for f in $out/share/recoll/filters/* ; do
       if [[ ! "$f" =~ \.zip$ ]]; then
+<<<<<<< HEAD
   '' + lib.concatStrings (lib.mapAttrsToList (k: v: (''
         substituteInPlace $f --replace '"${k}"'  '"${lib.getBin v}/bin/${k}"'
   '')) filters) + ''
@@ -144,6 +175,30 @@ mkDerivation rec {
     done
     wrapProgram $out/bin/recoll      --prefix PATH : "${filterPath}"
     wrapProgram $out/bin/recollindex --prefix PATH : "${filterPath}"
+=======
+        substituteInPlace $f --replace '"antiword"'  '"${lib.getBin antiword}/bin/antiword"'
+        substituteInPlace $f --replace '"awk"'       '"${lib.getBin gawk}/bin/awk"'
+        substituteInPlace $f --replace '"catppt"'    '"${lib.getBin catdoc}/bin/catppt"'
+        substituteInPlace $f --replace '"djvused"'   '"${lib.getBin djvulibre}/bin/djvused"'
+        substituteInPlace $f --replace '"djvutxt"'   '"${lib.getBin djvulibre}/bin/djvutxt"'
+        substituteInPlace $f --replace '"egrep"'     '"${lib.getBin gnugrep}/bin/egrep"'
+        substituteInPlace $f --replace '"groff"'     '"${lib.getBin groff}/bin/groff"'
+        substituteInPlace $f --replace '"gunzip"'    '"${lib.getBin gzip}/bin/gunzip"'
+        substituteInPlace $f --replace '"iconv"'     '"${lib.getBin libiconv}/bin/iconv"'
+        substituteInPlace $f --replace '"pdftotext"' '"${lib.getBin poppler_utils}/bin/pdftotext"'
+        substituteInPlace $f --replace '"pstotext"'  '"${lib.getBin ghostscript}/bin/ps2ascii"'
+        substituteInPlace $f --replace '"sed"'       '"${lib.getBin gnused}/bin/sed"'
+        substituteInPlace $f --replace '"tar"'       '"${lib.getBin gnutar}/bin/tar"'
+        substituteInPlace $f --replace '"unzip"'     '"${lib.getBin unzip}/bin/unzip"'
+        substituteInPlace $f --replace '"xls2csv"'   '"${lib.getBin catdoc}/bin/xls2csv"'
+        substituteInPlace $f --replace '"xsltproc"'  '"${lib.getBin libxslt}/bin/xsltproc"'
+        substituteInPlace $f --replace '"unrtf"'     '"${lib.getBin unrtf}/bin/unrtf"'
+        substituteInPlace $f --replace '"untex"'     '"${lib.getBin untex}/bin/untex"'
+        substituteInPlace $f --replace '"wpd2html"'  '"${lib.getBin libwpd}/bin/wpd2html"'
+        substituteInPlace $f --replace /usr/bin/perl   ${lib.getBin perl}/bin/perl
+      fi
+    done
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     wrapProgram $out/share/recoll/filters/rclaudio.py \
       --prefix PYTHONPATH : $PYTHONPATH
     wrapProgram $out/share/recoll/filters/rclimg \
@@ -168,8 +223,11 @@ mkDerivation rec {
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
     maintainers = with maintainers; [ jcumming ehmry ];
+<<<<<<< HEAD
 
     # `Makefile.am` assumes the ability to run the hostPlatform's python binary at build time
     broken = withPython && (with stdenv; !buildPlatform.canExecute hostPlatform);
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

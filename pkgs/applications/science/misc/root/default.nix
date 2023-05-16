@@ -2,6 +2,10 @@
 , lib
 , callPackage
 , fetchurl
+<<<<<<< HEAD
+=======
+, fetchpatch
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , makeWrapper
 , cmake
 , coreutils
@@ -13,7 +17,10 @@
 , gnugrep
 , gnused
 , gsl
+<<<<<<< HEAD
 , gtest
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , lapack
 , libX11
 , libXpm
@@ -23,7 +30,11 @@
 , libGL
 , libxcrypt
 , libxml2
+<<<<<<< HEAD
 , llvm_13
+=======
+, llvm_9
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , lsof
 , lz4
 , xz
@@ -55,9 +66,29 @@
 , noSplash ? false
 }:
 
+<<<<<<< HEAD
 stdenv.mkDerivation rec {
   pname = "root";
   version = "6.28.06";
+=======
+let
+
+  _llvm_9 = llvm_9.overrideAttrs (prev: {
+    patches = (prev.patches or [ ]) ++ [
+      (fetchpatch {
+        url = "https://github.com/root-project/root/commit/a9c961cf4613ff1f0ea50f188e4a4b0eb749b17d.diff";
+        stripLen = 3;
+        hash = "sha256-LH2RipJICEDWOr7JzX5s0QiUhEwXNMFEJihYKy9qWpo=";
+      })
+    ];
+  });
+
+in
+
+stdenv.mkDerivation rec {
+  pname = "root";
+  version = "6.26.10";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   passthru = {
     tests = import ./tests { inherit callPackage; };
@@ -65,7 +96,11 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://root.cern.ch/download/root_v${version}.source.tar.gz";
+<<<<<<< HEAD
     hash = "sha256-rztnO5rKOTpcmuG/huqyZyqvGEG2WMXG56MKuTxYZTM=";
+=======
+    hash = "sha256-jla+w5cQQBeqVPnrVU3noaE0R0/gs7sPQ6cPxPq9Yl8=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ makeWrapper cmake pkg-config git ];
@@ -83,11 +118,18 @@ stdenv.mkDerivation rec {
     lapack
     libxcrypt
     libxml2
+<<<<<<< HEAD
     llvm_13
     lz4
     xz
     gsl
     gtest
+=======
+    _llvm_9
+    lz4
+    xz
+    gsl
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     openblas
     openssl
     xxHash
@@ -109,16 +151,38 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./sw_vers.patch
+<<<<<<< HEAD
   ];
 
+=======
+  ] ++ lib.optionals (python.pkgs.pythonAtLeast "3.11") [
+    # Fix build against Python 3.11
+    (fetchpatch {
+      url = "https://github.com/root-project/root/commit/484deb056dacf768aba4954073b41105c431bffc.patch";
+      hash = "sha256-4qur2e3SxMIPgOg4IjlvuULR2BObuP7xdvs+LmNT2/s=";
+    })
+  ];
+
+  # Fix build against vanilla LLVM 9
+  postPatch = ''
+    sed \
+      -e '/#include "llvm.*RTDyldObjectLinkingLayer.h"/i#define private protected' \
+      -e '/#include "llvm.*RTDyldObjectLinkingLayer.h"/a#undef private' \
+      -i interpreter/cling/lib/Interpreter/IncrementalJIT.h
+  '';
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   preConfigure = ''
     rm -rf builtins/*
     substituteInPlace cmake/modules/SearchInstalledSoftware.cmake \
       --replace 'set(lcgpackages ' '#set(lcgpackages '
 
+<<<<<<< HEAD
     substituteInPlace interpreter/llvm/src/tools/clang/tools/driver/CMakeLists.txt \
       --replace 'add_clang_symlink(''${link} clang)' ""
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     # Don't require textutil on macOS
     : > cmake/modules/RootCPack.cmake
 
@@ -143,8 +207,11 @@ stdenv.mkDerivation rec {
     "-DCMAKE_INSTALL_LIBDIR=lib"
     "-DCMAKE_INSTALL_INCLUDEDIR=include"
     "-Dbuiltin_llvm=OFF"
+<<<<<<< HEAD
     "-Dbuiltin_freetype=OFF"
     "-Dbuiltin_gtest=OFF"
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "-Dbuiltin_nlohmannjson=OFF"
     "-Dbuiltin_openui5=OFF"
     "-Dalien=OFF"
@@ -218,20 +285,36 @@ stdenv.mkDerivation rec {
     # but it also need to support Bash-less POSIX shell like dash,
     # as they are mentioned in `thisroot.sh`.
 
+<<<<<<< HEAD
+=======
+    # `thisroot.sh` would include commands `lsof` and `procps` since ROOT 6.28.
+    # See https://github.com/root-project/root/pull/10332
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     patchRcPathPosix "$out/bin/thisroot.sh" "${lib.makeBinPath [
       coreutils # dirname tail
       gnugrep # grep
       gnused # sed
+<<<<<<< HEAD
       lsof # lsof
       man # manpath
       procps # ps
+=======
+      lsof # lsof # for ROOT (>=6.28)
+      man # manpath
+      procps # ps # for ROOT (>=6.28)
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       which # which
     ]}"
     patchRcPathCsh "$out/bin/thisroot.csh" "${lib.makeBinPath [
       coreutils
       gnugrep
       gnused
+<<<<<<< HEAD
       lsof # lsof
+=======
+      lsof # lsof # for ROOT (>=6.28)
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       man
       which
     ]}"

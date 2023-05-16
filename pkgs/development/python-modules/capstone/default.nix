@@ -10,7 +10,11 @@ buildPythonPackage rec {
   version = lib.getVersion capstone;
 
   src = capstone.src;
+<<<<<<< HEAD
   sourceRoot = "${src.name}/bindings/python";
+=======
+  sourceRoot = "source/bindings/python";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   postPatch = ''
     ln -s ${capstone}/lib/libcapstone${stdenv.targetPlatform.extensions.sharedLibrary} prebuilt/

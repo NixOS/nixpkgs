@@ -17,8 +17,11 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-8NoLv7pHbBauPhz9hiJW0wkVkR96uqGxbOYu5lMZJ4Q=";
   };
 
+<<<<<<< HEAD
   outputs = [ "out" "dev" ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   configureFlags = [
     (lib.enableFeature fontconfigSupport "fontconfig")
     (lib.enableFeature rasterizerSupport "rasterizer")

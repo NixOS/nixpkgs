@@ -2,12 +2,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "resvg";
+<<<<<<< HEAD
   version = "0.35.0";
+=======
+  version = "0.32.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "RazrFalcon";
     repo = pname;
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-iZY0t8GssM4doPnPiI+FdAdjmfXDxSUT7K9YUHBs8rQ=";
   };
 
@@ -22,6 +27,12 @@ rustPlatform.buildRustPackage rec {
   postInstall = ''
     install -Dm644 -t $out/include crates/c-api/*.h
   '';
+=======
+    hash = "sha256-tbFRonljX/vH32/18yKs9qbs+spxLa1ZOQt2QTR8Z7o=";
+  };
+
+  cargoHash = "sha256-0SxFE6eMdVAU1wHvVLMClDk++Uf84InOISs1txXnIzo=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   meta = with lib; {
     description = "An SVG rendering library";

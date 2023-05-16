@@ -10,7 +10,10 @@ let
   defaultConfig = ''
     BIND_ADDRESS = '127.0.0.1'
     PORT = 8000
+<<<<<<< HEAD
     CAPTCHA_ENABLE = False
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '';
 
   makeAppTest = name: configs: makeTest {
@@ -99,6 +102,7 @@ let
       tcp = {
         services.powerdns-admin.extraArgs = [ "-b" "127.0.0.1:8000" ];
         system.build.testScript = ''
+<<<<<<< HEAD
           set -euxo pipefail
           curl -sSf http://127.0.0.1:8000/
 
@@ -123,6 +127,9 @@ let
 
           # Check that we are logged in, this redirects to /admin/setting/pdns if we are
           curl -sSfb session http://127.0.0.1:8000/dashboard/ | grep /admin/setting
+=======
+          curl -sSf http://127.0.0.1:8000/
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         '';
       };
       unix = {

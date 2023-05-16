@@ -67,7 +67,11 @@
 , sdl2Support        ? true,           SDL2
 , sixelSupport       ? false,          libsixel
 , speexSupport       ? true,           speex
+<<<<<<< HEAD
 , swiftSupport       ? stdenv.isDarwin, swift
+=======
+, swiftSupport       ? stdenv.isDarwin && stdenv.isAarch64, swift
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , theoraSupport      ? true,           libtheora
 , vaapiSupport       ? x11Support || waylandSupport, libva
 , vapoursynthSupport ? false,          vapoursynth
@@ -82,6 +86,7 @@ let
   inherit (darwin.apple_sdk_11_0.frameworks)
     AVFoundation CoreFoundation CoreMedia Cocoa CoreAudio MediaPlayer Accelerate;
   luaEnv = lua.withPackages (ps: with ps; [ luasocket ]);
+<<<<<<< HEAD
 
   overrideSDK = platform: version:
     platform // lib.optionalAttrs (platform ? darwinMinVersion) {
@@ -98,6 +103,11 @@ let
 in stdenv'.mkDerivation (finalAttrs: {
   pname = "mpv";
   version = "0.36.0";
+=======
+in stdenv.mkDerivation (finalAttrs: {
+  pname = "mpv";
+  version = "0.35.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   outputs = [ "out" "dev" "man" ];
 
@@ -105,6 +115,7 @@ in stdenv'.mkDerivation (finalAttrs: {
     owner = "mpv-player";
     repo = "mpv";
     rev = "v${finalAttrs.version}";
+<<<<<<< HEAD
     hash = "sha256-82moFbWvfc1awXih0d0D+dHqYbIoGNZ77RmafQ80IOY=";
   };
 
@@ -115,6 +126,17 @@ in stdenv'.mkDerivation (finalAttrs: {
       url = "https://github.com/mpv-player/mpv/commit/3c1686488b48bd2760e9b19f42e7d3be1363d00a.patch";
       hash = "sha256-eYXfX8Y08q4Bl41VHBpwbxYRMZgm/iziXeK6AOp8O6I=";
       revert = true;
+=======
+    sha256 = "sha256-CoYTX9hgxLo72YdMoa0sEywg4kybHbFsypHk1rCM6tM=";
+  };
+
+  patches = [
+    (fetchpatch {
+      # fixes EDL error on youtube DASH streams https://github.com/mpv-player/mpv/issues/11392
+      # to be removed on next release
+      url = "https://github.com/mpv-player/mpv/commit/94c189dae76ba280d9883b16346c3dfb9720687e.patch";
+      sha256 = "sha256-GeAltLAwkOKk82YfXYSrkNEX08uPauh7+kVbBGPWeT8=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     })
   ];
 
@@ -214,8 +236,12 @@ in stdenv'.mkDerivation (finalAttrs: {
     cp ../TOOLS/mpv_identify.sh $out/bin
     cp ../TOOLS/umpv $out/bin
     cp $out/share/applications/mpv.desktop $out/share/applications/umpv.desktop
+<<<<<<< HEAD
     sed -i '/Icon=/ ! s/mpv/umpv/g; s/^Exec=.*/Exec=umpv %U/' $out/share/applications/umpv.desktop
     printf "NoDisplay=true\n" >> $out/share/applications/umpv.desktop
+=======
+    sed -i '/Icon=/ ! s/mpv/umpv/g' $out/share/applications/umpv.desktop
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '' + lib.optionalString stdenv.isDarwin ''
     mkdir -p $out/Applications
     cp -r mpv.app $out/Applications

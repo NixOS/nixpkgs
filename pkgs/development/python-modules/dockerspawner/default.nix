@@ -30,6 +30,10 @@ buildPythonPackage rec {
     description = "Dockerspawner: A custom spawner for Jupyterhub";
     homepage = "https://jupyter.org";
     license = licenses.bsd3;
+<<<<<<< HEAD
     maintainers = [ ];
+=======
+    maintainers = [ maintainers.costrouc ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 { lib, stdenv, fetchNpmDeps, buildPackages, nodejs }:
+=======
+{ lib, stdenv, fetchNpmDeps, npmHooks, nodejs }:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 { name ? "${args.pname}-${args.version}"
 , src ? null
@@ -22,7 +26,11 @@
 , npmBuildScript ? "build"
   # Flags to pass to all npm commands.
 , npmFlags ? [ ]
+<<<<<<< HEAD
   # Flags to pass to `npm ci`.
+=======
+  # Flags to pass to `npm ci` and `npm prune`.
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , npmInstallFlags ? [ ]
   # Flags to pass to `npm rebuild`.
 , npmRebuildFlags ? [ ]
@@ -30,10 +38,13 @@
 , npmBuildFlags ? [ ]
   # Flags to pass to `npm pack`.
 , npmPackFlags ? [ ]
+<<<<<<< HEAD
   # Flags to pass to `npm prune`.
 , npmPruneFlags ? npmInstallFlags
   # Value for npm `--workspace` flag and directory in which the files to be installed are found.
 , npmWorkspace ? null
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , ...
 } @ args:
 
@@ -44,12 +55,16 @@ let
     hash = npmDepsHash;
   };
 
+<<<<<<< HEAD
   # .override {} negates splicing, so we need to use buildPackages explicitly
   npmHooks = buildPackages.npmHooks.override {
     inherit nodejs;
   };
 
   inherit (npmHooks) npmConfigHook npmBuildHook npmInstallHook;
+=======
+  inherit (npmHooks.override { inherit nodejs; }) npmConfigHook npmBuildHook npmInstallHook;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 in
 stdenv.mkDerivation (args // {
   inherit npmDeps npmBuildScript;
@@ -62,5 +77,10 @@ stdenv.mkDerivation (args // {
   # Stripping takes way too long with the amount of files required by a typical Node.js project.
   dontStrip = args.dontStrip or true;
 
+<<<<<<< HEAD
+=======
+  passthru = { inherit npmDeps; } // (args.passthru or { });
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   meta = (args.meta or { }) // { platforms = args.meta.platforms or nodejs.meta.platforms; };
 })

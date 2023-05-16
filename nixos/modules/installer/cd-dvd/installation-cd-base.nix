@@ -21,6 +21,12 @@ with lib;
   # ISO naming.
   isoImage.isoName = "${config.isoImage.isoBaseName}-${config.system.nixos.label}-${pkgs.stdenv.hostPlatform.system}.iso";
 
+<<<<<<< HEAD
+=======
+  # BIOS booting
+  isoImage.makeBiosBootable = true;
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   # EFI booting
   isoImage.makeEfiBootable = true;
 

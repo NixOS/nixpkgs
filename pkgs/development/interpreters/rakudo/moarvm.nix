@@ -8,13 +8,21 @@
 
 stdenv.mkDerivation rec {
   pname = "moarvm";
+<<<<<<< HEAD
   version = "2023.08";
+=======
+  version = "2023.04";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "moarvm";
     repo = "moarvm";
     rev = version;
+<<<<<<< HEAD
     hash = "sha256-oYdXzbT+2L/nDySKq8ZYVuVfNgzLDiskwacOM1L4lzw=";
+=======
+    hash = "sha256-QYA4nSsrouYFaw1eju/6gNWwMcE/VeL0sNJmsTvtU3I=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     fetchSubmodules = true;
   };
 

@@ -1,4 +1,5 @@
 diff --git a/Makefile b/Makefile
+<<<<<<< HEAD
 index b3d5aeb..a5acc08 100644
 --- a/Makefile
 +++ b/Makefile
@@ -7,6 +8,16 @@ index b3d5aeb..a5acc08 100644
  MOREFLAGS := $(CFLAGS_$(TARGET))
  
 -DIVSUF := $(SRCDIR)/libdivsufsort-2.0.1
+=======
+index c9d8b6d..9d66b0b 100644
+--- a/Makefile
++++ b/Makefile
+@@ -79,9 +79,7 @@ endif
+ MOREFLAGS := $(CFLAGS_$(TARGET))
+ 
+ 
+-DIVSUF := libdivsufsort-2.0.1
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 -SOURCES += $(DIVSUF)/lib/divsufsort.c $(DIVSUF)/lib/sssort.c $(DIVSUF)/lib/trsort.c
 -MOREFLAGS += -I$(DIVSUF)/include -DHAVE_CONFIG_H -D__STDC_FORMAT_MACROS
 +MOREFLAGS += -ldivsufsort

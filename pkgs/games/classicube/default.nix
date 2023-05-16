@@ -15,13 +15,21 @@
 
 stdenv.mkDerivation rec {
   pname = "ClassiCube";
+<<<<<<< HEAD
   version = "1.3.6";
+=======
+  version = "1.3.5";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "UnknownShadow200";
     repo = "ClassiCube";
     rev = version;
+<<<<<<< HEAD
     sha256 = "sha256-7VPn5YXNoAR3ftYMDQuQRqeMCrbyB56ir1sQWBiPWAI=";
+=======
+    sha256 = "sha256-anBi9hPwX1AAIc8dXsKyX4u7UbkKqC1P+7f7wdKWAig=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ dos2unix makeWrapper copyDesktopItems ];
@@ -64,17 +72,32 @@ stdenv.mkDerivation rec {
       --replace '%NIXPKGS_FONT_PATH%' "${font_path}"
     # ClassiCube's Makefile hardcodes JOBS=1 for some reason,
     # even though it works perfectly well multi-threaded.
+<<<<<<< HEAD
     substituteInPlace Makefile \
+=======
+    substituteInPlace src/Makefile \
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       --replace 'JOBS=1' "JOBS=$NIX_BUILD_CORES"
   '';
 
   buildInputs = [ libX11 libXi libGL curl openal liberation_ttf ];
 
+<<<<<<< HEAD
+=======
+  preBuild = "cd src";
+
+  postBuild = "cd -";
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   installPhase = ''
     runHook preInstall
 
     mkdir -p "$out/bin"
+<<<<<<< HEAD
     cp 'ClassiCube' "$out/bin"
+=======
+    cp 'src/ClassiCube' "$out/bin"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     # ClassiCube puts downloaded resources
     # next to the location of the executable by default.
     # This doesn't work with Nix

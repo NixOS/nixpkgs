@@ -75,7 +75,10 @@ stdenv.mkDerivation rec {
     sourceProvenance = with sourceTypes; [ binaryBytecode fromSource ];
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
+<<<<<<< HEAD
     mainProgram = "tvbrowser";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     maintainers = with maintainers; [ jfrankenau yarny ];
     longDescription = ''
       TV-Browser shows TV program data arranged like in printed

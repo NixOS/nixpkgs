@@ -15,7 +15,11 @@
 
 buildPythonPackage rec {
   pname = "redshift-connector";
+<<<<<<< HEAD
   version = "2.0.911";
+=======
+  version = "2.0.910";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -24,7 +28,11 @@ buildPythonPackage rec {
     owner = "aws";
     repo = "amazon-redshift-python-driver";
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-D1LpFGYEpGmkYCAJbYJaQStDnol90mH8X4S6iXg6Nfs=";
+=======
+    hash = "sha256-24yI6pXSHxhT30N3rJXAMtpCOhhGsBuDrwx9jMO1FW0=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   # disable test coverage

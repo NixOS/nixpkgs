@@ -13,14 +13,22 @@ let
   */
   staticdb = symlinkJoin {
     inherit (db) name;
+<<<<<<< HEAD
     paths = with db.overrideAttrs { dontDisableStatic = true; }; [ out dev ];
+=======
+    paths = with db.overrideAttrs(old: { dontDisableStatic = true; }); [ out dev ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     postBuild = ''
       rm $out/lib/*.so*
     '';
   };
   pcap = symlinkJoin {
     inherit (libpcap) name;
+<<<<<<< HEAD
     paths = [ (libpcap.overrideAttrs { dontDisableStatic = true; }) ];
+=======
+    paths = [ (libpcap.overrideAttrs(old: { dontDisableStatic = true; })) ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     postBuild = ''
       cp -rs $out/include/pcap $out/include/net
       # prevent references to libpcap
@@ -29,15 +37,25 @@ let
   };
   net = symlinkJoin {
     inherit (libnet) name;
+<<<<<<< HEAD
     paths = [ (libnet.overrideAttrs { dontDisableStatic = true; }) ];
+=======
+    paths = [ (libnet.overrideAttrs(old: { dontDisableStatic = true; })) ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     postBuild = ''
       # prevent dynamic linking, now that we have a static library
       rm $out/lib/*.so*
     '';
   };
+<<<<<<< HEAD
   nids = libnids.overrideAttrs {
     dontDisableStatic = true;
   };
+=======
+  nids = libnids.overrideAttrs(old: {
+    dontDisableStatic = true;
+  });
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ssl = symlinkJoin {
     inherit (openssl) name;
     paths = with openssl.override { static = true; }; [ out dev ];

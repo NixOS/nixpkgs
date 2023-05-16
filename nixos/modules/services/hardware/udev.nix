@@ -72,7 +72,11 @@ let
           --replace \"/sbin/blkid \"${pkgs.util-linux}/sbin/blkid \
           --replace \"/bin/mount \"${pkgs.util-linux}/bin/mount \
           --replace /usr/bin/readlink ${pkgs.coreutils}/bin/readlink \
+<<<<<<< HEAD
           --replace /usr/bin/basename ${pkgs.coreutils}/bin/basename 2>/dev/null
+=======
+          --replace /usr/bin/basename ${pkgs.coreutils}/bin/basename
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       ${optionalString (initrdBin != null) ''
         substituteInPlace $i --replace '/run/current-system/systemd' "${removeSuffix "/bin" initrdBin}"
       ''}
@@ -296,6 +300,10 @@ in
       packages = mkOption {
         type = types.listOf types.path;
         default = [];
+<<<<<<< HEAD
+=======
+        visible = false;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         description = lib.mdDoc ''
           *This will only be used when systemd is used in stage 1.*
 
@@ -310,6 +318,10 @@ in
       binPackages = mkOption {
         type = types.listOf types.path;
         default = [];
+<<<<<<< HEAD
+=======
+        visible = false;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         description = lib.mdDoc ''
           *This will only be used when systemd is used in stage 1.*
 

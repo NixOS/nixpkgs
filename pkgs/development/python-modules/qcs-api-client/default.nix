@@ -22,7 +22,11 @@
 
 buildPythonPackage rec {
   pname = "qcs-api-client";
+<<<<<<< HEAD
   version = "0.21.6";
+=======
+  version = "0.21.5";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -31,7 +35,11 @@ buildPythonPackage rec {
     owner = "rigetti";
     repo = "qcs-api-client-python";
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-1vXqwir3lAM+m/HGHWuXl20muAOasEWo1H0RjUCShTM=";
+=======
+    hash = "sha256-lw6jswIaqDFExz/hjIrpZf4BC757l83MeCfOyZaTbfg=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   patches = [

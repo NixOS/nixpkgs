@@ -11,13 +11,21 @@
 
 stdenv.mkDerivation rec {
   pname = "ipv6calc";
+<<<<<<< HEAD
   version = "4.1.0";
+=======
+  version = "4.0.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "pbiering";
     repo = pname;
     rev = version;
+<<<<<<< HEAD
     sha256 = "sha256-zpV3RpFPYICntNLVTC4FpkrxJ7nDh/KEzmNpg0ORWZQ=";
+=======
+    sha256 = "sha256-p/er/Ehyu7PqmikMIKPQBQ0/F81d8iiKdmLXLz+8pus=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   buildInputs = [

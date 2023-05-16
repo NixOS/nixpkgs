@@ -80,7 +80,11 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+<<<<<<< HEAD
   passthru.tests = lib.nixosTests.gnupg;
+=======
+  passthru.tests.connman = lib.nixosTests.gnupg;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   meta = with lib; {
     homepage = "https://gnupg.org";

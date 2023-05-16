@@ -2,13 +2,21 @@
 
 stdenv.mkDerivation rec {
   pname = "pg_ivm";
+<<<<<<< HEAD
   version = "1.6";
+=======
+  version = "1.5.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "sraoss";
     repo = pname;
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-MAZsEPQu1AqI53h01M5bErc/MUJRauNPO9Hizig+2dc=";
+=======
+    hash = "sha256-AIH0BKk3y7F885IlC9pEyAubIgNSElpjU8nL6gl98FU=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   buildInputs = [ postgresql ];

@@ -22,14 +22,24 @@
 
 stdenv.mkDerivation rec {
   pname = "valent";
+<<<<<<< HEAD
   version = "unstable-2023-08-26";
+=======
+  version = "unstable-2023-05-01";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "andyholmes";
     repo = "valent";
+<<<<<<< HEAD
     rev = "89d1e5a0312a0371bfcd9a95486805917c3729c0";
     fetchSubmodules = true;
     hash = "sha256-28l+SkjVQkOA/5f5nT5BbqIV2BrMLmSK/YtDGYl1xjQ=";
+=======
+    rev = "74f5d9349a60f0d9fcf88cda01713980a221d639";
+    fetchSubmodules = true;
+    sha256 = "sha256-wqdujEKizrDFXtsjSTWpFgDL7MH3tsLTc7yd3LFgIQU=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

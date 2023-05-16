@@ -60,6 +60,7 @@ buildPythonPackage rec {
     "test_default_headers"
     "test_head"
     "tls"
+<<<<<<< HEAD
     "test_simple_request"
     "test_node"
     "test_debug_logging"
@@ -67,6 +68,8 @@ buildPythonPackage rec {
     "test_debug_logging_no_body"
     "test_httpbin"
     "test_sniffed_nodes_added_to_pool"
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   meta = with lib; {

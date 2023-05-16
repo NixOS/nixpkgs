@@ -30,6 +30,10 @@ buildPythonPackage rec {
     description = "Great data sets for Topological Data Analysis";
     homepage = "https://tadasets.scikit-tda.org";
     license = licenses.mit;
+<<<<<<< HEAD
     maintainers = [ ];
+=======
+    maintainers = [ maintainers.costrouc ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

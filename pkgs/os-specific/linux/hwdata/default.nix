@@ -2,13 +2,21 @@
 
 stdenv.mkDerivation rec {
   pname = "hwdata";
+<<<<<<< HEAD
   version = "0.373";
+=======
+  version = "0.370";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "vcrhonek";
     repo = "hwdata";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-KXZodSvY4Szt/gp0iRkx+ngziCaUYvkjnkvjwPj3OwI=";
+=======
+    sha256 = "sha256-fqhYPKqtuI+7h/SgdWI4i7jBTgluy/hI8Q6pq4LKtY4=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   postPatch = ''

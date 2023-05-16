@@ -15,13 +15,21 @@
 
 stdenv.mkDerivation rec {
   pname = "open-iscsi";
+<<<<<<< HEAD
   version = "2.1.9";
+=======
+  version = "2.1.8";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "open-iscsi";
     repo = "open-iscsi";
     rev = version;
+<<<<<<< HEAD
     hash = "sha256-y0NIb/KsKpCd8byr/SXI7nwTKXP2/bSSoW8QgeL5xdc=";
+=======
+    hash = "sha256-JzSyX9zvUkhCEpNwTMneTZpCRgaYxHZ1wP215YnMI78=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [
@@ -55,7 +63,11 @@ stdenv.mkDerivation rec {
     "-Ddbroot=/etc/iscsi"
   ];
 
+<<<<<<< HEAD
   passthru.tests = { inherit (nixosTests) iscsi-root; };
+=======
+  passthru.tests = { inherit (nixosTests) iscsi-root iscsi-multipath-root; };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   meta = with lib; {
     description = "A high performance, transport independent, multi-platform implementation of RFC3720";

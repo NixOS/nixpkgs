@@ -6,7 +6,11 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://oligarchy.co.uk/xapian/${version}/xapian-omega-${version}.tar.xz";
+<<<<<<< HEAD
     hash = "sha256-Z0yXn7kPH0mQ64qQntq4jKSgCUF9/Vqwy6GeAsepVSg=";
+=======
+    hash = "sha256-iKETxVmPyVgz4SEscL5GOrudVgFWTSG4YWNvc3lVqtU=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   buildInputs = [ xapian perl pcre2 zlib libmagic ];

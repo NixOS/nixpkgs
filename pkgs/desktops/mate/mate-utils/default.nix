@@ -1,7 +1,10 @@
 { lib
 , stdenv
 , fetchurl
+<<<<<<< HEAD
 , fetchpatch
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , pkg-config
 , gettext
 , itstool
@@ -20,6 +23,7 @@
 
 stdenv.mkDerivation rec {
   pname = "mate-utils";
+<<<<<<< HEAD
   version = "1.26.1";
 
   src = fetchurl {
@@ -38,6 +42,15 @@ stdenv.mkDerivation rec {
     })
   ];
 
+=======
+  version = "1.26.0";
+
+  src = fetchurl {
+    url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "0bkqj8qwwml9xyvb680yy06lv3dzwkv89yrzz5jamvz88ar6m9bw";
+  };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nativeBuildInputs = [
     pkg-config
     gettext

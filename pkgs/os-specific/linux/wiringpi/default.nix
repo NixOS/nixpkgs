@@ -18,7 +18,11 @@ let
   }: stdenv.mkDerivation rec {
     pname = "wiringpi-${subprj}";
     inherit version src;
+<<<<<<< HEAD
     sourceRoot = "${src.name}/${subprj}";
+=======
+    sourceRoot = "source/${subprj}";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     inherit buildInputs;
     # Remove (meant for other OSs) lines from Makefiles
     preInstall = ''

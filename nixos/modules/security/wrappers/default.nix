@@ -5,8 +5,13 @@ let
 
   parentWrapperDir = dirOf wrapperDir;
 
+<<<<<<< HEAD
   securityWrapper = sourceProg : pkgs.callPackage ./wrapper.nix {
     inherit sourceProg;
+=======
+  securityWrapper = pkgs.callPackage ./wrapper.nix {
+    inherit parentWrapperDir;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   fileModeType =
@@ -91,7 +96,12 @@ let
     , ...
     }:
     ''
+<<<<<<< HEAD
       cp ${securityWrapper source}/bin/security-wrapper "$wrapperDir/${program}"
+=======
+      cp ${securityWrapper}/bin/security-wrapper "$wrapperDir/${program}"
+      echo -n "${source}" > "$wrapperDir/${program}.real"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
       # Prevent races
       chmod 0000 "$wrapperDir/${program}"
@@ -118,7 +128,12 @@ let
     , ...
     }:
     ''
+<<<<<<< HEAD
       cp ${securityWrapper source}/bin/security-wrapper "$wrapperDir/${program}"
+=======
+      cp ${securityWrapper}/bin/security-wrapper "$wrapperDir/${program}"
+      echo -n "${source}" > "$wrapperDir/${program}.real"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
       # Prevent races
       chmod 0000 "$wrapperDir/${program}"
@@ -246,6 +261,7 @@ in
       export PATH="${wrapperDir}:$PATH"
     '';
 
+<<<<<<< HEAD
     security.apparmor.includes = lib.mapAttrs' (wrapName: wrap: lib.nameValuePair
      "nixos/security.wrappers/${wrapName}" ''
       include "${pkgs.apparmorRulesFromClosure { name="security.wrappers.${wrapName}"; } [
@@ -253,6 +269,13 @@ in
       ]}"
       mrpx ${wrap.source},
     '') wrappers;
+=======
+    security.apparmor.includes."nixos/security.wrappers" = ''
+      include "${pkgs.apparmorRulesFromClosure { name="security.wrappers"; } [
+        securityWrapper
+      ]}"
+    '';
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     ###### wrappers activation script
     system.activationScripts.wrappers =
@@ -283,7 +306,11 @@ in
         '';
 
     ###### wrappers consistency checks
+<<<<<<< HEAD
     system.checks = lib.singleton (pkgs.runCommandLocal
+=======
+    system.extraDependencies = lib.singleton (pkgs.runCommandLocal
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       "ensure-all-wrappers-paths-exist" { }
       ''
         # make sure we produce output

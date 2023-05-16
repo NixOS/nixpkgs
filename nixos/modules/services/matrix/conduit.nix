@@ -94,6 +94,7 @@ in
                 instance will require manual migration of data.
               '';
             };
+<<<<<<< HEAD
             global.allow_check_for_updates = mkOption {
               type = types.bool;
               default = false;
@@ -104,6 +105,8 @@ in
                 Disabled by default because nixpkgs handles updates.
               '';
             };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           };
         };
         default = {};
@@ -148,12 +151,18 @@ in
             "~@privileged"
           ];
           StateDirectory = "matrix-conduit";
+<<<<<<< HEAD
           StateDirectoryMode = "0700";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           ExecStart = "${cfg.package}/bin/conduit";
           Restart = "on-failure";
           RestartSec = 10;
           StartLimitBurst = 5;
+<<<<<<< HEAD
           UMask = "077";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         };
       };
     };

@@ -1,5 +1,9 @@
 { lib, fetchFromGitHub, cacert, openssl, nixosTests
+<<<<<<< HEAD
 , python310, fetchPypi, fetchpatch
+=======
+, python310, fetchpatch
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 let
@@ -7,6 +11,7 @@ let
     outputs = lib.filter (x: x != "doc") outputs;
   };
 
+<<<<<<< HEAD
   # Follow issue below for Python 3.11 support
   # https://github.com/privacyidea/privacyidea/issues/3593
   python3' = python310.override {
@@ -16,12 +21,20 @@ let
       sqlalchemy = super.sqlalchemy.overridePythonAttrs (oldAttrs: rec {
         version = "1.3.24";
         src = fetchPypi {
+=======
+  python3' = python310.override {
+    packageOverrides = self: super: {
+      sqlalchemy = super.sqlalchemy.overridePythonAttrs (oldAttrs: rec {
+        version = "1.3.24";
+        src = super.fetchPypi {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           inherit (oldAttrs) pname;
           inherit version;
           hash = "sha256-67t3fL+TEjWbiXv4G6ANrg9ctp+6KhgmXcwYpvXvdRk=";
         };
         doCheck = false;
       });
+<<<<<<< HEAD
       # version 3.3.0+ does not support SQLAlchemy 1.3
       factory_boy = super.factory_boy.overridePythonAttrs (oldAttrs: rec {
         version = "3.2.1";
@@ -31,13 +44,21 @@ let
         };
         postPatch = "";
       });
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       # fails with `no tests ran in 1.75s`
       alembic = super.alembic.overridePythonAttrs (lib.const {
         doCheck = false;
       });
+<<<<<<< HEAD
       flask-migrate = super.flask-migrate.overridePythonAttrs (oldAttrs: rec {
         version = "2.7.0";
         src = fetchPypi {
+=======
+      flask_migrate = super.flask_migrate.overridePythonAttrs (oldAttrs: rec {
+        version = "2.7.0";
+        src = self.fetchPypi {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           pname = "Flask-Migrate";
           inherit version;
           hash = "sha256-ri8FZxWIdi3YOiHYsYxR/jVehng+JFlJlf+Nc4Df/jg=";
@@ -46,7 +67,11 @@ let
       flask-sqlalchemy = super.flask-sqlalchemy.overridePythonAttrs (old: rec {
         version = "2.5.1";
         format = "setuptools";
+<<<<<<< HEAD
         src = fetchPypi {
+=======
+        src = self.fetchPypi {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           pname = "Flask-SQLAlchemy";
           inherit version;
           hash = "sha256:2bda44b43e7cacb15d4e05ff3cc1f8bc97936cc464623424102bfc2c35e95912";
@@ -116,7 +141,10 @@ let
           inherit version;
           hash = "sha256-0rUlXHxjSbwb0eWeCM0SrLvWPOZJ8liHVXg6qU37axo=";
         };
+<<<<<<< HEAD
         disabledTests = [ "test_bytes_args" ]; # https://github.com/pallets/click/commit/6e05e1fa1c2804
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       });
       # Now requires `lingua` as check input that requires a newer `click`,
       # however `click-7` is needed by the older flask we need here. Since it's just
@@ -137,7 +165,11 @@ let
         pname = "Flask-Babel";
         version = "2.0.0";
         format = "setuptools";
+<<<<<<< HEAD
         src = fetchPypi {
+=======
+        src = self.fetchPypi {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           inherit pname;
           inherit version;
           hash = "sha256:f9faf45cdb2e1a32ea2ec14403587d4295108f35017a7821a2b1acb8cfd9257d";
@@ -155,6 +187,12 @@ let
         sphinxHook = null;
         sphinx-better-theme = null;
       }).overridePythonAttrs dropDocOutput;
+<<<<<<< HEAD
+=======
+      hypothesis = super.hypothesis.override {
+        enableDocumentation = false;
+      };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       pyjwt = (super.pyjwt.override {
         sphinxHook = null;
         sphinx-rtd-theme = null;
@@ -166,7 +204,11 @@ let
         sphinx-rtd-theme = null;
       }).overridePythonAttrs (old: rec {
         version = "5.1.0";
+<<<<<<< HEAD
         src = fetchPypi {
+=======
+        src = self.fetchPypi {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           inherit (old) pname;
           inherit version;
           hash = "sha256-GysFCsG64EnNB/WSCxT6u+UmOPSF2a2h6xFanuv/aDU=";
@@ -178,6 +220,7 @@ let
         sphinxHook = null;
         sphinx-rtd-theme = null;
       }).overridePythonAttrs dropDocOutput;
+<<<<<<< HEAD
       deprecated = (super.deprecated.override {
         sphinxHook = null;
       }).overridePythonAttrs dropDocOutput;
@@ -185,13 +228,18 @@ let
         sphinxHook = null;
         sphinx-rtd-theme = null;
       }).overridePythonAttrs dropDocOutput;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
   };
 in
 python3'.pkgs.buildPythonPackage rec {
   pname = "privacyIDEA";
   version = "3.8.1";
+<<<<<<< HEAD
   format = "setuptools";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = pname;
@@ -210,8 +258,13 @@ python3'.pkgs.buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = with python3'.pkgs; [
+<<<<<<< HEAD
     cryptography pyrad pymysql python-dateutil flask-versioned flask-script
     defusedxml croniter flask-migrate pyjwt configobj sqlsoup pillow
+=======
+    cryptography pyrad pymysql python-dateutil flask-versioned flask_script
+    defusedxml croniter flask_migrate pyjwt configobj sqlsoup pillow
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     python-gnupg passlib pyopenssl beautifulsoup4 smpplib flask-babel
     ldap3 huey pyyaml qrcode oauth2client requests lxml cbor2 psycopg2
     pydash ecdsa google-auth importlib-metadata argon2-cffi bcrypt segno
@@ -258,6 +311,9 @@ python3'.pkgs.buildPythonPackage rec {
     license = licenses.agpl3Plus;
     homepage = "http://www.privacyidea.org";
     maintainers = with maintainers; [ globin ma27 ];
+<<<<<<< HEAD
     platforms = platforms.linux;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

@@ -5,14 +5,22 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "mitmproxy2swagger";
+<<<<<<< HEAD
   version = "0.10.1";
+=======
+  version = "0.9.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "alufers";
     repo = pname;
     rev = "refs/tags/${version}";
+<<<<<<< HEAD
     hash = "sha256-vWeMAtNyxYpuVlxav0ibTMoTKwLCNRFJpFKG3bIatTQ=";
+=======
+    hash = "sha256-P+Gw4D+G76gifYY2OghXRzrlPiYk4KggoVMgzJbm6Is=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = with python3.pkgs; [

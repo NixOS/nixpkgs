@@ -1,14 +1,26 @@
+<<<<<<< HEAD
 { lib, buildGoModule, fetchFromGitHub, installShellFiles, makeWrapper }:
 
 buildGoModule rec {
   pname = "skaffold";
   version = "2.7.0";
+=======
+{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
+
+buildGoModule rec {
+  pname = "skaffold";
+  version = "2.4.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "GoogleContainerTools";
     repo = "skaffold";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-uKrHWFyHuGX5dzrEvl7x305QgFOraS0L6J7gAFloUYc=";
+=======
+    hash = "sha256-feUR8R8mlKfSV2ct9EeAcEHJiK7Hb5PAXTnES9UG2Qc=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   vendorHash = null;
@@ -22,7 +34,11 @@ buildGoModule rec {
     "-X ${t}/version.buildDate=unknown"
   ];
 
+<<<<<<< HEAD
   nativeBuildInputs = [ installShellFiles makeWrapper ];
+=======
+  nativeBuildInputs = [ installShellFiles ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   doInstallCheck = true;
   installCheckPhase = ''
@@ -30,8 +46,11 @@ buildGoModule rec {
   '';
 
   postInstall = ''
+<<<<<<< HEAD
     wrapProgram $out/bin/skaffold --set SKAFFOLD_UPDATE_CHECK false
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     installShellCompletion --cmd skaffold \
       --bash <($out/bin/skaffold completion bash) \
       --zsh <($out/bin/skaffold completion zsh)

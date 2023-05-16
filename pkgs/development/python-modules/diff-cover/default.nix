@@ -18,7 +18,11 @@
 
 buildPythonPackage rec {
   pname = "diff-cover";
+<<<<<<< HEAD
   version = "7.7.0";
+=======
+  version = "7.5.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -26,7 +30,11 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "diff_cover";
     inherit version;
+<<<<<<< HEAD
     hash = "sha256-YGFM9+ciz3+xveSXr6wLUUKU4eJlNESWItrE2ilhI/s=";
+=======
+    hash = "sha256-pLMCSoMeTzjCLoCZRfCdCmp7pmLcjjDSjxprIaPt6/w=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [

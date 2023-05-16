@@ -11,7 +11,11 @@ buildGoModule rec {
     sha256 = "sha256-KJAPhSGaC3upWLfo2eeSD3Vit9Blmbol7s8y3f849N4=";
   };
 
+<<<<<<< HEAD
   vendorHash = "sha256-KkyMd94cejWkgg/RJudy1lm/M3lsEJXFGqVTzGIX3qM=";
+=======
+  vendorSha256 = "sha256-KkyMd94cejWkgg/RJudy1lm/M3lsEJXFGqVTzGIX3qM=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   meta = with lib; {
     license = licenses.mit;

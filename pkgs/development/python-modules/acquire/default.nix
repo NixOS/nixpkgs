@@ -17,16 +17,27 @@
 
 buildPythonPackage rec {
   pname = "acquire";
+<<<<<<< HEAD
   version = "3.8";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
+=======
+  version = "3.5";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.7";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "fox-it";
     repo = "acquire";
     rev = "refs/tags/${version}";
+<<<<<<< HEAD
     hash = "sha256-JfZ0sc7hFj71XxGWTTZ50uGWuKoWKY4vYm0v+zS2YiQ=";
+=======
+    hash = "sha256-F0kKydFDL2XafK7A66qn3Ad/mGZU8x3UKtXtKpxHZqU=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;

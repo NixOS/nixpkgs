@@ -17,13 +17,21 @@
 
 buildDotnetModule rec {
   pname = "osu-lazer";
+<<<<<<< HEAD
   version = "2023.815.0";
+=======
+  version = "2023.511.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "ppy";
     repo = "osu";
     rev = version;
+<<<<<<< HEAD
     sha256 = "sha256-Lm/unDa1ADc2zprrgP/a2bOzHb02CwU9gcvhmTOXKIM=";
+=======
+    sha256 = "sha256-bwbryisUiRCv/N4RTHUecsJ5/JVM3XF3f9mKb1M6jow=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   projectFile = "osu.Desktop/osu.Desktop.csproj";

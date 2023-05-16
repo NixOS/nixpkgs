@@ -17,7 +17,11 @@
 with python3Packages;
 buildPythonApplication rec {
   pname = "pre-commit";
+<<<<<<< HEAD
   version = "3.3.3";
+=======
+  version = "3.3.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -26,7 +30,11 @@ buildPythonApplication rec {
     owner = "pre-commit";
     repo = "pre-commit";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-6FKf4jLHUt2c7LSxFcq53IsfHOWeUSI+P9To0eh48+o=";
+=======
+    hash = "sha256-2Q8ZtCWkNaBzcRpkhVo0eTVKf0rnOslqjC3Wjm64WrM=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   patches = [
@@ -101,12 +109,15 @@ buildPythonApplication rec {
     deactivate
   '';
 
+<<<<<<< HEAD
   # Propagating dependencies leaks them through $PYTHONPATH which causes issues
   # when used in nix-shell.
   postFixup = ''
     rm $out/nix-support/propagated-build-inputs
   '';
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   disabledTests = [
     # ERROR: The install method you used for conda--probably either `pip install conda`
     # or `easy_install conda`--is not compatible with using conda as an application.

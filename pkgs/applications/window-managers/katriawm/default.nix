@@ -9,12 +9,20 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "katriawm";
+<<<<<<< HEAD
   version = "23.06";
+=======
+  version = "22.12";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchzip {
     name = finalAttrs.pname + "-" + finalAttrs.version;
     url = "https://www.uninformativ.de/git/katriawm/archives/katriawm-v${finalAttrs.version}.tar.gz";
+<<<<<<< HEAD
     hash = "sha256-4vdBX5biakoxiOyz7DPNgkLxlzi27kZ9rC20g+pn3N4=";
+=======
+    hash = "sha256-xFKr4PxqvnQEAWplhRsaL5rhmSJpnImpk1eXFX0N1tc=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

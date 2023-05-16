@@ -5,7 +5,11 @@
 
 stdenv.mkDerivation rec {
   pname = "aws-workspaces";
+<<<<<<< HEAD
   version = "4.6.0.4187";
+=======
+  version = "4.5.0.2006";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchurl {
     # ref https://d3nt0h4h6pmmc4.cloudfront.net/ubuntu/dists/focal/main/binary-amd64/Packages
@@ -13,7 +17,11 @@ stdenv.mkDerivation rec {
       "https://d3nt0h4h6pmmc4.cloudfront.net/ubuntu/dists/focal/main/binary-amd64/workspacesclient_${version}_amd64.deb"
       "https://archive.org/download/workspacesclient_${version}_amd64/workspacesclient_${version}_amd64.deb"
     ];
+<<<<<<< HEAD
     sha256 = "sha256-A+b79ewh4hBIf8jgK0INILFktTqRRpOgXRH0FGziV6c=";
+=======
+    sha256 = "sha256-1ysj020fYOmIRvZR27+7ZNqdzqkA2QbrCwDU18ouxaI=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

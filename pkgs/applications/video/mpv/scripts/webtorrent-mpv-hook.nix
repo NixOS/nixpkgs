@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 { lib, buildNpmPackage, fetchFromGitHub, nodejs, python3 }:
+=======
+{ lib , buildNpmPackage , fetchFromGitHub, nodejs }:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 buildNpmPackage rec {
   pname = "webtorrent-mpv-hook";
@@ -21,10 +25,13 @@ buildNpmPackage rec {
   npmDepsHash = "sha256-GpNUJ5ZCgMjSYLqsIE/RwkTSFT3uAhxrHPe7XvGDRHE=";
   makeCacheWritable = true;
 
+<<<<<<< HEAD
   nativeBuildInputs = [
     python3 # Fixes node-gyp on aarch64-linux
   ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   postInstall = ''
     mkdir -p $out/share/mpv/scripts/
     ln -s $out/lib/node_modules/webtorrent-mpv-hook/build/webtorrent.js $out/share/mpv/scripts/

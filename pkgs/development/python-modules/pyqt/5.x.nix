@@ -17,8 +17,11 @@
 , withWebKit ? false
 , withWebSockets ? false
 , withLocation ? false
+<<<<<<< HEAD
 , withSerialPort ? false
 , withTools ? false
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 buildPythonPackage rec {
@@ -88,8 +91,11 @@ buildPythonPackage rec {
     ++ lib.optional withWebKit qtwebkit
     ++ lib.optional withWebSockets qtwebsockets
     ++ lib.optional withLocation qtlocation
+<<<<<<< HEAD
     ++ lib.optional withSerialPort qtserialport
     ++ lib.optional withTools qttools
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ;
 
   buildInputs = with libsForQt5; [
@@ -103,8 +109,11 @@ buildPythonPackage rec {
     ++ lib.optional withWebKit qtwebkit
     ++ lib.optional withWebSockets qtwebsockets
     ++ lib.optional withLocation qtlocation
+<<<<<<< HEAD
     ++ lib.optional withSerialPort qtserialport
     ++ lib.optional withTools qttools
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ;
 
   propagatedBuildInputs = [
@@ -136,8 +145,11 @@ buildPythonPackage rec {
     ++ lib.optional withMultimedia "PyQt5.QtMultimedia"
     ++ lib.optional withConnectivity "PyQt5.QtBluetooth"
     ++ lib.optional withLocation "PyQt5.QtPositioning"
+<<<<<<< HEAD
     ++ lib.optional withSerialPort "PyQt5.QtSerialPort"
     ++ lib.optional withTools "PyQt5.QtDesigner"
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ;
 
   meta = with lib; {

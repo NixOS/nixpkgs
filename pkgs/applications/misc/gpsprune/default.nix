@@ -2,11 +2,19 @@
 
 stdenv.mkDerivation rec {
   pname = "gpsprune";
+<<<<<<< HEAD
   version = "23.1";
 
   src = fetchurl {
     url = "https://activityworkshop.net/software/gpsprune/gpsprune_${version}.jar";
     sha256 = "sha256-0Lf/GuqlovVbnk3jSJHFGF688GXABcSVLr1hATaIomk=";
+=======
+  version = "22.2";
+
+  src = fetchurl {
+    url = "https://activityworkshop.net/software/gpsprune/gpsprune_${version}.jar";
+    sha256 = "sha256-7T7UmS650VvYN29vQxemzsaxF5wPFF+yCNCTyXY7nmY=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   dontUnpack = true;

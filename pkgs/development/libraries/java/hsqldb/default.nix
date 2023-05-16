@@ -2,12 +2,20 @@
 
 stdenv.mkDerivation rec {
   pname = "hsqldb";
+<<<<<<< HEAD
   version = "2.7.2";
+=======
+  version = "2.7.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   underscoreMajMin = lib.replaceStrings ["."] ["_"] (lib.versions.majorMinor version);
 
   src = fetchurl {
     url = "mirror://sourceforge/project/hsqldb/hsqldb/hsqldb_${underscoreMajMin}/hsqldb-${version}.zip";
+<<<<<<< HEAD
     sha256 = "sha256-/7NZy+ZroxeTF7av22LNJ0dlMzvTAWfOMypLLYWXWBI=";
+=======
+    sha256 = "sha256-d0FruJXNnwme1gPHWcIXpD2LO0fL8CzZOn8H14Quo50=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ unzip makeWrapper ];

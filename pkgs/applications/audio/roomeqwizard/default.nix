@@ -14,11 +14,19 @@
 
 stdenv.mkDerivation rec {
   pname = "roomeqwizard";
+<<<<<<< HEAD
   version = "5.20.13";
 
   src = fetchurl {
     url = "https://www.roomeqwizard.com/installers/REW_linux_no_jre_${lib.replaceStrings [ "." ] [ "_" ] version}.sh";
     sha256 = "sha256-6zaBDOmQlyMRQ84j64oS7TMwcctT1PSbuQOUYY9QjvY=";
+=======
+  version = "5.20.5";
+
+  src = fetchurl {
+    url = "https://www.roomeqwizard.com/installers/REW_linux_${lib.replaceStrings [ "." ] [ "_" ] version}.sh";
+    sha256 = "NYTRiOZmwkni4k+jI2SV84z5umO7+l+eKpwPCdlDD3U=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   dontUnpack = true;

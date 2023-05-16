@@ -26,7 +26,10 @@ in
         Identifier  "DisplayLink"
         MatchDriver "evdi"
         Driver      "modesetting"
+<<<<<<< HEAD
         Option      "TearFree" "true"
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         Option      "AccelMethod" "none"
       EndSection
     '';

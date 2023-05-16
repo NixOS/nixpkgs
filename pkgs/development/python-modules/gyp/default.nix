@@ -27,12 +27,15 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "gyp" "gyp.generator" ];
 
+<<<<<<< HEAD
   # Make mac_tool.py executable so that patchShebangs hook processes it. This
   # file is copied and run by builds using gyp on macOS
   preFixup = ''
     chmod +x "$out/${python.sitePackages}/gyp/mac_tool.py"
   '';
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   meta = with lib; {
     description = "A tool to generate native build files";
     homepage = "https://gyp.gsrc.io";

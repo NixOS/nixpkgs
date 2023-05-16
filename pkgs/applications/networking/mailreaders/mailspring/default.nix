@@ -22,11 +22,19 @@
 
 stdenv.mkDerivation rec {
   pname = "mailspring";
+<<<<<<< HEAD
   version = "1.11.0";
 
   src = fetchurl {
     url = "https://github.com/Foundry376/Mailspring/releases/download/${version}/mailspring-${version}-amd64.deb";
     hash = "sha256-aAqkltVxIlGwRVGM+1QkrVgfnitl+D3Xb0qi0o8ow+Q=";
+=======
+  version = "1.10.8";
+
+  src = fetchurl {
+    url = "https://github.com/Foundry376/Mailspring/releases/download/${version}/mailspring-${version}-amd64.deb";
+    sha256 = "sha256-aXpPn6tpSOwWL/34qlpJ+on/H+X7303J1jwvwcVOTNs=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

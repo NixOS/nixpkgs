@@ -1,13 +1,20 @@
 { lib
 , python3
+<<<<<<< HEAD
 , fetchPypi
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "alerta-server";
   version = "8.7.0";
 
+<<<<<<< HEAD
   src = fetchPypi {
+=======
+  src = python3.pkgs.fetchPypi {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     inherit pname version;
     sha256 = "sha256-EM3owmj+6gFjU0ARaQP3FLYXliGaGCRSaLgkiPwhGdU=";
   };
@@ -32,7 +39,11 @@ python3.pkgs.buildPythonApplication rec {
     sentry-sdk
   ];
 
+<<<<<<< HEAD
   # We can't run the tests from Nix, because they rely on the presence of a working MongoDB server
+=======
+   # We can't run the tests from Nix, because they rely on the presence of a working MongoDB server
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   doCheck = false;
 
   pythonImportsCheck = [

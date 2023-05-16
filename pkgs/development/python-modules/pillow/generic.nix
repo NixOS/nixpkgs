@@ -39,8 +39,11 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook pyroma numpy ];
 
+<<<<<<< HEAD
   nativeBuildInputs = [ setuptools ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   buildInputs = [ freetype libjpeg openjpeg libimagequant zlib libtiff libwebp libxcrypt tcl lcms2 ]
     ++ lib.optionals (lib.versionAtLeast version "7.1.0") [ libxcb ]
     ++ lib.optionals (isPyPy) [ tk libX11 ];

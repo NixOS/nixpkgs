@@ -25,7 +25,11 @@ let
   pyVerNoDot = builtins.replaceStrings [ "." ] [ "" ] python.pythonVersion;
   srcs = import ./binary-hashes.nix version;
   unsupported = throw "Unsupported system";
+<<<<<<< HEAD
   version = "2.0.1";
+=======
+  version = "2.0.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 in buildPythonPackage {
   inherit version;
 
@@ -38,6 +42,7 @@ in buildPythonPackage {
 
   src = fetchurl srcs."${stdenv.system}-${pyVerNoDot}" or unsupported;
 
+<<<<<<< HEAD
   nativeBuildInputs = lib.optionals stdenv.isLinux [
     addOpenGLRunpath
     autoPatchelfHook
@@ -51,6 +56,22 @@ in buildPythonPackage {
   ]);
 
   autoPatchelfIgnoreMissingDeps = lib.optionals stdenv.isLinux [
+=======
+  nativeBuildInputs = [
+    addOpenGLRunpath
+    autoPatchelfHook
+    cudaPackages.autoAddOpenGLRunpathHook
+    patchelf
+  ];
+
+  buildInputs = with cudaPackages; [
+    # $out/${sitePackages}/nvfuser/_C*.so wants libnvToolsExt.so.1 but torch/lib only ships
+    # libnvToolsExt-$hash.so.1
+    cuda_nvtx
+  ];
+
+  autoPatchelfIgnoreMissingDeps = [
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     # This is the hardware-dependent userspace driver that comes from
     # nvidia_x11 package. It must be deployed at runtime in
     # /run/opengl-driver/lib or pointed at by LD_LIBRARY_PATH variable, rather
@@ -78,7 +99,11 @@ in buildPythonPackage {
     rm -rf $out/bin
   '';
 
+<<<<<<< HEAD
   postFixup = lib.optionalString stdenv.isLinux ''
+=======
+  postFixup = ''
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     addAutoPatchelfSearchPath "$out/${python.sitePackages}/torch/lib"
 
     patchelf $out/${python.sitePackages}/torch/lib/libcudnn.so.8 --add-needed libcudnn_cnn_infer.so.8

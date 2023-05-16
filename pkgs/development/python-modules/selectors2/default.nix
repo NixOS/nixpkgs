@@ -30,6 +30,10 @@ buildPythonPackage rec {
     homepage = "https://www.github.com/SethMichaelLarson/selectors2";
     description = "Back-ported, durable, and portable selectors";
     license = licenses.mit;
+<<<<<<< HEAD
     maintainers = [ ];
+=======
+    maintainers = [ maintainers.costrouc ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

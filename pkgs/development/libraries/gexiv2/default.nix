@@ -18,13 +18,21 @@
 
 stdenv.mkDerivation rec {
   pname = "gexiv2";
+<<<<<<< HEAD
   version = "0.14.2";
+=======
+  version = "0.14.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+<<<<<<< HEAD
     sha256 = "Kgyc9I++izQ1AIhm/9QLjt2wZn0iErQjlv32iOk84L4=";
+=======
+    sha256 = "7D7j7DhguceJWKVdqJz3auIwWEjhL0GUW3tSEk2PbPk=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [
@@ -54,6 +62,14 @@ stdenv.mkDerivation rec {
     "-Dtests=true"
   ];
 
+<<<<<<< HEAD
+=======
+  # Needed for darwin due to std::auto_ptr in exiv2 header files & enabling C++ 17
+  # https://github.com/Exiv2/exiv2/issues/2359
+  # https://gitlab.gnome.org/GNOME/gexiv2/-/issues/73
+  env.NIX_CFLAGS_COMPILE = "-D_LIBCPP_ENABLE_CXX17_REMOVED_AUTO_PTR";
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   doCheck = true;
 
   preCheck = let

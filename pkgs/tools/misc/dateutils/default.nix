@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 { lib, stdenv, fetchurl, autoreconfHook, tzdata }:
+=======
+{ lib, stdenv, fetchurl, autoreconfHook, tzdata, fetchpatch }:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 stdenv.mkDerivation rec {
   version = "0.4.10";

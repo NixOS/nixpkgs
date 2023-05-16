@@ -2,11 +2,19 @@
 
 stdenv.mkDerivation rec {
   pname = "roundcube";
+<<<<<<< HEAD
   version = "1.6.2";
 
   src = fetchurl {
     url = "https://github.com/roundcube/roundcubemail/releases/download/${version}/roundcubemail-${version}-complete.tar.gz";
     sha256 = "sha256-yJgwfZXMSEGM+VUX71K1sAiMUAFPZ6bvgVdjQoqAQ/A=";
+=======
+  version = "1.6.1";
+
+  src = fetchurl {
+    url = "https://github.com/roundcube/roundcubemail/releases/download/${version}/roundcubemail-${version}-complete.tar.gz";
+    sha256 = "sha256-RsL2ujS8t+V+R8sDS/M45fx9zO3dqSEqLvO9MUbZe+0=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   patches = [ ./0001-Don-t-resolve-symlinks-when-trying-to-find-INSTALL_P.patch ];

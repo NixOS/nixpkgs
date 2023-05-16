@@ -9,13 +9,21 @@
 
 mkDerivation rec {
   pname = "moolticute";
+<<<<<<< HEAD
   version = "1.02.0";
+=======
+  version = "1.01.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "mooltipass";
     repo = pname;
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-URGAhd7u1DrGReQAwsX9LMj7Jq1GsILzP8fVFnA74O4=";
+=======
+    sha256 = "sha256-6vqYyAJ9p0ey49kc2Tp/HZVv0mePARX2dcmcIG4bcNQ=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   outputs = [ "out" "udev" ];

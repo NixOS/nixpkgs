@@ -1,5 +1,6 @@
 { webcord
 , substituteAll
+<<<<<<< HEAD
 , lib
 , vencord-web-extension
 }:
@@ -11,6 +12,16 @@ webcord.overrideAttrs (old: {
     (substituteAll {
       src = ./add-extension.patch;
       vencord = vencord-web-extension;
+=======
+, callPackage
+, lib
+}:
+webcord.overrideAttrs (old: {
+  patches = (old.patches or [ ]) ++ [
+    (substituteAll {
+      src = ./add-extension.patch;
+      vencord = callPackage ./vencord-web-extension { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     })
   ];
 

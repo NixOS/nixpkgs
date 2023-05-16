@@ -1,11 +1,19 @@
 { lib, fetchFromGitHub
 , version
 , suffix ? ""
+<<<<<<< HEAD
 , hash ? null
 , src ? fetchFromGitHub { owner = "NixOS"; repo = "nix"; rev = version; inherit hash; }
 , patches ? [ ]
 }:
 assert (hash == null) -> (src != null);
+=======
+, sha256 ? null
+, src ? fetchFromGitHub { owner = "NixOS"; repo = "nix"; rev = version; inherit sha256; }
+, patches ? [ ]
+}:
+assert (sha256 == null) -> (src != null);
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 let
   atLeast24 = lib.versionAtLeast version "2.4pre";
   atLeast25 = lib.versionAtLeast version "2.5pre";
@@ -50,6 +58,7 @@ in
 , util-linuxMinimal
 , xz
 
+<<<<<<< HEAD
 , enableDocumentation ? !atLeast24 || (
     (stdenv.hostPlatform == stdenv.buildPlatform) &&
     # mdbook errors out on risc-v due to a rustc bug
@@ -57,6 +66,9 @@ in
     # https://github.com/rust-lang/rust/issues/114473
     !stdenv.buildPlatform.isRiscV
   )
+=======
+, enableDocumentation ? !atLeast24 || stdenv.hostPlatform == stdenv.buildPlatform
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , enableStatic ? stdenv.hostPlatform.isStatic
 , withAWS ? !enableStatic && (stdenv.isLinux || stdenv.isDarwin), aws-sdk-cpp
 , withLibseccomp ? lib.meta.availableOn stdenv.hostPlatform libseccomp, libseccomp
@@ -138,10 +150,13 @@ self = stdenv.mkDerivation {
     (lib.optionalString (stdenv.hostPlatform.system == "armv5tel-linux" || stdenv.hostPlatform.system == "armv6l-linux") "-latomic")
   ];
 
+<<<<<<< HEAD
   postPatch = ''
     patchShebangs --build tests
   '';
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   preConfigure =
     # Copy libboost_context so we don't get all of Boost in our closure.
     # https://github.com/NixOS/nixpkgs/issues/45462
@@ -247,7 +262,10 @@ self = stdenv.mkDerivation {
     maintainers = with maintainers; [ eelco lovesegfault artturin ];
     platforms = platforms.unix;
     outputsToInstall = [ "out" ] ++ optional enableDocumentation "man";
+<<<<<<< HEAD
     mainProgram = "nix";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 };
 in self

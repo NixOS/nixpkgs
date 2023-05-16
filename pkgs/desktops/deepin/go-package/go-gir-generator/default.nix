@@ -21,11 +21,18 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     pkg-config
     go
+<<<<<<< HEAD
     gobject-introspection
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   buildInputs = [
     libgudev
+<<<<<<< HEAD
+=======
+    gobject-introspection
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   makeFlags = [

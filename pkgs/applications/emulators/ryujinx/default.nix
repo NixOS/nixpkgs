@@ -1,6 +1,10 @@
 { lib
 , buildDotnetModule
 , dotnetCorePackages
+<<<<<<< HEAD
+=======
+, stdenvNoCC
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , fetchFromGitHub
 , wrapGAppsHook
 , libX11
@@ -28,13 +32,22 @@
 
 buildDotnetModule rec {
   pname = "ryujinx";
+<<<<<<< HEAD
   version = "1.1.999"; # Based off of the official github actions builds: https://github.com/Ryujinx/Ryujinx/actions/workflows/release.yml
+=======
+  version = "1.1.733"; # Based off of the official github actions builds: https://github.com/Ryujinx/Ryujinx/actions/workflows/release.yml
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "Ryujinx";
     repo = "Ryujinx";
+<<<<<<< HEAD
     rev = "7f96dbc0242f169caeb8461237bc01a23c115f56";
     sha256 = "1fi1bfbz07k9n8civ7gv0rlksdm59wpjcq50hrj7dgwnkrlmxdi2";
+=======
+    rev = "9f12e50a546b15533778ed0d8290202af91c10a2";
+    sha256 = "1d1hg2sv0h56a56xnarcfp73df3rbw3iax85g258l6w2kxhkc42a";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   dotnet-sdk = dotnetCorePackages.sdk_7_0;
@@ -79,7 +92,11 @@ buildDotnetModule rec {
   ];
 
   projectFile = "Ryujinx.sln";
+<<<<<<< HEAD
   testProjectFile = "src/Ryujinx.Tests/Ryujinx.Tests.csproj";
+=======
+  testProjectFile = "Ryujinx.Tests/Ryujinx.Tests.csproj";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   doCheck = true;
 
   dotnetFlags = [
@@ -113,7 +130,11 @@ buildDotnetModule rec {
     install -D ../misc/Logo.svg $out/share/icons/hicolor/scalable/apps/Ryujinx.svg
 
     substituteInPlace $out/share/applications/Ryujinx.desktop \
+<<<<<<< HEAD
       --replace "Ryujinx %f" "$out/bin/Ryujinx %f"
+=======
+      --replace "Exec=Ryujinx" "Exec=$out/bin/Ryujinx"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     ln -s $out/bin/Ryujinx $out/bin/ryujinx
 

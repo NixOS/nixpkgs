@@ -5,11 +5,19 @@
 
 stdenv.mkDerivation rec {
   pname = "traceroute";
+<<<<<<< HEAD
   version = "2.1.3";
 
   src = fetchurl {
     url = "mirror://sourceforge/traceroute/${pname}-${version}.tar.gz";
     sha256 = "sha256-BevHq6KKkQD5u65Uzuy/dcgsz0a9/Oi11kgGRZp+BBI=";
+=======
+  version = "2.1.2";
+
+  src = fetchurl {
+    url = "mirror://sourceforge/traceroute/${pname}-${version}.tar.gz";
+    sha256 = "sha256-UHwmjyl3tOIYznPn6+1Fug2XCoykmV3Zy7H/6OmbWx8=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   makeFlags = [

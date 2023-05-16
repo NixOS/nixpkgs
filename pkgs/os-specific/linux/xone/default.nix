@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 { stdenv, lib, fetchFromGitHub, kernel, fetchurl, fetchpatch }:
+=======
+{ stdenv, lib, fetchFromGitHub, kernel, fetchurl }:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 stdenv.mkDerivation rec {
   pname = "xone";
@@ -11,6 +15,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-h+j4xCV9R6hp9trsv1NByh9m0UBafOz42ZuYUjclILE=";
   };
 
+<<<<<<< HEAD
   patches = [
     # Fix build on kernel 6.3
     (fetchpatch {
@@ -22,6 +27,10 @@ stdenv.mkDerivation rec {
 
   setSourceRoot = ''
     export sourceRoot=$(pwd)/${src.name}
+=======
+  setSourceRoot = ''
+    export sourceRoot=$(pwd)/source
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '';
 
   nativeBuildInputs = kernel.moduleBuildDependencies;

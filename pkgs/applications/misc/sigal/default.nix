@@ -1,7 +1,10 @@
 { stdenv
 , lib
 , python3
+<<<<<<< HEAD
 , fetchPypi
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , ffmpeg
 }:
 
@@ -10,7 +13,11 @@ python3.pkgs.buildPythonApplication rec {
   version = "2.3";
   format = "setuptools";
 
+<<<<<<< HEAD
   src = fetchPypi {
+=======
+  src = python3.pkgs.fetchPypi {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     inherit version pname;
     hash = "sha256-4Zsb/OBtU/jV0gThEYe8bcrb+6hW+hnzQS19q1H409Q=";
   };

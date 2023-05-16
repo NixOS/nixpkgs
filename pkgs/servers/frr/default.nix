@@ -9,7 +9,10 @@
 , perl
 , pkg-config
 , texinfo
+<<<<<<< HEAD
 , buildPackages
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 # runtime
 , c-ares
@@ -29,6 +32,7 @@
 # tests
 , nettools
 , nixosTests
+<<<<<<< HEAD
 
 # FRR's configure.ac gets SNMP options by executing net-snmp-config on the build host
 # This leads to compilation errors when cross compiling.
@@ -84,12 +88,23 @@ lib.warnIf (!(stdenv.buildPlatform.canExecute stdenv.hostPlatform))
 stdenv.mkDerivation rec {
   pname = "frr";
   version = "8.5.2";
+=======
+}:
+
+stdenv.mkDerivation rec {
+  pname = "frr";
+  version = "8.5.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "FRRouting";
     repo = pname;
     rev = "${pname}-${version}";
+<<<<<<< HEAD
     hash = "sha256-xJCaVh/PlV6WRv/JRHO/vzF72E6Ap8/RaqLnkYTnk14=";
+=======
+    hash = "sha256-dK6eVYj9OIVChnR90FDTB7ow93nLLNRaOG8YEXxh8UQ=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [
@@ -108,6 +123,10 @@ stdenv.mkDerivation rec {
     libelf
     libunwind
     libyang
+<<<<<<< HEAD
+=======
+    net-snmp
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     openssl
     pam
     pcre2
@@ -116,6 +135,7 @@ stdenv.mkDerivation rec {
     rtrlib
   ] ++ lib.optionals stdenv.isLinux [
     libcap
+<<<<<<< HEAD
   ] ++ lib.optionals snmpSupport [
     net-snmp
   ];
@@ -131,16 +151,27 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--disable-silent-rules"
+=======
+  ];
+
+  configureFlags = [
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "--disable-exampledir"
     "--enable-configfile-mask=0640"
     "--enable-group=frr"
     "--enable-logfile-mask=0640"
+<<<<<<< HEAD
     "--enable-multipath=${toString numMultipath}"
+=======
+    "--enable-multipath=64"
+    "--enable-snmp"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "--enable-user=frr"
     "--enable-vty-group=frrvty"
     "--localstatedir=/run/frr"
     "--sbindir=$(out)/libexec/frr"
     "--sysconfdir=/etc/frr"
+<<<<<<< HEAD
     "--with-clippy=${clippy-helper}/bin/clippy"
     # general options
     (lib.strings.enableFeature snmpSupport "snmp")
@@ -179,6 +210,9 @@ stdenv.mkDerivation rec {
     (lib.strings.enableFeature cumulusSupport "cumulus")
     # Datacenter options
     (lib.strings.enableFeature datacenterSupport "datacenter")
+=======
+    "--enable-rpki"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   postPatch = ''
@@ -221,7 +255,11 @@ stdenv.mkDerivation rec {
       private clouds.
     '';
     license = with licenses; [ gpl2Plus lgpl21Plus ];
+<<<<<<< HEAD
     maintainers = with maintainers; [ woffs thillux ];
+=======
+    maintainers = with maintainers; [ woffs ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     platforms = platforms.unix;
   };
 

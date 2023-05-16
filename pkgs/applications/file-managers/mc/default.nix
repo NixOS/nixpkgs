@@ -24,11 +24,19 @@
 
 stdenv.mkDerivation rec {
   pname = "mc";
+<<<<<<< HEAD
   version = "4.8.30";
 
   src = fetchurl {
     url = "https://www.midnight-commander.org/downloads/${pname}-${version}.tar.xz";
     sha256 = "sha256-Xrw8shRLlwxRSf2lVsStULeHgElGls3y0UpTIEyVx98=";
+=======
+  version = "4.8.29";
+
+  src = fetchurl {
+    url = "https://www.midnight-commander.org/downloads/${pname}-${version}.tar.xz";
+    sha256 = "sha256-AdijuU9YGAzKW/FyV7UHjR/W/SeptcDpcOx2dUlUCtQ=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ pkg-config unzip ]
@@ -93,6 +101,9 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ sander ];
     platforms = with platforms; linux ++ darwin;
+<<<<<<< HEAD
     mainProgram = "mc";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

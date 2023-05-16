@@ -20,7 +20,11 @@ let
 in
   buildPythonPackage rec {
     pname = "yaramod";
+<<<<<<< HEAD
     version = "3.20.1";
+=======
+    version = "3.19.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     format = "setuptools";
 
     disabled = pythonOlder "3.7";
@@ -29,7 +33,11 @@ in
       owner = "avast";
       repo = pname;
       rev = "refs/tags/v${version}";
+<<<<<<< HEAD
       hash = "sha256-je4BBJ34VcA8pkvIBXfqrHAhWF+DdakSqeFma3mHpWo=";
+=======
+      hash = "sha256-HYagARlppQpM43ND/CkLL0iHmOmhl/wBDGVlJyOc9dU=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
 
     postPatch = ''

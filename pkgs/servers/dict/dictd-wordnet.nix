@@ -1,10 +1,18 @@
+<<<<<<< HEAD
 {lib, stdenv, python3, wordnet, writeScript, libfaketime}:
+=======
+{lib, stdenv, python3, wordnet, writeScript}:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 stdenv.mkDerivation rec {
   version = "542";
   pname = "dict-db-wordnet";
 
+<<<<<<< HEAD
   buildInputs = [python3 wordnet libfaketime];
+=======
+  buildInputs = [python3 wordnet];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   convert = ./wordnet_structures.py;
 
   builder = writeScript "builder.sh" ''
@@ -16,8 +24,12 @@ stdenv.mkDerivation rec {
       DATA="$DATA `echo $i | sed -e s,data,index,` $i";
     done
 
+<<<<<<< HEAD
     source_date=$(date --utc --date=@$SOURCE_DATE_EPOCH "+%F %T")
     faketime -f "$source_date" python ${convert} $DATA
+=======
+    python ${convert} $DATA
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     echo en_US.UTF-8 > locale
   '';
 

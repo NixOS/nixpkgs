@@ -19,16 +19,27 @@
 
 stdenv.mkDerivation rec {
   pname = "oven-media-engine";
+<<<<<<< HEAD
   version = "0.15.14";
+=======
+  version = "0.15.10";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "AirenSoft";
     repo = "OvenMediaEngine";
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-pLLnk0FXJ6gb0WSdWGEzJSEbKdOpjdWECIRzrHvi8HQ=";
   };
 
   sourceRoot = "${src.name}/src";
+=======
+    sha256 = "sha256-gQ9Z8VMu5v4zEo4vtViNFG0QP5JooHsQxJPMOnZmVZM=";
+  };
+
+  sourceRoot = "source/src";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   makeFlags = [ "release" "CONFIG_LIBRARY_PATHS=" "CONFIG_PKG_PATHS=" "GLOBAL_CC=$(CC)" "GLOBAL_CXX=$(CXX)" "GLOBAL_LD=$(CXX)" "SHELL=${stdenv.shell}" ];
   enableParallelBuilding = true;
 
@@ -60,6 +71,10 @@ stdenv.mkDerivation rec {
     homepage    = "https://ovenmediaengine.com";
     license     = licenses.agpl3Only;
     maintainers = with maintainers; [ lukegb ];
+<<<<<<< HEAD
     platforms   = platforms.linux;
+=======
+    platforms   = [ "x86_64-linux" ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

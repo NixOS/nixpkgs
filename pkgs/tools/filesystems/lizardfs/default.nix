@@ -1,6 +1,10 @@
 { lib
 , stdenv
 , fetchFromGitHub
+<<<<<<< HEAD
+=======
+, fetchpatch
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , cmake
 , makeWrapper
 , python3

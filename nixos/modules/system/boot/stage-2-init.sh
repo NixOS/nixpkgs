@@ -104,10 +104,14 @@ fi
 
 
 # Required by the activation script
+<<<<<<< HEAD
 install -m 0755 -d /etc
 if [ ! -h "/etc/nixos" ]; then
     install -m 0755 -d /etc/nixos
 fi
+=======
+install -m 0755 -d /etc /etc/nixos
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 install -m 01777 -d /tmp
 
 

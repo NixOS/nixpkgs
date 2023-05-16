@@ -11,7 +11,11 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-TkMy2tEdG1FPPWfH/wPnVbs5kocqe4Y0jU4yvbiRZ9k=";
   };
 
+<<<<<<< HEAD
   sourceRoot = "${src.name}/libvmaf";
+=======
+  sourceRoot = "source/libvmaf";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   patches = [
     # Backport fix for non-Linux, non-Darwin platforms.

@@ -20,13 +20,21 @@
 
 stdenv.mkDerivation rec {
   pname = "nest";
+<<<<<<< HEAD
   version = "3.5";
+=======
+  version = "3.4";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "nest";
     repo = "nest-simulator";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-PPUIXlU6noJRAa/twNSKVxPgIvbWl0OillEJRDzt+4s=";
+=======
+    hash = "sha256-+wjsZxW2l0WGyGTm/6vyzPEeqCfyxJml9oP/zn6W1L0=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   postPatch = ''

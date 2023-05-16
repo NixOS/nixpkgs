@@ -47,6 +47,7 @@ To include more eggs, edit `pkgs/development/compilers/chicken/5/eggs.scm`.
 The first section of this file lists eggs which are required by `egg2nix`
 itself; all other eggs go into the second section. After editing, follow the
 procedure for updating eggs.
+<<<<<<< HEAD
 
 ## Override Scope {#sec-chicken-override-scope}
 
@@ -76,3 +77,5 @@ in
 # the local copy of `srfi-180`.
 # ...
 ```
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)

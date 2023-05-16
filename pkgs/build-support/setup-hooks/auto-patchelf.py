@@ -109,6 +109,7 @@ def osabi_are_compatible(wanted: str, got: str) -> bool:
 
 
 def glob(path: Path, pattern: str, recursive: bool) -> Iterator[Path]:
+<<<<<<< HEAD
     if path.is_dir():
         return path.rglob(pattern) if recursive else path.glob(pattern)
     else:
@@ -117,6 +118,9 @@ def glob(path: Path, pattern: str, recursive: bool) -> Iterator[Path]:
         # This allows to pass single files instead of dirs to auto_patchelf,
         # for greater control on the files to consider.
         return [path] if path.match(pattern) else []
+=======
+    return path.rglob(pattern) if recursive else path.glob(pattern)
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 
 cached_paths: Set[Path] = set()
@@ -312,6 +316,7 @@ def main() -> None:
         "--no-recurse",
         dest="recursive",
         action="store_false",
+<<<<<<< HEAD
         help="Disable the recursive traversal of paths to patch.")
     parser.add_argument(
         "--paths", nargs="*", type=Path,
@@ -327,6 +332,18 @@ def main() -> None:
         "--runtime-dependencies", nargs="*", type=Path,
         help="Paths to prepend to the runtime path of executable binaries."
              " Subject to deduplication, which may imply some reordering.")
+=======
+        help="Patch only the provided paths, and ignore their children")
+    parser.add_argument(
+        "--paths", nargs="*", type=Path,
+        help="Paths whose content needs to be patched.")
+    parser.add_argument(
+        "--libs", nargs="*", type=Path,
+        help="Paths where libraries are searched for.")
+    parser.add_argument(
+        "--runtime-dependencies", nargs="*", type=Path,
+        help="Paths to prepend to the runtime path of executable binaries.")
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     parser.add_argument(
         "--append-rpaths",
         nargs="*",

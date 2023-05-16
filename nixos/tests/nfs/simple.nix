@@ -89,7 +89,11 @@ in
           t1 = time.monotonic()
           client1.shutdown()
           duration = time.monotonic() - t1
+<<<<<<< HEAD
           # FIXME: regressed in kernel 6.1.28, temporarily disabled while investigating
           # assert duration < 30, f"shutdown took too long ({duration} seconds)"
+=======
+          assert duration < 30, f"shutdown took too long ({duration} seconds)"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     '';
 })

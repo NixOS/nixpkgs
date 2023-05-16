@@ -67,13 +67,20 @@ let
       substituteInPlace $out/lib/cmake/clang/ClangTargets-release.cmake \
           --replace "\''${_IMPORT_PREFIX}/lib/libclang." "$lib/lib/libclang."
 
+<<<<<<< HEAD
       mkdir -p $python/bin $python/share/{clang,scan-view}
+=======
+      mkdir -p $python/bin $python/share/clang/
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       mv $out/bin/{git-clang-format,scan-view} $python/bin
       if [ -e $out/bin/set-xcode-analyzer ]; then
         mv $out/bin/set-xcode-analyzer $python/bin
       fi
       mv $out/share/clang/*.py $python/share/clang
+<<<<<<< HEAD
       mv $out/share/scan-view/*.py $python/share/scan-view
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       rm $out/bin/c-index-test
       patchShebangs $python/bin
 

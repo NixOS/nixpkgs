@@ -14,16 +14,42 @@
 
 stdenv.mkDerivation rec {
   pname = "groff";
+<<<<<<< HEAD
   version = "1.23.0";
 
   src = fetchurl {
     url = "mirror://gnu/groff/${pname}-${version}.tar.gz";
     hash = "sha256-a5dX9ZK3UYtJAutq9+VFcL3Mujeocf3bLTCuOGNRHBM=";
+=======
+  version = "1.22.4";
+
+  src = fetchurl {
+    url = "mirror://gnu/groff/${pname}-${version}.tar.gz";
+    sha256 = "14q2mldnr1vx0l9lqp9v2f6iww24gj28iyh4j2211hyynx67p3p7";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   outputs = [ "out" "man" "doc" "info" "perl" ];
 
+<<<<<<< HEAD
   enableParallelBuilding = true;
+=======
+  # Parallel build is failing for missing depends. Known upstream as:
+  #   https://savannah.gnu.org/bugs/?62084
+  #   fixed, planned release: 1.23.0
+  enableParallelBuilding = false;
+
+  patches = [
+    ./0001-Fix-cross-compilation-by-looking-for-ar.patch
+  ]
+  ++ lib.optionals (stdenv.cc.isClang && lib.versionAtLeast stdenv.cc.version "9") [
+    # https://trac.macports.org/ticket/59783
+    (fetchpatch {
+      url = "https://raw.githubusercontent.com/openembedded/openembedded-core/ce265cf467f1c3e5ba2edbfbef2170df1a727a52/meta/recipes-extended/groff/files/0001-Include-config.h.patch";
+      sha256 = "1b0mg31xkpxkzlx696nr08rcc7ndpaxdplvysy0hw5099c4n1wyf";
+    })
+  ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   postPatch = ''
     # BASH_PROG gets replaced with a path to the build bash which doesn't get automatically patched by patchShebangs
@@ -39,7 +65,12 @@ stdenv.mkDerivation rec {
       --replace "pnmcrop" "${lib.getBin netpbm}/bin/pnmcrop" \
       --replace "pngtopnm" "${lib.getBin netpbm}/bin/pngtopnm" \
       --replace "@PNMTOPS_NOSETPAGE@" "${lib.getBin netpbm}/bin/pnmtops -nosetpage"
+<<<<<<< HEAD
   '' + lib.optionalString (enableGhostscript || enableHtml) ''
+=======
+    substituteInPlace contrib/groffer/roff2.pl \
+      --replace "'gs'" "'${lib.getBin ghostscript}/bin/gs'"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     substituteInPlace contrib/pdfmark/pdfroff.sh \
       --replace '$GROFF_GHOSTSCRIPT_INTERPRETER' "${lib.getBin ghostscript}/bin/gs" \
       --replace '$GROFF_AWK_INTERPRETER' "${lib.getBin gawk}/bin/gawk"
@@ -104,6 +135,14 @@ stdenv.mkDerivation rec {
     substituteInPlace $perl/bin/gpinyin \
       --replace $out/lib/groff/gpinyin $perl/lib/groff/gpinyin
 
+<<<<<<< HEAD
+=======
+    moveToOutput bin/groffer $perl
+    moveToOutput lib/groff/groffer $perl
+    substituteInPlace $perl/bin/groffer \
+      --replace $out/lib/groff/groffer $perl/lib/groff/groffer
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     moveToOutput bin/grog $perl
     moveToOutput lib/groff/grog $perl
     substituteInPlace $perl/bin/grog \

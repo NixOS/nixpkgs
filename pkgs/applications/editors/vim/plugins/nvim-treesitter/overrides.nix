@@ -1,9 +1,16 @@
+<<<<<<< HEAD
 { lib, callPackage, tree-sitter, neovim, neovimUtils, runCommand }:
+=======
+{ lib, callPackage, tree-sitter, neovim, runCommand }:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 self: super:
 
 let
+<<<<<<< HEAD
   inherit (neovimUtils) grammarToPlugin;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   generatedGrammars = callPackage ./generated.nix {
     inherit (tree-sitter) buildGrammar;
   };
@@ -28,6 +35,28 @@ let
       })
     generatedDerivations;
 
+<<<<<<< HEAD
+=======
+  grammarToPlugin = grammar:
+    let
+      name = lib.pipe grammar [
+        lib.getName
+
+        # added in buildGrammar
+        (lib.removeSuffix "-grammar")
+
+        # grammars from tree-sitter.builtGrammars
+        (lib.removePrefix "tree-sitter-")
+        (lib.replaceStrings [ "-" ] [ "_" ])
+      ];
+    in
+
+    runCommand "nvim-treesitter-grammar-${name}" { } ''
+      mkdir -p $out/parser
+      ln -s ${grammar}/parser $out/parser/${name}.so
+    '';
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   allGrammars = lib.attrValues generatedDerivations;
 
   # Usage:
@@ -35,10 +64,17 @@ let
   # or for all grammars:
   # pkgs.vimPlugins.nvim-treesitter.withAllGrammars
   withPlugins =
+<<<<<<< HEAD
     f: self.nvim-treesitter.overrideAttrs {
       passthru.dependencies = map grammarToPlugin
         (f (tree-sitter.builtGrammars // builtGrammars));
     };
+=======
+    f: self.nvim-treesitter.overrideAttrs (_: {
+      passthru.dependencies = map grammarToPlugin
+        (f (tree-sitter.builtGrammars // builtGrammars));
+    });
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   withAllGrammars = withPlugins (_: allGrammars);
 in

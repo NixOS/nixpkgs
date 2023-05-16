@@ -28,11 +28,16 @@
 
 stdenv.mkDerivation rec {
   pname = "stratisd";
+<<<<<<< HEAD
   version = "3.5.9";
+=======
+  version = "3.5.4";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "stratis-storage";
     repo = pname;
+<<<<<<< HEAD
     rev = "refs/tags/stratisd-v${version}";
     hash = "sha256-E4bBrbkqEh2twolPIHpHxphMG3bnDj0tjEBUWhrwL+M=";
   };
@@ -42,6 +47,15 @@ stdenv.mkDerivation rec {
     outputHashes = {
       "loopdev-0.4.0" = "sha256-nV52zjsg5u6++J8CdN2phii8AwjHg1uap2lt+U8obDQ=";
     };
+=======
+    rev = "v${version}";
+    hash = "sha256-V/1gNgjunT11ErXWIa5hDp2+onPCTequCswwXWD5+9E=";
+  };
+
+  cargoDeps = rustPlatform.fetchCargoTarball {
+    inherit src;
+    hash = "sha256-RljuLL8tep42KNGVsS5CxI7xuhxEjRZ90jVn3jUhVYM=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   postPatch = ''
@@ -76,8 +90,11 @@ stdenv.mkDerivation rec {
     lvm2
   ];
 
+<<<<<<< HEAD
   outputs = [ "out" "initrd" ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   EXECUTABLES_PATHS = lib.makeBinPath ([
     xfsprogs
     thin-provisioning-tools
@@ -99,6 +116,7 @@ stdenv.mkDerivation rec {
 
   # remove files for supporting dracut
   postInstall = ''
+<<<<<<< HEAD
     mkdir -p "$initrd/bin"
     cp "dracut/90stratis/stratis-rootfs-setup" "$initrd/bin"
     mkdir -p "$initrd/lib/systemd/system"
@@ -107,6 +125,8 @@ stdenv.mkDerivation rec {
       --replace mkdir "${coreutils}/bin/mkdir"
     mkdir -p "$initrd/lib/udev/rules.d"
     cp udev/61-stratisd.rules "$initrd/lib/udev/rules.d"
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     rm -r "$out/lib/dracut"
     rm -r "$out/lib/systemd/system-generators"
   '';

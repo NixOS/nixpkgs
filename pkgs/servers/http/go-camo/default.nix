@@ -2,16 +2,27 @@
 
 buildGoModule rec {
   pname = "go-camo";
+<<<<<<< HEAD
   version = "2.4.4";
+=======
+  version = "2.4.3";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "cactus";
     repo = pname;
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-27kAVuFJaGKt7q9E2tchAD6kSukO4xkhU+1JTPfT3Qk=";
   };
 
   vendorHash = "sha256-LVQnQ8Tpkzpc6aUsUgwz2xTttccHynJPsQKvWGiRAIU=";
+=======
+    sha256 = "sha256-GRctsE+uAvyA0pcz+ym4sz3K80pUHoDipVsjFcdrT2A=";
+  };
+
+  vendorHash = "sha256-C66QxlMBupbHYktyzHapUrl0yk+pvWZN0BLhpjIGVzI=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   ldflags = [ "-s" "-w" "-X=main.ServerVersion=${version}" ];
 

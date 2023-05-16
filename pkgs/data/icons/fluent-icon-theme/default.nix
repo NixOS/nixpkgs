@@ -16,13 +16,21 @@ lib.checkListOfEnum "${pname}: available color variants" [ "standard" "green" "g
 
 stdenvNoCC.mkDerivation rec {
   inherit pname;
+<<<<<<< HEAD
   version = "2023-06-07";
+=======
+  version = "2023-02-01";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "vinceliuice";
     repo = pname;
     rev = version;
+<<<<<<< HEAD
     hash = "sha256-drEAjIY/lacqncSeVeNmeRX6v4PnLvGo66Na1fuFXRg=";
+=======
+    hash = "sha256-Plm05+5r6p9MabLmmh8kWitALGFalruBbhAgBhPCjRo=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ gtk3 jdupes ];

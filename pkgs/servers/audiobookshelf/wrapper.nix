@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 { stdenv, ffmpeg-full, tone, pname, nodejs, getopt }: ''
+=======
+{ stdenv, ffmpeg-full, tone, pname, nodejs }: ''
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     #!${stdenv.shell}
 
     port=8000
@@ -7,7 +11,11 @@
     metadata=$(pwd)/metadata
 
     LONGOPTS=host:,port:,config:,metadata:,help
+<<<<<<< HEAD
     args=$(${getopt}/bin/getopt -l "$LONGOPTS" -o h -- "$@")
+=======
+    args=$(getopt -l "$LONGOPTS" -o h -- "$@")
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     eval set -- "$args"
 
@@ -44,7 +52,11 @@
           ;;
         --help|-h)
           echo "Usage: audiobookshelf [--host <host>] [--port <port>] [--metadata <dir>] [--config <dir>]"
+<<<<<<< HEAD
           exit 0
+=======
+          shift
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           ;;
       esac
       shift

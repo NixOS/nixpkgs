@@ -15,13 +15,21 @@
 
 stdenv.mkDerivation rec {
   pname = "lnav";
+<<<<<<< HEAD
   version = "0.11.2";
+=======
+  version = "0.11.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "tstack";
     repo = "lnav";
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-OuxxcXpdpSxrDdiUqRbEaXvCZBAcWvE4YwaMtLKSqCM=";
+=======
+    sha256 = "sha256-W0NXmdbrarSmLOLpl9bt9kYjjDBtejGgh0QYeGFVMNQ=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   patches = [ ./0001-Forcefully-disable-docs-build.patch ];

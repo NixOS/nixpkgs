@@ -2,6 +2,10 @@
 , lib
 , gitUpdater
 , fetchFromGitHub
+<<<<<<< HEAD
+=======
+, fetchpatch
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , cmake
 , pkg-config
 , boost
@@ -11,15 +15,35 @@
 
 stdenv.mkDerivation rec {
   pname = "wlcs";
+<<<<<<< HEAD
   version = "1.6.0";
+=======
+  version = "1.5.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "MirServer";
     repo = "wlcs";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-+YM5dT45p9wk0gJeATmhWDFJJMaUdcTfw8GLS/vMkw4=";
   };
 
+=======
+    hash = "sha256-QxmWxu+w77/WE5pGXMWXm+NP95QmYo2O8ltZYrgCIWw=";
+  };
+
+  patches = [
+    # Improves pkg-config paths even more
+    # Remove when https://github.com/MirServer/wlcs/pull/260 merged & in a release
+    (fetchpatch {
+      name = "0001-wlcs-pkgsconfig-Use-better-path-concatenations.patch";
+      url = "https://github.com/MirServer/wlcs/pull/260/commits/20f28d82fa4dfa6a6e27212dbd6b0f2e8a833c69.patch";
+      hash = "sha256-m8zPD27JbX/vN2YQgNhcRsh/O+qLfvoeky5E5ZEeD1I=";
+    })
+  ];
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nativeBuildInputs = [
     cmake
     pkg-config
@@ -31,6 +55,14 @@ stdenv.mkDerivation rec {
     wayland
   ];
 
+<<<<<<< HEAD
+=======
+  env.NIX_CFLAGS_COMPILE = toString [
+    # Needed with GCC 12
+    "-Wno-error=maybe-uninitialized"
+  ];
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   passthru.updateScript = gitUpdater {
     rev-prefix = "v";
   };

@@ -10,13 +10,21 @@
 
 stdenv.mkDerivation rec {
   pname = "libstrophe";
+<<<<<<< HEAD
   version = "0.12.3";
+=======
+  version = "0.12.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "strophe";
     repo = pname;
     rev = version;
+<<<<<<< HEAD
     sha256 = "EDgdKJ7wqUoThy0t1r39p2lbn64uvTDoIqNCzhpWnZ8=";
+=======
+    sha256 = "sha256-jT4VIqqUldCj3Rsb5MC74WXYQyTqOZxzFADf47TBV8c=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];

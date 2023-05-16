@@ -203,7 +203,11 @@ with lib;
     users = {
       users.${cfg.user} = {
         description = "Nullmailer relay-only mta user";
+<<<<<<< HEAD
         inherit (cfg) group;
+=======
+        group = cfg.group;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         isSystemUser = true;
       };
 
@@ -211,10 +215,17 @@ with lib;
     };
 
     systemd.tmpfiles.rules = [
+<<<<<<< HEAD
       "d /var/spool/nullmailer - ${cfg.user} ${cfg.group} - -"
       "d /var/spool/nullmailer/failed 770 ${cfg.user} ${cfg.group} - -"
       "d /var/spool/nullmailer/queue 770 ${cfg.user} ${cfg.group} - -"
       "d /var/spool/nullmailer/tmp 770 ${cfg.user} ${cfg.group} - -"
+=======
+      "d /var/spool/nullmailer - ${cfg.user} - - -"
+      "d /var/spool/nullmailer/failed 750 ${cfg.user} - - -"
+      "d /var/spool/nullmailer/queue 750 ${cfg.user} - - -"
+      "d /var/spool/nullmailer/tmp 750 ${cfg.user} - - -"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     ];
 
     systemd.services.nullmailer = {
@@ -238,7 +249,11 @@ with lib;
       program = "sendmail";
       source = "${pkgs.nullmailer}/bin/sendmail";
       owner = cfg.user;
+<<<<<<< HEAD
       inherit (cfg) group;
+=======
+      group = cfg.group;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       setuid = true;
       setgid = true;
     };

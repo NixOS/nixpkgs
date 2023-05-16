@@ -4,6 +4,10 @@
 , cmake
 , extra-cmake-modules
 , inotify-tools
+<<<<<<< HEAD
+=======
+, installShellFiles
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , libcloudproviders
 , librsvg
 , libsecret
@@ -25,7 +29,11 @@
 
 mkDerivation rec {
   pname = "nextcloud-client";
+<<<<<<< HEAD
   version = "3.9.4";
+=======
+  version = "3.8.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   outputs = [ "out" "dev" ];
 
@@ -33,7 +41,11 @@ mkDerivation rec {
     owner = "nextcloud";
     repo = "desktop";
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-h8lOstl085haesmCmzq2o0OlQrO5U/mfGngQunynIuQ=";
+=======
+    sha256 = "sha256-BTve1dq+OiUwh/Kiy20iSAyALolkdOX7FHwxvVAdS4U=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   patches = [
@@ -86,9 +98,12 @@ mkDerivation rec {
     "-DNO_SHIBBOLETH=1" # allows to compile without qtwebkit
   ];
 
+<<<<<<< HEAD
   # causes redefinition of _FORTIFY_SOURCE
   hardeningDisable = [ "fortify3" ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   postBuild = ''
     make doc-man
   '';

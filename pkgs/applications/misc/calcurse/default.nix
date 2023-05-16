@@ -2,11 +2,19 @@
 
 stdenv.mkDerivation rec {
   pname = "calcurse";
+<<<<<<< HEAD
   version = "4.8.1";
 
   src = fetchurl {
     url = "https://calcurse.org/files/${pname}-${version}.tar.gz";
     hash = "sha256-2GuzcBT9abjYPMuQSsl5xrjd9Z7j28gPWidFJeTVgwo=";
+=======
+  version = "4.8.0";
+
+  src = fetchurl {
+    url = "https://calcurse.org/files/${pname}-${version}.tar.gz";
+    sha256 = "sha256-SKc2ZmzEtrUwEtc7OqcBUsGLQebHtIB/qw8WjWRa4yw=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   buildInputs = [ ncurses gettext python3 python3Packages.wrapPython ];
@@ -31,6 +39,9 @@ stdenv.mkDerivation rec {
     changelog = "https://git.calcurse.org/calcurse.git/plain/CHANGES.md?h=v${version}";
     license = licenses.bsd2;
     platforms = platforms.unix;
+<<<<<<< HEAD
     maintainers = [ maintainers.matthiasbeyer ];
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

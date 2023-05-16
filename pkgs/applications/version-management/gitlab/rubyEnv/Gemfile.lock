@@ -1,4 +1,5 @@
 PATH
+<<<<<<< HEAD
   remote: gems/activerecord-gitlab
   specs:
     activerecord-gitlab (0.2.0)
@@ -68,6 +69,8 @@ PATH
       rspec (~> 3.0)
 
 PATH
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   remote: vendor/gems/attr_encrypted
   specs:
     attr_encrypted (3.2.4)
@@ -96,6 +99,22 @@ PATH
       devise-two-factor (~> 4.0)
 
 PATH
+<<<<<<< HEAD
+=======
+  remote: vendor/gems/error_tracking_open_api
+  specs:
+    error_tracking_open_api (1.0.0)
+      typhoeus (~> 1.0, >= 1.0.1)
+
+PATH
+  remote: vendor/gems/ipynbdiff
+  specs:
+    ipynbdiff (0.4.7)
+      diffy (~> 3.4)
+      oj (~> 3.13.16)
+
+PATH
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   remote: vendor/gems/mail-smtp_pool
   specs:
     mail-smtp_pool (0.1.0)
@@ -118,6 +137,17 @@ PATH
       omniauth-oauth2 (~> 1.4)
 
 PATH
+<<<<<<< HEAD
+=======
+  remote: vendor/gems/omniauth-cas3
+  specs:
+    omniauth-cas3 (1.1.4)
+      addressable (~> 2.3)
+      nokogiri (~> 1.7, >= 1.7.1)
+      omniauth (~> 2.0)
+
+PATH
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   remote: vendor/gems/omniauth-gitlab
   specs:
     omniauth-gitlab (4.0.0)
@@ -155,6 +185,7 @@ GEM
     acme-client (2.0.11)
       faraday (>= 1.0, < 3.0.0)
       faraday-retry (~> 1.0)
+<<<<<<< HEAD
     actioncable (7.0.6)
       actionpack (= 7.0.6)
       activesupport (= 7.0.6)
@@ -196,10 +227,47 @@ GEM
       nokogiri (>= 1.8.5)
     actionview (7.0.6)
       activesupport (= 7.0.6)
+=======
+    actioncable (6.1.7.2)
+      actionpack (= 6.1.7.2)
+      activesupport (= 6.1.7.2)
+      nio4r (~> 2.0)
+      websocket-driver (>= 0.6.1)
+    actionmailbox (6.1.7.2)
+      actionpack (= 6.1.7.2)
+      activejob (= 6.1.7.2)
+      activerecord (= 6.1.7.2)
+      activestorage (= 6.1.7.2)
+      activesupport (= 6.1.7.2)
+      mail (>= 2.7.1)
+    actionmailer (6.1.7.2)
+      actionpack (= 6.1.7.2)
+      actionview (= 6.1.7.2)
+      activejob (= 6.1.7.2)
+      activesupport (= 6.1.7.2)
+      mail (~> 2.5, >= 2.5.4)
+      rails-dom-testing (~> 2.0)
+    actionpack (6.1.7.2)
+      actionview (= 6.1.7.2)
+      activesupport (= 6.1.7.2)
+      rack (~> 2.0, >= 2.0.9)
+      rack-test (>= 0.6.3)
+      rails-dom-testing (~> 2.0)
+      rails-html-sanitizer (~> 1.0, >= 1.2.0)
+    actiontext (6.1.7.2)
+      actionpack (= 6.1.7.2)
+      activerecord (= 6.1.7.2)
+      activestorage (= 6.1.7.2)
+      activesupport (= 6.1.7.2)
+      nokogiri (>= 1.8.5)
+    actionview (6.1.7.2)
+      activesupport (= 6.1.7.2)
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       builder (~> 3.1)
       erubi (~> 1.4)
       rails-dom-testing (~> 2.0)
       rails-html-sanitizer (~> 1.1, >= 1.2.0)
+<<<<<<< HEAD
     activejob (7.0.6)
       activesupport (= 7.0.6)
       globalid (>= 0.3.6)
@@ -219,11 +287,37 @@ GEM
       marcel (~> 1.0)
       mini_mime (>= 1.1.0)
     activesupport (7.0.6)
+=======
+    activejob (6.1.7.2)
+      activesupport (= 6.1.7.2)
+      globalid (>= 0.3.6)
+    activemodel (6.1.7.2)
+      activesupport (= 6.1.7.2)
+    activerecord (6.1.7.2)
+      activemodel (= 6.1.7.2)
+      activesupport (= 6.1.7.2)
+    activerecord-explain-analyze (0.1.0)
+      activerecord (>= 4)
+      pg
+    activestorage (6.1.7.2)
+      actionpack (= 6.1.7.2)
+      activejob (= 6.1.7.2)
+      activerecord (= 6.1.7.2)
+      activesupport (= 6.1.7.2)
+      marcel (~> 1.0)
+      mini_mime (>= 1.1.0)
+    activesupport (6.1.7.2)
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       concurrent-ruby (~> 1.0, >= 1.0.2)
       i18n (>= 1.6, < 2)
       minitest (>= 5.1)
       tzinfo (~> 2.0)
+<<<<<<< HEAD
     acts-as-taggable-on (9.0.1)
+=======
+      zeitwerk (~> 2.3)
+    acts-as-taggable-on (9.0.0)
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       activerecord (>= 6.0, < 7.1)
     addressable (2.8.1)
       public_suffix (>= 2.0.2, < 6.0)
@@ -261,15 +355,24 @@ GEM
     awesome_print (1.9.2)
     awrence (1.2.1)
     aws-eventstream (1.2.0)
+<<<<<<< HEAD
     aws-partitions (1.761.0)
     aws-sdk-cloudformation (1.41.0)
       aws-sdk-core (~> 3, >= 3.99.0)
       aws-sigv4 (~> 1.1)
     aws-sdk-core (3.180.3)
+=======
+    aws-partitions (1.733.0)
+    aws-sdk-cloudformation (1.41.0)
+      aws-sdk-core (~> 3, >= 3.99.0)
+      aws-sigv4 (~> 1.1)
+    aws-sdk-core (3.171.0)
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       aws-eventstream (~> 1, >= 1.0.2)
       aws-partitions (~> 1, >= 1.651.0)
       aws-sigv4 (~> 1.5)
       jmespath (~> 1, >= 1.6.1)
+<<<<<<< HEAD
     aws-sdk-kms (1.64.0)
       aws-sdk-core (~> 3, >= 3.165.0)
       aws-sigv4 (~> 1.1)
@@ -278,6 +381,16 @@ GEM
       aws-sdk-kms (~> 1)
       aws-sigv4 (~> 1.6)
     aws-sigv4 (1.6.0)
+=======
+    aws-sdk-kms (1.63.0)
+      aws-sdk-core (~> 3, >= 3.165.0)
+      aws-sigv4 (~> 1.1)
+    aws-sdk-s3 (1.121.0)
+      aws-sdk-core (~> 3, >= 3.165.0)
+      aws-sdk-kms (~> 1)
+      aws-sigv4 (~> 1.4)
+    aws-sigv4 (1.5.1)
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       aws-eventstream (~> 1, >= 1.0.2)
     axe-core-api (4.6.0)
       dumb_delegator
@@ -298,11 +411,19 @@ GEM
       faraday_middleware (~> 1.0, >= 1.0.0.rc1)
       net-http-persistent (~> 4.0)
       nokogiri (~> 1, >= 1.10.8)
+<<<<<<< HEAD
     babosa (2.0.0)
     backport (1.2.0)
     base32 (0.3.2)
     batch-loader (2.0.1)
     bcrypt (3.1.18)
+=======
+    babosa (1.0.4)
+    backport (1.2.0)
+    base32 (0.3.2)
+    batch-loader (2.0.1)
+    bcrypt (3.1.16)
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     benchmark (0.2.0)
     benchmark-ips (2.11.0)
     benchmark-malloc (0.2.0)
@@ -310,10 +431,17 @@ GEM
       memory_profiler (~> 1)
     benchmark-perf (0.6.0)
     benchmark-trend (0.4.0)
+<<<<<<< HEAD
     better_errors (2.10.1)
       erubi (>= 1.0.0)
       rack (>= 0.9.0)
       rouge (>= 1.0.0)
+=======
+    better_errors (2.9.1)
+      coderay (>= 1.0.0)
+      erubi (>= 1.0.0)
+      rack (>= 0.9.0)
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     bindata (2.4.11)
     binding_of_caller (1.0.0)
       debug_inspector (>= 0.0.1)
@@ -328,7 +456,11 @@ GEM
       bundler (>= 1.2.0, < 3)
       thor (>= 0.18, < 2)
     byebug (11.1.3)
+<<<<<<< HEAD
     capybara (3.39.2)
+=======
+    capybara (3.39.0)
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       addressable
       matrix
       mini_mime (>= 0.1.3)
@@ -357,8 +489,13 @@ GEM
       mixlib-shellout (>= 2.0, < 4.0)
       tomlrb (~> 1.2)
     chef-utils (16.10.17)
+<<<<<<< HEAD
     chunky_png (1.3.5)
     circuitbox (2.0.0)
+=======
+    childprocess (3.0.0)
+    chunky_png (1.3.5)
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     citrus (3.0.2)
     claide (1.1.0)
     claide-plugins (0.9.2)
@@ -369,7 +506,11 @@ GEM
     coercible (1.0.0)
       descendants_tracker (~> 0.0.1)
     colored2 (3.1.2)
+<<<<<<< HEAD
     commonmarker (0.23.10)
+=======
+    commonmarker (0.23.6)
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     concurrent-ruby (1.2.2)
     connection_pool (2.3.0)
     cork (0.3.0)
@@ -429,7 +570,10 @@ GEM
       thor (>= 0.19, < 2)
     descendants_tracker (0.0.4)
       thread_safe (~> 0.3, >= 0.3.1)
+<<<<<<< HEAD
     devfile (0.0.22.pre.alpha1)
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     device_detector (1.0.0)
     devise (4.8.1)
       bcrypt (~> 3.0)
@@ -455,6 +599,7 @@ GEM
       unf (>= 0.0.5, < 1.0.0)
     doorkeeper (5.6.6)
       railties (>= 5)
+<<<<<<< HEAD
     doorkeeper-openid_connect (1.8.7)
       doorkeeper (>= 5.5, < 5.7)
       jwt (>= 2.5)
@@ -473,6 +618,32 @@ GEM
       dry-inflector (~> 1.0)
       dry-logic (~> 1.4)
       zeitwerk (~> 2.6)
+=======
+    doorkeeper-openid_connect (1.8.5)
+      doorkeeper (>= 5.5, < 5.7)
+      jwt (>= 2.5)
+    dotenv (2.7.6)
+    dry-configurable (0.12.0)
+      concurrent-ruby (~> 1.0)
+      dry-core (~> 0.5, >= 0.5.0)
+    dry-container (0.7.2)
+      concurrent-ruby (~> 1.0)
+      dry-configurable (~> 0.1, >= 0.1.3)
+    dry-core (0.5.0)
+      concurrent-ruby (~> 1.0)
+    dry-equalizer (0.3.0)
+    dry-inflector (0.2.0)
+    dry-logic (1.1.0)
+      concurrent-ruby (~> 1.0)
+      dry-core (~> 0.5, >= 0.5)
+    dry-types (1.4.0)
+      concurrent-ruby (~> 1.0)
+      dry-container (~> 0.3)
+      dry-core (~> 0.4, >= 0.4.4)
+      dry-equalizer (~> 0.3)
+      dry-inflector (~> 0.1, >= 0.1.2)
+      dry-logic (~> 1.0, >= 1.0.2)
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     dumb_delegator (1.0.0)
     duo_api (1.3.0)
     e2mmap (0.1.0)
@@ -528,6 +699,12 @@ GEM
       faraday-rack (~> 1.0)
       faraday-retry (~> 1.0)
       ruby2_keywords (>= 0.0.4)
+<<<<<<< HEAD
+=======
+    faraday-cookie_jar (0.0.7)
+      faraday (>= 0.8.0)
+      http-cookie (~> 1.0.0)
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     faraday-em_http (1.0.0)
     faraday-em_synchrony (1.0.0)
     faraday-excon (1.1.0)
@@ -556,8 +733,13 @@ GEM
     ffi-compiler (1.0.1)
       ffi (>= 1.0.0)
       rake
+<<<<<<< HEAD
     ffi-yajl (2.6.0)
       libyajl2 (>= 1.2)
+=======
+    ffi-yajl (2.3.4)
+      libyajl2 (~> 1.2)
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     filelock (1.1.1)
     find_a_port (1.0.1)
     flipper (0.25.0)
@@ -625,7 +807,11 @@ GEM
     gettext (3.3.6)
       locale (>= 2.0.5)
       text (>= 1.3.0)
+<<<<<<< HEAD
     gettext_i18n_rails (1.11.0)
+=======
+    gettext_i18n_rails (1.8.0)
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       fast_gettext (>= 0.9.0)
     gettext_i18n_rails_js (1.3.0)
       gettext (>= 3.0.2)
@@ -634,47 +820,79 @@ GEM
       rails (>= 3.2.0)
     git (1.11.0)
       rchardet (~> 1.8)
+<<<<<<< HEAD
     gitaly (16.2.0.pre.rc4)
+=======
+    gitaly (15.9.0.pre.rc3)
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       grpc (~> 1.0)
     gitlab (4.19.0)
       httparty (~> 0.20)
       terminal-table (>= 1.5.1)
     gitlab-chronic (0.10.5)
       numerizer (~> 0.2)
+<<<<<<< HEAD
     gitlab-dangerfiles (3.13.0)
+=======
+    gitlab-dangerfiles (3.9.0)
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       danger (>= 8.4.5)
       danger-gitlab (>= 8.0.0)
       rake
     gitlab-experiment (0.7.1)
       activesupport (>= 3.0)
       request_store (>= 1.0)
+<<<<<<< HEAD
     gitlab-fog-azure-rm (1.8.0)
+=======
+    gitlab-fog-azure-rm (1.7.0)
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       azure-storage-blob (~> 2.0)
       azure-storage-common (~> 2.0)
       fog-core (= 2.1.0)
       fog-json (~> 1.2.0)
       mime-types
+<<<<<<< HEAD
     gitlab-labkit (0.34.0)
+=======
+      ms_rest_azure (~> 0.12.0)
+    gitlab-labkit (0.31.1)
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       actionpack (>= 5.0.0, < 8.0.0)
       activesupport (>= 5.0.0, < 8.0.0)
       grpc (>= 1.37)
       jaeger-client (~> 1.1.0)
       opentracing (~> 0.4)
+<<<<<<< HEAD
       pg_query (~> 4.2.3)
       redis (> 3.0.0, < 6.0.0)
     gitlab-license (2.3.0)
+=======
+      pg_query (~> 2.1)
+      redis (> 3.0.0, < 6.0.0)
+    gitlab-license (2.2.1)
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     gitlab-mail_room (0.0.23)
       jwt (>= 2.0)
       net-imap (>= 0.2.1)
       oauth2 (>= 1.4.4, < 3)
     gitlab-markup (1.9.0)
     gitlab-net-dns (0.9.2)
+<<<<<<< HEAD
     gitlab-styles (10.1.0)
       rubocop (~> 1.50.2)
       rubocop-graphql (~> 0.18)
       rubocop-performance (~> 1.15)
       rubocop-rails (~> 2.17)
       rubocop-rspec (~> 2.22)
+=======
+    gitlab-styles (10.0.0)
+      rubocop (~> 1.43.0)
+      rubocop-graphql (~> 0.18)
+      rubocop-performance (~> 1.15)
+      rubocop-rails (~> 2.17)
+      rubocop-rspec (~> 2.18)
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     gitlab_chronic_duration (0.10.6.2)
       numerizer (~> 0.2)
     gitlab_omniauth-ldap (2.2.0)
@@ -682,6 +900,7 @@ GEM
       omniauth (>= 1.3, < 3)
       pyu-ruby-sasl (>= 0.0.3.3, < 0.1)
       rubyntlm (~> 0.5)
+<<<<<<< HEAD
     gitlab_quality-test_tooling (0.9.3)
       activesupport (>= 6.1, < 7.1)
       gitlab (~> 4.19)
@@ -691,6 +910,8 @@ GEM
       rainbow (>= 3, < 4)
       table_print (= 1.5.7)
       zeitwerk (>= 2, < 3)
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     globalid (1.1.0)
       activesupport (>= 5.0)
     gon (6.4.0)
@@ -752,7 +973,11 @@ GEM
       google-cloud-core (~> 1.6)
       googleauth (>= 0.16.2, < 2.a)
       mini_mime (~> 1.0)
+<<<<<<< HEAD
     google-protobuf (3.23.4)
+=======
+    google-protobuf (3.22.3)
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     googleapis-common-protos (1.4.0)
       google-protobuf (~> 3.14)
       googleapis-common-protos-types (~> 1.2)
@@ -768,12 +993,20 @@ GEM
       signet (>= 0.16, < 2.a)
     gpgme (2.0.22)
       mini_portile2 (~> 2.7)
+<<<<<<< HEAD
     grape (1.7.1)
+=======
+    grape (1.5.2)
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       activesupport
       builder
       dry-types (>= 1.1)
       mustermann-grape (~> 1.0.0)
+<<<<<<< HEAD
       rack (>= 1.3.0, < 3)
+=======
+      rack (>= 1.3.0)
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       rack-accept
     grape-entity (0.10.0)
       activesupport (>= 3.0.0)
@@ -783,7 +1016,11 @@ GEM
       grape (~> 1.3)
       rake (> 12)
       ruby2_keywords (~> 0.0.2)
+<<<<<<< HEAD
     grape-swagger (1.6.1)
+=======
+    grape-swagger (1.5.0)
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       grape (~> 1.3)
     grape-swagger-entity (0.5.1)
       grape-entity (>= 0.6.0)
@@ -811,8 +1048,13 @@ GEM
       graphql (~> 1.12)
       html-pipeline (~> 2.9)
       sass (~> 3.4)
+<<<<<<< HEAD
     grpc (1.55.0)
       google-protobuf (~> 3.23)
+=======
+    grpc (1.42.0)
+      google-protobuf (~> 3.18)
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       googleapis-common-protos-types (~> 1.0)
     gssapi (1.3.1)
       ffi (>= 1.0.1)
@@ -909,10 +1151,13 @@ GEM
       hana (~> 1.3)
       regexp_parser (~> 2.0)
       uri_template (~> 0.7)
+<<<<<<< HEAD
     jsonb_accessor (1.3.10)
       activerecord (>= 5.0)
       activesupport (>= 5.0)
       pg (>= 0.18.1)
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     jsonpath (1.1.2)
       multi_json
     jwt (2.5.0)
@@ -928,7 +1173,11 @@ GEM
       activerecord
       kaminari-core (= 1.2.2)
     kaminari-core (1.2.2)
+<<<<<<< HEAD
     kas-grpc (0.2.0)
+=======
+    kas-grpc (0.0.2)
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       grpc (~> 1.0)
     knapsack (1.21.1)
       rake
@@ -943,7 +1192,11 @@ GEM
       rest-client (~> 2.0)
     launchy (2.5.0)
       addressable (~> 2.7)
+<<<<<<< HEAD
     lefthook (1.4.7)
+=======
+    lefthook (1.3.10)
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     letter_opener (1.7.0)
       launchy (~> 2.2)
     letter_opener_web (2.0.0)
@@ -978,19 +1231,35 @@ GEM
       activesupport (>= 4)
       railties (>= 4)
       request_store (~> 1.0)
+<<<<<<< HEAD
     loofah (2.21.3)
       crass (~> 1.0.2)
       nokogiri (>= 1.12.0)
     lookbook (2.0.1)
+=======
+    loofah (2.20.0)
+      crass (~> 1.0.2)
+      nokogiri (>= 1.5.9)
+    lookbook (1.5.3)
+      actioncable
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       activemodel
       css_parser
       htmlbeautifier (~> 1.3)
       htmlentities (~> 4.3.4)
+<<<<<<< HEAD
       marcel (~> 1.0)
       railties (>= 5.0)
       redcarpet (~> 3.5)
       rouge (>= 3.26, < 5.0)
       view_component (>= 2.0)
+=======
+      listen (~> 3.0)
+      railties (>= 5.0)
+      redcarpet (~> 3.5)
+      rouge (>= 3.26, < 5.0)
+      view_component (> 2.0, < 4)
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       yard (~> 0.9.25)
       zeitwerk (~> 2.5)
     lru_redux (1.1.0)
@@ -1014,7 +1283,11 @@ GEM
     mini_histogram (0.3.1)
     mini_magick (4.10.1)
     mini_mime (1.1.2)
+<<<<<<< HEAD
     mini_portile2 (2.8.2)
+=======
+    mini_portile2 (2.8.1)
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     minitest (5.11.3)
     mixlib-cli (2.1.8)
     mixlib-config (3.0.9)
@@ -1022,11 +1295,24 @@ GEM
     mixlib-log (3.0.9)
     mixlib-shellout (3.2.5)
       chef-utils
+<<<<<<< HEAD
+=======
+    ms_rest (0.7.6)
+      concurrent-ruby (~> 1.0)
+      faraday (>= 0.9, < 2.0.0)
+      timeliness (~> 0.3.10)
+    ms_rest_azure (0.12.0)
+      concurrent-ruby (~> 1.0)
+      faraday (>= 0.9, < 2.0.0)
+      faraday-cookie_jar (~> 0.0.6)
+      ms_rest (~> 0.7.6)
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     msgpack (1.5.4)
     multi_json (1.14.1)
     multi_xml (0.6.0)
     multipart-post (2.2.3)
     murmurhash3 (0.1.7)
+<<<<<<< HEAD
     mustermann (3.0.0)
       ruby2_keywords (~> 0.0.1)
     mustermann-grape (1.0.2)
@@ -1038,6 +1324,14 @@ GEM
     net-http (0.1.1)
       net-protocol
       uri
+=======
+    mustermann (1.1.1)
+      ruby2_keywords (~> 0.0.1)
+    mustermann-grape (1.0.1)
+      mustermann (>= 1.0.0)
+    nap (1.1.0)
+    nenv (0.3.0)
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     net-http-persistent (4.0.1)
       connection_pool (~> 2.2)
     net-imap (0.3.4)
@@ -1057,8 +1351,13 @@ GEM
     netrc (0.11.0)
     nio4r (2.5.8)
     no_proxy_fix (0.1.2)
+<<<<<<< HEAD
     nokogiri (1.15.4)
       mini_portile2 (~> 2.8.2)
+=======
+    nokogiri (1.14.3)
+      mini_portile2 (~> 2.8.0)
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       racc (~> 1.4)
     notiffany (0.1.3)
       nenv (~> 0.1)
@@ -1126,11 +1425,17 @@ GEM
     omniauth-oauth2-generic (0.2.8)
       omniauth-oauth2 (~> 1.0)
       rake
+<<<<<<< HEAD
     omniauth-saml (2.1.0)
       omniauth (~> 2.0)
       ruby-saml (~> 1.12)
     omniauth-shibboleth-redux (2.0.0)
       omniauth (>= 2.0.0)
+=======
+    omniauth-saml (2.0.0)
+      omniauth (~> 2.0)
+      ruby-saml (~> 1.9)
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     omniauth-twitter (1.4.0)
       omniauth-oauth (~> 1.1)
       rack
@@ -1148,7 +1453,12 @@ GEM
       validate_email
       validate_url
       webfinger (>= 1.0.1)
+<<<<<<< HEAD
     openssl (3.1.0)
+=======
+    openssl (2.2.2)
+      ipaddr
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     openssl-signature_algorithm (1.3.0)
       openssl (> 2.0)
     opentracing (0.5.0)
@@ -1181,17 +1491,28 @@ GEM
       expgen (~> 0.1)
       rainbow (~> 3.1.1)
     parallel (1.22.1)
+<<<<<<< HEAD
     parser (3.2.2.3)
       ast (~> 2.4.1)
       racc
+=======
+    parser (3.2.0.0)
+      ast (~> 2.4.1)
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     parslet (1.8.2)
     pastel (0.8.0)
       tty-color (~> 0.5)
     peek (1.1.0)
       railties (>= 4.0.0)
+<<<<<<< HEAD
     pg (1.5.3)
     pg_query (4.2.3)
       google-protobuf (>= 3.22.3)
+=======
+    pg (1.4.6)
+    pg_query (2.2.1)
+      google-protobuf (>= 3.19.2)
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     plist (3.6.0)
     png_quantizator (0.2.1)
     po_to_json (1.0.1)
@@ -1207,8 +1528,12 @@ GEM
       coderay
       parser
       unparser
+<<<<<<< HEAD
     prometheus-client-mmap (0.27.0)
       rb_sys (~> 0.9)
+=======
+    prometheus-client-mmap (0.19.1)
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     pry (0.14.2)
       coderay (~> 1.1)
       method_source (~> 1.0)
@@ -1217,11 +1542,16 @@ GEM
       pry (>= 0.13, < 0.15)
     pry-rails (0.3.9)
       pry (>= 0.10.4)
+<<<<<<< HEAD
     pry-shell (0.6.4)
+=======
+    pry-shell (0.6.1)
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       pry (>= 0.13.0)
       tty-markdown
       tty-prompt
     public_suffix (5.0.0)
+<<<<<<< HEAD
     puma (6.3.0)
       nio4r (~> 2.0)
     pyu-ruby-sasl (0.0.3.3)
@@ -1232,6 +1562,21 @@ GEM
       rack (>= 0.4)
     rack-attack (6.7.0)
       rack (>= 1.0, < 4)
+=======
+    puma (5.6.5)
+      nio4r (~> 2.0)
+    puma_worker_killer (0.3.1)
+      get_process_mem (~> 0.2)
+      puma (>= 2.7)
+    pyu-ruby-sasl (0.0.3.3)
+    raabro (1.4.0)
+    racc (1.6.2)
+    rack (2.2.6.4)
+    rack-accept (0.4.5)
+      rack (>= 0.4)
+    rack-attack (6.6.1)
+      rack (>= 1.0, < 3)
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     rack-cors (1.1.1)
       rack (>= 2.0.0)
     rack-oauth2 (1.21.3)
@@ -1244,6 +1589,7 @@ GEM
       rack
     rack-proxy (0.7.6)
       rack
+<<<<<<< HEAD
     rack-test (2.1.0)
       rack (>= 1.3)
     rack-timeout (0.6.3)
@@ -1261,6 +1607,26 @@ GEM
       activesupport (= 7.0.6)
       bundler (>= 1.15.0)
       railties (= 7.0.6)
+=======
+    rack-test (2.0.2)
+      rack (>= 1.3)
+    rack-timeout (0.6.3)
+    rails (6.1.7.2)
+      actioncable (= 6.1.7.2)
+      actionmailbox (= 6.1.7.2)
+      actionmailer (= 6.1.7.2)
+      actionpack (= 6.1.7.2)
+      actiontext (= 6.1.7.2)
+      actionview (= 6.1.7.2)
+      activejob (= 6.1.7.2)
+      activemodel (= 6.1.7.2)
+      activerecord (= 6.1.7.2)
+      activestorage (= 6.1.7.2)
+      activesupport (= 6.1.7.2)
+      bundler (>= 1.15.0)
+      railties (= 6.1.7.2)
+      sprockets-rails (>= 2.0.0)
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     rails-controller-testing (1.0.5)
       actionpack (>= 5.0.1.rc1)
       actionview (>= 5.0.1.rc1)
@@ -1273,6 +1639,7 @@ GEM
     rails-i18n (7.0.3)
       i18n (>= 0.7, < 2)
       railties (>= 6.0.0, < 8)
+<<<<<<< HEAD
     railties (7.0.6)
       actionpack (= 7.0.6)
       activesupport (= 7.0.6)
@@ -1280,12 +1647,23 @@ GEM
       rake (>= 12.2)
       thor (~> 1.0)
       zeitwerk (~> 2.5)
+=======
+    railties (6.1.7.2)
+      actionpack (= 6.1.7.2)
+      activesupport (= 6.1.7.2)
+      method_source
+      rake (>= 12.2)
+      thor (~> 1.0)
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     rainbow (3.1.1)
     rake (13.0.6)
     rb-fsevent (0.11.2)
     rb-inotify (0.10.1)
       ffi (~> 1.0)
+<<<<<<< HEAD
     rb_sys (0.9.78)
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     rbtrace (0.4.14)
       ffi (>= 1.0.6)
       msgpack (>= 0.4.3)
@@ -1293,7 +1671,11 @@ GEM
     rbtree (0.4.6)
     rchardet (1.8.0)
     rdoc (6.3.2)
+<<<<<<< HEAD
     re2 (1.7.0)
+=======
+    re2 (1.6.0)
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     recaptcha (5.12.3)
       json
     recursive-open-struct (1.1.3)
@@ -1318,7 +1700,11 @@ GEM
       uber (< 0.2.0)
     request_store (1.5.1)
       rack (>= 1.4)
+<<<<<<< HEAD
     responders (3.0.1)
+=======
+    responders (3.0.0)
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       actionpack (>= 5.0)
       railties (>= 5.0)
     rest-client (2.1.0)
@@ -1332,7 +1718,11 @@ GEM
     rexml (3.2.5)
     rinku (2.0.0)
     rotp (6.2.0)
+<<<<<<< HEAD
     rouge (4.1.3)
+=======
+    rouge (4.1.0)
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     rqrcode (0.7.0)
       chunky_png
     rqrcode-rails3 (0.1.7)
@@ -1346,12 +1736,21 @@ GEM
       benchmark-perf (~> 0.6)
       benchmark-trend (~> 0.4)
       rspec (>= 3.0)
+<<<<<<< HEAD
     rspec-core (3.12.2)
       rspec-support (~> 3.12.0)
     rspec-expectations (3.12.3)
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.12.0)
     rspec-mocks (3.12.6)
+=======
+    rspec-core (3.12.0)
+      rspec-support (~> 3.12.0)
+    rspec-expectations (3.12.2)
+      diff-lcs (>= 1.2.0, < 2.0)
+      rspec-support (~> 3.12.0)
+    rspec-mocks (3.12.3)
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.12.0)
     rspec-parameterized (1.0.0)
@@ -1365,6 +1764,7 @@ GEM
     rspec-parameterized-table_syntax (1.0.0)
       binding_of_caller
       rspec-parameterized-core (< 2)
+<<<<<<< HEAD
     rspec-rails (6.0.3)
       actionpack (>= 6.1)
       activesupport (>= 6.1)
@@ -1373,6 +1773,16 @@ GEM
       rspec-expectations (~> 3.12)
       rspec-mocks (~> 3.12)
       rspec-support (~> 3.12)
+=======
+    rspec-rails (6.0.1)
+      actionpack (>= 6.1)
+      activesupport (>= 6.1)
+      railties (>= 6.1)
+      rspec-core (~> 3.11)
+      rspec-expectations (~> 3.11)
+      rspec-mocks (~> 3.11)
+      rspec-support (~> 3.11)
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     rspec-retry (0.6.2)
       rspec-core (> 3.3)
     rspec-support (3.12.0)
@@ -1383,13 +1793,18 @@ GEM
       pg
       rails
       sqlite3
+<<<<<<< HEAD
     rubocop (1.50.2)
+=======
+    rubocop (1.43.0)
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       json (~> 2.3)
       parallel (~> 1.10)
       parser (>= 3.2.0.0)
       rainbow (>= 2.2.2, < 4.0)
       regexp_parser (>= 1.8, < 3.0)
       rexml (>= 3.2.5, < 4.0)
+<<<<<<< HEAD
       rubocop-ast (>= 1.28.0, < 2.0)
       ruby-progressbar (~> 1.7)
       unicode-display_width (>= 2.4.0, < 3.0)
@@ -1412,6 +1827,27 @@ GEM
       rubocop (~> 1.33)
       rubocop-capybara (~> 2.17)
       rubocop-factory_bot (~> 2.22)
+=======
+      rubocop-ast (>= 1.24.1, < 2.0)
+      ruby-progressbar (~> 1.7)
+      unicode-display_width (>= 2.4.0, < 3.0)
+    rubocop-ast (1.24.1)
+      parser (>= 3.1.1.0)
+    rubocop-capybara (2.17.0)
+      rubocop (~> 1.41)
+    rubocop-graphql (0.19.0)
+      rubocop (>= 0.87, < 2)
+    rubocop-performance (1.16.0)
+      rubocop (>= 1.7.0, < 2.0)
+      rubocop-ast (>= 0.4.0)
+    rubocop-rails (2.17.4)
+      activesupport (>= 4.2.0)
+      rack (>= 1.1)
+      rubocop (>= 1.33.0, < 2.0)
+    rubocop-rspec (2.18.1)
+      rubocop (~> 1.33)
+      rubocop-capybara (~> 2.17)
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     ruby-fogbugz (0.3.0)
       crack (~> 0.4)
       multipart-post (~> 2.0)
@@ -1420,8 +1856,13 @@ GEM
     ruby-openai (3.7.0)
       httparty (>= 0.18.1)
     ruby-progressbar (1.11.0)
+<<<<<<< HEAD
     ruby-saml (1.15.0)
       nokogiri (>= 1.13.10)
+=======
+    ruby-saml (1.13.0)
+      nokogiri (>= 1.10.5)
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       rexml
     ruby-statistics (3.0.0)
     ruby2_keywords (0.0.5)
@@ -1430,7 +1871,11 @@ GEM
     rubyntlm (0.6.3)
     rubypants (0.2.0)
     rubyzip (2.3.2)
+<<<<<<< HEAD
     rugged (1.6.3)
+=======
+    rugged (1.5.1)
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     safe_yaml (1.0.4)
     safety_net_attestation (0.4.0)
       jwt (~> 2.0)
@@ -1457,10 +1902,16 @@ GEM
     seed-fu (2.3.7)
       activerecord (>= 3.1)
       activesupport (>= 3.1)
+<<<<<<< HEAD
     selenium-webdriver (4.11.0)
       rexml (~> 3.2, >= 3.2.5)
       rubyzip (>= 1.2.2, < 3.0)
       websocket (~> 1.0)
+=======
+    selenium-webdriver (3.142.7)
+      childprocess (>= 0.5, < 4.0)
+      rubyzip (>= 1.2.2)
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     semver_dialects (1.2.1)
       pastel (~> 0.8.0)
       thor (~> 1.2.0)
@@ -1475,7 +1926,12 @@ GEM
     sentry-sidekiq (5.8.0)
       sentry-ruby (~> 5.8.0)
       sidekiq (>= 3.0)
+<<<<<<< HEAD
     set (1.0.2)
+=======
+    set (1.0.1)
+    settingslogic (2.0.9)
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     sexp_processor (4.16.1)
     shellany (0.0.1)
     shoulda-matchers (5.1.0)
@@ -1494,6 +1950,7 @@ GEM
       jwt (>= 1.5, < 3.0)
       multi_json (~> 1.10)
     simple_po_parser (1.1.6)
+<<<<<<< HEAD
     simplecov (0.22.0)
       docile (~> 1.1)
       simplecov-html (~> 0.11)
@@ -1501,6 +1958,14 @@ GEM
     simplecov-cobertura (2.1.0)
       rexml
       simplecov (~> 0.19)
+=======
+    simplecov (0.21.2)
+      docile (~> 1.1)
+      simplecov-html (~> 0.11)
+      simplecov_json_formatter (~> 0.1)
+    simplecov-cobertura (1.3.1)
+      simplecov (~> 0.8)
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     simplecov-html (0.12.3)
     simplecov-lcov (0.8.0)
     simplecov_json_formatter (0.1.4)
@@ -1545,7 +2010,11 @@ GEM
       mini_portile2 (~> 2.8.0)
     ssh_data (1.3.0)
     ssrf_filter (1.0.8)
+<<<<<<< HEAD
     stackprof (0.2.25)
+=======
+    stackprof (0.2.23)
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     state_machines (0.5.0)
     state_machines-activemodel (0.8.0)
       activemodel (>= 5.1)
@@ -1566,7 +2035,10 @@ GEM
     sys-filesystem (1.4.3)
       ffi (~> 1.1)
     sysexits (1.2.0)
+<<<<<<< HEAD
     table_print (1.5.7)
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     tanuki_emoji (0.6.0)
     telesign (2.2.4)
       net-http-persistent (>= 3.0.0, < 5.0)
@@ -1579,7 +2051,11 @@ GEM
       unicode-display_width (>= 1.1.1, < 3)
     terser (1.0.2)
       execjs (>= 0.3.0, < 3)
+<<<<<<< HEAD
     test-prof (1.2.2)
+=======
+    test-prof (1.2.1)
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     test_file_finder (0.1.4)
       faraday (~> 1.0)
     text (1.3.1)
@@ -1587,6 +2063,10 @@ GEM
     thread_safe (0.3.6)
     thrift (0.16.0)
     tilt (2.0.11)
+<<<<<<< HEAD
+=======
+    timeliness (0.3.10)
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     timeout (0.3.2)
     timfel-krb5-auth (0.8.3)
     tins (1.31.1)
@@ -1632,11 +2112,20 @@ GEM
       ethon (>= 0.9.0)
     tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
+<<<<<<< HEAD
     uber (0.1.0)
     undercover (0.4.6)
       imagen (>= 0.1.8)
       rainbow (>= 2.1, < 4.0)
       rugged (>= 0.27, < 1.7)
+=======
+    u2f (0.2.1)
+    uber (0.1.0)
+    undercover (0.4.5)
+      imagen (>= 0.1.8)
+      rainbow (>= 2.1, < 4.0)
+      rugged (>= 0.27, < 1.6)
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     unf (0.1.4)
       unf_ext
     unf_ext (0.0.8.2)
@@ -1648,7 +2137,10 @@ GEM
     unparser (0.6.7)
       diff-lcs (~> 1.3)
       parser (>= 3.2.0)
+<<<<<<< HEAD
     uri (0.12.1)
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     uri_template (0.7.0)
     valid_email (0.1.3)
       activemodel
@@ -1664,8 +2156,13 @@ GEM
       activesupport (>= 3.0)
     version_gem (1.1.0)
     version_sorter (2.3.0)
+<<<<<<< HEAD
     view_component (3.2.0)
       activesupport (>= 5.2.0, < 8.0)
+=======
+    view_component (2.74.1)
+      activesupport (>= 5.0.0, < 8.0)
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       concurrent-ruby (~> 1.0)
       method_source (~> 1.0)
     virtus (2.0.0)
@@ -1693,7 +2190,10 @@ GEM
       crack (>= 0.3.2)
       hashdiff (>= 0.4.0, < 2.0.0)
     webrick (1.8.1)
+<<<<<<< HEAD
     websocket (1.2.9)
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     websocket-driver (0.7.5)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.5)
@@ -1710,7 +2210,11 @@ GEM
       nokogiri (~> 1.8)
     yajl-ruby (1.4.3)
     yard (0.9.26)
+<<<<<<< HEAD
     zeitwerk (2.6.7)
+=======
+    zeitwerk (2.6.6)
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 PLATFORMS
   ruby
@@ -1720,7 +2224,10 @@ DEPENDENCIES
   RedCloth (~> 4.3.2)
   acme-client (~> 2.0)
   activerecord-explain-analyze (~> 0.1)
+<<<<<<< HEAD
   activerecord-gitlab!
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   acts-as-taggable-on (~> 9.0)
   addressable (~> 2.8)
   akismet (~> 3.0)
@@ -1737,21 +2244,33 @@ DEPENDENCIES
   autoprefixer-rails (= 10.2.5.1)
   awesome_print
   aws-sdk-cloudformation (~> 1)
+<<<<<<< HEAD
   aws-sdk-core (~> 3.180.3)
   aws-sdk-s3 (~> 1.132.1)
   axe-core-rspec
   babosa (~> 2.0)
+=======
+  aws-sdk-core (~> 3.171.0)
+  aws-sdk-s3 (~> 1.121.0)
+  axe-core-rspec
+  babosa (~> 1.0.4)
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   base32 (~> 0.3.0)
   batch-loader (~> 2.0.1)
   bcrypt (~> 3.1, >= 3.1.14)
   benchmark-ips (~> 2.11.0)
   benchmark-memory (~> 0.1)
+<<<<<<< HEAD
   better_errors (~> 2.10.1)
+=======
+  better_errors (~> 2.9.1)
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   bootsnap (~> 1.16.0)
   browser (~> 5.3.1)
   bullet (~> 7.0.2)
   bundler-audit (~> 0.7.0.1)
   bundler-checksum (~> 0.1.0)!
+<<<<<<< HEAD
   capybara (~> 3.39, >= 3.39.2)
   capybara-screenshot (~> 1.0.26)
   carrierwave (~> 1.3)
@@ -1760,19 +2279,33 @@ DEPENDENCIES
   click_house-client!
   cloud_profiler_agent (~> 0.0.0)!
   commonmarker (~> 0.23.10)
+=======
+  capybara (~> 3.39)
+  capybara-screenshot (~> 1.0.26)
+  carrierwave (~> 1.3)
+  charlock_holmes (~> 0.7.7)
+  cloud_profiler_agent (~> 0.0.0)!
+  commonmarker (~> 0.23.6)
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   concurrent-ruby (~> 1.1)
   connection_pool (~> 2.0)
   countries (~> 4.0.0)
   creole (~> 0.5.0)
   crystalball (~> 0.7.0)
+<<<<<<< HEAD
   csv_builder!
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   cvss-suite (~> 3.0.1)
   database_cleaner (~> 1.7.0)
   deckar01-task_list (= 2.3.2)
   declarative_policy (~> 1.1.0)
   deprecation_toolkit (~> 1.5.1)
   derailed_benchmarks
+<<<<<<< HEAD
   devfile (~> 0.0.22.pre.alpha1)
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   device_detector
   devise (~> 4.8.1)
   devise-pbkdf2-encryptable (~> 0.0.0)!
@@ -1781,7 +2314,11 @@ DEPENDENCIES
   diffy (~> 3.4)
   discordrb-webhooks (~> 3.4)
   doorkeeper (~> 5.6, >= 5.6.6)
+<<<<<<< HEAD
   doorkeeper-openid_connect (~> 1.8, >= 1.8.7)
+=======
+  doorkeeper-openid_connect (~> 1.8, >= 1.8.5)
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   duo_api (~> 1.3)
   ed25519 (~> 1.3.0)
   elasticsearch-api (= 7.13.3)
@@ -1806,6 +2343,7 @@ DEPENDENCIES
   fugit (~> 1.8.1)
   fuubar (~> 2.2.0)
   gettext (~> 3.3)
+<<<<<<< HEAD
   gettext_i18n_rails (~> 1.11.0)
   gettext_i18n_rails_js (~> 1.3)
   gitaly (~> 16.2.0.pre.rc4)
@@ -1827,6 +2365,24 @@ DEPENDENCIES
   gitlab_chronic_duration (~> 0.10.6.2)
   gitlab_omniauth-ldap (~> 2.2.0)
   gitlab_quality-test_tooling (~> 0.9.3)
+=======
+  gettext_i18n_rails (~> 1.8.0)
+  gettext_i18n_rails_js (~> 1.3)
+  gitaly (~> 15.9.0.pre.rc3)
+  gitlab-chronic (~> 0.10.5)
+  gitlab-dangerfiles (~> 3.9.0)
+  gitlab-experiment (~> 0.7.1)
+  gitlab-fog-azure-rm (~> 1.7.0)
+  gitlab-labkit (~> 0.31.1)
+  gitlab-license (~> 2.2.1)
+  gitlab-mail_room (~> 0.0.23)
+  gitlab-markup (~> 1.9.0)
+  gitlab-net-dns (~> 0.9.2)
+  gitlab-sidekiq-fetcher!
+  gitlab-styles (~> 10.0.0)
+  gitlab_chronic_duration (~> 0.10.6.2)
+  gitlab_omniauth-ldap (~> 2.2.0)
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   gon (~> 6.4.0)
   google-apis-androidpublisher_v3 (~> 0.34.0)
   google-apis-cloudbilling_v1 (~> 0.21.0)
@@ -1839,12 +2395,21 @@ DEPENDENCIES
   google-apis-serviceusage_v1 (~> 0.28.0)
   google-apis-sqladmin_v1beta4 (~> 0.41.0)
   google-cloud-storage (~> 1.44.0)
+<<<<<<< HEAD
   google-protobuf (~> 3.23, >= 3.23.4)
   gpgme (~> 2.0.22)
   grape (~> 1.7.1)
   grape-entity (~> 0.10.0)
   grape-path-helpers (~> 1.7.1)
   grape-swagger (~> 1.6.1)
+=======
+  google-protobuf (~> 3.22, >= 3.22.3)
+  gpgme (~> 2.0.22)
+  grape (~> 1.5.2)
+  grape-entity (~> 0.10.0)
+  grape-path-helpers (~> 1.7.1)
+  grape-swagger (~> 1.5.0)
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   grape-swagger-entity (~> 0.5.1)
   grape_logging (~> 1.8)
   graphiql-rails (~> 1.8)
@@ -1852,7 +2417,11 @@ DEPENDENCIES
   graphlyte (~> 1.0.0)
   graphql (~> 1.13.12)
   graphql-docs (~> 2.1.0)
+<<<<<<< HEAD
   grpc (~> 1.55.0)
+=======
+  grpc (~> 1.42.0)
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   gssapi (~> 1.3.1)
   guard-rspec
   haml_lint (~> 0.40.0)
@@ -1872,6 +2441,7 @@ DEPENDENCIES
   js_regex (~> 3.8)
   json (~> 2.6.3)
   json_schemer (~> 0.2.18)
+<<<<<<< HEAD
   jsonb_accessor (~> 1.3.10)
   jwt (~> 2.5)
   kaminari (~> 1.2.2)
@@ -1880,14 +2450,28 @@ DEPENDENCIES
   kramdown (~> 2.3.1)
   kubeclient (~> 4.11.0)
   lefthook (~> 1.4.7)
+=======
+  jwt (~> 2.5)
+  kaminari (~> 1.2.2)
+  kas-grpc (~> 0.0.2)
+  knapsack (~> 1.21.1)
+  kramdown (~> 2.3.1)
+  kubeclient (~> 4.11.0)
+  lefthook (~> 1.3.10)
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   letter_opener_web (~> 2.0.0)
   license_finder (~> 7.0)
   licensee (~> 9.15)
   listen (~> 3.7)
   lockbox (~> 1.1.1)
   lograge (~> 0.5)
+<<<<<<< HEAD
   loofah (~> 2.21.3)
   lookbook (~> 2.0, >= 2.0.1)
+=======
+  loofah (~> 2.20.0)
+  lookbook (~> 1.5, >= 1.5.3)
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   lru_redux
   mail (= 2.8.1)
   mail-smtp_pool (~> 0.1.0)!
@@ -1897,12 +2481,19 @@ DEPENDENCIES
   mini_magick (~> 4.10.1)
   minitest (~> 5.11.0)
   multi_json (~> 1.14.1)
+<<<<<<< HEAD
   neighbor (~> 0.2.3)
   net-http (= 0.1.1)
   net-ldap (~> 0.17.1)
   net-ntp
   net-protocol (~> 0.1.3)
   nokogiri (~> 1.15, >= 1.15.4)
+=======
+  net-ldap (~> 0.17.1)
+  net-ntp
+  net-protocol (~> 0.1.3)
+  nokogiri (~> 1.14.3)
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   oauth2 (~> 2.0)
   octokit (~> 4.15)
   ohai (~> 17.9)
@@ -1914,6 +2505,10 @@ DEPENDENCIES
   omniauth-auth0 (~> 3.1)
   omniauth-azure-activedirectory-v2 (~> 2.0)
   omniauth-azure-oauth2 (~> 0.0.9)!
+<<<<<<< HEAD
+=======
+  omniauth-cas3 (~> 1.1.4)!
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   omniauth-dingtalk-oauth2 (~> 1.0)
   omniauth-facebook (~> 4.0.0)
   omniauth-github (= 2.0.1)
@@ -1921,12 +2516,17 @@ DEPENDENCIES
   omniauth-google-oauth2 (~> 1.1)
   omniauth-oauth2-generic (~> 0.2.2)
   omniauth-salesforce (~> 1.0.5)!
+<<<<<<< HEAD
   omniauth-saml (~> 2.1.0)
   omniauth-shibboleth-redux (~> 2.0)
+=======
+  omniauth-saml (~> 2.0.0)
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   omniauth-twitter (~> 1.4)
   omniauth_crowd (~> 2.4.0)!
   omniauth_openid_connect (~> 0.6.1)
   openid_connect (= 1.3.0)
+<<<<<<< HEAD
   openssl (~> 3.0)
   org-ruby (~> 0.9.12)
   pact (~> 1.63)
@@ -1945,17 +2545,45 @@ DEPENDENCIES
   puma (~> 6.3)
   rack (~> 2.2.8)
   rack-attack (~> 6.7.0)
+=======
+  openssl (= 2.2.2)
+  org-ruby (~> 0.9.12)
+  pact (~> 1.63)
+  parallel (~> 1.19)
+  parslet (~> 1.8)
+  peek (~> 1.1)
+  pg (~> 1.4.6)
+  pg_query (~> 2.2, >= 2.2.1)
+  png_quantizator (~> 0.2.1)
+  premailer-rails (~> 1.10.3)
+  prometheus-client-mmap (~> 0.19)
+  pry-byebug
+  pry-rails (~> 0.3.9)
+  pry-shell (~> 0.6.1)
+  puma (~> 5.6.5)
+  puma_worker_killer (~> 0.3.1)
+  rack (~> 2.2.6, >= 2.2.6.4)
+  rack-attack (~> 6.6.1)
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   rack-cors (~> 1.1.1)
   rack-oauth2 (~> 1.21.3)
   rack-proxy (~> 0.7.6)
   rack-timeout (~> 0.6.3)
+<<<<<<< HEAD
   rails (~> 7.0.6)
+=======
+  rails (~> 6.1.7.2)
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   rails-controller-testing
   rails-i18n (~> 7.0)
   rainbow (~> 3.0)
   rbtrace (~> 0.4)
   rdoc (~> 6.3.2)
+<<<<<<< HEAD
   re2 (~> 1.7.0)
+=======
+  re2 (~> 1.6.0)
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   recaptcha (~> 5.12)
   redis (~> 4.8.0)
   redis-actionpack (~> 5.3.0)
@@ -1964,6 +2592,7 @@ DEPENDENCIES
   responders (~> 3.0)
   retriable (~> 3.1.2)
   rexml (~> 3.2.5)
+<<<<<<< HEAD
   rouge (~> 4.1.3)
   rqrcode-rails3 (~> 0.1.7)
   rspec-benchmark (~> 0.6.0)
@@ -1971,6 +2600,14 @@ DEPENDENCIES
   rspec-rails (~> 6.0.3)
   rspec-retry (~> 0.6.2)
   rspec_flaky!
+=======
+  rouge (~> 4.1.0)
+  rqrcode-rails3 (~> 0.1.7)
+  rspec-benchmark (~> 0.6.0)
+  rspec-parameterized (~> 1.0)
+  rspec-rails (~> 6.0.1)
+  rspec-retry (~> 0.6.2)
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   rspec_junit_formatter
   rspec_profiling (~> 0.0.6)
   rubocop
@@ -1978,27 +2615,46 @@ DEPENDENCIES
   ruby-magic (~> 0.6)
   ruby-openai (~> 3.7)
   ruby-progressbar (~> 1.10)
+<<<<<<< HEAD
   ruby-saml (~> 1.15.0)
   ruby_parser (~> 3.20)
   rubyzip (~> 2.3.2)
   rugged (~> 1.6)
+=======
+  ruby-saml (~> 1.13.0)
+  ruby_parser (~> 3.20)
+  rubyzip (~> 2.3.2)
+  rugged (~> 1.5)
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   sanitize (~> 6.0)
   sassc-rails (~> 2.1.0)
   sd_notify (~> 0.1.0)
   seed-fu (~> 2.3.7)
+<<<<<<< HEAD
   selenium-webdriver (= 4.11.0)
+=======
+  selenium-webdriver (~> 3.142, >= 3.142.7)
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   semver_dialects (~> 1.2.1)
   sentry-rails (~> 5.8.0)
   sentry-raven (~> 3.1)
   sentry-ruby (~> 5.8.0)
   sentry-sidekiq (~> 5.8.0)
+<<<<<<< HEAD
+=======
+  settingslogic (~> 2.0.9)
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   shoulda-matchers (~> 5.1.0)
   sidekiq (~> 6.5.7)
   sidekiq-cron (~> 1.8.0)
   sigdump (~> 0.2.4)
   simple_po_parser (~> 1.1.6)
   simplecov (~> 0.21)
+<<<<<<< HEAD
   simplecov-cobertura (~> 2.1.0)
+=======
+  simplecov-cobertura (~> 1.3.1)
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   simplecov-lcov (~> 0.8.0)
   slack-messenger (~> 2.3.4)
   snowplow-tracker (~> 0.8.0)
@@ -2009,26 +2665,42 @@ DEPENDENCIES
   sprite-factory (~> 1.7)
   sprockets (~> 3.7.0)
   ssh_data (~> 1.3)
+<<<<<<< HEAD
   stackprof (~> 0.2.25)
+=======
+  stackprof (~> 0.2.23)
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   state_machines-activerecord (~> 0.8.0)
   sys-filesystem (~> 1.4.3)
   tanuki_emoji (~> 0.6)
   telesignenterprise (~> 2.2)
   terser (= 1.0.2)
+<<<<<<< HEAD
   test-prof (~> 1.2.2)
+=======
+  test-prof (~> 1.2.1)
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   test_file_finder (~> 0.1.3)
   thrift (>= 0.16.0)
   timfel-krb5-auth (~> 0.8)
   toml-rb (~> 2.2.0)
   truncato (~> 0.7.12)
   typhoeus (~> 1.4.0)
+<<<<<<< HEAD
+=======
+  u2f (~> 0.2.1)
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   undercover (~> 0.4.4)
   unf (~> 0.1.4)
   unleash (~> 3.2.2)
   valid_email (~> 0.1)
   validates_hostname (~> 1.0.11)
   version_sorter (~> 2.3)
+<<<<<<< HEAD
   view_component (~> 3.2.0)
+=======
+  view_component (~> 2.74.1)
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   vmstat (~> 2.3.0)
   warning (~> 1.3.0)
   webauthn (~> 3.0)
@@ -2038,4 +2710,8 @@ DEPENDENCIES
   yajl-ruby (~> 1.4.3)
 
 BUNDLED WITH
+<<<<<<< HEAD
    2.4.18
+=======
+   2.4.12
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)

@@ -21,6 +21,7 @@
 , desktop-file-utils
 }:
 
+<<<<<<< HEAD
 stdenv.mkDerivation (finalAttrs: {
   pname = "ashpd-demo";
   version = "0.3.0";
@@ -35,6 +36,27 @@ stdenv.mkDerivation (finalAttrs: {
   cargoDeps = rustPlatform.fetchCargoTarball {
     src = "${finalAttrs.src}/ashpd-demo";
     hash = "sha256-9L/WFL2fLCRahjGCVdgV+3HfDMrntdIWcuuOJbzdPiI=";
+=======
+stdenv.mkDerivation rec {
+  pname = "ashpd-demo";
+  version = "0.2.2";
+
+  src =
+    let
+      share = fetchFromGitHub {
+        owner = "bilelmoussaoui";
+        repo = "ashpd";
+        rev = version;
+        sha256 = "9O6XqM4oys/hXgztQQ8tTobJV8U52db/VY6FlTMUvGY=";
+      };
+    in
+    "${share}/ashpd-demo";
+
+  cargoDeps = rustPlatform.fetchCargoTarball {
+    inherit src;
+    name = "${pname}-${version}";
+    hash = "sha256-eFq42m16zzrUBbAqv7BsAf4VxyO93WynLjvIzKbZwnQ=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [
@@ -61,9 +83,19 @@ stdenv.mkDerivation (finalAttrs: {
     libshumate
   ];
 
+<<<<<<< HEAD
   postPatch = ''
     cd ashpd-demo
   '';
+=======
+  # FIXME: workaround for Pipewire 0.3.64 deprecated API change, remove when fixed upstream
+  # https://gitlab.freedesktop.org/pipewire/pipewire-rs/-/issues/55
+  env.NIX_CFLAGS_COMPILE = toString [ "-DPW_ENABLE_DEPRECATED" ];
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   meta = with lib; {
     description = "Tool for playing with XDG desktop portals";
@@ -72,4 +104,8 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with maintainers; [ jtojnar ];
     platforms = platforms.linux;
   };
+<<<<<<< HEAD
 })
+=======
+}
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)

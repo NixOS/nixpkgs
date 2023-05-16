@@ -29,14 +29,22 @@
 
 buildPythonPackage rec {
   pname = "thinc";
+<<<<<<< HEAD
   version = "8.1.10";
+=======
+  version = "8.1.8";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
+<<<<<<< HEAD
     hash = "sha256-bEpI19oH4EToSmjLubIvMvhJCZWiurC/xg5BLRSvuZE=";
+=======
+    hash = "sha256-NcZXy+2wT8W8JHhl1mWSHOw9Ve81+/zj7hogSGtyBoM=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   buildInputs = [

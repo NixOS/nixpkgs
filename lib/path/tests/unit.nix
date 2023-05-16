@@ -3,7 +3,11 @@
 { libpath }:
 let
   lib = import libpath;
+<<<<<<< HEAD
   inherit (lib.path) hasPrefix removePrefix append splitRoot subpath;
+=======
+  inherit (lib.path) append subpath;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   cases = lib.runTests {
     # Test examples from the lib.path.append documentation
@@ -40,6 +44,7 @@ let
       expected = false;
     };
 
+<<<<<<< HEAD
     testHasPrefixExample1 = {
       expr = hasPrefix /foo /foo/bar;
       expected = true;
@@ -91,6 +96,8 @@ let
       expected = false;
     };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     # Test examples from the lib.path.subpath.isValid documentation
     testSubpathIsValidExample1 = {
       expr = subpath.isValid null;
@@ -238,6 +245,7 @@ let
       expr = (builtins.tryEval (subpath.normalise "..")).success;
       expected = false;
     };
+<<<<<<< HEAD
 
     testSubpathComponentsExample1 = {
       expr = subpath.components ".";
@@ -251,6 +259,8 @@ let
       expr = (builtins.tryEval (subpath.components "/foo")).success;
       expected = false;
     };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 in
   if cases == [] then "Unit tests successful"

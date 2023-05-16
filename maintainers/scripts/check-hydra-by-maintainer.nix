@@ -1,5 +1,6 @@
 { maintainer }:
 let
+<<<<<<< HEAD
   pkgs = import ./../../default.nix {
     config.allowAliases = false;
   };
@@ -8,11 +9,22 @@ let
   packagesWith = cond: return: prefix: set:
     (lib.flatten
       (lib.mapAttrsToList
+=======
+  pkgs = import ./../../default.nix { };
+  maintainer_ = pkgs.lib.maintainers.${maintainer};
+  packagesWith = cond: return: prefix: set:
+    (pkgs.lib.flatten
+      (pkgs.lib.mapAttrsToList
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         (name: pkg:
           let
             result = builtins.tryEval
               (
+<<<<<<< HEAD
                 if lib.isDerivation pkg && cond name pkg then
+=======
+                if pkgs.lib.isDerivation pkg && cond name pkg then
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
                 # Skip packages whose closure fails on evaluation.
                 # This happens for pkgs like `python27Packages.djangoql`
                 # that have disabled Python pkgs as dependencies.
@@ -45,7 +57,11 @@ let
       )
     )
     (name: name)
+<<<<<<< HEAD
     ""
+=======
+    ("")
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     pkgs;
 
 in

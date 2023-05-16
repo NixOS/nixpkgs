@@ -106,8 +106,11 @@ stdenv.mkDerivation rec {
     "--localstatedir=/var"
   ];
 
+<<<<<<< HEAD
   hardeningDisable = [ "fortify3" ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   postInstall = ''
     installShellCompletion --bash scripts/pacman --zsh scripts/_pacman
     wrapProgram $out/bin/makepkg \

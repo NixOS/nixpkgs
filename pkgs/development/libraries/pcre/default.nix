@@ -57,9 +57,12 @@ stdenv.mkDerivation rec {
 
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ ];
+<<<<<<< HEAD
     pkgConfigModules = [
       "libpcre"
       "libpcreposix"
     ];
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

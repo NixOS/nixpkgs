@@ -1,13 +1,25 @@
 { lib
 , stdenv
 , fetchurl
+<<<<<<< HEAD
+=======
+, fetchpatch
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , acl
 , autoreconfHook
 , avahi
 , db
+<<<<<<< HEAD
 , libevent
 , libgcrypt
 , libiconv
+=======
+, ed
+, libevent
+, libgcrypt
+, libiconv
+, libtirpc
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , openssl
 , pam
 , perl

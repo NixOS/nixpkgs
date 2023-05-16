@@ -18,11 +18,19 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "mcomix";
+<<<<<<< HEAD
   version = "2.2.1";
 
   src = fetchurl {
     url = "mirror://sourceforge/mcomix/${pname}-${version}.tar.gz";
     hash = "sha256-fmnlPhNCN6YR3lW2YCMEAbEiWVigcfFDq1tDQ1eTNkA=";
+=======
+  version = "2.1.0";
+
+  src = fetchurl {
+    url = "mirror://sourceforge/mcomix/${pname}-${version}.tar.gz";
+    hash = "sha256-Nok4oqTezO84q9IDZvgi33ZeKfRL+tpg7QEDmp2ZZpU=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   buildInputs = [ gtk3 gdk-pixbuf ];

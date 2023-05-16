@@ -2,7 +2,10 @@
 , fetchFromGitHub
 }: rec {
   version = "3.5.1";
+<<<<<<< HEAD
   format = "setuptools";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "openrazer";

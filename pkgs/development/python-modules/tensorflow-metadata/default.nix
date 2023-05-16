@@ -8,13 +8,21 @@
 
 buildPythonPackage rec {
   pname = "tensorflow-metadata";
+<<<<<<< HEAD
   version = "1.14.0";
+=======
+  version = "1.13.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "tensorflow";
     repo = "metadata";
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-ZfX25CaV+tZVdas+n7O6Gqv1GxOP1iwippIXxfhcOfg=";
+=======
+    hash = "sha256-XzOV0gTZo9Flr3HVI5mzK+qgol4rsteerfrgLpw4Ouo=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   patches = [

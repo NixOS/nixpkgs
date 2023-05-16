@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 diff --git a/speech-dispatcherd.service.in b/speech-dispatcherd.service.in
 index ab14b99d..12521b1b 100644
 --- a/speech-dispatcherd.service.in
@@ -6,6 +7,14 @@ index ab14b99d..12521b1b 100644
  [Service]
  Type=forking
  ExecStart=@bindir@/speech-dispatcher -d -t 0
+=======
+--- a/speech-dispatcherd.service.in
++++ b/speech-dispatcherd.service.in
+@@ -19,7 +19,7 @@
+ [Service]
+ Type=forking
+ ExecStart=@bindir@/speech-dispatcher -d
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 -ExecReload=/bin/kill -HUP $MAINPID
 +ExecReload=@utillinux@/bin/kill -HUP $MAINPID
  

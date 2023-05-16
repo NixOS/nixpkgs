@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+<<<<<<< HEAD
 # Property tests for lib/path/default.nix
 # It generates random path-like strings and runs the functions on
 # them, checking that the expected laws of the functions hold
@@ -7,6 +8,12 @@
 # [nixpkgs]$ lib/path/tests/prop.sh
 # or:
 # [nixpkgs]$ nix-build lib/tests/release.nix
+=======
+# Property tests for the `lib.path` library
+#
+# It generates random path-like strings and runs the functions on
+# them, checking that the expected laws of the functions hold
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 set -euo pipefail
 shopt -s inherit_errexit
@@ -74,7 +81,11 @@ fi
 
 # Precalculate all normalisations with a single Nix call. Calling Nix for each
 # string individually would take way too long
+<<<<<<< HEAD
 nix-instantiate --eval --strict --json --show-trace \
+=======
+nix-instantiate --eval --strict --json \
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     --argstr libpath "$TEST_LIB" \
     --argstr dir "$tmp/strings" \
     "$SCRIPT_DIR"/prop.nix \

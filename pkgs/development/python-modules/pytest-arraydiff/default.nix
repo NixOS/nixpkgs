@@ -44,6 +44,10 @@ buildPythonPackage rec {
     description = "Pytest plugin to help with comparing array output from tests";
     homepage = "https://github.com/astrofrog/pytest-arraydiff";
     license = licenses.bsd3;
+<<<<<<< HEAD
     maintainers = with maintainers; [ ];
+=======
+    maintainers = with maintainers; [ costrouc ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

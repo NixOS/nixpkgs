@@ -17,13 +17,21 @@
 
 stdenv.mkDerivation (finalAttrs: rec {
   pname = "proj";
+<<<<<<< HEAD
   version = "9.2.1";
+=======
+  version = "9.2.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "OSGeo";
     repo = "PROJ";
     rev = version;
+<<<<<<< HEAD
     hash = "sha256-cUnnJ9gOh65xBbfamfDkN7ajRdRLO5nUXRLeaBBMchg=";
+=======
+    hash = "sha256-NC5H7ufIXit+PVDwNDhz5cv44fduTytsdmNOWyqDDYQ=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   patches = [
@@ -64,11 +72,20 @@ stdenv.mkDerivation (finalAttrs: rec {
   };
 
   meta = with lib; {
+<<<<<<< HEAD
     changelog = "https://github.com/OSGeo/PROJ/blob/${src.rev}/NEWS";
     description = "Cartographic Projections Library";
     homepage = "https://proj.org/";
     license = licenses.mit;
     maintainers = with maintainers; teams.geospatial.members ++ [ dotlambda ];
     platforms = platforms.unix;
+=======
+    changelog = "https://github.com/OSGeo/PROJ/blob/${src.rev}/docs/source/news.rst";
+    description = "Cartographic Projections Library";
+    homepage = "https://proj.org/";
+    license = licenses.mit;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ dotlambda ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 })

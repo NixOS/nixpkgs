@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 { fetchFromGitLab
 , installShellFiles
 , lib
@@ -23,6 +24,24 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     installShellFiles
   ];
+=======
+{ fetchFromGitLab, installShellFiles, lib, python3, stdenv }:
+
+stdenv.mkDerivation rec {
+  pname = "nvd";
+  version = "0.2.0";
+
+  src = fetchFromGitLab {
+    owner = "khumba";
+    repo = pname;
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-kOPcQP2tSym69qSOBwVc2XFO8+uy7bgYIQq4L/orS+A=";
+  };
+
+  buildInputs = [ python3 ];
+
+  nativeBuildInputs = [ installShellFiles ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   installPhase = ''
     runHook preInstall
@@ -31,6 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Nix/NixOS package version diff tool";
     homepage = "https://gitlab.com/khumba/nvd";
@@ -40,3 +60,13 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.all;
   };
 })
+=======
+  meta = with lib; {
+    description = "Nix/NixOS package version diff tool";
+    homepage = "https://gitlab.com/khumba/nvd";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ khumba ];
+    platforms = platforms.all;
+  };
+}
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)

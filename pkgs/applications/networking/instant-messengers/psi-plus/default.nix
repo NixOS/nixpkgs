@@ -43,13 +43,21 @@ assert enablePsiMedia -> enablePlugins;
 
 mkDerivation rec {
   pname = "psi-plus";
+<<<<<<< HEAD
   version = "1.5.1650";
+=======
+  version = "1.5.1646";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "psi-plus";
     repo = "psi-plus-snapshots";
     rev = version;
+<<<<<<< HEAD
     sha256 = "sha256-qoqusg2CbivoPFbYnBSzE5P5+p1vCKmMbSBrPdC6SqI=";
+=======
+    sha256 = "sha256-FeZlJAJHmNGd7hbpjmthe2/yGxh0zIl3zXnA+vRjNCM=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   cmakeFlags = [

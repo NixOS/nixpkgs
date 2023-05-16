@@ -19,9 +19,12 @@ stdenv.mkDerivation rec {
   patches = [
     # https://github.com/Edward-Wu/srt-live-server/pull/94
     ./fix-insecure-printfs.patch
+<<<<<<< HEAD
 
     # https://github.com/Edward-Wu/srt-live-server/pull/127  # adds `#include <ctime>`
     ./add-ctime-include.patch
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   buildInputs = [ srt zlib ];

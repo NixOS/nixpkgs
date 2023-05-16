@@ -1,6 +1,11 @@
 { lib, stdenv, vdr, fetchFromGitHub
+<<<<<<< HEAD
 , graphicsmagick, pcre
 , boost, libgcrypt, perl, util-linux, groff, ncurses
+=======
+, graphicsmagick, pcre, xorgserver, ffmpeg
+, libiconv, boost, libgcrypt, perl, util-linux, groff, libva, xorg, ncurses
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , callPackage
 }: let
   mkPlugin = name: stdenv.mkDerivation {
@@ -12,10 +17,13 @@
   };
 in {
 
+<<<<<<< HEAD
   markad = callPackage ./markad {};
 
   nopacity = callPackage ./nopacity {};
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   softhddevice = callPackage ./softhddevice {};
 
   streamdev = callPackage ./streamdev {};
@@ -57,6 +65,55 @@ in {
 
   };
 
+<<<<<<< HEAD
+=======
+  markad = stdenv.mkDerivation rec {
+    pname = "vdr-markad";
+    version = "3.1.1";
+
+    src = fetchFromGitHub {
+      repo = "vdr-plugin-markad";
+      owner = "kfb77";
+      sha256 = "sha256-h2a400T6mHzZRWAVFXF5Wzhu4Zp1D3btEKlxnCtB13M=";
+      rev = "V${version}";
+    };
+
+    buildInputs = [ vdr ffmpeg ];
+
+    postPatch = ''
+      substituteInPlace command/Makefile --replace '/usr' ""
+
+      substituteInPlace plugin/markad.cpp \
+        --replace "/usr/bin" "$out/bin" \
+        --replace "/var/lib/markad" "$out/var/lib/markad"
+
+      substituteInPlace command/markad-standalone.cpp \
+        --replace "/var/lib/markad" "$out/var/lib/markad"
+    '';
+
+    buildFlags = [
+      "DESTDIR=$(out)"
+      "LIBDIR=/lib/vdr"
+      "BINDIR=/bin"
+      "MANDIR=/share/man"
+      "APIVERSION=${vdr.version}"
+      "VDRDIR=${vdr.dev}/include/vdr"
+      "LOCDIR=/share/locale"
+    ];
+
+    installFlags = buildFlags;
+
+    meta = with lib; {
+      inherit (src.meta) homepage;
+      description = "MarkAd marks advertisements in VDR recordings.";
+      maintainers = [ maintainers.ck3d ];
+      license = licenses.gpl2;
+      inherit (vdr.meta) platforms;
+    };
+
+  };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   epgsearch = stdenv.mkDerivation rec {
     pname = "vdr-epgsearch";
     version = "2.4.2";

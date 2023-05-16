@@ -14,7 +14,11 @@
 
 buildPythonPackage rec {
   pname = "aiopvpc";
+<<<<<<< HEAD
   version = "4.2.2";
+=======
+  version = "4.1.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -23,7 +27,11 @@ buildPythonPackage rec {
     owner = "azogue";
     repo = pname;
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-k02lNjFjOcMfHa1jLJlMFUOOVrdTrACNoEXDSZ693K8=";
+=======
+    hash = "sha256-ixHLFVPlDZKQkPMrOt8PG5z+e84UlygQutkyS8wCZR4=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   postPatch = ''

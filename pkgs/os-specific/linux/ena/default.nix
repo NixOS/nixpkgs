@@ -1,14 +1,22 @@
 { lib, stdenv, fetchFromGitHub, kernel }:
 
 stdenv.mkDerivation rec {
+<<<<<<< HEAD
   version = "2.8.9";
+=======
+  version = "2.8.3";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   name = "ena-${version}-${kernel.version}";
 
   src = fetchFromGitHub {
     owner = "amzn";
     repo = "amzn-drivers";
     rev = "ena_linux_${version}";
+<<<<<<< HEAD
     hash = "sha256-9Csrq9wM7Q99qPj7+NlnQgP6KcciNHMbAAb+Wg7eYAU=";
+=======
+    sha256 = "sha256-Z5BCqqC4FNKHqpocJ6CsHwhh5sszj5QfxiN6+Dkaqek=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   hardeningDisable = [ "pic" ];

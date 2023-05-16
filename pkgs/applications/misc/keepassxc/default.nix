@@ -40,13 +40,21 @@
 
 stdenv.mkDerivation rec {
   pname = "keepassxc";
+<<<<<<< HEAD
   version = "2.7.5";
+=======
+  version = "2.7.4";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "keepassxreboot";
     repo = "keepassxc";
     rev = version;
+<<<<<<< HEAD
     sha256 = "sha256-OBEjczUIkY3pQXJfsuNj9Bm2TIbVWEHqMSolQnSfvLE=";
+=======
+    sha256 = "sha256-amedKK9nplLVJTldeabN3/c+g/QesrdH+qx+rba2/4s=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang (toString [
@@ -129,7 +137,11 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://keepassxc.org/";
     license = licenses.gpl2Plus;
+<<<<<<< HEAD
     maintainers = with maintainers; [ jonafato srapenne ];
+=======
+    maintainers = with maintainers; [ jonafato turion srapenne ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     platforms = platforms.linux ++ platforms.darwin;
   };
 }

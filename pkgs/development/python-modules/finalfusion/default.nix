@@ -36,10 +36,13 @@ buildPythonPackage rec {
 
   postPatch = ''
     patchShebangs tests/integration
+<<<<<<< HEAD
 
     # `np.float` was a deprecated alias of the builtin `float`
     substituteInPlace tests/test_storage.py \
       --replace 'dtype=np.float)' 'dtype=float)'
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '';
 
   checkPhase = ''

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 { lib
 , buildPythonPackage
 , fetchpatch
@@ -10,6 +11,9 @@
 , setuptools
 , twisted
 }:
+=======
+{ lib, buildPythonPackage, fetchPypi, ldap3, ldaptor, matrix-synapse, pytestCheckHook, service-identity, setuptools, twisted }:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 buildPythonPackage rec {
   pname = "matrix-synapse-ldap3";
@@ -21,6 +25,7 @@ buildPythonPackage rec {
     sha256 = "sha256-s4jZVpNIbu9pra79D9noRGPVL+F7AhSgDvyqZptzy3Q=";
   };
 
+<<<<<<< HEAD
   patches = [
     # add support to read bind_password from file
     (fetchpatch {
@@ -29,11 +34,17 @@ buildPythonPackage rec {
     })
   ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [ service-identity ldap3 twisted ];
 
+<<<<<<< HEAD
   nativeCheckInputs = [ ldaptor matrix-synapse-unwrapped pytestCheckHook ];
+=======
+  nativeCheckInputs = [ ldaptor matrix-synapse pytestCheckHook ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   pythonImportsCheck = [ "ldap_auth_provider" ];
 
@@ -41,6 +52,10 @@ buildPythonPackage rec {
     description = "LDAP3 auth provider for Synapse";
     homepage = "https://github.com/matrix-org/matrix-synapse-ldap3";
     license = licenses.asl20;
+<<<<<<< HEAD
     maintainers = with maintainers; [ ] ++ teams.c3d2.members;
+=======
+    maintainers = with maintainers; [ ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

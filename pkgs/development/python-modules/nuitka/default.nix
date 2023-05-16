@@ -2,6 +2,10 @@
 , buildPythonPackage
 , fetchFromGitHub
 , vmprof
+<<<<<<< HEAD
+=======
+, pyqt4
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , isPyPy
 , pkgs
 , scons
@@ -20,7 +24,11 @@ buildPythonPackage rec {
     hash = "sha256-8eWOcxATVS866nlN39b2VU1CuXAfcn0yQsDweHS2yDU=";
   };
 
+<<<<<<< HEAD
   nativeCheckInputs = [ vmprof ];
+=======
+  nativeCheckInputs = [ vmprof pyqt4 ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nativeBuildInputs = [ scons ];
   propagatedBuildInputs = [ chrpath ];
 

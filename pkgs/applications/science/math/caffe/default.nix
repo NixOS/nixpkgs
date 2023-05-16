@@ -13,7 +13,11 @@
 , Accelerate, CoreGraphics, CoreVideo
 , lmdbSupport ? true, lmdb
 , leveldbSupport ? true, leveldb, snappy
+<<<<<<< HEAD
 , cudaSupport ? config.cudaSupport, cudaPackages ? { }
+=======
+, cudaSupport ? config.cudaSupport or false, cudaPackages ? {}
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , cudnnSupport ? cudaSupport
 , ncclSupport ? false
 , pythonSupport ? false, python ? null, numpy ? null
@@ -27,7 +31,11 @@ let
   # Earlier versions of cudatoolkit use pre-8.x CUDNN, so we use the default.
   cudnn = if lib.versionOlder cudatoolkit.version "10.1"
     then cudaPackages.cudnn
+<<<<<<< HEAD
     else cudaPackages.cudnn_7_6;
+=======
+    else cudaPackages.cudnn_7_6_5;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 in
 
 assert leveldbSupport -> (leveldb != null && snappy != null);
@@ -84,7 +92,11 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = lib.optionals pythonSupport (
     # requirements.txt
     let pp = python.pkgs; in ([
+<<<<<<< HEAD
       pp.numpy pp.scipy pp.scikit-image pp.h5py
+=======
+      pp.numpy pp.scipy pp.scikitimage pp.h5py
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       pp.matplotlib pp.ipython pp.networkx pp.nose
       pp.pandas pp.python-dateutil pp.protobuf pp.gflags
       pp.pyyaml pp.pillow pp.six

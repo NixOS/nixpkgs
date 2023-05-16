@@ -6,8 +6,11 @@ let
     sha512 = "sha512-GpSwvyXOcOOlV70vbnzjj4fW5xW/FdUF6nQEt1ENy7m4ZCczi1+/buVUPAqmGfqznsORNFzUMjctTIp8a9tuCQ==";
   };
 
+<<<<<<< HEAD
   tests = callPackage ./tests {};
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 in {
   prefetch-yarn-deps = stdenv.mkDerivation {
     name = "prefetch-yarn-deps";
@@ -23,8 +26,13 @@ in {
       mkdir libexec
       tar --strip-components=1 -xf ${yarnpkg-lockfile-tar} package/index.js
       mv index.js libexec/yarnpkg-lockfile.js
+<<<<<<< HEAD
       cp ${./.}/*.js libexec/
       patchShebangs libexec
+=======
+      cp ${./index.js} libexec/index.js
+      patchShebangs libexec/index.js
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
       runHook postBuild
     '';
@@ -36,12 +44,18 @@ in {
       cp -r libexec $out
       makeWrapper $out/libexec/index.js $out/bin/prefetch-yarn-deps \
         --prefix PATH : ${lib.makeBinPath [ coreutils nix-prefetch-git nix ]}
+<<<<<<< HEAD
       makeWrapper $out/libexec/fixup.js $out/bin/fixup-yarn-lock
 
       runHook postInstall
     '';
 
     passthru = { inherit tests; };
+=======
+
+      runHook postInstall
+    '';
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   fetchYarnDeps = let
@@ -79,6 +93,10 @@ in {
     } // hash_ // (removeAttrs args ["src" "name" "hash" "sha256"]));
 
   in lib.setFunctionArgs f (lib.functionArgs f) // {
+<<<<<<< HEAD
     inherit tests;
+=======
+    tests = callPackage ./tests {};
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

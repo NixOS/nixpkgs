@@ -21,20 +21,32 @@
 
 stdenv.mkDerivation rec {
   pname = "amberol";
+<<<<<<< HEAD
   version = "0.10.3";
+=======
+  version = "0.10.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = pname;
     rev = version;
+<<<<<<< HEAD
     hash = "sha256-nAoUO0bGToNGD2W8qJmTegrETOJDdM04hI1jjiYkZXI=";
+=======
+    hash = "sha256-edYLdsXlk+3YGyG6bxR8E8q1bzaXWk04v/NxfaxcNhI=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
+<<<<<<< HEAD
     hash = "sha256-4ZoliqQ665KPDFl+1eBCE+1fZgr+FA7vesPstoRs0RU=";
+=======
+    hash = "sha256-bhB1hFFLYf+TH3pDCyx/hJqPxBdoPjtPBluK9yygpTk=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   postPatch = ''

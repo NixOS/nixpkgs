@@ -1,5 +1,10 @@
+<<<<<<< HEAD
 { buildPythonApplication, click, fetchPypi, hypothesis, pytest
 , lib, stringcase
+=======
+{ buildPythonApplication, click, fetchPypi, hypothesis, mypy, pytest
+, pytest-cov, pytest-runner, lib, stringcase
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 buildPythonApplication rec {
@@ -11,6 +16,7 @@ buildPythonApplication rec {
     sha256 = "b2cb9d4670a6e12d14a446c10d857862e91af6e4526f607e08b41bde89953bb8";
   };
 
+<<<<<<< HEAD
   postPatch = ''
     sed -i setup.cfg \
       -e '/--cov.*/d'
@@ -19,6 +25,17 @@ buildPythonApplication rec {
   nativeCheckInputs = [
     hypothesis
     pytest
+=======
+  nativeCheckInputs = [
+    hypothesis
+    mypy
+    pytest
+    pytest-cov
+  ];
+
+  buildInputs = [
+    pytest-runner
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   propagatedBuildInputs = [

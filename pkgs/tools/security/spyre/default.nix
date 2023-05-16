@@ -1,19 +1,27 @@
 { lib
 , buildGoModule
 , fetchFromGitHub
+<<<<<<< HEAD
 , fetchpatch
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , pkg-config
 , yara
 }:
 
 buildGoModule rec {
   pname = "spyre";
+<<<<<<< HEAD
   version = "1.2.5";
+=======
+  version = "1.2.4";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "spyre-project";
     repo = pname;
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-wlGZTMCJE6Ki5/6R6J9EJP06/S125BNNd/jNPYGwKNw=";
   };
 
@@ -33,6 +41,12 @@ buildGoModule rec {
   ];
 
   vendorHash = "sha256-aoeAnyFotKWWaRZQsgQPwwmhih/1zfL9eBV/2r1VPBM=";
+=======
+    sha256 = "sha256-408UOY7kvukMYOVqQfpugk6Z+LNQV9XyfJirKyBRWd4=";
+  };
+
+  vendorSha256 = "sha256-qZkt5WwicDXrExwMT0tCO+FZgClIHhrVtMR8xNsdAaQ=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nativeBuildInputs = [
     pkg-config

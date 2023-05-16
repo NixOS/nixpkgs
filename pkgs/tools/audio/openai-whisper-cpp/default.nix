@@ -6,7 +6,10 @@
 , wget
 , Accelerate
 , CoreGraphics
+<<<<<<< HEAD
 , CoreML
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , CoreVideo
 }:
 
@@ -29,12 +32,16 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ makeWrapper ];
 
+<<<<<<< HEAD
   buildInputs = [ SDL2 ] ++ lib.optionals stdenv.isDarwin [ Accelerate CoreGraphics CoreML CoreVideo ];
 
   env = lib.optionalAttrs stdenv.isDarwin {
     WHISPER_COREML = "1";
     WHISPER_COREML_ALLOW_FALLBACK = "1";
   };
+=======
+  buildInputs = [ SDL2 ] ++ lib.optionals stdenv.isDarwin [ Accelerate CoreGraphics CoreVideo ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   makeFlags = [ "main" "stream" ];
 

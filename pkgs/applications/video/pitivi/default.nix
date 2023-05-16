@@ -16,7 +16,10 @@
 , meson
 , ninja
 , gsettings-desktop-schemas
+<<<<<<< HEAD
 , hicolor-icon-theme
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -75,6 +78,7 @@ python3.pkgs.buildPythonApplication rec {
     librosa
   ];
 
+<<<<<<< HEAD
   preFixup = ''
     gappsWrapperArgs+=(
       # The icon theme is hardcoded.
@@ -82,6 +86,8 @@ python3.pkgs.buildPythonApplication rec {
     )
   '';
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   postPatch = ''
     patchShebangs ./getenvvar.py
   '';
@@ -102,7 +108,11 @@ python3.pkgs.buildPythonApplication rec {
       that can appeal to newbies and professionals alike.
     '';
     license = licenses.lgpl21Plus;
+<<<<<<< HEAD
     maintainers = with maintainers; [ akechishiro ];
+=======
+    maintainers = with maintainers; [];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     platforms = platforms.linux;
   };
 }

@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 { config, lib, pkgs, utils, ... }:
+=======
+{ config, lib, pkgs, ... }:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 with lib;
 
@@ -220,12 +224,15 @@ in
           in this case you can disable the failing check with this option.
         '';
       };
+<<<<<<< HEAD
 
       extraArgs = lib.mkOption {
         type = lib.types.listOf lib.types.str;
         default = [];
         description = "Additional command line arguments to pass on logrotate invocation";
       };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
   };
 
@@ -237,7 +244,11 @@ in
       serviceConfig = {
         Restart = "no";
         User = "root";
+<<<<<<< HEAD
         ExecStart = "${pkgs.logrotate}/sbin/logrotate ${utils.escapeSystemdExecArgs cfg.extraArgs} ${mailOption} ${cfg.configFile}";
+=======
+        ExecStart = "${pkgs.logrotate}/sbin/logrotate ${mailOption} ${cfg.configFile}";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       };
     };
     systemd.services.logrotate-checkconf = {
@@ -246,7 +257,11 @@ in
       serviceConfig = {
         Type = "oneshot";
         RemainAfterExit = true;
+<<<<<<< HEAD
         ExecStart = "${pkgs.logrotate}/sbin/logrotate ${utils.escapeSystemdExecArgs cfg.extraArgs} --debug ${cfg.configFile}";
+=======
+        ExecStart = "${pkgs.logrotate}/sbin/logrotate --debug ${cfg.configFile}";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       };
     };
   };

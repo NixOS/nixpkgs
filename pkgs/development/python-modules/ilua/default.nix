@@ -1,7 +1,11 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+<<<<<<< HEAD
 , jupyter-console
+=======
+, jupyter_console
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , jupyter-core
 , pygments
 , termcolor
@@ -19,7 +23,11 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
+<<<<<<< HEAD
     jupyter-console
+=======
+    jupyter_console
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     jupyter-core
     pygments
     termcolor

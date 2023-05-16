@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 { lib, fetchurl, buildDunePackage, ocaml
+=======
+{ lib, fetchurl, buildDunePackage
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , ppx_sexp_conv, ounit2
 }:
 
@@ -7,6 +11,10 @@ buildDunePackage rec {
   version = "5.4.0";
 
   minimalOCamlVersion = "4.04";
+<<<<<<< HEAD
+=======
+  duneVersion = "3";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchurl {
     url = "https://github.com/mirage/ocaml-ipaddr/releases/download/v${version}/ipaddr-${version}.tbz";
@@ -14,7 +22,11 @@ buildDunePackage rec {
   };
 
   checkInputs = [ ppx_sexp_conv ounit2 ];
+<<<<<<< HEAD
   doCheck = lib.versionAtLeast ocaml.version "4.08";
+=======
+  doCheck = true;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   meta = with lib; {
     homepage = "https://github.com/mirage/ocaml-ipaddr";

@@ -38,6 +38,9 @@ stdenv.mkDerivation rec {
     homepage = "http://www.mupen64plus.org/";
     maintainers = [ maintainers.sander ];
     platforms = [ "x86_64-linux" ];
+<<<<<<< HEAD
     mainProgram = "mupen64plus";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

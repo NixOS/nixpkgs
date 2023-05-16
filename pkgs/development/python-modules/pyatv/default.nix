@@ -12,20 +12,30 @@
 , protobuf
 , pytest-aiohttp
 , pytest-asyncio
+<<<<<<< HEAD
 , pytest-httpserver
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , pytest-timeout
 , pytestCheckHook
 , pythonRelaxDepsHook
 , pythonOlder
 , requests
 , srptools
+<<<<<<< HEAD
 , stdenv
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , zeroconf
 }:
 
 buildPythonPackage rec {
   pname = "pyatv";
+<<<<<<< HEAD
   version = "0.13.4";
+=======
+  version = "0.10.3";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -33,8 +43,13 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "postlund";
     repo = pname;
+<<<<<<< HEAD
     rev = "refs/tags/v${version}";
     hash = "sha256-rZnL18vO8eYn70GzeKSY528iTc0r/seGv0dYDYGHNzw=";
+=======
+    rev = "v${version}";
+    hash = "sha256-ng5KfW93p2/N2a6lnGbRJC6aWOQgTl0imBLdUIUlDic=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   postPatch = ''
@@ -79,7 +94,10 @@ buildPythonPackage rec {
     deepdiff
     pytest-aiohttp
     pytest-asyncio
+<<<<<<< HEAD
     pytest-httpserver
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     pytest-timeout
     pytestCheckHook
   ];
@@ -88,11 +106,14 @@ buildPythonPackage rec {
     "--asyncio-mode=legacy"
   ];
 
+<<<<<<< HEAD
   disabledTests = lib.optionals (stdenv.isDarwin) [
     # tests/protocols/raop/test_raop_functional.py::test_stream_retransmission[raop_properties2-2-True] - assert False
     "test_stream_retransmission"
   ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   disabledTestPaths = [
     # Test doesn't work in the sandbox
     "tests/protocols/companion/test_companion_auth.py"

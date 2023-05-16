@@ -19,5 +19,9 @@ buildGoModule rec {
     homepage = "https://github.com/sachaos/todoist";
     description = "Todoist CLI Client";
     license = lib.licenses.mit;
+<<<<<<< HEAD
+=======
+    platforms = lib.platforms.unix;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

@@ -5,15 +5,31 @@
 
 stdenv.mkDerivation rec {
   pname = "feh";
+<<<<<<< HEAD
   version = "3.10";
+=======
+  version = "3.9";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "derf";
     repo = pname;
     rev = version;
+<<<<<<< HEAD
     hash = "sha256-9NJ6zgQHcFJPmRlqJuCMXcKjLvDPUG+QvKGTJlWvWK4=";
   };
 
+=======
+    sha256 = "sha256-rgNC4M1TJ5EPeWmVHVzgaxTGLY7CYQf7uOsOn5bkwKE=";
+  };
+
+  postPatch = ''
+    substituteInPlace test/feh.t \
+      --replace "WARNING:" "WARNING: While loading" \
+      --replace "Does not look like an image \(magic bytes missing\)" "Unknown error \(15\)"
+  '';
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   outputs = [ "out" "man" "doc" ];
 
   nativeBuildInputs = [ makeWrapper ];
@@ -42,6 +58,9 @@ stdenv.mkDerivation rec {
     license = licenses.mit-feh;
     maintainers = with maintainers; [ viric willibutz globin ma27 ];
     platforms = platforms.unix;
+<<<<<<< HEAD
     mainProgram = "feh";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

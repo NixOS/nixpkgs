@@ -6,16 +6,27 @@
 
 buildGoModule rec {
   pname = "notify";
+<<<<<<< HEAD
   version = "1.0.5";
+=======
+  version = "1.0.4";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "projectdiscovery";
     repo = pname;
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-CXzxrY8G7Zh5xafuiIY9SsPkrYoSkMt15v2KLZBs0Jo=";
   };
 
   vendorHash = "sha256-tjaVEmOd/MJnDcS/mhvw95ZZ8giaUDTdDTyAMbjTckM=";
+=======
+    sha256 = "sha256-PZSt4mhon0JbFxeq5tOXb+xWKOoxT6rjRS1E3Jf2V3c=";
+  };
+
+  vendorSha256 = "sha256-MoGaIs2WmJk+E8pTljrahuaJ1VwYBhGBf1XGYVYOVt4=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   modRoot = ".";
   subPackages = [

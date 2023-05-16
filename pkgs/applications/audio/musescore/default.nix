@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 { stdenv
 , lib
 , fetchFromGitHub
@@ -49,11 +50,25 @@ let
 in stdenv'.mkDerivation rec {
   pname = "musescore";
   version = "4.1.1";
+=======
+{ mkDerivation, lib, fetchFromGitHub, fetchpatch, cmake, pkg-config, ninja
+, alsa-lib, freetype, libjack2, lame, libogg, libpulseaudio, libsndfile, libvorbis
+, portaudio, portmidi, qtbase, qtdeclarative, qtgraphicaleffects, flac
+, qtquickcontrols2, qtscript, qtsvg, qttools
+, qtwebengine, qtxmlpatterns, qtnetworkauth, qtx11extras
+, nixosTests
+}:
+
+mkDerivation rec {
+  pname = "musescore";
+  version = "4.0.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "musescore";
     repo = "MuseScore";
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-jXievVIA0tqLdKLy6oPaOHPIbDoFstveEQBri9M0Aoo=";
   };
   patches = [
@@ -75,10 +90,20 @@ in stdenv'.mkDerivation rec {
     (fetchpatch {
       url = "https://github.com/musescore/MuseScore/commit/9ab6b32b1c3b990cfa7bb172ee8112521dc2269c.patch";
       hash = "sha256-5GA29Z+o3I/uDTTDbkauZ8/xSdCE6yY93phMSY0ea7s=";
+=======
+    sha256 = "sha256-3NSHUdTyAC/WOhkB6yBrqtV3LV4Hl1m3poB3ojtJMfs=";
+  };
+  patches = [
+    # See https://github.com/musescore/MuseScore/issues/15571
+    (fetchpatch {
+      url = "https://github.com/musescore/MuseScore/commit/365be5dfb7296ebee4677cb74b67c1721bc2cf7b.patch";
+      hash = "sha256-tJ2M21i3geO9OsjUQKNatSXTkJ5U9qMT4RLNdJnyoKw=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     })
   ];
 
   cmakeFlags = [
+<<<<<<< HEAD
     "-DMUSESCORE_BUILD_MODE=release"
     # Disable the build and usage of the `/bin/crashpad_handler` utility - it's
     # not useful on NixOS, see:
@@ -93,19 +118,32 @@ in stdenv'.mkDerivation rec {
     # Don't bundle qt qml files, relevant really only for darwin, but we set
     # this for all platforms anyway.
     "-DMUE_COMPILE_INSTALL_QTQML_FILES=OFF"
+=======
+    "-DMUSESCORE_BUILD_CONFIG=release"
+    # Disable the _usage_ of the `/bin/crashpad_handler` utility. See:
+    # https://github.com/musescore/MuseScore/pull/15577
+    "-DBUILD_CRASHPAD_CLIENT=OFF"
+    # Use our freetype
+    "-DUSE_SYSTEM_FREETYPE=ON"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   qtWrapperArgs = [
     # MuseScore JACK backend loads libjack at runtime.
+<<<<<<< HEAD
     "--prefix ${lib.optionalString stdenv.isDarwin "DY"}LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libjack2 ]}"
   ] ++ lib.optionals (stdenv.isLinux) [
     "--set ALSA_PLUGIN_DIR ${alsa-plugins}/lib/alsa-lib"
   ] ++ lib.optionals (!stdenv.isDarwin) [
+=======
+    "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libjack2 ]}"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     # There are some issues with using the wayland backend, see:
     # https://musescore.org/en/node/321936
     "--set-default QT_QPA_PLATFORM xcb"
   ];
 
+<<<<<<< HEAD
   # HACK `propagatedSandboxProfile` does not appear to actually propagate the
   # sandbox profile from `qtbase`, see:
   # https://github.com/NixOS/nixpkgs/issues/237458
@@ -156,16 +194,34 @@ in stdenv'.mkDerivation rec {
   # Don't run bundled upstreams tests, as they require a running X window system.
   doCheck = false;
 
+=======
+  nativeBuildInputs = [ cmake pkg-config ninja ];
+
+  buildInputs = [
+    alsa-lib libjack2 freetype lame libogg libpulseaudio libsndfile libvorbis
+    portaudio portmidi flac # tesseract
+    qtbase qtdeclarative qtgraphicaleffects qtquickcontrols2
+    qtscript qtsvg qttools qtwebengine qtxmlpatterns qtnetworkauth qtx11extras
+  ];
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   passthru.tests = nixosTests.musescore;
 
   meta = with lib; {
     description = "Music notation and composition software";
     homepage = "https://musescore.org/";
     license = licenses.gpl3Only;
+<<<<<<< HEAD
     maintainers = with maintainers; [ vandenoever doronbehar ];
     # on aarch64-linux:
     # error: cannot convert '<brace-enclosed initializer list>' to 'float32x4_t' in assignment
     broken = (stdenv.isLinux && stdenv.isAarch64);
+=======
+    maintainers = with maintainers; [ vandenoever turion doronbehar ];
+    # Darwin requires CoreMIDI from SDK 11.3, we use the upstream built .dmg
+    # file in ./darwin.nix in the meantime.
+    platforms = platforms.linux;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     mainProgram = "mscore";
   };
 }

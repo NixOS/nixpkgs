@@ -19,16 +19,26 @@
 
 stdenv.mkDerivation rec {
   pname = "malcontent";
+<<<<<<< HEAD
   version = "0.11.1";
+=======
+  version = "0.11.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   outputs = [ "bin" "out" "lib" "pam" "dev" "man" "installedTests" ];
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "pwithnall";
+<<<<<<< HEAD
     repo = "malcontent";
     rev = version;
     hash = "sha256-NZwVCnQrEG2gecUjuWe1+cyWFR3OdYJCmj87V14Uwjw=";
+=======
+    repo = pname;
+    rev = version;
+    sha256 = "sha256-92F30DfdSJvO5C9EmNtiC/H6Fa6qQHecYSx59JKp8vA=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   patches = [

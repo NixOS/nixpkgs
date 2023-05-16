@@ -204,6 +204,7 @@ in
         `/usr/bin/env`.
       '';
     };
+<<<<<<< HEAD
 
     system.build.installBootLoader = mkOption {
       internal = true;
@@ -225,6 +226,8 @@ in
       } (types.either types.str types.package);
     };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
 
@@ -238,8 +241,12 @@ in
       ''
         # Various log/runtime directories.
 
+<<<<<<< HEAD
         mkdir -p /var/tmp
         chmod 1777 /var/tmp
+=======
+        mkdir -m 1777 -p /var/tmp
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
         # Empty, immutable home directory of many system accounts.
         mkdir -p /var/empty
@@ -253,8 +260,12 @@ in
 
     system.activationScripts.usrbinenv = if config.environment.usrbinenv != null
       then ''
+<<<<<<< HEAD
         mkdir -p /usr/bin
         chmod 0755 /usr/bin
+=======
+        mkdir -m 0755 -p /usr/bin
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         ln -sfn ${config.environment.usrbinenv} /usr/bin/.env.tmp
         mv /usr/bin/.env.tmp /usr/bin/env # atomically replace /usr/bin/env
       ''
@@ -274,8 +285,12 @@ in
           if mountpoint -q "$mountPoint"; then
             local options="remount,$options"
           else
+<<<<<<< HEAD
             mkdir -p "$mountPoint"
             chmod 0755 "$mountPoint"
+=======
+            mkdir -m 0755 -p "$mountPoint"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           fi
           mount -t "$fsType" -o "$options" "$device" "$mountPoint"
         }

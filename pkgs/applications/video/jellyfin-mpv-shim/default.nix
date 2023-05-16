@@ -61,10 +61,13 @@ buildPythonApplication rec {
     substituteInPlace jellyfin_mpv_shim/conf.py \
       --replace "check_updates: bool = True" "check_updates: bool = False" \
       --replace "notify_updates: bool = True" "notify_updates: bool = False"
+<<<<<<< HEAD
     # python-mpv renamed to mpv with 1.0.4
     substituteInPlace setup.py \
       --replace "python-mpv" "mpv" \
       --replace "mpv-jsonipc" "python_mpv_jsonipc"
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '';
 
   # Install all the icons for the desktop item

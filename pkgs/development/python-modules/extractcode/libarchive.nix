@@ -23,7 +23,11 @@ buildPythonPackage rec {
     sha256 = "02qinla281fc6pmg5xzsrmqnf9js76f2qcbf98zq7m2dkn70as4w";
   };
 
+<<<<<<< HEAD
   sourceRoot = "${src.name}/builtins/extractcode_libarchive-linux";
+=======
+  sourceRoot = "source/builtins/extractcode_libarchive-linux";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   preBuild = ''
     pushd src/extractcode_libarchive/lib

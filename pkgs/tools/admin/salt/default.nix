@@ -1,8 +1,11 @@
 { lib
 , stdenv
 , python3
+<<<<<<< HEAD
 , fetchpatch
 , fetchPypi
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , openssl
   # Many Salt modules require various Python modules to be installed,
   # passing them in this array enables Salt to find them.
@@ -11,6 +14,7 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "salt";
+<<<<<<< HEAD
   version = "3006.3";
   format = "setuptools";
 
@@ -26,6 +30,31 @@ python3.pkgs.buildPythonApplication rec {
       url = "https://github.com/saltstack/salt/commit/6b9463836e70e40409dbf653f01aa94ef869dfe7.patch";
       hash = "sha256-VcVdKC8EH4qoWHtq6eEPl8OviR4eA2k/S2lWNQbubJw=";
     })
+=======
+  version = "3006.0";
+
+  src = python3.pkgs.fetchPypi {
+    inherit pname version;
+    hash = "sha256-7iw4s06oYUCQE8gc8KqFKX1pzxB3O3PuegcQtclC3Mo=";
+  };
+
+  propagatedBuildInputs = with python3.pkgs; [
+    distro
+    jinja2
+    jmespath
+    looseversion
+    markupsafe
+    msgpack
+    packaging
+    psutil
+    pycryptodomex
+    pyyaml
+    pyzmq
+    requests
+  ] ++ extraInputs;
+
+  patches = [
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     ./fix-libcrypto-loading.patch
   ];
 
@@ -44,6 +73,7 @@ python3.pkgs.buildPythonApplication rec {
       --replace 'pyzmq==25.0.2 ; sys_platform == "win32"' ""
   '';
 
+<<<<<<< HEAD
   propagatedBuildInputs = with python3.pkgs; [
     distro
     jinja2
@@ -59,6 +89,8 @@ python3.pkgs.buildPythonApplication rec {
     requests
   ] ++ extraInputs;
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   # Don't use fixed dependencies on Darwin
   USE_STATIC_REQUIREMENTS = "0";
 

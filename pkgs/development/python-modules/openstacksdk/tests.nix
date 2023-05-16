@@ -15,9 +15,17 @@
 
 buildPythonPackage {
   pname = "openstacksdk-tests";
+<<<<<<< HEAD
   inherit (openstacksdk) version src;
   format = "other";
 
+=======
+  inherit (openstacksdk) version;
+  format = "other";
+
+  src = openstacksdk.src;
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   dontBuild = true;
   dontInstall = true;
 

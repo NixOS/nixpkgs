@@ -11,7 +11,10 @@
 , IOKit
 , MediaToolbox
 , OpenGL
+<<<<<<< HEAD
 , Security
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , VideoToolbox
 , ipu6ep-camera-hal
 }:
@@ -31,8 +34,11 @@
 
   gst-plugins-viperfx = callPackage ./viperfx { };
 
+<<<<<<< HEAD
   gst-plugins-rs = callPackage ./rs { inherit Security; };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   gst-rtsp-server = callPackage ./rtsp-server { };
 
   gst-libav = callPackage ./libav { };
@@ -48,5 +54,9 @@
     ipu6-camera-hal = ipu6ep-camera-hal;
   };
 
+<<<<<<< HEAD
   # note: gst-python is in ../../python-modules/gst-python - called under python3Packages
+=======
+  # note: gst-python is in ./python/default.nix - called under pythonPackages
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }

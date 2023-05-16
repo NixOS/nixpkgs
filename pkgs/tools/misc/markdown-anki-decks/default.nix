@@ -1,6 +1,9 @@
 { lib
 , python3
+<<<<<<< HEAD
 , fetchPypi
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -8,7 +11,11 @@ python3.pkgs.buildPythonApplication rec {
   version = "1.1.1";
   format = "pyproject";
 
+<<<<<<< HEAD
   src = fetchPypi {
+=======
+  src = python3.pkgs.fetchPypi {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     inherit pname version;
     hash = "sha256-SvKjjE629OwxWsPo2egGf2K6GzlWAYYStarHhA4Ex0w=";
   };
@@ -41,7 +48,11 @@ python3.pkgs.buildPythonApplication rec {
     description = "Tool to convert Markdown files into Anki Decks";
     homepage = "https://github.com/lukesmurray/markdown-anki-decks";
     license = licenses.mit;
+<<<<<<< HEAD
     maintainers = with maintainers; [ ];
+=======
+    maintainers = with maintainers; [ jtojnar ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     platforms = platforms.unix;
   };
 }

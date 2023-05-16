@@ -5,6 +5,7 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "svlint";
+<<<<<<< HEAD
   version = "0.9.0";
 
   src = fetchCrate {
@@ -13,6 +14,16 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoHash = "sha256-RjjYfdcdJzIxnJFZqx93KADihN5YK+bCuk1QaPhVuGQ=";
+=======
+  version = "0.7.2";
+
+  src = fetchCrate {
+    inherit pname version;
+    sha256 = "sha256-yo0SgNnwy0LnbIOCLwHUpzjgTZzOoO5GHzKmNVFQOtE=";
+  };
+
+  cargoHash = "sha256-3ELBEalMQE+Ozgud+RECl5ClBLy3TqGaEry2OwZ2pGk=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   cargoBuildFlags = [ "--bin" "svlint" ];
 

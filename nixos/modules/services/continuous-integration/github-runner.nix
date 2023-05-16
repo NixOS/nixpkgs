@@ -21,5 +21,9 @@ in
     services.github-runners.${cfg.name} = cfg;
   };
 
+<<<<<<< HEAD
   meta.maintainers = with maintainers; [ veehaitch newam thomasjm ];
+=======
+  meta.maintainers = with maintainers; [ veehaitch newam ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }

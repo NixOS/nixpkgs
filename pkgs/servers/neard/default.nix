@@ -70,7 +70,11 @@ stdenv.mkDerivation rec {
     description = "Near Field Communication manager";
     homepage = "https://01.org/linux-nfc";
     license = licenses.gpl2Only;
+<<<<<<< HEAD
     maintainers = with maintainers; [ ];
+=======
+    maintainers = with maintainers; [ jtojnar ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     platforms = platforms.unix;
   };
 }

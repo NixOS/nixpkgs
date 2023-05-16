@@ -7,12 +7,20 @@
 
 buildPythonPackage rec {
   pname = "types-redis";
+<<<<<<< HEAD
   version = "4.6.0.5";
+=======
+  version = "4.5.4.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
+<<<<<<< HEAD
     hash = "sha256-XxedEL08qZWoE0qvzd/D4S1SsghDfEUp7yfmisswHzg=";
+=======
+    hash = "sha256-vwQZL0FbK0Ls79cLtLkesDUuSPJxaiE+A441wJamOcI=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [

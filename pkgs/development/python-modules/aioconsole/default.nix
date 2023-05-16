@@ -16,7 +16,11 @@
 # wrapped to be able to find aioconsole and any other packages.
 buildPythonPackage rec {
   pname = "aioconsole";
+<<<<<<< HEAD
   version = "0.6.2";
+=======
+  version = "0.6.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -25,7 +29,11 @@ buildPythonPackage rec {
     owner = "vxgmichel";
     repo = pname;
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-axUJLh7yg2A+HB0fxBueuNT/rohHVq6svQUZvR2LKzo=";
+=======
+    hash = "sha256-XR79o65jZFR9jr9ubw7wdxCWNH8ANMrBDTVpLnetsuU=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeCheckInputs = [

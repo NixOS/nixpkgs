@@ -6,18 +6,29 @@
 
 buildGoModule rec {
   pname = "vault";
+<<<<<<< HEAD
   version = "1.14.2";
+=======
+  version = "1.13.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "hashicorp";
     repo = "vault";
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-c3WoSowF1Z0E9L8DdfOeiluYJzVnzltujE3tKlrLvPQ=";
   };
 
   vendorHash = "sha256-IUMBp+2TGtp55XnHo46aX7fYRUP/8+Vhe47KqR7zUws=";
 
   proxyVendor = true;
+=======
+    sha256 = "sha256-U4V2+O8//6mkuznSHkPWeeJNK6NtUTEhFk7zz3FEe58=";
+  };
+
+  vendorHash = "sha256-eyXmmhMAbLJiLwQQAR4+baU53n2WY5laUKEGoPjpBg4=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   subPackages = [ "." ];
 

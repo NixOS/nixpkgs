@@ -9,14 +9,22 @@
 
 buildPythonPackage rec {
   pname = "pydelijn";
+<<<<<<< HEAD
   version = "1.1.0";
+=======
+  version = "1.0.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
+<<<<<<< HEAD
     sha256 = "sha256-xyBq2h3ipUarkjCXq9GIbY7bhsf9729aQwHde3o5K6g=";
+=======
+    sha256 = "c5b6565c50d4f97d28baca9faf487281c2a5db635060b69f659e27c28a1a6e93";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [

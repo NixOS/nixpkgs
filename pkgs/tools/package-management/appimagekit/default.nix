@@ -17,7 +17,11 @@ let
   };
 
   # squashfuse adapted to nix from cmake experession in "${appimagekit_src}/lib/libappimage/cmake/dependencies.cmake"
+<<<<<<< HEAD
   appimagekit_squashfuse = squashfuse.overrideAttrs rec {
+=======
+  appimagekit_squashfuse = squashfuse.overrideAttrs (attrs: rec {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     pname = "squashfuse";
     version = "unstable-2016-10-09";
 
@@ -61,7 +65,11 @@ let
       cp -v ./.libs/*.a $out/lib
       cp -v ./*.h $out/include
     '';
+<<<<<<< HEAD
   };
+=======
+  });
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 in stdenv.mkDerivation rec {
   pname = "appimagekit";

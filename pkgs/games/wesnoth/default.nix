@@ -1,5 +1,9 @@
+<<<<<<< HEAD
 { lib, stdenv, fetchFromGitHub, fetchpatch
 , cmake, pkg-config, SDL2, SDL2_image, SDL2_mixer, SDL2_net, SDL2_ttf
+=======
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, SDL2, SDL2_image, SDL2_mixer, SDL2_net, SDL2_ttf
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , pango, gettext, boost, libvorbis, fribidi, dbus, libpng, pcre, openssl, icu
 , Cocoa, Foundation
 }:
@@ -15,6 +19,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-KtAPc2nsqSoHNsLTLom/yaUECn+IWBdBFpiMclrUHxM=";
   };
 
+<<<<<<< HEAD
   patches = [
     # Pull upstream fix https://github.com/wesnoth/wesnoth/pull/6726
     # for gcc-13 support.
@@ -25,6 +30,8 @@ stdenv.mkDerivation rec {
     })
   ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nativeBuildInputs = [ cmake pkg-config ];
 
   buildInputs = [ SDL2 SDL2_image SDL2_mixer SDL2_net SDL2_ttf pango gettext boost

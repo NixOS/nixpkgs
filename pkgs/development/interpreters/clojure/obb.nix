@@ -1,5 +1,9 @@
 { lib
 , stdenv
+<<<<<<< HEAD
+=======
+, fetchurl
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , babashka
 , cacert
 , clojure
@@ -78,8 +82,11 @@ stdenv.mkDerivation rec {
       willcohen
     ];
     platforms = platforms.darwin;
+<<<<<<< HEAD
 
     # https://hydra.nixos.org/job/nixpkgs/trunk/obb.aarch64-darwin/all
     broken = true;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

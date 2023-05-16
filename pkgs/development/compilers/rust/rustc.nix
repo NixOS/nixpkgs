@@ -1,7 +1,11 @@
 { lib, stdenv, removeReferencesTo, pkgsBuildBuild, pkgsBuildHost, pkgsBuildTarget, targetPackages
 , llvmShared, llvmSharedForBuild, llvmSharedForHost, llvmSharedForTarget, llvmPackages
 , fetchurl, file, python3
+<<<<<<< HEAD
 , darwin, cargo, cmake, rust, rustc
+=======
+, darwin, cargo, cmake, rust, rustc, rustPlatform
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , pkg-config, openssl, xz
 , libiconv
 , which, libffi
@@ -15,10 +19,13 @@
 , wezterm
 , firefox
 , thunderbird
+<<<<<<< HEAD
 # This only builds std for target and reuses the rustc from build.
 , fastCross
 , lndir
 , makeWrapper
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 let
@@ -57,7 +64,11 @@ in stdenv.mkDerivation rec {
   NIX_LDFLAGS = toString (
        # when linking stage1 libstd: cc: undefined reference to `__cxa_begin_catch'
        optional (stdenv.isLinux && !withBundledLLVM) "--push-state --as-needed -lstdc++ --pop-state"
+<<<<<<< HEAD
     ++ optional (stdenv.isDarwin && !withBundledLLVM) "-lc++ -lc++abi"
+=======
+    ++ optional (stdenv.isDarwin && !withBundledLLVM) "-lc++"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     ++ optional stdenv.isDarwin "-rpath ${llvmSharedForHost}/lib");
 
   # Increase codegen units to introduce parallelism within the compiler.
@@ -79,7 +90,10 @@ in stdenv.mkDerivation rec {
     "--release-channel=stable"
     "--set=build.rustc=${rustc}/bin/rustc"
     "--set=build.cargo=${cargo}/bin/cargo"
+<<<<<<< HEAD
     "--tools=rustc,rust-analyzer-proc-macro-srv"
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "--enable-rpath"
     "--enable-vendor"
     "--build=${rust.toRustTargetSpec stdenv.buildPlatform}"
@@ -91,13 +105,21 @@ in stdenv.mkDerivation rec {
     # (build!=target): When cross-building a compiler we need to add
     # the build platform as well so rustc can compile build.rs
     # scripts.
+<<<<<<< HEAD
     ] ++ optionals (stdenv.buildPlatform != stdenv.targetPlatform && !fastCross) [
+=======
+    ] ++ optionals (stdenv.buildPlatform != stdenv.targetPlatform) [
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       (rust.toRustTargetSpec stdenv.buildPlatform)
 
     # (host!=target): When building a cross-targeting compiler we
     # need to add the host platform as well so rustc can compile
     # build.rs scripts.
+<<<<<<< HEAD
     ] ++ optionals (stdenv.hostPlatform != stdenv.targetPlatform && !fastCross) [
+=======
+    ] ++ optionals (stdenv.hostPlatform != stdenv.targetPlatform) [
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       (rust.toRustTargetSpec stdenv.hostPlatform)
     ])}"
 
@@ -136,6 +158,7 @@ in stdenv.mkDerivation rec {
     "--set rust.jemalloc"
   ];
 
+<<<<<<< HEAD
   # if we already have a rust compiler for build just compile the target std
   # library and reuse compiler
   buildPhase = if fastCross then "
@@ -167,6 +190,8 @@ in stdenv.mkDerivation rec {
     runHook postInstall
   '' else null;
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   # The bootstrap.py will generated a Makefile that then executes the build.
   # The BOOTSTRAP_ARGS used by this Makefile must include all flags to pass
   # to the bootstrap builder.
@@ -185,6 +210,13 @@ in stdenv.mkDerivation rec {
 
     ${optionalString (!withBundledLLVM) "rm -rf src/llvm"}
 
+<<<<<<< HEAD
+=======
+    # Fix the configure script to not require curl as we won't use it
+    sed -i configure \
+      -e '/probe_need CFG_CURL curl/d'
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     # Useful debugging parameter
     # export VERBOSE=1
   '' + lib.optionalString (stdenv.targetPlatform.isMusl && !stdenv.targetPlatform.isStatic) ''
@@ -214,8 +246,12 @@ in stdenv.mkDerivation rec {
   nativeBuildInputs = [
     file python3 rustc cmake
     which libffi removeReferencesTo pkg-config xz
+<<<<<<< HEAD
   ]
     ++ optionals fastCross [ lndir makeWrapper ];
+=======
+  ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   buildInputs = [ openssl ]
     ++ optionals stdenv.isDarwin [ libiconv Security ]
@@ -224,7 +260,11 @@ in stdenv.mkDerivation rec {
   outputs = [ "out" "man" "doc" ];
   setOutputFlags = false;
 
+<<<<<<< HEAD
   postInstall = lib.optionalString (enableRustcDev && !fastCross) ''
+=======
+  postInstall = lib.optionalString enableRustcDev ''
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     # install rustc-dev components. Necessary to build rls, clippy...
     python x.py dist rustc-dev
     tar xf build/dist/rustc-dev*tar.gz
@@ -271,10 +311,16 @@ in stdenv.mkDerivation rec {
       "x86_64-darwin" "i686-darwin" "aarch64-darwin"
       "i686-freebsd13" "x86_64-freebsd13"
       "x86_64-solaris"
+<<<<<<< HEAD
       "aarch64-linux" "armv6l-linux" "armv7l-linux" "i686-linux"
       "loongarch64-linux" "mipsel-linux" "mips64el-linux"
       "powerpc64-linux" "powerpc64le-linux" "riscv64-linux"
       "s390x-linux" "x86_64-linux"
+=======
+      "aarch64-linux" "armv7l-linux" "i686-linux" "mipsel-linux"
+      "mips64el-linux" "powerpc64-linux" "powerpc64le-linux"
+      "riscv64-linux" "s390x-linux" "x86_64-linux"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       "aarch64-netbsd" "armv7l-netbsd" "i686-netbsd" "powerpc-netbsd"
       "x86_64-netbsd"
       "i686-openbsd" "x86_64-openbsd"

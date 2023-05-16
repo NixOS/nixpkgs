@@ -4,10 +4,17 @@
 , SDL2
 , cmake
 , copyDesktopItems
+<<<<<<< HEAD
 , cubeb
 , curl
 , extra-cmake-modules
 , libXrandr
+=======
+, curl
+, extra-cmake-modules
+, libXrandr
+, libpulseaudio
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , makeDesktopItem
 , mesa # for libgbm
 , ninja
@@ -48,6 +55,10 @@ stdenv.mkDerivation {
   buildInputs = [
     SDL2
     curl
+<<<<<<< HEAD
+=======
+    libpulseaudio
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     libXrandr
     mesa
     qtbase
@@ -57,8 +68,12 @@ stdenv.mkDerivation {
   ++ lib.optionals enableWayland [
     qtwayland
     wayland
+<<<<<<< HEAD
   ]
   ++ cubeb.passthru.backendLibs;
+=======
+  ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   cmakeFlags = [
     "-DUSE_DRMKMS=ON"
@@ -100,14 +115,21 @@ stdenv.mkDerivation {
   '';
 
   qtWrapperArgs = [
+<<<<<<< HEAD
     "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath ([ vulkan-loader ] ++ cubeb.passthru.backendLibs)}"
+=======
+    "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libpulseaudio vulkan-loader ]}"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   meta = with lib; {
     homepage = "https://github.com/stenzek/duckstation";
     description = "Fast PlayStation 1 emulator for x86-64/AArch32/AArch64";
     license = licenses.gpl3Only;
+<<<<<<< HEAD
     mainProgram = "duckstation-qt";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     maintainers = with maintainers; [ guibou AndersonTorres ];
     platforms = platforms.linux;
   };

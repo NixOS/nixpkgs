@@ -24,6 +24,10 @@ buildGoModule rec {
     description = "A build system for microservices";
     homepage = "https://bob.build";
     license = licenses.asl20;
+<<<<<<< HEAD
+=======
+    platforms = platforms.unix;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     maintainers = with maintainers; [ zuzuleinen ];
   };
 }

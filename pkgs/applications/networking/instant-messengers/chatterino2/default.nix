@@ -2,12 +2,20 @@
 
 stdenv.mkDerivation rec {
   pname = "chatterino2";
+<<<<<<< HEAD
   version = "2.4.5";
+=======
+  version = "2.4.3";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   src = fetchFromGitHub {
     owner = "Chatterino";
     repo = pname;
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-ughEavlvL1/mvevbYrDG+2/JYigMhVwyy3RFysQqUNs=";
+=======
+    sha256 = "sha256-M8WTgZv3+8SRGNfxCv10GldjgRYBUVo1B3X4s+QAuYs=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     fetchSubmodules = true;
   };
   nativeBuildInputs = [ cmake pkg-config wrapQtAppsHook ];

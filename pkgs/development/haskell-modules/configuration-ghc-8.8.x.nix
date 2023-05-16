@@ -45,6 +45,7 @@ self: super: {
   unix = null;
   # GHC only bundles the xhtml library if haddock is enabled, check if this is
   # still the case when updating: https://gitlab.haskell.org/ghc/ghc/-/blob/0198841877f6f04269d6050892b98b5c3807ce4c/ghc.mk#L463
+<<<<<<< HEAD
   xhtml = if self.ghc.hasHaddock or true then null else self.xhtml_3000_3_0_0;
   # These core package only exist for GHC >= 9.4. The best we can do is feign
   # their existence to callPackages, but their is no shim for lower GHC versions.
@@ -52,6 +53,9 @@ self: super: {
 
   # Need the Cabal-syntax-3.6.0.0 fake package for Cabal < 3.8 to allow callPackage and the constraint solver to work
   Cabal-syntax = self.Cabal-syntax_3_6_0_0;
+=======
+  xhtml = if self.ghc.hasHaddock or true then null else self.xhtml_3000_2_2_1;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   # GHC 8.8.x can build haddock version 2.23.*
   haddock = self.haddock_2_23_1;
@@ -63,6 +67,7 @@ self: super: {
   # Additionally depends on OneTuple for GHC < 9.0
   base-compat-batteries = addBuildDepend self.OneTuple super.base-compat-batteries;
 
+<<<<<<< HEAD
   # For GHC < 9.4, some packages need data-array-byte as an extra dependency
   primitive = addBuildDepends [ self.data-array-byte ] super.primitive;
   hashable = addBuildDepends [
@@ -70,6 +75,8 @@ self: super: {
     self.base-orphans
   ] super.hashable;
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   # Ignore overly restrictive upper version bounds.
   aeson-diff = doJailbreak super.aeson-diff;
   async = doJailbreak super.async;
@@ -77,6 +84,10 @@ self: super: {
   chell = doJailbreak super.chell;
   Diff = dontCheck super.Diff;
   doctest = doJailbreak super.doctest;
+<<<<<<< HEAD
+=======
+  hashable = addBuildDepend self.base-orphans super.hashable;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   hashable-time = doJailbreak super.hashable-time;
   hledger-lib = doJailbreak super.hledger-lib;  # base >=4.8 && <4.13, easytest >=0.2.1 && <0.3
   integer-logarithms = doJailbreak super.integer-logarithms;
@@ -148,12 +159,19 @@ self: super: {
   # has a restrictive lower bound on Cabal
   fourmolu = doJailbreak super.fourmolu;
 
+<<<<<<< HEAD
   # OneTuple needs hashable (instead of ghc-prim) and foldable1-classes-compat for GHC < 9
   OneTuple = addBuildDepends [
     self.foldable1-classes-compat
   ] (super.OneTuple.override {
     ghc-prim = self.hashable;
   });
+=======
+  # OneTuple needs hashable instead of ghc-prim for GHC < 9
+  OneTuple = super.OneTuple.override {
+    ghc-prim = self.hashable;
+  };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   # Temporarily disabled blaze-textual for GHC >= 9.0 causing hackage2nix ignoring it
   # https://github.com/paul-rouse/mysql-simple/blob/872604f87044ff6d1a240d9819a16c2bdf4ed8f5/Database/MySQL/Internal/Blaze.hs#L4-L10
@@ -180,7 +198,10 @@ self: super: {
   # Later versions only support GHC >= 9.2
   ghc-exactprint = self.ghc-exactprint_0_6_4;
   apply-refact = self.apply-refact_0_9_3_0;
+<<<<<<< HEAD
 
   # Requires GHC < 9.4
   ghc-source-gen = doDistribute (unmarkBroken super.ghc-source-gen);
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }

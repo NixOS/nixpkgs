@@ -2,7 +2,10 @@
 , buildPythonPackage
 , dissect-cim
 , dissect-clfs
+<<<<<<< HEAD
 , dissect-cobaltstrike
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , dissect-cstruct
 , dissect-esedb
 , dissect-etl
@@ -32,16 +35,27 @@
 
 buildPythonPackage rec {
   pname = "dissect";
+<<<<<<< HEAD
   version = "3.8.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.8.1";
+=======
+  version = "3.5";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.7";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "fox-it";
     repo = "dissect";
     rev = "refs/tags/${version}";
+<<<<<<< HEAD
     hash = "sha256-WbKzmLeGsvzFA/bTTCqBEj/unbnzKQFzHFPRG411Cos=";
+=======
+    hash = "sha256-fprB+TPwtGpRcG6pkAWHsttjxTbFmmm96DguMh7f+18=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
@@ -54,7 +68,10 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     dissect-cim
     dissect-clfs
+<<<<<<< HEAD
     dissect-cobaltstrike
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     dissect-cstruct
     dissect-esedb
     dissect-etl

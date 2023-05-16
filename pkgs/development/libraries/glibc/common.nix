@@ -161,6 +161,7 @@ stdenv.mkDerivation ({
     ++ lib.optional withGd "--with-gd"
     ++ lib.optional (!withLibcrypt) "--disable-crypt";
 
+<<<<<<< HEAD
   makeFlags = (args.makeFlags or []) ++ [
     "OBJCOPY=${stdenv.cc.targetPrefix}objcopy"
   ];
@@ -177,6 +178,16 @@ stdenv.mkDerivation ({
   # depend on getent but not on the locale generation tools in the bin
   # output. This saves a couple of megabytes of closure size in many cases.
   outputs = [ "out" "bin" "dev" "static" "getent" ];
+=======
+  makeFlags = [
+    "OBJCOPY=${stdenv.cc.targetPrefix}objcopy"
+  ];
+
+  installFlags = [ "sysconfdir=$(out)/etc" ];
+
+  # out as the first output is an exception exclusive to glibc
+  outputs = [ "out" "bin" "dev" "static" ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   strictDeps = true;
   depsBuildBuild = [ buildPackages.stdenv.cc ];
@@ -196,7 +207,11 @@ stdenv.mkDerivation ({
   passthru = { inherit version; minorRelease = version; };
 }
 
+<<<<<<< HEAD
 // (removeAttrs args [ "withLinuxHeaders" "withGd" "postInstall" "makeFlags" ]) //
+=======
+// (removeAttrs args [ "withLinuxHeaders" "withGd" ]) //
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 {
   src = fetchurl {

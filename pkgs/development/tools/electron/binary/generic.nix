@@ -32,7 +32,11 @@ let
       ++ optionals (versionAtLeast version "11.0.0") [ "aarch64-darwin" ]
       ++ optionals (versionOlder version "19.0.0") [ "i686-linux" ];
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+<<<<<<< HEAD
     knownVulnerabilities = optional (versionOlder version "22.0.0" || versions.major version == "23") "Electron version ${version} is EOL";
+=======
+    knownVulnerabilities = optional (versionOlder version "22.0.0") "Electron version ${version} is EOL";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   fetcher = vers: tag: hash: fetchurl {
@@ -82,22 +86,41 @@ let
       wrapGAppsHook
     ];
 
+<<<<<<< HEAD
+=======
+    dontWrapGApps = true; # electron is in lib, we need to wrap it manually
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     dontUnpack = true;
     dontBuild = true;
 
     installPhase = ''
+<<<<<<< HEAD
       mkdir -p $out/libexec/electron $out/bin
       unzip -d $out/libexec/electron $src
       ln -s $out/libexec/electron/electron $out/bin
       chmod u-x $out/libexec/electron/*.so*
+=======
+      mkdir -p $out/lib/electron $out/bin
+      unzip -d $out/lib/electron $src
+      ln -s $out/lib/electron/electron $out/bin
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     '';
 
     postFixup = ''
       patchelf \
         --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
+<<<<<<< HEAD
         --set-rpath "${atomEnv.libPath}:${electronLibPath}:$out/libexec/electron" \
         $out/libexec/electron/.electron-wrapped \
         ${lib.optionalString (lib.versionAtLeast version "15.0.0") "$out/libexec/electron/.chrome_crashpad_handler-wrapped" }
+=======
+        --set-rpath "${atomEnv.libPath}:${electronLibPath}:$out/lib/electron" \
+        $out/lib/electron/electron \
+        ${lib.optionalString (lib.versionAtLeast version "15.0.0") "$out/lib/electron/chrome_crashpad_handler" }
+
+      wrapProgram $out/lib/electron/electron "''${gappsWrapperArgs[@]}"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     '';
   };
 

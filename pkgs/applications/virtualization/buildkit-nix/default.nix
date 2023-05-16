@@ -11,7 +11,11 @@ buildGoModule rec {
     sha256 = "sha256-gKTCBz7om1M7UBzyMJDetNGcKLkQKMyuzwrHBbuuifM=";
   };
 
+<<<<<<< HEAD
   vendorHash = "sha256-1H5oWgcaamf+hocABWWnzJUjWiqwk1ZZtbBjF6EKzzU=";
+=======
+  vendorSha256 = "sha256-1H5oWgcaamf+hocABWWnzJUjWiqwk1ZZtbBjF6EKzzU=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   CGO_ENABLED = 0;
 

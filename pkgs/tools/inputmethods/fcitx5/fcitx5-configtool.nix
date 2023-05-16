@@ -21,13 +21,21 @@
 
 mkDerivation rec {
   pname = "fcitx5-configtool";
+<<<<<<< HEAD
   version = "5.1.0";
+=======
+  version = "5.0.17";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "fcitx";
     repo = pname;
     rev = version;
+<<<<<<< HEAD
     sha256 = "sha256-kjoAcoqLJ8XHMI6NUr5DZfltWfX3GPco3VGseze6qbw=";
+=======
+    sha256 = "sha256-nYHrJBcbaYxZ61OEFfnwTTsZFEBtDJkR0kuYPyTcjio=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   cmakeFlags = [

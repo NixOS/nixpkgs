@@ -38,18 +38,29 @@
 , appliance ? null
 , javaSupport ? false
 , jdk
+<<<<<<< HEAD
 , zstd
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 assert appliance == null || lib.isDerivation appliance;
 
 stdenv.mkDerivation rec {
   pname = "libguestfs";
+<<<<<<< HEAD
   version = "1.50.1";
 
   src = fetchurl {
     url = "https://libguestfs.org/download/${lib.versions.majorMinor version}-stable/${pname}-${version}.tar.gz";
     sha256 = "sha256-Xmhx6I+C5SHjHUQt5qELZJcCN8t5VumdEXsSO1hWWm8=";
+=======
+  version = "1.48.4";
+
+  src = fetchurl {
+    url = "https://libguestfs.org/download/${lib.versions.majorMinor version}-stable/${pname}-${version}.tar.gz";
+    sha256 = "sha256-ncIrbFpF8ZwsupEaN7Oo2G9idEUhsQ61PD05B+UIAxI=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   strictDeps = true;
@@ -64,7 +75,10 @@ stdenv.mkDerivation rec {
     makeWrapper
     pkg-config
     qemu
+<<<<<<< HEAD
     zstd
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ] ++ (with perlPackages; [ perl libintl-perl GetoptLong ModuleBuild ])
   ++ (with ocamlPackages; [ ocaml findlib ]);
   buildInputs = [

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 { lib, python3Packages, fetchPypi }:
 
 python3Packages.buildPythonApplication rec {
@@ -8,6 +9,18 @@ python3Packages.buildPythonApplication rec {
   src = fetchPypi {
     inherit pname version;
     sha256 = "sha256-QBURvPfDBbhF+AhQ0SsHYnZzr5RN36Cqa2DrAQZW0gU=";
+=======
+{ lib, python3Packages }:
+
+python3Packages.buildPythonApplication rec {
+  pname = "chatblade";
+  version = "0.2.3";
+  format = "setuptools";
+
+  src = python3Packages.fetchPypi {
+    inherit pname version;
+    sha256 = "sha256-YXZeqIX8cxNDvM4Pn0or6Lqj2ffX9aQb3b/xMIeBHRk=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   doCheck = false; # there are no tests

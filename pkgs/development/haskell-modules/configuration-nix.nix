@@ -93,6 +93,7 @@ self: super: builtins.intersectAttrs super {
     doCheck = false;
   }) super.ghcide;
 
+<<<<<<< HEAD
   # Test suite needs executable
   agda2lagda = overrideCabal (drv: {
     preCheck = ''
@@ -100,6 +101,8 @@ self: super: builtins.intersectAttrs super {
     '' + drv.preCheck or "";
   }) super.agda2lagda;
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   hiedb = overrideCabal (drv: {
     preCheck = ''
       export PATH=$PWD/dist/build/hiedb:$PATH
@@ -124,7 +127,10 @@ self: super: builtins.intersectAttrs super {
     hls-floskell-plugin
     hls-fourmolu-plugin
     hls-cabal-plugin
+<<<<<<< HEAD
     hls-overloaded-record-dot-plugin
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ;
 
   # PLUGINS WITH DISABLED TESTS
@@ -200,8 +206,11 @@ self: super: builtins.intersectAttrs super {
   # Link the proper version.
   zeromq4-haskell = super.zeromq4-haskell.override { zeromq = pkgs.zeromq4; };
 
+<<<<<<< HEAD
   threadscope = enableSeparateBinOutput super.threadscope;
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   # Use the default version of mysql to build this package (which is actually mariadb).
   # test phase requires networking
   mysql = dontCheck super.mysql;
@@ -224,6 +233,7 @@ self: super: builtins.intersectAttrs super {
     '';
   }) super.nvvm;
 
+<<<<<<< HEAD
   # hledger* overrides
   inherit (
     let
@@ -273,6 +283,8 @@ self: super: builtins.intersectAttrs super {
     hledger-web_1_30
     ;
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   cufft = overrideCabal (drv: {
     preConfigure = ''
       export CUDA_PATH=${pkgs.cudatoolkit}
@@ -291,6 +303,7 @@ self: super: builtins.intersectAttrs super {
   sfml-audio = appendConfigureFlag "--extra-include-dirs=${pkgs.openal}/include/AL" super.sfml-audio;
 
   # avoid compiling twice by providing executable as a separate output (with small closure size)
+<<<<<<< HEAD
   cabal-fmt = enableSeparateBinOutput super.cabal-fmt;
   hindent = enableSeparateBinOutput super.hindent;
   releaser  = enableSeparateBinOutput super.releaser;
@@ -302,6 +315,11 @@ self: super: builtins.intersectAttrs super {
   ghcid = enableSeparateBinOutput super.ghcid;
   ormolu = self.generateOptparseApplicativeCompletions [ "ormolu" ] (enableSeparateBinOutput super.ormolu);
   hnix = self.generateOptparseApplicativeCompletions [ "hnix" ] super.hnix;
+=======
+  niv = enableSeparateBinOutput (self.generateOptparseApplicativeCompletions [ "niv" ] super.niv);
+  ghcid = enableSeparateBinOutput super.ghcid;
+  ormolu = self.generateOptparseApplicativeCompletions [ "ormolu" ] (enableSeparateBinOutput super.ormolu);
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   # Generate shell completion.
   cabal2nix = self.generateOptparseApplicativeCompletions [ "cabal2nix" ] super.cabal2nix;
@@ -331,18 +349,31 @@ self: super: builtins.intersectAttrs super {
   gio = lib.pipe super.gio
     [ (disableHardening ["fortify"])
       (addBuildTool self.buildHaskellPackages.gtk2hs-buildtools)
+<<<<<<< HEAD
+=======
+      (addPkgconfigDepends (with pkgs; [ glib pcre2 util-linux pcre ]
+                                       ++ (if pkgs.stdenv.isLinux then [libselinux libsepol] else [])))
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     ];
   glib = disableHardening ["fortify"] (addPkgconfigDepend pkgs.glib (addBuildTool self.buildHaskellPackages.gtk2hs-buildtools super.glib));
   gtk3 = disableHardening ["fortify"] (super.gtk3.override { inherit (pkgs) gtk3; });
   gtk = lib.pipe super.gtk (
     [ (disableHardening ["fortify"])
       (addBuildTool self.buildHaskellPackages.gtk2hs-buildtools)
+<<<<<<< HEAD
+=======
+      (addPkgconfigDepends (with pkgs; [ gtk2 pcre2 util-linux pcre fribidi
+                                         libthai libdatrie xorg.libXdmcp libdeflate
+                                        ]
+                                       ++ (if pkgs.stdenv.isLinux then [libselinux libsepol] else [])))
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     ] ++
     ( if pkgs.stdenv.isDarwin then [(appendConfigureFlag "-fhave-quartz-gtk")] else [] )
   );
   gtksourceview2 = addPkgconfigDepend pkgs.gtk2 super.gtksourceview2;
   gtk-traymanager = addPkgconfigDepend pkgs.gtk3 super.gtk-traymanager;
 
+<<<<<<< HEAD
   shelly = overrideCabal (drv: {
     # /usr/bin/env is unavailable in the sandbox
     preCheck = drv.preCheck or "" + ''
@@ -351,6 +382,8 @@ self: super: builtins.intersectAttrs super {
     '';
   }) super.shelly;
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   # Add necessary reference to gtk3 package
   gi-dbusmenugtk3 = addPkgconfigDepend pkgs.gtk3 super.gi-dbusmenugtk3;
 
@@ -359,6 +392,7 @@ self: super: builtins.intersectAttrs super {
     src = assert super.nix-serve-ng.version == "1.0.0";
       # Workaround missing files in sdist
       # https://github.com/aristanetworks/nix-serve-ng/issues/10
+<<<<<<< HEAD
       #
       # Workaround for libstore incompatibility with Nix 2.13
       # https://github.com/aristanetworks/nix-serve-ng/issues/22
@@ -367,6 +401,13 @@ self: super: builtins.intersectAttrs super {
         owner = "aristanetworks";
         rev = "dabf46d65d8e3be80fa2eacd229eb3e621add4bd";
         hash = "sha256-SoJJ3rMtDMfUzBSzuGMY538HDIj/s8bPf8CjIkpqY2w=";
+=======
+      pkgs.fetchFromGitHub {
+        repo = "nix-serve-ng";
+        owner = "aristanetworks";
+        rev = "433f70f4daae156b84853f5aaa11987aa5ce7277";
+        sha256 = "0mqp67z5mi8rsjahdh395n7ppf0b65k8rd3pvnl281g02rbr69y2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       };
   } (addPkgconfigDepend pkgs.boost.dev super.nix-serve-ng);
 
@@ -498,8 +539,23 @@ self: super: builtins.intersectAttrs super {
     '';
   }) super.leksah);
 
+<<<<<<< HEAD
   # dyre's tests appear to be trying to directly call GHC.
   dyre = dontCheck super.dyre;
+=======
+  dyre =
+    appendPatch
+      # Dyre needs special support for reading the NIX_GHC env var.  This is
+      # available upstream in https://github.com/willdonnelly/dyre/pull/43, but
+      # hasn't been released to Hackage as of dyre-0.9.1.  Likely included in
+      # next version.
+      (pkgs.fetchpatch {
+        url = "https://github.com/willdonnelly/dyre/commit/c7f29d321aae343d6b314f058812dffcba9d7133.patch";
+        sha256 = "10m22k35bi6cci798vjpy4c2l08lq5nmmj24iwp0aflvmjdgscdb";
+      })
+      # dyre's tests appear to be trying to directly call GHC.
+      (dontCheck super.dyre);
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   # https://github.com/edwinb/EpiVM/issues/13
   # https://github.com/edwinb/EpiVM/issues/14
@@ -668,9 +724,12 @@ self: super: builtins.intersectAttrs super {
   # Break infinite recursion cycle between QuickCheck and splitmix.
   splitmix = dontCheck super.splitmix;
 
+<<<<<<< HEAD
   # Break infinite recursion cycle with OneTuple and quickcheck-instances.
   foldable1-classes-compat = dontCheck super.foldable1-classes-compat;
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   # Break infinite recursion cycle between tasty and clock.
   clock = dontCheck super.clock;
 
@@ -972,6 +1031,12 @@ self: super: builtins.intersectAttrs super {
   # Pass the correct libarchive into the package.
   streamly-archive = super.streamly-archive.override { archive = pkgs.libarchive; };
 
+<<<<<<< HEAD
+=======
+  # Pass the correct lmdb into the package.
+  streamly-lmdb = super.streamly-lmdb.override { lmdb = pkgs.lmdb; };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   hlint = overrideCabal (drv: {
     postInstall = ''
       install -Dm644 data/hlint.1 -t "$out/share/man/man1"
@@ -1039,8 +1104,12 @@ self: super: builtins.intersectAttrs super {
         wrapProgram "$out/bin/nvfetcher" --prefix 'PATH' ':' "${
           pkgs.lib.makeBinPath [
             pkgs.nvchecker
+<<<<<<< HEAD
             pkgs.nix # nix-prefetch-url
             pkgs.nix-prefetch-git
+=======
+            pkgs.nix-prefetch
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
             pkgs.nix-prefetch-docker
           ]
         }"
@@ -1057,6 +1126,7 @@ self: super: builtins.intersectAttrs super {
   # won't work (or would need to patch test suite).
   domaindriven-core = dontCheck super.domaindriven-core;
 
+<<<<<<< HEAD
   cachix-api = overrideCabal (drv: {
     version = "1.6";
     src = pkgs.fetchFromGitHub {
@@ -1109,6 +1179,42 @@ self: super: builtins.intersectAttrs super {
   # the testsuite fails because of not finding tsc without some help
   aeson-typescript = overrideCabal (drv: {
     testToolDepends = drv.testToolDepends or [] ++ [ pkgs.typescript ];
+=======
+ cachix = overrideCabal (drv: {
+    version = "1.4.2";
+    src = pkgs.fetchFromGitHub {
+      owner = "cachix";
+      repo = "cachix";
+      rev = "v1.4.2";
+      sha256 = "sha256-EjfBM5O+wXJhthRU/Nd9VFue7xo5O93nx0pMt3jx0Ow=";
+    };
+    postUnpack = "sourceRoot=$sourceRoot/cachix";
+    postPatch = ''
+      sed -i 's/1.4.1/1.4.2/' cachix.cabal
+    '';
+  }) (super.cachix.override {
+    fsnotify = dontCheck super.fsnotify_0_4_1_0;
+    hnix-store-core = super.hnix-store-core_0_6_1_0;
+  });
+
+  cachix_1_3_3 = overrideCabal (drv: {
+    hydraPlatforms = pkgs.lib.platforms.all;
+  }) (super.cachix_1_3_3.override {
+    nix = self.hercules-ci-cnix-store.nixPackage;
+    fsnotify = dontCheck super.fsnotify_0_4_1_0;
+    hnix-store-core = super.hnix-store-core_0_6_1_0;
+  });
+
+  hercules-ci-agent = super.hercules-ci-agent.override { nix = self.hercules-ci-cnix-store.passthru.nixPackage; };
+  hercules-ci-cnix-expr = addTestToolDepend pkgs.git (super.hercules-ci-cnix-expr.override { nix = self.hercules-ci-cnix-store.passthru.nixPackage; });
+  hercules-ci-cnix-store = (super.hercules-ci-cnix-store.override { nix = self.hercules-ci-cnix-store.passthru.nixPackage; }).overrideAttrs (_: {
+    passthru.nixPackage = pkgs.nixVersions.nix_2_14;
+  });
+
+  # the testsuite fails because of not finding tsc without some help
+  aeson-typescript = overrideCabal (drv: {
+    testToolDepends = drv.testToolDepends or [] ++ [ pkgs.nodePackages.typescript ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     # the testsuite assumes that tsc is in the PATH if it thinks it's in
     # CI, otherwise trying to install it.
     #
@@ -1314,6 +1420,7 @@ self: super: builtins.intersectAttrs super {
   # Disable checks to break dependency loop with SCalendar
   scalendar = dontCheck super.scalendar;
 
+<<<<<<< HEAD
   halide-haskell = super.halide-haskell.override { Halide = pkgs.halide; };
 
   # Sydtest has a brittle test suite that will only work with the exact
@@ -1329,4 +1436,6 @@ self: super: builtins.intersectAttrs super {
       gi-webkit2
       gi-webkit2webextension
       ;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }

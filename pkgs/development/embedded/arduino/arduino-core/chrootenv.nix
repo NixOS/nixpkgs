@@ -14,7 +14,11 @@ buildFHSEnv {
         pyserial
       ]))
     ]);
+<<<<<<< HEAD
   multiArch = false;
+=======
+  multiPkgs = null;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   extraInstallCommands = ''
     ${lib.optionalString withGui ''

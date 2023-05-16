@@ -70,9 +70,15 @@ in
           name = mkDefault "Mint-Y-Aqua";
           package = mkDefault pkgs.cinnamon.mint-themes;
         };
+<<<<<<< HEAD
         iconTheme = mkIf (notExcluded pkgs.cinnamon.mint-y-icons) {
           name = mkDefault "Mint-Y-Sand";
           package = mkDefault pkgs.cinnamon.mint-y-icons;
+=======
+        iconTheme = mkIf (notExcluded pkgs.cinnamon.mint-x-icons) {
+          name = mkDefault "Mint-Y-Aqua";
+          package = mkDefault pkgs.cinnamon.mint-x-icons;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         };
         cursorTheme = mkIf (notExcluded pkgs.cinnamon.mint-cursor-themes) {
           name = mkDefault "Bibata-Modern-Classic";
@@ -113,8 +119,11 @@ in
       services.gnome.glib-networking.enable = true;
       services.gnome.gnome-keyring.enable = true;
       services.gvfs.enable = true;
+<<<<<<< HEAD
       services.switcherooControl.enable = mkDefault true; # xapp-gpu-offload-helper
       services.touchegg.enable = mkDefault true;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       services.udisks2.enable = true;
       services.upower.enable = mkDefault config.powerManagement.enable;
       services.xserver.libinput.enable = mkDefault true;
@@ -180,8 +189,11 @@ in
         nixos-artwork.wallpapers.simple-dark-gray
         mint-artwork
         mint-cursor-themes
+<<<<<<< HEAD
         mint-l-icons
         mint-l-theme
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         mint-themes
         mint-x-icons
         mint-y-icons
@@ -191,6 +203,7 @@ in
       xdg.mime.enable = true;
       xdg.icons.enable = true;
 
+<<<<<<< HEAD
       xdg.portal.enable = true;
       xdg.portal.extraPortals = [
         pkgs.xdg-desktop-portal-xapp
@@ -200,6 +213,8 @@ in
         })
       ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       # Override GSettings schemas
       environment.sessionVariables.NIX_GSETTINGS_OVERRIDES_DIR = "${nixos-gsettings-overrides}/share/gsettings-schemas/nixos-gsettings-overrides/glib-2.0/schemas";
 
@@ -212,6 +227,7 @@ in
       programs.bash.vteIntegration = mkDefault true;
       programs.zsh.vteIntegration = mkDefault true;
 
+<<<<<<< HEAD
       # Qt application style
       qt = {
         enable = mkDefault true;
@@ -221,6 +237,15 @@ in
 
       # Default Fonts
       fonts.packages = with pkgs; [
+=======
+      # Harmonize Qt applications under Cinnamon
+      qt.enable = true;
+      qt.platformTheme = "gnome";
+      qt.style = "adwaita";
+
+      # Default Fonts
+      fonts.fonts = with pkgs; [
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         source-code-pro # Default monospace font in 3.32
         ubuntu_font_family # required for default theme
       ];

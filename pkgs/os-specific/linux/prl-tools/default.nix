@@ -34,15 +34,26 @@ let
     "${util-linux}/bin"
   ];
 in
+<<<<<<< HEAD
 stdenv.mkDerivation (finalAttrs: {
   pname = "prl-tools";
   version = "19.0.0-54570";
+=======
+stdenv.mkDerivation rec {
+  version = "18.2.0-53488";
+  pname = "prl-tools";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   # We download the full distribution to extract prl-tools-lin.iso from
   # => ${dmg}/Parallels\ Desktop.app/Contents/Resources/Tools/prl-tools-lin.iso
   src = fetchurl {
+<<<<<<< HEAD
     url = "https://download.parallels.com/desktop/v${lib.versions.major finalAttrs.version}/${finalAttrs.version}/ParallelsDesktop-${finalAttrs.version}.dmg";
     hash = "sha256-y7UC+E5i2cxkOJ9nVI6aQAFJ5kTXv9uaZoMO4/SCS6k=";
+=======
+    url = "https://download.parallels.com/desktop/v${lib.versions.major version}/${version}/ParallelsDesktop-${version}.dmg";
+    hash = "sha256-FpAbQQapIcZ7GsGjH4ZeJ81Ke+NUF7GvgV1wEDLKoUU=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   hardeningDisable = [ "pic" "format" ];
@@ -84,6 +95,11 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postUnpack
   '';
 
+<<<<<<< HEAD
+=======
+  env.NIX_CFLAGS_COMPILE = lib.optionalString (lib.versionAtLeast kernelVersion "6.3") "-Wno-incompatible-pointer-types";
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   buildPhase = ''
     runHook preBuild
 
@@ -173,4 +189,8 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with maintainers; [ catap wegank ];
     platforms = platforms.linux;
   };
+<<<<<<< HEAD
 })
+=======
+}
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)

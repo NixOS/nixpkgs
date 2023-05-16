@@ -8,10 +8,13 @@ stdenv.mkDerivation rec {
     sha256 = "1zn5kp8ar853rin0ay2j3p17blxy16agpp8wi8wfg4x98b31vgyh";
   };
 
+<<<<<<< HEAD
   # This should be fine on Linux and Darwin. Clang 16 requires it because otherwise getopt will
   # attempt to use C library functions without declaring them, which is raised as an error.
   env.NIX_CFLAGS_COMPILE = "-D__GNU_LIBRARY__";
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   makeFlags = [
     "WITHOUT_GETTEXT=1"
     "LIBCGETOPT=0"

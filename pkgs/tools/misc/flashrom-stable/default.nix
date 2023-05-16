@@ -27,6 +27,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     libftdi1
+<<<<<<< HEAD
     libjaylink
     libusb1
   ] ++ lib.optionals (!stdenv.isDarwin) [
@@ -36,6 +37,15 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "PREFIX=$(out)" "libinstall" ] ++ lib.optionals stdenv.isDarwin [ "CONFIG_ENABLE_LIBPCI_PROGRAMMERS=no" ]
     ++ lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [ "CONFIG_INTERNAL_X86=no" "CONFIG_INTERNAL_DMI=no" "CONFIG_RAYER_SPI=0" ];
+=======
+    libgpiod
+    libjaylink
+    libusb1
+    pciutils
+  ];
+
+  makeFlags = [ "PREFIX=$(out)" "libinstall" ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   meta = with lib; {
     homepage = "https://www.flashrom.org";
@@ -43,5 +53,9 @@ stdenv.mkDerivation rec {
     license = with licenses; [ gpl2 gpl2Plus ];
     maintainers = with maintainers; [ felixsinger ];
     platforms = platforms.all;
+<<<<<<< HEAD
+=======
+    broken = stdenv.isDarwin; # requires DirectHW
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

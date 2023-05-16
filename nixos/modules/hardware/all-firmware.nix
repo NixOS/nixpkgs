@@ -55,6 +55,10 @@ in {
         intel2200BGFirmware
         rtl8192su-firmware
         rt5677-firmware
+<<<<<<< HEAD
+=======
+        rtl8723bs-firmware
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         rtl8761b-firmware
         rtw88-firmware
         zd1211fw

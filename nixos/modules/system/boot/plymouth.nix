@@ -98,6 +98,7 @@ in
         type = types.path;
         # Dimensions are 48x48 to match GDM logo
         default = "${nixos-icons}/share/icons/hicolor/48x48/apps/nix-snowflake-white.png";
+<<<<<<< HEAD
         defaultText = literalExpression ''"''${nixos-icons}/share/icons/hicolor/48x48/apps/nix-snowflake-white.png"'';
         example = literalExpression ''
           pkgs.fetchurl {
@@ -105,6 +106,12 @@ in
             sha256 = "1ivzgd7iz0i06y36p8m5w48fd8pjqwxhdaavc0pxs7w1g7mcy5si";
           }
         '';
+=======
+        defaultText = literalExpression ''pkgs.fetchurl {
+          url = "https://nixos.org/logo/nixos-hires.png";
+          sha256 = "1ivzgd7iz0i06y36p8m5w48fd8pjqwxhdaavc0pxs7w1g7mcy5si";
+        }'';
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         description = lib.mdDoc ''
           Logo which is displayed on the splash screen.
         '';
@@ -137,6 +144,7 @@ in
     # XXX: Needed because we supply a different set of plugins in initrd.
     environment.etc."plymouth/plugins".source = "${plymouth}/lib/plymouth";
 
+<<<<<<< HEAD
     systemd.tmpfiles.rules = [
       "d /run/plymouth 0755 root root 0 -"
       "L+ /run/plymouth/plymouthd.defaults - - - - /etc/plymouth/plymouthd.defaults"
@@ -144,6 +152,8 @@ in
       "L+ /run/plymouth/plugins - - - - /etc/plymouth/plugins"
     ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     systemd.packages = [ plymouth ];
 
     systemd.services.plymouth-kexec.wantedBy = [ "kexec.target" ];
@@ -170,8 +180,13 @@ in
       contents = {
         # Files
         "/etc/plymouth/plymouthd.conf".source = configFile;
+<<<<<<< HEAD
         "/etc/plymouth/logo.png".source = cfg.logo;
         "/etc/plymouth/plymouthd.defaults".source = "${plymouth}/share/plymouth/plymouthd.defaults";
+=======
+        "/etc/plymouth/plymouthd.defaults".source = "${plymouth}/share/plymouth/plymouthd.defaults";
+        "/etc/plymouth/logo.png".source = cfg.logo;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         # Directories
         "/etc/plymouth/plugins".source = pkgs.runCommand "plymouth-initrd-plugins" {} ''
           # Check if the actual requested theme is here
@@ -184,8 +199,13 @@ in
 
           mkdir -p $out/renderers
           # module might come from a theme
+<<<<<<< HEAD
           cp ${themesEnv}/lib/plymouth/*.so $out
           cp ${plymouth}/lib/plymouth/renderers/*.so $out/renderers
+=======
+          cp ${themesEnv}/lib/plymouth/{text,details,label,$moduleName}.so $out
+          cp ${plymouth}/lib/plymouth/renderers/{drm,frame-buffer}.so $out/renderers
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         '';
         "/etc/plymouth/themes".source = pkgs.runCommand "plymouth-initrd-themes" {} ''
           # Check if the actual requested theme is here
@@ -194,6 +214,7 @@ in
               exit 1
           fi
 
+<<<<<<< HEAD
           mkdir -p $out/${cfg.theme}
           cp -r ${themesEnv}/share/plymouth/themes/${cfg.theme}/* $out/${cfg.theme}
           # Copy more themes if the theme depends on others
@@ -203,15 +224,28 @@ in
                     echo "Adding dependent theme: $theme"
                     mkdir -p "$out/$theme"
                     cp -r "${themesEnv}/share/plymouth/themes/$theme"/* "$out/$theme"
+=======
+          mkdir $out
+          cp -r ${themesEnv}/share/plymouth/themes/${cfg.theme} $out
+          # Copy more themes if the theme depends on others
+          for theme in $(grep -hRo '/etc/plymouth/themes/.*$' $out | xargs -n1 basename); do
+              if [[ -d "${themesEnv}/share/plymouth/themes/$theme" ]]; then
+                  if [[ ! -d "$out/$theme" ]]; then
+                    echo "Adding dependent theme: $theme"
+                    cp -r "${themesEnv}/share/plymouth/themes/$theme" $out
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
                   fi
               else
                 echo "Missing theme dependency: $theme"
               fi
           done
+<<<<<<< HEAD
           # Fixup references
           for theme in $out/*/*.plymouth; do
             sed -i "s,${builtins.storeDir}/.*/share/plymouth/themes,$out," "$theme"
           done
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         '';
 
         # Fonts
@@ -240,11 +274,14 @@ in
         plymouth-switch-root-initramfs.wantedBy = [ "halt.target" "kexec.target" "plymouth-switch-root-initramfs.service" "poweroff.target" "reboot.target" ];
         plymouth-switch-root.wantedBy = [ "initrd-switch-root.target" ];
       };
+<<<<<<< HEAD
       # Link in runtime files before starting
       services.plymouth-start.preStart = ''
         mkdir -p /run/plymouth
         ln -sf /etc/plymouth/{plymouthd.defaults,themes,plugins} /run/plymouth/
       '';
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
 
     # Insert required udev rules. We take stage 2 systemd because the udev
@@ -269,8 +306,13 @@ in
 
       mkdir -p $out/lib/plymouth/renderers
       # module might come from a theme
+<<<<<<< HEAD
       cp ${themesEnv}/lib/plymouth/*.so $out/lib/plymouth
       cp ${plymouth}/lib/plymouth/renderers/*.so $out/lib/plymouth/renderers
+=======
+      cp ${themesEnv}/lib/plymouth/{text,details,label,$moduleName}.so $out/lib/plymouth
+      cp ${plymouth}/lib/plymouth/renderers/{drm,frame-buffer}.so $out/lib/plymouth/renderers
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
       mkdir -p $out/share/plymouth/themes
       cp ${plymouth}/share/plymouth/plymouthd.defaults $out/share/plymouth
@@ -287,7 +329,11 @@ in
       chmod -R +w themes
       find themes -type f | while read file
       do
+<<<<<<< HEAD
         sed -i "s,${builtins.storeDir}/.*/share/plymouth/themes,$out/share/plymouth/themes,g" $file
+=======
+        sed -i "s,/nix/.*/share/plymouth/themes,$out/share/plymouth/themes,g" $file
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       done
 
       # Install themes
@@ -295,7 +341,11 @@ in
 
       # Install logo
       mkdir -p $out/etc/plymouth
+<<<<<<< HEAD
       cp -r -L ${themesEnv}/etc/plymouth $out/etc
+=======
+      cp -r -L ${themesEnv}/etc/plymouth $out
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
       # Setup font
       mkdir -p $out/share/fonts
@@ -324,11 +374,19 @@ in
     boot.initrd.preLVMCommands = mkIf (!config.boot.initrd.systemd.enable) (mkAfter ''
       mkdir -p /etc/plymouth
       mkdir -p /run/plymouth
+<<<<<<< HEAD
       ln -s $extraUtils/etc/plymouth/logo.png /etc/plymouth/logo.png
       ln -s ${configFile} /etc/plymouth/plymouthd.conf
       ln -s $extraUtils/share/plymouth/plymouthd.defaults /run/plymouth/plymouthd.defaults
       ln -s $extraUtils/share/plymouth/themes /run/plymouth/themes
       ln -s $extraUtils/lib/plymouth /run/plymouth/plugins
+=======
+      ln -s ${configFile} /etc/plymouth/plymouthd.conf
+      ln -s $extraUtils/share/plymouth/plymouthd.defaults /etc/plymouth/plymouthd.defaults
+      ln -s $extraUtils/share/plymouth/logo.png /etc/plymouth/logo.png
+      ln -s $extraUtils/share/plymouth/themes /etc/plymouth/themes
+      ln -s $extraUtils/lib/plymouth /etc/plymouth/plugins
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       ln -s $extraUtils/etc/fonts /etc/fonts
 
       plymouthd --mode=boot --pid-file=/run/plymouth/pid --attach-to-session

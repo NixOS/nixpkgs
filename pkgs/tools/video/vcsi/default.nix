@@ -1,10 +1,18 @@
+<<<<<<< HEAD
 { lib, python3Packages, fetchPypi, ffmpeg }:
+=======
+{ lib, python3Packages, ffmpeg }:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 python3Packages.buildPythonApplication rec {
   pname = "vcsi";
   version = "7.0.13";
 
+<<<<<<< HEAD
   src = fetchPypi {
+=======
+  src = python3Packages.fetchPypi {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     inherit pname version;
     sha256 = "01qwbb2l8gwf622zzhh0kzdzw3njvsdwmndwn01i9bn4qm5cas8r";
   };

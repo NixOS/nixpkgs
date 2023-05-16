@@ -9,7 +9,11 @@ let
     crossSystem = localSystem;
     crossOverlays = [];
 
+<<<<<<< HEAD
     # Ignore custom stdenvs when cross compiling for compatibility
+=======
+    # Ignore custom stdenvs when cross compiling for compatability
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     config = builtins.removeAttrs config [ "replaceStdenv" ];
   };
 

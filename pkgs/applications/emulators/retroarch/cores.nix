@@ -360,6 +360,7 @@ in
     };
   };
 
+<<<<<<< HEAD
   dosbox-pure = mkLibretroCore {
     core = "dosbox-pure";
     CXXFLAGS = "-std=gnu++11";
@@ -371,6 +372,8 @@ in
     };
   };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   eightyone = mkLibretroCore {
     core = "81";
     src = getCoreSrc "eightyone";
@@ -437,6 +440,7 @@ in
     };
   };
 
+<<<<<<< HEAD
   fuse = mkLibretroCore {
     core = "fuse";
     meta = {
@@ -445,6 +449,8 @@ in
     };
   };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   gambatte = mkLibretroCore {
     core = "gambatte";
     meta = {
@@ -733,10 +739,13 @@ in
       # remove ccache
       substituteInPlace CMakeLists.txt --replace "ccache" ""
     '';
+<<<<<<< HEAD
 
     # causes redefinition of _FORTIFY_SOURCE
     hardeningDisable = [ "fortify3" ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     postBuild = "cd /build/source/build/pcsx2";
     meta = {
       description = "Port of PCSX2 to libretro";
@@ -842,6 +851,7 @@ in
     };
   };
 
+<<<<<<< HEAD
   same_cdi = mkLibretroCore {
     core = "same_cdi";
     extraNativeBuildInputs = [ python3 ];
@@ -852,6 +862,8 @@ in
     };
   };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   scummvm = mkLibretroCore rec {
     core = "scummvm";
     version = "unstable-2022-04-06";
@@ -1003,6 +1015,7 @@ in
     };
   };
 
+<<<<<<< HEAD
   twenty-fortyeight = mkLibretroCore {
     core = "2048";
     meta = {
@@ -1011,6 +1024,8 @@ in
     };
   };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   vba-m = mkLibretroCore {
     core = "vbam";
     src = getCoreSrc "vba-m";

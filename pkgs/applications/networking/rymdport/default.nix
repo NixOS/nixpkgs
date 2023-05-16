@@ -11,16 +11,27 @@
 
 buildGoModule rec {
   pname = "rymdport";
+<<<<<<< HEAD
   version = "3.4.0";
+=======
+  version = "3.3.5";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "Jacalz";
     repo = "rymdport";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-nqB4KZdYSTiyIaslFN6ncwJnD8+7ZgHj/SXAa5YAt9k=";
   };
 
   vendorHash = "sha256-03qdjeU6u0mBcdWlMhs9ORaeBkPNMO4Auqy/rOFIaVM=";
+=======
+    hash = "sha256-dwIfkslbqphLQrmDNeukDhLskH1bBGG65Ve9LQzNeJg=";
+  };
+
+  vendorHash = "sha256-Q3bUH1EhY63QF646FYwiVXusWPTqI5Am2AVJq+qyNVo=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nativeBuildInputs = [
     pkg-config

@@ -7,7 +7,11 @@
 
 buildPythonPackage rec {
   pname = "mercadopago";
+<<<<<<< HEAD
   version = "2.2.1";
+=======
+  version = "2.2.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -16,7 +20,11 @@ buildPythonPackage rec {
     owner = "mercadopago";
     repo = "sdk-python";
     rev = "refs/tags/${version}";
+<<<<<<< HEAD
     hash = "sha256-ABxYGYUBOzeOSE0yK8jym+ldinDUCTpqO165OWhszgs=";
+=======
+    hash = "sha256-HtPyIwip/cjvnBDZ0qGpLKJOkwETGSqXvTkH2pcd6cc=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [

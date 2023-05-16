@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 { lib
 , buildPythonPackage
 , fetchpatch
@@ -7,17 +8,26 @@
 , setuptools-scm
 , wheel
 }:
+=======
+{ lib, buildPythonPackage, fetchPypi, isPy3k, six, mock, pytestCheckHook, setuptools, setuptools-scm }:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 buildPythonPackage rec {
   pname = "ansi2html";
   version = "1.8.0";
   format = "pyproject";
 
+<<<<<<< HEAD
+=======
+  disabled = !isPy3k;
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-OLgqKYSCofomE/D5yb6z23Ko+DLurFjrLke/Ms039tU=";
   };
 
+<<<<<<< HEAD
   patches = [
     (fetchpatch {
       name = "update-build-requirements.patch";
@@ -37,6 +47,13 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
   ];
+=======
+  nativeBuildInputs = [ setuptools-scm ];
+  propagatedBuildInputs = [ six setuptools ];
+
+  preCheck = "export PATH=$PATH:$out/bin";
+  nativeCheckInputs = [ mock pytestCheckHook ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   pythonImportsCheck = [ "ansi2html" ];
 

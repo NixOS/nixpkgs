@@ -1,8 +1,16 @@
+<<<<<<< HEAD
 # Since the same derivation can be depended on in multiple ways, we need to
 # accumulate *each* role (i.e. host and target platforms relative the depending
 # derivation) in which the derivation is used.
 #
 # The role is intended to be used as part of other variables names like
+=======
+# Since the same derivation can be depend on in multiple ways, we need to
+# accumulate *each* role (i.e. host and target platforms relative the depending
+# derivation) in which the derivation is used.
+#
+# The role is intened to be use as part of other variables names like
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 #  - $NIX_SOMETHING${role_post}
 
 function getRole() {
@@ -49,7 +57,11 @@ function getTargetRoleEnvHook() {
     getRole "$depTargetOffset"
 }
 
+<<<<<<< HEAD
 # This variant is intended specifically for code-producing tool wrapper scripts
+=======
+# This variant is inteneded specifically for code-prodocing tool wrapper scripts
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 # `NIX_@wrapperName@_TARGET_*_@suffixSalt@` tracks this (needs to be an exported
 # env var so can't use fancier data structures).
 function getTargetRoleWrapper() {

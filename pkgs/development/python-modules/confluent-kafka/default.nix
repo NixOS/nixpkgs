@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 { lib
 , avro
 , buildPythonPackage
@@ -65,11 +66,31 @@ buildPythonPackage rec {
     "tests/test_Admin.py"
     "tests/test_misc.py"
   ];
+=======
+{ lib, buildPythonPackage, fetchPypi, isPy3k, rdkafka, requests, avro3k, avro ? null, futures ? null, enum34 ? null }:
+
+buildPythonPackage rec {
+  version = "2.0.2";
+  pname = "confluent-kafka";
+
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-OzQupCJu0QXKi8A1sId+TcLxFf/adOOjUPNjaDNWUVs=";
+  };
+
+  buildInputs = [ rdkafka requests ] ++ (if isPy3k then [ avro3k ] else [ enum34 avro futures ]) ;
+
+  # No tests in PyPi Tarball
+  doCheck = false;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   meta = with lib; {
     description = "Confluent's Apache Kafka client for Python";
     homepage = "https://github.com/confluentinc/confluent-kafka-python";
+<<<<<<< HEAD
     changelog = "https://github.com/confluentinc/confluent-kafka-python/blob/v${version}/CHANGELOG.md";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     license = licenses.asl20;
     maintainers = with maintainers; [ mlieberman85 ];
   };

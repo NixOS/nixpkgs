@@ -18,7 +18,11 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/RazrFalcon/cargo-bloat";
     license = licenses.mit;
     platforms = platforms.unix;
+<<<<<<< HEAD
     maintainers = with maintainers; [ xrelkd matthiasbeyer ];
+=======
+    maintainers = with maintainers; [ xrelkd ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }
 

@@ -3,7 +3,11 @@
 let
 
   common = { pname, sha256, suffix ? "" }: let
+<<<<<<< HEAD
     legacySuffix = lib.optionalString (suffix != "-nons") "-ns";
+=======
+    legacySuffix = if suffix == "-nons" then "" else "-ns";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     self = stdenv.mkDerivation rec {
       inherit pname;
       version = "1.79.2";

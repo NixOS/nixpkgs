@@ -1,7 +1,14 @@
+<<<<<<< HEAD
 { lib
 , buildPythonPackage
 , fetchFromGitHub
 , flit-core
+=======
+{ stdenv
+, lib
+, buildPythonPackage
+, fetchFromGitHub
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , pythonOlder
 , python
 , py-multiaddr
@@ -22,7 +29,11 @@
 buildPythonPackage rec {
   pname = "ipfshttpclient";
   version = "0.8.0a2";
+<<<<<<< HEAD
   format = "pyproject";
+=======
+  format = "flit";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
@@ -32,10 +43,13 @@ buildPythonPackage rec {
     hash = "sha256-OmC67pN2BbuGwM43xNDKlsLhwVeUbpvfOazyIDvoMEA=";
   };
 
+<<<<<<< HEAD
   nativeBuildInputs = [
     flit-core
   ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   propagatedBuildInputs = [
     py-multiaddr
     requests
@@ -89,6 +103,10 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "ipfshttpclient" ];
 
   meta = with lib; {
+<<<<<<< HEAD
+=======
+    broken = stdenv.isDarwin;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     description = "A python client library for the IPFS API";
     homepage = "https://github.com/ipfs-shipyard/py-ipfs-http-client";
     license = licenses.mit;

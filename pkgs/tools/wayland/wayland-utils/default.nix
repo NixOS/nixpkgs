@@ -5,11 +5,19 @@
 
 stdenv.mkDerivation rec {
   pname = "wayland-utils";
+<<<<<<< HEAD
   version = "1.2.0";
 
   src = fetchurl {
     url = "https://gitlab.freedesktop.org/wayland/wayland-utils/-/releases/${version}/downloads/wayland-utils-${version}.tar.xz";
     sha256 = "sha256-2SeMIlVFhogYAlQHUbzEJWkmK/gM2aybD9Ev9L0JqeQ=";
+=======
+  version = "1.1.0";
+
+  src = fetchurl {
+    url = "https://gitlab.freedesktop.org/wayland/wayland-utils/-/releases/${version}/downloads/wayland-utils-${version}.tar.xz";
+    sha256 = "sha256-nmhYYwJbT+reNtU7vI4xtD4mSYvnQ96oTHqEkSlZQQo=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   strictDeps = true;
@@ -28,6 +36,9 @@ stdenv.mkDerivation rec {
     license = licenses.mit; # Expat version
     platforms = platforms.linux;
     maintainers = with maintainers; [ primeos ];
+<<<<<<< HEAD
     mainProgram = "wayland-info";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

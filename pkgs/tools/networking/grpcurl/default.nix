@@ -13,7 +13,11 @@ buildGoModule rec {
 
   subPackages = [ "cmd/grpcurl" ];
 
+<<<<<<< HEAD
   vendorHash = "sha256-xe3xb1+qa53Xph+CLcUqxJYeD9d4kBaY6SJfc7bhjQY=";
+=======
+  vendorSha256 = "sha256-xe3xb1+qa53Xph+CLcUqxJYeD9d4kBaY6SJfc7bhjQY=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   ldflags = [ "-s" "-w" "-X main.version=${version}" ];
 

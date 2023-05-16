@@ -12,14 +12,22 @@
 
 buildPythonPackage rec {
   pname = "pygtfs";
+<<<<<<< HEAD
   version = "0.1.9";
+=======
+  version = "0.1.7";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
+<<<<<<< HEAD
     hash = "sha256-J5vu51OOMabWd8h60PpvvBiCnwQlhEnBywNXxy9hOuA=";
+=======
+    hash = "sha256-sGJwtf8DVIrE4hcU3IksnyAAt8yf67UBJIiVILDSsv8=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   postPatch = ''

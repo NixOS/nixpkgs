@@ -15,7 +15,11 @@ buildGoModule rec {
 
   proxyVendor = true;
 
+<<<<<<< HEAD
   vendorHash = "sha256-n9XNqXIoqn+f0xKCenJWXUYXtQhtbNBar68onWH/WV4=";
+=======
+  vendorSha256 = "sha256-n9XNqXIoqn+f0xKCenJWXUYXtQhtbNBar68onWH/WV4=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   meta = with lib; {
     description = "RSS/Atom reader with the focus on speed, usability and a bit of unix philosophy";

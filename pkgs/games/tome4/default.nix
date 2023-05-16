@@ -3,11 +3,19 @@
 
 stdenv.mkDerivation rec {
   pname = "tome4";
+<<<<<<< HEAD
   version = "1.7.6";
 
   src = fetchurl {
     url = "https://te4.org/dl/t-engine/t-engine4-src-${version}.tar.bz2";
     sha256 = "sha256-mJ3qAIA/jNyt4CT0ZH1IC7GsDUN8JUKSwHVJwnKkaAw=";
+=======
+  version = "1.7.4";
+
+  src = fetchurl {
+    url = "https://te4.org/dl/t-engine/t-engine4-src-${version}.tar.bz2";
+    sha256 = "sha256-w1NPM/SMnPAnAl6z9E6Xsj3mEqZtXzFe1IMPmlKr8qQ=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   desktop = makeDesktopItem {

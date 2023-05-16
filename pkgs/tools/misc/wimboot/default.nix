@@ -2,16 +2,27 @@
 
 stdenv.mkDerivation rec {
   pname = "wimboot";
+<<<<<<< HEAD
   version = "2.7.6";
+=======
+  version = "2.7.5";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "ipxe";
     repo = "wimboot";
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-AFPuHxcDM/cdEJ5nRJnVbPk7Deg97NeSMsg/qwytZX4=";
   };
 
   sourceRoot = "${src.name}/src";
+=======
+    sha256 = "sha256-rbJONP3ge+2+WzCIpTUZeieQz9Q/MZfEUmQVbZ+9Dro=";
+  };
+
+  sourceRoot = "source/src";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   buildInputs = [ libbfd zlib libiberty ];
   makeFlags = [ "wimboot.x86_64.efi" ];

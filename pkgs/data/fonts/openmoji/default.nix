@@ -4,7 +4,10 @@
 , fetchpatch
 , scfbuild
 , fontforge
+<<<<<<< HEAD
 , node-glob
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , libuninameslist
 , nodejs
 , nodePackages
@@ -60,7 +63,11 @@ in stdenv.mkDerivation rec {
   nativeBuildInputs = [
     scfbuild-with-fontforge-20201107
     nodejs
+<<<<<<< HEAD
     node-glob
+=======
+    nodePackages.glob
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     nodePackages.lodash
   ];
 

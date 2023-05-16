@@ -2,15 +2,25 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "agate";
+<<<<<<< HEAD
   version = "3.3.1";
+=======
+  version = "3.3.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "mbrubeck";
     repo = "agate";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-gU4Q45Sb+LOmcv0j9R8yw996NUpCOnxdwT6lyvNp2pg=";
   };
   cargoHash = "sha256-6jF4ayzBN4sSk81u3iX0CxMPAsL6D+wpXRYGjgntMUE=";
+=======
+    hash = "sha256-B0hbXar/RulfBJUR1Jtczf3p1H6Zj5OVCXVCaj5zf/U=";
+  };
+  cargoHash = "sha256-6Z+mcQAJwW7tm4SBbrHwHIwiqlFV+PIa5I2onU2rPts=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   buildInputs = lib.optionals stdenv.isDarwin [ libiconv Security ];
 

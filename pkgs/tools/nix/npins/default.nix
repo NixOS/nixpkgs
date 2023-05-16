@@ -1,5 +1,10 @@
 { lib
 , rustPlatform
+<<<<<<< HEAD
+=======
+, fetchFromGitHub
+, nix-gitignore
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , makeWrapper
 , stdenv
 , darwin

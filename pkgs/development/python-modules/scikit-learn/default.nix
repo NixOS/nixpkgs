@@ -19,12 +19,20 @@
 
 buildPythonPackage rec {
   pname = "scikit-learn";
+<<<<<<< HEAD
   version = "1.3.0";
+=======
+  version = "1.2.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
+<<<<<<< HEAD
     hash = "sha256-i+VJiG9e2kZDa25VWw5Ic7TxCqIcB99FxLwXNa+8zXo=";
+=======
+    hash = "sha256-+/ilyJPJtLmbzH7Y+z6FAJV6ET9BAYYDhtBmNVIPfPs=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   buildInputs = [

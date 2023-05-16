@@ -1,9 +1,17 @@
 diff --git a/pkg/machine/qemu/machine.go b/pkg/machine/qemu/machine.go
+<<<<<<< HEAD
 index a118285f7..d775f0099 100644
 --- a/pkg/machine/qemu/machine.go
 +++ b/pkg/machine/qemu/machine.go
 @@ -1560,11 +1560,6 @@ func (v *MachineVM) waitAPIAndPrintInfo(forwardState machine.APIForwardingState,
  			case machine.NotInstalled:
+=======
+index 4f25b4d26..8a79862fd 100644
+--- a/pkg/machine/qemu/machine.go
++++ b/pkg/machine/qemu/machine.go
+@@ -1509,11 +1509,6 @@ func (v *MachineVM) waitAPIAndPrintInfo(forwardState apiForwardingState, forward
+ 			case notInstalled:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  				fmt.Printf("\nThe system helper service is not installed; the default Docker API socket\n")
  				fmt.Printf("address can't be used by podman. ")
 -				if helper := findClaimHelper(); len(helper) > 0 {
@@ -11,6 +19,12 @@ index a118285f7..d775f0099 100644
 -					fmt.Printf("\n\tsudo %s install\n", helper)
 -					fmt.Printf("\tpodman machine stop%s; podman machine start%s\n\n", suffix, suffix)
 -				}
+<<<<<<< HEAD
  			case machine.MachineLocal:
  				fmt.Printf("\nAnother process was listening on the default Docker API socket address.\n")
  			case machine.ClaimUnsupported:
+=======
+ 			case machineLocal:
+ 				fmt.Printf("\nAnother process was listening on the default Docker API socket address.\n")
+ 			case claimUnsupported:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)

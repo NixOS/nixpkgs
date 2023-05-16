@@ -19,7 +19,11 @@ in
           services.pufferpanel = {
             enable = true;
             extraPackages = with pkgs; [ bash curl gawk gnutar gzip ];
+<<<<<<< HEAD
             package = pkgs.buildFHSEnv {
+=======
+            package = pkgs.buildFHSUserEnv {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
               name = "pufferpanel-fhs";
               runScript = lib.getExe pkgs.pufferpanel;
               targetPkgs = pkgs': with pkgs'; [ icu openssl zlib ];
@@ -162,7 +166,11 @@ in
         PrivateUsers = true;
         PrivateDevices = true;
         RestrictRealtime = true;
+<<<<<<< HEAD
         RestrictNamespaces = [ "user" "mnt" ]; # allow buildFHSEnv
+=======
+        RestrictNamespaces = [ "user" "mnt" ]; # allow buildFHSUserEnv
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         RestrictAddressFamilies = [ "AF_INET" "AF_INET6" "AF_UNIX" ];
         LockPersonality = true;
         DeviceAllow = [ "" ];

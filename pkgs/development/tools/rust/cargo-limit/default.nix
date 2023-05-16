@@ -29,6 +29,10 @@ rustPlatform.buildRustPackage rec {
     description = "Cargo subcommand \"limit\": reduces the noise of compiler messages";
     homepage = "https://github.com/alopatindev/cargo-limit";
     license = with licenses; [ asl20 /* or */ mit ];
+<<<<<<< HEAD
     maintainers = with maintainers; [ otavio matthiasbeyer ];
+=======
+    maintainers = with maintainers; [ otavio ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

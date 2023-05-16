@@ -2,14 +2,22 @@
 
 let
   pname = "phpstan";
+<<<<<<< HEAD
   version = "1.10.33";
+=======
+  version = "1.10.15";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 in
 mkDerivation {
   inherit pname version;
 
   src = fetchurl {
     url = "https://github.com/phpstan/phpstan/releases/download/${version}/phpstan.phar";
+<<<<<<< HEAD
     sha256 = "sha256-dFIuCVYmZr6E0181jegKs6d3mA9jPoFqoIY+lyWl7P8=";
+=======
+    sha256 = "sha256-zGrAgQttAvGdRpuOB3V/GprMzc2NMya4d3MY1SIfYOQ=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   dontUnpack = true;

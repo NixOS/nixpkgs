@@ -29,6 +29,10 @@ buildPythonPackage rec {
     description = "Library for computing contrast ratios, as required by WCAG 2.0";
     homepage = "https://github.com/gsnedders/wcag-contrast-ratio";
     license = licenses.mit;
+<<<<<<< HEAD
     maintainers = with maintainers; [ ];
+=======
+    maintainers = with maintainers; [ SuperSandro2000 ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

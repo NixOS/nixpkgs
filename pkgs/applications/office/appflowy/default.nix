@@ -6,17 +6,29 @@
 , copyDesktopItems
 , makeDesktopItem
 , gtk3
+<<<<<<< HEAD
+=======
+, openssl_1_1
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , xdg-user-dirs
 , keybinder3
 }:
 
 stdenv.mkDerivation rec {
   pname = "appflowy";
+<<<<<<< HEAD
   version = "0.3.1";
 
   src = fetchzip {
     url = "https://github.com/AppFlowy-IO/appflowy/releases/download/${version}/AppFlowy_x86_64-unknown-linux-gnu_ubuntu-20.04.tar.gz";
     hash = "sha256-jIekGA+MG9tvjEyHAI3dcD7lI1JL/qPqRpVO9gRhcTw=";
+=======
+  version = "0.1.5";
+
+  src = fetchzip {
+    url = "https://github.com/AppFlowy-IO/appflowy/releases/download/${version}/AppFlowy_x86_64-unknown-linux-gnu_ubuntu-20.04.tar.gz";
+    sha256 = "sha256-fuA3/suJ9F3mHtNAxlefFGLX0+PHgFZpQycPpxztsPI=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     stripRoot = false;
   };
 
@@ -28,6 +40,10 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     gtk3
+<<<<<<< HEAD
+=======
+    openssl_1_1
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     keybinder3
   ];
 

@@ -2,11 +2,17 @@
 
 (mkCoqDerivation {
   pname = "zorns-lemma";
+<<<<<<< HEAD
   repo  = "topology";
 
   releaseRev = v: "v${v}";
 
   release."10.2.0".sha256 = "sha256-xLi3uRQBKL9KiLd4FBnbTPxh8TjdN8IEW/1D7n2B+xY=";
+=======
+
+  releaseRev = v: "v${v}";
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   release."9.0.0".sha256 = "sha256:03lgy53xg9pmrdd3d8qb4087k5qjnk260655svp6d79x4p2lxr8c";
   release."8.11.0".sha256 = "sha256-2Hf7YwRcFmP/DqwFtF1p78MCNV50qUWfMVQtZbwKd0k=";
   release."8.10.0".sha256 = "sha256-qLPLK2ZLJQ4SmJX2ADqFiP4kgHuQFJTeNXkBbjiFS+4=";
@@ -18,7 +24,10 @@
 
   inherit version;
   defaultVersion = with lib.versions; lib.switch coq.coq-version [
+<<<<<<< HEAD
     { case = range "8.12" "8.18"; out = "10.2.0"; }
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     { case = range "8.10" "8.16"; out = "9.0.0"; }
     { case = "8.9"; out = "8.9.0"; }
     { case = "8.8"; out = "8.8.0"; }
@@ -39,4 +48,8 @@
     maintainers = with maintainers; [ siraben ];
     license = licenses.lgpl21Plus;
   };
+<<<<<<< HEAD
 }).overrideAttrs({version, ...}: lib.optionalAttrs (lib.versions.isGe "9.0" version) { repo =  "topology"; })
+=======
+}).overrideAttrs({version, ...}: if lib.versions.isGe "9.0" version then { repo =  "topology"; } else {})
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)

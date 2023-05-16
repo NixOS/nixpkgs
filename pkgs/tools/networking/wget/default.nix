@@ -7,11 +7,19 @@
 
 stdenv.mkDerivation rec {
   pname = "wget";
+<<<<<<< HEAD
   version = "1.21.4";
 
   src = fetchurl {
     url = "mirror://gnu/wget/${pname}-${version}.tar.lz";
     hash = "sha256-NoNhml9Q7cvMsXIKeQBvo3v5uaJVqMW0gEi8PHqHS9k=";
+=======
+  version = "1.21.3";
+
+  src = fetchurl {
+    url = "mirror://gnu/wget/${pname}-${version}.tar.lz";
+    sha256 = "sha256-29L7XkcUnUdS0Oqg2saMxJzyDUbfT44yb/yPGLKvTqU=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   patches = [
@@ -47,15 +55,23 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Tool for retrieving files using HTTP, HTTPS, and FTP";
+<<<<<<< HEAD
     homepage = "https://www.gnu.org/software/wget/";
     license = licenses.gpl3Plus;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     longDescription =
       '' GNU Wget is a free software package for retrieving files using HTTP,
          HTTPS and FTP, the most widely-used Internet protocols.  It is a
          non-interactive commandline tool, so it may easily be called from
          scripts, cron jobs, terminals without X-Windows support, etc.
       '';
+<<<<<<< HEAD
     mainProgram = "wget";
+=======
+    license = licenses.gpl3Plus;
+    homepage = "https://www.gnu.org/software/wget/";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     maintainers = with maintainers; [ fpletz ];
     platforms = platforms.all;
   };

@@ -25,14 +25,22 @@ let
   };
 in
 stdenv.mkDerivation rec {
+<<<<<<< HEAD
   version = "16.1.35";
+=======
+  version = "16.1.9";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pname = "jmol";
 
   src = let
     baseVersion = "${lib.versions.major version}.${lib.versions.minor version}";
   in fetchurl {
     url = "mirror://sourceforge/jmol/Jmol/Version%20${baseVersion}/Jmol%20${version}/Jmol-${version}-binary.tar.gz";
+<<<<<<< HEAD
     hash = "sha256-r1ydAwAdXl5RRj64W0j8L7XbgnC7VOYjFNE019BcbpY=";
+=======
+    hash = "sha256-QGduoUKWNUjNlMEYO0wD5+igjuF03V5SVlgq44d2HDs=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   patchPhase = ''

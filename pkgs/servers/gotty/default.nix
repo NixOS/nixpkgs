@@ -14,7 +14,11 @@ buildGoModule rec {
     sha256 = "sha256-VSu0ASnLmRzOGOEKqb/zB43+HxEwMpKLpbdbWY5QrEk=";
   };
 
+<<<<<<< HEAD
   vendorHash = "sha256-XtqIiREtKg0LRnwOg8UyYrWUWJNQbCJUw+nVvaiN3GQ=";
+=======
+  vendorSha256 = "sha256-XtqIiREtKg0LRnwOg8UyYrWUWJNQbCJUw+nVvaiN3GQ=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   # upstream did not update the tests, so they are broken now
   # https://github.com/sorenisanerd/gotty/issues/13

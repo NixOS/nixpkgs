@@ -1,11 +1,17 @@
 { lib
+<<<<<<< HEAD
 , stdenv
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , aiofiles
 , aiosqlite
 , buildPythonPackage
 , cryptography
 , fetchFromGitHub
+<<<<<<< HEAD
 , pyopenssl
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , pytest-asyncio
 , pytest-mock
 , pytestCheckHook
@@ -18,7 +24,11 @@
 
 buildPythonPackage rec {
   pname = "asyncua";
+<<<<<<< HEAD
   version = "1.0.4";
+=======
+  version = "1.0.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -27,7 +37,11 @@ buildPythonPackage rec {
     owner = "FreeOpcUa";
     repo = "opcua-asyncio";
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-gAyvo+VJPdS/UpXN/h8LqbIRyx84fifSUsW2GUzLgfo=";
+=======
+    hash = "sha256-DnBxR4nD3dBBhiElDuRgljHaoBPiakdjY/VFn3VsKEQ=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     fetchSubmodules = true;
   };
 
@@ -43,6 +57,7 @@ buildPythonPackage rec {
   '';
 
   propagatedBuildInputs = [
+<<<<<<< HEAD
     aiofiles
     aiosqlite
     cryptography
@@ -50,6 +65,14 @@ buildPythonPackage rec {
     python-dateutil
     pytz
     sortedcontainers
+=======
+    aiosqlite
+    aiofiles
+    pytz
+    python-dateutil
+    sortedcontainers
+    cryptography
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     typing-extensions
   ];
 
@@ -63,6 +86,7 @@ buildPythonPackage rec {
     "asyncua"
   ];
 
+<<<<<<< HEAD
   disabledTests = lib.optionals stdenv.isDarwin [
     # Failed: DID NOT RAISE <class 'asyncio.exceptions.TimeoutError'>
     "test_publish"
@@ -74,6 +98,8 @@ buildPythonPackage rec {
     "test_encrypted_private_key_handling_failure"
   ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   meta = with lib; {
     description = "OPC UA / IEC 62541 Client and Server for Python";
     homepage = "https://github.com/FreeOpcUa/opcua-asyncio";

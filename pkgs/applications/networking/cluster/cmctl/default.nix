@@ -11,7 +11,11 @@ buildGoModule rec {
     sha256 = "128s5vd4hp5mr0rnb21grzmijzx0ibpv71as36dcgw7z4v3gq7lx";
   };
 
+<<<<<<< HEAD
   vendorHash = "sha256-+r0QpD97r6dokUr07Qjb9kvoK+oz2rvml0cIebtYuHg=";
+=======
+  vendorSha256 = "sha256-+r0QpD97r6dokUr07Qjb9kvoK+oz2rvml0cIebtYuHg=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   subPackages = [ "cmd/ctl" ];
 

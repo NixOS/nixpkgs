@@ -7,7 +7,11 @@
 
 buildPythonPackage rec {
   pname = "django-vite";
+<<<<<<< HEAD
   version = "2.1.3";
+=======
+  version = "2.0.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -16,7 +20,11 @@ buildPythonPackage rec {
     owner = "MrBin99";
     repo = pname;
     rev = "refs/tags/${version}";
+<<<<<<< HEAD
     hash = "sha256-HrcQt0Mdko+/XJd0srQTBYMtHaLZyImMuQn39HIwDfY=";
+=======
+    hash = "sha256-lYRFNHTIQBn7CDnWFxSzXELzqEtQcbwHedSZnR7ZtbE=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [

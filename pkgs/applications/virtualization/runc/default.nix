@@ -15,13 +15,21 @@
 
 buildGoModule rec {
   pname = "runc";
+<<<<<<< HEAD
   version = "1.1.9";
+=======
+  version = "1.1.7";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "opencontainers";
     repo = "runc";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-9vNzKoG+0Ze4+dhluNM6QtsUjV8/bpkuvEF8ASBfBRo=";
+=======
+    hash = "sha256-reSC9j9ESjRigItBRytef78XBjmMGsqu0o9qcN2AstU=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   vendorHash = null;

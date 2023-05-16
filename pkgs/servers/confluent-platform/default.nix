@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 {
   bash
 , fetchurl
@@ -29,6 +30,24 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
+=======
+{ stdenv, lib, fetchurl, fetchFromGitHub
+, jre, makeWrapper, bash, gnused }:
+
+stdenv.mkDerivation rec {
+  pname = "confluent-platform";
+  version = "7.3.0";
+
+  src = fetchurl {
+    url = "https://packages.confluent.io/archive/${lib.versions.majorMinor version}/confluent-${version}.tar.gz";
+    sha256 = "sha256-j120gSIky0CHNgzaVnodMAniecRX0RpU6+il86nxdrQ=";
+  };
+
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ jre bash ];
+
+  installPhase = ''
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     mkdir -p $out
     cp -R bin etc share src $out
     rm -rf $out/bin/windows
@@ -48,6 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
         --set KAFKA_LOG_DIR "/tmp/apache-kafka-logs" \
         --prefix PATH : "${jre}/bin:${bash}/bin:${gnused}/bin"
     done
+<<<<<<< HEAD
 
     runHook postInstall
   '';
@@ -60,3 +80,15 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.unix;
   };
 })
+=======
+  '';
+
+  meta = with lib; {
+    homepage = "https://www.confluent.io/";
+    description = "Confluent event streaming platform based on Apache Kafka";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ zoedsoupe ];
+    platforms = platforms.unix;
+  };
+}
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)

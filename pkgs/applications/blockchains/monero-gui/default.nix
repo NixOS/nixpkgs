@@ -99,6 +99,9 @@ stdenv.mkDerivation rec {
     license      = licenses.bsd3;
     platforms    = platforms.all;
     maintainers  = with maintainers; [ rnhmjoj ];
+<<<<<<< HEAD
     mainProgram  = "monero-wallet-gui";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

@@ -1,6 +1,7 @@
 { lib
 , buildGoModule
 , fetchFromGitHub
+<<<<<<< HEAD
 , fetchYarnDeps
 , fixup_yarn_lock
 , grafana-agent
@@ -10,10 +11,18 @@
 , systemd
 , testers
 , yarn
+=======
+, grafana-agent
+, nixosTests
+, stdenv
+, systemd
+, testers
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 buildGoModule rec {
   pname = "grafana-agent";
+<<<<<<< HEAD
   version = "0.36.1";
 
   src = fetchFromGitHub {
@@ -31,6 +40,20 @@ buildGoModule rec {
     hash = "sha256-sUFxuliLupGEJY1xFA2V4W2gwHxtUgst3Vrywh1owAo=";
   };
 
+=======
+  version = "0.33.2";
+
+  src = fetchFromGitHub {
+    rev = "v${version}";
+    owner = "grafana";
+    repo = "agent";
+    hash = "sha256-9/1EzRIuWpXbEVA6WIy5WAHFkJgPoqABLfvgA7DB/oU=";
+  };
+
+  vendorHash = "sha256-ZeSK5sTU/ey0pe303Y5eZi7D25lTXaQHJsPLDQ/tB+s=";
+  proxyVendor = true; # darwin/linux hash mismatch
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ldflags = let
     prefix = "github.com/grafana/agent/pkg/build";
   in [
@@ -43,10 +66,14 @@ buildGoModule rec {
     "-X ${prefix}.BuildDate=1980-01-01T00:00:00Z"
   ];
 
+<<<<<<< HEAD
   nativeBuildInputs = [ fixup_yarn_lock nodejs yarn ];
 
   tags = [
     "builtinassets"
+=======
+  tags = [
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "nonetwork"
     "nodocker"
     "promtail_journal_enabled"
@@ -55,6 +82,7 @@ buildGoModule rec {
   subPackages = [
     "cmd/grafana-agent"
     "cmd/grafana-agentctl"
+<<<<<<< HEAD
     "web/ui"
   ];
 
@@ -76,6 +104,10 @@ buildGoModule rec {
     preBuild = null;
   });
 
+=======
+  ];
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   # uses go-systemd, which uses libsystemd headers
   # https://github.com/coreos/go-systemd/issues/351
   env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.isLinux [ "-I${lib.getDev systemd}/include" ]);
@@ -98,6 +130,7 @@ buildGoModule rec {
     };
   };
 
+<<<<<<< HEAD
   meta = {
     description = "A lightweight subset of Prometheus and more, optimized for Grafana Cloud";
     license = lib.licenses.asl20;
@@ -105,5 +138,12 @@ buildGoModule rec {
     changelog = "https://github.com/grafana/agent/blob/${src.rev}/CHANGELOG.md";
     maintainers = with lib.maintainers; [ flokli emilylange ];
     mainProgram = "grafana-agent";
+=======
+  meta = with lib; {
+    description = "A lightweight subset of Prometheus and more, optimized for Grafana Cloud";
+    license = licenses.asl20;
+    homepage = "https://grafana.com/products/cloud";
+    maintainers = with maintainers; [ flokli indeednotjames ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

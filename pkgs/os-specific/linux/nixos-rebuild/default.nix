@@ -3,12 +3,18 @@
 , coreutils
 , gnused
 , gnugrep
+<<<<<<< HEAD
 , jq
 , util-linux
 , nix
 , lib
 , nixosTests
 , installShellFiles
+=======
+, nix
+, lib
+, nixosTests
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 let
   fallback = import ./../../../../nixos/modules/installer/tools/nix-fallback-paths.nix;
@@ -22,6 +28,7 @@ substituteAll {
   nix_x86_64_linux = fallback.x86_64-linux;
   nix_i686_linux = fallback.i686-linux;
   nix_aarch64_linux = fallback.aarch64-linux;
+<<<<<<< HEAD
   path = lib.makeBinPath [ coreutils gnused gnugrep jq util-linux ];
   nativeBuildInputs = [
     installShellFiles
@@ -29,6 +36,9 @@ substituteAll {
   postInstall = ''
     installManPage ${./nixos-rebuild.8}
   '';
+=======
+  path = lib.makeBinPath [ coreutils gnused gnugrep ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   # run some a simple installer tests to make sure nixos-rebuild still works for them
   passthru.tests = {

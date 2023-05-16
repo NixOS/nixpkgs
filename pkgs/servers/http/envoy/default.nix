@@ -24,8 +24,13 @@ let
     # However, the version string is more useful for end-users.
     # These are contained in a attrset of their own to make it obvious that
     # people should update both.
+<<<<<<< HEAD
     version = "1.26.4";
     rev = "cfa32deca25ac57c2bbecdad72807a9b13493fc1";
+=======
+    version = "1.26.1";
+    rev = "c7e8e7356d3a969c1b8e4e1f2687699acd91c6a1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 in
 buildBazelPackage rec {
@@ -36,7 +41,11 @@ buildBazelPackage rec {
     owner = "envoyproxy";
     repo = "envoy";
     inherit (srcVer) rev;
+<<<<<<< HEAD
     hash = "sha256-j5QyqT+9tpChg5JxdSw21rtb9AI036vIiAmzCNzGWGc=";
+=======
+    sha256 = "sha256-WHedup6z/9t/Jg6CBrwtDy9xv6IwO3gUuBqos4h+k2s=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     postFetch = ''
       chmod -R +w $out
@@ -80,8 +89,13 @@ buildBazelPackage rec {
 
   fetchAttrs = {
     sha256 = {
+<<<<<<< HEAD
       x86_64-linux = "sha256-+8MnbcFUyAE2122VA5olWAW8ZgjGweumRI62bxi9KOI=";
       aarch64-linux = "sha256-4PH8rgsHxEwtx8RQGjLbAxHpLfWVqRLOvSX9sqQoy4Y=";
+=======
+      x86_64-linux = "sha256-mw3k2r4heoAcBdcc7uYdnotUBrF1nM5Vmqbay+2DkjI=";
+      aarch64-linux = "sha256-2gSxzm7SXvrGEgwZnp5KdEpbV/+zdosf8Z5lrkK3QiI=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     }.${stdenv.system} or (throw "unsupported system ${stdenv.system}");
     dontUseCmakeConfigure = true;
     dontUseGnConfigure = true;
@@ -103,9 +117,12 @@ buildBazelPackage rec {
       rm -r $bazelOut/external/local_jdk
       rm -r $bazelOut/external/bazel_gazelle_go_repository_tools/bin
 
+<<<<<<< HEAD
       # Remove compiled python
       find $bazelOut -name '*.pyc' -delete
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       # Remove Unix timestamps from go cache.
       rm -rf $bazelOut/external/bazel_gazelle_go_repository_cache/{gocache,pkg/mod/cache,pkg/sumdb}
     '';

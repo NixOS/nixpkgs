@@ -8,7 +8,11 @@
 , pillow
 , pycairo
 , pkg-config
+<<<<<<< HEAD
 , boost182
+=======
+, boost
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , cairo
 , harfbuzz
 , icu
@@ -23,7 +27,10 @@
 , sqlite
 , nose
 , pytestCheckHook
+<<<<<<< HEAD
 , stdenv
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 buildPythonPackage rec {
@@ -61,7 +68,11 @@ buildPythonPackage rec {
 
   buildInputs = [
     mapnik
+<<<<<<< HEAD
     boost182
+=======
+    boost
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     cairo
     harfbuzz
     icu
@@ -99,9 +110,12 @@ buildPythonPackage rec {
   preCheck = ''
     # import from $out
     rm -r mapnik
+<<<<<<< HEAD
   '' + lib.optionalString stdenv.isDarwin ''
     # Replace the hardcoded /tmp references with $TMPDIR
     sed -i "s,/tmp,$TMPDIR,g" test/python_tests/*.py
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '';
 
   # https://github.com/mapnik/python-mapnik/issues/255
@@ -110,7 +124,10 @@ buildPythonPackage rec {
     "test_compare_map"
     "test_dataraster_coloring"
     "test_dataraster_query_point"
+<<<<<<< HEAD
     "test_geometry_type"
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "test_good_files"
     "test_layer_init"
     "test_load_save_map"
@@ -133,8 +150,11 @@ buildPythonPackage rec {
     "test_visual_zoom_all_rendering1"
     "test_visual_zoom_all_rendering2"
     "test_wgs84_inverse_forward"
+<<<<<<< HEAD
   ] ++ lib.optionals stdenv.isDarwin [
     "test_passing_pycairo_context_pdf"
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   pythonImportsCheck = [ "mapnik" ];

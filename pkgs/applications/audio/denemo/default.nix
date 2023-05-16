@@ -1,5 +1,9 @@
 { lib, stdenv, fetchurl, pkg-config
+<<<<<<< HEAD
 , libjack2, gettext, intltool, guile_2_2, lilypond
+=======
+, libjack2, gettext, intltool, guile_2_0, lilypond
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , glib, libxml2, librsvg, libsndfile, aubio
 , gtk3, gtksourceview, evince, fluidsynth, rubberband
 , portaudio, portmidi, fftw, wrapGAppsHook }:
@@ -14,7 +18,11 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
+<<<<<<< HEAD
     libjack2 guile_2_2 lilypond glib libxml2 librsvg libsndfile
+=======
+    libjack2 guile_2_0 lilypond glib libxml2 librsvg libsndfile
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     aubio gtk3 gtksourceview evince fluidsynth rubberband portaudio fftw portmidi
   ];
 

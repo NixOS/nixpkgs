@@ -2,11 +2,19 @@
 
 stdenv.mkDerivation rec {
   pname = "htslib";
+<<<<<<< HEAD
   version = "1.18";
 
   src = fetchurl {
     url = "https://github.com/samtools/htslib/releases/download/${version}/${pname}-${version}.tar.bz2";
     sha256 = "sha256-8atTpZOiMgob+t9O+RXa54QAbFtckiyKgXTXUwqa8Y8=";
+=======
+  version = "1.17";
+
+  src = fetchurl {
+    url = "https://github.com/samtools/htslib/releases/download/${version}/${pname}-${version}.tar.bz2";
+    sha256 = "sha256-djd5KIxA8HZG7HrZi5bDeMc5Fx0WKtmDmIaHg7chg58";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   # perl is only used during the check phase.

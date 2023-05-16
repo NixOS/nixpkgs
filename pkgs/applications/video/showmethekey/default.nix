@@ -13,13 +13,21 @@
 }:
 stdenv.mkDerivation rec {
   pname = "showmethekey";
+<<<<<<< HEAD
   version = "1.8.1";
+=======
+  version = "1.8.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "AlynxZhou";
     repo = pname;
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-IfegYHHFbZbMTA8JWXAun9Gl3BpykH/5RqUIrlYlLhk=";
+=======
+    hash = "sha256-iWZjOhugGD7GikcIKaJimfLrTDaGQeYgmp17N03Meb8=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

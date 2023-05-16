@@ -12,10 +12,17 @@
 mkXfceDerivation {
   category = "apps";
   pname = "xfce4-screenshooter";
+<<<<<<< HEAD
   version = "1.10.4";
   odd-unstable = false;
 
   sha256 = "sha256-jikvMHpmBLTqwDjTxx4AMU8CnfrtSExFauq+gcTX2E8=";
+=======
+  version = "1.10.3";
+  odd-unstable = false;
+
+  sha256 = "sha256-L+qlxzNgjsoMi+VsbOFG7L/IITbF1iqMWqujhk0rAcA=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   buildInputs = [
     exo

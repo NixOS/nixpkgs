@@ -4,7 +4,10 @@
 , boost
 , cairo
 , cmake
+<<<<<<< HEAD
 , desktopToDarwinBundle
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , fetchurl
 , gettext
 , ghostscript
@@ -79,15 +82,27 @@ stdenv.mkDerivation rec {
       # e.g., those from the "Effects" menu.
       python3 = "${python3Env}/bin/python";
     })
+<<<<<<< HEAD
     (substituteAll {
       # Fix path to ps2pdf binary
       src = ./fix-ps2pdf-path.patch;
       inherit ghostscript;
     })
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   postPatch = ''
     patchShebangs share/extensions
+<<<<<<< HEAD
+=======
+    substituteInPlace share/extensions/eps_input.inx \
+      --replace "location=\"path\">ps2pdf" "location=\"absolute\">${ghostscript}/bin/ps2pdf"
+    substituteInPlace share/extensions/ps_input.inx \
+      --replace "location=\"path\">ps2pdf" "location=\"absolute\">${ghostscript}/bin/ps2pdf"
+    substituteInPlace share/extensions/ps_input.py \
+      --replace "call('ps2pdf'" "call('${ghostscript}/bin/ps2pdf'"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     patchShebangs share/templates
     patchShebangs man/fix-roff-punct
 
@@ -107,9 +122,13 @@ stdenv.mkDerivation rec {
   ] ++ (with perlPackages; [
     perl
     XMLParser
+<<<<<<< HEAD
   ]) ++ lib.optionals stdenv.isDarwin [
     desktopToDarwinBundle
   ];
+=======
+  ]);
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   buildInputs = [
     boehmgc
@@ -159,7 +178,10 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     maintainers = [ maintainers.jtojnar ];
     platforms = platforms.all;
+<<<<<<< HEAD
     mainProgram = "inkscape";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     longDescription = ''
       Inkscape is a feature-rich vector graphics editor that edits
       files in the W3C SVG (Scalable Vector Graphics) file format.

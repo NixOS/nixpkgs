@@ -2,12 +2,20 @@
 
 let
   pname = "polypane";
+<<<<<<< HEAD
   version = "14.1.0";
+=======
+  version = "13.0.3";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchurl {
     url = "https://github.com/firstversionist/${pname}/releases/download/v${version}/${pname}-${version}.AppImage";
     name = "${pname}-${version}.AppImage";
+<<<<<<< HEAD
     sha256 = "sha256-UJ4Ccz9PjpmZqJGbJjw3lyqR3VCl9xf3F6WUoBaUEVg=";
+=======
+    sha256 = "sha256-wMWO8eRH8O93m4/HaRTdG3DhyCvHWw+s3sAtN+VLBeY=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   appimageContents = appimageTools.extractType2 {
@@ -16,7 +24,11 @@ let
 in appimageTools.wrapType2 {
   inherit pname src version;
 
+<<<<<<< HEAD
   multiArch = false;
+=======
+  multiPkgs = null;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   extraPkgs = pkgs: appimageTools.defaultFhsEnvArgs.multiPkgs pkgs ++ [ pkgs.bash ];
 
   extraInstallCommands = ''

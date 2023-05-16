@@ -8,7 +8,11 @@ let
       environment.variables.NIXOS_OZONE_WL = "1";
       environment.variables.DISPLAY = "do not use";
 
+<<<<<<< HEAD
       fonts.packages = with pkgs; [ dejavu_fonts ];
+=======
+      fonts.fonts = with pkgs; [ dejavu_fonts ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
     xorg = { pkgs, ... }: {
       imports = [ ./common/user-account.nix ./common/x11.nix ];

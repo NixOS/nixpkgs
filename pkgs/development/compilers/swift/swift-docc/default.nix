@@ -32,7 +32,11 @@ stdenv.mkDerivation {
   # This works around a failure building generate-symbol-graph:
   #  Sources/generate-symbol-graph/main.swift:13:18: error: module 'SwiftDocC' was not compiled for testing
   # TODO: Figure out the cause. It doesn't seem to happen outside Nixpkgs.
+<<<<<<< HEAD
   swiftpmFlags = [ "--product docc" ];
+=======
+  swiftpmFlags = "--product docc";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   # TODO: Tests depend on indexstore-db being provided by an existing Swift
   # toolchain. (ie. looks for `../lib/libIndexStore.so` relative to swiftc.

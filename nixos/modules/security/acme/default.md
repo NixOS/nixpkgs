@@ -189,7 +189,11 @@ security.acme.defaults.email = "admin+acme@example.com";
 security.acme.certs."example.com" = {
   domain = "*.example.com";
   dnsProvider = "rfc2136";
+<<<<<<< HEAD
   environmentFile = "/var/lib/secrets/certs.secret";
+=======
+  credentialsFile = "/var/lib/secrets/certs.secret";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   # We don't need to wait for propagation since this is a local DNS server
   dnsPropagationCheck = false;
 };
@@ -256,7 +260,11 @@ security.acme.acceptTerms = true;
 security.acme.defaults.email = "admin+acme@example.com";
 security.acme.defaults = {
   dnsProvider = "rfc2136";
+<<<<<<< HEAD
   environmentFile = "/var/lib/secrets/certs.secret";
+=======
+  credentialsFile = "/var/lib/secrets/certs.secret";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   # We don't need to wait for propagation since this is a local DNS server
   dnsPropagationCheck = false;
 };

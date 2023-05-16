@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 { lib, pkgs, config, utils, ... }:
+=======
+{ lib, pkgs, config, ... }:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 with lib;
 let
   cfg = config.services.lemmy;
@@ -16,6 +20,7 @@ in
 
     enable = mkEnableOption (lib.mdDoc "lemmy a federated alternative to reddit in rust");
 
+<<<<<<< HEAD
     server = {
       package = mkPackageOptionMD pkgs "lemmy-server" {};
     };
@@ -23,6 +28,9 @@ in
     ui = {
       package = mkPackageOptionMD pkgs "lemmy-ui" {};
 
+=======
+    ui = {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       port = mkOption {
         type = types.port;
         default = 1234;
@@ -31,6 +39,7 @@ in
     };
 
     caddy.enable = mkEnableOption (lib.mdDoc "exposing lemmy with the caddy reverse proxy");
+<<<<<<< HEAD
     nginx.enable = mkEnableOption (lib.mdDoc "exposing lemmy with the nginx reverse proxy");
 
     database = {
@@ -66,6 +75,10 @@ in
       default = null;
       description = lib.mdDoc "File which contains the value of `setup.admin_password`.";
     };
+=======
+
+    database.createLocally = mkEnableOption (lib.mdDoc "creation of database on the instance");
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     settings = mkOption {
       default = { };
@@ -86,6 +99,13 @@ in
           description = lib.mdDoc "Port where lemmy should listen for incoming requests.";
         };
 
+<<<<<<< HEAD
+=======
+        options.federation = {
+          enabled = mkEnableOption (lib.mdDoc "activitypub federation");
+        };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         options.captcha = {
           enabled = mkOption {
             type = types.bool;
@@ -100,6 +120,7 @@ in
         };
       };
     };
+<<<<<<< HEAD
   };
 
   config =
@@ -120,6 +141,18 @@ in
           pictrs = {
             url = with config.services.pict-rs; "http://${address}:${toString port}";
           };
+=======
+
+  };
+
+  config =
+    lib.mkIf cfg.enable {
+      services.lemmy.settings = (mapAttrs (name: mkDefault)
+        {
+          bind = "127.0.0.1";
+          tls_enabled = true;
+          pictrs_url = with config.services.pict-rs; "http://${address}:${toString port}";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           actor_name_max_length = 20;
 
           rate_limit.message = 180;
@@ -131,6 +164,7 @@ in
           rate_limit.image = 6;
           rate_limit.image_per_second = 3600;
         } // {
+<<<<<<< HEAD
           database = mapAttrs (name: mkDefault) {
             user = "lemmy";
             host = "/run/postgresql";
@@ -140,6 +174,16 @@ in
           };
         }) (lib.foldlAttrs (acc: option: data: acc // lib.setAttrByPath data.setting { _secret = option; }) {} secrets);
         # the option name is the id of the credential loaded by LoadCredential
+=======
+        database = mapAttrs (name: mkDefault) {
+          user = "lemmy";
+          host = "/run/postgresql";
+          port = 5432;
+          database = "lemmy";
+          pool_size = 5;
+        };
+      });
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
       services.postgresql = mkIf cfg.database.createLocally {
         enable = true;
@@ -157,11 +201,15 @@ in
         virtualHosts."${cfg.settings.hostname}" = {
           extraConfig = ''
             handle_path /static/* {
+<<<<<<< HEAD
               root * ${cfg.ui.package}/dist
               file_server
             }
             handle_path /static/${cfg.ui.package.passthru.commit_sha}/* {
               root * ${cfg.ui.package}/dist
+=======
+              root * ${pkgs.lemmy-ui}/dist
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
               file_server
             }
             @for_backend {
@@ -190,6 +238,7 @@ in
         };
       };
 
+<<<<<<< HEAD
       services.nginx = mkIf cfg.nginx.enable {
         enable = mkDefault true;
         virtualHosts."${cfg.settings.hostname}".locations = let
@@ -248,6 +297,21 @@ in
         environment = {
           LEMMY_CONFIG_LOCATION = if secrets == {} then settingsFormat.generate "config.hjson" cfg.settings else substitutedConfig;
           LEMMY_DATABASE_URL = if cfg.database.uri != null then cfg.database.uri else (mkIf (cfg.database.createLocally) "postgres:///lemmy?host=/run/postgresql&user=lemmy");
+=======
+      assertions = [{
+        assertion = cfg.database.createLocally -> cfg.settings.database.host == "localhost" || cfg.settings.database.host == "/run/postgresql";
+        message = "if you want to create the database locally, you need to use a local database";
+      }];
+
+      systemd.services.lemmy = {
+        description = "Lemmy server";
+
+        environment = {
+          LEMMY_CONFIG_LOCATION = "/run/lemmy/config.hjson";
+
+          # Verify how this is used, and don't put the password in the nix store
+          LEMMY_DATABASE_URL = with cfg.settings.database;"postgres:///${database}?host=${host}";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         };
 
         documentation = [
@@ -261,6 +325,7 @@ in
 
         requires = lib.optionals cfg.database.createLocally [ "postgresql.service" ];
 
+<<<<<<< HEAD
         # substitute secrets and prevent others from reading the result
         # if somehow $CREDENTIALS_DIRECTORY is not set we fail
         preStart = mkIf (secrets != {}) ''
@@ -278,6 +343,13 @@ in
           PrivateTmp = true;
           MemoryDenyWriteExecute = true;
           NoNewPrivileges = true;
+=======
+        serviceConfig = {
+          DynamicUser = true;
+          RuntimeDirectory = "lemmy";
+          ExecStartPre = "${pkgs.coreutils}/bin/install -m 600 ${settingsFormat.generate "config.hjson" cfg.settings} /run/lemmy/config.hjson";
+          ExecStart = "${pkgs.lemmy-server}/bin/lemmy_server";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         };
       };
 
@@ -286,10 +358,16 @@ in
 
         environment = {
           LEMMY_UI_HOST = "127.0.0.1:${toString cfg.ui.port}";
+<<<<<<< HEAD
           LEMMY_UI_LEMMY_INTERNAL_HOST = "127.0.0.1:${toString cfg.settings.port}";
           LEMMY_UI_LEMMY_EXTERNAL_HOST = cfg.settings.hostname;
           LEMMY_UI_HTTPS = "false";
           NODE_ENV = "production";
+=======
+          LEMMY_INTERNAL_HOST = "127.0.0.1:${toString cfg.settings.port}";
+          LEMMY_EXTERNAL_HOST = cfg.settings.hostname;
+          LEMMY_HTTPS = "false";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         };
 
         documentation = [
@@ -305,8 +383,13 @@ in
 
         serviceConfig = {
           DynamicUser = true;
+<<<<<<< HEAD
           WorkingDirectory = "${cfg.ui.package}";
           ExecStart = "${pkgs.nodejs}/bin/node ${cfg.ui.package}/dist/js/server.js";
+=======
+          WorkingDirectory = "${pkgs.lemmy-ui}";
+          ExecStart = "${pkgs.nodejs}/bin/node ${pkgs.lemmy-ui}/dist/js/server.js";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         };
       };
     };

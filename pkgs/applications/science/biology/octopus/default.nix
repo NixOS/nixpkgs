@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 {lib, stdenv, fetchurl, fetchFromGitHub, cmake, boost179, gmp, htslib, zlib, xz, pkg-config}:
+=======
+{lib, stdenv, fetchurl, fetchFromGitHub, cmake, boost, gmp, htslib, zlib, xz, pkg-config}:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 stdenv.mkDerivation rec {
   pname = "octopus";
@@ -12,7 +16,11 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake pkg-config ];
+<<<<<<< HEAD
   buildInputs = [ boost179 gmp htslib zlib xz ];
+=======
+  buildInputs = [ boost gmp htslib zlib xz ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   patches = [ (fetchurl {
     url = "https://github.com/luntergroup/octopus/commit/17a597d192bcd5192689bf38c5836a98b824867a.patch";

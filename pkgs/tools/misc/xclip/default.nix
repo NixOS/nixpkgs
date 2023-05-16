@@ -20,6 +20,9 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/astrand/xclip";
     license = lib.licenses.gpl2;
     platforms = lib.platforms.all;
+<<<<<<< HEAD
     mainProgram = "xclip";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

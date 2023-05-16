@@ -3,7 +3,10 @@
 , aresponses
 , buildPythonPackage
 , fetchFromGitHub
+<<<<<<< HEAD
 , fetchpatch
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , poetry-core
 , pytest-aiohttp
 , pytest-asyncio
@@ -25,6 +28,7 @@ buildPythonPackage rec {
     hash = "sha256-7NrOoc1gi8YzZaKvCnHnzAKPlMnMhqxjdyZGN5H/8TQ=";
   };
 
+<<<<<<< HEAD
   patches = [
     # This patch removes references to setuptools and wheel that are no longer
     # necessary and changes poetry to poetry-core, so that we don't need to add
@@ -39,6 +43,8 @@ buildPythonPackage rec {
     })
   ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nativeBuildInputs = [
     poetry-core
   ];
@@ -47,8 +53,11 @@ buildPythonPackage rec {
     aiohttp
   ];
 
+<<<<<<< HEAD
   __darwinAllowLocalNetworking = true;
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nativeCheckInputs = [
     aresponses
     pytest-aiohttp

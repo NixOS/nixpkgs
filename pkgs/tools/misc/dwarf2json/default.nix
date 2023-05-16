@@ -11,12 +11,20 @@ buildGoModule rec {
     sha256 = "sha256-hnS00glAcj78mZp5as63CsEn+dcr+GNEkz8iC3KM0h0=";
   };
 
+<<<<<<< HEAD
   vendorHash = "sha256-tgs0l+sYdAxMHwVTew++keNpDyrHmevpmOBVIiuL+34=";
+=======
+  vendorSha256 = "sha256-tgs0l+sYdAxMHwVTew++keNpDyrHmevpmOBVIiuL+34=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   meta = with lib; {
     homepage = "https://github.com/volatilityfoundation/dwarf2json";
     description = "Convert ELF/DWARF symbol and type information into vol3's intermediate JSON";
     license = licenses.vol-sl;
+<<<<<<< HEAD
+=======
+    platforms = platforms.unix;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     maintainers = with maintainers; [ arkivm ];
   };
 }

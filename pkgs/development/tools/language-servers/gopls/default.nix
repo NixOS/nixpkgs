@@ -2,17 +2,29 @@
 
 buildGoModule rec {
   pname = "gopls";
+<<<<<<< HEAD
   version = "0.13.2";
+=======
+  version = "0.11.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "golang";
     repo = "tools";
     rev = "gopls/v${version}";
+<<<<<<< HEAD
     hash = "sha256-fRpVAYg4UwRe3bcjQPOnCGWSANfoTwD5Y9vs3QET1eM=";
   };
 
   modRoot = "gopls";
   vendorHash = "sha256-9d7vgCMc1M5Cab+O10lQmKGfL9gqO3sajd+3rF5cums=";
+=======
+    sha256 = "sha256-49TDAxFx4kSwCn1YGQgMn3xLG3RHCCttMzqUfm4OPtE=";
+  };
+
+  modRoot = "gopls";
+  vendorSha256 = "sha256-1/stMvxsCs2OPMN7KGbZ61s2qGT5Yg7kHVHsWi6ekcY=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   doCheck = false;
 

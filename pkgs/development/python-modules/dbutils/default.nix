@@ -30,6 +30,10 @@ buildPythonPackage rec {
     description = "Database connections for multi-threaded environments";
     homepage = "https://webwareforpython.github.io/DBUtils/";
     license = licenses.mit;
+<<<<<<< HEAD
     maintainers = with maintainers; [ ];
+=======
+    maintainers = with maintainers; [ SuperSandro2000 ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

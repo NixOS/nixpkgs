@@ -27,8 +27,12 @@
     simpleUefiGrub
     simpleUefiGrubSpecialisation
     simpleUefiSystemdBoot
+<<<<<<< HEAD
     stratisRoot
     swraid
+=======
+    # swraid
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     zfsroot
     ;
 

@@ -9,13 +9,21 @@
 
 buildGoModule rec {
   pname = "kaniko";
+<<<<<<< HEAD
   version = "1.15.0";
+=======
+  version = "1.9.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "GoogleContainerTools";
     repo = "kaniko";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-PNAqdeB/ya3i1hRbagpfmpwS0tNRZbWBm9YIXME1HMc=";
+=======
+    hash = "sha256-dXQ0/o1qISv+sjNVIpfF85bkbM9sGOGwqVbWZpMWfMY=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   vendorHash = null;
@@ -47,7 +55,11 @@ buildGoModule rec {
     homepage = "https://github.com/GoogleContainerTools/kaniko";
     license = lib.licenses.asl20;
     platforms = lib.platforms.linux;
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [ jk qjoly ];
+=======
+    maintainers = with lib.maintainers; [ jk ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     mainProgram = "executor";
   };
 }

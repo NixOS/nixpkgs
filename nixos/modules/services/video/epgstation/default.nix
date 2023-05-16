@@ -80,11 +80,19 @@ in
   options.services.epgstation = {
     enable = lib.mkEnableOption (lib.mdDoc description);
 
+<<<<<<< HEAD
     package = lib.mkPackageOptionMD pkgs "epgstation" { };
 
     ffmpeg = lib.mkPackageOptionMD pkgs "ffmpeg" {
       default = [ "ffmpeg-headless" ];
       example = "pkgs.ffmpeg-full";
+=======
+    package = lib.mkOption {
+      default = pkgs.epgstation;
+      type = lib.types.package;
+      defaultText = lib.literalExpression "pkgs.epgstation";
+      description = lib.mdDoc "epgstation package to use";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
 
     usePreconfiguredStreaming = lib.mkOption {
@@ -264,9 +272,12 @@ in
       description = "EPGStation user";
       group = config.users.groups.epgstation.name;
       isSystemUser = true;
+<<<<<<< HEAD
 
       # NPM insists on creating ~/.npm
       home = "/var/cache/epgstation";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
 
     users.groups.epgstation = { };
@@ -278,8 +289,11 @@ in
       package = lib.mkDefault pkgs.mariadb;
       ensureDatabases = [ cfg.database.name ];
       # FIXME: enable once mysqljs supports auth_socket
+<<<<<<< HEAD
       # https://github.com/mysqljs/mysql/issues/1507
       #
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       # ensureUsers = [ {
       #   name = username;
       #   ensurePermissions = { "${cfg.database.name}.*" = "ALL PRIVILEGES"; };
@@ -297,8 +311,13 @@ in
             database = cfg.database.name;
           };
 
+<<<<<<< HEAD
           ffmpeg = lib.mkDefault "${cfg.ffmpeg}/bin/ffmpeg";
           ffprobe = lib.mkDefault "${cfg.ffmpeg}/bin/ffprobe";
+=======
+          ffmpeg = lib.mkDefault "${pkgs.ffmpeg-full}/bin/ffmpeg";
+          ffprobe = lib.mkDefault "${pkgs.ffmpeg-full}/bin/ffprobe";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
           # for disambiguation with TypeScript files
           recordedFileExtension = lib.mkDefault ".m2ts";
@@ -310,6 +329,7 @@ in
       ];
 
     systemd.tmpfiles.rules = [
+<<<<<<< HEAD
       "d '/var/lib/epgstation/key' - ${username} ${groupname} - -"
       "d '/var/lib/epgstation/streamfiles' - ${username} ${groupname} - -"
       "d '/var/lib/epgstation/drop' - ${username} ${groupname} - -"
@@ -319,6 +339,11 @@ in
       "d '/var/lib/epgstation/db/migrations/mysql' - ${username} ${groupname} - -"
       "d '/var/lib/epgstation/db/migrations/postgres' - ${username} ${groupname} - -"
       "d '/var/lib/epgstation/db/migrations/sqlite' - ${username} ${groupname} - -"
+=======
+      "d '/var/lib/epgstation/streamfiles' - ${username} ${groupname} - -"
+      "d '/var/lib/epgstation/recorded' - ${username} ${groupname} - -"
+      "d '/var/lib/epgstation/thumbnail' - ${username} ${groupname} - -"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     ];
 
     systemd.services.epgstation = {
@@ -329,14 +354,20 @@ in
         ++ lib.optional config.services.mirakurun.enable "mirakurun.service"
         ++ lib.optional config.services.mysql.enable "mysql.service";
 
+<<<<<<< HEAD
       environment.NODE_ENV = "production";
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       serviceConfig = {
         ExecStart = "${cfg.package}/bin/epgstation start";
         ExecStartPre = "+${preStartScript}";
         User = username;
         Group = groupname;
+<<<<<<< HEAD
         CacheDirectory = "epgstation";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         StateDirectory = "epgstation";
         LogsDirectory = "epgstation";
         ConfigurationDirectory = "epgstation";

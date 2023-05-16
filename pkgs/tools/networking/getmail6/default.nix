@@ -5,15 +5,23 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "getmail6";
+<<<<<<< HEAD
   version = "6.18.13";
 
   format = "setuptools";
+=======
+  version = "6.18.12";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-cyX+3LsXqBpAvaOPVpT4EuPzqJm9kki1uNTG+7k3Q28=";
+=======
+    hash = "sha256-b+zDoiOD80BTP5VDpW/swur8zJOqYEWe05e/ZupZjyk=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   # needs a Docker setup

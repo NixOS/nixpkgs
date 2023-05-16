@@ -18,6 +18,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-e8MGJGirulCv8+y4sizmdxlgNgCYkGiO9FM6qn+S5uQ=";
   };
 
+<<<<<<< HEAD
   patches = [
     # A bugfix https://gitlab.com/hepcedar/yoda/-/merge_requests/116
     (fetchpatch {
@@ -27,6 +28,8 @@ stdenv.mkDerivation rec {
     })
   ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nativeBuildInputs = with python.pkgs; [
     cython
     makeWrapper

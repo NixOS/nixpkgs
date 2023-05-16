@@ -38,7 +38,11 @@ buildPythonPackage rec {
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
+<<<<<<< HEAD
     sourceRoot = "${src.name}/aardwolf/utils/rlers";
+=======
+    sourceRoot = "source/aardwolf/utils/rlers";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     name = "${pname}-${version}";
     hash = "sha256-JGXTCCyC20EuUX0pP3xSZG3qFB5jRL7+wW2YRC3EiCc=";
   };

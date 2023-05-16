@@ -2,12 +2,20 @@
 , xercesc, xml-security-c, pkg-config, xsd, zlib, xalanc, xxd }:
 
 stdenv.mkDerivation rec {
+<<<<<<< HEAD
   version = "3.16.0";
+=======
+  version = "3.15.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pname = "libdigidocpp";
 
   src = fetchurl {
      url = "https://github.com/open-eid/libdigidocpp/releases/download/v${version}/libdigidocpp-${version}.tar.gz";
+<<<<<<< HEAD
      hash = "sha256-XgObeVQJ2X7hNIelGK55RTtkKvU6D+RkLMc24/PZCzY=";
+=======
+     hash = "sha256-CNHBPeodU2EzvmQBa9KI+1vGuuD25gSwdU9dVhVG04Q=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ cmake pkg-config xxd ];

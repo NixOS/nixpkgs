@@ -23,16 +23,27 @@
 
 buildPythonPackage rec {
   pname = "aesara";
+<<<<<<< HEAD
   version = "2.9.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
+=======
+  version = "2.8.12";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.7";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "aesara-devs";
     repo = "aesara";
     rev = "refs/tags/rel-${version}";
+<<<<<<< HEAD
     hash = "sha256-eanFkEiuPzm4InLd9dFmoLs/IOofObn9NIzaqzINdMQ=";
+=======
+    hash = "sha256-lRc0IGpxkSnVeziFOYX7f99P7WNvz1KHy73qMPrU24I=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

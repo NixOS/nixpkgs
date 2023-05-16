@@ -2,6 +2,10 @@
 , testers
 , stdenv
 , fetchFromGitHub
+<<<<<<< HEAD
+=======
+, fetchpatch
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , openssl
 , libsamplerate
 , swig
@@ -15,17 +19,39 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "pjsip";
+<<<<<<< HEAD
   version = "2.13.1";
+=======
+  version = "2.13";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = finalAttrs.pname;
     repo = "pjproject";
+<<<<<<< HEAD
     rev = "refs/tags/${finalAttrs.version}";
     hash = "sha256-R1iKIkWyNCRV2PjQgTqKmJYUgHAZrREanD60Jz6MY1Y=";
+=======
+    rev = finalAttrs.version;
+    sha256 = "sha256-yzszmm3uIyXtYFgZtUP3iswLx4u/8UbFt80Ln25ToFE=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   patches = [
     ./fix-aarch64.patch
+<<<<<<< HEAD
+=======
+    (fetchpatch {
+      name = "CVE-2022-23537.patch";
+      url = "https://github.com/pjsip/pjproject/commit/d8440f4d711a654b511f50f79c0445b26f9dd1e1.patch";
+      sha256 = "sha256-7ueQCHIiJ7MLaWtR4+GmBc/oKaP+jmEajVnEYqiwLRA=";
+    })
+    (fetchpatch {
+      name = "CVE-2022-23547.patch";
+      url = "https://github.com/pjsip/pjproject/commit/bc4812d31a67d5e2f973fbfaf950d6118226cf36.patch";
+      sha256 = "sha256-bpc8e8VAQpfyl5PX96G++6fzkFpw3Or1PJKNPKl7N5k=";
+    })
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   nativeBuildInputs =
@@ -102,8 +128,14 @@ stdenv.mkDerivation (finalAttrs: {
     command = "pjsua --version";
   };
 
+<<<<<<< HEAD
   passthru.tests.pkg-config = testers.hasPkgConfigModules {
     package = finalAttrs.finalPackage;
+=======
+  passthru.tests.pkg-config = testers.hasPkgConfigModule {
+    package = finalAttrs.finalPackage;
+    moduleName = "libpjproject";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   passthru.tests.python-pjsua2 = runCommand "python-pjsua2" { } ''
@@ -117,8 +149,11 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with maintainers; [ olynch ];
     mainProgram = "pjsua";
     platforms = platforms.linux ++ platforms.darwin;
+<<<<<<< HEAD
     pkgConfigModules = [
       "libpjproject"
     ];
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 })

@@ -12,27 +12,44 @@
 , glib
 , gtk3
 , gtk4
+<<<<<<< HEAD
 , gtksourceview4
 , libadwaita
 , libhandy
 , webkitgtk_4_1
 , webkitgtk_6_0
+=======
+, libadwaita
+, libhandy
+, webkitgtk
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , nix-update-script
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "cambalache";
+<<<<<<< HEAD
   version = "0.12.1";
 
   format = "other";
 
   # Did not fetch submodule since it is only for tests we don't run.
+=======
+  version = "0.10.3";
+
+  format = "other";
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "jpu";
     repo = pname;
     rev = version;
+<<<<<<< HEAD
     sha256 = "sha256-kGCpccWIhaeWrzLlrDI7Vzd0KuAIKxvLrDuSqWtpSLU=";
+=======
+    sha256 = "sha256-Xm8h3BBRibdLCeI/OeprF5dCCiNrfJCg7aE24uleCds=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [
@@ -54,9 +71,13 @@ python3.pkgs.buildPythonApplication rec {
     glib
     gtk3
     gtk4
+<<<<<<< HEAD
     gtksourceview4
     webkitgtk_4_1
     webkitgtk_6_0
+=======
+    webkitgtk
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     # For extra widgets support.
     libadwaita
     libhandy
@@ -68,7 +89,11 @@ python3.pkgs.buildPythonApplication rec {
   postPatch = ''
     patchShebangs postinstall.py
     # those programs are used at runtime not build time
+<<<<<<< HEAD
     # https://gitlab.gnome.org/jpu/cambalache/-/blob/0.12.1/meson.build#L79-80
+=======
+    # https://gitlab.gnome.org/jpu/cambalache/-/blob/main/meson.build#L79-80
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     substituteInPlace ./meson.build \
       --replace "find_program('broadwayd', required: true)" "" \
       --replace "find_program('gtk4-broadwayd', required: true)" ""

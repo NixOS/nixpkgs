@@ -6,7 +6,10 @@
 , gzip
 , lib
 , makeWrapper
+<<<<<<< HEAD
 , nix-update-script
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , nixosTests
 , openssh
 , pam
@@ -17,6 +20,7 @@
 , stdenv
 , fetchFromGitea
 , buildNpmPackage
+<<<<<<< HEAD
 }:
 
 let
@@ -25,6 +29,17 @@ let
     inherit (forgejo) src version;
 
     npmDepsHash = "sha256-YZzVw+WWqTmJafqnZ5vrzb7P6V4DTMNQwW1/+wvZEM8=";
+=======
+, writeShellApplication
+}:
+
+let
+  frontend = buildNpmPackage rec {
+    pname = "forgejo-frontend";
+    inherit (forgejo) src version;
+
+    npmDepsHash = "sha256-dB/uBuS0kgaTwsPYnqklT450ejLHcPAqBdDs3JT8Uxg=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     patches = [
       ./package-json-npm-build-frontend.patch
@@ -39,17 +54,28 @@ let
 in
 buildGoModule rec {
   pname = "forgejo";
+<<<<<<< HEAD
   version = "1.20.4-0";
+=======
+  version = "1.19.3-0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "forgejo";
     repo = "forgejo";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-guKU3VG1Wyhr5p6w0asL/CopQ5b7HiNi26Tw8WCEpwE=";
   };
 
   vendorHash = "sha256-dgtZjsLBwblhdge3BvdbK/mN/TeZKps9K5dJbqomtjo=";
+=======
+    hash = "sha256-0T26EsU5lJ+Rxy/jSDn8nTk5IdHO8oK3LvN7tPArPgs=";
+  };
+
+  vendorHash = "sha256-bnLcHmwOh/fw6ecgsndX2BmVf11hJWllE+f2J8YSzec=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   subPackages = [ "." ];
 
@@ -89,16 +115,23 @@ buildGoModule rec {
       --prefix PATH : ${lib.makeBinPath [ bash git gzip openssh ]}
   '';
 
+<<<<<<< HEAD
   # $data is not available in goModules.drv and preBuild isn't needed
+=======
+  # $data is not available in go-modules.drv and preBuild isn't needed
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   overrideModAttrs = (_: {
     postPatch = null;
     preBuild = null;
   });
 
   passthru = {
+<<<<<<< HEAD
     # allow nix-update to handle npmDepsHash
     inherit (frontend) npmDeps;
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     data-compressed = runCommand "forgejo-data-compressed" {
       nativeBuildInputs = [ brotli xorg.lndir ];
     } ''
@@ -112,6 +145,7 @@ buildGoModule rec {
     '';
 
     tests = nixosTests.forgejo;
+<<<<<<< HEAD
     updateScript = nix-update-script { };
   };
 
@@ -121,6 +155,16 @@ buildGoModule rec {
     changelog = "https://codeberg.org/forgejo/forgejo/releases/tag/${src.rev}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ emilylange urandom bendlas adamcstephens ];
+=======
+  };
+
+  meta = with lib; {
+    description = "A self-hosted lightweight software forge";
+    homepage = "https://forgejo.org";
+    changelog = "https://codeberg.org/forgejo/forgejo/releases/tag/v${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ indeednotjames urandom ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     broken = stdenv.isDarwin;
     mainProgram = "gitea";
   };

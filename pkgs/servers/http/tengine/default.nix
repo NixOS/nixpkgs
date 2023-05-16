@@ -10,14 +10,22 @@
 with lib;
 
 stdenv.mkDerivation rec {
+<<<<<<< HEAD
   version = "3.0.0";
+=======
+  version = "2.4.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pname = "tengine";
 
   src = fetchFromGitHub {
     owner = "alibaba";
     repo = pname;
     rev = version;
+<<<<<<< HEAD
     hash = "sha256-nUwPT7374dfE/T6yuCUynObq6LxBHDp90Dj2JGwJ4+M=";
+=======
+    hash = "sha256-h/eSa2wCPvnX29wdtDHNQh8r1No1/YGinZNYU2MnsTM=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   buildInputs =

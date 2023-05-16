@@ -9,7 +9,11 @@ mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
+<<<<<<< HEAD
   sourceRoot = "${src.name}/herqq";
+=======
+  sourceRoot = "source/herqq";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   src = fetchFromGitHub {
     owner = "ThomArmax";
     repo = "HUPnP";

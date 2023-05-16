@@ -61,14 +61,23 @@ in {
     machine.wait_for_unit("lxd.service")
     machine.wait_for_file("/var/lib/lxd/unix.socket")
 
+<<<<<<< HEAD
     # Wait for lxd to settle
     machine.succeed("lxd waitready")
+=======
+    # It takes additional second for lxd to settle
+    machine.sleep(1)
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     # lxd expects the pool's directory to already exist
     machine.succeed("mkdir /var/lxd-pool")
 
     machine.succeed(
+<<<<<<< HEAD
         "lxd init --minimal"
+=======
+        "cat ${./common/lxd/config.yaml} | lxd init --preseed"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     )
 
     machine.succeed(

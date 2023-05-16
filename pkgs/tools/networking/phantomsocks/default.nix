@@ -1,11 +1,14 @@
 { lib
 , buildGoModule
 , fetchFromGitHub
+<<<<<<< HEAD
 , stdenv
 , libpcap
 # Cann't be build with both pcap and rawsocket tags
 , withPcap ? (!stdenv.isLinux && !withRawsocket)
 , withRawsocket ? (stdenv.isLinux && !withPcap)
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 buildGoModule rec {
@@ -21,6 +24,7 @@ buildGoModule rec {
 
   vendorHash = "sha256-c0NQfZuMMWz1ASwFBcpMNjxZwXLo++gMYBiNgvT8ZLQ=";
 
+<<<<<<< HEAD
   ldflags = [
     "-s" "-w"
   ];
@@ -28,6 +32,8 @@ buildGoModule rec {
   tags = lib.optional withPcap "pcap"
     ++ lib.optional withRawsocket "rawsocket";
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   meta = with lib;{
     homepage = "https://github.com/macronut/phantomsocks";
     description = "A cross-platform proxy client/server for Linux/Windows/macOS";

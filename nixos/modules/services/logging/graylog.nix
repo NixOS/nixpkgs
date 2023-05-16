@@ -37,8 +37,13 @@ in
 
       package = mkOption {
         type = types.package;
+<<<<<<< HEAD
         default = if versionOlder config.system.stateVersion "23.05" then pkgs.graylog-3_3 else pkgs.graylog-5_1;
         defaultText = literalExpression (if versionOlder config.system.stateVersion "23.05" then "pkgs.graylog-3_3" else "pkgs.graylog-5_1");
+=======
+        default = pkgs.graylog;
+        defaultText = literalExpression "pkgs.graylog";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         description = lib.mdDoc "Graylog package to use.";
       };
 

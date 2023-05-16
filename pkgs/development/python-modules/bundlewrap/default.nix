@@ -18,7 +18,11 @@
 
 buildPythonPackage rec {
   pname = "bundlewrap";
+<<<<<<< HEAD
   version = "4.17.2";
+=======
+  version = "4.17.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -27,7 +31,11 @@ buildPythonPackage rec {
     owner = "bundlewrap";
     repo = "bundlewrap";
     rev = "refs/tags/${version}";
+<<<<<<< HEAD
     hash = "sha256-0yg8+OflTF3pNYz2TPNUW8ubTZjrEgtihV/21PpJUlM=";
+=======
+    hash = "sha256-hdTJcuhVMbLqtPclgj4u6XwH0A5DvnGpnkhIG6Gm8+4=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ setuptools ];

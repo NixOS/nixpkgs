@@ -82,8 +82,11 @@ stdenv.mkDerivation (finalAttrs: {
     repo = finalAttrs.src.repo;
   };
 
+<<<<<<< HEAD
   requiredSystemFeatures = [ "big-parallel" ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   meta = with lib; {
     description = "ROCm LAPACK implementation";
     homepage = "https://github.com/ROCmSoftwarePlatform/rocSOLVER";

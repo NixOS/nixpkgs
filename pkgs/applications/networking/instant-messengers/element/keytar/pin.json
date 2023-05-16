@@ -1,5 +1,9 @@
 {
   "version": "7.9.0",
+<<<<<<< HEAD
   "srcHash": "sha256-Mnl0Im2hZJXJEtyXb5rgMntekkUAnOG2MN1bwfgh0eg=",
+=======
+  "srcHash": "Mnl0Im2hZJXJEtyXb5rgMntekkUAnOG2MN1bwfgh0eg=",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   "npmHash": "sha256-ldfRWV+HXBdBYO2ZiGbVFSHV4/bMG43U7w+sJ4kpVUY="
 }

@@ -9,9 +9,13 @@
 , six
 , nose
 , mako
+<<<<<<< HEAD
 , config
 , cudaSupport ? config.cudaSupport
 , cudaPackages ? { }
+=======
+, cudaSupport ? false, cudaPackages
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , openclSupport ? true, ocl-icd, clblas
 }:
 

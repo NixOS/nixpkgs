@@ -30,6 +30,15 @@
     enable = true;
   };
 
+<<<<<<< HEAD
+=======
+  # Theme calamares with GNOME theme
+  qt = {
+    enable = true;
+    platformTheme = "gnome";
+  };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   # Fix scaling for calamares on wayland
   environment.variables = {
     QT_QPA_PLATFORM = "$([[ $XDG_SESSION_TYPE = \"wayland\" ]] && echo \"wayland\")";

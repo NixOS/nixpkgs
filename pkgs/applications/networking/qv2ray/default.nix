@@ -21,13 +21,22 @@
 
 mkDerivation rec {
   pname = "qv2ray";
+<<<<<<< HEAD
   version = "unstable-2023-06-09";
+=======
+  version = "unstable-2022-09-25";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "Qv2ray";
     repo = "Qv2ray";
+<<<<<<< HEAD
     rev = "aea9981cc28fe25de55207b93d86036b30d467d2";
     hash = "sha256-ySXAF6fkkKsafuSa3DxkOuRjSyiCDUZRevcfJRp7LPM=";
+=======
+    rev = "fb44fb1421941ab192229ff133bc28feeb4a8ce5";
+    sha256 = "sha256-TngDgLXKyAoQFnXpBNaz4QjfkVwfZyuQwatdhEiI57U=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     fetchSubmodules = true;
   };
 

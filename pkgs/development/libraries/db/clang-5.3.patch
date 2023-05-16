@@ -139,6 +139,7 @@ index 106b161..fc4de9d 100644
  		} else {
  			DB_ASSERT(env, sharecount > 0);
  			MEMBAR_EXIT();
+<<<<<<< HEAD
 diff -ur a/dist/aclocal/clock.m4 b/dist/aclocal/clock.m4
 --- a/dist/aclocal/clock.m4	1969-12-31 19:00:01.000000000 -0500
 +++ b/dist/aclocal/clock.m4	2023-06-05 19:14:02.007080500 -0400
@@ -247,3 +248,5 @@ diff -ur a/dist/aclocal/sequence.m4 b/dist/aclocal/sequence.m4
  			$db_cv_seq_type l;
  			unsigned $db_cv_seq_type u;
  			char buf@<:@100@:>@;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)

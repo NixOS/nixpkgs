@@ -1,11 +1,18 @@
 { lib
 , stdenv
 , fetchFromGitHub
+<<<<<<< HEAD
 , fetchpatch
 , cmake
 , asciidoc
 , pkg-config
 , boost179
+=======
+, cmake
+, asciidoc
+, pkg-config
+, boost17x
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , cmark
 , coeurl
 , curl
@@ -43,6 +50,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-2daXxTbpSUlig47y901JOkWRxbZGH4qrvNMepJbvS3o=";
   };
 
+<<<<<<< HEAD
   patches = [
     # The 2 following patches can be removed with the next version bump.
     # Backport of https://github.com/Nheko-Reborn/nheko/commit/e89e65dc17020772eb057414b4f0c5d6f4ad98d0.
@@ -59,6 +67,8 @@ stdenv.mkDerivation rec {
     })
   ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nativeBuildInputs = [
     asciidoc
     cmake
@@ -68,7 +78,11 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+<<<<<<< HEAD
     boost179
+=======
+    boost17x
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     cmark
     coeurl
     curl

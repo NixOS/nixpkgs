@@ -43,6 +43,10 @@ buildPythonPackage rec {
     description = "Unified tool for collecting system logs and other debug information";
     homepage = "https://github.com/sosreport/sos";
     license = licenses.gpl2Only;
+<<<<<<< HEAD
     maintainers = with maintainers; [ ];
+=======
+    maintainers = with maintainers; [ SuperSandro2000 ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

@@ -69,7 +69,11 @@ in stdenv.mkDerivation {
 
     license = licenses.gpl2Plus;
 
+<<<<<<< HEAD
     maintainers = with maintainers; [ ];
+=======
+    maintainers = with maintainers; [ jtojnar ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     platforms = platforms.unix;
     hydraPlatforms = platforms.linux; # sdl-config times out on darwin
   };

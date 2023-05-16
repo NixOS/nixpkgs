@@ -25,7 +25,13 @@ python3.pkgs.buildPythonApplication rec {
     ./configdir.patch
   ];
 
+<<<<<<< HEAD
   nativeBuildInputs = [ intltool pandoc wrapGAppsHook gobject-introspection ];
+=======
+  nativeBuildInputs = [ intltool pandoc wrapGAppsHook ];
+
+  buildInputs = [ gobject-introspection ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   propagatedBuildInputs = [
      gtk3

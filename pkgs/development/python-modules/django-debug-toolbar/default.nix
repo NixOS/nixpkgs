@@ -12,16 +12,27 @@
 
 buildPythonPackage rec {
   pname = "django-debug-toolbar";
+<<<<<<< HEAD
   version = "4.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
+=======
+  version = "3.8.1";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.7";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "jazzband";
     repo = pname;
     rev = "refs/tags/${version}";
+<<<<<<< HEAD
     hash = "sha256-hPO2q3V69kpyahav4cgUHz/3WLxXnZYCyWGetyNS+2Q=";
+=======
+    hash = "sha256-GlEw25wem8iwwm3rYLk6TFEAIzC1pYjpSHdAkHwtFcE=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [
@@ -59,5 +70,9 @@ buildPythonPackage rec {
     changelog = "https://django-debug-toolbar.readthedocs.io/en/latest/changes.html";
     license = licenses.bsd3;
     maintainers = with maintainers; [ yuu ];
+<<<<<<< HEAD
   };
+=======
+};
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }

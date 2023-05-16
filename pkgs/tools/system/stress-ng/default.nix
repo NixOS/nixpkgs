@@ -4,13 +4,21 @@
 
 stdenv.mkDerivation rec {
   pname = "stress-ng";
+<<<<<<< HEAD
   version = "0.16.04";
+=======
+  version = "0.15.06";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "ColinIanKing";
     repo = pname;
     rev = "V${version}";
+<<<<<<< HEAD
     hash = "sha256-Qr1t+xyl0aS2tSB+DyS7oXOkbcJRaSabS6g/qc8hdWc=";
+=======
+    hash = "sha256-64PEeVpbFs0BjH4DvATlwErxqeJl/vn5otfiylT1RNk=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   postPatch = ''

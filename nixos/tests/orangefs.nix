@@ -62,7 +62,11 @@ in {
             "sudo -g orangefs -u orangefs pvfs2-server -f /etc/orangefs/server.conf"
         )
 
+<<<<<<< HEAD
     # start services after storage is formatted on all machines
+=======
+    # start services after storage is formated on all machines
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     for server in server1, server2:
         server.succeed("systemctl start orangefs-server.service")
 

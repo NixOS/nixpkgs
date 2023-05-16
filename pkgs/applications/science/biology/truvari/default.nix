@@ -1,6 +1,9 @@
 { lib
 , fetchFromGitHub
+<<<<<<< HEAD
 , fetchpatch
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , python3Packages
 , runtimeShell
 , bcftools
@@ -25,6 +28,7 @@ in python3Packages.buildPythonApplication rec {
     hash = "sha256-UJNMKEV5m2jFqnWvkVAtymkcE2TjPIXp7JqRZpMSqsE=";
   };
 
+<<<<<<< HEAD
   patches = [
     (fetchpatch {
       name = "fix-anno-trf-on-darwin.patch";
@@ -38,6 +42,8 @@ in python3Packages.buildPythonApplication rec {
     })
   ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   postPatch = ''
     substituteInPlace setup.py \
       --replace "rich==" "rich>="

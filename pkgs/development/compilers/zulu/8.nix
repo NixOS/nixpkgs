@@ -106,7 +106,10 @@ in stdenv.mkDerivation {
 
   meta = with lib; {
     homepage = "https://www.azul.com/products/zulu/";
+<<<<<<< HEAD
     sourceProvenance = with sourceTypes; [ binaryBytecode binaryNativeCode ];
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     license = licenses.gpl2;
     description = "Certified builds of OpenJDK";
     longDescription = ''

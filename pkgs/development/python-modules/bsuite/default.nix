@@ -10,7 +10,11 @@
 , absl-py
 , dm-env
 , plotnine
+<<<<<<< HEAD
 , scikit-image
+=======
+, scikitimage
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , dm-tree
 , patsy
 , tensorflow-probability
@@ -45,7 +49,11 @@ let bsuite = buildPythonPackage rec {
     pandas
     patsy
     plotnine
+<<<<<<< HEAD
     scikit-image
+=======
+    scikitimage
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     scipy
     statsmodels
     termcolor

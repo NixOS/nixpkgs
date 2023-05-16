@@ -1,5 +1,9 @@
+<<<<<<< HEAD
 { stdenv
 , lib
+=======
+{ lib
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , buildPythonPackage
 , fetchFromGitHub
 , jsonschema
@@ -55,6 +59,7 @@ buildPythonPackage rec {
     changelog = "https://github.com/devicetree-org/dt-schema/releases/tag/v${version}";
     license = with licenses; [ bsd2 /* or */ gpl2Only ];
     maintainers = with maintainers; [ sorki ];
+<<<<<<< HEAD
 
     broken = (
       # Library not loaded: @rpath/libfdt.1.dylib
@@ -63,6 +68,8 @@ buildPythonPackage rec {
       # see https://github.com/devicetree-org/dt-schema/issues/108
       versionAtLeast jsonschema.version "4.18"
     );
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }
 

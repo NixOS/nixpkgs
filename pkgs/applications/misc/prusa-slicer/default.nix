@@ -1,8 +1,11 @@
 { stdenv
 , lib
+<<<<<<< HEAD
 , openexr
 , jemalloc
 , c-blosc
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , binutils
 , fetchFromGitHub
 , cmake
@@ -24,12 +27,16 @@
 , ilmbase
 , libpng
 , mpfr
+<<<<<<< HEAD
 , nanosvg
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , nlopt
 , opencascade-occt
 , openvdb
 , pcre
 , qhull
+<<<<<<< HEAD
 , tbb_2021_8
 , wxGTK32
 , xorg
@@ -70,6 +77,30 @@ in
 stdenv.mkDerivation rec {
   pname = "prusa-slicer";
   version = "2.6.0";
+=======
+, tbb
+, wxGTK31
+, xorg
+, fetchpatch
+, withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd, systemd
+}:
+let
+  wxGTK-prusa = wxGTK31.overrideAttrs (old: rec {
+    pname = "wxwidgets-prusa3d-patched";
+    version = "3.1.4";
+    src = fetchFromGitHub {
+      owner = "prusa3d";
+      repo = "wxWidgets";
+      rev = "489f6118256853cf5b299d595868641938566cdb";
+      hash = "sha256-xGL5I2+bPjmZGSTYe1L7VAmvLHbwd934o/cxg9baEvQ=";
+      fetchSubmodules = true;
+    };
+  });
+in
+stdenv.mkDerivation rec {
+  pname = "prusa-slicer";
+  version = "2.5.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nativeBuildInputs = [
     cmake
@@ -94,6 +125,7 @@ stdenv.mkDerivation rec {
     ilmbase
     libpng
     mpfr
+<<<<<<< HEAD
     nanosvg-fltk
     nlopt
     opencascade-occt
@@ -102,11 +134,40 @@ stdenv.mkDerivation rec {
     qhull
     tbb_2021_8
     wxGTK-override'
+=======
+    nlopt
+    opencascade-occt
+    openvdb
+    pcre
+    tbb
+    wxGTK-prusa
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     xorg.libX11
   ] ++ lib.optionals withSystemd [
     systemd
   ] ++ nativeCheckInputs;
 
+<<<<<<< HEAD
+=======
+  patches = [
+    # Fix detection of TBB, see https://github.com/prusa3d/PrusaSlicer/issues/6355
+    (fetchpatch {
+      url = "https://github.com/prusa3d/PrusaSlicer/commit/76f4d6fa98bda633694b30a6e16d58665a634680.patch";
+      sha256 = "1r806ycp704ckwzgrw1940hh1l6fpz0k1ww3p37jdk6mygv53nv6";
+    })
+    # Fix compile error with boost 1.79. See https://github.com/prusa3d/PrusaSlicer/issues/8238
+    # Can be removed with the next version update
+    (fetchpatch {
+      url = "https://github.com/prusa3d/PrusaSlicer/commit/408e56f0390f20aaf793e0aa0c70c4d9544401d4.patch";
+      sha256 = "sha256-vzEPjLE3Yy5szawPn2Yp3i7MceWewpdnLUPVu9+H3W8=";
+    })
+    (fetchpatch {
+      url = "https://github.com/prusa3d/PrusaSlicer/commit/926ae0471800abd1e5335e251a5934570eb8f6ff.patch";
+      sha256 = "sha256-tAEgubeGGKFWY7r7p/6pmI2HXUGKi2TM1X5ILVZVT20=";
+    })
+  ];
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   doCheck = true;
   nativeCheckInputs = [ gtest ];
 
@@ -131,8 +192,15 @@ stdenv.mkDerivation rec {
     # now seems to be integrated into the main lib.
     sed -i 's|nlopt_cxx|nlopt|g' cmake/modules/FindNLopt.cmake
 
+<<<<<<< HEAD
     # Disable slic3r_jobs_tests.cpp as the test fails sometimes
     sed -i 's|slic3r_jobs_tests.cpp||g' tests/slic3rutils/CMakeLists.txt
+=======
+    # Disable test_voronoi.cpp as the assembler hangs during build,
+    # likely due to commit e682dd84cff5d2420fcc0a40508557477f6cc9d3
+    # See issue #185808 for details.
+    sed -i 's|test_voronoi.cpp||g' tests/libslic3r/CMakeLists.txt
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     # prusa-slicer expects the OCCTWrapper shared library in the same folder as
     # the executable when loading STEP files. We force the loader to find it in
@@ -142,10 +210,13 @@ stdenv.mkDerivation rec {
       substituteInPlace src/libslic3r/Format/STEP.cpp \
         --replace 'libpath /= "OCCTWrapper.so";' 'libpath = "OCCTWrapper.so";'
     fi
+<<<<<<< HEAD
     # https://github.com/prusa3d/PrusaSlicer/issues/9581
     if [ -f "cmake/modules/FindEXPAT.cmake" ]; then
       rm cmake/modules/FindEXPAT.cmake
     fi
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     # Fix resources folder location on macOS
     substituteInPlace src/PrusaSlicer.cpp \
@@ -155,6 +226,7 @@ stdenv.mkDerivation rec {
     sed -i '/libslic3r/d' tests/CMakeLists.txt
   '';
 
+<<<<<<< HEAD
   patches = [
     # wxWidgets: CheckResizerFlags assert fix
     (fetchpatch {
@@ -167,6 +239,12 @@ stdenv.mkDerivation rec {
     owner = "prusa3d";
     repo = "PrusaSlicer";
     hash = "sha256-6AZdwNcgddHePyB0bNS7xGmpz38uzhAwUxgo48OQLuU=";
+=======
+  src = fetchFromGitHub {
+    owner = "prusa3d";
+    repo = "PrusaSlicer";
+    sha256 = "sha256-oQRBVAbA2wOYZkQiYIgbd3UcKAkXjnNXo6gB5QbPDAs=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     rev = "version_${version}";
   };
 

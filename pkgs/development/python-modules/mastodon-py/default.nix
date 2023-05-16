@@ -18,7 +18,11 @@
 
 buildPythonPackage rec {
   pname = "mastodon-py";
+<<<<<<< HEAD
   version = "1.8.1";
+=======
+  version = "1.8.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   format = "setuptools";
 
@@ -26,7 +30,11 @@ buildPythonPackage rec {
     owner = "halcy";
     repo = "Mastodon.py";
     rev = "refs/tags/${version}";
+<<<<<<< HEAD
     hash = "sha256-r0AAUjd2MBfZANEpyztMNyaQTlGWvWoUVjJNO1eL218=";
+=======
+    hash = "sha256-T/yG9LLdttBQ+9vCSit+pyQX/BPqqDXbrTcPfTAUu1U=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   postPatch = ''

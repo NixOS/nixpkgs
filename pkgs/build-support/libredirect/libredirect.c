@@ -70,12 +70,18 @@ static void init()
 
 }
 
+<<<<<<< HEAD
 static const char * rewrite(const char * volatile path, char * buf)
 {
     // Marking the path volatile is needed so the the following check isn't
     // optimized away by the compiler.
     if (path == NULL) return path;
 
+=======
+static const char * rewrite(const char * path, char * buf)
+{
+    if (path == NULL) return path;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     for (int n = 0; n < nrRedirects; ++n) {
         int len = strlen(from[n]);
         if (strncmp(path, from[n], len) != 0) continue;
@@ -109,7 +115,11 @@ static int open_needs_mode(int flags)
 
 WRAPPER(int, open)(const char * path, int flags, ...)
 {
+<<<<<<< HEAD
     int (*open_real) (const char *, int, ...) = LOOKUP_REAL(open);
+=======
+    int (*open_real) (const char *, int, mode_t) = LOOKUP_REAL(open);
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     mode_t mode = 0;
     if (open_needs_mode(flags)) {
         va_list ap;
@@ -142,7 +152,11 @@ WRAPPER_DEF(open64)
 
 WRAPPER(int, openat)(int dirfd, const char * path, int flags, ...)
 {
+<<<<<<< HEAD
     int (*openat_real) (int, const char *, int, ...) = LOOKUP_REAL(openat);
+=======
+    int (*openat_real) (int, const char *, int, mode_t) = LOOKUP_REAL(openat);
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     mode_t mode = 0;
     if (open_needs_mode(flags)) {
         va_list ap;

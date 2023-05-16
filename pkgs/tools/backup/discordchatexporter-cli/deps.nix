@@ -3,6 +3,7 @@
 
 { fetchNuGet }: [
   (fetchNuGet { pname = "AdvancedStringBuilder"; version = "0.1.0"; sha256 = "1lpv5sggdxza0bmcqmzf5r4i340f0m7nr5073lac18naj5697q5g"; })
+<<<<<<< HEAD
   (fetchNuGet { pname = "AngleSharp"; version = "1.0.4"; sha256 = "1b4qd0z27fdkgy5l8fqcbpzwm29gmmjm2h0mqb9ac94rv6ynq510"; })
   (fetchNuGet { pname = "AsyncKeyedLock"; version = "6.2.1"; sha256 = "0281mj9ppz6q454li6xyllb1hdfkl59bh3psbj4z6l9xjbhnjhz0"; })
   (fetchNuGet { pname = "CliFx"; version = "2.3.4"; sha256 = "14nj8w3j0hbsr5cghj39jx2sh5cg3wsvl517dk8whva5kgy3q1mf"; })
@@ -18,4 +19,16 @@
   (fetchNuGet { pname = "System.Text.Encoding.CodePages"; version = "7.0.0"; sha256 = "0sn6hxdjm7bw3xgsmg041ccchsa4sp02aa27cislw3x61dbr68kq"; })
   (fetchNuGet { pname = "WebMarkupMin.Core"; version = "2.14.0"; sha256 = "0c41zw1bwz6ybxagq5vr26cx7najd17rrdbqjpn8mabynq380ayr"; })
   (fetchNuGet { pname = "YoutubeExplode"; version = "6.3.1"; sha256 = "1rkj7rjm8vl4lygfqbil5cgj271wvnhcdpcybb74m6mlf7w7dg1q"; })
+=======
+  (fetchNuGet { pname = "CliFx"; version = "2.3.0"; sha256 = "0dxxd5hm7gnc1lhq7k266nkcl84w0844r3cdxdcksvcc786f43vp"; })
+  (fetchNuGet { pname = "DotnetRuntimeBootstrapper"; version = "2.3.1"; sha256 = "0zsicyizachdam64mjm1brh5a3nzf7j8nalyhwnw26wk3v3rgmc9"; })
+  (fetchNuGet { pname = "Gress"; version = "2.0.1"; sha256 = "00xhyfkrlc38nbl6aymr7zwxc3kj0rxvx5gwk6fkfrvi1pzgq0wc"; })
+  (fetchNuGet { pname = "JsonExtensions"; version = "1.2.0"; sha256 = "0g54hibabbqqfhxjlnxwv1rxagpali5agvnpymp2w3dk8h6q66xy"; })
+  (fetchNuGet { pname = "MiniRazor.CodeGen"; version = "2.2.2"; sha256 = "11mxv1p7ahjzpf3sgacfx6szv1xwwk33vpz1r6wb2nch5dx93vdx"; })
+  (fetchNuGet { pname = "MiniRazor.Runtime"; version = "2.2.2"; sha256 = "1bjnqx06gzc13kpbhyndzfrvwgmxi7j0nbaxm7cmb1g7zq06vzrb"; })
+  (fetchNuGet { pname = "Polly"; version = "7.2.3"; sha256 = "1iws4jd5iqj5nlfp16fg9p5vfqqas1si0cgh8xcj64y433a933cv"; })
+  (fetchNuGet { pname = "Spectre.Console"; version = "0.44.0"; sha256 = "0f4q52rmib0q3vg7ij6z73mnymyas7c7wrm8dfdhrkdzn53zwl6p"; })
+  (fetchNuGet { pname = "Superpower"; version = "3.0.0"; sha256 = "0p6riay4732j1fahc081dzgs9q4z3n2fpxrin4zfpj6q2226dhz4"; })
+  (fetchNuGet { pname = "WebMarkupMin.Core"; version = "2.12.0"; sha256 = "1v4dcrpz2icm73w1pfrcjanx0x4j1khi65pyf1xd712lfpm7gpyd"; })
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 ]

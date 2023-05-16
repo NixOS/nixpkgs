@@ -42,7 +42,11 @@ stdenv.mkDerivation rec {
 
   # This is needed by freeimage
   patches = [ ./0001-Compile-transupp.c-as-part-of-the-library.patch ]
+<<<<<<< HEAD
     ++ lib.optional stdenv.hostPlatform.isMinGW
+=======
+    ++ lib.optional (stdenv.hostPlatform.libc or null == "msvcrt")
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     ./mingw-boolean.patch;
 
   outputs = [ "bin" "dev" "dev_private" "out" "man" "doc" ];

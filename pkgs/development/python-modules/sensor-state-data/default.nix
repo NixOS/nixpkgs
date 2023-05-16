@@ -10,7 +10,11 @@
 
 buildPythonPackage rec {
   pname = "sensor-state-data";
+<<<<<<< HEAD
   version = "2.17.1";
+=======
+  version = "2.14.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -19,7 +23,11 @@ buildPythonPackage rec {
     owner = "Bluetooth-Devices";
     repo = pname;
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-zfgkTBdE8UWwk+G3bLBThVjgU+m2QoPf1fzORyznEgs=";
+=======
+    hash = "sha256-ICr/IyzzWX1u4qndZYlPpAMlI3Z1A9povzPseMkIZ4U=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

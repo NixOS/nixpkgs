@@ -27,11 +27,19 @@
 
 stdenv.mkDerivation rec {
   pname = "spice";
+<<<<<<< HEAD
   version = "0.15.2";
 
   src = fetchurl {
     url = "https://www.spice-space.org/download/releases/spice-server/${pname}-${version}.tar.bz2";
     sha256 = "sha256-bZ62EX8DkXRxxLwQAEq+z/SKefuF64WhxF8CM3cBW4E=";
+=======
+  version = "0.15.1";
+
+  src = fetchurl {
+    url = "https://www.spice-space.org/download/releases/spice-server/${pname}-${version}.tar.bz2";
+    sha256 = "ramvZ6syGRa9frWePWGaSneWwIooxzLt/H8C/ICxo3o=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   patches = [
@@ -82,7 +90,11 @@ stdenv.mkDerivation rec {
   postPatch = ''
     patchShebangs build-aux
 
+<<<<<<< HEAD
     # Forgotten in 0.15.2 tarball
+=======
+    # Forgotten in 0.15.1 tarball
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     sed -i /meson.add_dist_script/d meson.build
   '';
 

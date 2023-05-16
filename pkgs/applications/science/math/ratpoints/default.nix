@@ -12,7 +12,11 @@ stdenv.mkDerivation rec {
 
   patches = [
     (fetchpatch {
+<<<<<<< HEAD
       url = "https://raw.githubusercontent.com/sagemath/sage/1615f58890e8f9881c4228c78a6b39b9aab1303a/build/pkgs/ratpoints/patches/sturm_and_rp_private.patch";
+=======
+      url = "https://git.sagemath.org/sage.git/plain/build/pkgs/ratpoints/patches/sturm_and_rp_private.patch?id=1615f58890e8f9881c4228c78a6b39b9aab1303a";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       sha256 = "0q3wajncyfr3gahd8gwk9x7g56zw54lpywrl63lqk7drkf60mrcl";
     })
   ];

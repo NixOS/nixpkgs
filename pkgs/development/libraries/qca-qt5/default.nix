@@ -2,11 +2,19 @@
 
 stdenv.mkDerivation rec {
   pname = "qca-qt5";
+<<<<<<< HEAD
   version = "2.3.6";
 
   src = fetchurl {
     url = "http://download.kde.org/stable/qca/${version}/qca-${version}.tar.xz";
     sha256 = "sha256-7lnVMdS4L7FoX02NdMLKoHd/UBgA90JuqjchCaQwUkk=";
+=======
+  version = "2.3.5";
+
+  src = fetchurl {
+    url = "http://download.kde.org/stable/qca/${version}/qca-${version}.tar.xz";
+    sha256 = "sha256-kffZFqs2kr9ZkfClU7+BUxYb/doUvQBdSAorTjhDYug=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   buildInputs = [ openssl qtbase ];

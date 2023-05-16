@@ -2,12 +2,20 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "zinit";
+<<<<<<< HEAD
   version = "3.12.0";
+=======
+  version = "3.7";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   src = fetchFromGitHub {
     owner = "zdharma-continuum";
     repo = pname;
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-AiYK1pRFD4CGvBcQg9QwgFjc5Z564TVlWW0MzxoxdWU=";
+=======
+    hash = "sha256-B+cTGz+U8MR22l6xXdRAAjDr+ulCk+CJ9GllFMK0axE=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
   # adapted from https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=zsh-zplugin-git
   dontBuild = true;
@@ -20,9 +28,15 @@ stdenvNoCC.mkDerivation rec {
 
     # Zplugin's source files
     install -dm0755 "$outdir"
+<<<<<<< HEAD
     # Installing backward compatibility layer
     install -m0644 zinit{,-side,-install,-autoload}.zsh "$outdir"
     install -m0755 share/git-process-output.zsh "$outdir"
+=======
+    # Installing also backward compatibility layer
+    install -m0644 z{plugin,init}{,-side,-install,-autoload}.zsh "$outdir"
+    install -m0755 git-process-output.zsh "$outdir"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     # Zplugin autocompletion
     installShellCompletion --zsh _zinit

@@ -1,7 +1,10 @@
 import ./make-test-python.nix ({ lib, pkgs, ... }: let
 
   testId = "7CFNTQM-IMTJBHJ-3UWRDIU-ZGQJFR6-VCXZ3NB-XUH3KZO-N52ITXR-LAIYUAU";
+<<<<<<< HEAD
   testName = "testDevice foo'bar";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 in {
   name = "syncthing-init";
@@ -10,6 +13,7 @@ in {
   nodes.machine = {
     services.syncthing = {
       enable = true;
+<<<<<<< HEAD
       settings.devices.testDevice = {
         id = testId;
       };
@@ -18,6 +22,16 @@ in {
         devices = [ "testDevice" ];
       };
       settings.gui.user = "guiUser";
+=======
+      devices.testDevice = {
+        id = testId;
+      };
+      folders.testFolder = {
+        path = "/tmp/test";
+        devices = [ "testDevice" ];
+      };
+      extraOptions.gui.user = "guiUser";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
   };
 

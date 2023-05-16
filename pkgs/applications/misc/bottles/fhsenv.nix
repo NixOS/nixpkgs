@@ -1,4 +1,9 @@
+<<<<<<< HEAD
 { buildFHSEnv
+=======
+{ lib
+, buildFHSEnv
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , symlinkJoin
 , bottles-unwrapped
 , gst_all_1
@@ -7,9 +12,12 @@
 }:
 
 let fhsEnv = {
+<<<<<<< HEAD
   # Many WINE games need 32bit
   multiArch = true;
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   targetPkgs = pkgs: with pkgs; [
     bottles-unwrapped
     # This only allows to enable the toggle, vkBasalt won't work if not installed with environment.systemPackages (or nix-env)

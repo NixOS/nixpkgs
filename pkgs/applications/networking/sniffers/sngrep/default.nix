@@ -3,7 +3,10 @@
 , autoconf
 , automake
 , fetchFromGitHub
+<<<<<<< HEAD
 , fetchpatch
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , libpcap
 , ncurses
 , openssl
@@ -21,6 +24,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-gFba2wOU4GwpOZTo5A2QpBgnC6OgDJEeyaPGHbA+7tA=";
   };
 
+<<<<<<< HEAD
   patches = [
     (fetchpatch {
       name = "CVE-2023-36192.patch";
@@ -29,6 +33,8 @@ stdenv.mkDerivation rec {
     })
   ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nativeBuildInputs = [
     autoconf
     automake
@@ -53,8 +59,11 @@ stdenv.mkDerivation rec {
     ./bootstrap.sh
   '';
 
+<<<<<<< HEAD
   doCheck = true;
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   meta = with lib; {
     description = "A tool for displaying SIP calls message flows from terminal";
     homepage = "https://github.com/irontec/sngrep";

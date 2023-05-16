@@ -45,6 +45,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
           regular2 = foreground;
         };
       };
+<<<<<<< HEAD
 
       etc."gpg-agent.conf".text = ''
         pinentry-timeout 86400
@@ -52,6 +53,11 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
     };
 
     fonts.packages = [ pkgs.inconsolata ];
+=======
+    };
+
+    fonts.fonts = [ pkgs.inconsolata ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     # Automatically configure and start Sway when logging in on tty1:
     programs.bash.loginShellInit = ''
@@ -75,6 +81,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
     virtualisation.qemu.options = [ "-vga none -device virtio-gpu-pci" ];
   };
 
+<<<<<<< HEAD
   testScript = { nodes, ... }: ''
     import shlex
     import json
@@ -122,6 +129,18 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
             return any(pattern in name for name in nodes)
 
         retry(func)
+=======
+  enableOCR = true;
+
+  testScript = { nodes, ... }: ''
+    import shlex
+
+    def swaymsg(command: str, succeed=True):
+        with machine.nested(f"sending swaymsg {command!r}" + " (allowed to fail)" * (not succeed)):
+          (machine.succeed if succeed else machine.execute)(
+            f"su - alice -c {shlex.quote('swaymsg -- ' + command)}"
+          )
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     start_all()
     machine.wait_for_unit("multi-user.target")
@@ -135,7 +154,11 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
 
     # Test XWayland (foot does not support X):
     swaymsg("exec WINIT_UNIX_BACKEND=x11 WAYLAND_DISPLAY=invalid alacritty")
+<<<<<<< HEAD
     wait_for_window("alice@machine")
+=======
+    machine.wait_for_text("alice@machine")
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     machine.send_chars("test-x11\n")
     machine.wait_for_file("/tmp/test-x11-exit-ok")
     print(machine.succeed("cat /tmp/test-x11.out"))
@@ -147,7 +170,11 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
     machine.send_key("alt-3")
     machine.sleep(3)
     machine.send_key("alt-ret")
+<<<<<<< HEAD
     wait_for_window("alice@machine")
+=======
+    machine.wait_for_text("alice@machine")
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     machine.send_chars("test-wayland\n")
     machine.wait_for_file("/tmp/test-wayland-exit-ok")
     print(machine.succeed("cat /tmp/test-wayland.out"))
@@ -158,6 +185,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
 
     # Test gpg-agent starting pinentry-gnome3 via D-Bus (tests if
     # $WAYLAND_DISPLAY is correctly imported into the D-Bus user env):
+<<<<<<< HEAD
     swaymsg("exec mkdir -p ~/.gnupg")
     swaymsg("exec cp /etc/gpg-agent.conf ~/.gnupg")
 
@@ -165,17 +193,27 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
     machine.wait_until_succeeds("pgrep --exact gpg")
     wait_for_window("gpg")
     machine.succeed("pgrep --exact gpg")
+=======
+    swaymsg("exec gpg --no-tty --yes --quick-generate-key test")
+    machine.wait_until_succeeds("pgrep --exact gpg")
+    machine.wait_for_text("Passphrase")
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     machine.screenshot("gpg_pinentry")
     machine.send_key("alt-shift-q")
     machine.wait_until_fails("pgrep --exact gpg")
 
     # Test swaynag:
+<<<<<<< HEAD
     def get_height():
         return [node['rect']['height'] for node in walk(swaymsg(type="get_tree")) if node['focused']][0]
 
     before = get_height()
     machine.send_key("alt-shift-e")
     retry(lambda _: get_height() < before)
+=======
+    machine.send_key("alt-shift-e")
+    machine.wait_for_text("You pressed the exit shortcut.")
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     machine.screenshot("sway_exit")
 
     swaymsg("exec swaylock")

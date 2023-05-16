@@ -3,7 +3,10 @@
 , fetchpatch
 , nixosTests
 , python3
+<<<<<<< HEAD
 , fetchPypi
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , radicale3
 }:
 
@@ -16,6 +19,7 @@ let
           inherit version;
           hash = "sha256-4RIMIoyi9VO0cN9KX6knq2YlhGdSYGmYGz6wqRkCaH0=";
         };
+<<<<<<< HEAD
 
         patches = [
           # Pulling in this patch lets us continue running tests without any
@@ -27,6 +31,8 @@ let
             includes = [ "src/flask/cli.py" ];
           })
         ];
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       });
       flask-wtf = super.flask-wtf.overridePythonAttrs (old: rec {
         version = "0.15.1";
@@ -56,7 +62,11 @@ in python.pkgs.buildPythonApplication rec {
   pname = "etesync-dav";
   version = "0.32.1";
 
+<<<<<<< HEAD
   src = fetchPypi {
+=======
+  src = python.pkgs.fetchPypi {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     inherit pname version;
     hash = "sha256-pOLug5MnVdKaw5wedABewomID9LU0hZPCf4kZKKU1yA=";
   };

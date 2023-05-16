@@ -33,6 +33,10 @@ buildGoModule rec {
     homepage = "https://github.com/dim-an/cod/";
     license = licenses.asl20;
     maintainers = with maintainers; [ SuperSandro2000 ];
+<<<<<<< HEAD
     broken = stdenv.isDarwin;
+=======
+    broken = true;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

@@ -23,7 +23,10 @@
 , sqlite
 , Cocoa
 , IOKit
+<<<<<<< HEAD
 , IOBluetooth
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , libsamplerate
 , shaderc
 }:
@@ -112,7 +115,11 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optional (stdenv.hostPlatform.isWindows || stdenv.hostPlatform.isLinux) libopenglrecorder
   ++ lib.optional stdenv.hostPlatform.isLinux openal
+<<<<<<< HEAD
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ OpenAL IOKit Cocoa IOBluetooth libsamplerate ];
+=======
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ OpenAL IOKit Cocoa libsamplerate ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   cmakeFlags = [
     "-DBUILD_RECORDER=${if (stdenv.hostPlatform.isWindows || stdenv.hostPlatform.isLinux) then "ON" else "OFF"}"

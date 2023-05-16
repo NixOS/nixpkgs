@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 { lib, buildPythonPackage, fetchFromGitHub, matrix-synapse-unwrapped, twisted }:
+=======
+{ lib, buildPythonPackage, fetchFromGitHub, matrix-synapse, twisted }:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 buildPythonPackage rec {
   pname = "matrix-synapse-shared-secret-auth";
@@ -14,7 +18,11 @@ buildPythonPackage rec {
   doCheck = false;
   pythonImportsCheck = [ "shared_secret_authenticator" ];
 
+<<<<<<< HEAD
   buildInputs = [ matrix-synapse-unwrapped ];
+=======
+  buildInputs = [ matrix-synapse ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   propagatedBuildInputs = [ twisted ];
 
   meta = with lib; {

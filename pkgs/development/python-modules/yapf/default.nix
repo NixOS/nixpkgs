@@ -3,34 +3,52 @@
 , fetchPypi
 , isPyPy
 , nose
+<<<<<<< HEAD
 , importlib-metadata
 , platformdirs
 , tomli
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 buildPythonPackage rec {
   pname = "yapf";
+<<<<<<< HEAD
   version = "0.40.1";
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-lYWH61yOxshgEZqcJdAq3fMKRPdaoVKkIg0w5WqYA3w=";
+=======
+  version = "0.32.0";
+
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-o/UIXTfvfj4ATEup+bPkDFT/GQHNER8FFFrjE6fGfRs=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   # nose is unavailable on pypy
   doCheck = !isPyPy;
 
+<<<<<<< HEAD
   propagatedBuildInputs = [
     importlib-metadata
     platformdirs
     tomli
   ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nativeCheckInputs = [
     nose
   ];
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     homepage = "https://github.com/google/yapf";
     description = "Yet Another Python Formatter";
     longDescription = ''
@@ -53,7 +71,12 @@ buildPythonPackage rec {
       that a programmer would write if they were following the style guide. It
       takes away some of the drudgery of maintaining your code.
     '';
+<<<<<<< HEAD
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ AndersonTorres siddharthist ];
+=======
+    license = licenses.asl20;
+    maintainers = with maintainers; [ AndersonTorres siddharthist ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

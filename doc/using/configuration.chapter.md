@@ -185,10 +185,15 @@ You can define a function called `packageOverrides` in your local `~/.config/nix
 
 The following attributes can be passed in [`config`](#chap-packageconfig).
 
+<<<<<<< HEAD
 ```{=include=} options
 id-prefix: opt-
 list-id: configuration-variable-list
 source: ../config-options.json
+=======
+```{=docbook}
+<include xmlns="http://www.w3.org/2001/XInclude" href="../doc-support/result/config-options.docbook.xml"/>
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 ```
 
 

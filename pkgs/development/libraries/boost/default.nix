@@ -16,6 +16,15 @@ let
       }
     );
 in {
+<<<<<<< HEAD
+=======
+  boost168 = makeBoost ./1.68.nix;
+  boost169 = makeBoost ./1.69.nix;
+  boost170 = makeBoost ./1.70.nix;
+  boost172 = makeBoost ./1.72.nix;
+  boost173 = makeBoost ./1.73.nix;
+  boost174 = makeBoost ./1.74.nix;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   boost175 = makeBoost ./1.75.nix;
   boost177 = makeBoost ./1.77.nix;
   boost178 = makeBoost ./1.78.nix;
@@ -23,5 +32,8 @@ in {
   boost180 = makeBoost ./1.80.nix;
   boost181 = makeBoost ./1.81.nix;
   boost182 = makeBoost ./1.82.nix;
+<<<<<<< HEAD
   boost183 = makeBoost ./1.83.nix;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }

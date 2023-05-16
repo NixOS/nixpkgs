@@ -15,9 +15,15 @@ buildPythonPackage rec {
     sha256 = "0qv2kv7vc3qqlzxsisgg31cmrkkqgnmxspbj10c5fhdmwzzwi0i9";
   };
 
+<<<<<<< HEAD
   nativeBuildInputs = [ makeWrapper gobject-introspection ];
   buildInputs = [
     glibcLocales gtk3 libsoup libsecret
+=======
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [
+    glibcLocales gobject-introspection gtk3 libsoup libsecret
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   propagatedBuildInputs = [

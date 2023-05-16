@@ -1,25 +1,42 @@
 { lib
 , fetchFromGitHub
+<<<<<<< HEAD
 , python3
+=======
+, python3Packages
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , glibcLocales
 , coreutils
 , git
 }:
 
+<<<<<<< HEAD
 python3.pkgs.buildPythonApplication rec {
   pname = "xonsh";
   version = "0.14.0";
   format = "pyproject";
+=======
+python3Packages.buildPythonApplication rec {
+  pname = "xonsh";
+  version = "0.13.4";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   # fetch from github because the pypi package ships incomplete tests
   src = fetchFromGitHub {
     owner = "xonsh";
     repo = "xonsh";
     rev = "refs/tags/${version}";
+<<<<<<< HEAD
     hash = "sha256-ZrPKKa/vl06QAjGr16ZzKF/DAByFHr6ze2WVOCa+wf8=";
   };
 
   env.LC_ALL = "en_US.UTF-8";
+=======
+    sha256 = "sha256-/u8jA7sLy3N8483uIzqBeSxEAGhX7+XS4D14n+15JHU=";
+  };
+
+  LC_ALL = "en_US.UTF-8";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   postPatch = ''
     sed -ie "s|/bin/ls|${coreutils}/bin/ls|" tests/test_execer.py
@@ -30,6 +47,7 @@ python3.pkgs.buildPythonApplication rec {
     find scripts -name 'xonsh*' -exec sed -i -e "s|env -S|env|" {} \;
     find -name "*.xsh" | xargs sed -ie 's|/usr/bin/env|${coreutils}/bin/env|'
     patchShebangs .
+<<<<<<< HEAD
   '';
 
   nativeBuildInputs = with python3.pkgs; [
@@ -37,6 +55,23 @@ python3.pkgs.buildPythonApplication rec {
     wheel
   ];
 
+=======
+
+    substituteInPlace scripts/xon.sh \
+      --replace 'python' "${python3Packages.python}/bin/python"
+
+  '';
+
+  makeWrapperArgs = [
+    "--prefix PYTHONPATH : ${placeholder "out"}/lib/${python3Packages.python.libPrefix}/site-packages"
+  ];
+
+  postInstall = ''
+    wrapProgram $out/bin/xonsh \
+      $makeWrapperArgs
+  '';
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   disabledTests = [
     # fails on sandbox
     "test_colorize_file"
@@ -69,9 +104,15 @@ python3.pkgs.buildPythonApplication rec {
   '';
 
   nativeCheckInputs = [ glibcLocales git ] ++
+<<<<<<< HEAD
     (with python3.pkgs; [ pip pyte pytestCheckHook pytest-mock pytest-subprocess ]);
 
   propagatedBuildInputs = with python3.pkgs; [ ply prompt-toolkit pygments ];
+=======
+    (with python3Packages; [ pyte pytestCheckHook pytest-mock pytest-subprocess ]);
+
+  propagatedBuildInputs = with python3Packages; [ ply prompt-toolkit pygments ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   meta = with lib; {
     description = "A Python-ish, BASHwards-compatible shell";
@@ -83,6 +124,9 @@ python3.pkgs.buildPythonApplication rec {
 
   passthru = {
     shellPath = "/bin/xonsh";
+<<<<<<< HEAD
     python = python3;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

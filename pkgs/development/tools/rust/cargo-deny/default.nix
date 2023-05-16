@@ -2,13 +2,23 @@
 , rustPlatform
 , fetchFromGitHub
 , pkg-config
+<<<<<<< HEAD
 , zstd
 , stdenv
+=======
+, libgit2_1_5
+, openssl
+, zlib
+, zstd
+, stdenv
+, curl
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , darwin
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-deny";
+<<<<<<< HEAD
   version = "0.14.2";
 
   src = fetchFromGitHub {
@@ -30,6 +40,33 @@ rustPlatform.buildRustPackage rec {
     darwin.apple_sdk.frameworks.Security
   ];
 
+=======
+  version = "0.13.9";
+
+  src = fetchFromGitHub {
+    owner = "EmbarkStudios";
+    repo = pname;
+    rev = version;
+    hash = "sha256-fkbYPn7GmnOgLvJqbizVKKLBnzVn0Ji6jQc23DimIX4=";
+  };
+
+  cargoHash = "sha256-WHr2Ky0LlK/EVOrSK3MF9Yt/Qe/6o7Ftx7X8iECj6pM=";
+
+  nativeBuildInputs = [ pkg-config ];
+
+  buildInputs = [
+    libgit2_1_5
+    openssl
+    zlib
+    zstd
+  ] ++ lib.optionals stdenv.isDarwin [
+    curl
+    darwin.apple_sdk.frameworks.Security
+  ];
+
+  buildNoDefaultFeatures = true;
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   env = {
     ZSTD_SYS_USE_PKG_CONFIG = true;
   };

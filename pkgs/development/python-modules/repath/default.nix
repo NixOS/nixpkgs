@@ -1,7 +1,13 @@
 { lib
+<<<<<<< HEAD
 , buildPythonPackage
 , fetchPypi
 , six
+=======
+, python3
+, buildPythonPackage
+, fetchPypi
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 buildPythonPackage rec {
@@ -13,7 +19,11 @@ buildPythonPackage rec {
     hash = "sha256-gpITm6xqDkP9nXBgXU6NrrJdRmcuSE7TGiTHzgrvD7c=";
   };
 
+<<<<<<< HEAD
   propagatedBuildInputs = [
+=======
+  propagatedBuildInputs = with python3.pkgs; [
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     six
   ];
 

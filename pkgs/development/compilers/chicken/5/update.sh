@@ -1,5 +1,9 @@
 #!/usr/bin/env nix-shell
+<<<<<<< HEAD
 #! nix-shell -I nixpkgs=../../../../.. -i oil -p oil chicken
+=======
+#! nix-shell -i oil -p oil chicken
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 export URL_PREFIX="https://code.call-cc.org/egg-tarballs/5/"
 cd $(nix-prefetch-url \

@@ -8,13 +8,21 @@
 
 stdenv.mkDerivation rec {
   pname = "openal-soft";
+<<<<<<< HEAD
   version = "1.23.1";
+=======
+  version = "1.22.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "kcat";
     repo = "openal-soft";
     rev = version;
+<<<<<<< HEAD
     sha256 = "sha256-jwY1NzNJdWIvVv7TvJyg4cIGFLWGZhL3BkMI1NbOEG0=";
+=======
+    sha256 = "sha256-MVM0qCZDWcO7/Hnco+0dBqzBLcWD279xjx0slxxlc4w=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   patches = [

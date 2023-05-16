@@ -44,11 +44,14 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     sed -e 's@/usr/bin/less@${less}/bin/less@' -i src/unix/terminal.cc
+<<<<<<< HEAD
   '' + lib.optionalString (lib.versionAtLeast boost.version "1.73") ''
     find . -type f -exec sed -i \
       -e 's/ E(/ internal_E(/g' \
       -e 's/{E(/{internal_E(/g' \
       {} +
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '';
 
   CXXFLAGS=" --std=c++11 ";

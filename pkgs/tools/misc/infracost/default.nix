@@ -2,15 +2,25 @@
 
 buildGoModule rec {
   pname = "infracost";
+<<<<<<< HEAD
   version = "0.10.29";
+=======
+  version = "0.10.21";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "infracost";
     rev = "v${version}";
     repo = "infracost";
+<<<<<<< HEAD
     sha256 = "sha256-xtxTIC7DNTvcDMXtFJOJkJGn78HdzCWVrBMS5Ksmtcc=";
   };
   vendorHash = "sha256-ZKRtUlrEk/W2qZSbsh0ddwmspH6quzzY0cFSQmO0i10=";
+=======
+    sha256 = "sha256-9fb3Q0DzTE+cAtMTAn5F1IvaslaACdsPz9mVvxoNdjY=";
+  };
+  vendorHash = "sha256-6GGSFnCbg7HZZQvBVBbwKwy+ng/NNX5oOquuBFXpN/s=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   ldflags = [ "-s" "-w" "-X github.com/infracost/infracost/internal/version.Version=v${version}" ];
 
@@ -62,6 +72,10 @@ buildGoModule rec {
       compare different deployment options upfront.
     '';
     license = licenses.asl20;
+<<<<<<< HEAD
     maintainers = with maintainers; [ davegallant jk kashw2 ];
+=======
+    maintainers = with maintainers; [ davegallant jk ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

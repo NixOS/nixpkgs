@@ -1,16 +1,27 @@
 { lib, callPackage, stdenv, makeWrapper, fetchurl, ocaml, findlib, dune_3
 , ncurses
 , fix, menhir, menhirLib, menhirSdk, merlin-extend, ppxlib, utop, cppo, ppx_derivers
+<<<<<<< HEAD
 , dune-build-info
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 stdenv.mkDerivation rec {
   pname = "ocaml${ocaml.version}-reason";
+<<<<<<< HEAD
   version = "3.9.0";
 
   src = fetchurl {
     url = "https://github.com/reasonml/reason/releases/download/${version}/reason-${version}.tbz";
     hash = "sha256-vPAIHs89Bc5o6Ch2obwqSEl8eCJbizEPLPJLM/NWhBY=";
+=======
+  version = "3.8.2";
+
+  src = fetchurl {
+    url = "https://github.com/reasonml/reason/releases/download/${version}/reason-${version}.tbz";
+    sha256 = "sha256-etzEXbILje+CrfJxIhH7jthEMoSJdS6O33QoG8HrLvI=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   strictDeps = true;
@@ -25,7 +36,10 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+<<<<<<< HEAD
     dune-build-info
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     fix
     menhirSdk
     ppxlib

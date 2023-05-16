@@ -36,10 +36,14 @@ let
 
     debug = {
       # Necessary for BTF
+<<<<<<< HEAD
       DEBUG_INFO                = mkMerge [
         (whenOlder "5.2" (if (features.debug or false) then yes else no))
         (whenBetween "5.2" "5.18" yes)
       ];
+=======
+      DEBUG_INFO                = yes;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT = whenAtLeast "5.18" yes;
       # Reduced debug info conflict with BTF and have been enabled in
       # aarch64 defconfig since 5.13
@@ -62,6 +66,11 @@ let
       SUNRPC_DEBUG              = yes;
       # Provide access to tunables like sched_migration_cost_ns
       SCHED_DEBUG               = yes;
+<<<<<<< HEAD
+=======
+
+      GDB_SCRIPTS               = yes;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
 
     power-management = {
@@ -78,6 +87,7 @@ let
       ACPI_APEI                        = (option yes);
       # APEI Generic Hardware Error Source
       ACPI_APEI_GHES                   = (option yes);
+<<<<<<< HEAD
 
       # Enable lazy RCUs for power savings:
       # https://lore.kernel.org/rcu/20221019225138.GA2499943@paulmck-ThinkPad-P17-Gen-1/
@@ -85,6 +95,8 @@ let
       # depends on HAVE_VIRT_CPU_ACCOUNTING_GEN depends on 64BIT,
       # so we can't force-enable this
       RCU_LAZY                         = whenAtLeast "6.2" (option yes);
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     } // optionalAttrs (stdenv.hostPlatform.isx86) {
       INTEL_IDLE                       = yes;
       INTEL_RAPL                       = whenAtLeast "5.3" module;
@@ -93,6 +105,7 @@ let
       X86_AMD_PSTATE                   = whenAtLeast "5.17" yes;
       # Intel DPTF (Dynamic Platform and Thermal Framework) Support
       ACPI_DPTF                        = whenAtLeast "5.10" yes;
+<<<<<<< HEAD
 
       # Required to bring up some Bay Trail devices properly
       I2C                              = yes;
@@ -109,6 +122,8 @@ let
       CHT_DC_TI_PMIC_OPREGION          = whenAtLeast "5.10" yes;
       MFD_TPS68470                     = whenBetween "5.10" "5.13" yes;
       TPS68470_PMIC_OPREGION           = whenAtLeast "5.10" yes;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
 
     external-firmware = {
@@ -127,6 +142,7 @@ let
       CC_OPTIMIZE_FOR_SIZE = no;
     };
 
+<<<<<<< HEAD
     memory = {
       DAMON = whenAtLeast "5.15" yes;
       DAMON_VADDR = whenAtLeast "5.15" yes;
@@ -137,6 +153,8 @@ let
       DAMON_LRU_SORT = whenAtLeast "6.0" yes;
     };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     memtest = {
       MEMTEST = yes;
     };
@@ -158,8 +176,12 @@ let
 
     timer = {
       # Enable Full Dynticks System.
+<<<<<<< HEAD
       # NO_HZ_FULL depends on HAVE_VIRT_CPU_ACCOUNTING_GEN depends on 64BIT
       NO_HZ_FULL = mkIf stdenv.is64bit yes;
+=======
+      NO_HZ_FULL = mkIf stdenv.is64bit yes; # TODO: more precise condition?
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
 
     # Enable NUMA.
@@ -171,7 +193,10 @@ let
       NET                = yes;
       IP_ADVANCED_ROUTER = yes;
       IP_PNP             = no;
+<<<<<<< HEAD
       IP_ROUTE_MULTIPATH = yes;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       IP_VS_PROTO_TCP    = yes;
       IP_VS_PROTO_UDP    = yes;
       IP_VS_PROTO_ESP    = yes;
@@ -283,6 +308,7 @@ let
     };
 
     wireless = {
+<<<<<<< HEAD
       CFG80211_WEXT               = option yes; # Without it, ipw2200 drivers don't build
       IPW2100_MONITOR             = option yes; # support promiscuous mode
       IPW2200_MONITOR             = option yes; # support promiscuous mode
@@ -307,6 +333,20 @@ let
       RTW88                       = whenAtLeast "5.2" module;
       RTW88_8822BE                = mkMerge [ (whenBetween "5.2" "5.8" yes) (whenAtLeast "5.8" module) ];
       RTW88_8822CE                = mkMerge [ (whenBetween "5.2" "5.8" yes) (whenAtLeast "5.8" module) ];
+=======
+      CFG80211_WEXT         = option yes; # Without it, ipw2200 drivers don't build
+      IPW2100_MONITOR       = option yes; # support promiscuous mode
+      IPW2200_MONITOR       = option yes; # support promiscuous mode
+      HOSTAP_FIRMWARE       = option yes; # Support downloading firmware images with Host AP driver
+      HOSTAP_FIRMWARE_NVRAM = option yes;
+      ATH9K_PCI             = option yes; # Detect Atheros AR9xxx cards on PCI(e) bus
+      ATH9K_AHB             = option yes; # Ditto, AHB bus
+      B43_PHY_HT            = option yes;
+      BCMA_HOST_PCI         = option yes;
+      RTW88                 = whenAtLeast "5.2" module;
+      RTW88_8822BE          = mkMerge [ (whenBetween "5.2" "5.8" yes) (whenAtLeast "5.8" module) ];
+      RTW88_8822CE          = mkMerge [ (whenBetween "5.2" "5.8" yes) (whenAtLeast "5.8" module) ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
 
     fb = {
@@ -363,7 +403,10 @@ let
       DRM_AMD_DC_DCN2_1 = whenBetween "5.4" "5.6" yes;
       DRM_AMD_DC_DCN3_0 = whenBetween "5.9" "5.11" yes;
       DRM_AMD_DC_DCN = whenBetween "5.11" "6.4" yes;
+<<<<<<< HEAD
       DRM_AMD_DC_FP = whenAtLeast "6.4" yes;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       DRM_AMD_DC_HDCP = whenBetween "5.5" "6.4" yes;
       DRM_AMD_DC_SI = whenAtLeast "5.10" yes;
     } // optionalAttrs (stdenv.hostPlatform.system == "x86_64-linux") {
@@ -603,8 +646,13 @@ let
 
     microcode = {
       MICROCODE       = yes;
+<<<<<<< HEAD
       MICROCODE_INTEL = whenOlder "6.6" yes;
       MICROCODE_AMD   = whenOlder "6.6" yes;
+=======
+      MICROCODE_INTEL = yes;
+      MICROCODE_AMD   = yes;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       # Write Back Throttling
       # https://lwn.net/Articles/682582/
       # https://bugzilla.kernel.org/show_bug.cgi?id=12309#c655
@@ -657,11 +705,14 @@ let
       RING_BUFFER_BENCHMARK = no;
     };
 
+<<<<<<< HEAD
     perf = {
       # enable AMD Zen branch sampling if available
       PERF_EVENTS_AMD_BRS       = whenAtLeast "5.19" (option yes);
     };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     virtualisation = {
       PARAVIRT = option yes;
 
@@ -716,7 +767,11 @@ let
       MEDIA_PCI_SUPPORT        = yes;
       MEDIA_USB_SUPPORT        = yes;
       MEDIA_ANALOG_TV_SUPPORT  = yes;
+<<<<<<< HEAD
       VIDEO_STK1160_COMMON     = whenOlder "6.5" module;
+=======
+      VIDEO_STK1160_COMMON     = module;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
 
     "9p" = {
@@ -732,12 +787,19 @@ let
     };
 
     zram = {
+<<<<<<< HEAD
       ZRAM           = module;
       ZRAM_WRITEBACK = option yes;
       ZSWAP          = option yes;
       ZPOOL          = yes;
       ZBUD           = option yes;
       ZSMALLOC       = module;
+=======
+      ZRAM     = module;
+      ZSWAP    = option yes;
+      ZBUD     = option yes;
+      ZSMALLOC = module;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
 
     brcmfmac = {
@@ -913,7 +975,11 @@ let
       SECCOMP             = yes; # used by systemd >= 231
       SECCOMP_FILTER      = yes; # ditto
       POSIX_MQUEUE        = yes;
+<<<<<<< HEAD
       FRONTSWAP           = whenOlder "6.6" yes;
+=======
+      FRONTSWAP           = yes;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       FUSION              = yes; # Fusion MPT device support
       IDE                 = whenOlder "5.14" no; # deprecated IDE support, removed in 5.14
       IDLE_PAGE_TRACKING  = yes;
@@ -1035,10 +1101,13 @@ let
 
       # Fresh toolchains frequently break -Werror build for minor issues.
       WERROR = whenAtLeast "5.15" no;
+<<<<<<< HEAD
 
       # > CONFIG_KUNIT should not be enabled in a production environment. Enabling KUnit disables Kernel Address-Space Layout Randomization (KASLR), and tests may affect the state of the kernel in ways not suitable for production.
       # https://www.kernel.org/doc/html/latest/dev-tools/kunit/start.html
       KUNIT = whenAtLeast "5.5" no;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     } // optionalAttrs (stdenv.hostPlatform.system == "x86_64-linux" || stdenv.hostPlatform.system == "aarch64-linux") {
       # Enable CPU/memory hotplug support
       # Allows you to dynamically add & remove CPUs/memory to a VM client running NixOS without requiring a reboot

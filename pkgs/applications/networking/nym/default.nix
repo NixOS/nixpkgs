@@ -5,6 +5,7 @@
 , pkg-config
 , openssl
 , Security
+<<<<<<< HEAD
 , CoreServices
 , nix-update-script
 , rustc
@@ -17,17 +18,31 @@ in
 rustPlatform.buildRustPackage {
   pname = "nym";
   inherit version;
+=======
+, libiconv
+}:
+
+rustPlatform.buildRustPackage rec {
+  pname = "nym";
+  version = "0.11.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "nymtech";
     repo = "nym";
+<<<<<<< HEAD
     rev = "nym-binaries-v${version}";
     inherit hash;
+=======
+    rev = "v${version}";
+    sha256 = "sha256-bZXbteryXkOxft63zUMWdpBgbDSvrBHQY3f70/+mBtI=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
+<<<<<<< HEAD
       "bls12_381-0.6.0" = "sha256-sIZy+CTASP+uiY10nP/N4WfCLjeqkjiNl/FzO0p5WdI=";
       "cosmos-sdk-proto-0.12.3" = "sha256-ekQ9JA6WaTkvHkBKJbYPzfmx6I7LZnhIPiHsZFAP90w=";
       "rocket_cors-0.5.2" = "sha256-hfk5gKtc94g+VZmm+S6HKvg+E71QVKQTK2E3K2MCvz0=";
@@ -71,6 +86,28 @@ rustPlatform.buildRustPackage {
     VERGEN_CARGO_PROFILE = "release";
   };
 
+=======
+      "sphinx-0.1.0" = "sha256-/NW6jHZIi2Pe/m6o86FR0pLsSuRVuLYNTTPU7JEf/Us=";
+    };
+  };
+
+  nativeBuildInputs = [ pkg-config ];
+
+  buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [ Security libiconv ];
+
+  checkType = "debug";
+
+  passthru.updateScript = ./update.sh;
+
+  checkFlags = [
+    "--skip commands::upgrade::upgrade_tests"
+    "--skip allowed_hosts::tests::creating_a_new_host_store"
+    "--skip allowed_hosts::tests::getting_the_domain_root"
+    "--skip allowed_hosts::tests::requests_to_allowed_hosts"
+    "--skip allowed_hosts::tests::requests_to_unknown_hosts"
+  ];
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   meta = with lib; {
     description = "A mixnet providing IP-level privacy";
     longDescription = ''

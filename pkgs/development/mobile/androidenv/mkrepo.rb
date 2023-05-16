@@ -177,8 +177,13 @@ def empty? value
   !value || value.empty?
 end
 
+<<<<<<< HEAD
 # Fixes up returned hashes by converting archives like
 #  (e.g. {'linux' => {'sha1' => ...}, 'macosx' => ...} to
+=======
+# Fixes up returned hashes by sorting keys.
+# Will also convert archives (e.g. {'linux' => {'sha1' => ...}, 'macosx' => ...} to
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 # [{'os' => 'linux', 'sha1' => ...}, {'os' => 'macosx', ...}, ...].
 def fixup value
   Hash[value.map do |k, v|
@@ -191,6 +196,7 @@ def fixup value
     else
       [k, v]
     end
+<<<<<<< HEAD
   end]
 end
 
@@ -220,6 +226,9 @@ def expire_records record, oldest_valid_day
   else
     record
   end
+=======
+  end.sort {|(k1, v1), (k2, v2)| k1 <=> k2 }]
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 end
 
 # Normalize the specified license text.
@@ -281,7 +290,10 @@ def parse_package_xml doc
     target['dependencies'] ||= dependencies if dependencies
     target['archives'] ||= {}
     merge target['archives'], archives
+<<<<<<< HEAD
     target['last-available-day'] = today
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   end
 
   [licenses, packages]
@@ -323,7 +335,10 @@ def parse_image_xml doc
     target['dependencies'] ||= dependencies if dependencies
     target['archives'] ||= {}
     merge target['archives'], archives
+<<<<<<< HEAD
     target['last-available-day'] = today
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   end
 
   [licenses, images]
@@ -381,12 +396,16 @@ def parse_addon_xml doc
     target['dependencies'] ||= dependencies if dependencies
     target['archives'] ||= {}
     merge target['archives'], archives
+<<<<<<< HEAD
     target['last-available-day'] = today
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   end
 
   [licenses, addons, extras]
 end
 
+<<<<<<< HEAD
 # Make the clean diff by always sorting the result before puting it in the stdout.
 def sort_recursively value
   if value.is_a?(Hash)
@@ -402,15 +421,24 @@ def sort_recursively value
   end
 end
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 def merge_recursively a, b
   a.merge!(b) {|key, a_item, b_item|
     if a_item.is_a?(Hash) && b_item.is_a?(Hash)
       merge_recursively(a_item, b_item)
+<<<<<<< HEAD
     elsif b_item != nil
       b_item
     end
   }
   a
+=======
+    else
+      a[key] = b_item
+    end
+  }
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 end
 
 def merge dest, src
@@ -423,6 +451,7 @@ opts = Slop.parse do |o|
   o.array '-a', '--addons', 'addon repo XMLs to parse'
 end
 
+<<<<<<< HEAD
 result = {}
 result['licenses'] = {}
 result['packages'] = {}
@@ -434,16 +463,36 @@ opts[:packages].each do |filename|
   licenses, packages = parse_package_xml(Nokogiri::XML(File.open(filename)) { |conf| conf.noblanks })
   merge result['licenses'], licenses
   merge result['packages'], packages
+=======
+result = {
+  licenses: {},
+  packages: {},
+  images: {},
+  addons: {},
+  extras: {}
+}
+
+opts[:packages].each do |filename|
+  licenses, packages = parse_package_xml(Nokogiri::XML(File.open(filename)) { |conf| conf.noblanks })
+  merge result[:licenses], licenses
+  merge result[:packages], packages
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 end
 
 opts[:images].each do |filename|
   licenses, images = parse_image_xml(Nokogiri::XML(File.open(filename)) { |conf| conf.noblanks })
+<<<<<<< HEAD
   merge result['licenses'], licenses
   merge result['images'], images
+=======
+  merge result[:licenses], licenses
+  merge result[:images], images
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 end
 
 opts[:addons].each do |filename|
   licenses, addons, extras = parse_addon_xml(Nokogiri::XML(File.open(filename)) { |conf| conf.noblanks })
+<<<<<<< HEAD
   merge result['licenses'], licenses
   merge result['addons'], addons
   merge result['extras'], extras
@@ -475,3 +524,11 @@ fixup_result = fixup(result)
 output = merge input, fixup_result
 
 puts JSON.pretty_generate(sort_recursively(output))
+=======
+  merge result[:licenses], licenses
+  merge result[:addons], addons
+  merge result[:extras], extras
+end
+
+puts JSON.pretty_generate(fixup(result))
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)

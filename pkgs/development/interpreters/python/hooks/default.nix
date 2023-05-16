@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 self: dontUse: with self;
 
 let
@@ -5,6 +6,14 @@ let
   pythonInterpreter = pythonForBuild.interpreter;
   pythonSitePackages = python.sitePackages;
   pythonCheckInterpreter = python.interpreter;
+=======
+self: super: with self;
+
+let
+  pythonInterpreter = super.python.pythonForBuild.interpreter;
+  pythonSitePackages = super.python.sitePackages;
+  pythonCheckInterpreter = super.python.interpreter;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   setuppy = ../run_setup.py;
 in {
   makePythonHook = args: pkgs.makeSetupHook ({passthru.provides.setupHook = true; } // args);
@@ -63,6 +72,7 @@ in {
       };
     } ./pip-build-hook.sh) {};
 
+<<<<<<< HEAD
   pypaBuildHook = callPackage ({ makePythonHook, build, wheel }:
     makePythonHook {
       name = "pypa-build-hook.sh";
@@ -71,6 +81,8 @@ in {
       inherit (pythonForBuild.pkgs) build;
     };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pipInstallHook = callPackage ({ makePythonHook, pip }:
     makePythonHook {
       name = "pip-install-hook";
@@ -80,6 +92,7 @@ in {
       };
     } ./pip-install-hook.sh) {};
 
+<<<<<<< HEAD
   pypaInstallHook = callPackage ({ makePythonHook, installer }:
     makePythonHook {
       name = "pypa-install-hook";
@@ -91,6 +104,8 @@ in {
       inherit (pythonForBuild.pkgs) installer;
     };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pytestCheckHook = callPackage ({ makePythonHook, pytest }:
     makePythonHook {
       name = "pytest-check-hook";
@@ -117,12 +132,20 @@ in {
       };
     } ./python-imports-check-hook.sh) {};
 
+<<<<<<< HEAD
   pythonNamespacesHook = callPackage ({ makePythonHook, buildPackages }:
     makePythonHook {
       name = "python-namespaces-hook.sh";
       substitutions = {
         inherit pythonSitePackages;
         inherit (buildPackages) findutils;
+=======
+  pythonNamespacesHook = callPackage ({ makePythonHook, findutils }:
+    makePythonHook {
+      name = "python-namespaces-hook.sh";
+      substitutions = {
+        inherit pythonSitePackages findutils;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       };
     } ./python-namespaces-hook.sh) {};
 
@@ -144,8 +167,14 @@ in {
   pythonRelaxDepsHook = callPackage ({ makePythonHook, wheel }:
     makePythonHook {
       name = "python-relax-deps-hook";
+<<<<<<< HEAD
       substitutions = {
         inherit pythonInterpreter pythonSitePackages wheel;
+=======
+      propagatedBuildInputs = [ wheel ];
+      substitutions = {
+        inherit pythonInterpreter;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       };
     } ./python-relax-deps-hook.sh) {};
 
@@ -180,6 +209,7 @@ in {
       };
     } ./setuptools-check-hook.sh) {};
 
+<<<<<<< HEAD
     setuptoolsRustBuildHook = callPackage ({ makePythonHook, setuptools-rust, rust }:
       makePythonHook {
         name = "setuptools-rust-setup-hook";
@@ -194,6 +224,8 @@ in {
         };
       } ./setuptools-rust-hook.sh) {};
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   unittestCheckHook = callPackage ({ makePythonHook }:
     makePythonHook {
       name = "unittest-check-hook";
@@ -221,9 +253,16 @@ in {
     inherit (pkgs.buildPackages) makeWrapper;
   };
 
+<<<<<<< HEAD
   sphinxHook = callPackage ({ makePythonHook, installShellFiles }:
     makePythonHook {
       name = "python${python.pythonVersion}-sphinx-hook";
       propagatedBuildInputs = [ pythonForBuild.pkgs.sphinx installShellFiles ];
+=======
+  sphinxHook = callPackage ({ makePythonHook, sphinx, installShellFiles }:
+    makePythonHook {
+      name = "python${python.pythonVersion}-sphinx-hook";
+      propagatedBuildInputs = [ sphinx installShellFiles ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     } ./sphinx-hook.sh) {};
 }

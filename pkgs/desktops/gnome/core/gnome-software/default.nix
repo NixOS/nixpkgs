@@ -45,11 +45,19 @@ in
 
 stdenv.mkDerivation rec {
   pname = "gnome-software";
+<<<<<<< HEAD
   version = "44.4";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-software/${lib.versions.major version}/${pname}-${version}.tar.xz";
     sha256 = "i1N2fvbMVKLbWI7xxZJoOLDWe42bIRc95ROc0PvSgJU=";
+=======
+  version = "44.1";
+
+  src = fetchurl {
+    url = "mirror://gnome/sources/gnome-software/${lib.versions.major version}/${pname}-${version}.tar.xz";
+    sha256 = "ncZVFRLPCibQPg159JSHCmkW1DwU2CGZxDoR2cwK1ao=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   patches = [

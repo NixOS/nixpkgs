@@ -88,9 +88,12 @@ stdenv.mkDerivation rec {
                       --replace '"which "' '"${which}/bin/which "'
     substituteInPlace lib/exceptionhandler/exceptionhandler.cpp \
                       --replace "which %s" "${which}/bin/which %s"
+<<<<<<< HEAD
     # https://github.com/Warzone2100/warzone2100/pull/3353
     substituteInPlace lib/ivis_opengl/gfx_api_vk.cpp \
       --replace vk::throwResultException vk::detail::throwResultException
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '';
 
   cmakeFlags = [

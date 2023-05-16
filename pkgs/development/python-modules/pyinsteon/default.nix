@@ -1,10 +1,16 @@
 { lib
 , aiofiles
 , aiohttp
+<<<<<<< HEAD
 , async-generator
 , buildPythonPackage
 , fetchFromGitHub
 , fetchpatch
+=======
+, async_generator
+, buildPythonPackage
+, fetchFromGitHub
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , pypubsub
 , pyserial
 , pyserial-asyncio
@@ -12,20 +18,31 @@
 , pythonOlder
 , setuptools
 , voluptuous
+<<<<<<< HEAD
 , wheel
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 buildPythonPackage rec {
   pname = "pyinsteon";
+<<<<<<< HEAD
   version = "1.5.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
+=======
+  version = "1.4.2";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.6";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "refs/tags/${version}";
+<<<<<<< HEAD
     hash = "sha256-REm0E7+otqDypVslB5heHEaWA+q3Nh1O96gxFeCC3As=";
   };
 
@@ -41,6 +58,13 @@ buildPythonPackage rec {
   nativeBuildInputs = [
     setuptools
     wheel
+=======
+    hash = "sha256-5c2hcW9XSEyIMlyrn70U7tgBWdxGrtJoQkjkYzlrbKE=";
+  };
+
+  nativeBuildInputs = [
+    setuptools
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   propagatedBuildInputs = [
@@ -53,7 +77,11 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+<<<<<<< HEAD
     async-generator
+=======
+    async_generator
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     pytestCheckHook
   ];
 
@@ -69,7 +97,10 @@ buildPythonPackage rec {
       2413U, 2412S, 2448A7 and Hub models 2242 and 2245.
     '';
     homepage = "https://github.com/pyinsteon/pyinsteon";
+<<<<<<< HEAD
     changelog = "https://github.com/pyinsteon/pyinsteon/releases/tag/${version}";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };

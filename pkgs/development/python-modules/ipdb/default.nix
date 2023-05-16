@@ -45,7 +45,11 @@ buildPythonPackage rec {
     homepage = "https://github.com/gotcha/ipdb";
     description = "IPython-enabled pdb";
     license = licenses.bsd0;
+<<<<<<< HEAD
     maintainers = [ ];
+=======
+    maintainers = [ maintainers.costrouc ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
 }

@@ -18,6 +18,10 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/YodaEmbedding/frece";
     license = licenses.mit;
     platforms = platforms.linux;
+<<<<<<< HEAD
     maintainers = with maintainers; [ ];
+=======
+    maintainers = with maintainers; [ WeebSorceress ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

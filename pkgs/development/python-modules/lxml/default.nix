@@ -8,13 +8,21 @@
 
 buildPythonPackage rec {
   pname = "lxml";
+<<<<<<< HEAD
   version = "4.9.3-3";
+=======
+  version = "4.9.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "refs/tags/lxml-${version}";
+<<<<<<< HEAD
     hash = "sha256-Vrizi+6jUUEx7qODU4PAH5ZmvBIyT9H18+QpYB0m1f4=";
+=======
+    hash = "sha256-IHuTlcDbrZHvS6Gtx48IkznVU+9WxZT9XHUZf8M1WOE=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   # setuptoolsBuildPhase needs dependencies to be passed through nativeBuildInputs

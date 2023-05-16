@@ -12,7 +12,10 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
       systemd.services.check-flush = {
         requiredBy = ["multi-user.target"];
         before = ["network-pre.target" "multi-user.target"];
+<<<<<<< HEAD
         wants = ["network-pre.target"];
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         unitConfig.DefaultDependencies = false;
         serviceConfig.Type = "oneshot";
         path = [ pkgs.iproute2 pkgs.iputils pkgs.gnugrep ];

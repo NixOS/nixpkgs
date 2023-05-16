@@ -3,6 +3,10 @@
 , dunamai
 , fetchFromGitHub
 , jinja2
+<<<<<<< HEAD
+=======
+, markupsafe
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , poetry-core
 , poetry
 , pytestCheckHook
@@ -12,7 +16,11 @@
 
 buildPythonPackage rec {
   pname = "poetry-dynamic-versioning";
+<<<<<<< HEAD
   version = "1.0.1";
+=======
+  version = "0.21.4";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -21,7 +29,11 @@ buildPythonPackage rec {
     owner = "mtkennerly";
     repo = pname;
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-BGAo3c0TzyhIiDtZjoEP+Eeu51WJB3Wg71poFMWJ+VM=";
+=======
+    hash = "sha256-1RgxDXzijWr47mZeqfHfFnANdZKyY3QXCZoXijs5nTw=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [
@@ -31,6 +43,10 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     dunamai
     jinja2
+<<<<<<< HEAD
+=======
+    markupsafe
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     tomlkit
   ];
 
@@ -54,8 +70,11 @@ buildPythonPackage rec {
     "poetry_dynamic_versioning"
   ];
 
+<<<<<<< HEAD
   setupHook = ./setup-hook.sh;
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   meta = with lib; {
     description = "Plugin for Poetry to enable dynamic versioning based on VCS tags";
     homepage = "https://github.com/mtkennerly/poetry-dynamic-versioning";

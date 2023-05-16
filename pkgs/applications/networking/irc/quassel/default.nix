@@ -78,7 +78,11 @@ in (if !buildClient then stdenv.mkDerivation else mkDerivation) rec {
 
   meta = with lib; {
     homepage = "https://quassel-irc.org/";
+<<<<<<< HEAD
     description = "Qt/KDE distributed IRC client supporting a remote daemon";
+=======
+    description = "Qt/KDE distributed IRC client suppporting a remote daemon";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     longDescription = ''
       Quassel IRC is a cross-platform, distributed IRC client,
       meaning that one (or multiple) client(s) can attach to

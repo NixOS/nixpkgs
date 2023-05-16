@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 { lib
 , fetchurl
 , buildPythonPackage
@@ -10,12 +11,29 @@
 , jinja2
 , jupyter-core
 , jupyterlab-pygments
+=======
+{ beautifulsoup4
+, bleach
+, buildPythonPackage
+, defusedxml
+, fetchPypi
+, fetchpatch
+, fetchurl
+, hatchling
+, importlib-metadata
+, ipywidgets
+, jinja2
+, jupyter-core
+, jupyterlab-pygments
+, lib
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , markupsafe
 , mistune
 , nbclient
 , packaging
 , pandocfilters
 , pygments
+<<<<<<< HEAD
 , tinycss2
 , traitlets
 , importlib-metadata
@@ -23,6 +41,13 @@
 , ipywidgets
 , pyppeteer
 , pytestCheckHook
+=======
+, pyppeteer
+, pytestCheckHook
+, pythonOlder
+, tinycss2
+, traitlets
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 let
@@ -33,15 +58,25 @@ let
   };
 in buildPythonPackage rec {
   pname = "nbconvert";
+<<<<<<< HEAD
   version = "7.7.3";
 
   disabled = pythonOlder "3.8";
+=======
+  version = "7.2.5";
+
+  disabled = pythonOlder "3.7";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
+<<<<<<< HEAD
     hash = "sha256-SlmWv1880WqgQxiXuhqkxkhCwgefQ0s9xrjEslLvM1U=";
+=======
+    hash = "sha256-j9xE/X2UJNt/3G4eg0oC9rhiD/tlN2c4i+L56xb4QYQ=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   # Add $out/share/jupyter to the list of paths that are used to search for
@@ -85,7 +120,10 @@ in buildPythonPackage rec {
   '';
 
   nativeCheckInputs = [
+<<<<<<< HEAD
     flaky
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     ipywidgets
     pyppeteer
     pytestCheckHook

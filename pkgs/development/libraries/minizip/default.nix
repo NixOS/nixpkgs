@@ -2,7 +2,12 @@
 
 stdenv.mkDerivation {
   pname = "minizip";
+<<<<<<< HEAD
   inherit (zlib) src version;
+=======
+  version = zlib.version;
+  inherit (zlib) src;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nativeBuildInputs = [ autoreconfHook ];
   buildInputs = [ zlib ];

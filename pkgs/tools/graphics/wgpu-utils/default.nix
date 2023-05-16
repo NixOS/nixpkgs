@@ -2,13 +2,21 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "wgpu-utils";
+<<<<<<< HEAD
   version = "0.16.1";
+=======
+  version = "0.16.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "gfx-rs";
     repo = "wgpu";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-tGjjjQDcN9zkxQSOrW/D1Pu6cycTKo/lh71mTEpZQIE=";
+=======
+    hash = "sha256-2BS38Ybz/j6QnlI1G9zc/lFJKXj4Bh7+jlvyweUVhfA=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   cargoLock = {

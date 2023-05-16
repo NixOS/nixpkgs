@@ -11,7 +11,11 @@ import ./make-test-python.nix ({ pkgs, ...} :
   {
     imports = [ ./common/user-account.nix ];
 
+<<<<<<< HEAD
     fonts.packages = with pkgs; [ dejavu_fonts ];
+=======
+    fonts.fonts = with pkgs; [ dejavu_fonts ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     services.cage = {
       enable = true;

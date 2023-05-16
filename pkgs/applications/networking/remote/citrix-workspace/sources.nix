@@ -22,6 +22,7 @@ let
       x86hash   = "39228fc8dd69adca4e56991c1ebc0832fec183c3ab5abd2d65c66b39b634391b";
       x64suffix = "10";
       x86suffix = "10";
+<<<<<<< HEAD
       homepage  = "https://www.citrix.com/downloads/workspace-app/legacy-workspace-app-for-linux/workspace-app-for-linux-latest6.html";
     };
 
@@ -36,6 +37,10 @@ let
       homepage  = "https://www.citrix.com/downloads/workspace-app/linux/workspace-app-for-linux-latest.html";
     };
 
+=======
+      homepage  = "https://www.citrix.com/downloads/workspace-app/linux/workspace-app-for-linux-latest.html";
+    };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   # Retain attribute-names for abandoned versions of Citrix workspace to

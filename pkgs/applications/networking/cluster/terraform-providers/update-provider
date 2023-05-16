@@ -1,5 +1,9 @@
 #!/usr/bin/env nix-shell
+<<<<<<< HEAD
 #! nix-shell -i bash -p coreutils curl git jq moreutils nix nurl
+=======
+#! nix-shell -i bash -p coreutils curl git jq moreutils nix nix-prefetch
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 # shellcheck shell=bash
 # vim: ft=sh
 #
@@ -90,7 +94,12 @@ update_attr() {
 repo_root=$(git rev-parse --show-toplevel)
 
 generate_hash() {
+<<<<<<< HEAD
   nurl --expr "(import ${repo_root} {}).terraform-providers.${provider}.$1"
+=======
+  nix-prefetch -I nixpkgs="${repo_root}" \
+    "{ sha256 }: (import ${repo_root} {}).terraform-providers.${provider}.$1.overrideAttrs (_: { inherit sha256; })"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }
 
 echo_provider() {
@@ -107,7 +116,10 @@ if [[ ${provider} =~ ^[^/]+/[^/]+$ ]]; then
   # create empty stings so nix-prefetch works
   update_attr hash ""
   update_attr vendorHash ""
+<<<<<<< HEAD
   update_attr spdx ""
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 fi
 
 homepage="$(read_attr homepage)"
@@ -137,11 +149,16 @@ repo="$(echo "${provider_source_url}" | cut -d '/' -f 5)"
 update_attr repo "${repo}"
 
 if [[ ${spdx} == 1 ]]; then
+<<<<<<< HEAD
   old_spdx="$(read_attr spdx)"
   if [[ ${old_spdx} != null ]]; then
     spdx="$(curl -L -s ${GITHUB_TOKEN:+-u ":${GITHUB_TOKEN}"} "https://api.github.com/repos/${org}/${repo}/license" | jq -r '.license.spdx_id')"
     update_attr spdx "${spdx}"
   fi
+=======
+  spdx="$(curl -L -s ${GITHUB_TOKEN:+-u ":${GITHUB_TOKEN}"} "https://api.github.com/repos/${org}/${repo}/license" | jq -r '.license.spdx_id')"
+  update_attr spdx "${spdx}"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 fi
 
 echo_provider "calculating hash"
@@ -151,7 +168,11 @@ update_attr hash "${hash}"
 old_vendor_hash="$(read_attr vendorHash)"
 if [[ ${old_vendor_hash} != null ]]; then
   echo_provider "calculating vendorHash"
+<<<<<<< HEAD
   vendorHash=$(generate_hash goModules)
+=======
+  vendorHash=$(generate_hash go-modules)
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   update_attr vendorHash "${vendorHash}"
 fi
 

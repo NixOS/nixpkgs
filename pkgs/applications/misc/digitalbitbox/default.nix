@@ -103,12 +103,19 @@ in mkDerivation rec {
     cp src/hidapi/libusb/.libs/*.so* $out/lib
     cp src/univalue/.libs/*.so* $out/lib
 
+<<<<<<< HEAD
+=======
+    # [RPATH][patchelf] Avoid forbidden reference error
+    rm -rf $PWD
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     # Provide udev rules as documented in https://digitalbitbox.com/start_linux
     mkdir -p "$out/etc/udev/rules.d"
     ${copyUdevRuleToOutput "51-hid-digitalbox.rules" udevRule51}
     ${copyUdevRuleToOutput "52-hid-digitalbox.rules" udevRule52}
   '';
 
+<<<<<<< HEAD
   # remove forbidden references to $TMPDIR
   preFixup = ''
     for f in "$out"/{bin,lib}/*; do
@@ -118,6 +125,8 @@ in mkDerivation rec {
     done
   '';
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   enableParallelBuilding = true;
 
   meta = with lib; {

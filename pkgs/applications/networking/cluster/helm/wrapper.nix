@@ -31,10 +31,14 @@ in
     preferLocalBuild = true;
 
     nativeBuildInputs = [ makeWrapper ];
+<<<<<<< HEAD
     passthru = {
       inherit pluginsDir;
       unwrapped = helm;
     };
+=======
+    passthru = { unwrapped = helm; };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     meta = helm.meta // {
       # To prevent builds on hydra

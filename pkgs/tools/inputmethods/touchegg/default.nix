@@ -18,13 +18,21 @@
 
 stdenv.mkDerivation rec {
   pname = "touchegg";
+<<<<<<< HEAD
   version = "2.0.17";
+=======
+  version = "2.0.16";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "JoseExposito";
     repo = pname;
     rev = version;
+<<<<<<< HEAD
     sha256 = "sha256-he6ERl6ZNWuD5StUqQWsUjeJ35nD0b8KddIAvntqlOI=";
+=======
+    sha256 = "sha256-/0XeFW0cdS1/UaE/z2FROwk2dTyZMqXjiBzt62x8f8o=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   patches = lib.optionals withPantheon [

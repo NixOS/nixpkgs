@@ -1,24 +1,38 @@
+<<<<<<< HEAD
 { lib, stdenv, fetchFromGitHub, fetchpatch, gettext, makeWrapper, tcl, which
 , ncurses, perl , cyrus_sasl, gss, gpgme, libkrb5, libidn2, libxml2, notmuch, openssl
+=======
+{ lib, stdenv, fetchFromGitHub, gettext, makeWrapper, tcl, which
+, ncurses, perl , cyrus_sasl, gss, gpgme, libkrb5, libidn, libxml2, notmuch, openssl
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , lua, lmdb, libxslt, docbook_xsl, docbook_xml_dtd_42, w3m, mailcap, sqlite, zlib, lndir
 , pkg-config, zstd, enableZstd ? true, enableMixmaster ? false, enableLua ? false
 , withContrib ? true
 }:
 
 stdenv.mkDerivation rec {
+<<<<<<< HEAD
   version = "20230517";
+=======
+  version = "20230407";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pname = "neomutt";
 
   src = fetchFromGitHub {
     owner  = "neomutt";
     repo   = "neomutt";
     rev    = version;
+<<<<<<< HEAD
     sha256 = "sha256-1i0STaJulJP0LWdNfLLIEKVapfkcguYRnbc+psWlVE4=";
+=======
+    sha256 = "sha256-cTZua1AbLMjkMhlUk2aMttj6HdwpJYnRYPuvukSxfwc=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   patches = [
     # https://github.com/neomutt/neomutt/issues/3773#issuecomment-1493295144
     ./fix-open-very-large-mailbox.patch
+<<<<<<< HEAD
     (fetchpatch {
       name = "disable-incorrect-tests.patch";
       url = "https://github.com/neomutt/neomutt/pull/3933.patch";
@@ -29,6 +43,12 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     cyrus_sasl gss gpgme libkrb5 libidn2 ncurses
+=======
+  ];
+
+  buildInputs = [
+    cyrus_sasl gss gpgme libkrb5 libidn ncurses
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     notmuch openssl perl lmdb
     mailcap sqlite
   ]

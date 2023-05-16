@@ -1,4 +1,10 @@
+<<<<<<< HEAD
 { lib
+=======
+{ fetchgit
+, lib
+, makeDesktopItem
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , node_webkit
 , pkgs
 , runCommand
@@ -23,10 +29,17 @@ let
   # define a shortcut to get to onlykey.
   onlykey = self."${onlykeyPkg}";
 
+<<<<<<< HEAD
   super = import ./onlykey.nix {
     inherit pkgs;
     inherit (stdenv.hostPlatform) system;
   };
+=======
+  super = (import ./onlykey.nix {
+    inherit pkgs;
+    inherit (stdenv.hostPlatform) system;
+  });
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   self = super // {
     "${onlykeyPkg}" = super."${onlykeyPkg}".override (attrs: {
@@ -46,6 +59,17 @@ let
   script = writeShellScript "${onlykey.packageName}-starter-${onlykey.version}" ''
     ${node_webkit}/bin/nw ${onlykey}/lib/node_modules/${onlykey.packageName}/build
   '';
+<<<<<<< HEAD
+=======
+
+  desktop = makeDesktopItem {
+    name = onlykey.packageName;
+    exec = script;
+    icon = "${onlykey}/lib/node_modules/${onlykey.packageName}/resources/onlykey_logo_128.png";
+    desktopName = onlykey.packageName;
+    genericName = onlykey.packageName;
+  };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 in
 runCommand "${onlykey.packageName}-${onlykey.version}" { } ''
   mkdir -p $out/bin

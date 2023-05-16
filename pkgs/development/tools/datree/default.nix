@@ -8,16 +8,27 @@
 
 buildGoModule rec {
   pname = "datree";
+<<<<<<< HEAD
   version = "1.9.19";
+=======
+  version = "1.9.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "datreeio";
     repo = "datree";
     rev = "refs/tags/${version}";
+<<<<<<< HEAD
     hash = "sha256-W1eX7eUMdPGbHA/f08xkG2EUeZmaunEAQn7/LRBe2nk=";
   };
 
   vendorHash = "sha256-+PQhuIO4KjXtW/ZcS0OamuOHzK7ZL+nwOBxeCRoXuKE=";
+=======
+    hash = "sha256-FN+on/P5NyXCIwz+VydlpLC0LS7TI4IkX+mjyYrCzTI=";
+  };
+
+  vendorHash = "sha256-MrVIpr2iwddW3yUeBuDfeg+Xo9Iarr/fp4Rc4WGYGeU=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nativeBuildInputs = [ installShellFiles ];
 

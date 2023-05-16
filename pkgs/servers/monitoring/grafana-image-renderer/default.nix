@@ -1,18 +1,31 @@
+<<<<<<< HEAD
 { lib, mkYarnPackage, fetchFromGitHub, fetchYarnDeps, nodejs, runtimeShell }:
 
 # Notes for the upgrade:
 # * Download the tarball of the new version to use.
 # * Replace new `package.json` here.
+=======
+{ lib, mkYarnPackage, fetchFromGitHub, nodejs, runtimeShell }:
+
+# Notes for the upgrade:
+# * Download the tarball of the new version to use.
+# * Replace new `package.json`, `yarn.nix`, `yarn.lock` here.
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 # * Update `version`+`hash` and rebuild.
 
 mkYarnPackage rec {
   pname = "grafana-image-renderer";
+<<<<<<< HEAD
   version = "3.7.2";
+=======
+  version = "3.7.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "grafana";
     repo = "grafana-image-renderer";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-I5UHNt4vOsXqgeQ96CxJwxuD/MiGK1NEAFJItN1CkwA=";
   };
 
@@ -23,6 +36,11 @@ mkYarnPackage rec {
 
   packageJSON = ./package.json;
 
+=======
+    sha256 = "sha256-kbL6I2aFHyCmBiB1x02e3H7wIO4TE8ty6vHJEu/T8fI=";
+  };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   buildPhase = ''
     runHook preBuild
 
@@ -35,6 +53,13 @@ mkYarnPackage rec {
 
   dontInstall = true;
 
+<<<<<<< HEAD
+=======
+  packageJSON = ./package.json;
+  yarnNix = ./yarn.nix;
+  yarnLock = ./yarn.lock;
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   distPhase = ''
     runHook preDist
 
@@ -62,6 +87,10 @@ mkYarnPackage rec {
     description = "A Grafana backend plugin that handles rendering of panels & dashboards to PNGs using headless browser (Chromium/Chrome)";
     license = licenses.asl20;
     maintainers = with maintainers; [ ma27 ];
+<<<<<<< HEAD
     platforms = platforms.all;
+=======
+    platforms = platforms.linux;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

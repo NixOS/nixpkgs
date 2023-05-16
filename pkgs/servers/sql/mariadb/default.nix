@@ -6,7 +6,11 @@ let
     # Native buildInputs components
     , bison, boost, cmake, fixDarwinDylibNames, flex, makeWrapper, pkg-config
     # Common components
+<<<<<<< HEAD
     , curl, libiconv, ncurses, openssl, pcre2
+=======
+    , curl, libiconv, ncurses, openssl, openssl_1_1, pcre, pcre2
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     , libkrb5, libaio, liburing, systemd
     , CoreServices, cctools, perl
     , jemalloc, less, libedit
@@ -44,6 +48,7 @@ let
 
       buildInputs = [
         libiconv ncurses zlib
+<<<<<<< HEAD
         pcre2
         openssl
         curl
@@ -51,6 +56,16 @@ let
         ++ (if (lib.versionOlder version "10.6") then [ libaio ] else [ liburing ]))
         ++ lib.optionals stdenv.hostPlatform.isDarwin [ CoreServices cctools perl libedit ]
         ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ jemalloc ];
+=======
+      ] ++ lib.optionals stdenv.hostPlatform.isLinux ([ libkrb5 systemd ]
+        ++ (if (lib.versionOlder version "10.6") then [ libaio ] else [ liburing ]))
+        ++ lib.optionals stdenv.hostPlatform.isDarwin [ CoreServices cctools perl libedit ]
+        ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ jemalloc ]
+        ++ (if (lib.versionOlder version "10.5") then [ pcre ] else [ pcre2 ])
+        ++ (if (lib.versionOlder version "10.5")
+            then [ openssl_1_1 (curl.override { openssl = openssl_1_1; }) ]
+            else [ openssl curl ]);
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
       prePatch = ''
         sed -i 's,[^"]*/var/log,/var/log,g' storage/mroonga/vendor/groonga/CMakeLists.txt
@@ -148,9 +163,12 @@ let
         ./patch/cmake-plugin-includedir.patch
       ];
 
+<<<<<<< HEAD
       buildInputs = common.buildInputs
         ++ lib.optionals (lib.versionAtLeast common.version "10.7") [ fmt_8 ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       cmakeFlags = common.cmakeFlags ++ [
         "-DPLUGIN_AUTH_PAM=NO"
         "-DWITHOUT_SERVER=ON"
@@ -243,28 +261,53 @@ let
 in
   self: {
     # see https://mariadb.org/about/#maintenance-policy for EOLs
+<<<<<<< HEAD
     mariadb_105 = self.callPackage generic {
       # Supported until 2025-06-24
       version = "10.5.22";
       hash = "sha256-PiOGu17iWo3c0hz/xIx2CX5cpBpuSgmPay7kASsNY44=";
+=======
+    mariadb_104 = self.callPackage generic {
+      # Supported until 2024-06-18
+      version = "10.4.29";
+      hash = "sha256-Wy0zh5LnnmjWpUXisVYDu792GMc55fgg9XsdayIJITA=";
+      inherit (self.darwin) cctools;
+      inherit (self.darwin.apple_sdk.frameworks) CoreServices;
+    };
+    mariadb_105 = self.callPackage generic {
+      # Supported until 2025-06-24
+      version = "10.5.20";
+      hash = "sha256-sY+Q8NAR74e71VmtBDLN4Qfs21jqKCcQg7SJvf0e79s=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       inherit (self.darwin) cctools;
       inherit (self.darwin.apple_sdk.frameworks) CoreServices;
     };
     mariadb_106 = self.callPackage generic {
       # Supported until 2026-07-06
+<<<<<<< HEAD
       version = "10.6.15";
       hash = "sha256-sva9uhfq1NkcTSVPr8NKcorGsCfdHXF4vCZ1jc5pQzU=";
+=======
+      version = "10.6.13";
+      hash = "sha256-8IXzec9Z7S02VkT8XNhVj4gqiG7JZAcNZaKFMN27dbo=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       inherit (self.darwin) cctools;
       inherit (self.darwin.apple_sdk.frameworks) CoreServices;
     };
     mariadb_1010 = self.callPackage generic {
       # Supported until 2023-11-17. TODO: remove ahead of 23.11 branchoff
+<<<<<<< HEAD
       version = "10.10.6";
       hash = "sha256-4eUwEZedKfDsJuE6uMr2E0gb8ClSBWb7loF1RhA5ONU=";
+=======
+      version = "10.10.4";
+      hash = "sha256-IX2Z47Ami5MizyicGEMnqHiYs/aGvS6eS5JpXqYRixk=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       inherit (self.darwin) cctools;
       inherit (self.darwin.apple_sdk.frameworks) CoreServices;
     };
     mariadb_1011 = self.callPackage generic {
+<<<<<<< HEAD
       # Supported until 2028-02-16
       version = "10.11.5";
       hash = "sha256-TJSEBI1NDHHdB2qzP8KpzoUQvfdiiG3g1j/lJJbz27s=";
@@ -275,6 +318,11 @@ in
       # Supported until 2024-06-07
       version = "11.0.3";
       hash = "sha256-Up8IoGTudzOhNuxHSkI56Kyb1tsTm4unC/+KfxMDg5o=";
+=======
+      # Supported until 2028-02-16. TODO: make this the default, at some point
+      version = "10.11.3";
+      hash = "sha256-sGWw8ypun9R55Wb9ZnFFA3mIbY3aLZp++TCvHlwmwMc=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       inherit (self.darwin) cctools;
       inherit (self.darwin.apple_sdk.frameworks) CoreServices;
     };

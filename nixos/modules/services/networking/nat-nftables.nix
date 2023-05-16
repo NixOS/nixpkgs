@@ -145,14 +145,21 @@ in
       }
     ];
 
+<<<<<<< HEAD
     networking.nftables.tables = {
       "nixos-nat" = {
         family = "ip";
         content = mkTable {
+=======
+    networking.nftables.ruleset = ''
+      table ip nixos-nat {
+        ${mkTable {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           ipVer = "ip";
           inherit dest ipSet;
           forwardPorts = filter (x: !(isIPv6 x.destination)) cfg.forwardPorts;
           inherit (cfg) dmzHost;
+<<<<<<< HEAD
         };
       };
       "nixos-nat6" = mkIf cfg.enableIPv6 {
@@ -167,6 +174,23 @@ in
         };
       };
     };
+=======
+        }}
+      }
+
+      ${optionalString cfg.enableIPv6 ''
+        table ip6 nixos-nat {
+          ${mkTable {
+            ipVer = "ip6";
+            dest = destIPv6;
+            ipSet = ipv6Set;
+            forwardPorts = filter (x: isIPv6 x.destination) cfg.forwardPorts;
+            dmzHost = null;
+          }}
+        }
+      ''}
+    '';
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     networking.firewall.extraForwardRules = optionalString config.networking.firewall.filterForward ''
       ${optionalString (ifaceSet != "") ''

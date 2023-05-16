@@ -3,6 +3,7 @@
 with lib;
 
 let
+<<<<<<< HEAD
   cfg = config.services.fail2ban;
 
   settingsFormat = pkgs.formats.keyValue { };
@@ -41,6 +42,25 @@ let
 
     in
     pkgs.concatText "jail.local" [ configFile (pkgs.writeText "extra-jail.local" extraConfig) ];
+=======
+
+  cfg = config.services.fail2ban;
+
+  fail2banConf = pkgs.writeText "fail2ban.local" cfg.daemonConfig;
+
+  jailConf = pkgs.writeText "jail.local" ''
+    [INCLUDES]
+
+    before = paths-nixos.conf
+
+    ${concatStringsSep "\n" (attrValues (flip mapAttrs cfg.jails (name: def:
+      optionalString (def != "")
+        ''
+          [${name}]
+          ${def}
+        '')))}
+  '';
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   pathsConf = pkgs.writeText "paths-nixos.conf" ''
     # NixOS
@@ -53,10 +73,15 @@ let
 
     [DEFAULT]
   '';
+<<<<<<< HEAD
+=======
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 in
 
 {
 
+<<<<<<< HEAD
   imports = [
     (mkRemovedOptionModule [ "services" "fail2ban" "daemonConfig" ] "The daemon is now configured through the attribute set `services.fail2ban.daemonSettings`.")
     (mkRemovedOptionModule [ "services" "fail2ban" "extraSettings" ] "The extra default configuration can now be set using `services.fail2ban.jails.DEFAULT.settings`.")
@@ -65,6 +90,12 @@ in
   ###### interface
 
   options = {
+=======
+  ###### interface
+
+  options = {
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     services.fail2ban = {
       enable = mkOption {
         default = false;
@@ -93,7 +124,11 @@ in
       };
 
       extraPackages = mkOption {
+<<<<<<< HEAD
         default = [ ];
+=======
+        default = [];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         type = types.listOf types.package;
         example = lib.literalExpression "[ pkgs.ipset ]";
         description = lib.mdDoc ''
@@ -204,7 +239,11 @@ in
         example = true;
         description = lib.mdDoc ''
           "bantime.overalljails" (if true) specifies the search of IP in the database will be executed
+<<<<<<< HEAD
           cross over all jails, if false (default), only current jail of the ban IP will be searched.
+=======
+          cross over all jails, if false (default), only current jail of the ban IP will be searched
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         '';
       };
 
@@ -218,6 +257,7 @@ in
         '';
       };
 
+<<<<<<< HEAD
       daemonSettings = mkOption {
         inherit (configFormat) type;
 
@@ -234,12 +274,41 @@ in
         description = lib.mdDoc ''
           The contents of Fail2ban's main configuration file.
           It's generally not necessary to change it.
+=======
+      daemonConfig = mkOption {
+        default = ''
+          [Definition]
+          logtarget = SYSLOG
+          socket    = /run/fail2ban/fail2ban.sock
+          pidfile   = /run/fail2ban/fail2ban.pid
+          dbfile    = /var/lib/fail2ban/fail2ban.sqlite3
+        '';
+        type = types.lines;
+        description = lib.mdDoc ''
+          The contents of Fail2ban's main configuration file.  It's
+          generally not necessary to change it.
+       '';
+      };
+
+      extraSettings = mkOption {
+        type = with types; attrsOf (oneOf [ bool ints.positive str ]);
+        default = {};
+        description = lib.mdDoc ''
+          Extra default configuration for all jails (i.e. `[DEFAULT]`). See
+          <https://github.com/fail2ban/fail2ban/blob/master/config/jail.conf> for an overview.
+        '';
+        example = literalExpression ''
+          {
+            findtime = "15m";
+          }
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         '';
       };
 
       jails = mkOption {
         default = { };
         example = literalExpression ''
+<<<<<<< HEAD
           {
             apache-nohome-iptables = {
               settings = {
@@ -287,6 +356,30 @@ in
             };
           };
         })));
+=======
+          { apache-nohome-iptables = '''
+              # Block an IP address if it accesses a non-existent
+              # home directory more than 5 times in 10 minutes,
+              # since that indicates that it's scanning.
+              filter   = apache-nohome
+              action   = iptables-multiport[name=HTTP, port="http,https"]
+              logpath  = /var/log/httpd/error_log*
+              backend = auto
+              findtime = 600
+              bantime  = 600
+              maxretry = 5
+            ''';
+           dovecot = '''
+             # block IPs which failed to log-in
+             # aggressive mode add blocking for aborted connections
+             enabled = true
+             filter = dovecot[mode=aggressive]
+             maxretry = 3
+           ''';
+          }
+        '';
+        type = types.attrsOf types.lines;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         description = lib.mdDoc ''
           The configuration of each Fail2ban “jail”.  A jail
           consists of an action (such as blocking a port using
@@ -317,7 +410,11 @@ in
   config = mkIf cfg.enable {
     assertions = [
       {
+<<<<<<< HEAD
         assertion = cfg.bantime-increment.formula == null || cfg.bantime-increment.multipliers == null;
+=======
+        assertion = (cfg.bantime-increment.formula == null || cfg.bantime-increment.multipliers == null);
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         message = ''
           Options `services.fail2ban.bantime-increment.formula` and `services.fail2ban.bantime-increment.multipliers` cannot be both specified.
         '';
@@ -339,7 +436,11 @@ in
       "fail2ban/paths-nixos.conf".source = pathsConf;
       "fail2ban/action.d".source = "${cfg.package}/etc/fail2ban/action.d/*.conf";
       "fail2ban/filter.d".source = "${cfg.package}/etc/fail2ban/filter.d/*.conf";
+<<<<<<< HEAD
     } // (mapAttrs' mkFilter (filterAttrs (_: v: v.filter != null && !builtins.isString v.filter) attrsJails));
+=======
+    };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     systemd.packages = [ cfg.package ];
     systemd.services.fail2ban = {
@@ -374,6 +475,7 @@ in
       };
     };
 
+<<<<<<< HEAD
     # Defaults for the daemon settings
     services.fail2ban.daemonSettings.Definition = {
       logtarget = mkDefault "SYSLOG";
@@ -410,5 +512,41 @@ in
     # Benefits from verbose sshd logging to observe failed login attempts,
     # so we set that here unless the user overrode it.
     services.openssh.settings.LogLevel = mkDefault "VERBOSE";
+=======
+    # Add some reasonable default jails.  The special "DEFAULT" jail
+    # sets default values for all other jails.
+    services.fail2ban.jails.DEFAULT = ''
+      # Bantime increment options
+      bantime.increment = ${boolToString cfg.bantime-increment.enable}
+      ${optionalString (cfg.bantime-increment.rndtime != null) "bantime.rndtime = ${cfg.bantime-increment.rndtime}"}
+      ${optionalString (cfg.bantime-increment.maxtime != null) "bantime.maxtime = ${cfg.bantime-increment.maxtime}"}
+      ${optionalString (cfg.bantime-increment.factor != null) "bantime.factor = ${cfg.bantime-increment.factor}"}
+      ${optionalString (cfg.bantime-increment.formula != null) "bantime.formula = ${cfg.bantime-increment.formula}"}
+      ${optionalString (cfg.bantime-increment.multipliers != null) "bantime.multipliers = ${cfg.bantime-increment.multipliers}"}
+      ${optionalString (cfg.bantime-increment.overalljails != null) "bantime.overalljails = ${boolToString cfg.bantime-increment.overalljails}"}
+      # Miscellaneous options
+      ignoreip    = 127.0.0.1/8 ${optionalString config.networking.enableIPv6 "::1"} ${concatStringsSep " " cfg.ignoreIP}
+      ${optionalString (cfg.bantime != null) ''
+        bantime     = ${cfg.bantime}
+      ''}
+      maxretry    = ${toString cfg.maxretry}
+      backend     = systemd
+      # Actions
+      banaction   = ${cfg.banaction}
+      banaction_allports = ${cfg.banaction-allports}
+      ${optionalString (cfg.extraSettings != {}) ''
+        # Extra settings
+        ${generators.toKeyValue {} cfg.extraSettings}
+      ''}
+    '';
+    # Block SSH if there are too many failing connection attempts.
+    # Benefits from verbose sshd logging to observe failed login attempts,
+    # so we set that here unless the user overrode it.
+    services.openssh.settings.LogLevel = lib.mkDefault "VERBOSE";
+    services.fail2ban.jails.sshd = mkDefault ''
+      enabled = true
+      port    = ${concatMapStringsSep "," (p: toString p) config.services.openssh.ports}
+    '';
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

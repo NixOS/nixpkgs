@@ -133,7 +133,11 @@ def retry(fn: Callable, timeout: int = 900) -> None:
 
 
 class StartCommand:
+<<<<<<< HEAD
     """The Base Start Command knows how to append the necessary
+=======
+    """The Base Start Command knows how to append the necesary
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     runtime qemu options as determined by a particular test driver
     run. Any such start command is expected to happily receive and
     append additional qemu args.
@@ -211,7 +215,11 @@ class StartCommand:
 class NixStartScript(StartCommand):
     """A start script from nixos/modules/virtualiation/qemu-vm.nix
     that also satisfies the requirement of the BaseStartCommand.
+<<<<<<< HEAD
     These Nix commands have the particular characteristic that the
+=======
+    These Nix commands have the particular charactersitic that the
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     machine name can be extracted out of them via a regex match.
     (Admittedly a _very_ implicit contract, evtl. TODO fix)
     """
@@ -369,8 +377,13 @@ class Machine:
     @staticmethod
     def create_startcommand(args: Dict[str, str]) -> StartCommand:
         rootlog.warning(
+<<<<<<< HEAD
             "Using legacy create_startcommand(), "
             "please use proper nix test vm instrumentation, instead "
+=======
+            "Using legacy create_startcommand(),"
+            "please use proper nix test vm instrumentation, instead"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
             "to generate the appropriate nixos test vm qemu startup script"
         )
         hda = None
@@ -416,10 +429,13 @@ class Machine:
         return answer
 
     def send_monitor_command(self, command: str) -> str:
+<<<<<<< HEAD
         """
         Send a command to the QEMU monitor. This allows attaching
         virtual USB disks to a running machine, among other things.
         """
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         self.run_callbacks()
         message = f"{command}\n".encode()
         assert self.monitor is not None
@@ -429,10 +445,16 @@ class Machine:
     def wait_for_unit(
         self, unit: str, user: Optional[str] = None, timeout: int = 900
     ) -> None:
+<<<<<<< HEAD
         """
         Wait for a systemd unit to get into "active" state.
         Throws exceptions on "failed" and "inactive" states as well as after
         timing out.
+=======
+        """Wait for a systemd unit to get into "active" state.
+        Throws exceptions on "failed" and "inactive" states as well as
+        after timing out.
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         """
 
         def check_active(_: Any) -> bool:
@@ -481,6 +503,7 @@ class Machine:
         )
 
     def systemctl(self, q: str, user: Optional[str] = None) -> Tuple[int, str]:
+<<<<<<< HEAD
         """
         Runs `systemctl` commands with optional support for
         `systemctl --user`
@@ -494,6 +517,8 @@ class Machine:
         machine.systemctl("list-jobs --no-pager", "any-user")
         ```
         """
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         if user is not None:
             q = q.replace("'", "\\'")
             return self.execute(
@@ -532,6 +557,7 @@ class Machine:
         return "".join(output_buffer)
 
     def execute(
+<<<<<<< HEAD
         self,
         command: str,
         check_return: bool = True,
@@ -570,6 +596,10 @@ class Machine:
         `timeout` parameter, e.g., `execute(cmd, timeout=10)` or
         `execute(cmd, timeout=None)`. The default is 900 seconds.
         """
+=======
+        self, command: str, check_return: bool = True, timeout: Optional[int] = 900
+    ) -> Tuple[int, str]:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         self.run_callbacks()
         self.connect()
 
@@ -581,17 +611,26 @@ class Machine:
             timeout_str = f"timeout {timeout}"
 
         # While sh is bash on NixOS, this is not the case for every distro.
+<<<<<<< HEAD
         # We explicitly call bash here to allow for the driver to boot other distros as well.
         out_command = (
             f"{timeout_str} bash -c {shlex.quote(command)} | (base64 -w 0; echo)\n"
+=======
+        # We explicitely call bash here to allow for the driver to boot other distros as well.
+        out_command = (
+            f"{timeout_str} bash -c {shlex.quote(command)} | (base64 --wrap 0; echo)\n"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         )
 
         assert self.shell
         self.shell.send(out_command.encode())
 
+<<<<<<< HEAD
         if not check_output:
             return (-2, "")
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         # Get the output
         output = base64.b64decode(self._next_newline_closed_block_from_shell())
 
@@ -605,11 +644,18 @@ class Machine:
         return (rc, output.decode(errors="replace"))
 
     def shell_interact(self, address: Optional[str] = None) -> None:
+<<<<<<< HEAD
         """
         Allows you to directly interact with the guest shell. This should
         only be used during test development, not in production tests.
         Killing the interactive session with `Ctrl-d` or `Ctrl-c` also ends
         the guest session.
+=======
+        """Allows you to interact with the guest shell for debugging purposes.
+
+        @address string passed to socat that will be connected to the guest shell.
+        Check the `Running Tests interactivly` chapter of NixOS manual for an example.
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         """
         self.connect()
 
@@ -628,6 +674,7 @@ class Machine:
             pass
 
     def console_interact(self) -> None:
+<<<<<<< HEAD
         """
         Allows you to directly interact with QEMU's stdin, by forwarding
         terminal input to the QEMU process.
@@ -636,6 +683,14 @@ class Machine:
         Output from QEMU is only read line-wise. `Ctrl-c` kills QEMU and
         `Ctrl-d` closes console and returns to the test runner.
         """
+=======
+        """Allows you to interact with QEMU's stdin
+
+        The shell can be exited with Ctrl+D. Note that Ctrl+C is not allowed to be used.
+        QEMU's stdout is read line-wise.
+
+        Should only be used during test development, not in the production test."""
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         self.log("Terminal is ready (there is no prompt):")
 
         assert self.process
@@ -652,12 +707,16 @@ class Machine:
             self.send_console(char.decode())
 
     def succeed(self, *commands: str, timeout: Optional[int] = None) -> str:
+<<<<<<< HEAD
         """
         Execute a shell command, raising an exception if the exit status is
         not zero, otherwise returning the standard output. Similar to `execute`,
         except that the timeout is `None` by default. See `execute` for details on
         command execution.
         """
+=======
+        """Execute each command and check that it succeeds."""
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         output = ""
         for command in commands:
             with self.nested(f"must succeed: {command}"):
@@ -669,10 +728,14 @@ class Machine:
         return output
 
     def fail(self, *commands: str, timeout: Optional[int] = None) -> str:
+<<<<<<< HEAD
         """
         Like `succeed`, but raising an exception if the command returns a zero
         status.
         """
+=======
+        """Execute each command and check that it fails."""
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         output = ""
         for command in commands:
             with self.nested(f"must fail: {command}"):
@@ -683,11 +746,15 @@ class Machine:
         return output
 
     def wait_until_succeeds(self, command: str, timeout: int = 900) -> str:
+<<<<<<< HEAD
         """
         Repeat a shell command with 1-second intervals until it succeeds.
         Has a default timeout of 900 seconds which can be modified, e.g.
         `wait_until_succeeds(cmd, timeout=10)`. See `execute` for details on
         command execution.
+=======
+        """Wait until a command returns success and return its output.
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         Throws an exception on timeout.
         """
         output = ""
@@ -702,8 +769,13 @@ class Machine:
             return output
 
     def wait_until_fails(self, command: str, timeout: int = 900) -> str:
+<<<<<<< HEAD
         """
         Like `wait_until_succeeds`, but repeating the command until it fails.
+=======
+        """Wait until a command returns failure.
+        Throws an exception on timeout.
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         """
         output = ""
 
@@ -713,7 +785,11 @@ class Machine:
             return status != 0
 
         with self.nested(f"waiting for failure: {command}"):
+<<<<<<< HEAD
             retry(check_failure, timeout)
+=======
+            retry(check_failure)
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
             return output
 
     def wait_for_shutdown(self) -> None:
@@ -755,19 +831,26 @@ class Machine:
             retry(tty_matches)
 
     def send_chars(self, chars: str, delay: Optional[float] = 0.01) -> None:
+<<<<<<< HEAD
         """
         Simulate typing a sequence of characters on the virtual keyboard,
         e.g., `send_chars("foobar\n")` will type the string `foobar`
         followed by the Enter key.
         """
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         with self.nested(f"sending keys {repr(chars)}"):
             for char in chars:
                 self.send_key(char, delay, log=False)
 
     def wait_for_file(self, filename: str) -> None:
+<<<<<<< HEAD
         """
         Waits until the file exists in the machine's file system.
         """
+=======
+        """Waits until the file exists in machine's file system."""
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
         def check_file(_: Any) -> bool:
             status, _ = self.execute(f"test -e {filename}")
@@ -777,11 +860,14 @@ class Machine:
             retry(check_file)
 
     def wait_for_open_port(self, port: int, addr: str = "localhost") -> None:
+<<<<<<< HEAD
         """
         Wait until a process is listening on the given TCP port and IP address
         (default `localhost`).
         """
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         def port_is_open(_: Any) -> bool:
             status, _ = self.execute(f"nc -z {addr} {port}")
             return status == 0
@@ -790,11 +876,14 @@ class Machine:
             retry(port_is_open)
 
     def wait_for_closed_port(self, port: int, addr: str = "localhost") -> None:
+<<<<<<< HEAD
         """
         Wait until nobody is listening on the given TCP port and IP address
         (default `localhost`).
         """
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         def port_is_closed(_: Any) -> bool:
             status, _ = self.execute(f"nc -z {addr} {port}")
             return status != 0
@@ -833,6 +922,7 @@ class Machine:
             # TODO: do we want to bail after a set number of attempts?
             while not shell_ready(timeout_secs=30):
                 self.log("Guest root shell did not produce any data yet...")
+<<<<<<< HEAD
                 self.log(
                     "  To debug, enter the VM and run 'systemctl status backdoor.service'."
                 )
@@ -844,6 +934,10 @@ class Machine:
                 if b"Spawning backdoor root shell..." in chunk:
                     break
 
+=======
+
+            self.log(self.shell.recv(1024).decode())
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
             toc = time.time()
 
             self.log("connected to guest root shell")
@@ -851,10 +945,13 @@ class Machine:
             self.connected = True
 
     def screenshot(self, filename: str) -> None:
+<<<<<<< HEAD
         """
         Take a picture of the display of the virtual machine, in PNG format.
         The screenshot will be available in the derivation output.
         """
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         if "." not in filename:
             filename += ".png"
         if "/" not in filename:
@@ -884,6 +981,7 @@ class Machine:
             )
 
     def copy_from_host(self, source: str, target: str) -> None:
+<<<<<<< HEAD
         """
         Copies a file from host to machine, e.g.,
         `copy_from_host("myfile", "/etc/my/important/file")`.
@@ -899,6 +997,10 @@ class Machine:
         all the VMs (using a temporary directory).
         The access rights bits will mimic the ones from the host file and
         user:group will be root:root.
+=======
+        """Copy a file from the host into the guest via the `shared_dir` shared
+        among all the VMs (using a temporary directory).
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         """
         host_src = Path(source)
         vm_target = Path(target)
@@ -950,6 +1052,7 @@ class Machine:
             return _perform_ocr_on_screenshot(screenshot_path, model_ids)
 
     def get_screen_text_variants(self) -> List[str]:
+<<<<<<< HEAD
         """
         Return a list of different interpretations of what is currently
         visible on the machine's screen using optical character
@@ -985,6 +1088,14 @@ class Machine:
         :::
         """
 
+=======
+        return self._get_screen_text_variants([0, 1, 2])
+
+    def get_screen_text(self) -> str:
+        return self._get_screen_text_variants([2])[0]
+
+    def wait_for_text(self, regex: str) -> None:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         def screen_matches(last: bool) -> bool:
             variants = self.get_screen_text_variants()
             for text in variants:
@@ -999,6 +1110,7 @@ class Machine:
         with self.nested(f"waiting for {regex} to appear on screen"):
             retry(screen_matches)
 
+<<<<<<< HEAD
     def wait_for_console_text(self, regex: str, timeout: int | None = None) -> None:
         """
         Wait until the supplied regular expressions match a line of the
@@ -1027,10 +1139,28 @@ class Machine:
             else:
                 while not console_matches(False):
                     pass
+=======
+    def wait_for_console_text(self, regex: str) -> None:
+        with self.nested(f"waiting for {regex} to appear on console"):
+            # Buffer the console output, this is needed
+            # to match multiline regexes.
+            console = io.StringIO()
+            while True:
+                try:
+                    console.write(self.last_lines.get())
+                except queue.Empty:
+                    self.sleep(1)
+                    continue
+                console.seek(0)
+                matches = re.search(regex, console.read())
+                if matches is not None:
+                    return
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     def send_key(
         self, key: str, delay: Optional[float] = 0.01, log: Optional[bool] = True
     ) -> None:
+<<<<<<< HEAD
         """
         Simulate pressing keys on the virtual keyboard, e.g.,
         `send_key("ctrl-alt-delete")`.
@@ -1038,6 +1168,8 @@ class Machine:
         Please also refer to the QEMU documentation for more information on the
         input syntax: https://en.wikibooks.org/wiki/QEMU/Monitor#sendkey_keys
         """
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         key = CHAR_TO_KEY.get(key, key)
         context = self.nested(f"sending key {repr(key)}") if log else nullcontext()
         with context:
@@ -1046,21 +1178,27 @@ class Machine:
                 time.sleep(delay)
 
     def send_console(self, chars: str) -> None:
+<<<<<<< HEAD
         r"""
         Send keys to the kernel console. This allows interaction with the systemd
         emergency mode, for example. Takes a string that is sent, e.g.,
         `send_console("\n\nsystemctl default\n")`.
         """
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         assert self.process
         assert self.process.stdin
         self.process.stdin.write(chars.encode())
         self.process.stdin.flush()
 
     def start(self, allow_reboot: bool = False) -> None:
+<<<<<<< HEAD
         """
         Start the virtual machine. This method is asynchronous --- it does
         not wait for the machine to finish booting.
         """
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         if self.booted:
             return
 
@@ -1118,9 +1256,12 @@ class Machine:
         rootlog.log("if you want to keep the VM state, pass --keep-vm-state")
 
     def shutdown(self) -> None:
+<<<<<<< HEAD
         """
         Shut down the machine, waiting for the VM to exit.
         """
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         if not self.booted:
             return
 
@@ -1129,9 +1270,12 @@ class Machine:
         self.wait_for_shutdown()
 
     def crash(self) -> None:
+<<<<<<< HEAD
         """
         Simulate a sudden power failure, by telling the VM to exit immediately.
         """
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         if not self.booted:
             return
 
@@ -1149,8 +1293,13 @@ class Machine:
         self.connected = False
 
     def wait_for_x(self) -> None:
+<<<<<<< HEAD
         """
         Wait until it is possible to connect to the X server.
+=======
+        """Wait until it is possible to connect to the X server.  Note that
+        testing the existence of /tmp/.X11-unix/X0 is insufficient.
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         """
 
         def check_x(_: Any) -> bool:
@@ -1173,10 +1322,13 @@ class Machine:
         ).splitlines()
 
     def wait_for_window(self, regexp: str) -> None:
+<<<<<<< HEAD
         """
         Wait until an X11 window has appeared whose name matches the given
         regular expression, e.g., `wait_for_window("Terminal")`.
         """
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         pattern = re.compile(regexp)
 
         def window_is_visible(last_try: bool) -> bool:
@@ -1197,26 +1349,40 @@ class Machine:
         self.succeed(f"sleep {secs}")
 
     def forward_port(self, host_port: int = 8080, guest_port: int = 80) -> None:
+<<<<<<< HEAD
         """
         Forward a TCP port on the host to a TCP port on the guest.
+=======
+        """Forward a TCP port on the host to a TCP port on the guest.
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         Useful during interactive testing.
         """
         self.send_monitor_command(f"hostfwd_add tcp::{host_port}-:{guest_port}")
 
     def block(self) -> None:
+<<<<<<< HEAD
         """
         Simulate unplugging the Ethernet cable that connects the machine to
         the other machines.
         This happens by shutting down eth1 (the multicast interface used to talk
         to the other VMs). eth0 is kept online to still enable the test driver
         to communicate with the machine.
+=======
+        """Make the machine unreachable by shutting down eth1 (the multicast
+        interface used to talk to the other VMs).  We keep eth0 up so that
+        the test driver can continue to talk to the machine.
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         """
         self.send_monitor_command("set_link virtio-net-pci.1 off")
 
     def unblock(self) -> None:
+<<<<<<< HEAD
         """
         Undo the effect of `block`.
         """
+=======
+        """Make the machine reachable."""
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         self.send_monitor_command("set_link virtio-net-pci.1 on")
 
     def release(self) -> None:

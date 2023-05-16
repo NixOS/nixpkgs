@@ -1,5 +1,9 @@
 #!/usr/bin/env nix-shell
+<<<<<<< HEAD
 #!nix-shell -I nixpkgs=../../../../../../ -i bash -p wget prefetch-yarn-deps yarn nix-prefetch nix-prefetch-github
+=======
+#!nix-shell -I nixpkgs=../../../../../../ -i bash -p wget prefetch-yarn-deps yarn nix-prefetch
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 if [ "$#" -gt 1 ] || [[ "$1" == -* ]]; then
   echo "Regenerates packaging data for the seshat package."
@@ -25,7 +29,11 @@ wget "$SRC/seshat-node/yarn.lock"
 yarn_hash=$(prefetch-yarn-deps yarn.lock)
 popd
 
+<<<<<<< HEAD
 src_hash=$(nix-prefetch-github matrix-org seshat --rev ${version} | jq -r .hash)
+=======
+src_hash=$(nix-prefetch-github matrix-org seshat --rev ${version} | jq -r .sha256)
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 cat > pin.json << EOF
 {

@@ -1,6 +1,10 @@
 { stdenv
 , lib
 , go
+<<<<<<< HEAD
+=======
+, pkgs
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , buildGoModule
 , fetchFromGitHub
 , fetchurl
@@ -31,10 +35,17 @@
 }:
 
 let
+<<<<<<< HEAD
   version = "2.46.0";
   webUiStatic = fetchurl {
     url = "https://github.com/prometheus/prometheus/releases/download/v${version}/prometheus-web-ui-${version}.tar.gz";
     hash = "sha256-H6RRyemawt9NRLTVG0iH4vNFNiuvdPZz7u43Zop0vVI=";
+=======
+  version = "2.42.0";
+  webUiStatic = fetchurl {
+    url = "https://github.com/prometheus/prometheus/releases/download/v${version}/prometheus-web-ui-${version}.tar.gz";
+    sha256 = "sha256-QOnt8YZkq+/cmoaI8ZOrVbgVh5MnaKpDBVtPTckl4+A=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 in
 buildGoModule rec {
@@ -47,10 +58,17 @@ buildGoModule rec {
     owner = "prometheus";
     repo = "prometheus";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-TB4N5aAfNw34HJ1HSt6rHTETTyAgpGA8B5VOFHisZFU=";
   };
 
   vendorHash = "sha256-jeGtna7IeKAOiu4FFA2xRv+fwpzCpnqwI5nj641dlM4=";
+=======
+    sha256 = "sha256-UwowidKKn3fp2z/MSbwESpl2E4IIioEC0oV1QRE7ViQ=";
+  };
+
+  vendorSha256 = "sha256-wUniz7E9l/5ldgPHo+wZkKaZuAH5kvjT0VDl4qkcoNs=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   excludedPackages = [ "documentation/prometheus-mixin" ];
 
@@ -119,9 +137,13 @@ buildGoModule rec {
     moveToOutput bin/promtool $cli
   '';
 
+<<<<<<< HEAD
   # https://hydra.nixos.org/build/130673870/nixlog/1
   # Test mock data uses 64 bit data without an explicit (u)int64
   doCheck = !(stdenv.isDarwin || stdenv.hostPlatform.parsed.cpu.bits < 64);
+=======
+  doCheck = !stdenv.isDarwin; # https://hydra.nixos.org/build/130673870/nixlog/1
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   passthru.tests = { inherit (nixosTests) prometheus; };
 

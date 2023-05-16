@@ -15,7 +15,11 @@ import ./make-test-python.nix ({ ... }:
         fsType = "btrfs";
       };
     };
+<<<<<<< HEAD
     services.snapper.configs.home.SUBVOLUME = "/home";
+=======
+    services.snapper.configs.home.subvolume = "/home";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     services.snapper.filters = "/nix";
   };
 

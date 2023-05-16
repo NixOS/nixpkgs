@@ -5,7 +5,10 @@
   enableGuile        ? false,                                         guile ? null
 , enablePython       ? false,                                         python ? null
 , enablePerl         ? (!stdenv.isDarwin) && (stdenv.hostPlatform == stdenv.buildPlatform), perl ? null
+<<<<<<< HEAD
 , fetchpatch
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 # re-add javascript support when upstream supports modern spidermonkey
 }:
 
@@ -23,6 +26,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-u6QGhfi+uWeIzSUFuYHAH3Xu0Fky0yw2h4NOKgYFLsM=";
   };
 
+<<<<<<< HEAD
   patches = [
     # Fix build bug with perl 5.38.0. Backport of https://github.com/rkd77/elinks/pull/243 by gentoo:
     # https://gitweb.gentoo.org/repo/gentoo.git/commit/?id=dfefaa456bd69bc14e3a1c2c6c1b0cc19c6b0869
@@ -32,6 +36,8 @@ stdenv.mkDerivation rec {
     })
   ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   buildInputs = [
     ncurses libX11 bzip2 zlib brotli zstd xz
     openssl libidn tre expat libev
@@ -48,7 +54,10 @@ stdenv.mkDerivation rec {
     "--enable-finger"
     "--enable-html-highlight"
     "--enable-gopher"
+<<<<<<< HEAD
     "--enable-gemini"
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "--enable-cgi"
     "--enable-bittorrent"
     "--enable-nntp"

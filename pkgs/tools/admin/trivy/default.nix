@@ -1,17 +1,25 @@
 { lib
 , buildGoModule
 , fetchFromGitHub
+<<<<<<< HEAD
 , testers
 , trivy
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 buildGoModule rec {
   pname = "trivy";
+<<<<<<< HEAD
   version = "0.45.0";
+=======
+  version = "0.41.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "aquasecurity";
     repo = pname;
+<<<<<<< HEAD
     rev = "refs/tags/v${version}";
     hash = "sha256-HsxcB3X8/n4Y8sU7im1nEGqMK9bVlhq5ZiF9gG+3YFs=";
   };
@@ -22,11 +30,25 @@ buildGoModule rec {
   vendorHash = "sha256-rlMhmgnqvkKttfIzVMi1Ca/dqOdkoCF9yZbEcr8sv5I=";
 
   subPackages = [ "cmd/trivy" ];
+=======
+    rev = "v${version}";
+    sha256 = "sha256-GDApctrRWRJ9svPBWGt86slnCtmZyciQ03rhYW1958s=";
+  };
+  # hash missmatch on across linux and darwin
+  proxyVendor = true;
+  vendorHash = "sha256-JlLQpBiviVXcX1xK0pi2igErCzvOXBc28m4fzDuIQ1U=";
+
+  excludedPackages = [ "magefiles" "misc" ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   ldflags = [
     "-s"
     "-w"
+<<<<<<< HEAD
     "-X=main.version=v${version}"
+=======
+    "-X main.version=v${version}"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   # Tests require network access
@@ -34,11 +56,20 @@ buildGoModule rec {
 
   doInstallCheck = true;
 
+<<<<<<< HEAD
   passthru.tests.version = testers.testVersion {
     package = trivy;
     command = "trivy --version";
     version = "v${version}";
   };
+=======
+  installCheckPhase = ''
+    runHook preInstallCheck
+    $out/bin/trivy --help
+    $out/bin/trivy --version | grep "v${version}"
+    runHook postInstallCheck
+  '';
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   meta = with lib; {
     homepage = "https://github.com/aquasecurity/trivy";
@@ -52,6 +83,10 @@ buildGoModule rec {
       application dependencies (Bundler, Composer, npm, yarn, etc.).
     '';
     license = licenses.asl20;
+<<<<<<< HEAD
     maintainers = with maintainers; [ fab jk ];
+=======
+    maintainers = with maintainers; [ jk ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

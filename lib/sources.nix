@@ -5,18 +5,48 @@
 let
   inherit (builtins)
     match
+<<<<<<< HEAD
     split
     storeDir
+=======
+    readDir
+    split
+    storeDir
+    tryEval
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     ;
   inherit (lib)
     boolToString
     filter
+<<<<<<< HEAD
     isString
     readFile
     ;
   inherit (lib.filesystem)
     pathIsRegularFile
     ;
+=======
+    getAttr
+    isString
+    pathExists
+    readFile
+    ;
+
+  /*
+    Returns the type of a path: regular (for file), symlink, or directory.
+  */
+  pathType = path: getAttr (baseNameOf path) (readDir (dirOf path));
+
+  /*
+    Returns true if the path exists and is a directory, false otherwise.
+  */
+  pathIsDirectory = path: if pathExists path then (pathType path) == "directory" else false;
+
+  /*
+    Returns true if the path exists and is a regular file, false otherwise.
+  */
+  pathIsRegularFile = path: if pathExists path then (pathType path) == "regular" else false;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   /*
     A basic filter for `cleanSourceWith` that removes
@@ -255,6 +285,7 @@ let
     };
 
 in {
+<<<<<<< HEAD
 
   pathType = lib.warnIf (lib.isInOldestRelease 2305)
     "lib.sources.pathType has been moved to lib.filesystem.pathType."
@@ -269,6 +300,13 @@ in {
     lib.filesystem.pathIsRegularFile;
 
   inherit
+=======
+  inherit
+    pathType
+    pathIsDirectory
+    pathIsRegularFile
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     pathIsGitRepo
     commitIdFromGitRepo
 

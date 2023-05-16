@@ -3,7 +3,10 @@
 , fetchFromGitHub
 , pythonOlder
 , pytestCheckHook
+<<<<<<< HEAD
 , pythonRelaxDepsHook
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , poetry-core
 , httpx
 , pydicom
@@ -23,6 +26,7 @@ buildPythonPackage rec {
     hash = "sha256-RZJ7BuQRJ+yaHFv9iq4uFvMtH8NvGvmpjmgmyvw9rGk=";
   };
 
+<<<<<<< HEAD
   nativeBuildInputs = [ pythonRelaxDepsHook poetry-core ];
 
   propagatedBuildInputs = [ httpx pydicom ];
@@ -31,6 +35,12 @@ buildPythonPackage rec {
     "httpx"
   ];
 
+=======
+  nativeBuildInputs = [ poetry-core ];
+
+  propagatedBuildInputs = [ httpx pydicom ];
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   doCheck = false;  # requires orthanc server (not in Nixpkgs)
 
   pythonImportsCheck = [

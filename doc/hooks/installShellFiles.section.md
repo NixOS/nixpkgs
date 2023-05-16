@@ -1,4 +1,9 @@
+<<<<<<< HEAD
 # `installShellFiles` {#installshellfiles}
+=======
+
+### `installShellFiles` {#installshellfiles}
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 This hook helps with installing manpages and shell completion files. It exposes 2 shell functions `installManPage` and `installShellCompletion` that can be used from your `postInstall` hook.
 

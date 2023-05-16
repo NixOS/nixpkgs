@@ -20,7 +20,11 @@
 , graphql-core
 , gql
 , armips
+<<<<<<< HEAD
   # tests
+=======
+# tests
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , pytestCheckHook
 , parameterized
 , xmldiff
@@ -28,13 +32,21 @@
 
 buildPythonPackage rec {
   pname = "skytemple-files";
+<<<<<<< HEAD
   version = "1.5.4";
+=======
+  version = "1.4.7";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "SkyTemple";
     repo = pname;
     rev = version;
+<<<<<<< HEAD
     hash = "sha256-RB+Cp4mL0y59/l7yu0z3jefADHR9/h0rbTZLm7BvJ7k=";
+=======
+    hash = "sha256-SLRZ9ThrH2UWqfr5BbjJKDM/SRkCfMNK70XZT4+Ks7w=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     fetchSubmodules = true;
   };
 
@@ -70,7 +82,11 @@ buildPythonPackage rec {
   };
 
   checkInputs = [ pytestCheckHook parameterized xmldiff ] ++ passthru.optional-dependencies.spritecollab;
+<<<<<<< HEAD
   pytestFlagsArray = [ "test/" ];
+=======
+  pytestFlagsArray = "test/";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   disabledTestPaths = [
     "test/skytemple_files_test/common/spritecollab/sc_online_test.py"
     "test/skytemple_files_test/compression_container/atupx/atupx_test.py" # Particularly long test

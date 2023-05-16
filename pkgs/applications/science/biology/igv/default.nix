@@ -2,10 +2,17 @@
 
 stdenv.mkDerivation rec {
   pname = "igv";
+<<<<<<< HEAD
   version = "2.16.2";
   src = fetchzip {
     url = "https://data.broadinstitute.org/igv/projects/downloads/${lib.versions.majorMinor version}/IGV_${version}.zip";
     sha256 = "sha256-/X9loW8rOevf/GA/Wk3bVsES9ZceF79Bkwby75SJgTQ=";
+=======
+  version = "2.16.0";
+  src = fetchzip {
+    url = "https://data.broadinstitute.org/igv/projects/downloads/${lib.versions.majorMinor version}/IGV_${version}.zip";
+    sha256 = "sha256-pfFUtPgHzTWMm3sh4un8SwSYF8HM30HbAQznxlu4Irw=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   installPhase = ''

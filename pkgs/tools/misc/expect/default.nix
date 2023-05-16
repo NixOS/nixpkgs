@@ -41,7 +41,10 @@ tcl.mkTclDerivation rec {
     homepage = "https://expect.sourceforge.net/";
     license = licenses.publicDomain;
     platforms = platforms.unix;
+<<<<<<< HEAD
     mainProgram = "expect";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     maintainers = with maintainers; [ SuperSandro2000 ];
   };
 }

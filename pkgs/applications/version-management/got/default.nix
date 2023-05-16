@@ -5,11 +5,19 @@
 
 stdenv.mkDerivation rec {
   pname = "got";
+<<<<<<< HEAD
   version = "0.92";
 
   src = fetchurl {
     url = "https://gameoftrees.org/releases/portable/got-portable-${version}.tar.gz";
     hash = "sha256-HaNCxgbl0ewvI96jr9/BgJphqoQC5P2atj5a51bj99c=";
+=======
+  version = "0.88";
+
+  src = fetchurl {
+    url = "https://gameoftrees.org/releases/portable/got-portable-${version}.tar.gz";
+    hash = "sha256-F8EHMKAQq/fV/i6+Vf42hmVjhbptuuiO8zfE9kfzzqA=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ pkg-config bison ]
@@ -18,8 +26,11 @@ stdenv.mkDerivation rec {
   buildInputs = [ openssl libbsd libevent libuuid libmd zlib ncurses ]
   ++ lib.optionals stdenv.isDarwin [ libossp_uuid ];
 
+<<<<<<< HEAD
   configureFlags = [ "--enable-gotd" ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   preConfigure = lib.optionalString stdenv.isDarwin ''
     # The configure script assumes dependencies on Darwin are install via
     # Homebrew or MacPorts and hardcodes assumptions about the paths of

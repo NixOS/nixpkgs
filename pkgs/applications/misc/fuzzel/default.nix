@@ -24,14 +24,22 @@ assert svgSupport -> enableCairo;
 
 stdenv.mkDerivation rec {
   pname = "fuzzel";
+<<<<<<< HEAD
   version = "1.9.2";
+=======
+  version = "1.9.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "dnkl";
     repo = pname;
     rev = version;
+<<<<<<< HEAD
     hash = "sha256-X1P/ghX97KCQcrNk44Cy2IAGuZ8DDwHBWzh1AHLDvd4=";
+=======
+    hash = "sha256-Va/Rm35jqxDlIfQdrpZ41qrW8YzWmm1LWra76AW1xUw=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   depsBuildBuild = [
@@ -65,6 +73,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
+<<<<<<< HEAD
     changelog = "https://codeberg.org/dnkl/fuzzel/releases/tag/${version}";
     description = "Wayland-native application launcher, similar to rofi’s drun mode";
     homepage = "https://codeberg.org/dnkl/fuzzel";
@@ -72,5 +81,13 @@ stdenv.mkDerivation rec {
     mainProgram = "fuzzel";
     maintainers = with maintainers; [ fionera polykernel rodrgz ];
     platforms = with platforms; linux;
+=======
+    description = "Wayland-native application launcher, similar to rofi’s drun mode";
+    homepage = "https://codeberg.org/dnkl/fuzzel";
+    license = with licenses; [ mit zlib ];
+    maintainers = with maintainers; [ fionera polykernel rodrgz ];
+    platforms = with platforms; linux;
+    changelog = "https://codeberg.org/dnkl/fuzzel/releases/tag/${version}";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

@@ -1,18 +1,30 @@
 { lib, stdenv, fetchFromGitHub
 , talloc
 , pkg-config
+<<<<<<< HEAD
+=======
+, git
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , ncurses
 , docutils, swig, python3, coreutils, enablePython ? true }:
 
 stdenv.mkDerivation rec {
   pname = "proot";
+<<<<<<< HEAD
   version = "5.4.0";
+=======
+  version = "5.3.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     repo = "proot";
     owner = "proot-me";
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-Z9Y7ccWp5KEVuo9xfHcgo58XqYVdFo7ck1jH7cnT2KA=";
+=======
+    sha256 = "sha256-uN31wDJjuQmDWeHaZHHQpmXQeQ/TYeS9HNYWEC0shaA=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   postPatch = ''
@@ -48,6 +60,9 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     license = licenses.gpl2;
     maintainers = with maintainers; [ ianwookim makefu veprbl dtzWill ];
+<<<<<<< HEAD
     mainProgram = "proot";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

@@ -1,6 +1,11 @@
 { stdenv
 , lib
 , fetchFromGitHub
+<<<<<<< HEAD
+=======
+, cmake
+, pkg-config
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , systemd
 , runtimeShell
 , python3
@@ -41,7 +46,11 @@ let
   };
 
 in
+<<<<<<< HEAD
 stdenv.mkDerivation {
+=======
+stdenv.mkDerivation rec {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pname = "keyd";
   inherit version src;
 

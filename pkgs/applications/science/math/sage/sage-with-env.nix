@@ -1,5 +1,9 @@
 { stdenv
 , lib
+<<<<<<< HEAD
+=======
+, makeWrapper
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , sage-env
 , blas
 , lapack
@@ -71,7 +75,11 @@ let
       []
     );
 
+<<<<<<< HEAD
   allInputs = lib.remove null (nativeBuildInputs ++ buildInputs ++ pythonEnv.extraLibs);
+=======
+  allInputs = lib.remove null (nativeBuildInputs ++ buildInputs ++ pythonEnv.extraLibs ++ [ makeWrapper ]);
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   transitiveDeps = lib.unique (builtins.concatLists (map transitiveClosure allInputs ));
   # fix differences between spkg and sage names
   # (could patch sage instead, but this is more lightweight and also works for packages depending on sage)

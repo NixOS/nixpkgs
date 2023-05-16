@@ -7,7 +7,11 @@
 
 buildPythonPackage rec {
   pname = "dacite";
+<<<<<<< HEAD
   version = "1.8.1";
+=======
+  version = "1.8.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -16,7 +20,11 @@ buildPythonPackage rec {
     owner = "konradhalas";
     repo = pname;
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-lvObQ+jyBH2s4GOwyDXEAYmG7ZGQN9WDqL8ftNItPCQ=";
+=======
+    hash = "sha256-aQwQHFWaXwTaA6GQgDcWT6ivE9YtWtHCTOtxDi503+M=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   postPatch = ''

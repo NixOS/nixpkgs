@@ -1,7 +1,11 @@
 { lib, buildGoModule, fetchFromGitLab, fetchurl, bash }:
 
 let
+<<<<<<< HEAD
   version = "16.3.0";
+=======
+  version = "15.11.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 in
 buildGoModule rec {
   inherit version;
@@ -17,13 +21,21 @@ buildGoModule rec {
   # For patchShebangs
   buildInputs = [ bash ];
 
+<<<<<<< HEAD
   vendorHash = "sha256-tMhzq9ygUmNi9+mlI9Gvr2nDyG9HQbs8PVusSgadZIE=";
+=======
+  vendorHash = "sha256-4eSfNo5S/eottEN4AptGJq6pBDHkNud0Nj5GrqutADM=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitLab {
     owner = "gitlab-org";
     repo = "gitlab-runner";
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-YAnHOIpUN1OuNefjCIccZOLwPNMxVBuCRQgX0Tb5bos=";
+=======
+    sha256 = "sha256-S4KdEepNWv8J5+r/GT8+8kAKU5fq2iwQU+qyoCY1s0o=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   patches = [
@@ -49,12 +61,15 @@ buildGoModule rec {
     rm executors/docker/services_test.go
   '';
 
+<<<<<<< HEAD
   excludedPackages = [
     # CI helper script for pushing images to Docker and ECR registries
     # https://gitlab.com/gitlab-org/gitlab-runner/-/merge_requests/4139
     "./scripts/sync-docker-images"
   ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   postInstall = ''
     install packaging/root/usr/share/gitlab-runner/clear-docker-cache $out/bin
   '';
@@ -69,6 +84,10 @@ buildGoModule rec {
     license = licenses.mit;
     homepage = "https://about.gitlab.com/gitlab-ci/";
     platforms = platforms.unix ++ platforms.darwin;
+<<<<<<< HEAD
     maintainers = with maintainers; [ bachp zimbatm globin ] ++ teams.gitlab.members;
+=======
+    maintainers = with maintainers; [ bachp zimbatm globin yayayayaka ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

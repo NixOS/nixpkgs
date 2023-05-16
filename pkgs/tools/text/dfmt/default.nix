@@ -1,11 +1,18 @@
 { lib
 , python3
+<<<<<<< HEAD
 , fetchPypi
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 let
   inherit (python3.pkgs)
     buildPythonApplication
+<<<<<<< HEAD
+=======
+    fetchPypi
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     pythonOlder;
 in
 buildPythonApplication rec {

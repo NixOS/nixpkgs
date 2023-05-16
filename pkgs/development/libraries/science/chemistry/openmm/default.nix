@@ -11,8 +11,12 @@
 , enableOpencl ? true
 , opencl-headers
 , ocl-icd
+<<<<<<< HEAD
 , config
 , enableCuda ? config.cudaSupport
+=======
+, enableCuda ? false
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , cudaPackages
 , addOpenGLRunpath
 }:

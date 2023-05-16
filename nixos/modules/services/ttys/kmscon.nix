@@ -99,7 +99,10 @@ in {
     systemd.units."kmsconvt@.service".aliases = [ "autovt@.service" ];
 
     systemd.services.systemd-vconsole-setup.enable = false;
+<<<<<<< HEAD
     systemd.services.reload-systemd-vconsole-setup.enable = false;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     services.kmscon.extraConfig =
       let
@@ -111,7 +114,11 @@ in {
 
     fonts = mkIf (cfg.fonts != null) {
       fontconfig.enable = true;
+<<<<<<< HEAD
       packages = map (f: f.package) cfg.fonts;
+=======
+      fonts = map (f: f.package) cfg.fonts;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
   };
 }

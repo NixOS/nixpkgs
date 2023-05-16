@@ -21,13 +21,21 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "gef";
+<<<<<<< HEAD
   version = "2023.08";
+=======
+  version = "2023.06";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "hugsy";
     repo = "gef";
     rev = version;
+<<<<<<< HEAD
     sha256 = "sha256-MqpII3jhSc6aP/WQDktom2wxAvCkxCwfs1AFWij5J7A=";
+=======
+    sha256 = "sha256-QfVtDGhnyvRWQhxRnDyQFiHD7DByTGC3fUKadTB2w/U=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   dontBuild = true;

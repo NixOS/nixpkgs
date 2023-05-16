@@ -9,22 +9,37 @@
 , python3
 , sqlite
 , vala
+<<<<<<< HEAD
 , libwebsockets
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 stdenv.mkDerivation rec {
   pname = "seafile-shared";
+<<<<<<< HEAD
   version = "9.0.3";
+=======
+  version = "8.0.3";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "haiwen";
     repo = "seafile";
+<<<<<<< HEAD
     rev = "v${version}";
     sha256 = "sha256-g8MQFhDBBUuEDGsJ14rHGsaGEznOtCMVOv+5kljXByY=";
   };
 
   nativeBuildInputs = [
     libwebsockets
+=======
+    rev = "0fdc14d5175979919b7c741f6bb97bfaaacbbfbe";
+    sha256 = "1cr1hvpp96s5arnzh1r5sazapcghhvbazbf7zym37yp3fy3lpya1";
+  };
+
+  nativeBuildInputs = [
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     autoreconfHook
     vala
     pkg-config

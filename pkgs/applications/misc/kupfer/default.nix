@@ -10,7 +10,11 @@
 , desktop-file-utils
 , shared-mime-info
 , wrapGAppsHook
+<<<<<<< HEAD
 , waf
+=======
+, wafHook
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , bash
 , dbus
 }:
@@ -31,7 +35,11 @@ buildPythonApplication rec {
   nativeBuildInputs = [
     wrapGAppsHook intltool
     # For setup hook
+<<<<<<< HEAD
     gobject-introspection waf.hook
+=======
+    gobject-introspection wafHook
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     itstool            # for help pages
     desktop-file-utils # for update-desktop-database
     shared-mime-info   # for update-mime-info

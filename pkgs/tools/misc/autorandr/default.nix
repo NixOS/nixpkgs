@@ -1,9 +1,14 @@
 { lib
 , python3
+<<<<<<< HEAD
+=======
+, python3Packages
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , fetchFromGitHub
 , systemd
 , xrandr
 , installShellFiles
+<<<<<<< HEAD
 , desktop-file-utils
 }:
 
@@ -21,6 +26,17 @@ python3.pkgs.buildPythonApplication rec {
 
   nativeBuildInputs = [ installShellFiles desktop-file-utils ];
   propagatedBuildInputs = with python3.pkgs; [ packaging ];
+=======
+, desktop-file-utils }:
+
+python3.pkgs.buildPythonApplication rec {
+  pname = "autorandr";
+  version = "1.13.3";
+  format = "other";
+
+  nativeBuildInputs = [ installShellFiles desktop-file-utils ];
+  propagatedBuildInputs = [ python3Packages.packaging ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   buildPhase = ''
     substituteInPlace autorandr.py \
@@ -41,10 +57,14 @@ python3.pkgs.buildPythonApplication rec {
     # see https://github.com/phillipberndt/autorandr/issues/197
     installShellCompletion --cmd autorandr \
         --bash contrib/bash_completion/autorandr \
+<<<<<<< HEAD
         --zsh contrib/zsh_completion/_autorandr \
         --fish contrib/fish_copletion/autorandr.fish
     # In the line above there's a typo that needs to be fixed in the next
     # release
+=======
+        --zsh contrib/zsh_completion/_autorandr
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     make install TARGETS='autostart_config' PREFIX=$out DESTDIR=$out
 
@@ -66,6 +86,16 @@ python3.pkgs.buildPythonApplication rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
+=======
+  src = fetchFromGitHub {
+    owner = "phillipberndt";
+    repo = "autorandr";
+    rev = "refs/tags/${version}";
+    sha256 = "sha256-3zWYOOVYpj+s7VKagnbI55MNshM5WtbCFD6q9tRCzes=";
+  };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   meta = with lib; {
     homepage = "https://github.com/phillipberndt/autorandr/";
     description = "Automatically select a display configuration based on connected devices";

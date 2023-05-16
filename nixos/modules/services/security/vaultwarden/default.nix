@@ -59,12 +59,16 @@ in {
 
     config = mkOption {
       type = attrsOf (nullOr (oneOf [ bool int str ]));
+<<<<<<< HEAD
       default = {
         config = {
           ROCKET_ADDRESS = "::1"; # default to localhost
           ROCKET_PORT = 8222;
         };
       };
+=======
+      default = {};
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       example = literalExpression ''
         {
           DOMAIN = "https://bitwarden.example.com";
@@ -121,7 +125,11 @@ in {
         The available configuration options can be found in
         [the environment template file](https://github.com/dani-garcia/vaultwarden/blob/${vaultwarden.version}/.env.template).
 
+<<<<<<< HEAD
         See [](#opt-services.vaultwarden.environmentFile) for how
+=======
+        See ()[#opt-services.vaultwarden.environmentFile) for how
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         to set up access to the Admin UI to invite initial users.
       '';
     };

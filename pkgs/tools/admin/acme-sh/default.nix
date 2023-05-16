@@ -15,13 +15,21 @@
 
 stdenv.mkDerivation rec {
   pname = "acme.sh";
+<<<<<<< HEAD
   version = "3.0.6";
+=======
+  version = "3.0.5";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "acmesh-official";
     repo = "acme.sh";
     rev = "refs/tags/${version}";
+<<<<<<< HEAD
     hash = "sha256-4Chqdr4a9+T+/o1vCPY5xMREoYl0HxY3OlGRD86ulGs=";
+=======
+    hash = "sha256-IDhJRIsk+a+tP+ZeNm6nGvkDh54M0uvAMnSWHbCF3E8=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

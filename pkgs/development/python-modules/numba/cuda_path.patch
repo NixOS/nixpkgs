@@ -1,13 +1,23 @@
 diff --git a/numba/cuda/cuda_paths.py b/numba/cuda/cuda_paths.py
+<<<<<<< HEAD
 index d195bbc29..0699b365b 100644
 --- a/numba/cuda/cuda_paths.py
 +++ b/numba/cuda/cuda_paths.py
 @@ -24,11 +24,7 @@ def _find_valid_path(options):
+=======
+index 0da435d33..7b1fde087 100644
+--- a/numba/cuda/cuda_paths.py
++++ b/numba/cuda/cuda_paths.py
+@@ -24,10 +24,7 @@ def _find_valid_path(options):
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  
  def _get_libdevice_path_decision():
      options = [
 -        ('Conda environment', get_conda_ctk()),
+<<<<<<< HEAD
 -        ('Conda environment (NVIDIA package)', get_nvidia_libdevice_ctk()),
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 -        ('CUDA_HOME', get_cuda_home('nvvm', 'libdevice')),
 -        ('System', get_system_ctk('nvvm', 'libdevice')),
 -        ('Debian package', get_debian_pkg_libdevice()),
@@ -15,7 +25,11 @@ index d195bbc29..0699b365b 100644
      ]
      by, libdir = _find_valid_path(options)
      return by, libdir
+<<<<<<< HEAD
 @@ -36,17 +32,14 @@ def _get_libdevice_path_decision():
+=======
+@@ -35,16 +32,14 @@ def _get_libdevice_path_decision():
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  
  def _nvvm_lib_dir():
      if IS_WIN32:
@@ -29,14 +43,21 @@ index d195bbc29..0699b365b 100644
  def _get_nvvm_path_decision():
      options = [
 -        ('Conda environment', get_conda_ctk()),
+<<<<<<< HEAD
 -        ('Conda environment (NVIDIA package)', get_nvidia_nvvm_ctk()),
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 -        ('CUDA_HOME', get_cuda_home(*_nvvm_lib_dir())),
 -        ('System', get_system_ctk(*_nvvm_lib_dir())),
 +        ('Nix store', get_nix_ctk(*_nvvm_lib_dir())),
      ]
      by, path = _find_valid_path(options)
      return by, path
+<<<<<<< HEAD
 @@ -66,7 +59,7 @@ def _cudalib_path():
+=======
+@@ -64,14 +59,12 @@ def _cudalib_path():
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
      if IS_WIN32:
          return 'bin'
      else:
@@ -44,6 +65,7 @@ index d195bbc29..0699b365b 100644
 +        return 'lib'
  
  
+<<<<<<< HEAD
  def _cuda_home_static_cudalib_path():
 @@ -78,10 +71,7 @@ def _cuda_home_static_cudalib_path():
  
@@ -51,18 +73,30 @@ index d195bbc29..0699b365b 100644
      options = [
 -        ('Conda environment', get_conda_ctk()),
 -        ('Conda environment (NVIDIA package)', get_nvidia_cudalib_ctk()),
+=======
+ def _get_cudalib_dir_path_decision():
+     options = [
+-        ('Conda environment', get_conda_ctk()),
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 -        ('CUDA_HOME', get_cuda_home(_cudalib_path())),
 -        ('System', get_system_ctk(_cudalib_path())),
 +        ('Nix store', get_nix_lib_ctk(_cudalib_path())),
      ]
      by, libdir = _find_valid_path(options)
      return by, libdir
+<<<<<<< HEAD
 @@ -239,3 +229,19 @@ def get_debian_pkg_libdevice():
      if not os.path.exists(pkg_libdevice_location):
          return None
      return pkg_libdevice_location
 +
 +
+=======
+@@ -82,6 +75,22 @@ def _get_cudalib_dir():
+     return _env_path_tuple(by, libdir)
+ 
+ 
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 +def get_nix_ctk(*subdirs):
 +    """Return path to nix store cudatoolkit; or, None if it doesn't exist.
 +    """
@@ -77,3 +111,11 @@ index d195bbc29..0699b365b 100644
 +    base = '@cuda_toolkit_lib_path@'
 +    if os.path.exists(base):
 +        return os.path.join(base, *subdirs)
+<<<<<<< HEAD
+=======
++
++
+ def get_system_ctk(*subdirs):
+     """Return path to system-wide cudatoolkit; or, None if it doesn't exist.
+     """
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)

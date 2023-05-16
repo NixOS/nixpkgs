@@ -3,8 +3,11 @@
 , buildPythonPackage
 , pythonOlder
 , fetchPypi
+<<<<<<< HEAD
 , setuptools
 , wheel
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , pytz-deprecation-shim
 , pytest-mock
 , pytestCheckHook
@@ -12,6 +15,7 @@
 
 buildPythonPackage rec {
   pname = "tzlocal";
+<<<<<<< HEAD
   version = "4.3"; # version needs to be compatible with APScheduler
 
   disabled = pythonOlder "3.7";
@@ -28,6 +32,17 @@ buildPythonPackage rec {
     wheel
   ];
 
+=======
+  version = "4.2"; # version needs to be compatible with APScheduler
+
+  disabled = pythonOlder "3.6";
+
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "ee5842fa3a795f023514ac2d801c4a81d1743bbe642e3940143326b3a00addd7";
+  };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   propagatedBuildInputs = [
     pytz-deprecation-shim
   ];

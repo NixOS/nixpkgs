@@ -87,8 +87,13 @@ in
         environment = {
           HOME = "/root";
         }
+<<<<<<< HEAD
         // (optionalAttrs (config.environment.variables ? DYSNOMIA_CONTAINERS_PATH) { inherit (config.environment.variables) DYSNOMIA_CONTAINERS_PATH; })
         // (optionalAttrs (config.environment.variables ? DYSNOMIA_MODULES_PATH) { inherit (config.environment.variables) DYSNOMIA_MODULES_PATH; });
+=======
+        // (if config.environment.variables ? DYSNOMIA_CONTAINERS_PATH then { inherit (config.environment.variables) DYSNOMIA_CONTAINERS_PATH; } else {})
+        // (if config.environment.variables ? DYSNOMIA_MODULES_PATH then { inherit (config.environment.variables) DYSNOMIA_MODULES_PATH; } else {});
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
         serviceConfig.ExecStart = "${cfg.package}/bin/disnix-service";
       };

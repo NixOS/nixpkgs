@@ -39,7 +39,10 @@ stdenv.mkDerivation rec {
   ];
 
   NIX_CFLAGS_COMPILE = [
+<<<<<<< HEAD
     "-Wno-error"
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     # gstcameradeinterlace.cpp:55:10: fatal error: gst/video/video.h: No such file or directory
     "-I${gst_all_1.gst-plugins-base.dev}/include/gstreamer-1.0"
   ];

@@ -2,11 +2,16 @@
 , buildPythonPackage
 , pythonOlder
 , fetchPypi
+<<<<<<< HEAD
 , setuptools-scm
+=======
+, wrapio
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 buildPythonPackage rec {
   pname = "survey";
+<<<<<<< HEAD
   version = "4.5.4";
   format = "setuptools";
 
@@ -19,6 +24,19 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     setuptools-scm
+=======
+  version = "3.4.3";
+
+  disabled = pythonOlder "3.5";
+
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-TK89quY3bpNIEz1n3Ecew4FnTH6QgeSLdDNV86gq7+I=";
+  };
+
+  propagatedBuildInputs = [
+    wrapio
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   doCheck = false;

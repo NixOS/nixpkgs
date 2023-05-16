@@ -8,13 +8,21 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "mint-themes";
+<<<<<<< HEAD
   version = "2.1.5";
+=======
+  version = "2.0.9";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = pname;
     rev = version;
+<<<<<<< HEAD
     hash = "sha256-l/ePlvdrHUhRz/KBaBgUSA9KF/pufqeCgSAFRR03IKE=";
+=======
+    hash = "sha256-FvX4r7AZgSq52T9CKE9RagsKgQXExTYPptQBXadA3eI=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

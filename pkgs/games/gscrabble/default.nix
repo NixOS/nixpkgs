@@ -15,11 +15,19 @@ buildPythonApplication {
 
   doCheck = false;
 
+<<<<<<< HEAD
   nativeBuildInputs = [ wrapGAppsHook gobject-introspection ];
 
   buildInputs = with gst_all_1; [
     gst-plugins-base gst-plugins-good gst-plugins-ugly gst-plugins-bad
     gnome.adwaita-icon-theme gtk3
+=======
+  nativeBuildInputs = [ wrapGAppsHook ];
+
+  buildInputs = with gst_all_1; [
+    gst-plugins-base gst-plugins-good gst-plugins-ugly gst-plugins-bad
+    gnome.adwaita-icon-theme gtk3 gobject-introspection
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   propagatedBuildInputs = with python3Packages; [ gst-python pygobject3 ];

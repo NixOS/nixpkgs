@@ -23,13 +23,21 @@
 
 stdenv.mkDerivation rec {
   pname = "gvm-libs";
+<<<<<<< HEAD
   version = "22.7.0";
+=======
+  version = "22.5.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "greenbone";
     repo = pname;
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-Jc8qNONdlyzpCCgwhMdwG2D2CO9o0l4vH9sE+NjidE4=";
+=======
+    hash = "sha256-QHAkPZoLQG+UQ1YNdad+XYOywqLqIW1vBmcFkuf3pXU=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [
@@ -60,9 +68,12 @@ stdenv.mkDerivation rec {
     "-DGVM_RUN_DIR=${placeholder "out"}/run/gvm"
   ];
 
+<<<<<<< HEAD
   # causes redefinition of _FORTIFY_SOURCE
   hardeningDisable = [ "fortify3" ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   meta = with lib; {
     description = "Libraries module for the Greenbone Vulnerability Management Solution";
     homepage = "https://github.com/greenbone/gvm-libs";

@@ -1,7 +1,10 @@
 { lib
 , attrs
 , buildPythonPackage
+<<<<<<< HEAD
 , cbor2
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , fetchFromGitHub
 , exceptiongroup
 , hypothesis
@@ -21,7 +24,11 @@
 
 buildPythonPackage rec {
   pname = "cattrs";
+<<<<<<< HEAD
   version = "23.1.2";
+=======
+  version = "22.2.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -30,7 +37,11 @@ buildPythonPackage rec {
     owner = "python-attrs";
     repo = pname;
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-YO4Clbo5fmXbysxwwM2qCHJwO5KwDC05VctRVFruJcw=";
+=======
+    hash = "sha256-Qnrq/mIA/t0mur6IAen4vTmMIhILWS6v5nuf+Via2hA=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [
@@ -41,11 +52,18 @@ buildPythonPackage rec {
     attrs
   ] ++ lib.optionals (pythonOlder "3.11") [
     exceptiongroup
+<<<<<<< HEAD
+=======
+  ] ++ lib.optionals (pythonOlder "3.7") [
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     typing-extensions
   ];
 
   nativeCheckInputs = [
+<<<<<<< HEAD
     cbor2
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     hypothesis
     immutables
     motor
@@ -55,7 +73,10 @@ buildPythonPackage rec {
     pytestCheckHook
     pyyaml
     tomlkit
+<<<<<<< HEAD
     typing-extensions
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     ujson
   ];
 
@@ -96,7 +117,10 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python custom class converters for attrs";
     homepage = "https://github.com/python-attrs/cattrs";
+<<<<<<< HEAD
     changelog = "https://github.com/python-attrs/cattrs/blob/${src.rev}/HISTORY.md";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };

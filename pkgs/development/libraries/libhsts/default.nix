@@ -35,6 +35,10 @@ stdenv.mkDerivation rec {
     description = "Library to easily check a domain against the Chromium HSTS Preload list";
     homepage = "https://gitlab.com/rockdaboot/libhsts";
     license = with licenses; [ mit bsd3 ];
+<<<<<<< HEAD
     maintainers = with maintainers; [ ];
+=======
+    maintainers = with maintainers; [ SuperSandro2000 ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

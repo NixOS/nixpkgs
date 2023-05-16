@@ -11,7 +11,11 @@ buildGoModule rec {
     sha256 = "sha256-glKjScJoJnFEm7Z9LAVF51haeyHB3wQ946U8RzJXs3k=";
   };
 
+<<<<<<< HEAD
   vendorHash = "sha256-YyMySHnrjBHm3hRNJDwWBs86Ih4S5DONYuwlQ3FBjkA=";
+=======
+  vendorSha256 = "sha256-YyMySHnrjBHm3hRNJDwWBs86Ih4S5DONYuwlQ3FBjkA=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   ldflags = [ "-s" "-w" "-X main.version=${version}" ];
 
@@ -22,5 +26,9 @@ buildGoModule rec {
     homepage = "https://github.com/nginxinc/nginx-prometheus-exporter";
     license = licenses.asl20;
     maintainers = with maintainers; [ benley fpletz willibutz globin ];
+<<<<<<< HEAD
+=======
+    platforms = platforms.unix;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

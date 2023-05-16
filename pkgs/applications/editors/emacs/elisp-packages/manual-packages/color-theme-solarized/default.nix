@@ -1,6 +1,10 @@
 { lib
 , trivialBuild
 , fetchFromGitHub
+<<<<<<< HEAD
+=======
+, emacs
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , color-theme
 }:
 
@@ -15,12 +19,30 @@ trivialBuild {
     hash = "sha256-oxX0lo6sxotEiR3nPrKPE9H01HKB3ohB/p8eEHFTp5k=";
   };
 
+<<<<<<< HEAD
   packageRequires = [ color-theme ];
+=======
+  buildInputs = [ emacs ];
+  propagatedUserEnvPkgs = [ color-theme ];
+
+  buildPhase = ''
+    runHook preBuild
+
+    emacs -L . -L ${color-theme}/share/emacs/site-lisp/elpa/color-theme-* \
+      --batch -f batch-byte-compile *.el
+
+    runHook postBuild
+  '';
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   meta = with lib; {
     homepage = "http://ethanschoonover.com/solarized";
     description = "Precision colors for machines and people; Emacs implementation";
     license = licenses.mit;
     maintainers = with maintainers; [ samuelrivas AndersonTorres ];
+<<<<<<< HEAD
+=======
+    inherit (emacs.meta) platforms;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

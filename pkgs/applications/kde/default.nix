@@ -73,7 +73,10 @@ let
       akonadiconsole = callPackage ./akonadiconsole.nix {};
       akregator = callPackage ./akregator.nix {};
       analitza = callPackage ./analitza.nix {};
+<<<<<<< HEAD
       arianna = callPackage ./arianna.nix {};
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       ark = callPackage ./ark {};
       baloo-widgets = callPackage ./baloo-widgets.nix {};
       bomber = callPackage ./bomber.nix {};
@@ -100,7 +103,11 @@ let
       kaccounts-providers = callPackage ./kaccounts-providers.nix {};
       kaddressbook = callPackage ./kaddressbook.nix {};
       kalarm = callPackage ./kalarm.nix {};
+<<<<<<< HEAD
       merkuro = callPackage ./merkuro.nix {};
+=======
+      kalendar = callPackage ./kalendar.nix {};
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       kalzium = callPackage ./kalzium.nix {};
       kamoso = callPackage ./kamoso.nix {};
       kapman = callPackage ./kapman.nix {};
@@ -135,6 +142,10 @@ let
       kdiamond = callPackage ./kdiamond.nix {};
       keditbookmarks = callPackage ./keditbookmarks.nix {};
       kfind = callPackage ./kfind.nix {};
+<<<<<<< HEAD
+=======
+      kfloppy = callPackage ./kfloppy.nix {};
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       kgeography = callPackage ./kgeography.nix {};
       kget = callPackage ./kget.nix {};
       kgpg = callPackage ./kgpg.nix {};

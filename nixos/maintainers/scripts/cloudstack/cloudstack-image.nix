@@ -2,6 +2,11 @@
 
 { config, lib, pkgs, ... }:
 
+<<<<<<< HEAD
+=======
+with lib;
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 {
   imports =
     [ ../../../modules/virtualisation/cloudstack-config.nix ];

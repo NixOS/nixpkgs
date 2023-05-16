@@ -7,25 +7,39 @@
 , psmisc
 , argp-standalone
 , openssl
+<<<<<<< HEAD
 , libcap
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , jitterentropy, withJitterEntropy ? true
   # WARNING: DO NOT USE BEACON GENERATED VALUES AS SECRET CRYPTOGRAPHIC KEYS
   # https://www.nist.gov/programs-projects/nist-randomness-beacon
 , curl, jansson, libxml2, withNistBeacon ? false
 , libp11, opensc, withPkcs11 ? true
 , rtl-sdr, withRtlsdr ? true
+<<<<<<< HEAD
 , withQrypt ? false
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 stdenv.mkDerivation rec {
   pname = "rng-tools";
+<<<<<<< HEAD
   version = "6.16";
+=======
+  version = "6.15";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "nhorman";
     repo = pname;
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-9pXQhG2nbu6bq4BnBgEOyyUBNkQTI5RhWmJIoLtFU+c=";
+=======
+    hash = "sha256-km+MEng3VWZF07sdvGLbAG/vf8/A1DxhA/Xa2Y+LAEQ=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ autoreconfHook libtool pkg-config ];
@@ -35,16 +49,26 @@ stdenv.mkDerivation rec {
     (lib.withFeature   (withNistBeacon)    "nistbeacon")
     (lib.withFeature   (withPkcs11)        "pkcs11")
     (lib.withFeature   (withRtlsdr)        "rtlsdr")
+<<<<<<< HEAD
     (lib.withFeature   (withQrypt)         "qrypt")
   ];
 
   buildInputs = [ openssl libcap ]
+=======
+  ];
+
+  buildInputs = [ openssl ]
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     ++ lib.optionals stdenv.hostPlatform.isMusl [ argp-standalone ]
     ++ lib.optionals withJitterEntropy [ jitterentropy ]
     ++ lib.optionals withNistBeacon    [ curl jansson libxml2 ]
     ++ lib.optionals withPkcs11        [ libp11 libp11.passthru.openssl ]
+<<<<<<< HEAD
     ++ lib.optionals withRtlsdr        [ rtl-sdr ]
     ++ lib.optionals withQrypt         [ curl jansson ];
+=======
+    ++ lib.optionals withRtlsdr        [ rtl-sdr ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   enableParallelBuilding = true;
 
@@ -55,6 +79,7 @@ stdenv.mkDerivation rec {
   ];
 
   doCheck = true;
+<<<<<<< HEAD
   preCheck = ''
     patchShebangs tests/*.sh
     export RNGD_JITTER_TIMEOUT=10
@@ -66,6 +91,9 @@ stdenv.mkDerivation rec {
   # for the test cases.
   # Patching the timeout to a larger value was declined upstream,
   # see (https://github.com/nhorman/rng-tools/pull/178).
+=======
+  preCheck = "patchShebangs tests/*.sh";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nativeCheckInputs = [ psmisc ]; # rngtestjitter.sh needs killall
 
   doInstallCheck = true;

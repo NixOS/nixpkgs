@@ -14,8 +14,13 @@ let
     nonchars = filter (x : !(elem x.value chars))
                (imap0 (i: v: {ind = i; value = v;}) (stringToCharacters str));
   in
+<<<<<<< HEAD
     lib.optionalString (nonchars != [ ])
       (substring (head nonchars).ind (add 1 (sub (last nonchars).ind (head nonchars).ind)) str);
+=======
+    if length nonchars == 0 then ""
+    else substring (head nonchars).ind (add 1 (sub (last nonchars).ind (head nonchars).ind)) str;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   indent = str: concatStrings (concatMap (s: ["  " (trim [" " "\t"] s) "\n"]) (splitString "\n" str));
   configText = indent (toString cfg.configSetup);
   connectionText = concatStrings (mapAttrsToList (n: v:

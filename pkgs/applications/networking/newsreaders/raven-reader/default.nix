@@ -2,10 +2,17 @@
 
 let
   pname = "raven-reader";
+<<<<<<< HEAD
   version = "1.0.80";
   src = fetchurl {
     url = "https://github.com/hello-efficiency-inc/raven-reader/releases/download/v${version}/Raven-Reader-${version}.AppImage";
     sha256 = "sha256-RkpUWM1hAH73ePpQPj2C3SOukLpcPXbaXmb1VbcHaSU=";
+=======
+  version = "1.0.78";
+  src = fetchurl {
+    url = "https://github.com/hello-efficiency-inc/raven-reader/releases/download/v${version}/Raven-Reader-${version}.AppImage";
+    sha256 = "sha256-H9V2zTD80fBuIuNZnGDR21IYAAl/b6iYrde5rfsMECQ=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
   appimageContents = appimageTools.extractType2 { inherit pname version src; };
 

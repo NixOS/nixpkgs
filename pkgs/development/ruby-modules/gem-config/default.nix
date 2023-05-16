@@ -25,9 +25,15 @@
 , cairo, re2, rake, gobject-introspection, gdk-pixbuf, zeromq, czmq, graphicsmagick, libcxx
 , file, libvirt, glib, vips, taglib, libopus, linux-pam, libidn, protobuf, fribidi, harfbuzz
 , bison, flex, pango, python3, patchelf, binutils, freetds, wrapGAppsHook, atk
+<<<<<<< HEAD
 , bundler, libsass, dart-sass, libexif, libselinux, libsepol, shared-mime-info, libthai, libdatrie
 , CoreServices, DarwinTools, cctools, libtool, discount, exiv2, libmaxminddb, libyaml
 , autoSignDarwinBinariesHook, fetchpatch
+=======
+, bundler, libsass, libexif, libselinux, libsepol, shared-mime-info, libthai, libdatrie
+, CoreServices, DarwinTools, cctools, libtool, discount, exiv2, libmaxminddb, libyaml
+, autoSignDarwinBinariesHook
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }@args:
 
 let
@@ -239,9 +245,15 @@ in
   };
 
   gio2 = attrs: {
+<<<<<<< HEAD
     nativeBuildInputs = [ pkg-config gobject-introspection ]
       ++ lib.optionals stdenv.isDarwin [ DarwinTools ];
     buildInputs = [ gtk2 pcre pcre2 ] ++ lib.optionals stdenv.isLinux [ util-linux libselinux libsepol ];
+=======
+    nativeBuildInputs = [ pkg-config ]
+      ++ lib.optionals stdenv.isDarwin [ DarwinTools ];
+    buildInputs = [ gtk2 pcre pcre2 gobject-introspection ] ++ lib.optionals stdenv.isLinux [ util-linux libselinux libsepol ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   gitlab-markup = attrs: { meta.priority = 1; };
@@ -283,6 +295,7 @@ in
     meta.mainProgram = "rbprettier";
   };
 
+<<<<<<< HEAD
   prometheus-client-mmap = attrs: {
     dontBuild = false;
     postPatch = let
@@ -292,6 +305,8 @@ in
     '';
   };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   glib2 = attrs: {
     nativeBuildInputs = [ pkg-config ]
       ++ lib.optionals stdenv.isDarwin [ DarwinTools ];
@@ -525,7 +540,11 @@ in
 
   openssl = attrs: {
     # https://github.com/ruby/openssl/issues/369
+<<<<<<< HEAD
     buildInputs = [ (if (lib.versionAtLeast attrs.version "3.0.0") then openssl else openssl_1_1) ];
+=======
+    buildInputs = [ openssl_1_1 ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   opus-ruby = attrs: {
@@ -539,6 +558,7 @@ in
 
   ovirt-engine-sdk = attrs: {
     buildInputs = [ curl libxml2 ];
+<<<<<<< HEAD
     dontBuild = false;
     patches = [
       # fix ruby 3.1 https://github.com/oVirt/ovirt-engine-sdk-ruby/pull/3
@@ -548,6 +568,8 @@ in
         stripLen = 1;
       })
     ];
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   pango = attrs: {
@@ -573,6 +595,7 @@ in
   };
 
   pg = attrs: {
+<<<<<<< HEAD
     # Force pkg-config lookup for libpq.
     # See https://github.com/ged/ruby-pg/blob/6629dec6656f7ca27619e4675b45225d9e422112/ext/extconf.rb#L34-L55
     #
@@ -581,6 +604,11 @@ in
     buildFlags = [ "--with-pg-config=ignore" ];
     nativeBuildInputs = [ pkg-config ];
     buildInputs = [ postgresql ];
+=======
+    buildFlags = [
+      "--with-pg-config=${postgresql}/bin/pg_config"
+    ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   psych = attrs: {
@@ -672,6 +700,7 @@ in
       "--with-cflags=-I${ncurses.dev}/include"
       "--with-ldflags=-L${ncurses.out}/lib"
     ];
+<<<<<<< HEAD
     dontBuild = false;
     postPatch = ''
       substituteInPlace extconf.rb --replace 'rubyio.h' 'ruby/io.h'
@@ -679,6 +708,8 @@ in
         --replace 'rubyio.h' 'ruby/io.h' \
         --replace 'rb_cData' 'rb_cObject'
     '';
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   ruby-vips = attrs: {
@@ -711,6 +742,7 @@ in
     buildFlags = [ "--disable-lto" ];
   });
 
+<<<<<<< HEAD
   sass-embedded = attrs: {
     # Patch the Rakefile to use our dart-sass and not try to fetch anything.
     dontBuild = false;
@@ -721,6 +753,8 @@ in
     '';
   };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   scrypt = attrs: lib.optionalAttrs stdenv.isDarwin {
     dontBuild = false;
     postPatch = ''

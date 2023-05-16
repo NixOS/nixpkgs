@@ -67,7 +67,11 @@ rec {
             "--disable-shared" # brrr...
           ];
       }));
+<<<<<<< HEAD
     } // lib.optionalAttrs (stdenv0.hostPlatform.libc == "glibc") {
+=======
+    } // lib.optionalAttrs (stdenv0.hostPlatform.libc == "libc") {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       extraBuildInputs = (old.extraBuildInputs or []) ++ [
         pkgs.glibc.static
       ];
@@ -95,6 +99,7 @@ rec {
   makeStaticDarwin = stdenv: stdenv.override (old: {
     # extraBuildInputs are dropped in cross.nix, but darwin still needs them
     extraBuildInputs = [ pkgs.buildPackages.darwin.CF ];
+<<<<<<< HEAD
     mkDerivationFromStdenv = withOldMkDerivation old (stdenv: mkDerivationSuper: args:
     (mkDerivationSuper args).overrideAttrs (finalAttrs: {
       NIX_CFLAGS_LINK = toString (finalAttrs.NIX_CFLAGS_LINK or "")
@@ -110,6 +115,20 @@ rec {
           } ./darwin/portable-libsystem.sh)
         ];
     }));
+=======
+    mkDerivationFromStdenv = extendMkDerivationArgs old (args: {
+      NIX_CFLAGS_LINK = toString (args.NIX_CFLAGS_LINK or "")
+        + lib.optionalString (stdenv.cc.isGNU or false) " -static-libgcc";
+      nativeBuildInputs = (args.nativeBuildInputs or []) ++ [
+        (pkgs.buildPackages.makeSetupHook {
+          name = "darwin-portable-libSystem-hook";
+          substitutions = {
+            libsystem = "${stdenv.cc.libc}/lib/libSystem.B.dylib";
+          };
+        } ./darwin/portable-libsystem.sh)
+      ];
+    });
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   });
 
   # Puts all the other ones together
@@ -121,6 +140,12 @@ rec {
     # Apple does not provide a static version of libSystem or crt0.o
     # So we can’t build static binaries without extensive hacks.
     ++ lib.optional (!stdenv.hostPlatform.isDarwin) makeStaticBinaries
+<<<<<<< HEAD
+=======
+
+    # Glibc doesn’t come with static runtimes by default.
+    # ++ lib.optional (stdenv.hostPlatform.libc == "glibc") ((lib.flip overrideInStdenv) [ self.glibc.static ])
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   );
 
 

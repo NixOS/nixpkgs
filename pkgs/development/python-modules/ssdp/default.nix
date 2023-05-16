@@ -9,7 +9,11 @@
 
 buildPythonPackage rec {
   pname = "ssdp";
+<<<<<<< HEAD
   version = "1.3.0";
+=======
+  version = "1.1.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -18,7 +22,11 @@ buildPythonPackage rec {
     owner = "codingjoe";
     repo = pname;
     rev = "refs/tags/${version}";
+<<<<<<< HEAD
     hash = "sha256-mORjMEg7Q/2CKZBLICSGF8dcdl98S6mBgJ4jujPGs6M=";
+=======
+    hash = "sha256-D2mww3sEc2SvufWNmT450a2CW+ogROn3RHypljkebuY=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;

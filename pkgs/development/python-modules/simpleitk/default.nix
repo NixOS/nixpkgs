@@ -15,7 +15,11 @@ buildPythonPackage rec {
   format = "pyproject";
   disabled = pythonOlder "3.8";
 
+<<<<<<< HEAD
   sourceRoot = "${src.name}/Wrapping/Python";
+=======
+  sourceRoot = "source/Wrapping/Python";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   preBuild = ''
     make
   '';

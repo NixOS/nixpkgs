@@ -11,7 +11,11 @@ buildGoModule rec {
     sha256 = "sha256-01ciAutRIn4DmqlvDTXhRiuZHTtF8b6js7SUrLOjtAY=";
   };
 
+<<<<<<< HEAD
   vendorHash = "sha256-hwDi59Yp92eMDqA8OD56nxsKSX2ngxs0lYdmEMLX+Oc=";
+=======
+  vendorSha256 = "sha256-hwDi59Yp92eMDqA8OD56nxsKSX2ngxs0lYdmEMLX+Oc=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   # Change the default location of the management socket on Linux
   # systems so that the yggdrasil system service unit does not have to

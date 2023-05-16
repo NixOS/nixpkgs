@@ -6,7 +6,11 @@
 mkChromiumDerivation (base: rec {
   name = "chromium-browser";
   packageName = "chromium";
+<<<<<<< HEAD
   buildTargets = [ "run_mksnapshot_default" "chrome_sandbox" "chrome" ];
+=======
+  buildTargets = [ "mksnapshot" "chrome_sandbox" "chrome" ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   outputs = ["out" "sandbox"];
 
@@ -85,8 +89,13 @@ mkChromiumDerivation (base: rec {
       then "https://github.com/ungoogled-software/ungoogled-chromium"
       else "https://www.chromium.org/";
     maintainers = with lib.maintainers; if ungoogled
+<<<<<<< HEAD
       then [ squalus primeos michaeladler networkexception ]
       else [ primeos thefloweringash networkexception ];
+=======
+      then [ squalus primeos michaeladler ]
+      else [ primeos thefloweringash ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     license = if enableWideVine then lib.licenses.unfree else lib.licenses.bsd3;
     platforms = lib.platforms.linux;
     mainProgram = "chromium";

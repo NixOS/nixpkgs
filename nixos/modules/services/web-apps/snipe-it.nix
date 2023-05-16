@@ -15,8 +15,11 @@ let
 
   tlsEnabled = cfg.nginx.addSSL || cfg.nginx.forceSSL || cfg.nginx.onlySSL || cfg.nginx.enableACME;
 
+<<<<<<< HEAD
   inherit (snipe-it.passthru) phpPackage;
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   # shell script for local administration
   artisan = pkgs.writeScriptBin "snipe-it" ''
     #! ${pkgs.runtimeShell}
@@ -25,7 +28,11 @@ let
     if [[ "$USER" != ${user} ]]; then
       sudo='exec /run/wrappers/bin/sudo -u ${user}'
     fi
+<<<<<<< HEAD
     $sudo ${phpPackage}/bin/php artisan $*
+=======
+    $sudo ${pkgs.php}/bin/php artisan $*
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '';
 in {
   options.services.snipe-it = {
@@ -342,7 +349,12 @@ in {
     };
 
     services.phpfpm.pools.snipe-it = {
+<<<<<<< HEAD
       inherit user group phpPackage;
+=======
+      inherit user group;
+      phpPackage = pkgs.php81;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       phpOptions = ''
         post_max_size = ${cfg.maxUploadSize}
         upload_max_filesize = ${cfg.maxUploadSize}
@@ -451,7 +463,11 @@ in {
           rm "${cfg.dataDir}"/bootstrap/cache/*.php || true
 
           # migrate db
+<<<<<<< HEAD
           ${phpPackage}/bin/php artisan migrate --force
+=======
+          ${pkgs.php}/bin/php artisan migrate --force
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
           # A placeholder file for invalid barcodes
           invalid_barcode_location="${cfg.dataDir}/public/uploads/barcodes/invalid_barcode.gif"

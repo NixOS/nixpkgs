@@ -4,6 +4,10 @@
 , cvxopt
 , cvxpy
 , cython
+<<<<<<< HEAD
+=======
+, doCheck ? true
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , fetchFromGitHub
 , ipython
 , matplotlib
@@ -18,7 +22,11 @@
 
 buildPythonPackage rec {
   pname = "qutip";
+<<<<<<< HEAD
   version = "4.7.3";
+=======
+  version = "4.7.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -27,7 +35,11 @@ buildPythonPackage rec {
     owner = pname;
     repo = pname;
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-cpzUHjZBpAbNEnYRuY1wUZouAEAgBaN9rWdxRSfI3bs=";
+=======
+    hash = "sha256-W5iqRWAB6D1Dnxz0Iyl7ZmP3yrXvLyV7BdBdIgFCiQY=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [
@@ -85,9 +97,15 @@ buildPythonPackage rec {
   };
 
   meta = with lib; {
+<<<<<<< HEAD
     description = "Open-source software for simulating the dynamics of closed and open quantum systems";
     homepage = "https://qutip.org/";
     changelog = "https://github.com/qutip/qutip/releases/tag/v${version}";
+=======
+    broken = (stdenv.isLinux && stdenv.isAarch64);
+    description = "Open-source software for simulating the dynamics of closed and open quantum systems";
+    homepage = "https://qutip.org/";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     license = licenses.bsd3;
     maintainers = with maintainers; [ fabiangd ];
   };

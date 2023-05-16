@@ -25,7 +25,10 @@
 , libbfd_2_38
 , libopcodes
 , libopcodes_2_38
+<<<<<<< HEAD
 , libpfm
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , libtraceevent
 , openssl
 , systemtap
@@ -64,7 +67,11 @@ stdenv.mkDerivation {
   postPatch = ''
     # Linux scripts
     patchShebangs scripts
+<<<<<<< HEAD
     patchShebangs tools/perf/check-headers.sh
+=======
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '' + lib.optionalString (lib.versionAtLeast kernel.version "6.3") ''
     # perf-specific scripts
     patchShebangs tools/perf/pmu-events
@@ -126,7 +133,10 @@ stdenv.mkDerivation {
   ++ lib.optional withGtk gtk2
   ++ lib.optional withZstd zstd
   ++ lib.optional withLibcap libcap
+<<<<<<< HEAD
   ++ lib.optional (lib.versionAtLeast kernel.version "5.8") libpfm
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ++ lib.optional (lib.versionAtLeast kernel.version "6.0") python3.pkgs.setuptools;
 
   env.NIX_CFLAGS_COMPILE = toString [

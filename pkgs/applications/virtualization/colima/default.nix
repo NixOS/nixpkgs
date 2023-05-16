@@ -17,13 +17,21 @@
 
 buildGoModule rec {
   pname = "colima";
+<<<<<<< HEAD
   version = "0.5.5";
+=======
+  version = "0.5.4";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "abiosoft";
     repo = pname;
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-i+JveX9cXF+2Po5NFM8HTmwcSJJ/iSPrlwbA/7aNhc0=";
+=======
+    sha256 = "sha256-oCYHQFajtZXVAVeJ8zvJABlmwmOUgisvVg9eLT7wd0M=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     # We need the git revision
     leaveDotGit = true;
     postFetch = ''
@@ -35,7 +43,11 @@ buildGoModule rec {
   nativeBuildInputs = [ installShellFiles makeWrapper ]
     ++ lib.optionals stdenv.isDarwin [ darwin.DarwinTools ];
 
+<<<<<<< HEAD
   vendorHash = "sha256-lsTvzGFoC3Brnr1Q0Hl0ZqEDfcTeQ8vWGe+xylTyvts=";
+=======
+  vendorHash = "sha256-bEgC7j8WvCgrJ2Ahye4mfWVEmo6Y/OO64mDIJXvtaiE=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   # disable flaky Test_extractZones
   # https://hydra.nixos.org/build/212378003/log

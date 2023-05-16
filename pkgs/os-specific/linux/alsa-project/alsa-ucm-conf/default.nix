@@ -2,11 +2,19 @@
 
 stdenv.mkDerivation rec {
   pname = "alsa-ucm-conf";
+<<<<<<< HEAD
   version = "1.2.9";
 
   src = fetchurl {
     url = "mirror://alsa/lib/${pname}-${version}.tar.bz2";
     hash = "sha256-N09oM7/XfQpGdeSqK/t53v6FDlpGpdRUKkWWL0ueJyo=";
+=======
+  version = "1.2.8";
+
+  src = fetchurl {
+    url = "mirror://alsa/lib/${pname}-${version}.tar.bz2";
+    hash = "sha256-/uSnN4MP0l+WnYPaRqKyMb6whu/ZZvzAfSJeeCMmCug=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   dontBuild = true;

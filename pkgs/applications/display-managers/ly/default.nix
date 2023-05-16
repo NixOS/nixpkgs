@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 { stdenv, lib, fetchFromGitHub, git, linux-pam, libxcb }:
 
 stdenv.mkDerivation rec {
@@ -15,6 +16,24 @@ stdenv.mkDerivation rec {
   hardeningDisable = [ "all" ];
   nativeBuildInputs = [ git ];
   buildInputs = [ libxcb linux-pam ];
+=======
+{ stdenv, lib, fetchFromGitHub, linux-pam }:
+
+stdenv.mkDerivation rec {
+  pname = "ly";
+  version = "0.2.1";
+
+  src = fetchFromGitHub {
+    owner = "cylgom";
+    repo = "ly";
+    rev = version;
+    sha256 = "16gjcrd4a6i4x8q8iwlgdildm7cpdsja8z22pf2izdm6rwfki97d";
+    fetchSubmodules = true;
+  };
+
+  buildInputs = [ linux-pam ];
+  makeFlags = [ "FLAGS=-Wno-error" ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   installPhase = ''
     mkdir -p $out/bin
@@ -24,8 +43,13 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "TUI display manager";
     license = licenses.wtfpl;
+<<<<<<< HEAD
     homepage = "https://github.com/fairyglade/ly";
     maintainers = [ maintainers.vidister ];
     platforms = platforms.linux;
+=======
+    homepage = "https://github.com/cylgom/ly";
+    maintainers = [ maintainers.vidister ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

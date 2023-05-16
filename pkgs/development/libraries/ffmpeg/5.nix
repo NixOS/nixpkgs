@@ -1,6 +1,7 @@
 import ./generic.nix rec {
   version = "5.1.3";
   sha256 = "sha256-twfJvANLQGO7TiyHPMPqApfHLFUlOGZTTIIGEnjyvuE=";
+<<<<<<< HEAD
   extraPatches = [
     {
       name = "libsvtav1-1.5.0-compat-compressed_ten_bit_format.patch";
@@ -18,4 +19,6 @@ import ./generic.nix rec {
       hash = "sha256-Z5HSe7YpryYGHD3BYXejAhqR4EPnmfTGyccxNvU3AaU=";
     }
   ];
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }

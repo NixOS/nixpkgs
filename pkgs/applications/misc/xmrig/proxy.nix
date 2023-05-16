@@ -13,13 +13,21 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "xmrig-proxy";
+<<<<<<< HEAD
   version = "6.20.0";
+=======
+  version = "6.19.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "xmrig";
     repo = "xmrig-proxy";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-RliH4cr96lsigtoJiq5ymkIY8rbXG4xYmhWDAwZpSY0=";
+=======
+    hash = "sha256-3nEfg2hmOMjevo5VhjelIeV2xRwkIOVhLNxBmPzdWog=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   postPatch = ''

@@ -14,7 +14,11 @@
 
 buildPythonPackage rec {
   pname = "aioswitcher";
+<<<<<<< HEAD
   version = "3.4.0";
+=======
+  version = "3.3.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -23,7 +27,11 @@ buildPythonPackage rec {
     owner = "TomerFi";
     repo = pname;
     rev = "refs/tags/${version}";
+<<<<<<< HEAD
     hash = "sha256-coTENnNX8GFLstpQtuJOC8050llW4QuLiutYARDWaSo=";
+=======
+    hash = "sha256-dg3oGSwRoOFkX97ZBk7fgOv0fZjOZ+FRXNO9DKEU6Zk=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

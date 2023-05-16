@@ -2,13 +2,21 @@
 
 buildGoModule rec {
   pname = "kyverno";
+<<<<<<< HEAD
   version = "1.10.3";
+=======
+  version = "1.9.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "kyverno";
     repo = "kyverno";
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-SRDabFN0ITXwHzvE5m3pIAk42kQa2yINpT64x+k3r3g=";
+=======
+    sha256 = "sha256-R+08s8oQ/ZbaDwyYBshtot+g9OM7XAM6wZPf287wngg=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   ldflags = [
@@ -18,7 +26,11 @@ buildGoModule rec {
     "-X github.com/kyverno/kyverno/pkg/version.BuildTime=1970-01-01_00:00:00"
   ];
 
+<<<<<<< HEAD
   vendorHash = "sha256-YFlf0lqG4vWn9d5RAvi12ti/wV+qvsHWn123hhfmxRU=";
+=======
+  vendorHash = "sha256-jE1v9Ec4lEVcx+YjVtcsuNPCqr3x1pt8BMmC+OTwlRM=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   subPackages = [ "cmd/cli/kubectl-kyverno" ];
 

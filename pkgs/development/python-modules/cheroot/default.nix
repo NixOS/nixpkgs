@@ -2,8 +2,13 @@
 , stdenv
 , buildPythonPackage
 , fetchPypi
+<<<<<<< HEAD
 , jaraco-functools
 , jaraco-text
+=======
+, jaraco_functools
+, jaraco_text
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , more-itertools
 , portend
 , pypytools
@@ -35,13 +40,21 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
+<<<<<<< HEAD
     jaraco-functools
+=======
+    jaraco_functools
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     more-itertools
     six
   ];
 
   nativeCheckInputs = [
+<<<<<<< HEAD
     jaraco-text
+=======
+    jaraco_text
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     portend
     pypytools
     pytest-mock

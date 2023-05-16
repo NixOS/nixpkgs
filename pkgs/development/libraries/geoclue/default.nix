@@ -65,6 +65,10 @@ stdenv.mkDerivation rec {
     json-glib
     libsoup_3
     avahi
+<<<<<<< HEAD
+=======
+    gobject-introspection
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ] ++ lib.optionals withDemoAgent [
     libnotify gdk-pixbuf
   ] ++ lib.optionals (!stdenv.isDarwin) [

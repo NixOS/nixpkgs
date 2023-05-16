@@ -40,6 +40,10 @@ buildPythonPackage rec {
     description = "Pythonic remote execution";
     homepage = "https://www.fabfile.org/";
     license = licenses.bsd2;
+<<<<<<< HEAD
     maintainers = [ ];
+=======
+    maintainers = [ maintainers.costrouc ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

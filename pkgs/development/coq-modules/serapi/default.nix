@@ -87,10 +87,13 @@ in
     then [
       ./janestreet-0.15.patch
     ]
+<<<<<<< HEAD
     else if version == "8.17.0+0.17.0"
     then [
       ./janestreet-0.16.patch
     ]
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     else [
     ];
 

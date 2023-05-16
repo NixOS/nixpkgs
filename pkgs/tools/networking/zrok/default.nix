@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 { lib, stdenv, fetchzip }:
 
 let
@@ -28,6 +29,20 @@ stdenv.mkDerivation rec {
 
   updateScript = ./update.sh;
 
+=======
+{ stdenv, lib, fetchzip, patchelf }:
+
+stdenv.mkDerivation rec {
+  pname = "zrok";
+  version = "0.3.6";
+
+  src = fetchzip {
+    url = "https://github.com/openziti/zrok/releases/download/v${version}/zrok_${version}_linux_amd64.tar.gz";
+    stripRoot = false;
+    sha256 = "sha256-gcmgpvfk7bciTmotTHObvZvLPdLudAR2vQneLKN+uE4=";
+  };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   installPhase = let
     interpreter = "$(< \"$NIX_CC/nix-support/dynamic-linker\")";
   in ''
@@ -41,9 +56,15 @@ stdenv.mkDerivation rec {
     description = "Geo-scale, next-generation sharing platform built on top of OpenZiti";
     homepage = "https://zrok.io";
     maintainers = [ lib.maintainers.bandresen ];
+<<<<<<< HEAD
     platforms = [ "x86_64-linux" "aarch64-linux" "armv7l-linux" ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.asl20;
+=======
+    platforms = [ "x86_64-linux" ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.apsl20;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
 }

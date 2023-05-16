@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 { lib, stdenv, buildEnv, runCommand, fetchurl, file, texlive, writeShellScript, writeText }:
 
 rec {
@@ -26,6 +27,11 @@ rec {
         ${postTest}
       ''
   );
+=======
+{ lib, runCommand, fetchurl, file, texlive, writeShellScript }:
+
+{
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   tlpdbNix = runCommand "texlive-test-tlpdb-nix" {
     nixpkgsTlpdbNix = ../../tools/typesetting/tex/texlive/tlpdb.nix;
@@ -36,6 +42,7 @@ rec {
     diff -u "''${nixpkgsTlpdbNix}" "''${tlpdbNix}" | tee "$out/tlpdb.nix.patch"
   '';
 
+<<<<<<< HEAD
   # test two completely different font discovery mechanisms, both of which were once broken:
   #  - lualatex uses its own luaotfload script (#220228)
   #  - xelatex uses fontconfig (#228196)
@@ -62,6 +69,36 @@ rec {
   chktex = runCommand "texlive-test-chktex" {
     nativeBuildInputs = [
       (texlive.combine { inherit (texlive) scheme-infraonly chktex; })
+=======
+  opentype-fonts = runCommand "texlive-test-opentype" {
+    nativeBuildInputs = [
+      (with texlive; combine { inherit scheme-medium libertinus-fonts; })
+    ];
+    input = builtins.toFile "opentype-testfile.tex" ''
+      \documentclass{article}
+      \usepackage{fontspec}
+      \setmainfont{Libertinus Serif}
+      \begin{document}
+        \LaTeX{} is great
+      \end{document}
+    '';
+  }
+  ''
+    export HOME="$(mktemp -d)"
+    # We use the same testfile to test two completely different
+    # font discovery mechanisms, both of which were once broken:
+    #  - lualatex uses its own luaotfload script (#220228)
+    #  - xelatex uses fontconfig (#228196)
+    # both of the following two commands need to succeed.
+    lualatex -halt-on-error "$input"
+    xelatex -halt-on-error "$input"
+    echo success > $out
+  '';
+
+  chktex = runCommand "texlive-test-chktex" {
+    nativeBuildInputs = [
+      (with texlive; combine { inherit scheme-infraonly chktex; })
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     ];
     input = builtins.toFile "chktex-sample.tex" ''
       \documentclass{article}
@@ -99,7 +136,11 @@ rec {
 
     # test dvipng's limited capability to render postscript specials via GS
     ghostscript = runCommand "texlive-test-ghostscript" {
+<<<<<<< HEAD
       nativeBuildInputs = [ file (texlive.combine { inherit (texlive) scheme-small dvipng; }) ];
+=======
+      nativeBuildInputs = [ file (with texlive; combine { inherit scheme-small dvipng; }) ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       input = builtins.toFile "postscript-sample.tex" ''
         \documentclass{minimal}
         \begin{document}
@@ -166,8 +207,13 @@ rec {
 
   texdoc = runCommand "texlive-test-texdoc" {
     nativeBuildInputs = [
+<<<<<<< HEAD
       (texlive.combine {
         inherit (texlive) scheme-infraonly luatex texdoc;
+=======
+      (with texlive; combine {
+        inherit scheme-infraonly luatex texdoc;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         pkgFilter = pkg: lib.elem pkg.tlType [ "run" "bin" "doc" ];
       })
     ];
@@ -178,6 +224,7 @@ rec {
     grep texdoc.pdf "$out"
   '';
 
+<<<<<<< HEAD
   # check that the default language is US English
   defaultLanguage = lib.recurseIntoAttrs rec {
     # language.def
@@ -287,6 +334,8 @@ rec {
       };
     };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   # test that language files are generated as expected
   hyphen-base = runCommand "texlive-test-hyphen-base" {
     hyphenBase = lib.head texlive.hyphen-base.pkgs;
@@ -331,6 +380,7 @@ rec {
       {"$kpathsea","$schemeFull"/share/texmf-var}/web2c/fmtutil.cnf \
       | tee "$out/fmtutil.cnf.patch"
   '';
+<<<<<<< HEAD
 
   # verify that the restricted mode gets enabled when
   # needed (detected by checking if it disallows --gscmd)
@@ -664,4 +714,6 @@ rec {
       touch "$out"
     fi
   '';
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }

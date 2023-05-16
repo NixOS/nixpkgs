@@ -20,11 +20,16 @@
 
 stdenv.mkDerivation rec {
   pname = "otpclient";
+<<<<<<< HEAD
   version = "3.1.9";
+=======
+  version = "3.1.6";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "paolostivanin";
     repo = pname;
+<<<<<<< HEAD
     rev = "refs/tags/v${version}";
     hash = "sha256-FSXUqnES/YxONwLza4N2C4Ks02OOfRaXHbdBxr85sFg=";
   };
@@ -49,11 +54,22 @@ stdenv.mkDerivation rec {
     qrencode
     zbar
   ];
+=======
+    rev = "v${version}";
+    sha256 = "sha256-v7TvdS0IlfB4oKdaEh7Z3AFJDV1bOMiX5vVD7VhIMCE=";
+  };
+
+  buildInputs = [ gtk3 jansson libgcrypt libzip libpng libcotp zbar protobuf protobufc libsecret qrencode libuuid ];
+  nativeBuildInputs = [ cmake pkg-config wrapGAppsHook ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   meta = with lib; {
     description = "Highly secure and easy to use OTP client written in C/GTK that supports both TOTP and HOTP";
     homepage = "https://github.com/paolostivanin/OTPClient";
+<<<<<<< HEAD
     changelog = "https://github.com/paolostivanin/OTPClient/releases/tag/v${version}";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ alexbakker ];
     platforms = platforms.linux;

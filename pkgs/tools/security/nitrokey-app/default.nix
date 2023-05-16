@@ -3,10 +3,17 @@
 , cmake
 , fetchFromGitHub
 , pkg-config
+<<<<<<< HEAD
 , wrapQtAppsHook
 , libnitrokey
 , cppcodec
 , qttools
+=======
+, qttranslations
+, wrapQtAppsHook
+, libnitrokey
+, cppcodec
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 stdenv.mkDerivation rec {
@@ -24,7 +31,11 @@ stdenv.mkDerivation rec {
     cmake
     pkg-config
     wrapQtAppsHook
+<<<<<<< HEAD
     qttools
+=======
+    qttranslations
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   cmakeFlags = [

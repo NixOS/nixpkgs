@@ -2,15 +2,26 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rsass";
+<<<<<<< HEAD
   version = "0.28.0";
+=======
+  version = "0.27.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchCrate {
     pname = "rsass-cli";
     inherit version;
+<<<<<<< HEAD
     hash = "sha256-hBYZB/Jyzd89dylZn2tYdHr0IXCFgJi9TnvuoVqCR1A=";
   };
 
   cargoHash = "sha256-nVTYTjmHB/z5M5AyojbsuZNCa3JCiADWrgV5eb3bcUE=";
+=======
+    sha256 = "sha256-IaXfxccRRY868waEPI7qbWp1SSAhJlRqgeEiRNddC/c=";
+  };
+
+  cargoSha256 = "sha256-2owdX9ePHcAXpE43Svan252lAa5ICk0/DrDeADegZ6U=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   meta = with lib; {
     description = "Sass reimplemented in rust with nom";

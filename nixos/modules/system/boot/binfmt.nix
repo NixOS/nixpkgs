@@ -102,6 +102,7 @@ let
       mask = ''\xff\xff\xff\xff\xff\xff\xff\x00\xff\xff\xff\xff\xff\xff\xff\xff\xfe\xff\xff\x00'';
     };
     mips-linux = {
+<<<<<<< HEAD
       magicOrExtension = ''\x7fELF\x01\x02\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x02\x00\x08\x00\x00\x00\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00'';
       mask = ''\xff\xff\xff\xff\xff\xff\xff\x00\x00\xff\xff\xff\xff\xff\xff\xff\xff\xfe\xff\xff\xff\xff\xff\xff\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x20'';
     };
@@ -124,6 +125,22 @@ let
     mips64el-linuxabin32 = {
       magicOrExtension = ''\x7fELF\x01\x01\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x02\x00\x08\x00\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x20\x00\x00\x00'';
       mask = ''\xff\xff\xff\xff\xff\xff\xff\x00\x00\xff\xff\xff\xff\xff\xff\xff\xfe\xff\xff\xff\xff\xff\xff\xff\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x20\x00\x00\x00'';
+=======
+      magicOrExtension = ''\x7fELF\x01\x02\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x02\x00\x08'';
+      mask = ''\xff\xff\xff\xff\xff\xff\xff\x00\xff\xff\xff\xff\xff\xff\xff\xff\xff\xfe\xff\xff'';
+    };
+    mipsel-linux = {
+      magicOrExtension = ''\x7fELF\x01\x01\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x02\x00\x08\x00'';
+      mask = ''\xff\xff\xff\xff\xff\xff\xff\x00\xff\xff\xff\xff\xff\xff\xff\xff\xfe\xff\xff\xff'';
+    };
+    mips64-linux = {
+      magicOrExtension = ''\x7fELF\x02\x02\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x02\x00\x08'';
+      mask = ''\xff\xff\xff\xff\xff\xff\xff\x00\xff\xff\xff\xff\xff\xff\xff\xff\xff\xfe\xff\xff'';
+    };
+    mips64el-linux = {
+      magicOrExtension = ''\x7fELF\x02\x01\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x02\x00\x08\x00'';
+      mask = ''\xff\xff\xff\xff\xff\xff\xff\x00\xff\xff\xff\xff\xff\xff\xff\xff\xfe\xff\xff\xff'';
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
     riscv32-linux = {
       magicOrExtension = ''\x7fELF\x01\x01\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x02\x00\xf3\x00'';
@@ -145,8 +162,19 @@ let
       magicOrExtension = ''\x00asm'';
       mask = ''\xff\xff\xff\xff'';
     };
+<<<<<<< HEAD
     x86_64-windows.magicOrExtension = "MZ";
     i686-windows.magicOrExtension = "MZ";
+=======
+    x86_64-windows = {
+      magicOrExtension = "exe";
+      recognitionType = "extension";
+    };
+    i686-windows = {
+      magicOrExtension = "exe";
+      recognitionType = "extension";
+    };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
 in {
@@ -279,7 +307,11 @@ in {
           support your new systems.
           Warning: the builder can execute all emulated systems within the same build, which introduces impurities in the case of cross compilation.
         '';
+<<<<<<< HEAD
         type = types.listOf (types.enum (builtins.attrNames magics));
+=======
+        type = types.listOf types.str;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       };
     };
   };
@@ -319,8 +351,12 @@ in {
     environment.etc."binfmt.d/nixos.conf".source = builtins.toFile "binfmt_nixos.conf"
       (lib.concatStringsSep "\n" (lib.mapAttrsToList makeBinfmtLine config.boot.binfmt.registrations));
     system.activationScripts.binfmt = stringAfter [ "specialfs" ] ''
+<<<<<<< HEAD
       mkdir -p /run/binfmt
       chmod 0755 /run/binfmt
+=======
+      mkdir -p -m 0755 /run/binfmt
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       ${lib.concatStringsSep "\n" (lib.mapAttrsToList activationSnippet config.boot.binfmt.registrations)}
     '';
     systemd = lib.mkIf (config.boot.binfmt.registrations != {}) {

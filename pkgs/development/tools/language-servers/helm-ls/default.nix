@@ -8,16 +8,27 @@
 
 buildGoModule rec {
   pname = "helm-ls";
+<<<<<<< HEAD
   version = "0.0.5";
+=======
+  version = "0.0.3";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "mrjosh";
     repo = "helm-ls";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-GRnE9GC9pIcOfcVtlqx/yCkQz9rmxpkAfRGa6GZBzJE=";
   };
 
   vendorHash = "sha256-wMYrgAgAEgwfjMLP81H0cKWm/kh63ppDkSiymfsaj7U=";
+=======
+    hash = "sha256-MiDbV+mfr1wcc0e0iwFPL8WniWKbPnr4zb79qniT2Kc=";
+  };
+
+  vendorHash = "sha256-EqZlmOoQtC3Iuf0LG2PL0K2pluGqbyA6132lzgF4+ic=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nativeBuildInputs = [ installShellFiles ];
 

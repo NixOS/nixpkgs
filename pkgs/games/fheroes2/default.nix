@@ -6,13 +6,21 @@
 
 stdenv.mkDerivation rec {
   pname = "fheroes2";
+<<<<<<< HEAD
   version = "1.0.7";
+=======
+  version = "1.0.3";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "ihhub";
     repo = "fheroes2";
     rev = version;
+<<<<<<< HEAD
     sha256 = "sha256-DRwCTy87mC1bXpOEaPGQc+dJaPOaKzlmJv9d/BntR7s=";
+=======
+    sha256 = "sha256-msFuBKG/uuXxOcPf0KT3TWOiQrQ4rYHFxOcJ56QBkEU=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ imagemagick ];

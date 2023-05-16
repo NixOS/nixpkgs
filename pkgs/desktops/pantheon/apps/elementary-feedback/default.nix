@@ -6,24 +6,42 @@
 , meson
 , ninja
 , vala
+<<<<<<< HEAD
 , gtk4
 , glib
 , granite7
 , libadwaita
 , libgee
 , wrapGAppsHook4
+=======
+, python3
+, gtk3
+, glib
+, granite
+, libgee
+, libhandy
+, wrapGAppsHook
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , appstream
 }:
 
 stdenv.mkDerivation rec {
   pname = "elementary-feedback";
+<<<<<<< HEAD
   version = "7.1.0";
+=======
+  version = "7.0.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "feedback";
     rev = version;
+<<<<<<< HEAD
     sha256 = "sha256-hAObgD2Njg1We0rGEu508khoBo+hj0DQAB7N33CVDiM=";
+=======
+    sha256 = "sha256-QvqyaI9szZuYuE3D6o4zjr5J6mvEzNHqTBWii+gjyMc=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   patches = [
@@ -38,12 +56,19 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
+<<<<<<< HEAD
     vala
     wrapGAppsHook4
+=======
+    python3
+    vala
+    wrapGAppsHook
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   buildInputs = [
     appstream
+<<<<<<< HEAD
     granite7
     gtk4
     libadwaita
@@ -51,6 +76,20 @@ stdenv.mkDerivation rec {
     glib
   ];
 
+=======
+    granite
+    gtk3
+    libgee
+    libhandy
+    glib
+  ];
+
+  postPatch = ''
+    chmod +x meson/post_install.py
+    patchShebangs meson/post_install.py
+  '';
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   passthru = {
     updateScript = nix-update-script { };
   };

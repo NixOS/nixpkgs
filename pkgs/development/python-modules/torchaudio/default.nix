@@ -12,13 +12,21 @@
 
 buildPythonPackage rec {
   pname = "torchaudio";
+<<<<<<< HEAD
   version = "2.0.2";
+=======
+  version = "2.0.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "pytorch";
     repo = "audio";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-9lB4gLXq0nXHT1+DNOlbJQqNndt2I6kVoNwhMO/2qlE=";
+=======
+    hash = "sha256-qrDWFY+6eVV9prUzUzb5yzyFYtEvaSyEW0zeKqAg2Vk=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   postPatch = ''

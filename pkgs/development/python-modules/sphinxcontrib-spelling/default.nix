@@ -5,9 +5,13 @@
 , importlib-metadata
 , sphinx
 , pyenchant
+<<<<<<< HEAD
 , setuptools
 , setuptools-scm
 , wheel
+=======
+, pbr
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 buildPythonPackage rec {
@@ -23,9 +27,13 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [
+<<<<<<< HEAD
     setuptools
     setuptools-scm
     wheel
+=======
+    pbr
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   propagatedBuildInputs = [

@@ -15,7 +15,11 @@
 
 buildPythonPackage rec {
   pname = "aiooss2";
+<<<<<<< HEAD
   version = "0.2.7";
+=======
+  version = "0.2.5";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -24,7 +28,11 @@ buildPythonPackage rec {
     owner = "karajan1001";
     repo = "aiooss2";
     rev = "refs/tags/${version}";
+<<<<<<< HEAD
     hash = "sha256-eMmJpX7bjX5r6GW9N5KmLQpo5V8i6F95TfInct34a2g=";
+=======
+    hash = "sha256-NYr8i5OAYRaRnDkNmnw1IWXnSp7HAovNaSV79xcwyHo=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;

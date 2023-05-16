@@ -4,14 +4,23 @@
 stdenv.mkDerivation rec {
 
   pname = "nano-wallet";
+<<<<<<< HEAD
   version = "25.1";
+=======
+  version = "21.3";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "nanocurrency";
     repo = "nano-node";
     rev = "V${version}";
+<<<<<<< HEAD
     fetchSubmodules = true;
     hash = "sha256-YvYEXHC8kxviZLQwINs+pS61wITSfqfrrPmlR+zNRoE=";
+=======
+    sha256 = "0f6chl5vrzdr4w8g3nivfxk3qm6m11js401998afnhz0xaysm4pm";
+    fetchSubmodules = true;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   cmakeFlags = let
@@ -34,7 +43,15 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
+<<<<<<< HEAD
   makeFlags = [ "nano_wallet" ];
+=======
+  buildPhase = ''
+    runHook preBuild
+    make nano_wallet
+    runHook postBuild
+  '';
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   checkPhase = ''
     runHook preCheck

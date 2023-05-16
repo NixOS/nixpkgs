@@ -17,6 +17,7 @@
 
 let
   # Mosquitto needs external poll enabled in libwebsockets.
+<<<<<<< HEAD
   libwebsockets' = (libwebsockets.override {
     withExternalPoll = true;
   }).overrideAttrs (old: {
@@ -29,12 +30,25 @@ in
 stdenv.mkDerivation rec {
   pname = "mosquitto";
   version = "2.0.17";
+=======
+  libwebsockets' = libwebsockets.override {
+    withExternalPoll = true;
+  };
+in
+stdenv.mkDerivation rec {
+  pname = "mosquitto";
+  version = "2.0.15";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "eclipse";
     repo = pname;
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-hOnZ6oHLvunZL6MrCmR5GkROQNww34QQ3m4gYDaSpb4=";
+=======
+    sha256 = "sha256-H2oaTphx5wvwXWDDaf9lLSVfHWmb2rMlxQmyRB4k5eg=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   patches = lib.optionals stdenv.isDarwin [

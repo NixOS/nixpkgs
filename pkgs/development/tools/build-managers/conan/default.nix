@@ -9,13 +9,18 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "conan";
+<<<<<<< HEAD
   version = "2.0.5";
+=======
+  version = "2.0.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "conan-io";
     repo = "conan";
     rev = "refs/tags/${version}";
+<<<<<<< HEAD
     hash = "sha256-+ohUOQ9WBER/X0TDklf/qZCm9LhM1I1QRmED4FnkweM=";
   };
 
@@ -23,6 +28,11 @@ python3.pkgs.buildPythonApplication rec {
     pythonRelaxDepsHook
   ];
 
+=======
+    hash = "sha256-yx/MO5QAVKnGraQXJitXxaZooLtBqa+L04s73DwiE14=";
+  };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   propagatedBuildInputs = with python3.pkgs; [
     bottle
     colorama
@@ -45,11 +55,14 @@ python3.pkgs.buildPythonApplication rec {
     pyopenssl
   ];
 
+<<<<<<< HEAD
   pythonRelaxDeps = [
     # This can be removed once conan is updated to 2.0.7+
     "PyYAML"
   ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nativeCheckInputs = [
     git
     pkg-config
@@ -62,8 +75,11 @@ python3.pkgs.buildPythonApplication rec {
     webtest
   ]);
 
+<<<<<<< HEAD
   __darwinAllowLocalNetworking = true;
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pythonImportsCheck = [
     "conan"
   ];
@@ -76,6 +92,7 @@ python3.pkgs.buildPythonApplication rec {
   disabledTests = [
     # Tests require network access
     "TestFTP"
+<<<<<<< HEAD
   ] ++ lib.optionals stdenv.isDarwin [
     # Rejects paths containing nix
     "test_conditional_os"
@@ -87,23 +104,33 @@ python3.pkgs.buildPythonApplication rec {
     "test_xcrun"
     "test_xcrun_in_required_by_tool_requires"
     "test_xcrun_in_tool_requires"
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   disabledTestPaths = [
     # Requires cmake, meson, autotools, apt-get, etc.
     "conans/test/functional/command/new_test.py"
     "conans/test/functional/command/test_install_deploy.py"
+<<<<<<< HEAD
     "conans/test/functional/graph/test_transitive_build_scripts.py"
     "conans/test/functional/layout/test_editable_cmake_components.py"
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "conans/test/functional/layout/test_editable_cmake.py"
     "conans/test/functional/layout/test_in_subfolder.py"
     "conans/test/functional/layout/test_source_folder.py"
     "conans/test/functional/toolchains/"
     "conans/test/functional/tools_versions_test.py"
+<<<<<<< HEAD
     "conans/test/functional/tools/scm/test_git.py"
     "conans/test/functional/tools/system/package_manager_test.py"
     "conans/test/functional/util/test_cmd_args_to_string.py"
     "conans/test/integration/command_v2/list_test.py"
+=======
+    "conans/test/functional/tools/system/package_manager_test.py"
+    "conans/test/functional/util/test_cmd_args_to_string.py"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "conans/test/unittests/tools/env/test_env_files.py"
   ];
 

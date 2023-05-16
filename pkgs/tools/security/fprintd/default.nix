@@ -7,10 +7,18 @@
 , ninja
 , perl
 , gettext
+<<<<<<< HEAD
+=======
+, cairo
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , gtk-doc
 , libxslt
 , docbook-xsl-nons
 , docbook_xml_dtd_412
+<<<<<<< HEAD
+=======
+, fetchurl
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , glib
 , gusb
 , dbus

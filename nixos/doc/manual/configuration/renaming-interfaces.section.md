@@ -37,7 +37,11 @@ even if networkd is disabled.
 Alternatively, we can use a plain old udev rule:
 
 ```nix
+<<<<<<< HEAD
 boot.initrd.services.udev.rules = ''
+=======
+services.udev.initrdRules = ''
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   SUBSYSTEM=="net", ACTION=="add", DRIVERS=="?*", \
   ATTR{address}=="52:54:00:12:01:01", KERNEL=="eth*", NAME="wan"
 '';
@@ -45,7 +49,11 @@ boot.initrd.services.udev.rules = ''
 
 ::: {.warning}
 The rule must be installed in the initrd using
+<<<<<<< HEAD
 `boot.initrd.services.udev.rules`, not the usual `services.udev.extraRules`
+=======
+`services.udev.initrdRules`, not the usual `services.udev.extraRules`
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 option. This is to avoid race conditions with other programs controlling
 the interface.
 :::

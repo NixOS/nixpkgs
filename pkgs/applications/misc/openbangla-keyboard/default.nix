@@ -44,7 +44,11 @@ stdenv.mkDerivation rec {
     postPatch = ''
       cp ${./Cargo.lock} Cargo.lock
     '';
+<<<<<<< HEAD
     sourceRoot = "${src.name}/${cargoRoot}";
+=======
+    sourceRoot = "source/${cargoRoot}";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     sha256 = "sha256-01MWuUUirsgpoprMArRp3qxKNayPHTkYWk31nXcIC34=";
   };
 

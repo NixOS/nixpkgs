@@ -33,7 +33,11 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://github.com/jopohl/urh";
     description = "Universal Radio Hacker: investigate wireless protocols like a boss";
     license = licenses.gpl3;
+<<<<<<< HEAD
     platforms = platforms.unix;
+=======
+    platforms = platforms.linux;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     maintainers = with maintainers; [ fpletz ];
   };
 }

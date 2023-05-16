@@ -2,7 +2,11 @@
 , config
 , stdenv
 , fetchFromGitHub
+<<<<<<< HEAD
 , boost179
+=======
+, boost
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , cmake
 , expat
 , harfbuzz
@@ -80,7 +84,11 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+<<<<<<< HEAD
     boost179
+=======
+    boost
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     expat
     ffmpeg
     ffms

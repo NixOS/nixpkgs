@@ -2,11 +2,19 @@
 
 stdenv.mkDerivation rec {
   pname = "rivet";
+<<<<<<< HEAD
   version = "3.1.8";
 
   src = fetchurl {
     url = "https://www.hepforge.org/archive/rivet/Rivet-${version}.tar.bz2";
     hash = "sha256-dbPz1BnKY4jR/S7A7afh+Q8yS5lszwWR9IpdLijczBM=";
+=======
+  version = "3.1.7";
+
+  src = fetchurl {
+    url = "https://www.hepforge.org/archive/rivet/Rivet-${version}.tar.bz2";
+    hash = "sha256-J8fbvLX9fugcrxNtr06WC8oOwlXZ+hq+YC9NQwhhsno=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   latex = texlive.combine { inherit (texlive)

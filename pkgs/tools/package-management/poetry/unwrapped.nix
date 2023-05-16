@@ -4,15 +4,27 @@
 , pythonOlder
 , fetchFromGitHub
 , installShellFiles
+<<<<<<< HEAD
 , pythonRelaxDepsHook
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , build
 , cachecontrol
 , cleo
 , crashtest
 , dulwich
+<<<<<<< HEAD
 , installer
 , jsonschema
 , keyring
+=======
+, filelock
+, html5lib
+, installer
+, jsonschema
+, keyring
+, lockfile
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , packaging
 , pexpect
 , pkginfo
@@ -25,6 +37,10 @@
 , shellingham
 , tomlkit
 , trove-classifiers
+<<<<<<< HEAD
+=======
+, urllib3
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , virtualenv
 , xattr
 , tomli
@@ -41,26 +57,40 @@
 
 buildPythonPackage rec {
   pname = "poetry";
+<<<<<<< HEAD
   version = "1.6.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
+=======
+  version = "1.4.2";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.7";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "python-poetry";
     repo = pname;
     rev = "refs/tags/${version}";
+<<<<<<< HEAD
     hash = "sha256-/OvYT4Vix1t5Yx/Tx0z3E9L9qJ4OdI4maQqUVl8H524=";
+=======
+    hash = "sha256-AiRQFZA5+M1niTzj1RO2lx0QFOMmSzpQo1gzauyTblg=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [
     installShellFiles
+<<<<<<< HEAD
     pythonRelaxDepsHook
   ];
 
   pythonRelaxDeps = [
     # only pinned to avoid dependency on Rust
     "jsonschema"
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   propagatedBuildInputs = [
@@ -69,9 +99,18 @@ buildPythonPackage rec {
     cleo
     crashtest
     dulwich
+<<<<<<< HEAD
     installer
     jsonschema
     keyring
+=======
+    filelock
+    html5lib
+    installer
+    jsonschema
+    keyring
+    lockfile
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     packaging
     pexpect
     pkginfo
@@ -84,6 +123,10 @@ buildPythonPackage rec {
     shellingham
     tomlkit
     trove-classifiers
+<<<<<<< HEAD
+=======
+    urllib3
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     virtualenv
   ] ++ lib.optionals (stdenv.isDarwin) [
     xattr
@@ -122,14 +165,20 @@ buildPythonPackage rec {
   '';
 
   disabledTests = [
+<<<<<<< HEAD
     "test_installer_with_pypi_repository"
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     # touches network
     "git"
     "solver"
     "load"
     "vcs"
     "prereleases_if_they_are_compatible"
+<<<<<<< HEAD
     "test_builder_setup_generation_runs_with_pip_editable"
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "test_executor"
     # requires git history to work correctly
     "default_with_excluded_data"
@@ -152,11 +201,14 @@ buildPythonPackage rec {
     "poetry"
   ];
 
+<<<<<<< HEAD
   # Unset ambient PYTHONPATH in the wrapper, so Poetry only ever runs with its own,
   # isolated set of dependencies. This works because the correct PYTHONPATH is set
   # in the Python script, which runs after the wrapper.
   makeWrapperArgs = ["--unset PYTHONPATH"];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   meta = with lib; {
     changelog = "https://github.com/python-poetry/poetry/blob/${src.rev}/CHANGELOG.md";
     homepage = "https://python-poetry.org/";

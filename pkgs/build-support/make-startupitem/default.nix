@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 # given a package with a $name.desktop file, makes a copy
+=======
+# given a pakcage with a $name.desktop file, makes a copy
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 # as autostart item.
 
 {stdenv, lib}:

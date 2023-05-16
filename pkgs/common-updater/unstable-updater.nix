@@ -12,7 +12,10 @@
 , branch ? null
 , stableVersion ? false # Use version format according to RFC 107 (i.e. LAST_TAG+date=YYYY-MM-DD)
 , tagPrefix ? "" # strip this prefix from a tag name when using stable version
+<<<<<<< HEAD
 , shallowClone ? true
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 let
@@ -23,7 +26,10 @@ let
     branch=""
     use_stable_version=""
     tag_prefix=""
+<<<<<<< HEAD
     shallow_clone=""
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     while (( $# > 0 )); do
         flag="$1"
@@ -41,9 +47,12 @@ let
           --tag-prefix=*)
             tag_prefix="''${flag#*=}"
             ;;
+<<<<<<< HEAD
           --shallow-clone)
             shallow_clone=1
             ;;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           *)
             echo "$0: unknown option ‘''${flag}’"
             exit 1
@@ -63,12 +72,18 @@ let
 
     cloneArgs=(
       --bare
+<<<<<<< HEAD
     )
 
     if [[ "$shallow_clone" == "1" ]]; then
         cloneArgs+=(--depth=1)
     fi
 
+=======
+      --depth=1
+    )
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     if [[ -n "$branch" ]]; then
         cloneArgs+=(--branch="$branch")
     fi
@@ -109,8 +124,12 @@ let
         --rev="$commit_sha"
   '';
 
+<<<<<<< HEAD
 in
 [
+=======
+in [
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   updateScript
   "--url=${builtins.toString url}"
 ] ++ lib.optionals (branch != null) [
@@ -118,6 +137,9 @@ in
 ] ++ lib.optionals stableVersion [
   "--use-stable-version"
   "--tag-prefix=${tagPrefix}"
+<<<<<<< HEAD
 ] ++ lib.optionals shallowClone [
   "--shallow-clone"
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 ]

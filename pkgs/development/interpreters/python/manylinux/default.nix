@@ -56,8 +56,11 @@ let
     "libgobject-2.0.so.0" = glib;
     "libgthread-2.0.so.0" = glib;
     "libglib-2.0.so.0" = glib;
+<<<<<<< HEAD
     "libz.so.1" = zlib;
     "libexpat.so.1" = expat;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     });
 
   # https://www.python.org/dev/peps/pep-0571/

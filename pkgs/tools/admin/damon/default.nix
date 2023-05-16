@@ -11,7 +11,11 @@ buildGoModule rec {
     sha256 = "sha256-vg5PISNqk8N2nn7eABm+/7qzePDbKPkvovdZk2sZYsg=";
   };
 
+<<<<<<< HEAD
   vendorHash = "sha256-/ZZxw6qEUJQUz3J0TxUYJECCcX276r74g0N2tV77+8I=";
+=======
+  vendorSha256 = "sha256-/ZZxw6qEUJQUz3J0TxUYJECCcX276r74g0N2tV77+8I=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   meta = with lib; {
     homepage = "https://github.com/hashicorp/damon";

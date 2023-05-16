@@ -19,13 +19,21 @@
 
 stdenv.mkDerivation rec {
   pname = "glib-networking";
+<<<<<<< HEAD
   version = "2.76.1";
+=======
+  version = "2.76.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   outputs = [ "out" "installedTests" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+<<<<<<< HEAD
     sha256 = "XGmKmZTd5R79+xAmpWaYoiHWJQ6J3FDrzd2nuBSApCs=";
+=======
+    sha256 = "FJoFoXnmKaU4viVmKqMktJnXxFScUVHbU3PngKG/G5o=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   patches = [

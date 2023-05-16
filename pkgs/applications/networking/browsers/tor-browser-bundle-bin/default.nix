@@ -2,7 +2,10 @@
 , fetchurl
 , makeDesktopItem
 , writeText
+<<<<<<< HEAD
 , callPackage
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 # Common run-time dependencies
 , zlib
@@ -47,7 +50,11 @@
 # Hardening
 , graphene-hardened-malloc
 # Whether to use graphene-hardened-malloc
+<<<<<<< HEAD
 , useHardenedMalloc ? null
+=======
+, useHardenedMalloc ? true
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 # Whether to disable multiprocess support
 , disableContentSandbox ? false
@@ -56,10 +63,14 @@
 , extraPrefs ? ""
 }:
 
+<<<<<<< HEAD
 lib.warnIf (useHardenedMalloc != null)
   "tor-browser-bundle-bin: useHardenedMalloc is deprecated and enabling it can cause issues"
 
 (let
+=======
+let
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   libPath = lib.makeLibraryPath libPkgs;
 
   libPkgs = [
@@ -92,11 +103,19 @@ lib.warnIf (useHardenedMalloc != null)
   fteLibPath = lib.makeLibraryPath [ stdenv.cc.cc gmp ];
 
   # Upstream source
+<<<<<<< HEAD
   version = "12.5.3";
 
   lang = "ALL";
 
   sources = {
+=======
+  version = "12.0.5";
+
+  lang = "ALL";
+
+  srcs = {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     x86_64-linux = fetchurl {
       urls = [
         "https://dist.torproject.org/torbrowser/${version}/tor-browser-linux64-${version}_${lang}.tar.xz"
@@ -104,7 +123,11 @@ lib.warnIf (useHardenedMalloc != null)
         "https://tor.eff.org/dist/torbrowser/${version}/tor-browser-linux64-${version}_${lang}.tar.xz"
         "https://tor.calyxinstitute.org/dist/torbrowser/${version}/tor-browser-linux64-${version}_${lang}.tar.xz"
       ];
+<<<<<<< HEAD
       hash = "sha256-QF71UXZXwLjr1XugKeFWZH9RXb4xeKWZScds+xtNekI=";
+=======
+      hash = "sha256-V4BUs30h0+AKNuNsHuRriDXJ0ZzrIsg2SYn4GPZS6Hs=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
 
     i686-linux = fetchurl {
@@ -114,7 +137,11 @@ lib.warnIf (useHardenedMalloc != null)
         "https://tor.eff.org/dist/torbrowser/${version}/tor-browser-linux32-${version}_${lang}.tar.xz"
         "https://tor.calyxinstitute.org/dist/torbrowser/${version}/tor-browser-linux32-${version}_${lang}.tar.xz"
       ];
+<<<<<<< HEAD
       hash = "sha256-xaLTYo8aJO0DzFQLSUHF12vKOEMO6hbVXQdL3PHLb8s=";
+=======
+      hash = "sha256-TUfS31EjAi/hgVjCKT/T5Jx8iCYXB/3EXPVm1KSqXLk=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
   };
 
@@ -135,7 +162,11 @@ stdenv.mkDerivation rec {
   pname = "tor-browser-bundle-bin";
   inherit version;
 
+<<<<<<< HEAD
   src = sources.${stdenv.hostPlatform.system} or (throw "unsupported system: ${stdenv.hostPlatform.system}");
+=======
+  src = srcs.${stdenv.hostPlatform.system} or (throw "unsupported system: ${stdenv.hostPlatform.system}");
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   preferLocalBuild = true;
   allowSubstitutes = false;
@@ -251,7 +282,11 @@ stdenv.mkDerivation rec {
 
     # Hard-code path to TBB fonts; see also FONTCONFIG_FILE in
     # the wrapper below.
+<<<<<<< HEAD
     FONTCONFIG_FILE=$TBB_IN_STORE/fontconfig/fonts.conf
+=======
+    FONTCONFIG_FILE=$TBB_IN_STORE/TorBrowser/Data/fontconfig/fonts.conf
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     sed -i "$FONTCONFIG_FILE" \
         -e "s,<dir>fonts</dir>,<dir>$TBB_IN_STORE/fonts</dir>,"
 
@@ -271,7 +306,11 @@ stdenv.mkDerivation rec {
     GeoIPv6File $TBB_IN_STORE/TorBrowser/Data/Tor/geoip6
     EOF
 
+<<<<<<< HEAD
     WRAPPER_LD_PRELOAD=${lib.optionalString (useHardenedMalloc == true)
+=======
+    WRAPPER_LD_PRELOAD=${lib.optionalString useHardenedMalloc
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       "${graphene-hardened-malloc}/lib/libhardened_malloc.so"}
 
     WRAPPER_XDG_DATA_DIRS=${lib.concatMapStringsSep ":" (x: "${x}/share") [
@@ -451,6 +490,7 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   passthru = {
     inherit sources;
     updateScript = callPackage ./update.nix {
@@ -458,6 +498,8 @@ stdenv.mkDerivation rec {
     };
   };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   meta = with lib; {
     description = "Tor Browser Bundle built by torproject.org";
     longDescription = ''
@@ -471,8 +513,13 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://www.torproject.org/";
     changelog = "https://gitweb.torproject.org/builders/tor-browser-build.git/plain/projects/tor-browser/Bundle-Data/Docs/ChangeLog.txt?h=maint-${version}";
+<<<<<<< HEAD
     platforms = attrNames sources;
     maintainers = with maintainers; [ felschr panicgh joachifm hax404 ];
+=======
+    platforms = attrNames srcs;
+    maintainers = with maintainers; [ offline matejc thoughtpolice joachifm hax404 KarlJoad ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     mainProgram = "tor-browser";
     # MPL2.0+, GPL+, &c.  While it's not entirely clear whether
     # the compound is "libre" in a strict sense (some components place certain
@@ -480,4 +527,8 @@ stdenv.mkDerivation rec {
     license = licenses.free;
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
   };
+<<<<<<< HEAD
 })
+=======
+}
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)

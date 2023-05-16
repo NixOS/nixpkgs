@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Functions for querying information about the filesystem
 # without copying any files to the Nix store.
 { lib }:
@@ -11,10 +12,19 @@ let
 
   inherit (lib.filesystem)
     pathType
+=======
+# Functions for copying sources to the Nix store.
+{ lib }:
+
+let
+  inherit (lib.strings)
+    hasPrefix
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     ;
 in
 
 {
+<<<<<<< HEAD
 
   /*
     The type of a path. The path needs to exist and be accessible.
@@ -84,6 +94,8 @@ in
   pathIsRegularFile = path:
     pathExists path && pathType path == "regular";
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   /*
     A map of all haskell packages defined in the given path,
     identified by having a cabal file with the same name as the

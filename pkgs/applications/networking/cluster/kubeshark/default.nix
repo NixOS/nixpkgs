@@ -2,16 +2,27 @@
 
 buildGoModule rec {
   pname = "kubeshark";
+<<<<<<< HEAD
   version = "50.2";
+=======
+  version = "40.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "kubeshark";
     repo = "kubeshark";
     rev = version;
+<<<<<<< HEAD
     sha256 = "sha256-bABPfy790cMIfunKYfZwDbEn07fhq6g0m/yqeFgJg4Y=";
   };
 
   vendorHash = "sha256-rcxnvKkc9zerfULRdU5eGRRqSDQQDNMYaLJ7oEMQghk=";
+=======
+    sha256 = "sha256-E39Hr39fPiRKElploh2EEE35x0vnyAf2eWHr8Ifx0l0=";
+  };
+
+  vendorHash = "sha256-ckIjmrXkn1AVBQRwM6+wdRwwYHytxKm3rKEe+csORdU=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   ldflags = let t = "github.com/kubeshark/kubeshark"; in [
    "-s" "-w"

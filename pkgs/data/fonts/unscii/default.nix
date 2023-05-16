@@ -9,11 +9,19 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "unscii";
+<<<<<<< HEAD
   version = "2.1";
 
   src = fetchurl {
     url = "http://viznut.fi/${pname}/${pname}-${version}-src.tar.gz";
     sha256 = "0msvqrq7x36p76a2n5bzkadh95z954ayqa08wxd017g4jpa1a4jd";
+=======
+  version = "1.1";
+
+  src = fetchurl {
+    url = "http://pelulamu.net/${pname}/${pname}-${version}-src.tar.gz";
+    sha256 = "0qcxcnqz2nlwfzlrn115kkp3n8dd7593h762vxs6vfqm13i39lq1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs =
@@ -66,6 +74,10 @@ stdenv.mkDerivation rec {
     # version. The reduced version is public domain.
     license = "http://unifoundry.com/LICENSE.txt";
     maintainers = [ lib.maintainers.raskin ];
+<<<<<<< HEAD
     homepage = "http://viznut.fi/unscii/";
+=======
+    homepage = "http://pelulamu.net/unscii/";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

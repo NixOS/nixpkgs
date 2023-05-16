@@ -6,12 +6,20 @@
 , importlib-metadata
 , packaging
 , pytestCheckHook
+<<<<<<< HEAD
+=======
+, setuptools
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , git
 }:
 
 buildPythonPackage rec {
   pname = "dunamai";
+<<<<<<< HEAD
   version = "1.18.0";
+=======
+  version = "1.16.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -20,7 +28,11 @@ buildPythonPackage rec {
     owner = "mtkennerly";
     repo = "dunamai";
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-QKXEFwOAa5nIQZA6DHNqnWyshnN+/6qovdqjCd9WF4k=";
+=======
+    hash = "sha256-pPUn+1rv76N/7WVDyWJLPVMweJ1Qbx6/P4zIKU06hSs=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [
@@ -45,11 +57,15 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     git
     pytestCheckHook
+<<<<<<< HEAD
   ];
 
   disabledTests = [
     # clones from github.com
     "test__version__from_git__shallow"
+=======
+    setuptools
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   pythonImportsCheck = [

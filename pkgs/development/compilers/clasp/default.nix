@@ -55,7 +55,11 @@ in llvmPackages_15.stdenv.mkDerivation {
     sbcl
     git
     pkg-config
+<<<<<<< HEAD
     fmt_9
+=======
+    fmt
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     gmpxx
     libelf
     boost

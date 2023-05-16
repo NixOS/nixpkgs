@@ -26,13 +26,21 @@
 
 stdenv.mkDerivation rec {
   pname = "linux-wifi-hotspot";
+<<<<<<< HEAD
   version = "4.5.0";
+=======
+  version = "4.4.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "lakinduakash";
     repo = pname;
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-cCVJPEAZZzOGCf45oo1J7wWtYn/IJfcASHnKR+R0Ge4=";
+=======
+    sha256 = "sha256-XCgYWOX7QSdANG6DqYk0yZZqnvZGDl3GaF9KtYRmpJ0=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

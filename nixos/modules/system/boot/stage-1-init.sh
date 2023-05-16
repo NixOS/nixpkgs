@@ -114,6 +114,7 @@ waitDevice() {
     done
 }
 
+<<<<<<< HEAD
 # Create the mount point if required.
 makeMountPoint() {
     local device="$1"
@@ -136,6 +137,8 @@ makeMountPoint() {
     mkdir -m 0755 -p "/mnt-root$mountPoint"
 }
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 # Mount special file systems.
 specialMount() {
   local device="$1"
@@ -315,9 +318,12 @@ checkFS() {
     # Skip fsck for inherently readonly filesystems.
     if [ "$fsType" = squashfs ]; then return 0; fi
 
+<<<<<<< HEAD
     # Skip fsck.erofs because it is still experimental.
     if [ "$fsType" = erofs ]; then return 0; fi
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     # If we couldn't figure out the FS type, then skip fsck.
     if [ "$fsType" = auto ]; then
         echo 'cannot check filesystem with type "auto"!'
@@ -396,6 +402,25 @@ mountFS() {
 
     checkFS "$device" "$fsType"
 
+<<<<<<< HEAD
+=======
+    # Optionally resize the filesystem.
+    case $options in
+        *x-nixos.autoresize*)
+            if [ "$fsType" = ext2 -o "$fsType" = ext3 -o "$fsType" = ext4 ]; then
+                modprobe "$fsType"
+                echo "resizing $device..."
+                e2fsck -fp "$device"
+                resize2fs "$device"
+            elif [ "$fsType" = f2fs ]; then
+                echo "resizing $device..."
+                fsck.f2fs -fp "$device"
+                resize.f2fs "$device"
+            fi
+            ;;
+    esac
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     # Create backing directories for overlayfs
     if [ "$fsType" = overlay ]; then
         for i in upper work; do
@@ -406,7 +431,11 @@ mountFS() {
 
     info "mounting $device on $mountPoint..."
 
+<<<<<<< HEAD
     makeMountPoint "$device" "$mountPoint" "$optionsPrefixed"
+=======
+    mkdir -p "/mnt-root$mountPoint"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     # For ZFS and CIFS mounts, retry a few times before giving up.
     # We do this for ZFS as a workaround for issue NixOS/nixpkgs#25383.
@@ -451,7 +480,11 @@ lustrateRoot () {
         mv -v "$d" "$root/old-root.tmp"
     done
 
+<<<<<<< HEAD
     # Use .tmp to make sure subsequent invocations don't clash
+=======
+    # Use .tmp to make sure subsequent invokations don't clash
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     mv -v "$root/old-root.tmp" "$root/old-root"
 
     mkdir -m 0755 -p "$root/etc"

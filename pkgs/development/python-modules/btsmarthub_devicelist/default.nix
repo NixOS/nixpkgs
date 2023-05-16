@@ -17,7 +17,11 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jxwolstenholme";
     repo = "btsmarthub_devicelist";
+<<<<<<< HEAD
     rev = version;
+=======
+    rev = "${version}";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     hash = "sha256-7ncxCpY+A2SuSFa3k21QchrmFs1dPRUMb1r1z/laa6M=";
   };
 

@@ -15,7 +15,11 @@
 , qhull
 , cmake
 , cgal_5
+<<<<<<< HEAD
 , boost179
+=======
+, boost17x
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , mpfr
 , xercesc
 }:
@@ -27,8 +31,13 @@ mkDerivation rec {
   src = fetchFromGitHub {
     owner = "cnr-isti-vclab";
     repo = "meshlab";
+<<<<<<< HEAD
     rev = "MeshLab-${version}";
     sha256 = "sha256-jcc3PfsiIeYyipteZgzd0NwZgFFgR/mMBiaInzhOcDY=";
+=======
+    rev = "Meshlab-${version}";
+    sha256 = "sha256-MP+jkiV6yS1T1eWClxM56kZWLXwu0g4w/zBHy6CSL6Y=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     fetchSubmodules = true; # for vcglib
   };
 
@@ -46,7 +55,11 @@ mkDerivation rec {
     levmar
     qhull
     cgal_5
+<<<<<<< HEAD
     boost179
+=======
+    boost17x
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     mpfr
     xercesc
   ];

@@ -6,6 +6,7 @@
 , enableDefaultMusicPack ? true
 }:
 
+<<<<<<< HEAD
 let
   pname = "endgame-singularity";
   version = "1.00";
@@ -28,6 +29,26 @@ python3.pkgs.buildPythonApplication rec {
 
   srcs = [ main_src ] ++ lib.optional enableDefaultMusicPack music_src;
   sourceRoot = main_src.name;
+=======
+python3.pkgs.buildPythonApplication rec {
+  pname = "endgame-singularity";
+  version = "1.00";
+
+  srcs = [
+    (fetchFromGitHub {
+      owner = "singularity";
+      repo = "singularity";
+      rev = "v${version}";
+      sha256 = "0ndrnxwii8lag6vrjpwpf5n36hhv223bb46d431l9gsigbizv0hl";
+    })
+  ] ++ lib.optional enableDefaultMusicPack (
+    fetchurl {
+      url = "http://www.emhsoft.com/singularity/endgame-singularity-music-007.zip";
+      sha256 = "0vf2qaf66jh56728pq1zbnw50yckjz6pf6c6qw6dl7vk60kkqnpb";
+    }
+  );
+  sourceRoot = "source";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nativeBuildInputs = [ unzip ]; # The music is zipped
   propagatedBuildInputs = with python3.pkgs; [ pygame numpy polib ];

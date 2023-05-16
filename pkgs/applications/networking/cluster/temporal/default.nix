@@ -2,16 +2,27 @@
 
 buildGoModule rec {
   pname = "temporal";
+<<<<<<< HEAD
   version = "1.21.5";
+=======
+  version = "1.20.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "temporalio";
     repo = "temporal";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-G8HqoTdkAAGSadJRF+22hD8q0htwl21HWupfx1/5muc=";
   };
 
   vendorHash = "sha256-AVij8Xb729UQt8BuRf+SoGhoDFzsVELAFV5xCBwnx4c=";
+=======
+    hash = "sha256-2xer6W8pSZttjn5m5GgTOpHyXx2rE4qRZsBZzxwWh4o=";
+  };
+
+  vendorHash = "sha256-Fo/xePou96KdFlUNIqhDZX4TJoYXqlMyuLDvmR/XreY=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   excludedPackages = [ "./build" ];
 

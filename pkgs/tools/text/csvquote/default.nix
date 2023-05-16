@@ -38,7 +38,11 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
+<<<<<<< HEAD
     description = "Enables common unix utilities like cut, awk, wc, head to work correctly with csv data containing delimiters and newlines";
+=======
+    description = "Enables common unix utlities like cut, awk, wc, head to work correctly with csv data containing delimiters and newlines";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     homepage = "https://github.com/dbro/csvquote";
     license = licenses.mit;
     maintainers = with maintainers; [ figsoda ];

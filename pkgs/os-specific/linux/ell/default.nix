@@ -7,14 +7,22 @@
 
 stdenv.mkDerivation rec {
   pname = "ell";
+<<<<<<< HEAD
   version = "0.57";
+=======
+  version = "0.56";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   outputs = [ "out" "dev" ];
 
   src = fetchgit {
     url = "https://git.kernel.org/pub/scm/libs/ell/ell.git";
     rev = version;
+<<<<<<< HEAD
     sha256 = "sha256-9d9WMCByQ1TKWpzWe5msts1LG+BKKqwCgaMBbD74/+4=";
+=======
+    sha256 = "sha256-aCQ7I4XgxswQRfzzZG3MYe+W3dPWWex5MErMc0ZilSA=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [
@@ -40,6 +48,10 @@ stdenv.mkDerivation rec {
     changelog = "https://git.kernel.org/pub/scm/libs/ell/ell.git/tree/ChangeLog?h=${version}";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
+<<<<<<< HEAD
     maintainers = with maintainers; [ mic92 dtzWill amaxine ];
+=======
+    maintainers = with maintainers; [ mic92 dtzWill maxeaubrey ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

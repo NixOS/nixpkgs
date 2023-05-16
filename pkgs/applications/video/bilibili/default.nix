@@ -7,10 +7,17 @@
 
 stdenv.mkDerivation rec {
   pname = "bilibili";
+<<<<<<< HEAD
   version = "1.11.4-2";
   src = fetchurl {
     url = "https://github.com/msojocs/bilibili-linux/releases/download/v${version}/io.github.msojocs.bilibili_${version}_amd64.deb";
     hash = "sha256-nUixkNZPIqeMUdjJxaNrHODFbShDqHFHVoKRZKAVjyc=";
+=======
+  version = "1.9.2-1";
+  src = fetchurl {
+    url = "https://github.com/msojocs/bilibili-linux/releases/download/v${version}/io.github.msojocs.bilibili_${version}_amd64.deb";
+    hash = "sha256-y3dUBImvcIG89m82RaIOa0cxJXIAIGa+n3FJkASacaY=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   unpackPhase = ''
@@ -42,7 +49,11 @@ stdenv.mkDerivation rec {
     description = "Electron-based bilibili desktop client";
     homepage = "https://github.com/msojocs/bilibili-linux";
     license = licenses.mit;
+<<<<<<< HEAD
     maintainers = with maintainers; [ jedsek kashw2 ];
+=======
+    maintainers = with maintainers; [ jedsek ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     platforms = platforms.unix;
   };
 }

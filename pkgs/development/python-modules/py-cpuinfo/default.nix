@@ -47,6 +47,10 @@ buildPythonPackage rec {
     homepage = "https://github.com/workhorsy/py-cpuinfo";
     changelog = "https://github.com/workhorsy/py-cpuinfo/blob/v${version}/ChangeLog";
     license = licenses.mit;
+<<<<<<< HEAD
     maintainers = with maintainers; [ ];
+=======
+    maintainers = with maintainers; [ costrouc ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

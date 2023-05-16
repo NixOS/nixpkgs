@@ -9,13 +9,21 @@
 
 stdenv.mkDerivation rec {
   pname = "icinga2${nameSuffix}";
+<<<<<<< HEAD
   version = "2.14.0";
+=======
+  version = "2.13.7";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "icinga";
     repo = "icinga2";
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-MrNfkbbmID27Ht2sDSklrPvRvCmewOuOOBIFnHJz1zE=";
+=======
+    sha256 = "sha256-YLNzXdR54DA9araC7pxZmopAZB90j9sx4gb3hOVsu0I=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   patches = [

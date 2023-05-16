@@ -5,8 +5,11 @@ mkCoqDerivation {
 
   releaseRev = v: "v${v}";
 
+<<<<<<< HEAD
   release."8.18.0".sha256 = "sha256-Vpe79qCyFLOdOtFFvLKR0N+MMpGD661Q01yx4gxRhZo=";
   release."8.17.0".sha256 = "sha256-c8DtD21QFDZEVyCQc7ScPZEMTmolxlT3+Db3gStofF8=";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   release."8.16.0".sha256 = "sha256-sE1w8q/60adNF9yMJQO70CEk3D8QUopvgiszdHt5Wsw=";
   release."8.15.1".sha256 = "sha256:0k2sl3ns897a5ll11bazgpv4ppgi1vmx4n89v2dnxabm5dglyglp";
   release."8.14.1".sha256 = "sha256:1w99jgm7mxwdxnalxhralmhmpwwbd52pbbifq0mx13ixkv6iqm1a";
@@ -23,8 +26,11 @@ mkCoqDerivation {
 
   inherit version;
   defaultVersion = with lib.versions; lib.switch coq.coq-version [
+<<<<<<< HEAD
     { case = "8.18"; out = "8.18.0"; }
     { case = "8.17"; out = "8.17.0"; }
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     { case = "8.16"; out = "8.16.0"; }
     { case = "8.15"; out = "8.15.1"; }
     { case = "8.14"; out = "8.14.1"; }

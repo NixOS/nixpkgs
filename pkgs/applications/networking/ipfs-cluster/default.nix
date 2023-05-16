@@ -17,6 +17,10 @@ buildGoModule rec {
     description = "Allocate, replicate, and track Pins across a cluster of IPFS daemons";
     homepage = "https://ipfscluster.io";
     license = licenses.mit;
+<<<<<<< HEAD
+=======
+    platforms = platforms.unix;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     maintainers = with maintainers; [ Luflosi jglukasik ];
   };
 }

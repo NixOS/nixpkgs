@@ -29,7 +29,11 @@
 
 stdenv.mkDerivation rec {
   pname = "chatty";
+<<<<<<< HEAD
   version = "0.7.3";
+=======
+  version = "0.7.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitLab {
     domain = "source.puri.sm";
@@ -37,7 +41,11 @@ stdenv.mkDerivation rec {
     repo = "chatty";
     rev = "v${version}";
     fetchSubmodules = true;
+<<<<<<< HEAD
     hash = "sha256-zsZDpncnoj+0klJ2/220gY93c7mD0wIvQaP3QF8F3zQ=";
+=======
+    hash = "sha256-e3lYzQjQx1ndomq4mJ8TmwXoUG3Bjl9JrLuTmjXmRCs=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   postPatch = ''

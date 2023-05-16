@@ -10,7 +10,11 @@
 
 stdenv.mkDerivation rec {
   pname = "live555";
+<<<<<<< HEAD
   version = "2023.05.10";
+=======
+  version = "2023.03.30";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchurl {
     urls = [
@@ -18,7 +22,11 @@ stdenv.mkDerivation rec {
       "https://download.videolan.org/contrib/live555/live.${version}.tar.gz"
       "mirror://sourceforge/slackbuildsdirectlinks/live.${version}.tar.gz"
     ];
+<<<<<<< HEAD
     sha256 = "sha256-6ph9x4UYELkkJVIE9r25ycc5NOYbPcgAy9LRZebvGFY=";
+=======
+    sha256 = "sha256-v/1Nh8dicdWeNxFp7bakhEaKB4ysKtRFnyLKqNmJ2tQ=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = lib.optional stdenv.isDarwin darwin.cctools;

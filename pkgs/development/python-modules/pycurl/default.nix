@@ -46,8 +46,11 @@ buildPythonPackage rec {
     curl
   ];
 
+<<<<<<< HEAD
   __darwinAllowLocalNetworking = true;
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nativeCheckInputs = [
     bottle
     pytestCheckHook
@@ -84,6 +87,10 @@ buildPythonPackage rec {
     homepage = "http://pycurl.io/";
     description = "Python Interface To The cURL library";
     license = with licenses; [ lgpl2Only mit ];
+<<<<<<< HEAD
     maintainers = with maintainers; [ ];
+=======
+    maintainers = with maintainers; [ SuperSandro2000 ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

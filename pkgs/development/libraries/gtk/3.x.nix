@@ -63,7 +63,11 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gtk+3";
+<<<<<<< HEAD
   version = "3.24.38";
+=======
+  version = "3.24.37";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   outputs = [ "out" "dev" ] ++ lib.optional withIntrospection "devdoc";
   outputBin = "dev";
@@ -77,7 +81,11 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (finalAttrs) version;
   in fetchurl {
     url = "mirror://gnome/sources/gtk+/${lib.versions.majorMinor version}/gtk+-${version}.tar.xz";
+<<<<<<< HEAD
     sha256 = "sha256-zhHezwGLJb3YUFVEpPhyQoVOyIvgVNmt5fOiBETdjuc=";
+=======
+    sha256 = "sha256-Z0XwtMBTeUFR/Q8OJHSwd8zP9fg+ndG/PTn+n+X7f1c=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   patches = [

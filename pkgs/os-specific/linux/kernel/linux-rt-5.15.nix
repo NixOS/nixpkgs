@@ -6,7 +6,11 @@
 , ... } @ args:
 
 let
+<<<<<<< HEAD
   version = "5.15.129-rt67"; # updated by ./update-rt.sh
+=======
+  version = "5.15.111-rt63"; # updated by ./update-rt.sh
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   branch = lib.versions.majorMinor version;
   kversion = builtins.elemAt (lib.splitString "-" version) 0;
 in buildLinux (args // {
@@ -18,14 +22,22 @@ in buildLinux (args // {
 
   src = fetchurl {
     url = "mirror://kernel/linux/kernel/v5.x/linux-${kversion}.tar.xz";
+<<<<<<< HEAD
     sha256 = "0ribh1jalbnapfrjzjk5kqg6nypalkn5ayin5cwkwiziwiycj3km";
+=======
+    sha256 = "1hmfvii77w70dx1lsfigc7nmjblvs1q131q48didsn01khjymkkp";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   kernelPatches = let rt-patch = {
     name = "rt";
     patch = fetchurl {
       url = "mirror://kernel/linux/kernel/projects/rt/${branch}/older/patch-${version}.patch.xz";
+<<<<<<< HEAD
       sha256 = "1qh2v8i2sa334mkfwx9k8jjvqpp21bj2wmvvdib8wfxbnjnj3vzy";
+=======
+      sha256 = "1jixgqzyns56804dsjkg9n04mbaqrgwvsbgv5jxi2mip1p8spm8s";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
   }; in [ rt-patch ] ++ kernelPatches;
 

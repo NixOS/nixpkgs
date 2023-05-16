@@ -22,6 +22,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+<<<<<<< HEAD
   pytestFlagsArray = [
     "-o cache_dir=$(mktemp -d)"
 
@@ -30,6 +31,11 @@ buildPythonPackage rec {
   ];
 
   sourceRoot = "${src.name}/certbot-dns-route53";
+=======
+  pytestFlagsArray = [ "-o cache_dir=$(mktemp -d)" ];
+
+  sourceRoot = "source/certbot-dns-route53";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   meta = certbot.meta // {
     description = "Route53 DNS Authenticator plugin for Certbot";

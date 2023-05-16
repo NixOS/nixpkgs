@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 {
   chromaprint
 , cmake
@@ -8,6 +9,18 @@
 , flac
 , id3lib
 , lib
+=======
+{ lib
+, stdenv
+, fetchurl
+, chromaprint
+, cmake
+, docbook_xml_dtd_45
+, docbook_xsl
+, ffmpeg
+, flac
+, id3lib
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , libogg
 , libvorbis
 , libxslt
@@ -20,12 +33,16 @@
 , qtquickcontrols
 , qttools
 , readline
+<<<<<<< HEAD
 , stdenv
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , taglib
 , wrapQtAppsHook
 , zlib
 }:
 
+<<<<<<< HEAD
 stdenv.mkDerivation (finalAttrs: {
   pname = "kid3";
   version = "3.9.4";
@@ -33,6 +50,15 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://download.kde.org/stable/kid3/${finalAttrs.version}/kid3-${finalAttrs.version}.tar.xz";
     hash = "sha256-xBCWDpYiXeChxIiMPqHG3CyiRau2kUdDJtzcPtvWpSA=";
+=======
+stdenv.mkDerivation rec {
+  pname = "kid3";
+  version = "3.9.3";
+
+  src = fetchurl {
+    url = "https://download.kde.org/stable/${pname}/${version}/${pname}-${version}.tar.xz";
+    sha256 = "sha256-D2hrdej2Q69AYjDn2Ey4vBSOmzBY3UzZMUdJSRjurdA=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [
@@ -43,7 +69,10 @@ stdenv.mkDerivation (finalAttrs: {
     python3
     wrapQtAppsHook
   ];
+<<<<<<< HEAD
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   buildInputs = [
     chromaprint
     ffmpeg
@@ -70,10 +99,16 @@ stdenv.mkDerivation (finalAttrs: {
     export DOCBOOKDIR="${docbook_xsl}/xml/xsl/docbook/"
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "A simple and powerful audio tag editor";
     homepage = "https://kid3.kde.org/";
     license = lib.licenses.lgpl2Plus;
+=======
+  meta = with lib; {
+    homepage = "https://kid3.kde.org/";
+    description = "A simple and powerful audio tag editor";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     longDescription = ''
       If you want to easily tag multiple MP3, Ogg/Vorbis, FLAC, MPC, MP4/AAC,
       MP2, Opus, Speex, TrueAudio, WavPack, WMA, WAV and AIFF files (e.g. full
@@ -103,7 +138,15 @@ stdenv.mkDerivation (finalAttrs: {
       - Edit synchronized lyrics and event timing codes, import and export
         LRC files.
     '';
+<<<<<<< HEAD
     maintainers = [ lib.maintainers.AndersonTorres ];
     platforms = lib.platforms.linux;
   };
 })
+=======
+    license = licenses.lgpl2Plus;
+    maintainers = [ maintainers.AndersonTorres ];
+    platforms = platforms.linux;
+  };
+}
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)

@@ -4,11 +4,19 @@
 
 stdenv.mkDerivation rec {
   pname = "jquake";
+<<<<<<< HEAD
   version = "1.8.5";
 
   src = fetchurl {
     url = "https://github.com/fleneindre/fleneindre.github.io/raw/master/downloads/JQuake_${version}_linux.zip";
     sha256 = "sha256-Q9R5Qhk8Qodw2d99nL2aG5WGpIyvKmjzfkRK7xJzoc0=";
+=======
+  version = "1.8.4";
+
+  src = fetchurl {
+    url = "https://github.com/fleneindre/fleneindre.github.io/raw/master/downloads/JQuake_${version}_linux.zip";
+    sha256 = "sha256-oIYkYmI8uG4zjnm1Jq1mzIcSwRlKbWJqvACygQyp9sA=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ unzip copyDesktopItems ];

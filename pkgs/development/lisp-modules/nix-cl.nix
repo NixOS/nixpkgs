@@ -299,7 +299,11 @@ let
   }:
     let
       spec = { inherit pkg faslExt program flags asdf; };
+<<<<<<< HEAD
       pkgs = (commonLispPackagesFor spec).overrideScope packageOverrides;
+=======
+      pkgs = (commonLispPackagesFor spec).overrideScope' packageOverrides;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       withPackages = lispWithPackages pkgs;
       withOverrides = packageOverrides:
         wrapLisp {

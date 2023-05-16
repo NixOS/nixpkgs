@@ -1,15 +1,25 @@
 { lib, stdenv, fetchFromGitHub, makeWrapper, perlPackages }:
 
+<<<<<<< HEAD
 let version = "1.98";
 in stdenv.mkDerivation {
   pname = "cloc";
   inherit version;
+=======
+stdenv.mkDerivation rec {
+  pname = "cloc";
+  version = "1.96";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "AlDanial";
     repo = "cloc";
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-OTzIzLgE9sdbHZUSARSbVrxD95dW8gPiM8tvMvqm1Bg=";
+=======
+    sha256 = "sha256-20vL+SX8Tbp6QxErDn76c6sLWnB1IJwHlQX4YAvj+Eg=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   setSourceRoot = ''
@@ -28,6 +38,7 @@ in stdenv.mkDerivation {
 
   postFixup = "wrapProgram $out/bin/cloc --prefix PERL5LIB : $PERL5LIB";
 
+<<<<<<< HEAD
   doInstallCheck = true;
   installCheckPhase = ''
     runHook preInstallCheck
@@ -50,6 +61,8 @@ in stdenv.mkDerivation {
     runHook postInstallCheck
   '';
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   meta = {
     description = "A program that counts lines of source code";
     homepage = "https://github.com/AlDanial/cloc";

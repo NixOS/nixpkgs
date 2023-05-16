@@ -12,13 +12,21 @@
 }:
 buildPythonPackage rec {
   pname = "viv-utils";
+<<<<<<< HEAD
   version = "0.7.9";
+=======
+  version = "0.7.7";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "williballenthin";
     repo = "viv-utils";
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-xM3jtA6fNk36+enL/EcQH59CNajYnGlEDu06QXIFz6A=";
+=======
+    hash = "sha256-ih6CtnsGfHRLDjoaF7BkoUENu+0pU3NB6TG0A70f3nE=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   postPatch = ''

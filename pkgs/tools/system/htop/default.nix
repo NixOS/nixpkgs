@@ -37,7 +37,11 @@ stdenv.mkDerivation rec {
       "--enable-capabilities"
       "--enable-delayacct"
     ]
+<<<<<<< HEAD
     ++ lib.optional sensorsSupport "--enable-sensors"
+=======
+    ++ lib.optional sensorsSupport "--with-sensors"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ;
 
   postFixup =
@@ -55,6 +59,9 @@ stdenv.mkDerivation rec {
     platforms = platforms.all;
     maintainers = with maintainers; [ rob relrod SuperSandro2000 ];
     changelog = "https://github.com/htop-dev/htop/blob/${version}/ChangeLog";
+<<<<<<< HEAD
     mainProgram = "htop";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

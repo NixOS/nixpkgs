@@ -2,7 +2,11 @@ import ./make-test-python.nix ({ lib, pkgs, ... }: {
   name = "systemd-initrd-vconsole";
 
   nodes.machine = { pkgs, ... }: {
+<<<<<<< HEAD
     boot.kernelParams = lib.mkAfter [ "rd.systemd.unit=rescue.target" "loglevel=3" "udev.log_level=3" "systemd.log_level=warning" ];
+=======
+    boot.kernelParams = [ "rd.systemd.unit=rescue.target" ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     boot.initrd.systemd = {
       enable = true;
@@ -20,6 +24,7 @@ import ./make-test-python.nix ({ lib, pkgs, ... }: {
     machine.start()
     machine.wait_for_console_text("Press Enter for maintenance")
     machine.send_console("\n")
+<<<<<<< HEAD
 
     # Wait for shell to become ready
     for _ in range(300):
@@ -34,9 +39,19 @@ import ./make-test-python.nix ({ lib, pkgs, ... }: {
 
     # Check keymap
     machine.send_console("(printf '%s to receive text:\\n' Ready && read text && echo \"$text\") </dev/tty1\n")
+=======
+    machine.wait_for_console_text("Logging in with home")
+
+    # Check keymap
+    machine.send_console("(printf '%s to receive text: \\n' Ready && read text && echo \"$text\") </dev/tty1\n")
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     machine.wait_for_console_text("Ready to receive text:")
     for key in "asdfjkl;\n":
       machine.send_key(key)
     machine.wait_for_console_text("arstneio")
+<<<<<<< HEAD
+=======
+    machine.send_console("systemctl poweroff\n")
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '';
 })

@@ -31,6 +31,10 @@ buildPythonPackage rec {
     description = "Backport of Python 3.11's datetime.fromisoformat";
     homepage = "https://github.com/movermeyer/backports.datetime_fromisoformat";
     license = licenses.mit;
+<<<<<<< HEAD
     maintainers = with maintainers; [ ];
+=======
+    maintainers = with maintainers; [ SuperSandro2000 ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

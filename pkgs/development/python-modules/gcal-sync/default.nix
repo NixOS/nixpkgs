@@ -13,7 +13,11 @@
 
 buildPythonPackage rec {
   pname = "gcal-sync";
+<<<<<<< HEAD
   version = "4.2.1";
+=======
+  version = "4.2.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.9";
@@ -22,7 +26,11 @@ buildPythonPackage rec {
     owner = "allenporter";
     repo = "gcal_sync";
     rev = "refs/tags/${version}";
+<<<<<<< HEAD
     hash = "sha256-+ysm3THUet2gKHyVq0QoOxDem7ik4BK7bxVos9thExM=";
+=======
+    hash = "sha256-Z5XRyhObREj38BWnexQnwHS1y2Ewyv5/KPkl/ybHvUE=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [
@@ -31,8 +39,11 @@ buildPythonPackage rec {
     pydantic
   ];
 
+<<<<<<< HEAD
   __darwinAllowLocalNetworking = true;
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nativeCheckInputs = [
     freezegun
     pytest-aiohttp

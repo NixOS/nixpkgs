@@ -8,7 +8,11 @@
 
 buildPythonPackage rec {
   pname = "bytecode";
+<<<<<<< HEAD
   version = "0.15.0";
+=======
+  version = "0.14.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "pyproject";
   disabled = pythonOlder "3.6";
 
@@ -16,7 +20,11 @@ buildPythonPackage rec {
     owner = "vstinner";
     repo = pname;
     rev = "refs/tags/${version}";
+<<<<<<< HEAD
     hash = "sha256-A8S3U07P4Olq9f7/q20aHOPAQsQp3OuGHtIAs8B8VEQ=";
+=======
+    hash = "sha256-vSuGjNTQw7prFxmVyiq7s8cnl+VGbRArC2sp7GVP0XA=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;

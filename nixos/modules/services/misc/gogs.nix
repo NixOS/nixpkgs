@@ -6,16 +6,28 @@ let
   cfg = config.services.gogs;
   opt = options.services.gogs;
   configFile = pkgs.writeText "app.ini" ''
+<<<<<<< HEAD
     BRAND_NAME = ${cfg.appName}
+=======
+    APP_NAME = ${cfg.appName}
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     RUN_USER = ${cfg.user}
     RUN_MODE = prod
 
     [database]
+<<<<<<< HEAD
     TYPE = ${cfg.database.type}
     HOST = ${cfg.database.host}:${toString cfg.database.port}
     NAME = ${cfg.database.name}
     USER = ${cfg.database.user}
     PASSWORD = #dbpass#
+=======
+    DB_TYPE = ${cfg.database.type}
+    HOST = ${cfg.database.host}:${toString cfg.database.port}
+    NAME = ${cfg.database.name}
+    USER = ${cfg.database.user}
+    PASSWD = #dbpass#
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     PATH = ${cfg.database.path}
 
     [repository]
@@ -25,7 +37,11 @@ let
     DOMAIN = ${cfg.domain}
     HTTP_ADDR = ${cfg.httpAddress}
     HTTP_PORT = ${toString cfg.httpPort}
+<<<<<<< HEAD
     EXTERNAL_URL = ${cfg.rootUrl}
+=======
+    ROOT_URL = ${cfg.rootUrl}
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     [session]
     COOKIE_NAME = session

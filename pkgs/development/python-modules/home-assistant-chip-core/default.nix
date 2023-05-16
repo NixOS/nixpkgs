@@ -8,6 +8,7 @@
 , autoPatchelfHook
 
 # runtime
+<<<<<<< HEAD
 , libnl
 , openssl_1_1
 
@@ -18,6 +19,14 @@
 , cryptography
 , dacite
 , ecdsa
+=======
+, openssl_1_1
+
+# propagates
+, coloredlogs
+, construct
+, dacite
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , rich
 , pyyaml
 , ipdb
@@ -28,7 +37,11 @@
 
 buildPythonPackage rec {
   pname = "home-assistant-chip-core";
+<<<<<<< HEAD
   version = "2023.6.0";
+=======
+  version = "2023.4.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "wheel";
 
   disabled = pythonOlder "3.7";
@@ -37,11 +50,19 @@ buildPythonPackage rec {
     system = {
       "aarch64-linux" = {
         name = "aarch64";
+<<<<<<< HEAD
         hash = "sha256-fR+ea25SqOMksBJXgSjuVvv2xSBoadZmPWP0IwxpiMA=";
       };
       "x86_64-linux" = {
         name = "x86_64";
         hash = "sha256-bRP82jTVSJS46WuO8MVWFvte+2mCOSsGFDBaXdmdPHI=";
+=======
+        hash = "sha256-Rke4cVHdpJjrqqiNKWFwglerr61VyiTNKj8AhLE0+Xo=";
+      };
+      "x86_64-linux" = {
+        name = "x86_64";
+        hash = "sha256-ihbbNFuR+3SLzdZgApJawpwnZeo1HPoOBWJXkY+5RSM=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       };
     }.${stdenv.system} or (throw "Unsupported system");
   in fetchPypi {
@@ -59,17 +80,26 @@ buildPythonPackage rec {
   ];
 
   buildInputs = [
+<<<<<<< HEAD
     libnl
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     openssl_1_1
   ];
 
   propagatedBuildInputs = [
+<<<<<<< HEAD
     aenum
     coloredlogs
     construct
     cryptography
     dacite
     ecdsa
+=======
+    coloredlogs
+    construct
+    dacite
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     rich
     pyyaml
     ipdb

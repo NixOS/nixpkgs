@@ -23,7 +23,11 @@ buildGoModule rec {
   };
 
   proxyVendor = true;
+<<<<<<< HEAD
   vendorHash = "sha256-KLeVSrPDS1lKsKFemRmgxT6Pxack3X3B/btSCOUSUFY=";
+=======
+  vendorSha256 = "sha256-KLeVSrPDS1lKsKFemRmgxT6Pxack3X3B/btSCOUSUFY=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   ldflags = [ "-s" "-w" "-X main.Version=v${version}" ];
 

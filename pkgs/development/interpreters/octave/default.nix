@@ -112,12 +112,20 @@ let
   };
 
   self = mkDerivation rec {
+<<<<<<< HEAD
     version = "8.3.0";
+=======
+    version = "8.2.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     pname = "octave";
 
     src = fetchurl {
       url = "mirror://gnu/octave/${pname}-${version}.tar.gz";
+<<<<<<< HEAD
       sha256 = "sha256-K0gRHLZ7MSgX5dHz4XH1utFRK7Bn4WdLnEspKBiVuXo=";
+=======
+      sha256 = "sha256-V9F/kYqUDTjKM0ghHhELNNc1oyKofbccF3xGkqSanIQ=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
 
     buildInputs = [

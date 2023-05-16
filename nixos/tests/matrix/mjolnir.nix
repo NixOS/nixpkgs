@@ -32,6 +32,10 @@ import ../make-test-python.nix (
     name = "mjolnir";
     meta = with pkgs.lib; {
       maintainers = teams.matrix.members;
+<<<<<<< HEAD
+=======
+      broken = true; # times out after spending many hours
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
 
     nodes = {
@@ -98,8 +102,11 @@ import ../make-test-python.nix (
             enable = true;
             username = "mjolnir";
             passwordFile = pkgs.writeText "password.txt" "mjolnir-password";
+<<<<<<< HEAD
             # otherwise mjolnir tries to connect to ::1, which is not listened by pantalaimon
             options.listenAddress = "127.0.0.1";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           };
           managementRoom = "#moderators:homeserver";
         };

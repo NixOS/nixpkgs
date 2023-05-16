@@ -2,6 +2,7 @@
 #! nix-shell -i python3 -p python3Packages.packaging python3Packages.debian
 
 import base64
+<<<<<<< HEAD
 import textwrap
 from urllib import request
 
@@ -9,6 +10,16 @@ from collections import OrderedDict
 from debian.deb822 import Packages
 from debian.debian_support import Version
 
+=======
+import gzip
+import textwrap
+from urllib import request
+
+from debian.deb822 import Packages
+from debian.debian_support import Version
+
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 def packages():
     packages_url = 'https://packages.microsoft.com/repos/edge/dists/stable/main/binary-amd64/Packages'
     handle = request.urlopen(packages_url)
@@ -16,7 +27,11 @@ def packages():
 
 
 def latest_packages(packages: bytes):
+<<<<<<< HEAD
     latest_packages: OrderedDict[str, Packages] = {}
+=======
+    latest_packages: dict[str, Packages] = {}
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     for package in Packages.iter_paragraphs(packages, use_apt_pkg=False):
         name: str = package['Package']
         if not name.startswith('microsoft-edge-'):
@@ -59,7 +74,11 @@ def nix_expressions(latest: dict[str, Packages]):
 def write_expression():
     latest = latest_packages(packages())
     channel_strs = nix_expressions(latest)
+<<<<<<< HEAD
     nix_expr = '{\n' + textwrap.indent('\n'.join(channel_strs), '  ') + '\n}\n'
+=======
+    nix_expr = '{\n' + textwrap.indent('\n'.join(channel_strs), '  ') + '\n}'
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     with open('default.nix', 'w') as f:
         f.write(nix_expr)
 

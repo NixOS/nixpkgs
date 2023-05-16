@@ -25,7 +25,11 @@
 , pythonOlder
 , qdarkstyle
 , qimage2ndarray
+<<<<<<< HEAD
 , scikit-image
+=======
+, scikitimage
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , scipy
 , tables
 }:
@@ -57,7 +61,11 @@ buildPythonPackage rec {
     pandas
     tables
     git
+<<<<<<< HEAD
     scikit-image
+=======
+    scikitimage
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     matplotlib
     qdarkstyle
     gitpython

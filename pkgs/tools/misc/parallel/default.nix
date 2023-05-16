@@ -2,11 +2,19 @@
 
 stdenv.mkDerivation rec {
   pname = "parallel";
+<<<<<<< HEAD
   version = "20230822";
 
   src = fetchurl {
     url = "mirror://gnu/parallel/${pname}-${version}.tar.bz2";
     sha256 = "sha256-S1lFmaPBE8KVLWsMG3zlRGAJjqIVrF9oUSAfme5r/F4=";
+=======
+  version = "20230422";
+
+  src = fetchurl {
+    url = "mirror://gnu/parallel/${pname}-${version}.tar.bz2";
+    sha256 = "sha256-kQZZPQncTeDglLexQ5CjCdj8sdJxBKU4FNFpN9y648I=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   outputs = [ "out" "man" "doc" ];

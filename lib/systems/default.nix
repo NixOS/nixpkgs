@@ -9,6 +9,7 @@ rec {
   examples = import ./examples.nix { inherit lib; };
   architectures = import ./architectures.nix { inherit lib; };
 
+<<<<<<< HEAD
   /*
     Elaborated systems contain functions, which means that they don't satisfy
     `==` for a lack of reflexivity.
@@ -27,6 +28,8 @@ rec {
     let removeFunctions = a: lib.filterAttrs (_: v: !builtins.isFunction v) a;
     in a: b: removeFunctions a == removeFunctions b;
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   /* List of all Nix system doubles the nixpkgs flake will expose the package set
      for. All systems listed here must be supported by nixpkgs as `localSystem`.
 
@@ -85,18 +88,31 @@ rec {
         # is why we use the more obscure "bfd" and not "binutils" for this
         # choice.
         else                                     "bfd";
+<<<<<<< HEAD
       extensions = lib.optionalAttrs final.hasSharedLibraries {
         sharedLibrary =
           if      final.isDarwin  then ".dylib"
           else if final.isWindows then ".dll"
           else                         ".so";
       } // {
+=======
+      extensions = rec {
+        sharedLibrary =
+          /**/ if final.isDarwin  then ".dylib"
+          else if final.isWindows then ".dll"
+          else                         ".so";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         staticLibrary =
           /**/ if final.isWindows then ".lib"
           else                         ".a";
         library =
+<<<<<<< HEAD
           /**/ if final.isStatic then final.extensions.staticLibrary
           else                        final.extensions.sharedLibrary;
+=======
+          /**/ if final.isStatic then staticLibrary
+          else                        sharedLibrary;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         executable =
           /**/ if final.isWindows then ".exe"
           else                         "";
@@ -133,6 +149,7 @@ rec {
          # uname -r
          release = null;
       };
+<<<<<<< HEAD
 
       # It is important that hasSharedLibraries==false when the platform has no
       # dynamic library loader.  Various tools (including the gcc build system)
@@ -152,6 +169,8 @@ rec {
       # don't support dynamic linking, but don't get the `staticMarker`.
       # `pkgsStatic` sets `isStatic=true`, so `pkgsStatic.hostPlatform` always
       # has the `staticMarker`.
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       isStatic = final.isWasm || final.isRedox;
 
       # Just a guess, based on `system`
@@ -224,7 +243,10 @@ rec {
               gtkSupport = false;
               sdlSupport = false;
               pulseSupport = false;
+<<<<<<< HEAD
               pipewireSupport = false;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
               smbdSupport = false;
               seccompSupport = false;
               enableDocs = false;
@@ -232,7 +254,12 @@ rec {
             };
             wine = (pkgs.winePackagesFor "wine${toString final.parsed.cpu.bits}").minimal;
           in
+<<<<<<< HEAD
           if pkgs.stdenv.hostPlatform.canExecute final
+=======
+          if final.parsed.kernel.name == pkgs.stdenv.hostPlatform.parsed.kernel.name &&
+            pkgs.stdenv.hostPlatform.canExecute final
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           then "${pkgs.runtimeShell} -c '\"$@\"' --"
           else if final.isWindows
           then "${wine}/bin/wine${lib.optionalString (final.parsed.cpu.bits == 64) "64"}"

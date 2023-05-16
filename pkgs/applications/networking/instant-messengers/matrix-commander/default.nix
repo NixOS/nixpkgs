@@ -12,18 +12,29 @@
 , dbus-python
 , pyxdg
 , python-olm
+<<<<<<< HEAD
 , emoji
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 buildPythonApplication rec {
   pname = "matrix-commander";
+<<<<<<< HEAD
   version = "7.2.0";
+=======
+  version = "6.0.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "8go";
     repo = "matrix-commander";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-qL6ARkAWu0FEuYK2e9Z9hMSfK4TW0kGgoIFUfJ8Dgwk=";
+=======
+    sha256 = "sha256-NSoMGUQjy4TQXdzZcQfO2rUQDsuSzQnoGDpqFiLQHVQ=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   format = "pyproject";
@@ -50,7 +61,10 @@ buildPythonApplication rec {
     dbus-python
     pyxdg
     python-olm
+<<<<<<< HEAD
     emoji
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ] ++ matrix-nio.optional-dependencies.e2e;
 
   meta = with lib; {

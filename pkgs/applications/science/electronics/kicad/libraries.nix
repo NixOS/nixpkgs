@@ -2,9 +2,12 @@
 , cmake
 , gettext
 , libSrc
+<<<<<<< HEAD
 , stepreduce
 , parallel
 , zip
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 let
   mkLib = name:
@@ -14,6 +17,7 @@ let
 
       src = libSrc name;
 
+<<<<<<< HEAD
       nativeBuildInputs = [ cmake ]
         ++ lib.optionals (name == "packages3d") [
           stepreduce
@@ -24,10 +28,19 @@ let
       postInstall = lib.optional (name == "packages3d") ''
         find $out -type f -name '*.step' | parallel 'stepreduce {} {} && zip -9 {.}.stpZ {} && rm {}'
       '';
+=======
+      nativeBuildInputs = [ cmake ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
       meta = rec {
         license = lib.licenses.cc-by-sa-40;
         platforms = lib.platforms.all;
+<<<<<<< HEAD
+=======
+        # the 3d models are a ~1 GiB download and occupy ~5 GiB in store.
+        # this would exceed the hydra output limit
+        hydraPlatforms = if (name == "packages3d") then [ ] else platforms;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       };
     };
 in

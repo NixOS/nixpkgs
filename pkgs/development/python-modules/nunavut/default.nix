@@ -9,14 +9,22 @@
 
  buildPythonPackage rec {
   pname = "nunavut";
+<<<<<<< HEAD
   version = "2.1.1";
+=======
+  version = "2.0.9";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
+<<<<<<< HEAD
     hash = "sha256-ENP1uhzQwFEk990b1RX2wNVpInaSSH80KNihX6XpQtU=";
+=======
+    hash = "sha256-SRiM4Vuk2nhETnBclYTeKFsT+5HgAxQe4z27h+lW7HI=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   postPatch = ''
@@ -50,7 +58,10 @@
       authors to generate code, schemas, metadata, documentation, etc.
     '';
     homepage = "https://nunavut.readthedocs.io/";
+<<<<<<< HEAD
     changelog = "https://github.com/OpenCyphal/nunavut/releases/tag/${version}";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     maintainers = with maintainers; [ wucke13 ];
     license = with licenses; [ bsd3 mit ];
   };

@@ -8,7 +8,11 @@
 
 buildPythonPackage rec {
   pname = "click-option-group";
+<<<<<<< HEAD
   version = "0.5.6";
+=======
+  version = "0.5.5";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
   disabled = pythonOlder "3.6";
 
@@ -16,7 +20,11 @@ buildPythonPackage rec {
     owner = "click-contrib";
     repo = pname;
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-uR5rIZPPT6pRk/jJEy2rZciOXrHWVWN6BfGroQ3znas=";
+=======
+    hash = "sha256-ur7ycioZmgWMp4N+MURj1ggYMzs2eauteg1B5eLkSvc=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [

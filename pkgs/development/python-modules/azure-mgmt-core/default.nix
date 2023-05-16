@@ -6,13 +6,21 @@
 }:
 
 buildPythonPackage rec {
+<<<<<<< HEAD
   version = "1.4.0";
+=======
+  version = "1.3.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pname = "azure-mgmt-core";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
+<<<<<<< HEAD
     hash = "sha256-0ZUgg0AJT5jlpmYbeBzeb2oFHnnOMXyqvY/5cDCps64=";
+=======
+    hash = "sha256-B/Sv6COlXXBLBI1h7f3BMYwFHtWfJEAyEmNQvpXp1QE=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [

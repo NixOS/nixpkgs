@@ -17,7 +17,10 @@ bundlerApp rec {
     "asciidoctor-epub3"
     "asciidoctor-multipage"
     "asciidoctor-pdf"
+<<<<<<< HEAD
     "asciidoctor-reducer"
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "asciidoctor-revealjs"
   ];
 

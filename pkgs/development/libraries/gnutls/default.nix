@@ -1,6 +1,9 @@
 { config, lib, stdenv, fetchurl, zlib, lzo, libtasn1, nettle, pkg-config, lzip
 , perl, gmp, autoconf, automake, libidn2, libiconv
+<<<<<<< HEAD
 , fetchpatch, texinfo
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , unbound, dns-root-data, gettext, util-linux
 , cxxBindings ? !stdenv.hostPlatform.isStatic # tries to link libstdc++.so
 , tpmSupport ? false, trousers, which, nettools, libunistring
@@ -19,7 +22,10 @@
 , python3Packages
 , qemu
 , rsyslog
+<<<<<<< HEAD
 , openconnect
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , samba
 }:
 
@@ -35,11 +41,19 @@ in
 
 stdenv.mkDerivation rec {
   pname = "gnutls";
+<<<<<<< HEAD
   version = "3.8.1";
 
   src = fetchurl {
     url = "mirror://gnupg/gnutls/v${lib.versions.majorMinor version}/gnutls-${version}.tar.xz";
     hash = "sha256-uoueFa4gq6iPRGYZePW1hjSUMW/n5yLt6dBp/mKUgpw=";
+=======
+  version = "3.8.0";
+
+  src = fetchurl {
+    url = "mirror://gnupg/gnutls/v${lib.versions.majorMinor version}/gnutls-${version}.tar.xz";
+    sha256 = "sha256-DqDRGhZgoeY/lg8Vexl6vm0MjLMlW+JOH7OBWTC5vcU=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   outputs = [ "bin" "dev" "out" "man" "devdoc" ];
@@ -47,6 +61,7 @@ stdenv.mkDerivation rec {
   outputInfo = "devdoc";
   outputDoc  = "devdoc";
 
+<<<<<<< HEAD
   patches = [
     (fetchpatch { #TODO: when updating drop this patch and texinfo
       name = "GNUTLS_NO_EXTENSIONS.patch";
@@ -56,6 +71,9 @@ stdenv.mkDerivation rec {
 
     ./nix-ssl-cert-file.patch
   ];
+=======
+  patches = [ ./nix-ssl-cert-file.patch ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   # Skip some tests:
   #  - pkg-config: building against the result won't work before installing (3.5.11)
@@ -90,7 +108,11 @@ stdenv.mkDerivation rec {
     ++ lib.optional (withP11-kit) p11-kit
     ++ lib.optional (tpmSupport && stdenv.isLinux) trousers;
 
+<<<<<<< HEAD
   nativeBuildInputs = [ perl pkg-config texinfo ]
+=======
+  nativeBuildInputs = [ perl pkg-config ]
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     ++ lib.optionals doCheck [ which nettools util-linux ];
 
   propagatedBuildInputs = [ nettle ]
@@ -116,7 +138,11 @@ stdenv.mkDerivation rec {
   '';
 
   passthru.tests = {
+<<<<<<< HEAD
     inherit ngtcp2-gnutls curlWithGnuTls ffmpeg emacs qemu knot-resolver samba openconnect;
+=======
+    inherit ngtcp2-gnutls curlWithGnuTls ffmpeg emacs qemu knot-resolver;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     inherit (ocamlPackages) ocamlnet;
     haskell-gnutls = haskellPackages.gnutls;
     python3-gnutls = python3Packages.python3-gnutls;

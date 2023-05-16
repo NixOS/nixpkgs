@@ -6,7 +6,10 @@
 , devtools
 , email-validator
 , fetchFromGitHub
+<<<<<<< HEAD
 , fetchpatch
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , pytest-mock
 , pytestCheckHook
 , python-dotenv
@@ -19,7 +22,10 @@
 , withDocs ? (stdenv.hostPlatform == stdenv.buildPlatform && !stdenv.isDarwin && pythonAtLeast "3.10")
 , ansi2html
 , markdown-include
+<<<<<<< HEAD
 , mike
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , mkdocs
 , mkdocs-exclude
 , mkdocs-material
@@ -33,7 +39,11 @@
 
 buildPythonPackage rec {
   pname = "pydantic";
+<<<<<<< HEAD
   version = "1.10.9";
+=======
+  version = "1.10.7";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   outputs = [
@@ -45,6 +55,7 @@ buildPythonPackage rec {
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
+<<<<<<< HEAD
     owner = "pydantic";
     repo = pname;
     rev = "refs/tags/v${version}";
@@ -60,6 +71,14 @@ buildPythonPackage rec {
     })
   ];
 
+=======
+    owner = "samuelcolvin";
+    repo = pname;
+    rev = "refs/tags/v${version}";
+    hash = "sha256-7X7rlHJ5Q01CuB9FZzoUfyfwx6AMXtE1BV5t+LnZKIM=";
+  };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   postPatch = ''
     sed -i '/flake8/ d' Makefile
   '';
@@ -76,7 +95,10 @@ buildPythonPackage rec {
     ansi2html
     markdown-include
     mdx-truly-sane-lists
+<<<<<<< HEAD
     mike
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     mkdocs
     mkdocs-exclude
     mkdocs-material
@@ -132,9 +154,14 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "pydantic" ];
 
   meta = with lib; {
+<<<<<<< HEAD
     description = "Data validation and settings management using Python type hinting";
     homepage = "https://github.com/pydantic/pydantic";
     changelog = "https://github.com/pydantic/pydantic/blob/v${version}/HISTORY.md";
+=======
+    homepage = "https://github.com/samuelcolvin/pydantic";
+    description = "Data validation and settings management using Python type hinting";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     license = licenses.mit;
     maintainers = with maintainers; [ wd15 ];
   };

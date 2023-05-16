@@ -1,19 +1,33 @@
 { lib, stdenv, fetchurl, makeWrapper, makeDesktopItem, zlib, glib, libpng, freetype, openssl
 , xorg, fontconfig, qtbase, qtwebengine, qtwebchannel, qtsvg, qtwebsockets, xkeyboard_config
+<<<<<<< HEAD
 , alsa-lib, libpulseaudio ? null, libredirect, quazip, which, unzip, perl, llvmPackages
+=======
+, alsa-lib, libpulseaudio ? null, libredirect, quazip, which, unzip, llvmPackages_10, writeShellScriptBin
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 let
 
+<<<<<<< HEAD
   arch = "amd64";
 
   libDir = "lib64";
+=======
+  arch = if stdenv.is64bit then "amd64" else "x86";
+
+  libDir = if stdenv.is64bit then "lib64" else "lib";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   deps =
     [ zlib glib libpng freetype xorg.libSM xorg.libICE xorg.libXrender openssl
       xorg.libXrandr xorg.libXfixes xorg.libXcursor xorg.libXinerama
       xorg.libxcb fontconfig xorg.libXext xorg.libX11 alsa-lib qtbase qtwebengine qtwebchannel qtsvg
+<<<<<<< HEAD
       qtwebsockets libpulseaudio quazip llvmPackages.libcxx llvmPackages.libcxxabi
+=======
+      qtwebsockets libpulseaudio quazip llvmPackages_10.libcxx llvmPackages_10.libcxxabi # llvmPackages_11 and higher crash https://github.com/NixOS/nixpkgs/issues/161395
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     ];
 
   desktopItem = makeDesktopItem {
@@ -25,16 +39,32 @@ let
     genericName = "TeamSpeak";
     categories = [ "Network" ];
   };
+<<<<<<< HEAD
+=======
+
+  fakeLess = writeShellScriptBin "less" "cat";
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 in
 
 stdenv.mkDerivation rec {
   pname = "teamspeak-client";
 
+<<<<<<< HEAD
   version = "3.6.1";
 
   src = fetchurl {
     url = "https://files.teamspeak-services.com/releases/client/${version}/TeamSpeak3-Client-linux_${arch}-${version}.run";
     hash = "sha256-j4sgZ+tJpV6ST0yLmbLTLgBxQTcK1LZoEEfMe3TUAC4=";
+=======
+  version = "3.5.6";
+
+  src = fetchurl {
+    url = "https://files.teamspeak-services.com/releases/client/${version}/TeamSpeak3-Client-linux_${arch}-${version}.run";
+    sha256 = if stdenv.is64bit
+                then "sha256:0hjai1bd4mq3g2dlyi0zkn8s4zlgxd38skw77mb78nc4di5gvgpg"
+                else "sha256:1y1c65nap91nv9xkvd96fagqbfl56p9n0rl6iac0i29bkysdmija";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   # grab the plugin sdk for the desktop icon
@@ -43,6 +73,7 @@ stdenv.mkDerivation rec {
     sha256 = "1bywmdj54glzd0kffvr27r84n4dsd0pskkbmh59mllbxvj0qwy7f";
   };
 
+<<<<<<< HEAD
   nativeBuildInputs = [
     makeWrapper
     which
@@ -57,6 +88,13 @@ stdenv.mkDerivation rec {
   unpackPhase =
     ''
       echo -e '\ny' | PAGER=cat sh -xe $src
+=======
+  nativeBuildInputs = [ makeWrapper fakeLess which unzip ];
+
+  unpackPhase =
+    ''
+      echo -e '\ny' | sh -xe $src
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       cd TeamSpeak*
     '';
 
@@ -114,9 +152,14 @@ stdenv.mkDerivation rec {
       url = "https://www.teamspeak.com/en/privacy-and-terms/";
       free = false;
     };
+<<<<<<< HEAD
     maintainers = with maintainers; [ lhvwb lukegb atemu ];
     mainProgram = "ts3client";
     platforms = [ "x86_64-linux" ];
+=======
+    maintainers = with maintainers; [ lhvwb lukegb ];
+    platforms = [ "i686-linux" "x86_64-linux" ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }
 

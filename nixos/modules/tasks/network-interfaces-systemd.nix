@@ -437,7 +437,11 @@ in
             '';
             postStop = ''
               echo "Cleaning Open vSwitch ${n}"
+<<<<<<< HEAD
               echo "Shutting down internal ${n} interface"
+=======
+              echo "Shuting down internal ${n} interface"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
               ip link set ${n} down || true
               echo "Deleting flows for ${n}"
               ovs-ofctl --protocols=${v.openFlowVersion} del-flows ${n} || true

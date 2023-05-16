@@ -19,13 +19,21 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "SDL_compat";
+<<<<<<< HEAD
   version = "1.2.64";
+=======
+  version = "1.2.60";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "libsdl-org";
     repo = "sdl12-compat";
     rev = "release-" + version;
+<<<<<<< HEAD
     hash = "sha256-Ctl7RElRWaB4IpBZD5Sm0rYOcv5zaIag78VTKoFlbVs=";
+=======
+    hash = "sha256-8b9rFI4iRpBJqeJ2KRJ9vRyv9gYwa9jRWCuXRfA3x50=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ cmake pkg-config ]

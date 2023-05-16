@@ -81,7 +81,11 @@ in
           if [ "$TERM" != "dumb" ] || [ -n "$INSIDE_EMACS" ]; then
             PROMPT_COLOR="1;31m"
             ((UID)) && PROMPT_COLOR="1;32m"
+<<<<<<< HEAD
             if [ -n "$INSIDE_EMACS" ]; then
+=======
+            if [ -n "$INSIDE_EMACS" ] || [ "$TERM" = "eterm" ] || [ "$TERM" = "eterm-color" ]; then
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
               # Emacs term mode doesn't support xterm title escape sequence (\e]0;)
               PS1="\n\[\033[$PROMPT_COLOR\][\u@\h:\w]\\$\[\033[0m\] "
             else

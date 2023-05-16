@@ -12,14 +12,22 @@
 }:
 
 stdenv.mkDerivation rec {
+<<<<<<< HEAD
   version = "4.12.1";
+=======
+  version = "4.12.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pname = "sleuthkit";
 
   sleuthsrc = fetchFromGitHub {
     owner = "sleuthkit";
     repo = "sleuthkit";
     rev = "${pname}-${version}";
+<<<<<<< HEAD
     hash = "sha256-q51UY2lIcLijycNaq9oQIwUXpp/1mfc3oPN4syOPF44=";
+=======
+    hash = "sha256-NX7LNtor7UQJ6HCDz9wGpxbqrLQTTH9+543hOaQOAz4=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   # Fetch libraries using a fixed output derivation

@@ -20,7 +20,10 @@ rustPlatform.buildRustPackage rec {
     description = "Find and remove unused code in .nix source files";
     homepage = "https://github.com/astro/deadnix";
     license = licenses.gpl3Only;
+<<<<<<< HEAD
     mainProgram = "deadnix";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     maintainers = with maintainers; [ astro ];
   };
 }

@@ -29,6 +29,10 @@ buildPythonPackage rec {
     description = "Factory and registry pattern for Python classes";
     homepage = "https://class-registry.readthedocs.io/en/latest/";
     license = licenses.mit;
+<<<<<<< HEAD
     maintainers = with maintainers; [ kevincox ];
+=======
+    maintainers = with maintainers; [ kevincox SuperSandro2000 ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

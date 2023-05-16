@@ -12,6 +12,9 @@ bundlerApp {
     homepage = "https://github.com/ruby-formatter/rufo";
     license = licenses.mit;
     maintainers = with maintainers; [ andersk ];
+<<<<<<< HEAD
     mainProgram = "rufo";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

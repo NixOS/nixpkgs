@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 { lib, buildNimPackage, fetchFromGitHub }:
 
 buildNimPackage (final: prev: {
@@ -16,3 +17,12 @@ buildNimPackage (final: prev: {
     maintainers = with lib.maintainers; [ ehmry ];
   };
 })
+=======
+{ fetchNimble }:
+
+fetchNimble {
+  pname = "chroma";
+  version = "0.2.5";
+  hash = "sha256-6lNHpO2aMorgkaPfo6kRcOs9r5R6T/kislVmkeoulw8=";
+}
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)

@@ -2,9 +2,14 @@
 , rustPlatform
 , fetchFromGitHub
 , pkg-config
+<<<<<<< HEAD
 , wrapGAppsHook
 , gtk3
 , librsvg
+=======
+, gtk3
+, gdk-pixbuf
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , withWayland ? false
 , gtk-layer-shell
 , stdenv
@@ -12,6 +17,7 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "eww";
+<<<<<<< HEAD
   version = "unstable-2023-08-18";
 
   src = fetchFromGitHub {
@@ -31,6 +37,27 @@ rustPlatform.buildRustPackage rec {
   buildFeatures = [
     (if withWayland then "wayland" else "x11")
   ];
+=======
+  version = "0.4.0";
+
+  src = fetchFromGitHub {
+    owner = "elkowar";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "sha256-wzgWx3QxZvCAzRKLFmo/ru8hsIQsEDNeb4cPdlEyLxE=";
+  };
+
+  cargoSha256 = "sha256-9RfYDF31wFYylhZv53PJpZofyCdMiUiH/nhRB2Ni/Is=";
+
+  cargoPatches = [ ./Cargo.lock.patch ];
+
+  nativeBuildInputs = [ pkg-config ];
+
+  buildInputs = [ gtk3 gdk-pixbuf ] ++ lib.optional withWayland gtk-layer-shell;
+
+  buildNoDefaultFeatures = withWayland;
+  buildFeatures = lib.optional withWayland "wayland";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   cargoBuildFlags = [ "--bin" "eww" ];
 
@@ -44,7 +71,10 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/elkowar/eww";
     license = licenses.mit;
     maintainers = with maintainers; [ figsoda lom ];
+<<<<<<< HEAD
     mainProgram = "eww";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     broken = stdenv.isDarwin;
   };
 }

@@ -1,10 +1,17 @@
 { fetchzip, lib, stdenv, makeWrapper, openjdk }:
 stdenv.mkDerivation rec {
   pname = "gremlin-server";
+<<<<<<< HEAD
   version = "3.7.0";
   src = fetchzip {
     url = "https://downloads.apache.org/tinkerpop/${version}/apache-tinkerpop-gremlin-server-${version}-bin.zip";
     sha256 = "sha256-cS7R7Raz5tkrr5DNeW7jbEYDee2OgE4htTXJRnqXlqI=";
+=======
+  version = "3.5.2";
+  src = fetchzip {
+    url = "https://downloads.apache.org/tinkerpop/${version}/apache-tinkerpop-gremlin-server-${version}-bin.zip";
+    sha256 = "sha256-XFI2PQnvIPYjkJhm73TPSpMqH4+/Qv5RxS5iWkfuBg0=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ makeWrapper ];

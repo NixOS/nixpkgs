@@ -3,6 +3,7 @@
 with lib;
 
 let
+<<<<<<< HEAD
   CONTAINS_NEWLINE_RE = ".*\n.*";
   # The following values are reserved as complete option values:
   # { - start of a group.
@@ -49,6 +50,17 @@ let
     ++ (flag cfg.logPath "logfile")
     ++ (flag cfg.port "port")
     ++ cfg.extraArgs;
+=======
+  cfg   = config.services.minetest-server;
+  flag  = val: name: optionalString (val != null) "--${name} ${toString val} ";
+  flags = [
+    (flag cfg.gameId "gameid")
+    (flag cfg.world "world")
+    (flag cfg.configPath "config")
+    (flag cfg.logPath "logfile")
+    (flag cfg.port "port")
+  ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 in
 {
   options = {
@@ -92,6 +104,7 @@ in
         '';
       };
 
+<<<<<<< HEAD
       config = mkOption {
         type = types.attrsOf types.anything;
         default = {};
@@ -102,6 +115,8 @@ in
         '';
       };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       logPath = mkOption {
         type        = types.nullOr types.path;
         default     = null;
@@ -122,6 +137,7 @@ in
           If set to null, the default 30000 will be used.
         '';
       };
+<<<<<<< HEAD
 
       extraArgs = mkOption {
         type = types.listOf types.str;
@@ -130,6 +146,8 @@ in
           Additional command line flags to pass to the minetest executable.
         '';
       };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
   };
 
@@ -155,7 +173,11 @@ in
       script = ''
         cd /var/lib/minetest
 
+<<<<<<< HEAD
         exec ${pkgs.minetest}/bin/minetest ${lib.escapeShellArgs flags}
+=======
+        exec ${pkgs.minetest}/bin/minetest --server ${concatStrings flags}
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       '';
     };
   };

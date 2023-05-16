@@ -8,16 +8,27 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rage";
+<<<<<<< HEAD
   version = "0.9.2";
+=======
+  version = "0.9.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "str4d";
     repo = pname;
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-hFuuwmwe0ti4Y8mSJyNqUIhZjFC6qtv6W5cwtNjPUFQ=";
   };
 
   cargoHash = "sha256-1gtLWU6uiWzUfYy9y3pb2vcnUC3H+Mf9rglmqNd989M=";
+=======
+    hash = "sha256-df+ch0JfPgmf/qKMV3sBSmfCvRTazVnAa1SRRvhrteQ=";
+  };
+
+  cargoHash = "sha256-GW3u3LyUJqu4AMnb/2M7mYa45qbRtG2IDuCJoEVOfn0=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nativeBuildInputs = [
     installShellFiles
@@ -46,6 +57,9 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/str4d/rage/raw/v${version}/rage/CHANGELOG.md";
     license = with licenses; [ asl20 mit ]; # either at your option
     maintainers = with maintainers; [ marsam ryantm ];
+<<<<<<< HEAD
     mainProgram = "rage";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

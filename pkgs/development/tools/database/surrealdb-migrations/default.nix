@@ -10,7 +10,11 @@
 
 let
   pname = "surrealdb-migrations";
+<<<<<<< HEAD
   version = "0.9.12";
+=======
+  version = "0.9.5";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 in
 rustPlatform.buildRustPackage rec {
   inherit pname version;
@@ -19,12 +23,26 @@ rustPlatform.buildRustPackage rec {
     owner = "Odonno";
     repo = pname;
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-avDztyxjRTa66MUfIvwtxY1SiGNAtVdepUPHggrbDk0=";
   };
 
   cargoLock = {
     lockFile = ./Cargo.lock;
   };
+=======
+    sha256 = "sha256-raDWqdOid4WSl6Ads8dmh7KI6NMWZrSwGfh+wbd/Vao=";
+  };
+
+  cargoSha256 = "sha256-1+cvOhDeH9vx/8J1RwKLPdkBmqBKFmbNXv3H44pZfj0=";
+
+
+  # nativeBuildInputs = [
+  #   pkg-config
+  #   # needed on top of LIBCLANG_PATH to compile rquickjs
+  #   llvmPackages.clang
+  # ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   buildInputs = [ ]
     ++ lib.optionals stdenv.isDarwin [ Security ];

@@ -59,6 +59,10 @@ buildPythonPackage rec {
     description = "Topological Data Analysis for humans";
     homepage = "https://github.com/scikit-tda/scikit-tda";
     license = licenses.mit;
+<<<<<<< HEAD
     maintainers = [ ];
+=======
+    maintainers = [ maintainers.costrouc ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

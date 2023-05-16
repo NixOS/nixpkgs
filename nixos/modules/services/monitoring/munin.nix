@@ -375,7 +375,11 @@ in
 
     # Munin is hardcoded to use DejaVu Mono and the graphs come out wrong if
     # it's not available.
+<<<<<<< HEAD
     fonts.packages = [ pkgs.dejavu_fonts ];
+=======
+    fonts.fonts = [ pkgs.dejavu_fonts ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     systemd.timers.munin-cron = {
       description = "batch Munin master programs";

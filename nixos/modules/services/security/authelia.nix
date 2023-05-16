@@ -72,7 +72,11 @@ let
               type = types.nullOr types.path;
               default = null;
               description = mdDoc ''
+<<<<<<< HEAD
                 Path to your JWT secret used during identity verificaton.
+=======
+                Path to your JWT secret used during identity verificaiton.
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
               '';
             };
 

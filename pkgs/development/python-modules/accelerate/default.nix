@@ -2,8 +2,11 @@
 , lib
 , buildPythonPackage
 , fetchFromGitHub
+<<<<<<< HEAD
 , fetchpatch
 , pythonAtLeast
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , pythonOlder
 , pytestCheckHook
 , setuptools
@@ -19,7 +22,11 @@
 
 buildPythonPackage rec {
   pname = "accelerate";
+<<<<<<< HEAD
   version = "0.21.0";
+=======
+  version = "0.18.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "pyproject";
   disabled = pythonOlder "3.7";
 
@@ -27,6 +34,7 @@ buildPythonPackage rec {
     owner = "huggingface";
     repo = pname;
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-BwM3gyNhsRkxtxLNrycUGwBmXf8eq/7b56/ykMryt5w=";
   };
 
@@ -39,6 +47,11 @@ buildPythonPackage rec {
     })
   ];
 
+=======
+    hash = "sha256-fCIvVbMaWAWzRfPc5/1CZq3gZ8kruuk9wBt8mzLHmyw=";
+  };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
@@ -64,6 +77,7 @@ buildPythonPackage rec {
     # try to download data:
     "FeatureExamplesTests"
     "test_infer_auto_device_map_on_t0pp"
+<<<<<<< HEAD
   ] ++ lib.optionals (stdenv.isLinux && stdenv.isAarch64) [
     # usual aarch64-linux RuntimeError: DataLoader worker (pid(s) <...>) exited unexpectedly
     "CheckpointTest"
@@ -83,6 +97,17 @@ buildPythonPackage rec {
     "tests/test_scheduler.py"
   ];
 
+=======
+    # known failure with Torch>2.0; see https://github.com/huggingface/accelerate/pull/1339:
+    # (remove for next release)
+    "test_gradient_sync_cpu_multi"
+  ] ++ lib.optionals (stdenv.isLinux && stdenv.isAarch64) [
+    # usual aarch64-linux RuntimeError: DataLoader worker (pid(s) <...>) exited unexpectedly
+    "CheckpointTest"
+  ];
+  # numerous instances of torch.multiprocessing.spawn.ProcessRaisedException:
+  doCheck = !stdenv.isDarwin;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pythonImportsCheck = [
     "accelerate"
   ];

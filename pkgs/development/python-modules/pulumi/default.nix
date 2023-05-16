@@ -7,7 +7,10 @@
 , pulumi
 , isPy27
 , semver
+<<<<<<< HEAD
 , pip
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , pytestCheckHook
 , pyyaml
 , six
@@ -29,7 +32,10 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+<<<<<<< HEAD
     pip
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     pulumi.pkgs.pulumi-language-python
     pytestCheckHook
   ];

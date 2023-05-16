@@ -4,6 +4,10 @@
 , makeWrapper
 , nixosTests
 , openssh
+<<<<<<< HEAD
+=======
+, fetchpatch
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 buildGoModule rec {
   pname = "zrepl";
@@ -16,7 +20,11 @@ buildGoModule rec {
     sha256 = "sha256-XazwuaAzgTuKITF1mYihsNwkIKi5fvZrCvlCDKwxj4U=";
   };
 
+<<<<<<< HEAD
   vendorHash = "sha256-75fGejR7eiECsm1j3yIU1lAWaW9GrorrVnv8JEzkAtU=";
+=======
+  vendorSha256 = "sha256-75fGejR7eiECsm1j3yIU1lAWaW9GrorrVnv8JEzkAtU=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   subPackages = [ "." ];
 

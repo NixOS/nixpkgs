@@ -1,6 +1,10 @@
 { cmake, fetchFromGitHub, makeWrapper, opencv3, lib, stdenv, ocl-icd, opencl-headers, OpenCL
+<<<<<<< HEAD
 , config
 , cudaSupport ? config.cudaSupport, cudatoolkit ? null
+=======
+, cudaSupport ? false, cudatoolkit ? null
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 stdenv.mkDerivation rec {

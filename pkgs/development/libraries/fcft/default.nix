@@ -17,14 +17,22 @@ in
 
 stdenv.mkDerivation rec {
   pname = "fcft";
+<<<<<<< HEAD
   version = "3.1.6";
+=======
+  version = "3.1.5";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "dnkl";
     repo = "fcft";
     rev = version;
+<<<<<<< HEAD
     sha256 = "0cfyxf3xcj552bhd5awv5j0lb8xk3xhz87iixp3wnbvsgvl6dpwq";
+=======
+    sha256 = "sha256-3gsaXnflGiGOpIkqDQe5u6x8d18x67/dc4Hh1iU89+o=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   depsBuildBuild = [ pkg-config ];

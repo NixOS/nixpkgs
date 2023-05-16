@@ -6,13 +6,21 @@
 
 stdenv.mkDerivation rec {
   pname = "android-udev-rules";
+<<<<<<< HEAD
   version = "20230614";
+=======
+  version = "20230303";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "M0Rf30";
     repo = "android-udev-rules";
     rev = version;
+<<<<<<< HEAD
     sha256 = "sha256-TLQHZYcnO7VzIHH+aCj78plTwK5RrcsU/OfNXApAvdM=";
+=======
+    sha256 = "sha256-ddalOVt0gLuTcwk322fNNn6WNZx1Ubsa4MgaG0Lmn2k=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   installPhase = ''

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 { lib
 , buildDunePackage
 , lsp
@@ -11,6 +12,9 @@
 , odoc-parser
 , merlin-lib
 }:
+=======
+{ lib, buildDunePackage, lsp, xdg, re, fiber, makeWrapper, dot-merlin-reader, spawn, ocamlc-loc }:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 buildDunePackage rec {
   pname = "ocaml-lsp-server";
@@ -20,8 +24,12 @@ buildDunePackage rec {
   buildInputs = lsp.buildInputs ++ [ lsp re ]
   ++ lib.optional (lib.versionAtLeast version "1.9") spawn
   ++ lib.optionals (lib.versionAtLeast version "1.10") [ fiber xdg ]
+<<<<<<< HEAD
   ++ lib.optional (lib.versionAtLeast version "1.14.2") ocamlc-loc
   ++ lib.optional (lib.versionAtLeast version "1.16.2") [ odoc-parser merlin-lib ];
+=======
+  ++ lib.optional (lib.versionAtLeast version "1.14.2") ocamlc-loc;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nativeBuildInputs = [ makeWrapper ];
 

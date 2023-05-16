@@ -29,8 +29,18 @@ buildPythonPackage rec {
     maturinBuildHook
   ]);
 
+<<<<<<< HEAD
   buildAndTestSubdir = "synapse";
 
+=======
+  preBuild = ''
+    cd synapse
+  '';
+
+  postBuild = ''
+    cd ..
+  '';
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   pythonImportsCheck = [ "matrix_http_rendezvous_synapse" ];
 

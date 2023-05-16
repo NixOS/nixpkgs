@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 { lib, fetchFromGitHub, installShellFiles, rustPlatform, ronn, pkg-config, libsodium }:
+=======
+{ stdenv, lib, fetchFromGitHub, installShellFiles, rustPlatform, ronn, pkg-config, libsodium }:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 rustPlatform.buildRustPackage rec {
   pname = "bupstash";
   version = "0.12.0";
@@ -29,6 +33,9 @@ rustPlatform.buildRustPackage rec {
     license = licenses.mit;
     platforms = platforms.unix;
     maintainers = with maintainers; [ andrewchambers ];
+<<<<<<< HEAD
     mainProgram = "bupstash";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

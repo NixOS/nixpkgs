@@ -81,6 +81,9 @@ stdenv.mkDerivation rec {
     license = with licenses; [ gpl3 cc-by-sa-30 ];
     maintainers = with maintainers; [ robberer muscaln ];
     platforms = platforms.linux;
+<<<<<<< HEAD
     mainProgram = "Fritzing";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

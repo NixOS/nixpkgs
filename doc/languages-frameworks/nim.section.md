@@ -15,6 +15,7 @@ case of packages not containing exported library code the attribute
 The following example shows a Nim program that depends only on Nim libraries:
 
 ```nix
+<<<<<<< HEAD
 { lib, nimPackages, fetchFromGitHub }:
 
 nimPackages.buildNimPackage (finalAttrs: {
@@ -32,6 +33,34 @@ nimPackages.buildNimPackage (finalAttrs: {
   buildInputs = with nimPackages; [ asciigraph illwill parsetoml zippy ];
 
 })
+=======
+{ lib, nimPackages, fetchurl }:
+
+nimPackages.buildNimPackage rec {
+  pname = "hottext";
+  version = "1.4";
+
+  nimBinOnly = true;
+
+  src = fetchurl {
+    url = "https://git.sr.ht/~ehmry/hottext/archive/v${version}.tar.gz";
+    hash = "sha256-hIUofi81zowSMbt1lUsxCnVzfJGN3FEiTtN8CEFpwzY=";
+  };
+
+  buildInputs = with nimPackages; [
+    bumpy
+    chroma
+    flatty
+    nimsimd
+    pixie
+    sdl2
+    typography
+    vmath
+    zippy
+  ];
+}
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 ```
 
 ## Nim library packages in Nixpkgs {#nim-library-packages-in-nixpkgs}
@@ -51,6 +80,7 @@ non-Nim package:
 ```nix
 { lib, buildNimPackage, fetchNimble, SDL2 }:
 
+<<<<<<< HEAD
 buildNimPackage (finalAttrs: {
   pname = "sdl2";
   version = "2.0.4";
@@ -60,6 +90,17 @@ buildNimPackage (finalAttrs: {
   };
   propagatedBuildInputs = [ SDL2 ];
 })
+=======
+buildNimPackage rec {
+  pname = "sdl2";
+  version = "2.0.4";
+  src = fetchNimble {
+    inherit pname version;
+    hash = "sha256-qDtVSnf+7rTq36WAxgsUZ8XoUk4sKwHyt8EJcY5WP+o=";
+  };
+  propagatedBuildInputs = [ SDL2 ];
+}
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 ```
 
 ## `buildNimPackage` parameters {#buildnimpackage-parameters}

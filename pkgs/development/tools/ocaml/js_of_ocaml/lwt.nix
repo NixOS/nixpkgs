@@ -6,6 +6,10 @@ buildDunePackage {
   pname = "js_of_ocaml-lwt";
 
   inherit (js_of_ocaml-compiler) version src;
+<<<<<<< HEAD
+=======
+  duneVersion = "3";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   buildInputs = [ js_of_ocaml-ppx ];
 

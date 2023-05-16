@@ -18,13 +18,21 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "gscreenshot";
+<<<<<<< HEAD
   version = "3.4.1";
+=======
+  version = "3.4.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "thenaterhood";
     repo = "${pname}";
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sLJ+Fk+ePrmJeSllGd30uEQ/uFDl5CIob//1cDLKZHg=";
+=======
+    sha256 = "YuISiTUReX9IQpckIgbt03CY7klnog/IeOtfBoQ1DZM=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   # needed for wrapGAppsHook to function

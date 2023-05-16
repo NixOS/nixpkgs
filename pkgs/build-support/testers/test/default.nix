@@ -12,7 +12,11 @@ let
 
 in
 lib.recurseIntoAttrs {
+<<<<<<< HEAD
   hasPkgConfigModules = pkgs.callPackage ../hasPkgConfigModules/tests.nix { };
+=======
+  hasPkgConfigModule = pkgs.callPackage ../hasPkgConfigModule/tests.nix { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   runNixOSTest-example = pkgs-with-overlay.testers.runNixOSTest ({ lib, ... }: {
     name = "runNixOSTest-test";

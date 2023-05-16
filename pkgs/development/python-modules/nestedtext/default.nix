@@ -14,7 +14,11 @@
 
 buildPythonPackage rec {
   pname = "nestedtext";
+<<<<<<< HEAD
   version = "3.6";
+=======
+  version = "3.5";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -23,7 +27,11 @@ buildPythonPackage rec {
     owner = "KenKundert";
     repo = "nestedtext";
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-SHY/MTmYbNh3azkyvwEtuvT+V7YzfLi2B3FvBzv6Omo=";
+=======
+    hash = "sha256-RGCcrGsDkBhThuUZd2LuuyXG9r1S7iOA75HYRxkwUrU=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

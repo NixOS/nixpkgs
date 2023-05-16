@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 { buildPecl, lib, pcre2, fetchFromGitHub, php, fetchpatch }:
+=======
+{ buildPecl, lib, pcre2, fetchFromGitHub }:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 let
   version = "5.1.22";
@@ -13,6 +17,7 @@ in buildPecl {
     sha256 = "sha256-L4a+/kWT95a1Km+FzFNiAaBw8enU6k4ZiCFRErjj9o8=";
   };
 
+<<<<<<< HEAD
   patches = lib.optionals (lib.versionAtLeast php.version "8.3") [
     (fetchpatch {
       url = "https://github.com/krakjoe/apcu/commit/c9a29161c68c0faf71046e8f03f6a90900023ded.patch";
@@ -20,6 +25,8 @@ in buildPecl {
     })
   ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   buildInputs = [ pcre2 ];
   doCheck = true;
   checkTarget = "test";

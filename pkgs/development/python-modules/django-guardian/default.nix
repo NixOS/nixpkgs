@@ -32,6 +32,10 @@ buildPythonPackage rec {
     description = "Per object permissions for Django";
     homepage = "https://github.com/django-guardian/django-guardian";
     license = with licenses; [ mit bsd2 ];
+<<<<<<< HEAD
     maintainers = with maintainers; [ ];
+=======
+    maintainers = with maintainers; [ SuperSandro2000 ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

@@ -10,7 +10,10 @@
 , pytest-randomly
 , pytest-timeout
 , pytestCheckHook
+<<<<<<< HEAD
 , pythonAtLeast
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , six
 }:
 
@@ -26,10 +29,13 @@ buildPythonPackage rec {
     hash = "sha256-1Pl+l28J7crfO2UY/9/D019IzOHWOwjR+UvVEHICTqU=";
   };
 
+<<<<<<< HEAD
   postPatch = ''
     sed -i "/--cov/d" setup.cfg
   '';
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   propagatedBuildInputs = [
     pyparsing
   ];
@@ -44,10 +50,19 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+<<<<<<< HEAD
   __darwinAllowLocalNetworking = true;
 
   # Don't run tests for older Pythons
   doCheck = pythonAtLeast "3.9";
+=======
+  # Don't run tests for Python 2.7
+  doCheck = !isPy27;
+
+  postPatch = ''
+    sed -i "/--cov/d" setup.cfg
+  '';
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   disabledTests = [
     # ValueError: Unable to load PEM file.

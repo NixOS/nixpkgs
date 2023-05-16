@@ -1,6 +1,13 @@
+<<<<<<< HEAD
 { lib, stdenv, buildPecl, valgrind, pcre2, fetchFromGitHub }:
 
 let
+=======
+{ lib, stdenv, buildPecl, php, valgrind, pcre2, fetchFromGitHub }:
+
+let
+  pname = "openswoole";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   version = "22.0.0";
 in buildPecl {
   inherit version;
@@ -10,7 +17,11 @@ in buildPecl {
     owner = "openswoole";
     repo = "swoole-src";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-4Z7mBNGHXS/giSCmPpSyu9/99MEjCnoXgymDM/s1gk8=";
+=======
+    sha256 = "sha256-4Z7mBNGHXS/giSCmPpSyu9/99MEjCnoXgymDM/s1gk8=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   buildInputs = [ pcre2 ] ++ lib.optionals (!stdenv.isDarwin) [ valgrind ];

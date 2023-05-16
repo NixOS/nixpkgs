@@ -68,6 +68,9 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     maintainers = [ ];
     platforms = platforms.unix;
+<<<<<<< HEAD
     mainProgram = "libtool";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

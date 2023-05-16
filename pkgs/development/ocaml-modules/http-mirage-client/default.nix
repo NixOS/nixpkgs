@@ -16,13 +16,23 @@
 
 buildDunePackage rec {
   pname = "http-mirage-client";
+<<<<<<< HEAD
   version = "0.0.5";
 
+=======
+  version = "0.0.3";
+
+  duneVersion = "3";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   minimalOCamlVersion = "4.08";
 
   src = fetchurl {
     url = "https://github.com/roburio/http-mirage-client/releases/download/v${version}/http-mirage-client-${version}.tbz";
+<<<<<<< HEAD
     hash = "sha256-w/dMv5QvgglTFj9V4wRoDqK+36YeE0xWLxcAVS0oHz0=";
+=======
+    hash = "sha256-6PMxZQfPiDTFbj9gOO2tW5FHF0MUP5tOySjkYg+QwGA=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [

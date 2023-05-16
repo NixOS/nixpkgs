@@ -20,7 +20,11 @@
 
 stdenv.mkDerivation rec {
   pname = "libadwaita";
+<<<<<<< HEAD
   version = "1.3.4";
+=======
+  version = "1.3.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   outputs = [ "out" "dev" "devdoc" ];
   outputBin = "devdoc"; # demo app
@@ -30,7 +34,11 @@ stdenv.mkDerivation rec {
     owner = "GNOME";
     repo = "libadwaita";
     rev = version;
+<<<<<<< HEAD
     hash = "sha256-NBYIDW0sphmBT2cIB2CPsCJrjRsINxWpumJbQK5RjU8=";
+=======
+    hash = "sha256-9Qha8xN3lC/t5dQNYPbgMX6HAKgEk80pyycrd5MGYLo=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   depsBuildBuild = [

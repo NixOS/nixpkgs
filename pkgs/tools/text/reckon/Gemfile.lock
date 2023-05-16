@@ -2,6 +2,7 @@ GEM
   remote: https://rubygems.org/
   specs:
     chronic (0.10.2)
+<<<<<<< HEAD
     highline (2.1.0)
     matrix (0.4.2)
     rchardet (1.8.0)
@@ -9,6 +10,13 @@ GEM
       chronic (>= 0.3.0)
       highline (>= 1.5.2)
       matrix (>= 0.4.2)
+=======
+    highline (2.0.3)
+    rchardet (1.8.0)
+    reckon (0.8.0)
+      chronic (>= 0.3.0)
+      highline (>= 1.5.2)
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       rchardet (>= 1.8.0)
 
 PLATFORMS
@@ -18,4 +26,8 @@ DEPENDENCIES
   reckon
 
 BUNDLED WITH
+<<<<<<< HEAD
    2.4.13
+=======
+   2.2.20
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)

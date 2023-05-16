@@ -6,24 +6,37 @@
 , pytestCheckHook
 , aiohttp
 , dask
+<<<<<<< HEAD
 , distributed
 , fsspec
 , numpy
 , requests
 , scikit-image
+=======
+, fsspec
+, numpy
+, requests
+, scikitimage
+, s3fs
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , toolz
 , zarr
 }:
 
 buildPythonPackage rec {
   pname = "ome-zarr";
+<<<<<<< HEAD
   version = "0.8.0";
+=======
+  version = "0.6.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "ome";
     repo = "ome-zarr-py";
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-DMBTrDyUmNsrjOsFKrqukJNZ1f/mAjz4aunNUcwVMKg=";
   };
 
@@ -31,13 +44,37 @@ buildPythonPackage rec {
     numpy
     dask
     distributed
+=======
+    hash = "sha256-dpweOuqruh7mAqmSaNbehLCr8OCLe1IZNWV4bpHpTl0=";
+  };
+
+  patches = [
+    # remove after next release:
+    (fetchpatch {
+      name = "fix-writer-bug";
+      url = "https://github.com/ome/ome-zarr-py/commit/c1302e05998dfe2faf94b0f958c92888681f5ffa.patch";
+      hash = "sha256-1WANObABUXkjqeGdnmg0qJ48RcZcuAwgitZyMwiRYUw=";
+    })
+  ];
+
+  propagatedBuildInputs = [
+    numpy
+    dask
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     zarr
     fsspec
     aiohttp
     requests
+<<<<<<< HEAD
     scikit-image
     toolz
   ] ++ fsspec.passthru.optional-dependencies.s3;
+=======
+    s3fs
+    scikitimage
+    toolz
+  ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nativeCheckInputs = [
     pytestCheckHook

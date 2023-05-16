@@ -5,14 +5,23 @@
 , scipy
 , torch
 , autograd
+<<<<<<< HEAD
 , matplotlib
 , pytestCheckHook
+=======
+, nose2
+, matplotlib
+, tensorflow
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 buildPythonPackage rec {
   pname = "pymanopt";
   version = "2.1.1";
+<<<<<<< HEAD
   format = "setuptools";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = pname;
@@ -22,6 +31,7 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [ numpy scipy torch ];
+<<<<<<< HEAD
   nativeCheckInputs = [ autograd matplotlib pytestCheckHook ];
 
   preCheck = ''
@@ -37,6 +47,27 @@ buildPythonPackage rec {
     "tests/test_problem.py"
   ];
 
+=======
+  nativeCheckInputs = [ nose2 autograd matplotlib tensorflow ];
+
+  checkPhase = ''
+    runHook preCheck
+
+    # upstream themselves seem unsure about the robustness of these
+    # tests - see https://github.com/pymanopt/pymanopt/issues/219
+    grep -lr 'test_second_order_function_approximation' tests/ | while read -r fn ; do
+      substituteInPlace "$fn" \
+        --replace \
+          'test_second_order_function_approximation' \
+          'dont_test_second_order_function_approximation'
+    done
+
+    nose2 tests -v
+
+    runHook postCheck
+  '';
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pythonImportsCheck = [ "pymanopt" ];
 
   meta = {
@@ -44,6 +75,9 @@ buildPythonPackage rec {
     homepage = "https://www.pymanopt.org/";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ yl3dy ];
+<<<<<<< HEAD
     broken = lib.versionAtLeast scipy.version "1.10.0";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

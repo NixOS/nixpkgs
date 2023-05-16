@@ -10,9 +10,13 @@
 , optax
 , pytest-xdist
 , pytestCheckHook
+<<<<<<< HEAD
 , pythonRelaxDepsHook
 , tensorflow
 , tensorstore
+=======
+, tensorflow
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , fetchpatch
 , rich
 }:
@@ -28,7 +32,11 @@ buildPythonPackage rec {
     hash = "sha256-Vv68BK83gTIKj0r9x+twdhqmRYziD0vxQCdHkYSeTak=";
   };
 
+<<<<<<< HEAD
   nativeBuildInputs = [ jaxlib pythonRelaxDepsHook ];
+=======
+  buildInputs = [ jaxlib ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   propagatedBuildInputs = [
     jax
@@ -37,12 +45,17 @@ buildPythonPackage rec {
     numpy
     optax
     rich
+<<<<<<< HEAD
     tensorstore
   ];
 
   # See https://github.com/google/flax/pull/2882.
   pythonRemoveDeps = [ "orbax" ];
 
+=======
+  ];
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pythonImportsCheck = [
     "flax"
   ];
@@ -70,12 +83,15 @@ buildPythonPackage rec {
     # `tensorflow_datasets`, `vocabulary`) so the benefits of trying to run them
     # would be limited anyway.
     "examples/*"
+<<<<<<< HEAD
 
     # See https://github.com/google/flax/issues/3232.
     "tests/jax_utils_test.py"
 
     # Requires orbax which is not packaged as of 2023-07-27.
     "tests/checkpoints_test.py"
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   disabledTests = [
@@ -97,7 +113,10 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Neural network library for JAX";
     homepage = "https://github.com/google/flax";
+<<<<<<< HEAD
     changelog = "https://github.com/google/flax/releases/tag/v${version}";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     license = licenses.asl20;
     maintainers = with maintainers; [ ndl ];
   };

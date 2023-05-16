@@ -36,6 +36,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     license = licenses.bsd2;
     maintainers = with maintainers; [ offline screendriver marsam ];
     platforms = nodejs.meta.platforms;
+<<<<<<< HEAD
     mainProgram = "yarn";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 })

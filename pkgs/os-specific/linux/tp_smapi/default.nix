@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 { stdenv
 , lib
 , fetchFromGitHub
@@ -10,6 +11,9 @@
 , curl
 , common-updater-scripts
 , runtimeShell
+=======
+{ stdenv, lib, fetchFromGitHub, kernel, writeScript, coreutils, gnugrep, jq, curl, common-updater-scripts, runtimeShell
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 stdenv.mkDerivation rec {
@@ -17,6 +21,7 @@ stdenv.mkDerivation rec {
   version = "0.43";
 
   src = fetchFromGitHub {
+<<<<<<< HEAD
     owner = "linux-thinkpad";
     repo = "tp_smapi";
     rev = "tp-smapi/${version}";
@@ -32,6 +37,15 @@ stdenv.mkDerivation rec {
     })
   ];
 
+=======
+    owner = "evgeni";
+    repo = "tp_smapi";
+    rev = "tp-smapi/${version}";
+    sha256 = "1rjb0njckczc2mj05cagvj0lkyvmyk6bw7wkiinv81lw8m90g77g";
+    name = "tp-smapi-${version}";
+  };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nativeBuildInputs = kernel.moduleBuildDependencies;
 
   hardeningDisable = [ "pic" ];
@@ -58,7 +72,11 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "IBM ThinkPad hardware functions driver";
+<<<<<<< HEAD
     homepage = "https://github.com/linux-thinkpad/tp_smapi";
+=======
+    homepage = "https://github.com/evgeni/tp_smapi";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     license = lib.licenses.gpl2;
     maintainers = [ ];
     # driver is only ment for linux thinkpads i think  bellow platforms should cover it.

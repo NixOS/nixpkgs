@@ -39,6 +39,10 @@ buildPythonPackage rec {
     description = "An improved PLY implementation of lex and yacc for Python 3";
     homepage = "https://github.com/dabeaz/sly";
     license = licenses.bsd3;
+<<<<<<< HEAD
     maintainers = [ ];
+=======
+    maintainers = [ maintainers.costrouc ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

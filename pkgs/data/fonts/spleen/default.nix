@@ -2,11 +2,19 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "spleen";
+<<<<<<< HEAD
   version = "2.0.0";
 
   src = fetchurl {
     url = "https://github.com/fcambus/spleen/releases/download/${version}/spleen-${version}.tar.gz";
     hash = "sha256-d4d4s13UhwG4A9skemrIdZFUzl/Dq9XMC225ikS6Wgw=";
+=======
+  version = "1.9.3";
+
+  src = fetchurl {
+    url = "https://github.com/fcambus/spleen/releases/download/${version}/spleen-${version}.tar.gz";
+    hash = "sha256-t60e2wKl3a0RfKlPAm64RQtRUE0ugbw6A4deEtTnayU=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ xorg.mkfontscale ];

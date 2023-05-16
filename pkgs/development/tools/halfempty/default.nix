@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 { lib, stdenv, fetchFromGitHub, fetchpatch, pkg-config, glib, hexdump, scowl }:
+=======
+{ lib, stdenv, fetchFromGitHub, fetchpatch, pkg-config, glib, util-linux, scowl }:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 stdenv.mkDerivation rec {
   pname = "halfempty";
@@ -11,11 +15,17 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-YGq6fneAMo2jCpLPrjzRJ0eeOsStKaK5L+lwQfqcfpY=";
   };
 
+<<<<<<< HEAD
   nativeBuildInputs = [ pkg-config hexdump ];
   buildInputs = [ glib ];
 
   makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
 
+=======
+  nativeBuildInputs = [ pkg-config util-linux ];
+  buildInputs = [ glib ];
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   enableParallelBuilding = true;
 
   patches = [
@@ -43,6 +53,9 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/googleprojectzero/halfempty/";
     maintainers = with lib.maintainers; [ fpletz ];
     license = with lib.licenses; [ asl20 ];
+<<<<<<< HEAD
     platforms = lib.platforms.unix;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

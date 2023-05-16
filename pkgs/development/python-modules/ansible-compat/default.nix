@@ -13,14 +13,22 @@
 
 buildPythonPackage rec {
   pname = "ansible-compat";
+<<<<<<< HEAD
   version = "4.1.10";
+=======
+  version = "4.0.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
+<<<<<<< HEAD
     hash = "sha256-K+jHtRDS4V7tHp70QyCdZ9muyPQnAmuIk21FNf9Zhj0=";
+=======
+    hash = "sha256-JbDcWro8Q+DP3JFATlcErphX5mTCEPf4SlVm4A111/M=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

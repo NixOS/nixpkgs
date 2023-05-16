@@ -5,13 +5,21 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "acr";
+<<<<<<< HEAD
   version = "2.1.2";
+=======
+  version = "2.1.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "radareorg";
     repo = "acr";
     rev = finalAttrs.version;
+<<<<<<< HEAD
     hash = "sha256-xKB9zBw9sX+z/yBzvfIzQPyOHzlCAGfGLyuLGRoyWbg=";
+=======
+    hash = "sha256-JReYgIqQISQuLPd4pUbqbKtBOXT0/YJCn9czz2VTVBs=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   preConfigure = ''

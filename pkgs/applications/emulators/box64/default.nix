@@ -15,13 +15,21 @@ assert withDynarec -> stdenv.hostPlatform.isAarch64;
 
 stdenv.mkDerivation rec {
   pname = "box64";
+<<<<<<< HEAD
   version = "0.2.4";
+=======
+  version = "0.2.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "ptitSeb";
     repo = pname;
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-iCZv/WvqZkH6i23fSLA/p0nG5/CgzjyU5glVgje4c3w=";
+=======
+    hash = "sha256-aIvL0H0k0/lz2lCLxB17RxNm0cxVozYthy0z85/FuUE=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

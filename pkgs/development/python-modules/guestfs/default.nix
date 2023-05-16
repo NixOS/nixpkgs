@@ -20,6 +20,9 @@ buildPythonPackage rec {
     description = "Use libguestfs from Python";
     license = licenses.lgpl2Plus;
     maintainers = with maintainers; [ grahamc ];
+<<<<<<< HEAD
     inherit (libguestfs.meta) platforms;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

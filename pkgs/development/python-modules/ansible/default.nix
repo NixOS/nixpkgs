@@ -7,7 +7,10 @@
 , ncclient
 , netaddr
 , paramiko
+<<<<<<< HEAD
 , ansible-pylibssh
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , pynetbox
 , scp
 , textfsm
@@ -21,17 +24,29 @@
 
 let
   pname = "ansible";
+<<<<<<< HEAD
   version = "8.3.0";
+=======
+  version = "7.2.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 in
 buildPythonPackage {
   inherit pname version;
   format = "setuptools";
 
+<<<<<<< HEAD
   disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-XlgAHX1twz5dFWyjQ4g7YT7JiPaTZLCkP3Ek/ktb4vI=";
+=======
+  disabled = pythonOlder "3.8";
+
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-YOLBpY8c6zShkLfDgPezOG0ec2kGGVSx+LjKPfdgY8w=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   postPatch = ''
@@ -46,7 +61,10 @@ buildPythonPackage {
     ncclient
     netaddr
     paramiko
+<<<<<<< HEAD
     ansible-pylibssh
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     xmltodict
     # ansible.posix
     # ansible.utils
@@ -64,7 +82,10 @@ buildPythonPackage {
     jxmlease
     ncclient
     paramiko
+<<<<<<< HEAD
     ansible-pylibssh
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     scp
     xmltodict
   ] ++ lib.optionals (withNetbox) [

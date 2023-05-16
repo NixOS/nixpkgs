@@ -12,8 +12,11 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ faust2jaqt faust2lv2 ];
 
+<<<<<<< HEAD
   dontWrapQtApps = true;
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   buildPhase = ''
     faust2jaqt -vec -time -t 99999 ${pname}.dsp
     faust2lv2 -vec -time -gui -t 99999 ${pname}.dsp
@@ -21,9 +24,13 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir -p $out/bin
+<<<<<<< HEAD
     for f in $(find . -executable -type f); do
       cp $f $out/bin/
     done
+=======
+    cp ${pname} $out/bin/
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     mkdir -p $out/lib/lv2
     cp -r ${pname}.lv2/ $out/lib/lv2
   '';

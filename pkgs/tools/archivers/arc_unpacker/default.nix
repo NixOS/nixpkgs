@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 { lib
 , stdenv
 , fetchFromGitHub
@@ -15,6 +16,12 @@
 }:
 
 stdenv.mkDerivation {
+=======
+{ lib, stdenv, fetchFromGitHub, cmake, makeWrapper, boost, libpng, libiconv
+, libjpeg, zlib, openssl, libwebp, catch2 }:
+
+stdenv.mkDerivation rec {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pname = "arc_unpacker";
   version = "unstable-2021-08-06";
 
@@ -25,6 +32,7 @@ stdenv.mkDerivation {
     hash = "sha256-STbdWH7Mr3gpOrZvujblYrIIKEWBHzy1/BaNuh4teI8=";
   };
 
+<<<<<<< HEAD
   patches = [
     (fetchpatch {
       name = "failing_tests.patch";
@@ -32,12 +40,17 @@ stdenv.mkDerivation {
       hash = "sha256-bClACsf/+SktyLAPtt7EcSqprkw8JVIi1ZLpcJcv9IE=";
     })
   ];
+=======
+  nativeBuildInputs = [ cmake makeWrapper catch2 ];
+  buildInputs = [ boost libiconv libjpeg libpng libwebp openssl zlib ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   postPatch = ''
     cp ${catch2}/include/catch2/catch.hpp tests/test_support/catch.h
     sed '1i#include <limits>' -i src/dec/eagls/pak_archive_decoder.cc # gcc12
   '';
 
+<<<<<<< HEAD
   nativeBuildInputs = [
     cmake
     makeWrapper
@@ -54,6 +67,8 @@ stdenv.mkDerivation {
     zlib
   ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   checkPhase = ''
     runHook preCheck
 

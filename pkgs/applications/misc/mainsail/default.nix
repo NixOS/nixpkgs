@@ -5,11 +5,19 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "mainsail";
+<<<<<<< HEAD
   version = "2.7.1";
 
   src = fetchzip {
     url = "https://github.com/mainsail-crew/mainsail/releases/download/v${version}/mainsail.zip";
     hash = "sha256-j2ri7PyQGzRlhpgE9qKneX00HwlDmIi2JUremz446wk=";
+=======
+  version = "2.5.1";
+
+  src = fetchzip {
+    url = "https://github.com/mainsail-crew/mainsail/releases/download/v${version}/mainsail.zip";
+    hash = "sha256-xdmi1Q2j2gG4ajh57mBsjH3qCBwpsZCQbh0INFKifg4=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     stripRoot = false;
   };
 

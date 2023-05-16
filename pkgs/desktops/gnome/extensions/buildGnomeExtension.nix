@@ -36,6 +36,7 @@ let
         echo "${metadata}" | base64 --decode > $out/metadata.json
       '';
     };
+<<<<<<< HEAD
     nativeBuildInputs = with pkgs; [ buildPackages.glib ];
     buildPhase = ''
       runHook preBuild
@@ -44,6 +45,9 @@ let
       fi
       runHook postBuild
     '';
+=======
+    dontBuild = true;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     installPhase = ''
       runHook preInstall
       mkdir -p $out/share/gnome-shell/extensions/

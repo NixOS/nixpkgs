@@ -142,7 +142,11 @@ in stdenv.mkDerivation {
     '';
     homepage = "http://www.transmissionbt.com/";
     license = lib.licenses.gpl2Plus; # parts are under MIT
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [ astsmtl ];
+=======
+    maintainers = with lib.maintainers; [ astsmtl vcunat ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     platforms = lib.platforms.unix;
   };
 

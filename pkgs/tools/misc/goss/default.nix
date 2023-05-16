@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 { buildGoModule
 , fetchFromGitHub
 , goss
@@ -20,12 +21,29 @@ buildGoModule rec {
   };
 
   vendorHash = "sha256-n+k7f9e2iqf4KrcDkzX0CWk+Bq2WE3dyUEid4PTP1FA=";
+=======
+{ lib, fetchFromGitHub, buildGoModule }:
+
+buildGoModule rec {
+  pname = "goss";
+  version = "0.3.18";
+
+  src = fetchFromGitHub {
+    owner = "aelsabbahy";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "01ssc7rnnwpyhjv96qy8drsskghbfpyxpsahk8s62lh8pxygynhv";
+  };
+
+  vendorSha256 = "sha256-zlQMVn4w6syYmntxpeiIc1UTbFrIJzOMg0RVDCICTM8=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   CGO_ENABLED = 0;
   ldflags = [
     "-s" "-w" "-X main.version=v${version}"
   ];
 
+<<<<<<< HEAD
   checkFlags = [
     # Prometheus tests are skipped upstream
     # See https://github.com/goss-org/goss/blob/master/ci/go-test.sh
@@ -44,6 +62,11 @@ buildGoModule rec {
   meta = with lib; {
     homepage = "https://github.com/goss-org/goss/";
     changelog = "https://github.com/goss-org/goss/releases/tag/v${version}";
+=======
+  meta = with lib; {
+    homepage = "https://github.com/aelsabbahy/goss/";
+    changelog = "https://github.com/aelsabbahy/goss/releases/tag/v${version}";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     description = "Quick and easy server validation";
     longDescription = ''
       Goss is a YAML based serverspec alternative tool for validating a server’s configuration.
@@ -52,6 +75,10 @@ buildGoModule rec {
     '';
     license = licenses.asl20;
     platforms = platforms.linux;
+<<<<<<< HEAD
     maintainers = with maintainers; [ hyzual jk anthonyroussel ];
+=======
+    maintainers = with maintainers; [ hyzual jk ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

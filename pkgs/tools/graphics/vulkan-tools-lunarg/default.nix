@@ -5,7 +5,10 @@
 , python3
 , jq
 , expat
+<<<<<<< HEAD
 , jsoncpp
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , libX11
 , libXdmcp
 , libXrandr
@@ -25,13 +28,21 @@
 
 stdenv.mkDerivation rec {
   pname = "vulkan-tools-lunarg";
+<<<<<<< HEAD
   version = "1.3.261";
+=======
+  version = "1.3.249";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
    owner = "LunarG";
    repo = "VulkanTools";
    rev = "v${version}";
+<<<<<<< HEAD
    hash = "sha256-Kem3nWVaMeDEsidKYMsWr9Bu0yBgjjennDB0sKBDogA=";
+=======
+   hash = "sha256-yQE6tjUxIZEMspxDaO9AoSjoEHQl2eDAc0E/aVQZnxQ=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
    fetchSubmodules = true;
  };
 
@@ -39,7 +50,10 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     expat
+<<<<<<< HEAD
     jsoncpp
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     libX11
     libXdmcp
     libXrandr
@@ -72,8 +86,11 @@ stdenv.mkDerivation rec {
     patchShebangs scripts/*
     sed -i '/^git /d' $update
     ./$update
+<<<<<<< HEAD
 
     substituteInPlace via/CMakeLists.txt --replace "jsoncpp_static" "jsoncpp"
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '';
 
   # Include absolute paths to layer libraries in their associated
@@ -85,9 +102,13 @@ stdenv.mkDerivation rec {
     done
   '';
 
+<<<<<<< HEAD
   patches = [
     ./gtest.patch
   ];
+=======
+  patches = [ ./gtest.patch ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   # Same as vulkan-validation-layers
   dontPatchELF = true;

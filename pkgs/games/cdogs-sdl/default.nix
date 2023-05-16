@@ -13,13 +13,21 @@
 
 stdenv.mkDerivation rec {
   pname = "cdogs-sdl";
+<<<<<<< HEAD
   version = "1.5.0";
+=======
+  version = "1.4.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     repo = pname;
     owner = "cxong";
     rev = version;
+<<<<<<< HEAD
     sha256 = "sha256-XSq0TK3ZuLOa8JJnp/Qxt16Ru3p35tq5FOo4+tv+c60=";
+=======
+    sha256 = "sha256-CH0P8OrRUXtuqAHxDKv4ziKYdwGTccLPwpzh4xo7lQc=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   postPatch = ''
@@ -50,9 +58,12 @@ stdenv.mkDerivation rec {
     protobuf
   ];
 
+<<<<<<< HEAD
   # inlining failed in call to 'tinydir_open': --param max-inline-insns-single limit reached
   hardeningDisable = [ "fortify3" ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   meta = with lib; {
     homepage = "https://cxong.github.io/cdogs-sdl";
     description = "Open source classic overhead run-and-gun game";

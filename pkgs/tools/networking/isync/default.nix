@@ -1,9 +1,12 @@
 { lib, stdenv, fetchurl, pkg-config, perl
 , openssl, db, cyrus_sasl, zlib
 , Security
+<<<<<<< HEAD
 # Disabled by default as XOAUTH2 is an "OBSOLETE" SASL mechanism and this relies
 # on a package that isn't really maintained anymore:
 , withCyrusSaslXoauth2 ? false, cyrus-sasl-xoauth2, makeWrapper
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 stdenv.mkDerivation rec {
@@ -23,6 +26,7 @@ stdenv.mkDerivation rec {
     ./work-around-unexpected-EOF-error-messages-at-end-of-SSL-connections.patch
   ];
 
+<<<<<<< HEAD
   nativeBuildInputs = [ pkg-config perl ]
     ++ lib.optionals withCyrusSaslXoauth2 [ makeWrapper ];
   buildInputs = [ openssl db cyrus_sasl zlib ]
@@ -33,6 +37,12 @@ stdenv.mkDerivation rec {
         --prefix SASL_PATH : "${lib.makeSearchPath "lib/sasl2" [ cyrus-sasl-xoauth2 ]}"
   '';
 
+=======
+  nativeBuildInputs = [ pkg-config perl ];
+  buildInputs = [ openssl db cyrus_sasl zlib ]
+    ++ lib.optionals stdenv.isDarwin [ Security ];
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   meta = with lib; {
     homepage = "http://isync.sourceforge.net/";
     # https://sourceforge.net/projects/isync/

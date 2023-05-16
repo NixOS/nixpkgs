@@ -1,6 +1,10 @@
+<<<<<<< HEAD
 { lib, pkgs, ... }:
 
 {
+=======
+import ../make-test-python.nix ({ pkgs, ... }: {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   name = "dnscrypt-wrapper";
   meta = with pkgs.lib.maintainers; {
     maintainers = [ rnhmjoj ];
@@ -52,23 +56,40 @@
         server.wait_for_unit("dnscrypt-wrapper")
         server.wait_for_file("/var/lib/dnscrypt-wrapper/2.dnscrypt-cert.server.key")
         server.wait_for_file("/var/lib/dnscrypt-wrapper/2.dnscrypt-cert.server.crt")
+<<<<<<< HEAD
         almost_expiration = server.succeed("date --date '4days 23 hours 56min'").strip()
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     with subtest("The client can connect to the server"):
         server.wait_for_unit("tinydns")
         client.wait_for_unit("dnscrypt-proxy2")
+<<<<<<< HEAD
         assert "1.2.3.4" in client.wait_until_succeeds(
+=======
+        assert "1.2.3.4" in client.succeed(
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
             "host it.works"
         ), "The IP address of 'it.works' does not match 1.2.3.4"
 
     with subtest("The server rotates the ephemeral keys"):
         # advance time by a little less than 5 days
+<<<<<<< HEAD
         server.succeed(f"date -s '{almost_expiration}'")
         client.succeed(f"date -s '{almost_expiration}'")
+=======
+        server.succeed("date -s \"$(date --date '4 days 6 hours')\"")
+        client.succeed("date -s \"$(date --date '4 days 6 hours')\"")
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         server.wait_for_file("/var/lib/dnscrypt-wrapper/oldkeys")
 
     with subtest("The client can still connect to the server"):
         server.wait_for_unit("dnscrypt-wrapper")
         client.succeed("host it.works")
   '';
+<<<<<<< HEAD
 }
+=======
+})
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)

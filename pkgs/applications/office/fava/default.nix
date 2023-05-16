@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 { lib, python3, fetchPypi }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -8,6 +9,18 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-YSxUqwmv7LQqnT9U1dau9pYaKvEEG5Tbi7orylJKkp0=";
+=======
+{ lib, python3 }:
+
+python3.pkgs.buildPythonApplication rec {
+  pname = "fava";
+  version = "1.24.4";
+  format = "pyproject";
+
+  src = python3.pkgs.fetchPypi {
+    inherit pname version;
+    hash = "sha256-klRPe6NQMn3HVayfCGc05mB0afi3x4Wlj3EI0XdSkMc=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = with python3.pkgs; [ setuptools-scm ];
@@ -19,7 +32,11 @@ python3.pkgs.buildPythonApplication rec {
     click
     flask
     flask-babel
+<<<<<<< HEAD
     jaraco-functools
+=======
+    jaraco_functools
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     jinja2
     markdown2
     ply

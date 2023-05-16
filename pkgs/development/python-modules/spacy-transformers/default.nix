@@ -13,14 +13,22 @@
 
 buildPythonPackage rec {
   pname = "spacy-transformers";
+<<<<<<< HEAD
   version = "1.2.5";
+=======
+  version = "1.2.3";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
+<<<<<<< HEAD
     hash = "sha256-+VIQXcffodzR6QEr2ZfvEIBGIxqKwsNZotI+Eh0EOIw=";
+=======
+    hash = "sha256-oNdH0oZNo8XWx+bbzwZs7iXD0Af6zx1k6wBYksgtp4w=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

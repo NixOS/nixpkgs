@@ -1,10 +1,19 @@
+<<<<<<< HEAD
 { lib, stdenv, fetchurl, libpcap, pkg-config, openssl, lua5_4
 , pcre, libssh2
+=======
+{ lib, stdenv, fetchurl, fetchpatch, libpcap, pkg-config, openssl, lua5_3
+, pcre, libssh2
+, libX11 ? null
+, gtk2 ? null
+, makeWrapper ? null
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , withLua ? true
 }:
 
 stdenv.mkDerivation rec {
   pname = "nmap";
+<<<<<<< HEAD
   version = "7.94";
 
   src = fetchurl {
@@ -12,6 +21,27 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-1xvhie7EPX4Jm6yFcVCdMWxFd8p5SRgyrD4SF7yPksw=";
   };
 
+=======
+  version = "7.93";
+
+  src = fetchurl {
+    url = "https://nmap.org/dist/nmap-${version}.tar.bz2";
+    sha256 = "sha256-Vbz+R5PiWsyWukJ02MQijbVQuOjv1yAEs47FWi3RZlE=";
+  };
+
+  patches = [ ./zenmap.patch ]
+    ++ lib.optionals stdenv.cc.isClang [(
+      # Fixes a compile error due an ambiguous reference to bind(2) in
+      # nping/EchoServer.cc, which is otherwise resolved to std::bind.
+      # https://github.com/nmap/nmap/pull/1363
+      fetchpatch {
+        url = "https://github.com/nmap/nmap/commit/5bbe66f1bd8cbd3718f5805139e2e8139e6849bb.diff";
+        includes = [ "nping/EchoServer.cc" ];
+        sha256 = "0xcph9mycy57yryjg253frxyz87c4135rrbndlqw1400c8jxq70c";
+      }
+    )];
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   prePatch = lib.optionalString stdenv.isDarwin ''
     substituteInPlace libz/configure \
         --replace /usr/bin/libtool ar \
@@ -20,7 +50,11 @@ stdenv.mkDerivation rec {
   '';
 
   configureFlags = [
+<<<<<<< HEAD
     (if withLua then "--with-liblua=${lua5_4}" else "--without-liblua")
+=======
+    (if withLua then "--with-liblua=${lua5_3}" else "--without-liblua")
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "--with-liblinear=included"
     "--without-ndiff"
     "--without-zenmap"

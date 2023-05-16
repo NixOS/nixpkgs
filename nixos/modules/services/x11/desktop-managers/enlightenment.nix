@@ -92,7 +92,11 @@ in
 
     environment.etc."X11/xkb".source = xcfg.xkbDir;
 
+<<<<<<< HEAD
     fonts.packages = [ pkgs.dejavu_fonts pkgs.ubuntu_font_family ];
+=======
+    fonts.fonts = [ pkgs.dejavu_fonts pkgs.ubuntu_font_family ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     services.udisks2.enable = true;
     services.upower.enable = config.powerManagement.enable;

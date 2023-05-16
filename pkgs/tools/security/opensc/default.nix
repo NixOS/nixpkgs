@@ -1,6 +1,9 @@
 { lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, zlib, readline, openssl
 , libiconv, pcsclite, libassuan, libXt
+<<<<<<< HEAD
 , fetchpatch
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , docbook_xsl, libxslt, docbook_xml_dtd_412
 , Carbon, PCSC, buildPackages
 , withApplePCSC ? stdenv.isDarwin
@@ -17,6 +20,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-Yo8dwk7+d6q+hi7DmJ0GJM6/pmiDOiyEm/tEBSbCU8k=";
   };
 
+<<<<<<< HEAD
   patches = [
     (fetchpatch {
       name = "CVE-2023-2977.patch";
@@ -25,6 +29,8 @@ stdenv.mkDerivation rec {
     })
   ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nativeBuildInputs = [ pkg-config autoreconfHook ];
   buildInputs = [
     zlib readline openssl libassuan

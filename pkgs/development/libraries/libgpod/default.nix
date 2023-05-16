@@ -1,7 +1,10 @@
 { stdenv
 , lib
 , fetchurl
+<<<<<<< HEAD
 , fetchpatch
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , perlPackages
 , intltool
 , autoreconfHook
@@ -25,11 +28,16 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://sourceforge/gtkpod/libgpod-${version}.tar.bz2";
+<<<<<<< HEAD
     hash = "sha256-Y4p5WdBOlfHmKrrQK9M3AuTo3++YSFrH2dUDlcN+lV0=";
+=======
+    sha256 = "0pcmgv1ra0ymv73mlj4qxzgyir026z9jpl5s5bkg35afs1cpk2k3";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   outputs = [ "out" "dev" ];
 
+<<<<<<< HEAD
   patches = [
     (fetchpatch {
       name = "libplist-2.3.0-compatibility.patch";
@@ -38,6 +46,8 @@ stdenv.mkDerivation rec {
     })
   ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   postPatch = ''
     # support libplist 2.2
     substituteInPlace configure.ac --replace 'libplist >= 1.0' 'libplist-2.0 >= 2.2'

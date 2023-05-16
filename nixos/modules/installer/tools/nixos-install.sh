@@ -206,7 +206,11 @@ if [[ -z $noBootLoader ]]; then
       mount --rbind --mkdir / "$mountPoint"
       mount --make-rslave "$mountPoint"
       /run/current-system/bin/switch-to-configuration boot
+<<<<<<< HEAD
       umount -R "$mountPoint" && (rmdir "$mountPoint" 2>/dev/null || true)
+=======
+      umount -R "$mountPoint" && rmdir "$mountPoint"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 EOF
 )"
 fi

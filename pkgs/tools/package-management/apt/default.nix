@@ -28,11 +28,19 @@
 
 stdenv.mkDerivation rec {
   pname = "apt";
+<<<<<<< HEAD
   version = "2.7.3";
 
   src = fetchurl {
     url = "mirror://debian/pool/main/a/apt/apt_${version}.tar.xz";
     hash = "sha256-mtLrLE8lzjU12aXYBW4f6TLW27WMJkfNX8jfjJ+N71M=";
+=======
+  version = "2.6.0";
+
+  src = fetchurl {
+    url = "mirror://debian/pool/main/a/apt/apt_${version}.tar.xz";
+    hash = "sha256-Q0Z9HKfebAlV/ZkZJUM+IvpmIwhw5fZsRJhnXQF3bCo=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [
@@ -79,7 +87,10 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://salsa.debian.org/apt-team/apt";
     description = "Command-line package management tools used on Debian-based systems";
+<<<<<<< HEAD
     changelog = "https://salsa.debian.org/apt-team/apt/-/raw/${version}/debian/changelog";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ cstrahan ];

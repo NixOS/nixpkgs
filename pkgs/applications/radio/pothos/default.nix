@@ -1,7 +1,10 @@
 { lib
 , mkDerivation
 , fetchFromGitHub
+<<<<<<< HEAD
 , fetchpatch
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , cmake
 , pkg-config
 , doxygen
@@ -34,12 +37,15 @@ mkDerivation rec {
   patches = [
     # spuce's CMakeLists.txt uses QT5_USE_Modules, which does not seem to work on Nix
     ./spuce.patch
+<<<<<<< HEAD
     # Poco had some breaking API changes in 1.12
     (fetchpatch {
       name = "poco-1.12-compat.patch";
       url = "https://github.com/pothosware/PothosCore/commit/092d1209b0fd0aa8a1733706c994fa95e66fd017.patch";
       hash = "sha256-bZXG8kD4+1LgDV8viZrJ/DMjg8UvW7b5keJQDXurfkA=";
     })
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   nativeBuildInputs = [ cmake pkg-config doxygen wrapQtAppsHook ];

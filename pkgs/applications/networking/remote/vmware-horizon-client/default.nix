@@ -10,7 +10,11 @@
 , configText ? ""
 }:
 let
+<<<<<<< HEAD
   version = "2306";
+=======
+  version = "2303";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   sysArch =
     if stdenv.hostPlatform.system == "x86_64-linux" then "x64"
@@ -39,6 +43,7 @@ let
     pname = "vmware-horizon-files";
     inherit version;
     src = fetchurl {
+<<<<<<< HEAD
       url = "https://download3.vmware.com/software/CART24FQ2_LIN_2306_TARBALL/VMware-Horizon-Client-Linux-2306-8.10.0-21964631.tar.gz";
       sha256 = "6051f6f1617385b3c211b73ff42dad27e2d22362df6ffd2f3d9f559d0b5743ea";
     };
@@ -50,6 +55,16 @@ let
       chmod -R u+w ext/usr/lib
       mv ext/usr $out
       cp -r ext/bin ext/lib $out/
+=======
+      url = "https://download3.vmware.com/software/CART24FQ1_LIN_2303_TARBALL/VMware-Horizon-Client-Linux-2303-8.9.0-21435420.tar.gz";
+      sha256 = "a4dcc6afc0be7641e10e922ccbbab0a10adbf8f2a83e4b5372dfba095091fb78";
+    };
+    nativeBuildInputs = [ makeWrapper ];
+    installPhase = ''
+      mkdir ext $out
+      find ${sysArch} -type f -print0 | xargs -0n1 tar -Cext --strip-components=1 -xf
+      mv ext/bin ext/lib ext/share "$out"/
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
       # Horizon includes a copy of libstdc++ which is loaded via $LD_LIBRARY_PATH
       # when it cannot detect a new enough version already present on the system.
@@ -57,6 +72,12 @@ let
       # Deleting the bundled library is the simplest way to force it to use our version.
       rm "$out/lib/vmware/gcc/libstdc++.so.6"
 
+<<<<<<< HEAD
+=======
+      # This library causes the program to core-dump occasionally. Use ours instead.
+      rm -r $out/lib/vmware/view/crtbora
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       # This opensc library is required to support smartcard authentication during the
       # initial connection to Horizon.
       mkdir $out/lib/vmware/view/pkcs11
@@ -76,7 +97,10 @@ let
       atk
       cairo
       dbus
+<<<<<<< HEAD
       file
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       fontconfig
       freetype
       gdk-pixbuf

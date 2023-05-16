@@ -24,6 +24,7 @@ let
     x86_64-linux = "../../cmpl_gcc_x64.mak";
   }.${stdenv.hostPlatform.system} or "../../cmpl_gcc.mak"; # generic build
 in
+<<<<<<< HEAD
 stdenv.mkDerivation (finalAttrs: {
   pname = "7zz";
   version = "23.01";
@@ -33,6 +34,17 @@ stdenv.mkDerivation (finalAttrs: {
     hash = {
       free = "sha256-F1ybQsyReF2NBR/3eMZySvxVEntpwq2VUlRCHp/5nZs=";
       unfree = "sha256-NWBxAHNg5aGCTZkEmT6LJIC1G1cOjJ+vfA9Y6+S/n3Q=";
+=======
+stdenv.mkDerivation rec {
+  pname = "7zz";
+  version = "22.01";
+
+  src = fetchurl {
+    url = "https://7-zip.org/a/7z${lib.replaceStrings [ "." ] [ "" ] version}-src.tar.xz";
+    hash = {
+      free = "sha256-mp3cFXOEiVptkUdD1+X8XxwoJhBGs+Ns5qk3HBByfLg=";
+      unfree = "sha256-OTCYcwxwBCOSr4CJF+dllF3CQ33ueq48/MSWbrkg+8U=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     }.${if enableUnfree then "unfree" else "free"};
     downloadToTemp = (!enableUnfree);
     # remove the unRAR related code from the src drv
@@ -54,10 +66,17 @@ stdenv.mkDerivation (finalAttrs: {
   sourceRoot = ".";
 
   patches = [
+<<<<<<< HEAD
     ./fix-cross-mingw-build.patch
     # remove unneeded semicolons related to -Wextra-semi-stmt, caused by upstream
     ./fix-empty-expr-stmt.patch
   ];
+=======
+    ./fix-build-on-darwin.patch
+    ./fix-cross-mingw-build.patch
+  ];
+  patchFlags = [ "-p0" ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   postPatch = lib.optionalString stdenv.hostPlatform.isMinGW ''
     substituteInPlace CPP/7zip/7zip_gcc.mak C/7zip_gcc_c.mak \
@@ -69,6 +88,7 @@ stdenv.mkDerivation (finalAttrs: {
   ] ++ lib.optionals stdenv.hostPlatform.isMinGW [
     "-Wno-conversion"
     "-Wno-unused-macros"
+<<<<<<< HEAD
   ] ++ lib.optionals stdenv.cc.isClang [
     "-Wno-declaration-after-statement"
     (lib.optionals (lib.versionAtLeast (lib.getVersion stdenv.cc.cc) "13") [
@@ -79,6 +99,8 @@ stdenv.mkDerivation (finalAttrs: {
       "-Wno-unsafe-buffer-usage"
       "-Wno-cast-function-type-strict"
     ])
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ]);
 
   inherit makefile;
@@ -107,7 +129,11 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preInstall
 
     install -Dm555 -t $out/bin b/*/7zz${stdenv.hostPlatform.extensions.executable}
+<<<<<<< HEAD
     install -Dm444 -t $out/share/doc/${finalAttrs.pname} ../../../../DOC/*.txt
+=======
+    install -Dm444 -t $out/share/doc/${pname} ../../../../DOC/*.txt
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     runHook postInstall
   '';
@@ -130,8 +156,16 @@ stdenv.mkDerivation (finalAttrs: {
       # and CPP/7zip/Compress/Rar* are unfree with the unRAR license restriction
       # the unRAR compression code is disabled by default
       lib.optionals enableUnfree [ unfree ];
+<<<<<<< HEAD
     maintainers = with maintainers; [ anna328p eclairevoyant jk peterhoeg ];
     platforms = platforms.unix ++ platforms.windows;
     mainProgram = "7zz";
   };
 })
+=======
+    maintainers = with maintainers; [ anna328p peterhoeg jk ];
+    platforms = platforms.unix ++ platforms.windows;
+    mainProgram = "7zz";
+  };
+}
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)

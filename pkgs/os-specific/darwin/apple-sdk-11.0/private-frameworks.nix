@@ -7,6 +7,7 @@
   AddressBookCore = { inherit ContactsPersistence; };
   AudioToolboxCore = {};
   ContactsPersistence = {};
+<<<<<<< HEAD
   GameCenterFoundation = {};
   GameCenterUI = {};
   GameCenterUICore = {};
@@ -16,6 +17,16 @@
   SkyLight = {};
   UIFoundation = {};
   URLFormatting = {};
+=======
+  UIFoundation = {};
+  GameCenterFoundation = {};
+  GameCenterUI = {};
+  GameCenterUICore = {};
+  URLFormatting = {};
+  SignpostMetrics = {};
+  PassKitCore = {};
+  SkyLight = {};
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   # Also expose CoreSymbolication; used by `root` package.
   CoreSymbolication = {};

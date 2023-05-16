@@ -9,17 +9,28 @@
 
 buildPythonPackage rec {
   pname = "django-jinja";
+<<<<<<< HEAD
   version = "2.11.0";
 
   disabled = pythonOlder "3.8";
+=======
+  version = "2.10.2";
+
+  disabled = pythonOlder "3.6";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "niwinz";
     repo = "django-jinja";
+<<<<<<< HEAD
     rev = "refs/tags/${version}";
     hash = "sha256-0gkv9xinHux8TRiNBLl/JgcimXU3CzysxzGR2jn7OZ4=";
+=======
+    rev = version;
+    hash = "sha256-IZ4HjBQt6K8xbaYfO5DVlGKUVCQ3UciAUpfnqCjzyCE=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [

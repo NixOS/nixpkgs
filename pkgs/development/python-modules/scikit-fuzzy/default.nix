@@ -1,8 +1,13 @@
 { lib
 , buildPythonPackage
+<<<<<<< HEAD
 , pythonOlder
 , fetchFromGitHub
 , fetchpatch
+=======
+, isPy27
+, fetchFromGitHub
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , matplotlib
 , networkx
 , nose
@@ -14,9 +19,13 @@
 buildPythonPackage rec {
   pname = "scikit-fuzzy";
   version = "unstable-2022-11-07";
+<<<<<<< HEAD
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
+=======
+  disabled = isPy27;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = pname;
@@ -25,6 +34,7 @@ buildPythonPackage rec {
     hash = "sha256-kS48aHC719wUdc2WcJa9geoMUcLHSj7ZsoRZYAhF2a0=";
   };
 
+<<<<<<< HEAD
   patches = [
     # https://github.com/scikit-fuzzy/scikit-fuzzy/pull/299
     (fetchpatch {
@@ -44,6 +54,8 @@ buildPythonPackage rec {
     })
   ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   propagatedBuildInputs = [ networkx numpy scipy ];
   nativeCheckInputs = [ matplotlib nose pytestCheckHook ];
 

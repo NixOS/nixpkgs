@@ -14,7 +14,11 @@ stdenv.mkDerivation rec {
     ./arm64-check.patch
   ];
 
+<<<<<<< HEAD
   outputs = [ "out" "dev" "doc" ];
+=======
+  outputs = [ "out" "doc" ]; # headers are just two and very small
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nativeBuildInputs = [ cmake ];
 

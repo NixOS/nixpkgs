@@ -6,7 +6,10 @@ use warnings;
 
 use CPAN::Meta();
 use CPANPLUS::Backend();
+<<<<<<< HEAD
 use MIME::Base64;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 use Module::CoreList;
 use Getopt::Long::Descriptive qw( describe_options );
 use JSON::PP qw( encode_json );
@@ -355,11 +358,14 @@ sub render_license {
     return $license_line;
 }
 
+<<<<<<< HEAD
 sub sha256_to_sri {
     my ($sha256) = @_;
     return "sha256-" . encode_base64(pack("H*", $sha256), '');
 }
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 my ( $opt, $module_name ) = handle_opts();
 
 Log::Log4perl->easy_init(
@@ -386,9 +392,14 @@ INFO( "package: ", $module->package, " (", "$pkg_name-$pkg_version", ", ", $attr
 INFO( "path: ",    $module->path );
 
 my $tar_path = $module->fetch();
+<<<<<<< HEAD
 my $sri_hash = sha256_to_sri($module->status->checksum_value);
 INFO( "downloaded to: ", $tar_path );
 INFO( "hash: ", $sri_hash );
+=======
+INFO( "downloaded to: ", $tar_path );
+INFO( "sha-256: ",       $module->status->checksum_value );
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 my $pkg_path = $module->extract();
 INFO( "unpacked to: ", $pkg_path );
@@ -443,7 +454,11 @@ print <<EOF;
     version = "$pkg_version";
     src = fetchurl {
       url = "mirror://cpan/${\$module->path}/${\$module->package}";
+<<<<<<< HEAD
       hash = "$sri_hash";
+=======
+      sha256 = "${\$module->status->checksum_value}";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
 EOF
 print <<EOF if scalar @build_deps > 0;

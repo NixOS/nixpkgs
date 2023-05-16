@@ -1,4 +1,5 @@
 { lib
+<<<<<<< HEAD
 , adal
 , azure-common
 , buildPythonPackage
@@ -6,10 +7,21 @@
 , msal
 , pythonOlder
 , requests
+=======
+, buildPythonPackage
+, fetchPypi
+, requests
+, adal
+, azure-common
+, futures ? null
+, pathlib2
+, isPy3k
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 buildPythonPackage rec {
   pname = "azure-datalake-store";
+<<<<<<< HEAD
   version = "0.0.53";
   format = "setuptools";
 
@@ -25,6 +37,22 @@ buildPythonPackage rec {
     azure-common
     msal
     requests
+=======
+  version = "0.0.52";
+
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "4198ddb32614d16d4502b43d5c9739f81432b7e0e4d75d30e05149fe6007fea2";
+  };
+
+  propagatedBuildInputs = [
+    requests
+    adal
+    azure-common
+  ] ++ lib.optionals (!isPy3k) [
+    futures
+    pathlib2
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   # has no tests

@@ -9,7 +9,11 @@ callPackage ./common.nix {} {
 
   extraNativeBuildInputs = [ texinfo perl ];
 
+<<<<<<< HEAD
   makeFlags = [ "info" ];
+=======
+  buildPhase = "make info";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   # I don't know why the info is not generated in 'build'
   # Somehow building the info still does not work, because the final

@@ -4,6 +4,7 @@
 , removeReferencesTo
 }:
 
+<<<<<<< HEAD
 stdenv.mkDerivation (finalAttrs: {
   pname = "pkgconf";
   version = "2.0.2";
@@ -11,6 +12,15 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://distfiles.dereferenced.org/pkgconf/pkgconf-${finalAttrs.version}.tar.xz";
     hash = "sha256-6lol748lHrU3fsDiHHX7YYlEM8+9vwslWboz5MJmRAE=";
+=======
+stdenv.mkDerivation rec {
+  pname = "pkgconf";
+  version = "1.9.4";
+
+  src = fetchurl {
+    url = "https://distfiles.dereferenced.org/${pname}/${pname}-${version}.tar.xz";
+    hash = "sha256-2szxu+WjDRSbVWx9L//+r9dte1FOJJJxq91QFTPB2K4=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   outputs = [ "out" "lib" "dev" "man" "doc" ];
@@ -40,7 +50,11 @@ stdenv.mkDerivation (finalAttrs: {
     mv ${placeholder "dev"}/share ${placeholder "out"}
   '';
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     homepage = "https://github.com/pkgconf/pkgconf";
     description = "Package compiler and linker metadata toolkit";
     longDescription = ''
@@ -52,6 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
       functionality, to allow other tooling such as compilers and IDEs to
       discover and use libraries configured by pkgconf.
     '';
+<<<<<<< HEAD
     changelog = "https://github.com/pkgconf/pkgconf/blob/pkgconf-${finalAttrs.version}/NEWS";
     license = lib.licenses.isc;
     mainProgram = "pkgconf";
@@ -59,3 +74,10 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.all;
   };
 })
+=======
+    license = licenses.isc;
+    maintainers = with maintainers; [ zaninime AndersonTorres ];
+    platforms = platforms.all;
+  };
+}
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)

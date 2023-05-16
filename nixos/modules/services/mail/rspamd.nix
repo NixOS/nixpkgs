@@ -215,7 +215,11 @@ let
       text = v.extraConfig;
     })
     (filterAttrs (n: v: v.extraConfig != "") cfg.workers))
+<<<<<<< HEAD
     // (lib.optionalAttrs (cfg.extraConfig != "") {
+=======
+    // (if cfg.extraConfig == "" then {} else {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       "extra-config.inc".text = cfg.extraConfig;
     });
 in

@@ -2,13 +2,21 @@
 
 stdenv.mkDerivation rec {
   pname = "rofi-power-menu";
+<<<<<<< HEAD
   version = "3.1.0";
+=======
+  version = "3.0.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "jluttine";
     repo = "rofi-power-menu";
     rev = version;
+<<<<<<< HEAD
     sha256 = "sha256-VPCfmCTr6ADNT7MW4jiqLI/lvTjlAu1QrCAugiD0toU=";
+=======
+    sha256 = "sha256-Bkc87BXSnAR517wCkyOAfoACYx/5xprDGJQhLWGUNns=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   installPhase = ''
@@ -22,6 +30,9 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/jluttine/rofi-power-menu";
     maintainers = with maintainers; [ ikervagyok ];
     platforms = platforms.linux;
+<<<<<<< HEAD
     mainProgram = "rofi-power-menu";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

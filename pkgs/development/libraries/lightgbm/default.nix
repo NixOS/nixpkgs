@@ -1,5 +1,9 @@
 { config, stdenv, lib, fetchFromGitHub, cmake, gtest, doCheck ? true
+<<<<<<< HEAD
 , cudaSupport ? config.cudaSupport, openclSupport ? false, mpiSupport ? false, javaWrapper ? false, hdfsSupport ? false
+=======
+, cudaSupport ? config.cudaSupport or false, openclSupport ? false, mpiSupport ? false, javaWrapper ? false, hdfsSupport ? false
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , rLibrary ? false, cudaPackages, opencl-headers, ocl-icd, boost, llvmPackages, openmpi, openjdk, swig, hadoop, R, rPackages }:
 
 assert doCheck -> mpiSupport != true;

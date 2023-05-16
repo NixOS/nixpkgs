@@ -6,16 +6,27 @@
 
 buildNpmPackage rec {
   pname = "ansible-language-server";
+<<<<<<< HEAD
   version = "1.2.1";
+=======
+  version = "1.0.4";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "ansible";
     repo = pname;
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-e6cOWoryOxWnl8q62rlGmSgwLVnoxLMwNFoGlUZw2bQ=";
   };
 
   npmDepsHash = "sha256-Lzwj0/2fxa44DJBsgDPa43AbRxggqh881X/DFnlNLig=";
+=======
+    hash = "sha256-IBySScjfF2bIbiOv09uLMt9QH07zegm/W1vmGhdWxGY=";
+  };
+
+  npmDepsHash = "sha256-rJ1O2OsrJhTIfywK9/MRubwwcCmMbu61T4zyayg+mAU=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   npmBuildScript = "compile";
 
   # We remove/ignore the prepare and prepack scripts because they run the

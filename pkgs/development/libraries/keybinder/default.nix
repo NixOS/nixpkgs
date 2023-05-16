@@ -13,11 +13,19 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-elL6DZtzCwAtoyGZYP0jAma6tHPks2KAtrziWtBENGU=";
   };
 
+<<<<<<< HEAD
   nativeBuildInputs = [ pkg-config autoconf automake gobject-introspection ];
 
   buildInputs = [
     libtool gnome.gnome-common gtk-doc gtk2
     lua
+=======
+  nativeBuildInputs = [ pkg-config autoconf automake ];
+
+  buildInputs = [
+    libtool gnome.gnome-common gtk-doc gtk2
+    lua gobject-introspection
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   configureFlags = [ "--disable-python" ];

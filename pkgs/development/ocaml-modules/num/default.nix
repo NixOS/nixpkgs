@@ -28,7 +28,13 @@ stdenv.mkDerivation (rec {
     inherit (ocaml.meta) platforms;
     inherit (src.meta) homepage;
   };
+<<<<<<< HEAD
 } // (lib.optionalAttrs (lib.versions.majorMinor ocaml.version == "4.06") {
     env.NIX_CFLAGS_COMPILE = "-fcommon";
   })
+=======
+} // (if lib.versions.majorMinor ocaml.version == "4.06" then {
+    env.NIX_CFLAGS_COMPILE = "-fcommon";
+  } else {})
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 )

@@ -15,7 +15,11 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-oY1aGl5CKVtpOfh8Wskio/huWYMiPuxWPqxlooTutcw=";
   };
 
+<<<<<<< HEAD
   sourceRoot = "${src.name}/src";
+=======
+  sourceRoot = "source/src";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nativeBuildInputs = [
     cmake

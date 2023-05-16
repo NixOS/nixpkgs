@@ -63,10 +63,13 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ primeos ttuegel ];
     mainProgram = "xkbcli";
     platforms = with platforms; unix;
+<<<<<<< HEAD
     pkgConfigModules = [
       "xkbcommon"
       "xkbcommon-x11"
       "xkbregistry"
     ];
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

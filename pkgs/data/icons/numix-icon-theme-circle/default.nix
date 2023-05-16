@@ -2,13 +2,21 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "numix-icon-theme-circle";
+<<<<<<< HEAD
   version = "23.09.11";
+=======
+  version = "23.04.28";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "numixproject";
     repo = pname;
     rev = version;
+<<<<<<< HEAD
     sha256 = "sha256-9GTNE9Gt+dxdfOLD0Qv1utSkwigalAPxixGSC5Nj8XM=";
+=======
+    sha256 = "sha256-GxTxywN5+CL/+21xhfCvbxJeGnDNjYrQ7iUd2/eq+QU=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ gtk3 ];

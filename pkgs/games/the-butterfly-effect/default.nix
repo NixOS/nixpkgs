@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 { lib, mkDerivation, fetchFromGitHub, cmake, qttools, wrapQtAppsHook, qtbase, qtsvg }:
+=======
+{ lib, mkDerivation, fetchFromGitHub, qt5, box2d, which, cmake, gettext }:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 mkDerivation rec {
   pname = "tbe";
@@ -11,6 +15,7 @@ mkDerivation rec {
     sha256 = "1ag2cp346f9bz9qy6za6q54id44d2ypvkyhvnjha14qzzapwaysj";
   };
 
+<<<<<<< HEAD
   postPatch = ''
     sed '1i#include <vector>' -i src/model/World.h
 
@@ -21,6 +26,15 @@ mkDerivation rec {
   nativeBuildInputs = [ cmake qttools wrapQtAppsHook ];
   buildInputs = [ qtbase qtsvg ];
   strictDeps = true;
+=======
+  postPatch = "sed '1i#include <vector>' -i src/model/World.h";
+
+  nativeBuildInputs = [ cmake ];
+  buildInputs = [
+    qt5.qtbase qt5.qtsvg qt5.qttranslations box2d which
+    gettext
+  ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   installPhase = ''
     make DESTDIR=.. install

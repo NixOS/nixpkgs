@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 { lib, buildNimPackage, fetchFromGitHub }:
 
 buildNimPackage (finalAttrs: {
@@ -16,3 +17,13 @@ buildNimPackage (finalAttrs: {
     maintainers = with lib.maintainers; [ ehmry ];
   };
 })
+=======
+{ fetchFromGitHub }:
+
+fetchFromGitHub {
+  owner = "jangko";
+  repo = "nim-noise";
+  rev = "v0.1.14";
+  sha256 = "0wndiphznfyb1pac6zysi3bqljwlfwj6ziarcwnpf00sw2zni449";
+}
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)

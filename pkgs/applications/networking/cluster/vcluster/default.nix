@@ -2,16 +2,27 @@
 
 buildGoModule rec {
   pname = "vcluster";
+<<<<<<< HEAD
   version = "0.15.6";
+=======
+  version = "0.12.3";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "loft-sh";
     repo = pname;
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-frYE/0PcVNlk+hwSCoPwSbL2se4dEP9g6aLDMGdn6x8=";
   };
 
   vendorHash = null;
+=======
+    sha256 = "sha256-7yyOpF/eIeJinTe0sHPWLLBUbKYDhphmW8qkOdYOdXM=";
+  };
+
+  vendorSha256 = null;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   subPackages = [ "cmd/vclusterctl" ];
 
@@ -40,6 +51,10 @@ buildGoModule rec {
     downloadPage = "https://github.com/loft-sh/vcluster";
     homepage = "https://www.vcluster.com/";
     license = licenses.asl20;
+<<<<<<< HEAD
     maintainers = with maintainers; [ peterromfeldhk berryp qjoly ];
+=======
+    maintainers = with maintainers; [ peterromfeldhk berryp ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

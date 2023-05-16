@@ -1,6 +1,11 @@
+<<<<<<< HEAD
 { lib
 , stdenv
 , fetchurl
+=======
+{ lib, stdenv
+, fetchFromGitHub
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , pkg-config
 , cmake
 , extra-cmake-modules
@@ -14,11 +19,21 @@
 
 stdenv.mkDerivation rec {
   pname = "fcitx5-rime";
+<<<<<<< HEAD
   version = "5.1.1";
 
   src = fetchurl {
     url = "https://download.fcitx-im.org/fcitx5/${pname}/${pname}-${version}.tar.xz";
     hash = "sha256-qo0m/asTranm70PHPLwWCn/jX+FWNEGRKBRNNW+B28A=";
+=======
+  version = "5.0.16";
+
+  src = fetchFromGitHub {
+    owner = "fcitx";
+    repo = pname;
+    rev = version;
+    sha256 = "sha256-YAunuxdMlv1KOj2/xXstb/Uhm97G9D9rxb35AbNgMaE=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   cmakeFlags = [

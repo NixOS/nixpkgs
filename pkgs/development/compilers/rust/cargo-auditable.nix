@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 { lib, buildPackages, fetchFromGitHub, makeRustPlatform, installShellFiles, stdenv }:
+=======
+{ lib, fetchFromGitHub, makeRustPlatform, rustc, cargo, installShellFiles, stdenv }:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 let
   args = rec {
@@ -30,8 +34,13 @@ let
   };
 
   rustPlatform = makeRustPlatform {
+<<<<<<< HEAD
     inherit (buildPackages) rustc;
     cargo = buildPackages.cargo.override {
+=======
+    inherit rustc;
+    cargo = cargo.override {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       auditable = false;
     };
   };

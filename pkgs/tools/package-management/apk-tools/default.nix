@@ -4,14 +4,22 @@
 
 stdenv.mkDerivation rec {
   pname = "apk-tools";
+<<<<<<< HEAD
   version = "2.14.0";
+=======
+  version = "2.12.11";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitLab {
     domain = "gitlab.alpinelinux.org";
     owner = "alpine";
     repo = "apk-tools";
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-NbADp017wL6h+Owg/GISidoXEq0seWaa98/Hyyq6pYc=";
+=======
+    sha256 = "sha256-vhEjzCuMvMZmzkCQK25JG3tT33KnX2fJbqdaTaeuhgo=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ pkg-config scdoc ]

@@ -2,11 +2,19 @@
 
 stdenv.mkDerivation rec {
   pname = "mpage";
+<<<<<<< HEAD
   version = "2.5.8";
 
   src = fetchurl {
     url = "https://www.mesa.nl/pub/mpage/mpage-${version}.tgz";
     sha256 = "sha256-I1HpHSV5SzWN9mGPF6cBOijTUOwgQI/gb4Ej3EZz/pM=";
+=======
+  version = "2.5.7";
+
+  src = fetchurl {
+    url = "https://www.mesa.nl/pub/mpage/mpage-${version}.tgz";
+    sha256 = "1zn37r5xrvjgjbw2bdkc0r7s6q8b1krmcryzj0yf0dyxbx79rasi";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   postPatch = ''

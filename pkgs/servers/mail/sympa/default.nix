@@ -61,13 +61,21 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "sympa";
+<<<<<<< HEAD
   version = "6.2.72";
+=======
+  version = "6.2.70";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "sympa-community";
     repo = pname;
     rev = version;
+<<<<<<< HEAD
     sha256 = "sha256-8G6MxpqVa3E5J/68E7tljcXF4w7OmNkI0nJwsgxJE28=";
+=======
+    sha256 = "sha256-/gaJ17IwB6ZC7OT9gxA5uUhTAHXeqsEh/x4AzAARups=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   configureFlags = [

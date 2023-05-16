@@ -1,19 +1,27 @@
 { lib
 , stdenv
 , fetchFromGitHub
+<<<<<<< HEAD
 , fetchpatch
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , cmake
 , qtbase
 }:
 
 stdenv.mkDerivation rec {
   pname = "qxlsx";
+<<<<<<< HEAD
   version = "1.4.6";
+=======
+  version = "1.4.5";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "QtExcel";
     repo = "QXlsx";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-8plnvyb4sQRfEac1TVWgr2yrtAVAPKucgAnsybdUd3U=";
   };
 
@@ -26,6 +34,11 @@ stdenv.mkDerivation rec {
     })
   ];
 
+=======
+    hash = "sha256-T+PUeml4O6uwY6DCAsBer4gDo+nrSGGus+yQv02CJcE=";
+  };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nativeBuildInputs = [ cmake ];
   buildInputs = [ qtbase ];
 

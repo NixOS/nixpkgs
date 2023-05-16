@@ -2,22 +2,35 @@
 , buildPythonPackage
 , fetchFromGitHub
 , fetchpatch
+<<<<<<< HEAD
 , setuptools
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , mypy
 , pytestCheckHook
 , python-lsp-server
 , pythonOlder
+<<<<<<< HEAD
 , tomli
+=======
+, toml
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 buildPythonPackage rec {
   pname = "pylsp-mypy";
+<<<<<<< HEAD
   version = "0.6.7";
   format = "pyproject";
+=======
+  version = "0.6.6";
+  format = "setuptools";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
+<<<<<<< HEAD
     owner = "python-lsp";
     repo = "pylsp-mypy";
     rev = "refs/tags/${version}";
@@ -42,6 +55,18 @@ buildPythonPackage rec {
     python-lsp-server
   ] ++ lib.optionals (pythonOlder "3.11") [
     tomli
+=======
+    owner = "Richardk2n";
+    repo = "pylsp-mypy";
+    rev = "refs/tags/${version}";
+    hash = "sha256-9B+GSEoQEqd1W/g0oup4xULKWOF0TgSG5DfBtyWA3vs=";
+  };
+
+  propagatedBuildInputs = [
+    mypy
+    python-lsp-server
+    toml
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   nativeCheckInputs = [
@@ -59,7 +84,11 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Mypy plugin for the Python LSP Server";
+<<<<<<< HEAD
     homepage = "https://github.com/python-lsp/pylsp-mypy";
+=======
+    homepage = "https://github.com/Richardk2n/pylsp-mypy";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     license = licenses.mit;
     maintainers = with maintainers; [ cpcloud ];
   };

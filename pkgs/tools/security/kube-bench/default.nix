@@ -2,16 +2,27 @@
 
 buildGoModule rec {
   pname = "kube-bench";
+<<<<<<< HEAD
   version = "0.6.17";
+=======
+  version = "0.6.13";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "aquasecurity";
     repo = pname;
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-9pXW8PVJhaYi9uKArIJcXbQ6FbCjFA4z9f5M3DLKnng=";
   };
 
   vendorHash = "sha256-dBN6Yi8HtS9LzXr08jhw1hqDwS8a4UqrYaRpM+RzvVM=";
+=======
+    hash = "sha256-tr6QQAxFAejX05rv8/cx6LXAATlutXX6UmrIv7ru3gM=";
+  };
+
+  vendorHash = "sha256-kOY9cIkh272A8PJTpMfNVlVNkY9PqPTOVYw25rTwd84=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nativeBuildInputs = [ installShellFiles ];
 

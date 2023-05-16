@@ -3,13 +3,21 @@
 
 stdenv.mkDerivation rec {
   pname = "xjadeo";
+<<<<<<< HEAD
   version = "0.8.13";
+=======
+  version = "0.8.12";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "x42";
     repo = "xjadeo";
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-CSq11hFNmo41VXOndBoPxRc9NNUUBtzfWx14DCUFieQ=";
+=======
+    sha256 = "sha256-VPmVoCoVyljzqtbkuT3e6jhXClP708V/6zy1bVoET7c=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];

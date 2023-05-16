@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /*
 Nix evaluation tests for various lib functions.
 
@@ -13,6 +14,11 @@ Alternatively, to run all `lib` tests:
 
   [nixpkgs]$ nix-build lib/tests/release.nix
 */
+=======
+# to run these tests:
+# nix-instantiate --eval --strict nixpkgs/lib/tests/misc.nix
+# if the resulting list is empty, all tests passed
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 with import ../default.nix;
 
 let
@@ -349,6 +355,7 @@ runTests {
     expected = true;
   };
 
+<<<<<<< HEAD
   testRemovePrefixExample1 = {
     expr = removePrefix "foo." "foo.bar.baz";
     expected = "bar.baz";
@@ -370,6 +377,8 @@ runTests {
     expected = "";
   };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   testNormalizePath = {
     expr = strings.normalizePath "//a/b//c////d/";
     expected = "/a/b/c/d/";
@@ -513,6 +522,7 @@ runTests {
     ([ 1 2 3 ] == (take 4 [  1 2 3 ]))
   ];
 
+<<<<<<< HEAD
   testListHasPrefixExample1 = {
     expr = lists.hasPrefix [ 1 2 ] [ 1 2 3 4 ];
     expected = true;
@@ -551,6 +561,8 @@ runTests {
     expected = false;
   };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   testFoldAttrs = {
     expr = foldAttrs (n: a: [n] ++ a) [] [
     { a = 2; b = 7; }
@@ -559,6 +571,7 @@ runTests {
     expected = { a = [ 2 3 ]; b = [7]; c = [8];};
   };
 
+<<<<<<< HEAD
   testListCommonPrefixExample1 = {
     expr = lists.commonPrefix [ 1 2 3 4 5 6 ] [ 1 2 4 8 ];
     expected = [ 1 2 ];
@@ -592,6 +605,8 @@ runTests {
       expected = longList;
     };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   testSort = {
     expr = sort builtins.lessThan [ 40 2 30 42 ];
     expected = [2 30 40 42];
@@ -622,6 +637,7 @@ runTests {
     expected = false;
   };
 
+<<<<<<< HEAD
   testFindFirstIndexExample1 = {
     expr = lists.findFirstIndex (x: x > 3) (abort "index found, so a default must not be evaluated") [ 1 6 4 ];
     expected = 1;
@@ -672,6 +688,8 @@ runTests {
     expr = lists.findFirst (x: x > 9) 7 [ 1 6 4 ];
     expected = 7;
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 # ATTRSETS
 
@@ -723,6 +741,7 @@ runTests {
     };
   };
 
+<<<<<<< HEAD
 
   testMergeAttrsListExample1 = {
     expr = attrsets.mergeAttrsList [ { a = 0; b = 1; } { c = 2; d = 3; } ];
@@ -748,6 +767,8 @@ runTests {
       expected = foldl' mergeAttrs { } list;
     };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   # code from the example
   testRecursiveUpdateUntil = {
     expr = recursiveUpdateUntil (path: l: r: path == ["foo"]) {
@@ -948,6 +969,7 @@ runTests {
     '';
   };
 
+<<<<<<< HEAD
   testToGitINI = {
     expr = generators.toGitINI {
       user = {
@@ -993,6 +1015,8 @@ runTests {
     '';
   };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   /* right now only invocation check */
   testToJSONSimple =
     let val = {

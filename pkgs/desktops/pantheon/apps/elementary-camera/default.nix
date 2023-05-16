@@ -19,13 +19,21 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-camera";
+<<<<<<< HEAD
   version = "6.2.2";
+=======
+  version = "6.2.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "camera";
     rev = version;
+<<<<<<< HEAD
     sha256 = "sha256-Sj89TBat2RY2Ms02M0P7gmE9tXYk1yrnPLzDwGyAFZA=";
+=======
+    sha256 = "sha256-ijzEMGXoH0gACem/3JaC/aOIaOQgP7Y7n48NgoDMKBk=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

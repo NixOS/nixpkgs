@@ -24,13 +24,21 @@ lib.checkListOfEnum "${pname}: tweaks" [ "image" "square" "round" ] tweaks
 
 stdenv.mkDerivation rec {
   inherit pname;
+<<<<<<< HEAD
   version = "2023-05-24";
+=======
+  version = "2023-02-27";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "vinceliuice";
     repo = pname;
     rev = version;
+<<<<<<< HEAD
     sha256 = "L19pbmJJFr1xi4ZTp0ocxmdMvWmtkK2zquOFfbV+P5Q=";
+=======
+    sha256 = "oBUBSPlOCBEaRRFK5ZyoGlk+gwcE8LtdwxvL+iTfuMA=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

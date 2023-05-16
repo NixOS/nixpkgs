@@ -1,11 +1,21 @@
 { lib
 , buildPythonPackage
+<<<<<<< HEAD
 , fetchFromGitHub
+=======
+, fetchpatch
+, fetchFromGitHub
+, pythonAtLeast
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 , coqpit
 , fsspec
 , torch-bin
+<<<<<<< HEAD
 , tensorboard
+=======
+, tensorboardx
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , protobuf
 , psutil
 
@@ -16,7 +26,11 @@
 
 let
   pname = "trainer";
+<<<<<<< HEAD
   version = "0.0.29";
+=======
+  version = "0.0.25";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 in
 buildPythonPackage {
   inherit pname version;
@@ -26,7 +40,11 @@ buildPythonPackage {
     owner = "coqui-ai";
     repo = "Trainer";
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-ISEIIJReYKT3tEAF9/pckPg2+aYkBJyRWo6fvWZ/asI=";
+=======
+    hash = "sha256-XhE3CbcbCZjuUI6dx1gNNpQrxycqCgmOgjkaQ8MtL9E=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   postPatch = ''
@@ -39,7 +57,11 @@ buildPythonPackage {
     protobuf
     psutil
     soundfile
+<<<<<<< HEAD
     tensorboard
+=======
+    tensorboardx
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     torch-bin
   ];
 

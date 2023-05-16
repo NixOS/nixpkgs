@@ -2,6 +2,10 @@
 
 let
   cfg = config.services.joycond;
+<<<<<<< HEAD
+=======
+  kernelPackages = config.boot.kernelPackages;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 in
 
 with lib;
@@ -23,6 +27,11 @@ with lib;
   config = mkIf cfg.enable {
     environment.systemPackages = [ cfg.package ];
 
+<<<<<<< HEAD
+=======
+    boot.extraModulePackages = optional (versionOlder kernelPackages.kernel.version "5.16") kernelPackages.hid-nintendo;
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     services.udev.packages = [ cfg.package ];
 
     systemd.packages = [ cfg.package ];

@@ -5,7 +5,10 @@
 , fetchFromGitHub
 , pytest-asyncio
 , pytest-mock
+<<<<<<< HEAD
 , pythonAtLeast
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , pytestCheckHook
 , pythonOlder
 }:
@@ -39,11 +42,14 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+<<<<<<< HEAD
   disabledTestPaths = lib.optionals (pythonAtLeast "3.11") [
     # unittest.mock.InvalidSpecError: Cannot spec a Mock object.
     "tests/test_light.py"
   ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pythonImportsCheck = [
     "pyzerproc"
   ];

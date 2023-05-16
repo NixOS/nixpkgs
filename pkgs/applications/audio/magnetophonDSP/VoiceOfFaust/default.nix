@@ -18,8 +18,11 @@ stdenv.mkDerivation rec {
 
   runtimeInputs = [ pitchTracker ];
 
+<<<<<<< HEAD
   dontWrapQtApps = true;
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   patchPhase = ''
     sed -i "s@pd -nodac@${pitchTracker}/bin/pd -nodac@g" launchers/synthWrapper
     sed -i "s@../PureData/OscSendVoc.pd@$out/PureData/OscSendVoc.pd@g" launchers/pitchTracker
@@ -34,8 +37,15 @@ stdenv.mkDerivation rec {
   installPhase = ''
     mkdir -p $out/bin
 
+<<<<<<< HEAD
     for f in $(find . -executable -type f); do
       cp $f $out/bin/
+=======
+    for file in ./*; do
+      if test -x "$file" && test -f "$file"; then
+        cp "$file" "$out/bin"
+      fi
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     done
 
     cp launchers/* $out/bin/

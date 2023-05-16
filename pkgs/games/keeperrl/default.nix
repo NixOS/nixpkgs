@@ -13,6 +13,7 @@
 , libtheora
 , unfree_assets ? false }:
 
+<<<<<<< HEAD
 let
   pname = "keeperrl";
   version = "alpha34";
@@ -20,11 +21,24 @@ let
   free_src = fetchFromGitHub {
     owner = "miki151";
     repo = pname;
+=======
+stdenv.mkDerivation rec {
+  pname = "keeperrl";
+  version = "alpha34";
+
+  free-src = fetchFromGitHub {
+    owner = "miki151";
+    repo = "keeperrl";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     rev = version;
     sha256 = "sha256-0sww+ppctXvxMouclG3OdXpcNgrrOZJw9z8s2GhJ+IE=";
   };
 
+<<<<<<< HEAD
   assets = requireFile rec {
+=======
+  assets = if unfree_assets then requireFile rec {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     name = "keeperrl_data_${version}.tar.gz";
     message = ''
       This nix expression requires that the KeeperRL art assets are already
@@ -39,6 +53,7 @@ let
       "nix-prefetch-url file://\$PWD/${name}".
     '';
     sha256 = "0115pxdzdyma2vicxgr0j21pp82gxdyrlj090s8ihp0b50f0nlll";
+<<<<<<< HEAD
   };
 in
 
@@ -48,6 +63,13 @@ stdenv.mkDerivation {
   srcs = [ free_src ] ++ lib.optional unfree_assets assets;
 
   sourceRoot = free_src.name;
+=======
+  } else null;
+
+  sourceRoot = "source";
+
+  srcs = [ free-src ] ++ lib.optional unfree_assets assets;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   postUnpack = lib.optionalString unfree_assets ''
     mv data $sourceRoot

@@ -19,7 +19,11 @@ import ./make-test-python.nix ({ pkgs, ... } : {
         node.wait_for_unit("etcd.service")
 
     with subtest("should write and read some values to etcd"):
+<<<<<<< HEAD
         node.succeed("etcdctl put /foo/bar 'Hello world'")
+=======
+        node.succeed("etcdctl set /foo/bar 'Hello world'")
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         node.succeed("etcdctl get /foo/bar | grep 'Hello world'")
   '';
 })

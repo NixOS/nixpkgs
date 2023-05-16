@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 { lib
 , llvmPackages
 , fetchFromGitHub
@@ -129,6 +130,37 @@ in mkDerivation rec {
 
     popd
   '';
+=======
+{ lib, stdenv, fetchFromGitHub, cmake, libtool, llvm-bintools, ninja
+, boost, brotli, capnproto, cctz, clang-unwrapped, double-conversion
+, icu, jemalloc, libcpuid, libxml2, lld, llvm, lz4, libmysqlclient, openssl, perl
+, poco, protobuf, python3, rapidjson, re2, rdkafka, readline, sparsehash, unixODBC
+, xxHash, zstd
+, nixosTests
+}:
+
+stdenv.mkDerivation rec {
+  pname = "clickhouse";
+  version = "22.8.16.32";
+
+  broken = stdenv.buildPlatform.is32bit; # not supposed to work on 32-bit https://github.com/ClickHouse/ClickHouse/pull/23959#issuecomment-835343685
+
+  src = fetchFromGitHub {
+    owner  = "ClickHouse";
+    repo   = "ClickHouse";
+    rev    = "v${version}-lts";
+    fetchSubmodules = true;
+    sha256 = "sha256-LArHbsu2iaEP+GrCxdTrfpGDDfwcg1mlvbAceXNZyz8=";
+  };
+
+  nativeBuildInputs = [ cmake libtool llvm-bintools ninja ];
+  buildInputs = [
+    boost brotli capnproto cctz clang-unwrapped double-conversion
+    icu jemalloc libxml2 lld llvm lz4 libmysqlclient openssl perl
+    poco protobuf python3 rapidjson re2 rdkafka readline sparsehash unixODBC
+    xxHash zstd
+  ] ++ lib.optional stdenv.hostPlatform.isx86 libcpuid;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   postPatch = ''
     patchShebangs src/
@@ -143,6 +175,7 @@ in mkDerivation rec {
       --replace 'git rev-parse --show-toplevel' '$src'
     substituteInPlace utils/check-style/check-style \
       --replace 'git rev-parse --show-toplevel' '$src'
+<<<<<<< HEAD
   '' + lib.optionalString stdenv.isDarwin ''
     sed -i 's|gfind|find|' cmake/tools.cmake
     sed -i 's|ggrep|grep|' cmake/tools.cmake
@@ -161,10 +194,13 @@ in mkDerivation rec {
     popd
 
     cargoSetupPostPatchHook() { true; }
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '';
 
   cmakeFlags = [
     "-DENABLE_TESTS=OFF"
+<<<<<<< HEAD
     "-DCOMPILER_CACHE=disabled"
     "-DENABLE_EMBEDDED_COMPILER=ON"
   ];
@@ -172,6 +208,13 @@ in mkDerivation rec {
   # https://github.com/ClickHouse/ClickHouse/issues/49988
   hardeningDisable = [ "fortify" ];
 
+=======
+    "-DENABLE_CCACHE=0"
+    "-DENABLE_EMBEDDED_COMPILER=ON"
+    "-USE_INTERNAL_LLVM_LIBRARY=OFF"
+  ];
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   postInstall = ''
     rm -rf $out/share/clickhouse-test
 
@@ -183,6 +226,11 @@ in mkDerivation rec {
       --replace "<level>trace</level>" "<level>warning</level>"
   '';
 
+<<<<<<< HEAD
+=======
+  hardeningDisable = [ "format" ];
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   # Builds in 7+h with 2 cores, and ~20m with a big-parallel builder.
   requiredSystemFeatures = [ "big-parallel" ];
 
@@ -193,9 +241,13 @@ in mkDerivation rec {
     description = "Column-oriented database management system";
     license = licenses.asl20;
     maintainers = with maintainers; [ orivej ];
+<<<<<<< HEAD
 
     # not supposed to work on 32-bit https://github.com/ClickHouse/ClickHouse/pull/23959#issuecomment-835343685
     platforms = lib.filter (x: (lib.systems.elaborate x).is64bit) (platforms.linux ++ platforms.darwin);
     broken = stdenv.buildPlatform != stdenv.hostPlatform;
+=======
+    platforms = platforms.linux;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

@@ -18,7 +18,11 @@ stdenv.mkDerivation {
   nativeBuildInputs = with ocamlPackages; [ menhir ocaml findlib dune_3 ];
 
   buildInputs = with ocamlPackages; [
+<<<<<<< HEAD
     ansiterminal cairo2 cmdliner fmt logs menhirLib mtime_1 sedlex yojson
+=======
+    ansiterminal cairo2 cmdliner fmt logs menhirLib mtime sedlex yojson
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   buildPhase = ''

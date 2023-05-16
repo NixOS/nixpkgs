@@ -23,6 +23,10 @@ buildPythonPackage rec {
     homepage = "https://github.com/pydron/ifaddr";
     description = "Enumerates all IP addresses on all network adapters of the system";
     license = licenses.mit;
+<<<<<<< HEAD
     maintainers = [ ];
+=======
+    maintainers = [ maintainers.costrouc ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

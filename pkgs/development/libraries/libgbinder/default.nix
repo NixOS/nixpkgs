@@ -2,13 +2,21 @@
 
 stdenv.mkDerivation rec {
   pname = "libgbinder";
+<<<<<<< HEAD
   version = "1.1.34";
+=======
+  version = "1.1.33";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "mer-hybris";
     repo = pname;
     rev = version;
+<<<<<<< HEAD
     sha256 = "sha256-e4J7K1AZyw3AvBNMj69VGKo7gtJ6Nr2ELjqgoqPlObU=";
+=======
+    sha256 = "sha256-tVvW7cbgj2t251SzUchfVEnHgLVgdkTLyGpQfn6VYow=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   outputs = [ "out" "dev" ];

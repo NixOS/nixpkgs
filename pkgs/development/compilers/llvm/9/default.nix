@@ -282,6 +282,11 @@ let
       inherit llvm_meta targetLlvm;
     };
   });
+<<<<<<< HEAD
   noExtend = extensible: lib.attrsets.removeAttrs extensible [ "extend" ];
 
 in { inherit tools libraries release_version; } // (noExtend libraries) // (noExtend tools)
+=======
+
+in { inherit tools libraries release_version; } // libraries // tools
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)

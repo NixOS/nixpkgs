@@ -1,10 +1,15 @@
 { lib, fetchgit, fetchFromGitHub }:
 
 let
+<<<<<<< HEAD
   version = "5.15.10";
   overrides = {
     qtscript.version = "5.15.9";
   };
+=======
+  version = "5.15.9";
+  overrides = {};
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   mk = name: args:
     let
@@ -24,6 +29,7 @@ let
 in
 lib.mapAttrs mk (lib.importJSON ./srcs-generated.json)
 // {
+<<<<<<< HEAD
   # qtpim has no official releases
   qtpim = {
     version = "unstable-2020-11-02";
@@ -36,6 +42,8 @@ lib.mapAttrs mk (lib.importJSON ./srcs-generated.json)
     };
   };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   # Has no kde/5.15 branch
   qtpositioning = rec {
     version = "5.15.2";
@@ -76,6 +84,7 @@ lib.mapAttrs mk (lib.importJSON ./srcs-generated.json)
     hash = "sha256-LPfBCEB5tJOljXpptsNk0sHGtJf/wIRL7fccN79Nh6o=";
   };
 
+<<<<<<< HEAD
   qtwebengine = rec {
       version = "5.15.14";
 
@@ -85,6 +94,39 @@ lib.mapAttrs mk (lib.importJSON ./srcs-generated.json)
         rev = "v${version}-lts";
         hash = "sha256-jIoNwRdr0bZ2p0UMp/KDQuwgNjhzzGlb91UGjQgT60Y=";
         fetchSubmodules = true;
+=======
+  qtwebengine =
+    let
+      branchName = "5.15.13";
+      rev = "v${branchName}-lts";
+    in
+    {
+      version = branchName;
+
+      src = fetchgit {
+        url = "https://github.com/qt/qtwebengine.git";
+        sha256 = "sha256-gZmhJTA5A3+GeySJoppYGffNC6Ych2pOYlsu3w+fnmw=";
+        inherit rev branchName;
+        fetchSubmodules = true;
+        leaveDotGit = true;
+        name = "qtwebengine-${lib.substring 0 8 rev}.tar.gz";
+        postFetch = ''
+          # remove submodule .git directory
+          rm -rf "$out/src/3rdparty/.git"
+
+          # compress to not exceed the 2GB output limit
+          # try to make a deterministic tarball
+          tar -I 'gzip -n' \
+            --sort=name \
+            --mtime=1970-01-01 \
+            --owner=root --group=root \
+            --numeric-owner --mode=go=rX,u+rw,a-s \
+            --transform='s@^@source/@' \
+            -cf temp  -C "$out" .
+          rm -r "$out"
+          mv temp "$out"
+        '';
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       };
     };
 }

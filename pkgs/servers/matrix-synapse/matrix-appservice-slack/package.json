@@ -1,6 +1,10 @@
 {
   "name": "matrix-appservice-slack",
+<<<<<<< HEAD
   "version": "2.1.2",
+=======
+  "version": "2.1.1",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   "description": "A Matrix <--> Slack bridge",
   "engines": {
     "node": ">=16 <=18"
@@ -42,13 +46,21 @@
     "axios": "^0.27.2",
     "classnames": "^2.3.2",
     "escape-string-regexp": "^4.0.0",
+<<<<<<< HEAD
     "https-proxy-agent": "^5.0.1",
     "matrix-appservice-bridge": "^8.1.2",
+=======
+    "matrix-appservice-bridge": "^8.1.1",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "matrix-widget-api": "^1.1.1",
     "minimist": "^1.2.6",
     "nedb": "^1.8.0",
     "node-emoji": "^1.10.0",
+<<<<<<< HEAD
     "nunjucks": "^3.2.4",
+=======
+    "nunjucks": "^3.2.3",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "p-queue": "^6.0.0",
     "pg-promise": "^10.11.1",
     "randomstring": "^1.2.1",

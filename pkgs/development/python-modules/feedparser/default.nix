@@ -22,8 +22,11 @@ buildPythonPackage rec {
     sgmllib3k
   ];
 
+<<<<<<< HEAD
   __darwinAllowLocalNetworking = true;
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   checkPhase = ''
     # Tests are failing
     # AssertionError: unexpected '~' char in declaration

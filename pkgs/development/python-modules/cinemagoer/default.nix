@@ -7,11 +7,19 @@
 
 buildPythonPackage rec {
   pname = "cinemagoer";
+<<<<<<< HEAD
   version = "2023.5.1";
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-XOHXeuZUZwFhjxHlsVVqGdGO3srRttfZaXPsNJQbGPI=";
+=======
+  version = "2022.12.27";
+
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-uUq/6Uijv6krBNCa5ftBWG/uYLs/5pLyDONLvBoxjYo=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [

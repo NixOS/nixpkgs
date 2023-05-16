@@ -2,7 +2,10 @@
 , fetchFromGitHub
 , fetchpatch
 , nixosTests
+<<<<<<< HEAD
 , lib
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 , plugins ? ps: []
 }:
@@ -94,6 +97,7 @@ in py.pkgs.buildPythonApplication rec {
       inherit (nixosTests) peering-manager;
     };
   };
+<<<<<<< HEAD
 
   meta = with lib; {
     homepage = "https://peering-manager.net/";
@@ -102,4 +106,6 @@ in py.pkgs.buildPythonApplication rec {
     maintainers = teams.wdz.members;
     platforms = platforms.linux;
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }

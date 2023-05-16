@@ -1,3 +1,15 @@
+<<<<<<< HEAD
+=======
+source $stdenv/setup
+
+sources_=($sources)
+targets_=($targets)
+
+objects=($objects)
+symlinks=($symlinks)
+
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 # Remove the initial slash from a path, since genisofs likes it that way.
 stripSlash() {
     res="$1"
@@ -26,6 +38,7 @@ if test -n "$bootable"; then
     # The -boot-info-table option modifies the $bootImage file, so
     # find it in `contents' and make a copy of it (since the original
     # is read-only in the Nix store...).
+<<<<<<< HEAD
     for ((i = 0; i < ${#targets[@]}; i++)); do
         stripSlash "${targets[$i]}"
         if test "$res" = "$bootImage"; then
@@ -33,6 +46,15 @@ if test -n "$bootable"; then
             cp "${sources[$i]}" boot.img
             chmod u+w boot.img
             sources[$i]=boot.img
+=======
+    for ((i = 0; i < ${#targets_[@]}; i++)); do
+        stripSlash "${targets_[$i]}"
+        if test "$res" = "$bootImage"; then
+            echo "copying the boot image ${sources_[$i]}"
+            cp "${sources_[$i]}" boot.img
+            chmod u+w boot.img
+            sources_[$i]=boot.img
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         fi
     done
 
@@ -57,9 +79,15 @@ touch pathlist
 
 
 # Add the individual files.
+<<<<<<< HEAD
 for ((i = 0; i < ${#targets[@]}; i++)); do
     stripSlash "${targets[$i]}"
     addPath "$res" "${sources[$i]}"
+=======
+for ((i = 0; i < ${#targets_[@]}; i++)); do
+    stripSlash "${targets_[$i]}"
+    addPath "$res" "${sources_[$i]}"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 done
 
 

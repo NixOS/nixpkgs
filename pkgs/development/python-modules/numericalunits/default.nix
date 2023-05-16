@@ -19,6 +19,10 @@ buildPythonPackage rec {
     homepage = "http://pypi.python.org/pypi/numericalunits";
     description = "A package that lets you define quantities with unit";
     license = licenses.mit;
+<<<<<<< HEAD
     maintainers = [ ];
+=======
+    maintainers = [ maintainers.costrouc ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

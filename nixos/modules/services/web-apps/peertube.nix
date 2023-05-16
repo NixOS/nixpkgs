@@ -52,7 +52,13 @@ let
 
   envFile = pkgs.writeText "peertube.env" (lib.concatMapStrings (s: s + "\n") (
     (lib.concatLists (lib.mapAttrsToList (name: value:
+<<<<<<< HEAD
       lib.optional (value != null) ''${name}="${toString value}"''
+=======
+      if value != null then [
+        "${name}=\"${toString value}\""
+      ] else []
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     ) env))));
 
   peertubeEnv = pkgs.writeShellScriptBin "peertube-env" ''
@@ -348,7 +354,11 @@ in {
         };
         redis = {
           hostname = "${toString cfg.redis.host}";
+<<<<<<< HEAD
           port = (lib.optionalString (cfg.redis.port != null) cfg.redis.port);
+=======
+          port = (if cfg.redis.port == null then "" else cfg.redis.port);
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         };
         storage = {
           tmp = lib.mkDefault "/var/lib/peertube/storage/tmp/";

@@ -2,7 +2,11 @@
 , faad2, fftwFloat, zlib
 }:
 
+<<<<<<< HEAD
 stdenv.mkDerivation (finalAttrs: {
+=======
+stdenv.mkDerivation {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pname = "dab_lib";
   version = "unstable-2023-03-02";
 
@@ -13,7 +17,11 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-KSkOg0a5iq+13kClQqj+TaEP/PsLUrm8bMmiJEAZ+C4=";
   };
 
+<<<<<<< HEAD
   sourceRoot = "${finalAttrs.src.name}/library";
+=======
+  sourceRoot = "source/library/";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nativeBuildInputs = [ cmake pkg-config ];
   buildInputs = [ faad2 fftwFloat zlib ];
@@ -25,4 +33,8 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with maintainers; [ alexwinter ];
     platforms = platforms.unix;
   };
+<<<<<<< HEAD
 })
+=======
+}
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)

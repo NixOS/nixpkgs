@@ -8,7 +8,11 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "google";
     repo = "leveldb";
+<<<<<<< HEAD
     rev = version;
+=======
+    rev = "${version}";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     sha256 = "sha256-RL+dfSFZZzWvUobSqiPbuC4nDiGzjIIukbVJZRacHbI=";
   };
 

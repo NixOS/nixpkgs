@@ -1,16 +1,35 @@
 { config, lib, ... }:
 
+<<<<<<< HEAD
 let
   dmcfg = config.services.xserver.displayManager;
   cfg = config.test-support.displayManager.auto;
 in
+=======
+with lib;
+
+let
+
+  dmcfg = config.services.xserver.displayManager;
+  cfg = config.test-support.displayManager.auto;
+
+in
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 {
 
   ###### interface
 
   options = {
+<<<<<<< HEAD
     test-support.displayManager.auto = {
       enable = lib.mkOption {
+=======
+
+    test-support.displayManager.auto = {
+
+      enable = mkOption {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         default = false;
         description = lib.mdDoc ''
           Whether to enable the fake "auto" display manager, which
@@ -20,6 +39,7 @@ in
         '';
       };
 
+<<<<<<< HEAD
       user = lib.mkOption {
         default = "root";
         description = lib.mdDoc "The user account to login automatically.";
@@ -30,6 +50,22 @@ in
   ###### implementation
 
   config = lib.mkIf cfg.enable {
+=======
+      user = mkOption {
+        default = "root";
+        description = lib.mdDoc "The user account to login automatically.";
+      };
+
+    };
+
+  };
+
+
+  ###### implementation
+
+  config = mkIf cfg.enable {
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     services.xserver.displayManager = {
       lightdm.enable = true;
       autoLogin = {
@@ -51,5 +87,11 @@ in
 
         session  include   lightdm
     '';
+<<<<<<< HEAD
   };
+=======
+
+  };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }

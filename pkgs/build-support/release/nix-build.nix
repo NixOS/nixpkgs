@@ -146,7 +146,11 @@ stdenv.mkDerivation (
 
     postPhases = postPhases ++ ["finalPhase"];
 
+<<<<<<< HEAD
     meta = (lib.optionalAttrs (args ? meta) args.meta) // {
+=======
+    meta = (if args ? meta then args.meta else {}) // {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       description = if doCoverageAnalysis then "Coverage analysis" else "Nix package for ${stdenv.hostPlatform.system}";
     };
 
@@ -154,8 +158,13 @@ stdenv.mkDerivation (
 
   //
 
+<<<<<<< HEAD
   (lib.optionalAttrs buildOutOfSourceTree
    {
+=======
+  (if buildOutOfSourceTree
+   then {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
      preConfigure =
        # Build out of source tree and make the source tree read-only.  This
        # helps catch violations of the GNU Coding Standards (info
@@ -170,5 +179,9 @@ stdenv.mkDerivation (
           ${lib.optionalString (preConfigure != null) preConfigure}
        '';
    }
+<<<<<<< HEAD
   )
+=======
+   else {})
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 )

@@ -19,7 +19,10 @@
 , ffmpeg
 , version
 , src
+<<<<<<< HEAD
 , autoPatchelfHook
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 stdenv.mkDerivation rec {
@@ -27,7 +30,11 @@ stdenv.mkDerivation rec {
 
   inherit version src;
 
+<<<<<<< HEAD
   nativeBuildInputs = [ cmake autoPatchelfHook ];
+=======
+  nativeBuildInputs = [ cmake ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   buildInputs = [
     indilib libnova curl cfitsio libusb1 zlib boost gsl gpsd
@@ -61,7 +68,11 @@ stdenv.mkDerivation rec {
     description = "Third party firmware for the INDI astronomical software suite";
     changelog = "https://github.com/indilib/indi-3rdparty/releases/tag/v${version}";
     license = licenses.lgpl2Plus;
+<<<<<<< HEAD
     maintainers = with maintainers; [ hjones2199 sheepforce ];
+=======
+    maintainers = with maintainers; [ hjones2199 ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     platforms = platforms.linux;
   };
 }

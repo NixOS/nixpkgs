@@ -24,7 +24,11 @@
 
 buildPythonPackage rec {
   pname = "pandas-stubs";
+<<<<<<< HEAD
   version = "2.0.3.230814";
+=======
+  version = "1.5.3.230321";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -33,7 +37,11 @@ buildPythonPackage rec {
     owner = "pandas-dev";
     repo = pname;
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-V/igL+vPJADOL7LwBJljqs2a1BB3vDVYTWXIkK/ImYY=";
+=======
+    hash = "sha256-RjU762VyDPy86Cvmr8hfPkqLtmntB3F6tf2OAgqmnK4=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [
@@ -66,7 +74,10 @@ buildPythonPackage rec {
     # AttributeErrors, missing dependencies, error and warning checks
     "test_aggregate_frame_combinations"
     "test_aggregate_series_combinations"
+<<<<<<< HEAD
     "test_all_read_without_lxml_dtype_backend"
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "test_arrow_dtype"
     "test_attribute_conflict_warning"
     "test_categorical_conversion_warning"
@@ -80,8 +91,11 @@ buildPythonPackage rec {
     "test_database_error"
     "test_dummies"
     "test_from_dummies_args"
+<<<<<<< HEAD
     "test_hdf_context_manager"
     "test_hdfstore"
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "test_incompatibility_warning"
     "test_index_astype"
     "test_indexing_error"
@@ -98,9 +112,12 @@ buildPythonPackage rec {
     "test_possible_precision_loss"
     "test_pyperclip_exception"
     "test_quantile_150_changes"
+<<<<<<< HEAD
     "test_read_hdf_iterator"
     "test_read_sql_via_sqlalchemy_connection"
     "test_read_sql_via_sqlalchemy_engine"
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "test_resample_150_changes"
     "test_reset_index_150_changes"
     "test_reset_index"
@@ -113,6 +130,11 @@ buildPythonPackage rec {
     "test_types_rank"
     "test_undefined_variable_error"
     "test_value_label_type_mismatch"
+<<<<<<< HEAD
+=======
+    "test_read_sql_via_sqlalchemy_connection"
+    "test_read_sql_via_sqlalchemy_engine"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ] ++ lib.optionals stdenv.isDarwin [
     "test_plotting" # Fatal Python error: Illegal instruction
   ];

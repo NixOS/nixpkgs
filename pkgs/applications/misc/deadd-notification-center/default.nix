@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 { mkDerivation, haskellPackages, fetchFromGitHub, lib }:
+=======
+{ mkDerivation, haskellPackages, fetchFromGitHub, lib, writeText }:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 let
   # deadd-notification-center.service
@@ -17,13 +21,22 @@ let
   '';
 in mkDerivation rec {
   pname = "deadd-notification-center";
+<<<<<<< HEAD
   version = "2.1.1";
+=======
+  version = "unstable-2022-11-07";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "phuhl";
     repo = "linux_notification_center";
+<<<<<<< HEAD
     rev = version;
     hash = "sha256-VU9NaQVS0n8hFRjWMvCMkaF5mZ4hpnluV31+/SAK7tU=";
+=======
+    rev = "f4b8e2b724d86def9e7b0e12ea624f95760352d5";
+    hash = "sha256-ClJfWqStULvmj5YRAUDAmn2WOSA2sVtyZsa+qSY51Gk=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   isLibrary = false;
@@ -31,11 +44,19 @@ in mkDerivation rec {
   isExecutable = true;
 
   libraryHaskellDepends = with haskellPackages; [
+<<<<<<< HEAD
     aeson base bytestring ConfigFile containers dbus directory env-locale
     filepath gi-cairo gi-gdk gi-gdkpixbuf gi-gio gi-glib gi-gobject
     gi-gtk gi-pango haskell-gettext haskell-gi haskell-gi-base
     hdaemonize here lens mtl process regex-tdfa setlocale split stm
     tagsoup text time transformers tuple unix yaml
+=======
+    base bytestring ConfigFile containers dbus directory env-locale
+    filepath gi-cairo gi-gdk gi-gdkpixbuf gi-gio gi-glib gi-gobject
+    gi-gtk gi-pango haskell-gettext haskell-gi haskell-gi-base
+    hdaemonize here lens mtl process regex-tdfa setlocale split stm
+    tagsoup text time transformers tuple unix
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   executableHaskellDepends = with haskellPackages; [ base ];

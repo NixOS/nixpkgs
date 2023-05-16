@@ -23,7 +23,11 @@ mkYarnPackage rec {
     owner = "Fallenbagel";
     repo = "jellyseerr";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = pin.srcHash;
+=======
+    sha256 = pin.srcSha256;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   packageJSON = ./package.json;

@@ -10,7 +10,11 @@ let
       meta = rust-bindgen-unwrapped.meta // {
         longDescription = rust-bindgen-unwrapped.meta.longDescription + ''
           This version of bindgen is wrapped with the required compiler flags
+<<<<<<< HEAD
           required to find the c and c++ standard library, as well as the libraries
+=======
+          required to find the c and c++ standard libary, as well as the libraries
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           specified in the buildInputs of your derivation.
         '';
       };

@@ -19,8 +19,13 @@ let
       pkgs.qgnomeplatform-qt6
       pkgs.adwaita-qt6
     ]
+<<<<<<< HEAD
     else if isQtStyle then [ pkgs.libsForQt5.qtstyleplugins pkgs.qt6Packages.qt6gtk2 ]
     else if isQt5ct then [ pkgs.libsForQt5.qt5ct pkgs.qt6Packages.qt6ct ]
+=======
+    else if isQtStyle then [ pkgs.libsForQt5.qtstyleplugins ]
+    else if isQt5ct then [ pkgs.libsForQt5.qt5ct ]
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     else if isLxqt then [ pkgs.lxqt.lxqt-qtplugin pkgs.lxqt.lxqt-config ]
     else if isKde then [ pkgs.libsForQt5.plasma-integration pkgs.libsForQt5.systemsettings ]
     else throw "`qt.platformTheme` ${cfg.platformTheme} and `qt.style` ${cfg.style} are not compatible.";
@@ -86,7 +91,10 @@ in
           "adwaita-qt"
           "adwaita-qt6"
           ["libsForQt5" "qtstyleplugins"]
+<<<<<<< HEAD
           ["qt6Packages" "qt6gtk2"]
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         ];
         description = lib.mdDoc ''
           Selects the style to use for Qt applications.

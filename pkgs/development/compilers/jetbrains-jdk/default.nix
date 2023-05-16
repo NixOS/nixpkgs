@@ -29,8 +29,13 @@
 
 openjdk17.overrideAttrs (oldAttrs: rec {
   pname = "jetbrains-jdk-jcef";
+<<<<<<< HEAD
   javaVersion = "17.0.7";
   build = "829.16";
+=======
+  javaVersion = "17.0.6";
+  build = "829.5";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   # To get the new tag:
   # git clone https://github.com/jetbrains/jetbrainsruntime
   # cd jetbrainsruntime
@@ -43,7 +48,11 @@ openjdk17.overrideAttrs (oldAttrs: rec {
     owner = "JetBrains";
     repo = "JetBrainsRuntime";
     rev = "jb${version}";
+<<<<<<< HEAD
     hash = "sha256-b3wW52knkYUeG8h4naTQLGUedhAMiPnUsn3zFAiJCwM=";
+=======
+    hash = "sha256-LTwmuoKKwkuel0a1qcYNnb0d3HBFoABvmqCcrsPyh2I=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   BOOT_JDK = openjdk17-bootstrap.home;

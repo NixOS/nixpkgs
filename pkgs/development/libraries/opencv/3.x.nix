@@ -2,7 +2,11 @@
 , fetchFromGitHub
 , fetchpatch
 , cmake, pkg-config, unzip, zlib, pcre, hdf5
+<<<<<<< HEAD
 , glog, boost, gflags, protobuf3_21
+=======
+, glog, boost, gflags, protobuf
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , config
 
 , enableJPEG      ? true, libjpeg
@@ -14,7 +18,11 @@
 , enableOpenblas  ? true, openblas, blas, lapack
 , enableContrib   ? true
 
+<<<<<<< HEAD
 , enableCuda      ? config.cudaSupport &&
+=======
+, enableCuda      ? (config.cudaSupport or false) &&
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
                     stdenv.hostPlatform.isx86_64
 , cudaPackages ? { }
 , enableUnfree    ? false
@@ -187,7 +195,11 @@ stdenv.mkDerivation {
 
   buildInputs =
        [ zlib pcre hdf5 glog boost gflags ]
+<<<<<<< HEAD
     ++ lib.optional useSystemProtobuf protobuf3_21
+=======
+    ++ lib.optional useSystemProtobuf protobuf
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     ++ lib.optional enablePython pythonPackages.python
     ++ lib.optional enableGtk2 gtk2
     ++ lib.optional enableGtk3 gtk3

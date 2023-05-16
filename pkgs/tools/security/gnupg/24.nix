@@ -6,18 +6,29 @@
 , withPcsc ? !enableMinimal, pcsclite
 , guiSupport ? stdenv.isDarwin, pinentry
 , withTpm2Tss ? !stdenv.isDarwin && !enableMinimal, tpm2-tss
+<<<<<<< HEAD
 , nixosTests
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 assert guiSupport -> enableMinimal == false;
 
 stdenv.mkDerivation rec {
   pname = "gnupg";
+<<<<<<< HEAD
   version = "2.4.1";
 
   src = fetchurl {
     url = "mirror://gnupg/gnupg/${pname}-${version}.tar.bz2";
     hash = "sha256-drceWutEO/2RDOnLyCgbYXyDQWh6+2e65FWHeXK1neg=";
+=======
+  version = "2.4.0";
+
+  src = fetchurl {
+    url = "mirror://gnupg/gnupg/${pname}-${version}.tar.bz2";
+    hash = "sha256-HXkVjdAdmSQx3S4/rLif2slxJ/iXhOosthDGAPsMFIM=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
@@ -63,6 +74,15 @@ stdenv.mkDerivation rec {
       rm $f
     done
   '' else ''
+<<<<<<< HEAD
+=======
+    mkdir -p $out/lib/systemd/user
+    for f in doc/examples/systemd-user/*.{service,socket} ; do
+      substitute $f $out/lib/systemd/user/$(basename $f) \
+        --replace /usr/bin $out/bin
+    done
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     # add gpg2 symlink to make sure git does not break when signing commits
     ln -s $out/bin/gpg $out/bin/gpg2
 
@@ -80,7 +100,11 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+<<<<<<< HEAD
   passthru.tests = nixosTests.gnupg;
+=======
+  passthru.tests.connman = lib.nixosTests.gnupg;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   meta = with lib; {
     homepage = "https://gnupg.org";

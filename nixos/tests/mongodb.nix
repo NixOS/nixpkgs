@@ -33,6 +33,10 @@ import ./make-test-python.nix ({ pkgs, ... }:
     nodes = {
       node = {...}: {
         environment.systemPackages = with pkgs; [
+<<<<<<< HEAD
+=======
+          mongodb-4_2
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           mongodb-4_4
           mongodb-5_0
         ];
@@ -42,6 +46,10 @@ import ./make-test-python.nix ({ pkgs, ... }:
     testScript = ''
       node.start()
     ''
+<<<<<<< HEAD
+=======
+      + runMongoDBTest pkgs.mongodb-4_2
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       + runMongoDBTest pkgs.mongodb-4_4
       + runMongoDBTest pkgs.mongodb-5_0
       + ''

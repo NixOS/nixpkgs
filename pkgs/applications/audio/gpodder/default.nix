@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 { lib
 , fetchFromGitHub
 , gitUpdater
@@ -10,18 +11,31 @@
 , python3Packages
 , wrapGAppsHook
 , xdg-utils
+=======
+{ lib, fetchFromGitHub, python3, python3Packages, intltool
+, glibcLocales, gnome, gtk3, wrapGAppsHook
+, gobject-introspection
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "gpodder";
+<<<<<<< HEAD
   version = "3.11.1";
+=======
+  version = "3.10.21";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "other";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = version;
+<<<<<<< HEAD
     sha256 = "Ns03MFhd4ZLtyeQTLTgLWY2Ot6gmrksFMOZm8jFaLIg=";
+=======
+    sha256 = "0n73jm5ypsj962gpr0dk10lqh83giqsczm63wchyhmrkyf1wgga1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   patches = [
@@ -81,10 +95,13 @@ python3Packages.buildPythonApplication rec {
     LC_ALL=C PYTHONPATH=src/:$PYTHONPATH pytest tests --ignore=src/gpodder/utilwin32ctypes.py --ignore=src/mygpoclient --cov=gpodder
   '';
 
+<<<<<<< HEAD
   makeWrapperArgs = [ "--suffix PATH : ${lib.makeBinPath [ xdg-utils ]}" ];
 
   passthru.updateScript = gitUpdater {};
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   meta = with lib; {
     description = "A podcatcher written in python";
     longDescription = ''

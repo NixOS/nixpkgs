@@ -1,5 +1,9 @@
 { lib, stdenv, fetchFromGitHub, jdk, gmp, readline, openssl, unixODBC, zlib
+<<<<<<< HEAD
 , libarchive, db, pcre2, libedit, libossp_uuid, libxcrypt,libXpm
+=======
+, libarchive, db, pcre, libedit, libossp_uuid, libxcrypt,libXpm
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , libSM, libXt, freetype, pkg-config, fontconfig
 , cmake, libyaml, Security
 , libjpeg, libX11, libXext, libXft, libXinerama
@@ -34,7 +38,11 @@
 }:
 
 let
+<<<<<<< HEAD
   version = "9.1.10";
+=======
+  version = "8.3.29";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   packInstall = swiplPath: pack:
     ''${swiplPath}/bin/swipl -g "pack_install(${pack}, [package_directory(\"${swiplPath}/lib/swipl/pack\"), silent(true), interactive(false)])." -t "halt."
     '';
@@ -47,7 +55,11 @@ stdenv.mkDerivation {
     owner = "SWI-Prolog";
     repo = "swipl-devel";
     rev = "V${version}";
+<<<<<<< HEAD
     sha256 = "sha256-hr9cI0Ww6RfZs99iM1hFVw4sOYZFZWr8Vzv6dognCTQ=";
+=======
+    sha256 = "sha256-2QYY3VDG3dhbv5gtSid4eMYMxhhpggCedJL+RhtbbaU=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     fetchSubmodules = true;
   };
 
@@ -59,7 +71,11 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ cmake pkg-config ];
 
   buildInputs = [ gmp readline openssl
+<<<<<<< HEAD
     libarchive libyaml db pcre2 libedit libossp_uuid libxcrypt
+=======
+    libarchive libyaml db pcre libedit libossp_uuid libxcrypt
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     zlib ]
   ++ lib.optionals (withGui && !stdenv.isDarwin) [ libXpm libX11 libXext libXft libXinerama libjpeg ]
   ++ extraLibraries

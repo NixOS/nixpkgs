@@ -6,12 +6,20 @@
 
 stdenv.mkDerivation rec {
   pname = "upwork";
+<<<<<<< HEAD
   version = "5.8.0.31";
+=======
+  version = "5.8.0.24";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = requireFile {
     name = "${pname}_${version}_amd64.deb";
     url = "https://www.upwork.com/ab/downloads/os/linux/";
+<<<<<<< HEAD
     sha256 = "sha256-tQV6v0U6xxqBl7nQaBhXSrc9iv+7SPHfABTiJJQDnPI=";
+=======
+    sha256 = "sha256-9X1U/ImI8GfCiYLpLD+jICYAYsAr1NJLlOMvecXK7hc=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [
@@ -31,6 +39,11 @@ stdenv.mkDerivation rec {
   libPath = lib.makeLibraryPath buildInputs;
 
   dontWrapGApps = true;
+<<<<<<< HEAD
+=======
+  dontBuild = true;
+  dontConfigure = true;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   unpackPhase = ''
     dpkg-deb -x ${src} ./

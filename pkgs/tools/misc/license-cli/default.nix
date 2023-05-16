@@ -1,4 +1,9 @@
+<<<<<<< HEAD
 { lib
+=======
+{ stdenv
+, lib
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , fetchFromSourcehut
 , rustPlatform
 , installShellFiles
@@ -13,16 +18,27 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "license-cli";
+<<<<<<< HEAD
   version = "3.1.0";
+=======
+  version = "3.0.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromSourcehut {
     owner = "~zethra";
     repo = "license";
     rev = version;
+<<<<<<< HEAD
     hash = "sha256-OGS26mE5rjxlZOaBWhYc7C8aM3Lq2xX0f31LgckjJF8=";
   };
 
   cargoHash = "sha256-Zj9t/e6QhiOxU8mlVRBKEbviSTKXM4WQ3lqtoCcMbMI=";
+=======
+    hash = "sha256-M5ypymJ99T4Vc7XSmqNb69yBLgSYu9I+6FEQvtFGUf0=";
+  };
+
+  cargoHash = "sha256-me4xPP6fO1D+vvR9XZg2EHieY7OU2HHQ4P0nkk/IKpE=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nativeBuildInputs = [ installShellFiles makeWrapper ];
 

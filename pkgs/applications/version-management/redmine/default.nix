@@ -1,13 +1,24 @@
+<<<<<<< HEAD
 { lib, stdenv, fetchurl, bundlerEnv, ruby, defaultGemConfig, makeWrapper, nixosTests }:
 
 let
   version = "5.0.5";
+=======
+{ lib, stdenv, fetchurl, bundlerEnv, ruby, makeWrapper, nixosTests }:
+
+let
+  version = "4.2.10";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   rubyEnv = bundlerEnv {
     name = "redmine-env-${version}";
 
     inherit ruby;
     gemdir = ./.;
+<<<<<<< HEAD
     groups = [ "development" "ldap" "markdown" "common_mark" "minimagick" "test" ];
+=======
+    groups = [ "development" "ldap" "markdown" "minimagick" "openid" "test" ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 in
   stdenv.mkDerivation rec {
@@ -16,7 +27,11 @@ in
 
     src = fetchurl {
       url = "https://www.redmine.org/releases/${pname}-${version}.tar.gz";
+<<<<<<< HEAD
       sha256 = "sha256-qJrRxLub8CXmUnx3qxjI+vd0nJSpdcryz9u6AOsSpIE=";
+=======
+      sha256 = "sha256-byY4jCOJKWJVLKSR1e/tq9QtrIiGHdnYC8M0WPZb4ek=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
 
     nativeBuildInputs = [ makeWrapper ];
@@ -47,7 +62,11 @@ in
     meta = with lib; {
       homepage = "https://www.redmine.org/";
       platforms = platforms.linux;
+<<<<<<< HEAD
       maintainers = with maintainers; [ aanderse felixsinger megheaiulian ];
+=======
+      maintainers = with maintainers; [ aanderse felixsinger ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       license = licenses.gpl2;
     };
   }

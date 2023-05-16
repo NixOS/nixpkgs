@@ -1,13 +1,22 @@
+<<<<<<< HEAD
 { fetchpatch, fetchzip, lib, rustPlatform, git, installShellFiles, makeWrapper }:
 
 rustPlatform.buildRustPackage rec {
   pname = "helix";
   version = "23.05";
+=======
+{ fetchzip, lib, rustPlatform, installShellFiles, makeWrapper }:
+
+rustPlatform.buildRustPackage rec {
+  pname = "helix";
+  version = "23.03";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   # This release tarball includes source code for the tree-sitter grammars,
   # which is not ordinarily part of the repository.
   src = fetchzip {
     url = "https://github.com/helix-editor/helix/releases/download/${version}/helix-${version}-source.tar.xz";
+<<<<<<< HEAD
     hash = "sha256-3ZEToXwW569P7IFLqz6Un8rClnWrW5RiYKmRVFt7My8=";
     stripRoot = false;
   };
@@ -22,6 +31,21 @@ rustPlatform.buildRustPackage rec {
   ];
 
   nativeBuildInputs = [ git installShellFiles makeWrapper ];
+=======
+    hash = "sha256-FtY2V7za3WGeUaC2t2f63CcDUEg9zAS2cGUWI0YeGwk=";
+    stripRoot = false;
+  };
+
+  # should be removed, when tree-sitter is not used as a git checkout anymore
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "tree-sitter-0.20.9" = "sha256-/PaFaASOT0Z8FpipX5uiRCjnv1kyZtg4B9+TnHA0yTY=";
+    };
+  };
+
+  nativeBuildInputs = [ installShellFiles makeWrapper ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   postInstall = ''
     # not needed at runtime
@@ -43,6 +67,10 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://helix-editor.com";
     license = licenses.mpl20;
     mainProgram = "hx";
+<<<<<<< HEAD
     maintainers = with maintainers; [ danth yusdacra zowoq ];
+=======
+    maintainers = with maintainers; [ danth yusdacra ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

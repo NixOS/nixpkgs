@@ -2,11 +2,19 @@
 
 stdenv.mkDerivation rec {
   pname = "libassuan";
+<<<<<<< HEAD
   version = "2.5.6";
 
   src = fetchurl {
     url = "mirror://gnupg/${pname}/${pname}-${version}.tar.bz2";
     sha256 = "sha256-6f0nIY1TlJBOTjl4j5sXQnEcPmtBaJoxqjOAvVqk9CY=";
+=======
+  version = "2.5.5";
+
+  src = fetchurl {
+    url = "mirror://gnupg/${pname}/${pname}-${version}.tar.bz2";
+    sha256 = "sha256-jowvzJgvnKZ9y7HZXi3HRrFzmkZovCCzo8W+Yy7bNOQ=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   outputs = [ "out" "dev" "info" ];

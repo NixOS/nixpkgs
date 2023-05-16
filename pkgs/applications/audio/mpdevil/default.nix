@@ -51,6 +51,9 @@ python3Packages.buildPythonApplication rec {
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ apfelkuchen6 ];
+<<<<<<< HEAD
     mainProgram = "mpdevil";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

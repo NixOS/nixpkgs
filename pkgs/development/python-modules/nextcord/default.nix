@@ -16,7 +16,11 @@
 
 buildPythonPackage rec {
   pname = "nextcord";
+<<<<<<< HEAD
   version = "2.5.0";
+=======
+  version = "2.4.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   format = "setuptools";
 
@@ -26,7 +30,11 @@ buildPythonPackage rec {
     owner = "nextcord";
     repo = "nextcord";
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-Oo1C2tasuNIpUaKACbapnoZs7WVS1uncS1akErzQrqI=";
+=======
+    hash = "sha256-n73F5y922rsu0YFjAwQlUVpSa6Scs/xyfZHREmqKiHU=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   patches = [

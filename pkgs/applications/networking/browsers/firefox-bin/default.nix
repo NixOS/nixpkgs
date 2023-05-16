@@ -167,8 +167,12 @@ stdenv.mkDerivation {
 
       for executable in \
         firefox firefox-bin plugin-container \
+<<<<<<< HEAD
         updater crashreporter webapprt-stub \
         glxtest vaapitest
+=======
+        updater crashreporter webapprt-stub
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       do
         if [ -e "$out/usr/lib/firefox-bin-${version}/$executable" ]; then
           patchelf --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \

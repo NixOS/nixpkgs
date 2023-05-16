@@ -9,6 +9,10 @@ lib.makeScope newScope (self:
       callPackage ../development/nim-packages/build-nim-package {
         inherit (buildPackages.buildPackages.nimPackages) nim_builder;
       };
+<<<<<<< HEAD
+=======
+    fetchNimble = callPackage ../development/nim-packages/fetch-nimble { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     asciigraph = callPackage ../development/nim-packages/asciigraph { };
 
@@ -31,8 +35,11 @@ lib.makeScope newScope (self:
 
     coap = callPackage  ../development/nim-packages/coap { };
 
+<<<<<<< HEAD
     db_connector = callPackage ../development/nim-packages/db_connector { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     docopt = callPackage ../development/nim-packages/docopt { };
 
     eris = callPackage ../development/nim-packages/eris { };
@@ -46,9 +53,13 @@ lib.makeScope newScope (self:
     getdns = callPackage ../development/nim-packages/getdns {
       inherit (pkgs) getdns; };
 
+<<<<<<< HEAD
     hashlib = callPackage ../development/nim-packages/hashlib { };
 
     hts = callPackage ../development/nim-packages/hts { };
+=======
+    hts-nim = callPackage ../development/nim-packages/hts-nim { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     illwill = callPackage ../development/nim-packages/illwill { };
 
@@ -96,8 +107,11 @@ lib.makeScope newScope (self:
       inherit (pkgs) rocksdb;
     };
 
+<<<<<<< HEAD
     safeseq = callPackage ../development/nim-packages/safeseq { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     safeset = callPackage ../development/nim-packages/safeset { };
 
     sass = callPackage ../development/nim-packages/sass { };
@@ -111,8 +125,11 @@ lib.makeScope newScope (self:
 
     nimraylib-now = callPackage ../development/nim-packages/nimraylib-now { };
 
+<<<<<<< HEAD
     smtp = callPackage ../development/nim-packages/smtp { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     spry = callPackage ../development/nim-packages/spry { };
 
     spryvm = callPackage ../development/nim-packages/spryvm { };
@@ -137,8 +154,11 @@ lib.makeScope newScope (self:
 
     vmath = callPackage ../development/nim-packages/vmath { };
 
+<<<<<<< HEAD
     ws = callPackage ../development/nim-packages/ws { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     x11 = callPackage ../development/nim-packages/x11 { };
 
     zippy = callPackage ../development/nim-packages/zippy { };

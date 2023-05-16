@@ -2,13 +2,21 @@
 
 buildGoModule rec {
   pname = "podman-tui";
+<<<<<<< HEAD
   version = "0.11.0";
+=======
+  version = "0.9.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "podman-tui";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-XaZgvy8b/3XUjO/GAQV6fxfqlR+eSMeosC7ugoYsEJM=";
+=======
+    hash = "sha256-0iI417mwmwph4wjuusaWY0kGtVsQy7i+eZvE1tYiINY=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   vendorHash = null;

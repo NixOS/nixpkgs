@@ -1,14 +1,23 @@
 { config, lib, pkgs, ... }:
 
+<<<<<<< HEAD
 let
   inherit (lib) concatStringsSep mkEnableOption mkIf mkOption types;
+=======
+with lib;
+
+let
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   cfg = config.services.openarena;
 in
 {
   options = {
     services.openarena = {
       enable = mkEnableOption (lib.mdDoc "OpenArena");
+<<<<<<< HEAD
       package = lib.mkPackageOptionMD pkgs "openarena" { };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
       openPorts = mkOption {
         type = types.bool;
@@ -43,7 +52,11 @@ in
       serviceConfig = {
         DynamicUser = true;
         StateDirectory = "openarena";
+<<<<<<< HEAD
         ExecStart = "${cfg.package}/bin/oa_ded +set fs_basepath ${cfg.package}/share/openarena +set fs_homepath /var/lib/openarena ${concatStringsSep " " cfg.extraFlags}";
+=======
+        ExecStart = "${pkgs.openarena}/bin/oa_ded +set fs_basepath ${pkgs.openarena}/openarena-0.8.8 +set fs_homepath /var/lib/openarena ${concatStringsSep " " cfg.extraFlags}";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         Restart = "on-failure";
 
         # Hardening

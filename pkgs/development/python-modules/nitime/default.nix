@@ -5,9 +5,12 @@
 , pythonOlder
 , pytestCheckHook
 , cython
+<<<<<<< HEAD
 , setuptools
 , setuptools-scm
 , wheel
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , numpy
 , scipy
 , matplotlib
@@ -26,6 +29,7 @@ buildPythonPackage rec {
     hash = "sha256-NnoVrSt6MTTcNup1e+/1v5JoHCYcycuQH4rHLzXJt+Y=";
   };
 
+<<<<<<< HEAD
   # Upstream wants to build against the oldest version of numpy possible, but
   # we only want to build against the most recent version.
   postPatch = ''
@@ -52,6 +56,13 @@ buildPythonPackage rec {
 
   doCheck = !stdenv.isDarwin;  # tests hang indefinitely
 
+=======
+  buildInputs = [ cython ];
+  propagatedBuildInputs = [ numpy scipy matplotlib networkx nibabel ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
+  doCheck = !stdenv.isDarwin;  # tests hang indefinitely
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pythonImportsCheck = [ "nitime" ];
 
   meta = with lib; {

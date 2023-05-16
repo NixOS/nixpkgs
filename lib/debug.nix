@@ -15,6 +15,7 @@
 { lib }:
 let
   inherit (lib)
+<<<<<<< HEAD
     isList
     isAttrs
     substring
@@ -24,6 +25,24 @@ let
     elem
     generators
     id
+=======
+    isInt
+    attrNames
+    isList
+    isAttrs
+    substring
+    addErrorContext
+    attrValues
+    concatLists
+    concatStringsSep
+    const
+    elem
+    generators
+    head
+    id
+    isDerivation
+    isFunction
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     mapAttrs
     trace;
 in

@@ -131,6 +131,7 @@ let
       inherit llvm_meta;
     };
 
+<<<<<<< HEAD
     lldb = callPackage ../common/lldb.nix {
       src = fetch "lldb" "051p5b04y6z3g730rmc2n2v71lipbw7k69riww3a6sl74myfiaq7";
       patches = [
@@ -138,6 +139,10 @@ let
         ./lldb/gnu-install-dirs.patch
       ];
       inherit llvm_meta release_version;
+=======
+    lldb = callPackage ./lldb {
+      inherit llvm_meta;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
 
     # Below, is the LLVM bootstrapping logic. It handles building a
@@ -279,6 +284,11 @@ let
       inherit llvm_meta targetLlvm;
     };
   });
+<<<<<<< HEAD
   noExtend = extensible: lib.attrsets.removeAttrs extensible [ "extend" ];
 
 in { inherit tools libraries release_version; } // (noExtend libraries) // (noExtend tools)
+=======
+
+in { inherit tools libraries release_version; } // libraries // tools
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)

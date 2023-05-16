@@ -13,7 +13,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "liblouis";
+<<<<<<< HEAD
   version = "3.26.0";
+=======
+  version = "3.25.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   outputs = [ "out" "dev" "info" "doc" ]
     # configure: WARNING: cannot generate manual pages while cross compiling
@@ -23,7 +27,11 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "liblouis";
     repo = "liblouis";
     rev = "v${finalAttrs.version}";
+<<<<<<< HEAD
     hash = "sha256-Kko9qBWdNiZ61Wbb7lUYoSNU1hhRUexPcU3pADv0UHo=";
+=======
+    hash = "sha256-On5PbBgvDAeD41oGb5EKBtKvi/VXnLsVrTMX7tcwnq4=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   strictDeps = true;

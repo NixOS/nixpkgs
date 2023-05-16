@@ -16,9 +16,12 @@ stdenv.mkDerivation {
   doCheck = true;
   checkPhase = "./hash_extender --test";
 
+<<<<<<< HEAD
   # https://github.com/iagox86/hash_extender/issues/26
   hardeningDisable = [ "fortify3" ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   env.NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations";
 
   installPhase = ''

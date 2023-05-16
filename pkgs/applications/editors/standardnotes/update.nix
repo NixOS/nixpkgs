@@ -31,7 +31,11 @@ writeScript "update-standardnotes" ''
   fi
 
   function getDownloadUrl() {
+<<<<<<< HEAD
     jq -r ".assets[] | select(.name==\"standard-notes-$newVersion-$1.deb\") | .browser_download_url" < "$jsonPath"
+=======
+    jq -r ".assets[] | select(.name==\"standard-notes-$newVersion-$1.AppImage\") | .browser_download_url" < "$jsonPath"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   }
 
   function setJsonKey() {
@@ -44,11 +48,19 @@ writeScript "update-standardnotes" ''
     url=$(getDownloadUrl "$upstreamPlatform")
     hash=$(nix-prefetch-url "$url" --type sha512)
     sriHash=$(nix hash to-sri --type sha512 $hash)
+<<<<<<< HEAD
     setJsonKey .deb[\""$nixPlatform"\"].url "$url"
     setJsonKey .deb[\""$nixPlatform"\"].hash "$sriHash"
   }
 
   updatePlatform x86_64-linux linux-amd64
+=======
+    setJsonKey .appimage[\""$nixPlatform"\"].url "$url"
+    setJsonKey .appimage[\""$nixPlatform"\"].hash "$sriHash"
+  }
+
+  updatePlatform x86_64-linux linux-x86_64
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   updatePlatform aarch64-linux linux-arm64
   setJsonKey .version "$newVersion"
 ''

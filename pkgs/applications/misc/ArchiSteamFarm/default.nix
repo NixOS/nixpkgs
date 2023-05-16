@@ -1,4 +1,8 @@
 { lib
+<<<<<<< HEAD
+=======
+, stdenv
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , buildDotnetModule
 , fetchFromGitHub
 , dotnetCorePackages
@@ -6,6 +10,7 @@
 , zlib
 , openssl
 , callPackage
+<<<<<<< HEAD
 }:
 
 buildDotnetModule rec {
@@ -18,6 +23,21 @@ buildDotnetModule rec {
     repo = "ArchiSteamFarm";
     rev = version;
     hash = "sha256-ySiN5iPs+EtgzPJJpKvD7BR3Z2xa4HLnTEtqroW478w=";
+=======
+, stdenvNoCC
+}:
+
+buildDotnetModule rec {
+  pname = "archisteamfarm";
+  # nixpkgs-update: no auto update
+  version = "5.4.5.2";
+
+  src = fetchFromGitHub {
+    owner = "justarchinet";
+    repo = pname;
+    rev = version;
+    sha256 = "sha256-l3qcdgTTpbI4Jdy1jpzyCiAFglJfzBHkb6hLIZ4hDKQ=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   dotnet-runtime = dotnetCorePackages.aspnetcore_7_0;
@@ -56,7 +76,11 @@ buildDotnetModule rec {
     buildPlugin() {
       echo "Publishing plugin $1"
       dotnet publish $1 -p:ContinuousIntegrationBuild=true -p:Deterministic=true \
+<<<<<<< HEAD
         --output $out/lib/archisteamfarm/plugins/$1 --configuration Release \
+=======
+        --output $out/lib/${pname}/plugins/$1 --configuration Release \
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         -p:TargetLatestRuntimePatch=false -p:UseAppHost=false --no-restore \
         --framework=net7.0
      }

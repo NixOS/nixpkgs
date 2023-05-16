@@ -211,7 +211,11 @@ rec {
   # nixos/doc/manual/development/option-types.xml!
   types = rec {
 
+<<<<<<< HEAD
     raw = mkOptionType {
+=======
+    raw = mkOptionType rec {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       name = "raw";
       description = "raw value";
       descriptionClass = "noun";
@@ -436,12 +440,19 @@ rec {
 
     # Deprecated; should not be used because it quietly concatenates
     # strings, which is usually not what you want.
+<<<<<<< HEAD
     # We use a lib.warn because `deprecationMessage` doesn't trigger in nested types such as `attrsOf string`
     string = lib.warn
       "The type `types.string` is deprecated. See https://github.com/NixOS/nixpkgs/pull/66346 for better alternative types."
       (separatedString "" // {
         name = "string";
       });
+=======
+    string = separatedString "" // {
+      name = "string";
+      deprecationMessage = "See https://github.com/NixOS/nixpkgs/pull/66346 for better alternative types.";
+    };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     passwdEntry = entryType: addCheck entryType (str: !(hasInfix ":" str || hasInfix "\n" str)) // {
       name = "passwdEntry ${entryType.name}";
@@ -463,7 +474,10 @@ rec {
     # - strings with context, e.g. "${pkgs.foo}" or (toString pkgs.foo)
     # - hardcoded store path literals (/nix/store/hash-foo) or strings without context
     #   ("/nix/store/hash-foo"). These get a context added to them using builtins.storePath.
+<<<<<<< HEAD
     # If you don't need a *top-level* store path, consider using pathInStore instead.
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     package = mkOptionType {
       name = "package";
       descriptionClass = "noun";
@@ -494,6 +508,7 @@ rec {
       merge = mergeEqualOption;
     };
 
+<<<<<<< HEAD
     pathInStore = mkOptionType {
       name = "pathInStore";
       description = "path in the Nix store";
@@ -502,6 +517,8 @@ rec {
       merge = mergeEqualOption;
     };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     listOf = elemType: mkOptionType rec {
       name = "listOf";
       description = "list of ${optionDescriptionPhrase (class: class == "noun" || class == "composite") elemType}";
@@ -786,11 +803,17 @@ rec {
           };
           binOp = lhs: rhs: {
             class =
+<<<<<<< HEAD
               # `or null` was added for backwards compatibility only. `class` is
               # always set in the current version of the module system.
               if lhs.class or null == null then rhs.class or null
               else if rhs.class or null == null then lhs.class or null
               else if lhs.class or null == rhs.class then lhs.class or null
+=======
+              if lhs.class == null then rhs.class
+              else if rhs.class == null then lhs.class
+              else if lhs.class == rhs.class then lhs.class
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
               else throw "A submoduleWith option is declared multiple times with conflicting class values \"${toString lhs.class}\" and \"${toString rhs.class}\".";
             modules = lhs.modules ++ rhs.modules;
             specialArgs =

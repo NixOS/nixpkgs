@@ -36,6 +36,9 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2;
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.devhell ];
+<<<<<<< HEAD
     mainProgram = "nload";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

@@ -45,11 +45,14 @@ let
       # BEAM-based languages.
       elixir = elixir_1_14;
 
+<<<<<<< HEAD
       elixir_1_15 = lib'.callElixir ../interpreters/elixir/1.15.nix {
         inherit erlang;
         debugInfo = true;
       };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       elixir_1_14 = lib'.callElixir ../interpreters/elixir/1.14.nix {
         inherit erlang;
         debugInfo = true;

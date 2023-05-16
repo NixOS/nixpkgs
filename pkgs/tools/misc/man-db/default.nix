@@ -1,7 +1,10 @@
 { buildPackages
 , db
 , fetchurl
+<<<<<<< HEAD
 , fetchpatch
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , groff
 , gzip
 , lib
@@ -21,7 +24,11 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://savannah/man-db/man-db-${version}.tar.xz";
+<<<<<<< HEAD
     hash = "sha256-z/oe5Ol0vnhkbEZQjm3S8358WJqqspOMwQZPBY/vn40=";
+=======
+    sha256 = "sha256-z/oe5Ol0vnhkbEZQjm3S8358WJqqspOMwQZPBY/vn40=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   outputs = [ "out" "doc" ];
@@ -32,6 +39,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ libpipeline db groff ]; # (Yes, 'groff' is both native and build input)
   nativeCheckInputs = [ libiconv /* for 'iconv' binary */ ];
 
+<<<<<<< HEAD
   patches = [
     ./systemwide-man-db-conf.patch
     # Remove the patches below when updating to the next man-db release.
@@ -61,6 +69,9 @@ stdenv.mkDerivation rec {
       hash = "sha256-w12/LOGN9gO85zmqX7zookA55w3WUxBMJgWInpH5wms=";
     })
   ];
+=======
+  patches = [ ./systemwide-man-db-conf.patch ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   postPatch = ''
     # Remove all mandatory manpaths. Nixpkgs makes no requirements on
@@ -108,7 +119,11 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+<<<<<<< HEAD
   doCheck = !stdenv.hostPlatform.isMusl /* iconv binary */;
+=======
+  doCheck = !stdenv.hostPlatform.isMusl /* iconv binary */ && !stdenv.hostPlatform.isDarwin;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   passthru.tests = {
     nixos = nixosTests.man;

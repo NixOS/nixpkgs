@@ -23,7 +23,10 @@
 
 , src
 , version
+<<<<<<< HEAD
 , extraPatches ? [ ]
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , pluginOverrides ? { }
 , disableAllPlugins ? false
 
@@ -46,6 +49,7 @@ let
 
   pluginWrapperBins = concatMap (p: p.wrapperBins) (attrValues enabledPlugins);
 in
+<<<<<<< HEAD
 python3Packages.buildPythonApplication {
   pname = "beets";
   inherit src version;
@@ -57,6 +61,21 @@ python3Packages.buildPythonApplication {
     substituteInPlace beets/util/artresizer.py \
       --replace "Image.ANTIALIAS" "Image.Resampling.LANCZOS"
   '';
+=======
+python3Packages.buildPythonApplication rec {
+  pname = "beets";
+  inherit src version;
+
+  patches = [
+    # Bash completion fix for Nix
+    ./patches/bash-completion-always-print.patch
+    (fetchpatch {
+      # Fix unidecode>=1.3.5 compat
+      url = "https://github.com/beetbox/beets/commit/5ae1e0f3c8d3a450cb39f7933aa49bb78c2bc0d9.patch";
+      hash = "sha256-gqkrE+U1j3tt1qPRJufTGS/GftaSw/gweXunO/mCVG8=";
+    })
+  ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   propagatedBuildInputs = with python3Packages; [
     confuse
@@ -70,7 +89,10 @@ python3Packages.buildPythonApplication {
     pyyaml
     reflink
     unidecode
+<<<<<<< HEAD
     typing-extensions
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ] ++ (concatMap (p: p.propagatedBuildInputs) (attrValues enabledPlugins));
 
   nativeBuildInputs = [
@@ -181,6 +203,9 @@ EOF
     license = licenses.mit;
     maintainers = with maintainers; [ aszlig doronbehar lovesegfault pjones ];
     platforms = platforms.linux;
+<<<<<<< HEAD
     mainProgram = "beet";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

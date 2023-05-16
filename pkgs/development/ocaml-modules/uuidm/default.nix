@@ -11,10 +11,13 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-/GZbkJVDQu1UY8SliK282kUWAVMfOnpQadUlRT/tJrM=";
   };
 
+<<<<<<< HEAD
   postPatch = ''
     substituteInPlace pkg/META --replace "bytes" ""
   '';
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   strictDeps = true;
 
   nativeBuildInputs = [ ocaml findlib ocamlbuild topkg ];

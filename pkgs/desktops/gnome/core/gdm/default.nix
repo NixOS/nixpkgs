@@ -1,5 +1,9 @@
+<<<<<<< HEAD
 { lib
 , stdenv
+=======
+{ lib, stdenv
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , fetchurl
 , fetchpatch
 , substituteAll
@@ -9,6 +13,10 @@
 , pkg-config
 , glib
 , itstool
+<<<<<<< HEAD
+=======
+, libxml2
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , xorg
 , accountsservice
 , libX11
@@ -24,12 +32,19 @@
 , audit
 , gobject-introspection
 , plymouth
+<<<<<<< HEAD
+=======
+, librsvg
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , coreutils
 , xorgserver
 , xwayland
 , dbus
 , nixos-icons
+<<<<<<< HEAD
 , runCommand
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 let
@@ -41,21 +56,33 @@ let
 
 in
 
+<<<<<<< HEAD
 stdenv.mkDerivation (finalAttrs: {
+=======
+stdenv.mkDerivation rec {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pname = "gdm";
   version = "44.1";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
+<<<<<<< HEAD
     url = "mirror://gnome/sources/gdm/${lib.versions.major finalAttrs.version}/${finalAttrs.pname}-${finalAttrs.version}.tar.xz";
+=======
+    url = "mirror://gnome/sources/gdm/${lib.versions.major version}/${pname}-${version}.tar.xz";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     sha256 = "aCZrOr59KPxGnQBnqsnF2rsMp5UswffCOKBJUfPcWw0=";
   };
 
   mesonFlags = [
     "-Dgdm-xsession=true"
     # TODO: Setup a default-path? https://gitlab.gnome.org/GNOME/gdm/-/blob/6fc40ac6aa37c8ad87c32f0b1a5d813d34bf7770/meson_options.txt#L6
+<<<<<<< HEAD
     "-Dinitial-vt=${finalAttrs.passthru.initialVT}"
+=======
+    "-Dinitial-vt=${passthru.initialVT}"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "-Dudev-dir=${placeholder "out"}/lib/udev/rules.d"
     "-Dsystemdsystemunitdir=${placeholder "out"}/lib/systemd/system"
     "-Dsystemduserunitdir=${placeholder "out"}/lib/systemd/user"
@@ -131,12 +158,17 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   preInstall = ''
+<<<<<<< HEAD
     install -D ${override} $DESTDIR/$out/share/glib-2.0/schemas/org.gnome.login-screen.gschema.override
+=======
+    install -D ${override} ${DESTDIR}/$out/share/glib-2.0/schemas/org.gnome.login-screen.gschema.override
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '';
 
   postInstall = ''
     # Move stuff from DESTDIR to proper location.
     # We use rsync to merge the directories.
+<<<<<<< HEAD
     rsync --archive "$DESTDIR/etc" "$out"
     rm --recursive "$DESTDIR/etc"
     for o in $(getAllOutputNames); do
@@ -146,6 +178,17 @@ stdenv.mkDerivation (finalAttrs: {
     done
     # Ensure the DESTDIR is removed.
     rmdir "$DESTDIR/nix/store" "$DESTDIR/nix" "$DESTDIR"
+=======
+    rsync --archive "${DESTDIR}/etc" "$out"
+    rm --recursive "${DESTDIR}/etc"
+    for o in $(getAllOutputNames); do
+        if [[ "$o" = "debug" ]]; then continue; fi
+        rsync --archive "${DESTDIR}/''${!o}" "$(dirname "''${!o}")"
+        rm --recursive "${DESTDIR}/''${!o}"
+    done
+    # Ensure the DESTDIR is removed.
+    rmdir "${DESTDIR}/nix/store" "${DESTDIR}/nix" "${DESTDIR}"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     # We are setting DESTDIR so the post-install script does not compile the schemas.
     glib-compile-schemas "$out/share/glib-2.0/schemas"
@@ -170,6 +213,7 @@ stdenv.mkDerivation (finalAttrs: {
     # Used in GDM NixOS module
     # Don't remove.
     initialVT = "7";
+<<<<<<< HEAD
     dconfDb = "${finalAttrs.finalPackage}/share/gdm/greeter-dconf-defaults";
     dconfProfile = "user-db:user\nfile-db:${finalAttrs.passthru.dconfDb}";
 
@@ -182,6 +226,8 @@ stdenv.mkDerivation (finalAttrs: {
         touch $out
       '';
     };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   meta = with lib; {
@@ -191,4 +237,8 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = teams.gnome.members;
     platforms = platforms.linux;
   };
+<<<<<<< HEAD
 })
+=======
+}
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)

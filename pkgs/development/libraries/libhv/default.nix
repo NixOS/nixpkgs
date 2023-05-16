@@ -2,13 +2,21 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libhv";
+<<<<<<< HEAD
   version = "1.3.1";
+=======
+  version = "1.3.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "ithewei";
     repo = "libhv";
     rev = "v${finalAttrs.version}";
+<<<<<<< HEAD
     hash = "sha256-hzqU06Gc/vNqRKe3DTdP4AihJqeuNpt2mn4GlLuGU6U=";
+=======
+    hash = "sha256-LMk8B/1EofcQcIF3kGmtPdM2s+/gN9ctcsybwTpf4Po=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ cmake ];

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 { lib
 , stdenv
 , fetchurl
@@ -10,6 +11,10 @@
 , libconfig
 , pkg-config
 }:
+=======
+{ lib, stdenv, fetchurl, cmake, libsodium, ncurses, libopus, msgpack
+, libvpx, check, libconfig, pkg-config }:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 let buildToxAV = !stdenv.isAarch32;
 in stdenv.mkDerivation rec {
@@ -24,6 +29,7 @@ in stdenv.mkDerivation rec {
       sha256 = "sha256-8pQFN5mIY1k+KLxqa19W8JZ19s2KKDJre8MbSDbAiUI=";
     };
 
+<<<<<<< HEAD
   cmakeFlags = [
     "-DDHT_BOOTSTRAP=ON"
     "-DBOOTSTRAP_DAEMON=ON"
@@ -36,6 +42,16 @@ in stdenv.mkDerivation rec {
   ] ++ lib.optionals buildToxAV [
     libopus
     libvpx
+=======
+  cmakeFlags =
+    [ "-DBUILD_NTOX=ON" "-DDHT_BOOTSTRAP=ON" "-DBOOTSTRAP_DAEMON=ON" ]
+    ++ lib.optional buildToxAV "-DMUST_BUILD_TOXAV=ON";
+
+  buildInputs = [
+    libsodium msgpack ncurses libconfig
+  ] ++ lib.optionals buildToxAV [
+    libopus libvpx
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   nativeBuildInputs = [ cmake pkg-config ];

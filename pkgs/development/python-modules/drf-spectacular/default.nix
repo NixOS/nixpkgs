@@ -28,13 +28,21 @@
 
 buildPythonPackage rec {
   pname = "drf-spectacular";
+<<<<<<< HEAD
   version = "0.26.4";
+=======
+  version = "0.26.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "tfranzel";
     repo = "drf-spectacular";
     rev = "refs/tags/${version}";
+<<<<<<< HEAD
     hash = "sha256-f8x4QOt2EbDv+NlYAmpzXrCdT+q4wLGIrDsuUd45j2U=";
+=======
+    hash = "sha256-wwR7ZdbWFNRgxQubdgriDke5W6u7VNsNZV9xqQypSrY=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [
@@ -78,6 +86,10 @@ buildPythonPackage rec {
     homepage = "https://github.com/tfranzel/drf-spectacular";
     changelog = "https://github.com/tfranzel/drf-spectacular/releases/tag/${version}";
     license = licenses.bsd3;
+<<<<<<< HEAD
     maintainers = with maintainers; [ ];
+=======
+    maintainers = with maintainers; [ SuperSandro2000 ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

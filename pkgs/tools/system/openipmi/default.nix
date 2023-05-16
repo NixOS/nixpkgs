@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 { stdenv, fetchurl, popt, ncurses, python3, readline, lib }:
+=======
+{ stdenv, fetchurl, popt, ncurses, python39, readline, lib }:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 stdenv.mkDerivation rec {
   pname = "OpenIPMI";
@@ -9,7 +13,11 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-+1Pp6l4mgc+K982gJLGgBExnX4QRbKJ66WFsi3rZW0k=";
   };
 
+<<<<<<< HEAD
   buildInputs = [ ncurses popt python3 readline ];
+=======
+  buildInputs = [ ncurses popt python39 readline ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   outputs = [ "out" "lib" "dev" "man" ];
 

@@ -4,7 +4,10 @@
 , fetchurl
 , autoPatchelfHook
 , dpkg
+<<<<<<< HEAD
 , wrapGAppsHook
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , ...
 }:
 with lib;
@@ -17,7 +20,11 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-+xiXEwSSxpt1/Eu9g57/L+Il/Av+a/mgGBQl/4LKR74=";
   };
 
+<<<<<<< HEAD
   nativeBuildInputs = [ autoPatchelfHook dpkg wrapGAppsHook ];
+=======
+  nativeBuildInputs = [ autoPatchelfHook dpkg ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   buildInputs = with pkgs;[
     alsa-lib

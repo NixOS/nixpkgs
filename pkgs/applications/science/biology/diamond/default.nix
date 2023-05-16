@@ -2,13 +2,21 @@
 
 stdenv.mkDerivation rec {
   pname = "diamond";
+<<<<<<< HEAD
   version = "2.1.8";
+=======
+  version = "2.1.6";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "bbuchfink";
     repo = "diamond";
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-6L/eS3shfJ33bsXo1BaCO4lKklh2KbOIO2tZsvwcjnA=";
+=======
+    sha256 = "sha256-2FxJTF/fF/Xi0TglXDlf3sSwncv2f6gc129nTbk8YU0=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
 

@@ -39,6 +39,7 @@ let
       };
     };
 
+<<<<<<< HEAD
     updates-nix-store = stdenv.mkDerivation {
       name = "updates-nix-store";
       strictDeps = false;
@@ -56,6 +57,8 @@ let
       };
     };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     split-string = stdenv.mkDerivation {
       name = "split-string";
       strictDeps = false;
@@ -76,7 +79,11 @@ let
 in
 stdenv.mkDerivation {
   name = "test-patch-shebangs";
+<<<<<<< HEAD
   passthru = { inherit (tests) bad-shebang ignores-nix-store updates-nix-store split-string; };
+=======
+  passthru = { inherit (tests) bad-shebang ignores-nix-store split-string; };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   buildCommand = ''
     validate() {
       local name=$1

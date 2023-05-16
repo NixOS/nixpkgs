@@ -11,13 +11,17 @@
 , pythonOlder
 , setuptools
 , setuptools-scm
+<<<<<<< HEAD
 , tomli
 , tomli-w
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , wheel
 }:
 
 buildPythonPackage rec {
   pname = "pip-tools";
+<<<<<<< HEAD
   version = "7.3.0";
   format = "pyproject";
 
@@ -26,6 +30,16 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-jpyZEn/gJMAltGoLLRXHvUfxjzMibPczDTVJNmP8HR0=";
+=======
+  version = "6.13.0";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.7";
+
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-YdRr0uuAFu1Kkk4Zbm5bCiaM07q9eeWTBIcg2yNSK7E=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   patches = [ ./fix-setup-py-bad-syntax-detection.patch ];
@@ -41,6 +55,7 @@ buildPythonPackage rec {
     pip
     setuptools
     wheel
+<<<<<<< HEAD
   ] ++ lib.optionals (pythonOlder "3.11") [
     tomli
   ];
@@ -51,6 +66,13 @@ buildPythonPackage rec {
     pytest-xdist
     pytestCheckHook
     tomli-w
+=======
+  ];
+
+  nativeCheckInputs = [
+    pytest-xdist
+    pytestCheckHook
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   preCheck = lib.optionalString (stdenv.isDarwin && stdenv.isAarch64) ''

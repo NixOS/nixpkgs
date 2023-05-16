@@ -13,13 +13,21 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "sssd";
+<<<<<<< HEAD
   version = "2.9.1";
+=======
+  version = "2.9.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "SSSD";
     repo = pname;
     rev = version;
+<<<<<<< HEAD
     sha256 = "sha256-OafSo28MN92py33foE8oMkPUmV9WUUOkKWJgm0i7MJU=";
+=======
+    sha256 = "sha256-H9Snh2RzbnjGPqvC9fJHeZvAkGX/O/vmVsl143yb194=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   postPatch = ''

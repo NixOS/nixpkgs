@@ -1,5 +1,8 @@
 { lib
+<<<<<<< HEAD
 , argcomplete
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , backoff
 , buildPythonPackage
 , fetchFromGitHub
@@ -18,7 +21,11 @@
 
 buildPythonPackage rec {
   pname = "censys";
+<<<<<<< HEAD
   version = "2.2.5";
+=======
+  version = "2.2.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -27,7 +34,11 @@ buildPythonPackage rec {
     owner = "censys";
     repo = "censys-python";
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-D25deUPMWc6KRlwytSfZqoPeJGmTV304slUP9gCyrUw=";
+=======
+    hash = "sha256-CtW6EN9oH/OIZ4XaoSuKlMYK9Mh/ewRs6y34xbfY234=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [
@@ -36,7 +47,10 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
+<<<<<<< HEAD
     argcomplete
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     backoff
     requests
     rich
@@ -75,7 +89,10 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python API wrapper for the Censys Search Engine (censys.io)";
     homepage = "https://github.com/censys/censys-python";
+<<<<<<< HEAD
     changelog = "https://github.com/censys/censys-python/releases/tag/v${version}";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     license = with licenses; [ asl20 ];
     maintainers = with maintainers; [ fab ];
   };

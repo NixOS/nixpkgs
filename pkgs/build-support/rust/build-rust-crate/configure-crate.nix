@@ -21,7 +21,11 @@
 , verbose
 , workspace_member }:
 let version_ = lib.splitString "-" crateVersion;
+<<<<<<< HEAD
     versionPre = lib.optionalString (lib.tail version_ != []) (lib.elemAt version_ 1);
+=======
+    versionPre = if lib.tail version_ == [] then "" else lib.elemAt version_ 1;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     version = lib.splitVersion (lib.head version_);
     rustcOpts = lib.foldl' (opts: opt: opts + " " + opt)
         (if release then "-C opt-level=3" else "-C debuginfo=2")

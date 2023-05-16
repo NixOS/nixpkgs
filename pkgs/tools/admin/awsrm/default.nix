@@ -11,7 +11,11 @@ buildGoModule rec {
     sha256 = "sha256-KAujqYDtZbCBRO5WK9b9mxqe84ZllbBoO2tLnDH/bdo=";
   };
 
+<<<<<<< HEAD
   vendorHash = "sha256-CldEAeiFH7gdFNLbIe/oTzs8Pdnde7EqLr7vP7SMDGU=";
+=======
+  vendorSha256 = "sha256-CldEAeiFH7gdFNLbIe/oTzs8Pdnde7EqLr7vP7SMDGU=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   ldflags =
     let t = "github.com/jckuester/awsrm/internal";

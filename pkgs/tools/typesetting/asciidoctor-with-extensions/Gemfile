@@ -7,8 +7,13 @@ gem 'asciidoctor-html5s'
 gem 'asciidoctor-mathematical'
 gem 'asciidoctor-multipage'
 gem 'asciidoctor-pdf'
+<<<<<<< HEAD
 gem 'asciidoctor-reducer'
 gem 'asciidoctor-revealjs'
+=======
+gem 'asciidoctor-revealjs'
+gem 'asciidoctor-rouge'
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 gem 'coderay'
 gem 'pygments.rb'
 gem 'rouge'

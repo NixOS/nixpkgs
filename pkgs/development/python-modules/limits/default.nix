@@ -4,7 +4,10 @@
 , fetchFromGitHub
 , etcd3
 , hiro
+<<<<<<< HEAD
 , importlib-resources
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , packaging
 , pymemcache
 , pymongo
@@ -19,7 +22,11 @@
 
 buildPythonPackage rec {
   pname = "limits";
+<<<<<<< HEAD
   version = "3.5.0";
+=======
+  version = "3.2.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -34,12 +41,19 @@ buildPythonPackage rec {
     postFetch = ''
       rm "$out/limits/_version.py"
     '';
+<<<<<<< HEAD
     hash = "sha256-O4yENynvon9xM8F/r0NMSpSh6Hl2EoTcXgldrwzo24M=";
+=======
+    hash = "sha256-zMU2MU7MFTWSig2j1PaBLPtKM5/7gNkFajKXw3A+fIQ=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [
     deprecated
+<<<<<<< HEAD
     importlib-resources
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     packaging
     setuptools
     typing-extensions

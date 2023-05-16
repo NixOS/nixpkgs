@@ -20,7 +20,11 @@ buildGoModule rec {
     })
   ];
 
+<<<<<<< HEAD
   vendorHash = "sha256-qhffg/s1RZFNW0nHLbJ89yqLzdC72ARXdbSfMLJK2pQ=";
+=======
+  vendorSha256 = "sha256-qhffg/s1RZFNW0nHLbJ89yqLzdC72ARXdbSfMLJK2pQ=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   postInstall = ''
     mv $out/bin/{cmd,kubectl-doctor}

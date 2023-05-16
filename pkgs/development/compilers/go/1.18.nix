@@ -166,8 +166,12 @@ stdenv.mkDerivation rec {
     runHook preInstall
     mkdir -p $GOROOT_FINAL
     cp -a bin pkg src lib misc api doc $GOROOT_FINAL
+<<<<<<< HEAD
     mkdir -p $out/bin
     ln -s $GOROOT_FINAL/bin/* $out/bin
+=======
+    ln -s $GOROOT_FINAL/bin $out/bin
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     runHook postInstall
   '';
 

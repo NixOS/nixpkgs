@@ -22,8 +22,11 @@ nimPackages.buildNimPackage rec {
 
   nimDefines = [ "nimcore" "nimsuggest" "debugCommunication" "debugLogging" ];
 
+<<<<<<< HEAD
   doCheck = false;
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   meta = with lib; {
     description = "Language Server Protocol implementation for Nim";
     homepage = "https://github.com/PMunch/nimlsp";

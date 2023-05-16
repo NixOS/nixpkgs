@@ -35,13 +35,19 @@ let
     "dovecot"
     "fastly"
     "fritzbox"
+<<<<<<< HEAD
     "graphite"
     "idrac"
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "influxdb"
     "ipmi"
     "json"
     "jitsi"
+<<<<<<< HEAD
     "junos-czerwonk"
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "kea"
     "keylight"
     "knot"
@@ -50,7 +56,10 @@ let
     "mikrotik"
     "minio"
     "modemmanager"
+<<<<<<< HEAD
     "mysqld"
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "nextcloud"
     "nginx"
     "nginxlog"
@@ -58,7 +67,10 @@ let
     "nut"
     "openldap"
     "openvpn"
+<<<<<<< HEAD
     "php-fpm"
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "pihole"
     "postfix"
     "postgres"
@@ -68,7 +80,10 @@ let
     "redis"
     "rspamd"
     "rtl_433"
+<<<<<<< HEAD
     "scaphandre"
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "script"
     "shelly"
     "snmp"
@@ -298,12 +313,15 @@ in
           or 'services.prometheus.exporters.mail.configFile'.
       '';
     } {
+<<<<<<< HEAD
       assertion = cfg.mysqld.runAsLocalSuperUser -> config.services.mysql.enable;
       message = ''
         The exporter is configured to run as 'services.mysql.user', but
           'services.mysql.enable' is set to false.
       '';
     } {
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       assertion = cfg.sql.enable -> (
         (cfg.sql.configFile == null) != (cfg.sql.configuration == null)
       );
@@ -311,6 +329,7 @@ in
         Please specify either 'services.prometheus.exporters.sql.configuration' or
           'services.prometheus.exporters.sql.configFile'
       '';
+<<<<<<< HEAD
     } {
       assertion = cfg.scaphandre.enable -> (pkgs.stdenv.targetPlatform.isx86_64 == true);
       message = ''
@@ -334,6 +353,8 @@ in
         Please ensure you have either `services.prometheus.exporters.idrac.configuration'
           or `services.prometheus.exporters.idrac.configurationPath' set!
       '';
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     } ] ++ (flip map (attrNames exporterOpts) (exporter: {
       assertion = cfg.${exporter}.firewallFilter != null -> cfg.${exporter}.openFirewall;
       message = ''
@@ -341,12 +362,16 @@ in
         `openFirewall' is set to `true'!
       '';
     })) ++ config.services.prometheus.exporters.assertions;
+<<<<<<< HEAD
     warnings = [(mkIf (config.services.prometheus.exporters.idrac.enable && config.services.prometheus.exporters.idrac.configurationPath != null) ''
         Configuration file in `services.prometheus.exporters.idrac.configurationPath` may override
         `services.prometheus.exporters.idrac.listenAddress` and/or `services.prometheus.exporters.idrac.port`.
         Consider using `services.prometheus.exporters.idrac.configuration` instead.
       ''
     )] ++ config.services.prometheus.exporters.warnings;
+=======
+    warnings = config.services.prometheus.exporters.warnings;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   }] ++ [(mkIf config.services.minio.enable {
     services.prometheus.exporters.minio.minioAddress  = mkDefault "http://localhost:9000";
     services.prometheus.exporters.minio.minioAccessKey = mkDefault config.services.minio.accessKey;

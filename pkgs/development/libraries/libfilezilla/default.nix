@@ -24,10 +24,13 @@ stdenv.mkDerivation rec {
   buildInputs = [ gettext gnutls nettle libxcrypt ]
     ++ lib.optionals stdenv.isDarwin [ libiconv ApplicationServices ];
 
+<<<<<<< HEAD
   preBuild = lib.optionalString (stdenv.isDarwin && lib.versionOlder stdenv.hostPlatform.darwinMinVersion "11") ''
     export MACOSX_DEPLOYMENT_TARGET=10.13  # for futimens()
   '';
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   enableParallelBuilding = true;
 
   meta = with lib; {

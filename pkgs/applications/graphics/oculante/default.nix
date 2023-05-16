@@ -21,13 +21,21 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "oculante";
+<<<<<<< HEAD
   version = "0.7.4";
+=======
+  version = "0.6.63";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "woelper";
     repo = pname;
     rev = version;
+<<<<<<< HEAD
     hash = "sha256-EyGbCOPc+ClsBUQCi9PPXeU7PmiUSANH20DGPuvgfAM=";
+=======
+    sha256 = "sha256-ynxGpx8LLcd4/n9hz/bbhpZUxqX1sPS7LFYPZ22hTxo=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   cargoLock = {
@@ -60,10 +68,13 @@ rustPlatform.buildRustPackage rec {
     darwin.libobjc
   ];
 
+<<<<<<< HEAD
   checkFlags = [
     "--skip=bench"
   ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   postFixup = lib.optionalString stdenv.isLinux ''
     patchelf $out/bin/oculante --add-rpath ${lib.makeLibraryPath [ libxkbcommon libX11 ]}
   '';

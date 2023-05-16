@@ -2,9 +2,22 @@
 , stdenv
 , fetchgit
 , fetchFromGitHub
+<<<<<<< HEAD
 , runCommand
 , which
 , rustPlatform
+=======
+, fetchurl
+, writeShellScript
+, runCommand
+, which
+, formats
+, rustPlatform
+, jq
+, nix-prefetch-git
+, xe
+, curl
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , emscripten
 , Security
 , callPackage
@@ -34,7 +47,11 @@ let
     fetchSubmodules = true;
   };
 
+<<<<<<< HEAD
   update-all-grammars = callPackage ./update.nix { };
+=======
+  update-all-grammars = callPackage ./update.nix {};
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   fetchGrammar = (v: fetchgit { inherit (v) url rev sha256 fetchSubmodules; });
 
@@ -55,7 +72,10 @@ let
           inherit version;
           src = grammar.src or (fetchGrammar grammar);
           location = grammar.location or null;
+<<<<<<< HEAD
           generate = grammar.generate or false;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         };
       grammars' = import ./grammars { inherit lib; } // extraGrammars;
       grammars = grammars' //
@@ -65,8 +85,12 @@ let
         { tree-sitter-typescript = grammars'.tree-sitter-typescript // { location = "typescript"; }; } //
         { tree-sitter-tsx = grammars'.tree-sitter-typescript // { location = "tsx"; }; } //
         { tree-sitter-markdown = grammars'.tree-sitter-markdown // { location = "tree-sitter-markdown"; }; } //
+<<<<<<< HEAD
         { tree-sitter-markdown-inline = grammars'.tree-sitter-markdown // { language = "markdown_inline"; location = "tree-sitter-markdown-inline"; }; } //
         { tree-sitter-wing = grammars'.tree-sitter-wing // { location = "libs/tree-sitter-wing"; generate = true; }; };
+=======
+        { tree-sitter-markdown-inline = grammars'.tree-sitter-markdown // { language = "markdown_inline"; location = "tree-sitter-markdown-inline"; }; };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     in
     lib.mapAttrs build (grammars);
 
@@ -106,17 +130,28 @@ rustPlatform.buildRustPackage {
   inherit src version cargoSha256;
 
   buildInputs =
+<<<<<<< HEAD
     lib.optionals stdenv.isDarwin [ Security CoreServices ];
+=======
+    lib.optionals stdenv.isDarwin [ Security CoreServices];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nativeBuildInputs =
     [ which ]
     ++ lib.optionals webUISupport [ emscripten ];
 
   postPatch = lib.optionalString (!webUISupport) ''
     # remove web interface
+<<<<<<< HEAD
     sed -e '/pub mod playground/d' \
         -i cli/src/lib.rs
     sed -e 's/playground,//' \
         -e 's/playground::serve(&current_dir.*$/println!("ERROR: web-ui is not available in this nixpkgs build; enable the webUISupport"); std::process::exit(1);/' \
+=======
+    sed -e '/pub mod web_ui/d' \
+        -i cli/src/lib.rs
+    sed -e 's/web_ui,//' \
+        -e 's/web_ui::serve(&current_dir.*$/println!("ERROR: web-ui is not available in this nixpkgs build; enable the webUISupport"); std::process::exit(1);/' \
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         -i cli/src/main.rs
   '';
 
@@ -163,6 +198,10 @@ rustPlatform.buildRustPackage {
       * Dependency-free so that the runtime library (which is written in pure C) can be embedded in any application
     '';
     license = licenses.mit;
+<<<<<<< HEAD
     maintainers = with maintainers; [ oxalica Profpatsch ];
+=======
+    maintainers = with maintainers; [ Profpatsch oxalica ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

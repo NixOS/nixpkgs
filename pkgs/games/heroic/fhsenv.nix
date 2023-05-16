@@ -1,4 +1,9 @@
+<<<<<<< HEAD
 { buildFHSEnv
+=======
+{ lib
+, buildFHSEnv
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , heroic-unwrapped
 , extraPkgs ? pkgs: [ ]
 , extraLibraries ? pkgs: [ ]
@@ -9,12 +14,15 @@ buildFHSEnv {
 
   runScript = "heroic";
 
+<<<<<<< HEAD
   # Many Wine and native games need 32-bit libraries.
   multiArch = true;
 
   # required by Electron
   unshareIpc = false;
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   targetPkgs = pkgs: with pkgs; [
     heroic-unwrapped
     gamemode
@@ -86,6 +94,10 @@ buildFHSEnv {
     libpulseaudio
     libselinux
     libsndfile
+<<<<<<< HEAD
+=======
+    libsndfile
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     libsoup
     libtheora
     libtiff
@@ -112,6 +124,10 @@ buildFHSEnv {
     speex
     sqlite
     udev
+<<<<<<< HEAD
+=======
+    udev
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     unixODBC
     util-linux
     v4l-utils

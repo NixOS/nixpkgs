@@ -16,7 +16,11 @@ stdenv.mkDerivation {
   inherit version;
 
   inherit src;
+<<<<<<< HEAD
   sourceRoot = "${src.name}/compiler-rt";
+=======
+  sourceRoot = "source/compiler-rt";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nativeBuildInputs = [ cmake python3 libllvm.dev ]
     ++ lib.optional stdenv.isDarwin xcbuild.xcrun;

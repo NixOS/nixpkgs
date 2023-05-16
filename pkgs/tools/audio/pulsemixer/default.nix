@@ -31,6 +31,9 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = [ maintainers.woffs ];
     platforms = platforms.all;
+<<<<<<< HEAD
     mainProgram = "pulsemixer";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

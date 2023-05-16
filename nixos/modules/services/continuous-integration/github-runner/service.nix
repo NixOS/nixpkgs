@@ -22,7 +22,10 @@ with lib;
 
 let
   workDir = if cfg.workDir == null then runtimeDir else cfg.workDir;
+<<<<<<< HEAD
   package = cfg.package.override { inherit (cfg) nodeRuntimes; };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 in
 {
   description = "GitHub Actions runner";
@@ -48,7 +51,11 @@ in
 
   serviceConfig = mkMerge [
     {
+<<<<<<< HEAD
       ExecStart = "${package}/bin/Runner.Listener run --startuptype service";
+=======
+      ExecStart = "${cfg.package}/bin/Runner.Listener run --startuptype service";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
       # Does the following, sequentially:
       # - If the module configuration or the token has changed, purge the state directory,
@@ -150,7 +157,11 @@ in
               else
                 args+=(--token "$token")
               fi
+<<<<<<< HEAD
               ${package}/bin/Runner.Listener configure "''${args[@]}"
+=======
+              ${cfg.package}/bin/Runner.Listener configure "''${args[@]}"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
               # Move the automatically created _diag dir to the logs dir
               mkdir -p  "$STATE_DIRECTORY/_diag"
               cp    -r  "$STATE_DIRECTORY/_diag/." "$LOGS_DIRECTORY/"

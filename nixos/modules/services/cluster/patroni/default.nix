@@ -6,6 +6,12 @@ let
   defaultGroup = "patroni";
   format = pkgs.formats.yaml { };
 
+<<<<<<< HEAD
+=======
+  #boto doesn't support python 3.10 yet
+  patroni = pkgs.patroni.override { pythonPackages = pkgs.python39Packages; };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   configFileName = "patroni-${cfg.scope}-${cfg.name}.yaml";
   configFile = format.generate configFileName cfg.settings;
 in
@@ -105,7 +111,11 @@ in
     };
 
     otherNodesIps = mkOption {
+<<<<<<< HEAD
       type = types.listOf types.str;
+=======
+      type = types.listOf types.string;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       example = [ "192.168.1.2" "192.168.1.3" ];
       description = mdDoc ''
         IP addresses of the other nodes.
@@ -221,7 +231,11 @@ in
 
         script = ''
           ${concatStringsSep "\n" (attrValues (mapAttrs (name: path: ''export ${name}="$(< ${escapeShellArg path})"'') cfg.environmentFiles))}
+<<<<<<< HEAD
           exec ${pkgs.patroni}/bin/patroni ${configFile}
+=======
+          exec ${patroni}/bin/patroni ${configFile}
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         '';
 
         serviceConfig = mkMerge [
@@ -249,7 +263,11 @@ in
     '';
 
     environment.systemPackages = [
+<<<<<<< HEAD
       pkgs.patroni
+=======
+      patroni
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       cfg.postgresqlPackage
       (mkIf cfg.raft pkgs.python310Packages.pysyncobj)
     ];

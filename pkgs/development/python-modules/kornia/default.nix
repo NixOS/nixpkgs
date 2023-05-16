@@ -2,22 +2,37 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pythonOlder
+<<<<<<< HEAD
+=======
+, pytestCheckHook
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , packaging
 , torch
 }:
 
 buildPythonPackage rec {
   pname = "kornia";
+<<<<<<< HEAD
   version = "0.7.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
+=======
+  version = "0.6.12";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.7";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-XcQXKn4F3DIgn+XQcN5ZcGZLehd/IPBgLuGzIkPSxZg=";
+=======
+    hash = "sha256-qLJos1ivEws/jFK4j0Kp1ij9J9ZwCoHFRYXnlYxwPFY=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [

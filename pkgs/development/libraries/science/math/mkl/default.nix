@@ -124,7 +124,11 @@ in stdenvNoCC.mkDerivation ({
   '' +
     (if enableStatic then ''
       install -Dm0644 -t $out/lib opt/intel/oneapi/mkl/${mklVersion}/lib/${lib.optionalString stdenvNoCC.isLinux "intel64"}/*.a
+<<<<<<< HEAD
       install -Dm0644 -t $out/lib/pkgconfig opt/intel/oneapi/mkl/${mklVersion}/lib/pkgconfig/*.pc
+=======
+      install -Dm0644 -t $out/lib/pkgconfig opt/intel/oneapi/mkl/${mklVersion}/tools/pkgconfig/*.pc
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     '' else ''
       cp opt/intel/oneapi/mkl/${mklVersion}/lib/${lib.optionalString stdenvNoCC.isLinux "intel64"}/*${shlibExt}* $out/lib
       install -Dm0644 -t $out/lib/pkgconfig opt/intel/oneapi/mkl/${mklVersion}/lib/pkgconfig/*dynamic*.pc

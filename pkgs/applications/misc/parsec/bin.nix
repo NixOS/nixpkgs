@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 { stdenvNoCC
 , stdenv
 , lib
@@ -20,6 +21,18 @@
 , libpng
 , libjpeg8
 , curl
+=======
+{ stdenvNoCC, stdenv
+, lib
+, dpkg, autoPatchelfHook, makeWrapper
+, fetchurl
+, alsa-lib, openssl, udev
+, libglvnd
+, libX11, libXcursor, libXi, libXrandr
+, libpulseaudio
+, libva
+, ffmpeg
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 stdenvNoCC.mkDerivation {
@@ -27,7 +40,11 @@ stdenvNoCC.mkDerivation {
   version = "150_86e";
 
   src = fetchurl {
+<<<<<<< HEAD
     url = "https://web.archive.org/web/20230531105208/https://builds.parsec.app/package/parsec-linux.deb";
+=======
+    url = "https://web.archive.org/web/20230124210253/https://builds.parsecgaming.com/package/parsec-linux.deb";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     sha256 = "sha256-wwBy86TdrHaH9ia40yh24yd5G84WTXREihR+9I6o6uU=";
   };
 
@@ -56,14 +73,20 @@ stdenvNoCC.mkDerivation {
     libpulseaudio
     libva
     ffmpeg
+<<<<<<< HEAD
     libpng
     libjpeg8
     curl
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     libX11
     libXcursor
     libXi
     libXrandr
+<<<<<<< HEAD
     libXfixes
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   prepareParsec = ''
@@ -90,6 +113,7 @@ stdenvNoCC.mkDerivation {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   # Only the main binary needs to be patched, the wrapper script handles
   # everything else. The libraries in `share/parsec/skel` would otherwise
   # contain dangling references when copied out of the nix store.
@@ -103,6 +127,8 @@ stdenvNoCC.mkDerivation {
     runHook postFixup
   '';
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   meta = with lib; {
     homepage = "https://parsecgaming.com/";
     changelog = "https://parsec.app/changelog";

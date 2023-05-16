@@ -16,14 +16,22 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "catfish";
+<<<<<<< HEAD
   version = "4.18.0";
+=======
+  version = "4.16.4";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitLab {
     domain = "gitlab.xfce.org";
     owner = "apps";
     repo = pname;
     rev = "${pname}-${version}";
+<<<<<<< HEAD
     sha256 = "sha256-hfbIgSFn48++eGrJXzhXRxhWkrjgTYsr7BX/n0EXhGo=";
+=======
+    sha256 = "sha256-hdrEFdBa/4i/PF7VyEI7ObiJXLIRW+RFSe8yGnUpqRc=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

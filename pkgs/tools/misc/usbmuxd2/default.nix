@@ -1,7 +1,10 @@
 { lib
 , clangStdenv
 , fetchFromGitHub
+<<<<<<< HEAD
 , fetchpatch
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , autoreconfHook
 , pkg-config
 , libimobiledevice
@@ -17,7 +20,11 @@
       owner = "tihmstar";
       repo = pname;
       rev = "017d71edb0a12ff4fa01a39d12cd297d8b3d8d34";
+<<<<<<< HEAD
       hash = "sha256-NrSl/BeKe3wahiYTHGRVSq3PLgQfu76kHCC5ziY7cgQ=";
+=======
+      sha256 = "sha256-NrSl/BeKe3wahiYTHGRVSq3PLgQfu76kHCC5ziY7cgQ=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
     postPatch = ''
       # Set package version so we don't require git
@@ -47,6 +54,7 @@ clangStdenv.mkDerivation rec {
     hash = "sha256-T9bt3KOJwFpdPeFuXfBhkBZNaNzix3Q3D47vASR+fVg=";
   };
 
+<<<<<<< HEAD
   patches = [
     (fetchpatch {
       name = "libplist-2.3.0-compatibility.patch";
@@ -55,6 +63,8 @@ clangStdenv.mkDerivation rec {
     })
   ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   postPatch = ''
     # Set package version so we don't require git
     sed -i '/AC_INIT/s/m4_esyscmd.*/${version})/' configure.ac

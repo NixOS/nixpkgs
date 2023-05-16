@@ -27,16 +27,27 @@
 
 buildPythonPackage rec {
   pname = "maestral";
+<<<<<<< HEAD
   version = "1.8.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
+=======
+  version = "1.7.2";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.7";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "SamSchott";
     repo = "maestral";
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-YYbdd0GLVKE7+Oi0mpQjqhFdjdlquk/XnIg5WrtKcfI=";
+=======
+    hash = "sha256-XyyEAeEQEc7MhGyXBBLZDqzBL7K+0dMMCKhr0iENvog=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [

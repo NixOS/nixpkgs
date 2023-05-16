@@ -17,6 +17,10 @@ rustPlatform.buildRustPackage rec {
   ]);
 
   cargoSha256 = "sha256:1dpdlzv96kpc25yf5jgsz9qldghyw35x382qpxhkadkn5dryzjvd";
+<<<<<<< HEAD
+=======
+  verifyCargoDeps = true;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   # Tests perform networking and therefore can't work in sandbox
   doCheck = false;

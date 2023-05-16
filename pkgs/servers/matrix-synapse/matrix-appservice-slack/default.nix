@@ -19,7 +19,11 @@ mkYarnPackage rec {
     owner = "matrix-org";
     repo = "matrix-appservice-slack";
     rev = data.version;
+<<<<<<< HEAD
     hash = data.srcHash;
+=======
+    sha256 = data.srcHash;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   offlineCache = fetchYarnDeps {

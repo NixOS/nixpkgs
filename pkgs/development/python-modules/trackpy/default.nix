@@ -2,6 +2,7 @@
 , stdenv
 , buildPythonPackage
 , fetchFromGitHub
+<<<<<<< HEAD
 , looseversion
 , matplotlib
 , numba
@@ -11,14 +12,27 @@
 , pythonOlder
 , pyyaml
 , scipy
+=======
+, numpy
+, scipy
+, six
+, pandas
+, pyyaml
+, matplotlib
+, numba
+, pytestCheckHook
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 buildPythonPackage rec {
   pname = "trackpy";
   version = "0.6.1";
+<<<<<<< HEAD
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "soft-matter";
@@ -28,6 +42,7 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
+<<<<<<< HEAD
     looseversion
     matplotlib
     numba
@@ -35,6 +50,15 @@ buildPythonPackage rec {
     pandas
     pyyaml
     scipy
+=======
+    numpy
+    scipy
+    six
+    pandas
+    pyyaml
+    matplotlib
+    numba
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   nativeCheckInputs = [
@@ -48,6 +72,7 @@ buildPythonPackage rec {
     echo "backend: ps" > $HOME/.matplotlib/matplotlibrc
   '';
 
+<<<<<<< HEAD
   pythonImportsCheck = [
     "trackpy"
   ];
@@ -59,5 +84,13 @@ buildPythonPackage rec {
     license = licenses.bsd3;
     maintainers = with maintainers; [ ];
     broken = (stdenv.isLinux && stdenv.isAarch64);
+=======
+  meta = with lib; {
+    broken = (stdenv.isLinux && stdenv.isAarch64);
+    description = "Particle-tracking toolkit";
+    homepage = "https://github.com/soft-matter/trackpy";
+    license = licenses.bsd3;
+    maintainers = [ maintainers.costrouc ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

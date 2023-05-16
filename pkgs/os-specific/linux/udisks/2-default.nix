@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 { lib, stdenv, fetchFromGitHub, substituteAll, pkg-config, gnused, autoreconfHook
+=======
+{ lib, stdenv, fetchFromGitHub, substituteAll, fetchpatch, pkg-config, gnused, autoreconfHook
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , gtk-doc, acl, systemd, glib, libatasmart, polkit, coreutils, bash, which
 , expat, libxslt, docbook_xsl, util-linux, mdadm, libgudev, libblockdev, parted
 , gobject-introspection, docbook_xml_dtd_412, docbook_xml_dtd_43
@@ -8,13 +12,21 @@
 
 stdenv.mkDerivation rec {
   pname = "udisks";
+<<<<<<< HEAD
   version = "2.10.0";
+=======
+  version = "2.9.4";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "storaged-project";
     repo = "udisks";
     rev = "${pname}-${version}";
+<<<<<<< HEAD
     sha256 = "sha256-M0L2MjVKv7VmtML/JZx0I8vNj+m6KDWGezvcwFqoTNI=";
+=======
+    sha256 = "sha256-MYQztzIyp5kh9t1bCIlj08/gaOmZfuu/ZOwo3F+rZiw=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   outputs = [ "out" "man" "dev" ] ++ lib.optional (stdenv.hostPlatform == stdenv.buildPlatform) "devdoc";
@@ -23,6 +35,10 @@ stdenv.mkDerivation rec {
     (substituteAll {
       src = ./fix-paths.patch;
       bash = "${bash}/bin/bash";
+<<<<<<< HEAD
+=======
+      blkid = "${util-linux}/bin/blkid";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       false = "${coreutils}/bin/false";
       mdadm = "${mdadm}/bin/mdadm";
       mkswap = "${util-linux}/bin/mkswap";
@@ -39,6 +55,14 @@ stdenv.mkDerivation rec {
         xfsprogs ntfs3g parted util-linux
       ];
     })
+<<<<<<< HEAD
+=======
+    # Fix crash on exit, remove on upgrade to 2.10.
+    (fetchpatch {
+      url = "https://github.com/storaged-project/udisks/commit/6464e3083c27b9e4d97848b9e69e862f265511d5.patch";
+      hash = "sha256-XGprXjJLIL8l4P5MRTHV8GOQR1hpaaFiLgexGnO9Lvg=";
+    })
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   strictDeps = true;
@@ -83,10 +107,14 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
+<<<<<<< HEAD
   passthru = {
     inherit libblockdev;
     tests.vm = nixosTests.udisks2;
   };
+=======
+  passthru.tests.vm = nixosTests.udisks2;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   meta = with lib; {
     description = "A daemon, tools and libraries to access and manipulate disks, storage devices and technologies";

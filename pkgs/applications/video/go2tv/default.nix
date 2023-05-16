@@ -14,13 +14,21 @@
 
 buildGoModule rec {
   pname = "go2tv" + lib.optionalString (!withGui) "-lite";
+<<<<<<< HEAD
   version = "1.15.0";
+=======
+  version = "1.14.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "alexballas";
     repo = "go2tv";
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-5GOhTDlUpzInMm8hVcBjbf1CXRw2GQITRtj6UaxYHtE=";
+=======
+    sha256 = "sha256-t+T3zerFvEdMYoe8GYSCGgwiXw528Lrs/EjPsXr6I98=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   vendorHash = null;

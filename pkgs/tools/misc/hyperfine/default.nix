@@ -1,6 +1,10 @@
 { lib
 , rustPlatform
+<<<<<<< HEAD
 , fetchFromGitHub
+=======
+, fetchCrate
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , installShellFiles
 , stdenv
 , Security
@@ -8,6 +12,7 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "hyperfine";
+<<<<<<< HEAD
   version = "1.17.0";
 
   src = fetchFromGitHub {
@@ -18,6 +23,16 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoHash = "sha256-VjkcQueBODEADHdWOts2f3Zjar43hi0UXzVhvkK4o8I=";
+=======
+  version = "1.16.1";
+
+  src = fetchCrate {
+    inherit pname version;
+    sha256 = "sha256-OdOlFdhIYxBi3e94QAief0xZqVdr+wnbaPFSKJ20DNM=";
+  };
+
+  cargoSha256 = "sha256-RgoMq52GkRbfhsBipMKhCSu3YQoOtDB/Fdg+9OPzGtk=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nativeBuildInputs = [ installShellFiles ];
   buildInputs = lib.optional stdenv.isDarwin Security;

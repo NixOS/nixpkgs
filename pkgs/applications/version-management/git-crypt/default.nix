@@ -63,7 +63,11 @@ stdenv.mkDerivation rec {
     '';
     downloadPage = "https://github.com/AGWA/git-crypt/releases";
     license = licenses.gpl3;
+<<<<<<< HEAD
     maintainers = with maintainers; [ dochang ];
+=======
+    maintainers = with maintainers; [ dochang SuperSandro2000 ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     platforms = platforms.unix;
   };
 

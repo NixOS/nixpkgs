@@ -5,10 +5,16 @@
 , pythonOlder
 , dnspython
 , greenlet
+<<<<<<< HEAD
 , isPyPy
 , monotonic
 , six
 , nose3
+=======
+, monotonic
+, six
+, nose
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , iana-etc
 , pytestCheckHook
 , libredirect
@@ -36,12 +42,19 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
+<<<<<<< HEAD
     nose3
   ];
 
   # libredirect is not available on darwin
   # tests hang on pypy indefinitely
   doCheck = !stdenv.isDarwin && !isPyPy;
+=======
+    nose
+  ];
+
+  doCheck = !stdenv.isDarwin;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   preCheck = lib.optionalString doCheck ''
     echo "nameserver 127.0.0.1" > resolv.conf

@@ -1,5 +1,10 @@
 { lib
 , rustPlatform
+<<<<<<< HEAD
+=======
+, llvmPackages
+, clang
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , fetchFromGitHub
 }:
 
@@ -19,8 +24,17 @@ rustPlatform.buildRustPackage {
   doCheck = false;
 
   nativeBuildInputs = [
+<<<<<<< HEAD
     rustPlatform.bindgenHook
   ];
+=======
+    llvmPackages.libclang
+    llvmPackages.libcxxClang
+    clang
+  ];
+  LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
+  BINDGEN_EXTRA_CLANG_ARGS = "-isystem ${llvmPackages.libclang.lib}/lib/clang/${lib.getVersion clang}/include";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   postPatch = ''
     substituteInPlace src/main.rs --replace "./config.cfg" "$out/etc/sonic/config.cfg"

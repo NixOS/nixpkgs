@@ -36,14 +36,23 @@ let
   in
     assert lib.all (p: p.enabled -> ! (builtins.elem null p.buildInputs)) plugins;
     stdenv.mkDerivation rec {
+<<<<<<< HEAD
       version = "4.0.4";
+=======
+      version = "3.8";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       pname = "weechat";
 
       hardeningEnable = [ "pie" ];
 
       src = fetchurl {
+<<<<<<< HEAD
         url = "https://weechat.org/files/src/weechat-${version}.tar.xz";
         hash = "sha256-rl9JebWtoDObhOdB1ffkge6R4/7NQKCZB7ZHUYKetvY=";
+=======
+        url = "https://weechat.org/files/src/weechat-${version}.tar.bz2";
+        hash = "sha256-objxAUGvBhTkbQl4GshDP3RsCkAW4z917L9WyaVoYj4=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       };
 
       outputs = [ "out" "man" ] ++ map (p: p.name) enabledPlugins;
@@ -51,7 +60,10 @@ let
       cmakeFlags = with lib; [
         "-DENABLE_MAN=ON"
         "-DENABLE_DOC=ON"
+<<<<<<< HEAD
         "-DENABLE_DOC_INCOMPLETE=ON"
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "-DENABLE_TESTS=${if enableTests then "ON" else "OFF"}"
       ]
         ++ optionals stdenv.isDarwin ["-DICONV_LIBRARY=${libiconv}/lib/libiconv.dylib"]
@@ -85,8 +97,12 @@ let
       '';
 
       meta = {
+<<<<<<< HEAD
         homepage = "https://weechat.org/";
         changelog = "https://weechat.org/files/doc/weechat/ChangeLog-${version}.html";
+=======
+        homepage = "http://www.weechat.org/";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         description = "A fast, light and extensible chat client";
         longDescription = ''
           You can find more documentation as to how to customize this package
@@ -95,7 +111,10 @@ let
         '';
         license = lib.licenses.gpl3;
         maintainers = with lib.maintainers; [ ncfavier ];
+<<<<<<< HEAD
         mainProgram = "weechat";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         platforms = lib.platforms.unix;
       };
     }

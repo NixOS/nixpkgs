@@ -8,7 +8,11 @@
 
 buildPythonPackage rec {
   pname = "versioneer";
+<<<<<<< HEAD
   version = "0.29";
+=======
+  version = "0.28";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -17,7 +21,11 @@ buildPythonPackage rec {
     owner = "python-versioneer";
     repo = "python-versioneer";
     rev = "refs/tags/${version}";
+<<<<<<< HEAD
     hash = "sha256-seYT/v691QB0LUzeI4MraegbNILU3tLO//9UbZIfe+A=";
+=======
+    hash = "sha256-Jy0c1I3kLgJAeGWzcgl5qVAWesf4EXaMIOW03B+1yWE=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

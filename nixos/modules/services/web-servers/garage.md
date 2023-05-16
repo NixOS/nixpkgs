@@ -77,7 +77,11 @@ updated to make sure that the
 on fresh setups.
 
 If major-releases will be abandoned by upstream, we should check first if those are needed
+<<<<<<< HEAD
 in NixOS for a safe upgrade-path before removing those. In that case we should keep those
+=======
+in NixOS for a safe upgrade-path before removing those. In that case we shold keep those
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 packages, but mark them as insecure in an expression like this (in
 `<nixpkgs/pkgs/tools/filesystem/garage/default.nix>`):
 ```

@@ -3,6 +3,7 @@
 mkCoqDerivation {
   pname = "bignums";
   owner = "coq";
+<<<<<<< HEAD
   inherit version;
   defaultVersion = with lib.versions; lib.switch coq.coq-version [
     { case = range "8.13" "8.18"; out = "9.0.0+coq${coq.coq-version}"; }
@@ -15,6 +16,13 @@ mkCoqDerivation {
   release."9.0.0+coq8.15".sha256 = "sha256-2oGOANn3XULHNIlyqjZ5ppQTQa2QF1zzf3YjHAd/pjo=";
   release."9.0.0+coq8.14".sha256 = "sha256-qTU152Dz34W6nFZ0pPbja9ouUm/714ZrLQ/Z4N/HIC4=";
   release."9.0.0+coq8.13".sha256 = "sha256-zvAqV3VAB7cN+nlMhjSXzxuDkdd387ju2VSb2EUthI0=";
+=======
+  displayVersion = { bignums = ""; };
+  inherit version;
+  defaultVersion = if lib.versions.isGe "8.6" coq.coq-version
+    then "${coq.coq-version}.0" else null;
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   release."8.17.0".sha256 = "sha256-MXYjqN86+3O4hT2ql62U83T5H03E/8ysH8erpvC/oyw=";
   release."8.16.0".sha256 = "sha256-DH3iWwatPlhhCVYVlgL2WLkvneSVzSXUiKo2e0+1zR4=";
   release."8.15.0".sha256 = "093klwlhclgyrba1iv18dyz1qp5f0lwiaa7y0qwvgmai8rll5fns";
@@ -28,7 +36,11 @@ mkCoqDerivation {
   release."8.7.0".sha256  = "11c4sdmpd3l6jjl4v6k213z9fhrmmm1xnly3zmzam1wrrdif4ghl";
   release."8.6.0".rev     = "v8.6.0";
   release."8.6.0".sha256  = "0553pcsy21cyhmns6k9qggzb67az8kl31d0lwlnz08bsqswigzrj";
+<<<<<<< HEAD
   releaseRev = v: "${if lib.versions.isGe "9.0" v then "v" else "V"}${v}";
+=======
+  releaseRev = v: "V${v}";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   mlPlugin = true;
 

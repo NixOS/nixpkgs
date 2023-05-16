@@ -4,11 +4,19 @@
 
 stdenv.mkDerivation rec {
   pname = "cvs-fast-export";
+<<<<<<< HEAD
   version = "1.61";
 
   src = fetchurl {
     url = "http://www.catb.org/~esr/cvs-fast-export/cvs-fast-export-${version}.tar.gz";
     sha256 = "sha256-4iH8VKxVliVZKwZ40rGMb3fH1nxTBdMT5IcBzdp1mjw=";
+=======
+  version = "1.59";
+
+  src = fetchurl {
+    url = "http://www.catb.org/~esr/cvs-fast-export/cvs-fast-export-${version}.tar.gz";
+    sha256 = "sha256-JDnNg/VMmPJI6F07o77L4ChYDollLFB1YCL75WSp6No=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   strictDeps = true;

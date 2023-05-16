@@ -6,7 +6,10 @@ nix-update buildbot
 nix-update --version=skip buildbot-worker
 nix-update --version=skip buildbot-plugins.buildbot-pkg
 nix-update --version=skip buildbot-plugins.www
+<<<<<<< HEAD
 nix-update --version=skip buildbot-plugins.www-react
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 nix-update --version=skip buildbot-plugins.console-view
 nix-update --version=skip buildbot-plugins.waterfall-view
 nix-update --version=skip buildbot-plugins.grid-view

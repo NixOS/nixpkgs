@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 { lib, stdenv, rustPlatform, fetchFromGitHub, openssl, Security, libiconv, pkg-config, protobuf, buildPackages }:
+=======
+{ lib, stdenv, rustPlatform, fetchFromGitHub, openssl, Security, libiconv, pkg-config, protobuf, which, buildPackages }:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 rustPlatform.buildRustPackage rec {
   pname = "quill";

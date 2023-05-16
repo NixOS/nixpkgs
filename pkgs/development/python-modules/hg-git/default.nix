@@ -1,7 +1,10 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+<<<<<<< HEAD
 , setuptools-scm
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , dulwich
 , mercurial
 , pythonOlder
@@ -9,6 +12,7 @@
 
 buildPythonPackage rec {
   pname = "hg-git";
+<<<<<<< HEAD
   version = "1.0.2";
   format = "pyproject";
 
@@ -23,6 +27,18 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
+=======
+  version = "1.0.1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
+
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-P3Ng9bD16AX7DJac/Y168GSWLTIAD3I1aLblYIDQiyk=";
+  };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   propagatedBuildInputs = [
     dulwich
     mercurial

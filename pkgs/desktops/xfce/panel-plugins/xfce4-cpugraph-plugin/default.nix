@@ -1,7 +1,10 @@
 { lib
 , mkXfceDerivation
 , exo
+<<<<<<< HEAD
 , glib
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , gtk3
 , libXtst
 , libxfce4ui
@@ -14,6 +17,7 @@
 mkXfceDerivation rec {
   category = "panel-plugins";
   pname  = "xfce4-cpugraph-plugin";
+<<<<<<< HEAD
   version = "1.2.8";
   rev-prefix = "xfce4-cpugraph-plugin-";
   odd-unstable = false;
@@ -22,6 +26,15 @@ mkXfceDerivation rec {
   buildInputs = [
     exo
     glib
+=======
+  version = "1.2.7";
+  rev-prefix = "xfce4-cpugraph-plugin-";
+  odd-unstable = false;
+  sha256 = "sha256-IgxljHJAg9Bp/OFFZiQ6QwE5vtAtQ0WmYHs78NVsmCw=";
+
+  buildInputs = [
+    exo
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     gtk3
     libXtst
     libxfce4ui

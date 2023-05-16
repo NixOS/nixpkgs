@@ -42,7 +42,11 @@ let
   # looking things up.
   makeCacheConf = { }:
     let
+<<<<<<< HEAD
       makeCache = fontconfig: pkgs.makeFontsCache { inherit fontconfig; fontDirectories = config.fonts.packages; };
+=======
+      makeCache = fontconfig: pkgs.makeFontsCache { inherit fontconfig; fontDirectories = config.fonts.fonts; };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       cache     = makeCache pkgs.fontconfig;
       cache32   = makeCache pkgs.pkgsi686Linux.fontconfig;
     in
@@ -51,7 +55,11 @@ let
       <!DOCTYPE fontconfig SYSTEM 'urn:fontconfig:fonts.dtd'>
       <fontconfig>
         <!-- Font directories -->
+<<<<<<< HEAD
         ${concatStringsSep "\n" (map (font: "<dir>${font}</dir>") config.fonts.packages)}
+=======
+        ${concatStringsSep "\n" (map (font: "<dir>${font}</dir>") config.fonts.fonts)}
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         ${optionalString (pkgs.stdenv.hostPlatform == pkgs.stdenv.buildPlatform) ''
         <!-- Pre-generated font caches -->
         <cachedir>${cache}</cachedir>
@@ -77,6 +85,21 @@ let
         <edit mode="append" name="autohint">
           ${fcBool cfg.hinting.autohint}
         </edit>
+<<<<<<< HEAD
+=======
+        <edit mode="append" name="hintstyle">
+          <const>${cfg.hinting.style}</const>
+        </edit>
+        <edit mode="append" name="antialias">
+          ${fcBool cfg.antialias}
+        </edit>
+        <edit mode="append" name="rgba">
+          <const>${cfg.subpixel.rgba}</const>
+        </edit>
+        <edit mode="append" name="lcdfilter">
+          <const>lcd${cfg.subpixel.lcdfilter}</const>
+        </edit>
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       </match>
 
     </fontconfig>
@@ -165,6 +188,7 @@ let
     </fontconfig>
   '';
 
+<<<<<<< HEAD
   # Replace default linked config with a different variant
   replaceDefaultConfig = defaultConfig: newConfig: ''
     rm $dst/${defaultConfig}
@@ -172,6 +196,8 @@ let
           $dst/
   '';
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   # fontconfig configuration package
   confPkg = pkgs.runCommand "fontconfig-conf" {
     preferLocalBuild = true;
@@ -191,6 +217,7 @@ let
     ln -s ${pkg.out}/etc/fonts/conf.d/*.conf \
           $dst/
 
+<<<<<<< HEAD
     ${optionalString (!cfg.antialias)
       (replaceDefaultConfig "10-yes-antialias.conf"
         "10-no-antialias.conf")
@@ -211,6 +238,8 @@ let
         "11-lcdfilter-${cfg.subpixel.lcdfilter}.conf")
     }
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     # 00-nixos-cache.conf
     ln -s ${cacheConf}  $dst/00-nixos-cache.conf
 
@@ -382,12 +411,18 @@ in
           };
 
           style = mkOption {
+<<<<<<< HEAD
             type = types.enum ["none" "slight" "medium" "full"];
             default = "slight";
+=======
+            type = types.enum [ "hintnone" "hintslight" "hintmedium" "hintfull" ];
+            default = "hintslight";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
             description = lib.mdDoc ''
               Hintstyle is the amount of font reshaping done to line up
               to the grid.
 
+<<<<<<< HEAD
               slight will make the font more fuzzy to line up to the grid but
               will be better in retaining font shape, while full will be a
               crisp font that aligns well to the pixel grid but will lose a
@@ -401,6 +436,13 @@ in
                 warning = "The option `${from}` contains a deprecated value `${val}`. Use `${val'}` instead.";
               in
               lib.warnIf (lib.hasPrefix "hint" val) warning val';
+=======
+              hintslight will make the font more fuzzy to line up to the grid
+              but will be better in retaining font shape, while hintfull will
+              be a crisp font that aligns well to the pixel grid but will lose
+              a greater amount of font shape.
+            '';
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           };
         };
 
@@ -417,7 +459,11 @@ in
         subpixel = {
 
           rgba = mkOption {
+<<<<<<< HEAD
             default = "none";
+=======
+            default = "rgb";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
             type = types.enum ["rgb" "bgr" "vrgb" "vbgr" "none"];
             description = lib.mdDoc ''
               Subpixel order. The overwhelming majority of displays are

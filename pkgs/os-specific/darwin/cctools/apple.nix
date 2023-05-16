@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 { lib, stdenv, fetchFromGitHub, symlinkJoin, xcbuildHook, tcsh, libobjc, libtapi, libunwind, llvm, memstreamHook, xar }:
+=======
+{ lib, stdenv, fetchurl, symlinkJoin, xcbuildHook, tcsh, libobjc, libtapi, libunwind, llvm, memstreamHook, xar }:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 let
 
@@ -6,11 +10,17 @@ cctools = stdenv.mkDerivation rec {
   pname = "cctools";
   version = "973.0.1";
 
+<<<<<<< HEAD
   src = fetchFromGitHub {
     owner = "apple-oss-distributions";
     repo = "cctools";
     rev = "${pname}-${version}";
     hash = "sha256-0NlDqy3zeg4D0MbDipx0sMYDfzYa63Jxfsckzz/928o=";
+=======
+  src = fetchurl {
+    url = "https://opensource.apple.com/tarballs/cctools/cctools-${version}.tar.gz";
+    hash = "sha256-r/6tsyyfi3R/0cLl+lN/B9ZaOaVF+Z7vJ6xj4LzSgiQ=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   patches = [
@@ -62,11 +72,17 @@ ld64 = stdenv.mkDerivation rec {
   pname = "ld64";
   version = "609";
 
+<<<<<<< HEAD
   src = fetchFromGitHub {
     owner = "apple-oss-distributions";
     repo = "ld64";
     rev = "${pname}-${version}";
     hash = "sha256-WAaphem6NS4eCHL/pISlDXnO1CDYTgSrVGzcothh4/Q=";
+=======
+  src = fetchurl {
+    url = "https://opensource.apple.com/tarballs/ld64/ld64-${version}.tar.gz";
+    hash = "sha256-SqQ7SqmK+uOPijzxOTqtkEu3qYmcth6H7rrQ03R1Q+4=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   postPatch = ''

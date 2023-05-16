@@ -12,7 +12,11 @@ in stdenv.mkDerivation rec {
     owner = "atom";
     repo = "node-keytar";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = pinData.srcHash;
+=======
+    sha256 = pinData.srcHash;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

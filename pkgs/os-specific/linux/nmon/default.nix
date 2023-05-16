@@ -2,11 +2,19 @@
 
 stdenv.mkDerivation rec {
   pname = "nmon";
+<<<<<<< HEAD
   version = "16p";
 
   src = fetchurl {
     url = "mirror://sourceforge/nmon/lmon${version}.c";
     sha256 = "sha256-XcYEX2cl4ySalpkY+uaWY6HWaRYgh3ILq825D86eayo=";
+=======
+  version = "16n";
+
+  src = fetchurl {
+    url = "mirror://sourceforge/nmon/lmon${version}.c";
+    sha256 = "1wpm2f30414b87kpbr9hbidblr5cmfby5skwqd0fkpi5v712q0f0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   buildInputs = [ ncurses ];

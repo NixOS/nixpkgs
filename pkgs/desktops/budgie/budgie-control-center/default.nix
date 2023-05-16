@@ -39,7 +39,10 @@
 , libwacom
 , libxml2
 , libxslt
+<<<<<<< HEAD
 , magpie
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , meson
 , modemmanager
 , networkmanager
@@ -59,14 +62,22 @@
 
 stdenv.mkDerivation rec {
   pname = "budgie-control-center";
+<<<<<<< HEAD
   version = "1.3.0";
+=======
+  version = "1.2.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "BuddiesOfBudgie";
     repo = pname;
     rev = "v${version}";
     fetchSubmodules = true;
+<<<<<<< HEAD
     sha256 = "sha256-7E23cgX7TkBJT/yansBfvMx0ddfAwrF7mGfqzbyLY4Q=";
+=======
+    sha256 = "sha256-z9apestNLEUKzrCMNo0BNAWeyE6FsUCAzcHIom8LcUs=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   patches = [
@@ -109,6 +120,10 @@ stdenv.mkDerivation rec {
     gnome.gnome-remote-desktop
     gnome.gnome-settings-daemon
     gnome.gnome-user-share
+<<<<<<< HEAD
+=======
+    gnome.mutter
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     gsettings-desktop-schemas
     gsound
     gtk3
@@ -126,7 +141,10 @@ stdenv.mkDerivation rec {
     libsecret
     libwacom
     libxml2
+<<<<<<< HEAD
     magpie
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     modemmanager
     networkmanager
     polkit
@@ -159,7 +177,11 @@ stdenv.mkDerivation rec {
       --prefix XDG_DATA_DIRS : "${gdk-pixbuf}/share"
       --prefix XDG_DATA_DIRS : "${librsvg}/share"
       # WM keyboard shortcuts
+<<<<<<< HEAD
       --prefix XDG_DATA_DIRS : "${magpie}/share"
+=======
+      --prefix XDG_DATA_DIRS : "${gnome.mutter}/share"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     )
   '';
 

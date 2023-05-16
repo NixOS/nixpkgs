@@ -76,13 +76,21 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "freerdp";
+<<<<<<< HEAD
   version = "2.11.1";
+=======
+  version = "2.10.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "FreeRDP";
     repo = "FreeRDP";
     rev = version;
+<<<<<<< HEAD
     sha256 = "sha256-x97I0TDPAd/zULM/FpAvYQTcArG2CwGoUUp/eEM4vdc=";
+=======
+    sha256 = "sha256-4sq3LblFRWCBREudtzg+o9wjstm58gPzBq7QAwlWvEg=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   postPatch = ''

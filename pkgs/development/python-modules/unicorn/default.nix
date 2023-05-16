@@ -12,7 +12,11 @@ buildPythonPackage rec {
 
   src = unicorn-emu.src;
 
+<<<<<<< HEAD
   sourceRoot = "${src.name}/bindings/python";
+=======
+  sourceRoot = "source/bindings/python";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   prePatch = ''
     ln -s ${unicorn-emu}/lib/libunicorn.* prebuilt/

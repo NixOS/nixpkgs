@@ -7,14 +7,22 @@
 
 buildPythonPackage rec {
   pname = "pyvesync";
+<<<<<<< HEAD
   version = "2.1.10";
+=======
+  version = "2.1.6";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
+<<<<<<< HEAD
     hash = "sha256-ddtTtTAUpvS8DN1vKVN+CjnmYp20xyxHydwOaDRjWzo=";
+=======
+    hash = "sha256-u31yiTAINjQagDzZZ+6+XCmCSwjGkoGSyFxTosHJ9i0=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [

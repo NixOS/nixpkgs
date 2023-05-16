@@ -1,7 +1,11 @@
+<<<<<<< HEAD
 { lib, stdenv, ocaml, fetchFromGitHub, fetchpatch, buildDunePackage, pkg-config, gsl, darwin, dune-configurator }:
 
 lib.throwIf (lib.versionAtLeast ocaml.version "5.0")
   "gsl is not available for OCaml ${ocaml.version}"
+=======
+{ lib, stdenv, fetchFromGitHub, fetchpatch, buildDunePackage, pkg-config, gsl, darwin, dune-configurator }:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 buildDunePackage rec {
   pname = "gsl";
@@ -39,6 +43,11 @@ buildDunePackage rec {
     })
   ];
 
+<<<<<<< HEAD
+=======
+  duneVersion = "3";
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ dune-configurator gsl ];
   propagatedBuildInputs = lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Accelerate ];

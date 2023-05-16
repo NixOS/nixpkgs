@@ -2,13 +2,18 @@
 
 let
   pname = "joplin-desktop";
+<<<<<<< HEAD
   version = "2.12.16";
+=======
+  version = "2.10.18";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   name = "${pname}-${version}";
 
   inherit (stdenv.hostPlatform) system;
   throwSystem = throw "Unsupported system: ${system}";
 
   suffix = {
+<<<<<<< HEAD
     x86_64-linux = ".AppImage";
     x86_64-darwin = ".dmg";
     aarch64-darwin = "-arm64.dmg";
@@ -20,6 +25,17 @@ let
       x86_64-linux = "sha256-9ib8lymmSINqC0oXUxkKcpKfPh7qmU3YytU1/4aKMLg=";
       x86_64-darwin = "sha256-vWc5yx3i5Ru8vrQbrTQwr43ZMBzOAb9254cxTHg6A/Q=";
       aarch64-darwin = "sha256-dhwPqT+zfBYOVUV5JprPfgrSJR2ZNsC3LJmRHGJVM4k=";
+=======
+    x86_64-linux = "AppImage";
+    x86_64-darwin = "dmg";
+  }.${system} or throwSystem;
+
+  src = fetchurl {
+    url = "https://github.com/laurent22/joplin/releases/download/v${version}/Joplin-${version}.${suffix}";
+    sha256 = {
+      x86_64-linux = "sha256-oo3li8w1uem9lyFqwnrZ7Fl1R7Hrd8W+PHcIiaL2/+U=";
+      x86_64-darwin = "sha256-xYNp6WW8uPBrfuUgE5LI+1PuQK+vTA11eOtkz2ogpk0=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     }.${system} or throwSystem;
   };
 
@@ -38,8 +54,13 @@ let
     '';
     homepage = "https://joplinapp.org";
     license = licenses.agpl3Plus;
+<<<<<<< HEAD
     maintainers = with maintainers; [ hugoreeves qjoly ];
     platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-darwin"];
+=======
+    maintainers = with maintainers; [ hugoreeves ];
+    platforms = [ "x86_64-linux" "x86_64-darwin" ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   linux = appimageTools.wrapType2 rec {
@@ -49,7 +70,11 @@ let
       export LC_ALL=C.UTF-8
     '';
 
+<<<<<<< HEAD
     multiArch = false; # no 32bit needed
+=======
+    multiPkgs = null; # no 32bit needed
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     extraPkgs = appimageTools.defaultFhsEnvArgs.multiPkgs;
     extraInstallCommands = ''
       mv $out/bin/{${name},${pname}}

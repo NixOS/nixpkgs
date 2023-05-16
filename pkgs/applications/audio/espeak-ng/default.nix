@@ -75,6 +75,9 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ aske ];
     platforms = platforms.all;
+<<<<<<< HEAD
     mainProgram = "espeak-ng";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

@@ -5,13 +5,21 @@
 
 buildGoModule rec {
   pname = "gotestsum";
+<<<<<<< HEAD
   version = "1.10.1";
+=======
+  version = "1.10.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "gotestyourself";
     repo = "gotestsum";
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-Sq0ejnX7AJoPf3deBge8PMOq1NlMbw+Ljn145C5MQ+s=";
+=======
+    hash = "sha256-4Gcylc1x+GNLcAV/xBafxEdFCh6gKz9X2jMPZXxktLo=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   vendorHash = "sha256-zUqa6xlDV12ZV4N6+EZ7fLPsL8U+GB7boQ0qG9egvm0=";

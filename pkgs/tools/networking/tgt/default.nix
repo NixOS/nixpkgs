@@ -1,16 +1,28 @@
 { stdenv, lib, fetchFromGitHub, libxslt, libaio, systemd, perl
+<<<<<<< HEAD
 , docbook_xsl, coreutils, lsof, makeWrapper, sg3_utils
+=======
+, docbook_xsl, coreutils, lsof, rdma-core, makeWrapper, sg3_utils, util-linux
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 stdenv.mkDerivation rec {
   pname = "tgt";
+<<<<<<< HEAD
   version = "1.0.87";
+=======
+  version = "1.0.86";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "fujita";
     repo = pname;
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-nDYNXQJqCtwlm4HTPTMuUbn6FA8JRYEqxbYUAev2R3o=";
+=======
+    sha256 = "sha256-xQzTGFptw/L+o8ivXGTxIzVFbAMrsMXvwUjCFS4rhdw=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ libxslt docbook_xsl makeWrapper ];
@@ -27,11 +39,14 @@ stdenv.mkDerivation rec {
     "-Wno-error=maybe-uninitialized"
   ];
 
+<<<<<<< HEAD
   hardeningDisable = lib.optionals stdenv.isAarch64 [
     # error: 'read' writing 1 byte into a region of size 0 overflows the destination
     "fortify3"
   ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   installFlags = [
     "sysconfdir=${placeholder "out"}/etc"
   ];

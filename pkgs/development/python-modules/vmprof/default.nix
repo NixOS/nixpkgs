@@ -1,7 +1,10 @@
 { stdenv
 , lib
 , buildPythonPackage
+<<<<<<< HEAD
 , fetchpatch
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , fetchPypi
 , colorama
 , libunwind
@@ -22,6 +25,7 @@ buildPythonPackage rec {
   buildInputs = [ libunwind ];
   propagatedBuildInputs = [ colorama requests six pytz ];
 
+<<<<<<< HEAD
   patches = [
     (fetchpatch {
       name = "${pname}-python-3.10-compat.patch";
@@ -38,6 +42,8 @@ buildPythonPackage rec {
     })
   ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   # No tests included
   doCheck = false;
   pythonImportsCheck = [ "vmprof" ];

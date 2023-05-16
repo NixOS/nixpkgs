@@ -16,11 +16,19 @@
 
 stdenv.mkDerivation rec {
   pname = "gtkwave";
+<<<<<<< HEAD
   version = "3.3.117";
 
   src = fetchurl {
     url = "mirror://sourceforge/gtkwave/${pname}-gtk3-${version}.tar.gz";
     sha256 = "sha256-PPFTdYapEcuwYBr4+hjPbacIyKFKcfac48uRGOhXHbk=";
+=======
+  version = "3.3.115";
+
+  src = fetchurl {
+    url = "mirror://sourceforge/gtkwave/${pname}-gtk3-${version}.tar.gz";
+    sha256 = "sha256-rbenwCsYygg1oGS2cvbNxR+HXEVLAYmnQ/LOi5HmSqU=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ pkg-config wrapGAppsHook ];
@@ -46,7 +54,11 @@ stdenv.mkDerivation rec {
     description = "VCD/Waveform viewer for Unix and Win32";
     homepage = "https://gtkwave.sourceforge.net";
     license = lib.licenses.gpl2Plus;
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [ thoughtpolice jiegec jleightcap ];
+=======
+    maintainers = with lib.maintainers; [ thoughtpolice jiegec ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 }

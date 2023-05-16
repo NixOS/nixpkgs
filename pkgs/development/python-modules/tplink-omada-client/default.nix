@@ -10,7 +10,11 @@
 
 buildPythonPackage rec {
   pname = "tplink-omada-client";
+<<<<<<< HEAD
   version = "1.3.3";
+=======
+  version = "1.2.5";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -18,7 +22,11 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "tplink_omada_client";
     inherit version;
+<<<<<<< HEAD
     hash = "sha256-Jo0p/28Hzokeq0SAdyWfkKzoscVkQj9kP3VnRlWjR8o=";
+=======
+    hash = "sha256-I9lD99IxEq97ANJx0Aeh7YXdPU6izEjWgjJHCaiAWRI=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

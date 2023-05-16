@@ -25,7 +25,11 @@
   #   rev-version = /* human readable version; i.e. "unstable-2022-26-07" */;
   #   sha256 = /* checksum for this release, can omit if specifying your own `monorepoSrc` */;
   # }
+<<<<<<< HEAD
 , officialRelease ? { version = "16.0.6"; sha256 = "sha256-fspqSReX+VD+Nl/Cfq+tDcdPtnQPV1IRopNDfd5VtUs="; }
+=======
+, officialRelease ? { version = "16.0.1"; sha256 = "sha256-Vr978ZY0i0NkdE/uuwcTccshfAT61KIN6KNq0TdwBNE="; }
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   # i.e.:
   # {
   #   version = /* i.e. "15.0.0" */;
@@ -184,6 +188,7 @@ in let
       inherit llvm_meta;
     };
 
+<<<<<<< HEAD
     lldb = callPackage ../common/lldb.nix {
       src = callPackage ({ runCommand }: runCommand "lldb-src-${version}" {} ''
         mkdir -p "$out"
@@ -219,6 +224,13 @@ in let
             && (lib.versionOlder darwin.apple_sdk.sdk.version "11.0")
         ) ./lldb/cpu_subtype_arm64e_replacement.patch;
       inherit llvm_meta release_version;
+=======
+    lldb = callPackage ./lldb {
+      inherit llvm_meta;
+      inherit (darwin) libobjc bootstrap_cmds;
+      inherit (darwin.apple_sdk.libs) xpc;
+      inherit (darwin.apple_sdk.frameworks) Foundation Carbon Cocoa;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
 
     # Below, is the LLVM bootstrapping logic. It handles building a
@@ -254,6 +266,7 @@ in let
         [ "-rtlib=compiler-rt"
           "-Wno-unused-command-line-argument"
           "-B${targetLlvmLibraries.compiler-rt}/lib"
+<<<<<<< HEAD
 
           # Combat "__cxxabi_config.h not found". Maybe this could be fixed by
           # copying these headers into libcxx? Note that building libcxx
@@ -262,6 +275,8 @@ in let
           # ("16.0.3 libcxx, libcxxabi: circular build dependencies")
           # Looks like the machinery changed in https://reviews.llvm.org/D120727.
           "-I${lib.getDev targetLlvmLibraries.libcxx.cxxabi}/include/c++/v1"
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         ]
         ++ lib.optional (!stdenv.targetPlatform.isWasm) "--unwindlib=libunwind"
         ++ lib.optional
@@ -324,7 +339,11 @@ in let
 
     compiler-rt-libc = callPackage ./compiler-rt {
       inherit llvm_meta;
+<<<<<<< HEAD
       stdenv = if stdenv.hostPlatform.useLLVM or false || (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isStatic)
+=======
+      stdenv = if stdenv.hostPlatform.useLLVM or false
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
                then overrideCC stdenv buildLlvmTools.clangNoCompilerRtWithLibc
                else stdenv;
     };
@@ -337,7 +356,11 @@ in let
     };
 
     # N.B. condition is safe because without useLLVM both are the same.
+<<<<<<< HEAD
     compiler-rt = if stdenv.hostPlatform.isAndroid || stdenv.hostPlatform.isDarwin
+=======
+    compiler-rt = if stdenv.hostPlatform.isAndroid
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       then libraries.compiler-rt-libc
       else libraries.compiler-rt-no-libc;
 
@@ -400,6 +423,11 @@ in let
       inherit llvm_meta targetLlvm;
     };
   });
+<<<<<<< HEAD
   noExtend = extensible: lib.attrsets.removeAttrs extensible [ "extend" ];
 
 in { inherit tools libraries release_version; } // (noExtend libraries) // (noExtend tools)
+=======
+
+in { inherit tools libraries release_version; } // libraries // tools
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)

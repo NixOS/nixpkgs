@@ -9,7 +9,11 @@
 , setuptools
 
 # runtime
+<<<<<<< HEAD
 , ffmpeg-headless
+=======
+, ffmpeg
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 # tests
 , numpy
@@ -38,7 +42,11 @@ buildPythonPackage rec {
   ];
 
   buildInputs = [
+<<<<<<< HEAD
     ffmpeg-headless
+=======
+    ffmpeg
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   preCheck = ''

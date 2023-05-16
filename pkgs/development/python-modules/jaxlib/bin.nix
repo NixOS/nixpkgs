@@ -18,17 +18,29 @@
 , autoPatchelfHook
 , buildPythonPackage
 , config
+<<<<<<< HEAD
 , fetchPypi
 , fetchurl
 , flatbuffers
 , jaxlib-build
 , lib
 , ml-dtypes
+=======
+, cudnn ? cudaPackages.cudnn
+, fetchurl
+, flatbuffers
+, isPy39
+, lib
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , python
 , scipy
 , stdenv
   # Options:
+<<<<<<< HEAD
 , cudaSupport ? config.cudaSupport
+=======
+, cudaSupport ? config.cudaSupport or false
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , cudaPackages ? {}
 }:
 
@@ -36,6 +48,7 @@ let
   inherit (cudaPackages) cudatoolkit cudnn;
 in
 
+<<<<<<< HEAD
 assert cudaSupport -> lib.versionAtLeast cudatoolkit.version "11.1" && lib.versionAtLeast cudnn.version "8.2" && stdenv.isLinux;
 
 let
@@ -83,10 +96,51 @@ let
 
 in
 buildPythonPackage {
+=======
+assert cudaSupport -> lib.versionAtLeast cudatoolkit.version "11.1";
+assert cudaSupport -> lib.versionAtLeast cudnn.version "8.2";
+
+let
+  version = "0.4.4";
+
+  pythonVersion = python.pythonVersion;
+
+  # Find new releases at https://storage.googleapis.com/jax-releases/jax_releases.html.
+  # When upgrading, you can get these hashes from prefetch.sh. See
+  # https://github.com/google/jax/issues/12879 as to why this specific URL is
+  # the correct index.
+  cpuSrcs = {
+    "x86_64-linux" = fetchurl {
+      url = "https://storage.googleapis.com/jax-releases/nocuda/jaxlib-${version}-cp310-cp310-manylinux2014_x86_64.whl";
+      hash = "sha256-4VT909AB+ti5HzQvsaZWNY6MS/GItlVEFH9qeZnUuKQ=";
+    };
+    "aarch64-darwin" = fetchurl {
+      url = "https://storage.googleapis.com/jax-releases/mac/jaxlib-${version}-cp310-cp310-macosx_11_0_arm64.whl";
+      hash = "sha256-wuOmoCeTldslSa0MommQeTe+RYKhUMam1ZXrgSov+8U=";
+    };
+    "x86_64-darwin" = fetchurl {
+      url = "https://storage.googleapis.com/jax-releases/mac/jaxlib-${version}-cp310-cp310-macosx_10_14_x86_64.whl";
+      hash = "sha256-arfiTw8yafJwjRwJhKby2O7y3+4ksh3PjaKW9JgJ1ok=";
+    };
+  };
+
+  gpuSrc = fetchurl {
+    url = "https://storage.googleapis.com/jax-releases/cuda11/jaxlib-${version}+cuda11.cudnn82-cp310-cp310-manylinux2014_x86_64.whl";
+    hash = "sha256-bJ62DdzuPSV311ZI2R/LJQ3fOkDibtz2+8wDKw31FLk=";
+  };
+in
+buildPythonPackage rec {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pname = "jaxlib";
   inherit version;
   format = "wheel";
 
+<<<<<<< HEAD
+=======
+  # At the time of writing (2022-10-19), there are releases for <=3.10.
+  # Supporting all of them is a pain, so we focus on 3.10, the current nixpkgs
+  # python version.
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   disabled = !(pythonVersion == "3.10");
 
   # See https://discourse.nixos.org/t/ofborg-does-not-respect-meta-platforms/27019/6.
@@ -99,10 +153,16 @@ buildPythonPackage {
 
   # Prebuilt wheels are dynamically linked against things that nix can't find.
   # Run `autoPatchelfHook` to automagically fix them.
+<<<<<<< HEAD
   nativeBuildInputs = lib.optionals stdenv.isLinux [ autoPatchelfHook ]
     ++ lib.optionals cudaSupport [ addOpenGLRunpath ];
   # Dynamic link dependencies
   buildInputs = [ stdenv.cc.cc.lib ];
+=======
+  nativeBuildInputs = lib.optionals cudaSupport [ autoPatchelfHook addOpenGLRunpath ];
+  # Dynamic link dependencies
+  buildInputs = [ stdenv.cc.cc ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   # jaxlib contains shared libraries that open other shared libraries via dlopen
   # and these implicit dependencies are not recognized by ldd or
@@ -126,12 +186,16 @@ buildPythonPackage {
     done
   '';
 
+<<<<<<< HEAD
   propagatedBuildInputs = [
     absl-py
     flatbuffers
     ml-dtypes
     scipy
   ];
+=======
+  propagatedBuildInputs = [ absl-py flatbuffers scipy ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   # Note that cudatoolkit is snecessary since jaxlib looks for "ptxas" in $PATH.
   # See https://github.com/NixOS/nixpkgs/pull/164176#discussion_r828801621 for
@@ -141,7 +205,11 @@ buildPythonPackage {
     ln -s ${cudatoolkit}/bin/ptxas $out/bin/ptxas
   '';
 
+<<<<<<< HEAD
   inherit (jaxlib-build) pythonImportsCheck;
+=======
+  pythonImportsCheck = [ "jaxlib" ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   meta = with lib; {
     description = "XLA library for JAX";

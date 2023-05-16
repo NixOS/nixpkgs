@@ -1,5 +1,6 @@
 { faust
 , alsa-lib
+<<<<<<< HEAD
 , qtbase
 , writeText
 , buildPackages
@@ -19,12 +20,18 @@ let
     done
   '';
 in
+=======
+, qt4
+}:
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 faust.wrapWithBuildEnv {
 
   baseName = "faust2alqt";
 
   propagatedBuildInputs = [
     alsa-lib
+<<<<<<< HEAD
     qtbase
   ];
 
@@ -38,4 +45,9 @@ faust.wrapWithBuildEnv {
       sed -i "/QMAKE=/c\ QMAKE="${qtbase.dev}/bin/qmake"" $script
     done
   '';
+=======
+    qt4
+  ];
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }

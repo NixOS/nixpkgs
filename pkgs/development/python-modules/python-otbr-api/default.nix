@@ -4,18 +4,28 @@
 , buildPythonPackage
 , cryptography
 , fetchFromGitHub
+<<<<<<< HEAD
 , fetchpatch
 , pytest-asyncio
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , pytestCheckHook
 , pythonOlder
 , setuptools
 , voluptuous
+<<<<<<< HEAD
 , wheel
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 buildPythonPackage rec {
   pname = "python-otbr-api";
+<<<<<<< HEAD
   version = "2.5.0";
+=======
+  version = "1.1.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -24,6 +34,7 @@ buildPythonPackage rec {
     owner = "home-assistant-libs";
     repo = pname;
     rev = "refs/tags/${version}";
+<<<<<<< HEAD
     hash = "sha256-bPN2h60ypjlKpXs1xDS7bZcGRXvatA3EdlAX/HLxxTM=";
   };
 
@@ -39,6 +50,13 @@ buildPythonPackage rec {
   nativeBuildInputs = [
     setuptools
     wheel
+=======
+    hash = "sha256-0JPniehl4cnoTWgqmq1fMZwU8FFl2Zx4CF81az6iaxQ=";
+  };
+
+  nativeBuildInputs = [
+    setuptools
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   propagatedBuildInputs = [
@@ -49,7 +67,10 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+<<<<<<< HEAD
     pytest-asyncio
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     pytestCheckHook
   ];
 

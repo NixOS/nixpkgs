@@ -29,6 +29,9 @@ in buildGoModule {
     license = licenses.mit;
     homepage = "https://influxdata.com/";
     maintainers = with maintainers; [ abbradar danderson ];
+<<<<<<< HEAD
     mainProgram = "influx";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

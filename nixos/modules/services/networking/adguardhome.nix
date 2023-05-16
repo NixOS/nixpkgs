@@ -17,7 +17,10 @@ let
     text = builtins.toJSON cfg.settings;
     checkPhase = "${pkgs.adguardhome}/bin/adguardhome -c $out --check-config";
   };
+<<<<<<< HEAD
   defaultBindPort = 3000;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 in
 {
@@ -42,6 +45,7 @@ in
       '';
     };
 
+<<<<<<< HEAD
     allowDHCP = mkOption {
       default = cfg.settings.dhcp.enabled or false;
       defaultText = literalExpression ''config.services.adguardhome.settings.dhcp.enabled or false'';
@@ -56,6 +60,8 @@ in
       '';
     };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     mutableSettings = mkOption {
       default = true;
       type = bool;
@@ -87,7 +93,11 @@ in
             '';
           };
           bind_port = mkOption {
+<<<<<<< HEAD
             default = defaultBindPort;
+=======
+            default = 3000;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
             type = port;
             description = lib.mdDoc ''
               Port to serve HTTP pages on.
@@ -162,7 +172,11 @@ in
       serviceConfig = {
         DynamicUser = true;
         ExecStart = "${pkgs.adguardhome}/bin/adguardhome ${args}";
+<<<<<<< HEAD
         AmbientCapabilities = [ "CAP_NET_BIND_SERVICE" ] ++ optionals cfg.allowDHCP [ "CAP_NET_RAW" ];
+=======
+        AmbientCapabilities = [ "CAP_NET_BIND_SERVICE" ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         Restart = "always";
         RestartSec = 10;
         RuntimeDirectory = "AdGuardHome";
@@ -170,6 +184,10 @@ in
       };
     };
 
+<<<<<<< HEAD
     networking.firewall.allowedTCPPorts = mkIf cfg.openFirewall [ cfg.settings.bind_port or defaultBindPort ];
+=======
+    networking.firewall.allowedTCPPorts = mkIf cfg.openFirewall [ cfg.settings.bind_port ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

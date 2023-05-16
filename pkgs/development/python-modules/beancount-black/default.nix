@@ -10,7 +10,11 @@
 
 buildPythonPackage rec {
   pname = "beancount-black";
+<<<<<<< HEAD
   version = "0.2.1";
+=======
+  version = "0.2.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   disabled = pythonOlder "3.9";
   format = "pyproject";
@@ -19,7 +23,11 @@ buildPythonPackage rec {
     owner = "LaunchPlatform";
     repo = "beancount-black";
     rev = version;
+<<<<<<< HEAD
     hash = "sha256-wvAQnwnyHn5Koc/UN4zpJ3JDmFbDoUrpCTmJCpSP7Mg=";
+=======
+    hash = "sha256-1n+IADiGUsi69XoxO4Tjio2QdkJyoYZHgvYc646TuF4=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   buildInputs = [

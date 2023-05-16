@@ -1,5 +1,6 @@
 { stdenv
 , lib
+<<<<<<< HEAD
 , rustPlatform
 , fetchFromGitHub
 , pkg-config
@@ -19,11 +20,28 @@
 rustPlatform.buildRustPackage rec {
   pname = "stgit";
   version = "2.3.2";
+=======
+, fetchFromGitHub
+, installShellFiles
+, python3Packages
+, asciidoc
+, docbook_xsl
+, docbook_xml_dtd_45
+, git
+, perl
+, xmlto
+}:
+
+python3Packages.buildPythonApplication rec {
+  pname = "stgit";
+  version = "1.5";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "stacked-git";
     repo = "stgit";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-rQNX54zmVHZKplEUNaKyVtCrC8Q4DdxLzNSStiYvDGA=";
   };
   cargoHash = "sha256-ju8JQnohidBsydwwm6gNx1L24brmDWYXwNgfCl7G/aA=";
@@ -39,6 +57,16 @@ rustPlatform.buildRustPackage rec {
   ] ++ lib.optionals stdenv.isDarwin [
     darwin.system_cmds libiconv
   ];
+=======
+    sha256 = "sha256-TsJr2Riygz/DZrn6UZMPvq1tTfvl3dFEZZNq2wVj1Nw=";
+  };
+
+  nativeBuildInputs = [ installShellFiles asciidoc xmlto docbook_xsl docbook_xml_dtd_45 python3Packages.setuptools ];
+
+  format = "other";
+
+  nativeCheckInputs = [ git perl ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   postPatch = ''
     for f in Documentation/*.xsl; do
@@ -52,10 +80,18 @@ rustPlatform.buildRustPackage rec {
     substituteInPlace Documentation/texi.xsl \
       --replace http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd \
                 ${docbook_xml_dtd_45}/xml/dtd/docbook/docbookx.dtd
+<<<<<<< HEAD
+=======
+
+    cat > stgit/_version.py <<EOF
+    __version__ = "${version}"
+    EOF
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '';
 
   makeFlags = [
     "prefix=${placeholder "out"}"
+<<<<<<< HEAD
     "XMLTO_EXTRA=--skip-validation"
     "PERL_PATH=${perl}/bin/perl"
   ];
@@ -72,6 +108,19 @@ rustPlatform.buildRustPackage rec {
   postInstall = ''
     wrapProgram $out/bin/stg --prefix PATH : ${lib.makeBinPath [ git ]}
 
+=======
+    "MAN_BASE_URL=${placeholder "out"}/share/man"
+    "XMLTO_EXTRA=--skip-validation"
+  ];
+
+  buildFlags = [ "all" "doc" ];
+
+  checkTarget = "test";
+  checkFlags = [ "PERL_PATH=${perl}/bin/perl" ];
+
+  installTargets = [ "install" "install-doc" "install-html" ];
+  postInstall = ''
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     installShellCompletion --cmd stg \
       --fish completion/stg.fish \
       --bash completion/stgit.bash \

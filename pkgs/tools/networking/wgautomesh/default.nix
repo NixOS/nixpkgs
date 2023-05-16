@@ -21,6 +21,9 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://git.deuxfleurs.fr/Deuxfleurs/wgautomesh";
     license = licenses.agpl3Only;
     maintainers = [ maintainers.lx ];
+<<<<<<< HEAD
     mainProgram = "wgautomesh";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

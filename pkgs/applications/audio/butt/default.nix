@@ -3,11 +3,19 @@
 
 stdenv.mkDerivation rec {
   pname = "butt";
+<<<<<<< HEAD
   version = "0.1.38";
 
   src = fetchurl {
     url = "mirror://sourceforge/${pname}/${pname}-${version}.tar.gz";
     hash = "sha256-6c4BknAh+XPaKrEfCz0oHm7lWOLV+9jiJbQx9vvtI4I=";
+=======
+  version = "0.1.37";
+
+  src = fetchurl {
+    url = "mirror://sourceforge/${pname}/${pname}-${version}.tar.gz";
+    hash = "sha256-FI8xRCaGSMC6KEf5v87Q4syO3kVPWXYXgnL24+myRKo=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   postPatch = ''

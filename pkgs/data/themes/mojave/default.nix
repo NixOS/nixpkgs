@@ -21,6 +21,7 @@
 }:
 
 let
+<<<<<<< HEAD
 
   pname = "mojave-gtk-theme";
   version = "2023-06-13";
@@ -42,6 +43,10 @@ let
 
 in
 
+=======
+  pname = "mojave-gtk-theme";
+in
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 lib.checkListOfEnum "${pname}: button size variants" [ "standard" "small" ] buttonSizeVariants
 lib.checkListOfEnum "${pname}: button variants" [ "standard" "alt" ] buttonVariants
 lib.checkListOfEnum "${pname}: color variants" [ "light" "dark" ] colorVariants
@@ -49,11 +54,34 @@ lib.checkListOfEnum "${pname}: opacity variants" [ "standard" "solid" ] opacityV
 lib.checkListOfEnum "${pname}: theme variants" [ "default" "blue" "purple" "pink" "red" "orange" "yellow" "green" "grey" "all" ] themeVariants
 
 stdenvNoCC.mkDerivation rec {
+<<<<<<< HEAD
   inherit pname version;
 
   srcs = [ main_src ] ++ lib.optional wallpapers wallpapers_src;
 
   sourceRoot = main_src.name;
+=======
+  inherit pname;
+  version = "2022-10-21";
+
+  srcs = [
+    (fetchFromGitHub {
+      owner = "vinceliuice";
+      repo = pname;
+      rev = version;
+      sha256 = "sha256-0OqQXyv/fcbKTzvQUVIbUw5Y27hU1bzwx/0DelMEZIs=";
+    })
+  ]
+  ++
+  lib.optional wallpapers
+    (fetchurl {
+      url = "https://github.com/vinceliuice/Mojave-gtk-theme/raw/11741a99d96953daf9c27e44c94ae50a7247c0ed/macOS_Mojave_Wallpapers.tar.xz";
+      sha256 = "18zzkwm1kqzsdaj8swf0xby1n65gxnyslpw4lnxcx1rphip0rwf7";
+    })
+  ;
+
+  sourceRoot = "source";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nativeBuildInputs = [
     glib
@@ -101,12 +129,15 @@ stdenvNoCC.mkDerivation rec {
         --replace /usr/bin/inkscape ${inkscape}/bin/inkscape \
         --replace /usr/bin/optipng ${optipng}/bin/optipng
     done
+<<<<<<< HEAD
 
     ${lib.optionalString wallpapers ''
       for f in ../${wallpapers_src.name}/Mojave{,-timed}.xml; do
         substituteInPlace $f --replace /usr $out
       done
     ''}
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '';
 
   installPhase = ''
@@ -121,11 +152,15 @@ stdenvNoCC.mkDerivation rec {
       --dest $out/share/themes
 
     ${lib.optionalString wallpapers ''
+<<<<<<< HEAD
       mkdir -p $out/share/backgrounds/Mojave
       mkdir -p $out/share/gnome-background-properties
       cp -a ../${wallpapers_src.name}/Mojave*.jpeg $out/share/backgrounds/Mojave/
       cp -a ../${wallpapers_src.name}/Mojave-timed.xml $out/share/backgrounds/Mojave/
       cp -a ../${wallpapers_src.name}/Mojave.xml $out/share/gnome-background-properties/
+=======
+      install -D -t $out/share/wallpapers ../"macOS Mojave Wallpapers"/*
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     ''}
 
     # Replace duplicate files with soft links to the first file in each

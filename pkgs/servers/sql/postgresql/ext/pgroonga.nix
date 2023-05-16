@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 { lib, stdenv, fetchurl, pkg-config, postgresql, msgpack-c, groonga }:
 
 stdenv.mkDerivation rec {
@@ -16,6 +17,23 @@ stdenv.mkDerivation rec {
     "HAVE_MSGPACK=1"
     "MSGPACK_PACKAGE_NAME=msgpack-c"
   ];
+=======
+{ lib, stdenv, fetchurl, pkg-config, postgresql, msgpack, groonga }:
+
+stdenv.mkDerivation rec {
+  pname = "pgroonga";
+  version = "3.0.1";
+
+  src = fetchurl {
+    url = "https://packages.groonga.org/source/${pname}/${pname}-${version}.tar.gz";
+    sha256 = "sha256-lsUtM6AM/AVjDGP9vSzj7Vxx+3+IS4cr7ctmU4C6Ml8=";
+  };
+
+  nativeBuildInputs = [ pkg-config ];
+  buildInputs = [ postgresql msgpack groonga ];
+
+  makeFlags = [ "HAVE_MSGPACK=1" ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   installPhase = ''
     install -D pgroonga.so -t $out/lib/
@@ -36,7 +54,10 @@ stdenv.mkDerivation rec {
       You can use super fast full text search feature against all languages by installing PGroonga into your PostgreSQL.
     '';
     homepage = "https://pgroonga.github.io/";
+<<<<<<< HEAD
     changelog = "https://github.com/pgroonga/pgroonga/releases/tag/${version}";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     license = licenses.postgresql;
     platforms = postgresql.meta.platforms;
     maintainers = with maintainers; [ DerTim1 ];

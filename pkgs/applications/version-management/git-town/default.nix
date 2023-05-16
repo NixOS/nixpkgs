@@ -1,17 +1,41 @@
+<<<<<<< HEAD
 { lib, buildGoModule, fetchFromGitHub, installShellFiles, git, testers, git-town, makeWrapper }:
 
 buildGoModule rec {
   pname = "git-town";
   version = "9.0.1";
+=======
+{ lib, buildGoModule, fetchFromGitHub, fetchpatch, installShellFiles, git, testers, git-town, makeWrapper }:
+
+buildGoModule rec {
+  pname = "git-town";
+  version = "7.8.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "git-town";
     repo = "git-town";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-JvN7te59uRMC0TOWsBUYNEPLIn4nLlIvXI5gOQfQaCU=";
   };
 
   vendorHash = null;
+=======
+    sha256 = "sha256-g9ooMIMN8DN2FcWYkDC1hICCleQYdHf30PYMCit/NMI=";
+  };
+
+  patches = [
+    # Fix "go vet" when building using Go 1.18.
+    (fetchpatch {
+      name = "fix-go-vet-in-go-1.18.patch";
+      url = "https://github.com/git-town/git-town/commit/23eb0aca7b28c6a0afc21db553aa0e35d35891aa.patch";
+      sha256 = "sha256-EyfhKVrQxRJNrYqaZI04dJogaXs1J+bbOIu7p8g2Clc=";
+    })
+  ];
+
+  vendorSha256 = null;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nativeBuildInputs = [ installShellFiles makeWrapper ];
 

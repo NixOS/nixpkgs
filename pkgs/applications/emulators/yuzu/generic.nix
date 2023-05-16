@@ -15,7 +15,10 @@
 , discord-rpc
 , doxygen
 , enet
+<<<<<<< HEAD
 , fetchurl
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , ffmpeg
 , fmt
 , glslang
@@ -48,6 +51,7 @@
 , zstd
 }:
 
+<<<<<<< HEAD
 let
   tzinfoVersion = "220816";
   tzinfo = fetchurl {
@@ -55,6 +59,9 @@ let
     hash = "sha256-yv8ykEYPu9upeXovei0u16iqQ7NasH6873KnQy4+KwI=";
   };
 in stdenv.mkDerivation {
+=======
+stdenv.mkDerivation {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pname = "yuzu-${branch}";
 
   inherit version src;
@@ -148,10 +155,13 @@ in stdenv.mkDerivation {
       "-DTITLE_BAR_FORMAT_IDLE=yuzu | ${branch} ${version} (nixpkgs) {}"
       "-DTITLE_BAR_FORMAT_RUNNING=yuzu | ${branch} ${version} (nixpkgs) | {}"
     )
+<<<<<<< HEAD
 
     # provide pre-downloaded tz data
     mkdir -p build/externals/nx_tzdb
     ln -sf ${tzinfo} build/externals/nx_tzdb/${tzinfoVersion}.zip
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '';
 
   # This must be done after cmake finishes as it overwrites the file

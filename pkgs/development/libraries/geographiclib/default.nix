@@ -2,13 +2,21 @@
 
 stdenv.mkDerivation rec {
   pname = "geographiclib";
+<<<<<<< HEAD
   version = "2.3";
+=======
+  version = "2.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "geographiclib";
     repo = "geographiclib";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-FVA2y1q0WjRSCltCN2qntWC//Zj94TXO/fTebFfQ9NY=";
+=======
+    hash = "sha256-W2YbeUYr6rjzdufVGzJ1k56uHHMzq8eidDZbRxTyzAU=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ cmake doxygen ];

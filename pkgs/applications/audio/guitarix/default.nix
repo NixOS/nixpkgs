@@ -30,7 +30,11 @@
 , serd
 , sord
 , sratom
+<<<<<<< HEAD
 , waf
+=======
+, wafHook
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , wrapGAppsHook
 , zita-convolver
 , zita-resampler
@@ -56,7 +60,11 @@ stdenv.mkDerivation rec {
     intltool
     pkg-config
     python3
+<<<<<<< HEAD
     waf.hook
+=======
+    wafHook
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     wrapGAppsHook
   ];
 

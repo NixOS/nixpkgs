@@ -7,14 +7,27 @@ let
   cfg = config.services.nexus;
 
 in
+<<<<<<< HEAD
+=======
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 {
   options = {
     services.nexus = {
       enable = mkEnableOption (lib.mdDoc "Sonatype Nexus3 OSS service");
 
+<<<<<<< HEAD
       package = lib.mkPackageOption pkgs "nexus" { };
 
       jdkPackage = lib.mkPackageOption pkgs "openjdk8" { };
+=======
+      package = mkOption {
+        type = types.package;
+        default = pkgs.nexus;
+        defaultText = literalExpression "pkgs.nexus";
+        description = lib.mdDoc "Package which runs Nexus3";
+      };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
       user = mkOption {
         type = types.str;
@@ -101,11 +114,20 @@ in
   config = mkIf cfg.enable {
     users.users.${cfg.user} = {
       isSystemUser = true;
+<<<<<<< HEAD
       inherit (cfg) group home;
       createHome = true;
     };
 
     users.groups.${cfg.group} = { };
+=======
+      group = cfg.group;
+      home = cfg.home;
+      createHome = true;
+    };
+
+    users.groups.${cfg.group} = {};
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     systemd.services.nexus = {
       description = "Sonatype Nexus3";
@@ -118,7 +140,10 @@ in
         NEXUS_USER = cfg.user;
         NEXUS_HOME = cfg.home;
 
+<<<<<<< HEAD
         INSTALL4J_JAVA_HOME = cfg.jdkPackage;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         VM_OPTS_FILE = pkgs.writeText "nexus.vmoptions" cfg.jvmOpts;
       };
 

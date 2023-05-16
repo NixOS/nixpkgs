@@ -7,7 +7,11 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "pb-";
     repo = "gotypist";
+<<<<<<< HEAD
     rev = version;
+=======
+    rev = "${version}";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     sha256 = "0khl2f6bl121slw9mlf4qzsdarpk1v3vry11f3dvz7pb1q6zjj11";
   };
 

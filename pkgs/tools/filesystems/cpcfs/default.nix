@@ -12,7 +12,11 @@ stdenv.mkDerivation rec {
     sha256 = "0rfbry0qy8mv746mzk9zdfffkdgq4w7invgb5cszjma2cp83q3i2";
   };
 
+<<<<<<< HEAD
   sourceRoot = "${src.name}/src";
+=======
+  sourceRoot = "source/src";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nativeBuildInputs = [ makeWrapper ncurses readline ronn ];
 

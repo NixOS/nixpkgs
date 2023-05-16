@@ -21,8 +21,11 @@ stdenv.mkDerivation rec {
     # Fix warnings from preprocessor instructions.
     # https://github.com/NixOS/nixpkgs/issues/59929
     ./preprocessor-warnings.patch
+<<<<<<< HEAD
     # `configure` defines a test `main` with an implicit `int` return, which clang 16 disallows.
     ./fix-configure-main.patch
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   enableParallelBuilding = true;
@@ -57,6 +60,7 @@ stdenv.mkDerivation rec {
        # cross-compiling, but `autoreconfHook` brings in `makeWrapper` which
        # doesn't work with the bootstrapTools bash, so can only do this for
        # cross builds when `stdenv.shell` is a newer bash.
+<<<<<<< HEAD
     ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform
        # The provided `configure` script fails on clang 16 because some tests have a `main`
        # returning an implicit `int`, which clang 16 treats as an error. Running `autoreconf` fixes
@@ -64,6 +68,9 @@ stdenv.mkDerivation rec {
        # This is done only for clang on Darwin because the Darwin stdenv bootstrap does not use
        # libelf, so should be safe because it will always be run with a compatible version of bash.
        || (stdenv.cc.isClang && stdenv.isDarwin)) autoreconfHook;
+=======
+    ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) autoreconfHook;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   meta = {
     description = "ELF object file access library";

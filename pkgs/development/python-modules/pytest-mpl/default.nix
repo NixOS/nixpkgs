@@ -63,6 +63,10 @@ buildPythonPackage rec {
     description = "Pytest plugin to help with testing figures output from Matplotlib";
     homepage = "https://github.com/matplotlib/pytest-mpl";
     license = licenses.bsd3;
+<<<<<<< HEAD
     maintainers = [ ];
+=======
+    maintainers = [ maintainers.costrouc ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

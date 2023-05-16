@@ -4,6 +4,10 @@
 , python3Packages
 , gnupg
 , pass
+<<<<<<< HEAD
+=======
+, makeWrapper
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 python3Packages.buildPythonApplication rec {

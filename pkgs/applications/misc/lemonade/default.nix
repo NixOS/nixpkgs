@@ -22,7 +22,11 @@ buildGoModule rec {
     })
   ];
 
+<<<<<<< HEAD
   vendorHash = "sha256-wjQfTKVNmehu4aU5425gS0YWKj53dosVSTLgdu9KjKc=";
+=======
+  vendorSha256 = "sha256-wjQfTKVNmehu4aU5425gS0YWKj53dosVSTLgdu9KjKc=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   subPackages = [ "." ];
 
@@ -30,6 +34,10 @@ buildGoModule rec {
     description = "Remote utility tool that to copy, paste and open browsers over TCP";
     homepage = "https://github.com/lemonade-command/lemonade/";
     license = licenses.mit;
+<<<<<<< HEAD
     maintainers = with maintainers; [ ];
+=======
+    maintainers = with maintainers; [ SuperSandro2000 ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

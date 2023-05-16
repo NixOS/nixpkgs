@@ -15,10 +15,13 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ glib mpv-unwrapped ];
 
+<<<<<<< HEAD
   postPatch = ''
     substituteInPlace Makefile --replace 'PKG_CONFIG =' 'PKG_CONFIG ?='
   '';
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   installFlags = [ "SCRIPTS_DIR=$(out)/share/mpv/scripts" ];
 
   # Otherwise, the shared object isn't `strip`ped. See:
@@ -32,6 +35,9 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     platforms = platforms.linux;
     maintainers = with maintainers; [ jfrankenau ];
+<<<<<<< HEAD
     changelog = "https://github.com/hoyon/mpv-mpris/releases/tag/${version}";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

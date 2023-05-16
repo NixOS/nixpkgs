@@ -16,8 +16,13 @@ stdenv.mkDerivation rec {
     sha256 = "0f70lkw66v9cj72q0iw1s2546r6bwwcd8idcm3621fg2fgh2rw58";
   };
 
+<<<<<<< HEAD
   nativeBuildInputs = [ pkg-config gobject-introspection ];
   buildInputs = [ dbus dbus-glib gtk3 gtk-doc docbook_xml_dtd_45 docbook_xsl libxslt libxml2 ];
+=======
+  nativeBuildInputs = [ pkg-config ];
+  buildInputs = [ dbus dbus-glib gtk3 gobject-introspection gtk-doc docbook_xml_dtd_45 docbook_xsl libxslt libxml2 ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   meta = {
     homepage = "https://wiki.gnome.org/Attic/LibUnique";

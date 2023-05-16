@@ -31,7 +31,10 @@ in
         type = types.package;
         default = pkgs.boinc;
         defaultText = literalExpression "pkgs.boinc";
+<<<<<<< HEAD
         example = literalExpression "pkgs.boinc-headless";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         description = lib.mdDoc ''
           Which BOINC package to use.
         '';

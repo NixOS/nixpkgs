@@ -38,6 +38,10 @@ buildPythonPackage rec {
     description = "Test asyncio code more easily";
     homepage = "https://github.com/kwarunek/aiounittest";
     license = licenses.mit;
+<<<<<<< HEAD
     maintainers = [ ];
+=======
+    maintainers = [ maintainers.costrouc ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

@@ -1,6 +1,9 @@
 { lib
 , python3
+<<<<<<< HEAD
 , fetchPypi
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , fetchFromGitHub
 , ffmpeg
 }:
@@ -10,7 +13,11 @@ let
     packageOverrides = self: super: {
       ytmusicapi = super.ytmusicapi.overridePythonAttrs (old: rec {
         version = "0.25.1";
+<<<<<<< HEAD
         src = fetchPypi {
+=======
+        src = self.fetchPypi {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           inherit (old) pname;
           inherit version;
           hash = "sha256-uc/fgDetSYaCRzff0SzfbRhs3TaKrfE2h6roWkkj8yQ=";
@@ -20,7 +27,11 @@ let
   };
 in python.pkgs.buildPythonApplication rec {
   pname = "spotdl";
+<<<<<<< HEAD
   version = "4.2.0";
+=======
+  version = "4.1.8";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   format = "pyproject";
 
@@ -28,7 +39,11 @@ in python.pkgs.buildPythonApplication rec {
     owner = "spotDL";
     repo = "spotify-downloader";
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-miIDasbOKmfYESiEIlMxEUfPkLLBz4s1rX2eMz3MrzA=";
+=======
+    hash = "sha256-iE5d9enSbONqVxKW7H7N+1TmBp6nVGtiQvxJxV7R/1o=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = with python.pkgs; [
@@ -56,10 +71,15 @@ in python.pkgs.buildPythonApplication rec {
     pykakasi
     syncedlyrics
     typing-extensions
+<<<<<<< HEAD
     soundcloud-v2
     bandcamp-api
     setuptools # for pkg_resources
   ] ++ python-slugify.optional-dependencies.unidecode;
+=======
+    setuptools # for pkg_resources
+  ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nativeCheckInputs = with python.pkgs; [
     pytestCheckHook
@@ -87,8 +107,13 @@ in python.pkgs.buildPythonApplication rec {
     "test_album_from_string"
     "test_album_from_url"
     "test_album_length"
+<<<<<<< HEAD
     "test_artist_from_string"
     "test_artist_from_url"
+=======
+    "test_artist_from_url"
+    "test_artist_from_string"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "test_convert"
     "test_download_ffmpeg"
     "test_download_song"
@@ -98,7 +123,10 @@ in python.pkgs.buildPythonApplication rec {
     "test_preload_song"
     "test_song_from_search_term"
     "test_song_from_url"
+<<<<<<< HEAD
     "test_yt_search"
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   makeWrapperArgs = [

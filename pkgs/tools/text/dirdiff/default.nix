@@ -23,11 +23,14 @@ stdenv.mkDerivation rec {
     done
   '';
 
+<<<<<<< HEAD
   env = {
     NIX_CFLAGS_COMPILE = "-DUSE_INTERP_RESULT";
     NIX_LDFLAGS = "-ltcl";
   };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   # If we don't create the directories ourselves, then 'make install' creates
   # files named 'bin' and 'lib'.
   preInstall = ''
@@ -59,6 +62,10 @@ stdenv.mkDerivation rec {
     homepage = "https://www.samba.org/ftp/paulus/";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ khumba ];
+<<<<<<< HEAD
     platforms = platforms.unix;
+=======
+    platforms = platforms.linux;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

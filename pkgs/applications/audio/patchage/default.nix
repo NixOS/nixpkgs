@@ -10,7 +10,11 @@
 , libjack2
 , pkg-config
 , python3
+<<<<<<< HEAD
 , waf
+=======
+, wafHook
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 stdenv.mkDerivation rec {
@@ -35,7 +39,11 @@ stdenv.mkDerivation rec {
     gtkmm2
     libjack2
     python3
+<<<<<<< HEAD
     waf.hook
+=======
+    wafHook
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   meta = {

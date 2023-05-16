@@ -2,7 +2,10 @@
 , buildPythonPackage
 , docutils
 , fetchFromGitHub
+<<<<<<< HEAD
 , fetchpatch
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , funcparserlib
 , nose
 , pillow
@@ -29,6 +32,7 @@ buildPythonPackage rec {
     hash = "sha256-j8FoNUIJJOaahaol1MRPyY2jcPCEIlaAD4bmM2QKFFI=";
   };
 
+<<<<<<< HEAD
   patches = [
     # https://github.com/blockdiag/blockdiag/pull/179
     (fetchpatch {
@@ -38,6 +42,8 @@ buildPythonPackage rec {
     })
   ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   propagatedBuildInputs = [
     setuptools
     funcparserlib
@@ -71,6 +77,10 @@ buildPythonPackage rec {
     homepage = "http://blockdiag.com/";
     license = licenses.asl20;
     platforms = platforms.unix;
+<<<<<<< HEAD
     maintainers = with maintainers; [ bjornfor ];
+=======
+    maintainers = with maintainers; [ bjornfor SuperSandro2000 ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

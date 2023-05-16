@@ -178,7 +178,11 @@ stdenv.mkDerivation {
   passthru = {
     inherit modules;
     tests = {
+<<<<<<< HEAD
       inherit (nixosTests) nginx nginx-auth nginx-etag nginx-globalredirect nginx-http3 nginx-proxyprotocol nginx-pubhtml nginx-sandbox nginx-sso nginx-status-page;
+=======
+      inherit (nixosTests) nginx nginx-auth nginx-etag nginx-globalredirect nginx-http3 nginx-pubhtml nginx-sandbox nginx-sso;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       variants = lib.recurseIntoAttrs nixosTests.nginx-variants;
       acme-integration = nixosTests.acme;
     } // passthru.tests;
@@ -190,6 +194,10 @@ stdenv.mkDerivation {
     license     = [ licenses.bsd2 ]
       ++ concatMap (m: m.meta.license) modules;
     platforms   = platforms.all;
+<<<<<<< HEAD
     maintainers = with maintainers; [ fpletz ajs124 raitobezarius ];
+=======
+    maintainers = with maintainers; [ thoughtpolice raskin fpletz globin ajs124 ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

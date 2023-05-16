@@ -1,6 +1,30 @@
 import ./make-test-python.nix ({pkgs, lib, ...}:
 let
+<<<<<<< HEAD
   gpgKeyring = import ./common/gpg-keyring.nix { inherit pkgs; };
+=======
+  gpgKeyring = (pkgs.runCommand "gpg-keyring" { buildInputs = [ pkgs.gnupg ]; } ''
+    mkdir -p $out
+    export GNUPGHOME=$out
+    cat > foo <<EOF
+      %echo Generating a basic OpenPGP key
+      %no-protection
+      Key-Type: DSA
+      Key-Length: 1024
+      Subkey-Type: ELG-E
+      Subkey-Length: 1024
+      Name-Real: Bob Foobar
+      Name-Email: bob@foo.bar
+      Expire-Date: 0
+      # Do a commit here, so that we can later print "done"
+      %commit
+      %echo done
+    EOF
+    gpg --batch --generate-key foo
+    rm $out/S.gpg-agent $out/S.gpg-agent.*
+    gpg --export bob@foo.bar -a > $out/pubkey.gpg
+  '');
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nspawnImages = (pkgs.runCommand "localhost" { buildInputs = [ pkgs.coreutils pkgs.gnupg ]; } ''
     mkdir -p $out

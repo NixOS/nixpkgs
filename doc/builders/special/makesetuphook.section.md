@@ -12,7 +12,11 @@ pkgs.makeSetupHook {
 } ./script.sh
 ```
 
+<<<<<<< HEAD
 ### setup hook that depends on the hello package and runs hello and @shell@ is substituted with path to bash {#sec-pkgs.makeSetupHook-usage-example}
+=======
+#### setup hook that depends on the hello package and runs hello and @shell@ is substituted with path to bash {#sec-pkgs.makeSetupHook-usage-example}
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 ```nix
 pkgs.makeSetupHook {

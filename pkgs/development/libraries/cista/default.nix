@@ -2,13 +2,21 @@
 
 stdenv.mkDerivation rec {
   pname = "cista";
+<<<<<<< HEAD
   version = "0.14";
+=======
+  version = "0.13";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "felixguendling";
     repo = pname;
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-E2B+dNFk0ssKhT9dULNFzpa8auRQ9Q0czuUjX6hxWPw=";
+=======
+    sha256 = "sha256-dQOVmKRXfApN0QRx/PmLVzeCGppFJBnNWIOoLbDbrds=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ cmake ];

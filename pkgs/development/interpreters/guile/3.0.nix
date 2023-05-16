@@ -127,11 +127,15 @@ builder rec {
 
   setupHook = ./setup-hook-3.0.sh;
 
+<<<<<<< HEAD
   passthru = rec {
     effectiveVersion = lib.versions.majorMinor version;
     siteCcacheDir = "lib/guile/${effectiveVersion}/site-ccache";
     siteDir = "share/guile/site/${effectiveVersion}";
 
+=======
+  passthru = {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     updateScript = writeScript "update-guile-3" ''
       #!/usr/bin/env nix-shell
       #!nix-shell -i bash -p curl pcre common-updater-scripts

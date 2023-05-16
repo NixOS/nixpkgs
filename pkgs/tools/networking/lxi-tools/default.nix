@@ -10,13 +10,21 @@
 
 stdenv.mkDerivation rec {
   pname = "lxi-tools";
+<<<<<<< HEAD
   version = "2.7";
+=======
+  version = "2.5";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "lxi-tools";
     repo = "lxi-tools";
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-69B3wW4lg6GxSpEKhuFYKTuAyd+QYb4WNbNVdZnRUt8=";
+=======
+    sha256 = "sha256-F9svLaQnQyVyC5KzDnaGwB8J/nBZ3zzOVwYNxWBPifU=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [
@@ -48,7 +56,11 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://lxi-tools.github.io/";
     license = licenses.bsd3;
+<<<<<<< HEAD
     platforms = platforms.unix;
+=======
+    platforms = platforms.linux;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     maintainers = [ maintainers.vq ];
   };
 }

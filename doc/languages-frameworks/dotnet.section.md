@@ -92,7 +92,11 @@ The `dotnetCorePackages.sdk` contains both a runtime and the full sdk of a given
 
 To package Dotnet applications, you can use `buildDotnetModule`. This has similar arguments to `stdenv.mkDerivation`, with the following additions:
 
+<<<<<<< HEAD
 * `projectFile` is used for specifying the dotnet project file, relative to the source root. These have `.sln` (entire solution) or `.csproj` (single project) file extensions. This can be a list of multiple projects as well. When omitted, will attempt to find and build the solution (`.sln`). If running into problems, make sure to set it to a file (or a list of files) with the `.csproj` extension - building applications as entire solutions is not fully supported by the .NET CLI.
+=======
+* `projectFile` is used for specifying the dotnet project file, relative to the source root. These usually have `.sln` or `.csproj` file extensions. This can be a list of multiple projects as well. Most of the time dotnet can figure this location out by itself, so this should only be set if necessary.
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 * `nugetDeps` takes either a path to a `deps.nix` file, or a derivation. The `deps.nix` file can be generated using the script attached to `passthru.fetch-deps`. This file can also be generated manually using `nuget-to-nix` tool, which is available in nixpkgs. If the argument is a derivation, it will be used directly and assume it has the same output as `mkNugetDeps`.
 * `packNupkg` is used to pack project as a `nupkg`, and installs it to `$out/share`. If set to `true`, the derivation can be used as a dependency for another dotnet project by adding it to `projectReferences`.
 * `projectReferences` can be used to resolve `ProjectReference` project items. Referenced projects can be packed with `buildDotnetModule` by setting the `packNupkg = true` attribute and passing a list of derivations to `projectReferences`. Since we are sharing referenced projects as NuGets they must be added to csproj/fsproj files as `PackageReference` as well.
@@ -108,6 +112,7 @@ To package Dotnet applications, you can use `buildDotnetModule`. This has simila
 * `executables` is used to specify which executables get wrapped to `$out/bin`, relative to `$out/lib/$pname`. If this is unset, all executables generated will get installed. If you do not want to install any, set this to `[]`. This gets done in the `preFixup` phase.
 * `runtimeDeps` is used to wrap libraries into `LD_LIBRARY_PATH`. This is how dotnet usually handles runtime dependencies.
 * `buildType` is used to change the type of build. Possible values are `Release`, `Debug`, etc. By default, this is set to `Release`.
+<<<<<<< HEAD
 * `selfContainedBuild` allows to enable the [self-contained](https://docs.microsoft.com/en-us/dotnet/core/deploying/#publish-self-contained) build flag. By default, it is set to false and generated applications have a dependency on the selected dotnet runtime. If enabled, the dotnet runtime is bundled into the executable and the built app has no dependency on .NET.
 * `useAppHost` will enable creation of a binary executable that runs the .NET application using the specified root. More info in [Microsoft docs](https://learn.microsoft.com/en-us/dotnet/core/deploying/#publish-framework-dependent). Enabled by default.
 * `useDotnetFromEnv` will change the binary wrapper so that it uses the .NET from the environment. The runtime specified by `dotnet-runtime` is given as a fallback in case no .NET is installed in the user's environment. This is most useful for .NET global tools and LSP servers, which often extend the .NET CLI and their runtime should match the users' .NET runtime.
@@ -115,6 +120,13 @@ To package Dotnet applications, you can use `buildDotnetModule`. This has simila
 * `dotnet-runtime` is useful in cases where you need to change what dotnet runtime is being used. This can be either a regular dotnet runtime, or an aspnetcore.
 * `dotnet-test-sdk` is useful in cases where unit tests expect a different dotnet SDK. By default, this is set to the `dotnet-sdk` attribute.
 * `testProjectFile` is useful in cases where the regular project file does not contain the unit tests. It gets restored and build, but not installed. You may need to regenerate your nuget lockfile after setting this. Note that if set, only tests from this project are executed.
+=======
+* `selfContainedBuild` allows to enable the [self-contained](https://docs.microsoft.com/en-us/dotnet/core/deploying/#publish-self-contained) build flag. By default, it is set to false and generated applications have a dependency on the selected dotnet runtime. If enabled, the dotnet runtime is bundled into the executable and the built app has no dependency on Dotnet.
+* `dotnet-sdk` is useful in cases where you need to change what dotnet SDK is being used. You can also set this to the result of `dotnetSdkPackages.combinePackages`, if the project uses multiple SDKs to build.
+* `dotnet-runtime` is useful in cases where you need to change what dotnet runtime is being used. This can be either a regular dotnet runtime, or an aspnetcore.
+* `dotnet-test-sdk` is useful in cases where unit tests expect a different dotnet SDK. By default, this is set to the `dotnet-sdk` attribute.
+* `testProjectFile` is useful in cases where the regular project file does not contain the unit tests. It gets restored and build, but not installed. You may need to regenerate your nuget lockfile after setting this.
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 * `disabledTests` is used to disable running specific unit tests. This gets passed as: `dotnet test --filter "FullyQualifiedName!={}"`, to ensure compatibility with all unit test frameworks.
 * `dotnetRestoreFlags` can be used to pass flags to `dotnet restore`.
 * `dotnetBuildFlags` can be used to pass flags to `dotnet build`.
@@ -123,7 +135,11 @@ To package Dotnet applications, you can use `buildDotnetModule`. This has simila
 * `dotnetPackFlags` can be used to pass flags to `dotnet pack`. Used only if `packNupkg` is set to `true`.
 * `dotnetFlags` can be used to pass flags to all of the above phases.
 
+<<<<<<< HEAD
 When packaging a new application, you need to fetch its dependencies. Create an empty `deps.nix`, set `nugetDeps = ./deps.nix`, then run `nix-build -A package.fetch-deps` to generate a script that will build the lockfile for you.
+=======
+When packaging a new application, you need to fetch its dependencies. You can run `nix-build -A package.fetch-deps` to generate a script that will build a lockfile for you. After running the script you should have the location of the generated lockfile printed to the console, which can be copied to a stable directory. Then set `nugetDeps = ./deps.nix` and you're ready to build the derivation.
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 Here is an example `default.nix`, using some of the previously discussed arguments:
 ```nix
@@ -153,6 +169,7 @@ in buildDotnetModule rec {
   runtimeDeps = [ ffmpeg ]; # This will wrap ffmpeg's library path into `LD_LIBRARY_PATH`.
 }
 ```
+<<<<<<< HEAD
 
 ## Dotnet global tools {#dotnet-global-tools}
 
@@ -212,3 +229,5 @@ buildDotnetGlobalTool {
 ```
 
 When packaging a new .NET application in nixpkgs, you can tag the [`@NixOS/dotnet`](https://github.com/orgs/nixos/teams/dotnet) team for help and code review.
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)

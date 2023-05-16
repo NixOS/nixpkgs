@@ -9,8 +9,11 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-vtb2hI4iuy+Dtfdksq7w7TkwVOgDqOOocRyyo55rSS0=";
   };
 
+<<<<<<< HEAD
   outputs = [ "out" "dev" "man" ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   configureFlags = [
     "--without-python"
   ];

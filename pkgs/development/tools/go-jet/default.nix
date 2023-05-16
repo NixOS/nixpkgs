@@ -2,13 +2,21 @@
 
 buildGoModule rec {
   pname = "go-jet";
+<<<<<<< HEAD
   version = "2.10.1";
+=======
+  version = "2.10.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = pname;
     repo = "jet";
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-G/yKS4YFKOVkuoqT/Qh12ul43dKo4W23EIyCgmeaUoo=";
+=======
+    sha256 = "sha256-Dj/Bq7MEM2sIhz1ThvRpO9wYCasISvd8icP68LVXEx0=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   vendorHash = "sha256-AwrtLTzKqKjFf5fV3JWYWyaqzHJjMNrYuSXhHXyV5HE=";

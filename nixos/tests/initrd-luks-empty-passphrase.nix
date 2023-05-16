@@ -14,18 +14,24 @@ in {
   name = "initrd-luks-empty-passphrase";
 
   nodes.machine = { pkgs, ... }: {
+<<<<<<< HEAD
     imports = lib.optionals (!systemdStage1) [ ./common/auto-format-root-device.nix ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     virtualisation = {
       emptyDiskImages = [ 512 ];
       useBootLoader = true;
       useEFIBoot = true;
+<<<<<<< HEAD
       # This requires to have access
       # to a host Nix store as
       # the new root device is /dev/vdb
       # an empty 512MiB drive, containing no Nix store.
       mountHostNixStore = true;
       fileSystems."/".autoFormat = lib.mkIf systemdStage1 true;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
 
     boot.loader.systemd-boot.enable = true;

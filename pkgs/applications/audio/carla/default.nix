@@ -24,6 +24,7 @@
 assert withQt -> qtbase != null;
 assert withQt -> wrapQtAppsHook != null;
 
+<<<<<<< HEAD
 stdenv.mkDerivation (finalAttrs: {
   pname = "carla";
   version = "2.5.6";
@@ -33,6 +34,17 @@ stdenv.mkDerivation (finalAttrs: {
     repo = finalAttrs.pname;
     rev = "v${finalAttrs.version}";
     hash = "sha256-/ZIproky1AHJHvV62xWm0nrzNBOjvBBv93V0KespVjU=";
+=======
+stdenv.mkDerivation rec {
+  pname = "carla";
+  version = "2.5.4";
+
+  src = fetchFromGitHub {
+    owner = "falkTX";
+    repo = pname;
+    rev = "v${version}";
+    hash = "sha256-St0+avF9/UzQj8T1eZq5HSmxnaK9+BXSuufyX0NJYbU=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [
@@ -49,7 +61,11 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optional withGtk2 gtk2
     ++ lib.optional withGtk3 gtk3;
 
+<<<<<<< HEAD
   propagatedBuildInputs = finalAttrs.pythonPath;
+=======
+  propagatedBuildInputs = pythonPath;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   enableParallelBuilding = true;
 
@@ -100,4 +116,8 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = [ maintainers.minijackson ];
     platforms = platforms.linux;
   };
+<<<<<<< HEAD
 })
+=======
+}
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)

@@ -17,12 +17,18 @@
 , deepmerge
 , fastjsonschema
 , hexdump
+<<<<<<< HEAD
 , importlib-metadata
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , jinja2
 , libusbsio
 , oscrypto
 , pycryptodome
+<<<<<<< HEAD
 , pyftdi
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , pylink-square
 , pyocd
 , pypemicro
@@ -36,6 +42,7 @@
 
 buildPythonPackage rec {
   pname = "spsdk";
+<<<<<<< HEAD
   version = "1.11.0";
 
   src = fetchFromGitHub {
@@ -43,6 +50,15 @@ buildPythonPackage rec {
     repo = pname;
     rev = "refs/tags/${version}";
     hash = "sha256-B3qedAXSG3A8rcWu1O2GnZ1ZqHN+7fQK43qXzGnDEY0=";
+=======
+  version = "1.10.0";
+
+  src = fetchFromGitHub {
+    owner = "NXPmicro";
+    repo = pname;
+    rev = "refs/tags/${version}";
+    hash = "sha256-KJUtAWENS3+VAs3Iai1aKYzMYtfetMeI0MHeQ6NraNY=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [
@@ -94,8 +110,11 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+<<<<<<< HEAD
     importlib-metadata
     pyftdi
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     pytestCheckHook
     voluptuous
   ];
@@ -103,9 +122,14 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "spsdk" ];
 
   meta = with lib; {
+<<<<<<< HEAD
     changelog = "https://github.com/nxp-mcuxpresso/spsdk/blob/${src.rev}/docs/release_notes.rst";
     description = "NXP Secure Provisioning SDK";
     homepage = "https://github.com/nxp-mcuxpresso/spsdk";
+=======
+    description = "NXP Secure Provisioning SDK";
+    homepage = "https://github.com/NXPmicro/spsdk";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     license = licenses.bsd3;
     maintainers = with maintainers; [ frogamic sbruder ];
   };

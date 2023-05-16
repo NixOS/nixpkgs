@@ -1,6 +1,9 @@
 { lib, stdenv
 , fetchFromGitHub
+<<<<<<< HEAD
 , fetchpatch
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , cmake
 , nixosTests
 , alsa-lib
@@ -14,12 +17,17 @@
 
 stdenv.mkDerivation rec {
   pname = "ft2-clone";
+<<<<<<< HEAD
   version = "1.69";
+=======
+  version = "1.67";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "8bitbubsy";
     repo = "ft2-clone";
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-tm0yTh46UKnsjH9hv3cMW0YL2x3OTRL+14x4c7w124U=";
   };
 
@@ -37,6 +45,15 @@ stdenv.mkDerivation rec {
       hash = "sha256-X4AVuJ0iRlpH1N/YzjdVk5+yv7eiDNoZkk0mhOizgOg=";
     })
   ];
+=======
+    sha256 = "sha256-v/yGHWd/hhE2jDdAQhyQbZOuHSS0FSG4WlVe8Oc6tMc=";
+  };
+
+  # Adapt the linux-only CMakeLists to darwin (more reliable than make-macos.sh)
+  postPatch = lib.optionalString stdenv.isDarwin ''
+    sed -i -e 's@__LINUX_ALSA__@__MACOSX_CORE__@' -e 's@asound@@' CMakeLists.txt
+  '';
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ SDL2 ]
@@ -49,6 +66,16 @@ stdenv.mkDerivation rec {
          Cocoa
        ];
 
+<<<<<<< HEAD
+=======
+  NIX_LDFLAGS = lib.optionalString stdenv.isDarwin [
+    "-framework CoreAudio"
+    "-framework CoreMIDI"
+    "-framework CoreServices"
+    "-framework Cocoa"
+  ];
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   passthru.tests = {
     ft2-clone-starts = nixosTests.ft2-clone;
   };

@@ -19,14 +19,22 @@
 
 stdenv.mkDerivation rec {
   pname = "libgit2";
+<<<<<<< HEAD
   version = "1.7.1";
+=======
+  version = "1.6.4";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   # also check the following packages for updates: python3Packages.pygit2 and libgit2-glib
 
   src = fetchFromGitHub {
     owner = "libgit2";
     repo = "libgit2";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-3W0/i6Pu7I7D1zMQhmEqJVsa7PZpKOqU1+udNENSBvM=";
+=======
+    hash = "sha256-lW3mokVKsbknVj2xsxEbeZH4IdKZ0aIgGutzenS0Eh0=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   cmakeFlags = [

@@ -35,7 +35,11 @@ import ./make-test-python.nix ({ pkgs, ...} : {
         "${pkgs.nzbget}/bin/nzbget -n -o Control_iP=127.0.0.1 -o Control_port=6789 -o Control_password=tegbzn6789 -V"
     )
 
+<<<<<<< HEAD
     config = server.succeed("${nodes.server.systemd.services.nzbget.serviceConfig.ExecStart} --printconfig")
+=======
+    config = server.succeed("${nodes.server.config.systemd.services.nzbget.serviceConfig.ExecStart} --printconfig")
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     # confirm the test settings are applied
     assert 'MainDir = "/var/lib/nzbget"' in config

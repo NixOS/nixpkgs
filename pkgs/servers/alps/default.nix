@@ -11,7 +11,11 @@ buildGoModule rec {
     hash = "sha256-RSug3YSiqYLGs05Bee4NoaoCyPvUZ7IqlKWI1hmxbiA=";
   };
 
+<<<<<<< HEAD
   vendorHash = "sha256-XDm6LU9D/rVQHiko7EFpocv+IktGe6tQhJYRrOJxeSs=";
+=======
+  vendorSha256 = "sha256-XDm6LU9D/rVQHiko7EFpocv+IktGe6tQhJYRrOJxeSs=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   ldflags = [
     "-s"
@@ -45,6 +49,10 @@ buildGoModule rec {
     description = "A simple and extensible webmail.";
     homepage = "https://git.sr.ht/~migadu/alps";
     license = licenses.mit;
+<<<<<<< HEAD
     maintainers = with maintainers; [ booklearner madonius hmenke ];
+=======
+    maintainers = with maintainers; [ gordias booklearner madonius hmenke ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

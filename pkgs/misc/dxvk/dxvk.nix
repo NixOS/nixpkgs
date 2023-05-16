@@ -5,16 +5,25 @@
 , meson
 , ninja
 , windows
+<<<<<<< HEAD
 , dxvkVersion ? "default"
+=======
+, dxvkVersion
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , spirv-headers
 , vulkan-headers
 , SDL2
 , glfw
 , pkgsBuildHost
+<<<<<<< HEAD
 , gitUpdater
 , sdl2Support ? true
 , glfwSupport ? false
 , enableMoltenVKCompat ? false
+=======
+, sdl2Support ? true
+, glfwSupport ? false
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 # SDL2 and GLFW support are mutually exclusive.
@@ -36,7 +45,11 @@ let
         hash = "sha256-T93ZylxzJGprrP+j6axZwl2d3hJowMCUOKNjIyNzkmE=";
       };
       # These patches are required when using DXVK with Wine on Darwin.
+<<<<<<< HEAD
       patches = lib.optionals enableMoltenVKCompat [
+=======
+      patches = lib.optionals stdenv.buildPlatform.isDarwin [
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         # Patch DXVK to work with MoltenVK even though it doesn’t support some required features.
         # Some games work poorly (particularly Unreal Engine 4 games), but others work pretty well.
         ./darwin-dxvk-compat.patch
@@ -45,13 +58,22 @@ let
         ./darwin-thread-primitives.patch
       ];
     };
+<<<<<<< HEAD
     "default" = rec {
       version = "2.2";
+=======
+    "2.1" = rec {
+      version = "2.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       src = fetchFromGitHub {
         owner = "doitsujin";
         repo = "dxvk";
         rev = "v${version}";
+<<<<<<< HEAD
         hash = "sha256-GKRd66DvcA+7p3/wDqAUi02ZLRSVZ/fvJM0PQDEKVMA=";
+=======
+        hash = "sha256-A4KR11brfQbR56dGt371MRwMN/H6HFAU8TlFC97/bRs=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         fetchSubmodules = true; # Needed for the DirectX headers and libdisplay-info
       };
       patches = [ ];
@@ -61,7 +83,11 @@ let
   isWindows = stdenv.targetPlatform.uname.system == "Windows";
   isCross = stdenv.hostPlatform != stdenv.targetPlatform;
 in
+<<<<<<< HEAD
 stdenv.mkDerivation (finalAttrs:  {
+=======
+stdenv.mkDerivation {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pname = "dxvk";
   inherit (srcs.${dxvkVersion}) version src patches;
 
@@ -97,12 +123,15 @@ stdenv.mkDerivation (finalAttrs:  {
 
   doCheck = isDxvk2 && !isCross;
 
+<<<<<<< HEAD
   passthru = lib.optionalAttrs (lib.versionAtLeast finalAttrs.version "2.0") {
     updateScript = gitUpdater {
       rev-prefix = "v";
     };
   };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   meta = {
     description = "A Vulkan-based translation layer for Direct3D 9/10/11";
     homepage = "https://github.com/doitsujin/dxvk";
@@ -111,4 +140,8 @@ stdenv.mkDerivation (finalAttrs:  {
     license = lib.licenses.zlib;
     platforms = lib.platforms.windows ++ lib.optionals isDxvk2 lib.platforms.linux;
   };
+<<<<<<< HEAD
 })
+=======
+}
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)

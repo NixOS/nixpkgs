@@ -12,7 +12,11 @@
 
 buildPythonPackage rec {
   pname = "roombapy";
+<<<<<<< HEAD
   version = "1.6.9";
+=======
+  version = "1.6.8";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -21,7 +25,11 @@ buildPythonPackage rec {
     owner = "pschmitt";
     repo = "roombapy";
     rev = "refs/tags/${version}";
+<<<<<<< HEAD
     hash = "sha256-Bu8wl5Qtys1sy5FnB+2NCGnXnuq9u+TUUR9zNdlOFTU=";
+=======
+    hash = "sha256-z9D9FiE+14/x05AFu3EpBYlAqpDPc5y6S+pLTsSO0cU=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   postPatch = ''

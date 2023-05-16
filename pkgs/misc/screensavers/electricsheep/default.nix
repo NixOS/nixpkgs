@@ -11,7 +11,11 @@
 , pkg-config
 , flam3
 , libgtop
+<<<<<<< HEAD
 , boost179
+=======
+, boost
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , tinyxml
 , freeglut
 , libGLU
@@ -41,7 +45,11 @@ stdenv.mkDerivation rec {
     xorg.libXrender
     flam3
     libgtop
+<<<<<<< HEAD
     boost179
+=======
+    boost
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     tinyxml
     freeglut
     libGLU

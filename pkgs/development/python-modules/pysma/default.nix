@@ -9,14 +9,22 @@
 
 buildPythonPackage rec {
   pname = "pysma";
+<<<<<<< HEAD
   version = "0.7.5";
+=======
+  version = "0.7.4";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
+<<<<<<< HEAD
     hash = "sha256-zlCGEcG5tmgEXhSMDLKj0/imT1iHBqlp1O1QhmPrJcA=";
+=======
+    hash = "sha256-4u564tLk91duYv1IClHddur6t+Rbla/e9P0yWAxw2sw=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [

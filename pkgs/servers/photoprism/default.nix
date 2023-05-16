@@ -1,14 +1,25 @@
+<<<<<<< HEAD
 { pkgs, lib, stdenv, fetchFromGitHub, fetchzip, darktable, rawtherapee, ffmpeg, libheif, exiftool, imagemagick, makeWrapper, testers }:
 
 let
   version = "230719-73fa7bbe8";
+=======
+{ pkgs, lib, stdenv, fetchFromGitHub, fetchzip, darktable, rawtherapee, ffmpeg, libheif, exiftool, makeWrapper, testers }:
+
+let
+  version = "221118-e58fee0fb";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pname = "photoprism";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = version;
+<<<<<<< HEAD
     sha256 = "sha256-MRRF+XCk25dGK6A2AdD6/4PdXWoZNHuh/EsYOY0i7y0=";
+=======
+    sha256 = "sha256-Bx9SJLK97uZ/k09LIj8dHwmRetg6krI5iO7mtojV3PU=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   libtensorflow = pkgs.callPackage ./libtensorflow.nix { };
@@ -62,8 +73,12 @@ stdenv.mkDerivation {
       --set PHOTOPRISM_RAWTHERAPEE_BIN ${rawtherapee}/bin/rawtherapee-cli \
       --set PHOTOPRISM_HEIFCONVERT_BIN ${libheif}/bin/heif-convert \
       --set PHOTOPRISM_FFMPEG_BIN ${ffmpeg}/bin/ffmpeg \
+<<<<<<< HEAD
       --set PHOTOPRISM_EXIFTOOL_BIN ${exiftool}/bin/exiftool \
       --set PHOTOPRISM_IMAGEMAGICK_BIN ${imagemagick}/bin/convert
+=======
+      --set PHOTOPRISM_EXIFTOOL_BIN ${exiftool}/bin/exiftool
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     # install frontend
     ln -s ${frontend}/assets/* ${assets_path}

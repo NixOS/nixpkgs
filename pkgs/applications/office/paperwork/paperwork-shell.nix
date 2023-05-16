@@ -20,7 +20,11 @@ buildPythonPackage rec {
   pname = "paperwork-shell";
   inherit (import ./src.nix { inherit fetchFromGitLab; }) version src;
 
+<<<<<<< HEAD
   sourceRoot = "${src.name}/paperwork-shell";
+=======
+  sourceRoot = "source/paperwork-shell";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   # Python 2.x is not supported.
   disabled = !isPy3k && !isPyPy;

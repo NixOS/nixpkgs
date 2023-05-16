@@ -24,13 +24,21 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "newsflash";
+<<<<<<< HEAD
   version = "2.3.1";
+=======
+  version = "2.3.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitLab {
     owner = "news-flash";
     repo = "news_flash_gtk";
     rev = "refs/tags/v.${finalAttrs.version}";
+<<<<<<< HEAD
     sha256 = "sha256-JUAlDc2mp8M0vjiWcDoyBw/sKCmd4J8e9wEwZoiW0AE=";
+=======
+    sha256 = "sha256-sW2yO6aZqhiyrIT4B8iBmum+36vcQMg4NsFxInJm7hM=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   cargoDeps = rustPlatform.importCargoLock {

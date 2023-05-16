@@ -12,9 +12,12 @@
 , meta ? { }
 , enableDebugInfo ? false
 , mixEnv ? "prod"
+<<<<<<< HEAD
 # A config directory that is considered for all the dependencies of an app, typically in $src/config/
 # This was initially added, as some of Mobilizon's dependencies need to access the config at build time.
 , appConfigPath ? null
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , ...
 }@attrs:
 
@@ -31,7 +34,10 @@ let
     MIX_ENV = mixEnv;
     MIX_DEBUG = if enableDebugInfo then 1 else 0;
     HEX_OFFLINE = 1;
+<<<<<<< HEAD
     LC_ALL = "C.UTF-8";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     # add to ERL_LIBS so other modules can find at runtime.
     # http://erlang.org/doc/man/code.html#code-path
@@ -49,6 +55,7 @@ let
       runHook preConfigure
 
       ${./mix-configure-hook.sh}
+<<<<<<< HEAD
       ${lib.optionalString (!isNull appConfigPath)
       # Due to https://hexdocs.pm/elixir/main/Config.html the config directory
       # of a library seems to be not considered, as config is always
@@ -57,6 +64,8 @@ let
         rm -rf config
         cp -r ${appConfigPath} config
       ''}
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
       runHook postConfigure
     '';

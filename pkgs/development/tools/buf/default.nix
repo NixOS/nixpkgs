@@ -10,20 +10,36 @@
 
 buildGoModule rec {
   pname = "buf";
+<<<<<<< HEAD
   version = "1.26.1";
+=======
+  version = "1.18.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "bufbuild";
     repo = pname;
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-e00o3G66GCJyA3flqRa+J1yQVBVusBrEOJrL9viKtlM=";
   };
 
   vendorHash = "sha256-7RVYD0r3nqb0yLmKu9zzpQNiVDVBJGG1BiVb6J+VR9k=";
+=======
+    hash = "sha256-wMYl9TlOQ4h5MFNNWaGkou7YIBSsMfhV70ABgKkC7xo=";
+  };
+
+  vendorHash = "sha256-pyhK0tHpHrEkGRkWgzTFg9FNNBx3SwoWUfw+2zk7nAs=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   patches = [
     # Skip a test that requires networking to be available to work.
     ./skip_test_requiring_network.patch
+<<<<<<< HEAD
+=======
+    # Skip TestWorkspaceGit which requires .git and commits.
+    ./skip_test_requiring_dotgit.patch
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   nativeBuildInputs = [ installShellFiles ];
@@ -38,6 +54,11 @@ buildGoModule rec {
   preCheck = ''
     # The tests need access to some of the built utilities
     export PATH="$PATH:$GOPATH/bin"
+<<<<<<< HEAD
+=======
+    # To skip TestCloneBranchAndRefToBucket
+    export CI=true
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '';
 
   # Allow tests that bind or connect to localhost on macOS.

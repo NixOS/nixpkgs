@@ -10,13 +10,21 @@
 
 stdenv.mkDerivation rec {
   pname = "clightd";
+<<<<<<< HEAD
   version = "5.8";
+=======
+  version = "5.7";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "FedeDP";
     repo = "Clightd";
     rev = version;
+<<<<<<< HEAD
     hash = "sha256-Lmno/TJVCQVNzfpKNZzuDf2OM6w6rbz+zJTr3zVo/CM=";
+=======
+    sha256 = "sha256-4daM6Z67d52v2LmzqSZ6RSAHznyZNEqvAdWCuVFi0Kw=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   # dbus-1.pc has datadir=/etc

@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 { stdenv, lib, git, openssl, buildPythonApplication, pytestCheckHook, ps
+=======
+{ stdenv, lib, git, openssl, makeWrapper, buildPythonApplication, pytestCheckHook, ps
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , fetchPypi, fetchFromGitLab, sudo }:
 
 buildPythonApplication rec {

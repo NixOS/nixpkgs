@@ -18,11 +18,16 @@ stdenvNoCC.mkDerivation rec {
   nativeCheckInputs = [ shellspec ksh mksh yash zsh ]
     ++ lib.lists.optional (!stdenvNoCC.isDarwin) busybox-sandbox-shell;
 
+<<<<<<< HEAD
   # Disable checks against yash, since shellspec seems to be broken for yash>=2.54
   # (see: https://github.com/NixOS/nixpkgs/pull/218264#pullrequestreview-1434402054)
   preCheck = ''
     sed -i '/shellspec -s posh/d' Makefile
     sed -i '/shellspec -s yash/d' Makefile
+=======
+  preCheck = ''
+    sed -i '/shellspec -s posh/d' Makefile
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     '' + lib.strings.optionalString stdenvNoCC.isDarwin ''
     sed -i "/shellspec -s 'busybox ash'/d" Makefile
   '';

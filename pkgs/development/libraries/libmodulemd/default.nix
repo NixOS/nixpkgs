@@ -17,7 +17,11 @@
 
 stdenv.mkDerivation rec {
   pname = "libmodulemd";
+<<<<<<< HEAD
   version = "2.15.0";
+=======
+  version = "2.14.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   outputs = [ "bin" "out" "dev" "devdoc" "man" "py" ];
 
@@ -25,7 +29,11 @@ stdenv.mkDerivation rec {
     owner = "fedora-modularity";
     repo = pname;
     rev = "${pname}-${version}";
+<<<<<<< HEAD
     sha256 = "sha256-mIyrdksyEk1AKV+vw4g8LUwlQRzwwMkPDuCbw2IiNcA=";
+=======
+    sha256 = "sha256-ccLk8O0UJwy7WZYr5Bq2XqaSFNe4i7HQehmVoB5C2Yg=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   patches = [

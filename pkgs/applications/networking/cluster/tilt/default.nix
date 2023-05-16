@@ -1,13 +1,18 @@
+<<<<<<< HEAD
 { lib
 , buildGoModule
 , fetchFromGitHub
 }:
+=======
+{ stdenv, lib, buildGoModule, fetchFromGitHub }:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 buildGoModule rec {
   pname = "tilt";
   /* Do not use "dev" as a version. If you do, Tilt will consider itself
     running in development environment and try to serve assets from the
     source tree, which is not there once build completes.  */
+<<<<<<< HEAD
   version = "0.33.5";
 
   src = fetchFromGitHub {
@@ -17,16 +22,34 @@ buildGoModule rec {
     hash = "sha256-o78PoIKj+0FvZRpm0AqtUq3N9a9/LDYc7DIPZgSZe4s=";
   };
 
+=======
+  version = "0.32.3";
+
+  src = fetchFromGitHub {
+    owner  = "tilt-dev";
+    repo   = pname;
+    rev    = "v${version}";
+    sha256 = "sha256-5QTZUapHhSSI+UZu77IUZdflCIm+oCu4kPQVhLHCsUQ=";
+  };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   vendorHash = null;
 
   subPackages = [ "cmd/tilt" ];
 
   ldflags = [ "-X main.version=${version}" ];
 
+<<<<<<< HEAD
   meta = {
     description = "Local development tool to manage your developer instance when your team deploys to Kubernetes in production";
     homepage = "https://tilt.dev/";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ anton-dessiatov ];
+=======
+  meta = with lib; {
+    description = "Local development tool to manage your developer instance when your team deploys to Kubernetes in production";
+    homepage = "https://tilt.dev/";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ anton-dessiatov ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

@@ -7,12 +7,21 @@
 
 stdenv.mkDerivation rec {
   pname = "jdt-language-server";
+<<<<<<< HEAD
   version = "1.26.0";
   timestamp = "202307271613";
 
   src = fetchurl {
     url = "https://download.eclipse.org/jdtls/milestones/${version}/jdt-language-server-${version}-${timestamp}.tar.gz";
     sha256 = "sha256-ul/l7jsqg5UofiSu8gzm4Xg0z46HcRfmyqysamiKbFM=";
+=======
+  version = "1.21.0";
+  timestamp = "202303161431";
+
+  src = fetchurl {
+    url = "https://download.eclipse.org/jdtls/milestones/${version}/jdt-language-server-${version}-${timestamp}.tar.gz";
+    sha256 = "sha256-c8RDSvOgLbl05LDNelKgQXucbJnjJ7GVcut6mVT6GjA=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   sourceRoot = ".";
@@ -97,6 +106,9 @@ stdenv.mkDerivation rec {
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.epl20;
     maintainers = with maintainers; [ matt-snider ];
+<<<<<<< HEAD
     platforms = platforms.all;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

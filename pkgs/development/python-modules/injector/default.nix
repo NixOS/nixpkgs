@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 { lib
 , buildPythonPackage
 , pythonOlder
@@ -28,6 +29,22 @@ buildPythonPackage rec {
     pytest-cov
   ];
 
+=======
+{ lib, buildPythonPackage, fetchPypi, typing-extensions }:
+
+buildPythonPackage rec {
+  pname = "injector";
+  version = "0.20.1";
+
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-hmG0mi+DCc5h46aoK3rLXiJcS96OF9FhDIk6Zw3/Ijo=";
+  };
+
+  propagatedBuildInputs = [ typing-extensions ];
+
+  doCheck = false; # No tests are available
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pythonImportsCheck = [ "injector" ];
 
   meta = with lib; {

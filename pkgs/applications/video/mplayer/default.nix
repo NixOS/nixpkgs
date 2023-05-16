@@ -152,7 +152,11 @@ stdenv.mkDerivation rec {
          (stdenv.hostPlatform.isx86 && !crossBuild)
          "--enable-runtime-cpudetection"
     ++ optional fribidiSupport "--enable-fribidi"
+<<<<<<< HEAD
     ++ optional (stdenv.isLinux && !stdenv.isAarch64) "--enable-vidix"
+=======
+    ++ optional stdenv.isLinux "--enable-vidix"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     ++ optional stdenv.isLinux "--enable-fbdev"
     ++ optionals (crossBuild) [
     "--enable-cross-compile"
@@ -203,6 +207,10 @@ stdenv.mkDerivation rec {
     homepage = "http://mplayerhq.hu";
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ eelco ];
+<<<<<<< HEAD
     platforms = [ "i686-linux" "x86_64-linux" "x86_64-darwin" "aarch64-darwin" "aarch64-linux" ];
+=======
+    platforms = [ "i686-linux" "x86_64-linux" "x86_64-darwin" "aarch64-darwin" ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

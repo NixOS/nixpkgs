@@ -28,7 +28,11 @@ kaem.runCommand "${pname}-${version}" {
     '';
     homepage = "https://savannah.nongnu.org/projects/nyacc";
     license = licenses.lgpl3Plus;
+<<<<<<< HEAD
     maintainers = teams.minimal-bootstrap.members;
+=======
+    maintainers = with maintainers; [ emilytrau ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     platforms = platforms.all;
   };
 } ''

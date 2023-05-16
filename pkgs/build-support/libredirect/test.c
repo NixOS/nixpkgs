@@ -45,6 +45,7 @@ void test_subprocess(void) {
     assert(system(SUBTEST) == 0);
 }
 
+<<<<<<< HEAD
 void test_stat_with_null_path(void) {
     // This checks whether the compiler optimizes away the null pointer check
     // on the path passed to stat(). If that's the case, the following code
@@ -56,6 +57,8 @@ void test_stat_with_null_path(void) {
 #pragma GCC diagnostic pop
 }
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 void assert_mktemp_path(
     const char * orig_prefix,
     const char * orig_suffix,
@@ -158,7 +161,10 @@ int main(int argc, char *argv[])
 
     test_spawn();
     test_system();
+<<<<<<< HEAD
     test_stat_with_null_path();
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     // Only run subprocess if no arguments are given
     // as the subprocess will be called without argument

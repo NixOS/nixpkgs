@@ -5,7 +5,10 @@
 , coreutils
 , pythonOlder
 , astunparse
+<<<<<<< HEAD
 , flit-core
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , jq
 , bc
 }:
@@ -13,7 +16,11 @@
 buildPythonPackage rec {
   pname = "pyp";
   version = "1.1.0";
+<<<<<<< HEAD
   format = "pyproject";
+=======
+  format = "setuptools";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   disabled = pythonOlder "3.6";
 
@@ -24,10 +31,13 @@ buildPythonPackage rec {
     hash = "sha256-A1Ip41kxH17BakHEWEuymfa24eBEl5FIHAWL+iZFM4I=";
   };
 
+<<<<<<< HEAD
   nativeBuildInputs = [
     flit-core
   ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   propagatedBuildInputs = lib.optionals (pythonOlder "3.9") [
     astunparse
   ];

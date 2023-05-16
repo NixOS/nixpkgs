@@ -9,13 +9,21 @@
 
 stdenv.mkDerivation rec {
   pname = "wibo";
+<<<<<<< HEAD
   version = "0.4.2";
+=======
+  version = "0.3.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "decompals";
     repo = "wibo";
     rev = version;
+<<<<<<< HEAD
     hash = "sha256-oq/i0Hb2y5pwDEvaqSyC4+6LH1oUbvDZ/62l+V3S7Uk=";
+=======
+    hash = "sha256-J5h/RpF+twb5fBjSDQMVB5SoTWWs8VD/EUuikuj73YA=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

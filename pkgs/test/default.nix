@@ -3,6 +3,7 @@
 with pkgs;
 
 {
+<<<<<<< HEAD
   cc-wrapper = with builtins; let
     pkgNames = (attrNames pkgs);
     llvmTests = let
@@ -96,6 +97,30 @@ with pkgs;
 
   top-level = callPackage ./top-level { };
 
+=======
+  cc-wrapper = callPackage ./cc-wrapper { };
+  cc-wrapper-gcc = callPackage ./cc-wrapper { stdenv = gccStdenv; };
+  cc-wrapper-gcc7 = callPackage ./cc-wrapper { stdenv = gcc7Stdenv; };
+  cc-wrapper-gcc8 = callPackage ./cc-wrapper { stdenv = gcc8Stdenv; };
+  cc-wrapper-gcc9 = callPackage ./cc-wrapper { stdenv = gcc9Stdenv; };
+  cc-wrapper-clang = callPackage ./cc-wrapper { stdenv = llvmPackages.stdenv; };
+  cc-wrapper-libcxx = callPackage ./cc-wrapper { stdenv = llvmPackages.libcxxStdenv; };
+  cc-wrapper-clang-5 = callPackage ./cc-wrapper { stdenv = llvmPackages_5.stdenv; };
+  cc-wrapper-libcxx-5 = callPackage ./cc-wrapper { stdenv = llvmPackages_5.libcxxStdenv; };
+  cc-wrapper-clang-6 = callPackage ./cc-wrapper { stdenv = llvmPackages_6.stdenv; };
+  cc-wrapper-libcxx-6 = callPackage ./cc-wrapper { stdenv = llvmPackages_6.libcxxStdenv; };
+  cc-wrapper-clang-7 = callPackage ./cc-wrapper { stdenv = llvmPackages_7.stdenv; };
+  cc-wrapper-libcxx-7 = callPackage ./cc-wrapper { stdenv = llvmPackages_7.libcxxStdenv; };
+  cc-wrapper-clang-8 = callPackage ./cc-wrapper { stdenv = llvmPackages_8.stdenv; };
+  cc-wrapper-libcxx-8 = callPackage ./cc-wrapper { stdenv = llvmPackages_8.libcxxStdenv; };
+  cc-wrapper-clang-9 = callPackage ./cc-wrapper { stdenv = llvmPackages_9.stdenv; };
+  cc-wrapper-libcxx-9 = callPackage ./cc-wrapper { stdenv = llvmPackages_9.libcxxStdenv; };
+  stdenv-inputs = callPackage ./stdenv-inputs { };
+  stdenv = callPackage ./stdenv { };
+
+  config = callPackage ./config.nix { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   haskell = callPackage ./haskell { };
 
   hooks = callPackage ./hooks { };
@@ -106,7 +131,10 @@ with pkgs;
   fetchurl = callPackages ../build-support/fetchurl/tests.nix { };
   fetchpatch = callPackages ../build-support/fetchpatch/tests.nix { };
   fetchpatch2 = callPackages ../build-support/fetchpatch/tests.nix { fetchpatch = fetchpatch2; };
+<<<<<<< HEAD
   fetchDebianPatch = callPackages ../build-support/fetchdebianpatch/tests.nix { };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   fetchzip = callPackages ../build-support/fetchzip/tests.nix { };
   fetchgit = callPackages ../build-support/fetchgit/tests.nix { };
   fetchFirefoxAddon = callPackages ../build-support/fetchfirefoxaddon/tests.nix { };
@@ -138,7 +166,19 @@ with pkgs;
 
   cuda = callPackage ./cuda { };
 
+<<<<<<< HEAD
   trivial-builders = callPackage ../build-support/trivial-builders/test/default.nix {};
+=======
+  trivial-builders = recurseIntoAttrs {
+    writeStringReferencesToFile = callPackage ../build-support/trivial-builders/test/writeStringReferencesToFile.nix {};
+    writeTextFile = callPackage ../build-support/trivial-builders/test/write-text-file.nix {};
+    writeShellScript = callPackage ../build-support/trivial-builders/test/write-shell-script.nix {};
+    references = callPackage ../build-support/trivial-builders/test/references.nix {};
+    overriding = callPackage ../build-support/trivial-builders/test-overriding.nix {};
+    concat = callPackage ../build-support/trivial-builders/test/concat-test.nix {};
+    linkFarm = callPackage ../build-support/trivial-builders/test/link-farm.nix {};
+  };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   writers = callPackage ../build-support/writers/test.nix {};
 
@@ -150,8 +190,11 @@ with pkgs;
 
   coq = callPackage ./coq {};
 
+<<<<<<< HEAD
   dotnet = recurseIntoAttrs (callPackages ./dotnet { });
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   makeHardcodeGsettingsPatch = callPackage ./make-hardcode-gsettings-patch { };
 
   makeWrapper = callPackage ./make-wrapper { };
@@ -165,6 +208,9 @@ with pkgs;
   };
 
   pkgs-lib = recurseIntoAttrs (import ../pkgs-lib/tests { inherit pkgs; });
+<<<<<<< HEAD
 
   nixpkgs-check-by-name = callPackage ./nixpkgs-check-by-name { };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }

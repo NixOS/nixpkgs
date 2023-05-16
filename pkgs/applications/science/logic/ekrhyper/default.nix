@@ -11,7 +11,11 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
   nativeBuildInputs = [ ocaml perl ];
+<<<<<<< HEAD
   setSourceRoot = "export sourceRoot=$(echo */ekrh/src)";
+=======
+  setSourceRoot = "export sourceRoot=$(echo */ekrh/src/)";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   preInstall = "export INSTALLDIR=$out";
   postInstall = ''for i in "$out/casc"/*; do ln -s "$i" "$out/bin/ekrh-casc-$(basename $i)"; done '';
 

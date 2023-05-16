@@ -2,11 +2,19 @@
 
 stdenv.mkDerivation rec {
   pname = "iperf";
+<<<<<<< HEAD
   version = "3.14";
 
   src = fetchurl {
     url = "https://downloads.es.net/pub/iperf/iperf-${version}.tar.gz";
     hash = "sha256-cj/MQwoCe8aVJij6KjrHdYSh0L0ygnXlc/ybIGwVUAQ=";
+=======
+  version = "3.12";
+
+  src = fetchurl {
+    url = "https://downloads.es.net/pub/iperf/iperf-${version}.tar.gz";
+    sha256 = "sha256-cgNOz7an1tZ+OE4Z+27/8yNspPftTFGNfbZJxEfh/9Y=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   buildInputs = [ openssl ] ++ lib.optionals stdenv.isLinux [ lksctp-tools ];
@@ -30,7 +38,11 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
+<<<<<<< HEAD
     homepage = "https://software.es.net/iperf/";
+=======
+    homepage = "http://software.es.net/iperf/";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     description = "Tool to measure IP bandwidth using UDP or TCP";
     platforms = platforms.unix;
     license = licenses.bsd3;

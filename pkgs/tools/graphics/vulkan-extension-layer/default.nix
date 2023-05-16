@@ -1,13 +1,22 @@
+<<<<<<< HEAD
 { lib, stdenv, fetchFromGitHub, cmake, pkg-config, writeText, vulkan-headers, jq, libX11, libXrandr, libxcb, wayland }:
 
 stdenv.mkDerivation rec {
   pname = "vulkan-extension-layer";
   version = "1.3.261";
+=======
+{ lib, stdenv, fetchFromGitHub, cmake, writeText, vulkan-headers, jq }:
+
+stdenv.mkDerivation rec {
+  pname = "vulkan-extension-layer";
+  version = "1.3.248";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "Vulkan-ExtensionLayer";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-MeW7mmbjgqEvXEnAYzTNu4omC4fqq1fplIVjDpV2LcA=";
   };
 
@@ -18,6 +27,18 @@ stdenv.mkDerivation rec {
   # Help vulkan-loader find the validation layers
   setupHook = writeText "setup-hook" ''
     addToSearchPath XDG_DATA_DIRS @out@/share
+=======
+    hash = "sha256-CuwYpB8HX8pnR+ElkQfckpKDLKyZIzqm4F9kluM1cKo=";
+  };
+
+  nativeBuildInputs = [ cmake jq ];
+
+  buildInputs = [ vulkan-headers ];
+
+  # Help vulkan-loader find the validation layers
+  setupHook = writeText "setup-hook" ''
+    export XDG_DATA_DIRS=@out@/share:$XDG_DATA_DIRS
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '';
 
   # Tests are not for gpu-less and headless environments

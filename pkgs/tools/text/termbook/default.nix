@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 { lib
 , rustPlatform
 , fetchFromGitHub
@@ -7,6 +8,9 @@
 , stdenv
 , darwin
 }:
+=======
+{ lib, rustPlatform, fetchFromGitHub, stdenv, darwin }:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 rustPlatform.buildRustPackage rec {
   pname = "termbook-cli";
@@ -19,6 +23,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "Bo3DI0cMXIfP7ZVr8MAW/Tmv+4mEJBIQyLvRfVBDG8c=";
   };
 
+<<<<<<< HEAD
   cargoLock = {
     lockFile = ./Cargo.lock;
   };
@@ -50,6 +55,14 @@ rustPlatform.buildRustPackage rec {
       --zsh <($out/bin/termbook completions zsh)
   '';
 
+=======
+  cargoSha256 = "sha256-9fFvJJlDzBmbI7hes/wfjAk1Cl2H55T5n8HLnUmDw/c=";
+
+  buildInputs = lib.optionals stdenv.isDarwin [
+    darwin.apple_sdk.frameworks.Security
+  ];
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   meta = with lib; {
     description = "A runner for `mdbooks` to keep your documentation tested";
     homepage = "https://github.com/Byron/termbook/";

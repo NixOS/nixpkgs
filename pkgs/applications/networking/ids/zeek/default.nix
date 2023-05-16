@@ -26,11 +26,19 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "zeek";
+<<<<<<< HEAD
   version = "5.2.2";
 
   src = fetchurl {
     url = "https://download.zeek.org/zeek-${version}.tar.gz";
     sha256 = "sha256-4MJBV8yWpy5LvkyyipOZdDjU6FV7F8INc/zWddRGFcY=";
+=======
+  version = "5.2.0";
+
+  src = fetchurl {
+    url = "https://download.zeek.org/zeek-${version}.tar.gz";
+    sha256 = "sha256-URBHQA3UU5F3VCyEpegNfpetc9KpmG/81s2FtMxxH78=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   strictDeps = true;
@@ -54,14 +62,21 @@ stdenv.mkDerivation rec {
     spicy-parser-generator
     curl
     gperftools
+<<<<<<< HEAD
+=======
+    libkqueue
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     libmaxminddb
     libpcap
     ncurses
     openssl
     swig
     zlib
+<<<<<<< HEAD
   ] ++ lib.optionals stdenv.isLinux [
     libkqueue
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ] ++ lib.optionals stdenv.isDarwin [
     gettext
   ];
@@ -76,14 +91,21 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     "-DBroker_ROOT=${broker}"
     "-DSPICY_ROOT_DIR=${spicy-parser-generator}"
+<<<<<<< HEAD
+=======
+    "-DLIBKQUEUE_ROOT_DIR=${libkqueue}"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "-DENABLE_PERFTOOLS=true"
     "-DINSTALL_AUX_TOOLS=true"
     "-DZEEK_ETC_INSTALL_DIR=/etc/zeek"
     "-DZEEK_LOG_DIR=/var/log/zeek"
     "-DZEEK_STATE_DIR=/var/lib/zeek"
     "-DZEEK_SPOOL_DIR=/var/spool/zeek"
+<<<<<<< HEAD
   ] ++ lib.optionals stdenv.isLinux [
     "-DLIBKQUEUE_ROOT_DIR=${libkqueue}"
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   postInstall = ''

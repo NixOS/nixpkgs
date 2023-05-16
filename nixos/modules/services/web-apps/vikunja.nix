@@ -56,11 +56,14 @@ in {
       type = types.str;
       description = lib.mdDoc "The Hostname under which the frontend is running.";
     };
+<<<<<<< HEAD
     port = mkOption {
       type = types.port;
       default = 3456;
       description = lib.mdDoc "The TCP port exposed by the API.";
     };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     settings = mkOption {
       type = format.type;
@@ -106,7 +109,10 @@ in {
         inherit (cfg.database) type host user database path;
       };
       service = {
+<<<<<<< HEAD
         interface = ":${toString cfg.port}";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         frontendurl = "${cfg.frontendScheme}://${cfg.frontendHostname}/";
       };
       files = {
@@ -138,7 +144,11 @@ in {
           tryFiles = "try_files $uri $uri/ /";
         };
         "~* ^/(api|dav|\\.well-known)/" = {
+<<<<<<< HEAD
           proxyPass = "http://localhost:${toString cfg.port}";
+=======
+          proxyPass = "http://localhost:3456";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           extraConfig = ''
             client_max_body_size 20M;
           '';

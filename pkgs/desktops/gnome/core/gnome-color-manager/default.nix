@@ -28,10 +28,13 @@ stdenv.mkDerivation rec {
     sha256 = "1vpxa2zjz3lkq9ldjg0fl65db9s6b4kcs8nyaqfz3jygma7ifg3w";
   };
 
+<<<<<<< HEAD
   patches = [
     ./0001-Fix-build-with-Exiv2-0.28.patch
   ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nativeBuildInputs = [
     meson
     ninja

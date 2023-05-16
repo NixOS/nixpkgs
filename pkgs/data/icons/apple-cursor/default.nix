@@ -8,7 +8,11 @@ let
     name = variant;
     url = "https://github.com/ful1e5/apple_cursor/releases/download/v${version}/${variant}.${suffix}";
     hash = hash;
+<<<<<<< HEAD
   } // (lib.optionalAttrs (suffix == "zip") { stripRoot = false; }));
+=======
+  } // (if suffix == "zip" then { stripRoot = false; } else {}));
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   version = "2.0.0";
   srcs = [

@@ -3,7 +3,10 @@
 , fetchFromGitLab
 , fetchFromGitHub
 , fetchurl
+<<<<<<< HEAD
 , fetchpatch
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , substituteAll
 , coreutils
 , curl
@@ -31,7 +34,10 @@
 , glfw
 , xorg
 , gamescopeSupport ? true # build mangoapp and mangohudctl
+<<<<<<< HEAD
 , lowerBitnessSupport ? stdenv.hostPlatform.is64bit # Support 32 bit on 64bit
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , nix-update-script
 }:
 
@@ -124,6 +130,7 @@ stdenv.mkDerivation (finalAttrs: {
       libdbus = dbus.lib;
       inherit hwdata;
     })
+<<<<<<< HEAD
 
     # Pull gcc-13 build fix for nissing <cstdint>
     (fetchpatch {
@@ -131,13 +138,19 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://github.com/flightlessmango/MangoHud/commit/3f8f036ee8773ae1af23dd0848b6ab487b5ac7de.patch";
       hash = "sha256-qbNywAXAStGiVZ1LA5qZyNp4n28iNUuE4N69zXv2gmM=";
     })
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   postPatch = ''
     substituteInPlace bin/mangohud.in \
       --subst-var-by libraryPath ${lib.makeSearchPath "lib/mangohud" ([
         (placeholder "out")
+<<<<<<< HEAD
       ] ++ lib.optionals lowerBitnessSupport [
+=======
+      ] ++ lib.optionals (stdenv.hostPlatform.system == "x86_64-linux") [
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         mangohud32
       ])} \
       --subst-var-by dataDir ${placeholder "out"}/share
@@ -193,7 +206,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   # Support 32bit Vulkan applications by linking in 32bit Vulkan layers
   # This is needed for the same reason the 32bit preload workaround is needed.
+<<<<<<< HEAD
   postInstall = lib.optionalString lowerBitnessSupport ''
+=======
+  postInstall = lib.optionalString (stdenv.hostPlatform.system == "x86_64-linux") ''
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     ln -s ${mangohud32}/share/vulkan/implicit_layer.d/MangoHud.x86.json \
       "$out/share/vulkan/implicit_layer.d"
 
@@ -203,6 +220,7 @@ stdenv.mkDerivation (finalAttrs: {
     ''}
   '';
 
+<<<<<<< HEAD
   postFixup = let
     archMap = {
       "x86_64-linux" = "x86_64";
@@ -223,6 +241,18 @@ stdenv.mkDerivation (finalAttrs: {
   '' + lib.optionalString finalAttrs.doCheck ''
     # libcmocka.so is only used for tests
     rm "$out/lib/libcmocka.so"
+=======
+  postFixup = ''
+    # Add OpenGL driver path to RUNPATH to support NVIDIA cards
+    addOpenGLRunpath "$out/lib/mangohud/libMangoHud.so"
+    ${lib.optionalString gamescopeSupport ''
+      addOpenGLRunpath "$out/bin/mangoapp"
+    ''}
+    ${lib.optionalString finalAttrs.doCheck ''
+      # libcmocka.so is only used for tests
+      rm "$out/lib/libcmocka.so"
+    ''}
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '';
 
   passthru.updateScript = nix-update-script { };

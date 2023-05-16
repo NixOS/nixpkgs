@@ -4,13 +4,21 @@
 
 stdenv.mkDerivation rec {
   pname = "kissat";
+<<<<<<< HEAD
   version = "3.1.0";
+=======
+  version = "3.0.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "arminbiere";
     repo = "kissat";
     rev = "rel-${version}";
+<<<<<<< HEAD
     sha256 = "sha256-AFUVkkD+toOfVEvIKfz3ncEdABLRxs9yQ8aJx6Q0ETM=";
+=======
+    sha256 = "sha256-C1lvkyYgFNhV7jGVLlrpJ5zZ8SFHg8g+iW1lDczhpBM=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   outputs = [ "out" "dev" "lib" ];

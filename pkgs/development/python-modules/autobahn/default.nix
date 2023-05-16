@@ -1,6 +1,10 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+<<<<<<< HEAD
+=======
+, fetchpatch
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , attrs
 , argon2-cffi
 , base58
@@ -20,7 +24,11 @@
 , msgpack
 , passlib
 , py-ecc
+<<<<<<< HEAD
 # , py-eth-sig-utils
+=======
+, py-eth-sig-utils
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , py-multihash
 , py-ubjson
 , pynacl
@@ -48,6 +56,7 @@
 
 buildPythonPackage rec {
   pname = "autobahn";
+<<<<<<< HEAD
   version = "23.6.2";
   format = "setuptools";
 
@@ -56,6 +65,24 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-7JQhxSohAzZNHvBGgDbmAZ7oT3FyHoazb+Ga1pZsEYE=";
+=======
+  version = "22.7.1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
+
+  patches = [
+    (fetchpatch {
+      # https://github.com/crossbario/autobahn-python/pull/1604
+      url = "https://github.com/crossbario/autobahn-python/commit/ffe679fae4ebcdde964d4ee88cb82a9c65c40529.patch";
+      hash = "sha256-QNnQkxMZJsFbiYUp4Os+dWo7jdCa96+kyb/2HxSMU8k=";
+    })
+  ];
+
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-i0Yuouaq1rTcDtRfuAC2y/6wMl5/5pg5B/Ei8r5KH+k=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   postPatch = ''
@@ -101,13 +128,21 @@ buildPythonPackage rec {
     serialization = [ cbor2 flatbuffers msgpack ujson py-ubjson ];
     twisted = [ attrs args.twisted zope_interface ];
     ui = [ pygobject3 ];
+<<<<<<< HEAD
     xbr = [ base58 cbor2 click ecdsa eth-abi jinja2 hkdf mnemonic py-ecc /* py-eth-sig-utils */ py-multihash rlp spake2 twisted /* web3 xbr */ yapf /* zlmdb */ ];
+=======
+    xbr = [ base58 cbor2 click ecdsa eth-abi jinja2 hkdf mnemonic py-ecc py-eth-sig-utils py-multihash rlp spake2 twisted /* web3 xbr */ yapf /* zlmdb */ ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   meta = with lib; {
     description = "WebSocket and WAMP in Python for Twisted and asyncio";
     homepage = "https://crossbar.io/autobahn";
     license = licenses.mit;
+<<<<<<< HEAD
     maintainers = with maintainers; [ ];
+=======
+    maintainers = with maintainers; [ SuperSandro2000 ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

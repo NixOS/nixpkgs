@@ -14,17 +14,24 @@ stdenv.mkDerivation rec {
   buildInputs = [ libuuid ] ++ lib.optionals stdenv.isDarwin [ Foundation readline ];
 
   patches = [ ./no-curl-ca.patch ];
+<<<<<<< HEAD
   postPatch = ''
+=======
+  patchPhase = ''
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     substituteInPlace contrib/curl/premake5.lua \
       --replace "ca = nil" "ca = '${cacert}/etc/ssl/certs/ca-bundle.crt'"
   '' + lib.optionalString stdenv.isDarwin ''
     substituteInPlace premake5.lua \
       --replace -mmacosx-version-min=10.4 -mmacosx-version-min=10.5
+<<<<<<< HEAD
   '' + lib.optionalString stdenv.hostPlatform.isStatic ''
     substituteInPlace \
       binmodules/example/premake5.lua \
       binmodules/luasocket/premake5.lua \
       --replace SharedLib StaticLib
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '';
 
   buildPhase =

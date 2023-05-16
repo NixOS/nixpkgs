@@ -12,6 +12,9 @@
 
   helm-secrets = callPackage ./helm-secrets.nix { };
 
+<<<<<<< HEAD
   helm-unittest = callPackage ./helm-unittest.nix { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }

@@ -2,11 +2,19 @@
 
 appimageTools.wrapType2 rec {
   pname = "cider";
+<<<<<<< HEAD
   version = "1.6.1";
 
   src = fetchurl {
     url = "https://github.com/ciderapp/Cider/releases/download/v${version}/Cider-${version}.AppImage";
     sha256 = "sha256-t3kslhb6STPemdBN6fXc8jcPgNrlnGzcAUQ3HAUB7Yw=";
+=======
+  version = "1.6.0";
+
+  src = fetchurl {
+    url = "https://github.com/ciderapp/cider-releases/releases/download/v${version}/Cider-${version}.AppImage";
+    sha256 = "sha256-fbeUl+vQpEdP17m3koblKv9z4CRpLNYtVQf7bs8ZP1M=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   extraInstallCommands =

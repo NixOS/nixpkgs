@@ -11,10 +11,17 @@ buildGoModule rec {
     owner = "lc";
     repo = pname;
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-csxFn3YUnuYjZ5/4jIi7DfuujB/gFjHogLaV4XK5kQU=";
   };
 
   vendorHash = "sha256-Ibsgi2MYvs12E1NJgshAD/S5GTJgLl7C+smfvS+aAfg=";
+=======
+    sha256 = "01cip5rf35dnh3l325p03y6axyqdpf48ry4zcwiyd7hlfsglbk3j";
+  };
+
+  vendorSha256 = "1y01k8pvv7y9zb15wbk068cvkx0g83484jak2dvcvghqcf5j1fr1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   ldflags = [ "-s" "-w" "-X main.AppVersion=${version}" ];
 

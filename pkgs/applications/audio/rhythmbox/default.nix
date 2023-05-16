@@ -52,7 +52,10 @@ stdenv.mkDerivation rec {
     itstool
     wrapGAppsHook
     desktop-file-utils
+<<<<<<< HEAD
     gobject-introspection
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   buildInputs = [
@@ -73,6 +76,10 @@ stdenv.mkDerivation rec {
     brasero
     grilo
 
+<<<<<<< HEAD
+=======
+    gobject-introspection
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     python3.pkgs.pygobject3
 
     gst_all_1.gstreamer

@@ -8,12 +8,18 @@
 , curl
 , flex
 , getopt
+<<<<<<< HEAD
 , glib
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , gnupg
 , hivex
 , jansson
 , libguestfs-with-appliance
+<<<<<<< HEAD
 , libosinfo
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , libvirt
 , libxml2
 , makeWrapper
@@ -29,11 +35,19 @@
 
 stdenv.mkDerivation rec {
   pname = "guestfs-tools";
+<<<<<<< HEAD
   version = "1.50.1";
 
   src = fetchurl {
     url = "https://download.libguestfs.org/guestfs-tools/${lib.versions.majorMinor version}-stable/guestfs-tools-${version}.tar.gz";
     sha256 = "sha256-rH/MK9Xid+lb1bKnspCE3gATefBnHDZAQ3NRavhTvLA=";
+=======
+  version = "1.48.2";
+
+  src = fetchurl {
+    url = "https://download.libguestfs.org/guestfs-tools/${lib.versions.majorMinor version}-stable/guestfs-tools-${version}.tar.gz";
+    sha256 = "sha256-G9l5sG5g5kMlSXzg0GX8+Et7M9/k2dRLMBgsMI4MaxA=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [
@@ -63,11 +77,17 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     bash-completion
+<<<<<<< HEAD
     glib
     hivex
     jansson
     libguestfs-with-appliance
     libosinfo
+=======
+    hivex
+    jansson
+    libguestfs-with-appliance
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     libvirt
     libxml2
     ncurses

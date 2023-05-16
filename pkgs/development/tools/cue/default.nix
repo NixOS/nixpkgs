@@ -2,13 +2,21 @@
 
 buildGoModule rec {
   pname = "cue";
+<<<<<<< HEAD
   version = "0.6.0";
+=======
+  version = "0.5.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "cue-lang";
     repo = "cue";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-1svWb83xbVZIlI9pviCYfQ6Kkp0QRjZwrauL7PPJLts=";
+=======
+    hash = "sha256-4E50VrekIkVXhzHVNehgm6/DbkofvqlNSgX9oK9SLu4=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   postPatch = ''
@@ -16,7 +24,11 @@ buildGoModule rec {
     rm -f cmd/cue/cmd/script_test.go
   '';
 
+<<<<<<< HEAD
   vendorHash = "sha256-ku4tPTXdnKau0kqnAAEHDdSF4oAC/6SDkTq8cECOiEk=";
+=======
+  vendorHash = "sha256-0N0bZdimGHu3vkLe+eGKBTm/YeSQOnp+Pxhz3LVniTk=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   excludedPackages = [ "internal/ci/updatetxtar" "internal/cmd/embedpkg" "internal/cmd/qgo" "pkg/gen" ];
 

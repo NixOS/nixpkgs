@@ -7,6 +7,7 @@
 
 stdenv.mkDerivation rec {
   pname = "diffutils";
+<<<<<<< HEAD
   version = "3.10";
 
   src = fetchurl {
@@ -27,19 +28,52 @@ stdenv.mkDerivation rec {
     sed -i -E 's:test-sigsegv-catch-stackoverflow[12]::g' gnulib-tests/Makefile.in
   '' else null;
 
+=======
+  version = "3.9";
+
+  src = fetchurl {
+    url = "mirror://gnu/diffutils/diffutils-${version}.tar.xz";
+    hash = "sha256-2A076QogGGjeg9eNrTQTrYgWDMU7zDbrnq98INvwI/E=";
+  };
+
+  patches = [
+    # Backport of a fix for 'diff -D' output.
+    # TODO: remove when updating to 3.10.
+    ./fix-diff-D.patch
+  ];
+
+  postPatch = ''
+    # avoid the need for help2man
+    # TODO: can be removed when fix-diff-D.patch is removed.
+    touch man/diff.1
+  '';
+
+  outputs = [ "out" "info" ];
+
+  nativeBuildInputs = [ xz.bin ];
+  /* If no explicit coreutils is given, use the one from stdenv. */
+  buildInputs = [ coreutils ];
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   configureFlags =
     # "pr" need not be on the PATH as a run-time dep, so we need to tell
     # configure where it is. Covers the cross and native case alike.
     lib.optional (coreutils != null) "PR_PROGRAM=${coreutils}/bin/pr"
     ++ lib.optional (stdenv.buildPlatform != stdenv.hostPlatform) "gl_cv_func_getopt_gnu=yes";
 
+<<<<<<< HEAD
   doCheck = true;
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   meta = with lib; {
     homepage = "https://www.gnu.org/software/diffutils/diffutils.html";
     description = "Commands for showing the differences between files (diff, cmp, etc.)";
     license = licenses.gpl3;
     platforms = platforms.unix;
+<<<<<<< HEAD
     maintainers = with maintainers; [ das_j ];
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

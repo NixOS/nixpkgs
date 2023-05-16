@@ -11,10 +11,18 @@ buildNimPackage rec {
   };
   propagatedNativeBuildInputs = [ pkg-config ];
   propagatedBuildInputs = [ tkrzw ];
+<<<<<<< HEAD
   meta = with lib;
     src.meta // {
       description = "Nim wrappers over some of the Tkrzw C++ library";
       license = lib.licenses.asl20;
+=======
+  doCheck = true;
+  meta = with lib;
+    src.meta // {
+      description = "Nim wrappers over some of the Tkrzw C++ library";
+      license = lib.licenses.apsl20;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       maintainers = with lib.maintainers; [ ehmry ];
     };
 }

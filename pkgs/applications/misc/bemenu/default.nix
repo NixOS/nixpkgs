@@ -5,6 +5,7 @@
 , x11Support ? true, xorg
 }:
 
+<<<<<<< HEAD
 stdenv.mkDerivation (finalAttrs: {
   pname = "bemenu";
   version = "0.6.16";
@@ -14,6 +15,17 @@ stdenv.mkDerivation (finalAttrs: {
     repo = finalAttrs.pname;
     rev = finalAttrs.version;
     sha256 = "sha256-K9a9BUodpKwvEOhnF2/TGo5zLm7F9RzqSCcWzuhKcWA=";
+=======
+stdenv.mkDerivation rec {
+  pname = "bemenu";
+  version = "0.6.14";
+
+  src = fetchFromGitHub {
+    owner = "Cloudef";
+    repo = pname;
+    rev = version;
+    sha256 = "sha256-bMnnuT+LNNKphmvVcD1aaNZxasSGOEcAveC4stCieG8=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   strictDeps = true;
@@ -45,7 +57,13 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Dynamic menu library and client program inspired by dmenu";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ lheckemann ];
+<<<<<<< HEAD
     mainProgram = "bemenu";
     platforms = with platforms; linux;
   };
 })
+=======
+    platforms = with platforms; linux;
+  };
+}
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)

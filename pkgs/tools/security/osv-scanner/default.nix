@@ -6,16 +6,27 @@
 }:
 buildGoModule rec {
   pname = "osv-scanner";
+<<<<<<< HEAD
   version = "1.3.6";
+=======
+  version = "1.3.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "google";
     repo = pname;
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-mvR4LqUPtmLBH9RSfVge4anwun1wHJMCuGyHGQvA56s=";
   };
 
   vendorHash = "sha256-oxAvpiNrdst7Y8EbSTrTEebX6+G/8K5UFwdKG+wiDQE=";
+=======
+    hash = "sha256-xgSRaGS09a1d1qepzvkTuMtaUHh8QsKxF7RWD+0Sepg=";
+  };
+
+  vendorHash = "sha256-9tNEPgJJ4mp4DPNgIzezS9Axed3XoJV9cyTYCOGMvgA=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   subPackages = [
     "cmd/osv-scanner"

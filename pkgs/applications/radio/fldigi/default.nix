@@ -18,11 +18,19 @@
 
 stdenv.mkDerivation rec {
   pname = "fldigi";
+<<<<<<< HEAD
   version = "4.2.00";
 
   src = fetchurl {
     url = "mirror://sourceforge/${pname}/${pname}-${version}.tar.gz";
     hash = "sha256-F09C6R3mEgYVhS7/MqEBFzfqGKbyrAem5/+QDlwI+9k=";
+=======
+  version = "4.1.26";
+
+  src = fetchurl {
+    url = "mirror://sourceforge/${pname}/${pname}-${version}.tar.gz";
+    sha256 = "sha256-RIrTWjQPnn0I8bzV3kMQEesNaAkIQnhikLMaYivrWRc=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ pkg-config ];

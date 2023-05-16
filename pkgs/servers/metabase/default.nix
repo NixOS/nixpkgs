@@ -2,11 +2,19 @@
 
 stdenv.mkDerivation rec {
   pname = "metabase";
+<<<<<<< HEAD
   version = "0.46.7";
 
   src = fetchurl {
     url = "https://downloads.metabase.com/v${version}/metabase.jar";
     hash = "sha256-LGtjzODVkoOr8yGcE+fpgMzINQG3lBchTujTsZGgARU=";
+=======
+  version = "0.46.2";
+
+  src = fetchurl {
+    url = "https://downloads.metabase.com/v${version}/metabase.jar";
+    hash = "sha256-FHI8QUZIPMhBNOd0RfdSKGkILaRlS4he8EVSrQxjD0s=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ makeWrapper ];

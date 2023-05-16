@@ -11,7 +11,11 @@
 
 buildPythonPackage rec {
   pname = "dissect-cim";
+<<<<<<< HEAD
   version = "3.7";
+=======
+  version = "3.5";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -20,7 +24,11 @@ buildPythonPackage rec {
     owner = "fox-it";
     repo = "dissect.cim";
     rev = "refs/tags/${version}";
+<<<<<<< HEAD
     hash = "sha256-+HHjDUSepAEebMD5ckjXbfgA4AKlNMBYHwxDq+jdhxw=";
+=======
+    hash = "sha256-VRHnDLyHZEzeEFK+2MNQibekIlb+tsBEjUbT5tI/tIs=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;

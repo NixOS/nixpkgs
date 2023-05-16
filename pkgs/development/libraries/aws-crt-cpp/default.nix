@@ -17,7 +17,11 @@
 
 stdenv.mkDerivation rec {
   pname = "aws-crt-cpp";
+<<<<<<< HEAD
   version = "0.20.3";
+=======
+  version = "0.19.8";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   outputs = [ "out" "dev" ];
 
@@ -25,7 +29,11 @@ stdenv.mkDerivation rec {
     owner = "awslabs";
     repo = "aws-crt-cpp";
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-70AchkuhuyumwpBYaj9mOVPJ8+6VSLTLtr3ghwqG3wM=";
+=======
+    sha256 = "sha256-z/9ifBv4KbH5RiR1t1Dz8cCWZlHrMSyB8/w4pdTscw0=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   patches = [

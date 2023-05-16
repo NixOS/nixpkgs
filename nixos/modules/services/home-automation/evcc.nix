@@ -50,7 +50,11 @@ in
       ];
       environment.HOME = "/var/lib/evcc";
       path = with pkgs; [
+<<<<<<< HEAD
         getent
+=======
+        glibc # requires getent
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       ];
       serviceConfig = {
         ExecStart = "${package}/bin/evcc --config ${configFile} ${escapeShellArgs cfg.extraArgs}";

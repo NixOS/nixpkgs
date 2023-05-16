@@ -1,7 +1,11 @@
 { lib
 , fetchpatch
 , python3
+<<<<<<< HEAD
 , fetchPypi
+=======
+, docutils
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , sphinx
 , postfix
 , lynx
@@ -35,11 +39,19 @@ buildPythonPackage rec {
     passlib
     requests
     sqlalchemy
+<<<<<<< HEAD
     zope-component
+=======
+    zope_component
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     zope_configuration
   ];
 
   checkInputs = [
+<<<<<<< HEAD
+=======
+    docutils
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     sphinx
   ];
 

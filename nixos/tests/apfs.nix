@@ -1,8 +1,16 @@
+<<<<<<< HEAD
 { lib, ... }: {
   name = "apfs";
   meta.maintainers = with lib.maintainers; [ Luflosi ];
 
   nodes.machine = {
+=======
+import ./make-test-python.nix ({ pkgs, ... }: {
+  name = "apfs";
+  meta.maintainers = with pkgs.lib.maintainers; [ Luflosi ];
+
+  nodes.machine = { pkgs, ... }: {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     virtualisation.emptyDiskImages = [ 1024 ];
 
     boot.supportedFilesystems = [ "apfs" ];
@@ -48,6 +56,7 @@
           "umount /tmp/mnt",
           "apfsck /dev/vdb",
       )
+<<<<<<< HEAD
     with subtest("Snapshots"):
       machine.succeed(
           "mkapfs /dev/vdb",
@@ -63,3 +72,7 @@
       )
   '';
 }
+=======
+  '';
+})
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)

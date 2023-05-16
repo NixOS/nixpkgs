@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 { lib, stdenv, fetchFromGitLab, fetchpatch, rustPlatform, pkg-config, openssl
+=======
+{ lib, stdenv, fetchFromGitLab, rustPlatform, pkg-config, openssl
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , installShellFiles
 , Security, AppKit
 
@@ -24,6 +28,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-L1j1lXPxy9nWMeED9uzQHV5y7XTE6+DB57rDnXa4kMo=";
   };
 
+<<<<<<< HEAD
   cargoHash = "sha256-r1yIPV2sW/EpHJpdaJyi6pzE+rtNkBIxSUJF+XA8kbA=";
 
   cargoPatches = [
@@ -56,6 +61,9 @@ rustPlatform.buildRustPackage rec {
       hash = "sha256-2hWlFXDopNy26Df74nJoB1J8qzPEOpf61wEOEtxOVx8=";
     })
   ];
+=======
+  cargoSha256 = "sha256-zNLU9QnBGna5qb+iu2imOUvCIw3ZWRFsQlpFo5ECtKo=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nativeBuildInputs = [ installShellFiles ]
     ++ lib.optionals stdenv.isLinux [ pkg-config ];

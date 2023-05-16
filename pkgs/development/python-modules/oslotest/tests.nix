@@ -4,10 +4,18 @@
 , stestr
 }:
 
+<<<<<<< HEAD
 buildPythonPackage {
   pname = "oslotest-tests";
   inherit (oslotest) version src;
   format = "other";
+=======
+buildPythonPackage rec {
+  pname = "oslotest-tests";
+  inherit (oslotest) version;
+
+  src = oslotest.src;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   postPatch = ''
     # only a small portion of the listed packages are actually needed for running the tests

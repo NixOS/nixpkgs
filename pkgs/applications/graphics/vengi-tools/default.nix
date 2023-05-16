@@ -29,13 +29,21 @@
 
 stdenv.mkDerivation rec {
   pname = "vengi-tools";
+<<<<<<< HEAD
   version = "0.0.26";
+=======
+  version = "0.0.24";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "mgerhardy";
     repo = "vengi";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-p+ZL3oxzwKhh+j1bxakgyStH+1GAu2aEwNmsqo6fNFo=";
+=======
+    sha256 = "sha256-ZkO2CLSuuJcFJFBO4XS8Qec0CxxAJdzOGfFa2zy+4uI=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

@@ -85,7 +85,11 @@ in
         ${pkgs.jq}/bin/jq -n \
           --arg system_label ${lib.escapeShellArg config.system.nixos.label} \
           --arg system ${lib.escapeShellArg pkgs.stdenv.hostPlatform.system} \
+<<<<<<< HEAD
           --arg root_logical_bytes "$(${pkgs.qemu_kvm}/bin/qemu-img info --output json "$rootDisk" | ${pkgs.jq}/bin/jq '."virtual-size"')" \
+=======
+          --arg root_logical_bytes "$(${pkgs.qemu}/bin/qemu-img info --output json "$rootDisk" | ${pkgs.jq}/bin/jq '."virtual-size"')" \
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           --arg boot_mode "${imageBootMode}" \
           --arg root "$rootDisk" \
          '{}

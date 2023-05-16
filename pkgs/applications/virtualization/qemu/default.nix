@@ -1,7 +1,11 @@
 { lib, stdenv, fetchurl, fetchpatch, python3Packages, zlib, pkg-config, glib, buildPackages
 , pixman, vde2, alsa-lib, texinfo, flex
 , bison, lzo, snappy, libaio, libtasn1, gnutls, nettle, curl, ninja, meson, sigtool
+<<<<<<< HEAD
 , makeWrapper, removeReferencesTo
+=======
+, makeWrapper, runtimeShell, removeReferencesTo
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , attr, libcap, libcap_ng, socat, libslirp
 , CoreServices, Cocoa, Hypervisor, rez, setfile, vmnet
 , guestAgentSupport ? with stdenv.hostPlatform; isLinux || isNetBSD || isOpenBSD || isSunOS || isWindows
@@ -9,7 +13,10 @@
 , seccompSupport ? stdenv.isLinux, libseccomp
 , alsaSupport ? lib.hasSuffix "linux" stdenv.hostPlatform.system && !nixosTestRunner
 , pulseSupport ? !stdenv.isDarwin && !nixosTestRunner, libpulseaudio
+<<<<<<< HEAD
 , pipewireSupport ? !stdenv.isDarwin && !nixosTestRunner, pipewire
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , sdlSupport ? !stdenv.isDarwin && !nixosTestRunner, SDL2, SDL2_image
 , jackSupport ? !stdenv.isDarwin && !nixosTestRunner, libjack2
 , gtkSupport ? !stdenv.isDarwin && !xenSupport && !nixosTestRunner, gtk3, gettext, vte, wrapGAppsHook
@@ -28,7 +35,10 @@
 , tpmSupport ? true
 , uringSupport ? stdenv.isLinux, liburing
 , canokeySupport ? false, canokey-qemu
+<<<<<<< HEAD
 , capstoneSupport ? true, capstone
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , enableDocs ? true
 , hostCpuOnly ? false
 , hostCpuTargets ? (if hostCpuOnly
@@ -36,23 +46,40 @@
                           ++ ["${stdenv.hostPlatform.qemuArch}-softmmu"])
                     else null)
 , nixosTestRunner ? false
+<<<<<<< HEAD
 , gitUpdater
+=======
+, doCheck ? false
+, qemu  # for passthru.tests
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 let
   hexagonSupport = hostCpuTargets == null || lib.elem "hexagon" hostCpuTargets;
 in
 
+<<<<<<< HEAD
 stdenv.mkDerivation (finalAttrs: {
+=======
+stdenv.mkDerivation rec {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pname = "qemu"
     + lib.optionalString xenSupport "-xen"
     + lib.optionalString hostCpuOnly "-host-cpu-only"
     + lib.optionalString nixosTestRunner "-for-vm-tests";
+<<<<<<< HEAD
   version = "8.1.0";
 
   src = fetchurl {
     url = "https://download.qemu.org/qemu-${finalAttrs.version}.tar.xz";
     hash = "sha256-cQwQEZjjNNR2Lu9l9km8Q/qKXddTA1VLis/sPrJfDlU=";
+=======
+  version = "8.0.0";
+
+  src = fetchurl {
+    url = "https://download.qemu.org/qemu-${version}.tar.xz";
+    sha256 = "u2DwNBUxGB1sw5ad0ZoBPQQnqH+RgZOXDZrbkRMeVtA=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   depsBuildBuild = [ buildPackages.stdenv.cc ]
@@ -79,7 +106,10 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals numaSupport [ numactl ]
     ++ lib.optionals alsaSupport [ alsa-lib ]
     ++ lib.optionals pulseSupport [ libpulseaudio ]
+<<<<<<< HEAD
     ++ lib.optionals pipewireSupport [ pipewire ]
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     ++ lib.optionals sdlSupport [ SDL2 SDL2_image ]
     ++ lib.optionals jackSupport [ libjack2 ]
     ++ lib.optionals gtkSupport [ gtk3 gettext vte ]
@@ -96,8 +126,12 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals libiscsiSupport [ libiscsi ]
     ++ lib.optionals smbdSupport [ samba ]
     ++ lib.optionals uringSupport [ liburing ]
+<<<<<<< HEAD
     ++ lib.optionals canokeySupport [ canokey-qemu ]
     ++ lib.optionals capstoneSupport [ capstone ];
+=======
+    ++ lib.optionals canokeySupport [ canokey-qemu ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   dontUseMesonConfigure = true; # meson's configurePhase isn't compatible with qemu build
 
@@ -155,6 +189,12 @@ stdenv.mkDerivation (finalAttrs: {
     "--enable-tools"
     "--localstatedir=/var"
     "--sysconfdir=/etc"
+<<<<<<< HEAD
+=======
+    # Always use our Meson, not the bundled version, which doesn't
+    # have our patches and will be subtly broken because of that.
+    "--meson=meson"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "--cross-prefix=${stdenv.cc.targetPrefix}"
     (lib.enableFeature guestAgentSupport "guest-agent")
   ] ++ lib.optional numaSupport "--enable-numa"
@@ -175,8 +215,12 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optional libiscsiSupport "--enable-libiscsi"
     ++ lib.optional smbdSupport "--smbd=${samba}/bin/smbd"
     ++ lib.optional uringSupport "--enable-linux-io-uring"
+<<<<<<< HEAD
     ++ lib.optional canokeySupport "--enable-canokey"
     ++ lib.optional capstoneSupport "--enable-capstone";
+=======
+    ++ lib.optional canokeySupport "--enable-canokey";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   dontWrapGApps = true;
 
@@ -204,7 +248,11 @@ stdenv.mkDerivation (finalAttrs: {
   preBuild = "cd build";
 
   # tests can still timeout on slower systems
+<<<<<<< HEAD
   doCheck = false;
+=======
+  inherit doCheck;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nativeCheckInputs = [ socat ];
   preCheck = ''
     # time limits are a little meagre for a build machine that's
@@ -218,7 +266,10 @@ stdenv.mkDerivation (finalAttrs: {
 
     # point tests towards correct binaries
     substituteInPlace ../tests/unit/test-qga.c \
+<<<<<<< HEAD
       --replace '/bin/bash' "$(type -P bash)" \
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       --replace '/bin/echo' "$(type -P echo)"
     substituteInPlace ../tests/unit/test-io-channel-command.c \
       --replace '/bin/socat' "$(type -P socat)"
@@ -246,6 +297,7 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = {
     qemu-system-i386 = "bin/qemu-system-i386";
     tests = {
+<<<<<<< HEAD
       qemu-tests = finalAttrs.finalPackage.overrideAttrs (_: { doCheck = true; });
     };
     updateScript = gitUpdater {
@@ -253,6 +305,9 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://gitlab.com/qemu-project/qemu.git";
       rev-prefix = "v";
       ignoredVersions = "(alpha|beta|rc).*";
+=======
+      qemu-tests = qemu.override { doCheck = true; };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
   };
 
@@ -267,4 +322,8 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with maintainers; [ eelco qyliss ];
     platforms = platforms.unix;
   };
+<<<<<<< HEAD
 })
+=======
+}
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)

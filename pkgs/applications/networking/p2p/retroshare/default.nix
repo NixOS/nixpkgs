@@ -19,7 +19,10 @@ mkDerivation rec {
     # The build normally tries to get git sub-modules during build
     # but we already have them checked out
     ./no-submodules.patch
+<<<<<<< HEAD
     ./cpp-filesystem.patch
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   nativeBuildInputs = [ pkg-config qmake cmake ];

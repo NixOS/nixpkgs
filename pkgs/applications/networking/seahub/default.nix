@@ -1,6 +1,9 @@
 { lib
 , fetchFromGitHub
+<<<<<<< HEAD
 , fetchpatch
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , python3
 , makeWrapper
 , nixosTests
@@ -31,6 +34,7 @@ python.pkgs.buildPythonApplication rec {
     sha256 = "sha256-7Exvm3EShb/1EqwA4wzWB9zCdv0P/ISmjKSoqtOMnqk=";
   };
 
+<<<<<<< HEAD
   patches = [
     (fetchpatch {
       # PIL update fix
@@ -39,6 +43,8 @@ python.pkgs.buildPythonApplication rec {
     })
   ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   dontBuild = true;
 
   doCheck = false; # disabled because it requires a ccnet environment

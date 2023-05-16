@@ -1,18 +1,28 @@
 GEM
   remote: https://rubygems.org/
   specs:
+<<<<<<< HEAD
     activesupport (7.0.6)
+=======
+    activesupport (7.0.4)
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       concurrent-ruby (~> 1.0, >= 1.0.2)
       i18n (>= 1.6, < 2)
       minitest (>= 5.1)
       tzinfo (~> 2.0)
     aws-eventstream (1.2.0)
+<<<<<<< HEAD
     aws-partitions (1.785.0)
     aws-sdk-core (3.177.0)
+=======
+    aws-partitions (1.689.0)
+    aws-sdk-core (3.168.4)
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       aws-eventstream (~> 1, >= 1.0.2)
       aws-partitions (~> 1, >= 1.651.0)
       aws-sigv4 (~> 1.5)
       jmespath (~> 1, >= 1.6.1)
+<<<<<<< HEAD
     aws-sdk-kms (1.70.0)
       aws-sdk-core (~> 3, >= 3.177.0)
       aws-sigv4 (~> 1.1)
@@ -21,12 +31,26 @@ GEM
       aws-sdk-kms (~> 1)
       aws-sigv4 (~> 1.6)
     aws-sigv4 (1.6.0)
+=======
+    aws-sdk-kms (1.61.0)
+      aws-sdk-core (~> 3, >= 3.165.0)
+      aws-sigv4 (~> 1.1)
+    aws-sdk-s3 (1.117.2)
+      aws-sdk-core (~> 3, >= 3.165.0)
+      aws-sdk-kms (~> 1)
+      aws-sigv4 (~> 1.4)
+    aws-sigv4 (1.5.2)
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       aws-eventstream (~> 1, >= 1.0.2)
     cli-format (0.2.2)
       activesupport
       text-table
       zeitwerk
+<<<<<<< HEAD
     concurrent-ruby (1.2.2)
+=======
+    concurrent-ruby (1.1.10)
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     deep_merge (1.2.2)
     diff-lcs (1.5.0)
     dotenv (2.8.1)
@@ -41,6 +65,7 @@ GEM
     graph (2.11.0)
     hcl_parser (0.2.2)
       rhcl
+<<<<<<< HEAD
     i18n (1.14.1)
       concurrent-ruby (~> 1.0)
     jmespath (1.6.2)
@@ -53,6 +78,20 @@ GEM
     mini_portile2 (2.8.2)
     rainbow (3.1.1)
     render_me_pretty (0.9.0)
+=======
+    i18n (1.12.0)
+      concurrent-ruby (~> 1.0)
+    jmespath (1.6.2)
+    memoist (0.16.2)
+    minitest (5.17.0)
+    mini_portile2 (2.8.0)
+    nokogiri (1.13.9)
+      racc (~> 1.4)
+      mini_portile2 (~> 2.8.0)
+    racc (1.6.2)
+    rainbow (3.1.1)
+    render_me_pretty (0.8.4)
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       activesupport
       rainbow
       tilt
@@ -63,6 +102,7 @@ GEM
       rspec-core (~> 3.12.0)
       rspec-expectations (~> 3.12.0)
       rspec-mocks (~> 3.12.0)
+<<<<<<< HEAD
     rspec-core (3.12.2)
       rspec-support (~> 3.12.0)
     rspec-expectations (3.12.3)
@@ -73,13 +113,29 @@ GEM
       rspec-support (~> 3.12.0)
     rspec-support (3.12.1)
     rspec-terraspace (0.3.3)
+=======
+    rspec-core (3.12.0)
+      rspec-support (~> 3.12.0)
+    rspec-expectations (3.12.2)
+      diff-lcs (>= 1.2.0, < 2.0)
+      rspec-support (~> 3.12.0)
+    rspec-mocks (3.12.2)
+      diff-lcs (>= 1.2.0, < 2.0)
+      rspec-support (~> 3.12.0)
+    rspec-support (3.12.0)
+    rspec-terraspace (0.3.2)
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       activesupport
       memoist
       rainbow
       rspec
       zeitwerk
     rubyzip (2.3.2)
+<<<<<<< HEAD
     terraspace (2.2.8)
+=======
+    terraspace (2.2.3)
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       activesupport
       bundler
       cli-format
@@ -110,12 +166,21 @@ GEM
       thor
       zeitwerk
     text-table (1.2.4)
+<<<<<<< HEAD
     thor (1.2.2)
     tilt (2.2.0)
     tty-tree (0.4.0)
     tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
     zeitwerk (2.6.8)
+=======
+    thor (1.2.1)
+    tilt (2.0.11)
+    tty-tree (0.4.0)
+    tzinfo (2.0.5)
+      concurrent-ruby (~> 1.0)
+    zeitwerk (2.6.6)
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     zip_folder (0.1.0)
       rubyzip
 
@@ -123,7 +188,14 @@ PLATFORMS
   x86_64-linux
 
 DEPENDENCIES
+<<<<<<< HEAD
   terraspace (~> 2.2.8)
 
 BUNDLED WITH
    2.3.26
+=======
+  terraspace (~> 2.2.3)
+
+BUNDLED WITH
+   2.3.25
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)

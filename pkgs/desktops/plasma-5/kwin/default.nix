@@ -55,6 +55,10 @@
 , kxmlgui
 , plasma-framework
 , libqaccessibilityclient
+<<<<<<< HEAD
+=======
+, python3
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 # TODO (ttuegel): investigate qmlplugindump failure
@@ -143,7 +147,11 @@ mkDerivation {
   ];
 
   CXXFLAGS = [
+<<<<<<< HEAD
     ''-DNIXPKGS_XWAYLAND=\"${lib.getExe xwayland}\"''
+=======
+    ''-DNIXPKGS_XWAYLAND=\"${lib.getBin xwayland}/bin/Xwayland\"''
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   postInstall = ''

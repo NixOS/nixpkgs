@@ -7,14 +7,22 @@
 
 buildPythonPackage rec {
   pname = "aliyun-python-sdk-iot";
+<<<<<<< HEAD
   version = "8.55.0";
+=======
+  version = "8.53.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
+<<<<<<< HEAD
     hash = "sha256-cLiOdXZpjZUVJ0O0rykM6GQH0pXaiMQp1zH6kuDLqOY=";
+=======
+    hash = "sha256-dRNrbdFASkh1wWa1Z2VaUPijbyqUyIlVYSKvqR9N1js=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [

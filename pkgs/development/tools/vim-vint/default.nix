@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 { lib, python3Packages, fetchPypi }:
+=======
+{ lib, python3Packages }:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 with python3Packages;
 
@@ -6,7 +10,11 @@ buildPythonApplication rec {
   pname = "vim-vint";
   version = "0.3.21";
 
+<<<<<<< HEAD
   src = fetchPypi {
+=======
+  src = python3Packages.fetchPypi {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     inherit pname version;
     sha256 = "15qdh8fby9xgfjxidcfv1xmrqqrxxapky7zmyn46qx1abhp9piax";
   };

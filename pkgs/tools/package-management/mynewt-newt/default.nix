@@ -15,7 +15,11 @@ buildGoModule rec {
     sha256 = "sha256-HWZDs4kYWveEqzPRNGNbghc1Yg6hy/Pq3eU5jW8WdHc=";
   };
 
+<<<<<<< HEAD
   vendorHash = "sha256-/LK+NSs7YZkw6TRvBQcn6/SszIwAfXN0rt2AKSBV7CE=";
+=======
+  vendorSha256 = "sha256-/LK+NSs7YZkw6TRvBQcn6/SszIwAfXN0rt2AKSBV7CE=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   doCheck = false;
 
@@ -33,5 +37,9 @@ buildGoModule rec {
     '';
     license = licenses.asl20;
     maintainers = with maintainers; [ pjones ];
+<<<<<<< HEAD
+=======
+    platforms = platforms.unix;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

@@ -1,10 +1,16 @@
 { lib
 , buildPythonPackage
+<<<<<<< HEAD
 , fetchpatch
 , fetchPypi
 , pythonOlder
 , setuptools
 , wheel
+=======
+, fetchPypi
+, pythonOlder
+, setuptools
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 buildPythonPackage rec {
@@ -19,6 +25,7 @@ buildPythonPackage rec {
     hash = "sha256-R+P4pgKbLvf0mwpSDoujCvlJe/yS+nvSJ7ewLVOOg/0=";
   };
 
+<<<<<<< HEAD
   patches = [
     # https://github.com/pyinsteon/insteon-panel/pull/33
     (fetchpatch {
@@ -31,6 +38,10 @@ buildPythonPackage rec {
   nativeBuildInputs = [
     setuptools
     wheel
+=======
+  nativeBuildInputs = [
+    setuptools
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   # upstream has no tests

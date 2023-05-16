@@ -12,6 +12,7 @@ Unfortunately, Nixpkgs currently lacks a way to query available
 configuration options.
 :::
 
+<<<<<<< HEAD
 ::: {.note}
 Alternatively, many packages come with extensions one might add.
 Examples include:
@@ -35,6 +36,8 @@ environment.systemPackages = with pkgs; [
 ```
 :::
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 Apart from high-level options, it's possible to tweak a package in
 almost arbitrary ways, such as changing or disabling dependencies of a
 package. For instance, the Emacs package in Nixpkgs by default has a

@@ -2,6 +2,7 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "scraper";
+<<<<<<< HEAD
   version = "0.17.1";
 
   src = fetchCrate {
@@ -10,6 +11,16 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoHash = "sha256-/Lut38gFO4XtrBHXr4sfcII+bWgcCDrHf5/PKPrDiDs=";
+=======
+  version = "0.16.0";
+
+  src = fetchCrate {
+    inherit pname version;
+    hash = "sha256-3FxEfrScOetB1raiT9xjq9G2xLrLZqVlkqbVAFCIhZ0=";
+  };
+
+  cargoHash = "sha256-Pf8+vvOvOHpuJ2v7iwdVzHwneqvhk2E4nbGO4TL/FAM=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nativeBuildInputs = [ installShellFiles ];
 

@@ -86,9 +86,12 @@ stdenv.mkDerivation rec {
     "-DIGC_PREFERRED_LLVM_VERSION=${lib.getVersion llvm}"
   ];
 
+<<<<<<< HEAD
   # causes redefinition of _FORTIFY_SOURCE
   hardeningDisable = [ "fortify3" ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   meta = with lib; {
     homepage = "https://github.com/intel/intel-graphics-compiler";
     description = "LLVM-based compiler for OpenCL targeting Intel Gen graphics hardware";

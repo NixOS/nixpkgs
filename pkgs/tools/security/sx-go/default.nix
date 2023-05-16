@@ -1,4 +1,9 @@
+<<<<<<< HEAD
 { lib
+=======
+{ stdenv
+, lib
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , buildGoModule
 , fetchFromGitHub
 , fetchpatch
@@ -16,7 +21,11 @@ buildGoModule rec {
     sha256 = "sha256-HTIzA1QOVn3V/hGUu7wLIYUNYmcJ/FXi2yr6BGRizZA=";
   };
 
+<<<<<<< HEAD
   vendorHash = "sha256-TWRMNt6x8zuvhP1nz4R6IVCX+9HityvVpzxRhDiMyO4=";
+=======
+  vendorSha256 = "sha256-TWRMNt6x8zuvhP1nz4R6IVCX+9HityvVpzxRhDiMyO4=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   patches = [
     # Fix darwin builds: https://github.com/v-byte-cpu/sx/pull/120

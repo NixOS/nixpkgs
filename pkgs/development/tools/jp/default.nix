@@ -11,7 +11,11 @@ buildGoModule rec {
     hash = "sha256-a3WvLAdUZk+Y+L+opPDMBvdN5x5B6nAi/lL8JHJG/gY=";
   };
 
+<<<<<<< HEAD
   vendorHash = "sha256-K6ZNtART7tcVBH5myV6vKrKWfnwK8yTa6/KK4QLyr00=";
+=======
+  vendorSha256 = "sha256-K6ZNtART7tcVBH5myV6vKrKWfnwK8yTa6/KK4QLyr00=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   meta = with lib; {
     description = "A command line interface to the JMESPath expression language for JSON";

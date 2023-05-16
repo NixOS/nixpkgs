@@ -13,14 +13,22 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-appengine-logging";
+<<<<<<< HEAD
   version = "1.3.1";
+=======
+  version = "1.3.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
+<<<<<<< HEAD
     hash = "sha256-s/X3l9a6zGBlTeIZAZAvinh49xaNdr5dR8d3X+DD4Kg=";
+=======
+    hash = "sha256-1S8U4empk3l6CG7/PUdy3qeQg5DGrWEtJigTQfF8mkk=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [

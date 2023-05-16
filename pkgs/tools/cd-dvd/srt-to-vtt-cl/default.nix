@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 { lib, stdenv, fetchFromGitHub }:
+=======
+{ lib, stdenv, fetchFromGitHub, substituteAll }:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 stdenv.mkDerivation rec {
   pname = "srt-to-vtt-cl";
@@ -12,13 +16,23 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
+<<<<<<< HEAD
     ./fix-validation.patch
     ./simplify-macOS-builds.patch
+=======
+    (substituteAll {
+      src = ./fix-validation.patch;
+    })
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   installPhase = ''
     mkdir -p $out/bin
+<<<<<<< HEAD
     cp bin/srt-vtt $out/bin
+=======
+    cp bin/$(uname -s)/$(uname -m)/srt-vtt $out/bin
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '';
 
   meta = with lib; {
@@ -26,6 +40,10 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = with maintainers; [ ericdallo ];
     homepage = "https://github.com/nwoltman/srt-to-vtt-cl";
+<<<<<<< HEAD
     platforms = platforms.unix;
+=======
+    platforms = platforms.linux;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

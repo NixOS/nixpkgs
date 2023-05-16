@@ -14,13 +14,22 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "hare";
+<<<<<<< HEAD
   version = "unstable-2023-04-23";
+=======
+  version = "unstable-2023-03-15";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromSourcehut {
     owner = "~sircmpwn";
     repo = "hare";
+<<<<<<< HEAD
     rev = "464ec7a660b12ab1ef8e4dcc9d00604cec996c6e";
     hash = "sha256-5/ObckDxosqUkFfDVhGA/0kwjFzDUxu420nkfa97vqM=";
+=======
+    rev = "488771bc8cef15557a44815eb6f7808df40a09f7";
+    hash = "sha256-1cSXWD8jpW1VJZDTDOkIabczqbaDCOWsyaUSGtsKsUM=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [
@@ -94,5 +103,9 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl3Only;
     maintainers = [ lib.maintainers.AndersonTorres ];
     inherit (harec.meta) platforms badPlatforms;
+<<<<<<< HEAD
+=======
+    broken = stdenv.isAarch64; # still figuring how to set cross-compiling stuff
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 })

@@ -28,14 +28,22 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-bigquery";
+<<<<<<< HEAD
   version = "3.11.4";
+=======
+  version = "3.10.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
+<<<<<<< HEAD
     hash = "sha256-aX3xFyQaIoO8u5OyHhC63BTlHJqQgA0qfho+HH2EKXQ=";
+=======
+    hash = "sha256-SwLe8Hbi24zsZvZftifROQSp/Dz0/uMV7eQ9y3A4qN8=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [
@@ -127,12 +135,19 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
+<<<<<<< HEAD
     # Not compatible with pyarrow13 yet.
     broken = true;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     description = "Google BigQuery API client library";
     homepage = "https://github.com/googleapis/python-bigquery";
     changelog = "https://github.com/googleapis/python-bigquery/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
+<<<<<<< HEAD
     maintainers = with maintainers; [ ];
+=======
+    maintainers = with maintainers; [ SuperSandro2000 ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

@@ -27,23 +27,38 @@
 , pkg-config
 , rnnoise
 , rubberband
+<<<<<<< HEAD
+=======
+, speex
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , speexdsp
 , tbb
 , wrapGAppsHook4
 , zam-plugins
 , zita-convolver
+<<<<<<< HEAD
 , soundtouch
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 stdenv.mkDerivation rec {
   pname = "easyeffects";
+<<<<<<< HEAD
   version = "7.0.5";
+=======
+  version = "7.0.3";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "wwmm";
     repo = "easyeffects";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-Z/0O8dVZ3J901OdOc1wF1XibNE/33b8oSqY6RKPDfzg=";
+=======
+    sha256 = "sha256-vHswNRu4JrW95nZaEBs95exUqslO0dyIr41E1gJhHow=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [
@@ -74,7 +89,11 @@ stdenv.mkDerivation rec {
     pipewire
     rnnoise
     rubberband
+<<<<<<< HEAD
     soundtouch
+=======
+    speex
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     speexdsp
     tbb
     zita-convolver
@@ -105,8 +124,13 @@ stdenv.mkDerivation rec {
     description = "Audio effects for PipeWire applications.";
     homepage = "https://github.com/wwmm/easyeffects";
     license = licenses.gpl3Plus;
+<<<<<<< HEAD
     maintainers = with maintainers; [ ];
     platforms = platforms.linux;
     mainProgram = "easyeffects";
+=======
+    maintainers = with maintainers; [ jtojnar ];
+    platforms = platforms.linux;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

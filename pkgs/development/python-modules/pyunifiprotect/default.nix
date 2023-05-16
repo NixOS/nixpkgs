@@ -31,7 +31,11 @@
 
 buildPythonPackage rec {
   pname = "pyunifiprotect";
+<<<<<<< HEAD
   version = "4.20.0";
+=======
+  version = "4.8.3";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -40,7 +44,11 @@ buildPythonPackage rec {
     owner = "briis";
     repo = pname;
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-d4pMswABy/KFO2adwufSRRsj879O894nphh3MEjZOl0=";
+=======
+    hash = "sha256-2DR1SPWElDZcTYF6TaJK3lxqJ5Skv76X+K+y6i69bj4=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   postPatch = ''

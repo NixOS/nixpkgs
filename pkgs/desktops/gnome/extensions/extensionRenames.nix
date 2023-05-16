@@ -6,8 +6,14 @@
 # - Make a separate section for each GNOME version. Collisions will come back eventually
 #   as the extensions are updated.
 {
+<<<<<<< HEAD
 
   # ####### GNOME 44 #######
+=======
+  # ############################################################################
+  # These are conflicts for older extensions (i.e. they don't support the latest GNOME version).
+  # Make sure to move them up once they are updated
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   "apps-menu@gnome-shell-extensions.gcampax.github.com" = "applications-menu";
   "Applications_Menu@rmy.pobox.com" = "frippery-applications-menu";
@@ -15,15 +21,19 @@
   "workspace-indicator@gnome-shell-extensions.gcampax.github.com" = "workspace-indicator";
   "horizontal-workspace-indicator@tty2.io" = "workspace-indicator-2";
 
+<<<<<<< HEAD
   "PersianCalendar@oxygenws.com" = "persian-calendar";
   "persian-calendar@iamrezamousavi.gmail.com" = "persian-calendar-2";
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   "clipboard-indicator@tudmotu.com" = "clipboard-indicator";
   "clipboard-indicator@Dieg0Js.github.io" = "clipboard-indicator-2";
 
   "vbox-applet@gs.eros2.info" = "virtualbox-applet";
   "vbox-applet@buba98" = "virtualbox-applet-2";
 
+<<<<<<< HEAD
   "panel-date-format@keiii.github.com" = "panel-date-format";
   "panel-date-format@atareao.es" = "panel-date-format-2";
 
@@ -38,6 +48,12 @@
 
   "lockkeys@vaina.lt" = "lock-keys";
   "lockkeys@fawtytoo" = "lock-keys-2";
+=======
+  # ####### GNOME 43 #######
+
+  "PersianCalendar@oxygenws.com" = "persian-calendar";
+  "persian-calendar@iamrezamousavi.gmail.com" = "persian-calendar-2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   # DEPRECATED: Use "Caffeine" instead
   "KeepAwake@jepfa.de" = "keep-awake";
@@ -46,6 +62,12 @@
   "noannoyance@sindex.com" = "noannoyance";
   "noannoyance@daase.net" = "noannoyance-2";
 
+<<<<<<< HEAD
+=======
+  "batime@martin.zurowietz.de" = "battery-time";
+  "batterytime@typeof.pw" = "battery-time-2";
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   "volume_scroller@trflynn89.pm.me" = "volume-scroller";
   "volume_scroller@francislavoie.github.io" = "volume-scroller-2";
 
@@ -55,6 +77,17 @@
 
   # ####### GNOME 42 #######
 
+<<<<<<< HEAD
+=======
+  "lockkeys@vaina.lt" = "lock-keys";
+  "lockkeys@fawtytoo" = "lock-keys-2";
+
+  "panel-date-format@keiii.github.com" = "panel-date-format";
+  "panel-date-format@atareao.es" = "panel-date-format-2";
+
+  "volume_scroller@noskoski" = "volume-scroller-3";
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   "wireguard-indicator@gregos.me" = "wireguard-indicator-2";
   "wireguard-indicator@atareao.es" = "wireguard-indicator";
 
@@ -64,9 +97,12 @@
   "true-color-invert@jackkenney" = "true-color-invert";
   "true-color-window-invert@lynet101" = "true-color-window-invert";
 
+<<<<<<< HEAD
   "SomaFm-Radio@alireza6677.gmail.com" = "somafm-internet-radio";
   "SomaFm-Radio@cajhne.gmail.com" = "somafm-internet-radio-2";
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   # ####### GNOME 41 #######
 
   "floatingDock@sun.wxg@gmail.com" = "floating-dock-2";
@@ -93,6 +129,12 @@
   "Hide_Activities@shay.shayel.org" = "hide-activities-button";
   "hide-activities-button@nmingori.gnome-shell-extensions.org" = "hide-activities-button-2";
 
+<<<<<<< HEAD
+=======
+  "SomaFm-Radio@alireza6677.gmail.com" = "somafm-internet-radio";
+  "SomaFm-Radio@cajhne.gmail.com" = "somafm-internet-radio-2";
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   "extension-list@tu.berry" = "extension-list";
   "screen-lock@garciabaameiro.com" = "screen-lock"; # Don't know why they got 'extension-list' as slug
 

@@ -12,19 +12,30 @@
 , makeDesktopItem
 , copyDesktopItems
 , yarn2nix-moretea
+<<<<<<< HEAD
 , fetchYarnDeps
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , chromium
 }:
 
 stdenvNoCC.mkDerivation rec {
   pname = "Sharedown";
+<<<<<<< HEAD
   version = "5.3.1";
+=======
+  version = "5.2.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "kylon";
     repo = pname;
     rev = version;
+<<<<<<< HEAD
     sha256 = "sha256-llQt3m/qu7v5uQIfA1yxl2JZiFafk6sPgcvrIpQy/DI=";
+=======
+    sha256 = "sha256-kdntnzGpu1NUP6rrBaH7ASwE7XT18vHcgf39bp5A4ds=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [
@@ -52,7 +63,11 @@ stdenvNoCC.mkDerivation rec {
         yt-dlp
       ]);
 
+<<<<<<< HEAD
       modules = yarn2nix-moretea.mkYarnModules rec {
+=======
+      modules = yarn2nix-moretea.mkYarnModules {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         name = "${pname}-modules-${version}";
         inherit pname version;
 
@@ -88,11 +103,15 @@ stdenvNoCC.mkDerivation rec {
 
         packageJSON = "${src}/package.json";
         yarnLock = ./yarn.lock;
+<<<<<<< HEAD
 
         offlineCache = fetchYarnDeps {
           inherit yarnLock;
           hash = "sha256-NzWzkZbf5R1R72K7KVJbZUCzso1UZ0p3+lRYZE2M/dI=";
         };
+=======
+        yarnNix = ./yarndeps.nix;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       };
     in
     ''

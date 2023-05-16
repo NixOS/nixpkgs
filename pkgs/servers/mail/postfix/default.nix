@@ -25,11 +25,19 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "postfix";
+<<<<<<< HEAD
   version = "3.8.2";
 
   src = fetchurl {
     url = "http://cdn.postfix.johnriley.me/mirrors/postfix-release/official/${pname}-${version}.tar.gz";
     hash = "sha256-Z5CQPNu14ORxlmkeuaXyz4BQJi3vlB4Dnm1L9AQ6XjA=";
+=======
+  version = "3.8.0";
+
+  src = fetchurl {
+    url = "http://cdn.postfix.johnriley.me/mirrors/postfix-release/official/${pname}-${version}.tar.gz";
+    hash = "sha256-o62AKb0sawxXZHeg93v50sC3YcuqDvv+9Hlp7+purek=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ makeWrapper m4 ];
@@ -109,7 +117,10 @@ in stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "http://www.postfix.org/";
+<<<<<<< HEAD
     changelog = "https://www.postfix.org/announcements/postfix-${version}.html";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     description = "A fast, easy to administer, and secure mail server";
     license = with licenses; [ ipl10 epl20 ];
     platforms = platforms.linux;

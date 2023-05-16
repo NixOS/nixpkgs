@@ -2,18 +2,30 @@
 
 buildGraalvmNativeImage rec {
   pname = "clojure-lsp";
+<<<<<<< HEAD
   version = "2023.08.06-00.28.06";
+=======
+  version = "2023.05.04-19.38.01";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = version;
+<<<<<<< HEAD
     sha256 = "sha256-wc7M2cPRtdaRzZn3GNu/aCbQ2VqxiDxvu/b7qnBVUBo=";
+=======
+    sha256 = "sha256-TWbOR0/YYO0O+4w2ACADOrp8EmyEfFAq2FQOUDEafjw=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   jar = fetchurl {
     url = "https://github.com/clojure-lsp/clojure-lsp/releases/download/${version}/clojure-lsp-standalone.jar";
+<<<<<<< HEAD
     sha256 = "c301821ac6914999a44f5c1cd371d46b248fe9a2e31d43a666d0bc2656cfdd78";
+=======
+    sha256 = "48503b147a247cef4c106084b0c15e10bb0f1de8f0b15d528ca9d66e76bba465";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   extraNativeImageBuildArgs = [

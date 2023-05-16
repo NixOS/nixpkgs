@@ -21,6 +21,10 @@ arpa/inet.h
 arpa/nameser_compat.h
 arpa/telnet.h
 arpa/tftp.h
+<<<<<<< HEAD
+=======
+asl.h
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 assert.h
 bitstring.h
 cpio.h
@@ -48,8 +52,17 @@ langinfo.h
 libc.h
 libc_private.h
 libgen.h
+<<<<<<< HEAD
 limits.h
 locale.h
+=======
+libkern/OSAtomic.h
+libkern/OSCacheControl.h
+libproc.h
+limits.h
+locale.h
+malloc/malloc.h
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 memory.h
 monetary.h
 monitor.h
@@ -67,17 +80,35 @@ protocols/routed.h
 protocols/rwhod.h
 protocols/talkd.h
 protocols/timed.h
+<<<<<<< HEAD
+=======
+pthread.h
+pthread_impl.h
+pthread_spis.h
+pthread_workqueue.h
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 ranlib.h
 readpassphrase.h
 regex.h
 runetype.h
+<<<<<<< HEAD
+=======
+sched.h
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 search.h
 secure/_common.h
 secure/_stdio.h
 secure/_string.h
 semaphore.h
+<<<<<<< HEAD
 sgtty.h
 signal.h
+=======
+setjmp.h
+sgtty.h
+signal.h
+spawn.h
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 stab.h
 standards.h
 stddef.h
@@ -100,6 +131,10 @@ time.h
 timeconv.h
 ttyent.h
 tzfile.h
+<<<<<<< HEAD
+=======
+ucontext.h
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 ulimit.h
 unistd.h
 util.h

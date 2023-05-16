@@ -1,9 +1,14 @@
+<<<<<<< HEAD
 { lib, stdenv, fetchFromGitHub, fetchpatch, cmake }:
+=======
+{ lib, stdenv, fetchurl, cmake }:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 stdenv.mkDerivation rec {
   pname = "json-c";
   version = "0.16";
 
+<<<<<<< HEAD
   src = fetchFromGitHub {
     owner = "json-c";
     repo = "json-c";
@@ -19,6 +24,13 @@ stdenv.mkDerivation rec {
     })
   ];
 
+=======
+  src = fetchurl {
+    url    = "https://s3.amazonaws.com/json-c_releases/releases/${pname}-${version}.tar.gz";
+    sha256 = "sha256-jkWsj5bsd5Hq87t+5Q6cIQC7vIe40PHQMMW6igKI2Ws=";
+  };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   outputs = [ "out" "dev" ];
 
   nativeBuildInputs = [ cmake ];

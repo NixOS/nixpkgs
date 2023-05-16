@@ -31,8 +31,11 @@ let
 
   cfg = config.services.gitea-actions-runner;
 
+<<<<<<< HEAD
   settingsFormat = pkgs.formats.yaml { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   # Check whether any runner instance label requires a container runtime
   # Empty label strings result in the upstream defined defaultLabels, which require docker
   # https://gitea.com/gitea/act_runner/src/tag/v0.1.5/internal/app/cmd/register.go#L93-L98
@@ -121,6 +124,7 @@ in
               that follows the filesystem hierarchy standard.
             '';
           };
+<<<<<<< HEAD
           settings = mkOption {
             description = lib.mdDoc ''
               Configuration for `act_runner daemon`.
@@ -133,6 +137,8 @@ in
 
             default = { };
           };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
           hostPackages = mkOption {
             type = listOf package;
@@ -183,7 +189,10 @@ in
         wantsHost = hasHostScheme instance;
         wantsDocker = wantsContainerRuntime && config.virtualisation.docker.enable;
         wantsPodman = wantsContainerRuntime && config.virtualisation.podman.enable;
+<<<<<<< HEAD
         configFile = settingsFormat.generate "config.yaml" instance.settings;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       in
         nameValuePair "gitea-runner-${escapeSystemdPath name}" {
           inherit (instance) enable;
@@ -211,12 +220,16 @@ in
             User = "gitea-runner";
             StateDirectory = "gitea-runner";
             WorkingDirectory = "-/var/lib/gitea-runner/${name}";
+<<<<<<< HEAD
 
             # gitea-runner might fail when gitea is restarted during upgrade.
             Restart = "on-failure";
             RestartSec = 2;
 
             ExecStartPre = [(pkgs.writeShellScript "gitea-register-runner-${name}" ''
+=======
+            ExecStartPre = pkgs.writeShellScript "gitea-register-runner-${name}" ''
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
               export INSTANCE_DIR="$STATE_DIRECTORY/${name}"
               mkdir -vp "$INSTANCE_DIR"
               cd "$INSTANCE_DIR"
@@ -227,7 +240,11 @@ in
               export LABELS_CURRENT="$(cat $LABELS_FILE 2>/dev/null || echo 0)"
 
               if [ ! -e "$INSTANCE_DIR/.runner" ] || [ "$LABELS_WANTED" != "$LABELS_CURRENT" ]; then
+<<<<<<< HEAD
                 # remove existing registration file, so that changing the labels forces a re-registration
+=======
+                # remove existing registration file, so that changing the labels forces a re-registation
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
                 rm -v "$INSTANCE_DIR/.runner" || true
 
                 # perform the registration
@@ -241,8 +258,13 @@ in
                 echo "$LABELS_WANTED" > "$LABELS_FILE"
               fi
 
+<<<<<<< HEAD
             '')];
             ExecStart = "${cfg.package}/bin/act_runner daemon --config ${configFile}";
+=======
+            '';
+            ExecStart = "${cfg.package}/bin/act_runner daemon";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
             SupplementaryGroups = optionals (wantsDocker) [
               "docker"
             ] ++ optionals (wantsPodman) [

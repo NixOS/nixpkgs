@@ -13,7 +13,11 @@ buildGoModule rec {
 
   nativeBuildInputs = [ scdoc installShellFiles ];
 
+<<<<<<< HEAD
   vendorHash = "sha256-C1ueL/zmPzFbpNo5BF56/t74nwCUvb2Vu1exssPqOPE=";
+=======
+  vendorSha256 = "sha256-C1ueL/zmPzFbpNo5BF56/t74nwCUvb2Vu1exssPqOPE=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   postInstall = ''
     scdoc < docs/kiln.1.scd > docs/kiln.1

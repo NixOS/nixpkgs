@@ -18,7 +18,11 @@
 
 buildPythonPackage rec {
   pname = "json-schema-for-humans";
+<<<<<<< HEAD
   version = "0.45.1";
+=======
+  version = "0.44.5";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -27,9 +31,20 @@ buildPythonPackage rec {
     owner = "coveooss";
     repo = pname;
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-9dX9+YwJdJpgU3cZkxk7+CgdRFgcVhrvU0amO8zHZhs=";
   };
 
+=======
+    hash = "sha256-+RsJdlGMrjW2GFFLUcQBMwBnBlhST0knCleh2e3d10A=";
+  };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace 'pytz = "^2021.1"' 'pytz = "*"'
+  '';
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nativeBuildInputs = [
     poetry-core
   ];

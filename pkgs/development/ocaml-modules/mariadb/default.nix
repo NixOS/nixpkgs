@@ -1,6 +1,10 @@
 { lib, fetchurl, stdenv
+<<<<<<< HEAD
 , fetchpatch
 , ocaml, findlib, ocamlbuild, camlp-streams
+=======
+, ocaml, findlib, ocamlbuild
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , ctypes, mariadb, libmysqlclient }:
 
 lib.throwIfNot (lib.versionAtLeast ocaml.version "4.07")
@@ -15,6 +19,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-3/C1Gz6luUzS7oaudLlDHMT6JB2v5OdbLVzJhtayHGM=";
   };
 
+<<<<<<< HEAD
   patches = fetchpatch {
     url = "https://github.com/andrenth/ocaml-mariadb/commit/9db2e4d8dec7c584213d0e0f03d079a36a35d9d5.patch";
     hash = "sha256-heROtU02cYBJ5edIHMdYP1xNXcLv8h79GYGBuudJhgE=";
@@ -27,6 +32,10 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ ocaml findlib ocamlbuild ];
   buildInputs = [ mariadb libmysqlclient camlp-streams ocamlbuild ];
+=======
+  nativeBuildInputs = [ ocaml findlib ocamlbuild ];
+  buildInputs = [ mariadb libmysqlclient ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   propagatedBuildInputs = [ ctypes ];
 
   strictDeps = true;

@@ -9,7 +9,11 @@
 
 buildPythonPackage rec {
   pname = "aiosqlite";
+<<<<<<< HEAD
   version = "0.19.0";
+=======
+  version = "0.18.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -18,7 +22,11 @@ buildPythonPackage rec {
     owner = "omnilib";
     repo = pname;
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-dm7uqG59FP40hcQt+R7qfQiD8P42AYZ2WcH1RoEC5wQ=";
+=======
+    hash = "sha256-yPGSKqjOz1EY5/V0oKz2EiZ90q2O4TINoXdxHuB7Gqk=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [
@@ -44,6 +52,10 @@ buildPythonPackage rec {
     homepage = "https://github.com/jreese/aiosqlite";
     changelog = "https://github.com/omnilib/aiosqlite/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
+<<<<<<< HEAD
     maintainers = with maintainers; [ ];
+=======
+    maintainers = with maintainers; [ costrouc ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

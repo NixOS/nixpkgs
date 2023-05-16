@@ -22,11 +22,20 @@ with lib;
 
   config = mkIf config.security.lockKernelModules {
     boot.kernelModules = concatMap (x:
+<<<<<<< HEAD
       optionals (x.device != null) (
         if x.fsType == "vfat"
         then [ "vfat" "nls-cp437" "nls-iso8859-1" ]
         else [ x.fsType ])
       ) config.system.build.fileSystems;
+=======
+      if x.device != null
+        then
+          if x.fsType == "vfat"
+            then [ "vfat" "nls-cp437" "nls-iso8859-1" ]
+            else [ x.fsType ]
+        else []) config.system.build.fileSystems;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     systemd.services.disable-kernel-module-loading = {
       description = "Disable kernel module loading";

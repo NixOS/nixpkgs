@@ -10,8 +10,12 @@ let
 
   defaultPinentryFlavor =
     if xserverCfg.desktopManager.lxqt.enable
+<<<<<<< HEAD
     || xserverCfg.desktopManager.plasma5.enable
     || xserverCfg.desktopManager.deepin.enable then
+=======
+    || xserverCfg.desktopManager.plasma5.enable then
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       "qt"
     else if xserverCfg.desktopManager.xfce.enable then
       "gtk2"
@@ -75,7 +79,13 @@ in
       defaultText = literalMD ''matching the configured desktop environment'';
       description = lib.mdDoc ''
         Which pinentry interface to use. If not null, the path to the
+<<<<<<< HEAD
         pinentry binary will be set in /etc/gnupg/gpg-agent.conf.
+=======
+        pinentry binary will be passed to gpg-agent via commandline and
+        thus overrides the pinentry option in gpg-agent.conf in the user's
+        home directory.
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         If not set at all, it'll pick an appropriate flavor depending on the
         system configuration (qt flavor for lxqt and plasma5, gtk2 for xfce
         4.12, gnome3 on all other systems with X enabled, ncurses otherwise).
@@ -92,6 +102,7 @@ in
   };
 
   config = mkIf cfg.agent.enable {
+<<<<<<< HEAD
     environment.etc."gnupg/gpg-agent.conf".text =
       lib.optionalString (cfg.agent.pinentryFlavor != null) ''
       pinentry-program ${pkgs.pinentry.${cfg.agent.pinentryFlavor}}/bin/pinentry
@@ -121,10 +132,22 @@ in
         SocketMode = "0600";
         DirectoryMode = "0700";
       };
+=======
+    # This overrides the systemd user unit shipped with the gnupg package
+    systemd.user.services.gpg-agent = mkIf (cfg.agent.pinentryFlavor != null) {
+      serviceConfig.ExecStart = [ "" ''
+        ${cfg.package}/bin/gpg-agent --supervised \
+          --pinentry-program ${pkgs.pinentry.${cfg.agent.pinentryFlavor}}/bin/pinentry
+      '' ];
+    };
+
+    systemd.user.sockets.gpg-agent = {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       wantedBy = [ "sockets.target" ];
     };
 
     systemd.user.sockets.gpg-agent-ssh = mkIf cfg.agent.enableSSHSupport {
+<<<<<<< HEAD
       unitConfig = {
         Description = "GnuPG cryptographic agent (ssh-agent emulation)";
         Documentation = "man:gpg-agent(1) man:ssh-add(1) man:ssh-agent(1) man:ssh(1)";
@@ -136,10 +159,13 @@ in
         SocketMode = "0600";
         DirectoryMode = "0700";
       };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       wantedBy = [ "sockets.target" ];
     };
 
     systemd.user.sockets.gpg-agent-extra = mkIf cfg.agent.enableExtraSocket {
+<<<<<<< HEAD
       unitConfig = {
         Description = "GnuPG cryptographic agent and passphrase cache (restricted)";
         Documentation = "man:gpg-agent(1)";
@@ -151,10 +177,13 @@ in
         SocketMode = "0600";
         DirectoryMode = "0700";
       };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       wantedBy = [ "sockets.target" ];
     };
 
     systemd.user.sockets.gpg-agent-browser = mkIf cfg.agent.enableBrowserSocket {
+<<<<<<< HEAD
       unitConfig = {
         Description = "GnuPG cryptographic agent and passphrase cache (access for web browsers)";
         Documentation = "man:gpg-agent(1)";
@@ -191,12 +220,22 @@ in
         SocketMode = "0600";
         DirectoryMode = "0700";
       };
+=======
+      wantedBy = [ "sockets.target" ];
+    };
+
+    systemd.user.sockets.dirmngr = mkIf cfg.dirmngr.enable {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       wantedBy = [ "sockets.target" ];
     };
 
     services.dbus.packages = mkIf (cfg.agent.pinentryFlavor == "gnome3") [ pkgs.gcr ];
 
     environment.systemPackages = with pkgs; [ cfg.package ];
+<<<<<<< HEAD
+=======
+    systemd.packages = [ cfg.package ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     environment.interactiveShellInit = ''
       # Bind gpg-agent to this TTY if gpg commands are used.

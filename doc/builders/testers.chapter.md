@@ -1,4 +1,5 @@
 # Testers {#chap-testers}
+<<<<<<< HEAD
 This chapter describes several testing builders which are available in the `testers` namespace.
 
 ## `hasPkgConfigModules` {#tester-hasPkgConfigModules}
@@ -8,10 +9,18 @@ This chapter describes several testing builders which are available in the `test
 Checks whether a package exposes a given list of `pkg-config` modules.
 If the `moduleNames` argument is omitted, `hasPkgConfigModules` will
 use `meta.pkgConfigModules`.
+=======
+This chapter describes several testing builders which are available in the <literal>testers</literal> namespace.
+
+## `hasPkgConfigModule` {#tester-hasPkgConfigModule}
+
+Checks whether a package exposes a certain `pkg-config` module.
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 Example:
 
 ```nix
+<<<<<<< HEAD
 passthru.tests.pkg-config = testers.hasPkgConfigModules {
   package = finalAttrs.finalPackage;
   moduleNames = [ "libfoo" ];
@@ -26,6 +35,12 @@ passthru.tests.pkg-config = testers.hasPkgConfigModules {
 };
 
 meta.pkgConfigModules = [ "libfoo" ];
+=======
+passthru.tests.pkg-config = testers.hasPkgConfigModule {
+  package = finalAttrs.finalPackage;
+  moduleName = "libfoo";
+}
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 ```
 
 ## `testVersion` {#tester-testVersion}

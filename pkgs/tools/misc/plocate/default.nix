@@ -2,6 +2,10 @@
 , stdenv
 , lib
 , fetchgit
+<<<<<<< HEAD
+=======
+, fetchpatch
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , pkg-config
 , meson
 , ninja
@@ -14,14 +18,33 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "plocate";
+<<<<<<< HEAD
   version = "1.1.19";
+=======
+  version = "1.1.17";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchgit {
     url = "https://git.sesse.net/plocate";
     rev = version;
+<<<<<<< HEAD
     sha256 = "sha256-Vf/NgUPDL3KWMpjnyB2QR2sU6rQfPIADNU6OlpN+O0M=";
   };
 
+=======
+    sha256 = "sha256-EcWzvbY8ey5asEJxUeSl10ozApgg+wL5o8NCNw7/W7k=";
+  };
+
+  patches = [
+    # fix redefinition error
+    (fetchpatch {
+      url = "https://git.sesse.net/?p=plocate;a=patch;h=0125004cd28c5f9124632b594e51dde73af1691c";
+      revert = true;
+      sha256 = "sha256-1TDpxIdpDZQ0IZ/wGG91RVZDrpMpWkvhRF8oE0CJWIY=";
+    })
+  ];
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   postPatch = ''
     sed -i meson.build \
       -e '/mkdir\.sh/d'

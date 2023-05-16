@@ -32,6 +32,10 @@ buildPythonPackage rec {
     description = "Camel case JSON support for Django REST framework";
     homepage = "https://github.com/vbabiy/djangorestframework-camel-case";
     license = licenses.bsd3;
+<<<<<<< HEAD
     maintainers = with maintainers; [ ];
+=======
+    maintainers = with maintainers; [ SuperSandro2000 ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

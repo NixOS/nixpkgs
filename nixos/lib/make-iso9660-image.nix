@@ -47,16 +47,28 @@ assert usbBootable -> isohybridMbrImage != "";
 
 stdenv.mkDerivation {
   name = isoName;
+<<<<<<< HEAD
   __structuredAttrs = true;
 
   buildCommandPath = ./make-iso9660-image.sh;
+=======
+  builder = ./make-iso9660-image.sh;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nativeBuildInputs = [ xorriso syslinux zstd libossp_uuid ];
 
   inherit isoName bootable bootImage compressImage volumeID efiBootImage efiBootable isohybridMbrImage usbBootable;
 
+<<<<<<< HEAD
   sources = map (x: x.source) contents;
   targets = map (x: x.target) contents;
 
+=======
+  # !!! should use XML.
+  sources = map (x: x.source) contents;
+  targets = map (x: x.target) contents;
+
+  # !!! should use XML.
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   objects = map (x: x.object) storeContents;
   symlinks = map (x: x.symlink) storeContents;
 

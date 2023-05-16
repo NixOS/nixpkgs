@@ -69,7 +69,11 @@ stdenv.mkDerivation rec {
     description = "GNOME translation making program";
     homepage = "https://wiki.gnome.org/Apps/Gtranslator";
     license = licenses.gpl3Plus;
+<<<<<<< HEAD
     maintainers = with maintainers; [ ];
+=======
+    maintainers = with maintainers; [ jtojnar ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     platforms = platforms.linux;
   };
 }

@@ -2,6 +2,7 @@
   "@angular/cli"
 , "@antfu/ni"
 , "@astrojs/language-server"
+<<<<<<< HEAD
 , "@babel/cli"
 , "@commitlint/cli"
 , "@commitlint/config-conventional"
@@ -10,6 +11,18 @@
 , "@microsoft/rush"
 , "@nerdwallet/shepherd"
 , "@shopify/cli"
+=======
+, "@bitwarden/cli"
+, "@commitlint/cli"
+, "@commitlint/config-conventional"
+, "@emacs-eask/cli"
+, "@forge/cli"
+, "@medable/mdctl-cli"
+, "@microsoft/rush"
+, "@nerdwallet/shepherd"
+, "@shopify/cli"
+, "@squoosh/cli"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , "@tailwindcss/aspect-ratio"
 , "@tailwindcss/forms"
 , "@tailwindcss/language-server"
@@ -24,20 +37,44 @@
 , {"@webassemblyjs/wasm-text-gen": "1.11.1"}
 , {"@webassemblyjs/wast-refmt": "1.11.1"}
 , "alex"
+<<<<<<< HEAD
+=======
+, "alloy"
+, "antennas"
+, "asar"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , "audiosprite"
 , "autoprefixer"
 , "auto-changelog"
 , "aws-azure-login"
 , "aws-cdk"
 , "awesome-lint"
+<<<<<<< HEAD
 , "bash-language-server"
+=======
+, "balanceofsatoshis"
+, "bash-language-server"
+, "bibtex-tidy"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , "bower"
 , "bower2nix"
 , "browserify"
 , "browser-sync"
+<<<<<<< HEAD
 , "cdk8s-cli"
 , "cdktf-cli"
 , "clipboard-cli"
+=======
+, "btc-rpc-explorer"
+, "castnow"
+, "carbon-now-cli"
+, "carto"
+, "cdk8s-cli"
+, "cdktf-cli"
+, "clean-css-cli"
+, "clipboard-cli"
+, "clubhouse-cli"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , "coc-clangd"
 , "coc-cmake"
 , "coc-css"
@@ -52,6 +89,10 @@
 , "coc-haxe"
 , "coc-highlight"
 , "coc-html"
+<<<<<<< HEAD
+=======
+, "coc-imselect"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , "coc-java"
 , "coc-jest"
 , "coc-json"
@@ -88,35 +129,72 @@
 , "coc-yaml"
 , "coc-yank"
 , "code-theme-converter"
+<<<<<<< HEAD
 , "coinmon"
 , "concurrently"
 , "conventional-changelog-cli"
+=======
+, "coffee-script"
+, "coinmon"
+, "concurrently"
+, "configurable-http-proxy"
+, "conventional-changelog-cli"
+, "cordova"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , "cpy-cli"
 , "create-cycle-app"
 , "create-react-app"
 , "create-react-native-app"
 , "cspell"
 , "csslint"
+<<<<<<< HEAD
 , "dhcp"
 , "diagnostic-languageserver"
 , "diff2html-cli"
 , "dotenv-cli"
+=======
+, "dat"
+, "degit"
+, "dhcp"
+, "diagnostic-languageserver"
+, "diff2html-cli"
+, "dockerfile-language-server-nodejs"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , "dotenv-vault"
 , "elasticdump"
 , "@electron-forge/cli"
 , "eas-cli"
 , "elm-oracle"
+<<<<<<< HEAD
 , "emoj"
 , "emojione"
 , "escape-string-regexp"
 , "eslint"
+=======
+, "elm-test"
+, "emoj"
+, "emojione"
+, {"epgstation": "../../applications/video/epgstation"}
+, {"epgstation-client": "../../applications/video/epgstation/client"}
+, "escape-string-regexp"
+, "eslint"
+, "eslint_d"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , "esy"
 , "expo-cli"
 , "fast-cli"
 , "fauna-shell"
+<<<<<<< HEAD
 , "fixjson"
 , "fkill-cli"
 , "fleek-cli"
+=======
+, "firebase-tools"
+, "fixjson"
+, "fkill-cli"
+, "fleek-cli"
+, "flood"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , "forever"
 , "fx"
 , "ganache"
@@ -124,14 +202,23 @@
 , "generator-code"
 , "get-graphql-schema"
 , "git-run"
+<<<<<<< HEAD
 , "git-standup"
 , "@gitbeaker/cli"
 , "gitmoji-cli"
+=======
+, "git-ssb"
+, "git-standup"
+, "@gitbeaker/cli"
+, "gitmoji-cli"
+, "glob"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , "gramma"
 , "grammarly-languageserver"
 , "graphql"
 , "graphql-cli"
 , "graphql-language-service-cli"
+<<<<<<< HEAD
 , "grunt-cli"
 , "makam"
 , "meshcommander"
@@ -145,6 +232,35 @@
 , "imapnotify"
 , "insect"
 , "intelephense"
+=======
+, "graphqurl"
+, "grunt-cli"
+, "makam"
+, "meshcommander"
+, "gqlint"
+, "gtop"
+, "gulp"
+, "gulp-cli"
+, "he"
+, "html-minifier"
+, "htmlhint"
+, "http-server"
+, "hsd"
+, "hs-airdrop"
+, "hs-client"
+, "hueadm"
+, "hyperpotamus"
+, "ijavascript"
+, "inliner"
+, "imapnotify"
+, "immich"
+, "indium"
+, "insect"
+, "intelephense"
+, "ionic"
+, "jake"
+, "javascript-typescript-langserver"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , "joplin"
 , "js-beautify"
 , "js-yaml"
@@ -158,8 +274,15 @@
 , "jsonplaceholder"
 , "kaput-cli"
 , "katex"
+<<<<<<< HEAD
 , "keyoxide"
 , "lcov-result-merger"
+=======
+, "karma"
+, "keyoxide"
+, "lcov-result-merger"
+, "leetcode-cli"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , "vsc-leetcode-cli"
 , "lerna"
 , "less"
@@ -171,25 +294,53 @@
 , "lua-fmt"
 , "lv_font_conv"
 , "madoko"
+<<<<<<< HEAD
 , "markdown-link-check"
 , "mastodon-bot"
 , "mathjax"
 , "meat"
 , "mocha"
 , "multi-file-swagger"
+=======
+, "markdownlint-cli"
+, "markdownlint-cli2"
+, "markdown-link-check"
+, {"markdown-preview-nvim": "../../applications/editors/vim/plugins/markdown-preview-nvim"}
+, "mastodon-bot"
+, "mathjax"
+, "meat"
+, "@mermaid-js/mermaid-cli"
+, "mocha"
+, "multi-file-swagger"
+, "musescore-downloader"
+, "near-cli"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , "neovim"
 , "nijs"
 , "node-gyp"
 , "node-gyp-build"
+<<<<<<< HEAD
+=======
+, "node-inspector"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , "node-pre-gyp"
 , "node-red"
 , "node2nix"
 , "nodemon"
 , "np"
 , "npm"
+<<<<<<< HEAD
 , "npm-merge-driver"
 , "nrm"
 , "orval"
+=======
+, "npm-check-updates"
+, "npm-merge-driver"
+, "nrm"
+, "ocaml-language-server"
+, "orval"
+, "parcel-bundler"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , "parcel"
 , "parsoid"
 , "patch-package"
@@ -215,6 +366,7 @@
 , "purty"
 , "pxder"
 , "pyright"
+<<<<<<< HEAD
 , "react-native-cli"
 , "react-tools"
 , "redoc-cli"
@@ -223,6 +375,22 @@
 , "rimraf"
 , "rollup"
 , {"rust-analyzer-build-deps": "../../applications/editors/vscode/extensions/rust-lang.rust-analyzer/build-deps"}
+=======
+, "quicktype"
+, "react-native-cli"
+, "react-static"
+, "react-tools"
+, "readability-cli"
+, "redoc-cli"
+, "remod-cli"
+, "reveal.js"
+, "reveal-md"
+, "rimraf"
+, "rollup"
+, { "rust-analyzer-build-deps": "../../applications/editors/vscode/extensions/rust-lang.rust-analyzer/build-deps" }
+, "rtlcss"
+, "s3http"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , "sass"
 , "semver"
 , "serve"
@@ -230,6 +398,7 @@
 , "shout"
 , "sloc"
 , "smartdc"
+<<<<<<< HEAD
 , "socket.io"
 , "speed-test"
 , "sql-formatter"
@@ -238,10 +407,29 @@
 , "svelte-check"
 , "svelte-language-server"
 , "svgo"
+=======
+, "snyk"
+, "socket.io"
+, "speed-test"
+, "sql-formatter"
+, "ssb-server"
+, "stackdriver-statsd-backend"
+, "stf"
+, "stylelint"
+, "surge"
+, "svelte-check"
+, "svelte-language-server"
+, "svgo"
+, "swagger"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , "tailwindcss"
 , {"tedicross": "git+https://github.com/TediCross/TediCross.git#v0.8.7"}
 , "teck-programmer"
 , "tern"
+<<<<<<< HEAD
+=======
+, "terser"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , "textlint"
 , "textlint-plugin-latex"
 , "textlint-rule-abbr-within-parentheses"
@@ -256,6 +444,10 @@
 , "textlint-rule-terminology"
 , "textlint-rule-unexpanded-acronym"
 , "textlint-rule-write-good"
+<<<<<<< HEAD
+=======
+, "thelounge"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , "thelounge-plugin-closepms"
 , "thelounge-plugin-giphy"
 , "thelounge-plugin-shortcuts"
@@ -295,6 +487,7 @@
 , "thelounge-theme-zenburn"
 , "thelounge-theme-zenburn-monospace"
 , "thelounge-theme-zenburn-sourcecodepro"
+<<<<<<< HEAD
 , "tiddlywiki"
 , "tsun"
 , "ts-node"
@@ -302,6 +495,19 @@
 , "typescript-language-server"
 , "uglify-js"
 , "undollar"
+=======
+, "three"
+, "tiddlywiki"
+, "titanium"
+, "tsun"
+, "ts-node"
+, "ttf2eot"
+, "typescript"
+, "typescript-language-server"
+, "uglify-js"
+, "undollar"
+, "ungit"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , "unified-language-server"
 , "vega-cli"
 , "vega-lite"
@@ -312,7 +518,15 @@
 , "vscode-html-languageserver-bin"
 , "vscode-json-languageserver"
 , "vscode-json-languageserver-bin"
+<<<<<<< HEAD
 , "wavedrom-cli"
+=======
+, "vscode-langservers-extracted"
+, "vue-cli"
+, "vue-language-server"
+, "wavedrom-cli"
+, "web-ext"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , "webpack"
 , "webpack-cli"
 , "webpack-dev-server"
@@ -321,8 +535,19 @@
 , "@withgraphite/graphite-cli"
 , "wrangler"
 , "wring"
+<<<<<<< HEAD
 , "@yaegassy/coc-nginx"
 , "yalc"
 , "yarn"
 , "@zwave-js/server"
+=======
+, "write-good"
+, "@yaegassy/coc-nginx"
+, "yaml-language-server"
+, "yalc"
+, "yarn"
+, "yo"
+, "@zwave-js/server"
+, "zx"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 ]

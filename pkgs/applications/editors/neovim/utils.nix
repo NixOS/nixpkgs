@@ -9,11 +9,16 @@
 , python3Packages
 , writeText
 , wrapNeovimUnstable
+<<<<<<< HEAD
 , runCommand
 }:
 let
   inherit (vimUtils) toVimPlugin;
 
+=======
+}:
+let
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
    /* returns everything needed for the caller to wrap its own neovim:
    - the generated content of the future init.vim
    - the arguments to wrap neovim with
@@ -175,8 +180,11 @@ let
       withPython3 ? true
     , withNodeJs ? false
     , withRuby ? true
+<<<<<<< HEAD
     # perl is problematic https://github.com/NixOS/nixpkgs/issues/132368
     , withPerl ? false
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     # so that we can pass the full neovim config while ignoring it
     , ...
@@ -186,7 +194,10 @@ let
         python = false;
         python3 = withPython3;
         ruby = withRuby;
+<<<<<<< HEAD
         perl = withPerl;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       };
 
       genProviderCommand = prog: withProg:
@@ -199,6 +210,7 @@ let
     in
         lib.concatStringsSep ";" hostProviderLua;
 
+<<<<<<< HEAD
   buildNeovimPlugin = callPackage ./build-neovim-plugin.nix {
     inherit (vimUtils) toVimPlugin;
     inherit lua;
@@ -229,13 +241,23 @@ let
         ln -s ${grammar}/parser $out/parser/${name}.so
       '');
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 in
 {
   inherit makeNeovimConfig;
   inherit generateProviderRc;
   inherit legacyWrapper;
+<<<<<<< HEAD
   inherit grammarToPlugin;
 
   inherit buildNeovimPlugin;
   buildNeovimPluginFrom2Nix = lib.warn "buildNeovimPluginFrom2Nix was renamed to buildNeovimPlugin" buildNeovimPlugin;
+=======
+
+  buildNeovimPluginFrom2Nix = callPackage ./build-neovim-plugin.nix {
+    inherit (vimUtils) toVimPlugin;
+    inherit lua;
+  };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }

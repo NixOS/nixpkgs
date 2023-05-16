@@ -1,5 +1,9 @@
 { stdenv, lib, fetchFromGitHub, makeWrapper
+<<<<<<< HEAD
 , pkg-config, which, perl, jq, libXrandr, coreutils
+=======
+, pkg-config, which, perl, jq, libXrandr
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , cairo, dbus, systemd, gdk-pixbuf, glib, libX11, libXScrnSaver
 , wayland, wayland-protocols
 , libXinerama, libnotify, pango, xorgproto, librsvg
@@ -39,9 +43,12 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/dunst \
       --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE"
 
+<<<<<<< HEAD
     wrapProgram $out/bin/dunstctl \
       --prefix PATH : "${lib.makeBinPath [ coreutils dbus ]}"
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     install -D contrib/_dunst.zshcomp $out/share/zsh/site-functions/_dunst
     install -D contrib/_dunstctl.zshcomp $out/share/zsh/site-functions/_dunstctl
     substituteInPlace $out/share/zsh/site-functions/_dunstctl \
@@ -57,6 +64,9 @@ stdenv.mkDerivation rec {
     # NOTE: 'unix' or even 'all' COULD work too, I'm not sure
     platforms = platforms.linux;
     maintainers = with maintainers; [ domenkozar ];
+<<<<<<< HEAD
     mainProgram = "dunst";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

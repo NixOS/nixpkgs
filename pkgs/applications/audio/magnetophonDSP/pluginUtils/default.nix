@@ -12,8 +12,11 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ faust2jaqt faust2lv2 ];
 
+<<<<<<< HEAD
   dontWrapQtApps = true;
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   buildPhase = ''
     for f in *.dsp
       do
@@ -30,10 +33,15 @@ stdenv.mkDerivation rec {
     mkdir -p $out/lib/lv2
     mv *.lv2/ $out/lib/lv2
     mkdir -p $out/bin
+<<<<<<< HEAD
     for f in $(find . -executable -type f); do
       cp $f $out/bin/
     done
  '';
+=======
+    cp * $out/bin/
+  '';
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   meta = {
     description = "Some simple utility lv2 plugins";

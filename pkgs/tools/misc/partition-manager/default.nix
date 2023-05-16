@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 { mkDerivation
 , fetchurl
 , lib
@@ -30,6 +31,14 @@
 , udftools
 , xfsprogs
 , zfs
+=======
+{ mkDerivation, fetchurl, lib
+, extra-cmake-modules, kdoctools, wrapGAppsHook
+, kconfig, kcrash, kinit, kpmcore, polkit-qt
+, cryptsetup, lvm2, mdadm, smartmontools, systemdMinimal, util-linux
+, btrfs-progs, dosfstools, e2fsprogs, exfat, f2fs-tools, fatresize, hfsprogs
+, jfsutils, nilfs-utils, ntfs3g, reiser4progs, reiserfsprogs, udftools, xfsprogs, zfs
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 let
@@ -64,6 +73,7 @@ let
     # FIXME: Missing command: tune.exfat hfsck hformat fsck.nilfs2 {fsck,mkfs,debugfs,tunefs}.ocfs2
   ];
 
+<<<<<<< HEAD
 in
 mkDerivation rec {
   pname = "partitionmanager";
@@ -73,6 +83,16 @@ mkDerivation rec {
   src = fetchurl {
     url = "mirror://kde/stable/release-service/${version}/src/${pname}-${version}.tar.xz";
     hash = "sha256-iMf6/QOJIDTKHAsCg3ey4GX0QHwrYl2LcCWxZsolMl8=";
+=======
+in mkDerivation rec {
+  pname = "partitionmanager";
+  # NOTE: When changing this version, also change the version of `kpmcore`.
+  version = "22.12.1";
+
+  src = fetchurl {
+    url = "mirror://kde/stable/release-service/${version}/src/${pname}-${version}.tar.xz";
+    hash = "sha256-8uI7rWkjUALZAdciGwOpmjVzGDffwM86BI9B3S0eSho=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ extra-cmake-modules kdoctools wrapGAppsHook ];

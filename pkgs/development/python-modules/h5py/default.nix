@@ -2,9 +2,13 @@
 , fetchPypi
 , buildPythonPackage
 , pythonOlder
+<<<<<<< HEAD
 , oldest-supported-numpy
 , setuptools
 , wheel
+=======
+, setuptools
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , numpy
 , hdf5
 , cython
@@ -35,6 +39,10 @@ in buildPythonPackage rec {
   # avoid strict pinning of numpy
   postPatch = ''
     substituteInPlace setup.py \
+<<<<<<< HEAD
+=======
+      --replace "numpy ==" "numpy >=" \
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       --replace "mpi4py ==" "mpi4py >="
   '';
 
@@ -51,10 +59,15 @@ in buildPythonPackage rec {
 
   nativeBuildInputs = [
     cython
+<<<<<<< HEAD
     oldest-supported-numpy
     pkgconfig
     setuptools
     wheel
+=======
+    pkgconfig
+    setuptools
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   buildInputs = [ hdf5 ]

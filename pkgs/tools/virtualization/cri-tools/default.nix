@@ -6,13 +6,21 @@
 
 buildGoModule rec {
   pname = "cri-tools";
+<<<<<<< HEAD
   version = "1.28.0";
+=======
+  version = "1.27.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "kubernetes-sigs";
     repo = pname;
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-inw4bPeObMlwtgFLR/8+tqRKTkcViZeEFZ1MOm0HYI4=";
+=======
+    sha256 = "sha256-5fBQkujOmxdiLkNuHL8y4QmuKQVGJuFlC7bRu+xElyk=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   vendorHash = null;

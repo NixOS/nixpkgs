@@ -15,7 +15,11 @@ stdenv.mkDerivation rec {
     sha256 = "1hxwxmqc5jinr14ya1idigqigc8qhy1vimzcwy2vmwdjay2sqik2";
   };
 
+<<<<<<< HEAD
   sourceRoot = ".";
+=======
+  setSourceRoot = "sourceRoot=`pwd`";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ gtk2 fftw ];

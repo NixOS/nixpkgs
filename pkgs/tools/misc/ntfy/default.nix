@@ -1,7 +1,10 @@
 { lib
 , stdenv
 , python39
+<<<<<<< HEAD
 , fetchPypi
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , fetchFromGitHub
 , fetchpatch
 , withXmpp ? !stdenv.isDarwin
@@ -18,18 +21,28 @@ let
       ntfy-webpush = self.callPackage ./webpush.nix { };
 
       # databases, on which slack-sdk depends, is incompatible with SQLAlchemy 2.0
+<<<<<<< HEAD
       sqlalchemy = super.sqlalchemy.overridePythonAttrs rec {
         version = "1.4.46";
         src = fetchPypi {
+=======
+      sqlalchemy = super.sqlalchemy.overridePythonAttrs (old: rec {
+        version = "1.4.46";
+        src = self.fetchPypi {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           pname = "SQLAlchemy";
           inherit version;
           hash = "sha256-aRO4JH2KKS74MVFipRkx4rQM6RaB8bbxj2lwRSAMSjA=";
         };
+<<<<<<< HEAD
         disabledTestPaths = [
            "test/aaa_profiling"
            "test/ext/mypy"
         ];
       };
+=======
+      });
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
   };
 in python.pkgs.buildPythonApplication rec {

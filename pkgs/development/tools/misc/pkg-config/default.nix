@@ -35,9 +35,12 @@ stdenv.mkDerivation rec {
          "ac_cv_func_posix_getgrgid_r=yes"
        ];
 
+<<<<<<< HEAD
   # Silence "incompatible integer to pointer conversion passing 'gsize'" when building with Clang.
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-int-conversion";
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   enableParallelBuilding = true;
   doCheck = true;
 

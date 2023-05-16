@@ -1,5 +1,9 @@
 { lib, fetchFromGitHub, buildPythonApplication, python3Packages, wrapGAppsHook
+<<<<<<< HEAD
 , xflux, gtk3, gobject-introspection, pango, gdk-pixbuf, atk
+=======
+, xflux, librsvg, gtk3, gobject-introspection, pango, gdk-pixbuf, atk
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , pexpect, pygobject3, pyxdg, libappindicator-gtk3
 }:
 buildPythonApplication rec {

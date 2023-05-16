@@ -24,6 +24,7 @@ assert (blas.isILP64 == lapack.isILP64 &&
         blas.isILP64 == arpack.isILP64 &&
         !blas.isILP64);
 
+<<<<<<< HEAD
 stdenv.mkDerivation (finalAttrs: {
   pname = "igraph";
   version = "0.10.7";
@@ -37,6 +38,21 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     echo "${finalAttrs.version}" > IGRAPH_VERSION
+=======
+stdenv.mkDerivation rec {
+  pname = "igraph";
+  version = "0.10.4";
+
+  src = fetchFromGitHub {
+    owner = "igraph";
+    repo = pname;
+    rev = version;
+    hash = "sha256-LsTOxUktGZcp46Ec9QH3+9C+VADMYTZZCjKF1gp36xk=";
+  };
+
+  postPatch = ''
+    echo "${version}" > IGRAPH_VERSION
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '';
 
   outputs = [ "out" "dev" "doc" ];
@@ -92,6 +108,7 @@ stdenv.mkDerivation (finalAttrs: {
     install_name_tool -change libblas.dylib ${blas}/lib/libblas.dylib $out/lib/libigraph.dylib
   '';
 
+<<<<<<< HEAD
   passthru.tests = {
     python = python3.pkgs.igraph;
   };
@@ -100,8 +117,18 @@ stdenv.mkDerivation (finalAttrs: {
     description = "C library for complex network analysis and graph theory";
     homepage = "https://igraph.org/";
     changelog = "https://github.com/igraph/igraph/blob/${finalAttrs.src.rev}/CHANGELOG.md";
+=======
+  meta = with lib; {
+    description = "C library for complex network analysis and graph theory";
+    homepage = "https://igraph.org/";
+    changelog = "https://github.com/igraph/igraph/blob/${src.rev}/CHANGELOG.md";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     license = licenses.gpl2Plus;
     platforms = platforms.all;
     maintainers = with maintainers; [ MostAwesomeDude dotlambda ];
   };
+<<<<<<< HEAD
 })
+=======
+}
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)

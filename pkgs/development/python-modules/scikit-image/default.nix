@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , buildPythonPackage
 , python
+<<<<<<< HEAD
 , pythonOlder
 , astropy
 , cloudpickle
@@ -28,12 +29,29 @@
 , six
 , tifffile
 , wheel
+=======
+, cython
+, pythran
+, numpy
+, scipy
+, matplotlib
+, networkx
+, six
+, pillow
+, pywavelets
+, dask
+, cloudpickle
+, imageio
+, tifffile
+, pytestCheckHook
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 let
   installedPackageRoot = "${builtins.placeholder "out"}/${python.sitePackages}";
   self = buildPythonPackage rec {
     pname = "scikit-image";
+<<<<<<< HEAD
     version = "0.21.0";
     format = "pyproject";
 
@@ -98,6 +116,35 @@ let
       ] ++ dask.optional-dependencies.array;
     };
 
+=======
+    version = "0.19.3";
+
+    src = fetchFromGitHub {
+      owner = pname;
+      repo = pname;
+      rev = "v${version}";
+      hash = "sha256-zvXgZdvYycFbbMsBFSqMDzLanEtF9+JuVSQ3AM8/LQk=";
+    };
+
+    patches = [ ./add-testing-data.patch ];
+
+    nativeBuildInputs = [ cython pythran ];
+
+    propagatedBuildInputs = [
+      cloudpickle
+      dask
+      imageio
+      matplotlib
+      networkx
+      numpy
+      pillow
+      pywavelets
+      scipy
+      six
+      tifffile
+    ];
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     # test suite is very cpu intensive, move to passthru.tests
     doCheck = false;
     nativeCheckInputs = [ pytestCheckHook ];
@@ -126,10 +173,13 @@ let
       "skimage/feature/tests/test_util.py::test_plot_matches"
       "skimage/filters/tests/test_thresholding.py::TestSimpleImage::test_try_all_threshold"
       "skimage/io/tests/test_mpl_imshow.py::"
+<<<<<<< HEAD
     ] ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
       # https://github.com/scikit-image/scikit-image/issues/7104
       "skimage/measure/tests/test_fit.py"
       "skimage/measure/tests/test_moments.py"
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     ]);
 
     # Check cythonized modules
@@ -140,6 +190,10 @@ let
       "skimage.feature"
       "skimage.restoration"
       "skimage.filters"
+<<<<<<< HEAD
+=======
+      "skimage.future.graph"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       "skimage.graph"
       "skimage.io"
       "skimage.measure"
@@ -156,7 +210,10 @@ let
     meta = {
       description = "Image processing routines for SciPy";
       homepage = "https://scikit-image.org";
+<<<<<<< HEAD
       changelog = "https://github.com/scikit-image/scikit-image/releases/tag/${src.rev}";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       license = lib.licenses.bsd3;
       maintainers = with lib.maintainers; [ yl3dy ];
     };

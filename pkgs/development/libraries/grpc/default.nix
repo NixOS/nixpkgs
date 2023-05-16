@@ -21,7 +21,11 @@
 
 stdenv.mkDerivation rec {
   pname = "grpc";
+<<<<<<< HEAD
   version = "1.57.0"; # N.B: if you change this, please update:
+=======
+  version = "1.54.0"; # N.B: if you change this, please update:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     # pythonPackages.grpcio-tools
     # pythonPackages.grpcio-status
 
@@ -29,7 +33,11 @@ stdenv.mkDerivation rec {
     owner = "grpc";
     repo = "grpc";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-ZPhPi4ODAAohCySVKeypaDID4ZUXvnfidOGK5EMXvh4=";
+=======
+    hash = "sha256-WVH7rYyFx2LyAnctnNbX4KevoJ5KKZujN+SmL0Y6wvw=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     fetchSubmodules = true;
   };
 
@@ -40,12 +48,15 @@ stdenv.mkDerivation rec {
       url = "https://github.com/lopsided98/grpc/commit/164f55260262c816e19cd2c41b564486097d62fe.patch";
       hash = "sha256-d6kMyjL5ZnEnEz4XZfRgXJBH53gp1r7q1tlwh+HM6+Y=";
     })
+<<<<<<< HEAD
     # Fix generated CMake config file
     # FIXME: remove when merged
     (fetchpatch {
       url = "https://github.com/grpc/grpc/pull/33361/commits/117dc80eb43021dd5619023ef6d02d0d6ec7ae7a.patch";
       hash = "sha256-VBk3ZD5h9uOQVN0st+quUQK/wXqvfFNk8G8AN4f2MQo=";
     })
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   nativeBuildInputs = [ cmake pkg-config ]
@@ -62,6 +73,7 @@ stdenv.mkDerivation rec {
     "-DgRPC_PROTOBUF_PROVIDER=package"
     "-DgRPC_ABSL_PROVIDER=package"
     "-DBUILD_SHARED_LIBS=ON"
+<<<<<<< HEAD
   ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     "-D_gRPC_PROTOBUF_PROTOC_EXECUTABLE=${buildPackages.protobuf}/bin/protoc"
   ]
@@ -78,6 +90,12 @@ stdenv.mkDerivation rec {
   [
     "-DCMAKE_CXX_STANDARD=17"
   ]);
+=======
+    "-DCMAKE_CXX_STANDARD=${passthru.cxxStandard}"
+  ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    "-D_gRPC_PROTOBUF_PROTOC_EXECUTABLE=${buildPackages.protobuf}/bin/protoc"
+  ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   # CMake creates a build directory by default, this conflicts with the
   # basel BUILD file on case-insensitive filesystems.
@@ -99,6 +117,20 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilds = true;
 
+<<<<<<< HEAD
+=======
+  passthru.cxxStandard =
+    let
+      # Needs to be compiled with -std=c++11 for clang < 11. Interestingly this is
+      # only an issue with the useLLVM stdenv, not the darwin stdenv…
+      # https://github.com/grpc/grpc/issues/26473#issuecomment-860885484
+      useLLVMAndOldCC = (stdenv.hostPlatform.useLLVM or false) && lib.versionOlder stdenv.cc.cc.version "11.0";
+      # With GCC 9 (current aarch64-linux) it fails with c++17 but OK with c++14.
+      useOldGCC = !(stdenv.hostPlatform.useLLVM or false) && lib.versionOlder stdenv.cc.cc.version "10";
+    in
+    (if useLLVMAndOldCC then "11" else if useOldGCC then "14" else "17");
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   passthru.tests = {
     inherit (python3.pkgs) grpcio-status grpcio-tools;
     inherit arrow-cpp;

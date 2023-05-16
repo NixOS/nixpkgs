@@ -1,6 +1,11 @@
 { lib
+<<<<<<< HEAD
 , python3
 , fetchPypi
+=======
+, stdenv
+, python3
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 let

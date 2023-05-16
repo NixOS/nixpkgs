@@ -118,6 +118,7 @@ the symlink, and this path is in `/nix/store/.../lib/systemd/user/`.
 Hence [garbage collection](#sec-nix-gc) will remove that file and you
 will wind up with a broken symlink in your systemd configuration, which
 in turn will not make the service / timer start on login.
+<<<<<<< HEAD
 
 ## Template units {#sect-nixos-systemd-template-units}
 
@@ -148,3 +149,5 @@ example illustrates this:
   };
 }
 ```
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)

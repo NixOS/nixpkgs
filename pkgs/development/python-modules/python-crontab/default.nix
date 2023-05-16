@@ -8,14 +8,22 @@
 
 buildPythonPackage rec {
   pname = "python-crontab";
+<<<<<<< HEAD
   version = "3.0.0";
+=======
+  version = "2.7.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
+<<<<<<< HEAD
     hash = "sha256-eft0ZQOd39T7k9By1u4NRcGsi/FZfwaG6hT9Q2Hbo3k=";
+=======
+    hash = "sha256-shr0ZHx7u4SP7y8CBhbGsCidy5+UtPmRpVMQ/5vsV0k=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [

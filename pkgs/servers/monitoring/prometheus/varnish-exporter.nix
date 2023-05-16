@@ -26,6 +26,10 @@ buildGoModule rec {
     homepage = "https://github.com/jonnenauha/prometheus_varnish_exporter";
     description = "Varnish exporter for Prometheus";
     license = lib.licenses.mit;
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [ MostAwesomeDude ];
+=======
+    maintainers = with lib.maintainers; [ MostAwesomeDude willibutz ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

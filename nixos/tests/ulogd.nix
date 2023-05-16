@@ -1,7 +1,13 @@
 import ./make-test-python.nix ({ pkgs, lib, ... }: {
   name = "ulogd";
 
+<<<<<<< HEAD
   meta.maintainers = with lib.maintainers; [ p-h ];
+=======
+  meta = with lib; {
+    maintainers = with maintainers; [ p-h ];
+  };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nodes.machine = { ... }: {
     networking.firewall.enable = false;

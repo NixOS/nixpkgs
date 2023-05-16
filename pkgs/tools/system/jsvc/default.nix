@@ -2,11 +2,19 @@
 
 stdenv.mkDerivation rec {
   pname = "jsvc";
+<<<<<<< HEAD
   version = "1.3.4";
 
   src = fetchurl {
     url = "https://downloads.apache.org//commons/daemon/source/commons-daemon-${version}-src.tar.gz";
     sha256 = "sha256-30hJ0F5YFmEOZ4IYg/T8HhFySgu4t4uEsh7dUDns674=";
+=======
+  version = "1.3.3";
+
+  src = fetchurl {
+    url = "https://downloads.apache.org//commons/daemon/source/commons-daemon-${version}-src.tar.gz";
+    sha256 = "sha256-J5Gzd6R8CMqhsgRPrrHhD//LdpcVEQKnBB7i/pLL8ns=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   buildInputs = [ commonsDaemon ];

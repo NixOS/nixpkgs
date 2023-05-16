@@ -22,14 +22,23 @@ in
 
 stdenv.mkDerivation rec {
   pname = "xdg-utils";
+<<<<<<< HEAD
   version = "unstable-2022-11-06";
+=======
+  version = "unstable-2020-10-21";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "xdg";
     repo = "xdg-utils";
+<<<<<<< HEAD
     rev = "8ae02631a9806da11b34cd6b274af02d28aee5da";
     sha256 = "sha256-WdnnAiPYbREny633FnBi5tD9hDuF8NCVVbUaAVIKTxM=";
+=======
+    rev = "d11b33ec7f24cfb1546f6b459611d440013bdc72";
+    sha256 = "sha256-8PtXfI8hRneEpnUvIV3M+6ACjlkx0w/NEiJFdGbbHnQ=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   patches = lib.optionals withXdgOpenUsePortalPatch [
@@ -83,6 +92,9 @@ stdenv.mkDerivation rec {
     license = if mimiSupport then licenses.gpl2 else licenses.free;
     maintainers = [ maintainers.eelco ];
     platforms = platforms.all;
+<<<<<<< HEAD
     broken = !(stdenv.buildPlatform.canExecute stdenv.hostPlatform);
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

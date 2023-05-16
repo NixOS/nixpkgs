@@ -12,7 +12,11 @@
 
 buildPythonPackage rec {
   pname = "snscrape";
+<<<<<<< HEAD
   version = "0.7.0.20230622";
+=======
+  version = "0.6.0.20230303";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -21,7 +25,11 @@ buildPythonPackage rec {
     owner = "JustAnotherArchivist";
     repo = pname;
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-9xAUMr1SWFePEvIz6DFEexk9Txex3u8wPNfMAdxEUCA=";
+=======
+    hash = "sha256-FY8byS+0yAhNSRxWsrsQMR5kdZmnHutru5Z6SWVfpiE=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;

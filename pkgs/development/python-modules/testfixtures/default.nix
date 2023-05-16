@@ -7,7 +7,11 @@
 , pythonOlder
 , sybil
 , twisted
+<<<<<<< HEAD
 , zope-component
+=======
+, zope_component
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 buildPythonPackage rec {
@@ -33,7 +37,11 @@ buildPythonPackage rec {
     pytestCheckHook
     sybil
     twisted
+<<<<<<< HEAD
     zope-component
+=======
+    zope_component
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   disabledTestPaths = [

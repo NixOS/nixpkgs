@@ -39,9 +39,14 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config cmake doxygen ];
 
+<<<<<<< HEAD
   buildInputs = lib.optionals (!stdenv.isDarwin) [
     libX11 libXinerama libXrandr libGLU libGL
   ] ++ [
+=======
+  buildInputs = [
+    libX11 libXinerama libXrandr libGLU libGL
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     glib ilmbase libxml2 pcre zlib
   ] ++ lib.optional jpegSupport libjpeg
     ++ lib.optional exrSupport openexr
@@ -63,7 +68,10 @@ stdenv.mkDerivation rec {
     ++ lib.optional sdlSupport SDL2
     ++ lib.optional restSupport asio
     ++ lib.optionals withExamples [ fltk ]
+<<<<<<< HEAD
     ++ lib.optionals (!stdenv.isDarwin) [  ]
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     ++ lib.optionals stdenv.isDarwin [ AGL Accelerate Carbon Cocoa Foundation ]
     ++ lib.optional (restSupport || colladaSupport) boost
   ;

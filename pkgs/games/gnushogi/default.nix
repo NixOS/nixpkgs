@@ -1,13 +1,18 @@
+<<<<<<< HEAD
 { lib
 , stdenv
 , fetchurl
 , fetchpatch
 , zlib
 }:
+=======
+{ lib, stdenv, fetchurl, zlib }:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 stdenv.mkDerivation rec {
   pname = "gnushogi";
   version = "1.4.2";
+<<<<<<< HEAD
 
   src = fetchurl {
     url = "mirror://gnu/gnushogi/${pname}-${version}.tar.gz";
@@ -27,6 +32,15 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ zlib ];
 
+=======
+  buildInputs = [ zlib ];
+
+  src = fetchurl {
+    url = "mirror://gnu/gnushogi/${pname}-${version}.tar.gz";
+    sha256 = "0a9bsl2nbnb138lq0h14jfc5xvz7hpb2bcsj4mjn6g1hcsl4ik0y";
+  };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   meta = with lib; {
     description = "GNU implementation of Shogi, also known as Japanese Chess";
     homepage = "https://www.gnu.org/software/gnushogi/";

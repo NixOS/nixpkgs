@@ -40,6 +40,10 @@ let
     runc
     crun
     conmon
+<<<<<<< HEAD
+=======
+    slirp4netns
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     fuse-overlayfs
     util-linux
     iptables
@@ -56,19 +60,30 @@ let
       aardvark-dns
       catatonit # added here for the pause image and also set in `containersConf` for `init_path`
       netavark
+<<<<<<< HEAD
       slirp4netns
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     ];
   };
 in
 buildGoModule rec {
   pname = "podman";
+<<<<<<< HEAD
   version = "4.6.2";
+=======
+  version = "4.5.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "podman";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-Zxzb7ORyugvN9mhxa0s8r0ch16Ndbm3Z1JCsQcwbF6g=";
+=======
+    hash = "sha256-udvvTdkpL8xvY0iIMBgBFQk5sybpn9vCFFXP0ZqOajM=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   patches = [

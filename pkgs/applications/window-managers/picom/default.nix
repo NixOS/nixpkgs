@@ -30,14 +30,22 @@
 , withDebug ? false
 }:
 
+<<<<<<< HEAD
 stdenv.mkDerivation (finalAttrs: {
+=======
+stdenv.mkDerivation rec {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pname = "picom";
   version = "10.2";
 
   src = fetchFromGitHub {
     owner = "yshui";
     repo = "picom";
+<<<<<<< HEAD
     rev = "v${finalAttrs.version}";
+=======
+    rev = "v${version}";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     hash = "sha256-C+icJXTkE+XMaU7N6JupsP8xhmRVggX9hY1P7za0pO0=";
     fetchSubmodules = true;
   };
@@ -113,6 +121,11 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/yshui/picom";
     maintainers = with maintainers; [ ertes twey thiagokokada ];
     platforms = platforms.linux;
+<<<<<<< HEAD
     mainProgram = "picom";
   };
 })
+=======
+  };
+}
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)

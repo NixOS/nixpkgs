@@ -6,14 +6,20 @@ mkCoqDerivation {
   owner = "thery";
   inherit version;
   defaultVersion = with lib.versions; lib.switch coq.coq-version [
+<<<<<<< HEAD
     { case = range "8.14" "8.18"; out = "8.17"; }
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     { case = range "8.12" "8.16"; out = "8.15"; }
     { case = range "8.10" "8.11"; out = "8.10"; }
     { case = range "8.8"  "8.9";  out = "8.8"; }
     { case = "8.7";               out = "8.7.2"; }
   ] null;
 
+<<<<<<< HEAD
   release."8.17".sha256  = "sha256-D878t/PijVCopRKHYqfwdNvt3arGlI8yxbK/vI6qZUY=";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   release."8.15".sha256  = "sha256:1zr2q52r08na8265019pj9spcz982ivixk6cnzk6l1srn2g328gv";
   release."8.14.1".sha256= "sha256:0dqf87xkzcpg7gglbxjyx68ad84w1w73icxgy3s7d3w563glc2p7";
   release."8.12".sha256  = "1slka4w0pya15js4drx9frj7lxyp3k2lzib8v23givzpnxs8ijdj";

@@ -32,6 +32,9 @@ in appimageTools.wrapType2 rec {
     license = licenses.cc0;
     platforms = platforms.linux;
     maintainers = [ maintainers.lgcl ];
+<<<<<<< HEAD
     mainProgram = "ytmdesktop";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

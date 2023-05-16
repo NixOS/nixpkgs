@@ -17,16 +17,27 @@
 
 buildPythonPackage rec {
   pname = "basemap";
+<<<<<<< HEAD
   version = "1.3.8";
+=======
+  version = "1.3.6";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "matplotlib";
     repo = "basemap";
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-QH/pC1WIa0XQaDbAhYwKbCeCyxUprJbNyRfguiLjlHI=";
   };
 
   sourceRoot = "${src.name}/packages/basemap";
+=======
+    hash = "sha256-BSWifzh+Y1f+x89oNYMBvttWY9qZ0IM5QYqSgyVb1fE=";
+  };
+
+  sourceRoot = "source/packages/basemap";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nativeBuildInputs = [
     cython

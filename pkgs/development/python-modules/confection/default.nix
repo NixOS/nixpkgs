@@ -9,7 +9,11 @@
 
 buildPythonPackage rec {
   pname = "confection";
+<<<<<<< HEAD
   version = "0.1.1";
+=======
+  version = "0.0.4";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -18,7 +22,11 @@ buildPythonPackage rec {
     owner = "explosion";
     repo = pname;
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-OpUMx8hcTnBdaATzRXBICwF6eAGsdyA0jFvX4nVBiM4=";
+=======
+    hash = "sha256-JZQ9D5+UAobywlj8eiyw15wXKYhUKz6+lf9hikMV6x0=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [

@@ -12,6 +12,10 @@ buildNimPackage rec {
   };
   buildInputs = [ rocksdb snappy spryvm stew tempfile ui ];
   patches = [ ./nil.patch ./python.patch ];
+<<<<<<< HEAD
+=======
+  doCheck = true;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   meta = with lib;
     src.meta // {
       description =

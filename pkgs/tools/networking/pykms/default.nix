@@ -43,7 +43,11 @@ pypkgs.buildPythonApplication rec {
     hash = "sha256-9KiMbS0uKTbWSZVIv5ziIeR9c8+EKfKd20yPmjCX7GQ=";
   };
 
+<<<<<<< HEAD
   sourceRoot = "${src.name}/py-kms";
+=======
+  sourceRoot = "source/py-kms";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   propagatedBuildInputs = with pypkgs; [ systemd pytz tzlocal dnspython ];
 

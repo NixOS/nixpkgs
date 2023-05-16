@@ -11,11 +11,19 @@ let
     };
 
   # Only allow the demo data to be used (only if it's unfreeRedistributable).
+<<<<<<< HEAD
   unfreePredicate = pkg: let
     allowPackageNames = [ "quake3-demodata" "quake3-pointrelease" ];
     allowLicenses = [ lib.licenses.unfreeRedistributable ];
   in lib.elem pkg.pname allowPackageNames &&
      lib.elem (pkg.meta.license or null) allowLicenses;
+=======
+  unfreePredicate = pkg: with lib; let
+    allowPackageNames = [ "quake3-demodata" "quake3-pointrelease" ];
+    allowLicenses = [ lib.licenses.unfreeRedistributable ];
+  in elem pkg.pname allowPackageNames &&
+     elem (pkg.meta.license or null) allowLicenses;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   client =
     { pkgs, ... }:

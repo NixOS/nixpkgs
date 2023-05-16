@@ -130,7 +130,11 @@ in with pkgs; rec {
         cp -d ${patch}/bin/* $out/bin
         cp ${patchelf}/bin/* $out/bin
 
+<<<<<<< HEAD
         cp -d ${gnugrep.pcre2.out}/lib/libpcre2*.so* $out/lib # needed by grep
+=======
+        cp -d ${gnugrep.pcre.out}/lib/libpcre*.so* $out/lib # needed by grep
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
         # Copy what we need of GCC.
         cp -d ${bootGCC.out}/bin/gcc $out/bin

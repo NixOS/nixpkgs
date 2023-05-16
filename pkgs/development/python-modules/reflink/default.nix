@@ -7,11 +7,19 @@
 
 buildPythonPackage rec {
   pname = "reflink";
+<<<<<<< HEAD
   version = "0.2.2";
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-iCN17nMZJ1rl9qahKHQGNl2sHpZDuRrRDlGH0/hCU70=";
+=======
+  version = "0.2.1";
+
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-ySU1gtskQTv9cDq/wbKkneePMbSQcjnyhumhkpoebjo=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [ cffi ];

@@ -23,12 +23,15 @@ buildPythonPackage rec {
     hash = "sha256-HMJqZn0yzN2dP5WTRCbem1Xw8nyH2Hy7oVP4kEKHHAo=";
   };
 
+<<<<<<< HEAD
   postPatch = ''
     # Upstream doesn't set a version for the tagged releases
     substituteInPlace setup.py \
       --replace "main" ${version}
   '';
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   propagatedBuildInputs = [
     aiohttp
     awesomeversion
@@ -40,16 +43,29 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+<<<<<<< HEAD
+=======
+  postPatch = ''
+    # Upstream doesn't set a version for the tagged releases
+    substituteInPlace setup.py \
+      --replace "main" ${version}
+  '';
+
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pythonImportsCheck = [
     "pyhaversion"
   ];
 
+<<<<<<< HEAD
   disabledTests = [
     # Error fetching version information from HaVersionSource.SUPERVISOR Server disconnected
     "test_stable_version"
     "test_etag"
   ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   meta = with lib; {
     description = "Python module to the newest version number of Home Assistant";
     homepage = "https://github.com/ludeeus/pyhaversion";

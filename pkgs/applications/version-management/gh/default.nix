@@ -2,16 +2,27 @@
 
 buildGoModule rec {
   pname = "gh";
+<<<<<<< HEAD
   version = "2.34.0";
+=======
+  version = "2.29.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "cli";
     repo = "cli";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-Bb0vEaMOjgQ5p9r/tfciKo4/MXjUCUIdoDSB/Bido/8=";
   };
 
   vendorHash = "sha256-iql/CEWwg6t5k8qOFEQotMUUJd4VQ/H4JcuL2Eunqg0=";
+=======
+    hash = "sha256-OVZTHgzKGpz+F1hHRmbCgjMJSFFFjL9WQBqtx7vZIHc=";
+  };
+
+  vendorHash = "sha256-iTPdOolvWINUSSYiPZAwn5ZF44x/x1tIWnKUHAn8ITA=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -47,7 +58,10 @@ buildGoModule rec {
     homepage = "https://cli.github.com/";
     changelog = "https://github.com/cli/cli/releases/tag/v${version}";
     license = licenses.mit;
+<<<<<<< HEAD
     mainProgram = "gh";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     maintainers = with maintainers; [ zowoq ];
   };
 }

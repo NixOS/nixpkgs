@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 { stdenv, lib, appleDerivation, xcbuild, ncurses, libutil, Libc }:
 
 let
@@ -12,14 +13,21 @@ let
     '';
   };
 in
+=======
+{ lib, appleDerivation, xcbuild, ncurses, libutil, Libc }:
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 appleDerivation {
   # We can't just run the root build, because https://github.com/facebook/xcbuild/issues/264
 
   patchPhase = ''
     substituteInPlace adv_cmds.xcodeproj/project.pbxproj \
       --replace '/usr/lib/libtermcap.dylib' 'libncurses.dylib'
+<<<<<<< HEAD
     substituteInPlace colldef/scan.l \
       --replace 'static orderpass = 0;' 'static int orderpass = 0;'
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '';
 
   # pkill requires special private headers that are unavailable in
@@ -56,7 +64,11 @@ appleDerivation {
   '';
 
   nativeBuildInputs = [ xcbuild ];
+<<<<<<< HEAD
   buildInputs = [ ncurses libutil msgcat ];
+=======
+  buildInputs = [ ncurses libutil Libc ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   meta = {
     platforms = lib.platforms.darwin;

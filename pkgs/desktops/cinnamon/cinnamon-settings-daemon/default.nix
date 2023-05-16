@@ -32,17 +32,29 @@
 
 stdenv.mkDerivation rec {
   pname = "cinnamon-settings-daemon";
+<<<<<<< HEAD
   version = "5.8.1";
+=======
+  version = "5.6.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = pname;
     rev = version;
+<<<<<<< HEAD
     hash = "sha256-2ObfUdrCuvyhtpoxNzoH8tsFQLxNkMLQPFfJajXEsXU=";
+=======
+    hash = "sha256-IqYfHMjKe7gVsM6HgihQMNkcXSYBOft1lamXOLa1Y8k=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   patches = [
     ./csd-backlight-helper-fix.patch
+<<<<<<< HEAD
+=======
+    ./use-sane-install-dir.patch
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   buildInputs = [

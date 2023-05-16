@@ -13,7 +13,11 @@
 
 buildPythonPackage rec {
   pname = "yamlfix";
+<<<<<<< HEAD
   version = "1.13.0";
+=======
+  version = "1.9.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -22,7 +26,11 @@ buildPythonPackage rec {
     owner = "lyz-code";
     repo = pname;
     rev = "refs/tags/${version}";
+<<<<<<< HEAD
     hash = "sha256-GoCQtanQHYOFrhRvZjzk/cCPnUFwYUAclZuYGZfNg5E=";
+=======
+    hash = "sha256-av3QNfyPo/4GzFzQ60OrtPK6CV5AkN4FbbqgeBz4rY0=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

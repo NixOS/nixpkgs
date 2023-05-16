@@ -134,7 +134,10 @@ stdenv.mkDerivation rec {
     mv $out/share/applications/dolphin-emu.desktop $out/share/applications/dolphin-emu-primehack.desktop
     mv $out/share/icons/hicolor/256x256/apps/dolphin-emu.png $out/share/icons/hicolor/256x256/apps/dolphin-emu-primehack.png
     substituteInPlace $out/share/applications/dolphin-emu-primehack.desktop --replace 'dolphin-emu' 'dolphin-emu-primehack'
+<<<<<<< HEAD
     substituteInPlace $out/share/applications/dolphin-emu-primehack.desktop --replace 'Dolphin Emulator' 'PrimeHack'
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '' + lib.optionalString stdenv.hostPlatform.isLinux ''
     install -D $src/Data/51-usb-device.rules $out/etc/udev/rules.d/51-usb-device.rules
   '';

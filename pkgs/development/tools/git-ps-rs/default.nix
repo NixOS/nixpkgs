@@ -12,13 +12,21 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "git-ps-rs";
+<<<<<<< HEAD
   version = "6.9.0";
+=======
+  version = "6.7.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "uptech";
     repo = "git-ps-rs";
     rev = version;
+<<<<<<< HEAD
     hash = "sha256-D6613T87jLEur8WXHed2cSKVafKVfgGWap/z/UBe31U=";
+=======
+    hash = "sha256-yBZ+YJxiVO8+rI7FLtI0xse8hoirjt5Bc2KxPeBidd0=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   cargoLock = {

@@ -1,5 +1,9 @@
 { lib, stdenv, fetchurl, bzip2, gfortran, libX11, libXmu, libXt, libjpeg, libpng
+<<<<<<< HEAD
 , libtiff, ncurses, pango, pcre2, perl, readline, tcl, texlive, texLive, tk, xz, zlib
+=======
+, libtiff, ncurses, pango, pcre2, perl, readline, tcl, texLive, tk, xz, zlib
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , less, texinfo, graphviz, icu, pkg-config, bison, imake, which, jdk, blas, lapack
 , curl, Cocoa, Foundation, libobjc, libcxx, tzdata
 , withRecommendedPackages ? true
@@ -15,24 +19,38 @@ assert (!blas.isILP64) && (!lapack.isILP64);
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "R";
+<<<<<<< HEAD
   version = "4.3.1";
+=======
+  version = "4.2.3";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = let
     inherit (finalAttrs) pname version;
   in fetchurl {
     url = "https://cran.r-project.org/src/base/R-${lib.versions.major version}/${pname}-${version}.tar.gz";
+<<<<<<< HEAD
     sha256 = "sha256-jdC/JPECPG9hjDsxc4PSkbSklPQNc7mDrCL/6pnkupk=";
   };
 
   outputs = [ "out" "tex" ];
 
+=======
+    sha256 = "sha256-VeSpptQ74xTiwD0CZqb6VESv3OULMDv8O4Kzl5UW4HQ=";
+  };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   dontUseImakeConfigure = true;
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
     bzip2 gfortran libX11 libXmu libXt libXt libjpeg libpng libtiff ncurses
     pango pcre2 perl readline texLive xz zlib less texinfo graphviz icu
+<<<<<<< HEAD
     bison imake which blas lapack curl tcl tk jdk tzdata
+=======
+    bison imake which blas lapack curl tcl tk jdk
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ] ++ lib.optionals stdenv.isDarwin [ Cocoa Foundation libobjc libcxx ];
 
   patches = [
@@ -91,6 +109,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   installTargets = [ "install" "install-info" "install-pdf" ];
 
+<<<<<<< HEAD
   # move tex files to $tex for use with texlive.combine
   # add link in $out since ${R_SHARE_DIR}/texmf is hardcoded in several places
   postInstall = ''
@@ -98,6 +117,8 @@ stdenv.mkDerivation (finalAttrs: {
     ln -s "$tex" "$out/lib/R/share/texmf"
   '';
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   # The store path to "which" is baked into src/library/base/R/unix/system.unix.R,
   # but Nix cannot detect it as a run-time dependency because the installed file
   # is compiled and compressed, which hides the store path.
@@ -112,12 +133,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 
+<<<<<<< HEAD
   # make tex output available to texlive.combine
   passthru.pkgs = [ finalAttrs.finalPackage.tex ];
   passthru.tlType = "run";
   # dependencies (based on \RequirePackage in jss.cls, Rd.sty, Sweave.sty)
   passthru.tlDeps = with texlive; [ amsfonts amsmath fancyvrb graphics hyperref iftex jknapltx latex lm tools upquote url ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   meta = with lib; {
     homepage = "http://www.r-project.org/";
     description = "Free software environment for statistical computing and graphics";

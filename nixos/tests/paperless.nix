@@ -30,13 +30,18 @@ import ./make-test-python.nix ({ lib, ... }: {
     with subtest("Task-queue gets ready"):
         machine.wait_for_unit("paperless-task-queue.service")
 
+<<<<<<< HEAD
     with subtest("Add a png document via the web interface"):
+=======
+    with subtest("Add a document via the web interface"):
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         machine.succeed(
             "convert -size 400x40 xc:white -font 'DejaVu-Sans' -pointsize 20 -fill black "
             "-annotate +5+20 'hello web 16-10-2005' /tmp/webdoc.png"
         )
         machine.wait_until_succeeds("curl -u admin:admin -F document=@/tmp/webdoc.png -fs localhost:28981/api/documents/post_document/")
 
+<<<<<<< HEAD
     with subtest("Add a txt document via the web interface"):
         machine.succeed(
             "echo 'hello web 16-10-2005' > /tmp/webdoc.txt"
@@ -46,11 +51,19 @@ import ./make-test-python.nix ({ lib, ... }: {
     with subtest("Documents are consumed"):
         machine.wait_until_succeeds(
             "(($(curl -u admin:admin -fs localhost:28981/api/documents/ | jq .count) == 3))"
+=======
+    with subtest("Documents are consumed"):
+        machine.wait_until_succeeds(
+            "(($(curl -u admin:admin -fs localhost:28981/api/documents/ | jq .count) == 2))"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         )
         docs = json.loads(machine.succeed("curl -u admin:admin -fs localhost:28981/api/documents/"))['results']
         assert "2005-10-16" in docs[0]['created']
         assert "2005-10-16" in docs[1]['created']
+<<<<<<< HEAD
         assert "2005-10-16" in docs[2]['created']
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     # Detects gunicorn issues, see PR #190888
     with subtest("Document metadata can be accessed"):
@@ -59,8 +72,11 @@ import ./make-test-python.nix ({ lib, ... }: {
 
         metadata = json.loads(machine.succeed("curl -u admin:admin -fs localhost:28981/api/documents/2/metadata/"))
         assert "original_checksum" in metadata
+<<<<<<< HEAD
 
         metadata = json.loads(machine.succeed("curl -u admin:admin -fs localhost:28981/api/documents/3/metadata/"))
         assert "original_checksum" in metadata
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '';
 })

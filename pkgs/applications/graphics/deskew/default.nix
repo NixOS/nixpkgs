@@ -18,12 +18,15 @@ stdenv.mkDerivation rec {
   buildPhase = ''
     runHook preBuild
     patchShebangs ./Scripts
+<<<<<<< HEAD
 
     # Deskew insists on using dlopen to load libtiff, we insist it links against it.
     sed -i -e 's/{$DEFINE DYNAMIC_DLL_LOADING}//' Imaging/LibTiff/LibTiffDynLib.pas
     sed -i -e 's/if LibTiffDynLib\.LoadTiffLibrary then//' Imaging/LibTiff/ImagingTiffLib.pas
     # Make sure libtiff is in the RPATH, so that Nix can find and track the runtime dependency
     export NIX_LDFLAGS="$NIX_LDFLAGS -rpath ${lib.getLib libtiff}/lib"
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     pushd Scripts && ./compile.sh && popd
     runHook postBuild
   '';

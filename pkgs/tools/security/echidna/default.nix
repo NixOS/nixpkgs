@@ -1,4 +1,5 @@
 { lib
+<<<<<<< HEAD
 , mkDerivation
 , fetchFromGitHub
 , haskellPackages
@@ -26,16 +27,35 @@ let haskellPackagesOverride = haskellPackages.override {
 in mkDerivation rec {
   pname = "echidna";
   version = "2.2.1";
+=======
+, fetchFromGitHub
+# Haskell deps
+, mkDerivation, aeson, base, base16-bytestring, binary, brick, bytestring
+, containers, data-dword, data-has, directory, exceptions, extra, filepath
+, hashable, hevm, hpack, html-entities, lens, ListLike, MonadRandom, mtl
+, optparse-applicative, process, random, semver, tasty, tasty-hunit
+, tasty-quickcheck, text, transformers, unix, unliftio, unordered-containers
+, vector, vector-instances, vty, yaml
+}:
+mkDerivation rec {
+  pname = "echidna";
+  version = "2.0.5";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "crytic";
     repo = "echidna";
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-5d9ttPR3rRHywBeLM85EGCEZLNZNZzOAhIN6AJToJyI=";
+=======
+    sha256 = "sha256-8bChe+qA4DowfuwsR5wLckb56fXi102g8vL2gAH/kYE=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   isLibrary = true;
   isExecutable = true;
+<<<<<<< HEAD
 
   libraryToolDepends = with haskellPackagesOverride; [
     haskellPackages.hpack
@@ -55,6 +75,20 @@ in mkDerivation rec {
     tasty tasty-hunit tasty-quickcheck
   ];
 
+=======
+  libraryHaskellDepends = [
+    aeson base base16-bytestring binary brick bytestring containers data-dword
+    data-has directory exceptions extra filepath hashable hevm html-entities
+    lens ListLike MonadRandom mtl optparse-applicative process random semver
+    text transformers unix unliftio unordered-containers vector vector-instances
+    vty yaml
+  ];
+  libraryToolDepends = [ hpack ];
+  executableHaskellDepends = libraryHaskellDepends;
+  testHaskellDepends = [
+    tasty tasty-hunit tasty-quickcheck
+  ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   preConfigure = ''
     hpack
     # re-enable dynamic build for Linux
@@ -68,7 +102,11 @@ in mkDerivation rec {
   description = "Ethereum smart contract fuzzer";
   homepage = "https://github.com/crytic/echidna";
   license = lib.licenses.agpl3Plus;
+<<<<<<< HEAD
   maintainers = with lib.maintainers; [ arturcygan hellwolf ];
+=======
+  maintainers = with lib.maintainers; [ arturcygan ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   platforms = lib.platforms.unix;
   mainProgram = "echidna-test";
 }

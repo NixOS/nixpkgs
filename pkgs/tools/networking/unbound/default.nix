@@ -18,7 +18,11 @@
 , nixosTests
   #
   # By default unbound will not be built with systemd support. Unbound is a very
+<<<<<<< HEAD
   # common dependency. The transitive dependency closure of systemd also
+=======
+  # commmon dependency. The transitive dependency closure of systemd also
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   # contains unbound.
   # Since most (all?) (lib)unbound users outside of the unbound daemon usage do
   # not need the systemd integration it is likely best to just default to no

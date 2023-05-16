@@ -8,13 +8,21 @@
 
 stdenv.mkDerivation rec {
   pname = "cpp-utilities";
+<<<<<<< HEAD
   version = "5.24.0";
+=======
+  version = "5.22.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "Martchus";
     repo = pname;
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-krskfuoCRxYcAIDqrae4+yEABXXZ9Nv0BjBVwSMjC7g=";
+=======
+    sha256 = "sha256-c36FzKDAaalKVIrqVSCoslrKVopW77cGdGwfiMbaXe4=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ cmake ];
@@ -22,9 +30,12 @@ stdenv.mkDerivation rec {
   buildInputs = lib.optionals stdenv.isDarwin [
     iconv # needed on Darwin, see https://github.com/Martchus/cpp-utilities/issues/4
   ];
+<<<<<<< HEAD
 
   cmakeFlags = ["-DBUILD_SHARED_LIBS=ON"];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   # Otherwise, tests fail since the resulting shared object libc++utilities.so is only available in PWD of the make files
   preCheck = ''
     checkFlagsArray+=(

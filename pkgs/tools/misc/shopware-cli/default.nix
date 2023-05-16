@@ -3,17 +3,26 @@
 , fetchFromGitHub
 , installShellFiles
 , makeWrapper
+<<<<<<< HEAD
 , dart-sass
 , git
+=======
+, dart-sass-embedded
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 buildGoModule rec {
   pname = "shopware-cli";
+<<<<<<< HEAD
   version = "0.2.8";
+=======
+  version = "0.1.62";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   src = fetchFromGitHub {
     repo = "shopware-cli";
     owner = "FriendsOfShopware";
     rev = version;
+<<<<<<< HEAD
     hash = "sha256-ThjSp7WBAWBUXDRN0mJvIb7uWTjYtVa53b+BoWCPuvo=";
   };
 
@@ -21,6 +30,14 @@ buildGoModule rec {
   nativeCheckInputs = [ git ];
 
   vendorHash = "sha256-JRzF2eYHnFO/2Tqnc4DMMGSV8gDKDiu8ZjELcn/Wur0=";
+=======
+    hash = "sha256-Vxg3hYUCN4UdBGHN57VXDlGdp+qzq8tbUDPAl/Bse44=";
+  };
+
+  nativeBuildInputs = [ installShellFiles makeWrapper ];
+
+  vendorSha256 = "sha256-O3dJX2w+J9TABkytaJ0ubFg9edVpmo7iPArc+Qqh3M4=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   postInstall = ''
     export HOME="$(mktemp -d)"
@@ -32,7 +49,11 @@ buildGoModule rec {
 
   preFixup = ''
     wrapProgram $out/bin/shopware-cli \
+<<<<<<< HEAD
       --prefix PATH : ${lib.makeBinPath [ dart-sass ]}
+=======
+      --prefix PATH : ${lib.makeBinPath [ dart-sass-embedded ]}
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '';
 
   ldflags = [

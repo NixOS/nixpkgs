@@ -38,13 +38,18 @@
 
 buildPythonPackage rec {
   pname = "mlflow";
+<<<<<<< HEAD
   version = "2.5.0";
+=======
+  version = "2.3.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
+<<<<<<< HEAD
     hash = "sha256-+ZKujqnHNQI0S69IxOxEeqnvv6iWW8CQho5hYyNPTrA=";
   };
 
@@ -53,6 +58,11 @@ buildPythonPackage rec {
       --replace "gunicorn<21" "gunicorn"
   '';
 
+=======
+    hash = "sha256-Y0OTl7JxjOV0cojvVHX0azcWs3ClF74+PGe3maJHoYY=";
+  };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   # Remove currently broken dependency `shap`, a model explainability package.
   # This seems quite unprincipled especially with tests not being enabled,
   # but not mlflow has a 'skinny' install option which does not require `shap`.

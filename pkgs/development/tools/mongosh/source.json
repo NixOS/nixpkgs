@@ -1,6 +1,13 @@
 {
+<<<<<<< HEAD
   "version": "1.10.6",
   "integrity": "sha512-rReUz89EF5eERhPZo29nYpKAux1u5iK3ug74wtsr7kE9SOJs5XGWS2gh8LKSMK9uieeDKRYX8+nFIa4bl1Ls2Q==",
   "filename": "mongosh-1.10.6.tgz",
   "deps": "sha256-j1l6PVPkp5Ju0uBB6dKfQP8fbwttWpPR3VPviu4a/Zg="
+=======
+  "version": "1.8.0",
+  "integrity": "sha512-9pHLqfYMWwP1L2t83TK5k6ho1faz+jFD9zXxnTtgnyu0c/uC39nx+tJT9AsxNZpY+GlhshDu1YcJm45f8l3gIw==",
+  "filename": "mongosh-1.8.0.tgz",
+  "deps": "sha256-ewl5q6ZxlQN030AmObP42E5KpUisrdYHOsg8whUIUZA="
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }

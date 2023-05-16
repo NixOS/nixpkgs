@@ -27,7 +27,10 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Backlight and Keyboard LED control tool";
     homepage = "https://gitlab.com/cameronnemo/brillo";
+<<<<<<< HEAD
     mainProgram = "brillo";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     license = [ licenses.gpl3 licenses.bsd0 ];
     platforms = platforms.linux;
     maintainers = [ maintainers.alexarice ];

@@ -2,13 +2,21 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "yewtube";
+<<<<<<< HEAD
   version = "2.10.5";
+=======
+  version = "2.10.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "mps-youtube";
     repo = "yewtube";
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-a7ySRHSRHmQePaVV7HnCk8QsiAQfN4nCVRdamPMUHGo=";
+=======
+    hash = "sha256-yqztce6t7VTtrumxbhbikYY54FiyUaegBPYSnF4wTkU=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   postPatch = ''

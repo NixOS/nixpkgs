@@ -2,13 +2,21 @@
 
 stdenv.mkDerivation rec {
   pname = "aws-c-io";
+<<<<<<< HEAD
   version = "0.13.29";
+=======
+  version = "0.13.19";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "awslabs";
     repo = pname;
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-ZeogbjgpbqdCioLeb34CRol1Fa5BJOloAxxgE50yfQs=";
+=======
+    sha256 = "sha256-6lTAnoBWbwyWpycsaS7dpCC9c4xYws19HCNyTd7aRho=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ cmake ];

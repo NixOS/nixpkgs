@@ -1,7 +1,13 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+<<<<<<< HEAD
 , pyhamcrest
+=======
+, py
+, pyhamcrest
+, pytest-benchmark
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , pytestCheckHook
 , pythonOlder
 }:
@@ -18,6 +24,7 @@ buildPythonPackage rec {
   };
 
   nativeCheckInputs = [
+<<<<<<< HEAD
     pyhamcrest
     pytestCheckHook
   ];
@@ -28,6 +35,14 @@ buildPythonPackage rec {
     "test_encode_random"
   ];
 
+=======
+    py
+    pyhamcrest
+    pytest-benchmark
+    pytestCheckHook
+  ];
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pythonImportsCheck = [ "base58" ];
 
   meta = with lib; {

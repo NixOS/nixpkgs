@@ -2,13 +2,21 @@
 
 buildNpmPackage rec {
   pname = "open-stage-control";
+<<<<<<< HEAD
   version = "1.25.3";
+=======
+  version = "1.24.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "jean-emmanuel";
     repo = "open-stage-control";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-drv+QNBmUjvlRul8PlFK4ZBIDw6BV4kJXVw287H6WT4=";
+=======
+    hash = "sha256-mM81u1irVfFFJUddOXKcs46tcGwVAcir+daKdkxFLsE=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   # Remove some Electron stuff from package.json

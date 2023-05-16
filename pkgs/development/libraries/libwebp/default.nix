@@ -1,4 +1,8 @@
 { lib, stdenv, fetchFromGitHub, autoreconfHook, libtool
+<<<<<<< HEAD
+=======
+, fetchpatch
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , threadingSupport ? true # multi-threading
 , openglSupport ? false, freeglut, libGL, libGLU # OpenGL (required for vwebp)
 , pngSupport ? true, libpng # PNG image format
@@ -27,15 +31,34 @@
 
 stdenv.mkDerivation rec {
   pname = "libwebp";
+<<<<<<< HEAD
   version = "1.3.1";
+=======
+  version = "1.3.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner  = "webmproject";
     repo   = pname;
     rev    = "v${version}";
+<<<<<<< HEAD
     hash   = "sha256-Q94avvKjPdwdGt5ADo30cf2V4T7MCTubDHJxTtbG4xQ=";
   };
 
+=======
+    hash   = "sha256-nhXkq+qKpaa75YQB/W/cRozslTIFPdXeqj1y6emQeHk=";
+  };
+
+  patches = [
+    # https://www.mozilla.org/en-US/security/advisories/mfsa2023-13/#MFSA-TMP-2023-0001
+    (fetchpatch {
+      url = "https://github.com/webmproject/libwebp/commit/a486d800b60d0af4cc0836bf7ed8f21e12974129.patch";
+      name = "fix-msfa-tmp-2023-0001.patch";
+      hash = "sha256-TRKXpNkYVzftBw09mX+WeQRhRoOzBgXFTNZBzSdCKvc=";
+    })
+  ];
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   configureFlags = [
     (lib.enableFeature threadingSupport "threading")
     (lib.enableFeature openglSupport "gl")

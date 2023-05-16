@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 { lib, stdenv, fetchurl, makeWrapper, jre }:
+=======
+{ lib, stdenv, fetchurl, makeWrapper, adoptopenjdk-bin, jre }:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 stdenv.mkDerivation rec {
   pname = "tlaplus";
@@ -10,6 +14,10 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ makeWrapper ];
+<<<<<<< HEAD
+=======
+  buildInputs = [ adoptopenjdk-bin ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   dontUnpack = true;
   installPhase = ''
@@ -32,6 +40,10 @@ stdenv.mkDerivation rec {
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
     license     = lib.licenses.mit;
     platforms   = lib.platforms.unix;
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [ florentc thoughtpolice mgregson ];
+=======
+    maintainers = with lib.maintainers; [ florentc thoughtpolice ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

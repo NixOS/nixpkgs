@@ -9,13 +9,21 @@
 
 stdenv.mkDerivation rec {
   pname = "libbpf";
+<<<<<<< HEAD
   version = "1.2.2";
+=======
+  version = "1.2.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "libbpf";
     repo = "libbpf";
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-SDDdz2HKEfzHloLkb0sv5ldTo+1yJDVc9O7nj4Cjznk=";
+=======
+    sha256 = "sha256-NimK4pdYcai21hZHdP1mBX1MOlNY61iDJ+PDYwpRuVE=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ pkg-config ];

@@ -1,6 +1,10 @@
 { lib, stdenv, fetchurl, fetchFromGitHub, ncurses, texinfo, writeScript
 , common-updater-scripts, git, nix, nixfmt, coreutils, gnused, callPackage
+<<<<<<< HEAD
 , file ? null, gettext ? null, enableNls ? true, enableTiny ? false }:
+=======
+, gettext ? null, enableNls ? true, enableTiny ? false }:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 assert enableNls -> (gettext != null);
 
@@ -22,7 +26,11 @@ in stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ texinfo ] ++ lib.optional enableNls gettext;
+<<<<<<< HEAD
   buildInputs = [ ncurses ] ++ lib.optional (!enableTiny) file;
+=======
+  buildInputs = [ ncurses ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   outputs = [ "out" "info" ];
 
@@ -75,6 +83,9 @@ in stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ joachifm nequissimus ];
     platforms = platforms.all;
+<<<<<<< HEAD
     mainProgram = "nano";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

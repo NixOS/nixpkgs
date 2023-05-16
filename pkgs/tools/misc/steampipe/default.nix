@@ -1,17 +1,32 @@
+<<<<<<< HEAD
 { lib, buildGoModule, fetchFromGitHub, installShellFiles }:
 
 buildGoModule rec {
   pname = "steampipe";
   version = "0.20.11";
+=======
+{ stdenv, lib, buildGoModule, fetchFromGitHub, installShellFiles }:
+
+buildGoModule rec {
+  pname = "steampipe";
+  version = "0.19.5";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "turbot";
     repo = "steampipe";
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-idMVQyRpWc4ZT9GZvQvShwIY9I9t9MArfih57trhJvc=";
   };
 
   vendorHash = "sha256-VuUzo+afUazXH7jaR4Qm5Kfr6qiyHqdGLJWS3MX8oOA=";
+=======
+    sha256 = "sha256-eF6LlQTSCscReTHUZzFI/gR1E/pNs52m68gnJmKnfGk=";
+  };
+
+  vendorHash = "sha256-XrEdaNLG46BwMEF/vhAk9+A6vH4mpbtH7vWXd01Y7ME=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   proxyVendor = true;
 
   patchPhase = ''

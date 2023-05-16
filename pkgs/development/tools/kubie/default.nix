@@ -2,16 +2,27 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "kubie";
+<<<<<<< HEAD
   version = "0.21.2";
+=======
+  version = "0.19.3";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     rev = "v${version}";
     owner = "sbstp";
     repo = "kubie";
+<<<<<<< HEAD
     sha256 = "sha256-fkIKb2fcml9E2sSJwhYPrqiThFgpNYh1CampQu8RT4k=";
   };
 
   cargoHash = "sha256-zZwSLMuuaQ8Ht6Ux/wrqB/VEHCvBqTQGvg+RSr8+AiQ=";
+=======
+    sha256 = "sha256-c4+ebl/tWPxAlgt/N5/xalZQZGSizKp/pDcgojbjy7A=";
+  };
+
+  cargoHash = "sha256-D3RjlYMD/UHfYxUMvZVSiRHOPmcLVGgsRVghoaMn9AM=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nativeBuildInputs = [ installShellFiles ];
 

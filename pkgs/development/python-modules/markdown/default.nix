@@ -11,7 +11,11 @@
 
 buildPythonPackage rec {
   pname = "markdown";
+<<<<<<< HEAD
   version = "3.4.4";
+=======
+  version = "3.4.3";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   disabled = pythonOlder "3.7";
 
@@ -21,7 +25,11 @@ buildPythonPackage rec {
     owner = "Python-Markdown";
     repo = "markdown";
     rev = "refs/tags/${version}";
+<<<<<<< HEAD
     hash = "sha256-5PIIhbJVsotGwZ3BQ4x0I7WjgnGF3opNrn8J+xZCflg=";
+=======
+    hash = "sha256-o2MDsrSkR0fMA5I8AoQcJrpwNGO5lXJn8O47tQN7U6o=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

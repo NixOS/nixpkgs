@@ -2,16 +2,27 @@
 
 buildGoModule rec {
   pname = "maddy";
+<<<<<<< HEAD
   version = "0.7.0";
+=======
+  version = "0.6.3";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "foxcpp";
     repo = "maddy";
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-EMw07yTFP0aBSuGDWivB8amuxWLFHhYV6J9faTEW5z4=";
   };
 
   vendorHash = "sha256-LyfkETZPkhJKN8CEivNp7Se4IBpzyAtmCM1xil4n2po=";
+=======
+    sha256 = "sha256-vf+jkXerdwvQhtyiOObBRxh8sYMEcgXC5vNzm5wquBs=";
+  };
+
+  vendorSha256 = "sha256-10cLNl9jWYX8XIKQkCxJ+/ymZC1YJRHUJWZQhq7zeV4=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   tags = [ "libpam" ];
 

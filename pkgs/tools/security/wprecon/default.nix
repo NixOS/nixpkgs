@@ -14,7 +14,11 @@ buildGoModule rec {
     hash = "sha256-23zJD3Nnkeko+J2FjPq5RA5dIjORMXvwt3wtAYiVlQs=";
   };
 
+<<<<<<< HEAD
   vendorHash = "sha256-FYdsLcW6FYxSgixZ5US9cBPABOAVwidC3ejUNbs1lbA=";
+=======
+  vendorSha256 = "sha256-FYdsLcW6FYxSgixZ5US9cBPABOAVwidC3ejUNbs1lbA=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   postFixup = ''
     # Rename binary

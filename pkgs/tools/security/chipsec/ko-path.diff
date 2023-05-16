@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 diff --git a/chipsec/helper/linux/linuxhelper.py b/chipsec/helper/linux/linuxhelper.py
 index 2fd65140..f3f26bcb 100644
 --- a/chipsec/helper/linux/linuxhelper.py
@@ -8,6 +9,18 @@ index 2fd65140..f3f26bcb 100644
  
 -        driver_path = os.path.join(chipsec.file.get_main_dir(), "chipsec", "helper", "linux", "chipsec.ko")
 +        driver_path = os.path.join(chipsec.file.get_main_dir(), "drivers", "linux", "chipsec.ko")
+=======
+diff --git c/chipsec/helper/linux/linuxhelper.py i/chipsec/helper/linux/linuxhelper.py
+index c51b5e6..4be05ea 100644
+--- c/chipsec/helper/linux/linuxhelper.py
++++ i/chipsec/helper/linux/linuxhelper.py
+@@ -152,7 +152,7 @@ class LinuxHelper(Helper):
+             else:
+                 a2 = "a2=0x{}".format(phys_mem_access_prot)
+ 
+-        driver_path = os.path.join(chipsec.file.get_main_dir(), "chipsec", "helper", "linux", "chipsec.ko" )
++        driver_path = os.path.join(chipsec.file.get_main_dir(), "drivers", "linux", "chipsec.ko" )
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
          if not os.path.exists(driver_path):
              driver_path += ".xz"
              if not os.path.exists(driver_path):

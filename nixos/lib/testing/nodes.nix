@@ -16,7 +16,10 @@ let
 
   baseOS =
     import ../eval-config.nix {
+<<<<<<< HEAD
       inherit lib;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       system = null; # use modularly defined system
       inherit (config.node) specialArgs;
       modules = [ config.defaults ];

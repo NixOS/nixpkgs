@@ -186,7 +186,11 @@ in
           ProtectSystem = "strict";
           ReadWritePaths = cfg.recordingsDir;
           RemoveIPC = true;
+<<<<<<< HEAD
           RestrictAddressFamilies = [ "AF_INET" "AF_INET6" "AF_NETLINK" ];
+=======
+          RestrictAddressFamilies = [ "AF_INET" "AF_INET6" ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           RestrictNamespaces = true;
           RestrictRealtime = true;
           RestrictSUIDSGID = true;

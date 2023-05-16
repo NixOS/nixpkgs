@@ -26,7 +26,11 @@ buildPythonPackage rec {
     hash = "sha256-XbUIe+XIFOz34sfTChoVyX7Kl9jCbzHdxU12fUpDvOg=";
   };
 
+<<<<<<< HEAD
   patches = lib.optionals (!stdenv.isDarwin) [
+=======
+  patches = [
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     (substituteAll {
       src = ./libgl-path.patch;
       libgl = "${libGL.out}/lib/libGL${stdenv.hostPlatform.extensions.sharedLibrary}";

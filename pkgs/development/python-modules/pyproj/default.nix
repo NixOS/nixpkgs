@@ -17,14 +17,23 @@
 
 buildPythonPackage rec {
   pname = "pyproj";
+<<<<<<< HEAD
   version = "3.6.0";
   disabled = pythonOlder "3.9";
+=======
+  version = "3.5.0";
+  disabled = pythonOlder "3.7";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "pyproj4";
     repo = "pyproj";
     rev = "refs/tags/${version}";
+<<<<<<< HEAD
     hash = "sha256-XMJg1azsvMtVnKuIulrrZ1Of3CFk2/EgQjkN1g0FpmQ=";
+=======
+    hash = "sha256-Vsje8gEJWNt2P1WOFm/IZSpJo04N0CXWxcmfADmP/M4=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   # force pyproj to use ${proj}

@@ -64,9 +64,12 @@
   - pkgs/build-support/kernel/**/*
   - pkgs/os-specific/linux/kernel/**/*
 
+<<<<<<< HEAD
 "6.topic: lib":
   - lib/**
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 "6.topic: lua":
   - pkgs/development/interpreters/lua-5/**/*
   - pkgs/development/interpreters/luajit/**/*
@@ -86,6 +89,7 @@
   - nixos/tests/mate.nix
   - pkgs/desktops/mate/**/*
 
+<<<<<<< HEAD
 "6.topic: module system":
   - lib/modules.nix
   - lib/types.nix
@@ -93,6 +97,8 @@
   - lib/tests/modules.sh
   - lib/tests/modules/**
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 "6.topic: nixos":
   - nixos/**/*
   - pkgs/os-specific/linux/nixos-rebuild/**/*
@@ -103,6 +109,7 @@
   - pkgs/development/nim-packages/**/*
   - pkgs/top-level/nim-packages.nix
 
+<<<<<<< HEAD
 "6.topic: nodejs":
   - doc/languages-frameworks/javascript.section.md
   - pkgs/build-support/node/**/*
@@ -111,6 +118,8 @@
   - pkgs/development/tools/yarn2nix-moretea/**/*
   - pkgs/development/web/nodejs/*
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 "6.topic: ocaml":
   - doc/languages-frameworks/ocaml.section.md
   - pkgs/development/compilers/ocaml/**/*
@@ -170,7 +179,10 @@
 
 "6.topic: TeX":
   - doc/languages-frameworks/texlive.section.md
+<<<<<<< HEAD
   - pkgs/test/texlive/**
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   - pkgs/tools/typesetting/tex/**/*
 
 "6.topic: vim":
@@ -189,10 +201,13 @@
   - nixos/tests/xfce.nix
   - pkgs/desktops/xfce/**/*
 
+<<<<<<< HEAD
 "6.topic: zig":
   - pkgs/development/compilers/zig/**/*
   - doc/hooks/zig.section.md
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 "8.has: changelog":
   - nixos/doc/manual/release-notes/**/*
 

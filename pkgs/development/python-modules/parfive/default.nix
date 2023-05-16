@@ -58,6 +58,10 @@ buildPythonPackage rec {
     description = "A HTTP and FTP parallel file downloader";
     homepage = "https://parfive.readthedocs.io/";
     license = licenses.mit;
+<<<<<<< HEAD
     maintainers = with maintainers; [ ];
+=======
+    maintainers = with maintainers; [ costrouc ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

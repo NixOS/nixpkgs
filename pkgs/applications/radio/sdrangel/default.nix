@@ -24,11 +24,18 @@
 , libbladeRF
 , mbelib
 , ninja
+<<<<<<< HEAD
+=======
+, ocl-icd
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , opencv3
 , pkg-config
 , qtcharts
 , qtdeclarative
+<<<<<<< HEAD
 , qtgamepad
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , qtgraphicaleffects
 , qtlocation
 , qtmultimedia
@@ -41,22 +48,34 @@
 , qtwebengine
 , rtl-sdr
 , serialdv
+<<<<<<< HEAD
 , sdrplay
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , sgp4
 , soapysdr-with-plugins
 , uhd
 , wrapQtAppsHook
 , zlib
+<<<<<<< HEAD
 , withSDRplay ? false
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "sdrangel";
   version = "7.15.4";
+=======
+}:
+
+stdenv.mkDerivation rec {
+  pname = "sdrangel";
+  version = "7.13.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "f4exb";
     repo = "sdrangel";
+<<<<<<< HEAD
     rev = "v${finalAttrs.version}";
     hash = "sha256-oSFnoNmoXvdb5lpx/j3DVVhOfbsDZlGNZNcvud1w8Ks=";
   };
@@ -67,6 +86,13 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     wrapQtAppsHook
   ];
+=======
+    rev = "v${version}";
+    hash = "sha256-xG41FNlMfqH5MaGVFFENP0UFEkZYiWhtpNSPh2s4Irk=";
+  };
+
+  nativeBuildInputs = [ cmake ninja pkg-config wrapQtAppsHook ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   buildInputs = [
     airspy
@@ -93,7 +119,10 @@ stdenv.mkDerivation (finalAttrs: {
     opencv3
     qtcharts
     qtdeclarative
+<<<<<<< HEAD
     qtgamepad
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     qtgraphicaleffects
     qtlocation
     qtmultimedia
@@ -110,8 +139,12 @@ stdenv.mkDerivation (finalAttrs: {
     soapysdr-with-plugins
     uhd
     zlib
+<<<<<<< HEAD
   ]
   ++ lib.optionals withSDRplay [ sdrplay ];
+=======
+  ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   cmakeFlags = [
     "-DAPT_DIR=${aptdec}"
@@ -121,6 +154,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-Wno-dev"
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "Software defined radio (SDR) software";
     homepage = "https://github.com/f4exb/sdrangel";
@@ -132,3 +166,18 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.unix;
   };
 })
+=======
+  LD_LIBRARY_PATH = "${ocl-icd}/lib";
+
+  meta = with lib; {
+    description = "Software defined radio (SDR) software";
+    longDescription = ''
+      SDRangel is an Open Source Qt5 / OpenGL 3.0+ SDR and signal analyzer frontend to various hardware.
+    '';
+    homepage = "https://github.com/f4exb/sdrangel";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ alkeryn Tungsten842 ];
+    platforms = platforms.unix;
+  };
+}
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)

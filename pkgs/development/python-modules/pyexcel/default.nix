@@ -38,6 +38,10 @@ buildPythonPackage rec {
     description = "Single API for reading, manipulating and writing data in csv, ods, xls, xlsx and xlsm files";
     homepage = "http://docs.pyexcel.org/";
     license = lib.licenses.bsd3;
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [ ];
+=======
+    maintainers = with lib.maintainers; [ jtojnar ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

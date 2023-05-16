@@ -1,5 +1,6 @@
 { lib
 , python3
+<<<<<<< HEAD
 , fetchPypi
 , groff
 , less
@@ -12,6 +13,41 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-8SmOu79FZESL1Hd15wdd1m1Uewswqaum2y8LOZAl9P8=";
+=======
+, fetchFromGitHub
+, groff
+, less
+}:
+let
+  py = python3.override {
+    packageOverrides = self: super: {
+      pyyaml = super.pyyaml.overridePythonAttrs (oldAttrs: rec {
+        version = "5.4.1";
+        src = fetchFromGitHub {
+          owner = "yaml";
+          repo = "pyyaml";
+          rev = version;
+          hash = "sha256-VUqnlOF/8zSOqh6JoEYOsfQ0P4g+eYqxyFTywgCS7gM=";
+        };
+        checkPhase = ''
+          runHook preCheck
+          PYTHONPATH="tests/lib3:$PYTHONPATH" ${self.python.interpreter} -m test_all
+          runHook postCheck
+        '';
+      });
+    };
+    self = py;
+  };
+
+in
+with py.pkgs; buildPythonApplication rec {
+  pname = "awscli";
+  version = "1.27.79"; # N.B: if you change this, change botocore and boto3 to a matching version too
+
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-A3MVM5MV+PTwR4W2ALrqEtMaFtVAEt8yqkd4ZLsvHGE=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   # https://github.com/aws/aws-cli/issues/4837
@@ -22,10 +58,18 @@ python3.pkgs.buildPythonApplication rec {
       --replace "rsa>=3.1.2,<4.8" "rsa<5,>=3.1.2"
   '';
 
+<<<<<<< HEAD
   propagatedBuildInputs = with python3.pkgs; [
     botocore
     bcdoc
     s3transfer
+=======
+  propagatedBuildInputs = [
+    botocore
+    bcdoc
+    s3transfer
+    six
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     colorama
     docutils
     rsa
@@ -45,6 +89,7 @@ python3.pkgs.buildPythonApplication rec {
   '';
 
   passthru = {
+<<<<<<< HEAD
     python = python3; # for aws_shell
   };
 
@@ -54,6 +99,16 @@ python3.pkgs.buildPythonApplication rec {
     runHook preInstallCheck
 
     $out/bin/aws --version | grep "${python3.pkgs.botocore.version}"
+=======
+    python = py; # for aws_shell
+  };
+
+  doInstallCheck = true;
+  installCheckPhase = ''
+    runHook preInstallCheck
+
+    $out/bin/aws --version | grep "${py.pkgs.botocore.version}"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     $out/bin/aws --version | grep "${version}"
 
     runHook postInstallCheck

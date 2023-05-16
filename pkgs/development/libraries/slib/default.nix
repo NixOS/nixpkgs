@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 { lib, stdenv, fetchurl, scheme, texinfo, unzip }:
 
 stdenv.mkDerivation rec {
@@ -21,15 +22,37 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ scheme texinfo unzip ];
   buildInputs = [ scheme ];
+=======
+{ fetchurl, lib, stdenv, unzip, scheme, texinfo }:
+
+stdenv.mkDerivation rec {
+  pname = "slib";
+  version = "3b5";
+
+  src = fetchurl {
+    url = "https://groups.csail.mit.edu/mac/ftpdir/scm/${pname}-${version}.zip";
+    sha256 = "0q0p2d53p8qw2592yknzgy2y1p5a9k7ppjx0cfrbvk6242c4mdpq";
+  };
+
+  patches = [ ./catalog-in-library-vicinity.patch ];
+
+  nativeBuildInputs = [ unzip ];
+  buildInputs = [ scheme texinfo ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   postInstall = ''
     ln -s mklibcat{.scm,}
     SCHEME_LIBRARY_PATH="$out/lib/slib" make catalogs
 
+<<<<<<< HEAD
     sed -i \
       -e '2i export PATH="${scheme}/bin:$PATH"' \
       -e '3i export GUILE_AUTO_COMPILE=0' \
       $out/bin/slib
+=======
+    sed -i "$out/bin/slib" \
+        -e "/^SCHEME_LIBRARY_PATH/i export PATH=\"${scheme}/bin:\$PATH\""
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '';
 
   # There's no test suite (?!).

@@ -6,8 +6,11 @@ import ./make-test-python.nix ({ lib, pkgs, ... }: {
     virtualisation = {
       emptyDiskImages = [ 512 ];
       useBootLoader = true;
+<<<<<<< HEAD
       # Booting off the TPM2-encrypted device requires an available init script
       mountHostNixStore = true;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       useEFIBoot = true;
       qemu.options = ["-chardev socket,id=chrtpm,path=/tmp/mytpm1/swtpm-sock -tpmdev emulator,id=tpm0,chardev=chrtpm -device tpm-tis,tpmdev=tpm0"];
     };
@@ -28,7 +31,10 @@ import ./make-test-python.nix ({ lib, pkgs, ... }: {
         };
       };
       virtualisation.rootDevice = "/dev/mapper/cryptroot";
+<<<<<<< HEAD
       virtualisation.fileSystems."/".autoFormat = true;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
   };
 

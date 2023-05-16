@@ -85,7 +85,11 @@ stdenv.mkDerivation (finalAttrs: {
   '' + lib.optionalString buildSamples ''
     mkdir -p $sample/bin
     mv clients/staging/hipfft_* $sample/bin
+<<<<<<< HEAD
     patchelf $sample/bin/hipfft_* --shrink-rpath --allowed-rpath-prefixes "$NIX_STORE"
+=======
+    patchelf $sample/bin/hipfft_* --shrink-rpath --allowed-rpath-prefixes /nix/store
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '' + lib.optionalString (buildTests || buildBenchmarks) ''
     rmdir $out/bin
   '';

@@ -27,7 +27,11 @@
 
 stdenv.mkDerivation rec {
   pname = "power-profiles-daemon";
+<<<<<<< HEAD
   version = "0.13";
+=======
+  version = "0.12";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   outputs = [ "out" "devdoc" ];
 
@@ -36,7 +40,11 @@ stdenv.mkDerivation rec {
     owner = "hadess";
     repo = "power-profiles-daemon";
     rev = version;
+<<<<<<< HEAD
     sha256 = "sha256-ErHy+shxZQ/aCryGhovmJ6KmAMt9OZeQGDbHIkC0vUE=";
+=======
+    sha256 = "sha256-2eMFPGVLwTBIlaB1zM3BzHrhydgBEm+kvx+VIZdUDPM=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [
@@ -128,6 +136,10 @@ stdenv.mkDerivation rec {
     description = "Makes user-selected power profiles handling available over D-Bus";
     platforms = platforms.linux;
     license = licenses.gpl3Plus;
+<<<<<<< HEAD
     maintainers = with maintainers; [ mvnetbiz ];
+=======
+    maintainers = with maintainers; [ jtojnar mvnetbiz ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

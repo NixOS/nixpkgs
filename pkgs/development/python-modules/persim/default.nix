@@ -63,16 +63,24 @@ buildPythonPackage rec {
     "test_n_pixels"
     # https://github.com/scikit-tda/persim/issues/67
     "test_persistenceimager"
+<<<<<<< HEAD
     # ValueError: setting an array element with a sequence
     "test_exact_critical_pairs"
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   meta = with lib; {
     description = "Distances and representations of persistence diagrams";
     homepage = "https://persim.scikit-tda.org";
+<<<<<<< HEAD
     changelog = "https://github.com/scikit-tda/persim/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ ];
+=======
+    license = licenses.mit;
+    maintainers = with maintainers; [ costrouc ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     broken = stdenv.isDarwin;
   };
 }

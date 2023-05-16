@@ -5,29 +5,46 @@
 , setuptools
 , setuptools-scm
 , cocotb-bus
+<<<<<<< HEAD
 , find-libpython
 , pytestCheckHook
 , swig
 , verilog
 , ghdl
+=======
+, pytestCheckHook
+, swig
+, verilog
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 buildPythonPackage rec {
   pname = "cocotb";
+<<<<<<< HEAD
   version = "1.8.0";
+=======
+  version = "1.7.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   # pypi source doesn't include tests
   src = fetchFromGitHub {
     owner = "cocotb";
     repo = "cocotb";
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-k3VizQ9iyDawfDCeE3Zup/KkyD54tFBLdQvRKsbKDLY=";
+=======
+    hash = "sha256-gLOYwljqnYkGsdbny7+f93QgroLBaLLnDBRpoCe8uEg=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ setuptools-scm ];
 
   buildInputs = [ setuptools ];
+<<<<<<< HEAD
   propagatedBuildInputs = [ find-libpython ];
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   postPatch = ''
     patchShebangs bin/*.py
@@ -53,7 +70,11 @@ buildPythonPackage rec {
     ./0001-Patch-LDCXXSHARED-for-macOS-along-with-LDSHARED.patch
   ];
 
+<<<<<<< HEAD
   nativeCheckInputs = [ cocotb-bus pytestCheckHook swig verilog ghdl ];
+=======
+  nativeCheckInputs = [ cocotb-bus pytestCheckHook swig verilog ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   preCheck = ''
     export PATH=$out/bin:$PATH
     mv cocotb cocotb.hidden
@@ -62,10 +83,17 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "cocotb" ];
 
   meta = with lib; {
+<<<<<<< HEAD
     changelog = "https://github.com/cocotb/cocotb/releases/tag/v${version}";
     description = "Coroutine based cosimulation library for writing VHDL and Verilog testbenches in Python";
     homepage = "https://github.com/cocotb/cocotb";
     license = licenses.bsd3;
     maintainers = with maintainers; [ matthuszagh jleightcap ];
+=======
+    description = "Coroutine based cosimulation library for writing VHDL and Verilog testbenches in Python";
+    homepage = "https://github.com/cocotb/cocotb";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ matthuszagh ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

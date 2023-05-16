@@ -33,8 +33,11 @@ buildPythonPackage rec {
   postPatch = ''
     substituteInPlace tox.ini \
       --replace " --cov --cov-report term-missing:skip-covered" ""
+<<<<<<< HEAD
     substituteInPlace pilkit/processors/resize.py \
       --replace "Image.ANTIALIAS" "Image.Resampling.LANCZOS"
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '';
 
   pythonImportsCheck = [
@@ -42,7 +45,11 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
+<<<<<<< HEAD
     description = "A collection of utilities and processors for the Python Imaging Library";
+=======
+    description = "A collection of utilities and processors for the Python Imaging Libary";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     homepage = "https://github.com/matthewwithanm/pilkit/";
     license = licenses.bsd0;
     maintainers = with maintainers; [ domenkozar ];

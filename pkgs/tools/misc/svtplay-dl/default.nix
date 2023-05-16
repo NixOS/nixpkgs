@@ -15,7 +15,11 @@ let
     python pytest nose cryptography pyyaml requests mock requests-mock
     python-dateutil setuptools;
 
+<<<<<<< HEAD
   version = "4.25";
+=======
+  version = "4.20";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 in
 
@@ -27,7 +31,11 @@ stdenv.mkDerivation rec {
     owner = "spaam";
     repo = "svtplay-dl";
     rev = version;
+<<<<<<< HEAD
     hash = "sha256-vYcBK7jgoBEC7dZ+5osJ/Q85wSNLXO02wcv9GHaa0Ds=";
+=======
+    hash = "sha256-nG4ErqQC7GZDLClqcE3cliXxowzCku/SnB39AVIqkNw=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   pythonPaths = [ cryptography pyyaml requests ];

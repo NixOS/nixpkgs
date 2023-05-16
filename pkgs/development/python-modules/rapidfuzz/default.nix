@@ -18,7 +18,11 @@
 
 buildPythonPackage rec {
   pname = "rapidfuzz";
+<<<<<<< HEAD
   version = "3.2.0";
+=======
+  version = "3.0.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -27,7 +31,11 @@ buildPythonPackage rec {
     owner = "maxbachmann";
     repo = "RapidFuzz";
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-Lt5m1SdZBzId6nvXXrEDQR3ZdA3yjoj15o3/nPeXPPs=";
+=======
+    hash = "sha256-rpUrMHIBr7sb0Cib6WYdLJ3KOPEgRnB0DCV/df1uE1A=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

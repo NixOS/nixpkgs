@@ -8,13 +8,21 @@
 
 stdenv.mkDerivation rec {
   pname = "hash-slinger";
+<<<<<<< HEAD
   version = "3.3";
+=======
+  version = "3.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "letoams";
     repo = pname;
     rev = version;
+<<<<<<< HEAD
     sha256 = "sha256-c6IZHUFuhcccUWZYSOUGFbKpTtwMclIvEvDX8gE5d8o=";
+=======
+    sha256 = "sha256-PfOEGqPMGLixoqHENZnxOv9nK+dYMqe6P0k+ZiJMik0=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   pythonPath = with python3.pkgs; [

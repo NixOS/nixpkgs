@@ -39,6 +39,10 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/ubuntu/yaru";
     license = with licenses; [ cc-by-sa-40 gpl3Plus lgpl21Only lgpl3Only ];
     platforms = platforms.linux;
+<<<<<<< HEAD
     maintainers = with maintainers; [ fortuneteller2k amaxine ];
+=======
+    maintainers = with maintainers; [ fortuneteller2k maxeaubrey ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

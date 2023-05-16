@@ -1,5 +1,9 @@
 { lib, stdenv, fetchurl, plib, freeglut, xorgproto, libX11, libXext, libXi
+<<<<<<< HEAD
 , libICE, libSM, libXt, libXmu, libGLU, libGL, boost179, zlib, libjpeg, freealut
+=======
+, libICE, libSM, libXt, libXmu, libGLU, libGL, boost, zlib, libjpeg, freealut
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , openscenegraph, openal, expat, cmake, apr, xz
 , curl
 }:
@@ -18,7 +22,11 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ plib freeglut xorgproto libX11 libXext libXi
+<<<<<<< HEAD
                   libICE libSM libXt libXmu libGLU libGL boost179 zlib libjpeg freealut
+=======
+                  libICE libSM libXt libXmu libGLU libGL boost zlib libjpeg freealut
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
                   openscenegraph openal expat apr curl xz ];
 
   meta = with lib; {

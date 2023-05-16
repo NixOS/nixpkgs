@@ -1,8 +1,11 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+<<<<<<< HEAD
 , cryptography
 , cython_3
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , poetry-core
 , pytestCheckHook
 , pythonOlder
@@ -11,7 +14,11 @@
 
 buildPythonPackage rec {
   pname = "bluetooth-data-tools";
+<<<<<<< HEAD
   version = "1.11.0";
+=======
+  version = "0.4.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -20,6 +27,7 @@ buildPythonPackage rec {
     owner = "Bluetooth-Devices";
     repo = pname;
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-iyfk0OOJezNCNyqRCbR2cTTTdgdYQM6hExTngd/3CtA=";
   };
 
@@ -29,14 +37,23 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     cython_3
+=======
+    hash = "sha256-Zu2tD5isiOKOn1/bNgVo1F2/CbFFj5wVp1CUO+6btBc=";
+  };
+
+  nativeBuildInputs = [
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     poetry-core
     setuptools
   ];
 
+<<<<<<< HEAD
   propagatedBuildInputs = [
     cryptography
   ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nativeCheckInputs = [
     pytestCheckHook
   ];
@@ -54,7 +71,11 @@ buildPythonPackage rec {
     description = "Library for converting bluetooth data and packets";
     homepage = "https://github.com/Bluetooth-Devices/bluetooth-data-tools";
     changelog = "https://github.com/Bluetooth-Devices/bluetooth-data-tools/blob/v${version}/CHANGELOG.md";
+<<<<<<< HEAD
     license = licenses.asl20;
+=======
+    license = with licenses; [ asl20 ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     maintainers = with maintainers; [ fab ];
   };
 }

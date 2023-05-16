@@ -93,7 +93,16 @@ mkDerivation {
 
   qtWrapperArgs = [
     "--prefix PATH : ${placeholder "out"}/bin"
+<<<<<<< HEAD
   ] ++ lib.optional withSage "--prefix PATH : ${sage-with-env}/bin";
+=======
+  ];
+
+  postInstall = lib.optionalString withSage ''
+    wrapProgram $out/share/cantor/sagebackend/cantor-execsage \
+      --prefix PATH : ${sage-with-env}/bin
+  '';
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   meta = with lib; {
     description = "Front end to powerful mathematics and statistics packages";

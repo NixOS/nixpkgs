@@ -5,7 +5,10 @@
 , buildPythonPackage
 , defusedxml
 , fetchFromGitHub
+<<<<<<< HEAD
 , pytest-aiohttp
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , pytest-asyncio
 , pytestCheckHook
 , python-didl-lite
@@ -15,16 +18,27 @@
 
 buildPythonPackage rec {
   pname = "async-upnp-client";
+<<<<<<< HEAD
   version = "0.35.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
+=======
+  version = "0.33.1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "StevenLooman";
     repo = "async_upnp_client";
     rev = "refs/tags/${version}";
+<<<<<<< HEAD
     hash = "sha256-owg9oZv/smovJPoCjr9Y0TK4Ap5IMD7cNagtkYkJk1c=";
+=======
+    hash = "sha256-gXDuStgCBH6YW3SsAjEvQq7l+Vf8+Z8sle1TnLRtNwo=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [
@@ -37,7 +51,10 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
+<<<<<<< HEAD
     pytest-aiohttp
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     pytest-asyncio
   ];
 

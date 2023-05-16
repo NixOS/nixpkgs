@@ -18,10 +18,13 @@ in
 {
 
   options = {
+<<<<<<< HEAD
     security.pki.installCACerts = mkEnableOption "Add CA certificates to system" // {
       default = true;
       internal = true;
     };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     security.pki.certificateFiles = mkOption {
       type = types.listOf types.path;
@@ -74,7 +77,11 @@ in
 
   };
 
+<<<<<<< HEAD
   config = mkIf cfg.installCACerts {
+=======
+  config = {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     # NixOS canonical location + Debian/Ubuntu/Arch/Gentoo compatibility.
     environment.etc."ssl/certs/ca-certificates.crt".source = caBundle;

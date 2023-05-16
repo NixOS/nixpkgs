@@ -17,7 +17,11 @@ showSyntax() {
 
 # Parse the command line.
 origArgs=("$@")
+<<<<<<< HEAD
 copyFlags=()
+=======
+copyClosureFlags=()
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 extraBuildFlags=()
 lockFlags=()
 flakeFlags=(--extra-experimental-features 'nix-command flakes')
@@ -36,7 +40,10 @@ verboseScript=
 noFlake=
 # comma separated list of vars to preserve when using sudo
 preservedSudoVars=NIXOS_INSTALL_BOOTLOADER
+<<<<<<< HEAD
 json=
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 # log the given argument to stderr
 log() {
@@ -49,7 +56,11 @@ while [ "$#" -gt 0 ]; do
       --help)
         showSyntax
         ;;
+<<<<<<< HEAD
       switch|boot|test|build|edit|dry-build|dry-run|dry-activate|build-vm|build-vm-with-bootloader|list-generations)
+=======
+      switch|boot|test|build|edit|dry-build|dry-run|dry-activate|build-vm|build-vm-with-bootloader)
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         if [ "$i" = dry-run ]; then i=dry-build; fi
         # exactly one action mandatory, bail out if multiple are given
         if [ -n "$action" ]; then showSyntax; fi
@@ -75,10 +86,17 @@ while [ "$#" -gt 0 ]; do
         upgrade=1
         upgrade_all=1
         ;;
+<<<<<<< HEAD
       --use-substitutes|--substitute-on-destination|-s)
         copyFlags+=("-s")
         ;;
       -I|--max-jobs|-j|--cores|--builders|--log-format)
+=======
+      --use-substitutes|-s)
+        copyClosureFlags+=("$i")
+        ;;
+      -I|--max-jobs|-j|--cores|--builders)
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         j="$1"; shift 1
         extraBuildFlags+=("$i" "$j")
         ;;
@@ -147,9 +165,12 @@ while [ "$#" -gt 0 ]; do
         k="$1"; shift 1
         lockFlags+=("$i" "$j" "$k")
         ;;
+<<<<<<< HEAD
       --json)
         json=1
         ;;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       *)
         log "$0: unknown option \`$i'"
         exit 1
@@ -196,12 +217,21 @@ copyToTarget() {
     if ! [ "$targetHost" = "$buildHost" ]; then
         if [ -z "$targetHost" ]; then
             logVerbose "Running nix-copy-closure with these NIX_SSHOPTS: $SSHOPTS"
+<<<<<<< HEAD
             NIX_SSHOPTS=$SSHOPTS runCmd nix-copy-closure "${copyFlags[@]}" --from "$buildHost" "$1"
         elif [ -z "$buildHost" ]; then
             logVerbose "Running nix-copy-closure with these NIX_SSHOPTS: $SSHOPTS"
             NIX_SSHOPTS=$SSHOPTS runCmd nix-copy-closure "${copyFlags[@]}" --to "$targetHost" "$1"
         else
             buildHostCmd nix-copy-closure "${copyFlags[@]}" --to "$targetHost" "$1"
+=======
+            NIX_SSHOPTS=$SSHOPTS runCmd nix-copy-closure "${copyClosureFlags[@]}" --from "$buildHost" "$1"
+        elif [ -z "$buildHost" ]; then
+            logVerbose "Running nix-copy-closure with these NIX_SSHOPTS: $SSHOPTS"
+            NIX_SSHOPTS=$SSHOPTS runCmd nix-copy-closure "${copyClosureFlags[@]}" --to "$targetHost" "$1"
+        else
+            buildHostCmd nix-copy-closure "${copyClosureFlags[@]}" --to "$targetHost" "$1"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         fi
     fi
 }
@@ -296,7 +326,11 @@ nixFlakeBuild() {
         drv="$(runCmd nix "${flakeFlags[@]}" eval --raw "${attr}.drvPath" "${evalArgs[@]}" "${extraBuildFlags[@]}")"
         if [ -a "$drv" ]; then
             logVerbose "Running nix with these NIX_SSHOPTS: $SSHOPTS"
+<<<<<<< HEAD
             NIX_SSHOPTS=$SSHOPTS runCmd nix "${flakeFlags[@]}" copy "${copyFlags[@]}" --derivation --to "ssh://$buildHost" "$drv"
+=======
+            NIX_SSHOPTS=$SSHOPTS runCmd nix "${flakeFlags[@]}" copy --derivation --to "ssh://$buildHost" "$drv"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
             buildHostCmd nix-store -r "$drv" "${buildArgs[@]}"
         else
             log "nix eval failed"
@@ -484,7 +518,11 @@ if [[ -n $buildNix && -z $flake ]]; then
     if [ -a "$nixDrv" ]; then
         nix-store -r "$nixDrv"'!'"out" --add-root "$tmpDir/nix" --indirect >/dev/null
         if [ -n "$buildHost" ]; then
+<<<<<<< HEAD
             nix-copy-closure "${copyFlags[@]}" --to "$buildHost" "$nixDrv"
+=======
+            nix-copy-closure "${copyClosureFlags[@]}" --to "$buildHost" "$nixDrv"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
             # The nix build produces multiple outputs, we add them all to the remote path
             for p in $(buildHostCmd nix-store -r "$(readlink "$nixDrv")" "${buildArgs[@]}"); do
                 remoteNix="$remoteNix${remoteNix:+:}$p/bin"
@@ -511,6 +549,7 @@ if [ "$action" = dry-build ]; then
     extraBuildFlags+=(--dry-run)
 fi
 
+<<<<<<< HEAD
 if [ "$action" = list-generations ]; then
     if [ ! -L "$profile" ]; then
         log "No profile \`$(basename "$profile")' found"
@@ -592,6 +631,8 @@ EOF
     exit 0
 fi
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 # Either upgrade the configuration in the system profile (for "switch"
 # or "boot"), or just build it and create a symlink "result" in the

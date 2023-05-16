@@ -12,7 +12,11 @@
 
 buildPythonPackage rec {
   pname = "elkm1-lib";
+<<<<<<< HEAD
   version = "2.2.5";
+=======
+  version = "2.2.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -21,7 +25,11 @@ buildPythonPackage rec {
     owner = "gwww";
     repo = "elkm1";
     rev = "refs/tags/${version}";
+<<<<<<< HEAD
     hash = "sha256-8Mzxaww6a+vi3i8H4W9jRgY+5mpTGaJbNBXPDPn8sl4=";
+=======
+    hash = "sha256-z/ltpypCGJ3ORHOlLjicKlqIoxqGzVt588OHmNO65bg=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

@@ -16,7 +16,10 @@ stdenv.mkDerivation rec {
   buildInputs = [ bpp-core bpp-seq bpp-phyl bpp-popgen ];
 
   meta = bpp-core.meta // {
+<<<<<<< HEAD
     homepage = "https://github.com/BioPP/bppsuite";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     changelog = "https://github.com/BioPP/bppsuite/blob/master/ChangeLog";
   };
 }

@@ -30,8 +30,12 @@ stdenv.mkDerivation rec {
     description = "AOSP libldac dispatcher";
     homepage    = "https://github.com/EHfive/ldacBT";
     license     = licenses.asl20;
+<<<<<<< HEAD
     # libldac code detects & #error's out on non-LE byte order
     platforms   = platforms.littleEndian;
+=======
+    platforms   = platforms.all;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     maintainers = with maintainers; [ adisbladis ];
   };
 }

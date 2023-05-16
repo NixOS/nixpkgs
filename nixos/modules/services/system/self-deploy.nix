@@ -125,6 +125,7 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+<<<<<<< HEAD
     systemd.services.self-deploy = rec {
       inherit (cfg) startAt;
 
@@ -134,6 +135,15 @@ in
 
       after = requires;
 
+=======
+    systemd.services.self-deploy = {
+      inherit (cfg) startAt;
+
+      wantedBy = [ "multi-user.target" ];
+
+      requires = lib.mkIf (!(isPathType cfg.repository)) [ "network-online.target" ];
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       environment.GIT_SSH_COMMAND = lib.mkIf (cfg.sshKeyFile != null)
         "${pkgs.openssh}/bin/ssh -i ${lib.escapeShellArg cfg.sshKeyFile}";
 

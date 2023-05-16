@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 { lib
 , bash
 , fetchFromGitHub
@@ -7,6 +8,9 @@
 , unzip
 , zip
 }:
+=======
+{ lib, stdenv, fetchFromGitHub, zip, unzip, firefox, bash }:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 stdenv.mkDerivation rec {
   pname = "slimerjs";
@@ -20,10 +24,14 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ zip ];
+<<<<<<< HEAD
   nativeBuildInputs = [
     strip-nondeterminism
     unzip
   ];
+=======
+  nativeBuildInputs = [ unzip ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   preConfigure = ''
     test -d src && cd src
@@ -31,7 +39,10 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+<<<<<<< HEAD
     strip-nondeterminism --type zip omni.ja
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     mkdir -p "$out"/{bin,share/doc/slimerjs,lib/slimerjs}
     cp LICENSE README* "$out/share/doc/slimerjs"
     cp -r * "$out/lib/slimerjs"

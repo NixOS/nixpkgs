@@ -2,6 +2,10 @@
 , stdenv
 , rustPlatform
 , fetchFromGitHub
+<<<<<<< HEAD
+=======
+, llvmPackages
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , sqlite
 , installShellFiles
 , Security
@@ -12,11 +16,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "innernet";
+<<<<<<< HEAD
   version = "1.6.0";
+=======
+  version = "1.5.5";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "tonarino";
     repo = "innernet";
+<<<<<<< HEAD
     rev = "refs/tags/v${version}";
     hash = "sha256-eAiYXE8kSfuhBgrIo6rbtE2YH9JcLJwA/vXA5IWNYG8=";
   };
@@ -34,6 +43,21 @@ rustPlatform.buildRustPackage rec {
     Security
     libiconv
   ];
+=======
+    rev = "v${version}";
+    sha256 = "sha256-jUL7/jHjfgpLg6728JQETbBcC2Q3G8d31oiwhkS+FD0=";
+  };
+  cargoSha256 = "sha256-qQ6yRI0rNxV/TRZHCR69h6kx6L2Wp75ziw+B2P8LZmE=";
+
+  nativeBuildInputs = with llvmPackages; [
+    llvm
+    clang
+    installShellFiles
+  ];
+  buildInputs = [ sqlite ] ++ lib.optionals stdenv.isDarwin [ Security libiconv ];
+
+  LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   postInstall = ''
     installManPage doc/innernet-server.8.gz
@@ -53,7 +77,10 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "A private network system that uses WireGuard under the hood";
     homepage = "https://github.com/tonarino/innernet";
+<<<<<<< HEAD
     changelog = "https://github.com/tonarino/innernet/releases/tag/v${version}";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     license = licenses.mit;
     maintainers = with maintainers; [ tomberek _0x4A6F ];
   };

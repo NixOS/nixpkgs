@@ -1,5 +1,8 @@
 { mkXfceDerivation
+<<<<<<< HEAD
 , gobject-introspection
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , dbus-glib
 , garcon
 , glib
@@ -12,12 +15,16 @@
 , libxfce4util
 , libxklavier
 , pam
+<<<<<<< HEAD
 , python3
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , systemd
 , xfconf
 , lib
 }:
 
+<<<<<<< HEAD
 let
   # For xfce4-screensaver-configure
   pythonEnv = python3.withPackages (pp: [ pp.pygobject3 ]);
@@ -32,6 +39,14 @@ mkXfceDerivation {
   nativeBuildInputs = [
     gobject-introspection
   ];
+=======
+mkXfceDerivation {
+  category = "apps";
+  pname = "xfce4-screensaver";
+  version = "4.18.1";
+
+  sha256 = "sha256-d72m2dW8jvM/EjgNSVaKsP5Ip7ioguB61/hy2cWw+dw=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   buildInputs = [
     dbus-glib
@@ -46,7 +61,10 @@ mkXfceDerivation {
     libxfce4util
     libxklavier
     pam
+<<<<<<< HEAD
     pythonEnv
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     systemd
     xfconf
   ];
@@ -55,8 +73,14 @@ mkXfceDerivation {
 
   makeFlags = [ "DBUS_SESSION_SERVICE_DIR=$(out)/etc" ];
 
+<<<<<<< HEAD
   meta = with lib; {
     description = "Screensaver for Xfce";
     maintainers = with maintainers; [ symphorien ] ++ teams.xfce.members;
+=======
+  meta =  {
+    description = "Screensaver for Xfce";
+    maintainers = with lib.maintainers; [ symphorien ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

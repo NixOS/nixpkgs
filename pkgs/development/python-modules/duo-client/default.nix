@@ -47,6 +47,10 @@ buildPythonPackage rec {
     homepage = "https://github.com/duosecurity/duo_client_python";
     changelog = "https://github.com/duosecurity/duo_client_python/releases/tag/${version}";
     license = licenses.bsd3;
+<<<<<<< HEAD
     maintainers = with maintainers; [ ];
+=======
+    maintainers = with maintainers; [ SuperSandro2000 ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

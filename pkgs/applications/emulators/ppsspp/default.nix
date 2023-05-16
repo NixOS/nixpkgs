@@ -34,14 +34,22 @@ stdenv.mkDerivation (finalAttrs: {
           + lib.optionalString enableQt "-qt"
           + lib.optionalString (!enableQt) "-sdl"
           + lib.optionalString forceWayland "-wayland";
+<<<<<<< HEAD
   version = "1.16";
+=======
+  version = "1.15.3";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "hrydgard";
     repo = "ppsspp";
     rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
+<<<<<<< HEAD
     sha256 = "sha256-41FAInCMmgO4vxzpFKVZtITs8piQLJgBJBbGVKEd97o=";
+=======
+    sha256 = "sha256-5IICMP7KEniAnuxdDPECN+8jXA0ZKgPsdIL6Og2xyX4=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   postPatch = ''
@@ -97,7 +105,11 @@ stdenv.mkDerivation (finalAttrs: {
     ''
       runHook preInstall
 
+<<<<<<< HEAD
       mkdir -p $out/share/{applications,ppsspp,icons}
+=======
+      mkdir -p $out/share/{applications,ppsspp}
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     '' + (if enableQt then ''
       install -Dm555 PPSSPPQt $out/bin/ppsspp
       wrapProgram $out/bin/ppsspp \
@@ -110,7 +122,10 @@ stdenv.mkDerivation (finalAttrs: {
         --prefix LD_LIBRARY_PATH : ${vulkanPath} \
     '' + "\n" + ''
       mv assets $out/share/ppsspp
+<<<<<<< HEAD
       mv ../icons/hicolor $out/share/icons
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
       runHook postInstall
     '';

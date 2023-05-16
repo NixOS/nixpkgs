@@ -1,6 +1,10 @@
 { lib, mkDerivation, fetchFromGitHub
 , cmake, gcc-arm-embedded, python3Packages
+<<<<<<< HEAD
 , qtbase, qtmultimedia, qttools, SDL, gtest
+=======
+, qtbase, qtmultimedia, qttranslations, SDL, gtest
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , dfu-util
 }:
 
@@ -16,9 +20,15 @@ mkDerivation rec {
     sha256 = "sha256-bKMAyONy1Udd+2nDVEMrtIsnfqrNuBVMWU7nCqvZ+3E=";
   };
 
+<<<<<<< HEAD
   nativeBuildInputs = [ cmake gcc-arm-embedded python3Packages.pillow qttools ];
 
   buildInputs = [ qtbase qtmultimedia SDL ];
+=======
+  nativeBuildInputs = [ cmake gcc-arm-embedded python3Packages.pillow ];
+
+  buildInputs = [ qtbase qtmultimedia qttranslations SDL ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   postPatch = ''
     sed -i companion/src/burnconfigdialog.cpp \
@@ -27,6 +37,10 @@ mkDerivation rec {
 
   cmakeFlags = [
     "-DGTEST_ROOT=${gtest.src}/googletest"
+<<<<<<< HEAD
+=======
+    "-DQT_TRANSLATIONS_DIR=${qttranslations}/translations"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "-DDFU_UTIL_PATH=${dfu-util}/bin/dfu-util"
     # file RPATH_CHANGE could not write new RPATH
     "-DCMAKE_SKIP_BUILD_RPATH=ON"

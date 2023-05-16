@@ -139,6 +139,7 @@ index f3922e0..e40fcdf 100644
  		} else {
  			DB_ASSERT(env, sharecount > 0);
  			MEMBAR_EXIT();
+<<<<<<< HEAD
 diff -ur a/dist/aclocal/clock.m4 b/dist/aclocal/clock.m4
 --- a/dist/aclocal/clock.m4	1969-12-31 19:00:01.000000000 -0500
 +++ b/dist/aclocal/clock.m4	2023-06-05 19:14:02.007080500 -0400
@@ -203,3 +204,5 @@ diff -ur a/dist/RELEASE b/dist/RELEASE
 -DB_RELEASE_DATE=`date "+%B %e, %Y"`
 +DB_RELEASE_DATE="April  9, 2010"
  DB_VERSION_STRING="Berkeley DB $DB_VERSION: ($DB_RELEASE_DATE)"
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)

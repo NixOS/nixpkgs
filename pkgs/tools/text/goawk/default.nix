@@ -2,16 +2,27 @@
 
 buildGoModule rec {
   pname = "goawk";
+<<<<<<< HEAD
   version = "1.24.0";
+=======
+  version = "1.22.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "benhoyt";
     repo = "goawk";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-pce7g0MI23244t5ZK4UDOfQNt1m3tRpCahne0s+NRRE=";
   };
 
   vendorHash = null;
+=======
+    sha256 = "sha256-8UoYGAmYmC0hcxLfkNac3flKyPBT/xsykuy+TvVosBI=";
+  };
+
+  vendorSha256 = null;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nativeCheckInputs = [ gawk ];
 

@@ -1,11 +1,19 @@
+<<<<<<< HEAD
 { lib, python38, fetchPypi, fetchFromGitHub }:
+=======
+{ lib, python38, fetchFromGitHub }:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 let
   python = python38.override {
     self = python;
     packageOverrides = self: super: {
       sqlalchemy = super.sqlalchemy.overridePythonAttrs (oldAttrs: rec {
         version = "1.3.24";
+<<<<<<< HEAD
         src = fetchPypi {
+=======
+        src = super.fetchPypi {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           inherit (oldAttrs) pname;
           inherit version;
           hash = "sha256-67t3fL+TEjWbiXv4G6ANrg9ctp+6KhgmXcwYpvXvdRk=";

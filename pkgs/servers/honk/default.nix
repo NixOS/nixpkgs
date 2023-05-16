@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 { lib
 , buildGoModule
 , fetchurl
@@ -31,6 +32,26 @@ buildGoModule rec {
   # providing the `-viewdir` parameter in the command line.
   postPatch = ''
     substituteInPlace main.go --replace \
+=======
+{ lib, buildGoModule, fetchurl, installShellFiles, sqlite }:
+
+buildGoModule rec {
+  pname = "honk";
+  version = "0.9.91";
+
+  src = fetchurl {
+    url = "https://humungus.tedunangst.com/r/honk/d/honk-${version}.tgz";
+    hash = "sha256-+NFWTTMVdngWsC8/EIN2xJC/5C4naaAekk/YoA17wFk=";
+  };
+  vendorHash = null;
+
+  buildInputs = [ sqlite ];
+  nativeBuildInputs = [ installShellFiles ];
+  subPackages = [ "." ];
+
+  postPatch = ''
+    substituteInPlace honk.go --replace \
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       "var viewDir = \".\"" \
       "var viewDir = \"$out/share/honk\""
   '';
@@ -50,6 +71,7 @@ buildGoModule rec {
     mv views $out/share/${pname}
   '';
 
+<<<<<<< HEAD
   passthru.tests = {
     inherit (nixosTests) honk;
   };
@@ -61,5 +83,12 @@ buildGoModule rec {
     license = lib.licenses.isc;
     mainProgram = "honk";
     maintainers = with lib.maintainers; [ huyngo ];
+=======
+  meta = with lib; {
+    description = "An ActivityPub server with minimal setup and support costs.";
+    homepage = "https://humungus.tedunangst.com/r/honk";
+    license = licenses.isc;
+    maintainers = with maintainers; [ huyngo ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

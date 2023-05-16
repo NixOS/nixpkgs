@@ -23,11 +23,16 @@ assert gpgmeSupport -> sslSupport;
 
 stdenv.mkDerivation rec {
   pname = "mutt";
+<<<<<<< HEAD
   version = "2.2.12";
+=======
+  version = "2.2.10";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   outputs = [ "out" "doc" "info" ];
 
   src = fetchurl {
     url = "http://ftp.mutt.org/pub/mutt/${pname}-${version}.tar.gz";
+<<<<<<< HEAD
     hash = "sha256-BDrzEvZLjlb3/Qv3f4SiBdTEmAML2VhkV2ZcR7sYzjg=";
   };
 
@@ -35,6 +40,12 @@ stdenv.mkDerivation rec {
     # Avoid build-only references embedding into 'mutt -v' output.
     ./no-build-only-refs.patch
   ] ++ lib.optional smimeSupport (fetchpatch {
+=======
+    sha256 = "sha256-TXc/IkIveQlve5S1e+5FZUrZolFl27NkY8WClbTNPYg=";
+  };
+
+  patches = lib.optional smimeSupport (fetchpatch {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     url = "https://salsa.debian.org/mutt-team/mutt/raw/debian/1.10.1-2/debian/patches/misc/smime.rc.patch";
     sha256 = "0b4i00chvx6zj9pcb06x2jysmrcb2znn831lcy32cgfds6gr3nsi";
   });
@@ -103,7 +114,10 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "A small but very powerful text-based mail client";
     homepage = "http://www.mutt.org";
+<<<<<<< HEAD
     mainProgram = "mutt";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
     maintainers = with maintainers; [ rnhmjoj ];

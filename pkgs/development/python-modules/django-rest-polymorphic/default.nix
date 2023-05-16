@@ -41,6 +41,10 @@ buildPythonPackage rec {
     description = "Polymorphic serializers for Django REST Framework";
     homepage = "https://github.com/apirobot/django-rest-polymorphic";
     license = licenses.mit;
+<<<<<<< HEAD
     maintainers = with maintainers; [ ];
+=======
+    maintainers = with maintainers; [ SuperSandro2000 ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

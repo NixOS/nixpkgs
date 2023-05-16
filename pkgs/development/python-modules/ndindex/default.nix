@@ -16,14 +16,22 @@
 
 buildPythonPackage rec {
   pname = "ndindex";
+<<<<<<< HEAD
   version = "1.7";
+=======
+  version = "1.6";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "Quansight-Labs";
     repo = "ndindex";
     rev = "refs/tags/${version}";
+<<<<<<< HEAD
     hash = "sha256-JP0cEuxXfPTWc1EIUtMsy5Hx6eIo9vDzD0IUXm1lFME=";
+=======
+    hash = "sha256-QLWGgbF5nNTa1SsSkupo+fAs9K7eTexTK9n9yDLVgrQ=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

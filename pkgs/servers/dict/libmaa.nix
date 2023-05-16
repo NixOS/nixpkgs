@@ -15,9 +15,15 @@ stdenv.mkDerivation rec {
   env.NIX_CFLAGS_COMPILE = "-Wno-error=format-truncation";
 
   meta = with lib; {
+<<<<<<< HEAD
     description = "Provides many low-level data structures which are helpful for writing compilers";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ sikmir ];
     platforms = platforms.unix;
+=======
+    description = "Dict protocol server and client";
+    maintainers = [ ];
+    platforms = platforms.linux;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

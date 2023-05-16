@@ -19,7 +19,11 @@
 
 stdenv.mkDerivation rec {
   pname = "palemoon-bin";
+<<<<<<< HEAD
   version = "32.3.1";
+=======
+  version = "32.1.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchzip {
     urls = [
@@ -27,9 +31,15 @@ stdenv.mkDerivation rec {
       "https://rm-us.palemoon.org/release/palemoon-${version}.linux-x86_64-gtk${if withGTK3 then "3" else "2"}.tar.xz"
     ];
     hash = if withGTK3 then
+<<<<<<< HEAD
       "sha256-1JYaxxkqgg/gLdZ+uGDB5BI0NKjHO4huk0b/M9QFuII="
     else
       "sha256-p/Lid6Uv3XTEg+43Gke5VLILhzENHoBP6XjGVHy7wCY=";
+=======
+      "sha256-Kre+F1AE4bC5hAODYjo+S6TUCpKk8KMnYumQWHz+epY="
+    else
+      "sha256-LIsep7KsNhsw3zlmgltu6/4qZEWjGQbUmLqHCabSTfg=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   preferLocalBuild = true;

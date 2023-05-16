@@ -1,9 +1,17 @@
 from collections.abc import Mapping, Sequence
 from dataclasses import dataclass
+<<<<<<< HEAD
 from typing import cast, Iterable, Optional
 
 import re
 
+=======
+from typing import Any, cast, Iterable, Optional
+
+import re
+
+import markdown_it
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 from markdown_it.token import Token
 
 from .md import Renderer

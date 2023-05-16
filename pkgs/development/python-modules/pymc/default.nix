@@ -14,7 +14,11 @@
 
 buildPythonPackage rec {
   pname = "pymc";
+<<<<<<< HEAD
   version = "5.3.1";
+=======
+  version = "5.0.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -23,7 +27,11 @@ buildPythonPackage rec {
     owner = "pymc-devs";
     repo = pname;
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-TtRIYgsPlire4li4/9Ls7Rh1SIkDGi5uCSN7huSrelA=";
+=======
+    hash = "sha256-ffNWSSzoRLFmYzN9sm5Z1j6WtEoFzGkCQxpBC0NlpRc=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [

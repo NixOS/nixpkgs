@@ -31,12 +31,21 @@
 let
   gdbDefaultsTo = if gdbUseFixed then "${gdb}/bin/gdb" else "gdb";
 in
+<<<<<<< HEAD
 vscode-utils.buildVscodeMarketplaceExtension {
   mktplcRef = {
     name = "cpptools";
     publisher = "ms-vscode";
     version = "1.17.3";
     sha256 = "sha256-4mKCBqUCOndKEfsJqTIsfwEt+0CZI8QAhBj3Y4+wKlg=";
+=======
+vscode-utils.buildVscodeMarketplaceExtension rec {
+  mktplcRef = {
+    name = "cpptools";
+    publisher = "ms-vscode";
+    version = "1.11.0";
+    sha256 = "c0725d3914aeb2515627691727455cc27e7a75031fa02ca957be02cc210bd64d";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     arch = "linux-x64";
   };
 

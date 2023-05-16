@@ -77,13 +77,23 @@ stdenv.mkDerivation rec {
   postPatch = lib.optionalString (!stable) ''
     substituteInPlace cmake/KiCadVersion.cmake \
       --replace "unknown" "${builtins.substring 0 10 src.rev}"
+<<<<<<< HEAD
 
     substituteInPlace cmake/CreateGitVersionHeader.cmake \
       --replace "0000000000000000000000000000000000000000" "${src.rev}"
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '';
 
   makeFlags = optionals (debug) [ "CFLAGS+=-Og" "CFLAGS+=-ggdb" ];
 
+<<<<<<< HEAD
+=======
+  # some ngspice tests attempt to write to $HOME/.cache/
+  XDG_CACHE_HOME = "$TMP";
+  # failing tests still attempt to create $HOME though
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   cmakeFlags = [
     "-DKICAD_USE_EGL=ON"
     "-DOCC_INCLUDE_DIR=${opencascade-occt}/include/opencascade"
@@ -164,16 +174,20 @@ stdenv.mkDerivation rec {
   ++ optional (withNgspice) libngspice
   ++ optional (debug) valgrind;
 
+<<<<<<< HEAD
   # some ngspice tests attempt to write to $HOME/.cache/
   # this could be and was resolved with XDG_CACHE_HOME = "$TMP";
   # but failing tests still attempt to create $HOME
   # and the newer CLI tests seem to also use $HOME...
   HOME = "$TMP";
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   # debug builds fail all but the python test
   doInstallCheck = !(debug);
   installCheckTarget = "test";
 
+<<<<<<< HEAD
   pythonForTests = python.withPackages(ps: with ps; [
     numpy
     pytest
@@ -182,6 +196,8 @@ stdenv.mkDerivation rec {
   ]);
   nativeInstallCheckInputs = optional (!stable) pythonForTests;
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   dontStrip = debug;
 
   meta = {

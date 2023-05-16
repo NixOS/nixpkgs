@@ -11,7 +11,11 @@
 
 buildPythonPackage rec {
   pname = "pyezviz";
+<<<<<<< HEAD
   version = "0.2.2.2";
+=======
+  version = "0.2.0.12";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -20,7 +24,11 @@ buildPythonPackage rec {
     owner = "baqs";
     repo = "pyEzviz";
     rev = "refs/tags/${version}";
+<<<<<<< HEAD
     hash = "sha256-YQlPv8YfPbYfpg+4VrLWHOWYJoecuAr3K7JBiogiI/g=";
+=======
+    hash = "sha256-RHwsKNbjKPMp0Ddc3eEsJbLwCAgbFd+5hpzUABYnTso=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [

@@ -254,7 +254,11 @@ in
       preStart = ''
         # Blindly copy the whole project here.
         chmod -R +w .
+<<<<<<< HEAD
         rm -rf ./public/assets/
+=======
+        rm -rf ./public/assets/*
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         rm -rf ./tmp/*
         rm -rf ./log/*
         cp -r --no-preserve=owner ${cfg.package}/* .

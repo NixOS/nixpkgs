@@ -26,6 +26,10 @@ buildPythonPackage rec {
     description = "Load me later. A lazy plugin management system for Python";
     homepage = "http://lml.readthedocs.io/";
     license = lib.licenses.bsd3;
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [ ];
+=======
+    maintainers = with lib.maintainers; [ jtojnar ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

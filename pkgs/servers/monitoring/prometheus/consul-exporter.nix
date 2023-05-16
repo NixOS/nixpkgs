@@ -27,5 +27,9 @@ buildGoModule rec {
     changelog = "https://github.com/prometheus/consul_exporter/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ hectorj ];
+<<<<<<< HEAD
+=======
+    platforms = platforms.unix;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

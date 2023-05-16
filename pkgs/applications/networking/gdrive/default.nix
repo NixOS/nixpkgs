@@ -28,6 +28,10 @@ buildGoModule rec {
     homepage = "https://github.com/prasmussen/gdrive";
     description = "A command line utility for interacting with Google Drive";
     license = licenses.mit;
+<<<<<<< HEAD
+=======
+    platforms = platforms.unix;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     maintainers = [ maintainers.rzetterberg ];
   };
 }

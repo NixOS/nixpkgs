@@ -1,5 +1,9 @@
 { lib
 , mkDerivation
+<<<<<<< HEAD
+=======
+, cmake
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , extra-cmake-modules
 , wrapGAppsHook
 , gst_all_1
@@ -10,7 +14,10 @@
 , mpv
 , qtmultimedia
 , qtquickcontrols2
+<<<<<<< HEAD
 , yt-dlp
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 mkDerivation {
@@ -36,6 +43,7 @@ mkDerivation {
     gstreamer
   ]);
 
+<<<<<<< HEAD
   qtWrapperArgs = [
     "--prefix"
     "PATH"
@@ -43,6 +51,8 @@ mkDerivation {
     (lib.makeBinPath [ yt-dlp ])
   ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   preFixup = ''
     qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';

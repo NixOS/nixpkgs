@@ -45,8 +45,11 @@ buildPythonPackage rec {
     cython
   ];
 
+<<<<<<< HEAD
   __darwinAllowLocalNetworking = true;
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   preCheck = ''
     export HOME=$TMPDIR
     cp -R tests examples $TMPDIR

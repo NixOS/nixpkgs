@@ -1,6 +1,9 @@
 { lib
 , python3Packages
+<<<<<<< HEAD
 , fetchPypi
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , onlykey-cli
 }:
 
@@ -47,7 +50,11 @@ python3Packages.buildPythonApplication rec {
   pname = "onlykey-agent";
   version = "1.1.13";
 
+<<<<<<< HEAD
   src = fetchPypi {
+=======
+  src = python3Packages.fetchPypi {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     inherit pname version;
     sha256 = "sha256-GAb6crtW6rLAbFtdi6fAGCPjXpKFhravguoGjuNcIxc=";
   };

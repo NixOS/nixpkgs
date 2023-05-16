@@ -1,6 +1,9 @@
 { lib, stdenv, fetchFromGitHub, fetchurl
+<<<<<<< HEAD
 , callPackage
 , fetchpatch
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , cmake, pkg-config, dbus, makeWrapper
 , boost
 , elfutils # for libdw
@@ -24,8 +27,12 @@
 , SDL2_image
 , systemd
 , writeText
+<<<<<<< HEAD
 , writeShellScript
 , nixosTests
+=======
+, writeScript
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 let
@@ -36,20 +43,41 @@ let
     Exec=@out@/libexec/anbox-session-manager
   '';
 
+<<<<<<< HEAD
   anbox-application-manager = writeShellScript "anbox-application-manager" ''
     exec @out@/bin/anbox launch --package=org.anbox.appmgr --component=org.anbox.appmgr.AppViewActivity
+=======
+  anbox-application-manager = writeScript "anbox-application-manager" ''
+    #!${runtimeShell}
+
+    ${systemd}/bin/busctl --user call \
+        org.freedesktop.DBus \
+        /org/freedesktop/DBus \
+        org.freedesktop.DBus \
+        StartServiceByName "su" org.anbox 0
+
+    @out@/bin/anbox launch --package=org.anbox.appmgr --component=org.anbox.appmgr.AppViewActivity
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '';
 
 in
 
 stdenv.mkDerivation rec {
   pname = "anbox";
+<<<<<<< HEAD
   version = "unstable-2023-02-03";
+=======
+  version = "unstable-2021-10-20";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
+<<<<<<< HEAD
     rev = "ddf4c57ebbe3a2e46099087570898ab5c1e1f279";
+=======
+    rev = "84f0268012cbe322ad858d76613f4182074510ac";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     sha256 = "sha256-QXWhatewiUDQ93cH1UZsYgbjUxpgB1ajtGFYZnKmabc=";
     fetchSubmodules = true;
   };
@@ -85,7 +113,11 @@ stdenv.mkDerivation rec {
     "-Wno-error=mismatched-new-delete"
   ]);
 
+<<<<<<< HEAD
   prePatch = ''
+=======
+  patchPhase = ''
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     patchShebangs scripts
 
     cat >cmake/FindGMock.cmake <<'EOF'
@@ -113,6 +145,7 @@ stdenv.mkDerivation rec {
     EOF
   '';
 
+<<<<<<< HEAD
   patches = [
     # Fixes compatibility with lxc 4
     (fetchpatch {
@@ -137,6 +170,10 @@ stdenv.mkDerivation rec {
   postInstall = ''
     wrapProgram $out/bin/anbox \
       --set SDL_VIDEO_X11_WMCLASS "anbox" \
+=======
+  postInstall = ''
+    wrapProgram $out/bin/anbox \
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [libGL libglvnd]} \
       --prefix PATH : ${git}/bin
 
@@ -150,6 +187,7 @@ stdenv.mkDerivation rec {
 
     substitute ${anbox-application-manager} $out/bin/anbox-application-manager \
       --subst-var out
+<<<<<<< HEAD
     chmod +x $out/bin/anbox-application-manager
   '';
 
@@ -157,6 +195,27 @@ stdenv.mkDerivation rec {
 
   passthru.image = callPackage ./postmarketos-image.nix { };
   passthru.postmarketos-image = callPackage ./anbox-image.nix { };
+=======
+  '';
+
+  passthru.image = let
+    imgroot = "https://build.anbox.io/android-images";
+  in
+    {
+      armv7l-linux = fetchurl {
+        url = imgroot + "/2017/06/12/android_1_armhf.img";
+        sha256 = "1za4q6vnj8wgphcqpvyq1r8jg6khz7v6b7h6ws1qkd5ljangf1w5";
+      };
+      aarch64-linux = fetchurl {
+        url = imgroot + "/2017/08/04/android_1_arm64.img";
+        sha256 = "02yvgpx7n0w0ya64y5c7bdxilaiqj9z3s682l5s54vzfnm5a2bg5";
+      };
+      x86_64-linux = fetchurl {
+        url = imgroot + "/2018/07/19/android_amd64.img";
+        sha256 = "1jlcda4q20w30cm9ikm6bjq01p547nigik1dz7m4v0aps4rws13b";
+      };
+    }.${stdenv.system} or null;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   meta = with lib; {
     homepage = "https://anbox.io";

@@ -67,7 +67,10 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ MP2E ];
+<<<<<<< HEAD
     mainProgram = "nestopia";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }
 

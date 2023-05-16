@@ -8,13 +8,21 @@
 
 stdenv.mkDerivation rec {
   pname = "libqalculate";
+<<<<<<< HEAD
   version = "4.8.0";
+=======
+  version = "4.6.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "qalculate";
     repo = "libqalculate";
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-wONqqd8Ds10SvkUrj7Ps6BfqUNPE6hCnQrKDTEglVEQ=";
+=======
+    sha256 = "sha256-GOVSNEnEl/oef54q88s+YuLyqPMLyx1eoX7DlWrmo2c=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   outputs = [ "out" "dev" "doc" ];

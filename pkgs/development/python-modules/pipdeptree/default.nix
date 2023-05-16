@@ -14,16 +14,27 @@
 
 buildPythonPackage rec {
   pname = "pipdeptree";
+<<<<<<< HEAD
   version = "2.13.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
+=======
+  version = "2.7.0";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.7";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "tox-dev";
     repo = "pipdeptree";
     rev = "refs/tags/${version}";
+<<<<<<< HEAD
     hash = "sha256-mblj6SQK/az2al81wMiWXHuyn1+30jfAxrWGv9Nw/gw=";
+=======
+    hash = "sha256-M9Vr7VZJ/nVd3xgfDBIjgQHhJB2QgJgB9ED7p7fRuA8=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
@@ -33,7 +44,11 @@ buildPythonPackage rec {
     hatch-vcs
   ];
 
+<<<<<<< HEAD
   propagatedBuildInputs = [
+=======
+  propagatedBuildInput = [
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     pip
   ];
 
@@ -54,11 +69,14 @@ buildPythonPackage rec {
     "pipdeptree"
   ];
 
+<<<<<<< HEAD
   disabledTests = [
     # Don't run console tests
     "test_console"
   ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   meta = with lib; {
     description = "Command line utility to show dependency tree of packages";
     homepage = "https://github.com/tox-dev/pipdeptree";

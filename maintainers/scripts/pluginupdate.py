@@ -4,20 +4,34 @@
 # - maintainers/scripts/update-luarocks-packages
 
 # format:
+<<<<<<< HEAD
 # $ nix run nixpkgs#black maintainers/scripts/pluginupdate.py
 # type-check:
 # $ nix run nixpkgs#python3.pkgs.mypy maintainers/scripts/pluginupdate.py
 # linted:
 # $ nix run nixpkgs#python3.pkgs.flake8 -- --ignore E501,E265 maintainers/scripts/pluginupdate.py
+=======
+# $ nix run nixpkgs.python3Packages.black -c black update.py
+# type-check:
+# $ nix run nixpkgs.python3Packages.mypy -c mypy update.py
+# linted:
+# $ nix run nixpkgs.python3Packages.flake8 -c flake8 --ignore E501,E265 update.py
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 import argparse
 import csv
 import functools
 import http
 import json
+<<<<<<< HEAD
 import logging
 import os
 import subprocess
+=======
+import os
+import subprocess
+import logging
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 import sys
 import time
 import traceback
@@ -25,14 +39,24 @@ import urllib.error
 import urllib.parse
 import urllib.request
 import xml.etree.ElementTree as ET
+<<<<<<< HEAD
 from dataclasses import asdict, dataclass
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 from datetime import datetime
 from functools import wraps
 from multiprocessing.dummy import Pool
 from pathlib import Path
+<<<<<<< HEAD
 from tempfile import NamedTemporaryFile
 from typing import Any, Callable, Dict, List, Optional, Tuple, Union
 from urllib.parse import urljoin, urlparse
+=======
+from typing import Dict, List, Optional, Tuple, Union, Any, Callable
+from urllib.parse import urljoin, urlparse
+from tempfile import NamedTemporaryFile
+from dataclasses import dataclass, asdict
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 import git
 
@@ -41,13 +65,21 @@ ATOM_LINK = "{http://www.w3.org/2005/Atom}link"  # "
 ATOM_UPDATED = "{http://www.w3.org/2005/Atom}updated"  # "
 
 LOG_LEVELS = {
+<<<<<<< HEAD
     logging.getLevelName(level): level
     for level in [logging.DEBUG, logging.INFO, logging.WARN, logging.ERROR]
+=======
+    logging.getLevelName(level): level for level in [
+        logging.DEBUG, logging.INFO, logging.WARN, logging.ERROR ]
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }
 
 log = logging.getLogger()
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 def retry(ExceptionToCheck: Any, tries: int = 4, delay: float = 3, backoff: float = 2):
     """Retry calling the decorated function using an exponential backoff.
     http://www.saltycrane.com/blog/2009/11/trying-out-retry-decorator-python/
@@ -78,7 +110,10 @@ def retry(ExceptionToCheck: Any, tries: int = 4, delay: float = 3, backoff: floa
 
     return deco_retry
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 @dataclass
 class FetchConfig:
     proc: int
@@ -93,6 +128,7 @@ def make_request(url: str, token=None) -> urllib.request.Request:
 
 
 # a dictionary of plugins and their new repositories
+<<<<<<< HEAD
 Redirects = Dict["PluginDesc", "Repo"]
 
 
@@ -103,11 +139,28 @@ class Repo:
         self._branch = branch
         # Redirect is the new Repo to use
         self.redirect: Optional["Repo"] = None
+=======
+Redirects = Dict['PluginDesc', 'Repo']
+
+class Repo:
+    def __init__(
+        self, uri: str, branch: str
+    ) -> None:
+        self.uri = uri
+        '''Url to the repo'''
+        self._branch = branch
+        # Redirect is the new Repo to use
+        self.redirect: Optional['Repo'] = None
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         self.token = "dummy_token"
 
     @property
     def name(self):
+<<<<<<< HEAD
         return self.uri.split("/")[-1]
+=======
+        return self.uri.split('/')[-1]
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     @property
     def branch(self):
@@ -115,7 +168,10 @@ class Repo:
 
     def __str__(self) -> str:
         return f"{self.uri}"
+<<<<<<< HEAD
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     def __repr__(self) -> str:
         return f"Repo({self.name}, {self.uri})"
 
@@ -127,9 +183,15 @@ class Repo:
     def latest_commit(self) -> Tuple[str, datetime]:
         log.debug("Latest commit")
         loaded = self._prefetch(None)
+<<<<<<< HEAD
         updated = datetime.strptime(loaded["date"], "%Y-%m-%dT%H:%M:%S%z")
 
         return loaded["rev"], updated
+=======
+        updated = datetime.strptime(loaded['date'], "%Y-%m-%dT%H:%M:%S%z")
+
+        return loaded['rev'], updated
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     def _prefetch(self, ref: Optional[str]):
         cmd = ["nix-prefetch-git", "--quiet", "--fetch-submodules", self.uri]
@@ -146,6 +208,7 @@ class Repo:
         return loaded["sha256"]
 
     def as_nix(self, plugin: "Plugin") -> str:
+<<<<<<< HEAD
         return f"""fetchgit {{
       url = "{self.uri}";
       rev = "{plugin.commit}";
@@ -163,6 +226,25 @@ class RepoGitHub(Repo):
         log.debug(
             "Instantiating github repo owner=%s and repo=%s", self.owner, self.repo
         )
+=======
+        return f'''fetchgit {{
+      url = "{self.uri}";
+      rev = "{plugin.commit}";
+      sha256 = "{plugin.sha256}";
+    }}'''
+
+
+class RepoGitHub(Repo):
+    def __init__(
+        self, owner: str, repo: str, branch: str
+    ) -> None:
+        self.owner = owner
+        self.repo = repo
+        self.token = None
+        '''Url to the repo'''
+        super().__init__(self.url(""), branch)
+        log.debug("Instantiating github repo owner=%s and repo=%s", self.owner, self.repo)
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     @property
     def name(self):
@@ -215,6 +297,10 @@ class RepoGitHub(Repo):
             new_repo = RepoGitHub(owner=new_owner, repo=new_name, branch=self.branch)
             self.redirect = new_repo
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     def prefetch(self, commit: str) -> str:
         if self.has_submodules():
             sha256 = super().prefetch(commit)
@@ -234,12 +320,20 @@ class RepoGitHub(Repo):
         else:
             submodule_attr = ""
 
+<<<<<<< HEAD
         return f"""fetchFromGitHub {{
+=======
+        return f'''fetchFromGitHub {{
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       owner = "{self.owner}";
       repo = "{self.repo}";
       rev = "{plugin.commit}";
       sha256 = "{plugin.sha256}";{submodule_attr}
+<<<<<<< HEAD
     }}"""
+=======
+    }}'''
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 
 @dataclass(frozen=True)
@@ -259,6 +353,7 @@ class PluginDesc:
         return self.repo.name < other.repo.name
 
     @staticmethod
+<<<<<<< HEAD
     def load_from_csv(config: FetchConfig, row: Dict[str, str]) -> "PluginDesc":
         branch = row["branch"]
         repo = make_repo(row["repo"], branch.strip())
@@ -267,6 +362,17 @@ class PluginDesc:
 
     @staticmethod
     def load_from_string(config: FetchConfig, line: str) -> "PluginDesc":
+=======
+    def load_from_csv(config: FetchConfig, row: Dict[str, str]) -> 'PluginDesc':
+        branch = row["branch"]
+        repo = make_repo(row['repo'], branch.strip())
+        repo.token = config.github_token
+        return PluginDesc(repo, branch.strip(), row["alias"])
+
+
+    @staticmethod
+    def load_from_string(config: FetchConfig, line: str) -> 'PluginDesc':
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         branch = "HEAD"
         alias = None
         uri = line
@@ -279,7 +385,10 @@ class PluginDesc:
         repo.token = config.github_token
         return PluginDesc(repo, branch.strip(), alias)
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 @dataclass
 class Plugin:
     name: str
@@ -303,6 +412,7 @@ class Plugin:
         return copy
 
 
+<<<<<<< HEAD
 def load_plugins_from_csv(
     config: FetchConfig,
     input_file: Path,
@@ -314,12 +424,21 @@ def load_plugins_from_csv(
         reader = csv.DictReader(
             csvfile,
         )
+=======
+def load_plugins_from_csv(config: FetchConfig, input_file: Path,) -> List[PluginDesc]:
+    log.debug("Load plugins from csv %s", input_file)
+    plugins = []
+    with open(input_file, newline='') as csvfile:
+        log.debug("Writing into %s", input_file)
+        reader = csv.DictReader(csvfile,)
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         for line in reader:
             plugin = PluginDesc.load_from_csv(config, line)
             plugins.append(plugin)
 
     return plugins
 
+<<<<<<< HEAD
 
 def run_nix_expr(expr):
     with CleanEnvironment() as nix_path:
@@ -335,6 +454,12 @@ def run_nix_expr(expr):
             "--nix-path",
             nix_path,
         ]
+=======
+def run_nix_expr(expr):
+    with CleanEnvironment():
+        cmd = ["nix", "eval", "--extra-experimental-features",
+                "nix-command", "--impure", "--json", "--expr", expr]
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         log.debug("Running command %s", " ".join(cmd))
         out = subprocess.check_output(cmd)
         data = json.loads(out)
@@ -365,7 +490,11 @@ class Editor:
         self.nixpkgs_repo = None
 
     def add(self, args):
+<<<<<<< HEAD
         """CSV spec"""
+=======
+        '''CSV spec'''
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         log.debug("called the 'add' command")
         fetch_config = FetchConfig(args.proc, args.github_token)
         editor = self
@@ -373,6 +502,7 @@ class Editor:
             log.debug("using plugin_line", plugin_line)
             pdesc = PluginDesc.load_from_string(fetch_config, plugin_line)
             log.debug("loaded as pdesc", pdesc)
+<<<<<<< HEAD
             append = [pdesc]
             editor.rewrite_input(
                 fetch_config, args.input_file, editor.deprecated, append=append
@@ -380,20 +510,34 @@ class Editor:
             plugin, _ = prefetch_plugin(
                 pdesc,
             )
+=======
+            append = [ pdesc ]
+            editor.rewrite_input(fetch_config, args.input_file, editor.deprecated, append=append)
+            plugin, _ = prefetch_plugin(pdesc, )
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
             autocommit = not args.no_commit
             if autocommit:
                 commit(
                     editor.nixpkgs_repo,
                     "{drv_name}: init at {version}".format(
                         drv_name=editor.get_drv_name(plugin.normalized_name),
+<<<<<<< HEAD
                         version=plugin.version,
+=======
+                        version=plugin.version
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
                     ),
                     [args.outfile, args.input_file],
                 )
 
     # Expects arguments generated by 'update' subparser
+<<<<<<< HEAD
     def update(self, args):
         """CSV spec"""
+=======
+    def update(self, args ):
+        '''CSV spec'''
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         print("the update member function should be overriden in subclasses")
 
     def get_current_plugins(self) -> List[Plugin]:
@@ -406,11 +550,19 @@ class Editor:
         return plugins
 
     def load_plugin_spec(self, config: FetchConfig, plugin_file) -> List[PluginDesc]:
+<<<<<<< HEAD
         """CSV spec"""
         return load_plugins_from_csv(config, plugin_file)
 
     def generate_nix(self, _plugins, _outfile: str):
         """Returns nothing for now, writes directly to outfile"""
+=======
+        '''CSV spec'''
+        return load_plugins_from_csv(config, plugin_file)
+
+    def generate_nix(self, _plugins, _outfile: str):
+        '''Returns nothing for now, writes directly to outfile'''
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         raise NotImplementedError()
 
     def get_update(self, input_file: str, outfile: str, config: FetchConfig):
@@ -434,6 +586,10 @@ class Editor:
 
         return update
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     @property
     def attr_path(self):
         return self.name + "Plugins"
@@ -447,11 +603,18 @@ class Editor:
     def create_parser(self):
         common = argparse.ArgumentParser(
             add_help=False,
+<<<<<<< HEAD
             description=(
                 f"""
                 Updates nix derivations for {self.name} plugins.\n
                 By default from {self.default_in} to {self.default_out}"""
             ),
+=======
+            description=(f"""
+                Updates nix derivations for {self.name} plugins.\n
+                By default from {self.default_in} to {self.default_out}"""
+            )
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         )
         common.add_argument(
             "--input-names",
@@ -484,6 +647,7 @@ class Editor:
             Uses GITHUB_API_TOKEN environment variables as the default value.""",
         )
         common.add_argument(
+<<<<<<< HEAD
             "--no-commit",
             "-n",
             action="store_true",
@@ -496,21 +660,41 @@ class Editor:
             choices=LOG_LEVELS.keys(),
             default=logging.getLevelName(logging.WARN),
             help="Adjust log level",
+=======
+            "--no-commit", "-n", action="store_true", default=False,
+            help="Whether to autocommit changes"
+        )
+        common.add_argument(
+            "--debug", "-d", choices=LOG_LEVELS.keys(),
+            default=logging.getLevelName(logging.WARN),
+            help="Adjust log level"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         )
 
         main = argparse.ArgumentParser(
             parents=[common],
+<<<<<<< HEAD
             description=(
                 f"""
                 Updates nix derivations for {self.name} plugins.\n
                 By default from {self.default_in} to {self.default_out}"""
             ),
+=======
+            description=(f"""
+                Updates nix derivations for {self.name} plugins.\n
+                By default from {self.default_in} to {self.default_out}"""
+            )
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         )
 
         subparsers = main.add_subparsers(dest="command", required=False)
         padd = subparsers.add_parser(
+<<<<<<< HEAD
             "add",
             parents=[],
+=======
+            "add", parents=[],
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
             description="Add new plugin",
             add_help=False,
         )
@@ -530,12 +714,19 @@ class Editor:
         pupdate.set_defaults(func=self.update)
         return main
 
+<<<<<<< HEAD
     def run(
         self,
     ):
         """
         Convenience function
         """
+=======
+    def run(self,):
+        '''
+        Convenience function
+        '''
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         parser = self.create_parser()
         args = parser.parse_args()
         command = args.command or "update"
@@ -548,15 +739,28 @@ class Editor:
         getattr(self, command)(args)
 
 
+<<<<<<< HEAD
 class CleanEnvironment(object):
     def __enter__(self) -> str:
         self.old_environ = os.environ.copy()
         local_pkgs = str(Path(__file__).parent.parent.parent)
+=======
+
+
+class CleanEnvironment(object):
+    def __enter__(self) -> None:
+        self.old_environ = os.environ.copy()
+        local_pkgs = str(Path(__file__).parent.parent.parent)
+        os.environ["NIX_PATH"] = f"localpkgs={local_pkgs}"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         self.empty_config = NamedTemporaryFile()
         self.empty_config.write(b"{}")
         self.empty_config.flush()
         os.environ["NIXPKGS_CONFIG"] = self.empty_config.name
+<<<<<<< HEAD
         return f"localpkgs={local_pkgs}"
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     def __exit__(self, exc_type: Any, exc_value: Any, traceback: Any) -> None:
         os.environ.update(self.old_environ)
@@ -598,6 +802,7 @@ def print_download_error(plugin: PluginDesc, ex: Exception):
     ]
     print("\n".join(tb_lines))
 
+<<<<<<< HEAD
 
 def check_results(
     results: List[Tuple[PluginDesc, Union[Exception, Plugin], Optional[Repo]]]
@@ -607,6 +812,16 @@ def check_results(
     plugins = []
     redirects: Redirects = {}
     for pdesc, result, redirect in results:
+=======
+def check_results(
+    results: List[Tuple[PluginDesc, Union[Exception, Plugin], Optional[Repo]]]
+) -> Tuple[List[Tuple[PluginDesc, Plugin]], Redirects]:
+    ''' '''
+    failures: List[Tuple[PluginDesc, Exception]] = []
+    plugins = []
+    redirects: Redirects = {}
+    for (pdesc, result, redirect) in results:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         if isinstance(result, Exception):
             failures.append((pdesc, result))
         else:
@@ -623,11 +838,16 @@ def check_results(
     else:
         print(f", {len(failures)} plugin(s) could not be downloaded:\n")
 
+<<<<<<< HEAD
         for plugin, exception in failures:
+=======
+        for (plugin, exception) in failures:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
             print_download_error(plugin, exception)
 
         sys.exit(1)
 
+<<<<<<< HEAD
 
 def make_repo(uri: str, branch) -> Repo:
     """Instantiate a Repo with the correct specialization depending on server (gitub spec)"""
@@ -635,6 +855,14 @@ def make_repo(uri: str, branch) -> Repo:
     res = urlparse(uri)
     if res.netloc in ["github.com", ""]:
         res = res.path.strip("/").split("/")
+=======
+def make_repo(uri: str, branch) -> Repo:
+    '''Instantiate a Repo with the correct specialization depending on server (gitub spec)'''
+    # dumb check to see if it's of the form owner/repo (=> github) or https://...
+    res = urlparse(uri)
+    if res.netloc in [ "github.com", ""]:
+        res = res.path.strip('/').split('/')
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         repo = RepoGitHub(res[0], res[1], branch)
     else:
         repo = Repo(uri.strip(), branch)
@@ -705,6 +933,10 @@ def prefetch(
         return (pluginDesc, e, None)
 
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 def rewrite_input(
     config: FetchConfig,
     input_file: Path,
@@ -713,14 +945,22 @@ def rewrite_input(
     redirects: Redirects = {},
     append: List[PluginDesc] = [],
 ):
+<<<<<<< HEAD
     plugins = load_plugins_from_csv(
         config,
         input_file,
     )
+=======
+    plugins = load_plugins_from_csv(config, input_file,)
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     plugins.extend(append)
 
     if redirects:
+<<<<<<< HEAD
+=======
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         cur_date_iso = datetime.now().strftime("%Y-%m-%d")
         with open(deprecated, "r") as f:
             deprecations = json.load(f)
@@ -740,8 +980,13 @@ def rewrite_input(
     with open(input_file, "w") as f:
         log.debug("Writing into %s", input_file)
         # fields = dataclasses.fields(PluginDesc)
+<<<<<<< HEAD
         fieldnames = ["repo", "branch", "alias"]
         writer = csv.DictWriter(f, fieldnames, dialect="unix", quoting=csv.QUOTE_NONE)
+=======
+        fieldnames = ['repo', 'branch', 'alias']
+        writer = csv.DictWriter(f, fieldnames, dialect='unix', quoting=csv.QUOTE_NONE)
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         writer.writeheader()
         for plugin in sorted(plugins):
             writer.writerow(asdict(plugin))
@@ -757,6 +1002,10 @@ def commit(repo: git.Repo, message: str, files: List[Path]) -> None:
         print("no changes in working tree to commit")
 
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 def update_plugins(editor: Editor, args):
     """The main entry function of this module. All input arguments are grouped in the `Editor`."""
 
@@ -781,3 +1030,7 @@ def update_plugins(editor: Editor, args):
                 f"{editor.attr_path}: resolve github repository redirects",
                 [args.outfile, args.input_file, editor.deprecated],
             )
+<<<<<<< HEAD
+=======
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)

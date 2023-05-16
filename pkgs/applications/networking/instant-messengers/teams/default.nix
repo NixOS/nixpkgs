@@ -14,7 +14,11 @@
 , gawk
 , xdg-utils
 , systemd
+<<<<<<< HEAD
 , asar
+=======
+, nodePackages
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , xar
 , cpio
 , makeWrapper
@@ -39,7 +43,10 @@ let
     license = licenses.unfree;
     maintainers = with maintainers; [ liff tricktron ];
     platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-darwin" ];
+<<<<<<< HEAD
     mainProgram = "teams";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   linux = stdenv.mkDerivation rec {
@@ -55,7 +62,11 @@ let
       hash = hashes.linux;
     };
 
+<<<<<<< HEAD
     nativeBuildInputs = [ dpkg autoPatchelfHook wrapGAppsHook asar ];
+=======
+    nativeBuildInputs = [ dpkg autoPatchelfHook wrapGAppsHook nodePackages.asar ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     unpackCmd = "dpkg -x $curSrc .";
 
@@ -103,10 +114,13 @@ let
       mv share/teams $out/opt/
       mv share $out/share
 
+<<<<<<< HEAD
       mkdir -p $out/share/icons/hicolor/512x512/apps
       mv $out/share/pixmaps/teams.png $out/share/icons/hicolor/512x512/apps
       rmdir $out/share/pixmaps
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       substituteInPlace $out/share/applications/teams.desktop \
         --replace /usr/bin/ ""
 

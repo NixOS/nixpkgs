@@ -6,6 +6,7 @@
 , makeWrapper
 , runCommand
 , appimageTools
+<<<<<<< HEAD
 , icu
 }:
 let
@@ -15,6 +16,17 @@ let
   src = fetchzip {
     url = "https://download.jetbrains.com/toolbox/jetbrains-toolbox-${version}.tar.gz";
     sha256 = "sha256-iz9bUkeQZs0k3whRZuIl/KtSn7KlTq1urQ2I+D292MM=";
+=======
+, patchelf
+}:
+let
+  pname = "jetbrains-toolbox";
+  version = "1.28.1.15219";
+
+  src = fetchzip {
+    url = "https://download.jetbrains.com/toolbox/jetbrains-toolbox-${version}.tar.gz";
+    sha256 = "sha256-4P73MC5Go8wLACBtjh1y3Ao0czE/3hsSI4728mNjKxA=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     stripRoot = false;
   };
 
@@ -54,9 +66,13 @@ stdenv.mkDerivation {
     runHook preInstall
 
     install -Dm644 ${appimageContents}/.DirIcon $out/share/icons/hicolor/scalable/apps/jetbrains-toolbox.svg
+<<<<<<< HEAD
     makeWrapper ${appimage}/bin/${pname}-${version} $out/bin/${pname} \
       --append-flags "--update-failed" \
       --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [icu]}
+=======
+    makeWrapper ${appimage}/bin/${pname}-${version} $out/bin/${pname} --append-flags "--update-failed"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     runHook postInstall
   '';

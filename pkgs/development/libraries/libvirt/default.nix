@@ -114,13 +114,21 @@ stdenv.mkDerivation rec {
   # NOTE: You must also bump:
   # <nixpkgs/pkgs/development/python-modules/libvirt/default.nix>
   # SysVirt in <nixpkgs/pkgs/top-level/perl-packages.nix>
+<<<<<<< HEAD
   version = "9.7.0";
+=======
+  version = "9.2.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitLab {
     owner = pname;
     repo = pname;
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-7huo2UsbNG/HG2dpdVT5qcJuFmYZE6Jdave8Gb1kHME=";
+=======
+    sha256 = "sha256-uASIfQVbY/5I/PELEB6EGzzHfcgY4jIolbyH05TgiLA=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     fetchSubmodules = true;
   };
 
@@ -141,13 +149,19 @@ stdenv.mkDerivation rec {
     # delete only the first occurrence of this
     sed -i '0,/qemuxml2argvtest/{/qemuxml2argvtest/d;}' tests/meson.build
 
+<<<<<<< HEAD
   '' + lib.optionalString isLinux ''
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     for binary in mount umount mkfs; do
       substituteInPlace meson.build \
         --replace "find_program('$binary'" "find_program('${lib.getBin util-linux}/bin/$binary'"
     done
 
+<<<<<<< HEAD
   '' + ''
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     substituteInPlace meson.build \
       --replace "'dbus-daemon'," "'${lib.getBin dbus}/bin/dbus-daemon',"
   '' + lib.optionalString isLinux ''

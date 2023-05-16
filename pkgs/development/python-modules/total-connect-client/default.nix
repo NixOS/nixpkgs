@@ -9,7 +9,11 @@
 
 buildPythonPackage rec {
   pname = "total-connect-client";
+<<<<<<< HEAD
   version = "2023.7";
+=======
+  version = "2023.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -18,7 +22,11 @@ buildPythonPackage rec {
     owner = "craigjmidwinter";
     repo = "total-connect-client";
     rev = "refs/tags/${version}";
+<<<<<<< HEAD
     hash = "sha256-sx4KfWQCvGS+w83tECJSyLLWU9GkwYpo39gt4EKndPk=";
+=======
+    hash = "sha256-sZA+3UjYSHZnN87KUNukRCQ/kG7aobcPVWnhqNOLwJw=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

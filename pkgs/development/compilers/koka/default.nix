@@ -4,18 +4,30 @@
 , parsec, process, regex-compat, text, time }:
 
 let
+<<<<<<< HEAD
   version = "2.4.2";
+=======
+  version = "2.4.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   src = fetchFromGitHub {
     owner = "koka-lang";
     repo = "koka";
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-sVjaIzOxNuBtDswpDl5gLB10Sw945TQAf2ywrKumqqk=";
+=======
+    sha256 = "sha256-+evs5g0qrplUMr8zC51GvUx2JXQBYJb39IaI4rC6CSA=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     fetchSubmodules = true;
   };
   kklib = stdenv.mkDerivation {
     pname = "kklib";
     inherit version;
     src = "${src}/kklib";
+<<<<<<< HEAD
+=======
+    patches = [ ./kklib-mimalloc-macos-fix.diff ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     nativeBuildInputs = [ cmake ];
     outputs = [ "out" "dev" ];
     postInstall = ''

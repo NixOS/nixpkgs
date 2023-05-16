@@ -1,6 +1,10 @@
 { lib
 , stdenv
+<<<<<<< HEAD
 , fetchFromGitHub
+=======
+, fetchurl
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , fetchpatch
 , pkg-config
 , udev
@@ -14,11 +18,17 @@ stdenv.mkDerivation rec {
   pname = "dhcpcd";
   version = "9.4.1";
 
+<<<<<<< HEAD
   src = fetchFromGitHub {
     owner = "NetworkConfiguration";
     repo = "dhcpcd";
     rev = "v${version}";
     sha256 = "sha256-qyxON+TsAKMwAI19b5P+dT/sgxpW6m1giGcf/boFpHc=";
+=======
+  src = fetchurl {
+    url = "mirror://roy/${pname}/${pname}-${version}.tar.xz";
+    sha256 = "sha256-gZNXY07+0epc9E7AGyTT0/iFL+yLQkmSXcxWZ8VON2w=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   patches = [

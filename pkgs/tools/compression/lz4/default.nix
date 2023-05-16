@@ -38,7 +38,10 @@ stdenv.mkDerivation rec {
   ]
     # TODO make full dictionary
     ++ lib.optional stdenv.hostPlatform.isMinGW "TARGET_OS=MINGW"
+<<<<<<< HEAD
     ++ lib.optional stdenv.hostPlatform.isLinux "TARGET_OS=Linux"
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     ;
 
   doCheck = false; # tests take a very long time

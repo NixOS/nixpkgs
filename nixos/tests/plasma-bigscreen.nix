@@ -22,11 +22,22 @@ import ./make-test-python.nix ({ pkgs, ...} :
     users.users.alice.extraGroups = ["uinput"];
   };
 
+<<<<<<< HEAD
   testScript = { nodes, ... }: ''
     with subtest("Wait for login"):
         start_all()
         machine.wait_for_file("/tmp/xauth_*")
         machine.succeed("xauth merge /tmp/xauth_*")
+=======
+  testScript = { nodes, ... }: let
+    user = nodes.machine.users.users.alice;
+    xdo = "${pkgs.xdotool}/bin/xdotool";
+  in ''
+    with subtest("Wait for login"):
+        start_all()
+        machine.wait_for_file("${user.home}/.Xauthority")
+        machine.succeed("xauth merge ${user.home}/.Xauthority")
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     with subtest("Check plasmashell started"):
         machine.wait_until_succeeds("pgrep plasmashell")

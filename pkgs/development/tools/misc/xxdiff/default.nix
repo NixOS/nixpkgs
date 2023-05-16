@@ -22,7 +22,11 @@ mkDerivation rec {
   # c++11 and above is needed for building with Qt 5.9+
   env.NIX_CFLAGS_COMPILE = toString [ "-std=c++14" ];
 
+<<<<<<< HEAD
   sourceRoot = "${src.name}/src";
+=======
+  sourceRoot = "source/src";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   postPatch = ''
     substituteInPlace xxdiff.pro --replace ../bin ./bin

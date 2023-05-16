@@ -17,23 +17,36 @@ in
       })
     ];
 
+<<<<<<< HEAD
     tests = {
       netbox = nixosTests.netbox_3_3;
       inherit (nixosTests) netbox-upgrade;
     };
+=======
+    tests.netbox = nixosTests.netbox_3_3;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     maintainers = with lib.maintainers; [ n0emis raitobezarius ];
     eol = true;
   };
 
   netbox = callPackage generic {
+<<<<<<< HEAD
     version = "3.5.9";
     hash = "sha256-CJbcuCyTuihDXrObSGyJi2XF+zgWAwcJzjxtkX8pmKs=";
+=======
+    version = "3.5.0";
+    hash = "sha256-LsUitX/e+ec/9mRBw+cbGOG2Idl9ZQwf/vxIC3YS5LU=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     extraPatches = [
       # Allow setting the STATIC_ROOT from within the configuration and setting a custom redis URL
       ./config.patch
     ];
     tests = {
+<<<<<<< HEAD
       inherit (nixosTests) netbox netbox-upgrade;
+=======
+      inherit (nixosTests) netbox;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
 
     maintainers = with lib.maintainers; [ minijackson n0emis raitobezarius ];

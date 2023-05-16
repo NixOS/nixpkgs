@@ -12,7 +12,11 @@
   # Advanced image processing (triples size of output)
 , advancedProcessing ? false
 , opencv3
+<<<<<<< HEAD
 , scikit-image
+=======
+, scikitimage
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , scikit-learn
 , scipy
 , matplotlib
@@ -48,7 +52,11 @@ buildPythonPackage rec {
     proglog
   ] ++ lib.optionals advancedProcessing [
     opencv3
+<<<<<<< HEAD
     scikit-image
+=======
+    scikitimage
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     scikit-learn
     scipy
     matplotlib

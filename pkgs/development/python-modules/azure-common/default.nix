@@ -23,7 +23,11 @@ buildPythonPackage rec {
     azure-nspkg
   ] ++ lib.optionals (!isPy3k) [ setuptools ]; # need for namespace lookup
 
+<<<<<<< HEAD
   postInstall = lib.optionalString (!isPy3k) ''
+=======
+  postInstall = if isPy3k then "" else ''
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     echo "__import__('pkg_resources').declare_namespace(__name__)" >> "$out/lib/${python.libPrefix}"/site-packages/azure/__init__.py
   '';
 

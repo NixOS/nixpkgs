@@ -3,7 +3,10 @@
 , makeWrapper
 , bundix
 , common-updater-scripts
+<<<<<<< HEAD
 , xidel
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , jq
 , nix-prefetch-github
 , yarn
@@ -24,7 +27,10 @@ stdenv.mkDerivation rec {
   buildInputs = [
     bundix
     common-updater-scripts
+<<<<<<< HEAD
     xidel
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     jq
     nix-prefetch-github
     yarn

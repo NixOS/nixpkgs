@@ -1,20 +1,35 @@
 { lib, stdenv, fetchurl, libxml2, readline, zlib, perl, cairo, gtk3, gsl
+<<<<<<< HEAD
 , pkg-config, gtksourceview4, pango, gettext, dconf
 , makeWrapper, gsettings-desktop-schemas, hicolor-icon-theme
 , texinfo, ssw, python3, iconv
+=======
+, pkg-config, gtksourceview, pango, gettext, dconf
+, makeWrapper, gsettings-desktop-schemas, hicolor-icon-theme
+, texinfo, ssw, python3
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 stdenv.mkDerivation rec {
   pname = "pspp";
+<<<<<<< HEAD
   version = "1.6.2";
 
   src = fetchurl {
     url = "mirror://gnu/pspp/${pname}-${version}.tar.gz";
     sha256 = "sha256-cylMovWy9/xBu/i3jFiIyAdfQ8YJf9SCq7BPhasIR7Y=";
+=======
+  version = "1.4.1";
+
+  src = fetchurl {
+    url = "mirror://gnu/pspp/${pname}-${version}.tar.gz";
+    sha256 = "0lqrash677b09zxdlxp89z6k02y4i23mbqg83956dwl69wc53dan";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ pkg-config texinfo python3 makeWrapper ];
   buildInputs = [ libxml2 readline zlib perl cairo gtk3 gsl
+<<<<<<< HEAD
                   gtksourceview4 pango gettext
                   gsettings-desktop-schemas hicolor-icon-theme ssw iconv
                 ];
@@ -23,6 +38,11 @@ stdenv.mkDerivation rec {
     "${libxml2.dev}/include/libxml2/:" +
     lib.makeSearchPathOutput "dev" "include" buildInputs;
   LIBRARY_PATH = lib.makeLibraryPath buildInputs;
+=======
+    gtksourceview pango gettext
+    gsettings-desktop-schemas hicolor-icon-theme ssw
+  ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   doCheck = false;
 

@@ -9,13 +9,21 @@
 
 buildDotnetModule rec {
   pname = "jackett";
+<<<<<<< HEAD
   version = "0.21.747";
+=======
+  version = "0.20.4105";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha512-RSHMDrcg8yuMMXXv5bIfF0k3QyXSIAdA7myvLw+PaTpHQHFZKQ4MkS7nDEGT2vxU2yX872sSIgtRRX7Xcm2mQg==";
+=======
+    hash = "sha512-XDYuFly7hy55L76Vn92mphK/rP90/4OT50In7p9kyU8L/4W0WljrMUycIFKYsQfdJsKmQgz7z2Bw8bw2fHEuSQ==";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   projectFile = "src/Jackett.Server/Jackett.Server.csproj";

@@ -11,7 +11,11 @@
 
 buildPythonPackage rec {
   pname = "dissect-eventlog";
+<<<<<<< HEAD
   version = "3.6";
+=======
+  version = "3.4";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -20,7 +24,11 @@ buildPythonPackage rec {
     owner = "fox-it";
     repo = "dissect.eventlog";
     rev = "refs/tags/${version}";
+<<<<<<< HEAD
     hash = "sha256-h1LrBt8f9YFkc1uAAb4WwY3LjPuvsdVFvxji3QxKF0A=";
+=======
+    hash = "sha256-dU34eEUwRGHm/S0w6rnXJmootv1trkhKlXjWcfCFB3Q=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;

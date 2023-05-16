@@ -49,6 +49,7 @@ poetry2nix.mkPoetryApplication {
   # Fails because of impurities (network, git etc etc)
   doCheck = false;
 
+<<<<<<< HEAD
   overrides = [
     poetry2nix.defaultPoetryOverrides
     (self: super: {
@@ -75,6 +76,8 @@ poetry2nix.mkPoetryApplication {
     })
   ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   meta = with lib; {
     inherit (python.meta) platforms;
     maintainers = with maintainers; [ adisbladis jakewaksbaum ];

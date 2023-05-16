@@ -60,7 +60,11 @@ stdenv.mkDerivation rec {
   # few additional steps and might not be the best idea.)
 
   src = fetchurl {
+<<<<<<< HEAD
     url = "https://updates.signal.org/desktop/apt/pool/s/${pname}/${pname}_${version}_amd64.deb";
+=======
+    url = "https://updates.signal.org/desktop/apt/pool/main/s/${pname}/${pname}_${version}_amd64.deb";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     inherit hash;
   };
 

@@ -9,10 +9,17 @@ stdenv.mkDerivation rec {
   pname = "fxlinuxprint";
   version = "1.1.2-1";
 
+<<<<<<< HEAD
   # https://support-fb.fujifilm.com/driver_downloads/fxlinuxpdf112119031.zip is gone
   src = fetchzip {
     url = "https://github.com/NixOS/nixpkgs/files/12232817/fxlinuxpdf112119031.zip";
     sha256 = "1mv07ch6ysk9bknfmjqsgxb803sj6vfin29s9knaqv17jvgyh0n3";
+=======
+  src = fetchzip {
+    url = "https://support-fb.fujifilm.com/driver_downloads/fxlinuxpdf112119031.zip";
+    sha256 = "1mv07ch6ysk9bknfmjqsgxb803sj6vfin29s9knaqv17jvgyh0n3";
+    curlOpts = "--user-agent Mozilla/5.0";  # HTTP 410 otherwise
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ dpkg autoPatchelfHook ];

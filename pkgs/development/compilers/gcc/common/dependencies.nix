@@ -30,7 +30,11 @@
 , javaAwtGtk ? false
 , langAda ? false
 , langGo ? false
+<<<<<<< HEAD
 , withoutTargetLibc ? null
+=======
+, crossStageStatic ? null
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , threadsCross ? null
 }:
 
@@ -88,5 +92,9 @@ in
   ;
 
   # threadsCross.package after gcc6 so i assume its okay for 4.8 and 4.9 too
+<<<<<<< HEAD
   depsTargetTarget = optionals (!withoutTargetLibc && threadsCross != { } && threadsCross.package != null) [ threadsCross.package ];
+=======
+  depsTargetTarget = optionals (!crossStageStatic && threadsCross != { } && threadsCross.package != null) [ threadsCross.package ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }

@@ -4,13 +4,21 @@
 stdenv.mkDerivation rec {
 
   pname = "squashfuse";
+<<<<<<< HEAD
   version = "0.4.0";
+=======
+  version = "0.1.105";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "vasi";
     repo = pname;
     rev = version;
+<<<<<<< HEAD
     sha256 = "sha256-gK1k1Ooue3HLtBmPFMZdW4h2Ee1Uy4T26EOBeQICQpM=";
+=======
+    sha256 = "sha256-RIhDXzpmrYUOwj5OYzjWKJw0cwE+L3t/9pIkg/hFXA0=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ autoreconfHook libtool pkg-config ];

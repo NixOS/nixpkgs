@@ -2,7 +2,10 @@
 , buildPythonPackage
 , pythonOlder
 , fetchPypi
+<<<<<<< HEAD
 , setuptools
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , setuptools-scm
 , botocore
 , pytestCheckHook
@@ -26,7 +29,10 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     botocore
+<<<<<<< HEAD
     setuptools  # Needs pkg_resources at runtime.
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   patches = [

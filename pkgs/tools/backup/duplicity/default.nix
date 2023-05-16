@@ -1,6 +1,12 @@
+<<<<<<< HEAD
 { lib
 , stdenv
 , fetchFromGitLab
+=======
+{ lib, stdenv
+, fetchFromGitLab
+, fetchpatch
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , python3
 , librsync
 , ncftp
@@ -12,8 +18,17 @@
 , makeWrapper
 , gettext
 }:
+<<<<<<< HEAD
 
 python3.pkgs.buildPythonApplication rec {
+=======
+let
+  pythonPackages = python3.pkgs;
+  inherit (lib.versions) majorMinor splitVersion;
+  majorMinorPatch = v: builtins.concatStringsSep "." (lib.take 3 (splitVersion v));
+in
+pythonPackages.buildPythonApplication rec {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pname = "duplicity";
   version = "0.8.23";
 
@@ -50,15 +65,25 @@ python3.pkgs.buildPythonApplication rec {
   nativeBuildInputs = [
     makeWrapper
     gettext
+<<<<<<< HEAD
     python3.pkgs.wrapPython
     python3.pkgs.setuptools-scm
   ];
 
+=======
+    pythonPackages.wrapPython
+    pythonPackages.setuptools-scm
+  ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   buildInputs = [
     librsync
   ];
 
+<<<<<<< HEAD
   pythonPath = with python3.pkgs; [
+=======
+  pythonPath = with pythonPackages; [
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     b2sdk
     boto3
     cffi
@@ -82,7 +107,11 @@ python3.pkgs.buildPythonApplication rec {
     par2cmdline # Add 'par2' to PATH.
   ] ++ lib.optionals stdenv.isLinux [
     util-linux # Add 'setsid' to PATH.
+<<<<<<< HEAD
   ] ++ (with python3.pkgs; [
+=======
+  ] ++ (with pythonPackages; [
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     lockfile
     mock
     pexpect
@@ -127,6 +156,10 @@ python3.pkgs.buildPythonApplication rec {
     description = "Encrypted bandwidth-efficient backup using the rsync algorithm";
     homepage = "https://duplicity.gitlab.io/duplicity-web/";
     license = licenses.gpl2Plus;
+<<<<<<< HEAD
     maintainers = with maintainers; [ ];
+=======
+    platforms = platforms.unix;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

@@ -7,16 +7,27 @@
 
 buildGoModule rec {
   pname = "osv-detector";
+<<<<<<< HEAD
   version = "0.11.1";
+=======
+  version = "0.6.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "G-Rath";
     repo = pname;
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-vIkLrKyDeMfRe/0EPhlKlHAO6XB0/OFY5mTUHeZbcg8=";
   };
 
   vendorHash = "sha256-Rrosye8foVntoFDvDmyNuXgnEgjzcOXenOKBMZVCRio=";
+=======
+    hash = "sha256-Y/9q4ZJ4vxDitqrM4hGe49iqLYk4ebhTs4jrD7P8fdw=";
+  };
+
+  vendorSha256 = "sha256-KAxpDQIRrLZIOvfW8wf0CV4Fj6l3W6nNZNCH3ZE6yJc=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   ldflags = [
     "-w"
@@ -24,6 +35,7 @@ buildGoModule rec {
     "-X main.version=${version}"
   ];
 
+<<<<<<< HEAD
   checkFlags =
     let
       skippedTests = [
@@ -40,6 +52,8 @@ buildGoModule rec {
     in
     [ "-skip" "${builtins.concatStringsSep "|" skippedTests}" ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   passthru.tests.version = testers.testVersion {
     package = osv-detector;
     command = "osv-detector -version";

@@ -2,11 +2,19 @@
 
 mkDerivation rec {
   pname = "gede";
+<<<<<<< HEAD
   version = "2.18.3";
 
   src = fetchurl {
     url = "http://gede.dexar.se/uploads/source/${pname}-${version}.tar.xz";
     sha256 = "sha256-RUl60iPa4XSlUilpYKaYQbRmLqthKHAvYonnhufjPsE=";
+=======
+  version = "2.18.2";
+
+  src = fetchurl {
+    url = "http://gede.dexar.se/uploads/source/${pname}-${version}.tar.xz";
+    sha256 = "sha256-QWrDHV+2trl+wKKibWiDa+kVREN116OwQ6DomaKj3LY=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ qmake makeWrapper python3 ];

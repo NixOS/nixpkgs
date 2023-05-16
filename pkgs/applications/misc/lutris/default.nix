@@ -32,8 +32,11 @@
 , pypresence
 , pyyaml
 , requests
+<<<<<<< HEAD
 , protobuf
 , moddb
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   # commands that lutris needs
 , xrandr
@@ -75,13 +78,22 @@ let
 in
 buildPythonApplication rec {
   pname = "lutris-unwrapped";
+<<<<<<< HEAD
   version = "0.5.13";
+=======
+  version = "0.5.12";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "lutris";
     repo = "lutris";
+<<<<<<< HEAD
     rev = "v${version}";
     hash = "sha256-ectrfbIkPhIqfhkavDpBCNdLPnGQhCnfFYwTf2IxB50=";
+=======
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-rsiXm7L/M85ot6NrTyy//lMRFlLPJYve9y6Erg9Ugxg=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ wrapGAppsHook gobject-introspection ];
@@ -115,8 +127,11 @@ buildPythonApplication rec {
     pypresence
     pyyaml
     requests
+<<<<<<< HEAD
     protobuf
     moddb
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   postPatch = ''
@@ -147,6 +162,9 @@ buildPythonApplication rec {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ Madouura ];
     platforms = platforms.linux;
+<<<<<<< HEAD
     mainProgram = "lutris";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

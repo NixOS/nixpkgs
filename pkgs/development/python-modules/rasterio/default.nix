@@ -15,7 +15,10 @@
 , matplotlib
 , ipython
 , numpy
+<<<<<<< HEAD
 , oldest-supported-numpy
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , packaging
 , pytest-randomly
 , pytestCheckHook
@@ -23,12 +26,19 @@
 , setuptools
 , shapely
 , snuggs
+<<<<<<< HEAD
 , wheel
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 buildPythonPackage rec {
   pname = "rasterio";
+<<<<<<< HEAD
   version = "1.3.8";
+=======
+  version = "1.3.6";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -37,16 +47,23 @@ buildPythonPackage rec {
     owner = "rasterio";
     repo = "rasterio";
     rev = "refs/tags/${version}";
+<<<<<<< HEAD
     hash = "sha256-8kPzUvTZ/jRDXlYMAZkG1xdLAQuzxnvHXBzwWizMOTo=";
+=======
+    hash = "sha256-C5jenXcONNYiUNa5GQ7ATBi8m0JWvg8Dyp9+ejGX+Fs=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [
     cython
     gdal
+<<<<<<< HEAD
     numpy
     oldest-supported-numpy
     setuptools
     wheel
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   propagatedBuildInputs = [
@@ -74,7 +91,10 @@ buildPythonPackage rec {
   };
 
   nativeCheckInputs = [
+<<<<<<< HEAD
     boto3
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     hypothesis
     packaging
     pytest-randomly
@@ -82,12 +102,15 @@ buildPythonPackage rec {
     shapely
   ];
 
+<<<<<<< HEAD
   doCheck = true;
 
   preCheck = ''
     rm -r rasterio # prevent importing local rasterio
   '';
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pytestFlagsArray = [
     "-m 'not network'"
   ];
@@ -100,6 +123,15 @@ buildPythonPackage rec {
     "rasterio"
   ];
 
+<<<<<<< HEAD
+=======
+  doInstallCheck = true;
+
+  installCheckPhase = ''
+    $out/bin/rio --version | grep ${version} > /dev/null
+  '';
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   meta = with lib; {
     description = "Python package to read and write geospatial raster data";
     homepage = "https://rasterio.readthedocs.io/";

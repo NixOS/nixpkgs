@@ -28,7 +28,11 @@ let
     pname = "tsc";
     commit = version;
 
+<<<<<<< HEAD
     sourceRoot = "${src.name}/core";
+=======
+    sourceRoot = "source/core";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     recipe = writeText "recipe" ''
       (tsc
@@ -44,7 +48,11 @@ let
     pname = "tsc-dyn";
 
     nativeBuildInputs = [ rustPlatform.bindgenHook ];
+<<<<<<< HEAD
     sourceRoot = "${src.name}/core";
+=======
+    sourceRoot = "source/core";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     postInstall = ''
       LIB=($out/lib/libtsc_dyn.*)
@@ -55,7 +63,11 @@ let
       rm -r $out/lib
     '';
 
+<<<<<<< HEAD
     inherit (srcMeta) cargoHash;
+=======
+    inherit (srcMeta) cargoSha256;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
 in symlinkJoin {

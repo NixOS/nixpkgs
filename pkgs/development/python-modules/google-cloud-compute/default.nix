@@ -12,14 +12,22 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-compute";
+<<<<<<< HEAD
   version = "1.14.0";
+=======
+  version = "1.11.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
+<<<<<<< HEAD
     hash = "sha256-AtGjz+ghJ+/WI8ppavkF2J6Hqq65pQYhWb3PN0f9j2Y=";
+=======
+    hash = "sha256-0dBaSz7G+DC73Md5p0DpY6gNMkpP1u9Bp8JIoHz5ZIk=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [

@@ -36,7 +36,11 @@ qtModule {
     "bin/macdeployqt"
   ];
 
+<<<<<<< HEAD
   env.NIX_CFLAGS_COMPILE = lib.optionalString (stdenv.isDarwin && qtdeclarative != null) ''-DNIXPKGS_QMLIMPORTSCANNER="${qtdeclarative.dev}/bin/qmlimportscanner"'';
+=======
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin ''-DNIXPKGS_QMLIMPORTSCANNER="${qtdeclarative.dev}/bin/qmlimportscanner"'';
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   setupHook = ../hooks/qttools-setup-hook.sh;
 }

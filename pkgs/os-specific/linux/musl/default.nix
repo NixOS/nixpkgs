@@ -152,8 +152,13 @@ stdenv.mkDerivation rec {
     platforms   = [
       "aarch64-linux" "armv5tel-linux" "armv6l-linux" "armv7a-linux"
       "armv7l-linux" "i686-linux" "x86_64-linux" "m68k-linux"
+<<<<<<< HEAD
       "microblaze-linux" "microblazeel-linux" "mips-linux" "mips64-linux"
       "mipsel-linux" "mips64el-linux" "powerpc64-linux" "powerpc64le-linux"
+=======
+      "microblaze-linux" "microblazeel-linux" "mipsel-linux"
+      "mips64el-linux" "powerpc64-linux" "powerpc64le-linux"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       "riscv64-linux" "s390x-linux"
     ];
     maintainers = with maintainers; [ thoughtpolice dtzWill ];

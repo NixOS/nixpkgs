@@ -25,6 +25,9 @@ rustPlatform.buildRustPackage rec {
     maintainers = with maintainers; [ sikmir ];
     mainProgram = "t_rex";
     platforms = platforms.unix;
+<<<<<<< HEAD
     broken = true;  # https://github.com/t-rex-tileserver/t-rex/issues/302
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

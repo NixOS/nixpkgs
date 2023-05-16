@@ -43,7 +43,10 @@ let
         muc_nickname = xmppConfig.mucNickname;
         disable_certificate_verification = xmppConfig.disableCertificateVerification;
       });
+<<<<<<< HEAD
       apis.rest.enabled = cfg.colibriRestApi;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
   };
 
@@ -51,11 +54,14 @@ let
   jvbConfig = recursiveUpdate defaultJvbConfig cfg.config;
 in
 {
+<<<<<<< HEAD
   imports = [
     (mkRemovedOptionModule [ "services" "jitsi-videobridge" "apis" ]
       "services.jitsi-videobridge.apis was broken and has been migrated into the boolean option services.jitsi-videobridge.colibriRestApi. It is set to false by default, setting it to true will correctly enable the private /colibri rest API."
     )
   ];
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   options.services.jitsi-videobridge = with types; {
     enable = mkEnableOption (lib.mdDoc "Jitsi Videobridge, a WebRTC compatible video router");
 
@@ -198,6 +204,7 @@ in
       '';
     };
 
+<<<<<<< HEAD
     colibriRestApi = mkOption {
       type = bool;
       description = lib.mdDoc ''
@@ -205,6 +212,16 @@ in
         Needed for monitoring jitsi, enabling scraping of the /colibri/stats endpoint.
       '';
       default = false;
+=======
+    apis = mkOption {
+      type = with types; listOf str;
+      description = lib.mdDoc ''
+        What is passed as --apis= parameter. If this is empty, "none" is passed.
+        Needed for monitoring jitsi.
+      '';
+      default = [];
+      example = literalExpression "[ \"colibri\" \"rest\" ]";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
   };
 
@@ -238,7 +255,11 @@ in
         "export ${toVarName name}=$(cat ${xmppConfig.passwordFile})\n"
       ) cfg.xmppConfigs))
       + ''
+<<<<<<< HEAD
         ${pkgs.jitsi-videobridge}/bin/jitsi-videobridge
+=======
+        ${pkgs.jitsi-videobridge}/bin/jitsi-videobridge --apis=${if (cfg.apis == []) then "none" else concatStringsSep "," cfg.apis}
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       '';
 
       serviceConfig = {

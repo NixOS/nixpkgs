@@ -47,6 +47,7 @@ assert !((lib.count (x: x) [ gnutlsSupport opensslSupport wolfsslSupport rustlsS
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "curl";
+<<<<<<< HEAD
   version = "8.2.1";
 
   src = fetchurl {
@@ -55,6 +56,16 @@ stdenv.mkDerivation (finalAttrs: {
       "https://github.com/curl/curl/releases/download/curl-${finalAttrs.version}/curl-${finalAttrs.version}.tar.xz"
     ];
     hash = "sha256-3TIva9CiDmzr39OI9p6Yw9GDvteSz0cTyKfvSYy6SJQ=";
+=======
+  version = "8.0.1";
+
+  src = fetchurl {
+    urls = [
+      "https://curl.haxx.se/download/curl-${finalAttrs.version}.tar.bz2"
+      "https://github.com/curl/curl/releases/download/curl-${finalAttrs.version}/curl-${finalAttrs.version}.tar.bz2"
+    ];
+    hash = "sha256-m2selrdI0EuWh4a2vfQHqlx1q1Oj03wcjIHNtzZVXM8=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   patches = [
@@ -196,6 +207,9 @@ stdenv.mkDerivation (finalAttrs: {
     # Fails to link against static brotli or gss
     broken = stdenv.hostPlatform.isStatic && (brotliSupport || gssSupport);
     pkgConfigModules = [ "libcurl" ];
+<<<<<<< HEAD
     mainProgram = "curl";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 })

@@ -24,9 +24,15 @@ in stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ meson ninja pkg-config desktop-file-utils
+<<<<<<< HEAD
     appstream-glib wrapGAppsHook sassc gobject-introspection ];
 
   buildInputs = [ glib pythonEnv gtk3
+=======
+    appstream-glib wrapGAppsHook sassc ];
+
+  buildInputs = [ glib pythonEnv gobject-introspection gtk3
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     gnome.adwaita-icon-theme webkitgtk gspell texlive
     glib-networking libhandy ];
 

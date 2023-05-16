@@ -31,7 +31,11 @@
 , gdk-pixbuf
 }:
 let
+<<<<<<< HEAD
   version = "0.21.1";
+=======
+  version = "0.20.5";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pname = "space-station-14-launcher";
 in
 buildDotnetModule rec {
@@ -44,7 +48,11 @@ buildDotnetModule rec {
     owner = "space-wizards";
     repo = "SS14.Launcher";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-uJ/47cQZsGgrExemWCWeSM/U6eW2HoKWHCsVE2KypVQ=";
+=======
+    hash = "sha256-uonndoqDOgPtnSk5v0KyyR8BQ9neAH1ploEY/kKD0IQ=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     fetchSubmodules = true;
   };
 
@@ -63,7 +71,11 @@ buildDotnetModule rec {
     updateScript = ./update.sh;
   };
 
+<<<<<<< HEAD
   dotnet-sdk = with dotnetCorePackages; combinePackages [ sdk_7_0 sdk_6_0 ];
+=======
+  dotnet-sdk = dotnetCorePackages.sdk_7_0;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   dotnet-runtime = dotnetCorePackages.runtime_7_0;
 
   dotnetFlags = [

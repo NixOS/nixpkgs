@@ -1,9 +1,17 @@
 { lib
 , stdenv
 , fetchurl
+<<<<<<< HEAD
 
 # dependencies
 , cyrus_sasl
+=======
+, fetchpatch
+
+# dependencies
+, cyrus_sasl
+, db
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , groff
 , libsodium
 , libtool
@@ -17,11 +25,19 @@
 
 stdenv.mkDerivation rec {
   pname = "openldap";
+<<<<<<< HEAD
   version = "2.6.6";
 
   src = fetchurl {
     url = "https://www.openldap.org/software/download/OpenLDAP/openldap-release/${pname}-${version}.tgz";
     hash = "sha256-CC6ZjPVCmE1DY0RC2+EdqGB1nlEJBxUupXm9xC/jnqA=";
+=======
+  version = "2.6.4";
+
+  src = fetchurl {
+    url = "https://www.openldap.org/software/download/OpenLDAP/openldap-release/${pname}-${version}.tgz";
+    hash = "sha256-1RcE5QF4QwwGzz2KoXTaZrrfVZdHpH2SC7VLLUqkCZE=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   # TODO: separate "out" and "bin"
@@ -32,8 +48,11 @@ stdenv.mkDerivation rec {
     "devdoc"
   ];
 
+<<<<<<< HEAD
   __darwinAllowLocalNetworking = true;
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   enableParallelBuilding = true;
 
   nativeBuildInputs = [
@@ -44,6 +63,10 @@ stdenv.mkDerivation rec {
     (cyrus_sasl.override {
       inherit openssl;
     })
+<<<<<<< HEAD
+=======
+    db
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     libsodium
     libtool
     openssl
@@ -96,9 +119,12 @@ stdenv.mkDerivation rec {
   preCheck = ''
     substituteInPlace tests/scripts/all \
       --replace "/bin/rm" "rm"
+<<<<<<< HEAD
 
     # skip flaky tests
     rm -f tests/scripts/test063-delta-multiprovider
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '';
 
   doCheck = true;

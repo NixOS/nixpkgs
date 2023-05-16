@@ -4,13 +4,21 @@
 
 stdenv.mkDerivation rec {
   pname = "latex2html";
+<<<<<<< HEAD
   version = "2023.2";
+=======
+  version = "2023";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-fn9Td4IVqlON93p3xPpQuurFQR8Rjp/sHoQG33O5GkI=";
+=======
+    sha256 = "sha256-VQ416ieqZ+UqI2sgsh+YPkcdn2SmtXFhPqJd1tp49EQ=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   buildInputs = [ ghostscript netpbm perl ];

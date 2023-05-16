@@ -18,13 +18,22 @@
 
 stdenv.mkDerivation rec {
   pname = "rakshasa-rtorrent";
+<<<<<<< HEAD
   version = "0.9.8+date=2022-06-20";
+=======
+  version = "0.9.8+date=2021-08-07";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "rakshasa";
     repo = "rtorrent";
+<<<<<<< HEAD
     rev = "92bec88d0904bfb31c808085c2fd0f22d0ec8db7";
     hash = "sha256-er7UdIb+flhq0ye76UmomgfHV2ZSBROpXmfrNDHwTWw=";
+=======
+    rev = "a6bc99bb821d86b3b0633552db3fbd0a22497657";
+    hash = "sha256-HTwAs8dfZVXfLRNiT6QpjKGnuahHfoMfYWqdKkedUL0=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   passthru = {

@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 { lib, stdenv, fetchFromGitHub, rustPlatform, Security }:
+=======
+{ lib, stdenv, fetchFromGitHub, rustPlatform, darwin, Security }:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 rustPlatform.buildRustPackage rec {
   pname = "manix";

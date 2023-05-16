@@ -13,14 +13,22 @@
 
 buildPythonPackage rec {
   pname = "gehomesdk";
+<<<<<<< HEAD
   version = "0.5.20";
+=======
+  version = "0.5.10";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
+<<<<<<< HEAD
     hash = "sha256-5nu7pewkxCZ/F6m7xOwvMwuhFsanQKHtdwGqNto3/zk=";
+=======
+    hash = "sha256-M0G+UvFCegKEDA+0PI1voesMqIItKC0591ruZ4YvjMU=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [

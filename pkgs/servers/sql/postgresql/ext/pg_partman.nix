@@ -2,7 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "pg_partman";
+<<<<<<< HEAD
   version = "4.7.4";
+=======
+  version = "4.7.3";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   buildInputs = [ postgresql ];
 
@@ -10,7 +14,11 @@ stdenv.mkDerivation rec {
     owner  = "pgpartman";
     repo   = pname;
     rev    = "refs/tags/v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-DdE/hqCrju678Xk3xXGVFhKQM3x9skQQKolNJ2/3gbs=";
+=======
+    sha256 = "sha256-njw7/+C3nMNRKeJ4AMCNTihTVXcouH/VY2vaFeyA5v8=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   installPhase = ''

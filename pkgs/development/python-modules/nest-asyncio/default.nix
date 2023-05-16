@@ -23,6 +23,10 @@ buildPythonPackage rec {
     description = "Patch asyncio to allow nested event loops";
     homepage = "https://github.com/erdewit/nest_asyncio";
     license = licenses.bsdOriginal;
+<<<<<<< HEAD
     maintainers = with maintainers; [ ];
+=======
+    maintainers = with maintainers; [ costrouc ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

@@ -13,7 +13,11 @@ buildGoModule rec {
     sha256 = "sha256-UlIQCy4moW58tQ1dqxrPsU5LN1Bs/Jy5X+2CEmXdYIk=";
   };
 
+<<<<<<< HEAD
   vendorHash = "sha256-EV59sXmjunWs+MC++CwyuBlbWzWZI1YXDLEsOaESgRU=";
+=======
+  vendorSha256 = "sha256-EV59sXmjunWs+MC++CwyuBlbWzWZI1YXDLEsOaESgRU=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   meta = with lib; {
     description = "A Lightweight VPN Built on top of Libp2p for Truly Distributed Networks.";

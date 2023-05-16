@@ -15,7 +15,11 @@
 
 buildPythonPackage rec {
   pname = "flask-restful";
+<<<<<<< HEAD
   version = "0.3.10";
+=======
+  version = "0.3.9";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -23,7 +27,11 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "Flask-RESTful";
     inherit version;
+<<<<<<< HEAD
     hash = "sha256-/kry7wAn34+bT3l6uiDFVmgBtq3plaxjtYir8aWc7Dc=";
+=======
+    hash = "sha256-zOxlC4NdSBkhOMhTKa4Dc15s7VjpstnCFG1shMBvpT4=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   # conditional so that overrides are easier for web applications

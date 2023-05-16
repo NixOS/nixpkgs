@@ -8,7 +8,11 @@
 
 buildPythonPackage rec {
   pname = "rq";
+<<<<<<< HEAD
   version = "1.15.1";
+=======
+  version = "1.14.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -17,7 +21,11 @@ buildPythonPackage rec {
     owner = "rq";
     repo = "rq";
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-cymNXFI+6YEVw2Pc7u6+vroC0428oW7BTLxyBgPqLng=";
+=======
+    hash = "sha256-8X7l59YAO4T0JA3saLzEwirHZniXsp/9Z8q+Tr2HDv0=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [

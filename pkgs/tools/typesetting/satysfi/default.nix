@@ -1,15 +1,27 @@
+<<<<<<< HEAD
 { lib, fetchFromGitHub, ocamlPackages
 , ipaexfont, junicode, lmodern, lmmath
 }:
 let
   camlpdf = ocamlPackages.camlpdf.overrideAttrs {
+=======
+{ lib, stdenv, fetchFromGitHub, ruby, ocamlPackages
+, ipaexfont, junicode, lmodern, lmmath
+}:
+let
+  camlpdf = ocamlPackages.camlpdf.overrideAttrs (o: {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     src = fetchFromGitHub {
       owner = "gfngfn";
       repo = "camlpdf";
       rev = "v2.3.1+satysfi";
       sha256 = "1s8wcqdkl1alvfcj67lhn3qdz8ikvd1v64f4q6bi4c0qj9lmp30k";
     };
+<<<<<<< HEAD
   };
+=======
+  });
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   otfm = ocamlPackages.otfm.overrideAttrs (o: {
     src = fetchFromGitHub {
       owner = "gfngfn";

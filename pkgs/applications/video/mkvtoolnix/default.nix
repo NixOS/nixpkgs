@@ -1,6 +1,10 @@
 { lib
 , stdenv
 , fetchFromGitLab
+<<<<<<< HEAD
+=======
+, fetchpatch
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , pkg-config
 , autoreconfHook
 , rake
@@ -46,13 +50,21 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "mkvtoolnix";
+<<<<<<< HEAD
   version = "78.0";
+=======
+  version = "75.0.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitLab {
     owner = "mbunkus";
     repo = "mkvtoolnix";
     rev = "release-${version}";
+<<<<<<< HEAD
     sha256 = "sha256-iImcpuGZsRlwBTPyPUsfHAOkOIhc8eYs6rinl8O78oU=";
+=======
+    sha256 = "c3I2ULSvKBTYIm1chVHPkaV0TxblLglBjzeUJ5TRmGw=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [
@@ -101,7 +113,10 @@ stdenv.mkDerivation rec {
     "--disable-precompiled-headers"
     "--disable-profiling"
     "--disable-static-qt"
+<<<<<<< HEAD
     "--disable-update-check"
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "--enable-optimization"
     "--with-boost-libdir=${lib.getLib boost}/lib"
     "--with-docbook-xsl-root=${docbook_xsl}/share/xml/docbook-xsl"

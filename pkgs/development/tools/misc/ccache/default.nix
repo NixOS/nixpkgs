@@ -15,13 +15,21 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ccache";
+<<<<<<< HEAD
   version = "4.8.3";
+=======
+  version = "4.8";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "ccache";
     repo = "ccache";
     rev = "refs/tags/v${finalAttrs.version}";
+<<<<<<< HEAD
     sha256 = "sha256-fcstTjwwOh5SAe6+VT5MpBaD+AEFoQtHop99dOMr7/A=";
+=======
+    sha256 = "sha256-X7Pv+yEQaKPdWTiKq67kSAyimyKvLSCYr4EjLlw+J0U=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   outputs = [ "out" "man" ];
@@ -31,11 +39,17 @@ stdenv.mkDerivation (finalAttrs: {
     # Linux it uses objdump. We don't have dwarfdump packaged for
     # Darwin, so this patch updates the test to also use objdump on
     # Darwin.
+<<<<<<< HEAD
     # Additionally, when cross compiling, the correct target prefix
     # needs to be set.
     (substituteAll {
       src = ./fix-objdump-path.patch;
       objdump = "${binutils.bintools}/bin/${binutils.targetPrefix}objdump";
+=======
+    (substituteAll {
+      src = ./force-objdump-on-darwin.patch;
+      objdump = "${binutils.bintools}/bin/objdump";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     })
   ];
 
@@ -61,7 +75,10 @@ stdenv.mkDerivation (finalAttrs: {
         "test.trim_dir" # flaky on hydra (possibly filesystem-specific?)
       ] ++ lib.optionals stdenv.isDarwin [
         "test.basedir"
+<<<<<<< HEAD
         "test.fileclone" # flaky on hydra (possibly filesystem-specific?)
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "test.multi_arch"
         "test.nocpp2"
       ];

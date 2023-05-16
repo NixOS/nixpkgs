@@ -39,6 +39,10 @@ buildPythonPackage rec {
     description = "A Python library for parsing TOML, fully compatible with TOML v1.0.0";
     homepage = "https://github.com/hukkin/tomli";
     license = licenses.mit;
+<<<<<<< HEAD
     maintainers = with maintainers; [ veehaitch ];
+=======
+    maintainers = with maintainers; [ veehaitch SuperSandro2000 ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

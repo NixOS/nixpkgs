@@ -116,8 +116,13 @@ in
       wantedBy = [ "multi-user.target" ];
       restartTriggers = [ config.environment.etc."exim.conf".source ];
       serviceConfig = {
+<<<<<<< HEAD
         ExecStart   = "!${cfg.package}/bin/exim -bdf -q${cfg.queueRunnerInterval}";
         ExecReload  = "!${coreutils}/bin/kill -HUP $MAINPID";
+=======
+        ExecStart   = "+${cfg.package}/bin/exim -bdf -q${cfg.queueRunnerInterval}";
+        ExecReload  = "+${coreutils}/bin/kill -HUP $MAINPID";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         User        = cfg.user;
       };
       preStart = ''

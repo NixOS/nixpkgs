@@ -1,7 +1,10 @@
 { lib
 , stdenv
 , fetchFromGitHub
+<<<<<<< HEAD
 , fetchYarnDeps
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , fetchzip
 , makeWrapper
 , makeDesktopItem
@@ -15,17 +18,26 @@ let
 in
   mkYarnPackage rec {
     pname = "micropad";
+<<<<<<< HEAD
     version = "4.3.0";
+=======
+    version = "4.2.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     src = fetchFromGitHub {
       owner = "MicroPad";
       repo = "Micropad-Electron";
       rev = "v${version}";
+<<<<<<< HEAD
       hash = "sha256-Rr3mOz2OlCq2tibxutR8zBANhswnkz70aP9BBS/pXp0=";
+=======
+      sha256 = "sha256-XmnKhyb0JMWP0ZGzPvLPtpkgAemW/mdxunbFW9WV9lE=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
 
     micropad-core = fetchzip {
       url = "https://github.com/MicroPad/MicroPad-Core/releases/download/v${version}/micropad.tar.xz";
+<<<<<<< HEAD
       hash = "sha256-7yFTD8bXsxT6kBKxBGGxwzYpa0rZYLYV6KRYtImQ58c=";
     };
 
@@ -35,6 +47,14 @@ in
       yarnLock = "${src}/yarn.lock";
       hash = "sha256-PKCi1c8WY1BG/H1kUJ8xSCVoLF/9DEn5Kh29is2BTYY=";
     };
+=======
+      sha256 = "0mzyd2p4mmnc19ffvd4sd75x7xwb1g5masdaqpn2n3h91687jmsf";
+    };
+
+    packageJSON = ./package.json;
+    yarnLock = ./yarn.lock;
+    yarnNix = ./yarn.nix;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     nativeBuildInputs = [ copyDesktopItems makeWrapper ]
       ++ lib.optionals stdenv.isDarwin [ desktopToDarwinBundle ];

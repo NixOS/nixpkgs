@@ -25,6 +25,10 @@ buildPythonPackage rec {
     homepage = "https://github.com/django-polymorphic/django-polymorphic";
     description = "Improved Django model inheritance with automatic downcasting";
     license = licenses.bsd3;
+<<<<<<< HEAD
     maintainers = with maintainers; [ ];
+=======
+    maintainers = with maintainers; [ SuperSandro2000 ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

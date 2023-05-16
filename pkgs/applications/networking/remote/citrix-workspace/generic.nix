@@ -3,7 +3,11 @@
 , heimdal, krb5, libsoup, libvorbis, speex, openssl, zlib, xorg, pango, gtk2
 , gnome2, mesa, nss, nspr, gtk_engines, freetype, dconf, libpng12, libxml2
 , libjpeg, libredirect, tzdata, cacert, systemd, libcxxabi, libcxx, e2fsprogs, symlinkJoin
+<<<<<<< HEAD
 , libpulseaudio, pcsclite, glib-networking, llvmPackages_12, opencv4
+=======
+, libpulseaudio, pcsclite, glib-networking, llvmPackages_12
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 , homepage, version, prefix, hash
 
@@ -82,6 +86,7 @@ stdenv.mkDerivation rec {
     libcxxabi
     libjpeg
     libpng12
+<<<<<<< HEAD
     libpulseaudio
     libsoup
     libvorbis
@@ -91,6 +96,14 @@ stdenv.mkDerivation rec {
     nspr
     nss
     opencv4
+=======
+    libsoup
+    libvorbis
+    libxml2
+    mesa
+    nspr
+    nss
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     openssl'
     pango
     speex
@@ -101,7 +114,13 @@ stdenv.mkDerivation rec {
     xorg.libXScrnSaver
     xorg.libXtst
     zlib
+<<<<<<< HEAD
   ];
+=======
+  ] ++ lib.optional (lib.versionOlder version "20.04") e2fsprogs
+    ++ lib.optional (lib.versionAtLeast version "20.10") libpulseaudio
+    ++ lib.optional (lib.versionAtLeast version "21.12") llvmPackages_12.libunwind;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   runtimeDependencies = [
     glib
@@ -122,7 +141,11 @@ stdenv.mkDerivation rec {
   installPhase = let
     icaFlag = program:
       if (builtins.match "selfservice(.*)" program) != null then "--icaroot"
+<<<<<<< HEAD
       else if (builtins.match "wfica(.*)" program != null) then null
+=======
+      else if (lib.versionAtLeast version "21.12" && builtins.match "wfica(.*)" program != null) then null
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       else "-icaroot";
     wrap = program: ''
       wrapProgram $out/opt/citrix-icaclient/${program} \
@@ -143,7 +166,12 @@ stdenv.mkDerivation rec {
 
     mkWrappers = lib.concatMapStringsSep "\n";
 
+<<<<<<< HEAD
     toWrap = [ "wfica" "selfservice" "util/configmgr" "util/conncenter" "util/ctx_rehash" ];
+=======
+    toWrap = [ "wfica" "selfservice" "util/configmgr" "util/conncenter" "util/ctx_rehash" ]
+      ++ lib.optional (lib.versionOlder version "20.06") "selfservice_old";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   in ''
     runHook preInstall
 
@@ -198,6 +226,7 @@ stdenv.mkDerivation rec {
   # Make sure that `autoPatchelfHook` is executed before
   # running `ctx_rehash`.
   dontAutoPatchelf = true;
+<<<<<<< HEAD
   preFixup = ''
     find $out/opt/citrix-icaclient/lib -name "libopencv_imgcodecs.so.*" | while read -r fname; do
       # lib needs libtiff.so.5, but nixpkgs provides libtiff.so.6
@@ -206,6 +235,8 @@ stdenv.mkDerivation rec {
       patchelf --replace-needed libjpeg.so.8 libjpeg.so $fname
     done
   '';
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   postFixup = ''
     autoPatchelf -- "$out"
     $out/opt/citrix-icaclient/util/ctx_rehash
@@ -216,7 +247,11 @@ stdenv.mkDerivation rec {
     description = "Citrix Workspace";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     platforms = platforms.linux;
+<<<<<<< HEAD
     maintainers = with maintainers; [ michaeladler ];
+=======
+    maintainers = with maintainers; [ pmenke michaeladler ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     inherit homepage;
   };
 }

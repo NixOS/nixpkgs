@@ -45,11 +45,14 @@ let
   '';
 in
 {
+<<<<<<< HEAD
   imports = [
     # https://github.com/zedeus/nitter/pull/772
     (mkRemovedOptionModule [ "services" "nitter" "replaceInstagram" ] "Nitter no longer supports this option as Bibliogram has been discontinued.")
   ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   options = {
     services.nitter = {
       enable = mkEnableOption (lib.mdDoc "Nitter");
@@ -160,6 +163,7 @@ in
           description = lib.mdDoc "Use base64 encoding for proxied media URLs.";
         };
 
+<<<<<<< HEAD
         enableRSS = mkEnableOption (lib.mdDoc "RSS feeds") // { default = true; };
 
         enableDebug = mkEnableOption (lib.mdDoc "request logs and debug endpoints");
@@ -176,6 +180,8 @@ in
           description = lib.mdDoc "Credentials for proxy.";
         };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         tokenCount = mkOption {
           type = types.int;
           default = 10;
@@ -213,6 +219,15 @@ in
           description = lib.mdDoc "Replace Reddit links with links to this instance (blank to disable).";
         };
 
+<<<<<<< HEAD
+=======
+        replaceInstagram = mkOption {
+          type = types.str;
+          default = "";
+          description = lib.mdDoc "Replace Instagram links with links to this instance (blank to disable).";
+        };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         mp4Playback = mkOption {
           type = types.bool;
           default = true;
@@ -290,12 +305,15 @@ in
           default = false;
           description = lib.mdDoc "Hide tweet replies.";
         };
+<<<<<<< HEAD
 
         squareAvatars = mkOption {
           type = types.bool;
           default = false;
           description = lib.mdDoc "Square profile pictures.";
         };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       };
 
       settings = mkOption {
@@ -334,8 +352,12 @@ in
     systemd.services.nitter = {
         description = "Nitter (An alternative Twitter front-end)";
         wantedBy = [ "multi-user.target" ];
+<<<<<<< HEAD
         wants = [ "network-online.target" ];
         after = [ "network-online.target" ];
+=======
+        after = [ "network.target" ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         serviceConfig = {
           DynamicUser = true;
           StateDirectory = "nitter";

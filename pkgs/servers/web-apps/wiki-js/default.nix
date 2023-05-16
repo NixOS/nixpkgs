@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 { stdenv, fetchurl, lib, nixosTests, jq, moreutils }:
 
 stdenv.mkDerivation rec {
@@ -7,6 +8,17 @@ stdenv.mkDerivation rec {
   src = fetchurl {
     url = "https://github.com/Requarks/wiki/releases/download/v${version}/${pname}.tar.gz";
     sha256 = "sha256-Cycq2oeB8v02VtE5KPs09+uzZqvGbJRH+J4YPDYo+yY=";
+=======
+{ stdenv, fetchurl, lib, nixosTests }:
+
+stdenv.mkDerivation rec {
+  pname = "wiki-js";
+  version = "2.5.298";
+
+  src = fetchurl {
+    url = "https://github.com/Requarks/wiki/releases/download/v${version}/${pname}.tar.gz";
+    sha256 = "sha256-O7KQ134zh9ullYyQZimmxfdRwXeHkD8aAhy/pRzIjxo=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   sourceRoot = ".";

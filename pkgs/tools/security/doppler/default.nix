@@ -8,16 +8,27 @@
 
 buildGoModule rec {
   pname = "doppler";
+<<<<<<< HEAD
   version = "3.65.2";
+=======
+  version = "3.58.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "dopplerhq";
     repo = "cli";
     rev = version;
+<<<<<<< HEAD
     sha256 = "sha256-rs+V19YaBvo5U9AAUks/nWl8TYveH8t+/rcQqjtG1gE=";
   };
 
   vendorHash = "sha256-FOmaK6S61fkzybpDx6qfi6m4e2IaqBpavaFhEgIvmqw=";
+=======
+    sha256 = "sha256-1cAsoaKKxSz2YhwMkfyzAyH8zFHm7YWS01/3CmcD8uY=";
+  };
+
+  vendorHash = "sha256-yuGjaUHfXCJnMvxfaSwbVAApflwfsvX2W7iEZdruMDE=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   ldflags = [
     "-s -w"

@@ -1,6 +1,10 @@
 { stdenv
 , lib
 , pkgs
+<<<<<<< HEAD
+=======
+, fetchgit
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , phpPackage
 , autoconf
 , pkg-config
@@ -9,16 +13,33 @@
 , curl
 , cyrus_sasl
 , enchant2
+<<<<<<< HEAD
 , freetds
+=======
+, fetchpatch
+, freetds
+, freetype
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , gd
 , gettext
 , gmp
 , html-tidy
 , icu64
+<<<<<<< HEAD
 , libffi
 , libiconv
 , libkrb5
 , libsodium
+=======
+, libXpm
+, libffi
+, libiconv
+, libjpeg
+, libkrb5
+, libpng
+, libsodium
+, libwebp
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , libxml2
 , libxslt
 , libzip
@@ -31,7 +52,10 @@
 , pam
 , pcre2
 , postgresql
+<<<<<<< HEAD
 , bison
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , re2c
 , readline
 , rsync
@@ -40,7 +64,10 @@
 , uwimap
 , valgrind
 , zlib
+<<<<<<< HEAD
 , fetchpatch
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 lib.makeScope pkgs.newScope (self: with self; {
@@ -79,6 +106,7 @@ lib.makeScope pkgs.newScope (self: with self; {
   # will mark the extension as a zend extension or not.
   mkExtension = lib.makeOverridable
     ({ name
+<<<<<<< HEAD
      , configureFlags ? [ "--enable-${extName}" ]
      , internalDeps ? [ ]
      , postPhpize ? ""
@@ -88,6 +116,17 @@ lib.makeScope pkgs.newScope (self: with self; {
      , extName ? name
      , ...
      }@args: stdenv.mkDerivation ((builtins.removeAttrs args [ "name" ]) // {
+=======
+    , configureFlags ? [ "--enable-${extName}" ]
+    , internalDeps ? [ ]
+    , postPhpize ? ""
+    , buildInputs ? [ ]
+    , zendExtension ? false
+    , doCheck ? true
+    , extName ? name
+    , ...
+    }@args: stdenv.mkDerivation ((builtins.removeAttrs args [ "name" ]) // {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       pname = "php-${name}";
       extensionName = extName;
 
@@ -102,12 +141,16 @@ lib.makeScope pkgs.newScope (self: with self; {
         autoconf
         pkg-config
         re2c
+<<<<<<< HEAD
         bison
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       ];
 
       inherit configureFlags internalDeps buildInputs zendExtension doCheck;
 
       preConfigurePhases = [
+<<<<<<< HEAD
         "genfiles"
         "cdToExtensionRootPhase"
       ];
@@ -118,6 +161,11 @@ lib.makeScope pkgs.newScope (self: with self; {
         fi
       '';
 
+=======
+        "cdToExtensionRootPhase"
+      ];
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       cdToExtensionRootPhase = ''
         # Go to extension source root.
         cd "ext/${extName}"
@@ -178,8 +226,11 @@ lib.makeScope pkgs.newScope (self: with self; {
   tools = {
     box = callPackage ../development/php-packages/box { };
 
+<<<<<<< HEAD
     castor = callPackage ../development/php-packages/castor { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     composer = callPackage ../development/php-packages/composer { };
 
     deployer = callPackage ../development/php-packages/deployer { };
@@ -214,6 +265,7 @@ lib.makeScope pkgs.newScope (self: with self; {
   # This is a set of PHP extensions meant to be used in php.buildEnv
   # or php.withExtensions to extend the functionality of the PHP
   # interpreter.
+<<<<<<< HEAD
   # The extensions attributes is composed of three sections:
   # 1. The contrib conditional extensions, which are only available on specific PHP versions
   # 2. The contrib extensions available
@@ -225,17 +277,28 @@ lib.makeScope pkgs.newScope (self: with self; {
   } //
   # Contrib extensions
   {
+=======
+  extensions = {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     amqp = callPackage ../development/php-packages/amqp { };
 
     apcu = callPackage ../development/php-packages/apcu { };
 
     ast = callPackage ../development/php-packages/ast { };
 
+<<<<<<< HEAD
     couchbase = callPackage ../development/php-packages/couchbase { };
 
     datadog_trace = callPackage ../development/php-packages/datadog_trace {
       inherit (pkgs) darwin;
     };
+=======
+    blackfire = pkgs.callPackage ../development/tools/misc/blackfire/php-probe.nix { inherit php; };
+
+    couchbase = callPackage ../development/php-packages/couchbase { };
+
+    datadog_trace = callPackage ../development/php-packages/datadog_trace { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     ds = callPackage ../development/php-packages/ds { };
 
@@ -255,6 +318,7 @@ lib.makeScope pkgs.newScope (self: with self; {
 
     maxminddb = callPackage ../development/php-packages/maxminddb { };
 
+<<<<<<< HEAD
     memcache = callPackage ../development/php-packages/memcache { };
 
     memcached = callPackage ../development/php-packages/memcached { };
@@ -262,13 +326,21 @@ lib.makeScope pkgs.newScope (self: with self; {
     mongodb = callPackage ../development/php-packages/mongodb {
       inherit (pkgs) darwin;
     };
+=======
+    memcached = callPackage ../development/php-packages/memcached { };
+
+    mongodb = callPackage ../development/php-packages/mongodb { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     msgpack = callPackage ../development/php-packages/msgpack { };
 
     oci8 = callPackage ../development/php-packages/oci8 { };
 
+<<<<<<< HEAD
     opentelemetry = callPackage ../development/php-packages/opentelemetry { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     openswoole = callPackage ../development/php-packages/openswoole { };
 
     pdlib = callPackage ../development/php-packages/pdlib { };
@@ -295,8 +367,11 @@ lib.makeScope pkgs.newScope (self: with self; {
 
     pdo_sqlsrv = callPackage ../development/php-packages/pdo_sqlsrv { };
 
+<<<<<<< HEAD
     phalcon = callPackage ../development/php-packages/phalcon { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     pinba = callPackage ../development/php-packages/pinba { };
 
     protobuf = callPackage ../development/php-packages/protobuf { };
@@ -305,6 +380,7 @@ lib.makeScope pkgs.newScope (self: with self; {
 
     redis = callPackage ../development/php-packages/redis { };
 
+<<<<<<< HEAD
     relay = callPackage ../development/php-packages/relay { inherit php; };
 
     smbclient = callPackage ../development/php-packages/smbclient { };
@@ -312,6 +388,11 @@ lib.makeScope pkgs.newScope (self: with self; {
     snuffleupagus = callPackage ../development/php-packages/snuffleupagus {
       inherit (pkgs) darwin;
     };
+=======
+    smbclient = callPackage ../development/php-packages/smbclient { };
+
+    snuffleupagus = callPackage ../development/php-packages/snuffleupagus { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     sqlsrv = callPackage ../development/php-packages/sqlsrv { };
 
@@ -319,15 +400,21 @@ lib.makeScope pkgs.newScope (self: with self; {
 
     swoole = callPackage ../development/php-packages/swoole { };
 
+<<<<<<< HEAD
     uv = callPackage ../development/php-packages/uv { };
 
     vld = callPackage ../development/php-packages/vld { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     xdebug = callPackage ../development/php-packages/xdebug { };
 
     yaml = callPackage ../development/php-packages/yaml { };
   } // (
+<<<<<<< HEAD
     # Core extensions
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     let
       # This list contains build instructions for different modules that one may
       # want to build.
@@ -360,10 +447,14 @@ lib.makeScope pkgs.newScope (self: with self; {
         }
         { name = "exif"; doCheck = false; }
         { name = "ffi"; buildInputs = [ libffi ]; }
+<<<<<<< HEAD
         {
           name = "fileinfo";
           buildInputs = [ pcre2 ];
         }
+=======
+        { name = "fileinfo"; buildInputs = [ pcre2 ]; }
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         { name = "filter"; buildInputs = [ pcre2 ]; }
         { name = "ftp"; buildInputs = [ openssl ]; }
         {
@@ -471,7 +562,11 @@ lib.makeScope pkgs.newScope (self: with self; {
         }
         {
           name = "openssl";
+<<<<<<< HEAD
           buildInputs = [ openssl ];
+=======
+          buildInputs = if (lib.versionAtLeast php.version "8.1") then [ openssl ] else [ openssl_1_1 ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           configureFlags = [ "--with-openssl" ];
           doCheck = false;
         }
@@ -550,9 +645,13 @@ lib.makeScope pkgs.newScope (self: with self; {
           '';
           doCheck = false;
         }
+<<<<<<< HEAD
         { name = "session";
           doCheck = false;
         }
+=======
+        { name = "session"; doCheck = false; }
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         { name = "shmop"; }
         {
           name = "simplexml";
@@ -589,7 +688,12 @@ lib.makeScope pkgs.newScope (self: with self; {
         { name = "tidy"; configureFlags = [ "--with-tidy=${html-tidy}" ]; doCheck = false; }
         {
           name = "tokenizer";
+<<<<<<< HEAD
           patches = [ ../development/interpreters/php/fix-tokenizer-php81.patch ];
+=======
+          patches = lib.optional (lib.versionAtLeast php.version "8.1")
+            ../development/interpreters/php/fix-tokenizer-php81.patch;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         }
         {
           name = "xml";

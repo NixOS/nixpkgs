@@ -21,7 +21,11 @@ buildGoModule rec {
     description = "Infra manages access to infrastructure such as Kubernetes";
     homepage = "https://github.com/infrahq/infra";
     changelog = "https://github.com/infrahq/infra/raw/v${version}/CHANGELOG.md";
+<<<<<<< HEAD
     license = licenses.elastic;
+=======
+    license = licenses.mit;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     maintainers = with maintainers; [ peterromfeldhk ];
   };
 }

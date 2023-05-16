@@ -22,10 +22,13 @@ buildPythonPackage rec {
     hash = "sha256-CmDypmlc/kb6ONCUggjT1Iqd29xNSLRaGh5Hz36dvOw=";
   };
 
+<<<<<<< HEAD
   patches = [
     ./support-openssl-3.0.10.patch
   ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   postPatch = ''
     for file in oscrypto/_openssl/_lib{crypto,ssl}_c{ffi,types}.py; do
       substituteInPlace $file \

@@ -78,8 +78,12 @@ in
       environment.PYTHONPATH = pkgs.powerdns-admin.pythonPath;
       serviceConfig = {
         ExecStart = "${pkgs.powerdns-admin}/bin/powerdns-admin --pid /run/powerdns-admin/pid ${escapeShellArgs cfg.extraArgs}";
+<<<<<<< HEAD
         # Set environment variables only for starting flask database upgrade
         ExecStartPre = "${pkgs.coreutils}/bin/env FLASK_APP=${pkgs.powerdns-admin}/share/powerdnsadmin/__init__.py SESSION_TYPE= ${pkgs.python3Packages.flask}/bin/flask db upgrade -d ${pkgs.powerdns-admin}/share/migrations";
+=======
+        ExecStartPre = "${pkgs.coreutils}/bin/env FLASK_APP=${pkgs.powerdns-admin}/share/powerdnsadmin/__init__.py ${pkgs.python3Packages.flask}/bin/flask db upgrade -d ${pkgs.powerdns-admin}/share/migrations";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
         ExecStop = "${pkgs.coreutils}/bin/kill -TERM $MAINPID";
         PIDFile = "/run/powerdns-admin/pid";

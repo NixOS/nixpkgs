@@ -1,7 +1,10 @@
 { lib
 , stdenv
 , fetchurl
+<<<<<<< HEAD
 , fetchpatch
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , buildPackages
 , coreutils
 , pam
@@ -15,6 +18,7 @@
 
 stdenv.mkDerivation rec {
   pname = "sudo";
+<<<<<<< HEAD
   version = "1.9.14p3";
 
   src = fetchurl {
@@ -37,6 +41,15 @@ stdenv.mkDerivation rec {
     })
   ];
 
+=======
+  version = "1.9.13p3";
+
+  src = fetchurl {
+    url = "https://www.sudo.ws/dist/${pname}-${version}.tar.gz";
+    hash = "sha256-kjNKEruT4MBWsJ9T4lXMt9b2fGNQ4oE82Vk87sp4Vgs=";
+  };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   prePatch = ''
     # do not set sticky bit in nix store
     substituteInPlace src/Makefile.in --replace 04755 0755
@@ -102,7 +115,11 @@ stdenv.mkDerivation rec {
 
     license = "https://www.sudo.ws/sudo/license.html";
 
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [ delroth ];
+=======
+    maintainers = with lib.maintainers; [ eelco delroth ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     platforms = lib.platforms.linux;
   };

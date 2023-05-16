@@ -7,9 +7,12 @@ let
 
   settingsFile = settingsFormat.generate "invidious-settings" cfg.settings;
 
+<<<<<<< HEAD
   generatedHmacKeyFile = "/var/lib/invidious/hmac_key";
   generateHmac = cfg.hmacKeyFile == null;
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   serviceConfig = {
     systemd.services.invidious = {
       description = "Invidious (An alternative YouTube front-end)";
@@ -17,6 +20,7 @@ let
       after = [ "network-online.target" ];
       wantedBy = [ "multi-user.target" ];
 
+<<<<<<< HEAD
       preStart = lib.optionalString generateHmac ''
         if [[ ! -e "${generatedHmacKeyFile}" ]]; then
           ${pkgs.pwgen}/bin/pwgen 20 1 > "${generatedHmacKeyFile}"
@@ -52,12 +56,29 @@ let
         export INVIDIOUS_CONFIG="$(${pkgs.jq}/bin/jq -s 'reduce .[] as $item ({}; . * $item)' <<<"''${configParts[*]}")"
         exec ${cfg.package}/bin/invidious
       '';
+=======
+      script =
+        let
+          jqFilter = "."
+            + lib.optionalString (cfg.database.host != null) "[0].db.password = \"'\"'\"$(cat ${lib.escapeShellArg cfg.database.passwordFile})\"'\"'\""
+            + " | .[0]"
+            + lib.optionalString (cfg.extraSettingsFile != null) " * .[1]";
+          jqFiles = [ settingsFile ] ++ lib.optional (cfg.extraSettingsFile != null) cfg.extraSettingsFile;
+        in
+        ''
+          export INVIDIOUS_CONFIG="$(${pkgs.jq}/bin/jq -s "${jqFilter}" ${lib.escapeShellArgs jqFiles})"
+          exec ${cfg.package}/bin/invidious
+        '';
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
       serviceConfig = {
         RestartSec = "2s";
         DynamicUser = true;
+<<<<<<< HEAD
         StateDirectory = "invidious";
         StateDirectoryMode = "0750";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
         CapabilityBoundingSet = "";
         PrivateDevices = true;
@@ -69,12 +90,15 @@ let
         RestrictNamespaces = true;
         SystemCallArchitectures = "native";
         SystemCallFilter = [ "@system-service" "~@privileged" "~@resources" ];
+<<<<<<< HEAD
 
         # Because of various issues Invidious must be restarted often, at least once a day, ideally
         # every hour.
         # This option enables the automatic restarting of the Invidious instance.
         Restart = lib.mkDefault "always";
         RuntimeMaxSec = lib.mkDefault "1h";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       };
     };
 
@@ -90,7 +114,11 @@ let
         port = cfg.database.port;
         # Blank for unix sockets, see
         # https://github.com/will/crystal-pg/blob/1548bb255210/src/pq/conninfo.cr#L100-L108
+<<<<<<< HEAD
         host = lib.optionalString (cfg.database.host != null) cfg.database.host;
+=======
+        host = if cfg.database.host == null then "" else cfg.database.host;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         # Not needed because peer authentication is enabled
         password = lib.mkIf (cfg.database.host == null) "";
       };
@@ -199,6 +227,7 @@ in
       '';
     };
 
+<<<<<<< HEAD
     hmacKeyFile = lib.mkOption {
       type = types.nullOr types.path;
       default = null;
@@ -211,6 +240,8 @@ in
       '';
     };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     extraSettingsFile = lib.mkOption {
       type = types.nullOr types.str;
       default = null;

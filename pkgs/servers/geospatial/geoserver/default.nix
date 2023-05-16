@@ -2,11 +2,19 @@
 
 stdenv.mkDerivation rec {
   pname = "geoserver";
+<<<<<<< HEAD
   version = "2.23.2";
 
   src = fetchurl {
     url = "mirror://sourceforge/geoserver/GeoServer/${version}/geoserver-${version}-bin.zip";
     sha256 = "sha256-4zOtcUWeb/zubEY3wNCYBeStRSga2bm1BnBa+qcyeCw=";
+=======
+  version = "2.23.0";
+
+  src = fetchurl {
+    url = "mirror://sourceforge/geoserver/GeoServer/${version}/geoserver-${version}-bin.zip";
+    sha256 = "sha256-qoRyU+dZrgYKa6tqe13nHJacOlNiSMuCECtfMFxu1Vg=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   sourceRoot = ".";

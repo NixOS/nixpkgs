@@ -22,13 +22,21 @@
 
 stdenv.mkDerivation rec {
   pname = "deepin-camera";
+<<<<<<< HEAD
   version = "6.0.2";
+=======
+  version = "1.4.11";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
+<<<<<<< HEAD
     hash = "sha256-GQQFwlJNfdsi0GvDRMIorUnlbXrgbYl9H9aBedOm+ZQ=";
+=======
+    sha256 = "sha256-GQQFwlJNfdsi0GvDRMIorUnlbXrgbYl9H9aBedOm+ZQ=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   # QLibrary and dlopen work with LD_LIBRARY_PATH
@@ -66,6 +74,10 @@ stdenv.mkDerivation rec {
     gstreamer
     gst-plugins-base
     gst-plugins-good
+<<<<<<< HEAD
+=======
+    gst-plugins-bad
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ]);
 
   cmakeFlags = [ "-DVERSION=${version}" ];

@@ -6,11 +6,19 @@
 
 buildPythonPackage rec {
   pname = "hg-evolve";
+<<<<<<< HEAD
   version = "11.0.2";
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-qDURFcDm7zvDEv1Z+aoXtFfbilul6q6KlkjBvhkeYkM=";
+=======
+  version = "11.0.1";
+
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-gupC35pLQOJgSmXiBp+KxqWuMX3iKSX9xDUtEaB/wFQ=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeCheckInputs = [

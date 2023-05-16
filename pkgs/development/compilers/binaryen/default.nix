@@ -4,13 +4,21 @@
 
 stdenv.mkDerivation rec {
   pname = "binaryen";
+<<<<<<< HEAD
   version = "114";
+=======
+  version = "112";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "WebAssembly";
     repo = "binaryen";
     rev = "version_${version}";
+<<<<<<< HEAD
     hash = "sha256-bzHNIQy0AN8mIFGG+638p/MBSqlkWuaOzKGSsMDAPH4=";
+=======
+    hash = "sha256-xVumVmiLMHJp3SItE8eL8OBPeq58HtOOiK9LL8SP4CQ=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ cmake python3 ];

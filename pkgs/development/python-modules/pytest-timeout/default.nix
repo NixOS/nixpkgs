@@ -4,6 +4,10 @@
 , pytest
 , pytestCheckHook
 , pexpect
+<<<<<<< HEAD
+=======
+, pytest-cov
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 buildPythonPackage rec {
@@ -23,6 +27,10 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     pexpect
+<<<<<<< HEAD
+=======
+    pytest-cov
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   disabledTests = [
@@ -44,6 +52,10 @@ buildPythonPackage rec {
     homepage = "https://github.com/pytest-dev/pytest-timeout/";
     changelog = "https://github.com/pytest-dev/pytest-timeout/#changelog";
     license = licenses.mit;
+<<<<<<< HEAD
     maintainers = with maintainers; [ makefu ];
+=======
+    maintainers = with maintainers; [ makefu costrouc ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

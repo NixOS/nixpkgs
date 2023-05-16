@@ -5,7 +5,11 @@
 }:
 
 mkDerivation rec {
+<<<<<<< HEAD
   version = "0.9.11";
+=======
+  version = "0.9.10";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pname = "qjackctl";
 
   # some dependencies such as killall have to be installed additionally
@@ -14,7 +18,11 @@ mkDerivation rec {
     owner = "rncbc";
     repo = "qjackctl";
     rev = "${pname}_${lib.replaceStrings ["."] ["_"] version}";
+<<<<<<< HEAD
     sha256 = "sha256-dZW9bZ17O/1DxBr5faYSE+YkSuz7NIJSc1vqxzOOxyg=";
+=======
+    sha256 = "sha256-XF5v+VgSCqqV2ft9qw1NTNzeYOv1OuhljJGdgikPLEo=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   buildInputs = [

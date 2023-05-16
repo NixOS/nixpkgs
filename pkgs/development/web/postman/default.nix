@@ -2,7 +2,11 @@
 
 let
   pname = "postman";
+<<<<<<< HEAD
   version = "10.15.0";
+=======
+  version = "10.12.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   meta = with lib; {
     homepage = "https://www.getpostman.com";
     description = "API Development Environment";

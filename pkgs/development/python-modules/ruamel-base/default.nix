@@ -18,12 +18,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ruamel.base" ];
 
+<<<<<<< HEAD
   pythonNamespaces = [ "ruamel" ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   meta = with lib; {
     description = "Common routines for ruamel packages";
     homepage = "https://sourceforge.net/projects/ruamel-base/";
     license = licenses.mit;
+<<<<<<< HEAD
     maintainers = with maintainers; [ ];
+=======
+    maintainers = with maintainers; [ SuperSandro2000 ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

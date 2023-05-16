@@ -13,7 +13,11 @@
 
 buildPythonPackage rec {
   pname = "rfcat";
+<<<<<<< HEAD
   version = "2.0.1";
+=======
+  version = "1.9.7";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -22,7 +26,11 @@ buildPythonPackage rec {
     owner = "atlas0fd00m";
     repo = "rfcat";
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-hdRsVbDXRC1EOhBoFJ9T5ZE6hwOgDWSdN5sIpxJ0x3E=";
+=======
+    hash = "sha256-VOLA/ZZLazW7u0VYkAHzDh4aaHGr3u09bKVOkhYk6Fk=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 { stdenv, lib, fetchurl, autoPatchelfHook, udev, libusb1 }:
 let
   arch =
@@ -31,6 +32,25 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoPatchelfHook ];
 
   buildInputs = [ libusb1 udev stdenv.cc.cc.lib ];
+=======
+{ stdenv, lib, fetchurl, autoPatchelfHook, udev }:
+let
+  arch = if stdenv.isx86_64  then "x86_64"
+    else if stdenv.isi686    then "i686"
+    else throw "unsupported architecture";
+in stdenv.mkDerivation rec {
+  pname = "sdrplay";
+  version = "3.07.1";
+
+  src = fetchurl {
+    url = "https://www.sdrplay.com/software/SDRplay_RSP_API-Linux-${version}.run";
+    sha256 = "1a25c7rsdkcjxr7ffvx2lwj7fxdbslg9qhr8ghaq1r53rcrqgzmf";
+  };
+
+  nativeBuildInputs = [ autoPatchelfHook ];
+
+  buildInputs = [ udev stdenv.cc.cc.lib ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   unpackPhase = ''
     sh "$src" --noexec --target source
@@ -62,7 +82,11 @@ stdenv.mkDerivation rec {
     homepage = "https://www.sdrplay.com/downloads/";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
+<<<<<<< HEAD
     maintainers = with maintainers; [ pmenke zaninime ];
+=======
+    maintainers = [ maintainers.pmenke ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     platforms = platforms.linux;
   };
 }

@@ -40,7 +40,11 @@ let
     else if pkg.meta.broken
     then null
 
+<<<<<<< HEAD
     else testers.hasPkgConfigModules { moduleNames = [ moduleName ]; package = pkg; };
+=======
+    else testers.hasPkgConfigModule { inherit moduleName; package = pkg; };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 in
   lib.recurseIntoAttrs allTests // { inherit tests-combined; }

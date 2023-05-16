@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 { lib
 , buildPythonPackage
 , fetchFromGitHub
@@ -16,6 +17,11 @@
 , bzip2
 , xz
 }:
+=======
+{ lib, buildPythonPackage, fetchFromGitHub, pytestCheckHook, p7zip,
+  cabextract, zip, lzip, zpaq, gnutar, gnugrep, diffutils, file,
+  gzip, bzip2, xz}:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 # unrar is unfree, as well as 7z with unrar support, not including it (patool doesn't support unar)
 # it will still use unrar if present in the path
@@ -39,13 +45,17 @@ in
 buildPythonPackage rec {
   pname = "patool";
   version = "1.12";
+<<<<<<< HEAD
   format = "setuptools";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   #pypi doesn't have test data
   src = fetchFromGitHub {
     owner = "wummel";
     repo = pname;
     rev = "upstream/${version}";
+<<<<<<< HEAD
     hash = "sha256-Xv4aCUnLi+b1T29tuKRADTIWwK2dO8iDP/D7UfU5mWw=";
   };
 
@@ -64,6 +74,11 @@ buildPythonPackage rec {
     })
   ];
 
+=======
+    sha256 = "0v4r77sm3yzh7y1whfwxmp01cchd82jbhvbg9zsyd2yb944imzjy";
+  };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   postPatch = ''
     substituteInPlace patoolib/util.py \
       --replace "path = None" 'path = os.environ["PATH"] + ":${lib.makeBinPath compression-utilities}"'

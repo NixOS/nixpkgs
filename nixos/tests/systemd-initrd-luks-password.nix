@@ -6,8 +6,11 @@ import ./make-test-python.nix ({ lib, pkgs, ... }: {
     virtualisation = {
       emptyDiskImages = [ 512 512 ];
       useBootLoader = true;
+<<<<<<< HEAD
       # Booting off the encrypted disk requires an available init script
       mountHostNixStore = true;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       useEFIBoot = true;
     };
     boot.loader.systemd-boot.enable = true;
@@ -25,7 +28,10 @@ import ./make-test-python.nix ({ lib, pkgs, ... }: {
         cryptroot2.device = "/dev/vdc";
       };
       virtualisation.rootDevice = "/dev/mapper/cryptroot";
+<<<<<<< HEAD
       virtualisation.fileSystems."/".autoFormat = true;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       # test mounting device unlocked in initrd after switching root
       virtualisation.fileSystems."/cryptroot2".device = "/dev/mapper/cryptroot2";
     };

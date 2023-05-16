@@ -2,11 +2,19 @@
 
 stdenv.mkDerivation rec {
   pname = "blast";
+<<<<<<< HEAD
   version = "2.14.0";
 
   src = fetchurl {
     url = "https://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/${version}/ncbi-blast-${version}+-src.tar.gz";
     sha256 = "sha256-v0d/Gww7gvC3pwlL8AOpqD4347BxbB33mQYMT+qxdQA=";
+=======
+  version = "2.13.0";
+
+  src = fetchurl {
+    url = "https://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/${version}/ncbi-blast-${version}+-src.tar.gz";
+    sha256 = "sha256-iVU3FNEz2vKMR3+D0zN5Szxi5BSECMByobRiDl7E/rI=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   sourceRoot = "ncbi-blast-${version}+-src/c++";

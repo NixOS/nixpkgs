@@ -12,7 +12,11 @@
 
 stdenv.mkDerivation rec {
   pname = "libfabric";
+<<<<<<< HEAD
   version = "1.18.1";
+=======
+  version = "1.18.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   enableParallelBuilding = true;
 
@@ -20,7 +24,11 @@ stdenv.mkDerivation rec {
     owner = "ofiwg";
     repo = pname;
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-3iQsFfpXSyMFkBeByGJmKSTUXuLsWA0l8t1cCDkNRos=";
+=======
+    sha256 = "sha256-30ADIUbpzwyxMJtPyLDwXYGJF4c1ZiSJH2mBBtgfE18=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ pkg-config autoreconfHook ];

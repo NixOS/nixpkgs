@@ -9,16 +9,25 @@
 
 buildPythonPackage rec {
   pname = "dicom-numpy";
+<<<<<<< HEAD
   version = "0.6.5";
   format = "pyproject";
 
+=======
+  version = "0.6.3";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "innolitics";
     repo = pname;
+<<<<<<< HEAD
     rev = "refs/tags/v${version}";
     hash = "sha256-pgmREQlstr0GY2ThIWt4hbcSWmaNWgkr2gO4PSgGHqE=";
+=======
+    rev = "v${version}";
+    hash = "sha256-QIPuSFaWgHmcTddZ8H9kgzLYuwGUzy/FVsi/ttSUskA=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [

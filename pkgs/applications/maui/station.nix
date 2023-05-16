@@ -8,9 +8,13 @@
 , kirigami2
 , mauikit
 , mauikit-filebrowsing
+<<<<<<< HEAD
 , mauikit-terminal
 , qmltermwidget
 , qtmultimedia
+=======
+, qmltermwidget
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 mkDerivation {
@@ -28,9 +32,13 @@ mkDerivation {
     kirigami2
     mauikit
     mauikit-filebrowsing
+<<<<<<< HEAD
     mauikit-terminal
     qmltermwidget
     qtmultimedia
+=======
+    qmltermwidget
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   meta = with lib; {

@@ -2,10 +2,16 @@
 , buildPythonPackage
 , fetchFromGitHub
 
+<<<<<<< HEAD
 # build-system
 , cython_3
 , numpy
 , oldest-supported-numpy
+=======
+# build-sytem
+, cython_3
+, numpy
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , setuptools
 , setuptools-scm
 , gnutar
@@ -19,7 +25,11 @@
 
 buildPythonPackage rec {
   pname = "soxr";
+<<<<<<< HEAD
   version = "0.3.5";
+=======
+  version = "0.3.4";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "pyproject";
 
   src = fetchFromGitHub {
@@ -27,16 +37,26 @@ buildPythonPackage rec {
     repo = "python-soxr";
     rev = "refs/tags/v${version}";
     fetchSubmodules = true;
+<<<<<<< HEAD
     hash = "sha256-q/K7XlqvDHAna+fqN6iiJ9wD8efsuwHiEfKjXS46jz8=";
   };
 
   env.SETUPTOOLS_SCM_PRETEND_VERSION = version;
+=======
+    hash = "sha256-/NFGzOF1X9c0yccgtVNUO+1aIWoNdJqP/OKcNj+uKpk=";
+  };
+
+  SETUPTOOLS_SCM_PRETEND_VERSION = version;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nativeBuildInputs = [
     cython_3
     gnutar
     numpy
+<<<<<<< HEAD
     oldest-supported-numpy
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     setuptools
     setuptools-scm
   ];

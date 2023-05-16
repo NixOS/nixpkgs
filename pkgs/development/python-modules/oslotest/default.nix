@@ -3,7 +3,10 @@
 , fetchPypi
 , fixtures
 , pbr
+<<<<<<< HEAD
 , six
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , subunit
 , callPackage
 }:
@@ -11,7 +14,10 @@
 buildPythonPackage rec {
   pname = "oslotest";
   version = "4.5.0";
+<<<<<<< HEAD
   format = "setuptools";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchPypi {
     inherit pname version;
@@ -22,7 +28,10 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     fixtures
+<<<<<<< HEAD
     six
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     subunit
   ];
 

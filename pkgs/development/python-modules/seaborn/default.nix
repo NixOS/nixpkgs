@@ -1,7 +1,10 @@
 { lib
 , stdenv
 , buildPythonPackage
+<<<<<<< HEAD
 , fetchpatch
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , fetchPypi
 , flit-core
 , matplotlib
@@ -25,6 +28,7 @@ buildPythonPackage rec {
     hash = "sha256-N0ZF82UJ0NyriVy6W0fa8Fhvd7/js2yXxgfbfaW+ATk=";
   };
 
+<<<<<<< HEAD
   patches = [
     (fetchpatch {
       name = "fix-test-using-matplotlib-3.7.patch";
@@ -43,6 +47,8 @@ buildPythonPackage rec {
     })
   ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nativeBuildInputs = [
     flit-core
   ];
@@ -60,12 +66,21 @@ buildPythonPackage rec {
   ];
 
   disabledTests = [
+<<<<<<< HEAD
     # requires internet connection
     "test_load_dataset_string_error"
 
     # per https://github.com/mwaskom/seaborn/issues/3431, we can enable this
     # once matplotlib releases version > 3.7.2
     "test_share_xy"
+=======
+    # incompatible with matplotlib 3.7
+    # https://github.com/mwaskom/seaborn/issues/3288
+    "test_subplot_kws"
+
+    # requires internet connection
+    "test_load_dataset_string_error"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ] ++ lib.optionals (!stdenv.hostPlatform.isx86) [
     # overly strict float tolerances
     "TestDendrogram"
@@ -73,7 +88,11 @@ buildPythonPackage rec {
 
   # All platforms should use Agg. Let's set it explicitly to avoid probing GUI
   # backends (leads to crashes on macOS).
+<<<<<<< HEAD
   env.MPLBACKEND="Agg";
+=======
+  MPLBACKEND="Agg";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   pythonImportsCheck = [
     "seaborn"

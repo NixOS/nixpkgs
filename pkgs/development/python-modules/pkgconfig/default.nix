@@ -45,6 +45,10 @@ buildPythonPackage rec {
     description = "Interface Python with pkg-config";
     homepage = "https://github.com/matze/pkgconfig";
     license = licenses.mit;
+<<<<<<< HEAD
     maintainers = with maintainers; [ nickcao ];
+=======
+    maintainers = with maintainers; [ SuperSandro2000 ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

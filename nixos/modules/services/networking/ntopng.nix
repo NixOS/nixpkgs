@@ -20,7 +20,11 @@ let
     ''
     else
     pkgs.writeText "ntopng.conf" ''
+<<<<<<< HEAD
       ${concatStringsSep "\n" (map (e: "--interface=${e}") cfg.interfaces)}
+=======
+      ${concatStringsSep " " (map (e: "--interface=" + e) cfg.interfaces)}
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       --http-port=${toString cfg.httpPort}
       --redis=${cfg.redis.address}
       --data-dir=/var/lib/ntopng

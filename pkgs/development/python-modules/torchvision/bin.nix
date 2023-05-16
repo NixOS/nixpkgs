@@ -16,7 +16,11 @@ let
   pyVerNoDot = builtins.replaceStrings [ "." ] [ "" ] python.pythonVersion;
   srcs = import ./binary-hashes.nix version;
   unsupported = throw "Unsupported system";
+<<<<<<< HEAD
   version = "0.15.2";
+=======
+  version = "0.15.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 in buildPythonPackage {
   inherit version;
 
@@ -28,14 +32,22 @@ in buildPythonPackage {
 
   disabled = (pythonOlder "3.8") || (pythonAtLeast "3.12");
 
+<<<<<<< HEAD
   # Note that we don't rely on config.cudaSupport here, because the Linux wheels all come built with CUDA support.
   buildInputs = with cudaPackages; lib.optionals stdenv.isLinux [
+=======
+  buildInputs = with cudaPackages; [
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     # $out/${sitePackages}/torchvision/_C.so wants libcudart.so.11.0 but torchvision.libs only ships
     # libcudart.$hash.so.11.0
     cuda_cudart
   ];
 
+<<<<<<< HEAD
   nativeBuildInputs = lib.optionals stdenv.isLinux [
+=======
+  nativeBuildInputs = [
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     autoPatchelfHook
     addOpenGLRunpath
   ];
@@ -50,7 +62,11 @@ in buildPythonPackage {
 
   pythonImportsCheck = [ "torchvision" ];
 
+<<<<<<< HEAD
   preInstall = lib.optionalString stdenv.isLinux ''
+=======
+  preInstall = ''
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     addAutoPatchelfSearchPath "${torch-bin}/${python.sitePackages}/torch"
   '';
 
@@ -63,7 +79,11 @@ in buildPythonPackage {
     # https://www.intel.com/content/www/us/en/developer/articles/license/onemkl-license-faq.html
     license = licenses.bsd3;
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+<<<<<<< HEAD
     platforms = [ "aarch64-darwin" "x86_64-darwin" "x86_64-linux" ];
+=======
+    platforms = [ "x86_64-linux" ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     maintainers = with maintainers; [ junjihashimoto ];
   };
 }

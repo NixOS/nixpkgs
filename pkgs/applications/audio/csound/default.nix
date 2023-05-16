@@ -31,9 +31,13 @@ stdenv.mkDerivation rec {
   };
 
   cmakeFlags = [ "-DBUILD_CSOUND_AC=0" ] # fails to find Score.hpp
+<<<<<<< HEAD
     ++ lib.optional stdenv.isDarwin "-DCS_FRAMEWORK_DEST=${placeholder "out"}/lib"
     # Ignore gettext in CMAKE_PREFIX_PATH on cross to prevent find_program picking up the wrong gettext
     ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) "-DCMAKE_IGNORE_PATH=${lib.getBin gettext}/bin";
+=======
+    ++ lib.optional stdenv.isDarwin "-DCS_FRAMEWORK_DEST=${placeholder "out"}/lib";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nativeBuildInputs = [ cmake flex bison gettext ];
   buildInputs = [ libsndfile libsamplerate boost ]

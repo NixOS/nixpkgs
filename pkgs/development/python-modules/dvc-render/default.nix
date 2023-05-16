@@ -2,7 +2,10 @@
 , stdenv
 , buildPythonPackage
 , fetchFromGitHub
+<<<<<<< HEAD
 , flatten-dict
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , funcy
 , matplotlib
 , tabulate
@@ -15,7 +18,11 @@
 
 buildPythonPackage rec {
   pname = "dvc-render";
+<<<<<<< HEAD
   version = "0.5.3";
+=======
+  version = "0.4.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -24,7 +31,11 @@ buildPythonPackage rec {
     owner = "iterative";
     repo = pname;
     rev = "refs/tags/${version}";
+<<<<<<< HEAD
     hash = "sha256-4nqImAYk4pYXSuE2/znzwjtf0349bydqi4iN69wG080=";
+=======
+    hash = "sha256-bt2jqjhgtGmJsyfYNSzETQZUHFKni/poyeqpQzIJX08=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
@@ -35,7 +46,10 @@ buildPythonPackage rec {
 
   passthru.optional-dependencies = {
     table = [
+<<<<<<< HEAD
       flatten-dict
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       tabulate
     ];
     markdown = [

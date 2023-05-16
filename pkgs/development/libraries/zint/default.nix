@@ -53,6 +53,9 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/zint/zint/blob/${version}/ChangeLog";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ azahi ];
+<<<<<<< HEAD
     platforms = platforms.all;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

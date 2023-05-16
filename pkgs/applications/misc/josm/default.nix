@@ -3,6 +3,7 @@
 }:
 let
   pname = "josm";
+<<<<<<< HEAD
   version = "18822";
   srcs = {
     jar = fetchurl {
@@ -12,6 +13,17 @@ let
     macosx = fetchurl {
       url = "https://josm.openstreetmap.de/download/macosx/josm-macos-${version}-java17.zip";
       hash = "sha256-MFiWbEU8C6Jvq9wkIKANQeqJh2/yC3y40ANnGEl4IF0=";
+=======
+  version = "18721";
+  srcs = {
+    jar = fetchurl {
+      url = "https://josm.openstreetmap.de/download/josm-snapshot-${version}.jar";
+      hash = "sha256-nc6itoblAzP064xTTF8q990TiRX3+zf5uk+enS+C5Jo=";
+    };
+    macosx = fetchurl {
+      url = "https://josm.openstreetmap.de/download/macosx/josm-macos-${version}-java17.zip";
+      hash = "sha256-uaj32PupxAS5Pa7us9sIeeepGJ6BIljm41e6onB7zxQ=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
     pkg = fetchsvn {
       url = "https://josm.openstreetmap.de/svn/trunk/native/linux/tested";

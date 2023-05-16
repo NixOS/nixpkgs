@@ -32,6 +32,9 @@ writeTextFile {
       directory.
     '';
     maintainers = with maintainers; [ qyliss tfc ];
+<<<<<<< HEAD
     mainProgram = "drawio";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

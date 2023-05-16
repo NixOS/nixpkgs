@@ -18,6 +18,10 @@ buildGoModule rec {
     description = "Prometheus service discovery for Equinix Metal";
     homepage = "https://github.com/packethost/prometheus-packet-sd";
     license = licenses.asl20;
+<<<<<<< HEAD
+=======
+    platforms = platforms.unix;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     maintainers = [ ];
     mainProgram = "prometheus-packet-sd";
   };

@@ -1,16 +1,28 @@
 { lib
 , stdenv
 , fetchFromGitHub
+<<<<<<< HEAD
+=======
+, fetchpatch
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , cmake
 , blas
 }:
 
 let
+<<<<<<< HEAD
   suitesparseVersion = "7.1.0";
 in
 stdenv.mkDerivation {
   pname = "mongoose";
   version = "3.0.5";
+=======
+  suitesparseVersion = "7.0.1";
+in
+stdenv.mkDerivation rec {
+  pname = "mongoose";
+  version = "3.0.4";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   outputs = [ "bin" "out" "dev" ];
 
@@ -18,7 +30,11 @@ stdenv.mkDerivation {
     owner = "DrTimothyAldenDavis";
     repo = "SuiteSparse";
     rev = "v${suitesparseVersion}";
+<<<<<<< HEAD
     hash = "sha256-UizybioU1J01PLBpu+PfnSzWScGTvMuJN5j9PjuZRwE=";
+=======
+    hash = "sha256-EIreweeOx44YDxlnxnJ7l31Ie1jSx6y87VAyEX+4NsQ=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

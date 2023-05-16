@@ -24,12 +24,20 @@
 }:
 
 let
+<<<<<<< HEAD
   version = "6.3.2";
+=======
+  version = "6.2.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   sourceRoot = ".";
 
   src = fetchurl {
     url = "https://github.com/bazelbuild/bazel/releases/download/${version}/bazel-${version}-dist.zip";
+<<<<<<< HEAD
     hash = "sha256-jNf+rFgZO+K8ukUbpmiKRoJNN8pjWf9Y4NROuY8EKUg=";
+=======
+    hash = "sha256-8ej3iGN6xXTUcdYZ0glrqsoEoZtXoDQ5ngeWM9tEGUU=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   # Update with
@@ -223,7 +231,11 @@ stdenv.mkDerivation rec {
 
   # Additional tests that check bazel’s functionality. Execute
   #
+<<<<<<< HEAD
   #     nix-build . -A bazel_6.tests
+=======
+  #     nix-build . -A bazel_5.tests
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   #
   # in the nixpkgs checkout root to exercise them locally.
   passthru.tests =
@@ -295,10 +307,17 @@ stdenv.mkDerivation rec {
         sha256 = "1mm4awx6sa0myiz9j4hwp71rpr7yh8vihf3zm15n2ii6xb82r31k";
       };
 
+<<<<<<< HEAD
     in (lib.optionalAttrs (!stdenv.hostPlatform.isDarwin) {
       # `extracted` doesn’t work on darwin
       shebang = callPackage ../shebang-test.nix { inherit runLocal extracted bazelTest distDir; bazel = bazel_self;};
     }) // {
+=======
+    in (if !stdenv.hostPlatform.isDarwin then {
+      # `extracted` doesn’t work on darwin
+      shebang = callPackage ../shebang-test.nix { inherit runLocal extracted bazelTest distDir; bazel = bazel_self;};
+    } else {}) // {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       bashTools = callPackage ../bash-tools-test.nix { inherit runLocal bazelTest distDir; bazel = bazel_self;};
       cpp = callPackage ../cpp-test.nix { inherit runLocal bazelTest bazel-examples distDir; bazel = bazel_self;};
       java = callPackage ../java-test.nix { inherit runLocal bazelTest bazel-examples distDir; bazel = bazel_self;};
@@ -625,12 +644,15 @@ stdenv.mkDerivation rec {
 
     cd ./bazel_src
 
+<<<<<<< HEAD
     # If .bazelversion file is present in dist files and doesn't match `bazel` version
     # running `bazel` command within bazel_src will fail.
     # Let's remove .bazelversion within the test, if present it is meant to indicate bazel version
     # to compile bazel with, not version of bazel to be built and tested.
     rm -f .bazelversion
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     # test whether $WORKSPACE_ROOT/tools/bazel works
 
     mkdir -p tools

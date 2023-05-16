@@ -1,6 +1,9 @@
 { lib
 , fetchFromGitea
+<<<<<<< HEAD
 , fetchpatch
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , ocamlPackages
 , soupault
 , testers
@@ -9,7 +12,11 @@
 let
   pname = "soupault";
 
+<<<<<<< HEAD
   version = "4.6.0";
+=======
+  version = "4.4.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 in
 ocamlPackages.buildDunePackage {
   inherit pname version;
@@ -23,6 +30,7 @@ ocamlPackages.buildDunePackage {
     owner = "PataphysicalSociety";
     repo = pname;
     rev = version;
+<<<<<<< HEAD
     sha256 = "MblwVacfK9CfoO0TEND+bqdi7iQayBOJKKOhzE7oiVk=";
   };
 
@@ -34,6 +42,11 @@ ocamlPackages.buildDunePackage {
       sha256 = "J5RGyLDDVRzf6MLLI+73lqClxoovcPD2ZFawk+f6cE4=";
     });
 
+=======
+    sha256 = "sha256-M4gaPxBxQ1Bk2C3BwvobYHyaWKIZgQ6buZ6S5wBlvPg=";
+  };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   buildInputs = with ocamlPackages; [
     base64
     camomile

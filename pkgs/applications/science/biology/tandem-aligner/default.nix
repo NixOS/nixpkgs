@@ -26,7 +26,11 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
+<<<<<<< HEAD
   sourceRoot = "${finalAttrs.src.name}/tandem_aligner";
+=======
+  sourceRoot = "source/tandem_aligner";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nativeBuildInputs = [ cmake ];
 

@@ -64,6 +64,10 @@ buildPythonPackage rec {
     description = "Bridge from UFOs to FontTools objects";
     homepage = "https://github.com/googlefonts/ufo2ft";
     license = licenses.mit;
+<<<<<<< HEAD
     maintainers = with maintainers; [ ];
+=======
+    maintainers = with maintainers; [ jtojnar ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

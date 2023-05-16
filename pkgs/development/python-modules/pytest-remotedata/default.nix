@@ -32,8 +32,11 @@ buildPythonPackage rec {
     six
   ];
 
+<<<<<<< HEAD
   __darwinAllowLocalNetworking = true;
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nativeCheckInputs = [
     pytestCheckHook
   ];
@@ -52,6 +55,10 @@ buildPythonPackage rec {
     homepage = "https://github.com/astropy/pytest-remotedata";
     changelog = "https://github.com/astropy/pytest-remotedata/blob/v${version}/CHANGES.rst";
     license = licenses.bsd3;
+<<<<<<< HEAD
     maintainers = with maintainers; [ ];
+=======
+    maintainers = with maintainers; [ costrouc ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

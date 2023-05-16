@@ -9,16 +9,27 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "oha";
+<<<<<<< HEAD
   version = "0.6.3";
+=======
+  version = "0.5.8";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "hatoo";
     repo = pname;
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-vna0wmdcugrYLubnjSgBBeDW6ZHH3VToIJG0z8sB/ss=";
   };
 
   cargoSha256 = "sha256-d6gK/+dsJYb/9HSOHOsly3b35dh0FZ+aNnDVVzcXiV0=";
+=======
+    sha256 = "sha256-BnaFpJquYr+Ap9e31juAPVCE+AcTO7r3WfL/+OSLXIg=";
+  };
+
+  cargoSha256 = "sha256-7IRhHLBH4bLHI6gZEaSwqMn0XP+yoSVWwc+jikZpeD0=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nativeBuildInputs = lib.optionals stdenv.isLinux [
     pkg-config

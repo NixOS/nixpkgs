@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 { lib
 , buildPythonPackage
 , fetchFromGitHub
@@ -12,6 +13,15 @@ buildPythonPackage rec {
   format = "setuptools";
 
   disabled = pythonOlder "3.9";
+=======
+{ lib, buildPythonPackage, fetchFromGitHub
+, wheel, pytestCheckHook, pytest-runner, pythonAtLeast }:
+
+buildPythonPackage rec {
+  version = "0.18.6";
+  pname = "bacpypes";
+  disabled = pythonAtLeast "3.9";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "JoelBender";
@@ -20,6 +30,7 @@ buildPythonPackage rec {
     hash = "sha256-BHCHI36nTqBj2dkHB/Y5qkC4uJCmzbHGzSFWKNsIdbc=";
   };
 
+<<<<<<< HEAD
   postPatch = ''
     substituteInPlace setup.py \
       --replace "'pytest-runner'," "" \
@@ -34,11 +45,19 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+=======
+  propagatedBuildInputs = [ wheel ];
+
+  # Using pytes instead of setuptools check hook allows disabling specific tests
+  nativeCheckInputs = [ pytestCheckHook pytest-runner ];
+  dontUseSetuptoolsCheck = true;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   disabledTests = [
     # Test fails with a an error: AssertionError: assert 30 == 31
     "test_recurring_task_5"
   ];
 
+<<<<<<< HEAD
   pythonImportsCheck = [
     "bacpypes"
   ];
@@ -47,6 +66,11 @@ buildPythonPackage rec {
     description = "Module for the BACnet application layer and network layer";
     homepage = "https://github.com/JoelBender/bacpypes";
     changelog = "https://github.com/JoelBender/bacpypes/releases/tag/v${version}";
+=======
+  meta = with lib; {
+    homepage = "https://github.com/JoelBender/bacpypes";
+    description = "BACpypes provides a BACnet application layer and network layer written in Python for daemons, scripting, and graphical interfaces.";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     license = licenses.mit;
     maintainers = with maintainers; [ bachp ];
   };

@@ -1,7 +1,10 @@
 { lib
 , stdenv
 , fetchFromGitHub
+<<<<<<< HEAD
 , fetchpatch
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , installShellFiles
 , makeWrapper
 , pkg-config
@@ -10,6 +13,7 @@
 , readline
 , which
 , musl-fts
+<<<<<<< HEAD
   # options
 , conf ? null
 , withIcons ? false
@@ -25,11 +29,27 @@ assert withEmojis -> (withIcons == false && withNerdIcons == false);
 stdenv.mkDerivation (finalAttrs: {
   pname = "nnn";
   version = "4.9";
+=======
+# options
+, conf ? null
+, withIcons ? false
+, withNerdIcons ? false
+}:
+
+# Mutually exclusive options
+assert withIcons -> withNerdIcons == false;
+assert withNerdIcons -> withIcons == false;
+
+stdenv.mkDerivation (finalAttrs: {
+  pname = "nnn";
+  version = "4.8";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "jarun";
     repo = "nnn";
     rev = "v${finalAttrs.version}";
+<<<<<<< HEAD
     hash = "sha256-g19uI36HyzTF2YUQKFP4DE2ZBsArGryVHhX79Y0XzhU=";
   };
 
@@ -40,6 +60,11 @@ stdenv.mkDerivation (finalAttrs: {
     ./darwin-fix-file-mime-opts.patch
   ];
 
+=======
+    hash = "sha256-QbKW2wjhUNej3zoX18LdeUHqjNLYhEKyvPH2MXzp/iQ=";
+  };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   configFile = lib.optionalString (conf != null) (builtins.toFile "nnn.h" conf);
   preBuild = lib.optionalString (conf != null) "cp ${finalAttrs.configFile} src/nnn.h";
 
@@ -51,6 +76,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   makeFlags = [ "PREFIX=$(out)" ]
     ++ lib.optionals withIcons [ "O_ICONS=1" ]
+<<<<<<< HEAD
     ++ lib.optionals withNerdIcons [ "O_NERD=1" ]
     ++ lib.optionals withEmojis [ "O_EMOJI=1" ];
 
@@ -58,6 +84,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   installTargets = [ "install" "install-desktop" ];
 
+=======
+    ++ lib.optionals withNerdIcons [ "O_NERD=1" ];
+
+  binPath = lib.makeBinPath [ file which ];
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   postInstall = ''
     installShellCompletion --bash --name nnn.bash misc/auto-completion/bash/nnn-completion.bash
     installShellCompletion --fish misc/auto-completion/fish/nnn.fish
@@ -73,6 +105,9 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.bsd2;
     platforms = platforms.all;
     maintainers = with maintainers; [ jfrankenau Br1ght0ne ];
+<<<<<<< HEAD
     mainProgram = "nnn";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 })

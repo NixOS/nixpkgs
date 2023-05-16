@@ -24,7 +24,11 @@
 
 buildPythonPackage rec {
   pname = "python-benedict";
+<<<<<<< HEAD
   version = "0.32.0";
+=======
+  version = "0.30.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -33,7 +37,11 @@ buildPythonPackage rec {
     owner = "fabiocaccamo";
     repo = pname;
     rev = "refs/tags/${version}";
+<<<<<<< HEAD
     hash = "sha256-4fBV7sInw/jrKt7CmG7riMTmpLyrsyvWZGRY6s3YbHw=";
+=======
+    hash = "sha256-/LERLQw0Jb/Yuf2CfEKIZ658LtSkHjMvMxGcB00IgKs=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

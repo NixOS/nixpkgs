@@ -19,13 +19,21 @@
 
 stdenv.mkDerivation rec {
   pname = "slade";
+<<<<<<< HEAD
   version = "3.2.4";
+=======
+  version = "3.2.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "sirjuddington";
     repo = "SLADE";
     rev = version;
+<<<<<<< HEAD
     sha256 = "sha256-CN01w+sXXRqvQqu1whePAb+phVx+VM8tL2NusfnCyF8=";
+=======
+    sha256 = "sha256-UAxGNJ66o5wO8i/g0CgY395uHfJRJSxTlXlBbhgDAbM=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   postPatch = lib.optionalString (!stdenv.hostPlatform.isx86) ''

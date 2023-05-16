@@ -67,23 +67,36 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "gnome-shell";
+<<<<<<< HEAD
   version = "44.4";
+=======
+  version = "44.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   outputs = [ "out" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-shell/${lib.versions.major version}/${pname}-${version}.tar.xz";
+<<<<<<< HEAD
     sha256 = "HdUebujZL7y5XObd8Ruf7OiNImIsAQFf+pNgFpzUGGY=";
+=======
+    sha256 = "C/vkOU0mdiUVTQjQFGe9vZnoFXUS/I30XVwC3bdVHKY=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   patches = [
     # Hardcode paths to various dependencies so that they can be found at runtime.
     (substituteAll {
       src = ./fix-paths.patch;
+<<<<<<< HEAD
       gkbd_keyboard_display = "${lib.getBin libgnomekbd}/bin/gkbd-keyboard-display";
       glib_compile_schemas = "${glib.dev}/bin/glib-compile-schemas";
       gsettings = "${glib.bin}/bin/gsettings";
       unzip = "${lib.getBin unzip}/bin/unzip";
+=======
+      inherit libgnomekbd unzip;
+      gsettings = "${glib.bin}/bin/gsettings";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     })
 
     # Use absolute path for libshew installation to make our patched gobject-introspection
@@ -122,7 +135,10 @@ stdenv.mkDerivation rec {
     desktop-file-utils
     libxslt.bin
     asciidoc
+<<<<<<< HEAD
     gobject-introspection
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   buildInputs = [
@@ -156,6 +172,10 @@ stdenv.mkDerivation rec {
     ibus
     gnome-desktop
     gnome-settings-daemon
+<<<<<<< HEAD
+=======
+    gobject-introspection
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     mesa
 
     # recording

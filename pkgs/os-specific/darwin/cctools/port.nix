@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 { lib, stdenv, fetchFromGitHub, autoconf, automake, libtool, autoreconfHook, memstreamHook
+=======
+{ lib, stdenv, fetchFromGitHub, autoconf, automake, libtool, autoreconfHook
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , installShellFiles
 , libuuid
 , libobjc ? null, maloader ? null
@@ -35,8 +39,12 @@ stdenv.mkDerivation {
 
   outputs = [ "out" "dev" "man" ];
 
+<<<<<<< HEAD
   nativeBuildInputs = [ autoconf automake libtool autoreconfHook installShellFiles ]
     ++ lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [ memstreamHook ];
+=======
+  nativeBuildInputs = [ autoconf automake libtool autoreconfHook installShellFiles ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   buildInputs = [ libuuid ]
     ++ lib.optionals stdenv.isDarwin [ libobjc ]
     ++ lib.optional enableTapiSupport libtapi;
@@ -52,9 +60,14 @@ stdenv.mkDerivation {
       url = "https://github.com/MercuryTechnologies/cctools-port/commit/025899b7b3593dedb0c681e689e57c0e7bbd9b80.patch";
       hash = "sha256-SWVUzFaJHH2fu9y8RcU3Nx/QKx60hPE5zFx0odYDeQs=";
     })
+<<<<<<< HEAD
     # Always use `open_memstream`. This is provided by memstream via hook on x86_64-darwin.
     ./darwin-memstream.patch
   ];
+=======
+  ]
+    ++ lib.optional stdenv.isDarwin ./darwin-no-memstream.patch;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   __propagatedImpureHostDeps = [
     # As far as I can tell, otool from cctools is the only thing that depends on these two, and we should fix them

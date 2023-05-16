@@ -18,6 +18,9 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/zimbatm/mdsh";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ zimbatm ];
+<<<<<<< HEAD
     mainProgram = "mdsh";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

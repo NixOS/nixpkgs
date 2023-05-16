@@ -70,7 +70,11 @@ stdenv.mkDerivation (
       test -n "$releaseName" && (echo "$releaseName" >> $out/nix-support/hydra-release-name)
     '';
 
+<<<<<<< HEAD
     meta = (lib.optionalAttrs (args ? meta) args.meta) // {
+=======
+    meta = (if args ? meta then args.meta else {}) // {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       description = "Build of a generic binary distribution";
     };
 

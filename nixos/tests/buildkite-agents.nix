@@ -1,8 +1,18 @@
+<<<<<<< HEAD
 import ./make-test-python.nix ({ lib, pkgs, ... }:
 
 {
   name = "buildkite-agent";
   meta.maintainers = with lib.maintainers; [ flokli ];
+=======
+import ./make-test-python.nix ({ pkgs, ... }:
+
+{
+  name = "buildkite-agent";
+  meta = with pkgs.lib.maintainers; {
+    maintainers = [ flokli ];
+  };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nodes.machine = { pkgs, ... }: {
     services.buildkite-agents = {

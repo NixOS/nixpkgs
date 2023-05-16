@@ -8,23 +8,39 @@ import ./make-test-python.nix ({ pkgs, ... }:
     client_wsdd = { pkgs, ... }: {
       services.samba-wsdd = {
         enable = true;
+<<<<<<< HEAD
         openFirewall = true;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         interface = "eth1";
         workgroup = "WORKGROUP";
         hostname = "CLIENT-WSDD";
         discovery = true;
         extraOptions = [ "--no-host" ];
       };
+<<<<<<< HEAD
+=======
+      networking.firewall.allowedTCPPorts = [ 5357 ];
+      networking.firewall.allowedUDPPorts = [ 3702 ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
 
     server_wsdd = { ... }: {
       services.samba-wsdd = {
         enable = true;
+<<<<<<< HEAD
         openFirewall = true;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         interface = "eth1";
         workgroup = "WORKGROUP";
         hostname = "SERVER-WSDD";
       };
+<<<<<<< HEAD
+=======
+      networking.firewall.allowedTCPPorts = [ 5357 ];
+      networking.firewall.allowedUDPPorts = [ 3702 ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
   };
 

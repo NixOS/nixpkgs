@@ -91,10 +91,21 @@ rec {
     microblaze   = { bits = 32; significantByte = bigEndian;    family = "microblaze"; };
     microblazeel = { bits = 32; significantByte = littleEndian; family = "microblaze"; };
 
+<<<<<<< HEAD
     mips     = { bits = 32; significantByte = bigEndian;    family = "mips"; };
     mipsel   = { bits = 32; significantByte = littleEndian; family = "mips"; };
     mips64   = { bits = 64; significantByte = bigEndian;    family = "mips"; };
     mips64el = { bits = 64; significantByte = littleEndian; family = "mips"; };
+=======
+    mips          = { bits = 32; significantByte = bigEndian;    family = "mips"; };
+    mipsel        = { bits = 32; significantByte = littleEndian; family = "mips"; };
+    mipsisa32r6   = { bits = 32; significantByte = bigEndian;    family = "mips"; };
+    mipsisa32r6el = { bits = 32; significantByte = littleEndian; family = "mips"; };
+    mips64        = { bits = 64; significantByte = bigEndian;    family = "mips"; };
+    mips64el      = { bits = 64; significantByte = littleEndian; family = "mips"; };
+    mipsisa64r6   = { bits = 64; significantByte = bigEndian;    family = "mips"; };
+    mipsisa64r6el = { bits = 64; significantByte = littleEndian; family = "mips"; };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     mmix     = { bits = 64; significantByte = bigEndian;    family = "mmix"; };
 
@@ -221,8 +232,11 @@ rec {
   vendors = setTypes types.openVendor {
     apple = {};
     pc = {};
+<<<<<<< HEAD
     knuth = {};
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     # Actually matters, unlocking some MinGW-w64-specific options in GCC. See
     # bottom of https://sourceforge.net/p/mingw-w64/wiki2/Unicode%20apps/
     w64 = {};

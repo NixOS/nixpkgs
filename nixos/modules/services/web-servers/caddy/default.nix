@@ -14,7 +14,11 @@ let
     in
       ''
         ${hostOpts.hostName} ${concatStringsSep " " hostOpts.serverAliases} {
+<<<<<<< HEAD
           ${optionalString (hostOpts.listenAddresses != [ ]) "bind ${concatStringsSep " " hostOpts.listenAddresses}"}
+=======
+          bind ${concatStringsSep " " hostOpts.listenAddresses}
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           ${optionalString (hostOpts.useACMEHost != null) "tls ${sslCertDir}/cert.pem ${sslCertDir}/key.pem"}
           log {
             ${hostOpts.logFormat}
@@ -24,6 +28,7 @@ let
         }
       '';
 
+<<<<<<< HEAD
   settingsFormat = pkgs.formats.json { };
 
   configFile =
@@ -50,6 +55,25 @@ let
 
   configPath = "/etc/${etcConfigFile}";
 
+=======
+  configFile =
+    let
+      Caddyfile = pkgs.writeTextDir "Caddyfile" ''
+        {
+          ${cfg.globalConfig}
+        }
+        ${cfg.extraConfig}
+      '';
+
+      Caddyfile-formatted = pkgs.runCommand "Caddyfile-formatted" { nativeBuildInputs = [ cfg.package ]; } ''
+        mkdir -p $out
+        cp --no-preserve=mode ${Caddyfile}/Caddyfile $out/Caddyfile
+        caddy fmt --overwrite $out/Caddyfile
+      '';
+    in
+      "${if pkgs.stdenv.buildPlatform == pkgs.stdenv.hostPlatform then Caddyfile-formatted else Caddyfile}/Caddyfile";
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   acmeHosts = unique (catAttrs "useACMEHost" acmeVHosts);
 
   mkCertOwnershipAssertion = import ../../../security/acme/mk-cert-ownership-assertion.nix;
@@ -164,16 +188,23 @@ in
       description = lib.mdDoc ''
         Override the configuration file used by Caddy. By default,
         NixOS generates one automatically.
+<<<<<<< HEAD
 
         The configuration file is exposed at {file}`${configPath}`.
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       '';
     };
 
     adapter = mkOption {
+<<<<<<< HEAD
       default = if (builtins.baseNameOf cfg.configFile) == "Caddyfile" then "caddyfile" else null;
       defaultText = literalExpression ''
         if (builtins.baseNameOf cfg.configFile) == "Caddyfile" then "caddyfile" else null
       '';
+=======
+      default = null;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       example = literalExpression "nginx";
       type = with types; nullOr str;
       description = lib.mdDoc ''
@@ -259,6 +290,7 @@ in
     };
 
     acmeCA = mkOption {
+<<<<<<< HEAD
       default = null;
       example = "https://acme-v02.api.letsencrypt.org/directory";
       type = with types; nullOr str;
@@ -276,6 +308,17 @@ in
         Value `null` should be prefered for production setups,
         as it omits the `acme_ca` option to enable
         [automatic issuer fallback](https://caddyserver.com/docs/automatic-https#issuer-fallback).
+=======
+      default = "https://acme-v02.api.letsencrypt.org/directory";
+      example = "https://acme-staging-v02.api.letsencrypt.org/directory";
+      type = with types; nullOr str;
+      description = lib.mdDoc ''
+        The URL to the ACME CA's directory. It is strongly recommended to set
+        this to Let's Encrypt's staging endpoint for testing or development.
+
+        Set it to `null` if you want to write a more
+        fine-grained configuration manually.
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       '';
     };
 
@@ -289,6 +332,7 @@ in
       '';
     };
 
+<<<<<<< HEAD
     enableReload = mkOption {
       default = true;
       type = types.bool;
@@ -325,6 +369,8 @@ in
         :::
       '';
     };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   # implementation
@@ -361,6 +407,7 @@ in
       wantedBy = [ "multi-user.target" ];
       startLimitIntervalSec = 14400;
       startLimitBurst = 10;
+<<<<<<< HEAD
       reloadTriggers = optional cfg.enableReload cfg.configFile;
 
       serviceConfig = let
@@ -371,6 +418,15 @@ in
         ExecStart = [ "" ''${cfg.package}/bin/caddy run ${runOptions} ${optionalString cfg.resume "--resume"}'' ];
         # Validating the configuration before applying it ensures we’ll get a proper error that will be reported when switching to the configuration
         ExecReload = [ "" ''${cfg.package}/bin/caddy reload ${runOptions} --force'' ];
+=======
+
+      serviceConfig = {
+        # https://www.freedesktop.org/software/systemd/man/systemd.service.html#ExecStart=
+        # If the empty string is assigned to this option, the list of commands to start is reset, prior assignments of this option will have no effect.
+        ExecStart = [ "" ''${cfg.package}/bin/caddy run --config ${cfg.configFile} ${optionalString (cfg.adapter != null) "--adapter ${cfg.adapter}"} ${optionalString cfg.resume "--resume"}'' ];
+        ExecReload = [ "" ''${cfg.package}/bin/caddy reload --config ${cfg.configFile} ${optionalString (cfg.adapter != null) "--adapter ${cfg.adapter}"} --force'' ];
+        ExecStartPre = ''${cfg.package}/bin/caddy validate --config ${cfg.configFile} ${optionalString (cfg.adapter != null) "--adapter ${cfg.adapter}"}'';
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         User = cfg.user;
         Group = cfg.group;
         ReadWriteDirectories = cfg.dataDir;
@@ -406,6 +462,9 @@ in
       in
         listToAttrs certCfg;
 
+<<<<<<< HEAD
     environment.etc.${etcConfigFile}.source = cfg.configFile;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

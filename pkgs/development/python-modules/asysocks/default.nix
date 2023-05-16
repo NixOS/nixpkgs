@@ -7,14 +7,22 @@
 
 buildPythonPackage rec {
   pname = "asysocks";
+<<<<<<< HEAD
   version = "0.2.7";
+=======
+  version = "0.2.5";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
+<<<<<<< HEAD
     hash = "sha256-Kf2KDonjb+t7sA4jnC8mTh7fWoEDfRPhDkggb9A5E0Q=";
+=======
+    hash = "sha256-A8m6WA1SjD5awRdHtXsZNaG5vzSrtH2C23lzA1FhWlo=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [

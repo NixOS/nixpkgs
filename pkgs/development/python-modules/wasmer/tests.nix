@@ -6,7 +6,11 @@
 , wasmer-compiler-singlepass
 }:
 
+<<<<<<< HEAD
 buildPythonPackage {
+=======
+buildPythonPackage rec {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pname = "wasmer-tests";
   inherit (wasmer) version;
 

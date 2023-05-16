@@ -8,7 +8,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bzip3";
+<<<<<<< HEAD
   version = "1.3.2";
+=======
+  version = "1.3.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   outputs = [ "bin" "dev" "out" ];
 
@@ -16,7 +20,11 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "kspalaiologos";
     repo = "bzip3";
     rev = finalAttrs.version;
+<<<<<<< HEAD
     hash = "sha256-nSmKpOwlbxbUN2TJwsS2CFP5UV2ODOKXFHAUsCje7mc=";
+=======
+    hash = "sha256-g6+NdgbmbumNs6xt+D9F/yNclrUqOk6CJLCcjjSrzk4=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   postPatch = ''

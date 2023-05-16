@@ -19,17 +19,23 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-9FzMyBIR2u1zXHtTWJABM6RF1+OyjYdEPlRwtig9blI=";
   };
 
+<<<<<<< HEAD
   # remove large unneeded files
   postUnpack = ''
     find -name "lib*.so" -delete
   '';
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nativeBuildInputs = [ wrapGAppsHook unzip ];
 
   buildInputs = [ gsettings-desktop-schemas gtk3 ];
 
   installPhase = ''
+<<<<<<< HEAD
     runHook preInstall
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     mkdir -p $out/bin \
              $out/opt/${pname}
 
@@ -38,7 +44,10 @@ stdenv.mkDerivation rec {
     cp -r ${desktopItem}/share/applications $out/share/
 
     makeWrapper ${nwjs}/bin/nw $out/bin/${pname} --add-flags $out/opt/${pname}
+<<<<<<< HEAD
     runHook postInstall
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '';
 
   meta = with lib; {

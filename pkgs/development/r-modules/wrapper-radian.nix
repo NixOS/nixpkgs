@@ -26,7 +26,12 @@ runCommand (radian.name + "-wrapper") {
   };
 } (''
   makeWrapper "${radian}/bin/radian" "$out/bin/radian" \
+<<<<<<< HEAD
     --prefix "R_LIBS_SITE" ":" "$R_LIBS_SITE"
+=======
+    --prefix "R_LIBS_SITE" ":" "$R_LIBS_SITE" \
+    --set "R_HOME" "${R}/lib/R"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 '' + lib.optionalString wrapR ''
   cd ${R}/bin
   for exe in *; do

@@ -1,6 +1,12 @@
+<<<<<<< HEAD
 { lib, stdenv, fetchFromGitLab, installShellFiles
 , qmake, qttools
 , qtsvg, qtxmlpatterns
+=======
+{ lib, stdenv, fetchFromGitLab, substituteAll, installShellFiles
+, qmake, qttools
+, qtsvg, qttranslations, qtxmlpatterns
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , wrapQtAppsHook
 }:
 
@@ -15,6 +21,15 @@ stdenv.mkDerivation rec {
     hash = "sha256-N9fC2tCP4TVNncatHaz5W5Mp3jOmAcEWYCl30+0myaE=";
   };
 
+<<<<<<< HEAD
+=======
+  patches = (substituteAll {
+    # See https://github.com/NixOS/nixpkgs/issues/86054
+    src = ./fix-qttranslations-path.patch;
+    inherit qttranslations;
+  });
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   postPatch = ''
     substituteInPlace src/app/translations.pri \
       --replace '$$[QT_INSTALL_BINS]/$$LRELEASE' '${lib.getDev qttools}/bin/lrelease'

@@ -70,10 +70,18 @@ let
       let
         val = if item.freeform != null then item.freeform else item.tristate;
       in
+<<<<<<< HEAD
         optionalString (val != null)
             (if (item.optional)
             then "${key}? ${mkValue val}\n"
             else "${key} ${mkValue val}\n");
+=======
+        if val == null
+          then ""
+          else if (item.optional)
+            then "${key}? ${mkValue val}\n"
+            else "${key} ${mkValue val}\n";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     mkConf = cfg: concatStrings (mapAttrsToList mkConfigLine cfg);
   in mkConf exprs;

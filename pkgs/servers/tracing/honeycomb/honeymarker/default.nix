@@ -3,7 +3,11 @@ import ./versions.nix ({version, sha256}:
   buildGoModule {
   pname = "honeymarker";
   inherit version;
+<<<<<<< HEAD
   vendorHash = "sha256-ZuDobjC/nizZ7G0o/zVTQmDfDjcdBhfPcmkhgwFc7VU=";
+=======
+  vendorSha256 = "sha256-ZuDobjC/nizZ7G0o/zVTQmDfDjcdBhfPcmkhgwFc7VU=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "honeycombio";

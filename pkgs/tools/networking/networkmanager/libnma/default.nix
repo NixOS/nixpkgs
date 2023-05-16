@@ -21,6 +21,10 @@
 , withGnome ? true
 , gcr_4
 , glib
+<<<<<<< HEAD
+=======
+, substituteAll
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , lib
 , _experimental-update-script-combinators
 , makeHardcodeGsettingsPatch

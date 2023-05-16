@@ -18,7 +18,11 @@
 }:
 python3.pkgs.buildPythonApplication rec {
   pname = "giara";
+<<<<<<< HEAD
   version = "1.1.0";
+=======
+  version = "1.0.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   format = "other";
 
@@ -27,7 +31,11 @@ python3.pkgs.buildPythonApplication rec {
     owner = "World";
     repo = pname;
     rev = version;
+<<<<<<< HEAD
     hash = "sha256-FTy0ElcoTGXG9eV85pUrF35qKDKOfYIovPtjLfTJVOg=";
+=======
+    hash = "sha256-hKaniW+bbuKUrETMQGWwvC2kyudK9tCE/R69dOFzdQM=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [
@@ -62,9 +70,12 @@ python3.pkgs.buildPythonApplication rec {
   postPatch = ''
     substituteInPlace meson_post_install.py \
       --replace "gtk-update-icon-cache" "gtk4-update-icon-cache"
+<<<<<<< HEAD
     # blueprint-compiler expects "profile" to be a string.
     substituteInPlace data/ui/headerbar.blp \
       --replace "item { custom: profile; }" 'item { custom: "profile"; }'
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '';
 
   meta = with lib; {

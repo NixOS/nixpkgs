@@ -11,7 +11,11 @@ stdenv.mkDerivation rec {
     sha256 = "08la3jmmzlf4pm48bf9zx4cqj9gbqalpqy0s57bh5vfsdk74nnhv";
   };
 
+<<<<<<< HEAD
   sourceRoot = "${src.name}/src";
+=======
+  sourceRoot = "source/src";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nativeBuildInputs = [ meson ninja pkg-config ];
   buildInputs = [ libseccomp ];

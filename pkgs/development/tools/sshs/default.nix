@@ -12,10 +12,17 @@ buildGoModule rec {
     owner = "quantumsheep";
     repo = pname;
     rev = version;
+<<<<<<< HEAD
     hash = "sha256-KD971dGm1oQt9GbiUGZm2k4SJrBAA9rnHj7Gu0t3SJw=";
   };
 
   vendorHash = "sha256-OCh37wjSs40Q0VQmoc1nXQ4nWddnoUCrI5xgxpxR/Ec=";
+=======
+    sha256 = "KD971dGm1oQt9GbiUGZm2k4SJrBAA9rnHj7Gu0t3SJw=";
+  };
+
+  vendorSha256 = "OCh37wjSs40Q0VQmoc1nXQ4nWddnoUCrI5xgxpxR/Ec=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   ldflags = [ "-s" "-w" "-X github.com/quantumsheep/sshs/cmd.Version=${version}" ];
 

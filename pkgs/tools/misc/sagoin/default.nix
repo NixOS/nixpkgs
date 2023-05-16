@@ -8,16 +8,27 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "sagoin";
+<<<<<<< HEAD
   version = "0.2.3";
+=======
+  version = "0.2.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "figsoda";
     repo = pname;
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-/WNUDlJxxUGAtykX44A9EqMdBNwVKsGkPnq9pATmLEQ=";
   };
 
   cargoHash = "sha256-YGQZR5n71srD/8QrBUOoEe72nPm0cwgk5zrzoXy2Hx0=";
+=======
+    sha256 = "sha256-CSkij/3WCeEq26Uhlrgdf503hGf0OwSUQNmx5mspD08=";
+  };
+
+  cargoSha256 = "sha256-Zos3ox6VQv9t1KoblAJhVblTOQOn9rJyvaXK48Y/K1c=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nativeBuildInputs = [ installShellFiles ];
 

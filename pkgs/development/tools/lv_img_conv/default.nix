@@ -52,7 +52,13 @@ buildNpmPackage rec {
     makeWrapper ${nodePackages.ts-node}/bin/ts-node $out/bin/lv_img_conv --add-flags $out/lib/node_modules/lv_img_conv/lib/cli.ts
   '';
 
+<<<<<<< HEAD
   passthru.updateScript = nix-update-script { };
+=======
+  passthru.updateScript = nix-update-script {
+    attrPath = pname;
+  };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   meta = with lib; {
     changelog = "https://github.com/lvgl/lv_img_conv/releases/tag/v${version}";

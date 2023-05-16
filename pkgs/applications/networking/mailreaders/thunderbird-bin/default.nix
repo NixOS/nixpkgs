@@ -173,8 +173,12 @@ stdenv.mkDerivation {
 
       for executable in \
         thunderbird thunderbird-bin plugin-container \
+<<<<<<< HEAD
         updater crashreporter webapprt-stub \
         glxtest vaapitest
+=======
+        updater crashreporter webapprt-stub
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       do
         if [ -e "$out/usr/lib/thunderbird-bin-${version}/$executable" ]; then
           patchelf --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
@@ -213,7 +217,10 @@ stdenv.mkDerivation {
     changelog = "https://www.thunderbird.net/en-US/thunderbird/${version}/releasenotes/";
     description = "Mozilla Thunderbird, a full-featured email client (binary package)";
     homepage = "http://www.mozilla.org/thunderbird/";
+<<<<<<< HEAD
     mainProgram = "thunderbird";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.mpl20;
     maintainers = with lib.maintainers; [ lovesegfault ];

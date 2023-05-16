@@ -3,11 +3,19 @@
 
 stdenv.mkDerivation rec {
   pname = "mercury";
+<<<<<<< HEAD
   version = "22.01.7";
 
   src = fetchurl {
     url    = "https://dl.mercurylang.org/release/mercury-srcdist-${version}.tar.gz";
     sha256 = "sha256-PctyVKlV2cnHoBSAXjMTSPvWY7op9D6kIMypYDRgvGw=";
+=======
+  version = "22.01.5";
+
+  src = fetchurl {
+    url    = "https://dl.mercurylang.org/release/mercury-srcdist-${version}.tar.gz";
+    sha256 = "sha256-fhstGxMMCvxlVCvjwuSDmc8sJdegStPEJ+AicVsJig8=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -54,10 +62,16 @@ stdenv.mkDerivation rec {
       allowing modularity, separate compilation, and numerous optimization/time
       trade-offs.
     '';
+<<<<<<< HEAD
     homepage    = "https://mercurylang.org/";
     changelog   = "https://dl.mercurylang.org/release/release-notes-${version}.html";
     license     = lib.licenses.gpl2Only;
     platforms   = lib.platforms.all;
+=======
+    homepage    = "http://mercurylang.org";
+    license     = lib.licenses.gpl2;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     maintainers = [ ];
   };
 }

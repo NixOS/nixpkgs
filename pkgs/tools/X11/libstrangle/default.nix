@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 { lib, stdenv, fetchFromGitLab, fetchpatch, libGL, libX11 }:
+=======
+{ lib, stdenv, fetchFromGitLab, libGL, libX11 }:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 stdenv.mkDerivation rec {
   pname = "libstrangle";
@@ -16,6 +20,7 @@ stdenv.mkDerivation rec {
   makeFlags = [ "prefix=" "DESTDIR=$(out)" ];
 
   patches = [
+<<<<<<< HEAD
     ./nixos.patch
     # Pull the fix pending upstream inclusion for gcc-13:
     #   https://gitlab.com/torkel104/libstrangle/-/merge_requests/29
@@ -24,6 +29,9 @@ stdenv.mkDerivation rec {
       url = "https://gitlab.com/torkel104/libstrangle/-/commit/4e17025071de1d99630febe7270b4f63056d0dfa.patch";
       hash = "sha256-AKMHAZhCPcn62pi4fBGhw2r8SNSkCDMUCpR3IlmJ7wQ=";
     })
+=======
+      ./nixos.patch
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   postPatch = ''

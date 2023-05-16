@@ -9,14 +9,22 @@
 
 buildPythonPackage rec {
   pname = "pyroute2";
+<<<<<<< HEAD
   version = "0.7.9";
+=======
+  version = "0.7.8";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
+<<<<<<< HEAD
     hash = "sha256-tp2C8UCwd0MX17pA9sX6HXVQmLo/PrYZmC0W51DcYxo=";
+=======
+    hash = "sha256-mJRHQ08XyyD9kvwfFV8LxqRoKr9hH94qeslaYed3f/0=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

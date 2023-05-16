@@ -22,13 +22,22 @@
 }:
 
 let
+<<<<<<< HEAD
   apparmor-version = "3.1.6";
+=======
+  apparmor-version = "3.1.3";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   apparmor-meta = component: with lib; {
     homepage = "https://apparmor.net/";
     description = "A mandatory access control system - ${component}";
+<<<<<<< HEAD
     license = with licenses; [ gpl2Only lgpl21Only ];
     maintainers = with maintainers; [ julm thoughtpolice ajs124 ];
+=======
+    license = licenses.gpl2;
+    maintainers = with maintainers; [ julm thoughtpolice ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     platforms = platforms.linux;
   };
 
@@ -36,7 +45,11 @@ let
     owner = "apparmor";
     repo = "apparmor";
     rev = "v${apparmor-version}";
+<<<<<<< HEAD
     hash = "sha256-VPgRmmQv+kgLduc6RTu9gotyjT6OImUXsPeatgG7m9E=";
+=======
+    hash = "sha256-6N1BStOXKui6BxSriWVoOkvyGRUJ4btsloHh/SsG/JE=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   aa-teardown = writeShellScript "aa-teardown" ''
@@ -128,10 +141,16 @@ let
     meta = apparmor-meta "library";
   };
 
+<<<<<<< HEAD
   apparmor-utils = python.pkgs.buildPythonApplication {
     pname = "apparmor-utils";
     version = apparmor-version;
     format = "other";
+=======
+  apparmor-utils = stdenv.mkDerivation {
+    pname = "apparmor-utils";
+    version = apparmor-version;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     src = apparmor-sources;
 
@@ -144,6 +163,7 @@ let
       perl
       python
       libapparmor
+<<<<<<< HEAD
       (libapparmor.python or null)
     ];
 
@@ -153,6 +173,9 @@ let
       # Used by aa-notify
       python.pkgs.notify2
       python.pkgs.psutil
+=======
+      libapparmor.python
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     ];
 
     prePatch = prePatchCommon +
@@ -160,12 +183,18 @@ let
       lib.optionalString stdenv.hostPlatform.isMusl ''
         sed -i ./utils/Makefile -e "/\<vim\>/d"
       '' + ''
+<<<<<<< HEAD
       sed -i -E 's/^(DESTDIR|BINDIR|PYPREFIX)=.*//g' ./utils/Makefile
 
       sed -i utils/aa-unconfined -e "/my_env\['PATH'\]/d"
 
       substituteInPlace utils/aa-remove-unknown \
        --replace "/lib/apparmor/rc.apparmor.functions" "${apparmor-parser}/lib/apparmor/rc.apparmor.functions"
+=======
+      for file in utils/apparmor/easyprof.py utils/apparmor/aa.py utils/logprof.conf; do
+        substituteInPlace $file --replace "/sbin/apparmor_parser" "${apparmor-parser}/bin/apparmor_parser"
+      done
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     '';
     inherit patches;
     postPatch = "cd ./utils";
@@ -173,6 +202,20 @@ let
     installFlags = [ "DESTDIR=$(out)" "BINDIR=$(out)/bin" "VIM_INSTALL_PATH=$(out)/share" "PYPREFIX=" ];
 
     postInstall = ''
+<<<<<<< HEAD
+=======
+      sed -i $out/bin/aa-unconfined -e "/my_env\['PATH'\]/d"
+      for prog in aa-audit aa-autodep aa-cleanprof aa-complain aa-disable aa-enforce aa-genprof aa-logprof aa-mergeprof aa-unconfined ; do
+        wrapProgram $out/bin/$prog --prefix PYTHONPATH : "$out/lib/${python.sitePackages}:$PYTHONPATH"
+      done
+
+      substituteInPlace $out/bin/aa-notify \
+        --replace /usr/bin/notify-send ${libnotify}/bin/notify-send \
+        --replace /usr/bin/perl "${perl}/bin/perl -I ${libapparmor}/${perl.libPrefix}"
+
+      substituteInPlace $out/bin/aa-remove-unknown \
+       --replace "/lib/apparmor/rc.apparmor.functions" "${apparmor-parser}/lib/apparmor/rc.apparmor.functions"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       wrapProgram $out/bin/aa-remove-unknown \
        --prefix PATH : ${lib.makeBinPath [ gawk ]}
 

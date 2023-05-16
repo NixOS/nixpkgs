@@ -46,9 +46,19 @@ let
              then baseName
              else baseName + "-" + channel;
 
+<<<<<<< HEAD
   iconSuffix = lib.optionalString (channel != "stable") "_${channel}";
 
   desktopSuffix = lib.optionalString (channel != "stable") "-${channel}";
+=======
+  iconSuffix = if channel == "stable"
+               then ""
+               else "_${channel}";
+
+  desktopSuffix = if channel == "stable"
+                  then ""
+                  else "-${channel}";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 in
 
 stdenv.mkDerivation rec {
@@ -138,7 +148,11 @@ stdenv.mkDerivation rec {
     cp -R opt usr/bin usr/share $out
 
     ${if channel == "stable"
+<<<<<<< HEAD
       then "ln -sf $out/bin/${longName} $out/bin/${baseName}-${channel}"
+=======
+      then ""
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       else "ln -sf $out/opt/microsoft/${shortName}/${baseName}-${channel} $out/opt/microsoft/${shortName}/${baseName}"}
 
     ln -sf $out/opt/microsoft/${shortName}/${longName} $out/bin/${longName}

@@ -2,13 +2,21 @@
 
 stdenv.mkDerivation rec {
   pname = "subnetcalc";
+<<<<<<< HEAD
   version = "2.4.22";
+=======
+  version = "2.4.21";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "dreibh";
     repo = pname;
     rev = "${pname}-${version}";
+<<<<<<< HEAD
     sha256 = "sha256-5sDEMS4RgHdGQZAT2MVF/Ls0KXwdKzX+05uQpHhCZn8=";
+=======
+    sha256 = "sha256-cFlNx59PaI5GvbEKUplNEq5HVCNt40ZJUvMj2UIbe2A=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ cmake ninja ];

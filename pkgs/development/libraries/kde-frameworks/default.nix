@@ -82,7 +82,11 @@ let
                 homepage = meta.homepage or "https://kde.org";
                 license = meta.license or license;
                 maintainers = (meta.maintainers or []) ++ maintainers;
+<<<<<<< HEAD
                 platforms = meta.platforms or lib.platforms.all;
+=======
+                platforms = meta.platforms or lib.platforms.linux;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
               };
 
           in mkDerivation (args // {

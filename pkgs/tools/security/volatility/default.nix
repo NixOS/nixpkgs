@@ -19,7 +19,11 @@ python2Packages.buildPythonApplication rec {
     homepage = "https://www.volatilityfoundation.org/";
     description = "Advanced memory forensics framework";
     maintainers = with maintainers; [ bosu ];
+<<<<<<< HEAD
     license = licenses.gpl2Plus;
     broken = true;
+=======
+    license = lib.licenses.gpl2Plus;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

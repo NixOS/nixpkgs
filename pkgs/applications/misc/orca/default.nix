@@ -34,13 +34,21 @@
 
 buildPythonApplication rec {
   pname = "orca";
+<<<<<<< HEAD
   version = "44.1";
+=======
+  version = "44.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   format = "other";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
+<<<<<<< HEAD
     sha256 = "9e1lUdcviXshJI1DMIWnuBesy7ApaoTD6FHZH7Lu5N4=";
+=======
+    sha256 = "e8WX7AvBtnQgC2L995XUuulkemNxfXVN9hWHzCUFAs4=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   patches = [

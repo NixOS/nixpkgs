@@ -11,7 +11,11 @@ buildGoModule rec {
     sha256 = "sha256-vhxIm20ZUi+RusrAsSY54tv/D570/oMO5qLz9dNqgqo=";
   };
 
+<<<<<<< HEAD
   vendorHash = "sha256-xY9xNuJhkWPgtqA/FBVIp7GuWOv+3nrz6l3vaZVLlIE=";
+=======
+  vendorSha256 = "sha256-xY9xNuJhkWPgtqA/FBVIp7GuWOv+3nrz6l3vaZVLlIE=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   postInstall = ''
     mkdir -p $out/share/

@@ -29,6 +29,9 @@ stdenv.mkDerivation {
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ astro ];
     platforms = [ "x86_64-linux" "aarch64-linux" ];
+<<<<<<< HEAD
     mainProgram = "nvramtool";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

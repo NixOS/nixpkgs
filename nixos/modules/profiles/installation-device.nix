@@ -106,8 +106,11 @@ with lib;
         systemdStage1Network
       ];
 
+<<<<<<< HEAD
     boot.swraid.enable = true;
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     # Show all debug messages from the kernel but don't log refused packets
     # because we have the firewall enabled. This makes installs from the
     # console less cumbersome if the machine has a public IP.
@@ -120,8 +123,11 @@ with lib;
       [PStore]
       Unlink=no
     '';
+<<<<<<< HEAD
 
     # allow nix-copy to live system
     nix.settings.trusted-users = [ "root" "nixos" ];
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

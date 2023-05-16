@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 { lib
 , buildPythonPackage
 , fetchPypi
@@ -7,10 +8,20 @@
 , scipy
 , setuptools
 , tables
+=======
+{ lib, buildPythonPackage, fetchPypi, isPy27
+, numpy
+, scipy
+, tables
+, pandas
+, nose
+, configparser
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 buildPythonPackage rec {
   pname = "flammkuchen";
+<<<<<<< HEAD
   version = "1.0.3";
   format = "pyproject";
 
@@ -21,18 +32,34 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     setuptools
+=======
+  version = "1.0.2";
+
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-KtMGQftoYVNNMtfYeYiaQyMLAySpf9YXLMxj+e/CV5I=";
+  };
+
+  nativeCheckInputs = [
+    nose
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   propagatedBuildInputs = [
     numpy
     scipy
     tables
+<<<<<<< HEAD
   ];
 
   nativeCheckInputs = [
     pandas
     pytestCheckHook
   ];
+=======
+    pandas
+  ] ++ lib.optionals isPy27 [ configparser ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   meta = {
     homepage = "https://github.com/portugueslab/flammkuchen";

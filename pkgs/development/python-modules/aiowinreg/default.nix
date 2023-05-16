@@ -8,7 +8,11 @@
 
 buildPythonPackage rec {
   pname = "aiowinreg";
+<<<<<<< HEAD
   version = "0.0.10";
+=======
+  version = "0.0.9";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -17,7 +21,11 @@ buildPythonPackage rec {
     owner = "skelsec";
     repo = pname;
     rev = "refs/tags/${version}";
+<<<<<<< HEAD
     hash = "sha256-PkrBjH+yeSLpwL9kH242xQKBsjv6a11k2c26qBwR6Fw=";
+=======
+    hash = "sha256-FyrYqNqp0PTEHHit3Rn00jtvPOvgVy+lz3jDRJnsobI=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [

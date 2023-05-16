@@ -11,7 +11,11 @@
 
 buildPythonPackage rec {
   pname = "asyncwhois";
+<<<<<<< HEAD
   version = "1.0.7";
+=======
+  version = "1.0.5";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -20,7 +24,11 @@ buildPythonPackage rec {
     owner = "pogzyb";
     repo = pname;
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-OiDi9hD2IDDfQoQoPhLpClBnJyI/wlZfGyzqmVI94yA=";
+=======
+    hash = "sha256-ILKnJlPT8BuZK06xk7fWYXcdn9SRL5zA3+B6CfJwvKM=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [

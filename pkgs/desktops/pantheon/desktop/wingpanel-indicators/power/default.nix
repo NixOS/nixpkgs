@@ -6,6 +6,10 @@
 , gnome-power-manager
 , pkg-config
 , meson
+<<<<<<< HEAD
+=======
+, python3
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , ninja
 , vala
 , gtk3
@@ -20,13 +24,21 @@
 
 stdenv.mkDerivation rec {
   pname = "wingpanel-indicator-power";
+<<<<<<< HEAD
   version = "6.2.1";
+=======
+  version = "6.2.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
+<<<<<<< HEAD
     sha256 = "sha256-EEY32O7GeXBHSjZQ3XGogT1sUzIKGX+CzcGx8buGLq4=";
+=======
+    sha256 = "sha256-TxrskbwitsilTidWifSWg9IP6BzH1y/OOrFohlENJmM=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   patches = [
@@ -40,6 +52,10 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
+<<<<<<< HEAD
+=======
+    python3
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     vala
   ];
 
@@ -54,6 +70,14 @@ stdenv.mkDerivation rec {
     wingpanel
   ];
 
+<<<<<<< HEAD
+=======
+  postPatch = ''
+    chmod +x meson/post_install.py
+    patchShebangs meson/post_install.py
+  '';
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   passthru = {
     updateScript = nix-update-script { };
   };

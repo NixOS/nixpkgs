@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 { lib
 , stdenv
 , fetchFromGitHub
@@ -8,6 +9,10 @@
 , libsodium
 , enableDrafts ? false
 }:
+=======
+{ lib, stdenv, fetchFromGitHub, cmake, asciidoc, pkg-config, libsodium
+, enableDrafts ? false }:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 stdenv.mkDerivation rec {
   pname = "zeromq";
@@ -20,6 +25,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-epOEyHOswUGVwzz0FLxhow/zISmZHxsIgmpOV8C8bQM=";
   };
 
+<<<<<<< HEAD
   patches = [
     # Backport gcc-13 fix:
     #   https://github.com/zeromq/libzmq/pull/4480
@@ -30,6 +36,8 @@ stdenv.mkDerivation rec {
     })
   ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nativeBuildInputs = [ cmake asciidoc pkg-config ];
   buildInputs = [ libsodium ];
 
@@ -41,7 +49,11 @@ stdenv.mkDerivation rec {
     branch = "4";
     homepage = "http://www.zeromq.org";
     description = "The Intelligent Transport Layer";
+<<<<<<< HEAD
     license = licenses.lgpl3Plus;
+=======
+    license = licenses.gpl3;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     platforms = platforms.all;
     maintainers = with maintainers; [ fpletz ];
   };

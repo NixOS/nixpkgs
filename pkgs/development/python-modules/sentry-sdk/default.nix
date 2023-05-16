@@ -40,7 +40,11 @@
 
 buildPythonPackage rec {
   pname = "sentry-sdk";
+<<<<<<< HEAD
   version = "1.30.0";
+=======
+  version = "1.21.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -49,7 +53,11 @@ buildPythonPackage rec {
     owner = "getsentry";
     repo = "sentry-python";
     rev = "refs/tags/${version}";
+<<<<<<< HEAD
     hash = "sha256-bs2Eg9eq39/LeuAWyW8FlnPULRUvQXils7OFrAEIg0w=";
+=======
+    hash = "sha256-RKYnDeuLWGavYdxsHs+GBGQCUcrVSR+Bi3RO3MbRxfU=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [

@@ -23,7 +23,10 @@
 , libpulseaudio
 , libuuid
 , libwnck
+<<<<<<< HEAD
 , magpie
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , mesa
 , meson
 , ninja
@@ -37,14 +40,22 @@
 
 stdenv.mkDerivation rec {
   pname = "budgie-desktop";
+<<<<<<< HEAD
   version = "10.8";
+=======
+  version = "10.7.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "BuddiesOfBudgie";
     repo = pname;
     rev = "v${version}";
     fetchSubmodules = true;
+<<<<<<< HEAD
     hash = "sha256-fOsTBnKtwBGQSPkBBrzwHEB3+OcJYtPIdvZsV31oi6g=";
+=======
+    hash = "sha256-fd3B2DMZxCI4Gb9mwdACjIPydKghXx8IkhFpMS/Clps=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   patches = [
@@ -71,6 +82,10 @@ stdenv.mkDerivation rec {
     gnome-menus
     gnome.gnome-bluetooth_1_0
     gnome.gnome-settings-daemon
+<<<<<<< HEAD
+=======
+    gnome.mutter
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     gnome.zenity
     graphene
     gtk3
@@ -83,7 +98,10 @@ stdenv.mkDerivation rec {
     libpulseaudio
     libuuid
     libwnck
+<<<<<<< HEAD
     magpie
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     mesa
     polkit
     sassc
@@ -102,6 +120,10 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/BuddiesOfBudgie/budgie-desktop";
     platforms = platforms.linux;
     maintainers = [ maintainers.federicoschonborn ];
+<<<<<<< HEAD
     license = with licenses; [ gpl2Plus lgpl21Plus cc-by-sa-30 ];
+=======
+    license = with licenses; [ gpl2Plus lgpl21Plus cc-by-sa-30];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

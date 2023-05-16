@@ -2,9 +2,14 @@
 , lib
 , pkg-config
 , fetchFromGitLab
+<<<<<<< HEAD
 , fetchpatch
 , gitUpdater
 , ffmpeg_6
+=======
+, gitUpdater
+, ffmpeg_5
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   # for daemon
 , autoreconfHook
@@ -12,7 +17,11 @@
 , alsa-lib
 , asio
 , dbus
+<<<<<<< HEAD
 , sdbus-cpp
+=======
+, dbus_cplusplus
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , fmt
 , gmp
 , gnutls
@@ -66,14 +75,22 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "jami";
+<<<<<<< HEAD
   version = "20230619.1";
+=======
+  version = "20230323.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitLab {
     domain = "git.jami.net";
     owner = "savoirfairelinux";
     repo = "jami-client-qt";
     rev = "stable/${version}";
+<<<<<<< HEAD
     hash = "sha256-gOl4GtGmEvhM8xtlyFvTwXrUsbocUKULnVy9cnCNAM0=";
+=======
+    hash = "sha256-X8iIT8UtI2Vq0Ne5e2ahSPN4g7QLZGnq3SZV/NY+1pY=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     fetchSubmodules = true;
   };
 
@@ -82,12 +99,17 @@ stdenv.mkDerivation rec {
       patch-src = src + "/daemon/contrib/src/pjproject/";
     in
     rec {
+<<<<<<< HEAD
       version = "e4b83585a0bdf1523e808a4fc1946ec82ac733d0";
+=======
+      version = "3b78ef1c48732d238ba284cdccb04dc6de79c54f";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
       src = fetchFromGitHub {
         owner = "savoirfairelinux";
         repo = "pjproject";
         rev = version;
+<<<<<<< HEAD
         hash = "sha256-QeD2o6uz9r5vc3Scs1oRKYZ+aNH+01TSxLBj71ssfj4=";
       };
 
@@ -100,6 +122,12 @@ stdenv.mkDerivation rec {
       ];
 
       patchFlags = [ "-p1" "-l" ];
+=======
+        hash = "sha256-hrm5tDM2jknU/gWMeO6/FhqOvay8bajFid39OiEtAAQ=";
+      };
+
+      patches = (map (x: patch-src + x) (readLinesToList ./config/pjsip_patches));
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
       configureFlags = (readLinesToList ./config/pjsip_args_common)
         ++ lib.optionals stdenv.isLinux (readLinesToList ./config/pjsip_args_linux);
@@ -113,7 +141,13 @@ stdenv.mkDerivation rec {
   daemon = stdenv.mkDerivation {
     pname = "jami-daemon";
     inherit src version meta;
+<<<<<<< HEAD
     sourceRoot = "${src.name}/daemon";
+=======
+    sourceRoot = "source/daemon";
+
+    patches = [ ./0001-fix-annotations-in-bin-dbus-cx.ring.Ring.CallManager.patch ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     nativeBuildInputs = [
       autoreconfHook
@@ -125,9 +159,15 @@ stdenv.mkDerivation rec {
       alsa-lib
       asio
       dbus
+<<<<<<< HEAD
       sdbus-cpp
       fmt
       ffmpeg_6
+=======
+      dbus_cplusplus
+      fmt
+      ffmpeg_5
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       gmp
       gnutls
       http-parser
@@ -154,11 +194,14 @@ stdenv.mkDerivation rec {
     enableParallelBuilding = true;
   };
 
+<<<<<<< HEAD
   postPatch = ''
     substituteInPlace src/app/commoncomponents/ModalTextEdit.qml \
       --replace 'required property string placeholderText' 'property string placeholderText: ""'
   '';
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   preConfigure = ''
     echo 'const char VERSION_STRING[] = "${version}";' > src/app/version.h
   '';
@@ -173,7 +216,11 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     daemon
+<<<<<<< HEAD
     ffmpeg_6
+=======
+    ffmpeg_5
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     libnotify
     networkmanager
     qtbase

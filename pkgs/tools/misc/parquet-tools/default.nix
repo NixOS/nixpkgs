@@ -7,7 +7,11 @@ with python3Packages;
 
 buildPythonApplication rec {
   pname = "parquet-tools";
+<<<<<<< HEAD
   version = "0.2.14";
+=======
+  version = "0.2.12";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   format = "pyproject";
 
@@ -15,7 +19,11 @@ buildPythonApplication rec {
     owner = "ktrueda";
     repo = "parquet-tools";
     rev = "refs/tags/${version}";
+<<<<<<< HEAD
     hash = "sha256-2jIwDsxB+g37zV9hLc2VNC5YuZXTpTmr2aQ72AeHYJo=";
+=======
+    hash = "sha256-5bK+kW550DgBhcH5INozwGKKjM+xXblmFg2Tu2rnos4=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   postPatch = ''
@@ -56,8 +64,11 @@ buildPythonApplication rec {
     # These tests try to read Python code as parquet and fail
     "test_local_wildcard"
     "test_local_and_s3_wildcard_files"
+<<<<<<< HEAD
     # test file is 2 bytes bigger than expected
     "test_excute_simple"
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   pythonImportsCheck = [

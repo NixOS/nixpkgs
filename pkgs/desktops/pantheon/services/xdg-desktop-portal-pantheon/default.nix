@@ -16,13 +16,21 @@
 
 stdenv.mkDerivation rec {
   pname = "xdg-desktop-portal-pantheon";
+<<<<<<< HEAD
   version = "7.1.1";
+=======
+  version = "7.0.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "portals";
     rev = version;
+<<<<<<< HEAD
     sha256 = "sha256-JZ2VYsNAjNGCzKOEhHCZx2uNLHFs+ktjFmROLHdFjX4=";
+=======
+    sha256 = "sha256-Rfo9Z5rCJgk36Db3ce8dYBJswy8owjvRMrJVB/RfwyI=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

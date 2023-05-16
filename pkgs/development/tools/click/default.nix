@@ -28,12 +28,15 @@ buildPythonApplication {
     sha256 = "sha256-pNu995/w3tbz15QQVdVYBnWnAoZmqWj1DN/5PZZ0iZw=";
   };
 
+<<<<<<< HEAD
   postPatch = ''
     # These should be proper Requires, using the header needs their headers
     substituteInPlace lib/click/click-*.pc.in \
       --replace 'Requires.private' 'Requires'
   '';
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   configureFlags = [
     "--with-systemdsystemunitdir=${placeholder "out"}/lib/systemd/system"
     "--with-systemduserunitdir=${placeholder "out"}/lib/systemd/user"

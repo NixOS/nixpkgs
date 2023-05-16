@@ -3,14 +3,23 @@
 
 stdenv.mkDerivation rec {
   pname = "sbt-extras";
+<<<<<<< HEAD
   rev = "6918a7d323874cbc8d59d353f1ac8f105bb79b81";
   version = "2023-08-28";
+=======
+  rev = "32c96866364964b3e2f7272e0f9ef3e1a76ea7d7";
+  version = "2023-01-05";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "paulp";
     repo = "sbt-extras";
     inherit rev;
+<<<<<<< HEAD
     sha256 = "awRkk9mir/lcpPUEDnNeDSe+aynYKwKQd066cws5nhU=";
+=======
+    sha256 = "AgwqWmNkUkyQDu6R8LO86/JYJJHI6ZjEhPglt/jWBRY=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   dontBuild = true;

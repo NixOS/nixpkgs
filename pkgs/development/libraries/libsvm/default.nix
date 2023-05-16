@@ -8,11 +8,19 @@
 
 stdenv.mkDerivation rec {
   pname = "libsvm";
+<<<<<<< HEAD
   version = "3.32";
 
   src = fetchurl {
     url = "https://www.csie.ntu.edu.tw/~cjlin/libsvm/libsvm-${version}.tar.gz";
     sha256 = "sha256-hkTMZRjKiLvFDYyOrRc08aubbxcBcEXvmuOHc6plPa0=";
+=======
+  version = "3.31";
+
+  src = fetchurl {
+    url = "https://www.csie.ntu.edu.tw/~cjlin/libsvm/libsvm-${version}.tar.gz";
+    sha256 = "sha256-AKtWH0jfX8kqhCCa2P5Rmery5Rmzwnm6z8k1l4p1zx8=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   patches = lib.optionals withOpenMP [ ./openmp.patch ];

@@ -2,17 +2,24 @@
 , stdenv
 , fetchurl
 , gnutls
+<<<<<<< HEAD
 , openssl
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , gsasl
 , libidn
 , pkg-config
 , Security
+<<<<<<< HEAD
 , nlsSupport ? true
 , idnSupport ? true
 , gsaslSupport ? true
 , sslLibrary ? "gnutls"
 }:
 assert lib.assertOneOf "sslLibrary" sslLibrary ["gnutls" "openssl" "no"];
+=======
+}:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 stdenv.mkDerivation rec {
   pname = "mpop";
@@ -27,6 +34,7 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
+<<<<<<< HEAD
   buildInputs =
     lib.optional stdenv.isDarwin Security
     ++ lib.optional gsaslSupport gsasl
@@ -40,6 +48,19 @@ stdenv.mkDerivation rec {
     (lib.withFeature gsaslSupport "gsasl")
     "--with-tls=${sslLibrary}"
   ] ++ lib.optional stdenv.isDarwin "--with-macosx-keyring";
+=======
+  buildInputs = [
+    gnutls
+    gsasl
+    libidn
+  ] ++ lib.optionals stdenv.isDarwin [
+    Security
+  ];
+
+  configureFlags = lib.optionals stdenv.isDarwin [
+    "--with-macosx-keyring"
+  ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   meta = with lib;{
     description = "POP3 mail retrieval agent";

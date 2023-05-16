@@ -3,12 +3,17 @@
 , fetchurl
 , appimageTools
 , makeWrapper
+<<<<<<< HEAD
 # graphs will not sync without matching upstream's major electron version
 , electron_24
+=======
+, electron
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , git
 , nix-update-script
 }:
 
+<<<<<<< HEAD
 stdenv.mkDerivation (finalAttrs: let
   inherit (finalAttrs) pname version src appimageContents;
 
@@ -19,6 +24,15 @@ in {
   src = fetchurl {
     url = "https://github.com/logseq/logseq/releases/download/${version}/logseq-linux-x64-${version}.AppImage";
     hash = "sha256-1CXr/evINfB+VwLQBeuVhq0rCzRVM1ULQC3epYECN+I=";
+=======
+stdenv.mkDerivation rec {
+  pname = "logseq";
+  version = "0.9.4";
+
+  src = fetchurl {
+    url = "https://github.com/logseq/logseq/releases/download/${version}/logseq-linux-x64-${version}.AppImage";
+    hash = "sha256-K04iIa/WnRtcHwRUHJbKqXO9c4l5xwHPvnwN5WX/Row=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     name = "${pname}-${version}.AppImage";
   };
 
@@ -57,11 +71,18 @@ in {
 
   postFixup = ''
     # set the env "LOCAL_GIT_DIRECTORY" for dugite so that we can use the git in nixpkgs
+<<<<<<< HEAD
     makeWrapper ${electron_24}/bin/electron $out/bin/${pname} \
       --set "LOCAL_GIT_DIRECTORY" ${git} \
       --add-flags $out/share/${pname}/resources/app \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}" \
       --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ stdenv.cc.cc.lib ]}"
+=======
+    makeWrapper ${electron}/bin/electron $out/bin/${pname} \
+      --set "LOCAL_GIT_DIRECTORY" ${git} \
+      --add-flags $out/share/${pname}/resources/app \
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '';
 
   passthru.updateScript = nix-update-script { };
@@ -74,4 +95,8 @@ in {
     maintainers = with maintainers; [ ];
     platforms = [ "x86_64-linux" ];
   };
+<<<<<<< HEAD
 })
+=======
+}
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)

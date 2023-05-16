@@ -2,11 +2,19 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "panoply";
+<<<<<<< HEAD
   version = "5.2.9";
 
   src = fetchurl {
     url = "https://www.giss.nasa.gov/tools/panoply/download/PanoplyJ-${version}.tgz";
     sha256 = "sha256-InnHiaPvSCCtRmWStyrYQMhNQnoG+lhSBe7ECrPFKFc=";
+=======
+  version = "5.2.6";
+
+  src = fetchurl {
+    url = "https://www.giss.nasa.gov/tools/panoply/download/PanoplyJ-${version}.tgz";
+    sha256 = "sha256-C/FMR276qx7yo7UaZ3a794B3mDy1/mrrZiua2eaIoxg=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ makeWrapper ];

@@ -11,6 +11,10 @@ from markdown_it.token import Token
 from typing import Any, Generic, Optional
 from urllib.parse import quote
 
+<<<<<<< HEAD
+=======
+import markdown_it
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 from . import md
 from . import parallel
@@ -37,10 +41,18 @@ class BaseConverter(Converter[md.TR], Generic[md.TR]):
 
     _options: dict[str, RenderedOption]
 
+<<<<<<< HEAD
     def __init__(self, revision: str):
         super().__init__()
         self._options = {}
         self._revision = revision
+=======
+    def __init__(self, revision: str, markdown_by_default: bool):
+        super().__init__()
+        self._options = {}
+        self._revision = revision
+        self._markdown_by_default = markdown_by_default
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     def _sorted_options(self) -> list[tuple[str, RenderedOption]]:
         keys = list(self._options.keys())
@@ -105,7 +117,11 @@ class BaseConverter(Converter[md.TR], Generic[md.TR]):
             return []
 
     def _render_description(self, desc: str | dict[str, str]) -> list[str]:
+<<<<<<< HEAD
         if isinstance(desc, str):
+=======
+        if isinstance(desc, str) and self._markdown_by_default:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
             return [ self._render(desc) ] if desc else []
         elif isinstance(desc, dict) and desc.get('_type') == 'mdDoc':
             return [ self._render(desc['text']) ] if desc['text'] else []
@@ -197,22 +213,49 @@ class DocBookConverter(BaseConverter[OptionsDocBookRenderer]):
 
     def __init__(self, manpage_urls: Mapping[str, str],
                  revision: str,
+<<<<<<< HEAD
                  document_type: str,
                  varlist_id: str,
                  id_prefix: str):
         super().__init__(revision)
+=======
+                 markdown_by_default: bool,
+                 document_type: str,
+                 varlist_id: str,
+                 id_prefix: str):
+        super().__init__(revision, markdown_by_default)
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         self._renderer = OptionsDocBookRenderer(manpage_urls)
         self._document_type = document_type
         self._varlist_id = varlist_id
         self._id_prefix = id_prefix
 
     def _parallel_render_prepare(self) -> Any:
+<<<<<<< HEAD
         return (self._renderer._manpage_urls, self._revision, self._document_type,
+=======
+        return (self._renderer._manpage_urls, self._revision, self._markdown_by_default, self._document_type,
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
                 self._varlist_id, self._id_prefix)
     @classmethod
     def _parallel_render_init_worker(cls, a: Any) -> DocBookConverter:
         return cls(*a)
 
+<<<<<<< HEAD
+=======
+    def _render_code(self, option: dict[str, Any], key: str) -> list[str]:
+        if lit := option_is(option, key, 'literalDocBook'):
+            return [ f"<para><emphasis>{key.capitalize()}:</emphasis> {lit['text']}</para>" ]
+        else:
+            return super()._render_code(option, key)
+
+    def _render_description(self, desc: str | dict[str, Any]) -> list[str]:
+        if isinstance(desc, str) and not self._markdown_by_default:
+            return [ f"<nixos:option-description><para>{desc}</para></nixos:option-description>" ]
+        else:
+            return super()._render_description(desc)
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     def _related_packages_header(self) -> list[str]:
         return [
             "<para>",
@@ -250,7 +293,11 @@ class DocBookConverter(BaseConverter[OptionsDocBookRenderer]):
                 '  <title>Configuration Options</title>',
             ]
         result += [
+<<<<<<< HEAD
             '<variablelist xmlns:xlink="http://www.w3.org/1999/xlink"',
+=======
+            f'<variablelist xmlns:xlink="http://www.w3.org/1999/xlink"',
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
             '               xmlns:nixos="tag:nixos.org"',
             '               xmlns="http://docbook.org/ns/docbook"',
             f'              xml:id="{self._varlist_id}">',
@@ -286,19 +333,34 @@ class ManpageConverter(BaseConverter[OptionsManpageRenderer]):
     _options_by_id: dict[str, str]
     _links_in_last_description: Optional[list[str]] = None
 
+<<<<<<< HEAD
     def __init__(self, revision: str,
                  *,
                  # only for parallel rendering
                  _options_by_id: Optional[dict[str, str]] = None):
         super().__init__(revision)
+=======
+    def __init__(self, revision: str, markdown_by_default: bool,
+                 *,
+                 # only for parallel rendering
+                 _options_by_id: Optional[dict[str, str]] = None):
+        super().__init__(revision, markdown_by_default)
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         self._options_by_id = _options_by_id or {}
         self._renderer = OptionsManpageRenderer({}, self._options_by_id)
 
     def _parallel_render_prepare(self) -> Any:
+<<<<<<< HEAD
         return (self._revision, { '_options_by_id': self._options_by_id })
     @classmethod
     def _parallel_render_init_worker(cls, a: Any) -> ManpageConverter:
         return cls(a[0], **a[1])
+=======
+        return ((self._revision, self._markdown_by_default), { '_options_by_id': self._options_by_id })
+    @classmethod
+    def _parallel_render_init_worker(cls, a: Any) -> ManpageConverter:
+        return cls(*a[0], **a[1])
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     def _render_option(self, name: str, option: dict[str, Any]) -> RenderedOption:
         links = self._renderer.link_footnotes = []
@@ -312,11 +374,28 @@ class ManpageConverter(BaseConverter[OptionsManpageRenderer]):
         return super().add_options(options)
 
     def _render_code(self, option: dict[str, Any], key: str) -> list[str]:
+<<<<<<< HEAD
         try:
             self._renderer.inline_code_is_quoted = False
             return super()._render_code(option, key)
         finally:
             self._renderer.inline_code_is_quoted = True
+=======
+        if lit := option_is(option, key, 'literalDocBook'):
+            raise RuntimeError("can't render manpages in the presence of docbook")
+        else:
+            try:
+                self._renderer.inline_code_is_quoted = False
+                return super()._render_code(option, key)
+            finally:
+                self._renderer.inline_code_is_quoted = True
+
+    def _render_description(self, desc: str | dict[str, Any]) -> list[str]:
+        if isinstance(desc, str) and not self._markdown_by_default:
+            raise RuntimeError("can't render manpages in the presence of docbook")
+        else:
+            return super()._render_description(desc)
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     def _related_packages_header(self) -> list[str]:
         return [
@@ -397,16 +476,44 @@ class OptionsCommonMarkRenderer(OptionDocsRestrictions, CommonMarkRenderer):
 class CommonMarkConverter(BaseConverter[OptionsCommonMarkRenderer]):
     __option_block_separator__ = ""
 
+<<<<<<< HEAD
     def __init__(self, manpage_urls: Mapping[str, str], revision: str):
         super().__init__(revision)
         self._renderer = OptionsCommonMarkRenderer(manpage_urls)
 
     def _parallel_render_prepare(self) -> Any:
         return (self._renderer._manpage_urls, self._revision)
+=======
+    def __init__(self, manpage_urls: Mapping[str, str], revision: str, markdown_by_default: bool):
+        super().__init__(revision, markdown_by_default)
+        self._renderer = OptionsCommonMarkRenderer(manpage_urls)
+
+    def _parallel_render_prepare(self) -> Any:
+        return (self._renderer._manpage_urls, self._revision, self._markdown_by_default)
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     @classmethod
     def _parallel_render_init_worker(cls, a: Any) -> CommonMarkConverter:
         return cls(*a)
 
+<<<<<<< HEAD
+=======
+    def _render_code(self, option: dict[str, Any], key: str) -> list[str]:
+        # NOTE this duplicates the old direct-paste behavior, even if it is somewhat
+        # incorrect, since users rely on it.
+        if lit := option_is(option, key, 'literalDocBook'):
+            return [ f"*{key.capitalize()}:* {lit['text']}" ]
+        else:
+            return super()._render_code(option, key)
+
+    def _render_description(self, desc: str | dict[str, Any]) -> list[str]:
+        # NOTE this duplicates the old direct-paste behavior, even if it is somewhat
+        # incorrect, since users rely on it.
+        if isinstance(desc, str) and not self._markdown_by_default:
+            return [ desc ]
+        else:
+            return super()._render_description(desc)
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     def _related_packages_header(self) -> list[str]:
         return [ "*Related packages:*" ]
 
@@ -437,16 +544,44 @@ class OptionsAsciiDocRenderer(OptionDocsRestrictions, AsciiDocRenderer):
 class AsciiDocConverter(BaseConverter[OptionsAsciiDocRenderer]):
     __option_block_separator__ = ""
 
+<<<<<<< HEAD
     def __init__(self, manpage_urls: Mapping[str, str], revision: str):
         super().__init__(revision)
         self._renderer = OptionsAsciiDocRenderer(manpage_urls)
 
     def _parallel_render_prepare(self) -> Any:
         return (self._renderer._manpage_urls, self._revision)
+=======
+    def __init__(self, manpage_urls: Mapping[str, str], revision: str, markdown_by_default: bool):
+        super().__init__(revision, markdown_by_default)
+        self._renderer = OptionsAsciiDocRenderer(manpage_urls)
+
+    def _parallel_render_prepare(self) -> Any:
+        return (self._renderer._manpage_urls, self._revision, self._markdown_by_default)
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     @classmethod
     def _parallel_render_init_worker(cls, a: Any) -> AsciiDocConverter:
         return cls(*a)
 
+<<<<<<< HEAD
+=======
+    def _render_code(self, option: dict[str, Any], key: str) -> list[str]:
+        # NOTE this duplicates the old direct-paste behavior, even if it is somewhat
+        # incorrect, since users rely on it.
+        if lit := option_is(option, key, 'literalDocBook'):
+            return [ f"*{key.capitalize()}:* {lit['text']}" ]
+        else:
+            return super()._render_code(option, key)
+
+    def _render_description(self, desc: str | dict[str, Any]) -> list[str]:
+        # NOTE this duplicates the old direct-paste behavior, even if it is somewhat
+        # incorrect, since users rely on it.
+        if isinstance(desc, str) and not self._markdown_by_default:
+            return [ desc ]
+        else:
+            return super()._render_description(desc)
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     def _related_packages_header(self) -> list[str]:
         return [ "__Related packages:__" ]
 
@@ -486,21 +621,46 @@ class OptionsHTMLRenderer(OptionDocsRestrictions, HTMLRenderer):
 class HTMLConverter(BaseConverter[OptionsHTMLRenderer]):
     __option_block_separator__ = ""
 
+<<<<<<< HEAD
     def __init__(self, manpage_urls: Mapping[str, str], revision: str,
                  varlist_id: str, id_prefix: str, xref_targets: Mapping[str, XrefTarget]):
         super().__init__(revision)
+=======
+    def __init__(self, manpage_urls: Mapping[str, str], revision: str, markdown_by_default: bool,
+                 varlist_id: str, id_prefix: str, xref_targets: Mapping[str, XrefTarget]):
+        super().__init__(revision, markdown_by_default)
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         self._xref_targets = xref_targets
         self._varlist_id = varlist_id
         self._id_prefix = id_prefix
         self._renderer = OptionsHTMLRenderer(manpage_urls, self._xref_targets)
 
     def _parallel_render_prepare(self) -> Any:
+<<<<<<< HEAD
         return (self._renderer._manpage_urls, self._revision,
+=======
+        return (self._renderer._manpage_urls, self._revision, self._markdown_by_default,
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
                 self._varlist_id, self._id_prefix, self._xref_targets)
     @classmethod
     def _parallel_render_init_worker(cls, a: Any) -> HTMLConverter:
         return cls(*a)
 
+<<<<<<< HEAD
+=======
+    def _render_code(self, option: dict[str, Any], key: str) -> list[str]:
+        if lit := option_is(option, key, 'literalDocBook'):
+            raise RuntimeError("can't render html in the presence of docbook")
+        else:
+            return super()._render_code(option, key)
+
+    def _render_description(self, desc: str | dict[str, Any]) -> list[str]:
+        if isinstance(desc, str) and not self._markdown_by_default:
+            raise RuntimeError("can't render html in the presence of docbook")
+        else:
+            return super()._render_description(desc)
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     def _related_packages_header(self) -> list[str]:
         return [
             '<p><span class="emphasis"><em>Related packages:</em></span></p>',
@@ -568,6 +728,10 @@ def _build_cli_db(p: argparse.ArgumentParser) -> None:
     p.add_argument('--document-type', required=True)
     p.add_argument('--varlist-id', required=True)
     p.add_argument('--id-prefix', required=True)
+<<<<<<< HEAD
+=======
+    p.add_argument('--markdown-by-default', default=False, action='store_true')
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     p.add_argument("infile")
     p.add_argument("outfile")
 
@@ -579,12 +743,20 @@ def _build_cli_manpage(p: argparse.ArgumentParser) -> None:
 def _build_cli_commonmark(p: argparse.ArgumentParser) -> None:
     p.add_argument('--manpage-urls', required=True)
     p.add_argument('--revision', required=True)
+<<<<<<< HEAD
+=======
+    p.add_argument('--markdown-by-default', default=False, action='store_true')
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     p.add_argument("infile")
     p.add_argument("outfile")
 
 def _build_cli_asciidoc(p: argparse.ArgumentParser) -> None:
     p.add_argument('--manpage-urls', required=True)
     p.add_argument('--revision', required=True)
+<<<<<<< HEAD
+=======
+    p.add_argument('--markdown-by-default', default=False, action='store_true')
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     p.add_argument("infile")
     p.add_argument("outfile")
 
@@ -593,6 +765,10 @@ def _run_cli_db(args: argparse.Namespace) -> None:
         md = DocBookConverter(
             json.load(manpage_urls),
             revision = args.revision,
+<<<<<<< HEAD
+=======
+            markdown_by_default = args.markdown_by_default,
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
             document_type = args.document_type,
             varlist_id = args.varlist_id,
             id_prefix = args.id_prefix)
@@ -603,7 +779,15 @@ def _run_cli_db(args: argparse.Namespace) -> None:
             f.write(md.finalize())
 
 def _run_cli_manpage(args: argparse.Namespace) -> None:
+<<<<<<< HEAD
     md = ManpageConverter(revision = args.revision)
+=======
+    md = ManpageConverter(
+        revision = args.revision,
+        # manpage rendering only works if there's no docbook, so we can
+        # also set markdown_by_default with no ill effects.
+        markdown_by_default = True)
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     with open(args.infile, 'r') as f:
         md.add_options(json.load(f))
@@ -612,7 +796,14 @@ def _run_cli_manpage(args: argparse.Namespace) -> None:
 
 def _run_cli_commonmark(args: argparse.Namespace) -> None:
     with open(args.manpage_urls, 'r') as manpage_urls:
+<<<<<<< HEAD
         md = CommonMarkConverter(json.load(manpage_urls), revision = args.revision)
+=======
+        md = CommonMarkConverter(
+            json.load(manpage_urls),
+            revision = args.revision,
+            markdown_by_default = args.markdown_by_default)
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
         with open(args.infile, 'r') as f:
             md.add_options(json.load(f))
@@ -621,7 +812,14 @@ def _run_cli_commonmark(args: argparse.Namespace) -> None:
 
 def _run_cli_asciidoc(args: argparse.Namespace) -> None:
     with open(args.manpage_urls, 'r') as manpage_urls:
+<<<<<<< HEAD
         md = AsciiDocConverter(json.load(manpage_urls), revision = args.revision)
+=======
+        md = AsciiDocConverter(
+            json.load(manpage_urls),
+            revision = args.revision,
+            markdown_by_default = args.markdown_by_default)
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
         with open(args.infile, 'r') as f:
             md.add_options(json.load(f))

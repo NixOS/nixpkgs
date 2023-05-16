@@ -5,12 +5,20 @@
 
 stdenv.mkDerivation rec {
   pname = "xfstests";
+<<<<<<< HEAD
   version = "2023.05.14";
+=======
+  version = "2022.09.04";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchgit {
     url = "https://git.kernel.org/pub/scm/fs/xfs/xfstests-dev.git";
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-yyjY9Q3eUH+q+o15zFUjOcNz1HpXPCwdcxWXoycOx98=";
+=======
+    sha256 = "sha256-hPFoqNmB8pewvBN1nzVMkTrMHCo0xc8tmmIODaiDeRw=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

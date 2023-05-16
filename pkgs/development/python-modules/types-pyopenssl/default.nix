@@ -6,13 +6,21 @@
 
 buildPythonPackage rec {
   pname = "types-pyopenssl";
+<<<<<<< HEAD
   version = "23.2.0.2";
+=======
+  version = "23.0.0.4";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   src = fetchPypi {
     pname = "types-pyOpenSSL";
     inherit version;
+<<<<<<< HEAD
     hash = "sha256-agENrJ7NQrWC190sw+nkBIa3mztkuy//uhR0/5avkG0=";
+=======
+    hash = "sha256-izVQtuGdUc54qr1ySw2OvZYggaX86V5/haWS3828Fr8=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [

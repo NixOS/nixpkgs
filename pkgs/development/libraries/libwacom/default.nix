@@ -13,7 +13,11 @@
 
 stdenv.mkDerivation rec {
   pname = "libwacom";
+<<<<<<< HEAD
   version = "2.7.0";
+=======
+  version = "2.6.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   outputs = [ "out" "dev" ];
 
@@ -21,7 +25,11 @@ stdenv.mkDerivation rec {
     owner = "linuxwacom";
     repo = "libwacom";
     rev = "libwacom-${version}";
+<<<<<<< HEAD
     sha256 = "sha256-NNfhZMshM5U/EfJHuNgkDe5NEkEGKtJ56vSpXyGf/xw=";
+=======
+    sha256 = "sha256-9zqW6zPrFcxv/yAAtFgdVavKVMXeDBoMP3E/XriUcT0=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   postPatch = ''
@@ -41,7 +49,11 @@ stdenv.mkDerivation rec {
     libgudev
   ];
 
+<<<<<<< HEAD
   doCheck = stdenv.hostPlatform == stdenv.buildPlatform && lib.meta.availableOn stdenv.hostPlatform valgrind;
+=======
+  doCheck = stdenv.hostPlatform == stdenv.buildPlatform;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   mesonFlags = [
     "-Dtests=${if doCheck then "enabled" else "disabled"}"

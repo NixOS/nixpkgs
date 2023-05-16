@@ -52,7 +52,11 @@ let
   });
 in stdenv.mkDerivation rec {
   pname = "phoc";
+<<<<<<< HEAD
   version = "0.27.0";
+=======
+  version = "0.25.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
@@ -60,7 +64,11 @@ in stdenv.mkDerivation rec {
     owner = "Phosh";
     repo = pname;
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-4/Fxo72KXLy3gxXMS+PrTUbZl0EFt2GPMXg8+/fE7MY=";
+=======
+    sha256 = "sha256-1cbv4vzQ+RcRoT1pOT8Q0nxuZzKUlec38KCNMYaceeE=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     fetchSubmodules = true;
   };
 

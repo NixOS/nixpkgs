@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 { lib, pkgs, stdenv, fetchFromGitHub, python3, nix, git, makeWrapper
+=======
+{ lib, pkgs, stdenv, fetchFromGitHub, mypy, python3, nix, git, makeWrapper
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , runtimeShell }:
 let self = stdenv.mkDerivation rec {
   pname = "nix-pin";
@@ -10,7 +14,14 @@ let self = stdenv.mkDerivation rec {
     sha256 = "1pccvc0iqapms7kidrh09g5fdx44x622r5l9k7bkmssp3v4c68vy";
   };
   nativeBuildInputs = [ makeWrapper ];
+<<<<<<< HEAD
   buildInputs = [ python3 ];
+=======
+  buildInputs = [ python3 mypy ];
+  checkPhase = ''
+    mypy bin/*
+  '';
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   installPhase = ''
     mkdir "$out"
     cp -r bin share "$out"

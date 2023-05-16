@@ -64,7 +64,11 @@ stdenv.mkDerivation {
     homepage = "https://www.inference.org.uk/dasher/";
     description = "Information-efficient text-entry interface, driven by natural continuous pointing gestures";
     license = lib.licenses.gpl2Only;
+<<<<<<< HEAD
     maintainers = [ ];
+=======
+    maintainers = [ lib.maintainers.Profpatsch ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     platforms = lib.platforms.all;
   };
 }

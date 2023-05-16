@@ -2,13 +2,21 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "agdsn-zsh-config";
+<<<<<<< HEAD
   version = "0.7.1";
+=======
+  version = "0.6.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "agdsn";
     repo = "agdsn-zsh-config";
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-79bD3YQcpNTKYvEoKu22gqOKvNH7eZPGS/iU+/4IbAU=";
+=======
+    sha256 = "sha256-/l2fE4ZsZ6f89fYG9sTEV1mrXZ3MLXx6K3CTUQHiAsc=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   dontBuild = true;

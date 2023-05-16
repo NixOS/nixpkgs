@@ -16,6 +16,7 @@ fi
 set -x
 
 cd "$(dirname "$0")"
+<<<<<<< HEAD
 rev="$1"
 
 set -euo pipefail
@@ -29,6 +30,24 @@ src_hash=$(nix-prefetch-github adamcstephens pnpm-lock-export --rev "${rev}" | j
 
 # Front-end dependencies
 upstream_src="https://raw.githubusercontent.com/adamcstephens/pnpm-lock-export/${rev}"
+=======
+version="$1"
+
+set -euo pipefail
+
+if [ -z "$version" ]; then
+    version="$(wget -O- "${TOKEN_ARGS[@]}" "https://api.github.com/repos/cvent/pnpm-lock-export/releases?per_page=1" | jq -r '.[0].tag_name')"
+fi
+
+# strip leading "v"
+version="${version#v}"
+
+# pnpm-lock-export repository
+src_hash=$(nix-prefetch-github cvent pnpm-lock-export --rev "v${version}" | jq -r .sha256)
+
+# Front-end dependencies
+upstream_src="https://raw.githubusercontent.com/cvent/pnpm-lock-export/v$version"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 trap 'rm -rf package.json' EXIT
 wget "${TOKEN_ARGS[@]}" "$upstream_src/package.json"
@@ -36,8 +55,15 @@ npm install --package-lock-only
 deps_hash=$(prefetch-npm-deps package-lock.json)
 
 # Use friendlier hashes
+<<<<<<< HEAD
 deps_hash=$(nix hash to-sri --type sha256 "$deps_hash")
 
 sed -i -E -e "s#rev = \".*\"#rev = \"$rev\"#" default.nix
+=======
+src_hash=$(nix hash to-sri --type sha256 "$src_hash")
+deps_hash=$(nix hash to-sri --type sha256 "$deps_hash")
+
+sed -i -E -e "s#version = \".*\"#version = \"$version\"#" default.nix
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 sed -i -E -e "s#hash = \".*\"#hash = \"$src_hash\"#" default.nix
 sed -i -E -e "s#npmDepsHash = \".*\"#npmDepsHash = \"$deps_hash\"#" default.nix

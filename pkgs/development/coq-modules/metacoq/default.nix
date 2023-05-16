@@ -33,7 +33,12 @@ let
   template-coq = metacoq_ "template-coq";
 
   metacoq_ = package: let
+<<<<<<< HEAD
       metacoq-deps = lib.optionals (package != "single") (map metacoq_ (head (splitList (lib.pred.equal package) packages)));
+=======
+      metacoq-deps = if package == "single" then []
+        else map metacoq_ (head (splitList (lib.pred.equal package) packages));
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       pkgpath = if package == "single" then "./" else "./${package}";
       pname = if package == "all" then "metacoq" else "metacoq-${package}";
       pkgallMake = ''

@@ -1,4 +1,10 @@
+<<<<<<< HEAD
 { config, lib, pkgs, ... }:
+=======
+{ config, lib, pkgs, buildEnv, ... }:
+
+with lib;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 let
   cfg = config.services.netbox;
@@ -15,7 +21,11 @@ let
   pkg = (cfg.package.overrideAttrs (old: {
     installPhase = old.installPhase + ''
       ln -s ${configFile} $out/opt/netbox/netbox/netbox/configuration.py
+<<<<<<< HEAD
     '' + lib.optionalString cfg.enableLdap ''
+=======
+    '' + optionalString cfg.enableLdap ''
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       ln -s ${cfg.ldapConfigPath} $out/opt/netbox/netbox/netbox/ldap_config.py
     '';
   })).override {
@@ -29,7 +39,11 @@ let
 
 in {
   options.services.netbox = {
+<<<<<<< HEAD
     enable = lib.mkOption {
+=======
+    enable = mkOption {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       type = lib.types.bool;
       default = false;
       description = lib.mdDoc ''
@@ -64,18 +78,30 @@ in {
       };
     };
 
+<<<<<<< HEAD
     listenAddress = lib.mkOption {
       type = lib.types.str;
+=======
+    listenAddress = mkOption {
+      type = types.str;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       default = "[::1]";
       description = lib.mdDoc ''
         Address the server will listen on.
       '';
     };
 
+<<<<<<< HEAD
     package = lib.mkOption {
       type = lib.types.package;
       default = if lib.versionAtLeast config.system.stateVersion "23.05" then pkgs.netbox else pkgs.netbox_3_3;
       defaultText = lib.literalExpression ''
+=======
+    package = mkOption {
+      type = types.package;
+      default = if versionAtLeast config.system.stateVersion "23.05" then pkgs.netbox else pkgs.netbox_3_3;
+      defaultText = literalExpression ''
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         if versionAtLeast config.system.stateVersion "23.05" then pkgs.netbox else pkgs.netbox_3_3;
       '';
       description = lib.mdDoc ''
@@ -83,18 +109,30 @@ in {
       '';
     };
 
+<<<<<<< HEAD
     port = lib.mkOption {
       type = lib.types.port;
+=======
+    port = mkOption {
+      type = types.port;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       default = 8001;
       description = lib.mdDoc ''
         Port the server will listen on.
       '';
     };
 
+<<<<<<< HEAD
     plugins = lib.mkOption {
       type = with lib.types; functionTo (listOf package);
       default = _: [];
       defaultText = lib.literalExpression ''
+=======
+    plugins = mkOption {
+      type = types.functionTo (types.listOf types.package);
+      default = _: [];
+      defaultText = literalExpression ''
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         python3Packages: with python3Packages; [];
       '';
       description = lib.mdDoc ''
@@ -102,23 +140,38 @@ in {
       '';
     };
 
+<<<<<<< HEAD
     dataDir = lib.mkOption {
       type = lib.types.str;
+=======
+    dataDir = mkOption {
+      type = types.str;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       default = "/var/lib/netbox";
       description = lib.mdDoc ''
         Storage path of netbox.
       '';
     };
 
+<<<<<<< HEAD
     secretKeyFile = lib.mkOption {
       type = lib.types.path;
+=======
+    secretKeyFile = mkOption {
+      type = types.path;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       description = lib.mdDoc ''
         Path to a file containing the secret key.
       '';
     };
 
+<<<<<<< HEAD
     extraConfig = lib.mkOption {
       type = lib.types.lines;
+=======
+    extraConfig = mkOption {
+      type = types.lines;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       default = "";
       description = lib.mdDoc ''
         Additional lines of configuration appended to the `configuration.py`.
@@ -126,8 +179,13 @@ in {
       '';
     };
 
+<<<<<<< HEAD
     enableLdap = lib.mkOption {
       type = lib.types.bool;
+=======
+    enableLdap = mkOption {
+      type = types.bool;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       default = false;
       description = lib.mdDoc ''
         Enable LDAP-Authentication for Netbox.
@@ -136,8 +194,13 @@ in {
       '';
     };
 
+<<<<<<< HEAD
     ldapConfigPath = lib.mkOption {
       type = lib.types.path;
+=======
+    ldapConfigPath = mkOption {
+      type = types.path;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       default = "";
       description = lib.mdDoc ''
         Path to the Configuration-File for LDAP-Authentication, will be loaded as `ldap_config.py`.
@@ -169,6 +232,7 @@ in {
         AUTH_LDAP_FIND_GROUP_PERMS = True
       '';
     };
+<<<<<<< HEAD
     keycloakClientSecret = lib.mkOption {
       type = with lib.types; nullOr path;
       default = null;
@@ -181,14 +245,24 @@ in {
   config = lib.mkIf cfg.enable {
     services.netbox = {
       plugins = lib.mkIf cfg.enableLdap (ps: [ ps.django-auth-ldap ]);
+=======
+  };
+
+  config = mkIf cfg.enable {
+    services.netbox = {
+      plugins = mkIf cfg.enableLdap (ps: [ ps.django-auth-ldap ]);
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       settings = {
         STATIC_ROOT = staticDir;
         MEDIA_ROOT = "${cfg.dataDir}/media";
         REPORTS_ROOT = "${cfg.dataDir}/reports";
         SCRIPTS_ROOT = "${cfg.dataDir}/scripts";
 
+<<<<<<< HEAD
         GIT_PATH = "${pkgs.gitMinimal}/bin/git";
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         DATABASE = {
           NAME = "netbox";
           USER = "netbox";
@@ -234,10 +308,14 @@ in {
       extraConfig = ''
         with open("${cfg.secretKeyFile}", "r") as file:
             SECRET_KEY = file.readline()
+<<<<<<< HEAD
       '' + (lib.optionalString (cfg.keycloakClientSecret != null) ''
         with open("${cfg.keycloakClientSecret}", "r") as file:
             SOCIAL_AUTH_KEYCLOAK_SECRET = file.readline()
       '');
+=======
+      '';
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
 
     services.redis.servers.netbox.enable = true;
@@ -271,6 +349,7 @@ in {
         StateDirectory = "netbox";
         StateDirectoryMode = "0750";
         Restart = "on-failure";
+<<<<<<< HEAD
         RestartSec = 30;
       };
     in {
@@ -308,35 +387,86 @@ in {
           echo "${cfg.package.version}" > "$versionFile"
         '';
 
+=======
+      };
+    in {
+      netbox-migration = {
+        description = "NetBox migrations";
+        wantedBy = [ "netbox.target" ];
+
+        environment = {
+          PYTHONPATH = pkg.pythonPath;
+        };
+
+        serviceConfig = defaultServiceConfig // {
+          Type = "oneshot";
+          ExecStart = ''
+            ${pkg}/bin/netbox migrate
+          '';
+        };
+      };
+
+      netbox = {
+        description = "NetBox WSGI Service";
+        wantedBy = [ "netbox.target" ];
+        after = [ "netbox-migration.service" ];
+
+        preStart = ''
+          ${pkg}/bin/netbox trace_paths --no-input
+          ${pkg}/bin/netbox collectstatic --no-input
+          ${pkg}/bin/netbox remove_stale_contenttypes --no-input
+        '';
+
+        environment = {
+          PYTHONPATH = pkg.pythonPath;
+        };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         serviceConfig = defaultServiceConfig // {
           ExecStart = ''
             ${pkgs.python3Packages.gunicorn}/bin/gunicorn netbox.wsgi \
               --bind ${cfg.listenAddress}:${toString cfg.port} \
               --pythonpath ${pkg}/opt/netbox/netbox
           '';
+<<<<<<< HEAD
           PrivateTmp = true;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         };
       };
 
       netbox-rq = {
         description = "NetBox Request Queue Worker";
+<<<<<<< HEAD
         documentation = [ "https://docs.netbox.dev/" ];
 
         wantedBy = [ "netbox.target" ];
         after = [ "netbox.service" ];
 
         environment.PYTHONPATH = pkg.pythonPath;
+=======
+        wantedBy = [ "netbox.target" ];
+        after = [ "netbox.service" ];
+
+        environment = {
+          PYTHONPATH = pkg.pythonPath;
+        };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
         serviceConfig = defaultServiceConfig // {
           ExecStart = ''
             ${pkg}/bin/netbox rqworker high default low
           '';
+<<<<<<< HEAD
           PrivateTmp = true;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         };
       };
 
       netbox-housekeeping = {
         description = "NetBox housekeeping job";
+<<<<<<< HEAD
         documentation = [ "https://docs.netbox.dev/" ];
 
         wantedBy = [ "multi-user.target" ];
@@ -345,6 +475,13 @@ in {
         wants = [ "network-online.target" ];
 
         environment.PYTHONPATH = pkg.pythonPath;
+=======
+        after = [ "netbox.service" ];
+
+        environment = {
+          PYTHONPATH = pkg.pythonPath;
+        };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
         serviceConfig = defaultServiceConfig // {
           Type = "oneshot";
@@ -357,6 +494,7 @@ in {
 
     systemd.timers.netbox-housekeeping = {
       description = "Run NetBox housekeeping job";
+<<<<<<< HEAD
       documentation = [ "https://docs.netbox.dev/" ];
 
       wantedBy = [ "multi-user.target" ];
@@ -368,6 +506,12 @@ in {
         OnCalendar = "daily";
         AccuracySec = "1h";
         Persistent = true;
+=======
+      wantedBy = [ "timers.target" ];
+
+      timerConfig = {
+        OnCalendar = "daily";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       };
     };
 

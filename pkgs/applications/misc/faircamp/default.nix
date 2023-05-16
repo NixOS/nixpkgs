@@ -1,5 +1,8 @@
 { lib
+<<<<<<< HEAD
 , stdenv
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , rustPlatform
 , fetchgit
 , makeWrapper
@@ -10,7 +13,10 @@
 , ffmpeg
 , callPackage
 , unstableGitUpdater
+<<<<<<< HEAD
 , darwin
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 rustPlatform.buildRustPackage {
@@ -41,8 +47,11 @@ rustPlatform.buildRustPackage {
     glib
     libopus
     vips
+<<<<<<< HEAD
   ] ++ lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.CoreServices
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   postInstall = ''

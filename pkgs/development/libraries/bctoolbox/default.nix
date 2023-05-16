@@ -9,7 +9,11 @@
 
 stdenv.mkDerivation rec {
   pname = "bctoolbox";
+<<<<<<< HEAD
   version = "5.2.98";
+=======
+  version = "5.2.16";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nativeBuildInputs = [
     cmake
@@ -30,7 +34,11 @@ stdenv.mkDerivation rec {
     group = "BC";
     repo = pname;
     rev = version;
+<<<<<<< HEAD
     hash = "sha256-j1vVd9UcwmP3tGGN6NApiMyOql8vYljTqj3CKor1Ckk=";
+=======
+    hash = "sha256-M2apFibqSKp8ojXl82W+vQb7CUxdbWsmw8PLL/ByYuM=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   # Do not build static libraries

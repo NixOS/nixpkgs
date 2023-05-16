@@ -57,6 +57,10 @@ buildPythonPackage rec {
     description = "Python library providing wrappers to SymEngine";
     homepage = "https://github.com/symengine/symengine.py";
     license = licenses.mit;
+<<<<<<< HEAD
     maintainers = [ ];
+=======
+    maintainers = [ maintainers.costrouc ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

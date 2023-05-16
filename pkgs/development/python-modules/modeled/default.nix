@@ -32,6 +32,10 @@ buildPythonPackage rec {
     description = "Universal data modeling for Python";
     homepage = "https://github.com/modeled/modeled";
     license = licenses.lgpl3Only;
+<<<<<<< HEAD
     maintainers = [ ];
+=======
+    maintainers = [ maintainers.costrouc ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

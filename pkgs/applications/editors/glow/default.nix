@@ -1,7 +1,12 @@
+<<<<<<< HEAD
 { lib
 , buildGoModule
 , fetchFromGitHub
 }:
+=======
+{ lib, buildGoModule, fetchFromGitHub }:
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 buildGoModule rec {
   pname = "glow";
   version = "1.5.0";
@@ -25,6 +30,9 @@ buildGoModule rec {
     changelog = "https://github.com/charmbracelet/glow/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ Br1ght0ne penguwin ];
+<<<<<<< HEAD
     mainProgram = "glow";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

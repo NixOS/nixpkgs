@@ -2,12 +2,20 @@
 
 stdenv.mkDerivation rec {
   pname = "signal-cli";
+<<<<<<< HEAD
   version = "0.12.1";
+=======
+  version = "0.11.9.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   # Building from source would be preferred, but is much more involved.
   src = fetchurl {
     url = "https://github.com/AsamK/signal-cli/releases/download/v${version}/signal-cli-${version}-Linux.tar.gz";
+<<<<<<< HEAD
     hash = "sha256-pxDSAVh/zg3hCuTlSuilgD4VKe1CPSG/ZLl0TF1nc1I=";
+=======
+    hash = "sha256-LhTv3ycJXr2vt0vyXfCd1ABro4q7CfBma63Zd1osBhA=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   buildInputs = lib.optionals stdenv.isLinux [ libmatthew_java dbus dbus_java ];
@@ -47,7 +55,10 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/AsamK/signal-cli";
     description = "Command-line and dbus interface for communicating with the Signal messaging service";
+<<<<<<< HEAD
     changelog = "https://github.com/AsamK/signal-cli/blob/v${version}/CHANGELOG.md";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     license = licenses.gpl3;
     maintainers = with maintainers; [ ivan ];
     platforms = platforms.all;

@@ -4,13 +4,21 @@
 
 mkDerivation rec {
   pname = "scantailor-advanced";
+<<<<<<< HEAD
   version = "1.0.19";
+=======
+  version = "1.0.18";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "vigri";
     repo = "scantailor-advanced";
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-mvoCoYdRTgXW5t8yd9Y9TOl7D3RDVwcjUv2YDUWrtRI=";
+=======
+    sha256 = "sha256-4/QSjgHvRgIduS/AXbT7osRTdOdgR7On3CbjRnGbwHU=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ cmake qttools ];

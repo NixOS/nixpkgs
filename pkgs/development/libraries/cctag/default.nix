@@ -3,7 +3,11 @@
 , fetchFromGitHub
 
 , cmake
+<<<<<<< HEAD
 , boost179
+=======
+, boost
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , eigen
 , opencv
 , tbb
@@ -47,7 +51,11 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+<<<<<<< HEAD
     boost179
+=======
+    boost
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     eigen
     opencv
   ];

@@ -2,16 +2,27 @@
 
 buildGoModule rec {
   pname = "func";
+<<<<<<< HEAD
   version = "1.10.0";
+=======
+  version = "1.7.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "knative";
     repo = "func";
     rev = "knative-v${version}";
+<<<<<<< HEAD
     hash = "sha256-x/SrRkgeLvjcd9LNgMGOf5TLU1GXpjY2Z2MyxrBZckc=";
   };
 
   vendorHash = null;
+=======
+    sha256 = "sha256-LrWRY22deh+YL/cLb+ZwK93okVPgysBoMCmo2MrbqIs=";
+  };
+
+  vendorSha256 = null;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   subPackages = [ "cmd/func" ];
 

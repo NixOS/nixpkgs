@@ -48,7 +48,11 @@ stdenv.mkDerivation rec {
     "-DAPACHE_MODULE_DIR=${placeholder "out"}/modules"
   ];
 
+<<<<<<< HEAD
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-std=c99";
+=======
+  env.NIX_CFLAGS_COMPILE = "-std=c99";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   meta = with lib; {
     description = "A server that implements tile caching to speed up access to WMS layers";

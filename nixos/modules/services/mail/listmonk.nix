@@ -54,7 +54,11 @@ let
 
       smtp = mkOption {
         type = listOf (submodule {
+<<<<<<< HEAD
           freeformType = with types; attrsOf anything;
+=======
+          freeformType = with types; attrsOf (oneOf [ str int bool ]);
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
           options = {
             enabled = mkEnableOption (lib.mdDoc "this SMTP server for listmonk");
@@ -86,7 +90,11 @@ let
       # TODO: refine this type based on the smtp one.
       "bounce.mailboxes" = mkOption {
         type = listOf
+<<<<<<< HEAD
           (submodule { freeformType = with types; listOf (attrsOf anything); });
+=======
+          (submodule { freeformType = with types; oneOf [ str int bool ]; });
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         default = [ ];
         description = lib.mdDoc "List of bounce mailboxes";
       };

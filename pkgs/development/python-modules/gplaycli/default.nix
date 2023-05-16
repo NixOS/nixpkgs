@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 { lib
 , args
 , buildPythonPackage
@@ -13,18 +14,26 @@
 , pythonOlder
 , requests
 , setuptools
+=======
+{ buildPythonPackage, lib, libffi, isPy3k, pyasn1, clint, ndg-httpsclient
+, protobuf, requests, args, matlink-gpapi, pyaxmlparser, setuptools, fetchFromGitHub
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 buildPythonPackage rec {
   pname = "gplaycli";
   version = "3.29";
+<<<<<<< HEAD
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "matlink";
     repo = "gplaycli";
+<<<<<<< HEAD
     rev = "refs/tags/${version}";
     hash = "sha256-uZBrIxnDSaJDOPcD7J4SCPr9nvecDDR9h+WnIjIP7IE=";
   };
@@ -71,6 +80,19 @@ buildPythonPackage rec {
     description = "Google Play Downloader via Command line";
     homepage = "https://github.com/matlink/gplaycli";
     changelog = "https://github.com/matlink/gplaycli/releases/tag/${version}";
+=======
+    rev = version;
+    sha256 = "10gc1wr259z5hxyk834wyyggvyh82agfq0zp711s4jf334inp45r";
+  };
+
+  disabled = !isPy3k;
+
+  propagatedBuildInputs = [ libffi pyasn1 clint ndg-httpsclient protobuf requests args matlink-gpapi pyaxmlparser setuptools ];
+
+  meta = with lib; {
+    homepage = "https://github.com/matlink/gplaycli";
+    description = "Google Play Downloader via Command line";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     license = licenses.agpl3Plus;
     maintainers = with maintainers; [ ];
   };

@@ -11,7 +11,11 @@
 
 buildPythonPackage rec {
   pname = "scikit-hep-testdata";
+<<<<<<< HEAD
   version = "0.4.31";
+=======
+  version = "0.4.30";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
@@ -20,7 +24,11 @@ buildPythonPackage rec {
     owner = "scikit-hep";
     repo = pname;
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-/CUBRRezm84yAqnEVAC89vKIpALnvSkoSKBCmX84S0w=";
+=======
+    hash = "sha256-8nmzU+aCBlGZs0O3/7gcP9zDM9LyCb6hVqW4cNKxrU4=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;

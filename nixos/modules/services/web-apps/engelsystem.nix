@@ -104,7 +104,10 @@ in {
       '';
 
     services.phpfpm.pools.engelsystem = {
+<<<<<<< HEAD
       phpPackage = pkgs.php81;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       user = "engelsystem";
       settings = {
         "listen.owner" = config.services.nginx.user;

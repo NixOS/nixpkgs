@@ -4,11 +4,19 @@
 , pkg-config
 , fontconfig
 , freetype
+<<<<<<< HEAD
+=======
+, libclang
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 let
   inherit (rustPlatform) buildRustPackage bindgenHook;
 
+<<<<<<< HEAD
   version = "0.2.8";
+=======
+  version = "0.2.7";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 in
 buildRustPackage {
   pname = "figma-agent";
@@ -18,6 +26,7 @@ buildRustPackage {
     owner = "neetly";
     repo = "figma-agent-linux";
     rev = version;
+<<<<<<< HEAD
     sha256 = "sha256-GtbONBAXoJ3AdpsWGk4zBCtGQr446siMtuj3or27wYw=";
   };
 
@@ -27,12 +36,28 @@ buildRustPackage {
     pkg-config
     bindgenHook
   ];
+=======
+    sha256 = "sha256-Cq1hWNwJLBY9Bb41WFJxnr9fcygFZ8eNsn5cPXmGTyw=";
+  };
+
+  cargoSha256 = "sha256-Gc94Uk/Ikxjnb541flQL7AeblgU/yS6zQ/187ZGRYco=";
+
+  nativeBuildInputs = [ pkg-config ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   buildInputs = [
     fontconfig
     freetype
+<<<<<<< HEAD
   ];
 
+=======
+    bindgenHook
+  ];
+
+  LIBCLANG_PATH = "${libclang.lib}/lib";
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   doCheck = true;
 
   meta = with lib; {

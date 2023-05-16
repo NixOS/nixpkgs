@@ -13,13 +13,21 @@
 
 stdenv.mkDerivation rec {
   pname = "doxygen";
+<<<<<<< HEAD
   version = "1.9.7";
+=======
+  version = "1.9.6";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "doxygen";
     repo = "doxygen";
     rev = "Release_${lib.replaceStrings [ "." ] [ "_" ] version}";
+<<<<<<< HEAD
     sha256 = "sha256-ezeMQk+Vyi9qNsYwbaRRruaIYGY8stFf71W7GonXqco=";
+=======
+    sha256 = "sha256-SqboPBqK7gDVTTjGgCUB9oIGBZR55EA7x65a0wumiKw=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

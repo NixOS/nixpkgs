@@ -1,8 +1,15 @@
 diff --git a/forge-adventure/pom.xml b/forge-adventure/pom.xml
+<<<<<<< HEAD
 index b35356ea76..b7ab1c775b 100644
 --- a/forge-adventure/pom.xml
 +++ b/forge-adventure/pom.xml
 @@ -47,131 +47,6 @@
+=======
+index 4d81b150e0..80dd1e04cb 100644
+--- a/forge-adventure/pom.xml
++++ b/forge-adventure/pom.xml
+@@ -41,131 +41,6 @@
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
                  </configuration>
              </plugin>
  
@@ -19,11 +26,19 @@ index b35356ea76..b7ab1c775b 100644
 -                            </goals>
 -                            <configuration>
 -                                <headerType>gui</headerType>
+<<<<<<< HEAD
 -                                <outfile>${project.build.directory}/forge-adventure-editor-java8.exe</outfile>
 -                                <jar>${project.build.finalName}-jar-with-dependencies.jar</jar>
 -                                <dontWrapJar>true</dontWrapJar>
 -                                <errTitle>forge</errTitle>
 -                                <icon>src/main/config/forge-adventure-editor.ico</icon>
+=======
+-                                <outfile>${project.build.directory}/forge-adventure-java8.exe</outfile>
+-                                <jar>${project.build.finalName}-jar-with-dependencies.jar</jar>
+-                                <dontWrapJar>true</dontWrapJar>
+-                                <errTitle>forge</errTitle>
+-                                <icon>src/main/config/forge-adventure.ico</icon>
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 -                                <classPath>
 -                                    <mainClass>forge.adventure.Main</mainClass>
 -                                    <addDependencies>false</addDependencies>
@@ -51,9 +66,15 @@ index b35356ea76..b7ab1c775b 100644
 -                                    <txtProductVersion>
 -                                        1.0.0.0
 -                                    </txtProductVersion>
+<<<<<<< HEAD
 -                                    <productName>forge-adventure-editor</productName>
 -                                    <internalName>forge-adventure-editor</internalName>
 -                                    <originalFilename>forge-adventure-editor-java8.exe</originalFilename>
+=======
+-                                    <productName>forge-adventure</productName>
+-                                    <internalName>forge-adventure</internalName>
+-                                    <originalFilename>forge-adventure-java8.exe</originalFilename>
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 -                                </versionInfo>
 -                            </configuration>
 -                        </execution>
@@ -66,12 +87,20 @@ index b35356ea76..b7ab1c775b 100644
 -                            </goals>
 -                            <configuration>
 -                                <headerType>gui</headerType>
+<<<<<<< HEAD
 -                                <outfile>${project.build.directory}/forge-adventure-editor.exe</outfile>
+=======
+-                                <outfile>${project.build.directory}/forge-adventure.exe</outfile>
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 -                                <jar>${project.build.finalName}-jar-with-dependencies.jar</jar>
 -                                <dontWrapJar>true</dontWrapJar>
 -                                <errTitle>forge</errTitle>
 -                                <downloadUrl>https://www.oracle.com/java/technologies/downloads/</downloadUrl>
+<<<<<<< HEAD
 -                                <icon>src/main/config/forge-adventure-editor.ico</icon>
+=======
+-                                <icon>src/main/config/forge-adventure.ico</icon>
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 -                                <classPath>
 -                                    <mainClass>forge.adventure.Main</mainClass>
 -                                    <addDependencies>false</addDependencies>
@@ -121,9 +150,15 @@ index b35356ea76..b7ab1c775b 100644
 -                                    <txtProductVersion>
 -                                        1.0.0.0
 -                                    </txtProductVersion>
+<<<<<<< HEAD
 -                                    <productName>forge-adventure-editor</productName>
 -                                    <internalName>forge-adventure-editor</internalName>
 -                                    <originalFilename>forge-adventure-editor.exe</originalFilename>
+=======
+-                                    <productName>forge-adventure</productName>
+-                                    <internalName>forge-adventure</internalName>
+-                                    <originalFilename>forge-adventure.exe</originalFilename>
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 -                                </versionInfo>
 -                            </configuration>
 -                        </execution>
@@ -135,10 +170,17 @@ index b35356ea76..b7ab1c775b 100644
                  <groupId>com.google.code.maven-replacer-plugin</groupId>
                  <artifactId>replacer</artifactId>
 diff --git a/forge-gui-desktop/pom.xml b/forge-gui-desktop/pom.xml
+<<<<<<< HEAD
 index 3b74663b04..f0e324b69c 100644
 --- a/forge-gui-desktop/pom.xml
 +++ b/forge-gui-desktop/pom.xml
 @@ -282,59 +282,6 @@
+=======
+index 218e641096..e8d0905a3d 100644
+--- a/forge-gui-desktop/pom.xml
++++ b/forge-gui-desktop/pom.xml
+@@ -231,60 +231,6 @@
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
              <id>windows-linux-release</id>
              <build>
                  <plugins>
@@ -195,10 +237,18 @@ index 3b74663b04..f0e324b69c 100644
 -                            </execution>
 -                        </executions>
 -                    </plugin>
+<<<<<<< HEAD
  
                      <plugin>
                          <groupId>org.apache.maven.plugins</groupId>
 @@ -447,130 +394,6 @@
+=======
+-
+                     <plugin>
+                         <groupId>org.apache.maven.plugins</groupId>
+                         <artifactId>maven-antrun-plugin</artifactId>
+@@ -396,131 +342,6 @@
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
              <id>windows-linux</id>
              <build>
                  <plugins>
@@ -326,6 +376,7 @@ index 3b74663b04..f0e324b69c 100644
 -                            <!--extra-->
 -                        </executions>
 -                    </plugin>
+<<<<<<< HEAD
  
                      <plugin>
                          <groupId>org.apache.maven.plugins</groupId>
@@ -464,3 +515,9 @@ index e7439c1e3a..de0cbc16a1 100644
              <plugin>
                  <artifactId>maven-assembly-plugin</artifactId>
                  <configuration>
+=======
+-
+                     <plugin>
+                         <groupId>org.apache.maven.plugins</groupId>
+                         <artifactId>maven-antrun-plugin</artifactId>
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)

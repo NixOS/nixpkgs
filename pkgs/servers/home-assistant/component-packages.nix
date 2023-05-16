@@ -2,7 +2,11 @@
 # Do not edit!
 
 {
+<<<<<<< HEAD
   version = "2023.9.2";
+=======
+  version = "2023.5.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   components = {
     "3_day_blinds" = ps: with ps; [
     ];
@@ -21,8 +25,13 @@
     "actiontec" = ps: with ps; [
     ];
     "adax" = ps: with ps; [
+<<<<<<< HEAD
       adax
       adax-local
+=======
+      adax-local
+      adax
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     ];
     "adguard" = ps: with ps; [
       adguardhome
@@ -62,9 +71,14 @@
       aioruuvigateway
       aioshelly
       airthings-ble
+<<<<<<< HEAD
       async-interrupt
       bleak
       bleak-retry-connector
+=======
+      bleak-retry-connector
+      bleak
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       bluetooth-adapters
       bluetooth-auto-recovery
       bluetooth-data-tools
@@ -94,9 +108,12 @@
     "airzone" = ps: with ps; [
       aioairzone
     ];
+<<<<<<< HEAD
     "airzone_cloud" = ps: with ps; [
       aioairzone-cloud
     ];
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "aladdin_connect" = ps: with ps; [
       aioaladdinconnect
     ];
@@ -108,8 +125,13 @@
     "alert" = ps: with ps; [
     ];
     "alexa" = ps: with ps; [
+<<<<<<< HEAD
       aiohttp-cors
       pyturbojpeg
+=======
+      pyturbojpeg
+      aiohttp-cors
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     ];
     "alpha_vantage" = ps: with ps; [
       alpha-vantage
@@ -154,11 +176,17 @@
     ++ androidtv.optional-dependencies.async
     ++ pure-python-adb.optional-dependencies.async;
     "androidtv_remote" = ps: with ps; [
+<<<<<<< HEAD
       androidtvremote2
     ];
     "anel_pwrctrl" = ps: with ps; [
       anel-pwrctrl-homeassistant
     ];
+=======
+    ]; # missing inputs: androidtvremote2
+    "anel_pwrctrl" = ps: with ps; [
+    ]; # missing inputs: anel_pwrctrl-homeassistant
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "anova" = ps: with ps; [
     ]; # missing inputs: anova-wifi
     "anthemav" = ps: with ps; [
@@ -200,16 +228,25 @@
       aqualogic
     ];
     "aquostv" = ps: with ps; [
+<<<<<<< HEAD
     ]; # missing inputs: sharp-aquos-rc
+=======
+    ]; # missing inputs: sharp_aquos_rc
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "aranet" = ps: with ps; [
       aioesphomeapi
       aiohttp-cors
       aioruuvigateway
       aioshelly
       aranet4
+<<<<<<< HEAD
       async-interrupt
       bleak
       bleak-retry-connector
+=======
+      bleak-retry-connector
+      bleak
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       bluetooth-adapters
       bluetooth-auto-recovery
       bluetooth-data-tools
@@ -268,14 +305,22 @@
     "aten_pe" = ps: with ps; [
       atenpdu
     ];
+<<<<<<< HEAD
     "atlanticcityelectric" = ps: with ps; [
     ];
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "atome" = ps: with ps; [
       pyatome
     ];
     "august" = ps: with ps; [
+<<<<<<< HEAD
       yalexs
       yalexs-ble
+=======
+      yalexs-ble
+      yalexs
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     ];
     "august_ble" = ps: with ps; [
     ];
@@ -329,8 +374,12 @@
       sqlalchemy
     ];
     "baf" = ps: with ps; [
+<<<<<<< HEAD
       aiobafi6
     ];
+=======
+    ]; # missing inputs: aiobafi6
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "baidu" = ps: with ps; [
     ]; # missing inputs: baidu-aip
     "balboa" = ps: with ps; [
@@ -341,9 +390,13 @@
     "bbox" = ps: with ps; [
     ]; # missing inputs: pybbox
     "beewi_smartclim" = ps: with ps; [
+<<<<<<< HEAD
     ]; # missing inputs: beewi-smartclim
     "bge" = ps: with ps; [
     ];
+=======
+    ]; # missing inputs: beewi_smartclim
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "binary_sensor" = ps: with ps; [
     ];
     "bitcoin" = ps: with ps; [
@@ -377,9 +430,14 @@
       aiohttp-cors
       aioruuvigateway
       aioshelly
+<<<<<<< HEAD
       async-interrupt
       bleak
       bleak-retry-connector
+=======
+      bleak-retry-connector
+      bleak
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       bluemaestro-ble
       bluetooth-adapters
       bluetooth-auto-recovery
@@ -405,8 +463,13 @@
     ];
     "bluetooth" = ps: with ps; [
       aiohttp-cors
+<<<<<<< HEAD
       bleak
       bleak-retry-connector
+=======
+      bleak-retry-connector
+      bleak
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       bluetooth-adapters
       bluetooth-auto-recovery
       bluetooth-data-tools
@@ -422,9 +485,14 @@
       aiohttp-cors
       aioruuvigateway
       aioshelly
+<<<<<<< HEAD
       async-interrupt
       bleak
       bleak-retry-connector
+=======
+      bleak-retry-connector
+      bleak
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       bluetooth-adapters
       bluetooth-auto-recovery
       bluetooth-data-tools
@@ -447,9 +515,14 @@
       aiohttp-cors
       aioruuvigateway
       aioshelly
+<<<<<<< HEAD
       async-interrupt
       bleak
       bleak-retry-connector
+=======
+      bleak-retry-connector
+      bleak
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       bluetooth-adapters
       bluetooth-auto-recovery
       bluetooth-data-tools
@@ -522,9 +595,14 @@
       aiohttp-cors
       aioruuvigateway
       aioshelly
+<<<<<<< HEAD
       async-interrupt
       bleak
       bleak-retry-connector
+=======
+      bleak-retry-connector
+      bleak
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       bluetooth-adapters
       bluetooth-auto-recovery
       bluetooth-data-tools
@@ -559,14 +637,23 @@
       aiohttp-cors
     ];
     "camera" = ps: with ps; [
+<<<<<<< HEAD
       aiohttp-cors
       pyturbojpeg
+=======
+      pyturbojpeg
+      aiohttp-cors
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     ];
     "canary" = ps: with ps; [
       ha-ffmpeg
       py-canary
     ];
     "cast" = ps: with ps; [
+<<<<<<< HEAD
+=======
+      pyturbojpeg
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       aiohttp-cors
       fnv-hash-fast
       hass-nabucasa
@@ -579,7 +666,10 @@
       plexwebsocket
       psutil-home-assistant
       pychromecast
+<<<<<<< HEAD
       pyturbojpeg
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       sqlalchemy
       webrtcvad
       zeroconf
@@ -614,12 +704,19 @@
     "climate" = ps: with ps; [
     ];
     "cloud" = ps: with ps; [
+<<<<<<< HEAD
+=======
+      pyturbojpeg
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       aiohttp-cors
       hass-nabucasa
       hassil
       home-assistant-intents
       mutagen
+<<<<<<< HEAD
       pyturbojpeg
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       webrtcvad
     ];
     "cloudflare" = ps: with ps; [
@@ -635,6 +732,7 @@
     "color_extractor" = ps: with ps; [
       colorthief
     ];
+<<<<<<< HEAD
     "comed" = ps: with ps; [
     ];
     "comed_hourly_pricing" = ps: with ps; [
@@ -642,6 +740,10 @@
     "comelit" = ps: with ps; [
       aiocomelit
     ];
+=======
+    "comed_hourly_pricing" = ps: with ps; [
+    ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "comfoconnect" = ps: with ps; [
       pycomfoconnect
     ];
@@ -652,8 +754,11 @@
     ];
     "concord232" = ps: with ps; [
     ]; # missing inputs: concord232
+<<<<<<< HEAD
     "coned" = ps: with ps; [
     ];
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "config" = ps: with ps; [
       aiohttp-cors
     ];
@@ -708,10 +813,13 @@
     "datadog" = ps: with ps; [
       datadog
     ];
+<<<<<<< HEAD
     "date" = ps: with ps; [
     ];
     "datetime" = ps: with ps; [
     ];
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "ddwrt" = ps: with ps; [
     ];
     "debugpy" = ps: with ps; [
@@ -724,6 +832,7 @@
       bluepy
     ]; # missing inputs: decora
     "decora_wifi" = ps: with ps; [
+<<<<<<< HEAD
     ]; # missing inputs: decora-wifi
     "default_config" = ps: with ps; [
       aiodiscover
@@ -731,12 +840,27 @@
       async-upnp-client
       bleak
       bleak-retry-connector
+=======
+    ]; # missing inputs: decora_wifi
+    "default_config" = ps: with ps; [
+      pynacl
+      pyturbojpeg
+      aiodiscover
+      aiohttp-cors
+      async-upnp-client
+      bleak-retry-connector
+      bleak
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       bluetooth-adapters
       bluetooth-auto-recovery
       bluetooth-data-tools
       dbus-fast
       fnv-hash-fast
+<<<<<<< HEAD
       ha-av
+=======
+      av
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       hass-nabucasa
       hassil
       home-assistant-frontend
@@ -747,9 +871,13 @@
       numpy
       pillow
       psutil-home-assistant
+<<<<<<< HEAD
       pynacl
       pyserial
       pyturbojpeg
+=======
+      pyserial
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       pyudev
       scapy
       securetar
@@ -760,8 +888,11 @@
     "delijn" = ps: with ps; [
       pydelijn
     ];
+<<<<<<< HEAD
     "delmarva" = ps: with ps; [
     ];
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "deluge" = ps: with ps; [
       deluge-client
     ];
@@ -826,8 +957,19 @@
     "discord" = ps: with ps; [
       nextcord
     ];
+<<<<<<< HEAD
     "discovergy" = ps: with ps; [
       pydiscovergy
+=======
+    "discovery" = ps: with ps; [
+      aiohttp-cors
+      fnv-hash-fast
+      ifaddr
+      netdisco
+      psutil-home-assistant
+      sqlalchemy
+      zeroconf
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     ];
     "dlib_face_detect" = ps: with ps; [
       face-recognition
@@ -877,9 +1019,14 @@
       aiohttp-cors
       aioruuvigateway
       aioshelly
+<<<<<<< HEAD
       async-interrupt
       bleak
       bleak-retry-connector
+=======
+      bleak-retry-connector
+      bleak
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       bluetooth-adapters
       bluetooth-auto-recovery
       bluetooth-data-tools
@@ -902,9 +1049,12 @@
     ]; # missing inputs: dovado
     "downloader" = ps: with ps; [
     ];
+<<<<<<< HEAD
     "dremel_3d_printer" = ps: with ps; [
       dremel3dpy
     ];
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "dsmr" = ps: with ps; [
       dsmr-parser
     ];
@@ -922,15 +1072,19 @@
     "dunehd" = ps: with ps; [
       pdunehd
     ];
+<<<<<<< HEAD
     "duotecno" = ps: with ps; [
       pyduotecno
     ];
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "dwd_weather_warnings" = ps: with ps; [
       dwdwfsapi
     ];
     "dweet" = ps: with ps; [
     ]; # missing inputs: dweepy
     "dynalite" = ps: with ps; [
+<<<<<<< HEAD
       aiohttp-cors
       dynalite-devices
       fnv-hash-fast
@@ -940,6 +1094,10 @@
       psutil-home-assistant
       sqlalchemy
     ]; # missing inputs: dynalite-panel
+=======
+      dynalite-devices
+    ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "eafm" = ps: with ps; [
       aioeafm
     ];
@@ -966,6 +1124,10 @@
       aiohttp-cors
     ];
     "eddystone_temperature" = ps: with ps; [
+<<<<<<< HEAD
+=======
+      construct
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     ]; # missing inputs: beacontools
     "edimax" = ps: with ps; [
       pyedimax
@@ -982,6 +1144,7 @@
     "eight_sleep" = ps: with ps; [
       pyeight
     ];
+<<<<<<< HEAD
     "electrasmart" = ps: with ps; [
     ]; # missing inputs: pyElectra
     "electric_kiwi" = ps: with ps; [
@@ -990,6 +1153,8 @@
       psutil-home-assistant
       sqlalchemy
     ]; # missing inputs: electrickiwi-api
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "elgato" = ps: with ps; [
       elgato
     ];
@@ -1056,7 +1221,11 @@
       enocean
     ];
     "enphase_envoy" = ps: with ps; [
+<<<<<<< HEAD
       pyenphase
+=======
+      envoy-reader
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     ];
     "entur_public_transport" = ps: with ps; [
       enturclient
@@ -1080,9 +1249,14 @@
       aiohttp-cors
       aioruuvigateway
       aioshelly
+<<<<<<< HEAD
       async-interrupt
       bleak
       bleak-retry-connector
+=======
+      bleak-retry-connector
+      bleak
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       bluetooth-adapters
       bluetooth-auto-recovery
       bluetooth-data-tools
@@ -1109,9 +1283,14 @@
     "esphome" = ps: with ps; [
       aioesphomeapi
       aiohttp-cors
+<<<<<<< HEAD
       async-interrupt
       bleak
       bleak-retry-connector
+=======
+      bleak-retry-connector
+      bleak
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       bluetooth-adapters
       bluetooth-auto-recovery
       bluetooth-data-tools
@@ -1139,9 +1318,14 @@
       aiohttp-cors
       aioruuvigateway
       aioshelly
+<<<<<<< HEAD
       async-interrupt
       bleak
       bleak-retry-connector
+=======
+      bleak-retry-connector
+      bleak
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       bluetooth-adapters
       bluetooth-auto-recovery
       bluetooth-data-tools
@@ -1160,10 +1344,13 @@
       webrtcvad
       zeroconf
     ];
+<<<<<<< HEAD
     "event" = ps: with ps; [
     ];
     "evergy" = ps: with ps; [
     ];
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "everlights" = ps: with ps; [
       pyeverlights
     ];
@@ -1251,9 +1438,14 @@
       aiohttp-cors
       aioruuvigateway
       aioshelly
+<<<<<<< HEAD
       async-interrupt
       bleak
       bleak-retry-connector
+=======
+      bleak-retry-connector
+      bleak
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       bluetooth-adapters
       bluetooth-auto-recovery
       bluetooth-data-tools
@@ -1353,15 +1545,23 @@
       psutil-home-assistant
       sqlalchemy
       xmltodict
+<<<<<<< HEAD
     ]
     ++ fritzconnection.optional-dependencies.qr;
+=======
+    ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "fritzbox" = ps: with ps; [
       pyfritzhome
     ];
     "fritzbox_callmonitor" = ps: with ps; [
       fritzconnection
+<<<<<<< HEAD
     ]
     ++ fritzconnection.optional-dependencies.qr;
+=======
+    ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "fronius" = ps: with ps; [
       pyfronius
     ];
@@ -1388,6 +1588,7 @@
     "garages_amsterdam" = ps: with ps; [
       odp-amsterdam
     ];
+<<<<<<< HEAD
     "gardena_bluetooth" = ps: with ps; [
       aioesphomeapi
       aiohttp-cors
@@ -1413,6 +1614,8 @@
       webrtcvad
       zeroconf
     ]; # missing inputs: gardena_bluetooth
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "gaviota" = ps: with ps; [
     ];
     "gc100" = ps: with ps; [
@@ -1422,7 +1625,11 @@
     ];
     "generic" = ps: with ps; [
       aiohttp-cors
+<<<<<<< HEAD
       ha-av
+=======
+      av
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       pillow
     ];
     "generic_hygrostat" = ps: with ps; [
@@ -1473,6 +1680,11 @@
     "glances" = ps: with ps; [
       glances-api
     ];
+<<<<<<< HEAD
+=======
+    "goalfeed" = ps: with ps; [
+    ]; # missing inputs: pysher
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "goalzero" = ps: with ps; [
       goalzero
     ];
@@ -1491,8 +1703,13 @@
       sqlalchemy
     ];
     "google_assistant" = ps: with ps; [
+<<<<<<< HEAD
       aiohttp-cors
       pyturbojpeg
+=======
+      pyturbojpeg
+      aiohttp-cors
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     ];
     "google_assistant_sdk" = ps: with ps; [
       aiohttp-cors
@@ -1506,12 +1723,15 @@
     ];
     "google_domains" = ps: with ps; [
     ];
+<<<<<<< HEAD
     "google_generative_ai_conversation" = ps: with ps; [
       aiohttp-cors
       google-generativeai
       hassil
       home-assistant-intents
     ];
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "google_mail" = ps: with ps; [
       aiohttp-cors
       fnv-hash-fast
@@ -1545,9 +1765,14 @@
       aiohttp-cors
       aioruuvigateway
       aioshelly
+<<<<<<< HEAD
       async-interrupt
       bleak
       bleak-retry-connector
+=======
+      bleak-retry-connector
+      bleak
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       bluetooth-adapters
       bluetooth-auto-recovery
       bluetooth-data-tools
@@ -1644,7 +1869,11 @@
     "hi_kumo" = ps: with ps; [
     ];
     "hikvision" = ps: with ps; [
+<<<<<<< HEAD
     ]; # missing inputs: pyHik
+=======
+    ]; # missing inputs: pyhik
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "hikvisioncam" = ps: with ps; [
       hikvision
     ];
@@ -1685,6 +1914,7 @@
     ];
     "homeassistant_alerts" = ps: with ps; [
     ];
+<<<<<<< HEAD
     "homeassistant_green" = ps: with ps; [
       aiohttp-cors
       bellows
@@ -1704,6 +1934,8 @@
       zigpy-zigate
       zigpy-znp
     ];
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "homeassistant_hardware" = ps: with ps; [
       aiohttp-cors
       bellows
@@ -1711,6 +1943,7 @@
       janus
       pillow
       psutil-home-assistant
+<<<<<<< HEAD
       pyserial
       pyserial-asyncio
       pyudev
@@ -1718,10 +1951,21 @@
       universal-silabs-flasher
       zha-quirks
       zigpy
+=======
+      pyserial-asyncio
+      pyserial
+      pyudev
+      sqlalchemy
+      zha-quirks
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       zigpy-deconz
       zigpy-xbee
       zigpy-zigate
       zigpy-znp
+<<<<<<< HEAD
+=======
+      zigpy
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     ];
     "homeassistant_sky_connect" = ps: with ps; [
       aiohttp-cors
@@ -1730,6 +1974,7 @@
       janus
       pillow
       psutil-home-assistant
+<<<<<<< HEAD
       pyserial
       pyserial-asyncio
       pyudev
@@ -1737,10 +1982,21 @@
       universal-silabs-flasher
       zha-quirks
       zigpy
+=======
+      pyserial-asyncio
+      pyserial
+      pyudev
+      sqlalchemy
+      zha-quirks
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       zigpy-deconz
       zigpy-xbee
       zigpy-zigate
       zigpy-znp
+<<<<<<< HEAD
+=======
+      zigpy
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     ];
     "homeassistant_yellow" = ps: with ps; [
       aiohttp-cors
@@ -1749,6 +2005,7 @@
       janus
       pillow
       psutil-home-assistant
+<<<<<<< HEAD
       pyserial
       pyserial-asyncio
       pyudev
@@ -1756,21 +2013,42 @@
       universal-silabs-flasher
       zha-quirks
       zigpy
+=======
+      pyserial-asyncio
+      pyserial
+      pyudev
+      sqlalchemy
+      zha-quirks
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       zigpy-deconz
       zigpy-xbee
       zigpy-zigate
       zigpy-znp
+<<<<<<< HEAD
     ];
     "homekit" = ps: with ps; [
+=======
+      zigpy
+    ];
+    "homekit" = ps: with ps; [
+      hap-python
+      pyqrcode
+      pyturbojpeg
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       aiohttp-cors
       base36
       fnv-hash-fast
       ha-ffmpeg
+<<<<<<< HEAD
       hap-python
       ifaddr
       psutil-home-assistant
       pyqrcode
       pyturbojpeg
+=======
+      ifaddr
+      psutil-home-assistant
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       sqlalchemy
       zeroconf
     ];
@@ -1780,9 +2058,14 @@
       aiohttp-cors
       aioruuvigateway
       aioshelly
+<<<<<<< HEAD
       async-interrupt
       bleak
       bleak-retry-connector
+=======
+      bleak-retry-connector
+      bleak
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       bluetooth-adapters
       bluetooth-auto-recovery
       bluetooth-data-tools
@@ -1851,7 +2134,11 @@
       pygti
     ];
     "hydrawise" = ps: with ps; [
+<<<<<<< HEAD
       pydrawise
+=======
+      hydrawiser
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     ];
     "hyperion" = ps: with ps; [
       hyperion-py
@@ -1860,8 +2147,12 @@
       pyialarm
     ];
     "iammeter" = ps: with ps; [
+<<<<<<< HEAD
       iammeter
     ];
+=======
+    ]; # missing inputs: iammeter
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "iaqualink" = ps: with ps; [
       h2
       iaqualink
@@ -1871,9 +2162,14 @@
       aiohttp-cors
       aioruuvigateway
       aioshelly
+<<<<<<< HEAD
       async-interrupt
       bleak
       bleak-retry-connector
+=======
+      bleak-retry-connector
+      bleak
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       bluetooth-adapters
       bluetooth-auto-recovery
       bluetooth-data-tools
@@ -1909,12 +2205,18 @@
     "ihc" = ps: with ps; [
       defusedxml
     ]; # missing inputs: ihcsdk
+<<<<<<< HEAD
     "image" = ps: with ps; [
       aiohttp-cors
     ];
     "image_processing" = ps: with ps; [
       aiohttp-cors
       pyturbojpeg
+=======
+    "image_processing" = ps: with ps; [
+      pyturbojpeg
+      aiohttp-cors
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     ];
     "image_upload" = ps: with ps; [
       aiohttp-cors
@@ -1932,17 +2234,27 @@
       incomfort-client
     ];
     "influxdb" = ps: with ps; [
+<<<<<<< HEAD
       influxdb
       influxdb-client
+=======
+      influxdb-client
+      influxdb
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     ];
     "inkbird" = ps: with ps; [
       aioesphomeapi
       aiohttp-cors
       aioruuvigateway
       aioshelly
+<<<<<<< HEAD
       async-interrupt
       bleak
       bleak-retry-connector
+=======
+      bleak-retry-connector
+      bleak
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       bluetooth-adapters
       bluetooth-auto-recovery
       bluetooth-data-tools
@@ -2010,7 +2322,12 @@
       zeroconf
     ];
     "iotawatt" = ps: with ps; [
+<<<<<<< HEAD
     ]; # missing inputs: ha-iotawattpy
+=======
+      iotawattpy
+    ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "iperf3" = ps: with ps; [
     ]; # missing inputs: iperf3
     "ipma" = ps: with ps; [
@@ -2056,8 +2373,11 @@
     "justnimbus" = ps: with ps; [
       justnimbus
     ];
+<<<<<<< HEAD
     "jvc_projector" = ps: with ps; [
     ]; # missing inputs: pyjvcprojector
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "kaiterra" = ps: with ps; [
     ]; # missing inputs: kaiterra-async-client
     "kaleidescape" = ps: with ps; [
@@ -2080,9 +2400,14 @@
       aiohttp-cors
       aioruuvigateway
       aioshelly
+<<<<<<< HEAD
       async-interrupt
       bleak
       bleak-retry-connector
+=======
+      bleak-retry-connector
+      bleak
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       bluetooth-adapters
       bluetooth-auto-recovery
       bluetooth-data-tools
@@ -2104,17 +2429,30 @@
     "keyboard" = ps: with ps; [
     ]; # missing inputs: pyuserinput
     "keyboard_remote" = ps: with ps; [
+<<<<<<< HEAD
       asyncinotify
       evdev
     ];
     "keymitt_ble" = ps: with ps; [
+=======
+      aionotify
+      evdev
+    ];
+    "keymitt_ble" = ps: with ps; [
+      pymicrobot
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       aioesphomeapi
       aiohttp-cors
       aioruuvigateway
       aioshelly
+<<<<<<< HEAD
       async-interrupt
       bleak
       bleak-retry-connector
+=======
+      bleak-retry-connector
+      bleak
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       bluetooth-adapters
       bluetooth-auto-recovery
       bluetooth-data-tools
@@ -2126,7 +2464,10 @@
       ifaddr
       mutagen
       psutil-home-assistant
+<<<<<<< HEAD
       pymicrobot
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       pyserial
       pyudev
       sqlalchemy
@@ -2149,6 +2490,7 @@
     ];
     "knx" = ps: with ps; [
       aiohttp-cors
+<<<<<<< HEAD
       fnv-hash-fast
       home-assistant-frontend
       janus
@@ -2158,6 +2500,10 @@
       sqlalchemy
       xknx
       xknxproject
+=======
+      janus
+      xknx
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     ];
     "kodi" = ps: with ps; [
       aiohttp-cors
@@ -2212,8 +2558,11 @@
     "laundrify" = ps: with ps; [
       laundrify-aio
     ];
+<<<<<<< HEAD
     "lawn_mower" = ps: with ps; [
     ];
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "lcn" = ps: with ps; [
       pypck
     ];
@@ -2222,9 +2571,14 @@
       aiohttp-cors
       aioruuvigateway
       aioshelly
+<<<<<<< HEAD
       async-interrupt
       bleak
       bleak-retry-connector
+=======
+      bleak-retry-connector
+      bleak
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       bluetooth-adapters
       bluetooth-auto-recovery
       bluetooth-data-tools
@@ -2248,9 +2602,14 @@
       aiohttp-cors
       aioruuvigateway
       aioshelly
+<<<<<<< HEAD
       async-interrupt
       bleak
       bleak-retry-connector
+=======
+      bleak-retry-connector
+      bleak
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       bluetooth-adapters
       bluetooth-auto-recovery
       bluetooth-data-tools
@@ -2365,6 +2724,7 @@
     "lookin" = ps: with ps; [
       aiolookin
     ];
+<<<<<<< HEAD
     "loqed" = ps: with ps; [
       aiohttp-cors
       hass-nabucasa
@@ -2374,6 +2734,8 @@
       pyturbojpeg
       webrtcvad
     ]; # missing inputs: loqedAPI
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "lovelace" = ps: with ps; [
     ];
     "luci" = ps: with ps; [
@@ -2455,7 +2817,11 @@
     ];
     "media_extractor" = ps: with ps; [
       aiohttp-cors
+<<<<<<< HEAD
       yt-dlp
+=======
+      youtube-dl-light
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     ];
     "media_player" = ps: with ps; [
       aiohttp-cors
@@ -2476,9 +2842,14 @@
       aiohttp-cors
       aioruuvigateway
       aioshelly
+<<<<<<< HEAD
       async-interrupt
       bleak
       bleak-retry-connector
+=======
+      bleak-retry-connector
+      bleak
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       bluetooth-adapters
       bluetooth-auto-recovery
       bluetooth-data-tools
@@ -2525,6 +2896,7 @@
     "microsoft" = ps: with ps; [
     ]; # missing inputs: pycsspeechtts
     "microsoft_face" = ps: with ps; [
+<<<<<<< HEAD
       aiohttp-cors
       pyturbojpeg
     ];
@@ -2535,6 +2907,20 @@
     "microsoft_face_identify" = ps: with ps; [
       aiohttp-cors
       pyturbojpeg
+=======
+      pyturbojpeg
+      aiohttp-cors
+    ];
+    "microsoft_face_detect" = ps: with ps; [
+      pyturbojpeg
+      aiohttp-cors
+    ];
+    "microsoft_face_identify" = ps: with ps; [
+      pyturbojpeg
+      aiohttp-cors
+    ];
+    "miflora" = ps: with ps; [
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     ];
     "mijndomein_energie" = ps: with ps; [
     ];
@@ -2555,6 +2941,11 @@
     "minio" = ps: with ps; [
       minio
     ];
+<<<<<<< HEAD
+=======
+    "mitemp_bt" = ps: with ps; [
+    ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "mjpeg" = ps: with ps; [
     ];
     "moat" = ps: with ps; [
@@ -2562,9 +2953,14 @@
       aiohttp-cors
       aioruuvigateway
       aioshelly
+<<<<<<< HEAD
       async-interrupt
       bleak
       bleak-retry-connector
+=======
+      bleak-retry-connector
+      bleak
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       bluetooth-adapters
       bluetooth-auto-recovery
       bluetooth-data-tools
@@ -2584,6 +2980,11 @@
       zeroconf
     ];
     "mobile_app" = ps: with ps; [
+<<<<<<< HEAD
+=======
+      pynacl
+      pyturbojpeg
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       aiohttp-cors
       fnv-hash-fast
       hass-nabucasa
@@ -2592,8 +2993,11 @@
       mutagen
       pillow
       psutil-home-assistant
+<<<<<<< HEAD
       pynacl
       pyturbojpeg
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       sqlalchemy
       webrtcvad
     ];
@@ -2629,9 +3033,14 @@
       aiohttp-cors
       aioruuvigateway
       aioshelly
+<<<<<<< HEAD
       async-interrupt
       bleak
       bleak-retry-connector
+=======
+      bleak-retry-connector
+      bleak
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       bluetooth-adapters
       bluetooth-auto-recovery
       bluetooth-data-tools
@@ -2711,6 +3120,11 @@
       psutil-home-assistant
       sqlalchemy
     ];
+<<<<<<< HEAD
+=======
+    "mycroft" = ps: with ps; [
+    ]; # missing inputs: mycroftapi
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "myq" = ps: with ps; [
       pymyq
     ];
@@ -2758,9 +3172,17 @@
       google-nest-sdm
       ha-ffmpeg
       psutil-home-assistant
+<<<<<<< HEAD
       sqlalchemy
     ];
     "netatmo" = ps: with ps; [
+=======
+      python-nest
+      sqlalchemy
+    ];
+    "netatmo" = ps: with ps; [
+      pyturbojpeg
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       aiohttp-cors
       fnv-hash-fast
       hass-nabucasa
@@ -2769,7 +3191,10 @@
       mutagen
       psutil-home-assistant
       pyatmo
+<<<<<<< HEAD
       pyturbojpeg
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       sqlalchemy
       webrtcvad
     ];
@@ -2930,9 +3355,15 @@
       onkyo-eiscp
     ];
     "onvif" = ps: with ps; [
+<<<<<<< HEAD
       ha-ffmpeg
       onvif-zeep-async
       wsdiscovery
+=======
+      wsdiscovery
+      ha-ffmpeg
+      onvif-zeep-async
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     ];
     "open_meteo" = ps: with ps; [
       open-meteo
@@ -2969,7 +3400,10 @@
       opensensemap-api
     ];
     "opensky" = ps: with ps; [
+<<<<<<< HEAD
       python-opensky
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     ];
     "opentherm_gw" = ps: with ps; [
       pyotgw
@@ -2983,6 +3417,7 @@
     "opnsense" = ps: with ps; [
       pyopnsense
     ];
+<<<<<<< HEAD
     "opower" = ps: with ps; [
       fnv-hash-fast
       opower
@@ -2991,14 +3426,24 @@
     ];
     "opple" = ps: with ps; [
     ]; # missing inputs: pyoppleio-legacy
+=======
+    "opple" = ps: with ps; [
+      pyoppleio
+    ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "oralb" = ps: with ps; [
       aioesphomeapi
       aiohttp-cors
       aioruuvigateway
       aioshelly
+<<<<<<< HEAD
       async-interrupt
       bleak
       bleak-retry-connector
+=======
+      bleak-retry-connector
+      bleak
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       bluetooth-adapters
       bluetooth-auto-recovery
       bluetooth-data-tools
@@ -3019,8 +3464,11 @@
     ];
     "oru" = ps: with ps; [
     ]; # missing inputs: oru
+<<<<<<< HEAD
     "oru_opower" = ps: with ps; [
     ];
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "orvibo" = ps: with ps; [
       orvibo
     ];
@@ -3035,6 +3483,7 @@
       pillow
       psutil-home-assistant
       pyroute2
+<<<<<<< HEAD
       pyserial
       pyserial-asyncio
       python-otbr-api
@@ -3044,10 +3493,23 @@
       zeroconf
       zha-quirks
       zigpy
+=======
+      pyserial-asyncio
+      pyserial
+      python-otbr-api
+      pyudev
+      sqlalchemy
+      zeroconf
+      zha-quirks
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       zigpy-deconz
       zigpy-xbee
       zigpy-zigate
       zigpy-znp
+<<<<<<< HEAD
+=======
+      zigpy
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     ];
     "otp" = ps: with ps; [
       pyotp
@@ -3059,6 +3521,11 @@
       ovoenergy
     ];
     "owntracks" = ps: with ps; [
+<<<<<<< HEAD
+=======
+      pynacl
+      pyturbojpeg
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       aiohttp-cors
       hass-nabucasa
       hassil
@@ -3066,8 +3533,11 @@
       janus
       mutagen
       paho-mqtt
+<<<<<<< HEAD
       pynacl
       pyturbojpeg
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       webrtcvad
     ];
     "p1_monitor" = ps: with ps; [
@@ -3105,6 +3575,7 @@
     "peco" = ps: with ps; [
       peco
     ];
+<<<<<<< HEAD
     "peco_opower" = ps: with ps; [
     ];
     "pegel_online" = ps: with ps; [
@@ -3114,14 +3585,22 @@
     ];
     "pepco" = ps: with ps; [
     ];
+=======
+    "pencom" = ps: with ps; [
+      pencompy
+    ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "persistent_notification" = ps: with ps; [
     ];
     "person" = ps: with ps; [
       aiohttp-cors
       pillow
     ];
+<<<<<<< HEAD
     "pge" = ps: with ps; [
     ];
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "philips_js" = ps: with ps; [
       ha-philipsjs
     ];
@@ -3140,18 +3619,28 @@
     ];
     "pioneer" = ps: with ps; [
     ];
+<<<<<<< HEAD
     "piper" = ps: with ps; [
     ];
     "pjlink" = ps: with ps; [
     ]; # missing inputs: pypjlink2
     "plaato" = ps: with ps; [
+=======
+    "pjlink" = ps: with ps; [
+    ]; # missing inputs: pypjlink2
+    "plaato" = ps: with ps; [
+      pyturbojpeg
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       aiohttp-cors
       hass-nabucasa
       hassil
       home-assistant-intents
       mutagen
       pyplaato
+<<<<<<< HEAD
       pyturbojpeg
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       webrtcvad
     ];
     "plant" = ps: with ps; [
@@ -3189,7 +3678,11 @@
       pyprof2calltree
     ];
     "progettihwsw" = ps: with ps; [
+<<<<<<< HEAD
     ]; # missing inputs: ProgettiHWSW
+=======
+    ]; # missing inputs: progettihwsw
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "proliphix" = ps: with ps; [
     ]; # missing inputs: proliphix
     "prometheus" = ps: with ps; [
@@ -3214,8 +3707,11 @@
     ];
     "ps4" = ps: with ps; [
     ]; # missing inputs: pyps4-2ndscreen
+<<<<<<< HEAD
     "pse" = ps: with ps; [
     ];
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "pulseaudio_loopback" = ps: with ps; [
       pulsectl
     ];
@@ -3254,9 +3750,14 @@
       aiohttp-cors
       aioruuvigateway
       aioshelly
+<<<<<<< HEAD
       async-interrupt
       bleak
       bleak-retry-connector
+=======
+      bleak-retry-connector
+      bleak
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       bluetooth-adapters
       bluetooth-auto-recovery
       bluetooth-data-tools
@@ -3300,12 +3801,19 @@
       pyqwikswitch
     ];
     "rachio" = ps: with ps; [
+<<<<<<< HEAD
+=======
+      pyturbojpeg
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       aiohttp-cors
       hass-nabucasa
       hassil
       home-assistant-intents
       mutagen
+<<<<<<< HEAD
       pyturbojpeg
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       rachiopy
       webrtcvad
     ];
@@ -3338,9 +3846,14 @@
       aiohttp-cors
       aioruuvigateway
       aioshelly
+<<<<<<< HEAD
       async-interrupt
       bleak
       bleak-retry-connector
+=======
+      bleak-retry-connector
+      bleak
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       bluetooth-adapters
       bluetooth-auto-recovery
       bluetooth-data-tools
@@ -3397,8 +3910,11 @@
     "renault" = ps: with ps; [
       renault-api
     ];
+<<<<<<< HEAD
     "renson" = ps: with ps; [
     ]; # missing inputs: renson-endura-delta
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "reolink" = ps: with ps; [
       aiohttp-cors
       reolink-aio
@@ -3474,6 +3990,7 @@
     "rtorrent" = ps: with ps; [
     ];
     "rtsp_to_webrtc" = ps: with ps; [
+<<<<<<< HEAD
       aiohttp-cors
       pyturbojpeg
       rtsp-to-webrtc
@@ -3484,13 +4001,29 @@
     ];
     "russound_rio" = ps: with ps; [
     ]; # missing inputs: russound-rio
+=======
+      pyturbojpeg
+      aiohttp-cors
+      rtsp-to-webrtc
+    ];
+    "ruckus_unleashed" = ps: with ps; [
+      pyruckus
+    ];
+    "russound_rio" = ps: with ps; [
+    ]; # missing inputs: russound_rio
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "russound_rnet" = ps: with ps; [
     ]; # missing inputs: russound
     "ruuvi_gateway" = ps: with ps; [
       aiohttp-cors
       aioruuvigateway
+<<<<<<< HEAD
       bleak
       bleak-retry-connector
+=======
+      bleak-retry-connector
+      bleak
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       bluetooth-adapters
       bluetooth-auto-recovery
       bluetooth-data-tools
@@ -3506,9 +4039,14 @@
       aiohttp-cors
       aioruuvigateway
       aioshelly
+<<<<<<< HEAD
       async-interrupt
       bleak
       bleak-retry-connector
+=======
+      bleak-retry-connector
+      bleak
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       bluetooth-adapters
       bluetooth-auto-recovery
       bluetooth-data-tools
@@ -3533,6 +4071,10 @@
       pysabnzbd
     ];
     "safe_mode" = ps: with ps; [
+<<<<<<< HEAD
+=======
+      pyturbojpeg
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       aiohttp-cors
       fnv-hash-fast
       hass-nabucasa
@@ -3543,7 +4085,10 @@
       mutagen
       pillow
       psutil-home-assistant
+<<<<<<< HEAD
       pyturbojpeg
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       sqlalchemy
       webrtcvad
     ];
@@ -3567,14 +4112,21 @@
     ++ samsungtvws.optional-dependencies.async
     ++ samsungtvws.optional-dependencies.encrypted;
     "satel_integra" = ps: with ps; [
+<<<<<<< HEAD
     ]; # missing inputs: satel-integra
+=======
+    ]; # missing inputs: satel_integra
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "scene" = ps: with ps; [
     ];
     "schedule" = ps: with ps; [
     ];
+<<<<<<< HEAD
     "schlage" = ps: with ps; [
       pyschlage
     ];
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "schluter" = ps: with ps; [
     ]; # missing inputs: py-schluter
     "scrape" = ps: with ps; [
@@ -3609,6 +4161,12 @@
     "sense" = ps: with ps; [
       sense-energy
     ];
+<<<<<<< HEAD
+=======
+    "senseme" = ps: with ps; [
+      aiosenseme
+    ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "sensibo" = ps: with ps; [
       pysensibo
     ];
@@ -3617,9 +4175,14 @@
       aiohttp-cors
       aioruuvigateway
       aioshelly
+<<<<<<< HEAD
       async-interrupt
       bleak
       bleak-retry-connector
+=======
+      bleak-retry-connector
+      bleak
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       bluetooth-adapters
       bluetooth-auto-recovery
       bluetooth-data-tools
@@ -3633,11 +4196,18 @@
       psutil-home-assistant
       pyserial
       pyudev
+<<<<<<< HEAD
       sensirion-ble
       sqlalchemy
       webrtcvad
       zeroconf
     ];
+=======
+      sqlalchemy
+      webrtcvad
+      zeroconf
+    ]; # missing inputs: sensirion-ble
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "sensor" = ps: with ps; [
       fnv-hash-fast
       psutil-home-assistant
@@ -3650,9 +4220,14 @@
       aiohttp-cors
       aioruuvigateway
       aioshelly
+<<<<<<< HEAD
       async-interrupt
       bleak
       bleak-retry-connector
+=======
+      bleak-retry-connector
+      bleak
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       bluetooth-adapters
       bluetooth-auto-recovery
       bluetooth-data-tools
@@ -3676,9 +4251,14 @@
       aiohttp-cors
       aioruuvigateway
       aioshelly
+<<<<<<< HEAD
       async-interrupt
       bleak
       bleak-retry-connector
+=======
+      bleak-retry-connector
+      bleak
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       bluetooth-adapters
       bluetooth-auto-recovery
       bluetooth-data-tools
@@ -3732,8 +4312,13 @@
     "shelly" = ps: with ps; [
       aiohttp-cors
       aioshelly
+<<<<<<< HEAD
       bleak
       bleak-retry-connector
+=======
+      bleak-retry-connector
+      bleak
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       bluetooth-adapters
       bluetooth-auto-recovery
       bluetooth-data-tools
@@ -3766,8 +4351,12 @@
       pysignalclirestapi
     ];
     "simplepush" = ps: with ps; [
+<<<<<<< HEAD
       simplepush
     ];
+=======
+    ]; # missing inputs: simplepush
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "simplisafe" = ps: with ps; [
       simplisafe-python
     ];
@@ -3782,8 +4371,12 @@
     "siren" = ps: with ps; [
     ];
     "sisyphus" = ps: with ps; [
+<<<<<<< HEAD
       sisyphus-control
     ];
+=======
+    ]; # missing inputs: sisyphus-control
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "sky_hub" = ps: with ps; [
       pyskyqhub
     ];
@@ -3824,6 +4417,10 @@
     "smarther" = ps: with ps; [
     ];
     "smartthings" = ps: with ps; [
+<<<<<<< HEAD
+=======
+      pyturbojpeg
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       aiohttp-cors
       hass-nabucasa
       hassil
@@ -3831,12 +4428,20 @@
       mutagen
       pysmartapp
       pysmartthings
+<<<<<<< HEAD
       pyturbojpeg
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       webrtcvad
     ];
     "smarttub" = ps: with ps; [
       python-smarttub
     ];
+<<<<<<< HEAD
+=======
+    "smarty" = ps: with ps; [
+    ]; # missing inputs: pysmarty
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "smhi" = ps: with ps; [
       smhi-pkg
     ];
@@ -3861,9 +4466,14 @@
       aiohttp-cors
       aioruuvigateway
       aioshelly
+<<<<<<< HEAD
       async-interrupt
       bleak
       bleak-retry-connector
+=======
+      bleak-retry-connector
+      bleak
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       bluetooth-adapters
       bluetooth-auto-recovery
       bluetooth-data-tools
@@ -3942,7 +4552,11 @@
       spiderpy
     ];
     "splunk" = ps: with ps; [
+<<<<<<< HEAD
     ]; # missing inputs: hass-splunk
+=======
+    ]; # missing inputs: hass_splunk
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "spotify" = ps: with ps; [
       aiohttp-cors
       fnv-hash-fast
@@ -4007,10 +4621,17 @@
     "stookwijzer" = ps: with ps; [
     ]; # missing inputs: stookwijzer
     "stream" = ps: with ps; [
+<<<<<<< HEAD
       aiohttp-cors
       ha-av
       numpy
       pyturbojpeg
+=======
+      pyturbojpeg
+      aiohttp-cors
+      av
+      numpy
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     ];
     "streamlabswater" = ps: with ps; [
       streamlabswater
@@ -4048,13 +4669,22 @@
       pyswitchbee
     ];
     "switchbot" = ps: with ps; [
+<<<<<<< HEAD
+=======
+      pyswitchbot
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       aioesphomeapi
       aiohttp-cors
       aioruuvigateway
       aioshelly
+<<<<<<< HEAD
       async-interrupt
       bleak
       bleak-retry-connector
+=======
+      bleak-retry-connector
+      bleak
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       bluetooth-adapters
       bluetooth-auto-recovery
       bluetooth-data-tools
@@ -4067,7 +4697,10 @@
       mutagen
       psutil-home-assistant
       pyserial
+<<<<<<< HEAD
       pyswitchbot
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       pyudev
       sqlalchemy
       webrtcvad
@@ -4077,7 +4710,11 @@
       aioswitcher
     ];
     "switchmate" = ps: with ps; [
+<<<<<<< HEAD
     ]; # missing inputs: PySwitchmate
+=======
+    ]; # missing inputs: pySwitchmate
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "symfonisk" = ps: with ps; [
     ];
     "syncthing" = ps: with ps; [
@@ -4144,6 +4781,7 @@
       xmltodict
     ];
     "telegram" = ps: with ps; [
+<<<<<<< HEAD
       aiohttp-cors
       pysocks
       python-telegram-bot
@@ -4151,6 +4789,15 @@
     "telegram_bot" = ps: with ps; [
       aiohttp-cors
       pysocks
+=======
+      pysocks
+      aiohttp-cors
+      python-telegram-bot
+    ];
+    "telegram_bot" = ps: with ps; [
+      pysocks
+      aiohttp-cors
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       python-telegram-bot
     ];
     "tellduslive" = ps: with ps; [
@@ -4183,9 +4830,14 @@
       aiohttp-cors
       aioruuvigateway
       aioshelly
+<<<<<<< HEAD
       async-interrupt
       bleak
       bleak-retry-connector
+=======
+      bleak-retry-connector
+      bleak
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       bluetooth-adapters
       bluetooth-auto-recovery
       bluetooth-data-tools
@@ -4211,9 +4863,14 @@
       aiohttp-cors
       aioruuvigateway
       aioshelly
+<<<<<<< HEAD
       async-interrupt
       bleak
       bleak-retry-connector
+=======
+      bleak-retry-connector
+      bleak
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       bluetooth-adapters
       bluetooth-auto-recovery
       bluetooth-data-tools
@@ -4234,7 +4891,11 @@
     ];
     "thermoworks_smoke" = ps: with ps; [
       stringcase
+<<<<<<< HEAD
     ]; # missing inputs: thermoworks-smoke
+=======
+    ]; # missing inputs: thermoworks_smoke
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "thethingsnetwork" = ps: with ps; [
     ];
     "thingspeak" = ps: with ps; [
@@ -4271,9 +4932,14 @@
       aiohttp-cors
       aioruuvigateway
       aioshelly
+<<<<<<< HEAD
       async-interrupt
       bleak
       bleak-retry-connector
+=======
+      bleak-retry-connector
+      bleak
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       bluetooth-adapters
       bluetooth-auto-recovery
       bluetooth-data-tools
@@ -4292,8 +4958,11 @@
       webrtcvad
       zeroconf
     ];
+<<<<<<< HEAD
     "time" = ps: with ps; [
     ];
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "time_date" = ps: with ps; [
     ];
     "timer" = ps: with ps; [
@@ -4315,12 +4984,19 @@
       pytomorrowio
     ];
     "toon" = ps: with ps; [
+<<<<<<< HEAD
+=======
+      pyturbojpeg
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       aiohttp-cors
       hass-nabucasa
       hassil
       home-assistant-intents
       mutagen
+<<<<<<< HEAD
       pyturbojpeg
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       toonapi
       webrtcvad
     ];
@@ -4339,7 +5015,11 @@
       psutil-home-assistant
       python-kasa
       sqlalchemy
+<<<<<<< HEAD
     ]; # missing inputs: python-kasa.optional-dependencies.speedups
+=======
+    ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "tplink_lte" = ps: with ps; [
     ]; # missing inputs: tp-connected
     "tplink_omada" = ps: with ps; [
@@ -4359,9 +5039,12 @@
       pytradfri
     ]
     ++ pytradfri.optional-dependencies.async;
+<<<<<<< HEAD
     "trafikverket_camera" = ps: with ps; [
       pytrafikverket
     ];
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "trafikverket_ferry" = ps: with ps; [
       pytrafikverket
     ];
@@ -4426,6 +5109,11 @@
     "ukraine_alarm" = ps: with ps; [
       uasiren
     ];
+<<<<<<< HEAD
+=======
+    "ultraloq" = ps: with ps; [
+    ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "unifi" = ps: with ps; [
       aiounifi
     ];
@@ -4546,9 +5234,12 @@
     "vlc_telnet" = ps: with ps; [
       aiovlc
     ];
+<<<<<<< HEAD
     "vodafone_station" = ps: with ps; [
       aiovodafone
     ];
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "voicerss" = ps: with ps; [
     ];
     "voip" = ps: with ps; [
@@ -4578,13 +5269,20 @@
     "wake_on_lan" = ps: with ps; [
       wakeonlan
     ];
+<<<<<<< HEAD
     "wake_word" = ps: with ps; [
     ];
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "wallbox" = ps: with ps; [
       wallbox
     ];
     "waqi" = ps: with ps; [
+<<<<<<< HEAD
       aiowaqi
+=======
+      waqiasync
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     ];
     "water_heater" = ps: with ps; [
     ];
@@ -4593,11 +5291,21 @@
     ];
     "watson_iot" = ps: with ps; [
     ]; # missing inputs: ibmiotf
+<<<<<<< HEAD
+=======
+    "watson_tts" = ps: with ps; [
+      ibm-watson
+    ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "watttime" = ps: with ps; [
       aiowatttime
     ];
     "waze_travel_time" = ps: with ps; [
+<<<<<<< HEAD
       pywaze
+=======
+      wazeroutecalculator
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     ];
     "weather" = ps: with ps; [
     ];
@@ -4619,8 +5327,11 @@
     "whirlpool" = ps: with ps; [
       whirlpool-sixth-sense
     ];
+<<<<<<< HEAD
     "whisper" = ps: with ps; [
     ];
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "whois" = ps: with ps; [
       whois
     ];
@@ -4651,7 +5362,11 @@
       wled
     ];
     "wolflink" = ps: with ps; [
+<<<<<<< HEAD
     ]; # missing inputs: wolf-smartset
+=======
+    ]; # missing inputs: wolf_smartset
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "workday" = ps: with ps; [
       holidays
     ];
@@ -4667,8 +5382,12 @@
     "wsdot" = ps: with ps; [
     ];
     "wyoming" = ps: with ps; [
+<<<<<<< HEAD
       wyoming
     ];
+=======
+    ]; # missing inputs: wyoming
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "x10" = ps: with ps; [
     ];
     "xbox" = ps: with ps; [
@@ -4686,15 +5405,30 @@
     ];
     "xiaomi_aqara" = ps: with ps; [
       pyxiaomigateway
+<<<<<<< HEAD
+=======
+      aiohttp-cors
+      fnv-hash-fast
+      ifaddr
+      netdisco
+      psutil-home-assistant
+      sqlalchemy
+      zeroconf
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     ];
     "xiaomi_ble" = ps: with ps; [
       aioesphomeapi
       aiohttp-cors
       aioruuvigateway
       aioshelly
+<<<<<<< HEAD
       async-interrupt
       bleak
       bleak-retry-connector
+=======
+      bleak-retry-connector
+      bleak
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       bluetooth-adapters
       bluetooth-auto-recovery
       bluetooth-data-tools
@@ -4726,8 +5460,11 @@
     ];
     "xs1" = ps: with ps; [
     ]; # missing inputs: xs1-api-client
+<<<<<<< HEAD
     "yale_home" = ps: with ps; [
     ];
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "yale_smart_alarm" = ps: with ps; [
       yalesmartalarmclient
     ];
@@ -4736,9 +5473,14 @@
       aiohttp-cors
       aioruuvigateway
       aioshelly
+<<<<<<< HEAD
       async-interrupt
       bleak
       bleak-retry-connector
+=======
+      bleak-retry-connector
+      bleak
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       bluetooth-adapters
       bluetooth-auto-recovery
       bluetooth-data-tools
@@ -4775,8 +5517,11 @@
     ];
     "yandextts" = ps: with ps; [
     ];
+<<<<<<< HEAD
     "yardian" = ps: with ps; [
     ]; # missing inputs: pyyardian
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "yeelight" = ps: with ps; [
       aiohttp-cors
       async-upnp-client
@@ -4803,12 +5548,15 @@
     "youless" = ps: with ps; [
       youless-api
     ];
+<<<<<<< HEAD
     "youtube" = ps: with ps; [
       aiohttp-cors
       fnv-hash-fast
       psutil-home-assistant
       sqlalchemy
     ]; # missing inputs: youtubeaio
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "zabbix" = ps: with ps; [
       py-zabbix
     ];
@@ -4841,6 +5589,7 @@
       janus
       pillow
       psutil-home-assistant
+<<<<<<< HEAD
       pyserial
       pyserial-asyncio
       pyudev
@@ -4848,13 +5597,27 @@
       universal-silabs-flasher
       zha-quirks
       zigpy
+=======
+      pyserial-asyncio
+      pyserial
+      pyudev
+      sqlalchemy
+      zha-quirks
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       zigpy-deconz
       zigpy-xbee
       zigpy-zigate
       zigpy-znp
+<<<<<<< HEAD
     ];
     "zhong_hong" = ps: with ps; [
     ]; # missing inputs: zhong-hong-hvac
+=======
+      zigpy
+    ];
+    "zhong_hong" = ps: with ps; [
+    ]; # missing inputs: zhong_hong_hvac
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "ziggo_mediabox_xl" = ps: with ps; [
     ]; # missing inputs: ziggo-mediabox-xl
     "zodiac" = ps: with ps; [
@@ -4904,7 +5667,10 @@
     "airvisual"
     "airvisual_pro"
     "airzone"
+<<<<<<< HEAD
     "airzone_cloud"
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "aladdin_connect"
     "alarm_control_panel"
     "alarmdecoder"
@@ -4916,7 +5682,10 @@
     "analytics"
     "android_ip_webcam"
     "androidtv"
+<<<<<<< HEAD
     "androidtv_remote"
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "apache_kafka"
     "apcupsd"
     "api"
@@ -4942,7 +5711,10 @@
     "azure_devops"
     "azure_event_hub"
     "backup"
+<<<<<<< HEAD
     "baf"
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "balboa"
     "bayesian"
     "binary_sensor"
@@ -4978,7 +5750,10 @@
     "cloudflare"
     "co2signal"
     "color_extractor"
+<<<<<<< HEAD
     "comelit"
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "comfoconnect"
     "command_line"
     "compensation"
@@ -4993,8 +5768,11 @@
     "crownstone"
     "daikin"
     "datadog"
+<<<<<<< HEAD
     "date"
     "datetime"
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "debugpy"
     "deconz"
     "default_config"
@@ -5013,20 +5791,31 @@
     "dialogflow"
     "directv"
     "discord"
+<<<<<<< HEAD
     "discovergy"
+=======
+    "discovery"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "dlna_dmr"
     "dlna_dms"
     "dnsip"
     "doorbird"
     "dormakaba_dkey"
+<<<<<<< HEAD
     "dremel_3d_printer"
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "dsmr"
     "dsmr_reader"
     "dte_energy_bridge"
     "duckdns"
     "dunehd"
+<<<<<<< HEAD
     "duotecno"
     "dwd_weather_warnings"
+=======
+    "dynalite"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "eafm"
     "easyenergy"
     "ecobee"
@@ -5051,7 +5840,10 @@
     "escea"
     "esphome"
     "eufylife_ble"
+<<<<<<< HEAD
     "event"
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "everlights"
     "evil_genius_labs"
     "ezviz"
@@ -5116,7 +5908,10 @@
     "google_assistant"
     "google_assistant_sdk"
     "google_domains"
+<<<<<<< HEAD
     "google_generative_ai_conversation"
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "google_mail"
     "google_pubsub"
     "google_sheets"
@@ -5149,7 +5944,10 @@
     "home_plus_control"
     "homeassistant"
     "homeassistant_alerts"
+<<<<<<< HEAD
     "homeassistant_green"
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "homeassistant_hardware"
     "homeassistant_sky_connect"
     "homeassistant_yellow"
@@ -5174,7 +5972,10 @@
     "icloud"
     "ifttt"
     "ign_sismologia"
+<<<<<<< HEAD
     "image"
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "image_processing"
     "image_upload"
     "imap"
@@ -5193,6 +5994,10 @@
     "intent"
     "intent_script"
     "ios"
+<<<<<<< HEAD
+=======
+    "iotawatt"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "ipma"
     "ipp"
     "iqvia"
@@ -5221,7 +6026,10 @@
     "lastfm"
     "launch_library"
     "laundrify"
+<<<<<<< HEAD
     "lawn_mower"
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "lcn"
     "ld2410_ble"
     "led_ble"
@@ -5293,7 +6101,10 @@
     "my"
     "myq"
     "mysensors"
+<<<<<<< HEAD
     "mystrom"
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "mythicbeastsdns"
     "nam"
     "namecheapdns"
@@ -5340,13 +6151,19 @@
     "openexchangerates"
     "opengarage"
     "openhardwaremonitor"
+<<<<<<< HEAD
     "openhome"
     "opensky"
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "opentherm_gw"
     "openuv"
     "openweathermap"
     "opnsense"
+<<<<<<< HEAD
     "opower"
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "oralb"
     "otbr"
     "overkiz"
@@ -5385,7 +6202,10 @@
     "python_script"
     "qingping"
     "qld_bushfire"
+<<<<<<< HEAD
     "qnap"
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "qnap_qsw"
     "qwikswitch"
     "rachio"
@@ -5431,7 +6251,10 @@
     "samsungtv"
     "scene"
     "schedule"
+<<<<<<< HEAD
     "schlage"
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "scrape"
     "screenlogic"
     "script"
@@ -5439,8 +6262,13 @@
     "season"
     "select"
     "sense"
+<<<<<<< HEAD
     "sensibo"
     "sensirion_ble"
+=======
+    "senseme"
+    "sensibo"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "sensor"
     "sensorpro"
     "sensorpush"
@@ -5456,7 +6284,10 @@
     "sigfox"
     "sighthound"
     "signal_messenger"
+<<<<<<< HEAD
     "simplepush"
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "simplisafe"
     "simulated"
     "siren"
@@ -5536,7 +6367,10 @@
     "tibber"
     "tile"
     "tilt_ble"
+<<<<<<< HEAD
     "time"
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "time_date"
     "timer"
     "tod"
@@ -5546,12 +6380,19 @@
     "tomorrowio"
     "toon"
     "totalconnect"
+<<<<<<< HEAD
+=======
+    "tplink"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "tplink_omada"
     "traccar"
     "trace"
     "tractive"
     "tradfri"
+<<<<<<< HEAD
     "trafikverket_camera"
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "trafikverket_ferry"
     "trafikverket_train"
     "trafikverket_weatherstation"
@@ -5592,14 +6433,20 @@
     "vilfo"
     "vizio"
     "vlc_telnet"
+<<<<<<< HEAD
     "vodafone_station"
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "voicerss"
     "volumio"
     "volvooncall"
     "vulcan"
     "vultr"
     "wake_on_lan"
+<<<<<<< HEAD
     "wake_word"
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "wallbox"
     "water_heater"
     "watttime"
@@ -5620,7 +6467,10 @@
     "worldclock"
     "ws66i"
     "wsdot"
+<<<<<<< HEAD
     "wyoming"
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "xbox"
     "xiaomi"
     "xiaomi_aqara"

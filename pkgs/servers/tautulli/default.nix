@@ -2,7 +2,11 @@
 
 buildPythonApplication rec {
   pname = "Tautulli";
+<<<<<<< HEAD
   version = "2.13.1";
+=======
+  version = "2.12.3";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "other";
 
   pythonPath = [ setuptools ];
@@ -12,7 +16,11 @@ buildPythonApplication rec {
     owner = "Tautulli";
     repo = pname;
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-+uVBvtwMJRqPWJKQ0Tn9wLiuR02Btsbxd9+rl9tAlgg=";
+=======
+    sha256 = "sha256-UENYnXEdrKlU+gUmGdw46jslN8B5qWPDIFU03Z7aMps=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   installPhase = ''

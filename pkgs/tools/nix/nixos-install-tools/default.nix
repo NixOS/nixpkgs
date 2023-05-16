@@ -20,7 +20,12 @@ in
     inherit (config.system.build)
       nixos-install nixos-generate-config nixos-enter;
 
+<<<<<<< HEAD
     inherit (config.system.build.manual) nixos-configuration-reference-manpage;
+=======
+    # Required for --help.
+    inherit (config.system.build.manual) manpages;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   extraOutputsToInstall = ["man"];
@@ -62,7 +67,14 @@ in
       touch $out
     '';
   };
+<<<<<<< HEAD
 }).overrideAttrs {
   inherit version;
   pname = "nixos-install-tools";
 }
+=======
+}).overrideAttrs (o: {
+  inherit version;
+  pname = "nixos-install-tools";
+})
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)

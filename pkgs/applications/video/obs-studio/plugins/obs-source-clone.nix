@@ -7,13 +7,21 @@
 
 stdenv.mkDerivation rec {
   pname = "obs-source-clone";
+<<<<<<< HEAD
   version = "0.1.4";
+=======
+  version = "0.1.3";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "exeldro";
     repo = "obs-source-clone";
     rev = version;
+<<<<<<< HEAD
     sha256 = "sha256-E2pHJO3cdOXmSlTVGsz4tncm9fMaa8Rhsq9YZDNidjs=";
+=======
+    sha256 = "sha256-cgqv2QdeGz4Aeoy4Dncw03l7NWGsZN1lsrZH7uHxGxw=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ cmake ];

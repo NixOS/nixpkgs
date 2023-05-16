@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 { lib, buildPythonPackage, fetchFromGitHub, numpy, scipy, pillow, fetchpatch }:
+=======
+{ lib, buildPythonPackage, fetchFromGitHub, numpy, scipy, pillow }:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 buildPythonPackage rec {
   pname = "pyssim";
@@ -14,6 +18,7 @@ buildPythonPackage rec {
     sha256 = "sha256-VvxQTvDTDms6Ccyclbf9P0HEQksl5atPPzHuH8yXTmc=";
   };
 
+<<<<<<< HEAD
   patches = [
     # "Replace Image.ANTIALIAS with Image.LANCZOS"
     # Image.ANTIALIAS has been removed in Pillow 10.0.0,
@@ -26,6 +31,8 @@ buildPythonPackage rec {
     })
   ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   # Tests are copied from .travis.yml
   checkPhase = ''
     $out/bin/pyssim test-images/test1-1.png test-images/test1-1.png | grep 1

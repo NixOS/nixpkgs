@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 { mkDerivation, config, lib, fetchurl, cmake, doxygen, extra-cmake-modules, wrapGAppsHook
+=======
+{ mkDerivation, lib, fetchurl, cmake, doxygen, extra-cmake-modules, wrapGAppsHook
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 # For `digitaglinktree`
 , perl, sqlite
@@ -7,7 +11,10 @@
 , qtxmlpatterns
 , qtsvg
 , qtwebengine
+<<<<<<< HEAD
 , qtnetworkauth
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 , akonadi-contacts
 , kcalendarcore
@@ -53,13 +60,17 @@
 
 , breeze-icons
 , oxygen
+<<<<<<< HEAD
 
 , cudaSupport ? config.cudaSupport
 , cudaPackages ? {}
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 mkDerivation rec {
   pname   = "digikam";
+<<<<<<< HEAD
   version = "8.1.0";
 
   src = fetchurl {
@@ -76,6 +87,16 @@ mkDerivation rec {
   ] ++ lib.optionals cudaSupport (with cudaPackages; [
     cuda_nvcc
   ]);
+=======
+  version = "7.10.0";
+
+  src = fetchurl {
+    url = "mirror://kde/stable/${pname}/${version}/digiKam-${version}.tar.xz";
+    sha256 = "sha256-o/MPAbfRttWFgivNXr+N9p4P8CRWOnJGLr+AadvaIuE=";
+  };
+
+  nativeBuildInputs = [ cmake doxygen extra-cmake-modules kdoctools wrapGAppsHook ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   buildInputs = [
     bison
@@ -105,7 +126,10 @@ mkDerivation rec {
     qtxmlpatterns
     qtsvg
     qtwebengine
+<<<<<<< HEAD
     qtnetworkauth
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     akonadi-contacts
     kcalendarcore
@@ -122,9 +146,13 @@ mkDerivation rec {
     marble
     oxygen
     threadweaver
+<<<<<<< HEAD
   ] ++ lib.optionals cudaSupport (with cudaPackages; [
     cuda_cudart
   ]);
+=======
+  ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   cmakeFlags = [
     "-DENABLE_MYSQLSUPPORT=1"
@@ -151,6 +179,9 @@ mkDerivation rec {
     license = licenses.gpl2;
     homepage = "https://www.digikam.org";
     platforms = platforms.linux;
+<<<<<<< HEAD
     mainProgram = "digikam";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

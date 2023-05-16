@@ -1,19 +1,32 @@
 { lib
 , stdenv
 , fetchFromGitHub
+<<<<<<< HEAD
+=======
+, fetchpatch
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , python3
 , enableSystemd ? lib.meta.availableOn stdenv.hostPlatform python3.pkgs.systemd
 }:
 
 python3.pkgs.buildPythonPackage rec {
   pname = "mautrix-facebook";
+<<<<<<< HEAD
   version = "unstable-2023-07-16";
+=======
+  version = "0.4.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "mautrix";
     repo = "facebook";
+<<<<<<< HEAD
     rev = "543b50e73918918d1fabac67891dd80d97080942";
     hash = "sha256-Y6nwryPenNQa68Rh2KPUHQrv6rnapj8x19FdgLXutm8=";
+=======
+    rev = "v${version}";
+    hash = "sha256-MlT8jNUpJMgaUO9ZIYjpv8l3evdFjfEOSvdAdSlOUvg=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = with python3.pkgs; [

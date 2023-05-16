@@ -3,7 +3,10 @@
 , fetchFromGitHub
 , stdenv
 , pkg-config
+<<<<<<< HEAD
 , ffmpeg
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -14,7 +17,11 @@ rustPlatform.buildRustPackage rec {
     owner = "ImageOptim";
     repo = "gifski";
     rev = version;
+<<<<<<< HEAD
     hash = "sha256-sPsq/hntNqOdPJcoob1jrDUrLLiBEnfRoDANyFUjOuM=";
+=======
+    sha256 = "sha256-sPsq/hntNqOdPJcoob1jrDUrLLiBEnfRoDANyFUjOuM=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   cargoLock = {
@@ -24,6 +31,7 @@ rustPlatform.buildRustPackage rec {
     };
   };
 
+<<<<<<< HEAD
   nativeBuildInputs = [
     pkg-config
     rustPlatform.bindgenHook
@@ -44,6 +52,12 @@ rustPlatform.buildRustPackage rec {
   # outline a solution.
   #
   checkType = "debug";
+=======
+  nativeBuildInputs = lib.optionals stdenv.isLinux [ pkg-config ];
+
+  # error: the crate `gifski` is compiled with the panic strategy `abort` which is incompatible with this crate's strategy of `unwind`
+  doCheck = !stdenv.isDarwin;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   # error: linker `/usr/bin/x86_64-linux-gnu-gcc` not found
   postPatch = ''
@@ -56,6 +70,9 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/ImageOptim/gifski/releases/tag/${src.rev}";
     license = licenses.agpl3Plus;
     maintainers = with maintainers; [ figsoda marsam ];
+<<<<<<< HEAD
     mainProgram = "gifski";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

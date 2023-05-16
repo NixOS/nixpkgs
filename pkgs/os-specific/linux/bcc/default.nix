@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 { audit
 , bash
 , bison
@@ -21,6 +22,18 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "bcc";
   version = "0.28.0";
+=======
+{ lib, stdenv, fetchFromGitHub
+, makeWrapper, cmake, llvmPackages
+, flex, bison, elfutils, python, luajit, netperf, iperf, libelf
+, bash, libbpf, nixosTests
+, audit
+}:
+
+python.pkgs.buildPythonApplication rec {
+  pname = "bcc";
+  version = "0.26.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   disabled = !stdenv.isLinux;
 
@@ -28,7 +41,11 @@ python3.pkgs.buildPythonApplication rec {
     owner = "iovisor";
     repo = "bcc";
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-+ecSaVroDC2bWbio4JsuwEvHQdCMpxLt7hIkeREMJs8=";
+=======
+    sha256 = "sha256-zx38tPwuuGU6px9pRNN5JtvBysK9fStOvoqe7cLo7LM=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
   format = "other";
 
@@ -44,6 +61,7 @@ python3.pkgs.buildPythonApplication rec {
     ./fix-deadlock-detector-import.patch
   ];
 
+<<<<<<< HEAD
   propagatedBuildInputs = [ python3.pkgs.netaddr ];
   nativeBuildInputs = [
     bison
@@ -54,6 +72,10 @@ python3.pkgs.buildPythonApplication rec {
     python3.pkgs.setuptools
     zip
   ];
+=======
+  propagatedBuildInputs = [ python.pkgs.netaddr ];
+  nativeBuildInputs = [ makeWrapper cmake flex bison llvmPackages.llvm.dev ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   cmakeFlags = [
     "-DBCC_KERNEL_MODULES_DIR=/run/booted-system/kernel-modules/lib/modules"
@@ -80,10 +102,13 @@ python3.pkgs.buildPythonApplication rec {
       --replace '$'{exec_prefix}/@CMAKE_INSTALL_LIBDIR@ @CMAKE_INSTALL_FULL_LIBDIR@
   '';
 
+<<<<<<< HEAD
   preInstall = ''
     # required for setuptool during install
     export PYTHONPATH=$out/${python3.sitePackages}:$PYTHONPATH
   '';
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   postInstall = ''
     mkdir -p $out/bin $out/share
     rm -r $out/share/bcc/tools/old

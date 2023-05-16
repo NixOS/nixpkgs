@@ -2,7 +2,11 @@
 
 let
   pname = "minidlna";
+<<<<<<< HEAD
   version = "1.3.3";
+=======
+  version = "1.3.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 in
 stdenv.mkDerivation {
   inherit pname version;
@@ -10,7 +14,11 @@ stdenv.mkDerivation {
   src = fetchgit {
     url = "https://git.code.sf.net/p/${pname}/git";
     rev = "v${builtins.replaceStrings [ "." ] [ "_" ] version}";
+<<<<<<< HEAD
     hash = "sha256-InsSguoGi1Gp8R/bd4/c16xqRuk0bRsgw7wvcbokgKo=";
+=======
+    hash = "sha256-v+puglrbuLqHIAbrO7bhOA0npc/GYp0Bdi3DnD9qyII=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   preConfigure = ''

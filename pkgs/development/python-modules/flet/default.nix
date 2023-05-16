@@ -1,4 +1,5 @@
 { lib
+<<<<<<< HEAD
 , buildPythonPackage
 , fetchPypi
 
@@ -15,15 +16,25 @@
 , websocket-client
 , websockets
 
+=======
+, python3
+, buildPythonPackage
+, fetchPypi
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 buildPythonPackage rec {
   pname = "flet";
+<<<<<<< HEAD
   version = "0.7.4";
+=======
+  version = "0.6.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
+<<<<<<< HEAD
     hash = "sha256-vFPjN+5wIygtP035odAOSdF9PQe6eXz6CJ9Q0d8ScFo=";
   };
 
@@ -38,6 +49,20 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
+=======
+    hash = "sha256-EDNATwO2N4jXVC5H1VmXqC9XGTnQo8vLvTEozRYZuj4=";
+  };
+
+  patches = [
+    ./pyproject.toml.patch
+  ];
+
+  nativeBuildInputs = with python3.pkgs; [
+    poetry-core
+  ];
+
+  propagatedBuildInputs = with python3.pkgs; [
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     flet-core
     typing-extensions
     websocket-client

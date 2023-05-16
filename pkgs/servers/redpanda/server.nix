@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 { abseil-cpp_202206
+=======
+{ abseil-cpp
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , avro-cpp
 , callPackage
 , ccache
@@ -91,7 +95,11 @@ llvmPackages_14.stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+<<<<<<< HEAD
     abseil-cpp_202206
+=======
+    abseil-cpp
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     avro-cpp
     base64
     crc32c

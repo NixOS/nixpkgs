@@ -18,14 +18,22 @@
 
 buildPythonPackage rec {
   pname = "ledgerblue";
+<<<<<<< HEAD
   version = "0.1.48";
+=======
+  version = "0.1.47";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
+<<<<<<< HEAD
     hash = "sha256-LVRNcsTmJOR3zTBhbKV4V0zCQk0sk/Uf6kSmfbAhgfY=";
+=======
+    hash = "sha256-xe8ude2JzrdmJqwzqLlxRO697IjcGuQgGG6c3nQ/drg=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [

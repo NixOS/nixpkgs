@@ -8,18 +8,27 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "bazarr";
+<<<<<<< HEAD
   version = "1.2.4";
+=======
+  version = "1.2.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   sourceRoot = ".";
 
   src = fetchurl {
     url = "https://github.com/morpheus65535/bazarr/releases/download/v${version}/bazarr.zip";
+<<<<<<< HEAD
     sha256 = "sha256-TdBazeY/w9vSEbs/OgRtdoi/riAUai1zrmM/A8ecaWA=";
+=======
+    sha256 = "sha256-PuVK1jrNjxagESYvgqRBfxzsV/KxFhTdOyliO8smwec=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ unzip makeWrapper ];
 
   buildInputs = [
+<<<<<<< HEAD
     (python3.withPackages (ps: [
       ps.lxml
       ps.numpy
@@ -28,6 +37,9 @@ stdenv.mkDerivation rec {
       ps.pillow
       ps.setuptools
     ]))
+=======
+    (python3.withPackages (ps: [ ps.lxml ps.numpy ps.gevent ps.gevent-websocket ps.pillow ]))
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ] ++ runtimeProgDeps;
 
   installPhase = ''

@@ -4,18 +4,31 @@
 , openh264, usrsctp, libevent, libvpx
 , libX11, libXtst, libXcomposite, libXdamage, libXext, libXrender, libXrandr, libXi
 , glib, abseil-cpp, pcre, util-linuxMinimal, libselinux, libsepol, pipewire
+<<<<<<< HEAD
 , mesa, libepoxy, libglvnd, unstableGitUpdater
+=======
+, mesa, valgrind, libepoxy, libglvnd
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 stdenv.mkDerivation {
   pname = "tg_owt";
+<<<<<<< HEAD
   version = "unstable-2023-08-15";
+=======
+  version = "unstable-2023-05-01";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "desktop-app";
     repo = "tg_owt";
+<<<<<<< HEAD
     rev = "0532942ac6176a66ef184fb728a4cbb02958fc0b";
     sha256 = "sha256-FcRXxu0Nc8qHQl8PoA92MeuhpV+vgl658uILEpmDy3A=";
+=======
+    rev = "dcb5069ff76bd293e86928804208737e6cee2ccc";
+    sha256 = "0c3wnx51kbpzy9x8i9wm0ng16h35kgqsigrygrmwvxxn7zgv72ma";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     fetchSubmodules = true;
   };
 
@@ -54,8 +67,11 @@ stdenv.mkDerivation {
     abseil-cpp openh264 usrsctp libevent libvpx openssl
   ];
 
+<<<<<<< HEAD
   passthru.updateScript = unstableGitUpdater { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   meta = with lib; {
     license = licenses.bsd3;
     maintainers = with maintainers; [ oxalica ];

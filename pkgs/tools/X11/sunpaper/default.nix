@@ -3,6 +3,10 @@
 , fetchFromGitHub
 , sunwait
 , wallutils
+<<<<<<< HEAD
+=======
+, rPackages
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 stdenvNoCC.mkDerivation rec {
@@ -26,7 +30,11 @@ stdenvNoCC.mkDerivation rec {
       --replace "sunwait" "${sunwait}/bin/sunwait" \
       --replace "setwallpaper" "${wallutils}/bin/setwallpaper" \
       --replace '$HOME/sunpaper/images/' "$out/share/sunpaper/images/"
+<<<<<<< HEAD
   '';
+=======
+    '';
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   installPhase = ''
     mkdir -p "$out/bin" "$out/share/sunpaper/images"

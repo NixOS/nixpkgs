@@ -5,12 +5,20 @@
 }:
 
 let
+<<<<<<< HEAD
   version = "6.2.2";
+=======
+  version = "5.7.8";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pname = "timeular";
 
   src = fetchurl {
     url = "https://s3.amazonaws.com/timeular-desktop-packages/linux/production/Timeular-${version}.AppImage";
+<<<<<<< HEAD
     sha256 = "sha256-i6VLKGHst6gykXOpkt+VFMkdm9RLAWVgAhQ2UZ7Lt5Y=";
+=======
+    sha256 = "sha256-gIYo91ITpFtYdYGek4bXaOowMSILXZ4fJYNKeZDhk+Y=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   appimageContents = appimageTools.extractType2 {

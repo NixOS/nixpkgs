@@ -21,7 +21,11 @@ python3.pkgs.buildPythonApplication rec {
 
   # Upstream splitted the project into gitlint and gitlint-core to
   # simplify the dependency handling
+<<<<<<< HEAD
   sourceRoot = "${src.name}/gitlint-core";
+=======
+  sourceRoot = "source/gitlint-core";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nativeBuildInputs = with python3.pkgs; [
     hatch-vcs

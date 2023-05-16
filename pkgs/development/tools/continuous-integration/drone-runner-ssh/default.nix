@@ -18,6 +18,9 @@ buildGoModule rec {
     homepage = "https://github.com/drone-runners/drone-runner-ssh";
     license = licenses.unfreeRedistributable;
     maintainers = teams.c3d2.members;
+<<<<<<< HEAD
     mainProgram = "drone-runner-ssh";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

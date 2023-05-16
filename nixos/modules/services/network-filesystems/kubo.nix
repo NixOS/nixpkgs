@@ -172,8 +172,13 @@ in
 
       emptyRepo = mkOption {
         type = types.bool;
+<<<<<<< HEAD
         default = true;
         description = lib.mdDoc "If set to false, the repo will be initialized with help files";
+=======
+        default = false;
+        description = lib.mdDoc "If set to true, the repo won't be initialized with help files";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       };
 
       settings = mkOption {
@@ -278,12 +283,15 @@ in
           You can't set services.kubo.settings.Pinning.RemoteServices because the ``config replace`` subcommand used at startup does not work with it.
         '';
       }
+<<<<<<< HEAD
       {
         assertion = !((lib.versionAtLeast cfg.package.version "0.21") && (builtins.hasAttr "Experimental" cfg.settings) && (builtins.hasAttr "AcceleratedDHTClient" cfg.settings.Experimental));
         message = ''
     The `services.kubo.settings.Experimental.AcceleratedDHTClient` option was renamed to `services.kubo.settings.Routing.AcceleratedDHTClient` in Kubo 0.21.
   '';
       }
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     ];
 
     environment.systemPackages = [ cfg.package ];
@@ -337,7 +345,11 @@ in
 
       preStart = ''
         if [[ ! -f "$IPFS_PATH/config" ]]; then
+<<<<<<< HEAD
           ipfs init --empty-repo=${lib.boolToString cfg.emptyRepo}
+=======
+          ipfs init ${optionalString cfg.emptyRepo "-e"}
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         else
           # After an unclean shutdown this file may exist which will cause the config command to attempt to talk to the daemon. This will hang forever if systemd is holding our sockets open.
           rm -vf "$IPFS_PATH/api"

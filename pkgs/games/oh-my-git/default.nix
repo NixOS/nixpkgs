@@ -1,5 +1,8 @@
 { lib
+<<<<<<< HEAD
 , autoPatchelfHook
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , copyDesktopItems
 , fetchFromGitHub
 , makeDesktopItem
@@ -7,8 +10,13 @@
 , alsa-lib
 , gcc-unwrapped
 , git
+<<<<<<< HEAD
 , godot3-export-templates
 , godot3-headless
+=======
+, godot-export-templates
+, godot-headless
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , libGLU
 , libX11
 , libXcursor
@@ -37,9 +45,14 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
+<<<<<<< HEAD
     autoPatchelfHook
     copyDesktopItems
     godot3-headless
+=======
+    copyDesktopItems
+    godot-headless
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   buildInputs = [
@@ -91,10 +104,17 @@ stdenv.mkDerivation rec {
     # expects the template-file at .../templates/3.2.3.stable/linux_x11_64_release
     # with 3.2.3 being the version of godot.
     mkdir -p $HOME/.local/share/godot
+<<<<<<< HEAD
     ln -s ${godot3-export-templates}/share/godot/templates $HOME/.local/share/godot
 
     mkdir -p $out/share/oh-my-git
     godot3-headless --export "Linux" $out/share/oh-my-git/oh-my-git
+=======
+    ln -s ${godot-export-templates}/share/godot/templates $HOME/.local/share/godot
+
+    mkdir -p $out/share/oh-my-git
+    godot-headless --export "Linux" $out/share/oh-my-git/oh-my-git
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     runHook postBuild
   '';
@@ -118,12 +138,15 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   runtimeDependencies = map lib.getLib [
     alsa-lib
     libpulseaudio
     udev
   ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   meta = with lib; {
     homepage = "https://ohmygit.org/";
     description = "An interactive Git learning game";

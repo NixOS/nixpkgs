@@ -4,11 +4,16 @@
 , esbuild
 , deno
 , fetchurl
+<<<<<<< HEAD
 , dart-sass
+=======
+, nodePackages
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , rWrapper
 , rPackages
 , extraRPackages ? []
 , makeWrapper
+<<<<<<< HEAD
 , runCommand
 , python3
 , quarto
@@ -21,6 +26,18 @@ stdenv.mkDerivation (final: {
   src = fetchurl {
     url = "https://github.com/quarto-dev/quarto-cli/releases/download/v${final.version}/quarto-${final.version}-linux-amd64.tar.gz";
     sha256 = "sha256-bcj7SzEGfQxsw9P8WkcLrKurPupzwpgIGtxoE3KVwAU=";
+=======
+, python3
+, extraPythonPackages ? ps: with ps; []
+}:
+
+stdenv.mkDerivation rec {
+  pname = "quarto";
+  version = "1.2.475";
+  src = fetchurl {
+    url = "https://github.com/quarto-dev/quarto-cli/releases/download/v${version}/quarto-${version}-linux-amd64.tar.gz";
+    sha256 = "sha256-oyKjDlTKt2fIzirOqgNRrpuM7buNCG5mmgIztPa28rY=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [
@@ -45,9 +62,15 @@ stdenv.mkDerivation (final: {
       --prefix PATH : ${lib.makeBinPath [ deno ]} \
       --prefix QUARTO_PANDOC : ${pandoc}/bin/pandoc \
       --prefix QUARTO_ESBUILD : ${esbuild}/bin/esbuild \
+<<<<<<< HEAD
       --prefix QUARTO_DART_SASS : ${dart-sass}/bin/dart-sass \
       ${lib.optionalString (rWrapper != null) "--prefix QUARTO_R : ${rWrapper.override { packages = [ rPackages.rmarkdown ] ++ extraRPackages; }}/bin/R"} \
       ${lib.optionalString (python3 != null) "--prefix QUARTO_PYTHON : ${python3.withPackages (ps: with ps; [ jupyter ipython ] ++ (extraPythonPackages ps))}/bin/python3"}
+=======
+      --prefix QUARTO_DART_SASS : ${nodePackages.sass}/bin/sass \
+      --prefix QUARTO_R : ${rWrapper.override { packages = [ rPackages.rmarkdown ] ++ extraRPackages; }}/bin/R \
+      --prefix QUARTO_PYTHON : ${python3.withPackages (ps: with ps; [ jupyter ipython ] ++ (extraPythonPackages ps))}/bin/python3
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '';
 
   installPhase = ''
@@ -63,6 +86,7 @@ stdenv.mkDerivation (final: {
       runHook preInstall
   '';
 
+<<<<<<< HEAD
   passthru.tests = {
     quarto-check = runCommand "quarto-check" {} ''
       export HOME="$(mktemp -d)"
@@ -71,6 +95,8 @@ stdenv.mkDerivation (final: {
     '';
   };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   meta = with lib; {
     description = "Open-source scientific and technical publishing system built on Pandoc";
     longDescription = ''
@@ -80,8 +106,16 @@ stdenv.mkDerivation (final: {
     homepage = "https://quarto.org/";
     changelog = "https://github.com/quarto-dev/quarto-cli/releases/tag/v${version}";
     license = licenses.gpl2Plus;
+<<<<<<< HEAD
     maintainers = with maintainers; [ minijackson mrtarantoga ];
     platforms = [ "x86_64-linux" ];
     sourceProvenance = with sourceTypes; [ binaryNativeCode binaryBytecode ];
   };
 })
+=======
+    maintainers = with maintainers; [ mrtarantoga ];
+    platforms = [ "x86_64-linux" ];
+    sourceProvenance = with sourceTypes; [ binaryNativeCode binaryBytecode ];
+  };
+}
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)

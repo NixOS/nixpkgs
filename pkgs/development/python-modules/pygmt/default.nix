@@ -18,16 +18,27 @@
 
 buildPythonPackage rec {
   pname = "pygmt";
+<<<<<<< HEAD
   version = "0.10.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
+=======
+  version = "0.9.0";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.8";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "GenericMappingTools";
     repo = "pygmt";
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-+bkjqHjJIwk44u226q6xqeGmwMWleyc4lRfMZdDjVBA=";
+=======
+    hash = "sha256-XDIAFIU+chewMDEoQDYqSYvK1tT9afh44w3Yd7ILZIc=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   postPatch = ''

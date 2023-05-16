@@ -1,5 +1,8 @@
 { lib
+<<<<<<< HEAD
 , stdenv
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , asn1crypto
 , buildPythonPackage
 , defusedxml
@@ -17,7 +20,10 @@
 , dissect-ntfs
 , dissect-regf
 , dissect-sql
+<<<<<<< HEAD
 , dissect-shellitem
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , dissect-thumbcache
 , dissect-util
 , dissect-volume
@@ -39,16 +45,27 @@
 
 buildPythonPackage rec {
   pname = "dissect-target";
+<<<<<<< HEAD
   version = "3.11.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.11.1";
+=======
+  version = "3.8";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.8";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "fox-it";
     repo = "dissect.target";
     rev = "refs/tags/${version}";
+<<<<<<< HEAD
     hash = "sha256-xT0PXah+sYzSDRoBU4OWBp+zhlinKRuQUDBLvos4zKk=";
+=======
+    hash = "sha256-CPN8g6LDeS77fveFOK6gExIJq9g+5qXhwDhjw3tWuJc=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
@@ -82,7 +99,10 @@ buildPythonPackage rec {
       dissect-extfs
       dissect-fat
       dissect-ffs
+<<<<<<< HEAD
       dissect-shellitem
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       dissect-sql
       dissect-thumbcache
       dissect-xfs
@@ -110,11 +130,15 @@ buildPythonPackage rec {
     "test_tar_sensitive_drive_letter"
     # Tests compare dates and times
     "yum"
+<<<<<<< HEAD
     # Filesystem access, windows defender tests
     "test_defender_quarantine_recovery"
   ] ++
   # test is broken on Darwin
   lib.optional stdenv.hostPlatform.isDarwin "test_fs_attrs_no_os_listxattr";
+=======
+  ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   disabledTestPaths = [
     # Tests are using Windows paths

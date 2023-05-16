@@ -3,7 +3,10 @@
 , runCommand
 , fetchurl
 , fetchFromGitHub
+<<<<<<< HEAD
 , fetchPypi
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 # Build time
 , cmake
@@ -11,7 +14,10 @@
 , fmt
 , git
 , makeWrapper
+<<<<<<< HEAD
 , nasm
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , pkg-config
 , which
 
@@ -24,13 +30,21 @@
 , boost179
 , bzip2
 , cryptsetup
+<<<<<<< HEAD
+=======
+, cimg
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , cunit
 , doxygen
 , gperf
 , graphviz
 , gtest
 , icu
+<<<<<<< HEAD
 , libcap
+=======
+, jsoncpp
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , libcap_ng
 , libnl
 , libxml2
@@ -85,7 +99,11 @@
 assert cryptopp != null || (nss != null && nspr != null);
 
 let
+<<<<<<< HEAD
   shouldUsePkg = pkg: if pkg != null && lib.meta.availableOn stdenv.hostPlatform pkg then pkg else null;
+=======
+  shouldUsePkg = pkg: if pkg != null && pkg.meta.available then pkg else null;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   optYasm = shouldUsePkg yasm;
   optExpat = shouldUsePkg expat;
@@ -107,7 +125,11 @@ let
   optZfs = shouldUsePkg zfs;
 
   # Downgrade rocksdb, 7.10 breaks ceph
+<<<<<<< HEAD
   rocksdb' = rocksdb.overrideAttrs {
+=======
+  rocksdb' = rocksdb.overrideAttrs (oldAttrs: {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     version = "7.9.2";
     src = fetchFromGitHub {
       owner = "facebook";
@@ -115,7 +137,11 @@ let
       rev = "refs/tags/v7.9.2";
       hash = "sha256-5P7IqJ14EZzDkbjaBvbix04ceGGdlWBuVFH/5dpD5VM=";
     };
+<<<<<<< HEAD
   };
+=======
+  });
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   hasRadosgw = optExpat != null && optCurl != null && optLibedit != null;
 
@@ -165,18 +191,35 @@ let
   # Watch out for python <> boost compatibility
   python = python310.override {
     packageOverrides = self: super: {
+<<<<<<< HEAD
       sqlalchemy = super.sqlalchemy.overridePythonAttrs rec {
         version = "1.4.46";
         src = fetchPypi {
+=======
+      sqlalchemy = super.sqlalchemy.overridePythonAttrs (oldAttrs: rec {
+        version = "1.4.46";
+        src = super.fetchPypi {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           pname = "SQLAlchemy";
           inherit version;
           hash = "sha256-aRO4JH2KKS74MVFipRkx4rQM6RaB8bbxj2lwRSAMSjA=";
         };
+<<<<<<< HEAD
         disabledTestPaths = [
           "test/aaa_profiling"
           "test/ext/mypy"
         ];
       };
+=======
+        nativeCheckInputs = oldAttrs.nativeCheckInputs ++ (with super; [
+          pytest-xdist
+        ]);
+        disabledTestPaths = (oldAttrs.disabledTestPaths or []) ++ [
+          "test/aaa_profiling"
+          "test/ext/mypy"
+        ];
+      });
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
   };
 
@@ -223,12 +266,21 @@ let
     cmd2
     colorama
   ]);
+<<<<<<< HEAD
   inherit (ceph-python-env.python) sitePackages;
 
   version = "18.2.0";
   src = fetchurl {
     url = "https://download.ceph.com/tarballs/ceph-${version}.tar.gz";
     hash = "sha256:0k9nl6xi5brva51rr14m7ig27mmmd7vrpchcmqc40q3c2khn6ns9";
+=======
+  sitePackages = ceph-python-env.python.sitePackages;
+
+  version = "17.2.5";
+  src = fetchurl {
+    url = "http://download.ceph.com/tarballs/ceph-${version}.tar.gz";
+    hash = "sha256-NiJpwUeROvh0siSaRoRrDm+C0s61CvRiIrbd7JmRspo=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 in rec {
   ceph = stdenv.mkDerivation {
@@ -240,7 +292,10 @@ in rec {
       fmt
       git
       makeWrapper
+<<<<<<< HEAD
       nasm
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       pkg-config
       python
       python.pkgs.python # for the toPythonPath function
@@ -260,12 +315,22 @@ in rec {
       boost
       bzip2
       ceph-python-env
+<<<<<<< HEAD
+=======
+      cimg
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       cryptsetup
       cunit
       gperf
       gtest
+<<<<<<< HEAD
       icu
       libcap
+=======
+      jsoncpp
+      icu
+      libcap_ng
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       libnl
       libxml2
       lttng-ust
@@ -286,7 +351,10 @@ in rec {
       zstd
     ] ++ lib.optionals stdenv.isLinux [
       keyutils
+<<<<<<< HEAD
       libcap_ng
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       liburing
       libuuid
       linuxHeaders
@@ -314,12 +382,17 @@ in rec {
       # install target needs to be in PYTHONPATH for "*.pth support" check to succeed
       # set PYTHONPATH, so the build system doesn't silently skip installing ceph-volume and others
       export PYTHONPATH=${ceph-python-env}/${sitePackages}:$lib/${sitePackages}:$out/${sitePackages}
+<<<<<<< HEAD
       patchShebangs src/
+=======
+      patchShebangs src/script src/spdk src/test src/tools
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     '';
 
     cmakeFlags = [
       "-DCMAKE_INSTALL_DATADIR=${placeholder "lib"}/lib"
 
+<<<<<<< HEAD
       "-DWITH_CEPHFS_SHELL:BOOL=ON"
       "-DWITH_SYSTEMD:BOOL=OFF"
       # `WITH_JAEGER` requires `thrift` as a depenedncy (fine), but the build fails with:
@@ -346,6 +419,18 @@ in rec {
       # Use our own libraries, where possible
       "-DWITH_SYSTEM_ARROW:BOOL=ON" # Only used if other options enable Arrow support.
       "-DWITH_SYSTEM_BOOST:BOOL=ON"
+=======
+      "-DMGR_PYTHON_VERSION=${ceph-python-env.python.pythonVersion}"
+      "-DWITH_CEPHFS_SHELL:BOOL=ON"
+      "-DWITH_SYSTEMD:BOOL=OFF"
+      "-DWITH_TESTS:BOOL=OFF"
+
+      # Use our own libraries, where possible
+      "-DWITH_SYSTEM_ARROW:BOOL=ON"
+      "-DWITH_SYSTEM_BOOST:BOOL=ON"
+      "-DWITH_SYSTEM_CIMG:BOOL=ON"
+      "-DWITH_SYSTEM_JSONCPP:BOOL=ON"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       "-DWITH_SYSTEM_GTEST:BOOL=ON"
       "-DWITH_SYSTEM_ROCKSDB:BOOL=ON"
       "-DWITH_SYSTEM_UTF8PROC:BOOL=ON"
@@ -353,6 +438,11 @@ in rec {
 
       # TODO breaks with sandbox, tries to download stuff with npm
       "-DWITH_MGR_DASHBOARD_FRONTEND:BOOL=OFF"
+<<<<<<< HEAD
+=======
+      # no matching function for call to 'parquet::PageReader::Open(std::shared_ptr<arrow::io::InputStream>&, int64_t, arrow::Compression::type, parquet::MemoryPool*, parquet::CryptoContext*)'
+      "-DWITH_RADOSGW_SELECT_PARQUET:BOOL=OFF"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       # WITH_XFS has been set default ON from Ceph 16, keeping it optional in nixpkgs for now
       ''-DWITH_XFS=${if optLibxfs != null then "ON" else "OFF"}''
     ] ++ lib.optional stdenv.isLinux "-DWITH_SYSTEM_LIBURING=ON";

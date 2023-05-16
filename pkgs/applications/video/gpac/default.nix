@@ -1,18 +1,27 @@
 { lib, stdenv, fetchFromGitHub, fetchpatch, pkg-config, zlib }:
 
 stdenv.mkDerivation rec {
+<<<<<<< HEAD
   version = "2.2.1";
+=======
+  version = "2.2.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pname = "gpac";
 
   src = fetchFromGitHub {
     owner = "gpac";
     repo = "gpac";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-VjA1VFMsYUJ8uJqhYgjXYtqlGWSJHr16Ck3b5stuZWw=";
+=======
+    sha256 = "sha256-m2qXTXLGgAyU9y6GEk4Hp/7Al57IPRSqImJatIcwswQ=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   patches = [
     (fetchpatch {
+<<<<<<< HEAD
       name = "CVE-2023-2837.patch";
       url = "https://github.com/gpac/gpac/commit/6f28c4cd607d83ce381f9b4a9f8101ca1e79c611.patch";
       hash = "sha256-HA6qMungIoh1fz1R3zUvV1Ahoa2pp861JRzYY/NNDQI=";
@@ -31,6 +40,11 @@ stdenv.mkDerivation rec {
       name = "CVE-2023-2840.patch";
       url = "https://github.com/gpac/gpac/commit/ba59206b3225f0e8e95a27eff41cb1c49ddf9a37.patch";
       hash = "sha256-mwO9Qeeufq0wa57lO+LgWGjrN3CHMYK+xr2ZBalKBQo=";
+=======
+      name = "CVE-2023-0358.patch";
+      url = "https://github.com/gpac/gpac/commit/9971fb125cf91cefd081a080c417b90bbe4a467b.patch";
+      sha256 = "sha256-0PDQXahbJCOo1JJAC0T0N1u2mqmwAkdm87wXMJnBicM=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     })
   ];
 

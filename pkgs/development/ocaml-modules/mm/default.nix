@@ -4,7 +4,11 @@
 
 buildDunePackage rec {
   pname = "mm";
+<<<<<<< HEAD
   version = "0.8.4";
+=======
+  version = "0.8.3";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   duneVersion = "3";
 
@@ -14,7 +18,11 @@ buildDunePackage rec {
     owner = "savonet";
     repo = "ocaml-mm";
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-RM+vsWf2RK5dY84KcqeR/OHwO42EDycrYgfOUFpUE44=";
+=======
+    sha256 = "sha256-pL1e7U5EtbI8bVum7mMHUD8QFMV4jc3YFjhTOvR43kg=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   buildInputs = [ dune-configurator ];

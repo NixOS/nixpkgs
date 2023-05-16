@@ -143,9 +143,14 @@ stdenv.mkDerivation (finalAttrs: {
       pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
     };
 
+<<<<<<< HEAD
     # gdk_pixbuf_binarydir and gdk_pixbuf_moduledir variables from gdk-pixbuf-2.0.pc
     binaryDir = "lib/gdk-pixbuf-2.0/2.10.0";
     moduleDir = "${finalAttrs.passthru.binaryDir}/loaders";
+=======
+    # gdk_pixbuf_moduledir variable from gdk-pixbuf-2.0.pc
+    moduleDir = "lib/gdk-pixbuf-2.0/2.10.0/loaders";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   meta = with lib; {

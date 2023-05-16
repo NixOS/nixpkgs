@@ -1,10 +1,18 @@
+<<<<<<< HEAD
 { python3Packages, fetchPypi, lib, flac, lame, opusTools, vorbis-tools, ffmpeg }:
+=======
+{ python3Packages, lib, flac, lame, opusTools, vorbis-tools, ffmpeg }:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 python3Packages.buildPythonApplication rec {
   pname = "flac2all";
   version = "5.1";
 
+<<<<<<< HEAD
   src = fetchPypi {
+=======
+  src = python3Packages.fetchPypi {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     inherit pname version;
     sha256 = "OBjlr7cbSx2WOIfZUNwHy5Hpb2Fmh3vmZdc70JiWsiI=";
   };

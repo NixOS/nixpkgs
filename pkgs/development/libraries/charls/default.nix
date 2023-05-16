@@ -2,13 +2,21 @@
 
 stdenv.mkDerivation rec {
   pname = "charls";
+<<<<<<< HEAD
   version = "2.4.2";
+=======
+  version = "2.4.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "team-charls";
     repo = pname;
     rev = "refs/tags/${version}";
+<<<<<<< HEAD
     hash = "sha256-c1wrk6JLcAH7TFPwjARlggaKXrAsLWyUQF/3WHlqoqg=";
+=======
+    hash = "sha256-l0qcJeQfRqpwR7vNmYZx00kGlPkK7nEYuslydjxj7ss=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   postPatch = ''

@@ -9,6 +9,7 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "star-history";
+<<<<<<< HEAD
   version = "1.0.14";
 
   src = fetchCrate {
@@ -17,6 +18,16 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoSha256 = "sha256-Z7zq93Orx7Mb2b9oZxAIPn6qObzYPGOx4N86naUvqtg=";
+=======
+  version = "1.0.11";
+
+  src = fetchCrate {
+    inherit pname version;
+    sha256 = "sha256-Cbhg0KLDi2GOEP9KwwExcoX5wE2kMM41biXLrlWLKvY=";
+  };
+
+  cargoSha256 = "sha256-RbTwJx8ueMAOl9cx6YxGEsjARxcZhJXHhyWWYPTdpI4=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nativeBuildInputs = [ pkg-config ];
 

@@ -4,7 +4,11 @@
 , makeWrapper
 , electron
 , makeDesktopItem
+<<<<<<< HEAD
 , imagemagick
+=======
+, graphicsmagick
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , writeScript
 , undmg
 , unzip
@@ -12,25 +16,42 @@
 let
   inherit (stdenv.hostPlatform) system;
   pname = "obsidian";
+<<<<<<< HEAD
   version = "1.4.11";
+=======
+  version = "1.2.8";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   appname = "Obsidian";
   meta = with lib; {
     description = "A powerful knowledge base that works on top of a local folder of plain text Markdown files";
     homepage = "https://obsidian.md";
     downloadPage = "https://github.com/obsidianmd/obsidian-releases/releases";
     license = licenses.obsidian;
+<<<<<<< HEAD
     maintainers = with maintainers; [ atila conradmearns zaninime qbit kashw2 ];
+=======
+    maintainers = with maintainers; [ atila conradmearns zaninime qbit ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   filename = if stdenv.isDarwin then "Obsidian-${version}-universal.dmg" else "obsidian-${version}.tar.gz";
   src = fetchurl {
     url = "https://github.com/obsidianmd/obsidian-releases/releases/download/v${version}/${filename}";
+<<<<<<< HEAD
     sha256 = if stdenv.isDarwin then "sha256-bJLWXdeVzbVrb8jmIRpyQG6a5H1jMydhO9ioHOGk3Ms=" else "sha256-Z4DojO90PAlGGsItcZugPsi+48UPnOjvCn2BIzrDQpc=";
   };
 
   icon = fetchurl {
     url = "https://obsidian.md/images/obsidian-logo-gradient.svg";
     sha256 = "100j8fcrc5q8zv525siapminffri83s2khs2hw4kdxwrdjwh36qi";
+=======
+    sha256 = if stdenv.isDarwin then "sha256-c01Oc20henVRTNFAuiRH5xkxFH8k0Cfd4Z+0t8iUPEg=" else "sha256-KG73QaDY5njFzGhjWtjFNucZRcLtRGTrIPgG0sdonQw=";
+  };
+
+  icon = fetchurl {
+    url = "https://forum.obsidian.md/uploads/default/original/1X/bf119bd48f748f4fd2d65f2d1bb05d3c806883b5.png";
+    sha256 = "18ylnbvxr6k4x44c4i1d55wxy2dq4fdppp43a4wl6h6zar0sc9s2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   desktopItem = makeDesktopItem {
@@ -46,7 +67,11 @@ let
   linux = stdenv.mkDerivation {
     inherit pname version src desktopItem icon;
     meta = meta // { platforms = [ "x86_64-linux" "aarch64-linux" ]; };
+<<<<<<< HEAD
     nativeBuildInputs = [ makeWrapper imagemagick ];
+=======
+    nativeBuildInputs = [ makeWrapper graphicsmagick ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     installPhase = ''
       runHook preInstall
       mkdir -p $out/bin
@@ -59,7 +84,11 @@ let
         -t $out/share/applications/
       for size in 16 24 32 48 64 128 256 512; do
         mkdir -p $out/share/icons/hicolor/"$size"x"$size"/apps
+<<<<<<< HEAD
         convert -background none -resize "$size"x"$size" ${icon} $out/share/icons/hicolor/"$size"x"$size"/apps/obsidian.png
+=======
+        gm convert -resize "$size"x"$size" ${icon} $out/share/icons/hicolor/"$size"x"$size"/apps/obsidian.png
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       done
       runHook postInstall
     '';

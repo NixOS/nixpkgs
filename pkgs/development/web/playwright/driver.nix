@@ -29,16 +29,27 @@ let
     in
     {
     pname = "playwright-driver";
+<<<<<<< HEAD
     # run ./pkgs/development/python-modules/playwright/update.sh to update
     version = "1.37.0";
+=======
+    version =  "1.31.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     src = fetchurl {
       url = "https://playwright.azureedge.net/builds/driver/${filename}";
       sha256 = {
+<<<<<<< HEAD
         x86_64-linux = "1lkmanr402ar9njwb7dgyzparjyr1r9krz9ad7b8c6hi3fjvrj0y";
         aarch64-linux = "13nfva9jfmjyjxm1my0aq8ngn6ha0fdrpfv28gm351n0j9cjlvqh";
         x86_64-darwin = "0q1qmgypngxs9ipb6dlhk1xccyzw6frzr835ijifpypgp4xmz2gi";
         aarch64-darwin = "1mq1868s06wgfgi3nhdrzsdqi3cl08lrkiz5q06mg1s724b2sf0v";
+=======
+        x86_64-linux = "1wg49kfs8fflmx8g01bkckbjkghhwy7c44akckjf7dp4lbh1z8fd";
+        aarch64-linux = "0f09a0cxqxihy8lmbjzii80jkpf3n5xlvhjpgdkwmrr3wh0nnixj";
+        x86_64-darwin = "1zd0dz8jazymcpa1im5yzxb7rwl6wn4xz19lpz83bnpd1njq01b3";
+        aarch64-darwin = "0hcn80zm9aki8hzsf1cljzcmi4iaw7fascs8ajj0qcwqkkm4jnw0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       }.${system} or throwSystem;
     };
 

@@ -15,7 +15,11 @@ buildGoModule rec {
     sha256 = "sha256-V1pBzillWTk9iuHAhFztxYaq4uLL3U3HYvedGk6ffbk=";
   };
 
+<<<<<<< HEAD
   vendorHash = "sha256-ngYkTtBEZSyYYnfBHi0VrotwKGvMOiowbrwigJnjsuU=";
+=======
+  vendorSha256 = "sha256-ngYkTtBEZSyYYnfBHi0VrotwKGvMOiowbrwigJnjsuU=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   buildPhase = ''
     runHook preBuild

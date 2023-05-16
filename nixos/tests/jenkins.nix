@@ -73,8 +73,13 @@ import ./make-test-python.nix ({ pkgs, ...} : {
 
   testScript = { nodes, ... }:
     let
+<<<<<<< HEAD
       configWithoutJobs = "${nodes.master.system.build.toplevel}/specialisation/noJenkinsJobs";
       jenkinsPort = nodes.master.services.jenkins.port;
+=======
+      configWithoutJobs = "${nodes.master.config.system.build.toplevel}/specialisation/noJenkinsJobs";
+      jenkinsPort = nodes.master.config.services.jenkins.port;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       jenkinsUrl = "http://localhost:${toString jenkinsPort}";
     in ''
     start_all()

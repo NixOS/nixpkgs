@@ -12,7 +12,11 @@
 , libmnl
 , gnutls
 , readline
+<<<<<<< HEAD
 # configurable options
+=======
+# configureable options
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , firewallType ? "iptables" # or "nftables"
 , iptables ? null
 , libnftnl ? null # for nftables
@@ -59,6 +63,7 @@ let inherit (lib) optionals; in
 
 stdenv.mkDerivation rec {
   pname = "connman";
+<<<<<<< HEAD
   version = "1.42";
   src = fetchurl {
     url = "mirror://kernel/linux/network/connman/${pname}-${version}.tar.xz";
@@ -74,6 +79,30 @@ stdenv.mkDerivation rec {
     (fetchpatch {
       url = "https://git.alpinelinux.org/aports/plain/community/connman/libresolv.patch?id=e393ea84386878cbde3cccadd36a30396e357d1e";
       hash = "sha256-7Q1bp8rD/gGVYUqnIXqjr9vypR8jlC926p3KYWl9kLw=";
+=======
+  version = "1.41";
+  src = fetchurl {
+    url = "mirror://kernel/linux/network/connman/${pname}-${version}.tar.xz";
+    sha256 = "sha256-eftA9P3VUwxFqo5ZL7Froj02dPOpjPELiaZXbxmN5Yk=";
+  };
+
+  patches = [
+    (fetchpatch {
+      name = "pppd-2.5.0-compat.patch";
+      url = "https://git.kernel.org/pub/scm/network/connman/connman.git/patch/?id=a48864a2e5d2a725dfc6eef567108bc13b43857f";
+      sha256 = "sha256-jB1qL13mceQ1riv3K+oFWw4VC7ohv/CcH9sjxZPXcG4=";
+    })
+    (fetchpatch {
+      name = "CVE-2023-28488.patch";
+      url = "https://git.kernel.org/pub/scm/network/connman/connman.git/patch/?id=99e2c16ea1cced34a5dc450d76287a1c3e762138";
+      sha256 = "sha256-377CmsECji2w/c4bZXR+TxzTB7Lce0yo7KdK1oWfCVY=";
+    })
+  ] ++ lib.optionals stdenv.hostPlatform.isMusl [
+    # Fix Musl build by avoiding a Glibc-only API.
+    (fetchpatch {
+      url = "https://git.alpinelinux.org/aports/plain/community/connman/libresolv.patch?id=e393ea84386878cbde3cccadd36a30396e357d1e";
+      sha256 = "1kg2nml7pdxc82h5hgsa3npvzdxy4d2jpz2f93pa97if868i8d43";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     })
   ];
 
@@ -183,7 +212,11 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "A daemon for managing internet connections";
     homepage = "https://git.kernel.org/pub/scm/network/connman/connman.git/";
+<<<<<<< HEAD
     maintainers = with maintainers; [ eclairevoyant ];
+=======
+    maintainers = [ maintainers.matejc ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     platforms = platforms.linux;
     license = licenses.gpl2Only;
   };

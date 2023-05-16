@@ -6,22 +6,34 @@
 , igraph
 , pygments
 , pytestCheckHook
+<<<<<<< HEAD
 , pythonRelaxDepsHook
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 buildPythonPackage rec {
   pname = "explorerscript";
+<<<<<<< HEAD
   version = "0.1.3";
+=======
+  version = "0.1.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "SkyTemple";
     repo = pname;
     rev = version;
+<<<<<<< HEAD
     sha256 = "sha256-0U5n7e/utmgOTBuTypkBMeHZR7lji6lFimSjbC7hVRM=";
+=======
+    sha256 = "sha256-REQYyxB2sb/gG54+OkMw+M4Agg9SWfAyqAhiSNnd3tE=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [
     antlr4
+<<<<<<< HEAD
     pythonRelaxDepsHook
   ];
 
@@ -37,6 +49,12 @@ buildPythonPackage rec {
   ];
 
   postPatch = ''
+=======
+  ];
+
+  postPatch = ''
+    sed -i "s/antlr4-python3-runtime.*/antlr4-python3-runtime',/" setup.py
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     antlr -Dlanguage=Python3 -visitor explorerscript/antlr/{ExplorerScript,SsbScript}.g4
   '';
 

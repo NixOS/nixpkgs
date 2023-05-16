@@ -1,7 +1,11 @@
 { mkDerivation, backintime-common, python3 }:
 
 let
+<<<<<<< HEAD
   python' = python3.withPackages (ps: with ps; [ pyqt5 backintime-common packaging ]);
+=======
+  python' = python3.withPackages (ps: with ps; [ pyqt5 backintime-common ]);
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 in
 mkDerivation {
   inherit (backintime-common)

@@ -41,6 +41,10 @@ buildPythonPackage rec {
     description = "Basic notebook checks and linting";
     homepage = "https://github.com/pyviz/nbsmoke";
     license = licenses.bsd3;
+<<<<<<< HEAD
     maintainers = [ ];
+=======
+    maintainers = [ maintainers.costrouc ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

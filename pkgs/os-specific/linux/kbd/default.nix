@@ -16,6 +16,7 @@
 
 stdenv.mkDerivation rec {
   pname = "kbd";
+<<<<<<< HEAD
   version = "2.6.1";
 
   src = fetchurl {
@@ -26,6 +27,16 @@ stdenv.mkDerivation rec {
   # vlock is moved into its own output, since it depends on pam. This
   # reduces closure size for most use cases.
   outputs = [ "out" "vlock" "dev" ];
+=======
+  version = "2.5.1";
+
+  src = fetchurl {
+    url = "mirror://kernel/linux/utils/kbd/${pname}-${version}.tar.xz";
+    sha256 = "sha256-zN9FI4emOAlz0pJzY+nLuTn6IGiRWm+Tf/nSRSICRoM=";
+  };
+
+  outputs = [ "out" "dev" ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   configureFlags = [
     "--enable-optional-progs"
@@ -57,12 +68,15 @@ stdenv.mkDerivation rec {
         --replace 'bzip2 ' '${bzip2.bin}/bin/bzip2 ' \
         --replace 'xz '    '${xz.bin}/bin/xz ' \
         --replace 'zstd '  '${zstd.bin}/bin/zstd '
+<<<<<<< HEAD
 
       sed -i '
         1i prefix:=$(vlock)
         1i bindir := $(vlock)/bin' \
         src/vlock/Makefile.in \
         src/vlock/Makefile.am
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     '';
 
   postInstall = ''

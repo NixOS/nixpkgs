@@ -5,13 +5,21 @@
 
 mkDerivation rec {
   pname = "klayout";
+<<<<<<< HEAD
   version = "0.28.11";
+=======
+  version = "0.28.7";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "KLayout";
     repo = "klayout";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-PEWb2QBWK3XMuOAkSI2nAk6UJronG+3+NBU92uWO5LQ=";
+=======
+    hash = "sha256-CA6PNoQtg59Mo7dKIgSVeC4owVuAirJ3mFds1J9IQtI=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   postPatch = ''

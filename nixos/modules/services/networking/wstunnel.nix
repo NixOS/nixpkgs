@@ -86,12 +86,20 @@ let
         description = mdDoc "Address and port to listen on. Setting the port to a value below 1024 will also give the process the required `CAP_NET_BIND_SERVICE` capability.";
         type = types.submodule hostPortSubmodule;
         default = {
+<<<<<<< HEAD
           host = "0.0.0.0";
+=======
+          address = "0.0.0.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           port = if config.enableHTTPS then 443 else 80;
         };
         defaultText = literalExpression ''
           {
+<<<<<<< HEAD
             host = "0.0.0.0";
+=======
+            address = "0.0.0.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
             port = if enableHTTPS then 443 else 80;
           }
         '';

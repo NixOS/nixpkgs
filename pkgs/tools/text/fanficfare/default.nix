@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 { lib, python3Packages, fetchPypi }:
 
 python3Packages.buildPythonApplication rec {
@@ -7,6 +8,17 @@ python3Packages.buildPythonApplication rec {
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-ky6N/AcfoXJahW7tw++WtnpTnpRv4ZUraMTWjVXDjEE=";
+=======
+{ lib, python3Packages }:
+
+python3Packages.buildPythonApplication rec {
+  pname = "FanFicFare";
+  version = "4.8.0";
+
+  src = python3Packages.fetchPypi {
+    inherit pname version;
+    sha256 = "0h20cw9z6k3z42fhl48pfxcqrk3i45zp4f4xm6pz7jqjzi17h9fk";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = with python3Packages; [

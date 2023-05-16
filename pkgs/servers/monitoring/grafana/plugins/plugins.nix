@@ -6,7 +6,10 @@
 
   doitintl-bigquery-datasource = callPackage ./doitintl-bigquery-datasource { };
   grafadruid-druid-datasource = callPackage ./grafadruid-druid-datasource { };
+<<<<<<< HEAD
   grafana-clickhouse-datasource = callPackage ./grafana-clickhouse-datasource { };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   grafana-clock-panel = callPackage ./grafana-clock-panel { };
   grafana-piechart-panel = callPackage ./grafana-piechart-panel { };
   grafana-polystat-panel = callPackage ./grafana-polystat-panel { };

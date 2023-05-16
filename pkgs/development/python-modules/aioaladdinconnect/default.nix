@@ -7,7 +7,11 @@
 
 buildPythonPackage rec {
   pname = "aioaladdinconnect";
+<<<<<<< HEAD
   version = "0.1.58";
+=======
+  version = "0.1.56";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -15,7 +19,11 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "AIOAladdinConnect";
     inherit version;
+<<<<<<< HEAD
     hash = "sha256-ymynaOKvnqqHIEuQc+5CagsaH5cHnQit8ileoUO6G+I=";
+=======
+    hash = "sha256-YLAIT33ItaNgokwensOan/OO2lK01GO/u5AZwzvuoPo=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [

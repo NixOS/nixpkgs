@@ -1,5 +1,9 @@
 # Test a minimal HDFS cluster with no HA
 import ../make-test-python.nix ({ package, lib, ... }:
+<<<<<<< HEAD
+=======
+with lib;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 {
   name = "hadoop-hdfs";
 
@@ -21,7 +25,11 @@ import ../make-test-python.nix ({ package, lib, ... }:
           };
           httpfs = {
             # The NixOS hadoop module only support webHDFS on 3.3 and newer
+<<<<<<< HEAD
             enable = lib.mkIf (lib.versionAtLeast package.version "3.3") true;
+=======
+            enable = mkIf (versionAtLeast package.version "3.3") true;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
             openFirewall = true;
           };
         };
@@ -56,7 +64,11 @@ import ../make-test-python.nix ({ package, lib, ... }:
 
     datanode.wait_for_unit("hdfs-datanode")
     datanode.wait_for_unit("network.target")
+<<<<<<< HEAD
   '' + (if lib.versionAtLeast package.version "3" then ''
+=======
+  '' + ( if versionAtLeast package.version "3" then ''
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     datanode.wait_for_open_port(9864)
     datanode.wait_for_open_port(9866)
     datanode.wait_for_open_port(9867)
@@ -75,7 +87,11 @@ import ../make-test-python.nix ({ package, lib, ... }:
     datanode.succeed("echo testfilecontents | sudo -u hdfs hdfs dfs -put - /testfile")
     assert "testfilecontents" in datanode.succeed("sudo -u hdfs hdfs dfs -cat /testfile")
 
+<<<<<<< HEAD
   '' + lib.optionalString (lib.versionAtLeast package.version "3.3" ) ''
+=======
+  '' + optionalString ( versionAtLeast package.version "3.3" ) ''
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     namenode.wait_for_unit("hdfs-httpfs")
     namenode.wait_for_open_port(14000)
     assert "testfilecontents" in datanode.succeed("curl -f \"http://namenode:14000/webhdfs/v1/testfile?user.name=hdfs&op=OPEN\" 2>&1")

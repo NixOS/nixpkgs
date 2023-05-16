@@ -21,6 +21,10 @@ buildPythonPackage rec {
     description = "Version of the glob module that can capture patterns and supports recursive wildcards";
     homepage = "https://github.com/miracle2k/python-glob2/";
     license = licenses.bsd3;
+<<<<<<< HEAD
     maintainers = [ ];
+=======
+    maintainers = [ maintainers.costrouc ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

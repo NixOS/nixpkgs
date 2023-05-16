@@ -39,7 +39,13 @@ with lib;
 
     # !!! Hack - attributes expected by other modules.
     environment.systemPackages = [ pkgs.grub2_efi ]
+<<<<<<< HEAD
       ++ (lib.optionals (pkgs.stdenv.hostPlatform.system != "aarch64-linux") [pkgs.grub2 pkgs.syslinux]);
+=======
+      ++ (if pkgs.stdenv.hostPlatform.system == "aarch64-linux"
+          then []
+          else [ pkgs.grub2 pkgs.syslinux ]);
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     fileSystems."/" = mkImageMediaOverride
       { fsType = "tmpfs";

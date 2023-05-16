@@ -1,6 +1,12 @@
+<<<<<<< HEAD
 { lib, stdenv, fetchurl, gmp }:
 
 stdenv.mkDerivation {
+=======
+{lib, stdenv, fetchurl, gmp}:
+
+stdenv.mkDerivation rec {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pname = "lrs";
   version = "7.2";
 
@@ -11,6 +17,7 @@ stdenv.mkDerivation {
 
   buildInputs = [ gmp ];
 
+<<<<<<< HEAD
   makeFlags = [
     "prefix=${placeholder "out"}"
     "CC:=$(CC)"
@@ -20,6 +27,16 @@ stdenv.mkDerivation {
     description = "Implementation of the reverse search algorithm for vertex enumeration/convex hull problems";
     license = lib.licenses.gpl2;
     maintainers = [ lib.maintainers.raskin ];
+=======
+  preBuild = ''
+    export makeFlags="$makeFlags prefix=$out";
+  '';
+
+  meta = {
+    description = "Implementation of the reverse search algorithm for vertex enumeration/convex hull problems";
+    license = lib.licenses.gpl2 ;
+    maintainers = [lib.maintainers.raskin];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     platforms = lib.platforms.linux;
     homepage = "http://cgm.cs.mcgill.ca/~avis/C/lrs.html";
   };

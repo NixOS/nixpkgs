@@ -18,7 +18,11 @@
 
 buildPythonPackage rec {
   pname = "prance";
+<<<<<<< HEAD
   version = "23.06.21.0";
+=======
+  version = "0.22.02.22.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -28,7 +32,11 @@ buildPythonPackage rec {
     repo = pname;
     rev = "v${version}";
     fetchSubmodules = true;
+<<<<<<< HEAD
     hash = "sha256-p+LZbQal4DPeMp+eJ2O83rCaL+QIUDcU34pZhYdN4bE=";
+=======
+    hash = "sha256-NtIbZp34IcMYJzaNQVL9GLdNS3NYOCRoWS1wGg/gLVA=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   postPatch = ''
@@ -70,7 +78,10 @@ buildPythonPackage rec {
     "test_convert_defaults"
     "test_convert_output"
     "test_fetch_url_http"
+<<<<<<< HEAD
     "test_openapi_spec_validator_validate_failure"
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
   pythonImportsCheck = [ "prance" ];
 
@@ -79,6 +90,10 @@ buildPythonPackage rec {
     description = "Resolving Swagger/OpenAPI 2.0 and 3.0.0 Parser";
     homepage = "https://github.com/RonnyPfannschmidt/prance";
     license = licenses.mit;
+<<<<<<< HEAD
     maintainers = [ ];
+=======
+    maintainers = [ maintainers.costrouc ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

@@ -38,7 +38,11 @@
 , makeWrapper
 , ncurses5
 , nspr
+<<<<<<< HEAD
 , nss_latest
+=======
+, nss
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , pciutils
 , pkgsi686Linux
 , ps
@@ -146,7 +150,11 @@ let
           libXfixes
           libGL
           nspr
+<<<<<<< HEAD
           nss_latest
+=======
+          nss
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           systemd
 
           # For GTKLookAndFeel

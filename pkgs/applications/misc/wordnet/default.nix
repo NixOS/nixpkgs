@@ -25,6 +25,10 @@ stdenv.mkDerivation rec {
   ];
 
   postInstall = ''
+<<<<<<< HEAD
+=======
+    wrapProgram $out/bin/wishwn --set TK_LIBRARY "${tk}/lib/${tk.libPrefix}"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     wrapProgram $out/bin/wnb    --prefix PATH : "$out/bin"
   '';
 

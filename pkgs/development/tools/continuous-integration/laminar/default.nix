@@ -20,18 +20,31 @@ let
     sha256 = "1dx8wn38ds8d01kkih26fx1yrisg3kpz61qynjr4zil03ap0hrlr";
   };
   js.Chart = fetchurl {
+<<<<<<< HEAD
     url = "https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js";
     hash = "sha256-+8RZJua0aEWg+QVVKg4LEzEEm/8RFez5Tb4JBNiV5xA=";
   };
 in stdenv.mkDerivation rec {
   pname = "laminar";
   version = "1.3";
+=======
+    url = "https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min.js";
+    sha256 = "1jh4h12qchsba03dx03mrvs4r8g9qfjn56xm56jqzgqf7r209xq9";
+  };
+in stdenv.mkDerivation rec {
+  pname = "laminar";
+  version = "1.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   outputs = [ "out" "doc" ];
   src = fetchFromGitHub {
     owner = "ohwgiles";
     repo = "laminar";
     rev = version;
+<<<<<<< HEAD
     hash = "sha256-eo5WzvmjBEe0LAfZdQ/U0XepEE2kdWKKiyE4HOi3RXk=";
+=======
+    sha256 = "sha256-PLnfiWpelgKhs4FNry60sm6/QdhYs76FnZ/ZcRmb4Ok=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
   patches = [ ./patches/no-network.patch ];
 

@@ -2,16 +2,27 @@
 
 buildGoModule rec {
   pname = "circleci-cli";
+<<<<<<< HEAD
   version = "0.1.28995";
+=======
+  version = "0.1.26343";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "CircleCI-Public";
     repo = pname;
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-+Gyv3GO6nOueswPAriUm7QkQgEkYEilnBT7hqmiqDW8=";
   };
 
   vendorHash = "sha256-OWdJ7nFR5hrKQf2H763ezjXkEh0PvtBcjjeSNvH+ca4=";
+=======
+    sha256 = "sha256-mEvrcZbQ8vcRHL1CWlxzBJFqXLTJi51DER9BKLxnJ+4=";
+  };
+
+  vendorHash = "sha256-LzDofZI54cWP4FQfINq3tQbSi4c9/N1v0YH/aSzttNo=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nativeBuildInputs = [ installShellFiles ];
 

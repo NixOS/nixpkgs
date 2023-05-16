@@ -30,10 +30,13 @@ stdenv.mkDerivation rec {
 
     makeWrapper ${jdk11}/bin/java $out/bin/janusgraph-server \
       --add-flags "-classpath $classpath org.janusgraph.graphdb.server.JanusGraphServer"
+<<<<<<< HEAD
 
     # temporary workaround for
     # https://github.com/NixOS/nixpkgs/pull/244400#issuecomment-1667330430
     cd "$TMPDIR"
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '';
 
   meta = with lib; {

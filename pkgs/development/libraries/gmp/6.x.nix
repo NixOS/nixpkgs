@@ -13,6 +13,7 @@ let inherit (lib) optional; in
 
 let self = stdenv.mkDerivation rec {
   pname = "gmp${lib.optionalString cxx "-with-cxx"}";
+<<<<<<< HEAD
   version = "6.3.0";
 
   src = fetchurl { # we need to use bz2, others aren't in bootstrapping stdenv
@@ -20,6 +21,17 @@ let self = stdenv.mkDerivation rec {
     hash = "sha256-rCghGnz7YJuuLiyNYFjWbI/pZDT3QM9v4uR7AA0cIMs=";
   };
 
+=======
+  version = "6.2.1";
+
+  src = fetchurl { # we need to use bz2, others aren't in bootstrapping stdenv
+    urls = [ "mirror://gnu/gmp/gmp-${version}.tar.bz2" "ftp://ftp.gmplib.org/pub/gmp-${version}/gmp-${version}.tar.bz2" ];
+    sha256 = "0z2ddfiwgi0xbf65z4fg4hqqzlhv0cc6hdcswf3c6n21xdmk5sga";
+  };
+
+  patches = [ ./6.2.1-CVE-2021-43618.patch ];
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   #outputs TODO: split $cxx due to libstdc++ dependency
   # maybe let ghc use a version with *.so shared with rest of nixpkgs and *.a added
   # - see #5855 for related discussion

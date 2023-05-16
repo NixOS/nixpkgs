@@ -1,6 +1,9 @@
 { lib
 , buildPythonPackage
+<<<<<<< HEAD
 , fetchpatch
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , fetchPypi
 , pythonAtLeast
 , flit-core
@@ -20,6 +23,7 @@ buildPythonPackage {
     hash = "sha256-+IvrPaW1w4uYkEad5n0MsPnUlLeLEGyhhF+WwQuRxKw=";
   };
 
+<<<<<<< HEAD
   patches = [
     # https://github.com/sethmlarson/socksio/pull/61
     (fetchpatch {
@@ -29,6 +33,8 @@ buildPythonPackage {
     })
   ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nativeBuildInputs = [
     flit-core
   ];

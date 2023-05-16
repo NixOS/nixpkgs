@@ -35,10 +35,13 @@ stdenv.mkDerivation rec {
     ncurses
   ];
 
+<<<<<<< HEAD
   makeFlags = [
     "AR:=$(AR)"
   ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   # preConfigure = ''
   #   sed -e '/ifdef SYS_signalfd/atypedef long long loff_t;' -i src/fbterm.cpp
   #   sed -e '/install-exec-hook:/,/^[^\t]/{d}; /.NOEXPORT/iinstall-exec-hook:\

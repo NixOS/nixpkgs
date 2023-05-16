@@ -21,6 +21,10 @@ buildPythonPackage rec {
     description = "Object-oriented filesystem paths";
     homepage = "https://pathlib.readthedocs.org/";
     license = lib.licenses.mit;
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [ ];
+=======
+    maintainers = with lib.maintainers; [ costrouc ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

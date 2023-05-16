@@ -1,13 +1,21 @@
 { lib, stdenv, mkDerivation, fetchFromGitLab, qmake, qtbase, qttools, qtserialport, libGLU }:
 mkDerivation rec {
   pname = "OSCAR";
+<<<<<<< HEAD
   version = "1.5.0";
+=======
+  version = "1.4.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitLab {
     owner = "pholy";
     repo = "OSCAR-code";
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-eaj2/ioh9dXxWv7X/IZv7m/oVcU6t7r+mK5YrrViF2w=";
+=======
+    sha256 = "sha256-bgETkpyL0yhCD1FfTVN0s9RNOPkDp88W/1Gdxvu+Ons=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   buildInputs = [ qtbase qttools qtserialport libGLU ];

@@ -4,7 +4,11 @@
 , qmake
 , qtbase
 , qtmultimedia
+<<<<<<< HEAD
 , qttools
+=======
+, qttranslations
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 mkDerivation {
@@ -41,6 +45,11 @@ mkDerivation {
   postPatch = ''
     sed -i 's|@out@|'"''${out}"'|g' src/src.pro src/defines.h
   '';
+<<<<<<< HEAD
   nativeBuildInputs = [ qmake qttools ];
   buildInputs = [ qtbase qtmultimedia ];
+=======
+  nativeBuildInputs = [ qmake ];
+  buildInputs = [ qtbase qtmultimedia qttranslations ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }

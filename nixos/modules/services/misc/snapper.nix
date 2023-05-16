@@ -4,6 +4,7 @@ with lib;
 
 let
   cfg = config.services.snapper;
+<<<<<<< HEAD
 
   mkValue = v:
     if isList v then "\"${concatMapStringsSep " " (escape [ "\\" " " ]) v}\""
@@ -79,6 +80,8 @@ let
       '';
     };
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 in
 
 {
@@ -127,15 +130,25 @@ in
       example = literalExpression ''
         {
           home = {
+<<<<<<< HEAD
             SUBVOLUME = "/home";
             ALLOW_USERS = [ "alice" ];
             TIMELINE_CREATE = true;
             TIMELINE_CLEANUP = true;
+=======
+            subvolume = "/home";
+            extraConfig = '''
+              ALLOW_USERS="alice"
+              TIMELINE_CREATE=yes
+              TIMELINE_CLEANUP=yes
+            ''';
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           };
         }
       '';
 
       description = lib.mdDoc ''
+<<<<<<< HEAD
         Subvolume configuration. Any option mentioned in man:snapper-configs(5)
         is valid here, even if NixOS doesn't document it.
       '';
@@ -144,6 +157,40 @@ in
         freeformType = types.attrsOf (types.oneOf [ (types.listOf safeStr) types.bool safeStr types.number ]);
 
         options = configOptions;
+=======
+        Subvolume configuration
+      '';
+
+      type = types.attrsOf (types.submodule {
+        options = {
+          subvolume = mkOption {
+            type = types.path;
+            description = lib.mdDoc ''
+              Path of the subvolume or mount point.
+              This path is a subvolume and has to contain a subvolume named
+              .snapshots.
+              See also man:snapper(8) section PERMISSIONS.
+            '';
+          };
+
+          fstype = mkOption {
+            type = types.enum [ "btrfs" ];
+            default = "btrfs";
+            description = lib.mdDoc ''
+              Filesystem type. Only btrfs is stable and tested.
+            '';
+          };
+
+          extraConfig = mkOption {
+            type = types.lines;
+            default = "";
+            description = lib.mdDoc ''
+              Additional configuration next to SUBVOLUME and FSTYPE.
+              See man:snapper-configs(5).
+            '';
+          };
+        };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       });
     };
   };
@@ -166,7 +213,15 @@ in
 
       }
       // (mapAttrs' (name: subvolume: nameValuePair "snapper/configs/${name}" ({
+<<<<<<< HEAD
         text = lib.generators.toKeyValue { inherit mkKeyValue; } (filterAttrs (k: v: v != defaultOf k) subvolume);
+=======
+        text = ''
+          ${subvolume.extraConfig}
+          FSTYPE="${subvolume.fstype}"
+          SUBVOLUME="${subvolume.subvolume}"
+        '';
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       })) cfg.configs)
       // (lib.optionalAttrs (cfg.filters != null) {
         "snapper/filters/default.txt".text = cfg.filters;
@@ -226,6 +281,7 @@ in
       unitConfig.ConditionPathExists = "/etc/snapper/configs/root";
     };
 
+<<<<<<< HEAD
     assertions =
       concatMap
         (name:
@@ -249,5 +305,7 @@ in
             [ "fstype" "subvolume" ]
         )
         (attrNames cfg.configs);
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   });
 }

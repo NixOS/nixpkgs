@@ -2,16 +2,27 @@
 
 buildGoModule rec {
   pname = "fly";
+<<<<<<< HEAD
   version = "7.10.0";
+=======
+  version = "7.9.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "concourse";
     repo = "concourse";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-KmKIr7Y3CQmv1rXdju6xwUHABqj/dkXpgWc/yNrAza8=";
   };
 
   vendorHash = "sha256-lc0okniezfTNLsnCBIABQxSgakRUidsprrEnkH8il2g=";
+=======
+    sha256 = "sha256-ySyarky92+VSo/KzQFrWeh35KDMTQDV34F5iFrARHJs=";
+  };
+
+  vendorHash = "sha256-Oy1wP82ZhdpGHs/gpfdveOK/jI9yuo0D3JtxjLg+W/w=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   subPackages = [ "fly" ];
 

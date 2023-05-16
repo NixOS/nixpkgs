@@ -1,6 +1,10 @@
 **/deps.nix linguist-generated
 **/deps.json linguist-generated
+<<<<<<< HEAD
 **/deps.toml linguist-generated
+=======
+**/deps.toml lingust-generated
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 **/node-packages.nix linguist-generated
 
 pkgs/applications/editors/emacs-modes/*-generated.nix linguist-generated

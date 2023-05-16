@@ -11,11 +11,19 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "iterm2";
+<<<<<<< HEAD
   version = "3.4.20";
 
   src = fetchzip {
     url = "https://iterm2.com/downloads/stable/iTerm2-${lib.replaceStrings ["."] ["_"] version}.zip";
     hash = "sha256-RXBv3RXd2Kq8k7rbOE3HPEf6vI64VZCo1IX03gDy7l0=";
+=======
+  version = "3.4.19";
+
+  src = fetchzip {
+    url = "https://iterm2.com/downloads/stable/iTerm2-${lib.replaceStrings ["."] ["_"] version}.zip";
+    hash = "sha256-UioKFhlwVdrkHtoS1ixXE2rykVO5aQeNQ8TnC5kNSUc=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   dontFixup = true;

@@ -26,7 +26,10 @@ mkDerivationWith python3Packages.buildPythonApplication rec {
   nativeBuildInputs = [
     file
     intltool
+<<<<<<< HEAD
     gobject-introspection
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   # Package has no generally usable unit tests.
@@ -38,9 +41,19 @@ mkDerivationWith python3Packages.buildPythonApplication rec {
     $out/bin/rapid-photo-downloader --detailed-version
   '';
 
+<<<<<<< HEAD
   buildInputs = [
     gdk-pixbuf
     gexiv2
+=======
+  # NOTE: Without gobject-introspection in buildInputs and strictDeps = false,
+  #       launching fails with:
+  #       "Namespace [Notify / GExiv2 / GUdev] not available"
+  buildInputs = [
+    gdk-pixbuf
+    gexiv2
+    gobject-introspection
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     gst_all_1.gst-libav
     gst_all_1.gst-plugins-base
     gst_all_1.gst-plugins-good
@@ -51,10 +64,13 @@ mkDerivationWith python3Packages.buildPythonApplication rec {
     udisks
   ];
 
+<<<<<<< HEAD
   # NOTE: Check if strictDeps can be renabled
   # at the time of writing this the dependency easygui fails to build
   #       launching fails with:
   #       "Namespace [Notify / GExiv2 / GUdev] not available"
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   strictDeps = false;
 
   propagatedBuildInputs = with python3Packages; [

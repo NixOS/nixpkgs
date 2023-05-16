@@ -10,6 +10,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bmake";
+<<<<<<< HEAD
   version = "20230723";
 
   src = fetchurl {
@@ -28,6 +29,15 @@ stdenv.mkDerivation (finalAttrs: {
     ./dont-test-while-installing.diff
   ];
 
+=======
+  version = "20230414";
+
+  src = fetchurl {
+    url = "http://www.crufty.net/ftp/pub/sjg/${finalAttrs.pname}-${finalAttrs.version}.tar.gz";
+    hash = "sha256-KcsdJqrn3p3vkr2us6rUUg6JlRzpey518LibrhuVOZ8=";
+  };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   # Make tests work with musl
   # * Disable deptgt-delete_on_error test (alpine does this too)
   # * Disable shell-ksh test (ksh doesn't compile with musl)
@@ -41,6 +51,30 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ getopt ];
 
+<<<<<<< HEAD
+=======
+  patches = [
+    # make bootstrap script aware of the prefix in /nix/store
+    ./bootstrap-fix.patch
+    # preserve PATH from build env in unit tests
+    ./fix-unexport-env-test.patch
+    # Always enable ksh test since it checks in a impure location /bin/ksh
+    ./unconditional-ksh-test.patch
+    # decouple tests from build phase
+    (fetchpatch {
+      name = "separate-tests.patch";
+      url = "https://raw.githubusercontent.com/alpinelinux/aports/2a36f7b79df44136c4d2b8e9512f908af65adfee/community/bmake/separate-tests.patch";
+      hash = "sha256-KkmqASAl46/6Of7JLOQDFUqkOw3rGLxnNmyg7Lk0RwM=";
+    })
+    # add a shebang to bmake's install(1) replacement
+    (fetchpatch {
+      name = "install-sh.patch";
+      url = "https://raw.githubusercontent.com/alpinelinux/aports/34cd8c45397c63c041cf3cbe1ba5232fd9331196/community/bmake/install-sh.patch";
+      hash = "sha256-RvFq5nsmDxq54UTnXGlfO6Rip/XQYj0ZySatqUxjEX0=";
+    })
+  ];
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   # The generated makefile is a small wrapper for calling ./boot-strap with a
   # given op. On a case-insensitive filesystem this generated makefile clobbers
   # a distinct, shipped, Makefile and causes infinite recursion during tests
@@ -49,6 +83,20 @@ stdenv.mkDerivation (finalAttrs: {
     "--without-makefile"
   ];
 
+<<<<<<< HEAD
+=======
+  # Disabled tests:
+  # opt-chdir: ofborg complains about it somehow
+  # opt-keep-going-indirect: not yet known
+  # varmod-localtime: musl doesn't support TZDIR and this test relies on impure,
+  # implicit paths
+  BROKEN_TESTS = builtins.concatStringsSep " " [
+    "opt-chdir"
+    "opt-keep-going-indirect"
+    "varmod-localtime"
+  ];
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   buildPhase = ''
     runHook preBuild
 
@@ -73,6 +121,7 @@ stdenv.mkDerivation (finalAttrs: {
     ksh
   ];
 
+<<<<<<< HEAD
   # Disabled tests:
   # opt-chdir: ofborg complains about it somehow
   # opt-keep-going-indirect: not yet known
@@ -84,6 +133,8 @@ stdenv.mkDerivation (finalAttrs: {
     "varmod-localtime"
   ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   checkPhase = ''
     runHook preCheck
 
@@ -94,6 +145,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   setupHook = ./setup-hook.sh;
 
+<<<<<<< HEAD
   passthru.tests.bmakeMusl = pkgsMusl.bmake;
 
   meta = {
@@ -104,5 +156,16 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.unix;
     broken = stdenv.isAarch64; # failure on gnulib-tests
   };
+=======
+  meta = with lib; {
+    homepage = "http://www.crufty.net/help/sjg/bmake.html";
+    description = "Portable version of NetBSD 'make'";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ thoughtpolice AndersonTorres ];
+    platforms = platforms.unix;
+  };
+
+  passthru.tests.bmakeMusl = pkgsMusl.bmake;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 })
 # TODO: report the quirks and patches to bmake devteam (especially the Musl one)

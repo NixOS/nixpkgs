@@ -30,6 +30,9 @@ stdenv.mkDerivation rec {
     description = "Static library for Sysprof capture data generation";
     license = lib.licenses.bsd2Patent;
     platforms = lib.platforms.all;
+<<<<<<< HEAD
     pkgConfigModules = [ "sysprof-capture-4" ];
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

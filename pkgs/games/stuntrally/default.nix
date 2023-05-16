@@ -3,7 +3,11 @@
 , stdenv
 , cmake
 , boost
+<<<<<<< HEAD
 , ogre_13
+=======
+, ogre
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , mygui
 , ois
 , SDL2
@@ -19,7 +23,11 @@
 }:
 
 let
+<<<<<<< HEAD
   stuntrally_ogre = ogre_13.overrideAttrs (old: {
+=======
+  stuntrally_ogre = ogre.overrideAttrs (old: {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     cmakeFlags = old.cmakeFlags ++ [
       "-DOGRE_NODELESS_POSITIONING=ON"
       "-DOGRE_RESOURCEMANAGER_STRICT=0"
@@ -27,7 +35,11 @@ let
   });
   stuntrally_mygui = mygui.override {
     withOgre = true;
+<<<<<<< HEAD
     ogre = stuntrally_ogre;
+=======
+    inherit ogre;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 in
 

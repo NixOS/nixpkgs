@@ -11,6 +11,7 @@
 }:
 
 with lib;
+<<<<<<< HEAD
 
 let
   pname = "koboredux";
@@ -48,6 +49,38 @@ stdenv.mkDerivation rec {
   src = [ main_src ] ++ optional useProprietaryAssets assets_src;
 
   sourceRoot = main_src.name;
+=======
+stdenv.mkDerivation rec {
+  pname = "koboredux";
+  version = "0.7.5.1";
+
+  src =
+    [(fetchFromGitHub {
+      owner = "olofson";
+      repo = "koboredux";
+      rev = "v${version}";
+      sha256 = "09h9r65z8bar2z89s09j6px0gdq355kjf38rmd85xb2aqwnm6xig";
+    })]
+    ++
+    (optional useProprietaryAssets (requireFile {
+      name = "koboredux-${version}-Linux.tar.bz2";
+      sha256 = "11bmicx9i11m4c3dp19jsql0zy4rjf5a28x4hd2wl8h3bf8cdgav";
+      message = ''
+        Please purchase the game on https://olofson.itch.io/kobo-redux
+        and download the Linux build.
+
+        Once you have downloaded the file, please use the following command
+        and re-run the installation:
+
+        nix-prefetch-url file://\$PWD/koboredux-${version}-Linux.tar.bz2
+
+        Alternatively, install the "koboredux-free" package, which replaces the
+        proprietary assets with a placeholder theme.
+      '';
+    }));
+
+  sourceRoot = "source"; # needed when we have the assets source
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   # Fix clang build
   patches = [(fetchpatch {

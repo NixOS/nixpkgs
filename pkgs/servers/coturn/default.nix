@@ -14,13 +14,21 @@
 
 stdenv.mkDerivation rec {
   pname = "coturn";
+<<<<<<< HEAD
   version = "4.6.2";
+=======
+  version = "4.6.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "coturn";
     repo = "coturn";
     rev = "refs/tags/${version}";
+<<<<<<< HEAD
     hash = "sha256-BKIto762W7UkKjzIm3eVU18oiHpYUMQYJihebYxBOZs=";
+=======
+    hash = "sha256-ckqPxG3ieqA0H9g1GfE8hYs6tUsZfzt6/yYR1qlgoxE=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [
@@ -38,6 +46,15 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./pure-configure.patch
+<<<<<<< HEAD
+=======
+
+    # fix build against openssl 3.x
+    (fetchpatch {
+      url = "https://github.com/coturn/coturn/commit/4ce784a8781ab086c150e2b9f5641b1a37fd9b31.patch";
+      hash = "sha256-Jx8XNXrgq0ockm1zjwRzfvSS3fVrVyVvQY1l0CpcR3Q=";
+    })
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   # Workaround build failure on -fno-common toolchains like upstream

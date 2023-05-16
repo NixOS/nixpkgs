@@ -14,7 +14,11 @@ in
 
   meta.maintainers = with pkgs.lib.maintainers; [ julm ];
 
+<<<<<<< HEAD
   nodes.machine = { config, pkgs, nodes, ... }: let
+=======
+  machine = { config, pkgs, nodes, ... }: let
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     inherit (config.services) gitolite public-inbox;
     # Git repositories paths in Gitolite.
     # Only their baseNameOf is used for configuring public-inbox.
@@ -201,7 +205,11 @@ in
 
       This is a testing mail.
     ''}")
+<<<<<<< HEAD
     machine.sleep(10)
+=======
+    machine.sleep(5)
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     machine.succeed("curl -L 'https://machine.${domain}/inbox/repo1/repo1@root-1/T/#u' | grep 'This is a testing mail.'")
 
     # Read a mail through public-inbox-imapd
@@ -221,10 +229,15 @@ in
     # Delete a mail.
     # Note that the use of an extension not listed in the addresses
     # require to use --all
+<<<<<<< HEAD
     machine.succeed("curl -L https://machine.${domain}/inbox/repo1/repo1@root-1/raw | sudo -u public-inbox public-inbox-learn rm --all")
     machine.fail("curl -L https://machine.${domain}/inbox/repo1/repo1@root-1/T/#u | grep 'This is a testing mail.'")
 
     # Compact the database
     machine.succeed("sudo -u public-inbox public-inbox-compact --all")
+=======
+    machine.succeed("curl -L https://machine.example.localdomain/inbox/repo1/repo1@root-1/raw | sudo -u public-inbox public-inbox-learn rm --all")
+    machine.fail("curl -L https://machine.example.localdomain/inbox/repo1/repo1@root-1/T/#u | grep 'This is a testing mail.'")
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '';
 })

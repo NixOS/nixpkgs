@@ -13,12 +13,17 @@ in
 
   agda2-mode = callPackage ./manual-packages/agda2-mode { };
 
+<<<<<<< HEAD
   beancount = callPackage ./manual-packages/beancount { };
 
   cask = callPackage ./manual-packages/cask { };
 
   consult-gh = callPackage ./manual-packages/consult-gh { };
 
+=======
+  cask = callPackage ./manual-packages/cask { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   control-lock = callPackage ./manual-packages/control-lock { };
 
   ebuild-mode = callPackage ./manual-packages/ebuild-mode { };
@@ -61,14 +66,22 @@ in
     _map = self.map;
   };
 
+<<<<<<< HEAD
   mu4e = callPackage ./manual-packages/mu4e { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ott-mode = callPackage ./manual-packages/ott-mode { };
 
   perl-completion = callPackage ./manual-packages/perl-completion { };
 
   pod-mode = callPackage ./manual-packages/pod-mode { };
 
+<<<<<<< HEAD
+=======
+  power-mode = callPackage ./manual-packages/power-mode { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   prisma-mode = callPackage ./manual-packages/prisma-mode { };
 
   structured-haskell-mode = self.shm;
@@ -77,8 +90,11 @@ in
 
   tree-sitter-langs = callPackage ./manual-packages/tree-sitter-langs { final = self; };
 
+<<<<<<< HEAD
   treesit-grammars = callPackage ./manual-packages/treesit-grammars { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   tsc = callPackage ./manual-packages/tsc { };
 
   urweb-mode = callPackage ./manual-packages/urweb-mode { };

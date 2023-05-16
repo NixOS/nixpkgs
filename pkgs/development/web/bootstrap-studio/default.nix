@@ -2,10 +2,17 @@
 
 let
   pname = "bootstrap-studio";
+<<<<<<< HEAD
   version = "6.4.5";
   src = fetchurl {
     url = "https://releases.bootstrapstudio.io/${version}/Bootstrap%20Studio.AppImage";
     sha256 = "sha256-kCMqDNRC3H3WBpDJCBXBxvWRuiGCrZ7gRGghXiGtGq8=";
+=======
+  version = "6.2.1";
+  src = fetchurl {
+    url = "https://bootstrapstudio.io/releases/desktop/${version}/Bootstrap%20Studio.AppImage";
+    sha256 = "sha256-1+3YCM1K2k1Gga7Y2ciMqmwzxYJQ7Ab5uDHP1iHXK7g=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
   appimageContents = appimageTools.extractType2 { inherit pname version src; };
 in

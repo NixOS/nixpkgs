@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 { lib, buildEnv, runCommand, writeText, makeWrapper, libfaketime, makeFontsConf
 , perl, bash, coreutils, gnused, gnugrep, gawk, ghostscript
 , bin, tl }:
@@ -5,11 +6,18 @@
 args@{
   pkgFilter ? (pkg: pkg.tlType == "run" || pkg.tlType == "bin" || pkg.pname == "core"
                     || pkg.hasManpages or false)
+=======
+params: with params;
+# combine =
+args@{
+  pkgFilter ? (pkg: pkg.tlType == "run" || pkg.tlType == "bin" || pkg.pname == "core")
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , extraName ? "combined"
 , extraVersion ? ""
 , ...
 }:
 let
+<<<<<<< HEAD
   # combine a set of TL packages into a single TL meta-package
   combinePkgs = pkgList: lib.catAttrs "pkg" (
     let
@@ -44,10 +52,46 @@ let
 
   texmfdist = (buildEnv {
     name = "${name}-texmfdist";
+=======
+  pkgSet = removeAttrs args [ "pkgFilter" "extraName" "extraVersion" ] // {
+    # include a fake "core" package
+    core.pkgs = [
+      (bin.core.out // { pname = "core"; tlType = "bin"; })
+      (bin.core.doc // { pname = "core"; tlType = "doc"; })
+    ];
+  };
+  pkgList = rec {
+    all = lib.filter pkgFilter (combinePkgs (lib.attrValues pkgSet));
+    splitBin = builtins.partition (p: p.tlType == "bin") all;
+    bin = splitBin.right
+      ++ lib.optional
+          (lib.any (p: p.tlType == "run" && p.pname == "pdfcrop") splitBin.wrong)
+          (lib.getBin ghostscript);
+    nonbin = splitBin.wrong;
+
+    # extra interpreters needed for shebangs, based on 2015 schemes "medium" and "tetex"
+    # (omitted tk needed in pname == "epspdf", bin/epspdftk)
+    pkgNeedsPython = pkg: pkg.tlType == "run" && lib.elem pkg.pname
+      [ "de-macro" "pythontex" "dviasm" "texliveonfly" ];
+    pkgNeedsRuby = pkg: pkg.tlType == "run" && pkg.pname == "match-parens";
+    extraInputs =
+      lib.optional (lib.any pkgNeedsPython splitBin.wrong) python3
+      ++ lib.optional (lib.any pkgNeedsRuby splitBin.wrong) ruby;
+  };
+
+  name = "texlive-${extraName}-${bin.texliveYear}${extraVersion}";
+
+  texmfroot = (buildEnv {
+    name = "${name}-texmfroot";
+
+    # the 'non-relocated' packages must live in $TEXMFROOT/texmf-dist (e.g. fmtutil, updmap look for perl modules there)
+    extraPrefix = "/texmf-dist";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     # remove fake derivations (without 'outPath') to avoid undesired build dependencies
     paths = lib.catAttrs "outPath" pkgList.nonbin;
 
+<<<<<<< HEAD
     # mktexlsr
     nativeBuildInputs = [ (lib.last tl."texlive.infra".pkgs) ];
 
@@ -74,11 +118,26 @@ let
     ln -s "$tlpkg" "$out"/tlpkg
   '';
 
+=======
+    nativeBuildInputs = [ perl bin.core.out ];
+
+    postBuild = # generate ls-R database
+    ''
+      perl -I "${bin.core.out}/share/texmf-dist/scripts/texlive" \
+        -- "$out/texmf-dist/scripts/texlive/mktexlsr.pl" --sort "$out"/texmf-dist
+    '';
+  }).overrideAttrs (_: { allowSubstitutes = true; });
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   # expose info and man pages in usual /share/{info,man} location
   doc = buildEnv {
     name = "${name}-doc";
 
+<<<<<<< HEAD
     paths = [ (texmfdist.outPath + "/doc") ];
+=======
+    paths = [ (texmfroot.outPath + "/texmf-dist/doc") ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     extraPrefix = "/share";
 
     pathsToLink = [
@@ -97,6 +156,7 @@ in (buildEnv {
   paths = lib.catAttrs "outPath" pkgList.bin ++ [ doc ];
   pathsToLink = [
     "/"
+<<<<<<< HEAD
     "/share/texmf-var/scripts"
     "/share/texmf-var/tex/generic/config"
     "/share/texmf-var/web2c"
@@ -112,10 +172,18 @@ in (buildEnv {
     (lib.last tl.texlive-scripts-extra.pkgs) # texlinks
     perl
   ];
+=======
+    "/bin" # ensure these are writeable directories
+  ];
+
+  nativeBuildInputs = [ makeWrapper libfaketime perl bin.texlinks ];
+  buildInputs = pkgList.extraInputs;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   passthru = {
     # This is set primarily to help find-tarballs.nix to do its job
     packages = pkgList.all;
+<<<<<<< HEAD
     # useful for inclusion in the `fonts.packages` nixos option or for use in devshells
     fonts = "${texmfroot}/texmf-dist/fonts";
   };
@@ -126,10 +194,22 @@ in (buildEnv {
     TEXMFROOT="${texmfroot}"
     TEXMFDIST="${texmfdist}"
     export PATH="$out/bin:$PATH"
+=======
+    # useful for inclusion in the `fonts.fonts` nixos option or for use in devshells
+    fonts = "${texmfroot}/texmf-dist/fonts";
+  };
+
+  postBuild = ''
+    TEXMFROOT="${texmfroot}"
+    TEXMFDIST="${texmfroot}/texmf-dist"
+    export PATH="$out/bin:$PATH"
+    export PERL5LIB="${bin.core.out}/share/texmf-dist/scripts/texlive" # modules otherwise found in tlpkg/ of texlive.infra
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     TEXMFSYSCONFIG="$out/share/texmf-config"
     TEXMFSYSVAR="$out/share/texmf-var"
     export TEXMFCNF="$TEXMFSYSVAR/web2c"
   '' +
+<<<<<<< HEAD
     # wrap executables with required env vars as early as possible
     # 1. we want texlive.combine to use the wrapped binaries, to catch bugs
     # 2. we do not want to wrap links generated by texlinks
@@ -159,6 +239,8 @@ in (buildEnv {
     done
     echo "wrapped $wrapCount binaries and scripts"
   '' +
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     # patch texmf-dist  -> $TEXMFDIST
     # patch texmf-local -> $out/share/texmf-local
     # patch texmf.cnf   -> $TEXMFSYSVAR/web2c/texmf.cnf
@@ -197,7 +279,11 @@ in (buildEnv {
   (let
     hyphens = lib.filter (p: p.hasHyphens or false && p.tlType == "run") pkgList.splitBin.wrong;
     hyphenPNames = map (p: p.pname) hyphens;
+<<<<<<< HEAD
     formats = lib.filter (p: p ? formats && p.tlType == "run") pkgList.splitBin.wrong;
+=======
+    formats = lib.filter (p: p.hasFormats or false && p.tlType == "run") pkgList.splitBin.wrong;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     formatPNames = map (p: p.pname) formats;
     # sed expression that prints the lines in /start/,/end/ except for /end/
     section = start: end: "/${start}/,/${end}/{ /${start}/p; /${end}/!p; };\n";
@@ -242,6 +328,7 @@ in (buildEnv {
       "$TEXMFDIST"/tex/generic/config/language.dat.lua > "$TEXMFSYSVAR"/tex/generic/config/language.dat.lua
     [[ -e "$TEXMFDIST"/web2c/fmtutil.cnf ]] && sed -E -f '${fmtutilSed}' "$TEXMFDIST"/web2c/fmtutil.cnf > "$TEXMFCNF"/fmtutil.cnf
 
+<<<<<<< HEAD
     # create $TEXMFSYSCONFIG database, make new $TEXMFSYSVAR files visible to kpathsea
     mktexlsr "$TEXMFSYSCONFIG" "$TEXMFSYSVAR"
   '') +
@@ -262,12 +349,78 @@ in (buildEnv {
   '') (lib.filter (pkg: pkg ? postactionScript) pkgList.tlpkg)) +
     # generate formats
   ''
+=======
+    # make new files visible to kpathsea
+    perl "$TEXMFDIST"/scripts/texlive/mktexlsr.pl --sort "$TEXMFSYSVAR"
+  '') +
+
+  # function to wrap created executables with required env vars
+  ''
+    wrapBin() {
+    for link in "$out"/bin/*; do
+      [ -L "$link" -a -x "$link" ] || continue # if not link, assume OK
+      local target=$(readlink "$link")
+
+      # skip simple local symlinks; mktexfmt in particular
+      echo "$target" | grep / > /dev/null || continue;
+
+      echo -n "Wrapping '$link'"
+      rm "$link"
+      makeWrapper "$target" "$link" \
+        --prefix PATH : "${gnused}/bin:${gnugrep}/bin:${coreutils}/bin:$out/bin:${perl}/bin" \
+        --prefix PERL5LIB : "$PERL5LIB" \
+        --set-default TEXMFCNF "$TEXMFCNF" \
+        --set-default FONTCONFIG_FILE "${
+          # neccessary for XeTeX to find the fonts distributed with texlive
+          makeFontsConf { fontDirectories = [ "${texmfroot}/texmf-dist/fonts" ]; }
+        }"
+
+      # avoid using non-nix shebang in $target by calling interpreter
+      if [[ "$(head -c 2 "$target")" = "#!" ]]; then
+        local cmdline="$(head -n 1 "$target" | sed 's/^\#\! *//;s/ *$//')"
+        local relative=`basename "$cmdline" | sed 's/^env //' `
+        local newInterp=`echo "$relative" | cut -d\  -f1`
+        local params=`echo "$relative" | cut -d\  -f2- -s`
+        local newPath="$(type -P "$newInterp")"
+        if [[ -z "$newPath" ]]; then
+          echo " Warning: unknown shebang '$cmdline' in '$target'"
+          continue
+        fi
+        echo " and patching shebang '$cmdline'"
+        sed "s|^exec |exec $newPath $params |" -i "$link"
+
+      elif head -n 1 "$target" | grep -q 'exec perl'; then
+        # see #24343 for details of the problem
+        echo " and patching weird perl shebang"
+        sed "s|^exec |exec '${perl}/bin/perl' -w |" -i "$link"
+
+      else
+        sed 's|^exec |exec -a "$0" |' -i "$link"
+        echo
+      fi
+    done
+    }
+  '' +
+  # texlive post-install actions
+  ''
+    ln -sf "$TEXMFDIST"/scripts/texlive/updmap.pl "$out"/bin/updmap
+  '' +
+    # now hack to preserve "$0" for mktexfmt
+  ''
+    cp "$TEXMFDIST"/scripts/texlive/fmtutil.pl "$out/bin/fmtutil"
+    patchShebangs "$out/bin/fmtutil"
+    ln -sf fmtutil "$out/bin/mktexfmt"
+
+    texlinks "$out/bin" && wrapBin
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     # many formats still ignore SOURCE_DATE_EPOCH even when FORCE_SOURCE_DATE=1
     # libfaketime fixes non-determinism related to timestamps ignoring FORCE_SOURCE_DATE
     # we cannot fix further randomness caused by luatex; for further details, see
     # https://salsa.debian.org/live-team/live-build/-/blob/master/examples/hooks/reproducible/2006-reproducible-texlive-binaries-fmt-files.hook.chroot#L52
     # note that calling faketime and fmtutil is fragile (faketime uses LD_PRELOAD, fmtutil calls /bin/sh, causing potential glibc issues on non-NixOS)
     # so we patch fmtutil to use faketime, rather than calling faketime fmtutil
+<<<<<<< HEAD
     substitute "$TEXMFDIST"/scripts/texlive/fmtutil.pl fmtutil \
       --replace 'my $cmdline = "$eng -ini ' 'my $cmdline = "faketime -f '"'"'\@1980-01-01 00:00:00 x0.001'"'"' $eng -ini '
     FORCE_SOURCE_DATE=1 TZ= perl fmtutil --sys --all | grep '^fmtutil' # too verbose
@@ -276,15 +429,64 @@ in (buildEnv {
     echo y | updmap --sys --syncwithtrees --force 2>&1 | grep '^\(updmap\|  /\)'
     # Regenerate the map files (this is optional)
     updmap --sys --force 2>&1 | grep '^\(updmap\|  /\)'
+=======
+    substitute "$out/bin/fmtutil" fmtutil \
+      --replace 'my $cmdline = "$eng -ini ' 'my $cmdline = "faketime -f '"'"'\@1980-01-01 00:00:00 x0.001'"'"' $eng -ini '
+    FORCE_SOURCE_DATE=1 TZ= perl fmtutil --sys --all | grep '^fmtutil' # too verbose
+    #texlinks "$out/bin" && wrapBin # do we need to regenerate format links?
+
+    # Disable unavailable map files
+    echo y | updmap --sys --syncwithtrees --force
+    # Regenerate the map files (this is optional)
+    updmap --sys --force
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     # sort entries to improve reproducibility
     [[ -f "$TEXMFSYSCONFIG"/web2c/updmap.cfg ]] && sort -o "$TEXMFSYSCONFIG"/web2c/updmap.cfg "$TEXMFSYSCONFIG"/web2c/updmap.cfg
 
+<<<<<<< HEAD
     mktexlsr "$TEXMFSYSCONFIG" "$TEXMFSYSVAR" # to make sure (of what?)
   '' +
     # remove *-sys scripts since /nix/store is readonly
   ''
     rm "$out"/bin/*-sys
+=======
+    perl "$TEXMFDIST"/scripts/texlive/mktexlsr.pl --sort "$TEXMFSYSCONFIG" "$TEXMFSYSVAR" # to make sure
+  '' +
+    # install (wrappers for) scripts, based on a list from upstream texlive
+  ''
+    source '${bin.core.out}/share/texmf-dist/scripts/texlive/scripts.lst'
+    for s in $texmf_scripts; do
+      [[ -x "$TEXMFDIST/scripts/$s" ]] || continue
+      tName="$(basename $s | sed 's/\.[a-z]\+$//')" # remove extension
+      [[ ! -e "$out/bin/$tName" ]] || continue
+      ln -sv "$(realpath "$TEXMFDIST/scripts/$s")" "$out/bin/$tName" # wrapped below
+    done
+  '' +
+    # A hacky way to provide repstopdf
+    #  * Copy is done to have a correct "$0" so that epstopdf enables the restricted mode
+    #  * ./bin/repstopdf needs to be a symlink to be processed by wrapBin
+  ''
+    if [[ -e "$out"/bin/epstopdf ]]; then
+      mkdir -p "$TEXMFSYSVAR/scripts"
+      cp "$out"/bin/epstopdf "$TEXMFSYSVAR"/scripts/repstopdf
+      ln -s "$TEXMFSYSVAR"/scripts/repstopdf "$out"/bin/repstopdf
+    fi
+  '' +
+    # finish up the wrappers
+  ''
+    rm "$out"/bin/*-sys
+    wrapBin
+  '' +
+    # Perform a small test to verify that the restricted mode get enabled when
+    # needed (detected by checking if it disallows --gscmd)
+  ''
+    if [[ -e "$out"/bin/epstopdf ]]; then
+      echo "Testing restricted mode for {,r}epstopdf"
+      ! (epstopdf --gscmd echo /dev/null 2>&1 || true) | grep forbidden
+      (repstopdf --gscmd echo /dev/null 2>&1 || true) | grep forbidden
+    fi
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '' +
   # TODO: a context trigger https://www.preining.info/blog/2015/06/debian-tex-live-2015-the-new-layout/
     # http://wiki.contextgarden.net/ConTeXt_Standalone#Unix-like_platforms_.28Linux.2FMacOS_X.2FFreeBSD.2FSolaris.29
@@ -300,16 +502,24 @@ in (buildEnv {
         --replace 'uuid=osuuid(),' 'uuid="242be807-d17e-4792-8e39-aa93326fc871",'
       FORCE_SOURCE_DATE=1 TZ= faketime -f '@1980-01-01 00:00:00 x0.001' luatex --luaonly mtxrun.lua --generate
     fi
+<<<<<<< HEAD
   '' +
+=======
+  ''
+    + bin.cleanBrokenLinks +
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   # Get rid of all log files. They are not needed, but take up space
   # and render the build unreproducible by their embedded timestamps
   # and other non-deterministic diagnostics.
   ''
     find "$TEXMFSYSVAR"/web2c -name '*.log' -delete
+<<<<<<< HEAD
   '' +
   # link TEXMFDIST in $out/share for backward compatibility
   ''
     ln -s "$TEXMFDIST" "$out"/share/texmf
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ''
   ;
 }).overrideAttrs (_: { allowSubstitutes = true; })

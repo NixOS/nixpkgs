@@ -1,10 +1,18 @@
+<<<<<<< HEAD
 { lib, python3, fetchPypi, netcat-openbsd, nix-update-script }:
+=======
+{ lib, python3, netcat-openbsd, nix-update-script }:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 python3.pkgs.buildPythonApplication rec {
   pname = "flashfocus";
   version = "2.3.1";
 
+<<<<<<< HEAD
   src = fetchPypi {
+=======
+  src = python3.pkgs.fetchPypi {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     inherit pname version;
     sha256 = "sha256-XT3CKJWn1uKnPPsJC+MWlEAd8sWdVTEXz5b3n0UUedY=";
   };

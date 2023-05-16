@@ -2,11 +2,19 @@
 
 stdenv.mkDerivation rec {
   pname = "asciidoctorj";
+<<<<<<< HEAD
   version = "2.5.10";
 
   src = fetchzip {
     url = "mirror://maven/org/asciidoctor/${pname}/${version}/${pname}-${version}-bin.zip";
     sha256 = "sha256-uhGwZkr5DaoQGkH+romkD7bQTLr+O8Si+wQcZXyMWOI=";
+=======
+  version = "2.5.8";
+
+  src = fetchzip {
+    url = "mirror://maven/org/asciidoctor/${pname}/${version}/${pname}-${version}-bin.zip";
+    sha256 = "sha256-Xn6uIHEsyIXA9ls0bZZHdW7aKcgdub9C6g7lQ853tiQ=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ makeWrapper ];

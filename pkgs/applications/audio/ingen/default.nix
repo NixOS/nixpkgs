@@ -1,6 +1,10 @@
 { lib, stdenv, fetchgit, boost, ganv, glibmm, gtkmm2, libjack2, lilv
 , lv2, pkg-config, python3, raul, serd, sord, sratom
+<<<<<<< HEAD
 , waf
+=======
+, wafHook
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , suil
 }:
 
@@ -16,7 +20,11 @@ stdenv.mkDerivation  rec {
     deepClone = true;
   };
 
+<<<<<<< HEAD
   nativeBuildInputs = [ pkg-config waf.hook python3 python3.pkgs.wrapPython ];
+=======
+  nativeBuildInputs = [ pkg-config wafHook python3 python3.pkgs.wrapPython ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   buildInputs = [
     boost ganv glibmm gtkmm2 libjack2 lilv lv2
     python3 raul serd sord sratom suil

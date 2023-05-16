@@ -4,12 +4,19 @@
 , fetchpatch
 , extra-cmake-modules
 , qtbase
+<<<<<<< HEAD
+=======
+, qttranslations
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , kcoreaddons
 , python3
 , sqlite
 , postgresql
 , libmysqlclient
+<<<<<<< HEAD
 , qttools
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 mkDerivation rec {
@@ -34,9 +41,15 @@ mkDerivation rec {
     })
   ];
 
+<<<<<<< HEAD
   nativeBuildInputs = [ extra-cmake-modules qttools ];
 
   buildInputs = [ kcoreaddons python3 sqlite postgresql libmysqlclient ];
+=======
+  nativeBuildInputs = [ extra-cmake-modules ];
+
+  buildInputs = [ qttranslations kcoreaddons python3 sqlite postgresql libmysqlclient ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   propagatedBuildInputs = [ qtbase ];
 

@@ -9,16 +9,27 @@
 
 buildGoModule rec {
   pname = "gdu";
+<<<<<<< HEAD
   version = "5.25.0";
+=======
+  version = "5.23.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "dundee";
     repo = pname;
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-TtfTIG0XlEDXVjIZ6Vpy/Z5StXcxyaEocwoe7M75YDw=";
   };
 
   vendorHash = "sha256-DkH1H2XvVlDMFuFSbCmhPMC709upPvXhpzlEgNq5zoA=";
+=======
+    hash = "sha256-Uv5wPEGmd2+LVZoSw/K24F3czyjGi6ysQsNtq87p4fg=";
+  };
+
+  vendorHash = "sha256-BQOlp2mjycOSB0qjLuVNo3+n0xqb77IMizUY6Sz94PM=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nativeBuildInputs = [
     installShellFiles

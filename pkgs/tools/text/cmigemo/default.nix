@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 { lib, stdenv, fetchFromGitHub
+=======
+{ lib, stdenv, fetchFromGitHub, buildPackages
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , iconv, nkf, perl, which
 , skk-dicts
 }:

@@ -2,17 +2,28 @@
 
 buildGoModule rec {
   pname = "go-migrate";
+<<<<<<< HEAD
   version = "4.16.2";
+=======
+  version = "4.15.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "golang-migrate";
     repo = "migrate";
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-kP9wA8LSkdICy5NfQtzxeGUrqFqf6XpzkfCBaNAP8jE=";
   };
 
   proxyVendor = true; # darwin/linux hash mismatch
   vendorHash = "sha256-wP6nwXbxU2GUNUKv+hQptuS4eHWUyGlg8gkTouSx6Hg=";
+=======
+    sha256 = "sha256-nVR6zMG/a4VbGgR9a/6NqMNYwFTifAZW3F6rckvOEJM=";
+  };
+
+  vendorSha256 = "sha256-lPNPl6fqBT3XLQie9z93j91FLtrMjKbHnXUQ6b4lDb4=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   subPackages = [ "cmd/migrate" ];
 

@@ -14,12 +14,20 @@
 
 buildPythonPackage rec {
   pname = "chiavdf";
+<<<<<<< HEAD
   version = "1.0.10";
+=======
+  version = "1.0.8";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
+<<<<<<< HEAD
     hash = "sha256-660Frlaj6WbYOl0sfb5ox6qTzE+jKJR0Qka9nEijSyg=";
+=======
+    hash = "sha256-ilT7tCdX8ak3qmpXJ0LITf0ZGAdFSN4tm6GKw06A/m8=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   patches = [

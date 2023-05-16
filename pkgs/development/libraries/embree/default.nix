@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 { stdenv, lib, fetchFromGitHub, fetchpatch, cmake, pkg-config, ispc, tbb, glfw,
+=======
+{ stdenv, lib, fetchFromGitHub, cmake, pkg-config, ispc, tbb, glfw,
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   openimageio, libjpeg, libpng, libpthreadstubs, libX11, glib }:
 
 stdenv.mkDerivation rec {
@@ -12,6 +16,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-tfM4SGOFVBG0pQK9B/iN2xDaW3yjefnTtsoUad75m80=";
   };
 
+<<<<<<< HEAD
   patches = [
     (fetchpatch {
       name = "fixed-compilation-issues-for-arm-aarch64-processor-under-linux.patch";
@@ -20,6 +25,8 @@ stdenv.mkDerivation rec {
     })
   ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   postPatch = ''
     # Fix duplicate /nix/store/.../nix/store/.../ paths
     sed -i "s|SET(EMBREE_ROOT_DIR .*)|set(EMBREE_ROOT_DIR $out)|" \
@@ -36,6 +43,10 @@ stdenv.mkDerivation rec {
     "-DTBB_INCLUDE_DIR=${tbb.dev}/include"
   ];
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nativeBuildInputs = [ ispc pkg-config cmake ];
   buildInputs = [ tbb glfw openimageio libjpeg libpng libX11 libpthreadstubs ]
                 ++ lib.optionals stdenv.isDarwin [ glib ];
@@ -46,5 +57,9 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ hodapp gebner ];
     license = licenses.asl20;
     platforms = platforms.unix;
+<<<<<<< HEAD
+=======
+    badPlatforms = [ "aarch64-linux" ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

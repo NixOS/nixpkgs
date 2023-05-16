@@ -6,11 +6,19 @@
 buildPythonPackage rec {
   inherit (flatbuffers) pname version src;
 
+<<<<<<< HEAD
   sourceRoot = "${src.name}/python";
 
   # flatbuffers needs VERSION environment variable for setting the correct
   # version, otherwise it uses the current date.
   VERSION = version;
+=======
+  sourceRoot = "source/python";
+
+  # flatbuffers needs VERSION environment variable for setting the correct
+  # version, otherwise it uses the current date.
+  VERSION = "${version}";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   pythonImportsCheck = [ "flatbuffers" ];
 

@@ -12,14 +12,22 @@
 
 buildPythonPackage rec {
   pname = "pathy";
+<<<<<<< HEAD
   version = "0.10.2";
+=======
+  version = "0.10.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
+<<<<<<< HEAD
     hash = "sha256-ecVyq3/thNxGg3NG7a5YVlmS0Ed6eJzUaRpB2Oq5kX0=";
+=======
+    hash = "sha256-TNbnG0zV/4dc+7lJrZ+lUZ2NHb5p1fwdGyOqPLBJYYs=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [

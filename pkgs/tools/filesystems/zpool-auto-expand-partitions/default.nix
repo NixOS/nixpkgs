@@ -1,7 +1,15 @@
+<<<<<<< HEAD
 { lib
 , rustPlatform
 , cloud-utils
 , fetchFromGitHub
+=======
+{ rustPlatform
+, cloud-utils
+, fetchFromGitHub
+, lib
+, llvmPackages
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , pkg-config
 , util-linux
 , zfs

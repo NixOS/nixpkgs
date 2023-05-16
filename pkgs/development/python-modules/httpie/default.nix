@@ -16,7 +16,10 @@
 , rich
 , pysocks
 # CheckInputs
+<<<<<<< HEAD
 , pip
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , pytest-httpbin
 , pytest-lazy-fixture
 , pytest-mock
@@ -27,14 +30,22 @@
 
 buildPythonPackage rec {
   pname = "httpie";
+<<<<<<< HEAD
   version = "3.2.2";
+=======
+  version = "3.2.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "httpie";
     repo = "httpie";
     rev = version;
+<<<<<<< HEAD
     hash = "sha256-hPsjEpvT6tnPm68AUB2Tv3Gon4DfSzO2VYCGqP8ozSI=";
+=======
+    hash = "sha256-WEe8zSlNckl7bPBi6u8mHQ1/xPw3kE81F8Xr15TchgM=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [
@@ -53,10 +64,15 @@ buildPythonPackage rec {
     rich
   ] ++ requests.optional-dependencies.socks;
 
+<<<<<<< HEAD
   __darwinAllowLocalNetworking = true;
 
   nativeCheckInputs = [
     pip
+=======
+
+  nativeCheckInputs = [
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     pytest-httpbin
     pytest-lazy-fixture
     pytest-mock

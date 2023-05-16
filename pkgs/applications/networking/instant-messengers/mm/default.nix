@@ -10,7 +10,11 @@ buildGoModule {
     sha256 = "sha256-SdD4EE/rc85H7xqKB/kU8XFsC63i1sVObPha/zrxFGk=";
   };
 
+<<<<<<< HEAD
   vendorHash = "sha256-zJJ9PzQShv2iRNyCg1XVscbwjV9ZtMIojJDtXXm3rVM=";
+=======
+  vendorSha256 = "sha256-zJJ9PzQShv2iRNyCg1XVscbwjV9ZtMIojJDtXXm3rVM=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   meta = with lib; {
     description = "A file system based matrix client";

@@ -1,7 +1,11 @@
 GEM
   remote: https://rubygems.org/
   specs:
+<<<<<<< HEAD
     brakeman (6.0.0)
+=======
+    brakeman (5.4.1)
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 PLATFORMS
   ruby
@@ -10,4 +14,8 @@ DEPENDENCIES
   brakeman
 
 BUNDLED WITH
+<<<<<<< HEAD
    2.4.13
+=======
+   2.4.6
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)

@@ -8,7 +8,11 @@
 
 buildPythonPackage rec {
   pname = "asyncstdlib";
+<<<<<<< HEAD
   version = "3.10.8";
+=======
+  version = "3.10.7";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "flit";
 
   disabled = pythonOlder "3.7";
@@ -17,7 +21,11 @@ buildPythonPackage rec {
     owner = "maxfischer2781";
     repo = pname;
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-7HQFyIR+NWRzbFkzkZiuEQotZfCXpCzrWfWIFg1lWv4=";
+=======
+    hash = "sha256-lX5mOcoZTb6EfRHT0qTTWst3NErLti4jZwAeQx4pHGA=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [

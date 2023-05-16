@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 { lib, python3, fetchPypi
+=======
+{ lib, python3
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , sassc, hyperkitty, postorius
 }:
 
@@ -6,12 +10,20 @@ with python3.pkgs;
 
 buildPythonPackage rec {
   pname = "mailman-web";
+<<<<<<< HEAD
   version = "0.0.6";
+=======
+  version = "0.0.5";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
+<<<<<<< HEAD
     sha256 = "sha256-UWdqrcx529r6kwgf0YEHiDrpZlGoUBR6OdYtHMTPMGY=";
+=======
+    sha256 = "sha256-9pvs/VATAsMcGNrj58b/LifysEPTNhrAP57sfp4nX6Q=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   postPatch = ''
@@ -39,7 +51,10 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
+<<<<<<< HEAD
     homepage = "https://gitlab.com/mailman/mailman-web";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     description = "Django project for Mailman 3 web interface";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ qyliss m1cr0man ];

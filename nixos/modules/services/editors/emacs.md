@@ -286,11 +286,19 @@ The server should now be ready to serve Emacs clients.
 
 ### Starting the client {#module-services-emacs-starting-client}
 
+<<<<<<< HEAD
 Ensure that the Emacs server is enabled, either by customizing the
 {var}`server-mode` variable, or by adding
 `(server-start)` to {file}`~/.emacs`.
 
 To connect to the Emacs daemon, run one of the following:
+=======
+Ensure that the emacs server is enabled, either by customizing the
+{var}`server-mode` variable, or by adding
+`(server-start)` to {file}`~/.emacs`.
+
+To connect to the emacs daemon, run one of the following:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 ```
 emacsclient FILENAME
 emacsclient --create-frame  # opens a new frame (window)
@@ -339,10 +347,31 @@ This will add the symlink
 
 ## Configuring Emacs {#module-services-emacs-configuring}
 
+<<<<<<< HEAD
 If you want to only use extension packages from Nixpkgs, you can add
 `(setq package-archives nil)` to your init file.
 
 After the declarative Emacs package configuration has been tested,
+=======
+The Emacs init file should be changed to load the extension packages at
+startup:
+
+::: {.example #module-services-emacs-package-initialisation}
+### Package initialization in `.emacs`
+
+```
+(require 'package)
+
+;; optional. makes unpure packages archives unavailable
+(setq package-archives nil)
+
+(setq package-enable-at-startup nil)
+(package-initialize)
+```
+:::
+
+After the declarative emacs package configuration has been tested,
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 previously downloaded packages can be cleaned up by removing
 {file}`~/.emacs.d/elpa` (do make a backup first, in case you
 forgot a package).

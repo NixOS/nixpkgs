@@ -123,8 +123,13 @@ in
       boot.extraModulePackages = [ (lib.mkIf cfg.netatop.enable cfg.netatop.package) ];
       systemd =
         let
+<<<<<<< HEAD
           mkSystemd = type: name: restartTriggers: {
             ${name} = {
+=======
+          mkSystemd = type: cond: name: restartTriggers: {
+            ${name} = lib.mkIf cond {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
               inherit restartTriggers;
               wantedBy = [ (if type == "services" then "multi-user.target" else if type == "timers" then "timers.target" else null) ];
             };
@@ -134,6 +139,7 @@ in
         in
         {
           packages = [ atop (lib.mkIf cfg.netatop.enable cfg.netatop.package) ];
+<<<<<<< HEAD
           services = lib.mkMerge [
             (lib.mkIf cfg.atopService.enable (lib.recursiveUpdate
               (mkService "atop" [ atop ])
@@ -172,6 +178,44 @@ in
           group = "root";
           source = "${atop}/bin/atop";
         };
+=======
+          services =
+            mkService cfg.atopService.enable "atop" [ atop ]
+            // lib.mkIf cfg.atopService.enable {
+              # always convert logs to newer version first
+              # XXX might trigger TimeoutStart but restarting atop.service will
+              # convert remainings logs and start eventually
+              atop.serviceConfig.ExecStartPre = pkgs.writeShellScript "atop-update-log-format" ''
+                set -e -u
+                shopt -s nullglob
+                for logfile in "$LOGPATH"/atop_*
+                do
+                  ${atop}/bin/atopconvert "$logfile" "$logfile".new
+                  # only replace old file if version was upgraded to avoid
+                  # false positives for atop-rotate.service
+                  if ! ${pkgs.diffutils}/bin/cmp -s "$logfile" "$logfile".new
+                  then
+                    ${pkgs.coreutils}/bin/mv -v -f "$logfile".new "$logfile"
+                  else
+                    ${pkgs.coreutils}/bin/rm -f "$logfile".new
+                  fi
+                done
+              '';
+            }
+            // mkService cfg.atopacctService.enable "atopacct" [ atop ]
+            // mkService cfg.netatop.enable "netatop" [ cfg.netatop.package ]
+            // mkService cfg.atopgpu.enable "atopgpu" [ atop ];
+          timers = mkTimer cfg.atopRotateTimer.enable "atop-rotate" [ atop ];
+        };
+
+      security.wrappers = lib.mkIf cfg.setuidWrapper.enable {
+        atop =
+          { setuid = true;
+            owner = "root";
+            group = "root";
+            source = "${atop}/bin/atop";
+          };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       };
     }
   );

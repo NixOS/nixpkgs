@@ -15,7 +15,11 @@ mkCoqDerivation rec {
 
   inherit version;
   defaultVersion = with lib.versions; lib.switch coq.coq-version [
+<<<<<<< HEAD
     { case = range "8.10" "8.18"; out = "8.14.0"; }
+=======
+    { case = range "8.10" "8.17"; out = "8.14.0"; }
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     { case = "8.9"; out = "8.9.0"; }
     { case = "8.8"; out = "8.8.0"; }
     { case = "8.7"; out = "8.7.0"; }

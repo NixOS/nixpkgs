@@ -2,13 +2,21 @@
 
 stdenv.mkDerivation rec {
   pname = "nqp";
+<<<<<<< HEAD
   version = "2023.08";
+=======
+  version = "2023.04";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "raku";
     repo = "nqp";
     rev = version;
+<<<<<<< HEAD
     hash = "sha256-kVNj6zDT0z6eFxtTovpT1grbl0pygsPKkFoVcFW7baI=";
+=======
+    hash = "sha256-6V9d01aacDc+770XPSbQd4m1bg7Bbe47TTNOUxc2Fpw=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     fetchSubmodules = true;
   };
 

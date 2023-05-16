@@ -51,13 +51,21 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mutter";
+<<<<<<< HEAD
   version = "43.8";
+=======
+  version = "43.5";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   outputs = [ "out" "dev" "man" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/mutter/${lib.versions.major finalAttrs.version}/mutter-${finalAttrs.version}.tar.xz";
+<<<<<<< HEAD
     sha256 = "TjTh8XWTS9hJqEvZX6Nb8G6EEuAt8loDbC8RNdUz8oE=";
+=======
+    sha256 = "/JAP4ahA2aeTyOLSDUTJCqCH1fv9x5Su5wluHYoJZxo=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   patches = [
@@ -74,7 +82,11 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dinstalled_tests=false" # TODO: enable these
     "-Dwayland_eglstream=true"
     "-Dprofiler=true"
+<<<<<<< HEAD
     "-Dxwayland_path=${lib.getExe xwayland}"
+=======
+    "-Dxwayland_path=${xwayland}/bin/Xwayland"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     # This should be auto detected, but it looks like it manages a false
     # positive.
     "-Dxwayland_initfd=disabled"
@@ -102,7 +114,10 @@ stdenv.mkDerivation (finalAttrs: {
     wrapGAppsHook
     gi-docgen
     xorgserver
+<<<<<<< HEAD
     gobject-introspection
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   buildInputs = [
@@ -111,6 +126,10 @@ stdenv.mkDerivation (finalAttrs: {
     glib
     gnome-desktop
     gnome-settings-daemon
+<<<<<<< HEAD
+=======
+    gobject-introspection
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     gsettings-desktop-schemas
     gtk3
     libcanberra

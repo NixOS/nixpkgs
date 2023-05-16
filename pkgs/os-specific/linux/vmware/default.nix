@@ -1,16 +1,29 @@
+<<<<<<< HEAD
 { lib, stdenv, fetchFromGitHub, kernel, kmod, gnugrep }:
 
 stdenv.mkDerivation rec {
   pname = "vmware-modules";
   version = "workstation-17.0.2-2023-08-12-${kernel.version}";
+=======
+{ lib, stdenv, fetchFromGitHub, kernel, kmod, gnugrep, vmware-workstation }:
+
+stdenv.mkDerivation rec {
+  pname = "vmware-modules";
+  version = "${vmware-workstation.version}-${kernel.version}";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "mkubecek";
     repo = "vmware-host-modules";
+<<<<<<< HEAD
     # Developer no longer provides tags for kernel compatibility fixes
     # Commit hash for branch workstation-17.0.2 as of 2023-08-12
     rev = "8b2d31498a8df9b1215f407c989b065953b73455";
     sha256 = "sha256-R0nY4O3ASQkOop+ddU4k72HiIJU/aJz0l3lkJN/kuHc=";
+=======
+    rev = "w${vmware-workstation.version}";
+    sha256 = "sha256-EHMiSmljpUjYuZH6r/0Vk5OVGeyQyNngy0AVJO/48a0=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   hardeningDisable = [ "pic" ];

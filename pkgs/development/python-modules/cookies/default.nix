@@ -1,13 +1,18 @@
+<<<<<<< HEAD
 { lib
 , buildPythonPackage
 , fetchpatch
 , fetchPypi
 , pytestCheckHook
 }:
+=======
+{ lib, buildPythonPackage, fetchPypi }:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 buildPythonPackage rec {
   pname = "cookies";
   version = "2.2.1";
+<<<<<<< HEAD
   format = "setuptools";
 
   src = fetchPypi {
@@ -31,6 +36,15 @@ buildPythonPackage rec {
     # https://gitlab.com/sashahart/cookies/-/issues/6
     "test_encoding_assumptions"
   ];
+=======
+
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "13pfndz8vbk4p2a44cfbjsypjarkrall71pgc97glk5fiiw9idnn";
+  };
+
+  doCheck = false;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   meta = with lib; {
     description = "Friendlier RFC 6265-compliant cookie parser/renderer";

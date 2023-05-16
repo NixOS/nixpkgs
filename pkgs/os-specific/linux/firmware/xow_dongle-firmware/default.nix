@@ -14,7 +14,11 @@ stdenvNoCC.mkDerivation rec {
 
   nativeBuildInputs = [ cabextract ];
 
+<<<<<<< HEAD
   sourceRoot = ".";
+=======
+  sourceRoot = "./.";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   unpackCmd = ''
     cabextract -F FW_ACC_00U.bin ${src}

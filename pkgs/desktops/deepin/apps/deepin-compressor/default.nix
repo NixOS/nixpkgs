@@ -14,19 +14,30 @@
 , wrapQtAppsHook
 , minizip
 , libzip
+<<<<<<< HEAD
 , libuuid
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , libarchive
 }:
 
 stdenv.mkDerivation rec {
   pname = "deepin-compressor";
+<<<<<<< HEAD
   version = "5.12.17";
+=======
+  version = "5.12.14";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
+<<<<<<< HEAD
     hash = "sha256-eg9JcuBTKoaEuoph0rvy0VRH28sFOdYWN9sGbduUwcM=";
+=======
+    sha256 = "sha256-0F1LdoeGtIKOVepifwdNMohbEb9fakpQLiNHg5H9Nlw=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   postPatch = ''
@@ -52,7 +63,10 @@ stdenv.mkDerivation rec {
     karchive
     minizip
     libzip
+<<<<<<< HEAD
     libuuid
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     libarchive
   ];
 

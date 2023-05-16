@@ -28,7 +28,10 @@
 , ninja
 , openmp
 , rocmSupport ? false
+<<<<<<< HEAD
 , static ? false
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , stdenv
 , symlinkJoin
 }:
@@ -86,6 +89,32 @@ let
     # "75" -> "750"  Cf. https://bitbucket.org/icl/magma/src/f4ec79e2c13a2347eff8a77a3be6f83bc2daec20/CMakeLists.txt#lines-273
     "${minArch'}0";
 
+<<<<<<< HEAD
+=======
+  cuda-common-redist = with cudaPackages; [
+    libcublas # cublas_v2.h
+    libcusparse # cusparse.h
+  ];
+
+  # Build-time dependencies
+  cuda-native-redist = symlinkJoin {
+    name = "cuda-native-redist-${cudaVersion}";
+    paths = with cudaPackages; [
+      cuda_cudart # cuda_runtime.h
+      cuda_nvcc
+    ] ++ lists.optionals (strings.versionOlder cudaVersion "11.8") [
+      cuda_nvprof # <cuda_profiler_api.h>
+    ] ++ lists.optionals (strings.versionAtLeast cudaVersion "11.8") [
+      cuda_profiler_api # <cuda_profiler_api.h>
+    ] ++ cuda-common-redist;
+  };
+
+  # Run-time dependencies
+  cuda-redist = symlinkJoin {
+    name = "cuda-redist-${cudaVersion}";
+    paths = cuda-common-redist;
+  };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 in
 
 assert (builtins.match "[^[:space:]]*" gpuTargetString) != null;
@@ -105,13 +134,18 @@ stdenv.mkDerivation {
     ninja
     gfortran
   ] ++ lists.optionals cudaSupport [
+<<<<<<< HEAD
     cudaPackages.cuda_nvcc
+=======
+    cuda-native-redist
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   buildInputs = [
     libpthreadstubs
     lapack
     blas
+<<<<<<< HEAD
   ] ++ lists.optionals cudaSupport (with cudaPackages; [
     cuda_cudart.dev # cuda_runtime.h
     cuda_cudart.lib # cudart
@@ -125,6 +159,11 @@ stdenv.mkDerivation {
   ] ++ lists.optionals (strings.versionAtLeast cudaVersion "11.8") [
     cuda_profiler_api.dev # <cuda_profiler_api.h>
   ]) ++ lists.optionals rocmSupport [
+=======
+  ] ++ lists.optionals cudaSupport [
+    cuda-redist
+  ] ++ lists.optionals rocmSupport [
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     hip
     hipblas
     hipsparse
@@ -133,8 +172,11 @@ stdenv.mkDerivation {
 
   cmakeFlags = [
     "-DGPU_TARGET=${gpuTargetString}"
+<<<<<<< HEAD
   ] ++ lists.optionals static [
     "-DBUILD_SHARED_LIBS=OFF"
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ] ++ lists.optionals cudaSupport [
     "-DCMAKE_CUDA_ARCHITECTURES=${cudaArchitecturesString}"
     "-DMIN_ARCH=${minArch}" # Disarms magma's asserts

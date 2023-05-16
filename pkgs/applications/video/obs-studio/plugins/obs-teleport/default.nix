@@ -8,16 +8,27 @@
 
 buildGoModule rec {
   pname = "obs-teleport";
+<<<<<<< HEAD
   version = "0.6.6";
+=======
+  version = "0.6.5";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "fzwoch";
     repo = "obs-teleport";
     rev = version;
+<<<<<<< HEAD
     sha256 = "sha256-fDLe1GbLZb/rXLiTtvcMqfQo2cG1guDCwLOEf3piPcU=";
   };
 
   vendorHash = "sha256-GhIFGnGnwDmuDobMlOWCRFpHTbQlRtJrqXSFwxFydG0=";
+=======
+    sha256 = "sha256-J3Q0AQV21jh+Pth5wXbGbryrx7Mg65rAQVapyGBls7Y=";
+  };
+
+  vendorHash = "sha256-2rlEMkdcD+46EpQhUpLIGMzqvlyMFYK/XQYV9DJZxao=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   buildInputs = [
     libjpeg

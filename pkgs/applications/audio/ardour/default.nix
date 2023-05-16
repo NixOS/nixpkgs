@@ -52,20 +52,32 @@
 , suil
 , taglib
 , vamp-plugin-sdk
+<<<<<<< HEAD
 , waf
+=======
+, wafHook
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , xjadeo
 , videoSupport ? true
 }:
 stdenv.mkDerivation rec {
   pname = "ardour";
+<<<<<<< HEAD
   version = "7.4";
+=======
+  version = "7.3";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   # We can't use `fetchFromGitea` here, as attempting to fetch release archives from git.ardour.org
   # result in an empty archive. See https://tracker.ardour.org/view.php?id=7328 for more info.
   src = fetchgit {
     url = "git://git.ardour.org/ardour/ardour.git";
     rev = version;
+<<<<<<< HEAD
     hash = "sha256-CUGhJi3ji0F6v41Y08sQvo7oKITOJ96ojdJL+FyCxmw=";
+=======
+    hash = "sha256-fDZGmKQ6qgENkq8NY/J67Jym+IXoOYs8DT4xyPXLcC4=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   bundledContent = fetchzip {
@@ -78,7 +90,10 @@ stdenv.mkDerivation rec {
   patches = [
     # AS=as in the environment causes build failure https://tracker.ardour.org/view.php?id=8096
     ./as-flags.patch
+<<<<<<< HEAD
     ./default-plugin-search-paths.patch
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   # Ardour's wscript requires git revision and date to be available.
@@ -100,7 +115,11 @@ stdenv.mkDerivation rec {
     perl
     pkg-config
     python3
+<<<<<<< HEAD
     waf.hook
+=======
+    wafHook
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   buildInputs = [
@@ -198,7 +217,10 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://ardour.org/";
     license = licenses.gpl2Plus;
+<<<<<<< HEAD
     mainProgram = "ardour7";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     platforms = platforms.linux;
     maintainers = with maintainers; [ goibhniu magnetophon mitchmindtree ];
   };

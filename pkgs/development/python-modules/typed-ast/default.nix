@@ -45,6 +45,10 @@ buildPythonPackage rec {
     description = "Python AST modules with type comment support";
     homepage = "https://github.com/python/typed_ast";
     license = licenses.asl20;
+<<<<<<< HEAD
     maintainers = with maintainers; [ ];
+=======
+    maintainers = with maintainers; [ SuperSandro2000 ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

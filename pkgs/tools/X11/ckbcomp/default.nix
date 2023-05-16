@@ -2,14 +2,22 @@
 
 stdenv.mkDerivation rec {
   pname = "ckbcomp";
+<<<<<<< HEAD
   version = "1.222";
+=======
+  version = "1.218";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitLab {
     domain = "salsa.debian.org";
     owner = "installer-team";
     repo = "console-setup";
     rev = version;
+<<<<<<< HEAD
     sha256 = "sha256-2HviEt/PJS3QFgGPa8WsUeDhotGaHRLs51LlSimfTYQ=";
+=======
+    sha256 = "sha256-8FCQEQiy+xDOUmdABPrr0J87RLj0kqdJDxv4JvyzZM0=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   buildInputs = [ perl ];

@@ -1,19 +1,28 @@
 { lib, beamPackages
 , fetchFromGitHub, fetchFromGitLab, fetchHex
 , file, cmake
+<<<<<<< HEAD
+=======
+, libxcrypt-legacy
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , nixosTests, writeText
 , ...
 }:
 
 beamPackages.mixRelease rec {
   pname = "pleroma";
+<<<<<<< HEAD
   version = "2.5.5";
+=======
+  version = "2.5.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitLab {
     domain = "git.pleroma.social";
     owner = "pleroma";
     repo = "pleroma";
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-9gD39eHIQEd59UNlz/Sw7V7ekBvk/pHETfo8HzfdQDQ=";
   };
 
@@ -24,6 +33,15 @@ beamPackages.mixRelease rec {
   mixNixDeps = import ./mix.nix {
     inherit beamPackages lib;
     overrides = final: prev: {
+=======
+    sha256 = "sha256-3iG2s7jVEnhq1kLLgtaHnFmLYBO2Xr5M5jjZfSNA9z4=";
+  };
+  stripDebug = false;
+
+  mixNixDeps = import ./mix.nix {
+    inherit beamPackages lib;
+    overrides = (final: prev: {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       # mix2nix does not support git dependencies yet,
       # so we need to add them manually
       gettext = beamPackages.buildMix rec {
@@ -139,7 +157,11 @@ beamPackages.mixRelease rec {
 
         src = fetchHex {
           pkg = "${name}";
+<<<<<<< HEAD
           inherit version;
+=======
+          version = "${version}";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           sha256 = "120znzz0yw1994nk6v28zql9plgapqpv51n9g6qm6md1f4x7gj0z";
         };
 
@@ -163,7 +185,18 @@ beamPackages.mixRelease rec {
           cp ${cfgFile} config/config.exs
         '';
       };
+<<<<<<< HEAD
     };
+=======
+
+      crypt = let
+        version = prev.crypt.version;
+      in prev.crypt.override {
+        buildInputs = [ libxcrypt-legacy ];
+        postInstall = "mv $out/lib/erlang/lib/crypt-${version}/priv/{hex-source-crypt-${version},crypt}.so";
+      };
+    });
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   passthru = {
@@ -175,7 +208,11 @@ beamPackages.mixRelease rec {
     description = "ActivityPub microblogging server";
     homepage = "https://git.pleroma.social/pleroma/pleroma";
     license = licenses.agpl3;
+<<<<<<< HEAD
     maintainers = with maintainers; [ ninjatrappeur yuka kloenk yayayayaka ];
+=======
+    maintainers = with maintainers; [ ninjatrappeur yuka kloenk ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     platforms = platforms.unix;
   };
 }

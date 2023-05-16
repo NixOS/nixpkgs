@@ -4,7 +4,11 @@
 
 import multiprocessing
 
+<<<<<<< HEAD
 from typing import Any, Callable, Iterable, Optional, TypeVar
+=======
+from typing import Any, Callable, ClassVar, Iterable, Optional, TypeVar
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 R = TypeVar('R')
 S = TypeVar('S')

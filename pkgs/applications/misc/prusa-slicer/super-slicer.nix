@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 { lib, fetchFromGitHub, fetchpatch, makeDesktopItem, wxGTK31, prusa-slicer }:
+=======
+{ lib, fetchFromGitHub, fetchpatch, makeDesktopItem, prusa-slicer }:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 let
   appname = "SuperSlicer";
   pname = "super-slicer";
@@ -83,6 +87,7 @@ let
     passthru = allVersions;
 
   };
+<<<<<<< HEAD
  wxGTK31-prusa = wxGTK31.overrideAttrs (old: rec {
     pname = "wxwidgets-prusa3d-patched";
     version = "3.1.4";
@@ -96,5 +101,8 @@ let
   });
   prusa-slicer-wxGTK-override = prusa-slicer.override { wxGTK-override = wxGTK31-prusa; };
   allVersions = builtins.mapAttrs (_name: version: (prusa-slicer-wxGTK-override.overrideAttrs (override version))) versions;
+=======
+  allVersions = builtins.mapAttrs (_name: version: (prusa-slicer.overrideAttrs (override version))) versions;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 in
 allVersions.stable

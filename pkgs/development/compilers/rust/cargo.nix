@@ -112,8 +112,11 @@ rustPlatform.buildRustPackage.override {
     maintainers = teams.rust.members;
     license = [ licenses.mit licenses.asl20 ];
     platforms = platforms.unix;
+<<<<<<< HEAD
     # https://github.com/alexcrichton/nghttp2-rs/issues/2
     broken = stdenv.hostPlatform.isx86 && stdenv.buildPlatform != stdenv.hostPlatform;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }
 // lib.optionalAttrs (rust.toRustTarget stdenv.buildPlatform != rust.toRustTarget stdenv.hostPlatform) {

@@ -8,11 +8,19 @@
 stdenv.mkDerivation rec {
   pname = "libvterm-neovim";
   # Releases are not tagged, look at commit history to find latest release
+<<<<<<< HEAD
   version = "0.3.2";
 
   src = fetchurl {
     url = "https://www.leonerd.org.uk/code/libvterm/libvterm-${version}.tar.gz";
     sha256 = "sha256-ketQiAafTm7atp4UxCEvbaAZLmVpWVbcBIAWoNq4vPY=";
+=======
+  version = "0.3.1";
+
+  src = fetchurl {
+    url = "https://www.leonerd.org.uk/code/libvterm/libvterm-${version}.tar.gz";
+    sha256 = "sha256-JaitnBVIU2jf0Kip3KGuyP6lwn2j+nTsUY1dN4fww5c=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ perl libtool ];

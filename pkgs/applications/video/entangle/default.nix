@@ -70,7 +70,10 @@ stdenv.mkDerivation rec {
     python3 # for build scripts
     pkgconf
     wrapGAppsHook
+<<<<<<< HEAD
     gobject-introspection
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   buildInputs = [
@@ -80,6 +83,10 @@ stdenv.mkDerivation rec {
     elfutils
     gexiv2
     glib
+<<<<<<< HEAD
+=======
+    gobject-introspection
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     gst-plugins-base
     gstreamer
     gtk3

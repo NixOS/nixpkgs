@@ -1,5 +1,6 @@
 # Python {#python}
 
+<<<<<<< HEAD
 ## Reference {#reference}
 
 ### Interpreters {#interpreters}
@@ -509,6 +510,8 @@ nix-shell -p pythonPackages.pyramid zlib libjpeg git
 There is a boolean value `lib.inNixShell` set to `true` if nix-shell is invoked.
 :::
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 ## User Guide {#user-guide}
 
 ### Using Python {#using-python}
@@ -519,7 +522,11 @@ Several versions of the Python interpreter are available on Nix, as well as a
 high amount of packages. The attribute `python3` refers to the default
 interpreter, which is currently CPython 3.10. The attribute `python` refers to
 CPython 2.7 for backwards-compatibility. It is also possible to refer to
+<<<<<<< HEAD
 specific versions, e.g. `python311` refers to CPython 3.11, and `pypy` refers to
+=======
+specific versions, e.g. `python39` refers to CPython 3.9, and `pypy` refers to
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 the default PyPy interpreter.
 
 Python is used a lot, and in different ways. This affects also how it is
@@ -535,10 +542,17 @@ however, are in separate sets, with one set per interpreter version.
 The interpreters have several common attributes. One of these attributes is
 `pkgs`, which is a package set of Python libraries for this specific
 interpreter. E.g., the `toolz` package corresponding to the default interpreter
+<<<<<<< HEAD
 is `python.pkgs.toolz`, and the CPython 3.11 version is `python311.pkgs.toolz`.
 The main package set contains aliases to these package sets, e.g.
 `pythonPackages` refers to `python.pkgs` and `python311Packages` to
 `python311.pkgs`.
+=======
+is `python.pkgs.toolz`, and the CPython 3.9 version is `python39.pkgs.toolz`.
+The main package set contains aliases to these package sets, e.g.
+`pythonPackages` refers to `python.pkgs` and `python39Packages` to
+`python39.pkgs`.
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 #### Installing Python and packages {#installing-python-and-packages}
 
@@ -563,7 +577,11 @@ with `python.buildEnv` or `python.withPackages` where the interpreter and other
 executables are wrapped to be able to find each other and all of the modules.
 
 In the following examples we will start by creating a simple, ad-hoc environment
+<<<<<<< HEAD
 with a nix-shell that has `numpy` and `toolz` in Python 3.11; then we will create
+=======
+with a nix-shell that has `numpy` and `toolz` in Python 3.9; then we will create
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 a re-usable environment in a single-file Python script; then we will create a
 full Python environment for development with this same environment.
 
@@ -579,10 +597,17 @@ temporary shell session with a Python and a *precise* list of packages (plus
 their runtime dependencies), with no other Python packages in the Python
 interpreter's scope.
 
+<<<<<<< HEAD
 To create a Python 3.11 session with `numpy` and `toolz` available, run:
 
 ```sh
 $ nix-shell -p 'python311.withPackages(ps: with ps; [ numpy toolz ])'
+=======
+To create a Python 3.9 session with `numpy` and `toolz` available, run:
+
+```sh
+$ nix-shell -p 'python39.withPackages(ps: with ps; [ numpy toolz ])'
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 ```
 
 By default `nix-shell` will start a `bash` session with this interpreter in our
@@ -590,7 +615,12 @@ By default `nix-shell` will start a `bash` session with this interpreter in our
 
 ```Python console
 [nix-shell:~/src/nixpkgs]$ python3
+<<<<<<< HEAD
 Python 3.11.3 (main, Apr  4 2023, 22:36:41) [GCC 12.2.0] on linux
+=======
+Python 3.9.12 (main, Mar 23 2022, 21:36:19)
+[GCC 11.3.0] on linux
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 Type "help", "copyright", "credits" or "license" for more information.
 >>> import numpy; import toolz
 ```
@@ -610,12 +640,25 @@ will still get 1 wrapped Python interpreter. We can start the interpreter
 directly like so:
 
 ```sh
+<<<<<<< HEAD
 $ nix-shell -p "python311.withPackages (ps: with ps; [ numpy toolz requests ])" --run python3
 this derivation will be built:
   /nix/store/r19yf5qgfiakqlhkgjahbg3zg79549n4-python3-3.11.2-env.drv
 building '/nix/store/r19yf5qgfiakqlhkgjahbg3zg79549n4-python3-3.11.2-env.drv'...
 created 273 symlinks in user environment
 Python 3.11.2 (main, Feb  7 2023, 13:52:42) [GCC 12.2.0] on linux
+=======
+$ nix-shell -p "python39.withPackages (ps: with ps; [ numpy toolz requests ])" --run python3
+this derivation will be built:
+  /nix/store/mpn7k6bkjl41fm51342rafaqfsl10qs4-python3-3.9.12-env.drv
+this path will be fetched (0.09 MiB download, 0.41 MiB unpacked):
+  /nix/store/5gaiacnzi096b6prc6aa1pwrhncmhc8b-python3.9-toolz-0.11.2
+copying path '/nix/store/5gaiacnzi096b6prc6aa1pwrhncmhc8b-python3.9-toolz-0.11.2' from 'https://cache.nixos.org'...
+building '/nix/store/mpn7k6bkjl41fm51342rafaqfsl10qs4-python3-3.9.12-env.drv'...
+created 279 symlinks in user environment
+Python 3.9.12 (main, Mar 23 2022, 21:36:19)
+[GCC 11.3.0] on linux
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 Type "help", "copyright", "credits" or "license" for more information.
 >>> import requests
 >>>
@@ -654,7 +697,11 @@ Executing this script requires a `python3` that has `numpy`. Using what we learn
 in the previous section, we could startup a shell and just run it like so:
 
 ```ShellSession
+<<<<<<< HEAD
 $ nix-shell -p 'python311.withPackages (ps: with ps; [ numpy ])' --run 'python3 foo.py'
+=======
+$ nix-shell -p 'python39.withPackages(ps: with ps; [ numpy ])' --run 'python3 foo.py'
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 The dot product of [1 2] and [3 4] is: 11
 ```
 
@@ -694,17 +741,28 @@ can make it fully reproducible by pinning the `nixpkgs` import:
 
 ```python
 #!/usr/bin/env nix-shell
+<<<<<<< HEAD
 #!nix-shell -i python3 -p "python3.withPackages (ps: [ ps.numpy ])"
 #!nix-shell -I nixpkgs=https://github.com/NixOS/nixpkgs/archive/e51209796c4262bfb8908e3d6d72302fe4e96f5f.tar.gz
+=======
+#!nix-shell -i python3 -p "python3.withPackages(ps: [ ps.numpy ])"
+#!nix-shell -I nixpkgs=https://github.com/NixOS/nixpkgs/archive/d373d80b1207d52621961b16aa4a3438e4f98167.tar.gz
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 import numpy as np
 a = np.array([1,2])
 b = np.array([3,4])
 print(f"The dot product of {a} and {b} is: {np.dot(a, b)}")
 ```
 
+<<<<<<< HEAD
 This will execute with the exact same versions of Python 3.10, numpy, and system
 dependencies a year from now as it does today, because it will always use
 exactly git commit `e51209796c4262bfb8908e3d6d72302fe4e96f5f` of Nixpkgs for all
+=======
+This will execute with the exact same versions of Python 3.8, numpy, and system
+dependencies a year from now as it does today, because it will always use
+exactly git commit `d373d80b1207d52621961b16aa4a3438e4f98167` of Nixpkgs for all
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 of the package versions.
 
 This is also a great way to ensure the script executes identically on different
@@ -717,15 +775,23 @@ create a single script with Python dependencies, but in the course of normal
 development we're usually working in an entire package repository.
 
 As explained in the Nix manual, `nix-shell` can also load an expression from a
+<<<<<<< HEAD
 `.nix` file. Say we want to have Python 3.11, `numpy` and `toolz`, like before,
+=======
+`.nix` file. Say we want to have Python 3.9, `numpy` and `toolz`, like before,
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 in an environment. We can add a `shell.nix` file describing our dependencies:
 
 ```nix
 with import <nixpkgs> {};
+<<<<<<< HEAD
 (python311.withPackages (ps: with ps; [
   numpy
   toolz
 ])).env
+=======
+(python39.withPackages (ps: [ps.numpy ps.toolz])).env
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 ```
 
 And then at the command line, just typing `nix-shell` produces the same
@@ -739,7 +805,11 @@ What's happening here?
    imports the `<nixpkgs>` function, `{}` calls it and the `with` statement
    brings all attributes of `nixpkgs` in the local scope. These attributes form
    the main package set.
+<<<<<<< HEAD
 2. Then we create a Python 3.11 environment with the `withPackages` function, as before.
+=======
+2. Then we create a Python 3.9 environment with the `withPackages` function, as before.
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 3. The `withPackages` function expects us to provide a function as an argument
    that takes the set of all Python packages and returns a list of packages to
    include in the environment. Here, we select the packages `numpy` and `toolz`
@@ -750,7 +820,11 @@ To combine this with `mkShell` you can:
 ```nix
 with import <nixpkgs> {};
 let
+<<<<<<< HEAD
   pythonEnv = python311.withPackages (ps: [
+=======
+  pythonEnv = python39.withPackages (ps: [
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     ps.numpy
     ps.toolz
   ]);
@@ -834,7 +908,11 @@ on NixOS.
 { # ...
 
   environment.systemPackages = with pkgs; [
+<<<<<<< HEAD
     (python310.withPackages(ps: with ps; [ numpy toolz ]))
+=======
+    (python38.withPackages(ps: with ps; [ numpy toolz ]))
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 }
 ```
@@ -855,21 +933,29 @@ building Python libraries is `buildPythonPackage`. Let's see how we can build th
 `toolz` package.
 
 ```nix
+<<<<<<< HEAD
 { lib
 , buildPythonPackage
 , fetchPypi
 }:
+=======
+{ lib, buildPythonPackage, fetchPypi }:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 buildPythonPackage rec {
   pname = "toolz";
   version = "0.10.0";
+<<<<<<< HEAD
   format = "setuptools";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-CP3V73yWSArRHBLUct4hrNMjWZlvaaUlkpm1QP66RWA=";
   };
 
+<<<<<<< HEAD
   # has no tests
   doCheck = false;
 
@@ -881,6 +967,11 @@ buildPythonPackage rec {
 
   meta = with lib; {
     changelog = "https://github.com/pytoolz/toolz/releases/tag/${version}";
+=======
+  doCheck = false;
+
+  meta = with lib; {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     homepage = "https://github.com/pytoolz/toolz";
     description = "List processing tools and functional utilities";
     license = licenses.bsd3;
@@ -895,14 +986,23 @@ arguments is the name of the package, which consists of a basename (generally
 following the name on PyPi) and a version. Another argument, `src` specifies the
 source, which in this case is fetched from PyPI using the helper function
 `fetchPypi`. The argument `doCheck` is used to set whether tests should be run
+<<<<<<< HEAD
 when building the package. Since there are no tests, we rely on `pythonImportsCheck`
 to test whether the package can be imported. Furthermore, we specify some meta
+=======
+when building the package. Furthermore, we specify some (optional) meta
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 information. The output of the function is a derivation.
 
 An expression for `toolz` can be found in the Nixpkgs repository. As explained
 in the introduction of this Python section, a derivation of `toolz` is available
+<<<<<<< HEAD
 for each interpreter version, e.g. `python311.pkgs.toolz` refers to the `toolz`
 derivation corresponding to the CPython 3.11 interpreter.
+=======
+for each interpreter version, e.g. `python39.pkgs.toolz` refers to the `toolz`
+derivation corresponding to the CPython 3.9 interpreter.
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 The above example works when you're directly working on
 `pkgs/top-level/python-packages.nix` in the Nixpkgs repository. Often though,
@@ -915,22 +1015,34 @@ and adds it along with a `numpy` package to a Python environment.
 with import <nixpkgs> {};
 
 ( let
+<<<<<<< HEAD
     my_toolz = python311.pkgs.buildPythonPackage rec {
       pname = "toolz";
       version = "0.10.0";
       format = "setuptools";
 
       src = fetchPypi {
+=======
+    my_toolz = python39.pkgs.buildPythonPackage rec {
+      pname = "toolz";
+      version = "0.10.0";
+
+      src = python39.pkgs.fetchPypi {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         inherit pname version;
         hash = "sha256-CP3V73yWSArRHBLUct4hrNMjWZlvaaUlkpm1QP66RWA=";
       };
 
+<<<<<<< HEAD
       # has no tests
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       doCheck = false;
 
       meta = {
         homepage = "https://github.com/pytoolz/toolz/";
         description = "List processing tools and functional utilities";
+<<<<<<< HEAD
         # [...]
       };
     };
@@ -939,11 +1051,21 @@ with import <nixpkgs> {};
     numpy
     my_toolz
   ])
+=======
+      };
+    };
+
+  in python38.withPackages (ps: [ps.numpy my_toolz])
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 ).env
 ```
 
 Executing `nix-shell` will result in an environment in which you can use
+<<<<<<< HEAD
 Python 3.11 and the `toolz` package. As you can see we had to explicitly mention
+=======
+Python 3.9 and the `toolz` package. As you can see we had to explicitly mention
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 for which Python version we want to build a package.
 
 So, what did we do here? Well, we took the Nix expression that we used earlier
@@ -968,6 +1090,7 @@ The following example shows which arguments are given to `buildPythonPackage` in
 order to build [`datashape`](https://github.com/blaze/datashape).
 
 ```nix
+<<<<<<< HEAD
 { lib
 , buildPythonPackage
 , fetchPypi
@@ -978,17 +1101,24 @@ order to build [`datashape`](https://github.com/blaze/datashape).
 # tests
 , pytest
 }:
+=======
+{ lib, buildPythonPackage, fetchPypi, numpy, multipledispatch, python-dateutil, pytest }:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 buildPythonPackage rec {
   pname = "datashape";
   version = "0.4.7";
+<<<<<<< HEAD
   format = "setuptools";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-FLLvdm1MllKrgTGC6Gb0k0deZeVYvtCCLji/B7uhong=";
   };
 
+<<<<<<< HEAD
   propagatedBuildInputs = [
     multipledispatch
     numpy
@@ -1001,6 +1131,12 @@ buildPythonPackage rec {
 
   meta = with lib; {
     changelog = "https://github.com/blaze/datashape/releases/tag/${version}";
+=======
+  nativeCheckInputs = [ pytest ];
+  propagatedBuildInputs = [ numpy multipledispatch python-dateutil ];
+
+  meta = with lib; {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     homepage = "https://github.com/ContinuumIO/datashape";
     description = "A data description language";
     license = licenses.bsd2;
@@ -1010,9 +1146,15 @@ buildPythonPackage rec {
 ```
 
 We can see several runtime dependencies, `numpy`, `multipledispatch`, and
+<<<<<<< HEAD
 `python-dateutil`. Furthermore, we have `nativeCheckInputs` with `pytest`.
 `pytest` is a test runner and is only used during the `checkPhase` and is
 therefore not added to `propagatedBuildInputs`.
+=======
+`python-dateutil`. Furthermore, we have one `nativeCheckInputs`, i.e. `pytest`. `pytest` is a
+test runner and is only used during the `checkPhase` and is therefore not added
+to `propagatedBuildInputs`.
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 In the previous case we had only dependencies on other Python packages to consider.
 Occasionally you have also system libraries to consider. E.g., `lxml` provides
@@ -1020,23 +1162,31 @@ Python bindings to `libxml2` and `libxslt`. These libraries are only required
 when building the bindings and are therefore added as `buildInputs`.
 
 ```nix
+<<<<<<< HEAD
 { lib
 , buildPythonPackage
 , fetchPypi
 , libxml2
 , libxslt
 }:
+=======
+{ lib, pkgs, buildPythonPackage, fetchPypi }:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 buildPythonPackage rec {
   pname = "lxml";
   version = "3.4.4";
+<<<<<<< HEAD
   format = "setuptools";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-s9NiusRxFydHzaNRMjjxFcvWxfi45jGb9ql6eJJyQJk=";
   };
 
+<<<<<<< HEAD
   buildInputs = [
     libxml2
     libxslt
@@ -1044,6 +1194,11 @@ buildPythonPackage rec {
 
   meta = with lib; {
     changelog = "https://github.com/lxml/lxml/releases/tag/lxml-${version}";
+=======
+  buildInputs = [ pkgs.libxml2 pkgs.libxslt ];
+
+  meta = with lib; {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     description = "Pythonic binding for the libxml2 and libxslt libraries";
     homepage = "https://lxml.de";
     license = licenses.bsd3;
@@ -1063,6 +1218,7 @@ The bindings don't expect to find each of them in a different folder, and
 therefore we have to set `LDFLAGS` and `CFLAGS`.
 
 ```nix
+<<<<<<< HEAD
 { lib
 , buildPythonPackage
 , fetchPypi
@@ -1074,17 +1230,24 @@ therefore we have to set `LDFLAGS` and `CFLAGS`.
 , numpy
 , scipy
 }:
+=======
+{ lib, pkgs, buildPythonPackage, fetchPypi, numpy, scipy }:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 buildPythonPackage rec {
   pname = "pyFFTW";
   version = "0.9.2";
+<<<<<<< HEAD
   format = "setuptools";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-9ru2r6kwhUCaskiFoaPNuJCfCVoUL01J40byvRt4kHQ=";
   };
 
+<<<<<<< HEAD
   buildInputs = [
     fftw
     fftwFloat
@@ -1100,12 +1263,26 @@ buildPythonPackage rec {
     export LDFLAGS="-L${fftw.dev}/lib -L${fftwFloat.out}/lib -L${fftwLongDouble.out}/lib"
     export CFLAGS="-I${fftw.dev}/include -I${fftwFloat.dev}/include -I${fftwLongDouble.dev}/include"
   '';
+=======
+  buildInputs = [ pkgs.fftw pkgs.fftwFloat pkgs.fftwLongDouble];
+
+  propagatedBuildInputs = [ numpy scipy ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   # Tests cannot import pyfftw. pyfftw works fine though.
   doCheck = false;
 
+<<<<<<< HEAD
   meta = with lib; {
     changelog = "https://github.com/pyFFTW/pyFFTW/releases/tag/v${version}";
+=======
+  preConfigure = ''
+    export LDFLAGS="-L${pkgs.fftw.dev}/lib -L${pkgs.fftwFloat.out}/lib -L${pkgs.fftwLongDouble.out}/lib"
+    export CFLAGS="-I${pkgs.fftw.dev}/include -I${pkgs.fftwFloat.dev}/include -I${pkgs.fftwLongDouble.dev}/include"
+  '';
+
+  meta = with lib; {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     description = "A pythonic wrapper around FFTW, the FFT library, presenting a unified interface for all the supported transforms";
     homepage = "http://hgomersall.github.com/pyFFTW";
     license = with licenses; [ bsd2 bsd3 ];
@@ -1125,12 +1302,17 @@ command provided by the setup.py (i.e. `python setup.py test`). However,
 this is currently deprecated https://github.com/pypa/setuptools/pull/1878
 and your package should provide its own checkPhase.
 
+<<<<<<< HEAD
 ::: {.note}
 The `checkPhase` for python maps to the `installCheckPhase` on a
+=======
+*NOTE:* The `checkPhase` for python maps to the `installCheckPhase` on a
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 normal derivation. This is due to many python packages not behaving well
 to the pre-installed version of the package. Version info, and natively
 compiled extensions generally only exist in the install directory, and
 thus can cause issues when a test suite asserts on that behavior.
+<<<<<<< HEAD
 :::
 
 ::: {.note}
@@ -1139,6 +1321,13 @@ Tests should only be disabled if they don't agree with nix
 as many tests should be enabled as possible. Failing tests can still be
 a good indication that the package is not in a valid state.
 :::
+=======
+
+*NOTE:* Tests should only be disabled if they don't agree with nix
+(e.g. external dependencies, network access, flakey tests), however,
+as many tests should be enabled as possible. Failing tests can still be
+a good indication that the package is not in a valid state.
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 #### Using pytest {#using-pytest}
 
@@ -1167,7 +1356,11 @@ To filter tests using pytest, one can do the following:
   checkPhase = ''
     runHook preCheck
 
+<<<<<<< HEAD
     pytest tests/ --ignore=tests/integration -k 'not download and not update' --ignore=tests/test_failing.py
+=======
+    pytest tests/ --ignore=tests/integration -k 'not download and not update'
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     runHook postCheck
   '';
@@ -1183,10 +1376,15 @@ filtering out tests which contain `download` or `update` in their test case name
 Only one `-k` argument is allowed, and thus a long predicate should be concatenated
 with “\\” and wrapped to the next line.
 
+<<<<<<< HEAD
 ::: {.note}
 In pytest==6.0.1, the use of “\\” to continue a line (e.g. `-k 'not download \'`) has
 been removed, in this case, it's recommended to use `pytestCheckHook`.
 :::
+=======
+*NOTE:* In pytest==6.0.1, the use of “\\” to continue a line (e.g. `-k 'not download \'`) has
+been removed, in this case, it's recommended to use `pytestCheckHook`.
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 #### Using pytestCheckHook {#using-pytestcheckhook}
 
@@ -1197,6 +1395,7 @@ when a package may need many items disabled to run the test suite.
 Using the example above, the analogous `pytestCheckHook` usage would be:
 
 ```
+<<<<<<< HEAD
   nativeCheckInputs = [
     pytestCheckHook
   ];
@@ -1206,6 +1405,12 @@ Using the example above, the analogous `pytestCheckHook` usage would be:
     "tests/"
     "--ignore=tests/integration"
   ];
+=======
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  # requires additional data
+  pytestFlagsArray = [ "tests/" "--ignore=tests/integration" ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   disabledTests = [
     # touches network
@@ -1247,10 +1452,14 @@ To help ensure the package still works, `pythonImportsCheck` can attempt to impo
 the listed modules.
 
 ```
+<<<<<<< HEAD
   pythonImportsCheck = [
     "requests"
     "urllib"
   ];
+=======
+  pythonImportsCheck = [ "requests" "urllib" ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 ```
 
 roughly translates to:
@@ -1291,6 +1500,7 @@ pkg3>=1.0,<=2.0
 we can do:
 
 ```
+<<<<<<< HEAD
   nativeBuildInputs = [
     pythonRelaxDepsHook
   ];
@@ -1301,6 +1511,11 @@ we can do:
   pythonRemoveDeps = [
     "pkg2"
   ];
+=======
+  nativeBuildInputs = [ pythonRelaxDepsHook ];
+  pythonRelaxDeps = [ "pkg1" "pkg3" ];
+  pythonRemoveDeps = [ "pkg2" ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 ```
 
 which would result in the following `requirements.txt` file:
@@ -1343,6 +1558,7 @@ with the exception of `other` (see `format` in
 `unittestCheckHook` is a hook which will substitute the setuptools `test` command for a `checkPhase` which runs `python -m unittest discover`:
 
 ```
+<<<<<<< HEAD
   nativeCheckInputs = [
     unittestCheckHook
   ];
@@ -1350,6 +1566,11 @@ with the exception of `other` (see `format` in
   unittestFlagsArray = [
     "-s" "tests" "-v"
   ];
+=======
+  nativeCheckInputs = [ unittestCheckHook ];
+
+  unittestFlagsArray = [ "-s" "tests" "-v" ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 ```
 
 #### Using sphinxHook {#using-sphinxhook}
@@ -1414,7 +1635,11 @@ If we create a `shell.nix` file which calls `buildPythonPackage`, and if `src`
 is a local source, and if the local source has a `setup.py`, then development
 mode is activated.
 
+<<<<<<< HEAD
 In the following example, we create a simple environment that has a Python 3.11
+=======
+In the following example, we create a simple environment that has a Python 3.9
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 version of our package in it, as well as its dependencies and other packages we
 like to have in the environment, all specified with `propagatedBuildInputs`.
 Indeed, we can just add any package we like to have in our environment to
@@ -1422,16 +1647,24 @@ Indeed, we can just add any package we like to have in our environment to
 
 ```nix
 with import <nixpkgs> {};
+<<<<<<< HEAD
 with python311Packages;
+=======
+with python39Packages;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 buildPythonPackage rec {
   name = "mypackage";
   src = ./path/to/package/source;
+<<<<<<< HEAD
   propagatedBuildInputs = [
     pytest
     numpy
     pkgs.libsndfile
   ];
+=======
+  propagatedBuildInputs = [ pytest numpy pkgs.libsndfile ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }
 ```
 
@@ -1459,14 +1692,21 @@ Let's split the package definition from the environment definition.
 We first create a function that builds `toolz` in `~/path/to/toolz/release.nix`
 
 ```nix
+<<<<<<< HEAD
 { lib
 , buildPythonPackage
 }:
+=======
+{ lib, buildPythonPackage }:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 buildPythonPackage rec {
   pname = "toolz";
   version = "0.10.0";
+<<<<<<< HEAD
   format = "setuptools";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchPypi {
     inherit pname version;
@@ -1474,7 +1714,10 @@ buildPythonPackage rec {
   };
 
   meta = with lib; {
+<<<<<<< HEAD
     changelog = "https://github.com/pytoolz/toolz/releases/tag/${version}";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     homepage = "https://github.com/pytoolz/toolz/";
     description = "List processing tools and functional utilities";
     license = licenses.bsd3;
@@ -1491,6 +1734,7 @@ with import <nixpkgs> {};
 
 ( let
     toolz = callPackage /path/to/toolz/release.nix {
+<<<<<<< HEAD
       buildPythonPackage = python310
 Packages.buildPythonPackage;
     };
@@ -1498,6 +1742,11 @@ Packages.buildPythonPackage;
     ps.numpy
     toolz
   ])
+=======
+      buildPythonPackage = python38Packages.buildPythonPackage;
+    };
+  in python38.withPackages (ps: [ ps.numpy toolz ])
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 ).env
 ```
 
@@ -1505,8 +1754,545 @@ Important to remember is that the Python version for which the package is made
 depends on the `python` derivation that is passed to `buildPythonPackage`. Nix
 tries to automatically pass arguments when possible, which is why generally you
 don't explicitly define which `python` derivation should be used. In the above
+<<<<<<< HEAD
 example we use `buildPythonPackage` that is part of the set `python3Packages`,
 and in this case the `python3` interpreter is automatically used.
+=======
+example we use `buildPythonPackage` that is part of the set `python38Packages`,
+and in this case the `python38` interpreter is automatically used.
+
+## Reference {#reference}
+
+### Interpreters {#interpreters}
+
+Versions 2.7, 3.7, 3.8, 3.9 and 3.10 of the CPython interpreter are available
+as respectively `python27`, `python37`, `python38`, `python39` and `python310`.
+The aliases `python2` and `python3` correspond to respectively `python27` and
+`python39`. The attribute `python` maps to `python2`. The PyPy interpreters
+compatible with Python 2.7 and 3 are available as `pypy27` and `pypy3`, with
+aliases `pypy2` mapping to `pypy27` and `pypy` mapping to `pypy2`. The Nix
+expressions for the interpreters can be found in
+`pkgs/development/interpreters/python`.
+
+All packages depending on any Python interpreter get appended
+`out/{python.sitePackages}` to `$PYTHONPATH` if such directory
+exists.
+
+#### Missing `tkinter` module standard library {#missing-tkinter-module-standard-library}
+
+To reduce closure size the `Tkinter`/`tkinter` is available as a separate package, `pythonPackages.tkinter`.
+
+#### Attributes on interpreters packages {#attributes-on-interpreters-packages}
+
+Each interpreter has the following attributes:
+
+- `libPrefix`. Name of the folder in `${python}/lib/` for corresponding interpreter.
+- `interpreter`. Alias for `${python}/bin/${executable}`.
+- `buildEnv`. Function to build python interpreter environments with extra packages bundled together. See section *python.buildEnv function* for usage and documentation.
+- `withPackages`. Simpler interface to `buildEnv`. See section *python.withPackages function* for usage and documentation.
+- `sitePackages`. Alias for `lib/${libPrefix}/site-packages`.
+- `executable`. Name of the interpreter executable, e.g. `python3.8`.
+- `pkgs`. Set of Python packages for that specific interpreter. The package set can be modified by overriding the interpreter and passing `packageOverrides`.
+
+### Optimizations {#optimizations}
+
+The Python interpreters are by default not built with optimizations enabled, because
+the builds are in that case not reproducible. To enable optimizations, override the
+interpreter of interest, e.g using
+
+```
+let
+  pkgs = import ./. {};
+  mypython = pkgs.python3.override {
+    enableOptimizations = true;
+    reproducibleBuild = false;
+    self = mypython;
+  };
+in mypython
+```
+
+### Building packages and applications {#building-packages-and-applications}
+
+Python libraries and applications that use `setuptools` or
+`distutils` are typically built with respectively the `buildPythonPackage` and
+`buildPythonApplication` functions. These two functions also support installing a `wheel`.
+
+All Python packages reside in `pkgs/top-level/python-packages.nix` and all
+applications elsewhere. In case a package is used as both a library and an
+application, then the package should be in `pkgs/top-level/python-packages.nix`
+since only those packages are made available for all interpreter versions. The
+preferred location for library expressions is in
+`pkgs/development/python-modules`. It is important that these packages are
+called from `pkgs/top-level/python-packages.nix` and not elsewhere, to guarantee
+the right version of the package is built.
+
+Based on the packages defined in `pkgs/top-level/python-packages.nix` an
+attribute set is created for each available Python interpreter. The available
+sets are
+
+* `pkgs.python27Packages`
+* `pkgs.python37Packages`
+* `pkgs.python38Packages`
+* `pkgs.python39Packages`
+* `pkgs.python310Packages`
+* `pkgs.python311Packages`
+* `pkgs.pypyPackages`
+
+and the aliases
+
+* `pkgs.python2Packages` pointing to `pkgs.python27Packages`
+* `pkgs.python3Packages` pointing to `pkgs.python39Packages`
+* `pkgs.pythonPackages` pointing to `pkgs.python2Packages`
+
+#### `buildPythonPackage` function {#buildpythonpackage-function}
+
+The `buildPythonPackage` function is implemented in
+`pkgs/development/interpreters/python/mk-python-derivation.nix`
+using setup hooks.
+
+The following is an example:
+
+```nix
+{ lib, buildPythonPackage, fetchPypi, hypothesis, setuptools-scm, attrs, py, setuptools, six, pluggy }:
+
+buildPythonPackage rec {
+  pname = "pytest";
+  version = "3.3.1";
+
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-z4Q23FnYaVNG/NOrKW3kZCXsqwDWQJbOvnn7Ueyy65M=";
+  };
+
+  postPatch = ''
+    # don't test bash builtins
+    rm testing/test_argcomplete.py
+  '';
+
+  nativeCheckInputs = [ hypothesis ];
+  nativeBuildInputs = [ setuptools-scm ];
+  propagatedBuildInputs = [ attrs py setuptools six pluggy ];
+
+  meta = with lib; {
+    maintainers = with maintainers; [ domenkozar lovek323 madjar lsix ];
+    description = "Framework for writing tests";
+  };
+}
+```
+
+The `buildPythonPackage` mainly does four things:
+
+* In the `buildPhase`, it calls `${python.pythonForBuild.interpreter} setup.py bdist_wheel` to
+  build a wheel binary zipfile.
+* In the `installPhase`, it installs the wheel file using `pip install *.whl`.
+* In the `postFixup` phase, the `wrapPythonPrograms` bash function is called to
+  wrap all programs in the `$out/bin/*` directory to include `$PATH`
+  environment variable and add dependent libraries to script's `sys.path`.
+* In the `installCheck` phase, `${python.interpreter} setup.py test` is run.
+
+By default tests are run because `doCheck = true`. Test dependencies, like
+e.g. the test runner, should be added to `nativeCheckInputs`.
+
+By default `meta.platforms` is set to the same value
+as the interpreter unless overridden otherwise.
+
+##### `buildPythonPackage` parameters {#buildpythonpackage-parameters}
+
+All parameters from `stdenv.mkDerivation` function are still supported. The
+following are specific to `buildPythonPackage`:
+
+* `catchConflicts ? true`: If `true`, abort package build if a package name
+  appears more than once in dependency tree. Default is `true`.
+* `disabled ? false`: If `true`, package is not built for the particular Python
+  interpreter version.
+* `dontWrapPythonPrograms ? false`: Skip wrapping of Python programs.
+* `permitUserSite ? false`: Skip setting the `PYTHONNOUSERSITE` environment
+  variable in wrapped programs.
+* `format ? "setuptools"`: Format of the source. Valid options are
+  `"setuptools"`, `"pyproject"`, `"flit"`, `"wheel"`, and `"other"`.
+  `"setuptools"` is for when the source has a `setup.py` and `setuptools` is
+  used to build a wheel, `flit`, in case `flit` should be used to build a wheel,
+  and `wheel` in case a wheel is provided. Use `other` when a custom
+  `buildPhase` and/or `installPhase` is needed.
+* `makeWrapperArgs ? []`: A list of strings. Arguments to be passed to
+  `makeWrapper`, which wraps generated binaries. By default, the arguments to
+  `makeWrapper` set `PATH` and `PYTHONPATH` environment variables before calling
+  the binary. Additional arguments here can allow a developer to set environment
+  variables which will be available when the binary is run. For example,
+  `makeWrapperArgs = ["--set FOO BAR" "--set BAZ QUX"]`.
+* `namePrefix`: Prepends text to `${name}` parameter. In case of libraries, this
+  defaults to `"python3.8-"` for Python 3.8, etc., and in case of applications
+  to `""`.
+* `pipInstallFlags ? []`: A list of strings. Arguments to be passed to `pip
+  install`. To pass options to `python setup.py install`, use
+  `--install-option`. E.g., `pipInstallFlags=["--install-option='--cpp_implementation'"]`.
+* `pythonPath ? []`: List of packages to be added into `$PYTHONPATH`. Packages
+  in `pythonPath` are not propagated (contrary to `propagatedBuildInputs`).
+* `preShellHook`: Hook to execute commands before `shellHook`.
+* `postShellHook`: Hook to execute commands after `shellHook`.
+* `removeBinByteCode ? true`: Remove bytecode from `/bin`. Bytecode is only
+  created when the filenames end with `.py`.
+* `setupPyGlobalFlags ? []`: List of flags passed to `setup.py` command.
+* `setupPyBuildFlags ? []`: List of flags passed to `setup.py build_ext` command.
+
+The `stdenv.mkDerivation` function accepts various parameters for describing
+build inputs (see "Specifying dependencies"). The following are of special
+interest for Python packages, either because these are primarily used, or
+because their behaviour is different:
+
+* `nativeBuildInputs ? []`: Build-time only dependencies. Typically executables
+  as well as the items listed in `setup_requires`.
+* `buildInputs ? []`: Build and/or run-time dependencies that need to be
+  compiled for the host machine. Typically non-Python libraries which are being
+  linked.
+* `nativeCheckInputs ? []`: Dependencies needed for running the `checkPhase`. These
+  are added to `nativeBuildInputs` when `doCheck = true`. Items listed in
+  `tests_require` go here.
+* `propagatedBuildInputs ? []`: Aside from propagating dependencies,
+  `buildPythonPackage` also injects code into and wraps executables with the
+  paths included in this list. Items listed in `install_requires` go here.
+
+##### Overriding Python packages {#overriding-python-packages}
+
+The `buildPythonPackage` function has a `overridePythonAttrs` method that can be
+used to override the package. In the following example we create an environment
+where we have the `blaze` package using an older version of `pandas`. We
+override first the Python interpreter and pass `packageOverrides` which contains
+the overrides for packages in the package set.
+
+```nix
+with import <nixpkgs> {};
+
+(let
+  python = let
+    packageOverrides = self: super: {
+      pandas = super.pandas.overridePythonAttrs(old: rec {
+        version = "0.19.1";
+        src =  super.fetchPypi {
+          pname = "pandas";
+          inherit version;
+          hash = "sha256-JQn+rtpy/OA2deLszSKEuxyttqBzcAil50H+JDHUdCE=";
+        };
+      });
+    };
+  in pkgs.python3.override {inherit packageOverrides; self = python;};
+
+in python.withPackages(ps: [ps.blaze])).env
+```
+
+#### Optional extra dependencies {#python-optional-dependencies}
+
+Some packages define optional dependencies for additional features. With
+`setuptools` this is called `extras_require` and `flit` calls it
+`extras-require`, while PEP 621 calls these `optional-dependencies`. A
+method for supporting this is by declaring the extras of a package in its
+`passthru`, e.g. in case of the package `dask`
+
+```nix
+passthru.optional-dependencies = {
+  complete = [ distributed ];
+};
+```
+
+and letting the package requiring the extra add the list to its dependencies
+
+```nix
+propagatedBuildInputs = [
+  ...
+] ++ dask.optional-dependencies.complete;
+```
+
+Note this method is preferred over adding parameters to builders, as that can
+result in packages depending on different variants and thereby causing
+collisions.
+
+#### `buildPythonApplication` function {#buildpythonapplication-function}
+
+The `buildPythonApplication` function is practically the same as
+`buildPythonPackage`. The main purpose of this function is to build a Python
+package where one is interested only in the executables, and not importable
+modules. For that reason, when adding this package to a `python.buildEnv`, the
+modules won't be made available.
+
+Another difference is that `buildPythonPackage` by default prefixes the names of
+the packages with the version of the interpreter. Because this is irrelevant for
+applications, the prefix is omitted.
+
+When packaging a Python application with `buildPythonApplication`, it should be
+called with `callPackage` and passed `python` or `pythonPackages` (possibly
+specifying an interpreter version), like this:
+
+```nix
+{ lib, python3 }:
+
+python3.pkgs.buildPythonApplication rec {
+  pname = "luigi";
+  version = "2.7.9";
+
+  src = python3.pkgs.fetchPypi {
+    inherit pname version;
+    hash  = "sha256-Pe229rT0aHwA98s+nTHQMEFKZPo/yw6sot8MivFDvAw=";
+  };
+
+  propagatedBuildInputs = with python3.pkgs; [ tornado python-daemon ];
+
+  meta = with lib; {
+    ...
+  };
+}
+```
+
+This is then added to `all-packages.nix` just as any other application would be.
+
+```nix
+luigi = callPackage ../applications/networking/cluster/luigi { };
+```
+
+Since the package is an application, a consumer doesn't need to care about
+Python versions or modules, which is why they don't go in `pythonPackages`.
+
+#### `toPythonApplication` function {#topythonapplication-function}
+
+A distinction is made between applications and libraries, however, sometimes a
+package is used as both. In this case the package is added as a library to
+`python-packages.nix` and as an application to `all-packages.nix`. To reduce
+duplication the `toPythonApplication` can be used to convert a library to an
+application.
+
+The Nix expression shall use `buildPythonPackage` and be called from
+`python-packages.nix`. A reference shall be created from `all-packages.nix` to
+the attribute in `python-packages.nix`, and the `toPythonApplication` shall be
+applied to the reference:
+
+```nix
+youtube-dl = with pythonPackages; toPythonApplication youtube-dl;
+```
+
+#### `toPythonModule` function {#topythonmodule-function}
+
+In some cases, such as bindings, a package is created using
+`stdenv.mkDerivation` and added as attribute in `all-packages.nix`. The Python
+bindings should be made available from `python-packages.nix`. The
+`toPythonModule` function takes a derivation and makes certain Python-specific
+modifications.
+
+```nix
+opencv = toPythonModule (pkgs.opencv.override {
+  enablePython = true;
+  pythonPackages = self;
+});
+```
+
+Do pay attention to passing in the right Python version!
+
+#### `python.buildEnv` function {#python.buildenv-function}
+
+Python environments can be created using the low-level `pkgs.buildEnv` function.
+This example shows how to create an environment that has the Pyramid Web Framework.
+Saving the following as `default.nix`
+
+```nix
+with import <nixpkgs> {};
+
+python.buildEnv.override {
+  extraLibs = [ pythonPackages.pyramid ];
+  ignoreCollisions = true;
+}
+```
+
+and running `nix-build` will create
+
+```
+/nix/store/cf1xhjwzmdki7fasgr4kz6di72ykicl5-python-2.7.8-env
+```
+
+with wrapped binaries in `bin/`.
+
+You can also use the `env` attribute to create local environments with needed
+packages installed. This is somewhat comparable to `virtualenv`. For example,
+running `nix-shell` with the following `shell.nix`
+
+```nix
+with import <nixpkgs> {};
+
+(python3.buildEnv.override {
+  extraLibs = with python3Packages; [ numpy requests ];
+}).env
+```
+
+will drop you into a shell where Python will have the
+specified packages in its path.
+
+##### `python.buildEnv` arguments {#python.buildenv-arguments}
+
+
+* `extraLibs`: List of packages installed inside the environment.
+* `postBuild`: Shell command executed after the build of environment.
+* `ignoreCollisions`: Ignore file collisions inside the environment (default is `false`).
+* `permitUserSite`: Skip setting the `PYTHONNOUSERSITE` environment variable in
+  wrapped binaries in the environment.
+
+#### `python.withPackages` function {#python.withpackages-function}
+
+The `python.withPackages` function provides a simpler interface to the `python.buildEnv` functionality.
+It takes a function as an argument that is passed the set of python packages and returns the list
+of the packages to be included in the environment. Using the `withPackages` function, the previous
+example for the Pyramid Web Framework environment can be written like this:
+
+```nix
+with import <nixpkgs> {};
+
+python.withPackages (ps: [ps.pyramid])
+```
+
+`withPackages` passes the correct package set for the specific interpreter
+version as an argument to the function. In the above example, `ps` equals
+`pythonPackages`. But you can also easily switch to using python3:
+
+```nix
+with import <nixpkgs> {};
+
+python3.withPackages (ps: [ps.pyramid])
+```
+
+Now, `ps` is set to `python3Packages`, matching the version of the interpreter.
+
+As `python.withPackages` simply uses `python.buildEnv` under the hood, it also
+supports the `env` attribute. The `shell.nix` file from the previous section can
+thus be also written like this:
+
+```nix
+with import <nixpkgs> {};
+
+(python38.withPackages (ps: [ps.numpy ps.requests])).env
+```
+
+In contrast to `python.buildEnv`, `python.withPackages` does not support the
+more advanced options such as `ignoreCollisions = true` or `postBuild`. If you
+need them, you have to use `python.buildEnv`.
+
+Python 2 namespace packages may provide `__init__.py` that collide. In that case
+`python.buildEnv` should be used with `ignoreCollisions = true`.
+
+#### Setup hooks {#setup-hooks}
+
+The following are setup hooks specifically for Python packages. Most of these
+are used in `buildPythonPackage`.
+
+- `eggUnpackhook` to move an egg to the correct folder so it can be installed
+  with the `eggInstallHook`
+- `eggBuildHook` to skip building for eggs.
+- `eggInstallHook` to install eggs.
+- `flitBuildHook` to build a wheel using `flit`.
+- `pipBuildHook` to build a wheel using `pip` and PEP 517. Note a build system
+  (e.g. `setuptools` or `flit`) should still be added as `nativeBuildInput`.
+- `pipInstallHook` to install wheels.
+- `pytestCheckHook` to run tests with `pytest`. See [example usage](#using-pytestcheckhook).
+- `pythonCatchConflictsHook` to check whether a Python package is not already existing.
+- `pythonImportsCheckHook` to check whether importing the listed modules works.
+- `pythonRelaxDepsHook` will relax Python dependencies restrictions for the package.
+  See [example usage](#using-pythonrelaxdepshook).
+- `pythonRemoveBinBytecode` to remove bytecode from the `/bin` folder.
+- `setuptoolsBuildHook` to build a wheel using `setuptools`.
+- `setuptoolsCheckHook` to run tests with `python setup.py test`.
+- `sphinxHook` to build documentation and manpages using Sphinx.
+- `venvShellHook` to source a Python 3 `venv` at the `venvDir` location. A
+  `venv` is created if it does not yet exist. `postVenvCreation` can be used to
+  to run commands only after venv is first created.
+- `wheelUnpackHook` to move a wheel to the correct folder so it can be installed
+  with the `pipInstallHook`.
+- `unittestCheckHook` will run tests with `python -m unittest discover`. See [example usage](#using-unittestcheckhook).
+
+### Development mode {#development-mode}
+
+Development or editable mode is supported. To develop Python packages
+`buildPythonPackage` has additional logic inside `shellPhase` to run `pip
+install -e . --prefix $TMPDIR/`for the package.
+
+Warning: `shellPhase` is executed only if `setup.py` exists.
+
+Given a `default.nix`:
+
+```nix
+with import <nixpkgs> {};
+
+pythonPackages.buildPythonPackage {
+  name = "myproject";
+  buildInputs = with pythonPackages; [ pyramid ];
+
+  src = ./.;
+}
+```
+
+Running `nix-shell` with no arguments should give you the environment in which
+the package would be built with `nix-build`.
+
+Shortcut to setup environments with C headers/libraries and Python packages:
+
+```shell
+nix-shell -p pythonPackages.pyramid zlib libjpeg git
+```
+
+Note: There is a boolean value `lib.inNixShell` set to `true` if nix-shell is invoked.
+
+### Tools {#tools}
+
+Packages inside nixpkgs are written by hand. However many tools exist in
+community to help save time. No tool is preferred at the moment.
+
+- [pypi2nix](https://github.com/nix-community/pypi2nix): Generate Nix
+  expressions for your Python project. Note that [sharing derivations from
+  pypi2nix with nixpkgs is possible but not
+  encouraged](https://github.com/nix-community/pypi2nix/issues/222#issuecomment-443497376).
+- [nixpkgs-pytools](https://github.com/nix-community/nixpkgs-pytools)
+- [poetry2nix](https://github.com/nix-community/poetry2nix)
+
+### Deterministic builds {#deterministic-builds}
+
+The Python interpreters are now built deterministically. Minor modifications had
+to be made to the interpreters in order to generate deterministic bytecode. This
+has security implications and is relevant for those using Python in a
+`nix-shell`.
+
+When the environment variable `DETERMINISTIC_BUILD` is set, all bytecode will
+have timestamp 1. The `buildPythonPackage` function sets `DETERMINISTIC_BUILD=1`
+and [PYTHONHASHSEED=0](https://docs.python.org/3.8/using/cmdline.html#envvar-PYTHONHASHSEED).
+Both are also exported in `nix-shell`.
+
+### Automatic tests {#automatic-tests}
+
+It is recommended to test packages as part of the build process.
+Source distributions (`sdist`) often include test files, but not always.
+
+By default the command `python setup.py test` is run as part of the
+`checkPhase`, but often it is necessary to pass a custom `checkPhase`. An
+example of such a situation is when `py.test` is used.
+
+#### Common issues {#common-issues}
+
+* Non-working tests can often be deselected. By default `buildPythonPackage`
+  runs `python setup.py test`. Most Python modules follows the standard test
+  protocol where the pytest runner can be used instead. `py.test` supports a
+  `-k` parameter to ignore test methods or classes:
+
+  ```nix
+  buildPythonPackage {
+    # ...
+    # assumes the tests are located in tests
+    nativeCheckInputs = [ pytest ];
+    checkPhase = ''
+      runHook preCheck
+
+      py.test -k 'not function_name and not other_function' tests
+
+      runHook postCheck
+    '';
+  }
+  ```
+
+* Tests that attempt to access `$HOME` can be fixed by using the following
+  work-around before running tests (e.g. `preCheck`): `export HOME=$(mktemp -d)`
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 ## FAQ {#faq}
 
@@ -1529,6 +2315,7 @@ with import <nixpkgs> {};
     packageOverrides = self: super: {
       pandas = super.pandas.overridePythonAttrs(old: {name="foo";});
     };
+<<<<<<< HEAD
   in pkgs.python310.override {
     inherit packageOverrides;
   };
@@ -1536,6 +2323,11 @@ with import <nixpkgs> {};
 in python.withPackages (ps: [
   ps.pandas
 ])).env
+=======
+  in pkgs.python38.override {inherit packageOverrides;};
+
+in python.withPackages(ps: [ps.pandas])).env
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 ```
 
 Using `nix-build` on this expression will build an environment that contains the
@@ -1555,11 +2347,15 @@ with import <nixpkgs> {};
     packageOverrides = self: super: {
       scipy = super.scipy_0_17;
     };
+<<<<<<< HEAD
   in (pkgs.python310.override {
     inherit packageOverrides;
   }).withPackages (ps: [
     ps.blaze
   ])
+=======
+  in (pkgs.python38.override {inherit packageOverrides;}).withPackages (ps: [ps.blaze])
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 ).env
 ```
 
@@ -1573,11 +2369,19 @@ If you want the whole of Nixpkgs to use your modifications, then you can use
 let
   pkgs = import <nixpkgs> {};
   newpkgs = import pkgs.path { overlays = [ (self: super: {
+<<<<<<< HEAD
     python310 = let
       packageOverrides = python-self: python-super: {
         numpy = python-super.numpy_1_18;
       };
     in super.python310.override {inherit packageOverrides;};
+=======
+    python38 = let
+      packageOverrides = python-self: python-super: {
+        numpy = python-super.numpy_1_18;
+      };
+    in super.python38.override {inherit packageOverrides;};
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   } ) ]; };
 in newpkgs.inkscape
 ```
@@ -1856,6 +2660,7 @@ In a `setup.py` or `setup.cfg` it is common to declare dependencies:
 * `install_requires` corresponds to `propagatedBuildInputs`
 * `tests_require` corresponds to `nativeCheckInputs`
 
+<<<<<<< HEAD
 ### How to enable interpreter optimizations? {#optimizations}
 
 The Python interpreters are by default not built with optimizations enabled, because
@@ -1958,6 +2763,8 @@ example of such a situation is when `py.test` is used.
 * Tests that attempt to access `$HOME` can be fixed by using the following
   work-around before running tests (e.g. `preCheck`): `export HOME=$(mktemp -d)`
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 ## Contributing {#contributing}
 
 ### Contributing guidelines {#contributing-guidelines}

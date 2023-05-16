@@ -38,13 +38,21 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "cudatext";
+<<<<<<< HEAD
   version = "1.198.0";
+=======
+  version = "1.193.3";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "Alexey-T";
     repo = "CudaText";
     rev = version;
+<<<<<<< HEAD
     hash = "sha256-zm5acOTcjQdgKf6cSPP3mE070TVXbV6ixVa/+7g/SFE=";
+=======
+    hash = "sha256-zkSdMXIfUT+QfRi7CT3JlVLAvtLGbOGAaQkYNMAIZeI=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   postPatch = ''

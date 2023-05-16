@@ -21,7 +21,11 @@
 
 buildPythonPackage rec {
   pname = "softlayer";
+<<<<<<< HEAD
   version = "6.1.7";
+=======
+  version = "6.1.4";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -30,7 +34,11 @@ buildPythonPackage rec {
     owner = pname;
     repo = "softlayer-python";
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-WL/hv1/eB8/ynSo0XOTOYE2rGWV/4VsgSQsRioR2ACE=";
+=======
+    hash = "sha256-Ofl8MmGn70CJPuPZi0W0GJiMiceMNMACSNVKaOPdQN8=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   postPatch = ''
@@ -49,8 +57,11 @@ buildPythonPackage rec {
     urllib3
   ];
 
+<<<<<<< HEAD
   __darwinAllowLocalNetworking = true;
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nativeCheckInputs = [
     mock
     pytestCheckHook

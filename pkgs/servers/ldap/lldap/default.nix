@@ -15,6 +15,18 @@
 
 let
 
+<<<<<<< HEAD
+=======
+  # version of wasm-opt, with https://github.com/rustwasm/wasm-pack/pull/1257 backported
+  wasm-pack-git = wasm-pack.overrideAttrs (oldAttrs: {
+    version = oldAttrs.version + "-git";
+    patches = [(fetchpatch {
+      url = "https://patch-diff.githubusercontent.com/raw/rustwasm/wasm-pack/pull/1257.patch";
+      sha256 = "sha256-npi9ewh0NaD67crTcje9AYxaLLOJOMzqjqEJXZF2LbQ=";
+    })];
+  });
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   # replace with upstream wasm rustc, after resolution of
   # https://github.com/NixOS/nixpkgs/issues/89426
   rustc-wasm = (rustc.override {
@@ -32,12 +44,15 @@ let
     configureFlags = attrs.configureFlags ++ ["--set=build.docs=false"];
   });
 
+<<<<<<< HEAD
   wasm-bindgen-84 = wasm-bindgen-cli.override {
     version = "0.2.84";
     hash = "sha256-0rK+Yx4/Jy44Fw5VwJ3tG243ZsyOIBBehYU54XP/JGk=";
     cargoHash = "sha256-vcpxcRlW1OKoD64owFF6mkxSqmNrvY+y3Ckn5UwEQ50=";
   };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   commonDerivationAttrs = rec {
     pname = "lldap";
     version = "0.4.3";
@@ -71,7 +86,11 @@ let
     pname = commonDerivationAttrs.pname + "-frontend";
 
     nativeBuildInputs = [
+<<<<<<< HEAD
       wasm-pack wasm-bindgen-84 binaryen which rustc-wasm rustc-wasm.llvmPackages.lld
+=======
+      wasm-pack-git wasm-bindgen-cli binaryen which rustc-wasm rustc-wasm.llvmPackages.lld
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     ];
 
     buildPhase = ''
@@ -87,9 +106,12 @@ let
   });
 
 in rustPlatform.buildRustPackage (commonDerivationAttrs // {
+<<<<<<< HEAD
 
   cargoBuildFlags = [ "-p" "lldap" "-p" "migration-tool" "-p" "lldap_set_password" ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   patches = [
     ./static-frontend-path.patch
   ];
@@ -98,10 +120,13 @@ in rustPlatform.buildRustPackage (commonDerivationAttrs // {
     substituteInPlace server/src/infra/tcp_server.rs --subst-var-by frontend '${frontend}'
   '';
 
+<<<<<<< HEAD
   postInstall = ''
     mv $out/bin/migration-tool $out/bin/lldap_migration_tool
   '';
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   passthru = {
     inherit frontend;
     tests = {
@@ -115,7 +140,11 @@ in rustPlatform.buildRustPackage (commonDerivationAttrs // {
     changelog = "https://github.com/lldap/lldap/blob/v${lldap.version}/CHANGELOG.md";
     license = licenses.gpl3Only;
     platforms = platforms.linux;
+<<<<<<< HEAD
     maintainers = with maintainers; [ emilylange bendlas ];
     mainProgram = "lldap";
+=======
+    maintainers = with maintainers; [ indeednotjames bendlas ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 })

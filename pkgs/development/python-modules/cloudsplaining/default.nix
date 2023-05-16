@@ -17,7 +17,11 @@
 
 buildPythonPackage rec {
   pname = "cloudsplaining";
+<<<<<<< HEAD
   version = "0.6.1";
+=======
+  version = "0.5.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -26,7 +30,11 @@ buildPythonPackage rec {
     owner = "salesforce";
     repo = pname;
     rev = "refs/tags/${version}";
+<<<<<<< HEAD
     hash = "sha256-Bw1RhYFTz1bw+4APZKTyWP/G+LWB3R9WI/QEduEgWTQ=";
+=======
+    hash = "sha256-L7sEv0xe8+riJb7DW2N6+MsoXBXJNzK96oGkpAkAyLU=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [

@@ -38,6 +38,10 @@ rustPlatform.buildRustPackage rec {
     description = ''Cargo subcommand "valgrind": runs valgrind and collects its output in a helpful manner'';
     homepage = "https://github.com/jfrimmel/cargo-valgrind";
     license = with licenses; [ asl20 /* or */ mit ];
+<<<<<<< HEAD
     maintainers = with maintainers; [ otavio matthiasbeyer ];
+=======
+    maintainers = with maintainers; [ otavio ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

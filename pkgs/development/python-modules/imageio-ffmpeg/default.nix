@@ -1,5 +1,9 @@
 { lib
 , buildPythonPackage
+<<<<<<< HEAD
+=======
+, isPy3k
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , fetchPypi
 , substituteAll
 , ffmpeg_4
@@ -9,7 +13,12 @@
 buildPythonPackage rec {
   pname = "imageio-ffmpeg";
   version = "0.4.8";
+<<<<<<< HEAD
   format = "setuptools";
+=======
+
+  disabled = !isPy3k;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchPypi {
     inherit pname version;
@@ -23,11 +32,14 @@ buildPythonPackage rec {
     })
   ];
 
+<<<<<<< HEAD
   # https://github.com/imageio/imageio-ffmpeg/issues/59
   postPatch = ''
     sed -i '/setup_requires=\["pip>19"\]/d' setup.py
   '';
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   checkPhase = ''
     runHook preCheck
 

@@ -12,16 +12,27 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "git-credential-keepassxc";
+<<<<<<< HEAD
   version = "0.13.0";
+=======
+  version = "0.12.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "Frederick888";
     repo = "git-credential-keepassxc";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-eu4Ff+7670gCO+j3WSRnvQ1aFXIx0nw1jAZXNuni2bU=";
   };
 
   cargoHash = "sha256-DVMQLsiiaxMZtDqzqnMJQl91NCuMRSPEb8B6AttB4lE=";
+=======
+    hash = "sha256-siVSZke+anVTaLiJVyDEKvgX+VmS0axa+4721nlgmiw=";
+  };
+
+  cargoHash = "sha256-QMAAKkjWgM/UiOfkNMLQxyGEYYmiSvE0Pd8fZXYyN48=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   buildInputs = lib.optionals stdenv.isDarwin [ DiskArbitration Foundation ];
 

@@ -1,8 +1,13 @@
 {
   "owner": "python-poetry",
   "repo": "poetry",
+<<<<<<< HEAD
   "rev": "1.3.0",
   "sha256": "16ng59ykm7zkjizmwb482y0hawpjjr5mvl0ahjd790xzxcc2bbbv",
+=======
+  "rev": "1.4.2",
+  "sha256": "0n3fjgn6lcsqld83ljr6wca107cpnq9xbqrwi5kwvy1rj0am0902",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   "fetchSubmodules": true
 }
 

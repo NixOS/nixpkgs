@@ -12,13 +12,21 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hidapi";
+<<<<<<< HEAD
   version = "0.14.0";
+=======
+  version = "0.13.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "libusb";
     repo = "hidapi";
     rev = "${finalAttrs.pname}-${finalAttrs.version}";
+<<<<<<< HEAD
     sha256 = "sha256-p3uzBq5VxxQbVuy1lEHEEQdxXwnhQgJDIyAAWjVWNIg=";
+=======
+    sha256 = "sha256-CEZP5n8qEAzsqn8dz3u1nG0YoT7J1P+WfN7urkRTuVg=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ cmake pkg-config ];

@@ -4,12 +4,20 @@ with lib;
 
 stdenv.mkDerivation rec {
   pname = "marvin";
+<<<<<<< HEAD
   version = "23.4.0";
+=======
+  version = "22.13.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchurl {
     name = "marvin-${version}.deb";
     url = "http://dl.chemaxon.com/marvin/${version}/marvin_linux_${versions.majorMinor version}.deb";
+<<<<<<< HEAD
     sha256 = "sha256-+jzGcuAcbXOwsyAL+Hr9Fas2vO2S8ZKSaZeCf/bnl7A=";
+=======
+    sha256 = "sha256-cZ9SFdKNURhcInM6zZNwoi+WyHAsGCeAgkfpAVi7GYE=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ dpkg makeWrapper ];

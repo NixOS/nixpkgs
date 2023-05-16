@@ -530,15 +530,23 @@ let
         then
             ln -s $out/lib/node_modules/.bin $out/bin
 
+<<<<<<< HEAD
             # Fixup all executables
+=======
+            # Patch the shebang lines of all the executables
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
             ls $out/bin/* | while read i
             do
                 file="$(readlink -f "$i")"
                 chmod u+rwx "$file"
+<<<<<<< HEAD
                 if isScript "$file"
                 then
                     sed -i 's/\r$//' "$file"  # convert crlf to lf
                 fi
+=======
+                patchShebangs "$file"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
             done
         fi
 

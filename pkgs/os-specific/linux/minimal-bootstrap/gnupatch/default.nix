@@ -70,13 +70,21 @@ in
 kaem.runCommand "${pname}-${version}" {
   inherit pname version;
 
+<<<<<<< HEAD
   nativeBuildInputs = [ tinycc.compiler ];
+=======
+  nativeBuildInputs = [ tinycc ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   meta = with lib; {
     description = "GNU Patch, a program to apply differences to files";
     homepage = "https://www.gnu.org/software/patch";
     license = licenses.gpl3Plus;
+<<<<<<< HEAD
     maintainers = teams.minimal-bootstrap.members;
+=======
+    maintainers = with maintainers; [ emilytrau ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     mainProgram = "patch";
     platforms = platforms.unix;
   };
@@ -91,11 +99,19 @@ kaem.runCommand "${pname}-${version}" {
   catm config.h
 
   # Build
+<<<<<<< HEAD
   alias CC="tcc -B ${tinycc.libs}/lib ${lib.concatStringsSep " " CFLAGS}"
   ${lib.concatMapStringsSep "\n" (f: "CC -c ${f}") sources}
 
   # Link
   CC -o patch ${lib.concatStringsSep " " objects}
+=======
+  alias CC="tcc ${lib.concatStringsSep " " CFLAGS}"
+  ${lib.concatMapStringsSep "\n" (f: "CC -c ${f}") sources}
+
+  # Link
+  CC -static -o patch ${lib.concatStringsSep " " objects}
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   # Check
   ./patch --version

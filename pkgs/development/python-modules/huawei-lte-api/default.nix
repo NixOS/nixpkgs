@@ -10,7 +10,11 @@
 
 buildPythonPackage rec {
   pname = "huawei-lte-api";
+<<<<<<< HEAD
   version = "1.7.3";
+=======
+  version = "1.6.11";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -19,7 +23,11 @@ buildPythonPackage rec {
     owner = "Salamek";
     repo = "huawei-lte-api";
     rev = "refs/tags/${version}";
+<<<<<<< HEAD
     hash = "sha256-a01oNfUivbCzTd5auu+EXj+yvcC1vKyktIFK+zPQGy4=";
+=======
+    hash = "sha256-pOBYMSORgT8WOnhCdazuKucjPoOywnrWa+qCYR5qSls=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [

@@ -5,11 +5,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "workstyle";
+<<<<<<< HEAD
   version = "unstable-2023-08-23";
+=======
+  version = "unstable-2021-05-09";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "pierrechevalier83";
     repo = pname;
+<<<<<<< HEAD
     rev = "8bde72d9a9dd67e0fc7c0545faca53df23ed3753";
     sha256 = "sha256-yhnt7edhgVy/cZ6FpF6AZWPoeMeEKTXP+87no2KeIYU=";
   };
@@ -20,6 +25,13 @@ rustPlatform.buildRustPackage rec {
       "swayipc-3.0.1" = "sha256-3Jhz3+LhncSRvo3n7Dh5d+RWQSvEff9teuaDZLLLEHk=";
     };
   };
+=======
+    rev = "f2023750d802259ab3ee7d7d1762631ec157a0b1";
+    sha256 = "04xds691sw4pi2nq8xvdhn0312wwia60gkd8b1bjqy11zrqbivbx";
+  };
+
+  cargoSha256 = "0xwv8spr96z4aimjlr15bhwl6i3zqp7jr45d9zr3sbi9d8dbdja2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   doCheck = false; # No tests
 

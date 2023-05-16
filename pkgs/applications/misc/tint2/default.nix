@@ -1,6 +1,9 @@
 { lib, stdenv
 , fetchFromGitLab
+<<<<<<< HEAD
 , fetchpatch
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , pkg-config
 , cmake
 , gettext
@@ -25,6 +28,7 @@
 
 stdenv.mkDerivation rec {
   pname = "tint2";
+<<<<<<< HEAD
   version = "17.1.3";
 
   src = fetchFromGitLab {
@@ -44,6 +48,17 @@ stdenv.mkDerivation rec {
     })
   ];
 
+=======
+  version = "17.0.2";
+
+  src = fetchFromGitLab {
+    owner = "o9000";
+    repo = "tint2";
+    rev = version;
+    sha256 = "sha256-SqpAjclwu3HN07LAZgvXGzjMK6G+nYLDdl90o1+9aog=";
+  };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nativeBuildInputs = [
     pkg-config
     cmake
@@ -83,7 +98,11 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
+<<<<<<< HEAD
     homepage = "https://gitlab.com/nick87720z/tint2";
+=======
+    homepage = "https://gitlab.com/o9000/tint2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     description = "Simple panel/taskbar unintrusive and light (memory, cpu, aestetic)";
     license = licenses.gpl2Only;
     platforms = platforms.linux;

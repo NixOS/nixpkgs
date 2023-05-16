@@ -1,7 +1,10 @@
 { stdenv,
   backendStdenv,
   lib,
+<<<<<<< HEAD
   lndir,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   zlib,
   useCudatoolkitRunfile ? false,
   cudaVersion,
@@ -11,6 +14,17 @@
   autoPatchelfHook,
   autoAddOpenGLRunpathHook,
   fetchurl,
+<<<<<<< HEAD
+=======
+  # The distributed version of CUDNN includes both dynamically liked .so files,
+  # as well as statically linked .a files.  However, CUDNN is quite large
+  # (multiple gigabytes), so you can save some space in your nix store by
+  # removing the statically linked libraries if you are not using them.
+  #
+  # Setting this to true removes the statically linked .a files.
+  # Setting this to false keeps these statically linked .a files.
+  removeStatic ? false,
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }: {
   version,
   url,
@@ -31,20 +45,35 @@ assert useCudatoolkitRunfile || (libcublas != null); let
   # versionTriple :: String
   # Version with three components: major.minor.patch
   versionTriple = majorMinorPatch version;
+<<<<<<< HEAD
+=======
+
+  # cudatoolkit_root :: Derivation
+  cudatoolkit_root =
+    if useCudatoolkitRunfile
+    then cudatoolkit
+    else libcublas;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 in
   backendStdenv.mkDerivation {
     pname = "cudatoolkit-${cudaMajorVersion}-cudnn";
     version = versionTriple;
+<<<<<<< HEAD
     strictDeps = true;
     outputs = ["out" "lib" "static" "dev"];
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     src = fetchurl {
       inherit url hash;
     };
 
+<<<<<<< HEAD
     # We do need some other phases, like configurePhase, so the multiple-output setup hook works.
     dontBuild = true;
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     # Check and normalize Runpath against DT_NEEDED using autoPatchelf.
     # Prepend /run/opengl-driver/lib using addOpenGLRunpath for dlopen("libcudacuda.so")
     nativeBuildInputs = [
@@ -59,36 +88,57 @@ in
       stdenv.cc.cc.lib
 
       zlib
+<<<<<<< HEAD
     ] ++ lists.optionals useCudatoolkitRunfile [
       cudatoolkit
     ] ++ lists.optionals (!useCudatoolkitRunfile) [
       libcublas.lib
+=======
+      cudatoolkit_root
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     ];
 
     # We used to patch Runpath here, but now we use autoPatchelfHook
     #
     # Note also that version <=8.3.0 contained a subdirectory "lib64/" but in
     # version 8.3.2 it seems to have been renamed to simply "lib/".
+<<<<<<< HEAD
     #
     # doc and dev have special output handling. Other outputs need to be moved to their own
     # output.
     # Note that moveToOutput operates on all outputs:
     # https://github.com/NixOS/nixpkgs/blob/2920b6fc16a9ed5d51429e94238b28306ceda79e/pkgs/build-support/setup-hooks/multiple-outputs.sh#L105-L107
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     installPhase =
       ''
         runHook preInstall
 
+<<<<<<< HEAD
         mkdir -p "$out"
         mv * "$out"
         moveToOutput "lib64" "$lib"
         moveToOutput "lib" "$lib"
         moveToOutput "**/*.a" "$static"
 
+=======
+        mkdir -p $out
+        cp -a include $out/include
+        [ -d "lib/" ] && cp -a lib $out/lib
+        [ -d "lib64/" ] && cp -a lib64 $out/lib64
+      ''
+      + strings.optionalString removeStatic ''
+        rm -f $out/lib/*.a
+        rm -f $out/lib64/*.a
+      ''
+      + ''
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         runHook postInstall
       '';
 
     # Without --add-needed autoPatchelf forgets $ORIGIN on cuda>=8.0.5.
     postFixup = strings.optionalString (strings.versionAtLeast versionTriple "8.0.5") ''
+<<<<<<< HEAD
       patchelf $lib/lib/libcudnn.so --add-needed libcudnn_cnn_infer.so
       patchelf $lib/lib/libcudnn_ops_infer.so --add-needed libcublas.so --add-needed libcublasLt.so
     '';
@@ -112,6 +162,9 @@ in
       ${lib.meta.getExe lndir} "$lib" "$out"
       ${lib.meta.getExe lndir} "$static" "$out"
       ${lib.meta.getExe lndir} "$dev" "$out"
+=======
+      patchelf $out/lib/libcudnn.so --add-needed libcudnn_cnn_infer.so
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     '';
 
     passthru = {
@@ -128,6 +181,7 @@ in
       majorVersion = versions.major versionTriple;
     };
 
+<<<<<<< HEAD
     # Setting propagatedBuildInputs to false will prevent outputs known to the multiple-outputs
     # from depending on `out` by default.
     # https://github.com/NixOS/nixpkgs/blob/2920b6fc16a9ed5d51429e94238b28306ceda79e/pkgs/build-support/setup-hooks/multiple-outputs.sh#L196
@@ -141,6 +195,8 @@ in
     # unqualified (that is, without an explicit output).
     outputSpecified = true;
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     meta = with lib; {
       # Check that the cudatoolkit version satisfies our min/max constraints (both
       # inclusive). We mark the package as broken if it fails to satisfies the
@@ -157,8 +213,11 @@ in
       license = licenses.unfree;
       platforms = ["x86_64-linux"];
       maintainers = with maintainers; [mdaiter samuela];
+<<<<<<< HEAD
       # Force the use of the default, fat output by default (even though `dev` exists, which
       # causes Nix to prefer that output over the others if outputSpecified isn't set).
       outputsToInstall = ["out"];
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
   }

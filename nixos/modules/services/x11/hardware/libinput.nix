@@ -261,8 +261,12 @@ in {
 
     services.xserver.libinput = {
       enable = mkEnableOption (lib.mdDoc "libinput") // {
+<<<<<<< HEAD
         default = config.services.xserver.enable;
         defaultText = lib.literalExpression "config.services.xserver.enable";
+=======
+        default = true;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       };
       mouse = mkConfigForDevice "mouse";
       touchpad = mkConfigForDevice "touchpad";

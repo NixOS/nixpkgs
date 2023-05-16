@@ -25,6 +25,10 @@ buildPythonPackage rec {
     homepage = "https://pyasn1.readthedocs.io";
     changelog = "https://github.com/etingof/pyasn1/blob/master/CHANGES.rst";
     license = licenses.bsd2;
+<<<<<<< HEAD
     maintainers = with maintainers; [ ];
+=======
+    maintainers = with maintainers; [ SuperSandro2000 ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

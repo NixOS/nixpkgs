@@ -16,11 +16,19 @@ let
   inherit (hdf5) mpiSupport mpi;
 in stdenv.mkDerivation rec {
   pname = "netcdf" + lib.optionalString mpiSupport "-mpi";
+<<<<<<< HEAD
   version = "4.9.2";
 
   src = fetchurl {
     url = "https://downloads.unidata.ucar.edu/netcdf-c/${version}/netcdf-c-${version}.tar.gz";
     hash = "sha256-zxG6u725lj8J9VB54LAZ9tA3H1L44SZKW6jp/asabEg=";
+=======
+  version = "4.9.0";
+
+  src = fetchurl {
+    url = "https://downloads.unidata.ucar.edu/netcdf-c/${version}/netcdf-c-${version}.tar.gz";
+    hash = "sha256-TJVgIrecCOXhTu6N9RsTwo5hIcK35/qtwhs3WUlAC0k=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   postPatch = ''
@@ -30,10 +38,13 @@ in stdenv.mkDerivation rec {
     for a in ncdap_test/Makefile.am ncdap_test/Makefile.in; do
       substituteInPlace $a --replace testurl.sh " "
     done
+<<<<<<< HEAD
 
     # Prevent building the tests from prepending `#!/bin/bash` and wiping out the patched shenbangs.
     substituteInPlace nczarr_test/Makefile.in \
       --replace '#!/bin/bash' '${stdenv.shell}'
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '';
 
   nativeBuildInputs = [ m4 removeReferencesTo ];
@@ -69,7 +80,11 @@ in stdenv.mkDerivation rec {
     remove-references-to -t ${stdenv.cc} "$(readlink -f $out/lib/libnetcdf.settings)"
   '';
 
+<<<<<<< HEAD
   doCheck = !mpiSupport;
+=======
+  doCheck = !(mpiSupport || (stdenv.isDarwin && stdenv.isAarch64));
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nativeCheckInputs = [ unzip ];
 
   preCheck = ''

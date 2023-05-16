@@ -11,7 +11,11 @@ buildGoModule rec {
     sha256 = "sha256-SL3YHsNeFw8K8lPrzJXAoTkHxS+1sTREfzjawBxdnf0=";
   };
 
+<<<<<<< HEAD
   vendorHash = "sha256-CmENxPAdjz0BAyvhLKIaJjSbK/mvRzHGCQOfGIiA3yI=";
+=======
+  vendorSha256 = "sha256-CmENxPAdjz0BAyvhLKIaJjSbK/mvRzHGCQOfGIiA3yI=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   excludedPackages = [ "test/e2e" ];
 

@@ -58,12 +58,20 @@
 }:
 
 stdenv.mkDerivation rec {
+<<<<<<< HEAD
   version = "4.4.2";
+=======
+  version = "4.2.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pname = "darktable";
 
   src = fetchurl {
     url = "https://github.com/darktable-org/darktable/releases/download/release-${version}/darktable-${version}.tar.xz";
+<<<<<<< HEAD
     sha256 = "c11d28434fdf2e9ce572b9b1f9bc4e64dcebf6148e25080b4c32eb51916cfa98";
+=======
+    sha256 = "18b0917fdfe9b09f66c279a681cc3bd52894a566852bbf04b2e179ecfdb11af9";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ cmake ninja llvm_13 pkg-config intltool perl desktop-file-utils wrapGAppsHook ];
@@ -147,6 +155,10 @@ stdenv.mkDerivation rec {
     homepage = "https://www.darktable.org";
     license = licenses.gpl3Plus;
     platforms = platforms.linux ++ platforms.darwin;
+<<<<<<< HEAD
     maintainers = with maintainers; [ goibhniu flosse mrVanDalo paperdigits freyacodes ];
+=======
+    maintainers = with maintainers; [ goibhniu flosse mrVanDalo paperdigits ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

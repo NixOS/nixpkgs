@@ -7,15 +7,29 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "oil";
+<<<<<<< HEAD
   version = "0.17.0";
 
   src = fetchurl {
     url = "https://www.oilshell.org/download/oil-${version}.tar.xz";
     hash = "sha256-H7oWI3+660MhMdDTTPX11/YalnItzhxfdBrtwKR8xrM=";
+=======
+  version = "0.15.0";
+
+  src = fetchurl {
+    url = "https://www.oilshell.org/download/oil-${version}.tar.xz";
+    hash = "sha256-1oYP/sRhYG2oJYY80WOxqSXwqyUMbjIZdznBHcnGMxg=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   postPatch = ''
     patchShebangs build
+<<<<<<< HEAD
+=======
+    # TODO: workaround for https://github.com/oilshell/oil/issues/1467
+    #       check for removability on updates :)
+    substituteInPlace configure --replace "echo '#define HAVE_READLINE 1'" "echo '#define HAVE_READLINE 1' && return 0"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '';
 
   preInstall = ''

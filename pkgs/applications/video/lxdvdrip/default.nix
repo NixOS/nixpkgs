@@ -2,6 +2,7 @@
 
 stdenv.mkDerivation rec {
   pname = "lxdvdrip";
+<<<<<<< HEAD
   version = "1.77";
 
   src = fetchurl {
@@ -12,6 +13,18 @@ stdenv.mkDerivation rec {
   postPatch = ''
     sed -i -e s,/usr/local,$out, -e s,/etc,$out/etc,g Makefile
     sed -i -e s,/usr/local,$out, mbuffer/Makefile
+=======
+  version = "1.76";
+
+  src = fetchurl {
+    url = "mirror://sourceforge/lxdvdrip/lxdvdrip-${version}.tgz";
+    sha256 = "0vgslc7dapfrbgslnaicc8bggdccyrvcgjv1dwi19qswhh7jkzj6";
+  };
+
+  prePatch = ''
+    sed -i -e s,/usr/local,$out, -e s,/etc,$out/etc,g Makefile
+    sed -i -e s,/usr/local,$out, buffer/Makefile
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     makeFlags="$makeFlags PREFIX=$out"
   '';
 

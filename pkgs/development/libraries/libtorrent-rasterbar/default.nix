@@ -3,7 +3,11 @@
 }:
 
 let
+<<<<<<< HEAD
   version = "2.0.9";
+=======
+  version = "2.0.8";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   # Make sure we override python, so the correct version is chosen
   boostPython = boost.override { enablePython = true; inherit python; };
@@ -16,7 +20,11 @@ in stdenv.mkDerivation {
     owner = "arvidn";
     repo = "libtorrent";
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-kUpeofullQ70uK/YZUD0ikHCquFTGwev7MxBYj0oHeU=";
+=======
+    sha256 = "sha256-mMY3NiSL/lYuYmV/KWgfKbs8XukSV4PvQ87tpgBid6M=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     fetchSubmodules = true;
   };
 

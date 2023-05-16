@@ -14,7 +14,11 @@ buildGoModule rec {
     hash = "sha256-TGqsiYZLbXvCc30OtvNbX4INlzw3ZfjvXal47rP7NDw=";
   };
 
+<<<<<<< HEAD
   vendorHash = "sha256-HQ9qclaaDj0H8PL0oQG1WsH19wVQpynijHNcal4gWBE=";
+=======
+  vendorSha256 = "sha256-HQ9qclaaDj0H8PL0oQG1WsH19wVQpynijHNcal4gWBE=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   meta = with lib; {
     description = "Java serialization protocol analysis tool";

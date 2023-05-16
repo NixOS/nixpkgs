@@ -8,11 +8,16 @@
 , nodejs
 , fetchYarnDeps
 , fixup_yarn_lock
+<<<<<<< HEAD
 , electron_24
+=======
+, electron
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , libpulseaudio
 , pipewire
 , alsa-utils
 , which
+<<<<<<< HEAD
 , testers
 , teams-for-linux
 }:
@@ -33,6 +38,31 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-j5N6d270myUylDVDFQTScbsGp1wlpt5sISDJBRCV/GU=";
   };
 
+=======
+}:
+
+stdenv.mkDerivation rec {
+  pname = "teams-for-linux";
+  version = "1.0.83";
+
+  src = fetchFromGitHub {
+    owner = "IsmaelMartinez";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "sha256-2tCBFc4CEgaYJq5fMbHi+M/Cz5Eeo2Slqgu9xUUkUjA=";
+  };
+
+  offlineCache = fetchYarnDeps {
+    yarnLock = "${src}/yarn.lock";
+    sha256 = "sha256-3zjmVIPQ+F2jPQ2xkAv5hQUjr8k5jIHTsa73J+IMayw=";
+  };
+
+  patches = [
+    # Can be removed once Electron upstream resolves https://github.com/electron/electron/issues/36660
+    ./screensharing-wayland-hack-fix.patch
+  ];
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nativeBuildInputs = [ yarn fixup_yarn_lock nodejs copyDesktopItems makeWrapper ];
 
   configurePhase = ''
@@ -52,8 +82,13 @@ stdenv.mkDerivation (finalAttrs: {
 
     yarn --offline electron-builder \
       --dir ${if stdenv.isDarwin then "--macos" else "--linux"} ${if stdenv.hostPlatform.isAarch64 then "--arm64" else "--x64"} \
+<<<<<<< HEAD
       -c.electronDist=${electron_24}/libexec/electron \
       -c.electronVersion=${electron_24.version}
+=======
+      -c.electronDist=${electron}/lib/electron \
+      -c.electronVersion=${electron.version}
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     runHook postBuild
   '';
@@ -72,7 +107,11 @@ stdenv.mkDerivation (finalAttrs: {
     popd
 
     # Linux needs 'aplay' for notification sounds, 'libpulse' for meeting sound, and 'libpipewire' for screen sharing
+<<<<<<< HEAD
     makeWrapper '${electron_24}/bin/electron' "$out/bin/teams-for-linux" \
+=======
+    makeWrapper '${electron}/bin/electron' "$out/bin/teams-for-linux" \
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       ${lib.optionalString stdenv.isLinux ''
         --prefix PATH : ${lib.makeBinPath [ alsa-utils which ]} \
         --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libpulseaudio pipewire ]} \
@@ -84,15 +123,24 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   desktopItems = [(makeDesktopItem {
+<<<<<<< HEAD
     name = finalAttrs.pname;
     exec = finalAttrs.pname;
     icon = finalAttrs.pname;
     desktopName = "Microsoft Teams for Linux";
     comment = finalAttrs.meta.description;
+=======
+    name = pname;
+    exec = pname;
+    icon = pname;
+    desktopName = "Microsoft Teams for Linux";
+    comment = meta.description;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     categories = [ "Network" "InstantMessaging" "Chat" ];
   })];
 
   passthru.updateScript = ./update.sh;
+<<<<<<< HEAD
   passthru.tests.version = testers.testVersion rec {
     package = teams-for-linux;
     command = "HOME=$TMPDIR ${package.meta.mainProgram or package.pname} --version";
@@ -107,3 +155,15 @@ stdenv.mkDerivation (finalAttrs: {
     broken = stdenv.isDarwin;
   };
 })
+=======
+
+  meta = with lib; {
+    description = "Unofficial Microsoft Teams client for Linux";
+    homepage = "https://github.com/IsmaelMartinez/teams-for-linux";
+    license = licenses.gpl3Only;
+    maintainers = with maintainers; [ muscaln lilyinstarlight ];
+    platforms = platforms.unix;
+    broken = stdenv.isDarwin;
+  };
+}
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)

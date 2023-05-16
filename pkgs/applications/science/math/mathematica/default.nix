@@ -2,7 +2,11 @@
 , config
 , lib
 , cudaPackages
+<<<<<<< HEAD
 , cudaSupport ? config.cudaSupport
+=======
+, cudaSupport ? config.cudaSupport or false
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , lang ? "en"
 , webdoc ? false
 , version ? null

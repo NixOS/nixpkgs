@@ -1,8 +1,16 @@
 { lib
 , bundlerApp
+<<<<<<< HEAD
 }:
 
 bundlerApp {
+=======
+, buildRubyGem
+, ruby
+}:
+
+bundlerApp rec {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pname = "haste";
   gemdir = ./.;
   exes = [ "haste" ];

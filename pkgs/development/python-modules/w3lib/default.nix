@@ -2,7 +2,10 @@
 , buildPythonPackage
 , fetchPypi
 , pytestCheckHook
+<<<<<<< HEAD
 , pythonAtLeast
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , pythonOlder
 }:
 
@@ -26,10 +29,15 @@ buildPythonPackage rec {
     "w3lib"
   ];
 
+<<<<<<< HEAD
   disabledTests = lib.optionals (pythonAtLeast "3.11") [
     # regressed on Python 3.11.4
     # https://github.com/scrapy/w3lib/issues/212
     "test_safe_url_string_url"
+=======
+  disabledTests = [
+    "test_add_or_replace_parameter"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   meta = with lib; {

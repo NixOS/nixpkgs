@@ -6,13 +6,21 @@ else
 
 stdenv.mkDerivation rec {
   pname = "ocaml${ocaml.version}-wasm";
+<<<<<<< HEAD
   version = "2.0.1";
+=======
+  version = "2.0.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "WebAssembly";
     repo = "spec";
     rev = "opam-${version}";
+<<<<<<< HEAD
     hash = "sha256-5eo8MIui2GxRS5X9az0NlLGZfxi5KGsTI/EaP6m/zts=";
+=======
+    sha256 = "sha256:09s0v79x0ymzcp2114zkm3phxavdfnkkq67qz1ndnknbkziwqf3v";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ ocaml findlib ocamlbuild ];

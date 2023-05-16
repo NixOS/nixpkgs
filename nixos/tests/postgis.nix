@@ -9,7 +9,11 @@ import ./make-test-python.nix ({ pkgs, ...} : {
       { pkgs, ... }:
 
       {
+<<<<<<< HEAD
         services.postgresql = let mypg = pkgs.postgresql; in {
+=======
+        services.postgresql = let mypg = pkgs.postgresql_11; in {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
             enable = true;
             package = mypg;
             extraPlugins = with mypg.pkgs; [

@@ -2,8 +2,14 @@ import nixos_render_docs as nrd
 
 from sample_md import sample1
 
+<<<<<<< HEAD
 from typing import Mapping
 
+=======
+from typing import Mapping, Optional
+
+import markdown_it
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 class Converter(nrd.md.Converter[nrd.commonmark.CommonMarkRenderer]):
     def __init__(self, manpage_urls: Mapping[str, str]):
@@ -26,7 +32,11 @@ def test_indented_fence() -> None:
 
 def test_full() -> None:
     c = Converter({ 'man(1)': 'http://example.org' })
+<<<<<<< HEAD
     assert c._render(sample1) == """\
+=======
+    assert c._render(sample1) == f"""\
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 **Warning:** foo
 
 **Note:** nested
@@ -91,9 +101,12 @@ some nested anchors
  - *‌more stuff in same deflist‌*
    
    foo""".replace(' ', ' ')
+<<<<<<< HEAD
 
 def test_images() -> None:
     c = Converter({})
     assert c._render("![*alt text*](foo \"title \\\"quoted\\\" text\")") == (
         "![*alt text*](foo \"title \\\"quoted\\\" text\")"
     )
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)

@@ -42,10 +42,14 @@ stdenv.mkDerivation rec {
     description = "Toolbox for manipulating and creating Ogg video files";
     homepage = "http://www.streamnik.de/oggvideotools.html";
     license = licenses.gpl2Only;
+<<<<<<< HEAD
     maintainers = with maintainers; [ ];
     # Compilation error on Darwin:
     # error: invalid argument '--std=c++0x' not allowed with 'C'
     # make[2]: *** [src/libresample/CMakeFiles/resample.dir/build.make:76: src/libresample/CMakeFiles/resample.dir/filterkit.c.o] Error 1
     broken = stdenv.isDarwin;
+=======
+    maintainers = with maintainers; [ SuperSandro2000 ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

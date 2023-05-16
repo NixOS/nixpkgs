@@ -37,20 +37,34 @@
 
 stdenv.mkDerivation rec {
   pname = "389-ds-base";
+<<<<<<< HEAD
   version = "2.4.3";
+=======
+  version = "2.3.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "389ds";
     repo = pname;
     rev = "${pname}-${version}";
+<<<<<<< HEAD
     hash = "sha256-bUjL1fjzyrq9jjpB/xbRCAISiPBwrlXbbDqT0aLOVOc=";
+=======
+    sha256 = "sha256-14zl0zGVb8ykgtjao8QGakFyr+b5Cve0NbiZeZig/Ac=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
+<<<<<<< HEAD
     sourceRoot = "${src.name}/src";
     name = "${pname}-${version}";
     hash = "sha256-FlrHaz1whwzDvm3MA+wEaQpq7h2X9ZDnQc3f73vLZ58=";
+=======
+    sourceRoot = "source/src";
+    name = "${pname}-${version}";
+    hash = "sha256-C7HFv6tTBXoi0a1yEQeGjcKjruvBrm/kiu5zgUUTse0=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

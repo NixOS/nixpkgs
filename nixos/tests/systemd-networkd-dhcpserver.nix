@@ -1,6 +1,7 @@
 # This test predominantly tests systemd-networkd DHCP server, by
 # setting up a DHCP server and client, and ensuring they are mutually
 # reachable via the DHCP allocated address.
+<<<<<<< HEAD
 # Two DHCP servers are set up on bridge VLANs, testing to make sure that
 # bridge VLAN settings are correctly applied.
 #
@@ -11,6 +12,12 @@ import ./make-test-python.nix ({pkgs, ...}: {
   name = "systemd-networkd-dhcpserver";
   meta = with pkgs.lib.maintainers; {
     maintainers = [ ];
+=======
+import ./make-test-python.nix ({pkgs, ...}: {
+  name = "systemd-networkd-dhcpserver";
+  meta = with pkgs.lib.maintainers; {
+    maintainers = [ tomfitzhenry ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
   nodes = {
     router = { config, pkgs, ... }: {
@@ -22,6 +29,7 @@ import ./make-test-python.nix ({pkgs, ...}: {
         firewall.enable = false;
       };
       systemd.network = {
+<<<<<<< HEAD
         netdevs = {
           br0 = {
             enable = true;
@@ -44,6 +52,8 @@ import ./make-test-python.nix ({pkgs, ...}: {
             vlanConfig.Id = 2;
           };
         };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         networks = {
           # systemd-networkd will load the first network unit file
           # that matches, ordered lexiographically by filename.
@@ -52,6 +62,7 @@ import ./make-test-python.nix ({pkgs, ...}: {
           # however, hence why this network is named such.
           "01-eth1" = {
             name = "eth1";
+<<<<<<< HEAD
             networkConfig.Bridge = "br0";
             bridgeVLANs = [
               { bridgeVLANConfig = { PVID = 2; EgressUntagged = 2; }; }
@@ -78,6 +89,11 @@ import ./make-test-python.nix ({pkgs, ...}: {
             networkConfig = {
               DHCPServer = true;
               Address = "10.0.2.1/24";
+=======
+            networkConfig = {
+              DHCPServer = true;
+              Address = "10.0.0.1/24";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
             };
             dhcpServerConfig = {
               PoolOffset = 100;
@@ -103,7 +119,12 @@ import ./make-test-python.nix ({pkgs, ...}: {
     start_all()
     router.wait_for_unit("systemd-networkd-wait-online.service")
     client.wait_for_unit("systemd-networkd-wait-online.service")
+<<<<<<< HEAD
     client.wait_until_succeeds("ping -c 5 10.0.2.1")
     router.wait_until_succeeds("ping -c 5 10.0.2.100")
+=======
+    client.wait_until_succeeds("ping -c 5 10.0.0.1")
+    router.wait_until_succeeds("ping -c 5 10.0.0.100")
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '';
 })

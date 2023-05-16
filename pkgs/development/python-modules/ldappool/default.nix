@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 { lib
 , buildPythonPackage
 , fetchPypi
@@ -9,6 +10,10 @@
 , testresources
 , testtools
 }:
+=======
+{ lib, buildPythonPackage, fetchPypi
+, pbr, python-ldap, prettytable, fixtures, testresources, testtools }:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 buildPythonPackage rec {
   pname = "ldappool";
@@ -29,7 +34,11 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ pbr ];
 
+<<<<<<< HEAD
   propagatedBuildInputs = [ python-ldap prettytable six ];
+=======
+  propagatedBuildInputs = [ python-ldap prettytable ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nativeCheckInputs = [ fixtures testresources testtools ];
 

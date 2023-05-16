@@ -3,15 +3,22 @@ use lock::UrlOrString;
 use rayon::prelude::*;
 use serde_json::{Map, Value};
 use std::{
+<<<<<<< HEAD
     fs,
     io::{self, Read},
+=======
+    fs, io,
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     process::{Command, Stdio},
 };
 use tempfile::{tempdir, TempDir};
 use url::Url;
 
+<<<<<<< HEAD
 use crate::util;
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 pub mod lock;
 
 pub fn lockfile(content: &str, force_git_deps: bool) -> anyhow::Result<Vec<Package>> {
@@ -106,7 +113,11 @@ impl Package {
 
         let specifics = match get_hosted_git_url(&resolved)? {
             Some(hosted) => {
+<<<<<<< HEAD
                 let mut body = util::get_url_with_retry(&hosted)?;
+=======
+                let mut body = ureq::get(hosted.as_str()).call()?.into_reader();
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
                 let workdir = tempdir()?;
 
@@ -139,9 +150,15 @@ impl Package {
             None => Specifics::Registry {
                 integrity: pkg
                     .integrity
+<<<<<<< HEAD
                     .expect("non-git dependencies should have associated integrity")
                     .into_best()
                     .expect("non-git dependencies should have non-empty associated integrity"),
+=======
+                    .expect("non-git dependencies should have assosciated integrity")
+                    .into_best()
+                    .expect("non-git dependencies should have non-empty assosciated integrity"),
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
             },
         };
 
@@ -157,7 +174,14 @@ impl Package {
             Specifics::Registry { .. } => {
                 let mut body = Vec::new();
 
+<<<<<<< HEAD
                 util::get_url_with_retry(&self.url)?.read_to_end(&mut body)?;
+=======
+                ureq::get(self.url.as_str())
+                    .call()?
+                    .into_reader()
+                    .read_to_end(&mut body)?;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
                 Ok(body)
             }

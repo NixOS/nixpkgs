@@ -63,7 +63,10 @@ let
       mauikit-calendar = callPackage ./mauikit-calendar { };
       mauikit-filebrowsing = callPackage ./mauikit-filebrowsing.nix { };
       mauikit-imagetools = callPackage ./mauikit-imagetools.nix { };
+<<<<<<< HEAD
       mauikit-terminal = callPackage ./mauikit-terminal.nix { };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       mauikit-texteditor = callPackage ./mauikit-texteditor.nix { };
       mauiman = callPackage ./mauiman.nix { };
 

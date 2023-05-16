@@ -53,7 +53,11 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "A package manager for PureScript based on package sets";
     license = licenses.bsd3;
+<<<<<<< HEAD
     maintainers = with maintainers; [ ];
+=======
+    maintainers = with maintainers; [ Profpatsch ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     platforms = [ "x86_64-darwin" "x86_64-linux" ];
   };
 }

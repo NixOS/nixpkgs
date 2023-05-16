@@ -17,6 +17,10 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "A cargo subcommand for creating GraphViz DOT files and dependency graphs";
     license = with licenses; [ mit ];
+<<<<<<< HEAD
     maintainers = with maintainers; [ basvandijk matthiasbeyer ];
+=======
+    maintainers = with maintainers; [ basvandijk ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

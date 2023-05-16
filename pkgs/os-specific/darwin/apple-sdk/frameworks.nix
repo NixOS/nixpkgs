@@ -104,7 +104,10 @@ with frameworks; with libs; {
   SpriteKit               = {};
   StoreKit                = {};
   SyncServices            = {};
+<<<<<<< HEAD
   System                  = {};
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   SystemConfiguration     = { inherit Security; };
   TWAIN                   = { inherit Carbon; };
   Tcl                     = {};

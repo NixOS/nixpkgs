@@ -22,13 +22,21 @@
 
 stdenv.mkDerivation rec {
   pname = "pdal";
+<<<<<<< HEAD
   version = "2.5.6";
+=======
+  version = "2.4.3";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "PDAL";
     repo = "PDAL";
     rev = version;
+<<<<<<< HEAD
     sha256 = "sha256-JKwa89c05EfZ/FxOkj8lYmw0o2EgSqafRDIV2mTpZ5E=";
+=======
+    sha256 = "sha256-9TQlhuGSTnHsTlJos9Hwnyl1CxI0tXLZdqsaGdp6WIE=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [
@@ -79,7 +87,11 @@ stdenv.mkDerivation rec {
     description = "PDAL is Point Data Abstraction Library. GDAL for point cloud data";
     homepage = "https://pdal.io";
     license = licenses.bsd3;
+<<<<<<< HEAD
     maintainers = teams.geospatial.members;
+=======
+    maintainers = with maintainers; [ nh2 ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     platforms = platforms.all;
   };
 }

@@ -263,8 +263,13 @@ in
       serviceConfig.RemainAfterExit = true;
 
       wantedBy = [ "multi-user.target" ];
+<<<<<<< HEAD
       requires = lib.optional (cfg.database.host != null) "postgresql.service";
       after = [ "network.target" ] ++ (lib.optional (cfg.database.host != null) "postgresql.service");
+=======
+      requires = if cfg.database.host == null then [] else [ "postgresql.service" ];
+      after = [ "network.target" ] ++ (if cfg.database.host == null then [] else [ "postgresql.service" ]);
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
       script = ''
         rm -rf "${runDir}"

@@ -11,7 +11,10 @@
 , freetype
 , alsa-lib
 , libjack2
+<<<<<<< HEAD
 , Accelerate
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , Cocoa
 , WebKit
 , MetalKit
@@ -53,7 +56,10 @@ stdenv.mkDerivation rec {
     alsa-lib
     libjack2
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
+<<<<<<< HEAD
     Accelerate
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     Cocoa
     WebKit
     MetalKit

@@ -81,10 +81,16 @@ rec {
    */
   toKeyValue = {
     mkKeyValue ? mkKeyValueDefault {} "=",
+<<<<<<< HEAD
     listsAsDuplicateKeys ? false,
     indent ? ""
   }:
   let mkLine = k: v: indent + mkKeyValue k v + "\n";
+=======
+    listsAsDuplicateKeys ? false
+  }:
+  let mkLine = k: v: mkKeyValue k v + "\n";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       mkLines = if listsAsDuplicateKeys
         then k: v: map (mkLine k) (if lib.isList v then v else [v])
         else k: v: [ (mkLine k v) ];
@@ -169,7 +175,11 @@ rec {
     mkKeyValue    ? mkKeyValueDefault {} "=",
     # allow lists as values for duplicate keys
     listsAsDuplicateKeys ? false
+<<<<<<< HEAD
   }: { globalSection, sections ? {} }:
+=======
+  }: { globalSection, sections }:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     ( if globalSection == {}
       then ""
       else (toKeyValue { inherit mkKeyValue listsAsDuplicateKeys; } globalSection)
@@ -189,10 +199,17 @@ rec {
    * }
    *
    *> [url "ssh://git@github.com/"]
+<<<<<<< HEAD
    *>   insteadOf = "https://github.com"
    *>
    *> [user]
    *>   name = "edolstra"
+=======
+   *>   insteadOf = https://github.com/
+   *>
+   *> [user]
+   *>   name = edolstra
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
    */
   toGitINI = attrs:
     with builtins;
@@ -209,6 +226,7 @@ rec {
         else
           ''${section} "${subsection}"'';
 
+<<<<<<< HEAD
       mkValueString = v:
         let
           escapedV = ''
@@ -220,6 +238,11 @@ rec {
       # generation for multiple ini values
       mkKeyValue = k: v:
         let mkKeyValue = mkKeyValueDefault { inherit mkValueString; } " = " k;
+=======
+      # generation for multiple ini values
+      mkKeyValue = k: v:
+        let mkKeyValue = mkKeyValueDefault { } " = " k;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         in concatStringsSep "\n" (map (kv: "\t" + mkKeyValue kv) (lib.toList v));
 
       # converts { a.b.c = 5; } to { "a.b".c = 5; } for toINI
@@ -238,6 +261,7 @@ rec {
     in
       toINI_ (gitFlattenAttrs attrs);
 
+<<<<<<< HEAD
   # mkKeyValueDefault wrapper that handles dconf INI quirks.
   # The main differences of the format is that it requires strings to be quoted.
   mkDconfKeyValue = mkKeyValueDefault { mkValueString = v: toString (lib.gvariant.mkValue v); } "=";
@@ -246,6 +270,8 @@ rec {
   # for details.
   toDconfINI = toINI { mkKeyValue = mkDconfKeyValue; };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   /* Generates JSON from an arbitrary (non-function) value.
     * For more information see the documentation of the builtin.
     */
@@ -448,7 +474,11 @@ ${expr "" v}
 
   /*
    Translate a simple Nix expression to Lua representation with occasional
+<<<<<<< HEAD
    Lua-inlines that can be constructed by mkLuaInline function.
+=======
+   Lua-inlines that can be construted by mkLuaInline function.
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
    Configuration:
      * multiline - by default is true which results in indented block-like view.

@@ -70,11 +70,20 @@ in {
 
     users.groups.${cfg.group} = {};
     users.users.${cfg.user} =
+<<<<<<< HEAD
       optionalAttrs (cfg.user == "roon-bridge") {
+=======
+      if cfg.user == "roon-bridge" then {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         isSystemUser = true;
         description = "Roon Bridge user";
         group = cfg.group;
         extraGroups = [ "audio" ];
+<<<<<<< HEAD
       };
+=======
+      }
+      else {};
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

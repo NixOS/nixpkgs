@@ -51,6 +51,10 @@ buildPythonPackage rec {
     description = "A package for symbolic computation";
     homepage = "https://documen.tician.de/pymbolic/";
     license = licenses.mit;
+<<<<<<< HEAD
     maintainers = with maintainers; [ ];
+=======
+    maintainers = with maintainers; [ costrouc ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

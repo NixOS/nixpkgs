@@ -41,13 +41,21 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "icewm";
+<<<<<<< HEAD
   version = "3.4.1";
+=======
+  version = "3.3.4";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "ice-wm";
     repo = "icewm";
     rev = finalAttrs.version;
+<<<<<<< HEAD
     hash = "sha256-KgdCgKR3KqDf9GONCBRkLpNLoOycE0y4UXxHxBqNudk=";
+=======
+    hash = "sha256-Ygu10QF+cbjA0qy3k8/A9QX5xSthXcPy0wII3tXLH68=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 { lib
 , stdenv
 , fetchFromGitHub
@@ -9,16 +10,25 @@
 
 # tests
 , bear, tiledb
+=======
+{ lib, stdenv, fetchFromGitHub, cmake, fmt
+, staticBuild ? stdenv.hostPlatform.isStatic
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 stdenv.mkDerivation rec {
   pname = "spdlog";
+<<<<<<< HEAD
   version = "1.12.0";
+=======
+  version = "1.11.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "gabime";
     repo  = "spdlog";
     rev   = "v${version}";
+<<<<<<< HEAD
     hash  = "sha256-cxTaOuLXHRU8xMz9gluYz0a93O0ez2xOxbloyc1m1ns=";
   };
 
@@ -33,6 +43,13 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
   propagatedBuildInputs = [ fmt ];
   checkInputs = [ catch2_3 ];
+=======
+    hash  = "sha256-kA2MAb4/EygjwiLEjF9EA7k8Tk//nwcKB1+HlzELakQ=";
+  };
+
+  nativeBuildInputs = [ cmake ];
+  propagatedBuildInputs = [ fmt ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   cmakeFlags = [
     "-DSPDLOG_BUILD_SHARED=${if staticBuild then "OFF" else "ON"}"
@@ -52,10 +69,13 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
+<<<<<<< HEAD
   passthru.tests = {
     inherit bear tiledb;
   };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   meta = with lib; {
     description    = "Very fast, header only, C++ logging library";
     homepage       = "https://github.com/gabime/spdlog";

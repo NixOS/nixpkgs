@@ -124,7 +124,10 @@ rec {
         inherit tor meek obfs4 snowflake;
         inherit (tor) geoip;
       })
+<<<<<<< HEAD
       ./fix-qrcode-gui.patch
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     ];
 
     disable = !isPy3k;
@@ -139,6 +142,7 @@ rec {
 
     nativeBuildInputs = [ qt5.wrapQtAppsHook ];
 
+<<<<<<< HEAD
     postInstall = ''
       mkdir -p $out/share/{appdata,applications,icons}
       cp $src/org.onionshare.OnionShare.desktop $out/share/applications
@@ -146,6 +150,8 @@ rec {
       cp $src/org.onionshare.OnionShare.appdata.xml $out/share/appdata
     '';
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     preFixup = ''
       wrapQtApp $out/bin/onionshare
     '';

@@ -4,7 +4,11 @@
 
   # Build-time dependencies:
 , addOpenGLRunpath
+<<<<<<< HEAD
 , bazel_6
+=======
+, bazel_5
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , binutils
 , buildBazelPackage
 , buildPythonPackage
@@ -21,13 +25,19 @@
 , setuptools
 , symlinkJoin
 , wheel
+<<<<<<< HEAD
 , build
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , which
 
   # Python dependencies:
 , absl-py
 , flatbuffers
+<<<<<<< HEAD
 , ml-dtypes
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , numpy
 , scipy
 , six
@@ -37,13 +47,22 @@
 , giflib
 , grpc
 , libjpeg_turbo
+<<<<<<< HEAD
+=======
+, protobuf
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , python
 , snappy
 , zlib
 
+<<<<<<< HEAD
 , config
   # CUDA flags:
 , cudaSupport ? config.cudaSupport
+=======
+  # CUDA flags:
+, cudaSupport ? false
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , cudaPackages ? {}
 
   # MKL:
@@ -54,7 +73,11 @@ let
   inherit (cudaPackages) backendStdenv cudatoolkit cudaFlags cudnn nccl;
 
   pname = "jaxlib";
+<<<<<<< HEAD
   version = "0.4.14";
+=======
+  version = "0.4.4";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   meta = with lib; {
     description = "JAX is Autograd and XLA, brought together for high-performance machine learning research.";
@@ -65,7 +88,11 @@ let
     # aarch64-darwin is broken because of https://github.com/bazelbuild/rules_cc/pull/136
     # however even with that fix applied, it doesn't work for everyone:
     # https://github.com/NixOS/nixpkgs/pull/184395#issuecomment-1207287129
+<<<<<<< HEAD
     broken = stdenv.isDarwin;
+=======
+    broken = stdenv.isAarch64 || stdenv.isDarwin;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   cudatoolkit_joined = symlinkJoin {
@@ -100,9 +127,13 @@ let
     # "com_github_googleapis_googleapis"
     # "com_github_googlecloudplatform_google_cloud_cpp"
     "com_github_grpc_grpc"
+<<<<<<< HEAD
     # ERROR: /build/output/external/bazel_tools/tools/proto/BUILD:25:6: no such target '@com_google_protobuf//:cc_toolchain':
     # target 'cc_toolchain' not declared in package '' defined by /build/output/external/com_google_protobuf/BUILD.bazel
     # "com_google_protobuf"
+=======
+    "com_google_protobuf"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     # Fails with the error: external/org_tensorflow/tensorflow/core/profiler/utils/tf_op_utils.cc:46:49: error: no matching function for call to 're2::RE2::FullMatch(absl::lts_2020_02_25::string_view&, re2::RE2&)'
     # "com_googlesource_code_re2"
     "curl"
@@ -123,9 +154,13 @@ let
     "org_sqlite"
     "pasta"
     "png"
+<<<<<<< HEAD
     # ERROR: /build/output/external/pybind11/BUILD.bazel: no such target '@pybind11//:osx':
     # target 'osx' not declared in package '' defined by /build/output/external/pybind11/BUILD.bazel
     # "pybind11"
+=======
+    "pybind11"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "six_archive"
     "snappy"
     "tblib_archive"
@@ -135,6 +170,7 @@ let
     "zlib"
   ];
 
+<<<<<<< HEAD
   arch =
     # KeyError: ('Linux', 'arm64')
     if stdenv.targetPlatform.isLinux && stdenv.targetPlatform.linuxArch == "arm64" then "aarch64"
@@ -145,13 +181,23 @@ let
 
     # See https://github.com/google/jax/blob/main/.bazelversion for the latest.
     bazel = bazel_6;
+=======
+  bazel-build = buildBazelPackage rec {
+    name = "bazel-build-${pname}-${version}";
+
+    bazel = bazel_5;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     src = fetchFromGitHub {
       owner = "google";
       repo = "jax";
       # google/jax contains tags for jax and jaxlib. Only use jaxlib tags!
       rev = "refs/tags/${pname}-v${version}";
+<<<<<<< HEAD
       hash = "sha256-0KnILQkahSiA1uuyT+kgy1XaCcZ3cpx1q114e2pecvg=";
+=======
+      hash = "sha256-DP68UwS9bg243iWU4MLHN0pwl8LaOcW3Sle1ZjsLOHo=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
 
     nativeBuildInputs = [
@@ -160,7 +206,10 @@ let
       git
       setuptools
       wheel
+<<<<<<< HEAD
       build
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       which
     ] ++ lib.optionals stdenv.isDarwin [
       cctools
@@ -176,7 +225,11 @@ let
       numpy
       openssl
       pkgs.flatbuffers
+<<<<<<< HEAD
       pkgs.protobuf
+=======
+      protobuf
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       pybind11
       scipy
       six
@@ -195,8 +248,12 @@ let
       rm -f .bazelversion
     '';
 
+<<<<<<< HEAD
     bazelRunTarget = "//jaxlib/tools:build_wheel";
     runTargetFlags = [ "--output_path=$out" "--cpu=${arch}" ];
+=======
+    bazelTargets = [ "//build:build_wheel" ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     removeRulesCC = false;
 
@@ -215,11 +272,15 @@ let
       build --action_env=PYENV_ROOT
       build --python_path="${python}/bin/python"
       build --distinct_host_configuration=false
+<<<<<<< HEAD
       build --define PROTOBUF_INCLUDE_PATH="${pkgs.protobuf}/include"
     '' + lib.optionalString (stdenv.targetPlatform.avxSupport && stdenv.targetPlatform.isUnix) ''
       build --config=avx_posix
     '' + lib.optionalString mklSupport ''
       build --config=mkl_open_source_only
+=======
+      build --define PROTOBUF_INCLUDE_PATH="${protobuf}/include"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     '' + lib.optionalString cudaSupport ''
       build --action_env CUDA_TOOLKIT_PATH="${cudatoolkit_joined}"
       build --action_env CUDNN_INSTALL_PATH="${cudnn}"
@@ -246,7 +307,11 @@ let
     fetchAttrs = {
       TF_SYSTEM_LIBS = lib.concatStringsSep "," tf_system_libs;
       # we have to force @mkl_dnn_v1 since it's not needed on darwin
+<<<<<<< HEAD
       bazelTargets = [ bazelRunTarget "@mkl_dnn_v1//:mkl_dnn" ];
+=======
+      bazelTargets = bazelTargets ++ [ "@mkl_dnn_v1//:mkl_dnn" ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       bazelFlags = bazelFlags ++ [
         "--config=avx_posix"
       ] ++ lib.optionals cudaSupport [
@@ -259,12 +324,20 @@ let
         "--config=mkl_open_source_only"
       ];
 
+<<<<<<< HEAD
       sha256 = (if cudaSupport then {
         x86_64-linux = "sha256-L+d4umcN8eZQJS7NtbyMhFbbGUVd0a73GOYbZx3bW9Q=";
       } else {
         x86_64-linux = "sha256-V1giQbu70RYjbNsqudibiCgvtFNRIJ8XG75QtIzjM4g=";
         aarch64-linux = "sha256-DRU4aT7kQffhsOllgHtSlIsYOeLF4Sy5o5RR1CaTle0=";
       }).${stdenv.system} or (throw "jaxlib: unsupported system: ${stdenv.system}");
+=======
+      sha256 =
+        if cudaSupport then
+          "sha256-O6bM7Lc8eaFyO4Xzl5/hvBrbPioI+Yeqx9yNC97fvKk="
+        else
+          "sha256-gLMJfJSQIdGGY2Ivx4IgDWg0hc+mxzlqY11CUkSWcjI=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
 
     buildAttrs = {
@@ -274,6 +347,7 @@ let
         "nsync" # fails to build on darwin
       ]);
 
+<<<<<<< HEAD
       # Note: we cannot do most of this patching at `patch` phase as the deps are not available yet.
       # 1) Link protobuf from nixpkgs (through TF_SYSTEM_LIBS when using gcc) to prevent crashes on
       #    loading multiple extensions in the same python program due to duplicate protobuf DBs.
@@ -281,6 +355,27 @@ let
       preBuild = lib.optionalString cudaSupport ''
         export NIX_LDFLAGS+=" -L${backendStdenv.nixpkgsCompatibleLibstdcxx}/lib"
         patchShebangs ../output/external/xla/third_party/gpus/crosstool/clang/bin/crosstool_wrapper_driver_is_not_gcc.tpl
+=======
+      bazelFlags = bazelFlags ++ lib.optionals (stdenv.targetPlatform.isx86_64 && stdenv.targetPlatform.isUnix) [
+        "--config=avx_posix"
+      ] ++ lib.optionals cudaSupport [
+        "--config=cuda"
+      ] ++ lib.optionals mklSupport [
+        "--config=mkl_open_source_only"
+      ];
+      # Note: we cannot do most of this patching at `patch` phase as the deps are not available yet.
+      # 1) Fix pybind11 include paths.
+      # 2) Link protobuf from nixpkgs (through TF_SYSTEM_LIBS when using gcc) to prevent crashes on
+      #    loading multiple extensions in the same python program due to duplicate protobuf DBs.
+      # 3) Patch python path in the compiler driver.
+      preBuild = ''
+        for src in ./jaxlib/*.{cc,h} ./jaxlib/cuda/*.{cc,h}; do
+          sed -i 's@include/pybind11@pybind11@g' $src
+        done
+      '' + lib.optionalString cudaSupport ''
+        export NIX_LDFLAGS+=" -L${backendStdenv.nixpkgsCompatibleLibstdcxx}/lib"
+        patchShebangs ../output/external/org_tensorflow/third_party/gpus/crosstool/clang/bin/crosstool_wrapper_driver_is_not_gcc.tpl
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       '' + lib.optionalString stdenv.isDarwin ''
         # Framework search paths aren't added by bintools hook
         # https://github.com/NixOS/nixpkgs/pull/41914
@@ -290,23 +385,44 @@ let
         substituteInPlace ../output/external/rules_cc/cc/private/toolchain/unix_cc_configure.bzl \
           --replace "/usr/bin/libtool" "${cctools}/bin/libtool"
       '' + (if stdenv.cc.isGNU then ''
+<<<<<<< HEAD
         sed -i 's@-lprotobuf@-l:libprotobuf.a@' ../output/external/xla/third_party/systemlibs/protobuf.BUILD
         sed -i 's@-lprotoc@-l:libprotoc.a@' ../output/external/xla/third_party/systemlibs/protobuf.BUILD
       '' else if stdenv.cc.isClang then ''
         sed -i 's@-lprotobuf@${pkgs.protobuf}/lib/libprotobuf.a@' ../output/external/xla/third_party/systemlibs/protobuf.BUILD
         sed -i 's@-lprotoc@${pkgs.protobuf}/lib/libprotoc.a@' ../output/external/xla/third_party/systemlibs/protobuf.BUILD
       '' else throw "Unsupported stdenv.cc: ${stdenv.cc}");
+=======
+        sed -i 's@-lprotobuf@-l:libprotobuf.a@' ../output/external/org_tensorflow/third_party/systemlibs/protobuf.BUILD
+        sed -i 's@-lprotoc@-l:libprotoc.a@' ../output/external/org_tensorflow/third_party/systemlibs/protobuf.BUILD
+      '' else if stdenv.cc.isClang then ''
+        sed -i 's@-lprotobuf@${protobuf}/lib/libprotobuf.a@' ../output/external/org_tensorflow/third_party/systemlibs/protobuf.BUILD
+        sed -i 's@-lprotoc@${protobuf}/lib/libprotoc.a@' ../output/external/org_tensorflow/third_party/systemlibs/protobuf.BUILD
+      '' else throw "Unsupported stdenv.cc: ${stdenv.cc}");
+
+      installPhase = ''
+        ./bazel-bin/build/build_wheel --output_path=$out --cpu=${stdenv.targetPlatform.linuxArch}
+      '';
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
 
     inherit meta;
   };
   platformTag =
     if stdenv.targetPlatform.isLinux then
+<<<<<<< HEAD
       "manylinux2014_${arch}"
     else if stdenv.system == "x86_64-darwin" then
       "macosx_10_9_${arch}"
     else if stdenv.system == "aarch64-darwin" then
       "macosx_11_0_${arch}"
+=======
+      "manylinux2014_${stdenv.targetPlatform.linuxArch}"
+    else if stdenv.system == "x86_64-darwin" then
+      "macosx_10_9_${stdenv.targetPlatform.linuxArch}"
+    else if stdenv.system == "aarch64-darwin" then
+      "macosx_11_0_${stdenv.targetPlatform.linuxArch}"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     else throw "Unsupported target platform: ${stdenv.targetPlatform}";
 
 in
@@ -342,19 +458,26 @@ buildPythonPackage {
     grpc
     jsoncpp
     libjpeg_turbo
+<<<<<<< HEAD
     ml-dtypes
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     numpy
     scipy
     six
     snappy
   ];
 
+<<<<<<< HEAD
   pythonImportsCheck = [
     "jaxlib"
     # `import jaxlib` loads surprisingly little. These imports are actually bugs that appeared in the 0.4.11 upgrade.
     "jaxlib.cpu_feature_guard"
     "jaxlib.xla_client"
   ];
+=======
+  pythonImportsCheck = [ "jaxlib" ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   # Without it there are complaints about libcudart.so.11.0 not being found
   # because RPATH path entries added above are stripped.

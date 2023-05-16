@@ -6,6 +6,7 @@
 , zlib
 }:
 
+<<<<<<< HEAD
 stdenv.mkDerivation (finalAttrs: {
   pname = "sbt";
   version = "1.9.4";
@@ -13,6 +14,15 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/sbt/sbt/releases/download/v${finalAttrs.version}/sbt-${finalAttrs.version}.tgz";
     hash = "sha256-aL0CJcKdo5ss+yW2dwqRn2nkdiG7JQESFSdC1/KauHA=";
+=======
+stdenv.mkDerivation rec {
+  pname = "sbt";
+  version = "1.8.2";
+
+  src = fetchurl {
+    url = "https://github.com/sbt/sbt/releases/download/v${version}/sbt-${version}.tgz";
+    sha256 = "sha256-H2U0TaB029Zt/vqTwO/40xnXcuXK1H/L62rheLvfRoY=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   postPatch = ''
@@ -47,7 +57,14 @@ stdenv.mkDerivation (finalAttrs: {
       binaryNativeCode
     ];
     description = "A build tool for Scala, Java and more";
+<<<<<<< HEAD
     maintainers = with maintainers; [ nequissimus kashw2 ];
     platforms = platforms.unix;
   };
 })
+=======
+    maintainers = with maintainers; [ nequissimus ];
+    platforms = platforms.unix;
+  };
+}
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)

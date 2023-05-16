@@ -2,7 +2,11 @@
 , rustPlatform
 , fetchFromGitHub
 , pkg-config
+<<<<<<< HEAD
 , libgit2_1_6
+=======
+, libgit2
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , openssl
 , stdenv
 , darwin
@@ -11,12 +15,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-generate";
+<<<<<<< HEAD
   version = "0.18.4";
+=======
+  version = "0.18.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "cargo-generate";
     repo = "cargo-generate";
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-u4LEE3fDYneKhNU38VeVNvqcbDO0pws6yldgcvwSv6M=";
   };
 
@@ -25,6 +34,16 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ libgit2_1_6 openssl ] ++ lib.optionals stdenv.isDarwin [
+=======
+    sha256 = "sha256-FtYdhnw8QrW2wHjLLIXVcByiVFQ97eyrZWsaxt7mmPE=";
+  };
+
+  cargoSha256 = "sha256-UM9sf4LMR7x6haDH7/DFjsZZCng+9E5EnLt6HtTLvCU=";
+
+  nativeBuildInputs = [ pkg-config ];
+
+  buildInputs = [ libgit2 openssl ] ++ lib.optionals stdenv.isDarwin [
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     darwin.apple_sdk.frameworks.Security
   ];
 
@@ -53,6 +72,10 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/cargo-generate/cargo-generate";
     changelog = "https://github.com/cargo-generate/cargo-generate/blob/v${version}/CHANGELOG.md";
     license = with licenses; [ asl20 /* or */ mit ];
+<<<<<<< HEAD
     maintainers = with maintainers; [ figsoda turbomack matthiasbeyer ];
+=======
+    maintainers = with maintainers; [ figsoda turbomack ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

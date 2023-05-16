@@ -2,7 +2,10 @@
 , git
 , gnupg1
 , python3Packages
+<<<<<<< HEAD
 , fetchPypi
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 with python3Packages; buildPythonApplication rec {

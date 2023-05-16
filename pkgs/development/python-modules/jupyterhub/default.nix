@@ -1,5 +1,6 @@
 { lib
 , stdenv
+<<<<<<< HEAD
 , alembic
 , async-generator
 , beautifulsoup4
@@ -34,6 +35,33 @@
 , sqlalchemy
 , tornado
 , traitlets
+=======
+, buildPythonPackage
+, pythonOlder
+, fetchPypi
+, fetchzip
+, alembic
+, async_generator
+, certipy
+, python-dateutil
+, entrypoints
+, jinja2
+, jupyter-telemetry
+, oauthlib
+, pamela
+, prometheus-client
+, requests
+, sqlalchemy
+, tornado
+, traitlets
+, nodePackages
+, beautifulsoup4
+, cryptography
+, notebook
+, pytest-asyncio
+, pytestCheckHook
+, requests-mock
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , virtualenv
 }:
 
@@ -70,6 +98,7 @@ in
 
 buildPythonPackage rec {
   pname = "jupyterhub";
+<<<<<<< HEAD
   version = "4.0.2";
   format = "setuptools";
 
@@ -78,6 +107,14 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-1ORQ7tjZDfvPDsoI8A8gk6C8503FH3z8C3BX9gI0Gh0=";
+=======
+  version = "1.5.0";
+  disabled = pythonOlder "3.6";
+
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-3GGPZXwjukYoDjYlflCTGAZnS6Dp5kmK+wke/GIm1p0=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   # Most of this only applies when building from source (e.g. js/css assets are
@@ -97,11 +134,19 @@ buildPythonPackage rec {
 
     substituteInPlace jupyterhub/proxy.py --replace \
       "'configurable-http-proxy'" \
+<<<<<<< HEAD
       "'${configurable-http-proxy}/bin/configurable-http-proxy'"
 
     substituteInPlace jupyterhub/tests/test_proxy.py --replace \
       "'configurable-http-proxy'" \
       "'${configurable-http-proxy}/bin/configurable-http-proxy'"
+=======
+      "'${nodePackages.configurable-http-proxy}/bin/configurable-http-proxy'"
+
+    substituteInPlace jupyterhub/tests/test_proxy.py --replace \
+      "'configurable-http-proxy'" \
+      "'${nodePackages.configurable-http-proxy}/bin/configurable-http-proxy'"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     substituteInPlace setup.py --replace \
       "'npm'" "'true'"
@@ -122,14 +167,21 @@ buildPythonPackage rec {
   '';
 
   propagatedBuildInputs = [
+<<<<<<< HEAD
     alembic
     async-generator
+=======
+    # https://github.com/jupyterhub/jupyterhub/blob/master/requirements.txt
+    alembic
+    async_generator
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     certipy
     python-dateutil
     entrypoints
     jinja2
     jupyter-telemetry
     oauthlib
+<<<<<<< HEAD
     packaging
     pamela
     prometheus-client
@@ -151,23 +203,47 @@ buildPythonPackage rec {
     mock
     jupyterlab
     playwright
+=======
+    pamela
+    prometheus-client
+    requests
+    sqlalchemy
+    tornado
+    traitlets
+  ];
+
+  preCheck = ''
+    substituteInPlace jupyterhub/tests/test_spawner.py --replace \
+      "'jupyterhub-singleuser'" "'$out/bin/jupyterhub-singleuser'"
+  '';
+
+  nativeCheckInputs = [
+    # https://github.com/jupyterhub/jupyterhub/blob/master/dev-requirements.txt
+    beautifulsoup4
+    cryptography
+    notebook
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     pytest-asyncio
     pytestCheckHook
     requests-mock
     virtualenv
   ];
 
+<<<<<<< HEAD
   preCheck = ''
     substituteInPlace jupyterhub/tests/test_spawner.py --replace \
       "'jupyterhub-singleuser'" "'$out/bin/jupyterhub-singleuser'"
     export PATH="$PATH:$out/bin";
   '';
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   disabledTests = [
     # Tries to install older versions through pip
     "test_upgrade"
     # Testcase fails to find requests import
     "test_external_service"
+<<<<<<< HEAD
     # Attempts to do TLS connection
     "test_connection_notebook_wrong_certs"
     # AttributeError: 'coroutine' object...
@@ -204,5 +280,19 @@ buildPythonPackage rec {
     maintainers = with maintainers; [ ixxie cstrahan ];
     # darwin: E   OSError: dlopen(/nix/store/43zml0mlr17r5jsagxr00xxx91hz9lky-openpam-20170430/lib/libpam.so, 6): image not found
     broken = (stdenv.isLinux && stdenv.isAarch64) || stdenv.isDarwin;
+=======
+    # attempts to do ssl connection
+    "test_connection_notebook_wrong_certs"
+  ];
+
+  meta = with lib; {
+    # darwin: E   OSError: dlopen(/nix/store/43zml0mlr17r5jsagxr00xxx91hz9lky-openpam-20170430/lib/libpam.so, 6): image not found
+    broken = (stdenv.isLinux && stdenv.isAarch64) || stdenv.isDarwin;
+    description = "Serves multiple Jupyter notebook instances";
+    homepage = "https://jupyter.org/";
+    changelog = "https://github.com/jupyterhub/jupyterhub/blob/${version}/docs/source/changelog.md";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ ixxie cstrahan ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

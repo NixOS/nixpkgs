@@ -9,10 +9,18 @@
 , testscenarios
 }:
 
+<<<<<<< HEAD
 buildPythonPackage {
 pname = "oslo-config-tests";
   inherit (oslo-config) version src;
   format = "other";
+=======
+buildPythonPackage rec {
+  pname = "oslo-config-tests";
+  inherit (oslo-config) version;
+
+  src = oslo-config.src;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   postPatch = ''
     # only a small portion of the listed packages are actually needed for running the tests

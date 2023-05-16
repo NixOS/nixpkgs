@@ -45,7 +45,10 @@ stdenv.mkDerivation rec {
     license     = licenses.bsd3;
     platforms   = [ "x86_64-linux" ];
     maintainers = with maintainers; [ thoughtpolice ];
+<<<<<<< HEAD
     # Needs a major update, not compatible with gcc-11.
     broken = true;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

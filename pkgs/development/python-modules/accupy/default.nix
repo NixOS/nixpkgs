@@ -1,5 +1,8 @@
 { lib
+<<<<<<< HEAD
 , stdenv
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , buildPythonPackage
 , fetchFromGitHub
 , pythonOlder
@@ -57,10 +60,13 @@ buildPythonPackage rec {
     export HOME=$(mktemp -d)
   '';
 
+<<<<<<< HEAD
   # This variable is needed to suppress the "Trace/BPT trap: 5" error in Darwin's checkPhase.
   # Not sure of the details, but we can avoid it by changing the matplotlib backend during testing.
   env.MPLBACKEND = lib.optionalString stdenv.isDarwin "Agg";
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   # performance tests aren't useful to us and disabling them allows us to
   # decouple ourselves from an unnecessary build dep
   preCheck = ''
@@ -75,6 +81,10 @@ buildPythonPackage rec {
     description = "Accurate sums and dot products for Python";
     homepage = "https://github.com/nschloe/accupy";
     license = licenses.mit;
+<<<<<<< HEAD
     maintainers = [ ];
+=======
+    maintainers = [ maintainers.costrouc ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

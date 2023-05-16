@@ -29,7 +29,10 @@ buildPythonPackage rec {
     pyparsing
     numpy
     astropy
+<<<<<<< HEAD
     cython
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   # Upstream patches needed for the tests to pass

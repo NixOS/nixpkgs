@@ -1,14 +1,24 @@
 { lib, stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation {
+<<<<<<< HEAD
   pname = "drat-trim";
   version = "2023-05-22";
+=======
+  pname = "drat-trim-unstable";
+  version = "2020-06-05";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "marijnheule";
     repo = "drat-trim";
+<<<<<<< HEAD
     rev = "refs/tags/v05.22.2023";
     hash = "sha256-sV3A0f1TLSaTIdAtT6y8rU3ZS2UqEePJYSf3UySOlSA=";
+=======
+    rev = "9afad0f7156a1e9c6ce19dce5d72cf1cb9a3ef27";
+    sha256 = "1zq585igfaknwqbvv2cji744016zxadbvr0ifr5l6yq13m0vvn3b";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   postPatch = ''

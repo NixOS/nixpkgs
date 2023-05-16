@@ -10,7 +10,11 @@ in
 
     i18n.inputMethod.uim = {
       toolbar = mkOption {
+<<<<<<< HEAD
         type    = types.enum [ "gtk" "gtk3" "gtk-systray" "gtk3-systray" "qt5" ];
+=======
+        type    = types.enum [ "gtk" "gtk3" "gtk-systray" "gtk3-systray" "qt4" ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         default = "gtk";
         example = "gtk-systray";
         description = lib.mdDoc ''

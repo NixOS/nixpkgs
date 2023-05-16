@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 { lib
 , stdenv
 , fetchFromGitHub
@@ -13,12 +14,24 @@
 stdenv.mkDerivation (finalAttrs: {
   pname = "fluent-bit";
   version = "2.1.9";
+=======
+{ lib, stdenv, fetchFromGitHub, cmake, flex, bison, systemd, postgresql, openssl, libyaml }:
+
+stdenv.mkDerivation rec {
+  pname = "fluent-bit";
+  version = "2.1.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "fluent";
     repo = "fluent-bit";
+<<<<<<< HEAD
     rev = "v${finalAttrs.version}";
     hash = "sha256-G/DYGmZMB1vMJJK6vIWxGqhN8WRNjNXoMn9AY75Gw4M=";
+=======
+    rev = "v${version}";
+    sha256 = "sha256-AdIK1qNM2mUC/dLNN5GqYzi9ulqViqsyyd1mvHRfeIM=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ cmake flex bison ];
@@ -44,6 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
       --replace /lib/systemd $out/lib/systemd
   '';
 
+<<<<<<< HEAD
   meta = {
     changelog = "https://github.com/fluent/fluent-bit/releases/tag/v${finalAttrs.version}";
     description = "Log forwarder and processor, part of Fluentd ecosystem";
@@ -53,3 +67,13 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.linux;
   };
 })
+=======
+  meta = with lib; {
+    description = "Log forwarder and processor, part of Fluentd ecosystem";
+    homepage = "https://fluentbit.io";
+    maintainers = with maintainers; [ samrose fpletz ];
+    license = licenses.asl20;
+    platforms = platforms.linux;
+  };
+}
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)

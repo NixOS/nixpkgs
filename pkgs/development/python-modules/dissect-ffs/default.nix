@@ -11,7 +11,11 @@
 
 buildPythonPackage rec {
   pname = "dissect-ffs";
+<<<<<<< HEAD
   version = "3.6";
+=======
+  version = "3.4";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -20,7 +24,11 @@ buildPythonPackage rec {
     owner = "fox-it";
     repo = "dissect.ffs";
     rev = "refs/tags/${version}";
+<<<<<<< HEAD
     hash = "sha256-eyqqsOKcRmzOY+fj1FYudh9FUanD0Z59zZPtsNz6I0s=";
+=======
+    hash = "sha256-A2KyXkL5SKy/iX2G6jQ2Fyx08UKVnekPICdcLhUbm3Q=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;

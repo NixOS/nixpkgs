@@ -11,8 +11,11 @@ in
     services.prowlarr = {
       enable = mkEnableOption (lib.mdDoc "Prowlarr");
 
+<<<<<<< HEAD
       package = mkPackageOptionMD pkgs "prowlarr" { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       openFirewall = mkOption {
         type = types.bool;
         default = false;
@@ -31,7 +34,11 @@ in
         Type = "simple";
         DynamicUser = true;
         StateDirectory = "prowlarr";
+<<<<<<< HEAD
         ExecStart = "${lib.getExe cfg.package} -nobrowser -data=/var/lib/prowlarr";
+=======
+        ExecStart = "${pkgs.prowlarr}/bin/Prowlarr -nobrowser -data=/var/lib/prowlarr";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         Restart = "on-failure";
       };
     };

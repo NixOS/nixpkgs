@@ -1,16 +1,27 @@
+<<<<<<< HEAD
 { config, lib, options, pkgs, buildEnv, ... }:
+=======
+{ config, lib, pkgs, buildEnv, ... }:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 with lib;
 
 let
   defaultUser = "healthchecks";
   cfg = config.services.healthchecks;
+<<<<<<< HEAD
   opt = options.services.healthchecks;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pkg = cfg.package;
   boolToPython = b: if b then "True" else "False";
   environment = {
     PYTHONPATH = pkg.pythonPath;
     STATIC_ROOT = cfg.dataDir + "/static";
+<<<<<<< HEAD
+=======
+    DB_NAME = "${cfg.dataDir}/healthchecks.sqlite";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   } // cfg.settings;
 
   environmentFile = pkgs.writeText "healthchecks-environment" (lib.generators.toKeyValue { } environment);
@@ -98,12 +109,17 @@ in
       description = lib.mdDoc ''
         Environment variables which are read by healthchecks `(local)_settings.py`.
 
+<<<<<<< HEAD
         Settings which are explicitly covered in options below, are type-checked and/or transformed
+=======
+        Settings which are explicitly covered in options bewlow, are type-checked and/or transformed
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         before added to the environment, everything else is passed as a string.
 
         See <https://healthchecks.io/docs/self_hosted_configuration/>
         for a full documentation of settings.
 
+<<<<<<< HEAD
         We add additional variables to this list inside the packages `local_settings.py.`
         - `STATIC_ROOT` to set a state directory for dynamically generated static files.
         - `SECRET_KEY_FILE` to read `SECRET_KEY` from a file at runtime and keep it out of
@@ -116,6 +132,13 @@ in
           - or `nix eval 'nixpkgs#healthchecks.secrets'` if the flake support has been enabled.
       '';
       type = types.submodule (settings: {
+=======
+        We add two variables to this list inside the packages `local_settings.py.`
+        - STATIC_ROOT to set a state directory for dynamically generated static files.
+        - SECRET_KEY_FILE to read SECRET_KEY from a file at runtime and keep it out of /nix/store.
+      '';
+      type = types.submodule {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         freeformType = types.attrsOf types.str;
         options = {
           ALLOWED_HOSTS = lib.mkOption {
@@ -150,6 +173,7 @@ in
             '';
             apply = boolToPython;
           };
+<<<<<<< HEAD
 
           DB = mkOption {
             type = types.enum [ "sqlite" "postgres" "mysql" ];
@@ -172,6 +196,10 @@ in
           };
         };
       });
+=======
+        };
+      };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
   };
 
@@ -195,7 +223,11 @@ in
           StateDirectoryMode = mkIf (cfg.dataDir == "/var/lib/healthchecks") "0750";
         };
       in
+<<<<<<< HEAD
       {
+=======
+        {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         healthchecks-migration = {
           description = "Healthchecks migrations";
           wantedBy = [ "healthchecks.target" ];

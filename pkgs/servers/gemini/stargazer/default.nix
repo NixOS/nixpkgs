@@ -1,10 +1,16 @@
 { lib
+<<<<<<< HEAD
 , stdenv
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , fetchFromSourcehut
 , rustPlatform
 , installShellFiles
 , scdoc
+<<<<<<< HEAD
 , Security
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -24,8 +30,11 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ installShellFiles scdoc ];
 
+<<<<<<< HEAD
   buildInputs = lib.optional stdenv.isDarwin Security;
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   postInstall = ''
     scdoc < doc/stargazer.scd  > stargazer.1
     scdoc < doc/stargazer-ini.scd  > stargazer.ini.5
@@ -40,5 +49,9 @@ rustPlatform.buildRustPackage rec {
     license = licenses.agpl3Plus;
     changelog = "https://git.sr.ht/~zethra/stargazer/refs/${version}";
     maintainers = with maintainers; [ gaykitty ];
+<<<<<<< HEAD
+=======
+    platforms = platforms.linux;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

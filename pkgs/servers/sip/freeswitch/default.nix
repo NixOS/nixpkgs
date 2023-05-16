@@ -88,12 +88,20 @@ in
 
 stdenv.mkDerivation rec {
   pname = "freeswitch";
+<<<<<<< HEAD
   version = "1.10.10";
+=======
+  version = "1.10.9";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   src = fetchFromGitHub {
     owner = "signalwire";
     repo = pname;
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-3Mm/hbMwnlwbtiOFlODtKItVyj34O3beZDlV8YoJmts=";
+=======
+    sha256 = "sha256-65DH2HxiF8wqzmzbIqaQZjSa/JPERHIS2FW6F18c6Pw=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   postPatch = ''

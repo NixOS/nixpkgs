@@ -1,10 +1,13 @@
 { lib
 , fetchFromGitHub
 , buildPythonPackage
+<<<<<<< HEAD
 , packaging
 , setuptools
 , pkgconfig
 , freetype
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , pytest
 , python
 , pillow
@@ -13,13 +16,18 @@
 
 buildPythonPackage rec {
   pname = "aggdraw";
+<<<<<<< HEAD
   version = "1.3.16";
   format = "pyproject";
+=======
+  version = "1.3.15";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "pytroll";
     repo = pname;
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-2yajhuRyQ7BqghbSgPClW3inpw4TW2DhgQbomcRFx94=";
   };
 
@@ -33,6 +41,11 @@ buildPythonPackage rec {
     freetype
   ];
 
+=======
+    hash = "sha256-w3HlnsHYB0R+HZOXtzygC2RST3gllPI7SYtwSCVXhTU=";
+  };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nativeCheckInputs = [
     numpy
     pillow

@@ -17,11 +17,19 @@
 
 buildPythonPackage rec {
   pname = "tesserocr";
+<<<<<<< HEAD
   version = "2.6.1";
 
   src = fetchPypi {
     inherit pname version;
     sha256 = "sha256-pz82cutgQ9ifMS6+40mcBiOsXIqeEquYdBWT+npZNPY=";
+=======
+  version = "2.6.0";
+
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "sha256-d0MNJytT2s073Ur11WP9wkrlG4b9vJzy6BRvKceryaQ=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   # https://github.com/sirfz/tesserocr/issues/314

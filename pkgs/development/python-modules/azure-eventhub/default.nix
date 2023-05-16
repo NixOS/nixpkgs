@@ -9,7 +9,11 @@
 
 buildPythonPackage rec {
   pname = "azure-eventhub";
+<<<<<<< HEAD
   version = "5.11.4";
+=======
+  version = "5.11.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -17,7 +21,11 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
+<<<<<<< HEAD
     hash = "sha256-aLiaNRUEDxF2+bSWxMdtOBwQd3mu13V8u7mj2r4wqCM=";
+=======
+    hash = "sha256-/QVHPlElUNT7whLdMe1k8wYXePg+tQRBmXmZJM1w6fU=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [

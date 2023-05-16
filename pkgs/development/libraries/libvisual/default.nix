@@ -17,8 +17,11 @@ stdenv.mkDerivation rec {
     hash = "sha256-qhKHdBf3bTZC2fTHIzAjgNgzF1Y51jpVZB0Bkopd230=";
   };
 
+<<<<<<< HEAD
   outputs = [ "out" "dev" ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   patches = [
     # pull upstream fix for SDL1 cross-compilation.
     #   https://github.com/Libvisual/libvisual/pull/238

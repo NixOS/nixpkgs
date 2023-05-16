@@ -1,5 +1,10 @@
 {
   "version": "1.10.35",
+<<<<<<< HEAD
   "hash": "sha256-y7+ogMJ5E9E/+ZaTCHWOQWG7iR+BGuVqvlNUDT++Ghc=",
   "cargoHash": "sha256-idlu9qkh2mrF6MxstRcvemKrtTGNY/InBnIDqRvDQPs"
+=======
+  "sha256": "sha256-y7+ogMJ5E9E/+ZaTCHWOQWG7iR+BGuVqvlNUDT++Ghc=",
+  "cargoSha256": "sha256-idlu9qkh2mrF6MxstRcvemKrtTGNY/InBnIDqRvDQPs"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }

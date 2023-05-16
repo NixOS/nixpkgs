@@ -4,13 +4,21 @@
 
 stdenv.mkDerivation rec {
   pname = "libva-utils";
+<<<<<<< HEAD
   version = "2.19.0";
+=======
+  version = "2.18.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner  = "intel";
     repo   = "libva-utils";
     rev    = version;
+<<<<<<< HEAD
     sha256 = "sha256-/juTlK7iRu8XN4kbB1VhmOcKjFD8iBwuIIAJsmF5ihU=";
+=======
+    sha256 = "sha256-t8N+MQ/HueQWtNzEzfAPZb4q7FjFNhpTmX4JbJ5ZGqM=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ meson ninja pkg-config ];

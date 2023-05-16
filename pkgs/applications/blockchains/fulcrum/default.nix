@@ -5,7 +5,11 @@
 , qmake
 , python3
 , qtbase
+<<<<<<< HEAD
 , rocksdb_7_10
+=======
+, rocksdb
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , zeromq
 }:
 
@@ -24,7 +28,11 @@ stdenv.mkDerivation rec {
 
   dontWrapQtApps = true; # no GUI
 
+<<<<<<< HEAD
   buildInputs = [ python3 qtbase rocksdb_7_10 zeromq ];
+=======
+  buildInputs = [ python3 qtbase rocksdb zeromq ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   meta = with lib; {
     description = "Fast & nimble SPV server for Bitcoin Cash & Bitcoin BTC";

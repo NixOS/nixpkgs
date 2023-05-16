@@ -1,5 +1,9 @@
 #!/usr/bin/env nix-shell
+<<<<<<< HEAD
 #!nix-shell -i bash -p curl crystal crystal2nix jq git moreutils nix nix-prefetch pkg-config pcre
+=======
+#!nix-shell -i bash -p curl crystal crystal2nix jq git moreutils nix nix-prefetch pkg-config
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 git_url='https://github.com/iv-org/invidious.git'
 git_branch='master'
 git_dir='/var/tmp/invidious.git'

@@ -45,6 +45,9 @@ buildPythonPackage rec {
     homepage = "https://github.com/pycqa/flake8";
     license = licenses.mit;
     maintainers = with maintainers; [ dotlambda ];
+<<<<<<< HEAD
     mainProgram = "flake8";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

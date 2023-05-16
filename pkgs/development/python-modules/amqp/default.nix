@@ -3,7 +3,10 @@
 , case
 , fetchPypi
 , pytestCheckHook
+<<<<<<< HEAD
 , pytest-rerunfailures
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , pythonOlder
 , vine
 }:
@@ -24,12 +27,18 @@ buildPythonPackage rec {
     vine
   ];
 
+<<<<<<< HEAD
   __darwinAllowLocalNetworking = true;
 
   nativeCheckInputs = [
     case
     pytestCheckHook
     pytest-rerunfailures
+=======
+  nativeCheckInputs = [
+    case
+    pytestCheckHook
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   disabledTests = [

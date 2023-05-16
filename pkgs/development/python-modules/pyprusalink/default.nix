@@ -2,10 +2,15 @@
 , aiohttp
 , buildPythonPackage
 , fetchFromGitHub
+<<<<<<< HEAD
 , fetchpatch
 , pythonOlder
 , setuptools
 , wheel
+=======
+, pythonOlder
+, setuptools
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 buildPythonPackage rec {
@@ -22,6 +27,7 @@ buildPythonPackage rec {
     hash = "sha256-XRtbb7kceiqi8pioTWStRo0drCtQfy1t62jCMihlIec=";
   };
 
+<<<<<<< HEAD
   patches = [
     # https://github.com/home-assistant-libs/pyprusalink/pull/55
     (fetchpatch {
@@ -34,6 +40,10 @@ buildPythonPackage rec {
   nativeBuildInputs = [
     setuptools
     wheel
+=======
+  nativeBuildInputs = [
+    setuptools
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   propagatedBuildInputs = [

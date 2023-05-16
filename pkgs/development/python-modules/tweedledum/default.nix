@@ -21,11 +21,14 @@ buildPythonPackage rec {
     hash = "sha256-wgrY5ajaMYxznyNvlD0ul1PFr3W8oV9I/OVsStlZEBM=";
   };
 
+<<<<<<< HEAD
   postPatch = ''
     sed -i '/\[project\]/a version = "${version}"' pyproject.toml
     sed -i '/\[project\]/a name = "tweedledum"' pyproject.toml
   '';
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nativeBuildInputs = [ cmake ninja scikit-build ];
   dontUseCmakeConfigure = true;
 

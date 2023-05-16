@@ -44,9 +44,17 @@ let
     transport_file_type: hash
   '';
 
+<<<<<<< HEAD
   mailmanCfg = lib.generators.toINI {} (recursiveUpdate cfg.settings {
     webservice.admin_pass = "#NIXOS_MAILMAN_REST_API_PASS_SECRET#";
   });
+=======
+  mailmanCfg = lib.generators.toINI {}
+    (recursiveUpdate cfg.settings
+      ((optionalAttrs (cfg.restApiPassFile != null) {
+        webservice.admin_pass = "#NIXOS_MAILMAN_REST_API_PASS_SECRET#";
+      })));
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   mailmanCfgFile = pkgs.writeText "mailman-raw.cfg" mailmanCfg;
 
@@ -386,7 +394,10 @@ in {
 
     environment.etc."mailman3/settings.py".text = ''
       import os
+<<<<<<< HEAD
       from configparser import ConfigParser
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
       # Required by mailman_web.settings, but will be overridden when
       # settings_local.json is loaded.
@@ -403,10 +414,17 @@ in {
       with open('/var/lib/mailman-web/settings_local.json') as f:
           globals().update(json.load(f))
 
+<<<<<<< HEAD
       with open('/etc/mailman.cfg') as f:
           config = ConfigParser()
           config.read_file(f)
           MAILMAN_REST_API_PASS = config['webservice']['admin_pass']
+=======
+      ${optionalString (cfg.restApiPassFile != null) ''
+        with open('${cfg.restApiPassFile}') as f:
+            MAILMAN_REST_API_PASS = f.read().rstrip('\n')
+      ''}
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
       ${optionalString (cfg.ldap.enable) ''
         import ldap
@@ -503,6 +521,7 @@ in {
         path = with pkgs; [ jq ];
         after = optional withPostgresql "postgresql.service";
         requires = optional withPostgresql "postgresql.service";
+<<<<<<< HEAD
         serviceConfig.RemainAfterExit = true;
         serviceConfig.Type = "oneshot";
         script = ''
@@ -511,6 +530,12 @@ in {
             sed -i "s/#NIXOS_MAILMAN_REST_API_PASS_SECRET#/$(tr -dc A-Za-z0-9 < /dev/urandom | head -c 64)/g" \
               /etc/mailman.cfg
           '' else ''
+=======
+        serviceConfig.Type = "oneshot";
+        script = ''
+          install -m0750 -o mailman -g mailman ${mailmanCfgFile} /etc/mailman.cfg
+          ${optionalString (cfg.restApiPassFile != null) ''
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
             ${pkgs.replace-secret}/bin/replace-secret \
               '#NIXOS_MAILMAN_REST_API_PASS_SECRET#' \
               ${cfg.restApiPassFile} \

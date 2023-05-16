@@ -12,7 +12,11 @@
 
 buildPythonPackage rec {
   pname = "skodaconnect";
+<<<<<<< HEAD
   version = "1.3.6";
+=======
+  version = "1.3.5";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -21,7 +25,11 @@ buildPythonPackage rec {
     owner = "lendy007";
     repo = pname;
     rev = "refs/tags/${version}";
+<<<<<<< HEAD
     hash = "sha256-gV/+mt6XxY1UcA1H8zM4pG1ugrDo0m876e3XG1yV32A=";
+=======
+    hash = "sha256-gLk+Dj2x2OHa6VIIoA7FesDKtg180MuCud2nYk9mYpM=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;

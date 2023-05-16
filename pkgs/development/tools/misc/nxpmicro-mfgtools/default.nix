@@ -12,6 +12,7 @@
 
 stdenv.mkDerivation rec {
   pname = "nxpmicro-mfgtools";
+<<<<<<< HEAD
   version = "1.5.21";
 
   src = fetchFromGitHub {
@@ -19,6 +20,15 @@ stdenv.mkDerivation rec {
     repo = "mfgtools";
     rev = "uuu_${version}";
     sha256 = "sha256-XVvGsHltlA3h9hd3C88G3s2wIZ1EVM6DmvdiwD82vTw=";
+=======
+  version = "1.5.11";
+
+  src = fetchFromGitHub {
+    owner = "NXPmicro";
+    repo = "mfgtools";
+    rev = "uuu_${version}";
+    hash = "sha256-RD0haw0C89uvTlLHtvlv1VwU4Jw2U19Caiq+BSfB4hU=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ cmake pkg-config installShellFiles ];

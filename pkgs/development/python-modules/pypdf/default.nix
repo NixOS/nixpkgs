@@ -15,17 +15,28 @@
 , typing-extensions
 
 # optionals
+<<<<<<< HEAD
 , cryptography
+=======
+, pycryptodome
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , pillow
 
 # tests
 , pytestCheckHook
+<<<<<<< HEAD
 , pytest-timeout
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 buildPythonPackage rec {
   pname = "pypdf";
+<<<<<<< HEAD
   version = "3.15.1";
+=======
+  version = "3.5.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "pyproject";
 
   src = fetchFromGitHub {
@@ -34,7 +45,11 @@ buildPythonPackage rec {
     rev = "refs/tags/${version}";
     # fetch sample files used in tests
     fetchSubmodules = true;
+<<<<<<< HEAD
     hash = "sha256-0KMZnMIeTkra2Il4HGDBtm8HLP8zpMXgUD4V5U5fYy0=";
+=======
+    hash = "sha256-f+M4sfUzDy8hxHUiWG9hyu0EYvnjNA46OtHzBSJdID0=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   outputs = [
@@ -63,7 +78,11 @@ buildPythonPackage rec {
   passthru.optional-dependencies = rec {
     full = crypto ++ image;
     crypto = [
+<<<<<<< HEAD
       cryptography
+=======
+      pycryptodome
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     ];
     image = [
       pillow
@@ -76,7 +95,10 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
+<<<<<<< HEAD
     pytest-timeout
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ] ++ passthru.optional-dependencies.full;
 
   pytestFlagsArray = [
@@ -84,11 +106,14 @@ buildPythonPackage rec {
     "-m" "'not enable_socket'"
   ];
 
+<<<<<<< HEAD
   disabledTests = [
     # requires fpdf2 which we don't package yet
     "test_compression"
   ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   meta = with lib; {
     description = "A pure-python PDF library capable of splitting, merging, cropping, and transforming the pages of PDF files";
     homepage = "https://github.com/py-pdf/pypdf";

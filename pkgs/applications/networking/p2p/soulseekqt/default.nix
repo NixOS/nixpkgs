@@ -28,13 +28,21 @@ mkDerivation rec {
   buildInputs = [ qtmultimedia stdenv.cc.cc ];
 
   installPhase = ''
+<<<<<<< HEAD
       binary="$(realpath ${appextracted}/AppRun)"
+=======
+      # directory in /nix/store so readonly
+      cd $appextracted
+
+      binary="$(readlink AppRun)"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       install -Dm755 $binary -t $out/bin
 
       # fixup and install desktop file
       desktop-file-install --dir $out/share/applications \
         --set-key Exec --set-value $binary \
         --set-key Comment --set-value "${meta.description}" \
+<<<<<<< HEAD
         --set-key Categories --set-value Network ${appextracted}/default.desktop
       mv $out/share/applications/default.desktop $out/share/applications/SoulseekQt.desktop
       #TODO: write generic code to read icon path from $binary.desktop
@@ -42,6 +50,16 @@ mkDerivation rec {
       for size in 16 32 48 64 72 96 128 192 256 512 1024; do
         mkdir -p $out/share/icons/hicolor/"$size"x"$size"/apps
         convert -resize "$size"x"$size" $icon $out/share/icons/hicolor/"$size"x"$size"/apps/$(basename $icon)
+=======
+        --set-key Categories --set-value Network default.desktop
+      mv $out/share/applications/default.desktop $out/share/applications/SoulseekQt.desktop
+
+      #TODO: write generic code to read icon path from $binary.desktop
+      icon="$(readlink .DirIcon)"
+      for size in 16 32 48 64 72 96 128 192 256 512 1024; do
+        mkdir -p $out/share/icons/hicolor/"$size"x"$size"/apps
+        convert -resize "$size"x"$size" $icon $out/share/icons/hicolor/"$size"x"$size"/apps/$icon
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       done
     '';
 

@@ -2,13 +2,21 @@
 
 stdenv.mkDerivation rec {
   pname = "rakudo";
+<<<<<<< HEAD
   version = "2023.08";
+=======
+  version = "2023.04";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "rakudo";
     repo = "rakudo";
     rev = version;
+<<<<<<< HEAD
     hash = "sha256-wvHMyXMkI2RarmUeC8lKGgy3TNmVQsZo/3D/eS4FUrI=";
+=======
+    hash = "sha256-m5rXriBKfp/i9AIcBGCYGfXIGBRsxgVmBbLJPXXc5AY=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     fetchSubmodules = true;
   };
 

@@ -61,6 +61,7 @@ in let
   localSystem = lib.systems.elaborate args.localSystem;
 
   # Condition preserves sharing which in turn affects equality.
+<<<<<<< HEAD
   #
   # See `lib.systems.equals` documentation for more details.
   #
@@ -77,6 +78,12 @@ in let
     if crossSystem0 == null || lib.systems.equals system localSystem
     then localSystem
     else system;
+=======
+  crossSystem =
+    if crossSystem0 == null || crossSystem0 == args.localSystem
+    then localSystem
+    else lib.systems.elaborate crossSystem0;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   # Allow both:
   # { /* the config */ } and

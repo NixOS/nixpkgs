@@ -24,7 +24,13 @@
 , release ? true
   # Additional crate2nix configuration if it exists.
 , crateConfig
+<<<<<<< HEAD
   ? lib.optionalAttrs (builtins.pathExists ./crate-config.nix) (pkgs.callPackage ./crate-config.nix {})
+=======
+  ? if builtins.pathExists ./crate-config.nix
+    then pkgs.callPackage ./crate-config.nix {}
+    else {}
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 rec {

@@ -2,7 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "wavpack";
+<<<<<<< HEAD
   version = "5.6.0";
+=======
+  version = "5.5.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   enableParallelBuilding = true;
 
@@ -16,7 +20,11 @@ stdenv.mkDerivation rec {
     owner = "dbry";
     repo = "WavPack";
     rev = version;
+<<<<<<< HEAD
     hash = "sha256-fWAGE87JTNTnYoxrkMf3I8C53kZrQiiBy3Zyg0cw8Og=";
+=======
+    hash = "sha256-4QDtLywu0PT+YsMV26M74bL2P7p4s1tk8ZBQtQcubaU=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   outputs = [ "out" "dev" "doc" "man" ];

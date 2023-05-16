@@ -59,7 +59,10 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = with maintainers; [ AndersonTorres ];
     platforms = platforms.linux;
+<<<<<<< HEAD
     mainProgram = "wlogout";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }
 # TODO: shell completions

@@ -5,7 +5,10 @@
 , django
 , factory_boy
 , mock
+<<<<<<< HEAD
 , pip
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , pygments
 , pytest-django
 , pytestCheckHook
@@ -47,7 +50,10 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     factory_boy
     mock
+<<<<<<< HEAD
     pip
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     pygments # not explicitly declared in setup.py, but some tests require it
     pytest-django
     pytestCheckHook

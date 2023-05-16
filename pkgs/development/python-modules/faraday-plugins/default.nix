@@ -6,7 +6,10 @@
 , fetchFromGitHub
 , html2text
 , lxml
+<<<<<<< HEAD
 , markdown
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , pytestCheckHook
 , python-dateutil
 , pythonOlder
@@ -18,7 +21,11 @@
 
 buildPythonPackage rec {
   pname = "faraday-plugins";
+<<<<<<< HEAD
   version = "1.13.2";
+=======
+  version = "1.11.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -27,7 +34,11 @@ buildPythonPackage rec {
     owner = "infobyte";
     repo = "faraday_plugins";
     rev = "refs/tags/${version}";
+<<<<<<< HEAD
     hash = "sha256-ZoxIuUeDkhACWGi+njZuMhO8P6nlErcBkub5VCMNm8Q=";
+=======
+    hash = "sha256-rbmD+UeMzsccYq7AzANziUZCgKtShRe/fJersODMrF8=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   postPatch = ''
@@ -41,7 +52,10 @@ buildPythonPackage rec {
     colorama
     html2text
     lxml
+<<<<<<< HEAD
     markdown
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     python-dateutil
     pytz
     requests

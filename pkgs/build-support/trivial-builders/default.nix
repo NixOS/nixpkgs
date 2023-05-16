@@ -88,12 +88,15 @@ rec {
       passAsFile = [ "buildCommand" ]
         ++ (derivationArgs.passAsFile or []);
     }
+<<<<<<< HEAD
     // lib.optionalAttrs (! derivationArgs?meta) {
       pos = let args = builtins.attrNames derivationArgs; in
         if builtins.length args > 0
         then builtins.unsafeGetAttrPos (builtins.head args) derivationArgs
         else null;
     }
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     // (lib.optionalAttrs runLocal {
           preferLocalBuild = true;
           allowSubstitutes = false;
@@ -141,6 +144,7 @@ rec {
     , allowSubstitutes ? false
     , preferLocalBuild ? true
     }:
+<<<<<<< HEAD
     let
       matches = builtins.match "/bin/([^/]+)" destination;
     in
@@ -150,6 +154,11 @@ rec {
         meta = lib.optionalAttrs (executable && matches != null) {
           mainProgram = lib.head matches;
         } // meta;
+=======
+    runCommand name
+      { inherit text executable checkPhase meta allowSubstitutes preferLocalBuild;
+        passAsFile = [ "text" ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       }
       ''
         target=$out${lib.escapeShellArg destination}
@@ -242,11 +251,15 @@ rec {
 
 
   */
+<<<<<<< HEAD
   writeScriptBin = name: text: writeTextFile {
     inherit name text;
     executable = true;
     destination = "/bin/${name}";
   };
+=======
+  writeScriptBin = name: text: writeTextFile {inherit name text; executable = true; destination = "/bin/${name}";};
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   /*
     Similar to writeScript. Writes a Shell script and checks its syntax.
@@ -304,7 +317,10 @@ rec {
       checkPhase = ''
         ${stdenv.shellDryRun} "$target"
       '';
+<<<<<<< HEAD
       meta.mainProgram = name;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
 
   /*
@@ -336,11 +352,18 @@ rec {
     { name
     , text
     , runtimeInputs ? [ ]
+<<<<<<< HEAD
     , meta ? { }
     , checkPhase ? null
     }:
     writeTextFile {
       inherit name meta;
+=======
+    , checkPhase ? null
+    }:
+    writeTextFile {
+      inherit name;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       executable = true;
       destination = "/bin/${name}";
       allowSubstitutes = true;
@@ -359,6 +382,7 @@ rec {
       '';
 
       checkPhase =
+<<<<<<< HEAD
         # GHC (=> shellcheck) isn't supported on some platforms (such as risc-v)
         # but we still want to use writeShellApplication on those platforms
         let
@@ -376,6 +400,19 @@ rec {
           runHook postCheck
         ''
         else checkPhase;
+=======
+        if checkPhase == null then ''
+          runHook preCheck
+          ${stdenv.shellDryRun} "$target"
+          # use shellcheck which does not include docs
+          # pandoc takes long to build and documentation isn't needed for in nixpkgs usage
+          ${lib.getExe (haskell.lib.compose.justStaticExecutables shellcheck.unwrapped)} "$target"
+          runHook postCheck
+        ''
+        else checkPhase;
+
+      meta.mainProgram = name;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
 
   # Create a C binary
@@ -388,9 +425,12 @@ rec {
       # Pointless to do this on a remote machine.
       preferLocalBuild = true;
       allowSubstitutes = false;
+<<<<<<< HEAD
       meta = {
         mainProgram = name;
       };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     }
     ''
       n=$out/bin/$name
@@ -643,10 +683,13 @@ rec {
     script:
     runCommand name
       (substitutions // {
+<<<<<<< HEAD
         # TODO(@Artturin:) substitutions should be inside the env attrset
         # but users are likely passing non-substitution arguments through substitutions
         # turn off __structuredAttrs to unbreak substituteAll
         __structuredAttrs = false;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         inherit meta;
         inherit depsTargetTargetPropagated;
         propagatedBuildInputs =
@@ -834,10 +877,16 @@ rec {
         or
           nix-prefetch-url --type ${hashAlgo} file:///path/to/${name_}
       '';
+<<<<<<< HEAD
       hashAlgo = if hash != null then (builtins.head (lib.strings.splitString "-" hash))
             else if sha256 != null then "sha256"
             else "sha1";
       hashAlgo_ = if hash != null then "" else hashAlgo;
+=======
+      hashAlgo = if hash != null then ""
+            else if sha256 != null then "sha256"
+            else "sha1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       hash_ = if hash != null then hash
          else if sha256 != null then sha256
          else sha1;
@@ -846,7 +895,11 @@ rec {
     stdenvNoCC.mkDerivation {
       name = name_;
       outputHashMode = hashMode;
+<<<<<<< HEAD
       outputHashAlgo = hashAlgo_;
+=======
+      outputHashAlgo = hashAlgo;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       outputHash = hash_;
       preferLocalBuild = true;
       allowSubstitutes = false;
@@ -906,17 +959,25 @@ rec {
              ) + "-patched"
     , patches   ? []
     , postPatch ? ""
+<<<<<<< HEAD
     , ...
     }@args: stdenvNoCC.mkDerivation {
+=======
+    }: stdenvNoCC.mkDerivation {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       inherit name src patches postPatch;
       preferLocalBuild = true;
       allowSubstitutes = false;
       phases = "unpackPhase patchPhase installPhase";
       installPhase = "cp -R ./ $out";
+<<<<<<< HEAD
     }
     # Carry `meta` information from the underlying `src` if present.
     // (optionalAttrs (src?meta) { inherit (src) meta; })
     // (removeAttrs args [ "src" "name" "patches" "postPatch" ]);
+=======
+    };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   /* An immutable file in the store with a length of 0 bytes. */
   emptyFile = runCommand "empty-file" {

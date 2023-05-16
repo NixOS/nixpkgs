@@ -8,7 +8,11 @@ buildGoModule rec {
     owner = "xetys";
     repo = "hetzner-kube";
     rev = version;
+<<<<<<< HEAD
     hash = "sha256-XHvR+31yq0o3txMBHh2rCh2peDlG5Kh3hdl0LGm9D8c=";
+=======
+    sha256 = "1iqgpmljqx6rhmvsir2675waj78amcfiw08knwvlmavjgpxx2ysw";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   patches = [
@@ -18,7 +22,11 @@ buildGoModule rec {
     ./fix-home.patch
   ];
 
+<<<<<<< HEAD
   vendorHash = "sha256-sIjSu9U+uNc5dgt9Qg328W/28nX4F5d5zjUb7Y1xAso=";
+=======
+  vendorSha256 = "1jh2f66ys6rmrrwrf5zqfprgcvziyq6l4z8bfqwxgf1ysnxx525h";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   doCheck = false;
 
@@ -44,5 +52,9 @@ buildGoModule rec {
     homepage = "https://github.com/xetys/hetzner-kube";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ eliasp ];
+<<<<<<< HEAD
+=======
+    platforms = lib.platforms.unix;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

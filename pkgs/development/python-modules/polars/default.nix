@@ -6,16 +6,27 @@
 , libiconv
 , fetchFromGitHub
 , typing-extensions
+<<<<<<< HEAD
 , darwin
 }:
 let
   pname = "polars";
   version = "0.18.13";
+=======
+}:
+let
+  pname = "polars";
+  version = "0.17.11";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   rootSource = fetchFromGitHub {
     owner = "pola-rs";
     repo = "polars";
     rev = "refs/tags/py-${version}";
+<<<<<<< HEAD
     hash = "sha256-kV30r2wmswpCUmMRaFsCOeRrlTN5/PU0ogaU2JIHq0E=";
+=======
+    hash = "sha256-zNp/77an9daUfHQ+HCaHtZzaq0TT9F+8aH3abrF7+YA=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 in
 buildPythonPackage {
@@ -28,16 +39,27 @@ buildPythonPackage {
   # thus the `sed` command
   # Make sure to check that the right substitutions are made when updating the package
   preBuild = ''
+<<<<<<< HEAD
     cd py-polars
     #sed -i 's/version = "0.18.0"/version = "${version}"/g' Cargo.lock
+=======
+      cd py-polars
+      #sed -i 's/version = "0.17.11"/version = "${version}"/g' Cargo.lock
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '';
 
   cargoDeps = rustPlatform.importCargoLock {
     lockFile = ./Cargo.lock;
     outputHashes = {
+<<<<<<< HEAD
       "arrow2-0.17.3" = "sha256-pM6lNjMCpUzC98IABY+M23lbLj0KMXDefgBMjUPjDlg=";
       "jsonpath_lib-0.3.0" = "sha256-NKszYpDGG8VxfZSMbsTlzcMGFHBOUeFojNw4P2wM3qk=";
       "simd-json-0.10.0" = "sha256-0q/GhL7PG5SLgL0EETPqe8kn6dcaqtyL+kLU9LL+iQs=";
+=======
+      "arrow2-0.17.0" = "sha256-jjrwTP+ZKem9lyrmAWJ+t9cZBkGqAR1VlgNFXDtx1LA=";
+      "jsonpath_lib-0.3.0" = "sha256-NKszYpDGG8VxfZSMbsTlzcMGFHBOUeFojNw4P2wM3qk=";
+      "simd-json-0.7.0" = "sha256-tlz6my4vhUQIArPonJml8zIyk1sbbDSORKp3cmPUUSI=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
   };
   cargoRoot = "py-polars";
@@ -49,10 +71,14 @@ buildPythonPackage {
 
   nativeBuildInputs = with rustPlatform; [ cargoSetupHook maturinBuildHook ];
 
+<<<<<<< HEAD
   buildInputs = lib.optionals stdenv.isDarwin [
     libiconv
     darwin.apple_sdk.frameworks.Security
   ];
+=======
+  buildInputs = lib.optionals stdenv.isDarwin [ libiconv ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   pythonImportsCheck = [ "polars" ];
   # nativeCheckInputs = [
@@ -66,6 +92,10 @@ buildPythonPackage {
   # ];
 
   meta = with lib; {
+<<<<<<< HEAD
+=======
+    broken = (stdenv.isLinux && stdenv.isAarch64) || stdenv.isDarwin;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     description = "Fast multi-threaded DataFrame library in Rust | Python | Node.js ";
     homepage = "https://github.com/pola-rs/polars";
     license = licenses.asl20;

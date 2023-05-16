@@ -12,8 +12,11 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ faust2jaqt faust2lv2 ];
 
+<<<<<<< HEAD
   dontWrapQtApps = true;
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   buildPhase = ''
     faust2jaqt -time -vec -t 99999 ConstantDetuneChorus.dsp
     faust2lv2  -time -vec -t 99999 -gui ConstantDetuneChorus.dsp
@@ -21,9 +24,13 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir -p $out/bin
+<<<<<<< HEAD
     for f in $(find . -executable -type f); do
       cp $f $out/bin/
     done
+=======
+    cp ConstantDetuneChorus $out/bin/
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     mkdir -p $out/lib/lv2
     cp -r ConstantDetuneChorus.lv2/ $out/lib/lv2
   '';
@@ -33,7 +40,10 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/magnetophon/constant-detune-chorus";
     license = lib.licenses.gpl3;
     maintainers = [ lib.maintainers.magnetophon ];
+<<<<<<< HEAD
     # ERROR3 : n is NaN in an Interval
     broken = true;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

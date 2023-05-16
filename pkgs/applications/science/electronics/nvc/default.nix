@@ -1,6 +1,10 @@
 { lib
 , stdenv
 , fetchFromGitHub
+<<<<<<< HEAD
+=======
+, fetchpatch
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , autoreconfHook
 , check
 , flex
@@ -11,11 +15,15 @@
 , libffi
 , llvm
 , zlib
+<<<<<<< HEAD
 , zstd
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 stdenv.mkDerivation rec {
   pname = "nvc";
+<<<<<<< HEAD
   version = "1.10.2";
 
   src = fetchFromGitHub {
@@ -23,6 +31,15 @@ stdenv.mkDerivation rec {
     repo = "nvc";
     rev = "r${version}";
     hash = "sha256-sAr51+8hFnpIq0jDd8dB5uiy00N09ufkFgWkFtW7ErU=";
+=======
+  version = "1.9.2";
+
+  src = fetchFromGitHub {
+    owner = "nickg";
+    repo = pname;
+    rev = "r${version}";
+    hash = "sha256-xB2COtYgbg00rrOWTbcBocRnqF5682jUG2eS7I71Ln4=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [
@@ -37,7 +54,10 @@ stdenv.mkDerivation rec {
     libffi
     llvm
     zlib
+<<<<<<< HEAD
     zstd
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ] ++ lib.optionals stdenv.isLinux [
     elfutils
   ] ++ lib.optionals (!stdenv.isLinux) [

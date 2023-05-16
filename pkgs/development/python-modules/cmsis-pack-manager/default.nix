@@ -1,5 +1,9 @@
 { lib
+<<<<<<< HEAD
 , fetchFromGitHub
+=======
+, fetchPypi
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , rustPlatform
 , cffi
 , libiconv
@@ -15,6 +19,7 @@
 }:
 
 buildPythonPackage rec {
+<<<<<<< HEAD
   pname = "cmsis-pack-manager";
   version = "0.5.2";
   format = "pyproject";
@@ -24,11 +29,23 @@ buildPythonPackage rec {
     repo = "cmsis-pack-manager";
     rev = "refs/tags/v${version}";
     hash = "sha256-PeyJf3TGUxv8/MKIQUgWrenrK4Hb+4cvtDA2h3r6kGg=";
+=======
+  pname = "cmsis_pack_manager";
+  version = "0.5.2";
+
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-sVfyz9D7/0anIp0bEPp1EJkERDbNJ3dCcydLbty1KsQ=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
+<<<<<<< HEAD
     hash = "sha256-dO4qw5Jx0exwb4RuOhu6qvGxQZ+LayHtXDHZKADLTEI=";
+=======
+    sha256 = "dO4qw5Jx0exwb4RuOhu6qvGxQZ+LayHtXDHZKADLTEI=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ rustPlatform.cargoSetupHook rustPlatform.maturinBuildHook ];
@@ -38,10 +55,17 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ appdirs pyyaml ];
   nativeCheckInputs = [ hypothesis jinja2 pytestCheckHook unzip ];
 
+<<<<<<< HEAD
   # remove cmsis_pack_manager source directory so that binaries can be imported
   # from the installed wheel instead
   preCheck = ''
     rm -r cmsis_pack_manager
+=======
+  format = "pyproject";
+
+  preCheck = ''
+    unzip $dist/*.whl cmsis_pack_manager/cmsis_pack_manager/native.so
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '';
 
   disabledTests = [

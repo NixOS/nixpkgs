@@ -267,6 +267,7 @@ in
 
     environment.systemPackages = [ sddm ];
     services.dbus.packages = [ sddm ];
+<<<<<<< HEAD
     systemd.tmpfiles.packages = [ sddm ];
 
     # We're not using the upstream unit, so copy these: https://github.com/sddm/sddm/blob/develop/services/sddm.service.in
@@ -279,6 +280,8 @@ in
     systemd.services.display-manager.conflicts = [
       "getty@tty7.service"
     ];
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     # To enable user switching, allow sddm to allocate TTYs/displays dynamically.
     services.xserver.tty = null;

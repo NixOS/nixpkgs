@@ -1,5 +1,9 @@
+<<<<<<< HEAD
 { lib
 , stdenv
+=======
+{ lib, stdenv
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , coreutils
 , fetchFromGitHub
 , makeWrapper
@@ -15,21 +19,32 @@
 , p11-kit
 , vim
 , which
+<<<<<<< HEAD
 , ncurses
 , fetchpatch
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 with lib.strings;
 
 let
 
+<<<<<<< HEAD
   version = "2.59.6";
+=======
+  version = "2.54.9";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "grame-cncm";
     repo = "faust";
     rev = version;
+<<<<<<< HEAD
     sha256 = "sha256-m6dimBxI9C3KDhUxbJAn2Pf9z+LRahjrzD34W/bf1XA=";
+=======
+    sha256 = "sha256-7eSZUsZ0h0vWJIpZWXaS+SHV6N2i9nv6Gr6a9cuu4Fg=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     fetchSubmodules = true;
   };
 
@@ -41,6 +56,7 @@ let
     maintainers = with maintainers; [ magnetophon pmahoney ];
   };
 
+<<<<<<< HEAD
   faust =
     let ncurses_static = ncurses.override { enableStatic = true; };
     in stdenv.mkDerivation {
@@ -132,6 +148,82 @@ let
   # Default values for faust2appl.
   faust2ApplBase =
     { baseName, dir ? "tools/faust2appls", scripts ? [ baseName ], ... }@args:
+=======
+  faust = stdenv.mkDerivation {
+
+    pname = "faust";
+    inherit version;
+
+    inherit src;
+
+    nativeBuildInputs = [ makeWrapper pkg-config cmake vim which ];
+    buildInputs = [ llvm emscripten openssl libsndfile libmicrohttpd gnutls libtasn1 p11-kit ];
+
+
+    passthru = {
+      inherit wrap wrapWithBuildEnv faust2ApplBase;
+    };
+
+
+    preConfigure = ''
+      cd build
+    '';
+
+    cmakeFlags = [
+      "-C../backends/all.cmake"
+      "-C../targets/all.cmake"
+    ];
+
+    postInstall = ''
+      # syntax error when eval'd directly
+      pattern="faust2!(*@(atomsnippets|graph|graphviewer|md|plot|sig|sigviewer|svg))"
+      (shopt -s extglob; rm "$out"/bin/$pattern)
+    '';
+
+    postFixup = ''
+      # The 'faustoptflags' is 'source'd into other faust scripts and
+      # not used as an executable, so patch 'uname' usage directly
+      # rather than use makeWrapper.
+      substituteInPlace "$out"/bin/faustoptflags \
+        --replace uname "${coreutils}/bin/uname"
+
+      # wrapper for scripts that don't need faust.wrap*
+      for script in "$out"/bin/faust2*; do
+        wrapProgram "$script" \
+          --prefix PATH : "$out"/bin
+      done
+    '';
+
+    meta = meta // {
+      description = "A functional programming language for realtime audio signal processing";
+      longDescription = ''
+        FAUST (Functional Audio Stream) is a functional programming
+        language specifically designed for real-time signal processing
+        and synthesis. FAUST targets high-performance signal processing
+        applications and audio plug-ins for a variety of platforms and
+        standards.
+        The Faust compiler translates DSP specifications into very
+        efficient C++ code. Thanks to the notion of architecture,
+        FAUST programs can be easily deployed on a large variety of
+        audio platforms and plugin formats (jack, alsa, ladspa, maxmsp,
+        puredata, csound, supercollider, pure, vst, coreaudio) without
+        any change to the FAUST code.
+
+        This package has just the compiler, libraries, and headers.
+        Install faust2* for specific faust2appl scripts.
+      '';
+    };
+
+  };
+
+  # Default values for faust2appl.
+  faust2ApplBase =
+    { baseName
+    , dir ? "tools/faust2appls"
+    , scripts ? [ baseName ]
+    , ...
+    }@args:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     args // {
       name = "${baseName}-${version}";
@@ -161,8 +253,12 @@ let
       '';
 
       meta = meta // {
+<<<<<<< HEAD
         description =
           "The ${baseName} script, part of faust functional programming language for realtime audio signal processing";
+=======
+        description = "The ${baseName} script, part of faust functional programming language for realtime audio signal processing";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       };
     };
 
@@ -182,7 +278,15 @@ let
   #
   # The build input 'faust' is automatically added to the
   # propagatedBuildInputs.
+<<<<<<< HEAD
   wrapWithBuildEnv = { baseName, propagatedBuildInputs ? [ ], ... }@args:
+=======
+  wrapWithBuildEnv =
+    { baseName
+    , propagatedBuildInputs ? [ ]
+    , ...
+    }@args:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     stdenv.mkDerivation ((faust2ApplBase args) // {
 
@@ -222,6 +326,7 @@ let
   # simply need to be wrapped with some dependencies on PATH.
   #
   # The build input 'faust' is automatically added to the PATH.
+<<<<<<< HEAD
   wrap = { baseName, runtimeInputs ? [ ], ... }@args:
 
     let
@@ -235,12 +340,35 @@ let
         nativeBuildInputs = [ makeWrapper ];
 
         postFixup = ''
+=======
+  wrap =
+    { baseName
+    , runtimeInputs ? [ ]
+    , ...
+    }@args:
+
+    let
+
+      runtimePath = concatStringsSep ":" (map (p: "${p}/bin") ([ faust ] ++ runtimeInputs));
+
+    in stdenv.mkDerivation ((faust2ApplBase args) // {
+
+      nativeBuildInputs = [ makeWrapper ];
+
+      postFixup = ''
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         for script in "$out"/bin/*; do
           wrapProgram "$script" --prefix PATH : "${runtimePath}"
         done
       '';
 
+<<<<<<< HEAD
       });
 
 in
 faust
+=======
+    });
+
+in faust
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)

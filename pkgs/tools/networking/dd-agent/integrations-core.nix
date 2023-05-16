@@ -51,7 +51,11 @@ let
     inherit src version;
     name = "datadog-integration-${pname}-${version}";
 
+<<<<<<< HEAD
     sourceRoot = "${src.name}/${args.sourceRoot or pname}";
+=======
+    sourceRoot = "source/${args.sourceRoot or pname}";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     doCheck = false;
   });
 

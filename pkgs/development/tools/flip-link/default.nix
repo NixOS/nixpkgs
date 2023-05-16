@@ -2,16 +2,27 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "flip-link";
+<<<<<<< HEAD
   version = "0.1.7";
+=======
+  version = "0.1.6";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "knurling-rs";
     repo = pname;
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-bwNtIuAALSOSUkbx2UbOEzHv064BVAHTBdJGPZVyEis=";
   };
 
   cargoHash = "sha256-pY1/p3TMt/DCTadU0Ki0yMgmS7RwO9siZLvNNXSLrfg=";
+=======
+    sha256 = "sha256-Sf2HlAfPlg8Er2g17AnRmUkvRhTw5AVPuL2B92hFvpA=";
+  };
+
+  cargoSha256 = "sha256-2VgsO2hUIvSPNQhR13+bGTxXa6xZXcK0amfiWv2EIxk=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   buildInputs = lib.optional stdenv.isDarwin libiconv;
 

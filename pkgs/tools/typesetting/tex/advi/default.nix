@@ -45,8 +45,11 @@ ocamlPackages.buildDunePackage rec {
     substituteInPlace ./Makefile \
       --replace "\$(DUNE) install \$(DUNEROOT) --display=short" \
       "\$(DUNE) install \$(DUNEROOT) --prefix $out --docdir $out/share/doc --mandir $out/share/man"
+<<<<<<< HEAD
     substituteInPlace ./src/discover.sh \
       --replace 'gs_path=$(which gs)' 'gs_path=${ghostscriptX}/bin/gs'
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '';
 
   duneVersion = "3";
@@ -54,9 +57,16 @@ ocamlPackages.buildDunePackage rec {
   nativeBuildInputs = [ fake-opam kpsexpand makeWrapper texlive.combined.scheme-medium which ];
   buildInputs = with ocamlPackages; [ camlimages ghostscriptX graphics ];
 
+<<<<<<< HEAD
   # install additional files (such as man pages)
   preInstall = ''
     make install
+=======
+  # TODO: ghostscript linked from texlive.combine will override ghostscriptX and break advi
+  preInstall = ''
+    make install
+    wrapProgram "$out/bin/advi" --prefix PATH : "${lib.makeBinPath [ ghostscriptX ]}"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '';
 
   # TODO: redirect /share/advi/tex/latex to tex output compatible with texlive.combine

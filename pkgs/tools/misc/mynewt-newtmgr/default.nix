@@ -17,7 +17,11 @@ buildGoModule rec {
     sha256 = "sha256-fobaMkYLLK5qclogtClGdOjgTbmuse/72T3APNssYa4=";
   };
 
+<<<<<<< HEAD
   vendorHash = "sha256-+vOZoueoMqlGnopLKc6pCgTmcgI34pxaMNbr6Y+JCfQ=";
+=======
+  vendorSha256 = "sha256-+vOZoueoMqlGnopLKc6pCgTmcgI34pxaMNbr6Y+JCfQ=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   passthru.tests.version = testers.testVersion {
     package = mynewt-newtmgr;

@@ -19,6 +19,10 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/rust-embedded/cargo-binutils";
     changelog = "https://github.com/rust-embedded/cargo-binutils/blob/v${version}/CHANGELOG.md";
     license = with licenses; [ asl20 mit ];
+<<<<<<< HEAD
     maintainers = with maintainers; [ stupremee matthiasbeyer ];
+=======
+    maintainers = with maintainers; [ stupremee ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

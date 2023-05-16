@@ -14,7 +14,11 @@
 , pango
 , libsecret
 , openssh
+<<<<<<< HEAD
 , systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd, systemd
+=======
+, systemd
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , gobject-introspection
 , wrapGAppsHook
 , gi-docgen
@@ -56,7 +60,11 @@ stdenv.mkDerivation rec {
     pango
     libsecret
     openssh
+<<<<<<< HEAD
   ] ++ lib.optionals (systemdSupport) [
+=======
+  ] ++ lib.optionals stdenv.isLinux [
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     systemd
   ];
 
@@ -74,7 +82,11 @@ stdenv.mkDerivation rec {
     # We are still using ssh-agent from gnome-keyring.
     # https://github.com/NixOS/nixpkgs/issues/140824
     "-Dssh_agent=false"
+<<<<<<< HEAD
   ] ++ lib.optionals (!systemdSupport) [
+=======
+  ] ++ lib.optionals (!stdenv.isLinux) [
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "-Dsystemd=disabled"
   ];
 

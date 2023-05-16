@@ -110,6 +110,7 @@ let
     sdl2 = super.sdl2.overrideLispAttrs (o: {
       nativeLibs = [ pkgs.SDL2 ];
     });
+<<<<<<< HEAD
     sdl2-image = super.sdl2-image.overrideLispAttrs (o: {
       nativeLibs = [ pkgs.SDL2_image ];
     });
@@ -119,6 +120,8 @@ let
     sdl2-ttf = super.sdl2-ttf.overrideLispAttrs (o: {
       nativeLibs = [ pkgs.SDL2_ttf ];
     });
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     lispbuilder-sdl-cffi = super.lispbuilder-sdl-cffi.overrideLispAttrs (o: {
       nativeLibs = [ pkgs.SDL ];
     });
@@ -173,6 +176,12 @@ let
     cl-readline = super.cl-readline.overrideLispAttrs (o: {
       nativeLibs = [ pkgs.readline ];
     });
+<<<<<<< HEAD
+=======
+    log4cl = super.log4cl.overrideLispAttrs (o: {
+      patches = [ ./patches/log4cl-fix-build.patch ];
+    });
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     md5 = super.md5.overrideLispAttrs (o: {
       lispLibs = [ super.flexi-streams ];
     });
@@ -232,6 +241,7 @@ let
       lispLibs = o.lispLibs ++ [
         self.mcclim
       ];
+<<<<<<< HEAD
     });
     cl-charms = super.cl-charms.overrideLispAttrs (o: {
       nativeLibs = [ pkgs.ncurses ];
@@ -276,3 +286,14 @@ let
       (pkgs.callPackage ./imported.nix { inherit build-asdf-system; });
 
 in qlpkgs.overrideScope overrides
+=======
+});
+  });
+
+  qlpkgs =
+    if builtins.pathExists ./imported.nix
+    then pkgs.callPackage ./imported.nix { inherit build-asdf-system; }
+    else {};
+
+in qlpkgs.overrideScope' overrides
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)

@@ -10,7 +10,11 @@
 
 buildPythonPackage rec {
   pname = "aiofile";
+<<<<<<< HEAD
   version = "3.8.6";
+=======
+  version = "3.8.5";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -19,7 +23,11 @@ buildPythonPackage rec {
     owner = "mosquito";
     repo = pname;
     rev = "refs/tags/${version}";
+<<<<<<< HEAD
     hash = "sha256-KBly/aeHHZh7mL8MJ9gmxbqS7PmR4sedtBY/2HCXt54=";
+=======
+    hash = "sha256-jQ97jtYhkqQgQjtHhtlk5JlvkzbFQw3kY6uXuV81ZkQ=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [

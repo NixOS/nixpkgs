@@ -11,7 +11,11 @@ buildGoModule rec {
     sha256 = "sha256-TAgMA9IV3i8dpgOBDmnlt4iyGlmWN5Nj3BexXb5vzlc=";
   };
 
+<<<<<<< HEAD
   vendorHash = "sha256-LAEnXJ3qShfCGjtsYAGyW5x/TTFQxQxXM0hebJrqiW4=";
+=======
+  vendorSha256 = "sha256-LAEnXJ3qShfCGjtsYAGyW5x/TTFQxQxXM0hebJrqiW4=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   postPatch = ''
     substituteInPlace proc/read_test.go --replace /bin/cat cat

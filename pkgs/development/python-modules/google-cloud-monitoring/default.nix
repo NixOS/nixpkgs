@@ -14,14 +14,22 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-monitoring";
+<<<<<<< HEAD
   version = "2.15.1";
+=======
+  version = "2.14.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
+<<<<<<< HEAD
     hash = "sha256-CGqEWjSm4QWrijpICTkupjZ6ZbKLdWHCYQFTSocF7Tc=";
+=======
+    hash = "sha256-5v2hMJeeLo11mrcNZCe1lISBlIyW9f1KQjcLqWoRlZs=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [
@@ -58,6 +66,10 @@ buildPythonPackage rec {
     homepage = "https://github.com/googleapis/python-monitoring";
     changelog = "https://github.com/googleapis/python-monitoring/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
+<<<<<<< HEAD
     maintainers = with maintainers; [ ];
+=======
+    maintainers = with maintainers; [ SuperSandro2000 ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

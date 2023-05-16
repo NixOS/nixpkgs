@@ -9,14 +9,22 @@
 
 buildPythonApplication rec {
   pname = "glances";
+<<<<<<< HEAD
   version = "3.4.0.2";
+=======
+  version = "3.3.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   disabled = isPyPy;
 
   src = fetchFromGitHub {
     owner = "nicolargo";
     repo = "glances";
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-mAhdablRr97DXNmwRk8cA9Q0rS9PsEocVvNc686Gco0=";
+=======
+    sha256 = "sha256-93fghrNktcz+YyPkRl6ZiSZC+3a5TDql6eFZMy6veJc=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   # On Darwin this package segfaults due to mismatch of pure and impure

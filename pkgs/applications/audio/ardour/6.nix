@@ -50,7 +50,11 @@
 , suil
 , taglib
 , vamp-plugin-sdk
+<<<<<<< HEAD
 , waf
+=======
+, wafHook
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , xjadeo
 , videoSupport ? true
 }:
@@ -79,7 +83,11 @@ stdenv.mkDerivation rec {
     perl
     pkg-config
     python3
+<<<<<<< HEAD
     waf.hook
+=======
+    wafHook
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   buildInputs = [
@@ -185,7 +193,10 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://ardour.org/";
     license = licenses.gpl2Plus;
+<<<<<<< HEAD
     mainProgram = "ardour6";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     platforms = platforms.linux;
     maintainers = with maintainers; [ goibhniu magnetophon mitchmindtree ];
   };

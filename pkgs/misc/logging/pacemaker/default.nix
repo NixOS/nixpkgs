@@ -29,13 +29,21 @@
 
 stdenv.mkDerivation rec {
   pname = "pacemaker";
+<<<<<<< HEAD
   version = "2.1.6";
+=======
+  version = "2.1.5";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "ClusterLabs";
     repo = pname;
     rev = "Pacemaker-${version}";
+<<<<<<< HEAD
     sha256 = "sha256-3+eRQ3NqPusdFhKc0wE7UMMNKsDLRVvh+EhD6zYGoP0=";
+=======
+    sha256 = "sha256-vsHWNKCrHJIgXlJYyZZEUfuIUBnaejPrPCM1HrYOTKQ=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

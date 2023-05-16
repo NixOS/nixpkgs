@@ -2,8 +2,11 @@ self: super: {
 
     age = super.callPackage ./ext/age.nix { };
 
+<<<<<<< HEAD
     apache_datasketches = super.callPackage ./ext/apache_datasketches.nix { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     jsonb_deep_sum = super.callPackage ./ext/jsonb_deep_sum.nix { };
 
     periods = super.callPackage ./ext/periods.nix { };
@@ -30,8 +33,11 @@ self: super: {
 
     pgroonga = super.callPackage ./ext/pgroonga.nix { };
 
+<<<<<<< HEAD
     pgsql-http = super.callPackage ./ext/pgsql-http.nix { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     pgvector = super.callPackage ./ext/pgvector.nix { };
 
     plpgsql_check = super.callPackage ./ext/plpgsql_check.nix { };
@@ -50,8 +56,11 @@ self: super: {
 
     pg_topn = super.callPackage ./ext/pg_topn.nix { };
 
+<<<<<<< HEAD
     pg_net = super.callPackage ./ext/pg_net.nix { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     pgtap = super.callPackage ./ext/pgtap.nix { };
 
     pipelinedb = super.callPackage ./ext/pipelinedb.nix { };

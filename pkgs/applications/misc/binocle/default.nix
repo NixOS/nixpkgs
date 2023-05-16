@@ -44,6 +44,10 @@ rustPlatform.buildRustPackage rec {
     description = "Graphical tool to visualize binary data";
     homepage = "https://github.com/sharkdp/binocle";
     license = with licenses; [ asl20 /* or */ mit ];
+<<<<<<< HEAD
     maintainers = with maintainers; [ figsoda ];
+=======
+    maintainers = with maintainers; [ SuperSandro2000 ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

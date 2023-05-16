@@ -22,6 +22,7 @@ in stdenv.mkDerivation rec {
   doCheck = true;
   buildFlags = [ "GCC_BASE:=${GCC_BASE}" ];
 
+<<<<<<< HEAD
   # Test failures with "fortify3" on, such as:
   # +*** buffer overflow detected ***: terminated
   # +Aborted (core dumped)
@@ -30,6 +31,8 @@ in stdenv.mkDerivation rec {
   # error: FAIL: test 'bool-float.c' failed
   hardeningDisable = [ "fortify3" ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   passthru.tests = {
     simple-execution = callPackage ./tests.nix { };
   };

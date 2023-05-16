@@ -93,7 +93,11 @@ import ./make-test-python.nix (
             password_input = find_element(By.CSS_SELECTOR, 'input#login-password-input')
             set_value(password_input, "${password}")
 
+<<<<<<< HEAD
             log("Submitting credentials for login")
+=======
+            log("Submiting credentials for login")
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
             driver.find_element(By.CSS_SELECTOR, 'button#login-button').click()
 
             # driver.implicitly_wait(1)
@@ -102,7 +106,11 @@ import ./make-test-python.nix (
             log("Waiting dashboard to load")
             wait_title_contains("${user}@server")
 
+<<<<<<< HEAD
             log("Waiting for the frontend to initialize")
+=======
+            log("Waiting for the frontend to initalize")
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
             sleep(1)
 
             log("Looking for that banner that tells about limited access")

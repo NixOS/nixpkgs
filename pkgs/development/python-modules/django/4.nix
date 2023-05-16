@@ -42,14 +42,22 @@
 
 buildPythonPackage rec {
   pname = "Django";
+<<<<<<< HEAD
   version = "4.2.4";
+=======
+  version = "4.2.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "pyproject";
 
   disabled = pythonOlder "3.10";
 
   src = fetchPypi {
     inherit pname version;
+<<<<<<< HEAD
     hash = "sha256-fkIl7AZeDzVMz3NJoi0gneCcwcB0gyvp64TFHBeZxDI=";
+=======
+    hash = "sha256-fvprH3gaYRmhCslLR5Te2Q24rMvngCKBzSb4Zk/+1Zw=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   patches = [

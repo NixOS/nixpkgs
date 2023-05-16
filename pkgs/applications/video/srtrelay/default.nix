@@ -11,7 +11,11 @@ buildGoModule rec {
     sha256 = "sha256-CA+UuFOWjZjSBDWM62rda3IKO1fwC3X52mP4tg1uoO4=";
   };
 
+<<<<<<< HEAD
   vendorHash = "sha256-xTYlfdijSo99ei+ZMX6N9gl+yw0DrPQ2wOhn6SS9S/E=";
+=======
+  vendorSha256 = "sha256-xTYlfdijSo99ei+ZMX6N9gl+yw0DrPQ2wOhn6SS9S/E=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   buildInputs = [ srt ];
   nativeCheckInputs = [ ffmpeg ];

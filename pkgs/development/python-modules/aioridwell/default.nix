@@ -3,7 +3,10 @@
 , aresponses
 , buildPythonPackage
 , fetchFromGitHub
+<<<<<<< HEAD
 , fetchpatch
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , freezegun
 , poetry-core
 , pyjwt
@@ -18,7 +21,11 @@
 
 buildPythonPackage rec {
   pname = "aioridwell";
+<<<<<<< HEAD
   version = "2023.08.0";
+=======
+  version = "2023.01.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -27,6 +34,7 @@ buildPythonPackage rec {
     owner = "bachya";
     repo = pname;
     rev = "refs/tags/${version}";
+<<<<<<< HEAD
     hash = "sha256-AreQC5LOthnOEj0HnEww4zLob394XwCvqZBwjsT2Lcg=";
   };
 
@@ -44,6 +52,11 @@ buildPythonPackage rec {
     })
   ];
 
+=======
+    hash = "sha256-enNYzU65QBT/ryCUNwB08U+QiFvVb03fbYzZ5Qk6GTk=";
+  };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nativeBuildInputs = [
     poetry-core
   ];
@@ -55,8 +68,11 @@ buildPythonPackage rec {
     titlecase
   ];
 
+<<<<<<< HEAD
   __darwinAllowLocalNetworking = true;
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nativeCheckInputs = [
     aresponses
     freezegun

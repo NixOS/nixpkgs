@@ -3,9 +3,13 @@
 , fetchPypi
 , isPyPy
 , python
+<<<<<<< HEAD
 , oldest-supported-numpy
 , setuptools
 , wheel
+=======
+, setuptools
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , numpy
 , zlib
 , netcdf
@@ -28,12 +32,16 @@ buildPythonPackage rec {
     hash = "sha256-A4KwL/aiiEGfb/7IXexA9FH0G4dVVHFUxXXd2fD0rlM=";
   };
 
+<<<<<<< HEAD
   nativeBuildInputs = [
     cython
     oldest-supported-numpy
     setuptools
     wheel
   ];
+=======
+  nativeBuildInputs = [ setuptools cython ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   propagatedBuildInputs = [
     cftime
@@ -57,7 +65,11 @@ buildPythonPackage rec {
   CURL_DIR = curl.dev;
   JPEG_DIR = libjpeg.dev;
 
+<<<<<<< HEAD
   pythonImportsCheck = [ "netCDF4" ];
+=======
+  pythonImportsCheckHook = [ "netcdf4" ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   meta = with lib; {
     description = "Interface to netCDF library (versions 3 and 4)";

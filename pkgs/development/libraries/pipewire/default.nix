@@ -66,8 +66,11 @@
 , mysofaSupport ? true
 , libmysofa
 , tinycompress
+<<<<<<< HEAD
 , ffadoSupport ? stdenv.buildPlatform.canExecute stdenv.hostPlatform
 , ffado
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 let
@@ -75,7 +78,11 @@ let
 
   self = stdenv.mkDerivation rec {
     pname = "pipewire";
+<<<<<<< HEAD
     version = "0.3.79";
+=======
+    version = "0.3.70";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     outputs = [
       "out"
@@ -93,7 +100,11 @@ let
       owner = "pipewire";
       repo = "pipewire";
       rev = version;
+<<<<<<< HEAD
       sha256 = "sha256-pqs991pMqz3IQE+NUk0VNzZS4ExwfoZqBQDWBSGdWcs=";
+=======
+      sha256 = "sha256-xhJzE6JcfNcLMm+TqTIPaBEnEthEqUZiTqhWz1fO5Ng=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
 
     patches = [
@@ -101,8 +112,11 @@ let
       ./0040-alsa-profiles-use-libdir.patch
       # Change the path of the pipewire-pulse binary in the service definition.
       ./0050-pipewire-pulse-path.patch
+<<<<<<< HEAD
       # Load libjack from a known location
       ./0060-libjack-path.patch
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       # Move installed tests into their own output.
       ./0070-installed-tests-path.patch
       # Add option for changing the config install directory
@@ -151,8 +165,12 @@ let
     ++ lib.optional raopSupport openssl
     ++ lib.optional rocSupport roc-toolkit
     ++ lib.optionals x11Support [ libcanberra xorg.libX11 xorg.libXfixes ]
+<<<<<<< HEAD
     ++ lib.optional mysofaSupport libmysofa
     ++ lib.optional ffadoSupport ffado;
+=======
+    ++ lib.optional mysofaSupport libmysofa;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     # Valgrind binary is required for running one optional test.
     nativeCheckInputs = lib.optional withValgrind valgrind;
@@ -166,7 +184,10 @@ let
       "-Dlibjack-path=${placeholder "jack"}/lib"
       "-Dlibv4l2-path=${placeholder "out"}/lib"
       "-Dlibcamera=${mesonEnableFeature libcameraSupport}"
+<<<<<<< HEAD
       "-Dlibffado=${mesonEnableFeature ffadoSupport}"
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       "-Droc=${mesonEnableFeature rocSupport}"
       "-Dlibpulse=${mesonEnableFeature pulseTunnelSupport}"
       "-Davahi=${mesonEnableFeature zeroconfSupport}"
@@ -221,6 +242,7 @@ let
       moveToOutput "bin/pw-jack" "$jack"
     '';
 
+<<<<<<< HEAD
     passthru.tests.installed-tests = nixosTests.installed-tests.pipewire;
 
     meta = with lib; {
@@ -230,6 +252,16 @@ let
       license = licenses.mit;
       platforms = platforms.linux;
       maintainers = with maintainers; [ kranzes k900 ];
+=======
+    passthru.tests = nixosTests.installed-tests.pipewire;
+
+    meta = with lib; {
+      description = "Server and user space API to deal with multimedia pipelines";
+      homepage = "https://pipewire.org/";
+      license = licenses.mit;
+      platforms = platforms.linux;
+      maintainers = with maintainers; [ jtojnar kranzes k900 ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
   };
 

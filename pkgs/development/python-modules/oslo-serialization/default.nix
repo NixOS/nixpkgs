@@ -11,12 +11,20 @@
 
 buildPythonPackage rec {
   pname = "oslo-serialization";
+<<<<<<< HEAD
   version = "5.2.0";
+=======
+  version = "5.1.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchPypi {
     pname = "oslo.serialization";
     inherit version;
+<<<<<<< HEAD
     hash = "sha256-nPAw1hpszh9Hpi1AUPXoPhvRoQGKxnG7GTruB9Fb28I=";
+=======
+    hash = "sha256-irvaixdjoGBx/CjF2Km+VHuihfSDDminD/iP4R8Wv0M=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   postPatch = ''

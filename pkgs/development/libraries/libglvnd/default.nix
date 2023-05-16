@@ -33,10 +33,14 @@ stdenv.mkDerivation rec {
     "-DDEFAULT_EGL_VENDOR_CONFIG_DIRS=\"${addOpenGLRunpath.driverLink}/share/glvnd/egl_vendor.d:/etc/glvnd/egl_vendor.d:/usr/share/glvnd/egl_vendor.d\""
 
     "-Wno-error=array-bounds"
+<<<<<<< HEAD
   ] ++ lib.optionals stdenv.cc.isClang [
     "-Wno-error"
     "-Wno-int-conversion"
   ]);
+=======
+  ] ++ lib.optional stdenv.cc.isClang "-Wno-error");
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   configureFlags  = []
     # Indirectly: https://bugs.freedesktop.org/show_bug.cgi?id=35268

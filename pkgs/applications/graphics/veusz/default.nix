@@ -1,15 +1,26 @@
+<<<<<<< HEAD
 { lib
 , python3Packages
 , fetchPypi
 , wrapQtAppsHook
 , qtbase
+=======
+{ python3Packages
+, qtbase
+, wrapQtAppsHook
+, lib
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "veusz";
   version = "3.6.2";
 
+<<<<<<< HEAD
   src = fetchPypi {
+=======
+  src = python3Packages.fetchPypi {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     inherit pname version;
     sha256 = "whcaxF5LMEJNj8NSYeLpnb5uJboRl+vCQ1WxBrJjldE=";
   };

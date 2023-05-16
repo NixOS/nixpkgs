@@ -10,13 +10,21 @@
 
 stdenv.mkDerivation rec {
   pname = "eudev";
+<<<<<<< HEAD
   version = "3.2.12";
+=======
+  version = "3.2.11";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "eudev-project";
     repo = pname;
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-x9l+W8zuFYwG0m9JOIDbEf1x6yeBW36HnJws/buc7HI=";
+=======
+    hash = "sha256-W5nL4hicQ4fxz5rqoP+hhkE1tVn8lJZjMq4UaiXH6jc=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

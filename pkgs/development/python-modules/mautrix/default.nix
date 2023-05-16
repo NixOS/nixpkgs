@@ -15,21 +15,36 @@
 , pytestCheckHook
 , pytest-asyncio
 , aiosqlite
+<<<<<<< HEAD
+=======
+, sqlalchemy
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , asyncpg
 }:
 
 buildPythonPackage rec {
   pname = "mautrix";
+<<<<<<< HEAD
   version = "0.20.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.9";
+=======
+  version = "0.19.13";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.8";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "mautrix";
     repo = "python";
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-Byvwg6WW4b8kRWJkl6DG2Ioz4HYDaJyVEV98tS/ybXQ=";
+=======
+    hash = "sha256-nmsYe/iDKW4dUSuxSoUz2NpAGLPOTzrBNy6AwYMVs8k=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [
@@ -56,9 +71,23 @@ buildPythonPackage rec {
   checkInputs = [
     pytest-asyncio
     aiosqlite
+<<<<<<< HEAD
     asyncpg
   ] ++ passthru.optional-dependencies.encryption;
 
+=======
+    sqlalchemy
+    asyncpg
+  ] ++ passthru.optional-dependencies.encryption;
+
+  SQLALCHEMY_SILENCE_UBER_WARNING = 1;
+
+  disabledTestPaths = [
+    # sqlalchemy 2 unsupported
+    "mautrix/client/state_store/tests/store_test.py"
+  ];
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pythonImportsCheck = [
     "mautrix"
   ];

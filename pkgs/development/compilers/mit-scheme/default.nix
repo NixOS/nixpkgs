@@ -14,7 +14,11 @@
 }:
 
 let
+<<<<<<< HEAD
   version = "12.1";
+=======
+  version = "11.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   bootstrapFromC = ! ((stdenv.isLinux && stdenv.isAarch64) || stdenv.isx86_64);
 
   arch = if stdenv.isLinux && stdenv.isAarch64 then
@@ -34,10 +38,17 @@ stdenv.mkDerivation {
     if stdenv.isLinux && stdenv.isAarch64
     then fetchurl {
       url = "mirror://gnu/mit-scheme/stable.pkg/${version}/mit-scheme-${version}-aarch64le.tar.gz";
+<<<<<<< HEAD
       sha256 = "12ra9bc93x8g07impbd8jr6djjzwpb9qvh9zhxvvrba3332zx3vh";
   } else fetchurl {
       url = "mirror://gnu/mit-scheme/stable.pkg/${version}/mit-scheme-${version}-x86-64.tar.gz";
       sha256 = "035f92vni0vqmgj9hq2i7vwasz7crx52wll4823vhfkm1qdv5ywc";
+=======
+      sha256 = "11maixldk20wqb5js5p4imq221zz9nf27649v9pqkdf8fv7rnrs9";
+  } else fetchurl {
+      url = "mirror://gnu/mit-scheme/stable.pkg/${version}/mit-scheme-${version}-x86-64.tar.gz";
+      sha256 = "17822hs9y07vcviv2af17p3va7qh79dird49nj50bwi9rz64ia3w";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
 
   buildInputs = [ ncurses ] ++ lib.optionals enableX11 [ libX11 ];

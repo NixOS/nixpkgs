@@ -4,7 +4,11 @@ from markdown_it.token import Token
 import pytest
 
 def test_option_headings() -> None:
+<<<<<<< HEAD
     c = nixos_render_docs.options.DocBookConverter({}, 'local', 'none', 'vars', 'opt-')
+=======
+    c = nixos_render_docs.options.DocBookConverter({}, 'local', False, 'none', 'vars', 'opt-')
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     with pytest.raises(RuntimeError) as exc:
         c._render("# foo")
     assert exc.value.args[0] == 'md token not supported in options doc'

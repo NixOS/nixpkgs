@@ -14,7 +14,11 @@ buildGoModule rec {
     sha256 = "sha256-lX5zh+fYVSyWPUOnfRNMGZPsiuxjKBSpluPUMN9mZ+k=";
   };
 
+<<<<<<< HEAD
   vendorHash = "sha256-JDDxarFROBhdi76mY6udn++lReKLdju/JBpj3JhGdQA=";
+=======
+  vendorSha256 = "sha256-JDDxarFROBhdi76mY6udn++lReKLdju/JBpj3JhGdQA=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   meta = with lib; {
     description = "Recon tool that allows searching shortened URLs";

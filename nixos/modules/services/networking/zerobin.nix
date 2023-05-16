@@ -75,12 +75,21 @@ in
 
     config = mkIf (cfg.enable) {
       users.users.${cfg.user} =
+<<<<<<< HEAD
       optionalAttrs (cfg.user == "zerobin") {
+=======
+      if cfg.user == "zerobin" then {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         isSystemUser = true;
         group = cfg.group;
         home = cfg.dataDir;
         createHome = true;
+<<<<<<< HEAD
       };
+=======
+      }
+      else {};
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       users.groups.${cfg.group} = {};
 
       systemd.services.zerobin = {

@@ -15,9 +15,14 @@
 , pytz
 , requests
 , six
+<<<<<<< HEAD
 , zope-component
 , zope_interface
 , setuptools
+=======
+, zope_component
+, zope_interface
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , dialog
 , gnureadline
 , pytest-xdist
@@ -27,16 +32,27 @@
 
 buildPythonPackage rec {
   pname = "certbot";
+<<<<<<< HEAD
   version = "2.6.0";
+=======
+  version = "2.4.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-CbYamk1+NvcyS6w7pOjpD5lqWHCk+VJqF9R3xYxzpQk=";
   };
 
   sourceRoot = "${src.name}/${pname}";
+=======
+    hash = "sha256-BQsdhlYABZtz5+SORiCVnWMZdMmiWGM9W1YLqObyFo8=";
+  };
+
+  sourceRoot = "source/${pname}";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   propagatedBuildInputs = [
     configargparse
@@ -51,9 +67,14 @@ buildPythonPackage rec {
     pytz
     requests
     six
+<<<<<<< HEAD
     zope-component
     zope_interface
     setuptools # for pkg_resources
+=======
+    zope_component
+    zope_interface
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   buildInputs = [ dialog gnureadline ];

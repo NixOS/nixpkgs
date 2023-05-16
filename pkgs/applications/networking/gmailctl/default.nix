@@ -15,7 +15,11 @@ buildGoModule rec {
     sha256 = "sha256-OpRkBHNWRrBhh6nGrV7dZT01xsSlbANCk+g7b8SidG0=";
   };
 
+<<<<<<< HEAD
   vendorHash = "sha256-+r0WHrKARcxW1hUY1HwAXk0X6ZQrbgBj9+GjIJV5DS0=";
+=======
+  vendorSha256 = "sha256-+r0WHrKARcxW1hUY1HwAXk0X6ZQrbgBj9+GjIJV5DS0=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nativeBuildInputs = [
     installShellFiles

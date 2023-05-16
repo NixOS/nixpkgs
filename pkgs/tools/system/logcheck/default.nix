@@ -2,12 +2,20 @@
 
 stdenv.mkDerivation rec {
   pname = "logcheck";
+<<<<<<< HEAD
   version = "1.4.3";
+=======
+  version = "1.4.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   _name    = "logcheck_${version}";
 
   src = fetchurl {
     url = "mirror://debian/pool/main/l/logcheck/${_name}.tar.xz";
+<<<<<<< HEAD
     sha256 = "sha256-rYOugL14C9rl7v1ArVmj6XuFrTpJYqp8ANmO073/zdA=";
+=======
+    sha256 = "sha256-DGUd6zHcIB8VhOzqKSslmTK65uPozvhG2zEJ6Jp/IX4=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   prePatch = ''

@@ -7,6 +7,10 @@
 , gawk
 , gnugrep
 , gnum4
+<<<<<<< HEAD
+=======
+, makeWrapper
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , pacman
 , util-linux
 , chrootPath ? [

@@ -3,7 +3,11 @@
 }:
 {
   overrideModAttrs = (_: {
+<<<<<<< HEAD
     # No need to workaround -trimpath: it's not used in goModules,
+=======
+    # No need to workaround -trimpath: it's not used in go-modules,
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     # but do download `go generate`'s dependencies nonetheless.
     preBuild = ''
       go generate ./loaders

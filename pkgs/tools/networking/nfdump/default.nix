@@ -13,13 +13,21 @@
 
 stdenv.mkDerivation rec {
   pname = "nfdump";
+<<<<<<< HEAD
   version = "1.7.3";
+=======
+  version = "1.7.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "phaag";
     repo = "nfdump";
     rev =  "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-etmelBCZQKscuVJt5dBtwQVjiZNUFLTu11Gw0jmYcAg=";
+=======
+    hash = "sha256-ns/RG0kyu2b0UjcJKArcAjY+dI397ljhrUO8euS5Snk=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

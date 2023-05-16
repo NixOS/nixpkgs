@@ -1,6 +1,9 @@
 { lib, stdenv, fetchurl, coreutils, openjdk17, makeWrapper, autoPatchelfHook
 , zlib, libzen, libmediainfo, curlWithGnuTls, libmms, glib
+<<<<<<< HEAD
 , genericUpdater, writeShellScript
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 let
@@ -8,6 +11,7 @@ let
     url = "https://search.maven.org/remotecontent?filepath=com/googlecode/lanterna/lanterna/3.1.1/lanterna-3.1.1.jar";
     hash = "sha256-7zxCeXYW5v9ritnvkwRpPKdgSptCmkT3HJOaNgQHUmQ=";
   };
+<<<<<<< HEAD
 in stdenv.mkDerivation (finalAttrs: {
   pname = "filebot";
   version = "5.0.3";
@@ -15,6 +19,15 @@ in stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://web.archive.org/web/20230418205553/https://get.filebot.net/filebot/FileBot_${finalAttrs.version}/FileBot_${finalAttrs.version}-portable.tar.xz";
     hash = "sha256-8FTmR+ztR2ugPcgHvfwyh9yfxPiUJdeAVvjjl5cQCy0=";
+=======
+in stdenv.mkDerivation rec {
+  pname = "filebot";
+  version = "5.0.2";
+
+  src = fetchurl {
+    url = "https://web.archive.org/web/20230418205553/https://get.filebot.net/filebot/FileBot_${version}/FileBot_${version}-portable.tar.xz";
+    hash = "sha256-XnzBXZy/gNA8qf7XairoviRmdQiXHbW19BgbHL52SP0=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   unpackPhase = "tar xvf $src";
@@ -44,6 +57,7 @@ in stdenv.mkDerivation (finalAttrs: {
     ln -s $out/opt/filebot.sh $out/bin/filebot
   '';
 
+<<<<<<< HEAD
   passthru.updateScript = genericUpdater {
     versionLister = writeShellScript "filebot-versionLister" ''
       curl -s https://www.filebot.net \
@@ -51,6 +65,8 @@ in stdenv.mkDerivation (finalAttrs: {
     '';
   };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   meta = with lib; {
     description = "The ultimate TV and Movie Renamer";
     longDescription = ''
@@ -68,4 +84,8 @@ in stdenv.mkDerivation (finalAttrs: {
     maintainers = with maintainers; [ gleber felschr ];
     platforms = platforms.linux;
   };
+<<<<<<< HEAD
 })
+=======
+}
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)

@@ -3,24 +3,38 @@
 , buildPythonPackage
 , pythonOlder
 , fetchPypi
+<<<<<<< HEAD
 , fetchpatch
 , isPyPy
 , defusedxml, olefile, freetype, libjpeg, zlib, libtiff, libwebp, libxcrypt, tcl, lcms2, tk, libX11
 , libxcb, openjpeg, libimagequant, pyroma, numpy, pytestCheckHook, setuptools
+=======
+, isPyPy
+, defusedxml, olefile, freetype, libjpeg, zlib, libtiff, libwebp, libxcrypt, tcl, lcms2, tk, libX11
+, libxcb, openjpeg, libimagequant, pyroma, numpy, pytestCheckHook
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 # for passthru.tests
 , imageio, matplotlib, pilkit, pydicom, reportlab
 }@args:
 
 import ./generic.nix (rec {
   pname = "pillow";
+<<<<<<< HEAD
   version = "10.0.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
+=======
+  version = "9.4.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchPypi {
     pname = "Pillow";
     inherit version;
+<<<<<<< HEAD
     hash = "sha256-nIK1s+BDx68NlXktDSDM9o9hof7Gs1MOcYtohCJyc5Y=";
   };
 
@@ -34,6 +48,11 @@ import ./generic.nix (rec {
     })
   ];
 
+=======
+    hash = "sha256-ocLXeARI65P7zDeJvzkWqlcg2ULjeUX0BWaAMX8c0j4=";
+  };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   passthru.tests = {
     inherit imageio matplotlib pilkit pydicom reportlab;
   };
@@ -48,6 +67,10 @@ import ./generic.nix (rec {
       processing and graphics capabilities.
     '';
     license = licenses.hpnd;
+<<<<<<< HEAD
     maintainers = with maintainers; [ goibhniu prikhi ];
+=======
+    maintainers = with maintainers; [ goibhniu prikhi SuperSandro2000 ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 } // args )

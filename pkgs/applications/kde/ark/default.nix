@@ -3,13 +3,21 @@
 , kiconthemes, kitemmodels, khtml, kio, kparts, kpty, kservice, kwidgetsaddons
 , libarchive, libzip
 # Archive tools
+<<<<<<< HEAD
 , p7zip, lrzip, unar
+=======
+, p7zip, lrzip
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 # Unfree tools
 , unfreeEnableUnrar ? false, unrar
 }:
 
 let
+<<<<<<< HEAD
   extraTools = [ p7zip lrzip unar ] ++ lib.optional unfreeEnableUnrar unrar;
+=======
+  extraTools = [ p7zip lrzip ] ++ lib.optional unfreeEnableUnrar unrar;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 in
 
 mkDerivation {

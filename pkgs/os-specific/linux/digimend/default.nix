@@ -2,13 +2,22 @@
 
 stdenv.mkDerivation rec {
   pname = "digimend";
+<<<<<<< HEAD
   version = "unstable-2023-05-03";
+=======
+  version = "10";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "digimend";
     repo = "digimend-kernel-drivers";
+<<<<<<< HEAD
     rev = "eca6e1b701bffb80a293234a485ebf6b4bc85562";
     hash = "sha256-0mjIUgHvbNcVQVzU3xzaloe5R41a4eknDhdhruJH+6c=";
+=======
+    rev = "v${version}";
+    sha256 = "0lifd6cx6aa6hcms4zn4hlla3alra08r0svj5x1l8nlsv0ydnl6i";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   postPatch = ''

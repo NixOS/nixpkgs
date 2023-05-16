@@ -1,9 +1,15 @@
 { lib
 , buildPackages, pkgs, targetPackages
+<<<<<<< HEAD
 , generateSplicesForMkScope, makeScopeWithSplicing'
 , stdenv
 , preLibcCrossHeaders
 , config
+=======
+, generateSplicesForMkScope, makeScopeWithSplicing
+, stdenv
+, preLibcCrossHeaders
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 let
@@ -15,10 +21,14 @@ let
                                         (stdenv.targetPlatform.config + "-");
 in
 
+<<<<<<< HEAD
 makeScopeWithSplicing' {
   otherSplices = generateSplicesForMkScope "darwin";
   extra = spliced: spliced.apple_sdk.frameworks;
   f = (self: let
+=======
+makeScopeWithSplicing (generateSplicesForMkScope "darwin") (_: {}) (spliced: spliced.apple_sdk.frameworks) (self: let
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   inherit (self) mkDerivation callPackage;
 
   # Must use pkgs.callPackage to avoid infinite recursion.
@@ -104,12 +114,19 @@ impure-cmds // appleSourcePackages // chooseLibs // {
     bintools = self.binutils-unwrapped;
   };
 
+<<<<<<< HEAD
   cctools = self.cctools-llvm;
+=======
+  cctools = callPackage ../os-specific/darwin/cctools/port.nix {
+    stdenv = if stdenv.isDarwin then stdenv else pkgs.libcxxStdenv;
+  };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   cctools-apple = callPackage ../os-specific/darwin/cctools/apple.nix {
     stdenv = if stdenv.isDarwin then stdenv else pkgs.libcxxStdenv;
   };
 
+<<<<<<< HEAD
   cctools-llvm = callPackage ../os-specific/darwin/cctools/llvm.nix {
     stdenv = if stdenv.isDarwin then stdenv else pkgs.libcxxStdenv;
   };
@@ -118,6 +135,8 @@ impure-cmds // appleSourcePackages // chooseLibs // {
     stdenv = if stdenv.isDarwin then stdenv else pkgs.libcxxStdenv;
   };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   # TODO(@connorbaker): See https://github.com/NixOS/nixpkgs/issues/229389.
   cf-private = self.apple_sdk.frameworks.CoreFoundation;
 
@@ -136,9 +155,25 @@ impure-cmds // appleSourcePackages // chooseLibs // {
 
   sigtool = callPackage ../os-specific/darwin/sigtool { };
 
+<<<<<<< HEAD
   signingUtils = callPackage ../os-specific/darwin/signing-utils { };
 
   postLinkSignHook = callPackage ../os-specific/darwin/signing-utils/post-link-sign-hook.nix { };
+=======
+  postLinkSignHook = pkgs.writeTextFile {
+    name = "post-link-sign-hook";
+    executable = true;
+
+    text = ''
+      if [ "$linkerOutput" != "/dev/null" ]; then
+        CODESIGN_ALLOCATE=${targetPrefix}codesign_allocate \
+          ${self.sigtool}/bin/codesign -f -s - "$linkerOutput"
+      fi
+    '';
+  };
+
+  signingUtils = callPackage ../os-specific/darwin/signing-utils { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   autoSignDarwinBinariesHook = pkgs.makeSetupHook {
     name = "auto-sign-darwin-binaries-hook";
@@ -223,7 +258,11 @@ impure-cmds // appleSourcePackages // chooseLibs // {
   discrete-scroll = callPackage ../os-specific/darwin/discrete-scroll { };
 
   # See doc/builders/special/darwin-builder.section.md
+<<<<<<< HEAD
   linux-builder = lib.makeOverridable ({ modules }:
+=======
+  builder =
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     let
       toGuest = builtins.replaceStrings [ "darwin" ] [ "linux" ];
 
@@ -231,7 +270,11 @@ impure-cmds // appleSourcePackages // chooseLibs // {
         configuration = {
           imports = [
             ../../nixos/modules/profiles/macos-builder.nix
+<<<<<<< HEAD
           ] ++ modules;
+=======
+          ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
           virtualisation.host = { inherit pkgs; };
         };
@@ -240,9 +283,14 @@ impure-cmds // appleSourcePackages // chooseLibs // {
       };
 
     in
+<<<<<<< HEAD
       nixos.config.system.build.macos-builder-installer) { modules = [ ]; };
 
 } // lib.optionalAttrs config.allowAliases {
   builder = throw "'darwin.builder' has been changed and renamed to 'darwin.linux-builder'. The default ssh port is now 31022. Please update your configuration or override the port back to 22. See https://nixos.org/manual/nixpkgs/unstable/#sec-darwin-builder"; # added 2023-07-06
 });
 }
+=======
+      nixos.config.system.build.macos-builder-installer;
+})
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)

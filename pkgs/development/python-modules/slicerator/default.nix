@@ -28,6 +28,10 @@ buildPythonPackage rec {
     description = "A lazy-loading, fancy-sliceable iterable";
     homepage = "https://github.com/soft-matter/slicerator";
     license = licenses.bsdOriginal;
+<<<<<<< HEAD
     maintainers = with maintainers; [ ];
+=======
+    maintainers = with maintainers; [ costrouc ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

@@ -40,7 +40,11 @@ buildPythonPackage rec {
     description = "Read Google Cloud Storage, Azure Blobs, and local paths with the same interface";
     homepage = "https://github.com/christopher-hesse/blobfile";
     changelog = "https://github.com/christopher-hesse/blobfile/blob/v${version}/CHANGES.md";
+<<<<<<< HEAD
     license = licenses.unlicense;
+=======
+    license = licenses.mit;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     maintainers = with maintainers; [ happysalada ];
   };
 }

@@ -13,14 +13,21 @@
 , pythonOlder
 , sniffio
 , socksio
+<<<<<<< HEAD
 # for passthru.tests
 , httpx
 , httpx-socks
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 buildPythonPackage rec {
   pname = "httpcore";
+<<<<<<< HEAD
   version = "0.17.2";
+=======
+  version = "0.16.3";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -29,7 +36,11 @@ buildPythonPackage rec {
     owner = "encode";
     repo = pname;
     rev = "refs/tags/${version}";
+<<<<<<< HEAD
     hash = "sha256-qAoORhzBbjXxgtzTqbAxWBxrohzfwDWm5mxxrgeXt48=";
+=======
+    hash = "sha256-3bC97CTZi6An+owjoJF7Irtr7ONbP8RtNdTIGJRy0Ng=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [
@@ -73,12 +84,16 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
+<<<<<<< HEAD
   passthru.tests = {
     inherit httpx httpx-socks;
   };
 
   meta = with lib; {
     changelog = "https://github.com/encode/httpcore/releases/tag/${version}";
+=======
+  meta = with lib; {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     description = "A minimal low-level HTTP client";
     homepage = "https://github.com/encode/httpcore";
     license = licenses.bsd3;

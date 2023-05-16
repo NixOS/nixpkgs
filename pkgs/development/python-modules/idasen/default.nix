@@ -12,7 +12,11 @@
 
 buildPythonPackage rec {
   pname = "idasen";
+<<<<<<< HEAD
   version = "0.10.2";
+=======
+  version = "0.9.6";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -21,7 +25,11 @@ buildPythonPackage rec {
     owner = "newAM";
     repo = "idasen";
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-aCAtZsHH1tkti2A7OWw9rV4vij1n6T+R8nMa/MRZuF8=";
+=======
+    hash = "sha256-t8w4USDzyS0k5yk0XtQF8fVffzdf+udKSkdveMlseHk=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

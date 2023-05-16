@@ -2,7 +2,11 @@
 
 buildPythonPackage rec {
   pname = "stem";
+<<<<<<< HEAD
   version = "1.8.2";
+=======
+  version = "1.8.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   # As of May 2023, the master branch of stem contains fixes for Python 3.11
   # that the last release (1.8.1) doesn't. The test suite fails on both master
@@ -12,7 +16,11 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
+<<<<<<< HEAD
     hash = "sha256-g/sZ/9TJ+CIHwAYFFIA4n4CvIhp+R4MACu3sTjhOtYI=";
+=======
+    hash = "sha256-gdQ6fGaLqde8EQOy56kR6dFIKUs3PSelmujaee96Pi8=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   postPatch = ''

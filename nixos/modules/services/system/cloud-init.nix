@@ -15,7 +15,10 @@ let
   ]
   ++ optional cfg.btrfs.enable btrfs-progs
   ++ optional cfg.ext4.enable e2fsprogs
+<<<<<<< HEAD
   ++ optional cfg.xfs.enable xfsprogs
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ;
   settingsFormat = pkgs.formats.yaml { };
   cfgfile = settingsFormat.generate "cloud.cfg" cfg.settings;
@@ -58,6 +61,7 @@ in
         '';
       };
 
+<<<<<<< HEAD
       xfs.enable = mkOption {
         type = types.bool;
         default = false;
@@ -66,6 +70,8 @@ in
         '';
       };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       network.enable = mkOption {
         type = types.bool;
         default = false;
@@ -99,7 +105,11 @@ in
 
   };
 
+<<<<<<< HEAD
   config = mkIf cfg.enable {
+=======
+  config = {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     services.cloud-init.settings = {
       system_info = mkDefault {
         distro = "nixos";
@@ -151,6 +161,10 @@ in
         "power-state-change"
       ];
     };
+<<<<<<< HEAD
+=======
+  } // (mkIf cfg.enable {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     environment.etc."cloud/cloud.cfg" =
       if cfg.config == "" then
@@ -233,7 +247,11 @@ in
       description = "Cloud-config availability";
       requires = [ "cloud-init-local.service" "cloud-init.service" ];
     };
+<<<<<<< HEAD
   };
 
   meta.maintainers = [ maintainers.zimbatm ];
+=======
+  });
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }

@@ -25,6 +25,11 @@ dotnetConfigureHook() {
             ${dotnetFlags[@]}
     }
 
+<<<<<<< HEAD
+=======
+    (( "${#projectFile[@]}" == 0 )) && dotnetRestore
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     # Generate a NuGet.config file to make sure everything,
     # including things like <Sdk /> dependencies, is restored from the proper source
 cat <<EOF > "./NuGet.config"
@@ -37,6 +42,7 @@ cat <<EOF > "./NuGet.config"
 </configuration>
 EOF
 
+<<<<<<< HEAD
     # Patch paket.dependencies and paket.lock (if found) to use the proper source. This ensures
     # paket restore works correctly
     # We use + instead of / in sed to avoid problems with slashes
@@ -47,10 +53,13 @@ EOF
 
     (( "${#projectFile[@]}" == 0 )) && dotnetRestore
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     for project in ${projectFile[@]} ${testProjectFile[@]-}; do
         dotnetRestore "$project"
     done
 
+<<<<<<< HEAD
     echo "Fixing up native binaries..."
     # Find all native binaries and nuget libraries, and fix them up,
     # by setting the proper interpreter and rpath to some commonly used libraries
@@ -72,6 +81,8 @@ EOF
         fi
     done
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     runHook postConfigure
 
     echo "Finished dotnetConfigureHook"

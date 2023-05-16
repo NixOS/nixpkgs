@@ -187,6 +187,7 @@ Decision: All functions remove trailing slashes in their results.
 
 </details>
 
+<<<<<<< HEAD
 ### Prefer returning subpaths over components
 [subpath-preference]: #prefer-returning-subpaths-over-components
 
@@ -208,6 +209,8 @@ Decision: Subpaths should be preferred over list of path component strings.
   For completeness, `lib.path.subpath.join` allows converting the list of components back to a subpath.
 </details>
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 ## Other implementations and references
 
 - [Rust](https://doc.rust-lang.org/std/path/struct.Path.html)

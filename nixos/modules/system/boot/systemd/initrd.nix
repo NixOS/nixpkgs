@@ -56,6 +56,10 @@ let
     "systemd-ask-password-console.path"
     "systemd-ask-password-console.service"
     "systemd-fsck@.service"
+<<<<<<< HEAD
+=======
+    "systemd-growfs@.service"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "systemd-halt.service"
     "systemd-hibernate-resume@.service"
     "systemd-journald-audit.socket"
@@ -92,6 +96,10 @@ let
   fileSystems = filter utils.fsNeededForBoot config.system.build.fileSystems;
 
   needMakefs = lib.any (fs: fs.autoFormat) fileSystems;
+<<<<<<< HEAD
+=======
+  needGrowfs = lib.any (fs: fs.autoResize) fileSystems;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   kernel-name = config.boot.kernelPackages.kernel.name or "kernel";
   modulesTree = config.system.modulesTree.override { name = kernel-name + "-modules"; };
@@ -333,6 +341,7 @@ in {
       visible = "shallow";
       description = lib.mdDoc "Definition of slice configurations.";
     };
+<<<<<<< HEAD
 
     enableTpm2 = mkOption {
       default = true;
@@ -341,6 +350,8 @@ in {
         Whether to enable TPM2 support in the initrd.
       '';
     };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   config = mkIf (config.boot.initrd.enable && cfg.enable) {
@@ -350,8 +361,13 @@ in {
       # systemd needs this for some features
       "autofs4"
       # systemd-cryptenroll
+<<<<<<< HEAD
     ] ++ lib.optional cfg.enableTpm2 "tpm-tis"
     ++ lib.optional (cfg.enableTpm2 && !(pkgs.stdenv.hostPlatform.isRiscV64 || pkgs.stdenv.hostPlatform.isArmv7)) "tpm-crb";
+=======
+      "tpm-tis"
+    ] ++ lib.optional (pkgs.stdenv.hostPlatform.system != "riscv64-linux") "tpm-crb";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     boot.initrd.systemd = {
       initrdBin = [pkgs.bash pkgs.coreutils cfg.package.kmod cfg.package] ++ config.system.fsPackages;
@@ -406,6 +422,10 @@ in {
       storePaths = [
         # systemd tooling
         "${cfg.package}/lib/systemd/systemd-fsck"
+<<<<<<< HEAD
+=======
+        (lib.mkIf needGrowfs "${cfg.package}/lib/systemd/systemd-growfs")
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "${cfg.package}/lib/systemd/systemd-hibernate-resume"
         "${cfg.package}/lib/systemd/systemd-journald"
         (lib.mkIf needMakefs "${cfg.package}/lib/systemd/systemd-makefs")
@@ -429,11 +449,19 @@ in {
 
         # so NSS can look up usernames
         "${pkgs.glibc}/lib/libnss_files.so.2"
+<<<<<<< HEAD
       ] ++ optionals (cfg.package.withCryptsetup && cfg.enableTpm2) [
         # tpm2 support
         "${cfg.package}/lib/cryptsetup/libcryptsetup-token-systemd-tpm2.so"
         pkgs.tpm2-tss
       ] ++ optionals cfg.package.withCryptsetup [
+=======
+      ] ++ optionals cfg.package.withCryptsetup [
+        # tpm2 support
+        "${cfg.package}/lib/cryptsetup/libcryptsetup-token-systemd-tpm2.so"
+        pkgs.tpm2-tss
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         # fido2 support
         "${cfg.package}/lib/cryptsetup/libcryptsetup-token-systemd-fido2.so"
         "${pkgs.libfido2}/lib/libfido2.so.1"

@@ -8,11 +8,19 @@
 
 stdenv.mkDerivation rec {
   pname = "dataexplorer";
+<<<<<<< HEAD
   version = "3.8.0";
 
   src = fetchurl {
     url = "mirror://savannah/dataexplorer/dataexplorer-${version}-src.tar.gz";
     sha256 = "sha256-ZluT/jCjcOrlh2nqe0j56shmtGqfm11BCnsp6mWDXkQ=";
+=======
+  version = "3.7.6";
+
+  src = fetchurl {
+    url = "mirror://savannah/dataexplorer/dataexplorer-${version}-src.tar.gz";
+    sha256 = "sha256-mwz4o1m2ldjyD4pbwMQxeaI8a8JXzis+s0I+6GW8WaY=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ ant makeWrapper ];

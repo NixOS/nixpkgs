@@ -17,14 +17,22 @@
 
 buildPythonPackage rec {
   pname = "google-api-core";
+<<<<<<< HEAD
   version = "2.11.1";
+=======
+  version = "2.11.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
+<<<<<<< HEAD
     hash = "sha256-JdKeBaAFjtXxnGHAp4sbU63qTZNktGTQFPvalB9tHJo=";
+=======
+    hash = "sha256-S5u11aOAoL76BXOzAmUbipqJJiwXMON79CPOxRGATCI=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [
@@ -87,6 +95,10 @@ buildPythonPackage rec {
     homepage = "https://github.com/googleapis/python-api-core";
     changelog = "https://github.com/googleapis/python-api-core/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
+<<<<<<< HEAD
     maintainers = with maintainers; [ ];
+=======
+    maintainers = with maintainers; [ SuperSandro2000 ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

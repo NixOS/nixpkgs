@@ -19,6 +19,10 @@ rustPlatform.buildRustPackage rec {
     description = "See what Rust is doing behind the curtains";
     homepage = "https://github.com/mre/cargo-inspect";
     license = with licenses; [ mit asl20 ];
+<<<<<<< HEAD
     maintainers = with maintainers; [ minijackson matthiasbeyer ];
+=======
+    maintainers = with maintainers; [ minijackson ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

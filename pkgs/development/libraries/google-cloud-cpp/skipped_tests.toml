@@ -1,4 +1,5 @@
 whole = [
+<<<<<<< HEAD
   "common_samples_samples",
   "common_internal_grpc_impersonate_service_account_integration_test",
   "common_internal_unified_rest_credentials_integration_test",
@@ -41,11 +42,44 @@ whole = [
   "pubsub_subscriber_integration_test",
   "pubsub_subscription_admin_integration_test",
   "pubsub_topic_admin_integration_test",
+=======
+  "bigquery_bigquery_read_integration_test",
+  "bigtable_admin_admin_iam_policy_integration_test",
+  "bigtable_admin_iam_policy_integration_test",
+  "bigtable_admin_integration_test",
+  "bigtable_apply_read_latency_benchmark",
+  "bigtable_data_async_future_integration_test",
+  "bigtable_data_integration_test",
+  "bigtable_endurance_benchmark",
+  "bigtable_filters_integration_test",
+  "bigtable_mutation_batcher_throughput_benchmark",
+  "bigtable_mutations_integration_test",
+  "bigtable_read_sync_vs_async_benchmark",
+  "bigtable_scan_throughput_benchmark",
+  "bigtable_table_sample_rows_integration_test",
+  "common_grpc_utils_internal_grpc_impersonate_service_account_integration_test",
+  "iam_iam_credentials_integration_test",
+  "iam_iam_integration_test",
+  "logging_quickstart",
+  "pubsub_endurance",
+  "pubsub_schema_admin_integration_test",
+  "pubsub_subscriber_integration_test",
+  "pubsub_subscription_admin_integration_test",
+  "pubsub_throughput",
+  "pubsub_topic_admin_integration_test",
+  "rest_internal_internal_curl_rest_client_integration_test",
+  "rest_internal_internal_unified_rest_credentials_integration_test",
+  "spanner_admin_backup_extra_integration_test",
+  "spanner_admin_database_admin_integration_test",
+  "spanner_admin_instance_admin_integration_test",
+  "spanner_backup_extra_integration_test",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   "spanner_client_integration_test",
   "spanner_client_stress_test",
   "spanner_data_types_integration_test",
   "spanner_database_admin_integration_test",
   "spanner_instance_admin_integration_test",
+<<<<<<< HEAD
   "spanner_session_pool_integration_test",
   "spanner_admin_database_admin_integration_test",
   "spanner_admin_instance_admin_integration_test",
@@ -53,10 +87,19 @@ whole = [
   "spanner_instance_admin_client_samples",
   "spanner_multiple_rows_cpu_benchmark",
   "spanner_single_row_throughput_benchmark",
+=======
+  "spanner_multiple_rows_cpu_benchmark",
+  "spanner_rpc_failure_threshold_integration_test",
+  "spanner_session_pool_integration_test",
+  "spanner_single_row_throughput_benchmark",
+  "storage_aggregate_download_throughput_benchmark",
+  "storage_aggregate_upload_throughput_benchmark",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   "storage_alternative_endpoint_integration_test",
   "storage_auto_finalize_integration_test",
   "storage_bucket_integration_test",
   "storage_create_client_integration_test",
+<<<<<<< HEAD
   "storage_curl_sign_blob_integration_test",
   "storage_decompressive_transcoding_integration_test",
   "storage_grpc_bucket_acl_integration_test",
@@ -66,6 +109,15 @@ whole = [
   "storage_grpc_object_acl_integration_test",
   "storage_grpc_object_media_integration_test",
   "storage_grpc_object_metadata_integration_test",
+=======
+  "storage_create_dataset",
+  "storage_curl_download_request_integration_test",
+  "storage_curl_request_integration_test",
+  "storage_curl_resumable_upload_session_integration_test",
+  "storage_curl_sign_blob_integration_test",
+  "storage_decompressive_transcoding_integration_test",
+  "storage_grpc_integration_test",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   "storage_key_file_integration_test",
   "storage_minimal_iam_credentials_rest_integration_test",
   "storage_object_basic_crud_integration_test",
@@ -94,6 +146,7 @@ whole = [
   "storage_service_account_integration_test",
   "storage_signed_url_integration_test",
   "storage_small_reads_integration_test",
+<<<<<<< HEAD
   "storage_thread_integration_test",
   "storage_tracing_integration_test",
   "storage_unified_credentials_integration_test",
@@ -104,6 +157,15 @@ whole = [
   "storage_storage_parallel_uploads_benchmark",
   "storage_storage_throughput_vs_cpu_benchmark",
   "storage_throughput_experiment_test"
+=======
+  "storage_storage_file_transfer_benchmark",
+  "storage_storage_parallel_uploads_benchmark",
+  "storage_storage_throughput_vs_cpu_benchmark",
+  "storage_thread_integration_test",
+  "storage_throughput_experiment_test",
+  "storage_tracing_integration_test",
+  "storage_unified_credentials_integration_test",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 ]
 cases = [
   "BackupExtraIntegrationTest.CreateBackupWithExpiredVersionTime",

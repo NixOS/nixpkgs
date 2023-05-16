@@ -21,7 +21,11 @@
 
 buildPythonPackage rec {
   pname = "pytensor";
+<<<<<<< HEAD
   version = "2.11.3";
+=======
+  version = "2.10.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -30,7 +34,11 @@ buildPythonPackage rec {
     owner = "pymc-devs";
     repo = pname;
     rev = "refs/tags/rel-${version}";
+<<<<<<< HEAD
     hash = "sha256-4GDur8S19i8pZkywKHZUelmd2e0jZmC5HzF7o2esDl4=";
+=======
+    hash = "sha256-sk/HGfiiNKrgnf5fPaxoOySvAEpnAXnLFmK0yah51ww=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [
@@ -72,10 +80,15 @@ buildPythonPackage rec {
   disabledTests = [
     # benchmarks (require pytest-benchmark):
     "test_elemwise_speed"
+<<<<<<< HEAD
     "test_fused_elemwise_benchmark"
     "test_logsumexp_benchmark"
     "test_scan_multiple_output"
     "test_vector_taps_benchmark"
+=======
+    "test_logsumexp_benchmark"
+    "test_scan_multiple_output"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   disabledTestPaths = [

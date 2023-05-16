@@ -18,7 +18,11 @@ stdenv.mkDerivation rec {
   ];
 
   installPhase = ''
+<<<<<<< HEAD
     runHook preInstall
+=======
+    runHook preInstal
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     install -Dm755 wasm3 -t $out/bin
     runHook postInstall
   '';

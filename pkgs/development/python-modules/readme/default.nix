@@ -34,7 +34,11 @@ buildPythonPackage rec {
     description = "Readme is a library for rendering readme descriptions for Warehouse";
     homepage = "https://github.com/pypa/readme";
     license = licenses.asl20;
+<<<<<<< HEAD
     maintainers = [ ];
+=======
+    maintainers = [ maintainers.costrouc ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
 }

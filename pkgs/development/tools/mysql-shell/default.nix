@@ -38,16 +38,28 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "mysql-shell";
+<<<<<<< HEAD
   version = "8.0.34";
+=======
+  version = "8.0.33";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   srcs = [
     (fetchurl {
       url = "https://cdn.mysql.com//Downloads/MySQL-Shell/mysql-shell-${version}-src.tar.gz";
+<<<<<<< HEAD
       hash = "sha256-QY1PmhGw3PhqZ79+H/Xbb9uOvmrBlFQRS7idnV5OXF0=";
     })
     (fetchurl {
       url = "https://dev.mysql.com/get/Downloads/MySQL-${lib.versions.majorMinor version}/mysql-${version}.tar.gz";
       hash = "sha256-5l0Do8QmGLX7+ZBCrtMyCUAumyeqYsfIdD/9R4jY2x0=";
+=======
+      hash = "sha256-ElcAOvyQjXNns35p4J+jnGu8orZR81Itz/fxYh7Usbs=";
+    })
+    (fetchurl {
+      url = "https://dev.mysql.com/get/Downloads/MySQL-${lib.versions.majorMinor version}/mysql-${version}.tar.gz";
+      hash = "sha256-liAC9dkG9C9AsnejnS25OTEkjB8H/49DEsKI5jgD3RI=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     })
   ];
 

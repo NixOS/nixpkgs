@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 { lib
 , buildNpmPackage
 , fetchFromGitHub
@@ -14,15 +15,30 @@
 buildNpmPackage rec {
   pname = "webcord";
   version = "4.4.0";
+=======
+{ lib, stdenv, buildNpmPackage, fetchFromGitHub, copyDesktopItems
+, python3, pipewire, libpulseaudio, xdg-utils, electron_24, makeDesktopItem }:
+
+buildNpmPackage rec {
+  pname = "webcord";
+  version = "4.2.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "SpacingBat3";
     repo = "WebCord";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-Kiw3pebjH9Pz5oi6Gbjxrjd/kvozapLNqfWLVuTXF/I=";
   };
 
   npmDepsHash = "sha256-CPGfhV8VXbpX9UB5oQhI+IwFWPgYq2dGnSuyByMNGg4=";
+=======
+    sha256 = "sha256-530iWNvehImwSYt5HnZaqa4TAslrwxAOZi3gRm1K2/w=";
+  };
+
+  npmDepsHash = "sha256-YguZtGn8CT4EqOQWS0GeNGBdZSC3Lj1gFR0ZiegWTJU=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nativeBuildInputs = [
     copyDesktopItems
@@ -56,7 +72,11 @@ buildNpmPackage rec {
     install -Dm644 sources/assets/icons/app.png $out/share/icons/hicolor/256x256/apps/webcord.png
 
     # Add xdg-utils to path via suffix, per PR #181171
+<<<<<<< HEAD
     makeWrapper '${electron_25}/bin/electron' $out/bin/webcord \
+=======
+    makeWrapper '${electron_24}/bin/electron' $out/bin/webcord \
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       --prefix LD_LIBRARY_PATH : ${libPath}:$out/opt/webcord \
       --suffix PATH : "${lib.makeBinPath [ xdg-utils ]}" \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform=wayland}}" \
@@ -76,16 +96,24 @@ buildNpmPackage rec {
     })
   ];
 
+<<<<<<< HEAD
   passthru.updateScript = nix-update-script { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   meta = with lib; {
     description = "A Discord and Fosscord electron-based client implemented without Discord API";
     homepage = "https://github.com/SpacingBat3/WebCord";
     downloadPage = "https://github.com/SpacingBat3/WebCord/releases";
     changelog = "https://github.com/SpacingBat3/WebCord/releases/tag/v${version}";
     license = licenses.mit;
+<<<<<<< HEAD
     mainProgram = "webcord";
     maintainers = with maintainers; [ huantian ];
     platforms = platforms.linux;
+=======
+    maintainers = with maintainers; [ huantian ];
+    platforms = electron_24.meta.platforms;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

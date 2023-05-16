@@ -18,4 +18,8 @@ let
     egg2nix = callPackage ./egg2nix.nix { };
   };
 
+<<<<<<< HEAD
 in self
+=======
+in lib.recurseIntoAttrs self
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)

@@ -31,7 +31,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "feedbackd";
+<<<<<<< HEAD
   version = "0.2.0";
+=======
+  version = "0.1.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   outputs = [ "out" "dev" "devdoc" ];
 
@@ -40,10 +44,24 @@ stdenv.mkDerivation rec {
     owner = "Librem5";
     repo = "feedbackd";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-l5rfMx3ElW25A5WVqzfKBp57ebaNC9msqV7mvnwv10s=";
     fetchSubmodules = true;
   };
 
+=======
+    hash = "sha256-7H5Ah4zo+wLKd0WoKoOgtIm7HcUSw8PTf/KzBlY75oc=";
+    fetchSubmodules = true;
+  };
+
+  patches = [
+    (fetchpatch2 {
+      url = "https://source.puri.sm/Librem5/feedbackd/-/merge_requests/109.patch";
+      hash = "sha256-z3Ud6P2GHYOaGA2vJDD3Sz47+M8p0VcYZ5gbYcGydMk=";
+    })
+  ];
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   depsBuildBuild = [
     pkg-config
   ];

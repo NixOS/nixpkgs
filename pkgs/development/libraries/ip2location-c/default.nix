@@ -6,13 +6,21 @@
 
 stdenv.mkDerivation rec {
   pname = "ip2location-c";
+<<<<<<< HEAD
   version = "8.6.1";
+=======
+  version = "8.5.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "chrislim2888";
     repo = "IP2Location-C-Library";
     rev = version;
+<<<<<<< HEAD
     sha256 = "sha256-3/cLoGV7go4S1ew73IJzJEMTlLnvM3adl+/Sb7mPrZY=";
+=======
+    sha256 = "sha256-+Az1bAJ3HT9mIjO43FOcEqxX3oA3RcIY7VvxfaHtBX8=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

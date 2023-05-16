@@ -2,13 +2,21 @@
 
 stdenv.mkDerivation rec {
   pname = "imgui";
+<<<<<<< HEAD
   version = "1.89.9";
+=======
+  version = "1.89.5";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "ocornut";
     repo = "imgui";
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-0k9jKrJUrG9piHNFQaBBY3zgNIKM23ZA879NY+MNYTU=";
+=======
+    sha256 = "sha256-Ha70CTSBpyF9S+/qG9lAhUlUT4vY0crOoi3vFsy65H8=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   dontBuild = true;

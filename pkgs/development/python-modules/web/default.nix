@@ -29,7 +29,11 @@ buildPythonPackage rec {
     '';
     homepage = "https://webpy.org/";
     license = licenses.publicDomain;
+<<<<<<< HEAD
     maintainers = with maintainers; [ layus ];
+=======
+    maintainers = with maintainers; [ layus SuperSandro2000 ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
 }

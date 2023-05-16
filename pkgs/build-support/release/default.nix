@@ -5,7 +5,11 @@ with pkgs;
 rec {
 
   sourceTarball = args: import ./source-tarball.nix (
+<<<<<<< HEAD
     { inherit lib stdenv autoconf automake libtool;
+=======
+    { inherit stdenv autoconf automake libtool;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     } // args);
 
   makeSourceTarball = sourceTarball; # compatibility

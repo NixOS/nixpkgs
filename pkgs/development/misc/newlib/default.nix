@@ -73,12 +73,19 @@ stdenv.mkDerivation (finalAttrs: {
       cd $out${finalAttrs.passthru.libdir}
 
       for f in librdimon.a libc.a libg.a; do
+<<<<<<< HEAD
         # Some libraries are only available for specific architectures.
         # For example, librdimon.a is only available on ARM.
         [ -f "$f" ] && cp "$f" "''${f%%\.a}_nano.a"
       done
     )
   '' + ''[ "$(find $out -type f | wc -l)" -gt 0 ] || (echo '$out is empty' 1>&2 && exit 1)'';
+=======
+        cp "$f" "''${f%%\.a}_nano.a"
+      done
+    )
+  '';
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   passthru = {
     incdir = "/${stdenv.targetPlatform.config}/include";

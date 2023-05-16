@@ -2,7 +2,11 @@
 
 let
   pname = "miniflux";
+<<<<<<< HEAD
   version = "2.0.46";
+=======
+  version = "2.0.43";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 in buildGoModule {
   inherit pname version;
@@ -11,6 +15,7 @@ in buildGoModule {
     owner = pname;
     repo = "v2";
     rev = version;
+<<<<<<< HEAD
     sha256 = "sha256-a27eKOhW2vHmPktLgqHKqiwtC9T6GRwnOeNReeMsaeM=";
   };
 
@@ -19,6 +24,18 @@ in buildGoModule {
   nativeBuildInputs = [ installShellFiles ];
 
   checkFlags = [ "-skip=TestClient" ]; # skip client tests as they require network access
+=======
+    sha256 = "sha256-IVIAlDYOuAl51V/Q1hpkjIREHTXq8E5D/w4cyTZ8ebs=";
+  };
+
+  vendorHash = "sha256-/BINHOlRmAfOIXY9x5VjnQwIc87Mt2TAvBE1tPq6W80=";
+
+  nativeBuildInputs = [ installShellFiles ];
+
+  checkPhase = ''
+    go test $(go list ./... | grep -v client)
+  ''; # skip client tests as they require network access
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   ldflags = [
     "-s" "-w" "-X miniflux.app/version.Version=${version}"

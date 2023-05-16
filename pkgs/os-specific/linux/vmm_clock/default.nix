@@ -7,7 +7,11 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "voutilad";
     repo = "vmm_clock";
+<<<<<<< HEAD
     rev = version;
+=======
+    rev = "${version}";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     hash = "sha256-8z/N/dbkeFd40sH7jatNmSS62B88tC0jVgNljhxslOo=";
   };
 

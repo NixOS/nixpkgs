@@ -199,7 +199,11 @@ in
     ];
   };
   everything = makeTest {
+<<<<<<< HEAD
     name = "atop-everything";
+=======
+    name = "atop-everthing";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     nodes.machine = {
       programs.atop = {
         enable = true;

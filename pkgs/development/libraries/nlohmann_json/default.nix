@@ -1,7 +1,10 @@
 { stdenv
 , lib
 , fetchFromGitHub
+<<<<<<< HEAD
 , fetchpatch
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , cmake
 }:
 let
@@ -22,6 +25,7 @@ in stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-SUdhIV7tjtacf5DkoWk9cnkfyMlrkg8ZU7XnPZd22Tw=";
   };
 
+<<<<<<< HEAD
   patches = [
     # Backport fix for gcc-13:
     #   https://github.com/nlohmann/json/pull/3895
@@ -40,6 +44,8 @@ in stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nativeBuildInputs = [ cmake ];
 
   cmakeFlags = [

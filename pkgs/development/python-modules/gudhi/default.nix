@@ -19,14 +19,22 @@
 
 buildPythonPackage rec {
   pname = "gudhi";
+<<<<<<< HEAD
   version = "3.8.0";
+=======
+  version = "3.4.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "GUDHI";
     repo = "gudhi-devel";
     rev = "tags/gudhi-release-${version}";
     fetchSubmodules = true;
+<<<<<<< HEAD
     sha256 = "sha256-f2ajy4muG9vuf4JarGWZmdk/LF9OYd2KLSaGyY6BQrY=";
+=======
+    sha256 = "1m03qazzfraxn62l1cb11icjz4x8q2sg9c2k3syw5v0yv9ndgx1v";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   patches = [ ./remove_explicit_PYTHONPATH.patch ];

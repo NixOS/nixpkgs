@@ -15,7 +15,11 @@
 
 buildPythonPackage rec {
   pname = "bc-detect-secrets";
+<<<<<<< HEAD
   version = "1.4.30";
+=======
+  version = "1.4.27";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -24,7 +28,11 @@ buildPythonPackage rec {
     owner = "bridgecrewio";
     repo = "detect-secrets";
     rev = "refs/tags/${version}";
+<<<<<<< HEAD
     hash = "sha256-wq+SKOiMcVO7OiK+RdRk4RNsjSAT7lBdAjLHfurSIRo=";
+=======
+    hash = "sha256-iQNMU77nTv6KY9LJb1fiBUVs5LkpX732UpJAYdUWNyc=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [

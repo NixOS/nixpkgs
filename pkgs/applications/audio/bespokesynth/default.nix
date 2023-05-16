@@ -30,13 +30,19 @@
 , pcre
 , mount
 , gnome
+<<<<<<< HEAD
 , Accelerate
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , Cocoa
 , WebKit
 , CoreServices
 , CoreAudioKit
+<<<<<<< HEAD
 , IOBluetooth
 , MetalKit
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   # It is not allowed to distribute binaries with the VST2 SDK plugin without a license
   # (the author of Bespoke has such a licence but not Nix). VST3 should work out of the box.
   # Read more in https://github.com/NixOS/nixpkgs/issues/145607
@@ -59,16 +65,32 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "bespokesynth";
+<<<<<<< HEAD
   version = "unstable-2023-08-17";
+=======
+  version = "1.1.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "BespokeSynth";
     repo = pname;
+<<<<<<< HEAD
     rev = "c6b1410afefc8b0b9aeb4aa11ad5c32651879c9f";
     hash = "sha256-MLHlHSszD2jEN4/f2jC4vjAidr3gVOSK606qs5bq+Sc=";
     fetchSubmodules = true;
   };
 
+=======
+    rev = "v${version}";
+    sha256 = "sha256-PN0Q6/gI1PeMaF/8EZFGJdLR8JVHQZfWunAhOIQxkHw=";
+    fetchSubmodules = true;
+  };
+
+  postPatch = ''
+    sed '1i#include <memory>' -i Source/TitleBar.h # gcc12
+  '';
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   cmakeBuildType = "Release";
 
   cmakeFlags = lib.optionals enableVST2 [ "-DBESPOKE_VST2_SDK_LOCATION=${vst-sdk}/VST2_SDK" ];
@@ -76,7 +98,11 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ python3 makeWrapper cmake pkg-config ninja ];
 
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
+<<<<<<< HEAD
     # List obtained from https://github.com/BespokeSynth/BespokeSynth/blob/main/azure-pipelines.yml
+=======
+    # List obtained in https://github.com/BespokeSynth/BespokeSynth/blob/main/azure-pipelines.yml
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     libX11
     libXrandr
     libXinerama
@@ -101,13 +127,19 @@ stdenv.mkDerivation rec {
     pcre
     mount
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
+<<<<<<< HEAD
     Accelerate
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     Cocoa
     WebKit
     CoreServices
     CoreAudioKit
+<<<<<<< HEAD
     IOBluetooth
     MetalKit
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin (toString [
@@ -131,6 +163,7 @@ stdenv.mkDerivation rec {
         --prefix PATH : '${lib.makeBinPath [
           gnome.zenity
           (python3.withPackages (ps: with ps; [ jedi ]))
+<<<<<<< HEAD
         ]}'
     '';
 
@@ -152,6 +185,25 @@ stdenv.mkDerivation rec {
       gpl3Plus
     ] ++ lib.optional enableVST2 unfree;
     maintainers = with maintainers; [ astro tobiasBora OPNA2608 PowerUser64 ];
+=======
+        ]}' \
+        --prefix LD_LIBRARY_PATH : '${lib.makeLibraryPath [
+          libXrandr
+          libXinerama
+          libXcursor
+          libXScrnSaver
+        ]}'
+    '';
+
+  meta = with lib; {
+    description =
+      "Software modular synth with controllers support, scripting and VST";
+    homepage = "https://github.com/awwbees/BespokeSynth";
+    license = with licenses; [
+      gpl3Plus
+    ] ++ lib.optional enableVST2 unfree;
+    maintainers = with maintainers; [ astro tobiasBora OPNA2608 ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     mainProgram = "BespokeSynth";
     platforms = platforms.all;
   };

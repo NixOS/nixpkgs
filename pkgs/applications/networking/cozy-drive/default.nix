@@ -5,12 +5,20 @@
 
 let
   pname = "cozydrive";
+<<<<<<< HEAD
   version = "3.38.0";
+=======
+  version = "3.32.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "https://github.com/cozy-labs/cozy-desktop/releases/download/v${version}/Cozy-Drive-${version}-x86_64.AppImage";
+<<<<<<< HEAD
     sha256 = "3liOzZVOjtV1cGrKlOKiFRRqnt8KHPr5Ye5HU0e/BYo=";
+=======
+    sha256 = "0qd5abswqbzqkk1krn9la5d8wkwfydkqrnbak3xmzbdxnkg4gc9a";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
   appimageContents = appimageTools.extract { inherit name src; };
 

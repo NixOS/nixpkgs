@@ -7,6 +7,10 @@
 , perl
 , perlPackages
 , lib, stdenv
+<<<<<<< HEAD
+=======
+, tree
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , util-linux
 }:
 let

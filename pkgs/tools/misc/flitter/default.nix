@@ -1,11 +1,19 @@
 { lib
+<<<<<<< HEAD
+=======
+, stdenv
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , ocamlPackages
 , fetchFromGitHub
 , makeWrapper
 , python3
 }:
 
+<<<<<<< HEAD
 ocamlPackages.buildDunePackage {
+=======
+ocamlPackages.buildDunePackage rec {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pname = "flitter";
   # request to tag releases: https://github.com/alexozer/flitter/issues/34
   version = "unstable-2020-10-05";

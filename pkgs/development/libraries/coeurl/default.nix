@@ -1,7 +1,10 @@
 { lib
 , stdenv
 , fetchFromGitLab
+<<<<<<< HEAD
 , fetchpatch
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , ninja
 , pkg-config
 , meson
@@ -21,6 +24,7 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     hash = "sha256-sN+YSddUOdnJLcnHyWdjNm1PpxCwnkwiqSvyrwUrg6w=";
   };
+<<<<<<< HEAD
   patches = [
     # Fix compatibility issues with curl > 7.85, see:
     # https://nheko.im/nheko-reborn/coeurl/-/commit/d926893007c353fbc149d8538a5762ca8384273a
@@ -40,6 +44,8 @@ stdenv.mkDerivation rec {
   postPatch = ''
     substituteInPlace subprojects/curl.wrap --replace '[provides]' '[provide]'
   '';
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nativeBuildInputs = [ ninja pkg-config meson ];
 

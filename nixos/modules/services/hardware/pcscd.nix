@@ -24,6 +24,10 @@ in
 
     plugins = mkOption {
       type = types.listOf types.package;
+<<<<<<< HEAD
+=======
+      default = [ pkgs.ccid ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       defaultText = literalExpression "[ pkgs.ccid ]";
       example = literalExpression "[ pkgs.pcsc-cyberjack ]";
       description = lib.mdDoc "Plugin packages to be used for PCSC-Lite.";
@@ -55,8 +59,11 @@ in
     environment.systemPackages = [ package ];
     systemd.packages = [ (getBin package) ];
 
+<<<<<<< HEAD
     services.pcscd.plugins = [ pkgs.ccid ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     systemd.sockets.pcscd.wantedBy = [ "sockets.target" ];
 
     systemd.services.pcscd = {

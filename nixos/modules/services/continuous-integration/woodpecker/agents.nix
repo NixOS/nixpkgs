@@ -23,7 +23,11 @@ let
             DOCKER_HOST = "unix:///run/podman/podman.sock";
           }
         '';
+<<<<<<< HEAD
         description = lib.mdDoc "woodpecker-agent config environment variables, for other options read the [documentation](https://woodpecker-ci.org/docs/administration/agent-config)";
+=======
+        description = lib.mdDoc "woodpecker-agent config envrionment variables, for other options read the [documentation](https://woodpecker-ci.org/docs/administration/agent-config)";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       };
 
       extraGroups = lib.mkOption {
@@ -35,6 +39,7 @@ let
         '';
       };
 
+<<<<<<< HEAD
       path = lib.mkOption {
         type = lib.types.listOf lib.types.package;
         default = [ ];
@@ -45,6 +50,8 @@ let
         '';
       };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       environmentFile = lib.mkOption {
         type = lib.types.listOf lib.types.path;
         default = [ ];
@@ -104,7 +111,11 @@ let
           "-/etc/localtime"
         ];
       };
+<<<<<<< HEAD
       inherit (agentCfg) environment path;
+=======
+      inherit (agentCfg) environment;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
   };
 in
@@ -116,6 +127,7 @@ in
       agents = lib.mkOption {
         default = { };
         type = lib.types.attrsOf agentModule;
+<<<<<<< HEAD
         example = lib.literalExpression ''
           {
             podman = {
@@ -151,6 +163,30 @@ in
             };
           }
         '';
+=======
+        example = {
+          docker = {
+            environment = {
+              WOODPECKER_SERVER = "localhost:9000";
+              WOODPECKER_BACKEND = "docker";
+              DOCKER_HOST = "unix:///run/podman/podman.sock";
+            };
+
+            extraGroups = [ "docker" ];
+
+            environmentFile = "/run/secrets/woodpecker/agent-secret.txt";
+          };
+
+          exec = {
+            environment = {
+              WOODPECKER_SERVER = "localhost:9000";
+              WOODPECKER_BACKEND = "exec";
+            };
+
+            environmentFile = "/run/secrets/woodpecker/agent-secret.txt";
+          };
+        };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         description = lib.mdDoc "woodpecker-agents configurations";
       };
     };

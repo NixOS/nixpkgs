@@ -1,24 +1,41 @@
+<<<<<<< HEAD
 { lib, stdenv, buildPackages, fetchurl, gettext, pkg-config
+=======
+{ lib, stdenv, buildPackages, fetchurl, autoconf, automake, gettext, libtool, pkg-config
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , icu, libuuid, readline, inih, liburcu
 , nixosTests
 }:
 
 stdenv.mkDerivation rec {
   pname = "xfsprogs";
+<<<<<<< HEAD
   version = "6.4.0";
 
   src = fetchurl {
     url = "mirror://kernel/linux/utils/fs/xfs/xfsprogs/${pname}-${version}.tar.xz";
     hash = "sha256-wxhoQYv79Jo6nEf8cM3/3p2W9P8AUb0EoIgeZlRkgQQ=";
+=======
+  version = "6.2.0";
+
+  src = fetchurl {
+    url = "mirror://kernel/linux/utils/fs/xfs/xfsprogs/${pname}-${version}.tar.xz";
+    hash = "sha256-1n3LpaKOCQS2CIa25fdSvHycOlxwlhU4VbWtyp24bFE=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   outputs = [ "bin" "dev" "out" "doc" ];
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [
+<<<<<<< HEAD
     gettext pkg-config
     libuuid # codegen tool uses libuuid
     liburcu # required by crc32selftest
+=======
+    autoconf automake libtool gettext pkg-config
+    libuuid # codegen tool uses libuuid
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
   buildInputs = [ readline icu inih liburcu ];
   propagatedBuildInputs = [ libuuid ]; # Dev headers include <uuid/uuid.h>
@@ -34,6 +51,10 @@ stdenv.mkDerivation rec {
       substituteInPlace "$file" \
         --replace '@sbindir@' '/run/current-system/sw/bin'
     done
+<<<<<<< HEAD
+=======
+    make configure
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     patchShebangs ./install-sh
   '';
 

@@ -1,0 +1,15 @@
+diff --git a/src/helper.js b/src/helper.js
+index 27352b53..7078e4c5 100644
+--- a/src/helper.js
++++ b/src/helper.js
+@@ -110,6 +110,10 @@ function setHome(newPath) {
+ 	userLogsPath = path.join(homePath, "logs");
+ 	clientCertificatesPath = path.join(homePath, "certificates");
+ 
++	if (process.env.THELOUNGE_PACKAGES !== undefined) {
++		packagesPath = process.env.THELOUNGE_PACKAGES;
++	}
++
+ 	// Reload config from new home location
+ 	if (fs.existsSync(configPath)) {
+ 		const userConfig = require(configPath);

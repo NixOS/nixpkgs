@@ -1,14 +1,20 @@
 { lib
 , stdenv
 , fetchFromGitHub
+<<<<<<< HEAD
 , fetchpatch
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , python3
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "maigret";
   version = "0.4.4";
+<<<<<<< HEAD
   format = "setuptools";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "soxoj";
@@ -17,6 +23,7 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-Z8SnA7Z5+oKW0AOaNf+c/zR30lrPFmXaxxKkbnDXNNs=";
   };
 
+<<<<<<< HEAD
   patches = [
     # https://github.com/soxoj/maigret/pull/1117
     (fetchpatch {
@@ -28,6 +35,9 @@ python3.pkgs.buildPythonApplication rec {
 
   nativeBuildInputs = [ python3.pkgs.pythonRelaxDepsHook ];
 
+=======
+  nativeBuildInputs = [ python3.pkgs.pythonRelaxDepsHook ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   propagatedBuildInputs = with python3.pkgs; [
     aiodns
     aiohttp
@@ -69,8 +79,11 @@ python3.pkgs.buildPythonApplication rec {
     yarl
   ];
 
+<<<<<<< HEAD
   __darwinAllowLocalNetworking = true;
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nativeCheckInputs = with python3.pkgs; [
     pytest-httpserver
     pytest-asyncio

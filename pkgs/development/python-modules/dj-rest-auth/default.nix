@@ -12,13 +12,21 @@
 
 buildPythonPackage rec {
   pname = "dj-rest-auth";
+<<<<<<< HEAD
   version = "4.0.1";
+=======
+  version = "3.0.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "iMerica";
     repo = "dj-rest-auth";
     rev = "refs/tags/${version}";
+<<<<<<< HEAD
     hash = "sha256-+ladx0b/bvvUW8zLjtG8IiWWdfPTqqm/KYbEK9uiFaU=";
+=======
+    hash = "sha256-wkbFUrvKhdp2Hd4QkXAvhMiaqSXFD/fgIw03nLPaO5I=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   postPatch = ''
@@ -63,6 +71,10 @@ buildPythonPackage rec {
     description = "Authentication for Django Rest Framework";
     homepage = "https://github.com/iMerica/dj-rest-auth";
     license = licenses.mit;
+<<<<<<< HEAD
     maintainers = with maintainers; [ ];
+=======
+    maintainers = with maintainers; [ SuperSandro2000 ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

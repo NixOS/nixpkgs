@@ -38,7 +38,10 @@ stdenv.mkDerivation {
   ];
 
   NIX_CFLAGS_COMPILE = [
+<<<<<<< HEAD
     "-Wno-error"
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "-I${lib.getDev ipu6-camera-bin}/include/ia_imaging"
     "-I${lib.getDev ipu6-camera-bin}/include/ia_camera"
   ];

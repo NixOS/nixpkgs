@@ -1,12 +1,20 @@
 { lib, stdenv, fetchurl, makeWrapper, perl, perlPackages }:
 
 stdenv.mkDerivation rec {
+<<<<<<< HEAD
   version = "4.0";
+=======
+  version = "3.8.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pname = "kpcli";
 
   src = fetchurl {
     url = "mirror://sourceforge/kpcli/${pname}-${version}.pl";
+<<<<<<< HEAD
     sha256 = "sha256-UYnX2tad3Jg00kdX5WHStI6u2pyts+SZlgj/jv4o/TU=";
+=======
+    sha256 = "sha256-bIT4Y5JFeZv5stXOKXxBtdTsB4n39fqeh2dVaBbqRyw=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ makeWrapper ];

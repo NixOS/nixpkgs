@@ -1381,6 +1381,10 @@ protocols/routed.h
 protocols/rwhod.h
 protocols/talkd.h
 protocols/timed.h
+<<<<<<< HEAD
+=======
+pthread.h
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 pthread/introspection.h
 pthread/pthread.h
 pthread/pthread_impl.h
@@ -1388,6 +1392,12 @@ pthread/pthread_spis.h
 pthread/qos.h
 pthread/sched.h
 pthread/spawn.h
+<<<<<<< HEAD
+=======
+pthread_impl.h
+pthread_spis.h
+pthread_workqueue.h
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 pwd.h
 ranlib.h
 readpassphrase.h
@@ -1410,6 +1420,10 @@ rpc/xdr.h
 rpcsvc/yp_prot.h
 rpcsvc/ypclnt.h
 runetype.h
+<<<<<<< HEAD
+=======
+sched.h
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 search.h
 secure/_common.h
 secure/_stdio.h

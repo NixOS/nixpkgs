@@ -59,7 +59,11 @@ stdenvNoCC.mkDerivation rec {
     homepage = "https://mac.getutm.app/";
     changelog = "https://github.com/utmapp/${pname}/releases/tag/v${version}";
     mainProgram = "UTM";
+<<<<<<< HEAD
     license = licenses.asl20;
+=======
+    license = licenses.apsl20;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     platforms = platforms.darwin; # 11.3 is the minimum supported version as of UTM 4.
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     maintainers = with maintainers; [ rrbutani ];

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 { lib
 , buildGoModule
 , fetchFromGitHub
@@ -7,10 +8,18 @@
 buildGoModule rec {
   pname = "hcloud";
   version = "1.37.0";
+=======
+{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
+
+buildGoModule rec {
+  pname = "hcloud";
+  version = "1.33.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "hetznercloud";
     repo = "cli";
+<<<<<<< HEAD
     rev = "refs/tags/v${version}";
     hash = "sha256-6UQaO2ArAYd6Lr1maciC83k1GlR8FLx+acAZh6SjI3g=";
   };
@@ -21,6 +30,17 @@ buildGoModule rec {
     "-s"
     "-w"
     "-X=github.com/hetznercloud/cli/internal/version.Version=${version}"
+=======
+    rev = "v${version}";
+    sha256 = "sha256-0mbEQwKmhID4luzW1mMThilWR6R8rmF4ZY4/weNkDvs=";
+  };
+
+  vendorHash = "sha256-gz8vSVWh9wyM91rjJT102UJXBpeDoU895lTrHHZpj3I=";
+
+  ldflags = [
+    "-s" "-w"
+    "-X github.com/hetznercloud/cli/internal/version.Version=${version}"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   nativeBuildInputs = [ installShellFiles ];

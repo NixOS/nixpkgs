@@ -1,11 +1,19 @@
+<<<<<<< HEAD
 { lib, stdenvNoCC, fetchPypi, unzip }:
 
 let
   common = import ./common.nix { inherit lib; };
+=======
+{ lib, stdenvNoCC, callPackage }:
+
+let
+  common = callPackage ./common.nix { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 in
 stdenvNoCC.mkDerivation rec {
   pname = "semgrep-core";
   inherit (common) version;
+<<<<<<< HEAD
   # fetch pre-built semgrep-core since the ocaml build is complex and relies on
   # the opam package manager at some point
   # pulling it out of the python wheel as r2c no longer release a built binary
@@ -41,12 +49,22 @@ stdenvNoCC.mkDerivation rec {
   installPhase = ''
     runHook preInstall
     install -Dm 755 -t $out/bin semgrep-${version}.data/purelib/semgrep/bin/semgrep-core
+=======
+  inherit (common.core) src;
+
+  installPhase = ''
+    runHook preInstall
+    install -Dm 755 -t $out/bin semgrep-core
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     runHook postInstall
   '';
 
   meta = common.meta // {
     description = common.meta.description + " - core binary";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+<<<<<<< HEAD
     platforms = lib.attrNames common.core;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

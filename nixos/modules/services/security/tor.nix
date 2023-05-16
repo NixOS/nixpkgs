@@ -769,7 +769,11 @@ in
           };
           options.SOCKSPort = mkOption {
             description = lib.mdDoc (descriptionGeneric "SOCKSPort");
+<<<<<<< HEAD
             default = lib.optionals cfg.settings.HiddenServiceNonAnonymousMode [{port = 0;}];
+=======
+            default = if cfg.settings.HiddenServiceNonAnonymousMode == true then [{port = 0;}] else [];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
             defaultText = literalExpression ''
               if config.${opt.settings}.HiddenServiceNonAnonymousMode == true
               then [ { port = 0; } ]
@@ -897,7 +901,12 @@ in
       allowedTCPPorts =
         concatMap (o:
           if isInt o && o > 0 then [o]
+<<<<<<< HEAD
           else optionals (o ? "port" && isInt o.port && o.port > 0) [o.port]
+=======
+          else if o ? "port" && isInt o.port && o.port > 0 then [o.port]
+          else []
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         ) (flatten [
           cfg.settings.ORPort
           cfg.settings.DirPort

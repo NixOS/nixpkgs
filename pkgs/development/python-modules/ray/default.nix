@@ -43,7 +43,11 @@
 , pyyaml
 , redis
 , requests
+<<<<<<< HEAD
 , scikit-image
+=======
+, scikitimage
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , scipy
 , setproctitle
 , smart-open
@@ -57,7 +61,11 @@
 
 let
   pname = "ray";
+<<<<<<< HEAD
   version = "2.6.1";
+=======
+  version = "2.4.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 in
 buildPythonPackage rec {
   inherit pname version;
@@ -103,7 +111,11 @@ buildPythonPackage rec {
       gym
       lz4
       matplotlib
+<<<<<<< HEAD
       scikit-image
+=======
+      scikitimage
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       pyyaml
       scipy
     ];
@@ -120,7 +132,10 @@ buildPythonPackage rec {
     "click"
     "grpcio"
     "protobuf"
+<<<<<<< HEAD
     "virtualenv"
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   propagatedBuildInputs = [

@@ -9,6 +9,10 @@
 , libGL
 , libGLU
 , libjpeg
+<<<<<<< HEAD
+=======
+, xorg
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , ncurses
 , libpng, libtool, mpfr, openssl, pango, poppler
 , readline, sqlite
@@ -24,7 +28,11 @@ let
     fontDirectories = [ freefont_ttf ];
   };
 
+<<<<<<< HEAD
   libPath = lib.makeLibraryPath ([
+=======
+  libPath = lib.makeLibraryPath [
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     cairo
     fontconfig
     glib
@@ -32,6 +40,11 @@ let
     gtk3
     gsettings-desktop-schemas
     libedit
+<<<<<<< HEAD
+=======
+    libGL
+    libGLU
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     libjpeg
     libpng
     mpfr
@@ -41,16 +54,24 @@ let
     poppler
     readline
     sqlite
+<<<<<<< HEAD
   ] ++ lib.optionals (!stdenv.isDarwin) [
     libGL
     libGLU
   ]);
+=======
+  ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 in
 
 stdenv.mkDerivation rec {
   pname = "racket";
+<<<<<<< HEAD
   version = "8.10"; # always change at once with ./minimal.nix
+=======
+  version = "8.9"; # always change at once with ./minimal.nix
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = (lib.makeOverridable ({ name, sha256 }:
     fetchurl {
@@ -59,7 +80,11 @@ stdenv.mkDerivation rec {
     }
   )) {
     name = "${pname}-${version}";
+<<<<<<< HEAD
     sha256 = "sha256-Dklj2iwX5/bVdCi9odz2Ttp0N+Lya7bMSLR/QXo9k6M=";
+=======
+    sha256 = "sha256-OuIl6E4Rn0zRpH8bFhM1aPx9NcKQxQVJVWbZ3M78UiQ=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   FONTCONFIG_FILE = fontsConf;
@@ -149,7 +174,10 @@ stdenv.mkDerivation rec {
       GUIs and charts.
     '';
     homepage = "https://racket-lang.org/";
+<<<<<<< HEAD
     changelog = "https://github.com/racket/racket/releases/tag/v${version}";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     license = with licenses; [ asl20 /* or */ mit ];
     maintainers = with maintainers; [ henrytill vrthra ];
     platforms = [ "x86_64-darwin" "x86_64-linux" "aarch64-linux" "aarch64-darwin" ];

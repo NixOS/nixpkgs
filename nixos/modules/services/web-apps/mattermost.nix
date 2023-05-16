@@ -86,7 +86,12 @@ let
   mattermostConf = recursiveUpdate
     mattermostConfWithoutPlugins
     (
+<<<<<<< HEAD
       lib.optionalAttrs (mattermostPlugins != null) {
+=======
+      if mattermostPlugins == null then {}
+      else {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         PluginSettings = {
           Enable = true;
         };

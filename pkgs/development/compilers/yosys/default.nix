@@ -71,13 +71,21 @@ let
 
 in stdenv.mkDerivation rec {
   pname   = "yosys";
+<<<<<<< HEAD
   version = "0.33";
+=======
+  version = "0.29";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "YosysHQ";
     repo  = "yosys";
     rev   = "${pname}-${version}";
+<<<<<<< HEAD
     hash  = "sha256-3MsWF161pqqeAbmeTlkQY6UpU4pq1WT0XXK9yciwt0M=";
+=======
+    hash  = "sha256-qsuKXYuKsMAALIy1SjxhEhZIMO8B4MF2vmVbwqgzLyM=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   enableParallelBuilding = true;

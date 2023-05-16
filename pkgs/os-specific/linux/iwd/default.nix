@@ -12,12 +12,20 @@
 
 stdenv.mkDerivation rec {
   pname = "iwd";
+<<<<<<< HEAD
   version = "2.7";
+=======
+  version = "2.3";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchgit {
     url = "https://git.kernel.org/pub/scm/network/wireless/iwd.git";
     rev = version;
+<<<<<<< HEAD
     sha256 = "sha256-UsyJYQB6YzwcL6H1nyCW8ZTpBzacZMAp39mCfsZqwHY=";
+=======
+    sha256 = "sha256-xI/zl7yYWZpoag7RZIL06aUNVgrHDOBEn93dbWBG48I=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   outputs = [ "out" "man" "doc" ]
@@ -92,6 +100,10 @@ stdenv.mkDerivation rec {
     description = "Wireless daemon for Linux";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
+<<<<<<< HEAD
     maintainers = with maintainers; [ dtzWill fpletz amaxine ];
+=======
+    maintainers = with maintainers; [ dtzWill fpletz maxeaubrey ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

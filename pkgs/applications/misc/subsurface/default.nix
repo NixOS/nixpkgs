@@ -44,7 +44,11 @@ let
 
     src = subsurfaceSrc;
 
+<<<<<<< HEAD
     sourceRoot = "${subsurfaceSrc.name}/libdivecomputer";
+=======
+    sourceRoot = "source/libdivecomputer";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     nativeBuildInputs = [ autoreconfHook pkg-config ];
 

@@ -10,12 +10,19 @@
 , tabulate
 , typing-extensions
 , pytestCheckHook
+<<<<<<< HEAD
 , gitUpdater
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 buildPythonPackage rec {
   pname = "aw-client";
+<<<<<<< HEAD
   version = "0.5.12";
+=======
+  version = "0.5.11";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   format = "pyproject";
 
@@ -24,7 +31,11 @@ buildPythonPackage rec {
     owner = "ActivityWatch";
     repo = "aw-client";
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-Aketk+itfd9gs3s+FDfzmGNWd7tKJQqNn1XsH2VTBD8=";
+=======
+    sha256 = "sha256-5WKGRoZGY+QnnB1Jzlju5OmCJreYMD8am2kW3Wcjhlw=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   disabled = pythonOlder "3.8";
@@ -57,10 +68,13 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aw_client" ];
 
+<<<<<<< HEAD
   passthru.updateScript = gitUpdater {
     rev-prefix = "v";
   };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   meta = with lib; {
     description = "Client library for ActivityWatch";
     homepage = "https://github.com/ActivityWatch/aw-client";

@@ -1,9 +1,18 @@
 { lib, mkDerivation, fetchFromGitHub, qtbase, qtwebengine, qtwebkit, qmake, minizinc }:
+<<<<<<< HEAD
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 mkDerivation rec {
   pname = "minizinc-ide";
   version = "2.5.5";
 
+<<<<<<< HEAD
+=======
+  nativeBuildInputs = [ qmake ];
+  buildInputs = [ qtbase qtwebengine qtwebkit ];
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   src = fetchFromGitHub {
     owner = "MiniZinc";
     repo = "MiniZincIDE";
@@ -12,10 +21,14 @@ mkDerivation rec {
     fetchSubmodules = true;
   };
 
+<<<<<<< HEAD
   nativeBuildInputs = [ qmake ];
   buildInputs = [ qtbase qtwebengine qtwebkit ];
 
   sourceRoot = "${src.name}/MiniZincIDE";
+=======
+  sourceRoot = "source/MiniZincIDE";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   dontWrapQtApps = true;
 
@@ -26,6 +39,10 @@ mkDerivation rec {
   meta = with lib; {
     homepage = "https://www.minizinc.org/";
     description = "IDE for MiniZinc, a medium-level constraint modelling language";
+<<<<<<< HEAD
+=======
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     longDescription = ''
       MiniZinc is a medium-level constraint modelling
       language. It is high-level enough to express most
@@ -33,6 +50,10 @@ mkDerivation rec {
       that it can be mapped onto existing solvers easily and consistently.
       It is a subset of the higher-level language Zinc.
     '';
+<<<<<<< HEAD
+=======
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     license = licenses.mpl20;
     platforms = platforms.linux;
     maintainers = [ maintainers.dtzWill ];

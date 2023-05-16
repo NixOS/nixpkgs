@@ -40,6 +40,10 @@ buildPythonPackage rec {
     description = "A full-featured console (xterm et al.) user interface library";
     homepage = "https://urwid.org/";
     license = licenses.lgpl21Plus;
+<<<<<<< HEAD
     maintainers = with maintainers; [ ];
+=======
+    maintainers = with maintainers; [ SuperSandro2000 ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

@@ -30,6 +30,10 @@ buildPythonPackage rec {
     description = "Tools for removing the tedious nature of creating nixpkgs derivations";
     homepage = "https://github.com/nix-community/nixpkgs-pytools";
     license = licenses.mit;
+<<<<<<< HEAD
     maintainers = [ ];
+=======
+    maintainers = [ maintainers.costrouc ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

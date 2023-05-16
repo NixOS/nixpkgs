@@ -14,7 +14,11 @@ stdenv.mkDerivation rec {
     owner = "otfried";
     repo = "ipe-tools";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-jlrjrjzZQo79CKMySayhCm1dqLh89wOQuXrXa2aqc0k=";
+=======
+    sha256 = "jlrjrjzZQo79CKMySayhCm1dqLh89wOQuXrXa2aqc0k=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   patches = [
@@ -22,6 +26,7 @@ stdenv.mkDerivation rec {
     # https://github.com/otfried/ipe-tools/pull/48
     (fetchpatch {
       url = "https://github.com/otfried/ipe-tools/commit/14335180432152ad094300d0afd00d8e390469b2.patch";
+<<<<<<< HEAD
       hash = "sha256-V3FmwG3bR6io/smxjasFJ5K0/u8RSFfdUX41ClGXhFc=";
       stripLen = 1;
       name = "poppler_fix_build_48.patch";
@@ -36,6 +41,15 @@ stdenv.mkDerivation rec {
   ];
 
   sourceRoot = "${src.name}/pdftoipe";
+=======
+      sha256 = "sha256-V3FmwG3bR6io/smxjasFJ5K0/u8RSFfdUX41ClGXhFc=";
+      stripLen = 1;
+      name = "poppler_fix_build.patch";
+    })
+  ];
+
+  sourceRoot = "source/pdftoipe";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ poppler ];
@@ -47,7 +61,10 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "A program that tries to convert arbitrary PDF documents to Ipe files";
     homepage = "https://github.com/otfried/ipe-tools";
+<<<<<<< HEAD
     changelog = "https://github.com/otfried/ipe-tools/releases";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ yrd ];
   };

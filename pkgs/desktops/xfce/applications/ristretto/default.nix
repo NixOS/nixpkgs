@@ -11,10 +11,17 @@
 mkXfceDerivation {
   category = "apps";
   pname = "ristretto";
+<<<<<<< HEAD
   version = "0.13.1";
   odd-unstable = false;
 
   sha256 = "sha256-Tor4mA0uSpVCdK6mla1L0JswgURnGPOfkYBR2N1AbL0=";
+=======
+  version = "0.13.0";
+  odd-unstable = false;
+
+  sha256 = "sha256-K1cC5NnRv/C5ZiwMAmaQ8qxvlxHRsJ4F1TgR9CN8Qgc=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   buildInputs = [
     glib

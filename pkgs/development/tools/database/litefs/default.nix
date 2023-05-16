@@ -5,16 +5,27 @@
 
 buildGoModule rec {
   pname = "litefs";
+<<<<<<< HEAD
   version = "0.5.4";
+=======
+  version = "0.4.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "superfly";
     repo = pname;
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-gTXIQVnNyVn2UqigozvEPaPm3XoqHd6E0RZnZS4bP3g=";
   };
 
   vendorHash = "sha256-4e1tAAXM2EYuqe1AbN1wng/bq1BP7MSOV6woeKjc3x4=";
+=======
+    sha256 = "sha256-CmWtQzoY/xY/LZL2swhYtDzPvpVOvKlhUH3plDEHrGI=";
+  };
+
+  vendorHash = "sha256-1I18ITgFPpUv0mPrt1biJmQV9qd9HB23zJmnDp5WzkA=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   subPackages = [ "cmd/litefs" ];
 

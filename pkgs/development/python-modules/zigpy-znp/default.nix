@@ -6,8 +6,13 @@
 , jsonschema
 , pytest-asyncio
 , pytest-mock
+<<<<<<< HEAD
 , pytest-rerunfailures
 , pytest-timeout
+=======
+, pytest-timeout
+, pytest-xdist
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , pytestCheckHook
 , pythonOlder
 , voluptuous
@@ -16,7 +21,11 @@
 
 buildPythonPackage rec {
   pname = "zigpy-znp";
+<<<<<<< HEAD
   version = "0.11.4";
+=======
+  version = "0.11.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -25,7 +34,11 @@ buildPythonPackage rec {
     owner = "zigpy";
     repo = pname;
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-wt7ZsMXOh+CbhJCUMS7RhzozYlyINRs0xOF7ecwkNCU=";
+=======
+    hash = "sha256-gYzk3XHXlF4+lnrRHYS5RB2QD0oDHgnMov9UFmXder8=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   postPatch = ''
@@ -44,6 +57,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytest-asyncio
     pytest-mock
+<<<<<<< HEAD
     pytest-rerunfailures
     pytest-timeout
     pytestCheckHook
@@ -51,6 +65,22 @@ buildPythonPackage rec {
 
   pytestFlagsArray = [
     "--reruns=3"
+=======
+    pytest-timeout
+    pytest-xdist
+    pytestCheckHook
+  ];
+
+  disabledTests = [
+    # https://github.com/zigpy/zigpy-znp/issues/209
+    "test_join_device"
+    "test_permit_join"
+    "test_request_recovery_route_rediscovery_af"
+    "test_request_recovery_route_rediscovery_zdo"
+    "test_zigpy_request"
+    "test_zigpy_request_failure"
+    "test_mgmt_nwk_update_req"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   pythonImportsCheck = [

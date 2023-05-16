@@ -142,6 +142,7 @@ let
       # trying to build binaries statically.
       ++ lib.optional static "no-ct"
       ++ lib.optional withZlib "zlib"
+<<<<<<< HEAD
       ++ lib.optionals (stdenv.hostPlatform.isMips && stdenv.hostPlatform ? gcc.arch) [
       # This is necessary in order to avoid openssl adding -march
       # flags which ultimately conflict with those added by
@@ -155,6 +156,9 @@ let
       # conflicting flags.
       "CFLAGS=-march=${stdenv.hostPlatform.gcc.arch}"
     ];
+=======
+      ;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     makeFlags = [
       "MANDIR=$(man)/share/man"
@@ -232,6 +236,7 @@ let
 
 in {
 
+<<<<<<< HEAD
   # If you do upgrade here, please update in pkgs/top-level/release.nix
   # the permitted insecure version to ensure it gets cached for our users
   # and backport this to stable release (23.05).
@@ -244,11 +249,21 @@ in {
       # https://www.openssl.org/news/secadv/20230908.txt
       ./1.1/CVE-2023-4807.patch
 
+=======
+
+  openssl_1_1 = common {
+    version = "1.1.1t";
+    sha256 = "sha256-je6bJL2x3L8MPR6bAvuPa/IhZegH9Fret8lndTaFnTs=";
+    patches = [
+      ./1.1/nix-ssl-cert-file.patch
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       (if stdenv.hostPlatform.isDarwin
        then ./use-etc-ssl-certs-darwin.patch
        else ./use-etc-ssl-certs.patch)
     ];
     withDocs = true;
+<<<<<<< HEAD
     extraMeta = {
       knownVulnerabilities = [
         "OpenSSL 1.1 is reaching its end of life on 2023/09/11 and cannot be supported through the NixOS 23.05 release cycle. https://www.openssl.org/blog/blog/2023/03/28/1.1.1-EOL/"
@@ -259,6 +274,13 @@ in {
   openssl_3 = common {
     version = "3.0.10";
     sha256 = "sha256-F2HU9bE6ECi5tvPUuOF/6wztyTcPav5h1xk9LNzoMyM=";
+=======
+  };
+
+  openssl_3 = common {
+    version = "3.0.8";
+    sha256 = "sha256-bBPSvzj98x6sPOKjRwc2c/XWMmM5jx9p0N9KQSU+Sz4=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     patches = [
       ./3.0/nix-ssl-cert-file.patch
 

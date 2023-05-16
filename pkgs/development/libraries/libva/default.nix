@@ -1,36 +1,60 @@
 { stdenv, lib, fetchFromGitHub, meson, pkg-config, ninja, wayland-scanner
 , libdrm
+<<<<<<< HEAD
 , minimal ? false
+=======
+, minimal ? false, libva-minimal
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , libX11, libXext, libXfixes, wayland, libffi, libGL
 , mesa
 # for passthru.tests
 , intel-compute-runtime
 , intel-media-driver
 , mpv
+<<<<<<< HEAD
 , intel-vaapi-driver
+=======
+, vaapiIntel
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , vlc
 }:
 
 stdenv.mkDerivation rec {
   pname = "libva" + lib.optionalString minimal "-minimal";
+<<<<<<< HEAD
   version = "2.19.0";
+=======
+  version = "2.18.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner  = "intel";
     repo   = "libva";
     rev    = version;
+<<<<<<< HEAD
     sha256 = "sha256-M6mAHvGl4d9EqdkDBSxSbpZUCUcrkpnf+hfo16L3eHs=";
+=======
+    sha256 = "sha256-VD+CTF0QLfzrUr4uFiyDlZux3MqsyyuJF/cXuhOFzwo=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   outputs = [ "dev" "out" ];
 
   depsBuildBuild = [ pkg-config ];
 
+<<<<<<< HEAD
   nativeBuildInputs = [ meson pkg-config ninja ]
     ++ lib.optional (!minimal) wayland-scanner;
 
   buildInputs = [ libdrm ]
     ++ lib.optionals (!minimal) [ libX11 libXext libXfixes wayland libffi libGL ];
+=======
+  nativeBuildInputs = [ meson pkg-config ninja wayland-scanner ];
+
+  buildInputs = [ libdrm ]
+    ++ lib.optionals (!minimal) [ libva-minimal libX11 libXext libXfixes wayland libffi libGL ];
+  # TODO: share libs between minimal and !minimal - perhaps just symlink them
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   mesonFlags = [
     # Add FHS and Debian paths for non-NixOS applications
@@ -40,7 +64,11 @@ stdenv.mkDerivation rec {
   passthru.tests = {
     # other drivers depending on libva and selected application users.
     # Please get a confirmation from the maintainer before adding more applications.
+<<<<<<< HEAD
     inherit intel-compute-runtime intel-media-driver intel-vaapi-driver mpv vlc;
+=======
+    inherit intel-compute-runtime intel-media-driver vaapiIntel mpv vlc;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   meta = with lib; {

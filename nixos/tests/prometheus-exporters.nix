@@ -6,7 +6,11 @@
 let
   inherit (import ../lib/testing-python.nix { inherit system pkgs; }) makeTest;
   inherit (pkgs.lib) concatStringsSep maintainers mapAttrs mkMerge
+<<<<<<< HEAD
     removeSuffix replaceStrings singleton splitString makeBinPath;
+=======
+    removeSuffix replaceStrings singleton splitString;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   /*
     * The attrset `exporterTests` contains one attribute
@@ -234,7 +238,13 @@ let
       exporterTest = ''
         wait_for_unit("prometheus-domain-exporter.service")
         wait_for_open_port(9222)
+<<<<<<< HEAD
         succeed("curl -sSf 'http://localhost:9222/probe?target=nixos.org'")
+=======
+        succeed(
+            "curl -sSf 'http://localhost:9222/probe?target=nixos.org' | grep 'domain_probe_success 0'"
+        )
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       '';
     };
 
@@ -284,6 +294,7 @@ let
       '';
     };
 
+<<<<<<< HEAD
     graphite = {
       exporterConfig = {
         enable = true;
@@ -324,6 +335,8 @@ let
       '';
     };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     influxdb = {
       exporterConfig = {
         enable = true;
@@ -366,7 +379,11 @@ let
         systemd.services.prometheus-jitsi-exporter.after = [ "jitsi-videobridge2.service" ];
         services.jitsi-videobridge = {
           enable = true;
+<<<<<<< HEAD
           colibriRestApi = true;
+=======
+          apis = [ "colibri" "rest" ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         };
       };
       exporterTest = ''
@@ -386,6 +403,7 @@ let
         enable = true;
         url = "http://localhost";
         configFile = pkgs.writeText "json-exporter-conf.json" (builtins.toJSON {
+<<<<<<< HEAD
           modules = {
             default = {
               metrics = [
@@ -393,6 +411,11 @@ let
               ];
             };
           };
+=======
+          metrics = [
+            { name = "json_test_metric"; path = "{ .test }"; }
+          ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         });
       };
       metricProvider = {
@@ -716,6 +739,7 @@ let
       '';
     };
 
+<<<<<<< HEAD
     mysqld = {
       exporterConfig = {
         enable = true;
@@ -751,6 +775,8 @@ let
       '';
     };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     nextcloud = {
       exporterConfig = {
         enable = true;
@@ -966,6 +992,7 @@ let
       '';
     };
 
+<<<<<<< HEAD
     php-fpm = {
       nodeName = "php_fpm";
       exporterConfig = {
@@ -1007,6 +1034,8 @@ let
       '';
     };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     postfix = {
       exporterConfig = {
         enable = true;
@@ -1178,6 +1207,7 @@ let
       '';
     };
 
+<<<<<<< HEAD
     scaphandre = {
       exporterConfig = {
         enable = true;
@@ -1194,6 +1224,8 @@ let
       '';
     };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     shelly = {
       exporterConfig = {
         enable = true;
@@ -1235,7 +1267,11 @@ let
       };
       exporterTest = ''
         wait_until_succeeds(
+<<<<<<< HEAD
             'journalctl -eu prometheus-smartctl-exporter.service -o cat | grep "Unable to detect device type"'
+=======
+            'journalctl -eu prometheus-smartctl-exporter.service -o cat | grep "Device unavailable"'
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         )
       '';
     };
@@ -1328,6 +1364,7 @@ let
         wait_for_unit("prometheus-statsd-exporter.service")
         wait_for_open_port(9102)
         succeed("curl http://localhost:9102/metrics | grep 'statsd_exporter_build_info{'")
+<<<<<<< HEAD
         wait_until_succeeds(
           "echo 'test.udp:1|c' > /dev/udp/localhost/9125 && \
           curl http://localhost:9102/metrics | grep 'test_udp 1'",
@@ -1337,6 +1374,15 @@ let
           "echo 'test.tcp:1|c' > /dev/tcp/localhost/9125 && \
           curl http://localhost:9102/metrics | grep 'test_tcp 1'",
           timeout=10
+=======
+        succeed(
+          "echo 'test.udp:1|c' > /dev/udp/localhost/9125",
+          "curl http://localhost:9102/metrics | grep 'test_udp 1'",
+        )
+        succeed(
+          "echo 'test.tcp:1|c' > /dev/tcp/localhost/9125",
+          "curl http://localhost:9102/metrics | grep 'test_tcp 1'",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         )
       '';
     };
@@ -1422,7 +1468,12 @@ let
     unbound = {
       exporterConfig = {
         enable = true;
+<<<<<<< HEAD
         unbound.host = "unix:///run/unbound/unbound.ctl";
+=======
+        fetchType = "uds";
+        controlInterface = "/run/unbound/unbound.ctl";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       };
       metricProvider = {
         services.unbound = {
@@ -1437,7 +1488,11 @@ let
         wait_for_unit("unbound.service")
         wait_for_unit("prometheus-unbound-exporter.service")
         wait_for_open_port(9167)
+<<<<<<< HEAD
         wait_until_succeeds("curl -sSf localhost:9167/metrics | grep 'unbound_up 1'")
+=======
+        succeed("curl -sSf localhost:9167/metrics | grep 'unbound_up 1'")
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       '';
     };
 
@@ -1531,10 +1586,14 @@ let
       '';
     };
 
+<<<<<<< HEAD
     wireguard = let
       snakeoil = import ./wireguard/snakeoil-keys.nix;
       publicKeyWithoutNewlines = replaceStrings [ "\n" ] [ "" ] snakeoil.peer1.publicKey;
     in
+=======
+    wireguard = let snakeoil = import ./wireguard/snakeoil-keys.nix; in
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       {
         exporterConfig.enable = true;
         metricProvider = {
@@ -1556,7 +1615,11 @@ let
           wait_for_unit("prometheus-wireguard-exporter.service")
           wait_for_open_port(9586)
           wait_until_succeeds(
+<<<<<<< HEAD
               "curl -sSf http://localhost:9586/metrics | grep '${publicKeyWithoutNewlines}'"
+=======
+              "curl -sSf http://localhost:9586/metrics | grep '${snakeoil.peer1.publicKey}'"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           )
         '';
       };

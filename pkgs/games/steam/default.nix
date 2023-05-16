@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 { makeScopeWithSplicing', generateSplicesForMkScope
+=======
+{ makeScopeWithSplicing, generateSplicesForMkScope
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , stdenv, buildFHSEnv, pkgsi686Linux, glxinfo
 }:
 
@@ -25,6 +29,7 @@ let
       inherit buildFHSEnv;
     };
     steam-fhsenv-small = steam-fhsenv.override { withGameSpecificLibraries = false; };
+<<<<<<< HEAD
 
     # This has to exist so Hydra tries to build all of Steam's dependencies.
     # FIXME: Maybe we should expose it as something more generic?
@@ -36,3 +41,10 @@ in makeScopeWithSplicing' {
   otherSplices = generateSplicesForMkScope "steamPackages";
   f = steamPackagesFun;
 }
+=======
+    steamcmd = callPackage ./steamcmd.nix { };
+  };
+  keep = self: { };
+  extra = spliced0: { };
+in makeScopeWithSplicing (generateSplicesForMkScope "steamPackages") keep extra steamPackagesFun
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)

@@ -153,6 +153,7 @@ in {
       type = types.bool;
     };
 
+<<<<<<< HEAD
     processAgentPackage = mkOption {
       default = pkgs.datadog-process-agent;
       defaultText = literalExpression "pkgs.datadog-process-agent";
@@ -165,6 +166,8 @@ in {
       type = types.package;
     };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     enableTraceAgent = mkOption {
       description = lib.mdDoc ''
         Whether to enable the trace agent.
@@ -282,7 +285,11 @@ in {
         path = [ ];
         script = ''
           export DD_API_KEY=$(head -n 1 ${cfg.apiKeyFile})
+<<<<<<< HEAD
           ${cfg.processAgentPackage}/bin/process-agent --config /etc/datadog-agent/datadog.yaml
+=======
+          ${pkgs.datadog-process-agent}/bin/process-agent --config /etc/datadog-agent/datadog.yaml
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         '';
       });
 

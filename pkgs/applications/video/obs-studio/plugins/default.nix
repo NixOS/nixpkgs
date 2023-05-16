@@ -20,10 +20,13 @@
 
   obs-command-source = callPackage ./obs-command-source.nix { };
 
+<<<<<<< HEAD
   obs-freeze-filter = qt6Packages.callPackage ./obs-freeze-filter.nix { };
 
   obs-gradient-source = callPackage ./obs-gradient-source.nix { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   obs-gstreamer = callPackage ./obs-gstreamer.nix { };
 
   obs-hyperion = qt6Packages.callPackage ./obs-hyperion/default.nix { };
@@ -34,24 +37,31 @@
 
   obs-multi-rtmp = qt6Packages.callPackage ./obs-multi-rtmp { };
 
+<<<<<<< HEAD
   obs-mute-filter = callPackage ./obs-mute-filter.nix { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   obs-ndi = qt6Packages.callPackage ./obs-ndi { };
 
   obs-nvfbc = callPackage ./obs-nvfbc.nix { };
 
   obs-pipewire-audio-capture = callPackage ./obs-pipewire-audio-capture.nix { };
 
+<<<<<<< HEAD
   obs-rgb-levels-filter = callPackage ./obs-rgb-levels-filter.nix { };
 
   obs-scale-to-sound = callPackage ./obs-scale-to-sound.nix { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   obs-shaderfilter = qt6Packages.callPackage ./obs-shaderfilter.nix { };
 
   obs-source-clone = callPackage ./obs-source-clone.nix { };
 
   obs-source-record = callPackage ./obs-source-record.nix { };
 
+<<<<<<< HEAD
   obs-source-switcher = callPackage ./obs-source-switcher.nix { };
 
   obs-teleport = callPackage ./obs-teleport { };
@@ -66,15 +76,27 @@
 
   obs-vertical-canvas = qt6Packages.callPackage ./obs-vertical-canvas.nix { };
 
+=======
+  obs-teleport = callPackage ./obs-teleport { };
+
+  obs-vaapi = callPackage ./obs-vaapi { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   obs-vintage-filter = callPackage ./obs-vintage-filter.nix { };
 
   obs-vkcapture = callPackage ./obs-vkcapture.nix {
     obs-vkcapture32 = pkgsi686Linux.obs-studio-plugins.obs-vkcapture;
   };
 
+<<<<<<< HEAD
   obs-websocket = qt6Packages.callPackage ./obs-websocket.nix { }; # Websocket 4.x compatibility for OBS Studio 28+
 
   wlrobs = callPackage ./wlrobs.nix { };
 
   waveform = callPackage ./waveform { };
+=======
+  obs-websocket = throw "obs-websocket has been removed: Functionality has been integrated into obs-studio itself.";
+
+  wlrobs = callPackage ./wlrobs.nix { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }

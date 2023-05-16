@@ -11,13 +11,21 @@
 
 let
   pname = "pydicom";
+<<<<<<< HEAD
   version = "2.4.2";
+=======
+  version = "2.3.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "pydicom";
     repo = "pydicom";
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-FNZVu2/7kBGeP4iTH53bsApfHzHFxr5bxqbqkI4T95E=";
+=======
+    hash = "sha256-xt0aK908lLgNlpcI86OSxy96Z/PZnQh7+GXzJ0VMQGA=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   # Pydicom needs pydicom-data to run some tests. If these files aren't downloaded
@@ -25,8 +33,13 @@ let
   test_data = fetchFromGitHub {
     owner = "pydicom";
     repo = "pydicom-data";
+<<<<<<< HEAD
     rev = "cbb9b2148bccf0f550e3758c07aca3d0e328e768";
     hash = "sha256-nF/j7pfcEpWHjjsqqTtIkW8hCEbuQ3J4IxpRk0qc1CQ=";
+=======
+    rev = "bbb723879690bb77e077a6d57657930998e92bd5";
+    hash = "sha256-dCI1temvpNWiWJYVfQZKy/YJ4ad5B0e9hEKHJnEeqzk=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
 in

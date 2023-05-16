@@ -19,5 +19,9 @@ buildGoModule rec {
     homepage    = "https://github.com/TekWizely/run";
     license     = licenses.mit;
     maintainers = with maintainers; [ rawkode Br1ght0ne ];
+<<<<<<< HEAD
+=======
+    platforms   = platforms.unix;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

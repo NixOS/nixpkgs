@@ -5,6 +5,10 @@
 buildDunePackage {
   pname = "tls-mirage";
   inherit (tls) src version;
+<<<<<<< HEAD
+=======
+  duneVersion = "3";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   propagatedBuildInputs = [
     fmt

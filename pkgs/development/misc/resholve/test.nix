@@ -20,7 +20,11 @@
 , runDemo ? false
 , binlore
 , sqlite
+<<<<<<< HEAD
 , unixtools
+=======
+, util-linux
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , gawk
 , rlwrap
 , gnutar
@@ -29,7 +33,11 @@
 
 let
   default_packages = [ bash file findutils gettext ];
+<<<<<<< HEAD
   parsed_packages = [ coreutils sqlite unixtools.script gnused gawk findutils rlwrap gnutar bc ];
+=======
+  parsed_packages = [ coreutils sqlite util-linux gnused gawk findutils rlwrap gnutar bc ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 in
 rec {
   module1 = resholve.mkDerivation {

@@ -9,7 +9,11 @@
 
 buildPythonPackage rec {
   pname = "exceptiongroup";
+<<<<<<< HEAD
   version = "1.1.2";
+=======
+  version = "1.1.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -18,7 +22,11 @@ buildPythonPackage rec {
     owner = "agronholm";
     repo = "exceptiongroup";
     rev = version;
+<<<<<<< HEAD
     hash = "sha256-19taP6adzmO4zH2As1OTXeYNFj6KwjhxBr09X+SrZRk=";
+=======
+    hash = "sha256-XQcYYz4MOxWj9QlgM6KuwBaCHjYzGRkQw3cN5WBSnAo=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

@@ -1,5 +1,9 @@
+<<<<<<< HEAD
 { stdenv
 , lib
+=======
+{ lib
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , fetchFromGitHub
 , buildGoModule
 , git
@@ -12,6 +16,7 @@
 , openssl
 , extra-cmake-modules
 , fontconfig
+<<<<<<< HEAD
 , testers
 , turbo
 , nix-update-script
@@ -25,10 +30,19 @@
 }:
 let
   version = "1.10.13";
+=======
+, go
+, testers
+, turbo
+}:
+let
+  version = "1.8.3";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   src = fetchFromGitHub {
     owner = "vercel";
     repo = "turbo";
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-7bEHE/bHRVOXMP7+oo+4k8yn6d+LkXBi8JcDeR0ajww";
   };
 
@@ -59,11 +73,21 @@ let
 
 
   go-turbo = buildGoModule {
+=======
+    sha256 = "sha256-aqe9ze6xZ5RUJJGT19nABhorrL9+ctSTS+ov97hG30o=";
+  };
+
+  go-turbo = buildGoModule rec {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     inherit src version;
     pname = "go-turbo";
     modRoot = "cli";
 
+<<<<<<< HEAD
     vendorHash = "sha256-8quDuT8VwT3B56jykkbX8ov+DNFZwxPf31+NLdfX1p0=";
+=======
+    vendorSha256 = "sha256-lqumN+xqJXEPI+nVnWSNfAyvQQ6fS9ao8uhwA1EbWWM=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     nativeBuildInputs = [
       git
@@ -73,6 +97,7 @@ let
       protoc-gen-go-grpc
     ];
 
+<<<<<<< HEAD
     buildInputs = [zlib ] ++ lib.optionals stdenv.isDarwin [
       Security
       libiconv
@@ -89,6 +114,10 @@ let
     preBuild = ''
       make compile-protos
       cp ${ffi}/lib/libturborepo_ffi.a ./internal/ffi/libturborepo_ffi_${go.GOOS}_${go.GOARCH}.a
+=======
+    preBuild = ''
+      make compile-protos
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     '';
 
     preCheck = ''
@@ -101,6 +130,7 @@ let
       git config --global init.defaultBranch main
       git init
       popd
+<<<<<<< HEAD
 
       # package_deps_hash_test.go:492: hash of child-dir/libA/pkgignorethisdir/file, got 67aed78ea231bdee3de45b6d47d8f32a0a792f6d want go-turbo>     package_deps_hash_test.go:499: found extra hashes in map[.gitignore:3237694bc3312ded18386964 a855074af7b066af some-dir/another-one:7e59c6a6ea9098c6d3beb00e753e2c54ea502311 some-dir/excluded-file:7e59 c6a6ea9098c6d3beb00e753e2c54ea502311 some-dir/other-file:7e59c6a6ea9098c6d3beb00e753e2c54ea502311 some-fil e:7e59c6a6ea9098c6d3beb00e753e2c54ea502311]
       rm ./internal/hashing/package_deps_hash_test.go
@@ -125,11 +155,17 @@ let
       # filewatcher_test.go:146: got event {/build/TestFileWatching1921149570/001/parent/sibling/deep/path/test-1689172679812 1}
       # filewatcher_test.go:146: got event {/build/TestFileWatching1921149570/001/parent/sibling/deep/test-1689172679812 1}
       rm ./internal/filewatcher/filewatcher_test.go
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     '';
 
   };
 in
+<<<<<<< HEAD
 rustPlatform.buildRustPackage {
+=======
+rustPlatform.buildRustPackage rec {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pname = "turbo";
   inherit src version;
   cargoBuildFlags = [
@@ -138,21 +174,36 @@ rustPlatform.buildRustPackage {
   ];
   RELEASE_TURBO_CLI = "true";
 
+<<<<<<< HEAD
   cargoHash = "sha256-rKdonANA6WvXPMpK8sC95hsX9Yb5zedeBezY4LWzsZE=";
 
+=======
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "update-informer-0.6.0" = "sha256-uMp6PE4ccNGflbYz5WbLBKDtTlXNjOPA3vAnIMSdMEs=";
+    };
+  };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   RUSTC_BOOTSTRAP = 1;
   nativeBuildInputs = [
     pkg-config
     extra-cmake-modules
+<<<<<<< HEAD
     protobuf
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
   buildInputs = [
     openssl
     fontconfig
+<<<<<<< HEAD
   ] ++ lib.optionals stdenv.isDarwin [
       IOKit
       CoreServices
       CoreFoundation
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   postInstall = ''
@@ -162,12 +213,16 @@ rustPlatform.buildRustPackage {
   # Browser tests time out with chromium and google-chrome
   doCheck = false;
 
+<<<<<<< HEAD
   passthru = {
     updateScript = nix-update-script {
       extraArgs = [ "--version-regex" "^\d+\.\d+\.\d+$" ];
     };
     tests.version = testers.testVersion { package = turbo; };
   };
+=======
+  passthru.tests.version = testers.testVersion { package = turbo; };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   meta = with lib; {
     description = "High-performance build system for JavaScript and TypeScript codebases";

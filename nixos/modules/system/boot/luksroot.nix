@@ -130,7 +130,11 @@ let
     ''}
 
     # Disable all input echo for the whole stage. We could use read -s
+<<<<<<< HEAD
     # instead but that would occasionally leak characters between read
+=======
+    # instead but that would ocasionally leak characters between read
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     # invocations.
     stty -echo
   '';
@@ -861,7 +865,11 @@ in
             '';
             description = lib.mdDoc ''
               Commands that should be run right before we try to mount our LUKS device.
+<<<<<<< HEAD
               This can be useful, if the keys needed to open the drive is on another partition.
+=======
+              This can be useful, if the keys needed to open the drive is on another partion.
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
             '';
           };
 
@@ -980,7 +988,11 @@ in
       ++ luks.cryptoModules
       # workaround until https://marc.info/?l=linux-crypto-vger&m=148783562211457&w=4 is merged
       # remove once 'modprobe --show-depends xts' shows ecb as a dependency
+<<<<<<< HEAD
       ++ (optional (builtins.elem "xts" luks.cryptoModules) "ecb");
+=======
+      ++ (if builtins.elem "xts" luks.cryptoModules then ["ecb"] else []);
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     # copy the cryptsetup binary and it's dependencies
     boot.initrd.extraUtilsCommands = let

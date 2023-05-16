@@ -14,11 +14,19 @@ $a}
 }
 
 # form an attrmap per package
+<<<<<<< HEAD
 # ignore packages whose name contains "." (such as binaries) except for texlive.infra
 /^name ([^.]+|texlive\.infra)$/,/^$/{
   # quote invalid names
   s/^name ([0-9].*|texlive\.infra)$/"\1" = {/p
   s/^name (.*)$/\1 = {/p
+=======
+# ignore packages whose name contains "." (such as binaries)
+/^name ([^.]+)$/,/^$/{
+  # quote package names, as some start with a number :-/
+  s/^name (.*)$/"\1" = {/p
+  /^$/,1i};
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   # extract revision
   s/^revision ([0-9]*)$/  revision = \1;/p
@@ -27,6 +35,10 @@ $a}
   s/^containerchecksum (.*)/  sha512.run = "\1";/p
   s/^doccontainerchecksum (.*)/  sha512.doc = "\1";/p
   s/^srccontainerchecksum (.*)/  sha512.source = "\1";/p
+<<<<<<< HEAD
+=======
+  /^runfiles /i\  hasRunfiles = true;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   # number of path components to strip, defaulting to 1 ("texmf-dist/")
   /^relocated 1/i\  stripPrefix = 0;
@@ -36,6 +48,7 @@ $a}
   /^catalogue-version/s/[\#,:\(\)]//g
   s/^catalogue-version_(.*)/  version = "\1";/p
 
+<<<<<<< HEAD
   /^catalogue-license/{
     # wrap licenses in quotes
     s/ ([^ ]+)/ "\1"/g
@@ -177,4 +190,25 @@ $a}
   s/^name (.*)\.x86_64-linux$/\1.binfiles = [/p
   s!^ bin/x86_64-linux/(.+)$!  "\1"!p
   /^$/i];
+=======
+  # extract deps
+  /^depend [^.]+$/{
+    s/^depend (.+)$/  deps = [\n    "\1"/
+
+    # loop through following depend lines
+    :next
+      h ; N     # save & read next line
+      s/\ndepend (.+)\.(.+)$//
+      s/\ndepend (.+)$/\n    "\1"/
+      t next    # loop if the previous lines matched
+
+    x; s/$/\n  ];/p ; x     # print saved deps
+    s/^.*\n//   # remove deps, resume processing
+  }
+
+  # extract hyphenation patterns and formats
+  # (this may create duplicate lines, use uniq to remove them)
+  /^execute\sAddHyphen/i\  hasHyphens = true;
+  /^execute\sAddFormat/i\  hasFormats = true;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }

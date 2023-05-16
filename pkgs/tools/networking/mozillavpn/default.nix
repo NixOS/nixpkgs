@@ -4,9 +4,12 @@
 , fetchFromGitHub
 , go
 , lib
+<<<<<<< HEAD
 , libcap
 , libgcrypt
 , libgpg-error
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , libsecret
 , pkg-config
 , polkit
@@ -26,12 +29,17 @@
 
 let
   pname = "mozillavpn";
+<<<<<<< HEAD
   version = "2.16.1";
+=======
+  version = "2.14.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   src = fetchFromGitHub {
     owner = "mozilla-mobile";
     repo = "mozilla-vpn-client";
     rev = "v${version}";
     fetchSubmodules = true;
+<<<<<<< HEAD
     hash = "sha256-UMWBn3DoEU1fG7qh6F0GOhOqod+grPwp15wSSdP0eCo=";
   };
   patches = [ ];
@@ -59,10 +67,39 @@ let
     name = "${pname}-${version}-qtglean";
     preBuild = "cd qtglean";
     hash = "sha256-cqfiOBS8xFC2BbYp6BJWK6NHIU0tILSgu4eo3Ik4YqY=";
+=======
+    hash = "sha256-xWm21guI+h0bKd/rEyxVMyxypCitLWEbVy7TaVBKh4o=";
+  };
+
+  netfilter-go-modules = (buildGoModule {
+    inherit pname version src;
+    modRoot = "linux/netfilter";
+    vendorHash = "sha256-Cmo0wnl0z5r1paaEf1MhCPbInWeoMhGjnxCxGh0cyO8=";
+  }).go-modules;
+
+  extensionBridgeDeps = rustPlatform.fetchCargoTarball {
+    inherit src;
+    name = "${pname}-${version}-extension-bridge";
+    preBuild = "cd extension/bridge";
+    hash = "sha256-XW47EnNHm5JUWCqDU/iHB6ZRGny4v5x7Fs/1dv5TfzM=";
+  };
+  signatureDeps = rustPlatform.fetchCargoTarball {
+    inherit src;
+    name = "${pname}-${version}-signature";
+    preBuild = "cd signature";
+    hash = "sha256-CNPL1Orn+ZbX0HL+CHMaoXPI9G8MoC+hY8pJTJlWH1U=";
+  };
+  vpngleanDeps = rustPlatform.fetchCargoTarball {
+    inherit src;
+    name = "${pname}-${version}-vpnglean";
+    preBuild = "cd vpnglean";
+    hash = "sha256-5vazbCqzJG6iA0MFaTNha42jb1pgLhr0P9I8rQxSKtw=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
 in
 stdenv.mkDerivation {
+<<<<<<< HEAD
   inherit pname version src patches;
 
   buildInputs = [
@@ -70,6 +107,13 @@ stdenv.mkDerivation {
     libgcrypt
     libgpg-error
     libsecret
+=======
+  inherit pname version src;
+
+  buildInputs = [
+    libsecret
+    polkit
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     qt5compat
     qtbase
     qtnetworkauth
@@ -77,7 +121,10 @@ stdenv.mkDerivation {
     qtwebsockets
   ];
   nativeBuildInputs = [
+<<<<<<< HEAD
     cargo
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     cmake
     go
     pkg-config
@@ -85,8 +132,13 @@ stdenv.mkDerivation {
     python3.pkgs.glean-parser
     python3.pkgs.pyyaml
     python3.pkgs.setuptools
+<<<<<<< HEAD
     qttools
     rustPlatform.cargoSetupHook
+=======
+    rustPlatform.cargoSetupHook
+    cargo
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     rustc
     wrapQtAppsHook
   ];
@@ -102,23 +154,45 @@ stdenv.mkDerivation {
     signatureDepsCopy="$cargoDepsCopy"
     popd
 
+<<<<<<< HEAD
     pushd source/qtglean
     cargoDeps='${qtgleanDeps}' cargoSetupPostUnpackHook
     qtgleanDepsCopy="$cargoDepsCopy"
+=======
+    pushd source/vpnglean
+    cargoDeps='${vpngleanDeps}' cargoSetupPostUnpackHook
+    vpngleanDepsCopy="$cargoDepsCopy"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     popd
   '';
   dontCargoSetupPostUnpack = true;
 
   postPatch = ''
+<<<<<<< HEAD
     substituteInPlace src/apps/vpn/cmake/linux.cmake \
       --replace '/etc/xdg/autostart' "$out/etc/xdg/autostart" \
+=======
+    substituteInPlace src/apps/vpn/platforms/linux/daemon/org.mozilla.vpn.dbus.service --replace /usr/bin/mozillavpn "$out/bin/mozillavpn"
+
+    substituteInPlace scripts/addon/build.py \
+      --replace 'qtbinpath = args.qtpath' 'qtbinpath = "${qttools.dev}/bin"' \
+      --replace 'rcc = os.path.join(qtbinpath, rcc_bin)' 'rcc = "${qtbase.dev}/libexec/rcc"'
+
+    substituteInPlace src/apps/vpn/cmake/linux.cmake \
+      --replace '/etc/xdg/autostart' "$out/etc/xdg/autostart" \
+      --replace '${"$"}{POLKIT_POLICY_DIR}' "$out/share/polkit-1/actions" \
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       --replace '/usr/share/dbus-1' "$out/share/dbus-1" \
       --replace '${"$"}{SYSTEMD_UNIT_DIR}' "$out/lib/systemd/system"
 
     substituteInPlace extension/CMakeLists.txt \
       --replace '/etc' "$out/etc"
 
+<<<<<<< HEAD
     ln -s '${netfilterGoModules}' linux/netfilter/vendor
+=======
+    ln -s '${netfilter-go-modules}' linux/netfilter/vendor
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     pushd extension/bridge
     cargoDepsCopy="$extensionBridgeDepsCopy" cargoSetupPostPatchHook
@@ -128,8 +202,13 @@ stdenv.mkDerivation {
     cargoDepsCopy="$signatureDepsCopy" cargoSetupPostPatchHook
     popd
 
+<<<<<<< HEAD
     pushd qtglean
     cargoDepsCopy="$qtgleanDepsCopy" cargoSetupPostPatchHook
+=======
+    pushd vpnglean
+    cargoDepsCopy="$vpngleanDepsCopy" cargoSetupPostPatchHook
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     popd
 
     cargoSetupPostPatchHook() { true; }

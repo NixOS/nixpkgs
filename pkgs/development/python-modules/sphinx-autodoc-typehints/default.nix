@@ -10,7 +10,11 @@
 
 let
   pname = "sphinx-autodoc-typehints";
+<<<<<<< HEAD
   version = "1.23.0";
+=======
+  version = "1.22";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 in
 
 buildPythonPackage {
@@ -22,7 +26,11 @@ buildPythonPackage {
   src = fetchPypi {
     pname = "sphinx_autodoc_typehints";
     inherit version;
+<<<<<<< HEAD
     hash = "sha256-XUTimWYzza2kmbbSeklt3528ld0fDwn3s3lAJJ5h9uk=";
+=======
+    hash = "sha256-cfyi1e7psDQgTkxoarILTY9euUCTliFryubIfDjhjqY=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

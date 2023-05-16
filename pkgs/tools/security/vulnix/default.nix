@@ -1,6 +1,9 @@
 { lib
 , python3Packages
+<<<<<<< HEAD
 , fetchPypi
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , nix
 , ronn
 }:
@@ -9,7 +12,11 @@ python3Packages.buildPythonApplication rec {
   pname = "vulnix";
   version = "1.10.1";
 
+<<<<<<< HEAD
   src = fetchPypi {
+=======
+  src = python3Packages.fetchPypi {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     inherit pname version;
     sha256 = "07v3ddvvhi3bslwrlin45kz48i3va2lzd6ny0blj5i2z8z40qcfm";
   };

@@ -11,7 +11,11 @@
 , boost
 , catch2
 , fmt
+<<<<<<< HEAD
 , microsoft-gsl
+=======
+, microsoft_gsl
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , range-v3
 , yaml-cpp
 , ncurses
@@ -47,8 +51,11 @@ mkDerivation rec {
     sha256 = "sha256-TpxVC0GFZD3jGISnDWHKEetgVVpznm5k/Vc2dwVfSG4=";
   };
 
+<<<<<<< HEAD
   outputs = [ "out" "terminfo" ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nativeBuildInputs = [
     cmake
     pkg-config
@@ -64,7 +71,11 @@ mkDerivation rec {
     boost
     catch2
     fmt
+<<<<<<< HEAD
     microsoft-gsl
+=======
+    microsoft_gsl
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     range-v3
     yaml-cpp
   ] ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.libs.utmp ];
@@ -88,12 +99,15 @@ mkDerivation rec {
     sed -i '/fixup_bundle/d' src/contour/CMakeLists.txt
   '';
 
+<<<<<<< HEAD
   postInstall = ''
     mkdir -p $out/nix-support $terminfo/share
     mv $out/share/terminfo $terminfo/share/
     echo "$terminfo" >> $out/nix-support/propagated-user-env-packages
   '';
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   passthru.tests.test = nixosTests.terminal-emulators.contour;
 
   meta = with lib; {

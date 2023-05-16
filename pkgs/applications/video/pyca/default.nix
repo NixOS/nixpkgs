@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 { lib
 , python3
 , fetchPypi
@@ -6,6 +7,9 @@
 , jq
 , stdenv
 }:
+=======
+{ stdenv, lib, python3, fetchFromGitHub, buildNpmPackage, jq }:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 let
   python = python3.override {
@@ -13,15 +17,22 @@ let
       # pyCA is incompatible with SQLAlchemy 2.0
       sqlalchemy = super.sqlalchemy.overridePythonAttrs (old: rec {
         version = "1.4.46";
+<<<<<<< HEAD
         src = fetchPypi {
+=======
+        src = self.fetchPypi {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           pname = "SQLAlchemy";
           inherit version;
           hash = "sha256-aRO4JH2KKS74MVFipRkx4rQM6RaB8bbxj2lwRSAMSjA=";
         };
+<<<<<<< HEAD
         disabledTestPaths = [
            "test/aaa_profiling"
            "test/ext/mypy"
         ];
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       });
     };
   };

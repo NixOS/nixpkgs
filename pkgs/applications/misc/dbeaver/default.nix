@@ -16,6 +16,7 @@
 , maven
 , webkitgtk_4_1
 , glib-networking
+<<<<<<< HEAD
 }:
 
 let
@@ -26,20 +27,41 @@ in
 mavenJdk17.buildMavenPackage rec {
   pname = "dbeaver";
   version = "22.2.2"; # When updating also update mvnHash
+=======
+, javaPackages
+}:
+
+(javaPackages.mavenfod.override {
+  inherit maven; # use overridden maven version (see dbeaver's entry in all-packages.nix)
+}) rec {
+  pname = "dbeaver";
+  version = "22.2.2"; # When updating also update mvnSha256
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "dbeaver";
     repo = "dbeaver";
     rev = version;
+<<<<<<< HEAD
     hash = "sha256-TUdtrhQ1JzqZx+QNauNA1P/+WDSSeOGIgGX3SdS0JTI=";
   };
 
   mvnHash = "sha256-ERZYDsPxp1YXteSmunFIgTGZUYqjZJhqrNytLnIUNBQ=";
+=======
+    sha256 = "sha256-TUdtrhQ1JzqZx+QNauNA1P/+WDSSeOGIgGX3SdS0JTI=";
+  };
+
+  mvnSha256 = "uu7UNRIuAx2GOh4+YxxoGRcV5QO8C72q32e0ynJdgFo=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   mvnParameters = "-P desktop,all-platforms";
 
   nativeBuildInputs = [
     copyDesktopItems
     makeWrapper
+<<<<<<< HEAD
+=======
+    maven
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   buildInputs = [
@@ -77,7 +99,11 @@ mavenJdk17.buildMavenPackage rec {
         aarch64-darwin = "aarch64";
         aarch64-linux = "aarch64";
         x86_64-darwin = "x86_64";
+<<<<<<< HEAD
         x86_64-linux = "x86_64";
+=======
+        x86_64-linux  = "x86_64";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       };
 
       systemPlatform = platformMap.${stdenv.hostPlatform.system} or (throw "dbeaver not supported on ${stdenv.hostPlatform.system}");
@@ -130,11 +156,18 @@ mavenJdk17.buildMavenPackage rec {
     '';
     sourceProvenance = with sourceTypes; [
       fromSource
+<<<<<<< HEAD
       binaryBytecode # dependencies from maven
+=======
+      binaryBytecode  # dependencies from maven
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     ];
     license = licenses.asl20;
     platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-linux" "aarch64-darwin" ];
     maintainers = with maintainers; [ jojosch mkg20001 ];
+<<<<<<< HEAD
     mainProgram = "dbeaver";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

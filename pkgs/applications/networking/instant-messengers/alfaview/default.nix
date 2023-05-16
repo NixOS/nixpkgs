@@ -5,11 +5,19 @@
 
 stdenv.mkDerivation rec {
   pname = "alfaview";
+<<<<<<< HEAD
   version = "9.0.3";
 
   src = fetchurl {
     url = "https://assets.alfaview.com/stable/linux/deb/${pname}_${version}.deb";
     sha256 = "sha256-Mmw4wWjU1Fr2dqonD3Vin8m6VX2dfDXbMDl+lTT4YT4=";
+=======
+  version = "8.65.0";
+
+  src = fetchurl {
+    url = "https://production-alfaview-assets.alfaview.com/stable/linux/${pname}_${version}.deb";
+    sha256 = "sha256-/1qYC2JCbgiR8fGL9R0mnRm8fY1DbAKhkjkDwEENWsA=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

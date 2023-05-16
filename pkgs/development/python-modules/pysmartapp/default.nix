@@ -9,7 +9,11 @@
 
 buildPythonPackage rec {
   pname = "pysmartapp";
+<<<<<<< HEAD
   version = "0.3.5";
+=======
+  version = "0.3.4";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -18,7 +22,11 @@ buildPythonPackage rec {
     owner = "andrewsayre";
     repo = pname;
     rev = version;
+<<<<<<< HEAD
     hash = "sha256-RiRGOO5l5hcHllyDDGLtQHr51JOTZhAa/wK8BfMqmAY=";
+=======
+    hash = "sha256-zYjv7wRxQTS4PnNaY69bw9xE6I4DZMocwUzEICBfwqM=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [

@@ -1,6 +1,10 @@
 { lib
 , clangStdenv
 , fetchFromGitLab
+<<<<<<< HEAD
+=======
+, libclang
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , rustPlatform
 , cargo
 , meson
@@ -49,7 +53,10 @@ clangStdenv.mkDerivation rec {
     desktop-file-utils
     cargo
     rustc
+<<<<<<< HEAD
     rustPlatform.bindgenHook
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     rustPlatform.cargoSetupHook
   ];
 
@@ -66,6 +73,11 @@ clangStdenv.mkDerivation rec {
     gst-plugins-bad
   ];
 
+<<<<<<< HEAD
+=======
+  LIBCLANG_PATH = "${libclang.lib}/lib";
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   meta = with lib; {
     description = "Scan and Generate QR Codes";
     homepage = "https://gitlab.gnome.org/World/decoder";

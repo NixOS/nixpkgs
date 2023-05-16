@@ -1,4 +1,8 @@
 { lib
+<<<<<<< HEAD
+=======
+, fetchFromGitLab
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , fetchFromGitHub
 , python3
 , gobject-introspection
@@ -27,6 +31,7 @@ let
           hash = "sha256-IWTo/P9JRxBQlhtcH3JMJZZrwAA8EALF4dtHajWUc4w=";
         };
       });
+<<<<<<< HEAD
 
       dataclasses-json = super.dataclasses-json.overridePythonAttrs (oldAttrs: rec {
         version = "0.5.7";
@@ -38,11 +43,14 @@ let
         };
         nativeBuildInputs = [ python3.pkgs.setuptools ];
       });
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
   };
 in
 python.pkgs.buildPythonApplication rec {
   pname = "sublime-music";
+<<<<<<< HEAD
   version = "0.12.0";
   format = "flit";
 
@@ -51,19 +59,48 @@ python.pkgs.buildPythonApplication rec {
     repo = pname;
     rev = "refs/tags/v${version}";
     hash = "sha256-FPzeFqDOcaiariz7qJwz6P3Wd+ZDxNP57uj+ptMtEyM=";
+=======
+  version = "0.11.16";
+  format = "pyproject";
+
+  src = fetchFromGitLab {
+    owner = "sublime-music";
+    repo = pname;
+    rev = "refs/tags/v${version}";
+    hash = "sha256-n77mTgElwwFaX3WQL8tZzbkPwnsyQ08OW9imSOjpBlg=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [
     gobject-introspection
     wrapGAppsHook
+<<<<<<< HEAD
+=======
+  ] ++ (with python.pkgs; [
+    poetry-core
+    pythonRelaxDepsHook
+  ]);
+
+  # Can be removed in later versions (probably > 0.11.16)
+  pythonRelaxDeps = [
+    "deepdiff"
+    "python-mpv"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   postPatch = ''
     sed -i "/--cov/d" setup.cfg
     sed -i "/--no-cov-on-fail/d" setup.cfg
+<<<<<<< HEAD
 
     # https://github.com/sublime-music/sublime-music/commit/f477659d24e372ed6654501deebad91ae4b0b51c
     sed -i "s/python-mpv/mpv/g" pyproject.toml
+=======
+    # https://github.com/sublime-music/sublime-music/pull/370
+    # Can be removed in later versions (probably > 0.11.16)
+    substituteInPlace pyproject.toml \
+      --replace 'python-Levenshtein = "^0.12.0"' 'Levenshtein = ">0.12.0"'
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '';
 
   buildInputs = [
@@ -76,6 +113,7 @@ python.pkgs.buildPythonApplication rec {
 
   propagatedBuildInputs = with python.pkgs; [
     bleach
+<<<<<<< HEAD
     bottle
     dataclasses-json
     deepdiff
@@ -90,6 +128,22 @@ python.pkgs.buildPythonApplication rec {
     thefuzz
   ]
   ++ lib.optional keyringSupport keyring
+=======
+    dataclasses-json
+    deepdiff
+    fuzzywuzzy
+    mpv
+    peewee
+    pygobject3
+    levenshtein
+    python-dateutil
+    requests
+    semver
+  ]
+  ++ lib.optional chromecastSupport pychromecast
+  ++ lib.optional keyringSupport keyring
+  ++ lib.optional serverSupport bottle
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ;
 
   nativeCheckInputs = with python.pkgs; [

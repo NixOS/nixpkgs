@@ -21,8 +21,11 @@ stdenv.mkDerivation rec {
     hash = "sha256-S22Szpg6iXeana5t6EpbOtRstthgrJ4Z2cBrf7a9ZBk=";
   };
 
+<<<<<<< HEAD
   outputs = [ "out" "dev" "doc" "man" ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nativeBuildInputs = [
     doxygen
     meson

@@ -2,8 +2,11 @@
 , stdenv
 , fetchFromGitHub
 , buildPythonApplication
+<<<<<<< HEAD
 , fetchpatch
 , pem
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , pyside6
 , twisted
 , certifi
@@ -25,6 +28,7 @@ buildPythonApplication rec {
     sha256 = "sha256-Te81yOv3D6M6aMfC5XrM6/I6BlMdlY1yRk1RRJa9Mxg=";
   };
 
+<<<<<<< HEAD
   patches = [
     (fetchpatch {
       name = "fix-typeerror.patch";
@@ -36,6 +40,10 @@ buildPythonApplication rec {
 
   buildInputs = lib.optionals enableGUI [ (if stdenv.isLinux then qt6.qtwayland else qt6.qtbase) ];
   propagatedBuildInputs = [ certifi pem twisted ]
+=======
+  buildInputs = lib.optionals enableGUI [ (if stdenv.isLinux then qt6.qtwayland else qt6.qtbase) ];
+  propagatedBuildInputs = [ twisted certifi ]
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     ++ twisted.optional-dependencies.tls
     ++ lib.optional enableGUI pyside6
     ++ lib.optional (stdenv.isDarwin && enableGUI) appnope;

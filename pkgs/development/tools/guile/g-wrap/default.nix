@@ -17,8 +17,11 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ libffi ];
 
+<<<<<<< HEAD
   env.NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations";
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   doCheck = true;
 
   meta = with lib; {

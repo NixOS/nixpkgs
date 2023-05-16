@@ -1,11 +1,21 @@
+<<<<<<< HEAD
 { lib, appimageTools, fetchurl, asar }: let
   pname = "flexoptix-app";
   version = "5.16.0-latest";
+=======
+{ lib, appimageTools, fetchurl, nodePackages }: let
+  pname = "flexoptix-app";
+  version = "5.13.4";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchurl {
     name = "${pname}-${version}.AppImage";
     url = "https://flexbox.reconfigure.me/download/electron/linux/x64/FLEXOPTIX%20App.${version}.AppImage";
+<<<<<<< HEAD
     hash = "sha256-A10r8IUB3zWKWmjen90vLXPF7V/Cgo+DhFn/Hsc1Nhg=";
+=======
+    hash = "sha256-W+9KmKZ1bPfQfv1DXCJrIswriw4ivBVZPW81tfvRBc0=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   udevRules = fetchurl {
@@ -18,9 +28,15 @@
       ${oA.buildCommand}
 
       # Get rid of the autoupdater
+<<<<<<< HEAD
       ${asar}/bin/asar extract $out/resources/app.asar app
       sed -i 's/async isUpdateAvailable.*/async isUpdateAvailable(updateInfo) { return false;/g' app/node_modules/electron-updater/out/AppUpdater.js
       ${asar}/bin/asar pack app $out/resources/app.asar
+=======
+      ${nodePackages.asar}/bin/asar extract $out/resources/app.asar app
+      sed -i 's/async isUpdateAvailable.*/async isUpdateAvailable(updateInfo) { return false;/g' app/node_modules/electron-updater/out/AppUpdater.js
+      ${nodePackages.asar}/bin/asar pack app $out/resources/app.asar
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     '';
   });
 
@@ -28,7 +44,11 @@ in appimageTools.wrapAppImage {
   inherit pname version;
   src = appimageContents;
 
+<<<<<<< HEAD
   multiArch = false; # no 32bit needed
+=======
+  multiPkgs = null; # no 32bit needed
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   extraPkgs = { pkgs, ... }@args: [
     pkgs.hidapi
   ] ++ appimageTools.defaultFhsEnvArgs.multiPkgs args;

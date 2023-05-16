@@ -7,15 +7,24 @@
 
 buildPythonPackage rec {
   pname = "adafruit-pureio";
+<<<<<<< HEAD
   version = "1.1.11";
   format = "pyproject";
+=======
+  version = "1.1.10";
+  format = "setuptools";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "Adafruit_PureIO";
     inherit version;
+<<<<<<< HEAD
     hash = "sha256-xM+7NlcxlC0fEJKhFvR9/a4K7xjFsn8QcrWCStXqjHw=";
+=======
+    hash = "sha256-EgaIN1PAlmMJ5tAtqXBnbpvHtQO7Sib3NuAXOfVqZLk=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

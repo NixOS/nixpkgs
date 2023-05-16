@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 { stdenv
 , fetchurl
 , jq
@@ -9,6 +10,14 @@
 
 { name
 , url ? null
+=======
+{stdenv, unzip, jq, zip, fetchurl,writeScript,  ...}:
+
+{
+  name
+, url ? null
+, md5 ? ""
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , sha1 ? ""
 , sha256 ? ""
 , sha512 ? ""
@@ -19,10 +28,16 @@
 
 let
   extid = if fixedExtid == null then "nixos@${name}" else fixedExtid;
+<<<<<<< HEAD
   source = if url == null then src else
   fetchurl {
     url = url;
     inherit sha1 sha256 sha512 hash;
+=======
+  source = if url == null then src else fetchurl {
+    url = url;
+    inherit md5 sha1 sha256 sha512 hash;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 in
 stdenv.mkDerivation {
@@ -44,6 +59,7 @@ stdenv.mkDerivation {
     echo "$NEW_MANIFEST" > "$out/$UUID/manifest.json"
     cd "$out/$UUID"
     zip -r -q -FS "$out/$UUID.xpi" *
+<<<<<<< HEAD
     strip-nondeterminism "$out/$UUID.xpi"
     rm -r "$out/$UUID"
   '';
@@ -54,4 +70,9 @@ stdenv.mkDerivation {
     unzip
     zip
   ];
+=======
+    rm -r "$out/$UUID"
+  '';
+  nativeBuildInputs = [ unzip zip jq  ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }

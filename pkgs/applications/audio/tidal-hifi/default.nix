@@ -34,6 +34,7 @@
 , xorg
 }:
 
+<<<<<<< HEAD
 stdenv.mkDerivation (finalAttrs: {
   pname = "tidal-hifi";
   version = "5.7.1";
@@ -41,6 +42,15 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/Mastermindzh/tidal-hifi/releases/download/${finalAttrs.version}/tidal-hifi_${finalAttrs.version}_amd64.deb";
     sha256 = "sha256-7wBQgoglLS67aiQsF9iUeFoJDDqq0fJgu5BSyH+HI7M=";
+=======
+stdenv.mkDerivation rec {
+  pname = "tidal-hifi";
+  version = "5.1.0";
+
+  src = fetchurl {
+    url = "https://github.com/Mastermindzh/tidal-hifi/releases/download/${version}/tidal-hifi_${version}_amd64.deb";
+    sha256 = "sha256-IaSgul2L0L343TVT3ujgBoMt6tITwjJaBNOVJPCBDtI=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ autoPatchelfHook dpkg makeWrapper ];
@@ -104,13 +114,18 @@ stdenv.mkDerivation (finalAttrs: {
 
   postFixup = ''
     makeWrapper $out/opt/tidal-hifi/tidal-hifi $out/bin/tidal-hifi \
+<<<<<<< HEAD
       --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath finalAttrs.buildInputs}" \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}" \
+=======
+      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath buildInputs}" \
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       "''${gappsWrapperArgs[@]}"
     substituteInPlace $out/share/applications/tidal-hifi.desktop \
       --replace "/opt/tidal-hifi/tidal-hifi" "tidal-hifi"
   '';
 
+<<<<<<< HEAD
   meta = {
     changelog = "https://github.com/Mastermindzh/tidal-hifi/releases/tag/${finalAttrs.version}";
     description = "The web version of Tidal running in electron with hifi support thanks to widevine";
@@ -121,3 +136,14 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "tidal-hifi";
   };
 })
+=======
+  meta = with lib; {
+    description = "The web version of Tidal running in electron with hifi support thanks to widevine";
+    homepage = "https://github.com/Mastermindzh/tidal-hifi";
+    changelog = "https://github.com/Mastermindzh/tidal-hifi/releases/tag/${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ qbit ];
+    platforms = [ "x86_64-linux" ];
+  };
+}
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)

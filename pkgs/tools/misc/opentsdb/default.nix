@@ -2,10 +2,18 @@
 , stdenv
 , autoconf
 , automake
+<<<<<<< HEAD
 , curl
 , fetchFromGitHub
 , fetchMavenArtifact
 , fetchpatch
+=======
+, bash
+, curl
+, fetchFromGitHub
+, fetchMavenArtifact
+, fetchurl
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , git
 , jdk8
 , makeWrapper
@@ -21,8 +29,13 @@ let
       (fetchMavenArtifact {
         groupId = "org.apache.commons";
         artifactId = "commons-math3";
+<<<<<<< HEAD
         version = "3.6.1";
         hash = "sha256-HlbXsFjSi2Wr0la4RY44hbZ0wdWI+kPNfRy7nH7yswg=";
+=======
+        version = "3.4.1";
+        hash = "sha256-0QdbFKcQhwOLC/0Zjw992OSbWzUp2OLrqZ59nrhWXks=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       })
     ];
     guava = [
@@ -37,14 +50,24 @@ let
       (fetchMavenArtifact {
         groupId = "com.google.gwt";
         artifactId = "gwt-dev";
+<<<<<<< HEAD
         version = "2.6.1";
         hash = "sha256-iS8VpnMPuxE9L9hkTJVtW5Tqgw2TIYei47zRvkdoK0o=";
+=======
+        version = "2.6.0";
+        hash = "sha256-4MLdI7q5fkftHTMoN7W3l5zsq1QB2R/8bF86vEqBI+A=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       })
       (fetchMavenArtifact {
         groupId = "com.google.gwt";
         artifactId = "gwt-user";
+<<<<<<< HEAD
         version = "2.6.1";
         hash = "sha256-3IlJ+b6C0Gmuh7aAFg9+ldgvZCdfJmTB8qcdC4HZC9g=";
+=======
+        version = "2.6.0";
+        hash = "sha256-HR5/aopn605inHeENNHBAqKrjkvIl9wPDM+nOwOpiEg=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       })
       (fetchMavenArtifact {
         groupId = "net.opentsdb";
@@ -74,20 +97,35 @@ let
       (fetchMavenArtifact {
         groupId = "com.fasterxml.jackson.core";
         artifactId = "jackson-annotations";
+<<<<<<< HEAD
         version = "2.14.1";
         hash = "sha256-0lW0uGP/jscUqPlvpVw0Yh1D27grgtP1dHZJakwJ4ec=";
+=======
+        version = "2.9.5";
+        hash = "sha256-OKDkUASfZDVwrayZiIqjSA7C3jhXkKcJaQi/Q7/AhdY=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       })
       (fetchMavenArtifact {
         groupId = "com.fasterxml.jackson.core";
         artifactId = "jackson-core";
+<<<<<<< HEAD
         version = "2.14.1";
         hash = "sha256-ARQYfilrNMkxwb+eWoQVK2K/q30YL1Yj85gtwto15SY=";
+=======
+        version = "2.9.5";
+        hash = "sha256-or66oyWtJUVbAhScZ+YFI2en1/wc533gAO7ShKUhTqw=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       })
       (fetchMavenArtifact {
         groupId = "com.fasterxml.jackson.core";
         artifactId = "jackson-databind";
+<<<<<<< HEAD
         version = "2.14.1";
         hash = "sha256-QjoMgG3ks/petKKGmDBeOjd3xzHhvPobLzo3YMe253M=";
+=======
+        version = "2.9.5";
+        hash = "sha256-D7TgecEY51LMlMFa0i5ngrDfxdwJFF9IE/s52C5oYEc=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       })
     ];
     javacc = [
@@ -110,8 +148,13 @@ let
       (fetchMavenArtifact {
         groupId = "commons-logging";
         artifactId = "commons-logging";
+<<<<<<< HEAD
         version = "1.2";
         hash = "sha256-2t3qHqC+D1aXirMAa4rJKDSv7vvZt+TmMW/KV98PpjY=";
+=======
+        version = "1.1.1";
+        hash = "sha256-zm+RPK0fDbOq1wGG1lxbx//Mmpnj/o4LE3MSgZ98Ni8=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       })
       (fetchMavenArtifact {
         groupId = "org.apache.commons";
@@ -167,14 +210,24 @@ let
       (fetchMavenArtifact {
         groupId = "ch.qos.logback";
         artifactId = "logback-classic";
+<<<<<<< HEAD
         version = "1.3.4";
         hash = "sha256-uGal2myLeOFVxn/M11YoYNC1/Hdric2WjC8/Ljf8OgI=";
+=======
+        version = "1.0.13";
+        hash = "sha256-EsGTDKkWU0IqxJ/qM/zovhsfzS0iIM6jg8R5SXbHQY8=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       })
       (fetchMavenArtifact {
         groupId = "ch.qos.logback";
         artifactId = "logback-core";
+<<<<<<< HEAD
         version = "1.3.4";
         hash = "sha256-R0CgmLtEOnRFVN093wYsaCKHspQGZ1TikuE0bIv1zt0=";
+=======
+        version = "1.0.13";
+        hash = "sha256-7NjyT5spQShOmPFU/zND5yDLMcj0e2dVSxRXRfWW87g=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       })
     ];
     mockito = [
@@ -222,14 +275,24 @@ let
       (fetchMavenArtifact {
         groupId = "org.slf4j";
         artifactId = "log4j-over-slf4j";
+<<<<<<< HEAD
         version = "2.0.6";
         hash = "sha256-QHMpiJioL0KeHr2iNaMUc7G0jDR94ShnNbtnkiUm6uQ=";
+=======
+        version = "1.7.7";
+        hash = "sha256-LjcWxCtsAm/jzd2pK7oaVZsTZjjcexj7qKQSxBiVecI=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       })
       (fetchMavenArtifact {
         groupId = "org.slf4j";
         artifactId = "slf4j-api";
+<<<<<<< HEAD
         version = "2.0.6";
         hash = "sha256-LyqS1BCyaBOdfWO3XtJeIZlc/kEAwZvyNXfP28gHe9o=";
+=======
+        version = "1.7.7";
+        hash = "sha256-aZgMA4yhsTGSZWFZFhfZwl+r/Hspgor5FZfKhXDPNf4=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       })
     ];
     suasync = [
@@ -275,6 +338,7 @@ in stdenv.mkDerivation rec {
     hash = "sha256-899m1H0UCLsI/bnSrNFnnny4MxSw3XBzf7rgDuEajDs=";
   };
 
+<<<<<<< HEAD
   patches = [
     (fetchpatch {
       name = "bump-deps.0.patch";
@@ -313,6 +377,8 @@ in stdenv.mkDerivation rec {
     })
   ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nativeBuildInputs = [
     autoconf
     automake
@@ -328,7 +394,11 @@ in stdenv.mkDerivation rec {
   '';
 
   preBuild = lib.concatStrings (lib.mapAttrsToList (dir: lib.concatMapStrings (artifact: ''
+<<<<<<< HEAD
     cp ${artifact}/share/java/* third_party/${dir}
+=======
+    ln -s ${artifact}/share/java/* third_party/${dir}
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '')) artifacts);
 
   postInstall = ''
@@ -342,10 +412,13 @@ in stdenv.mkDerivation rec {
     homepage = "http://opentsdb.net";
     license = licenses.lgpl21Plus;
     platforms = lib.platforms.linux;
+<<<<<<< HEAD
     sourceProvenance = with sourceTypes; [
       fromSource
       binaryBytecode  # maven dependencies
     ];
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     maintainers = [ ];
   };
 }

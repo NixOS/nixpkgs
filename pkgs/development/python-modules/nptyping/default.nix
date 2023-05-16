@@ -5,6 +5,10 @@
 , pytestCheckHook
 , beartype
 , invoke
+<<<<<<< HEAD
+=======
+, mypy
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , numpy
 , pandas
 , feedparser
@@ -33,6 +37,10 @@ buildPythonPackage rec {
     beartype
     feedparser
     invoke
+<<<<<<< HEAD
+=======
+    mypy
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     pandas
     pytestCheckHook
     typeguard

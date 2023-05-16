@@ -6,14 +6,18 @@ import ./make-test-python.nix ({ lib, pkgs, ... }: {
     virtualisation = {
       emptyDiskImages = [ 512 512 ];
       useBootLoader = true;
+<<<<<<< HEAD
       # Booting off the RAID requires an available init script
       mountHostNixStore = true;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       useEFIBoot = true;
     };
     boot.loader.systemd-boot.enable = true;
     boot.loader.efi.canTouchEfiVariables = true;
 
     environment.systemPackages = with pkgs; [ mdadm e2fsprogs ]; # for mdadm and mkfs.ext4
+<<<<<<< HEAD
     boot.swraid = {
       enable = true;
       mdadmConf = ''
@@ -23,23 +27,41 @@ import ./make-test-python.nix ({ lib, pkgs, ... }: {
     environment.etc."mdadm.conf".text = ''
       MAILADDR test@example.com
     '';
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     boot.initrd = {
       systemd = {
         enable = true;
         emergencyAccess = true;
       };
+<<<<<<< HEAD
+=======
+      services.swraid = {
+        enable = true;
+        mdadmConf = ''
+          ARRAY /dev/md0 devices=/dev/vdb,/dev/vdc
+        '';
+      };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       kernelModules = [ "raid0" ];
     };
 
     specialisation.boot-swraid.configuration.virtualisation.rootDevice = "/dev/disk/by-label/testraid";
+<<<<<<< HEAD
     # This protects against a regression. We do not have to switch to it.
     # It's sufficient to trigger its evaluation.
     specialisation.build-old-initrd.configuration.boot.initrd.systemd.enable = lib.mkForce false;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   testScript = ''
     # Create RAID
+<<<<<<< HEAD
     machine.succeed("mdadm --create --force /dev/md0 -n 2 --level=raid1 /dev/vdb /dev/vdc --metadata=0.90")
+=======
+    machine.succeed("mdadm --create --force /dev/md0 -n 2 --level=raid0 /dev/vdb /dev/vdc")
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     machine.succeed("mkfs.ext4 -L testraid /dev/md0")
     machine.succeed("mkdir -p /mnt && mount /dev/md0 /mnt && echo hello > /mnt/test && umount /mnt")
 
@@ -54,6 +76,7 @@ import ./make-test-python.nix ({ lib, pkgs, ... }: {
     assert "/dev/md0 on / type ext4" in machine.succeed("mount")
     assert "hello" in machine.succeed("cat /test")
     assert "md0" in machine.succeed("cat /proc/mdstat")
+<<<<<<< HEAD
 
     expected_config = """MAILADDR test@example.com
 
@@ -62,5 +85,7 @@ import ./make-test-python.nix ({ lib, pkgs, ... }: {
     got_config = machine.execute("cat /etc/mdadm.conf")[1]
     assert expected_config == got_config, repr((expected_config, got_config))
     machine.wait_for_unit("mdmonitor.service")
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '';
 })

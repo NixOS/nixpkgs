@@ -21,6 +21,10 @@ buildPythonPackage rec {
     homepage = "https://github.com/verigak/progress/";
     description = "Easy to use progress bars";
     license = licenses.mit;
+<<<<<<< HEAD
     maintainers = [ ];
+=======
+    maintainers = [ maintainers.costrouc ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

@@ -6,13 +6,21 @@
 
 stdenv.mkDerivation rec {
   pname = "opensmt";
+<<<<<<< HEAD
   version = "2.5.2";
+=======
+  version = "2.5.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "usi-verification-and-security";
     repo = "opensmt";
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-gP2oaTEBVk54oK4Le5VudF7+HM8JXCzVqv8UXc08RFQ=";
+=======
+    sha256 = "sha256-+u0Go+QU56mmV1G+m+sDOhi3QaWveZILS9fWv8THoWc=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ cmake bison flex ];

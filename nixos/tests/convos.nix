@@ -1,12 +1,22 @@
 import ./make-test-python.nix ({ lib, pkgs, ... }:
 
+<<<<<<< HEAD
 
+=======
+with lib;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 let
   port = 3333;
 in
 {
   name = "convos";
+<<<<<<< HEAD
   meta.maintainers = with lib.maintainers; [ sgo ];
+=======
+  meta = with pkgs.lib.maintainers; {
+    maintainers = [ sgo ];
+  };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nodes = {
     machine =

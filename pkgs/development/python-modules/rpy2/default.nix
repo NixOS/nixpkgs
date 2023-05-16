@@ -24,13 +24,21 @@
 }:
 
 buildPythonPackage rec {
+<<<<<<< HEAD
     version = "3.5.12";
+=======
+    version = "3.5.11";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     pname = "rpy2";
 
     disabled = isPyPy;
     src = fetchPypi {
       inherit version pname;
+<<<<<<< HEAD
       hash = "sha256-7q33lP0qpUj4hWjGodJufDgQzUp2Soeyw7MdMZQtbUU=";
+=======
+      hash = "sha256-DT5VTayPTlWiiTLylGNBquPgKJQwThGYVHIiqoa4niE=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
 
     patches = [

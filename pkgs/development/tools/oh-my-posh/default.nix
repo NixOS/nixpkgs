@@ -6,18 +6,31 @@
 
 buildGoModule rec {
   pname = "oh-my-posh";
+<<<<<<< HEAD
   version = "18.7.0";
+=======
+  version = "15.4.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "jandedobbeleer";
     repo = pname;
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-dnaKcyDy4TdlTPl0hCUCshW6aFMLUUFwVskv1jiO0fk=";
   };
 
   vendorHash = "sha256-GHOWcZqZmjL+EptcuCwbj0WSWKmhbsxpZFvHhlmsbxU=";
 
   sourceRoot = "${src.name}/src";
+=======
+    hash = "sha256-D1X0/r/OyQKPPE1aEwNVdGJYq6+i67xTvIQK3ZeI7pM=";
+  };
+
+  vendorHash = "sha256-4exLY24baDjgGIDS1P7BIK38O4b+KeqNTMzA6wap05k=";
+
+  sourceRoot = "source/src";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nativeBuildInputs = [
     installShellFiles
@@ -26,8 +39,12 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
+<<<<<<< HEAD
     "-X github.com/jandedobbeleer/oh-my-posh/src/build.Version=${version}"
     "-X github.com/jandedobbeleer/oh-my-posh/src/build.Date=1970-01-01T00:00:00Z"
+=======
+    "-X main.Version=${version}"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   tags = [
@@ -37,8 +54,13 @@ buildGoModule rec {
   ];
 
   postPatch = ''
+<<<<<<< HEAD
     # these tests requires internet access
     rm engine/image_test.go engine/migrate_glyphs_test.go
+=======
+    # this test requires internet access
+    rm engine/migrate_glyphs_test.go
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '';
 
   postInstall = ''

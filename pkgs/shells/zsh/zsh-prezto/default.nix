@@ -2,13 +2,22 @@
 
 stdenv.mkDerivation rec {
   pname = "zsh-prezto";
+<<<<<<< HEAD
   version = "unstable-2023-06-22";
+=======
+  version = "unstable-2023-04-13";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "sorin-ionescu";
     repo = "prezto";
+<<<<<<< HEAD
     rev = "c9c716e9c11938a1aff2f30230d4dc1da38dc564";
     sha256 = "QwFWQMg9Q67eKkzGVz4zmcXtPcuLvFTUlagVxDN/2h4=";
+=======
+    rev = "da87c79b3a35f5a4a504ea331e9ec52b4f786976";
+    sha256 = "EW1roiFaSgbXWYtc5Hxgj7m/ph6g1g225nXbvp0rtsw=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     fetchSubmodules = true;
   };
 

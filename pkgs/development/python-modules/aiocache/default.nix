@@ -8,7 +8,11 @@
 
 buildPythonPackage rec {
   pname = "aiocache";
+<<<<<<< HEAD
   version = "0.12.2";
+=======
+  version = "0.12.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -17,7 +21,11 @@ buildPythonPackage rec {
     owner = "aio-libs";
     repo = pname;
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-yvXDNJL8uxReaU81klVWudJwh1hmvg5GeeILcNpm/YA=";
+=======
+    hash = "sha256-/ruB8/5/oWGlTldOXkgdsPU+mQlXOL1qRcikElEHYNQ=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   passthru.optional-dependencies = {

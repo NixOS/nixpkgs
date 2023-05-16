@@ -12,13 +12,21 @@
 
 mkDerivation rec {
   pname = "antimicrox";
+<<<<<<< HEAD
   version = "3.3.4";
+=======
+  version = "3.3.3";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "AntiMicroX";
     repo = pname;
     rev = version;
+<<<<<<< HEAD
     sha256 = "sha256-WEtKeQKRZcYpZ4mnFdj4ZRApBuD8fByf11Uu6ylbAcY=";
+=======
+    sha256 = "sha256-svEk+IFttkCXmoAOFH3k2rRC/OL9HXOLiuGrCh10YNc=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ cmake extra-cmake-modules pkg-config itstool ];

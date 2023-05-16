@@ -6,6 +6,10 @@
 # build time
 , hatchling
 , hatch-vcs
+<<<<<<< HEAD
+=======
+, setuptools-scm
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 # runtime
 , packaging
@@ -20,14 +24,21 @@
 # tests
 , pytest-mock
 , pytestCheckHook
+<<<<<<< HEAD
 , setuptools
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , virtualenv
 , wheel
 }:
 
 buildPythonPackage rec {
   pname = "pyproject-api";
+<<<<<<< HEAD
   version = "1.5.4";
+=======
+  version = "1.5.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -36,7 +47,11 @@ buildPythonPackage rec {
     owner = "tox-dev";
     repo = "pyproject-api";
     rev = "refs/tags/${version}";
+<<<<<<< HEAD
     hash = "sha256-HX+5BypfEOfQ3vg3vha0QCVrEarjMu/Q8id+xgmWGfA=";
+=======
+    hash = "sha256-VO+huA9i7uMpCVaWHC29XlfestSu+N9vWWHteY21uqs=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   outputs = [
@@ -44,11 +59,19 @@ buildPythonPackage rec {
     "doc"
   ];
 
+<<<<<<< HEAD
   env.SETUPTOOLS_SCM_PRETEND_VERSION = version;
+=======
+  SETUPTOOLS_SCM_PRETEND_VERSION = version;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nativeBuildInputs = [
     hatchling
     hatch-vcs
+<<<<<<< HEAD
+=======
+    setuptools-scm
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     # docs
     sphinxHook
@@ -65,7 +88,10 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytest-mock
     pytestCheckHook
+<<<<<<< HEAD
     setuptools
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     virtualenv
     wheel
   ];

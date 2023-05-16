@@ -12,6 +12,10 @@
 , qtbase
 , qtsvg
 , qttools
+<<<<<<< HEAD
+=======
+, qttranslations
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , ffmpeg
 , filter-audio
 , libexif
@@ -43,6 +47,10 @@ mkDerivation rec {
     libXScrnSaver
     qtbase
     qtsvg
+<<<<<<< HEAD
+=======
+    qttranslations
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     ffmpeg
     filter-audio
     libexif

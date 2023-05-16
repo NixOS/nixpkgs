@@ -2,14 +2,22 @@
 
 let
   pname = "psalm";
+<<<<<<< HEAD
   version = "5.15.0";
+=======
+  version = "5.9.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 in
 mkDerivation {
   inherit pname version;
 
   src = fetchurl {
     url = "https://github.com/vimeo/psalm/releases/download/${version}/psalm.phar";
+<<<<<<< HEAD
     sha256 = "sha256-eAvogKsnvXMNUZHh44RPHpd0iMqEY9fzqJvXPT7SE1A=";
+=======
+    sha256 = "sha256-56vLT/t+3f5ZyH1pFmgy4vtSMQcDYLQZIF/iIkwd2vM=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   dontUnpack = true;

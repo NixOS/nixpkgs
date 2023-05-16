@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 { lib, stdenv, buildPackages }:
+=======
+{ stdenv, buildPackages }:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 # This function is for creating a flat-file binary cache, i.e. the kind created by
 # nix copy --to file:///some/path and usable as a substituter (with the file:// prefix).
@@ -19,7 +23,11 @@ stdenv.mkDerivation {
 
   preferLocalBuild = true;
 
+<<<<<<< HEAD
   PATH = lib.makeBinPath (with buildPackages; [ coreutils jq python3 nix xz ]);
+=======
+  PATH = "${buildPackages.coreutils}/bin:${buildPackages.jq}/bin:${buildPackages.python3}/bin:${buildPackages.nix}/bin:${buildPackages.xz}/bin";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   builder = builtins.toFile "builder" ''
     . .attrs.sh

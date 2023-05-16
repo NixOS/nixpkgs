@@ -18,7 +18,11 @@
 
 buildPythonPackage rec {
   pname = "pytelegrambotapi";
+<<<<<<< HEAD
   version = "4.13.0";
+=======
+  version = "4.11.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -27,7 +31,11 @@ buildPythonPackage rec {
     owner = "eternnoir";
     repo = "pyTelegramBotAPI";
     rev = "refs/tags/${version}";
+<<<<<<< HEAD
     hash = "sha256-5P0DfQL8lwCY4nvp5efB7fO7YyBMTRaB4qflkc+Arso=";
+=======
+    hash = "sha256-K81B8cNQ5Vvu8nH8kiroeffwRaUIKpwnpX2Jq7xPjB0=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   passthru.optional-dependencies = {

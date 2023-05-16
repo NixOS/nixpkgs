@@ -1,9 +1,17 @@
 { fetchFromGitHub
+<<<<<<< HEAD
+=======
+, gcc
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , lib
 , libnl
 , libpcap
 , pkg-config
 , stdenv
+<<<<<<< HEAD
+=======
+, writeShellScriptBin
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 stdenv.mkDerivation rec {
   pname = "nmrpflash";
@@ -21,7 +29,11 @@ stdenv.mkDerivation rec {
   buildInputs = [ libnl libpcap ];
 
   PREFIX = "${placeholder "out"}";
+<<<<<<< HEAD
   STANDALONE_VERSION = version;
+=======
+  STANDALONE_VERSION = "${version}";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   preInstall = ''
     mkdir -p $out/bin

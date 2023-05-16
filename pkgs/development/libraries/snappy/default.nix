@@ -23,17 +23,27 @@ stdenv.mkDerivation rec {
       url = "https://build.opensuse.org/public/source/openSUSE:Factory/snappy/reenable-rtti.patch?rev=a759aa6fba405cd40025e3f0ab89941d";
       sha256 = "sha256-RMuM5yd6zP1eekN/+vfS54EyY4cFbGDVor1E1vj3134=";
     })
+<<<<<<< HEAD
     # Fix -Wsign-compare warning on clang.
     (fetchpatch {
       url = "https://github.com/google/snappy/commit/27f34a580be4a3becf5f8c0cba13433f53c21337.patch";
       sha256 = "sha256-eq6ueeMAkd2bYmPJcKAZZzd5QlXyeWOrsxFIwR8KOpQ=";
     })
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   outputs = [ "out" "dev" ];
 
   nativeBuildInputs = [ cmake ];
 
+<<<<<<< HEAD
+=======
+  # See https://github.com/NixOS/nixpkgs/pull/219778#issuecomment-1464884412
+  # and https://github.com/NixOS/nixpkgs/pull/221215#issuecomment-1482564003.
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-Wno-sign-compare";
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   cmakeFlags = [
     "-DBUILD_SHARED_LIBS=${if static then "OFF" else "ON"}"
     "-DSNAPPY_BUILD_TESTS=OFF"

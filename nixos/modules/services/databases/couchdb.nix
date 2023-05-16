@@ -141,7 +141,11 @@ in {
         type = types.lines;
         default = "";
         description = lib.mdDoc ''
+<<<<<<< HEAD
           Extra configuration. Overrides any other configuration.
+=======
+          Extra configuration. Overrides any other cofiguration.
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         '';
       };
 

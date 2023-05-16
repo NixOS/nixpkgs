@@ -19,6 +19,7 @@ stdenv.mkDerivation rec {
     "--with-tkconfig=${tk}/lib"
   ];
 
+<<<<<<< HEAD
   env.CXXFLAGS = toString [
     "-std=c++11"
     "-DUSE_INTERP_RESULT"
@@ -26,6 +27,9 @@ stdenv.mkDerivation rec {
   ];
 
   enableParallelBuilding = true;
+=======
+  CXXFLAGS = " --std=c++11 ";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   hardeningDisable = [ "format" ];
 
@@ -55,7 +59,11 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "A programmable turn-based strategy game";
     maintainers = with maintainers; [ raskin ];
+<<<<<<< HEAD
     platforms = platforms.unix;
+=======
+    platforms = platforms.linux;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     license = licenses.gpl2;
   };
 }

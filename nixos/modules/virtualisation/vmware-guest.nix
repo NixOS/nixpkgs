@@ -24,12 +24,20 @@ in
 
   config = mkIf cfg.enable {
     assertions = [ {
+<<<<<<< HEAD
       assertion = pkgs.stdenv.hostPlatform.isx86 || pkgs.stdenv.hostPlatform.isAarch64;
+=======
+      assertion = pkgs.stdenv.hostPlatform.isx86;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       message = "VMWare guest is not currently supported on ${pkgs.stdenv.hostPlatform.system}";
     } ];
 
     boot.initrd.availableKernelModules = [ "mptspi" ];
+<<<<<<< HEAD
     boot.initrd.kernelModules = lib.optionals pkgs.stdenv.hostPlatform.isx86 [ "vmw_pvscsi" ];
+=======
+    boot.initrd.kernelModules = [ "vmw_pvscsi" ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     environment.systemPackages = [ open-vm-tools ];
 

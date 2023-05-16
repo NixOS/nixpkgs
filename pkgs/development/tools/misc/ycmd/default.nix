@@ -2,7 +2,11 @@
 , withGocode ? true, gocode
 , withGodef ? true, godef
 , withGotools? true, gotools
+<<<<<<< HEAD
 , withTypescript ? true, typescript
+=======
+, withTypescript ? true, nodePackages
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , abseil-cpp, boost, llvmPackages
 , fixDarwinDylibNames, Cocoa
 }:
@@ -77,7 +81,11 @@ stdenv.mkDerivation {
     ln -sf ${gotools}/bin/gopls $TARGET
   '' + lib.optionalString withTypescript ''
     TARGET=$out/lib/ycmd/third_party/tsserver
+<<<<<<< HEAD
     ln -sf ${typescript} $TARGET
+=======
+    ln -sf ${nodePackages.typescript} $TARGET
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '';
 
   # fixup the argv[0] and replace __file__ with the corresponding path so

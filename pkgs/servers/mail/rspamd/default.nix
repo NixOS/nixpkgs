@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 { stdenv
 , lib
 , fetchFromGitHub
@@ -18,6 +19,11 @@
 , lapack
 , lua
 , libsodium
+=======
+{ stdenv, lib, fetchFromGitHub, cmake, perl
+, glib, luajit, openssl, pcre, pkg-config, sqlite, ragel, icu
+, hyperscan, jemalloc, blas, lapack, lua, libsodium
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , withBlas ? true
 , withHyperscan ? stdenv.isx86_64
 , withLuaJIT ? stdenv.isx86_64
@@ -28,12 +34,17 @@ assert withHyperscan -> stdenv.isx86_64;
 
 stdenv.mkDerivation rec {
   pname = "rspamd";
+<<<<<<< HEAD
   version = "3.6";
+=======
+  version = "3.5";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "rspamd";
     repo = "rspamd";
     rev = version;
+<<<<<<< HEAD
     hash = "sha256-GuWuJK73RE+cS8451m+bcmpZNQEzmZtexm19xgdDQeU=";
   };
 
@@ -46,6 +57,11 @@ stdenv.mkDerivation rec {
     })
   ];
 
+=======
+    hash = "sha256-3+ve5cPt4As6Hfvxw77waJgl2Imi9LpredFkYzTchbQ=";
+  };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   hardeningEnable = [ "pie" ];
 
   nativeBuildInputs = [ cmake pkg-config perl ];

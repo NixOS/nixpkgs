@@ -30,7 +30,11 @@ buildPythonPackage rec {
 
   buildInputs = [ glibcLocales ];
 
+<<<<<<< HEAD
   # strong cycle with parameterized
+=======
+  # strong cycle with paramaterized
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   doCheck = false;
   nativeCheckInputs = [ pyftpdlib mock psutil pytestCheckHook ];
   propagatedBuildInputs = [ six appdirs pytz setuptools ]

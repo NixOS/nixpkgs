@@ -1,11 +1,19 @@
 { fetchzip, base, back, gsmakeDerivation, gui }:
 gsmakeDerivation rec {
   pname = "gorm";
+<<<<<<< HEAD
   version = "1.3.1";
 
   src = fetchzip {
     url = "ftp://ftp.gnustep.org/pub/gnustep/dev-apps/gorm-${version}.tar.gz";
     sha256 = "sha256-W+NgbvLjt1PpDiauhzWFaU1/CUhmDACQz+GoyRUyWB8=";
+=======
+  version = "1.2.28";
+
+  src = fetchzip {
+    url = "ftp://ftp.gnustep.org/pub/gnustep/dev-apps/gorm-${version}.tar.gz";
+    sha256 = "0n92xr16w0wnwfzh7i9xhsly61pyz9l9f615dp324a6r3444hn0z";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
   buildInputs = [ base back gui ];
 

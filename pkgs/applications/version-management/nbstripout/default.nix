@@ -1,6 +1,9 @@
 { lib
 , python3
+<<<<<<< HEAD
 , fetchPypi
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , coreutils
 , git
 , mercurial
@@ -10,7 +13,11 @@ python3.pkgs.buildPythonApplication rec {
   version = "0.6.1";
   pname = "nbstripout";
 
+<<<<<<< HEAD
   src = fetchPypi {
+=======
+  src = python3.pkgs.fetchPypi {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     inherit pname version;
     hash = "sha256-kGW83RSIs4bk88CB/8HUj0UTovjYv00NmiggjF2v6dM=";
   };

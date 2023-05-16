@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 { lib, stdenv, fetchFromGitHub, rustPlatform, CoreServices, graphviz }:
+=======
+{ lib, stdenv, fetchFromGitHub, fetchpatch, rustPlatform, CoreServices, graphviz }:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 rustPlatform.buildRustPackage rec {
   pname = "mdbook-graphviz";

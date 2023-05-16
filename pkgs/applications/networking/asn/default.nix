@@ -15,13 +15,21 @@
 
 stdenv.mkDerivation rec {
   pname = "asn";
+<<<<<<< HEAD
   version = "0.74";
+=======
+  version = "0.73.3";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "nitefood";
     repo = "asn";
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-400I8aWQaPE7qCV/HqyPzuMmKpUyLc+RK7GCVgbt7JQ=";
+=======
+    sha256 = "sha256-O0Iu+7UAAf+v0gZdGTdBpdn9BZ/9OqTAA/u0WDiz9s8=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ makeWrapper ];

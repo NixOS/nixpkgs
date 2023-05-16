@@ -2,19 +2,29 @@
 , async-timeout
 , buildPythonPackage
 , fetchFromGitHub
+<<<<<<< HEAD
 , fetchpatch
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , cryptography
 , ifaddr
 , pytest-asyncio
 , pytestCheckHook
 , pythonOlder
 , setuptools
+<<<<<<< HEAD
 , wheel
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 buildPythonPackage rec {
   pname = "xknx";
+<<<<<<< HEAD
   version = "2.11.2";
+=======
+  version = "2.9.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -23,6 +33,7 @@ buildPythonPackage rec {
     owner = "XKNX";
     repo = pname;
     rev = "refs/tags/${version}";
+<<<<<<< HEAD
     hash = "sha256-rKvHb0wkWVuZO8M8uIQdOiY1N6DmGSpqUgz4YYbUfSM=";
   };
 
@@ -37,6 +48,13 @@ buildPythonPackage rec {
   nativeBuildInputs = [
     setuptools
     wheel
+=======
+    hash = "sha256-1Nt69lIle4vKSXfsTKWry1DXqCBEvBJz2JOOWrUYdX4=";
+  };
+
+  nativeBuildInputs = [
+    setuptools
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   propagatedBuildInputs = [

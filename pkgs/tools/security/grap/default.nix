@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 { lib, stdenv, fetchFromGitHub, boost, libseccomp, flex, swig4, bison, cmake, python3 }:
+=======
+{ lib, stdenv, fetchFromGitHub, boost, libseccomp, flex, python3Packages, swig4, bison, cmake, python3 }:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 stdenv.mkDerivation rec {
   pname = "grap";

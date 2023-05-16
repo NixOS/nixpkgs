@@ -1,4 +1,5 @@
 {
+<<<<<<< HEAD
   "packageVersion": "116.0.3-1",
   "source": {
     "rev": "116.0.3-1",
@@ -7,5 +8,15 @@
   "firefox": {
     "version": "116.0.3",
     "sha512": "194c50e9ba5a918c37fbef8cd72ffb98e5e9f51955d8172b6666a758b5f20777ca0a7f79dff0328305fb6dafefb102ab002e326f47d0965a4dc6d3e9287c42b9"
+=======
+  "packageVersion": "113.0-3",
+  "source": {
+    "rev": "113.0-3",
+    "sha256": "0pqjchkpdgsxdsylawsnbszjmx4aybyvlsc2a8qdnck5rpnxl1p2"
+  },
+  "firefox": {
+    "version": "113.0",
+    "sha512": "96b0f0774083270f4fcce06085b177ced25ba05da7291d777f1da1d5bbad30721bc6363b76e06ccb64fc092778c8326a426a8bfdfa3cbaafd4f1169b924744a5"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   }
 }

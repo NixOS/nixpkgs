@@ -17,7 +17,11 @@
 , git
 , autoconf
 , libtool
+<<<<<<< HEAD
 , typescript
+=======
+, nodePackages
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , ApplicationServices
 , Carbon
 , Cocoa
@@ -65,7 +69,11 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [
     cmake
     git
+<<<<<<< HEAD
     typescript
+=======
+    nodePackages.typescript
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     makeWrapper
   ] ++ lib.optionals stdenv.isLinux [
     pkg-config

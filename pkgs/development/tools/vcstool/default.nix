@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 { lib, python3Packages, fetchPypi
+=======
+{ lib, python3Packages
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , git, breezy, subversion }:
 
 with python3Packages;

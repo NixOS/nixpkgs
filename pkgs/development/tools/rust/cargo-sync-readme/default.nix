@@ -18,6 +18,10 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/phaazon/cargo-sync-readme";
     changelog = "https://github.com/phaazon/cargo-sync-readme/blob/${version}/CHANGELOG.md";
     license = licenses.bsd3;
+<<<<<<< HEAD
     maintainers = with maintainers; [ b4dm4n matthiasbeyer ];
+=======
+    maintainers = with maintainers; [ b4dm4n ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

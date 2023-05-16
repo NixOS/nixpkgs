@@ -11,7 +11,11 @@
 
 buildPythonPackage rec {
   pname = "pysigma-backend-opensearch";
+<<<<<<< HEAD
   version = "1.0.1";
+=======
+  version = "1.0.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -20,7 +24,11 @@ buildPythonPackage rec {
     owner = "SigmaHQ";
     repo = "pySigma-backend-opensearch";
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-g3kGaNq07yMu3mnRDeZB3Ck8wwzK3HcOIzkl36cNOs8=";
+=======
+    hash = "sha256-erqKAtTNMQQy/zUkpOd0LoQT2MY2mgz5yGuSQJ0QTjI=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   postPatch = ''

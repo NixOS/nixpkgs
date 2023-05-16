@@ -13,13 +13,21 @@
 stdenv.mkDerivation rec {
 
   pname = "savvycan";
+<<<<<<< HEAD
   version = "213";
+=======
+  version = "208";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "collin80";
     repo = "SavvyCAN";
     rev = "V${version}";
+<<<<<<< HEAD
     hash = "sha256-duITY6s/uadeBCFuG42JbLCaq7yaYv1qB8Q3GA8UJ0A=";
+=======
+    hash = "sha256-agvCl8c7LqGyIKe0K3PdzuBUqTJZtUr434134olbUMw=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   buildInputs = [ qtbase qttools qtserialbus qtserialport qtdeclarative ];

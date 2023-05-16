@@ -10,15 +10,24 @@
 
 stdenv.mkDerivation rec {
   pname = "libirecovery";
+<<<<<<< HEAD
   version = "1.1.0";
+=======
+  version = "1.0.0+date=2022-04-04";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   outputs = [ "out" "dev" ];
 
   src = fetchFromGitHub {
     owner = "libimobiledevice";
     repo = pname;
+<<<<<<< HEAD
     rev = version;
     hash = "sha256-84xwSOLwPU2Py6X2r6FYESxdc1EuuD6xHEXTUUEdvTE=";
+=======
+    rev = "82d235703044c5af9da8ad8f77351fd2046dac47";
+    hash = "sha256-OESN9qme+TlSt+ZMbR4F3z/3RN0I12R7fcSyURBqUVk=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [
@@ -32,10 +41,13 @@ stdenv.mkDerivation rec {
     libimobiledevice-glue
   ];
 
+<<<<<<< HEAD
   preAutoreconf = ''
     export RELEASE_VERSION=${version}
   '';
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   # Packager note: Not clear whether this needs a NixOS configuration,
   # as only the `idevicerestore` binary was tested so far (which worked
   # without further configuration).

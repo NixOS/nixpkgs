@@ -10,7 +10,11 @@ buildGoModule rec {
     rev = "v${version}";
     sha256 = "sha256-lIXkflWQcUcmRDX9iSszFLKpI8nSgkCCB2+GQn07+DM=";
   };
+<<<<<<< HEAD
   vendorHash = "sha256-Oigt7tAK4jhBQtfG1wdLHqi11NWu6uJn5fmuqTmR76E=";
+=======
+  vendorSha256 = "sha256-Oigt7tAK4jhBQtfG1wdLHqi11NWu6uJn5fmuqTmR76E=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   ldflags = [
     "-s"

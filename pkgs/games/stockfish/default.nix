@@ -11,23 +11,39 @@ let
            if stdenv.isAarch64 then "armv8" else
            "unknown";
 
+<<<<<<< HEAD
     nnueFile = "nn-5af11540bbfe.nnue";
     nnue = fetchurl {
       name = nnueFile;
       url = "https://tests.stockfishchess.org/api/nn/${nnueFile}";
       sha256 = "sha256-WvEVQLv+/LVOOMXdAAyrS0ad+nWZodVb5dJyLCCokps=";
+=======
+    nnueFile = "nn-6877cd24400e.nnue";
+    nnue = fetchurl {
+      name = nnueFile;
+      url = "https://tests.stockfishchess.org/api/nn/${nnueFile}";
+      sha256 = "sha256-aHfNJEAOAbGf8SrjBoriQhUoAr3TMOZve2cDhlJR1uM=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
 in
 
 stdenv.mkDerivation rec {
   pname = "stockfish";
+<<<<<<< HEAD
   version = "16";
+=======
+  version = "15";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "official-stockfish";
     repo = "Stockfish";
     rev = "sf_${version}";
+<<<<<<< HEAD
     sha256 = "sha256-ASy2vIP94lnSKgxixK1GoC84yAysaJpxeyuggV4MrP4=";
+=======
+    sha256 = "sha256-sK4Jw9BPGRvlm9oIcgGcmHe8G4GR4cEuD8MtDrHZKew=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   # This addresses a linker issue with Darwin

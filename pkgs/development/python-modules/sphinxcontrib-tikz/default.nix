@@ -31,7 +31,11 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "TikZ extension for Sphinx";
     homepage = "https://bitbucket.org/philexander/tikz";
+<<<<<<< HEAD
     maintainers = with maintainers; [ ];
+=======
+    maintainers = with maintainers; [ costrouc ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     license = licenses.bsd3;
   };
 

@@ -15,7 +15,11 @@ let
 
   plugins = callPackage ./generated.nix {
     inherit buildVimPluginFrom2Nix;
+<<<<<<< HEAD
     inherit (neovimUtils) buildNeovimPlugin;
+=======
+    inherit (neovimUtils) buildNeovimPluginFrom2Nix;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   # TL;DR

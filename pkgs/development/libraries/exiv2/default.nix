@@ -16,7 +16,11 @@
 
 stdenv.mkDerivation rec {
   pname = "exiv2";
+<<<<<<< HEAD
   version = "0.27.7";
+=======
+  version = "0.27.6";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   outputs = [ "out" "lib" "dev" "doc" "man" "static" ];
 
@@ -24,7 +28,11 @@ stdenv.mkDerivation rec {
     owner = "exiv2";
     repo  = "exiv2";
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-xytVGrLDS22n2/yydFTT6CsDESmhO9mFbPGX4yk+b6g=";
+=======
+    sha256 = "sha256-Ddy605EQhsATzmdhN3Zq+2ksYMrHEfucA+IqezYmjo4=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [
@@ -88,12 +96,15 @@ stdenv.mkDerivation rec {
      ''}
   '' + lib.optionalString (stdenv.isDarwin && stdenv.isAarch64) ''
     export LC_ALL=C
+<<<<<<< HEAD
   '' + lib.optionalString stdenv.isAarch32 ''
     # these tests are fixed in 0.28, remove when updating to 0.28
     rm -f ../tests/bugfixes/github/test_issue_1503.py
     rm -f ../tests/bugfixes/github/test_pr1475_AVIF.py
     rm -f ../tests/bugfixes/github/test_pr1475_HEIC.py
     rm -f ../tests/bugfixes/github/test_pr1475_HIF.py
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '';
 
   # With CMake we have to enable samples or there won't be

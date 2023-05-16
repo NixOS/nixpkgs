@@ -39,7 +39,11 @@ in
   config = mkIf cfg.ensureHeadlessSoftwareOpenGL {
 
     # TurboVNC has builtin support for Mesa llvmpipe's `swrast`
+<<<<<<< HEAD
     # software rendering to implement GLX (OpenGL on Xorg).
+=======
+    # software rendering to implemnt GLX (OpenGL on Xorg).
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     # However, just building TurboVNC with support for that is not enough
     # (it only takes care of the X server side part of OpenGL);
     # the indiviudual applications (e.g. `glxgears`) also need to directly load

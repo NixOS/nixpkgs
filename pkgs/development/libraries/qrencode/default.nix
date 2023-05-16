@@ -45,6 +45,9 @@ stdenv.mkDerivation rec {
     license = licenses.lgpl21Plus;
     maintainers = with maintainers; [ adolfogc yana ];
     platforms = platforms.all;
+<<<<<<< HEAD
     mainProgram = "qrencode";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

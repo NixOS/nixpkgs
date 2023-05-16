@@ -6,7 +6,10 @@
 , autoPatchelfHook
 , cairo
 , cups
+<<<<<<< HEAD
 , curl
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , dbus
 , dpkg
 , expat
@@ -38,7 +41,10 @@
 , libgcrypt
 , libglvnd
 , libnotify
+<<<<<<< HEAD
 , libpulseaudio
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , libuuid
 , libxcb
 , libxkbcommon
@@ -63,6 +69,7 @@
 }:
 
 stdenv.mkDerivation rec {
+<<<<<<< HEAD
   version = "6.1.11";
   pname = "feishu";
   packageHash = "e82bd3ef"; # A hash value used in the download url
@@ -70,6 +77,15 @@ stdenv.mkDerivation rec {
   src = fetchurl {
     url = "https://sf3-cn.feishucdn.com/obj/ee-appcenter/${packageHash}/Feishu-linux_x64-${version}.deb";
     hash = "sha256-IBNMNOcOYIdiTlr4+Ziju7Pbf9XJV0O+w2arHTa1zZ0=";
+=======
+  version = "5.18.11";
+  pname = "feishu";
+  packageHash = "9d89b152d581"; # A hash value used in the download url
+
+  src = fetchurl {
+    url = "https://sf3-cn.feishucdn.com/obj/ee-appcenter/${packageHash}/Feishu-linux_x64-${version}.deb";
+    hash = "sha256-93LEybYePIEbmE8mjRL95haMuBuY0xH6/8fhwF7/ctM=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [
@@ -84,12 +100,18 @@ stdenv.mkDerivation rec {
     # for autopatchelf
     alsa-lib
     cups
+<<<<<<< HEAD
     curl
     libXdamage
     libXtst
     libdrm
     libgcrypt
     libpulseaudio
+=======
+    libXdamage
+    libdrm
+    libgcrypt
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     libxshmfence
     mesa
     nspr
@@ -103,7 +125,10 @@ stdenv.mkDerivation rec {
     atk
     cairo
     cups
+<<<<<<< HEAD
     curl
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     dbus
     expat
     fontconfig
@@ -131,7 +156,10 @@ stdenv.mkDerivation rec {
     libgcrypt
     libglvnd
     libnotify
+<<<<<<< HEAD
     libpulseaudio
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     libuuid
     libxcb
     libxkbcommon
@@ -181,12 +209,15 @@ stdenv.mkDerivation rec {
 
     mkdir -p $out/bin
     ln -s $out/opt/bytedance/feishu/bytedance-feishu $out/bin/bytedance-feishu
+<<<<<<< HEAD
 
     # feishu comes with a bundled libcurl.so
     # and has many dependencies that are hard to satisfy
     # e.g. openldap version 2.4
     # so replace it with our own libcurl.so
     ln -sf ${curl}/lib/libcurl.so $out/opt/bytedance/feishu/libcurl.so
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '';
 
   meta = with lib; {

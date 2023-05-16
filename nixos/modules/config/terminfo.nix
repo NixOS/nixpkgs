@@ -16,6 +16,7 @@ with lib;
 
   config = {
 
+<<<<<<< HEAD
     # can be generated with:
     # attrNames (filterAttrs
     #  (_: drv: (builtins.tryEval (isDerivation drv && drv ? terminfo)).value)
@@ -34,6 +35,18 @@ with lib;
       tmux
       wezterm
       yaft
+=======
+    # can be generated with: filter (drv: (builtins.tryEval (drv ? terminfo)).value) (attrValues pkgs)
+    environment.systemPackages = mkIf config.environment.enableAllTerminfo (map (x: x.terminfo) (with pkgs; [
+      alacritty
+      foot
+      kitty
+      mtm
+      rxvt-unicode-unwrapped
+      rxvt-unicode-unwrapped-emoji
+      termite
+      wezterm
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     ]));
 
     environment.pathsToLink = [

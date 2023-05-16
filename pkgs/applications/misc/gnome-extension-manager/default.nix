@@ -22,13 +22,21 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-extension-manager";
+<<<<<<< HEAD
   version = "0.4.2";
+=======
+  version = "0.4.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "mjakeman";
     repo = "extension-manager";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-AQdYZsOaTk+EX1bi/kDI2GcVfu7ZKIyrFpNf/fRcJmo=";
+=======
+    sha256 = "sha256-M+jMEJXtzUP6dQp9vpyMhh1wuKG9YJ8i0ys92nbmmpw=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

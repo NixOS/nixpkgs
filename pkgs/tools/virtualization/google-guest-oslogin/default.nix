@@ -1,5 +1,11 @@
+<<<<<<< HEAD
 { lib
 , stdenv
+=======
+{ stdenv
+, lib
+, bashInteractive
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , curl
 , fetchFromGitHub
 , json_c
@@ -9,13 +15,21 @@
 
 stdenv.mkDerivation rec {
   pname = "google-guest-oslogin";
+<<<<<<< HEAD
   version = "20230821.01";
+=======
+  version = "20230502.00";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "GoogleCloudPlatform";
     repo = "guest-oslogin";
     rev = version;
+<<<<<<< HEAD
     sha256 = "sha256-1/iXn4jN44eZCLRYCDSsEz7WDnTsAwxxB62jvIRjvoU=";
+=======
+    sha256 = "sha256-66e0d6nE3880xsdI67O71TyZKQi3sGHkx7fLo3xVI7Q=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   postPatch = ''

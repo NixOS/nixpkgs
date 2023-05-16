@@ -2,13 +2,21 @@
 
 buildPythonPackage rec {
   pname = "libvirt";
+<<<<<<< HEAD
   version = "9.7.0";
+=======
+  version = "9.2.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitLab {
     owner = "libvirt";
     repo = "libvirt-python";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-DFZPZx+jkxdNha+h50IXxl6wOwA1VjudRICgxD2V4+k=";
+=======
+    hash = "sha256-htJPNFiY0WuQlgfFkLh3RUmnx2X4aQ0+iUQgZ1+HDp0=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ pkg-config ];

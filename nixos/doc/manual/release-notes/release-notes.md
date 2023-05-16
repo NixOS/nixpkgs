@@ -3,7 +3,10 @@
 This section lists the release notes for each stable version of NixOS and current unstable revision.
 
 ```{=include=} sections
+<<<<<<< HEAD
 rl-2311.section.md
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 rl-2305.section.md
 rl-2211.section.md
 rl-2205.section.md

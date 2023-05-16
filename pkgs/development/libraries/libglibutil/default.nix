@@ -2,13 +2,21 @@
 
 stdenv.mkDerivation rec {
   pname = "libglibutil";
+<<<<<<< HEAD
   version = "1.0.71";
+=======
+  version = "1.0.69";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "sailfishos";
     repo = pname;
     rev = version;
+<<<<<<< HEAD
     sha256 = "sha256-I58XN1Ku5VVmxuTZ6yPm8jWGKscwLOhetWC+6B6EZRE=";
+=======
+    sha256 = "sha256-+4aAujSmdrcRMnTd6wHHbyQBfC1LRskZ+8MA2d3hDnI=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   outputs = [ "out" "dev" ];

@@ -2,11 +2,19 @@
 
 stdenv.mkDerivation rec {
   pname = "jpexs";
+<<<<<<< HEAD
   version = "18.4.1";
 
   src = fetchzip {
     url = "https://github.com/jindrapetrik/jpexs-decompiler/releases/download/version${version}/ffdec_${version}.zip";
     sha256 = "sha256-aaEL3xJZkFw78zo3IyauWJM9kOo0rJTUSKmWsv9xQZ8=";
+=======
+  version = "15.0.0";
+
+  src = fetchzip {
+    url = "${meta.homepage}/releases/download/version${version}/ffdec_${version}.zip";
+    sha256 = "1w8sh0dzln6mxcbibyw6r9f9c8g0cbwxq4qbm5kawq00yydvwfza";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     stripRoot = false;
   };
 

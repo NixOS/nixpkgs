@@ -7,13 +7,22 @@
 
 buildGoModule rec {
   pname = "gotestwaf";
+<<<<<<< HEAD
   version = "0.4.3";
+=======
+  version = "0.4.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "wallarm";
     repo = pname;
+<<<<<<< HEAD
     rev = "refs/tags/v${version}";
     hash = "sha256-NalXG4I4BtDU7vfKb4H3gJERDQ92Y/46OWIgdg+7+MA=";
+=======
+    rev = "v${version}";
+    hash = "sha256-waYX7DMyLW0eSzpFRyiCJQdYLFGaAKSlvGYrdcRfCl4=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   vendorHash = null;
@@ -22,7 +31,11 @@ buildGoModule rec {
   doCheck = false;
 
   ldflags = [
+<<<<<<< HEAD
     "-X=github.com/wallarm/gotestwaf/internal/version.Version=v${version}"
+=======
+    "-X github.com/wallarm/gotestwaf/internal/version.Version=v${version}"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   postFixup = ''
@@ -39,7 +52,10 @@ buildGoModule rec {
   meta = with lib; {
     description = "Tool for API and OWASP attack simulation";
     homepage = "https://github.com/wallarm/gotestwaf";
+<<<<<<< HEAD
     changelog = "https://github.com/wallarm/gotestwaf/releases/tag/v${version}";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };

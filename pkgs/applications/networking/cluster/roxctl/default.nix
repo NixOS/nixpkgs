@@ -2,16 +2,27 @@
 
 buildGoModule rec {
   pname = "roxctl";
+<<<<<<< HEAD
   version = "4.1.2";
+=======
+  version = "4.0.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "stackrox";
     repo = "stackrox";
     rev = version;
+<<<<<<< HEAD
     sha256 = "sha256-5wNf80kiYnKg/urIQQqe4HijqxQweiFx0UktFiOTeaU=";
   };
 
   vendorHash = "sha256-5glD904guK+TR9YFzeuIyHOXrJblcEVi9EReQz0fCCA=";
+=======
+    sha256 = "sha256-HDhR85plO3UDYPZ/uBiGfNXm1txKQoA4KbYMCvQ2pwY=";
+  };
+
+  vendorHash = "sha256-kv5kNFFw57ZuNgwNMucmCPIwaAhpzT0hs2K1B65WxpU=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nativeBuildInputs = [ installShellFiles ];
 

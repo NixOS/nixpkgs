@@ -2,7 +2,10 @@
 , stdenv
 , gccStdenv
 , autoreconfHook
+<<<<<<< HEAD
 , autoconf-archive
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , pkg-config
 , fetchurl
 , fetchFromGitHub
@@ -17,6 +20,7 @@
 
 let
   pname = "7kaa";
+<<<<<<< HEAD
   version = "2.15.5";
 
   musicVersion = lib.versions.majorMinor version;
@@ -27,6 +31,17 @@ let
     src = fetchurl {
       url = "https://www.7kfans.com/downloads/7kaa-music-${musicVersion}.tar.bz2";
       hash = "sha256-sNdntuJXGaFPXzSpN0SoAi17wkr2YnW+5U38eIaVwcM=";
+=======
+  version = "2.15.4p1";
+
+  music = stdenv.mkDerivation {
+    pname = "7kaa-music";
+    version = lib.versions.majorMinor version;
+
+    src = fetchurl {
+      url = "https://www.7kfans.com/downloads/7kaa-music-${lib.versions.majorMinor version}.tar.bz2";
+      sha256 = "sha256-sNdntuJXGaFPXzSpN0SoAi17wkr2YnW+5U38eIaVwcM=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
 
     installPhase = ''
@@ -35,20 +50,36 @@ let
     '';
 
     meta.license = lib.licenses.unfree;
+<<<<<<< HEAD
   };
 in
+=======
+
+  };
+
+in
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 gccStdenv.mkDerivation rec {
   inherit pname version;
 
   src = fetchFromGitHub {
     owner = "the3dfxdude";
     repo = pname;
+<<<<<<< HEAD
     rev = "v${version}";
     hash = "sha256-Z6TsR6L6vwpzoKTj6xJ6HKy4DxcUBWmYBFi/a9pQBD8=";
   };
 
   nativeBuildInputs = [ autoreconfHook autoconf-archive pkg-config ];
 
+=======
+    rev = "9db2a43e1baee25a44b7aa7e9cedde9a107ed34b";
+    sha256 = "sha256-OAKaRuPP0/n8pO3wIUvGKs6n+U+EmZXUTywXYDAan1o=";
+  };
+
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   buildInputs = [ openal enet SDL2 curl gettext libiconv ];
 
   preAutoreconf = ''

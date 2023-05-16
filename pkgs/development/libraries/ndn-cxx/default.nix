@@ -5,8 +5,13 @@
 , pkg-config
 , python3
 , python3Packages
+<<<<<<< HEAD
 , waf
 , boost179
+=======
+, wafHook
+, boost
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , openssl
 , sqlite
 }:
@@ -22,6 +27,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-nnnxlkYVTSRB6ZcuIUDFol999+amGtqegHXK+06ITK8=";
   };
 
+<<<<<<< HEAD
   nativeBuildInputs = [ doxygen pkg-config python3 python3Packages.sphinx waf.hook ];
 
   buildInputs = [ boost179 openssl sqlite ];
@@ -30,6 +36,16 @@ stdenv.mkDerivation rec {
     "--with-openssl=${openssl.dev}"
     "--boost-includes=${boost179.dev}/include"
     "--boost-libs=${boost179.out}/lib"
+=======
+  nativeBuildInputs = [ doxygen pkg-config python3 python3Packages.sphinx wafHook ];
+
+  buildInputs = [ boost openssl sqlite ];
+
+  wafConfigureFlags = [
+    "--with-openssl=${openssl.dev}"
+    "--boost-includes=${boost.dev}/include"
+    "--boost-libs=${boost.out}/lib"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "--with-tests"
   ];
 

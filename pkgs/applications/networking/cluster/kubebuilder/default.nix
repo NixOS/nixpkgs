@@ -12,16 +12,27 @@
 
 buildGoModule rec {
   pname = "kubebuilder";
+<<<<<<< HEAD
   version = "3.11.1";
+=======
+  version = "3.10.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "kubernetes-sigs";
     repo = "kubebuilder";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-VT9S8Ijf684rowfoU1kvgPSTzR8ZGr3GwxWiYHWLANc=";
   };
 
   vendorHash = "sha256-5XUYmAfFH6UlLF09PqcSLUxkgZ5iHZGj0Vurab+Jl1g=";
+=======
+    hash = "sha256-W1FjmhZWBt/ThkSHHGAR4p1Vxal4WOCutlsHIDZeRZM=";
+  };
+
+  vendorHash = "sha256-/Kvn3KwSB/mxgBKM+383QHCnVTOt06ZP3gt7FGqA5aM=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   subPackages = ["cmd"];
 

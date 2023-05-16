@@ -6,7 +6,11 @@ A set of VM related utilities, that help in building some packages in more advan
 
 A bash script fragment that produces a disk image at `destination`.
 
+<<<<<<< HEAD
 ### Attributes {#vm-tools-createEmptyImage-attributes}
+=======
+### Attributes
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 * `size`. The disk size, in MiB.
 * `fullName`. Name that will be written to `${destination}/nix-support/full-name`.
@@ -20,14 +24,22 @@ Thus, any pure Nix derivation should run unmodified.
 
 If the build fails and Nix is run with the `-K/--keep-failed` option, a script `run-vm` will be left behind in the temporary build directory that allows you to boot into the VM and debug it interactively.
 
+<<<<<<< HEAD
 ### Attributes {#vm-tools-runInLinuxVM-attributes}
+=======
+### Attributes
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 * `preVM` (optional). Shell command to be evaluated *before* the VM is started (i.e., on the host).
 * `memSize` (optional, default `512`). The memory size of the VM in MiB.
 * `diskImage` (optional). A file system image to be attached to `/dev/sda`.
   Note that currently we expect the image to contain a filesystem, not a full disk image with a partition table etc.
 
+<<<<<<< HEAD
 ### Examples {#vm-tools-runInLinuxVM-examples}
+=======
+### Examples
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 Build the derivation hello inside a VM:
 ```nix
@@ -56,13 +68,21 @@ runInLinuxVM (hello.overrideAttrs (_: {
 
 Takes a file, such as an ISO, and extracts its contents into the store.
 
+<<<<<<< HEAD
 ### Attributes {#vm-tools-extractFs-attributes}
+=======
+### Attributes
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 * `file`. Path to the file to be extracted.
   Note that currently we expect the image to contain a filesystem, not a full disk image with a partition table etc.
 * `fs` (optional). Filesystem of the contents of the file.
 
+<<<<<<< HEAD
 ### Examples {#vm-tools-extractFs-examples}
+=======
+### Examples
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 Extract the contents of an ISO file:
 ```nix
@@ -82,7 +102,11 @@ Like [](#vm-tools-runInLinuxVM), but instead of using `stdenv` from the Nix stor
 
 Generate a script that can be used to run an interactive session in the given image.
 
+<<<<<<< HEAD
 ### Examples {#vm-tools-makeImageTestScript-examples}
+=======
+### Examples
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 Create a script for running a Fedora 27 VM:
 ```nix
@@ -100,7 +124,11 @@ makeImageTestScript diskImages.ubuntu2004x86_64
 
 A set of functions that build a predefined set of minimal Linux distributions images.
 
+<<<<<<< HEAD
 ### Images {#vm-tools-diskImageFuns-images}
+=======
+### Images
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 * Fedora
   * `fedora26x86_64`
@@ -126,12 +154,20 @@ A set of functions that build a predefined set of minimal Linux distributions im
   * `debian11i386`
   * `debian11x86_64`
 
+<<<<<<< HEAD
 ### Attributes {#vm-tools-diskImageFuns-attributes}
+=======
+### Attributes
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 * `size` (optional, defaults to `4096`). The size of the image, in MiB.
 * `extraPackages` (optional). A list names of additional packages from the distribution that should be included in the image.
 
+<<<<<<< HEAD
 ### Examples {#vm-tools-diskImageFuns-examples}
+=======
+### Examples
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 8GiB image containing Firefox in addition to the default packages:
 ```nix

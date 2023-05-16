@@ -48,6 +48,9 @@ stdenv.mkDerivation rec {
     license     = licenses.gpl2Plus;
     maintainers = with maintainers; [ jfrankenau koral lovek323 ];
     platforms   = platforms.all;
+<<<<<<< HEAD
     mainProgram = "ncmpcpp";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

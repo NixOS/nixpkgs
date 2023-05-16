@@ -1,7 +1,11 @@
 { lib }:
 
 lib.mapAttrs (lname: lset: let
+<<<<<<< HEAD
   defaultLicense = {
+=======
+  defaultLicense = rec {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     shortName = lname;
     free = true; # Most of our licenses are Free, explicitly declare unfree additions as such!
     deprecated = false;
@@ -98,11 +102,14 @@ in mkLicense lset) ({
     fullName = "Artistic License 1.0";
   };
 
+<<<<<<< HEAD
   artistic1-cl8 = {
     spdxId = "Artistic-1.0-cl8";
     fullName = "Artistic License 1.0 w/clause 8";
   };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   artistic2 = {
     spdxId = "Artistic-2.0";
     fullName = "Artistic License 2.0";
@@ -183,11 +190,14 @@ in mkLicense lset) ({
     fullName = ''BSD 3-clause "New" or "Revised" License'';
   };
 
+<<<<<<< HEAD
   bsd3Clear = {
     spdxId = "BSD-3-Clause-Clear";
     fullName = "BSD 3-Clause Clear License";
   };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   bsdOriginal = {
     spdxId = "BSD-4-Clause";
     fullName = ''BSD 4-clause "Original" or "Old" License'';
@@ -212,12 +222,15 @@ in mkLicense lset) ({
     fullName = "Business Source License 1.1";
     url = "https://mariadb.com/bsl11";
     free = false;
+<<<<<<< HEAD
     redistributable = true;
   };
 
   caossl = {
     fullName = "Computer Associates Open Source Licence Version 1.0";
     url = "http://jxplorer.org/licence.html";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   cal10 = {
@@ -225,12 +238,15 @@ in mkLicense lset) ({
     url = "https://opensource.org/licenses/CAL-1.0";
   };
 
+<<<<<<< HEAD
   caldera = {
     spdxId = "Caldera";
     fullName = "Caldera License";
     url = "http://www.lemis.com/grog/UNIX/ancient-source-all.pdf";
   };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   capec = {
     fullName = "Common Attack Pattern Enumeration and Classification";
     url = "https://capec.mitre.org/about/termsofuse.html";
@@ -252,12 +268,15 @@ in mkLicense lset) ({
     free = false;
   };
 
+<<<<<<< HEAD
   cc-by-nc-nd-40 = {
     spdxId = "CC-BY-NC-ND-4.0";
     fullName = "Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International";
     free = false;
   };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   cc-by-nc-sa-20 = {
     spdxId = "CC-BY-NC-SA-2.0";
     fullName = "Creative Commons Attribution Non Commercial Share Alike 2.0";
@@ -300,6 +319,7 @@ in mkLicense lset) ({
     free = false;
   };
 
+<<<<<<< HEAD
   cc-by-sa-10 = {
     spdxId = "CC-BY-SA-1.0";
     fullName = "Creative Commons Attribution Share Alike 1.0";
@@ -310,16 +330,21 @@ in mkLicense lset) ({
     fullName = "Creative Commons Attribution Share Alike 2.0";
   };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   cc-by-sa-25 = {
     spdxId = "CC-BY-SA-2.5";
     fullName = "Creative Commons Attribution Share Alike 2.5";
   };
 
+<<<<<<< HEAD
   cc-by-10 = {
     spdxId = "CC-BY-1.0";
     fullName = "Creative Commons Attribution 1.0";
   };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   cc-by-30 = {
     spdxId = "CC-BY-3.0";
     fullName = "Creative Commons Attribution 3.0";
@@ -506,6 +531,7 @@ in mkLicense lset) ({
     url = "http://www.schristiancollins.com/generaluser.php"; # license included in sources
   };
 
+<<<<<<< HEAD
   gfl = {
     fullName = "GUST Font License";
     url = "http://www.gust.org.pl/fonts/licenses/GUST-FONT-LICENSE.txt";
@@ -516,6 +542,8 @@ in mkLicense lset) ({
     url = "http://www.gust.org.pl/fonts/licenses/GUST-FONT-SOURCE-LICENSE.txt";
   };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   gpl1Only = {
     spdxId = "GPL-1.0-only";
     fullName = "GNU General Public License v1.0 only";
@@ -597,12 +625,15 @@ in mkLicense lset) ({
     fullName = "Imlib2 License";
   };
 
+<<<<<<< HEAD
   info-zip = {
     spdxId = "Info-ZIP";
     fullName = "Info-ZIP License";
     url = "http://www.info-zip.org/pub/infozip/license.html";
   };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   inria-compcert = {
     fullName  = "INRIA Non-Commercial License Agreement for the CompCert verified compiler";
     url       = "https://compcert.org/doc/LICENSE.txt";
@@ -650,6 +681,7 @@ in mkLicense lset) ({
     free = true;
   };
 
+<<<<<<< HEAD
   fairsource09 = {
     fullName = "Fair Source License, version 0.9";
     url = "https://fair.io/v0.9.txt";
@@ -664,17 +696,22 @@ in mkLicense lset) ({
     redistributable = true;
   };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   issl = {
     fullName = "Intel Simplified Software License";
     url = "https://software.intel.com/en-us/license/intel-simplified-software-license";
     free = false;
   };
 
+<<<<<<< HEAD
   knuth = {
     fullName = "Knuth CTAN License";
     spdxId = "Knuth-CTAN";
   };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   lal12 = {
     spdxId = "LAL-1.2";
     fullName = "Licence Art Libre 1.2";
@@ -685,12 +722,15 @@ in mkLicense lset) ({
     fullName = "Licence Art Libre 1.3";
   };
 
+<<<<<<< HEAD
   lens = {
     fullName = "Lens Terms of Service Agreement";
     url = "https://k8slens.dev/licenses/tos";
     free = false;
   };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   lgpl2Only = {
     spdxId = "LGPL-2.0-only";
     fullName = "GNU Library General Public License v2 only";
@@ -751,21 +791,27 @@ in mkLicense lset) ({
     url = "https://opensource.franz.com/preamble.html";
   };
 
+<<<<<<< HEAD
   lppl1 = {
     spdxId = "LPPL-1.0";
     fullName = "LaTeX Project Public License v1.0";
   };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   lppl12 = {
     spdxId = "LPPL-1.2";
     fullName = "LaTeX Project Public License v1.2";
   };
 
+<<<<<<< HEAD
   lppl13a = {
     spdxId = "LPPL-1.3a";
     fullName = "LaTeX Project Public License v1.3a";
   };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   lppl13c = {
     spdxId = "LPPL-1.3c";
     fullName = "LaTeX Project Public License v1.3c";
@@ -823,12 +869,15 @@ in mkLicense lset) ({
     fullName = "Microsoft Public License";
   };
 
+<<<<<<< HEAD
   mulan-psl2 = {
     spdxId = "MulanPSL-2.0";
     fullName = "Mulan Permissive Software License, Version 2";
     url = "https://license.coscl.org.cn/MulanPSL2";
   };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nasa13 = {
     spdxId = "NASA-1.3";
     fullName = "NASA Open Source Agreement 1.3";
@@ -887,11 +936,14 @@ in mkLicense lset) ({
     fullName = "OpenSSL License";
   };
 
+<<<<<<< HEAD
   opubl = {
     spdxId = "OPUBL-1.0";
     fullName = "Open Publication License v1.0";
   };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   osl2 = {
     spdxId = "OSL-2.0";
     fullName = "Open Software License 2.0";
@@ -1014,6 +1066,7 @@ in mkLicense lset) ({
     url = "https://github.com/thestk/stk/blob/master/LICENSE";
   };
 
+<<<<<<< HEAD
   sustainableUse = {
     shortName = "sustainable";
     fullName = "Sustainable Use License";
@@ -1022,6 +1075,8 @@ in mkLicense lset) ({
     redistributable = false; # only free to redistribute "for non-commercial purposes"
   };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   tsl = {
     shortName = "TSL";
     fullName = "Timescale License Agreegment";

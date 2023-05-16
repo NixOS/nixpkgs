@@ -2,5 +2,12 @@
     "owner": "netlify",
     "repo": "cli",
     "rev": "6c7e8c9a4db4e2e408f65e6098a194497944e306",
+<<<<<<< HEAD
     "hash": "sha256-YMnQrurZDJtfeHBCIzy6vToGHnqtdRGvWFPX5RcWyPg="
+=======
+    "sha256": "YMnQrurZDJtfeHBCIzy6vToGHnqtdRGvWFPX5RcWyPg=",
+    "fetchSubmodules": false,
+    "leaveDotGit": false,
+    "deepClone": false
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }

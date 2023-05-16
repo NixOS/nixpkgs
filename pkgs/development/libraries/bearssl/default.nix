@@ -56,7 +56,11 @@ stdenv.mkDerivation rec {
     '';
     license = lib.licenses.mit;
     platforms = lib.platforms.all;
+<<<<<<< HEAD
     maintainers = [ ];
+=======
+    maintainers = [ lib.maintainers.Profpatsch ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
 }

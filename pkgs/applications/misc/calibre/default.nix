@@ -32,6 +32,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "calibre";
+<<<<<<< HEAD
   version = "6.26.0";
 
   src = fetchurl {
@@ -39,17 +40,36 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-7UUnDtTRf162xKMUuZoKh+y47oeUtrOsFHUTAvtOryM=";
   };
 
+=======
+  version = "6.17.0";
+
+  src = fetchurl {
+    url = "https://download.calibre-ebook.com/${finalAttrs.version}/calibre-${finalAttrs.version}.tar.xz";
+    hash = "sha256-HKSruKXYUMH1lj43CA3Rp3lXNlONXE1P9gFLaH16No4=";
+  };
+
+  # https://sources.debian.org/patches/calibre/${finalAttrs.version}+dfsg-1
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   patches = [
     #  allow for plugin update check, but no calibre version check
     (fetchpatch {
       name = "0001-only-plugin-update.patch";
+<<<<<<< HEAD
       url = "https://raw.githubusercontent.com/debian-calibre/calibre/debian/${finalAttrs.version}+ds-1/debian/patches/0001-only-plugin-update.patch";
+=======
+      url = "https://raw.githubusercontent.com/debian-calibre/calibre/debian/${finalAttrs.version}-1/debian/patches/0001-only-plugin-update.patch";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       hash = "sha256-uL1mSjgCl5ZRLbSuKxJM6XTfvVwog70F7vgKtQzQNEQ=";
     })
     (fetchpatch {
       name = "0007-Hardening-Qt-code.patch";
+<<<<<<< HEAD
       url = "https://raw.githubusercontent.com/debian-calibre/calibre/debian/${finalAttrs.version}+ds-1/debian/patches/hardening/0007-Hardening-Qt-code.patch";
       hash = "sha256-2V8H6ElvzS5yw1di+XZvMssuokUT5zP3aTzpDpMsMac=";
+=======
+      url = "https://raw.githubusercontent.com/debian-calibre/calibre/debian/${finalAttrs.version}-1/debian/patches/0007-Hardening-Qt-code.patch";
+      hash = "sha256-9P1kGrQbWAWDzu5EUiQr7TiCPHRWUA8hxPpEvFpK20k=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     })
   ]
   ++ lib.optional (!unrarSupport) ./dont_build_unrar_plugin.patch;
@@ -203,7 +223,11 @@ stdenv.mkDerivation (finalAttrs: {
     license = if unrarSupport
               then lib.licenses.unfreeRedistributable
               else lib.licenses.gpl3Plus;
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [ pSub ];
+=======
+    maintainers = with lib.maintainers; [ pSub AndersonTorres ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     platforms = lib.platforms.unix;
     broken = stdenv.isDarwin;
   };

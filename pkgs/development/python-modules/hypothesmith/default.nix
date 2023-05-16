@@ -7,11 +7,15 @@
 , parso
 , pytestCheckHook
 , pytest-xdist
+<<<<<<< HEAD
 , pythonOlder
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 buildPythonPackage rec {
   pname = "hypothesmith";
+<<<<<<< HEAD
   version = "0.3.0";
   format = "setuptools";
 
@@ -20,6 +24,13 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-Uj2gTAY7hzko1sKO8WUGz2S/MXdwOYN+F+a73G4szNs=";
+=======
+  version = "0.2.3";
+
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-vc6EXsmE5uP+0h5l0ugrjrxt5cpeuTZJ39dgNMWQakY=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   patches = [
@@ -60,8 +71,13 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Hypothesis strategies for generating Python programs, something like CSmith";
     homepage = "https://github.com/Zac-HD/hypothesmith";
+<<<<<<< HEAD
     changelog = "https://github.com/Zac-HD/hypothesmith/blob/master/CHANGELOG.md";
     license = licenses.mpl20;
     maintainers = with maintainers; [ ];
+=======
+    license = licenses.mpl20;
+    maintainers = with maintainers; [ SuperSandro2000 ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

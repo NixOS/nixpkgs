@@ -1,6 +1,10 @@
 { lib, stdenv
 , cairo
 , fetchFromGitHub
+<<<<<<< HEAD
+=======
+, gettext
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , glib
 , gobject-introspection
 , gtksourceview3
@@ -21,13 +25,21 @@ assert withGui -> !stdenv.isDarwin;
 
 stdenv.mkDerivation rec {
   pname = "rmlint";
+<<<<<<< HEAD
   version = "2.10.2";
+=======
+  version = "2.10.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "sahib";
     repo = "rmlint";
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-pOo1YfeqHUU6xyBRFbcj2lX1MHJ+a5Hi31BMC1nYZGo=";
+=======
+    sha256 = "15xfkcw1bkfyf3z8kl23k3rlv702m0h7ghqxvhniynvlwbgh6j2x";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   patches = [
@@ -42,7 +54,10 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals withGui [
     makeWrapper
     wrapGAppsHook
+<<<<<<< HEAD
     gobject-introspection
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   buildInputs = [
@@ -52,6 +67,10 @@ stdenv.mkDerivation rec {
     util-linux
   ] ++ lib.optionals withGui [
     cairo
+<<<<<<< HEAD
+=======
+    gobject-introspection
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     gtksourceview3
     pango
     polkit

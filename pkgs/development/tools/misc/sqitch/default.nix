@@ -10,7 +10,11 @@
 
 let
   sqitch = perlPackages.AppSqitch;
+<<<<<<< HEAD
   modules = with perlPackages; [ AlgorithmBackoff ]
+=======
+  modules = with perlPackages; [ ]
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     ++ lib.optional mysqlSupport DBDmysql
     ++ lib.optional postgresqlSupport DBDPg
     ++ lib.optional templateToolkitSupport TemplateToolkit;

@@ -7,11 +7,19 @@
 
 stdenv.mkDerivation rec {
   pname = "gnunet";
+<<<<<<< HEAD
   version = "0.19.4";
 
   src = fetchurl {
     url = "mirror://gnu/gnunet/${pname}-${version}.tar.gz";
     sha256 = "sha256-AKY99AjVmH9bqaUEQfKncYK9n7MvHjAq5WOslOesAJs=";
+=======
+  version = "0.17.6";
+
+  src = fetchurl {
+    url = "mirror://gnu/gnunet/${pname}-${version}.tar.gz";
+    sha256 = "sha256-JJNY7zsQzpmBB4H+2uxSam6rlDwSDku6CWrt+Rwa/EA=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   enableParallelBuilding = true;
@@ -70,6 +78,9 @@ stdenv.mkDerivation rec {
     license = licenses.agpl3Plus;
     maintainers = with maintainers; [ pstn vrthra ];
     platforms = platforms.gnu ++ platforms.linux;
+<<<<<<< HEAD
     changelog = "https://git.gnunet.org/gnunet.git/tree/ChangeLog?h=v${version}";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

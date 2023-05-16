@@ -1,19 +1,36 @@
+<<<<<<< HEAD
 { lib, stdenv, fetchFromGitHub, git, makeWrapper, openssl, coreutils, util-linux, gnugrep, gnused, gawk, testers, transcrypt }:
 
 stdenv.mkDerivation rec {
   pname = "transcrypt";
   version = "2.2.3";
+=======
+{ lib, stdenv, fetchFromGitHub, git, makeWrapper, openssl, coreutils, util-linux, gnugrep, gnused, gawk }:
+
+stdenv.mkDerivation rec {
+  pname = "transcrypt";
+  version = "1.1.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "elasticdog";
     repo = "transcrypt";
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "+B8CYHDneDd0GwiTwQK6YVScDMKao2JXFpGk9PY6/EE=";
+=======
+    sha256 = "1dkr69plk16wllk5bzlkchrzw63pk239dgbjhrb3mb61i065jdam";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ git openssl coreutils util-linux gnugrep gnused gawk ];
 
+<<<<<<< HEAD
+=======
+  patches = [ ./helper-scripts_depspathprefix.patch ];
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   installPhase = ''
     install -m 755 -D transcrypt $out/bin/transcrypt
     install -m 644 -D man/transcrypt.1 $out/share/man/man1/transcrypt.1
@@ -30,12 +47,15 @@ stdenv.mkDerivation rec {
     chmod +x $out/bin/transcrypt-depspathprefix
   '';
 
+<<<<<<< HEAD
   passthru.tests.version = testers.testVersion {
     package = transcrypt;
     command = "transcrypt --version";
     version = "transcrypt ${version}";
   };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   meta = with lib; {
     description = "Transparently encrypt files within a Git repository";
     longDescription = ''

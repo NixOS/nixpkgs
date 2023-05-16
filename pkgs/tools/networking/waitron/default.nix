@@ -34,6 +34,10 @@ buildGoModule rec {
     license =  licenses.asl20;
     maintainers = with maintainers; [ guibert ];
     platforms = platforms.linux;
+<<<<<<< HEAD
     broken = true; # vendor isn't reproducible with go > 1.17: nix-build -A $name.goModules --check
+=======
+    broken = true; # vendor isn't reproducible with go > 1.17: nix-build -A $name.go-modules --check
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

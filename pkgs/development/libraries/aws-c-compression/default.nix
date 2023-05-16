@@ -7,13 +7,21 @@
 
 stdenv.mkDerivation rec {
   pname = "aws-c-compression";
+<<<<<<< HEAD
   version = "0.2.17";
+=======
+  version = "0.2.16";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "awslabs";
     repo = "aws-c-compression";
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-XtmSThfz4Cu7CygYrLNQifDCQ6l/c/0OR0lX+OxCYJM=";
+=======
+    sha256 = "sha256-aQ5UsMms8aJh5yrE9of1AQgIGTAk9vyBRaybwYqUY68=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

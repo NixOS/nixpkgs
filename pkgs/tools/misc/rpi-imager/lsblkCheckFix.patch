@@ -1,16 +1,31 @@
 diff --git a/CMakeLists.txt b/CMakeLists.txt
+<<<<<<< HEAD
 index 170ce7a..063a137 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
 @@ -332,11 +332,6 @@ else()
+=======
+index 3d7fc79..8ce72b9 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -229,11 +229,6 @@ else()
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
          if (NOT LSBLK)
              message(FATAL_ERROR "Unable to locate lsblk (used for disk enumeration)")
          endif()
 -
+<<<<<<< HEAD
 -        execute_process(COMMAND "${LSBLK}" "--json" OUTPUT_QUIET RESULT_VARIABLE ret)
+=======
+-        execute_process(COMMAND "${LSBLK}" "--json" RESULT_VARIABLE ret)
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 -        if (ret EQUAL "1")
 -            message(FATAL_ERROR "util-linux package too old. lsblk does not support --json (used for disk enumeration)")
 -        endif()
      endif()
+<<<<<<< HEAD
 
+=======
+ 
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
      configure_file(

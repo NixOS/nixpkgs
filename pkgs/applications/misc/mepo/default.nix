@@ -1,10 +1,19 @@
 { lib
 , stdenv
 , fetchFromSourcehut
+<<<<<<< HEAD
+=======
+, pkg-config
+, zig
+, makeWrapper
+, busybox
+, curl
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , SDL2
 , SDL2_gfx
 , SDL2_image
 , SDL2_ttf
+<<<<<<< HEAD
 , busybox
 , curl
 , findutils
@@ -55,6 +64,59 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   postFixup = ''
+=======
+, findutils
+, jq
+, ncurses
+, gnome
+, xorg
+, util-linux
+, gpsd
+, geoclue2-with-demo-agent
+}:
+
+stdenv.mkDerivation rec {
+  pname = "mepo";
+  version = "1.1";
+
+  src = fetchFromSourcehut {
+    owner = "~mil";
+    repo = pname;
+    rev = version;
+    hash = "sha256-OIZ617QLjiTiDwcsn0DnRussYtjDkVyifr2mdSqA98A=";
+  };
+
+  nativeBuildInputs = [ pkg-config zig makeWrapper ];
+
+  buildInputs = [
+    curl SDL2 SDL2_gfx SDL2_image SDL2_ttf jq ncurses
+  ];
+
+  preBuild = ''
+    export HOME=$TMPDIR
+  '';
+
+  doCheck = true;
+  checkPhase = ''
+    runHook preCheck
+
+    zig build test
+
+    runHook postCheck
+  '';
+
+  installPhase = ''
+    runHook preInstall
+
+    zig build -Drelease-safe=true -Dcpu=baseline --prefix $out install
+    install -d $out/share/man/man1
+    $out/bin/mepo -docman > $out/share/man/man1/mepo.1
+
+    runHook postInstall
+  '';
+
+  postInstall = ''
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     substituteInPlace $out/bin/mepo_ui_menu_user_pin_updater.sh \
       --replace /usr/libexec/geoclue-2.0 ${geoclue2-with-demo-agent}/libexec/geoclue-2.0
     substituteInPlace $out/bin/mepo_ui_central_menu.sh \
@@ -62,6 +124,7 @@ stdenv.mkDerivation (finalAttrs: {
       --replace " ls " " ls -a " #circumvent wrapping for script detection
     for program in $out/bin/* ; do
       wrapProgram $program \
+<<<<<<< HEAD
         --suffix PATH : $out/bin:${lib.makeBinPath ([
           busybox
           curl
@@ -96,3 +159,21 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.linux;
   };
 })
+=======
+        --suffix PATH : $out/bin:${lib.makeBinPath ([ jq ncurses curl busybox findutils util-linux gpsd gnome.zenity xorg.xwininfo ])}
+    done
+  '';
+
+  meta = with lib; {
+    description = "Fast, simple, and hackable OSM map viewer";
+    longDescription = ''
+      It is recommended to use the corresponding NixOS module.
+    '';
+
+    homepage = "https://mepo.milesalan.com";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ sikmir McSinyx laalsaas ];
+    platforms = platforms.linux;
+  };
+}
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)

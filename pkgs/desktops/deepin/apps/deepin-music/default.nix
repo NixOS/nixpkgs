@@ -16,7 +16,10 @@
 , kcodecs
 , ffmpeg
 , libvlc
+<<<<<<< HEAD
 , libpulseaudio
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , libcue
 , taglib
 , gsettings-qt
@@ -28,18 +31,33 @@
 
 stdenv.mkDerivation rec {
   pname = "deepin-music";
+<<<<<<< HEAD
   version = "6.2.31";
+=======
+  version = "6.2.21";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
+<<<<<<< HEAD
     hash = "sha256-OXyHB47orv9ix+Jg0b7wciA6DWUsXzFmIg4SM+piO3c=";
+=======
+    sha256 = "sha256-sN611COCWy1gF/BZZqZ154uYuRo9HsbJw2wXe9OJ+iQ=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   postPatch = ''
     substituteInPlace src/music-player/CMakeLists.txt \
+<<<<<<< HEAD
       --replace "/usr/include/vlc" "${libvlc}/include/vlc"
+=======
+      --replace "/usr/include/vlc" "${libvlc}/include/vlc" \
+      --replace "/usr/share" "$out/share"
+    substituteInPlace src/libmusic-plugin/CMakeLists.txt \
+      --replace "/usr/lib/deepin-aiassistant" "$out/lib/deepin-aiassistant"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     substituteInPlace src/music-player/data/deepin-music.desktop \
       --replace "/usr/bin/deepin-music" "$out/bin/deepin-music"
   '';
@@ -63,7 +81,10 @@ stdenv.mkDerivation rec {
     kcodecs
     ffmpeg
     libvlc
+<<<<<<< HEAD
     libpulseaudio
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     libcue
     taglib
     gsettings-qt

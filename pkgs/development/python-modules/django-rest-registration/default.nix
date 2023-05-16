@@ -10,7 +10,11 @@
 
 buildPythonPackage rec {
   pname = "django-rest-registration";
+<<<<<<< HEAD
   version = "0.8.2";
+=======
+  version = "0.7.3";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -18,8 +22,13 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "apragacz";
     repo = pname;
+<<<<<<< HEAD
     rev = "refs/tags/v${version}";
     hash = "sha256-kGZ88Z5nV3HChImmPurHoewobsjotZQ4q9RngBYGe5g=";
+=======
+    rev = "refs/tags/${version}";
+    hash = "sha256-JoIeVjl5s60ilq9kU28Jo+GaYRKU61hoqy1GzYmMdZQ=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [

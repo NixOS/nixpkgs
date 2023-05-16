@@ -33,8 +33,12 @@ rustPlatform.buildRustPackage rec {
 
   postInstall = ''
     install -D 70-solo2.rules $out/lib/udev/rules.d/70-solo2.rules
+<<<<<<< HEAD
     installShellCompletion target/*/release/solo2.{bash,fish}
     installShellCompletion --zsh target/*/release/_solo2
+=======
+    installShellCompletion target/*/release/solo2.{bash,fish,zsh}
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '';
 
   doCheck = true;

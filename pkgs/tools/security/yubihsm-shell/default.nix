@@ -58,9 +58,12 @@ stdenv.mkDerivation rec {
     "-DDISABLE_LTO=ON"
   ];
 
+<<<<<<< HEAD
   # causes redefinition of _FORTIFY_SOURCE
   hardeningDisable = [ "fortify3" ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   meta = with lib; {
     description = "yubihsm-shell and libyubihsm";
     homepage = "https://github.com/Yubico/yubihsm-shell";

@@ -21,9 +21,16 @@ python3.pkgs.buildPythonApplication rec {
 
   buildInputs = [
     gtk3
+<<<<<<< HEAD
   ];
 
   nativeBuildInputs = [ wrapGAppsHook gobject-introspection ];
+=======
+    gobject-introspection
+  ];
+
+  nativeBuildInputs = [ wrapGAppsHook ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   propagatedBuildInputs = with python3.pkgs; [
     pygobject3

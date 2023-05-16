@@ -28,7 +28,11 @@ stdenv.mkDerivation rec {
   buildInputs = [ avahi ];
 
   unpackPhase = ''
+<<<<<<< HEAD
     unpackFile $src
+=======
+    unpackFile ${src}
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     echo y | ./${installerName}.sh
     sourceRoot="NDI SDK for Linux";
   '';

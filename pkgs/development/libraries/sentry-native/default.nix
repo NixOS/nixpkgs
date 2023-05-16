@@ -9,13 +9,21 @@
 
 stdenv.mkDerivation rec {
   pname = "sentry-native";
+<<<<<<< HEAD
   version = "0.6.5";
+=======
+  version = "0.6.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "getsentry";
     repo = "sentry-native";
     rev = version;
+<<<<<<< HEAD
     hash = "sha256-x9xqcQQQS6hUcZaF8Ei8OmDXUP+y3prVyjlzwm4+4ko=";
+=======
+    hash = "sha256-cKDKdwkmvmB7O5tvCYtAHFdZFlcTk3I95AuA0dr+oX8=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

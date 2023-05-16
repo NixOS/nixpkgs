@@ -22,12 +22,20 @@
 
 buildPythonPackage rec {
   pname = "python-manilaclient";
+<<<<<<< HEAD
   version = "4.6.0";
+=======
+  version = "4.4.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
+<<<<<<< HEAD
     hash = "sha256-JFdpPX2lVSGN/jVsKMOOKrPm51fwpD476TnQo/0AYWQ=";
+=======
+    hash = "sha256-iKBbR4h9J9OiQMHjUHxUVk+NbCRUYmIPtWxRwVVGQtY=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

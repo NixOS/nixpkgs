@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 { lib
 , stdenv
 , cmake
@@ -18,13 +19,36 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
   ];
+=======
+{ lib, stdenv, fetchFromGitHub, cmake }:
+
+stdenv.mkDerivation rec {
+  pname = "libmcfp";
+  version = "1.2.3";
+
+  src = fetchFromGitHub {
+    owner = "mhekkel";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "sha256-Mi5nj8vR1j3V7fIMBrSyhD57emmlkCb0F08+5s7Usj0=";
+  };
+
+  nativeBuildInputs = [ cmake ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   meta = with lib; {
     description = "Header only library that can collect configuration options from command line arguments";
     homepage = "https://github.com/mhekkel/libmcfp";
+<<<<<<< HEAD
     changelog = "https://github.com/mhekkel/libmcfp/blob/${finalAttrs.src.rev}/changelog";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     license = licenses.bsd2;
     maintainers = with maintainers; [ natsukium ];
     platforms = platforms.unix;
   };
+<<<<<<< HEAD
 })
+=======
+}
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)

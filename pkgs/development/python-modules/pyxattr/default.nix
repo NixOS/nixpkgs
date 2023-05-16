@@ -21,6 +21,9 @@ buildPythonPackage rec {
     meta = with lib; {
       description = "A Python extension module which gives access to the extended attributes for filesystem objects available in some operating systems";
       license = licenses.lgpl21Plus;
+<<<<<<< HEAD
       inherit (pkgs.attr.meta) platforms;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
 }

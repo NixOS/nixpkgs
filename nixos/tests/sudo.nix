@@ -2,6 +2,7 @@
 
 let
   password = "helloworld";
+<<<<<<< HEAD
 in
   import ./make-test-python.nix ({ lib, pkgs, ...} : {
     name = "sudo";
@@ -9,6 +10,19 @@ in
 
     nodes.machine =
       { lib, ... }:
+=======
+
+in
+  import ./make-test-python.nix ({ pkgs, ...} : {
+    name = "sudo";
+    meta = with pkgs.lib.maintainers; {
+      maintainers = [ lschuermann ];
+    };
+
+    nodes.machine =
+      { lib, ... }:
+      with lib;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       {
         users.groups = { foobar = {}; barfoo = {}; baz = { gid = 1337; }; };
         users.users = {

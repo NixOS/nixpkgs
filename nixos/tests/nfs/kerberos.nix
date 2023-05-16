@@ -1,5 +1,10 @@
 import ../make-test-python.nix ({ pkgs, lib, ... }:
 
+<<<<<<< HEAD
+=======
+with lib;
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 let
   krb5 =
     { enable = true;

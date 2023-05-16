@@ -28,13 +28,21 @@
 
 stdenv.mkDerivation rec {
   pname = "profanity";
+<<<<<<< HEAD
   version = "0.14.0";
+=======
+  version = "0.13.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "profanity-im";
     repo = "profanity";
     rev = version;
+<<<<<<< HEAD
     hash = "sha256-u/mp+vtMj602LfrulA+nhLNH8K6sqKIOuPJzhZusVmE=";
+=======
+    hash = "sha256-A9ZgHliLb4v/3W5tm5zD0WN8mRmxLE/MUSTBXGvBCCM=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   patches = [

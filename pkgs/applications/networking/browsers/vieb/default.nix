@@ -2,20 +2,32 @@
 
 buildNpmPackage rec {
   pname = "vieb";
+<<<<<<< HEAD
   version = "10.2.0";
+=======
+  version = "9.7.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "Jelmerro";
     repo = pname;
     rev = version;
+<<<<<<< HEAD
     hash = "sha256-eI+doYI5kssuVLNLlAj67CRvBuWQ+TRm0RKXPcW+S8c=";
+=======
+    hash = "sha256-1G3hhqWMClxdwt3aOmnAbEV+n2ui5X6Cgf30391OVi0=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   postPatch = ''
     sed -i '/"electron"/d' package.json
   '';
 
+<<<<<<< HEAD
   npmDepsHash = "sha256-Emiw5ZlHh4+YqtW+T3iQW/ldr1Exx/66vsQteCijObQ=";
+=======
+  npmDepsHash = "sha256-t8fKbh9M63CCkxwlXj3zGvP8y5uLMqbyNd8BimBhIBc=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   dontNpmBuild = true;
 
   nativeBuildInputs = [ makeWrapper ] ++ lib.optional stdenv.isAarch64 python3;

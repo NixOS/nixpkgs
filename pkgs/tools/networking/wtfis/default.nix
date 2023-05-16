@@ -1,6 +1,12 @@
 { lib
+<<<<<<< HEAD
 , python3
 , fetchFromGitHub
+=======
+, stdenv
+, fetchFromGitHub
+, python3
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 let

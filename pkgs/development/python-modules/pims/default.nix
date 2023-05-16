@@ -5,7 +5,11 @@
 , numpy
 , pytestCheckHook
 , pythonOlder
+<<<<<<< HEAD
 , scikit-image
+=======
+, scikitimage
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , slicerator
 }:
 
@@ -31,7 +35,11 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
+<<<<<<< HEAD
     scikit-image
+=======
+    scikitimage
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   pythonImportsCheck = [
@@ -40,7 +48,11 @@ buildPythonPackage rec {
 
   pytestFlagsArray = [
     "-W"
+<<<<<<< HEAD
     "ignore::Warning"
+=======
+    "ignore::DeprecationWarning"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   disabledTests = [
@@ -48,6 +60,7 @@ buildPythonPackage rec {
     "TestVideo_ImageIO"
   ];
 
+<<<<<<< HEAD
   disabledTestPaths = [
     # AssertionError: Tuples differ: (377, 505, 4) != (384, 512, 4)
     "pims/tests/test_display.py"
@@ -59,5 +72,13 @@ buildPythonPackage rec {
     changelog = "https://github.com/soft-matter/pims/releases/tag/v${version}";
     license = licenses.bsd3;
     maintainers = with maintainers; [ ];
+=======
+  meta = with lib; {
+    description = "Python Image Sequence: Load video and sequential images in many formats with a simple, consistent interface";
+    homepage = "https://github.com/soft-matter/pims";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ costrouc ];
+    broken = true;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

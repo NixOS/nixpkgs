@@ -2,13 +2,21 @@
 
 stdenv.mkDerivation rec {
   pname = "ncpamixer";
+<<<<<<< HEAD
   version = "1.3.3.5";
+=======
+  version = "1.3.3.3";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "fulhax";
     repo = "ncpamixer";
     rev = version;
+<<<<<<< HEAD
     sha256 = "sha256-iwwfuMZn8HwnTIEBgTuvnJNlRlPt4G+j/piXO8S7mPc=";
+=======
+    sha256 = "sha256-TxSfiBSsCAImzCXv6o64Jy7tSefpYCkU0xtuHx26Ss4=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ cmake pkg-config ];
@@ -24,6 +32,10 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/fulhax/ncpamixer";
     license = licenses.mit;
     platforms = platforms.linux;
+<<<<<<< HEAD
     maintainers = teams.c3d2.members;
+=======
+    maintainers = with maintainers; [ StijnDW ] ++ teams.c3d2.members;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

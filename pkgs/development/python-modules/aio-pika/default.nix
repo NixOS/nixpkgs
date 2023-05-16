@@ -15,7 +15,11 @@
 
 buildPythonPackage rec {
   pname = "aio-pika";
+<<<<<<< HEAD
   version = "9.1.3";
+=======
+  version = "9.0.7";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -24,7 +28,11 @@ buildPythonPackage rec {
     owner = "mosquito";
     repo = pname;
     rev = "refs/tags/${version}";
+<<<<<<< HEAD
     hash = "sha256-QCM/9Vt9/uXylaU8xymXJEjVd6sFRcVhpr2CGjB0AoY=";
+=======
+    hash = "sha256-4RZxpLQ8YcPRXrF0mJcteUwejlIQx0CIy0cFpfMW/RU=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

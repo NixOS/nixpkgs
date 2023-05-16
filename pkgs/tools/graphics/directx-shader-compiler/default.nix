@@ -2,7 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "directx-shader-compiler";
+<<<<<<< HEAD
   version = "1.7.2308";
+=======
+  version = "1.7.2212.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   # Put headers in dev, there are lot of them which aren't necessary for
   # using the compiler binary.
@@ -12,7 +16,11 @@ stdenv.mkDerivation rec {
     owner = "microsoft";
     repo = "DirectXShaderCompiler";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-pfdAD+kRpmqW29Y8jn6+X5Ujy/9cIvisYr0tH1PuxsY=";
+=======
+    hash = "sha256-old/vGNoj0mimuvd/RkwNeynBp+gBrkwQ7ah2oUZll0=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     fetchSubmodules = true;
   };
 

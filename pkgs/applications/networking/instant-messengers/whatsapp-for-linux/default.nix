@@ -27,13 +27,21 @@
 
 stdenv.mkDerivation rec {
   pname = "whatsapp-for-linux";
+<<<<<<< HEAD
   version = "1.6.4";
+=======
+  version = "1.6.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "eneshecan";
     repo = pname;
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-DU9tvIvDfOtBydR68yeRMFYdMjiBrOobCDXIZMmm7pQ=";
+=======
+    sha256 = "sha256-odE5syAFasGosc1WMU/pvQtk3YxuCci1YevZqNKfzYw=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

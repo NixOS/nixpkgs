@@ -17,7 +17,11 @@
 
 buildPythonPackage rec {
   pname = "databricks-cli";
+<<<<<<< HEAD
   version = "0.17.7";
+=======
+  version = "0.17.6";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -26,7 +30,11 @@ buildPythonPackage rec {
     owner = "databricks";
     repo = pname;
     rev = "refs/tags/${version}";
+<<<<<<< HEAD
     hash = "sha256-Eg6qpoEvWlbOJbMIkbJiHfHVrglVfVNq/TCOhQxukl0=";
+=======
+    hash = "sha256-K20fhfdJuABqpbm8O8PSA9pIW8Uu1MdlP3r5E49pt6Q=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [

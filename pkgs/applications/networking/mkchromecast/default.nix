@@ -13,7 +13,10 @@
 , opusTools
 , gst_all_1
 , enableSonos ? true
+<<<<<<< HEAD
 , qtwayland
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 let packages = [
   vorbis-tools
@@ -28,18 +31,29 @@ let packages = [
 ] ++ lib.optionals stdenv.isLinux [ pulseaudio ];
 
 in
+<<<<<<< HEAD
 python3Packages.buildPythonApplication {
   pname = "mkchromecast-unstable";
   version = "2022-10-31";
 
   src = fetchFromGitHub {
+=======
+python3Packages.buildPythonApplication rec {
+  pname = "mkchromecast-unstable";
+  version = "2022-10-31";
+
+  src = fetchFromGitHub rec {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     owner = "muammar";
     repo = "mkchromecast";
     rev = "0de9fd78c4122dec4f184aeae2564790b45fe6dc";
     sha256 = "sha256-dxsIcBPrZaXlsfzOEXhYj2qoK5LRducJG2ggMrMMl9Y=";
   };
 
+<<<<<<< HEAD
   buildInputs = lib.optional stdenv.isLinux qtwayland;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   propagatedBuildInputs = with python3Packages; ([
     pychromecast
     psutil

@@ -8,6 +8,10 @@
 , wayland-scanner
 , libjpeg
 , libpng
+<<<<<<< HEAD
+=======
+, xorg
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , libX11
 , libGL
 , libdrm

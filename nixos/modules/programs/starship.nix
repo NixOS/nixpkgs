@@ -43,21 +43,33 @@ in
 
   config = mkIf cfg.enable {
     programs.bash.${initOption} = ''
+<<<<<<< HEAD
       if [[ $TERM != "dumb" ]]; then
+=======
+      if [[ $TERM != "dumb" && (-z $INSIDE_EMACS || $INSIDE_EMACS == "vterm") ]]; then
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         export STARSHIP_CONFIG=${settingsFile}
         eval "$(${pkgs.starship}/bin/starship init bash)"
       fi
     '';
 
     programs.fish.${initOption} = ''
+<<<<<<< HEAD
       if test "$TERM" != "dumb"
+=======
+      if test "$TERM" != "dumb" -a \( -z "$INSIDE_EMACS" -o "$INSIDE_EMACS" = "vterm" \)
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         set -x STARSHIP_CONFIG ${settingsFile}
         eval (${pkgs.starship}/bin/starship init fish)
       end
     '';
 
     programs.zsh.${initOption} = ''
+<<<<<<< HEAD
       if [[ $TERM != "dumb" ]]; then
+=======
+      if [[ $TERM != "dumb" && (-z $INSIDE_EMACS || $INSIDE_EMACS == "vterm") ]]; then
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         export STARSHIP_CONFIG=${settingsFile}
         eval "$(${pkgs.starship}/bin/starship init zsh)"
       fi

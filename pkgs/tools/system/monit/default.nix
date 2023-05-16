@@ -24,13 +24,23 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ bison flex ] ++
     lib.optionals stdenv.hostPlatform.isDarwin [
       darwin.apple_sdk.frameworks.DiskArbitration
+<<<<<<< HEAD
       darwin.apple_sdk.frameworks.System
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     ];
 
   buildInputs = [ zlib.dev libxcrypt ] ++
     lib.optionals useSSL [ openssl ] ++
     lib.optionals usePAM [ pam ];
 
+<<<<<<< HEAD
+=======
+  preConfigure = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace configure --replace "-framework System" "-lSystem"
+  '';
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   configureFlags = [
     (lib.withFeature usePAM "pam")
   ] ++ (if useSSL then [

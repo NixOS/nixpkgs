@@ -2,7 +2,10 @@
 , buildGoModule
 , fetchFromGitHub
 , installShellFiles
+<<<<<<< HEAD
 , fetchpatch
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 buildGoModule rec {
@@ -16,6 +19,7 @@ buildGoModule rec {
     sha256 = "sha256-qc6RYz2bVaY/IBGIXUYO6wyh7iUDAJ1ASCK0dFwZo6s=";
   };
 
+<<<<<<< HEAD
   patches = [
     # go 1.20 support
     # https://github.com/mr-karan/doggo/pull/66
@@ -26,6 +30,9 @@ buildGoModule rec {
   ];
 
   vendorHash = "sha256-GVLfPK1DFVSfNSdIxYSaspHFphd8ft2HUK0SMeWiVUg=";
+=======
+  vendorHash = "sha256-UhSdYpK54c4+BAP/d/zU91LIBE05joOLHoV1XkNMYNw=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nativeBuildInputs = [ installShellFiles ];
   subPackages = [ "cmd/doggo" ];
 
@@ -48,6 +55,10 @@ buildGoModule rec {
       It outputs information in a neat concise manner and supports protocols like DoH, DoT, DoQ, and DNSCrypt as well
     '';
     license = licenses.gpl3Only;
+<<<<<<< HEAD
+=======
+    platforms = platforms.unix;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     maintainers = with maintainers; [ georgesalkhouri ];
   };
 }

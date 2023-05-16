@@ -31,14 +31,22 @@ buildPythonPackage rec {
     inherit src version;
     pname = "hgsrht-api";
     modRoot = "api";
+<<<<<<< HEAD
     vendorHash = "sha256-uIP3W7UJkP68HJUF33kz5xfg/KBiaSwMozFYmQJQkys=";
+=======
+    vendorSha256 = "sha256-uIP3W7UJkP68HJUF33kz5xfg/KBiaSwMozFYmQJQkys=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   } // import ./fix-gqlgen-trimpath.nix { inherit unzip; });
 
   hgsrht-keys = buildGoModule {
     inherit src version;
     pname = "hgsrht-keys";
     modRoot = "hgsrht-keys";
+<<<<<<< HEAD
     vendorHash = "sha256-7ti8xCjSrxsslF7/1X/GY4FDl+69hPL4UwCDfjxmJLU=";
+=======
+    vendorSha256 = "sha256-7ti8xCjSrxsslF7/1X/GY4FDl+69hPL4UwCDfjxmJLU=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [

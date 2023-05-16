@@ -50,8 +50,12 @@
     More fields may be added in the future, however, in order to comply with GDPR this file should stay as minimal as possible.
 
     When editing this file:
+<<<<<<< HEAD
      * keep the list alphabetically sorted, check with:
          nix-instantiate --eval maintainers/scripts/check-maintainers-sorted.nix
+=======
+     * keep the list alphabetically sorted
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
      * test the validity of the format with:
          nix-build lib/tests/maintainers.nix
 
@@ -64,12 +68,15 @@
     githubId = 64707304;
     name = "Dmitry Kulikov";
   };
+<<<<<<< HEAD
   _0x120581f = {
     email = "nixpkgs@0x120581f.dev";
     name = "0x120581f";
     github = "0x120581f";
     githubId = 130835755;
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   _0x4A6F = {
     email = "mail-maintainer@0x4A6F.dev";
     matrix = "@0x4a6f:matrix.org";
@@ -132,12 +139,15 @@
     github = "13r0ck";
     githubId = 58987761;
   };
+<<<<<<< HEAD
   _21eleven = {
     name = "Noah Lidell";
     email = "noahlidell@gmail.com";
     github = "21eleven";
     githubId = 8813855;
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   _2gn = {
     name = "Hiram Tanner";
     github = "2gn";
@@ -189,18 +199,22 @@
     githubId = 12578560;
     name = "Quinn Bohner";
   };
+<<<<<<< HEAD
   _8-bit-fox = {
     email = "sebastian@markwaerter.de";
     github = "8-bit-fox";
     githubId = 43320117;
     name = "Sebastian Marquardt";
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   _9999years = {
     email = "rbt@fastmail.com";
     github = "9999years";
     githubId = 15312184;
     name = "Rebecca Turner";
   };
+<<<<<<< HEAD
   _999eagle = {
     email = "github@999eagle.moe";
     matrix = "@sophie:catgirl.cloud";
@@ -211,6 +225,8 @@
       fingerprint = "7B59 F09E 0FE5 BC34 F032  1FB4 5270 1DE5 F5F5 1125";
     }];
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   a1russell = {
     email = "adamlr6+pub@gmail.com";
     github = "a1russell";
@@ -331,12 +347,15 @@
     githubId = 2321000;
     name = "Ruslan Babayev";
   };
+<<<<<<< HEAD
   abustany = {
     email = "adrien@bustany.org";
     github = "abustany";
     githubId = 2526296;
     name = "Adrien Bustany";
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   acairncross = {
     email = "acairncross@gmail.com";
     github = "acairncross";
@@ -424,12 +443,15 @@
     githubId = 1250775;
     name = "Adolfo E. García Castro";
   };
+<<<<<<< HEAD
   adriandole = {
     email = "adrian@dole.tech";
     github = "adriandole";
     githubId = 25236206;
     name = "Adrian Dole";
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   AdsonCicilioti = {
     name = "Adson Cicilioti";
     email = "adson.cicilioti@live.com";
@@ -544,12 +566,15 @@
     githubId = 44871469;
     name = "Etienne Wodey";
   };
+<<<<<<< HEAD
   aither64 = {
     email = "aither@havefun.cz";
     github = "aither64";
     githubId = 4717906;
     name = "Jakub Skokan";
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ajgrf = {
     email = "a@ajgrf.com";
     github = "ajgrf";
@@ -593,24 +618,30 @@
     githubId = 1318982;
     name = "Anders Claesson";
   };
+<<<<<<< HEAD
   akechishiro = {
     email = "akechishiro-aur+nixpkgs@lahfa.xyz";
     github = "AkechiShiro";
     githubId = 14914796;
     name = "Samy Lahfa";
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   a-kenji = {
     email = "aks.kenji@protonmail.com";
     github = "a-kenji";
     githubId = 65275785;
     name = "Alexander Kenji Berthold";
   };
+<<<<<<< HEAD
   akgrant43 = {
     name = "Alistair Grant";
     email = "akg1012@fastmail.com.au";
     github = "akgrant43";
     githubId = 2062166;
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   akho = {
     name = "Alexander Khodyrev";
     email = "a@akho.name";
@@ -656,6 +687,7 @@
     githubId = 43479487;
     name = "Titouan Biteau";
   };
+<<<<<<< HEAD
   albertchae = {
     github = "albertchae";
     githubId = 217050;
@@ -674,6 +706,8 @@
     githubId = 1078000;
     name = "Alejandro Sánchez Medina";
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   aleksana = {
     email = "me@aleksana.moe";
     github = "Aleksanaa";
@@ -722,6 +756,15 @@
     githubId = 8316672;
     name = "Alex Chapman";
   };
+<<<<<<< HEAD
+=======
+  alexeyre = {
+    email = "A.Eyre@sms.ed.ac.uk";
+    github = "alexeyre";
+    githubId = 38869148;
+    name = "Alex Eyre";
+  };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   alexfmpe = {
     email = "alexandre.fmp.esteves@gmail.com";
     github = "alexfmpe";
@@ -843,12 +886,15 @@
       fingerprint = "B422 CFB1 C9EF 73F7 E1E2 698D F53E 3233 42F7 A6D3A";
     }];
   };
+<<<<<<< HEAD
   alxsimon = {
     email = "alexis.simon@normalesup.org";
     github = "alxsimon";
     githubId = 9567176;
     name = "Alexis Simon";
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   alyaeanyx = {
     email = "alyaeanyx@mailbox.org";
     github = "alyaeanyx";
@@ -876,12 +922,15 @@
     githubId = 153175;
     name = "Andrew Marshall";
   };
+<<<<<<< HEAD
   amaxine = {
     email = "max@ine.dev";
     github = "amaxine";
     githubId = 35892750;
     name = "Maxine Aubrey";
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ambroisie = {
     email = "bruno.nixpkgs@belanyi.fr";
     github = "ambroisie";
@@ -1013,12 +1062,15 @@
     githubId = 123550;
     name = "André Silva";
   };
+<<<<<<< HEAD
   andresnav = {
     email = "nix@andresnav.com";
     github = "andres-nav";
     githubId = 118762770;
     name = "Andres Navarro";
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   andrestylianos = {
     email = "andre.stylianos@gmail.com";
     github = "andrestylianos";
@@ -1078,11 +1130,14 @@
     github = "an-empty-string";
     githubId = 681716;
   };
+<<<<<<< HEAD
   angaz = {
     name = "Angus Dippenaar";
     github = "angaz";
     githubId = 10219618;
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   angristan = {
     email = "angristan@pm.me";
     github = "angristan";
@@ -1161,12 +1216,15 @@
     githubId = 1342360;
     name = "Andrew Morgan";
   };
+<<<<<<< HEAD
   anomalocaris = {
     email = "duncan@anomalocaris.xyz";
     github = "Anomalocaridid";
     githubId = 29845794;
     name = "Duncan Russell";
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   anpin = {
     email = "pavel@anpin.fyi";
     github = "anpin";
@@ -1189,9 +1247,12 @@
     githubId = 48802534;
     name = "Anselm Schüler";
     matrix = "@schuelermine:matrix.org";
+<<<<<<< HEAD
     keys = [{
       fingerprint = "CDBF ECA8 36FE E340 1CEB  58FF BA34 EE1A BA3A 0955";
     }];
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
   anthonyroussel = {
     email = "anthony@roussel.dev";
@@ -1220,12 +1281,15 @@
     githubId = 20933385;
     name = "Anton Latukha";
   };
+<<<<<<< HEAD
   antonmosich = {
     email = "anton@mosich.at";
     github = "antonmosich";
     githubId = 27223336;
     name = "Anton Mosich";
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   antono = {
     email = "self@antono.info";
     github = "antono";
@@ -1281,6 +1345,7 @@
     githubId = 914687;
     name = "Alexis Praga";
   };
+<<<<<<< HEAD
   aprl = {
     email = "aprl@acab.dev";
     github = "cutestnekoaqua";
@@ -1293,6 +1358,8 @@
     githubId = 4923335;
     name = "Alexey Orlenko";
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ar1a = {
     email = "aria@ar1as.space";
     github = "ar1a";
@@ -1305,12 +1372,15 @@
     githubId = 56009;
     name = "Arcadio Rubio García";
   };
+<<<<<<< HEAD
   arcayr = {
     email = "nix@arcayr.online";
     github = "arcayr";
     githubId = 11192354;
     name = "Elliot Speck";
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   archer-65 = {
     email = "mario.liguori.056@gmail.com";
     github = "archer-65";
@@ -1451,12 +1521,15 @@
     githubId = 37193992;
     name = "Arthur Teisseire";
   };
+<<<<<<< HEAD
   arti5an = {
     email = "artis4n@outlook.com";
     github = "arti5an";
     githubId = 14922630;
     name = "Richard Smith";
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   artturin = {
     email = "artturin@artturin.com";
     matrix = "@artturin:matrix.org";
@@ -1483,6 +1556,7 @@
     githubId = 1482768;
     name = "Benjamin Asbach";
   };
+<<<<<<< HEAD
   asciimoth = {
     name = "Andrew";
     email = "ascii@moth.contact";
@@ -1492,6 +1566,8 @@
       fingerprint = "C5C8 4658 CCFD 7E8E 71DE  E933 AF3A E54F C3A3 5C9F";
     }];
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ashalkhakov = {
     email = "artyom.shalkhakov@gmail.com";
     github = "ashalkhakov";
@@ -1522,11 +1598,14 @@
     githubId = 11037075;
     name = "Ashley Hooper";
   };
+<<<<<<< HEAD
   ashvith-shetty = {
     github = "Ashvith10";
     githubId = 113123021;
     name = "Ashvith Shetty";
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   aske = {
     email = "aske@fmap.me";
     github = "aske";
@@ -1539,12 +1618,15 @@
     githubId = 453170;
     name = "Alastair Pharo";
   };
+<<<<<<< HEAD
   astavie = {
     email = "astavie@pm.me";
     github = "astavie";
     githubId = 7745457;
     name = "Astavie";
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   astro = {
     email = "astro@spaceboyz.net";
     github = "astro";
@@ -1581,6 +1663,7 @@
       fingerprint = "DD52 6BC7 767D BA28 16C0 95E5 6840 89CE 67EB B691";
     }];
   };
+<<<<<<< HEAD
   atalii = {
     email = "taliauster@gmail.com";
     github = "atalii";
@@ -1588,6 +1671,8 @@
     name = "tali auster";
     matrix = "@atalii:matrix.org";
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ataraxiasjel = {
     email = "nix@ataraxiadev.com";
     github = "AtaraxiaSjel";
@@ -1770,11 +1855,14 @@
     githubId = 135230;
     name = "Aycan iRiCAN";
   };
+<<<<<<< HEAD
   aynish = {
     github = "Chickensoupwithrice";
     githubId = 22575913;
     name = "Anish Lakhwara";
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   azahi = {
     name = "Azat Bahawi";
     email = "azat@bahawi.net";
@@ -1785,6 +1873,7 @@
       fingerprint = "2688 0377 C31D 9E81 9BDF  83A8 C8C6 BDDB 3847 F72B";
     }];
   };
+<<<<<<< HEAD
   azazak123 = {
     email = "azazaka2002@gmail.com";
     matrix = "@ne_dvoeshnik:matrix.org";
@@ -1798,6 +1887,8 @@
     githubId = 426541;
     name = "Tim Kleinschmidt";
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   azuwis = {
     email = "azuwis@gmail.com";
     github = "azuwis";
@@ -1831,12 +1922,15 @@
       fingerprint = "6FBC A462 4EAF C69C A7C4  98C1 F044 3098 48A0 7CAC";
     }];
   };
+<<<<<<< HEAD
   babeuh = {
     name = "Raphael Le Goaller";
     email = "babeuh@rlglr.fr";
     github = "babeuh";
     githubId = 60193302;
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   bachp = {
     email = "pascal.bach@nextrem.ch";
     matrix = "@bachp:matrix.org";
@@ -1935,6 +2029,7 @@
       fingerprint = "A3E1 C409 B705 50B3 BF41  492B 5684 0A61 4DBE 37AE";
     }];
   };
+<<<<<<< HEAD
   bastaynav = {
     name = "Ivan Bastrakov";
     email = "bastaynav@proton.me";
@@ -1945,6 +2040,8 @@
       fingerprint = "2C6D 37D4 6AA1 DCDA BE8D  F346 43E2 CF4C 01B9 4940";
     }];
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   basvandijk = {
     email = "v.dijk.bas@gmail.com";
     github = "basvandijk";
@@ -2044,12 +2141,15 @@
     githubId = 11135;
     name = "Berk D. Demir";
   };
+<<<<<<< HEAD
   bddvlpr = {
     email = "luna@bddvlpr.com";
     github = "bddvlpr";
     githubId = 17461028;
     name = "Luna Simons";
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   bdesham = {
     email = "benjamin@esham.io";
     github = "bdesham";
@@ -2068,12 +2168,15 @@
     github = "beardhatcode";
     githubId = 662538;
   };
+<<<<<<< HEAD
   beeb = {
     name = "Valentin Bersier";
     email = "hi@beeb.li";
     github = "beeb";
     githubId = 703631;
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   beezow = {
     name = "beezow";
     email = "zbeezow@gmail.com";
@@ -2114,6 +2217,7 @@
       fingerprint = "E9A3 7864 2165 28CE 507C  CA82 72EA BF75 C331 CD25";
     }];
   };
+<<<<<<< HEAD
   Benjamin-L = {
     name = "Benjamin Lee";
     email = "benjamin@computer.surgery";
@@ -2124,6 +2228,8 @@
       fingerprint = "9D84 09A0 44FC 1EEB AE2D  FA30 FB96 24E2 885D 55A4";
     }];
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   benkuhn = {
     email = "ben@ben-kuhn.com";
     github = "ben-kuhn";
@@ -2160,12 +2266,15 @@
     githubId = 75972;
     name = "Ben Booth";
   };
+<<<<<<< HEAD
   benwis = {
     name = "Ben Wishovich";
     email = "ben@benw.is";
     github = "benwis";
     githubId = 6953353;
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   berberman = {
     email = "berberman@yandex.com";
     matrix = "@berberman:mozilla.org";
@@ -2389,18 +2498,22 @@
       fingerprint = "17C7 95D4 871C 2F87 83C8  053D 0C61 C4E5 907F 76C8";
     }];
   };
+<<<<<<< HEAD
   booniepepper = {
     name = "J.R. Hill";
     email = "justin@so.dang.cool";
     github = "booniepepper";
     githubId = 17605298;
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   bootstrap-prime = {
     email = "bootstrap.prime@gmail.com";
     github = "bootstrap-prime";
     githubId = 68566724;
     name = "bootstrap-prime";
   };
+<<<<<<< HEAD
   boozedog = {
     email = "code@booze.dog";
     github = "boozedog";
@@ -2408,6 +2521,8 @@
     matrix = "@boozedog:matrix.org";
     name = "David A. Buser";
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   borisbabic = {
     email = "boris.ivan.babic@gmail.com";
     github = "borisbabic";
@@ -2661,7 +2776,11 @@
   };
   cafkafk = {
     email = "christina@cafkafk.com";
+<<<<<<< HEAD
     matrix = "@cafkafk:nixos.dev";
+=======
+    matrix = "@cafkafk:matrix.cafkafk.com";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     name = "Christina Sørensen";
     github = "cafkafk";
     githubId = 89321978;
@@ -2670,6 +2789,7 @@
         fingerprint = "7B9E E848 D074 AE03 7A0C  651A 8ED4 DEF7 375A 30C8";
       }
       {
+<<<<<<< HEAD
         fingerprint = "208A 2A66 8A2F CDE7 B5D3  8F64 CDDC 792F 6552 51ED";
       }
     ];
@@ -2680,6 +2800,12 @@
     githubId = 48105979;
     name = "Caitlin Davitt";
   };
+=======
+        fingerprint = "208A 2A66 8A2F CDE7 B5D3 8F64 CDDC 792F 6552 51ED";
+      }
+    ];
+  };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   calavera = {
     email = "david.calavera@gmail.com";
     github = "calavera";
@@ -2755,12 +2881,18 @@
   };
   CardboardTurkey = {
     name = "Kiran Ostrolenk";
+<<<<<<< HEAD
     email = "kiran@ostrolenk.co.uk";
     github = "CardboardTurkey";
     githubId = 34030186;
     keys = [{
       fingerprint = "8BC7 74E4 A2EC 7507 3B61  A647 0BBB 1C8B 1C36 39EE";
     }];
+=======
+    email = "kostrolenk@gmail.com";
+    github = "CardboardTurkey";
+    githubId = 34030186;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
   carlosdagos = {
     email = "m@cdagostino.io";
@@ -2774,12 +2906,15 @@
     githubId = 82591;
     name = "Carl Sverre";
   };
+<<<<<<< HEAD
   carlthome = {
     name = "Carl Thomé";
     email = "carlthome@gmail.com";
     github = "carlthome";
     githubId = 1595907;
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   carpinchomug = {
     email = "aki.suda@protonmail.com";
     github = "carpinchomug";
@@ -2847,12 +2982,15 @@
     githubId = 3471749;
     name = "Claudio Bley";
   };
+<<<<<<< HEAD
   cbourjau = {
     email = "christianb@posteo.de";
     github = "cbourjau";
     githubId = 3288058;
     name = "Christian Bourjau";
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   cbrewster = {
     email = "cbrewster@hey.com";
     github = "cbrewster";
@@ -2881,6 +3019,7 @@
     githubId = 64804;
     name = "Dennis Gosnell";
   };
+<<<<<<< HEAD
   cdmistman = {
     name = "Colton Donnelly";
     email = "colton@donn.io";
@@ -2888,6 +3027,8 @@
     github = "cdmistman";
     githubId = 23486351;
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ceedubs = {
     email = "ceedubs@gmail.com";
     github = "ceedubs";
@@ -2932,12 +3073,15 @@
       }
     ];
   };
+<<<<<<< HEAD
   Ch1keen = {
     email = "gihoong7@gmail.com";
     github = "Ch1keen";
     githubId = 40013212;
     name = "Han Jeongjun";
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   chaduffy = {
     email = "charles@dyfis.net";
     github = "charles-dyfis-net";
@@ -2980,6 +3124,7 @@
     githubId = 6608071;
     name = "Charles Huyghues-Despointes";
   };
+<<<<<<< HEAD
   chayleaf = {
     email = "chayleaf-nix@pavluk.org";
     github = "chayleaf";
@@ -2987,6 +3132,8 @@
     matrix = "@chayleaf:matrix.pavluk.org";
     name = "Anna Pavlyuk";
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   chekoopa = {
     email = "chekoopa@mail.ru";
     github = "chekoopa";
@@ -3038,6 +3185,7 @@
     githubId = 14790226;
     name = "Hubert Jasudowicz";
   };
+<<<<<<< HEAD
   c-h-johnson = {
     name = "Charles Johnson";
     email = "charles@charlesjohnson.name";
@@ -3046,6 +3194,10 @@
   };
   chkno = {
     email = "scottworley@scottworley.com";
+=======
+  chkno = {
+    email = "chuck@intelligence.org";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     github = "chkno";
     githubId = 1118859;
     name = "Scott Worley";
@@ -3182,7 +3334,11 @@
   };
   citadelcore = {
     email = "alex@arctarus.co.uk";
+<<<<<<< HEAD
     github = "VertexA115";
+=======
+    github = "CitadelCore";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     githubId = 5567402;
     name = "Alex Zero";
     keys = [{
@@ -3312,6 +3468,7 @@
     githubId = 34317;
     name = "Corey O'Connor";
   };
+<<<<<<< HEAD
   code-asher = {
     email = "ash@coder.com";
     github = "code-asher";
@@ -3327,12 +3484,15 @@
     githubId = 118829;
     name = "codec";
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   CodeLongAndProsper90 = {
     github = "CodeLongAndProsper90";
     githubId = 50145141;
     email = "jupiter@m.rdis.dev";
     name = "Scott Little";
   };
+<<<<<<< HEAD
   codifryed = {
     email = "gb@guyboldon.com";
     name = "Guy Boldon";
@@ -3342,6 +3502,8 @@
       fingerprint = "FDF5 EF67 8CC1 FE22 1845  6A22 CF7B BB5B C756 1BD3";
     }];
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   codsl = {
     email = "codsl@riseup.net";
     github = "codsl";
@@ -3354,12 +3516,15 @@
     githubId = 5561189;
     name = "Cody Opel";
   };
+<<<<<<< HEAD
   coffeeispower = {
     email = "tiagodinis33@proton.me";
     github = "coffee-is-power";
     name = "Tiago Dinis";
     githubId = 92828847;
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   cofob = {
     name = "Egor Ternovoy";
     email = "cofob@riseup.net";
@@ -3432,12 +3597,15 @@
     githubId = 244239;
     name = "Mauricio Collares";
   };
+<<<<<<< HEAD
   coloquinte = {
     email = "gabriel.gouvine_nix@m4x.org";
     github = "coloquinte";
     githubId = 4102525;
     name = "Gabriel Gouvine";
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   commandodev = {
     email = "ben@perurbis.com";
     github = "commandodev";
@@ -3463,12 +3631,15 @@
     name = "Changsheng Wu";
     githubId = 2083950;
   };
+<<<<<<< HEAD
   conni2461 = {
     email = "simon.hauser@outlook.com";
     github = "Conni2461";
     name = "Simon Hauser";
     githubId = 15233006;
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   connorbaker = {
     email = "connor.baker@tweag.io";
     matrix = "@connorbaker:matrix.org";
@@ -3808,6 +3979,7 @@
     githubId = 1298344;
     name = "Daniel Fullmer";
   };
+<<<<<<< HEAD
   danielrolls = {
     email = "daniel.rolls.27@googlemail.com";
     github = "danielrolls";
@@ -3820,6 +3992,8 @@
     githubId = 107034852;
     name = "Daniyal Suri";
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   dansbandit = {
     github = "dansbandit";
     githubId = 4530687;
@@ -3835,12 +4009,15 @@
       fingerprint = "4779 D1D5 3C97 2EAE 34A5  ED3D D8AF C4BF 0567 0F9D";
     }];
   };
+<<<<<<< HEAD
   dariof4 = {
     name = "dariof4";
     email = "dazedtank@gmail.com";
     github = "dariof4";
     githubId = 9992814;
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   darkonion0 = {
     name = "Alexandre Peruggia";
     email = "darkgenius1@protonmail.com";
@@ -3963,24 +4140,30 @@
     githubId = 11422515;
     name = "David Sánchez";
   };
+<<<<<<< HEAD
   dawidd6 = {
     email = "dawidd0811@gmail.com";
     github = "dawidd6";
     githubId = 9713907;
     name = "Dawid Dziurla";
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   dawidsowa = {
     email = "dawid_sowa@posteo.net";
     github = "dawidsowa";
     githubId = 49904992;
     name = "Dawid Sowa";
   };
+<<<<<<< HEAD
   dbalan = {
     email = "nix@dbalan.in";
     github = "dbalan";
     githubId = 223910;
     name = "Dhananjay Balan";
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   dbeckwith = {
     email = "djbsnx@gmail.com";
     github = "dbeckwith";
@@ -4020,12 +4203,15 @@
     githubId = 75067;
     name = "Daniel Duan";
   };
+<<<<<<< HEAD
   de11n = {
     email = "nixpkgs-commits@deshaw.com";
     github = "de11n";
     githubId = 130508846;
     name = "Elliot Cameron";
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   dearrude = {
     name = "Ebrahim Nejati";
     email = "dearrude@tfwno.gf";
@@ -4035,12 +4221,15 @@
       fingerprint = "4E35 F2E5 2132 D654 E815  A672 DB2C BC24 2868 6000";
     }];
   };
+<<<<<<< HEAD
   declan = {
     name = "Declan Rixon";
     email = "declan.fraser.rixon@gmail.com";
     github = "DeclanRixon";
     githubId = 57464835;
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   deejayem = {
     email = "nixpkgs.bu5hq@simplelogin.com";
     github = "deejayem";
@@ -4050,12 +4239,15 @@
       fingerprint = "9B43 6B14 77A8 79C2 6CDB  6604 C171 2510 02C2 00F2";
     }];
   };
+<<<<<<< HEAD
   deemp = {
     email = "deempleton@gmail.com";
     github = "deemp";
     githubId = 48378098;
     name = "Danila Danko";
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   deepfire = {
     email = "_deepfire@feelingofgreen.ru";
     github = "deepfire";
@@ -4224,6 +4416,7 @@
     githubId = 17111639;
     name = "Devin Singh";
   };
+<<<<<<< HEAD
   devpikachu = {
     email = "andrei.hava@proton.me";
     matrix = "@andrei:matrix.detpikachu.dev";
@@ -4231,6 +4424,8 @@
     githubId = 30475873;
     name = "Andrei Hava";
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   devusb = {
     email = "mhelton@devusb.us";
     github = "devusb";
@@ -4276,12 +4471,15 @@
       fingerprint = "1C4E F4FE 7F8E D8B7 1E88 CCDF BAB1 D15F B7B4 D4CE";
     }];
   };
+<<<<<<< HEAD
   dgollings = {
     email = "daniel.gollings+nixpkgs@gmail.com";
     github = "dgollings";
     githubId = 2032823;
     name = "Daniel Gollings";
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   dgonyeo = {
     email = "derek@gonyeo.com";
     github = "dgonyeo";
@@ -4406,11 +4604,14 @@
     githubId = 997543;
     name = "Dmitry Malikov";
   };
+<<<<<<< HEAD
   DMills27 = {
     github = "DMills27";
     githubId = 5251658;
     name = "Dominic Mills";
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   DmitryTsygankov = {
     email = "dmitry.tsygankov@gmail.com";
     github = "DmitryTsygankov";
@@ -4468,6 +4669,7 @@
     githubId = 39825;
     name = "Dominik Honnef";
   };
+<<<<<<< HEAD
   donovanglover = {
     github = "donovanglover";
     githubId = 2374245;
@@ -4476,6 +4678,8 @@
       fingerprint = "EE7D 158E F9E7 660E 0C33  86B2 8FC5 F7D9 0A5D 8F4D";
     }];
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   doriath = {
     email = "tomasz.zurkowski@gmail.com";
     github = "doriath";
@@ -4488,12 +4692,15 @@
     githubId = 10998835;
     name = "Doron Behar";
   };
+<<<<<<< HEAD
   dotemup = {
     email = "dotemup.designs+nixpkgs@gmail.com";
     github = "dotemup";
     githubId = 11077277;
     name = "Dote";
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   dotlambda = {
     email = "rschuetz17@gmail.com";
     matrix = "@robert:funklause.de";
@@ -4585,6 +4792,7 @@
       fingerprint = "7E38 89D9 B1A8 B381 C8DE  A15F 95EB 6DFF 26D1 CEB0";
     }];
   };
+<<<<<<< HEAD
   DrSensor = {
     name = "Fahmi Akbar Wildana";
     email = "sensorfied@gmail.com";
@@ -4592,6 +4800,8 @@
     github = "DrSensor";
     githubId = 4953069;
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   drupol = {
     name = "Pol Dellaiera";
     email = "pol.dellaiera@protonmail.com";
@@ -4625,12 +4835,20 @@
   };
   dsuetin = {
     name = "Danil Suetin";
+<<<<<<< HEAD
     email = "suetin085+nixpkgs@protonmail.com";
+=======
+    email = "suetin085@gmail.com";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     matrix = "@dani0854:matrix.org";
     github = "dani0854";
     githubId = 32674935;
     keys = [{
+<<<<<<< HEAD
       fingerprint = "E033 FE26 0E62 224B B35C  75C9 DE8B 9CED 0696 C600";
+=======
+      fingerprint = "6CC2 D713 6703 0D86 CA29  C71F 23B5 AA6F A374 F2FE";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     }];
   };
   dsymbol = {
@@ -4662,6 +4880,7 @@
       fingerprint = "5DD7 C6F6 0630 F08E DAE7  4711 1525 585D 1B43 C62A";
     }];
   };
+<<<<<<< HEAD
   dunxen = {
     email = "git@dunxen.dev";
     matrix = "@dunxen:x0f.org";
@@ -4672,6 +4891,8 @@
       fingerprint = "9484 44FC E03B 05BA 5AB0  591E C37B 1C1D 44C7 86EE";
     }];
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   dwarfmaster = {
     email = "nixpkgs@dwarfmaster.net";
     github = "dwarfmaster";
@@ -4764,11 +4985,14 @@
     githubId = 7875;
     name = "Rommel Martinez";
   };
+<<<<<<< HEAD
   eclairevoyant = {
     github = "eclairevoyant";
     githubId = 848000;
     name = "éclairevoyant";
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   edanaher = {
     email = "nixos@edanaher.net";
     github = "edanaher";
@@ -4787,6 +5011,7 @@
     githubId = 1516017;
     name = "Ed Cragg";
   };
+<<<<<<< HEAD
   eddsteel = {
     email = "edd@eddsteel.com";
     github = "eddsteel";
@@ -4796,6 +5021,8 @@
       fingerprint = "1BE8 48D7 6C7C 4C51 349D  DDCC 3362 0159 D403 85A0";
     }];
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   edef = {
     email = "edef@edef.eu";
     github = "edef1c";
@@ -4842,12 +5069,15 @@
     githubId = 54799;
     name = "Edward Tjörnhammar";
   };
+<<<<<<< HEAD
   ee2500 = {
     email = "earthengine@skiff.com";
     github = "ee2500";
     githubId = 134107129;
     name = "EarthEngine";
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   eelco = {
     email = "edolstra+nixpkgs@gmail.com";
     github = "edolstra";
@@ -5037,6 +5267,7 @@
     githubId = 18535642;
     name = "Emily";
   };
+<<<<<<< HEAD
   emilylange = {
     email = "nix@emilylange.de";
     github = "emilylange";
@@ -5046,6 +5277,11 @@
   emilytrau = {
     name = "Emily Trau";
     email = "emily+nix@downunderctf.com";
+=======
+  emilytrau = {
+    name = "Emily Trau";
+    email = "nix@angus.ws";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     github = "emilytrau";
     githubId = 13267947;
   };
@@ -5224,11 +5460,14 @@
     githubId = 1583484;
     name = "Andrey Golovizin";
   };
+<<<<<<< HEAD
   errnoh = {
     github = "errnoh";
     githubId = 373946;
     name = "Erno Hopearuoho";
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ersin = {
     email = "me@ersinakinci.com";
     github = "ersinakinci";
@@ -5331,12 +5570,15 @@
     githubId = 1847524;
     name = "Evan Stoll";
   };
+<<<<<<< HEAD
   evanrichter = {
     email = "evanjrichter@gmail.com";
     github = "evanrichter";
     githubId = 330292;
     name = "Evan Richter";
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   evax = {
     email = "nixos@evax.fr";
     github = "evax";
@@ -5355,12 +5597,15 @@
     githubId = 2512008;
     name = "Even Brenden";
   };
+<<<<<<< HEAD
   evilmav = {
     email = "elenskiy.ilya@gmail.com";
     github = "evilmav";
     githubId = 6803717;
     name = "Ilya Elenskiy";
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   evils = {
     email = "evils.devils@protonmail.com";
     matrix = "@evils:nixos.dev";
@@ -5408,12 +5653,15 @@
       fingerprint = "FC1D 3E4F CBCA 80DF E870  6397 C811 6E3A 0C1C A76A";
     }];
   };
+<<<<<<< HEAD
   exploitoverload = {
     email = "nix@exploitoverload.com";
     github = "exploitoverload";
     githubId = 99678549;
     name = "Asier Armenteros";
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   extends = {
     email = "sharosari@gmail.com";
     github = "ImExtends";
@@ -5427,12 +5675,15 @@
     githubId = 25955146;
     name = "eyJhb";
   };
+<<<<<<< HEAD
   f2k1de = {
     name = "f2k1de";
     email = "hi@f2k1.de";
     github = "f2k1de";
     githubId = 11199213;
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   f4814n = {
     email = "me@f4814n.de";
     github = "f4814";
@@ -5524,12 +5775,15 @@
     githubId = 4246921;
     name = "Florian Beeres";
   };
+<<<<<<< HEAD
   fd = {
     email = "simon.menke@gmail.com";
     github = "fd";
     githubId = 591;
     name = "Simon Menke";
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   fdns = {
     email = "fdns02@gmail.com";
     github = "fdns";
@@ -5574,11 +5828,19 @@
     matrix = "@felipeqq2:pub.solar";
   };
   felixalbrigtsen = {
+<<<<<<< HEAD
     email = "felix@albrigtsen.it";
     github = "felixalbrigtsen";
     githubId = 64613093;
     name = "Felix Albrigtsen";
     matrix = "@felixalb:feal.no";
+=======
+    email = "felixalbrigtsen@gmail.com";
+    github = "felixalbrigtsen";
+    githubId = 64613093;
+    name = "Felix Albrigtsen";
+    matrix = "@felixalb:pvv.ntnu.no";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
   felixscheinost = {
     name = "Felix Scheinost";
@@ -5608,6 +5870,7 @@
       }
     ];
   };
+<<<<<<< HEAD
   fernsehmuell = {
     email = "fernsehmuel@googlemail.com";
     matrix = "@fernsehmuell:matrix.org";
@@ -5615,6 +5878,8 @@
     githubId = 5198058;
     name = "Udo Sauer";
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ffinkdevs = {
     email = "fink@h0st.space";
     github = "ffinkdevs";
@@ -5693,12 +5958,15 @@
     githubId = 2489598;
     name = "Felix Breidenstein";
   };
+<<<<<<< HEAD
   flemzord = {
     email = "maxence@maireaux.fr";
     github = "flemzord";
     githubId = 1952914;
     name = "Maxence Maireaux";
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   flexagoon = {
     email = "flexagoon@pm.me";
     github = "flexagoon";
@@ -5771,12 +6039,15 @@
     githubId = 5918766;
     name = "Franz Thoma";
   };
+<<<<<<< HEAD
   fogti = {
     name = "Alain Fogtia Zscheile";
     email = "fogti+devel@ytrizja.de";
     github = "fogti";
     githubId = 1618343;
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   foo-dogsquared = {
     email = "foo.dogsquared@gmail.com";
     github = "foo-dogsquared";
@@ -5832,12 +6103,15 @@
     githubId = 84968;
     name = "Florian Paul Schmidt";
   };
+<<<<<<< HEAD
   fptje = {
     email = "fpeijnenburg@gmail.com";
     github = "FPtje";
     githubId = 1202014;
     name = "Falco Peijnenburg";
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   fragamus = {
     email = "innovative.engineer@gmail.com";
     github = "fragamus";
@@ -5862,6 +6136,7 @@
     githubId = 7551358;
     name = "Frede Emil";
   };
+<<<<<<< HEAD
   frederictobiasc = {
     email = "dev@ntr.li";
     github = "frederictobiasc";
@@ -5874,6 +6149,8 @@
     githubId = 32936898;
     name = "Wu Zhenyu";
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   freezeboy = {
     github = "freezeboy";
     githubId = 13279982;
@@ -5885,6 +6162,7 @@
     githubId = 609279;
     name = "Isaac Shapira";
   };
+<<<<<<< HEAD
   freyacodes = {
     email = "freya@arbjerg.dev";
     github = "freyacodes";
@@ -5897,6 +6175,8 @@
     githubId = 6599296;
     name = "Valentin Gagarin";
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   fridh = {
     email = "fridh@fridh.nl";
     github = "FRidh";
@@ -5939,12 +6219,15 @@
     githubId = 134872;
     name = "Sergei Lukianov";
   };
+<<<<<<< HEAD
   fsagbuya = {
     email = "fa@m-labs.ph";
     github = "fsagbuya";
     githubId = 77672306;
     name = "Florian Agbuya";
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   fstamour = {
     email = "fr.st-amour@gmail.com";
     github = "fstamour";
@@ -5995,6 +6278,7 @@
   };
   fuzen = {
     email = "me@fuzen.cafe";
+<<<<<<< HEAD
     github = "LovingMelody";
     githubId = 17859309;
     name = "Fuzen";
@@ -6009,6 +6293,12 @@
     githubId = 29337229;
     name = "mtths";
   };
+=======
+    github = "Fuzen-py";
+    githubId = 17859309;
+    name = "Fuzen";
+  };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   fxfactorial = {
     email = "edgar.factorial@gmail.com";
     github = "fxfactorial";
@@ -6034,18 +6324,30 @@
     githubId = 606000;
     name = "Gabriel Adomnicai";
   };
+<<<<<<< HEAD
+=======
+  Gabriel439 = {
+    email = "Gabriel439@gmail.com";
+    github = "Gabriella439";
+    githubId = 1313787;
+    name = "Gabriel Gonzalez";
+  };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   GabrielDougherty = {
     email = "contact@gabrieldougherty.com";
     github = "GabrielDougherty";
     githubId = 10541219;
     name = "Gabriel Dougherty";
   };
+<<<<<<< HEAD
   Gabriella439 = {
     email = "GenuineGabriella@gmail.com";
     github = "Gabriella439";
     githubId = 1313787;
     name = "Gabriella Gonzalez";
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   gador = {
     email = "florian.brandes@posteo.de";
     github = "gador";
@@ -6055,6 +6357,7 @@
       fingerprint = "0200 3EF8 8D2B CF2D 8F00  FFDC BBB3 E40E 5379 7FD9";
     }];
   };
+<<<<<<< HEAD
   gaelreyrol = {
     email = "me@gaelreyrol.dev";
     matrix = "@Zevran:matrix.org";
@@ -6065,6 +6368,8 @@
       fingerprint = "3492 D8FA ACFF 4C5F A56E  50B7 DFB9 B69A 2C42 7F61";
     }];
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   GaetanLepage = {
     email = "gaetan@glepage.com";
     github = "GaetanLepage";
@@ -6083,11 +6388,14 @@
     githubId = 7047019;
     name = "Florent Becker";
   };
+<<<<<<< HEAD
   galen = {
     github = "galenhuntington";
     githubId = 1851962;
     name = "Galen Huntington";
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   gamb = {
     email = "adam.gamble@pm.me";
     github = "gamb";
@@ -6154,12 +6462,15 @@
     githubId = 81654;
     name = "Damjan Georgievski";
   };
+<<<<<<< HEAD
   gdd = {
     email = "gabriel.doriath.dohler@ens.fr";
     github = "gabriel-doriath-dohler";
     githubId = 40209356;
     name = "Gabriel Doriath Döhler";
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   gdinh = {
     email = "nix@contact.dinh.ai";
     github = "gdinh";
@@ -6172,12 +6483,15 @@
     githubId = 313929;
     name = "Gabriel Ebner";
   };
+<<<<<<< HEAD
   geluk = {
     email = "johan+nix@geluk.io";
     github = "geluk";
     githubId = 1516985;
     name = "Johan Geluk";
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   genericnerdyusername = {
     name = "GenericNerdyUsername";
     email = "genericnerdyusername@proton.me";
@@ -6220,12 +6534,15 @@
       fingerprint = "D0CF 440A A703 E0F9 73CB  A078 82BB 70D5 41AE 2DB4";
     }];
   };
+<<<<<<< HEAD
   gerg-l = {
     email = "gregleyda@proton.me";
     github = "Gerg-L";
     githubId = 88247690;
     name = "Greg Leyda";
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   geri1701 = {
     email = "geri@sdf.org";
     github = "geri1701";
@@ -6238,6 +6555,7 @@
     githubId = 10353047;
     name = "Tobias Happ";
   };
+<<<<<<< HEAD
   getchoo = {
     email = "getchoo@tuta.io";
     github = "getchoo";
@@ -6251,6 +6569,8 @@
     github = "getpsyched";
     githubId = 43472218;
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   gfrascadorio = {
     email = "gfrascadorio@tutanota.com";
     github = "gfrascadorio";
@@ -6264,6 +6584,18 @@
     githubId = 3217744;
     name = "Peter Ferenczy";
   };
+<<<<<<< HEAD
+=======
+  ggwpaiushtha = {
+    name = "Ivan";
+    email = "ggwpaiushtha@gmail.com";
+    github = "GGwpAiushtha";
+    githubId = 6987136;
+    keys = [{
+      fingerprint = "2C6D 37D4 6AA1 DCDA BE8D  F346 43E2 CF4C 01B9 4940";
+    }];
+  };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ghostbuster91 = {
     name = "Kasper Kondzielski";
     email = "kghost0@gmail.com";
@@ -6276,6 +6608,7 @@
     githubId = 127353;
     name = "Geoffrey Huntley";
   };
+<<<<<<< HEAD
   gigglesquid = {
     email = "jack.connors@protonmail.com";
     github = "gigglesquid";
@@ -6285,6 +6618,8 @@
       fingerprint = "21DF 8034 B212 EDFF 9F19  9C19 F65B 7583 7ABF D019";
     }];
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   gila = {
     email = "jeffry.molanus@gmail.com";
     github = "gila";
@@ -6321,12 +6656,15 @@
     githubId = 471835;
     name = "Giorgio Gallo";
   };
+<<<<<<< HEAD
   GirardR1006 = {
     email = "julien.girard2@cea.fr";
     github = "GirardR1006";
     githubId = 19275558;
     name = "Julien Girard-Satabin";
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   GKasparov = {
     email = "mizozahr@gmail.com";
     github = "GKasparov";
@@ -6372,18 +6710,22 @@
     githubId = 1447245;
     name = "Robin Gloster";
   };
+<<<<<<< HEAD
   gmemstr = {
     email = "git@gmem.ca";
     github = "gmemstr";
     githubId = 1878840;
     name = "Gabriel Simmer";
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   gnxlxnxx = {
     email = "gnxlxnxx@web.de";
     github = "gnxlxnxx";
     githubId = 25820499;
     name = "Roman Kretschmer";
   };
+<<<<<<< HEAD
   goatchurchprime = {
     email = "julian@goatchurch.org.uk";
     github = "goatchurchprime";
@@ -6399,6 +6741,8 @@
       fingerprint = "62BD BF30 83E9 7076 9665 B60B 3AA3 153E 98B0 D771";
     }];
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   goertzenator = {
     email = "daniel.goertzen@gmail.com";
     github = "goertzenator";
@@ -6432,6 +6776,18 @@
     githubId = 1621335;
     name = "Andrew Trachenko";
   };
+<<<<<<< HEAD
+=======
+  gordias = {
+    name = "Gordias";
+    email = "gordias@disroot.org";
+    github = "gordiasdot";
+    githubId = 94724133;
+    keys = [{
+      fingerprint = "C006 B8A0 0618 F3B6 E0E4  2ECD 5D47 2848 30FA A4FA";
+    }];
+  };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   gotcha = {
     email = "gotcha@bubblenet.be";
     github = "gotcha";
@@ -6750,12 +7106,15 @@
     githubId = 1379411;
     name = "Georg Haas";
   };
+<<<<<<< HEAD
   hbjydev = {
     email = "hayden@kuraudo.io";
     github = "hbjydev";
     githubId = 22327045;
     name = "Hayden Young";
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   hbunke = {
     email = "bunke.hendrik@gmail.com";
     github = "hbunke";
@@ -6875,12 +7234,15 @@
     githubId = 41522204;
     name = "hexchen";
   };
+<<<<<<< HEAD
   hexclover = {
     email = "hexclover@outlook.com";
     github = "hexclover";
     githubId = 47456195;
     name = "hexclover";
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   heyimnova = {
     email = "git@heyimnova.dev";
     github = "heyimnova";
@@ -6921,6 +7283,16 @@
     githubId = 72349937;
     name = "Hikari";
   };
+<<<<<<< HEAD
+=======
+
+  hiljusti = {
+    name = "J.R. Hill";
+    email = "hiljusti@so.dang.cool";
+    github = "hiljusti";
+    githubId = 17605298;
+  };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   hirenashah = {
     email = "hiren@hiren.io";
     github = "hirenashah";
@@ -6937,12 +7309,15 @@
       fingerprint = "45A9 9917 578C D629 9F5F  B5B4 C22D 4DE4 D7B3 2D19";
     }];
   };
+<<<<<<< HEAD
   hitsmaxft = {
     name = "Bhe Hongtyu";
     email = "mfthits@gmail.com";
     github = "hitsmaxft";
     githubId = 352727;
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   hjones2199 = {
     email = "hjones2199@gmail.com";
     github = "hjones2199";
@@ -6976,6 +7351,7 @@
     githubId = 6074754;
     name = "Hlodver Sigurdsson";
   };
+<<<<<<< HEAD
   hmajid2301 = {
     name = "Haseeb Majid";
     email = "hello@haseebmajid.dev";
@@ -6985,6 +7361,8 @@
       fingerprint = "A236 785D 59F1 9076 1E9C E8EC 7828 3DB3 D233 E1F9";
     }];
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   hmenke = {
     name = "Henri Menke";
     email = "henri@henrimenke.de";
@@ -7111,11 +7489,14 @@
       fingerprint = "78C2 E81C 828A 420B 269A  EBC1 49FA 39F8 A7F7 35F9";
     }];
   };
+<<<<<<< HEAD
   hulr = {
     github = "hulr";
     githubId = 17255815;
     name = "hulr";
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   humancalico = {
     email = "humancalico@disroot.org";
     github = "humancalico";
@@ -7236,12 +7617,15 @@
     github = "Icy-Thought";
     githubId = 53710398;
   };
+<<<<<<< HEAD
   idlip = {
     name = "Dilip";
     email = "igoldlip@gmail.com";
     github = "idlip";
     githubId = 117019901;
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   idontgetoutmuch = {
     email = "dominic@steinitz.org";
     github = "idontgetoutmuch";
@@ -7316,7 +7700,11 @@
   };
   ilya-kolpakov = {
     email = "ilya.kolpakov@gmail.com";
+<<<<<<< HEAD
     github = "1pakch";
+=======
+    github = "ilya-kolpakov";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     githubId = 592849;
     name = "Ilya Kolpakov";
   };
@@ -7374,6 +7762,15 @@
       fingerprint = "F5B2 BE1B 9AAD 98FE 2916  5597 3665 FFF7 9D38 7BAA";
     }];
   };
+<<<<<<< HEAD
+=======
+  imsofi = {
+    email = "sofi+git@mailbox.org";
+    github = "imsofi";
+    githubId = 20756843;
+    name = "Sofi";
+  };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   imuli = {
     email = "i@imu.li";
     github = "imuli";
@@ -7386,6 +7783,15 @@
     githubId = 36667224;
     name = "Yingchi Long";
   };
+<<<<<<< HEAD
+=======
+  indeednotjames = {
+    email = "nix@indeednotjames.com";
+    github = "IndeedNotJames";
+    githubId = 55066419;
+    name = "Emily Lange";
+  };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   indexyz = {
     email = "indexyz@pm.me";
     github = "5aaee9";
@@ -7439,12 +7845,15 @@
       fingerprint = "5CB5 9AA0 D180 1997 2FB3  E0EC 943A 1DE9 372E BE4E";
     }];
   };
+<<<<<<< HEAD
   invokes-su = {
     email = "nixpkgs-commits@deshaw.com";
     github = "invokes-su";
     githubId = 88038050;
     name = "Souvik Sen";
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ionutnechita = {
     email = "ionut_n2001@yahoo.com";
     github = "ionutnechita";
@@ -7457,11 +7866,14 @@
     githubId = 1817528;
     name = "Igor Polyakov";
   };
+<<<<<<< HEAD
   iquerejeta = {
     github = "iquerejeta";
     githubId = 31273774;
     name = "Inigo Querejeta-Azurmendi";
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   irenes = {
     name = "Irene Knapp";
     email = "ireneista@gmail.com";
@@ -7478,12 +7890,15 @@
     githubId = 137306;
     name = "Michele Catalano";
   };
+<<<<<<< HEAD
   isaozler = {
     email = "isaozler@gmail.com";
     github = "isaozler";
     githubId = 1378630;
     name = "Isa Ozler";
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   isgy = {
     name = "isgy";
     email = "isgy@teiyg.com";
@@ -7571,12 +7986,15 @@
     githubId = 20320695;
     name = "Matan Bendix Shenhav";
   };
+<<<<<<< HEAD
   iynaix = {
     email = "iynaix@gmail.com";
     github = "iynaix";
     githubId = 94313;
     name = "Xianyi Lin";
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   izorkin = {
     email = "Izorkin@gmail.com";
     github = "Izorkin";
@@ -7613,6 +8031,7 @@
     github = "j4m3s-s";
     githubId = 9413812;
   };
+<<<<<<< HEAD
   jacbart = {
     name = "Jack Bartlett";
     email = "jacbart@gmail.com";
@@ -7625,6 +8044,8 @@
     github = "jakub-pravda";
     githubId = 16310411;
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   jacg = {
     name = "Jacek Generowicz";
     email = "jacg@my-post-office.net";
@@ -7637,12 +8058,15 @@
     githubId = 7558482;
     name = "Jack Gerrits";
   };
+<<<<<<< HEAD
   jaduff = {
     email = "jdduffpublic@proton.me";
     github = "jaduff";
     githubId = 10690970;
     name = "James Duff";
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   jagajaga = {
     email = "ars.seroka@gmail.com";
     github = "jagajaga";
@@ -7695,11 +8119,14 @@
     github = "jali-clarke";
     githubId = 17733984;
   };
+<<<<<<< HEAD
   james-atkins = {
     name = "James Atkins";
     github = "james-atkins";
     githubId = 9221409;
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   jamiemagee = {
     email = "jamie.magee@gmail.com";
     github = "JamieMagee";
@@ -7751,8 +8178,13 @@
   };
   jayesh-bhoot = {
     name = "Jayesh Bhoot";
+<<<<<<< HEAD
     email = "jb@jayeshbhoot.com";
     github = "bhootjb";
+=======
+    email = "jayesh@bhoot.sh";
+    github = "jayeshbhoot";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     githubId = 1915507;
   };
   jayman2000 = {
@@ -7839,12 +8271,15 @@
     githubId = 8685505;
     name = "Jen-Chieh Shen";
   };
+<<<<<<< HEAD
   jcspeegs = {
     email = "justin@speegs.com";
     github = "jcspeegs";
     githubId = 34928409;
     name = "Justin Speegle";
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   jcumming = {
     email = "jack@mudshark.org";
     github = "jcumming";
@@ -7938,6 +8373,7 @@
     githubId = 1608697;
     name = "Jens Binkert";
   };
+<<<<<<< HEAD
   jeremiahs = {
     email = "jeremiah@secrist.xyz";
     github = "JeremiahSecrist";
@@ -7945,6 +8381,8 @@
     matrix = "@jeremiahs:matrix.org";
     name = "Jeremiah Secrist";
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   jeremyschlatter = {
     email = "github@jeremyschlatter.com";
     github = "jeremyschlatter";
@@ -8025,11 +8463,14 @@
     githubId = 31008330;
     name = "Jann Marc Villablanca";
   };
+<<<<<<< HEAD
   jgarcia = {
     github = "chewblacka";
     githubId = 18430320;
     name = "John Garcia";
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   jgart = {
     email = "jgart@dismail.de";
     github = "jgarte";
@@ -8178,12 +8619,15 @@
     githubId = 8900;
     name = "Johan Magnus Jonsson";
   };
+<<<<<<< HEAD
   jmbaur = {
     email = "jaredbaur@fastmail.com";
     github = "jmbaur";
     githubId = 45740526;
     name = "Jared Baur";
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   jmc-figueira = {
     email = "business+nixos@jmc-figueira.dev";
     github = "jmc-figueira";
@@ -8212,12 +8656,15 @@
     githubId = 2308444;
     name = "Joshua Gilman";
   };
+<<<<<<< HEAD
   jmillerpdt = {
     email = "jcmiller@pdtpartners.com";
     github = "jmillerpdt";
     githubId = 54179289;
     name = "Jason Miller";
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   jnsgruk = {
     email = "jon@sgrs.uk";
     github = "jnsgruk";
@@ -8261,10 +8708,17 @@
     name = "Jocelyn Thode";
   };
   joedevivo = {
+<<<<<<< HEAD
     github = "joedevivo";
     githubId = 55951;
     name = "Joe DeVivo";
   };
+=======
+     github = "joedevivo";
+     githubId = 55951;
+     name = "Joe DeVivo";
+   };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   joelancaster = {
     email = "joe.a.lancas@gmail.com";
     github = "JoeLancaster";
@@ -8308,12 +8762,15 @@
     githubId = 297653;
     name = "Joe Salisbury";
   };
+<<<<<<< HEAD
   johannwagner = {
     email = "nix@wagner.digital";
     github = "johannwagner";
     githubId = 12380026;
     name = "Johann Wagner";
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   johanot = {
     email = "write@ownrisk.dk";
     github = "johanot";
@@ -8344,12 +8801,15 @@
     githubId = 2576152;
     name = "John M. Harris, Jr.";
   };
+<<<<<<< HEAD
   johnpyp = {
     name = "John Paul Penaloza";
     email = "johnpyp.dev@gmail.com";
     github = "johnpyp";
     githubId = 20625636;
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   johnramsden = {
     email = "johnramsden@riseup.net";
     github = "johnramsden";
@@ -8460,6 +8920,7 @@
     github = "jorsn";
     githubId = 4646725;
   };
+<<<<<<< HEAD
   joscha = {
     name = "joscha Loos";
     email = "j.loos@posteo.net";
@@ -8471,6 +8932,8 @@
     github = "josephst";
     githubId = 1269177;
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   joshniemela = {
     name = "Joshua Niemelä";
     email = "josh@jniemela.dk";
@@ -8587,6 +9050,7 @@
     name = "John Soo";
     githubId = 10039785;
   };
+<<<<<<< HEAD
   jsusk = {
     email = "joshua@suskalo.org";
     github = "IGJoshua";
@@ -8599,6 +9063,8 @@
     github = "jtbx";
     githubId = 92071952;
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   jtcoolen = {
     email = "jtcoolen@pm.me";
     name = "Julien Coolen";
@@ -8629,7 +9095,11 @@
   };
   juaningan = {
     email = "juaningan@gmail.com";
+<<<<<<< HEAD
     github = "oneingan";
+=======
+    github = "uningan";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     githubId = 810075;
     name = "Juan Rodal";
   };
@@ -8658,18 +9128,22 @@
     githubId = 1792886;
     name = "Julien Malka";
   };
+<<<<<<< HEAD
   juliusrickert = {
     email = "nixpkgs@juliusrickert.de";
     github = "juliusrickert";
     githubId = 5007494;
     name = "Julius Rickert";
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   julm = {
     email = "julm+nixpkgs@sourcephile.fr";
     github = "ju1m";
     githubId = 21160136;
     name = "Julien Moutinho";
   };
+<<<<<<< HEAD
   Julow = {
     email = "jules@j3s.fr";
     matrix = "@juloo:matrix.org";
@@ -8677,6 +9151,8 @@
     githubId = 2310568;
     name = "Jules Aguillon";
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   jumper149 = {
     email = "felixspringer149@gmail.com";
     github = "jumper149";
@@ -8701,12 +9177,15 @@
     githubId = 662666;
     name = "Justinas Stankevičius";
   };
+<<<<<<< HEAD
   justinlime = {
     email = "justinlime1999@gmail.com";
     github = "justinlime";
     githubId = 119710965;
     name = "Justin Fields";
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   justinlovinger = {
     email = "git@justinlovinger.com";
     github = "JustinLovinger";
@@ -8863,6 +9342,7 @@
     githubId = 1927188;
     name = "karolchmist";
   };
+<<<<<<< HEAD
   kashw2 = {
     email = "supra4keanu@hotmail.com";
     github = "kashw2";
@@ -8874,6 +9354,8 @@
     githubId = 49727155;
     name = "Paul Meyer";
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   kayhide = {
     email = "kayhide@gmail.com";
     github = "kayhide";
@@ -8905,12 +9387,15 @@
     githubId = 37185887;
     name = "Calvin Kim";
   };
+<<<<<<< HEAD
   keenanweaver = {
     email = "keenanweaver@protonmail.com";
     name = "Keenan Weaver";
     github = "keenanweaver";
     githubId = 37268985;
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   keksbg = {
     email = "keksbg@riseup.net";
     name = "Stella";
@@ -8962,11 +9447,14 @@
     githubId = 762421;
     name = "Pierre Thierry";
   };
+<<<<<<< HEAD
   keto = {
     github = "TheRealKeto";
     githubId = 24854941;
     name = "Keto";
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ketzacoatl = {
     email = "ketzacoatl@protonmail.com";
     github = "ketzacoatl";
@@ -9005,6 +9493,7 @@
     githubId = 546087;
     name = "Kristoffer K. Føllesdal";
   };
+<<<<<<< HEAD
   kgtkr = {
     email = "contact@kgtkr.net";
     github = "kgtkr";
@@ -9026,6 +9515,8 @@
     githubId = 59027018;
     name = "Andrey Khorokhorin";
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   kho-dialga = {
     email = "ivandashenyou@gmail.com";
     github = "Kho-Dialga";
@@ -9053,12 +9544,15 @@
     githubId = 16481032;
     name = "Kiba Fox";
   };
+<<<<<<< HEAD
   kidanger = {
     email = "angerj.dev@gmail.com";
     github = "kidanger";
     githubId = 297479;
     name = "Jérémy Anger";
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   kidd = {
     email = "raimonster@gmail.com";
     github = "kidd";
@@ -9130,6 +9624,7 @@
     githubId = 691290;
     name = "Keshav Kini";
   };
+<<<<<<< HEAD
   kip93 = {
     name = "Leandro Reina Kiperman";
     email = "leandro@kip93.net";
@@ -9137,6 +9632,8 @@
     github = "kip93";
     githubId = 26793632;
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   kira-bruneau = {
     email = "kira.bruneau@pm.me";
     name = "Kira Bruneau";
@@ -9256,24 +9753,30 @@
     github = "KnairdA";
     githubId = 498373;
   };
+<<<<<<< HEAD
   knarkzel = {
     email = "knarkzel@gmail.com";
     name = "Knarkzel";
     github = "Knarkzel";
     githubId = 85593302;
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   knedlsepp = {
     email = "josef.kemetmueller@gmail.com";
     github = "knedlsepp";
     githubId = 3287933;
     name = "Josef Kemetmüller";
   };
+<<<<<<< HEAD
   knightpp = {
     email = "knightpp@proton.me";
     github = "knightpp";
     githubId = 28928944;
     name = "Danylo Kondratiev";
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   knl = {
     email = "nikola@knezevic.co";
     github = "knl";
@@ -9329,18 +9832,30 @@
     githubId = 524268;
     name = "Koral";
   };
+<<<<<<< HEAD
   koralowiec = {
     email = "qnlgzyrw@anonaddy.me";
     github = "koralowiec";
     githubId = 36413794;
     name = "Arek Kalandyk";
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   koslambrou = {
     email = "koslambrou@gmail.com";
     github = "koslambrou";
     githubId = 2037002;
     name = "Konstantinos";
   };
+<<<<<<< HEAD
+=======
+  kototama = {
+    email = "kototama@posteo.jp";
+    github = "kototama";
+    githubId = 128620;
+    name = "Kototama";
+  };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   kouyk = {
     email = "skykinetic@stevenkou.xyz";
     github = "kouyk";
@@ -9425,6 +9940,7 @@
     githubId = 5759930;
     name = "Alexis Destrez";
   };
+<<<<<<< HEAD
   krupkat = {
     github = "krupkat";
     githubId = 6817216;
@@ -9437,6 +9953,8 @@
     github = "krzaczek";
     githubId = 5773701;
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ktf = {
     email = "giulio.eulisse@cern.ch";
     github = "ktf";
@@ -9511,12 +10029,15 @@
       fingerprint = "5A9A 1C9B 2369 8049 3B48  CF5B 81A1 5409 4816 2372";
     }];
   };
+<<<<<<< HEAD
   l0b0 = {
     email = "victor@engmark.name";
     github = "l0b0";
     githubId = 168301;
     name = "Victor Engmark";
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   l3af = {
     email = "L3afMeAlon3@gmail.com";
     matrix = "@L3afMe:matrix.org";
@@ -9595,12 +10116,15 @@
     githubId = 621759;
     name = "Lassulus";
   };
+<<<<<<< HEAD
   laurailway = {
     email = "laurailway.git@posteo.net";
     github = "LAURAilway";
     githubId = 118690640;
     name = "Laura";
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   laurent-f1z1 = {
     email = "laurent.nixpkgs@fainsin.bzh";
     github = "Laurent2916";
@@ -9691,7 +10215,11 @@
     github = "leifhelm";
     githubId = 31693262;
     name = "Jakob Leifhelm";
+<<<<<<< HEAD
     keys = [{
+=======
+    keys =[{
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       fingerprint = "4A82 F68D AC07 9FFD 8BF0  89C4 6817 AA02 3810 0822";
     }];
   };
@@ -9739,12 +10267,15 @@
     githubId = 1572058;
     name = "Leonardo Cecchi";
   };
+<<<<<<< HEAD
   leonid = {
     email = "belyaev.l@northeastern.edu";
     github = "leonidbelyaev";
     githubId = 77865363;
     name = "Leonid Belyaev";
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   leshainc = {
     email = "leshainc@fomalhaut.me";
     github = "LeshaInc";
@@ -9815,12 +10346,15 @@
     githubId = 1769386;
     name = "Liam Diprose";
   };
+<<<<<<< HEAD
   liberatys = {
     email = "liberatys@hey.com";
     name = "Nick Anthony Flueckiger";
     github = "liberatys";
     githubId = 35100156;
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   libjared = {
     email = "jared@perrycode.com";
     github = "libjared";
@@ -9918,6 +10452,7 @@
     githubId = 725613;
     name = "Linus Arver";
   };
+<<<<<<< HEAD
   linuxissuper = {
     email = "m+nix@linuxistcool.de";
     matrix = "@m:linuxistcool.de";
@@ -9925,6 +10460,8 @@
     githubId = 74221543;
     name = "Moritz Goltdammer";
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   lionello = {
     email = "lio@lunesu.com";
     github = "lionello";
@@ -9940,12 +10477,15 @@
       fingerprint = "74F5 E5CC 19D3 B5CB 608F  6124 68FF 81E6 A785 0F49";
     }];
   };
+<<<<<<< HEAD
   liyangau = {
     email = "d@aufomm.com";
     github = "liyangau";
     githubId = 71299093;
     name = "Li Yang";
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   lizelive = {
     email = "nixpkgs@lize.live";
     github = "lizelive";
@@ -9986,12 +10526,15 @@
       fingerprint = "1763 9903 2D7C 5B82 5D5A  0EAD A2BC 3C6F 1435 1991";
     }];
   };
+<<<<<<< HEAD
   locochoco = {
     email = "contact@locochoco.dev";
     github = "loco-choco";
     githubId = 58634087;
     name = "Ivan Pancheniak";
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   lodi = {
     email = "anthony.lodi@gmail.com";
     github = "lodi";
@@ -10039,12 +10582,15 @@
     githubId = 5624721;
     name = "Ben Wolsieffer";
   };
+<<<<<<< HEAD
   lord-valen = {
     name = "Lord Valen";
     matrix = "@lord-valen:matrix.org";
     github = "Lord-Valen";
     githubId = 46138807;
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   lorenz = {
     name = "Lorenz Brun";
     email = "lorenz@brun.one";
@@ -10146,24 +10692,30 @@
     githubId = 8555953;
     name = "Laure Tavard";
   };
+<<<<<<< HEAD
   lu15w1r7h = {
     email = "lwirth2000@gmail.com";
     github = "LU15W1R7H";
     githubId = 37505890;
     name = "Luis Wirth";
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   luc65r = {
     email = "lucas@ransan.tk";
     github = "luc65r";
     githubId = 59375051;
     name = "Lucas Ransan";
   };
+<<<<<<< HEAD
   LucaGuerra = {
     email = "luca@guerra.sh";
     github = "LucaGuerra";
     githubId = 35580196;
     name = "Luca Guerra";
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   lucasew = {
     email = "lucas59356@gmail.com";
     github = "lucasew";
@@ -10194,6 +10746,7 @@
     githubId = 1168435;
     name = "Ludovic Courtès";
   };
+<<<<<<< HEAD
   ludovicopiero = {
     email = "lewdovico@gnuweeb.org";
     github = "ludovicopiero";
@@ -10203,6 +10756,8 @@
       fingerprint = "72CA 4F61 46C6 0DAB 6193  4D35 3911 DD27 6CFE 779C";
     }];
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   lufia = {
     email = "lufia@lufia.org";
     github = "lufia";
@@ -10230,6 +10785,7 @@
     githubId = 22085373;
     name = "Luis Hebendanz";
   };
+<<<<<<< HEAD
   luisdaranda = {
     email = "luisdomingoaranda@gmail.com";
     github = "propet";
@@ -10246,6 +10802,8 @@
     githubId = 86449787;
     name = "Luis Quiñones";
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   luispedro = {
     email = "luis@luispedro.org";
     github = "luispedro";
@@ -10268,12 +10826,15 @@
       fingerprint = "97A0 AE5E 03F3 499B 7D7A  65C6 76A4 1432 37EF 5817";
     }];
   };
+<<<<<<< HEAD
   lukaswrz = {
     email = "lukas@wrz.one";
     github = "lukaswrz";
     githubId = 84395723;
     name = "Lukas Wurzinger";
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   lukeadams = {
     email = "luke.adams@belljar.io";
     github = "lukeadams";
@@ -10334,6 +10895,7 @@
     githubId = 782440;
     name = "Luna Nova";
   };
+<<<<<<< HEAD
   luochen1990 = {
     email = "luochen1990@gmail.com";
     github = "luochen1990";
@@ -10346,6 +10908,8 @@
     githubId = 44469719;
     name = "Jussi Kuokkanen";
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   lux = {
     email = "lux@lux.name";
     github = "luxzeitlos";
@@ -10427,11 +10991,14 @@
       fingerprint = "1147 43F1 E707 6F3E 6F4B  2C96 B9A8 B592 F126 F8E8";
     }];
   };
+<<<<<<< HEAD
   mac-chaffee = {
     name = "Mac Chaffee";
     github = "mac-chaffee";
     githubId = 7581860;
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   maddiethecafebabe = {
     email = "maddie@cafebabe.date";
     github = "maddiethecafebabe";
@@ -10457,6 +11024,7 @@
     githubId = 93990818;
     name = "Madoura";
   };
+<<<<<<< HEAD
   maeve = {
     email = "mrey@mailbox.org";
     matrix = "@maeve:catgirl.cloud";
@@ -10467,6 +11035,8 @@
       fingerprint = "96C9 D086 CC9D 7BD7 EF24  80E2 9168 796A 1CC3 AEA2";
     }];
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   mafo = {
     email = "Marc.Fontaine@gmx.de";
     github = "MarcFontaine";
@@ -10550,11 +11120,14 @@
     githubId = 2914269;
     name = "Malo Bourgon";
   };
+<<<<<<< HEAD
   malt3 = {
     github = "malt3";
     githubId = 1780588;
     name = "Malte Poll";
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   malte-v = {
     email = "nixpkgs@mal.tc";
     github = "malte-v";
@@ -10567,6 +11140,7 @@
     githubId = 346094;
     name = "Michael Alyn Miller";
   };
+<<<<<<< HEAD
   mangoiv = {
     email = "contact@mangoiv.com";
     github = "mangoiv";
@@ -10579,6 +11153,8 @@
     githubId = 1189862;
     name = "Valter Nazianzeno";
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   manojkarthick = {
     email = "smanojkarthick@gmail.com";
     github = "manojkarthick";
@@ -10629,6 +11205,7 @@
     githubId = 105451387;
     name = "Maria";
   };
+<<<<<<< HEAD
   marie = {
     email = "tabmeier12+nix@gmail.com";
     github = "nycodeghg";
@@ -10636,6 +11213,8 @@
     matrix = "@marie:marie.cologne";
     name = "Marie Ramlow";
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   marijanp = {
     name = "Marijan Petričević";
     email = "marijan.petricevic94@gmail.com";
@@ -10861,6 +11440,7 @@
     githubId = 95194;
     name = "Mauricio Scheffer";
   };
+<<<<<<< HEAD
   mawis = {
     email = "m@tthias.eu";
     github = "mawis";
@@ -10877,6 +11457,9 @@
     name = "Max Ambaum";
   };
   maxbrunet = {
+=======
+   maxbrunet = {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     email = "max@brnt.mx";
     github = "maxbrunet";
     githubId = 32458727;
@@ -10891,6 +11474,15 @@
     githubId = 502805;
     name = "Max Zerzouri";
   };
+<<<<<<< HEAD
+=======
+  maxeaubrey = {
+    email = "maxeaubrey@gmail.com";
+    github = "maxeaubrey";
+    githubId = 35892750;
+    name = "Maxine Aubrey";
+  };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   maxhbr = {
     email = "nixos@maxhbr.dev";
     github = "maxhbr";
@@ -10971,12 +11563,15 @@
     githubId = 613740;
     name = "Martin Baillie";
   };
+<<<<<<< HEAD
   mbalatsko = {
     email = "mbalatsko@gmail.com";
     github = "mbalatsko";
     githubId = 15967073;
     name = "Maksym Balatsko";
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   mbbx6spp = {
     email = "me@susanpotter.net";
     github = "mbbx6spp";
@@ -11019,6 +11614,7 @@
     githubId = 10420834;
     name = "Mihai-Drosi Caju";
   };
+<<<<<<< HEAD
   mccurdyc = {
     email = "mccurdyc22@gmail.com";
     github = "mccurdyc";
@@ -11027,6 +11623,13 @@
     keys = [{
       fingerprint = "D709 03C8 0BE9 ACDC 14F0  3BFB 77BF E531 397E DE94";
     }];
+=======
+  mcbeth = {
+    email = "mcbeth@broggs.org";
+    github = "mcbeth";
+    githubId = 683809;
+    name = "Jeffrey Brent McBeth";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
   mcmtroffaes = {
     email = "matthias.troffaes@gmail.com";
@@ -11035,6 +11638,7 @@
     name = "Matthias C. M. Troffaes";
   };
   McSinyx = {
+<<<<<<< HEAD
     email = "cnx@loang.net";
     github = "McSinyx";
     githubId = 13689192;
@@ -11044,6 +11648,15 @@
       { fingerprint = "E90E 11B8 0493 343B 6132  E394 2714 8B2C 06A2 224B"; }
       { fingerprint = "838A FE0D 55DC 074E 360F  943A 84B6 9CE6 F3F6 B767"; }
     ];
+=======
+    email = "mcsinyx@disroot.org";
+    github = "McSinyx";
+    githubId = 13689192;
+    name = "Nguyễn Gia Phong";
+    keys = [{
+      fingerprint = "E90E 11B8 0493 343B 6132  E394 2714 8B2C 06A2 224B";
+    }];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
   mcwitt = {
     email = "mcwitt@gmail.com";
@@ -11157,12 +11770,15 @@
     githubId = 3300322;
     name = "Mitchell Fossen";
   };
+<<<<<<< HEAD
   mfrw = {
     email = "falakreyaz@gmail.com";
     github = "mfrw";
     githubId = 4929861;
     name = "Muhammad Falak R Wani";
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   mgdelacroix = {
     email = "mgdelacroix@gmail.com";
     github = "mgdelacroix";
@@ -11188,11 +11804,14 @@
     githubId = 9469313;
     name = "Gregoire Martinache";
   };
+<<<<<<< HEAD
   mgregson = {
     github = "mgregson";
     githubId = 333572;
     name = "Michael Gregson";
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   mgttlinger = {
     email = "megoettlinger@gmail.com";
     github = "mgttlinger";
@@ -11230,6 +11849,7 @@
       fingerprint = "8CE3 2906 516F C4D8 D373  308A E189 648A 55F5 9A9F";
     }];
   };
+<<<<<<< HEAD
   mib = {
     name = "mib";
     email = "mib@kanp.ai";
@@ -11240,6 +11860,8 @@
       fingerprint = "AB0D C647 B2F7 86EB 045C 7EFE CF6E 67DE D6DC 1E3F";
     }];
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   mic92 = {
     email = "joerg@thalheim.io";
     matrix = "@mic92:nixos.dev";
@@ -11263,6 +11885,7 @@
     github = "michaelBelsanti";
     githubId = 62124625;
   };
+<<<<<<< HEAD
   michaelCTS = {
     email = "michael.vogel@cts.co";
     name = "Michael Vogel";
@@ -11275,6 +11898,8 @@
     github = "michaeldonovan";
     githubId = 14077230;
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   michaelgrahamevans = {
     email = "michaelgrahamevans@gmail.com";
     name = "Michael Evans";
@@ -11286,7 +11911,11 @@
     name = "Michael Pacheco";
     github = "MichaelPachec0";
     githubId = 48970112;
+<<<<<<< HEAD
     keys = [{
+=======
+    keys = [ {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       fingerprint = "8D12 991F 5558 C501 70B2  779C 7811 46B0 B5F9 5F64";
     }];
   };
@@ -11296,12 +11925,15 @@
     githubId = 1699466;
     name = "Michael Peyton Jones";
   };
+<<<<<<< HEAD
   michaelshmitty = {
     name = "Michael Smith";
     email = "shmitty@protonmail.com";
     github = "michaelshmitty";
     githubId = 114845;
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   michalrus = {
     email = "m@michalrus.com";
     github = "michalrus";
@@ -11342,12 +11974,15 @@
       fingerprint = "FEF0 AE2D 5449 3482 5F06  40AA 186A 1EDA C5C6 3F83";
     }];
   };
+<<<<<<< HEAD
   mig4ng = {
     email = "mig4ng@gmail.com";
     github = "mig4ng";
     githubId = 5817039;
     name = "Miguel Carneiro";
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   mightyiam = {
     email = "mightyiampresence@gmail.com";
     github = "mightyiam";
@@ -11478,6 +12113,7 @@
     githubId = 1776903;
     name = "Andrew Abbott";
   };
+<<<<<<< HEAD
   Misaka13514 = {
     name = "Misaka13514";
     email = "Misaka13514@gmail.com";
@@ -11487,6 +12123,8 @@
     keys =
       [{ fingerprint = "293B 93D8 A471 059F 85D7  16A6 5BA9 2099 D9BE 2DAA"; }];
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   mislavzanic = {
     email = "mislavzanic3@gmail.com";
     github = "mislavzanic";
@@ -11619,12 +12257,15 @@
     githubId = 708570;
     name = "Manuel Mendez";
   };
+<<<<<<< HEAD
   mmusnjak = {
     email = "marko.musnjak@gmail.com";
     github = "mmusnjak";
     githubId = 668956;
     name = "Marko Mušnjak";
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   mnacamura = {
     email = "m.nacamura@gmail.com";
     github = "mnacamura";
@@ -11693,12 +12334,15 @@
       fingerprint = "6460 4147 C434 F65E C306  A21F 135E EDD0 F719 34F3";
     }];
   };
+<<<<<<< HEAD
   moody = {
     email = "moody@posixcafe.org";
     github = "majiru";
     githubId = 3579600;
     name = "Jacob Moody";
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   moosingin3space = {
     email = "moosingin3space@gmail.com";
     github = "moosingin3space";
@@ -11834,12 +12478,15 @@
     name = "Maxim Schuwalow";
     email = "maxim.schuwalow@gmail.com";
   };
+<<<<<<< HEAD
   mschwaig = {
     name = "Martin Schwaighofer";
     github = "mschwaig";
     githubId = 3856390;
     email = "mschwaig+nixpkgs@eml.cc";
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   msfjarvis = {
     github = "msfjarvis";
     githubId = 13348378;
@@ -11939,12 +12586,15 @@
     githubId = 220262;
     name = "Ion Mudreac";
   };
+<<<<<<< HEAD
   multisn8 = {
     email = "all-things-nix@multisamplednight.com";
     github = "MultisampledNight";
     githubId = 80128916;
     name = "MultisampledNight";
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   multun = {
     email = "victor.collod@epita.fr";
     github = "multun";
@@ -12008,12 +12658,15 @@
     githubId = 38578268;
     name = "Morgan Wolfe";
   };
+<<<<<<< HEAD
   mxkrsv = {
     email = "mxkrsv@disroot.org";
     github = "mxkrsv";
     githubId = 59313755;
     name = "Maxim Karasev";
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   myaats = {
     email = "mats@mats.sh";
     github = "Myaats";
@@ -12037,6 +12690,7 @@
     githubId = 22817873;
     name = "Ember Keske";
   };
+<<<<<<< HEAD
   n3oney = {
     name = "Michał Minarowski";
     email = "nixpkgs@neoney.dev";
@@ -12047,6 +12701,8 @@
       fingerprint = "9E6A 25F2 C1F2 9D76 ED00  1932 1261 173A 01E1 0298";
     }];
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nadrieril = {
     email = "nadrieril@gmail.com";
     github = "Nadrieril";
@@ -12074,11 +12730,14 @@
     githubId = 1009523;
     name = "Ashijit Pramanik";
   };
+<<<<<<< HEAD
   name-snrl = {
     github = "name-snrl";
     githubId = 72071763;
     name = "Yusup Urazaev";
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   namore = {
     email = "namor@hemio.de";
     github = "namore";
@@ -12301,6 +12960,7 @@
     githubId = 13920346;
     name = "Sébastien Iooss";
   };
+<<<<<<< HEAD
   networkexception = {
     name = "networkException";
     email = "nix@nwex.de";
@@ -12311,18 +12971,23 @@
       fingerprint = "A0B9 48C5 A263 55C2 035F  8567 FBB7 2A94 52D9 1A72";
     }];
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   neverbehave = {
     email = "i@never.pet";
     github = "NeverBehave";
     githubId = 17120571;
     name = "Xinhao Luo";
   };
+<<<<<<< HEAD
   nevivurn = {
     email = "nevivurn@nevi.dev";
     github = "nevivurn";
     githubId = 7698349;
     name = "Yongun Seong";
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   newam = {
     email = "alex@thinglab.org";
     github = "newAM";
@@ -12375,11 +13040,14 @@
     github = "NickCao";
     githubId = 15247171;
   };
+<<<<<<< HEAD
   nickgerace = {
     name = "Nick Gerace";
     github = "nickgerace";
     githubId = 39320683;
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nickhu = {
     email = "me@nickhu.co.uk";
     github = "NickHu";
@@ -12422,12 +13090,15 @@
       fingerprint = "E576 BFB2 CF6E B13D F571  33B9 E315 A758 4613 1564";
     }];
   };
+<<<<<<< HEAD
   nielsegberts = {
     email = "nix@nielsegberts.nl";
     github = "nielsegberts";
     githubId = 368712;
     name = "Niels Egberts";
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nigelgbanks = {
     name = "Nigel Banks";
     email = "nigel.g.banks@gmail.com";
@@ -12470,6 +13141,7 @@
     githubId = 26231126;
     name = "Nils ANDRÉ-CHANG";
   };
+<<<<<<< HEAD
   nim65s = {
     email = "guilhem.saurel@laas.fr";
     matrix = "@gsaurel:laas.fr";
@@ -12480,6 +13152,8 @@
       fingerprint = "9B1A 7906 5D2F 2B80 6C8A  5A1C 7D2A CDAF 4653 CF28";
     }];
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ninjatrappeur = {
     email = "felix@alternativebit.fr";
     matrix = "@ninjatrappeur:matrix.org";
@@ -12622,10 +13296,16 @@
   };
   NotAShelf = {
     name = "NotAShelf";
+<<<<<<< HEAD
     email = "raf@notashelf.dev";
     github = "NotAShelf";
     githubId = 62766066;
     matrix = "@raf:notashelf.dev";
+=======
+    email = "itsashelf@gmail.com";
+    github = "NotAShelf";
+    githubId = 62766066;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
   notbandali = {
     name = "Amin Bandali";
@@ -12649,12 +13329,15 @@
     githubId = 2946283;
     name = "Brian Cohen";
   };
+<<<<<<< HEAD
   nova-madeline = {
     matrix = "@nova:tchncs.de";
     github = "nova-r";
     githubId = 126072875;
     name = "nova madeline";
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   novenary = {
     email = "streetwalkermc@gmail.com";
     github = "9ary";
@@ -12698,12 +13381,15 @@
     githubId = 15707703;
     name = "Helmi Nour";
   };
+<<<<<<< HEAD
   nrhtr = {
     email = "jeremy@jenga.xyz";
     github = "nrhtr";
     githubId = 74261;
     name = "Jeremy Parker";
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nshalman = {
     email = "nahamu@gmail.com";
     github = "nshalman";
@@ -12729,7 +13415,11 @@
     name = "Kartik Gokte";
   };
   nullishamy = {
+<<<<<<< HEAD
     email = "spam@amyerskine.me";
+=======
+    email = "amy.codes@null.net";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     name = "nullishamy";
     github = "nullishamy";
     githubId = 99221043;
@@ -12759,12 +13449,15 @@
     githubId = 16027994;
     name = "Nathan Viets";
   };
+<<<<<<< HEAD
   nyanbinary = {
     email = "vextium@skiff.com";
     github = "nyabinary";
     githubId = 97130632;
     name = "Niko";
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nyanloutre = {
     email = "paul@nyanlout.re";
     github = "nyanloutre";
@@ -12799,12 +13492,15 @@
     githubId = 30825096;
     name = "Ning Zhang";
   };
+<<<<<<< HEAD
   oaksoaj = {
     email = "oaksoaj@riseup.net";
     name = "Oaksoaj";
     github = "oaksoaj";
     githubId = 103952141;
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   obadz = {
     email = "obadz-nixos@obadz.com";
     github = "obadz";
@@ -12933,6 +13629,7 @@
     github = "jackyliu16";
     githubId = 50787361;
   };
+<<<<<<< HEAD
   onemoresuza = {
     name = "Coutinho de Souza";
     email = "dev@onemoresuza.mailer.me";
@@ -12942,6 +13639,8 @@
       fingerprint = "484F D3B8 BAD7 BF5D 8B68  2AEA A2ED 1159 935E 4D7E";
     }];
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   onixie = {
     email = "onixie@gmail.com";
     github = "onixie";
@@ -12966,18 +13665,22 @@
     githubId = 915970;
     name = "Austin Platt";
   };
+<<<<<<< HEAD
   onur-ozkan = {
     name = "Onur Ozkan";
     email = "contact@onurozkan.dev";
     github = "onur-ozkan";
     githubId = 39852038;
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ony = {
     name = "Mykola Orliuk";
     email = "virkony@gmail.com";
     github = "ony";
     githubId = 11265;
   };
+<<<<<<< HEAD
   ooliver1 = {
     name = "Oliver Wilkes";
     email = "oliverwilkes2006@icloud.com";
@@ -12987,6 +13690,8 @@
       fingerprint = "D055 8A23 3947 B7A0 F966  B07F 0B41 0348 9833 7273";
     }];
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   opeik = {
     email = "sandro@stikic.com";
     github = "opeik";
@@ -13011,12 +13716,15 @@
     githubId = 75299;
     name = "Malcolm Matalka";
   };
+<<<<<<< HEAD
   orichter = {
     email = "richter-oliver@gmx.net";
     github = "RichterOliver";
     githubId = 135209509;
     name = "Oliver Richter";
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   orivej = {
     email = "orivej@gmx.fr";
     github = "orivej";
@@ -13035,11 +13743,14 @@
     githubId = 357005;
     name = "Marco Orovecchia";
   };
+<<<<<<< HEAD
   orthros = {
     github = "orthros";
     githubId = 7820716;
     name = "orthros";
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   osener = {
     email = "ozan@ozansener.com";
     github = "osener";
@@ -13523,12 +14234,15 @@
     githubId = 421510;
     name = "Noé Rubinstein";
   };
+<<<<<<< HEAD
   pho = {
     email = "phofin@gmail.com";
     github = "pho";
     githubId = 88469;
     name = "Jaime Breva";
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   photex = {
     email = "photex@gmail.com";
     github = "photex";
@@ -13614,12 +14328,15 @@
     githubId = 1830959;
     name = "Piper McCorkle";
   };
+<<<<<<< HEAD
   piturnah = {
     email = "peterhebden6@gmail.com";
     github = "Piturnah";
     githubId = 20472367;
     name = "Peter Hebden";
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pjbarnoy = {
     email = "pjbarnoy@gmail.com";
     github = "pjbarnoy";
@@ -13638,12 +14355,15 @@
     githubId = 3737;
     name = "Peter Jones";
   };
+<<<<<<< HEAD
   pjrm = {
     email = "pedrojrmagalhaes@gmail.com";
     github = "pjrm";
     githubId = 4622652;
     name = "Pedro Magalhães";
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pkharvey = {
     email = "kayharvey@protonmail.com";
     github = "pkharvey";
@@ -13798,12 +14518,15 @@
     githubId = 38314551;
     name = "Peter Okelmann";
   };
+<<<<<<< HEAD
   pokon548 = {
     email = "nix@bukn.uk";
     github = "pokon548";
     githubId = 65808665;
     name = "Bu Kun";
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   polarmutex = {
     email = "brian@brianryall.xyz";
     github = "polarmutex";
@@ -13944,6 +14667,7 @@
       fingerprint = "DD54 130B ABEC B65C 1F6B  2A38 8312 4F97 A318 EA18";
     }];
   };
+<<<<<<< HEAD
   p-rintz = {
     email = "nix@rintz.net";
     github = "p-rintz";
@@ -13951,6 +14675,8 @@
     name = "Philipp Rintz";
     matrix = "@philipp:srv.icu";
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ProducerMatt = {
     name = "Matthew Pherigo";
     email = "ProducerMatt42@gmail.com";
@@ -13975,12 +14701,15 @@
     githubId = 406946;
     name = "Valentin Lorentz";
   };
+<<<<<<< HEAD
   proofconstruction = {
     email = "source@proof.construction";
     github = "proofconstruction";
     githubId = 74747193;
     name = "Alexander Groleau";
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   proofofkeags = {
     email = "keagan.mcclelland@gmail.com";
     github = "ProofOfKeags";
@@ -14023,6 +14752,7 @@
     githubId = 33375;
     name = "Peter Sanford";
   };
+<<<<<<< HEAD
   pschmitt = {
     email = "philipp@schmitt.co";
     github = "pschmitt";
@@ -14033,6 +14763,8 @@
       fingerprint = "9FBF 2ABF FB37 F7F3 F502  44E5 DC43 9C47 EACB 17F9";
     }];
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pshirshov = {
     email = "pshirshov@eml.cc";
     github = "pshirshov";
@@ -14170,12 +14902,15 @@
     githubId = 115877;
     name = "Kenny Shen";
   };
+<<<<<<< HEAD
   quadradical = {
     email = "nixos@henryhiles.com";
     github = "Henry-Hiles";
     githubId = 71790868;
     name = "Henry Hiles";
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   quag = {
     email = "quaggy@gmail.com";
     github = "quag";
@@ -14210,12 +14945,15 @@
     githubId = 18196237;
     name = "Quentin Inkling";
   };
+<<<<<<< HEAD
   quentin-m = {
     email = "me+nix@quentin-machu.fr";
     github = "Quentin-M";
     githubId = 1332289;
     name = "Quentin Machu";
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   qyliss = {
     email = "hi@alyssa.is";
     github = "alyssais";
@@ -14330,12 +15068,15 @@
     githubId = 121178;
     name = "Raphael Robatsch";
   };
+<<<<<<< HEAD
   rapiteanu = {
     email = "rapiteanu.catalin@gmail.com";
     github = "Steinhagen";
     githubId = 4029937;
     name = "Viorel-Cătălin Răpițeanu";
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   raquelgb = {
     email = "raquel.garcia.bautista@gmail.com";
     github = "raquelgb";
@@ -14643,7 +15384,11 @@
     name = "Riley Inman";
   };
   riotbib = {
+<<<<<<< HEAD
     email = "lennart@cope.cool";
+=======
+    email = "github-nix@lnrt.de";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     github = "riotbib";
     githubId = 43172581;
     name = "Lennart Mühlenmeier";
@@ -14789,12 +15534,15 @@
     githubId = 1069318;
     name = "Robin Lambertz";
   };
+<<<<<<< HEAD
   robwalt = {
     email = "robwalter96@gmail.com";
     github = "robwalt";
     githubId = 26892280;
     name = "Robert Walter";
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   roconnor = {
     email = "roconnor@theorem.ca";
     github = "roconnor";
@@ -14867,12 +15615,15 @@
     github = "RossComputerGuy";
     githubId = 19699320;
   };
+<<<<<<< HEAD
   rotaerk = {
     name = "Matthew Stewart";
     email = "m.scott.stewart@gmail.com";
     github = "rotaerk";
     githubId = 17690823;
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   rowanG077 = {
     email = "goemansrowan@gmail.com";
     github = "rowanG077";
@@ -14925,6 +15676,7 @@
     }];
     name = "Rahul Butani";
   };
+<<<<<<< HEAD
   rs0vere = {
     email = "rs0vere@proton.me";
     github = "rs0vere";
@@ -14934,6 +15686,8 @@
     }];
     name = "Red Star Over Earth";
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   rski = {
     name = "rski";
     email = "rom.skiad+nix@gmail.com";
@@ -15011,12 +15765,15 @@
     githubId = 7365864;
     name = "Rafael Varago";
   };
+<<<<<<< HEAD
   rvdp = {
     email = "ramses@well-founded.dev";
     github = "R-VdP";
     githubId = 141248;
     name = "Ramses";
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   rvl = {
     email = "dev+nix@rodney.id.au";
     github = "rvl";
@@ -15053,6 +15810,7 @@
     githubId = 889991;
     name = "Ryan Artecona";
   };
+<<<<<<< HEAD
   ryanccn = {
     email = "hello@ryanccn.dev";
     github = "ryanccn";
@@ -15068,6 +15826,8 @@
       fingerprint = "E4F4 1EAB BF0F C785 06D8  62EF EF68 CF41 D42A 593D";
     }];
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ryanorendorff = {
     github = "ryanorendorff";
     githubId = 12442942;
@@ -15113,12 +15873,15 @@
     githubId = 3280280;
     name = "Ryne Everett";
   };
+<<<<<<< HEAD
   ryota-ka = {
     email = "ok@ryota-ka.me";
     github = "ryota-ka";
     githubId = 7309170;
     name = "Ryota Kameoka";
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   rytone = {
     email = "max@ryt.one";
     github = "rastertail";
@@ -15357,6 +16120,7 @@
       fingerprint = "30BB FF3F AB0B BB3E 0435  F83C 8E8F F66E 2AE8 D970";
     }];
   };
+<<<<<<< HEAD
   scm2342 = {
     name = "Sven Mattsen";
     email = "nix@sven.cc";
@@ -15364,6 +16128,8 @@
     github = "scm2342";
     githubId = 154108;
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   scode = {
     email = "peter.schuller@infidyne.com";
     github = "scode";
@@ -15478,6 +16244,7 @@
     github = "sei40kr";
     githubId = 11665236;
   };
+<<<<<<< HEAD
   seirl = {
     name = "Antoine Pietri";
     email = "antoine.pietri1@gmail.com";
@@ -15485,6 +16252,8 @@
     githubId = 4927883;
     matrix = "@seirl:matrix.org";
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   sellout = {
     email = "greg@technomadic.org";
     github = "sellout";
@@ -15497,6 +16266,7 @@
     githubId = 1286668;
     name = "Thilo Uttendorfer";
   };
+<<<<<<< HEAD
   sents = {
     email = "finn@krein.moe";
     github = "sents";
@@ -15504,6 +16274,8 @@
     matrix = "@sents:matrix.org";
     name = "Finn Krein";
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   sephalon = {
     email = "me@sephalon.net";
     github = "sephalon";
@@ -15531,6 +16303,7 @@
     githubId = 4805746;
     name = "Sebastian Jordan";
   };
+<<<<<<< HEAD
   septem9er = {
   name = "Septem9er";
   email = "develop@septem9er.de";
@@ -15541,6 +16314,8 @@
     fingerprint = "C408 07F9 8677 3D98 EFF3 0980 355A 9AFB FD8E AD33";
   }];
 };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   seqizz = {
     email = "seqizz@gmail.com";
     github = "seqizz";
@@ -15574,12 +16349,15 @@
       fingerprint = "A317 37B3 693C 921B 480C  C629 4A2A AAA3 82F8 294C";
     }];
   };
+<<<<<<< HEAD
   sestrella = {
     email = "sestrella.me@gmail.com";
     github = "sestrella";
     githubId = 2049686;
     name = "Sebastián Estrella";
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   seylerius = {
     name = "Sable Seyler";
     email = "sable@seyleri.us";
@@ -15589,6 +16367,7 @@
       fingerprint = "7246 B6E1 ABB9 9A48 4395  FD11 DC26 B921 A9E9 DBDE";
     }];
   };
+<<<<<<< HEAD
   sfr = {
     email = "sol@solfisher.com";
     matrix = "@sfr:enby.space";
@@ -15596,6 +16375,8 @@
     githubId = 57151943;
     name = "Sol Fisher Romanoff";
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   sfrijters = {
     email = "sfrijters@gmail.com";
     github = "SFrijters";
@@ -15639,11 +16420,17 @@
     name = "Scott Hamilton";
   };
   ShamrockLee = {
+<<<<<<< HEAD
     email = "shamrocklee@posteo.net";
     github = "ShamrockLee";
     githubId = 44064051;
     matrix = "@shamrocklee:matrix.org";
     name = "Yueh-Shun Li";
+=======
+    name = "Shamrock Lee";
+    github = "ShamrockLee";
+    githubId = 44064051;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
   shanesveller = {
     email = "shane@sveller.dev";
@@ -15678,6 +16465,7 @@
     githubId = 293035;
     name = "Shawn Dellysse";
   };
+<<<<<<< HEAD
   shayne = {
     email = "shaynesweeney@gmail.com";
     github = "shayne";
@@ -15687,6 +16475,8 @@
       fingerprint = "AFCB 29A0 F12E F367 9575  DABE 69DA 13E8 6BF4 03B0";
     }];
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   shazow = {
     email = "andrey.petrov@shazow.net";
     github = "shazow";
@@ -15768,12 +16558,15 @@
     github = "kf5grd";
     githubId = 18297490;
   };
+<<<<<<< HEAD
   shortcord = {
     name = "Short Cord";
     email = "short@shortcord.com";
     github = "shortcord";
     githubId = 3823744;
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   shou = {
     email = "x+g@shou.io";
     github = "Shou";
@@ -15795,11 +16588,14 @@
     githubId = 6224096;
     name = "Soner Sayakci";
   };
+<<<<<<< HEAD
   shymega = {
     name = "Dom Rodriguez";
     github = "shymega";
     githubId = 1334592;
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   siddharthist = {
     email = "langston.barrett@gmail.com";
     github = "langston-barrett";
@@ -15831,12 +16627,15 @@
     githubId = 16090;
     name = "Yann Hodique";
   };
+<<<<<<< HEAD
   sigmanificient = {
     email = "sigmanificient@gmail.com";
     github = "Sigmanificient";
     githubId = 53050011;
     name = "Yohann Boniface";
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   sikmir = {
     email = "sikmir@disroot.org";
     github = "sikmir";
@@ -15914,12 +16713,15 @@
     githubId = 74881555;
     name = "Fofanov Sergey";
   };
+<<<<<<< HEAD
   sitaaax = {
     email = "johannes@kle1n.com";
     github = "SitAAAx";
     githubId = 74413170;
     name = "Johannes Klein";
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   sivteck = {
     email = "sivaram1992@gmail.com";
     github = "sivteck";
@@ -15961,12 +16763,15 @@
     githubId = 3789764;
     name = "skykanin";
   };
+<<<<<<< HEAD
   slbtty = {
     email = "shenlebantongying@gmail.com";
     github = "shenlebantongying";
     githubId = 20123683;
     name = "Shenleban Tongying";
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   sleexyz = {
     email = "freshdried@gmail.com";
     github = "sleexyz";
@@ -16032,6 +16837,7 @@
     github = "syvb";
     githubId = 10530973;
   };
+<<<<<<< HEAD
   smona = {
     name = "Mel Bourgeois";
     email = "mason.bourgeois@gmail.com";
@@ -16041,6 +16847,8 @@
       fingerprint = "897E 6BE3 0345 B43D CADD  05B7 290F CF08 1AED B3EC";
     }];
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   sna = {
     email = "abouzahra.9@wright.edu";
     github = "S-NA";
@@ -16088,12 +16896,15 @@
     githubId = 1437166;
     name = "Xia Bin";
   };
+<<<<<<< HEAD
   sochotnicky = {
     email = "stanislav+github@ochotnicky.com";
     github = "sochotnicky";
     githubId = 55726;
     name = "Stanislav Ochotnický";
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   softinio = {
     email = "code@softinio.com";
     github = "softinio";
@@ -16153,12 +16964,15 @@
     githubId = 6277322;
     name = "Wei Tang";
   };
+<<<<<<< HEAD
   soupglasses = {
     email = "sofi+git@mailbox.org";
     github = "soupglasses";
     githubId = 20756843;
     name = "Sofi";
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   soywod = {
     name = "Clément DOUIN";
     email = "clement.douin@posteo.net";
@@ -16181,24 +16995,30 @@
     githubId = 7669898;
     name = "Katharina Fey";
   };
+<<<<<<< HEAD
   spalf = {
     email = "tom@tombarrett.xyz";
     name = "tom barrett";
     github = "70m6";
     githubId = 105207964;
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   spease = {
     email = "peasteven@gmail.com";
     github = "spease";
     githubId = 2825204;
     name = "Steven Pease";
   };
+<<<<<<< HEAD
   spectre256 = {
     name = "Ellis Gibbons";
     email = "egibbons256@gmail.com";
     github = "spectre256";
     githubId = 72505298;
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   spencerjanssen = {
     email = "spencerjanssen@gmail.com";
     matrix = "@sjanssen:matrix.org";
@@ -16206,12 +17026,15 @@
     githubId = 2600039;
     name = "Spencer Janssen";
   };
+<<<<<<< HEAD
   spikespaz = {
     name = "Jacob Birkett";
     email = "support@birkett.dev";
     github = "spikespaz";
     githubId = 12502988;
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   spinus = {
     email = "tomasz.czyz@gmail.com";
     github = "spinus";
@@ -16224,12 +17047,15 @@
     githubId = 6391601;
     name = "Roger Mason";
   };
+<<<<<<< HEAD
   sputn1ck = {
     email = "kon@kon.ninja";
     github = "sputn1ck";
     githubId = 8904314;
     name = "Konstantin Nick";
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   squalus = {
     email = "squalus@squalus.net";
     github = "squalus";
@@ -16266,6 +17092,7 @@
     githubId = 219362;
     name = "Sarah Brofeldt";
   };
+<<<<<<< HEAD
   srid = {
     email = "srid@srid.ca";
     matrix = "@srid:matrix.org";
@@ -16273,6 +17100,8 @@
     githubId = 3998;
     name = "Sridhar Ratnakumar";
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   srounce = {
     name = "Samuel Rounce";
     email = "me@samuelrounce.co.uk";
@@ -16493,12 +17322,15 @@
     githubId = 38893265;
     name = "StrikerLulu";
   };
+<<<<<<< HEAD
   stteague = {
     email = "stteague505@yahoo.com";
     github = "stteague";
     githubId = 77596767;
     name = "Scott Teague";
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   stumoss = {
     email = "samoss@gmail.com";
     github = "stumoss";
@@ -16541,12 +17373,15 @@
     githubId = 16734772;
     name = "Sumner Evans";
   };
+<<<<<<< HEAD
   sund3RRR = {
     email = "evenquantity@gmail.com";
     github = "sund3RRR";
     githubId = 73298492;
     name = "Mikhail Kiselev";
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   suominen = {
     email = "kimmo@suominen.com";
     github = "suominen";
@@ -16644,12 +17479,15 @@
     github = "sweenu";
     githubId = 7051978;
   };
+<<<<<<< HEAD
   swesterfeld = {
     email = "stefan@space.twc.de";
     github = "swesterfeld";
     githubId = 14840066;
     name = "Stefan Westerfeld";
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   swflint = {
     email = "swflint@flintfam.org";
     github = "swflint";
@@ -16668,6 +17506,7 @@
     githubId = 20063502;
     name = "Sybrand Aarnoutse";
   };
+<<<<<<< HEAD
   syboxez = {
     email = "syboxez@gmail.com";
     matrix = "@Syboxez:matrix.org";
@@ -16675,6 +17514,8 @@
     githubId = 12841859;
     name = "Syboxez Blank";
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   symphorien = {
     email = "symphorien_nixpkgs@xlumurb.eu";
     matrix = "@symphorien:xlumurb.eu";
@@ -16843,12 +17684,15 @@
     githubId = 863327;
     name = "Tyler Benster";
   };
+<<<<<<< HEAD
   tbidne = {
     email = "tbidne@protonmail.com";
     github = "tbidne";
     githubId = 2856188;
     name = "Thomas Bidne";
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   tboerger = {
     email = "thomas@webhippie.de";
     matrix = "@tboerger:matrix.org";
@@ -16890,7 +17734,11 @@
     name = "Andy Tockman";
   };
   techknowlogick = {
+<<<<<<< HEAD
     email = "techknowlogick@gitea.com";
+=======
+    email = "techknowlogick@gitea.io";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     github = "techknowlogick";
     githubId = 164197;
     name = "techknowlogick";
@@ -16932,6 +17780,7 @@
     githubId = 1755789;
     name = "Robert Irelan";
   };
+<<<<<<< HEAD
   tengkuizdihar = {
     name = "Tengku Izdihar";
     email = "tengkuizdihar@gmail.com";
@@ -16939,6 +17788,8 @@
     github = "tengkuizdihar";
     githubId = 22078730;
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   tennox = {
     email = "tennox+nix@txlab.io";
     github = "tennox";
@@ -17191,6 +18042,7 @@
     github = "thielema";
     githubId = 898989;
   };
+<<<<<<< HEAD
   thillux = {
     name = "Markus Theil";
     email = "theil.markus@gmail.com";
@@ -17203,6 +18055,8 @@
     github = "thilobillerbeck";
     githubId = 7442383;
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   thled = {
     name = "Thomas Le Duc";
     email = "dev@tleduc.de";
@@ -17297,12 +18151,15 @@
     github = "TilCreator";
     githubId = 18621411;
   };
+<<<<<<< HEAD
   tillkruss = {
     name = "Till Krüss";
     email = "till@kruss.io";
     github = "tillkruss";
     githubId = 665029;
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   tilpner = {
     name = "Till Höppner";
     email = "nixpkgs@tilpner.com";
@@ -17352,6 +18209,7 @@
     githubId = 1292007;
     name = "Sébastien Maccagnoni";
   };
+<<<<<<< HEAD
   tiredofit = {
     email = "dave@tiredofit.ca";
     github = "tiredofit";
@@ -17359,6 +18217,8 @@
     name = "Dave Conroy";
     matrix = "@dave:tiredofit.ca";
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   tirex = {
     email = "szymon@kliniewski.pl";
     name = "Szymon Kliniewski";
@@ -17408,12 +18268,15 @@
     githubId = 3159881;
     name = "Tobias Markus";
   };
+<<<<<<< HEAD
   tm-drtina = {
     email = "tm.drtina@gmail.com";
     github = "tm-drtina";
     githubId = 26902865;
     name = "Tomas Drtina";
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   tmountain = {
     email = "tinymountain@gmail.com";
     github = "tmountain";
@@ -17467,6 +18330,7 @@
     githubId = 8577941;
     name = "Kevin Rauscher";
   };
+<<<<<<< HEAD
   tomasajt = {
     github = "TomaSajt";
     githubId = 62384384;
@@ -17475,6 +18339,8 @@
       fingerprint = "8CA9 8016 F44D B717 5B44  6032 F011 163C 0501 22A1";
     }];
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   tomaskala = {
     email = "public+nixpkgs@tomaskala.com";
     github = "tomaskala";
@@ -17539,12 +18405,15 @@
     githubId = 27586264;
     name = "Tobias Schmidt";
   };
+<<<<<<< HEAD
   totalchaos = {
     email = "basil.keeler@outlook.com";
     github = "totalchaos05";
     githubId = 70387628;
     name = "Basil Keeler";
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   totoroot = {
     name = "Matthias Thym";
     email = "git@thym.at";
@@ -17723,12 +18592,15 @@
     githubId = 9413924;
     name = "Thorsten Weber";
   };
+<<<<<<< HEAD
   twesterhout = {
     name = "Tom Westerhout";
     matrix = "@twesterhout:matrix.org";
     github = "twesterhout";
     githubId = 14264576;
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   twey = {
     email = "twey@twey.co.uk";
     github = "Twey";
@@ -17750,6 +18622,7 @@
     github = "twitchyliquid64";
     githubId = 6328589;
   };
+<<<<<<< HEAD
   twz123 = {
     name = "Tom Wieczorek";
     email = "tom@bibbu.net";
@@ -17759,6 +18632,8 @@
       fingerprint = "B1FD 4E2A 84B2 2379 F4BF  2EF5 FE33 A228 2371 E831";
     }];
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   tylerjl = {
     email = "tyler+nixpkgs@langlois.to";
     github = "tylerjl";
@@ -17766,12 +18641,15 @@
     matrix = "@ty:tjll.net";
     name = "Tyler Langlois";
   };
+<<<<<<< HEAD
   tymscar = {
     email = "oscar@tymscar.com";
     github = "tymscar";
     githubId = 3742502;
     name = "Oscar Molnar";
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   typetetris = {
     email = "ericwolf42@mail.com";
     github = "typetetris";
@@ -17805,6 +18683,7 @@
       fingerprint = "EE59 5E29 BB5B F2B3 5ED2  3F1C D276 FF74 6700 7335";
     }];
   };
+<<<<<<< HEAD
   undefined-moe = {
     name = "undefined";
     email = "i@undefined.moe";
@@ -17814,6 +18693,8 @@
       fingerprint = "6684 4E7D D213 C75D 8828  6215 C714 A58B 6C1E 0F52";
     }];
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   unhammer = {
     email = "unhammer@fsfe.org";
     github = "unhammer";
@@ -18054,12 +18935,15 @@
     github = "vdot0x23";
     githubId = 40716069;
   };
+<<<<<<< HEAD
   vector1dev = {
     name = "vector1dev";
     matrix = "@vector1dev:vector1.dev";
     github = "vector1dev";
     githubId = 127302590;
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   veehaitch = {
     name = "Vincent Haupert";
     email = "mail@vincent-haupert.de";
@@ -18087,12 +18971,15 @@
     githubId = 245573;
     name = "Dmitry Kalinkin";
   };
+<<<<<<< HEAD
   victormeriqui = {
     name = "Victor Meriqui";
     email = "victor.meriqui@ororatech.com";
     github = "victormeriqui";
     githubId = 1396008;
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   victormignot = {
     email = "root@victormignot.fr";
     github = "victormignot";
@@ -18126,6 +19013,7 @@
     githubId = 7953163;
     name = "Vika Shleina";
     keys = [{
+<<<<<<< HEAD
       fingerprint = "5814 50EB 6E17 E715 7C63  E7F1 9879 8C3C 4D68 8D6D";
     }];
   };
@@ -18147,6 +19035,11 @@
     githubId = 7235381;
     name = "Ondřej Kvapil";
   };
+=======
+      fingerprint = "B3C0 DA1A C18B 82E8 CA8B  B1D1 4F62 CD07 CE64 796A";
+    }];
+  };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   vincentbernat = {
     email = "vincent@bernat.ch";
     github = "vincentbernat";
@@ -18156,12 +19049,15 @@
       fingerprint = "AEF2 3487 66F3 71C6 89A7  3600 95A4 2FE8 3535 25F9";
     }];
   };
+<<<<<<< HEAD
   vinetos = {
     name = "vinetos";
     email = "vinetosdev@gmail.com";
     github = "vinetos";
     githubId = 10145351;
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   vinnymeller = {
     email = "vinnymeller@proton.me";
     github = "vinnymeller";
@@ -18265,12 +19161,15 @@
     githubId = 3413119;
     name = "Vonfry";
   };
+<<<<<<< HEAD
   votava = {
     email = "votava@gmail.com";
     github = "janvotava";
     githubId = 367185;
     name = "Jan Votava";
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   vq = {
     email = "vq@erq.se";
     github = "vq";
@@ -18301,12 +19200,15 @@
     githubId = 16415673;
     name = "Van Tuan Vo";
   };
+<<<<<<< HEAD
   vuimuich = {
     email = "vuimuich@quantentunnel.de";
     github = "VuiMuich";
     githubId = 4779365;
     name = "Johannes Mayrhofer";
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   vyorkin = {
     email = "vasiliy.yorkin@gmail.com";
     github = "vyorkin";
@@ -18334,6 +19236,7 @@
     githubId = 5228243;
     name = "waelwindows";
   };
+<<<<<<< HEAD
   wahtique = {
     name = "William Veal Phan";
     email = "williamvphan@yahoo.fr";
@@ -18343,6 +19246,8 @@
       fingerprint = "9262 E3A7 D129 C4DD A7C1  26CE 370D D9BE 9121 F0B3";
     }];
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   waiting-for-dev = {
     email = "marc@lamarciana.com";
     github = "waiting-for-dev";
@@ -18394,6 +19299,7 @@
     github = "wdavidw";
     githubId = 46896;
   };
+<<<<<<< HEAD
   weathercold = {
     name = "Weathercold";
     email = "weathercold.scr@proton.me";
@@ -18402,6 +19308,16 @@
     githubId = 49368953;
     keys = [{
       fingerprint = "D20F C904 A145 8B28 53D8  FBA0 0422 0096 01E4 87FC";
+=======
+  WeebSorceress = {
+    name = "WeebSorceress";
+    email = "hello@weebsorceress.anonaddy.me";
+    matrix = "@weebsorceress:matrix.org";
+    github = "WeebSorceress";
+    githubId = 106774777;
+    keys = [{
+      fingerprint = "659A 9BC3 F904 EC24 1461  2EFE 7F57 3443 17F0 FA43";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     }];
   };
   wegank = {
@@ -18508,12 +19424,15 @@
     githubId = 20464732;
     name = "Willi Butz";
   };
+<<<<<<< HEAD
   willswats = {
     email = "williamstuwatson@gmail.com";
     github = "willswats";
     githubId = 86304139;
     name = "William Watson";
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   wilsonehusin = {
     name = "Wilson E. Husin";
     email = "wilsonehusin@gmail.com";
@@ -18818,12 +19737,15 @@
     github = "XYenon";
     githubId = 20698483;
   };
+<<<<<<< HEAD
   xyven1 = {
     name = "Xyven";
     email = "nix@xyven.dev";
     github = "xyven1";
     githubId = 35360746;
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   xzfc = {
     email = "xzfcpw@gmail.com";
     github = "xzfc";
@@ -18865,6 +19787,7 @@
     githubId = 3705333;
     name = "Dmitry V.";
   };
+<<<<<<< HEAD
   yavko = {
     name = "Yavor Kolev";
     email = "yavornkolev@gmail.com";
@@ -18888,6 +19811,14 @@
     github = "yboettcher";
     githubId = 39460066;
     email = "yannikboettcher@outlook.de";
+=======
+  yayayayaka = {
+    email = "nixpkgs@uwu.is";
+    matrix = "@lara:uwu.is";
+    github = "yayayayaka";
+    githubId = 73759599;
+    name = "Lara A.";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
   ydlr = {
     name = "ydlr";
@@ -18959,12 +19890,15 @@
     github = "ymeister";
     githubId = 47071325;
   };
+<<<<<<< HEAD
   yoavlavi = {
     email = "yoav@yoavlavi.com";
     github = "yoav-lavi";
     githubId = 14347895;
     name = "Yoav Lavi";
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   yochai = {
     email = "yochai@titat.info";
     github = "yochai";
@@ -18984,6 +19918,7 @@
     githubId = 647076;
     name = "Yorick van Pelt";
   };
+<<<<<<< HEAD
   YorikSar = {
     name = "Yuriy Taraday";
     email = "yorik.sar@gmail.com";
@@ -18991,6 +19926,8 @@
     github = "YorikSar";
     githubId = 428074;
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   yrashk = {
     email = "yrashk@gmail.com";
     github = "yrashk";
@@ -19075,6 +20012,7 @@
       fingerprint = "9F19 3AE8 AA25 647F FC31  46B5 416F 303B 43C2 0AC3";
     }];
   };
+<<<<<<< HEAD
   yvan-sraka = {
     email = "yvan@sraka.xyz";
     github = "yvan-sraka";
@@ -19085,6 +20023,8 @@
     matrix = "@/yvan:matrix.org";
     name = "Yvan Sraka";
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   yvesf = {
     email = "yvesf+nix@xapek.org";
     github = "yvesf";
@@ -19139,12 +20079,15 @@
     githubId = 1319905;
     name = "Uma Zalakain";
   };
+<<<<<<< HEAD
   zaldnoay = {
     email = "zunway@outlook.com";
     github = "zaldnoay";
     githubId = 5986078;
     name = "Zunway Liang";
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   zanculmarktum = {
     name = "Azure Zanculmarktum";
     email = "zanculmarktum@gmail.com";
@@ -19221,18 +20164,30 @@
     github = "zeri42";
     githubId = 68825133;
   };
+<<<<<<< HEAD
   zestsystem = {
     email = "mk337337@gmail.com";
     github = "zestsystem";
     githubId = 39456023;
     name = "Mike Yim";
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   zfnmxt = {
     name = "zfnmxt";
     email = "zfnmxt@zfnmxt.com";
     github = "zfnmxt";
     githubId = 37446532;
   };
+<<<<<<< HEAD
+=======
+  zgrannan = {
+    email = "zgrannan@gmail.com";
+    github = "zgrannan";
+    githubId = 1141948;
+    name = "Zack Grannan";
+  };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   zhaofengli = {
     email = "hello@zhaofeng.li";
     matrix = "@zhaofeng:zhaofeng.li";
@@ -19240,12 +20195,15 @@
     githubId = 2189609;
     name = "Zhaofeng Li";
   };
+<<<<<<< HEAD
   zi3m5f = {
     name = "zi3m5f";
     email = "k7n3o3a6f@mozmail.com";
     github = "zi3m5f";
     githubId = 113244000;
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ziguana = {
     name = "Zig Uana";
     email = "git@ziguana.dev";
@@ -19264,6 +20222,7 @@
     githubId = 1108325;
     name = "Théo Zimmermann";
   };
+<<<<<<< HEAD
   zmitchell = {
     name = "Zach Mitchell";
     email = "zmitchell@fastmail.com";
@@ -19277,6 +20236,8 @@
     githubId = 873857;
     name = "Zack Newman";
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   zoedsoupe = {
     github = "zoedsoupe";
     githubId = 44469426;
@@ -19327,6 +20288,18 @@
     githubId = 8100652;
     name = "David Mell";
   };
+<<<<<<< HEAD
+=======
+  zseri = {
+    name = "zseri";
+    email = "zseri.devel@ytrizja.de";
+    github = "fogti";
+    githubId = 1618343;
+    keys = [{
+      fingerprint = "7AFB C595 0D3A 77BD B00F  947B 229E 63AE 5644 A96D";
+    }];
+  };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ztzg = {
     email = "dd@crosstwine.com";
     github = "ztzg";
@@ -19375,11 +20348,14 @@
     githubId = 32876;
     name = "Diego Zamboni";
   };
+<<<<<<< HEAD
   zzzsy = {
     email = "me@zzzsy.top";
     github = "zzzsyyy";
     githubId = 	59917878;
     name = "Mathias Zhang";
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }
 /* Keep the list alphabetically sorted. */

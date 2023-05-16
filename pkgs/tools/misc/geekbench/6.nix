@@ -10,11 +10,19 @@
 
 stdenv.mkDerivation rec {
   pname = "geekbench";
+<<<<<<< HEAD
   version = "6.1.0";
 
   src = fetchurl {
     url = "https://cdn.geekbench.com/Geekbench-${version}-Linux.tar.gz";
     hash = "sha256-GBJHnT6tfLdZuaawwhEvqOFYcmM42DZxRxm7cJNi0aA=";
+=======
+  version = "6.0.3";
+
+  src = fetchurl {
+    url = "https://cdn.geekbench.com/Geekbench-${version}-Linux.tar.gz";
+    hash = "sha256-08c5YBKljeFo31Y7WHEnLLiJdFJm8RfkY2Q44C2dp7k=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   dontConfigure = true;

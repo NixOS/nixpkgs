@@ -1,10 +1,18 @@
 { lib
+<<<<<<< HEAD
+=======
+, stdenv
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , fetchFromGitHub
 , john
 , python3
 }:
 
+<<<<<<< HEAD
 python3.pkgs.buildPythonApplication {
+=======
+python3.pkgs.buildPythonApplication rec {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pname = "adenum";
   version = "unstable-2022-04-01";
   format = "other";

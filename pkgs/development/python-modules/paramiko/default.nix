@@ -78,6 +78,10 @@ buildPythonPackage rec {
       between python scripts. All major ciphers and hash methods are
       supported. SFTP client and server mode are both supported too.
     '';
+<<<<<<< HEAD
     maintainers = with maintainers; [ ];
+=======
+    maintainers = with maintainers; [ SuperSandro2000 ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

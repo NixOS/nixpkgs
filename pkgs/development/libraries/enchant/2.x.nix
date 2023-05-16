@@ -13,13 +13,21 @@
 
 stdenv.mkDerivation rec {
   pname = "enchant";
+<<<<<<< HEAD
   version = "2.5.0";
+=======
+  version = "2.3.4";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "https://github.com/AbiWord/${pname}/releases/download/v${version}/${pname}-${version}.tar.gz";
+<<<<<<< HEAD
     sha256 = "sha256-FJ4iTN0sqCXYdGOVeLYkbgfzfVuPOXBlijd6HvRvLhU=";
+=======
+    sha256 = "sha256-H34mdE2xyaD+ph0hafTlwc5DXPjCcxw34+QFQRnplKA=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

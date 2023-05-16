@@ -10,13 +10,21 @@
 }:
 
 let
+<<<<<<< HEAD
   version = "1.3.0-1";
+=======
+  version = "1.2.0-1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "mucommander";
     repo = "mucommander";
     rev = version;
+<<<<<<< HEAD
     sha256 = "sha256-rSHHv96L2EHQuKBSAdpfi1XGP2u9o2y4g1+65FHWFMw=";
+=======
+    sha256 = "sha256-OrtC7E/8n9uEo7zgFHYQqXV3qLpdKtxwbwZfxoOqTqA=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   postPatch = ''
@@ -49,7 +57,11 @@ let
     '';
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
+<<<<<<< HEAD
     outputHash = "sha256-9tCcUg7hDNbkZiQEWtVRsUUfms73aU+vt5tQsfknM+E=";
+=======
+    outputHash = "sha256-T4UhEzkaYh237+ZsoQTv1RgqcAKY4dPc/3x+dEie4A8=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
 in

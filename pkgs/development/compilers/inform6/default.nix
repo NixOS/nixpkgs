@@ -2,11 +2,19 @@
 
 stdenv.mkDerivation rec {
   pname = "inform6";
+<<<<<<< HEAD
   version = "6.41-r6";
 
   src = fetchurl  {
     url = "https://ifarchive.org/if-archive/infocom/compilers/inform6/source/inform-${version}.tar.gz";
     sha256 = "sha256-YJ3k9c+uYRzI5vMzPXAWvbLoAv45CWxZ21DFsx4UtVc=";
+=======
+  version = "6.41-r4";
+
+  src = fetchurl  {
+    url = "https://ifarchive.org/if-archive/infocom/compilers/inform6/source/inform-${version}.tar.gz";
+    sha256 = "sha256-y55F/zV/99fS4ZITtPsSgkpMNfonFztZEP/QZxSQjfc=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   buildInputs = [ perl ];

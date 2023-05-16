@@ -40,7 +40,13 @@ mkDerivation {
   ];
 
   # these libraries are only searched for at runtime so we need to force-link them
+<<<<<<< HEAD
   NIX_LDFLAGS = "-lgvc -lmysqlclient -lecpg -lssl -L${libmysqlclient}/lib/mariadb";
+=======
+  NIX_LDFLAGS = "-lgvc -lmysqlclient -lecpg -lssl";
+
+  env.NIX_CFLAGS_COMPILE = "-L${libmysqlclient}/lib/mysql -I${libmysqlclient}/include/mysql";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   qtWrapperArgs = [
     ''--prefix PATH : ${lib.getBin graphviz}/bin''

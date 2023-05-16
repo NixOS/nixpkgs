@@ -20,14 +20,22 @@
 
 buildPythonPackage rec {
   pname = "python-glanceclient";
+<<<<<<< HEAD
   version = "4.4.0";
+=======
+  version = "4.3.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
+<<<<<<< HEAD
     hash = "sha256-ejZuH/Zr23bmJ+7PfNQFO9lPNfo83GkNKa/0fpduBTI=";
+=======
+    hash = "sha256-5nwCPOc9GBxk9BItiaScfy1eljl+e0okFCEOVsHoXDQ=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   postPatch = ''

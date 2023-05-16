@@ -13,7 +13,11 @@
 
 stdenv.mkDerivation rec {
   pname = "adwaita-qt";
+<<<<<<< HEAD
   version = "1.4.2";
+=======
+  version = "1.4.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   outputs = [ "out" "dev" ];
 
@@ -21,7 +25,11 @@ stdenv.mkDerivation rec {
     owner = "FedoraQt";
     repo = pname;
     rev = version;
+<<<<<<< HEAD
     sha256 = "sha256-K/+SL52C+M2OC4NL+mhBnm/9BwH0KNNTGIDmPwuUwkM=";
+=======
+    sha256 = "sha256-t9vv1KcMUg8Qe7lhVMN4GO+VPoT7QzeoQ6hV4fesA8U=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [
@@ -60,7 +68,13 @@ stdenv.mkDerivation rec {
     description = "A style to bend Qt applications to look like they belong into GNOME Shell";
     homepage = "https://github.com/FedoraQt/adwaita-qt";
     license = licenses.gpl2Plus;
+<<<<<<< HEAD
     maintainers = with maintainers; [ ];
     platforms = platforms.all;
+=======
+    maintainers = teams.gnome.members ++ (with maintainers; [ ]);
+    platforms = platforms.all;
+    broken = stdenv.isDarwin; # broken since 2021-12-05 on hydra, broken until qt515 will be used for darwin
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

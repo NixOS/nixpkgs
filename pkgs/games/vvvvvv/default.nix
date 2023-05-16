@@ -26,7 +26,11 @@ stdenv.mkDerivation rec {
     rev = version;
     sha256 = "sha256-sLNO4vkmlirsqJmCV9YWpyNnIiigU1KMls7rOgWgSmQ=";
   };
+<<<<<<< HEAD
   sourceRoot = "${src.name}/desktop_version";
+=======
+  sourceRoot = "source/desktop_version";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   dataZip = fetchurl {
     url = "https://thelettervsixtim.es/makeandplay/data.zip";
     name = "data.zip";

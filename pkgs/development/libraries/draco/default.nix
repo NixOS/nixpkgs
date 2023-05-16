@@ -15,14 +15,22 @@
 let
   cmakeBool = b: if b then "ON" else "OFF";
 in
+<<<<<<< HEAD
 stdenv.mkDerivation (finalAttrs: {
+=======
+stdenv.mkDerivation rec {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   version = "1.5.6";
   pname = "draco";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "draco";
+<<<<<<< HEAD
     rev = finalAttrs.version;
+=======
+    rev = version;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     hash = "sha256-2YQMav0JJMbJ2bvnN/Xv90tjE/OWLbrZDO4WlaOvcfI=";
     fetchSubmodules = true;
   };
@@ -59,4 +67,8 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with maintainers; [ jansol ];
     platforms = platforms.all;
   };
+<<<<<<< HEAD
 })
+=======
+}
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)

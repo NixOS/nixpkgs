@@ -1,6 +1,10 @@
 { lib, mkDerivation, fetchFromGitHub
 , cmake, gcc-arm-embedded, python3Packages
+<<<<<<< HEAD
 , qtbase, qtmultimedia, qttools, SDL, gtest
+=======
+, qtbase, qtmultimedia, qttranslations, SDL, gtest
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , dfu-util, avrdude
 }:
 
@@ -15,9 +19,15 @@ mkDerivation rec {
     sha256 = "sha256-F3zykJhKuIpLQSTjn7mcdjEmgRAlwCZpkTaKQR9ve3g=";
   };
 
+<<<<<<< HEAD
   nativeBuildInputs = [ cmake gcc-arm-embedded python3Packages.pillow qttools ];
 
   buildInputs = [ qtbase qtmultimedia SDL ];
+=======
+  nativeBuildInputs = [ cmake gcc-arm-embedded python3Packages.pillow ];
+
+  buildInputs = [ qtbase qtmultimedia qttranslations SDL ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   postPatch = ''
     sed -i companion/src/burnconfigdialog.cpp \
@@ -27,6 +37,10 @@ mkDerivation rec {
 
   cmakeFlags = [
     "-DGTEST_ROOT=${gtest.src}/googletest"
+<<<<<<< HEAD
+=======
+    "-DQT_TRANSLATIONS_DIR=${qttranslations}/translations"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     # XXX I would prefer to include these here, though we will need to file a bug upstream to get that changed.
     #"-DDFU_UTIL_PATH=${dfu-util}/bin/dfu-util"
     #"-DAVRDUDE_PATH=${avrdude}/bin/avrdude"

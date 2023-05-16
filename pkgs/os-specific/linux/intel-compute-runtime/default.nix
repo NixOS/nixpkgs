@@ -12,13 +12,21 @@
 
 stdenv.mkDerivation rec {
   pname = "intel-compute-runtime";
+<<<<<<< HEAD
   version = "23.22.26516.18";
+=======
+  version = "23.05.25593.11";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "intel";
     repo = "compute-runtime";
     rev = version;
+<<<<<<< HEAD
     sha256 = "sha256-SeNmCXqoUqTo1F3ia+4fAMHWJgdEz/PsNFEkrqM+0k4=";
+=======
+    sha256 = "sha256-AsJGcyVqRGz7OBWTlQeTS412iUzMAbIsA4w6CmEf1G8=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ cmake pkg-config ];
@@ -35,9 +43,12 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "drivers" ];
 
+<<<<<<< HEAD
   # causes redefinition of _FORTIFY_SOURCE
   hardeningDisable = [ "fortify3" ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   postInstall = ''
     # Avoid clash with intel-ocl
     mv $out/etc/OpenCL/vendors/intel.icd $out/etc/OpenCL/vendors/intel-neo.icd

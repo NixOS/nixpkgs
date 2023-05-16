@@ -27,6 +27,10 @@ buildPythonPackage rec {
     description = "PyUtilib: A collection of Python utilities";
     homepage = "https://github.com/PyUtilib/pyutilib";
     license = licenses.bsd3;
+<<<<<<< HEAD
     maintainers = [ ];
+=======
+    maintainers = [ maintainers.costrouc ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

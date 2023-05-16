@@ -1,15 +1,26 @@
+<<<<<<< HEAD
 { lib
 , buildGoModule
 , fetchFromGitHub
+=======
+{ buildGoModule
+, fetchFromGitHub
+, lib
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 buildGoModule rec {
   pname = "dnsx";
+<<<<<<< HEAD
   version = "1.1.4";
+=======
+  version = "1.1.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "projectdiscovery";
     repo = "dnsx";
+<<<<<<< HEAD
     rev = "refs/tags/v${version}";
     hash = "sha256-FNPAsslKmsLrUtiw+GlXLppsEk/VB02jkZLmrB8zZOI=";
   };
@@ -18,6 +29,13 @@ buildGoModule rec {
 
   # Tests require network access
   doCheck = false;
+=======
+    rev = "v${version}";
+    sha256 = "sha256-5ZWBUgW3esdH+9APU5Z9Hn9VtA6VQqvUfJp5C42791k=";
+  };
+
+  vendorSha256 = "sha256-71JqgJZyx+9NTw08D7V5PPc84ExjGYdieCvFPTDSrs8=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   meta = with lib; {
     description = "Fast and multi-purpose DNS toolkit";
@@ -28,7 +46,10 @@ buildGoModule rec {
       resolvers.
     '';
     homepage = "https://github.com/projectdiscovery/dnsx";
+<<<<<<< HEAD
     changelog = "https://github.com/projectdiscovery/dnsx/releases/tag/v${version}";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };

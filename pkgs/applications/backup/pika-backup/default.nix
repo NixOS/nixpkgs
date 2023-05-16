@@ -21,20 +21,32 @@
 
 stdenv.mkDerivation rec {
   pname = "pika-backup";
+<<<<<<< HEAD
   version = "0.6.2";
+=======
+  version = "0.6.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "pika-backup";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-RTeRlfRmA/fXBcdzP41mbs88ArKlbU49AA0lnW3xRlg=";
+=======
+    hash = "sha256-7sgAp9/CKKxPr8rWbOot+FPAwaC8EPLa9pjVcC4TjW8=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
+<<<<<<< HEAD
     hash = "sha256-2B0N/Yq9A4LqKh8EKWmzNzTelwGE3Y9FL9IAqAgFSV8=";
+=======
+    hash = "sha256-Va7qLC6WvsLmG9JVmdT1FdIlWP4W/EFmsy7JOagQ+X8=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   patches = [

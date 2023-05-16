@@ -1,7 +1,10 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+<<<<<<< HEAD
 , fetchpatch
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , deprecation
 , hatchling
 , pythonOlder
@@ -24,6 +27,7 @@ buildPythonPackage rec {
     hash = "sha256-nZsrY7l//WeovFORwypCG8QVsmSjLJnk2NjdMdqunPQ=";
   };
 
+<<<<<<< HEAD
   patches = [
     (fetchpatch {
       name = "setuptools-68-test-compatibility.patch";
@@ -32,6 +36,8 @@ buildPythonPackage rec {
     })
   ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nativeBuildInputs = [
     hatchling
   ];

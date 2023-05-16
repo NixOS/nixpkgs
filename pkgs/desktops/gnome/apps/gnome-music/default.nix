@@ -58,6 +58,10 @@ python3.pkgs.buildPythonApplication rec {
     glib
     libmediaart
     gnome-online-accounts
+<<<<<<< HEAD
+=======
+    gobject-introspection
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     gdk-pixbuf
     python3
     grilo

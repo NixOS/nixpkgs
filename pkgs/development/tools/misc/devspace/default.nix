@@ -5,13 +5,21 @@
 
 buildGoModule rec {
   pname = "devspace";
+<<<<<<< HEAD
   version = "6.3.3";
+=======
+  version = "6.3.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "loft-sh";
     repo = "devspace";
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-xAK06bpl8BGsVUu6O1C2l+tzeiCQoRUMIUtwntUZVvU=";
+=======
+    sha256 = "sha256-TDC4zhsNcU3qwvBSxvaYxlWHXX1YllRX9n6CGKlXOq4=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   vendorSha256 = null;

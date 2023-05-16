@@ -9,11 +9,19 @@
 
 stdenv.mkDerivation rec {
   pname = "computecpp";
+<<<<<<< HEAD
   version = "2.11.0";
 
   src = fetchzip {
     url = "https://computecpp.codeplay.com/downloads/computecpp-ce/${version}/x86_64-linux-gnu.tar.gz";
     hash = "sha256-xHOPuijx5TZeHzRHPXcll0WqoBzHBryIoe3BnOxBVVY=";
+=======
+  version = "2.3.0";
+
+  src = fetchzip {
+    url = "https://computecpp.codeplay.com/downloads/computecpp-ce/${version}/x86_64-linux-gnu.tar.gz";
+    hash = "sha256-AUHSls4BOX20PVKzDAp3RqpeRDwgbgYzz6CRvRN+kdk=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     stripRoot = true;
   };
 

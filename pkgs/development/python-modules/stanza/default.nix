@@ -14,7 +14,11 @@
 
 buildPythonPackage rec {
   pname = "stanza";
+<<<<<<< HEAD
   version = "1.5.1";
+=======
+  version = "1.5.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -23,7 +27,11 @@ buildPythonPackage rec {
     owner = "stanfordnlp";
     repo = pname;
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-c7FaqI/8h6loLJJ9xOaJCyepWp+bc6IcqQlpGlW7u6g=";
+=======
+    hash = "sha256-sFGAVavY16UQNJmW467+Ekojws59UMcAoCc1t9wWHM4=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [

@@ -21,14 +21,22 @@
 
 buildPythonPackage rec {
   pname = "sfepy";
+<<<<<<< HEAD
   version = "2023.1";
+=======
+  version = "2022.3";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "sfepy";
     repo = "sfepy";
     rev = "release_${version}";
+<<<<<<< HEAD
     hash = "sha256-PuU6DL9zftHltpYI9VZQzKGIP8l9UUU8GVChrHtpNM0=";
+=======
+    hash = "sha256-6AhyO6LRG6N62ZAoPCZpRKu4ZBzj9IHkurhKFIPFAJI=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [
@@ -47,6 +55,12 @@ buildPythonPackage rec {
   ];
 
   postPatch = ''
+<<<<<<< HEAD
+=======
+    # broken tests
+    rm sfepy/tests/test_meshio.py
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     # slow tests
     rm sfepy/tests/test_io.py
     rm sfepy/tests/test_elasticity_small_strain.py

@@ -1,5 +1,9 @@
 { lib, buildPythonPackage, fetchPypi, isPy3k,
+<<<<<<< HEAD
   numpy, django-colorful, pillow, psycopg2,
+=======
+  numpy, django_colorful, pillow, psycopg2,
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pyparsing, django, celery, boto3, importlib-metadata
 }:
 
@@ -17,7 +21,11 @@ buildPythonPackage rec {
   # Tests require a postgresql + postgis server
   doCheck = false;
 
+<<<<<<< HEAD
   propagatedBuildInputs = [ numpy django-colorful pillow psycopg2
+=======
+  propagatedBuildInputs = [ numpy django_colorful pillow psycopg2
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
                             pyparsing django celery boto3 importlib-metadata ];
 
   meta = with lib; {

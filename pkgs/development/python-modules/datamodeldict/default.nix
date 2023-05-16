@@ -33,6 +33,10 @@ buildPythonPackage rec {
     description = "Class allowing for data models equivalently represented as Python dictionaries, JSON, and XML";
     homepage = "https://github.com/usnistgov/DataModelDict/";
     license = licenses.mit;
+<<<<<<< HEAD
     maintainers = with maintainers; [ ];
+=======
+    maintainers = with maintainers; [ costrouc ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

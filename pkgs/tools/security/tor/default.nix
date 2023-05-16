@@ -30,11 +30,19 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "tor";
+<<<<<<< HEAD
   version = "0.4.8.5";
 
   src = fetchurl {
     url = "https://dist.torproject.org/${pname}-${version}.tar.gz";
     sha256 = "sha256-aVfP0Uop7udVXFL4OHpG8s4vX+fa35NUfxvHSxZX4Rk=";
+=======
+  version = "0.4.7.13";
+
+  src = fetchurl {
+    url = "https://dist.torproject.org/${pname}-${version}.tar.gz";
+    sha256 = "sha256-IHkXLM4DRVbxEASOJgg86b6nUfMVSwrSgJdRgVsR6p0=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   outputs = [ "out" "geoip" ];

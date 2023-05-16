@@ -10,7 +10,11 @@
 
 buildPythonPackage rec {
   pname = "ulid-transform";
+<<<<<<< HEAD
   version = "0.8.1";
+=======
+  version = "0.7.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -19,7 +23,11 @@ buildPythonPackage rec {
     owner = "bdraco";
     repo = pname;
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-isngr9CZ2YYuq+5s3p4HXrTU20vPqZGZ1r8mBoVkxiI=";
+=======
+    hash = "sha256-AQeCgos/6BCvITTSnBYxefvAMWHHbJBsmbVMACl6L3o=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

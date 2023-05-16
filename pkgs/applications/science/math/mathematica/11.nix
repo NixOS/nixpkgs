@@ -75,8 +75,12 @@ stdenv.mkDerivation rec {
     + lib.optionalString (stdenv.hostPlatform.system == "x86_64-linux")
       (":" + lib.makeSearchPathOutput "lib" "lib64" buildInputs);
 
+<<<<<<< HEAD
   dontConfigure = true;
   dontBuild = true;
+=======
+  phases = "unpackPhase installPhase fixupPhase";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   unpackPhase = ''
     echo "=== Extracting makeself archive ==="

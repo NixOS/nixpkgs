@@ -2,7 +2,10 @@
 , unittestCheckHook
 , buildPythonPackage
 , fetchPypi
+<<<<<<< HEAD
 , fetchpatch
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , isPy27
 , pythonAtLeast
 }:
@@ -17,6 +20,7 @@ buildPythonPackage rec {
     sha256 = "02jzd23l4r6fswmwxaica9ldlyc2p6q8dk6dyff7j58fmdzf853d";
   };
 
+<<<<<<< HEAD
   patches = [
     (fetchpatch {
       name = "CVE-2023-28370.patch";
@@ -25,6 +29,8 @@ buildPythonPackage rec {
     })
   ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nativeCheckInputs = [ unittestCheckHook ];
 
   # We specify the name of the test files to prevent

@@ -45,11 +45,19 @@
 
 stdenv.mkDerivation rec {
   pname = "gvfs";
+<<<<<<< HEAD
   version = "1.50.6";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gvfs/${lib.versions.majorMinor version}/gvfs-${version}.tar.xz";
     hash = "sha256-xPbhH8TqqZM/TbjHo0R14GaM6tK//tloZ9Bhvj053aU=";
+=======
+  version = "1.50.4";
+
+  src = fetchurl {
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "q5BZpnalN+2+ohOIwqr+Gn4sjxrC39xtZFUCMwdUV/0=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   patches = [

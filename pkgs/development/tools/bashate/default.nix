@@ -8,7 +8,10 @@
 , pytestCheckHook
 , pythonOlder
 , setuptools
+<<<<<<< HEAD
 , testtools
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 buildPythonApplication rec {
@@ -31,7 +34,10 @@ buildPythonApplication rec {
     fixtures
     mock
     pytestCheckHook
+<<<<<<< HEAD
     testtools
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   pythonImportsCheck = [ "bashate" ];

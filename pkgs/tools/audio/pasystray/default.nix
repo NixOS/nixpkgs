@@ -5,11 +5,16 @@
 
 stdenv.mkDerivation rec {
   pname = "pasystray";
+<<<<<<< HEAD
   version = "0.8.2";
+=======
+  version = "0.7.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "christophgysin";
     repo = "pasystray";
+<<<<<<< HEAD
     rev = version;
     sha256 = "sha256-QaTQ8yUviJaFEQaQm2vYAUngqHliKe8TDYqfWt1Nx/0=";
   };
@@ -28,6 +33,22 @@ stdenv.mkDerivation rec {
       sha256 = "sha256-6njC3vqBPWFS1xAsa1katQ4C0KJdVkHAP1MCPiZ6ELM=";
     })
    ];
+=======
+    rev = "${pname}-${version}";
+    sha256 = "0xx1bm9kimgq11a359ikabdndqg5q54pn1d1dyyjnrj0s41168fk";
+  };
+
+  patches = [
+    # https://github.com/christophgysin/pasystray/issues/90#issuecomment-306190701
+    ./fix-wayland.patch
+
+    # https://github.com/christophgysin/pasystray/issues/98
+    (fetchpatch {
+      url = "https://sources.debian.org/data/main/p/pasystray/0.7.1-1/debian/patches/0001-Build-against-ayatana-appindicator.patch";
+      sha256 = "0hijphrf52n2zfwdnrmxlp3a7iwznnkb79awvpzplz0ia2lqywpw";
+    })
+  ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nativeBuildInputs = [ pkg-config autoreconfHook wrapGAppsHook ];
   buildInputs = [

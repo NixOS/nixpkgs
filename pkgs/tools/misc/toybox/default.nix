@@ -12,13 +12,21 @@ in
 
 stdenv.mkDerivation rec {
   pname = "toybox";
+<<<<<<< HEAD
   version = "0.8.10";
+=======
+  version = "0.8.9";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "landley";
     repo = pname;
     rev = version;
+<<<<<<< HEAD
     sha256 = "sha256-MMkNLhQP3ztWoRYhCU/cNXE/M+/ny41OK1SA9oM/lZg=";
+=======
+    sha256 = "sha256-3boPoq/wm0af0DqEWcUCUyCmVFopVMitRHJI1xsjAWM=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   depsBuildBuild = optionals (stdenv.hostPlatform != stdenv.buildPlatform) [ buildPackages.stdenv.cc ];

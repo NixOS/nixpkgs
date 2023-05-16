@@ -6,13 +6,21 @@
 
 stdenv.mkDerivation rec {
   pname = "vapoursynth";
+<<<<<<< HEAD
   version = "63";
+=======
+  version = "62";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner  = "vapoursynth";
     repo   = "vapoursynth";
     rev    = "R${version}";
+<<<<<<< HEAD
     sha256 = "sha256-6ITmzz1xJN/UnzVl0aAO8VNs0Go8zGcswwGpJUwwLB8=";
+=======
+    sha256 = "sha256-/40+SXFLX8upGKP3K+wk8RnO1Al4YoF8GFXyoxTkKs0=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   patches = [

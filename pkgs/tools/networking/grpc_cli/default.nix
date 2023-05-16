@@ -2,12 +2,20 @@
 
 stdenv.mkDerivation rec {
   pname = "grpc_cli";
+<<<<<<< HEAD
   version = "1.58.0";
+=======
+  version = "1.54.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   src = fetchFromGitHub {
     owner = "grpc";
     repo = "grpc";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-JxkQZSmI3FSAoSd45uciCpsTeGuAvRhG/BGyC4NKOjo=";
+=======
+    hash = "sha256-svQxWHCoDHYZSvSrzUuwO0+6WMtgKsu+uVDV1mP/nL4=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     fetchSubmodules = true;
   };
   nativeBuildInputs = [ automake cmake autoconf ];

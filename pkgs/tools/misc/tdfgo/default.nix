@@ -11,7 +11,11 @@ buildGoModule rec {
     sha256 = "sha256-Lr4+bXdVxYbCXKVzE+fjeLD559HuABK6lOLJ0sBBGNY=";
   };
 
+<<<<<<< HEAD
   vendorHash = "sha256-T6PSs5NfXSXvzlq67rIDbzURyA+25df3nMMfufo0fow=";
+=======
+  vendorSha256 = "sha256-T6PSs5NfXSXvzlq67rIDbzURyA+25df3nMMfufo0fow=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   meta = with lib; {
     description = "TheDraw font parser and console text renderer.";

@@ -4,7 +4,10 @@
 , fixDarwinDylibNames
 , libbutl
 , libpkgconf
+<<<<<<< HEAD
 , buildPackages
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , enableShared ? !stdenv.hostPlatform.isStatic
 , enableStatic ? !enableShared
 }:
@@ -58,10 +61,13 @@ stdenv.mkDerivation rec {
   # LC_LOAD_DYLIB entries containing @rpath, requiring manual fixup
   propagatedBuildInputs = lib.optionals stdenv.targetPlatform.isDarwin [
     fixDarwinDylibNames
+<<<<<<< HEAD
 
     # Build2 needs to use lld on Darwin because it creates thin archives when it detects `llvm-ar`,
     # which ld64 does not support.
     (lib.getBin buildPackages.llvmPackages_16.lld)
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   postPatch = ''
@@ -78,11 +84,14 @@ stdenv.mkDerivation rec {
     install_name_tool -add_rpath "''${!outputLib}/lib" "''${!outputBin}/bin/b"
   '';
 
+<<<<<<< HEAD
   postFixup = ''
     substituteInPlace $dev/nix-support/setup-hook \
       --subst-var-by isTargetDarwin '${toString stdenv.targetPlatform.isDarwin}'
   '';
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   passthru = {
     bootstrap = build2;
     inherit configSharedStatic;

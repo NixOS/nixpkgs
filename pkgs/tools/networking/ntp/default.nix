@@ -2,6 +2,7 @@
 
 stdenv.mkDerivation rec {
   pname = "ntp";
+<<<<<<< HEAD
   version = "4.2.8p17";
 
   src = fetchurl {
@@ -9,6 +10,20 @@ stdenv.mkDerivation rec {
     hash = "sha256-ED3ScuambFuN8H3OXpoCVV/NbxOXvft4IjcyjonTqGY=";
   };
 
+=======
+  version = "4.2.8p15";
+
+  src = fetchurl {
+    url = "https://www.eecis.udel.edu/~ntp/ntp_spool/ntp4/ntp-${lib.versions.majorMinor version}/ntp-${version}.tar.gz";
+    sha256 = "06cwhimm71safmwvp6nhxp6hvxsg62whnbgbgiflsqb8mgg40n7n";
+  };
+
+  patches = [
+    # From https://patchwork.openembedded.org/patch/180019/
+    ./glibc-2.34-fix.patch
+  ];
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   configureFlags = [
     "--sysconfdir=/etc"
     "--localstatedir=/var"
@@ -28,7 +43,11 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
+<<<<<<< HEAD
     homepage = "https://www.ntp.org/";
+=======
+    homepage = "http://www.ntp.org/";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     description = "An implementation of the Network Time Protocol";
     license = {
       # very close to isc and bsd2

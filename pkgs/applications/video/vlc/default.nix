@@ -14,6 +14,7 @@
 , flac
 , fluidsynth
 , freefont_ttf
+<<<<<<< HEAD
 , freetype
 , fribidi
 , gnutls
@@ -23,6 +24,10 @@
 , libXpm
 , libXv
 , libXvMC
+=======
+, fribidi
+, gnutls
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , libarchive
 , libass
 , libbluray
@@ -38,7 +43,10 @@
 , libkate
 , libmad
 , libmatroska
+<<<<<<< HEAD
 , libmicrodns
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , libmodplug
 , libmtp
 , liboggz
@@ -64,11 +72,14 @@
 , ncurses
 , perl
 , pkg-config
+<<<<<<< HEAD
 , protobuf
 , qtbase
 , qtsvg
 , qtwayland
 , qtx11extras
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , removeReferencesTo
 , samba
 , schroedinger
@@ -77,6 +88,7 @@
 , systemd
 , taglib
 , unzip
+<<<<<<< HEAD
 , wayland
 , wayland-protocols
 , wrapGAppsHook
@@ -90,6 +102,16 @@
 , skins2Support ? !onlyLibVLC
 , waylandSupport ? true
 , withQt5 ? true
+=======
+, xorg
+, zlib
+, chromecastSupport ? true, libmicrodns, protobuf
+, jackSupport ? false
+, onlyLibVLC ? false
+, skins2Support ? !onlyLibVLC, freetype
+, waylandSupport ? true, wayland, wayland-protocols
+, withQt5 ? true, qtbase, qtsvg, qtwayland, qtx11extras, wrapQtAppsHook, wrapGAppsHook
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 # chromecastSupport requires TCP port 8010 to be open for it to work.
@@ -99,11 +121,16 @@
 let
   inherit (lib) optionalString optional optionals;
 in
+<<<<<<< HEAD
 stdenv.mkDerivation (finalAttrs: {
+=======
+stdenv.mkDerivation rec {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pname = "${optionalString onlyLibVLC "lib"}vlc";
   version = "3.0.18";
 
   src = fetchurl {
+<<<<<<< HEAD
     url = "http://get.videolan.org/vlc/${finalAttrs.version}/vlc-${finalAttrs.version}.tar.xz";
     hash = "sha256-VwlEOcNl2KqLm0H6MIDMDu8r7+YCW7XO9yKszGJa7ew=";
   };
@@ -122,6 +149,12 @@ stdenv.mkDerivation (finalAttrs: {
     wayland-protocols
   ];
 
+=======
+    url = "http://get.videolan.org/vlc/${version}/vlc-${version}.tar.xz";
+    sha256 = "sha256-VwlEOcNl2KqLm0H6MIDMDu8r7+YCW7XO9yKszGJa7ew=";
+  };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   # VLC uses a *ton* of libraries for various pieces of functionality, many of
   # which are not included here for no other reason that nobody has mentioned
   # needing them
@@ -138,10 +171,13 @@ stdenv.mkDerivation (finalAttrs: {
     fluidsynth
     fribidi
     gnutls
+<<<<<<< HEAD
     libSM
     libXpm
     libXv
     libXvMC
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     libarchive
     libass
     libbluray
@@ -157,8 +193,13 @@ stdenv.mkDerivation (finalAttrs: {
     libkate
     libmad
     libmatroska
+<<<<<<< HEAD
     libmodplug
     libmtp
+=======
+    libmtp
+    libmodplug
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     liboggz
     libopus
     libplacebo
@@ -185,6 +226,7 @@ stdenv.mkDerivation (finalAttrs: {
     srt
     systemd
     taglib
+<<<<<<< HEAD
     xcbutilkeysyms
     zlib
   ]
@@ -192,15 +234,35 @@ stdenv.mkDerivation (finalAttrs: {
   ++ optional jackSupport libjack2
   ++ optionals chromecastSupport [ libmicrodns protobuf ]
   ++ optionals skins2Support [
+=======
+    zlib
+  ]
+  ++ (with xorg; [
+    libSM
+    libXpm
+    libXv
+    libXvMC
+    xcbutilkeysyms
+  ])
+  ++ optional (!stdenv.hostPlatform.isAarch && !onlyLibVLC) live555
+  ++ optional jackSupport libjack2
+  ++ optionals chromecastSupport [ libmicrodns protobuf ]
+  ++ optionals skins2Support (with xorg; [
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     freetype
     libXext
     libXinerama
     libXpm
+<<<<<<< HEAD
   ]
+=======
+  ])
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ++ optionals waylandSupport [ wayland wayland-protocols ]
   ++ optionals withQt5 [ qtbase qtsvg qtx11extras ]
   ++ optional (waylandSupport && withQt5) qtwayland;
 
+<<<<<<< HEAD
   env = {
     # vlc depends on a c11-gcc wrapper script which we don't have so we need to
     # set the path to the compiler
@@ -208,6 +270,26 @@ stdenv.mkDerivation (finalAttrs: {
   } // lib.optionalAttrs (!stdenv.hostPlatform.isAarch) {
     LIVE555_PREFIX = live555;
   };
+=======
+  nativeBuildInputs = [
+    autoreconfHook
+    perl
+    pkg-config
+    removeReferencesTo
+    unzip
+    wrapGAppsHook
+  ]
+  ++ optionals withQt5 [ wrapQtAppsHook ]
+  ++ optionals waylandSupport [ wayland wayland-protocols ];
+
+  enableParallelBuilding = true;
+
+  LIVE555_PREFIX = if stdenv.hostPlatform.isAarch then null else live555;
+
+  # vlc depends on a c11-gcc wrapper script which we don't have so we need to
+  # set the path to the compiler
+  BUILDCC = "${stdenv.cc}/bin/gcc";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   patches = [
     # patch to build with recent live555
@@ -229,9 +311,15 @@ stdenv.mkDerivation (finalAttrs: {
       /usr/share/fonts/truetype/freefont ${freefont_ttf}/share/fonts/truetype
   '';
 
+<<<<<<< HEAD
   enableParallelBuilding = true;
 
   dontWrapGApps = true; # to prevent double wrapping of Qtwrap and Gwrap
+=======
+
+  # to prevent double wrapping of Qtwrap and Gwrap
+  dontWrapGApps = true;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   preFixup = ''
     qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
@@ -267,17 +355,21 @@ stdenv.mkDerivation (finalAttrs: {
     sed -i 's|^#define CONFIGURE_LINE.*$|#define CONFIGURE_LINE "<removed>"|g' config.h
   '';
 
+<<<<<<< HEAD
   # fails on high core machines
   # ld: cannot find -lvlc_vdpau: No such file or directory
   # https://code.videolan.org/videolan/vlc/-/issues/27338
   enableParallelInstalling = false;
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   # Add missing SOFA files
   # Given in EXTRA_DIST, but not in install-data target
   postInstall = ''
     cp -R share/hrtfs $out/share/vlc
   '';
 
+<<<<<<< HEAD
   meta = {
     description = "Cross-platform media player and streaming server";
     homepage = "http://www.videolan.org/vlc/";
@@ -286,3 +378,13 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.linux;
   };
 })
+=======
+  meta = with lib; {
+    description = "Cross-platform media player and streaming server";
+    homepage = "http://www.videolan.org/vlc/";
+    license = licenses.lgpl21Plus;
+    maintainers = with maintainers; [ AndersonTorres ];
+    platforms = platforms.linux;
+  };
+}
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)

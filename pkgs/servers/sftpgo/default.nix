@@ -2,21 +2,35 @@
 , buildGoModule
 , fetchFromGitHub
 , installShellFiles
+<<<<<<< HEAD
 , nixosTests
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 buildGoModule rec {
   pname = "sftpgo";
+<<<<<<< HEAD
   version = "2.5.4";
+=======
+  version = "2.5.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "drakkan";
     repo = "sftpgo";
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-Xhu7QNPox0i6UuunRF1APYqdLrrlW0nR2BjzsABBnCw=";
   };
 
   vendorHash = "sha256-XAfGNRHXLGzvZ5E397CNVx9VuSa///yoX49hwQKuAA4=";
+=======
+    hash = "sha256-UL/CSNRvT9e+WAmE7nwd/EU7YOJ1mwMSnOIrd0dQJrk=";
+  };
+
+  vendorHash = "sha256-q6GgaMlmBPjovCpLku9/ENlEc0lF8gck1fM+fpptti4=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   ldflags = [
     "-s"
@@ -39,6 +53,7 @@ buildGoModule rec {
       --bash <($out/bin/sftpgo gen completion bash) \
       --zsh <($out/bin/sftpgo gen completion zsh) \
       --fish <($out/bin/sftpgo gen completion fish)
+<<<<<<< HEAD
 
     shareDirectory="$out/share/sftpgo"
     mkdir -p "$shareDirectory"
@@ -47,6 +62,10 @@ buildGoModule rec {
 
   passthru.tests = nixosTests.sftpgo;
 
+=======
+  '';
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   meta = with lib; {
     homepage = "https://github.com/drakkan/sftpgo";
     changelog = "https://github.com/drakkan/sftpgo/releases/tag/v${version}";
@@ -59,6 +78,10 @@ buildGoModule rec {
       Google Cloud Storage, Azure Blob Storage, SFTP.
     '';
     license = licenses.agpl3Only;
+<<<<<<< HEAD
     maintainers = with maintainers; [ thenonameguy yayayayaka ];
+=======
+    maintainers = with maintainers; [ thenonameguy ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

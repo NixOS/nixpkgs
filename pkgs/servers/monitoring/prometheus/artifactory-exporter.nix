@@ -6,17 +6,28 @@
 
 buildGoModule rec {
   pname = "artifactory_exporter";
+<<<<<<< HEAD
   version = "1.13.2";
+=======
+  version = "1.13.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   rev = "v${version}";
 
   src = fetchFromGitHub {
     owner = "peimanja";
     repo = pname;
     rev = rev;
+<<<<<<< HEAD
     hash = "sha256-m5ToXry1LgjWSTU9bjOtsgfVF8wKiKuTwCIC7jNGSKY=";
   };
 
   vendorHash = "sha256-ikWxTHmqHFWAReKMf6LFza/bhkcfxa4euXUixKPvcpQ=";
+=======
+    hash = "sha256-TXLIuTY5COHlhyp8xL9X02DbK2ku9AKnW5a4FYdzMic=";
+  };
+
+  vendorHash = "sha256-Gin134G4NPK8M2E2RrgH62ieiuCw15jwm9SJg03w9ts=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   subPackages = [ "." ];
 

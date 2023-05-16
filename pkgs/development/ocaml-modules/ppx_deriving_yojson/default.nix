@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 { lib, buildDunePackage, fetchFromGitHub, ocaml, ppxlib, ounit
+=======
+{ lib, buildDunePackage, fetchFromGitHub, ppxlib, ounit
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , ppx_deriving, yojson
 }:
 
@@ -17,6 +21,10 @@ buildDunePackage rec {
   inherit (param) version;
 
   minimalOCamlVersion = "4.07";
+<<<<<<< HEAD
+=======
+  duneVersion = "3";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "ocaml-ppx";
@@ -27,7 +35,11 @@ buildDunePackage rec {
 
   propagatedBuildInputs = [ ppxlib ppx_deriving yojson ];
 
+<<<<<<< HEAD
   doCheck = lib.versionAtLeast ocaml.version "4.08";
+=======
+  doCheck = true;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   checkInputs = [ ounit ];
 
   meta = {

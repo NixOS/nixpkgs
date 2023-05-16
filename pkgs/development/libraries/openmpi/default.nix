@@ -1,9 +1,15 @@
 { lib, stdenv, fetchurl, gfortran, perl, libnl
 , rdma-core, zlib, numactl, libevent, hwloc, targetPackages, symlinkJoin
 , libpsm2, libfabric, pmix, ucx
+<<<<<<< HEAD
 , config
 # Enable CUDA support
 , cudaSupport ? config.cudaSupport, cudatoolkit
+=======
+
+# Enable CUDA support
+, cudaSupport ? false, cudatoolkit
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 # Enable the Sun Grid Engine bindings
 , enableSGE ? false

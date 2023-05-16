@@ -45,6 +45,7 @@ stdenv.mkDerivation rec {
 
   checkTarget = "test";
 
+<<<<<<< HEAD
   # remove forbidden references to $TMPDIR
   preFixup = lib.optionalString stdenv.isLinux ''
     for f in "$out"/bin/*; do
@@ -53,6 +54,10 @@ stdenv.mkDerivation rec {
       fi
     done
   '';
+=======
+  # Hack to avoid TMPDIR in RPATHs.
+  preFixup = ''rm -rf "$(pwd)" '';
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   meta = {
     description = "Efficient Scheme compiler";

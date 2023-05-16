@@ -2,7 +2,11 @@
 
 buildGoModule rec {
   pname = "xcaddy";
+<<<<<<< HEAD
   version = "0.3.5";
+=======
+  version = "0.3.3";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   subPackages = [ "cmd/xcaddy" ];
 
@@ -10,7 +14,11 @@ buildGoModule rec {
     owner = "caddyserver";
     repo = pname;
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-XxklyOaKFPyWFabodNCcV1NnaPWS0AQ2Sj89ZZ5hJbk=";
+=======
+    hash = "sha256-HDyHvHa8yCz59AifHxQ0LAuC/xPXQInuUYURx7bL3oE=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   patches = [
@@ -30,6 +38,10 @@ buildGoModule rec {
     homepage = "https://github.com/caddyserver/xcaddy";
     description = "Build Caddy with plugins";
     license = licenses.asl20;
+<<<<<<< HEAD
     maintainers = with maintainers; [ tjni emilylange ];
+=======
+    maintainers = with maintainers; [ tjni indeednotjames ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

@@ -6,7 +6,11 @@
 }:
 
 let
+<<<<<<< HEAD
   upstream-info = (import ../../../../applications/networking/browsers/chromium/upstream-info.nix).stable.chromedriver;
+=======
+  upstream-info = (lib.importJSON ../../../../applications/networking/browsers/chromium/upstream-info.json).stable.chromedriver;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   allSpecs = {
     x86_64-linux = {
       system = "linux64";
@@ -14,12 +18,20 @@ let
     };
 
     x86_64-darwin = {
+<<<<<<< HEAD
       system = "mac-x64";
+=======
+      system = "mac64";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       sha256 = upstream-info.sha256_darwin;
     };
 
     aarch64-darwin = {
+<<<<<<< HEAD
       system = "mac-arm64";
+=======
+      system = "mac_arm64";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       sha256 = upstream-info.sha256_darwin_aarch64;
     };
   };
@@ -41,7 +53,11 @@ in stdenv.mkDerivation rec {
   version = upstream-info.version;
 
   src = fetchurl {
+<<<<<<< HEAD
     url = "https://edgedl.me.gvt1.com/edgedl/chrome/chrome-for-testing/${version}/${spec.system}/chromedriver-${spec.system}.zip";
+=======
+    url = "https://chromedriver.storage.googleapis.com/${version}/chromedriver_${spec.system}.zip";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     sha256 = spec.sha256;
   };
 
@@ -50,7 +66,11 @@ in stdenv.mkDerivation rec {
   unpackPhase = "unzip $src";
 
   installPhase = ''
+<<<<<<< HEAD
     install -m755 -D "chromedriver-${spec.system}/chromedriver" $out/bin/chromedriver
+=======
+    install -m755 -D chromedriver $out/bin/chromedriver
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '' + lib.optionalString (!stdenv.isDarwin) ''
     patchelf --set-interpreter ${glibc.out}/lib/ld-linux-x86-64.so.2 $out/bin/chromedriver
     wrapProgram "$out/bin/chromedriver" --prefix LD_LIBRARY_PATH : "${libs}"
@@ -73,6 +93,9 @@ in stdenv.mkDerivation rec {
     # Note from primeos: By updating Chromium I also update Google Chrome and
     # ChromeDriver.
     platforms = attrNames allSpecs;
+<<<<<<< HEAD
     mainProgram = "chromedriver";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

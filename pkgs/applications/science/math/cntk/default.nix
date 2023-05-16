@@ -2,8 +2,12 @@
 , fetchpatch
 , openblas, blas, lapack, opencv3, libzip, boost, protobuf, mpi
 , onebitSGDSupport ? false
+<<<<<<< HEAD
 , config
 , cudaSupport ? config.cudaSupport, cudaPackages ? { }, addOpenGLRunpath, cudatoolkit, nvidia_x11
+=======
+, cudaSupport ? false, cudaPackages ? {}, addOpenGLRunpath, cudatoolkit, nvidia_x11
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , cudnnSupport ? cudaSupport
 }:
 

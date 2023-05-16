@@ -8,13 +8,21 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "khal";
+<<<<<<< HEAD
   version = "0.11.2";
+=======
+  version = "0.11.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "pimutils";
     repo = pname;
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-yI33pB/t+UISvSbLUzmsZqBxLF6r8R3j9iPNeosKcYw=";
+=======
+    hash = "sha256-5wBKo24EKdEUoYhhv1EqMPOjdwUS31d3R24kLdbyvPA=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
@@ -37,7 +45,11 @@ python3.pkgs.buildPythonApplication rec {
     icalendar
     lxml
     pkginfo
+<<<<<<< HEAD
     vdirsyncer
+=======
+    pkgs.vdirsyncer
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     python-dateutil
     pytz
     pyxdg

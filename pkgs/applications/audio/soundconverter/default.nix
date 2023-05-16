@@ -17,6 +17,10 @@ python3Packages.buildPythonApplication rec {
   buildInputs = [
     gtk3
     fdk-aac-encoder
+<<<<<<< HEAD
+=======
+    gobject-introspection
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     gst_all_1.gst-libav
     gst_all_1.gst-plugins-base
     gst_all_1.gst-plugins-good
@@ -27,7 +31,10 @@ python3Packages.buildPythonApplication rec {
   nativeBuildInputs = [
     intltool
     wrapGAppsHook
+<<<<<<< HEAD
     gobject-introspection
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   propagatedBuildInputs = [

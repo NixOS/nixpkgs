@@ -1,4 +1,5 @@
 { lib
+<<<<<<< HEAD
 , stdenv
 , buildPythonPackage
 , cmake
@@ -13,38 +14,83 @@
 , pythonOlder
 , tabulate
 , typing-extensions
+=======
+, buildPythonPackage
+, python3
+, bash
+, cmake
+, fetchFromGitHub
+, gtest
+, isPy27
+, nbval
+, numpy
+, protobuf
+, pybind11
+, pytestCheckHook
+, six
+, tabulate
+, typing-extensions
+, pythonRelaxDepsHook
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 let
   gtestStatic = gtest.override { static = true; };
 in buildPythonPackage rec {
   pname = "onnx";
+<<<<<<< HEAD
   version = "1.14.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
+=======
+  version = "1.13.1";
+  format = "setuptools";
+
+  disabled = isPy27;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-ZVSdk6LeAiZpQrrzLxphMbc1b3rNUMpcxcXPP8s/5tE=";
+=======
+    hash = "sha256-10MH23XpAv/uDW/2tRFGS2lKU8hnaNBwbIBIgVc7Jpk=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [
     cmake
+<<<<<<< HEAD
     pybind11
   ];
 
   propagatedBuildInputs = [
     protobuf
     numpy
+=======
+    pythonRelaxDepsHook
+    pybind11
+  ];
+
+  pythonRelaxDeps = [ "protobuf" ];
+
+  propagatedBuildInputs = [
+    protobuf
+    numpy
+    six
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     typing-extensions
   ];
 
   nativeCheckInputs = [
     nbval
+<<<<<<< HEAD
     parameterized
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     pytestCheckHook
     tabulate
   ];
@@ -67,6 +113,10 @@ in buildPythonPackage rec {
     # Set CMAKE_INSTALL_LIBDIR to lib explicitly, because otherwise it gets set
     # to lib64 and cmake incorrectly looks for the protobuf library in lib64
     export CMAKE_ARGS="-DCMAKE_INSTALL_LIBDIR=lib -DONNX_USE_PROTOBUF_SHARED_LIBS=ON"
+<<<<<<< HEAD
+=======
+  '' + lib.optionalString doCheck ''
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     export CMAKE_ARGS+=" -Dgoogletest_STATIC_LIBRARIES=${gtestStatic}/lib/libgtest.a -Dgoogletest_INCLUDE_DIRS=${lib.getDev gtestStatic}/include"
     export ONNX_BUILD_TESTS=1
   '';
@@ -83,18 +133,26 @@ in buildPythonPackage rec {
   # The setup.py does all the configuration
   dontUseCmakeConfigure = true;
 
+<<<<<<< HEAD
+=======
+  doCheck = true;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   preCheck = ''
     export HOME=$(mktemp -d)
 
     # detecting source dir as a python package confuses pytest
     mv onnx/__init__.py onnx/__init__.py.hidden
   '';
+<<<<<<< HEAD
 
   pytestFlagsArray = [
     "onnx/test"
     "onnx/examples"
   ];
 
+=======
+  pytestFlagsArray = [ "onnx/test" "onnx/examples" ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   disabledTests = [
     # attempts to fetch data from web
     "test_bvlc_alexnet_cpu"
@@ -106,6 +164,7 @@ in buildPythonPackage rec {
     "test_squeezenet_cpu"
     "test_vgg19_cpu"
     "test_zfnet512_cpu"
+<<<<<<< HEAD
   ] ++ lib.optionals stdenv.isAarch64 [
     # AssertionError: Output 0 of test 0 in folder
     "test__pytorch_converted_Conv2d_depthwise_padded"
@@ -118,13 +177,19 @@ in buildPythonPackage rec {
     "test_ops_tested"
   ];
 
+=======
+  ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   disabledTestPaths = [
     # Unexpected output fields from running code: {'stderr'}
     "onnx/examples/np_array_tensorproto.ipynb"
   ];
+<<<<<<< HEAD
 
   __darwinAllowLocalNetworking = true;
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   postCheck = ''
     # run "cpp" tests
     .setuptools-cmake-build/onnx_gtests

@@ -11,7 +11,11 @@ let
     (builtins.attrNames (builtins.removeAttrs variantHashes [ "iosevka" ]));
 in stdenv.mkDerivation rec {
   pname = "${name}-bin";
+<<<<<<< HEAD
   version = "26.3.2";
+=======
+  version = "22.1.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchurl {
     url = "https://github.com/be5invis/Iosevka/releases/download/v${version}/ttc-${name}-${version}.zip";

@@ -12,14 +12,22 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-securitycenter";
+<<<<<<< HEAD
   version = "1.23.2";
+=======
+  version = "1.21.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
+<<<<<<< HEAD
     hash = "sha256-3QdHomKKN8bSUtyFCZJliw/FxNixVj9pdkzMwJWT880=";
+=======
+    hash = "sha256-zk5yZYevzpWmTOAAJgdNx9lnoTxjaq5XFJ+2hDQOBuc=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [
@@ -46,6 +54,10 @@ buildPythonPackage rec {
     homepage = "https://github.com/googleapis/python-securitycenter";
     changelog = "https://github.com/googleapis/python-securitycenter/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
+<<<<<<< HEAD
     maintainers = with maintainers; [ ];
+=======
+    maintainers = with maintainers; [ SuperSandro2000 ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

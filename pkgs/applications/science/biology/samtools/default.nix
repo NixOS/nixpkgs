@@ -2,11 +2,19 @@
 
 stdenv.mkDerivation rec {
   pname = "samtools";
+<<<<<<< HEAD
   version = "1.18";
 
   src = fetchurl {
     url = "https://github.com/samtools/samtools/releases/download/${version}/${pname}-${version}.tar.bz2";
     sha256 = "sha256-1ob/piECO6YYIqKlC3DoXQsY55Nx3lrbB4KFGdP8BuE=";
+=======
+  version = "1.17";
+
+  src = fetchurl {
+    url = "https://github.com/samtools/samtools/releases/download/${version}/${pname}-${version}.tar.bz2";
+    sha256 = "sha256-Ot85C2KCGf1kCPFGAqTEqpDmPhizldrXIqtRlDiipyk";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   # tests require `bgzip` from the htslib package

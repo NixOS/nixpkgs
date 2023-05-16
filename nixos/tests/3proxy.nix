@@ -1,6 +1,12 @@
 { lib, pkgs, ... }: {
   name = "3proxy";
+<<<<<<< HEAD
   meta.maintainers = with lib.maintainers; [ misuzu ];
+=======
+  meta = with lib.maintainers; {
+    maintainers = [ misuzu ];
+  };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nodes = {
     peer0 = { lib, ... }: {

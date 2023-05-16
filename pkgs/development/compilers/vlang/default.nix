@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 { lib, stdenv, fetchFromGitHub, glfw, freetype, openssl, makeWrapper, upx, boehmgc, xorg, binaryen, darwin }:
 
 let
@@ -40,12 +41,39 @@ in
 stdenv.mkDerivation {
   pname = "vlang";
   inherit version;
+=======
+{ lib, stdenv, fetchFromGitHub, glfw, freetype, openssl, makeWrapper, upx }:
+
+stdenv.mkDerivation rec {
+  pname = "vlang";
+  version = "weekly.2022.20";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "vlang";
     repo = "v";
     rev = version;
+<<<<<<< HEAD
     sha256 = "sha256-fHn1z2q3LmSycCOa1ii4DoHvbEW4uJt3Psq3/VuZNVQ=";
+=======
+    sha256 = "1isbyfs98bdbm2qjf7q4bqbpsmdiqlavn3gznwr12bkvhnsf4j3x";
+  };
+
+  # Required for bootstrap.
+  vc = fetchFromGitHub {
+    owner = "vlang";
+    repo = "vc";
+    rev = "167f262866090493650f58832d62d910999dd5a4";
+    sha256 = "1xax8355qkrccjcmx24gcab88xnrqj15mhqy0bgp3v2rb1hw1n3a";
+  };
+
+  # Required for vdoc.
+  markdown = fetchFromGitHub {
+    owner = "vlang";
+    repo = "markdown";
+    rev = "bbbd324a361e404ce0682fc00666df3a7877b398";
+    sha256 = "0cawzizr3rjz81blpvxvxrcvcdai1adj66885ss390444qq1fnv7";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [ glfw freetype openssl ]
@@ -53,6 +81,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ makeWrapper ];
 
+<<<<<<< HEAD
   buildInputs = [
     binaryen
   ] ++ lib.optionals stdenv.isDarwin [
@@ -79,6 +108,23 @@ stdenv.mkDerivation {
   # vcreate_test.v requires git, so we must remove it when building the tools.
   preInstall = ''
     mv cmd/tools/vcreate/vcreate_test.v $HOME/vcreate_test.v
+=======
+  makeFlags = [
+    "local=1"
+    "VC=${vc}"
+  ];
+
+  preBuild = ''
+    export HOME=$(mktemp -d)
+  '';
+
+  # vcreate_test.v requires git, so we must remove it when building the tools.
+  # vtest.v fails on Darwin, so let's just disable it for now.
+  preInstall = ''
+    mv cmd/tools/vcreate_test.v $HOME/vcreate_test.v
+  '' + lib.optionalString stdenv.isDarwin ''
+    mv cmd/tools/vtest.v $HOME/vtest.v
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '';
 
   installPhase = ''
@@ -104,6 +150,11 @@ stdenv.mkDerivation {
   # Return vcreate_test.v and vtest.v, so the user can use it.
   postInstall = ''
     cp $HOME/vcreate_test.v $out/lib/cmd/tools/vcreate_test.v
+<<<<<<< HEAD
+=======
+  '' + lib.optionalString stdenv.isDarwin ''
+    cp $HOME/vtest.v $out/lib/cmd/tools/vtest.v
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '';
 
   meta = with lib; {

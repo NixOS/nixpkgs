@@ -15,6 +15,10 @@
 , libjpeg
 , libpcap
 , libpulseaudio
+<<<<<<< HEAD
+=======
+, lua5_3
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , makeDesktopItem
 , makeWrapper
 , papirus-icon-theme
@@ -38,14 +42,22 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "mame";
+<<<<<<< HEAD
   version = "0.258";
+=======
+  version = "0.252";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   srcVersion = builtins.replaceStrings [ "." ] [ "" ] version;
 
   src = fetchFromGitHub {
     owner = "mamedev";
     repo = "mame";
     rev = "mame${srcVersion}";
+<<<<<<< HEAD
     hash = "sha256-5wsPlI3xTCeadxvOjjNSGtaa8F7M6gZobsv2Ks8DSGE=";
+=======
+    hash = "sha256-snef00pTbukiLQp8eAMfuIqNV3l0wP1+KlpFnS3iKFg=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   outputs = [ "out" "tools" ];
@@ -60,8 +72,12 @@ stdenv.mkDerivation rec {
     "USE_SYSTEM_LIB_FLAC=1"
     "USE_SYSTEM_LIB_GLM=1"
     "USE_SYSTEM_LIB_JPEG=1"
+<<<<<<< HEAD
     # https://www.mamedev.org/?p=523
     # "USE_SYSTEM_LIB_LUA=1"
+=======
+    "USE_SYSTEM_LIB_LUA=1"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "USE_SYSTEM_LIB_PORTAUDIO=1"
     "USE_SYSTEM_LIB_PORTMIDI=1"
     "USE_SYSTEM_LIB_PUGIXML=1"
@@ -78,6 +94,10 @@ stdenv.mkDerivation rec {
     expat
     zlib
     flac
+<<<<<<< HEAD
+=======
+    lua5_3
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     portmidi
     portaudio
     utf8proc
@@ -116,6 +136,13 @@ stdenv.mkDerivation rec {
       --subst-var-by mamePath "$out/opt/mame"
   '';
 
+<<<<<<< HEAD
+=======
+  env.NIX_CFLAGS_COMPILE = toString [
+    "-Wno-error=use-after-free"
+  ];
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   desktopItems = [
     (makeDesktopItem {
       name = "MAME";
@@ -196,6 +223,9 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ thiagokokada ];
     platforms = platforms.unix;
     broken = stdenv.isDarwin;
+<<<<<<< HEAD
     mainProgram = "mame";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

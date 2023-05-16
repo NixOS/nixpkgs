@@ -57,6 +57,10 @@ symlinkJoin {
     license = lib.licenses.ofl;
 
     platforms = lib.platforms.all;
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [ bergey minijackson ];
+=======
+    maintainers = with lib.maintainers; [ bergey minijackson Profpatsch ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

@@ -13,7 +13,11 @@
 
 buildGoModule rec {
   pname = "gopass";
+<<<<<<< HEAD
   version = "1.15.7";
+=======
+  version = "1.15.5";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nativeBuildInputs = [ installShellFiles makeWrapper ];
 
@@ -21,10 +25,17 @@ buildGoModule rec {
     owner = "gopasspw";
     repo = "gopass";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-Q3EX5giteIsH5+fXb7n2qpd9kBjaZZ/A5VuCljc72C8=";
   };
 
   vendorHash = "sha256-crnr5qXlYrhNT3nLlA7U13CaYAmAqcV+MBs/hee9ixU=";
+=======
+    hash = "sha256-0vMzCqH/p0GXtjoSrnSqMsIul9D00fICYb29KY6/Hno=";
+  };
+
+  vendorHash = "sha256-IgfzzwJANUfDToFLHv3BjDfm93KNm5zxQ5GMq7TQP+Q=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   subPackages = [ "." ];
 

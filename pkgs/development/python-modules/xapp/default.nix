@@ -10,12 +10,19 @@
 , gobject-introspection
 , xapp
 , polkit
+<<<<<<< HEAD
 , gitUpdater
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 buildPythonPackage rec {
   pname = "xapp";
+<<<<<<< HEAD
   version = "2.4.1";
+=======
+  version = "2.4.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   format = "other";
 
@@ -23,7 +30,11 @@ buildPythonPackage rec {
     owner = "linuxmint";
     repo = "python-xapp";
     rev = version;
+<<<<<<< HEAD
     hash = "sha256-Kvhp+biZ+KK9FYma/8cUEaQCHPKMLjOO909kbyMLQ3o=";
+=======
+    hash = "sha256-qEK71cGNGmaThxlFVsfnLUTD83RTr8GP+501c4UbHCk=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [
@@ -54,10 +65,13 @@ buildPythonPackage rec {
   doCheck = false;
   pythonImportsCheck = [ "xapp" ];
 
+<<<<<<< HEAD
   passthru.updateScript = gitUpdater {
     ignoredVersions = "^master.*";
   };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   meta = with lib; {
     homepage = "https://github.com/linuxmint/python-xapp";
     description = "Cross-desktop libraries and common resources for python";

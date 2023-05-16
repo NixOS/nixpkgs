@@ -125,6 +125,7 @@ in stdenv.mkDerivation (rec {
       relative = "llvm";
       hash = "sha256-XPbvNJ45SzjMGlNUgt/IgEvM2dHQpDOe6woUJY+nUYA=";
     })
+<<<<<<< HEAD
 
     # Backport gcc-13 fixes with missing includes.
     (fetchpatch {
@@ -133,6 +134,8 @@ in stdenv.mkDerivation (rec {
       hash = "sha256-CXwYxQezTq5vdmc8Yn88BUAEly6YZ5VEIA6X3y5NNOs=";
       stripLen = 1;
     })
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ] ++ lib.optional enablePolly ./gnu-install-dirs-polly.patch;
 
   postPatch = optionalString stdenv.isDarwin ''

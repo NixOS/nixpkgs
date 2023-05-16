@@ -2,12 +2,20 @@
 
 stdenv.mkDerivation rec {
   pname = "sfeed";
+<<<<<<< HEAD
   version = "1.9";
+=======
+  version = "1.8";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchgit {
     url = "git://git.codemadness.org/sfeed";
     rev = version;
+<<<<<<< HEAD
     sha256 = "sha256-VZChiJ1m2d0iEM5ATXMqCJVpHZcBIkqIorFvQlY0/mw=";
+=======
+    sha256 = "sha256-oosBwLCVZDy29RNxLXie0IPRUxAmT6qJlQGHypWScuk=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   buildInputs = [ ncurses ];

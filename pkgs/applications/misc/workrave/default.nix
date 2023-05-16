@@ -35,14 +35,22 @@
 
 stdenv.mkDerivation rec {
   pname = "workrave";
+<<<<<<< HEAD
   version = "1.10.51.1";
+=======
+  version = "1.10.50";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     repo = "workrave";
     owner = "rcaelers";
     rev = with lib;
       "v" + concatStringsSep "_" (splitVersion version);
+<<<<<<< HEAD
     sha256 = "sha256-rx3k4U5igRYxzuVke+x926K1Pso32iGob4Ccp0jdKds=";
+=======
+    sha256 = "sha256-fSUfgk0PmiteVQis+0NmMMZXBe/377X2k9oS2yp2Qzo=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [
@@ -55,7 +63,10 @@ stdenv.mkDerivation rec {
     pkg-config
     wrapGAppsHook
     jinja2
+<<<<<<< HEAD
     gobject-introspection
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   buildInputs = [
@@ -63,6 +74,10 @@ stdenv.mkDerivation rec {
     libSM
     libXScrnSaver
     libXtst
+<<<<<<< HEAD
+=======
+    gobject-introspection
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     glib
     glibmm
     gtkmm3

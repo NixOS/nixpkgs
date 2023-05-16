@@ -5,14 +5,22 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "circup";
+<<<<<<< HEAD
   version = "1.2.3";
+=======
+  version = "1.2.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "adafruit";
     repo = pname;
     rev = "refs/tags/${version}";
+<<<<<<< HEAD
     hash = "sha256-6RjZHMZBL8p72+JeZOzyD/x1qiZay2ApJEmp9IXXpDA=";
+=======
+    hash = "sha256-a1s5a1AhZZ06lBvFjm5E0IuWXE4flLvwVjDgViXI62c=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;

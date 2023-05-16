@@ -10,11 +10,19 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "gprojector";
+<<<<<<< HEAD
   version = "3.1.0";
 
   src = fetchzip {
     url = "https://www.giss.nasa.gov/tools/gprojector/download/G.ProjectorJ-${version}.tgz";
     sha256 = "sha256-cMmjyitetXxQzfSBh5ry5tIsLWOnBaaYOD1eQg1IX+w=";
+=======
+  version = "3.0.6";
+
+  src = fetchzip {
+    url = "https://www.giss.nasa.gov/tools/gprojector/download/G.ProjectorJ-${version}.tgz";
+    sha256 = "sha256-aw/p6mbTJl023d46NUZV3pnP4WVdYqZTFmgGlHEKfq0=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   desktopItems = [ (makeDesktopItem {

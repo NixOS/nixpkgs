@@ -6,11 +6,16 @@
 , lz4
 , openssh
 , openssl
+<<<<<<< HEAD
 , python3Packages
+=======
+, python3
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , xxHash
 , zstd
 , installShellFiles
 , nixosTests
+<<<<<<< HEAD
 , fetchPypi
 }:
 
@@ -24,13 +29,41 @@ python3Packages.buildPythonApplication rec {
     hash = "sha256-t6b48IYDnu7HkHC5FPPGUe1/NhLJZTdK+RDSd8eiE50=";
   };
 
+=======
+, fetchpatch
+}:
+
+python3.pkgs.buildPythonApplication rec {
+  pname = "borgbackup";
+  version = "1.2.3";
+  format = "pyproject";
+
+  src = python3.pkgs.fetchPypi {
+    inherit pname version;
+    hash = "sha256-4yQY+GM8lvqWgTUqVutjuY4pQgNHLBFKUkJwnTaWZ4U=";
+  };
+
+  patches = [
+    (fetchpatch {
+      # Fix HashIndexSizeTestCase.test_size_on_disk_accurate problems on ZFS,
+      # see https://github.com/borgbackup/borg/issues/7250
+      url = "https://github.com/borgbackup/borg/pull/7252/commits/fe3775cf8078c18d8fe39a7f42e52e96d3ecd054.patch";
+      hash = "sha256-gdssHfhdkmRfSAOeXsq9Afg7xqGM3NLIq4QnzmPBhw4=";
+    })
+  ];
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   postPatch = ''
     # sandbox does not support setuid/setgid/sticky bits
     substituteInPlace src/borg/testsuite/archiver.py \
       --replace "0o4755" "0o0755"
   '';
 
+<<<<<<< HEAD
   nativeBuildInputs = with python3Packages; [
+=======
+  nativeBuildInputs = with python3.pkgs; [
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     cython
     setuptools-scm
     pkgconfig
@@ -55,7 +88,11 @@ python3Packages.buildPythonApplication rec {
     acl
   ];
 
+<<<<<<< HEAD
   propagatedBuildInputs = with python3Packages; [
+=======
+  propagatedBuildInputs = with python3.pkgs; [
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     msgpack
     packaging
     (if stdenv.isLinux then pyfuse3 else llfuse)
@@ -72,7 +109,11 @@ python3Packages.buildPythonApplication rec {
       --zsh scripts/shell_completions/zsh/_borg
   '';
 
+<<<<<<< HEAD
   nativeCheckInputs = with python3Packages; [
+=======
+  nativeCheckInputs = with python3.pkgs; [
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     e2fsprogs
     py
     python-dateutil
@@ -115,7 +156,10 @@ python3Packages.buildPythonApplication rec {
   outputs = [ "out" "doc" "man" ];
 
   meta = with lib; {
+<<<<<<< HEAD
     changelog = "https://github.com/borgbackup/borg/blob/${version}/docs/changes.rst";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     description = "Deduplicating archiver with compression and encryption";
     homepage = "https://www.borgbackup.org";
     license = licenses.bsd3;

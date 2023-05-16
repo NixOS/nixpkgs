@@ -7,10 +7,18 @@
 , testscenarios
 }:
 
+<<<<<<< HEAD
 buildPythonPackage {
   pname = "os-service-types-tests";
   inherit (os-service-types) version src;
   format = "other";
+=======
+buildPythonPackage rec {
+  pname = "os-service-types-tests";
+  inherit (os-service-types) version;
+
+  src = os-service-types.src;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   postPatch = ''
     # only a small portion of the listed packages are actually needed for running the tests

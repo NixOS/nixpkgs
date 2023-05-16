@@ -9,9 +9,15 @@ stdenv.mkDerivation rec {
       sha256 = "073h03bmpfdy15qh37lvppayld2747i4acpyk0pm5nf2raiak0zm";
     };
 
+<<<<<<< HEAD
     postPatch = ''
       substituteInPlace Makefile \
         --replace "gcc" "$CC"
+=======
+    patchPhase = ''
+      substituteInPlace Makefile \
+        --replace "gcc" "cc"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     '';
 
     installPhase = ''

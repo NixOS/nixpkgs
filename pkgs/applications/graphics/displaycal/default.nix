@@ -1,11 +1,19 @@
 { lib
 , python3
+<<<<<<< HEAD
 , fetchPypi
 , wrapGAppsHook
 , gtk3
 , librsvg
 , xorg
 , argyllcms
+=======
+, xorg
+, argyllcms
+, wrapGAppsHook
+, gtk3
+, librsvg
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -13,7 +21,11 @@ python3.pkgs.buildPythonApplication rec {
   version = "3.9.10";
   format = "setuptools";
 
+<<<<<<< HEAD
   src = fetchPypi {
+=======
+  src = python3.pkgs.fetchPypi {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     pname = "DisplayCAL";
     inherit version;
     hash = "sha256-oDHDVb0zuAC49yPfmNe7xuFKaA1BRZGr75XwsLqugHs=";

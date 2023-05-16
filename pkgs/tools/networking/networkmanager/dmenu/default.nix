@@ -1,20 +1,35 @@
 { lib, stdenv, glib, fetchFromGitHub, networkmanager, python3Packages
+<<<<<<< HEAD
 , gobject-introspection, procps }:
+=======
+, gobject-introspection }:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 let inherit (python3Packages) python pygobject3;
 in stdenv.mkDerivation rec {
   pname = "networkmanager_dmenu";
+<<<<<<< HEAD
   version = "2.3.1";
+=======
+  version = "2.1.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "firecat53";
     repo = "networkmanager-dmenu";
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-RbJE6JCElctBY5HDJa6SIJhm8g9BugncLF5kmambPPc=";
   };
 
   nativeBuildInputs = [ gobject-introspection ];
   buildInputs = [ glib python pygobject3 networkmanager python3Packages.wrapPython procps ];
+=======
+    sha256 = "sha256-btwiKxmb1xDtPSTOIvpHJDQ5SY1gnBWlKnYOzzSLDEY=";
+  };
+
+  buildInputs = [ glib python pygobject3 gobject-introspection networkmanager python3Packages.wrapPython ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   dontBuild = true;
 

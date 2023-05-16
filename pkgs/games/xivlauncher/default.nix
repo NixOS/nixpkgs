@@ -1,9 +1,17 @@
+<<<<<<< HEAD
 { lib, buildDotnetModule, fetchFromGitHub, dotnetCorePackages, SDL2, libsecret, glib, gnutls, aria2, steam, gst_all_1
+=======
+{ lib, buildDotnetModule, fetchFromGitHub, dotnetCorePackages, SDL2, libsecret, glib, gnutls, aria2, steam-run, gst_all_1
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , copyDesktopItems, makeDesktopItem, makeWrapper
 , useSteamRun ? true }:
 
 let
+<<<<<<< HEAD
   rev = "1.0.4";
+=======
+  rev = "1.0.3";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 in
   buildDotnetModule rec {
     pname = "XIVLauncher";
@@ -13,7 +21,11 @@ in
       owner = "goatcorp";
       repo = "XIVLauncher.Core";
       inherit rev;
+<<<<<<< HEAD
       hash = "sha256-HbOo1aCBYnLXI2QZEBSRQNchHD2/fo50M2ZnIXkRn6Y=";
+=======
+      hash = "sha256-aQVfW6Ef8X6L6hBEOCY/Py5tEyorXqtOO3v70mD7efA=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       fetchSubmodules = true;
     };
 
@@ -39,6 +51,7 @@ in
       cp src/XIVLauncher.Core/Resources/logo.png $out/share/pixmaps/xivlauncher.png
     '';
 
+<<<<<<< HEAD
     postFixup = lib.optionalString useSteamRun (let
       steam-run = (steam.override {
         extraPkgs = pkgs: [ pkgs.libunwind ];
@@ -47,6 +60,12 @@ in
       substituteInPlace $out/bin/XIVLauncher.Core \
         --replace 'exec' 'exec ${steam-run}/bin/steam-run'
     '') + ''
+=======
+    postFixup = lib.optionalString useSteamRun ''
+      substituteInPlace $out/bin/XIVLauncher.Core \
+        --replace 'exec' 'exec ${steam-run}/bin/steam-run'
+    '' + ''
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       wrapProgram $out/bin/XIVLauncher.Core --prefix GST_PLUGIN_SYSTEM_PATH_1_0 ":" "$GST_PLUGIN_SYSTEM_PATH_1_0"
       # the reference to aria2 gets mangled as UTF-16LE and isn't detectable by nix: https://github.com/NixOS/nixpkgs/issues/220065
       mkdir -p $out/nix-support

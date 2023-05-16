@@ -60,6 +60,10 @@ buildPythonPackage rec {
     description = "A helper for organizing Django settings";
     homepage = "https://django-configurations.readthedocs.io/";
     license = licenses.bsd0;
+<<<<<<< HEAD
     maintainers = with maintainers; [ ];
+=======
+    maintainers = with maintainers; [ costrouc ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

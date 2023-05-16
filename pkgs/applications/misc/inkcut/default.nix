@@ -1,12 +1,22 @@
 { lib
 , fetchpatch
+<<<<<<< HEAD
 , python3
+=======
+, python3Packages
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , fetchFromGitHub
 , wrapQtAppsHook
 , cups
 }:
 
+<<<<<<< HEAD
 python3.pkgs.buildPythonApplication rec {
+=======
+with python3Packages;
+
+buildPythonApplication rec {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pname = "inkcut";
   version = "2.1.5";
 
@@ -46,7 +56,11 @@ python3.pkgs.buildPythonApplication rec {
 
   nativeBuildInputs = [ wrapQtAppsHook ];
 
+<<<<<<< HEAD
   propagatedBuildInputs = with python3.pkgs; [
+=======
+  propagatedBuildInputs = [
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     enamlx
     twisted
     lxml

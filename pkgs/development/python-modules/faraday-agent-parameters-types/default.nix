@@ -9,7 +9,11 @@
 
 buildPythonPackage rec {
   pname = "faraday-agent-parameters-types";
+<<<<<<< HEAD
   version = "1.3.1";
+=======
+  version = "1.2.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -17,7 +21,11 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "faraday_agent_parameters_types";
     inherit version;
+<<<<<<< HEAD
     hash = "sha256-yWDZPa9+DZh2Bj9IIeIVFpAt9nhQOk2tTZh02difsCs=";
+=======
+    hash = "sha256-jQgE/eR8Gd9nMGijH9unhHCrLUn7DbWFkTauoz3O/sM=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [

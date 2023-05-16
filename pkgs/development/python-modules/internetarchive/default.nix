@@ -1,20 +1,35 @@
+<<<<<<< HEAD
 { lib
 , buildPythonPackage
 , docopt
 , fetchFromGitHub
 , pytestCheckHook
+=======
+{ buildPythonPackage
+, fetchPypi
+, pytest
+, tqdm
+, docopt
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , requests
 , jsonpatch
 , schema
 , responses
+<<<<<<< HEAD
 , setuptools
 , tqdm
+=======
+, lib
+, glibcLocales
+, setuptools
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , urllib3
 , pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "internetarchive";
+<<<<<<< HEAD
   version = "3.5.0";
 
   format = "pyproject";
@@ -27,6 +42,17 @@ buildPythonPackage rec {
     repo = "internetarchive";
     rev = "v${version}";
     hash = "sha256-apBzx1qMHEA0wiWh82sS7I+AaiMEoAchhPsrtAgujbQ=";
+=======
+  version = "3.4.0";
+
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
+
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-vrvktAuijBKo3IsMQzUs5EyfwFCFGmvXZ4kCvlbeGWE=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [
@@ -39,6 +65,7 @@ buildPythonPackage rec {
     urllib3
   ];
 
+<<<<<<< HEAD
   nativeCheckInputs = [
     responses
     pytestCheckHook
@@ -63,6 +90,18 @@ buildPythonPackage rec {
   pythonImportsCheck = [
     "internetarchive"
   ];
+=======
+  nativeCheckInputs = [ pytest responses glibcLocales ];
+
+  # tests depend on network
+  doCheck = false;
+
+  checkPhase = ''
+    LC_ALL=en_US.utf-8 pytest tests
+  '';
+
+  pythonImportsCheck = [ "internetarchive" ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   meta = with lib; {
     description = "A Python and Command-Line Interface to Archive.org";

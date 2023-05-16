@@ -16,7 +16,11 @@ buildGoModule rec {
     sha256 = "sha256-3GPZ6+gx5i/xULM3lq7D+b0onBC6clgeZsI1CvZ943s=";
   };
 
+<<<<<<< HEAD
   vendorHash = "sha256-XVBDPhQsnUdftS+jZ1zWZlfSbFXxXrKSqiGTPpLq5i0=";
+=======
+  vendorSha256 = "sha256-XVBDPhQsnUdftS+jZ1zWZlfSbFXxXrKSqiGTPpLq5i0=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   subPackages = [ "." ];
 
@@ -41,7 +45,11 @@ buildGoModule rec {
       complete.
     '';
     license = licenses.mit;
+<<<<<<< HEAD
     maintainers = with maintainers; [ fgaz ];
+=======
+    maintainers = with maintainers; [ fgaz SuperSandro2000 ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     broken = stdenv.isDarwin; # needs golang.org/x/sys bump
   };
 }

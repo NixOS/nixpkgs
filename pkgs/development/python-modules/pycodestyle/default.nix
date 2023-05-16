@@ -18,6 +18,7 @@ buildPythonPackage rec {
     hash = "sha256-NHGHvbR2Mp2Y9pXCE9cpWoRtEVL/T+m6y4qVkLjucFM=";
   };
 
+<<<<<<< HEAD
   patches = [
     # https://github.com/PyCQA/pycodestyle/issues/1151
     # Applies a modified version of an upstream patch that only applied
@@ -25,6 +26,8 @@ buildPythonPackage rec {
     ./python-3.11.4-compat.patch
   ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   # https://github.com/PyCQA/pycodestyle/blob/2.10.0/tox.ini#L13
   checkPhase = ''
     ${python.interpreter} -m pycodestyle --statistics pycodestyle.py

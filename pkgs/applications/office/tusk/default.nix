@@ -31,7 +31,11 @@ in appimageTools.wrapType2 rec {
     export LC_ALL=C.UTF-8
   '';
 
+<<<<<<< HEAD
   multiArch = false; # no 32bit needed
+=======
+  multiPkgs = null; # no 32bit needed
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   extraPkgs = appimageTools.defaultFhsEnvArgs.multiPkgs;
   extraInstallCommands = ''
     mv $out/bin/{${pname}-${version},${pname}}

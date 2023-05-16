@@ -2,13 +2,21 @@
 
 stdenv.mkDerivation rec {
   pname = "diff-so-fancy";
+<<<<<<< HEAD
   version = "1.4.4";
+=======
+  version = "1.4.3";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "so-fancy";
     repo = "diff-so-fancy";
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-yF+LI1lsE1qwOc3u7mtc+uu0N/8m4bZD5qP+xFraaTI=";
+=======
+    sha256 = "sha256-/xdBvq2u1s5/yzjwr3MLxpaD1CNktcPijXJTKW3Bc4c=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

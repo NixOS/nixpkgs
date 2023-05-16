@@ -1,8 +1,13 @@
 { lib, stdenv, fetchurl, ocaml, findlib, ocamlbuild, ounit }:
 
 let
+<<<<<<< HEAD
   # ounit is only available for OCaml >= 4.08
   doCheck = lib.versionAtLeast ocaml.version "4.08";
+=======
+  # ounit is only available for OCaml >= 4.04
+  doCheck = lib.versionAtLeast ocaml.version "4.04";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 in
 
 lib.throwIf (lib.versionAtLeast ocaml.version "5.0")

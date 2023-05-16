@@ -23,7 +23,13 @@
     maintainers = [ maintainers.vbgl ];
   };
 }).overrideAttrs (x:
+<<<<<<< HEAD
   lib.optionalAttrs (lib.versionOlder x.version "20210316") {
+=======
+  if lib.versionAtLeast x.version "20210316"
+  then {}
+  else {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     installFlags = [ "CONTRIB=$(out)/lib/coq/${coq.coq-version}/user-contrib" ];
   }
 )

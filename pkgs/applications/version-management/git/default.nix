@@ -29,7 +29,11 @@ assert sendEmailSupport -> perlSupport;
 assert svnSupport -> perlSupport;
 
 let
+<<<<<<< HEAD
   version = "2.41.0";
+=======
+  version = "2.40.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   svn = subversionClient.override { perlBindings = perlSupport; };
   gitwebPerlLibs = with perlPackages; [ CGI HTMLParser CGIFast FCGI FCGIProcManager HTMLTagCloud ];
 in
@@ -42,7 +46,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://www.kernel.org/pub/software/scm/git/git-${version}.tar.xz";
+<<<<<<< HEAD
     hash = "sha256-50i6/UJM/oCyEsvG8bvMw6R9SGL7HreYiHd1BHhWgEA=";
+=======
+    hash = "sha256-SJO4uY7vyf3EsOfKJJ40AAT6p4BKQz0XQp4xHh/vIdI=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   outputs = [ "out" ] ++ lib.optional withManual "doc";
@@ -397,6 +405,9 @@ stdenv.mkDerivation (finalAttrs: {
 
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ primeos wmertens globin ];
+<<<<<<< HEAD
     mainProgram = "git";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 })

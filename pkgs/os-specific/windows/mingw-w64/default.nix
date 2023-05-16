@@ -36,8 +36,11 @@ in stdenv.mkDerivation {
   configureFlags = [
     "--enable-idl"
     "--enable-secure-api"
+<<<<<<< HEAD
   ] ++ lib.optionals (stdenv.targetPlatform.libc == "ucrt") [
     "--with-default-msvcrt=ucrt"
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   enableParallelBuilding = true;

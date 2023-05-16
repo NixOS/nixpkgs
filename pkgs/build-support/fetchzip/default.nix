@@ -7,6 +7,7 @@
 
 { lib, fetchurl, unzip, glibcLocalesUtf8 }:
 
+<<<<<<< HEAD
 { name ? "source"
 , url ? ""
 , urls ? []
@@ -27,14 +28,48 @@
 assert (extraPostFetch != "") -> lib.warn "use 'postFetch' instead of 'extraPostFetch' with 'fetchzip' and 'fetchFromGitHub'." true;
 
 let
+=======
+{ # Optionally move the contents of the unpacked tree up one level.
+  stripRoot ? true
+, url ? ""
+, urls ? []
+, extraPostFetch ? ""
+, postFetch ? ""
+, name ? "source"
+, pname ? ""
+, version ? ""
+, nativeBuildInputs ? [ ]
+, # Allows to set the extension for the intermediate downloaded
+  # file. This can be used as a hint for the unpackCmdHooks to select
+  # an appropriate unpacking tool.
+  extension ? null
+, ... } @ args:
+
+
+lib.warnIf (extraPostFetch != "") "use 'postFetch' instead of 'extraPostFetch' with 'fetchzip' and 'fetchFromGitHub'."
+
+(let
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   tmpFilename =
     if extension != null
     then "download.${extension}"
     else baseNameOf (if url != "" then url else builtins.head urls);
 in
 
+<<<<<<< HEAD
 fetchurl ({
   inherit name;
+=======
+fetchurl ((
+  if (pname != "" && version != "") then
+    {
+      name = "${pname}-${version}";
+      inherit pname version;
+    }
+  else
+    { inherit name; }
+) // {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   recursiveHash = true;
 
   downloadToTemp = true;
@@ -54,7 +89,12 @@ fetchurl ({
       mv "$downloadedFile" "$renamed"
       unpackFile "$renamed"
       chmod -R +w "$unpackDir"
+<<<<<<< HEAD
     '' + (if stripRoot then ''
+=======
+    ''
+    + (if stripRoot then ''
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       if [ $(ls -A "$unpackDir" | wc -l) != 1 ]; then
         echo "error: zip file must contain a single file or directory."
         echo "hint: Pass stripRoot=false; to fetchzip to assume flat list of files."
@@ -67,6 +107,7 @@ fetchurl ({
       mv "$unpackDir/$fn" "$out"
     '' else ''
       mv "$unpackDir" "$out"
+<<<<<<< HEAD
     '') + ''
       ${postFetch}
       ${extraPostFetch}
@@ -75,3 +116,18 @@ fetchurl ({
     # ^ Remove non-owner write permissions
     # Fixes https://github.com/NixOS/nixpkgs/issues/38649
 } // removeAttrs args [ "stripRoot" "extraPostFetch" "postFetch" "extension" "nativeBuildInputs" ])
+=======
+    '')
+    + ''
+      ${postFetch}
+    '' + ''
+      ${extraPostFetch}
+    ''
+
+    # Remove non-owner write permissions
+    # Fixes https://github.com/NixOS/nixpkgs/issues/38649
+    + ''
+      chmod 755 "$out"
+    '';
+} // removeAttrs args [ "stripRoot" "extraPostFetch" "postFetch" "extension" "nativeBuildInputs" ]))
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)

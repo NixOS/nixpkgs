@@ -52,7 +52,11 @@ import ./make-test-python.nix ({ pkgs, ... }: {
 
   testScript = { nodes, ... }:
     let
+<<<<<<< HEAD
       user = nodes.cli.users.users.alice;
+=======
+      user = nodes.cli.config.users.users.alice;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     in
     ''
       start_all()
@@ -65,8 +69,12 @@ import ./make-test-python.nix ({ pkgs, ... }: {
 
       with subtest("GUI"):
         gui.wait_for_x()
+<<<<<<< HEAD
         gui.wait_for_file("/tmp/xauth_*")
         gui.succeed("xauth merge /tmp/xauth_*")
+=======
+        gui.succeed("xauth merge ${user.home}/.Xauthority")
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         gui.wait_for_window("^Desktop ")
         gui.wait_for_unit("maestral.service", "${user.name}")
     '';

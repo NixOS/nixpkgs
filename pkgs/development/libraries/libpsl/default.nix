@@ -92,6 +92,9 @@ in stdenv.mkDerivation rec {
     maintainers = [ maintainers.c0bw3b ];
     mainProgram = "psl";
     platforms = platforms.unix;
+<<<<<<< HEAD
     pkgConfigModules = [ "libpsl" ];
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

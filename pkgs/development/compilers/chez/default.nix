@@ -1,8 +1,13 @@
+<<<<<<< HEAD
 { lib, stdenv, fetchurl
+=======
+{ lib, stdenv, fetchFromGitHub
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , coreutils, cctools
 , ncurses, libiconv, libX11, libuuid
 }:
 
+<<<<<<< HEAD
 stdenv.mkDerivation (finalAttrs: {
   pname = "chez-scheme";
   version = "9.6.2";
@@ -10,6 +15,18 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://github.com/cisco/ChezScheme/releases/download/v${finalAttrs.version}/csv${finalAttrs.version}.tar.gz";
     hash = "sha256-cUaVeJ4brTUY5s1fvIroIE92ED1a0roFo/HAY+stXQI=";
+=======
+stdenv.mkDerivation rec {
+  pname = "chez-scheme";
+  version = "9.5.8a";
+
+  src = fetchFromGitHub {
+    owner  = "cisco";
+    repo   = "ChezScheme";
+    rev    = "refs/tags/v${version}";
+    sha256 = "sha256-d8DgHATZzZbOYODHFKTqg4oWg/wja8jQgcCVpj8j6yQ=";
+    fetchSubmodules = true;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = lib.optional stdenv.isDarwin cctools;
@@ -59,7 +76,11 @@ stdenv.mkDerivation (finalAttrs: {
   ** Clean up some of the examples from the build output.
   */
   postInstall = ''
+<<<<<<< HEAD
     rm -rf $out/lib/csv${finalAttrs.version}/examples
+=======
+    rm -rf $out/lib/csv${version}/examples
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '';
 
   setupHook = ./setup-hook.sh;
@@ -72,4 +93,8 @@ stdenv.mkDerivation (finalAttrs: {
     platforms    = lib.platforms.unix;
     badPlatforms = [ "aarch64-linux" "aarch64-darwin" ];
   };
+<<<<<<< HEAD
 })
+=======
+}
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)

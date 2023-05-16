@@ -1,9 +1,13 @@
 { lib
 , stdenv
+<<<<<<< HEAD
 , fetchFromGitHub
 , fetchpatch
 , fetchurl
 , writeText
+=======
+, fetchPypi
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , python
 , pythonOlder
 , buildPythonPackage
@@ -20,6 +24,7 @@
 , pybind11
 , pooch
 , libxcrypt
+<<<<<<< HEAD
 , xsimd
 , blas
 , lapack
@@ -99,19 +104,50 @@ in buildPythonPackage {
     pybind11
     pooch
     xsimd
+=======
+}:
+
+buildPythonPackage rec {
+  pname = "scipy";
+  version = "1.10.1";
+  format = "pyproject";
+
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-LPnfuAp7RYm6TEDOdYiYbW1c68VFfK0sKID2vC1C86U=";
+  };
+
+  patches = [
+    # These tests require internet connection, currently impossible to disable
+    # them otherwise, see:
+    # https://github.com/scipy/scipy/pull/17965
+    ./disable-datasets-tests.patch
+  ];
+
+  nativeBuildInputs = [ cython gfortran meson-python pythran pkg-config wheel ];
+
+  buildInputs = [
+    numpy.blas
+    pybind11
+    pooch
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ] ++ lib.optionals (pythonOlder "3.9") [
     libxcrypt
   ];
 
   propagatedBuildInputs = [ numpy ];
 
+<<<<<<< HEAD
   __darwinAllowLocalNetworking = true;
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nativeCheckInputs = [ nose pytest pytest-xdist ];
 
   doCheck = !(stdenv.isx86_64 && stdenv.isDarwin);
 
   preConfigure = ''
+<<<<<<< HEAD
     # Helps parallelization a bit
     export NPY_NUM_BUILD_JOBS=$NIX_BUILD_CORES
     # We download manually the datasets and this variable tells the pooch
@@ -132,6 +168,11 @@ in buildPythonPackage {
     # https://docs.scipy.org/doc/scipy/building/cross_compilation.html
     "--cross-file=${crossFileScipy}"
   ];
+=======
+    sed -i '0,/from numpy.distutils.core/s//import setuptools;from numpy.distutils.core/' setup.py
+    export NPY_NUM_BUILD_JOBS=$NIX_BUILD_CORES
+  '';
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   # disable stackprotector on aarch64-darwin for now
   #
@@ -147,7 +188,11 @@ in buildPythonPackage {
     runHook preCheck
     pushd "$out"
     export OMP_NUM_THREADS=$(( $NIX_BUILD_CORES / 4 ))
+<<<<<<< HEAD
     ${python.interpreter} -c "import scipy, sys; sys.exit(scipy.test('fast', verbose=10, parallel=$NIX_BUILD_CORES) != True)"
+=======
+    ${python.interpreter} -c "import scipy; scipy.test('fast', verbose=10, parallel=$NIX_BUILD_CORES)"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     popd
     runHook postCheck
   '';
@@ -155,6 +200,7 @@ in buildPythonPackage {
   requiredSystemFeatures = [ "big-parallel" ]; # the tests need lots of CPU time
 
   passthru = {
+<<<<<<< HEAD
     inherit blas;
     updateScript = [
       ./update.sh
@@ -166,12 +212,23 @@ in buildPythonPackage {
     ;
   };
 
+=======
+    blas = numpy.blas;
+  };
+
+  setupPyBuildFlags = [ "--fcompiler='gnu95'" ];
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   SCIPY_USE_G77_ABI_WRAPPER = 1;
 
   meta = with lib; {
     description = "SciPy (pronounced 'Sigh Pie') is open-source software for mathematics, science, and engineering";
     homepage = "https://www.scipy.org/";
     license = licenses.bsd3;
+<<<<<<< HEAD
     maintainers = with maintainers; [ fridh doronbehar ];
+=======
+    maintainers = [ maintainers.fridh ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

@@ -10,8 +10,15 @@
 , mock
 , moto
 , psutil
+<<<<<<< HEAD
 , pytest-mock
 , pytestCheckHook
+=======
+, pytest-cov
+, pytest-mock
+, pytestCheckHook
+, pytest-runner
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , requests
 , responses
 , sqlalchemy
@@ -53,10 +60,15 @@ buildPythonPackage rec {
     websockets
   ];
 
+<<<<<<< HEAD
   pytestFlagsArray = [
     # Exclude tests that requires network features
     "--ignore=integration_tests"
   ];
+=======
+  # Exclude tests that requires network features
+  pytestFlagsArray = [ "--ignore=integration_tests" ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   preCheck = ''
     export HOME=$(mktemp -d)
@@ -76,9 +88,13 @@ buildPythonPackage rec {
     "test_send_dict"
   ];
 
+<<<<<<< HEAD
   pythonImportsCheck = [
     "slack"
   ];
+=======
+  pythonImportsCheck = [ "slack" ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   meta = with lib; {
     description = "A client for Slack, which supports the Slack Web API and Real Time Messaging (RTM) API";

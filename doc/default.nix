@@ -1,5 +1,6 @@
 { pkgs ? (import ./.. { }), nixpkgs ? { }}:
 let
+<<<<<<< HEAD
   inherit (pkgs) lib;
   inherit (lib) hasPrefix removePrefix;
 
@@ -89,10 +90,14 @@ let
             opt.declarations;
         };
   };
+=======
+  doc-support = import ./doc-support { inherit pkgs nixpkgs; };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 in pkgs.stdenv.mkDerivation {
   name = "nixpkgs-manual";
 
   nativeBuildInputs = with pkgs; [
+<<<<<<< HEAD
     nixos-render-docs
   ];
 
@@ -147,4 +152,41 @@ in pkgs.stdenv.mkDerivation {
     echo "doc manual $dest ${common.indexPath}" >> $out/nix-support/hydra-build-products
     echo "doc manual $dest nixpkgs-manual.epub" >> $out/nix-support/hydra-build-products
   '';
+=======
+    pandoc
+    graphviz
+    libxml2
+    libxslt
+    zip
+    jing
+    xmlformat
+  ];
+
+  src = pkgs.nix-gitignore.gitignoreSource [] ./.;
+
+  postPatch = ''
+    ln -s ${doc-support} ./doc-support/result
+  '';
+
+  preBuild = ''
+    make -j$NIX_BUILD_CORES render-md
+  '';
+
+  installPhase = ''
+    dest="$out/share/doc/nixpkgs"
+    mkdir -p "$(dirname "$dest")"
+    mv out/html "$dest"
+    mv "$dest/index.html" "$dest/manual.html"
+
+    mv out/epub/manual.epub "$dest/nixpkgs-manual.epub"
+
+    mkdir -p $out/nix-support/
+    echo "doc manual $dest manual.html" >> $out/nix-support/hydra-build-products
+    echo "doc manual $dest nixpkgs-manual.epub" >> $out/nix-support/hydra-build-products
+  '';
+
+  # Environment variables
+  PANDOC_LUA_FILTERS_DIR = "${pkgs.pandoc-lua-filters}/share/pandoc/filters";
+  PANDOC_LINK_MANPAGES_FILTER = import build-aux/pandoc-filters/link-manpages.nix { inherit pkgs; };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }

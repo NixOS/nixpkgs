@@ -12,14 +12,22 @@
 
 buildPythonPackage rec {
   pname = "glom";
+<<<<<<< HEAD
   version = "23.3.0";
+=======
+  version = "23.1.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
+<<<<<<< HEAD
     hash = "sha256-AxaZKA+kZmBI5D0uq2i+EET/zUh6t0rLeS3i7rC8JRU=";
+=======
+    hash = "sha256-t0QjCeAT/rb+qyBhl6v4rsMoNexwnYqSqFFDIvZMDv8=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   postPatch = ''

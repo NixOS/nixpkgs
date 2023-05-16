@@ -9,7 +9,10 @@ args@
 , autoAddOpenGLRunpathHook
 , addOpenGLRunpath
 , alsa-lib
+<<<<<<< HEAD
 , curlMinimal
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , expat
 , fetchurl
 , fontconfig
@@ -17,14 +20,20 @@ args@
 , gdk-pixbuf
 , glib
 , glibc
+<<<<<<< HEAD
 , gst_all_1
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , gtk2
 , lib
 , libxkbcommon
 , libkrb5
 , krb5
 , makeWrapper
+<<<<<<< HEAD
 , markForCudatoolkitRootHook
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , ncurses5
 , numactl
 , nss
@@ -32,7 +41,10 @@ args@
 , python3 # FIXME: CUDAToolkit 10 may still need python27
 , pulseaudio
 , requireFile
+<<<<<<< HEAD
 , setupCudaHook
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , stdenv
 , backendStdenv # E.g. gcc11Stdenv, set in extension.nix
 , unixODBC
@@ -44,7 +56,10 @@ args@
 , libsForQt5
 , libtiff
 , qt6Packages
+<<<<<<< HEAD
 , qt6
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , rdma-core
 , ucx
 , rsync
@@ -82,15 +97,21 @@ backendStdenv.mkDerivation rec {
     addOpenGLRunpath
     autoPatchelfHook
     autoAddOpenGLRunpathHook
+<<<<<<< HEAD
     markForCudatoolkitRootHook
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ] ++ lib.optionals (lib.versionOlder version "11") [
     libsForQt5.wrapQtAppsHook
   ] ++ lib.optionals (lib.versionAtLeast version "11.8") [
     qt6Packages.wrapQtAppsHook
   ];
+<<<<<<< HEAD
   depsTargetTargetPropagated = [
     setupCudaHook
   ];
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   buildInputs = lib.optionals (lib.versionOlder version "11") [
     libsForQt5.qt5.qtwebengine
     freeglut
@@ -135,6 +156,7 @@ backendStdenv.mkDerivation rec {
     (lib.getLib libtiff)
     qt6Packages.qtwayland
     rdma-core
+<<<<<<< HEAD
     (ucx.override { enableCuda = false; }) # Avoid infinite recursion
     xorg.libxshmfence
     xorg.libxkbfile
@@ -155,6 +177,12 @@ backendStdenv.mkDerivation rec {
     qtwebchannel
     qtwebengine
   ])));
+=======
+    ucx
+    xorg.libxshmfence
+    xorg.libxkbfile
+  ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   # Prepended to runpaths by autoPatchelf.
   # The order inherited from older rpath preFixup code
@@ -183,12 +211,15 @@ backendStdenv.mkDerivation rec {
     "libcom_err.so.2"
   ];
 
+<<<<<<< HEAD
   preFixup = if lib.versionOlder version "11" then ''
     patchelf $out/targets/*/lib/libnvrtc.so --add-needed libnvrtc-builtins.so
   '' else ''
     patchelf $out/lib64/libnvrtc.so --add-needed libnvrtc-builtins.so
   '';
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   unpackPhase = ''
     sh $src --keep --noexec
 
@@ -268,10 +299,13 @@ backendStdenv.mkDerivation rec {
     rm -rf $out/lib
     ''}
 
+<<<<<<< HEAD
     ${lib.optionalString (lib.versionAtLeast version "12.0") ''
     rm $out/host-linux-x64/libQt6*
     ''}
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     # Remove some cruft.
     ${lib.optionalString ((lib.versionAtLeast version "7.0") && (lib.versionOlder version "10.1"))
       "rm $out/bin/uninstall*"}
@@ -288,12 +322,32 @@ backendStdenv.mkDerivation rec {
     sed -i "1 i#define _BITS_FLOATN_H" "$out/include/host_defines.h"
   '' +
   # Point NVCC at a compatible compiler
+<<<<<<< HEAD
   # CUDA_TOOLKIT_ROOT_DIR is legacy,
   # Cf. https://cmake.org/cmake/help/latest/module/FindCUDA.html#input-variables
+=======
+  # FIXME: redist cuda_nvcc copy-pastes this code
+  # Refer to comments in the overrides for cuda_nvcc for explanation
+  # CUDA_TOOLKIT_ROOT_DIR is legacy,
+  # Cf. https://cmake.org/cmake/help/latest/module/FindCUDA.html#input-variables
+  # NOTE: We unconditionally set -Xfatbin=-compress-all, which reduces the size of the compiled
+  #   binaries. If binaries grow over 2GB, they will fail to link. This is a problem for us, as
+  #   the default set of CUDA capabilities we build can regularly cause this to occur (for
+  #   example, with Magma).
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ''
     mkdir -p $out/nix-support
     cat <<EOF >> $out/nix-support/setup-hook
     cmakeFlags+=' -DCUDA_TOOLKIT_ROOT_DIR=$out'
+<<<<<<< HEAD
+=======
+    cmakeFlags+=' -DCUDA_HOST_COMPILER=${backendStdenv.cc}/bin'
+    cmakeFlags+=' -DCMAKE_CUDA_HOST_COMPILER=${backendStdenv.cc}/bin'
+    if [ -z "\''${CUDAHOSTCXX-}" ]; then
+      export CUDAHOSTCXX=${backendStdenv.cc}/bin;
+    fi
+    export NVCC_PREPEND_FLAGS+=' --compiler-bindir=${backendStdenv.cc}/bin -Xfatbin=-compress-all'
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     EOF
 
     # Move some libraries to the lib output so that programs that
@@ -314,10 +368,13 @@ backendStdenv.mkDerivation rec {
   '' + lib.optionalString (lib.versionOlder version "8.0") ''
     # Hack to fix building against recent Glibc/GCC.
     echo "NIX_CFLAGS_COMPILE+=' -D_FORCE_INLINES'" >> $out/nix-support/setup-hook
+<<<<<<< HEAD
   ''
   # 11.8 includes a broken symlink, include/include, pointing to targets/x86_64-linux/include
   + lib.optionalString (lib.versions.majorMinor version == "11.8") ''
     rm $out/include/include
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '' + ''
     runHook postInstall
   '';
@@ -365,3 +422,7 @@ backendStdenv.mkDerivation rec {
     maintainers = teams.cuda.members;
   };
 }
+<<<<<<< HEAD
+=======
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)

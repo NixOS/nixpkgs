@@ -68,6 +68,10 @@ buildPythonPackage rec {
     description = "Kubernetes Python client";
     homepage = "https://github.com/kubernetes-client/python";
     license = licenses.asl20;
+<<<<<<< HEAD
     maintainers = with maintainers; [ lsix ];
+=======
+    maintainers = with maintainers; [ lsix SuperSandro2000 ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

@@ -1,5 +1,8 @@
 { lib
+<<<<<<< HEAD
 , stdenv
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , fetchPypi
 , fetchpatch
 , python
@@ -20,7 +23,11 @@ assert (!blas.isILP64) && (!lapack.isILP64);
 let
   cfg = writeTextFile {
     name = "site.cfg";
+<<<<<<< HEAD
     text = lib.generators.toINI {} {
+=======
+    text = (lib.generators.toINI {} {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       ${blas.implementation} = {
         include_dirs = "${lib.getDev blas}/include:${lib.getDev lapack}/include";
         library_dirs = "${blas}/lib:${lapack}/lib";
@@ -37,17 +44,26 @@ let
         library_dirs = "${blas}/lib";
         runtime_library_dirs = "${blas}/lib";
       };
+<<<<<<< HEAD
     };
   };
 in buildPythonPackage rec {
   pname = "numpy";
   version = "1.25.1";
+=======
+    });
+  };
+in buildPythonPackage rec {
+  pname = "numpy";
+  version = "1.24.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
     extension = "tar.gz";
+<<<<<<< HEAD
     hash = "sha256-mjqfOmFIDMCGEXtCaovYaGnCE/xAcuYG8BxOS2brkr8=";
   };
 
@@ -85,6 +101,21 @@ in buildPythonPackage rec {
   # Causes `error: argument unused during compilation: '-fno-strict-overflow'` due to `-Werror`.
   hardeningDisable = lib.optionals stdenv.cc.isClang [ "strictoverflow" ];
 
+=======
+    hash = "sha256-ADqfUw6IDLLNF3y6GvciC5qkLe+cSvwqL8Pua+frKyI=";
+  };
+
+  patches = lib.optionals python.hasDistutilsCxxPatch [
+    # We patch cpython/distutils to fix https://bugs.python.org/issue1222585
+    # Patching of numpy.distutils is needed to prevent it from undoing the
+    # patch to distutils.
+    ./numpy-distutils-C++.patch
+  ];
+
+  nativeBuildInputs = [ gfortran cython ];
+  buildInputs = [ blas lapack ];
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   # we default openblas to build with 64 threads
   # if a machine has more than 64 threads, it will segfault
   # see https://github.com/xianyi/OpenBLAS/issues/2993
@@ -102,14 +133,23 @@ in buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytest
+<<<<<<< HEAD
     hypothesis
+=======
+    # "hypothesis" indirectly depends on numpy to build its documentation.
+    (hypothesis.override { enableDocumentation = false; })
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     typing-extensions
   ];
 
   checkPhase = ''
     runHook preCheck
     pushd "$out"
+<<<<<<< HEAD
     ${python.interpreter} -c 'import numpy, sys; sys.exit(numpy.test("fast", verbose=10) is False)'
+=======
+    ${python.interpreter} -c 'import numpy; numpy.test("fast", verbose=10)'
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     popd
     runHook postCheck
   '';

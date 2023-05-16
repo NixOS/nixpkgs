@@ -10,7 +10,11 @@
 
 buildPythonPackage rec {
   pname = "fake-useragent";
+<<<<<<< HEAD
   version = "1.2.1";
+=======
+  version = "1.1.3";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -19,7 +23,11 @@ buildPythonPackage rec {
     owner = "fake-useragent";
     repo = "fake-useragent";
     rev = "refs/tags/${version}";
+<<<<<<< HEAD
     hash = "sha256-kOvVqdfK9swtjW8D7COrZksLCu1N8sQO8rzx5RZqCT0=";
+=======
+    hash = "sha256-8fVNko65nP/u9vLGBPfSseKW07b4JC6kCPFCPK2f6wU=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   postPatch = ''

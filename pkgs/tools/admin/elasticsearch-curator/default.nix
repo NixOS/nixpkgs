@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 { lib
 , fetchFromGitHub
 , python3
@@ -7,10 +8,35 @@ python3.pkgs.buildPythonApplication rec {
   pname = "elasticsearch-curator";
   version = "8.0.8";
   format = "pyproject";
+=======
+{ lib, fetchFromGitHub, python3 }:
+
+let
+  python = python3.override {
+    packageOverrides = self: super: {
+      click = super.click.overridePythonAttrs (old: rec {
+        version = "7.1.2";
+        src = old.src.override {
+          inherit version;
+          hash = "sha256-0rUlXHxjSbwb0eWeCM0SrLvWPOZJ8liHVXg6qU37axo=";
+        };
+      });
+      requests-aws4auth = super.requests-aws4auth.overridePythonAttrs (old: {
+        doCheck = false; # requires click>=8.0
+      });
+    };
+  };
+in python.pkgs.buildPythonApplication rec {
+  pname   = "elasticsearch-curator";
+  version = "5.8.4";
+
+  format = "setuptools";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "elastic";
     repo = "curator";
+<<<<<<< HEAD
     rev = "refs/tags/v${version}";
     hash = "sha256-G8wKeEr7TuUWlqz9hJmnJW7yxn+4WPoStVC0AX5jdHI=";
   };
@@ -42,10 +68,40 @@ python3.pkgs.buildPythonApplication rec {
   nativeCheckInputs = with python3.pkgs; [
     mock
     requests
+=======
+    rev = "v${version}";
+    hash = "sha256-wSfd52jebUkgF5xhjcoUjI7j46eJF33pVb4Wrybq44g=";
+  };
+
+  postPatch = ''
+    substituteInPlace setup.cfg \
+      --replace "urllib3==1.26.4" "urllib3"
+    substituteInPlace setup.py \
+      --replace "urllib3==1.26.4" "urllib3" \
+      --replace "pyyaml==5.4.1" "pyyaml"
+  '';
+
+  propagatedBuildInputs = with python.pkgs; [
+    elasticsearch
+    urllib3
+    requests
+    boto3
+    requests-aws4auth
+    click
+    pyyaml
+    voluptuous
+    certifi
+    six
+  ];
+
+  nativeCheckInputs = with python.pkgs; [
+    mock
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     pytestCheckHook
   ];
 
   disabledTestPaths = [
+<<<<<<< HEAD
     # Test requires running elasticsearch
     "tests/integration/test_alias.py"
     "tests/integration/test_allocation.py"
@@ -72,14 +128,26 @@ python3.pkgs.buildPythonApplication rec {
 
   disabledTests = [
     # Test require access network
+=======
+    "test/integration" # requires running elasticsearch
+  ];
+
+  disabledTests = [
+    # access network
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "test_api_key_not_set"
     "test_api_key_set"
   ];
 
   meta = with lib; {
+<<<<<<< HEAD
     description = "Curate, or manage, your Elasticsearch indices and snapshots";
     homepage = "https://github.com/elastic/curator";
     changelog = "https://github.com/elastic/curator/releases/tag/v${version}";
+=======
+    homepage = "https://github.com/elastic/curator";
+    description = "Curate, or manage, your Elasticsearch indices and snapshots";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     license = licenses.asl20;
     longDescription = ''
       Elasticsearch Curator helps you curate, or manage, your Elasticsearch

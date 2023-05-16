@@ -2,26 +2,43 @@
 , fetchurl
 , llvmPackages
 , python
+<<<<<<< HEAD
+=======
+, qt6
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , cmake
 , autoPatchelfHook
 , stdenv
 , libxcrypt
 }:
 
+<<<<<<< HEAD
 let
   stdenv' = if stdenv.cc.isClang then stdenv else llvmPackages.stdenv;
 in
 stdenv'.mkDerivation rec {
   pname = "shiboken6";
   version = "6.5.2";
+=======
+llvmPackages.stdenv.mkDerivation rec {
+  pname = "shiboken6";
+  version = "6.5.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchurl {
     # https://download.qt.io/official_releases/QtForPython/shiboken6/
     url = "https://download.qt.io/official_releases/QtForPython/shiboken6/PySide6-${version}-src/pyside-setup-everywhere-src-${version}.tar.xz";
+<<<<<<< HEAD
     sha256 = "sha256-kNvx0U/NQcmKfL6kS4pJUeENC3mOFUdJdW5JRmVNG6g";
   };
 
   sourceRoot = "pyside-setup-everywhere-src-${version}/sources/${pname}";
+=======
+    sha256 = "sha256-bvU7KRJyZ+OBkX5vk5nOdg7cBkTNWDGYix3nLJ1YOrQ=";
+  };
+
+  sourceRoot = "pyside-setup-everywhere-src-${lib.versions.majorMinor version}/sources/${pname}";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   patches = [
     ./fix-include-qt-headers.patch
@@ -37,10 +54,14 @@ stdenv'.mkDerivation rec {
   buildInputs = [
     llvmPackages.llvm
     llvmPackages.libclang
+<<<<<<< HEAD
     python.pkgs.qt6.qtbase
     python.pkgs.ninja
     python.pkgs.packaging
     python.pkgs.setuptools
+=======
+    qt6.qtbase
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   cmakeFlags = [
@@ -59,12 +80,15 @@ stdenv'.mkDerivation rec {
     patchelf $out/${python.sitePackages}/shiboken6/Shiboken.abi3.so --shrink-rpath --allowed-rpath-prefixes ${builtins.storeDir}
   '';
 
+<<<<<<< HEAD
   postInstall = ''
     cd ../../..
     ${python.pythonForBuild.interpreter} setup.py egg_info --build-type=shiboken6
     cp -r shiboken6.egg-info $out/${python.sitePackages}/
   '';
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   dontWrapQtApps = true;
 
   meta = with lib; {

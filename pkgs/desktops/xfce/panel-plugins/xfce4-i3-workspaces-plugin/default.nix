@@ -5,13 +5,21 @@
 
 stdenv.mkDerivation rec {
   pname = "xfce4-i3-workspaces-plugin";
+<<<<<<< HEAD
   version = "1.4.1";
+=======
+  version = "1.4.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "denesb";
     repo = "xfce4-i3-workspaces-plugin";
     rev = version;
+<<<<<<< HEAD
     sha256 = "sha256-Ss3uUmNvBqiu7hUaSy98+YYrWs64LFGbV4DMAV+xkvA=";
+=======
+    sha256 = "sha256-+tjxMr0UbE3BLdxBwNr2mZqKSQOOtw69FmN4rk4loyA=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

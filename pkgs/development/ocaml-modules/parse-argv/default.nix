@@ -7,7 +7,13 @@ buildDunePackage rec {
   pname = "parse-argv";
   version = "0.2.0";
 
+<<<<<<< HEAD
   minimalOCamlVersion = "4.03";
+=======
+  useDune2 = true;
+
+  minimumOCamlVersion = "4.03";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchurl {
     url = "https://github.com/mirage/parse-argv/releases/download/v${version}/parse-argv-v${version}.tbz";
@@ -16,7 +22,11 @@ buildDunePackage rec {
 
   propagatedBuildInputs = [ astring ];
 
+<<<<<<< HEAD
   doCheck = lib.versionAtLeast ocaml.version "4.08";
+=======
+  doCheck = lib.versionAtLeast ocaml.version "4.04";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   checkInputs = [ ounit ];
 
   meta = {

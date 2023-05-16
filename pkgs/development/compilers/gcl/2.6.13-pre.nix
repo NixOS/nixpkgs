@@ -21,7 +21,11 @@ stdenv.mkDerivation rec {
     sed -e 's/<= obj-date/<= (if (= 0 obj-date) 1 obj-date)/' -i lsp/make.lisp
   '';
 
+<<<<<<< HEAD
   sourceRoot = "${src.name}/gcl";
+=======
+  sourceRoot = "gcl/gcl";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   # breaks when compiling in parallel
   enableParallelBuilding = false;

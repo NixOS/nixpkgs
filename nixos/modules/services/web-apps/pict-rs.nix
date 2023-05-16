@@ -1,4 +1,5 @@
 { lib, pkgs, config, ... }:
+<<<<<<< HEAD
 
 let
   cfg = config.services.pict-rs;
@@ -6,12 +7,18 @@ let
 
   is03 = lib.versionOlder cfg.package.version "0.4.0";
 
+=======
+with lib;
+let
+  cfg = config.services.pict-rs;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 in
 {
   meta.maintainers = with maintainers; [ happysalada ];
   meta.doc = ./pict-rs.md;
 
   options.services.pict-rs = {
+<<<<<<< HEAD
     enable = lib.mkEnableOption (lib.mdDoc "pict-rs server");
 
     package = mkOption {
@@ -22,10 +29,14 @@ in
       '';
     };
 
+=======
+    enable = mkEnableOption (lib.mdDoc "pict-rs server");
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     dataDir = mkOption {
       type = types.path;
       default = "/var/lib/pict-rs";
       description = lib.mdDoc ''
+<<<<<<< HEAD
         The directory where to store the uploaded images & database.
       '';
     };
@@ -48,6 +59,11 @@ in
       '';
     };
 
+=======
+        The directory where to store the uploaded images.
+      '';
+    };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     address = mkOption {
       type = types.str;
       default = "127.0.0.1";
@@ -55,7 +71,10 @@ in
         The IPv4 address to deploy the service to.
       '';
     };
+<<<<<<< HEAD
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     port = mkOption {
       type = types.port;
       default = 8080;
@@ -64,6 +83,7 @@ in
       '';
     };
   };
+<<<<<<< HEAD
 
   config = lib.mkIf cfg.enable {
     services.pict-rs.package = lib.mkDefault (
@@ -94,13 +114,28 @@ in
           PICTRS__STORE__PATH = if cfg.storePath != null then cfg.storePath else "${cfg.dataDir}/files";
           PICTRS__SERVER__ADDR = "${cfg.address}:${toString cfg.port}";
         };
+=======
+  config = lib.mkIf cfg.enable {
+    systemd.services.pict-rs = {
+      environment = {
+        PICTRS__PATH = cfg.dataDir;
+        PICTRS__ADDR = "${cfg.address}:${toString cfg.port}";
+      };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
         DynamicUser = true;
         StateDirectory = "pict-rs";
+<<<<<<< HEAD
         ExecStart = if is03 then "${lib.getBin cfg.package}/bin/pict-rs" else "${lib.getBin cfg.package}/bin/pict-rs run";
       };
     };
   };
 
+=======
+        ExecStart = "${pkgs.pict-rs}/bin/pict-rs";
+      };
+    };
+  };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }

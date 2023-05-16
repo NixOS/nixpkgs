@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 { stdenv
 , llvmPackages
 , lib
@@ -8,6 +9,15 @@
 , libjpeg
 , mesa
 , libGL
+=======
+{ llvmPackages
+, lib
+, fetchFromGitHub
+, cmake
+, libpng
+, libjpeg
+, mesa
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , eigen
 , openblas
 , blas
@@ -16,7 +26,11 @@
 
 assert blas.implementation == "openblas" && lapack.implementation == "openblas";
 
+<<<<<<< HEAD
 stdenv.mkDerivation rec {
+=======
+llvmPackages.stdenv.mkDerivation rec {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pname = "halide";
   version = "15.0.1";
 
@@ -27,6 +41,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-mnZ6QMqDr48bH2W+andGZj2EhajXKApjuW6B50xtzx0=";
   };
 
+<<<<<<< HEAD
   cmakeFlags = [
     "-DWARNINGS_AS_ERRORS=OFF"
     "-DWITH_PYTHON_BINDINGS=OFF"
@@ -36,6 +51,9 @@ stdenv.mkDerivation rec {
   ];
 
   doCheck = true;
+=======
+  cmakeFlags = [ "-DWARNINGS_AS_ERRORS=OFF" "-DWITH_PYTHON_BINDINGS=OFF" "-DTARGET_WEBASSEMBLY=OFF" ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   # Note: only openblas and not atlas part of this Nix expression
   # see pkgs/development/libraries/science/math/liblapack/3.5.0.nix
@@ -45,6 +63,7 @@ stdenv.mkDerivation rec {
     llvmPackages.lld
     llvmPackages.openmp
     llvmPackages.libclang
+<<<<<<< HEAD
     libffi
     libpng
     libjpeg
@@ -53,6 +72,13 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals (!stdenv.isDarwin) [
     mesa
     libGL
+=======
+    libpng
+    libjpeg
+    mesa
+    eigen
+    openblas
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   nativeBuildInputs = [ cmake ];
@@ -62,6 +88,10 @@ stdenv.mkDerivation rec {
     homepage = "https://halide-lang.org";
     license = licenses.mit;
     platforms = platforms.all;
+<<<<<<< HEAD
     maintainers = with maintainers; [ ck3d atila twesterhout ];
+=======
+    maintainers = with maintainers; [ ck3d atila ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

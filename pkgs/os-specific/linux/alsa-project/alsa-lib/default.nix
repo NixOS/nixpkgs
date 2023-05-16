@@ -8,11 +8,19 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "alsa-lib";
+<<<<<<< HEAD
   version = "1.2.9";
 
   src = fetchurl {
     url = "mirror://alsa/lib/${finalAttrs.pname}-${finalAttrs.version}.tar.bz2";
     hash = "sha256-3JxkP9xMz9BXLMaFhY3UHgivtYPzBGCzF+QYgnX2FbI=";
+=======
+  version = "1.2.8";
+
+  src = fetchurl {
+    url = "mirror://alsa/lib/${finalAttrs.pname}-${finalAttrs.version}.tar.bz2";
+    hash = "sha256-GrAbdOM0JcqZwuNsCET9aIgnMZO9iYJA/o+TrMvL80c=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   patches = [

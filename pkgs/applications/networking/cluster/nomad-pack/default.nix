@@ -15,7 +15,11 @@ buildGoModule rec {
     sha256 = "sha256-Br+BJRAo9qSJQjg2awQTnsYz76WReVWsTUw6XoUb1YY=";
   };
 
+<<<<<<< HEAD
   vendorHash = "sha256-dUPDwKdkBXBfyfbFxrpgHwZ0Q5jB7aamClNmv+tLCGA=";
+=======
+  vendorSha256 = "sha256-dUPDwKdkBXBfyfbFxrpgHwZ0Q5jB7aamClNmv+tLCGA=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   # skip running go tests as they require network access
   doCheck = false;

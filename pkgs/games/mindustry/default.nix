@@ -15,7 +15,10 @@
 , alsa-lib
 , alsa-plugins
 , glew
+<<<<<<< HEAD
 , glew-egl
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 # for soloud
 , libpulseaudio ? null
@@ -31,28 +34,45 @@
 , makeBuildVersion ? (v: v)
 , enableClient ? true
 , enableServer ? true
+<<<<<<< HEAD
 
 , enableWayland ? false
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 let
   pname = "mindustry";
+<<<<<<< HEAD
   version = "146";
   buildVersion = makeBuildVersion version;
 
   selectedGlew = if enableWayland then glew-egl else glew;
 
+=======
+  version = "143.1";
+  buildVersion = makeBuildVersion version;
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   Mindustry = fetchFromGitHub {
     owner = "Anuken";
     repo = "Mindustry";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-pJAJjb8rgDL5q2hfuXH2Cyb1Szu4GixeXoLMdnIAlno=";
+=======
+    hash = "sha256-p6HxccLg+sjFW+ZGGTfo5ZvOIs6lKjub88kX/iaBres=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
   Arc = fetchFromGitHub {
     owner = "Anuken";
     repo = "Arc";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-L+5fshI1oo1lVdTMTBuPzqtEeR2dq1NORP84rZ83rT0=";
+=======
+    hash = "sha256-fbFjelwqBRadcUmbW3/oDnhmNAjTj660qB5WwXugIIU=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
   soloud = fetchFromGitHub {
     owner = "Anuken";
@@ -131,7 +151,11 @@ let
         | sh
     '';
     outputHashMode = "recursive";
+<<<<<<< HEAD
     outputHash = "sha256-hbWLsWorEo+1BBURvrFMXpxvZjJBZ1p7HVlJN5e5JZc=";
+=======
+    outputHash = "sha256-uxnW5AqX6PazqHJYLuF/By5qpev8Se+992jCyacogSY=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
 in
@@ -144,7 +168,11 @@ stdenv.mkDerivation rec {
 
   buildInputs = lib.optionals enableClient [
     SDL2
+<<<<<<< HEAD
     selectedGlew
+=======
+    glew
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     alsa-lib
   ];
   nativeBuildInputs = [
@@ -176,7 +204,11 @@ stdenv.mkDerivation rec {
     pushd ../Arc
     gradle --offline --no-daemon jnigenBuild -Pbuildversion=${buildVersion}
     gradle --offline --no-daemon jnigenJarNativesDesktop -Pbuildversion=${buildVersion}
+<<<<<<< HEAD
     glewlib=${lib.getLib selectedGlew}/lib/libGLEW.so
+=======
+    glewlib=${lib.getLib glew}/lib/libGLEW.so
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     sdllib=${lib.getLib SDL2}/lib/libSDL2.so
     patchelf backends/backend-sdl/libs/linux64/libsdl-arc*.so \
       --add-needed $glewlib \
@@ -191,6 +223,7 @@ stdenv.mkDerivation rec {
     gradle --offline --no-daemon server:dist -Pbuildversion=${buildVersion}
   '';
 
+<<<<<<< HEAD
   installPhase = with lib; let
     installClient = ''
       install -Dm644 desktop/build/libs/Mindustry.jar $out/share/mindustry.jar
@@ -226,6 +259,35 @@ stdenv.mkDerivation rec {
   '' + optionalString enableClient installClient
      + optionalString enableServer installServer
      + ''
+=======
+  installPhase = with lib; ''
+    runHook preInstall
+  '' + optionalString enableClient ''
+    install -Dm644 desktop/build/libs/Mindustry.jar $out/share/mindustry.jar
+    mkdir -p $out/bin
+    makeWrapper ${jdk}/bin/java $out/bin/mindustry \
+      --add-flags "-jar $out/share/mindustry.jar" \
+      --suffix LD_LIBRARY_PATH : ${lib.makeLibraryPath [libpulseaudio alsa-lib libjack2]} \
+      --set ALSA_PLUGIN_DIR ${alsa-plugins}/lib/alsa-lib/
+
+    # Retain runtime depends to prevent them from being cleaned up.
+    # Since a jar is a compressed archive, nix can't figure out that the dependency is actually in there,
+    # and will assume that it's not actually needed.
+    # This can cause issues.
+    # See https://github.com/NixOS/nixpkgs/issues/109798.
+    echo "# Retained runtime dependencies: " >> $out/bin/mindustry
+    for dep in ${SDL2.out} ${alsa-lib.out} ${glew.out}; do
+      echo "# $dep" >> $out/bin/mindustry
+    done
+
+    install -Dm644 core/assets/icons/icon_64.png $out/share/icons/hicolor/64x64/apps/mindustry.png
+  '' + optionalString enableServer ''
+    install -Dm644 server/build/libs/server-release.jar $out/share/mindustry-server.jar
+    mkdir -p $out/bin
+    makeWrapper ${jdk}/bin/java $out/bin/mindustry-server \
+      --add-flags "-jar $out/share/mindustry-server.jar"
+  '' + ''
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     runHook postInstall
   '';
 
@@ -243,7 +305,11 @@ stdenv.mkDerivation rec {
     ];
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ chkno fgaz thekostins ];
+<<<<<<< HEAD
     platforms = if enableClient then platforms.x86_64 else platforms.linux;
+=======
+    platforms = platforms.x86_64;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     # Hash mismatch on darwin:
     # https://github.com/NixOS/nixpkgs/pull/105590#issuecomment-737120293
     broken = stdenv.isDarwin;

@@ -337,7 +337,11 @@ in
         };
       };
 
+<<<<<<< HEAD
       # Always include cni plugins
+=======
+      # Allways include cni plugins
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       services.kubernetes.kubelet.cni.packages = [pkgs.cni-plugins pkgs.cni-plugin-flannel];
 
       boot.kernelModules = ["br_netfilter" "overlay"];

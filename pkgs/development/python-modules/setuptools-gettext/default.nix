@@ -7,7 +7,11 @@
 
 buildPythonPackage rec {
   pname = "setuptools-gettext";
+<<<<<<< HEAD
   version = "0.1.5";
+=======
+  version = "0.1.3";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -16,7 +20,11 @@ buildPythonPackage rec {
     owner = "breezy-team";
     repo = "setuptools-gettext";
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-16kzKB0xq3ApQlGQYp12oB7K99QCQMUwqpP54QiI3gg=";
+=======
+    hash = "sha256-pTjYdezNBFeLCh6cbC+YtHxQB4zrZAFTCjjNQffbHhc=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [

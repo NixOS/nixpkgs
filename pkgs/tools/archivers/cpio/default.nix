@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 { lib
 , stdenv
 , fetchurl
@@ -8,6 +9,9 @@
 , nixosTests
 , rpm
 }:
+=======
+{ lib, stdenv, fetchurl }:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 stdenv.mkDerivation rec {
   pname = "cpio";
@@ -26,12 +30,15 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+<<<<<<< HEAD
   passthru.tests = {
     inherit libguestfs rpm;
     git = git.tests.withInstallCheck;
     initrd = nixosTests.systemd-initrd-simple;
   };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   meta = with lib; {
     homepage = "https://www.gnu.org/software/cpio/";
     description = "A program to create or extract from cpio archives";

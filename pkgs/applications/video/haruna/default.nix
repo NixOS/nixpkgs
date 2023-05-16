@@ -26,13 +26,21 @@
 
 mkDerivation rec {
   pname = "haruna";
+<<<<<<< HEAD
   version = "0.12.1";
+=======
+  version = "0.10.3";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitLab {
     owner = "multimedia";
     repo = "haruna";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-x3tgH2eoLVELQKbgNLvJPGQsay8iOfMY/BGLOEov3OM=";
+=======
+    hash = "sha256-kXafPUcWWvadGbcN4PAtXlFmfll/mSpwu2Sbh6Gxx4w=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     domain = "invent.kde.org";
   };
 
@@ -73,6 +81,10 @@ mkDerivation rec {
     homepage = "https://invent.kde.org/multimedia/haruna";
     description = "Open source video player built with Qt/QML and libmpv";
     license = with licenses; [ bsd3 cc-by-40 cc-by-sa-40 cc0 gpl2Plus gpl3Plus wtfpl ];
+<<<<<<< HEAD
     maintainers = with maintainers; [ jojosch kashw2 ];
+=======
+    maintainers = with maintainers; [ jojosch ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

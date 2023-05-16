@@ -249,14 +249,22 @@ update /etc/fstab.
     which will be used by the boot partition.
 
     ```ShellSession
+<<<<<<< HEAD
     # parted /dev/sda -- mkpart root ext4 512MB -8GB
+=======
+    # parted /dev/sda -- mkpart primary 512MB -8GB
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     ```
 
 3.  Next, add a *swap* partition. The size required will vary according
     to needs, here a 8GB one is created.
 
     ```ShellSession
+<<<<<<< HEAD
     # parted /dev/sda -- mkpart swap linux-swap -8GB 100%
+=======
+    # parted /dev/sda -- mkpart primary linux-swap -8GB 100%
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     ```
 
     ::: {.note}
@@ -550,8 +558,13 @@ corresponding configuration Nix expression.
 ### Example partition schemes for NixOS on `/dev/sda` (UEFI)
 ```ShellSession
 # parted /dev/sda -- mklabel gpt
+<<<<<<< HEAD
 # parted /dev/sda -- mkpart root ext4 512MB -8GB
 # parted /dev/sda -- mkpart swap linux-swap -8GB 100%
+=======
+# parted /dev/sda -- mkpart primary 512MB -8GB
+# parted /dev/sda -- mkpart primary linux-swap -8GB 100%
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 # parted /dev/sda -- mkpart ESP fat32 1MB 512MB
 # parted /dev/sda -- set 3 esp on
 ```

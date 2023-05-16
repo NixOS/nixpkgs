@@ -110,18 +110,30 @@ let
   createImportService = { pool, systemd, force, prefix ? "" }:
     nameValuePair "zfs-import-${pool}" {
       description = "Import ZFS pool \"${pool}\"";
+<<<<<<< HEAD
       # We wait for systemd-udev-settle to ensure devices are available,
       # but don't *require* it, because mounts shouldn't be killed if it's stopped.
       # In the future, hopefully someone will complete this:
       # https://github.com/zfsonlinux/zfs/pull/4943
       wants = [ "systemd-udev-settle.service" ];
+=======
+      # we need systemd-udev-settle to ensure devices are available
+      # In the future, hopefully someone will complete this:
+      # https://github.com/zfsonlinux/zfs/pull/4943
+      requires = [ "systemd-udev-settle.service" ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       after = [
         "systemd-udev-settle.service"
         "systemd-modules-load.service"
         "systemd-ask-password-console.service"
       ];
+<<<<<<< HEAD
       requiredBy = getPoolMounts prefix pool ++ [ "zfs-import.target" ];
       before = getPoolMounts prefix pool ++ [ "zfs-import.target" ];
+=======
+      wantedBy = (getPoolMounts prefix pool) ++ [ "local-fs.target" ];
+      before = (getPoolMounts prefix pool) ++ [ "local-fs.target" ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       unitConfig = {
         DefaultDependencies = "no";
       };
@@ -138,6 +150,7 @@ let
         awkCmd = "${pkgs.gawk}/bin/awk";
         inherit cfgZfs;
       }) + ''
+<<<<<<< HEAD
         if ! poolImported "${pool}"; then
           echo -n "importing ZFS pool \"${pool}\"..."
           # Loop across the import until it succeeds, because the devices needed may not be discovered yet.
@@ -147,6 +160,16 @@ let
           done
           poolImported "${pool}" || poolImport "${pool}"  # Try one last time, e.g. to import a degraded pool.
         fi
+=======
+        poolImported "${pool}" && exit
+        echo -n "importing ZFS pool \"${pool}\"..."
+        # Loop across the import until it succeeds, because the devices needed may not be discovered yet.
+        for trial in `seq 1 60`; do
+          poolReady "${pool}" && poolImport "${pool}" && break
+          sleep 1
+        done
+        poolImported "${pool}" || poolImport "${pool}"  # Try one last time, e.g. to import a degraded pool.
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         if poolImported "${pool}"; then
           ${optionalString keyLocations.hasKeys ''
             ${keyLocations.command} | while IFS=$'\t' read ds kl ks; do
@@ -161,7 +184,11 @@ let
                   tries=3
                   success=false
                   while [[ $success != true ]] && [[ $tries -gt 0 ]]; do
+<<<<<<< HEAD
                     ${systemd}/bin/systemd-ask-password --timeout=${toString cfgZfs.passwordTimeout} "Enter key for $ds:" | ${cfgZfs.package}/sbin/zfs load-key "$ds" \
+=======
+                    ${systemd}/bin/systemd-ask-password "Enter key for $ds:" | ${cfgZfs.package}/sbin/zfs load-key "$ds" \
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
                       && success=true \
                       || tries=$((tries - 1))
                   done
@@ -314,6 +341,7 @@ in
           an interactive prompt (keylocation=prompt) and from a file (keylocation=file://).
         '';
       };
+<<<<<<< HEAD
 
       passwordTimeout = mkOption {
         type = types.int;
@@ -348,6 +376,8 @@ in
           ```
         '';
       };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
 
     services.zfs.autoSnapshot = {
@@ -548,6 +578,7 @@ in
           assertion = cfgZfs.allowHibernation -> !cfgZfs.forceImportRoot && !cfgZfs.forceImportAll;
           message = "boot.zfs.allowHibernation while force importing is enabled will cause data corruption";
         }
+<<<<<<< HEAD
         {
           assertion = !(elem "" allPools);
           message = ''
@@ -557,6 +588,8 @@ in
             This error can be triggered by using an absolute path, such as `"/dev/disk/..."`.
           '';
         }
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       ];
 
       boot = {
@@ -566,6 +599,7 @@ in
         # https://github.com/NixOS/nixpkgs/issues/106093
         kernelParams = lib.optionals (!config.boot.zfs.allowHibernation) [ "nohibernate" ];
 
+<<<<<<< HEAD
         extraModulePackages = let
           kernelPkg = if config.boot.zfs.enableUnstable then
             config.boot.kernelPackages.zfsUnstable
@@ -573,6 +607,13 @@ in
             config.boot.kernelPackages.zfs;
         in [
           (kernelPkg.override { inherit (cfgZfs) removeLinuxDRM; })
+=======
+        extraModulePackages = [
+          (if config.boot.zfs.enableUnstable then
+            config.boot.kernelPackages.zfsUnstable
+           else
+            config.boot.kernelPackages.zfs)
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         ];
       };
 
@@ -629,8 +670,11 @@ in
             force = cfgZfs.forceImportRoot;
             prefix = "/sysroot";
           }) rootPools);
+<<<<<<< HEAD
           targets.zfs-import.wantedBy = [ "zfs.target" ];
           targets.zfs.wantedBy = [ "initrd.target" ];
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           extraBin = {
             # zpool and zfs are already in thanks to fsPackages
             awk = "${pkgs.gawk}/bin/awk";
@@ -662,11 +706,14 @@ in
         ];
       };
 
+<<<<<<< HEAD
       # ZFS already has its own scheduler. Without this my(@Artturin) computer froze for a second when I nix build something.
       services.udev.extraRules = ''
         ACTION=="add|change", KERNEL=="sd[a-z]*[0-9]*|mmcblk[0-9]*p[0-9]*|nvme[0-9]*n[0-9]*p[0-9]*", ENV{ID_FS_TYPE}=="zfs_member", ATTR{../queue/scheduler}="none"
       '';
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       environment.etc = genAttrs
         (map
           (file: "zfs/zed.d/${file}")
@@ -697,6 +744,7 @@ in
       services.udev.packages = [ cfgZfs.package ]; # to hook zvol naming, etc.
       systemd.packages = [ cfgZfs.package ];
 
+<<<<<<< HEAD
       # Export kernel_neon_* symbols again.
       # This change is necessary until ZFS figures out a solution
       # with upstream or in their build system to fill the gap for
@@ -712,6 +760,8 @@ in
         };
       };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       systemd.services = let
         createImportService' = pool: createImportService {
           inherit pool;
@@ -747,7 +797,19 @@ in
                       map createSyncService allPools ++
                       map createZfsService [ "zfs-mount" "zfs-share" "zfs-zed" ]);
 
+<<<<<<< HEAD
       systemd.targets.zfs-import.wantedBy = [ "zfs.target" ];
+=======
+      systemd.targets.zfs-import =
+        let
+          services = map (pool: "zfs-import-${pool}.service") dataPools;
+        in
+          {
+            requires = services;
+            after = services;
+            wantedBy = [ "zfs.target" ];
+          };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
       systemd.targets.zfs.wantedBy = [ "multi-user.target" ];
     })

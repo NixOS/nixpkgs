@@ -4,11 +4,19 @@
 
 buildPythonPackage rec {
   pname = "pyudev";
+<<<<<<< HEAD
   version = "0.24.1";
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-deVNNyGPWsRbDaHw/ZzF5SajysPvHPrUEM96sziwFHE=";
+=======
+  version = "0.24.0";
+
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-sqOv4cmep1H4KWZSVX6sVZh02iobHsBiUXhwbsWjRfM=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   postPatch = ''

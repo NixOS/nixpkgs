@@ -73,6 +73,9 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Only;
     platforms = platforms.linux;
     maintainers = with maintainers; [ austinbutler ];
+<<<<<<< HEAD
     mainProgram = "kooha";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

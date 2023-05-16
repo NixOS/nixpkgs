@@ -16,7 +16,10 @@ use walkdir::WalkDir;
 
 mod cacache;
 mod parse;
+<<<<<<< HEAD
 mod util;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 fn cache_map_path() -> Option<PathBuf> {
     env::var_os("CACHE_MAP_PATH").map(PathBuf::from)
@@ -108,7 +111,11 @@ fn fixup_lockfile(
 
 // Recursive helper to fixup v1 lockfile deps
 fn fixup_v1_deps(
+<<<<<<< HEAD
     dependencies: &mut Map<String, Value>,
+=======
+    dependencies: &mut serde_json::Map<String, Value>,
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     cache: &Option<HashMap<String, String>>,
     fixed: &mut bool,
 ) {
@@ -173,8 +180,11 @@ fn map_cache() -> anyhow::Result<HashMap<Url, String>> {
 }
 
 fn main() -> anyhow::Result<()> {
+<<<<<<< HEAD
     env_logger::init();
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     let args = env::args().collect::<Vec<_>>();
 
     if args.len() < 2 {
@@ -185,6 +195,7 @@ fn main() -> anyhow::Result<()> {
         process::exit(1);
     }
 
+<<<<<<< HEAD
     if let Ok(jobs) = env::var("NIX_BUILD_CORES") {
         if !jobs.is_empty() {
             rayon::ThreadPoolBuilder::new()
@@ -197,6 +208,8 @@ fn main() -> anyhow::Result<()> {
         }
     }
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     if args[1] == "--fixup-lockfile" {
         let lock = serde_json::from_str(&fs::read_to_string(&args[2])?)?;
 

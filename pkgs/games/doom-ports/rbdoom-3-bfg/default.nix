@@ -16,13 +16,21 @@
 
 stdenv.mkDerivation rec {
   pname = "rbdoom-3-bfg";
+<<<<<<< HEAD
   version = "1.5.1";
+=======
+  version = "1.5.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "RobertBeckebans";
     repo = pname;
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-bjjeTdbQDWTibSrIWhCnr6F0Ef17efLgWGQAAwezjUw=";
+=======
+    hash = "sha256-jO1+Evk17JUjvYl6QOVAn+pWwr/G8gWMae5CwMhgYZI=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     fetchSubmodules = true;
   };
 
@@ -59,9 +67,12 @@ stdenv.mkDerivation rec {
     "-DUSE_SYSTEM_ZLIB=ON"
   ];
 
+<<<<<<< HEAD
   # it caused build failure
   hardeningDisable = [ "fortify3" ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   installPhase = ''
     runHook preInstall
 

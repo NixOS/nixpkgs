@@ -15,7 +15,11 @@
 
 buildPythonPackage rec {
   pname = "jira";
+<<<<<<< HEAD
   version = "3.5.2";
+=======
+  version = "3.5.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -24,7 +28,11 @@ buildPythonPackage rec {
     owner = "pycontribs";
     repo = pname;
     rev = "refs/tags/${version}";
+<<<<<<< HEAD
     hash = "sha256-9hzKN57OHi2be9C2mtHZU1KcpbcKxiiYDj9Vw7MxTK4=";
+=======
+    hash = "sha256-6Nx12xEEPSWZE6XORU3I5HYM7vIjbAWPu7vNrzR4W24=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

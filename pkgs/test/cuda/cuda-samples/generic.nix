@@ -1,15 +1,25 @@
 { lib
+<<<<<<< HEAD
 , cudaPackages
+=======
+, stdenv
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , fetchFromGitHub
 , fetchpatch
 , addOpenGLRunpath
 , cudatoolkit
 , pkg-config
 , sha256
+<<<<<<< HEAD
 , glfw3
 , freeimage
 }:
 cudaPackages.backendStdenv.mkDerivation rec {
+=======
+}:
+
+stdenv.mkDerivation rec {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pname = "cuda-samples";
   version = lib.versions.majorMinor cudatoolkit.version;
 
@@ -20,7 +30,11 @@ cudaPackages.backendStdenv.mkDerivation rec {
     inherit sha256;
   };
 
+<<<<<<< HEAD
   nativeBuildInputs = [ pkg-config addOpenGLRunpath glfw3 freeimage ];
+=======
+  nativeBuildInputs = [ pkg-config addOpenGLRunpath ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   buildInputs = [ cudatoolkit ];
 
@@ -41,7 +55,11 @@ cudaPackages.backendStdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
+<<<<<<< HEAD
     install -Dm755 -t $out/bin bin/${cudaPackages.backendStdenv.hostPlatform.parsed.cpu.name}/${cudaPackages.backendStdenv.hostPlatform.parsed.kernel.name}/release/*
+=======
+    install -Dm755 -t $out/bin bin/${stdenv.hostPlatform.parsed.cpu.name}/${stdenv.hostPlatform.parsed.kernel.name}/release/*
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     runHook postInstall
   '';

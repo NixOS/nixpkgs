@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 { lib, rustPlatform, fetchFromGitHub }:
+=======
+{ stdenv, lib, fetchFromGitHub, rustPlatform, pkgs }:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 rustPlatform.buildRustPackage rec {
   version = "0.1.4";

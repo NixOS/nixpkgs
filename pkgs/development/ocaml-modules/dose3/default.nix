@@ -1,7 +1,13 @@
 { lib, buildDunePackage, fetchFromGitLab
+<<<<<<< HEAD
 , ocamlgraph, parmap, re, stdlib-shims
 , base64, extlib, cudf
 , ocaml, ounit
+=======
+, camlzip, ocamlgraph, parmap, re, stdlib-shims
+, base64, bz2, extlib, cudf
+, dpkg, git, ocaml, ounit, python39, python39Packages
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 buildDunePackage rec {
@@ -15,7 +21,12 @@ buildDunePackage rec {
     sha256 = "sha256-K0fYSAWV48Rers/foDrEIqieyJ0PvpXkuYrFrZGBkkE=";
   };
 
+<<<<<<< HEAD
   minimalOCamlVersion = "4.07";
+=======
+  minimalOCamlVersion = "4.03";
+  useDune2 = true;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   buildInputs = [
     parmap
@@ -23,6 +34,11 @@ buildDunePackage rec {
 
   propagatedBuildInputs = [
     base64
+<<<<<<< HEAD
+=======
+    bz2
+    camlzip
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     cudf
     extlib
     ocamlgraph
@@ -30,10 +46,24 @@ buildDunePackage rec {
     stdlib-shims
   ];
 
+<<<<<<< HEAD
   checkInputs = [
     ounit
   ];
   doCheck = lib.versionAtLeast ocaml.version "4.08";
+=======
+  nativeCheckInputs = [
+    python39                  # Replaces: conf-python-3
+    python39Packages.pyyaml   # Replaces: conf-python3-yaml
+    git
+  ];
+  checkInputs = [
+    dpkg                      # Replaces: conf-dpkg
+    ounit
+  ];
+  doCheck = false; # Tests are failing.
+                   # To enable tests use: lib.versionAtLeast ocaml.version "4.04";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   meta = with lib; {
     description = "Dose library (part of Mancoosi tools)";

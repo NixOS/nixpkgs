@@ -2,14 +2,22 @@
 
 let
   pname = "pdepend";
+<<<<<<< HEAD
   version = "2.14.0";
+=======
+  version = "2.13.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 in
 stdenv.mkDerivation {
   inherit pname version;
 
   src = fetchurl {
     url = "https://github.com/pdepend/pdepend/releases/download/${version}/pdepend.phar";
+<<<<<<< HEAD
     sha256 = "sha256-t6Yf+z/8O/tZuYoLAZo2G5bORh8XPeEMdK57dWjHsmk=";
+=======
+    sha256 = "sha256-cd76PoHzAqsRxQzvklyEIsNO+4jByK8Mwx1aNu8rnnk=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   dontUnpack = true;

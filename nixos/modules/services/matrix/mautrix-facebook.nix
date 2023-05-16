@@ -29,7 +29,10 @@ in {
           };
 
           appservice = rec {
+<<<<<<< HEAD
             id = "facebook";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
             address = "http://${hostname}:${toString port}";
             hostname = "localhost";
             port = 29319;
@@ -172,7 +175,11 @@ in {
 
     services.mautrix-facebook = {
       registrationData = {
+<<<<<<< HEAD
         id = cfg.settings.appservice.id;
+=======
+        id = "mautrix-facebook";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
         namespaces = {
           users = [

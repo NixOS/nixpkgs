@@ -1,9 +1,16 @@
 { lib
 , buildPythonPackage
+<<<<<<< HEAD
 , deprecation
 , fetchFromGitHub
 , ghostscript
 , hypothesis
+=======
+, coloredlogs
+, deprecation
+, fetchFromGitHub
+, ghostscript
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , img2pdf
 , importlib-resources
 , jbig2enc
@@ -16,7 +23,10 @@
 , pytest-xdist
 , pytestCheckHook
 , pythonOlder
+<<<<<<< HEAD
 , rich
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , reportlab
 , setuptools
 , setuptools-scm
@@ -30,7 +40,11 @@
 
 buildPythonPackage rec {
   pname = "ocrmypdf";
+<<<<<<< HEAD
   version = "14.4.0";
+=======
+  version = "14.1.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   disabled = pythonOlder "3.8";
 
@@ -46,7 +60,11 @@ buildPythonPackage rec {
     postFetch = ''
       rm "$out/.git_archival.txt"
     '';
+<<<<<<< HEAD
     hash = "sha256-i1ZUBKR8dJXZkALUFwkzYcjtZ5Li66DfD2fupCGRQC4=";
+=======
+    hash = "sha256-Jyx9FPXNjcA04s+l2wY/LVX83RqExt78/EAHsL1VNMU=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
@@ -69,6 +87,10 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
+<<<<<<< HEAD
+=======
+    coloredlogs
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     deprecation
     img2pdf
     packaging
@@ -77,7 +99,10 @@ buildPythonPackage rec {
     pillow
     pluggy
     reportlab
+<<<<<<< HEAD
     rich
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     tqdm
   ] ++ lib.optionals (pythonOlder "3.9") [
     importlib-resources
@@ -86,7 +111,10 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+<<<<<<< HEAD
     hypothesis
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     pytest-xdist
     pytestCheckHook
   ];

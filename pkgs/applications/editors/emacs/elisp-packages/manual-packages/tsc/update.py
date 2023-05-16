@@ -51,12 +51,20 @@ def get_src(tag_name: str) -> Dict[str, str]:
     )
     src = json.loads(p.stdout)
 
+<<<<<<< HEAD
     fields = ["owner", "repo", "rev", "hash"]
+=======
+    fields = ["owner", "repo", "rev", "sha256"]
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     return {f: src[f] for f in fields}
 
 
+<<<<<<< HEAD
 def get_cargo_hash(drv_path: str):
+=======
+def get_cargo_sha256(drv_path: str):
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     # Note: No check=True since we expect this command to fail
     p = subprocess.run(["nix-store", "-r", drv_path], stderr=subprocess.PIPE)
 
@@ -74,7 +82,11 @@ def get_cargo_hash(drv_path: str):
         if m:
             return m.group(1)
 
+<<<<<<< HEAD
     raise ValueError("Could not extract actual hash: ", stderr)
+=======
+    raise ValueError("Could not extract actual sha256 hash: ", stderr)
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 
 if __name__ == "__main__":
@@ -96,26 +108,43 @@ if __name__ == "__main__":
         drv_path = eval_drv(
             nixpkgs,
             """
+<<<<<<< HEAD
         rustPlatform.buildRustPackage rec {
+=======
+        rustPlatform.buildRustPackage {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           pname = "tsc-dyn";
           version = "%s";
           nativeBuildInputs = [ clang ];
           src = fetchFromGitHub (lib.importJSON %s);
+<<<<<<< HEAD
           sourceRoot = "${src.name}/core";
           cargoHash = lib.fakeHash;
+=======
+          sourceRoot = "source/core";
+          cargoSha256 = lib.fakeSha256;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         }
         """
             % (tag_name, f.name),
         )
 
+<<<<<<< HEAD
     cargo_hash = get_cargo_hash(drv_path)
+=======
+    cargo_sha256 = get_cargo_sha256(drv_path)
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     with open(join(cwd, "src.json"), mode="w") as f:
         json.dump(
             {
                 "src": src,
                 "version": tag_name,
+<<<<<<< HEAD
                 "cargoHash": cargo_hash,
+=======
+                "cargoSha256": cargo_sha256,
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
             },
             f,
             indent=2,

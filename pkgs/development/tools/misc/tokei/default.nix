@@ -28,6 +28,9 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/XAMPPRocky/tokei";
     license = with licenses; [ asl20 /* or */ mit ];
     maintainers = with maintainers; [ gebner lilyball ];
+<<<<<<< HEAD
     mainProgram = "tokei";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

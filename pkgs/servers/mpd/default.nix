@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 { lib, stdenv, fetchFromGitHub, fetchpatch, meson, ninja, pkg-config, glib, systemd, boost, fmt, buildPackages
+=======
+{ lib, stdenv, fetchFromGitHub, meson, ninja, pkg-config, glib, systemd, boost, fmt, buildPackages
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 # Darwin inputs
 , AudioToolbox, AudioUnit
 # Inputs
@@ -116,13 +120,21 @@ let
 
     in stdenv.mkDerivation rec {
       pname = "mpd";
+<<<<<<< HEAD
       version = "0.23.13";
+=======
+      version = "0.23.12";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
       src = fetchFromGitHub {
         owner  = "MusicPlayerDaemon";
         repo   = "MPD";
         rev    = "v${version}";
+<<<<<<< HEAD
         sha256 = "sha256-OqSK4oo+Tx7zf7slHH/sRPCCUOBjyipsqDCPovw45Mo=";
+=======
+        sha256 = "sha256-BnEtSkZjUBK0flVttOrjkT4RCQh9F7+MDZGm2+MMrX8=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       };
 
       buildInputs = [
@@ -147,6 +159,7 @@ let
 
       depsBuildBuild = [ buildPackages.stdenv.cc ];
 
+<<<<<<< HEAD
       patches = [
         (fetchpatch {
           name = "mpd-systemd-paths.patch";
@@ -155,6 +168,8 @@ let
         })
       ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       postPatch = lib.optionalString (stdenv.isDarwin && lib.versionOlder stdenv.targetPlatform.darwinSdkVersion "12.0") ''
         substituteInPlace src/output/plugins/OSXOutputPlugin.cxx \
           --replace kAudioObjectPropertyElement{Main,Master} \

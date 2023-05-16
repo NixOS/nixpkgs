@@ -6,16 +6,27 @@
 
 buildGoModule rec {
   pname = "webhook";
+<<<<<<< HEAD
   version = "2.8.1";
+=======
+  version = "2.8.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "adnanh";
     repo = "webhook";
     rev = version;
+<<<<<<< HEAD
     sha256 = "sha256-8OpVpm9nEroUlr41VgnyM6sxd/FlSvoQK5COOWvo4Y4=";
   };
 
   vendorHash = null;
+=======
+    sha256 = "0n03xkgwpzans0cymmzb0iiks8mi2c76xxdak780dk0jbv6qgp5i";
+  };
+
+  vendorSha256 = null;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   subPackages = [ "." ];
 

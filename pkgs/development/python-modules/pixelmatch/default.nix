@@ -4,6 +4,10 @@
 , pillow
 , poetry-core
 , pytest-benchmark
+<<<<<<< HEAD
+=======
+, pytest-mypy
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , pytestCheckHook
 , pythonOlder
 }:
@@ -30,10 +34,19 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pillow
     pytest-benchmark
+<<<<<<< HEAD
+=======
+    pytest-mypy
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     pytestCheckHook
   ];
 
   pytestFlagsArray = [
+<<<<<<< HEAD
+=======
+    # Incompatible types in assignment
+    #"--mypy"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "--benchmark-disable"
   ];
 

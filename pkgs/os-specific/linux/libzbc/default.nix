@@ -31,7 +31,11 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "ZBC device manipulation library";
     homepage = "https://github.com/westerndigitalcorporation/libzbc";
+<<<<<<< HEAD
     maintainers = [ maintainers.fogti ];
+=======
+    maintainers = with maintainers; [ zseri ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     license = with licenses; [ bsd2 lgpl3Plus ];
     platforms = platforms.linux;
   };

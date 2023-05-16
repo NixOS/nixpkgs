@@ -129,6 +129,7 @@ let
       };
     };
   };
+<<<<<<< HEAD
 
   hooksModule = types.submodule {
     options = {
@@ -183,6 +184,8 @@ let
       };
     };
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 in
 {
 
@@ -300,6 +303,7 @@ in
         QEMU related options.
       '';
     };
+<<<<<<< HEAD
 
     hooks = mkOption {
       type = hooksModule;
@@ -308,6 +312,8 @@ in
         Hooks related options.
       '';
     };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
 
@@ -370,9 +376,13 @@ in
             libvirt/nwfilter/*.xml );
         do
             mkdir -p /var/lib/$(dirname $i) -m 755
+<<<<<<< HEAD
             if [ ! -e /var/lib/$i ]; then
               cp -pd ${cfg.package}/var/lib/$i /var/lib/$i
             fi
+=======
+            cp -npd ${cfg.package}/var/lib/$i /var/lib/$i
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         done
 
         # Copy generated qemu config to libvirt directory
@@ -399,6 +409,7 @@ in
           ln -s --force ${ovmfpackage}/FV/AAVMF_VARS.fd /run/${dirName}/nix-ovmf/
           ln -s --force ${ovmfpackage}/FV/OVMF_VARS.fd /run/${dirName}/nix-ovmf/
         '')}
+<<<<<<< HEAD
 
         # Symlink hooks to /var/lib/libvirt
         ${concatStringsSep "\n" (map (driver:
@@ -408,6 +419,8 @@ in
           ${concatStringsSep "\n" (mapAttrsToList (name: value:
             "ln -s --force ${value} /var/lib/${dirName}/hooks/${driver}.d/${name}") cfg.hooks.${driver})}
         '') (attrNames cfg.hooks))}
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       '';
 
       serviceConfig = {
@@ -487,6 +500,7 @@ in
     # https://libvirt.org/daemons.html#monolithic-systemd-integration
     systemd.sockets.libvirtd.wantedBy = [ "sockets.target" ];
 
+<<<<<<< HEAD
     security.polkit = {
       enable = true;
       extraConfig = ''
@@ -498,5 +512,15 @@ in
         });
       '';
     };
+=======
+    security.polkit.extraConfig = ''
+      polkit.addRule(function(action, subject) {
+        if (action.id == "org.libvirt.unix.manage" &&
+          subject.isInGroup("libvirtd")) {
+          return polkit.Result.YES;
+        }
+      });
+    '';
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

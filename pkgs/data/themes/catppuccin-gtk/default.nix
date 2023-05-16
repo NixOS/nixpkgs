@@ -28,13 +28,21 @@ lib.checkListOfEnum "${pname}: tweaks" validTweaks tweaks
 
 stdenvNoCC.mkDerivation rec {
   inherit pname;
+<<<<<<< HEAD
   version = "0.6.1";
+=======
+  version = "0.4.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "catppuccin";
     repo = "gtk";
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-b03V/c2do5FSm4Q0yN7V0RuoQX1fYsBd//Hj3R5MESI=";
+=======
+    sha256 = "sha256-dzRXt9/OdPyiy3mu9pmPYeu69OXCnR+zEqbD1C5BKqM=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ gtk3 sassc ];

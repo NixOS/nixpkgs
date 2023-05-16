@@ -6,6 +6,7 @@
 
 buildDunePackage rec {
   pname = "cohttp";
+<<<<<<< HEAD
   version = "5.3.0";
 
   minimalOCamlVersion = "4.08";
@@ -19,6 +20,18 @@ buildDunePackage rec {
     substituteInPlace cohttp/src/dune --replace 'bytes base64' 'base64'
   '';
 
+=======
+  version = "5.1.0";
+
+  minimalOCamlVersion = "4.08";
+  duneVersion = "3";
+
+  src = fetchurl {
+    url = "https://github.com/mirage/ocaml-cohttp/releases/download/v${version}/cohttp-v${version}.tbz";
+    sha256 = "sha256-mINgeBO7DSsWd84gYjQNUQFqbh8KBZ+S2bYI/iVWMAc=";
+  };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   buildInputs = [ jsonm ppx_sexp_conv ];
 
   propagatedBuildInputs = [ base64 re stringext uri-sexp ];

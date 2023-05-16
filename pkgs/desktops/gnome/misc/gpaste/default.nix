@@ -19,14 +19,22 @@
 }:
 
 stdenv.mkDerivation rec {
+<<<<<<< HEAD
   version = "44.1";
+=======
+  version = "44.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pname = "gpaste";
 
   src = fetchFromGitHub {
     owner = "Keruspe";
     repo = "GPaste";
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-c/q8VTzFOz8nzidPB3qnYw9+AkdKfTdUD4AcxyHKrqo=";
+=======
+    sha256 = "sha256-mYbyu3IIF6pQz1oEqEWLe7jdR99M3LxiMiRR9x7qFh8=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   patches = [

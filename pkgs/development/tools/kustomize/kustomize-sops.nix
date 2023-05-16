@@ -2,13 +2,21 @@
 
 buildGoModule rec {
   pname = "kustomize-sops";
+<<<<<<< HEAD
   version = "4.2.1";
+=======
+  version = "4.1.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "viaduct-ai";
     repo = pname;
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-Jm4mA91fyXQ8eScvRGDAmCBFVqT2GP57XIBZQo/bApg=";
+=======
+    sha256 = "sha256-jwOyOGSnUgk9+cD+cGj1/ZzQ84HAdAn0HMy3CLPs1U0=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   vendorHash = "sha256-tNYPgXFDJuNRlrVE0ywg77goNzfoWHFVzOG9mHqK3q8=";

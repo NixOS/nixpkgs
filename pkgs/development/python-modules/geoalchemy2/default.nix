@@ -13,7 +13,11 @@
 
 buildPythonPackage rec {
   pname = "geoalchemy2";
+<<<<<<< HEAD
   version = "0.13.3";
+=======
+  version = "0.13.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -21,7 +25,11 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "GeoAlchemy2";
     inherit version;
+<<<<<<< HEAD
     hash = "sha256-2Fp96qmiMJAXM/dBnWv/VnS4cwZR3hoH8rZCOqSSXQk=";
+=======
+    hash = "sha256-VyRtRK6pC0xS+EwAb2dY0OGVHrkBjxBAmocUHwIVmxM=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [
@@ -64,7 +72,10 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Toolkit for working with spatial databases";
     homepage =  "https://geoalchemy-2.readthedocs.io/";
+<<<<<<< HEAD
     changelog = "https://github.com/geoalchemy/geoalchemy2/releases/tag/${version}";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     license = licenses.mit;
     maintainers = with maintainers; [ ];
   };

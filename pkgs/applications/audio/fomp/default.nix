@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 { lib, stdenv, fetchurl, lv2, pkg-config, python3, waf }:
+=======
+{ lib, stdenv, fetchurl, lv2, pkg-config, python3, wafHook }:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 stdenv.mkDerivation rec {
   pname = "fomp";
@@ -9,7 +13,11 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-xnGijydiO3B7BjSlryFuH1j/OPio9hCYbniq2IXp2W8=";
   };
 
+<<<<<<< HEAD
   nativeBuildInputs = [ pkg-config waf.hook ];
+=======
+  nativeBuildInputs = [ pkg-config wafHook ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   buildInputs = [ lv2 python3 ];
 
   meta = with lib; {

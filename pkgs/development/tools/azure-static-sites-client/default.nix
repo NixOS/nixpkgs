@@ -67,7 +67,11 @@ stdenv.mkDerivation {
   # Stripping kills the binary
   dontStrip = true;
 
+<<<<<<< HEAD
   # Just make sure the binary executes successfully
+=======
+  # Just make sure the binary executes sucessfully
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   doInstallCheck = true;
   installCheckPhase = ''
     runHook preInstallCheck

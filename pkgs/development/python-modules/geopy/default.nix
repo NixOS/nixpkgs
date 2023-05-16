@@ -1,5 +1,9 @@
 { lib
+<<<<<<< HEAD
 , async-generator
+=======
+, async_generator
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , buildPythonPackage
 , docutils
 , fetchFromGitHub
@@ -11,7 +15,11 @@
 
 buildPythonPackage rec {
   pname = "geopy";
+<<<<<<< HEAD
   version = "2.4.0";
+=======
+  version = "2.3.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
   disabled = pythonOlder "3.7";
 
@@ -19,7 +27,11 @@ buildPythonPackage rec {
     owner = pname;
     repo = pname;
     rev = "refs/tags/${version}";
+<<<<<<< HEAD
     hash = "sha256-3Sq76DcnoG0Uv/KPF/B3oep0MO96vemKiANjgR7/k/I=";
+=======
+    hash = "sha256-bHfjUfuiEH3AxRDTLmbm67bKOw6fBuMQDUQA2NLg800=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [
@@ -27,7 +39,11 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+<<<<<<< HEAD
     async-generator
+=======
+    async_generator
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     docutils
     pytestCheckHook
     pytz

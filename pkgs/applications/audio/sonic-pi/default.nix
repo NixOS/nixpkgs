@@ -39,13 +39,21 @@
 
 stdenv.mkDerivation rec {
   pname = "sonic-pi";
+<<<<<<< HEAD
   version = "4.4.0";
+=======
+  version = "4.3.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "sonic-pi-net";
     repo = pname;
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-rXMCaI9zvWIXmT7ZqIArsvZmEkEEbs+5jYDYsSGeCXc=";
+=======
+    hash = "sha256-R+nmjIIDLoGOoCkDvJqejE1DaweHSAV8M2RvdwN5qAQ=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   mixFodDeps = beamPackages.fetchMixDeps {
@@ -53,7 +61,11 @@ stdenv.mkDerivation rec {
     pname = "mix-deps-${pname}";
     mixEnv = "test";
     src = "${src}/app/server/beam/tau";
+<<<<<<< HEAD
     hash = "sha256-YbYe+hljnoWFgV72OQ2YaUcnhucEtVb+TCLcMYzqUWU=";
+=======
+    sha256 = "sha256-MvwUyVTS23vQKLpGxz46tEVCs/OyYk5dDaBlv+kYg1M=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   strictDeps = true;

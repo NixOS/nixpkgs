@@ -9,7 +9,10 @@
 , libglvnd
 , darwin
 , buildPackages
+<<<<<<< HEAD
 , python3
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   # options
 , developerBuild ? false
@@ -25,7 +28,11 @@ let
   addPackages = self: with self;
     let
       callPackage = self.newScope ({
+<<<<<<< HEAD
         inherit qtModule srcs python3;
+=======
+        inherit qtModule srcs;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         stdenv = if stdenv.isDarwin then darwin.apple_sdk_11_0.stdenv else stdenv;
       });
     in
@@ -48,11 +55,14 @@ let
           ./patches/0004-qtbase-fix-locating-tzdir-on-NixOS.patch
           ./patches/0005-qtbase-deal-with-a-font-face-at-index-0-as-Regular-f.patch
           ./patches/0006-qtbase-qt-cmake-always-use-cmake-from-path.patch
+<<<<<<< HEAD
           ./patches/0007-qtbase-find-qt-tools-in-QTTOOLSPATH.patch
           ./patches/0008-qtbase-allow-translations-outside-prefix.patch
           ./patches/0008-qtbase-find-qmlimportscanner-in-macdeployqt-via-environment.patch
           ./patches/0009-qtbase-check-in-the-QML-folder-of-this-library-does-actuall.patch
           ./patches/0010-qtbase-pass-to-qmlimportscanner-the-QML2_IMPORT_PATH.patch
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         ];
       };
       env = callPackage ./qt-env.nix { };
@@ -138,7 +148,11 @@ let
       qtwebchannel = callPackage ./modules/qtwebchannel.nix { };
       qtwebengine = callPackage ./modules/qtwebengine.nix {
         inherit (darwin) bootstrap_cmds cctools xnu;
+<<<<<<< HEAD
         inherit (darwin.apple_sdk_11_0) libpm libunwind llvmPackages_14;
+=======
+        inherit (darwin.apple_sdk_11_0) libpm libunwind;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         inherit (darwin.apple_sdk_11_0.libs) sandbox;
         inherit (darwin.apple_sdk_11_0.frameworks)
           AGL AVFoundation Accelerate Cocoa CoreLocation CoreML ForceFeedback
@@ -171,6 +185,7 @@ let
         } ./hooks/qmake-hook.sh;
     };
 
+<<<<<<< HEAD
   # TODO(@Artturin): convert to makeScopeWithSplicing'
   # simple example of how to do that in 5568a4d25ca406809530420996d57e0876ca1a01
   baseScope = lib.makeScope newScope addPackages;
@@ -184,3 +199,10 @@ let
     qttranslations = bootstrapScope.qttranslations;
   });
 in finalScope
+=======
+  # TODO(@Artturin): convert to makeScopeWithSplicing
+  # simple example of how to do that in 5568a4d25ca406809530420996d57e0876ca1a01
+  self = lib.makeScope newScope addPackages;
+in
+self
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)

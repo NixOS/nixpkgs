@@ -1,5 +1,8 @@
 { lib
+<<<<<<< HEAD
 , stdenv
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , buildPythonPackage
 , autoPatchelfHook
 , pythonRelaxDepsHook
@@ -8,7 +11,10 @@
 , numpy
 , packaging
 , oneDNN
+<<<<<<< HEAD
 , re2
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 }:
 
@@ -36,9 +42,14 @@ buildPythonPackage {
   '';
 
   nativeBuildInputs = [
+<<<<<<< HEAD
     pythonRelaxDepsHook
   ] ++ lib.optionals stdenv.isLinux [
     autoPatchelfHook
+=======
+    autoPatchelfHook
+    pythonRelaxDepsHook
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   # This project requires fairly large dependencies such as sympy which we really don't always need.
@@ -51,7 +62,10 @@ buildPythonPackage {
   # Libraries are not linked correctly.
   buildInputs = [
     oneDNN
+<<<<<<< HEAD
     re2
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     onnxruntime.protobuf
   ];
 

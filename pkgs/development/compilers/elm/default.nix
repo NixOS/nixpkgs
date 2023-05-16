@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 { pkgs
 , lib
 , makeWrapper
@@ -5,6 +6,15 @@
 }:
 
 let
+=======
+{ pkgs, lib, makeWrapper }:
+
+let
+
+  # To control nodejs version we pass down
+  nodejs = pkgs.nodejs_18;
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   fetchElmDeps = pkgs.callPackage ./fetchElmDeps.nix { };
 
   # Haskell packages that require ghc 8.10
@@ -115,7 +125,12 @@ let
   };
 
   nodePkgs = pkgs.callPackage ./packages/node-composition.nix {
+<<<<<<< HEAD
     inherit pkgs nodejs;
+=======
+    inherit pkgs;
+    nodejs = pkgs.nodejs_14;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     inherit (pkgs.stdenv.hostPlatform) system;
   };
 
@@ -142,10 +157,23 @@ in lib.makeScope pkgs.newScope (self: with self; {
 
   elm-test-rs = callPackage ./packages/elm-test-rs.nix { };
 
+<<<<<<< HEAD
   elm-test = callPackage ./packages/elm-test.nix { };
 } // (hs810Pkgs self).elmPkgs // (hs92Pkgs self).elmPkgs // (with elmLib; with (hs810Pkgs self).elmPkgs; {
   elm-verify-examples = let
     patched = patchBinwrap [elmi-to-json] nodePkgs.elm-verify-examples // {
+=======
+  elm-test = nodePkgs.elm-test // {
+    meta = with lib; nodePkgs.elm-test.meta // {
+      description = "Runs elm-test suites from Node.js";
+      homepage = "https://github.com/rtfeldman/node-test-runner";
+      license = licenses.bsd3;
+      maintainers = [ maintainers.turbomack ];
+    };
+  };
+} // (hs810Pkgs self).elmPkgs // (hs92Pkgs self).elmPkgs // (with elmLib; with (hs810Pkgs self).elmPkgs; {
+  elm-verify-examples = patchBinwrap [elmi-to-json] nodePkgs.elm-verify-examples // {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     meta = with lib; nodePkgs.elm-verify-examples.meta // {
       description = "Verify examples in your docs";
       homepage = "https://github.com/stoeffel/elm-verify-examples";
@@ -153,6 +181,7 @@ in lib.makeScope pkgs.newScope (self: with self; {
       maintainers = [ maintainers.turbomack ];
     };
   };
+<<<<<<< HEAD
   in patched.override (old: {
     preRebuild = (old.preRebuild or "") + ''
       # This should not be needed (thanks to binwrap* being nooped) but for some reason it still needs to be done
@@ -161,6 +190,8 @@ in lib.makeScope pkgs.newScope (self: with self; {
       sed 's/\"install\".*/\"install\":\"echo no-op\",/g' --in-place node_modules/elmi-to-json/package.json
     '';
   });
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   elm-coverage = let
       patched = patchNpmElm (patchBinwrap [elmi-to-json] nodePkgs.elm-coverage);

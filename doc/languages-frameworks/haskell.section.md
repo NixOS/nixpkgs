@@ -23,7 +23,11 @@ installing and using them.
 
 All of these packages are originally defined in the `haskellPackages` package
 set and are re-exposed with a reduced dependency closure for convenience.
+<<<<<<< HEAD
 (see `justStaticExecutables` or `separateBinOutput` below)
+=======
+(see `justStaticExecutables` below)
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 The `haskellPackages` set includes at least one version of every package from
 Hackage as well as some manually injected packages. This amounts to a lot of
@@ -45,6 +49,7 @@ The attribute names in `haskellPackages` always correspond with their name on
 Hackage. Since Hackage allows names that are not valid Nix without escaping,
 you need to take care when handling attribute names like `3dmodels`.
 
+<<<<<<< HEAD
 For packages that are part of [Stackage] (a curated set of known to be
 compatible packages), we use the version prescribed by a Stackage snapshot
 (usually the current LTS one) as the default version. For all other packages we
@@ -56,6 +61,18 @@ Roughly half of the 16K packages contained in `haskellPackages` don’t actually
 build and are [marked as broken semi-automatically](https://github.com/NixOS/nixpkgs/blob/haskell-updates/pkgs/development/haskell-modules/configuration-hackage2nix/broken.yaml).
 Most of those packages are deprecated or unmaintained, but sometimes packages
 that should build, do not build. Very often fixing them is not a lot of work.
+=======
+For packages that are part of [Stackage], we use the version prescribed by a
+Stackage solver (usually the current LTS one) as the default version. For all
+other packages we use the latest version from Hackage. See
+[below](#haskell-available-versions) to learn which versions are provided
+exactly.
+
+Roughly half of the 16K packages contained in `haskellPackages` don't actually
+build and are marked as broken semi-automatically. Most of those packages are
+deprecated or unmaintained, but sometimes packages that should build, do not
+build. Very often fixing them is not a lot of work.
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 <!--
 TODO(@sternenseemann):
@@ -127,6 +144,7 @@ Every package set also re-exposes the GHC used to build its packages as `haskell
 ### Available package versions {#haskell-available-versions}
 
 We aim for a “blessed” package set which only contains one version of each
+<<<<<<< HEAD
 package, like [Stackage], which is a curated set of known to be compatible
 packages. We use the version information from Stackage snapshots and extend it
 with more packages. Normally in Nixpkgs the number of building Haskell packages
@@ -144,6 +162,21 @@ default version for that package.](https://github.com/NixOS/nixpkgs/blob/haskell
 3. For some packages, which are not on Stackage, we have if necessary [manual
 overrides to set the default version to a version older than the newest on
 Hackage.](https://github.com/NixOS/nixpkgs/blob/haskell-updates/pkgs/development/haskell-modules/configuration-hackage2nix/main.yaml)
+=======
+package, like Stackage (and based on it) but with more packages. Normally in
+nixpkgs the number of building Haskell packages is roughly two to three times
+the size of Stackage. For choosing the version to use for a certain package we
+use the following rules:
+
+1. By default, for every package `haskellPackages.foo` is the newest version
+found on Hackage (at the time of the last update of our package set).
+2. If the Stackage snapshot that we use (usually the newest LTS snapshot)
+contains a package, we use the Stackage version as default version for that
+package.
+3. For some packages, which are not on Stackage, we have manual overrides to
+set the default version to a version older than the newest on Hackage. We do
+this to get them or their reverse dependencies to compile in our package set.
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 4. For all packages, for which the newest Hackage version is not the default
 version, there will also be a `haskellPackages.foo_x_y_z` package with the
 newest version. The `x_y_z` part encodes the version with dots replaced by
@@ -151,12 +184,18 @@ underscores. When the newest version changes by a new release to Hackage the
 old package will disappear under that name and be replaced by a newer one under
 the name with the new version. The package name including the version will
 also disappear when the default version e.g. from Stackage catches up with the
+<<<<<<< HEAD
 newest version from Hackage. E.g. if `haskellPackages.foo` gets updated from
 1.0.0 to 1.1.0 the package `haskellPackages.foo_1_1_0` becomes obsolete and
 gets dropped.
 5. For some packages, we also [manually add other `haskellPackages.foo_x_y_z`
 versions](https://github.com/NixOS/nixpkgs/blob/haskell-updates/pkgs/development/haskell-modules/configuration-hackage2nix/main.yaml),
 if they are required for a certain build.
+=======
+newest version from Hackage.
+5. For some packages, we also manually add other `haskellPackages.foo_x_y_z`
+versions, if they are required for a certain build.
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 Relying on `haskellPackages.foo_x_y_z` attributes in derivations outside
 nixpkgs is discouraged because they may change or disappear with every package
@@ -284,6 +323,7 @@ Defaults to `true`.
 : Whether to generate an index for interactive navigation of the HTML documentation.
 Defaults to `true` if supported.
 
+<<<<<<< HEAD
 `doInstallIntermediates`
 : Whether to install intermediate build products (files written to `dist/build`
 by GHC during the build process). With `enableSeparateIntermediatesOutput`,
@@ -293,6 +333,8 @@ the same package with the `previousIntermediates` argument to support
 incremental builds. See [“Incremental builds”](#haskell-incremental-builds) for
 more information. Defaults to `false`.
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 `enableLibraryProfiling`
 : Whether to enable [profiling][profiling] for libraries contained in the
 package. Enabled by default if supported.
@@ -388,12 +430,15 @@ Defaults to `false`.
 : Whether to install documentation to a separate `doc` output.
 Is automatically enabled if `doHaddock` is `true`.
 
+<<<<<<< HEAD
 `enableSeparateIntermediatesOutput`
 : When `doInstallIntermediates` is true, whether to install intermediate build
 products to a separate `intermediates` output. See [“Incremental
 builds”](#haskell-incremental-builds) for more information. Defaults to
 `false`.
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 `allowInconsistentDependencies`
 : If enabled, allow multiple versions of the same Haskell package in the
 dependency tree at configure time. Often in such a situation compilation would
@@ -404,11 +449,14 @@ later fail because of type mismatches. Defaults to `false`.
 when loading the library in the REPL, but requires extra build time and
 disk space. Defaults to `false`.
 
+<<<<<<< HEAD
 `previousIntermediates`
 : If non-null, intermediate build artifacts are copied from this input to
 `dist/build` before performing compiling. See [“Incremental
 builds”](#haskell-incremental-builds) for more information. Defaults to `null`.
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 `buildTarget`
 : Name of the executable or library to build and install.
 If unset, all available targets are built and installed.
@@ -524,6 +572,7 @@ the [Meta-attributes section](#chap-meta) for their documentation.
     * `broken`
     * `hydraPlatforms`
 
+<<<<<<< HEAD
 ### Incremental builds {#haskell-incremental-builds}
 
 `haskellPackages.mkDerivation` supports incremental builds for GHC 9.4 and
@@ -572,6 +621,8 @@ in
   turtle-incremental-build
 ```
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 ## Development environments {#haskell-development-environments}
 
 In addition to building and installing Haskell software, nixpkgs can also
@@ -1065,7 +1116,11 @@ benchmark component.
 `dontBenchmark drv`
 : Set `doBenchmark` to `false` for `drv`.
 
+<<<<<<< HEAD
 `setBuildTargets drv list`
+=======
+`setBuildTargets list drv`
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 : Sets the `buildTarget` argument for `drv` so that the targets specified in `list` are built.
 
 `doCoverage drv`
@@ -1074,6 +1129,7 @@ benchmark component.
 `dontCoverage drv`
 : Sets the `doCoverage` argument to `false` for `drv`.
 
+<<<<<<< HEAD
 `enableExecutableProfiling drv`
 : Sets the `enableExecutableProfiling` argument to `true` for `drv`.
 
@@ -1086,6 +1142,8 @@ benchmark component.
 `disableLibraryProfiling drv`
 : Sets the `enableLibraryProfiling` argument to `false` for `drv`.
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 #### Library functions in the Haskell package sets {#haskell-package-set-lib-functions}
 
 Some library functions depend on packages from the Haskell package sets. Thus they are
@@ -1160,6 +1218,7 @@ covered in the old [haskell4nix docs](https://haskell4nix.readthedocs.io/).
 If you feel any important topic is not documented at all, feel free to comment
 on the issue linked above.
 
+<<<<<<< HEAD
 ### How to enable or disable profiling builds globally? {#haskell-faq-override-profiling}
 
 By default, Nixpkgs builds a profiling version of each Haskell library. The
@@ -1278,6 +1337,8 @@ overriding the entire package set sections and link to them from here where
 relevant.
 -->
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 [Stackage]: https://www.stackage.org
 [cabal-project-files]: https://cabal.readthedocs.io/en/latest/cabal-project.html
 [cabal2nix]: https://github.com/nixos/cabal2nix
@@ -1289,11 +1350,18 @@ relevant.
 [haskell.nix]: https://input-output-hk.github.io/haskell.nix/index.html
 [HLS user guide]: https://haskell-language-server.readthedocs.io/en/latest/configuration.html#configuring-your-editor
 [hoogle]: https://wiki.haskell.org/Hoogle
+<<<<<<< HEAD
 [incremental-builds]: https://www.haskellforall.com/2022/12/nixpkgs-support-for-incremental-haskell.html
 [jailbreak-cabal]: https://github.com/NixOS/jailbreak-cabal/
 [multiple-outputs]: https://nixos.org/manual/nixpkgs/stable/#chap-multiple-output
+=======
+[jailbreak-cabal]: https://github.com/NixOS/jailbreak-cabal/
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 [optparse-applicative-completions]: https://github.com/pcapriotti/optparse-applicative/blob/7726b63796aa5d0df82e926d467f039b78ca09e2/README.md#bash-zsh-and-fish-completions
 [profiling-detail]: https://cabal.readthedocs.io/en/latest/cabal-project.html#cfg-field-profiling-detail
 [profiling]: https://downloads.haskell.org/~ghc/latest/docs/html/users_guide/profiling.html
 [search.nixos.org]: https://search.nixos.org
+<<<<<<< HEAD
 [turtle]: https://hackage.haskell.org/package/turtle
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)

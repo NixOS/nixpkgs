@@ -18,7 +18,11 @@ buildGoModule rec {
     sha256 = "sha256-hxS/+/fbYOpMJ5VfvvG5l7wWKBUUR22rYn9X79DzUUk=";
   };
 
+<<<<<<< HEAD
   vendorHash = "sha256-SyPd8P9s8R2YbGEPqFeztF98W1QyGSBumtirSdpm8VI=";
+=======
+  vendorSha256 = "sha256-SyPd8P9s8R2YbGEPqFeztF98W1QyGSBumtirSdpm8VI=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   subPackages = [ "cmd/fetchit" ];
 

@@ -8,6 +8,10 @@
 , rapidjson
 , liburing
 , xxHash
+<<<<<<< HEAD
+=======
+, abseil-cpp_202111
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , gbenchmark
 , glog
 , gtest
@@ -41,6 +45,7 @@ let
     url = "https://github.com/lua/lua/archive/refs/tags/v5.4.4.tar.gz";
     hash = "sha256-L/ibvqIqfIuRDWsAb1ukVZ7c9GiiVTfO35mI7ZD2tFA=";
   };
+<<<<<<< HEAD
 
   # Needed exactly 20211102.0 for patch to work
   abseil-cpp_202111 = fetchFromGitHub {
@@ -49,6 +54,8 @@ let
     rev = "20211102.0";
     sha256 = "sha256-sSXT6D4JSrk3dA7kVaxfKkzOMBpqXQb0WbMYWG+nGwk=";
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 in
 stdenv.mkDerivation {
   inherit pname version src;
@@ -63,7 +70,11 @@ stdenv.mkDerivation {
     cp -R --no-preserve=mode,ownership ${gperftools.src} ./build/third_party/gperf
     cp -R --no-preserve=mode,ownership ${liburing.src} ./build/third_party/uring
     cp -R --no-preserve=mode,ownership ${xxHash.src} ./build/third_party/xxhash
+<<<<<<< HEAD
     cp -R --no-preserve=mode,ownership ${abseil-cpp_202111} ./build/_deps/abseil_cpp-src
+=======
+    cp -R --no-preserve=mode,ownership ${abseil-cpp_202111.src} ./build/_deps/abseil_cpp-src
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     cp -R --no-preserve=mode,ownership ${glog.src} ./build/_deps/glog-src
     chmod u+x ./build/third_party/uring/configure
     cp ./build/third_party/xxhash/cli/xxhsum.{1,c} ./build/third_party/xxhash

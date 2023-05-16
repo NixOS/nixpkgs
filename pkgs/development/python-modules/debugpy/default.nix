@@ -5,7 +5,10 @@
 , pythonAtLeast
 , fetchFromGitHub
 , substituteAll
+<<<<<<< HEAD
 , fetchpatch
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , gdb
 , django
 , flask
@@ -20,7 +23,11 @@
 
 buildPythonPackage rec {
   pname = "debugpy";
+<<<<<<< HEAD
   version = "1.6.7.post1";
+=======
+  version = "1.6.7";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   # Currently doesn't support 3.11:
@@ -31,7 +38,11 @@ buildPythonPackage rec {
     owner = "microsoft";
     repo = "debugpy";
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-zsF6XUSAAKhwmUZkroRWvOBWXjTWzWuRYOhnYuN3KrY=";
+=======
+    hash = "sha256-porQTFvcLaIkvhWPM4vWR0ohlcFRkRwSLpQJNg25Tj4=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   patches = [
@@ -50,6 +61,7 @@ buildPythonPackage rec {
     # To avoid this issue, debugpy should be installed using python.withPackages:
     # python.withPackages (ps: with ps; [ debugpy ])
     ./fix-test-pythonpath.patch
+<<<<<<< HEAD
 
     # Support disabling process timeouts when set to 0
     # See https://github.com/microsoft/debugpy/pull/1286
@@ -57,6 +69,8 @@ buildPythonPackage rec {
       url = "https://github.com/microsoft/debugpy/commit/1569cc8319350afcc5ba8630660f599d514ac3bb.patch";
       hash = "sha256-v4GKLb2M20F1egAGtix9cTkSzBnvSgSSphSQST5p63w=";
     })
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ] ++ lib.optionals stdenv.isLinux [
     # Hard code GDB path (used to attach to process)
     (substituteAll {
@@ -99,8 +113,16 @@ buildPythonPackage rec {
   ];
 
   preCheck = ''
+<<<<<<< HEAD
     export DEBUGPY_PROCESS_SPAWN_TIMEOUT=0
     export DEBUGPY_PROCESS_EXIT_TIMEOUT=0
+=======
+    # Scale default timeouts by a factor of 4 to avoid flaky builds
+    # https://github.com/microsoft/debugpy/pull/1286 if merged would
+    # allow us to disable the timeouts altogether
+    export DEBUGPY_PROCESS_SPAWN_TIMEOUT=60
+    export DEBUGPY_PROCESS_EXIT_TIMEOUT=20
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '' + lib.optionalString (stdenv.isDarwin && stdenv.isAarch64) ''
     # https://github.com/python/cpython/issues/74570#issuecomment-1093748531
     export no_proxy='*';

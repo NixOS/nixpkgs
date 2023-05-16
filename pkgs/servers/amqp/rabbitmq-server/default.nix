@@ -38,16 +38,27 @@ in
 
 stdenv.mkDerivation rec {
   pname = "rabbitmq-server";
+<<<<<<< HEAD
   version = "3.12.4";
+=======
+  version = "3.11.10";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   # when updating, consider bumping elixir version in all-packages.nix
   src = fetchurl {
     url = "https://github.com/rabbitmq/rabbitmq-server/releases/download/v${version}/${pname}-${version}.tar.xz";
+<<<<<<< HEAD
     hash = "sha256-9D59IZl7zYJzkSYuFcA6IPttCI9SjacE/l04cUh3An8=";
   };
 
   nativeBuildInputs = [ unzip xmlto docbook_xml_dtd_45 docbook_xsl zip rsync python3 ];
 
+=======
+    hash = "sha256-gZcUWN8SnCb93zUTqWDYtxUrT5655gfEnMax1NLHh+M=";
+  };
+
+  nativeBuildInputs = [ unzip xmlto docbook_xml_dtd_45 docbook_xsl zip rsync python3 ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   buildInputs = [ erlang elixir libxml2 libxslt glibcLocales ]
     ++ lib.optionals stdenv.isDarwin [ AppKit Carbon Cocoa ];
 
@@ -57,7 +68,10 @@ stdenv.mkDerivation rec {
     "PREFIX=${placeholder "out"}"
     "RMQ_ERLAPP_DIR=${placeholder "out"}"
   ];
+<<<<<<< HEAD
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   installTargets = [ "install" "install-man" ];
 
   preBuild = ''
@@ -88,7 +102,10 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://www.rabbitmq.com/";
     description = "An implementation of the AMQP messaging protocol";
+<<<<<<< HEAD
     changelog = "https://github.com/rabbitmq/rabbitmq-server/releases/tag/v${version}";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     license = licenses.mpl20;
     platforms = platforms.unix;
     maintainers = with maintainers; [ turion ];

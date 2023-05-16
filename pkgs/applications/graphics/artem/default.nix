@@ -2,12 +2,18 @@
 , rustPlatform
 , fetchFromGitHub
 , installShellFiles
+<<<<<<< HEAD
 , stdenv
 , darwin
+=======
+, pkg-config
+, openssl
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "artem";
+<<<<<<< HEAD
   version = "2.0.2";
 
   src = fetchFromGitHub {
@@ -26,6 +32,24 @@ rustPlatform.buildRustPackage rec {
   buildInputs = lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.Security
   ];
+=======
+  version = "1.1.7";
+
+  src = fetchFromGitHub {
+    owner = "finefindus";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "sha256-wd8csdt7qOWFhUBRjqfJSEGnNDyHD7lJA8CtW+q4Kxg=";
+  };
+
+  cargoSha256 = "sha256-zFXQUQVPqTur7m+aL0JhSiZI+EEFo9nCTVu1yAOgp/I=";
+
+  nativeBuildInputs = [ installShellFiles pkg-config ];
+
+  buildInputs = [ openssl ];
+
+  OPENSSL_NO_VENDOR = 1;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   checkFlags = [
     # require internet access

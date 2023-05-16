@@ -3,7 +3,10 @@
 , buildPythonPackage
 , orjson
 , fetchFromGitHub
+<<<<<<< HEAD
 , pytest-asyncio
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , pytestCheckHook
 , pythonOlder
 , requests
@@ -12,7 +15,11 @@
 
 buildPythonPackage rec {
   pname = "nexia";
+<<<<<<< HEAD
   version = "2.0.7";
+=======
+  version = "2.0.6";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.5";
@@ -21,7 +28,11 @@ buildPythonPackage rec {
     owner = "bdraco";
     repo = pname;
     rev = "refs/tags/${version}";
+<<<<<<< HEAD
     hash = "sha256-1uCmlFkha5oaNm5N0/8402ulBr7fNRUbDDASECfN9r8=";
+=======
+    hash = "sha256-VBK+h5K/irI0T0eUaYC1iouzMUo/lJshLTe0h5CtnAQ=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [
@@ -32,7 +43,10 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     aioresponses
     requests-mock
+<<<<<<< HEAD
     pytest-asyncio
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     pytestCheckHook
   ];
 

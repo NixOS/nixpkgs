@@ -2,13 +2,21 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "kubectl-node-shell";
+<<<<<<< HEAD
   version = "1.8.0";
+=======
+  version = "1.7.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "kvaps";
     repo = "kubectl-node-shell";
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-+JRHSigjsxuZFQg73wTMWWKtCVXd2mMFqivYGcwYznE=";
+=======
+    sha256 = "sha256-TCd/VipsUT/h88CevqCLUUjN7wAJKYxxq63IpEF2P1Y=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   strictDeps = true;

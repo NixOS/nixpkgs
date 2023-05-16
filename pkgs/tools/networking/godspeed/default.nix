@@ -16,7 +16,11 @@ buildGoModule rec {
     sha256 = "sha256-y/mCfNWe5ShdxEz8IUQ8zUzgVkUy/+5lX6rcJ3r6KoI=";
   };
 
+<<<<<<< HEAD
   vendorHash = "sha256-DCDAuKvov4tkf77nJNo9mQU/bAeQasp4VBQRtLX+U6c=";
+=======
+  vendorSha256 = "sha256-DCDAuKvov4tkf77nJNo9mQU/bAeQasp4VBQRtLX+U6c=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   buildInputs = [
     libpcap

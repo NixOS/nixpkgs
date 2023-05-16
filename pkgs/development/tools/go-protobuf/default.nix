@@ -18,5 +18,9 @@ buildGoModule rec {
     description = " Go bindings for protocol buffer";
     maintainers = with maintainers; [ lewo ];
     license     = licenses.bsd3;
+<<<<<<< HEAD
+=======
+    platforms   = platforms.unix;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

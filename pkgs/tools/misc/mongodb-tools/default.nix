@@ -2,13 +2,21 @@
 
 buildGoModule rec {
   pname = "mongo-tools";
+<<<<<<< HEAD
   version = "100.7.3";
+=======
+  version = "100.7.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "mongodb";
     repo = "mongo-tools";
     rev = version;
+<<<<<<< HEAD
     sha256 = "sha256-Ls2/P+0aqnTN4alP36aJ+86BjOZoULEuPMyW7NX5px8=";
+=======
+    sha256 = "sha256-m7Xn8RHCmnvT6S1694O+k8ZYSR9opN+/oYUG2yaZIMg=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   vendorHash = null;

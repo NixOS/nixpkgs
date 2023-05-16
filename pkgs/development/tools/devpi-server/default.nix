@@ -36,7 +36,11 @@ buildPythonApplication rec {
     hash = "sha256-tevQ/Ocusz2PythGnedP6r4xARgetVosAc8uTD49H3M=";
   };
 
+<<<<<<< HEAD
   sourceRoot = "${src.name}/server";
+=======
+  sourceRoot = "source/server";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   postPatch = ''
     substituteInPlace tox.ini \

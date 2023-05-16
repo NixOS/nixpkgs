@@ -2,7 +2,10 @@
 , lib
 , fetchFromGitea
 , fetchurl
+<<<<<<< HEAD
 , fetchpatch
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , runCommand
 , fcft
 , freetype
@@ -27,7 +30,11 @@
 }:
 
 let
+<<<<<<< HEAD
   version = "1.15.3";
+=======
+  version = "1.14.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   # build stimuli file for PGO build and the script to generate it
   # independently of the foot's build, so we can cache the result
@@ -40,7 +47,11 @@ let
 
     src = fetchurl {
       url = "https://codeberg.org/dnkl/foot/raw/tag/${version}/scripts/generate-alt-random-writes.py";
+<<<<<<< HEAD
       hash = "sha256-NvkKJ75n/OzgEd2WHX1NQIXPn9R0Z+YI1rpFmNxaDhk=";
+=======
+      sha256 = "0w4d0rxi54p8lvbynypcywqqwbbzmyyzc0svjab27ngmdj1034ii";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
 
     dontUnpack = true;
@@ -90,16 +101,26 @@ let
 
   terminfoDir = "${placeholder "terminfo"}/share/terminfo";
 in
+<<<<<<< HEAD
 stdenv.mkDerivation {
+=======
+stdenv.mkDerivation rec {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pname = "foot";
   inherit version;
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "dnkl";
+<<<<<<< HEAD
     repo = "foot";
     rev = version;
     hash = "sha256-jn/S0xjxZPnkGYpTRIpL3dKxGe7+Z+EmOGHiE0UkQqg=";
+=======
+    repo = pname;
+    rev = version;
+    sha256 = "1187805pxygyl547w75i4cl37kaw8y8ng11r5qqldv6fm74k31mk";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   depsBuildBuild = [
@@ -219,6 +240,9 @@ stdenv.mkDerivation {
     # TERMINFO to a store path, but allows installing foot.terminfo
     # on remote systems for proper foot terminfo support.
     priority = (ncurses.meta.priority or 5) + 3 + 1;
+<<<<<<< HEAD
     mainProgram = "foot";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

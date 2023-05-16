@@ -45,6 +45,7 @@ self: super: {
   unix = null;
   # GHC only bundles the xhtml library if haddock is enabled, check if this is
   # still the case when updating: https://gitlab.haskell.org/ghc/ghc/-/blob/0198841877f6f04269d6050892b98b5c3807ce4c/ghc.mk#L463
+<<<<<<< HEAD
   xhtml = if self.ghc.hasHaddock or true then null else self.xhtml_3000_3_0_0;
 
   # Need the Cabal-syntax-3.6.0.0 fake package for Cabal < 3.8 to allow callPackage and the constraint solver to work
@@ -52,6 +53,12 @@ self: super: {
 
   # Needs Cabal 3.0.x.
   jailbreak-cabal = super.jailbreak-cabal.overrideScope (cself: _: { Cabal = cself.Cabal_3_2_1_0; });
+=======
+  xhtml = if self.ghc.hasHaddock or true then null else self.xhtml_3000_2_2_1;
+
+  # Needs Cabal 3.0.x.
+  jailbreak-cabal = super.jailbreak-cabal.override { Cabal = self.Cabal_3_2_1_0; };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   # https://github.com/tibbe/unordered-containers/issues/214
   unordered-containers = dontCheck super.unordered-containers;
@@ -69,6 +76,10 @@ self: super: {
   unicode-transforms = dontCheck super.unicode-transforms;
   wl-pprint-extras = doJailbreak super.wl-pprint-extras; # containers >=0.4 && <0.6 is too tight; https://github.com/ekmett/wl-pprint-extras/issues/17
   RSA = dontCheck super.RSA; # https://github.com/GaloisInc/RSA/issues/14
+<<<<<<< HEAD
+=======
+  monad-par = dontCheck super.monad-par;  # https://github.com/simonmar/monad-par/issues/66
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   github = dontCheck super.github; # hspec upper bound exceeded; https://github.com/phadej/github/pull/341
   binary-orphans = dontCheck super.binary-orphans; # tasty upper bound exceeded; https://github.com/phadej/binary-orphans/commit/8ce857226595dd520236ff4c51fa1a45d8387b33
   rebase = doJailbreak super.rebase; # time ==1.9.* is too low
@@ -76,6 +87,15 @@ self: super: {
   # https://github.com/jgm/skylighting/issues/55
   skylighting-core = dontCheck super.skylighting-core;
 
+<<<<<<< HEAD
+=======
+  # Break out of "yaml >=0.10.4.0 && <0.11": https://github.com/commercialhaskell/stack/issues/4485
+  stack = doJailbreak super.stack;
+
+  # Newer versions don't compile.
+  resolv = self.resolv_0_1_1_2;
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   # cabal2nix needs the latest version of Cabal, and the one
   # hackage-db uses must match, so take the latest
   cabal2nix = super.cabal2nix.overrideScope (self: super: { Cabal = self.Cabal_3_2_1_0; });

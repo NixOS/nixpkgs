@@ -2,18 +2,26 @@
 , unzip, libsecret, libXScrnSaver, libxshmfence, buildPackages
 , atomEnv, at-spi2-atk, autoPatchelfHook
 , systemd, fontconfig, libdbusmenu, glib, buildFHSEnv, wayland
+<<<<<<< HEAD
 , libglvnd, libkrb5
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 # Populate passthru.tests
 , tests
 
 # needed to fix "Save as Root"
+<<<<<<< HEAD
 , asar, bash
+=======
+, nodePackages, bash
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 # Attributes inherit from specific versions
 , version, src, meta, sourceRoot, commandLineArgs
 , executableName, longName, shortName, pname, updateScript
 , dontFixup ? false
+<<<<<<< HEAD
 , rev ? null, vscodeServer ? null
 , sourceExecutableName ? executableName
 , useVSCodeRipgrep ? false
@@ -21,6 +29,15 @@
 }:
 
 let
+=======
+# sourceExecutableName is the name of the binary in the source archive, over
+# which we have no control
+, sourceExecutableName ? executableName
+}:
+
+let
+  inherit (stdenv.hostPlatform) system;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   unwrapped = stdenv.mkDerivation {
 
     inherit pname version src sourceRoot dontFixup;
@@ -29,8 +46,11 @@ let
       inherit executableName longName tests updateScript;
       fhs = fhs {};
       fhsWithPackages = f: fhs { additionalPkgs = f; };
+<<<<<<< HEAD
     } // lib.optionalAttrs (vscodeServer != null) {
       inherit rev vscodeServer;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
 
     desktopItem = makeDesktopItem {
@@ -39,7 +59,11 @@ let
       comment = "Code Editing. Redefined.";
       genericName = "Text Editor";
       exec = "${executableName} %F";
+<<<<<<< HEAD
       icon = "vs${executableName}";
+=======
+      icon = "code";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       startupNotify = true;
       startupWMClass = shortName;
       categories = [ "Utility" "TextEditor" "Development" "IDE" ];
@@ -48,7 +72,11 @@ let
       actions.new-empty-window = {
         name = "New Empty Window";
         exec = "${executableName} --new-window %F";
+<<<<<<< HEAD
         icon = "vs${executableName}";
+=======
+        icon = "code";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       };
     };
 
@@ -58,7 +86,11 @@ let
       comment = "Code Editing. Redefined.";
       genericName = "Text Editor";
       exec = executableName + " --open-url %U";
+<<<<<<< HEAD
       icon = "vs${executableName}";
+=======
+      icon = "code";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       startupNotify = true;
       categories = [ "Utility" "TextEditor" "Development" "IDE" ];
       mimeTypes = [ "x-scheme-handler/vscode" ];
@@ -67,14 +99,24 @@ let
     };
 
     buildInputs = [ libsecret libXScrnSaver libxshmfence ]
+<<<<<<< HEAD
       ++ lib.optionals (!stdenv.isDarwin) ([ at-spi2-atk libkrb5 ] ++ atomEnv.packages);
 
     runtimeDependencies = lib.optionals stdenv.isLinux [ (lib.getLib systemd) fontconfig.lib libdbusmenu wayland libsecret ];
+=======
+      ++ lib.optionals (!stdenv.isDarwin) ([ at-spi2-atk ] ++ atomEnv.packages);
+
+    runtimeDependencies = lib.optionals stdenv.isLinux [ (lib.getLib systemd) fontconfig.lib libdbusmenu wayland ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     nativeBuildInputs = [ unzip ]
       ++ lib.optionals stdenv.isLinux [
         autoPatchelfHook
+<<<<<<< HEAD
         asar
+=======
+        nodePackages.asar
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         # override doesn't preserve splicing https://github.com/NixOS/nixpkgs/issues/132651
         (buildPackages.wrapGAppsHook.override { inherit (buildPackages) makeWrapper; })
       ];
@@ -99,18 +141,26 @@ let
       ln -s "$desktopItem/share/applications/${executableName}.desktop" "$out/share/applications/${executableName}.desktop"
       ln -s "$urlHandlerDesktopItem/share/applications/${executableName}-url-handler.desktop" "$out/share/applications/${executableName}-url-handler.desktop"
 
+<<<<<<< HEAD
       # These are named vscode.png, vscode-insiders.png, etc to match the name in upstream *.deb packages.
       mkdir -p "$out/share/pixmaps"
       cp "$out/lib/vscode/resources/app/resources/linux/code.png" "$out/share/pixmaps/vs${executableName}.png"
+=======
+      mkdir -p "$out/share/pixmaps"
+      cp "$out/lib/vscode/resources/app/resources/linux/code.png" "$out/share/pixmaps/code.png"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
       # Override the previously determined VSCODE_PATH with the one we know to be correct
       sed -i "/ELECTRON=/iVSCODE_PATH='$out/lib/vscode'" "$out/bin/${executableName}"
       grep -q "VSCODE_PATH='$out/lib/vscode'" "$out/bin/${executableName}" # check if sed succeeded
+<<<<<<< HEAD
 
       # Remove native encryption code, as it derives the key from the executable path which does not work for us.
       # The credentials should be stored in a secure keychain already, so the benefit of this is questionable
       # in the first place.
       rm -rf $out/lib/vscode/resources/app/node_modules/vscode-encrypt
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     '') + ''
       runHook postInstall
     '';
@@ -141,6 +191,7 @@ let
       # and the window immediately closes which renders VSCode unusable
       # see https://github.com/NixOS/nixpkgs/issues/152939 for full log
       ln -rs "$unpacked" "$packed"
+<<<<<<< HEAD
     '' + (let
       vscodeRipgrep = if stdenv.isDarwin then
         "Contents/Resources/app/node_modules.asar.unpacked/@vscode/ripgrep/bin/rg"
@@ -155,6 +206,14 @@ let
 
     postFixup = lib.optionalString stdenv.isLinux ''
       patchelf --add-needed ${libglvnd}/lib/libGLESv2.so.2 $out/lib/vscode/${executableName}
+=======
+
+      # this fixes bundled ripgrep
+      chmod +x resources/app/node_modules/@vscode/ripgrep/bin/rg
+    '' + lib.optionalString (lib.versionOlder version "1.78.0" && stdenv.isLinux) ''
+      # see https://github.com/gentoo/gentoo/commit/4da5959
+      chmod +x resources/app/node_modules/node-pty/build/Release/spawn-helper
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     '';
 
     inherit meta;
@@ -213,7 +272,11 @@ let
 
     meta = meta // {
       description = ''
+<<<<<<< HEAD
         Wrapped variant of ${pname} which launches in a FHS compatible environment.
+=======
+        Wrapped variant of ${pname} which launches in a FHS compatible envrionment.
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         Should allow for easy usage of extensions without nix-specific modifications.
       '';
     };

@@ -16,6 +16,7 @@
 , libopus
 , ffmpeg
 , wayland
+<<<<<<< HEAD
 , darwin
 }:
 
@@ -23,6 +24,10 @@ let
   inherit (darwin.apple_sdk_11_0.frameworks) AVFoundation AppKit AudioUnit VideoToolbox;
 in
 
+=======
+}:
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 stdenv.mkDerivation rec {
   pname = "moonlight-qt";
   version = "4.3.1";
@@ -35,8 +40,11 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
+<<<<<<< HEAD
   patches = [ ./darwin.diff ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nativeBuildInputs = [
     wrapQtAppsHook
     pkg-config
@@ -47,15 +55,19 @@ stdenv.mkDerivation rec {
     qtquickcontrols2
     SDL2
     SDL2_ttf
+<<<<<<< HEAD
     openssl
     libopus
     ffmpeg
   ] ++ lib.optionals stdenv.isLinux [
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     libva
     libvdpau
     libxkbcommon
     alsa-lib
     libpulseaudio
+<<<<<<< HEAD
     wayland
   ] ++ lib.optionals stdenv.isDarwin [
     AVFoundation
@@ -71,6 +83,14 @@ stdenv.mkDerivation rec {
     ln -s $out/Applications/Moonlight.app/Contents/MacOS/Moonlight $out/bin/moonlight
   '';
 
+=======
+    openssl
+    libopus
+    ffmpeg
+    wayland
+  ];
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   meta = with lib; {
     description = "Play your PC games on almost any device";
     homepage = "https://moonlight-stream.org";

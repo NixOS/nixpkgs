@@ -11,13 +11,21 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "mint-x-icons";
+<<<<<<< HEAD
   version = "1.6.5";
+=======
+  version = "1.6.4";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = pname;
     rev = version;
+<<<<<<< HEAD
     hash = "sha256-Z07475Uiv4GKCOrKhDBXPZVBGpxdjN7vn2y0rRAZVm0=";
+=======
+    hash = "sha256-cPRae3EjzVtAL1Ei2LB4UNUU/m87mFT94xY/NnNR6JM=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [

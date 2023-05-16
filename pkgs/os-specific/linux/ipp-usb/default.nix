@@ -24,7 +24,11 @@ buildGoModule rec {
   nativeBuildInputs = [ pkg-config ronn ];
   buildInputs = [ libusb1 avahi ];
 
+<<<<<<< HEAD
   vendorHash = "sha256-KwW6KgopjF4tVo8eB4OtpXF5R8jfrJ9nibNmaN8U4l8=";
+=======
+  vendorSha256 = "sha256-KwW6KgopjF4tVo8eB4OtpXF5R8jfrJ9nibNmaN8U4l8=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   postInstall = ''
     # to accomodate the makefile

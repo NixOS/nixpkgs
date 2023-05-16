@@ -13,14 +13,22 @@
 
 buildPythonPackage rec {
   pname = "pytest-xdist";
+<<<<<<< HEAD
   version = "3.3.1";
+=======
+  version = "3.2.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   disabled = pythonOlder "3.7";
 
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
+<<<<<<< HEAD
     hash = "sha256-1e4FIOsbe8ylCmClGKt6dweZKBLFeBmPi0T9+seOjJM=";
+=======
+    hash = "sha256-GEm9mNiyQrlI5HLbdHjgkL8zYZEqj+2HmS7ZQIX1Ryc=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

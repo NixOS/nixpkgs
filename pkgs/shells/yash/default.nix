@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 { stdenv, lib, fetchFromGitHub, gettext, ncurses, asciidoc }:
 
 stdenv.mkDerivation rec {
@@ -14,6 +15,21 @@ stdenv.mkDerivation rec {
   strictDeps = true;
   nativeBuildInputs = [ asciidoc gettext ];
   buildInputs = [ ncurses ] ++ lib.optionals stdenv.isDarwin [ gettext ];
+=======
+{ stdenv, lib, fetchurl, gettext, ncurses }:
+
+stdenv.mkDerivation rec {
+  pname = "yash";
+  version = "2.53";
+
+  src = fetchurl {
+    url = "https://osdn.net/dl/yash/yash-${version}.tar.xz";
+    hash = "sha256-5DDuhF39dxHE+GTVGN+H3Xi0BWAyfElPWczEcxWFMF0=";
+  };
+
+  strictDeps = true;
+  buildInputs = [ gettext ncurses ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   meta = with lib; {
     homepage = "https://yash.osdn.jp/index.html.en";

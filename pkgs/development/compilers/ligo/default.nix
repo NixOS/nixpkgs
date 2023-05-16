@@ -15,12 +15,20 @@
 
 ocamlPackages.buildDunePackage rec {
   pname = "ligo";
+<<<<<<< HEAD
   version = "0.72.0";
+=======
+  version = "0.65.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   src = fetchFromGitLab {
     owner = "ligolang";
     repo = "ligo";
     rev = version;
+<<<<<<< HEAD
     sha256 = "sha256-DQ3TxxLxi8/W1+uBX7NEBIsVXBKnJBa6YNRBFleNrEA=";
+=======
+    sha256 = "sha256-vBvgagXK9lOXRI+iBwkPKmUvncZjrqHpKI3UAqOzHvc=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     fetchSubmodules = true;
   };
 
@@ -75,7 +83,10 @@ ocamlPackages.buildDunePackage rec {
     decompress
     ppx_deriving
     ppx_deriving_yojson
+<<<<<<< HEAD
     ppx_yojson_conv
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     ppx_expect
     ppx_import
     terminal_size
@@ -104,6 +115,11 @@ ocamlPackages.buildDunePackage rec {
     # vendored tezos' deps
     aches
     aches-lwt
+<<<<<<< HEAD
+=======
+    tezos-plonk
+    tezos-bls12-381-polynomial
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     ctypes
     ctypes_stubs_js
     class_group_vdf
@@ -115,7 +131,11 @@ ocamlPackages.buildDunePackage rec {
     bls12-381
     bls12-381-signature
     ptime
+<<<<<<< HEAD
     mtime_1
+=======
+    mtime
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     lwt_log
     secp256k1-internal
     resto
@@ -127,8 +147,11 @@ ocamlPackages.buildDunePackage rec {
     pure-splitmix
     zarith_stubs_js
     simple-diff
+<<<<<<< HEAD
     seqes
     stdint
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ] ++ lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.Security
   ];

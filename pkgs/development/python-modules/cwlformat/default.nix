@@ -1,7 +1,10 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+<<<<<<< HEAD
 , fetchpatch
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , pytestCheckHook
 , pythonOlder
 , ruamel-yaml
@@ -21,6 +24,7 @@ buildPythonPackage rec {
     hash = "sha256-FI8hUgb/KglTkubZ+StzptoSsYal71ITyyFNg7j48yk=";
   };
 
+<<<<<<< HEAD
   patches = [
     # https://github.com/rabix/cwl-format/pull/21
     (fetchpatch {
@@ -30,6 +34,8 @@ buildPythonPackage rec {
     })
   ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   propagatedBuildInputs = [
     ruamel-yaml
   ];

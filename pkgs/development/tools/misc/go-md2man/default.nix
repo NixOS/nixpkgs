@@ -18,5 +18,9 @@ buildGoModule rec {
     license = licenses.mit;
     homepage = "https://github.com/cpuguy83/go-md2man";
     maintainers = with maintainers; [offline];
+<<<<<<< HEAD
+=======
+    platforms = platforms.unix;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

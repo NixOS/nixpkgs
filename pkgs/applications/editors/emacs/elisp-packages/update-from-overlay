@@ -30,17 +30,26 @@ test_packageset(){
 }
 
 download_change "elpa/elpa-generated.nix"
+<<<<<<< HEAD
 download_change "elpa/elpa-devel-generated.nix"
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 download_change "melpa/recipes-archive-melpa.json"
 download_change "nongnu/nongnu-generated.nix"
 
 test_packageset "nongnuPackages"
 test_packageset "elpaPackages"
+<<<<<<< HEAD
 test_packageset "elpaDevelPackages"
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 test_packageset "melpaStablePackages"
 test_packageset "melpaPackages"
 
 commit_change "elpa-packages" "elpa-generated.nix"
+<<<<<<< HEAD
 commit_change "elpa-devel-packages" "elpa-devel-generated.nix"
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 commit_change "melpa-packages" "recipes-archive-melpa.json"
 commit_change "nongnu-packages" "nongnu-generated.nix"

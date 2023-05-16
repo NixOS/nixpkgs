@@ -80,6 +80,7 @@ in
         using the EDITOR environment variable.
       '';
     };
+<<<<<<< HEAD
 
     startWithGraphical = mkOption {
       type = types.bool;
@@ -89,6 +90,8 @@ in
         Start emacs with the graphical session instead of any session. Without this, emacs clients will not be able to create frames in the graphical session.
       '';
     };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   config = mkIf (cfg.enable || cfg.install) {
@@ -101,6 +104,7 @@ in
         ExecStop = "${cfg.package}/bin/emacsclient --eval (kill-emacs)";
         Restart = "always";
       };
+<<<<<<< HEAD
 
       unitConfig = optionalAttrs cfg.startWithGraphical {
         After = "graphical-session.target";
@@ -112,6 +116,13 @@ in
     environment.systemPackages = [ cfg.package editorScript desktopApplicationFile ];
 
     environment.variables.EDITOR = mkIf cfg.defaultEditor (mkOverride 900 "emacseditor");
+=======
+    } // optionalAttrs cfg.enable { wantedBy = [ "default.target" ]; };
+
+    environment.systemPackages = [ cfg.package editorScript desktopApplicationFile ];
+
+    environment.variables.EDITOR = mkIf cfg.defaultEditor (mkOverride 900 "${editorScript}/bin/emacseditor");
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   meta.doc = ./emacs.md;

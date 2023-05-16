@@ -16,7 +16,11 @@ with lib;
 
       enable = mkEnableOption (lib.mdDoc ''
         Provides some dbus interfaces that is used for screen zone detecting,
+<<<<<<< HEAD
         thumbnail generating, and sound playing in Deepin Desktop Environment.
+=======
+        thumbnail generating, and sound playing in Deepin Desktop Enviroment.
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       '');
 
     };

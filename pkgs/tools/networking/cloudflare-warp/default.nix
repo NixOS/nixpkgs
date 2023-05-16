@@ -12,11 +12,19 @@
 
 stdenv.mkDerivation rec {
   pname = "cloudflare-warp";
+<<<<<<< HEAD
   version = "2023.3.470";
 
   src = fetchurl {
     url = "https://pkg.cloudflareclient.com/pool/jammy/main/c/cloudflare-warp/cloudflare-warp_2023.3.470-1_amd64.deb";
     hash = "sha256-AYnmisEQKFiEB2iRJifEqRbdzAyBcfrU0ITeUokKLag=";
+=======
+  version = "2023.3.398";
+
+  src = fetchurl {
+    url = "https://pkg.cloudflareclient.com/uploads/cloudflare_warp_2023_3_398_1_amd64_002e48d521.deb";
+    hash = "sha256-1var+/G3WwICRLXsMHke277tmPYRPFW8Yf9b1Ex9OmU=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [
@@ -44,6 +52,13 @@ stdenv.mkDerivation rec {
     })
   ];
 
+<<<<<<< HEAD
+=======
+  unpackPhase = ''
+    dpkg-deb -x ${src} ./
+  '';
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   installPhase = ''
     runHook preInstall
 
@@ -68,10 +83,14 @@ stdenv.mkDerivation rec {
     homepage = "https://pkg.cloudflareclient.com/packages/cloudflare-warp";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
+<<<<<<< HEAD
     maintainers = with maintainers; [
       wolfangaukang
       devpikachu
     ];
+=======
+    maintainers = with maintainers; [ wolfangaukang ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     platforms = [ "x86_64-linux" ];
   };
 }

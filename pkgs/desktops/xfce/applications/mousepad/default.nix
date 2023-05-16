@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 { lib
 , mkXfceDerivation
 , gobject-introspection
@@ -8,10 +9,14 @@
 , enablePolkit ? true
 , polkit
 }:
+=======
+{ lib, mkXfceDerivation, gobject-introspection, gtk3, gtksourceview4, gspell }:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 mkXfceDerivation {
   category = "apps";
   pname = "mousepad";
+<<<<<<< HEAD
   version = "0.6.1";
   odd-unstable = false;
 
@@ -27,6 +32,16 @@ mkXfceDerivation {
   ] ++ lib.optionals enablePolkit [
     polkit
   ];
+=======
+  version = "0.6.0";
+  odd-unstable = false;
+
+  sha256 = "sha256-VmpCjR8/3rsCGkVGhT+IdC6kaQkGz8G2ktFhJk32DeQ=";
+
+  nativeBuildInputs = [ gobject-introspection ];
+
+  buildInputs = [ gtk3 gtksourceview4 gspell ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   # Use the GSettings keyfile backend rather than DConf
   configureFlags = [ "--enable-keyfile-settings" ];

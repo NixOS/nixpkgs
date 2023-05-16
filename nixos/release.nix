@@ -44,6 +44,7 @@ let
   pkgs = import ./.. { system = "x86_64-linux"; };
 
 
+<<<<<<< HEAD
   versionModule = { config, ... }: {
     system.nixos.versionSuffix = versionSuffix;
     system.nixos.revision = nixpkgs.rev or nixpkgs.shortRev;
@@ -51,6 +52,12 @@ let
     # At creation time we do not have state yet, so just default to latest.
     system.stateVersion = config.system.nixos.version;
   };
+=======
+  versionModule =
+    { system.nixos.versionSuffix = versionSuffix;
+      system.nixos.revision = nixpkgs.rev or nixpkgs.shortRev;
+    };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   makeModules = module: rest: [ configuration versionModule module rest ];
 
@@ -146,7 +153,11 @@ in rec {
   manualHTML = buildFromConfig ({ ... }: { }) (config: config.system.build.manual.manualHTML);
   manual = manualHTML; # TODO(@oxij): remove eventually
   manualEpub = (buildFromConfig ({ ... }: { }) (config: config.system.build.manual.manualEpub));
+<<<<<<< HEAD
   nixos-configuration-reference-manpage = buildFromConfig ({ ... }: { }) (config: config.system.build.manual.nixos-configuration-reference-manpage);
+=======
+  manpages = buildFromConfig ({ ... }: { }) (config: config.system.build.manual.manpages);
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   options = (buildFromConfig ({ ... }: { }) (config: config.system.build.manual.optionsJSON)).x86_64-linux;
 
 
@@ -313,7 +324,11 @@ in rec {
   );
 
   # An image that can be imported into lxd and used for container creation
+<<<<<<< HEAD
   lxdContainerImage = forMatchingSystems [ "x86_64-linux" "aarch64-linux" ] (system:
+=======
+  lxdImage = forMatchingSystems [ "x86_64-linux" "aarch64-linux" ] (system:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     with import ./.. { inherit system; };
 
@@ -322,14 +337,22 @@ in rec {
       modules =
         [ configuration
           versionModule
+<<<<<<< HEAD
           ./maintainers/scripts/lxd/lxd-container-image.nix
+=======
+          ./maintainers/scripts/lxd/lxd-image.nix
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         ];
     }).config.system.build.tarball)
 
   );
 
   # Metadata for the lxd image
+<<<<<<< HEAD
   lxdContainerMeta = forMatchingSystems [ "x86_64-linux" "aarch64-linux" ] (system:
+=======
+  lxdMeta = forMatchingSystems [ "x86_64-linux" "aarch64-linux" ] (system:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     with import ./.. { inherit system; };
 
@@ -338,6 +361,7 @@ in rec {
       modules =
         [ configuration
           versionModule
+<<<<<<< HEAD
           ./maintainers/scripts/lxd/lxd-container-image.nix
         ];
     }).config.system.build.metadata)
@@ -371,6 +395,9 @@ in rec {
         [ configuration
           versionModule
           ./maintainers/scripts/lxd/lxd-virtual-machine-image.nix
+=======
+          ./maintainers/scripts/lxd/lxd-image.nix
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         ];
     }).config.system.build.metadata)
 

@@ -1,4 +1,5 @@
 { lib
+<<<<<<< HEAD
 , aiolifx
 , async-timeout
 , buildPythonPackage
@@ -7,12 +8,26 @@
 , pytest-asyncio
 , pytestCheckHook
 , pythonOlder
+=======
+, fetchFromGitHub
+, buildPythonPackage
+, pythonOlder
+, aiolifx
+, poetry-core
+, pytest-asyncio
+, pytestCheckHook
+, async-timeout
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , typer
 }:
 
 buildPythonPackage rec {
   pname = "aiolifx-themes";
+<<<<<<< HEAD
   version = "0.4.8";
+=======
+  version = "0.4.5";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -21,7 +36,11 @@ buildPythonPackage rec {
     owner = "Djelibeybi";
     repo = "aiolifx-themes";
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-jbL6f6gDH6AxsfuD7mFtvCGKLqy/NKoo5bUmXN9hBrM=";
+=======
+    hash = "sha256-df3FQdOa3C8eQfgFi+sh7+/GBpE+4B5gOI+3XDQLHEs=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   prePatch = ''
@@ -31,11 +50,14 @@ buildPythonPackage rec {
       --replace "typer = " "# unused: typer = "
   '';
 
+<<<<<<< HEAD
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace 'aiolifx = "^0.8.6"' 'aiolifx = "*"'
   '';
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nativeBuildInputs = [
     poetry-core
   ];

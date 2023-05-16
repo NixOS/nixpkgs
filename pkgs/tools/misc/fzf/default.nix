@@ -5,7 +5,10 @@
 , writeShellScriptBin
 , runtimeShell
 , installShellFiles
+<<<<<<< HEAD
 , bc
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , ncurses
 , perl
 , glibcLocales
@@ -25,18 +28,29 @@ let
 in
 buildGoModule rec {
   pname = "fzf";
+<<<<<<< HEAD
   version = "0.42.0";
+=======
+  version = "0.40.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "junegunn";
     repo = pname;
     rev = version;
+<<<<<<< HEAD
     hash = "sha256-+65R7cbj62UXw3ZYXIK9VcAeGnpP4pLigr21awoPLi4=";
   };
 
   vendorHash = "sha256-O6OjBbrVAxDQd27ar2mmFkU1XyVM2C8SJWJ54rgaf2s=";
 
   CGO_ENABLED = 0;
+=======
+    hash = "sha256-1+s4AqvDfeTxZcM3w2VPUY1oSStNBXs0x//t3X7/zAw=";
+  };
+
+  vendorHash = "sha256-SSz4oHUgfMRbvpdIl1xepfckef1HDA1y646FWnyBp6o=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   outputs = [ "out" "man" ];
 
@@ -61,9 +75,12 @@ buildGoModule rec {
     # Include first args to make sure we're patching the right thing
     substituteInPlace shell/key-bindings.bash \
       --replace " perl -n " " ${ourPerl}/bin/perl -n "
+<<<<<<< HEAD
     # fzf-tmux depends on bc
    substituteInPlace bin/fzf-tmux \
      --replace "bc" "${bc}/bin/bc"
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '';
 
   postInstall = ''

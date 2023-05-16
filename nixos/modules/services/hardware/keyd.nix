@@ -3,11 +3,22 @@ with lib;
 let
   cfg = config.services.keyd;
   settingsFormat = pkgs.formats.ini { };
+<<<<<<< HEAD
 
   keyboardOptions = { ... }: {
     options = {
       ids = mkOption {
         type = types.listOf types.str;
+=======
+in
+{
+  options = {
+    services.keyd = {
+      enable = mkEnableOption (lib.mdDoc "keyd, a key remapping daemon");
+
+      ids = mkOption {
+        type = types.listOf types.string;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         default = [ "*" ];
         example = [ "*" "-0123:0456" ];
         description = lib.mdDoc ''
@@ -32,13 +43,18 @@ let
           };
         };
         description = lib.mdDoc ''
+<<<<<<< HEAD
           Configuration, except `ids` section, that is written to {file}`/etc/keyd/<keyboard>.conf`.
           Appropriate names can be used to write non-alpha keys, for example "equal" instead of "=" sign (see <https://github.com/NixOS/nixpkgs/issues/236622>).
+=======
+          Configuration, except `ids` section, that is written to {file}`/etc/keyd/default.conf`.
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           See <https://github.com/rvaiya/keyd> how to configure.
         '';
       };
     };
   };
+<<<<<<< HEAD
 in
 {
   imports = [
@@ -97,6 +113,20 @@ in
           '';
         })
       cfg.keyboards;
+=======
+
+  config = mkIf cfg.enable {
+    environment.etc."keyd/default.conf".source = pkgs.runCommand "default.conf"
+      {
+        ids = ''
+          [ids]
+          ${concatStringsSep "\n" cfg.ids}
+        '';
+        passAsFile = [ "ids" ];
+      } ''
+      cat $idsPath <(echo) ${settingsFormat.generate "keyd-main.conf" cfg.settings} >$out
+    '';
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     hardware.uinput.enable = lib.mkDefault true;
 
@@ -106,11 +136,17 @@ in
 
       wantedBy = [ "multi-user.target" ];
 
+<<<<<<< HEAD
       restartTriggers = mapAttrsToList
         (name: options:
           config.environment.etc."keyd/${name}.conf".source
         )
         cfg.keyboards;
+=======
+      restartTriggers = [
+        config.environment.etc."keyd/default.conf".source
+      ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
       # this is configurable in 2.4.2, later versions seem to remove this option.
       # post-2.4.2 may need to set makeFlags in the derivation:
@@ -122,9 +158,13 @@ in
         ExecStart = "${pkgs.keyd}/bin/keyd";
         Restart = "always";
 
+<<<<<<< HEAD
         # TODO investigate why it doesn't work propeprly with DynamicUser
         # See issue: https://github.com/NixOS/nixpkgs/issues/226346
         # DynamicUser = true;
+=======
+        DynamicUser = true;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         SupplementaryGroups = [
           config.users.groups.input.name
           config.users.groups.uinput.name
@@ -144,7 +184,10 @@ in
         ProtectHostname = true;
         PrivateUsers = true;
         PrivateMounts = true;
+<<<<<<< HEAD
         PrivateTmp = true;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         RestrictNamespaces = true;
         ProtectKernelLogs = true;
         ProtectKernelModules = true;
@@ -153,6 +196,7 @@ in
         MemoryDenyWriteExecute = true;
         RestrictRealtime = true;
         LockPersonality = true;
+<<<<<<< HEAD
         ProtectProc = "invisible";
         SystemCallFilter = [
           "@system-service"
@@ -165,6 +209,9 @@ in
         NoNewPrivileges = true;
         ProtectSystem = "strict";
         ProcSubset = "pid";
+=======
+        ProtectProc = "noaccess";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         UMask = "0077";
       };
     };

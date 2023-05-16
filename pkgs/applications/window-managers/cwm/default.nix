@@ -12,10 +12,15 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-lkjsxGMXOrnu4cUiV/TO7yzd9FzM297MhaFKauqmiHo=";
   };
 
+<<<<<<< HEAD
   strictDeps = true;
 
   nativeBuildInputs = [ pkg-config bison ];
   buildInputs = [ libX11 libXinerama libXrandr libXft ];
+=======
+  nativeBuildInputs = [ pkg-config ];
+  buildInputs = [ libX11 libXinerama libXrandr libXft bison ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   prePatch = ''sed -i "s@/usr/local@$out@" Makefile'';
 

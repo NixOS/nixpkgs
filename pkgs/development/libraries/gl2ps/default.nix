@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 { lib
 , stdenv
 , fetchurl
@@ -8,6 +9,16 @@
 , libGLU
 , freeglut
 , darwin
+=======
+{ lib, stdenv
+, fetchurl
+, cmake
+, zlib
+, libGL
+, libGLU
+, libpng
+, freeglut
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 stdenv.mkDerivation rec {
@@ -25,6 +36,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     zlib
+<<<<<<< HEAD
     libpng
   ] ++ lib.optionals (!stdenv.isDarwin) [
     libGL
@@ -32,6 +44,12 @@ stdenv.mkDerivation rec {
     freeglut
   ] ++ lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.OpenGL
+=======
+    libGL
+    libGLU
+    libpng
+    freeglut
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   meta = with lib; {
@@ -39,6 +57,10 @@ stdenv.mkDerivation rec {
     description = "An OpenGL to PostScript printing library";
     platforms = platforms.all;
     license = licenses.lgpl2;
+<<<<<<< HEAD
     maintainers = with maintainers; [ raskin twhitehead ];
+=======
+    maintainers = with maintainers; [raskin twhitehead];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 { lib, stdenv, fetchFromGitHub, pythonPackages, wrapGAppsNoGuiHook
+=======
+{ lib, stdenv, fetchFromGitHub, pythonPackages, wrapGAppsHook
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , gst_all_1, glib-networking, gobject-introspection
 }:
 
@@ -13,7 +17,11 @@ pythonPackages.buildPythonApplication rec {
     sha256 = "sha256-IUQe5WH2vsrAOgokhTNVVM3lnJXphT2xNGu27hWBLSo=";
   };
 
+<<<<<<< HEAD
   nativeBuildInputs = [ wrapGAppsNoGuiHook ];
+=======
+  nativeBuildInputs = [ wrapGAppsHook ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   buildInputs = with gst_all_1; [
     glib-networking
@@ -21,7 +29,10 @@ pythonPackages.buildPythonApplication rec {
     gst-plugins-base
     gst-plugins-good
     gst-plugins-ugly
+<<<<<<< HEAD
     gst-plugins-rs
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   propagatedBuildInputs = [
@@ -45,7 +56,14 @@ pythonPackages.buildPythonApplication rec {
 
   meta = with lib; {
     homepage = "https://www.mopidy.com/";
+<<<<<<< HEAD
     description = "An extensible music server that plays music from local disk, Spotify, SoundCloud, and more";
+=======
+    description = ''
+      An extensible music server that plays music from local disk, Spotify,
+      SoundCloud, and more
+    '';
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     license = licenses.asl20;
     maintainers = [ maintainers.fpletz ];
     hydraPlatforms = [];

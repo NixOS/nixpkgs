@@ -317,9 +317,12 @@ buildGoModule rec {
     wrapProgram $out/bin/k3s \
       --prefix PATH : ${lib.makeBinPath k3sRuntimeDeps} \
       --prefix PATH : "$out/bin"
+<<<<<<< HEAD
     ln -s $out/bin/k3s $out/bin/kubectl
     ln -s $out/bin/k3s $out/bin/crictl
     ln -s $out/bin/k3s $out/bin/ctr
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '';
 
   doInstallCheck = true;

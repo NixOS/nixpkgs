@@ -7,11 +7,19 @@
 
 stdenv.mkDerivation rec {
   pname = "knot-dns";
+<<<<<<< HEAD
   version = "3.3.1";
 
   src = fetchurl {
     url = "https://secure.nic.cz/files/knot-dns/knot-${version}.tar.xz";
     sha256 = "f3f4b1d49ec9b81113b14a38354b823bd4a470356ed7e8e555595b6fd1ac80c9";
+=======
+  version = "3.2.6";
+
+  src = fetchurl {
+    url = "https://secure.nic.cz/files/knot-dns/knot-${version}.tar.xz";
+    sha256 = "ac124fb17dbc4ac5310a30a396245a6ba304b3c89abed0f8a47d727462c8da4d";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   outputs = [ "bin" "out" "dev" ];

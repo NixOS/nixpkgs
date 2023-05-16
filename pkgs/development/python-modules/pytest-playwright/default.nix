@@ -14,16 +14,27 @@
 
 buildPythonPackage rec {
   pname = "pytest-playwright";
+<<<<<<< HEAD
   version = "0.4.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
+=======
+  version = "0.3.3";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "playwright-pytest";
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-yYFzaIPYOsuvS8bGcuwQQNS/CtvGUe1XQdORmfEJQmU=";
+=======
+    hash = "sha256-2xdRW8Q10x6mtNs/EdAsgrOtVmvLAOdbIGXfyeB8ZAg=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;

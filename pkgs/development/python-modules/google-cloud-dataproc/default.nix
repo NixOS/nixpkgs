@@ -14,14 +14,22 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-dataproc";
+<<<<<<< HEAD
   version = "5.5.0";
+=======
+  version = "5.4.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
+<<<<<<< HEAD
     hash = "sha256-XYjEmBMCkCUxKvAF2KNXwG72C6TMszLikFvLtnjJf14=";
+=======
+    hash = "sha256-GJbhT2PBIaPx4sIhKHzH/QBlDSpz+LOPggQK5tWqt78=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [
@@ -53,6 +61,10 @@ buildPythonPackage rec {
     homepage = "https://github.com/googleapis/python-dataproc";
     changelog = "https://github.com/googleapis/python-dataproc/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
+<<<<<<< HEAD
     maintainers = with maintainers; [ ];
+=======
+    maintainers = with maintainers; [ SuperSandro2000 ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

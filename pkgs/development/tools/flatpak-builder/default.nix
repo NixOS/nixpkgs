@@ -152,7 +152,11 @@ in stdenv.mkDerivation rec {
     description = "Tool to build flatpaks from source";
     homepage = "https://github.com/flatpak/flatpak-builder";
     license = licenses.lgpl21Plus;
+<<<<<<< HEAD
     maintainers = with maintainers; [ ];
+=======
+    maintainers = with maintainers; [ jtojnar ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     platforms = platforms.linux;
   };
 }

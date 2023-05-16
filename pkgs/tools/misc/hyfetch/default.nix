@@ -5,14 +5,22 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "hyfetch";
+<<<<<<< HEAD
   version = "1.4.10";
+=======
+  version = "1.4.7";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "hykilpikonna";
     repo = "hyfetch";
     rev = "refs/tags/${version}";
+<<<<<<< HEAD
     hash = "sha256-B8FAMXot+QV7Q2bJuTsRsrxHSr/2f+WNTKrZqFXewdE=";
+=======
+    hash = "sha256-DfPU42X9WCvOXf/BvFkfIM4yWQnunBgjjSfncaL6HPA=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = with python3.pkgs; [

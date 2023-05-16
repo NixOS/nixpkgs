@@ -118,11 +118,21 @@ in
     nodes.machine = { pkgs, lib, ... }: {
       imports = [ common ];
       boot.loader.systemd-boot.memtest86.enable = true;
+<<<<<<< HEAD
+=======
+      nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) [
+        "memtest86-efi"
+      ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
 
     testScript = ''
       machine.succeed("test -e /boot/loader/entries/memtest86.conf")
+<<<<<<< HEAD
       machine.succeed("test -e /boot/efi/memtest86/memtest.efi")
+=======
+      machine.succeed("test -e /boot/efi/memtest86/BOOTX64.efi")
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     '';
   };
 
@@ -149,12 +159,22 @@ in
       imports = [ common ];
       boot.loader.systemd-boot.memtest86.enable = true;
       boot.loader.systemd-boot.memtest86.entryFilename = "apple.conf";
+<<<<<<< HEAD
+=======
+      nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (lib.getName pkg) [
+        "memtest86-efi"
+      ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
 
     testScript = ''
       machine.fail("test -e /boot/loader/entries/memtest86.conf")
       machine.succeed("test -e /boot/loader/entries/apple.conf")
+<<<<<<< HEAD
       machine.succeed("test -e /boot/efi/memtest86/memtest.efi")
+=======
+      machine.succeed("test -e /boot/efi/memtest86/BOOTX64.efi")
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     '';
   };
 
@@ -201,17 +221,24 @@ in
     nodes = {
       inherit common;
 
+<<<<<<< HEAD
       machine = { pkgs, nodes, ... }: {
+=======
+      machine = { pkgs, ... }: {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         imports = [ common ];
         boot.loader.systemd-boot.extraFiles = {
           "efi/fruits/tomato.efi" = pkgs.netbootxyz-efi;
         };
+<<<<<<< HEAD
 
         # These are configs for different nodes, but we'll use them here in `machine`
         system.extraDependencies = [
           nodes.common.system.build.toplevel
           nodes.with_netbootxyz.system.build.toplevel
         ];
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       };
 
       with_netbootxyz = { pkgs, ... }: {
@@ -221,9 +248,15 @@ in
     };
 
     testScript = { nodes, ... }: let
+<<<<<<< HEAD
       originalSystem = nodes.machine.system.build.toplevel;
       baseSystem = nodes.common.system.build.toplevel;
       finalSystem = nodes.with_netbootxyz.system.build.toplevel;
+=======
+      originalSystem = nodes.machine.config.system.build.toplevel;
+      baseSystem = nodes.common.config.system.build.toplevel;
+      finalSystem = nodes.with_netbootxyz.config.system.build.toplevel;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     in ''
       machine.succeed("test -e /boot/efi/fruits/tomato.efi")
       machine.succeed("test -e /boot/efi/nixos/.extra-files/efi/fruits/tomato.efi")
@@ -251,6 +284,7 @@ in
           machine.succeed("test -e /boot/efi/nixos/.extra-files/efi/netbootxyz/netboot.xyz.efi")
     '';
   };
+<<<<<<< HEAD
 
   # Some UEFI firmwares fail on large reads. Now that systemd-boot loads initrd
   # itself, systems with such firmware won't boot without this fix
@@ -277,4 +311,6 @@ in
       machine.wait_for_unit("multi-user.target")
     '';
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }

@@ -51,6 +51,10 @@ buildPythonPackage rec {
     description = "Provides access to the Keycloak API";
     homepage = "https://github.com/marcospereirampj/python-keycloak";
     license = licenses.mit;
+<<<<<<< HEAD
     maintainers = with maintainers; [ ];
+=======
+    maintainers = with maintainers; [ costrouc ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

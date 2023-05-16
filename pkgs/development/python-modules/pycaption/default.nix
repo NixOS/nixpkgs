@@ -38,8 +38,11 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+<<<<<<< HEAD
   doCheck = false;
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   meta = with lib; {
     changelog = "https://github.com/pbs/pycaption/blob/${version}/docs/changelog.rst";
     description = "Closed caption converter";

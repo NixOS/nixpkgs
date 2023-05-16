@@ -5,7 +5,10 @@
 , python3
 , meson
 , ninja
+<<<<<<< HEAD
 , sassc
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , vala
 , pkg-config
 , libgee
@@ -19,7 +22,11 @@
 
 stdenv.mkDerivation rec {
   pname = "granite";
+<<<<<<< HEAD
   version = "7.3.0";
+=======
+  version = "7.2.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   outputs = [ "out" "dev" ];
 
@@ -27,7 +34,11 @@ stdenv.mkDerivation rec {
     owner = "elementary";
     repo = pname;
     rev = version;
+<<<<<<< HEAD
     sha256 = "sha256-siFS8BiHVlDtM5odL0Lf1aRMoG6qqQOnbsXGKVyc218=";
+=======
+    sha256 = "sha256-LU2eIeaNqO4/6dPUuzOQ/w4tx0dEm26JwZ87yQ16c4o=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [
@@ -37,7 +48,10 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     python3
+<<<<<<< HEAD
     sassc
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     vala
     wrapGAppsHook4
   ];

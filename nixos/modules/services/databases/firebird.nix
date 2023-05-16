@@ -1,6 +1,10 @@
 { config, lib, pkgs, ... }:
 
+<<<<<<< HEAD
 # TODO: This may file may need additional review, eg which configurations to
+=======
+# TODO: This may file may need additional review, eg which configuartions to
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 # expose to the user.
 #
 # I only used it to access some simple databases.

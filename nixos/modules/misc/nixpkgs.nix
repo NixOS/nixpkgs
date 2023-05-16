@@ -55,6 +55,14 @@ let
     description = "An evaluation of Nixpkgs; the top level attribute set of packages";
   };
 
+<<<<<<< HEAD
+=======
+  # Whether `pkgs` was constructed by this module - not if nixpkgs.pkgs or
+  # _module.args.pkgs is set. However, determining whether _module.args.pkgs
+  # is defined elsewhere does not seem feasible.
+  constructedByMe = !opt.pkgs.isDefined;
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   hasBuildPlatform = opt.buildPlatform.highestPrio < (mkOptionDefault {}).priority;
   hasHostPlatform = opt.hostPlatform.isDefined;
   hasPlatform = hasHostPlatform || hasBuildPlatform;
@@ -332,6 +340,7 @@ in
 
   config = {
     _module.args = {
+<<<<<<< HEAD
       pkgs =
         # We explicitly set the default override priority, so that we do not need
         # to evaluate finalPkgs in case an override is placed on `_module.args.pkgs`.
@@ -354,6 +363,12 @@ in
         # Although, if nixpkgs.pkgs is set, we did forward it, but we did not construct it.
           && !opt.pkgs.isDefined;
     in [
+=======
+      pkgs = finalPkgs.__splicedPackages;
+    };
+
+    assertions = [
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       (
         let
           nixosExpectedSystem =

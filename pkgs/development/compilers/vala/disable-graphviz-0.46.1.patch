@@ -259,6 +259,7 @@ index 5aa4afdea..e79b0b8f5 100644
  
  		return this;
  	}
+<<<<<<< HEAD
 diff --git i/libvaladoc/Makefile.am w/libvaladoc/Makefile.am
 index 8dc398cf1..a5d8a45b4 100644
 --- i/libvaladoc/Makefile.am
@@ -278,3 +279,5 @@ index 8dc398cf1..a5d8a45b4 100644
  valadoc@PACKAGE_SUFFIX@.vapi valadoc.h: libvaladoc.vala.stamp
  libvaladoc.vala.stamp: $(libvaladoc_la_VALASOURCES)
  	$(VALA_V)$(VALAC) \
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)

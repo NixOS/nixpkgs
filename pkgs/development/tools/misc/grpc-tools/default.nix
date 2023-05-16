@@ -2,22 +2,37 @@
 , stdenv
 , cmake
 , fetchFromGitHub
+<<<<<<< HEAD
 , gitUpdater
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 stdenv.mkDerivation rec {
   pname = "grpc-tools";
+<<<<<<< HEAD
   version = "1.12.4";
+=======
+  version = "1.11.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "grpc";
     repo = "grpc-node";
     rev = "grpc-tools@${version}";
+<<<<<<< HEAD
     hash = "sha256-708lBIGW5+vvSTrZHl/kc+ck7JKNXElrghIGDrMSyx8=";
     fetchSubmodules = true;
   };
 
   sourceRoot = "${src.name}/packages/grpc-tools";
+=======
+    sha256 = "00432y19pjcimwachjcqpzra21vzmlqchhhlqxnk98bfh25kxdcb";
+    fetchSubmodules = true;
+  };
+
+  sourceRoot = "source/packages/grpc-tools";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nativeBuildInputs = [ cmake ];
 
@@ -26,11 +41,14 @@ stdenv.mkDerivation rec {
     install -Dm755 -t $out/bin deps/protobuf/protoc
   '';
 
+<<<<<<< HEAD
   passthru.updateScript = gitUpdater {
     url = "https://github.com/grpc/grpc-node.git";
     rev-prefix = "grpc-tools@";
   };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   meta = with lib; {
     description = "Distribution of protoc and the gRPC Node protoc plugin for ease of installation with npm";
     longDescription = ''

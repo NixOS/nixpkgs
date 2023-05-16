@@ -4,13 +4,21 @@ let
   soVersion = "5";
 in stdenv.mkDerivation rec {
   pname = "liblinear";
+<<<<<<< HEAD
   version = "2.47";
+=======
+  version = "2.46";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "cjlin1";
     repo = "liblinear";
     rev = "v${builtins.replaceStrings ["."] [""] version}";
+<<<<<<< HEAD
     sha256 = "sha256-so7uCc/52NdN0V2Ska8EUdw/wSegaudX5AF+c0xe5jk=";
+=======
+    sha256 = "sha256-mKd6idfr6mIIDEie8DCS+drtfpgKoS/5UXI0JenTxlA=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   makeFlags = [ "AR=${stdenv.cc.targetPrefix}ar" "RANLIB=${stdenv.cc.targetPrefix}ranlib" ];

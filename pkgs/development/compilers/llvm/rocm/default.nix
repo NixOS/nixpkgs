@@ -29,7 +29,10 @@ let
   # Stage 1
   # Base
   llvm = callPackage ./llvm.nix {
+<<<<<<< HEAD
     requiredSystemFeatures = [ "big-parallel" ];
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     isBroken = stdenv.isAarch64; # https://github.com/RadeonOpenCompute/ROCm/issues/1831#issuecomment-1278205344
   };
 

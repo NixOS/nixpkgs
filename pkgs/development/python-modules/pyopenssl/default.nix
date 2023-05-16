@@ -13,13 +13,21 @@
 
 buildPythonPackage rec {
   pname = "pyopenssl";
+<<<<<<< HEAD
   version = "23.2.0";
+=======
+  version = "23.1.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   src = fetchPypi {
     pname = "pyOpenSSL";
     inherit version;
+<<<<<<< HEAD
     hash = "sha256-J2+TH1WkUufeppxxc+mE6ypEB85BPJGKo0tV+C+bi6w=";
+=======
+    hash = "sha256-hBSYub7GFiOxtsR+u8AjZ8B9YODhlfGXkIF/EMyNsLc=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   outputs = [
@@ -95,6 +103,10 @@ buildPythonPackage rec {
     homepage = "https://github.com/pyca/pyopenssl";
     changelog = "https://github.com/pyca/pyopenssl/blob/${version}/CHANGELOG.rst";
     license = licenses.asl20;
+<<<<<<< HEAD
     maintainers = with maintainers; [ ];
+=======
+    maintainers = with maintainers; [ SuperSandro2000 ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

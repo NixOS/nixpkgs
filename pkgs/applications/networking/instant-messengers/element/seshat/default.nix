@@ -5,16 +5,27 @@ let
 
 in rustPlatform.buildRustPackage rec {
   pname = "seshat-node";
+<<<<<<< HEAD
   inherit (pinData) version cargoHash;
+=======
+  inherit (pinData) version;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "matrix-org";
     repo = "seshat";
     rev = version;
+<<<<<<< HEAD
     hash = pinData.srcHash;
   };
 
   sourceRoot = "${src.name}/seshat-node/native";
+=======
+    sha256 = pinData.srcHash;
+  };
+
+  sourceRoot = "source/seshat-node/native";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nativeBuildInputs = [ nodejs python3 yarn ];
   buildInputs = [ sqlcipher ] ++ lib.optional stdenv.isDarwin CoreServices;
@@ -53,4 +64,9 @@ in rustPlatform.buildRustPackage rec {
   '';
 
   disallowedReferences = [ stdenv.cc.cc ];
+<<<<<<< HEAD
+=======
+
+  cargoSha256 = pinData.cargoHash;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }

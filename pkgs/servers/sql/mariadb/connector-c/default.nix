@@ -1,21 +1,35 @@
 { lib, stdenv, fetchurl, cmake
+<<<<<<< HEAD
 , curl, openssl, zlib, zstd
 , libiconv
 , version, hash, ...
+=======
+, curl, openssl, zlib
+, libiconv
+, version, sha256, ...
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 with lib;
 
+<<<<<<< HEAD
 let
   isVer33 = versionAtLeast version "3.3";
 
 in stdenv.mkDerivation {
+=======
+stdenv.mkDerivation {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pname = "mariadb-connector-c";
   inherit version;
 
   src = fetchurl {
     url = "https://downloads.mariadb.com/Connectors/c/connector-c-${version}/mariadb-connector-c-${version}-src.tar.gz";
+<<<<<<< HEAD
     inherit hash;
+=======
+    inherit sha256;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   outputs = [ "out" "dev" ];
@@ -29,11 +43,16 @@ in stdenv.mkDerivation {
 
   postPatch = ''
     substituteInPlace mariadb_config/mariadb_config.c.in \
+<<<<<<< HEAD
       --replace '#define INCLUDE "-I%s/@INSTALL_INCLUDEDIR@ -I%s/@INSTALL_INCLUDEDIR@/mysql"' "#define INCLUDE \"-I$dev/include -I$dev/include/mysql\"" \
       --replace '#define LIBS    "-L%s/@INSTALL_LIBDIR@/ -lmariadb"' "#define LIBS    \"-L$out/lib/mariadb -lmariadb\"" \
       --replace '#define PKG_LIBDIR "%s/@INSTALL_LIBDIR@"' "#define PKG_LIBDIR \"$out/lib/mariadb\"" \
       --replace '#define PLUGIN_DIR "%s/@INSTALL_PLUGINDIR@"' "#define PLUGIN_DIR \"$out/lib/mariadb/plugin\"" \
       --replace '#define PKG_PLUGINDIR "%s/@INSTALL_PLUGINDIR@"' "#define PKG_PLUGINDIR \"$out/lib/mariadb/plugin\""
+=======
+      --replace '-I%s/@INSTALL_INCLUDEDIR@' "-I$dev/include" \
+      --replace '-L%s/@INSTALL_LIBDIR@' "-L$out/lib/mariadb"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '' + lib.optionalString stdenv.hostPlatform.isStatic ''
     # Disables all dynamic plugins
     substituteInPlace cmake/plugins.cmake \
@@ -49,7 +68,11 @@ in stdenv.mkDerivation {
   '';
 
   nativeBuildInputs = [ cmake ];
+<<<<<<< HEAD
   propagatedBuildInputs = [ curl openssl zlib ] ++ optional isVer33 zstd;
+=======
+  propagatedBuildInputs = [ curl openssl zlib ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   buildInputs = [ libiconv ];
 
   postInstall = ''

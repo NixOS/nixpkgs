@@ -15,7 +15,11 @@ buildGoModule rec {
     sha256 = "sha256-f7coWG1CS4UL8GGqwADx5CvIk2sPONPlWW+JgRhFsb8=";
   };
 
+<<<<<<< HEAD
   vendorHash = "sha256-SOdIlu0QrQokl9j9Ff594+1K6twU1mCuECFQaVKaPV4=";
+=======
+  vendorSha256 = "sha256-SOdIlu0QrQokl9j9Ff594+1K6twU1mCuECFQaVKaPV4=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   # Used for some of the tests.
   nativeCheckInputs = [git];

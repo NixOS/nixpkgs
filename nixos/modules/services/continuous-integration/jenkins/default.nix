@@ -210,7 +210,13 @@ in {
 
       preStart =
         let replacePlugins =
+<<<<<<< HEAD
               optionalString (cfg.plugins != null) (
+=======
+              if cfg.plugins == null
+              then ""
+              else
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
                 let pluginCmds = lib.attrsets.mapAttrsToList
                       (n: v: "cp ${v} ${cfg.home}/plugins/${n}.jpi")
                       cfg.plugins;
@@ -218,7 +224,11 @@ in {
                   rm -r ${cfg.home}/plugins || true
                   mkdir -p ${cfg.home}/plugins
                   ${lib.strings.concatStringsSep "\n" pluginCmds}
+<<<<<<< HEAD
                 '');
+=======
+                '';
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         in ''
           rm -rf ${cfg.home}/war
           ${replacePlugins}

@@ -39,9 +39,12 @@
 , nodePackages
 , nodejs_16
 , dart-sass-embedded
+<<<<<<< HEAD
 , jq
 , moreutils
 , terser
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 , plugins ? []
 }@args:
@@ -224,12 +227,19 @@ let
       postgresql
       redis
       nodePackages.uglify-js
+<<<<<<< HEAD
       terser
       nodePackages.patch-package
       yarn
       nodejs_16
       jq
       moreutils
+=======
+      nodePackages.terser
+      nodePackages.patch-package
+      yarn
+      nodejs_16
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     ];
 
     outputs = [ "out" "javascripts" ];
@@ -271,12 +281,16 @@ let
 
       export SSL_CERT_FILE=${cacert}/etc/ssl/certs/ca-bundle.crt
 
+<<<<<<< HEAD
       find app/assets/javascripts -name package.json -print0 \
         | xargs -0 -I {} bash -c "jq 'del(.scripts.postinstall)' -r <{} | sponge {}"
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       yarn install --offline --cwd app/assets/javascripts/discourse
 
       patchShebangs app/assets/javascripts/node_modules/
 
+<<<<<<< HEAD
       # Run `patch-package` AFTER the corresponding shebang inside `.bin/patch-package`
       # got patched. Otherwise this will fail with
       #     /bin/sh: line 1: /build/source/app/assets/javascripts/node_modules/.bin/patch-package: cannot execute: required file not found
@@ -284,6 +298,8 @@ let
         yarn run patch-package
       popd &>/dev/null
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       redis-server >/dev/null &
 
       initdb -A trust $NIX_BUILD_TOP/postgres >/dev/null

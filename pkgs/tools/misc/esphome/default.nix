@@ -16,14 +16,22 @@ let
 in
 python.pkgs.buildPythonApplication rec {
   pname = "esphome";
+<<<<<<< HEAD
   version = "2023.8.3";
+=======
+  version = "2023.4.4";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "refs/tags/${version}";
+<<<<<<< HEAD
     hash = "sha256-qiB3VZzqQeimkLTlTNK2/UFt+YJw9sglfF/ogMl239o=";
+=======
+    hash = "sha256-zRzojc2cmBTpvP3yOADWTTK0MOsgCvUcr6idGiRovXo=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   postPatch = ''
@@ -49,12 +57,19 @@ python.pkgs.buildPythonApplication rec {
     colorama
     cryptography
     esphome-dashboard
+<<<<<<< HEAD
+=======
+    ifaddr
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     kconfiglib
     paho-mqtt
     pillow
     platformio
     protobuf
+<<<<<<< HEAD
     pyparsing
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     pyserial
     pyyaml
     requests

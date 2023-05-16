@@ -57,7 +57,11 @@ stdenv.mkDerivation rec {
     description = "HOOMD-blue is a general-purpose particle simulation toolkit";
     license = licenses.bsdOriginal;
     platforms = [ "x86_64-linux" ];
+<<<<<<< HEAD
     maintainers = [ ];
+=======
+    maintainers = [ maintainers.costrouc ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
 }

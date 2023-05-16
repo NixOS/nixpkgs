@@ -123,6 +123,10 @@ in
       })
     [ "consul-template" "vault-agent" ]);
 
+<<<<<<< HEAD
   meta.maintainers = with maintainers; [ emilylange tcheronneau ];
+=======
+  meta.maintainers = with maintainers; [ indeednotjames tcheronneau ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }
 

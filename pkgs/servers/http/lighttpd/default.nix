@@ -15,11 +15,19 @@
 
 stdenv.mkDerivation rec {
   pname = "lighttpd";
+<<<<<<< HEAD
   version = "1.4.71";
 
   src = fetchurl {
     url = "https://download.lighttpd.net/lighttpd/releases-${lib.versions.majorMinor version}.x/${pname}-${version}.tar.xz";
     sha256 = "sha256-uLaRXaIDlv3DVN8zJNXkQBabLl6nhZ46d1IThBMlr6w=";
+=======
+  version = "1.4.69";
+
+  src = fetchurl {
+    url = "https://download.lighttpd.net/lighttpd/releases-${lib.versions.majorMinor version}.x/${pname}-${version}.tar.xz";
+    sha256 = "sha256-FqyNuV5xlim6YZSbmfiib+upRqgdGFIVsoN5u0EWsLQ=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   patches = [

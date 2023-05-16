@@ -25,6 +25,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ hidapi jimtcl libftdi1 libjaylink libusb1 ]
+<<<<<<< HEAD
     ++
     # tracking issue for v2 api changes https://sourceforge.net/p/openocd/tickets/306/
     lib.optional stdenv.isLinux (libgpiod.overrideAttrs (old: rec {
@@ -34,6 +35,9 @@ stdenv.mkDerivation rec {
         sha256 = "sha256-gp1KwmjfB4U2CdZ8/H9HbpqnNssqaKYwvpno+tGXvgo=";
       };
     }));
+=======
+    ++ lib.optional stdenv.isLinux libgpiod;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   configureFlags = [
     "--disable-werror"

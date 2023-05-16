@@ -2,7 +2,10 @@
 , stdenv
 , fetchurl
 , fetchFromGitHub
+<<<<<<< HEAD
 , fetchpatch
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , cmake
 , pkg-config
 , unzip
@@ -11,7 +14,11 @@
 , hdf5
 , boost
 , gflags
+<<<<<<< HEAD
 , protobuf3_21
+=======
+, protobuf
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , config
 , ocl-icd
 , buildPackages
@@ -37,7 +44,11 @@
 , blas
 , enableContrib ? true
 
+<<<<<<< HEAD
 , enableCuda ? config.cudaSupport && stdenv.hostPlatform.isx86_64
+=======
+, enableCuda ? (config.cudaSupport or false) && stdenv.hostPlatform.isx86_64
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , enableCublas ? enableCuda
 , enableCudnn ? false # NOTE: CUDNN has a large impact on closure size so we disable it by default
 , enableCufft ? enableCuda
@@ -276,6 +287,7 @@ stdenv.mkDerivation {
   # Ensures that we use the system OpenEXR rather than the vendored copy of the source included with OpenCV.
   patches = [
     ./cmake-don-t-use-OpenCVFindOpenEXR.patch
+<<<<<<< HEAD
   ] ++ lib.optionals enableContrib [
     (fetchpatch {
       name = "CVE-2023-2617.patch";
@@ -291,6 +303,8 @@ stdenv.mkDerivation {
       extraPrefix = [ "opencv_contrib/" ];
       sha256 = "sha256-cB5Tsh2fDOsc0BNtSzd6U/QoCjkd9yMW1QutUU69JJ0=";
     })
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ] ++ lib.optional enableCuda ./cuda_opt_flow.patch;
 
   # This prevents cmake from using libraries in impure paths (which
@@ -317,7 +331,11 @@ stdenv.mkDerivation {
     echo '"(build info elided)"' > modules/core/version_string.inc
   '';
 
+<<<<<<< HEAD
   buildInputs = [ zlib pcre boost gflags protobuf3_21 ]
+=======
+  buildInputs = [ zlib pcre boost gflags protobuf ]
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     ++ lib.optional enablePython pythonPackages.python
     ++ lib.optional (stdenv.buildPlatform == stdenv.hostPlatform) hdf5
     ++ lib.optional enableGtk2 gtk2
@@ -369,7 +387,11 @@ stdenv.mkDerivation {
     "-DOPENCV_GENERATE_PKGCONFIG=ON"
     "-DWITH_OPENMP=ON"
     "-DBUILD_PROTOBUF=OFF"
+<<<<<<< HEAD
     "-DProtobuf_PROTOC_EXECUTABLE=${lib.getExe buildPackages.protobuf3_21}"
+=======
+    "-DProtobuf_PROTOC_EXECUTABLE=${lib.getExe buildPackages.protobuf}"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "-DPROTOBUF_UPDATE_FILES=ON"
     "-DOPENCV_ENABLE_NONFREE=${printEnabled enableUnfree}"
     "-DBUILD_TESTS=${printEnabled runAccuracyTests}"

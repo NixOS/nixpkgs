@@ -7,7 +7,11 @@
 
 let
   name = "liblc3";
+<<<<<<< HEAD
   version = "1.0.4";
+=======
+  version = "1.0.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 in
 stdenv.mkDerivation {
   pname = name;
@@ -17,7 +21,11 @@ stdenv.mkDerivation {
     owner = "google";
     repo = "liblc3";
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-nQJgF/cWoCx5TkX4xOaLB9SzvhVXPY29bLh7UwPMWEE=";
+=======
+    sha256 = "sha256-Be+dPUnxC2+cHzqL2FAqXOU7NjEAHiPBKh7spuYkvhc=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   outputs = [ "out" "dev" ];

@@ -11,18 +11,30 @@
 
 stdenv.mkDerivation rec {
   pname = "conmon";
+<<<<<<< HEAD
   version = "2.1.8";
+=======
+  version = "2.1.7";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = pname;
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-gdMNAU+w4u+9DZL9x96OAZihShkQdvSiqPCA+eNf600=";
+=======
+    hash = "sha256-W6nqhSEoP2mDp7fCoXqwYAafjfESxymYXAdC3BnJJno=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ glib libseccomp systemd ]
+<<<<<<< HEAD
     ++ lib.optionals (!stdenv.hostPlatform.isMusl) [ glibc glibc.static ];
+=======
+  ++ lib.optionals (!stdenv.hostPlatform.isMusl) [ glibc glibc.static ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   # manpage requires building the vendored go-md2man
   makeFlags = [ "bin/conmon" ];

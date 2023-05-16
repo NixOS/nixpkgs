@@ -21,6 +21,10 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/sstadick/cargo-bundle-licenses";
     changelog = "https://github.com/sstadick/cargo-bundle-licenses/blob/${src.rev}/CHANGELOG.md";
     license = with licenses; [ mit asl20 ];
+<<<<<<< HEAD
     maintainers = with maintainers; [ figsoda matthiasbeyer ];
+=======
+    maintainers = with maintainers; [ figsoda ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

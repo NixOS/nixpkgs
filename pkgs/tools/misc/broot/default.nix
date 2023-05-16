@@ -16,16 +16,27 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "broot";
+<<<<<<< HEAD
   version = "1.25.1";
+=======
+  version = "1.21.3";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "Canop";
     repo = pname;
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-CgWng5b0w6LGt2m9bx3IVMxOXwqYjgsIddTQdBnN/IY=";
   };
 
   cargoHash = "sha256-xcUDg2vfGq4nmdbN6kFfWwbwaH/WqdLpIO0qrvQ7/t4=";
+=======
+    hash = "sha256-YveMIGrcWW52rnTkX9gCUdOaq9+CFS9ByrJv78IeAJA=";
+  };
+
+  cargoHash = "sha256-WEqa2NQ49QrKf572mChha/0u8+kov6GnArsZtu8Igio=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nativeBuildInputs = [
     installShellFiles

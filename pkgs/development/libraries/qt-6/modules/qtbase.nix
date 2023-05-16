@@ -93,7 +93,10 @@
 , libGL
 , debug ? false
 , developerBuild ? false
+<<<<<<< HEAD
 , qttranslations ? null
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 let
@@ -234,7 +237,11 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals stdenv.isDarwin [
     # error: 'path' is unavailable: introduced in macOS 10.15
     "-DQT_FEATURE_cxx17_filesystem=OFF"
+<<<<<<< HEAD
   ] ++ lib.optional (qttranslations != null) "-DINSTALL_TRANSLATIONSDIR=${qttranslations}/translations";
+=======
+  ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   NIX_LDFLAGS = toString (lib.optionals stdenv.isDarwin [
     # Undefined symbols for architecture arm64: "___gss_c_nt_hostbased_service_oid_desc"

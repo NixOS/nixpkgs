@@ -11,7 +11,11 @@ buildGoModule rec {
     sha256 = "sha256-1y/WYLW6/HMGmuaX2wOlQbwYn0LcgQCMb4qw8BtCgxQ=";
   };
 
+<<<<<<< HEAD
   vendorHash = "sha256-Q0WOzyJGnTXTmj7ZPKyVSnWuWb4bbDjDpgftQ1Opf/I=";
+=======
+  vendorSha256 = "sha256-Q0WOzyJGnTXTmj7ZPKyVSnWuWb4bbDjDpgftQ1Opf/I=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   meta = with lib; {
     description = "Show off your most used shell commands.";

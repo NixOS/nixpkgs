@@ -2,11 +2,19 @@
 
 stdenv.mkDerivation rec {
   pname = "rubygems";
+<<<<<<< HEAD
   version = "3.4.19";
 
   src = fetchurl {
     url = "https://rubygems.org/rubygems/rubygems-${version}.tgz";
     hash = "sha256-+ZYpS9UOB16qCjhrKwFGBn43t3KNOv/QIrLKIPAywWs=";
+=======
+  version = "3.4.12";
+
+  src = fetchurl {
+    url = "https://rubygems.org/rubygems/rubygems-${version}.tgz";
+    sha256 = "sha256-WFCnwvw4DN09pwShznuwSNQtSACTPfULiSAmW1hF4Vs=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   patches = [

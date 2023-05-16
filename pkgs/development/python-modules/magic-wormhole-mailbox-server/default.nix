@@ -1,5 +1,8 @@
 { lib
+<<<<<<< HEAD
 , stdenv
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , buildPythonPackage
 , fetchPypi
 , fetchpatch
@@ -49,12 +52,15 @@ buildPythonPackage rec {
     twisted
   ];
 
+<<<<<<< HEAD
   # Fails in Darwin's sandbox
   postPatch = lib.optionalString stdenv.isDarwin ''
     echo 'LogRequests.skip = "Operation not permitted"' >> src/wormhole_mailbox_server/test/test_web.py
     echo 'WebSocketAPI.skip = "Operation not permitted"' >> src/wormhole_mailbox_server/test/test_web.py
   '';
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   checkPhase = ''
     trial -j$NIX_BUILD_CORES wormhole_mailbox_server
   '';
@@ -64,6 +70,10 @@ buildPythonPackage rec {
     homepage = "https://github.com/warner/magic-wormhole-mailbox-server";
     changelog = "https://github.com/magic-wormhole/magic-wormhole-mailbox-server/blob/${version}/NEWS.md";
     license = licenses.mit;
+<<<<<<< HEAD
     maintainers = with maintainers; [ ];
+=======
+    maintainers = with maintainers; [ SuperSandro2000 ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

@@ -351,7 +351,11 @@ in {
           CacheDirectory = dirs cacheDirs;
           RuntimeDirectory = dirName;
           ReadWriteDirectories = lib.mkIf useCustomDir [ cfg.storageDir ];
+<<<<<<< HEAD
           StateDirectory = dirs (lib.optionals (!useCustomDir) libDirs);
+=======
+          StateDirectory = dirs (if useCustomDir then [] else libDirs);
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           LogsDirectory = dirName;
           PrivateTmp = true;
           ProtectSystem = "strict";

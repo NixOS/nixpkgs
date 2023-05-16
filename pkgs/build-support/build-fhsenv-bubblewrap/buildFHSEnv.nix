@@ -12,7 +12,10 @@
 , profile ? ""
 , targetPkgs ? pkgs: []
 , multiPkgs ? pkgs: []
+<<<<<<< HEAD
 , multiArch ? false # Whether to include 32bit packages
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , extraBuildCommands ? ""
 , extraBuildCommandsMulti ? ""
 , extraOutputsToInstall ? []
@@ -36,8 +39,13 @@
 let
   inherit (stdenv) is64bit;
 
+<<<<<<< HEAD
   # "use of glibc_multi is only supported on x86_64-linux"
   isMultiBuild = multiArch && stdenv.system == "x86_64-linux";
+=======
+  # use of glibc_multi is only supported on x86_64-linux
+  isMultiBuild  = multiPkgs != null && stdenv.isx86_64 && stdenv.isLinux;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   isTargetBuild = !isMultiBuild;
 
   # list of packages (usually programs) which are only be installed for the
@@ -52,6 +60,7 @@ let
   # these match the host's architecture, glibc_multi is used for multilib
   # builds. glibcLocales must be before glibc or glibc_multi as otherwiese
   # the wrong LOCALE_ARCHIVE will be used where only C.UTF-8 is available.
+<<<<<<< HEAD
   basePkgs = with pkgs; [
     glibcLocales
     (if isMultiBuild then glibc_multi else glibc)
@@ -80,6 +89,23 @@ let
     exec ${if stdenv.system == "x86_64-linux" then pkgsi686Linux.glibc.bin else pkgs.glibc.bin}/bin/ldconfig -f /etc/ld.so.conf -C /etc/ld.so.cache "$@"
   '';
 
+=======
+  basePkgs = with pkgs;
+    [ glibcLocales
+      (if isMultiBuild then glibc_multi else glibc)
+      (toString gcc.cc.lib) bashInteractiveFHS coreutils less shadow su
+      gawk diffutils findutils gnused gnugrep
+      gnutar gzip bzip2 xz
+    ];
+  baseMultiPkgs = with pkgsi686Linux;
+    [ (toString gcc.cc.lib)
+    ];
+
+  ldconfig = writeShellScriptBin "ldconfig" ''
+    # due to a glibc bug, 64-bit ldconfig complains about patchelf'd 32-bit libraries, so we're using 32-bit ldconfig
+    exec ${if stdenv.isx86_64 && stdenv.isLinux then pkgsi686Linux.glibc.bin else pkgs.glibc.bin}/bin/ldconfig -f /etc/ld.so.conf -C /etc/ld.so.cache "$@"
+  '';
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   etcProfile = writeText "profile" ''
     export PS1='${name}-chrootenv:\u@\h:\w\$ '
     export LOCALE_ARCHIVE='/usr/lib/locale/locale-archive'
@@ -105,7 +131,10 @@ let
 
     # Force compilers and other tools to look in default search paths
     unset NIX_ENFORCE_PURITY
+<<<<<<< HEAD
     export NIX_BINTOOLS_WRAPPER_TARGET_HOST_${stdenv.cc.suffixSalt}=1
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     export NIX_CC_WRAPPER_TARGET_HOST_${stdenv.cc.suffixSalt}=1
     export NIX_CFLAGS_COMPILE='-idirafter /usr/include'
     export NIX_CFLAGS_LINK='-L/usr/lib -L/usr/lib32'
@@ -119,7 +148,11 @@ let
   # Compose /etc for the chroot environment
   etcPkg = runCommandLocal "${name}-chrootenv-etc" { } ''
     mkdir -p $out/etc
+<<<<<<< HEAD
     pushd $out/etc
+=======
+    cd $out/etc
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     # environment variables
     ln -s ${etcProfile} profile
@@ -187,6 +220,7 @@ let
     ln -s lib64 lib
 
     # copy glibc stuff
+<<<<<<< HEAD
     cp -rsHf ${staticUsrProfileTarget}/lib/32/* lib32/
     chmod u+w -R lib32/
 
@@ -199,6 +233,15 @@ let
     # copy content of targetPaths (64bit libs)
     cp -rsHf ${staticUsrProfileTarget}/lib/* lib64/
     chmod u+w -R lib64/
+=======
+    cp -rsHf ${staticUsrProfileTarget}/lib/32/* lib32/ && chmod u+w -R lib32/
+
+    # copy content of multiPaths (32bit libs)
+    [ -d ${staticUsrProfileMulti}/lib ] && cp -rsHf ${staticUsrProfileMulti}/lib/* lib32/ && chmod u+w -R lib32/
+
+    # copy content of targetPaths (64bit libs)
+    cp -rsHf ${staticUsrProfileTarget}/lib/* lib64/ && chmod u+w -R lib64/
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     # symlink 32-bit ld-linux.so
     ln -Ls ${staticUsrProfileTarget}/lib/32/ld-linux.so.2 lib/
@@ -211,6 +254,7 @@ let
   # the target profile is the actual profile that will be used for the chroot
   setupTargetProfile = ''
     mkdir -m0755 usr
+<<<<<<< HEAD
     pushd usr
 
     ${setupLibDirs}
@@ -220,6 +264,15 @@ let
       cp -rLf ${staticUsrProfileMulti}/share share
     fi
     '' + ''
+=======
+    cd usr
+    ${setupLibDirs}
+    ${lib.optionalString isMultiBuild ''
+    if [ -d "${staticUsrProfileMulti}/share" ]; then
+      cp -rLf ${staticUsrProfileMulti}/share share
+    fi
+    ''}
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     if [ -d "${staticUsrProfileTarget}/share" ]; then
       if [ -d share ]; then
         chmod -R 755 share
@@ -245,12 +298,16 @@ let
         ln -s "$i"
       fi
     done
+<<<<<<< HEAD
 
     popd
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '';
 
 in runCommandLocal "${name}-fhs" {
   passthru = {
+<<<<<<< HEAD
     inherit args multiPaths targetPaths ldconfig;
   };
 } ''
@@ -259,5 +316,16 @@ in runCommandLocal "${name}-fhs" {
 
   ${setupTargetProfile}
   ${extraBuildCommands}
+=======
+    inherit args multiPaths targetPaths;
+  };
+} ''
+  mkdir -p $out
+  cd $out
+  ${setupTargetProfile}
+  cd $out
+  ${extraBuildCommands}
+  cd $out
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ${lib.optionalString isMultiBuild extraBuildCommandsMulti}
 ''

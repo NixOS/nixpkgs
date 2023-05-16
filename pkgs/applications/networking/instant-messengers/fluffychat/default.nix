@@ -1,4 +1,5 @@
 { lib
+<<<<<<< HEAD
 , fetchFromGitHub
 , imagemagick
 , mesa
@@ -25,6 +26,27 @@ flutter.buildFlutterApplication rec {
 
   depsListFile = ./deps.json;
   vendorHash = "sha256-dkH+iI1KLsAJtSt6ndc3ZRBllZ9n21RNONqeeUzNQCE=";
+=======
+, fetchFromGitLab
+, imagemagick
+, flutter37
+, makeDesktopItem
+}:
+
+flutter37.buildFlutterApplication rec {
+  version = "1.11.0";
+  name = "fluffychat";
+
+  src = fetchFromGitLab {
+    owner = "famedly";
+    repo = "fluffychat";
+    rev = "v${version}";
+    hash = "sha256-Z7BOGsirBVQxRJY4kmskCmPeZloc41/bf4/ExoO8VBk=";
+  };
+
+  depsListFile = ./deps.json;
+  vendorHash = "sha256-axByNptbzGR7GQT4Gs2yaEyUCkCbI9RQNNOHN7CYd9A=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   desktopItem = makeDesktopItem {
     name = "Fluffychat";
@@ -34,10 +56,15 @@ flutter.buildFlutterApplication rec {
     genericName = "Chat with your friends (matrix client)";
     categories = [ "Chat" "Network" "InstantMessaging" ];
   };
+<<<<<<< HEAD
 
   nativeBuildInputs = [ imagemagick ];
   runtimeDependencies = [ pulseaudio ];
   extraWrapProgramArgs = "--prefix PATH : ${gnome.zenity}/bin";
+=======
+  nativeBuildInputs = [ imagemagick ];
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   postInstall = ''
     FAV=$out/app/data/flutter_assets/assets/favicon.png
     ICO=$out/share/icons
@@ -52,12 +79,17 @@ flutter.buildFlutterApplication rec {
     done
     substituteInPlace $out/share/applications/*.desktop \
       --subst-var out
+<<<<<<< HEAD
 
     patchelf --add-rpath ${libwebrtcRpath} $out/app/lib/libwebrtc.so
   '';
 
   env.NIX_LDFLAGS = "-rpath-link ${libwebrtcRpath}";
 
+=======
+  '';
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   meta = with lib; {
     description = "Chat with your friends (matrix client)";
     homepage = "https://fluffychat.im/";

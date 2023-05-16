@@ -5,11 +5,18 @@
 
 # build time
 , astropy-extension-helpers
+<<<<<<< HEAD
 , cython
 , jinja2
 , oldest-supported-numpy
 , setuptools-scm
 , wheel
+=======
+, astropy-helpers
+, cython
+, jinja2
+, setuptools-scm
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 # runtime
 , numpy
@@ -33,6 +40,7 @@ buildPythonPackage {
     hash = "sha256-9q4noHf46oSQPvp2x5C5hWFzQaAISw0hw5H3o/MyrCM=";
   };
 
+<<<<<<< HEAD
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace 'cython==' 'cython>='
@@ -45,6 +53,16 @@ buildPythonPackage {
     oldest-supported-numpy
     setuptools-scm
     wheel
+=======
+  SETUPTOOLS_SCM_PRETEND_VERSION = version;
+
+  nativeBuildInputs = [
+    astropy-extension-helpers
+    astropy-helpers
+    cython
+    jinja2
+    setuptools-scm
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   propagatedBuildInputs = [

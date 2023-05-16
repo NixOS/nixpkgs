@@ -41,6 +41,9 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     maintainers = [ ];
     license = lib.licenses.gpl2Plus;
+<<<<<<< HEAD
     pkgConfigModules = [ "libselinux" ];
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

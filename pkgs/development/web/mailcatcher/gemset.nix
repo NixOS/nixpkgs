@@ -1,4 +1,5 @@
 {
+<<<<<<< HEAD
   addressable = {
     dependencies = ["public_suffix"];
     groups = ["default" "development"];
@@ -106,11 +107,14 @@
     };
     version = "1.2.2";
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   daemons = {
     groups = ["default"];
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
+<<<<<<< HEAD
       sha256 = "07cszb0zl8mqmwhc8a2yfg36vi6lbgrp4pa5bvmryrpcz9v6viwg";
       type = "gem";
     };
@@ -135,12 +139,19 @@
       type = "gem";
     };
     version = "1.5.0";
+=======
+      sha256 = "0l5gai3vd4g7aqff0k1mp41j9zcsvm2rbwmqn115a325k9r7pf4w";
+      type = "gem";
+    };
+    version = "1.3.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
   eventmachine = {
     groups = ["default"];
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
+<<<<<<< HEAD
       sha256 = "0wh9aqb0skz80fhfn66lbpr4f86ya2z5rx6gm5xlfhd05bj1ch4r";
       type = "gem";
     };
@@ -190,10 +201,20 @@
   };
   mail = {
     dependencies = ["mini_mime" "net-imap" "net-pop" "net-smtp"];
+=======
+      sha256 = "17jr1caa3ggg696dd02g2zqzdjqj9x9q2nl7va82l36f7c5v6k4z";
+      type = "gem";
+    };
+    version = "1.0.9.1";
+  };
+  mail = {
+    dependencies = ["mini_mime"];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     groups = ["default"];
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
+<<<<<<< HEAD
       sha256 = "1bf9pysw1jfgynv692hhaycfxa8ckay1gjw5hz3madrbrynryfzc";
       type = "gem";
     };
@@ -201,10 +222,20 @@
   };
   mailcatcher = {
     dependencies = ["eventmachine" "faye-websocket" "mail" "net-smtp" "rack" "sinatra" "sqlite3" "thin"];
+=======
+      sha256 = "00wwz6ys0502dpk8xprwcqfwyf3hmnx6lgxaiq6vj43mkx43sapc";
+      type = "gem";
+    };
+    version = "2.7.1";
+  };
+  mailcatcher = {
+    dependencies = ["eventmachine" "mail" "rack" "sinatra" "skinny" "sqlite3" "thin"];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     groups = ["default"];
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
+<<<<<<< HEAD
       sha256 = "003d2a6i97syw67jxrjq0p4xm19p9cfqnbmsg4b1c3mdb5c78rfz";
       type = "gem";
     };
@@ -252,10 +283,19 @@
   };
   net-imap = {
     dependencies = ["date" "net-protocol"];
+=======
+      sha256 = "02w1ycyfv7x0sh9799lz7xa65p5qvl5z4pa8a7prb68h2zwkfq0n";
+      type = "gem";
+    };
+    version = "0.7.1";
+  };
+  mini_mime = {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     groups = ["default"];
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
+<<<<<<< HEAD
       sha256 = "0lf7wqg7czhaj51qsnmn28j7jmcxhkh3m28rl1cjrqsgjxhwj7r3";
       type = "gem";
     };
@@ -345,6 +385,22 @@
       type = "gem";
     };
     version = "1.6.13";
+=======
+      sha256 = "1q4pshq387lzv9m39jv32vwb8wrq3wc4jwgl4jk209r4l33v09d3";
+      type = "gem";
+    };
+    version = "1.0.1";
+  };
+  rack = {
+    groups = ["default"];
+    platforms = [];
+    source = {
+      remotes = ["https://rubygems.org"];
+      sha256 = "1g9926ln2lw12lfxm4ylq1h6nl0rafl10za3xvjzc87qvnqic87f";
+      type = "gem";
+    };
+    version = "1.6.11";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
   rack-protection = {
     dependencies = ["rack"];
@@ -357,6 +413,7 @@
     };
     version = "1.5.5";
   };
+<<<<<<< HEAD
   rack-test = {
     dependencies = ["rack"];
     groups = ["default" "development"];
@@ -515,6 +572,8 @@
     };
     version = "4.9.0";
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   sinatra = {
     dependencies = ["rack" "rack-protection" "tilt"];
     groups = ["default"];
@@ -526,6 +585,7 @@
     };
     version = "1.4.8";
   };
+<<<<<<< HEAD
   sprockets = {
     dependencies = ["concurrent-ruby" "rack"];
     groups = ["development"];
@@ -561,10 +621,15 @@
   };
   sqlite3 = {
     dependencies = ["mini_portile2"];
+=======
+  skinny = {
+    dependencies = ["eventmachine" "thin"];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     groups = ["default"];
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
+<<<<<<< HEAD
       sha256 = "0h95kr5529qv786mfk8r2jjdsdi6v7v3k3dpz69mrcc9i0vpdd37";
       type = "gem";
     };
@@ -579,6 +644,22 @@
       type = "gem";
     };
     version = "3.0.7";
+=======
+      sha256 = "1y3yvx88ylgz4d2s1wskjk5rkmrcr15q3ibzp1q88qwzr5y493a9";
+      type = "gem";
+    };
+    version = "0.2.4";
+  };
+  sqlite3 = {
+    groups = ["default"];
+    platforms = [];
+    source = {
+      remotes = ["https://rubygems.org"];
+      sha256 = "0pmgpqx2sg8pms54rk7kjjy8jwsw21g1f7mb02fggbdcqy8jk3fx";
+      type = "gem";
+    };
+    version = "1.4.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
   thin = {
     dependencies = ["daemons" "eventmachine" "rack"];
@@ -586,16 +667,24 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
+<<<<<<< HEAD
       sha256 = "08g1yq6zzvgndj8fd98ah7pp8g2diw28p8bfjgv7rvjvp8d2am8w";
       type = "gem";
     };
     version = "1.8.2";
+=======
+      sha256 = "0hrq9m3hb6pm8yrqshhg0gafkphdpvwcqmr7k722kgdisp3w91ga";
+      type = "gem";
+    };
+    version = "1.5.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
   tilt = {
     groups = ["default"];
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
+<<<<<<< HEAD
       sha256 = "0bmjgbv8158klwp2r3klxjwaj93nh1sbl4xvj9wsha0ic478avz7";
       type = "gem";
     };
@@ -663,5 +752,11 @@
       type = "gem";
     };
     version = "3.2.0";
+=======
+      sha256 = "0ca4k0clwf0rkvy7726x4nxpjxkpv67w043i39saxgldxd97zmwz";
+      type = "gem";
+    };
+    version = "2.0.9";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

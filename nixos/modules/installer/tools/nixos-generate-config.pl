@@ -85,7 +85,11 @@ sub debug {
 
 
 # nixpkgs.system
+<<<<<<< HEAD
 push @attrs, "nixpkgs.hostPlatform = lib.mkDefault \"@hostPlatformSystem@\";";
+=======
+push @attrs, "nixpkgs.hostPlatform = lib.mkDefault \"@system@\";";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 
 my $cpuinfo = read_file "/proc/cpuinfo";
@@ -335,7 +339,11 @@ sub findStableDevPath {
 
     my $st = stat($dev) or return $dev;
 
+<<<<<<< HEAD
     foreach my $dev2 (glob("/dev/stratis/*/*"), glob("/dev/disk/by-uuid/*"), glob("/dev/mapper/*"), glob("/dev/disk/by-label/*")) {
+=======
+    foreach my $dev2 (glob("/dev/disk/by-uuid/*"), glob("/dev/mapper/*"), glob("/dev/disk/by-label/*")) {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         my $st2 = stat($dev2) or next;
         return $dev2 if $st->rdev == $st2->rdev;
     }
@@ -381,7 +389,10 @@ sub in {
 
 my $fileSystems;
 my %fsByDev;
+<<<<<<< HEAD
 my $useSwraid = 0;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 foreach my $fs (read_file("/proc/self/mountinfo")) {
     chomp $fs;
     my @fields = split / /, $fs;
@@ -468,6 +479,7 @@ EOF
         }
     }
 
+<<<<<<< HEAD
     # is this a stratis fs?
     my $stableDevPath = findStableDevPath $device;
     my $stratisPool;
@@ -479,6 +491,8 @@ EOF
         $stratisPool = substr $line, $uuidIndex - 32, 36;
     }
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     # Don't emit tmpfs entry for /tmp, because it most likely comes from the
     # boot.tmp.useTmpfs option in configuration.nix (managed declaratively).
     next if ($mountPoint eq "/tmp" && $fsType eq "tmpfs");
@@ -486,7 +500,11 @@ EOF
     # Emit the filesystem.
     $fileSystems .= <<EOF;
   fileSystems.\"$mountPoint\" =
+<<<<<<< HEAD
     { device = \"$stableDevPath\";
+=======
+    { device = \"${\(findStableDevPath $device)}\";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       fsType = \"$fsType\";
 EOF
 
@@ -496,12 +514,15 @@ EOF
 EOF
     }
 
+<<<<<<< HEAD
     if ($stratisPool) {
         $fileSystems .= <<EOF;
       stratis.poolUuid = "$stratisPool";
 EOF
     }
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     $fileSystems .= <<EOF;
     };
 
@@ -511,8 +532,13 @@ EOF
     # boot.initrd.luks.devices entry.
     if (-e $device) {
         my $deviceName = basename(abs_path($device));
+<<<<<<< HEAD
         my $dmUuid = read_file("/sys/class/block/$deviceName/dm/uuid",  err_mode => 'quiet');
         if ($dmUuid =~ /^CRYPT-LUKS/)
+=======
+        if (-e "/sys/class/block/$deviceName"
+            && read_file("/sys/class/block/$deviceName/dm/uuid",  err_mode => 'quiet') =~ /^CRYPT-LUKS/)
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         {
             my @slaves = glob("/sys/class/block/$deviceName/slaves/*");
             if (scalar @slaves == 1) {
@@ -528,6 +554,7 @@ EOF
                 }
             }
         }
+<<<<<<< HEAD
         if (-e "/sys/class/block/$deviceName/md/uuid") {
             $useSwraid = 1;
         }
@@ -536,6 +563,10 @@ EOF
 if ($useSwraid) {
     push @attrs, "boot.swraid.enable = true;\n\n";
 }
+=======
+    }
+}
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 
 # Generate the hardware configuration file.

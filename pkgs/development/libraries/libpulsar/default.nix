@@ -1,7 +1,11 @@
 { lib
 , clang-tools
 , llvmPackages
+<<<<<<< HEAD
 , boost179
+=======
+, boost17x
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , protobuf
 , python3Support ? false
 , python3
@@ -40,7 +44,11 @@ let
   # Not really sure why I need to do this.. If I call clang-tools without the override it defaults to a different version and fails
   clangTools = clang-tools.override { inherit stdenv llvmPackages; };
   # If boost has python enabled, then boost-python package will be installed which is used by libpulsars python wrapper
+<<<<<<< HEAD
   boost = if python3Support then boost179.override { inherit stdenv; enablePython = python3Support; python = python3; } else boost179;
+=======
+  boost = if python3Support then boost17x.override { inherit stdenv; enablePython = python3Support; python = python3; } else boost17x;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   defaultOptionals = [ boost protobuf ]
     ++ lib.optional python3Support python3
     ++ lib.optional snappySupport snappy.dev

@@ -11,7 +11,11 @@
 
 buildPythonPackage rec {
   pname = "sqltrie";
+<<<<<<< HEAD
   version = "0.7.0";
+=======
+  version = "0.3.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -20,7 +24,11 @@ buildPythonPackage rec {
     owner = "iterative";
     repo = pname;
     rev = "refs/tags/${version}";
+<<<<<<< HEAD
     hash = "sha256-+o0JY572q3qSX4FeXsk9ke0hn94Om/N6HN3HNoUgSkc=";
+=======
+    hash = "sha256-e/3Tq2H9I0zvqq0+q1c3nbz2UiMNX7JpVpVC9suvYRM=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;

@@ -8,13 +8,21 @@
 buildGoModule rec {
   pname = "bosh-cli";
 
+<<<<<<< HEAD
   version = "7.4.0";
+=======
+  version = "7.2.3";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "cloudfoundry";
     repo = pname;
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-Hxak76S3+i5G81Xv4wdFvR/+vg5Eh86YjeqRzNUmfh4=";
+=======
+    sha256 = "sha256-sN6+hPH+VziXs94RkPdPlg6TKo/as4xC8Gd8MxAKluk=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
   vendorHash = null;
 

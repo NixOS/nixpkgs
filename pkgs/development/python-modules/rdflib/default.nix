@@ -18,7 +18,10 @@
 , html5lib
 
 # tests
+<<<<<<< HEAD
 , pip
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , pytest-cov
 , pytestCheckHook
 }:
@@ -54,10 +57,14 @@ buildPythonPackage rec {
     ];
   };
 
+<<<<<<< HEAD
   __darwinAllowLocalNetworking = true;
 
   nativeCheckInputs = [
     pip
+=======
+  nativeCheckInputs = [
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     pytest-cov
     pytestCheckHook
   ]

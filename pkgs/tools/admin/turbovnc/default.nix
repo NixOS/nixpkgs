@@ -17,7 +17,10 @@
 , openssl
 , pam
 , perl
+<<<<<<< HEAD
 , pkg-config
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , python3
 , which
 , xkbcomp
@@ -27,15 +30,26 @@
 , zlib
 }:
 
+<<<<<<< HEAD
 stdenv.mkDerivation (finalAttrs: {
   pname = "turbovnc";
   version = "3.0.3";
+=======
+stdenv.mkDerivation rec {
+  pname = "turbovnc";
+  version = "3.0.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "TurboVNC";
     repo = "turbovnc";
+<<<<<<< HEAD
     rev = finalAttrs.version;
     hash = "sha256-akkkbDb5ZHTG5GEEeDm1ns60GedQ+DnFXgVMZumRQHc=";
+=======
+    rev = version;
+    sha256 = "sha256-GRY6aW6Kvy5sDQRiOVz2cUgKEG0IMveh80S26/rGWdM=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   # TODO:
@@ -43,7 +57,11 @@ stdenv.mkDerivation (finalAttrs: {
   #   * `-- FONT_ENCODINGS_DIRECTORY = /var/empty/share/X11/fonts/encodings`
   #     Maybe relevant what the tigervnc and tightvnc derivations
   #     do with their `fontDirectories`?
+<<<<<<< HEAD
   #   * `XORG_REGISTRY_PATH = /var/empty/lib64/xorg`
+=======
+  #   * `SERVER_MISC_CONFIG_PATH = /var/empty/lib64/xorg`
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   #   * The thing about xorg `protocol.txt`
   # * Does SSH support require `openssh` on PATH?
   # * Add `enableClient ? true` flag that disables the client GUI
@@ -54,7 +72,10 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     makeWrapper
     openjdk_headless
+<<<<<<< HEAD
     pkg-config
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     python3
   ];
 
@@ -94,7 +115,11 @@ stdenv.mkDerivation (finalAttrs: {
     # to the swrast dri driver in Mesa.
     # Can also be given at runtime to its `Xvnc` as:
     #   -dridir /nix/store/...-mesa-20.1.10-drivers/lib/dri/
+<<<<<<< HEAD
     "-DXORG_DRI_DRIVER_PATH=${mesa.drivers}/lib/dri"
+=======
+    "-DDRI_DRIVER_PATH=${mesa.drivers}/lib/dri"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     # The build system doesn't find these files automatically.
     "-DTJPEG_JAR=${libjpeg_turbo.out}/share/java/turbojpeg.jar"
     "-DTJPEG_JNILIBRARY=${libjpeg_turbo.out}/lib/libturbojpeg.so"
@@ -139,6 +164,12 @@ stdenv.mkDerivation (finalAttrs: {
     description = "High-speed version of VNC derived from TightVNC";
     maintainers = with lib.maintainers; [ nh2 ];
     platforms = with lib.platforms; linux;
+<<<<<<< HEAD
     changelog = "https://github.com/TurboVNC/turbovnc/blob/${finalAttrs.version}/ChangeLog.md";
   };
 })
+=======
+    changelog = "https://github.com/TurboVNC/turbovnc/blob/${version}/ChangeLog.md";
+  };
+}
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)

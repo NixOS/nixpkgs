@@ -27,6 +27,7 @@ python3Packages.buildPythonApplication rec {
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
+<<<<<<< HEAD
   postInstall = ''
     (
       cd icons
@@ -41,6 +42,8 @@ python3Packages.buildPythonApplication rec {
     )
   '';
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   # RuntimeError: could not create GtkClipboard object
   doCheck = false;
 

@@ -16,6 +16,7 @@
 
 stdenv.mkDerivation rec {
   pname = "subtitleedit";
+<<<<<<< HEAD
   version = "4.0.0";
 
   src = fetchzip {
@@ -24,6 +25,20 @@ stdenv.mkDerivation rec {
     stripRoot = false;
   };
 
+=======
+  version = "3.6.12";
+
+  src = fetchzip {
+    url = "https://github.com/SubtitleEdit/subtitleedit/releases/download/${version}/SE${lib.replaceStrings [ "." ] [ "" ] version}.zip";
+    sha256 = "08p67krgcignjisbq7nmnb3nga2sad4vl739ak4a5rp3b49l1dmb";
+    stripRoot = false;
+  };
+
+  preUnpack = ''
+    rm -rf source
+  '';
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nativeBuildInputs = [
     copyDesktopItems
     icoutils
@@ -80,7 +95,11 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A subtitle editor";
+<<<<<<< HEAD
     homepage = "https://nikse.dk/subtitleedit";
+=======
+    homepage = "https://nikse.dk/subtitleedit/";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     license = licenses.gpl3Plus;
     longDescription = ''
       With Subtitle Edit you can easily adjust a subtitle if it is out of sync with

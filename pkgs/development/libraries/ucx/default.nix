@@ -1,7 +1,11 @@
 { lib, stdenv, fetchFromGitHub, autoreconfHook, doxygen, numactl
 , rdma-core, libbfd, libiberty, perl, zlib, symlinkJoin, pkg-config
+<<<<<<< HEAD
 , config
 , enableCuda ? config.cudaSupport
+=======
+, enableCuda ? false
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , cudatoolkit
 , enableRocm ? false
 , rocm-core, rocm-runtime, rocm-device-libs, hip
@@ -21,13 +25,21 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "ucx";
+<<<<<<< HEAD
   version = "1.14.1";
+=======
+  version = "1.14.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "openucx";
     repo = "ucx";
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-oAigiCgbr27pX+kNl+RW1P10TKYFSKrHDK4U4z8WMko=";
+=======
+    sha256 = "sha256-OSYeJfMi57KABt8l3Yj0glqx54C5cwM2FqlijszJIk4=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ autoreconfHook doxygen pkg-config ];

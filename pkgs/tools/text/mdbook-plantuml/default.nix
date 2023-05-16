@@ -3,8 +3,15 @@
 , fetchpatch
 , stdenv
 , rustPlatform
+<<<<<<< HEAD
 , pkg-config
 , openssl
+=======
+, darwin
+, pkg-config
+, openssl
+, libiconv
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , CoreServices
 }:
 

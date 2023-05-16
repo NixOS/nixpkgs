@@ -2,15 +2,25 @@
 
 buildGoModule rec {
   pname = "konstraint";
+<<<<<<< HEAD
   version = "0.30.0";
+=======
+  version = "0.28.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "plexsystems";
     repo = pname;
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-lO9yXIqasVYf+FHQeodS9nlqEPp+rpU/NckSMhQ5wqY=";
   };
   vendorHash = "sha256-MWg0RHKXxkZ52MqRglBuR5P9bRDg8RKG9XRux1PjJ1g=";
+=======
+    sha256 = "sha256-d5PmWhWRBch+q+4CrYMFBf/IRoEdy7CH8kEnJ0sl+AQ=";
+  };
+  vendorHash = "sha256-juhMRSAgvt83jF8LRefJuyPwKD392IINLOj13dBhZdQ=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   # Exclude go within .github folder
   excludedPackages = ".github";

@@ -10,7 +10,11 @@ let
     inherit version;
 
     inherit src;
+<<<<<<< HEAD
     sourceRoot = "${src.name}/clang";
+=======
+    sourceRoot = "source/clang";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     nativeBuildInputs = [ cmake python3 ]
       ++ lib.optional enableManpages python3.pkgs.sphinx
@@ -66,13 +70,20 @@ let
           --replace "\''${_IMPORT_PREFIX}/lib/libclang." "$lib/lib/libclang." \
           --replace "\''${_IMPORT_PREFIX}/lib/libclang-cpp." "$lib/lib/libclang-cpp."
 
+<<<<<<< HEAD
       mkdir -p $python/bin $python/share/{clang,scan-view}
+=======
+      mkdir -p $python/bin $python/share/clang/
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       mv $out/bin/{git-clang-format,scan-view} $python/bin
       if [ -e $out/bin/set-xcode-analyzer ]; then
         mv $out/bin/set-xcode-analyzer $python/bin
       fi
       mv $out/share/clang/*.py $python/share/clang
+<<<<<<< HEAD
       mv $out/share/scan-view/*.py $python/share/scan-view
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       rm $out/bin/c-index-test
       patchShebangs $python/bin
 

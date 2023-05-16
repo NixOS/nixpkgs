@@ -5,11 +5,19 @@
 
 stdenv.mkDerivation rec {
   pname = "gifsicle";
+<<<<<<< HEAD
   version = "1.94";
 
   src = fetchurl {
     url = "https://www.lcdf.org/gifsicle/${pname}-${version}.tar.gz";
     sha256 = "sha256-S8lwBcB4liDedfiZl9PC9wdYxyxhqgou8E96Zxov+Js=";
+=======
+  version = "1.93";
+
+  src = fetchurl {
+    url = "https://www.lcdf.org/gifsicle/${pname}-${version}.tar.gz";
+    sha256 = "sha256-kvZweXMr9MHaCH5q4JBSBYRuWsd3ulyqZtEqc6qUNEc=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   buildInputs = lib.optionals gifview [ xorgproto libXt libX11 ];

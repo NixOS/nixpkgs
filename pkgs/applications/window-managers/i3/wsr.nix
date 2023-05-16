@@ -20,7 +20,10 @@ rustPlatform.buildRustPackage rec {
   doCheck = false;
 
   meta = with lib; {
+<<<<<<< HEAD
     mainProgram = "i3wsr";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     description = "Automatically change i3 workspace names based on their contents";
     longDescription = ''
       Automatically sets the workspace names to match the windows on the workspace.

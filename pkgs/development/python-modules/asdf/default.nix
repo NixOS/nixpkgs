@@ -93,6 +93,10 @@ buildPythonPackage rec {
     description = "Python tools to handle ASDF files";
     homepage = "https://github.com/asdf-format/asdf";
     license = licenses.bsd3;
+<<<<<<< HEAD
     maintainers = with maintainers; [ ];
+=======
+    maintainers = with maintainers; [ costrouc ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

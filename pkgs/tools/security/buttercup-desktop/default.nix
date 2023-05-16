@@ -2,10 +2,17 @@
 
 let
   pname = "buttercup-desktop";
+<<<<<<< HEAD
   version = "2.20.3";
   src = fetchurl {
     url = "https://github.com/buttercup/buttercup-desktop/releases/download/v${version}/Buttercup-linux-x86_64.AppImage";
     sha256 = "sha256-e7CZjJSkAAkNn73Z3cg+D5SUdReBp6pqz7zKrbkHs38=";
+=======
+  version = "2.19.1";
+  src = fetchurl {
+    url = "https://github.com/buttercup/buttercup-desktop/releases/download/v${version}/Buttercup-linux-x86_64.AppImage";
+    sha256 = "sha256-ELJXPnr5lFHIgDsqjbGbcto0JLsi11sMe7UjOki5yQA=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
   appimageContents = appimageTools.extractType2 { inherit pname src version; };
 

@@ -1,6 +1,10 @@
 { lib, gccStdenv, fetchFromGitLab, cudatoolkit
+<<<<<<< HEAD
 , config
 , cudaSupport ? config.cudaSupport
+=======
+, cudaSupport ? false
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , pkg-config }:
 
 gccStdenv.mkDerivation rec {

@@ -1,8 +1,12 @@
+<<<<<<< HEAD
 { lib
 , stdenv
 , fetchurl
 , fetchpatch2
 }:
+=======
+{ lib, stdenv, fetchurl }:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 stdenv.mkDerivation rec {
   pname = "popt";
@@ -16,6 +20,7 @@ stdenv.mkDerivation rec {
   patches = lib.optionals stdenv.isCygwin [
     ./1.16-cygwin.patch
     ./1.16-vpath.patch
+<<<<<<< HEAD
   ] ++ lib.optionals stdenv.hostPlatform.isMinGW [
     # Do not require <sys/ioctl.h>
     (fetchpatch2 {
@@ -33,6 +38,8 @@ stdenv.mkDerivation rec {
       extraPrefix = "src/";
       revert = true;
     })
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   doCheck = false; # fails

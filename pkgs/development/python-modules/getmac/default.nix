@@ -10,7 +10,11 @@
 
 buildPythonPackage rec {
   pname = "getmac";
+<<<<<<< HEAD
   version = "0.9.4";
+=======
+  version = "0.9.3";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -19,7 +23,11 @@ buildPythonPackage rec {
     owner = "GhostofGoes";
     repo = pname;
     rev = "refs/tags/${version}";
+<<<<<<< HEAD
     hash = "sha256-B9agBmSrD3ZhqpGclZdMQNRSLSkepR6iduP1yrYz9tU=";
+=======
+    hash = "sha256-5g7FSdlwGeohbjOX3ErTKn83VDFtWV7fVq6zziAjCq0=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeCheckInputs = [

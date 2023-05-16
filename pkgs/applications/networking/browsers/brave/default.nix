@@ -1,4 +1,8 @@
 { lib, stdenv, fetchurl, wrapGAppsHook, makeWrapper
+<<<<<<< HEAD
+=======
+, dpkg
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , alsa-lib
 , at-spi2-atk
 , at-spi2-core
@@ -6,7 +10,10 @@
 , cairo
 , cups
 , dbus
+<<<<<<< HEAD
 , dpkg
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , expat
 , fontconfig
 , freetype
@@ -15,14 +22,21 @@
 , gnome
 , gsettings-desktop-schemas
 , gtk3
+<<<<<<< HEAD
 , libX11
 , libXScrnSaver
+=======
+, libuuid
+, libdrm
+, libX11
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , libXcomposite
 , libXcursor
 , libXdamage
 , libXext
 , libXfixes
 , libXi
+<<<<<<< HEAD
 , libXrandr
 , libXrender
 , libXtst
@@ -31,17 +45,34 @@
 , libuuid
 , libxkbcommon
 , libxshmfence
+=======
+, libxkbcommon
+, libXrandr
+, libXrender
+, libXScrnSaver
+, libxshmfence
+, libXtst
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , mesa
 , nspr
 , nss
 , pango
 , pipewire
+<<<<<<< HEAD
 , snappy
 , udev
 , wayland
 , xdg-utils
 , xorg
 , zlib
+=======
+, udev
+, wayland
+, xorg
+, zlib
+, xdg-utils
+, snappy
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 # command line arguments which are always set e.g "--disable-gpu"
 , commandLineArgs ? ""
@@ -74,7 +105,11 @@ let
     libxkbcommon libXScrnSaver libXcomposite libXcursor libXdamage
     libXext libXfixes libXi libXrandr libXrender libxshmfence
     libXtst libuuid mesa nspr nss pango pipewire udev wayland
+<<<<<<< HEAD
     xorg.libxcb zlib snappy libkrb5
+=======
+    xorg.libxcb zlib snappy
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ]
     ++ optional pulseSupport libpulseaudio
     ++ optional libvaSupport libva;
@@ -91,11 +126,19 @@ in
 
 stdenv.mkDerivation rec {
   pname = "brave";
+<<<<<<< HEAD
   version = "1.57.62";
 
   src = fetchurl {
     url = "https://github.com/brave/brave-browser/releases/download/v${version}/brave-browser_${version}_amd64.deb";
     sha256 = "sha256-98zhLxlV/pe5fownqQ3k165YfcoLLxz2vBM/4FEq8ug=";
+=======
+  version = "1.51.114";
+
+  src = fetchurl {
+    url = "https://github.com/brave/brave-browser/releases/download/v${version}/brave-browser_${version}_amd64.deb";
+    sha256 = "sha256-lykwmfGqH5VuWazEQuvTpD4ett4m+LCFmmxzjkULfmk=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   dontConfigure = true;

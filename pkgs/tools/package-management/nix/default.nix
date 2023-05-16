@@ -1,5 +1,8 @@
 { lib
+<<<<<<< HEAD
 , config
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , aws-sdk-cpp
 , boehmgc
 , callPackage
@@ -33,7 +36,11 @@ let
       owner = "aws";
       repo = "aws-sdk-cpp";
       rev = version;
+<<<<<<< HEAD
       hash = "sha256-Z1eRKW+8nVD53GkNyYlZjCcT74MqFqqRMeMc33eIQ9g=";
+=======
+      sha256 = "sha256-Z1eRKW+8nVD53GkNyYlZjCcT74MqFqqRMeMc33eIQ9g=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
     postPatch = ''
       # Avoid blanket -Werror to evade build failures on less
@@ -76,10 +83,17 @@ let
   aws-sdk-cpp-nix = (aws-sdk-cpp.override {
     apis = [ "s3" "transfer" ];
     customMemoryManagement = false;
+<<<<<<< HEAD
   }).overrideAttrs {
     # only a stripped down version is build which takes a lot less resources to build
     requiredSystemFeatures = [ ];
   };
+=======
+  }).overrideAttrs (args: {
+    # only a stripped down version is build which takes a lot less resources to build
+    requiredSystemFeatures = [ ];
+  });
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 
   common = args:
@@ -95,20 +109,29 @@ let
   patch-monitorfdhup = fetchpatch2 {
     name = "nix-7585-monitor-fd-hup.patch";
     url = "https://github.com/NixOS/nix/commit/1df3d62c769dc68c279e89f68fdd3723ed3bcb5a.patch";
+<<<<<<< HEAD
     hash = "sha256-f+F0fUO+bqyPXjt+IXJtISVr589hdc3y+Cdrxznb+Nk=";
+=======
+    sha256 = "sha256-f+F0fUO+bqyPXjt+IXJtISVr589hdc3y+Cdrxznb+Nk=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   # https://github.com/NixOS/nix/pull/7473
   patch-sqlite-exception = fetchpatch2 {
     name = "nix-7473-sqlite-exception-add-message.patch";
     url = "https://github.com/hercules-ci/nix/commit/c965f35de71cc9d88f912f6b90fd7213601e6eb8.patch";
+<<<<<<< HEAD
     hash = "sha256-tI5nKU7SZgsJrxiskJ5nHZyfrWf5aZyKYExM0792N80=";
+=======
+    sha256 = "sha256-tI5nKU7SZgsJrxiskJ5nHZyfrWf5aZyKYExM0792N80=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   patch-non-existing-output = fetchpatch {
     # https://github.com/NixOS/nix/pull/7283
     name = "fix-requires-non-existing-output.patch";
     url = "https://github.com/NixOS/nix/commit/3ade5f5d6026b825a80bdcc221058c4f14e10a27.patch";
+<<<<<<< HEAD
     hash = "sha256-s1ybRFCjQaSGj7LKu0Z5g7UiHqdJGeD+iPoQL0vaiS0=";
   };
 
@@ -120,17 +143,28 @@ let
   };
 
 in lib.makeExtensible (self: ({
+=======
+    sha256 = "sha256-s1ybRFCjQaSGj7LKu0Z5g7UiHqdJGeD+iPoQL0vaiS0=";
+  };
+
+in lib.makeExtensible (self: {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nix_2_3 = (common rec {
     version = "2.3.16";
     src = fetchurl {
       url = "https://nixos.org/releases/nix/nix-${version}/nix-${version}.tar.xz";
+<<<<<<< HEAD
       hash = "sha256-fuaBtp8FtSVJLSAsO+3Nne4ZYLuBj2JpD2xEk7fCqrw=";
+=======
+      sha256 = "sha256-fuaBtp8FtSVJLSAsO+3Nne4ZYLuBj2JpD2xEk7fCqrw=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
     patches = [
       patch-monitorfdhup
     ];
   }).override { boehmgc = boehmgc-nix_2_3; };
 
+<<<<<<< HEAD
   nix_2_10 = common {
     version = "2.10.3";
     hash = "sha256-B9EyDUz/9tlcWwf24lwxCFmkxuPTVW7HFYvp0C4xGbc=";
@@ -212,6 +246,8 @@ in lib.makeExtensible (self: ({
 
   unstable = self.stable;
 } // lib.optionalAttrs config.allowAliases {
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nix_2_4 = throw "nixVersions.nix_2_4 has been removed";
 
   nix_2_5 = throw "nixVersions.nix_2_5 has been removed";
@@ -223,4 +259,59 @@ in lib.makeExtensible (self: ({
   nix_2_8 = throw "nixVersions.nix_2_8 has been removed";
 
   nix_2_9 = throw "nixVersions.nix_2_9 has been removed";
+<<<<<<< HEAD
 }))
+=======
+
+  nix_2_10 = common {
+    version = "2.10.3";
+    sha256 = "sha256-B9EyDUz/9tlcWwf24lwxCFmkxuPTVW7HFYvp0C4xGbc=";
+    patches = [
+      ./patches/flaky-tests.patch
+      patch-non-existing-output
+      patch-monitorfdhup
+      patch-sqlite-exception
+    ];
+  };
+
+  nix_2_11 = common {
+    version = "2.11.1";
+    sha256 = "sha256-qCV65kw09AG+EkdchDPq7RoeBznX0Q6Qa4yzPqobdOk=";
+    patches = [
+      ./patches/flaky-tests.patch
+      patch-non-existing-output
+      patch-monitorfdhup
+      patch-sqlite-exception
+    ];
+  };
+
+  nix_2_12 = common {
+    version = "2.12.1";
+    sha256 = "sha256-GmHKhq0uFtdOiJnuBwj2YwlZjvh6YTkfQZgeu4e0dLU=";
+    patches = [
+      ./patches/flaky-tests.patch
+      patch-monitorfdhup
+      patch-sqlite-exception
+    ];
+  };
+
+  nix_2_13 = common {
+    version = "2.13.3";
+    sha256 = "sha256-jUc2ccTR8f6MGY2pUKgujm+lxSPNGm/ZAP+toX+nMNc=";
+  };
+
+  nix_2_14 = common {
+    version = "2.14.1";
+    sha256 = "sha256-5aCmGZbsFcLIckCDfvnPD4clGPQI7qYAqHYlttN/Wkg=";
+  };
+
+  nix_2_15 = common {
+    version = "2.15.0";
+    sha256 = "sha256-hNHfvmb1bIWwqFT5nesQgwh4V0OlyZHxj5ZVSQbZ+p4=";
+  };
+
+  stable = self.nix_2_13;
+
+  unstable = self.nix_2_15;
+})
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)

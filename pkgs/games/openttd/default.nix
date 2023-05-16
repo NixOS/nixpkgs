@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 { lib, stdenv, fetchurl, fetchzip, cmake, pkg-config
 , SDL2, libpng, zlib, xz, freetype, fontconfig
 , nlohmann_json, curl, icu, harfbuzz, expat, glib, pcre2
@@ -6,6 +7,13 @@
 , fluidsynth, soundfont-fluid, libsndfile
 , flac, libogg, libvorbis, libopus, libmpg123, pulseaudio, alsa-lib, libjack2
 , procps, writeScriptBin, makeWrapper, runtimeShell }:
+=======
+{ lib, stdenv, fetchurl, fetchzip, cmake, SDL2, libpng, zlib, xz, freetype, fontconfig
+, withOpenGFX ? true, withOpenSFX ? true, withOpenMSX ? true
+, withFluidSynth ? true, audioDriver ? "alsa", fluidsynth, soundfont-fluid, procps
+, writeScriptBin, makeWrapper, runtimeShell
+}:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 let
   opengfx = fetchzip {
@@ -32,6 +40,7 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "openttd";
+<<<<<<< HEAD
   version = "13.4";
 
   src = fetchurl {
@@ -47,6 +56,18 @@ stdenv.mkDerivation rec {
     fluidsynth soundfont-fluid libsndfile
     flac libogg libvorbis libopus libmpg123 pulseaudio alsa-lib libjack2
   ];
+=======
+  version = "13.1";
+
+  src = fetchurl {
+    url = "https://cdn.openttd.org/openttd-releases/${version}/${pname}-${version}-source.tar.xz";
+    hash = "sha256-Xt8i03A1I4KF72cql9WeZCgL66sj5YR4CDTM1r4KWLs=";
+  };
+
+  nativeBuildInputs = [ cmake makeWrapper ];
+  buildInputs = [ SDL2 libpng xz zlib freetype fontconfig ]
+    ++ lib.optionals withFluidSynth [ fluidsynth soundfont-fluid ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   prefixKey = "--prefix-dir=";
 

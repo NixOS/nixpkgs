@@ -20,14 +20,22 @@
 
 buildPythonPackage rec {
   pname = "pytorch-lightning";
+<<<<<<< HEAD
   version = "2.0.8";
+=======
+  version = "2.0.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "Lightning-AI";
     repo = "pytorch-lightning";
     rev = "refs/tags/${version}";
+<<<<<<< HEAD
     hash = "sha256-Z/5d7aUO9UO7c9PoekxP8PMajKlh//hk/YIp+BJMcho=";
+=======
+    hash = "sha256-MSztKWjg/7J+4+sv4sqFlucaYuQlGoehtcUTiqNUlPA=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   preConfigure = ''

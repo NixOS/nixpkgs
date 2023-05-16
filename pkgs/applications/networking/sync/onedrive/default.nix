@@ -14,13 +14,21 @@
 
 stdenv.mkDerivation rec {
   pname = "onedrive";
+<<<<<<< HEAD
   version = "2.4.25";
+=======
+  version = "2.4.23";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "abraunegg";
     repo = pname;
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-M6EOJiykmAKWIuAXdm9ebTSX1eVoO+1axgzxlAmuI8U=";
+=======
+    hash = "sha256-yHpjutZV2u1VhnLxsQIu0NtKnqwtoRn4TM+8tXJ4RNo=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ autoreconfHook ldc installShellFiles pkg-config ];

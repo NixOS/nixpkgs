@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 { lib
 , stdenv
 , fetchFromGitHub
@@ -19,11 +20,30 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoSha256 = "sha256-agBzn2MibM7158/QlLXI2HBBcYIe0p50rYSF1jBDF8U=";
+=======
+{ lib, stdenv, fetchFromGitHub, rustPlatform, python3Packages, Security }:
+
+rustPlatform.buildRustPackage rec {
+  pname = "rust-cbindgen";
+  version = "0.24.3";
+
+  src = fetchFromGitHub {
+    owner = "eqrion";
+    repo = "cbindgen";
+    rev = "v${version}";
+    hash = "sha256-v5g6/ul6mJtzC4O4WlNopPtFUSbx2Jv79mZL72mucws=";
+  };
+
+  cargoSha256 = "sha256-j3/2cFjSDkx0TXCaxYSCLrBbAHrJfJ6hwBcXlDedwh8=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   buildInputs = lib.optional stdenv.isDarwin Security;
 
   nativeCheckInputs = [
+<<<<<<< HEAD
     cmake
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     python3Packages.cython
   ];
 
@@ -42,9 +62,14 @@ rustPlatform.buildRustPackage rec {
   ];
 
   meta = with lib; {
+<<<<<<< HEAD
     changelog = "https://github.com/mozilla/cbindgen/blob/v${version}/CHANGES";
     description = "A project for generating C bindings from Rust code";
     homepage = "https://github.com/mozilla/cbindgen";
+=======
+    description = "A project for generating C bindings from Rust code";
+    homepage = "https://github.com/eqrion/cbindgen";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     license = licenses.mpl20;
     maintainers = with maintainers; [ hexa ];
   };

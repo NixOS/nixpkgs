@@ -1,10 +1,17 @@
+<<<<<<< HEAD
 { config, lib, pkgs, utils, ... }:
+=======
+{ config, lib, pkgs, ... }:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 with lib;
 
 let
   cfg = config.services.xserver.desktopManager.xfce;
+<<<<<<< HEAD
   excludePackages = config.environment.xfce.excludePackages;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 in
 {
@@ -70,6 +77,7 @@ in
         description = lib.mdDoc "Enable the XFCE screensaver.";
       };
     };
+<<<<<<< HEAD
 
     environment.xfce.excludePackages = mkOption {
       default = [];
@@ -81,6 +89,12 @@ in
 
   config = mkIf cfg.enable {
     environment.systemPackages = utils.removePackagesByName (with pkgs.xfce // pkgs; [
+=======
+  };
+
+  config = mkIf cfg.enable {
+    environment.systemPackages = with pkgs.xfce // pkgs; [
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       glib # for gsettings
       gtk3.out # gtk-update-icon-cache
 
@@ -129,7 +143,11 @@ in
       ] ++ optionals (!cfg.noDesktop) [
         xfce4-panel
         xfdesktop
+<<<<<<< HEAD
       ] ++ optional cfg.enableScreensaver xfce4-screensaver) excludePackages;
+=======
+      ] ++ optional cfg.enableScreensaver xfce4-screensaver;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     programs.xfconf.enable = true;
     programs.thunar.enable = true;
@@ -173,9 +191,15 @@ in
     programs.zsh.vteIntegration = mkDefault true;
 
     # Systemd services
+<<<<<<< HEAD
     systemd.packages = utils.removePackagesByName (with pkgs.xfce; [
       xfce4-notifyd
     ]) excludePackages;
+=======
+    systemd.packages = with pkgs.xfce; [
+      xfce4-notifyd
+    ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     security.pam.services.xfce4-screensaver.unixAuth = cfg.enableScreensaver;
   };

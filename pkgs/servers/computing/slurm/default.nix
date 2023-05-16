@@ -14,7 +14,11 @@
 
 stdenv.mkDerivation rec {
   pname = "slurm";
+<<<<<<< HEAD
   version = "23.02.4.1";
+=======
+  version = "23.02.2.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   # N.B. We use github release tags instead of https://www.schedmd.com/downloads.php
   # because the latter does not keep older releases.
@@ -23,7 +27,11 @@ stdenv.mkDerivation rec {
     repo = "slurm";
     # The release tags use - instead of .
     rev = "${pname}-${builtins.replaceStrings ["."] ["-"] version}";
+<<<<<<< HEAD
     sha256 = "sha256-sNZqC6F7Q05AqkKVVUG4mCO3JXRjVZBppt3VgRHf5+o=";
+=======
+    sha256 = "sha256-UWDtq4JSVaxiYOdplava9XUzFdMjEMQ4j8BCzVK8Ve0=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   outputs = [ "out" "dev" ];
@@ -67,7 +75,11 @@ stdenv.mkDerivation rec {
       "--with-jwt=${libjwt}"
       "--with-lz4=${lz4.dev}"
       "--with-munge=${munge}"
+<<<<<<< HEAD
       "--with-yaml=${libyaml.dev}"
+=======
+      "--with-yaml=${libyaml}"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       "--with-ofed=${rdma-core}"
       "--sysconfdir=/etc/slurm"
       "--with-pmix=${pmix}"

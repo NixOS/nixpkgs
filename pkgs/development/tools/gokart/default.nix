@@ -14,7 +14,11 @@ buildGoModule rec {
     sha256 = "sha256-G1IjlJ/rmviFWy6RFfLtP+bhfYcDuB97leimU39YCoQ=";
   };
 
+<<<<<<< HEAD
   vendorHash = "sha256-lgKYVgJlmUJ/msdIqG7EKAZuISie1lG7+VeCF/rcSlE=";
+=======
+  vendorSha256 = "sha256-lgKYVgJlmUJ/msdIqG7EKAZuISie1lG7+VeCF/rcSlE=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   # Would need files to scan which are not shipped by the project
   doCheck = false;

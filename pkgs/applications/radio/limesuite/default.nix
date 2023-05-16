@@ -1,9 +1,16 @@
 { lib, stdenv, fetchFromGitHub, cmake
+<<<<<<< HEAD
 , fetchpatch
 , sqlite, wxGTK32, libusb1, soapysdr
 , mesa_glu, libX11, gnuplot, fltk
 , GLUT
 , withGui ? !stdenv.isDarwin # withGui transitively depends on mesa, which is broken on darwin
+=======
+, sqlite, wxGTK32, libusb1, soapysdr
+, mesa_glu, libX11, gnuplot, fltk
+, GLUT
+, withGui ? true
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 stdenv.mkDerivation rec {
@@ -17,6 +24,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-t3v2lhPZ1L/HRRBwA3k1KfIpih6R4TUmBWaIm8sVGdY=";
   };
 
+<<<<<<< HEAD
   patches = [
     # Pull gcc-13 fix pending upstream inclusion:
     #   https://github.com/myriadrf/LimeSuite/pull/384
@@ -27,6 +35,8 @@ stdenv.mkDerivation rec {
     })
   ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nativeBuildInputs = [ cmake ];
 
   cmakeFlags = [

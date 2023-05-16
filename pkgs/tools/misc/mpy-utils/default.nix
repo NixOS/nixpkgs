@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 { stdenv, lib, buildPythonApplication, fetchPypi, fusepy, pyserial }:
+=======
+{ stdenv, lib, python3, buildPythonApplication, fetchPypi, fusepy, pyserial }:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 buildPythonApplication rec {
   pname = "mpy-utils";

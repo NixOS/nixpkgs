@@ -3,7 +3,10 @@
 , aresponses
 , buildPythonPackage
 , fetchFromGitHub
+<<<<<<< HEAD
 , fetchpatch
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , poetry-core
 , pytest-asyncio
 , pytestCheckHook
@@ -25,6 +28,7 @@ buildPythonPackage rec {
     hash = "sha256-3f6N4b6WZPAUUQTuGeb20q0f7ZqDR+O24QRze5RpRlw=";
   };
 
+<<<<<<< HEAD
   patches = [
     # https://github.com/klaasnicolaas/python-autarco/pull/265
     (fetchpatch {
@@ -41,6 +45,8 @@ buildPythonPackage rec {
       --replace "--cov" ""
   '';
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nativeBuildInputs = [
     poetry-core
   ];
@@ -50,14 +56,27 @@ buildPythonPackage rec {
     yarl
   ];
 
+<<<<<<< HEAD
   __darwinAllowLocalNetworking = true;
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nativeCheckInputs = [
     aresponses
     pytest-asyncio
     pytestCheckHook
   ];
 
+<<<<<<< HEAD
+=======
+  postPatch = ''
+    # Upstream doesn't set a version for the pyproject.toml
+    substituteInPlace pyproject.toml \
+      --replace "0.0.0" "${version}" \
+      --replace "--cov" ""
+  '';
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pythonImportsCheck = [
     "autarco"
   ];

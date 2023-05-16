@@ -88,6 +88,7 @@ dependencies = [
 ]
 
 [[package]]
+<<<<<<< HEAD
 name = "addr2line"
 version = "0.21.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -97,6 +98,8 @@ dependencies = [
 ]
 
 [[package]]
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 name = "adler"
 version = "1.0.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -115,21 +118,36 @@ dependencies = [
 
 [[package]]
 name = "aho-corasick"
+<<<<<<< HEAD
 version = "1.0.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "6748e8def348ed4d14996fa801f4122cd763fff530258cdc03f64b25f89d3a5a"
+=======
+version = "1.0.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "67fc08ce920c31afb70f013dcce1bfc3a3195de6a228474e45e1f145b36f8d04"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 dependencies = [
  "memchr",
 ]
 
 [[package]]
 name = "android-activity"
+<<<<<<< HEAD
 version = "0.4.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "64529721f27c2314ced0890ce45e469574a73e5e6fdd6e9da1860eb29285f5e0"
 dependencies = [
  "android-properties",
  "bitflags 1.3.2",
+=======
+version = "0.4.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "7c77a0045eda8b888c76ea473c2b0515ba6f471d318f8927c5c72240937035a6"
+dependencies = [
+ "android-properties",
+ "bitflags",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  "cc",
  "jni-sys",
  "libc",
@@ -137,7 +155,11 @@ dependencies = [
  "ndk",
  "ndk-context",
  "ndk-sys",
+<<<<<<< HEAD
  "num_enum 0.6.1",
+=======
+ "num_enum",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 ]
 
 [[package]]
@@ -147,6 +169,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "fc7eb209b1518d6bb87b283c20095f5228ecda460da70b44f0802523dea6da04"
 
 [[package]]
+<<<<<<< HEAD
 name = "android-tzdata"
 version = "0.1.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -166,6 +189,12 @@ name = "anyhow"
 version = "1.0.75"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "a4668cab20f66d8d020e1fbc0ebe47217433c1b6c8f2040faf858554e394ace6"
+=======
+name = "anyhow"
+version = "1.0.70"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "7de8ce5e0f9f8d88245311066a578d72b7af3e7088f32783804676302df237e4"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 [[package]]
 name = "arboard"
@@ -193,6 +222,7 @@ checksum = "6b4930d2cb77ce62f89ee5d5289b4ac049559b1c45539271f5ed4fdc7db34545"
 
 [[package]]
 name = "arrayvec"
+<<<<<<< HEAD
 version = "0.7.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "96d30a06541fbafbc7f82ed10c06164cfbd2c401138f6addd8404629c4b16711"
@@ -203,6 +233,18 @@ version = "4.7.1"
 dependencies = [
  "asusd",
  "cargo-husky",
+=======
+version = "0.7.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "8da52d66c7071e2e3fa2a1e5c6d088fec47b593032b254f5e980de8ea54454d6"
+
+[[package]]
+name = "asusctl"
+version = "4.6.2"
+dependencies = [
+ "cargo-husky",
+ "daemon",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  "gif",
  "glam",
  "gumdrop",
@@ -217,6 +259,7 @@ dependencies = [
 ]
 
 [[package]]
+<<<<<<< HEAD
 name = "asusd"
 version = "4.7.1"
 dependencies = [
@@ -261,6 +304,8 @@ dependencies = [
 ]
 
 [[package]]
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 name = "async-broadcast"
 version = "0.5.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -272,9 +317,15 @@ dependencies = [
 
 [[package]]
 name = "async-channel"
+<<<<<<< HEAD
 version = "1.9.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "81953c529336010edd6d8e358f886d9581267795c61b19475b71314bffa46d35"
+=======
+version = "1.8.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "cf46fee83e5ccffc220104713af3292ff9bc7c64c7de289f66dae8e38d826833"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 dependencies = [
  "concurrent-queue",
  "event-listener",
@@ -290,7 +341,11 @@ dependencies = [
  "async-lock",
  "async-task",
  "concurrent-queue",
+<<<<<<< HEAD
  "fastrand 1.9.0",
+=======
+ "fastrand",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  "futures-lite",
  "slab",
 ]
@@ -321,17 +376,29 @@ dependencies = [
  "log",
  "parking",
  "polling",
+<<<<<<< HEAD
  "rustix 0.37.23",
  "slab",
  "socket2 0.4.9",
+=======
+ "rustix",
+ "slab",
+ "socket2",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  "waker-fn",
 ]
 
 [[package]]
 name = "async-lock"
+<<<<<<< HEAD
 version = "2.8.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "287272293e9d8c41773cec55e365490fe034813a2f172f502d6ddcf75b2f582b"
+=======
+version = "2.7.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "fa24f727524730b077666307f2734b4a1a1c57acb79193127dcc8914d5242dd7"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 dependencies = [
  "event-listener",
 ]
@@ -361,7 +428,11 @@ dependencies = [
  "cfg-if",
  "event-listener",
  "futures-lite",
+<<<<<<< HEAD
  "rustix 0.37.23",
+=======
+ "rustix",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  "signal-hook",
  "windows-sys 0.48.0",
 ]
@@ -374,7 +445,11 @@ checksum = "0e97ce7de6cf12de5d7226c73f5ba9811622f4db3a5b91b55c53e987e5f91cba"
 dependencies = [
  "proc-macro2",
  "quote",
+<<<<<<< HEAD
  "syn 2.0.29",
+=======
+ "syn 2.0.15",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 ]
 
 [[package]]
@@ -385,6 +460,7 @@ checksum = "ecc7ab41815b3c653ccd2978ec3255c81349336702dfdf62ee6f7069b12a3aae"
 
 [[package]]
 name = "async-trait"
+<<<<<<< HEAD
 version = "0.1.73"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "bc00ceb34980c03614e35a3a4e218276a0a824e911d07651cd0d858a51e8c0f0"
@@ -392,6 +468,15 @@ dependencies = [
  "proc-macro2",
  "quote",
  "syn 2.0.29",
+=======
+version = "0.1.68"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "b9ccdd8f2a161be9bd5c023df56f1b2a0bd1d83872ae53b71a84a12c9bf6e842"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "syn 2.0.15",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 ]
 
 [[package]]
@@ -401,7 +486,11 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "39991bc421ddf72f70159011b323ff49b0f783cc676a7287c59453da2e2531cf"
 dependencies = [
  "atk-sys",
+<<<<<<< HEAD
  "bitflags 1.3.2",
+=======
+ "bitflags",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  "glib",
  "libc",
 ]
@@ -426,9 +515,15 @@ checksum = "1181e1e0d1fce796a03db1ae795d67167da795f9cf4a39c37589e85ef57f26d3"
 
 [[package]]
 name = "atomic_refcell"
+<<<<<<< HEAD
 version = "0.1.11"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "112ef6b3f6cb3cb6fc5b6b494ef7a848492cff1ab0ef4de10b0f7d572861c905"
+=======
+version = "0.1.10"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "79d6dc922a2792b006573f60b2648076355daeae5ce9cb59507e5908c9625d31"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 [[package]]
 name = "atspi"
@@ -470,6 +565,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "7b7e4c2464d97fe331d41de9d5db0def0a96f4d823b8b32a2efd503578988973"
 
 [[package]]
+<<<<<<< HEAD
 name = "backtrace"
 version = "0.3.69"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -489,6 +585,12 @@ name = "base64"
 version = "0.21.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "604178f6c5c21f02dc555784810edfb88d34ac2c73b2eae109655649ee73ce3d"
+=======
+name = "base64"
+version = "0.13.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "9e1b586273c5702936fe7b7d6896644d8be71e6314cfe09d3167c95f712589e8"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 [[package]]
 name = "bindgen"
@@ -496,7 +598,11 @@ version = "0.63.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "36d860121800b2a9a94f9b5604b332d5cffb234ce17609ea479d723dbc9d3885"
 dependencies = [
+<<<<<<< HEAD
  "bitflags 1.3.2",
+=======
+ "bitflags",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  "cexpr",
  "clang-sys",
  "lazy_static",
@@ -517,6 +623,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "bef38d45163c2f1dde094a7dfd33ccf595c92905c8f8f4fdc18d06fb1037718a"
 
 [[package]]
+<<<<<<< HEAD
 name = "bitflags"
 version = "2.4.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -526,6 +633,8 @@ dependencies = [
 ]
 
 [[package]]
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 name = "block"
 version = "0.1.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -569,16 +678,26 @@ dependencies = [
  "async-lock",
  "async-task",
  "atomic-waker",
+<<<<<<< HEAD
  "fastrand 1.9.0",
+=======
+ "fastrand",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  "futures-lite",
  "log",
 ]
 
 [[package]]
 name = "bumpalo"
+<<<<<<< HEAD
 version = "3.13.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "a3e2c3daef883ecc1b5d58c15adae93470a91d425f3532ba1695849656af3fc1"
+=======
+version = "3.12.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "9b1ce199063694f33ffb7dd4e0ee620741495c32833cde5aa08f02a0bf96f0c8"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 [[package]]
 name = "bytemuck"
@@ -597,7 +716,11 @@ checksum = "fdde5c9cd29ebd706ce1b35600920a33550e402fc998a2e53ad3b42c3c47a192"
 dependencies = [
  "proc-macro2",
  "quote",
+<<<<<<< HEAD
  "syn 2.0.29",
+=======
+ "syn 2.0.15",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 ]
 
 [[package]]
@@ -618,7 +741,11 @@ version = "0.16.7"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "f3125b15ec28b84c238f6f476c6034016a5f6cc0221cb514ca46c532139fc97d"
 dependencies = [
+<<<<<<< HEAD
  "bitflags 1.3.2",
+=======
+ "bitflags",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  "cairo-sys-rs",
  "glib",
  "libc",
@@ -639,11 +766,18 @@ dependencies = [
 
 [[package]]
 name = "calloop"
+<<<<<<< HEAD
 version = "0.10.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "52e0d00eb1ea24371a97d2da6201c6747a633dc6dc1988ef503403b4c59504a8"
 dependencies = [
  "bitflags 1.3.2",
+=======
+version = "0.10.5"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "1a59225be45a478d772ce015d9743e49e92798ece9e34eda9a6aa2a6a7f40192"
+dependencies = [
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  "log",
  "nix 0.25.1",
  "slotmap",
@@ -659,12 +793,20 @@ checksum = "7b02b629252fe8ef6460461409564e2c21d0c8e77e0944f3d189ff06c4e932ad"
 
 [[package]]
 name = "cc"
+<<<<<<< HEAD
 version = "1.0.83"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "f1174fb0b6ec23863f8b971027804a42614e347eafb0a95bf0b12cdae21fc4d0"
 dependencies = [
  "jobserver",
  "libc",
+=======
+version = "1.0.79"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "50d30906286121d95be3d479533b458f87493b30a4b5f79a607db8f5d11aa91f"
+dependencies = [
+ "jobserver",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 ]
 
 [[package]]
@@ -684,9 +826,15 @@ dependencies = [
 
 [[package]]
 name = "cfg-expr"
+<<<<<<< HEAD
 version = "0.15.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "b40ccee03b5175c18cde8f37e7d2a33bcef6f8ec8f7cc0d81090d1bb380949c9"
+=======
+version = "0.15.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "c8790cf1286da485c72cf5fc7aeba308438800036ec67d89425924c4807268c9"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 dependencies = [
  "smallvec",
  "target-lexicon",
@@ -714,6 +862,7 @@ dependencies = [
 ]
 
 [[package]]
+<<<<<<< HEAD
 name = "chrono"
 version = "0.4.26"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -728,6 +877,8 @@ dependencies = [
 ]
 
 [[package]]
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 name = "clang-sys"
 version = "1.6.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -766,12 +917,21 @@ dependencies = [
 
 [[package]]
 name = "concat-idents"
+<<<<<<< HEAD
 version = "1.1.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "f76990911f2267d837d9d0ad060aa63aaad170af40904b29461734c339030d4d"
 dependencies = [
  "quote",
  "syn 2.0.29",
+=======
+version = "1.1.4"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "0fe0e1d9f7de897d18e590a7496b5facbe87813f746cf4b8db596ba77e07e832"
+dependencies = [
+ "quote",
+ "syn 1.0.109",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 ]
 
 [[package]]
@@ -785,7 +945,11 @@ dependencies = [
 
 [[package]]
 name = "config-traits"
+<<<<<<< HEAD
 version = "4.7.1"
+=======
+version = "4.6.2"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 dependencies = [
  "cargo-husky",
  "log",
@@ -818,7 +982,11 @@ version = "0.22.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "2581bbab3b8ffc6fcbd550bf46c355135d16e9ff2a6ea032ad6b9bf1d7efe4fb"
 dependencies = [
+<<<<<<< HEAD
  "bitflags 1.3.2",
+=======
+ "bitflags",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  "core-foundation",
  "core-graphics-types",
  "foreign-types",
@@ -827,20 +995,36 @@ dependencies = [
 
 [[package]]
 name = "core-graphics-types"
+<<<<<<< HEAD
 version = "0.1.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "2bb142d41022986c1d8ff29103a1411c8a3dfad3552f87a4f8dc50d61d4f4e33"
 dependencies = [
  "bitflags 1.3.2",
  "core-foundation",
+=======
+version = "0.1.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "3a68b68b3446082644c91ac778bf50cd4104bfb002b5a6a7c44cca5a2c70788b"
+dependencies = [
+ "bitflags",
+ "core-foundation",
+ "foreign-types",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  "libc",
 ]
 
 [[package]]
 name = "cpufeatures"
+<<<<<<< HEAD
 version = "0.2.9"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "a17b76ff3a4162b0b27f354a0c87015ddad39d35f9c0c36607a3bdd175dde1f1"
+=======
+version = "0.2.7"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "3e4c1eaa2012c47becbbad2ab175484c2a84d1185b566fb2cc5b8707343dfe58"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 dependencies = [
  "libc",
 ]
@@ -856,9 +1040,15 @@ dependencies = [
 
 [[package]]
 name = "crossbeam-utils"
+<<<<<<< HEAD
 version = "0.8.16"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "5a22b2d63d4d1dc0b7f1b6b2747dd0088008a9be28b6ddf0b1e7d335e3037294"
+=======
+version = "0.8.15"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "3c063cd8cc95f5c377ed0d4b49a4b21f632396ff690e8470c29b3359b346984b"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 dependencies = [
  "cfg-if",
 ]
@@ -874,10 +1064,55 @@ dependencies = [
 ]
 
 [[package]]
+<<<<<<< HEAD
 name = "deranged"
 version = "0.3.8"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "f2696e8a945f658fd14dc3b87242e6b80cd0f36ff04ea560fa39082368847946"
+=======
+name = "daemon"
+version = "4.6.2"
+dependencies = [
+ "async-trait",
+ "cargo-husky",
+ "concat-idents",
+ "config-traits",
+ "env_logger",
+ "log",
+ "logind-zbus",
+ "rog_anime",
+ "rog_aura",
+ "rog_dbus",
+ "rog_platform",
+ "rog_profiles",
+ "serde",
+ "serde_derive",
+ "sysfs-class",
+ "systemd-zbus",
+ "tokio",
+ "zbus",
+]
+
+[[package]]
+name = "daemon-user"
+version = "4.6.2"
+dependencies = [
+ "cargo-husky",
+ "config-traits",
+ "dirs",
+ "env_logger",
+ "log",
+ "rog_anime",
+ "rog_aura",
+ "rog_dbus",
+ "rog_platform",
+ "serde",
+ "serde_derive",
+ "serde_json",
+ "smol",
+ "zbus",
+]
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 [[package]]
 name = "derivative"
@@ -892,9 +1127,15 @@ dependencies = [
 
 [[package]]
 name = "digest"
+<<<<<<< HEAD
 version = "0.10.7"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "9ed9a281f7bc9b7576e61468ba615a66a5c8cfdff42420a70aa82701a3b1e292"
+=======
+version = "0.10.6"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "8168378f4e5023e7218c89c891c0fd8ecdb5e5e4f18cb78f38cf245dd021e76f"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 dependencies = [
  "block-buffer",
  "crypto-common",
@@ -949,11 +1190,19 @@ checksum = "bd0c93bb4b0c6d9b77f4435b0ae98c24d17f1c45b2ff844c6151a07256ca923b"
 
 [[package]]
 name = "dlib"
+<<<<<<< HEAD
 version = "0.5.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "330c60081dcc4c72131f8eb70510f1ac07223e5d4163db481a04a0befcffa412"
 dependencies = [
  "libloading 0.8.0",
+=======
+version = "0.5.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "ac1b7517328c04c2aa68422fc60a41b92208182142ed04a25879c26c8f878794"
+dependencies = [
+ "libloading",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 ]
 
 [[package]]
@@ -1036,9 +1285,15 @@ dependencies = [
 
 [[package]]
 name = "either"
+<<<<<<< HEAD
 version = "1.9.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "a26ae43d7bcc3b814de94796a5e736d4029efb0ee900c12e2d54c993ad1a1e07"
+=======
+version = "1.8.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "7fcaabb2fef8c910e7f4c7ce9f67a1283a1715879a7c230ca9d6d1ae31f16d91"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 [[package]]
 name = "emath"
@@ -1089,7 +1344,11 @@ checksum = "5e9a1f9f7d83e59740248a6e14ecf93929ade55027844dfcea78beafccc15745"
 dependencies = [
  "proc-macro2",
  "quote",
+<<<<<<< HEAD
  "syn 2.0.29",
+=======
+ "syn 2.0.15",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 ]
 
 [[package]]
@@ -1122,6 +1381,7 @@ dependencies = [
 ]
 
 [[package]]
+<<<<<<< HEAD
 name = "equivalent"
 version = "1.0.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1132,6 +1392,12 @@ name = "errno"
 version = "0.3.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "6b30f669a7961ef1631673d2766cc92f52d64f7ef354d4fe0ddfd30ed52f0f4f"
+=======
+name = "errno"
+version = "0.3.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "4bcfec3a70f97c962c307b2d2c56e358cf1d00b558d74262b5f929ee8cc7e73a"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 dependencies = [
  "errno-dragonfly",
  "libc",
@@ -1174,12 +1440,15 @@ dependencies = [
 ]
 
 [[package]]
+<<<<<<< HEAD
 name = "fastrand"
 version = "2.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "6999dc1837253364c2ebb0704ba97994bd874e8f195d665c50b7548f6ea92764"
 
 [[package]]
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 name = "fdeflate"
 version = "0.3.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1190,22 +1459,39 @@ dependencies = [
 
 [[package]]
 name = "field-offset"
+<<<<<<< HEAD
 version = "0.3.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "38e2275cc4e4fc009b0669731a1e5ab7ebf11f469eaede2bab9309a5b4d6057f"
 dependencies = [
  "memoffset 0.9.0",
+=======
+version = "0.3.5"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "a3cf3a800ff6e860c863ca6d4b16fd999db8b752819c1606884047b73e468535"
+dependencies = [
+ "memoffset 0.8.0",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  "rustc_version",
 ]
 
 [[package]]
 name = "flate2"
+<<<<<<< HEAD
 version = "1.0.27"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "c6c98ee8095e9d1dcbf2fcc6d95acccb90d1c81db1e44725c6a984b1dbdfb010"
 dependencies = [
  "crc32fast",
  "miniz_oxide 0.7.1",
+=======
+version = "1.0.25"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "a8a2db397cb1c8772f31494cb8917e48cd1e64f0fa7efac59fbd741a0a8ce841"
+dependencies = [
+ "crc32fast",
+ "miniz_oxide 0.6.2",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 ]
 
 [[package]]
@@ -1234,9 +1520,15 @@ checksum = "00b0228411908ca8685dba7fc2cdd70ec9990a6e753e89b6ac91a84c40fbaf4b"
 
 [[package]]
 name = "form_urlencoded"
+<<<<<<< HEAD
 version = "1.2.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "a62bc1cf6f830c2ec14a513a9fb124d0a213a629668a4186f329db21fe045652"
+=======
+version = "1.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "a9c384f161156f5260c24a097c56119f9be8c798586aecc13afbcbe7b7e26bf8"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 dependencies = [
  "percent-encoding",
 ]
@@ -1279,7 +1571,11 @@ version = "1.13.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "49a9d51ce47660b1e808d3c990b4709f2f415d928835a17dfd16991515c46bce"
 dependencies = [
+<<<<<<< HEAD
  "fastrand 1.9.0",
+=======
+ "fastrand",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  "futures-core",
  "futures-io",
  "memchr",
@@ -1296,7 +1592,11 @@ checksum = "89ca545a94061b6365f2c7355b4b32bd20df3ff95f02da9329b34ccc3bd6ee72"
 dependencies = [
  "proc-macro2",
  "quote",
+<<<<<<< HEAD
  "syn 2.0.29",
+=======
+ "syn 2.0.15",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 ]
 
 [[package]]
@@ -1334,7 +1634,11 @@ version = "0.16.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "aa9cb33da481c6c040404a11f8212d193889e9b435db2c14fd86987f630d3ce1"
 dependencies = [
+<<<<<<< HEAD
  "bitflags 1.3.2",
+=======
+ "bitflags",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  "cairo-rs",
  "gdk-pixbuf",
  "gdk-sys",
@@ -1350,7 +1654,11 @@ version = "0.16.7"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "c3578c60dee9d029ad86593ed88cb40f35c1b83360e12498d055022385dd9a05"
 dependencies = [
+<<<<<<< HEAD
  "bitflags 1.3.2",
+=======
+ "bitflags",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  "gdk-pixbuf-sys",
  "gio",
  "glib",
@@ -1409,9 +1717,15 @@ dependencies = [
 
 [[package]]
 name = "getrandom"
+<<<<<<< HEAD
 version = "0.2.10"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "be4136b2a15dd319360be1c07d9933517ccf0be8f16bf62a3bee4f0d618df427"
+=======
+version = "0.2.9"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "c85e1d9ab2eadba7e5040d4e09cbd6d072b76a557ad64e797c2cb9d4da21d7e4"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 dependencies = [
  "cfg-if",
  "libc",
@@ -1429,18 +1743,25 @@ dependencies = [
 ]
 
 [[package]]
+<<<<<<< HEAD
 name = "gimli"
 version = "0.28.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "6fb8d784f27acf97159b40fc4db5ecd8aa23b9ad5ef69cdd136d3bc80665f0c0"
 
 [[package]]
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 name = "gio"
 version = "0.16.7"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "2a1c84b4534a290a29160ef5c6eff2a9c95833111472e824fc5cb78b513dd092"
 dependencies = [
+<<<<<<< HEAD
  "bitflags 1.3.2",
+=======
+ "bitflags",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  "futures-channel",
  "futures-core",
  "futures-io",
@@ -1489,11 +1810,19 @@ dependencies = [
 
 [[package]]
 name = "glib"
+<<<<<<< HEAD
 version = "0.16.9"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "16aa2475c9debed5a32832cb5ff2af5a3f9e1ab9e69df58eaadc1ab2004d6eba"
 dependencies = [
  "bitflags 1.3.2",
+=======
+version = "0.16.7"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "ddd4df61a866ed7259d6189b8bcb1464989a77f1d85d25d002279bbe9dd38b2f"
+dependencies = [
+ "bitflags",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  "futures-channel",
  "futures-core",
  "futures-executor",
@@ -1516,7 +1845,11 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "fb1a9325847aa46f1e96ffea37611b9d51fc4827e67f79e7de502a297560a67b"
 dependencies = [
  "anyhow",
+<<<<<<< HEAD
  "heck",
+=======
+ "heck 0.4.1",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  "proc-macro-crate",
  "proc-macro-error",
  "proc-macro2",
@@ -1542,9 +1875,15 @@ checksum = "d2fabcfbdc87f4758337ca535fb41a6d701b65693ce38287d856d1674551ec9b"
 
 [[package]]
 name = "glow"
+<<<<<<< HEAD
 version = "0.12.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "ca0fe580e4b60a8ab24a868bc08e2f03cbcb20d3d676601fa909386713333728"
+=======
+version = "0.12.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "4e007a07a24de5ecae94160f141029e9a347282cfe25d1d58d85d845cf3130f1"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 dependencies = [
  "js-sys",
  "slotmap",
@@ -1554,11 +1893,19 @@ dependencies = [
 
 [[package]]
 name = "glutin"
+<<<<<<< HEAD
 version = "0.30.10"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "8fc93b03242719b8ad39fb26ed2b01737144ce7bd4bfc7adadcef806596760fe"
 dependencies = [
  "bitflags 1.3.2",
+=======
+version = "0.30.7"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "f89bab9ec7715de13d5d5402238e66f48e3a5ae636ebb45aba4013c962e2ff15"
+dependencies = [
+ "bitflags",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  "cfg_aliases",
  "cgl",
  "core-foundation",
@@ -1566,7 +1913,11 @@ dependencies = [
  "glutin_egl_sys",
  "glutin_glx_sys",
  "glutin_wgl_sys",
+<<<<<<< HEAD
  "libloading 0.7.4",
+=======
+ "libloading",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  "objc2",
  "once_cell",
  "raw-window-handle",
@@ -1589,9 +1940,15 @@ dependencies = [
 
 [[package]]
 name = "glutin_egl_sys"
+<<<<<<< HEAD
 version = "0.5.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "af784eb26c5a68ec85391268e074f0aa618c096eadb5d6330b0911cf34fe57c5"
+=======
+version = "0.4.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "e5aaf0abb5c4148685b33101ae326a207946b4d3764d6cdc79f8316cdaa8367d"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 dependencies = [
  "gl_generator",
  "windows-sys 0.45.0",
@@ -1634,7 +1991,11 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "e4d3507d43908c866c805f74c9dd593c0ce7ba5c38e576e41846639cdcd4bee6"
 dependencies = [
  "atk",
+<<<<<<< HEAD
  "bitflags 1.3.2",
+=======
+ "bitflags",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  "cairo-rs",
  "field-offset",
  "futures-channel",
@@ -1704,9 +2065,24 @@ dependencies = [
 
 [[package]]
 name = "hashbrown"
+<<<<<<< HEAD
 version = "0.14.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "2c6201b9ff9fd90a5a3bac2e56a830d0caa509576f0e503818ee82c181b3437a"
+=======
+version = "0.12.3"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "8a9ee70c43aaf417c914396645a0fa852624801b24ebb7ae78fe8272889ac888"
+
+[[package]]
+name = "heck"
+version = "0.3.3"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "6d621efb26863f0e9924c6ac577e8275e5e6b77455db64ffa6c65c904e9e132c"
+dependencies = [
+ "unicode-segmentation",
+]
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 [[package]]
 name = "heck"
@@ -1716,9 +2092,24 @@ checksum = "95505c38b4572b2d910cecb0281560f54b440a19336cbbcb27bf6ce6adc6f5a8"
 
 [[package]]
 name = "hermit-abi"
+<<<<<<< HEAD
 version = "0.3.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "443144c8cdadd93ebf52ddb4056d257f5b52c04d3c804e657d19eb73fc33668b"
+=======
+version = "0.2.6"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "ee512640fe35acbfb4bb779db6f0d80704c2cacfa2e39b601ef3e3f47d1ae4c7"
+dependencies = [
+ "libc",
+]
+
+[[package]]
+name = "hermit-abi"
+version = "0.3.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "fed44880c466736ef9a5c5b5facefb5ed0785676d0c02d612db14e54f0d84286"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 [[package]]
 name = "hex"
@@ -1727,6 +2118,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "7f24254aa9a54b5c858eaee2f5bccdb46aaf0e486a595ed5fd8f86ba55232a70"
 
 [[package]]
+<<<<<<< HEAD
 name = "home"
 version = "0.5.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1736,12 +2128,15 @@ dependencies = [
 ]
 
 [[package]]
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 name = "humantime"
 version = "2.1.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "9a3a5bfb195931eeb336b2a7b4d761daec841b97f947d34394601737a7bba5e4"
 
 [[package]]
+<<<<<<< HEAD
 name = "iana-time-zone"
 version = "0.1.57"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1769,6 +2164,12 @@ name = "idna"
 version = "0.4.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "7d20d6b07bfbc108882d88ed8e37d39636dcc260e15e30c45e6ba089610b917c"
+=======
+name = "idna"
+version = "0.3.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "e14ddfc70884202db2244c223200c204c2bda1bc6e0998d11b5e024d657209e6"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 dependencies = [
  "unicode-bidi",
  "unicode-normalization",
@@ -1776,21 +2177,37 @@ dependencies = [
 
 [[package]]
 name = "indexmap"
+<<<<<<< HEAD
 version = "2.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "d5477fe2230a79769d8dc68e0eabf5437907c0457a5614a9e8dddb67f65eb65d"
 dependencies = [
  "equivalent",
+=======
+version = "1.9.3"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "bd070e393353796e801d209ad339e89596eb4c8d430d18ede6a1cced8fafbd99"
+dependencies = [
+ "autocfg",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  "hashbrown",
 ]
 
 [[package]]
 name = "inotify"
+<<<<<<< HEAD
 version = "0.10.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "fdd168d97690d0b8c412d6b6c10360277f4d7ee495c5d0d5d5fe0854923255cc"
 dependencies = [
  "bitflags 1.3.2",
+=======
+version = "0.10.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "abf888f9575c290197b2c948dc9e9ff10bd1a39ad1ea8585f734585fa6b9d3f9"
+dependencies = [
+ "bitflags",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  "futures-core",
  "inotify-sys",
  "libc",
@@ -1820,23 +2237,41 @@ dependencies = [
 
 [[package]]
 name = "io-lifetimes"
+<<<<<<< HEAD
 version = "1.0.11"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "eae7b9aee968036d54dce06cebaefd919e4472e753296daccd6d344e3e2df0c2"
 dependencies = [
  "hermit-abi",
+=======
+version = "1.0.10"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "9c66c74d2ae7e79a5a8f7ac924adbe38ee42a859c6539ad869eb51f0b52dc220"
+dependencies = [
+ "hermit-abi 0.3.1",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  "libc",
  "windows-sys 0.48.0",
 ]
 
 [[package]]
 name = "is-terminal"
+<<<<<<< HEAD
 version = "0.4.9"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "cb0889898416213fab133e1d33a0e5858a48177452750691bde3666d0fdbaf8b"
 dependencies = [
  "hermit-abi",
  "rustix 0.38.9",
+=======
+version = "0.4.7"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "adcf93614601c8129ddf72e2d5633df827ba6551541c6d8c59520a371475be1f"
+dependencies = [
+ "hermit-abi 0.3.1",
+ "io-lifetimes",
+ "rustix",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  "windows-sys 0.48.0",
 ]
 
@@ -1851,9 +2286,15 @@ dependencies = [
 
 [[package]]
 name = "itoa"
+<<<<<<< HEAD
 version = "1.0.9"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "af150ab688ff2122fcef229be89cb50dd66af9e01a4ff320cc137eecc9bacc38"
+=======
+version = "1.0.6"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "453ad9f582a441959e5f0d088b02ce04cfe8d51a8eaf077f12ac6d3e94164ca6"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 [[package]]
 name = "jni"
@@ -1933,15 +2374,25 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "08fcb2bea89cee9613982501ec83eaa2d09256b24540ae463c52a28906163918"
 dependencies = [
  "gtk-sys",
+<<<<<<< HEAD
  "libloading 0.7.4",
+=======
+ "libloading",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  "once_cell",
 ]
 
 [[package]]
 name = "libc"
+<<<<<<< HEAD
 version = "0.2.147"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "b4668fb0ea861c1df094127ac5f1da3409a82116a4ba74fca2e58ef927159bb3"
+=======
+version = "0.2.142"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "6a987beff54b60ffa6d51982e1aa1146bc42f19bd26be28b0586f252fccf5317"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 [[package]]
 name = "libloading"
@@ -1954,6 +2405,7 @@ dependencies = [
 ]
 
 [[package]]
+<<<<<<< HEAD
 name = "libloading"
 version = "0.8.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1964,6 +2416,8 @@ dependencies = [
 ]
 
 [[package]]
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 name = "libudev-sys"
 version = "0.1.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1987,6 +2441,7 @@ dependencies = [
 
 [[package]]
 name = "linux-raw-sys"
+<<<<<<< HEAD
 version = "0.3.8"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "ef53942eb7bf7ff43a617b3e2c1c4a5ecf5944a7c1bc12d7ee39bbb15e5c1519"
@@ -2002,6 +2457,17 @@ name = "lock_api"
 version = "0.4.10"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "c1cc9717a20b1bb222f333e6a92fd32f7d8a18ddc5a3191a11af45dcbf4dcd16"
+=======
+version = "0.3.4"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "36eb31c1778188ae1e64398743890d0877fef36d11521ac60406b42016e8c2cf"
+
+[[package]]
+name = "lock_api"
+version = "0.4.9"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "435011366fe56583b16cf956f9df0095b405b82d76425bc8981c0e22e60ec4df"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 dependencies = [
  "autocfg",
  "scopeguard",
@@ -2009,6 +2475,7 @@ dependencies = [
 
 [[package]]
 name = "log"
+<<<<<<< HEAD
 version = "0.4.20"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "b5e6163cb8c49088c2c36f57875e58ccd8c87c7427f7fbd50ea6710b2f3f2e8f"
@@ -2018,6 +2485,20 @@ name = "logind-zbus"
 version = "3.1.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "c07a2542f6e91ea92780158654852190edb2ba0b232d9d00d649d0c691cb7eb3"
+=======
+version = "0.4.17"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "abb12e687cfb44aa40f41fc3978ef76448f9b6038cad6aef4259d3c095a2382e"
+dependencies = [
+ "cfg-if",
+]
+
+[[package]]
+name = "logind-zbus"
+version = "3.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "3f2cfc54565c8d002ad7344ec08ce512c269b2de56dea59850708691e4b18fe3"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 dependencies = [
  "serde",
  "zbus",
@@ -2025,9 +2506,15 @@ dependencies = [
 
 [[package]]
 name = "mac-notification-sys"
+<<<<<<< HEAD
 version = "0.5.9"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "9402858e87f85f88bf518bd2e68450640df1c99b1ddb3ea28c4d5d823bb54cdd"
+=======
+version = "0.5.6"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "3e72d50edb17756489e79d52eb146927bec8eba9dd48faadf9ef08bca3791ad5"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 dependencies = [
  "cc",
  "dirs-next",
@@ -2080,9 +2567,15 @@ dependencies = [
 
 [[package]]
 name = "memoffset"
+<<<<<<< HEAD
 version = "0.9.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "5a634b1c61a95585bd15607c6ab0c4e5b226e695ff2800ba0cdccddf208c406c"
+=======
+version = "0.8.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "d61c719bcfbcf5d62b3a09efa6088de8c54bc0bfcd3ea7ae39fcc186108b8de1"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 dependencies = [
  "autocfg",
 ]
@@ -2111,6 +2604,18 @@ dependencies = [
 
 [[package]]
 name = "miniz_oxide"
+<<<<<<< HEAD
+=======
+version = "0.6.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "b275950c28b37e794e8c55d88aeb5e139d0ce23fdbbeda68f8d7174abdf9e8fa"
+dependencies = [
+ "adler",
+]
+
+[[package]]
+name = "miniz_oxide"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 version = "0.7.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "e7810e0be55b428ada41041c41f32c9f1a42817901b4ccf45fa3d4b6561e74c7"
@@ -2121,14 +2626,24 @@ dependencies = [
 
 [[package]]
 name = "mio"
+<<<<<<< HEAD
 version = "0.8.8"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "927a765cd3fc26206e66b296465fa9d3e5ab003e651c1b3c060e7956d96b19d2"
+=======
+version = "0.8.6"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "5b9d9a46eff5b4ff64b45a9e316a6d1e0bc719ef429cbec4dc630684212bfdf9"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 dependencies = [
  "libc",
  "log",
  "wasi",
+<<<<<<< HEAD
  "windows-sys 0.48.0",
+=======
+ "windows-sys 0.45.0",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 ]
 
 [[package]]
@@ -2137,10 +2652,17 @@ version = "0.7.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "451422b7e4718271c8b5b3aadf5adedba43dc76312454b387e98fae0fc951aa0"
 dependencies = [
+<<<<<<< HEAD
  "bitflags 1.3.2",
  "jni-sys",
  "ndk-sys",
  "num_enum 0.5.11",
+=======
+ "bitflags",
+ "jni-sys",
+ "ndk-sys",
+ "num_enum",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  "raw-window-handle",
  "thiserror",
 ]
@@ -2166,7 +2688,11 @@ version = "0.24.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "fa52e972a9a719cecb6864fb88568781eb706bac2cd1d4f04a648542dbf78069"
 dependencies = [
+<<<<<<< HEAD
  "bitflags 1.3.2",
+=======
+ "bitflags",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  "cfg-if",
  "libc",
  "memoffset 0.6.5",
@@ -2179,7 +2705,11 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "f346ff70e7dbfd675fe90590b92d59ef2de15a8779ae305ebcbfd3f0caf59be4"
 dependencies = [
  "autocfg",
+<<<<<<< HEAD
  "bitflags 1.3.2",
+=======
+ "bitflags",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  "cfg-if",
  "libc",
  "memoffset 0.6.5",
@@ -2191,7 +2721,11 @@ version = "0.26.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "bfdda3d196821d6af13126e40375cdf7da646a96114af134d5f417a9a1dc8e1a"
 dependencies = [
+<<<<<<< HEAD
  "bitflags 1.3.2",
+=======
+ "bitflags",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  "cfg-if",
  "libc",
  "memoffset 0.7.1",
@@ -2228,20 +2762,34 @@ dependencies = [
 
 [[package]]
 name = "num-traits"
+<<<<<<< HEAD
 version = "0.2.16"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "f30b0abd723be7e2ffca1272140fac1a2f084c77ec3e123c192b66af1ee9e6c2"
+=======
+version = "0.2.15"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "578ede34cf02f8924ab9447f50c28075b4d3e5b269972345e7e0372b38c6cdcd"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 dependencies = [
  "autocfg",
 ]
 
 [[package]]
 name = "num_cpus"
+<<<<<<< HEAD
 version = "1.16.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "4161fcb6d602d4d2081af7c3a45852d875a03dd337a6bfdd6e06407b61342a43"
 dependencies = [
  "hermit-abi",
+=======
+version = "1.15.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "0fac9e2da13b5eb447a6ce3d392f23a29d8694bff781bf03a16cd9ac8697593b"
+dependencies = [
+ "hermit-abi 0.2.6",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  "libc",
 ]
 
@@ -2251,6 +2799,7 @@ version = "0.5.11"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "1f646caf906c20226733ed5b1374287eb97e3c2a5c227ce668c1f2ce20ae57c9"
 dependencies = [
+<<<<<<< HEAD
  "num_enum_derive 0.5.11",
 ]
 
@@ -2261,6 +2810,9 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "7a015b430d3c108a207fd776d2e2196aaf8b1cf8cf93253e3a097ff3085076a1"
 dependencies = [
  "num_enum_derive 0.6.1",
+=======
+ "num_enum_derive",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 ]
 
 [[package]]
@@ -2276,6 +2828,7 @@ dependencies = [
 ]
 
 [[package]]
+<<<<<<< HEAD
 name = "num_enum_derive"
 version = "0.6.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2288,6 +2841,8 @@ dependencies = [
 ]
 
 [[package]]
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 name = "numtoa"
 version = "0.2.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2349,6 +2904,7 @@ dependencies = [
 ]
 
 [[package]]
+<<<<<<< HEAD
 name = "object"
 version = "0.32.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2370,6 +2926,23 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "8378ac0dfbd4e7895f2d2c1f1345cab3836910baf3a300b000d04250f0c8428f"
 dependencies = [
  "redox_syscall 0.3.5",
+=======
+name = "once_cell"
+version = "1.17.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "b7e5500299e16ebb147ae15a00a942af264cf3688f47923b8fc2cd5858f23ad3"
+
+[[package]]
+name = "orbclient"
+version = "0.3.44"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "0e9829e16c5e112e94efb5e2ad1fe17f8c1c99bb0fcdc8c65c44e935d904767d"
+dependencies = [
+ "cfg-if",
+ "redox_syscall 0.2.16",
+ "wasm-bindgen",
+ "web-sys",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 ]
 
 [[package]]
@@ -2397,7 +2970,11 @@ version = "0.16.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "cdff66b271861037b89d028656184059e03b0b6ccb36003820be19f7200b1e94"
 dependencies = [
+<<<<<<< HEAD
  "bitflags 1.3.2",
+=======
+ "bitflags",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  "gio",
  "glib",
  "libc",
@@ -2435,6 +3012,7 @@ dependencies = [
 
 [[package]]
 name = "parking_lot_core"
+<<<<<<< HEAD
 version = "0.9.8"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "93f00c865fe7cabf650081affecd3871070f26767e7b2070a3ffae14c654b447"
@@ -2444,13 +3022,30 @@ dependencies = [
  "redox_syscall 0.3.5",
  "smallvec",
  "windows-targets 0.48.5",
+=======
+version = "0.9.7"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "9069cbb9f99e3a5083476ccb29ceb1de18b9118cafa53e90c9551235de2b9521"
+dependencies = [
+ "cfg-if",
+ "libc",
+ "redox_syscall 0.2.16",
+ "smallvec",
+ "windows-sys 0.45.0",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 ]
 
 [[package]]
 name = "paste"
+<<<<<<< HEAD
 version = "1.0.14"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "de3145af08024dea9fa9914f381a17b8fc6034dfb00f3a84013f7ff43f29ed4c"
+=======
+version = "1.0.12"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "9f746c4065a8fa3fe23974dd82f15431cc8d40779821001404d10d2e79ca7d79"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 [[package]]
 name = "peeking_take_while"
@@ -2460,6 +3055,7 @@ checksum = "19b17cddbe7ec3f8bc800887bab5e717348c95ea2ca0b1bf0837fb964dc67099"
 
 [[package]]
 name = "percent-encoding"
+<<<<<<< HEAD
 version = "2.3.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "9b2a4787296e9989611394c33f193f676704af1686e70b8f8033ab5ba9a35a94"
@@ -2469,6 +3065,17 @@ name = "pin-project-lite"
 version = "0.2.13"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "8afb450f006bf6385ca15ef45d71d2288452bc3683ce2e2cacc0d18e4be60b58"
+=======
+version = "2.2.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "478c572c3d73181ff3c2539045f6eb99e5491218eae919370993b890cdbdd98e"
+
+[[package]]
+name = "pin-project-lite"
+version = "0.2.9"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "e0a7ae3ac2f1173085d398531c705756c94a4c56843785df85a60c1a0afac116"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 [[package]]
 name = "pin-utils"
@@ -2484,6 +3091,7 @@ checksum = "0c2b6992b377680150280d4708bda8207ba9e71f70507b5504f2e28d8e8e48c1"
 
 [[package]]
 name = "pkg-config"
+<<<<<<< HEAD
 version = "0.3.27"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "26072860ba924cbfa98ea39c8c19b4dd6a4a25423dbdf219c1eca91aa0cf6964"
@@ -2495,6 +3103,19 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "dd75bf2d8dd3702b9707cdbc56a5b9ef42cec752eb8b3bafc01234558442aa64"
 dependencies = [
  "bitflags 1.3.2",
+=======
+version = "0.3.26"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "6ac9a59f73473f1b8d852421e59e64809f025994837ef743615c6d0c5b305160"
+
+[[package]]
+name = "png"
+version = "0.17.8"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "aaeebc51f9e7d2c150d3f3bfeb667f2aa985db5ef1e3d212847bdedb488beeaa"
+dependencies = [
+ "bitflags",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  "crc32fast",
  "fdeflate",
  "flate2",
@@ -2518,7 +3139,11 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "4b2d323e8ca7996b3e23126511a523f7e62924d93ecd5ae73b333815b0eb3dce"
 dependencies = [
  "autocfg",
+<<<<<<< HEAD
  "bitflags 1.3.2",
+=======
+ "bitflags",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  "cfg-if",
  "concurrent-queue",
  "libc",
@@ -2569,9 +3194,15 @@ dependencies = [
 
 [[package]]
 name = "proc-macro2"
+<<<<<<< HEAD
 version = "1.0.66"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "18fb31db3f9bddb2ea821cde30a9f70117e3f119938b5ee630b7403aa6e2ead9"
+=======
+version = "1.0.56"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "2b63bdb0cd06f1f4dedf69b254734f9b45af66e4a031e42a7480257d9898b435"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 dependencies = [
  "unicode-ident",
 ]
@@ -2587,9 +3218,15 @@ dependencies = [
 
 [[package]]
 name = "quote"
+<<<<<<< HEAD
 version = "1.0.33"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "5267fca4496028628a95160fc423a33e8b2e6af8a5302579e322e4b520293cae"
+=======
+version = "1.0.26"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "4424af4bf778aae2051a77b60283332f386554255d722233d09fbfc7e30da2fc"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 dependencies = [
  "proc-macro2",
 ]
@@ -2636,7 +3273,11 @@ version = "0.2.16"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "fb5a58c1855b4b6819d59012155603f0b22ad30cad752600aadfcb695265519a"
 dependencies = [
+<<<<<<< HEAD
  "bitflags 1.3.2",
+=======
+ "bitflags",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 ]
 
 [[package]]
@@ -2645,7 +3286,11 @@ version = "0.3.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "567664f262709473930a4bf9e51bf2ebf3348f2e748ccc50dea20646858f8f29"
 dependencies = [
+<<<<<<< HEAD
  "bitflags 1.3.2",
+=======
+ "bitflags",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 ]
 
 [[package]]
@@ -2661,6 +3306,7 @@ dependencies = [
 
 [[package]]
 name = "regex"
+<<<<<<< HEAD
 version = "1.9.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "81bc1d4caf89fac26a70747fe603c130093b53c773888797a6329091246d651a"
@@ -2676,6 +3322,11 @@ name = "regex-automata"
 version = "0.3.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "fed1ceff11a1dddaee50c9dc8e4938bd106e9d89ae372f192311e7da498e3b69"
+=======
+version = "1.8.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "af83e617f331cc6ae2da5443c602dfa5af81e517212d9d611a5b3ba1777b5370"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 dependencies = [
  "aho-corasick",
  "memchr",
@@ -2684,6 +3335,7 @@ dependencies = [
 
 [[package]]
 name = "regex-syntax"
+<<<<<<< HEAD
 version = "0.7.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "e5ea92a5b6195c6ef2a0295ea818b312502c6fc94dde986c5553242e18fd4ce2"
@@ -2694,6 +3346,18 @@ version = "4.7.1"
 dependencies = [
  "asusd",
  "cargo-husky",
+=======
+version = "0.7.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "a5996294f19bd3aae0453a862ad728f60e6600695733dd5df01da90c54363a3c"
+
+[[package]]
+name = "rog-control-center"
+version = "4.6.2"
+dependencies = [
+ "cargo-husky",
+ "daemon",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  "dirs",
  "eframe",
  "egui",
@@ -2723,7 +3387,11 @@ dependencies = [
 
 [[package]]
 name = "rog_anime"
+<<<<<<< HEAD
 version = "4.7.1"
+=======
+version = "4.6.2"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 dependencies = [
  "cargo-husky",
  "gif",
@@ -2734,13 +3402,21 @@ dependencies = [
  "serde",
  "serde_derive",
  "sysfs-class",
+<<<<<<< HEAD
  "typeshare",
+=======
+ "uhid-virt",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  "zbus",
 ]
 
 [[package]]
 name = "rog_aura"
+<<<<<<< HEAD
 version = "4.7.1"
+=======
+version = "4.6.2"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 dependencies = [
  "cargo-husky",
  "log",
@@ -2748,13 +3424,20 @@ dependencies = [
  "serde",
  "serde_derive",
  "sysfs-class",
+<<<<<<< HEAD
  "typeshare",
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  "zbus",
 ]
 
 [[package]]
 name = "rog_dbus"
+<<<<<<< HEAD
 version = "4.7.1"
+=======
+version = "4.6.2"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 dependencies = [
  "cargo-husky",
  "rog_anime",
@@ -2766,25 +3449,37 @@ dependencies = [
 
 [[package]]
 name = "rog_platform"
+<<<<<<< HEAD
 version = "4.7.1"
+=======
+version = "4.6.2"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 dependencies = [
  "cargo-husky",
  "concat-idents",
  "inotify",
  "log",
  "rog_aura",
+<<<<<<< HEAD
  "rog_profiles",
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  "rusb",
  "serde",
  "serde_derive",
  "sysfs-class",
+<<<<<<< HEAD
  "typeshare",
  "udev",
+=======
+ "udev 0.7.0",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  "zbus",
 ]
 
 [[package]]
 name = "rog_profiles"
+<<<<<<< HEAD
 version = "4.7.1"
 dependencies = [
  "cargo-husky",
@@ -2793,10 +3488,19 @@ dependencies = [
  "serde_derive",
  "typeshare",
  "udev",
+=======
+version = "4.6.2"
+dependencies = [
+ "cargo-husky",
+ "serde",
+ "serde_derive",
+ "udev 0.7.0",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  "zbus",
 ]
 
 [[package]]
+<<<<<<< HEAD
 name = "rog_simulators"
 version = "4.7.1"
 dependencies = [
@@ -2817,25 +3521,44 @@ dependencies = [
  "bitflags 2.4.0",
  "serde",
  "serde_derive",
+=======
+name = "ron"
+version = "0.8.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "300a51053b1cb55c80b7a9fde4120726ddf25ca241a1cbb926626f62fb136bff"
+dependencies = [
+ "base64",
+ "bitflags",
+ "serde",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 ]
 
 [[package]]
 name = "rusb"
+<<<<<<< HEAD
 version = "0.9.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "45fff149b6033f25e825cbb7b2c625a11ee8e6dac09264d49beb125e39aa97bf"
+=======
+version = "0.9.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "44a8c36914f9b1a3be712c1dfa48c9b397131f9a75707e570a391735f785c5d1"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 dependencies = [
  "libc",
  "libusb1-sys",
 ]
 
 [[package]]
+<<<<<<< HEAD
 name = "rustc-demangle"
 version = "0.1.23"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "d626bb9dae77e28219937af045c257c28bfd3f69333c512553507f5f9798cb76"
 
 [[package]]
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 name = "rustc-hash"
 version = "1.1.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2852,6 +3575,7 @@ dependencies = [
 
 [[package]]
 name = "rustix"
+<<<<<<< HEAD
 version = "0.37.23"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "4d69718bf81c6127a49dc64e44a742e8bb9213c0ff8869a22c308f84c1d4ab06"
@@ -2874,14 +3598,31 @@ dependencies = [
  "errno",
  "libc",
  "linux-raw-sys 0.4.5",
+=======
+version = "0.37.15"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "a0661814f891c57c930a610266415528da53c4933e6dea5fb350cbfe048a9ece"
+dependencies = [
+ "bitflags",
+ "errno",
+ "io-lifetimes",
+ "libc",
+ "linux-raw-sys",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  "windows-sys 0.48.0",
 ]
 
 [[package]]
 name = "ryu"
+<<<<<<< HEAD
 version = "1.0.15"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "1ad4cc8da4ef723ed60bced201181d83791ad433213d8c24efffda1eec85d741"
+=======
+version = "1.0.13"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "f91339c0467de62360649f8d3e185ca8de4224ff281f66000de5eb2a77a79041"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 [[package]]
 name = "same-file"
@@ -2900,9 +3641,15 @@ checksum = "e1cf6437eb19a8f4a6cc0f7dca544973b0b78843adbfeb3683d1a94a0024a294"
 
 [[package]]
 name = "scopeguard"
+<<<<<<< HEAD
 version = "1.2.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "94143f37725109f92c262ed2cf5e59bce7498c01bcc1502d7b9afe439a4e9f49"
+=======
+version = "1.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "d29ab0c6d3fc0ee92fe66e2d99f700eab17a8d57d1c1d3b748380fb20baa78cd"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 [[package]]
 name = "sctk-adwaita"
@@ -2918,6 +3665,7 @@ dependencies = [
 ]
 
 [[package]]
+<<<<<<< HEAD
 name = "sdl2"
 version = "0.35.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2951,12 +3699,25 @@ name = "serde"
 version = "1.0.188"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "cf9e0fcba69a370eed61bcf2b728575f726b50b55cba78064753d708ddc7549e"
+=======
+name = "semver"
+version = "1.0.17"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "bebd363326d05ec3e2f532ab7660680f3b02130d780c299bca73469d521bc0ed"
+
+[[package]]
+name = "serde"
+version = "1.0.160"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "bb2f3770c8bce3bcda7e149193a069a0f4365bda1fa5cd88e03bca26afc1216c"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 dependencies = [
  "serde_derive",
 ]
 
 [[package]]
 name = "serde_derive"
+<<<<<<< HEAD
 version = "1.0.188"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "4eca7ac642d82aa35b60049a6eccb4be6be75e599bd2e9adb5f875a737654af2"
@@ -2964,13 +3725,28 @@ dependencies = [
  "proc-macro2",
  "quote",
  "syn 2.0.29",
+=======
+version = "1.0.160"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "291a097c63d8497e00160b166a967a4a79c64f3facdd01cbd7502231688d77df"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "syn 2.0.15",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 ]
 
 [[package]]
 name = "serde_json"
+<<<<<<< HEAD
 version = "1.0.105"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "693151e1ac27563d6dbcec9dee9fbd5da8539b20fa14ad3752b2e6d363ace360"
+=======
+version = "1.0.96"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "057d394a50403bcac12672b2b18fb387ab6d289d957dab67dd201875391e52f1"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 dependencies = [
  "itoa",
  "ryu",
@@ -2979,6 +3755,7 @@ dependencies = [
 
 [[package]]
 name = "serde_repr"
+<<<<<<< HEAD
 version = "0.1.16"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "8725e1dfadb3a50f7e5ce0b1a540466f6ed3fe7a0fca2ac2b8b831d31316bd00"
@@ -2986,13 +3763,28 @@ dependencies = [
  "proc-macro2",
  "quote",
  "syn 2.0.29",
+=======
+version = "0.1.12"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "bcec881020c684085e55a25f7fd888954d56609ef363479dc5a1305eb0d40cab"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "syn 2.0.15",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 ]
 
 [[package]]
 name = "serde_spanned"
+<<<<<<< HEAD
 version = "0.6.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "96426c9936fd7a0124915f9185ea1d20aa9445cc9821142f0a73bc9207a2e186"
+=======
+version = "0.6.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "0efd8caf556a6cebd3b285caf480045fcc1ac04f6bd786b09a6f11af30c4fcf4"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 dependencies = [
  "serde",
 ]
@@ -3016,9 +3808,15 @@ checksum = "43b2853a4d09f215c24cc5489c992ce46052d359b5109343cbafbf26bc62f8a3"
 
 [[package]]
 name = "signal-hook"
+<<<<<<< HEAD
 version = "0.3.17"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "8621587d4798caf8eb44879d42e56b9a93ea5dcd315a6487c357130095b62801"
+=======
+version = "0.3.15"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "732768f1176d21d09e076c23a93123d40bba92d50c4058da34d45c8de8e682b9"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 dependencies = [
  "libc",
  "signal-hook-registry",
@@ -3035,6 +3833,7 @@ dependencies = [
 
 [[package]]
 name = "simd-adler32"
+<<<<<<< HEAD
 version = "0.3.7"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "d66dc143e6b11c1eddc06d5c423cfc97062865baf299914ab64caa38182078fe"
@@ -3044,6 +3843,17 @@ name = "slab"
 version = "0.4.9"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "8f92a496fb766b417c996b9c5e57daf2f7ad3b0bebe1ccfca4856390e3d3bb67"
+=======
+version = "0.3.5"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "238abfbb77c1915110ad968465608b68e869e0772622c9656714e73e5a1a522f"
+
+[[package]]
+name = "slab"
+version = "0.4.8"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "6528351c9bc8ab22353f9d776db39a20288e8d6c37ef8cfe3317cf875eecfc2d"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 dependencies = [
  "autocfg",
 ]
@@ -3059,9 +3869,15 @@ dependencies = [
 
 [[package]]
 name = "smallvec"
+<<<<<<< HEAD
 version = "1.11.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "62bb4feee49fdd9f707ef802e22365a35de4b7b299de4763d44bfea899442ff9"
+=======
+version = "1.10.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "a507befe795404456341dfab10cef66ead4c041f62b8b11bbb92bffe5d0953e0"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 [[package]]
 name = "smithay-client-toolkit"
@@ -3069,7 +3885,11 @@ version = "0.16.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "f307c47d32d2715eb2e0ece5589057820e0e5e70d07c247d1063e844e107f454"
 dependencies = [
+<<<<<<< HEAD
  "bitflags 1.3.2",
+=======
+ "bitflags",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  "calloop",
  "dlib",
  "lazy_static",
@@ -3120,6 +3940,7 @@ dependencies = [
 ]
 
 [[package]]
+<<<<<<< HEAD
 name = "socket2"
 version = "0.5.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -3130,6 +3951,8 @@ dependencies = [
 ]
 
 [[package]]
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 name = "static_assertions"
 version = "1.1.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -3143,6 +3966,7 @@ checksum = "9e08d8363704e6c71fc928674353e6b7c23dcea9d82d7012c8faf2a3a025f8d0"
 
 [[package]]
 name = "strict-num"
+<<<<<<< HEAD
 version = "0.1.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "6637bab7722d379c8b41ba849228d680cc12d0a45ba1fa2b48f2a30577a06731"
@@ -3151,6 +3975,37 @@ checksum = "6637bab7722d379c8b41ba849228d680cc12d0a45ba1fa2b48f2a30577a06731"
 name = "supergfxctl"
 version = "5.1.2"
 source = "git+https://gitlab.com/asus-linux/supergfxctl.git#c2a1bb3461c7abbcdabecdc463d668555120f953"
+=======
+version = "0.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "9df65f20698aeed245efdde3628a6b559ea1239bbb871af1b6e3b58c413b2bd1"
+
+[[package]]
+name = "strum"
+version = "0.22.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "f7ac893c7d471c8a21f31cfe213ec4f6d9afeed25537c772e08ef3f005f8729e"
+dependencies = [
+ "strum_macros",
+]
+
+[[package]]
+name = "strum_macros"
+version = "0.22.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "339f799d8b549e3744c7ac7feb216383e4005d94bdb22561b3ab8f3b808ae9fb"
+dependencies = [
+ "heck 0.3.3",
+ "proc-macro2",
+ "quote",
+ "syn 1.0.109",
+]
+
+[[package]]
+name = "supergfxctl"
+version = "5.1.1"
+source = "git+https://gitlab.com/asus-linux/supergfxctl.git#47cb9a2138c28a4484919131ec94d7103e0f1447"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 dependencies = [
  "log",
  "logind-zbus",
@@ -3158,8 +4013,15 @@ dependencies = [
  "serde_derive",
  "serde_json",
  "tokio",
+<<<<<<< HEAD
  "udev",
  "zbus",
+=======
+ "udev 0.6.3",
+ "zbus",
+ "zvariant",
+ "zvariant_derive",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 ]
 
 [[package]]
@@ -3175,9 +4037,15 @@ dependencies = [
 
 [[package]]
 name = "syn"
+<<<<<<< HEAD
 version = "2.0.29"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "c324c494eba9d92503e6f1ef2e6df781e78f6a7705a0202d9801b198807d518a"
+=======
+version = "2.0.15"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "a34fcf3e8b60f57e6a14301a2e916d323af98b0ea63c599441eec8558660c822"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 dependencies = [
  "proc-macro2",
  "quote",
@@ -3195,6 +4063,7 @@ dependencies = [
 
 [[package]]
 name = "system-deps"
+<<<<<<< HEAD
 version = "6.1.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "30c2de8a4d8f4b823d634affc9cd2a74ec98c53a756f317e529a48046cbf71f3"
@@ -3203,14 +4072,30 @@ dependencies = [
  "heck",
  "pkg-config",
  "toml 0.7.6",
+=======
+version = "6.0.5"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "d0fe581ad25d11420b873cf9aedaca0419c2b411487b134d4d21065f3d092055"
+dependencies = [
+ "cfg-expr",
+ "heck 0.4.1",
+ "pkg-config",
+ "toml 0.7.3",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  "version-compare",
 ]
 
 [[package]]
 name = "systemd-zbus"
+<<<<<<< HEAD
 version = "0.1.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "ffbb1b6ea6d96b14a7e94532711efc4106337fe8b1d6bdf8ba5318012a9fa7e3"
+=======
+version = "0.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "abba675e441b13248eaf74f1acfacf64adc7b5c030f2f3ff66cc7e02b9a0c417"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 dependencies = [
  "serde",
  "zbus",
@@ -3218,6 +4103,7 @@ dependencies = [
 
 [[package]]
 name = "target-lexicon"
+<<<<<<< HEAD
 version = "0.12.11"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "9d0e916b1148c8e263850e1ebcbd046f333e0683c724876bb0da63ea4373dc8a"
@@ -3229,11 +4115,26 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "4f5bff1d532fead7c43324a0fa33643b8621a47ce2944a633be4cb6c0240898f"
 dependencies = [
  "quick-xml",
+=======
+version = "0.12.7"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "fd1ba337640d60c3e96bc6f0638a939b9c9a7f2c316a1598c279828b3d1dc8c5"
+
+[[package]]
+name = "tauri-winrt-notification"
+version = "0.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "c58de036c4d2e20717024de2a3c4bf56c301f07b21bc8ef9b57189fce06f1f3b"
+dependencies = [
+ "quick-xml",
+ "strum",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  "windows 0.39.0",
 ]
 
 [[package]]
 name = "tempfile"
+<<<<<<< HEAD
 version = "3.8.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "cb94d2f3cc536af71caac6b6fcebf65860b347e7ce0cc9ebe8f70d3e521054ef"
@@ -3243,6 +4144,17 @@ dependencies = [
  "redox_syscall 0.3.5",
  "rustix 0.38.9",
  "windows-sys 0.48.0",
+=======
+version = "3.5.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "b9fbec84f381d5795b08656e4912bec604d162bff9291d6189a78f4c8ab87998"
+dependencies = [
+ "cfg-if",
+ "fastrand",
+ "redox_syscall 0.3.5",
+ "rustix",
+ "windows-sys 0.45.0",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 ]
 
 [[package]]
@@ -3256,15 +4168,22 @@ dependencies = [
 
 [[package]]
 name = "thiserror"
+<<<<<<< HEAD
 version = "1.0.47"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "97a802ec30afc17eee47b2855fc72e0c4cd62be9b4efe6591edde0ec5bd68d8f"
+=======
+version = "1.0.40"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "978c9a314bd8dc99be594bc3c175faaa9794be04a5a5e153caba6915336cebac"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 dependencies = [
  "thiserror-impl",
 ]
 
 [[package]]
 name = "thiserror-impl"
+<<<<<<< HEAD
 version = "1.0.47"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "6bb623b56e39ab7dcd4b1b98bb6c8f8d907ed255b18de254088016b27a8ee19b"
@@ -3272,24 +4191,46 @@ dependencies = [
  "proc-macro2",
  "quote",
  "syn 2.0.29",
+=======
+version = "1.0.40"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "f9456a42c5b0d803c8cd86e73dd7cc9edd429499f37a3550d286d5e86720569f"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "syn 2.0.15",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 ]
 
 [[package]]
 name = "time"
+<<<<<<< HEAD
 version = "0.3.27"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "0bb39ee79a6d8de55f48f2293a830e040392f1c5f16e336bdd1788cd0aadce07"
 dependencies = [
  "deranged",
+=======
+version = "0.3.20"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "cd0cbfecb4d19b5ea75bb31ad904eb5b9fa13f21079c3b92017ebdf4999a5890"
+dependencies = [
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  "serde",
  "time-core",
 ]
 
 [[package]]
 name = "time-core"
+<<<<<<< HEAD
 version = "0.1.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "7300fbefb4dadc1af235a9cef3737cea692a9d97e1b9cbcd4ebdae6f8868e6fb"
+=======
+version = "0.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "2e153e1f1acaef8acc537e68b44906d2db6436e2b35ac2c6b42640fff91f00fd"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 [[package]]
 name = "tiny-skia"
@@ -3342,16 +4283,28 @@ checksum = "1f3ccbac311fea05f86f61904b462b55fb3df8837a366dfc601a0161d0532f20"
 
 [[package]]
 name = "tokio"
+<<<<<<< HEAD
 version = "1.32.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "17ed6077ed6cd6c74735e21f37eb16dc3935f96878b1fe961074089cc80893f9"
 dependencies = [
  "backtrace",
+=======
+version = "1.28.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "c3c786bf8134e5a3a166db9b29ab8f48134739014a3eca7bc6bfa95d673b136f"
+dependencies = [
+ "autocfg",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  "libc",
  "mio",
  "num_cpus",
  "pin-project-lite",
+<<<<<<< HEAD
  "socket2 0.5.3",
+=======
+ "socket2",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  "tokio-macros",
  "windows-sys 0.48.0",
 ]
@@ -3364,7 +4317,11 @@ checksum = "630bdcf245f78637c13ec01ffae6187cca34625e8c63150d424b59e55af2675e"
 dependencies = [
  "proc-macro2",
  "quote",
+<<<<<<< HEAD
  "syn 2.0.29",
+=======
+ "syn 2.0.15",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 ]
 
 [[package]]
@@ -3378,9 +4335,15 @@ dependencies = [
 
 [[package]]
 name = "toml"
+<<<<<<< HEAD
 version = "0.7.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "c17e963a819c331dcacd7ab957d80bc2b9a9c1e71c804826d2f283dd65306542"
+=======
+version = "0.7.3"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "b403acf6f2bb0859c93c7f0d967cb4a75a7ac552100f9322faf64dc047669b21"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 dependencies = [
  "serde",
  "serde_spanned",
@@ -3390,18 +4353,30 @@ dependencies = [
 
 [[package]]
 name = "toml_datetime"
+<<<<<<< HEAD
 version = "0.6.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "7cda73e2f1397b1262d6dfdcef8aafae14d1de7748d66822d3bfeeb6d03e5e4b"
+=======
+version = "0.6.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "3ab8ed2edee10b50132aed5f331333428b011c99402b5a534154ed15746f9622"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 dependencies = [
  "serde",
 ]
 
 [[package]]
 name = "toml_edit"
+<<<<<<< HEAD
 version = "0.19.14"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "f8123f27e969974a3dfba720fdb560be359f57b44302d280ba72e76a74480e8a"
+=======
+version = "0.19.8"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "239410c8609e8125456927e6707163a3b1fdb40561e4b803bc041f466ccfdc13"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 dependencies = [
  "indexmap",
  "serde",
@@ -3412,11 +4387,18 @@ dependencies = [
 
 [[package]]
 name = "tracing"
+<<<<<<< HEAD
 version = "0.1.37"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "8ce8c33a8d48bd45d624a6e523445fd21ec13d3653cd51f681abf67418f54eb8"
 dependencies = [
  "cfg-if",
+=======
+version = "0.1.38"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "cf9cf6a813d3f40c88b0b6b6f29a5c95c6cdbf97c1f9cc53fb820200f5ad814d"
+dependencies = [
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  "pin-project-lite",
  "tracing-attributes",
  "tracing-core",
@@ -3424,6 +4406,7 @@ dependencies = [
 
 [[package]]
 name = "tracing-attributes"
+<<<<<<< HEAD
 version = "0.1.26"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "5f4f31f56159e98206da9efd823404b79b6ef3143b4a7ab76e67b1751b25a4ab"
@@ -3431,22 +4414,43 @@ dependencies = [
  "proc-macro2",
  "quote",
  "syn 2.0.29",
+=======
+version = "0.1.24"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "0f57e3ca2a01450b1a921183a9c9cbfda207fd822cef4ccb00a65402cbba7a74"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "syn 2.0.15",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 ]
 
 [[package]]
 name = "tracing-core"
+<<<<<<< HEAD
 version = "0.1.31"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "0955b8137a1df6f1a2e9a37d8a6656291ff0297c1a97c24e0d8425fe2312f79a"
+=======
+version = "0.1.30"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "24eb03ba0eab1fd845050058ce5e616558e8f8d8fca633e6b163fe25c797213a"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 dependencies = [
  "once_cell",
 ]
 
 [[package]]
 name = "ttf-parser"
+<<<<<<< HEAD
 version = "0.19.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "a464a4b34948a5f67fddd2b823c62d9d92e44be75058b99939eae6c5b6960b33"
+=======
+version = "0.19.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "44dcf002ae3b32cd25400d6df128c5babec3927cd1eb7ce813cfff20eb6c3746"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 [[package]]
 name = "typenum"
@@ -3455,6 +4459,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "497961ef93d974e23eb6f433eb5fe1b7930b659f06d12dec6fc44a8f554c0bba"
 
 [[package]]
+<<<<<<< HEAD
 name = "typeshare"
 version = "1.0.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -3474,6 +4479,16 @@ checksum = "fc670d0e358428857cc3b4bf504c691e572fccaec9542ff09212d3f13d74b7a9"
 dependencies = [
  "quote",
  "syn 1.0.109",
+=======
+name = "udev"
+version = "0.6.3"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "1c960764f7e816eed851a96c364745d37f9fe71a2e7dba79fbd40104530b5dd0"
+dependencies = [
+ "libc",
+ "libudev-sys",
+ "pkg-config",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 ]
 
 [[package]]
@@ -3525,9 +4540,15 @@ checksum = "92888ba5573ff080736b3648696b70cafad7d250551175acbaa4e0385b3e1460"
 
 [[package]]
 name = "unicode-ident"
+<<<<<<< HEAD
 version = "1.0.11"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "301abaae475aa91687eb82514b328ab47a211a533026cb25fc3e519b86adfc3c"
+=======
+version = "1.0.8"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "e5464a87b239f13a63a501f2701565754bae92d243d4bb7eb12f6d57d2269bf4"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 [[package]]
 name = "unicode-normalization"
@@ -3539,10 +4560,23 @@ dependencies = [
 ]
 
 [[package]]
+<<<<<<< HEAD
 name = "url"
 version = "2.4.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "50bff7831e19200a85b17131d085c25d7811bc4e186efdaf54bbd132994a88cb"
+=======
+name = "unicode-segmentation"
+version = "1.10.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "1dd624098567895118886609431a7c3b8f516e41d30e0643f03d94592a147e36"
+
+[[package]]
+name = "url"
+version = "2.3.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "0d68c799ae75762b8c3fe375feb6600ef5602c883c5d21eb51c09f22b83c4643"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 dependencies = [
  "form_urlencoded",
  "idna",
@@ -3677,7 +4711,11 @@ version = "0.29.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "3f3b068c05a039c9f755f881dc50f01732214f5685e379829759088967c46715"
 dependencies = [
+<<<<<<< HEAD
  "bitflags 1.3.2",
+=======
+ "bitflags",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  "downcast-rs",
  "libc",
  "nix 0.24.3",
@@ -3716,7 +4754,11 @@ version = "0.29.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "b950621f9354b322ee817a23474e479b34be96c2e909c14f7bc0100e9a970bc6"
 dependencies = [
+<<<<<<< HEAD
  "bitflags 1.3.2",
+=======
+ "bitflags",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  "wayland-client",
  "wayland-commons",
  "wayland-scanner",
@@ -3768,12 +4810,21 @@ dependencies = [
 
 [[package]]
 name = "webbrowser"
+<<<<<<< HEAD
 version = "0.8.11"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "b2c79b77f525a2d670cb40619d7d9c673d09e0666f72c591ebd7861f84a87e57"
 dependencies = [
  "core-foundation",
  "home",
+=======
+version = "0.8.9"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "b692165700260bbd40fbc5ff23766c03e339fbaca907aeea5cb77bf0a553ca83"
+dependencies = [
+ "core-foundation",
+ "dirs",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  "jni",
  "log",
  "ndk-context",
@@ -3854,6 +4905,7 @@ dependencies = [
 ]
 
 [[package]]
+<<<<<<< HEAD
 name = "windows"
 version = "0.48.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -3863,6 +4915,8 @@ dependencies = [
 ]
 
 [[package]]
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 name = "windows-implement"
 version = "0.44.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -3899,7 +4953,11 @@ version = "0.48.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "677d2418bec65e3338edb076e806bc1ec15693c5d0104683f2efe857f61056a9"
 dependencies = [
+<<<<<<< HEAD
  "windows-targets 0.48.5",
+=======
+ "windows-targets 0.48.0",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 ]
 
 [[package]]
@@ -3919,6 +4977,7 @@ dependencies = [
 
 [[package]]
 name = "windows-targets"
+<<<<<<< HEAD
 version = "0.48.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "9a2fa6e2155d7247be68c096456083145c183cbbbc2764150dda45a87197940c"
@@ -3930,6 +4989,19 @@ dependencies = [
  "windows_x86_64_gnu 0.48.5",
  "windows_x86_64_gnullvm 0.48.5",
  "windows_x86_64_msvc 0.48.5",
+=======
+version = "0.48.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "7b1eb6f0cd7c80c79759c929114ef071b87354ce476d9d94271031c0497adfd5"
+dependencies = [
+ "windows_aarch64_gnullvm 0.48.0",
+ "windows_aarch64_msvc 0.48.0",
+ "windows_i686_gnu 0.48.0",
+ "windows_i686_msvc 0.48.0",
+ "windows_x86_64_gnu 0.48.0",
+ "windows_x86_64_gnullvm 0.48.0",
+ "windows_x86_64_msvc 0.48.0",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 ]
 
 [[package]]
@@ -3940,9 +5012,15 @@ checksum = "597a5118570b68bc08d8d59125332c54f1ba9d9adeedeef5b99b02ba2b0698f8"
 
 [[package]]
 name = "windows_aarch64_gnullvm"
+<<<<<<< HEAD
 version = "0.48.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "2b38e32f0abccf9987a4e3079dfb67dcd799fb61361e53e2882c3cbaf0d905d8"
+=======
+version = "0.48.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "91ae572e1b79dba883e0d315474df7305d12f569b400fcf90581b06062f7e1bc"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 [[package]]
 name = "windows_aarch64_msvc"
@@ -3958,9 +5036,15 @@ checksum = "e08e8864a60f06ef0d0ff4ba04124db8b0fb3be5776a5cd47641e942e58c4d43"
 
 [[package]]
 name = "windows_aarch64_msvc"
+<<<<<<< HEAD
 version = "0.48.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "dc35310971f3b2dbbf3f0690a219f40e2d9afcf64f9ab7cc1be722937c26b4bc"
+=======
+version = "0.48.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "b2ef27e0d7bdfcfc7b868b317c1d32c641a6fe4629c171b8928c7b08d98d7cf3"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 [[package]]
 name = "windows_i686_gnu"
@@ -3976,9 +5060,15 @@ checksum = "c61d927d8da41da96a81f029489353e68739737d3beca43145c8afec9a31a84f"
 
 [[package]]
 name = "windows_i686_gnu"
+<<<<<<< HEAD
 version = "0.48.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "a75915e7def60c94dcef72200b9a8e58e5091744960da64ec734a6c6e9b3743e"
+=======
+version = "0.48.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "622a1962a7db830d6fd0a69683c80a18fda201879f0f447f065a3b7467daa241"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 [[package]]
 name = "windows_i686_msvc"
@@ -3994,9 +5084,15 @@ checksum = "44d840b6ec649f480a41c8d80f9c65108b92d89345dd94027bfe06ac444d1060"
 
 [[package]]
 name = "windows_i686_msvc"
+<<<<<<< HEAD
 version = "0.48.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "8f55c233f70c4b27f66c523580f78f1004e8b5a8b659e05a4eb49d4166cca406"
+=======
+version = "0.48.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "4542c6e364ce21bf45d69fdd2a8e455fa38d316158cfd43b3ac1c5b1b19f8e00"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 [[package]]
 name = "windows_x86_64_gnu"
@@ -4012,9 +5108,15 @@ checksum = "8de912b8b8feb55c064867cf047dda097f92d51efad5b491dfb98f6bbb70cb36"
 
 [[package]]
 name = "windows_x86_64_gnu"
+<<<<<<< HEAD
 version = "0.48.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "53d40abd2583d23e4718fddf1ebec84dbff8381c07cae67ff7768bbf19c6718e"
+=======
+version = "0.48.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "ca2b8a661f7628cbd23440e50b05d705db3686f894fc9580820623656af974b1"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 [[package]]
 name = "windows_x86_64_gnullvm"
@@ -4024,9 +5126,15 @@ checksum = "26d41b46a36d453748aedef1486d5c7a85db22e56aff34643984ea85514e94a3"
 
 [[package]]
 name = "windows_x86_64_gnullvm"
+<<<<<<< HEAD
 version = "0.48.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "0b7b52767868a23d5bab768e390dc5f5c55825b6d30b86c844ff2dc7414044cc"
+=======
+version = "0.48.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "7896dbc1f41e08872e9d5e8f8baa8fdd2677f29468c4e156210174edc7f7b953"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 [[package]]
 name = "windows_x86_64_msvc"
@@ -4042,6 +5150,7 @@ checksum = "9aec5da331524158c6d1a4ac0ab1541149c0b9505fde06423b02f5ef0106b9f0"
 
 [[package]]
 name = "windows_x86_64_msvc"
+<<<<<<< HEAD
 version = "0.48.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "ed94fce61571a4006852b7389a063ab983c02eb1bb37b47f8272ce92d06d9538"
@@ -4054,6 +5163,20 @@ checksum = "866db3f712fffba75d31bf0cdecf357c8aeafd158c5b7ab51dba2a2b2d47f196"
 dependencies = [
  "android-activity",
  "bitflags 1.3.2",
+=======
+version = "0.48.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "1a515f5799fe4961cb532f983ce2b23082366b898e52ffbce459c86f67c8378a"
+
+[[package]]
+name = "winit"
+version = "0.28.3"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "4f504e8c117b9015f618774f8d58cd4781f5a479bc41079c064f974cbb253874"
+dependencies = [
+ "android-activity",
+ "bitflags",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  "cfg_aliases",
  "core-foundation",
  "core-graphics",
@@ -4083,9 +5206,15 @@ dependencies = [
 
 [[package]]
 name = "winnow"
+<<<<<<< HEAD
 version = "0.5.15"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "7c2e3184b9c4e92ad5167ca73039d0c42476302ab603e2fec4487511f38ccefc"
+=======
+version = "0.4.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "ae8970b36c66498d8ff1d66685dc86b91b29db0c7739899012f63a63814b4b28"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 dependencies = [
  "memchr",
 ]
@@ -4144,6 +5273,7 @@ dependencies = [
 
 [[package]]
 name = "xml-rs"
+<<<<<<< HEAD
 version = "0.8.16"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "47430998a7b5d499ccee752b41567bc3afc57e1327dc855b1a2aa44ce29b5fa1"
@@ -4153,17 +5283,34 @@ name = "zbus"
 version = "3.14.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "31de390a2d872e4cd04edd71b425e29853f786dc99317ed72d73d6fcf5ebb948"
+=======
+version = "0.8.4"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "d2d7d3948613f75c98fd9328cfdcc45acc4d360655289d0a7d4ec931392200a3"
+
+[[package]]
+name = "zbus"
+version = "3.12.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "29242fa5ec5693629ae74d6eb1f69622a9511f600986d6d9779bccf36ac316e3"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 dependencies = [
  "async-broadcast",
  "async-executor",
  "async-fs",
  "async-io",
  "async-lock",
+<<<<<<< HEAD
  "async-process",
  "async-recursion",
  "async-task",
  "async-trait",
  "blocking",
+=======
+ "async-recursion",
+ "async-task",
+ "async-trait",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  "byteorder",
  "derivative",
  "enumflags2",
@@ -4191,9 +5338,15 @@ dependencies = [
 
 [[package]]
 name = "zbus_macros"
+<<<<<<< HEAD
 version = "3.14.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "41d1794a946878c0e807f55a397187c11fc7a038ba5d868e7db4f3bd7760bc9d"
+=======
+version = "3.12.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "537793e26e9af85f774801dc52c6f6292352b2b517c5cf0449ffd3735732a53a"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 dependencies = [
  "proc-macro-crate",
  "proc-macro2",
@@ -4205,9 +5358,15 @@ dependencies = [
 
 [[package]]
 name = "zbus_names"
+<<<<<<< HEAD
 version = "2.6.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "fb80bb776dbda6e23d705cf0123c3b95df99c4ebeaec6c2599d4a5419902b4a9"
+=======
+version = "2.5.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "f34f314916bd89bdb9934154627fab152f4f28acdda03e7c4c68181b214fe7e3"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 dependencies = [
  "serde",
  "static_assertions",
@@ -4216,9 +5375,15 @@ dependencies = [
 
 [[package]]
 name = "zvariant"
+<<<<<<< HEAD
 version = "3.15.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "44b291bee0d960c53170780af148dca5fa260a63cdd24f1962fa82e03e53338c"
+=======
+version = "3.12.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "46fe4914a985446d6fd287019b5fceccce38303d71407d9e6e711d44954a05d8"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 dependencies = [
  "byteorder",
  "enumflags2",
@@ -4230,9 +5395,15 @@ dependencies = [
 
 [[package]]
 name = "zvariant_derive"
+<<<<<<< HEAD
 version = "3.15.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "934d7a7dfc310d6ee06c87ffe88ef4eca7d3e37bb251dece2ef93da8f17d8ecd"
+=======
+version = "3.12.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "34c20260af4b28b3275d6676c7e2a6be0d4332e8e0aba4616d34007fd84e462a"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 dependencies = [
  "proc-macro-crate",
  "proc-macro2",
@@ -4243,9 +5414,15 @@ dependencies = [
 
 [[package]]
 name = "zvariant_utils"
+<<<<<<< HEAD
 version = "1.0.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "7234f0d811589db492d16893e3f21e8e2fd282e6d01b0cddee310322062cc200"
+=======
+version = "1.0.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "53b22993dbc4d128a17a3b6c92f1c63872dd67198537ee728d8b5d7c40640a8b"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 dependencies = [
  "proc-macro2",
  "quote",

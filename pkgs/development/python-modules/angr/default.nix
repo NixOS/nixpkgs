@@ -32,7 +32,11 @@
 
 buildPythonPackage rec {
   pname = "angr";
+<<<<<<< HEAD
   version = "9.2.66";
+=======
+  version = "9.2.50";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -41,7 +45,11 @@ buildPythonPackage rec {
     owner = pname;
     repo = pname;
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-l/O+7M9f2HtIcXNd49+zr2Z0Cx/3mbXgZvqOyPlvJbk=";
+=======
+    hash = "sha256-lsQ0pMabd1nC9ysR38u2rlGOGY+onk3qV1V68AZBQy4=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [

@@ -11,9 +11,12 @@ import ./make-test-python.nix ({ pkgs, ... }: {
           memorySize = 2048;
 
           libvirtd.enable = true;
+<<<<<<< HEAD
           libvirtd.hooks.qemu.is_working = "${pkgs.writeShellScript "testHook.sh" ''
             touch /tmp/qemu_hook_is_working
           ''}";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         };
         boot.supportedFilesystems = [ "zfs" ];
         networking.hostId = "deadbeef"; # needed for zfs
@@ -60,9 +63,12 @@ import ./make-test-python.nix ({ pkgs, ... }: {
       virthost.shutdown()
       virthost.wait_for_unit("multi-user.target")
       virthost.wait_until_succeeds("ping -c 1 nixos")
+<<<<<<< HEAD
 
     with subtest("test if hooks are linked and run"):
       virthost.succeed("ls /var/lib/libvirt/hooks/qemu.d/is_working")
       virthost.succeed("ls /tmp/qemu_hook_is_working")
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '';
 })

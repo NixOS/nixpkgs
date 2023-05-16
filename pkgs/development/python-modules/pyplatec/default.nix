@@ -13,12 +13,19 @@ buildPythonPackage rec {
     sha256 = "0kqx33flcrrlipccmqs78d14pj5749bp85b6k5fgaq2c7yzz02jg";
   };
 
+<<<<<<< HEAD
   env.NIX_CFLAGS_COMPILE = "-std=c++11";
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   meta = with lib; {
     description = "Library to simulate plate tectonics with Python bindings";
     homepage    = "https://github.com/Mindwerks/plate-tectonics";
     license     = licenses.lgpl3;
+<<<<<<< HEAD
+=======
+    broken      = stdenv.isLinux;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
 }

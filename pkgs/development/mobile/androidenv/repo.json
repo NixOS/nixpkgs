@@ -11,7 +11,10 @@
           }
         ],
         "displayName": "Google APIs",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "google_apis",
         "path": "add-ons/addon-google_apis-google-10",
@@ -64,7 +67,10 @@
           }
         ],
         "displayName": "Google APIs",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "google_apis",
         "path": "add-ons/addon-google_apis-google-11",
@@ -110,7 +116,10 @@
           }
         ],
         "displayName": "Google APIs",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "google_apis",
         "path": "add-ons/addon-google_apis-google-12",
@@ -161,7 +170,10 @@
           }
         ],
         "displayName": "Google TV Addon",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-googletv-license",
         "name": "google_tv_addon",
         "path": "add-ons/addon-google_tv_addon-google-12",
@@ -198,7 +210,10 @@
           }
         ],
         "displayName": "Google APIs",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "google_apis",
         "path": "add-ons/addon-google_apis-google-13",
@@ -249,7 +264,10 @@
           }
         ],
         "displayName": "Google TV Addon",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-googletv-license",
         "name": "google_tv_addon",
         "path": "add-ons/addon-google_tv_addon-google-13",
@@ -286,7 +304,10 @@
           }
         ],
         "displayName": "Google APIs",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "google_apis",
         "path": "add-ons/addon-google_apis-google-14",
@@ -339,7 +360,10 @@
           }
         ],
         "displayName": "Google APIs",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "google_apis",
         "path": "add-ons/addon-google_apis-google-15",
@@ -399,7 +423,10 @@
           }
         ],
         "displayName": "Google APIs",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "google_apis",
         "path": "add-ons/addon-google_apis-google-16",
@@ -459,7 +486,10 @@
           }
         ],
         "displayName": "Google APIs",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "google_apis",
         "path": "add-ons/addon-google_apis-google-17",
@@ -519,7 +549,10 @@
           }
         ],
         "displayName": "Google APIs",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "google_apis",
         "path": "add-ons/addon-google_apis-google-18",
@@ -579,7 +612,10 @@
           }
         ],
         "displayName": "Google APIs",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "google_apis",
         "path": "add-ons/addon-google_apis-google-19",
@@ -639,7 +675,10 @@
           }
         ],
         "displayName": "Google APIs",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "google_apis",
         "path": "add-ons/addon-google_apis-google-21",
@@ -699,7 +738,10 @@
           }
         ],
         "displayName": "Google APIs",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "google_apis",
         "path": "add-ons/addon-google_apis-google-22",
@@ -759,7 +801,10 @@
           }
         ],
         "displayName": "Google APIs",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "google_apis",
         "path": "add-ons/addon-google_apis-google-23",
@@ -819,7 +864,10 @@
           }
         ],
         "displayName": "Google APIs",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "google_apis",
         "path": "add-ons/addon-google_apis-google-24",
@@ -879,7 +927,10 @@
           }
         ],
         "displayName": "Google APIs",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "google_apis",
         "path": "add-ons/addon-google_apis-google-25",
@@ -939,7 +990,10 @@
           }
         ],
         "displayName": "Google APIs",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "google_apis",
         "path": "add-ons/addon-google_apis-google-3",
@@ -985,7 +1039,10 @@
           }
         ],
         "displayName": "Google APIs",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "google_apis",
         "path": "add-ons/addon-google_apis-google-4",
@@ -1031,7 +1088,10 @@
           }
         ],
         "displayName": "Google APIs",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "google_apis",
         "path": "add-ons/addon-google_apis-google-5",
@@ -1077,7 +1137,10 @@
           }
         ],
         "displayName": "Google APIs",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "google_apis",
         "path": "add-ons/addon-google_apis-google-6",
@@ -1123,7 +1186,10 @@
           }
         ],
         "displayName": "Google APIs",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "google_apis",
         "path": "add-ons/addon-google_apis-google-7",
@@ -1169,7 +1235,10 @@
           }
         ],
         "displayName": "Google APIs",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "google_apis",
         "path": "add-ons/addon-google_apis-google-8",
@@ -1215,7 +1284,10 @@
           }
         ],
         "displayName": "Google APIs",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "google_apis",
         "path": "add-ons/addon-google_apis-google-9",
@@ -1262,7 +1334,10 @@
         }
       ],
       "displayName": "Android Support Repository",
+<<<<<<< HEAD
       "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       "license": "android-sdk-license",
       "name": "extras-android-m2repository",
       "path": "extras/android/m2repository",
@@ -1286,6 +1361,7 @@
       "archives": [
         {
           "os": "windows",
+<<<<<<< HEAD
           "sha1": "1a4ef9875cb0adfe5500632ad7140027cfb080d9",
           "size": 168741,
           "url": "https://dl.google.com/android/repository/gvm-windows_v2_0_0.zip"
@@ -1293,6 +1369,14 @@
       ],
       "displayName": "Android Emulator Hypervisor Driver for AMD Processors (installer: Deprecated)",
       "last-available-day": 19579,
+=======
+          "sha1": "7be9c46e3bbf4ab107fa614e426f925584ce310b",
+          "size": 166975,
+          "url": "https://dl.google.com/android/repository/gvm-windows_v1_8_0.zip"
+        }
+      ],
+      "displayName": "Android Emulator Hypervisor Driver for AMD Processors (installer)",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       "license": "android-sdk-license",
       "name": "extras-google-Android_Emulator_Hypervisor_Driver",
       "path": "extras/google/Android_Emulator_Hypervisor_Driver",
@@ -1322,7 +1406,10 @@
         }
       ],
       "displayName": "Google AdMob Ads SDK",
+<<<<<<< HEAD
       "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       "license": "android-sdk-license",
       "name": "extras-google-admob_ads_sdk",
       "path": "extras/google/admob_ads_sdk",
@@ -1350,7 +1437,10 @@
         }
       ],
       "displayName": "Google Analytics App Tracking SDK",
+<<<<<<< HEAD
       "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       "license": "android-sdk-license",
       "name": "extras-google-analytics_sdk_v2",
       "path": "extras/google/analytics_sdk_v2",
@@ -1378,7 +1468,10 @@
         }
       ],
       "displayName": "Google Cloud Messaging for Android Library",
+<<<<<<< HEAD
       "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       "license": "android-sdk-license",
       "name": "extras-google-gcm",
       "path": "extras/google/gcm",
@@ -1413,7 +1506,10 @@
         }
       },
       "displayName": "Google Play services",
+<<<<<<< HEAD
       "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       "license": "android-sdk-license",
       "name": "extras-google-google_play_services",
       "path": "extras/google/google_play_services",
@@ -1441,7 +1537,10 @@
         }
       ],
       "displayName": "Google Play services for Froyo",
+<<<<<<< HEAD
       "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       "license": "android-sdk-license",
       "name": "extras-google-google_play_services_froyo",
       "path": "extras/google/google_play_services_froyo",
@@ -1469,7 +1568,10 @@
         }
       ],
       "displayName": "Google Play Instant Development SDK",
+<<<<<<< HEAD
       "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       "license": "android-sdk-license",
       "name": "extras-google-instantapps",
       "path": "extras/google/instantapps",
@@ -1506,7 +1608,10 @@
         }
       },
       "displayName": "Google Repository",
+<<<<<<< HEAD
       "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       "license": "android-sdk-license",
       "name": "extras-google-m2repository",
       "path": "extras/google/m2repository",
@@ -1534,7 +1639,10 @@
         }
       ],
       "displayName": "Google Play APK Expansion library",
+<<<<<<< HEAD
       "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       "license": "android-sdk-license",
       "name": "extras-google-market_apk_expansion",
       "path": "extras/google/market_apk_expansion",
@@ -1562,7 +1670,10 @@
         }
       ],
       "displayName": "Google Play Licensing Library",
+<<<<<<< HEAD
       "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       "license": "android-sdk-license",
       "name": "extras-google-market_licensing",
       "path": "extras/google/market_licensing",
@@ -1591,7 +1702,10 @@
         }
       ],
       "displayName": "Android Auto API Simulators",
+<<<<<<< HEAD
       "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       "license": "android-sdk-license",
       "name": "extras-google-simulators",
       "path": "extras/google/simulators",
@@ -1619,7 +1733,10 @@
         }
       ],
       "displayName": "Google USB Driver",
+<<<<<<< HEAD
       "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       "license": "android-sdk-license",
       "name": "extras-google-usb_driver",
       "path": "extras/google/usb_driver",
@@ -1647,7 +1764,10 @@
         }
       ],
       "displayName": "Google Web Driver",
+<<<<<<< HEAD
       "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       "license": "android-sdk-license",
       "name": "extras-google-webdriver",
       "path": "extras/google/webdriver",
@@ -1675,7 +1795,10 @@
         }
       ],
       "displayName": "Solver for ConstraintLayout 1.0.0",
+<<<<<<< HEAD
       "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       "license": "android-sdk-license",
       "name": "extras-m2repository-com-android-support-constraint-constraint-layout-solver-1.0.0",
       "path": "extras/m2repository/com/android/support/constraint/constraint-layout-solver/1.0.0",
@@ -1703,7 +1826,10 @@
         }
       ],
       "displayName": "com.android.support.constraint:constraint-layout-solver:1.0.0-alpha4",
+<<<<<<< HEAD
       "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       "license": "android-sdk-license",
       "name": "extras-m2repository-com-android-support-constraint-constraint-layout-solver-1.0.0-alpha4",
       "path": "extras/m2repository/com/android/support/constraint/constraint-layout-solver/1.0.0-alpha4",
@@ -1731,7 +1857,10 @@
         }
       ],
       "displayName": "Solver for ConstraintLayout 1.0.0-alpha8",
+<<<<<<< HEAD
       "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       "license": "android-sdk-license",
       "name": "extras-m2repository-com-android-support-constraint-constraint-layout-solver-1.0.0-alpha8",
       "path": "extras/m2repository/com/android/support/constraint/constraint-layout-solver/1.0.0-alpha8",
@@ -1759,7 +1888,10 @@
         }
       ],
       "displayName": "Solver for ConstraintLayout 1.0.0-beta1",
+<<<<<<< HEAD
       "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       "license": "android-sdk-license",
       "name": "extras-m2repository-com-android-support-constraint-constraint-layout-solver-1.0.0-beta1",
       "path": "extras/m2repository/com/android/support/constraint/constraint-layout-solver/1.0.0-beta1",
@@ -1787,7 +1919,10 @@
         }
       ],
       "displayName": "Solver for ConstraintLayout 1.0.0-beta2",
+<<<<<<< HEAD
       "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       "license": "android-sdk-license",
       "name": "extras-m2repository-com-android-support-constraint-constraint-layout-solver-1.0.0-beta2",
       "path": "extras/m2repository/com/android/support/constraint/constraint-layout-solver/1.0.0-beta2",
@@ -1815,7 +1950,10 @@
         }
       ],
       "displayName": "Solver for ConstraintLayout 1.0.0-beta3",
+<<<<<<< HEAD
       "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       "license": "android-sdk-license",
       "name": "extras-m2repository-com-android-support-constraint-constraint-layout-solver-1.0.0-beta3",
       "path": "extras/m2repository/com/android/support/constraint/constraint-layout-solver/1.0.0-beta3",
@@ -1843,7 +1981,10 @@
         }
       ],
       "displayName": "Solver for ConstraintLayout 1.0.0-beta4",
+<<<<<<< HEAD
       "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       "license": "android-sdk-license",
       "name": "extras-m2repository-com-android-support-constraint-constraint-layout-solver-1.0.0-beta4",
       "path": "extras/m2repository/com/android/support/constraint/constraint-layout-solver/1.0.0-beta4",
@@ -1871,7 +2012,10 @@
         }
       ],
       "displayName": "Solver for ConstraintLayout 1.0.0-beta5",
+<<<<<<< HEAD
       "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       "license": "android-sdk-license",
       "name": "extras-m2repository-com-android-support-constraint-constraint-layout-solver-1.0.0-beta5",
       "path": "extras/m2repository/com/android/support/constraint/constraint-layout-solver/1.0.0-beta5",
@@ -1899,7 +2043,10 @@
         }
       ],
       "displayName": "Solver for ConstraintLayout 1.0.1",
+<<<<<<< HEAD
       "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       "license": "android-sdk-license",
       "name": "extras-m2repository-com-android-support-constraint-constraint-layout-solver-1.0.1",
       "path": "extras/m2repository/com/android/support/constraint/constraint-layout-solver/1.0.1",
@@ -1927,7 +2074,10 @@
         }
       ],
       "displayName": "Solver for ConstraintLayout 1.0.2",
+<<<<<<< HEAD
       "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       "license": "android-sdk-license",
       "name": "extras-m2repository-com-android-support-constraint-constraint-layout-solver-1.0.2",
       "path": "extras/m2repository/com/android/support/constraint/constraint-layout-solver/1.0.2",
@@ -1962,7 +2112,10 @@
         }
       },
       "displayName": "ConstraintLayout for Android 1.0.0",
+<<<<<<< HEAD
       "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       "license": "android-sdk-license",
       "name": "extras-m2repository-com-android-support-constraint-constraint-layout-1.0.0",
       "path": "extras/m2repository/com/android/support/constraint/constraint-layout/1.0.0",
@@ -1997,7 +2150,10 @@
         }
       },
       "displayName": "com.android.support.constraint:constraint-layout:1.0.0-alpha4",
+<<<<<<< HEAD
       "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       "license": "android-sdk-license",
       "name": "extras-m2repository-com-android-support-constraint-constraint-layout-1.0.0-alpha4",
       "path": "extras/m2repository/com/android/support/constraint/constraint-layout/1.0.0-alpha4",
@@ -2032,7 +2188,10 @@
         }
       },
       "displayName": "ConstraintLayout for Android 1.0.0-alpha8",
+<<<<<<< HEAD
       "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       "license": "android-sdk-license",
       "name": "extras-m2repository-com-android-support-constraint-constraint-layout-1.0.0-alpha8",
       "path": "extras/m2repository/com/android/support/constraint/constraint-layout/1.0.0-alpha8",
@@ -2067,7 +2226,10 @@
         }
       },
       "displayName": "ConstraintLayout for Android 1.0.0-beta1",
+<<<<<<< HEAD
       "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       "license": "android-sdk-license",
       "name": "extras-m2repository-com-android-support-constraint-constraint-layout-1.0.0-beta1",
       "path": "extras/m2repository/com/android/support/constraint/constraint-layout/1.0.0-beta1",
@@ -2102,7 +2264,10 @@
         }
       },
       "displayName": "ConstraintLayout for Android 1.0.0-beta2",
+<<<<<<< HEAD
       "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       "license": "android-sdk-license",
       "name": "extras-m2repository-com-android-support-constraint-constraint-layout-1.0.0-beta2",
       "path": "extras/m2repository/com/android/support/constraint/constraint-layout/1.0.0-beta2",
@@ -2137,7 +2302,10 @@
         }
       },
       "displayName": "ConstraintLayout for Android 1.0.0-beta3",
+<<<<<<< HEAD
       "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       "license": "android-sdk-license",
       "name": "extras-m2repository-com-android-support-constraint-constraint-layout-1.0.0-beta3",
       "path": "extras/m2repository/com/android/support/constraint/constraint-layout/1.0.0-beta3",
@@ -2172,7 +2340,10 @@
         }
       },
       "displayName": "ConstraintLayout for Android 1.0.0-beta4",
+<<<<<<< HEAD
       "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       "license": "android-sdk-license",
       "name": "extras-m2repository-com-android-support-constraint-constraint-layout-1.0.0-beta4",
       "path": "extras/m2repository/com/android/support/constraint/constraint-layout/1.0.0-beta4",
@@ -2207,7 +2378,10 @@
         }
       },
       "displayName": "ConstraintLayout for Android 1.0.0-beta5",
+<<<<<<< HEAD
       "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       "license": "android-sdk-license",
       "name": "extras-m2repository-com-android-support-constraint-constraint-layout-1.0.0-beta5",
       "path": "extras/m2repository/com/android/support/constraint/constraint-layout/1.0.0-beta5",
@@ -2242,7 +2416,10 @@
         }
       },
       "displayName": "ConstraintLayout for Android 1.0.1",
+<<<<<<< HEAD
       "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       "license": "android-sdk-license",
       "name": "extras-m2repository-com-android-support-constraint-constraint-layout-1.0.1",
       "path": "extras/m2repository/com/android/support/constraint/constraint-layout/1.0.1",
@@ -2277,7 +2454,10 @@
         }
       },
       "displayName": "ConstraintLayout for Android 1.0.2",
+<<<<<<< HEAD
       "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       "license": "android-sdk-license",
       "name": "extras-m2repository-com-android-support-constraint-constraint-layout-1.0.2",
       "path": "extras/m2repository/com/android/support/constraint/constraint-layout/1.0.2",
@@ -2316,7 +2496,10 @@
             }
           },
           "displayName": "ARM EABI v7a System Image",
+<<<<<<< HEAD
           "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           "license": "android-sdk-license",
           "name": "system-image-10-default-armeabi-v7a",
           "path": "system-images/android-10/default/armeabi-v7a",
@@ -2354,7 +2537,10 @@
             }
           },
           "displayName": "Intel x86 Atom System Image",
+<<<<<<< HEAD
           "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           "license": "android-sdk-license",
           "name": "system-image-10-default-x86",
           "path": "system-images/android-10/default/x86",
@@ -2394,7 +2580,10 @@
             }
           },
           "displayName": "Google APIs ARM EABI v7a System Image",
+<<<<<<< HEAD
           "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           "license": "android-sdk-license",
           "name": "system-image-10-google_apis-armeabi-v7a",
           "path": "system-images/android-10/google_apis/armeabi-v7a",
@@ -2435,7 +2624,10 @@
             }
           },
           "displayName": "Google APIs Intel x86 Atom System Image",
+<<<<<<< HEAD
           "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           "license": "android-sdk-license",
           "name": "system-image-10-google_apis-x86",
           "path": "system-images/android-10/google_apis/x86",
@@ -2473,7 +2665,10 @@
             }
           ],
           "displayName": "ARM EABI v7a System Image",
+<<<<<<< HEAD
           "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           "license": "android-sdk-license",
           "name": "system-image-14-default-armeabi-v7a",
           "path": "system-images/android-14/default/armeabi-v7a",
@@ -2515,7 +2710,10 @@
             }
           },
           "displayName": "ARM EABI v7a System Image",
+<<<<<<< HEAD
           "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           "license": "android-sdk-license",
           "name": "system-image-15-default-armeabi-v7a",
           "path": "system-images/android-15/default/armeabi-v7a",
@@ -2553,7 +2751,10 @@
             }
           },
           "displayName": "Intel x86 Atom System Image",
+<<<<<<< HEAD
           "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           "license": "android-sdk-license",
           "name": "system-image-15-default-x86",
           "path": "system-images/android-15/default/x86",
@@ -2593,7 +2794,10 @@
             }
           },
           "displayName": "Google APIs ARM EABI v7a System Image",
+<<<<<<< HEAD
           "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           "license": "android-sdk-license",
           "name": "system-image-15-google_apis-armeabi-v7a",
           "path": "system-images/android-15/google_apis/armeabi-v7a",
@@ -2634,7 +2838,10 @@
             }
           },
           "displayName": "Google APIs Intel x86 Atom System Image",
+<<<<<<< HEAD
           "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           "license": "android-sdk-license",
           "name": "system-image-15-google_apis-x86",
           "path": "system-images/android-15/google_apis/x86",
@@ -2679,7 +2886,10 @@
             }
           },
           "displayName": "ARM EABI v7a System Image",
+<<<<<<< HEAD
           "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           "license": "android-sdk-license",
           "name": "system-image-16-default-armeabi-v7a",
           "path": "system-images/android-16/default/armeabi-v7a",
@@ -2710,7 +2920,10 @@
             }
           ],
           "displayName": "MIPS System Image",
+<<<<<<< HEAD
           "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           "license": "mips-android-sysimage-license",
           "name": "system-image-16-default-mips",
           "path": "system-images/android-16/default/mips",
@@ -2748,7 +2961,10 @@
             }
           },
           "displayName": "Intel x86 Atom System Image",
+<<<<<<< HEAD
           "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           "license": "android-sdk-license",
           "name": "system-image-16-default-x86",
           "path": "system-images/android-16/default/x86",
@@ -2788,7 +3004,10 @@
             }
           },
           "displayName": "Google APIs ARM EABI v7a System Image",
+<<<<<<< HEAD
           "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           "license": "android-sdk-license",
           "name": "system-image-16-google_apis-armeabi-v7a",
           "path": "system-images/android-16/google_apis/armeabi-v7a",
@@ -2829,7 +3048,10 @@
             }
           },
           "displayName": "Google APIs Intel x86 Atom System Image",
+<<<<<<< HEAD
           "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           "license": "android-sdk-license",
           "name": "system-image-16-google_apis-x86",
           "path": "system-images/android-16/google_apis/x86",
@@ -2874,7 +3096,10 @@
             }
           },
           "displayName": "ARM EABI v7a System Image",
+<<<<<<< HEAD
           "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           "license": "android-sdk-license",
           "name": "system-image-17-default-armeabi-v7a",
           "path": "system-images/android-17/default/armeabi-v7a",
@@ -2905,7 +3130,10 @@
             }
           ],
           "displayName": "MIPS System Image",
+<<<<<<< HEAD
           "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           "license": "mips-android-sysimage-license",
           "name": "system-image-17-default-mips",
           "path": "system-images/android-17/default/mips",
@@ -2943,7 +3171,10 @@
             }
           },
           "displayName": "Intel x86 Atom System Image",
+<<<<<<< HEAD
           "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           "license": "android-sdk-license",
           "name": "system-image-17-default-x86",
           "path": "system-images/android-17/default/x86",
@@ -2986,7 +3217,10 @@
             }
           },
           "displayName": "Google APIs ARM EABI v7a System Image",
+<<<<<<< HEAD
           "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           "license": "android-sdk-license",
           "name": "system-image-17-google_apis-armeabi-v7a",
           "path": "system-images/android-17/google_apis/armeabi-v7a",
@@ -3027,7 +3261,10 @@
             }
           },
           "displayName": "Google APIs Intel x86 Atom System Image",
+<<<<<<< HEAD
           "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           "license": "android-sdk-license",
           "name": "system-image-17-google_apis-x86",
           "path": "system-images/android-17/google_apis/x86",
@@ -3072,7 +3309,10 @@
             }
           },
           "displayName": "ARM EABI v7a System Image",
+<<<<<<< HEAD
           "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           "license": "android-sdk-license",
           "name": "system-image-18-default-armeabi-v7a",
           "path": "system-images/android-18/default/armeabi-v7a",
@@ -3110,7 +3350,10 @@
             }
           },
           "displayName": "Intel x86 Atom System Image",
+<<<<<<< HEAD
           "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           "license": "android-sdk-license",
           "name": "system-image-18-default-x86",
           "path": "system-images/android-18/default/x86",
@@ -3150,7 +3393,10 @@
             }
           },
           "displayName": "Google APIs ARM EABI v7a System Image",
+<<<<<<< HEAD
           "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           "license": "android-sdk-license",
           "name": "system-image-18-google_apis-armeabi-v7a",
           "path": "system-images/android-18/google_apis/armeabi-v7a",
@@ -3191,7 +3437,10 @@
             }
           },
           "displayName": "Google APIs Intel x86 Atom System Image",
+<<<<<<< HEAD
           "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           "license": "android-sdk-license",
           "name": "system-image-18-google_apis-x86",
           "path": "system-images/android-18/google_apis/x86",
@@ -3236,7 +3485,10 @@
             }
           },
           "displayName": "ARM EABI v7a System Image",
+<<<<<<< HEAD
           "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           "license": "android-sdk-license",
           "name": "system-image-19-default-armeabi-v7a",
           "path": "system-images/android-19/default/armeabi-v7a",
@@ -3274,7 +3526,10 @@
             }
           },
           "displayName": "Intel x86 Atom System Image",
+<<<<<<< HEAD
           "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           "license": "android-sdk-license",
           "name": "system-image-19-default-x86",
           "path": "system-images/android-19/default/x86",
@@ -3314,7 +3569,10 @@
             }
           },
           "displayName": "Google APIs ARM EABI v7a System Image",
+<<<<<<< HEAD
           "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           "license": "android-sdk-license",
           "name": "system-image-19-google_apis-armeabi-v7a",
           "path": "system-images/android-19/google_apis/armeabi-v7a",
@@ -3355,7 +3613,10 @@
             }
           },
           "displayName": "Google APIs Intel x86 Atom System Image",
+<<<<<<< HEAD
           "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           "license": "android-sdk-license",
           "name": "system-image-19-google_apis-x86",
           "path": "system-images/android-19/google_apis/x86",
@@ -3393,7 +3654,10 @@
             }
           ],
           "displayName": "Android TV ARM EABI v7a System Image",
+<<<<<<< HEAD
           "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           "license": "android-sdk-license",
           "name": "system-image-21-android-tv-armeabi-v7a",
           "path": "system-images/android-21/android-tv/armeabi-v7a",
@@ -3423,7 +3687,10 @@
             }
           ],
           "displayName": "Android TV Intel x86 Atom System Image",
+<<<<<<< HEAD
           "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           "license": "android-sdk-license",
           "name": "system-image-21-android-tv-x86",
           "path": "system-images/android-21/android-tv/x86",
@@ -3455,7 +3722,10 @@
             }
           ],
           "displayName": "ARM 64 v8a System Image",
+<<<<<<< HEAD
           "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           "license": "android-sdk-license",
           "name": "system-image-21-default-arm64-v8a",
           "path": "system-images/android-21/default/arm64-v8a",
@@ -3493,7 +3763,10 @@
             }
           },
           "displayName": "ARM EABI v7a System Image",
+<<<<<<< HEAD
           "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           "license": "android-sdk-license",
           "name": "system-image-21-default-armeabi-v7a",
           "path": "system-images/android-21/default/armeabi-v7a",
@@ -3531,7 +3804,10 @@
             }
           },
           "displayName": "Intel x86 Atom System Image",
+<<<<<<< HEAD
           "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           "license": "android-sdk-license",
           "name": "system-image-21-default-x86",
           "path": "system-images/android-21/default/x86",
@@ -3568,8 +3844,12 @@
               }
             }
           },
+<<<<<<< HEAD
           "displayName": "Intel x86_64 Atom System Image",
           "last-available-day": 19579,
+=======
+          "displayName": "Intel x86 Atom_64 System Image",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           "license": "android-sdk-license",
           "name": "system-image-21-default-x86_64",
           "path": "system-images/android-21/default/x86_64",
@@ -3602,7 +3882,10 @@
             }
           ],
           "displayName": "Google APIs ARM 64 v8a System Image",
+<<<<<<< HEAD
           "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           "license": "android-sdk-license",
           "name": "system-image-21-google_apis-arm64-v8a",
           "path": "system-images/android-21/google_apis/arm64-v8a",
@@ -3643,7 +3926,10 @@
             }
           },
           "displayName": "Google APIs ARM EABI v7a System Image",
+<<<<<<< HEAD
           "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           "license": "android-sdk-license",
           "name": "system-image-21-google_apis-armeabi-v7a",
           "path": "system-images/android-21/google_apis/armeabi-v7a",
@@ -3684,7 +3970,10 @@
             }
           },
           "displayName": "Google APIs Intel x86 Atom System Image",
+<<<<<<< HEAD
           "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           "license": "android-sdk-license",
           "name": "system-image-21-google_apis-x86",
           "path": "system-images/android-21/google_apis/x86",
@@ -3724,8 +4013,12 @@
               }
             }
           },
+<<<<<<< HEAD
           "displayName": "Google APIs Intel x86_64 Atom System Image",
           "last-available-day": 19579,
+=======
+          "displayName": "Google APIs Intel x86 Atom_64 System Image",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           "license": "android-sdk-license",
           "name": "system-image-21-google_apis-x86_64",
           "path": "system-images/android-21/google_apis/x86_64",
@@ -3763,7 +4056,10 @@
             }
           ],
           "displayName": "Android TV Intel x86 Atom System Image",
+<<<<<<< HEAD
           "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           "license": "android-sdk-license",
           "name": "system-image-22-android-tv-x86",
           "path": "system-images/android-22/android-tv/x86",
@@ -3795,7 +4091,10 @@
             }
           ],
           "displayName": "ARM 64 v8a System Image",
+<<<<<<< HEAD
           "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           "license": "android-sdk-license",
           "name": "system-image-22-default-arm64-v8a",
           "path": "system-images/android-22/default/arm64-v8a",
@@ -3833,7 +4132,10 @@
             }
           },
           "displayName": "ARM EABI v7a System Image",
+<<<<<<< HEAD
           "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           "license": "android-sdk-license",
           "name": "system-image-22-default-armeabi-v7a",
           "path": "system-images/android-22/default/armeabi-v7a",
@@ -3871,7 +4173,10 @@
             }
           },
           "displayName": "Intel x86 Atom System Image",
+<<<<<<< HEAD
           "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           "license": "android-sdk-license",
           "name": "system-image-22-default-x86",
           "path": "system-images/android-22/default/x86",
@@ -3908,8 +4213,12 @@
               }
             }
           },
+<<<<<<< HEAD
           "displayName": "Intel x86_64 Atom System Image",
           "last-available-day": 19579,
+=======
+          "displayName": "Intel x86 Atom_64 System Image",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           "license": "android-sdk-license",
           "name": "system-image-22-default-x86_64",
           "path": "system-images/android-22/default/x86_64",
@@ -3942,7 +4251,10 @@
             }
           ],
           "displayName": "Google APIs ARM 64 v8a System Image",
+<<<<<<< HEAD
           "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           "license": "android-sdk-license",
           "name": "system-image-22-google_apis-arm64-v8a",
           "path": "system-images/android-22/google_apis/arm64-v8a",
@@ -3983,7 +4295,10 @@
             }
           },
           "displayName": "Google APIs ARM EABI v7a System Image",
+<<<<<<< HEAD
           "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           "license": "android-sdk-license",
           "name": "system-image-22-google_apis-armeabi-v7a",
           "path": "system-images/android-22/google_apis/armeabi-v7a",
@@ -4024,7 +4339,10 @@
             }
           },
           "displayName": "Google APIs Intel x86 Atom System Image",
+<<<<<<< HEAD
           "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           "license": "android-sdk-license",
           "name": "system-image-22-google_apis-x86",
           "path": "system-images/android-22/google_apis/x86",
@@ -4064,8 +4382,12 @@
               }
             }
           },
+<<<<<<< HEAD
           "displayName": "Google APIs Intel x86_64 Atom System Image",
           "last-available-day": 19579,
+=======
+          "displayName": "Google APIs Intel x86 Atom_64 System Image",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           "license": "android-sdk-license",
           "name": "system-image-22-google_apis-x86_64",
           "path": "system-images/android-22/google_apis/x86_64",
@@ -4103,7 +4425,10 @@
             }
           ],
           "displayName": "Android TV ARM EABI v7a System Image",
+<<<<<<< HEAD
           "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           "license": "android-sdk-license",
           "name": "system-image-23-android-tv-armeabi-v7a",
           "path": "system-images/android-23/android-tv/armeabi-v7a",
@@ -4140,7 +4465,10 @@
             }
           },
           "displayName": "Android TV Intel x86 Atom System Image",
+<<<<<<< HEAD
           "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           "license": "android-sdk-license",
           "name": "system-image-23-android-tv-x86",
           "path": "system-images/android-23/android-tv/x86",
@@ -4172,7 +4500,10 @@
             }
           ],
           "displayName": "ARM 64 v8a System Image",
+<<<<<<< HEAD
           "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           "license": "android-sdk-license",
           "name": "system-image-23-default-arm64-v8a",
           "path": "system-images/android-23/default/arm64-v8a",
@@ -4210,7 +4541,10 @@
             }
           },
           "displayName": "ARM EABI v7a System Image",
+<<<<<<< HEAD
           "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           "license": "android-sdk-license",
           "name": "system-image-23-default-armeabi-v7a",
           "path": "system-images/android-23/default/armeabi-v7a",
@@ -4248,7 +4582,10 @@
             }
           },
           "displayName": "Intel x86 Atom System Image",
+<<<<<<< HEAD
           "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           "license": "android-sdk-license",
           "name": "system-image-23-default-x86",
           "path": "system-images/android-23/default/x86",
@@ -4285,8 +4622,12 @@
               }
             }
           },
+<<<<<<< HEAD
           "displayName": "Intel x86_64 Atom System Image",
           "last-available-day": 19579,
+=======
+          "displayName": "Intel x86 Atom_64 System Image",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           "license": "android-sdk-license",
           "name": "system-image-23-default-x86_64",
           "path": "system-images/android-23/default/x86_64",
@@ -4319,7 +4660,10 @@
             }
           ],
           "displayName": "Google APIs ARM 64 v8a System Image",
+<<<<<<< HEAD
           "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           "license": "android-sdk-license",
           "name": "system-image-23-google_apis-arm64-v8a",
           "path": "system-images/android-23/google_apis/arm64-v8a",
@@ -4360,7 +4704,10 @@
             }
           },
           "displayName": "Google APIs ARM EABI v7a System Image",
+<<<<<<< HEAD
           "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           "license": "android-sdk-license",
           "name": "system-image-23-google_apis-armeabi-v7a",
           "path": "system-images/android-23/google_apis/armeabi-v7a",
@@ -4401,7 +4748,10 @@
             }
           },
           "displayName": "Google APIs Intel x86 Atom System Image",
+<<<<<<< HEAD
           "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           "license": "android-sdk-license",
           "name": "system-image-23-google_apis-x86",
           "path": "system-images/android-23/google_apis/x86",
@@ -4441,8 +4791,12 @@
               }
             }
           },
+<<<<<<< HEAD
           "displayName": "Google APIs Intel x86_64 Atom System Image",
           "last-available-day": 19579,
+=======
+          "displayName": "Google APIs Intel x86 Atom_64 System Image",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           "license": "android-sdk-license",
           "name": "system-image-23-google_apis-x86_64",
           "path": "system-images/android-23/google_apis/x86_64",
@@ -4487,7 +4841,10 @@
             }
           },
           "displayName": "Android TV Intel x86 Atom System Image",
+<<<<<<< HEAD
           "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           "license": "android-sdk-license",
           "name": "system-image-24-android-tv-x86",
           "path": "system-images/android-24/android-tv/x86",
@@ -4519,7 +4876,10 @@
             }
           ],
           "displayName": "ARM 64 v8a System Image",
+<<<<<<< HEAD
           "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           "license": "android-sdk-license",
           "name": "system-image-24-default-arm64-v8a",
           "path": "system-images/android-24/default/arm64-v8a",
@@ -4557,7 +4917,10 @@
             }
           },
           "displayName": "ARM EABI v7a System Image",
+<<<<<<< HEAD
           "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           "license": "android-sdk-license",
           "name": "system-image-24-default-armeabi-v7a",
           "path": "system-images/android-24/default/armeabi-v7a",
@@ -4595,7 +4958,10 @@
             }
           },
           "displayName": "Intel x86 Atom System Image",
+<<<<<<< HEAD
           "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           "license": "android-sdk-license",
           "name": "system-image-24-default-x86",
           "path": "system-images/android-24/default/x86",
@@ -4632,8 +4998,12 @@
               }
             }
           },
+<<<<<<< HEAD
           "displayName": "Intel x86_64 Atom System Image",
           "last-available-day": 19579,
+=======
+          "displayName": "Intel x86 Atom_64 System Image",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           "license": "android-sdk-license",
           "name": "system-image-24-default-x86_64",
           "path": "system-images/android-24/default/x86_64",
@@ -4673,7 +5043,10 @@
             }
           },
           "displayName": "Google APIs ARM 64 v8a System Image",
+<<<<<<< HEAD
           "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           "license": "android-sdk-license",
           "name": "system-image-24-google_apis-arm64-v8a",
           "path": "system-images/android-24/google_apis/arm64-v8a",
@@ -4714,7 +5087,10 @@
             }
           },
           "displayName": "Google APIs Intel x86 Atom System Image",
+<<<<<<< HEAD
           "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           "license": "android-sdk-license",
           "name": "system-image-24-google_apis-x86",
           "path": "system-images/android-24/google_apis/x86",
@@ -4754,8 +5130,12 @@
               }
             }
           },
+<<<<<<< HEAD
           "displayName": "Google APIs Intel x86_64 Atom System Image",
           "last-available-day": 19579,
+=======
+          "displayName": "Google APIs Intel x86 Atom_64 System Image",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           "license": "android-sdk-license",
           "name": "system-image-24-google_apis-x86_64",
           "path": "system-images/android-24/google_apis/x86_64",
@@ -4798,7 +5178,10 @@
             }
           },
           "displayName": "Google Play Intel x86 Atom System Image",
+<<<<<<< HEAD
           "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           "license": "android-sdk-license",
           "name": "system-image-24-google_apis_playstore-x86",
           "path": "system-images/android-24/google_apis_playstore/x86",
@@ -4843,7 +5226,10 @@
             }
           },
           "displayName": "Android TV Intel x86 Atom System Image",
+<<<<<<< HEAD
           "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           "license": "android-sdk-license",
           "name": "system-image-25-android-tv-x86",
           "path": "system-images/android-25/android-tv/x86",
@@ -4882,7 +5268,10 @@
             }
           },
           "displayName": "Android Wear ARM EABI v7a System Image",
+<<<<<<< HEAD
           "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           "license": "android-sdk-license",
           "name": "system-image-25-android-wear-armeabi-v7a",
           "path": "system-images/android-25/android-wear/armeabi-v7a",
@@ -4919,7 +5308,10 @@
             }
           },
           "displayName": "Android Wear Intel x86 Atom System Image",
+<<<<<<< HEAD
           "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           "license": "android-sdk-license",
           "name": "system-image-25-android-wear-x86",
           "path": "system-images/android-25/android-wear/x86",
@@ -4951,7 +5343,10 @@
             }
           ],
           "displayName": "ARM 64 v8a System Image",
+<<<<<<< HEAD
           "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           "license": "android-sdk-license",
           "name": "system-image-25-default-arm64-v8a",
           "path": "system-images/android-25/default/arm64-v8a",
@@ -4989,7 +5384,10 @@
             }
           },
           "displayName": "Intel x86 Atom System Image",
+<<<<<<< HEAD
           "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           "license": "android-sdk-license",
           "name": "system-image-25-default-x86",
           "path": "system-images/android-25/default/x86",
@@ -5026,8 +5424,12 @@
               }
             }
           },
+<<<<<<< HEAD
           "displayName": "Intel x86_64 Atom System Image",
           "last-available-day": 19579,
+=======
+          "displayName": "Intel x86 Atom_64 System Image",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           "license": "android-sdk-license",
           "name": "system-image-25-default-x86_64",
           "path": "system-images/android-25/default/x86_64",
@@ -5060,7 +5462,10 @@
             }
           ],
           "displayName": "Google APIs ARM 64 v8a System Image",
+<<<<<<< HEAD
           "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           "license": "android-sdk-license",
           "name": "system-image-25-google_apis-arm64-v8a",
           "path": "system-images/android-25/google_apis/arm64-v8a",
@@ -5101,7 +5506,10 @@
             }
           },
           "displayName": "Google APIs ARM EABI v7a System Image",
+<<<<<<< HEAD
           "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           "license": "android-sdk-license",
           "name": "system-image-25-google_apis-armeabi-v7a",
           "path": "system-images/android-25/google_apis/armeabi-v7a",
@@ -5142,7 +5550,10 @@
             }
           },
           "displayName": "Google APIs Intel x86 Atom System Image",
+<<<<<<< HEAD
           "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           "license": "android-sdk-license",
           "name": "system-image-25-google_apis-x86",
           "path": "system-images/android-25/google_apis/x86",
@@ -5182,8 +5593,12 @@
               }
             }
           },
+<<<<<<< HEAD
           "displayName": "Google APIs Intel x86_64 Atom System Image",
           "last-available-day": 19579,
+=======
+          "displayName": "Google APIs Intel x86 Atom_64 System Image",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           "license": "android-sdk-license",
           "name": "system-image-25-google_apis-x86_64",
           "path": "system-images/android-25/google_apis/x86_64",
@@ -5226,7 +5641,10 @@
             }
           },
           "displayName": "Google Play Intel x86 Atom System Image",
+<<<<<<< HEAD
           "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           "license": "android-sdk-license",
           "name": "system-image-25-google_apis_playstore-x86",
           "path": "system-images/android-25/google_apis_playstore/x86",
@@ -5281,7 +5699,10 @@
             }
           },
           "displayName": "Android TV Intel x86 Atom System Image",
+<<<<<<< HEAD
           "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           "license": "android-sdk-preview-license",
           "name": "system-image-26-android-tv-x86",
           "path": "system-images/android-26/android-tv/x86",
@@ -5320,7 +5741,10 @@
             }
           },
           "displayName": "Android Wear Intel x86 Atom System Image",
+<<<<<<< HEAD
           "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           "license": "android-sdk-license",
           "name": "system-image-26-android-wear-x86",
           "path": "system-images/android-26/android-wear/x86",
@@ -5346,9 +5770,15 @@
           "archives": [
             {
               "os": "all",
+<<<<<<< HEAD
               "sha1": "12353141d08dd302fbebc03872f0e1ca7357c55f",
               "size": 330014927,
               "url": "https://dl.google.com/android/repository/sys-img/android/arm64-v8a-26_r02.zip"
+=======
+              "sha1": "c3199baf49790fc65f90f7ce734435d5778f6a30",
+              "size": 328910124,
+              "url": "https://dl.google.com/android/repository/sys-img/android/arm64-v8a-26_r01.zip"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
             }
           ],
           "dependencies": {
@@ -5364,13 +5794,20 @@
             }
           },
           "displayName": "ARM 64 v8a System Image",
+<<<<<<< HEAD
           "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           "license": "android-sdk-license",
           "name": "system-image-26-default-arm64-v8a",
           "path": "system-images/android-26/default/arm64-v8a",
           "revision": "26-default-arm64-v8a",
           "revision-details": {
+<<<<<<< HEAD
             "major:0": "2"
+=======
+            "major:0": "1"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           },
           "type-details": {
             "abi:2": "arm64-v8a",
@@ -5401,7 +5838,10 @@
             }
           },
           "displayName": "Intel x86 Atom System Image",
+<<<<<<< HEAD
           "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           "license": "android-sdk-license",
           "name": "system-image-26-default-x86",
           "path": "system-images/android-26/default/x86",
@@ -5437,8 +5877,12 @@
               }
             }
           },
+<<<<<<< HEAD
           "displayName": "Intel x86_64 Atom System Image",
           "last-available-day": 19579,
+=======
+          "displayName": "Intel x86 Atom_64 System Image",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           "license": "android-sdk-license",
           "name": "system-image-26-default-x86_64",
           "path": "system-images/android-26/default/x86_64",
@@ -5464,9 +5908,15 @@
           "archives": [
             {
               "os": "all",
+<<<<<<< HEAD
               "sha1": "307bb9e03b215ebcab5d2a9edd47839009c57c8f",
               "size": 733341370,
               "url": "https://dl.google.com/android/repository/sys-img/google_apis/arm64-v8a-26_r02.zip"
+=======
+              "sha1": "75fe6f36cf0854270876543641da53887961a63b",
+              "size": 732225522,
+              "url": "https://dl.google.com/android/repository/sys-img/google_apis/arm64-v8a-26_r01.zip"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
             }
           ],
           "dependencies": {
@@ -5482,13 +5932,20 @@
             }
           },
           "displayName": "Google APIs ARM 64 v8a System Image",
+<<<<<<< HEAD
           "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           "license": "android-sdk-license",
           "name": "system-image-26-google_apis-arm64-v8a",
           "path": "system-images/android-26/google_apis/arm64-v8a",
           "revision": "26-google_apis-arm64-v8a",
           "revision-details": {
+<<<<<<< HEAD
             "major:0": "2"
+=======
+            "major:0": "1"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           },
           "type-details": {
             "abi:3": "arm64-v8a",
@@ -5533,7 +5990,10 @@
             }
           },
           "displayName": "Google APIs Intel x86 Atom System Image",
+<<<<<<< HEAD
           "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           "license": "android-sdk-license",
           "name": "system-image-26-google_apis-x86",
           "path": "system-images/android-26/google_apis/x86",
@@ -5583,8 +6043,12 @@
               }
             }
           },
+<<<<<<< HEAD
           "displayName": "Google APIs Intel x86_64 Atom System Image",
           "last-available-day": 19579,
+=======
+          "displayName": "Google APIs Intel x86 Atom_64 System Image",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           "license": "android-sdk-license",
           "name": "system-image-26-google_apis-x86_64",
           "path": "system-images/android-26/google_apis/x86_64",
@@ -5637,7 +6101,10 @@
             }
           },
           "displayName": "Google Play Intel x86 Atom System Image",
+<<<<<<< HEAD
           "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           "license": "android-sdk-preview-license",
           "name": "system-image-26-google_apis_playstore-x86",
           "path": "system-images/android-26/google_apis_playstore/x86",
@@ -5682,7 +6149,10 @@
             }
           },
           "displayName": "Android TV Intel x86 Atom System Image",
+<<<<<<< HEAD
           "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           "license": "android-sdk-preview-license",
           "name": "system-image-27-android-tv-x86",
           "path": "system-images/android-27/android-tv/x86",
@@ -5708,9 +6178,15 @@
           "archives": [
             {
               "os": "all",
+<<<<<<< HEAD
               "sha1": "e014473ac510cc9d8e9b412826332923277fa827",
               "size": 332173536,
               "url": "https://dl.google.com/android/repository/sys-img/android/arm64-v8a-27_r02.zip"
+=======
+              "sha1": "cb01199edae33ce375c6d8e08aea08911ff0d583",
+              "size": 331796092,
+              "url": "https://dl.google.com/android/repository/sys-img/android/arm64-v8a-27_r01.zip"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
             }
           ],
           "dependencies": {
@@ -5726,13 +6202,20 @@
             }
           },
           "displayName": "ARM 64 v8a System Image",
+<<<<<<< HEAD
           "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           "license": "android-sdk-license",
           "name": "system-image-27-default-arm64-v8a",
           "path": "system-images/android-27/default/arm64-v8a",
           "revision": "27-default-arm64-v8a",
           "revision-details": {
+<<<<<<< HEAD
             "major:0": "2"
+=======
+            "major:0": "1"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           },
           "type-details": {
             "abi:2": "arm64-v8a",
@@ -5763,7 +6246,10 @@
             }
           },
           "displayName": "Intel x86 Atom System Image",
+<<<<<<< HEAD
           "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           "license": "android-sdk-license",
           "name": "system-image-27-default-x86",
           "path": "system-images/android-27/default/x86",
@@ -5799,8 +6285,12 @@
               }
             }
           },
+<<<<<<< HEAD
           "displayName": "Intel x86_64 Atom System Image",
           "last-available-day": 19579,
+=======
+          "displayName": "Intel x86 Atom_64 System Image",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           "license": "android-sdk-license",
           "name": "system-image-27-default-x86_64",
           "path": "system-images/android-27/default/x86_64",
@@ -5826,9 +6316,15 @@
           "archives": [
             {
               "os": "all",
+<<<<<<< HEAD
               "sha1": "e4c06bbee837cd8266774fc4ddd1c70338ab6848",
               "size": 730720117,
               "url": "https://dl.google.com/android/repository/sys-img/google_apis/arm64-v8a-27_r02.zip"
+=======
+              "sha1": "a7ae177097205090fee9801349575cea0dd9f606",
+              "size": 730343967,
+              "url": "https://dl.google.com/android/repository/sys-img/google_apis/arm64-v8a-27_r01.zip"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
             }
           ],
           "dependencies": {
@@ -5844,13 +6340,20 @@
             }
           },
           "displayName": "Google APIs ARM 64 v8a System Image",
+<<<<<<< HEAD
           "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           "license": "android-sdk-license",
           "name": "system-image-27-google_apis-arm64-v8a",
           "path": "system-images/android-27/google_apis/arm64-v8a",
           "revision": "27-google_apis-arm64-v8a",
           "revision-details": {
+<<<<<<< HEAD
             "major:0": "2"
+=======
+            "major:0": "1"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           },
           "type-details": {
             "abi:3": "arm64-v8a",
@@ -5895,7 +6398,10 @@
             }
           },
           "displayName": "Google APIs Intel x86 Atom System Image",
+<<<<<<< HEAD
           "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           "license": "android-sdk-license",
           "name": "system-image-27-google_apis-x86",
           "path": "system-images/android-27/google_apis/x86",
@@ -5948,7 +6454,10 @@
             }
           },
           "displayName": "Google Play Intel x86 Atom System Image",
+<<<<<<< HEAD
           "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           "license": "android-sdk-license",
           "name": "system-image-27-google_apis_playstore-x86",
           "path": "system-images/android-27/google_apis_playstore/x86",
@@ -5993,7 +6502,10 @@
             }
           },
           "displayName": "Android TV Intel x86 Atom System Image",
+<<<<<<< HEAD
           "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           "license": "android-sdk-preview-license",
           "name": "system-image-28-android-tv-x86",
           "path": "system-images/android-28/android-tv/x86",
@@ -6032,7 +6544,10 @@
             }
           },
           "displayName": "Wear OS Intel x86 Atom System Image",
+<<<<<<< HEAD
           "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           "license": "android-sdk-license",
           "name": "system-image-28-android-wear-x86",
           "path": "system-images/android-28/android-wear/x86",
@@ -6058,9 +6573,15 @@
           "archives": [
             {
               "os": "all",
+<<<<<<< HEAD
               "sha1": "e209114dd0dfc2f4e0d328f5fd7367fec39ee1bd",
               "size": 426760297,
               "url": "https://dl.google.com/android/repository/sys-img/android/arm64-v8a-28_r02.zip"
+=======
+              "sha1": "4de0491612ca12097be7deb76af835ebabadefca",
+              "size": 425671679,
+              "url": "https://dl.google.com/android/repository/sys-img/android/arm64-v8a-28_r01.zip"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
             }
           ],
           "dependencies": {
@@ -6076,13 +6597,20 @@
             }
           },
           "displayName": "ARM 64 v8a System Image",
+<<<<<<< HEAD
           "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           "license": "android-sdk-license",
           "name": "system-image-28-default-arm64-v8a",
           "path": "system-images/android-28/default/arm64-v8a",
           "revision": "28-default-arm64-v8a",
           "revision-details": {
+<<<<<<< HEAD
             "major:0": "2"
+=======
+            "major:0": "1"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           },
           "type-details": {
             "abi:2": "arm64-v8a",
@@ -6106,7 +6634,10 @@
             }
           ],
           "displayName": "Intel x86 Atom System Image",
+<<<<<<< HEAD
           "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           "license": "android-sdk-preview-license",
           "name": "system-image-28-default-x86",
           "path": "system-images/android-28/default/x86",
@@ -6135,8 +6666,12 @@
               "url": "https://dl.google.com/android/repository/sys-img/android/x86_64-28_r04.zip"
             }
           ],
+<<<<<<< HEAD
           "displayName": "Intel x86_64 Atom System Image",
           "last-available-day": 19579,
+=======
+          "displayName": "Intel x86 Atom_64 System Image",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           "license": "android-sdk-preview-license",
           "name": "system-image-28-default-x86_64",
           "path": "system-images/android-28/default/x86_64",
@@ -6162,9 +6697,15 @@
           "archives": [
             {
               "os": "all",
+<<<<<<< HEAD
               "sha1": "28f59164bdb4cb18f1a1060f1880450e06cf4d10",
               "size": 857120029,
               "url": "https://dl.google.com/android/repository/sys-img/google_apis/arm64-v8a-28_r02.zip"
+=======
+              "sha1": "3360092d11284a9f2d7146847932a426c438b372",
+              "size": 856031756,
+              "url": "https://dl.google.com/android/repository/sys-img/google_apis/arm64-v8a-28_r01.zip"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
             }
           ],
           "dependencies": {
@@ -6180,13 +6721,21 @@
             }
           },
           "displayName": "Google APIs ARM 64 v8a System Image",
+<<<<<<< HEAD
           "last-available-day": 19579,
           "license": "android-sdk-license",
+=======
+          "license": "android-sdk-arm-dbt-license",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           "name": "system-image-28-google_apis-arm64-v8a",
           "path": "system-images/android-28/google_apis/arm64-v8a",
           "revision": "28-google_apis-arm64-v8a",
           "revision-details": {
+<<<<<<< HEAD
             "major:0": "2"
+=======
+            "major:0": "1"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           },
           "type-details": {
             "abi:3": "arm64-v8a",
@@ -6231,7 +6780,10 @@
             }
           },
           "displayName": "Google APIs Intel x86 Atom System Image",
+<<<<<<< HEAD
           "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           "license": "android-sdk-arm-dbt-license",
           "name": "system-image-28-google_apis-x86",
           "path": "system-images/android-28/google_apis/x86",
@@ -6281,8 +6833,12 @@
               }
             }
           },
+<<<<<<< HEAD
           "displayName": "Google APIs Intel x86_64 Atom System Image",
           "last-available-day": 19579,
+=======
+          "displayName": "Google APIs Intel x86 Atom_64 System Image",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           "license": "android-sdk-license",
           "name": "system-image-28-google_apis-x86_64",
           "path": "system-images/android-28/google_apis/x86_64",
@@ -6312,9 +6868,15 @@
           "archives": [
             {
               "os": "all",
+<<<<<<< HEAD
               "sha1": "205a4720befd41be99fcdfb2550fa1680e9a2e18",
               "size": 836861962,
               "url": "https://dl.google.com/android/repository/sys-img/google_apis_playstore/arm64-v8a-28_r02.zip"
+=======
+              "sha1": "8901ad796ada9d40272c429427ba628de6919281",
+              "size": 835797733,
+              "url": "https://dl.google.com/android/repository/sys-img/google_apis_playstore/arm64-v8a-28_r01.zip"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
             }
           ],
           "dependencies": {
@@ -6330,13 +6892,20 @@
             }
           },
           "displayName": "Google ARM64-V8a Play ARM 64 v8a System Image",
+<<<<<<< HEAD
           "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           "license": "android-sdk-arm-dbt-license",
           "name": "system-image-28-google_apis_playstore-arm64-v8a",
           "path": "system-images/android-28/google_apis_playstore/arm64-v8a",
           "revision": "28-google_apis_playstore-arm64-v8a",
           "revision-details": {
+<<<<<<< HEAD
             "major:0": "2"
+=======
+            "major:0": "1"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           },
           "type-details": {
             "abi:3": "arm64-v8a",
@@ -6381,7 +6950,10 @@
             }
           },
           "displayName": "Google Play Intel x86 Atom System Image",
+<<<<<<< HEAD
           "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           "license": "android-sdk-license",
           "name": "system-image-28-google_apis_playstore-x86",
           "path": "system-images/android-28/google_apis_playstore/x86",
@@ -6431,8 +7003,12 @@
               }
             }
           },
+<<<<<<< HEAD
           "displayName": "Google Play Intel x86_64 Atom System Image",
           "last-available-day": 19579,
+=======
+          "displayName": "Google Play Intel x86 Atom_64 System Image",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           "license": "android-sdk-license",
           "name": "system-image-28-google_apis_playstore-x86_64",
           "path": "system-images/android-28/google_apis_playstore/x86_64",
@@ -6487,7 +7063,10 @@
             }
           },
           "displayName": "Android TV Intel x86 Atom System Image",
+<<<<<<< HEAD
           "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           "license": "android-sdk-preview-license",
           "name": "system-image-29-android-tv-x86",
           "path": "system-images/android-29/android-tv/x86",
@@ -6519,7 +7098,10 @@
             }
           ],
           "displayName": "ARM 64 v8a System Image",
+<<<<<<< HEAD
           "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           "license": "android-sdk-license",
           "name": "system-image-29-default-arm64-v8a",
           "path": "system-images/android-29/default/arm64-v8a",
@@ -6573,7 +7155,10 @@
             }
           },
           "displayName": "Intel x86 Atom System Image",
+<<<<<<< HEAD
           "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           "license": "android-sdk-license",
           "name": "system-image-29-default-x86",
           "path": "system-images/android-29/default/x86",
@@ -6626,8 +7211,12 @@
               }
             }
           },
+<<<<<<< HEAD
           "displayName": "Intel x86_64 Atom System Image",
           "last-available-day": 19579,
+=======
+          "displayName": "Intel x86 Atom_64 System Image",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           "license": "android-sdk-license",
           "name": "system-image-29-default-x86_64",
           "path": "system-images/android-29/default/x86_64",
@@ -6671,7 +7260,10 @@
             }
           },
           "displayName": "Google APIs ARM 64 v8a System Image",
+<<<<<<< HEAD
           "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           "license": "android-sdk-arm-dbt-license",
           "name": "system-image-29-google_apis-arm64-v8a",
           "path": "system-images/android-29/google_apis/arm64-v8a",
@@ -6717,7 +7309,10 @@
             }
           },
           "displayName": "Google APIs Intel x86 Atom System Image",
+<<<<<<< HEAD
           "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           "license": "android-sdk-license",
           "name": "system-image-29-google_apis-x86",
           "path": "system-images/android-29/google_apis/x86",
@@ -6762,8 +7357,12 @@
               }
             }
           },
+<<<<<<< HEAD
           "displayName": "Google APIs Intel x86_64 Atom System Image",
           "last-available-day": 19579,
+=======
+          "displayName": "Google APIs Intel x86 Atom_64 System Image",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           "license": "android-sdk-license",
           "name": "system-image-29-google_apis-x86_64",
           "path": "system-images/android-29/google_apis/x86_64",
@@ -6817,7 +7416,10 @@
             }
           },
           "displayName": "Google Play ARM 64 v8a System Image",
+<<<<<<< HEAD
           "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           "license": "android-sdk-arm-dbt-license",
           "name": "system-image-29-google_apis_playstore-arm64-v8a",
           "path": "system-images/android-29/google_apis_playstore/arm64-v8a",
@@ -6880,7 +7482,10 @@
             }
           },
           "displayName": "Google Play Intel x86 Atom System Image",
+<<<<<<< HEAD
           "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           "license": "android-sdk-license",
           "name": "system-image-29-google_apis_playstore-x86",
           "path": "system-images/android-29/google_apis_playstore/x86",
@@ -6942,8 +7547,12 @@
               }
             }
           },
+<<<<<<< HEAD
           "displayName": "Google Play Intel x86_64 Atom System Image",
           "last-available-day": 19579,
+=======
+          "displayName": "Google Play Intel x86 Atom_64 System Image",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           "license": "android-sdk-license",
           "name": "system-image-29-google_apis_playstore-x86_64",
           "path": "system-images/android-29/google_apis_playstore/x86_64",
@@ -6998,7 +7607,10 @@
             }
           },
           "displayName": "Android TV Intel x86 Atom System Image",
+<<<<<<< HEAD
           "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           "license": "android-sdk-preview-license",
           "name": "system-image-30-android-tv-x86",
           "path": "system-images/android-30/android-tv/x86",
@@ -7037,7 +7649,10 @@
             }
           },
           "displayName": "Wear OS 3 ARM 64 v8a System Image",
+<<<<<<< HEAD
           "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           "license": "android-sdk-license",
           "name": "system-image-30-android-wear-arm64-v8a",
           "path": "system-images/android-30/android-wear/arm64-v8a",
@@ -7074,7 +7689,10 @@
             }
           },
           "displayName": "Wear OS 3 Intel x86 Atom System Image",
+<<<<<<< HEAD
           "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           "license": "android-sdk-license",
           "name": "system-image-30-android-wear-x86",
           "path": "system-images/android-30/android-wear/x86",
@@ -7100,6 +7718,7 @@
           "archives": [
             {
               "os": "all",
+<<<<<<< HEAD
               "sha1": "e96298145a5e0bfd6da4816f51b06c520d8dba72",
               "size": 548363615,
               "url": "https://dl.google.com/android/repository/sys-img/android/arm64-v8a-30_r02.zip"
@@ -7107,12 +7726,24 @@
           ],
           "displayName": "ARM 64 v8a System Image",
           "last-available-day": 19579,
+=======
+              "sha1": "2462af138023fbbd1114421818890884d4ebceab",
+              "size": 548363604,
+              "url": "https://dl.google.com/android/repository/sys-img/android/arm64-v8a-30_r01.zip"
+            }
+          ],
+          "displayName": "ARM 64 v8a System Image",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           "license": "android-sdk-license",
           "name": "system-image-30-default-arm64-v8a",
           "path": "system-images/android-30/default/arm64-v8a",
           "revision": "30-default-arm64-v8a",
           "revision-details": {
+<<<<<<< HEAD
             "major:0": "2"
+=======
+            "major:0": "1"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           },
           "type-details": {
             "abi:2": "arm64-v8a",
@@ -7130,9 +7761,15 @@
           "archives": [
             {
               "os": "all",
+<<<<<<< HEAD
               "sha1": "5e4de3946d46f88856c35efcc4d797b381456347",
               "size": 676379777,
               "url": "https://dl.google.com/android/repository/sys-img/android/x86_64-30_r11.zip"
+=======
+              "sha1": "e08119b65d2c188ef69f127028eb4c8cc632cd8f",
+              "size": 676379913,
+              "url": "https://dl.google.com/android/repository/sys-img/android/x86_64-30_r10.zip"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
             }
           ],
           "dependencies": {
@@ -7147,14 +7784,22 @@
               }
             }
           },
+<<<<<<< HEAD
           "displayName": "Intel x86_64 Atom System Image",
           "last-available-day": 19579,
+=======
+          "displayName": "Intel x86 Atom_64 System Image",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           "license": "android-sdk-license",
           "name": "system-image-30-default-x86_64",
           "path": "system-images/android-30/default/x86_64",
           "revision": "30-default-x86_64",
           "revision-details": {
+<<<<<<< HEAD
             "major:0": "11"
+=======
+            "major:0": "10"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           },
           "type-details": {
             "abi:2": "x86_64",
@@ -7174,9 +7819,15 @@
           "archives": [
             {
               "os": "all",
+<<<<<<< HEAD
               "sha1": "348aa8836d855745dd89295356330ad0b5622cb3",
               "size": 1244297361,
               "url": "https://dl.google.com/android/repository/sys-img/google_apis/arm64-v8a-30_r12.zip"
+=======
+              "sha1": "14393e29f2b1021d4bfece3a1cb29af745e95dac",
+              "size": 1244095258,
+              "url": "https://dl.google.com/android/repository/sys-img/google_apis/arm64-v8a-30_r11.zip"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
             }
           ],
           "dependencies": {
@@ -7192,13 +7843,21 @@
             }
           },
           "displayName": "Google APIs ARM 64 v8a System Image",
+<<<<<<< HEAD
           "last-available-day": 19579,
           "license": "android-sdk-license",
+=======
+          "license": "android-sdk-arm-dbt-license",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           "name": "system-image-30-google_apis-arm64-v8a",
           "path": "system-images/android-30/google_apis/arm64-v8a",
           "revision": "30-google_apis-arm64-v8a",
           "revision-details": {
+<<<<<<< HEAD
             "major:0": "12"
+=======
+            "major:0": "11"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           },
           "type-details": {
             "abi:3": "arm64-v8a",
@@ -7243,7 +7902,10 @@
             }
           },
           "displayName": "Google APIs Intel x86 Atom System Image",
+<<<<<<< HEAD
           "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           "license": "android-sdk-license",
           "name": "system-image-30-google_apis-x86",
           "path": "system-images/android-30/google_apis/x86",
@@ -7271,9 +7933,15 @@
           "archives": [
             {
               "os": "all",
+<<<<<<< HEAD
               "sha1": "efb07cd6268d93d7e2be88883bc9249a00b378b3",
               "size": 1438275289,
               "url": "https://dl.google.com/android/repository/sys-img/google_apis/x86_64-30_r12.zip"
+=======
+              "sha1": "8ec579d5fe31804dd80132f1678655bfc015609b",
+              "size": 1438274971,
+              "url": "https://dl.google.com/android/repository/sys-img/google_apis/x86_64-30_r11.zip"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
             }
           ],
           "dependencies": {
@@ -7293,14 +7961,23 @@
               }
             }
           },
+<<<<<<< HEAD
           "displayName": "Google APIs Intel x86_64 Atom System Image",
           "last-available-day": 19579,
           "license": "android-sdk-arm-dbt-license",
+=======
+          "displayName": "Google APIs Intel x86 Atom_64 System Image",
+          "license": "android-sdk-license",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           "name": "system-image-30-google_apis-x86_64",
           "path": "system-images/android-30/google_apis/x86_64",
           "revision": "30-google_apis-x86_64",
           "revision-details": {
+<<<<<<< HEAD
             "major:0": "12"
+=======
+            "major:0": "11"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           },
           "type-details": {
             "abi:3": "x86_64",
@@ -7348,7 +8025,10 @@
             }
           },
           "displayName": "Google Play ARM 64 v8a System Image",
+<<<<<<< HEAD
           "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           "license": "android-sdk-arm-dbt-license",
           "name": "system-image-30-google_apis_playstore-arm64-v8a",
           "path": "system-images/android-30/google_apis_playstore/arm64-v8a",
@@ -7411,7 +8091,10 @@
             }
           },
           "displayName": "Google Play Intel x86 Atom System Image",
+<<<<<<< HEAD
           "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           "license": "android-sdk-license",
           "name": "system-image-30-google_apis_playstore-x86",
           "path": "system-images/android-30/google_apis_playstore/x86",
@@ -7473,8 +8156,12 @@
               }
             }
           },
+<<<<<<< HEAD
           "displayName": "Google Play Intel x86_64 Atom System Image",
           "last-available-day": 19579,
+=======
+          "displayName": "Google Play Intel x86 Atom_64 System Image",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           "license": "android-sdk-arm-dbt-license",
           "name": "system-image-30-google_apis_playstore-x86_64",
           "path": "system-images/android-30/google_apis_playstore/x86_64",
@@ -7529,7 +8216,10 @@
             }
           },
           "displayName": "Android TV ARM 64 v8a System Image",
+<<<<<<< HEAD
           "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           "license": "android-sdk-license",
           "name": "system-image-31-android-tv-arm64-v8a",
           "path": "system-images/android-31/android-tv/arm64-v8a",
@@ -7576,7 +8266,10 @@
             }
           },
           "displayName": "Android TV Intel x86 Atom System Image",
+<<<<<<< HEAD
           "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           "license": "android-sdk-license",
           "name": "system-image-31-android-tv-x86",
           "path": "system-images/android-31/android-tv/x86",
@@ -7620,7 +8313,10 @@
             }
           },
           "displayName": "ARM 64 v8a System Image",
+<<<<<<< HEAD
           "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           "license": "android-sdk-license",
           "name": "system-image-31-default-arm64-v8a",
           "path": "system-images/android-31/default/arm64-v8a",
@@ -7644,9 +8340,15 @@
           "archives": [
             {
               "os": "all",
+<<<<<<< HEAD
               "sha1": "58bff3cb182c79bbfe3980fe77b87b51b9f7ad71",
               "size": 657246510,
               "url": "https://dl.google.com/android/repository/sys-img/android/x86_64-31_r05.zip"
+=======
+              "sha1": "1200d6983af477fd6439f11cc5cabf9866bc4a16",
+              "size": 657244568,
+              "url": "https://dl.google.com/android/repository/sys-img/android/x86_64-31_r03.zip"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
             }
           ],
           "dependencies": {
@@ -7661,14 +8363,22 @@
               }
             }
           },
+<<<<<<< HEAD
           "displayName": "Intel x86_64 Atom System Image",
           "last-available-day": 19579,
+=======
+          "displayName": "Intel x86 Atom_64 System Image",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           "license": "android-sdk-license",
           "name": "system-image-31-default-x86_64",
           "path": "system-images/android-31/default/x86_64",
           "revision": "31-default-x86_64",
           "revision-details": {
+<<<<<<< HEAD
             "major:0": "5"
+=======
+            "major:0": "4"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           },
           "type-details": {
             "abi:2": "x86_64",
@@ -7711,7 +8421,10 @@
             }
           },
           "displayName": "Google APIs ARM 64 v8a System Image",
+<<<<<<< HEAD
           "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           "license": "android-sdk-arm-dbt-license",
           "name": "system-image-31-google_apis-arm64-v8a",
           "path": "system-images/android-31/google_apis/arm64-v8a",
@@ -7739,9 +8452,15 @@
           "archives": [
             {
               "os": "all",
+<<<<<<< HEAD
               "sha1": "9aedd3e85cad7a479146f6858f4a94840c2a3f29",
               "size": 1470822277,
               "url": "https://dl.google.com/android/repository/sys-img/google_apis/x86_64-31_r14.zip"
+=======
+              "sha1": "05a74ff8509fb76cbfd14b2e3307addad5c4d0df",
+              "size": 1458104208,
+              "url": "https://dl.google.com/android/repository/sys-img/google_apis/x86_64-31_r11.zip"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
             }
           ],
           "dependencies": {
@@ -7761,14 +8480,22 @@
               }
             }
           },
+<<<<<<< HEAD
           "displayName": "Google APIs Intel x86_64 Atom System Image",
           "last-available-day": 19579,
+=======
+          "displayName": "Google APIs Intel x86 Atom_64 System Image",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           "license": "android-sdk-preview-license",
           "name": "system-image-31-google_apis-x86_64",
           "path": "system-images/android-31/google_apis/x86_64",
           "revision": "31-google_apis-x86_64",
           "revision-details": {
+<<<<<<< HEAD
             "major:0": "14"
+=======
+            "major:0": "11"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           },
           "type-details": {
             "abi:3": "x86_64",
@@ -7821,7 +8548,10 @@
             }
           },
           "displayName": "Google Play ARM 64 v8a System Image",
+<<<<<<< HEAD
           "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           "license": "android-sdk-arm-dbt-license",
           "name": "system-image-31-google_apis_playstore-arm64-v8a",
           "path": "system-images/android-31/google_apis_playstore/arm64-v8a",
@@ -7871,8 +8601,12 @@
               }
             }
           },
+<<<<<<< HEAD
           "displayName": "Google Play Intel x86_64 Atom System Image",
           "last-available-day": 19579,
+=======
+          "displayName": "Google Play Intel x86 Atom_64 System Image",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           "license": "android-sdk-arm-dbt-license",
           "name": "system-image-31-google_apis_playstore-x86_64",
           "path": "system-images/android-31/google_apis_playstore/x86_64",
@@ -7900,6 +8634,7 @@
     },
     "32": {
       "google_apis": {
+<<<<<<< HEAD
         "arm64-v8a": {
           "archives": [
             {
@@ -7951,13 +8686,21 @@
             }
           }
         },
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "x86_64": {
           "archives": [
             {
               "os": "all",
+<<<<<<< HEAD
               "sha1": "4b7fb40deefc6e7b5721774ce8f46310c2b434ca",
               "size": 1511072885,
               "url": "https://dl.google.com/android/repository/sys-img/google_apis/x86_64-32_r07.zip"
+=======
+              "sha1": "9727f570164b062e820d6e62edabc96d125027f6",
+              "size": 1471221547,
+              "url": "https://dl.google.com/android/repository/sys-img/google_apis/x86_64-32_r03.zip"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
             }
           ],
           "dependencies": {
@@ -7977,14 +8720,22 @@
               }
             }
           },
+<<<<<<< HEAD
           "displayName": "Google APIs Intel x86_64 Atom System Image",
           "last-available-day": 19579,
+=======
+          "displayName": "Google APIs Intel x86 Atom_64 System Image",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           "license": "android-sdk-preview-license",
           "name": "system-image-32-google_apis-x86_64",
           "path": "system-images/android-32/google_apis/x86_64",
           "revision": "32-google_apis-x86_64",
           "revision-details": {
+<<<<<<< HEAD
             "major:0": "7"
+=======
+            "major:0": "3"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           },
           "type-details": {
             "abi:3": "x86_64",
@@ -8037,7 +8788,10 @@
             }
           },
           "displayName": "Google Play ARM 64 v8a System Image",
+<<<<<<< HEAD
           "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           "license": "android-sdk-arm-dbt-license",
           "name": "system-image-32-google_apis_playstore-arm64-v8a",
           "path": "system-images/android-32/google_apis_playstore/arm64-v8a",
@@ -8099,8 +8853,12 @@
               }
             }
           },
+<<<<<<< HEAD
           "displayName": "Google Play Intel x86_64 Atom System Image",
           "last-available-day": 19579,
+=======
+          "displayName": "Google Play Intel x86 Atom_64 System Image",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           "license": "android-sdk-preview-license",
           "name": "system-image-32-google_apis_playstore-x86_64",
           "path": "system-images/android-32/google_apis_playstore/x86_64",
@@ -8155,7 +8913,10 @@
             }
           },
           "displayName": "Android TV ARM 64 v8a System Image",
+<<<<<<< HEAD
           "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           "license": "android-sdk-license",
           "name": "system-image-33-android-tv-arm64-v8a",
           "path": "system-images/android-33/android-tv/arm64-v8a",
@@ -8202,7 +8963,10 @@
             }
           },
           "displayName": "Android TV Intel x86 Atom System Image",
+<<<<<<< HEAD
           "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           "license": "android-sdk-license",
           "name": "system-image-33-android-tv-x86",
           "path": "system-images/android-33/android-tv/x86",
@@ -8223,6 +8987,7 @@
           }
         }
       },
+<<<<<<< HEAD
       "android-wear": {
         "arm64-v8a": {
           "archives": [
@@ -8299,14 +9064,22 @@
           }
         }
       },
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       "google_apis": {
         "arm64-v8a": {
           "archives": [
             {
               "os": "all",
+<<<<<<< HEAD
               "sha1": "5efee22c6b46ca0b0614d2881e1f8170fbf5649d",
               "size": 1629988084,
               "url": "https://dl.google.com/android/repository/sys-img/google_apis/arm64-v8a-33_r13.zip"
+=======
+              "sha1": "8e7733de150ad1a912d63f90a11a1de705b5ddcf",
+              "size": 1619645676,
+              "url": "https://dl.google.com/android/repository/sys-img/google_apis/arm64-v8a-33_r08.zip"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
             }
           ],
           "dependencies": {
@@ -8327,13 +9100,20 @@
             }
           },
           "displayName": "Google APIs ARM 64 v8a System Image",
+<<<<<<< HEAD
           "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           "license": "android-sdk-arm-dbt-license",
           "name": "system-image-33-google_apis-arm64-v8a",
           "path": "system-images/android-33/google_apis/arm64-v8a",
           "revision": "33-google_apis-arm64-v8a",
           "revision-details": {
+<<<<<<< HEAD
             "major:0": "13"
+=======
+            "major:0": "8"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           },
           "type-details": {
             "abi:3": "arm64-v8a",
@@ -8355,9 +9135,15 @@
           "archives": [
             {
               "os": "all",
+<<<<<<< HEAD
               "sha1": "50bc7f4082ea5dcb2e51fd65ddf243f934bcb40a",
               "size": 1545116967,
               "url": "https://dl.google.com/android/repository/sys-img/google_apis/x86_64-33_r13.zip"
+=======
+              "sha1": "6f5210b87ca249aa6ea2a25bb6d5598c19fa9372",
+              "size": 1510438727,
+              "url": "https://dl.google.com/android/repository/sys-img/google_apis/x86_64-33_r08.zip"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
             }
           ],
           "dependencies": {
@@ -8377,14 +9163,23 @@
               }
             }
           },
+<<<<<<< HEAD
           "displayName": "Google APIs Intel x86_64 Atom System Image",
           "last-available-day": 19579,
           "license": "android-sdk-arm-dbt-license",
+=======
+          "displayName": "Google APIs Intel x86 Atom_64 System Image",
+          "license": "android-sdk-license",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           "name": "system-image-33-google_apis-x86_64",
           "path": "system-images/android-33/google_apis/x86_64",
           "revision": "33-google_apis-x86_64",
           "revision-details": {
+<<<<<<< HEAD
             "major:0": "13"
+=======
+            "major:0": "8"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           },
           "type-details": {
             "abi:3": "x86_64",
@@ -8408,6 +9203,7 @@
           "archives": [
             {
               "os": "macosx",
+<<<<<<< HEAD
               "sha1": "51169278b759ce1f347a235497729bf5b558ecb2",
               "size": 1475820733,
               "url": "https://dl.google.com/android/repository/sys-img/google_apis_playstore/arm64-v8a-33_r01-darwin_ext05.zip"
@@ -8417,6 +9213,17 @@
               "sha1": "51169278b759ce1f347a235497729bf5b558ecb2",
               "size": 1475820733,
               "url": "https://dl.google.com/android/repository/sys-img/google_apis_playstore/arm64-v8a-33_r01-linux_ext05.zip"
+=======
+              "sha1": "831cfe87d12eb5dd9d107ca2dfb203d52ca7b217",
+              "size": 1582091204,
+              "url": "https://dl.google.com/android/repository/sys-img/google_apis_playstore/arm64-v8a-33_r07-darwin.zip"
+            },
+            {
+              "os": "linux",
+              "sha1": "831cfe87d12eb5dd9d107ca2dfb203d52ca7b217",
+              "size": 1582091204,
+              "url": "https://dl.google.com/android/repository/sys-img/google_apis_playstore/arm64-v8a-33_r07-linux.zip"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
             }
           ],
           "dependencies": {
@@ -8437,7 +9244,10 @@
             }
           },
           "displayName": "Google Play ARM 64 v8a System Image",
+<<<<<<< HEAD
           "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           "license": "android-sdk-arm-dbt-license",
           "name": "system-image-33-google_apis_playstore-arm64-v8a",
           "path": "system-images/android-33/google_apis_playstore/arm64-v8a",
@@ -8465,9 +9275,15 @@
           "archives": [
             {
               "os": "all",
+<<<<<<< HEAD
               "sha1": "e80584a2c9f8ba863a3fa961efc6d8866650f2eb",
               "size": 1479931636,
               "url": "https://dl.google.com/android/repository/sys-img/google_apis_playstore/x86_64-33_r01_ext05.zip"
+=======
+              "sha1": "b7491eecf45556bd96f7b7a80c020b18a8a7df0d",
+              "size": 1481773028,
+              "url": "https://dl.google.com/android/repository/sys-img/google_apis_playstore/x86_64-33_r07.zip"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
             }
           ],
           "dependencies": {
@@ -8487,8 +9303,12 @@
               }
             }
           },
+<<<<<<< HEAD
           "displayName": "Google Play Intel x86_64 Atom System Image",
           "last-available-day": 19579,
+=======
+          "displayName": "Google Play Intel x86 Atom_64 System Image",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           "license": "android-sdk-license",
           "name": "system-image-33-google_apis_playstore-x86_64",
           "path": "system-images/android-33/google_apis_playstore/x86_64",
@@ -8514,6 +9334,7 @@
         }
       }
     },
+<<<<<<< HEAD
     "34": {
       "android-tv": {
         "arm64-v8a": {
@@ -8826,12 +9647,15 @@
         }
       }
     },
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "TiramisuPrivacySandbox": {
       "google_apis_playstore": {
         "arm64-v8a": {
           "archives": [
             {
               "os": "macosx",
+<<<<<<< HEAD
               "sha1": "d4cb5f1b985cb9f6ee093a00a910c5afc1bb0912",
               "size": 1592946784,
               "url": "https://dl.google.com/android/repository/sys-img/google_apis_playstore/arm64-v8a-TiramisuPrivacySandbox_r09-darwin.zip"
@@ -8841,6 +9665,17 @@
               "sha1": "d4cb5f1b985cb9f6ee093a00a910c5afc1bb0912",
               "size": 1592946784,
               "url": "https://dl.google.com/android/repository/sys-img/google_apis_playstore/arm64-v8a-TiramisuPrivacySandbox_r09-linux.zip"
+=======
+              "sha1": "069cdb5926cef729c8f14897cdc70e47acfe6736",
+              "size": 1489462208,
+              "url": "https://dl.google.com/android/repository/sys-img/google_apis_playstore/arm64-v8a-TiramisuPrivacySandbox_r08-darwin.zip"
+            },
+            {
+              "os": "linux",
+              "sha1": "069cdb5926cef729c8f14897cdc70e47acfe6736",
+              "size": 1489462208,
+              "url": "https://dl.google.com/android/repository/sys-img/google_apis_playstore/arm64-v8a-TiramisuPrivacySandbox_r08-linux.zip"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
             }
           ],
           "dependencies": {
@@ -8861,13 +9696,20 @@
             }
           },
           "displayName": "Google Play ARM 64 v8a System Image",
+<<<<<<< HEAD
           "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           "license": "android-sdk-arm-dbt-license",
           "name": "system-image-TiramisuPrivacySandbox-google_apis_playstore-arm64-v8a",
           "path": "system-images/android-TiramisuPrivacySandbox/google_apis_playstore/arm64-v8a",
           "revision": "TiramisuPrivacySandbox-google_apis_playstore-arm64-v8a",
           "revision-details": {
+<<<<<<< HEAD
             "major:0": "9"
+=======
+            "major:0": "8"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           },
           "type-details": {
             "abi:4": "arm64-v8a",
@@ -8890,9 +9732,15 @@
           "archives": [
             {
               "os": "all",
+<<<<<<< HEAD
               "sha1": "4893f6e62413e97e2bad5f183319d65d3947a375",
               "size": 1492912127,
               "url": "https://dl.google.com/android/repository/sys-img/google_apis_playstore/x86_64-TiramisuPrivacySandbox_r09.zip"
+=======
+              "sha1": "7ae1658d066353e9f079afe694bdc17c446c0c88",
+              "size": 1493513570,
+              "url": "https://dl.google.com/android/repository/sys-img/google_apis_playstore/x86_64-TiramisuPrivacySandbox_r08.zip"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
             }
           ],
           "dependencies": {
@@ -8912,14 +9760,22 @@
               }
             }
           },
+<<<<<<< HEAD
           "displayName": "Google Play Intel x86_64 Atom System Image",
           "last-available-day": 19579,
+=======
+          "displayName": "Google Play Intel x86 Atom_64 System Image",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           "license": "android-sdk-preview-license",
           "name": "system-image-TiramisuPrivacySandbox-google_apis_playstore-x86_64",
           "path": "system-images/android-TiramisuPrivacySandbox/google_apis_playstore/x86_64",
           "revision": "TiramisuPrivacySandbox-google_apis_playstore-x86_64",
           "revision-details": {
+<<<<<<< HEAD
             "major:0": "9"
+=======
+            "major:0": "8"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           },
           "type-details": {
             "abi:4": "x86_64",
@@ -8939,6 +9795,7 @@
           }
         }
       }
+<<<<<<< HEAD
     },
     "UpsideDownCake": {
       "google_apis": {
@@ -9273,6 +10130,8 @@
           }
         }
       }
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     }
   },
   "licenses": {
@@ -9332,7 +10191,10 @@
           }
         },
         "displayName": "Android SDK Build-Tools 17",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "build-tools",
         "obsolete": "true",
@@ -9378,7 +10240,10 @@
           }
         },
         "displayName": "Android SDK Build-Tools 18.0.1",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "build-tools",
         "obsolete": "true",
@@ -9424,7 +10289,10 @@
           }
         },
         "displayName": "Android SDK Build-Tools 18.1",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "build-tools",
         "obsolete": "true",
@@ -9470,7 +10338,10 @@
           }
         },
         "displayName": "Android SDK Build-Tools 18.1.1",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "build-tools",
         "obsolete": "true",
@@ -9516,7 +10387,10 @@
           }
         },
         "displayName": "Android SDK Build-Tools 19",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "build-tools",
         "obsolete": "true",
@@ -9562,7 +10436,10 @@
           }
         },
         "displayName": "Android SDK Build-Tools 19.0.1",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "build-tools",
         "obsolete": "true",
@@ -9608,7 +10485,10 @@
           }
         },
         "displayName": "Android SDK Build-Tools 19.0.2",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "build-tools",
         "obsolete": "true",
@@ -9654,7 +10534,10 @@
           }
         },
         "displayName": "Android SDK Build-Tools 19.0.3",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "build-tools",
         "obsolete": "true",
@@ -9700,7 +10583,10 @@
           }
         },
         "displayName": "Android SDK Build-Tools 19.1",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "build-tools",
         "path": "build-tools/19.1.0",
@@ -9745,7 +10631,10 @@
           }
         },
         "displayName": "Android SDK Build-Tools 20",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "build-tools",
         "path": "build-tools/20.0.0",
@@ -9790,7 +10679,10 @@
           }
         },
         "displayName": "Android SDK Build-Tools 21",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "build-tools",
         "obsolete": "true",
@@ -9836,7 +10728,10 @@
           }
         },
         "displayName": "Android SDK Build-Tools 21.0.1",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "build-tools",
         "obsolete": "true",
@@ -9882,7 +10777,10 @@
           }
         },
         "displayName": "Android SDK Build-Tools 21.0.2",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "build-tools",
         "obsolete": "true",
@@ -9928,7 +10826,10 @@
           }
         },
         "displayName": "Android SDK Build-Tools 21.1",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "build-tools",
         "obsolete": "true",
@@ -9974,7 +10875,10 @@
           }
         },
         "displayName": "Android SDK Build-Tools 21.1.1",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "build-tools",
         "obsolete": "true",
@@ -10020,7 +10924,10 @@
           }
         },
         "displayName": "Android SDK Build-Tools 21.1.2",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "build-tools",
         "path": "build-tools/21.1.2",
@@ -10065,7 +10972,10 @@
           }
         },
         "displayName": "Android SDK Build-Tools 22",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "build-tools",
         "obsolete": "true",
@@ -10111,7 +11021,10 @@
           }
         },
         "displayName": "Android SDK Build-Tools 22.0.1",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "build-tools",
         "path": "build-tools/22.0.1",
@@ -10156,7 +11069,10 @@
           }
         },
         "displayName": "Android SDK Build-Tools 23",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "build-tools",
         "obsolete": "true",
@@ -10202,7 +11118,10 @@
           }
         },
         "displayName": "Android SDK Build-Tools 23.0.1",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "build-tools",
         "path": "build-tools/23.0.1",
@@ -10247,7 +11166,10 @@
           }
         },
         "displayName": "Android SDK Build-Tools 23.0.2",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "build-tools",
         "path": "build-tools/23.0.2",
@@ -10292,7 +11214,10 @@
           }
         },
         "displayName": "Android SDK Build-Tools 23.0.3",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "build-tools",
         "path": "build-tools/23.0.3",
@@ -10337,7 +11262,10 @@
           }
         },
         "displayName": "Android SDK Build-Tools 24",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "build-tools",
         "path": "build-tools/24.0.0",
@@ -10382,7 +11310,10 @@
           }
         },
         "displayName": "Android SDK Build-Tools 24.0.1",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "build-tools",
         "path": "build-tools/24.0.1",
@@ -10427,7 +11358,10 @@
           }
         },
         "displayName": "Android SDK Build-Tools 24.0.2",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "build-tools",
         "path": "build-tools/24.0.2",
@@ -10472,7 +11406,10 @@
           }
         },
         "displayName": "Android SDK Build-Tools 24.0.3",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "build-tools",
         "path": "build-tools/24.0.3",
@@ -10517,7 +11454,10 @@
           }
         },
         "displayName": "Android SDK Build-Tools 25",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "build-tools",
         "path": "build-tools/25.0.0",
@@ -10562,7 +11502,10 @@
           }
         },
         "displayName": "Android SDK Build-Tools 25.0.1",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "build-tools",
         "path": "build-tools/25.0.1",
@@ -10607,7 +11550,10 @@
           }
         },
         "displayName": "Android SDK Build-Tools 25.0.2",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "build-tools",
         "path": "build-tools/25.0.2",
@@ -10652,7 +11598,10 @@
           }
         },
         "displayName": "Android SDK Build-Tools 25.0.3",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "build-tools",
         "path": "build-tools/25.0.3",
@@ -10697,7 +11646,10 @@
           }
         },
         "displayName": "Android SDK Build-Tools 26",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "build-tools",
         "path": "build-tools/26.0.0",
@@ -10742,7 +11694,10 @@
           }
         },
         "displayName": "Android SDK Build-Tools 26.0.1",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "build-tools",
         "path": "build-tools/26.0.1",
@@ -10787,7 +11742,10 @@
           }
         },
         "displayName": "Android SDK Build-Tools 26.0.2",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "build-tools",
         "path": "build-tools/26.0.2",
@@ -10832,7 +11790,10 @@
           }
         },
         "displayName": "Android SDK Build-Tools 26.0.3",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "build-tools",
         "path": "build-tools/26.0.3",
@@ -10877,7 +11838,10 @@
           }
         },
         "displayName": "Android SDK Build-Tools 27",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "build-tools",
         "path": "build-tools/27.0.0",
@@ -10922,7 +11886,10 @@
           }
         },
         "displayName": "Android SDK Build-Tools 27.0.1",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "build-tools",
         "path": "build-tools/27.0.1",
@@ -10967,7 +11934,10 @@
           }
         },
         "displayName": "Android SDK Build-Tools 27.0.2",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "build-tools",
         "path": "build-tools/27.0.2",
@@ -11012,7 +11982,10 @@
           }
         },
         "displayName": "Android SDK Build-Tools 27.0.3",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "build-tools",
         "path": "build-tools/27.0.3",
@@ -11057,7 +12030,10 @@
           }
         },
         "displayName": "Android SDK Build-Tools 28",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "build-tools",
         "path": "build-tools/28.0.0",
@@ -11102,7 +12078,10 @@
           }
         },
         "displayName": "Android SDK Build-Tools 28-rc1",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-preview-license",
         "name": "build-tools",
         "obsolete": "true",
@@ -11149,7 +12128,10 @@
           }
         },
         "displayName": "Android SDK Build-Tools 28-rc2",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-preview-license",
         "name": "build-tools",
         "obsolete": "true",
@@ -11196,7 +12178,10 @@
           }
         },
         "displayName": "Android SDK Build-Tools 28.0.1",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "build-tools",
         "path": "build-tools/28.0.1",
@@ -11241,7 +12226,10 @@
           }
         },
         "displayName": "Android SDK Build-Tools 28.0.2",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "build-tools",
         "path": "build-tools/28.0.2",
@@ -11286,7 +12274,10 @@
           }
         },
         "displayName": "Android SDK Build-Tools 28.0.3",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "build-tools",
         "path": "build-tools/28.0.3",
@@ -11331,7 +12322,10 @@
           }
         },
         "displayName": "Android SDK Build-Tools 29",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "build-tools",
         "path": "build-tools/29.0.0",
@@ -11376,7 +12370,10 @@
           }
         },
         "displayName": "Android SDK Build-Tools 29-rc1",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-preview-license",
         "name": "build-tools",
         "obsolete": "true",
@@ -11423,7 +12420,10 @@
           }
         },
         "displayName": "Android SDK Build-Tools 29-rc2",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-preview-license",
         "name": "build-tools",
         "obsolete": "true",
@@ -11470,7 +12470,10 @@
           }
         },
         "displayName": "Android SDK Build-Tools 29-rc3",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-preview-license",
         "name": "build-tools",
         "obsolete": "true",
@@ -11517,7 +12520,10 @@
           }
         },
         "displayName": "Android SDK Build-Tools 29.0.1",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "build-tools",
         "path": "build-tools/29.0.1",
@@ -11562,7 +12568,10 @@
           }
         },
         "displayName": "Android SDK Build-Tools 29.0.2",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "build-tools",
         "path": "build-tools/29.0.2",
@@ -11607,7 +12616,10 @@
           }
         },
         "displayName": "Android SDK Build-Tools 29.0.3",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "build-tools",
         "path": "build-tools/29.0.3",
@@ -11652,7 +12664,10 @@
           }
         },
         "displayName": "Android SDK Build-Tools 30",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "build-tools",
         "path": "build-tools/30.0.0",
@@ -11697,7 +12712,10 @@
           }
         },
         "displayName": "Android SDK Build-Tools 30.0.1",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "build-tools",
         "path": "build-tools/30.0.1",
@@ -11742,7 +12760,10 @@
           }
         },
         "displayName": "Android SDK Build-Tools 30.0.2",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "build-tools",
         "path": "build-tools/30.0.2",
@@ -11787,7 +12808,10 @@
           }
         },
         "displayName": "Android SDK Build-Tools 30.0.3",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "build-tools",
         "path": "build-tools/30.0.3",
@@ -11825,7 +12849,10 @@
           }
         ],
         "displayName": "Android SDK Build-Tools 31",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "build-tools",
         "path": "build-tools/31.0.0",
@@ -11863,7 +12890,10 @@
           }
         ],
         "displayName": "Android SDK Build-Tools 32",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "build-tools",
         "path": "build-tools/32.0.0",
@@ -11901,7 +12931,10 @@
           }
         ],
         "displayName": "Android SDK Build-Tools 32.1-rc1",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-preview-license",
         "name": "build-tools",
         "path": "build-tools/32.1.0-rc1",
@@ -11940,7 +12973,10 @@
           }
         ],
         "displayName": "Android SDK Build-Tools 33",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "build-tools",
         "path": "build-tools/33.0.0",
@@ -11978,7 +13014,10 @@
           }
         ],
         "displayName": "Android SDK Build-Tools 33.0.1",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "build-tools",
         "path": "build-tools/33.0.1",
@@ -11993,6 +13032,7 @@
             "xsi:type": "ns5:genericDetailsType"
           }
         }
+<<<<<<< HEAD
       },
       "33.0.2": {
         "archives": [
@@ -12225,6 +13265,8 @@
             "xsi:type": "ns5:genericDetailsType"
           }
         }
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       }
     },
     "cmake": {
@@ -12250,7 +13292,10 @@
           }
         ],
         "displayName": "CMake 3.10.2.4988404",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "cmake",
         "path": "cmake/3.10.2.4988404",
@@ -12288,7 +13333,10 @@
           }
         ],
         "displayName": "CMake 3.18.1",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "cmake",
         "path": "cmake/3.18.1",
@@ -12326,7 +13374,10 @@
           }
         ],
         "displayName": "CMake 3.22.1",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "cmake",
         "path": "cmake/3.22.1",
@@ -12364,7 +13415,10 @@
           }
         ],
         "displayName": "CMake 3.6.4111459",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "cmake",
         "path": "cmake/3.6.4111459",
@@ -12404,7 +13458,10 @@
           }
         ],
         "displayName": "Android SDK Command-line Tools",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "cmdline-tools",
         "path": "cmdline-tools/1.0",
@@ -12419,6 +13476,7 @@
           }
         }
       },
+<<<<<<< HEAD
       "10.0": {
         "archives": [
           {
@@ -12645,6 +13703,8 @@
           }
         }
       },
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       "2.0": {
         "archives": [
           {
@@ -12667,7 +13727,10 @@
           }
         ],
         "displayName": "Android SDK Command-line Tools",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "cmdline-tools",
         "obsolete": "true",
@@ -12705,7 +13768,10 @@
           }
         ],
         "displayName": "Android SDK Command-line Tools",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "cmdline-tools",
         "path": "cmdline-tools/2.1",
@@ -12742,7 +13808,10 @@
           }
         ],
         "displayName": "Android SDK Command-line Tools",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "cmdline-tools",
         "path": "cmdline-tools/3.0",
@@ -12779,7 +13848,10 @@
           }
         ],
         "displayName": "Android SDK Command-line Tools",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "cmdline-tools",
         "path": "cmdline-tools/4.0",
@@ -12816,7 +13888,10 @@
           }
         ],
         "displayName": "Android SDK Command-line Tools",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "cmdline-tools",
         "path": "cmdline-tools/5.0",
@@ -12853,7 +13928,10 @@
           }
         ],
         "displayName": "Android SDK Command-line Tools",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "cmdline-tools",
         "path": "cmdline-tools/6.0",
@@ -12890,7 +13968,10 @@
           }
         ],
         "displayName": "Android SDK Command-line Tools",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "cmdline-tools",
         "path": "cmdline-tools/7.0",
@@ -12927,7 +14008,10 @@
           }
         ],
         "displayName": "Android SDK Command-line Tools",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "cmdline-tools",
         "path": "cmdline-tools/8.0",
@@ -12941,6 +14025,7 @@
             "xsi:type": "ns5:genericDetailsType"
           }
         }
+<<<<<<< HEAD
       },
       "9.0": {
         "archives": [
@@ -12978,6 +14063,8 @@
             "xsi:type": "ns5:genericDetailsType"
           }
         }
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       }
     },
     "emulator": {
@@ -13010,7 +14097,10 @@
           }
         },
         "displayName": "Android Emulator",
+<<<<<<< HEAD
         "last-available-day": 19469,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "emulator",
         "path": "emulator",
@@ -13055,7 +14145,10 @@
           }
         },
         "displayName": "Android Emulator",
+<<<<<<< HEAD
         "last-available-day": 19469,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "emulator",
         "path": "emulator",
@@ -13071,6 +14164,7 @@
           }
         }
       },
+<<<<<<< HEAD
       "32.1.10": {
         "archives": [
           {
@@ -13206,6 +14300,8 @@
           }
         }
       },
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       "32.1.8": {
         "archives": [
           {
@@ -13235,7 +14331,10 @@
           }
         },
         "displayName": "Android Emulator",
+<<<<<<< HEAD
         "last-available-day": 19469,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-preview-license",
         "name": "emulator",
         "path": "emulator",
@@ -13250,6 +14349,7 @@
             "xsi:type": "ns5:genericDetailsType"
           }
         }
+<<<<<<< HEAD
       },
       "33.1.10": {
         "archives": [
@@ -13430,6 +14530,8 @@
             "xsi:type": "ns5:genericDetailsType"
           }
         }
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       }
     },
     "extras": {
@@ -13455,7 +14557,10 @@
           }
         ],
         "displayName": "Android Auto Desktop Head Unit Emulator",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "extras",
         "path": "extras/google/auto",
@@ -13492,7 +14597,10 @@
           }
         ],
         "displayName": "Android Auto Desktop Head Unit Emulator",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "extras",
         "path": "extras/google/auto",
@@ -13538,7 +14646,10 @@
           }
         },
         "displayName": "NDK (Side by side) 16.1.4479499",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "ndk",
         "path": "ndk/16.1.4479499",
@@ -13583,7 +14694,10 @@
           }
         },
         "displayName": "NDK (Side by side) 17.2.4988734",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "ndk",
         "path": "ndk/17.2.4988734",
@@ -13628,7 +14742,10 @@
           }
         },
         "displayName": "NDK (Side by side) 18.1.5063045",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "ndk",
         "path": "ndk/18.1.5063045",
@@ -13673,7 +14790,10 @@
           }
         },
         "displayName": "NDK (Side by side) 19.0.5232133",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "ndk",
         "obsolete": "true",
@@ -13719,7 +14839,10 @@
           }
         },
         "displayName": "NDK (Side by side) 19.2.5345600",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "ndk",
         "path": "ndk/19.2.5345600",
@@ -13764,7 +14887,10 @@
           }
         },
         "displayName": "NDK (Side by side) 20.0.5392854",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-preview-license",
         "name": "ndk",
         "obsolete": "true",
@@ -13811,7 +14937,10 @@
           }
         },
         "displayName": "NDK (Side by side) 20.0.5471264",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-preview-license",
         "name": "ndk",
         "obsolete": "true",
@@ -13858,7 +14987,10 @@
           }
         },
         "displayName": "NDK (Side by side) 20.0.5594570",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "ndk",
         "path": "ndk/20.0.5594570",
@@ -13903,7 +15035,10 @@
           }
         },
         "displayName": "NDK (Side by side) 20.1.5948944",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "ndk",
         "path": "ndk/20.1.5948944",
@@ -13948,7 +15083,10 @@
           }
         },
         "displayName": "NDK (Side by side) 21.0.6011959",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-preview-license",
         "name": "ndk",
         "path": "ndk/21.0.6011959",
@@ -13994,7 +15132,10 @@
           }
         },
         "displayName": "NDK (Side by side) 21.0.6113669",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "ndk",
         "path": "ndk/21.0.6113669",
@@ -14039,7 +15180,10 @@
           }
         },
         "displayName": "NDK (Side by side) 21.1.6210238",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-preview-license",
         "name": "ndk",
         "path": "ndk/21.1.6210238",
@@ -14085,7 +15229,10 @@
           }
         },
         "displayName": "NDK (Side by side) 21.1.6273396",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-preview-license",
         "name": "ndk",
         "path": "ndk/21.1.6273396",
@@ -14131,7 +15278,10 @@
           }
         },
         "displayName": "NDK (Side by side) 21.1.6352462",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "ndk",
         "path": "ndk/21.1.6352462",
@@ -14176,7 +15326,10 @@
           }
         },
         "displayName": "NDK (Side by side) 21.1.6363665",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-preview-license",
         "name": "ndk",
         "path": "ndk/21.1.6363665",
@@ -14222,7 +15375,10 @@
           }
         },
         "displayName": "NDK (Side by side) 21.2.6472646",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "ndk",
         "path": "ndk/21.2.6472646",
@@ -14267,7 +15423,10 @@
           }
         },
         "displayName": "NDK (Side by side) 21.3.6528147",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "ndk",
         "path": "ndk/21.3.6528147",
@@ -14312,7 +15471,10 @@
           }
         },
         "displayName": "NDK (Side by side) 21.4.7075529",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "ndk",
         "path": "ndk/21.4.7075529",
@@ -14357,7 +15519,10 @@
           }
         },
         "displayName": "NDK (Side by side) 22.0.6917172",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-preview-license",
         "name": "ndk",
         "path": "ndk/22.0.6917172",
@@ -14403,7 +15568,10 @@
           }
         },
         "displayName": "NDK (Side by side) 22.0.7026061",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "ndk",
         "path": "ndk/22.0.7026061",
@@ -14448,7 +15616,10 @@
           }
         },
         "displayName": "NDK (Side by side) 22.1.7171670",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "ndk",
         "path": "ndk/22.1.7171670",
@@ -14493,7 +15664,10 @@
           }
         },
         "displayName": "NDK (Side by side) 23.0.7123448",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-preview-license",
         "name": "ndk",
         "path": "ndk/23.0.7123448",
@@ -14539,7 +15713,10 @@
           }
         },
         "displayName": "NDK (Side by side) 23.0.7196353",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-preview-license",
         "name": "ndk",
         "path": "ndk/23.0.7196353",
@@ -14585,7 +15762,10 @@
           }
         },
         "displayName": "NDK (Side by side) 23.0.7272597",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-preview-license",
         "name": "ndk",
         "path": "ndk/23.0.7272597",
@@ -14631,7 +15811,10 @@
           }
         },
         "displayName": "NDK (Side by side) 23.0.7344513",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-preview-license",
         "name": "ndk",
         "path": "ndk/23.0.7344513",
@@ -14677,7 +15860,10 @@
           }
         },
         "displayName": "NDK (Side by side) 23.0.7421159",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-preview-license",
         "name": "ndk",
         "path": "ndk/23.0.7421159",
@@ -14723,7 +15909,10 @@
           }
         },
         "displayName": "NDK (Side by side) 23.0.7530507",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-preview-license",
         "name": "ndk",
         "path": "ndk/23.0.7530507",
@@ -14769,7 +15958,10 @@
           }
         },
         "displayName": "NDK (Side by side) 23.0.7599858",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "ndk",
         "path": "ndk/23.0.7599858",
@@ -14814,7 +16006,10 @@
           }
         },
         "displayName": "NDK (Side by side) 23.1.7779620",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "ndk",
         "path": "ndk/23.1.7779620",
@@ -14859,7 +16054,10 @@
           }
         },
         "displayName": "NDK (Side by side) 23.2.8568313",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "ndk",
         "path": "ndk/23.2.8568313",
@@ -14904,7 +16102,10 @@
           }
         },
         "displayName": "NDK (Side by side) 24.0.7856742",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-preview-license",
         "name": "ndk",
         "path": "ndk/24.0.7856742",
@@ -14950,7 +16151,10 @@
           }
         },
         "displayName": "NDK (Side by side) 24.0.7956693",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-preview-license",
         "name": "ndk",
         "path": "ndk/24.0.7956693",
@@ -14996,7 +16200,10 @@
           }
         },
         "displayName": "NDK (Side by side) 24.0.8079956",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-preview-license",
         "name": "ndk",
         "path": "ndk/24.0.8079956",
@@ -15042,7 +16249,10 @@
           }
         },
         "displayName": "NDK (Side by side) 24.0.8215888",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "ndk",
         "path": "ndk/24.0.8215888",
@@ -15087,7 +16297,10 @@
           }
         },
         "displayName": "NDK (Side by side) 25.0.8151533",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-preview-license",
         "name": "ndk",
         "path": "ndk/25.0.8151533",
@@ -15133,7 +16346,10 @@
           }
         },
         "displayName": "NDK (Side by side) 25.0.8221429",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-preview-license",
         "name": "ndk",
         "path": "ndk/25.0.8221429",
@@ -15179,7 +16395,10 @@
           }
         },
         "displayName": "NDK (Side by side) 25.0.8355429",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-preview-license",
         "name": "ndk",
         "path": "ndk/25.0.8355429",
@@ -15225,7 +16444,10 @@
           }
         },
         "displayName": "NDK (Side by side) 25.0.8528842",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-preview-license",
         "name": "ndk",
         "path": "ndk/25.0.8528842",
@@ -15271,7 +16493,10 @@
           }
         },
         "displayName": "NDK (Side by side) 25.0.8775105",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "ndk",
         "path": "ndk/25.0.8775105",
@@ -15316,7 +16541,10 @@
           }
         },
         "displayName": "NDK (Side by side) 25.1.8937393",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "ndk",
         "path": "ndk/25.1.8937393",
@@ -15331,6 +16559,7 @@
             "xsi:type": "ns5:genericDetailsType"
           }
         }
+<<<<<<< HEAD
       },
       "25.2.9519653": {
         "archives": [
@@ -15422,6 +16651,8 @@
             "xsi:type": "ns5:genericDetailsType"
           }
         }
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       }
     },
     "ndk-bundle": {
@@ -15454,7 +16685,10 @@
           }
         },
         "displayName": "NDK",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "ndk-bundle",
         "path": "ndk-bundle",
@@ -15499,7 +16733,10 @@
           }
         },
         "displayName": "NDK",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "ndk-bundle",
         "path": "ndk-bundle",
@@ -15544,7 +16781,10 @@
           }
         },
         "displayName": "NDK",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "ndk-bundle",
         "path": "ndk-bundle",
@@ -15589,7 +16829,10 @@
           }
         },
         "displayName": "NDK",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "ndk-bundle",
         "obsolete": "true",
@@ -15635,7 +16878,10 @@
           }
         },
         "displayName": "NDK",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "ndk-bundle",
         "path": "ndk-bundle",
@@ -15680,7 +16926,10 @@
           }
         },
         "displayName": "NDK",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-preview-license",
         "name": "ndk-bundle",
         "obsolete": "true",
@@ -15727,7 +16976,10 @@
           }
         },
         "displayName": "NDK",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-preview-license",
         "name": "ndk-bundle",
         "obsolete": "true",
@@ -15774,7 +17026,10 @@
           }
         },
         "displayName": "NDK",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "ndk-bundle",
         "path": "ndk-bundle",
@@ -15819,7 +17074,10 @@
           }
         },
         "displayName": "NDK",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "ndk-bundle",
         "path": "ndk-bundle",
@@ -15864,7 +17122,10 @@
           }
         },
         "displayName": "NDK",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-preview-license",
         "name": "ndk-bundle",
         "path": "ndk-bundle",
@@ -15910,7 +17171,10 @@
           }
         },
         "displayName": "NDK",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "ndk-bundle",
         "path": "ndk-bundle",
@@ -15955,7 +17219,10 @@
           }
         },
         "displayName": "NDK",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-preview-license",
         "name": "ndk-bundle",
         "path": "ndk-bundle",
@@ -16001,7 +17268,10 @@
           }
         },
         "displayName": "NDK",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-preview-license",
         "name": "ndk-bundle",
         "path": "ndk-bundle",
@@ -16047,7 +17317,10 @@
           }
         },
         "displayName": "NDK",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "ndk-bundle",
         "path": "ndk-bundle",
@@ -16092,7 +17365,10 @@
           }
         },
         "displayName": "NDK",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-preview-license",
         "name": "ndk-bundle",
         "path": "ndk-bundle",
@@ -16138,7 +17414,10 @@
           }
         },
         "displayName": "NDK",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "ndk-bundle",
         "path": "ndk-bundle",
@@ -16183,7 +17462,10 @@
           }
         },
         "displayName": "NDK",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "ndk-bundle",
         "path": "ndk-bundle",
@@ -16228,7 +17510,10 @@
           }
         },
         "displayName": "NDK",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "ndk-bundle",
         "path": "ndk-bundle",
@@ -16273,7 +17558,10 @@
           }
         },
         "displayName": "NDK",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-preview-license",
         "name": "ndk-bundle",
         "path": "ndk-bundle",
@@ -16319,7 +17607,10 @@
           }
         },
         "displayName": "NDK",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "ndk-bundle",
         "path": "ndk-bundle",
@@ -16364,7 +17655,10 @@
           }
         },
         "displayName": "NDK",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "ndk-bundle",
         "path": "ndk-bundle",
@@ -16409,7 +17703,10 @@
           }
         },
         "displayName": "NDK",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-preview-license",
         "name": "ndk-bundle",
         "path": "ndk-bundle",
@@ -16455,7 +17752,10 @@
           }
         },
         "displayName": "NDK",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-preview-license",
         "name": "ndk-bundle",
         "path": "ndk-bundle",
@@ -16501,7 +17801,10 @@
           }
         },
         "displayName": "NDK",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-preview-license",
         "name": "ndk-bundle",
         "path": "ndk-bundle",
@@ -16547,7 +17850,10 @@
           }
         },
         "displayName": "NDK",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-preview-license",
         "name": "ndk-bundle",
         "path": "ndk-bundle",
@@ -16576,7 +17882,10 @@
           }
         ],
         "displayName": "SDK Patch Applier v4",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "patcher",
         "path": "patcher/v4",
@@ -16614,7 +17923,10 @@
           }
         ],
         "displayName": "Android SDK Platform-Tools",
+<<<<<<< HEAD
         "last-available-day": 19469,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "platform-tools",
         "path": "platform-tools",
@@ -16629,6 +17941,7 @@
             "xsi:type": "ns5:genericDetailsType"
           }
         }
+<<<<<<< HEAD
       },
       "34.0.1": {
         "archives": [
@@ -16705,6 +18018,8 @@
             "xsi:type": "ns5:genericDetailsType"
           }
         }
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       }
     },
     "platforms": {
@@ -16718,7 +18033,10 @@
           }
         ],
         "displayName": "Android SDK Platform 10",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "platforms",
         "path": "platforms/android-10",
@@ -16750,7 +18068,10 @@
           }
         ],
         "displayName": "Android SDK Platform 11",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "platforms",
         "path": "platforms/android-11",
@@ -16782,7 +18103,10 @@
           }
         ],
         "displayName": "Android SDK Platform 12",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "platforms",
         "path": "platforms/android-12",
@@ -16814,7 +18138,10 @@
           }
         ],
         "displayName": "Android SDK Platform 13",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "platforms",
         "path": "platforms/android-13",
@@ -16846,7 +18173,10 @@
           }
         ],
         "displayName": "Android SDK Platform 14",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "platforms",
         "path": "platforms/android-14",
@@ -16878,7 +18208,10 @@
           }
         ],
         "displayName": "Android SDK Platform 15",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "platforms",
         "path": "platforms/android-15",
@@ -16910,7 +18243,10 @@
           }
         ],
         "displayName": "Android SDK Platform 16",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "platforms",
         "path": "platforms/android-16",
@@ -16942,7 +18278,10 @@
           }
         ],
         "displayName": "Android SDK Platform 17",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "platforms",
         "path": "platforms/android-17",
@@ -16974,7 +18313,10 @@
           }
         ],
         "displayName": "Android SDK Platform 18",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "platforms",
         "path": "platforms/android-18",
@@ -17006,7 +18348,10 @@
           }
         ],
         "displayName": "Android SDK Platform 19",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "platforms",
         "path": "platforms/android-19",
@@ -17050,7 +18395,10 @@
           }
         ],
         "displayName": "Android SDK Platform 2",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "platforms",
         "obsolete": "true",
@@ -17083,7 +18431,10 @@
           }
         ],
         "displayName": "Android SDK Platform 20",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "platforms",
         "path": "platforms/android-20",
@@ -17115,7 +18466,10 @@
           }
         ],
         "displayName": "Android SDK Platform 21",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "platforms",
         "path": "platforms/android-21",
@@ -17147,7 +18501,10 @@
           }
         ],
         "displayName": "Android SDK Platform 22",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "platforms",
         "path": "platforms/android-22",
@@ -17179,7 +18536,10 @@
           }
         ],
         "displayName": "Android SDK Platform 23",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "platforms",
         "path": "platforms/android-23",
@@ -17211,7 +18571,10 @@
           }
         ],
         "displayName": "Android SDK Platform 24",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "platforms",
         "path": "platforms/android-24",
@@ -17243,7 +18606,10 @@
           }
         ],
         "displayName": "Android SDK Platform 25",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "platforms",
         "path": "platforms/android-25",
@@ -17275,7 +18641,10 @@
           }
         ],
         "displayName": "Android SDK Platform 26",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "platforms",
         "path": "platforms/android-26",
@@ -17307,7 +18676,10 @@
           }
         ],
         "displayName": "Android SDK Platform 27",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "platforms",
         "path": "platforms/android-27",
@@ -17339,7 +18711,10 @@
           }
         ],
         "displayName": "Android SDK Platform 28",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "platforms",
         "path": "platforms/android-28",
@@ -17371,7 +18746,10 @@
           }
         ],
         "displayName": "Android SDK Platform 29",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "platforms",
         "path": "platforms/android-29",
@@ -17415,7 +18793,10 @@
           }
         ],
         "displayName": "Android SDK Platform 3",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "platforms",
         "obsolete": "true",
@@ -17448,7 +18829,10 @@
           }
         ],
         "displayName": "Android SDK Platform 30",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "platforms",
         "path": "platforms/android-30",
@@ -17480,7 +18864,10 @@
           }
         ],
         "displayName": "Android SDK Platform 31",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "platforms",
         "path": "platforms/android-31",
@@ -17512,7 +18899,10 @@
           }
         ],
         "displayName": "Android SDK Platform 32",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "platforms",
         "path": "platforms/android-32",
@@ -17543,14 +18933,22 @@
             "url": "https://dl.google.com/android/repository/platform-33_r02.zip"
           }
         ],
+<<<<<<< HEAD
         "displayName": "Android SDK Platform 33-ext5",
         "last-available-day": 19579,
+=======
+        "displayName": "Android SDK Platform 33",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "platforms",
         "path": "platforms/android-33",
         "revision": "33",
         "revision-details": {
+<<<<<<< HEAD
           "major:0": "1"
+=======
+          "major:0": "2"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         },
         "type-details": {
           "api-level:0": "33",
@@ -17566,6 +18964,7 @@
           }
         }
       },
+<<<<<<< HEAD
       "34": {
         "archives": [
           {
@@ -17598,6 +18997,8 @@
           }
         }
       },
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       "4": {
         "archives": [
           {
@@ -17620,7 +19021,10 @@
           }
         ],
         "displayName": "Android SDK Platform 4",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "platforms",
         "obsolete": "true",
@@ -17665,7 +19069,10 @@
           }
         ],
         "displayName": "Android SDK Platform 5",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "platforms",
         "obsolete": "true",
@@ -17710,7 +19117,10 @@
           }
         ],
         "displayName": "Android SDK Platform 6",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "platforms",
         "obsolete": "true",
@@ -17743,7 +19153,10 @@
           }
         ],
         "displayName": "Android SDK Platform 7",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "platforms",
         "path": "platforms/android-7",
@@ -17775,7 +19188,10 @@
           }
         ],
         "displayName": "Android SDK Platform 8",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "platforms",
         "path": "platforms/android-8",
@@ -17807,7 +19223,10 @@
           }
         ],
         "displayName": "Android SDK Platform 9",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "platforms",
         "path": "platforms/android-9",
@@ -17833,6 +19252,7 @@
         "archives": [
           {
             "os": "all",
+<<<<<<< HEAD
             "sha1": "6bc5e85cd2ea54df4dae036ff20fb0e889a6835e",
             "size": 67663071,
             "url": "https://dl.google.com/android/repository/platform-TiramisuPrivacySandbox_r09.zip"
@@ -17840,12 +19260,24 @@
         ],
         "displayName": "Android SDK Platform TiramisuPrivacySandbox",
         "last-available-day": 19579,
+=======
+            "sha1": "07f3eb84b8f237e61744967d7aee1225efba25e6",
+            "size": 67975400,
+            "url": "https://dl.google.com/android/repository/platform-TiramisuPrivacySandbox_r08.zip"
+          }
+        ],
+        "displayName": "Android SDK Platform TiramisuPrivacySandbox",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "platforms",
         "path": "platforms/android-TiramisuPrivacySandbox",
         "revision": "TiramisuPrivacySandbox",
         "revision-details": {
+<<<<<<< HEAD
           "major:0": "9"
+=======
+          "major:0": "8"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         },
         "type-details": {
           "api-level:0": "33",
@@ -17859,6 +19291,7 @@
             }
           }
         }
+<<<<<<< HEAD
       },
       "UpsideDownCake": {
         "archives": [
@@ -17922,6 +19355,8 @@
             }
           }
         }
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       }
     },
     "skiaparser": {
@@ -17947,7 +19382,10 @@
           }
         ],
         "displayName": "Layout Inspector image server for API 31 and T",
+<<<<<<< HEAD
         "last-available-day": 19469,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "skiaparser",
         "path": "skiaparser/3",
@@ -17965,6 +19403,7 @@
         "archives": [
           {
             "os": "linux",
+<<<<<<< HEAD
             "sha1": "7fea0f8b5abaaa73b35e7703e54b641d0e60bba1",
             "size": 6728126,
             "url": "https://dl.google.com/android/repository/skiaparser-9858946-linux-x64.zip"
@@ -17984,6 +19423,26 @@
         ],
         "displayName": "Layout Inspector image server for API S",
         "last-available-day": 19579,
+=======
+            "sha1": "36e2c30f7745f4c062129a0fd549d29ab991db41",
+            "size": 6767192,
+            "url": "https://dl.google.com/android/repository/skiaparser-7478287-linux.zip"
+          },
+          {
+            "os": "macosx",
+            "sha1": "04a834a8ab3efd4612300da7cef7f43a6b257468",
+            "size": 7401688,
+            "url": "https://dl.google.com/android/repository/skiaparser-7478287-mac.zip"
+          },
+          {
+            "os": "windows",
+            "sha1": "567f24512f9d9487a3b948032a136261f5d59c92",
+            "size": 6532776,
+            "url": "https://dl.google.com/android/repository/skiaparser-7478287-win.zip"
+          }
+        ],
+        "displayName": "Layout Inspector image server for API S",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "skiaparser",
         "path": "skiaparser/2",
@@ -18019,7 +19478,10 @@
           }
         ],
         "displayName": "Layout Inspector image server for API 29-30",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "skiaparser",
         "path": "skiaparser/1",
@@ -18045,7 +19507,10 @@
           }
         ],
         "displayName": "Sources for Android 14",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "sources",
         "obsolete": "true",
@@ -18073,7 +19538,10 @@
           }
         ],
         "displayName": "Sources for Android 15",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "sources",
         "path": "sources/android-15",
@@ -18100,7 +19568,10 @@
           }
         ],
         "displayName": "Sources for Android 16",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "sources",
         "path": "sources/android-16",
@@ -18127,7 +19598,10 @@
           }
         ],
         "displayName": "Sources for Android 17",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "sources",
         "path": "sources/android-17",
@@ -18154,7 +19628,10 @@
           }
         ],
         "displayName": "Sources for Android 18",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "sources",
         "path": "sources/android-18",
@@ -18181,7 +19658,10 @@
           }
         ],
         "displayName": "Sources for Android 19",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "sources",
         "path": "sources/android-19",
@@ -18208,7 +19688,10 @@
           }
         ],
         "displayName": "Sources for Android 20",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "sources",
         "path": "sources/android-20",
@@ -18235,7 +19718,10 @@
           }
         ],
         "displayName": "Sources for Android 21",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "sources",
         "path": "sources/android-21",
@@ -18262,7 +19748,10 @@
           }
         ],
         "displayName": "Sources for Android 22",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "sources",
         "path": "sources/android-22",
@@ -18289,7 +19778,10 @@
           }
         ],
         "displayName": "Sources for Android 23",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "sources",
         "path": "sources/android-23",
@@ -18316,7 +19808,10 @@
           }
         ],
         "displayName": "Sources for Android 24",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "sources",
         "path": "sources/android-24",
@@ -18343,7 +19838,10 @@
           }
         ],
         "displayName": "Sources for Android 25",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "sources",
         "path": "sources/android-25",
@@ -18370,7 +19868,10 @@
           }
         ],
         "displayName": "Sources for Android 26",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "sources",
         "path": "sources/android-26",
@@ -18397,7 +19898,10 @@
           }
         ],
         "displayName": "Sources for Android 27",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "sources",
         "path": "sources/android-27",
@@ -18424,7 +19928,10 @@
           }
         ],
         "displayName": "Sources for Android 28",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "sources",
         "path": "sources/android-28",
@@ -18451,7 +19958,10 @@
           }
         ],
         "displayName": "Sources for Android 29",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "sources",
         "path": "sources/android-29",
@@ -18478,7 +19988,10 @@
           }
         ],
         "displayName": "Sources for Android 30",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "sources",
         "path": "sources/android-30",
@@ -18505,7 +20018,10 @@
           }
         ],
         "displayName": "Sources for Android 31",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "sources",
         "path": "sources/android-31",
@@ -18532,7 +20048,10 @@
           }
         ],
         "displayName": "Sources for Android 32",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "sources",
         "path": "sources/android-32",
@@ -18559,7 +20078,10 @@
           }
         ],
         "displayName": "Sources for Android 33",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "sources",
         "path": "sources/android-33",
@@ -18575,6 +20097,7 @@
             "xsi:type": "ns11:sourceDetailsType"
           }
         }
+<<<<<<< HEAD
       },
       "34": {
         "archives": [
@@ -18602,6 +20125,8 @@
             "xsi:type": "ns11:sourceDetailsType"
           }
         }
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       }
     },
     "tools": {
@@ -18647,7 +20172,10 @@
           }
         },
         "displayName": "Android SDK Tools",
+<<<<<<< HEAD
         "last-available-day": 19579,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "license": "android-sdk-license",
         "name": "tools",
         "obsolete": "true",

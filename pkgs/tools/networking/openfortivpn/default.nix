@@ -12,13 +12,21 @@
 
 stdenv.mkDerivation rec {
   pname = "openfortivpn";
+<<<<<<< HEAD
   version = "1.20.5";
+=======
+  version = "1.20.3";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "adrienverge";
     repo = pname;
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-jbgxhCQWDw1ZUOAeLhOG+b6JYgvpr5TnNDIO/4k+e7k=";
+=======
+    hash = "sha256-3HKVHH9S409t07TgiZtw58AhQH6W+Ch8chsSmof1Jkk=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   # we cannot write the config file to /etc and as we don't need the file, so drop it

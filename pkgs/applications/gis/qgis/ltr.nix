@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 { lib
 , makeWrapper
 , symlinkJoin
@@ -6,6 +7,13 @@
 
 , libsForQt5
 }:
+=======
+{ lib, makeWrapper, symlinkJoin
+, extraPythonPackages ? (ps: [ ])
+, libsForQt5
+}:
+with lib;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 let
   qgis-ltr-unwrapped = libsForQt5.callPackage ./unwrapped-ltr.nix {  };
 in symlinkJoin rec {
@@ -15,10 +23,14 @@ in symlinkJoin rec {
 
   paths = [ qgis-ltr-unwrapped ];
 
+<<<<<<< HEAD
   nativeBuildInputs = [
     makeWrapper
     qgis-ltr-unwrapped.py.pkgs.wrapPython
   ];
+=======
+  nativeBuildInputs = [ makeWrapper qgis-ltr-unwrapped.py.pkgs.wrapPython ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   # extend to add to the python environment of QGIS without rebuilding QGIS application.
   pythonInputs = qgis-ltr-unwrapped.pythonBuildInputs ++ (extraPythonPackages qgis-ltr-unwrapped.py.pkgs);

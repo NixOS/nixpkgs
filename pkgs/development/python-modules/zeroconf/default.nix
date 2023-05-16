@@ -15,7 +15,11 @@
 
 buildPythonPackage rec {
   pname = "zeroconf";
+<<<<<<< HEAD
   version = "0.108.0";
+=======
+  version = "0.62.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -24,7 +28,11 @@ buildPythonPackage rec {
     owner = "jstasiak";
     repo = "python-zeroconf";
     rev = "refs/tags/${version}";
+<<<<<<< HEAD
     hash = "sha256-XwSWKuj8gRe4PO0GaV+C4C5plDX9vkDhMjmSx1TpINE=";
+=======
+    hash = "sha256-+jaZ582GdO7dUDr9dPPyy4uUm1mHigDieWN0mgBR+iI=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

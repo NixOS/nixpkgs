@@ -21,13 +21,21 @@
 
 stdenv.mkDerivation rec {
   pname = "accountsservice";
+<<<<<<< HEAD
   version = "23.13.9";
+=======
+  version = "22.08.8";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "https://www.freedesktop.org/software/accountsservice/accountsservice-${version}.tar.xz";
+<<<<<<< HEAD
     sha256 = "rdpM3q4k+gmS598///nv+nCQvjrCM6Pt/fadWpybkk8=";
+=======
+    sha256 = "kJmXp2kZ/n3BOKmgHOpwvWItWpMtvJ+xMBARMCOno5E=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   patches = [
@@ -46,10 +54,13 @@ stdenv.mkDerivation rec {
     # Do not ignore third-party (e.g Pantheon) extensions not matching FHS path scheme.
     # Fixes https://github.com/NixOS/nixpkgs/issues/72396
     ./drop-prefix-check-extensions.patch
+<<<<<<< HEAD
 
     # Detect DM type from config file.
     # `readlink display-manager.service` won't return any of the candidates.
     ./get-dm-type-from-config.patch
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   nativeBuildInputs = [

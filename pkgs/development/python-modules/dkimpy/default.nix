@@ -3,11 +3,19 @@
 
 buildPythonPackage rec {
   pname = "dkimpy";
+<<<<<<< HEAD
   version = "1.1.5";
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-mmZ/hmS3Lrn4qhJQsHV8w5gqto9wxIrzkxe1jPYvLXU=";
+=======
+  version = "1.1.3";
+
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-8zIhlR9jOBEXb9D1qGH0S8I721/cKn+jWXUxlUAbEwg=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 };
 
   nativeCheckInputs = [ pytest ];

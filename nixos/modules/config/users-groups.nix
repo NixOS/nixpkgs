@@ -18,11 +18,19 @@ let
 
   passwordDescription = ''
     The options {option}`hashedPassword`,
+<<<<<<< HEAD
     {option}`password` and {option}`hashedPasswordFile`
     controls what password is set for the user.
     {option}`hashedPassword` overrides both
     {option}`password` and {option}`hashedPasswordFile`.
     {option}`password` overrides {option}`hashedPasswordFile`.
+=======
+    {option}`password` and {option}`passwordFile`
+    controls what password is set for the user.
+    {option}`hashedPassword` overrides both
+    {option}`password` and {option}`passwordFile`.
+    {option}`password` overrides {option}`passwordFile`.
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     If none of these three options are set, no password is assigned to
     the user, and the user will not be able to do password logins.
     If the option {option}`users.mutableUsers` is true, the
@@ -250,6 +258,7 @@ let
         '';
       };
 
+<<<<<<< HEAD
       hashedPasswordFile = mkOption {
         type = with types; nullOr str;
         default = cfg.users.${name}.passwordFile;
@@ -268,6 +277,18 @@ let
         default = null;
         visible = false;
         description = lib.mdDoc "Deprecated alias of hashedPasswordFile";
+=======
+      passwordFile = mkOption {
+        type = with types; nullOr str;
+        default = null;
+        description = lib.mdDoc ''
+          The full path to a file that contains the user's password. The password
+          file is read on each system activation. The file should contain
+          exactly one line, which should be the password in an encrypted form
+          that is suitable for the `chpasswd -e` command.
+          ${passwordDescription}
+        '';
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       };
 
       initialHashedPassword = mkOption {
@@ -319,6 +340,7 @@ let
         '';
       };
 
+<<<<<<< HEAD
       expires = mkOption {
         type = types.nullOr (types.strMatching "[[:digit:]]{4}-[[:digit:]]{2}-[[:digit:]]{2}");
         default = null;
@@ -330,6 +352,8 @@ let
           administrator before being able to use the system again.
         '';
       };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
 
     config = mkMerge
@@ -455,9 +479,15 @@ let
     users = mapAttrsToList (_: u:
       { inherit (u)
           name uid group description home homeMode createHome isSystemUser
+<<<<<<< HEAD
           password hashedPasswordFile hashedPassword
           autoSubUidGidRange subUidRanges subGidRanges
           initialPassword initialHashedPassword expires;
+=======
+          password passwordFile hashedPassword
+          autoSubUidGidRange subUidRanges subGidRanges
+          initialPassword initialHashedPassword;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         shell = utils.toShellPath u.shell;
       }) cfg.users;
     groups = attrValues cfg.groups;
@@ -558,12 +588,20 @@ in {
 
     # systemd initrd
     boot.initrd.systemd.users = mkOption {
+<<<<<<< HEAD
+=======
+      visible = false;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       description = ''
         Users to include in initrd.
       '';
       default = {};
       type = types.attrsOf (types.submodule ({ name, ... }: {
         options.uid = mkOption {
+<<<<<<< HEAD
+=======
+          visible = false;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           type = types.int;
           description = ''
             ID of the user in initrd.
@@ -572,6 +610,10 @@ in {
           default = cfg.users.${name}.uid;
         };
         options.group = mkOption {
+<<<<<<< HEAD
+=======
+          visible = false;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           type = types.singleLineStr;
           description = ''
             Group the user belongs to in initrd.
@@ -583,12 +625,20 @@ in {
     };
 
     boot.initrd.systemd.groups = mkOption {
+<<<<<<< HEAD
+=======
+      visible = false;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       description = ''
         Groups to include in initrd.
       '';
       default = {};
       type = types.attrsOf (types.submodule ({ name, ... }: {
         options.gid = mkOption {
+<<<<<<< HEAD
+=======
+          visible = false;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           type = types.int;
           description = ''
             ID of the group in initrd.
@@ -666,7 +716,11 @@ in {
       deps = [ "users" ];
       text = ''
         users=()
+<<<<<<< HEAD
         while IFS=: read -r user hash _; do
+=======
+        while IFS=: read -r user hash tail; do
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           if [[ "$hash" = "$"* && ! "$hash" =~ ^\''$${cryptSchemeIdPatternGroup}\$ ]]; then
             users+=("$user")
           fi
@@ -764,7 +818,11 @@ in {
             &&
             (allowsLogin cfg.hashedPassword
              || cfg.password != null
+<<<<<<< HEAD
              || cfg.hashedPasswordFile != null
+=======
+             || cfg.passwordFile != null
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
              || cfg.openssh.authorizedKeys.keys != []
              || cfg.openssh.authorizedKeys.keyFiles != [])
           ) cfg.users ++ [
@@ -853,6 +911,7 @@ in {
           The password hash of user "${user.name}" may be invalid. You must set a
           valid hash or the user will be locked out of their account. Please
           check the value of option `users.users."${user.name}".hashedPassword`.''
+<<<<<<< HEAD
         else null)
         ++ flip mapAttrsToList cfg.users (name: user:
           if user.passwordFile != null then
@@ -860,6 +919,11 @@ in {
             ''to `users.users."${name}".hashedPasswordFile'.''
           else null)
       );
+=======
+        else null
+      ));
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
 }

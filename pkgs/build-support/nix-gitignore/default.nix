@@ -45,7 +45,11 @@ in rec {
           escs = "\\*?";
           splitString =
             let recurse = str : [(substring 0 1 str)] ++
+<<<<<<< HEAD
                                  (lib.optionals (str != "") (recurse (substring 1 (stringLength(str)) str) ));
+=======
+                                 (if str == "" then [] else (recurse (substring 1 (stringLength(str)) str) ));
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
             in str : recurse str;
           chars = s: filter (c: c != "" && !isList c) (splitString s);
           escape = s: map (c: "\\" + c) (chars s);
@@ -66,7 +70,11 @@ in rec {
       handleSlashPrefix = l:
         let
           split = (match "^(/?)(.*)" l);
+<<<<<<< HEAD
           findSlash = l: lib.optionalString ((match ".+/.+" l) == null) l;
+=======
+          findSlash = l: if (match ".+/.+" l) != null then "" else l;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           hasSlash = mapAroundCharclass findSlash l != l;
         in
           (if (elemAt split 0) == "/" || hasSlash

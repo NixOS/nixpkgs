@@ -108,7 +108,11 @@ let
 
   # Replaces values inherited by workspace members.
   replaceWorkspaceValues = writers.writePython3 "replace-workspace-values"
+<<<<<<< HEAD
     { libraries = with python3Packages; [ tomli tomli-w ]; flakeIgnore = [ "E501" "W503" ]; }
+=======
+    { libraries = with python3Packages; [ tomli tomli-w ]; flakeIgnore = [ "E501" ]; }
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     (builtins.readFile ./replace-workspace-values.py);
 
   # Fetch and unpack a crate.
@@ -201,7 +205,11 @@ let
 
         # Set up configuration for the vendor directory.
         cat > $out/.cargo-config <<EOF
+<<<<<<< HEAD
         [source."${gitParts.url}${lib.optionalString (gitParts ? type) "?${gitParts.type}=${gitParts.value}"}"]
+=======
+        [source."${gitParts.url}"]
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         git = "${gitParts.url}"
         ${lib.optionalString (gitParts ? type) "${gitParts.type} = \"${gitParts.value}\""}
         replace-with = "vendored-sources"

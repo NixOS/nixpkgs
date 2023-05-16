@@ -60,7 +60,10 @@ stdenv.mkDerivation rec {
     cmake
     pkg-config
     wrapGAppsHook
+<<<<<<< HEAD
     gobject-introspection
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ] ++ lib.optionals withDoc [
     sphinx
     graphviz
@@ -82,6 +85,10 @@ stdenv.mkDerivation rec {
     pcre
     zstd
     glib
+<<<<<<< HEAD
+=======
+    gobject-introspection
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     gst_all_1.gstreamer
     gst_all_1.gst-plugins-base
     gst_all_1.gst-plugins-good

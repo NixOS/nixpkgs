@@ -22,5 +22,9 @@ buildGoModule rec {
     homepage = "https://github.com/mxschmitt/fritzbox_exporter";
     license = licenses.asl20;
     maintainers = with maintainers; [ bachp flokli sbruder ];
+<<<<<<< HEAD
+=======
+    platforms = platforms.unix;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

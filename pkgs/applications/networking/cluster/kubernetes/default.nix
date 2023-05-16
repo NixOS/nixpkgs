@@ -20,13 +20,21 @@
 
 buildGoModule rec {
   pname = "kubernetes";
+<<<<<<< HEAD
   version = "1.28.1";
+=======
+  version = "1.27.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "kubernetes";
     repo = "kubernetes";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-SsYSjGACGqg+RW7X1OVgPC7MF4KufyskXuES9YKM2mk=";
+=======
+    hash = "sha256-0Wxj+Qxf9q6pIZiYLdIIhZP7n3MHvCZ560tl5AiO+QE=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   vendorHash = null;

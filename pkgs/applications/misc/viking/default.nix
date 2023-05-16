@@ -1,5 +1,9 @@
+<<<<<<< HEAD
 { lib, stdenv, fetchurl, fetchpatch
 , desktopToDarwinBundle
+=======
+{ lib, stdenv, fetchurl
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , docbook_xml_dtd_45, docbook_xsl, intltool, itstool, libxslt, pkg-config, wrapGAppsHook, yelp-tools
 , curl, gdk-pixbuf, gtk3, json-glib, libxml2
 , gpsbabel
@@ -10,7 +14,11 @@
 , withMBTiles ? true, sqlite
 , withMd5Hash ? true, nettle
 , withOAuth ? true, liboauth
+<<<<<<< HEAD
 , withRealtimeGPSTracking ? (!stdenv.isDarwin), gpsd
+=======
+, withRealtimeGPSTracking ? true, gpsd
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 stdenv.mkDerivation rec {
@@ -22,6 +30,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-lFXIlfmLwT3iS9ayNM0PHV7NwbBotMvG62ZE9hJuRaw=";
   };
 
+<<<<<<< HEAD
   patches = [
     # Fix check_md5_hash.sh on macOS
     (fetchpatch {
@@ -32,6 +41,9 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ docbook_xml_dtd_45 docbook_xsl intltool itstool libxslt pkg-config wrapGAppsHook yelp-tools ]
     ++ lib.optional stdenv.isDarwin desktopToDarwinBundle;
+=======
+  nativeBuildInputs = [ docbook_xml_dtd_45 docbook_xsl intltool itstool libxslt pkg-config wrapGAppsHook yelp-tools ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   buildInputs = [ curl gdk-pixbuf gtk3 json-glib libxml2 ]
     ++ lib.optional withGeoClue geoclue2
@@ -76,6 +88,10 @@ stdenv.mkDerivation rec {
     homepage = "https://sourceforge.net/projects/viking/";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ pSub sikmir ];
+<<<<<<< HEAD
     platforms = with platforms; unix;
+=======
+    platforms = with platforms; linux;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

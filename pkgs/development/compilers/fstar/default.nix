@@ -2,13 +2,21 @@
 
 stdenv.mkDerivation rec {
   pname = "fstar";
+<<<<<<< HEAD
   version = "2023.04.25";
+=======
+  version = "2023.02.01";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "FStarLang";
     repo = "FStar";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-LF8eXi/es337QJ2fs5u9pLqegJkh1kDLjK8p4CcSGGc=";
+=======
+    hash = "sha256-sLhbIGF7j1tH8zKsPq1qOSwHvYDrVCyfln9UbE3IYv0=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   strictDeps = true;
@@ -20,7 +28,10 @@ stdenv.mkDerivation rec {
     removeReferencesTo
   ] ++ (with ocamlPackages; [
     ocaml
+<<<<<<< HEAD
     dune_3
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     findlib
     ocamlbuild
     menhir
@@ -46,7 +57,12 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   postPatch = ''
+<<<<<<< HEAD
     patchShebangs ulib/install-ulib.sh
+=======
+    patchShebangs ulib/gen_mllib.sh
+    substituteInPlace src/ocaml-output/Makefile --replace '$(COMMIT)' 'v${version}'
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '';
 
   preInstall = ''

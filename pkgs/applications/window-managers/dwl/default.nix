@@ -12,7 +12,11 @@
 , wayland-scanner
 , wayland
 , wayland-protocols
+<<<<<<< HEAD
 , wlroots
+=======
+, wlroots_0_16
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , writeText
 , xcbutilwm
 , xwayland
@@ -20,6 +24,12 @@
 , conf ? null
 }:
 
+<<<<<<< HEAD
+=======
+let
+  wlroots = wlroots_0_16;
+in
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 stdenv.mkDerivation (finalAttrs: {
   pname = "dwl";
   version = "0.4";
@@ -64,7 +74,11 @@ stdenv.mkDerivation (finalAttrs: {
     "PKG_CONFIG=${stdenv.cc.targetPrefix}pkg-config"
     "WAYLAND_SCANNER=wayland-scanner"
     "PREFIX=$(out)"
+<<<<<<< HEAD
     "MANDIR=$(man)/share/man"
+=======
+    "MANDIR=$(man)/share/man/man1"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   preBuild = ''

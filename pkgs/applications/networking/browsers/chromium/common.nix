@@ -1,7 +1,10 @@
 { stdenv, lib, fetchurl, fetchpatch
+<<<<<<< HEAD
 , buildPackages
 , pkgsBuildBuild
 , pkgsBuildTarget
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 # Channel data:
 , channel, upstream-info
 # Helper functions:
@@ -11,10 +14,14 @@
 , ninja, pkg-config
 , python3, perl
 , which
+<<<<<<< HEAD
 , llvmPackages_attrName
 , rustc
 , libuuid
 , overrideCC
+=======
+, llvmPackages
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 # postPatch:
 , pkgsBuildHost
 # configurePhase:
@@ -121,6 +128,7 @@ let
     inherit (upstream-info.deps.ungoogled-patches) rev sha256;
   };
 
+<<<<<<< HEAD
   # There currently isn't a (much) more concise way to get a stdenv
   # that uses lld as its linker without bootstrapping pkgsLLVM; see
   # https://github.com/NixOS/nixpkgs/issues/142901
@@ -148,6 +156,8 @@ let
       else throw "no chromium Rosetta Stone entry for os: ${platform.config}";
   };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   base = rec {
     pname = "${packageName}-unwrapped";
     inherit (upstream-info) version;
@@ -162,6 +172,7 @@ let
       ninja pkg-config
       python3WithPackages perl
       which
+<<<<<<< HEAD
       buildPackages.${llvmPackages_attrName}.bintools
       bison gperf
     ];
@@ -182,15 +193,25 @@ let
     ++ buildInputs
     ;
 
+=======
+      llvmPackages.bintools
+      bison gperf
+    ];
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     buildInputs = [
       (libpng.override { apngSupport = false; }) # https://bugs.chromium.org/p/chromium/issues/detail?id=752403
       bzip2 flac speex opusWithCustomModes
       libevent expat libjpeg snappy
       libcap
+<<<<<<< HEAD
     ] ++ lib.optionals (!xdg-utils.meta.broken) [
       xdg-utils
     ] ++ [
       minizip libwebp
+=======
+      xdg-utils minizip libwebp
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       libusb1 re2
       ffmpeg libxslt libxml2
       nasm
@@ -207,13 +228,20 @@ let
       curl
       libepoxy
       libffi
+<<<<<<< HEAD
+=======
+    ] ++ lib.optionals (chromiumVersionAtLeast "114") [
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       libevdev
     ] ++ lib.optional systemdSupport systemd
       ++ lib.optionals cupsSupport [ libgcrypt cups ]
       ++ lib.optional pulseSupport libpulseaudio;
 
     patches = [
+<<<<<<< HEAD
       ./cross-compile.patch
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       # Optional patch to use SOURCE_DATE_EPOCH in compute_build_timestamp.py (should be upstreamed):
       ./patches/no-build-timestamps.patch
       # For bundling Widevine (DRM), might be replaceable via bundle_widevine_cdm=true in gnFlags:
@@ -222,6 +250,7 @@ let
       # (we currently package 1.26 in Nixpkgs while Chromium bundles 1.21):
       # Source: https://bugs.chromium.org/p/angleproject/issues/detail?id=7582#c1
       ./patches/angle-wayland-include-protocol.patch
+<<<<<<< HEAD
       # We need to revert this patch to build M114+ with LLVM 16:
       (githubPatch {
         # Reland [clang] Disable autoupgrading debug info in ThinLTO builds
@@ -229,6 +258,8 @@ let
         sha256 = "sha256-Vryjg8kyn3cxWg3PmSwYRG6zrHOqYWBMSdEMGiaPg6M=";
         revert = true;
       })
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     ];
 
     postPatch = ''
@@ -277,7 +308,10 @@ let
           '/usr/share/locale/' \
           '${glibc}/share/locale/'
 
+<<<<<<< HEAD
     '' + lib.optionalString (!xdg-utils.meta.broken) ''
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       sed -i -e 's@"\(#!\)\?.*xdg-@"\1${xdg-utils}/bin/xdg-@' \
         chrome/browser/shell_integration_linux.cc
 
@@ -303,7 +337,11 @@ let
       # Allow building against system libraries in official builds
       sed -i 's/OFFICIAL_BUILD/GOOGLE_CHROME_BUILD/' tools/generate_shim_headers/generate_shim_headers.py
 
+<<<<<<< HEAD
     '' + lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform && stdenv.hostPlatform.isAarch64) ''
+=======
+    '' + lib.optionalString stdenv.isAarch64 ''
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       substituteInPlace build/toolchain/linux/BUILD.gn \
         --replace 'toolprefix = "aarch64-linux-gnu-"' 'toolprefix = ""'
     '' + lib.optionalString ungoogled ''
@@ -321,6 +359,7 @@ let
       # weaken or disable security measures like sandboxing or ASLR):
       is_official_build = true;
       disable_fieldtrial_testing_config = true;
+<<<<<<< HEAD
 
       # note: chromium calls buildPlatform "host" and calls hostPlatform "target"
       host_cpu      = chromiumRosettaStone.cpu stdenv.buildPlatform;
@@ -342,6 +381,11 @@ let
       host_pkg_config = "${pkgsBuildBuild.pkg-config}/bin/pkg-config";
       pkg_config      = "${pkgsBuildHost.pkg-config}/bin/${stdenv.cc.targetPrefix}pkg-config";
 
+=======
+      # Build Chromium using the system toolchain (for Linux distributions):
+      custom_toolchain = "//build/toolchain/linux/unbundle:default";
+      host_toolchain = "//build/toolchain/linux/unbundle:default";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       # Don't build against a sysroot image downloaded from Cloud Storage:
       use_sysroot = false;
       # Because we use a different toolchain / compiler version:
@@ -361,6 +405,10 @@ let
 
       # Optional features:
       use_gio = true;
+<<<<<<< HEAD
+=======
+      use_gnome_keyring = false; # Superseded by libsecret
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       use_cups = cupsSupport;
 
       # Feature overrides:
@@ -374,11 +422,16 @@ let
       rtc_use_pipewire = true;
       # Disable PGO because the profile data requires a newer compiler version (LLVM 14 isn't sufficient):
       chrome_pgo_phase = 0;
+<<<<<<< HEAD
       clang_base_path = "${pkgsBuildTarget.${llvmPackages_attrName}.stdenv.cc}";
+=======
+      clang_base_path = "${llvmPackages.clang}";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       use_qt = false;
       # To fix the build as we don't provide libffi_pic.a
       # (ld.lld: error: unable to find library -l:libffi_pic.a):
       use_system_libffi = true;
+<<<<<<< HEAD
       # Use nixpkgs Rust compiler instead of the one shipped by Chromium.
       # We do intentionally not set rustc_version as nixpkgs will never do incremental
       # rebuilds, thus leaving this empty is fine.
@@ -388,6 +441,8 @@ let
     } // lib.optionalAttrs (!(stdenv.buildPlatform.canExecute stdenv.hostPlatform)) {
       # https://www.mail-archive.com/v8-users@googlegroups.com/msg14528.html
       arm_control_flow_integrity = "none";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     } // lib.optionalAttrs proprietaryCodecs {
       # enable support for the H.264 codec
       proprietary_codecs = true;
@@ -417,11 +472,14 @@ let
     # our Clang is always older than Chromium's and the build logs have a size
     # of approx. 25 MB without this option (and this saves e.g. 66 %).
     env.NIX_CFLAGS_COMPILE = "-Wno-unknown-warning-option";
+<<<<<<< HEAD
     env.BUILD_CC = "$CC_FOR_BUILD";
     env.BUILD_CXX = "$CXX_FOR_BUILD";
     env.BUILD_AR = "$AR_FOR_BUILD";
     env.BUILD_NM = "$NM_FOR_BUILD";
     env.BUILD_READELF = "$READELF_FOR_BUILD";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     buildPhase = let
       buildCommand = target: ''
@@ -454,12 +512,16 @@ let
         gn = gnChromium;
       };
     };
+<<<<<<< HEAD
   }
   # overwrite `version` with the exact same `version` from the same source,
   # except it internally points to `upstream-info.nix` for
   # `builtins.unsafeGetAttrPos`, which is used by ofborg to decide
   # which maintainers need to be pinged.
   // builtins.removeAttrs upstream-info (builtins.filter (e: e != "version") (builtins.attrNames upstream-info));
+=======
+  };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 # Remove some extraAttrs we supplied to the base attributes already.
 in stdenv.mkDerivation (base // removeAttrs extraAttrs [

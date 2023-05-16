@@ -11,8 +11,11 @@ buildNimPackage rec {
     hash = "sha256-/v0lQIOMogTxFRtbssziW4W6VhMDepM6Si8igLgcx30=";
   };
 
+<<<<<<< HEAD
   nimFlags = [ "--mm:refc" ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   doCheck = !stdenv.isDarwin;
 
   meta = with lib;

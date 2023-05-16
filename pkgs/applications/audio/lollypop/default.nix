@@ -106,6 +106,9 @@ python3.pkgs.buildPythonApplication rec  {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ lovesegfault ];
     platforms = platforms.linux;
+<<<<<<< HEAD
     mainProgram = "lollypop";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

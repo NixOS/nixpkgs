@@ -1,13 +1,19 @@
 { lib, stdenv, fetchFromGitHub, fetchpatch, substituteAll, swaybg
 , meson, ninja, pkg-config, wayland-scanner, scdoc
 , wayland, libxkbcommon, pcre2, json_c, libevdev
+<<<<<<< HEAD
 , pango, cairo, libinput, gdk-pixbuf, librsvg
 , wlroots, wayland-protocols, libdrm
+=======
+, pango, cairo, libinput, libcap, pam, gdk-pixbuf, librsvg
+, wlroots_0_16, wayland-protocols, libdrm
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , nixosTests
 # Used by the NixOS module:
 , isNixOS ? false
 , enableXWayland ? true, xorg
 , systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd, systemd
+<<<<<<< HEAD
 , trayEnabled ? systemdSupport
 }:
 
@@ -20,6 +26,28 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "swaywm";
     repo = "sway";
     rev = finalAttrs.version;
+=======
+, dbusSupport ? true
+, dbus
+, trayEnabled ? systemdSupport && dbusSupport
+}:
+
+# The "sd-bus-provider" meson option does not include a "none" option,
+# but it is silently ignored iff "-Dtray=disabled".  We use "basu"
+# (which is not in nixpkgs) instead of "none" to alert us if this
+# changes: https://github.com/swaywm/sway/issues/6843#issuecomment-1047288761
+assert trayEnabled -> systemdSupport && dbusSupport;
+let sd-bus-provider = if systemdSupport then "libsystemd" else "basu"; in
+
+stdenv.mkDerivation rec {
+  pname = "sway-unwrapped";
+  version = "1.8.1";
+
+  src = fetchFromGitHub {
+    owner = "swaywm";
+    repo = "sway";
+    rev = version;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     hash = "sha256-WxnT+le9vneQLFPz2KoBduOI+zfZPhn1fKlaqbPL6/g=";
   };
 
@@ -36,11 +64,19 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://github.com/swaywm/sway/commit/dee032d0a0ecd958c902b88302dc59703d703c7f.diff";
       hash = "sha256-dx+7MpEiAkxTBnJcsT3/1BO8rYRfNLecXmpAvhqGMD0=";
     })
+<<<<<<< HEAD
   ] ++ lib.optionals (!finalAttrs.isNixOS) [
     # References to /nix/store/... will get GC'ed which causes problems when
     # copying the default configuration:
     ./sway-config-no-nix-store-references.patch
   ] ++ lib.optionals finalAttrs.isNixOS [
+=======
+  ] ++ lib.optionals (!isNixOS) [
+    # References to /nix/store/... will get GC'ed which causes problems when
+    # copying the default configuration:
+    ./sway-config-no-nix-store-references.patch
+  ] ++ lib.optionals isNixOS [
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     # Use /run/current-system/sw/share and /etc instead of /nix/store
     # references:
     ./sway-config-nixos-paths.patch
@@ -57,6 +93,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     wayland libxkbcommon pcre2 json_c libevdev
+<<<<<<< HEAD
     pango cairo libinput gdk-pixbuf librsvg
     wayland-protocols libdrm
     (wlroots.override { inherit (finalAttrs) enableXWayland; })
@@ -76,6 +113,21 @@ stdenv.mkDerivation (finalAttrs: {
     [ "-Dsd-bus-provider=${sd-bus-provider}" ]
     ++ lib.optional (!finalAttrs.enableXWayland) "-Dxwayland=disabled"
     ++ lib.optional (!finalAttrs.trayEnabled)    "-Dtray=disabled"
+=======
+    pango cairo libinput libcap pam gdk-pixbuf librsvg
+    wayland-protocols libdrm
+    (wlroots_0_16.override { inherit enableXWayland; })
+  ] ++ lib.optionals dbusSupport [
+    dbus
+  ] ++ lib.optionals enableXWayland [
+    xorg.xcbutilwm
+  ];
+
+  mesonFlags =
+    [ "-Dsd-bus-provider=${sd-bus-provider}" ]
+    ++ lib.optional (!enableXWayland) "-Dxwayland=disabled"
+    ++ lib.optional (!trayEnabled)    "-Dtray=disabled"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ;
 
   passthru.tests.basic = nixosTests.sway;
@@ -96,6 +148,11 @@ stdenv.mkDerivation (finalAttrs: {
     license     = licenses.mit;
     platforms   = platforms.linux;
     maintainers = with maintainers; [ primeos synthetica ];
+<<<<<<< HEAD
     mainProgram = "sway";
   };
 })
+=======
+  };
+}
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)

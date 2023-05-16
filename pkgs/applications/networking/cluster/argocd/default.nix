@@ -2,17 +2,29 @@
 
 buildGoModule rec {
   pname = "argocd";
+<<<<<<< HEAD
   version = "2.8.3";
+=======
+  version = "2.7.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "argoproj";
     repo = "argo-cd";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-sVaUItort09n2aShrE0MqOKQps44qNQv0Nox4P21xqg=";
   };
 
   proxyVendor = true; # darwin/linux hash mismatch
   vendorHash = "sha256-WeDIvw9KHDL5h/MQ9H1rOZkAlUOzROGw/gwpZB2jvOg=";
+=======
+    sha256 = "sha256-1P3FIgC9j0SbwzWo0aPUwVTKNlSY3FG7Iz6KD9pbv84=";
+  };
+
+  proxyVendor = true; # darwin/linux hash mismatch
+  vendorHash = "sha256-VRbNzJANWA7MjomzxNRK19Q4L+fsztMpumUbdYszYqw=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   # Set target as ./cmd per cli-local
   # https://github.com/argoproj/argo-cd/blob/master/Makefile#L227
@@ -59,6 +71,10 @@ buildGoModule rec {
     downloadPage = "https://github.com/argoproj/argo-cd";
     homepage = "https://argo-cd.readthedocs.io/en/stable/";
     license = licenses.asl20;
+<<<<<<< HEAD
     maintainers = with maintainers; [ shahrukh330 bryanasdev000 qjoly ];
+=======
+    maintainers = with maintainers; [ shahrukh330 bryanasdev000 ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

@@ -56,7 +56,11 @@ let
 
     src = djvSrc;
 
+<<<<<<< HEAD
     sourceRoot = "${src.name}/etc/SuperBuild";
+=======
+    sourceRoot = "source/etc/SuperBuild";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     nativeBuildInputs = [ cmake ];
     buildInputs = [

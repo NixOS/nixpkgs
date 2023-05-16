@@ -7,14 +7,22 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "maestral-qt";
+<<<<<<< HEAD
   version = "1.8.0";
+=======
+  version = "1.7.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   disabled = python3.pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "SamSchott";
     repo = "maestral-qt";
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-Ys7XrvV4qzq4Q9llua2WgU013Ui0+x+uMwLNIv6xxCw=";
+=======
+    hash = "sha256-YYlH9s3iNEIacs8izEnIU32j+2lruQ5JJrjvDIzQjRE=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   format = "pyproject";

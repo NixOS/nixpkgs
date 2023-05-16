@@ -227,6 +227,9 @@ in stdenv.mkDerivation {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ zhaofengli ];
     platforms = [ "x86_64-linux" ];
+<<<<<<< HEAD
     mainProgram = "darling";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

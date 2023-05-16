@@ -14,6 +14,10 @@
 , python3
 , reproc
 , spdlog
+<<<<<<< HEAD
+=======
+, termcolor
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , tl-expected
 }:
 
@@ -35,13 +39,21 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "micromamba";
+<<<<<<< HEAD
   version = "1.4.4";
+=======
+  version = "1.2.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "mamba-org";
     repo = "mamba";
     rev = "micromamba-" + version;
+<<<<<<< HEAD
     hash = "sha256-Z6hED0fiXzEKpVm8tUBR9ynqWCvHGXkXHzAXbbWlq9Y=";
+=======
+    sha256 = "sha256-KGlH5i/lI6c1Jj1ttAOrip8BKECaea5D202TJMcFDmM=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ cmake ];
@@ -56,6 +68,10 @@ stdenv.mkDerivation rec {
     libsolv'
     reproc
     spdlog
+<<<<<<< HEAD
+=======
+    termcolor
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     ghc_filesystem
     python3
     tl-expected

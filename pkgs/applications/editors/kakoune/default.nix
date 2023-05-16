@@ -2,12 +2,20 @@
 
 stdenv.mkDerivation rec {
   pname = "kakoune-unwrapped";
+<<<<<<< HEAD
   version = "2023.08.05";
+=======
+  version = "2022.10.31";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   src = fetchFromGitHub {
     repo = "kakoune";
     owner = "mawww";
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-RR3kw39vEjsg+6cIY6cK2i3ecGHlr1yzuBKaDtGlOGo=";
+=======
+    sha256 = "sha256-vmzGaGl0KSjseSD/s6DXxvMUTmAle+Iv/ZP9llaFnXk=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
   makeFlags = [ "debug=no" "PREFIX=${placeholder "out"}" ];
 

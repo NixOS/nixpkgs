@@ -2,20 +2,35 @@
 
 { config, lib, pkgs, ... }:
 
+<<<<<<< HEAD
 let
   cfg = config.virtualisation.lxd;
   preseedFormat = pkgs.formats.yaml {};
 in {
   imports = [
     (lib.mkRemovedOptionModule [ "virtualisation" "lxd" "zfsPackage" ] "Override zfs in an overlay instead to override it globally")
+=======
+with lib;
+
+let
+  cfg = config.virtualisation.lxd;
+in {
+  imports = [
+    (mkRemovedOptionModule [ "virtualisation" "lxd" "zfsPackage" ] "Override zfs in an overlay instead to override it globally")
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   ###### interface
 
   options = {
     virtualisation.lxd = {
+<<<<<<< HEAD
       enable = lib.mkOption {
         type = lib.types.bool;
+=======
+      enable = mkOption {
+        type = types.bool;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         default = false;
         description = lib.mdDoc ''
           This option enables lxd, a daemon that manages
@@ -31,28 +46,49 @@ in {
         '';
       };
 
+<<<<<<< HEAD
       package = lib.mkOption {
         type = lib.types.package;
         default = pkgs.lxd;
         defaultText = lib.literalExpression "pkgs.lxd";
+=======
+      package = mkOption {
+        type = types.package;
+        default = pkgs.lxd;
+        defaultText = literalExpression "pkgs.lxd";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         description = lib.mdDoc ''
           The LXD package to use.
         '';
       };
 
+<<<<<<< HEAD
       lxcPackage = lib.mkOption {
         type = lib.types.package;
         default = pkgs.lxc;
         defaultText = lib.literalExpression "pkgs.lxc";
+=======
+      lxcPackage = mkOption {
+        type = types.package;
+        default = pkgs.lxc;
+        defaultText = literalExpression "pkgs.lxc";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         description = lib.mdDoc ''
           The LXC package to use with LXD (required for AppArmor profiles).
         '';
       };
 
+<<<<<<< HEAD
       zfsSupport = lib.mkOption {
         type = lib.types.bool;
         default = config.boot.zfs.enabled;
         defaultText = lib.literalExpression "config.boot.zfs.enabled";
+=======
+      zfsSupport = mkOption {
+        type = types.bool;
+        default = config.boot.zfs.enabled;
+        defaultText = literalExpression "config.boot.zfs.enabled";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         description = lib.mdDoc ''
           Enables lxd to use zfs as a storage for containers.
 
@@ -61,8 +97,13 @@ in {
         '';
       };
 
+<<<<<<< HEAD
       recommendedSysctlSettings = lib.mkOption {
         type = lib.types.bool;
+=======
+      recommendedSysctlSettings = mkOption {
+        type = types.bool;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         default = false;
         description = lib.mdDoc ''
           Enables various settings to avoid common pitfalls when
@@ -74,6 +115,7 @@ in {
         '';
       };
 
+<<<<<<< HEAD
       preseed = lib.mkOption {
         type = lib.types.nullOr (lib.types.submodule {
           freeformType = preseedFormat.type;
@@ -135,6 +177,10 @@ in {
 
       startTimeout = lib.mkOption {
         type = lib.types.int;
+=======
+      startTimeout = mkOption {
+        type = types.int;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         default = 600;
         apply = toString;
         description = lib.mdDoc ''
@@ -143,6 +189,7 @@ in {
           considered failed and systemd will attempt to restart it.
         '';
       };
+<<<<<<< HEAD
 
       ui = {
         enable = lib.mkEnableOption (lib.mdDoc ''
@@ -151,11 +198,17 @@ in {
 
         package = lib.mkPackageOption pkgs.lxd-unwrapped "ui" { };
       };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
   };
 
   ###### implementation
+<<<<<<< HEAD
   config = lib.mkIf cfg.enable {
+=======
+  config = mkIf cfg.enable {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     environment.systemPackages = [ cfg.package ];
 
     # Note: the following options are also declared in virtualisation.lxc, but
@@ -197,21 +250,33 @@ in {
       wantedBy = [ "multi-user.target" ];
       after = [
         "network-online.target"
+<<<<<<< HEAD
         (lib.mkIf config.virtualisation.lxc.lxcfs.enable "lxcfs.service")
+=======
+        (mkIf config.virtualisation.lxc.lxcfs.enable "lxcfs.service")
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       ];
       requires = [
         "network-online.target"
         "lxd.socket"
+<<<<<<< HEAD
         (lib.mkIf config.virtualisation.lxc.lxcfs.enable "lxcfs.service")
+=======
+        (mkIf config.virtualisation.lxc.lxcfs.enable "lxcfs.service")
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       ];
       documentation = [ "man:lxd(1)" ];
 
       path = [ pkgs.util-linux ]
+<<<<<<< HEAD
         ++ lib.optional cfg.zfsSupport config.boot.zfs.package;
 
       environment = lib.mkIf (cfg.ui.enable) {
         "LXD_UI" = cfg.ui.package;
       };
+=======
+        ++ optional cfg.zfsSupport config.boot.zfs.package;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
       serviceConfig = {
         ExecStart = "@${cfg.package}/bin/lxd lxd --group lxd";
@@ -231,11 +296,16 @@ in {
         # By default, `lxd` loads configuration files from hard-coded
         # `/usr/share/lxc/config` - since this is a no-go for us, we have to
         # explicitly tell it where the actual configuration files are
+<<<<<<< HEAD
         Environment = lib.mkIf (config.virtualisation.lxc.lxcfs.enable)
+=======
+        Environment = mkIf (config.virtualisation.lxc.lxcfs.enable)
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           "LXD_LXC_TEMPLATE_CONFIG=${pkgs.lxcfs}/share/lxc/config";
       };
     };
 
+<<<<<<< HEAD
     systemd.services.lxd-preseed = lib.mkIf (cfg.preseed != null) {
       description = "LXD initialization with preseed file";
       wantedBy = ["multi-user.target"];
@@ -251,6 +321,8 @@ in {
       };
     };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     users.groups.lxd = {};
 
     users.users.root = {
@@ -258,18 +330,31 @@ in {
       subGidRanges = [ { startGid = 1000000; count = 65536; } ];
     };
 
+<<<<<<< HEAD
     boot.kernel.sysctl = lib.mkIf cfg.recommendedSysctlSettings {
       "fs.inotify.max_queued_events" = 1048576;
       "fs.inotify.max_user_instances" = 1048576;
       "fs.inotify.max_user_watches" = 1048576;
       "vm.max_map_count" = 262144; # TODO: Default vm.max_map_count has been increased system-wide
+=======
+    boot.kernel.sysctl = mkIf cfg.recommendedSysctlSettings {
+      "fs.inotify.max_queued_events" = 1048576;
+      "fs.inotify.max_user_instances" = 1048576;
+      "fs.inotify.max_user_watches" = 1048576;
+      "vm.max_map_count" = 262144;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       "kernel.dmesg_restrict" = 1;
       "net.ipv4.neigh.default.gc_thresh3" = 8192;
       "net.ipv6.neigh.default.gc_thresh3" = 8192;
       "kernel.keys.maxkeys" = 2000;
     };
 
+<<<<<<< HEAD
     boot.kernelModules = [ "veth" "xt_comment" "xt_CHECKSUM" "xt_MASQUERADE" "vhost_vsock" ]
       ++ lib.optionals (!config.networking.nftables.enable) [ "iptable_mangle" ];
+=======
+    boot.kernelModules = [ "veth" "xt_comment" "xt_CHECKSUM" "xt_MASQUERADE" ]
+      ++ optionals (!config.networking.nftables.enable) [ "iptable_mangle" ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

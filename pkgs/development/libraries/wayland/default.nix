@@ -124,4 +124,9 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
     maintainers = with maintainers; [ primeos codyopel qyliss ];
   };
+<<<<<<< HEAD
+=======
+
+  passthru.version = version;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }

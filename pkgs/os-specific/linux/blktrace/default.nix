@@ -13,6 +13,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libaio ];
 
+<<<<<<< HEAD
   makeFlags = [
     "prefix=${placeholder "out"}"
     "CC:=$(CC)"
@@ -22,6 +23,16 @@ stdenv.mkDerivation rec {
     description = "Block layer IO tracing mechanism";
     maintainers = with maintainers; [ nickcao ];
     license = licenses.gpl2Plus;
+=======
+  preConfigure = ''
+    sed s,/usr/local,$out, -i Makefile
+  '';
+
+  meta = with lib; {
+    description = "Block layer IO tracing mechanism";
+    maintainers = with maintainers; [ ];
+    license = licenses.gpl2;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     platforms = platforms.linux;
   };
 }

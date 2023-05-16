@@ -32,6 +32,7 @@ buildPythonPackage {
 
   # numpy is optional - if not supplied, tests simply have less coverage
   nativeCheckInputs = [ numpy ];
+<<<<<<< HEAD
 
   postPatch = ''
     substituteInPlace code/test_png.py \
@@ -46,12 +47,26 @@ buildPythonPackage {
     ${python.interpreter} code/test_png.py
 
     runHook postCheck
+=======
+  # checkPhase begins by deleting source dir to force test execution against installed version
+  checkPhase = ''
+    rm -r code/png
+    ${python.interpreter} code/test_png.py
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '';
 
   meta = with lib; {
     description = "Pure Python library for PNG image encoding/decoding";
+<<<<<<< HEAD
     homepage = "https://github.com/scondo/purepng";
     license = licenses.mit;
     maintainers = with maintainers; [ ris ];
   };
+=======
+    homepage    = "https://github.com/scondo/purepng";
+    license     = licenses.mit;
+    maintainers = with maintainers; [ ris ];
+  };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }

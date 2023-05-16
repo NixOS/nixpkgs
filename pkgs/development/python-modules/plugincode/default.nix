@@ -12,14 +12,22 @@
 
 buildPythonPackage rec {
   pname = "plugincode";
+<<<<<<< HEAD
   version = "32.0.0";
+=======
+  version = "31.0.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
+<<<<<<< HEAD
     hash = "sha256-QTLZOxdVJxxuImydouIET/YuvLhztelY1mqN3enzRfo=";
+=======
+    hash = "sha256-0BfdHQn/Kgct4ZT34KhMgMC3nS0unE3iL7DiWDhXDSk=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   dontConfigure = true;
@@ -51,7 +59,10 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Library that provides plugin functionality for ScanCode toolkit";
     homepage = "https://github.com/nexB/plugincode";
+<<<<<<< HEAD
     changelog = "https://github.com/nexB/plugincode/blob/v${version}/CHANGELOG.rst";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     license = licenses.asl20;
     maintainers = [ ];
   };

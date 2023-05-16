@@ -35,7 +35,10 @@ let
     expat
     fontconfig
     freetype
+<<<<<<< HEAD
   ] ++ lib.optionals stdenv.isLinux [
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     libGL
     xorg.libX11
     xorg.libXcursor
@@ -43,22 +46,37 @@ let
     xorg.libXrandr
     xorg.libXxf86vm
     xorg.libxcb
+<<<<<<< HEAD
+=======
+  ] ++ lib.optionals stdenv.isLinux [
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     libxkbcommon
     wayland
   ];
 in
 rustPlatform.buildRustPackage rec {
   pname = "alacritty";
+<<<<<<< HEAD
   version = "0.12.2";
+=======
+  version = "0.12.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "alacritty";
     repo = pname;
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-X3Z+f5r8surBW9FSsmWKZ/fr82ThXBUkS8fr/sTYR50=";
   };
 
   cargoHash = "sha256-JOmDmJl/y4WNsBnCixJykl4PgYgb5cSyo6MCdYmQAzQ=";
+=======
+    hash = "sha256-2MiFsOZpAlDVC4h3m3HHlMr2ytL/z47vrTwUMoHdegI=";
+  };
+
+  cargoSha256 = "sha256-4liPfNJ2JGniz8Os4Np+XSXCJBHND13XLPWDy3Gc/F8=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nativeBuildInputs = [
     cmake
@@ -104,7 +122,11 @@ rustPlatform.buildRustPackage rec {
       # As a workaround, strip manually before running patchelf.
       $STRIP -S $out/bin/alacritty
 
+<<<<<<< HEAD
       patchelf --add-rpath "${lib.makeLibraryPath rpathLibs}" $out/bin/alacritty
+=======
+      patchelf --set-rpath "${lib.makeLibraryPath rpathLibs}" $out/bin/alacritty
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     ''
   ) + ''
 
@@ -132,7 +154,10 @@ rustPlatform.buildRustPackage rec {
     description = "A cross-platform, GPU-accelerated terminal emulator";
     homepage = "https://github.com/alacritty/alacritty";
     license = licenses.asl20;
+<<<<<<< HEAD
     mainProgram = "alacritty";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     maintainers = with maintainers; [ Br1ght0ne mic92 ];
     platforms = platforms.unix;
     changelog = "https://github.com/alacritty/alacritty/blob/v${version}/CHANGELOG.md";

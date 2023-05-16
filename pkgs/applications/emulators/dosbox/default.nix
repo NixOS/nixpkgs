@@ -9,7 +9,10 @@
 , graphicsmagick
 , libGL
 , libGLU
+<<<<<<< HEAD
 , OpenGL
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , libpng
 , makeDesktopItem
 }:
@@ -33,6 +36,7 @@ stdenv.mkDerivation rec {
     SDL
     SDL_net
     SDL_sound
+<<<<<<< HEAD
     libpng
   ] ++ (if stdenv.hostPlatform.isDarwin then [
     OpenGL
@@ -40,6 +44,12 @@ stdenv.mkDerivation rec {
     libGL
     libGLU
   ]);
+=======
+    libGL
+    libGLU
+    libpng
+  ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   hardeningDisable = [ "format" ];
 
@@ -77,6 +87,9 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ matthewbauer ];
     platforms = platforms.unix;
+<<<<<<< HEAD
     mainProgram = "dosbox";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

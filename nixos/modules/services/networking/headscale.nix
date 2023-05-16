@@ -292,7 +292,11 @@ in {
               };
 
               client_secret_path = mkOption {
+<<<<<<< HEAD
                 type = types.nullOr types.str;
+=======
+                type = types.nullOr types.path;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
                 default = null;
                 description = lib.mdDoc ''
                   Path to OpenID Connect client secret file. Expands environment variables in format ''${VAR}.
@@ -393,7 +397,11 @@ in {
               type = types.nullOr types.path;
               default = null;
               description = lib.mdDoc ''
+<<<<<<< HEAD
                 Path to a file containing ACL policies.
+=======
+                Path to a file containg ACL policies.
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
               '';
             };
           };

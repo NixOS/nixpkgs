@@ -18,11 +18,19 @@
 
 buildPythonPackage rec {
   pname = "vowpalwabbit";
+<<<<<<< HEAD
   version = "9.9.0";
 
   src = fetchPypi{
     inherit pname version;
     hash = "sha256-YCg2EI4rhEMwcVEzx9ES8Z3CoCddeUFVk4lZ0nuQJUc=";
+=======
+  version = "9.8.0";
+
+  src = fetchPypi{
+    inherit pname version;
+    hash = "sha256-s2q9K2tuILQATSjUKXe/hYdQW84bSIHwh/gfWM0/NTM=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

@@ -3,7 +3,11 @@
 , fetchurl
 , unzip
 , qtbase
+<<<<<<< HEAD
 , qtmacextras ? null
+=======
+, qtmacextras
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , qmake
 , fixDarwinDylibNames
 }:
@@ -63,7 +67,10 @@ stdenv.mkDerivation rec {
     license = with licenses; [ gpl3 ]; # and commercial
     maintainers = with maintainers; [ peterhoeg ];
     platforms = platforms.unix;
+<<<<<<< HEAD
     # ld: library not found for -lcups
     broken = stdenv.isDarwin && lib.versionAtLeast qtbase.version "6";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

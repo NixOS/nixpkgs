@@ -1,5 +1,6 @@
 { lib
 , buildPythonPackage
+<<<<<<< HEAD
 , fetchpatch
 , fetchPypi
 , poetry-core
@@ -9,17 +10,30 @@
 , fastavro
 , importlib-metadata
 , requests
+=======
+, fetchPypi
+, poetry-core
+, pythonOlder
+, requests
+, aiohttp
+, backoff
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 buildPythonPackage rec {
   pname = "cohere";
+<<<<<<< HEAD
   version = "4.21";
+=======
+  version = "4.3.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
+<<<<<<< HEAD
     hash = "sha256-9hFDj0Cd/F1aChU6WFNJ9agLFpxxArWZTZmZ7PhECGY=";
   };
 
@@ -32,16 +46,27 @@ buildPythonPackage rec {
     })
   ];
 
+=======
+    hash = "sha256-koIDk7JPKb8lhBkwaX/o76AuaNrFaeapVp54RRxEY9U=";
+  };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nativeBuildInputs = [
     poetry-core
   ];
 
   propagatedBuildInputs = [
+<<<<<<< HEAD
     aiohttp
     backoff
     fastavro
     importlib-metadata
     requests
+=======
+    requests
+    aiohttp
+    backoff
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   # tests require CO_API_KEY

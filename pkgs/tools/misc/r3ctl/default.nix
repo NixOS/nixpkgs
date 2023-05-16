@@ -1,13 +1,22 @@
 { lib
 , qt5
 , qtbase
+<<<<<<< HEAD
+=======
+, qtsvg
+, qtx11extras
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , qttools
 , qtwebsockets
 , qtmultimedia
 , fetchFromGitHub
 }:
 
+<<<<<<< HEAD
 qt5.mkDerivation {
+=======
+qt5.mkDerivation rec {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pname = "r3ctl";
   version = "a82cb5b3123224e706835407f21acea9dc7ab0f0";
 

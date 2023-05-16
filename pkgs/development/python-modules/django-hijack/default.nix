@@ -1,4 +1,5 @@
 { lib
+<<<<<<< HEAD
 , fetchFromGitHub
 , fetchNpmDeps
 , buildPythonPackage
@@ -13,12 +14,19 @@
 , django
 
 # tests
+=======
+, fetchPypi
+, buildPythonPackage
+, django
+, django_compat
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , pytest-django
 , pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "django-hijack";
+<<<<<<< HEAD
   version = "3.3.0";
   format = "setuptools";
 
@@ -53,6 +61,25 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     django
+=======
+  version = "3.2.6";
+
+  # the wheel comes with pre-built assets, allowing us to avoid fighting
+  # with npm/webpack/gettext to build them ourselves.
+  format = "wheel";
+
+  src = fetchPypi {
+    inherit version format;
+    pname = "django_hijack";
+    dist = "py3";
+    python = "py3";
+    hash = "sha256-xFPZ03II1814+bZ5gx7GD/AxYMiLuH6awfSeXEraOHQ=";
+  };
+
+  propagatedBuildInputs = [
+    django
+    django_compat
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   nativeCheckInputs = [
@@ -60,11 +87,21 @@ buildPythonPackage rec {
     pytest-django
   ];
 
+<<<<<<< HEAD
   env.DJANGO_SETTINGS_MODULE = "hijack.tests.test_app.settings";
 
   pytestFlagsArray = [
     "--pyargs" "hijack"
     "-W" "ignore::DeprecationWarning"
+=======
+  preCheck = ''
+    export DJANGO_SETTINGS_MODULE='hijack.tests.test_app.settings'
+  '';
+
+  pytestFlagsArray = [
+    "--pyargs"
+    "hijack"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   meta = with lib; {

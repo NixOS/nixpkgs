@@ -14,8 +14,11 @@ stdenv.mkDerivation {
     sha256 = "NMQE2zU858b6OZhdS2oZnGvLK+eb7yU0nFaMAcpNw04=";
   };
 
+<<<<<<< HEAD
   separateDebugInfo = true;
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   depsBuildBuild = [ pkg-config ];
   nativeBuildInputs = [ imagemagick pkg-config wayland-scanner ];
   buildInputs = [ wayland wayland-protocols ];

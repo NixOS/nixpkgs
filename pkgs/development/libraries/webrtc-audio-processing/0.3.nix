@@ -9,8 +9,11 @@ stdenv.mkDerivation rec {
     sha256 = "1gsx7k77blfy171b6g3m0k0s0072v6jcawhmx1kjs9w5zlwdkzd0";
   };
 
+<<<<<<< HEAD
   outputs = [ "out" "dev" ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   patches = [
     ./enable-riscv.patch
     ./enable-powerpc.patch

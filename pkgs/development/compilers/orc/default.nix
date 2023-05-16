@@ -18,11 +18,19 @@
   inherit (lib) optional optionals;
 in stdenv.mkDerivation rec {
   pname = "orc";
+<<<<<<< HEAD
   version = "0.4.34";
 
   src = fetchurl {
     url = "https://gstreamer.freedesktop.org/src/orc/${pname}-${version}.tar.xz";
     sha256 = "sha256-j0ers/CXFx5E64B63Nq9hg+6Lv/TfY08T71fNByt1B8=";
+=======
+  version = "0.4.33";
+
+  src = fetchurl {
+    url = "https://gstreamer.freedesktop.org/src/orc/${pname}-${version}.tar.xz";
+    sha256 = "sha256-hE5tfbgIb3k/V2GNPUto0p2ZsWA05xQw3zwhz9PDVCo=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   postPatch = lib.optionalString stdenv.isAarch32 ''
@@ -58,7 +66,10 @@ in stdenv.mkDerivation rec {
   meta = with lib; {
     description = "The Oil Runtime Compiler";
     homepage = "https://gstreamer.freedesktop.org/projects/orc.html";
+<<<<<<< HEAD
     changelog = "https://cgit.freedesktop.org/gstreamer/orc/plain/RELEASE?h=${version}";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     # The source code implementing the Marsenne Twister algorithm is licensed
     # under the 3-clause BSD license. The rest is 2-clause BSD license.
     license = with licenses; [ bsd3 bsd2 ];

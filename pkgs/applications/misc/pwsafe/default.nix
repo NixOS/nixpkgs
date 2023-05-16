@@ -28,13 +28,21 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "pwsafe";
+<<<<<<< HEAD
   version = "1.17.0"; # do NOT update to 3.x Windows releases
+=======
+  version = "1.16.0"; # do NOT update to 3.x Windows releases
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = version;
+<<<<<<< HEAD
     hash = "sha256-C1mt9MklZoQNzs6zhk9CskeA4FfDsBVHNx/LRaqxWiI=";
+=======
+    hash = "sha256-5/TOg+hiy22vlPJHheE638abhS3B5Jrul0Umgwu+gi0=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   strictDeps = true;

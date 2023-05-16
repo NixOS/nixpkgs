@@ -47,8 +47,11 @@ let
 
     nccl = final.callPackage ../development/libraries/science/math/nccl { };
 
+<<<<<<< HEAD
     nccl-tests = final.callPackage ../development/libraries/science/math/nccl/tests.nix { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     autoAddOpenGLRunpathHook = final.callPackage ( { makeSetupHook, addOpenGLRunpath }:
       makeSetupHook {
         name = "auto-add-opengl-runpath-hook";
@@ -72,4 +75,8 @@ let
     cutensorExtension
   ]);
 
+<<<<<<< HEAD
 in (scope.overrideScope composedExtension)
+=======
+in (scope.overrideScope' composedExtension)
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)

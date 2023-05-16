@@ -5,13 +5,19 @@ let hb = mkCoqDerivation {
   owner = "math-comp";
   inherit version;
   defaultVersion = with lib.versions; lib.switch coq.coq-version [
+<<<<<<< HEAD
     { case = range "8.15" "8.18"; out = "1.5.0"; }
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     { case = range "8.15" "8.17"; out = "1.4.0"; }
     { case = range "8.13" "8.14"; out = "1.2.0"; }
     { case = range "8.12" "8.13"; out = "1.1.0"; }
     { case = isEq "8.11";         out = "0.10.0"; }
   ] null;
+<<<<<<< HEAD
   release."1.5.0".sha256  = "sha256-Lia3o156Pbe8rDHOA1IniGYsG5/qzZkzDKdHecfmS+c=";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   release."1.4.0".sha256  = "sha256-tOed9UU3kMw6KWHJ5LVLUFEmzHx1ImutXQvZ0ldW9rw=";
   release."1.3.0".sha256  = "17k7rlxdx43qda6i1yafpgc64na8br285cb0mbxy5wryafcdrkrc";
   release."1.2.1".sha256  = "sha256-pQYZJ34YzvdlRSGLwsrYgPdz3p/l5f+KhJjkYT08Mj0=";

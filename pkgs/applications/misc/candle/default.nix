@@ -13,7 +13,11 @@ mkDerivation rec {
 
   nativeBuildInputs = [ qmake ];
 
+<<<<<<< HEAD
   sourceRoot = "${src.name}/src";
+=======
+  sourceRoot = "source/src";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   installPhase = ''
     runHook preInstall

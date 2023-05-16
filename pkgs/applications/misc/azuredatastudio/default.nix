@@ -62,14 +62,22 @@ in
 stdenv.mkDerivation rec {
 
   pname = "azuredatastudio";
+<<<<<<< HEAD
   version = "1.44.1";
+=======
+  version = "1.35.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   desktopItems = [ desktopItem urlHandlerDesktopItem ];
 
   src = fetchurl {
     name = "${pname}-${version}.tar.gz";
     url = "https://azuredatastudio-update.azurewebsites.net/${version}/linux-x64/stable";
+<<<<<<< HEAD
     sha256 = "sha256-6kEV331kt+/7/uWKZmTTkJX4P06CfxC8Ogq052qlUEg=";
+=======
+    sha256 = "sha256-b/ha+81TlffnvSENzaePvfFugcKJffvjRU7y+x60OuQ=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [
@@ -112,7 +120,11 @@ stdenv.mkDerivation rec {
   ];
 
   # this will most likely need to be updated when azuredatastudio's version changes
+<<<<<<< HEAD
   sqltoolsservicePath = "${targetPath}/resources/app/extensions/mssql/sqltoolsservice/Linux/4.7.1.6";
+=======
+  sqltoolsservicePath = "${targetPath}/resources/app/extensions/mssql/sqltoolsservice/Linux/3.0.0-release.215";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   rpath = lib.concatStringsSep ":" [
     atomEnv.libPath

@@ -1,6 +1,9 @@
 { lib
 , pythonPackages
+<<<<<<< HEAD
 , fetchPypi
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , taskwarrior
 , writeShellScriptBin
 }:

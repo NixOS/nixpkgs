@@ -2,13 +2,21 @@
 
 python3.pkgs.buildPythonPackage rec {
   pname = "mautrix-signal";
+<<<<<<< HEAD
   version = "0.4.3";
+=======
+  version = "0.4.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "mautrix";
     repo = "signal";
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-QShyuwHiWRcP1hGkvCQfixvoUQ/FXr2DYC5VrcMKX48=";
+=======
+    sha256 = "sha256-UbetU1n9zD/mVFaJc9FECDq/Zell1TI/aYPsGXGB8Js=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   postPatch = ''
@@ -28,7 +36,10 @@ python3.pkgs.buildPythonPackage rec {
   propagatedBuildInputs = with python3.pkgs; [
     commonmark
     aiohttp
+<<<<<<< HEAD
     aiosqlite
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     asyncpg
     attrs
     commonmark

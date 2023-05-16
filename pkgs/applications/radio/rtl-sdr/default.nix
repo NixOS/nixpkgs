@@ -19,8 +19,12 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace CMakeLists.txt \
+<<<<<<< HEAD
       --replace '/etc/udev/rules.d' "$out/etc/udev/rules.d" \
       --replace "VERSION_INFO_PATCH_VERSION git" "VERSION_INFO_PATCH_VERSION ${lib.versions.patch version}"
+=======
+      --replace '/etc/udev/rules.d' "$out/etc/udev/rules.d"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     substituteInPlace rtl-sdr.rules \
       --replace 'MODE:="0666"' 'ENV{ID_SOFTWARE_RADIO}="1", MODE="0660", GROUP="plugdev"'

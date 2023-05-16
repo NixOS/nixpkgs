@@ -40,12 +40,19 @@ stdenv.mkDerivation rec {
     python3
     desktop-file-utils
     gtk3
+<<<<<<< HEAD
     gobject-introspection
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   buildInputs = [
     gtk3
     python3.pkgs.gatt
+<<<<<<< HEAD
+=======
+    gobject-introspection
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   pythonPath = with python3.pkgs; [
@@ -64,7 +71,11 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/theironrobin/siglo";
     changelog = "https://github.com/theironrobin/siglo/tags/v${version}";
     license = licenses.mpl20;
+<<<<<<< HEAD
     maintainers = with maintainers; [ ];
+=======
+    maintainers = with maintainers; [ tomfitzhenry ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     platforms = platforms.linux;
   };
 }

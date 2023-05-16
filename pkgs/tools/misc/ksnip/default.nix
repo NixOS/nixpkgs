@@ -7,32 +7,51 @@
 , kimageannotator
 , wrapQtAppsHook
 , qtsvg
+<<<<<<< HEAD
 , qttools
+=======
+, qttranslations
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , qtx11extras
 }:
 
 stdenv.mkDerivation rec {
   pname = "ksnip";
+<<<<<<< HEAD
   version = "1.10.1";
+=======
+  version = "1.10.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "ksnip";
     repo = "ksnip";
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-n7YwDXd73hyrzb6L8utZFuHh9HnjVtkU6CC4jfWPj/I=";
+=======
+    sha256 = "sha256-a5mS2mrbs0CyZ83hwwFdherq6kMS93ItQIDKu1AjnN4=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [
     cmake
     extra-cmake-modules
     wrapQtAppsHook
+<<<<<<< HEAD
     qttools
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   buildInputs = [
     kcolorpicker
     kimageannotator
     qtsvg
+<<<<<<< HEAD
+=======
+    qttranslations
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     qtx11extras
   ];
 

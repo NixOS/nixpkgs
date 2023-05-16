@@ -7,7 +7,11 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "berarma";
     repo = "new-lg4ff";
+<<<<<<< HEAD
     rev = version;
+=======
+    rev = "${version}";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     sha256 = "ZFwNdeJcSxzWtqjOF86SZpqhuz8jXZ2drvlQeIqsaNY=";
   };
 

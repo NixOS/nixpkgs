@@ -1,6 +1,10 @@
 { lib, stdenv, fetchFromGitHub
 , jdk, maven
+<<<<<<< HEAD
 , makeWrapper
+=======
+, runtimeShell, makeWrapper
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 let
@@ -10,14 +14,21 @@ let
     else if stdenv.isWindows then "windows"
     else throw "unsupported platform";
 in
+<<<<<<< HEAD
 maven.buildMavenPackage rec {
   pname = "java-language-server";
   version = "0.2.46";
+=======
+stdenv.mkDerivation rec {
+  pname = "java-language-server";
+  version = "0.2.38";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "georgewfraser";
     repo = pname;
     # commit hash is used as owner sometimes forgets to set tags. See https://github.com/georgewfraser/java-language-server/issues/104
+<<<<<<< HEAD
     rev = "d7f4303cd233cdad84daffbb871dd4512a2c8da2";
     sha256 = "sha256-BIcfwz+pLQarnK8XBPwDN2nrdvK8xqUo0XFXk8ZV/h0=";
   };
@@ -30,6 +41,51 @@ maven.buildMavenPackage rec {
 
   dontConfigure = true;
   preBuild = ''
+=======
+    rev = "1dfdc54d1f1e57646a0ec9c0b3f4a4f094bd9f17";
+    sha256 = "sha256-zkbl/SLg09XK2ZhJNzWEtvFCQBRQ62273M/2+4HV1Lk=";
+  };
+
+  fetchedMavenDeps = stdenv.mkDerivation {
+    name = "java-language-server-${version}-maven-deps";
+    inherit src;
+    buildInputs = [ maven ];
+
+    buildPhase = ''
+      runHook preBuild
+
+      mvn package -Dmaven.repo.local=$out -DskipTests
+
+      runHook postBuild
+    '';
+
+    installPhase = ''
+      runHook preInstall
+
+      find $out -type f \
+        -name \*.lastUpdated -or \
+        -name resolver-status.properties -or \
+        -name _remote.repositories \
+        -delete
+
+      runHook postInstall
+    '';
+
+    dontFixup = true;
+    dontConfigure = true;
+    outputHashAlgo = "sha256";
+    outputHashMode = "recursive";
+    outputHash = "sha256-YkcQKmm8oeEH7uyUzV/qGoe4LiI6o5wZ7o69qrO3oCA=";
+  };
+
+
+  nativeBuildInputs = [ maven jdk makeWrapper ];
+
+  dontConfigure = true;
+  buildPhase = ''
+    runHook preBuild
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     jlink \
       ${lib.optionalString (!stdenv.isDarwin) "--module-path './jdks/${platform}/jdk-13/jmods'"} \
       --add-modules java.base,java.compiler,java.logging,java.sql,java.xml,jdk.compiler,jdk.jdi,jdk.unsupported,jdk.zipfs \
@@ -37,6 +93,13 @@ maven.buildMavenPackage rec {
       --no-header-files \
       --no-man-pages \
       --compress 2
+<<<<<<< HEAD
+=======
+
+    mvn package --offline -Dmaven.repo.local=${fetchedMavenDeps} -DskipTests
+
+    runHook postBuild
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '';
 
   installPhase = ''
@@ -56,5 +119,9 @@ maven.buildMavenPackage rec {
     homepage = "https://github.com/georgewfraser/java-language-server";
     license = licenses.mit;
     maintainers = with maintainers; [ hqurve ];
+<<<<<<< HEAD
+=======
+    platforms = platforms.all;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

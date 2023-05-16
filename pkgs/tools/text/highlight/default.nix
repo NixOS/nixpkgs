@@ -3,13 +3,21 @@
 let
   self = stdenv.mkDerivation rec {
     pname = "highlight";
+<<<<<<< HEAD
     version = "4.7";
+=======
+    version = "4.5";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     src = fetchFromGitLab {
       owner = "saalen";
       repo = "highlight";
       rev = "v${version}";
+<<<<<<< HEAD
       sha256 = "sha256-WblpRrvfFp4PlyH4RS2VNKXYD911H+OcnSL5rctyxiM=";
+=======
+      sha256 = "sha256-0U8GN+y9jM3/kBXUvQ7XtvDHGO50Zn0jwPgt+6LMwaw=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
 
     enableParallelBuilding = true;

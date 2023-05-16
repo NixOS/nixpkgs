@@ -5,6 +5,10 @@
 , buildPythonPackage
 , click
 , fetchPypi
+<<<<<<< HEAD
+=======
+, intbitset
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , pytest-xdist
 , pytestCheckHook
 , pythonAtLeast
@@ -13,10 +17,15 @@
 , saneyaml
 , setuptools-scm
 , text-unidecode
+<<<<<<< HEAD
+=======
+, typing
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 buildPythonPackage rec {
   pname = "commoncode";
+<<<<<<< HEAD
   version = "31.0.3";
   format = "pyproject";
 
@@ -27,6 +36,23 @@ buildPythonPackage rec {
     hash = "sha256-ura55/m/iesqN6kSYmdHB1sbthSHXaFWiQ76wVmyl0E=";
   };
 
+=======
+  version = "31.0.2";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.6";
+
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-UWd8fTHVEC5ywETfMIWjfXm4xiNaMrVpwkQ/woeXc0k=";
+  };
+
+  postPatch = ''
+    substituteInPlace setup.cfg \
+      --replace "intbitset >= 2.3.0, < 3.0" "intbitset >= 2.3.0"
+  '';
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   dontConfigure = true;
 
   nativeBuildInputs = [
@@ -37,9 +63,18 @@ buildPythonPackage rec {
     attrs
     beautifulsoup4
     click
+<<<<<<< HEAD
     requests
     saneyaml
     text-unidecode
+=======
+    intbitset
+    requests
+    saneyaml
+    text-unidecode
+  ] ++ lib.optionals (pythonOlder "3.7") [
+    typing
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   nativeCheckInputs = [
@@ -73,8 +108,13 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "A set of common utilities, originally split from ScanCode";
     homepage = "https://github.com/nexB/commoncode";
+<<<<<<< HEAD
     changelog = "https://github.com/nexB/commoncode/blob/v${version}/CHANGELOG.rst";
     license = licenses.asl20;
     maintainers = with maintainers; [ ];
+=======
+    license = licenses.asl20;
+    maintainers = [ ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

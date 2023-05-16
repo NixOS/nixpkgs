@@ -2,13 +2,21 @@
 
 stdenv.mkDerivation rec {
   pname = "rpcsvc-proto";
+<<<<<<< HEAD
   version = "1.4.4";
+=======
+  version = "1.4.3";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "thkukuk";
     repo = pname;
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-DEXzSSmjMeMsr1PoU/ljaY+6b4COUU2Z8MJkGImsgzk=";
+=======
+    sha256 = "sha256-DXRLEpOanWcxCSTC8OxEw5SWKpgFz7oTPukzfnPrAOk=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   patches = [
@@ -20,7 +28,11 @@ stdenv.mkDerivation rec {
     })
   ];
 
+<<<<<<< HEAD
   outputs = [ "out" "man" "dev" ];
+=======
+  outputs = [ "out" "man" ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nativeBuildInputs = [ autoreconfHook ];
 

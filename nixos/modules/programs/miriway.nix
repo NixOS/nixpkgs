@@ -66,7 +66,11 @@ in {
     };
 
     hardware.opengl.enable = lib.mkDefault true;
+<<<<<<< HEAD
     fonts.enableDefaultPackages = lib.mkDefault true;
+=======
+    fonts.enableDefaultFonts = lib.mkDefault true;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     programs.dconf.enable = lib.mkDefault true;
     programs.xwayland.enable = lib.mkDefault true;
 

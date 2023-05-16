@@ -137,7 +137,11 @@ in
         mv -f ${registrationFile}.new ${registrationFile}
 
         # Grant Synapse access to the registration
+<<<<<<< HEAD
         if ${pkgs.getent}/bin/getent group matrix-synapse > /dev/null; then
+=======
+        if ${getBin pkgs.glibc}/bin/getent group matrix-synapse > /dev/null; then
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           chgrp -v matrix-synapse ${registrationFile}
           chmod -v g+r ${registrationFile}
         fi

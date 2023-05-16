@@ -7,7 +7,10 @@
 , pytestCheckHook
 , pythonOlder
 , setuptools
+<<<<<<< HEAD
 , wheel
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 buildPythonPackage rec {
@@ -26,7 +29,10 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     setuptools
+<<<<<<< HEAD
     wheel
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   propagatedBuildInputs = [
@@ -42,7 +48,10 @@ buildPythonPackage rec {
 
   postPatch = ''
     # Upstream uses versioningit to set the version
+<<<<<<< HEAD
     sed -i "/versioningit >=/d" pyproject.toml
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     sed -i '/^name =.*/a version = "${version}"' pyproject.toml
     sed -i "/dynamic =/d" pyproject.toml
   '';

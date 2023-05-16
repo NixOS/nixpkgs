@@ -47,7 +47,11 @@ stdenv.mkDerivation rec {
   patches = [
     # https://gitlab.com/embeddable-common-lisp/ecl/-/merge_requests/1
     (fetchpatch {
+<<<<<<< HEAD
       url = "https://raw.githubusercontent.com/sagemath/sage/9.2/build/pkgs/ecl/patches/write_error.patch";
+=======
+      url = "https://git.sagemath.org/sage.git/plain/build/pkgs/ecl/patches/write_error.patch?h=9.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       sha256 = "0hfxacpgn4919hg0mn4wf4m8r7y592r4gw7aqfnva7sckxi6w089";
     })
   ];

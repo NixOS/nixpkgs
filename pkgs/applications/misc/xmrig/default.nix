@@ -15,13 +15,21 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "xmrig";
+<<<<<<< HEAD
   version = "6.20.0";
+=======
+  version = "6.19.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "xmrig";
     repo = "xmrig";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-csJfmjKm/uAlINhijeqUsDVTemchlzWqJg/YHtmNlAk=";
+=======
+    hash = "sha256-m8ot/IbpxdzHOyJymzZ7MWt4p78GTUuTjYZ9P1oGpWI=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   patches = [
@@ -59,9 +67,12 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   # https://github.com/NixOS/nixpkgs/issues/245534
   hardeningDisable = [ "fortify" ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   meta = with lib; {
     description = "Monero (XMR) CPU miner";
     homepage = "https://github.com/xmrig/xmrig";

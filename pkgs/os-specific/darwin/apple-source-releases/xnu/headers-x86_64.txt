@@ -554,7 +554,10 @@ libkern/os/object.h
 libkern/os/object_private.h
 libkern/os/overflow.h
 libkern/os/trace.h
+<<<<<<< HEAD
 libproc.h
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 mach/audit_triggers.defs
 mach/boolean.h
 mach/bootstrap.h
@@ -1117,7 +1120,10 @@ servers/ls_defs.h
 servers/netname.h
 servers/netname_defs.h
 servers/nm_defs.h
+<<<<<<< HEAD
 spawn.h
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 sys/_endian.h
 sys/_posix_availability.h
 sys/_select.h

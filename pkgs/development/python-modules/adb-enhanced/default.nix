@@ -9,7 +9,11 @@
 
 buildPythonPackage rec {
   pname = "adb-enhanced";
+<<<<<<< HEAD
   version = "2.5.22";
+=======
+  version = "2.5.18";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -18,7 +22,11 @@ buildPythonPackage rec {
     owner = "ashishb";
     repo = pname;
     rev = "refs/tags/${version}";
+<<<<<<< HEAD
     hash = "sha256-n1CME/swV+NsZdUfWwVY1qQeYzawwy+sm0mkRPQKm6A=";
+=======
+    hash = "sha256-xsl8AentI4Tqo2mHWFRi6myyb0/MemATJz9erKN9eKQ=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [

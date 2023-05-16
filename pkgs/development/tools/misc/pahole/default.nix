@@ -26,8 +26,11 @@ stdenv.mkDerivation rec {
     musl-obstack
   ];
 
+<<<<<<< HEAD
   patches = [ ./threading-reproducibility.patch ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   # Put libraries in "lib" subdirectory, not top level of $out
   cmakeFlags = [ "-D__LIB=lib" "-DLIBBPF_EMBEDDED=OFF" ];
 

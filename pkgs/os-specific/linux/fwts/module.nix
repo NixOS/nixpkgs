@@ -6,7 +6,11 @@ stdenv.mkDerivation rec {
 
   inherit (fwts) src;
 
+<<<<<<< HEAD
   sourceRoot = "${src.name}/efi_runtime";
+=======
+  sourceRoot = "source/efi_runtime";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   postPatch = ''
     substituteInPlace Makefile --replace \

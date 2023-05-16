@@ -1,6 +1,10 @@
 { lib
 , isPyPy
 , pythonOlder
+<<<<<<< HEAD
+=======
+, fetchPypi
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , fetchFromGitHub
 , buildPythonPackage
 
@@ -40,7 +44,11 @@
 
 buildPythonPackage rec {
   pname = "SQLAlchemy";
+<<<<<<< HEAD
   version = "2.0.19";
+=======
+  version = "2.0.9";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -49,7 +57,11 @@ buildPythonPackage rec {
     owner = "sqlalchemy";
     repo = "sqlalchemy";
     rev = "refs/tags/rel_${lib.replaceStrings [ "." ] [ "_" ] version}";
+<<<<<<< HEAD
     hash = "sha256-97q04wQVtlV2b6VJHxvnQ9ep76T5umn1KI3hXh6a8kU=";
+=======
+    hash = "sha256-0WlRZ7Kv6owtZB+PDFKk+8dxEL4p3QQrRPq8eQd2PqM=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs =[
@@ -112,9 +124,12 @@ buildPythonPackage rec {
     postgresql_psycopg = [
       psycopg
     ];
+<<<<<<< HEAD
     postgresql_psycopgbinary = [
       psycopg
     ];
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     pymysql = [
       pymysql
     ];
@@ -142,7 +157,10 @@ buildPythonPackage rec {
   disabledTestPaths = [
     # typing correctness, not interesting
     "test/ext/mypy"
+<<<<<<< HEAD
     "test/typing"
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     # slow and high memory usage, not interesting
     "test/aaa_profiling"
   ];

@@ -28,13 +28,21 @@ let
   # This includes the complete source so the per-script derivations can run the tests.
   core = stdenv.mkDerivation rec {
     pname   = "bat-extras";
+<<<<<<< HEAD
     version = "2023.06.15";
+=======
+    version = "2023.03.21";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     src = fetchFromGitHub {
       owner  = "eth-p";
       repo   = pname;
       rev    = "v${version}";
+<<<<<<< HEAD
       sha256 = "sha256-dBrnUIG3EuEgDZBbzrspP5UReiUKjrMSYIe5QtZ0/tU=";
+=======
+      sha256 = "sha256-0Ged4qBeGi0p29unXrnQjoxWc6Fcl2oJThxkfL+t50A=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       fetchSubmodules = true;
     };
 
@@ -112,7 +120,11 @@ let
       dontBuild = true; # we've already built
 
       doCheck = true;
+<<<<<<< HEAD
       nativeCheckInputs = [ bat bash fish zsh ] ++ (lib.optionals stdenv.isDarwin [ getconf ]);
+=======
+      nativeCheckInputs = [ bash fish zsh ] ++ (lib.optionals stdenv.isDarwin [ getconf ]);
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       checkPhase = ''
         runHook preCheck
         bash ./test.sh --compiled --suite ${name}
@@ -142,7 +154,11 @@ in
 {
   batdiff = script "batdiff" ([ less coreutils gitMinimal ] ++ optionalDep withDelta delta);
   batgrep = script "batgrep" [ less coreutils ripgrep ];
+<<<<<<< HEAD
   batman = script "batman" (lib.optionals stdenv.isLinux [ util-linux ]);
+=======
+  batman = script "batman" [ util-linux ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   batpipe = script "batpipe" [ less ];
   batwatch = script "batwatch" ([ less coreutils ] ++ optionalDep withEntr entr);
   prettybat = script "prettybat" ([]

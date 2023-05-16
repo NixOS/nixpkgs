@@ -21,6 +21,9 @@ stdenv.mkDerivation rec {
     license = licenses.isc;
     maintainers = with maintainers; [ SlothOfAnarchy ];
     platforms = platforms.linux;
+<<<<<<< HEAD
     mainProgram = "batsignal";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

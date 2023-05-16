@@ -11,8 +11,14 @@ let
   mkOCITest = backend: makeTest {
     name = "oci-containers-${backend}";
 
+<<<<<<< HEAD
     meta.maintainers = lib.teams.serokell.members
                        ++ (with lib.maintainers; [ adisbladis benley mkaito ]);
+=======
+    meta = {
+      maintainers = with lib.maintainers; [ adisbladis benley mkaito ] ++ lib.teams.serokell.members;
+    };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     nodes = {
       ${backend} = { pkgs, ... }: {

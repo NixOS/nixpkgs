@@ -5,11 +5,15 @@
 , pytestCheckHook
 , hypothesis
 , readme_renderer
+<<<<<<< HEAD
 , pythonOlder
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 buildPythonPackage rec {
   pname = "marisa-trie";
+<<<<<<< HEAD
   version = "1.0.0";
   format = "setuptools";
 
@@ -18,6 +22,13 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-2KaDAfAjpyTrN5qqGxD4ip4aRYzIpBtSfGJQeFm0pNI=";
+=======
+  version = "0.8.0";
+
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-PQGdF7DX9i1ubXvQUjbYJSYk6hwUC+uL+cbu/zizxwc=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [
@@ -64,7 +75,10 @@ buildPythonPackage rec {
       This package provides alternative Cython-based pip-installable Python bindings.
     '';
     homepage =  "https://github.com/kmike/marisa-trie";
+<<<<<<< HEAD
     changelog = "https://github.com/pytries/marisa-trie/blob/${version}/CHANGES.rst";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     license = licenses.mit;
     maintainers = with maintainers; [ ixxie ];
   };

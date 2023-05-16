@@ -548,8 +548,12 @@ with self;
 
   ppx_bench = janePackage {
     pname = "ppx_bench";
+<<<<<<< HEAD
     version = "0.15.1";
     hash = "sha256-2uk3NfpAODScoQtqiU+ZaOE8zOqkayn/jpfn3GQ4vQg=";
+=======
+    hash = "0bc0gbm922417wqisafxh35jslcp7xy1s0h0a1q32rhx0ivxx3g6";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     minimalOCamlVersion = "4.04.2";
     meta.description = "Syntax extension for writing in-line benchmarks in ocaml code";
     propagatedBuildInputs = [ ppx_inline_test ];
@@ -664,8 +668,12 @@ with self;
 
   ppx_inline_test = janePackage {
     pname = "ppx_inline_test";
+<<<<<<< HEAD
     version = "0.15.1";
     hash = "sha256-9Up4/VK4gayuwbPc3r6gVRj78ILO2G3opL5UDOTKOgk=";
+=======
+    hash = "1a0gaj9p6gbn5j7c258mnzr7yjlq0hqi3aqqgyj1g2dbk1sxdbjz";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     minimalOCamlVersion = "4.04.2";
     meta.description = "Syntax extension for writing in-line tests in ocaml code";
     propagatedBuildInputs = [ ppxlib time_now ];
@@ -1062,8 +1070,12 @@ with self;
 
   virtual_dom = janePackage {
     pname = "virtual_dom";
+<<<<<<< HEAD
     version = "0.15.1";
     hash = "sha256-Uv6ZDxz2/H0nHjiycUKNQwy/zZyHHmwDEHknFHwDuDs=";
+=======
+    hash = "15xia9v4ighzm0gv3vbqk9nvg47cvzqmfnl2zr67yxv4b98kyzv3";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     meta.description = "OCaml bindings for the virtual-dom library";
     buildInputs = [ js_of_ocaml-ppx ];
     propagatedBuildInputs = [ core_kernel gen_js_api js_of_ocaml lambdasoup tyxml ];

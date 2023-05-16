@@ -1,13 +1,17 @@
 { lib
 , rustPlatform
 , fetchFromGitHub
+<<<<<<< HEAD
 , python3
 , nix-update-script
 , stdenv
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "nickel";
+<<<<<<< HEAD
   version = "1.1.1";
 
   src = fetchFromGitHub {
@@ -29,6 +33,18 @@ rustPlatform.buildRustPackage rec {
   doCheck = !stdenv.isDarwin;
 
   passthru.updateScript = nix-update-script { };
+=======
+  version = "0.3.1";
+
+  src  = fetchFromGitHub {
+    owner = "tweag";
+    repo = pname;
+    rev = "refs/tags/${version}"; # because pure ${version} doesn't work
+    hash = "sha256-bUUQP7ze0j8d+VEckexDOferAgAHdKZbdKR3q0TNOeE=";
+  };
+
+  cargoSha256 = "sha256-E8eIUASjCIVsZhptbU41VfK8bFmA4FTT3LVagLrgUso=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   meta = with lib; {
     homepage = "https://nickel-lang.org/";
@@ -43,6 +59,10 @@ rustPlatform.buildRustPackage rec {
     '';
     changelog = "https://github.com/tweag/nickel/blob/${version}/RELEASES.md";
     license = licenses.mit;
+<<<<<<< HEAD
     maintainers = with maintainers; [ AndersonTorres felschr matthiasbeyer ];
+=======
+    maintainers = with maintainers; [ AndersonTorres ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

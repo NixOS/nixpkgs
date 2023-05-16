@@ -2,13 +2,21 @@
 
 stdenv.mkDerivation rec {
   pname = "libqb";
+<<<<<<< HEAD
   version = "2.0.8";
+=======
+  version = "2.0.6";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "ClusterLabs";
     repo = pname;
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-ZjxC7W4U8T68mZy/OvWj/e4W9pJIj2lVDoEjxXYr/G8=";
+=======
+    sha256 = "sha256-vt9FmIRojX3INOn3CXAjkswVFD8Th4sRIz3RR4GJHFQ=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];

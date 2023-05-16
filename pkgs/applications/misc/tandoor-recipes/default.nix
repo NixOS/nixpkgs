@@ -42,6 +42,15 @@ python.pkgs.pythonPackages.buildPythonPackage rec {
   patches = [
     # Allow setting MEDIA_ROOT through environment variable
     ./media-root.patch
+<<<<<<< HEAD
+=======
+    # Address CVE-2023-31047 on Django 4.2.1+
+    (fetchpatch {
+      name = "fix-multiple-file-field";
+      url = "https://github.com/TandoorRecipes/recipes/pull/2458/commits/6b04c922977317354a367487427b15a8ed619be9.patch";
+      hash = "sha256-KmfjJSrB/4tOWtU7zrDJ/AOG4XlmWy/halw8IEEXdZ0=";
+    })
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   propagatedBuildInputs = with python.pkgs; [
@@ -66,7 +75,11 @@ python.pkgs.pythonPackages.buildPythonPackage rec {
     django-storages
     django-tables2
     django-webpack-loader
+<<<<<<< HEAD
     django-treebeard
+=======
+    django_treebeard
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     djangorestframework
     drf-writable-nested
     gunicorn

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 { stdenv, lib, fetchurl, appimageTools, makeWrapper, electron_22 }:
 
 stdenv.mkDerivation rec {
@@ -7,6 +8,17 @@ stdenv.mkDerivation rec {
   src = fetchurl {
     url = "https://github.com/FreeTubeApp/FreeTube/releases/download/v${version}-beta/freetube_${version}_amd64.AppImage";
     sha256 = "0yr5k9s3r4yvcx85bzwn6y4m03964ljnmhz7nf068zj87m9q8rcc";
+=======
+{ stdenv, lib, fetchurl, appimageTools, makeWrapper, electron }:
+
+stdenv.mkDerivation rec {
+  pname = "freetube";
+  version = "0.18.0";
+
+  src = fetchurl {
+    url = "https://github.com/FreeTubeApp/FreeTube/releases/download/v${version}-beta/freetube_${version}_amd64.AppImage";
+    sha256 = "sha256-7IxmlkExM8Q1yyq44ajZ6on4EMPyGt23QmzmBZmofts=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   appimageContents = appimageTools.extractType2 {
@@ -35,9 +47,14 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   # Electron version is set to 22 in order to match upstream
   postFixup = ''
     makeWrapper ${electron_22}/bin/electron $out/bin/${pname} \
+=======
+  postFixup = ''
+    makeWrapper ${electron}/bin/electron $out/bin/${pname} \
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       --add-flags $out/share/${pname}/resources/app.asar
   '';
 

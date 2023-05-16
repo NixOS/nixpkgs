@@ -1,5 +1,9 @@
 { lib, stdenv, fetchurl, makeWrapper
+<<<<<<< HEAD
 , python3, perl, textual-window-manager
+=======
+, ncurses, python3, perl, textual-window-manager
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , gettext, vim, bc, screen }:
 
 let
@@ -16,9 +20,14 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
+<<<<<<< HEAD
   strictdeps = true;
   nativeBuildInputs = [ makeWrapper gettext ];
   buildInputs = [ perl ]; # perl is needed for `lib/byobu/include/*` scripts
+=======
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ perl gettext ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   propagatedBuildInputs = [ textual-window-manager screen ];
 
   postPatch = ''

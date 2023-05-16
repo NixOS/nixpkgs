@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 { lib, fetchFromGitHub, python3 }:
+=======
+{ lib, fetchFromGitHub, python3, makeWrapper }:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 python3.pkgs.buildPythonApplication rec {
 

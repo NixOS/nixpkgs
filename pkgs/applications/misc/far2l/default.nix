@@ -1,6 +1,10 @@
 { lib, stdenv, fetchFromGitHub, makeWrapper, cmake, ninja, pkg-config, m4, bash
 , xdg-utils, zip, unzip, gzip, bzip2, gnutar, p7zip, xz
+<<<<<<< HEAD
 , IOKit, Carbon, Cocoa, AudioToolbox, OpenGL, System
+=======
+, IOKit, Carbon, Cocoa, AudioToolbox, OpenGL
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , withTTYX ? true, libX11
 , withGUI ? true, wxGTK32
 , withUCD ? true, libuchardet
@@ -35,7 +39,11 @@ stdenv.mkDerivation rec {
     ++ lib.optionals withNetRocks [ openssl libssh libnfs neon ]
     ++ lib.optional (withNetRocks && !stdenv.isDarwin) samba # broken on darwin
     ++ lib.optionals withPython (with python3Packages; [ python cffi debugpy pcpp ])
+<<<<<<< HEAD
     ++ lib.optionals stdenv.isDarwin [ IOKit Carbon Cocoa AudioToolbox OpenGL System ];
+=======
+    ++ lib.optionals stdenv.isDarwin [ IOKit Carbon Cocoa AudioToolbox OpenGL ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   postPatch = ''
     patchShebangs python/src/prebuild.sh
@@ -43,6 +51,12 @@ stdenv.mkDerivation rec {
       --replace '"/bin/bash"' '"${bash}/bin/bash"'
     substituteInPlace far2l/src/cfg/config.cpp \
       --replace '"/bin/bash"' '"${bash}/bin/bash"'
+<<<<<<< HEAD
+=======
+  '' + lib.optionalString stdenv.isDarwin ''
+    substituteInPlace WinPort/src/Backend/WX/CMakeLists.txt \
+      --replace "-framework System" -lSystem
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '';
 
   cmakeFlags = lib.mapAttrsToList (k: v: "-D${k}=${if v then "yes" else "no"}") {

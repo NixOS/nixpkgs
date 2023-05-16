@@ -309,6 +309,7 @@ in
 
         system.modulesTree = [ kernel ] ++ config.boot.extraModulePackages;
 
+<<<<<<< HEAD
         # Not required for, e.g., containers as they don't have their own kernel or initrd.
         # They boot directly into stage 2.
         system.systemBuilderArgs.kernelParams = config.boot.kernelParams;
@@ -341,6 +342,8 @@ in
             ln -s ${config.hardware.firmware}/lib/firmware $out/firmware
           '';
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         # Implement consoleLogLevel both in early boot and using sysctl
         # (so you don't need to reboot to have changes take effect).
         boot.kernelParams =

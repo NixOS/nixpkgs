@@ -18,7 +18,11 @@ buildGoModule rec {
     rev = "v${version}";
     sha256 = "sha256-JiYufEsoj/98An2qKdm/Uu4YHJr6ttc/VHn4kMgkuwI=";
   };
+<<<<<<< HEAD
   vendorHash = "sha256-D8b/pvmBGCnaRuf92FYgRcSSbN59Yu0CHKxAybdYjS4=";
+=======
+  vendorSha256 = "sha256-D8b/pvmBGCnaRuf92FYgRcSSbN59Yu0CHKxAybdYjS4=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   patches = [
     (substituteAll {

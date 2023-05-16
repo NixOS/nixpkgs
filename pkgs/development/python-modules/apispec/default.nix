@@ -54,6 +54,10 @@ buildPythonPackage rec {
     description = "A pluggable API specification generator with support for the OpenAPI Specification";
     homepage = "https://github.com/marshmallow-code/apispec";
     license = licenses.mit;
+<<<<<<< HEAD
     maintainers = with maintainers; [ ];
+=======
+    maintainers = with maintainers; [ costrouc ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

@@ -1,6 +1,10 @@
 { lib
 , stdenv
+<<<<<<< HEAD
 , supportedGhcVersions ? [ "94" ]
+=======
+, supportedGhcVersions ? [ "92" ]
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , dynamic ? true
 , haskellPackages
 , haskell

@@ -1,6 +1,7 @@
 { lib
 , fetchFromGitHub
 , buildDartApplication
+<<<<<<< HEAD
 , buf
 , protoc-gen-dart
 , testers
@@ -20,11 +21,19 @@ in
 buildDartApplication rec {
   pname = "dart-sass";
   version = "1.66.1";
+=======
+}:
+
+buildDartApplication rec {
+  pname = "dart-sass";
+  version = "1.62.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "sass";
     repo = pname;
     rev = version;
+<<<<<<< HEAD
     hash = "sha256-2bqYoWG8xGh7HGZyCPLNz/ZWXH29Be12YfYgGTCIVx8=";
   };
 
@@ -43,6 +52,15 @@ buildDartApplication rec {
   '';
 
   dartCompileFlags = [ "--define=version=${version}" ];
+=======
+    hash = "sha256-U6enz8yJcc4Wf8m54eYIAnVg/jsGi247Wy8lp1r1wg4=";
+  };
+
+  pubspecLockFile = ./pubspec.lock;
+  vendorHash = "sha256-Atm7zfnDambN/BmmUf4BG0yUz/y6xWzf0reDw3Ad41s=";
+
+  dartCompileFlags = "--define=version=${version}";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   meta = with lib; {
     homepage = "https://github.com/sass/dart-sass";
@@ -51,6 +69,7 @@ buildDartApplication rec {
     license = licenses.mit;
     maintainers = with maintainers; [ lelgenio ];
   };
+<<<<<<< HEAD
 
   passthru.tests = {
     version = testers.testVersion {
@@ -78,4 +97,6 @@ buildDartApplication rec {
       '';
     };
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }

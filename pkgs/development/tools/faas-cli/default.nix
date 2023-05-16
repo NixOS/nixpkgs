@@ -18,13 +18,21 @@ let
 in
 buildGoModule rec {
   pname = "faas-cli";
+<<<<<<< HEAD
   version = "0.16.12";
+=======
+  version = "0.16.3";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "openfaas";
     repo = "faas-cli";
     rev = version;
+<<<<<<< HEAD
     sha256 = "sha256-1vjqSHm4/MrlbdPTNlFznQqgtu4aYsHnlw366gBgaHA=";
+=======
+    sha256 = "sha256-EfDPJdLqsqrNwkJYceZolvyEbQPaT0W0GxvnRBsfZpg=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   vendorHash = null;

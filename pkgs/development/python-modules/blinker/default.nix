@@ -21,6 +21,10 @@ buildPythonPackage rec {
     homepage = "https://pythonhosted.org/blinker/";
     description = "Fast, simple object-to-object and broadcast signaling";
     license = licenses.mit;
+<<<<<<< HEAD
     maintainers = with maintainers; [ ];
+=======
+    maintainers = with maintainers; [ SuperSandro2000 ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

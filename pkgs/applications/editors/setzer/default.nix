@@ -15,18 +15,29 @@
 , poppler_gi
 , webkitgtk_4_1
 , librsvg
+<<<<<<< HEAD
 , libportal
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "setzer";
+<<<<<<< HEAD
   version = "56";
+=======
+  version = "55";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "cvfosammmm";
     repo = "Setzer";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-YCJu8EU+8RD09QNVT/RYF2ZJZ7cp+oawXThqTzg8ENQ=";
+=======
+    hash = "sha256-Mcl9kWeo4w/wW8crR58Yyqoh26w8/SmNrjmHps6DmRA=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   format = "other";
@@ -49,7 +60,10 @@ python3.pkgs.buildPythonApplication rec {
     poppler_gi
     webkitgtk_4_1
     librsvg
+<<<<<<< HEAD
     libportal
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   propagatedBuildInputs = with python3.pkgs; [
@@ -58,7 +72,10 @@ python3.pkgs.buildPythonApplication rec {
     pdfminer-six
     pycairo
     pexpect
+<<<<<<< HEAD
     bibtexparser
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   checkPhase = ''

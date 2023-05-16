@@ -1,11 +1,20 @@
+<<<<<<< HEAD
 { stdenv, lib, fetchFromGitHub, buildPythonPackage, python,
   config, cudaSupport ? config.cudaSupport, cudaPackages, magma,
+=======
+{ stdenv, lib, fetchFromGitHub, fetchpatch, buildPythonPackage, python,
+  cudaSupport ? false, cudaPackages, magma,
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   useSystemNccl ? true,
   MPISupport ? false, mpi,
   buildDocs ? false,
 
   # Native build inputs
+<<<<<<< HEAD
   cmake, linkFarm, symlinkJoin, which, pybind11, removeReferencesTo,
+=======
+  cmake, util-linux, linkFarm, symlinkJoin, which, pybind11, removeReferencesTo,
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pythonRelaxDepsHook,
 
   # Build inputs
@@ -39,7 +48,11 @@
   # dependencies for torch.utils.tensorboard
   pillow, six, future, tensorboard, protobuf,
 
+<<<<<<< HEAD
   pythonOlder,
+=======
+  isPy3k, pythonOlder,
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   # ROCm dependencies
   rocmSupport ? false,
@@ -55,7 +68,10 @@ let
   inherit (cudaPackages) cudatoolkit cudaFlags cudnn nccl;
 in
 
+<<<<<<< HEAD
 assert cudaSupport -> stdenv.isLinux;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 assert cudaSupport -> (cudaPackages.cudaMajorVersion == "11");
 
 # confirm that cudatoolkits are sync'd across dependencies
@@ -65,10 +81,17 @@ assert !cudaSupport || magma.cudaPackages.cudatoolkit == cudatoolkit;
 let
   setBool = v: if v then "1" else "0";
 
+<<<<<<< HEAD
   # https://github.com/pytorch/pytorch/blob/v2.0.1/torch/utils/cpp_extension.py#L1744
   supportedTorchCudaCapabilities =
     let
       real = ["3.5" "3.7" "5.0" "5.2" "5.3" "6.0" "6.1" "6.2" "7.0" "7.2" "7.5" "8.0" "8.6" "8.7" "8.9" "9.0"];
+=======
+  # https://github.com/pytorch/pytorch/blob/v1.13.1/torch/utils/cpp_extension.py#L1751
+  supportedTorchCudaCapabilities =
+    let
+      real = ["3.5" "3.7" "5.0" "5.2" "5.3" "6.0" "6.1" "6.2" "7.0" "7.2" "7.5" "8.0" "8.6"];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       ptx = lists.map (x: "${x}+PTX") real;
     in
     real ++ ptx;
@@ -134,7 +157,11 @@ let
 in buildPythonPackage rec {
   pname = "torch";
   # Don't forget to update torch-bin to the same version.
+<<<<<<< HEAD
   version = "2.0.1";
+=======
+  version = "2.0.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.8.0";
@@ -150,7 +177,11 @@ in buildPythonPackage rec {
     repo = "pytorch";
     rev = "refs/tags/v${version}";
     fetchSubmodules = true;
+<<<<<<< HEAD
     hash = "sha256-xUj77yKz3IQ3gd/G32pI4OhL3LoN1zS7eFg0/0nZp5I=";
+=======
+    hash = "sha256-cSw7+AYBUcZLz3UyK/+JWWjQxKwVBXcFvBq0XAcL3tE=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   patches = lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [
@@ -196,8 +227,12 @@ in buildPythonPackage rec {
     export TORCH_CUDA_ARCH_LIST="${gpuTargetString}"
     export CC=${cudatoolkit.cc}/bin/gcc CXX=${cudatoolkit.cc}/bin/g++
   '' + lib.optionalString (cudaSupport && cudnn != null) ''
+<<<<<<< HEAD
     export CUDNN_INCLUDE_DIR=${cudnn.dev}/include
     export CUDNN_LIB_DIR=${cudnn.lib}/lib
+=======
+    export CUDNN_INCLUDE_DIR=${cudnn}/include
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '' + lib.optionalString rocmSupport ''
     export ROCM_PATH=${rocmtoolkit_joined}
     export ROCM_SOURCE_DIR=${rocmtoolkit_joined}
@@ -209,9 +244,12 @@ in buildPythonPackage rec {
   # Use pytorch's custom configurations
   dontUseCmakeConfigure = true;
 
+<<<<<<< HEAD
   # causes possible redefinition of _FORTIFY_SOURCE
   hardeningDisable = [ "fortify3" ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   BUILD_NAMEDTENSOR = setBool true;
   BUILD_DOCS = setBool buildDocs;
 
@@ -226,7 +264,11 @@ in buildPythonPackage rec {
 
   # Avoid using pybind11 from git submodule
   # Also avoids pytorch exporting the headers of pybind11
+<<<<<<< HEAD
   USE_SYSTEM_PYBIND11 = true;
+=======
+  USE_SYSTEM_BIND11 = true;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   preBuild = ''
     export MAX_JOBS=$NIX_BUILD_CORES
@@ -281,6 +323,10 @@ in buildPythonPackage rec {
 
   nativeBuildInputs = [
     cmake
+<<<<<<< HEAD
+=======
+    util-linux
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     which
     ninja
     pybind11
@@ -291,7 +337,11 @@ in buildPythonPackage rec {
 
   buildInputs = [ blas blas.provider pybind11 ]
     ++ lib.optionals stdenv.isLinux [ linuxHeaders_5_19 ] # TMP: avoid "flexible array member" errors for now
+<<<<<<< HEAD
     ++ lib.optionals cudaSupport [ cudnn.dev cudnn.lib nccl ]
+=======
+    ++ lib.optionals cudaSupport [ cudnn nccl ]
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     ++ lib.optionals rocmSupport [ openmp ]
     ++ lib.optionals (cudaSupport || rocmSupport) [ magma ]
     ++ lib.optionals stdenv.isLinux [ numactl ]
@@ -418,7 +468,11 @@ in buildPythonPackage rec {
     homepage = "https://pytorch.org/";
     license = licenses.bsd3;
     maintainers = with maintainers; [ teh thoughtpolice tscholak ]; # tscholak esp. for darwin-related builds
+<<<<<<< HEAD
     platforms = with platforms; linux ++ lib.optionals (!cudaSupport && !rocmSupport) darwin;
+=======
+    platforms = with platforms; linux ++ lib.optionals (!cudaSupport || !rocmSupport) darwin;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     broken = rocmSupport && cudaSupport; # CUDA and ROCm are mutually exclusive
   };
 }

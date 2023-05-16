@@ -9,11 +9,19 @@
 
 stdenv.mkDerivation rec {
   pname = "btrfs-progs";
+<<<<<<< HEAD
   version = "6.5";
 
   src = fetchurl {
     url = "mirror://kernel/linux/kernel/people/kdave/btrfs-progs/btrfs-progs-v${version}.tar.xz";
     sha256 = "sha256-j1B6DN9qizcthi2+SUP+hMZtyyCI48/eLPs7F26sHBw=";
+=======
+  version = "6.3";
+
+  src = fetchurl {
+    url = "mirror://kernel/linux/kernel/people/kdave/btrfs-progs/btrfs-progs-v${version}.tar.xz";
+    sha256 = "sha256-QKC9/3h+y0kOVTPbzv1IUhdtrxKq5aEVggPbQ9itan0=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

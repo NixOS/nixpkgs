@@ -6,6 +6,10 @@
 , mypy-extensions
 , numpy
 , pydantic
+<<<<<<< HEAD
+=======
+, pytest-mypy-plugins
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , pytestCheckHook
 , pythonOlder
 , typing-extensions
@@ -41,6 +45,10 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     numpy
     pydantic
+<<<<<<< HEAD
+=======
+    pytest-mypy-plugins
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     pytestCheckHook
     wrapt
   ];

@@ -4,7 +4,11 @@
 , buildPackages
 , docbook_xml_dtd_44
 , docbook_xsl
+<<<<<<< HEAD
 , withLibcap ? stdenv.isLinux, libcap
+=======
+, libcap
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , pkg-config
 , meson
 , ninja
@@ -25,6 +29,7 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
+<<<<<<< HEAD
   mesonFlags = [
     (lib.mesonEnable "use_libcap" withLibcap)
   ];
@@ -32,6 +37,11 @@ stdenv.mkDerivation rec {
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [ docbook_xml_dtd_44 docbook_xsl meson ninja pkg-config xmlto ];
   buildInputs = lib.optionals withLibcap [ libcap ];
+=======
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
+  nativeBuildInputs = [ docbook_xml_dtd_44 docbook_xsl meson ninja pkg-config xmlto ];
+  buildInputs = [ libcap ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   # Needed for lddtree
   propagatedBuildInputs = [ (python3.withPackages (p: with p; [ pyelftools ])) ];
 

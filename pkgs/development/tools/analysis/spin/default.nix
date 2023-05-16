@@ -18,7 +18,11 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ bison ];
 
+<<<<<<< HEAD
   sourceRoot = "${src.name}/Src";
+=======
+  sourceRoot = "source/Src";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   preBuild = ''
     mkdir -p $out/bin

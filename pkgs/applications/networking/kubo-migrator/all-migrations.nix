@@ -13,7 +13,11 @@ let
   fs-repo-common = pname: version: buildGoModule {
     inherit pname version;
     inherit (kubo-migrator-unwrapped) src;
+<<<<<<< HEAD
     sourceRoot = "${kubo-migrator-unwrapped.src.name}/${pname}";
+=======
+    sourceRoot = "source/${pname}";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     vendorSha256 = null;
     # Fix build on Go 1.17 and later: panic: qtls.ClientHelloInfo doesn't match
     # See https://github.com/ipfs/fs-repo-migrations/pull/163
@@ -36,9 +40,14 @@ let
   };
 
   # Concatenation of the latest repo version and the version of that migration
+<<<<<<< HEAD
   version = "14.1.0.0";
 
   fs-repo-13-to-14 = fs-repo-common "fs-repo-13-to-14" "1.0.0";
+=======
+  version = "13.1.0.0";
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   fs-repo-12-to-13 = fs-repo-common "fs-repo-12-to-13" "1.0.0";
   fs-repo-11-to-12 = fs-repo-common "fs-repo-11-to-12" "1.0.2";
   fs-repo-10-to-11 = fs-repo-common "fs-repo-10-to-11" "1.0.1";
@@ -54,7 +63,10 @@ let
   fs-repo-0-to-1   = fs-repo-common "fs-repo-0-to-1"   "1.0.1";
 
   all-migrations = [
+<<<<<<< HEAD
     fs-repo-13-to-14
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     fs-repo-12-to-13
     fs-repo-11-to-12
     fs-repo-10-to-11

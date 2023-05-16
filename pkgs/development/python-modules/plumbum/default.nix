@@ -13,14 +13,22 @@
 
 buildPythonPackage rec {
   pname = "plumbum";
+<<<<<<< HEAD
   version = "1.8.2";
+=======
+  version = "1.8.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "tomerfiliba";
     repo = "plumbum";
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-b8JcGRHiZSv/ViyEogpLgGXOMHHSC+cjWT0FqhkolcA=";
+=======
+    hash = "sha256-5nRI9y2Y7itkqDdLRSX4qWfh96WmhqdP1Eo7HLoRHaQ=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   postPatch = ''

@@ -13,13 +13,21 @@
 
 stdenv.mkDerivation rec {
   pname = "ksmbd-tools";
+<<<<<<< HEAD
   version = "3.4.9";
+=======
+  version = "3.4.8";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "cifsd-team";
     repo = pname;
     rev = version;
+<<<<<<< HEAD
     sha256 = "sha256-GZccOlp9zZMqtv3+u8JnKFfIe8sjwbZBLkDk8lt3CGk=";
+=======
+    sha256 = "sha256-R/OWZekAGtDxE71MrzjWsdpaWGBu0c+VP0VkPro6GEo=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   buildInputs = [ glib libnl ] ++ lib.optional withKerberos libkrb5;

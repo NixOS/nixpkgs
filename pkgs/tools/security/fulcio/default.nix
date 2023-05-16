@@ -2,13 +2,21 @@
 
 buildGoModule rec {
   pname = "fulcio";
+<<<<<<< HEAD
   version = "1.4.0";
+=======
+  version = "1.3.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "sigstore";
     repo = pname;
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-9FDHMhL2vWyS5o04E3nML/pCL+juA87ZAEU6naIPCdc=";
+=======
+    sha256 = "sha256-d9PTio6BYJ+WmHH53NRFBI1BG/aOM+BauV398FKaQg0=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.
     leaveDotGit = true;
@@ -20,7 +28,11 @@ buildGoModule rec {
       find "$out" -name .git -print0 | xargs -0 rm -rf
     '';
   };
+<<<<<<< HEAD
   vendorHash = "sha256-dEBHhgy4dyorVbP1TloPTa1h6U/923bYrXX4qiRa/2w=";
+=======
+  vendorHash = "sha256-RnCQ0KKT1azPZGPwbtRBLxNMng2mnYVT7xBI3Cxm9Q0=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nativeBuildInputs = [ installShellFiles ];
 

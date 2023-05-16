@@ -14,7 +14,11 @@ buildGoModule rec {
   modRoot = "src";
 
   proxyVendor = true;
+<<<<<<< HEAD
   vendorHash = "sha256-C7lUusq/cWBCnA2wP9fzQglJCXvQyvFG4JY13H0cP6g=";
+=======
+  vendorSha256 = "sha256-C7lUusq/cWBCnA2wP9fzQglJCXvQyvFG4JY13H0cP6g=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   meta = with lib; {
     description = "Command-line tool to download nicovideo.jp livestreams";

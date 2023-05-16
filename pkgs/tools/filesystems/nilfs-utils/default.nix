@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 { lib, stdenv, fetchFromGitHub, autoreconfHook, libuuid, libselinux
+=======
+{ lib, stdenv, fetchFromGitHub, fetchpatch, autoreconfHook, libuuid, libselinux
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , e2fsprogs }:
 
 stdenv.mkDerivation rec {

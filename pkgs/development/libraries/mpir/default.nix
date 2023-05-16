@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 { lib, stdenv, fetchurl, m4, which, yasm, autoreconfHook, fetchpatch, buildPackages }:
+=======
+{ lib, stdenv, fetchurl, m4, which, yasm, buildPackages }:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 stdenv.mkDerivation rec {
   pname = "mpir";
@@ -6,13 +10,18 @@ stdenv.mkDerivation rec {
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 
+<<<<<<< HEAD
   nativeBuildInputs = [ m4 which yasm autoreconfHook ];
+=======
+  nativeBuildInputs = [ m4 which yasm ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchurl {
     url = "https://mpir.org/mpir-${version}.tar.bz2";
     sha256 = "1fvmhrqdjs925hzr2i8bszm50h00gwsh17p2kn2pi51zrxck9xjj";
   };
 
+<<<<<<< HEAD
   patches = [
     # Fixes configure check failures with clang 16 due to implicit definitions of `exit`, which
     # is an error with newer versions of clang.
@@ -22,6 +31,8 @@ stdenv.mkDerivation rec {
     })
   ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   configureFlags = [ "--enable-cxx" ]
     ++ lib.optionals stdenv.isLinux [ "--enable-fat" ];
 

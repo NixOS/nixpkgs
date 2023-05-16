@@ -1,6 +1,10 @@
 { lib, stdenv, fetchFromGitHub, cmake, libX11, xorgproto }:
 
+<<<<<<< HEAD
 stdenv.mkDerivation (finalAttrs: {
+=======
+stdenv.mkDerivation {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pname = "wmderlandc";
   version = "unstable-2020-07-17";
 
@@ -11,7 +15,11 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = "0npmlnybblp82mfpinjbz7dhwqgpdqc1s63wc1zs8mlcs19pdh98";
   };
 
+<<<<<<< HEAD
   sourceRoot = "${finalAttrs.src.name}/ipc-client";
+=======
+  sourceRoot = "source/ipc-client";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nativeBuildInputs = [
     cmake
@@ -29,4 +37,8 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = platforms.all;
     maintainers = with maintainers; [ takagiy ];
   };
+<<<<<<< HEAD
 })
+=======
+}
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)

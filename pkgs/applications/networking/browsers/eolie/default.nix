@@ -28,6 +28,10 @@ python3.pkgs.buildPythonApplication rec {
 
   buildInputs = with gst_all_1; [
     glib-networking
+<<<<<<< HEAD
+=======
+    gobject-introspection
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     gst-libav
     gst-plugins-base
     gst-plugins-ugly

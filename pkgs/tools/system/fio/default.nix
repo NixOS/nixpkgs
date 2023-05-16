@@ -4,22 +4,33 @@
 
 stdenv.mkDerivation rec {
   pname = "fio";
+<<<<<<< HEAD
   version = "3.35";
+=======
+  version = "3.34";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner  = "axboe";
     repo   = "fio";
     rev    = "fio-${version}";
+<<<<<<< HEAD
     sha256 = "sha256-8LMpgayxBebHb0MXYmjlqqtndSiL42/yEQpgamxt9kI=";
+=======
+    sha256 = "sha256-+csIerzwYOmXfmykYI0DHzbJf4iUCkEy1f7SFmAiuv4=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   buildInputs = [ python3 zlib ]
     ++ lib.optional (!stdenv.isDarwin) libaio;
 
+<<<<<<< HEAD
   # ./configure does not support autoconf-style --build=/--host=.
   # We use $CC instead.
   configurePlatforms = [ ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nativeBuildInputs = [ makeWrapper python3.pkgs.wrapPython ];
 
   strictDeps = true;

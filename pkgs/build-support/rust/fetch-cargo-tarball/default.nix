@@ -62,6 +62,13 @@ in stdenv.mkDerivation ({
     export CARGO_HOME=$(mktemp -d cargo-home.XXX)
     CARGO_CONFIG=$(mktemp cargo-config.XXXX)
 
+<<<<<<< HEAD
+=======
+    # https://blog.rust-lang.org/2023/03/09/Rust-1.68.0.html#cargos-sparse-protocol
+    # planned to become the default in 1.70
+    export CARGO_REGISTRIES_CRATES_IO_PROTOCOL=sparse
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     if [[ -n "$NIX_CRATES_INDEX" ]]; then
     cat >$CARGO_HOME/config.toml <<EOF
     [source.crates-io]

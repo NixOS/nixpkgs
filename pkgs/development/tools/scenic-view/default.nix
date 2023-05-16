@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 { lib, stdenv, fetchFromGitHub, openjdk, openjfx, gradle_7, makeDesktopItem, perl, writeText, makeWrapper }:
 let
   jdk = openjdk.override (lib.optionalAttrs stdenv.isLinux {
@@ -5,6 +6,10 @@ let
     openjfx = openjfx.override { withWebKit = true; };
   });
 
+=======
+{ lib, stdenv, fetchFromGitHub, jdk, gradle_7, makeDesktopItem, copyDesktopItems, perl, writeText, runtimeShell, makeWrapper }:
+let
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pname = "scenic-view";
   version = "11.0.2";
 

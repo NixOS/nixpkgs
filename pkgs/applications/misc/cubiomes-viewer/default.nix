@@ -9,13 +9,21 @@
 
 stdenv.mkDerivation rec {
   pname = "cubiomes-viewer";
+<<<<<<< HEAD
   version = "3.3.0";
+=======
+  version = "3.2.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "Cubitect";
     repo = pname;
     rev = version;
+<<<<<<< HEAD
     sha256 = "sha256-V6zPbL1/tP2B38wo4a05+vXCSjPE1YKpMR3zl/BbnY8=";
+=======
+    sha256 = "sha256-67augXXZsriXdndrCFUFWZbL+rVKgTPAyqlbZua2Ul4=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     fetchSubmodules = true;
   };
 

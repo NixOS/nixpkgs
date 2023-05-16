@@ -10,6 +10,7 @@
 , farama-notifications
 , importlib-metadata
 , pythonOlder
+<<<<<<< HEAD
 , ffmpeg
 , jax
 , jaxlib
@@ -20,10 +21,13 @@
 , pygame
 , pytestCheckHook
 , scipy
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 buildPythonPackage rec {
   pname = "gymnasium";
+<<<<<<< HEAD
   version = "0.29.1";
   format = "pyproject";
 
@@ -43,10 +47,33 @@ buildPythonPackage rec {
     jax-jumpy
     numpy
     typing-extensions
+=======
+  version = "0.28.1";
+
+  src = fetchFromGitHub {
+    owner = "Farama-Foundation";
+    repo = pname;
+    rev = "v${version}";
+    hash = "sha256-7rRF21H3IxbgmqxvtC370kr0exLgfg3e2tA3J49xuao=";
+  };
+
+  format = "pyproject";
+
+  nativeBuildInputs = [ setuptools ];
+
+  propagatedBuildInputs = [
+    jax-jumpy
+    cloudpickle
+    numpy
+    gym-notices
+    typing-extensions
+    farama-notifications
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ] ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ];
 
   pythonImportsCheck = [ "gymnasium" ];
 
+<<<<<<< HEAD
   nativeCheckInputs = [
     ffmpeg
     jax
@@ -71,6 +98,8 @@ buildPythonPackage rec {
     "tests/wrappers/test_video_recorder.py"
   ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   meta = with lib; {
     description = "A standard API for reinforcement learning and a diverse set of reference environments (formerly Gym)";
     homepage = "https://github.com/Farama-Foundation/Gymnasium";

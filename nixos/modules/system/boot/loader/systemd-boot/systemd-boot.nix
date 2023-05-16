@@ -32,7 +32,11 @@ let
 
     inherit (config.system.nixos) distroName;
 
+<<<<<<< HEAD
     memtest86 = optionalString cfg.memtest86.enable pkgs.memtest86plus;
+=======
+    memtest86 = optionalString cfg.memtest86.enable pkgs.memtest86-efi;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     netbootxyz = optionalString cfg.netbootxyz.enable pkgs.netbootxyz-efi;
 
@@ -147,8 +151,15 @@ in {
         default = false;
         type = types.bool;
         description = lib.mdDoc ''
+<<<<<<< HEAD
           Make Memtest86+ available from the systemd-boot menu. Memtest86+ is a
           program for testing memory.
+=======
+          Make MemTest86 available from the systemd-boot menu. MemTest86 is a
+          program for testing memory.  MemTest86 is an unfree program, so
+          this requires `allowUnfree` to be set to
+          `true`.
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         '';
       };
 
@@ -191,8 +202,13 @@ in {
       default = {};
       example = literalExpression ''
         { "memtest86.conf" = '''
+<<<<<<< HEAD
           title Memtest86+
           efi /efi/memtest86/memtest.efi
+=======
+          title MemTest86
+          efi /efi/memtest86/memtest86.efi
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         '''; }
       '';
       description = lib.mdDoc ''
@@ -211,7 +227,11 @@ in {
       type = types.attrsOf types.path;
       default = {};
       example = literalExpression ''
+<<<<<<< HEAD
         { "efi/memtest86/memtest.efi" = "''${pkgs.memtest86plus}/memtest.efi"; }
+=======
+        { "efi/memtest86/memtest86.efi" = "''${pkgs.memtest86-efi}/BOOTX64.efi"; }
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       '';
       description = lib.mdDoc ''
         A set of files to be copied to {file}`/boot`.
@@ -274,8 +294,16 @@ in {
     boot.loader.supportsInitrdSecrets = true;
 
     boot.loader.systemd-boot.extraFiles = mkMerge [
+<<<<<<< HEAD
       (mkIf cfg.memtest86.enable {
         "efi/memtest86/memtest.efi" = "${pkgs.memtest86plus.efi}";
+=======
+      # TODO: This is hard-coded to use the 64-bit EFI app, but it could probably
+      # be updated to use the 32-bit EFI app on 32-bit systems.  The 32-bit EFI
+      # app filename is BOOTIA32.efi.
+      (mkIf cfg.memtest86.enable {
+        "efi/memtest86/BOOTX64.efi" = "${pkgs.memtest86-efi}/BOOTX64.efi";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       })
       (mkIf cfg.netbootxyz.enable {
         "efi/netbootxyz/netboot.xyz.efi" = "${pkgs.netbootxyz-efi}";
@@ -285,8 +313,13 @@ in {
     boot.loader.systemd-boot.extraEntries = mkMerge [
       (mkIf cfg.memtest86.enable {
         "${cfg.memtest86.entryFilename}" = ''
+<<<<<<< HEAD
           title  Memtest86+
           efi    /efi/memtest86/memtest.efi
+=======
+          title  MemTest86
+          efi    /efi/memtest86/BOOTX64.efi
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         '';
       })
       (mkIf cfg.netbootxyz.enable {

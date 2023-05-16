@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 { lib, stdenv, crystal, fetchFromGitea, librsvg, pkg-config, libxml2, openssl, shards, sqlite, lsquic, videojs, nixosTests }:
+=======
+{ lib, stdenv, crystal, fetchFromGitHub, librsvg, pkg-config, libxml2, openssl, shards, sqlite, lsquic, videojs, nixosTests }:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 let
   # All versions, revisions, and checksums are stored in ./versions.json.
   # The update process is the following:
@@ -18,8 +22,12 @@ crystal.buildCrystalPackage rec {
   pname = "invidious";
   inherit (versions.invidious) version;
 
+<<<<<<< HEAD
   src = fetchFromGitea {
     domain = "gitea.invidious.io";
+=======
+  src = fetchFromGitHub {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     owner = "iv-org";
     repo = pname;
     fetchSubmodules = true;
@@ -97,6 +105,7 @@ crystal.buildCrystalPackage rec {
     cp -r config/sql $out/share/invidious/config
   '';
 
+<<<<<<< HEAD
   # Invidious tries to open and validate config/config.yml, even when
   # running --help. This specifies a minimal configuration in an
   # environment variable. Even though the database and hmac_key are
@@ -107,6 +116,14 @@ crystal.buildCrystalPackage rec {
     hmac_key: "this-is-required"
     EOF
     )" $out/bin/invidious --help
+=======
+  # Invidious tries to open config/config.yml and connect to the database, even
+  # when running --help. This specifies a minimal configuration in an
+  # environment variable. Even though the database is bogus, --help still
+  # works.
+  installCheckPhase = ''
+    INVIDIOUS_CONFIG="database_url: sqlite3:///dev/null" $out/bin/invidious --help
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '';
 
   passthru = {

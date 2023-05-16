@@ -2,11 +2,19 @@
 
 stdenv.mkDerivation rec {
   pname = "mill";
+<<<<<<< HEAD
   version = "0.11.2";
 
   src = fetchurl {
     url = "https://github.com/com-lihaoyi/mill/releases/download/${version}/${version}-assembly";
     hash = "sha256-7RYMj/vfyzBQhZUpWzEaZYN27ZhYCRyKhQUhlH8tE0U=";
+=======
+  version = "0.10.12";
+
+  src = fetchurl {
+    url = "https://github.com/com-lihaoyi/mill/releases/download/${version}/${version}-assembly";
+    hash = "sha256-MlPnJMuz35Zd+VQwvsadRRPULebR7GWN1vGV+cJ7s4c=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -46,7 +54,11 @@ stdenv.mkDerivation rec {
       SBT, but can also be extended to support any other language or platform via
       modules (written in Java or Scala) or through an external subprocesses.
     '';
+<<<<<<< HEAD
     maintainers = with maintainers; [ scalavision zenithal ];
+=======
+    maintainers = with maintainers; [ scalavision ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     platforms = lib.platforms.all;
   };
 }

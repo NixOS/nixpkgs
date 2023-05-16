@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 { lib, stdenv, fetchurl, pkg-config, ibus, gtk3, libthai }:
+=======
+{ lib, stdenv, fetchurl, makeWrapper, pkg-config, ibus, gtk3, libthai }:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 stdenv.mkDerivation rec {
   pname = "ibus-libthai";
@@ -19,6 +23,10 @@ stdenv.mkDerivation rec {
     description = "Thai input method engine for IBus";
     license = licenses.lgpl21Plus;
     platforms = platforms.unix;
+<<<<<<< HEAD
     maintainers = with maintainers; [ ];
+=======
+    maintainers = with maintainers; [ SuperSandro2000 ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

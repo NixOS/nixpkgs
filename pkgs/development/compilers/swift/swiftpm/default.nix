@@ -365,12 +365,19 @@ in stdenv.mkDerivation (commonAttrs // {
   pname = "swiftpm";
 
   nativeBuildInputs = commonAttrs.nativeBuildInputs ++ [
+<<<<<<< HEAD
     pkg-config
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     swift
     swiftpm-bootstrap
   ];
   buildInputs = [
     ncursesInput
+<<<<<<< HEAD
+=======
+    pkg-config
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     sqlite
     XCTest
   ]

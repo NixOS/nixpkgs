@@ -29,6 +29,10 @@ rustPlatform.buildRustPackage rec {
     description = "Generate README.md from docstrings";
     homepage = "https://github.com/livioribeiro/cargo-readme";
     license = with licenses; [ mit asl20 ];
+<<<<<<< HEAD
     maintainers = with maintainers; [ baloo matthiasbeyer ];
+=======
+    maintainers = with maintainers; [ baloo ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

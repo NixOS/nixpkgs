@@ -109,6 +109,13 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   gala = callPackage ./desktop/gala { };
 
+<<<<<<< HEAD
+=======
+  gnome-bluetooth-contract = callPackage ./desktop/gnome-bluetooth-contract {
+    inherit (gnome) gnome-bluetooth_1_0;
+  };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   wingpanel = callPackage ./desktop/wingpanel { };
 
   wingpanel-with-indicators = callPackage ./desktop/wingpanel/wrapper.nix {
@@ -244,8 +251,11 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   file-roller = pkgs.gnome.file-roller; # added 2022-03-12
 
+<<<<<<< HEAD
   gnome-bluetooth-contract = throw "pantheon.gnome-bluetooth-contract has been removed, abandoned by upstream."; # added 2022-06-30
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   notes-up = throw "The ‘pantheon.notes-up’ alias was removed on 2022-02-02, please use ‘pkgs.notes-up’ directly."; # added 2021-12-18
 
 }

@@ -3,7 +3,11 @@
 , dune-configurator
 , fetchFromGitHub
 , alcotest
+<<<<<<< HEAD
 , ctypes
+=======
+, eigen
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , stdio
 , openblasCompat
 , owl-base
@@ -21,7 +25,11 @@ buildDunePackage rec {
   checkInputs = [ alcotest ];
   buildInputs = [ dune-configurator stdio ];
   propagatedBuildInputs = [
+<<<<<<< HEAD
     ctypes
+=======
+    eigen
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     openblasCompat
     owl-base
     npy

@@ -13,13 +13,21 @@
 
 stdenv.mkDerivation rec {
   pname = "netplan";
+<<<<<<< HEAD
   version = "0.106.1";
+=======
+  version = "0.105";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "canonical";
     repo = "netplan";
     rev = version;
+<<<<<<< HEAD
     hash = "sha256-wQ4gd9+9YU92WGRMjSiF/zLCGxhaSl8s22pH1jr+Mm0=";
+=======
+    hash = "sha256-77vUZU9JG9Dz/5n4DpcAUS77UqfIILXhZHgBogIb400=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [
@@ -32,7 +40,11 @@ stdenv.mkDerivation rec {
     systemd
     glib
     libyaml
+<<<<<<< HEAD
     (python3.withPackages (p: with p; [ pyyaml netifaces dbus-python rich ]))
+=======
+    (python3.withPackages (p: with p; [ pyyaml netifaces ]))
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     libuuid
     bash-completion
   ];

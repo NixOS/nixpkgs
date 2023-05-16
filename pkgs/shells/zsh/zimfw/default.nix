@@ -2,14 +2,22 @@
 
 stdenv.mkDerivation rec {
   pname = "zimfw";
+<<<<<<< HEAD
   version = "1.12.0";
+=======
+  version = "1.11.3";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   src = fetchFromGitHub {
     owner = "zimfw";
     repo = "zimfw";
     rev = "v${version}";
     ## zim only needs this one file to be installed.
     sparseCheckout = [ "zimfw.zsh" ];
+<<<<<<< HEAD
     sha256 = "sha256-PwfPiga4KcOrkkObIu3RCUmO2ExoDQkbQx7S+Yncy6k=";
+=======
+    sha256 = "sha256-q3OSypjqAc+ul0kF6f3u+wnFyNEm4AKwyPBwQzlVzYU=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
   strictDeps = true;
   dontConfigure = true;

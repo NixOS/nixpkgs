@@ -1,12 +1,22 @@
+<<<<<<< HEAD
 { mkDerivation, lib, fetchFromGitHub, cmake, boost179, ceres-solver, eigen,
   freeimage, glog, libGLU, glew, qtbase,
   config,
   cudaSupport ? config.cudaSupport, cudaPackages }:
+=======
+{ mkDerivation, lib, fetchFromGitHub, cmake, boost17x, ceres-solver, eigen,
+  freeimage, glog, libGLU, glew, qtbase,
+  cudaSupport ? false, cudaPackages }:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 assert cudaSupport -> cudaPackages != { };
 
 let
+<<<<<<< HEAD
   boost_static = boost179.override { enableStatic = true; };
+=======
+  boost_static = boost17x.override { enableStatic = true; };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   # TODO: migrate to redist packages
   inherit (cudaPackages) cudatoolkit;

@@ -13,13 +13,21 @@
 
 stdenv.mkDerivation rec {
   pname = "theforceengine";
+<<<<<<< HEAD
   version = "1.09.300";
+=======
+  version = "1.09.100";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "luciusDXL";
     repo = "TheForceEngine";
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-nf5fhP68AgBESiJleeZOLXkAajS+JmHUqyj4vAt2wl4=";
+=======
+    sha256 = "sha256-nw9yp/StaSi5thafVT1V5YA2ZCYGWNoHUvQTpK90Foc=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

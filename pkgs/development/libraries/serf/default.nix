@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 { lib
 , stdenv
 , fetchurl
@@ -19,6 +20,19 @@ stdenv.mkDerivation rec {
   src = fetchurl {
     url = "mirror://apache/serf/${pname}-${version}.tar.bz2";
     hash = "sha256-voHvCLqiUW7Np2p3rffe97wyJ+61eLmjO0X3tB3AZOY=";
+=======
+{ lib, stdenv, fetchurl, apr, scons, openssl, aprutil, zlib, libkrb5
+, pkg-config, libiconv
+, fetchpatch }:
+
+stdenv.mkDerivation rec {
+  pname = "serf";
+  version = "1.3.9";
+
+  src = fetchurl {
+    url = "mirror://apache/serf/${pname}-${version}.tar.bz2";
+    sha256 = "1k47gbgpp52049andr28y28nbwh9m36bbb0g8p0aka3pqlhjv72l";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ pkg-config scons ];
@@ -27,7 +41,15 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./scons.patch
+<<<<<<< HEAD
 
+=======
+    # https://issues.apache.org/jira/projects/SERF/issues/SERF-198
+    (fetchpatch {
+      url = "https://issues.apache.org/jira/secure/attachment/13019945/serf.patch";
+      hash = "sha256-3djDGG30R/gq74KJL8OJ/upMh1zDpqtwGylRzN0lXpY=";
+    })
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     (fetchpatch {
       url = "https://src.fedoraproject.org/rpms/libserf/raw/rawhide/f/libserf-1.3.9-errgetfunc.patch";
       hash = "sha256-FQJvXOIZ0iItvbbcu4kR88j74M7fOi7C/0NN3o1/ub4=";
@@ -50,7 +72,10 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "HTTP client library based on APR";
+<<<<<<< HEAD
     homepage = "https://serf.apache.org/";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     license = licenses.asl20;
     maintainers = with maintainers; [ orivej raskin ];
     platforms = platforms.linux ++ platforms.darwin;

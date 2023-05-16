@@ -2,11 +2,19 @@
 
 stdenv.mkDerivation rec {
   pname = "cytoscape";
+<<<<<<< HEAD
   version = "3.10.1";
 
   src = fetchurl {
     url = "https://github.com/cytoscape/cytoscape/releases/download/${version}/${pname}-unix-${version}.tar.gz";
     sha256 = "sha256-fqxAsnpMYCYj0hW2oxu/NH4PqesRlWPs5eDSeSjy1aU=";
+=======
+  version = "3.9.1";
+
+  src = fetchurl {
+    url = "https://github.com/cytoscape/cytoscape/releases/download/${version}/${pname}-unix-${version}.tar.gz";
+    sha256 = "sha256-I4C2yGiIygnFUkRBC4LBSQFgjZlVKCoQGRphynVpscw=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   patches = [

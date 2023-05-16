@@ -4,11 +4,19 @@
 
 stdenv.mkDerivation rec {
   pname = "lldpd";
+<<<<<<< HEAD
   version = "1.0.17";
 
   src = fetchurl {
     url = "https://media.luffy.cx/files/lldpd/${pname}-${version}.tar.gz";
     sha256 = "sha256-k0MXfxRdK8pm7wPVlSgHnT8WY8YkseK50IJo79xhJ84=";
+=======
+  version = "1.0.16";
+
+  src = fetchurl {
+    url = "https://media.luffy.cx/files/lldpd/${pname}-${version}.tar.gz";
+    sha256 = "sha256-47ORZQx7pnzqL+hNZ/201/yKoexc+G64u5hHEd+EZak=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   configureFlags = [

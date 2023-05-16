@@ -1,6 +1,11 @@
 { lib, stdenv, fetchFromGitHub, pkg-config, python3Packages, makeWrapper
+<<<<<<< HEAD
 , libsamplerate, libsndfile, readline, eigen, celt
 , waf
+=======
+, bash, libsamplerate, libsndfile, readline, eigen, celt
+, wafHook
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 # Darwin Dependencies
 , aften, AudioUnit, CoreAudio, libobjc, Accelerate
 
@@ -28,26 +33,43 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "${prefix}jack2";
+<<<<<<< HEAD
   version = "1.9.22";
+=======
+  version = "1.9.19";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "jackaudio";
     repo = "jack2";
     rev = "v${finalAttrs.version}";
+<<<<<<< HEAD
     sha256 = "sha256-Cslfys5fcZDy0oee9/nM5Bd1+Cg4s/ayXjJJOSQCL4E=";
   };
 
   outputs = [ "out" "dev" ];
 
   nativeBuildInputs = [ pkg-config python makeWrapper waf.hook ];
+=======
+    sha256 = "01s8i64qczxqawgrzrw19asaqmcspf5l2h3203xzg56wnnhhzcw7";
+  };
+
+  nativeBuildInputs = [ pkg-config python makeWrapper wafHook ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   buildInputs = [ libsamplerate libsndfile readline eigen celt
     optDbus optPythonDBus optLibffado optAlsaLib optLibopus
   ] ++ lib.optionals stdenv.isDarwin [
     aften AudioUnit CoreAudio Accelerate libobjc
   ];
 
+<<<<<<< HEAD
   postPatch = ''
     patchShebangs --build svnversion_regenerate.sh
+=======
+  prePatch = ''
+    substituteInPlace svnversion_regenerate.sh \
+        --replace /bin/bash ${bash}/bin/bash
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '';
 
   dontAddWafCrossFlags = true;
@@ -61,6 +83,7 @@ stdenv.mkDerivation (finalAttrs: {
   postInstall = (if libOnly then ''
     rm -rf $out/{bin,share}
     rm -rf $out/lib/{jack,libjacknet*,libjackserver*}
+<<<<<<< HEAD
   '' else lib.optionalString (optDbus != null) ''
     wrapProgram $out/bin/jack_control --set PYTHONPATH $PYTHONPATH
   '');
@@ -70,6 +93,12 @@ stdenv.mkDerivation (finalAttrs: {
       --replace "$out/include" "$dev/include"
   '';
 
+=======
+  '' else ''
+    wrapProgram $out/bin/jack_control --set PYTHONPATH $PYTHONPATH
+  '');
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 
   meta = with lib; {

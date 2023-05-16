@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 { lib, rustPlatform, fetchFromGitHub, pkg-config, openssl }:
+=======
+{ lib, rustPlatform, fetchFromGitHub, pkg-config, stdenv, openssl }:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 rustPlatform.buildRustPackage rec {
   pname = "todo";

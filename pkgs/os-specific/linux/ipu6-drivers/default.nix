@@ -5,6 +5,7 @@
 , kernel
 }:
 
+<<<<<<< HEAD
 stdenv.mkDerivation {
   pname = "ipu6-drivers";
   version = "unstable-2023-08-28";
@@ -16,6 +17,24 @@ stdenv.mkDerivation {
     hash = "sha256-D782v6hIqAl2EO1+zKeakURD3UGVP3c7p3ba/61yfW4=";
   };
 
+=======
+stdenv.mkDerivation rec {
+  pname = "ipu6-drivers";
+  version = "unstable-2023-02-20";
+
+  src = fetchFromGitHub {
+    owner = "intel";
+    repo = pname;
+    rev = "dfedab03f3856010d37968cb384696038c73c984";
+    hash = "sha256-TKo04+fqY64SdDuWApuzRXBnaAW2DReubwFRsdfJMWM=";
+  };
+
+  patches = [
+    # https://github.com/intel/ipu6-drivers/pull/84
+    ./pr-84-unpatched-upstream-compatiblity.patch
+  ];
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   postPatch = ''
     cp --no-preserve=mode --recursive --verbose \
       ${ivsc-driver.src}/backport-include \
@@ -48,6 +67,11 @@ stdenv.mkDerivation {
     maintainers = with lib.maintainers; [ hexa ];
     platforms = [ "x86_64-linux" ];
     # requires 6.1.7 https://github.com/intel/ipu6-drivers/pull/84
+<<<<<<< HEAD
     broken = kernel.kernelOlder "6.1.7";
+=======
+    # fails to build on 6.3 https://github.com/intel/ipu6-drivers/issues/140
+    broken = kernel.kernelOlder "6.1.7" || kernel.kernelAtLeast "6.3";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

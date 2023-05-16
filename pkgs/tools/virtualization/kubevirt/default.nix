@@ -8,13 +8,21 @@
 
 buildGoModule rec {
   pname = "kubevirt";
+<<<<<<< HEAD
   version = "1.0.0";
+=======
+  version = "0.59.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "kubevirt";
     repo = "kubevirt";
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-1Idfz2cMiIivroEkdRAA1x4v0BVACLoNCKSBS5o+wr4=";
+=======
+    sha256 = "sha256-4mTq/V4X8eq7g+ltgFD2ZFC7k2yiszG2i2QErttPATE=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   vendorHash = null;

@@ -17,7 +17,11 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     hash = "sha256-i1txeUE/ZSRggwLDtpS8dd4uuZfHX9w3zRH0gBgGXnk=";
   };
+<<<<<<< HEAD
   sourceRoot = "${src.name}/fuzzylite";
+=======
+  sourceRoot = "source/fuzzylite";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   outputs = [ "out" "dev" ];
 

@@ -63,12 +63,16 @@ in rec {
 
   assertMacAddress = name: group: attr:
     optional (attr ? ${name} && ! isMacAddress attr.${name})
+<<<<<<< HEAD
       "Systemd ${group} field `${name}' must be a valid MAC address.";
 
   assertNetdevMacAddress = name: group: attr:
     optional (attr ? ${name} && (! isMacAddress attr.${name} && attr.${name} != "none"))
       "Systemd ${group} field `${name}` must be a valid MAC address or the special value `none`.";
 
+=======
+      "Systemd ${group} field `${name}' must be a valid mac address.";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   isPort = i: i >= 0 && i <= 65535;
 
@@ -294,9 +298,15 @@ in rec {
         // optionalAttrs (config.requisite != [])
           { Requisite = toString config.requisite; }
         // optionalAttrs (config ? restartTriggers && config.restartTriggers != [])
+<<<<<<< HEAD
           { X-Restart-Triggers = "${pkgs.writeText "X-Restart-Triggers" (toString config.restartTriggers)}"; }
         // optionalAttrs (config ? reloadTriggers && config.reloadTriggers != [])
           { X-Reload-Triggers = "${pkgs.writeText "X-Reload-Triggers" (toString config.reloadTriggers)}"; }
+=======
+          { X-Restart-Triggers = toString config.restartTriggers; }
+        // optionalAttrs (config ? reloadTriggers && config.reloadTriggers != [])
+          { X-Reload-Triggers = toString config.reloadTriggers; }
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         // optionalAttrs (config.description != "") {
           Description = config.description; }
         // optionalAttrs (config.documentation != []) {
@@ -443,6 +453,7 @@ in rec {
           ${attrsToSection def.sliceConfig}
         '';
     };
+<<<<<<< HEAD
 
   # Create a directory that contains systemd definition files from an attrset
   # that contains the file names as keys and the content as values. The values
@@ -460,4 +471,6 @@ in rec {
       )}
     '';
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }

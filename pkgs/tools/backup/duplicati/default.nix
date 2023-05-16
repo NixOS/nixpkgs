@@ -2,6 +2,7 @@
 
 stdenv.mkDerivation rec {
   pname = "duplicati";
+<<<<<<< HEAD
   version = "2.0.7.1";
   channel = "beta";
   build_date = "2023-05-25";
@@ -9,6 +10,15 @@ stdenv.mkDerivation rec {
   src = fetchzip {
     url = "https://github.com/duplicati/duplicati/releases/download/v${version}-${version}_${channel}_${build_date}/duplicati-${version}_${channel}_${build_date}.zip";
     hash = "sha256-isPmRC6N+gEZgvJ0bgeFf5kOQJsicZOsGnT+CAGgg+U=";
+=======
+  version = "2.0.6.3";
+  channel = "beta";
+  build_date = "2021-06-17";
+
+  src = fetchzip {
+    url = "https://github.com/duplicati/duplicati/releases/download/v${version}-${version}_${channel}_${build_date}/duplicati-${version}_${channel}_${build_date}.zip";
+    sha256 = "sha256-usMwlmer6rLgP46wGVkaAIocUW4MjuEpVWdX7rRcghg=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     stripRoot = false;
   };
 

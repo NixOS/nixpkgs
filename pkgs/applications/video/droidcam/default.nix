@@ -5,13 +5,21 @@
 
 stdenv.mkDerivation rec {
   pname = "droidcam";
+<<<<<<< HEAD
   version = "2.0.0";
+=======
+  version = "1.9.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "aramg";
     repo = "droidcam";
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-wTWdIPptbqt1cZgK6IDTZdrhno4Qlf4AujugfQ/xOT0=";
+=======
+    sha256 = "sha256-SbgvkAy7UTZKzgNPUQ17YwSo50yigiMLpITcenOODGw=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

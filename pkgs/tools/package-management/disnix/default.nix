@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 { lib, stdenv, fetchurl, pkg-config, glib, libxml2, libxslt, getopt, dysnomia, libintl, libiconv }:
+=======
+{ lib, stdenv, fetchurl, pkg-config, glib, libxml2, libxslt, getopt, gettext, dysnomia, libintl, libiconv }:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 stdenv.mkDerivation rec {
   pname = "disnix";

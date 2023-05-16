@@ -12,6 +12,7 @@
 
 buildPythonPackage rec {
   pname = "tifffile";
+<<<<<<< HEAD
   version = "2023.7.18";
   format = "setuptools";
 
@@ -20,6 +21,16 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-WlpiSy96t/N+nsQXSuLfGAW5ZY+JAT+bS1VQZy9l8qE=";
+=======
+  version = "2023.4.12";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.8";
+
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-L6mfmJDKq5GdkyoKyqnQ9YQ9wu81lOISljky4gcTut0=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [

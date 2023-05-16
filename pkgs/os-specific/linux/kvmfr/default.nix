@@ -1,14 +1,24 @@
+<<<<<<< HEAD
 { lib, stdenv, kernel, looking-glass-client }:
 
 stdenv.mkDerivation {
+=======
+{ lib, stdenv, fetchFromGitHub, kernel, kmod, looking-glass-client }:
+
+stdenv.mkDerivation rec {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pname = "kvmfr";
   version = looking-glass-client.version;
 
   src = looking-glass-client.src;
+<<<<<<< HEAD
   sourceRoot = "${looking-glass-client.src.name}/module";
   patches = lib.optional (kernel.kernelAtLeast "6.4") [
     ./linux-6-4-compat.patch
   ];
+=======
+  sourceRoot = "source/module";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   hardeningDisable = [ "pic" "format" ];
   nativeBuildInputs = kernel.moduleBuildDependencies;
 

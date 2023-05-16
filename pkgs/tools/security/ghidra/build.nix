@@ -1,4 +1,9 @@
 { stdenv
+<<<<<<< HEAD
+=======
+, fetchzip
+, fetchurl
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , fetchFromGitHub
 , lib
 , gradle_7
@@ -7,21 +12,37 @@
 , openjdk17
 , unzip
 , makeDesktopItem
+<<<<<<< HEAD
 , icoutils
 , xcbuild
 , protobuf
+=======
+, autoPatchelfHook
+, icoutils
+, xcbuild
+, protobuf3_17
+, libredirect
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 let
   pkg_path = "$out/lib/ghidra";
   pname = "ghidra";
+<<<<<<< HEAD
   version = "10.3.2";
+=======
+  version = "10.2.3";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "NationalSecurityAgency";
     repo = "Ghidra";
     rev = "Ghidra_${version}_build";
+<<<<<<< HEAD
     hash = "sha256-CVnEHtSF3DVTH+8qwUsABJq/lRkg6xulEWU+Q5C9ajo=";
+=======
+    sha256 = "sha256-YhjKRlFlF89H05NsTS69SB108rNiiWijvZZY9fR+Ebc=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   gradle = gradle_7;
@@ -41,6 +62,7 @@ let
     cat >>Ghidra/Debug/Debugger-gadp/build.gradle <<HERE
 protobuf {
   protoc {
+<<<<<<< HEAD
     path = '${protobuf}/bin/protoc'
   }
 }
@@ -49,6 +71,9 @@ HERE
 protobuf {
   protoc {
     path = '${protobuf}/bin/protoc'
+=======
+    path = '${protobuf3_17}/bin/protoc'
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   }
 }
 HERE
@@ -109,10 +134,17 @@ HERE
     '';
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
+<<<<<<< HEAD
     outputHash = "sha256-HveS3f8XHpJqefc4djYmnYfd01H2OBFK5PLNOsHAqlc=";
   };
 
 in stdenv.mkDerivation {
+=======
+    outputHash = "sha256-Z4RS3IzDP8V3SrrwOuX/hTlX7fs3woIhR8GPK/tFAzs=";
+  };
+
+in stdenv.mkDerivation rec {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   inherit pname version src;
 
   nativeBuildInputs = [
@@ -167,14 +199,21 @@ in stdenv.mkDerivation {
   meta = with lib; {
     description = "A software reverse engineering (SRE) suite of tools developed by NSA's Research Directorate in support of the Cybersecurity mission";
     homepage = "https://ghidra-sre.org/";
+<<<<<<< HEAD
     platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
+=======
+    platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-darwin" ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     sourceProvenance = with sourceTypes; [
       fromSource
       binaryBytecode  # deps
     ];
     license = licenses.asl20;
     maintainers = with maintainers; [ roblabla ];
+<<<<<<< HEAD
     broken = stdenv.isDarwin && stdenv.isx86_64;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
 }

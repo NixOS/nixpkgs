@@ -1,13 +1,20 @@
 [
   {
     "name": "fluffychat",
+<<<<<<< HEAD
     "version": "1.13.0+3514",
+=======
+    "version": "1.11.0+3254",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "kind": "root",
     "source": "root",
     "dependencies": [
       "adaptive_dialog",
       "animations",
+<<<<<<< HEAD
       "archive",
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       "badges",
       "blurhash_dart",
       "callkeep",
@@ -30,6 +37,7 @@
       "flutter_blurhash",
       "flutter_cache_manager",
       "flutter_foreground_task",
+<<<<<<< HEAD
       "flutter_highlighter",
       "flutter_html",
       "flutter_html_table",
@@ -38,6 +46,12 @@
       "flutter_localizations",
       "flutter_map",
       "flutter_math_fork",
+=======
+      "flutter_local_notifications",
+      "flutter_localizations",
+      "flutter_map",
+      "flutter_matrix_html",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       "flutter_olm",
       "flutter_openssl_crypto",
       "flutter_ringtone_player",
@@ -57,12 +71,20 @@
       "just_audio_mpv",
       "keyboard_shortcuts",
       "latlong2",
+<<<<<<< HEAD
       "linkify",
       "matrix",
       "matrix_homeserver_recommendations",
       "native_imaging",
       "package_info_plus",
       "pasteboard",
+=======
+      "matrix",
+      "matrix_homeserver_recommendations",
+      "matrix_link_text",
+      "native_imaging",
+      "package_info_plus",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       "path_provider",
       "permission_handler",
       "pin_code_text_field",
@@ -96,6 +118,7 @@
       "integration_test",
       "msix",
       "translations_cleaner",
+<<<<<<< HEAD
       "geolocator_android",
       "wakelock_windows"
     ]
@@ -204,6 +227,14 @@
     "dependencies": []
   },
   {
+=======
+      "ffi",
+      "flutter_secure_storage_windows",
+      "geolocator_android"
+    ]
+  },
+  {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "name": "geolocator_android",
     "version": "1.0.1",
     "kind": "transitive",
@@ -226,6 +257,23 @@
     ]
   },
   {
+<<<<<<< HEAD
+=======
+    "name": "meta",
+    "version": "1.8.0",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": []
+  },
+  {
+    "name": "vector_math",
+    "version": "2.1.4",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": []
+  },
+  {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "name": "plugin_platform_interface",
     "version": "2.1.4",
     "kind": "transitive",
@@ -235,6 +283,75 @@
     ]
   },
   {
+<<<<<<< HEAD
+=======
+    "name": "flutter",
+    "version": "0.0.0",
+    "kind": "direct",
+    "source": "sdk",
+    "dependencies": [
+      "characters",
+      "collection",
+      "js",
+      "material_color_utilities",
+      "meta",
+      "vector_math",
+      "sky_engine"
+    ]
+  },
+  {
+    "name": "sky_engine",
+    "version": "0.0.99",
+    "kind": "transitive",
+    "source": "sdk",
+    "dependencies": []
+  },
+  {
+    "name": "material_color_utilities",
+    "version": "0.2.0",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": []
+  },
+  {
+    "name": "js",
+    "version": "0.6.5",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "meta"
+    ]
+  },
+  {
+    "name": "collection",
+    "version": "1.17.0",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": []
+  },
+  {
+    "name": "characters",
+    "version": "1.2.1",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": []
+  },
+  {
+    "name": "flutter_secure_storage_windows",
+    "version": "1.1.2",
+    "kind": "transitive",
+    "source": "git",
+    "dependencies": []
+  },
+  {
+    "name": "ffi",
+    "version": "2.0.1",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": []
+  },
+  {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "name": "translations_cleaner",
     "version": "0.0.5",
     "kind": "dev",
@@ -246,7 +363,11 @@
   },
   {
     "name": "glob",
+<<<<<<< HEAD
     "version": "2.1.2",
+=======
+    "version": "2.1.1",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "kind": "transitive",
     "source": "hosted",
     "dependencies": [
@@ -268,7 +389,11 @@
   },
   {
     "name": "source_span",
+<<<<<<< HEAD
     "version": "1.10.0",
+=======
+    "version": "1.9.1",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "kind": "transitive",
     "source": "hosted",
     "dependencies": [
@@ -286,7 +411,11 @@
   },
   {
     "name": "path",
+<<<<<<< HEAD
     "version": "1.8.3",
+=======
+    "version": "1.8.2",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "kind": "transitive",
     "source": "hosted",
     "dependencies": []
@@ -303,7 +432,11 @@
   },
   {
     "name": "async",
+<<<<<<< HEAD
     "version": "2.11.0",
+=======
+    "version": "2.10.0",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "kind": "transitive",
     "source": "hosted",
     "dependencies": [
@@ -313,17 +446,29 @@
   },
   {
     "name": "args",
+<<<<<<< HEAD
     "version": "2.4.2",
+=======
+    "version": "2.4.0",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "kind": "transitive",
     "source": "hosted",
     "dependencies": []
   },
   {
     "name": "msix",
+<<<<<<< HEAD
     "version": "3.15.0",
     "kind": "dev",
     "source": "hosted",
     "dependencies": [
+=======
+    "version": "3.7.0",
+    "kind": "dev",
+    "source": "hosted",
+    "dependencies": [
+      "flutter",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       "args",
       "yaml",
       "path",
@@ -337,7 +482,11 @@
   },
   {
     "name": "cli_util",
+<<<<<<< HEAD
     "version": "0.4.0",
+=======
+    "version": "0.3.5",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "kind": "transitive",
     "source": "hosted",
     "dependencies": [
@@ -356,7 +505,11 @@
   },
   {
     "name": "pub_semver",
+<<<<<<< HEAD
     "version": "2.1.4",
+=======
+    "version": "2.1.3",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "kind": "transitive",
     "source": "hosted",
     "dependencies": [
@@ -366,7 +519,11 @@
   },
   {
     "name": "image",
+<<<<<<< HEAD
     "version": "4.0.17",
+=======
+    "version": "3.1.3",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "kind": "transitive",
     "source": "hosted",
     "dependencies": [
@@ -377,7 +534,11 @@
   },
   {
     "name": "xml",
+<<<<<<< HEAD
     "version": "6.3.0",
+=======
+    "version": "5.4.1",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "kind": "transitive",
     "source": "hosted",
     "dependencies": [
@@ -388,7 +549,11 @@
   },
   {
     "name": "petitparser",
+<<<<<<< HEAD
     "version": "5.4.0",
+=======
+    "version": "5.1.0",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "kind": "transitive",
     "source": "hosted",
     "dependencies": [
@@ -397,6 +562,7 @@
   },
   {
     "name": "archive",
+<<<<<<< HEAD
     "version": "3.3.7",
     "kind": "direct",
     "source": "hosted",
@@ -429,6 +595,19 @@
   {
     "name": "convert",
     "version": "3.1.1",
+=======
+    "version": "3.3.2",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "crypto",
+      "path"
+    ]
+  },
+  {
+    "name": "crypto",
+    "version": "3.0.2",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "kind": "transitive",
     "source": "hosted",
     "dependencies": [
@@ -437,7 +616,11 @@
   },
   {
     "name": "typed_data",
+<<<<<<< HEAD
     "version": "1.3.2",
+=======
+    "version": "1.3.1",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "kind": "transitive",
     "source": "hosted",
     "dependencies": [
@@ -445,6 +628,7 @@
     ]
   },
   {
+<<<<<<< HEAD
     "name": "crypto",
     "version": "3.0.3",
     "kind": "transitive",
@@ -456,6 +640,10 @@
   {
     "name": "get_it",
     "version": "7.6.0",
+=======
+    "name": "get_it",
+    "version": "7.2.0",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "kind": "transitive",
     "source": "hosted",
     "dependencies": [
@@ -474,7 +662,11 @@
   },
   {
     "name": "yaml",
+<<<<<<< HEAD
     "version": "3.1.2",
+=======
+    "version": "3.1.1",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "kind": "transitive",
     "source": "hosted",
     "dependencies": [
@@ -494,13 +686,24 @@
       "flutter_test",
       "path",
       "vm_service",
+<<<<<<< HEAD
+=======
+      "archive",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       "async",
       "boolean_selector",
       "characters",
       "clock",
       "collection",
+<<<<<<< HEAD
       "fake_async",
       "file",
+=======
+      "crypto",
+      "fake_async",
+      "file",
+      "js",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       "matcher",
       "material_color_utilities",
       "meta",
@@ -511,17 +714,30 @@
       "sync_http",
       "term_glyph",
       "test_api",
+<<<<<<< HEAD
       "vector_math",
       "web",
+=======
+      "typed_data",
+      "vector_math",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       "webdriver"
     ]
   },
   {
     "name": "webdriver",
+<<<<<<< HEAD
     "version": "3.0.2",
     "kind": "transitive",
     "source": "hosted",
     "dependencies": [
+=======
+    "version": "3.0.1",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "archive",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       "matcher",
       "path",
       "stack_trace",
@@ -546,6 +762,7 @@
   },
   {
     "name": "matcher",
+<<<<<<< HEAD
     "version": "0.12.16",
     "kind": "transitive",
     "source": "hosted",
@@ -555,11 +772,23 @@
       "stack_trace",
       "term_glyph",
       "test_api"
+=======
+    "version": "0.12.13",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "meta",
+      "stack_trace"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     ]
   },
   {
     "name": "test_api",
+<<<<<<< HEAD
     "version": "0.6.0",
+=======
+    "version": "0.4.16",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "kind": "transitive",
     "source": "hosted",
     "dependencies": [
@@ -571,7 +800,12 @@
       "stack_trace",
       "stream_channel",
       "string_scanner",
+<<<<<<< HEAD
       "term_glyph"
+=======
+      "term_glyph",
+      "matcher"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     ]
   },
   {
@@ -612,7 +846,11 @@
   },
   {
     "name": "vm_service",
+<<<<<<< HEAD
     "version": "11.7.1",
+=======
+    "version": "9.4.0",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "kind": "transitive",
     "source": "hosted",
     "dependencies": []
@@ -625,7 +863,10 @@
     "dependencies": [
       "flutter",
       "test_api",
+<<<<<<< HEAD
       "matcher",
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       "path",
       "fake_async",
       "clock",
@@ -635,13 +876,22 @@
       "boolean_selector",
       "characters",
       "collection",
+<<<<<<< HEAD
+=======
+      "js",
+      "matcher",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       "material_color_utilities",
       "meta",
       "source_span",
       "stream_channel",
       "string_scanner",
+<<<<<<< HEAD
       "term_glyph",
       "web"
+=======
+      "term_glyph"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     ]
   },
   {
@@ -658,11 +908,20 @@
       "meta",
       "vm_service",
       "webdriver",
+<<<<<<< HEAD
+=======
+      "archive",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       "async",
       "boolean_selector",
       "characters",
       "clock",
       "collection",
+<<<<<<< HEAD
+=======
+      "crypto",
+      "js",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       "matcher",
       "material_color_utilities",
       "platform",
@@ -674,8 +933,13 @@
       "sync_http",
       "term_glyph",
       "test_api",
+<<<<<<< HEAD
       "vector_math",
       "web"
+=======
+      "typed_data",
+      "vector_math"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     ]
   },
   {
@@ -730,16 +994,26 @@
   },
   {
     "name": "flutter_native_splash",
+<<<<<<< HEAD
     "version": "2.3.1",
+=======
+    "version": "2.2.0+1",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "kind": "dev",
     "source": "hosted",
     "dependencies": [
       "args",
       "flutter",
       "flutter_web_plugins",
+<<<<<<< HEAD
       "js",
       "html",
       "image",
+=======
+      "image",
+      "js",
+      "lint",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       "meta",
       "path",
       "universal_io",
@@ -749,7 +1023,11 @@
   },
   {
     "name": "universal_io",
+<<<<<<< HEAD
     "version": "2.2.2",
+=======
+    "version": "2.2.0",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "kind": "transitive",
     "source": "hosted",
     "dependencies": [
@@ -759,6 +1037,7 @@
     ]
   },
   {
+<<<<<<< HEAD
     "name": "html",
     "version": "0.15.4",
     "kind": "transitive",
@@ -776,6 +1055,13 @@
     "dependencies": [
       "source_span"
     ]
+=======
+    "name": "lint",
+    "version": "1.10.0",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": []
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   },
   {
     "name": "flutter_web_plugins",
@@ -784,17 +1070,29 @@
     "source": "sdk",
     "dependencies": [
       "flutter",
+<<<<<<< HEAD
+=======
+      "js",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       "characters",
       "collection",
       "material_color_utilities",
       "meta",
+<<<<<<< HEAD
       "vector_math",
       "web"
+=======
+      "vector_math"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     ]
   },
   {
     "name": "flutter_lints",
+<<<<<<< HEAD
     "version": "2.0.2",
+=======
+    "version": "2.0.1",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "kind": "dev",
     "source": "hosted",
     "dependencies": [
@@ -803,14 +1101,22 @@
   },
   {
     "name": "lints",
+<<<<<<< HEAD
     "version": "2.1.1",
+=======
+    "version": "2.0.1",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "kind": "transitive",
     "source": "hosted",
     "dependencies": []
   },
   {
     "name": "dart_code_metrics",
+<<<<<<< HEAD
     "version": "5.7.5",
+=======
+    "version": "4.21.3",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "kind": "dev",
     "source": "hosted",
     "dependencies": [
@@ -820,22 +1126,32 @@
       "args",
       "collection",
       "crypto",
+<<<<<<< HEAD
       "dart_code_metrics_presets",
       "file",
       "glob",
       "html",
       "http",
+=======
+      "file",
+      "glob",
+      "html",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       "meta",
       "path",
       "platform",
       "pub_updater",
       "source_span",
+<<<<<<< HEAD
       "uuid",
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       "xml",
       "yaml"
     ]
   },
   {
+<<<<<<< HEAD
     "name": "uuid",
     "version": "3.0.7",
     "kind": "transitive",
@@ -847,18 +1163,30 @@
   {
     "name": "pub_updater",
     "version": "0.3.0",
+=======
+    "name": "pub_updater",
+    "version": "0.2.4",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "kind": "transitive",
     "source": "hosted",
     "dependencies": [
       "http",
       "json_annotation",
+<<<<<<< HEAD
       "process",
       "pub_semver"
+=======
+      "process"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     ]
   },
   {
     "name": "json_annotation",
+<<<<<<< HEAD
     "version": "4.8.1",
+=======
+    "version": "4.8.0",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "kind": "transitive",
     "source": "hosted",
     "dependencies": [
@@ -867,13 +1195,22 @@
   },
   {
     "name": "http",
+<<<<<<< HEAD
     "version": "0.13.6",
+=======
+    "version": "0.13.5",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "kind": "direct",
     "source": "hosted",
     "dependencies": [
       "async",
       "http_parser",
+<<<<<<< HEAD
       "meta"
+=======
+      "meta",
+      "path"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     ]
   },
   {
@@ -889,11 +1226,31 @@
     ]
   },
   {
+<<<<<<< HEAD
     "name": "dart_code_metrics_presets",
     "version": "1.8.0",
     "kind": "transitive",
     "source": "hosted",
     "dependencies": []
+=======
+    "name": "html",
+    "version": "0.15.2",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "csslib",
+      "source_span"
+    ]
+  },
+  {
+    "name": "csslib",
+    "version": "0.17.2",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "source_span"
+    ]
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   },
   {
     "name": "ansicolor",
@@ -917,7 +1274,11 @@
   },
   {
     "name": "dart_style",
+<<<<<<< HEAD
     "version": "2.3.2",
+=======
+    "version": "2.2.5",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "kind": "transitive",
     "source": "hosted",
     "dependencies": [
@@ -930,7 +1291,11 @@
   },
   {
     "name": "analyzer",
+<<<<<<< HEAD
     "version": "5.13.0",
+=======
+    "version": "5.1.0",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "kind": "transitive",
     "source": "hosted",
     "dependencies": [
@@ -950,7 +1315,11 @@
   },
   {
     "name": "watcher",
+<<<<<<< HEAD
     "version": "1.1.0",
+=======
+    "version": "1.0.2",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "kind": "transitive",
     "source": "hosted",
     "dependencies": [
@@ -959,8 +1328,22 @@
     ]
   },
   {
+<<<<<<< HEAD
     "name": "_fe_analyzer_shared",
     "version": "61.0.0",
+=======
+    "name": "convert",
+    "version": "3.1.1",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "typed_data"
+    ]
+  },
+  {
+    "name": "_fe_analyzer_shared",
+    "version": "49.0.0",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "kind": "transitive",
     "source": "hosted",
     "dependencies": [
@@ -969,7 +1352,11 @@
   },
   {
     "name": "webrtc_interface",
+<<<<<<< HEAD
     "version": "1.1.0",
+=======
+    "version": "1.0.11",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "kind": "direct",
     "source": "hosted",
     "dependencies": []
@@ -989,6 +1376,39 @@
     ]
   },
   {
+<<<<<<< HEAD
+=======
+    "name": "wakelock_windows",
+    "version": "0.2.1",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "flutter",
+      "wakelock_platform_interface",
+      "win32"
+    ]
+  },
+  {
+    "name": "win32",
+    "version": "3.1.3",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "ffi"
+    ]
+  },
+  {
+    "name": "wakelock_platform_interface",
+    "version": "0.3.0",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "flutter",
+      "meta"
+    ]
+  },
+  {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "name": "wakelock_web",
     "version": "0.4.0",
     "kind": "transitive",
@@ -1034,7 +1454,11 @@
   },
   {
     "name": "url_launcher",
+<<<<<<< HEAD
     "version": "6.1.12",
+=======
+    "version": "6.1.10",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "kind": "direct",
     "source": "hosted",
     "dependencies": [
@@ -1050,7 +1474,11 @@
   },
   {
     "name": "url_launcher_windows",
+<<<<<<< HEAD
     "version": "3.0.7",
+=======
+    "version": "3.0.5",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "kind": "transitive",
     "source": "hosted",
     "dependencies": [
@@ -1060,7 +1488,11 @@
   },
   {
     "name": "url_launcher_platform_interface",
+<<<<<<< HEAD
     "version": "2.1.3",
+=======
+    "version": "2.1.2",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "kind": "transitive",
     "source": "hosted",
     "dependencies": [
@@ -1070,7 +1502,11 @@
   },
   {
     "name": "url_launcher_web",
+<<<<<<< HEAD
     "version": "2.0.18",
+=======
+    "version": "2.0.16",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "kind": "transitive",
     "source": "hosted",
     "dependencies": [
@@ -1081,7 +1517,11 @@
   },
   {
     "name": "url_launcher_macos",
+<<<<<<< HEAD
     "version": "3.0.5",
+=======
+    "version": "3.0.4",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "kind": "transitive",
     "source": "hosted",
     "dependencies": [
@@ -1091,7 +1531,11 @@
   },
   {
     "name": "url_launcher_linux",
+<<<<<<< HEAD
     "version": "3.0.5",
+=======
+    "version": "3.0.4",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "kind": "transitive",
     "source": "hosted",
     "dependencies": [
@@ -1101,7 +1545,11 @@
   },
   {
     "name": "url_launcher_ios",
+<<<<<<< HEAD
     "version": "6.1.4",
+=======
+    "version": "6.1.3",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "kind": "transitive",
     "source": "hosted",
     "dependencies": [
@@ -1111,7 +1559,11 @@
   },
   {
     "name": "url_launcher_android",
+<<<<<<< HEAD
     "version": "6.0.36",
+=======
+    "version": "6.0.25",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "kind": "transitive",
     "source": "hosted",
     "dependencies": [
@@ -1130,7 +1582,11 @@
   },
   {
     "name": "video_player",
+<<<<<<< HEAD
     "version": "2.7.0",
+=======
+    "version": "2.6.0",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "kind": "direct",
     "source": "hosted",
     "dependencies": [
@@ -1144,7 +1600,11 @@
   },
   {
     "name": "video_player_web",
+<<<<<<< HEAD
     "version": "2.0.16",
+=======
+    "version": "2.0.15",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "kind": "transitive",
     "source": "hosted",
     "dependencies": [
@@ -1165,7 +1625,11 @@
   },
   {
     "name": "video_player_avfoundation",
+<<<<<<< HEAD
     "version": "2.4.6",
+=======
+    "version": "2.4.2",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "kind": "transitive",
     "source": "hosted",
     "dependencies": [
@@ -1175,7 +1639,11 @@
   },
   {
     "name": "video_player_android",
+<<<<<<< HEAD
     "version": "2.4.9",
+=======
+    "version": "2.4.2",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "kind": "transitive",
     "source": "hosted",
     "dependencies": [
@@ -1194,6 +1662,7 @@
   },
   {
     "name": "vibration",
+<<<<<<< HEAD
     "version": "1.8.1",
     "kind": "direct",
     "source": "hosted",
@@ -1237,11 +1706,22 @@
       "flutter",
       "meta",
       "plugin_platform_interface"
+=======
+    "version": "1.7.6",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": [
+      "flutter"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     ]
   },
   {
     "name": "universal_html",
+<<<<<<< HEAD
     "version": "2.2.3",
+=======
+    "version": "2.2.1",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "kind": "direct",
     "source": "hosted",
     "dependencies": [
@@ -1265,7 +1745,11 @@
   },
   {
     "name": "unifiedpush",
+<<<<<<< HEAD
     "version": "5.0.0",
+=======
+    "version": "4.0.3",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "kind": "direct",
     "source": "hosted",
     "dependencies": [
@@ -1277,7 +1761,11 @@
   },
   {
     "name": "unifiedpush_android",
+<<<<<<< HEAD
     "version": "2.1.1",
+=======
+    "version": "1.1.2",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "kind": "transitive",
     "source": "hosted",
     "dependencies": [
@@ -1288,7 +1776,11 @@
   },
   {
     "name": "unifiedpush_platform_interface",
+<<<<<<< HEAD
     "version": "2.0.0",
+=======
+    "version": "1.0.0",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "kind": "transitive",
     "source": "hosted",
     "dependencies": [
@@ -1298,14 +1790,24 @@
   },
   {
     "name": "shared_preferences",
+<<<<<<< HEAD
     "version": "2.2.0",
+=======
+    "version": "2.0.15",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "kind": "direct",
     "source": "hosted",
     "dependencies": [
       "flutter",
       "shared_preferences_android",
+<<<<<<< HEAD
       "shared_preferences_foundation",
       "shared_preferences_linux",
+=======
+      "shared_preferences_ios",
+      "shared_preferences_linux",
+      "shared_preferences_macos",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       "shared_preferences_platform_interface",
       "shared_preferences_web",
       "shared_preferences_windows"
@@ -1313,7 +1815,11 @@
   },
   {
     "name": "shared_preferences_windows",
+<<<<<<< HEAD
     "version": "2.3.0",
+=======
+    "version": "2.1.5",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "kind": "transitive",
     "source": "hosted",
     "dependencies": [
@@ -1327,7 +1833,11 @@
   },
   {
     "name": "shared_preferences_platform_interface",
+<<<<<<< HEAD
     "version": "2.3.0",
+=======
+    "version": "2.1.1",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "kind": "transitive",
     "source": "hosted",
     "dependencies": [
@@ -1337,7 +1847,11 @@
   },
   {
     "name": "path_provider_windows",
+<<<<<<< HEAD
     "version": "2.1.7",
+=======
+    "version": "2.1.5",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "kind": "transitive",
     "source": "hosted",
     "dependencies": [
@@ -1361,7 +1875,11 @@
   },
   {
     "name": "shared_preferences_web",
+<<<<<<< HEAD
     "version": "2.2.0",
+=======
+    "version": "2.0.6",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "kind": "transitive",
     "source": "hosted",
     "dependencies": [
@@ -1371,8 +1889,23 @@
     ]
   },
   {
+<<<<<<< HEAD
     "name": "shared_preferences_linux",
     "version": "2.3.0",
+=======
+    "name": "shared_preferences_macos",
+    "version": "2.0.5",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "flutter",
+      "shared_preferences_platform_interface"
+    ]
+  },
+  {
+    "name": "shared_preferences_linux",
+    "version": "2.1.5",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "kind": "transitive",
     "source": "hosted",
     "dependencies": [
@@ -1386,7 +1919,11 @@
   },
   {
     "name": "path_provider_linux",
+<<<<<<< HEAD
     "version": "2.1.11",
+=======
+    "version": "2.1.10",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "kind": "transitive",
     "source": "hosted",
     "dependencies": [
@@ -1399,7 +1936,11 @@
   },
   {
     "name": "xdg_directories",
+<<<<<<< HEAD
     "version": "1.0.0",
+=======
+    "version": "0.2.0+3",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "kind": "transitive",
     "source": "hosted",
     "dependencies": [
@@ -1409,8 +1950,13 @@
     ]
   },
   {
+<<<<<<< HEAD
     "name": "shared_preferences_foundation",
     "version": "2.3.1",
+=======
+    "name": "shared_preferences_ios",
+    "version": "2.1.1",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "kind": "transitive",
     "source": "hosted",
     "dependencies": [
@@ -1420,7 +1966,11 @@
   },
   {
     "name": "shared_preferences_android",
+<<<<<<< HEAD
     "version": "2.2.0",
+=======
+    "version": "2.0.17",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "kind": "transitive",
     "source": "hosted",
     "dependencies": [
@@ -1488,7 +2038,11 @@
   },
   {
     "name": "share_plus",
+<<<<<<< HEAD
     "version": "7.0.2",
+=======
+    "version": "6.3.1",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "kind": "direct",
     "source": "hosted",
     "dependencies": [
@@ -1509,7 +2063,11 @@
   },
   {
     "name": "share_plus_platform_interface",
+<<<<<<< HEAD
     "version": "3.2.1",
+=======
+    "version": "3.2.0",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "kind": "transitive",
     "source": "hosted",
     "dependencies": [
@@ -1523,8 +2081,22 @@
     ]
   },
   {
+<<<<<<< HEAD
     "name": "path_provider",
     "version": "2.0.15",
+=======
+    "name": "uuid",
+    "version": "3.0.7",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "crypto"
+    ]
+  },
+  {
+    "name": "path_provider",
+    "version": "2.0.13",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "kind": "direct",
     "source": "hosted",
     "dependencies": [
@@ -1538,7 +2110,11 @@
   },
   {
     "name": "path_provider_foundation",
+<<<<<<< HEAD
     "version": "2.2.3",
+=======
+    "version": "2.2.0",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "kind": "transitive",
     "source": "hosted",
     "dependencies": [
@@ -1548,7 +2124,11 @@
   },
   {
     "name": "path_provider_android",
+<<<<<<< HEAD
     "version": "2.0.27",
+=======
+    "version": "2.0.24",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "kind": "transitive",
     "source": "hosted",
     "dependencies": [
@@ -1660,7 +2240,11 @@
   },
   {
     "name": "qr_flutter",
+<<<<<<< HEAD
     "version": "4.1.0",
+=======
+    "version": "4.0.0",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "kind": "direct",
     "source": "hosted",
     "dependencies": [
@@ -1670,7 +2254,11 @@
   },
   {
     "name": "qr",
+<<<<<<< HEAD
     "version": "3.0.1",
+=======
+    "version": "2.1.0",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "kind": "transitive",
     "source": "hosted",
     "dependencies": [
@@ -1726,7 +2314,11 @@
   },
   {
     "name": "permission_handler",
+<<<<<<< HEAD
     "version": "10.4.2",
+=======
+    "version": "10.2.0",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "kind": "direct",
     "source": "hosted",
     "dependencies": [
@@ -1740,7 +2332,11 @@
   },
   {
     "name": "permission_handler_platform_interface",
+<<<<<<< HEAD
     "version": "3.11.1",
+=======
+    "version": "3.9.0",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "kind": "transitive",
     "source": "hosted",
     "dependencies": [
@@ -1751,7 +2347,11 @@
   },
   {
     "name": "permission_handler_windows",
+<<<<<<< HEAD
     "version": "0.1.3",
+=======
+    "version": "0.1.2",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "kind": "transitive",
     "source": "hosted",
     "dependencies": [
@@ -1761,7 +2361,11 @@
   },
   {
     "name": "permission_handler_apple",
+<<<<<<< HEAD
     "version": "9.1.3",
+=======
+    "version": "9.0.7",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "kind": "transitive",
     "source": "hosted",
     "dependencies": [
@@ -1771,7 +2375,11 @@
   },
   {
     "name": "permission_handler_android",
+<<<<<<< HEAD
     "version": "10.3.0",
+=======
+    "version": "10.2.0",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "kind": "transitive",
     "source": "hosted",
     "dependencies": [
@@ -1780,12 +2388,18 @@
     ]
   },
   {
+<<<<<<< HEAD
     "name": "pasteboard",
     "version": "0.2.0",
+=======
+    "name": "package_info_plus",
+    "version": "1.4.3+1",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "kind": "direct",
     "source": "hosted",
     "dependencies": [
       "flutter",
+<<<<<<< HEAD
       "flutter_web_plugins",
       "js"
     ]
@@ -1797,18 +2411,41 @@
     "source": "hosted",
     "dependencies": [
       "ffi",
+=======
+      "package_info_plus_platform_interface",
+      "package_info_plus_linux",
+      "package_info_plus_macos",
+      "package_info_plus_windows",
+      "package_info_plus_web"
+    ]
+  },
+  {
+    "name": "package_info_plus_web",
+    "version": "1.0.6",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       "flutter",
       "flutter_web_plugins",
       "http",
       "meta",
+<<<<<<< HEAD
       "path",
       "package_info_plus_platform_interface",
       "win32"
+=======
+      "package_info_plus_platform_interface"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     ]
   },
   {
     "name": "package_info_plus_platform_interface",
+<<<<<<< HEAD
     "version": "2.0.1",
+=======
+    "version": "1.0.2",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "kind": "transitive",
     "source": "hosted",
     "dependencies": [
@@ -1818,6 +2455,41 @@
     ]
   },
   {
+<<<<<<< HEAD
+=======
+    "name": "package_info_plus_windows",
+    "version": "2.1.0",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "package_info_plus_platform_interface",
+      "ffi",
+      "flutter",
+      "win32"
+    ]
+  },
+  {
+    "name": "package_info_plus_macos",
+    "version": "1.3.0",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "flutter"
+    ]
+  },
+  {
+    "name": "package_info_plus_linux",
+    "version": "1.0.5",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "package_info_plus_platform_interface",
+      "flutter",
+      "path"
+    ]
+  },
+  {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "name": "native_imaging",
     "version": "0.1.0",
     "kind": "direct",
@@ -1828,6 +2500,19 @@
     ]
   },
   {
+<<<<<<< HEAD
+=======
+    "name": "matrix_link_text",
+    "version": "1.0.2",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": [
+      "flutter",
+      "url_launcher"
+    ]
+  },
+  {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "name": "matrix_homeserver_recommendations",
     "version": "0.3.0",
     "kind": "direct",
@@ -1839,7 +2524,11 @@
   },
   {
     "name": "matrix_api_lite",
+<<<<<<< HEAD
     "version": "1.7.1",
+=======
+    "version": "1.1.10",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "kind": "transitive",
     "source": "hosted",
     "dependencies": [
@@ -1857,7 +2546,11 @@
   },
   {
     "name": "matrix",
+<<<<<<< HEAD
     "version": "0.22.2",
+=======
+    "version": "0.18.0",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "kind": "direct",
     "source": "hosted",
     "dependencies": [
@@ -1881,7 +2574,10 @@
       "random_string",
       "sdp_transform",
       "slugify",
+<<<<<<< HEAD
       "typed_data",
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       "webrtc_interface"
     ]
   },
@@ -1939,7 +2635,11 @@
   },
   {
     "name": "canonical_json",
+<<<<<<< HEAD
     "version": "1.1.2",
+=======
+    "version": "1.1.1",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "kind": "transitive",
     "source": "hosted",
     "dependencies": [
@@ -1956,7 +2656,11 @@
   },
   {
     "name": "blurhash_dart",
+<<<<<<< HEAD
     "version": "1.2.1",
+=======
+    "version": "1.1.0",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "kind": "direct",
     "source": "hosted",
     "dependencies": [
@@ -1974,6 +2678,7 @@
     ]
   },
   {
+<<<<<<< HEAD
     "name": "linkify",
     "version": "5.0.0",
     "kind": "direct",
@@ -1983,6 +2688,10 @@
   {
     "name": "latlong2",
     "version": "0.8.2",
+=======
+    "name": "latlong2",
+    "version": "0.8.1",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "kind": "direct",
     "source": "hosted",
     "dependencies": [
@@ -1991,12 +2700,19 @@
   },
   {
     "name": "intl",
+<<<<<<< HEAD
     "version": "0.18.1",
+=======
+    "version": "0.17.0",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "kind": "direct",
     "source": "hosted",
     "dependencies": [
       "clock",
+<<<<<<< HEAD
       "meta",
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       "path"
     ]
   },
@@ -2014,7 +2730,11 @@
   },
   {
     "name": "tuple",
+<<<<<<< HEAD
     "version": "2.0.2",
+=======
+    "version": "2.0.1",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "kind": "transitive",
     "source": "hosted",
     "dependencies": []
@@ -2058,7 +2778,11 @@
   },
   {
     "name": "just_audio_platform_interface",
+<<<<<<< HEAD
     "version": "4.2.1",
+=======
+    "version": "4.2.0",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "kind": "transitive",
     "source": "hosted",
     "dependencies": [
@@ -2068,7 +2792,11 @@
   },
   {
     "name": "just_audio",
+<<<<<<< HEAD
     "version": "0.9.34",
+=======
+    "version": "0.9.31",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "kind": "direct",
     "source": "hosted",
     "dependencies": [
@@ -2094,7 +2822,11 @@
   },
   {
     "name": "audio_session",
+<<<<<<< HEAD
     "version": "0.1.16",
+=======
+    "version": "0.1.13",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "kind": "transitive",
     "source": "hosted",
     "dependencies": [
@@ -2106,7 +2838,11 @@
   },
   {
     "name": "just_audio_web",
+<<<<<<< HEAD
     "version": "0.4.8",
+=======
+    "version": "0.4.7",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "kind": "transitive",
     "source": "hosted",
     "dependencies": [
@@ -2117,7 +2853,11 @@
   },
   {
     "name": "image_picker",
+<<<<<<< HEAD
     "version": "1.0.0",
+=======
+    "version": "0.8.7",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "kind": "direct",
     "source": "hosted",
     "dependencies": [
@@ -2125,6 +2865,7 @@
       "image_picker_android",
       "image_picker_for_web",
       "image_picker_ios",
+<<<<<<< HEAD
       "image_picker_linux",
       "image_picker_macos",
       "image_picker_platform_interface",
@@ -2140,12 +2881,18 @@
       "file_selector_platform_interface",
       "file_selector_windows",
       "flutter",
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       "image_picker_platform_interface"
     ]
   },
   {
     "name": "image_picker_platform_interface",
+<<<<<<< HEAD
     "version": "2.8.0",
+=======
+    "version": "2.6.3",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "kind": "transitive",
     "source": "hosted",
     "dependencies": [
@@ -2156,6 +2903,7 @@
     ]
   },
   {
+<<<<<<< HEAD
     "name": "file_selector_windows",
     "version": "0.9.3",
     "kind": "transitive",
@@ -2227,6 +2975,10 @@
   {
     "name": "image_picker_ios",
     "version": "0.8.8",
+=======
+    "name": "image_picker_ios",
+    "version": "0.8.7+1",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "kind": "transitive",
     "source": "hosted",
     "dependencies": [
@@ -2236,19 +2988,31 @@
   },
   {
     "name": "image_picker_for_web",
+<<<<<<< HEAD
     "version": "2.2.0",
+=======
+    "version": "2.1.12",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "kind": "transitive",
     "source": "hosted",
     "dependencies": [
       "flutter",
       "flutter_web_plugins",
+<<<<<<< HEAD
       "image_picker_platform_interface",
       "mime"
+=======
+      "image_picker_platform_interface"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     ]
   },
   {
     "name": "image_picker_android",
+<<<<<<< HEAD
     "version": "0.8.7+3",
+=======
+    "version": "0.8.6+5",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "kind": "transitive",
     "source": "hosted",
     "dependencies": [
@@ -2259,7 +3023,11 @@
   },
   {
     "name": "flutter_plugin_android_lifecycle",
+<<<<<<< HEAD
     "version": "2.0.15",
+=======
+    "version": "2.0.9",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "kind": "transitive",
     "source": "hosted",
     "dependencies": [
@@ -2280,7 +3048,11 @@
   },
   {
     "name": "handy_window",
+<<<<<<< HEAD
     "version": "0.3.1",
+=======
+    "version": "0.1.9",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "kind": "direct",
     "source": "hosted",
     "dependencies": [
@@ -2332,11 +3104,18 @@
   },
   {
     "name": "flutter_webrtc",
+<<<<<<< HEAD
     "version": "0.9.37",
     "kind": "direct",
     "source": "hosted",
     "dependencies": [
       "collection",
+=======
+    "version": "0.9.24",
+    "kind": "direct",
+    "source": "git",
+    "dependencies": [
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       "dart_webrtc",
       "flutter",
       "path_provider",
@@ -2345,11 +3124,18 @@
   },
   {
     "name": "dart_webrtc",
+<<<<<<< HEAD
     "version": "1.1.1",
     "kind": "transitive",
     "source": "hosted",
     "dependencies": [
       "collection",
+=======
+    "version": "1.0.15",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       "js",
       "platform_detect",
       "webrtc_interface"
@@ -2367,7 +3153,11 @@
   },
   {
     "name": "flutter_web_auth_2",
+<<<<<<< HEAD
     "version": "2.1.5",
+=======
+    "version": "2.1.1",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "kind": "direct",
     "source": "hosted",
     "dependencies": [
@@ -2389,7 +3179,11 @@
   },
   {
     "name": "flutter_web_auth_2_platform_interface",
+<<<<<<< HEAD
     "version": "2.1.4",
+=======
+    "version": "2.1.0",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "kind": "transitive",
     "source": "hosted",
     "dependencies": [
@@ -2399,11 +3193,16 @@
   },
   {
     "name": "flutter_typeahead",
+<<<<<<< HEAD
     "version": "4.6.2",
+=======
+    "version": "4.3.7",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "kind": "direct",
     "source": "hosted",
     "dependencies": [
       "flutter",
+<<<<<<< HEAD
       "flutter_keyboard_visibility",
       "pointer_interceptor"
     ]
@@ -2415,11 +3214,18 @@
     "source": "hosted",
     "dependencies": [
       "flutter"
+=======
+      "flutter_keyboard_visibility"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     ]
   },
   {
     "name": "flutter_keyboard_visibility",
+<<<<<<< HEAD
     "version": "5.4.1",
+=======
+    "version": "5.4.0",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "kind": "transitive",
     "source": "hosted",
     "dependencies": [
@@ -2486,7 +3292,11 @@
   },
   {
     "name": "flutter_secure_storage",
+<<<<<<< HEAD
     "version": "8.0.0",
+=======
+    "version": "7.0.1",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "kind": "direct",
     "source": "hosted",
     "dependencies": [
@@ -2500,6 +3310,7 @@
     ]
   },
   {
+<<<<<<< HEAD
     "name": "flutter_secure_storage_windows",
     "version": "2.0.0",
     "kind": "transitive",
@@ -2520,6 +3331,8 @@
     ]
   },
   {
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "name": "flutter_secure_storage_web",
     "version": "1.1.1",
     "kind": "transitive",
@@ -2532,8 +3345,23 @@
     ]
   },
   {
+<<<<<<< HEAD
     "name": "flutter_secure_storage_macos",
     "version": "3.0.0",
+=======
+    "name": "flutter_secure_storage_platform_interface",
+    "version": "1.0.1",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "flutter",
+      "plugin_platform_interface"
+    ]
+  },
+  {
+    "name": "flutter_secure_storage_macos",
+    "version": "2.0.1",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "kind": "transitive",
     "source": "hosted",
     "dependencies": [
@@ -2580,11 +3408,63 @@
     ]
   },
   {
+<<<<<<< HEAD
     "name": "flutter_math_fork",
     "version": "0.7.1",
     "kind": "direct",
     "source": "hosted",
     "dependencies": [
+=======
+    "name": "flutter_matrix_html",
+    "version": "1.1.0",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": [
+      "html",
+      "flutter",
+      "cached_network_image",
+      "matrix_link_text",
+      "flutter_math_fork",
+      "flutter_highlight",
+      "isolate",
+      "highlight",
+      "crypto",
+      "csslib"
+    ]
+  },
+  {
+    "name": "highlight",
+    "version": "0.7.0",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "collection"
+    ]
+  },
+  {
+    "name": "isolate",
+    "version": "2.1.1",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": []
+  },
+  {
+    "name": "flutter_highlight",
+    "version": "0.7.0",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "flutter",
+      "highlight"
+    ]
+  },
+  {
+    "name": "flutter_math_fork",
+    "version": "0.4.2+2",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       "flutter",
       "flutter_svg",
       "provider",
@@ -2595,11 +3475,16 @@
   },
   {
     "name": "flutter_svg",
+<<<<<<< HEAD
     "version": "2.0.7",
+=======
+    "version": "0.22.0",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "kind": "transitive",
     "source": "hosted",
     "dependencies": [
       "flutter",
+<<<<<<< HEAD
       "vector_graphics",
       "vector_graphics_codec",
       "vector_graphics_compiler"
@@ -2628,6 +3513,29 @@
   {
     "name": "path_parsing",
     "version": "1.0.1",
+=======
+      "meta",
+      "path_drawing",
+      "vector_math",
+      "xml"
+    ]
+  },
+  {
+    "name": "path_drawing",
+    "version": "0.5.1+1",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "vector_math",
+      "meta",
+      "path_parsing",
+      "flutter"
+    ]
+  },
+  {
+    "name": "path_parsing",
+    "version": "0.2.1",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "kind": "transitive",
     "source": "hosted",
     "dependencies": [
@@ -2636,18 +3544,129 @@
     ]
   },
   {
+<<<<<<< HEAD
     "name": "vector_graphics",
     "version": "1.1.7",
+=======
+    "name": "cached_network_image",
+    "version": "3.2.3",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "kind": "transitive",
     "source": "hosted",
     "dependencies": [
       "flutter",
+<<<<<<< HEAD
       "vector_graphics_codec"
+=======
+      "flutter_cache_manager",
+      "octo_image",
+      "cached_network_image_platform_interface",
+      "cached_network_image_web"
+    ]
+  },
+  {
+    "name": "cached_network_image_web",
+    "version": "1.0.2",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "flutter",
+      "flutter_cache_manager",
+      "cached_network_image_platform_interface"
+    ]
+  },
+  {
+    "name": "cached_network_image_platform_interface",
+    "version": "2.0.0",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "flutter",
+      "flutter_cache_manager"
+    ]
+  },
+  {
+    "name": "flutter_cache_manager",
+    "version": "3.3.0",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": [
+      "clock",
+      "collection",
+      "file",
+      "flutter",
+      "http",
+      "path",
+      "path_provider",
+      "pedantic",
+      "rxdart",
+      "sqflite",
+      "uuid"
+    ]
+  },
+  {
+    "name": "sqflite",
+    "version": "2.2.6",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "flutter",
+      "sqflite_common",
+      "path"
+    ]
+  },
+  {
+    "name": "sqflite_common",
+    "version": "2.4.3",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "synchronized",
+      "path",
+      "meta"
+    ]
+  },
+  {
+    "name": "synchronized",
+    "version": "3.0.1",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": []
+  },
+  {
+    "name": "pedantic",
+    "version": "1.11.1",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": []
+  },
+  {
+    "name": "octo_image",
+    "version": "1.0.2",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "flutter",
+      "flutter_blurhash"
+    ]
+  },
+  {
+    "name": "flutter_blurhash",
+    "version": "0.7.0",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": [
+      "flutter"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     ]
   },
   {
     "name": "flutter_map",
+<<<<<<< HEAD
     "version": "4.0.0",
+=======
+    "version": "3.1.0",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "kind": "direct",
     "source": "hosted",
     "dependencies": [
@@ -2658,6 +3677,10 @@
       "latlong2",
       "meta",
       "polylabel",
+<<<<<<< HEAD
+=======
+      "positioned_tap_detector_2",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       "proj4dart",
       "tuple",
       "vector_math"
@@ -2709,6 +3732,18 @@
     ]
   },
   {
+<<<<<<< HEAD
+=======
+    "name": "positioned_tap_detector_2",
+    "version": "1.0.4",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "flutter"
+    ]
+  },
+  {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "name": "polylabel",
     "version": "1.0.1",
     "kind": "transitive",
@@ -2728,16 +3763,28 @@
       "characters",
       "clock",
       "collection",
+<<<<<<< HEAD
       "material_color_utilities",
       "meta",
       "path",
       "vector_math",
       "web"
+=======
+      "js",
+      "material_color_utilities",
+      "meta",
+      "path",
+      "vector_math"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     ]
   },
   {
     "name": "flutter_local_notifications",
+<<<<<<< HEAD
     "version": "15.1.0+1",
+=======
+    "version": "12.0.4",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "kind": "direct",
     "source": "hosted",
     "dependencies": [
@@ -2750,7 +3797,11 @@
   },
   {
     "name": "timezone",
+<<<<<<< HEAD
     "version": "0.9.2",
+=======
+    "version": "0.9.1",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "kind": "transitive",
     "source": "hosted",
     "dependencies": [
@@ -2759,7 +3810,11 @@
   },
   {
     "name": "flutter_local_notifications_platform_interface",
+<<<<<<< HEAD
     "version": "7.0.0+1",
+=======
+    "version": "6.0.0",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "kind": "transitive",
     "source": "hosted",
     "dependencies": [
@@ -2769,6 +3824,7 @@
   },
   {
     "name": "flutter_local_notifications_linux",
+<<<<<<< HEAD
     "version": "4.0.0+1",
     "kind": "transitive",
     "source": "hosted",
@@ -2777,13 +3833,26 @@
       "ffi",
       "flutter",
       "flutter_local_notifications_platform_interface",
+=======
+    "version": "1.0.0",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "flutter",
+      "flutter_local_notifications_platform_interface",
+      "dbus",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       "path",
       "xdg_directories"
     ]
   },
   {
     "name": "dbus",
+<<<<<<< HEAD
     "version": "0.7.8",
+=======
+    "version": "0.7.3",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "kind": "transitive",
     "source": "hosted",
     "dependencies": [
@@ -2794,6 +3863,7 @@
     ]
   },
   {
+<<<<<<< HEAD
     "name": "flutter_linkify",
     "version": "6.0.0",
     "kind": "direct",
@@ -2878,12 +3948,17 @@
   {
     "name": "flutter_foreground_task",
     "version": "6.0.0+1",
+=======
+    "name": "flutter_foreground_task",
+    "version": "3.10.0",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "kind": "direct",
     "source": "hosted",
     "dependencies": [
       "flutter",
       "plugin_platform_interface",
       "platform",
+<<<<<<< HEAD
       "shared_preferences"
     ]
   },
@@ -2941,6 +4016,11 @@
     "source": "hosted",
     "dependencies": [
       "flutter"
+=======
+      "shared_preferences",
+      "shared_preferences_android",
+      "shared_preferences_ios"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     ]
   },
   {
@@ -2963,7 +4043,11 @@
   },
   {
     "name": "file_picker",
+<<<<<<< HEAD
     "version": "5.3.2",
+=======
+    "version": "5.2.6",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "kind": "direct",
     "source": "hosted",
     "dependencies": [
@@ -3006,14 +4090,22 @@
   },
   {
     "name": "remove_emoji",
+<<<<<<< HEAD
     "version": "0.0.9",
+=======
+    "version": "0.0.7",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "kind": "transitive",
     "source": "hosted",
     "dependencies": []
   },
   {
     "name": "emoji_picker_flutter",
+<<<<<<< HEAD
     "version": "1.6.1",
+=======
+    "version": "1.5.2",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "kind": "direct",
     "source": "hosted",
     "dependencies": [
@@ -3025,7 +4117,11 @@
   },
   {
     "name": "dynamic_color",
+<<<<<<< HEAD
     "version": "1.6.6",
+=======
+    "version": "1.6.2",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "kind": "direct",
     "source": "hosted",
     "dependencies": [
@@ -3035,6 +4131,35 @@
     ]
   },
   {
+<<<<<<< HEAD
+=======
+    "name": "device_info_plus",
+    "version": "8.1.0",
+    "kind": "direct",
+    "source": "hosted",
+    "dependencies": [
+      "device_info_plus_platform_interface",
+      "ffi",
+      "file",
+      "flutter",
+      "flutter_web_plugins",
+      "meta",
+      "win32"
+    ]
+  },
+  {
+    "name": "device_info_plus_platform_interface",
+    "version": "7.0.0",
+    "kind": "transitive",
+    "source": "hosted",
+    "dependencies": [
+      "flutter",
+      "meta",
+      "plugin_platform_interface"
+    ]
+  },
+  {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "name": "desktop_notifications",
     "version": "0.6.3",
     "kind": "direct",
@@ -3045,7 +4170,11 @@
   },
   {
     "name": "desktop_lifecycle",
+<<<<<<< HEAD
     "version": "0.1.1",
+=======
+    "version": "0.1.0",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "kind": "direct",
     "source": "hosted",
     "dependencies": [
@@ -3072,7 +4201,11 @@
   },
   {
     "name": "connectivity_plus",
+<<<<<<< HEAD
     "version": "4.0.1",
+=======
+    "version": "3.0.3",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "kind": "direct",
     "source": "hosted",
     "dependencies": [
@@ -3106,7 +4239,11 @@
   },
   {
     "name": "chewie",
+<<<<<<< HEAD
     "version": "1.7.0",
+=======
+    "version": "1.4.0",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "kind": "direct",
     "source": "hosted",
     "dependencies": [
@@ -3114,6 +4251,7 @@
       "flutter",
       "provider",
       "video_player",
+<<<<<<< HEAD
       "wakelock_plus"
     ]
   },
@@ -3142,6 +4280,9 @@
       "flutter",
       "plugin_platform_interface",
       "meta"
+=======
+      "wakelock"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     ]
   },
   {
@@ -3173,7 +4314,11 @@
   },
   {
     "name": "adaptive_dialog",
+<<<<<<< HEAD
     "version": "1.9.0-x-macos-beta.1",
+=======
+    "version": "1.8.2",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "kind": "direct",
     "source": "hosted",
     "dependencies": [
@@ -3188,6 +4333,7 @@
   },
   {
     "name": "macos_ui",
+<<<<<<< HEAD
     "version": "2.0.0-beta.6",
     "kind": "transitive",
     "source": "hosted",
@@ -3199,6 +4345,9 @@
   {
     "name": "macos_window_utils",
     "version": "1.1.3",
+=======
+    "version": "1.12.2",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "kind": "transitive",
     "source": "hosted",
     "dependencies": [

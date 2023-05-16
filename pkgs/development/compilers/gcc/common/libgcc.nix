@@ -1,5 +1,6 @@
 { lib
 , stdenv
+<<<<<<< HEAD
 , version
 , langC
 , langCC
@@ -72,6 +73,20 @@ in
   };
 }))
 
+=======
+, langC
+, langCC
+, langJit
+}:
+
+let
+  enableLibGccOutput =
+    (with stdenv; targetPlatform == hostPlatform) &&
+    !langJit &&
+    !stdenv.hostPlatform.isDarwin &&
+    !stdenv.hostPlatform.isStatic;
+in
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 (pkg: pkg.overrideAttrs (previousAttrs: lib.optionalAttrs ((!langC) || langJit || enableLibGccOutput) {
   outputs = previousAttrs.outputs ++ lib.optionals enableLibGccOutput [ "libgcc" ];
   # This is a separate phase because gcc assembles its phase scripts
@@ -83,10 +98,13 @@ in
     lib.optionalString (!langC) ''
       rm -f $out/lib/libgcc_s.so*
     ''
+<<<<<<< HEAD
     + lib.optionalString (hostPlatform.config != targetPlatform.config) ''
       mkdir -p $lib/lib/
       ln -s ${targetPlatformSlash}lib $lib/lib
     ''
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     # TODO(amjoseph): remove the `libgcc_s.so` symlinks below and replace them
     # with a `-L${gccForLibs.libgcc}/lib` in cc-wrapper's
@@ -99,10 +117,17 @@ in
     + lib.optionalString enableLibGccOutput (''
       # move libgcc from lib to its own output (libgcc)
       mkdir -p $libgcc/lib
+<<<<<<< HEAD
       mv    $lib/${targetPlatformSlash}lib/libgcc_s.so      $libgcc/lib/
       mv    $lib/${targetPlatformSlash}lib/libgcc_s.so.${libgcc_s-version-major}    $libgcc/lib/
       ln -s $libgcc/lib/libgcc_s.so   $lib/${targetPlatformSlash}lib/
       ln -s $libgcc/lib/libgcc_s.so.${libgcc_s-version-major} $lib/${targetPlatformSlash}lib/
+=======
+      mv    $lib/lib/libgcc_s.so      $libgcc/lib/
+      mv    $lib/lib/libgcc_s.so.1    $libgcc/lib/
+      ln -s $libgcc/lib/libgcc_s.so   $lib/lib/
+      ln -s $libgcc/lib/libgcc_s.so.1 $lib/lib/
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     ''
     #
     # Nixpkgs ordinarily turns dynamic linking into pseudo-static linking:
@@ -159,6 +184,12 @@ in
     #    another eliminates the ability to make these queries.
     #
     + ''
+<<<<<<< HEAD
       patchelf --set-rpath "" $libgcc/lib/libgcc_s.so.${libgcc_s-version-major}
     '');
 }))]))
+=======
+      patchelf --set-rpath "" $libgcc/lib/libgcc_s.so.1
+    '');
+}))
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)

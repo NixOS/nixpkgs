@@ -18,7 +18,10 @@
 , pyturbojpeg
 , tifffile
 , lmdb
+<<<<<<< HEAD
 , mmengine
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , symlinkJoin
 }:
 
@@ -49,16 +52,27 @@ let
 in
 buildPythonPackage rec {
   pname = "mmcv";
+<<<<<<< HEAD
   version = "2.0.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
+=======
+  version = "1.7.1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "open-mmlab";
     repo = pname;
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-36PcvoB0bM0VoNb2psURYFo3krmgHG47OufU6PVjHyw=";
+=======
+    hash = "sha256-b4MLBPNRCcPq1osUvqo71PCWVX7lOjAH+dXttd4ZapU";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   preConfigure = ''
@@ -101,7 +115,10 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pytestCheckHook torchvision lmdb onnx onnxruntime scipy pyturbojpeg tifffile ];
 
   propagatedBuildInputs = [
+<<<<<<< HEAD
     mmengine
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     torch
     opencv4
     yapf

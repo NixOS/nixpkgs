@@ -1,25 +1,40 @@
+<<<<<<< HEAD
 { lib
 , buildPythonPackage
 , fetchFromGitHub
 , fetchpatch
+=======
+{ stdenv
+, lib
+, buildPythonPackage
+, fetchFromGitHub
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , python-dateutil
 , celery
 , redis
 , tenacity
 , pytestCheckHook
+<<<<<<< HEAD
 , pytz
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , fakeredis
 , mock
 }:
 
 buildPythonPackage rec {
   pname = "celery-redbeat";
+<<<<<<< HEAD
   version = "2.1.0";
+=======
+  version = "2.0.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "sibson";
     repo = "redbeat";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-WW/OYa7TWEKkata1eULir29wHaCnavBJebn4GrBzmWY=";
   };
 
@@ -34,15 +49,29 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     celery
     python-dateutil
+=======
+    hash = "sha256-pu4umhfNFZ30bQu5PcT2LYN4WGzFj4p4/qHm3pVIV+c=";
+  };
+
+  propagatedBuildInputs = [
+    python-dateutil
+    celery
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     redis
     tenacity
   ];
 
   nativeCheckInputs = [
+<<<<<<< HEAD
     fakeredis
     mock
     pytestCheckHook
     pytz
+=======
+    pytestCheckHook
+    fakeredis
+    mock
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   pythonImportsCheck = [ "redbeat" ];

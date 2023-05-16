@@ -21,7 +21,11 @@
 
 buildPythonPackage rec {
   pname = "fastapi";
+<<<<<<< HEAD
   version = "0.95.2";
+=======
+  version = "0.95.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -30,7 +34,11 @@ buildPythonPackage rec {
     owner = "tiangolo";
     repo = pname;
     rev = "refs/tags/${version}";
+<<<<<<< HEAD
     hash = "sha256-wD39CqUZOgwpG/NEGz/pXgQsadzUoM/elxfEXthOlHo=";
+=======
+    hash = "sha256-y6mP2w2d2oabM9bLtWRO/AdRA46LNhVrMB/0qxGxH7I=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

@@ -14,6 +14,11 @@
 , qtlocation
 , qtsensors
 , qttools
+<<<<<<< HEAD
+=======
+, qttranslations
+, substituteAll
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , zlib
 }:
 
@@ -29,6 +34,14 @@ mkDerivation rec {
   };
 
   patches = [
+<<<<<<< HEAD
+=======
+    # https://github.com/NixOS/nixpkgs/issues/86054
+    (substituteAll {
+      src = ./fix-qttranslations-path.diff;
+      inherit qttranslations;
+    })
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     # https://github.com/OpenOrienteering/mapper/pull/1907
     (fetchpatch {
       url = "https://github.com/OpenOrienteering/mapper/commit/bc52aa567e90a58d6963b44d5ae1909f3f841508.patch";

@@ -8,12 +8,17 @@
 
 buildGoModule rec {
   pname = "opentelemetry-collector-contrib";
+<<<<<<< HEAD
   version = "0.78.0";
+=======
+  version = "0.76.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "open-telemetry";
     repo = "opentelemetry-collector-contrib";
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-5oTXPQU1aT8Xm1bTjbnauBUqzBqBH+yBzC1tmLHA0v0=";
   };
   # proxy vendor to avoid hash missmatches between linux and macOS
@@ -27,6 +32,20 @@ buildGoModule rec {
   # additionally dependencies have had issues when GCO was enabled that weren't caught upstream
   # https://github.com/open-telemetry/opentelemetry-collector/blob/main/CONTRIBUTING.md#using-cgo
   CGO_ENABLED = 0;
+=======
+    sha256 = "sha256-Aeiq9IJReUxJUpeq5mSReK5foC5aY4fMSZli0ZUjYPc=";
+  };
+  # proxy vendor to avoid hash missmatches between linux and macOS
+  proxyVendor = true;
+  vendorSha256 = "sha256-vLbx/qmSZuteuvChnyA/wcEcIjU3zWkxSjfk8VBdgU4=";
+
+  # there is a nested go.mod
+  sourceRoot = "source/cmd/otelcontribcol";
+
+  # CGO_ENABLED=0 required for mac - "error: 'TARGET_OS_MAC' is not defined, evaluates to 0"
+  # https://github.com/shirou/gopsutil/issues/976
+  CGO_ENABLED = if stdenv.isLinux then 1 else 0;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   # journalctl is required in-$PATH for the journald receiver tests.
   nativeCheckInputs = lib.optionals stdenv.isLinux [ systemdMinimal ];

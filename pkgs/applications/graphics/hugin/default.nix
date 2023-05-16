@@ -2,7 +2,10 @@
 , stdenv
 , cmake
 , fetchurl
+<<<<<<< HEAD
 , fetchpatch
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , gnumake
 , makeWrapper
 , pkg-config
@@ -42,6 +45,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://sourceforge/hugin/hugin-${version}.tar.bz2";
+<<<<<<< HEAD
     hash = "sha256-l8hWKgupp0PguVWkPf3gSLHGDNnl8u4rad4agWRuBac=";
   };
 
@@ -53,6 +57,11 @@ stdenv.mkDerivation rec {
     })
   ];
 
+=======
+    sha256 = "sha256-l8hWKgupp0PguVWkPf3gSLHGDNnl8u4rad4agWRuBac=";
+  };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   buildInputs = [
     boost
     cairo

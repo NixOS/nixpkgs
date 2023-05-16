@@ -23,7 +23,11 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/wadahiro/keycloak-discord";
     description = "Keycloak Social Login extension for Discord";
+<<<<<<< HEAD
     license = licenses.asl20;
+=======
+    license = licenses.apsl20;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     maintainers = with maintainers; [ mkg20001 ];
   };
 }

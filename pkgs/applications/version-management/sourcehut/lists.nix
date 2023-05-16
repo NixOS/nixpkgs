@@ -27,7 +27,11 @@ buildPythonPackage rec {
     inherit src version;
     pname = "listssrht-api";
     modRoot = "api";
+<<<<<<< HEAD
     vendorHash = "sha256-xnmMkRSokbhWD+kz0XQ9AinYdm6/50FRBISURPvlzD0=";
+=======
+    vendorSha256 = "sha256-xnmMkRSokbhWD+kz0XQ9AinYdm6/50FRBISURPvlzD0=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   } // import ./fix-gqlgen-trimpath.nix { inherit unzip; });
 
   postPatch = ''

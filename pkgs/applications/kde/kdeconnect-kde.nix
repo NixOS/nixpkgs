@@ -8,7 +8,10 @@
 , kiconthemes
 , kio
 , kirigami2
+<<<<<<< HEAD
 , kirigami-addons
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , knotifications
 , kpeople
 , kpeoplevcard
@@ -44,7 +47,10 @@ mkDerivation {
     kiconthemes
     kio
     kirigami2
+<<<<<<< HEAD
     kirigami-addons
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     knotifications
     kpeople
     kpeoplevcard
@@ -78,6 +84,9 @@ mkDerivation {
     homepage = "https://community.kde.org/KDEConnect";
     license = with licenses; [ gpl2 ];
     maintainers = with maintainers; [ fridh ];
+<<<<<<< HEAD
     mainProgram = "kdeconnect-app";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

@@ -38,7 +38,11 @@ buildPythonPackage rec {
     description = "Sequential model-based optimization toolbox";
     homepage = "https://scikit-optimize.github.io/";
     license = licenses.bsd3;
+<<<<<<< HEAD
     maintainers = [ ];
     broken = true; # It will fix by https://github.com/scikit-optimize/scikit-optimize/pull/1123
+=======
+    maintainers = [ maintainers.costrouc ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

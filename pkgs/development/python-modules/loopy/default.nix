@@ -50,6 +50,10 @@ buildPythonPackage rec {
     description = "A code generator for array-based code on CPUs and GPUs";
     homepage = "https://github.com/inducer/loopy";
     license = licenses.mit;
+<<<<<<< HEAD
     maintainers = with maintainers; [ ];
+=======
+    maintainers = with maintainers; [ costrouc ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

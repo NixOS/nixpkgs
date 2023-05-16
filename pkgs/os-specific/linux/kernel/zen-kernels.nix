@@ -1,19 +1,35 @@
+<<<<<<< HEAD
 { lib, stdenv, fetchFromGitHub, buildLinux, ... } @ args:
+=======
+{ lib, fetchFromGitHub, buildLinux, ... } @ args:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 let
   # comments with variant added for update script
   # ./update-zen.py zen
   zenVariant = {
+<<<<<<< HEAD
     version = "6.5.2"; #zen
     suffix = "zen1"; #zen
     sha256 = "0rvf07i80cfrlpd7mfbba6dhzznh47zjw1pmiw04104z9lm84faq"; #zen
+=======
+    version = "6.3.1"; #zen
+    suffix = "zen1"; #zen
+    sha256 = "1m3jvgvqycig8ls4dgqglz8f0hphc0dmvi0v98xdcxqclkhz87nj"; #zen
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     isLqx = false;
   };
   # ./update-zen.py lqx
   lqxVariant = {
+<<<<<<< HEAD
     version = "6.4.14"; #lqx
     suffix = "lqx1"; #lqx
     sha256 = "1f85g081ijv2f1yclnhyci69ad8n1amcv9ccg3ma6mkf1n3qw6kk"; #lqx
+=======
+    version = "6.2.14"; #lqx
+    suffix = "lqx1"; #lqx
+    sha256 = "18c95lal9f2hak49rw888sc454pj7bmh1wnphlwb7sp8j944g8cf"; #lqx
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     isLqx = true;
   };
   zenKernelsFor = { version, suffix, sha256, isLqx }: buildLinux (args // {
@@ -28,6 +44,7 @@ let
       inherit sha256;
     };
 
+<<<<<<< HEAD
     # This is based on the following sources:
     # - zen: https://gitlab.archlinux.org/archlinux/packaging/packages/linux-zen/-/blob/main/config
     # - lqx: https://github.com/damentz/liquorix-package/blob/6.4/master/linux-liquorix/debian/config/kernelarch-x86/config-arch-64
@@ -98,14 +115,22 @@ let
       MLX5_CORE = no;
     };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     passthru.updateScript = [ ./update-zen.py (if isLqx then "lqx" else "zen") ];
 
     extraMeta = {
       branch = lib.versions.majorMinor version + "/master";
+<<<<<<< HEAD
       maintainers = with lib.maintainers; [ thiagokokada ];
       description = "Built using the best configuration and kernel sources for desktop, multimedia, and gaming workloads." +
         lib.optionalString isLqx " (Same as linux_zen, but less aggressive release schedule and additional extra config)";
       broken = stdenv.isAarch64;
+=======
+      maintainers = with lib.maintainers; [ ];
+      description = "Built using the best configuration and kernel sources for desktop, multimedia, and gaming workloads." +
+        lib.optionalString isLqx " (Same as linux_zen but less aggressive release schedule)";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
 
   } // (args.argsOverride or { }));

@@ -9,7 +9,11 @@
 
 buildPythonPackage rec {
   pname = "pysmartthings";
+<<<<<<< HEAD
   version = "0.7.8";
+=======
+  version = "0.7.7";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -18,7 +22,11 @@ buildPythonPackage rec {
     owner = "andrewsayre";
     repo = pname;
     rev = version;
+<<<<<<< HEAD
     hash = "sha256-r+f2+vEXJdQGDlbs/MhraFgEmsAf32PU282blLRLjzc=";
+=======
+    hash = "sha256-AzAiMn88tRRPwMpwSnKoS1XUERHbKz0sVm/TjcbTsGs=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [

@@ -7,13 +7,21 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rapidfuzz-cpp";
+<<<<<<< HEAD
   version = "2.0.0";
+=======
+  version = "1.11.3";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "maxbachmann";
     repo = "rapidfuzz-cpp";
     rev = "v${finalAttrs.version}";
+<<<<<<< HEAD
     hash = "sha256-gLiITRCxX3nkzrlvU1/ZPxEo2v7q79/MwrnURUjrY28=";
+=======
+    hash = "sha256-Qqdw5dy+JUBSDpbWEh3Ap3+3h+CcNdfBL+rloRzWGEQ=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

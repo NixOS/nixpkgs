@@ -1,12 +1,23 @@
 { config, pkgs, lib, ... }:
+<<<<<<< HEAD
 let
   inherit (lib) mkOption types mdDoc mkIf;
+=======
+
+with lib;
+
+let
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   cfg = config.services.atuin;
 in
 {
   options = {
     services.atuin = {
+<<<<<<< HEAD
       enable = lib.mkEnableOption (mdDoc "Atuin server for shell history sync");
+=======
+      enable = mkEnableOption (mdDoc "Enable server for shell history sync with atuin");
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
       openRegistration = mkOption {
         type = types.bool;
@@ -44,6 +55,7 @@ in
         description = mdDoc "Open ports in the firewall for the atuin server.";
       };
 
+<<<<<<< HEAD
       database = {
         createLocally = mkOption {
           type = types.bool;
@@ -58,10 +70,13 @@ in
           description = mdDoc "URI to the database";
         };
       };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
   };
 
   config = mkIf cfg.enable {
+<<<<<<< HEAD
     assertions = [
       {
         assertion = cfg.database.createLocally -> config.services.postgresql.enable;
@@ -70,6 +85,11 @@ in
     ];
 
     services.postgresql = mkIf cfg.database.createLocally {
+=======
+
+    # enable postgres to host atuin db
+    services.postgresql = {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       enable = true;
       ensureUsers = [{
         name = "atuin";
@@ -82,8 +102,12 @@ in
 
     systemd.services.atuin = {
       description = "atuin server";
+<<<<<<< HEAD
       requires = lib.optionals cfg.database.createLocally [ "postgresql.service" ];
       after = [ "network.target" ] ++ lib.optionals cfg.database.createLocally [ "postgresql.service" ];
+=======
+      after = [ "network.target" "postgresql.service" ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       wantedBy = [ "multi-user.target" ];
 
       serviceConfig = {
@@ -91,6 +115,7 @@ in
         RuntimeDirectory = "atuin";
         RuntimeDirectoryMode = "0700";
         DynamicUser = true;
+<<<<<<< HEAD
 
         # Hardening
         CapabilityBoundingSet = "";
@@ -127,19 +152,30 @@ in
           "~@privileged"
         ];
         UMask = "0077";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       };
 
       environment = {
         ATUIN_HOST = cfg.host;
         ATUIN_PORT = toString cfg.port;
         ATUIN_MAX_HISTORY_LENGTH = toString cfg.maxHistoryLength;
+<<<<<<< HEAD
         ATUIN_OPEN_REGISTRATION = lib.boolToString cfg.openRegistration;
         ATUIN_DB_URI = cfg.database.uri;
+=======
+        ATUIN_OPEN_REGISTRATION = boolToString cfg.openRegistration;
+        ATUIN_DB_URI = "postgresql:///atuin";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         ATUIN_PATH = cfg.path;
         ATUIN_CONFIG_DIR = "/run/atuin"; # required to start, but not used as configuration is via environment variables
       };
     };
 
     networking.firewall.allowedTCPPorts = mkIf cfg.openFirewall [ cfg.port ];
+<<<<<<< HEAD
+=======
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

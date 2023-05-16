@@ -24,7 +24,11 @@ buildGoModule rec {
   pname = "distrobuilder";
   version = "2.1";
 
+<<<<<<< HEAD
   vendorHash = "sha256-yRMsf8KfpNmVUX4Rn4ZPLUPFZCT/g78MKAfgbFDPVkE=";
+=======
+  vendorSha256 = "sha256-yRMsf8KfpNmVUX4Rn4ZPLUPFZCT/g78MKAfgbFDPVkE=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "lxc";
@@ -38,7 +42,11 @@ buildGoModule rec {
 
   patches = [
     # go.mod update: needed to to include a newer lxd which contains
+<<<<<<< HEAD
     # https://github.com/canonical/lxd/commit/d83f061a21f509d42b7a334b97403d2a019a7b52
+=======
+    # https://github.com/lxc/lxd/commit/d83f061a21f509d42b7a334b97403d2a019a7b52
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     # which is needed to fix the build w/glibc-2.36.
     (fetchpatch {
       url = "https://github.com/lxc/distrobuilder/commit/5346bcc77dd7f141a36a8da851f016d0b929835e.patch";

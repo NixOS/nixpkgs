@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 { lib, stdenv, fetchurl, pkg-config, libbsd, microsoft-gsl }:
+=======
+{ lib, stdenv, fetchurl, pkg-config, libbsd, microsoft_gsl }:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 stdenv.mkDerivation rec {
   pname = "iqueue";
@@ -10,7 +14,11 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
   nativeBuildInputs = [ pkg-config ];
+<<<<<<< HEAD
   buildInputs = [ libbsd microsoft-gsl ];
+=======
+  buildInputs = [ libbsd microsoft_gsl ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   env.NIX_CFLAGS_COMPILE = toString [
     # Needed with GCC 12

@@ -6,11 +6,19 @@
 
 stdenv.mkDerivation rec {
   pname = "e2fsprogs";
+<<<<<<< HEAD
   version = "1.47.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/${pname}/${pname}-${version}.tar.gz";
     hash = "sha256-Zmev3lbu8MavJmhJdEAOTSKI6knpRBv15iKRldUaNXg=";
+=======
+  version = "1.46.6";
+
+  src = fetchurl {
+    url = "mirror://sourceforge/${pname}/${pname}-${version}.tar.gz";
+    hash = "sha256-vy/MfuUXj+c6MFf34qo/5S6Yt7tGFQnGewIboA+Uxvc=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   # fuse2fs adds 14mb of dependencies
@@ -29,6 +37,7 @@ stdenv.mkDerivation rec {
       excludes = [ "lib/ext2fs/hashmap.h" ];
       extraPrefix = "";
     })
+<<<<<<< HEAD
     # Avoid trouble with older systems like NixOS 23.05.
     # TODO: most likely drop this at some point, e.g. when 23.05 loses support.
     (fetchurl {
@@ -36,6 +45,8 @@ stdenv.mkDerivation rec {
       url = "https://git.kernel.org/pub/scm/fs/ext2/e2fsprogs.git/plain/debian/patches/disable-metadata_csum_seed-and-orphan_file-by-default?h=debian/master&id=3fb3d18baba90e5d48d94f4c0b79b2d271b0c913";
       hash = "sha256-YD11K4s2bqv0rvzrxtaiodzLp3ztULlOlPUf1XcpxRY=";
     })
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   configureFlags =

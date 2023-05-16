@@ -2,26 +2,40 @@
 , stdenv
 , buildPythonPackage
 , fetchFromGitHub
+<<<<<<< HEAD
 , fetchpatch
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , pytest-asyncio
 , pytest-timeout
 , pytestCheckHook
 , pythonOlder
+<<<<<<< HEAD
 , setuptools
 , wheel
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 buildPythonPackage rec {
   pname = "pypck";
+<<<<<<< HEAD
   version = "0.7.17";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
+=======
+  version = "0.7.16";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.8";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "alengwenus";
     repo = pname;
     rev = "refs/tags/${version}";
+<<<<<<< HEAD
     hash = "sha256-Vlt4+fRULb9mB0ceRmc7MJ50DnF9DAJPHA8iCbNVvcE=";
   };
 
@@ -39,6 +53,11 @@ buildPythonPackage rec {
     wheel
   ];
 
+=======
+    hash = "sha256-OcXMVgG62JUH28BGvfO/rpnC++/klhBLJ2HafDu9R40=";
+  };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nativeCheckInputs = [
     pytest-asyncio
     pytest-timeout

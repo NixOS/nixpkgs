@@ -19,8 +19,13 @@ let
     welcometext="${cfg.welcometext}"
     port=${toString cfg.port}
 
+<<<<<<< HEAD
     ${optionalString (cfg.hostName != "") "host=${cfg.hostName}"}
     ${optionalString (cfg.password != "") "serverpassword=${cfg.password}"}
+=======
+    ${if cfg.hostName == "" then "" else "host="+cfg.hostName}
+    ${if cfg.password == "" then "" else "serverpassword="+cfg.password}
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     bandwidth=${toString cfg.bandwidth}
     users=${toString cfg.users}
@@ -32,6 +37,7 @@ let
     bonjour=${boolToString cfg.bonjour}
     sendversion=${boolToString cfg.sendVersion}
 
+<<<<<<< HEAD
     ${optionalString (cfg.registerName != "") "registerName=${cfg.registerName}"}
     ${optionalString (cfg.registerPassword == "") "registerPassword=${cfg.registerPassword}"}
     ${optionalString (cfg.registerUrl != "") "registerUrl=${cfg.registerUrl}"}
@@ -43,6 +49,19 @@ let
     ${optionalString (cfg.sslCa != "") "sslCA=${cfg.sslCa}"}
 
     ${optionalString (cfg.dbus != null) "dbus=${cfg.dbus}"}
+=======
+    ${if cfg.registerName     == "" then "" else "registerName="+cfg.registerName}
+    ${if cfg.registerPassword == "" then "" else "registerPassword="+cfg.registerPassword}
+    ${if cfg.registerUrl      == "" then "" else "registerUrl="+cfg.registerUrl}
+    ${if cfg.registerHostname == "" then "" else "registerHostname="+cfg.registerHostname}
+
+    certrequired=${boolToString cfg.clientCertRequired}
+    ${if cfg.sslCert == "" then "" else "sslCert="+cfg.sslCert}
+    ${if cfg.sslKey  == "" then "" else "sslKey="+cfg.sslKey}
+    ${if cfg.sslCa   == "" then "" else "sslCA="+cfg.sslCa}
+
+    ${lib.optionalString (cfg.dbus != null) "dbus=${cfg.dbus}"}
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     ${cfg.extraConfig}
   '';
@@ -313,7 +332,11 @@ in
     systemd.services.murmur = {
       description = "Murmur Chat Service";
       wantedBy    = [ "multi-user.target" ];
+<<<<<<< HEAD
       after       = [ "network.target" ];
+=======
+      after       = [ "network-online.target" ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       preStart    = ''
         ${pkgs.envsubst}/bin/envsubst \
           -o /run/murmur/murmurd.ini \
@@ -355,6 +378,7 @@ in
       '';
       destination = "/share/dbus-1/system.d/murmur.conf";
     })];
+<<<<<<< HEAD
 
     security.apparmor.policies."bin.mumble-server".profile = ''
       include <tunables/global>
@@ -387,5 +411,7 @@ in
       '' + ''
       }
     '';
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

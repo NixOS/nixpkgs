@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 { stdenv, fetchurl, lib, fetchpatch
+=======
+{ stdenv, fetchurl, lib
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , pandoc, pkg-config, makeWrapper, curl, openssl, tpm2-tss, libuuid
 , abrmdSupport ? true, tpm2-abrmd ? null }:
 
@@ -11,6 +15,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-H9tJxzBTe/2u0IiISIGmHjv9Eh6VfsC9zu7AJhI2wSM=";
   };
 
+<<<<<<< HEAD
   patches = [
     # https://github.com/tpm2-software/tpm2-tools/pull/3271
     (fetchpatch {
@@ -19,6 +24,8 @@ stdenv.mkDerivation rec {
     })
   ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nativeBuildInputs = [ pandoc pkg-config makeWrapper ];
   buildInputs = [
     curl openssl tpm2-tss libuuid

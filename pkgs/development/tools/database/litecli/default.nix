@@ -1,6 +1,9 @@
 { lib
 , python3Packages
+<<<<<<< HEAD
 , fetchPypi
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -8,7 +11,11 @@ python3Packages.buildPythonApplication rec {
   version = "1.9.0";
   disabled = python3Packages.pythonOlder "3.4";
 
+<<<<<<< HEAD
   src = fetchPypi {
+=======
+  src = python3Packages.fetchPypi {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     inherit pname version;
     sha256 = "sha256-Ia8s+gg91N8ePMqiohFxKbXxchJ1b1luoJDilndsJ6E=";
   };

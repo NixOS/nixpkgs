@@ -1,21 +1,44 @@
 { lib
 , stdenv
 , fetchurl
+<<<<<<< HEAD
+=======
+, fetchpatch
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , ncurses
 , pcre2
 }:
 
 stdenv.mkDerivation rec {
   pname = "less";
+<<<<<<< HEAD
   version = "633";
+=======
+  version = "608";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   # Only tarballs on the website are valid releases,
   # other versions, e.g. git tags are considered snapshots.
   src = fetchurl {
     url = "https://www.greenwoodsoftware.com/less/less-${version}.tar.gz";
+<<<<<<< HEAD
     hash = "sha256-LyAdZLgouIrzbf5s/bo+CBns4uRG6+YiSBMgmq7+0E8=";
   };
 
+=======
+    hash = "sha256-ppq+LgoSZ3fgIdO3OqMiLhsmHxDmRiTUHsB5aFpqwgk=";
+  };
+
+  patches = [
+    (fetchpatch {
+      # https://github.com/advisories/GHSA-5xw7-xf7p-gm82
+      name = "CVE-2022-46663.patch";
+      url = "https://github.com/gwsw/less/commit/a78e1351113cef564d790a730d657a321624d79c.patch";
+      hash = "sha256-gWgCzoMt1WyVJVKYzkMq8HfaTlU1XUtC8fvNFUQT0sI=";
+    })
+  ];
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   configureFlags = [
     # Look for ‘sysless’ in /etc.
     "--sysconfdir=/etc"

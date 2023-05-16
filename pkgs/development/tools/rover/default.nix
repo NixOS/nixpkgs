@@ -9,16 +9,27 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rover";
+<<<<<<< HEAD
   version = "0.14.0";
+=======
+  version = "0.11.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "apollographql";
     repo = pname;
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-fVgo5Ds/VK0kBpF+F2FdMvBnQj2IB+B5ToOK8ONdq6c=";
   };
 
   cargoSha256 = "sha256-fNqnpLNENLJEhbqxLFUqyjAf8tEPCLoGSRV91gOY9LI=";
+=======
+    sha256 = "sha256-Ei6EeM0+b3EsMoRo38nHO79onT9Oq/cfbiCZhyDYQrc=";
+  };
+
+  cargoSha256 = "sha256-+iDU8LPb7P4MNQ8MB5ldbWq4wWRcnbgOmSZ93Z//5O0=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   buildInputs = lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.Security

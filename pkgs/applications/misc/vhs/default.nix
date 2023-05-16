@@ -2,16 +2,27 @@
 
 buildGoModule rec {
   pname = "vhs";
+<<<<<<< HEAD
   version = "0.6.0";
+=======
+  version = "0.4.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "charmbracelet";
     repo = pname;
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-JKhijruaRjdMEbsIrcu2swSCb/nTxwIG/F9c2eGncnQ=";
   };
 
   vendorHash = "sha256-IpybcyW4up9QVV7fJCh+2Lrpi571tfravN17vh/G1bQ=";
+=======
+    hash = "sha256-qtewd4sm3urFwoDkqdUHfr2SvJRR1nVLLE5d28BocYg=";
+  };
+
+  vendorHash = "sha256-s1ISU7VEH9o7SBF3Vy+2kVZNxOFUYLmh/le5vU8rOqg=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nativeBuildInputs = [ installShellFiles makeWrapper ];
 

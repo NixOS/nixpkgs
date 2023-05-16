@@ -1,5 +1,8 @@
 { stdenv, lib, fetchFromGitHub, autoconf, automake, libtool, makeWrapper
+<<<<<<< HEAD
 , fetchpatch
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , pkg-config, cmake, yasm, python3Packages
 , libxcrypt, libgcrypt, libgpg-error, libunistring
 , boost, avahi, lame
@@ -39,15 +42,24 @@ assert usbSupport -> !udevSupport; # libusb-compat-0_1 won't be used if udev is 
 assert gbmSupport || waylandSupport || x11Support;
 
 let
+<<<<<<< HEAD
   kodiReleaseDate = "20230629";
   kodiVersion = "20.2";
+=======
+  kodiReleaseDate = "20230312";
+  kodiVersion = "20.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   rel = "Nexus";
 
   kodi_src = fetchFromGitHub {
     owner = "xbmc";
     repo = "xbmc";
     rev = "${kodiVersion}-${rel}";
+<<<<<<< HEAD
     hash = "sha256-nNdBjqY9gkpv3g/hcyjWPENHFwOlxrKs2cT4IvRPuXs=";
+=======
+    hash = "sha256-2nwjW0MYrMVk+dllrAv9yn+YNA6/loZzoK8mbFIZ8Xs=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   # see https://github.com/xbmc/xbmc/blob/${kodiVersion}-${rel}/tools/depends/target/ to get suggested versions for all dependencies
@@ -111,6 +123,7 @@ in stdenv.mkDerivation {
     version = kodiVersion;
 
     src = kodi_src;
+<<<<<<< HEAD
     patches = [
       # Fix compatiblity with fmt 10.0 (from spdlog).
       # Remove with the next release: https://github.com/xbmc/xbmc/pull/23453
@@ -120,6 +133,9 @@ in stdenv.mkDerivation {
         hash = "sha256-zMUparbQ8gfgeXj8W3MDmPi5OgLNz/zGCJINU7H6Rx0=";
       })
     ];
+=======
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     buildInputs = [
       gnutls libidn2 libtasn1 nasm p11-kit
       libxml2 python3Packages.python

@@ -8,16 +8,27 @@
 
 buildGoModule rec {
   pname = "sqlcmd";
+<<<<<<< HEAD
   version = "1.3.0";
+=======
+  version = "0.15.4";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     repo = "go-sqlcmd";
     owner = "microsoft";
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-omclEa/URexzzpn5jRw2ivBPxmx6kw+WBIOk4XZASkU=";
   };
 
   vendorHash = "sha256-mqyKH6xLfTqKVStEZYqau19U9y/NlqoD0XLeoWHScgM=";
+=======
+    sha256 = "sha256-6ofLXGrwkPBXQC+wb3sNqeMsVin5kBD8GyM7Ywu7xDs=";
+  };
+
+  vendorHash = "sha256-6JfxKzYAjSQ9JFuFGDUZ0ALS1D7f2LK3bP0Fbl2ivo0=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   proxyVendor = true;
 
   ldflags = [ "-s" "-w" "-X main.version=${version}" ];

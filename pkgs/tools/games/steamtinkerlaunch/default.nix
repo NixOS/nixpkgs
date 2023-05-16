@@ -3,6 +3,10 @@
 , git
 , gnugrep
 , fetchFromGitHub
+<<<<<<< HEAD
+=======
+, installShellFiles
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , lib
 , makeWrapper
 , stdenv

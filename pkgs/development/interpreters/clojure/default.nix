@@ -1,5 +1,6 @@
 { lib, stdenv, fetchurl, installShellFiles, jdk, rlwrap, makeWrapper, writeScript }:
 
+<<<<<<< HEAD
 stdenv.mkDerivation (finalAttrs: {
   pname = "clojure";
   version = "1.11.1.1413";
@@ -8,6 +9,16 @@ stdenv.mkDerivation (finalAttrs: {
     # https://github.com/clojure/brew-install/releases
     url = "https://github.com/clojure/brew-install/releases/download/${finalAttrs.version}/clojure-tools-${finalAttrs.version}.tar.gz";
     hash = "sha256-k8Olo63KUcWFgGNBmr9myD2/JOoV4f2S95v35mI4H+A=";
+=======
+stdenv.mkDerivation rec {
+  pname = "clojure";
+  version = "1.11.1.1273";
+
+  src = fetchurl {
+    # https://clojure.org/releases/tools
+    url = "https://download.clojure.org/install/clojure-tools-${version}.tar.gz";
+    sha256 = "sha256-X4uvzyS9FIrJvL5gqOe4CTye2OuODzhxmXcOOPDkDOY=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [
@@ -31,7 +42,11 @@ stdenv.mkDerivation (finalAttrs: {
       install -Dm644 example-deps.edn "$clojure_lib_dir/example-deps.edn"
       install -Dm644 tools.edn "$clojure_lib_dir/tools.edn"
       install -Dm644 exec.jar "$clojure_lib_dir/libexec/exec.jar"
+<<<<<<< HEAD
       install -Dm644 clojure-tools-${finalAttrs.version}.jar "$clojure_lib_dir/libexec/clojure-tools-${finalAttrs.version}.jar"
+=======
+      install -Dm644 clojure-tools-${version}.jar "$clojure_lib_dir/libexec/clojure-tools-${version}.jar"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
       echo "Installing clojure and clj into $bin_dir"
       substituteInPlace clojure --replace PREFIX $out
@@ -53,7 +68,11 @@ stdenv.mkDerivation (finalAttrs: {
     CLJ_CONFIG=$TMPDIR CLJ_CACHE=$TMPDIR/.clj_cache $out/bin/clojure \
       -Spath \
       -Sverbose \
+<<<<<<< HEAD
       -Scp $out/libexec/clojure-tools-${finalAttrs.version}.jar
+=======
+      -Scp $out/libexec/clojure-tools-${version}.jar
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '';
 
   passthru.updateScript = writeScript "update-clojure" ''
@@ -71,8 +90,11 @@ stdenv.mkDerivation (finalAttrs: {
     update-source-version clojure "$latest_version"
   '';
 
+<<<<<<< HEAD
   passthru.jdk = jdk;
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   meta = with lib; {
     description = "A Lisp dialect for the JVM";
     homepage = "https://clojure.org/";
@@ -100,4 +122,8 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with maintainers; [ jlesquembre thiagokokada ];
     platforms = platforms.unix;
   };
+<<<<<<< HEAD
 })
+=======
+}
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)

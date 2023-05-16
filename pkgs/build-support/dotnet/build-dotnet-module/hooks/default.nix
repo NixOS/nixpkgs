@@ -1,9 +1,12 @@
 { lib
+<<<<<<< HEAD
 , stdenv
 , which
 , coreutils
 , zlib
 , openssl
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , callPackage
 , makeSetupHook
 , makeWrapper
@@ -28,6 +31,7 @@ in
       propagatedBuildInputs = [ dotnet-sdk nuget-source ];
       substitutions = {
         nugetSource = nuget-source;
+<<<<<<< HEAD
         dynamicLinker = "${stdenv.cc}/nix-support/dynamic-linker";
         libPath = lib.makeLibraryPath [
           stdenv.cc.cc.lib
@@ -36,6 +40,8 @@ in
           zlib
           openssl
         ];
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         inherit runtimeId;
       };
     } ./dotnet-configure-hook.sh) { };
@@ -54,7 +60,11 @@ in
       name = "dotnet-check-hook";
       propagatedBuildInputs = [ dotnet-test-sdk ];
       substitutions = {
+<<<<<<< HEAD
         inherit buildType runtimeId libraryPath;
+=======
+        inherit buildType libraryPath;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         disabledTests = lib.optionalString (disabledTests != [])
           (let
             escapedNames = lib.lists.map (n: lib.replaceStrings [","] ["%2C"] n) disabledTests;
@@ -80,10 +90,13 @@ in
       substitutions = {
         dotnetRuntime = dotnet-runtime;
         runtimeDeps = libraryPath;
+<<<<<<< HEAD
         shell = stdenv.shell;
         which = "${which}/bin/which";
         dirname = "${coreutils}/bin/dirname";
         realpath = "${coreutils}/bin/realpath";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       };
     } ./dotnet-fixup-hook.sh) { };
 }

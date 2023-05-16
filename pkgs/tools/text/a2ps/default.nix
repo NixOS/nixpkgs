@@ -13,11 +13,19 @@
 
 stdenv.mkDerivation rec {
   pname = "a2ps";
+<<<<<<< HEAD
   version = "4.15.5";
 
   src = fetchurl {
     url = "mirror://gnu/a2ps/a2ps-${version}.tar.gz";
     hash = "sha256-gbsbQQTnwmOXYkUe3JeG2vPf6ziErfx9xqydII8w2n8=";
+=======
+  version = "4.15.4";
+
+  src = fetchurl {
+    url = "mirror://gnu/a2ps/a2ps-${version}.tar.gz";
+    hash = "sha256-SgY/hLqJ2GvhSmcEyjX9EwCDtXLxN2tDmht5tnsgbdc=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   postPatch = ''

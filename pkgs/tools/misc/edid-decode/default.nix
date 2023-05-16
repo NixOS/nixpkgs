@@ -4,7 +4,11 @@
 , unstableGitUpdater
 }:
 
+<<<<<<< HEAD
 stdenv.mkDerivation {
+=======
+stdenv.mkDerivation (finalAttrs: {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pname = "edid-decode";
   version = "unstable-2022-12-14";
 
@@ -34,4 +38,8 @@ stdenv.mkDerivation {
     maintainers = with maintainers; [ Madouura ];
     platforms = platforms.all;
   };
+<<<<<<< HEAD
 }
+=======
+})
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)

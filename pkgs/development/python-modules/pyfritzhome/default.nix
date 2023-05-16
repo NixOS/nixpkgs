@@ -8,7 +8,11 @@
 
 buildPythonPackage rec {
   pname = "pyfritzhome";
+<<<<<<< HEAD
   version = "0.6.9";
+=======
+  version = "0.6.8";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -17,7 +21,11 @@ buildPythonPackage rec {
     owner = "hthiery";
     repo = "python-fritzhome";
     rev = "refs/tags/${version}";
+<<<<<<< HEAD
     hash = "sha256-BhJkUbTAzMkzWINVoBDG2Vnf4Fd+kX1oBkXWD7UNbTw=";
+=======
+    hash = "sha256-MIWRBwqVuS1iEuWxsE1yuGS2zHYVgnH2G4JJk7Yct6s=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [

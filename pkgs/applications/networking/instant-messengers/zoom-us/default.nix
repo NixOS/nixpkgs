@@ -48,14 +48,21 @@ let
   # and often with different versions.  We write them on three lines
   # like this (rather than using {}) so that the updater script can
   # find where to edit them.
+<<<<<<< HEAD
   versions.aarch64-darwin = "5.15.12.22445";
   versions.x86_64-darwin = "5.15.12.22445";
   versions.x86_64-linux = "5.15.12.7665";
+=======
+  versions.aarch64-darwin = "5.14.7.18149";
+  versions.x86_64-darwin = "5.14.7.18149";
+  versions.x86_64-linux = "5.14.7.2928";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   srcs = {
     aarch64-darwin = fetchurl {
       url = "https://zoom.us/client/${versions.aarch64-darwin}/zoomusInstallerFull.pkg?archType=arm64";
       name = "zoomusInstallerFull.pkg";
+<<<<<<< HEAD
       hash = "sha256-pTpNbKmJGTxRIrfD/zWIrkouhCbErxu9Gjy9mDdTtHc=";
     };
     x86_64-darwin = fetchurl {
@@ -65,6 +72,17 @@ let
     x86_64-linux = fetchurl {
       url = "https://zoom.us/client/${versions.x86_64-linux}/zoom_x86_64.pkg.tar.xz";
       hash = "sha256-DMFMLwxPt1LV4Qhhrw6gdToe0z9743hGcxVWeR4O1YU=";
+=======
+      hash = "sha256-8Yu/1oDjTOpL5KbS/PJlGIHTRevBxkZ7/1Rp/dgpnOw=";
+    };
+    x86_64-darwin = fetchurl {
+      url = "https://zoom.us/client/${versions.x86_64-darwin}/zoomusInstallerFull.pkg";
+      hash = "sha256-un4tV7fitm097ES9J2Ght3U2NUJSNiyouwwKrsNXL/w=";
+    };
+    x86_64-linux = fetchurl {
+      url = "https://zoom.us/client/${versions.x86_64-linux}/zoom_x86_64.pkg.tar.xz";
+      hash = "sha256-xvJeVjzBKD1qxpr/t4sEhIWcqz3aQ4jllXoHX4pjrTU=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
   };
 
@@ -194,7 +212,11 @@ stdenv.mkDerivation rec {
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     platforms = builtins.attrNames srcs;
+<<<<<<< HEAD
     maintainers = with maintainers; [ danbst tadfisher ];
     mainProgram = "zoom";
+=======
+    maintainers = with maintainers; [ danbst tadfisher doronbehar ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

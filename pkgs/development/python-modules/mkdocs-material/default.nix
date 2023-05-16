@@ -19,7 +19,11 @@
 
 buildPythonPackage rec {
   pname = "mkdocs-material";
+<<<<<<< HEAD
   version = "9.1.13";
+=======
+  version = "9.1.8";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -28,7 +32,11 @@ buildPythonPackage rec {
     owner = "squidfunk";
     repo = pname;
     rev = "refs/tags/${version}";
+<<<<<<< HEAD
     hash = "sha256-S+cCNcQR8Y1UGj+4Nfy9Z10N/9PRq13fSeR2YFntxWI=";
+=======
+    hash = "sha256-a0AeRjS0fV4q3z6MPZBBv8Ffv61W3zHPrnPT4evBnaw=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

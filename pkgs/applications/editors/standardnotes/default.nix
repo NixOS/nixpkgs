@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 { lib, stdenv, fetchurl, dpkg, makeWrapper, electron, libsecret
 , desktop-file-utils , callPackage }:
 
@@ -40,6 +41,43 @@ stdenv.mkDerivation rec {
       --set-key Exec --set-value standardnotes usr/share/applications/standard-notes.desktop
 
     runHook postInstall
+=======
+{ callPackage, lib, stdenv, appimageTools, autoPatchelfHook, desktop-file-utils
+, fetchurl, libsecret  }:
+
+let
+  srcjson = builtins.fromJSON (builtins.readFile ./src.json);
+  version = srcjson.version;
+  pname = "standardnotes";
+  name = "${pname}-${version}";
+  throwSystem = throw "Unsupported system: ${stdenv.hostPlatform.system}";
+
+  src = fetchurl (srcjson.appimage.${stdenv.hostPlatform.system} or throwSystem);
+
+  appimageContents = appimageTools.extract {
+    inherit name src;
+  };
+
+  nativeBuildInputs = [ autoPatchelfHook desktop-file-utils ];
+
+in appimageTools.wrapType2 rec {
+  inherit name src;
+
+  extraPkgs = pkgs: with pkgs; [
+    libsecret
+  ];
+
+  extraInstallCommands = ''
+    # directory in /nix/store so readonly
+    cd $out
+    chmod -R +w $out
+    mv $out/bin/${name} $out/bin/${pname}
+
+    # fixup and install desktop file
+    ${desktop-file-utils}/bin/desktop-file-install --dir $out/share/applications \
+      --set-key Exec --set-value ${pname} ${appimageContents}/standard-notes.desktop
+    ln -s ${appimageContents}/usr/share/icons share
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '';
 
   passthru.updateScript = callPackage ./update.nix {};
@@ -54,6 +92,10 @@ stdenv.mkDerivation rec {
     license = licenses.agpl3;
     maintainers = with maintainers; [ mgregoire chuangzhu squalus ];
     sourceProvenance = [ sourceTypes.binaryNativeCode ];
+<<<<<<< HEAD
     platforms = builtins.attrNames srcjson.deb;
+=======
+    platforms = builtins.attrNames srcjson.appimage;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

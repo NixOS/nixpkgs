@@ -18,7 +18,11 @@
   dnsConfig = nodes: {
     dnsProvider = "exec";
     dnsPropagationCheck = false;
+<<<<<<< HEAD
     environmentFile = pkgs.writeText "wildcard.env" ''
+=======
+    credentialsFile = pkgs.writeText "wildcard.env" ''
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       EXEC_PATH=${dnsScript nodes}
       EXEC_POLLING_INTERVAL=1
       EXEC_PROPAGATION_TIMEOUT=1
@@ -266,6 +270,7 @@ in {
           }
         ];
 
+<<<<<<< HEAD
         concurrency-limit.configuration = {pkgs, ...}: lib.mkMerge [
           webserverBasicConfig {
             security.acme.maxConcurrentRenewals = 1;
@@ -297,6 +302,8 @@ in {
           }
         ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         # Test lego internal server (listenHTTP option)
         # Also tests useRoot option
         lego-server.configuration = { ... }: {
@@ -328,7 +335,11 @@ in {
 
           services.caddy = {
             enable = true;
+<<<<<<< HEAD
             virtualHosts."a.example.test" = {
+=======
+            virtualHosts."a.exmaple.test" = {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
               useACMEHost = "example.test";
               extraConfig = ''
                 root * ${documentRoot}
@@ -438,7 +449,11 @@ in {
       # Ensures the issuer of our cert matches the chain
       # and matches the issuer we expect it to be.
       # It's a good validation to ensure the cert.pem and fullchain.pem
+<<<<<<< HEAD
       # are not still selfsigned after verification
+=======
+      # are not still selfsigned afer verification
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       def check_issuer(node, cert_name, issuer):
           for fname in ("cert.pem", "fullchain.pem"):
               actual_issuer = node.succeed(
@@ -622,6 +637,7 @@ in {
           webserver.wait_for_unit("nginx.service")
           check_connection(client, "slow.example.test")
 
+<<<<<<< HEAD
       with subtest("Can limit concurrency of running renewals"):
           switch_to(webserver, "concurrency-limit")
           webserver.wait_for_unit("acme-finished-f.example.test.target")
@@ -631,6 +647,8 @@ in {
           check_connection(client, "g.example.test")
           check_connection(client, "h.example.test")
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       with subtest("Works with caddy"):
           switch_to(webserver, "caddy")
           webserver.wait_for_unit("acme-finished-example.test.target")

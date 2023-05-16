@@ -1,5 +1,8 @@
 { lib
+<<<<<<< HEAD
 , stdenv
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , buildPythonPackage
 , fetchPypi
 , isPy27
@@ -38,10 +41,13 @@ buildPythonPackage rec {
     msgpack
   ];
 
+<<<<<<< HEAD
   preBuild = if (stdenv.hostPlatform.isx86 && !stdenv.hostPlatform.avx2Support) then ''
     export DISABLE_NUMCODECS_AVX2=
   '' else null;
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nativeCheckInputs = [
     pytestCheckHook
   ];
@@ -66,6 +72,10 @@ buildPythonPackage rec {
     homepage = "https://github.com/zarr-developers/numcodecs";
     license = licenses.mit;
     description = "Buffer compression and transformation codecs for use in data storage and communication applications";
+<<<<<<< HEAD
     maintainers = [ ];
+=======
+    maintainers = [ maintainers.costrouc ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

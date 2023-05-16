@@ -37,8 +37,11 @@ lib.makeScope newScope (self: with self; {
 
   mopidy-soundcloud = callPackage ./soundcloud.nix { };
 
+<<<<<<< HEAD
   mopidy-spotify = callPackage ./spotify.nix { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   mopidy-tidal = callPackage ./tidal.nix { };
 
   mopidy-tunein = callPackage ./tunein.nix { };

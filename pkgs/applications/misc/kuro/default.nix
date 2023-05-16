@@ -1,6 +1,9 @@
 { lib
 , fetchFromGitHub
+<<<<<<< HEAD
 , fetchYarnDeps
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , makeWrapper
 , makeDesktopItem
 , copyDesktopItems
@@ -20,11 +23,16 @@ mkYarnPackage rec {
   };
 
   packageJSON = ./package.json;
+<<<<<<< HEAD
 
   offlineCache = fetchYarnDeps {
     yarnLock = "${src}/yarn.lock";
     hash = "sha256-GTiNv7u1QK/wjQgpka7REuoLn2wjZG59kYJQaZZPycI=";
   };
+=======
+  yarnLock = ./yarn.lock;
+  yarnNix = ./yarn.nix;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
 
@@ -38,7 +46,11 @@ mkYarnPackage rec {
 
     yarn --offline run electron-builder \
       --dir \
+<<<<<<< HEAD
       -c.electronDist=${electron}/libexec/electron \
+=======
+      -c.electronDist=${electron}/lib/electron \
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       -c.electronVersion=${electron.version}
 
     popd

@@ -1,9 +1,19 @@
+<<<<<<< HEAD
 { lib
 , buildPythonPackage
 , fetchFromGitHub
 , mock
 , parameterized
 , pip
+=======
+{ stdenv
+, lib
+, buildPythonPackage
+, fetchFromGitHub
+, fetchpatch
+, mock
+, parameterized
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , pyelftools
 , pytestCheckHook
 , pythonOlder
@@ -12,7 +22,11 @@
 
 buildPythonPackage rec {
   pname = "aws-lambda-builders";
+<<<<<<< HEAD
   version = "1.37.0";
+=======
+  version = "1.28.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -21,6 +35,7 @@ buildPythonPackage rec {
     owner = "awslabs";
     repo = "aws-lambda-builders";
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-ukHDrxx+Jxlp/Ypg1ltz7WN07X16spNdC7YygJhTBJo=";
   };
 
@@ -29,14 +44,34 @@ buildPythonPackage rec {
       --replace "version=read_version()," 'version="${version}",'
   '';
 
+=======
+    hash = "sha256-JSN51zwIh9N/Id3fhBXjmwGa2tLK/LoyPlHPl2rbVU4=";
+  };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   propagatedBuildInputs = [
     six
+  ];
+
+<<<<<<< HEAD
+  nativeCheckInputs = [
+    mock
+    parameterized
+    pip
+=======
+  patches = [
+    # This patch can be removed once https://github.com/aws/aws-lambda-builders/pull/475 has been merged.
+    (fetchpatch {
+      name = "setuptools-66-support";
+      url = "https://patch-diff.githubusercontent.com/raw/aws/aws-lambda-builders/pull/475.patch";
+      sha256 = "sha256-EkYQ6DNzbSnvkOads0GFwpGzeuBoLVU42THlSZNOHMc=";
+    })
   ];
 
   nativeCheckInputs = [
     mock
     parameterized
-    pip
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     pyelftools
     pytestCheckHook
   ];
@@ -67,6 +102,10 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
+<<<<<<< HEAD
+=======
+    broken = (stdenv.isLinux && stdenv.isAarch64);
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     description = "Tool to compile, build and package AWS Lambda functions";
     homepage = "https://github.com/awslabs/aws-lambda-builders";
     changelog = "https://github.com/aws/aws-lambda-builders/releases/tag/v${version}";

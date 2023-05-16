@@ -8,17 +8,27 @@
 , stdenv
 , fetchFromGitHub
 , cmake
+<<<<<<< HEAD
 , boost
 , pkg-config
 , libusb1
 , glslang
+=======
+, boost17x
+, pkg-config
+, libusb1
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , zstd
 , libressl
 , enableSdl2 ? true, SDL2
 , enableQt ? true, qtbase, qtmultimedia, wrapQtAppsHook
 , enableQtTranslation ? enableQt, qttools
 , enableWebService ? true
+<<<<<<< HEAD
 , enableCubeb ? true, cubeb
+=======
+, enableCubeb ? true, libpulseaudio
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , enableFfmpegAudioDecoder ? true
 , enableFfmpegVideoDumper ? true
 , ffmpeg_4
@@ -32,29 +42,46 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     cmake
+<<<<<<< HEAD
     glslang
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     pkg-config
   ] ++ lib.optionals enableQt [ wrapQtAppsHook ];
 
   buildInputs = [
+<<<<<<< HEAD
     boost
+=======
+    boost17x
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     libusb1
   ] ++ lib.optionals enableQt [ qtbase qtmultimedia ]
     ++ lib.optional enableSdl2 SDL2
     ++ lib.optional enableQtTranslation qttools
+<<<<<<< HEAD
     ++ lib.optionals enableCubeb cubeb.passthru.backendLibs
+=======
+    ++ lib.optional enableCubeb libpulseaudio
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     ++ lib.optional (enableFfmpegAudioDecoder || enableFfmpegVideoDumper) ffmpeg_4
     ++ lib.optional useDiscordRichPresence rapidjson
     ++ lib.optional enableFdk fdk_aac;
 
   cmakeFlags = [
     "-DUSE_SYSTEM_BOOST=ON"
+<<<<<<< HEAD
     "-DCITRA_WARNINGS_AS_ERRORS=OFF"
     "-DCITRA_USE_BUNDLED_FFMPEG=OFF"
     "-DCITRA_USE_BUNDLED_QT=OFF"
     "-DUSE_SYSTEM_SDL2=ON"
     "-DCMAKE_INSTALL_INCLUDEDIR=include"
     "-DCMAKE_INSTALL_LIBDIR=lib"
+=======
+    "-DCITRA_USE_BUNDLED_FFMPEG=OFF"
+    "-DCITRA_USE_BUNDLED_QT=OFF"
+    "-DUSE_SYSTEM_SDL2=ON"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     # We dont want to bother upstream with potentially outdated compat reports
     "-DCITRA_ENABLE_COMPATIBILITY_REPORTING=ON"
@@ -69,9 +96,13 @@ stdenv.mkDerivation rec {
     ++ lib.optional useDiscordRichPresence "-DUSE_DISCORD_PRESENCE=ON"
     ++ lib.optional enableFdk "-DENABLE_FDK=ON";
 
+<<<<<<< HEAD
   postPatch = with lib; let
     branchCaptialized = (lib.toUpper (lib.substring 0 1 branch) + lib.substring 1 (-1) branch);
   in ''
+=======
+  postPatch = ''
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     # Fix file not found when looking in var/empty instead of opt
     mkdir externals/dynarmic/src/dynarmic/ir/var
     ln -s ../opt externals/dynarmic/src/dynarmic/ir/var/empty
@@ -83,9 +114,12 @@ stdenv.mkDerivation rec {
     substituteInPlace CMakeLists.txt \
       --replace "check_submodules_present()" ""
 
+<<<<<<< HEAD
     # Add versions
     echo 'set(BUILD_FULLNAME "${branchCaptialized} ${version}")' >> CMakeModules/GenerateBuildInfo.cmake
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     # Devendoring
     rm -rf externals/zstd externals/libressl
     cp -r ${zstd.src} externals/zstd
@@ -97,7 +131,11 @@ stdenv.mkDerivation rec {
   # Fixes https://github.com/NixOS/nixpkgs/issues/171173
   postInstall = lib.optionalString (enableCubeb && enableSdl2) ''
     wrapProgram "$out/bin/citra" \
+<<<<<<< HEAD
       --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath cubeb.passthru.backendLibs}
+=======
+      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libpulseaudio ]}
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '';
 
   meta = with lib; {

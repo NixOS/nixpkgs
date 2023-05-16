@@ -8,10 +8,17 @@ let beat = package: extraArgs: buildGoModule (rec {
     owner = "elastic";
     repo = "beats";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-Quq32/3NeGhrsy17GrIeBiB3LGQuMFTFl3lAyyU6GZM=";
   };
 
   vendorHash = "sha256-UJjwCRxY1rrymroBqC/SfCVM9vmnQOtLlS3OONih3kM=";
+=======
+    sha256 = "sha256-DE7XpzVBu9qL7fMXXYRYLdVXrr0WB0IL0KAG0Zc3TVo=";
+  };
+
+  vendorSha256 = "sha256-TQrXUcLv7rFo3PP3bVx0wEC1WbtkJDsCm+/izHAxqBc=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   subPackages = [ package ];
 
@@ -24,7 +31,10 @@ let beat = package: extraArgs: buildGoModule (rec {
 } // extraArgs);
 in
 rec {
+<<<<<<< HEAD
   auditbeat7 = beat "auditbeat" { meta.description = "Lightweight shipper for audit data"; };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   filebeat7 = beat "filebeat" {
     meta.description = "Lightweight shipper for logfiles";
     buildInputs = [ systemd ];

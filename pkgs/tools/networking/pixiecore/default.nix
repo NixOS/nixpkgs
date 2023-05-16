@@ -23,5 +23,9 @@ buildGoModule rec {
     homepage = "https://github.com/danderson/netboot/tree/master/pixiecore";
     license =  lib.licenses.asl20;
     maintainers = with lib.maintainers; [ bbigras danderson ];
+<<<<<<< HEAD
+=======
+    platforms = lib.platforms.unix;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

@@ -51,7 +51,11 @@ in
 rustPlatform.buildRustPackage {
   inherit version src pname;
 
+<<<<<<< HEAD
   sourceRoot = "${src.name}/src-tauri";
+=======
+  sourceRoot = "source/src-tauri";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   cargoLock = {
     lockFile = ./Cargo.lock;
@@ -73,8 +77,13 @@ rustPlatform.buildRustPackage {
     substituteInPlace tauri.conf.json --replace '"distDir": "../out/src",' '"distDir": "frontend-build/src",'
   '';
 
+<<<<<<< HEAD
   nativeBuildInputs = [ cmake pkg-config ];
   buildInputs = [ dbus openssl freetype libsoup gtk3 webkitgtk ];
+=======
+  buildInputs = [ dbus openssl freetype libsoup gtk3 webkitgtk cmake ];
+  nativeBuildInputs = [ pkg-config ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   checkFlags = [
     # tries to mutate the parent directory

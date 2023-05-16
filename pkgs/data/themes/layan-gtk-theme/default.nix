@@ -6,13 +6,21 @@
 
 stdenv.mkDerivation rec {
   pname = "layan-gtk-theme";
+<<<<<<< HEAD
   version = "2023-05-23";
+=======
+  version = "2021-06-30";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "vinceliuice";
     repo = pname;
     rev = version;
+<<<<<<< HEAD
     sha256 = "sha256-R8QxDMOXzDIfioAvvescLAu6NjJQ9zhf/niQTXZr+yA=";
+=======
+    sha256 = "sha256-FI8+AJlcPHGOzxN6HUKLtPGLe8JTfTQ9Az9NsvVUK7g=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedUserEnvPkgs = [ gtk-engine-murrine ];

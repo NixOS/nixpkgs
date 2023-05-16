@@ -1,5 +1,6 @@
 { lib, stdenv, fetchurl, cmake, python3, bison, openssl, readline, bzip2 }:
 
+<<<<<<< HEAD
 stdenv.mkDerivation (finalAttrs: {
   pname = "monetdb";
   version = "11.47.5";
@@ -12,6 +13,17 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ bison cmake python3 ];
   buildInputs = [ openssl readline bzip2 ];
 
+=======
+stdenv.mkDerivation rec {
+  pname = "monetdb";
+  version = "11.45.13";
+
+  src = fetchurl {
+    url = "https://dev.monetdb.org/downloads/sources/archive/MonetDB-${version}.tar.bz2";
+    sha256 = "sha256-TYTzC1oiU/YwrJNABwyA50qSB12cwrMurqYFVCtSAcc=";
+  };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   postPatch = ''
     substituteInPlace cmake/monetdb-packages.cmake --replace \
       'get_os_release_info(LINUX_DISTRO LINUX_DISTRO_VERSION)' \
@@ -26,10 +38,19 @@ stdenv.mkDerivation (finalAttrs: {
       $out/bin/Mz.py \
       $out/bin/Mtest.py \
       $out/bin/sqlsample.pl \
+<<<<<<< HEAD
       $out/bin/malsample.pl \
       $out/bin/Mconvert.py
   '';
 
+=======
+      $out/bin/malsample.pl
+  '';
+
+  nativeBuildInputs = [ cmake python3 ];
+  buildInputs = [ bison openssl readline bzip2 ];
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   meta = with lib; {
     description = "An open source database system";
     homepage = "https://www.monetdb.org/";
@@ -37,4 +58,8 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = platforms.unix;
     maintainers = [ maintainers.StillerHarpo ];
   };
+<<<<<<< HEAD
 })
+=======
+}
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)

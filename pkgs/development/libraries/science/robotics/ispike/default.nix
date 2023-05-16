@@ -9,10 +9,13 @@ stdenv.mkDerivation rec {
     sha256 = "0khrxp43bi5kisr8j4lp9fl4r5marzf7b4inys62ac108sfb28lp";
   };
 
+<<<<<<< HEAD
   postPatch = ''
     sed -i "1i #include <map>" include/iSpike/YarpConnection.hpp
   '';
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nativeBuildInputs = [ cmake ];
   buildInputs = [ boost ];
 
@@ -20,7 +23,11 @@ stdenv.mkDerivation rec {
     description = "Spiking neural interface between iCub and a spiking neural simulator";
     homepage = "https://sourceforge.net/projects/ispike/";
     license = lib.licenses.lgpl3;
+<<<<<<< HEAD
     platforms = lib.platforms.unix;
+=======
+    platforms = lib.platforms.linux;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     maintainers = [ lib.maintainers.nico202 ];
   };
 }

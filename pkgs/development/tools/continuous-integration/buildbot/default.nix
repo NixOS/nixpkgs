@@ -1,5 +1,8 @@
 { python3
+<<<<<<< HEAD
 , fetchPypi
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , recurseIntoAttrs
 , callPackage
 }:
@@ -8,15 +11,22 @@ let
     packageOverrides = self: super: {
       sqlalchemy = super.sqlalchemy.overridePythonAttrs (oldAttrs: rec {
         version = "1.4.40";
+<<<<<<< HEAD
         src = fetchPypi {
+=======
+        src = super.fetchPypi {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           pname = "SQLAlchemy";
           inherit version;
           hash = "sha256-RKZgUGCAzJdeHfpXdv5fYxXdxiane1C/Du4YsDieomU=";
         };
+<<<<<<< HEAD
         disabledTestPaths = [
            "test/aaa_profiling"
            "test/ext/mypy"
         ];
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       });
       moto = super.moto.overridePythonAttrs (oldAttrs: rec {
         # a lot of tests -> very slow, we already build them when building python packages

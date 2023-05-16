@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 { lib
 , fetchFromGitHub
 , fetchpatch
@@ -6,16 +7,23 @@
 , zlib
 , libjpeg
 }:
+=======
+{ lib, fetchFromGitHub, python3Packages, ffmpeg, zlib, libjpeg }:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 python3Packages.buildPythonApplication {
   pname = "gif-for-cli";
   version = "1.1.2";
+<<<<<<< HEAD
   format = "setuptools";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "gif-for-cli";
     rev = "31f8aa2d617d6d6e941154f60e287c38dd9a74d5";
+<<<<<<< HEAD
     hash = "sha256-Bl5o492BUAn1KsscnlMIXCzJuy7xWUsdnxIKZKaRM3M=";
   };
 
@@ -44,6 +52,14 @@ python3Packages.buildPythonApplication {
     requests
     x256
   ];
+=======
+    sha256 = "Bl5o492BUAn1KsscnlMIXCzJuy7xWUsdnxIKZKaRM3M=";
+  };
+
+  nativeCheckInputs = [ python3Packages.coverage ];
+  buildInputs = [ zlib libjpeg ];
+  propagatedBuildInputs = with python3Packages; [ ffmpeg pillow requests x256 ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   meta = with lib; {
     description = "Render gifs as ASCII art in your cli";
@@ -52,4 +68,8 @@ python3Packages.buildPythonApplication {
     license = licenses.asl20;
     maintainers = with maintainers; [ Scriptkiddi ];
   };
+<<<<<<< HEAD
+=======
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }

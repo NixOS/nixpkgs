@@ -19,7 +19,10 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "CLI PulseAudio Volume Control";
     homepage = "https://github.com/falconindy/ponymix";
+<<<<<<< HEAD
     mainProgram = "ponymix";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     license = licenses.mit;
     platforms = platforms.linux;
     maintainers = with maintainers; [ ericsagnes ];

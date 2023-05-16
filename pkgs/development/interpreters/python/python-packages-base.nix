@@ -8,6 +8,10 @@ self:
 
 let
   inherit (self) callPackage;
+<<<<<<< HEAD
+=======
+  inherit (python.passthru) isPy27 isPy37 isPy38 isPy39 isPy310 isPy311 isPy3k isPyPy pythonAtLeast pythonOlder;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   namePrefix = python.libPrefix + "-";
 
@@ -32,17 +36,25 @@ let
       }
       else result;
 
+<<<<<<< HEAD
   mkPythonDerivation = if python.isPy3k then
     ./mk-python-derivation.nix
   else
     ./python2/mk-python-derivation.nix;
 
   buildPythonPackage = makeOverridablePythonPackage (lib.makeOverridable (callPackage mkPythonDerivation {
+=======
+  buildPythonPackage = makeOverridablePythonPackage (lib.makeOverridable (callPackage ./mk-python-derivation.nix {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     inherit namePrefix;     # We want Python libraries to be named like e.g. "python3.6-${name}"
     inherit toPythonModule; # Libraries provide modules
   }));
 
+<<<<<<< HEAD
   buildPythonApplication = makeOverridablePythonPackage (lib.makeOverridable (callPackage mkPythonDerivation {
+=======
+  buildPythonApplication = makeOverridablePythonPackage (lib.makeOverridable (callPackage ./mk-python-derivation.nix {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     namePrefix = "";        # Python applications should not have any prefix
     toPythonModule = x: x;  # Application does not provide modules.
   }));
@@ -96,6 +108,10 @@ in {
   inherit lib pkgs stdenv;
   inherit (python.passthru) isPy27 isPy37 isPy38 isPy39 isPy310 isPy311 isPy3k isPyPy pythonAtLeast pythonOlder;
   inherit buildPythonPackage buildPythonApplication;
+<<<<<<< HEAD
+=======
+  inherit (pkgs) fetchPypi;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   inherit hasPythonModule requiredPythonModules makePythonPath disabled disabledIf;
   inherit toPythonModule toPythonApplication;
   inherit buildSetupcfg;

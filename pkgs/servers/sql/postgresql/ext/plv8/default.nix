@@ -136,7 +136,11 @@ stdenv.mkDerivation (finalAttrs: {
     description = "V8 Engine Javascript Procedural Language add-on for PostgreSQL";
     homepage = "https://plv8.github.io/";
     maintainers = with maintainers; [ marsam ];
+<<<<<<< HEAD
     platforms = [ "x86_64-linux" "aarch64-linux" ];
+=======
+    platforms = [ "x86_64-linux" ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     license = licenses.postgresql;
     broken = postgresql.jitSupport;
   };

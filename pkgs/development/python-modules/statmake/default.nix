@@ -65,6 +65,10 @@ buildPythonPackage rec {
     homepage = "https://github.com/daltonmaag/statmake";
     changelog = "https://github.com/daltonmaag/statmake/releases/tag/v${version}";
     license = licenses.mit;
+<<<<<<< HEAD
     maintainers = with maintainers; [ ];
+=======
+    maintainers = with maintainers; [ jtojnar ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

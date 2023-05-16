@@ -1,21 +1,35 @@
 { lib, stdenv, buildGoModule, fetchFromGitHub, buildPackages, installShellFiles
 , makeWrapper
 , enableCmount ? true, fuse, macfuse-stubs
+<<<<<<< HEAD
 , librclone
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 buildGoModule rec {
   pname = "rclone";
+<<<<<<< HEAD
   version = "1.64.0";
+=======
+  version = "1.62.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-miXYBKUTmsqAvVLmxcVCpjgEO3HeKQpUZKSvzaxhqdU=";
   };
 
   vendorHash = "sha256-rpF44yd8ElOkXTT1lSW0l3ZwTqeNdGS1OxrvNY8atzA=";
+=======
+    sha256 = "sha256-nG3XW6OGzfbvkBmlmeOCnVRFun3EWIVLLvMXGhOAi+4=";
+  };
+
+  vendorSha256 = "sha256-UA6PlhKxJ9wpg3mbiJ4Mqc4npwEBa93qi6WrQR8JQSk=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   subPackages = [ "." ];
 
@@ -50,15 +64,22 @@ buildGoModule rec {
         --prefix LD_LIBRARY_PATH : "${fuse}/lib"
     '';
 
+<<<<<<< HEAD
   passthru.tests = {
     inherit librclone;
   };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   meta = with lib; {
     description = "Command line program to sync files and directories to and from major cloud storage";
     homepage = "https://rclone.org";
     changelog = "https://github.com/rclone/rclone/blob/v${version}/docs/content/changelog.md";
     license = licenses.mit;
+<<<<<<< HEAD
     maintainers = with maintainers; [ marsam SuperSandro2000 ];
+=======
+    maintainers = with maintainers; [ danielfullmer marsam SuperSandro2000 ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

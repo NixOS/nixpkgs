@@ -1,7 +1,10 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+<<<<<<< HEAD
 , fetchpatch
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , lxml
 , poetry-core
 , pythonOlder
@@ -11,13 +14,19 @@
 buildPythonPackage rec {
   pname = "xpath-expressions";
   version = "1.1.0";
+<<<<<<< HEAD
   format = "pyproject";
   disabled = pythonOlder "3.5";
+=======
+  disabled = pythonOlder "3.5";
+  format = "pyproject";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "orf";
     repo = pname;
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-UAzDXrz1Tr9/OOjKAg/5Std9Qlrnizei8/3XL3hMSFA=";
   };
 
@@ -30,6 +39,11 @@ buildPythonPackage rec {
     })
   ];
 
+=======
+    sha256 = "0l289iw2zmzxyfi3g2z7b917vmsaz47h5jp871zvykpmpigc632h";
+  };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nativeBuildInputs = [
     poetry-core
   ];
@@ -39,6 +53,15 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+<<<<<<< HEAD
+=======
+  postPatch = ''
+    # Was fixed upstream but not released
+    substituteInPlace pyproject.toml \
+      --replace "poetry.masonry.api" "poetry.core.masonry.api"
+  '';
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pythonImportsCheck = [ "xpath" ];
 
   meta = with lib; {

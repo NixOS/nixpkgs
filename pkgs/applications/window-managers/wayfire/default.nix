@@ -21,16 +21,27 @@
 , xorg
 }:
 
+<<<<<<< HEAD
 stdenv.mkDerivation (finalAttrs: {
+=======
+stdenv.mkDerivation rec {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pname = "wayfire";
   version = "0.7.5";
 
   src = fetchFromGitHub {
     owner = "WayfireWM";
+<<<<<<< HEAD
     repo = "wayfire";
     rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
     hash = "sha256-Z+rR9pY244I3i/++XZ4ROIkq3vtzMgcxxHvJNxFD9is=";
+=======
+    repo = pname;
+    rev = "v${version}";
+    fetchSubmodules = true;
+    sha256 = "sha256-Z+rR9pY244I3i/++XZ4ROIkq3vtzMgcxxHvJNxFD9is=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [
@@ -40,6 +51,10 @@ stdenv.mkDerivation (finalAttrs: {
     wayland-scanner
   ];
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   buildInputs = [
     wf-config
     libdrm
@@ -77,6 +92,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.providedSessions = [ "wayfire" ];
 
+<<<<<<< HEAD
   meta = {
     homepage = "https://wayfire.org/";
     description = "3D Wayland compositor";
@@ -86,3 +102,13 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "wayfire";
   };
 })
+=======
+  meta = with lib; {
+    homepage = "https://wayfire.org/";
+    description = "3D Wayland compositor";
+    license = licenses.mit;
+    maintainers = with maintainers; [ qyliss wucke13 rewine ];
+    platforms = platforms.unix;
+  };
+}
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)

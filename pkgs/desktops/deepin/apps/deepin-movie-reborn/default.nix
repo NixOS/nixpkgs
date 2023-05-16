@@ -35,13 +35,21 @@
 
 stdenv.mkDerivation rec {
   pname = "deepin-movie-reborn";
+<<<<<<< HEAD
   version = "5.10.28";
+=======
+  version = "5.10.23";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
+<<<<<<< HEAD
     sha256 = "sha256-aILaiVkApXBKJUxvQ1k7CHzL3IOwshsTTjW5Ak31xEM=";
+=======
+    sha256 = "sha256-0m8wYRQGsdN4zpnHUJKCfF05SdvTauRSp6gCu2F9ZAI";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   patches = [

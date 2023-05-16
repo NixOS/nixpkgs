@@ -30,8 +30,14 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Dict protocol server and client";
     homepage = "http://www.dict.org";
+<<<<<<< HEAD
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ sikmir ];
     platforms = platforms.unix;
+=======
+    license = licenses.gpl2;
+    maintainers = with maintainers; [ ];
+    platforms = platforms.linux;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

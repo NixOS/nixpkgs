@@ -31,6 +31,10 @@ buildPythonPackage rec {
     description = "This module offers classes representing filesystem paths with semantics appropriate for different operating systems.";
     homepage = "https://pypi.org/project/pathlib2/";
     license = with licenses; [ mit ];
+<<<<<<< HEAD
     maintainers = with maintainers; [ ];
+=======
+    maintainers = with maintainers; [ SuperSandro2000 ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

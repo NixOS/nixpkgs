@@ -3,7 +3,11 @@
 , fetchFromGitHub
 , gcc10
 , cmake
+<<<<<<< HEAD
 , boost179
+=======
+, boost17x
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , icu
 , swig
 , pcre
@@ -28,7 +32,11 @@ buildPythonPackage rec {
   nativeBuildInputs = [ gcc10 cmake ];
 
   buildInputs = [
+<<<<<<< HEAD
     boost179
+=======
+    boost17x
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     icu
     pcre
     libxml2

@@ -2,12 +2,18 @@
 , aiohttp
 , aresponses
 , buildPythonPackage
+<<<<<<< HEAD
 , certifi
 , fetchFromGitHub
 , fetchpatch
 , numpy
 , poetry-core
 , pygments
+=======
+, fetchFromGitHub
+, numpy
+, poetry-core
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , pysmb
 , pytest-aiohttp
 , pytest-asyncio
@@ -17,7 +23,11 @@
 
 buildPythonPackage rec {
   pname = "pyairvisual";
+<<<<<<< HEAD
   version = "2023.08.1";
+=======
+  version = "2022.12.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -26,6 +36,7 @@ buildPythonPackage rec {
     owner = "bachya";
     repo = pname;
     rev = "refs/tags/${version}";
+<<<<<<< HEAD
     hash = "sha256-+yqN3q+uA/v01uCguzUSoeCJK9lRmiiYn8d272+Dd2M=";
   };
 
@@ -44,12 +55,18 @@ buildPythonPackage rec {
       'certifi = "*"'
   '';
 
+=======
+    hash = "sha256-xzTho4HsIU2YLURz9DfFfaRL3tsrtVi8n5IA2bRkyzw=";
+  };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nativeBuildInputs = [
     poetry-core
   ];
 
   propagatedBuildInputs = [
     aiohttp
+<<<<<<< HEAD
     certifi
     numpy
     pygments
@@ -59,6 +76,12 @@ buildPythonPackage rec {
   # this lets tests bind to localhost in sandbox mode on macOS
   __darwinAllowLocalNetworking = true;
 
+=======
+    numpy
+    pysmb
+  ];
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nativeCheckInputs = [
     aresponses
     pytest-aiohttp

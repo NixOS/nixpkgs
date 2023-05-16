@@ -13,6 +13,13 @@
 , x11Support ? !stdenv.isDarwin
 }:
 
+<<<<<<< HEAD
+=======
+let
+  inherit (lib) getLib optional optionalString;
+
+in
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 stdenv.mkDerivation rec {
   pname = "libepoxy";
   version = "1.5.10";
@@ -29,7 +36,11 @@ stdenv.mkDerivation rec {
   postPatch = ''
     patchShebangs src/*.py
   ''
+<<<<<<< HEAD
   + lib.optionalString stdenv.isDarwin ''
+=======
+  + optionalString stdenv.isDarwin ''
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     substituteInPlace src/dispatch_common.h --replace "PLATFORM_HAS_GLX 0" "PLATFORM_HAS_GLX 1"
   '';
 
@@ -37,9 +48,14 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ meson ninja pkg-config utilmacros python3 ];
 
+<<<<<<< HEAD
   buildInputs = lib.optionals (x11Support && !stdenv.isDarwin) [
     libGL
   ] ++ lib.optionals x11Support [
+=======
+  buildInputs = lib.optionals x11Support [
+    libGL
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     libX11
   ] ++ lib.optionals stdenv.isDarwin [
     Carbon
@@ -53,7 +69,11 @@ stdenv.mkDerivation rec {
     "-Dx11=${lib.boolToString x11Support}"
   ];
 
+<<<<<<< HEAD
   env.NIX_CFLAGS_COMPILE = lib.optionalString (x11Support && !stdenv.isDarwin) ''-DLIBGL_PATH="${lib.getLib libGL}/lib"'';
+=======
+  env.NIX_CFLAGS_COMPILE = lib.optionalString x11Support ''-DLIBGL_PATH="${getLib libGL}/lib"'';
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   # cgl_core and cgl_epoxy_api fail in darwin sandbox and on Hydra (because it's headless?)
   preCheck = lib.optionalString stdenv.isDarwin ''
@@ -72,6 +92,9 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = with maintainers; [ goibhniu ];
     platforms = platforms.unix;
+<<<<<<< HEAD
     pkgConfigModules = [ "epoxy" ];
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

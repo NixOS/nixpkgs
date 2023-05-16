@@ -5,14 +5,22 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "sqlfluff";
+<<<<<<< HEAD
   version = "2.3.2";
+=======
+  version = "2.1.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "refs/tags/${version}";
+<<<<<<< HEAD
     hash = "sha256-buDDu5UQmO1ImWXzqwlFZHYbn2FUjAxs8KbQX+g/mvg=";
+=======
+    hash = "sha256-kUc3y9OlaQ72MsESrVd+eqm4xulFixYMKAIMeP3+NOc=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = with python3.pkgs; [

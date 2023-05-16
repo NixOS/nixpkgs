@@ -45,11 +45,19 @@ in
 
 stdenv.mkDerivation rec {
   pname = "sile";
+<<<<<<< HEAD
   version = "0.14.11";
 
   src = fetchurl {
     url = "https://github.com/sile-typesetter/sile/releases/download/v${version}/${pname}-${version}.tar.xz";
     sha256 = "sha256-JXlgiK1XyZZSe5QXz06zwEAnVYhiIZhhIaBmfxAgRS4=";
+=======
+  version = "0.14.9";
+
+  src = fetchurl {
+    url = "https://github.com/sile-typesetter/sile/releases/download/v${version}/${pname}-${version}.tar.xz";
+    sha256 = "0528835iir2ws14fwb7w4dqs3wlzzcv5arjxs8v13drb194rlwcs";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   configureFlags = [
@@ -108,6 +116,7 @@ stdenv.mkDerivation rec {
       --replace "ASSERT(ht && ht->table && iter);" "ASSERT(ht && iter);"
   '';
 
+<<<<<<< HEAD
   # remove forbidden references to $TMPDIR
   preFixup = lib.optionalString stdenv.isLinux ''
     for f in "$out"/bin/*; do
@@ -116,6 +125,10 @@ stdenv.mkDerivation rec {
       fi
     done
   '';
+=======
+  # Hack to avoid TMPDIR in RPATHs.
+  preFixup = ''rm -rf "$(pwd)" && mkdir "$(pwd)" '';
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   outputs = [ "out" "doc" "man" "dev" ];
 

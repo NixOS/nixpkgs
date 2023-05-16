@@ -9,13 +9,21 @@
 
 stdenv.mkDerivation rec {
   pname = "tagparser";
+<<<<<<< HEAD
   version = "12.1.0";
+=======
+  version = "11.6.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "Martchus";
     repo = "tagparser";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-83Xxj1CQsghbAsQ/3GKIYCz9lBNEBvLlx1iOKbszn8A=";
+=======
+    hash = "sha256-zi1n5Mdto8DmUq5DWxcr4f+DX6Sq/JsK8uzRzj5f0/E=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ cmake ];

@@ -1,7 +1,11 @@
 { lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config
 , curl, db, libgeotiff
 , xorg, motif, pcre
+<<<<<<< HEAD
 , perl, proj, graphicsmagick, shapelib
+=======
+, perl, proj, rastermagick, shapelib
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , libax25
 }:
 
@@ -24,7 +28,11 @@ stdenv.mkDerivation rec {
   buildInputs = [
     curl db libgeotiff
     xorg.libXpm xorg.libXt motif pcre
+<<<<<<< HEAD
     perl proj graphicsmagick shapelib
+=======
+    perl proj rastermagick shapelib
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     libax25
   ];
 

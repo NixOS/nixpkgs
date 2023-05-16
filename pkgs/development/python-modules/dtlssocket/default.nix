@@ -8,14 +8,22 @@
 
 buildPythonPackage rec {
   pname = "dtlssocket";
+<<<<<<< HEAD
   version = "0.1.16";
+=======
+  version = "0.1.14";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   format = "pyproject";
 
   src = fetchPypi {
     pname = "DTLSSocket";
     inherit version;
+<<<<<<< HEAD
     hash = "sha256-MLEIrkX84cAz4+9sLd1+dBgGKuN0Io46f6lpslQ2ajk=";
+=======
+    hash = "sha256-BLNfdKDKUvc+BJnhLqx7VzJg0opvrdaXhNLCigLH02k=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

@@ -9,17 +9,29 @@
 , docbook-xsl-nons
 , docbook_xml_dtd_42
 , which
+<<<<<<< HEAD
 , waf
+=======
+, wafHook
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , libxcrypt
 }:
 
 stdenv.mkDerivation rec {
   pname = "tevent";
+<<<<<<< HEAD
   version = "0.15.0";
 
   src = fetchurl {
     url = "mirror://samba/tevent/${pname}-${version}.tar.gz";
     sha256 = "sha256-ZiqfJ3KBvPUGtrwKC6oD5EpiIpUW7jS8xwOguCqkaQU=";
+=======
+  version = "0.14.1";
+
+  src = fetchurl {
+    url = "mirror://samba/tevent/${pname}-${version}.tar.gz";
+    sha256 = "sha256-74X8qoD/0jUQNrpLNHYw/vKhrD2pZKfxggRmutA80A0=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [
@@ -29,7 +41,11 @@ stdenv.mkDerivation rec {
     libxslt
     docbook-xsl-nons
     docbook_xml_dtd_42
+<<<<<<< HEAD
     waf.hook
+=======
+    wafHook
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   buildInputs = [

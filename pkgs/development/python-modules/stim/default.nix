@@ -11,8 +11,11 @@
 , matplotlib
 , networkx
 , scipy
+<<<<<<< HEAD
 , setuptools
 , wheel
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , pandas
 }:
 
@@ -30,6 +33,7 @@ buildPythonPackage rec {
     hash = "sha256-zXWdJjFkf74FCWxyVMF8dx0P8GmUkuHFxUo5wYNU2o0=";
   };
 
+<<<<<<< HEAD
   postPatch = ''
     # asked to relax this in https://github.com/quantumlib/Stim/issues/623
     substituteInPlace pyproject.toml \
@@ -44,6 +48,11 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     numpy
+=======
+  propagatedBuildInputs = [
+    numpy
+    pybind11
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   nativeCheckInputs = [

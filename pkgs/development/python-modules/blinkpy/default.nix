@@ -12,7 +12,11 @@
 
 buildPythonPackage rec {
   pname = "blinkpy";
+<<<<<<< HEAD
   version = "0.21.0";
+=======
+  version = "0.20.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -21,7 +25,11 @@ buildPythonPackage rec {
     owner = "fronzbot";
     repo = "blinkpy";
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-0sEZlnS6CJj8nMyjtSFZRALRKdmY0Uu5N6sozPiDG6w=";
+=======
+    hash = "sha256-6la8rCmMtH2N4/P5OVGht1wgSuiW16MmF5a422LADV4=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [

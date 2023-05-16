@@ -1,5 +1,10 @@
+<<<<<<< HEAD
 { stdenv, mkDerivation, lib, fetchFromGitHub
 , qmake, qttools
+=======
+{ stdenv, mkDerivation, lib, fetchFromGitHub, substituteAll
+, qmake, qttools, qttranslations
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 mkDerivation rec {
@@ -13,6 +18,15 @@ mkDerivation rec {
     sha256 = "080vnwcciqblfrbfyz9gjhl2lqw1hkdpbgr5qfrlyglkd4ynjd84";
   };
 
+<<<<<<< HEAD
+=======
+  patches = (substituteAll {
+    # See https://github.com/NixOS/nixpkgs/issues/86054
+    src = ./fix-qttranslations-path.patch;
+    inherit qttranslations;
+  });
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nativeBuildInputs = [ qmake qttools ];
 
   preConfigure = ''

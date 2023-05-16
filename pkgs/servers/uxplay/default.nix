@@ -11,15 +11,26 @@
 , gst_all_1
 }:
 
+<<<<<<< HEAD
 stdenv.mkDerivation (finalAttrs: {
   pname = "uxplay";
   version = "1.65.3";
+=======
+stdenv.mkDerivation rec {
+  pname = "uxplay";
+  version = "1.64";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "FDH2";
     repo = "UxPlay";
+<<<<<<< HEAD
     rev = "v${finalAttrs.version}";
     hash = "sha256-ghimxgukQHBc0yVSpttF5lEVE6BTf9OL7RWmR5izxCo=";
+=======
+    rev = "v${version}";
+    sha256 = "sha256-zCjAXQMA5QvcpmkSYb9FST4xzK1cjZZDGcBGc1CacVo=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   postPatch = ''
@@ -47,6 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
     gst_all_1.gst-libav
   ];
 
+<<<<<<< HEAD
   meta = {
     description = "AirPlay Unix mirroring server";
     homepage = "https://github.com/FDH2/UxPlay";
@@ -55,3 +67,13 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.unix;
   };
 })
+=======
+  meta = with lib; {
+    homepage = "https://github.com/FDH2/UxPlay";
+    description = "AirPlay Unix mirroring server";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ azuwis ];
+    platforms = platforms.unix;
+  };
+}
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)

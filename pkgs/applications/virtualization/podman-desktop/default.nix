@@ -73,7 +73,11 @@ stdenv.mkDerivation (finalAttrs: {
     yarn --offline run build
     yarn --offline run electron-builder --dir \
       --config .electron-builder.config.cjs \
+<<<<<<< HEAD
       -c.electronDist=${electron}/libexec/electron \
+=======
+      -c.electronDist=${electron}/lib/electron \
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       -c.electronVersion=${electron.version}
 
     runHook postBuild

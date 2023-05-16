@@ -59,10 +59,14 @@ stdenv.mkDerivation rec {
     protobuf
   ];
 
+<<<<<<< HEAD
   hardeningDisable = [
     # causes redefinition of _FORTIFY_SOURCE
     "fortify3"
   ] ++ lib.optionals debug [
+=======
+  hardeningDisable = lib.optionals debug [
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "fortify"
   ];
 

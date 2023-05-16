@@ -1,6 +1,10 @@
 { lib
 , stdenv
+<<<<<<< HEAD
 , fetchurl
+=======
+, fetchFromGitHub
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , fetchpatch
 , copyDesktopItems
 , pkg-config
@@ -12,11 +16,16 @@
 , libssh2
 , openssl
 , wxGTK32
+<<<<<<< HEAD
+=======
+, gitUpdater
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , makeDesktopItem
 }:
 
 stdenv.mkDerivation rec {
   pname = "freefilesync";
+<<<<<<< HEAD
   version = "12.5";
 
   src = fetchurl {
@@ -31,17 +40,33 @@ stdenv.mkDerivation rec {
 
   sourceRoot = ".";
 
+=======
+  version = "12.2";
+
+  src = fetchFromGitHub {
+    owner = "hkneptune";
+    repo = "FreeFileSync";
+    rev = "v${version}";
+    hash = "sha256-pCXMpK+NF06vgEgX31wyO24+kPhvPhdTeRk1j84nYd0=";
+  };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   # Patches from Debian
   patches = [
     # Disable loading of the missing Animal.dat
     (fetchpatch {
       url = "https://sources.debian.org/data/main/f/freefilesync/12.0-2/debian/patches/ffs_devuan.patch";
+<<<<<<< HEAD
       postFetch = ''
         substituteInPlace $out \
           --replace "-std=c++2b" "-std=c++23"
       '';
       excludes = [ "FreeFileSync/Source/ffs_paths.cpp" ];
       hash = "sha256-CtUC94AoYTxoqSMWZrzuO3jTD46rj11JnbNyXtWckCo=";
+=======
+      excludes = [ "FreeFileSync/Source/ffs_paths.cpp" ];
+      hash = "sha256-6pHr5txabMTpGMKP7I5oe1lGAmgb0cPW8ZkPv/WXN74=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     })
     # Fix build with GTK 3
     (fetchpatch {
@@ -120,6 +145,13 @@ stdenv.mkDerivation rec {
     })
   ];
 
+<<<<<<< HEAD
+=======
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "v";
+  };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   meta = with lib; {
     description = "Open Source File Synchronization & Backup Software";
     homepage = "https://freefilesync.org";

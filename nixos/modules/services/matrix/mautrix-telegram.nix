@@ -80,9 +80,12 @@ in {
               "example.com" = "full";
               "@admin:example.com" = "admin";
             };
+<<<<<<< HEAD
             telegram = {
               connection.use_ipv6 = true;
             };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           }
         '';
         description = lib.mdDoc ''
@@ -159,6 +162,10 @@ in {
         if [ ! -f '${registrationFile}' ]; then
           ${pkgs.mautrix-telegram}/bin/mautrix-telegram \
             --generate-registration \
+<<<<<<< HEAD
+=======
+            --base-config='${pkgs.mautrix-telegram}/${pkgs.mautrix-telegram.pythonModule.sitePackages}/mautrix_telegram/example-config.yaml' \
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
             --config='${settingsFile}' \
             --registration='${registrationFile}'
         fi

@@ -4,7 +4,11 @@
 , buildPythonPackage
 , chardet
 , django
+<<<<<<< HEAD
 , django-contrib-comments
+=======
+, django_contrib_comments
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , fetchPypi
 , filebrowser_safe
 , future
@@ -14,7 +18,10 @@
 , pillow
 , pyflakes
 , pythonOlder
+<<<<<<< HEAD
 , pytz
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , requests
 , requests-oauthlib
 , tzlocal
@@ -43,12 +50,19 @@ buildPythonPackage rec {
     bleach
     chardet
     django
+<<<<<<< HEAD
     django-contrib-comments
+=======
+    django_contrib_comments
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     filebrowser_safe
     future
     grappelli_safe
     pillow
+<<<<<<< HEAD
     pytz
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     requests
     requests-oauthlib
     tzlocal

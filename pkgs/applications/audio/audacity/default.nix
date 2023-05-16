@@ -61,13 +61,21 @@
 
 stdenv.mkDerivation rec {
   pname = "audacity";
+<<<<<<< HEAD
   version = "3.3.3";
+=======
+  version = "3.3.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "Audacity-${version}";
+<<<<<<< HEAD
     hash = "sha256-m38Awdv2ew+MKqd68x/ZsRBwidM2KJ3BRykIKgnFSx4=";
+=======
+    hash = "sha256-/DjTmanPzkShNoMFNbnQzzwEzk/a2uUYvVW9dsvl5uY=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   postPatch = ''

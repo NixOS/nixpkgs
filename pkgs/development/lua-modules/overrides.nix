@@ -15,7 +15,10 @@
 , gnulib
 , gnum4
 , gobject-introspection
+<<<<<<< HEAD
 , imagemagick
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , installShellFiles
 , lib
 , libevent
@@ -478,6 +481,7 @@ with prev;
     ];
   });
 
+<<<<<<< HEAD
   magick = prev.magick.overrideAttrs (oa: {
     buildInputs = oa.buildInputs ++ [
       imagemagick
@@ -497,6 +501,8 @@ with prev;
     meta.broken = !isLuaJIT;
   });
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   mpack = prev.mpack.overrideAttrs (drv: {
     buildInputs = (drv.buildInputs or []) ++ [ libmpack ];
     env = {
@@ -524,7 +530,13 @@ with prev;
       tar xf *.tar.gz
     '';
     # Without this, source root is wrongly set to ./readline-2.6/doc
+<<<<<<< HEAD
     sourceRoot = "readline-${lib.versions.majorMinor oa.version}";
+=======
+    setSourceRoot = ''
+      sourceRoot=./readline-${lib.versions.majorMinor oa.version}
+    '';
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   });
 
   sqlite = prev.sqlite.overrideAttrs (drv: {
@@ -559,7 +571,11 @@ with prev;
   });
 
   vstruct = prev.vstruct.overrideAttrs (_: {
+<<<<<<< HEAD
     meta.broken = (luaOlder "5.1" || luaAtLeast "5.4");
+=======
+    meta.broken = (luaOlder "5.1" || luaAtLeast "5.3");
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   });
 
   vusted = prev.vusted.overrideAttrs (_: {

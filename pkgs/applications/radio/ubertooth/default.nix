@@ -13,7 +13,11 @@ stdenv.mkDerivation rec {
     sha256 = "11r5ag2l5xn4pr7ycicm30w9c3ldn9yiqj1sqnjc79csxl2vrcfw";
   };
 
+<<<<<<< HEAD
   sourceRoot = "${src.name}/host";
+=======
+  sourceRoot = "source/host";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nativeBuildInputs = [ cmake pkg-config ];
   buildInputs = [ libbtbb libpcap libusb1 bluez ];

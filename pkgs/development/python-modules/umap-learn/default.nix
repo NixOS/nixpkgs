@@ -42,6 +42,7 @@ buildPythonPackage rec {
       url = "https://github.com/lmcinnes/umap/commit/949abd082524fce8c45dfb147bcd8e8ef49eade3.patch";
       hash = "sha256-8/1k8iYeF77FIaUApNtY07auPJkrt3vNRR/HTYRvq+0=";
     })
+<<<<<<< HEAD
     # Fix tests with numpy>=1.24
     # https://github.com/lmcinnes/umap/pull/952
     (fetchpatch {
@@ -57,6 +58,8 @@ buildPythonPackage rec {
       url = "https://github.com/lmcinnes/umap/commit/30e39938f4627f327223245dfe2c908af6b7e304.patch";
       hash = "sha256-7Divrym05wIPa7evgrNYXGm44/EOWG8sIYV8fmtuzJ4=";
     })
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   propagatedBuildInputs = [
@@ -96,6 +99,10 @@ buildPythonPackage rec {
     description = "Uniform Manifold Approximation and Projection";
     homepage = "https://github.com/lmcinnes/umap";
     license = licenses.bsd3;
+<<<<<<< HEAD
     maintainers = with maintainers; [ ];
+=======
+    maintainers = with maintainers; [ costrouc ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

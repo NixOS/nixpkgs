@@ -2,13 +2,21 @@
 
 stdenv.mkDerivation rec {
   pname = "dolibarr";
+<<<<<<< HEAD
   version = "18.0.1";
+=======
+  version = "16.0.4";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "Dolibarr";
     repo = "dolibarr";
     rev = version;
+<<<<<<< HEAD
     sha256 = "sha256-vOHspLYH0hB2aPVzfTqHzKdHFScyxFez5kHozAiokBo=";
+=======
+    sha256 = "sha256-H0f12pEsRxq6cYrcCjjQF1b5PFQEPBfYhZ5YnBfIbHk=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   dontBuild = true;

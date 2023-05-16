@@ -7,7 +7,11 @@
 
 buildPythonPackage rec {
   pname = "aiooncue";
+<<<<<<< HEAD
   version = "0.3.5";
+=======
+  version = "0.3.4";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -16,7 +20,11 @@ buildPythonPackage rec {
     owner = "bdraco";
     repo = pname;
     rev = version;
+<<<<<<< HEAD
     hash = "sha256-i3b/W2EeH/rNmMcNW+BA9w2BRzeV6EACSJI3zffVQS4=";
+=======
+    hash = "sha256-/Db32OomEkrBtq5lfT8zBGgvaUWnWE/sTqwNVNB9XAg=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [

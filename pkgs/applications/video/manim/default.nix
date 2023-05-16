@@ -1,6 +1,9 @@
 { lib
 , fetchFromGitHub
+<<<<<<< HEAD
 , fetchPypi
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 , cairo
 , ffmpeg
@@ -43,6 +46,7 @@ let
     fundus-calligra microtype wasysym physics dvisvgm jknapltx wasy cm-super
     babel-english gnu-freefont mathastext cbfonts-fd;
   };
+<<<<<<< HEAD
 
   python = python3.override {
     packageOverrides = self: super: {
@@ -67,6 +71,9 @@ let
   };
 
 in python.pkgs.buildPythonApplication rec {
+=======
+in python3.pkgs.buildPythonApplication rec {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pname = "manim";
   format = "pyproject";
   version = "0.16.0.post0";
@@ -79,8 +86,13 @@ in python.pkgs.buildPythonApplication rec {
     sha256 = "sha256-iXiPnI6lTP51P1X3iLp75ArRP66o8WAANBLoStPrz4M=";
   };
 
+<<<<<<< HEAD
   nativeBuildInputs = with python.pkgs; [
     poetry-core
+=======
+  nativeBuildInputs = [
+    python3.pkgs.poetry-core
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   postPatch = ''
@@ -93,7 +105,11 @@ in python.pkgs.buildPythonApplication rec {
 
   buildInputs = [ cairo ];
 
+<<<<<<< HEAD
   propagatedBuildInputs = with python.pkgs; [
+=======
+  propagatedBuildInputs = with python3.pkgs; [
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     click
     click-default-group
     cloup
@@ -130,6 +146,7 @@ in python.pkgs.buildPythonApplication rec {
     ])
   ];
 
+<<<<<<< HEAD
   nativeCheckInputs = [
     ffmpeg
     (texlive.combine manim-tinytex)
@@ -137,6 +154,16 @@ in python.pkgs.buildPythonApplication rec {
     pytest-xdist
     pytestCheckHook
   ]);
+=======
+
+  nativeCheckInputs = [
+    python3.pkgs.pytest-xdist
+    python3.pkgs.pytestCheckHook
+
+    ffmpeg
+    (texlive.combine manim-tinytex)
+  ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   # about 55 of ~600 tests failing mostly due to demand for display
   disabledTests = import ./failing_tests.nix;

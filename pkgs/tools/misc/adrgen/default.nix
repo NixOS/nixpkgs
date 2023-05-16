@@ -38,6 +38,10 @@ buildGoModule rec {
     homepage = "https://github.com/asiermarques/adrgen";
     description = "A command-line tool for generating and managing Architecture Decision Records";
     license = licenses.mit;
+<<<<<<< HEAD
+=======
+    platforms = platforms.unix;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     maintainers = [ maintainers.ivar ];
   };
 }

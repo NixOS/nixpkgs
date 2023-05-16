@@ -9,14 +9,22 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "nix-update";
+<<<<<<< HEAD
   version = "0.19.3";
+=======
+  version = "0.17.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "Mic92";
     repo = pname;
     rev = version;
+<<<<<<< HEAD
     hash = "sha256-+WD+SV/L3TvksWBIg6jk+T0dUTNdp4VKONzdzVT+pac=";
+=======
+    hash = "sha256-W2vBKgdPOLGdAIxbHD4Qi4ivAabFSuu7ikvu5kItwN8=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   makeWrapperArgs = [

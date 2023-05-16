@@ -2,8 +2,11 @@
 , stdenv
 , fetchFromGitHub
 , pkg-config
+<<<<<<< HEAD
 , makeWrapper
 , alsa-utils
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , alsa-lib
 , gtk4
 , wrapGAppsHook4
@@ -23,6 +26,7 @@ stdenv.mkDerivation rec {
   NIX_CFLAGS_COMPILE = [ "-Wno-error=deprecated-declarations" ];
 
   makeFlags = [ "DESTDIR=\${out}" "PREFIX=''" ];
+<<<<<<< HEAD
   sourceRoot = "${src.name}/src";
   nativeBuildInputs = [ pkg-config wrapGAppsHook4 makeWrapper ];
   buildInputs = [ gtk4 alsa-lib ];
@@ -35,6 +39,11 @@ stdenv.mkDerivation rec {
 
   # causes redefinition of _FORTIFY_SOURCE
   hardeningDisable = [ "fortify3" ];
+=======
+  sourceRoot = "source/src";
+  nativeBuildInputs = [ pkg-config wrapGAppsHook4 ];
+  buildInputs = [ gtk4 alsa-lib ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   meta = with lib; {
     description = "GUI for alsa controls presented by Focusrite Scarlett Gen 2/3 Mixer Driver";

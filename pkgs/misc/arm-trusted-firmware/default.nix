@@ -26,13 +26,21 @@ let
            stdenv.mkDerivation (rec {
 
     pname = "arm-trusted-firmware${lib.optionalString (platform != null) "-${platform}"}";
+<<<<<<< HEAD
     version = "2.9.0";
+=======
+    version = "2.7";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     src = fetchFromGitHub {
       owner = "ARM-software";
       repo = "arm-trusted-firmware";
       rev = "v${version}";
+<<<<<<< HEAD
       hash = "sha256-F7RNYNLh0ORzl5PmzRX9wGK8dZgUQVLKQg1M9oNd0pk=";
+=======
+      sha256 = "sha256-WDJMMIWZHNqxxAKeHiZDxtPjfsfQAWsbYv+0o0PiJQs=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
 
     patches = lib.optionals deleteHDCPBlobBeforeBuild [
@@ -52,8 +60,11 @@ let
     buildInputs = [ openssl ];
 
     makeFlags = [
+<<<<<<< HEAD
       "HOSTCC=$(CC_FOR_BUILD)"
       "M0_CROSS_COMPILE=${pkgsCross.arm-embedded.stdenv.cc.targetPrefix}"
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
       # binutils 2.39 regression
       # `warning: /build/source/build/rk3399/release/bl31/bl31.elf has a LOAD segment with RWX permissions`
@@ -89,6 +100,7 @@ in {
   inherit buildArmTrustedFirmware;
 
   armTrustedFirmwareTools = buildArmTrustedFirmware rec {
+<<<<<<< HEAD
     # Normally, arm-trusted-firmware builds the build tools for buildPlatform
     # using CC_FOR_BUILD (or as it calls it HOSTCC). Since want to build them
     # for the hostPlatform here, we trick it by overriding the HOSTCC setting
@@ -97,10 +109,19 @@ in {
     extraMakeFlags = [
       "HOSTCC=${stdenv.cc.targetPrefix}gcc"
       "fiptool" "certtool"
+=======
+    extraMakeFlags = [
+      "HOSTCC=${stdenv.cc.targetPrefix}gcc"
+      "fiptool" "certtool" "sptool"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     ];
     filesToInstall = [
       "tools/fiptool/fiptool"
       "tools/cert_create/cert_create"
+<<<<<<< HEAD
+=======
+      "tools/sptool/sptool"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     ];
     postInstall = ''
       mkdir -p "$out/bin"

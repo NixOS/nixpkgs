@@ -34,10 +34,16 @@ python3Packages.buildPythonApplication rec {
     pkg-config meson ninja
     appstream-glib desktop-file-utils
     wrapGAppsHook
+<<<<<<< HEAD
     gobject-introspection
   ];
   buildInputs = [
     gtk3
+=======
+  ];
+  buildInputs = [
+    gtk3 gobject-introspection
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     glib
   ];
   nativeCheckInputs = with python3Packages; [ flake8 pytest ];

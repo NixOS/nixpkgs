@@ -12,7 +12,11 @@
 
 buildPythonPackage rec {
   pname = "dsmr-parser";
+<<<<<<< HEAD
   version = "1.3.0";
+=======
+  version = "1.2.3";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -21,7 +25,11 @@ buildPythonPackage rec {
     owner = "ndokter";
     repo = "dsmr_parser";
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-nPhXJgky9/CgqBnyqbF2+BASHRSpwKd0ePIRFMq29Vc=";
+=======
+    hash = "sha256-M6ztqENIeD5foagKUXtJiGfFZPHsczlB0/AH4FMIsLY=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [

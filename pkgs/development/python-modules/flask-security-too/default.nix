@@ -27,7 +27,11 @@
 , email-validator
 , flask
 , flask-login
+<<<<<<< HEAD
 , flask-principal
+=======
+, flask_principal
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , flask-wtf
 , itsdangerous
 , passlib
@@ -57,17 +61,24 @@ buildPythonPackage rec {
     hash = "sha256-lZzm43m30y+2qjxNddFEeg9HDlQP9afq5VtuR25zaLc=";
   };
 
+<<<<<<< HEAD
   postPatch = ''
     # This should be removed after updating to version 5.3.0.
     sed -i '/filterwarnings =/a ignore:pkg_resources is deprecated:DeprecationWarning' pytest.ini
   '';
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   propagatedBuildInputs = [
     blinker
     email-validator
     flask
     flask-login
+<<<<<<< HEAD
     flask-principal
+=======
+    flask_principal
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     flask-wtf
     itsdangerous
     passlib

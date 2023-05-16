@@ -27,13 +27,21 @@ lib.checkListOfEnum "${pname}: theme variants" [
 
 stdenvNoCC.mkDerivation rec {
   inherit pname;
+<<<<<<< HEAD
   version = "2023-07-03";
+=======
+  version = "2023-01-08";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "vinceliuice";
     repo = pname;
     rev = version;
+<<<<<<< HEAD
     hash = "sha256-lq6d3BForrvzEJYeEMQZplvn/p6dPjggTToAU9UcPoM=";
+=======
+    hash = "sha256-xqKGZPlGl8kNZ4AQYZWAywL+6UxwGzYOZ9WvB85JKZk=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ gtk3 jdupes ];

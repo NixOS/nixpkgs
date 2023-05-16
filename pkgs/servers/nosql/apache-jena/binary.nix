@@ -2,10 +2,17 @@
 
 stdenv.mkDerivation rec {
   pname = "apache-jena";
+<<<<<<< HEAD
   version = "4.9.0";
   src = fetchurl {
     url = "mirror://apache/jena/binaries/apache-jena-${version}.tar.gz";
     hash = "sha256-kUsEdEKwYjyM5G8YKTt90fWzX21hiulRj3W5jK45Keg=";
+=======
+  version = "4.8.0";
+  src = fetchurl {
+    url = "mirror://apache/jena/binaries/apache-jena-${version}.tar.gz";
+    hash = "sha256-kAbhH0E2C1ToxDQgFUqWxvknCeFZbtqFhOmiSJ//ciU=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
   nativeBuildInputs = [
     makeWrapper

@@ -5,11 +5,19 @@ lib.throwIfNot (lib.versionAtLeast ocaml.version "4.08")
 
 stdenv.mkDerivation rec {
   pname = "ocaml${ocaml.version}-mtime";
+<<<<<<< HEAD
   version = "2.0.0";
 
   src = fetchurl {
     url = "https://erratique.ch/software/mtime/releases/mtime-${version}.tbz";
     sha256 = "Pz2g6gBts0RlsDCE3npYqxWg8W9HgoxQC+U63fHgROs=";
+=======
+  version = "1.4.0";
+
+  src = fetchurl {
+    url = "https://erratique.ch/software/mtime/releases/mtime-${version}.tbz";
+    sha256 = "sha256-VQyYEk8+57Yq8SUuYossaQUHZKqemHDJtf4LK8qjxvc=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ ocaml findlib ocamlbuild topkg ];

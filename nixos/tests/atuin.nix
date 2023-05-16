@@ -6,16 +6,26 @@ let
   testPass = "password";
   testEmail = "test.testerman@test.com";
 in
+<<<<<<< HEAD
 {
   name = "atuin";
   meta.maintainers = with lib.maintainers; [ devusb ];
+=======
+with lib;
+{
+  name = "atuin";
+  meta.maintainers = with pkgs.lib.maintainers; [ devusb ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nodes = {
     server =
       { ... }:
       {
+<<<<<<< HEAD
         services.postgresql.enable = true;
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         services.atuin = {
           enable = true;
           port = testPort;

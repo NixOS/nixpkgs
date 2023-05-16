@@ -14,13 +14,21 @@
 
 stdenv.mkDerivation rec {
   pname = "nvidia-vaapi-driver";
+<<<<<<< HEAD
   version = "0.0.10";
+=======
+  version = "0.0.9";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "elFarto";
     repo = pname;
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-j6AIleVZCgV7CD7nP/dKz5we3sUW9pldy0QKi8xwXB0=";
+=======
+    sha256 = "sha256-mQtprgm6QonYiMUPPIcCbWxPQ/b2XuQiOkROZNPYaQk=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [
@@ -39,6 +47,17 @@ stdenv.mkDerivation rec {
     libva
   ];
 
+<<<<<<< HEAD
+=======
+  # Note: Attempt to remove on next release after 0.0.9
+  # nixpkgs reference: https://github.com/NixOS/nixpkgs/pull/221978#issuecomment-1483892437
+  # upstream: https://github.com/elFarto/nvidia-vaapi-driver/issues/188
+  NIX_CFLAGS_COMPILE = [
+    "-Wno-error=format="
+    "-Wno-error=int-conversion"
+  ];
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   postFixup = ''
     addOpenGLRunpath "$out/lib/dri/nvidia_drv_video.so"
   '';

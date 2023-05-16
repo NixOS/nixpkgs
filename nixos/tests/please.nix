@@ -6,10 +6,17 @@ import ./make-test-python.nix ({ lib, ... }:
   nodes.machine =
     { ... }:
     {
+<<<<<<< HEAD
       users.users = lib.mkMerge [
         (lib.listToAttrs (map
           (n: lib.nameValuePair n { isNormalUser = true; })
           (lib.genList (x: "user${toString x}") 6)))
+=======
+      users.users = with lib; mkMerge [
+        (listToAttrs (map
+          (n: nameValuePair n { isNormalUser = true; })
+          (genList (x: "user${toString x}") 6)))
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         {
           user0.extraGroups = [ "wheel" ];
         }

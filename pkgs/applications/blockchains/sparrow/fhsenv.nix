@@ -4,9 +4,15 @@
 }:
 
 buildFHSEnv {
+<<<<<<< HEAD
   name = "sparrow-desktop";
 
   runScript = "${sparrow-unwrapped}/bin/sparrow-desktop";
+=======
+  name = "sparrow";
+
+  runScript = "${sparrow-unwrapped}/bin/sparrow";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   targetPkgs = pkgs: with pkgs; [
     sparrow-unwrapped

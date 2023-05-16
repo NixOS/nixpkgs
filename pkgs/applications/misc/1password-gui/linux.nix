@@ -131,11 +131,16 @@ in stdenv.mkDerivation {
     makeShellWrapper $out/share/1password/1password $out/bin/1password \
       "''${gappsWrapperArgs[@]}" \
       --suffix PATH : ${lib.makeBinPath [ xdg-utils ]} \
+<<<<<<< HEAD
       --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ udev ]}
       # Currently half broken on wayland (e.g. no copy functionality)
       # See: https://github.com/NixOS/nixpkgs/pull/232718#issuecomment-1582123406
       # Remove this comment when upstream fixes:
       # https://1password.community/discussion/comment/624011/#Comment_624011
       #--add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"
+=======
+      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ udev ]} \
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '';
 }

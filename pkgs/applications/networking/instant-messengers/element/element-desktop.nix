@@ -32,7 +32,11 @@ stdenv.mkDerivation (finalAttrs: builtins.removeAttrs pinData [ "hashes" ] // {
     owner = "vector-im";
     repo = "element-desktop";
     rev = "v${finalAttrs.version}";
+<<<<<<< HEAD
     hash = desktopSrcHash;
+=======
+    sha256 = desktopSrcHash;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   offlineCache = fetchYarnDeps {
@@ -123,10 +127,13 @@ stdenv.mkDerivation (finalAttrs: builtins.removeAttrs pinData [ "hashes" ] // {
     mimeTypes = [ "x-scheme-handler/element" ];
   };
 
+<<<<<<< HEAD
   postFixup = lib.optionalString stdenv.isDarwin ''
     cp build/icon.icns $out/Applications/Element.app/Contents/Resources/element.icns
   '';
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   passthru = {
     updateScript = ./update.sh;
 
@@ -149,6 +156,9 @@ stdenv.mkDerivation (finalAttrs: builtins.removeAttrs pinData [ "hashes" ] // {
     license = licenses.asl20;
     maintainers = teams.matrix.members;
     inherit (electron.meta) platforms;
+<<<<<<< HEAD
     mainProgram = "element-desktop";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 })

@@ -3,6 +3,7 @@
 , fetchFromGitHub
 
 # build-system
+<<<<<<< HEAD
 , cmake
 , cython
 , ninja
@@ -10,6 +11,13 @@
 , scikit-build
 , setuptools
 , wheel
+=======
+, setuptools
+, scikit-build
+, cython
+, cmake
+, ninja
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 # propagates
 , msgpack
@@ -46,10 +54,16 @@ buildPythonPackage rec {
     cmake
     cython
     ninja
+<<<<<<< HEAD
     oldest-supported-numpy
     scikit-build
     setuptools
     wheel
+=======
+    numpy
+    scikit-build
+    setuptools
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   dontUseCmakeConfigure = true;

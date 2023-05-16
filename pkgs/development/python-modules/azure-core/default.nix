@@ -14,6 +14,7 @@
 , requests
 , six
 , trio
+<<<<<<< HEAD
 , typing-extensions
 }:
 
@@ -23,13 +24,25 @@ buildPythonPackage rec {
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
+=======
+, typing-extensions }:
+
+buildPythonPackage rec {
+  version = "1.26.3";
+  pname = "azure-core";
+  disabled = pythonOlder "3.6";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   __darwinAllowLocalNetworking = true;
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
+<<<<<<< HEAD
     hash = "sha256-6e78Zvwf3lbatvBNTl0SxgdU1an6Sb3P2FNPyW7ZNr0=";
+=======
+    hash = "sha256-rL0NqpZ1zohiPaNcgNgZza+pFzHe5rJpXGTXyp2oLbQ=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [
@@ -38,6 +51,7 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
+<<<<<<< HEAD
   passthru.optional-dependencies = {
     aio = [
       aiohttp
@@ -46,6 +60,11 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     aiodns
+=======
+  nativeCheckInputs = [
+    aiodns
+    aiohttp
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     flask
     mock
     pytest
@@ -53,17 +72,25 @@ buildPythonPackage rec {
     pytest-asyncio
     pytestCheckHook
     trio
+<<<<<<< HEAD
   ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+=======
+  ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   # test server needs to be available
   preCheck = ''
     export PYTHONPATH=tests/testserver_tests/coretestserver:$PYTHONPATH
   '';
 
+<<<<<<< HEAD
   pytestFlagsArray = [
     "tests/"
   ];
 
+=======
+  pytestFlagsArray = [ "tests/" ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   # disable tests which touch network
   disabledTests = [
     "aiohttp"
@@ -79,7 +106,10 @@ buildPythonPackage rec {
   ] ++ lib.optionals stdenv.isDarwin [
     "location_polling_fail"
   ];
+<<<<<<< HEAD
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   disabledTestPaths = [
     # requires testing modules which aren't published, and likely to create cyclic dependencies
     "tests/test_connection_string_parsing.py"
@@ -100,7 +130,10 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Microsoft Azure Core Library for Python";
     homepage = "https://github.com/Azure/azure-sdk-for-python";
+<<<<<<< HEAD
     changelog = "https://github.com/Azure/azure-sdk-for-python/blob/main/sdk/core/azure-core/CHANGELOG.md";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     license = licenses.mit;
     maintainers = with maintainers; [ jonringer ];
   };

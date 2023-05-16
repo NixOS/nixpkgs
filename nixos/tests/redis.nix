@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import ./make-test-python.nix ({ pkgs, lib, ... }:
 {
   name = "redis";
@@ -6,12 +7,28 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
   nodes = {
     machine =
       { pkgs, lib, ... }:
+=======
+import ./make-test-python.nix ({ pkgs, ... }:
+{
+  name = "redis";
+  meta = with pkgs.lib.maintainers; {
+    maintainers = [ flokli ];
+  };
+
+  nodes = {
+    machine =
+      { pkgs, lib, ... }: with lib;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
       {
         services.redis.servers."".enable = true;
         services.redis.servers."test".enable = true;
 
+<<<<<<< HEAD
         users.users = lib.listToAttrs (map (suffix: lib.nameValuePair "member${suffix}" {
+=======
+        users.users = listToAttrs (map (suffix: nameValuePair "member${suffix}" {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           createHome = false;
           description = "A member of the redis${suffix} group";
           isNormalUser = true;

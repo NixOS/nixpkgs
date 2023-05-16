@@ -49,6 +49,10 @@ buildPythonPackage rec {
     description = "Library to deal with UFO font sources";
     homepage = "https://github.com/fonttools/ufoLib2";
     license = licenses.mit;
+<<<<<<< HEAD
     maintainers = with maintainers; [ ];
+=======
+    maintainers = with maintainers; [ jtojnar ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

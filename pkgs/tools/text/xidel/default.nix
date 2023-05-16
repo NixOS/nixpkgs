@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 { lib, stdenv, fetchFromGitHub, fpc, openssl }:
+=======
+{ lib, stdenv, fetchsvn, fetchFromGitHub, fpc, openssl }:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 let
   flreSrc = fetchFromGitHub {

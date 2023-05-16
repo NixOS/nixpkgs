@@ -14,7 +14,10 @@
 , pkgs
 , fetchurl
 , fetchpatch
+<<<<<<< HEAD
 , autoreconfHook
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , zlib
 , openssl
 , libedit
@@ -28,11 +31,18 @@
 , hostname
 , nixosTests
 , withFIDO ? stdenv.hostPlatform.isUnix && !stdenv.hostPlatform.isMusl
+<<<<<<< HEAD
 , withPAM ? stdenv.hostPlatform.isLinux
 , linkOpenssl ? true
 }:
 
 stdenv.mkDerivation {
+=======
+, linkOpenssl ? true
+}:
+
+stdenv.mkDerivation rec {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   inherit pname version src;
 
   patches = [
@@ -45,6 +55,7 @@ stdenv.mkDerivation {
 
     # See discussion in https://github.com/NixOS/nixpkgs/pull/16966
     ./dont_create_privsep_path.patch
+<<<<<<< HEAD
 
     # Pull upstream zlib-1.3 support.
     # The patch changes configure.ac, uses autoreconfHook.
@@ -53,6 +64,8 @@ stdenv.mkDerivation {
       url = "https://github.com/openssh/openssh-portable/commit/cb4ed12ffc332d1f72d054ed92655b5f1c38f621.patch";
       hash = "sha256-3Gx0/I2n9/XaWCIefVYtvk5f+VgH6MlhMBse+PMyf34=";
     })
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ] ++ extraPatches;
 
   postPatch =
@@ -63,7 +76,11 @@ stdenv.mkDerivation {
     '';
 
   strictDeps = true;
+<<<<<<< HEAD
   nativeBuildInputs = [ autoreconfHook pkg-config ]
+=======
+  nativeBuildInputs = [ pkg-config ]
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     # This is not the same as the libkrb5 from the inputs! pkgs.libkrb5 is
     # needed here to access krb5-config in order to cross compile. See:
     # https://github.com/NixOS/nixpkgs/pull/107606
@@ -72,7 +89,11 @@ stdenv.mkDerivation {
   buildInputs = [ zlib openssl libedit ]
     ++ lib.optional withFIDO libfido2
     ++ lib.optional withKerberos libkrb5
+<<<<<<< HEAD
     ++ lib.optional withPAM pam;
+=======
+    ++ lib.optional stdenv.isLinux pam;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   preConfigure = ''
     # Setting LD causes `configure' and `make' to disagree about which linker
@@ -89,7 +110,11 @@ stdenv.mkDerivation {
     "--with-mantype=man"
     "--with-libedit=yes"
     "--disable-strip"
+<<<<<<< HEAD
     (lib.withFeature withPAM "pam")
+=======
+    (if stdenv.isLinux then "--with-pam" else "--without-pam")
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ] ++ lib.optional (etcDir != null) "--sysconfdir=${etcDir}"
     ++ lib.optional withFIDO "--with-security-key-builtin=yes"
     ++ lib.optional withKerberos (assert libkrb5 != null; "--with-kerberos5=${libkrb5}")

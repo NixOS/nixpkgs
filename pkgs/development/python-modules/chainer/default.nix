@@ -1,7 +1,11 @@
 { lib
 , buildPythonPackage
 , config
+<<<<<<< HEAD
 , cudaSupport ? config.cudaSupport
+=======
+, cudaSupport ? config.cudaSupport or false
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , cupy
 , fetchFromGitHub
 , filelock

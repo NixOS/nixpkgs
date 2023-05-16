@@ -1,6 +1,9 @@
 { stdenv
 , fetchurl
+<<<<<<< HEAD
 , fetchpatch
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , lib
 , substituteAll
 , pam
@@ -215,6 +218,7 @@ in
     tar -xf ${srcs.translations}
   '';
 
+<<<<<<< HEAD
   # Remove build config to reduce the amount of `-dev` outputs in the
   # runtime closure. This was introduced in upstream commit
   # cbfac11330882c7d0a817b6c37a08b2ace2b66f4, so the patch doesn't apply
@@ -238,6 +242,8 @@ in
       (x: lib.optional (x?dev) x.dev)
       buildInputs);
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ### QT/KDE
   #
   # configure.ac assumes that the first directory that contains headers and
@@ -419,7 +425,11 @@ in
   dontWrapQtApps = true;
 
   configureFlags = [
+<<<<<<< HEAD
     (lib.optionalString (!withHelp) "--without-help")
+=======
+    (if withHelp then "" else "--without-help")
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "--with-boost=${getDev boost}"
     "--with-boost-libdir=${getLib boost}/lib"
     "--with-beanshell-jar=${bsh}"

@@ -19,7 +19,11 @@ let
 
   buildLuaApplication = args: buildLuarocksPackage ({ namePrefix = ""; } // args);
 
+<<<<<<< HEAD
   buildLuarocksPackage = lib.makeOverridable (callPackage ../development/interpreters/lua-5/build-luarocks-package.nix { });
+=======
+  buildLuarocksPackage = lib.makeOverridable (callPackage ../development/interpreters/lua-5/build-lua-package.nix { });
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   luaLib = callPackage ../development/lua-modules/lib.nix { };
 
@@ -54,10 +58,17 @@ rec {
     inherit (pkgs.buildPackages) makeSetupHook makeWrapper;
   };
 
+<<<<<<< HEAD
   luarocks = toLuaModule (callPackage ../development/tools/misc/luarocks/default.nix { });
 
   # a fork of luarocks used to generate nix lua derivations from rockspecs
   luarocks-nix = toLuaModule (callPackage ../development/tools/misc/luarocks/luarocks-nix.nix { });
+=======
+  luarocks = callPackage ../development/tools/misc/luarocks/default.nix { };
+
+  # a fork of luarocks used to generate nix lua derivations from rockspecs
+  luarocks-nix = callPackage ../development/tools/misc/luarocks/luarocks-nix.nix { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
  lua-resty-core = callPackage ({ fetchFromGitHub }: buildLuaPackage rec {
     pname = "lua-resty-core";
@@ -76,7 +87,11 @@ rec {
       description = "New FFI-based API for lua-nginx-module";
       homepage = "https://github.com/openresty/lua-resty-core";
       license = licenses.bsd3;
+<<<<<<< HEAD
       maintainers = with maintainers; [ ];
+=======
+      maintainers = with maintainers; [ SuperSandro2000 ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
   }) {};
 
@@ -95,7 +110,11 @@ rec {
       description = "Lua-land LRU Cache based on LuaJIT FFI";
       homepage = "https://github.com/openresty/lua-resty-lrucache";
       license = licenses.bsd3;
+<<<<<<< HEAD
       maintainers = with maintainers; [ ];
+=======
+      maintainers = with maintainers; [ SuperSandro2000 ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
   }) {};
 

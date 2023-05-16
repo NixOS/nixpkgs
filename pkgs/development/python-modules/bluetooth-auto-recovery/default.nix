@@ -1,6 +1,9 @@
 { lib
 , async-timeout
+<<<<<<< HEAD
 , bluetooth-adapters
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , btsocket
 , buildPythonPackage
 , fetchFromGitHub
@@ -13,7 +16,11 @@
 
 buildPythonPackage rec {
   pname = "bluetooth-auto-recovery";
+<<<<<<< HEAD
   version = "1.2.3";
+=======
+  version = "1.2.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -22,7 +29,11 @@ buildPythonPackage rec {
     owner = "Bluetooth-Devices";
     repo = pname;
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-1ytiTIAV00Wk2zqZKRAsstVLuyzPEGBISz0g0ssC5Eo=";
+=======
+    hash = "sha256-uPa8iXG++doRMAK83NSnqiqnZSIjdL7zMTkjdRrSjtA=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [
@@ -31,7 +42,10 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     async-timeout
+<<<<<<< HEAD
     bluetooth-adapters
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     btsocket
     pyric
     usb-devices

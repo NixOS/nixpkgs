@@ -1,8 +1,16 @@
 import ./make-test-python.nix ({ lib, ... }:
 
+<<<<<<< HEAD
 {
   name = "polaris";
   meta.maintainers = with lib.maintainers; [ pbsds ];
+=======
+with lib;
+
+{
+  name = "polaris";
+  meta.maintainers = with maintainers; [ pbsds ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nodes.machine =
     { pkgs, ... }: {

@@ -45,8 +45,12 @@ stdenv.mkDerivation rec {
 
   postFixup = ''
     makeWrapper ${electron}/bin/electron $out/bin/${pname} \
+<<<<<<< HEAD
       --add-flags $out/share/${pname}/resources/app.asar \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform=wayland --enable-features=WaylandWindowDecorations}}"
+=======
+      --add-flags $out/share/${pname}/resources/app.asar
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '';
 
   meta = with lib; {

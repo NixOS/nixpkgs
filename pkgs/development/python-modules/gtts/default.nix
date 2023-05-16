@@ -15,14 +15,22 @@
 
 buildPythonPackage rec {
   pname = "gtts";
+<<<<<<< HEAD
   version = "2.3.2";
+=======
+  version = "2.3.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "pndurette";
     repo = "gTTS";
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-Z5dM/PzIA8qtw0RepTKmHpqBwYMRwNLhWuEC0aBGL3U=";
+=======
+    hash = "sha256-dbIcx6U5TIy3CteUGrZqcWqOJoZD2HILaJmKDY+j/II=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [

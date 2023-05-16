@@ -23,8 +23,11 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-82NZeZc06ueFvss3QGPwvoM88i+ItPFpzSUbmTJOCOc=";
   };
 
+<<<<<<< HEAD
   outputs = [ "out" "terminfo" ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   inherit patches;
 
   configFile = lib.optionalString (conf != null)
@@ -53,9 +56,13 @@ stdenv.mkDerivation (finalAttrs: {
   ] ++ extraLibs;
 
   preInstall = ''
+<<<<<<< HEAD
     export TERMINFO=$terminfo/share/terminfo
     mkdir -p $TERMINFO $out/nix-support
     echo "$terminfo" >> $out/nix-support/propagated-user-env-packages
+=======
+    export TERMINFO=$out/share/terminfo
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '';
 
   installFlags = [ "PREFIX=$(out)" ];

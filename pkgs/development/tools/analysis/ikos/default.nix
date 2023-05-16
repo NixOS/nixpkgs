@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 { stdenv, lib, fetchFromGitHub, fetchpatch, cmake, boost, tbb
+=======
+{ stdenv, lib, fetchFromGitHub, cmake, boost, tbb
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , gmp, llvm, clang, sqlite, python3
 , ocamlPackages, mpfr, ppl, doxygen, graphviz
 }:
@@ -11,18 +15,26 @@ in
 
 stdenv.mkDerivation rec {
   pname = "ikos";
+<<<<<<< HEAD
   version = "3.1";
+=======
+  version = "3.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "NASA-SW-VnV";
     repo = "ikos";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-scaFkUhCkIi41iR6CGPbEndzXkgqTKMb3PDNvhgVbCE=";
   };
 
   patches = fetchpatch {
     url = "https://github.com/NASA-SW-VnV/ikos/commit/2e647432427b3f0dbb639e0371d976ab6406f290.patch";
     hash = "sha256-ffzjlqEp4qp76Kwl5zpyQlg/xUMt8aLDSSP4XA4ndS8=";
+=======
+    sha256 = "0k3kp1af0qx3l1x6a4sl4fm8qlwchjvwkvs2ck0fhfnc62q2im5f";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ cmake ];

@@ -3,7 +3,10 @@
 , aresponses
 , buildPythonPackage
 , fetchFromGitHub
+<<<<<<< HEAD
 , fetchpatch
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , poetry-core
 , pytest-asyncio
 , pytestCheckHook
@@ -25,6 +28,7 @@ buildPythonPackage rec {
     hash = "sha256-BorgGHxoEeIGyJKqe9mFRDpcGHhi6/8IV7ubEI8yQE4=";
   };
 
+<<<<<<< HEAD
   patches = [
     # https://github.com/klaasnicolaas/python-cemm/pull/360
     (fetchpatch {
@@ -34,6 +38,8 @@ buildPythonPackage rec {
     })
   ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace '"0.0.0"' '"${version}"' \
@@ -49,8 +55,11 @@ buildPythonPackage rec {
     yarl
   ];
 
+<<<<<<< HEAD
   __darwinAllowLocalNetworking = true;
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nativeCheckInputs = [
     aresponses
     pytest-asyncio

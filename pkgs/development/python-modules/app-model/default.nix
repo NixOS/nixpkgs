@@ -13,7 +13,11 @@
 
 buildPythonPackage rec {
   pname = "app-model";
+<<<<<<< HEAD
   version = "0.2.1";
+=======
+  version = "0.1.4";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -22,7 +26,11 @@ buildPythonPackage rec {
     owner = "pyapp-kit";
     repo = pname;
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-1LldqihVCCgFdnsod751zWAAqkaaIH2qMpfsPYjWzgs=";
+=======
+    hash = "sha256-GvMPWIvDydJ8C7wDR5DjmEGhVt0jd5e4WzP10a7mGm8=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;

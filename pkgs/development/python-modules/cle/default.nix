@@ -16,7 +16,11 @@
 
 let
   # The binaries are following the argr projects release cycle
+<<<<<<< HEAD
   version = "9.2.66";
+=======
+  version = "9.2.50";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   # Binary files from https://github.com/angr/binaries (only used for testing and only here)
   binaries = fetchFromGitHub {
@@ -38,7 +42,11 @@ buildPythonPackage rec {
     owner = "angr";
     repo = pname;
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-/LDVpw1Ej2YuzwA2qUoZv/ajQZPL9dDvvawj9r5bGbo=";
+=======
+    hash = "sha256-pThCJlxx2IkLJhc+U5H6fSQy8QLFQr6cIILsdlEA8wM=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [
@@ -74,8 +82,11 @@ buildPythonPackage rec {
     "test_plt_full_relro"
     # Test fails
     "test_tls_pe_incorrect_tls_data_start"
+<<<<<<< HEAD
     "test_x86"
     "test_x86_64"
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     # The required parts is not present on Nix
     "test_remote_file_map"
   ];

@@ -29,7 +29,11 @@ stdenv.mkDerivation rec {
   '';
 
   postInstall = ''
+<<<<<<< HEAD
     # Make sure Jack is available in $PATH for tetraproc
+=======
+    # Make sure Jack is avalable in $PATH for tetraproc
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     wrapProgram $out/bin/tetraproc --prefix PATH : "${jack2}/bin"
   '';
 

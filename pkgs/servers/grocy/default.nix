@@ -2,11 +2,19 @@
 
 stdenv.mkDerivation rec {
   pname = "grocy";
+<<<<<<< HEAD
   version = "4.0.3";
 
   src = fetchurl {
     url = "https://github.com/grocy/grocy/releases/download/v${version}/grocy_${version}.zip";
     hash = "sha256-KBTsi634SolgA01eRthMuWx7DIF7rhvJSPxiHyuKSR8=";
+=======
+  version = "3.3.2";
+
+  src = fetchurl {
+    url = "https://github.com/grocy/grocy/releases/download/v${version}/grocy_${version}.zip";
+    sha256 = "sha256-KF4zxrC8rlRUaBKc4iLIt6TSAHMJ+tOWptMsVcixVWs=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ unzip ];
@@ -33,7 +41,11 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     license = licenses.mit;
+<<<<<<< HEAD
     maintainers = with maintainers; [ n0emis ];
+=======
+    maintainers = with maintainers; [ ma27 ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     description = "ERP beyond your fridge - grocy is a web-based self-hosted groceries & household management solution for your home";
     homepage = "https://grocy.info/";
   };

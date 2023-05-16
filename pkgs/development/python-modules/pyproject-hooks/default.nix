@@ -2,7 +2,10 @@
 , buildPythonPackage
 , fetchPypi
 , flit-core
+<<<<<<< HEAD
 , pyproject-hooks
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , pytestCheckHook
 , pythonOlder
 , setuptools
@@ -27,6 +30,7 @@ buildPythonPackage rec {
     flit-core
   ];
 
+<<<<<<< HEAD
   propagatedBuildInputs = lib.optionals (pythonOlder "3.11") [
     tomli
   ];
@@ -58,6 +62,24 @@ buildPythonPackage rec {
       ];
     };
   };
+=======
+  propagatedBuildInputs = [
+  ] ++ lib.optionals (pythonOlder "3.11") [
+    tomli
+  ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+    setuptools
+    testpath
+  ];
+
+  disabledTests = [
+    # fail to import setuptools
+    "test_setup_py"
+    "test_issue_104"
+  ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   pythonImportsCheck = [
     "pyproject_hooks"
@@ -68,6 +90,10 @@ buildPythonPackage rec {
     homepage = "https://github.com/pypa/pyproject-hooks";
     changelog = "https://github.com/pypa/pyproject-hooks/blob/v${version}/docs/changelog.rst";
     license = licenses.mit;
+<<<<<<< HEAD
     maintainers = teams.python.members;
+=======
+    maintainers = with maintainers; [ hexa ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

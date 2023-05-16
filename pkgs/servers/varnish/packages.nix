@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 { callPackages, callPackage, varnish60, varnish72, varnish73, fetchFromGitHub }: {
+=======
+{ callPackages, callPackage, varnish60, varnish72, fetchFromGitHub }: {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   varnish60Packages = rec {
     varnish = varnish60;
     modules = (callPackages ./modules.nix { inherit varnish; }).modules15;
@@ -17,8 +21,11 @@
     varnish = varnish72;
     modules = (callPackages ./modules.nix { inherit varnish; }).modules20;
   };
+<<<<<<< HEAD
   varnish73Packages = rec {
     varnish = varnish73;
     modules = (callPackages ./modules.nix { inherit varnish; }).modules22;
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }

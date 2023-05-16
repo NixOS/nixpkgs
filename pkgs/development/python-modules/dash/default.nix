@@ -21,7 +21,11 @@
 
 buildPythonPackage rec {
   pname = "dash";
+<<<<<<< HEAD
   version = "2.10.2";
+=======
+  version = "2.9.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -30,7 +34,11 @@ buildPythonPackage rec {
     owner = "plotly";
     repo = pname;
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-OcY4nEtIfR9nvBaBwpHeUJkHXwWZp+LZxjhEkwjRC9k=";
+=======
+    hash = "sha256-bxWSYDKKnsWs/bTRkIsNJ2hOIoHS2xhl4IIW+uEnbMU=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [

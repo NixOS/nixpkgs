@@ -1,6 +1,9 @@
 { lib
 , python3
+<<<<<<< HEAD
 , fetchPypi
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -10,7 +13,11 @@ python3.pkgs.buildPythonApplication rec {
 
   disabled = python3.pkgs.pythonOlder "3.6";
 
+<<<<<<< HEAD
   src = fetchPypi {
+=======
+  src = python3.pkgs.fetchPypi {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     inherit pname version;
     hash = "sha256-YfWiy44rCRXK5xVkmA9X7pAlDhZrk6nS9vbC2eYvjbg=";
   };

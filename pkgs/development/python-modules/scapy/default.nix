@@ -48,7 +48,11 @@ buildPythonPackage rec {
     ++ lib.optional withCryptography cryptography
     ++ lib.optional withVoipSupport sox
     ++ lib.optional withPlottingSupport matplotlib
+<<<<<<< HEAD
     ++ lib.optionals withGraphicsSupport [ pyx texlive.combined.scheme-basic graphviz imagemagick ];
+=======
+    ++ lib.optionals withGraphicsSupport [ pyx texlive.combined.scheme-minimal graphviz imagemagick ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   # Running the tests seems too complicated:
   doCheck = false;

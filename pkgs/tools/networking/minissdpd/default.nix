@@ -10,10 +10,13 @@ stdenv.mkDerivation rec {
     name = "${pname}-${version}.tar.gz";
   };
 
+<<<<<<< HEAD
   patches = [
     ./makefile-install-dir.patch
   ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   buildInputs = [ libnfnetlink ];
 
   installFlags = [ "PREFIX=$(out)" "INSTALLPREFIX=$(out)" ];

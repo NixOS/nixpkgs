@@ -31,7 +31,11 @@
 
 buildPythonPackage rec {
   pname = "scrapy";
+<<<<<<< HEAD
   version = "2.10.1";
+=======
+  version = "2.9.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -39,7 +43,11 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit version;
     pname = "Scrapy";
+<<<<<<< HEAD
     hash = "sha256-kdZ4dfu1N2B7B+MTY0RXGKNTK1RObitLr4oEKyGh0Q8=";
+=======
+    hash = "sha256-VkyXK1blS4MUHzlc4/aiW/4gk9YdE/m4HQU4ThnbmNo=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [
@@ -98,7 +106,10 @@ buildPythonPackage rec {
     "test_custom_loop_asyncio"
     "test_custom_loop_asyncio_deferred_signal"
     "FileFeedStoragePreFeedOptionsTest"  # https://github.com/scrapy/scrapy/issues/5157
+<<<<<<< HEAD
     "test_persist"
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "test_timeout_download_from_spider_nodata_rcvd"
     "test_timeout_download_from_spider_server_hangs"
     # Depends on uvloop

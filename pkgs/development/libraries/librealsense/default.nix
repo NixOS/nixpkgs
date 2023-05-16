@@ -13,7 +13,11 @@
 , glfw
 , libGLU
 , curl
+<<<<<<< HEAD
 , cudaSupport ? config.cudaSupport, cudaPackages ? { }
+=======
+, cudaSupport ? config.cudaSupport or false, cudaPackages ? {}
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , enablePython ? false, pythonPackages ? null
 , enableGUI ? false,
 }:
@@ -78,10 +82,14 @@ stdenv.mkDerivation rec {
   # script does not do this, and it's questionable if intel knows it should be
   # done
   # ( https://github.com/IntelRealSense/meta-intel-realsense/issues/20 )
+<<<<<<< HEAD
   postInstall = ''
     substituteInPlace $out/lib/cmake/realsense2/realsense2Targets.cmake \
     --replace "\''${_IMPORT_PREFIX}/include" "$dev/include"
   '' + lib.optionalString enablePython  ''
+=======
+  postInstall = lib.optionalString enablePython  ''
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     cp ../wrappers/python/pyrealsense2/__init__.py $out/${pythonPackages.python.sitePackages}/pyrealsense2
   '';
 

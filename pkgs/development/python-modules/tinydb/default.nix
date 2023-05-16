@@ -10,7 +10,11 @@
 
 buildPythonPackage rec {
   pname = "tinydb";
+<<<<<<< HEAD
   version = "4.8.0";
+=======
+  version = "4.7.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   disabled = pythonOlder "3.5";
   format = "pyproject";
 
@@ -18,7 +22,11 @@ buildPythonPackage rec {
     owner = "msiemens";
     repo = pname;
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-sdWcpkjC8LtOI1k0Wyk4vLXBcwYe1vuQON9J7P8JPxA=";
+=======
+    hash = "sha256-nKsTMakCOBVHDDp8AX/xDkvHpCMBoIb0pa24F4VX/14=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

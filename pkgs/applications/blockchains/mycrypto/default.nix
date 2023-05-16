@@ -28,7 +28,11 @@ let
 in appimageTools.wrapType2 rec {
   inherit name src;
 
+<<<<<<< HEAD
   multiArch = false; # no p32bit needed
+=======
+  multiPkgs = null; # no p32bit needed
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   extraPkgs = appimageTools.defaultFhsEnvArgs.multiPkgs;
 
   extraInstallCommands = ''

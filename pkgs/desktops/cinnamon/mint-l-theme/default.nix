@@ -8,14 +8,23 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "mint-l-theme";
+<<<<<<< HEAD
   version = "1.9.5";
+=======
+  version = "1.9.3";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = pname;
+<<<<<<< HEAD
     # They don't really do tags, this is just a named commit.
     rev = "078219f4f947245b3b7bf271c7311f67bf744bfb";
     hash = "sha256-GK1bwKeyYTXZUNnOdOnqu2C0ZwJHheRVRYL2SLwOnd0=";
+=======
+    rev = version;
+    hash = "sha256-x+elC1NWcd+x8dNewwKPZBdkxSzEbo7jsG8B9DcWdoA=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

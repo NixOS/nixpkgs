@@ -8,7 +8,11 @@
 
 buildPythonPackage rec {
   pname = "apsw";
+<<<<<<< HEAD
   version = "3.42.0.0";
+=======
+  version = "3.41.0.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = isPyPy;
@@ -17,7 +21,11 @@ buildPythonPackage rec {
     owner = "rogerbinns";
     repo = "apsw";
     rev = "refs/tags/${version}";
+<<<<<<< HEAD
     hash = "sha256-pLkYTyf2BGRLs4bChb+eo2i5gRRUUJDFyfCBTSJ1RkQ=";
+=======
+    hash = "sha256-U7NhC83wBaUONLsQbL+j9866u4zs58O6AQxwzS3e0qM=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   buildInputs = [

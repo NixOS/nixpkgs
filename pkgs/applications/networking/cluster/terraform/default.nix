@@ -58,14 +58,23 @@ let
           Chili-Man
           babariviere
           kalbasit
+<<<<<<< HEAD
           amaxine
+=======
+          marsam
+          maxeaubrey
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           timstott
           zimbatm
           zowoq
           techknowlogick
+<<<<<<< HEAD
           qjoly
         ];
         mainProgram = "terraform";
+=======
+        ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       };
     } // attrs');
 
@@ -167,9 +176,15 @@ rec {
   mkTerraform = attrs: pluggable (generic attrs);
 
   terraform_1 = mkTerraform {
+<<<<<<< HEAD
     version = "1.5.7";
     hash = "sha256-pIhwJfa71/gW7lw/KRFBO4Q5Z5YMcTt3r9kD25k8cqM=";
     vendorHash = "sha256-lQgWNMBf+ioNxzAV7tnTQSIS840XdI9fg9duuwoK+U4=";
+=======
+    version = "1.4.6";
+    hash = "sha256-V5sI8xmGASBZrPFtsnnfMEHapjz4BH3hvl0+DGjUSxQ=";
+    vendorHash = "sha256-OW/aS6aBoHABxfdjDxMJEdHwLuHHtPR2YVW4l0sHPjE=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     patches = [ ./provider-path-0_15.patch ];
     passthru = {
       inherit plugins;

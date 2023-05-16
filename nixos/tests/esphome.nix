@@ -4,9 +4,16 @@ let
   testPort = 6052;
   unixSocket = "/run/esphome/esphome.sock";
 in
+<<<<<<< HEAD
 {
   name = "esphome";
   meta.maintainers = with lib.maintainers; [ oddlama ];
+=======
+with lib;
+{
+  name = "esphome";
+  meta.maintainers = with pkgs.lib.maintainers; [ oddlama ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nodes = {
     esphomeTcp = { ... }:

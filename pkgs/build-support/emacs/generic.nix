@@ -2,15 +2,29 @@
 
 { lib, stdenv, emacs, texinfo, writeText, gcc, ... }:
 
+<<<<<<< HEAD
 { pname
 , version
 , buildInputs ? []
 , packageRequires ? []
 , meta ? {}
+=======
+with lib;
+
+{ pname
+, version ? null
+
+, buildInputs ? []
+, packageRequires ? []
+
+, meta ? {}
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , ...
 }@args:
 
 let
+<<<<<<< HEAD
   defaultMeta = {
     broken = false;
     platforms = emacs.meta.platforms;
@@ -21,6 +35,20 @@ in
 
 stdenv.mkDerivation (finalAttrs: ({
   name = "emacs-${pname}-${finalAttrs.version}";
+=======
+
+  defaultMeta = {
+    broken = false;
+    platforms = emacs.meta.platforms;
+  } // optionalAttrs ((args.src.meta.homepage or "") != "") {
+    homepage = args.src.meta.homepage;
+  };
+
+in
+
+stdenv.mkDerivation ({
+  name = "emacs-${pname}${optionalString (version != null) "-${version}"}";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   unpackCmd = ''
     case "$curSrc" in
@@ -61,7 +89,11 @@ stdenv.mkDerivation (finalAttrs: ({
   meta = defaultMeta // meta;
 }
 
+<<<<<<< HEAD
 // lib.optionalAttrs (emacs.withNativeCompilation or false) {
+=======
+// lib.optionalAttrs (emacs.nativeComp or false) {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   LIBRARY_PATH = "${lib.getLib stdenv.cc.libc}/lib";
 
@@ -83,4 +115,10 @@ stdenv.mkDerivation (finalAttrs: ({
   '';
 }
 
+<<<<<<< HEAD
 // removeAttrs args [ "buildInputs" "packageRequires" "meta" ]))
+=======
+// removeAttrs args [ "buildInputs" "packageRequires"
+                      "meta"
+                    ])
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)

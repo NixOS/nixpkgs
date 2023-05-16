@@ -12,8 +12,13 @@ rec {
     };
 
   buildApp = import ./build-app.nix {
+<<<<<<< HEAD
     inherit (pkgs) stdenv lib python which file jdk nodejs titanium;
     alloy = pkgs.titanium-alloy;
+=======
+    inherit (pkgs) stdenv lib python which file jdk nodejs;
+    inherit (pkgs.nodePackages) alloy titanium;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     inherit (androidenv) composeAndroidPackages;
     inherit (xcodeenv) composeXcodeWrapper;
     inherit titaniumsdk;

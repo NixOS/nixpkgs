@@ -8,13 +8,21 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "nordzy-icon-theme";
+<<<<<<< HEAD
   version = "1.8.5";
+=======
+  version = "1.8.4";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "alvatip";
     repo = "Nordzy-icon";
     rev = version;
+<<<<<<< HEAD
     sha256 = "sha256-ea5OBvZrwH5Wvd7aieI9x3S10E8qcyg99Mh9B5RHkjo=";
+=======
+    sha256 = "sha256-3Lv1jwvFjeKxtBmY1ZwgPBjz8xjbqDH5EcwsIb9Vy7g=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   # In the post patch phase we should first make sure to patch shebangs.

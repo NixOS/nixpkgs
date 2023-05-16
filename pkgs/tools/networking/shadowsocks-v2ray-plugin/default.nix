@@ -23,6 +23,10 @@ buildGoModule rec {
     license = licenses.mit;
     maintainers = [ maintainers.ahrzb ];
     mainProgram = "v2ray-plugin";
+<<<<<<< HEAD
+=======
+    broken = true; # build fails with go > 1.17
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }
 

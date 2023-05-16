@@ -3,6 +3,7 @@
 , fetchFromGitHub
 }:
 
+<<<<<<< HEAD
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "mona-sans";
   version = "1.0.1";
@@ -17,12 +18,31 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   installPhase = ''
     install -D -m444 -t $out/share/fonts/opentype fonts/otf/*.otf
     install -D -m444 -t $out/share/fonts/truetype fonts/ttf/*.ttf fonts/variable/*.ttf
+=======
+stdenvNoCC.mkDerivation rec {
+  pname = "mona-sans";
+  version = "1.0";
+
+  src = fetchFromGitHub {
+    rev = "v" + version;
+    owner = "github";
+    repo = pname;
+    sha256 = "iJhbSGNByOvtJd9hEh0g7Ht6eoAJ18jco0oHGqjOiLQ=";
+  };
+
+  installPhase = ''
+    install -m644 --target $out/share/fonts/truetype/mona-sans -D $src/dist/*.ttf
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '';
 
   meta = {
     description = "A variable font from GitHub";
+<<<<<<< HEAD
     homepage = "https://github.com/mona-sans";
     changelog = "https://github.com/github/mona-sans/releases/tag/v${finalAttrs.version}";
+=======
+    homepage = "https://github.com/github/mona-sans";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     license = lib.licenses.ofl;
     longDescription = ''
       A strong and versatile typeface, designed together with Degarism and
@@ -38,4 +58,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [ drupol ];
     platforms = lib.platforms.all;
   };
+<<<<<<< HEAD
 })
+=======
+}
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)

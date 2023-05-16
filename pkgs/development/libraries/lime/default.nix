@@ -10,7 +10,11 @@
 
 stdenv.mkDerivation rec {
   pname = "lime";
+<<<<<<< HEAD
   version = "5.2.98";
+=======
+  version = "5.2.6";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitLab {
     domain = "gitlab.linphone.org";
@@ -18,7 +22,11 @@ stdenv.mkDerivation rec {
     group = "BC";
     repo = pname;
     rev = version;
+<<<<<<< HEAD
     hash = "sha256-LdwXBJpwSA/PoCXL+c1pcX1V2Fq/eR6nNmwBKDM1Vr8=";
+=======
+    sha256 = "sha256-WQ6AcJpQSvWR5m2edVNji5u6ZiS4QOH45vQN2q+39NU=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   buildInputs = [

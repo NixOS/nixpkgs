@@ -9,11 +9,19 @@
 
 buildPythonPackage rec {
   pname = "pytest-cov";
+<<<<<<< HEAD
   version = "4.1.0";
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-OQSxPfv+xH8AO453/VtYnNEZBKId3xqzimTyBNahDvY=";
+=======
+  version = "4.0.0";
+
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-mWt5795kM829AIiHLbxfs+1/4VeLaM27pjTxS7jdBHA=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   buildInputs = [ pytest ];

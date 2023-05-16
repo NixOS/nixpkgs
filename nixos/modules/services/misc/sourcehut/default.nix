@@ -8,13 +8,22 @@ let
   settingsFormat = pkgs.formats.ini {
     listToValue = concatMapStringsSep "," (generators.mkValueStringDefault {});
     mkKeyValue = k: v:
+<<<<<<< HEAD
       optionalString (v != null)
       (generators.mkKeyValueDefault {
+=======
+      if v == null then ""
+      else generators.mkKeyValueDefault {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         mkValueString = v:
           if v == true then "yes"
           else if v == false then "no"
           else generators.mkValueStringDefault {} v;
+<<<<<<< HEAD
       } "=" k v);
+=======
+      } "=" k v;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
   configIniOfService = srv: settingsFormat.generate "sourcehut-${srv}-config.ini"
     # Each service needs access to only a subset of sections (and secrets).

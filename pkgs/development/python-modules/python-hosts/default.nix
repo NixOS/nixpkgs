@@ -2,11 +2,19 @@
 
 buildPythonPackage rec {
   pname = "python-hosts";
+<<<<<<< HEAD
   version = "1.0.4";
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-y7d7CuGuKYEUCjFHvWb+iDI6oDeVsTzBNPSySzxu1Zk=";
+=======
+  version = "1.0.3";
+
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-4SAXjx5pRDhv4YVUgrUttyUa5izpYqpDKiiGJc2y8V0=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   # win_inet_pton is required for windows support

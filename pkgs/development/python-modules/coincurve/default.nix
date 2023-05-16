@@ -67,6 +67,10 @@ buildPythonPackage rec {
     description = "Cross-platform bindings for libsecp256k1";
     homepage = "https://github.com/ofek/coincurve";
     license = with licenses; [ asl20 mit ];
+<<<<<<< HEAD
     maintainers = with maintainers; [ ];
+=======
+    maintainers = with maintainers; [ SuperSandro2000 ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

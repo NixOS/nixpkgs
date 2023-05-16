@@ -1,7 +1,11 @@
 { lib
 , python3Packages
 , fetchFromGitHub
+<<<<<<< HEAD
 , godot3-server
+=======
+, godot-server
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 let lark080 = python3Packages.lark.overrideAttrs (old: rec {
@@ -43,12 +47,20 @@ python3Packages.buildPythonApplication rec {
   nativeCheckInputs = with python3Packages; [
     pytestCheckHook
     hypothesis
+<<<<<<< HEAD
     godot3-server
+=======
+    godot-server
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   preCheck =
     let
+<<<<<<< HEAD
       godotServerMajorVersion = lib.versions.major godot3-server.version;
+=======
+      godotServerMajorVersion = lib.versions.major godot-server.version;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       gdtoolkitMajorVersion = lib.versions.major version;
       msg = ''
         gdtoolkit major version ${gdtoolkitMajorVersion} does not match godot-server major version ${godotServerMajorVersion}!

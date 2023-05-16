@@ -4,9 +4,13 @@
 , astropy
 , dask
 , numpy
+<<<<<<< HEAD
 , oldest-supported-numpy
 , setuptools-scm
 , wheel
+=======
+, setuptools-scm
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 buildPythonPackage rec {
@@ -19,11 +23,15 @@ buildPythonPackage rec {
     hash = "sha256-8iZ+wcSfh5ACTb3/iQAf2qQpwZ6wExWwcdJoLmCEjB0=";
   };
 
+<<<<<<< HEAD
   nativeBuildInputs = [
     oldest-supported-numpy
     setuptools-scm
     wheel
   ];
+=======
+  nativeBuildInputs = [ setuptools-scm ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   propagatedBuildInputs = [ astropy dask numpy ];
 

@@ -21,11 +21,19 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "ulauncher";
+<<<<<<< HEAD
   version = "5.15.3";
 
   src = fetchurl {
     url = "https://github.com/Ulauncher/Ulauncher/releases/download/${version}/ulauncher_${version}.tar.gz";
     sha256 = "sha256-unAic6GTgvZFFJwPERh164vfDiFE0zLEUjgADR94w5w=";
+=======
+  version = "5.15.0";
+
+  src = fetchurl {
+    url = "https://github.com/Ulauncher/Ulauncher/releases/download/${version}/ulauncher_${version}.tar.gz";
+    sha256 = "sha256-1Qo6ffMtVRtZDPCHvHEl7T0dPdDUxP4TP2hkSVSdQpo";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = with python3Packages; [
@@ -50,6 +58,11 @@ python3Packages.buildPythonApplication rec {
 
   propagatedBuildInputs = with python3Packages; [
     mock
+<<<<<<< HEAD
+=======
+    mypy
+    mypy-extensions
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     dbus-python
     pygobject3
     pyinotify
@@ -120,6 +133,10 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://ulauncher.io/";
     license = licenses.gpl3;
     platforms = platforms.linux;
+<<<<<<< HEAD
     maintainers = with maintainers; [ aaronjanse sebtm ];
+=======
+    maintainers = with maintainers; [ aaronjanse ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

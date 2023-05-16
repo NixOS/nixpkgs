@@ -19,7 +19,11 @@ buildDunePackage rec {
   checkInputs = [
     ounit2
   ];
+<<<<<<< HEAD
   doCheck = lib.versionAtLeast ocaml.version "4.08";
+=======
+  doCheck = lib.versionAtLeast ocaml.version "4.04";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   meta = with lib; {
     description = "OCaml API to manipulate real files (POSIX like) and filenames";

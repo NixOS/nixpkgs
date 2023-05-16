@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 { lib
 , buildGoModule
 , fetchFromGitHub
@@ -7,15 +8,30 @@
 buildGoModule rec {
   pname = "nebula";
   version = "1.7.2";
+=======
+{ lib, buildGoModule, fetchFromGitHub, nixosTests }:
+
+buildGoModule rec {
+  pname = "nebula";
+  version = "1.6.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "slackhq";
     repo = pname;
+<<<<<<< HEAD
     rev = "refs/tags/v${version}";
     hash = "sha256-/kEXrcMFnrnnD+6754EDoOvn4czh0rJGEjlXkmCzb1w=";
   };
 
   vendorHash = "sha256-VZzSdl8R1y7rCF2vz7e+5nAkb3wlJymNWCXwZZUvg4A=";
+=======
+    rev = "v${version}";
+    sha256 = "sha256-IsLSlQsrfw3obkz4jHL23BRQY2fviGbPEvs5j0zkdX0=";
+  };
+
+  vendorSha256 = "sha256-GvMiOEC3Y/pGG++Z+XCgLVADKymUR9shDxjx3xIz8u0=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   subPackages = [ "cmd/nebula" "cmd/nebula-cert" ];
 
@@ -26,7 +42,11 @@ buildGoModule rec {
   };
 
   meta = with lib; {
+<<<<<<< HEAD
     description = "Overlay networking tool with a focus on performance, simplicity and security";
+=======
+    description = "A scalable overlay networking tool with a focus on performance, simplicity and security";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     longDescription = ''
       Nebula is a scalable overlay networking tool with a focus on performance,
       simplicity and security. It lets you seamlessly connect computers
@@ -43,8 +63,15 @@ buildGoModule rec {
       parts.
     '';
     homepage = "https://github.com/slackhq/nebula";
+<<<<<<< HEAD
     changelog = "https://github.com/slackhq/nebula/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ Br1ght0ne numinit ];
   };
+=======
+    license = licenses.mit;
+    maintainers = with maintainers; [ Br1ght0ne numinit ];
+  };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }

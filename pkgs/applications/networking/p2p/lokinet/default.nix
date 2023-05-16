@@ -8,12 +8,16 @@
 , nlohmann_json
 , pkg-config
 , spdlog
+<<<<<<< HEAD
 , fmt_9
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , sqlite
 , systemd
 , unbound
 , zeromq
 }:
+<<<<<<< HEAD
 let
   # Upstream has received reports of incompatibilities with fmt, and other
   # dependencies, see: https://github.com/oxen-io/lokinet/issues/2200.
@@ -22,6 +26,10 @@ let
   };
 
 in stdenv.mkDerivation rec {
+=======
+
+stdenv.mkDerivation rec {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pname = "lokinet";
   version = "0.9.11";
 
@@ -43,7 +51,11 @@ in stdenv.mkDerivation rec {
     libuv
     libsodium
     nlohmann_json
+<<<<<<< HEAD
     spdlog'
+=======
+    spdlog
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     sqlite
     systemd
     unbound

@@ -4,7 +4,10 @@
 # doc: https://github.com/ivmai/bdwgc/blob/v8.2.2/doc/README.macros (LARGE_CONFIG)
 , enableLargeConfig ? false
 , enableMmap ? true
+<<<<<<< HEAD
 , enableStatic ? false
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , nixVersions
 }:
 
@@ -27,7 +30,10 @@ stdenv.mkDerivation (finalAttrs: {
     "--enable-cplusplus"
     "--with-libatomic-ops=none"
   ]
+<<<<<<< HEAD
   ++ lib.optional enableStatic "--enable-static"
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ++ lib.optional enableMmap "--enable-mmap"
   ++ lib.optional enableLargeConfig "--enable-large-config";
 

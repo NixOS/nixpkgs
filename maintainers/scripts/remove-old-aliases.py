@@ -102,6 +102,7 @@ def convert_to_throw(date_older_list: list[str]) -> list[tuple[str, str]]:
 
         alias = before_equal
         alias_unquoted = before_equal.strip('"')
+<<<<<<< HEAD
         replacement = next(x.strip(";:") for x in after_equal.split())
         replacement = replacement.removeprefix("pkgs.")
 
@@ -109,6 +110,14 @@ def convert_to_throw(date_older_list: list[str]) -> list[tuple[str, str]]:
             f"{indent}{alias} = throw \"'{alias_unquoted}' has been"
             f" renamed to/replaced by '{replacement}'\";"
             f" # Converted to throw {datetime.today().strftime('%Y-%m-%d')}"
+=======
+        after_equal_list = [x.strip(";:") for x in after_equal.split()]
+
+        converted = (
+            f"{indent}{alias} = throw \"'{alias_unquoted}' has been renamed to/replaced by"
+            f" '{after_equal_list.pop(0)}'\";"
+            f' # Converted to throw {datetime.today().strftime("%Y-%m-%d")}'
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         )
         converted_list.append((line, converted))
 

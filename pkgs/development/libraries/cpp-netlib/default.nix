@@ -17,9 +17,12 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DCPP-NETLIB_BUILD_SHARED_LIBS=ON"
+<<<<<<< HEAD
     # fatal error: 'boost/asio/stream_socket_service.hpp' file not found
     "-DCPP-NETLIB_BUILD_EXAMPLES=OFF"
     "-DCPP-NETLIB_BUILD_TESTS=OFF"
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   # Most tests make network GET requests to various websites

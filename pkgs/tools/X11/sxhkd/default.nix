@@ -1,7 +1,10 @@
 { lib
 , stdenv
 , fetchFromGitHub
+<<<<<<< HEAD
 , fetchpatch
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , asciidoc
 , libxcb
 , xcbutil
@@ -20,6 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-OelMqenk0tiWMLraekS/ggGf6IsXP7Sz7bv75NvnNvI=";
   };
 
+<<<<<<< HEAD
   patches = [
     (fetchpatch {
       # Fixes an issue with overlapping chords when using multiple keyboard layouts.
@@ -29,6 +33,8 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nativeBuildInputs = [
     asciidoc
   ];
@@ -46,7 +52,11 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Simple X hotkey daemon";
     homepage = "https://github.com/baskerville/sxhkd";
     license = licenses.bsd2;
+<<<<<<< HEAD
     maintainers = with maintainers; [ vyp AndersonTorres ncfavier ];
+=======
+    maintainers = with maintainers; [ vyp AndersonTorres ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     platforms = platforms.linux;
   };
 })

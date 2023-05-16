@@ -22,7 +22,11 @@
 , libtiff
 , fftw
 , lcms2
+<<<<<<< HEAD
 , libspng
+=======
+, libpng
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , libimagequant
 , imagemagick
 , pango
@@ -35,12 +39,19 @@
 , libjxl
 , openslide
 , libheif
+<<<<<<< HEAD
 , cgif
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 stdenv.mkDerivation rec {
   pname = "vips";
+<<<<<<< HEAD
   version = "8.14.4";
+=======
+  version = "8.14.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   outputs = [ "bin" "out" "man" "dev" ] ++ lib.optionals (!stdenv.isDarwin) [ "devdoc" ];
 
@@ -48,7 +59,11 @@ stdenv.mkDerivation rec {
     owner = "libvips";
     repo = "libvips";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-y2Tyi8rxal3s3jLURRGPuCAUuHITRPl1+zJZDp557+I=";
+=======
+    hash = "sha256-QUWZ11t2JEJBdpNuIY2uRiSL/hffRbV0SV5HowxWaME=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     # Remove unicode file names which leads to different checksums on HFS+
     # vs. other filesystems because of unicode normalisation.
     postFetch = ''
@@ -80,7 +95,11 @@ stdenv.mkDerivation rec {
     libtiff
     fftw
     lcms2
+<<<<<<< HEAD
     libspng
+=======
+    libpng
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     libimagequant
     imagemagick
     pango
@@ -93,7 +112,10 @@ stdenv.mkDerivation rec {
     libjxl
     openslide
     libheif
+<<<<<<< HEAD
     cgif
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ] ++ lib.optionals stdenv.isDarwin [ ApplicationServices Foundation ];
 
   # Required by .pc file
@@ -102,12 +124,22 @@ stdenv.mkDerivation rec {
   ];
 
   mesonFlags = [
+<<<<<<< HEAD
     "-Dpdfium=disabled"
     "-Dnifti=disabled"
   ]
   ++ lib.optional (!stdenv.isDarwin) "-Dgtk_doc=true"
   ++ lib.optional (imagemagick == null) "-Dmagick=disabled"
   ;
+=======
+    "-Dcgif=disabled"
+    "-Dspng=disabled"
+    "-Dpdfium=disabled"
+    "-Dnifti=disabled"
+  ] ++ lib.optionals (!stdenv.isDarwin) [
+    "-Dgtk_doc=true"
+  ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   meta = with lib; {
     changelog = "https://github.com/libvips/libvips/blob/${src.rev}/ChangeLog";

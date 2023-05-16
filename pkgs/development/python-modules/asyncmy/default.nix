@@ -9,7 +9,11 @@
 
 buildPythonPackage rec {
   pname = "asyncmy";
+<<<<<<< HEAD
   version = "0.2.8";
+=======
+  version = "0.2.7";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -18,7 +22,11 @@ buildPythonPackage rec {
     owner = "long2ice";
     repo = pname;
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-2DqQclwTfHo3YFlJ7xL3cVnhGyS4ZE7VYYv6TBqRNL0=";
+=======
+    hash = "sha256-mkYh1fmhtBZ2DyL7a2RduTm+ig4Xnk5Ps1Tm0DS/OEc=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

@@ -1,14 +1,22 @@
 { fetchFromGitHub, lib, stdenv, kernel ? false }:
 
 stdenv.mkDerivation rec {
+<<<<<<< HEAD
   pname = "cryptodev-linux-1.13";
+=======
+  pname = "cryptodev-linux-1.12";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   name = "${pname}-${kernel.version}";
 
   src = fetchFromGitHub {
     owner = "cryptodev-linux";
     repo = "cryptodev-linux";
     rev = pname;
+<<<<<<< HEAD
     hash = "sha256-EzTPoKYa+XWOAa/Dk7ru02JmlymHeXVX7RMmEoJ1OT0=";
+=======
+    sha256 = "sha256-vJQ10rG5FGbeEOqCUmH/pZ0P77kAW/MtUarywbtIyHw=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = kernel.moduleBuildDependencies;

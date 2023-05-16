@@ -11,7 +11,11 @@
 
 buildPythonPackage rec {
   pname = "gitpython";
+<<<<<<< HEAD
   version = "3.1.33";
+=======
+  version = "3.1.31";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -20,7 +24,11 @@ buildPythonPackage rec {
     owner = "gitpython-developers";
     repo = "GitPython";
     rev = "refs/tags/${version}";
+<<<<<<< HEAD
     hash = "sha256-SqpoI8QnynHRHUdenMrOAGib/SDpix4rSXfEes4xt/Y=";
+=======
+    hash = "sha256-lpx/vptFhz4WOkybJpqq1teMGgX6RQo/f2OTNEm5XJU=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [

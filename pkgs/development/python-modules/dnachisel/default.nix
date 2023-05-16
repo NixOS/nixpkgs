@@ -7,7 +7,10 @@
 , numpy
 , proglog
 , pytestCheckHook
+<<<<<<< HEAD
 , pythonOlder
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , python-codon-tables
 , primer3
 , genome-collector
@@ -16,16 +19,24 @@
 
 buildPythonPackage rec {
   pname = "dnachisel";
+<<<<<<< HEAD
   version = "3.2.11";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
+=======
+  version = "3.2.10";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "Edinburgh-Genome-Foundry";
     repo = "DnaChisel";
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-rcZq/HhU1xIyQ1jM8+gO9ONDLBAxiUIByoWk2nMwuGA=";
+=======
+    hash = "sha256-YlNOvK7ZXUHYdRX1NFEdZ646NGLtGXU1YgAjN6RY2QE=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [
@@ -54,16 +65,24 @@ buildPythonPackage rec {
     "test_avoid_phage_blast_matches"
     "test_avoid_matches_with_list"
     "test_avoid_matches_with_phage"
+<<<<<<< HEAD
   ];
 
   pythonImportsCheck = [
     "dnachisel"
   ];
+=======
+   ];
+  pythonImportsCheck = [ "dnachisel" ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   meta = with lib; {
     homepage = "https://github.com/Edinburgh-Genome-Foundry/DnaChisel";
     description = "Optimize DNA sequences under constraints";
+<<<<<<< HEAD
     changelog = "https://github.com/Edinburgh-Genome-Foundry/DnaChisel/releases/tag/v${version}";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     license = licenses.mit;
     maintainers = with maintainers; [ prusnak ];
   };

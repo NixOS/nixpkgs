@@ -11,15 +11,26 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "nostr-rs-relay";
+<<<<<<< HEAD
   version = "0.8.12";
+=======
+  version = "0.8.9";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   src = fetchFromGitHub {
     owner = "scsibug";
     repo = "nostr-rs-relay";
     rev = version;
+<<<<<<< HEAD
     hash = "sha256-3/hd3w06bILcgd7gmmpzky4Sj3exHX5xn3XGrueGDbE=";
   };
 
   cargoHash = "sha256-ulCUJ59LSYxzSbMBZcv2/7wDTwTGGGXoHPAZO4rudDE=";
+=======
+    hash = "sha256-x5y/d76Qel8FMIlUn8NdwihWebJsNIt2it2vs/Xlk0Q=";
+  };
+
+  cargoHash = "sha256-1wgBABgcogHCk183AaTwbbSGk8d8FvlZYvw1//5y93I=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   buildInputs = [ openssl.dev ]
     ++ lib.optionals stdenv.isDarwin [

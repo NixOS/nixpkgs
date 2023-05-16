@@ -11,11 +11,14 @@ stdenv.mkDerivation rec {
     sha256 = "0immxc7almmpg80n3bdn834p3nrrz7bspl2syhb04s3lawa5y2lq";
   };
 
+<<<<<<< HEAD
   postPatch = ''
     substituteInPlace Makefile \
       --replace "pkg-config" "$PKG_CONFIG"
   '';
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   makeFlags = [ "PREFIX=" "DESTDIR=$(out)" "ENABLE_SYSTEMD=1" ];
 
   nativeBuildInputs = [ pkg-config ];
@@ -27,7 +30,10 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = with maintainers; [ megheaiulian ];
     platforms = platforms.linux;
+<<<<<<< HEAD
     mainProgram = "brightnessctl";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
 }

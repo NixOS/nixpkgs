@@ -29,13 +29,21 @@
 
 stdenv.mkDerivation rec {
   pname = "cinnamon-screensaver";
+<<<<<<< HEAD
   version = "5.8.1";
+=======
+  version = "5.6.3";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = pname;
     rev = version;
+<<<<<<< HEAD
     hash = "sha256-d7h9OJ39HVQNCHNr13M1ybDFoU3Xnd1PEczGLHZU/lU=";
+=======
+    hash = "sha256-S4+9ZTpDwwvYTc3gz0YQBYjgygp8KP94azkiJcH6xCk=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [
@@ -48,11 +56,18 @@ stdenv.mkDerivation rec {
     libtool
     meson
     ninja
+<<<<<<< HEAD
     gobject-introspection
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   buildInputs = [
     # from meson.build
+<<<<<<< HEAD
+=======
+    gobject-introspection
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     gtk3
     glib
 
@@ -89,6 +104,11 @@ stdenv.mkDerivation rec {
       -e s,/usr/share/cinnamon-screensaver,$out/share,g \
       -e s,/usr/share/iso-flag-png,${iso-flags-png-320x420}/share/iso-flags-png,g \
       {} +
+<<<<<<< HEAD
+=======
+
+    sed "s|/usr/share/locale|/run/current-system/sw/share/locale|g" -i ./src/cinnamon-screensaver-main.py
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '';
 
   preFixup = ''

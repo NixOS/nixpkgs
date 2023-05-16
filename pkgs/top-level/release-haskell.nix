@@ -67,10 +67,15 @@ let
     ghc925
     ghc926
     ghc927
+<<<<<<< HEAD
     ghc928
     ghc945
     ghc946
     ghc962
+=======
+    ghc945
+    ghc961
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   # packagePlatforms applied to `haskell.packages.*`
@@ -332,6 +337,10 @@ let
         nvfetcher
         ormolu
         pandoc
+<<<<<<< HEAD
+=======
+        pakcs
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         petrinizer
         place-cursor-at
         pinboard-notes-backup
@@ -438,8 +447,13 @@ let
               ;
             };
 
+<<<<<<< HEAD
             haskell.packages.native-bignum.ghc928 = {
               inherit (packagePlatforms pkgs.pkgsStatic.haskell.packages.native-bignum.ghc928)
+=======
+            haskell.packages.native-bignum.ghc927 = {
+              inherit (packagePlatforms pkgs.pkgsStatic.haskell.packages.native-bignum.ghc927)
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
                 hello
                 lens
                 random
@@ -481,16 +495,34 @@ let
       # package sets (like Cabal, jailbreak-cabal) are
       # working as expected.
       cabal-install = released;
+<<<<<<< HEAD
       Cabal_3_10_1_0 = released;
       Cabal-syntax_3_10_1_0 = released;
       cabal2nix = released;
       cabal2nix-unstable = released;
       funcmp = released;
+=======
+      Cabal_3_6_3_0 = released;
+      Cabal_3_8_1_0 = released;
+      Cabal-syntax_3_8_1_0 = released;
+      Cabal_3_10_1_0 = released;
+      Cabal-syntax_3_10_1_0 = released;
+      cabal2nix = lib.subtractLists [
+        compilerNames.ghc961
+      ] released;
+      cabal2nix-unstable = lib.subtractLists [
+        compilerNames.ghc961
+      ] released;
+      funcmp = lib.subtractLists [
+        compilerNames.ghc961
+      ] released;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       haskell-language-server = lib.subtractLists [
         # Support ceased as of 1.9.0.0
         compilerNames.ghc884
       ] released;
       hoogle = lib.subtractLists [
+<<<<<<< HEAD
         compilerNames.ghc962
       ] released;
       hlint = lib.subtractLists [
@@ -503,6 +535,21 @@ let
       large-hashable = [
         compilerNames.ghc928
       ];
+=======
+        compilerNames.ghc961
+      ] released;
+      hlint = lib.subtractLists [
+        compilerNames.ghc961
+      ] released;
+      hpack = lib.subtractLists [
+        compilerNames.ghc961
+      ] released;
+      hsdns = released;
+      jailbreak-cabal = released;
+      language-nix = lib.subtractLists [
+        compilerNames.ghc961
+      ] released;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       nix-paths = released;
       titlecase = released;
       ghc-api-compat = [
@@ -517,6 +564,7 @@ let
       ghc-lib = released;
       ghc-lib-parser = released;
       ghc-lib-parser-ex = released;
+<<<<<<< HEAD
       ghc-source-gen = [
         # Feel free to remove these as they break,
         # ghc-source-gen currently doesn't support GHC 9.4
@@ -525,6 +573,8 @@ let
         compilerNames.ghc902
         compilerNames.ghc928
       ];
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       ghc-tags = [
         compilerNames.ghc8107
         compilerNames.ghc902
@@ -532,6 +582,7 @@ let
         compilerNames.ghc925
         compilerNames.ghc926
         compilerNames.ghc927
+<<<<<<< HEAD
         compilerNames.ghc928
         compilerNames.ghc945
         compilerNames.ghc946
@@ -539,6 +590,10 @@ let
       ];
       hashable = released;
       primitive = released;
+=======
+        compilerNames.ghc945
+      ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       weeder = [
         compilerNames.ghc8107
         compilerNames.ghc902
@@ -546,10 +601,14 @@ let
         compilerNames.ghc925
         compilerNames.ghc926
         compilerNames.ghc927
+<<<<<<< HEAD
         compilerNames.ghc928
         compilerNames.ghc945
         compilerNames.ghc946
         compilerNames.ghc962
+=======
+        compilerNames.ghc945
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       ];
     })
     {
@@ -630,7 +689,10 @@ let
           jobs.pkgsMusl.haskell.compiler.ghc925
           jobs.pkgsMusl.haskell.compiler.ghc926
           jobs.pkgsMusl.haskell.compiler.ghc927
+<<<<<<< HEAD
           jobs.pkgsMusl.haskell.compiler.ghc928
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           jobs.pkgsMusl.haskell.compiler.ghcHEAD
           jobs.pkgsMusl.haskell.compiler.integer-simple.ghc8107
           jobs.pkgsMusl.haskell.compiler.native-bignum.ghc902
@@ -638,7 +700,10 @@ let
           jobs.pkgsMusl.haskell.compiler.native-bignum.ghc925
           jobs.pkgsMusl.haskell.compiler.native-bignum.ghc926
           jobs.pkgsMusl.haskell.compiler.native-bignum.ghc927
+<<<<<<< HEAD
           jobs.pkgsMusl.haskell.compiler.native-bignum.ghc928
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           jobs.pkgsMusl.haskell.compiler.native-bignum.ghcHEAD
         ];
       };
@@ -654,7 +719,11 @@ let
         };
         constituents = accumulateDerivations [
           jobs.pkgsStatic.haskellPackages
+<<<<<<< HEAD
           jobs.pkgsStatic.haskell.packages.native-bignum.ghc928
+=======
+          jobs.pkgsStatic.haskell.packages.native-bignum.ghc927
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         ];
       };
     }

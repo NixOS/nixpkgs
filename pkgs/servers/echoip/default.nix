@@ -15,7 +15,11 @@ buildGoModule {
     sha256 = "sha256-yN7PIwoIi2SPwwFWnHDoXnwvKohkPPf4kVsNxHLpqCE=";
   };
 
+<<<<<<< HEAD
   vendorHash = "sha256-lXYpkeGpBK+WGHqyLxJz7kS3t7a55q55QQLTqtxzroc=";
+=======
+  vendorSha256 = "sha256-lXYpkeGpBK+WGHqyLxJz7kS3t7a55q55QQLTqtxzroc=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nativeBuildInputs = [ makeWrapper ];
 

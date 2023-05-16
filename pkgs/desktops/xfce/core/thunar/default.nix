@@ -21,9 +21,15 @@
 let unwrapped = mkXfceDerivation {
   category = "xfce";
   pname = "thunar";
+<<<<<<< HEAD
   version = "4.18.7";
 
   sha256 = "sha256-pxIblhC40X0wdE6+uvmV5ypp4sOZtzn/evcS33PlNpU=";
+=======
+  version = "4.18.6";
+
+  sha256 = "sha256-7SWpIBGm/YhnQSWYi5BgYjx8WCiEqxZRTagz/cY0p3E=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nativeBuildInputs = [
     docbook_xsl
@@ -58,7 +64,10 @@ let unwrapped = mkXfceDerivation {
 
   meta = with lib; {
     description = "Xfce file manager";
+<<<<<<< HEAD
     mainProgram = "thunar";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     maintainers = with maintainers; [ ] ++ teams.xfce.members;
   };
 };

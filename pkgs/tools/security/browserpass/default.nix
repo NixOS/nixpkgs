@@ -4,9 +4,12 @@
 , fetchFromGitHub
 , gnupg
 , makeWrapper
+<<<<<<< HEAD
 , autoPatchelfHook
 , testers
 , browserpass
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 buildGoModule rec {
@@ -20,7 +23,11 @@ buildGoModule rec {
     sha256 = "sha256-UZzOPRRiCUIG7uSSp9AEPMDN/+4cgyK47RhrI8oUx8U=";
   };
 
+<<<<<<< HEAD
   nativeBuildInputs = [ makeWrapper ] ++ lib.optionals stdenv.isLinux [ autoPatchelfHook ];
+=======
+  nativeBuildInputs = [ makeWrapper ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   vendorHash = "sha256-CjuH4ANP2bJDeA+o+1j+obbtk5/NVLet/OFS3Rms4r0=";
 
@@ -58,11 +65,14 @@ buildGoModule rec {
     ln -s $out/lib/browserpass/hosts/firefox/*.json $out/lib/mozilla/native-messaging-hosts
   '';
 
+<<<<<<< HEAD
   passthru.tests.version = testers.testVersion {
     package = browserpass;
     command = "browserpass --version";
   };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   meta = with lib; {
     description = "Browserpass native client app";
     homepage = "https://github.com/browserpass/browserpass-native";

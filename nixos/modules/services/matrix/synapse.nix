@@ -9,6 +9,14 @@ let
   # remove null values from the final configuration
   finalSettings = lib.filterAttrsRecursive (_: v: v != null) cfg.settings;
   configFile = format.generate "homeserver.yaml" finalSettings;
+<<<<<<< HEAD
+=======
+  logConfigFile = format.generate "log_config.yaml" cfg.logConfig;
+
+  pluginsEnv = cfg.package.python.buildEnv.override {
+    extraLibs = cfg.plugins;
+  };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   usePostgresql = cfg.settings.database.name == "psycopg2";
   hasLocalPostgresDB = let args = cfg.settings.database.args; in
@@ -45,6 +53,7 @@ let
             "${bindAddress}"
         }:${builtins.toString listener.port}/"
     '';
+<<<<<<< HEAD
 
   defaultExtras = [
     "systemd"
@@ -68,6 +77,8 @@ let
     extras = wantedExtras;
     inherit (cfg) plugins;
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 in {
 
   imports = [
@@ -169,6 +180,7 @@ in {
 
       package = mkOption {
         type = types.package;
+<<<<<<< HEAD
         readOnly = true;
         description = lib.mdDoc ''
           Reference to the `matrix-synapse` wrapper with all extras
@@ -216,6 +228,12 @@ in {
           Please note that this option is additive: i.e. when adding a new item
           to this list, the defaults are still kept. To override the defaults as well,
           use `lib.mkForce`.
+=======
+        default = pkgs.matrix-synapse;
+        defaultText = literalExpression "pkgs.matrix-synapse";
+        description = lib.mdDoc ''
+          Overridable attribute of the matrix synapse server package to use.
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         '';
       };
 
@@ -254,7 +272,11 @@ in {
         default = {};
         description = mdDoc ''
           The primary synapse configuration. See the
+<<<<<<< HEAD
           [sample configuration](https://github.com/matrix-org/synapse/blob/v${pkgs.matrix-synapse-unwrapped.version}/docs/sample_config.yaml)
+=======
+          [sample configuration](https://github.com/matrix-org/synapse/blob/v${cfg.package.version}/docs/sample_config.yaml)
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           for possible values.
 
           Secrets should be passed in by using the `extraConfigFiles` option.
@@ -697,7 +719,10 @@ in {
 
             trusted_key_servers = mkOption {
               type = types.listOf (types.submodule {
+<<<<<<< HEAD
                 freeformType = format.type;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
                 options = {
                   server_name = mkOption {
                     type = types.str;
@@ -706,6 +731,25 @@ in {
                       Hostname of the trusted server.
                     '';
                   };
+<<<<<<< HEAD
+=======
+
+                  verify_keys = mkOption {
+                    type = types.nullOr (types.attrsOf types.str);
+                    default = null;
+                    example = literalExpression ''
+                      {
+                        "ed25519:auto" = "Noi6WqcDj0QmPxCNQqgezwTlBKrfqehY1u2FyWP9uYw";
+                      }
+                    '';
+                    description = lib.mdDoc ''
+                      Attribute set from key id to base64 encoded public key.
+
+                      If specified synapse will check that the response is signed
+                      by at least one of the given keys.
+                    '';
+                  };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
                 };
               });
               default = [ {
@@ -767,10 +811,13 @@ in {
     ];
 
     services.matrix-synapse.configFile = configFile;
+<<<<<<< HEAD
     services.matrix-synapse.package = wrapped;
 
     # default them, so they are additive
     services.matrix-synapse.extras = defaultExtras;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     users.users.matrix-synapse = {
       group = "matrix-synapse";
@@ -794,7 +841,13 @@ in {
           --keys-directory ${cfg.dataDir} \
           --generate-keys
       '';
+<<<<<<< HEAD
       environment = optionalAttrs (cfg.withJemalloc) {
+=======
+      environment = {
+        PYTHONPATH = makeSearchPathOutput "lib" cfg.package.python.sitePackages [ pluginsEnv ];
+      } // optionalAttrs (cfg.withJemalloc) {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         LD_PRELOAD = "${pkgs.jemalloc}/lib/libjemalloc.so";
       };
       serviceConfig = {

@@ -38,10 +38,16 @@ stdenv.mkDerivation rec {
     mv pip* pip
     mv setuptools* setuptools
     mv wheel* wheel
+<<<<<<< HEAD
     # Set up PYTHONPATH:
     # - pip and setuptools need to be in PYTHONPATH to install setuptools, wheel, and pip.
     # - $out is where we are installing to and takes precedence, and is where wheel will end so we can install pip.
     export PYTHONPATH="$out/${python.sitePackages}:$(pwd)/pip/src:$(pwd)/setuptools:$(pwd)/setuptools/pkg_resources:$PYTHONPATH"
+=======
+    # Set up PYTHONPATH. The above folders need to be on PYTHONPATH
+    # $out is where we are installing to and takes precedence
+    export PYTHONPATH="$out/${python.sitePackages}:$(pwd)/pip/src:$(pwd)/setuptools:$(pwd)/setuptools/pkg_resources:$(pwd)/wheel:$PYTHONPATH"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     echo "Building setuptools wheel..."
     pushd setuptools

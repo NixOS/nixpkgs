@@ -1,12 +1,20 @@
 { buildPackages, fetchurl, lib, stdenv, libgcrypt, readline, libgpg-error }:
 
 stdenv.mkDerivation rec {
+<<<<<<< HEAD
   version = "1.6.11";
+=======
+  version = "1.6.10";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pname = "freeipmi";
 
   src = fetchurl {
     url = "mirror://gnu/freeipmi/${pname}-${version}.tar.gz";
+<<<<<<< HEAD
     sha256 = "sha256-ZfvWkQ/AEEV3SGlUFPJ8V1W06NdXNCISIfOFjGIwqJc=";
+=======
+    sha256 = "sha256-/OSh5AG2GJwQPSsSAyYdC/v0WYXG8/pExRsYaxP+en0=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];

@@ -27,12 +27,15 @@ python3.pkgs.buildPythonApplication rec {
     "coercer"
   ];
 
+<<<<<<< HEAD
   # this file runs into issues on case-insensitive filesystems
   # ValueError: Both <...>/coercer and <...>/coercer.py exist
   postPatch = ''
     rm Coercer.py
   '';
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   meta = with lib; {
     description = "Tool to automatically coerce a Windows server";
     homepage = "https://github.com/p0dalirius/Coercer";

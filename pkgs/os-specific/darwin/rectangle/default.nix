@@ -7,11 +7,19 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "rectangle";
+<<<<<<< HEAD
   version = "0.70";
 
   src = fetchurl {
     url = "https://github.com/rxhanson/Rectangle/releases/download/v${version}/Rectangle${version}.dmg";
     hash = "sha256-YJYDzmFfLlXDupyEjoEAin5qynyLjXjuav1DSS/Q5zU=";
+=======
+  version = "0.68";
+
+  src = fetchurl {
+    url = "https://github.com/rxhanson/Rectangle/releases/download/v${version}/Rectangle${version}.dmg";
+    hash = "sha256-N1zSMmRo6ux/b16K4Og68A5bfht2WWi7S40Yys3QkTY=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   sourceRoot = ".";
@@ -37,7 +45,11 @@ stdenvNoCC.mkDerivation rec {
     homepage = "https://rectangleapp.com/";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     platforms = platforms.darwin;
+<<<<<<< HEAD
     maintainers = with maintainers; [ Enzime Intuinewin ];
+=======
+    maintainers = with maintainers; [ Enzime ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     license = licenses.mit;
   };
 }

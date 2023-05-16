@@ -17,17 +17,32 @@
 , wrapQtAppsHook
 , zlib
 , withTeXLive ? true
+<<<<<<< HEAD
 , buildPackages
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 stdenv.mkDerivation rec {
   pname = "ipe";
+<<<<<<< HEAD
   version = "7.2.27";
 
   src = fetchurl {
     url = "https://github.com/otfried/ipe/releases/download/v${version}/ipe-${version}-src.tar.gz";
     sha256 = "sha256-wx/bZy8kB7dpZsz58BeRGdS1BzbrIoafgEmLyFg7wZU=";
   };
+=======
+  version = "7.2.26";
+
+  src = fetchurl {
+    url = "https://github.com/otfried/ipe/releases/download/v${version}/ipe-${version}-src.tar.gz";
+    sha256 = "sha256-5J0AV5E6SlFrIBfwDZrbJnkDUoVZ0fDH669s2RQ1CqU=";
+  };
+  patches = [
+    ./headers-lookup.patch
+  ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nativeBuildInputs = [ pkg-config copyDesktopItems wrapQtAppsHook ];
 
@@ -50,11 +65,18 @@ stdenv.mkDerivation rec {
     "-C src"
     "IPEPREFIX=${placeholder "out"}"
     "LUA_PACKAGE=lua"
+<<<<<<< HEAD
     "MOC=${buildPackages.qt6Packages.qtbase}/libexec/moc"
     "IPE_NO_SPELLCHECK=1" # qtSpell is not yet packaged
   ];
 
   qtWrapperArgs = lib.optionals withTeXLive [ "--prefix PATH : ${lib.makeBinPath [ texlive ]}" ];
+=======
+    "IPE_NO_SPELLCHECK=1" # qtSpell is not yet packaged
+  ];
+
+  qtWrapperArgs = lib.optional withTeXLive [ "--prefix PATH : ${lib.makeBinPath [ texlive ]}" ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   enableParallelBuilding = true;
 

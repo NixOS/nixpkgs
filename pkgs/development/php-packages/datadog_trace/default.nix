@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 { lib
 , stdenv
 , buildPecl
@@ -14,11 +15,19 @@
 buildPecl rec {
   pname = "ddtrace";
   version = "0.89.0";
+=======
+{ buildPecl, curl, fetchFromGitHub, lib, pcre2, php }:
+
+buildPecl rec {
+  pname = "ddtrace";
+  version = "0.82.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "DataDog";
     repo = "dd-trace-php";
     rev = version;
+<<<<<<< HEAD
     fetchSubmodules = true;
     hash = "sha256-wTGQV80XQsBdmTQ+xaBKtFwLO3S+//9Yli9aReXDlLA=";
   };
@@ -59,5 +68,17 @@ buildPecl rec {
     homepage = "https://github.com/DataDog/dd-trace-php";
     license = with lib.licenses; [ asl20 bsd3 ];
     maintainers = lib.teams.php.members;
+=======
+    sha256 = "sha256-QTqZRHh57mRkg0HT9qQS13emGobB0IRqM+mdImAPgtE=";
+  };
+
+  buildInputs = [ curl pcre2 ];
+
+  meta = with lib; {
+    description = "Datadog Tracing PHP Client";
+    homepage = "https://github.com/DataDog/dd-trace-php";
+    license = licenses.apsl20;
+    maintainers = teams.php.members;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

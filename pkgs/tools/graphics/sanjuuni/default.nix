@@ -4,19 +4,30 @@
 , pkg-config
 , ffmpeg
 , poco
+<<<<<<< HEAD
 , ocl-icd
 , opencl-clhpp
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 stdenv.mkDerivation rec {
   pname = "sanjuuni";
+<<<<<<< HEAD
   version = "0.4";
+=======
+  version = "0.3";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "MCJack123";
     repo = "sanjuuni";
     rev = version;
+<<<<<<< HEAD
     sha256 = "sha256-wgtyrik4Z5AXd8MHkiMuxMpGh/xcEtNqivyhvL68aac=";
+=======
+    sha256 = "sha256-8IbdLXWUtT2VN6Eu1b8x4DnyI8JOd/12t0XDa6o3N+A=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [
@@ -26,8 +37,11 @@ stdenv.mkDerivation rec {
   buildInputs = [
     ffmpeg
     poco
+<<<<<<< HEAD
     ocl-icd
     opencl-clhpp
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   installPhase = ''

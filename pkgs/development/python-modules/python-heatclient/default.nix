@@ -22,14 +22,22 @@
 
 buildPythonPackage rec {
   pname = "python-heatclient";
+<<<<<<< HEAD
   version = "3.3.0";
+=======
+  version = "3.2.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
+<<<<<<< HEAD
     hash = "sha256-opBb9Zf60kgMtBNis2c+22VGS7psFEDPYvlz7WyKIHs=";
+=======
+    hash = "sha256-LYjRjDeZp7LQeQFXLogyGy4LEgawTQED+5qRu799tWM=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [

@@ -2,13 +2,21 @@
 
 mkDerivation rec {
   pname = "calaos_installer";
+<<<<<<< HEAD
   version = "3.11";
+=======
+  version = "3.5";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "calaos";
     repo = "calaos_installer";
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-e/f58VtGmKukdv4rIrGljXhA9d/xUycM5V6I1FT5qeY=";
+=======
+    sha256 = "hx7XVF2iueKFR67U0EvSK1vYZnJBnuOpUOkSjx7h1XY=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ qmake qttools ];

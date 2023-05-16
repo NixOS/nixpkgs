@@ -35,13 +35,21 @@
 
 mkDerivation rec {
   pname = "maui-shell";
+<<<<<<< HEAD
   version = "0.6.6";
+=======
+  version = "0.5.6";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "Nitrux";
     repo = pname;
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-8D3rlYrqLfyDZQFRSaVlxLaEblbv8w787v8Np2aW3yc=";
+=======
+    sha256 = "sha256-lhTtIHE+FUgZFaPYoIRgLPrBUPISeXHCg3rn0FlQg7w=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [
@@ -83,6 +91,9 @@ mkDerivation rec {
     homepage = "https://github.com/Nitrux/maui-shell";
     license = licenses.lgpl3;
     maintainers = with maintainers; [ onny ];
+<<<<<<< HEAD
     platforms = platforms.linux;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

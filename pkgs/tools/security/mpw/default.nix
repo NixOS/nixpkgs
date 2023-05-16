@@ -15,7 +15,11 @@ in stdenv.mkDerivation rec {
     inherit rev;
   };
 
+<<<<<<< HEAD
   sourceRoot = "${src.name}/platform-independent/c/cli";
+=======
+  sourceRoot = "./source/platform-independent/c/cli";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   postPatch = ''
     rm build

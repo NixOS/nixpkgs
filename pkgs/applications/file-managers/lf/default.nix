@@ -7,16 +7,27 @@
 
 buildGoModule rec {
   pname = "lf";
+<<<<<<< HEAD
   version = "30";
+=======
+  version = "29";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "gokcehan";
     repo = "lf";
     rev = "r${version}";
+<<<<<<< HEAD
     hash = "sha256-hlhmnkPm1x7uJMwUM/B02rXLffsXFbkxXYITKD3BERY=";
   };
 
   vendorHash = "sha256-DYReTxH4SHnJERbiE6rOp5XqzN3NRbICt5iNeX8Jgt8=";
+=======
+    hash = "sha256-kch+FQAO/Xn3GFXOzBTV1VUeJ+0CnDj/GmzxPUO5dlo=";
+  };
+
+  vendorHash = "sha256-z34WN4z9reBbwITLm7igQscmIVuoRpdAvZ4QMNGAPaE=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -43,6 +54,10 @@ buildGoModule rec {
     homepage = "https://godoc.org/github.com/gokcehan/lf";
     changelog = "https://github.com/gokcehan/lf/releases/tag/r${version}";
     license = licenses.mit;
+<<<<<<< HEAD
+=======
+    platforms = platforms.unix;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     maintainers = with maintainers; [ dotlambda ];
   };
 }

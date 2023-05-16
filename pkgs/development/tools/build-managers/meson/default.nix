@@ -1,6 +1,9 @@
 { lib
 , stdenv
+<<<<<<< HEAD
 , fetchFromGitHub
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , fetchpatch
 , installShellFiles
 , ninja
@@ -18,6 +21,7 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "meson";
+<<<<<<< HEAD
   version = "1.2.0";
 
   src = fetchFromGitHub {
@@ -25,6 +29,13 @@ python3.pkgs.buildPythonApplication rec {
     repo = "meson";
     rev = "refs/tags/${version}";
     hash = "sha256-bJAmkE+sL9DqKpcjZdBf4/z9lz+m/o0Z87hlAwbVbTY=";
+=======
+  version = "1.1.0";
+
+  src = python3.pkgs.fetchPypi {
+    inherit pname version;
+    hash = "sha256-2WFsRM1sU2if+PBfxpWKaT8uF8NHKo2vg87lXav/gp8=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   patches = [
@@ -75,6 +86,16 @@ python3.pkgs.buildPythonApplication rec {
         "docs/yaml/objects/dep.yaml"
       ];
     })
+<<<<<<< HEAD
+=======
+
+    # Fix regression in precomputing CMAKE_SIZEOF_VOID_P
+    # See https://github.com/mesonbuild/meson/pull/11761
+    (fetchpatch {
+      url = "https://github.com/mesonbuild/meson/commit/7c78c2b5a0314078bdabb998ead56925dc8b0fc0.patch";
+      sha256 = "sha256-vSnHhuOIXf/1X+bUkUmGND5b30ES0O8EDArwb4p2/w4=";
+    })
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   setupHook = ./setup-hook.sh;
@@ -141,7 +162,11 @@ python3.pkgs.buildPythonApplication rec {
       code.
     '';
     license = licenses.asl20;
+<<<<<<< HEAD
     maintainers = with maintainers; [ mbe AndersonTorres ];
+=======
+    maintainers = with maintainers; [ jtojnar mbe AndersonTorres ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     inherit (python3.meta) platforms;
   };
 }

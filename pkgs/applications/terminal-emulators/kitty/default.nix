@@ -29,13 +29,18 @@
 with python3Packages;
 buildPythonApplication rec {
   pname = "kitty";
+<<<<<<< HEAD
   version = "0.29.2";
+=======
+  version = "0.28.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "other";
 
   src = fetchFromGitHub {
     owner = "kovidgoyal";
     repo = "kitty";
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-ureJHG6Jh4bsXqQZnGwY5Hlq7sXxYX3iTajb8ZkpZw8=";
   };
 
@@ -44,6 +49,11 @@ buildPythonApplication rec {
     inherit src version;
     vendorHash = "sha256-jk2EcYVuhV/UQfHAIfpnn8ZIZnwjA/o8YRXmpoC85Vc=";
   }).goModules;
+=======
+    hash = "sha256-pAo+bT10rdQOf9j3imKWCCMFGm8KntUeTQUrEE1wYZc=";
+  };
+  vendorHash = "sha256-vq19exqsEtXhN20mgC5GCpYGm8s9AC6nlfCfG1lUiI8=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   buildInputs = [
     harfbuzz
@@ -99,19 +109,36 @@ buildPythonApplication rec {
     ./disable-test_ssh_bootstrap_with_different_launchers.patch
   ];
 
+<<<<<<< HEAD
   hardeningDisable = [
     # causes redefinition of _FORTIFY_SOURCE
     "fortify3"
   ];
+=======
+  # Causes build failure due to warning
+  hardeningDisable = lib.optional stdenv.cc.isClang "strictoverflow";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   CGO_ENABLED = 0;
   GOFLAGS = "-trimpath";
 
+<<<<<<< HEAD
+=======
+  go-modules = (buildGoModule {
+    pname = "kitty-go-modules";
+    inherit src vendorHash version;
+  }).go-modules;
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   configurePhase = ''
     export GOCACHE=$TMPDIR/go-cache
     export GOPATH="$TMPDIR/go"
     export GOPROXY=off
+<<<<<<< HEAD
     cp -r --reflink=auto $goModules vendor
+=======
+    cp -r --reflink=auto ${go-modules} vendor
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '';
 
   buildPhase = let
@@ -158,8 +185,11 @@ buildPythonApplication rec {
       --replace test_path_mapping_receive dont_test_path_mapping_receive
     substituteInPlace kitty_tests/shell_integration.py \
       --replace test_fish_integration dont_test_fish_integration
+<<<<<<< HEAD
     substituteInPlace kitty_tests/shell_integration.py \
       --replace test_bash_integration dont_test_bash_integration
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     substituteInPlace kitty_tests/open_actions.py \
       --replace test_parsing_of_open_actions dont_test_parsing_of_open_actions
     substituteInPlace kitty_tests/ssh.py \
@@ -168,8 +198,11 @@ buildPythonApplication rec {
       --replace 'class Rendering(BaseTest)' 'class Rendering'
     # theme collection test starts an http server
     rm tools/themes/collection_test.go
+<<<<<<< HEAD
     # passwd_test tries to exec /usr/bin/dscl
     rm tools/utils/passwd_test.go
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '';
 
   checkPhase = ''
@@ -187,8 +220,13 @@ buildPythonApplication rec {
 
   installPhase = ''
     runHook preInstall
+<<<<<<< HEAD
     mkdir -p "$out"
     mkdir -p "$kitten/bin"
+=======
+    mkdir -p $out
+    mkdir -p $kitten/bin
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     ${if stdenv.isDarwin then ''
     mkdir "$out/bin"
     ln -s ../Applications/kitty.app/Contents/MacOS/kitty "$out/bin/kitty"
@@ -199,8 +237,13 @@ buildPythonApplication rec {
 
     installManPage 'docs/_build/man/kitty.1'
     '' else ''
+<<<<<<< HEAD
     cp -r linux-package/{bin,share,lib} "$out"
     cp linux-package/bin/kitten "$kitten/bin/kitten"
+=======
+    cp -r linux-package/{bin,share,lib} $out
+    cp linux-package/bin/kitten $kitten/bin/kitten
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     ''}
     wrapProgram "$out/bin/kitty" --prefix PATH : "$out/bin:${lib.makeBinPath [ imagemagick ncurses.dev ]}"
 
@@ -217,7 +260,11 @@ buildPythonApplication rec {
     mkdir -p $terminfo/share
     mv "$terminfo_src" $terminfo/share/terminfo
 
+<<<<<<< HEAD
     mkdir -p "$out/nix-support"
+=======
+    mkdir -p $out/nix-support
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     echo "$terminfo" >> $out/nix-support/propagated-user-env-packages
 
     cp -r 'shell-integration' "$shell_integration"
@@ -226,8 +273,13 @@ buildPythonApplication rec {
   '';
 
   passthru = {
+<<<<<<< HEAD
     tests.test = nixosTests.terminal-emulators.kitty;
     updateScript = nix-update-script {};
+=======
+    updateScript = nix-update-script {};
+    tests.test = nixosTests.terminal-emulators.kitty;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   meta = with lib; {
@@ -236,7 +288,10 @@ buildPythonApplication rec {
     license = licenses.gpl3Only;
     changelog = "https://sw.kovidgoyal.net/kitty/changelog/";
     platforms = platforms.darwin ++ platforms.linux;
+<<<<<<< HEAD
     mainProgram = "kitty";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     maintainers = with maintainers; [ tex rvolosatovs Luflosi adamcstephens ];
   };
 }

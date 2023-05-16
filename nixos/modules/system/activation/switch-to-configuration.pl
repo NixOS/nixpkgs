@@ -31,10 +31,15 @@ use Cwd qw(abs_path);
 ## no critic(ValuesAndExpressions::ProhibitNoisyQuotes, ValuesAndExpressions::ProhibitMagicNumbers, ValuesAndExpressions::ProhibitEmptyQuotes, ValuesAndExpressions::ProhibitInterpolationOfLiterals)
 ## no critic(RegularExpressions::ProhibitEscapedMetacharacters)
 
+<<<<<<< HEAD
 # Location of activation scripts
 my $out = "@out@";
 # System closure path to switch to
 my $toplevel = "@toplevel@";
+=======
+# System closure path to switch to
+my $out = "@out@";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 # Path to the directory containing systemd tools of the old system
 my $cur_systemd = abs_path("/run/current-system/sw/bin");
 # Path to the systemd store path of the new system
@@ -98,7 +103,11 @@ if ($action eq "switch" || $action eq "boot") {
     chomp(my $install_boot_loader = <<'EOFBOOTLOADER');
 @installBootLoader@
 EOFBOOTLOADER
+<<<<<<< HEAD
     system("$install_boot_loader $toplevel") == 0 or exit 1;
+=======
+    system("$install_boot_loader $out") == 0 or exit 1;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }
 
 # Just in case the new configuration hangs the system, do a sync now.
@@ -112,7 +121,11 @@ if ($action eq "boot") {
 
 # Check if we can activate the new configuration.
 my $cur_init_interface_version = read_file("/run/current-system/init-interface-version", err_mode => "quiet") // "";
+<<<<<<< HEAD
 my $new_init_interface_version = read_file("$toplevel/init-interface-version");
+=======
+my $new_init_interface_version = read_file("$out/init-interface-version");
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 if ($new_init_interface_version ne $cur_init_interface_version) {
     print STDERR <<'EOF';
@@ -253,12 +266,17 @@ sub parse_systemd_ini {
 # If a directory with the same basename ending in .d exists next to the unit file, it will be
 # assumed to contain override files which will be parsed as well and handled properly.
 sub parse_unit {
+<<<<<<< HEAD
     my ($unit_path, $base_unit_path) = @_;
+=======
+    my ($unit_path) = @_;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     # Parse the main unit and all overrides
     my %unit_data;
     # Replace \ with \\ so glob() still works with units that have a \ in them
     # Valid characters in unit names are ASCII letters, digits, ":", "-", "_", ".", and "\"
+<<<<<<< HEAD
     $base_unit_path =~ s/\\/\\\\/gmsx;
     $unit_path =~ s/\\/\\\\/gmsx;
 
@@ -271,6 +289,12 @@ sub parse_unit {
             parse_systemd_ini(\%unit_data, "$_")
         }
     }
+=======
+    $unit_path =~ s/\\/\\\\/gmsx;
+    foreach (glob("${unit_path}{,.d/*.conf}")) {
+        parse_systemd_ini(\%unit_data, "$_")
+    }
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     return %unit_data;
 }
 
@@ -313,8 +337,12 @@ sub unrecord_unit {
 # needs to be restarted or reloaded. If the units differ, the service
 # is restarted unless the only difference is `X-Reload-Triggers` in the
 # `Unit` section. If this is the only modification, the unit is reloaded
+<<<<<<< HEAD
 # instead of restarted. If the only difference is `Options` in the
 # `[Mount]` section, the unit is reloaded rather than restarted.
+=======
+# instead of restarted.
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 # Returns:
 # - 0 if the units are equal
 # - 1 if the units are different and a restart action is required
@@ -391,11 +419,14 @@ sub compare_units { ## no critic(Subroutines::ProhibitExcessComplexity)
                         next;
                     }
                 }
+<<<<<<< HEAD
                 # If this is a mount unit, check if it was only `Options`
                 if ($section_name eq "Mount" and $ini_key eq "Options") {
                     $ret = 2;
                     next;
                 }
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
                 return 1;
             }
         }
@@ -437,7 +468,11 @@ sub compare_units { ## no critic(Subroutines::ProhibitExcessComplexity)
 # Called when a unit exists in both the old systemd and the new system and the units
 # differ. This figures out of what units are to be stopped, restarted, reloaded, started, and skipped.
 sub handle_modified_unit { ## no critic(Subroutines::ProhibitManyArgs, Subroutines::ProhibitExcessComplexity)
+<<<<<<< HEAD
     my ($unit, $base_name, $new_unit_file, $new_base_unit_file, $new_unit_info, $active_cur, $units_to_stop, $units_to_start, $units_to_reload, $units_to_restart, $units_to_skip) = @_;
+=======
+    my ($unit, $base_name, $new_unit_file, $new_unit_info, $active_cur, $units_to_stop, $units_to_start, $units_to_reload, $units_to_restart, $units_to_skip) = @_;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     if ($unit eq "sysinit.target" || $unit eq "basic.target" || $unit eq "multi-user.target" || $unit eq "graphical.target" || $unit =~ /\.path$/msx || $unit =~ /\.slice$/msx) {
         # Do nothing.  These cannot be restarted directly.
@@ -446,6 +481,7 @@ sub handle_modified_unit { ## no critic(Subroutines::ProhibitManyArgs, Subroutin
         # properties (resource limits and inotify watches)
         # seem to get applied on daemon-reload.
     } elsif ($unit =~ /\.mount$/msx) {
+<<<<<<< HEAD
         # Just restart the unit. We wouldn't have gotten into this subroutine
         # if only `Options` was changed, in which case the unit would be reloaded.
         # The only exception is / and /nix because it's very unlikely we can safely
@@ -458,13 +494,23 @@ sub handle_modified_unit { ## no critic(Subroutines::ProhibitManyArgs, Subroutin
             $units_to_restart->{$unit} = 1;
             record_unit($restart_list_file, $unit);
         }
+=======
+        # Reload the changed mount unit to force a remount.
+        # FIXME: only reload when Options= changed, restart otherwise
+        $units_to_reload->{$unit} = 1;
+        record_unit($reload_list_file, $unit);
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     } elsif ($unit =~ /\.socket$/msx) {
         # FIXME: do something?
         # Attempt to fix this: https://github.com/NixOS/nixpkgs/pull/141192
         # Revert of the attempt: https://github.com/NixOS/nixpkgs/pull/147609
         # More details: https://github.com/NixOS/nixpkgs/issues/74899#issuecomment-981142430
     } else {
+<<<<<<< HEAD
         my %new_unit_info = $new_unit_info ? %{$new_unit_info} : parse_unit($new_unit_file, $new_base_unit_file);
+=======
+        my %new_unit_info = $new_unit_info ? %{$new_unit_info} : parse_unit($new_unit_file);
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         if (parse_systemd_bool(\%new_unit_info, "Service", "X-ReloadIfChanged", 0) and not $units_to_restart->{$unit} and not $units_to_stop->{$unit}) {
             $units_to_reload->{$unit} = 1;
             record_unit($reload_list_file, $unit);
@@ -501,7 +547,11 @@ sub handle_modified_unit { ## no critic(Subroutines::ProhibitManyArgs, Subroutin
                             $units_to_stop->{$socket} = 1;
                             # Only restart sockets that actually
                             # exist in new configuration:
+<<<<<<< HEAD
                             if (-e "$toplevel/etc/systemd/system/$socket") {
+=======
+                            if (-e "$out/etc/systemd/system/$socket") {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
                                 $units_to_start->{$socket} = 1;
                                 if ($units_to_start eq $units_to_restart) {
                                     record_unit($restart_list_file, $socket);
@@ -560,33 +610,55 @@ my %units_to_filter; # units not shown
 
 my $active_cur = get_active_units();
 while (my ($unit, $state) = each(%{$active_cur})) {
+<<<<<<< HEAD
     my $cur_unit_file = "/etc/systemd/system/$unit";
     my $new_unit_file = "$toplevel/etc/systemd/system/$unit";
 
     my $base_unit = $unit;
     my $cur_base_unit_file = $cur_unit_file;
     my $new_base_unit_file = $new_unit_file;
+=======
+    my $base_unit = $unit;
+
+    my $cur_unit_file = "/etc/systemd/system/$base_unit";
+    my $new_unit_file = "$out/etc/systemd/system/$base_unit";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     # Detect template instances.
     if (!-e $cur_unit_file && !-e $new_unit_file && $unit =~ /^(.*)@[^\.]*\.(.*)$/msx) {
       $base_unit = "$1\@.$2";
+<<<<<<< HEAD
       $cur_base_unit_file = "/etc/systemd/system/$base_unit";
       $new_base_unit_file = "$toplevel/etc/systemd/system/$base_unit";
+=======
+      $cur_unit_file = "/etc/systemd/system/$base_unit";
+      $new_unit_file = "$out/etc/systemd/system/$base_unit";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     }
 
     my $base_name = $base_unit;
     $base_name =~ s/\.[[:lower:]]*$//msx;
 
+<<<<<<< HEAD
     if (-e $cur_base_unit_file && ($state->{state} eq "active" || $state->{state} eq "activating")) {
         if (! -e $new_base_unit_file || abs_path($new_base_unit_file) eq "/dev/null") {
             my %cur_unit_info = parse_unit($cur_unit_file, $cur_base_unit_file);
+=======
+    if (-e $cur_unit_file && ($state->{state} eq "active" || $state->{state} eq "activating")) {
+        if (! -e $new_unit_file || abs_path($new_unit_file) eq "/dev/null") {
+            my %cur_unit_info = parse_unit($cur_unit_file);
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
             if (parse_systemd_bool(\%cur_unit_info, "Unit", "X-StopOnRemoval", 1)) {
                 $units_to_stop{$unit} = 1;
             }
         }
 
         elsif ($unit =~ /\.target$/msx) {
+<<<<<<< HEAD
             my %new_unit_info = parse_unit($new_unit_file, $new_base_unit_file);
+=======
+            my %new_unit_info = parse_unit($new_unit_file);
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
             # Cause all active target units to be restarted below.
             # This should start most changed units we stop here as
@@ -620,11 +692,19 @@ while (my ($unit, $state) = each(%{$active_cur})) {
         }
 
         else {
+<<<<<<< HEAD
             my %cur_unit_info = parse_unit($cur_unit_file, $cur_base_unit_file);
             my %new_unit_info = parse_unit($new_unit_file, $new_base_unit_file);
             my $diff = compare_units(\%cur_unit_info, \%new_unit_info);
             if ($diff == 1) {
                 handle_modified_unit($unit, $base_name, $new_unit_file, $new_base_unit_file, \%new_unit_info, $active_cur, \%units_to_stop, \%units_to_start, \%units_to_reload, \%units_to_restart, \%units_to_skip);
+=======
+            my %cur_unit_info = parse_unit($cur_unit_file);
+            my %new_unit_info = parse_unit($new_unit_file);
+            my $diff = compare_units(\%cur_unit_info, \%new_unit_info);
+            if ($diff == 1) {
+                handle_modified_unit($unit, $base_name, $new_unit_file, \%new_unit_info, $active_cur, \%units_to_stop, \%units_to_start, \%units_to_reload, \%units_to_restart, \%units_to_skip);
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
             } elsif ($diff == 2 and not $units_to_restart{$unit}) {
                 $units_to_reload{$unit} = 1;
                 record_unit($reload_list_file, $unit);
@@ -652,7 +732,11 @@ sub path_to_unit_name {
 # we generated units for all mounts; then we could unify this with the
 # unit checking code above.
 my ($cur_fss, $cur_swaps) = parse_fstab("/etc/fstab");
+<<<<<<< HEAD
 my ($new_fss, $new_swaps) = parse_fstab("$toplevel/etc/fstab");
+=======
+my ($new_fss, $new_swaps) = parse_fstab("$out/etc/fstab");
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 foreach my $mount_point (keys(%{$cur_fss})) {
     my $cur = $cur_fss->{$mount_point};
     my $new = $new_fss->{$mount_point};
@@ -681,7 +765,11 @@ foreach my $device (keys(%{$cur_swaps})) {
         # "systemctl stop" here because systemd has lots of alias
         # units that prevent a stop from actually calling
         # "swapoff".
+<<<<<<< HEAD
         if ($action eq "dry-activate") {
+=======
+        if ($action ne "dry-activate") {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
             print STDERR "would stop swap device: $device\n";
         } else {
             print STDERR "stopping swap device: $device\n";
@@ -696,7 +784,11 @@ foreach my $device (keys(%{$cur_swaps})) {
 my $cur_pid1_path = abs_path("/proc/1/exe") // "/unknown";
 my $cur_systemd_system_config = abs_path("/etc/systemd/system.conf") // "/unknown";
 my $new_pid1_path = abs_path("$new_systemd/lib/systemd/systemd") or die;
+<<<<<<< HEAD
 my $new_systemd_system_config = abs_path("$toplevel/etc/systemd/system.conf") // "/unknown";
+=======
+my $new_systemd_system_config = abs_path("$out/etc/systemd/system.conf") // "/unknown";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 my $restart_systemd = $cur_pid1_path ne $new_pid1_path;
 if ($cur_systemd_system_config ne $new_systemd_system_config) {
@@ -734,14 +826,23 @@ if ($action eq "dry-activate") {
     # Handle the activation script requesting the restart or reload of a unit.
     foreach (split(/\n/msx, read_file($dry_restart_by_activation_file, err_mode => "quiet") // "")) {
         my $unit = $_;
+<<<<<<< HEAD
         my $new_unit_file = "$toplevel/etc/systemd/system/$unit";
         my $base_unit = $unit;
         my $new_base_unit_file = $new_unit_file;
+=======
+        my $base_unit = $unit;
+        my $new_unit_file = "$out/etc/systemd/system/$base_unit";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
         # Detect template instances.
         if (!-e $new_unit_file && $unit =~ /^(.*)@[^\.]*\.(.*)$/msx) {
           $base_unit = "$1\@.$2";
+<<<<<<< HEAD
           $new_base_unit_file = "$toplevel/etc/systemd/system/$base_unit";
+=======
+          $new_unit_file = "$out/etc/systemd/system/$base_unit";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         }
 
         my $base_name = $base_unit;
@@ -753,7 +854,11 @@ if ($action eq "dry-activate") {
             next;
         }
 
+<<<<<<< HEAD
         handle_modified_unit($unit, $base_name, $new_unit_file, $new_base_unit_file, undef, $active_cur, \%units_to_restart, \%units_to_restart, \%units_to_reload, \%units_to_restart, \%units_to_skip);
+=======
+        handle_modified_unit($unit, $base_name, $new_unit_file, undef, $active_cur, \%units_to_restart, \%units_to_restart, \%units_to_reload, \%units_to_restart, \%units_to_skip);
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     }
     unlink($dry_restart_by_activation_file);
 
@@ -784,7 +889,11 @@ if ($action eq "dry-activate") {
 }
 
 
+<<<<<<< HEAD
 syslog(LOG_NOTICE, "switching to system configuration $toplevel");
+=======
+syslog(LOG_NOTICE, "switching to system configuration $out");
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 if (scalar(keys(%units_to_stop)) > 0) {
     if (scalar(@units_to_stop_filtered)) {
@@ -807,14 +916,23 @@ system("$out/activate", "$out") == 0 or $res = 2;
 # Handle the activation script requesting the restart or reload of a unit.
 foreach (split(/\n/msx, read_file($restart_by_activation_file, err_mode => "quiet") // "")) {
     my $unit = $_;
+<<<<<<< HEAD
     my $new_unit_file = "$toplevel/etc/systemd/system/$unit";
     my $base_unit = $unit;
     my $new_base_unit_file = $new_unit_file;
+=======
+    my $base_unit = $unit;
+    my $new_unit_file = "$out/etc/systemd/system/$base_unit";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     # Detect template instances.
     if (!-e $new_unit_file && $unit =~ /^(.*)@[^\.]*\.(.*)$/msx) {
       $base_unit = "$1\@.$2";
+<<<<<<< HEAD
       $new_base_unit_file = "$toplevel/etc/systemd/system/$base_unit";
+=======
+      $new_unit_file = "$out/etc/systemd/system/$base_unit";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     }
 
     my $base_name = $base_unit;
@@ -827,7 +945,11 @@ foreach (split(/\n/msx, read_file($restart_by_activation_file, err_mode => "quie
         next;
     }
 
+<<<<<<< HEAD
     handle_modified_unit($unit, $base_name, $new_unit_file, $new_base_unit_file, undef, $active_cur, \%units_to_restart, \%units_to_restart, \%units_to_reload, \%units_to_restart, \%units_to_skip);
+=======
+    handle_modified_unit($unit, $base_name, $new_unit_file, undef, $active_cur, \%units_to_restart, \%units_to_restart, \%units_to_reload, \%units_to_restart, \%units_to_skip);
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }
 # We can remove the file now because it has been propagated to the other restart/reload files
 unlink($restart_by_activation_file);
@@ -885,7 +1007,11 @@ if (scalar(keys(%units_to_reload)) > 0) {
     for my $unit (keys(%units_to_reload)) {
         if (!unit_is_active($unit)) {
             # Figure out if we need to start the unit
+<<<<<<< HEAD
             my %unit_info = parse_unit("$toplevel/etc/systemd/system/$unit", "$toplevel/etc/systemd/system/$unit");
+=======
+            my %unit_info = parse_unit("$out/etc/systemd/system/$unit");
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
             if (!(parse_systemd_bool(\%unit_info, "Unit", "RefuseManualStart", 0) || parse_systemd_bool(\%unit_info, "Unit", "X-OnlyManualStart", 0))) {
                 $units_to_start{$unit} = 1;
                 record_unit($start_list_file, $unit);
@@ -968,9 +1094,15 @@ if (scalar(@failed) > 0) {
 }
 
 if ($res == 0) {
+<<<<<<< HEAD
     syslog(LOG_NOTICE, "finished switching to system configuration $toplevel");
 } else {
     syslog(LOG_ERR, "switching to system configuration $toplevel failed (status $res)");
+=======
+    syslog(LOG_NOTICE, "finished switching to system configuration $out");
+} else {
+    syslog(LOG_ERR, "switching to system configuration $out failed (status $res)");
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }
 
 exit($res);

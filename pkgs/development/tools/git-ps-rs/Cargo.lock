@@ -258,7 +258,11 @@ dependencies = [
 
 [[package]]
 name = "gps"
+<<<<<<< HEAD
 version = "6.9.0"
+=======
+version = "6.7.0"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 dependencies = [
  "ansi_term",
  "git2",

@@ -3,7 +3,11 @@
 , buildPythonPackage
 , cheroot
 , fetchPypi
+<<<<<<< HEAD
 , jaraco-collections
+=======
+, jaraco_collections
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , more-itertools
 , objgraph
 , path
@@ -27,7 +31,11 @@ buildPythonPackage rec {
   version = "18.8.0";
   format = "setuptools";
 
+<<<<<<< HEAD
   disabled = pythonOlder "3.7";
+=======
+  disabled = pythonOlder "3.7" || pythonAtLeast "3.11";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchPypi {
     pname = "CherryPy";
@@ -53,7 +61,11 @@ buildPythonPackage rec {
     portend
     more-itertools
     zc_lockfile
+<<<<<<< HEAD
     jaraco-collections
+=======
+    jaraco_collections
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   nativeCheckInputs = [
@@ -65,10 +77,13 @@ buildPythonPackage rec {
     requests-toolbelt
   ];
 
+<<<<<<< HEAD
   preCheck = ''
     export CI=true
   '';
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pytestFlagsArray = [
     "-W"
     "ignore::DeprecationWarning"
@@ -86,6 +101,7 @@ buildPythonPackage rec {
     "test_basic_request"
     "test_3_Redirect"
     "test_4_File_deletion"
+<<<<<<< HEAD
   ] ++ lib.optionals (pythonAtLeast "3.11") [
     "testErrorHandling"
     "testHookErrors"
@@ -100,6 +116,8 @@ buildPythonPackage rec {
     "test_iterator"
     "test_1_Ram_Concurrency"
     "test_2_File_Concurrency"
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ] ++ lib.optionals stdenv.isDarwin [
     "test_block"
   ];

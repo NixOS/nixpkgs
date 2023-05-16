@@ -1,7 +1,10 @@
 { lib
 , callPackage
 , fetchFromGitHub
+<<<<<<< HEAD
 , fetchpatch
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 /*
 ** To customize the enabled beets plugins, use the pluginOverrides input to the
@@ -27,6 +30,7 @@ lib.makeExtensible (self: {
       rev = "v${version}";
       hash = "sha256-fT+rCJJQR7bdfAcmeFRaknmh4ZOP4RCx8MXpq7/D8tM=";
     };
+<<<<<<< HEAD
     extraPatches = [
       # Bash completion fix for Nix
       ./patches/bash-completion-always-print.patch
@@ -42,11 +46,14 @@ lib.makeExtensible (self: {
       # The upstream patch does not apply on 1.6.0, as the related code has been refactored since
       ./patches/fix-embedart-imagick-7.1.1-12.patch
     ];
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   beets-minimal = self.beets.override { disableAllPlugins = true; };
 
   beets-unstable = callPackage ./common.nix {
+<<<<<<< HEAD
     version = "unstable-2023-07-05";
     src = fetchFromGitHub {
       owner = "beetbox";
@@ -58,6 +65,15 @@ lib.makeExtensible (self: {
       # Bash completion fix for Nix
       ./patches/unstable-bash-completion-always-print.patch
     ];
+=======
+    version = "unstable-2022-08-27";
+    src = fetchFromGitHub {
+      owner = "beetbox";
+      repo = "beets";
+      rev = "50bd693057de472470ab5175fae0cdb5b75811c6";
+      hash = "sha256-91v1StaByG60ryhQqByBXu6sFCjk0qT0nsUPnocSEE4=";
+    };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     pluginOverrides = {
       # unstable has a new plugin, so we register it here.
       limit = { builtin = true; };

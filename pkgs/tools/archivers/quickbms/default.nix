@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 { stdenv
 , lib
 , fetchzip
@@ -8,6 +9,9 @@
 , opensslSupport ? false
 , zlib
 }:
+=======
+{ stdenv, lib, fetchzip, bzip2, lzo, openssl, zlib }:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 stdenv.mkDerivation rec {
   version = "0.11.0";
@@ -18,6 +22,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-uQKTE36pLO8uhrX794utqaDGUeyqRz6zLCQFA7DYkNc=";
   };
 
+<<<<<<< HEAD
   patches = [
     # Fix errors on x86_64 and _rotl definition
     (fetchpatch {
@@ -30,6 +35,9 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ bzip2 lzo zlib ]
     ++ lib.optional (opensslSupport) openssl_1_1;
+=======
+  buildInputs = [ bzip2 lzo openssl zlib ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   makeFlags = [ "PREFIX=$(out)" ];
 

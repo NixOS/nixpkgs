@@ -2,7 +2,10 @@
 , buildPythonPackage
 , chardet
 , docutils
+<<<<<<< HEAD
 , fetchpatch
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , fetchPypi
 , pbr
 , pygments
@@ -11,7 +14,10 @@
 , restructuredtext_lint
 , setuptools-scm
 , stevedore
+<<<<<<< HEAD
 , wheel
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 buildPythonPackage rec {
@@ -26,6 +32,7 @@ buildPythonPackage rec {
     hash = "sha256-2XqT6PWi78RxOggEZX3trYN0XMpM0diN6Rhvd/l3YAQ=";
   };
 
+<<<<<<< HEAD
   patches = [
     # https://github.com/PyCQA/doc8/pull/146
     (fetchpatch {
@@ -38,6 +45,10 @@ buildPythonPackage rec {
   nativeBuildInputs = [
     setuptools-scm
     wheel
+=======
+  nativeBuildInputs = [
+    setuptools-scm
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   buildInputs = [

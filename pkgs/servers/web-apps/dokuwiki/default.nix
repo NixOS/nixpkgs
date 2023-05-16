@@ -8,13 +8,21 @@
 
 stdenv.mkDerivation rec {
   pname = "dokuwiki";
+<<<<<<< HEAD
   version = "2023-04-04a";
+=======
+  version = "2023-04-04";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "dokuwiki";
     repo = pname;
     rev = "release-${version}";
+<<<<<<< HEAD
     sha256 = "sha256-PVfJfGYa2Drf4ljnnhb7kNpjfQlW4dDt5Xd5h+C8tP4=";
+=======
+    sha256 = "sha256-QJnXKsEhvEcE88wvfMZR2j7X/pW8+28zlEnxhvhl+44=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   preload = writeText "preload.php" ''

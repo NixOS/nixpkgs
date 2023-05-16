@@ -11,7 +11,11 @@ stdenv.mkDerivation rec {
     sha256 = "07aayck82w5xcp3si35d7ghybmrbqw91fqqvmbpjrjcixc6m42z7";
   };
 
+<<<<<<< HEAD
   sourceRoot = "${src.name}/ctrtool";
+=======
+  sourceRoot = "source/ctrtool";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" "CXX=${stdenv.cc.targetPrefix}c++"];
   enableParallelBuilding = true;

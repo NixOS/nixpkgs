@@ -32,6 +32,7 @@ in {
       type = types.package;
       description = lib.mdDoc ''Mimir package to use.'';
     };
+<<<<<<< HEAD
 
     extraFlags = mkOption {
       type = types.listOf types.str;
@@ -42,11 +43,17 @@ in {
         which get escaped and are then passed to Mimir.
       '';
     };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   config = mkIf cfg.enable {
     # for mimirtool
+<<<<<<< HEAD
     environment.systemPackages = [ cfg.package ];
+=======
+    environment.systemPackages = [ pkgs.mimir ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     assertions = [{
       assertion = (
@@ -70,7 +77,11 @@ in {
                else cfg.configFile;
       in
       {
+<<<<<<< HEAD
         ExecStart = "${cfg.package}/bin/mimir --config.file=${conf} ${escapeShellArgs cfg.extraFlags}";
+=======
+        ExecStart = "${cfg.package}/bin/mimir --config.file=${conf}";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         DynamicUser = true;
         Restart = "always";
         ProtectSystem = "full";

@@ -21,7 +21,10 @@ stdenv.mkDerivation rec {
   doCheck = false;
 
   meta = with lib; {
+<<<<<<< HEAD
     mainProgram = "maim";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     inherit (src.meta) homepage;
     description = "A command-line screenshot utility";
     longDescription = ''

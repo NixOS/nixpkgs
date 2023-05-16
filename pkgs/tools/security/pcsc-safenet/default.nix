@@ -1,11 +1,19 @@
 { stdenv
 , lib
+<<<<<<< HEAD
+=======
+, runCommand
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , fetchzip
 , autoPatchelfHook
 , dpkg
 , gtk3
 , openssl_1_1
 , pcsclite
+<<<<<<< HEAD
+=======
+, unzip
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 stdenv.mkDerivation rec {

@@ -1,13 +1,21 @@
 { lib, buildGoModule, fetchFromGitHub, nixosTests, nix-update-script }:
 buildGoModule rec {
   pname = "mimir";
+<<<<<<< HEAD
   version = "2.9.0";
+=======
+  version = "2.8.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     rev = "${pname}-${version}";
     owner = "grafana";
     repo = pname;
+<<<<<<< HEAD
     sha256 = "sha256-6URhofT5zJZX2eFx7fNPrFOWF7Po3ChlmVHGTpvG24c=";
+=======
+    sha256 = "sha256-gVt334HTKOotRaO1ga774FaxpblADpgdTtucADOHsCE=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   vendorSha256 = null;
@@ -42,5 +50,9 @@ buildGoModule rec {
     homepage = "https://github.com/grafana/mimir";
     license = licenses.agpl3Only;
     maintainers = with maintainers; [ happysalada bryanhonof ];
+<<<<<<< HEAD
+=======
+    platforms = platforms.unix;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

@@ -7,13 +7,21 @@
 
 buildGoModule rec {
   pname = "soju";
+<<<<<<< HEAD
   version = "0.6.2";
+=======
+  version = "0.6.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromSourcehut {
     owner = "~emersion";
     repo = "soju";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-Icz6oIXLnLe75zuB8Q862I1ado5GpGZBJezrH7F7EJs=";
+=======
+    hash = "sha256-e3yA8gXuLxRzJIQQIjhajIOWVtikd+gNVxbhzfy56b0=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   vendorHash = "sha256-iT/QMm6RM6kvw69Az+aLTtBuaCX7ELAiYlj5wXAtBd4=";

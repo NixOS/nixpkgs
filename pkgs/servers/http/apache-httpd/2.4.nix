@@ -1,5 +1,8 @@
 { lib, stdenv, fetchurl, perl, zlib, apr, aprutil, pcre2, libiconv, lynx, which, libxcrypt
+<<<<<<< HEAD
 , fetchpatch
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , nixosTests
 , proxySupport ? true
 , sslSupport ? true, openssl
@@ -36,6 +39,7 @@ stdenv.mkDerivation rec {
     lib.optional http2Support nghttp2 ++
     lib.optional stdenv.isDarwin libiconv;
 
+<<<<<<< HEAD
   patches = lib.optionals modTlsSupport [
     (fetchpatch {
       name = "compat-with-rustls-ffi-0.10.0.patch";
@@ -44,6 +48,8 @@ stdenv.mkDerivation rec {
     })
   ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   postPatch = ''
     sed -i config.layout -e "s|installbuilddir:.*|installbuilddir: $dev/share/build|"
     sed -i support/apachectl.in -e 's|@LYNX_PATH@|${lynx}/bin/lynx|'

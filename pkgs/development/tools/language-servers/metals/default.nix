@@ -2,7 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "metals";
+<<<<<<< HEAD
   version = "1.0.1";
+=======
+  version = "0.11.12";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   deps = stdenv.mkDerivation {
     name = "${pname}-deps-${version}";
@@ -12,11 +16,19 @@ stdenv.mkDerivation rec {
         -r bintray:scalacenter/releases \
         -r sonatype:snapshots > deps
       mkdir -p $out/share/java
+<<<<<<< HEAD
       cp $(< deps) $out/share/java/
     '';
     outputHashMode = "recursive";
     outputHashAlgo = "sha256";
     outputHash = "sha256-AamUE6mr9fwjbDndQtzO2Yscu2T6zUW/DiXMYwv35YE=";
+=======
+      cp -n $(< deps) $out/share/java/
+    '';
+    outputHashMode = "recursive";
+    outputHashAlgo = "sha256";
+    outputHash = "sha256-3zYjjrd3Hc2T4vwnajiAMNfTDUprKJZnZp2waRLQjI4=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ makeWrapper setJavaClassPath ];
@@ -36,7 +48,11 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://scalameta.org/metals/";
     license = licenses.asl20;
+<<<<<<< HEAD
     description = "Language server for Scala";
+=======
+    description = "Work-in-progress language server for Scala";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     maintainers = with maintainers; [ fabianhjr tomahna ];
   };
 }

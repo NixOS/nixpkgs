@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 { lib
 , buildPythonPackage
 , pythonOlder
@@ -6,6 +7,17 @@
 , findutils
 , krb5
 , stdenv
+=======
+{ stdenv
+, lib
+, buildPythonPackage
+, fetchPypi
+, substituteAll
+, krb5
+, findutils
+, which
+, pythonOlder
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 buildPythonPackage rec {
@@ -25,6 +37,10 @@ buildPythonPackage rec {
       inherit findutils krb5;
       # krb5-config is in dev output
       krb5Dev = krb5.dev;
+<<<<<<< HEAD
+=======
+      which = "${which}/bin/which";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     })
   ];
 
@@ -34,7 +50,11 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "k5test" ];
 
   meta = with lib; {
+<<<<<<< HEAD
     broken = stdenv.isDarwin;
+=======
+    broken = (stdenv.isLinux && stdenv.isAarch64) || stdenv.isDarwin;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     description = "Library for setting up self-contained Kerberos 5 environment";
     homepage = "https://github.com/pythongssapi/k5test";
     license = licenses.mit;

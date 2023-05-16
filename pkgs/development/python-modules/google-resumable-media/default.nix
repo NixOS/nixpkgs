@@ -14,14 +14,22 @@
 
 buildPythonPackage rec {
   pname = "google-resumable-media";
+<<<<<<< HEAD
   version = "2.6.0";
+=======
+  version = "2.5.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
+<<<<<<< HEAD
     hash = "sha256-lyhS9sZfkz4VpKIQwrlpMHY7Rxl830ql9b6kNe+2Juc=";
+=======
+    hash = "sha256-IYkx6OKypzpY6zVKKI4DoP1fscRYMmGsbkwHhmZGjJM=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [
@@ -64,6 +72,10 @@ buildPythonPackage rec {
     homepage = "https://github.com/GoogleCloudPlatform/google-resumable-media-python";
     changelog = "https://github.com/googleapis/google-resumable-media-python/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
+<<<<<<< HEAD
     maintainers = with maintainers; [ ];
+=======
+    maintainers = with maintainers; [ SuperSandro2000 ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

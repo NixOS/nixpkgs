@@ -154,9 +154,12 @@ in
         description = "Mirakurun user";
         group = "video";
         isSystemUser = true;
+<<<<<<< HEAD
 
         # NPM insists on creating ~/.npm
         home = "/var/cache/mirakurun";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       };
 
       services.mirakurun.serverSettings = {
@@ -174,10 +177,16 @@ in
         wantedBy = [ "multi-user.target" ];
         after = [ "network.target" ];
         serviceConfig = {
+<<<<<<< HEAD
           ExecStart = "${mirakurun}/bin/mirakurun start";
           User = username;
           Group = groupname;
           CacheDirectory = "mirakurun";
+=======
+          ExecStart = "${mirakurun}/bin/mirakurun-start";
+          User = username;
+          Group = groupname;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           RuntimeDirectory="mirakurun";
           StateDirectory="mirakurun";
           Nice = -10;

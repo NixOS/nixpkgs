@@ -2,7 +2,10 @@
 , buildPythonPackage
 , pythonOlder
 , fetchPypi
+<<<<<<< HEAD
 , fetchpatch
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , flit-core
 , importlib-metadata
 , ipython
@@ -31,6 +34,7 @@ buildPythonPackage rec {
     hash = "sha256-D2E4ZRX6sHxzZGrcqX//L2n0HpDTE6JgIXxbvkGdhYs=";
   };
 
+<<<<<<< HEAD
   patches = [
     # Fix compatiblity with myst-parser 1.0. Remove with the next release.
     (fetchpatch {
@@ -52,6 +56,8 @@ buildPythonPackage rec {
       --replace "myst-parser~=0.18.0" "myst-parser"
   '';
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nativeBuildInputs = [
     flit-core
     pythonRelaxDepsHook
@@ -75,10 +81,14 @@ buildPythonPackage rec {
     "myst-parser"
   ];
 
+<<<<<<< HEAD
   pythonImportsCheck = [
     "myst_nb"
     "myst_nb.sphinx_ext"
   ];
+=======
+  pythonImportsCheck = [ "myst_nb" ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   meta = with lib; {
     description = "A Jupyter Notebook Sphinx reader built on top of the MyST markdown parser";

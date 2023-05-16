@@ -17,11 +17,19 @@
 
 stdenv.mkDerivation rec {
   pname = "gupnp-tools";
+<<<<<<< HEAD
   version = "0.12.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "U8+TEj85fo+PC46eQ2TIanUCpTNPTAvi4FSoJEeL1bo=";
+=======
+  version = "0.12.0";
+
+  src = fetchurl {
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "XqdgfuNlZCxVWSf+3FteH+COdPBh0MPrCL2QG16yAII=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [
@@ -41,10 +49,13 @@ stdenv.mkDerivation rec {
     gtksourceview4
   ];
 
+<<<<<<< HEAD
   # new libxml2 version
   # TODO: can be dropped on next update
   NIX_CFLAGS_COMPILE = [ "-Wno-error=deprecated-declarations" ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   passthru = {
     updateScript = gnome.updateScript {
       packageName = pname;

@@ -12,7 +12,11 @@ buildGoModule rec {
     owner = "genuinetools";
     repo = "reg";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-tfBetjoJkr84XLEEcfdRTtc0UZ4m/uRH1Fpr91lQn8o=";
+=======
+    sha256 = "1jlza1czfssssi3y9zi6kr8k9msfa7vp215ibhwbz4h97av5xw5m";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   patches = [
@@ -29,7 +33,11 @@ buildGoModule rec {
     })
   ];
 
+<<<<<<< HEAD
   vendorHash = null;
+=======
+  vendorSha256 = null;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   doCheck = false;
 
   meta = with lib; {

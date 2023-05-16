@@ -3,12 +3,20 @@
 }:
 
 stdenv.mkDerivation (rec {
+<<<<<<< HEAD
   version = "4.13.0";
+=======
+  version = "4.12.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pname = "libpfm";
 
   src = fetchurl {
     url = "mirror://sourceforge/perfmon2/libpfm4/${pname}-${version}.tar.gz";
+<<<<<<< HEAD
     sha256 = "sha256-0YuXdkx1VSjBBR03bjNUXQ62DG6/hWgENoE/pbBMw9E=";
+=======
+    sha256 = "sha256-SwwfU/OaYVJbab6/UyxoBAwbmE11RKiuCESxPNkeHuQ=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   makeFlags = [

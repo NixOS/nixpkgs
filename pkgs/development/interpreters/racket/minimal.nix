@@ -6,7 +6,11 @@ racket.overrideAttrs (oldAttrs: rec {
   version = oldAttrs.version;
   src = oldAttrs.src.override {
     name = "${pname}-${version}";
+<<<<<<< HEAD
     sha256 = "sha256-k1NzmkiYgPkP42U+08Ljjb3FEU7OM3lEaXsLH29hveA=";
+=======
+    sha256 = "sha256-mAvwer///Oz2w/Sf4tIo+DyS6wib8P85G+q9waDri3Q=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   meta = oldAttrs.meta // {

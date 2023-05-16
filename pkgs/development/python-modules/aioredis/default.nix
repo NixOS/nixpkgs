@@ -1,6 +1,9 @@
 { lib
 , buildPythonPackage
+<<<<<<< HEAD
 , fetchpatch
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , fetchPypi
 , async-timeout
 , typing-extensions
@@ -12,12 +15,16 @@
 buildPythonPackage rec {
   pname = "aioredis";
   version = "2.0.1";
+<<<<<<< HEAD
   format = "setuptools";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
+<<<<<<< HEAD
     hash = "sha256-6qUar5k/LXH1S3BSfEQEN7plNAWIr+t4bNh8Vcic2Y4=";
   };
 
@@ -31,6 +38,11 @@ buildPythonPackage rec {
     })
   ];
 
+=======
+    sha256 = "eaa51aaf993f2d71f54b70527c440437ba65340588afeb786cd87c55c89cd98e";
+  };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   propagatedBuildInputs = [
     async-timeout
     typing-extensions
@@ -41,7 +53,11 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Asyncio (PEP 3156) Redis client library";
+<<<<<<< HEAD
     homepage = "https://github.com/aio-libs-abandoned/aioredis-py";
+=======
+    homepage = "https://github.com/aio-libs/aioredis";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     license = licenses.mit;
     maintainers = with maintainers; [ mmai ];
   };

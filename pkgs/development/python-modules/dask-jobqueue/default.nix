@@ -13,14 +13,22 @@
 
 buildPythonPackage rec {
   pname = "dask-jobqueue";
+<<<<<<< HEAD
   version = "0.8.2";
+=======
+  version = "0.8.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
+<<<<<<< HEAD
     hash = "sha256-01QHoFoFNDR8XZWK50m5+FNb7FKYV9ATtuVknN5DkUo=";
+=======
+    hash = "sha256-Fv0bZGoHOtPedd3hKg3+UpuDbyGjvbzuKoi+8k6REqc=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [
@@ -82,6 +90,10 @@ buildPythonPackage rec {
     description = "Deploy Dask on job schedulers like PBS, SLURM, and SGE";
     homepage = "https://github.com/dask/dask-jobqueue";
     license = licenses.bsd3;
+<<<<<<< HEAD
     maintainers = with maintainers; [ ];
+=======
+    maintainers = with maintainers; [ costrouc ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

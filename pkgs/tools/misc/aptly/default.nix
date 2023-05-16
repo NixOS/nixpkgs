@@ -11,7 +11,11 @@ buildGoModule rec {
     sha256 = "sha256-LqGOLXXaGfQfoj2r+aY9SdOKUDI9+22EsHKBhHMidyk=";
   };
 
+<<<<<<< HEAD
   vendorHash = "sha256-6l3OFKFTtFWT68Ylav6woczBlMhD75C9ZoQ6OeLz0Cs=";
+=======
+  vendorSha256 = "sha256-6l3OFKFTtFWT68Ylav6woczBlMhD75C9ZoQ6OeLz0Cs=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nativeBuildInputs = [ installShellFiles makeWrapper ];
 
@@ -35,6 +39,10 @@ buildGoModule rec {
     homepage = "https://www.aptly.info";
     description = "Debian repository management tool";
     license = licenses.mit;
+<<<<<<< HEAD
+=======
+    platforms = platforms.unix;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     maintainers = with maintainers; [ montag451 ] ++ teams.bitnomial.members;
     changelog =
       "https://github.com/aptly-dev/aptly/releases/tag/v${version}";

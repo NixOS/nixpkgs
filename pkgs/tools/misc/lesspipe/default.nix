@@ -1,14 +1,26 @@
+<<<<<<< HEAD
 { lib, stdenv, fetchFromGitHub, makeWrapper, perl, procps, file, gnused, bash }:
 
 stdenv.mkDerivation rec {
   pname = "lesspipe";
   version = "2.08";
+=======
+{ lib, stdenv, fetchFromGitHub, substituteAll, makeWrapper, perl, procps, file, gnused, bash }:
+
+stdenv.mkDerivation rec {
+  pname = "lesspipe";
+  version = "2.07";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "wofr06";
     repo = "lesspipe";
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-jN8x5qd9zRr0bpjGYOWfFbiXbWSDDQ8CLZJo79fnegI=";
+=======
+    sha256 = "sha256-L39Prxs39Ku3jrQO/tOi2qGREFl7+W18WXTCcgoDkXU=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ perl makeWrapper ];

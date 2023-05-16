@@ -1,5 +1,9 @@
 { lib, rustPlatform, fetchFromGitHub
+<<<<<<< HEAD
 , pkg-config
+=======
+, clang, llvmPackages, pkg-config
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , dbus, fuse, sqlite
 }:
 
@@ -20,7 +24,13 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "sha256-W5Emkbe1jI9Z+irMckD/3gJO47rACa9E5k5dqAFC1yQ=";
 
+<<<<<<< HEAD
   nativeBuildInputs = [ rustPlatform.bindgenHook pkg-config ];
+=======
+  LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
+
+  nativeBuildInputs = [ clang pkg-config ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   buildInputs = [ dbus fuse sqlite ];
 
   # The test are requiring extended permissions.

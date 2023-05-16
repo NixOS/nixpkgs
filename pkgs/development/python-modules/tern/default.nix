@@ -19,14 +19,22 @@
 
 buildPythonPackage rec {
   pname = "tern";
+<<<<<<< HEAD
   version = "2.12.1";
+=======
+  version = "2.12.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
+<<<<<<< HEAD
     hash = "sha256-yMIvFiliEHrbZMqvX3ZAROWcqii5VmB54QEYHGRJocA=";
+=======
+    hash = "sha256-XvhKe7mf09Nr3sbpMOKOO63HQ+9thgluU02iEIdWSpg=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   preBuild = ''

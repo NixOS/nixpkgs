@@ -41,6 +41,10 @@ buildPythonPackage rec {
     description = "Python module to generate and modify perf";
     homepage = "https://pyperf.readthedocs.io/";
     license = licenses.mit;
+<<<<<<< HEAD
     maintainers = [ ];
+=======
+    maintainers = [ maintainers.costrouc ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

@@ -9,6 +9,7 @@ buildGoModule rec {
     owner = "golang";
     repo = "tools";
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-z5XJ7tflOfDBtv4rp7WEjnHsXIyjNw205PhazEvaYcw=";
   };
 
@@ -21,6 +22,17 @@ buildGoModule rec {
   '';
 
   vendorHash = "sha256-fp0pb3EcGRDWlSpgel4pYRdsPJGk8/d57EjWJ+fzq7g=";
+=======
+    # The gopls folder contains a Go submodule which causes a build failure
+    # and lives in its own package named gopls.
+    postFetch = ''
+      rm -r $out/gopls
+    '';
+    sha256 = "sha256-6Sdo6oKJHYXWkvJmbte7Wc7tov5AHzn70Bi1QdQ5HR4=";
+  };
+
+  vendorSha256 = "sha256-fp0pb3EcGRDWlSpgel4pYRdsPJGk8/d57EjWJ+fzq7g=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   doCheck = false;
 

@@ -17,7 +17,11 @@
 
 buildPythonPackage rec {
   pname = "teslajsonpy";
+<<<<<<< HEAD
   version = "3.9.3";
+=======
+  version = "3.8.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -26,7 +30,11 @@ buildPythonPackage rec {
     owner = "zabuldon";
     repo = pname;
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-kA2MFYryz61Mm/sPfH1NuLKnz4whtdNb6hGPYQZgQKQ=";
+=======
+    hash = "sha256-RPR1ek1gpbermSRaGqT2v31UVB6044E2ZxIqv1yr2bs=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

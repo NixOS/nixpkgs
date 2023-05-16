@@ -11,7 +11,11 @@
 
 buildPythonPackage rec {
   pname = "flake8-bugbear";
+<<<<<<< HEAD
   version = "23.7.10";
+=======
+  version = "23.5.9";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -20,7 +24,11 @@ buildPythonPackage rec {
     owner = "PyCQA";
     repo = pname;
     rev = "refs/tags/${version}";
+<<<<<<< HEAD
     hash = "sha256-pObZ3HvXuc9MabxY5XK2DPaGZXicH6zQ4RtfGpGdGBE=";
+=======
+    hash = "sha256-qjR6WbgewVdmxubtEK6BdZv6zXgp0B9bQLxana3o+WU=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [

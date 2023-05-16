@@ -34,6 +34,7 @@ jobs:
         pairs:
           - from: master
             into: haskell-updates
+<<<<<<< HEAD
           - from: release-23.05
             into: staging-next-23.05
           - from: staging-next-23.05
@@ -41,6 +42,15 @@ jobs:
     name: ${{ matrix.pairs.from }} → ${{ matrix.pairs.into }}
     steps:
       - uses: actions/checkout@v4
+=======
+          - from: release-22.11
+            into: staging-next-22.11
+          - from: staging-next-22.11
+            into: staging-22.11
+    name: ${{ matrix.pairs.from }} → ${{ matrix.pairs.into }}
+    steps:
+      - uses: actions/checkout@v3
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
       - name: ${{ matrix.pairs.from }} → ${{ matrix.pairs.into }}
         uses: devmasx/merge-branch@1.4.0

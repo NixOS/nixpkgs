@@ -6,13 +6,21 @@
 
 buildDotnetModule rec {
   pname = "nbxplorer";
+<<<<<<< HEAD
   version = "2.3.65";
+=======
+  version = "2.3.62";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "dgarage";
     repo = "NBXplorer";
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-7m9gf+enOtE5VWuBNLFf11ofLGBRAYWvmkrekUVQQaQ=";
+=======
+    sha256 = "sha256-FpAMkVgvl0SxJ59FjL4H3Fvqb1LKsET2I+A01TQlvFA=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   projectFile = "NBXplorer/NBXplorer.csproj";

@@ -14,7 +14,11 @@ buildGoModule rec {
     sha256 = "sha256-a0JpHk5pUe+MkcmJl871JwkOfFDg3S4yOzFIeXCReLE=";
   };
 
+<<<<<<< HEAD
   vendorHash = "sha256-5C0dDY/42H8oHNdQaKYiuqpi2QqqgHC7VMO/0kFAofY=";
+=======
+  vendorSha256 = "sha256-5C0dDY/42H8oHNdQaKYiuqpi2QqqgHC7VMO/0kFAofY=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   postInstall = ''
     mv $out/bin/src $out/bin/$pname

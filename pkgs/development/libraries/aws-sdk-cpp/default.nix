@@ -24,13 +24,21 @@ in
 
 stdenv.mkDerivation rec {
   pname = "aws-sdk-cpp";
+<<<<<<< HEAD
   version = "1.11.118";
+=======
+  version = "1.11.37";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "aws-sdk-cpp";
     rev = version;
+<<<<<<< HEAD
     sha256 = "sha256-jqGXh8xLD2gIjV9kSvlldrxA5TxTTXQoC/B66FVprvk=";
+=======
+    sha256 = "sha256-C1PdLNagoIMk9/AAV2Pp7kWcspasJtN9Tx679FnEprc=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   patches = [
@@ -38,6 +46,7 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
+<<<<<<< HEAD
     # Append the dev output to path hints in finding Aws.h to avoid
     # having to pass `AWS_CORE_HEADER_FILE` explicitly to cmake configure
     # when using find_package(AWSSDK CONFIG)
@@ -46,6 +55,8 @@ stdenv.mkDerivation rec {
         'C:/AWSSDK/''${AWSSDK_INSTALL_INCLUDEDIR}/aws/core"
             "${placeholder "dev"}/include/aws/core'
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     # Avoid blanket -Werror to evade build failures on less
     # tested compilers.
     substituteInPlace cmake/compiler_settings.cmake \
@@ -53,8 +64,11 @@ stdenv.mkDerivation rec {
 
     # Flaky on Hydra
     rm tests/aws-cpp-sdk-core-tests/aws/auth/AWSCredentialsProviderTest.cpp
+<<<<<<< HEAD
     rm tests/aws-cpp-sdk-core-tests/aws/client/AWSClientTest.cpp
     rm tests/aws-cpp-sdk-core-tests/aws/client/AwsConfigTest.cpp
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     # Includes aws-c-auth private headers, so only works with submodule build
     rm tests/aws-cpp-sdk-core-tests/aws/auth/AWSAuthSignerTest.cpp
     # TestRandomURLMultiThreaded fails
@@ -98,6 +112,13 @@ stdenv.mkDerivation rec {
     "-Wno-error=deprecated-declarations"
   ];
 
+<<<<<<< HEAD
+=======
+  # aws-cpp-sdk-core-tests/aws/client/AWSClientTest.cpp
+  # seem to have a datarace
+  enableParallelChecking = false;
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   postFixupHooks = [
     # This bodge is necessary so that the file that the generated -config.cmake file
     # points to an existing directory.

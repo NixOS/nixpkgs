@@ -11,6 +11,10 @@ buildNimPackage rec {
     sha256 = "1p250wb97nzz2g0vvq6mn521fx7sn1jpk1ralbzqh5q8clh4g7wr";
   };
 
+<<<<<<< HEAD
+=======
+  doCheck = true;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   meta = with lib;
     src.meta // {

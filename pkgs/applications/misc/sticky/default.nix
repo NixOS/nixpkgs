@@ -12,14 +12,22 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "sticky";
+<<<<<<< HEAD
   version = "1.17";
+=======
+  version = "1.14";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "other";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = pname;
     rev = version;
+<<<<<<< HEAD
     hash = "sha256-Am62Azm27irIUQEpZVY8ZP2pslH1eaiyRBdq4eSakQA=";
+=======
+    hash = "sha256-7UZbCbzQ1ZrSzxTUdbA+wsH3p27qj/c/cM4GY/kzG6E=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   postPatch = ''
@@ -33,6 +41,10 @@ python3.pkgs.buildPythonApplication rec {
 
   buildInputs = [
     glib
+<<<<<<< HEAD
+=======
+    gobject-introspection
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     cinnamon.xapp
     gspell
   ];

@@ -21,10 +21,13 @@ stdenv.mkDerivation rec {
     hash = "sha256-i7c1jSawHshj1kaXl8tdpelIKU24okeg9K5/+ht6t2k=";
   };
 
+<<<<<<< HEAD
   patches = [
     ./avoid-stack-overflow-for-lockfile-buf.patch
   ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   passthru = {
     inherit libtorrent;
   };

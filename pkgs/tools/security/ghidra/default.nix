@@ -24,12 +24,21 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "ghidra";
+<<<<<<< HEAD
   version = "10.3.1";
   versiondate = "20230614";
 
   src = fetchzip {
     url = "https://github.com/NationalSecurityAgency/ghidra/releases/download/Ghidra_${version}_build/ghidra_${version}_PUBLIC_${versiondate}.zip";
     hash = "sha256-I4FUEbBF/iwMP/iiA9Hjf36J4sAInhO80hLTbxWmUFc=";
+=======
+  version = "10.2.2";
+  versiondate = "20221115";
+
+  src = fetchzip {
+    url = "https://github.com/NationalSecurityAgency/ghidra/releases/download/Ghidra_${version}_build/ghidra_${version}_PUBLIC_${versiondate}.zip";
+    sha256 = "sha256-0OcSdCN8vWUgTgFdgNtiI0OfHmfa/WD9IoaJUl+llqI=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

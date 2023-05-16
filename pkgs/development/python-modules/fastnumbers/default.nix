@@ -1,6 +1,10 @@
 { lib
 , stdenv
 , buildPythonPackage
+<<<<<<< HEAD
+=======
+, fastnumbers
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , fetchFromGitHub
 , hypothesis
 , numpy
@@ -42,10 +46,13 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+<<<<<<< HEAD
   pytestFlagsArray = [
     "--hypothesis-profile=standard"
   ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pythonImportsCheck = [
     "fastnumbers"
   ];

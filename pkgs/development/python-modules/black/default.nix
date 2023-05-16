@@ -26,6 +26,7 @@
 
 buildPythonPackage rec {
   pname = "black";
+<<<<<<< HEAD
   version = "23.9.1";
   format = "pyproject";
 
@@ -34,6 +35,16 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-JLaz/1xtnqCKiIj2l36uhY4fNA1yYM9W1wpJgjI2ti0=";
+=======
+  version = "23.1.0";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.7";
+
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-sL2XvqiQP1orpyGSV6ROPx+dAAc9bMGt1o8L7saWkqw=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [
@@ -50,6 +61,10 @@ buildPythonPackage rec {
     platformdirs
   ] ++ lib.optionals (pythonOlder "3.11") [
     tomli
+<<<<<<< HEAD
+=======
+  ] ++ lib.optionals (pythonOlder "3.10") [
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     typing-extensions
   ];
 
@@ -107,7 +122,10 @@ buildPythonPackage rec {
     homepage = "https://github.com/psf/black";
     changelog = "https://github.com/psf/black/blob/${version}/CHANGES.md";
     license = licenses.mit;
+<<<<<<< HEAD
     mainProgram = "black";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     maintainers = with maintainers; [ sveitser autophagy ];
   };
 }

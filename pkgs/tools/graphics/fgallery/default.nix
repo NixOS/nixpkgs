@@ -10,21 +10,32 @@
 
 stdenv.mkDerivation rec {
   pname = "fgallery";
+<<<<<<< HEAD
   version = "1.9.1";
 
   src = fetchurl {
     url = "https://www.thregr.org/~wavexx/software/fgallery/releases/fgallery-${version}.zip";
     hash = "sha256-FvF0wkRe3wTPUG9/GEBxkaxvZ1B4wEd9kI9rURHKxn0=";
+=======
+  version = "1.8.2";
+
+  src = fetchurl {
+    url = "https://www.thregr.org/~wavexx/software/fgallery/releases/fgallery-${version}.zip";
+    sha256 = "18wlvqbxcng8pawimbc8f2422s8fnk840hfr6946lzsxr0ijakvf";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ makeWrapper unzip ];
   buildInputs = (with perlPackages; [ perl ImageExifTool CpanelJSONXS ]);
 
+<<<<<<< HEAD
   postPatch = ''
     substituteInPlace Makefile \
       --replace "/usr" $out
   '';
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   installPhase = ''
     mkdir -p "$out/bin"
     mkdir -p "$out/share/fgallery"

@@ -37,5 +37,9 @@ buildGoModule rec {
     homepage = "https://github.com/hound-search/hound";
     license = licenses.mit;
     maintainers = with maintainers; [ grahamc SuperSandro2000 ];
+<<<<<<< HEAD
+=======
+    platforms = platforms.unix;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

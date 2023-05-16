@@ -19,6 +19,7 @@
 }:
 
 let
+<<<<<<< HEAD
   buildNum = "2023-05-22-1083";
 in
 stdenv.mkDerivation {
@@ -28,6 +29,17 @@ stdenv.mkDerivation {
   src = fetchurl {
     url = "https://gpuopen.com/download/radeon-developer-tool-suite/RadeonDeveloperToolSuite-${buildNum}.tgz";
     hash = "sha256-WSSiNiiIVw1wwt9vxgyirBDe+SPzH87LU1GlSdUhZB8=";
+=======
+  buildNum = "2023-04-25-1075";
+in
+stdenv.mkDerivation {
+  pname = "rgp";
+  version = "1.15";
+
+  src = fetchurl {
+    url = "https://gpuopen.com/download/radeon-developer-tool-suite/RadeonDeveloperToolSuite-${buildNum}.tgz";
+    hash = "sha256-sk7Z+fmcDsbnYSjf4H4ke2U1pKTh/p4fWRj+f5XX6LQ=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ makeWrapper autoPatchelfHook ];

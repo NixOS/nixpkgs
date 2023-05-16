@@ -13,14 +13,22 @@
 
 buildPythonPackage rec {
   pname = "auth0-python";
+<<<<<<< HEAD
   version = "4.4.0";
+=======
+  version = "4.2.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
+<<<<<<< HEAD
     hash = "sha256-Yf8/NmQygdikQXv9sUukQEKKd+FcpSPnGbbi8kzVyLo=";
+=======
+    hash = "sha256-DyFRCQGjyv75YVBPN+1xWjKQtPUv29xblYu2TehkkVo=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [
@@ -52,6 +60,10 @@ buildPythonPackage rec {
     homepage = "https://github.com/auth0/auth0-python";
     changelog = "https://github.com/auth0/auth0-python/blob/${version}/CHANGELOG.md";
     license = licenses.mit;
+<<<<<<< HEAD
     maintainers = with maintainers; [ ];
+=======
+    maintainers = with maintainers; [ costrouc ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

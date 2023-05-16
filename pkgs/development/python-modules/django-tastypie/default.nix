@@ -8,7 +8,11 @@
 
 buildPythonPackage rec {
   pname = "django-tastypie";
+<<<<<<< HEAD
   version = "0.14.6";
+=======
+  version = "0.14.5";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -17,7 +21,11 @@ buildPythonPackage rec {
     owner = "django-tastypie";
     repo = pname;
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-emZVcycGLa8Z2yMv/NWZi1b5fPk50u841cFfFF3Ke/s=";
+=======
+    hash = "sha256-RgYinpo8eVzRaSkcnFkSq+IqpcFt6LCCHkpHyB/7u5M=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [

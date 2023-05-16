@@ -8,7 +8,10 @@
 , pytestCheckHook
 , pythonOlder
 , setuptools-scm
+<<<<<<< HEAD
 , six
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , typecode
 }:
 
@@ -41,7 +44,10 @@ buildPythonPackage rec {
     patch
     extractcode-libarchive
     extractcode-7z
+<<<<<<< HEAD
     six
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   nativeCheckInputs = [

@@ -1,6 +1,10 @@
 { lib
 , stdenv
 , fetchurl
+<<<<<<< HEAD
+=======
+, perl
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , gmp
 , mpfr
 , flint
@@ -14,6 +18,7 @@
 , ninja
 , ant
 , openjdk
+<<<<<<< HEAD
 , perl536Packages
 , makeWrapper
 }:
@@ -22,19 +27,33 @@ let
   perlPackages = perl536Packages;
   inherit (perlPackages) perl;
 in
+=======
+, perlPackages
+, makeWrapper
+}:
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 # polymake compiles its own version of sympol and atint because we
 # don't have those packages. other missing optional dependencies:
 # javaview, libnormaliz, scip, soplex, jreality.
 
 stdenv.mkDerivation rec {
   pname = "polymake";
+<<<<<<< HEAD
   version = "4.10";
+=======
+  version = "4.9";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchurl {
     # "The minimal version is a packager friendly version which omits
     # the bundled sources of cdd, lrs, libnormaliz, nauty and jReality."
     url = "https://polymake.org/lib/exe/fetch.php/download/polymake-${version}-minimal.tar.bz2";
+<<<<<<< HEAD
     sha256 = "sha256-YDiyZtbUC76ZVe3oRtzPRBfkEU+qh+d1ZWFhzUyi+Pg=";
+=======
+    sha256 = "sha256-BMkLgms6JsWmPhi+MZv/Eqie8BKL+KaPtk3xBZSyWfM=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

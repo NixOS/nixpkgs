@@ -2,12 +2,21 @@
 , licenseAccepted ? false
 }:
 
+<<<<<<< HEAD
 { cmdLineToolsVersion ? "11.0"
 , toolsVersion ? "26.1.1"
 , platformToolsVersion ? "34.0.4"
 , buildToolsVersions ? [ "34.0.0" ]
 , includeEmulator ? false
 , emulatorVersion ? "32.1.14"
+=======
+{ cmdLineToolsVersion ? "8.0"
+, toolsVersion ? "26.1.1"
+, platformToolsVersion ? "33.0.3"
+, buildToolsVersions ? [ "33.0.1" ]
+, includeEmulator ? false
+, emulatorVersion ? "31.3.14"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , platformVersions ? []
 , includeSources ? false
 , includeSystemImages ? false
@@ -15,7 +24,11 @@
 , abiVersions ? [ "armeabi-v7a" "arm64-v8a" ]
 , cmakeVersions ? [ ]
 , includeNDK ? false
+<<<<<<< HEAD
 , ndkVersion ? "25.2.9519653"
+=======
+, ndkVersion ? "25.1.8937393"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , ndkVersions ? [ndkVersion]
 , useGoogleAPIs ? false
 , useGoogleTVAddOns ? false
@@ -314,8 +327,11 @@ rec {
       '') plugins}
     ''; # */
 
+<<<<<<< HEAD
   cmdline-tools-package = check-version packages "cmdline-tools" cmdLineToolsVersion;
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   # This derivation deploys the tools package and symlinks all the desired
   # plugins that we want to use. If the license isn't accepted, prints all the licenses
   # requested and throws.
@@ -331,9 +347,15 @@ rec {
       by an environment variable for a single invocation of the nix tools.
         $ export NIXPKGS_ACCEPT_ANDROID_SDK_LICENSE=1
   '' else callPackage ./cmdline-tools.nix {
+<<<<<<< HEAD
     inherit deployAndroidPackage os;
 
     package = cmdline-tools-package;
+=======
+    inherit deployAndroidPackage os cmdLineToolsVersion;
+
+    package = check-version packages "cmdline-tools" cmdLineToolsVersion;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     postInstall = ''
       # Symlink all requested plugins
@@ -377,7 +399,11 @@ rec {
           ln -s $i $out/bin
       done
 
+<<<<<<< HEAD
       find $ANDROID_SDK_ROOT/${cmdline-tools-package.path}/bin -type f -executable | while read i; do
+=======
+      find $ANDROID_SDK_ROOT/cmdline-tools/${cmdLineToolsVersion}/bin -type f -executable | while read i; do
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           ln -s $i $out/bin
       done
 

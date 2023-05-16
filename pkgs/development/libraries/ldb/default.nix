@@ -11,17 +11,29 @@
 , docbook-xsl-nons
 , docbook_xml_dtd_42
 , cmocka
+<<<<<<< HEAD
 , waf
+=======
+, wafHook
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , libxcrypt
 }:
 
 stdenv.mkDerivation rec {
   pname = "ldb";
+<<<<<<< HEAD
   version = "2.7.2";
 
   src = fetchurl {
     url = "mirror://samba/ldb/${pname}-${version}.tar.gz";
     hash = "sha256-Ju5y1keFTmYtmWQ+srLTQWVavzH0mQg41mUPtc+SCcg=";
+=======
+  version = "2.6.2";
+
+  src = fetchurl {
+    url = "mirror://samba/ldb/${pname}-${version}.tar.gz";
+    hash = "sha256-XLxjw1KTwjSzn5S6n/yonW0HiSXX+QIfgIZz3t8tkl4=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   outputs = [ "out" "dev" ];
@@ -29,7 +41,11 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     pkg-config
     python3
+<<<<<<< HEAD
     waf.hook
+=======
+    wafHook
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     libxslt
     docbook-xsl-nons
     docbook_xml_dtd_42

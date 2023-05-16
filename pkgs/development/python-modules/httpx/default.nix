@@ -29,7 +29,11 @@
 
 buildPythonPackage rec {
   pname = "httpx";
+<<<<<<< HEAD
   version = "0.24.1";
+=======
+  version = "0.23.3";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -38,7 +42,11 @@ buildPythonPackage rec {
     owner = "encode";
     repo = pname;
     rev = "refs/tags/${version}";
+<<<<<<< HEAD
     hash = "sha256-qG6fgijNgQKjpSG6sg0+0yqeAU6qV7czR8NgWe63LIg=";
+=======
+    hash = "sha256-ZLRzkyoFbAY2Xs1ORWBqvc2gpKovg9wRs/RtAryOcVg=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [
@@ -125,6 +133,10 @@ buildPythonPackage rec {
     description = "The next generation HTTP client";
     homepage = "https://github.com/encode/httpx";
     license = licenses.bsd3;
+<<<<<<< HEAD
     maintainers = with maintainers; [ fab ];
+=======
+    maintainers = with maintainers; [ costrouc fab ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

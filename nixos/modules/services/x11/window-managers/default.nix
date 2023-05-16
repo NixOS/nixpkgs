@@ -14,7 +14,10 @@ in
     ./bspwm.nix
     ./cwm.nix
     ./clfswm.nix
+<<<<<<< HEAD
     ./dk.nix
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     ./dwm.nix
     ./e16.nix
     ./evilwm.nix
@@ -35,7 +38,10 @@ in
     ./openbox.nix
     ./pekwm.nix
     ./notion.nix
+<<<<<<< HEAD
     ./ragnarwm.nix
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     ./ratpoison.nix
     ./sawfish.nix
     ./smallwm.nix

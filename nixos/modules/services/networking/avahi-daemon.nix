@@ -56,6 +56,7 @@ in
       '';
     };
 
+<<<<<<< HEAD
     package = mkOption {
       type = types.package;
       default = pkgs.avahi;
@@ -65,6 +66,8 @@ in
       '';
     };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     hostName = mkOption {
       type = types.str;
       default = config.networking.hostName;
@@ -269,7 +272,11 @@ in
       (mkAfter [ "mdns" ]) # after dns
     ]);
 
+<<<<<<< HEAD
     environment.systemPackages = [ cfg.package ];
+=======
+    environment.systemPackages = [ pkgs.avahi ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     environment.etc = (mapAttrs'
       (n: v: nameValuePair
@@ -295,19 +302,31 @@ in
       # return a sensible value.
       environment.LD_LIBRARY_PATH = config.system.nssModules.path;
 
+<<<<<<< HEAD
       path = [ pkgs.coreutils cfg.package ];
+=======
+      path = [ pkgs.coreutils pkgs.avahi ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
       serviceConfig = {
         NotifyAccess = "main";
         BusName = "org.freedesktop.Avahi";
         Type = "dbus";
+<<<<<<< HEAD
         ExecStart = "${cfg.package}/sbin/avahi-daemon --syslog -f ${avahiDaemonConf}";
+=======
+        ExecStart = "${pkgs.avahi}/sbin/avahi-daemon --syslog -f ${avahiDaemonConf}";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         ConfigurationDirectory = "avahi/services";
       };
     };
 
     services.dbus.enable = true;
+<<<<<<< HEAD
     services.dbus.packages = [ cfg.package ];
+=======
+    services.dbus.packages = [ pkgs.avahi ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     networking.firewall.allowedUDPPorts = mkIf cfg.openFirewall [ 5353 ];
   };

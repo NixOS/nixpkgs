@@ -8,14 +8,22 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "memray";
+<<<<<<< HEAD
   version = "1.9.1";
+=======
+  version = "1.7.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "bloomberg";
     repo = pname;
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-DaJ1Hhg7q4ckA5feUx0twOsmy28v5aBBCTUAkn43xAo=";
+=======
+    hash = "sha256-FM6DVBnYgvciTeF9bf2NDvHGsnccxKqcR5ATj6daQ4w=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

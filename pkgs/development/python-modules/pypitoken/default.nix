@@ -12,16 +12,27 @@
 
 buildPythonPackage rec {
   pname = "pypitoken";
+<<<<<<< HEAD
   version = "7.0.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
+=======
+  version = "6.0.3";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.7";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "ewjoachim";
     repo = pname;
     rev = "refs/tags/${version}";
+<<<<<<< HEAD
     hash = "sha256-CjSENkk1VlzrCngwFoJuq31Iai60qTJXBGMoV5QkSsE=";
+=======
+    hash = "sha256-1kPIVcxpFjqlAnPh71iS07n9M0qcFrwMRV8k38YxHBc=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   postPatch = ''

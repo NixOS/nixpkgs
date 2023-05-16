@@ -39,6 +39,10 @@ buildPythonPackage rec {
     homepage = "https://github.com/xmlrunner/unittest-xml-reporting";
     description = "unittest-based test runner with Ant/JUnit like XML reporting";
     license = licenses.bsd2;
+<<<<<<< HEAD
     maintainers = with maintainers; [ rprospero ];
+=======
+    maintainers = with maintainers; [ rprospero SuperSandro2000 ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

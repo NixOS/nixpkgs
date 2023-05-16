@@ -9,13 +9,21 @@
 , fetchpatch
 , scipy
 , scikit-learn
+<<<<<<< HEAD
 , scikit-image
+=======
+, scikitimage
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , threadpoolctl
 }:
 
 buildPythonPackage rec {
   pname = "batchgenerators";
+<<<<<<< HEAD
   version = "0.25";
+=======
+  version = "0.24";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -24,7 +32,11 @@ buildPythonPackage rec {
     owner = "MIC-DKFZ";
     repo = pname;
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-L2mWH2t8PN9o1M67KDdl1Tj2ZZ02MY4icsJY2VNrj3A=";
+=======
+    hash = "sha256-47jAeHMJPBk7GpUvXtQuJchgiSy6M50anftsuXWk2ag=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [
@@ -33,7 +45,11 @@ buildPythonPackage rec {
     pillow
     scipy
     scikit-learn
+<<<<<<< HEAD
     scikit-image
+=======
+    scikitimage
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     threadpoolctl
   ];
 

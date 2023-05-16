@@ -2,13 +2,21 @@
 
 buildGoModule rec {
   pname = "docker-slim";
+<<<<<<< HEAD
   version = "1.40.4";
+=======
+  version = "1.40.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "slimtoolkit";
     repo = "slim";
     rev = version;
+<<<<<<< HEAD
     hash = "sha256-A5qMg+mgcvK0YyJLbnFdZRS3s+OFWFaLKmnyvKj4r4g=";
+=======
+    hash = "sha256-pRIfIgEM0olUi0LL8maB7vczcq4p67eDuWssoeOT4Tk=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   vendorHash = null;
@@ -17,10 +25,13 @@ buildGoModule rec {
 
   nativeBuildInputs = [ makeBinaryWrapper ];
 
+<<<<<<< HEAD
   preBuild = ''
     go generate github.com/docker-slim/docker-slim/pkg/appbom
   '';
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ldflags = [
     "-s"
     "-w"

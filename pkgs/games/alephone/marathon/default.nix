@@ -3,6 +3,7 @@
 alephone.makeWrapper rec {
   pname = "marathon";
   desktopName = "Marathon";
+<<<<<<< HEAD
   version = "20230119";
   icon = alephone.icons + "/marathon.png";
 
@@ -10,6 +11,14 @@ alephone.makeWrapper rec {
     url =
       "https://github.com/Aleph-One-Marathon/alephone/releases/download/release-${version}/Marathon-${version}-Data.zip";
     sha256 = "sha256-uz/1ZW9epd1HP/pzTNN3d2EEbOzjj0qpdMkrVoxb8Aw=";
+=======
+  version = "20210408";
+  icon = alephone.icons + "/marathon.png";
+
+  zip = fetchurl {
+    url = "https://github.com/Aleph-One-Marathon/alephone/releases/download/release-${version}/Marathon-${version}-Data.zip";
+    sha256 = "sha256-WM5c0X/BGeDu8d7hME3LiZavkgJll6rc3Beat/2bsdg=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   meta = {

@@ -16,11 +16,19 @@
 
 stdenv.mkDerivation rec {
   pname = "thrift";
+<<<<<<< HEAD
   version = "0.18.1";
 
   src = fetchurl {
     url = "https://archive.apache.org/dist/thrift/${version}/${pname}-${version}.tar.gz";
     hash = "sha256-BMbxDl14jKeOE+4u8NIVLHsHDAr1VIPWuULinP8pZyY=";
+=======
+  version = "0.18.0";
+
+  src = fetchurl {
+    url = "https://archive.apache.org/dist/thrift/${version}/${pname}-${version}.tar.gz";
+    hash = "sha256-fBk4nLeRCiDli45GkDyMGjY1MAj5/MGwP3SKzPm18+E=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   # Workaround to make the Python wrapper not drop this package:
@@ -102,9 +110,12 @@ stdenv.mkDerivation rec {
     "SecurityFromBufferTest"
     "python_test"
 
+<<<<<<< HEAD
     # fails on hydra, passes locally
     "concurrency_test"
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     # Tests that fail in the Darwin sandbox when trying to use network
     "UnitTests"
     "TInterruptTest"

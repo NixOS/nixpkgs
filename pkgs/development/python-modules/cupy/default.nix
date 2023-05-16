@@ -17,13 +17,21 @@ let
   inherit (cudaPackages) cudatoolkit cudnn cutensor nccl;
 in buildPythonPackage rec {
   pname = "cupy";
+<<<<<<< HEAD
   version = "12.2.0";
+=======
+  version = "11.5.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
+<<<<<<< HEAD
     hash = "sha256-+V/9Cv6sthewSP4Cjt4HuX3J6VrKFhCgIrHz0gqaAn4=";
+=======
+    hash = "sha256-S8hWW97SLMibIQ/Z+0il1TFvMHAeErsjhSpgMU4fn24=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   # See https://docs.cupy.dev/en/v10.2.0/reference/environment.html. Seting both

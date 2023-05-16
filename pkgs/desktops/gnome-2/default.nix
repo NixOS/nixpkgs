@@ -47,7 +47,11 @@ lib.makeScope pkgs.newScope (self: with self; {
     glib glibmm atk atkmm cairo pango pangomm gdk_pixbuf gtkmm2 libcanberra-gtk2
 
     # Included for backwards compatibility
+<<<<<<< HEAD
     libsoup libwnck2 gtk-doc gnome-doc-utils
+=======
+    libsoup libwnck2 gtk-doc gnome-doc-utils rarian
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     gvfs # added 2019-09-03
   ;

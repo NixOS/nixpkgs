@@ -1,5 +1,9 @@
 #!/usr/bin/env nix-shell
+<<<<<<< HEAD
 #!nix-shell -i bash --pure --keep GITHUB_TOKEN -p nix gnused jq nix-prefetch-git curl cacert
+=======
+#!nix-shell -i bash --pure --keep GITHUB_TOKEN -p gnused jq nix-prefetch-git curl cacert
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 set -eou pipefail
 
@@ -48,13 +52,22 @@ final_ver="$major_ver-$git_ver"
 echo "INFO: Latest commit is $commit_sha"
 echo "INFO: Latest version is $final_ver"
 
+<<<<<<< HEAD
 nix_hash=$(nix-prefetch-git --quiet --fetch-submodules https://github.com/RPCS3/rpcs3.git "$commit_sha" | jq -r .sha256)
 nix_hash=$(nix hash to-sri --type sha256 "$nix_hash")
 echo "INFO: Hash is $nix_hash"
+=======
+nix_sha256=$(nix-prefetch-git --quiet --fetch-submodules https://github.com/RPCS3/rpcs3.git "$commit_sha" | jq -r .sha256)
+echo "INFO: SHA256 is $nix_sha256"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 sed -i -E \
     -e "s/rpcs3GitVersion\s*=\s*\"[\.a-z0-9-]+\";$/rpcs3GitVersion = \"${git_ver}\";/g" \
     -e "s/rpcs3Version\s*=\s*\"[\.a-z0-9-]+\";$/rpcs3Version = \"${final_ver}\";/g" \
     -e "s/rpcs3Revision\s*=\s*\"[a-z0-9]+\";$/rpcs3Revision = \"${commit_sha}\";/g" \
+<<<<<<< HEAD
     -e "s|rpcs3Hash\s*=\s*\"sha256-.*\";$|rpcs3Hash = \"${nix_hash}\";|g" \
+=======
+    -e "s/rpcs3Sha256\s*=\s*\"[a-z0-9]+\";$/rpcs3Sha256 = \"${nix_sha256}\";/g" \
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "$ROOT/default.nix"

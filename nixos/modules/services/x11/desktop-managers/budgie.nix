@@ -134,7 +134,10 @@ in {
         # Update user directories.
         xdg-user-dirs
       ]
+<<<<<<< HEAD
       ++ lib.optional config.networking.networkmanager.enable pkgs.networkmanagerapplet
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       ++ (utils.removePackagesByName [
           cinnamon.nemo
           mate.eom
@@ -157,7 +160,11 @@ in {
       ++ cfg.sessionPath;
 
     # Fonts.
+<<<<<<< HEAD
     fonts.packages = mkDefault [
+=======
+    fonts.fonts = mkDefault [
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       pkgs.noto-fonts
       pkgs.hack-font
     ];
@@ -193,7 +200,11 @@ in {
     # Required by Budgie Panel plugins and/or Budgie Control Center panels.
     networking.networkmanager.enable = mkDefault true; # for BCC's Network panel.
     programs.nm-applet.enable = config.networking.networkmanager.enable; # Budgie has no Network applet.
+<<<<<<< HEAD
     programs.nm-applet.indicator = true; # Budgie uses AppIndicators.
+=======
+    programs.nm-applet.indicator = false; # Budgie doesn't support AppIndicators.
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     hardware.bluetooth.enable = mkDefault true; # for Budgie's Status Indicator and BCC's Bluetooth panel.
     hardware.pulseaudio.enable = mkDefault true; # for Budgie's Status Indicator and BCC's Sound panel.
@@ -238,11 +249,14 @@ in {
       budgie.budgie-control-center
     ];
 
+<<<<<<< HEAD
     # Register packages for udev.
     services.udev.packages = with pkgs; [
       budgie.magpie
     ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     # Shell integration for MATE Terminal.
     programs.bash.vteIntegration = true;
     programs.zsh.vteIntegration = true;

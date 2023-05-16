@@ -1,17 +1,24 @@
 { lib
 , asn1crypto
 , buildPythonPackage
+<<<<<<< HEAD
 , pythonRelaxDepsHook
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , certifi
 , cffi
 , charset-normalizer
 , fetchPypi
 , filelock
 , idna
+<<<<<<< HEAD
 , keyring
 , oscrypto
 , packaging
 , platformdirs
+=======
+, oscrypto
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , pycryptodomex
 , pyjwt
 , pyopenssl
@@ -19,21 +26,30 @@
 , pytz
 , requests
 , setuptools
+<<<<<<< HEAD
 , sortedcontainers
 , tomlkit
 , typing-extensions
 , wheel
+=======
+, typing-extensions
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 buildPythonPackage rec {
   pname = "snowflake-connector-python";
+<<<<<<< HEAD
   version = "3.2.0";
+=======
+  version = "3.0.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
+<<<<<<< HEAD
     hash = "sha256-Z2oNyhbefBIJAKoaX85kQIM7CmD3ZoK3zPFmeWcoLKM=";
   };
 
@@ -64,6 +80,17 @@ buildPythonPackage rec {
     "platformdirs"
   ];
 
+=======
+    hash = "sha256-F0EbgRSS/kYKUDPhf6euM0eLqIqVjQsHC6C9ZZSRCIE=";
+  };
+
+  postPatch = ''
+    substituteInPlace setup.cfg \
+      --replace "charset_normalizer>=2,<3" "charset_normalizer" \
+      --replace "pyOpenSSL>=16.2.0,<23.0.0" "pyOpenSSL"
+  '';
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   propagatedBuildInputs = [
     asn1crypto
     certifi
@@ -72,13 +99,17 @@ buildPythonPackage rec {
     filelock
     idna
     oscrypto
+<<<<<<< HEAD
     packaging
     platformdirs
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     pycryptodomex
     pyjwt
     pyopenssl
     pytz
     requests
+<<<<<<< HEAD
     sortedcontainers
     tomlkit
     typing-extensions
@@ -88,6 +119,12 @@ buildPythonPackage rec {
     secure-local-storage = [ keyring ];
   };
 
+=======
+    setuptools
+    typing-extensions
+  ];
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   # Tests require encrypted secrets, see
   # https://github.com/snowflakedb/snowflake-connector-python/tree/master/.github/workflows/parameters
   doCheck = false;

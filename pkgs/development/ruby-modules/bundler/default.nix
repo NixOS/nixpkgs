@@ -4,8 +4,13 @@ buildRubyGem rec {
   inherit ruby;
   name = "${gemName}-${version}";
   gemName = "bundler";
+<<<<<<< HEAD
   version = "2.4.19";
   source.sha256 = "sha256-M03HlkODhHMv3xm/ovYjdTt+2FFg0Izh8gAJmEzvs2I=";
+=======
+  version = "2.4.12";
+  source.sha256 = "sha256-y1VM1Pi/Rx0XeTff5vUv7mCtcLtKr3ENcnD6SiTezk0=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   dontPatchShebangs = true;
 
   postFixup = ''

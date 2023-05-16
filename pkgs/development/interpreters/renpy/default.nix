@@ -8,8 +8,13 @@ let
   # base_version is of the form major.minor.patch
   # vc_version is of the form YYMMDDCC
   # version corresponds to the tag on GitHub
+<<<<<<< HEAD
   base_version = "8.1.1";
   vc_version = "23060707";
+=======
+  base_version = "8.0.3";
+  vc_version = "22090809";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 in stdenv.mkDerivation rec {
   pname = "renpy";
 
@@ -19,20 +24,31 @@ in stdenv.mkDerivation rec {
     owner = "renpy";
     repo = "renpy";
     rev = version;
+<<<<<<< HEAD
     sha256 = "sha256-aJ/MobZ6SNBYRC/EpUxAMLJ3pwK6PC92DV0YL/LF5Ew=";
+=======
+    sha256 = "sha256-0/wkUk7PMPbBSGzDuSd82yxRzvAYxkbEhM5LTVt4bMA=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [
     pkg-config
     makeWrapper
     python3.pkgs.cython
+<<<<<<< HEAD
     python3.pkgs.setuptools
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   buildInputs = [
     SDL2 libpng ffmpeg freetype glew libGLU libGL fribidi zlib
   ] ++ (with python3.pkgs; [
+<<<<<<< HEAD
     python pygame_sdl2 tkinter future six pefile requests ecdsa
+=======
+    python pygame_sdl2 tkinter future six pefile requests
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ]);
 
   RENPY_DEPS_INSTALL = lib.concatStringsSep "::" (map (path: path) [
@@ -42,10 +58,15 @@ in stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   patches = [
+<<<<<<< HEAD
+=======
+    ./renpy-system-fribidi.diff
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     ./shutup-erofs-errors.patch
   ];
 
   postPatch = ''
+<<<<<<< HEAD
     cp tutorial/game/tutorial_director.rpy{m,}
 
     cat > renpy/vc_version.py << EOF
@@ -54,6 +75,17 @@ in stdenv.mkDerivation rec {
     nightly = False
     # Look at https://renpy.org/latest.html for what to put.
     version_name = 'Where No One Has Gone Before'
+=======
+    substituteInPlace module/setup.py \
+      --replace "@fribidi@" "${fribidi.dev}"
+
+    cp tutorial/game/tutorial_director.rpy{m,}
+
+    cat > renpy/vc_version.py << EOF
+    vc_version = ${vc_version}
+    official = False
+    nightly = False
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     EOF
   '';
 
@@ -66,7 +98,11 @@ in stdenv.mkDerivation rec {
   installPhase = with python3.pkgs; ''
     runHook preInstall
 
+<<<<<<< HEAD
     ${python.pythonForBuild.interpreter} module/setup.py install_lib -d $out/${python.sitePackages}
+=======
+    ${python.pythonForBuild.interpreter} module/setup.py install --prefix=$out
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     mkdir -p $out/share/renpy
     cp -vr sdk-fonts gui launcher renpy the_question tutorial renpy.py $out/share/renpy
 

@@ -8,14 +8,22 @@
 
 buildPythonPackage rec {
   pname = "userpath";
+<<<<<<< HEAD
   version = "1.9.0";
+=======
+  version = "1.8.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
+<<<<<<< HEAD
     hash = "sha256-heMnRUMXRHfGLVcB7UOj7xBRgkqd13aWitxBHlhkDdE=";
+=======
+    hash = "sha256-BCM9L8/lz/kRweT7cYl1VkDhUk/4ekuCq51rh1/uV4c=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

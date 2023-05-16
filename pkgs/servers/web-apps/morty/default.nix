@@ -11,7 +11,11 @@ buildGoModule {
     sha256 = "sha256-ik2VAPdxllt76UVFt77c1ltxIwFNahAKjn3FuErNFYo=";
   };
 
+<<<<<<< HEAD
   vendorHash = "sha256-3sllcoTDYQBAyAT7e9KeKNrlTEbgnoZc0Vt0ksQByvo=";
+=======
+  vendorSha256 = "sha256-3sllcoTDYQBAyAT7e9KeKNrlTEbgnoZc0Vt0ksQByvo=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   meta = with lib; {
     description = "Privacy aware web content sanitizer proxy as a service";

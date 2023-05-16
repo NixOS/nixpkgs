@@ -3,7 +3,10 @@
 , fetchFromGitHub
 , pandoc
 , pandocfilters
+<<<<<<< HEAD
 , poetry-core
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , pythonOlder
 , substituteAll
 , texlive
@@ -12,7 +15,10 @@
 buildPythonPackage rec {
   pname = "pypandoc";
   version = "1.10";
+<<<<<<< HEAD
   format = "pyproject";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   disabled = pythonOlder "3.7";
 
@@ -32,10 +38,13 @@ buildPythonPackage rec {
     ./skip-tests.patch
   ];
 
+<<<<<<< HEAD
   nativeBuildInputs = [
     poetry-core
   ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nativeCheckInputs = [
     texlive.combined.scheme-small
     pandocfilters

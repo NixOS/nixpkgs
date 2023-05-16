@@ -15,13 +15,21 @@
 
 stdenv.mkDerivation rec {
   pname = "ipcalc";
+<<<<<<< HEAD
   version = "1.0.3";
+=======
+  version = "1.0.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitLab {
     owner = "ipcalc";
     repo = "ipcalc";
     rev = version;
+<<<<<<< HEAD
     hash = "sha256-9eaR1zG8tjSGlkpyY1zTHAVgN5ypuyRfeRq6ct6zsLU=";
+=======
+    hash = "sha256-HlAGAjNUjfr/Ysjiml54vph/S5pS6fTMWYJwLFr1NSI=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   patches = [
@@ -55,6 +63,9 @@ stdenv.mkDerivation rec {
     homepage = "https://gitlab.com/ipcalc/ipcalc";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ peterhoeg ];
+<<<<<<< HEAD
     platforms = platforms.unix;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 { lib, stdenv, fetchurl, openssl, python, zlib, libuv, util-linux, http-parser, bash
+=======
+{ lib, stdenv, fetchurl, openssl, python, zlib, libuv, util-linux, http-parser
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , pkg-config, which, buildPackages
 # for `.pkgs` attribute
 , callPackage
@@ -14,8 +18,11 @@
 let
   inherit (darwin.apple_sdk.frameworks) CoreServices ApplicationServices;
 
+<<<<<<< HEAD
   isCross = stdenv.hostPlatform != stdenv.buildPlatform;
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   majorVersion = lib.versions.major version;
   minorVersion = lib.versions.minor version;
 
@@ -50,6 +57,7 @@ let
       inherit sha256;
     };
 
+<<<<<<< HEAD
     strictDeps = true;
 
     CC_host = "cc";
@@ -61,6 +69,14 @@ let
     # that use bash wrappers, e.g. polaris-web.
     buildInputs = lib.optionals stdenv.isDarwin [ CoreServices ApplicationServices ]
       ++ [ zlib libuv openssl http-parser icu bash ];
+=======
+    CC_host = "cc";
+    CXX_host = "c++";
+    depsBuildBuild = [ buildPackages.stdenv.cc openssl libuv zlib ];
+
+    buildInputs = lib.optionals stdenv.isDarwin [ CoreServices ApplicationServices ]
+      ++ [ zlib libuv openssl http-parser icu ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     nativeBuildInputs = [ which pkg-config python ]
       ++ lib.optionals stdenv.isDarwin [ xcbuild ];
@@ -70,11 +86,20 @@ let
     moveToDev = false;
 
     configureFlags = let
+<<<<<<< HEAD
+=======
+      isCross = stdenv.hostPlatform != stdenv.buildPlatform;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       inherit (stdenv.hostPlatform) gcc isAarch32;
     in sharedConfigureFlags ++ lib.optionals (lib.versionOlder version "19") [
       "--without-dtrace"
     ] ++ (lib.optionals isCross [
       "--cross-compiling"
+<<<<<<< HEAD
+=======
+      "--without-intl"
+      "--without-snapshot"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       "--dest-cpu=${let platform = stdenv.hostPlatform; in
                     if      platform.isAarch32 then "arm"
                     else if platform.isAarch64 then "arm64"
@@ -120,6 +145,7 @@ let
 
     inherit patches;
 
+<<<<<<< HEAD
     doCheck = lib.versionAtLeast version "16"; # some tests fail on v14
 
     # Some dependencies required for tools/doc/node_modules (and therefore
@@ -142,6 +168,34 @@ let
         mkdir -p $out/share/bash-completion/completions
         ln -s $out/lib/node_modules/npm/lib/utils/completion.sh \
           $out/share/bash-completion/completions/npm
+=======
+    postPatch = ''
+      patchShebangs .
+
+      # fix tests
+      for a in test/parallel/test-child-process-env.js \
+               test/parallel/test-child-process-exec-env.js \
+               test/parallel/test-child-process-default-options.js \
+               test/fixtures/syntax/good_syntax_shebang.js \
+               test/fixtures/syntax/bad_syntax_shebang.js ; do
+        substituteInPlace $a \
+          --replace "/usr/bin/env" "${coreutils}/bin/env"
+      done
+    '' + lib.optionalString stdenv.isDarwin ''
+      sed -i -e "s|tr1/type_traits|type_traits|g" \
+             -e "s|std::tr1|std|" src/util.h
+    '';
+
+    nativeCheckInputs = [ procps ];
+    doCheck = false; # fails 4 out of 1453 tests
+
+    postInstall = ''
+      PATH=$out/bin:$PATH patchShebangs $out
+
+      ${lib.optionalString (enableNpm && stdenv.hostPlatform == stdenv.buildPlatform) ''
+        mkdir -p $out/share/bash-completion/completions/
+        HOME=$TMPDIR $out/bin/npm completion > $out/share/bash-completion/completions/npm
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         for dir in "$out/lib/node_modules/npm/man/"*; do
           mkdir -p $out/share/man/$(basename "$dir")
           for page in "$dir"/*; do
@@ -160,6 +214,7 @@ let
       ${if stdenv.buildPlatform.isGnu then ''
         ar -cqs $libv8/lib/libv8.a @files
       '' else ''
+<<<<<<< HEAD
         # llvm-ar supports response files, so take advantage of it if it’s available.
         if [ "$(basename $(readlink -f $(command -v ar)))" = "llvm-ar" ]; then
           ar -cqs $libv8/lib/libv8.a @files
@@ -168,6 +223,11 @@ let
             ar -cqS $libv8/lib/libv8.a $file
           done
         fi
+=======
+        cat files | while read -r file; do
+          ar -cqS $libv8/lib/libv8.a $file
+        done
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       ''}
       popd
 
@@ -183,7 +243,11 @@ let
       Name: v8
       Description: V8 JavaScript Engine
       Version: $major.$minor.$patch
+<<<<<<< HEAD
       Libs: -L$libv8/lib -lv8 -pthread -licui18n -licuuc
+=======
+      Libs: -L$libv8/lib -lv8 -pthread -licui18n
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       Cflags: -I$libv8/include
       EOF
     '';
@@ -202,6 +266,7 @@ let
       maintainers = with maintainers; [ goibhniu gilligan cko marsam ];
       platforms = platforms.linux ++ platforms.darwin;
       mainProgram = "node";
+<<<<<<< HEAD
       knownVulnerabilities = optional (versionOlder version "18") "This NodeJS release has reached its end of life. See https://nodejs.org/en/about/releases/.";
 
       # Node.js build system does not have separate host and target OS
@@ -211,6 +276,9 @@ let
       # We may be missing something here, but it doesn’t look like it is
       # possible to cross-compile between different operating systems.
       broken = stdenv.buildPlatform.parsed.kernel.name != stdenv.hostPlatform.parsed.kernel.name;
+=======
+      knownVulnerabilities = optional (versionOlder version "14") "This NodeJS release has reached its end of life. See https://nodejs.org/en/about/releases/.";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
 
     passthru.python = python; # to ensure nodeEnv uses the same version

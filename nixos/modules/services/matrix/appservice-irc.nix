@@ -12,14 +12,24 @@ let
 
   configFile = pkgs.runCommand "matrix-appservice-irc.yml" {
     # Because this program will be run at build time, we need `nativeBuildInputs`
+<<<<<<< HEAD
     nativeBuildInputs = [ (pkgs.python3.withPackages (ps: [ ps.jsonschema ])) pkgs.remarshal ];
+=======
+    nativeBuildInputs = [ (pkgs.python3.withPackages (ps: [ ps.pyyaml ps.jsonschema ])) ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     preferLocalBuild = true;
 
     config = builtins.toJSON cfg.settings;
     passAsFile = [ "config" ];
   } ''
     # The schema is given as yaml, we need to convert it to json
+<<<<<<< HEAD
     remarshal --if yaml --of json -i ${pkg}/config.schema.yml -o config.schema.json
+=======
+    python -c 'import json; import yaml; import sys; json.dump(yaml.safe_load(sys.stdin), sys.stdout)' \
+      < ${pkg}/lib/node_modules/matrix-appservice-irc/config.schema.yml \
+      > config.schema.json
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     python -m jsonschema config.schema.json -i $configPath
     cp "$configPath" "$out"
   '';
@@ -185,7 +195,11 @@ in {
           sed -i "s/^as_token:.*$/$as_token/g" ${registrationFile}
         fi
         # Allow synapse access to the registration
+<<<<<<< HEAD
         if ${pkgs.getent}/bin/getent group matrix-synapse > /dev/null; then
+=======
+        if ${getBin pkgs.glibc}/bin/getent group matrix-synapse > /dev/null; then
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           chgrp matrix-synapse ${registrationFile}
           chmod g+r ${registrationFile}
         fi
@@ -213,10 +227,14 @@ in {
         LockPersonality = true;
         RestrictRealtime = true;
         PrivateMounts = true;
+<<<<<<< HEAD
         SystemCallFilter = [
           "@system-service @pkey"
           "~@privileged @resources"
         ];
+=======
+        SystemCallFilter = "~@aio @clock @cpu-emulation @debug @keyring @memlock @module @mount @obsolete @raw-io @setuid @swap";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         SystemCallArchitectures = "native";
         # AF_UNIX is required to connect to a postgres socket.
         RestrictAddressFamilies = "AF_UNIX AF_INET AF_INET6";

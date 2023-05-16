@@ -1,5 +1,9 @@
 { lib
 , stdenvNoCC
+<<<<<<< HEAD
+=======
+, callPackage
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , fetchurl
 , autoPatchelfHook
 , unzip
@@ -11,7 +15,11 @@
 }:
 
 stdenvNoCC.mkDerivation rec {
+<<<<<<< HEAD
   version = "1.0.0";
+=======
+  version = "0.5.9";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pname = "bun";
 
   src = passthru.sources.${stdenvNoCC.hostPlatform.system} or (throw "Unsupported system: ${stdenvNoCC.hostPlatform.system}");
@@ -25,16 +33,21 @@ stdenvNoCC.mkDerivation rec {
 
   installPhase = ''
     runHook preInstall
+<<<<<<< HEAD
 
     install -Dm 755 ./bun $out/bin/bun
     ln -s $out/bin/bun $out/bin/bunx
 
+=======
+    install -Dm 755 ./bun $out/bin/bun
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     runHook postInstall
   '';
   passthru = {
     sources = {
       "aarch64-darwin" = fetchurl {
         url = "https://github.com/oven-sh/bun/releases/download/bun-v${version}/bun-darwin-aarch64.zip";
+<<<<<<< HEAD
         hash = "sha256-Bd8KL1IbWBRiMZq4YPhNLdhBOqRReCFeUPAilLfk0TM=";
       };
       "aarch64-linux" = fetchurl {
@@ -48,6 +61,21 @@ stdenvNoCC.mkDerivation rec {
       "x86_64-linux" = fetchurl {
         url = "https://github.com/oven-sh/bun/releases/download/bun-v${version}/bun-linux-x64.zip";
         hash = "sha256-1ju7ZuW82wRfXEiU24Lx9spCoIhhddJ2p4dTTQmsa7A=";
+=======
+        sha256 = "nkXTyJMvGMBz1xiWudLSwl+s7gb750g1oYTvPoY+o0M=";
+      };
+      "aarch64-linux" = fetchurl {
+        url = "https://github.com/oven-sh/bun/releases/download/bun-v${version}/bun-linux-aarch64.zip";
+        sha256 = "pJXwRuokjlwVNLoDajvhIIBzLdYUHZsLxXr98RkC6Hg=";
+      };
+      "x86_64-darwin" = fetchurl {
+        url = "https://github.com/oven-sh/bun/releases/download/bun-v${version}/bun-darwin-x64.zip";
+        sha256 = "3vx61oBNS9K5kjAitIO3VJ6mVK4vpkAAn6Pur7ogsBA=";
+      };
+      "x86_64-linux" = fetchurl {
+        url = "https://github.com/oven-sh/bun/releases/download/bun-v${version}/bun-linux-x64.zip";
+        sha256 = "vwxkydYJdnb8MBUAfywpXdaahsuw5IvnXeoUmilzruE=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       };
     };
     updateScript = writeShellScript "update-bun" ''
@@ -66,7 +94,11 @@ stdenvNoCC.mkDerivation rec {
   };
   meta = with lib; {
     homepage = "https://bun.sh";
+<<<<<<< HEAD
     changelog = "https://bun.sh/blog/bun-v1.0"; # 1.0 changelog does not use the full version name, please change this to ${version} in the following releases
+=======
+    changelog = "https://github.com/Jarred-Sumner/bun/releases/tag/bun-v${version}";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     description = "Incredibly fast JavaScript runtime, bundler, transpiler and package manager – all in one";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     longDescription = ''
@@ -76,7 +108,11 @@ stdenvNoCC.mkDerivation rec {
       mit # bun core
       lgpl21Only # javascriptcore and webkit
     ];
+<<<<<<< HEAD
     maintainers = with maintainers; [ DAlperin jk thilobillerbeck cdmistman coffeeispower ];
+=======
+    maintainers = with maintainers; [ DAlperin jk ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     platforms = builtins.attrNames passthru.sources;
   };
 }

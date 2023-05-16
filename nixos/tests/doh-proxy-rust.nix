@@ -1,6 +1,12 @@
 import ./make-test-python.nix ({ lib, pkgs, ... }: {
   name = "doh-proxy-rust";
+<<<<<<< HEAD
   meta.maintainers = with lib.maintainers; [ stephank ];
+=======
+  meta = with lib.maintainers; {
+    maintainers = [ stephank ];
+  };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nodes = {
     machine = { pkgs, lib, ... }: {

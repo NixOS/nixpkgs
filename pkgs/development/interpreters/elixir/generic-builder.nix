@@ -16,7 +16,10 @@
 , sha256 ? null
 , rev ? "v${version}"
 , src ? fetchFromGitHub { inherit rev sha256; owner = "elixir-lang"; repo = "elixir"; }
+<<<<<<< HEAD
 , escriptPath ? "lib/elixir/generate_app.escript"
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 } @ args:
 
 let
@@ -39,7 +42,11 @@ stdenv.mkDerivation ({
   buildFlags = optional debugInfo "ERL_COMPILER_OPTIONS=debug_info";
 
   preBuild = ''
+<<<<<<< HEAD
     patchShebangs ${escriptPath} || true
+=======
+    patchShebangs lib/elixir/generate_app.escript || true
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     substituteInPlace Makefile \
       --replace "/usr/local" $out
@@ -50,14 +57,22 @@ stdenv.mkDerivation ({
     # to PATH so the scripts can run without problems.
 
     for f in $out/bin/*; do
+<<<<<<< HEAD
       b=$(basename $f)
+=======
+     b=$(basename $f)
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       if [ "$b" = mix ]; then continue; fi
       wrapProgram $f \
         --prefix PATH ":" "${lib.makeBinPath [ erlang coreutils curl bash ]}"
     done
 
     substituteInPlace $out/bin/mix \
+<<<<<<< HEAD
       --replace "/usr/bin/env elixir" "${coreutils}/bin/env $out/bin/elixir"
+=======
+          --replace "/usr/bin/env elixir" "${coreutils}/bin/env elixir"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '';
 
   pos = builtins.unsafeGetAttrPos "sha256" args;

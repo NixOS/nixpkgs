@@ -36,7 +36,11 @@
 
 stdenv.mkDerivation rec {
   pname = "phosh";
+<<<<<<< HEAD
   version = "0.27.0";
+=======
+  version = "0.25.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
@@ -45,7 +49,11 @@ stdenv.mkDerivation rec {
     repo = pname;
     rev = "v${version}";
     fetchSubmodules = true; # including gvc and libcall-ui which are designated as subprojects
+<<<<<<< HEAD
     sha256 = "sha256-dnSYeXn3aPwvxeIjjk+PsnOVKyuGlxXMXGWDdrRrIM0=";
+=======
+    sha256 = "sha256-ysAZdmkFEuqJDTPe246F2I4Qp+fjtomia42PS8BuMM8=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

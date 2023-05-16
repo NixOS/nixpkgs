@@ -7,13 +7,22 @@
 
 stdenv.mkDerivation rec {
   pname = "plan9port";
+<<<<<<< HEAD
   version = "2023-03-31";
+=======
+  version = "2022-09-12";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "9fans";
     repo = pname;
+<<<<<<< HEAD
     rev = "cc4571fec67407652b03d6603ada6580de2194dc";
     hash = "sha256-PZWjf0DJCNs5mjxtXgK4/BcstaOqG2WBKRo+Bh/9U7w=";
+=======
+    rev = "ffbdd1aa20c8a20a8e9dcd3cec644b6dfa3c6acb";
+    hash = "sha256-Lq5B4VYUetkHwhFX2EaLr33wR1aLIiVn8OBobxjFt7I=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   postPatch = ''

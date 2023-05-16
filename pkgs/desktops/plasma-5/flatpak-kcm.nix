@@ -4,7 +4,10 @@
 , kcmutils
 , kconfig
 , kdeclarative
+<<<<<<< HEAD
 , kitemmodels
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 mkDerivation {
@@ -15,6 +18,9 @@ mkDerivation {
     kcmutils
     kconfig
     kdeclarative
+<<<<<<< HEAD
     kitemmodels
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 }

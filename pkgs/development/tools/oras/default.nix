@@ -2,16 +2,27 @@
 
 buildGoModule rec {
   pname = "oras";
+<<<<<<< HEAD
   version = "1.1.0";
+=======
+  version = "1.0.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "oras-project";
     repo = "oras";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-oWDxrxCrBU0quSpRLXZ0w1COuImVj4FzAmv8574x76o=";
   };
 
   vendorHash = "sha256-51keQmj1eGT3rJysnfTWIl8xoHfz3NPL/qXegc3wwNc=";
+=======
+    hash = "sha256-NGkpmObFY3Z8sKBbgIwFAnIyVEFE0sRxgrX+3oXEVo0=";
+  };
+
+  vendorHash = "sha256-l2UuYrkFdZYaqQUW57y0OZyu1gPO22C+AwNdIYymV9k=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nativeBuildInputs = [ installShellFiles ];
 

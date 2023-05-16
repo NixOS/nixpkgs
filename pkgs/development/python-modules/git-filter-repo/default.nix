@@ -1,6 +1,9 @@
 { lib
 , buildPythonPackage
+<<<<<<< HEAD
 , fetchpatch
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , fetchPypi
 , pythonOlder
 , setuptools-scm
@@ -18,6 +21,7 @@ buildPythonPackage rec {
     hash = "sha256-/hdT4Y8L1tPJtXhoyAEa59BWpuurcGcGOWoV71MScl4=";
   };
 
+<<<<<<< HEAD
   patches = [
     # https://github.com/newren/git-filter-repo/pull/498
     (fetchpatch {
@@ -28,6 +32,8 @@ buildPythonPackage rec {
     })
   ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nativeBuildInputs = [
     setuptools-scm
   ];

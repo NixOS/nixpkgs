@@ -27,14 +27,22 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-bluetooth";
+<<<<<<< HEAD
   version = "42.6";
+=======
+  version = "42.5";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   # TODO: split out "lib"
   outputs = [ "out" "dev" "devdoc" "man" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
+<<<<<<< HEAD
     sha256 = "WGT+bx5xhxXbJrYiAbdaWQIM9CR/7DdkWzVZzS26WdA=";
+=======
+    sha256 = "pPXxrC27e3uS99bStCwDD2Ku2bVCa53BFpRgQfPLqPc=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

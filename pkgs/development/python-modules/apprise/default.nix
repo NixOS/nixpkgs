@@ -19,14 +19,22 @@
 
 buildPythonPackage rec {
   pname = "apprise";
+<<<<<<< HEAD
   version = "1.5.0";
+=======
+  version = "1.3.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
+<<<<<<< HEAD
     hash = "sha256-PFgRQQd6EBeQ7eDKsW+ig60DKpsvl9xtNWX7LZGBP9c=";
+=======
+    hash = "sha256-LFDBml3UExex9lnFKyGpkP6+bBXghGQiihzo5gmPEb8=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

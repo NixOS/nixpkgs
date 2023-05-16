@@ -1,6 +1,10 @@
 { lib
 , stdenv
 , fetchFromGitHub
+<<<<<<< HEAD
+=======
+, fetchpatch
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , xorg
 , xkeyboard_config
 , zlib
@@ -23,16 +27,34 @@
 }:
 
 stdenv.mkDerivation rec {
+<<<<<<< HEAD
   version = "1.13.1";
+=======
+  version = "1.12.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pname = "tigervnc";
 
   src = fetchFromGitHub {
     owner = "TigerVNC";
     repo = "tigervnc";
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-YSkgkk87bbHg7lJGoPBs7bfjvd1hvUeOZulFHYpXvvo=";
   };
 
+=======
+    sha256 = "sha256-77X+AvHFWfYYIio3c+EYf11jg/1IbYhNUweRIDHMOZw=";
+  };
+
+  patches = [
+    (fetchpatch {
+      url = "https://patch-diff.githubusercontent.com/raw/TigerVNC/tigervnc/pull/1383.patch";
+      sha256 = "sha256-r3QLtxVD0wIv2NWVN9r0LVxSlLurDHgkAZfkpIjmZyU=";
+      name = "Xvnc-support-Xorg-1.21-PR1383.patch";
+    })
+  ];
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   postPatch = lib.optionalString stdenv.isLinux ''
     sed -i -e '/^\$cmd \.= " -pn";/a$cmd .= " -xkbdir ${xkeyboard_config}/etc/X11/xkb";' unix/vncserver/vncserver.in
     fontPath=

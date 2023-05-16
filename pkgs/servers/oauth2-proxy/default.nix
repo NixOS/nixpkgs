@@ -11,7 +11,11 @@ buildGoModule rec {
     rev = "v${version}";
   };
 
+<<<<<<< HEAD
   vendorHash = "sha256-2WUd2RxeOal0lpp/TuGSyfP1ppvG/Vd3bgsSsNO8ejo=";
+=======
+  vendorSha256 = "sha256-2WUd2RxeOal0lpp/TuGSyfP1ppvG/Vd3bgsSsNO8ejo=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   # Taken from https://github.com/oauth2-proxy/oauth2-proxy/blob/master/Makefile
   ldflags = [ "-X main.VERSION=${version}" ];

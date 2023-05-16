@@ -14,21 +14,33 @@
 }:
 
 let
+<<<<<<< HEAD
   version = "1.17.4";
+=======
+  version = "1.17.3";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   # Using two URLs as the first one will break as soon as a new version is released
   src_bin = fetchurl {
     urls = [
       "http://www.makemkv.com/download/makemkv-bin-${version}.tar.gz"
       "http://www.makemkv.com/download/old/makemkv-bin-${version}.tar.gz"
     ];
+<<<<<<< HEAD
     sha256 = "68ebc6f9baba7be4429014b73bdf6da33516a399f011e9e535eb383aff97748b";
+=======
+    sha256 = "1cd633bfb381faa4f22ab57f6b75053c1b18997c223ed7988896c8c15cd1bee0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
   src_oss = fetchurl {
     urls = [
       "http://www.makemkv.com/download/makemkv-oss-${version}.tar.gz"
       "http://www.makemkv.com/download/old/makemkv-oss-${version}.tar.gz"
     ];
+<<<<<<< HEAD
     sha256 = "70e3599dd0a120ababa00d44c93ec8d2d001aea93e902355786ed90a7360cc99";
+=======
+    sha256 = "16be3ee29c1dd3d5292f793e9f5efbcd30a59bf035de79586e9afbfa98a6a4cb";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
 in mkDerivation {

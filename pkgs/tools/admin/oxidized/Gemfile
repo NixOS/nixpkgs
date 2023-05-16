@@ -1,5 +1,6 @@
 source 'https://rubygems.org'
 
+<<<<<<< HEAD
 gem 'oxidized', '0.29.1'
 gem 'oxidized-web', '0.13.1'
 
@@ -9,3 +10,8 @@ gem 'oxidized-script', git: 'https://github.com/ytti/oxidized-script.git', ref: 
 # Fix for https://github.com/ytti/oxidized/issues/2769
 gem 'psych', '~> 3.3.2'
 
+=======
+gem 'oxidized', '0.26.3'
+gem 'oxidized-web', '0.13.1'
+gem 'oxidized-script', '0.6.0'
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)

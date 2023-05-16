@@ -170,6 +170,7 @@ let
 
   # peer options
 
+<<<<<<< HEAD
   peerOpts = self: {
 
     options = {
@@ -186,6 +187,12 @@ let
         description = lib.mdDoc "Name used to derive peer unit name.";
       };
 
+=======
+  peerOpts = {
+
+    options = {
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       publicKey = mkOption {
         example = "xTIBA5rboUvnH4htodjb6e697QjLERt1NAB4mZqp8Dg=";
         type = types.singleLineStr;
@@ -325,11 +332,23 @@ let
         '';
       };
 
+<<<<<<< HEAD
   peerUnitServiceName = interfaceName: peerName: dynamicRefreshEnabled:
     let
       refreshSuffix = optionalString dynamicRefreshEnabled "-refresh";
     in
       "wireguard-${interfaceName}-peer-${peerName}${refreshSuffix}";
+=======
+  peerUnitServiceName = interfaceName: publicKey: dynamicRefreshEnabled:
+    let
+      keyToUnitName = replaceStrings
+        [ "/" "-"    " "     "+"     "="      ]
+        [ "-" "\\x2d" "\\x20" "\\x2b" "\\x3d" ];
+      unitName = keyToUnitName publicKey;
+      refreshSuffix = optionalString dynamicRefreshEnabled "-refresh";
+    in
+      "wireguard-${interfaceName}-peer-${unitName}${refreshSuffix}";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   generatePeerUnit = { interfaceName, interfaceCfg, peer }:
     let
@@ -345,11 +364,18 @@ let
       # We generate a different name (a `-refresh` suffix) when `dynamicEndpointRefreshSeconds`
       # to avoid that the same service switches `Type` (`oneshot` vs `simple`),
       # with the intent to make scripting more obvious.
+<<<<<<< HEAD
       serviceName = peerUnitServiceName interfaceName peer.name dynamicRefreshEnabled;
     in nameValuePair serviceName
       {
         description = "WireGuard Peer - ${interfaceName} - ${peer.name}"
           + optionalString (peer.name != peer.publicKey) " (${peer.publicKey})";
+=======
+      serviceName = peerUnitServiceName interfaceName peer.publicKey dynamicRefreshEnabled;
+    in nameValuePair serviceName
+      {
+        description = "WireGuard Peer - ${interfaceName} - ${peer.publicKey}";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         requires = [ "wireguard-${interfaceName}.service" ];
         wants = [ "network-online.target" ];
         after = [ "wireguard-${interfaceName}.service" "network-online.target" ];
@@ -427,7 +453,11 @@ let
   # the target is required to start new peer units when they are added
   generateInterfaceTarget = name: values:
     let
+<<<<<<< HEAD
       mkPeerUnit = peer: (peerUnitServiceName name peer.name (peer.dynamicEndpointRefreshSeconds != 0)) + ".service";
+=======
+      mkPeerUnit = peer: (peerUnitServiceName name peer.publicKey (peer.dynamicEndpointRefreshSeconds != 0)) + ".service";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     in
     nameValuePair "wireguard-${name}"
       rec {

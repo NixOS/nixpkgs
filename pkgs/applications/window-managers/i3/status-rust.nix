@@ -15,16 +15,27 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "i3status-rust";
+<<<<<<< HEAD
   version = "0.32.2";
+=======
+  version = "0.31.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "greshake";
     repo = pname;
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-CKL4XsOBo8y4k06t5E7k2HBmI4VABW4rxU6Bjl52fhs=";
   };
 
   cargoHash = "sha256-7v5813veJPP5NVe2gFZr+iXJmK+aLajSZuhEkgsMxuY=";
+=======
+    hash = "sha256-4lr2ibtBtJYXeeArBK4M35L4CUNqZcUDB+3Nm1kqp4w=";
+  };
+
+  cargoHash = "sha256-5LIXzfYSuHOdxYxfp1eMdxsqyP+3sldBCV0mgv7SRRI=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nativeBuildInputs = [ pkg-config makeWrapper ];
 

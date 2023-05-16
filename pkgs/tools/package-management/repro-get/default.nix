@@ -9,16 +9,27 @@
 
 buildGoModule rec {
   pname = "repro-get";
+<<<<<<< HEAD
   version = "0.4.0";
+=======
+  version = "0.3.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "reproducible-containers";
     repo = "repro-get";
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-Ij74EQz5NreOhjz6XPAriYUb5iNT4E+w5vO5uzjzFR4=";
   };
 
   vendorHash = "sha256-Tev6MaquEup5EN7aeIA1wzc08kqLtvLuUz7U8o7CW04=";
+=======
+    sha256 = "sha256-2B4jNP58t+cfeHi5pICtB9+NwujRzkhl1d/cPkWlNrk=";
+  };
+
+  vendorHash = "sha256-GM8sKIZb2G9dBj2RoRO80hQrv8D+hHYo0O9FbBuK780=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nativeBuildInputs = [ installShellFiles ];
 

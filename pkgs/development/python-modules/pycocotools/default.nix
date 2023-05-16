@@ -7,12 +7,20 @@
 
 buildPythonPackage rec {
   pname = "pycocotools";
+<<<<<<< HEAD
   version = "2.0.7";
+=======
+  version = "2.0.6";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
+<<<<<<< HEAD
     hash = "sha256-2ot4FRlu6/Ctq/Z/zEWRJsvGSYu8arH9FEw3FGXYaHk=";
+=======
+    hash = "sha256-f+CJsFzBjoBtzzvXZHCNhtq5IqEA83NOt3+3enCh0Yw=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [

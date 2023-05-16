@@ -1,5 +1,9 @@
 #! /usr/bin/env nix-shell
+<<<<<<< HEAD
 #! nix-shell -i bash -p nix curl jq git gnused gnugrep -I nixpkgs=.
+=======
+#! nix-shell -i bash -p nix curl jq nix-prefetch-github git gnused gnugrep -I nixpkgs=.
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 # shellcheck shell=bash
 
 set -eu -o pipefail
@@ -66,7 +70,10 @@ sed -r \
     -e '/ hie-bios /d' \
     -e '/ ShellCheck /d' \
     -e '/ Agda /d' \
+<<<<<<< HEAD
     -e '/ stack /d' \
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     < "${tmpfile_new}" >> $stackage_config
 # Explanations:
 # cabal2nix, distribution-nixpkgs, jailbreak-cabal, language-nix: These are our packages and we know what we are doing.

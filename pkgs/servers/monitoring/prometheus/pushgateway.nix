@@ -2,16 +2,27 @@
 
 buildGoModule rec {
   pname = "pushgateway";
+<<<<<<< HEAD
   version = "1.6.0";
+=======
+  version = "1.5.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "prometheus";
     repo = "pushgateway";
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-sJ4TTyo+A3CEUcTJv3LlUU60pc/a/PgB0Mk6R5wpTgM=";
   };
 
   vendorHash = "sha256-oDvFp7FYam/hsiEesfTuNgXciH4JAUKkMiECn4FPqmE=";
+=======
+    sha256 = "sha256-UnkSv0ZGNFqEQX+QeCySN5XeGbM2hCJGgWxry5I+3tg=";
+  };
+
+  vendorSha256 = "sha256-wEKk7Jrf14oJzP6MSRJidOUUgAbPFoBOmqPrXJg86FI=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   ldflags = [
     "-s"
@@ -32,5 +43,9 @@ buildGoModule rec {
     homepage = "https://github.com/prometheus/pushgateway";
     license = licenses.asl20;
     maintainers = with maintainers; [ benley ];
+<<<<<<< HEAD
+=======
+    platforms = platforms.unix;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

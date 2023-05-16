@@ -2,14 +2,20 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pytestCheckHook
+<<<<<<< HEAD
 , sphinxHook
 , sphinx-rtd-theme
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 buildPythonPackage rec {
   pname = "wrapt";
   version = "1.14.1";
+<<<<<<< HEAD
   outputs = [ "out" "doc" ];
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   src = fetchFromGitHub {
@@ -23,11 +29,14 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+<<<<<<< HEAD
   nativeBuildInputs = [
     sphinxHook
     sphinx-rtd-theme
   ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pythonImportsCheck = [
     "wrapt"
   ];

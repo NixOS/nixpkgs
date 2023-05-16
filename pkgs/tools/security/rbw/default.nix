@@ -5,7 +5,11 @@
 , openssl
 , pkg-config
 , installShellFiles
+<<<<<<< HEAD
 , darwin
+=======
+, Security
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   # rbw-fzf
 , withFzf ? false
@@ -24,6 +28,7 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rbw";
+<<<<<<< HEAD
   version = "1.8.3";
 
   src = fetchzip {
@@ -32,15 +37,29 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoHash = "sha256-nI1Pf7gREbAk+JVF3Gn2j8OqprexCQ5fVvECtq2aBPM=";
+=======
+  version = "1.7.1";
+
+  src = fetchzip {
+    url = "https://git.tozt.net/rbw/snapshot/rbw-${version}.tar.gz";
+    sha256 = "sha256-xE3T3iVXFaaTF90ehQiG6+dLXcsqrHeprSMUnlSsxkE=";
+  };
+
+  cargoHash = "sha256-eaG56FGz4smlqDPi/CJ0KB7NMEgp684X19PVWxGQutw=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nativeBuildInputs = [
     installShellFiles
   ] ++ lib.optionals stdenv.isLinux [ pkg-config ];
 
+<<<<<<< HEAD
   buildInputs = lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.Security
     darwin.apple_sdk.frameworks.AppKit
   ];
+=======
+  buildInputs = lib.optionals stdenv.isDarwin [ Security ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   preConfigure = lib.optionalString stdenv.isLinux ''
     export OPENSSL_INCLUDE_DIR="${openssl.dev}/include"

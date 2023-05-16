@@ -5,6 +5,10 @@
 , IOKit
 , nvidiaSupport ? false
 , makeWrapper
+<<<<<<< HEAD
+=======
+, llvmPackages
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 assert nvidiaSupport -> stdenv.isLinux;
@@ -33,11 +37,21 @@ rustPlatform.buildRustPackage rec {
     };
   };
 
+<<<<<<< HEAD
   nativeBuildInputs = [ rustPlatform.bindgenHook ] ++ lib.optional nvidiaSupport makeWrapper;
   buildInputs = lib.optionals stdenv.isDarwin [ IOKit ];
 
   buildFeatures = lib.optional nvidiaSupport "nvidia";
 
+=======
+  nativeBuildInputs = [ llvmPackages.clang ] ++ lib.optional nvidiaSupport makeWrapper;
+  buildInputs = [ llvmPackages.libclang ] ++ lib.optionals stdenv.isDarwin [ IOKit ];
+
+  buildFeatures = lib.optional nvidiaSupport "nvidia";
+
+  LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   postInstall = lib.optionalString nvidiaSupport ''
     wrapProgram $out/bin/zenith \
       --suffix LD_LIBRARY_PATH : "/run/opengl-driver/lib"

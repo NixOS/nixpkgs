@@ -1,6 +1,10 @@
 { stdenv, lib, fetchurl, pkg-config, meson, ninja, docutils
 , libpthreadstubs, libpciaccess
+<<<<<<< HEAD
 , withValgrind ? lib.meta.availableOn stdenv.hostPlatform valgrind-light, valgrind-light
+=======
+, withValgrind ? valgrind-light.meta.available, valgrind-light
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 stdenv.mkDerivation rec {

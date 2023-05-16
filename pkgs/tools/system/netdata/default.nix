@@ -17,14 +17,22 @@
 
 stdenv.mkDerivation rec {
   # Don't forget to update go.d.plugin.nix as well
+<<<<<<< HEAD
   version = "1.42.2";
+=======
+  version = "1.39.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pname = "netdata";
 
   src = fetchFromGitHub {
     owner = "netdata";
     repo = "netdata";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-8L8PhPgNIHvw+Dcx2D6OE8fp2+GEYOc9wEIoPJSqXME=";
+=======
+    sha256 = "sha256-YegHgyj9X8YDSsEV65v8oSnRDv57oz3PCkLA1vy+LYA=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     fetchSubmodules = true;
   };
 
@@ -49,6 +57,14 @@ stdenv.mkDerivation rec {
     # required to prevent plugins from relying on /etc
     # and /var
     ./no-files-in-etc-and-var.patch
+<<<<<<< HEAD
+=======
+    # The current IPC location is unsafe as it writes
+    # a fixed path in /tmp, which is world-writable.
+    # Therefore we put it into `/run/netdata`, which is owned
+    # by netdata only.
+    ./ipc-socket-in-run.patch
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     # Avoid build-only inputs in closure leaked by configure command:
     #   https://github.com/NixOS/nixpkgs/issues/175693#issuecomment-1143344162
@@ -60,7 +76,11 @@ stdenv.mkDerivation rec {
   # to bootstrap tools:
   #   https://github.com/NixOS/nixpkgs/pull/175719
   # We pick zlib.dev as a simple canary package with pkg-config input.
+<<<<<<< HEAD
   disallowedReferences = lib.optional (!withDebug) zlib.dev;
+=======
+  disallowedReferences = if withDebug then [] else [ zlib.dev ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   donStrip = withDebug;
   env.NIX_CFLAGS_COMPILE = lib.optionalString withDebug "-O1 -ggdb -DNETDATA_INTERNAL_CHECKS=1";
@@ -103,7 +123,10 @@ stdenv.mkDerivation rec {
   postFixup = ''
     wrapProgram $out/bin/netdata-claim.sh --prefix PATH : ${lib.makeBinPath [ openssl ]}
     wrapProgram $out/libexec/netdata/plugins.d/cgroup-network-helper.sh --prefix PATH : ${lib.makeBinPath [ bash ]}
+<<<<<<< HEAD
     wrapProgram $out/bin/netdatacli --set NETDATA_PIPENAME /run/netdata/ipc
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '';
 
   enableParallelBuild = true;
@@ -117,7 +140,10 @@ stdenv.mkDerivation rec {
     broken = stdenv.isDarwin || stdenv.buildPlatform != stdenv.hostPlatform;
     description = "Real-time performance monitoring tool";
     homepage = "https://www.netdata.cloud/";
+<<<<<<< HEAD
     changelog = "https://github.com/netdata/netdata/releases/tag/v${version}";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     license = licenses.gpl3Plus;
     platforms = platforms.unix;
     maintainers = with maintainers; [ raitobezarius ];

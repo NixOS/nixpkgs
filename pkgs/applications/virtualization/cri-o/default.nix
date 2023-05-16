@@ -15,13 +15,21 @@
 
 buildGoModule rec {
   pname = "cri-o";
+<<<<<<< HEAD
   version = "1.28.1";
+=======
+  version = "1.27.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "cri-o";
     repo = "cri-o";
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-4RwR4aM+h0cqogJ9sxoODlPGaXH2PALFoBU3jv/6Agg=";
+=======
+    sha256 = "sha256-ZFt8KcEJ7iN2JgKbOGDgpq0+pjlxEU7V9GSX+c3VnbY=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
   vendorHash = null;
 

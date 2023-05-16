@@ -7,13 +7,22 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cotton";
+<<<<<<< HEAD
   version = "unstable-2023-09-13";
+=======
+  version = "unstable-2023-04-13";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "danielhuang";
     repo = pname;
+<<<<<<< HEAD
     rev = "df9d79a4b0bc4b140e87ddd7795924a93775a864";
     sha256 = "sha256-ZMQaVMH8cuOb4PQ19g0pAFAMwP8bR60+eWFhiXk1bYE=";
+=======
+    rev = "e6aeb0757a2579de82e75e1d2e9fc20739f0ab7f";
+    sha256 = "sha256-DpwwTVlmmYxbZiJ9HAwQfomg7+WH3I3y3jZdaVbBf4w=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   cargoLock = {

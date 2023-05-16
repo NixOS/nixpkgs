@@ -109,6 +109,9 @@ mkDerivation rec {
     license = lib.licenses.gpl2;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ bjornfor raskin gebner ];
+<<<<<<< HEAD
     mainProgram = "openscad";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

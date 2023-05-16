@@ -1,7 +1,10 @@
 { fetchurl, stdenv, lib
 , enableStatic ? stdenv.hostPlatform.isStatic
 , enableShared ? !stdenv.hostPlatform.isStatic
+<<<<<<< HEAD
 , enableDarwinABICompat ? false
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 # assert !stdenv.hostPlatform.isLinux || stdenv.hostPlatform != stdenv.buildPlatform; # TODO: improve on cross
@@ -23,12 +26,17 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch =
+<<<<<<< HEAD
     lib.optionalString ((stdenv.hostPlatform != stdenv.buildPlatform && stdenv.hostPlatform.isMinGW) || stdenv.cc.nativeLibc)
+=======
+    lib.optionalString ((stdenv.hostPlatform != stdenv.buildPlatform && stdenv.hostPlatform.libc == "msvcrt") || stdenv.cc.nativeLibc)
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       ''
         sed '/^_GL_WARN_ON_USE (gets/d' -i srclib/stdio.in.h
       ''
     + lib.optionalString (!enableShared) ''
       sed -i -e '/preload/d' Makefile.in
+<<<<<<< HEAD
     ''
     # The system libiconv is based on libiconv 1.11 with some ABI differences. The following changes
     # build a compatible libiconv on Darwin, allowing it to be sustituted in place of the system one
@@ -58,6 +66,10 @@ stdenv.mkDerivation rec {
     NIX_CFLAGS_COMPILE+=" -Wl,-reexport-lcharset -L. " make -C lib -j$NIX_BUILD_CORES SHELL=$SHELL
   '';
 
+=======
+    '';
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   configureFlags = [
     (lib.enableFeature enableStatic "static")
     (lib.enableFeature enableShared "shared")

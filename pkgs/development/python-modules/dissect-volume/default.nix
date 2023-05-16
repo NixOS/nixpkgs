@@ -11,7 +11,11 @@
 
 buildPythonPackage rec {
   pname = "dissect-volume";
+<<<<<<< HEAD
   version = "3.6";
+=======
+  version = "3.4";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -20,7 +24,11 @@ buildPythonPackage rec {
     owner = "fox-it";
     repo = "dissect.volume";
     rev = "refs/tags/${version}";
+<<<<<<< HEAD
     hash = "sha256-dKDefDPdmr20mo7YhZtPeMVkhLXQn5a5dLdRAEoe7+8=";
+=======
+    hash = "sha256-7ud767/UoOAbFaH1Jx4CAaQnVDzInsKIULg/LDhb/gY=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;

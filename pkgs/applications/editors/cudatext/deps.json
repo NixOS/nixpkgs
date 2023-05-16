@@ -1,6 +1,7 @@
 {
   "EncConv": {
     "owner": "Alexey-T",
+<<<<<<< HEAD
     "rev": "2023.04.16",
     "hash": "sha256-6KaYv4OO6Ctk+vgow67LKGkbEEd1+lFJ9B1wSk4m3pc="
   },
@@ -43,6 +44,50 @@
     "owner": "Alexey-T",
     "rev": "2023.08.12",
     "hash": "sha256-s9ZKrL+XIWIwejnLz+uuyDbbDuOZLJhiuiMChKB4Reg="
+=======
+    "rev": "2023.01.02",
+    "hash": "sha256-4/ih4sBDel2wm+YFpNcwHoOrK8AgHe3Jbqxl+CYrQFM="
+  },
+  "ATBinHex-Lazarus": {
+    "owner": "Alexey-T",
+    "rev": "2022.06.14",
+    "hash": "sha256-3QhARraYURW5uCf2f4MZfUbxdbsg9h7BlXUxKcz4jwA="
+  },
+  "ATFlatControls": {
+    "owner": "Alexey-T",
+    "rev": "2023.05.07",
+    "hash": "sha256-B1+de0ze17GTAFuWxgmk95sdYiUmDGdeNTJmyy74Vmc="
+  },
+  "ATSynEdit": {
+    "owner": "Alexey-T",
+    "rev": "2023.05.07",
+    "hash": "sha256-ZdN+dUmM8DQ7nz0LqcCQt8ZoJH1wrhYRa+h0xj5F6PY="
+  },
+  "ATSynEdit_Cmp": {
+    "owner": "Alexey-T",
+    "rev": "2023.05.02",
+    "hash": "sha256-bPib2pJqxb+m9eMGerClj1bvAoHcGH2OTmmKon6UQfo="
+  },
+  "EControl": {
+    "owner": "Alexey-T",
+    "rev": "2023.04.18",
+    "hash": "sha256-Eb8ynxZP3OQ7TGFZMbw8r0HXXvaoR6yotwnwK6nwZxg="
+  },
+  "ATSynEdit_Ex": {
+    "owner": "Alexey-T",
+    "rev": "2023.05.02",
+    "hash": "sha256-EKJnkwQ7QTUTVaXOA1pi5YUHxaA/hu4qpgpHHaON61k="
+  },
+  "Python-for-Lazarus": {
+    "owner": "Alexey-T",
+    "rev": "2023.01.02",
+    "hash": "sha256-NnPrQAqmKg3Lh16Qp/LZVS4JRtAxXi3qRovLTbzUyYQ="
+  },
+  "Emmet-Pascal": {
+    "owner": "Alexey-T",
+    "rev": "2022.09.18",
+    "hash": "sha256-Kutl4Jh/+KptGbqakzPJnIYlFtytXVlzKWulKt4Z+/g="
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   },
   "CudaText-lexers": {
     "owner": "Alexey-T",
@@ -51,7 +96,12 @@
   },
   "bgrabitmap": {
     "owner": "bgrabitmap",
+<<<<<<< HEAD
     "rev": "v11.5.5",
     "hash": "sha256-M4ql+9zk5AJfmmHb9EG0PsJZGWcMm9/Y0lrPQqnKqcU="
+=======
+    "rev": "v11.5.3",
+    "hash": "sha256-qjBD9TVZQy1tKWHFWkuu6vdLjASzQb3+HRy0FLdd9a8="
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   }
 }

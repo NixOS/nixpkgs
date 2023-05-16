@@ -4,22 +4,36 @@
 , fetchFromGitHub
 , loguru
 , pytest-asyncio
+<<<<<<< HEAD
 , pytestCheckHook
 , pythonOlder
 , typing-extensions
+=======
+, pytest-mypy
+, pytestCheckHook
+, pythonOlder
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 buildPythonPackage rec {
   pname = "python-utils";
+<<<<<<< HEAD
   version = "3.7.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
+=======
+  version = "3.5.2";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "WoLpH";
     repo = pname;
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-WSP5LQQZnm9k0v/xbsUHgQiwmhcb2Uw9BQurC1ieMjI=";
   };
 
@@ -33,6 +47,16 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
+=======
+    hash = "sha256-FFBWkq7ct4JWSTH4Ldg+pbG/BAiW33puB7lqFPBjptw=";
+  };
+
+  postPatch = ''
+    sed -i '/--cov/d' pytest.ini
+    sed -i '/--mypy/d' pytest.ini
+  '';
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   passthru.optional-dependencies = {
     loguru = [
       loguru
@@ -41,6 +65,10 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytest-asyncio
+<<<<<<< HEAD
+=======
+    pytest-mypy
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     pytestCheckHook
   ] ++ passthru.optional-dependencies.loguru;
 

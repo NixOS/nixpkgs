@@ -20,6 +20,11 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ libusb-compat-0_1 ];
 
+<<<<<<< HEAD
+=======
+  # Hack to avoid TMPDIR in RPATHs.
+  preFixup = ''rm -rf "$(pwd)" '';
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   configureFlags = lib.optional (!stdenv.isDarwin) "--with-async-mode";
 
   # allow async mode. from ubuntu. see:
@@ -29,6 +34,7 @@ stdenv.mkDerivation rec {
       --replace "ifdef USB_CLASS_PTP" "if 0"
   '';
 
+<<<<<<< HEAD
   # remove forbidden references to $TMPDIR
   preFixup = lib.optionalString stdenv.isLinux ''
     for f in "$out"/bin/*; do
@@ -38,6 +44,8 @@ stdenv.mkDerivation rec {
     done
   '';
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   meta = {
     description = "A library to talk to FTDI chips using libusb";
     homepage = "https://www.intra2net.com/en/developer/libftdi/";

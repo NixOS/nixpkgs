@@ -7,13 +7,21 @@ rec {
       , mobyRev, mobyHash
       , runcRev, runcHash
       , containerdRev, containerdHash
+<<<<<<< HEAD
       , tiniRev, tiniHash
       , buildxSupport ? true, composeSupport ? true, sbomSupport ? false
+=======
+      , tiniRev, tiniHash, buildxSupport ? true, composeSupport ? true
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       # package dependencies
       , stdenv, fetchFromGitHub, fetchpatch, buildGoPackage
       , makeWrapper, installShellFiles, pkg-config, glibc
       , go-md2man, go, containerd, runc, docker-proxy, tini, libtool
+<<<<<<< HEAD
       , sqlite, iproute2, docker-buildx, docker-compose, docker-sbom
+=======
+      , sqlite, iproute2, docker-buildx, docker-compose
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       , iptables, e2fsprogs, xz, util-linux, xfsprogs, git
       , procps, rootlesskit, slirp4netns, fuse-overlayfs, nixosTests
       , clientOnly ? !stdenv.isLinux, symlinkJoin
@@ -98,7 +106,11 @@ rec {
 
       extraUserPath = lib.optionals (stdenv.isLinux && !clientOnly) (lib.makeBinPath [ rootlesskit slirp4netns fuse-overlayfs ]);
 
+<<<<<<< HEAD
       patches = lib.optionals (lib.versionOlder version "23") [
+=======
+      patches = [
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         # This patch incorporates code from a PR fixing using buildkit with the ZFS graph driver.
         # It could be removed when a version incorporating this patch is released.
         (fetchpatch {
@@ -106,12 +118,15 @@ rec {
           url = "https://github.com/moby/moby/pull/43136.patch";
           hash = "sha256-1WZfpVnnqFwLMYqaHLploOodls0gHF8OCp7MrM26iX8=";
         })
+<<<<<<< HEAD
       ] ++ lib.optionals (lib.versionOlder version "23.0.5") [
         (fetchpatch {
           name = "fix-issue-with-go-1.20.6.patch";
           url = "https://github.com/moby/moby/pull/45972.patch";
           hash = "sha256-zxFh/bI6+INOYSg6QFs0S9rdl9Z21KUIZFmzpNVjpSA=";
         })
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       ];
 
       postPatch = ''
@@ -160,8 +175,12 @@ rec {
     });
 
     plugins = lib.optional buildxSupport docker-buildx
+<<<<<<< HEAD
       ++ lib.optional composeSupport docker-compose
       ++ lib.optional sbomSupport docker-sbom;
+=======
+      ++ lib.optional composeSupport docker-compose;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     pluginsRef = symlinkJoin { name = "docker-plugins"; paths = plugins; };
   in
   buildGoPackage (lib.optionalAttrs (!clientOnly) {
@@ -184,6 +203,7 @@ rec {
     nativeBuildInputs = [
       makeWrapper pkg-config go-md2man go libtool installShellFiles
     ];
+<<<<<<< HEAD
 
     buildInputs = plugins ++ lib.optionals (lib.versionAtLeast version "23") [
       glibc
@@ -197,6 +217,14 @@ rec {
         hash = "sha256-F4ueSbdBk1w8OqC4Dgh8+4Ql4zTjehaM368ET7k6Yx8=";
       })
     ];
+=======
+    buildInputs = lib.optional (!clientOnly) sqlite
+      ++ lib.optional withLvm lvm2
+      ++ lib.optional withBtrfs btrfs-progs
+      ++ lib.optional withSystemd systemd
+      ++ lib.optional withSeccomp libseccomp
+      ++ plugins;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     postPatch = ''
       patchShebangs man scripts/build/
@@ -224,7 +252,11 @@ rec {
       cd -
     '';
 
+<<<<<<< HEAD
     outputs = ["out"] ++ lib.optional (lib.versionOlder version "23") "man";
+=======
+    outputs = ["out" "man"];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     installPhase = ''
       cd ./go/src/${goPackagePath}
@@ -246,13 +278,21 @@ rec {
       installShellCompletion --bash ./contrib/completion/bash/docker
       installShellCompletion --fish ./contrib/completion/fish/docker.fish
       installShellCompletion --zsh  ./contrib/completion/zsh/_docker
+<<<<<<< HEAD
     '' + lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform && lib.versionOlder version "23") ''
+=======
+    '' + lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform) ''
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       # Generate man pages from cobra commands
       echo "Generate man pages from cobra"
       mkdir -p ./man/man1
       go build -o ./gen-manpages github.com/docker/cli/man
       ./gen-manpages --root . --target ./man/man1
+<<<<<<< HEAD
     '' + lib.optionalString (lib.versionOlder version "23") ''
+=======
+    '' + ''
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       # Generate legacy pages from markdown
       echo "Generate legacy manpages"
       ./man/md2man-all.sh -q
@@ -275,14 +315,19 @@ rec {
         To enable the docker daemon on NixOS, set the `virtualisation.docker.enable` option to `true`.
       '';
       license = licenses.asl20;
+<<<<<<< HEAD
       maintainers = with maintainers; [ offline vdemeester periklis amaxine ];
       mainProgram = "docker";
+=======
+      maintainers = with maintainers; [ offline tailhook vdemeester periklis mikroskeem maxeaubrey ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
   });
 
   # Get revisions from
   # https://github.com/moby/moby/tree/${version}/hack/dockerfile/install/*
   docker_20_10 = callPackage dockerGen rec {
+<<<<<<< HEAD
     version = "20.10.25";
     cliRev = "v${version}";
     cliHash = "sha256-Wi/NHn8erqvKEVEJqkc99cO/sfPHptwMT44Savcuw2M=";
@@ -306,6 +351,17 @@ rec {
     runcHash = "sha256-rDJYEc64KW4Qa3Eg2oUjJqIKrg6THb5hxQFFbvb9Zp4=";
     containerdRev = "v1.7.1";
     containerdHash = "sha256-WwedtcsrDQwMQcKFO5nnPiHyGJpl5hXZlmpbBe1/ftY=";
+=======
+    version = "20.10.23";
+    cliRev = "v${version}";
+    cliHash = "sha256-fNaRpstyG90Jzq3+U2A42Jj+ixb+m7tXLioIcsegPbQ=";
+    mobyRev = "v${version}";
+    mobyHash = "sha256-nBPw/M4VC9XeZ9S33HWdWSjY2J2mYpI/TPOzvLjSmJM=";
+    runcRev = "v1.1.4";
+    runcHash = "sha256-ougJHW1Z+qZ324P8WpZqawY1QofKnn8WezP7orzRTdA=";
+    containerdRev = "v1.6.15";
+    containerdHash = "sha256-Vlftq//mLYZPoT2R/lHJA6wLnqiuC+Cpy4lGQC8jCPA=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     tiniRev = "v0.19.0";
     tiniHash = "sha256-ZDKu/8yE5G0RYFJdhgmCdN3obJNyRWv6K/Gd17zc1sI=";
   };

@@ -13,8 +13,15 @@ import ./make-test-python.nix ({ pkgs, ...} :
     services.xserver.enable = true;
     services.xserver.displayManager.sddm.enable = true;
     services.xserver.displayManager.defaultSession = "plasma";
+<<<<<<< HEAD
     services.xserver.desktopManager.plasma5.enable = true;
     environment.plasma5.excludePackages = [ pkgs.plasma5Packages.elisa ];
+=======
+    services.xserver.desktopManager.plasma5 = {
+      enable = true;
+      excludePackages = [ pkgs.plasma5Packages.elisa ];
+    };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     services.xserver.displayManager.autoLogin = {
       enable = true;
       user = "alice";
@@ -23,13 +30,22 @@ import ./make-test-python.nix ({ pkgs, ...} :
   };
 
   testScript = { nodes, ... }: let
+<<<<<<< HEAD
     user = nodes.machine.users.users.alice;
+=======
+    user = nodes.machine.config.users.users.alice;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     xdo = "${pkgs.xdotool}/bin/xdotool";
   in ''
     with subtest("Wait for login"):
         start_all()
+<<<<<<< HEAD
         machine.wait_for_file("/tmp/xauth_*")
         machine.succeed("xauth merge /tmp/xauth_*")
+=======
+        machine.wait_for_file("${user.home}/.Xauthority")
+        machine.succeed("xauth merge ${user.home}/.Xauthority")
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     with subtest("Check plasmashell started"):
         machine.wait_until_succeeds("pgrep plasmashell")
@@ -44,8 +60,11 @@ import ./make-test-python.nix ({ pkgs, ...} :
     with subtest("Ensure Elisa is not installed"):
         machine.fail("which elisa")
 
+<<<<<<< HEAD
     machine.succeed("su - ${user.name} -c 'xauth merge /tmp/xauth_*'")
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     with subtest("Run Dolphin"):
         machine.execute("su - ${user.name} -c 'DISPLAY=:0.0 dolphin >&2 &'")
         machine.wait_for_window(" Dolphin")

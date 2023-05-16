@@ -34,7 +34,11 @@ import ../make-test-python.nix ({ lib, pkgs, ... }: {
             "sudo -u postgres psql -c 'ALTER USER \"peering-manager\" WITH SUPERUSER;'"
         )
         machine.succeed(
+<<<<<<< HEAD
             "cd ${nodes.machine.system.build.peeringManagerPkg}/opt/peering-manager ; peering-manager-manage test --no-input"
+=======
+            "cd ${nodes.machine.config.system.build.peeringManagerPkg}/opt/peering-manager ; peering-manager-manage test --no-input"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         )
   '';
 })

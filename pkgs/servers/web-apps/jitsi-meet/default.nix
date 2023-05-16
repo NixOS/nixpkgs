@@ -2,11 +2,19 @@
 
 stdenv.mkDerivation rec {
   pname = "jitsi-meet";
+<<<<<<< HEAD
   version = "1.0.7322";
 
   src = fetchurl {
     url = "https://download.jitsi.org/jitsi-meet/src/jitsi-meet-${version}.tar.bz2";
     sha256 = "BjoNu1cQOw9JjX6i2R/K8Txx6m6ndVRnWPjze9y14pQ=";
+=======
+  version = "1.0.6943";
+
+  src = fetchurl {
+    url = "https://download.jitsi.org/jitsi-meet/src/jitsi-meet-${version}.tar.bz2";
+    sha256 = "4swWsCo6PmMzvSVY6vS5n2HH8o6pU+Ak37ng18BLqIk=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   dontBuild = true;

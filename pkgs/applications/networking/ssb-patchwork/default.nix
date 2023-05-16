@@ -48,7 +48,10 @@ in
       homepage = "https://www.scuttlebutt.nz/";
       license = licenses.agpl3;
       maintainers = with maintainers; [ asymmetric ninjatrappeur cyplo ];
+<<<<<<< HEAD
       mainProgram = "ssb-patchwork";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       platforms = [ "x86_64-linux" ];
     };
   }

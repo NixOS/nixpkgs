@@ -23,13 +23,21 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "hyprpicker" + lib.optionalString debug "-debug";
+<<<<<<< HEAD
   version = "0.1.1";
+=======
+  version = "0.1.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = finalAttrs.pname;
     rev = "v${finalAttrs.version}";
+<<<<<<< HEAD
     hash = "sha256-k+rG5AZjz47Q6bpVcTK7r4s7Avg3O+1iw+skK+cn0rk=";
+=======
+    hash = "sha256-8Tc8am5+iQvzRdnTYIpD3Ewge6TIctrm8tr0H+RvcsE=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   cmakeFlags = lib.optional debug "-DCMAKE_BUILD_TYPE=Debug";

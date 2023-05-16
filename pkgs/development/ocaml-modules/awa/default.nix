@@ -1,5 +1,9 @@
 { lib, buildDunePackage, fetchurl
+<<<<<<< HEAD
 , ppx_sexp_conv
+=======
+, ppx_sexp_conv, ppx_cstruct
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , mirage-crypto, mirage-crypto-ec, mirage-crypto-rng, mirage-crypto-pk
 , x509, cstruct, cstruct-unix, cstruct-sexp, sexplib, eqaf
 , rresult, mtime, logs, fmt, cmdliner, base64
@@ -8,6 +12,7 @@
 
 buildDunePackage rec {
   pname = "awa";
+<<<<<<< HEAD
   version = "0.3.0";
 
   minimalOCamlVersion = "4.10";
@@ -15,6 +20,16 @@ buildDunePackage rec {
   src = fetchurl {
     url = "https://github.com/mirage/awa-ssh/releases/download/v${version}/awa-${version}.tbz";
     hash = "sha256-BtbReSnnAN+u1Vy63afO1yheoDqsIRU2rig0y1QDtuw=";
+=======
+  version = "0.2.0";
+
+  minimalOCamlVersion = "4.08";
+  duneVersion = "3";
+
+  src = fetchurl {
+    url = "https://github.com/mirage/awa-ssh/releases/download/v${version}/awa-${version}.tbz";
+    hash = "sha256-hsmTuoubBdsEyGe8zmfG7JihY0LFM4lErpPKUVobIX8=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [
@@ -24,6 +39,11 @@ buildDunePackage rec {
     ppx_sexp_conv eqaf
   ];
 
+<<<<<<< HEAD
+=======
+  buildInputs = [ ppx_cstruct ];
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   doCheck = true;
   checkInputs = [ cstruct-unix cmdliner fmt ];
 

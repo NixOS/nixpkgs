@@ -1,5 +1,6 @@
 { lib
 , stdenv
+<<<<<<< HEAD
 , darwin
 , callPackage
 , flutter
@@ -24,6 +25,11 @@
           (architecture: [ "debug" "profile" "release" ]));
     };
   }
+=======
+, callPackage
+, flutter
+, supportsLinuxDesktop ? stdenv.isLinux
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , extraPkgConfigPackages ? [ ]
 , extraLibraries ? [ ]
 , extraIncludes ? [ ]
@@ -51,6 +57,7 @@
 , cmake
 , ninja
 , clang
+<<<<<<< HEAD
 , lndir
 , symlinkJoin
 }:
@@ -120,6 +127,15 @@ let
   immutableFlutter = writeShellScript "flutter_immutable" ''
     export PUB_CACHE=''${PUB_CACHE:-"$HOME/.pub-cache"}
     export FLUTTER_CACHE_DIR=${cacheDir}
+=======
+}:
+
+let
+  # By default, Flutter stores downloaded files (such as the Pub cache) in the SDK directory.
+  # Wrap it to ensure that it does not do that, preferring home directories instead.
+  immutableFlutter = writeShellScript "flutter_immutable" ''
+    export PUB_CACHE=''${PUB_CACHE:-"$HOME/.pub-cache"}
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     ${flutter}/bin/flutter "$@"
   '';
 
@@ -168,9 +184,13 @@ let
 in
 (callPackage ./sdk-symlink.nix { }) (runCommandLocal "flutter-wrapped"
 {
+<<<<<<< HEAD
   nativeBuildInputs = [
     makeWrapper
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.DarwinTools ];
+=======
+  nativeBuildInputs = [ makeWrapper ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   passthru = flutter.passthru // {
     inherit (flutter) version;

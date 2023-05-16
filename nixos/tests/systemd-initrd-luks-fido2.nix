@@ -6,8 +6,11 @@ import ./make-test-python.nix ({ lib, pkgs, ... }: {
     virtualisation = {
       emptyDiskImages = [ 512 ];
       useBootLoader = true;
+<<<<<<< HEAD
       # Booting off the encrypted disk requires having a Nix store available for the init script
       mountHostNixStore = true;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       useEFIBoot = true;
       qemu.package = lib.mkForce (pkgs.qemu_test.override { canokeySupport = true; });
       qemu.options = [ "-device canokey,file=/tmp/canokey-file" ];
@@ -26,7 +29,10 @@ import ./make-test-python.nix ({ lib, pkgs, ... }: {
         };
       };
       virtualisation.rootDevice = "/dev/mapper/cryptroot";
+<<<<<<< HEAD
       virtualisation.fileSystems."/".autoFormat = true;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
   };
 

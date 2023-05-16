@@ -2,7 +2,11 @@
 #!nix-shell -I nixpkgs=../../../../. -i bash -p curl jq nix gnused
 # shellcheck shell=bash
 
+<<<<<<< HEAD
 set -Eeuo pipefail
+=======
+set -euo pipefail
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 release () {
   local content="$1"
@@ -64,11 +68,14 @@ generate_package_list() {
         local url hash
         url="${nuget_url}${pkg,,}/${version,,}/${pkg,,}.${version,,}.nupkg"
         hash="$(nix-prefetch-url "$url")"
+<<<<<<< HEAD
         if [[ -z "$hash" ]]; then
             echo "Failed to fetch hash for $url" >&2
             exit 1
         fi
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         echo "      (fetchNuGet { pname = \"${pkg}\"; version = \"${version}\"; sha256 = \"${hash}\"; })"
     done
 }
@@ -246,6 +253,7 @@ sdk_packages () {
       "runtime.osx-arm64.Microsoft.NETCore.DotNetHost" \
       "runtime.osx-arm64.Microsoft.NETCore.DotNetHostPolicy" \
       "runtime.osx-arm64.Microsoft.NETCore.DotNetHostResolver" \
+<<<<<<< HEAD
       "Microsoft.NETCore.App.Crossgen2.linux-musl-arm" \
       "Microsoft.NETCore.App.Crossgen2.linux-musl-arm64" \
       "Microsoft.NETCore.App.Crossgen2.linux-musl-x64" \
@@ -254,6 +262,8 @@ sdk_packages () {
       "Microsoft.NETCore.App.Crossgen2.linux-x64" \
       "Microsoft.NETCore.App.Crossgen2.osx-x64" \
       "Microsoft.NETCore.App.Crossgen2.osx-arm64"
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     )
 
     # Packages that only apply to .NET 7 and up
@@ -332,10 +342,13 @@ Examples:
 
     channel_version=$(jq -r '."channel-version"' <<< "$content")
     support_phase=$(jq -r '."support-phase"' <<< "$content")
+<<<<<<< HEAD
 
     result=$(mktemp)
     trap "rm -f $result" TERM INT EXIT
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     echo "{ buildAspNetCore, buildNetRuntime, buildNetSdk }:
 
 # v$channel_version ($support_phase)
@@ -358,9 +371,13 @@ $(aspnetcore_packages "${aspnetcore_version}")
 $(sdk_packages "${runtime_version}")
     ];
   };
+<<<<<<< HEAD
 }" > "${result}"
 
     cp "${result}" "./versions/${sem_version}.nix"
+=======
+}" > "./versions/${sem_version}.nix"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     echo "Generated ./versions/${sem_version}.nix"
   done
 }

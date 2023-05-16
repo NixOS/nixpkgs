@@ -33,7 +33,10 @@ let
         pkg-config
         wrapGAppsHook
         wrapPython
+<<<<<<< HEAD
         gobject-introspection
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       ];
 
       configureFlags = [
@@ -48,6 +51,10 @@ let
       ];
 
       buildInputs = [
+<<<<<<< HEAD
+=======
+        gobject-introspection
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         gtk3
         python
       ] ++ lib.optional  withRandr        libxcb

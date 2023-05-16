@@ -17,6 +17,7 @@
 }:
 
 buildPythonPackage rec {
+<<<<<<< HEAD
   version = "0.21.6";
   pname = "dulwich";
   format = "setuptools";
@@ -26,6 +27,17 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-MPvofotR84E8Ex4oQchtAHQ00WC9FttYa0DUfzHdBbA=";
+=======
+  version = "0.21.5";
+  pname = "dulwich";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
+
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-cJVeTiSd3abjSkY2uQ906THlWPmTsXxSVw+mFEuZMQM=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   LC_ALL = "en_US.UTF-8";

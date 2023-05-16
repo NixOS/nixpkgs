@@ -31,7 +31,11 @@ in
 
         (lazyDerivation { inherit derivation; meta.foo = true; }).meta
 
+<<<<<<< HEAD
     In these expressions, `derivation` _will_ be evaluated:
+=======
+    In these expressions, it `derivation` _will_ be evaluated:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
         "${lazyDerivation { inherit derivation }}"
 

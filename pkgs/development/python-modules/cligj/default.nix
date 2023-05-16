@@ -24,7 +24,11 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
+<<<<<<< HEAD
     description = "Click params for command line interfaces to GeoJSON";
+=======
+    description = "Click params for commmand line interfaces to GeoJSON";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     homepage = "https://github.com/mapbox/cligj";
     license = licenses.bsd3;
     maintainers = with maintainers; [ knedlsepp ];

@@ -1,6 +1,10 @@
 {
   mkDerivation, fetchurl, lib,
+<<<<<<< HEAD
   extra-cmake-modules, kdoctools,
+=======
+  extra-cmake-modules, kdoctools, wrapGAppsHook,
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   kconfig, kcrash, kinit
 }:
 

@@ -10,7 +10,11 @@ stdenv.mkDerivation rec {
   };
 
   # Work around the "unpacker appears to have produced no directories"
+<<<<<<< HEAD
   sourceRoot = ".";
+=======
+  setSourceRoot = "sourceRoot=`pwd`";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   installPhase = ''
     runHook preInstall

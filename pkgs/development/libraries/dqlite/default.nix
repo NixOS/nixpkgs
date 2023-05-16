@@ -3,13 +3,21 @@
 
 stdenv.mkDerivation rec {
   pname = "dqlite";
+<<<<<<< HEAD
   version = "1.15.1";
+=======
+  version = "1.14.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "canonical";
     repo = pname;
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-GmteQy+nYQFspLvdw44TjuQQeTRQ24OtDeAA+TQJKiU=";
+=======
+    hash = "sha256-x76f9Sw3BMgWSY7DLIqDjbggp/qVu8mJBtf4znTz9hA=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ autoreconfHook file pkg-config ];

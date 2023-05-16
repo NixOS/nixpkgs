@@ -1,7 +1,10 @@
 { lib
 , stdenv
 , fetchFromGitHub
+<<<<<<< HEAD
 , fetchpatch
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , cmake
 , pkg-config
 , wrapQtAppsHook
@@ -13,7 +16,10 @@
 , enet
 , ffmpeg
 , fmt_8
+<<<<<<< HEAD
 , gtest
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , hidapi
 , libevdev
 , libGL
@@ -24,7 +30,10 @@
 , libXdmcp
 , libXext
 , libXrandr
+<<<<<<< HEAD
 , lzo
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , mbedtls_2
 , mgba
 , miniupnpc
@@ -32,13 +41,21 @@
 , openal
 , pugixml
 , qtbase
+<<<<<<< HEAD
 , qtsvg
 , sfml
+=======
+, sfml
+, soundtouch
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , udev
 , vulkan-loader
 , xxHash
 , xz
+<<<<<<< HEAD
 , zlib-ng
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   # Used in passthru
 , common-updater-scripts
@@ -59,11 +76,16 @@
 
 stdenv.mkDerivation rec {
   pname = "dolphin-emu";
+<<<<<<< HEAD
   version = "5.0-19870";
+=======
+  version = "5.0-18498";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "dolphin-emu";
     repo = "dolphin";
+<<<<<<< HEAD
     rev = "032c77b462a220016f23c5079e71bb23e0ad2adf";
     sha256 = "sha256-TgRattksYsMGcbfu4T5mCFO9BkkHRX0NswFxGwZWjEw=";
     fetchSubmodules = true;
@@ -80,12 +102,57 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     stdenv.cc
+=======
+    rev = "46b99671d9158e0ca840c1d8ef249db0f321ced7";
+    sha256 = "sha256-K+OF8o8I1XDLQQcsWC8p8jUuWeb+RoHlBG3cEZ1aWIU=";
+    fetchSubmodules = true;
+  };
+
+  nativeBuildInputs = [
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     cmake
     pkg-config
     wrapQtAppsHook
   ];
 
+<<<<<<< HEAD
   buildInputs = lib.optionals stdenv.isDarwin [
+=======
+  buildInputs = [
+    bzip2
+    cubeb
+    curl
+    enet
+    ffmpeg
+    fmt_8
+    hidapi
+    libGL
+    libiconv
+    libpulseaudio
+    libspng
+    libusb1
+    libXdmcp
+    mbedtls_2
+    miniupnpc
+    minizip-ng
+    openal
+    pugixml
+    qtbase
+    sfml
+    soundtouch
+    xxHash
+    xz
+  ] ++ lib.optionals stdenv.isLinux [
+    alsa-lib
+    bluez
+    libevdev
+    libXext
+    libXrandr
+    mgba # Derivation doesn't support Darwin
+    udev
+    vulkan-loader
+  ] ++ lib.optionals stdenv.isDarwin [
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     CoreBluetooth
     ForceFeedback
     IOBluetooth
@@ -93,6 +160,7 @@ stdenv.mkDerivation rec {
     moltenvk
     OpenGL
     VideoToolbox
+<<<<<<< HEAD
   ] ++ [
     bzip2
     cubeb
@@ -130,21 +198,34 @@ stdenv.mkDerivation rec {
     #mgba # Derivation doesn't support Darwin
     udev
     vulkan-loader
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   cmakeFlags = [
     "-DDISTRIBUTOR=NixOS"
+<<<<<<< HEAD
+=======
+    "-DUSE_SHARED_ENET=ON"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "-DDOLPHIN_WC_REVISION=${src.rev}"
     "-DDOLPHIN_WC_DESCRIBE=${version}"
     "-DDOLPHIN_WC_BRANCH=master"
   ] ++ lib.optionals stdenv.isDarwin [
     "-DOSX_USE_DEFAULT_SEARCH_PATH=True"
     "-DUSE_BUNDLED_MOLTENVK=OFF"
+<<<<<<< HEAD
     "-DMACOS_CODE_SIGNING=OFF"
     # Bundles the application folder into a standalone executable, so we cannot devendor libraries
     "-DSKIP_POSTPROCESS_BUNDLE=ON"
     # Needs xcode so compilation fails with it enabled. We would want the version to be fixed anyways.
     # Note: The updater isn't available on linux, so we don't need to disable it there.
+=======
+    # Bundles the application folder into a standalone executable, so we cannot devendor libraries
+    "-DSKIP_POSTPROCESS_BUNDLE=ON"
+    # Needs xcode so compilation fails with it enabled. We would want the version to be fixed anyways.
+    # Note: The updater isn't available on linux, so we dont need to disable it there.
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "-DENABLE_AUTOUPDATE=OFF"
   ];
 
@@ -201,5 +282,10 @@ stdenv.mkDerivation rec {
       xfix
       ivar
     ];
+<<<<<<< HEAD
+=======
+    # Requires both LLVM and SDK bump
+    broken = stdenv.isDarwin && stdenv.isx86_64;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

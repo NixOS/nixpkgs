@@ -20,7 +20,11 @@
 }:
 
 buildPythonPackage rec {
+<<<<<<< HEAD
   version = "0.3.7";
+=======
+  version = "0.3.6";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pname = "potentials";
   format = "setuptools";
 
@@ -28,7 +32,11 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
+<<<<<<< HEAD
     hash = "sha256-vkrNVRf9ntYSpf8nXmAmGjc+sQ4iFllisYHd9s+uQv0=";
+=======
+    hash = "sha256-VEPGa3Wp+B3KterfA5XGjaDf6sIAkSST0GWdeqaJcE0=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [

@@ -6,7 +6,11 @@ let
   cfg = config.services.dex;
   fixClient = client: if client ? secretFile then ((builtins.removeAttrs client [ "secretFile" ]) // { secret = client.secretFile; }) else client;
   filteredSettings = mapAttrs (n: v: if n == "staticClients" then (builtins.map fixClient v) else v) cfg.settings;
+<<<<<<< HEAD
   secretFiles = flatten (builtins.map (c: optional (c ? secretFile) c.secretFile) (cfg.settings.staticClients or []));
+=======
+  secretFiles = flatten (builtins.map (c: if c ? secretFile then [ c.secretFile ] else []) (cfg.settings.staticClients or []));
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   settingsFormat = pkgs.formats.yaml {};
   configFile = settingsFormat.generate "config.yaml" filteredSettings;

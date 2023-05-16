@@ -2,7 +2,10 @@
 , stdenv
 , buildPythonPackage
 , cython
+<<<<<<< HEAD
 , isPyPy
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , ninja
 , setuptools-scm
 , setuptools
@@ -51,10 +54,16 @@ buildPythonPackage rec {
 
   meta = {
     description = "Python access to operations on paths using the Skia library";
+<<<<<<< HEAD
     homepage = "https://github.com/fonttools/skia-pathops";
     license = lib.licenses.bsd3;
     maintainers = [ lib.maintainers.BarinovMaxim ];
     # ERROR at //gn/BUILDCONFIG.gn:87:14: Script returned non-zero exit code.
     broken = isPyPy;
+=======
+    homepage = "https://skia.org/dev/present/pathops";
+    license = lib.licenses.bsd3;
+    maintainers = [ lib.maintainers.BarinovMaxim ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

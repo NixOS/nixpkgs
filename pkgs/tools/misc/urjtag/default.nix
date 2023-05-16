@@ -1,11 +1,20 @@
 { lib
 , stdenv
 , fetchurl
+<<<<<<< HEAD
+=======
+, autoconf
+, automake
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , autoreconfHook
 , gettext
 , libftdi1
 , libtool
 , libusb-compat-0_1
+<<<<<<< HEAD
+=======
+, makeWrapper
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , pkg-config
 , readline
 , which

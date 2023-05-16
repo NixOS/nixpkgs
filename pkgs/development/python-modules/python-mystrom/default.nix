@@ -9,11 +9,19 @@
 
 buildPythonPackage rec {
   pname = "python-mystrom";
+<<<<<<< HEAD
   version = "2.2.0";
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-VFsTA/isBw0H7qXQhOX6K2p1QcVxO7q5TIzf8YivVgc=";
+=======
+  version = "2.1.0";
+
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-Kqv5rUdwkynOzssID77gVYyzs0CDR/bUWh6zpt5zOP8=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [

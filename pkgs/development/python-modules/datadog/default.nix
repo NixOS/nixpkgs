@@ -16,14 +16,22 @@
 
 buildPythonPackage rec {
   pname = "datadog";
+<<<<<<< HEAD
   version = "0.47.0";
+=======
+  version = "0.45.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
+<<<<<<< HEAD
     hash = "sha256-R747LD1wmn9bcJ6xJu1P5sx5d9YY/lwVjdicKp99mRY=";
+=======
+    hash = "sha256-a//tZ0SMtL9d/1WfsqzuHAbn2oYSuOKnNPJ4tQs5ZgM=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [
@@ -34,8 +42,11 @@ buildPythonPackage rec {
     requests
   ];
 
+<<<<<<< HEAD
   __darwinAllowLocalNetworking = true;
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nativeCheckInputs = [
     click
     freezegun

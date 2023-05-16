@@ -13,11 +13,19 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "SunVox";
+<<<<<<< HEAD
   version = "2.1c";
 
   src = fetchurl {
     url = "https://www.warmplace.ru/soft/sunvox/sunvox-${version}.zip";
     sha256 = "sha256-yPVcbtlAVbO9uMsFlfZ51T408hA1VPJAI+R+Jdjcyjw=";
+=======
+  version = "2.0e";
+
+  src = fetchurl {
+    url = "https://www.warmplace.ru/soft/sunvox/sunvox-${version}.zip";
+    sha256 = "sha256-v4dQnRr7pusOAHX8ytDChKixYxEIjg30vOTD6uA/S0o=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ unzip ];

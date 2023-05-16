@@ -1,4 +1,8 @@
 { fetchurl
+<<<<<<< HEAD
+=======
+, fetchpatch
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , stdenv
 , installShellFiles
 , lib
@@ -20,8 +24,12 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config installShellFiles ];
+<<<<<<< HEAD
   buildInputs = [ libftdi1 libusb1 ]
     ++ lib.optionals (!stdenv.isDarwin) [ pciutils ]
+=======
+  buildInputs = [ libftdi1 libusb1 pciutils ]
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     ++ lib.optional jlinkSupport libjaylink;
 
   postPatch = ''
@@ -30,8 +38,12 @@ stdenv.mkDerivation rec {
   '';
 
   makeFlags = [ "PREFIX=$(out)" "libinstall" ]
+<<<<<<< HEAD
     ++ lib.optional jlinkSupport "CONFIG_JLINK_SPI=yes"
     ++ lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [ "CONFIG_INTERNAL_X86=no" "CONFIG_INTERNAL_DMI=no" "CONFIG_RAYER_SPI=no" ];
+=======
+    ++ lib.optional jlinkSupport "CONFIG_JLINK_SPI=yes";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   postInstall = ''
     install -Dm644 util/flashrom_udev.rules $out/lib/udev/rules.d/flashrom.rules
@@ -43,5 +55,9 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
     maintainers = with maintainers; [ fpletz felixsinger ];
     platforms = platforms.all;
+<<<<<<< HEAD
+=======
+    broken = stdenv.isDarwin; # requires DirectHW
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

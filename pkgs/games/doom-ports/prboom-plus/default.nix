@@ -17,16 +17,27 @@
 
 stdenv.mkDerivation rec {
   pname = "prboom-plus";
+<<<<<<< HEAD
   version = "2.6.66";
+=======
+  version = "2.6.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "coelckers";
     repo = "prboom-plus";
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-moU/bZ2mS1QfKPP6HaAwWP1nRNZ4Ue5DFl9zBBrJiHw=";
   };
 
   sourceRoot = "${src.name}/prboom2";
+=======
+    sha256 = "iK70PMRLJiZHcK1jCQ2s88LgEMbcfG2pXjwCDVG7zUM=";
+  };
+
+  sourceRoot = "source/prboom2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nativeBuildInputs = [
     cmake

@@ -5,13 +5,19 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "wapiti";
+<<<<<<< HEAD
   version = "3.1.8";
   format = "pyproject";
+=======
+  version = "3.1.7";
+  format = "setuptools";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "wapiti-scanner";
     repo = pname;
     rev = "refs/tags/${version}";
+<<<<<<< HEAD
     hash = "sha256-2ssbczUa4pTA5Fai+sK1hES8skJMIHxa/R2hNIiEVLs=";
   };
 
@@ -41,11 +47,32 @@ python3.pkgs.buildPythonApplication rec {
     httpcore
     httpx
     httpx-ntlm
+=======
+    hash = "sha256-muAugc0BgVSER2LSRv7ATbCqpXID8/WH+hfhmtoS36o=";
+  };
+
+  propagatedBuildInputs = with python3.pkgs; [
+    aiocache
+    aiosqlite
+    arsenic
+    beautifulsoup4
+    brotli
+    browser-cookie3
+    cryptography
+    dnspython
+    httpcore
+    httpx
+    humanize
+    importlib-metadata
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     loguru
     mako
     markupsafe
     mitmproxy
+<<<<<<< HEAD
     pyasn1
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     six
     sqlalchemy
     tld
@@ -53,14 +80,29 @@ python3.pkgs.buildPythonApplication rec {
   ] ++ httpx.optional-dependencies.brotli
   ++ httpx.optional-dependencies.socks;
 
+<<<<<<< HEAD
   __darwinAllowLocalNetworking = true;
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nativeCheckInputs = with python3.pkgs; [
     respx
     pytest-asyncio
     pytestCheckHook
   ];
 
+<<<<<<< HEAD
+=======
+  postPatch = ''
+    # Ignore pinned versions
+    sed -i -e "s/==[0-9.]*//;s/>=[0-9.]*//" setup.py
+    substituteInPlace setup.py \
+      --replace '"pytest-runner"' ""
+    substituteInPlace setup.cfg \
+      --replace " --cov --cov-report=xml" ""
+  '';
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   preCheck = ''
     export HOME=$(mktemp -d);
   '';
@@ -121,7 +163,10 @@ python3.pkgs.buildPythonApplication rec {
     "test_xxe"
     # Requires a PHP installation
     "test_cookies"
+<<<<<<< HEAD
     "test_fallback_to_html_injection"
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "test_loknop_lfi_to_rce"
     "test_redirect"
     "test_timesql"
@@ -129,8 +174,11 @@ python3.pkgs.buildPythonApplication rec {
     "test_xss_inside_src_iframe"
     # TypeError: Expected bytes or bytes-like object got: <class 'str'>
     "test_persister_upload"
+<<<<<<< HEAD
     # Requires creating a socket to an external URL
     "test_attack_unifi"
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   disabledTestPaths = [

@@ -4,11 +4,19 @@
 
 stdenv.mkDerivation rec {
   pname = "jenkins";
+<<<<<<< HEAD
   version = "2.414.1";
 
   src = fetchurl {
     url = "https://get.jenkins.io/war-stable/${version}/jenkins.war";
     hash = "sha256-8lI/m1/lAZn2j2D5a2vvnKEA4YCZ4+PaeppJroxHsBU=";
+=======
+  version = "2.387.2";
+
+  src = fetchurl {
+    url = "https://get.jenkins.io/war-stable/${version}/jenkins.war";
+    hash = "sha256-XjnLBtm56xijIYtFoHxru4Afs1O3dOtb93SfiRtQDKk=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -66,7 +74,11 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "An extendable open source continuous integration server";
+<<<<<<< HEAD
     homepage = "https://jenkins.io/";
+=======
+    homepage = "https://jenkins-ci.org";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.mit;
     maintainers = with maintainers; [ coconnor earldouglas nequissimus ajs124 ];

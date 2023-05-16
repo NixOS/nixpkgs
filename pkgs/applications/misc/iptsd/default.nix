@@ -7,22 +7,37 @@
 , pkg-config
 , cli11
 , eigen
+<<<<<<< HEAD
 , hidrd
 , inih
 , microsoft-gsl
+=======
+, fmt
+, hidrd
+, inih
+, microsoft_gsl
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , spdlog
 , systemd
 }:
 
 stdenv.mkDerivation rec {
   pname = "iptsd";
+<<<<<<< HEAD
   version = "1.3.2";
+=======
+  version = "1.2.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "linux-surface";
     repo = pname;
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-iVxxlblwrZ4SPbVR0kIG+ePExk4qT6gExgvHS1Ksp6A=";
+=======
+    hash = "sha256-8RE93pIg5fVAYOOq8zHlWy0uTxep7hrJlowPu48beTs=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [
@@ -37,9 +52,16 @@ stdenv.mkDerivation rec {
   buildInputs = [
     cli11
     eigen
+<<<<<<< HEAD
     hidrd
     inih
     microsoft-gsl
+=======
+    fmt
+    hidrd
+    inih
+    microsoft_gsl
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     spdlog
     systemd
   ];

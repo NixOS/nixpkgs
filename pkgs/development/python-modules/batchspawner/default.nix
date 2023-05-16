@@ -2,7 +2,10 @@
 , buildPythonPackage
 , fetchFromGitHub
 , jupyterhub
+<<<<<<< HEAD
 , packaging
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , pythonOlder
 }:
 
@@ -22,7 +25,10 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     jupyterhub
+<<<<<<< HEAD
     packaging
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   # Tests require a job scheduler e.g. slurm, pbs, etc.
@@ -34,9 +40,15 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A spawner for Jupyterhub to spawn notebooks using batch resource managers";
+<<<<<<< HEAD
     homepage = "https://github.com/jupyterhub/batchspawner";
     changelog = "https://github.com/jupyterhub/batchspawner/blob/v${version}/CHANGELOG.md";
     license = licenses.bsd3;
     maintainers = with maintainers; [ ];
+=======
+    homepage = "https://jupyter.org";
+    license = licenses.bsd3;
+    maintainers = [ maintainers.costrouc ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

@@ -14,7 +14,11 @@ buildGoModule rec {
     sha256 = "sha256-WvEnMAz3dKG8xMlQzm7E0TmAgvsrRED50bb4Ved1+4U=";
   };
 
+<<<<<<< HEAD
   vendorHash = "sha256-qirt5g7dcjAnceejrBnfhDpA4LSEj7eOuznSlfUBUgo=";
+=======
+  vendorSha256 = "sha256-qirt5g7dcjAnceejrBnfhDpA4LSEj7eOuznSlfUBUgo=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   subPackages = [ "cmd/rqlite" "cmd/rqlited" "cmd/rqbench" ];
 

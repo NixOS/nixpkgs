@@ -24,7 +24,11 @@
 
 buildPythonPackage rec {
   pname = "weasyprint";
+<<<<<<< HEAD
   version = "59.0";
+=======
+  version = "58.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -32,7 +36,11 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit version;
     pname = "weasyprint";
+<<<<<<< HEAD
     hash = "sha256-Ijp2Y2s3ROqkq4oohfUM9Gz467GsuZtSdtAv7M9QdJI=";
+=======
+    hash = "sha256-YXMAnjE75lgH/vv3ioBRzrepN3bv2n67uIwT9XaXlPM=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   patches = [
@@ -79,9 +87,15 @@ buildPythonPackage rec {
 
   FONTCONFIG_FILE = "${fontconfig.out}/etc/fonts/fonts.conf";
 
+<<<<<<< HEAD
   # Set env variable explicitly for Darwin, but allow overriding when invoking directly
   makeWrapperArgs = [
     "--set-default FONTCONFIG_FILE ${FONTCONFIG_FILE}"
+=======
+  # Fontconfig error: Cannot load default config file: No such file: (null)
+  makeWrapperArgs = [
+    "--set FONTCONFIG_FILE ${FONTCONFIG_FILE}"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   postPatch = ''

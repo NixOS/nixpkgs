@@ -1,6 +1,12 @@
+<<<<<<< HEAD
 { lib, stdenv, fetchFromGitHub, cmake, clipper, nlopt, boost }:
 
 stdenv.mkDerivation {
+=======
+{ lib, stdenv, fetchFromGitHub, cmake, clipper, nlopt, boost, python3 }:
+
+stdenv.mkDerivation rec {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   version = "4.12.0";
   pname = "libnest2d";
 
@@ -14,11 +20,14 @@ stdenv.mkDerivation {
     sha256 = "1hzqi4z55x76rss3xk7hfqhy9hcaq2jaav5jqxa1aqmbvarr2gla";
   };
 
+<<<<<<< HEAD
   postPatch = ''
     substituteInPlace {,examples/}CMakeLists.txt \
       --replace "set(CMAKE_CXX_STANDARD 11)" "set(CMAKE_CXX_STANDARD 14)"
   '';
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   propagatedBuildInputs = [ clipper nlopt boost ];
   nativeBuildInputs = [ cmake ];
 

@@ -62,7 +62,11 @@ stdenv.mkDerivation rec {
     license = licenses.bsd3;
     platforms = platforms.all;
     maintainers = [ maintainers.viric ];
+<<<<<<< HEAD
     # Fails to build on gcc-10 due to boost being built with gcc-12.
     broken = true;
+=======
+    broken = stdenv.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/trunk/oxen.x86_64-darwin
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

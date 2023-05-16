@@ -25,6 +25,10 @@ buildPythonPackage rec {
     description = "A Pythonic Implementation of lyrics.wikia.com for getting lyrics of songs ";
     homepage = "https://github.com/geekpradd/PyLyrics";
     license = licenses.mit;
+<<<<<<< HEAD
     maintainers = with maintainers; [ ];
+=======
+    maintainers = with maintainers; [ SuperSandro2000 ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

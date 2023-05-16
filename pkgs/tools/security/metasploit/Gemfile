@@ -1,4 +1,8 @@
 # frozen_string_literal: true
 source "https://rubygems.org"
 
+<<<<<<< HEAD
 gem "metasploit-framework", git: "https://github.com/rapid7/metasploit-framework", ref: "refs/tags/6.3.33"
+=======
+gem "metasploit-framework", git: "https://github.com/rapid7/metasploit-framework", ref: "refs/tags/6.3.15"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)

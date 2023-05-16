@@ -15,19 +15,31 @@
 , mutter
 , mesa
 , json-glib
+<<<<<<< HEAD
+=======
+, python3
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , elementary-gtk-theme
 , elementary-icon-theme
 }:
 
 stdenv.mkDerivation rec {
   pname = "wingpanel";
+<<<<<<< HEAD
   version = "3.0.5";
+=======
+  version = "3.0.3";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
+<<<<<<< HEAD
     sha256 = "sha256-xowGdaH0e6y0Q2xSl0kUa01rxxoEQ0qXB3sUol0YDBA=";
+=======
+    sha256 = "sha256-dShC6SXjOJmiLI6TUEZsthv5scnm9Jzum+sG/NkWAyM=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   patches = [
@@ -39,6 +51,10 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
+<<<<<<< HEAD
+=======
+    python3
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     vala
     wrapGAppsHook
   ];
@@ -54,6 +70,14 @@ stdenv.mkDerivation rec {
     mesa # for libEGL
   ];
 
+<<<<<<< HEAD
+=======
+  postPatch = ''
+    chmod +x meson/post_install.py
+    patchShebangs meson/post_install.py
+  '';
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   preFixup = ''
     gappsWrapperArgs+=(
       # this GTK theme is required

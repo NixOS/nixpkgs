@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+<<<<<<< HEAD
 , meson
 , ninja
 , pkg-config
@@ -8,16 +9,26 @@
 , libusb1
 , ncurses
 , SDL2
+=======
+, czmq
+, libusb1
+, ncurses
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 stdenv.mkDerivation rec {
   pname = "orbuculum";
+<<<<<<< HEAD
   version = "2.1.0";
+=======
+  version = "2.0.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "orbcode";
     repo = pname;
     rev = "V${version}";
+<<<<<<< HEAD
     sha256 = "sha256-Ohcc8739W/EmDjOYhcMgzEPVhzbWrUYgsPLdy4qzxhY=";
   };
 
@@ -32,11 +43,19 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
+=======
+    sha256 = "sha256-aMMXfrBQQ9oOx17MUKmqe5vdTpxhBGM5mVfAel0y0a0=";
+  };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   buildInputs = [
     czmq
     libusb1
     ncurses
+<<<<<<< HEAD
     SDL2
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   installFlags = [

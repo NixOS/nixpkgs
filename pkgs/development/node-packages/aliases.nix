@@ -1,10 +1,13 @@
 pkgs: lib: self: super:
 
 ### Deprecated aliases - for backward compatibility
+<<<<<<< HEAD
 ###
 ### !!! NOTE !!!
 ### Use `./remove-attr.py [attrname]` in this directory to remove your alias
 ### from the `nodePackages` set without regenerating the entire file.
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 with self;
 
@@ -39,6 +42,7 @@ in
 
 mapAliases {
   "@antora/cli" = pkgs.antora; # Added 2023-05-06
+<<<<<<< HEAD
   "@bitwarden/cli" = pkgs.bitwarden-cli; # added 2023-07-25
   "@emacs-eask/cli" = pkgs.eask; # added 2023-08-17
   "@githubnext/github-copilot-cli" = pkgs.github-copilot-cli; # Added 2023-05-02
@@ -125,4 +129,11 @@ mapAliases {
   inherit (pkgs) yaml-language-server; # added 2023-09-05
   inherit (pkgs) yo; # added 2023-08-20
   zx = pkgs.zx; # added 2023-08-01
+=======
+  "@githubnext/github-copilot-cli" = pkgs.github-copilot-cli; # Added 2023-05-02
+  "@google/clasp" = pkgs.google-clasp; # Added 2023-05-07
+  "@nestjs/cli" = pkgs.nest-cli; # Added 2023-05-06
+  manta = pkgs.node-manta; # Added 2023-05-06
+  triton = pkgs.triton; # Added 2023-05-06
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }

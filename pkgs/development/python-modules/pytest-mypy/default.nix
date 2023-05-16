@@ -30,6 +30,10 @@ buildPythonPackage rec {
     description = "Mypy static type checker plugin for Pytest";
     homepage = "https://github.com/dbader/pytest-mypy";
     license = licenses.mit;
+<<<<<<< HEAD
     maintainers = [ ];
+=======
+    maintainers = [ maintainers.costrouc ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

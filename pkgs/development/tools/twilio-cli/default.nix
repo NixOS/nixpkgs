@@ -2,11 +2,19 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "twilio-cli";
+<<<<<<< HEAD
   version = "5.14.0";
 
   src = fetchzip {
     url = "https://twilio-cli-prod.s3.amazonaws.com/twilio-v${finalAttrs.version}/twilio-v${finalAttrs.version}.tar.gz";
     sha256 = "sha256-b+CL3Rxkzbk7wSUNXk+x0dQvjZWmOuVh/qWdrIhvJFo=";
+=======
+  version = "5.8.0";
+
+  src = fetchzip {
+    url = "https://twilio-cli-prod.s3.amazonaws.com/twilio-v${finalAttrs.version}/twilio-v${finalAttrs.version}.tar.gz";
+    sha256 = "sha256-/+AmyzwuKsxfDoBn1o07sDqrLeJZPX9iJz3KTOGKQs4=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   buildInputs = [ nodejs ];

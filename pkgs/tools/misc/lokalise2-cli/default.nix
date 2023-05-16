@@ -11,7 +11,11 @@ buildGoModule rec {
     sha256 = "sha256-U8XN7cH64ICVxcjmIWBeelOT3qQlGt6MhOPgUWkCPF0=";
   };
 
+<<<<<<< HEAD
   vendorHash = "sha256-PM3Jjgq6mbM6iVCXRos9UsqqFNaXOqq713GZ2R9tQww=";
+=======
+  vendorSha256 = "sha256-PM3Jjgq6mbM6iVCXRos9UsqqFNaXOqq713GZ2R9tQww=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   doCheck = false;
 
@@ -25,5 +29,9 @@ buildGoModule rec {
     license = licenses.bsd3;
     maintainers = with maintainers; [ timstott ];
     mainProgram = "lokalise2";
+<<<<<<< HEAD
+=======
+    platforms = platforms.unix;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

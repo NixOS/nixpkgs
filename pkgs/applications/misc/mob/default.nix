@@ -9,13 +9,21 @@
 
 buildGoModule rec {
   pname = "mob";
+<<<<<<< HEAD
   version = "4.4.6";
+=======
+  version = "4.4.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "remotemobprogramming";
     repo = pname;
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-UunFfP0Rn4t8lSJiubbqZ0bImK9OhIdC0gSGbkg6Ohw=";
+=======
+    sha256 = "sha256-muKlzOrqtegy35QcGJvwYqIJ9XZsaAvyofsrWPqCi7k=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   vendorHash = null;

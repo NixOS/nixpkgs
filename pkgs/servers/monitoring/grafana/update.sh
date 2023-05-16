@@ -16,7 +16,11 @@ replaceHash() {
 }
 extractVendorHash() {
   original="${1?original hash missing}"
+<<<<<<< HEAD
   result="$(nix-build -A grafana.goModules 2>&1 | tail -n3 | grep 'got:' | cut -d: -f2- | xargs echo || true)"
+=======
+  result="$(nix-build -A grafana.go-modules 2>&1 | tail -n3 | grep 'got:' | cut -d: -f2- | xargs echo || true)"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   [ -z "$result" ] && { echo "$original"; } || { echo "$result"; }
 }
 

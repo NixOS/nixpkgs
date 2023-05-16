@@ -9,6 +9,7 @@ let
     sha256 = hash;
   };
 
+<<<<<<< HEAD
   lib_src = fetchurl {
     url = "http://shinh.skr.jp/libbulletml/libbulletml-${version}.tar.bz2";
     sha256 = "0yda0zgj2ydgkmby5676f5iiawabxadzh5p7bmy42998sp9g6dvw";
@@ -28,6 +29,24 @@ stdenv.mkDerivation {
 
   postUnpack = "mv d_cpp bulletml/";
   sourceRoot = "bulletml";
+=======
+in stdenv.mkDerivation {
+  pname = "bulletml";
+  inherit version;
+
+  srcs = [
+    (fetchurl {
+      url = "http://shinh.skr.jp/libbulletml/libbulletml-${version}.tar.bz2";
+      sha256 = "0yda0zgj2ydgkmby5676f5iiawabxadzh5p7bmy42998sp9g6dvw";
+    })
+    (fetchurl {
+      url = "http://shinh.skr.jp/d/d_cpp.tar.bz2";
+      sha256 = "1ly9qmbb8q9nyadmdap1gmxs3vkniqgchlv2hw7riansz4gg1agh";
+    })
+  ];
+  sourceRoot = "bulletml";
+  postUnpack = "mv d_cpp bulletml/";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   patches = [
     (debianPatch "fixes" "0cnr968n0h50fjmjijx7idsa2pg2pv5cwy6nvfbkx9z8w2zf0mkl")

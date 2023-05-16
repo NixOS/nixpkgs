@@ -2,7 +2,10 @@
 , bzip2
 , patchelf
 , python3
+<<<<<<< HEAD
 , fetchPypi
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , gnutar
 , unzip
 }:
@@ -12,7 +15,11 @@ python3.pkgs.buildPythonApplication rec {
   version = "5.1.2";
   format = "setuptools";
 
+<<<<<<< HEAD
   src = fetchPypi {
+=======
+  src = python3.pkgs.fetchPypi {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     inherit pname version;
     hash = "sha256-PuWDABSTHqhK9c0GXGN7ZhTvoD2biL2Pv8kk5+0B1ro=";
   };

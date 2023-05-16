@@ -23,7 +23,11 @@ stdenv.mkDerivation rec {
   doCheck = !stdenv.isDarwin;
 
   meta = with lib; {
+<<<<<<< HEAD
     homepage = "https://github.com/BioPP/bpp-core";
+=======
+    homepage = "http://biopp.univ-montp2.fr/wiki/index.php/Main_Page";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     changelog = "https://github.com/BioPP/bpp-core/blob/master/ChangeLog";
     description = "C++ bioinformatics libraries and tools";
     maintainers = with maintainers; [ bcdarwin ];

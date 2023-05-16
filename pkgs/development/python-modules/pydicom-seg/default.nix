@@ -1,7 +1,10 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+<<<<<<< HEAD
 , fetchpatch
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , pythonOlder
 , pytestCheckHook
 , pythonRelaxDepsHook
@@ -27,6 +30,7 @@ buildPythonPackage rec {
     fetchSubmodules = true;
   };
 
+<<<<<<< HEAD
   patches = [
     # https://github.com/razorx89/pydicom-seg/pull/54
     (fetchpatch {
@@ -35,6 +39,12 @@ buildPythonPackage rec {
       hash = "sha256-xBOVjWZPjyQ8gSj6JLe9B531e11TI3FUFFtL+IelZOM=";
     })
   ];
+=======
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace "poetry.masonry.api" "poetry.core.masonry.api"
+  '';
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   pythonRelaxDeps = [
     "jsonschema"

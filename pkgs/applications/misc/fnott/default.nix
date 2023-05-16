@@ -19,14 +19,22 @@
 
 stdenv.mkDerivation rec {
   pname = "fnott";
+<<<<<<< HEAD
   version = "1.4.1";
+=======
+  version = "1.4.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "dnkl";
     repo = "fnott";
     rev = version;
+<<<<<<< HEAD
     sha256 = "sha256-8SKInlj54BP3Gn/DNVoLN62+Dfa8G5d/q2xGUXXdsjo=";
+=======
+    sha256 = "sha256-cJ7XmnC4x8lhZ+JRqobeQxTTps4Oz95zYdlFtr3KC1A=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   depsBuildBuild = [

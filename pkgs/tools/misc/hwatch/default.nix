@@ -24,16 +24,29 @@ rustPlatform.buildRustPackage rec {
 
   passthru.tests.version = testers.testVersion {
     package = hwatch;
+<<<<<<< HEAD
+=======
+    command = "hwatch --version";
+    version = version;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   meta = with lib; {
     homepage = "https://github.com/blacknon/hwatch";
+<<<<<<< HEAD
     description = "Modern alternative to the watch command";
+=======
+    description= "Modern alternative to the watch command";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     longDescription = ''
       A modern alternative to the watch command, records the differences in
       execution results and can check this differences at after.
     '';
     license = licenses.mit;
     maintainers = with maintainers; [ hamburger1984 ];
+<<<<<<< HEAD
+=======
+    platforms = platforms.linux;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

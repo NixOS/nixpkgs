@@ -2,14 +2,22 @@
 
 let
   pname = "php-cs-fixer";
+<<<<<<< HEAD
   version = "3.22.0";
+=======
+  version = "3.16.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 in
 mkDerivation {
   inherit pname version;
 
   src = fetchurl {
     url = "https://github.com/FriendsOfPHP/PHP-CS-Fixer/releases/download/v${version}/php-cs-fixer.phar";
+<<<<<<< HEAD
     sha256 = "sha256-iP5dmJkYZ/E1TAm4oLOCCQ5DCc4+I3CcEr8tOezzCt4=";
+=======
+    sha256 = "sha256-B4VzfsSwcffR/t4eREMLH9jRWCTumYel6GM4rpumVBY=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   dontUnpack = true;
@@ -30,6 +38,10 @@ mkDerivation {
     description = "A tool to automatically fix PHP coding standards issues";
     license = licenses.mit;
     homepage = "https://cs.symfony.com/";
+<<<<<<< HEAD
     maintainers = with maintainers; [ ] ++ teams.php.members;
+=======
+    maintainers = with maintainers; [ jtojnar ] ++ teams.php.members;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

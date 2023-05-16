@@ -5,9 +5,13 @@
 , fetchPypi
 , cython
 , geos
+<<<<<<< HEAD
 , oldest-supported-numpy
 , setuptools
 , wheel
+=======
+, setuptools
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , numpy
 , pytestCheckHook
 }:
@@ -27,9 +31,13 @@ buildPythonPackage rec {
   nativeBuildInputs = [
     cython
     geos # for geos-config
+<<<<<<< HEAD
     oldest-supported-numpy
     setuptools
     wheel
+=======
+    setuptools
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   buildInputs = [
@@ -66,6 +74,10 @@ buildPythonPackage rec {
     description = "Manipulation and analysis of geometric objects";
     homepage = "https://github.com/shapely/shapely";
     license = licenses.bsd3;
+<<<<<<< HEAD
     maintainers = teams.geospatial.members;
+=======
+    maintainers = with maintainers; [ knedlsepp ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

@@ -12,12 +12,20 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "mwprocapture";
+<<<<<<< HEAD
   subVersion = "4373";
+=======
+  subVersion = "4328";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   version = "1.3.0.${subVersion}-${kernel.version}";
 
   src = fetchurl {
     url = "https://www.magewell.com/files/drivers/ProCaptureForLinux_${subVersion}.tar.gz";
+<<<<<<< HEAD
     sha256 = "sha256-/6q+6CTlgkHOgq1PF8dSPfl/xm/UFczr/AGkac2mXZ8=";
+=======
+    sha256 = "197l86ad52ijmmq5an6891gd1chhkxqiagamcchirrky4c50qs36";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
@@ -60,7 +68,11 @@ stdenv.mkDerivation rec {
     homepage = "https://www.magewell.com/";
     description = "Linux driver for the Magewell Pro Capture family";
     license = licenses.unfreeRedistributable;
+<<<<<<< HEAD
     maintainers = with maintainers; [ flexiondotorg MP2E ];
+=======
+    maintainers = with maintainers; [ MP2E ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     platforms = platforms.linux;
   };
 }

@@ -51,9 +51,12 @@ stripDirs() {
     local stripFlags="$4"
     local pathsNew=
 
+<<<<<<< HEAD
     [ -z "$cmd" ] && echo "stripDirs: Strip command is empty" 1>&2 && exit 1
     [ -z "$ranlibCmd" ] && echo "stripDirs: Ranlib command is empty" 1>&2 && exit 1
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     local p
     for p in ${paths}; do
         if [ -e "$prefix/$p" ]; then
@@ -64,6 +67,7 @@ stripDirs() {
 
     if [ -n "${paths}" ]; then
         echo "stripping (with command $cmd and flags $stripFlags) in $paths"
+<<<<<<< HEAD
         local striperr
         striperr="$(mktemp --tmpdir="$TMPDIR" 'striperr.XXXXXX')"
         # Do not strip lib/debug. This is a directory used by setup-hooks/separate-debug-info.sh.
@@ -80,6 +84,10 @@ stripDirs() {
         [[ "$exit_code" = 123 || -z "$exit_code" ]] || (cat "$striperr" 1>&2 && exit 1)
 
         rm "$striperr"
+=======
+        # Do not strip lib/debug. This is a directory used by setup-hooks/separate-debug-info.sh.
+        find $paths -type f -a '!' -wholename "$prefix/lib/debug/*" -exec $cmd $stripFlags '{}' \; 2>/dev/null
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         # 'strip' does not normally preserve archive index in .a files.
         # This usually causes linking failures against static libs like:
         #   ld: ...-i686-w64-mingw32-stage-final-gcc-13.0.0-lib/i686-w64-mingw32/lib/libstdc++.dll.a:

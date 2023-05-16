@@ -2,21 +2,32 @@
 , buildPythonPackage
 , pythonOlder
 , fetchPypi
+<<<<<<< HEAD
+=======
+, fetchpatch
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , click
 , click-default-group
 , docformatter
 , jinja2
 , toposort
+<<<<<<< HEAD
 , typing-extensions
 , lxml
 , requests
 , pytestCheckHook
 , setuptools
 , wheel
+=======
+, lxml
+, requests
+, pytestCheckHook
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 buildPythonPackage rec {
   pname = "xsdata";
+<<<<<<< HEAD
   version = "23.8";
   format = "pyproject";
 
@@ -41,6 +52,34 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
+=======
+  version = "22.12";
+
+  disabled = pythonOlder "3.7";
+
+  format = "setuptools";
+
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-o9Xxt7b/+MkW94Jcg26ihaTn0/OpTcu+0OY7oV3JRGY=";
+  };
+
+  patches = [
+    # https://github.com/tefra/xsdata/pull/741
+    (fetchpatch {
+      name = "use-docformatter-1.5.1.patch";
+      url = "https://github.com/tefra/xsdata/commit/040692db47e6e51028fd959c793e757858c392d7.patch";
+      excludes = [ "setup.cfg" ];
+      hash = "sha256-ncecMJLJUiUb4lB8ys+nyiGU/UmayK++o89h3sAwREQ=";
+    })
+  ];
+
+  postPatch = ''
+    substituteInPlace setup.cfg \
+      --replace "--benchmark-skip" ""
+  '';
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   passthru.optional-dependencies = {
     cli = [
       click

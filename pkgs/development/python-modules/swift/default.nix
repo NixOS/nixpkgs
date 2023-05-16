@@ -24,11 +24,19 @@
 
 buildPythonPackage rec {
   pname = "swift";
+<<<<<<< HEAD
   version = "2.32.0";
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-JeDmZx667rG1ARfRBUDTcOWe7u3ZiytZzGQSRp8bpes=";
+=======
+  version = "2.31.1";
+
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-6CRSIv2m2pqZdzRAEJ/6Qo90PZ7LRNg1zQg50Ecq2RQ=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   postPatch = ''

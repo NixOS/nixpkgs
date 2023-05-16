@@ -22,13 +22,21 @@ let
 
   # determine the version number, there might be different ones per architecture
   version = {
+<<<<<<< HEAD
     x86_64-linux = "21.10.0.0.0";
+=======
+    x86_64-linux = "21.9.0.0.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     aarch64-linux = "19.10.0.0.0";
     x86_64-darwin = "19.8.0.0.0";
   }.${stdenv.hostPlatform.system} or throwSystem;
 
   directory = {
+<<<<<<< HEAD
     x86_64-linux = "2110000";
+=======
+    x86_64-linux = "219000";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     aarch64-linux = "191000";
     x86_64-darwin = "198000";
   }.${stdenv.hostPlatform.system} or throwSystem;
@@ -36,11 +44,19 @@ let
   # hashes per component and architecture
   hashes = {
     x86_64-linux = {
+<<<<<<< HEAD
       basic = "sha256-uo0QBOmx7TQyroD+As60IhjEkz//+0Cm1tWvLI3edaE=";
       sdk = "sha256-TIBFi1jHLJh+SUNFvuL7aJpxh61hG6gXhFIhvdPgpts=";
       sqlplus = "sha256-mF9kLjhZXe/fasYDfmZrYPL2CzAp3xDbi624RJDA4lM=";
       tools = "sha256-ay8ynzo1fPHbCg9GoIT5ja//iZPIZA2yXI/auVExiRY=";
       odbc = "sha256-3M6/cEtUrIFzQay8eHNiLGE+L0UF+VTmzp4cSBcrzlk=";
+=======
+      basic = "sha256-wiygUvZFYvjp5pndv3b9yTPxe8sC5HZkJ7jZqO1Mss8=";
+      sdk = "sha256-ehqHV52yLRe8ehrKqpLaN0HnN3zjHU7WrfjtqvQadgY=";
+      sqlplus = "sha256-tYvoG+7l5jXyTpxFUYZXaHCT0xGDeah78AinJ2qIsE8=";
+      tools = "sha256-6K2Ni0ZqqpqCrGFrBD06s0QNjNEDtNPrvDQ1U97lTKY=";
+      odbc = "sha256-yTANMLhaEqm9/ZEVqhEn1Gl8eJukgvqpqdaMRjxWxgs=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
     aarch64-linux = {
       basic = "sha256-DNntH20BAmo5kOz7uEgW2NXaNfwdvJ8l8oMnp50BOsY=";
@@ -143,7 +159,11 @@ stdenv.mkDerivation {
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.unfree;
     platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" ];
+<<<<<<< HEAD
     maintainers = with maintainers; [ dylanmtaylor ];
+=======
+    maintainers = with maintainers; [ flokli dylanmtaylor ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     hydraPlatforms = [ ];
   };
 }

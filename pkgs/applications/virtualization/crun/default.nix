@@ -23,7 +23,10 @@ let
     "test_exec.py"
     "test_hooks.py"
     "test_hostname.py"
+<<<<<<< HEAD
     "test_oci_features"
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "test_paths.py"
     "test_pid.py"
     "test_pid_file.py"
@@ -39,13 +42,21 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "crun";
+<<<<<<< HEAD
   version = "1.9";
+=======
+  version = "1.8.4";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = pname;
     rev = version;
+<<<<<<< HEAD
     hash = "sha256-1Ygr4tnMCRsskeJMUFv2XJxnNak8E30jZDZiLkXAQyg=";
+=======
+    hash = "sha256-wJ9V47X3tofFiwOzYignycm3PTRQWcAJ9iR2r5rJeJA=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     fetchSubmodules = true;
   };
 

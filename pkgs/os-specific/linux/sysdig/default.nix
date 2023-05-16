@@ -5,8 +5,13 @@
 
 let
   # Compare with https://github.com/draios/sysdig/blob/dev/cmake/modules/falcosecurity-libs.cmake
+<<<<<<< HEAD
   libsRev = "59fb313475b82f842e9e9bbc1e0e629428c0a4cf";
   libsSha256 = "sha256-IjzLbCOpB6EgPDgkGIyg1dNxHfYgU10OLgXrDOPmoTs=";
+=======
+  libsRev = "0.10.5";
+  libsSha256 = "sha256-5a5ePcMHAlniJ8sU/5kKdRp5YkJ6tcr4h5Ru4Oc2kQY=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   # Compare with https://github.com/falcosecurity/libs/blob/master/cmake/modules/valijson.cmake#L17
   valijson = fetchFromGitHub {
@@ -16,7 +21,10 @@ let
     sha256 = "sha256-ZD19Q2MxMQd3yEKbY90GFCrerie5/jzgO8do4JQDoKM=";
   };
 
+<<<<<<< HEAD
   # https://github.com/draios/sysdig/blob/0.31.5/cmake/modules/driver.cmake
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   driver = fetchFromGitHub {
     owner = "falcosecurity";
     repo = "libs";
@@ -27,12 +35,17 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "sysdig";
+<<<<<<< HEAD
   version = "0.33.1";
+=======
+  version = "0.31.5";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "draios";
     repo = "sysdig";
     rev = version;
+<<<<<<< HEAD
     sha256 = "sha256-qcJ9EcePrsKic+wgsck+pTrRdQic0xhzguH4EYVP0gk=";
   };
 
@@ -44,6 +57,11 @@ stdenv.mkDerivation rec {
     })
   ];
 
+=======
+    sha256 = "sha256-RuoPqVulATtn7jSga/8fECs7weNfjt/YFh7iHmfCKjw=";
+  };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nativeBuildInputs = [ cmake perl installShellFiles pkg-config ];
   buildInputs = [
     luajit
@@ -93,11 +111,16 @@ stdenv.mkDerivation rec {
     "-DCREATE_TEST_TARGETS=OFF"
   ] ++ lib.optional (kernel == null) "-DBUILD_DRIVER=OFF";
 
+<<<<<<< HEAD
   env.NIX_CFLAGS_COMPILE =
    # needed since luajit-2.1.0-beta3
    "-DluaL_reg=luaL_Reg -DluaL_getn(L,i)=((int)lua_objlen(L,i)) " +
    # fix compiler warnings been treated as errors
    "-Wno-error";
+=======
+  # needed since luajit-2.1.0-beta3
+  env.NIX_CFLAGS_COMPILE = "-DluaL_reg=luaL_Reg -DluaL_getn(L,i)=((int)lua_objlen(L,i))";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   preConfigure = ''
     if ! grep -q "${libsRev}" cmake/modules/falcosecurity-libs.cmake; then
@@ -126,6 +149,7 @@ stdenv.mkDerivation rec {
       if test -f "$out/lib/modules/${kernel.modDirVersion}/extra/scap.ko"; then
           sed -i "s#$kernel_dev#................................#g" $out/lib/modules/${kernel.modDirVersion}/extra/scap.ko
       else
+<<<<<<< HEAD
           for i in $out/lib/modules/${kernel.modDirVersion}/{extra,updates}/scap.ko.xz; do
             if test -f "$i"; then
               xz -d $i
@@ -133,6 +157,11 @@ stdenv.mkDerivation rec {
               xz -9 ''${i%.xz}
             fi
           done
+=======
+          xz -d $out/lib/modules/${kernel.modDirVersion}/extra/scap.ko.xz
+          sed -i "s#$kernel_dev#................................#g" $out/lib/modules/${kernel.modDirVersion}/extra/scap.ko
+          xz $out/lib/modules/${kernel.modDirVersion}/extra/scap.ko
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       fi
     '';
 

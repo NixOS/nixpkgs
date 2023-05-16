@@ -3,8 +3,15 @@
 , aioresponses
 , attrs
 , buildPythonPackage
+<<<<<<< HEAD
 , defusedxml
 , fetchFromGitHub
+=======
+, cached-property
+, defusedxml
+, fetchFromGitHub
+, fetchpatch
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , freezegun
 , httpx
 , isodate
@@ -27,7 +34,10 @@
 buildPythonPackage rec {
   pname = "zeep";
   version = "4.2.1";
+<<<<<<< HEAD
   format = "setuptools";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   disabled = pythonOlder "3.6";
 
@@ -40,7 +50,13 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     attrs
+<<<<<<< HEAD
     defusedxml
+=======
+    cached-property
+    defusedxml
+    httpx
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     isodate
     lxml
     platformdirs
@@ -48,6 +64,7 @@ buildPythonPackage rec {
     requests
     requests-file
     requests-toolbelt
+<<<<<<< HEAD
   ];
 
   passthru.optional-dependencies = {
@@ -61,6 +78,9 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [
     "zeep"
+=======
+    xmlsec
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   nativeCheckInputs = [
@@ -73,6 +93,7 @@ buildPythonPackage rec {
     pytest-httpx
     pytestCheckHook
     requests-mock
+<<<<<<< HEAD
   ]
   ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
 
@@ -82,6 +103,28 @@ buildPythonPackage rec {
 
   meta = with lib; {
     changelog = "https://github.com/mvantellingen/python-zeep/releases/tag/${version}";
+=======
+  ];
+
+  preCheck = ''
+    export HOME=$(mktemp -d);
+  '';
+
+  disabledTests = [
+    # lxml.etree.XMLSyntaxError: Extra content at the end of the document, line 2, column 64
+    "test_mime_content_serialize_text_xml"
+    # Tests are outdated
+    "test_load"
+    "test_load_cache"
+    "test_post"
+  ];
+
+  pythonImportsCheck = [
+    "zeep"
+  ];
+
+  meta = with lib; {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     description = "Python SOAP client";
     homepage = "http://docs.python-zeep.org";
     license = licenses.mit;

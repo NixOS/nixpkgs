@@ -13,7 +13,11 @@
 
 buildPythonPackage rec {
   pname = "azure-storage-blob";
+<<<<<<< HEAD
   version = "12.17.0";
+=======
+  version = "12.15.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -21,7 +25,11 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
+<<<<<<< HEAD
     hash = "sha256-wUt4WhcFCzD8MmoxW9rmvEoHiFX0+UpMMDrXSkjcjGM=";
+=======
+    hash = "sha256-+LjVgkknQKsWdERVQINC+45MiJe2Soo/wxdDhEciwvI=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [

@@ -2,16 +2,27 @@
 
 buildGoModule rec {
   pname = "crowdsec";
+<<<<<<< HEAD
   version = "1.5.2";
+=======
+  version = "1.4.6";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "crowdsecurity";
     repo = pname;
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-260+XsRn3Mm/zCSvfEcBQ6j715KV4t1Z0CvXdriDzCs=";
   };
 
   vendorHash = "sha256-Mto0X/LMwWU10cmC2bjzX4lzp9t+nEgsWRP3JGkl++A=";
+=======
+    hash = "sha256-+WvpsZjb1pb8WqK0HJYncJUo6wPkKzKvBi/nLKuhSD4=";
+  };
+
+  vendorHash = "sha256-FPsoufB9UDgBDIE3yUq4doBse3qgjP19ussYnMAxntk=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -23,12 +34,17 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
+<<<<<<< HEAD
     "-X github.com/crowdsecurity/go-cs-lib/pkg/version.Version=v${version}"
     "-X github.com/crowdsecurity/go-cs-lib/pkg/version.BuildDate=1970-01-01_00:00:00"
     "-X github.com/crowdsecurity/go-cs-lib/pkg/version.Tag=${src.rev}"
     "-X github.com/crowdsecurity/crowdsec/pkg/cwversion.Codename=alphaga"
     "-X github.com/crowdsecurity/crowdsec/pkg/csconfig.defaultConfigDir=/etc/crowdsec"
     "-X github.com/crowdsecurity/crowdsec/pkg/csconfig.defaultDataDir=/var/lib/crowdsec/data"
+=======
+    "-X github.com/crowdsecurity/crowdsec/pkg/cwversion.Version=v${version}"
+    "-X github.com/crowdsecurity/crowdsec/pkg/cwversion.BuildDate=1970-01-01_00:00:00"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   postBuild = "mv $GOPATH/bin/{crowdsec-cli,cscli}";

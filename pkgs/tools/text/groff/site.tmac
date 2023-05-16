@@ -9,5 +9,14 @@
 .    char \' \N'39'
 .  \}
 .
+<<<<<<< HEAD
+=======
+.  \" Shut off SGR by default (groff colors)
+.  \" Require GROFF_SGR envvar defined to turn it on
+.  if '\V[GROFF_SGR]'' \
+.    output x X tty: sgr 0
+.\}
+.
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 .ds doc-default-operating-system Nixpkgs
 .ds doc-volume-operating-system Nixpkgs

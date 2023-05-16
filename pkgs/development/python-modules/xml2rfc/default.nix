@@ -11,7 +11,10 @@
 , jinja2
 , lxml
 , markupsafe
+<<<<<<< HEAD
 , platformdirs
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , pycairo
 , pycountry
 , pyflakes
@@ -27,7 +30,11 @@
 
 buildPythonPackage rec {
   pname = "xml2rfc";
+<<<<<<< HEAD
   version = "3.18.0";
+=======
+  version = "3.17.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -36,7 +43,11 @@ buildPythonPackage rec {
     owner = "ietf-tools";
     repo = "xml2rfc";
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-yhzOfX2umux1ulDiInbbKXvATA+k1TLQrSa9vcR/i58=";
+=======
+    hash = "sha256-C5bc32XbAqJtzUbITj1U1ItaY2ZMEXM9z+B7dQadoIs=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   postPatch = ''
@@ -57,7 +68,10 @@ buildPythonPackage rec {
     jinja2
     lxml
     markupsafe
+<<<<<<< HEAD
     platformdirs
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     pycountry
     pyflakes
     pypdf2

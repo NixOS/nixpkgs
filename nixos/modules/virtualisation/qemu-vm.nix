@@ -1,8 +1,16 @@
 # This module creates a virtual machine from the NixOS configuration.
 # Building the `config.system.build.vm' attribute gives you a command
 # that starts a KVM/QEMU VM running the NixOS configuration defined in
+<<<<<<< HEAD
 # `config'. By default, the Nix store is shared read-only with the
 # host, which makes (re)building VMs very efficient.
+=======
+# `config'.  The Nix store is shared read-only with the host, which
+# makes (re)building VMs very efficient.  However, it also means you
+# can't reconfigure the guest inside the guest - you need to rebuild
+# the VM in the host.  On the other hand, the root filesystem is a
+# read/writable disk image persistent across VM reboots.
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 { config, lib, pkgs, options, ... }:
 
@@ -18,8 +26,11 @@ let
 
   qemu = cfg.qemu.package;
 
+<<<<<<< HEAD
   hostPkgs = cfg.host.pkgs;
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   consoles = lib.concatMapStringsSep " " (c: "console=${c}") cfg.qemu.consoles;
 
   driveOpts = { ... }: {
@@ -83,6 +94,7 @@ let
 
   drivesCmdLine = drives: concatStringsSep "\\\n    " (imap1 driveCmdline drives);
 
+<<<<<<< HEAD
   # Shell script to start the VM.
   startVM =
     ''
@@ -104,10 +116,41 @@ let
         rm "$temp"
       }
 
+=======
+
+  # Creates a device name from a 1-based a numerical index, e.g.
+  # * `driveDeviceName 1` -> `/dev/vda`
+  # * `driveDeviceName 2` -> `/dev/vdb`
+  driveDeviceName = idx:
+    let letter = elemAt lowerChars (idx - 1);
+    in if cfg.qemu.diskInterface == "scsi" then
+      "/dev/sd${letter}"
+    else
+      "/dev/vd${letter}";
+
+  lookupDriveDeviceName = driveName: driveList:
+    (findSingle (drive: drive.name == driveName)
+      (throw "Drive ${driveName} not found")
+      (throw "Multiple drives named ${driveName}") driveList).device;
+
+  addDeviceNames =
+    imap1 (idx: drive: drive // { device = driveDeviceName idx; });
+
+  # Shell script to start the VM.
+  startVM =
+    ''
+      #! ${cfg.host.pkgs.runtimeShell}
+
+      export PATH=${makeBinPath [ cfg.host.pkgs.coreutils ]}''${PATH:+:}$PATH
+
+      set -e
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       NIX_DISK_IMAGE=$(readlink -f "''${NIX_DISK_IMAGE:-${toString config.virtualisation.diskImage}}") || test -z "$NIX_DISK_IMAGE"
 
       if test -n "$NIX_DISK_IMAGE" && ! test -e "$NIX_DISK_IMAGE"; then
           echo "Disk image do not exist, creating the virtualisation disk image..."
+<<<<<<< HEAD
 
           ${if (cfg.useBootLoader && cfg.useDefaultFilesystems) then ''
             # Create a writable qcow2 image using the systemImage as a backing
@@ -127,6 +170,23 @@ let
             ${qemu}/bin/qemu-img create -f qcow2 "$NIX_DISK_IMAGE" "${toString cfg.diskSize}M"
           ''
           }
+=======
+          # If we are using a bootloader and default filesystems layout.
+          # We have to reuse the system image layout as a backing image format (CoW)
+          # So we can write on the top of it.
+
+          # If we are not using the default FS layout, potentially, we are interested into
+          # performing operations in postDeviceCommands or at early boot on the raw device.
+          # We can still boot through QEMU direct kernel boot feature.
+
+          # CoW prevent size to be attributed to an image.
+          # FIXME: raise this issue to upstream.
+          ${qemu}/bin/qemu-img create \
+          ${concatStringsSep " \\\n" ([ "-f qcow2" ]
+          ++ optional (cfg.useBootLoader && cfg.useDefaultFilesystems) "-F qcow2 -b ${systemImage}/nixos.qcow2"
+          ++ optional (!(cfg.useBootLoader && cfg.useDefaultFilesystems)) "-o size=${toString config.virtualisation.diskSize}M"
+          ++ [ ''"$NIX_DISK_IMAGE"'' ])}
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           echo "Virtualisation disk image created."
       fi
 
@@ -144,6 +204,7 @@ let
           else ''
             (
               cd ${builtins.storeDir}
+<<<<<<< HEAD
               ${hostPkgs.erofs-utils}/bin/mkfs.erofs \
                 --force-uid=0 \
                 --force-gid=0 \
@@ -155,6 +216,18 @@ let
                     sed -e 's^.*/^^g' \
                   | cut -c -10 \
                   | ${hostPkgs.python3}/bin/python ${./includes-to-excludes.py} )" \
+=======
+              ${pkgs.erofs-utils}/bin/mkfs.erofs \
+                --force-uid=0 \
+                --force-gid=0 \
+                -U eb176051-bd15-49b7-9e6b-462e0b467019 \
+                -T 0 \
+                --exclude-regex="$(
+                  <${pkgs.closureInfo { rootPaths = [ config.system.build.toplevel regInfo ]; }}/store-paths \
+                    sed -e 's^.*/^^g' \
+                  | cut -c -10 \
+                  | ${pkgs.python3}/bin/python ${./includes-to-excludes.py} )" \
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
                 "$TMPDIR"/store.img \
                 . \
                 </dev/null >/dev/null
@@ -166,6 +239,7 @@ let
       # Create a directory for exchanging data with the VM.
       mkdir -p "$TMPDIR/xchg"
 
+<<<<<<< HEAD
       ${lib.optionalString cfg.useHostCerts
       ''
         mkdir -p "$TMPDIR/certs"
@@ -176,6 +250,8 @@ let
         fi
       ''}
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       ${lib.optionalString cfg.useEFIBoot
       ''
         # Expose EFI variables, it's useful even when we are not using a bootloader (!).
@@ -226,6 +302,7 @@ let
     '';
 
 
+<<<<<<< HEAD
   regInfo = hostPkgs.closureInfo { rootPaths = config.virtualisation.additionalPaths; };
 
   # Use well-defined and persistent filesystem labels to identify block devices.
@@ -240,6 +317,9 @@ let
   # via QEMU. Inside the running system, the disk can then be identified via
   # the /dev/disk/by-id scheme.
   rootDriveSerialAttr = "root";
+=======
+  regInfo = pkgs.closureInfo { rootPaths = config.virtualisation.additionalPaths; };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   # System image is akin to a complete NixOS install with
   # a boot partition and root partition.
@@ -248,7 +328,10 @@ let
     additionalPaths = [ regInfo ];
     format = "qcow2";
     onlyNixStore = false;
+<<<<<<< HEAD
     label = rootFilesystemLabel;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     partitionTableType = selectPartitionTableLayout { inherit (cfg) useDefaultFilesystems useEFIBoot; };
     # Bootloader should be installed on the system image only if we are booting through bootloaders.
     # Though, if a user is not using our default filesystems, it is possible to not have any ESP
@@ -271,7 +354,10 @@ let
     additionalPaths = [ regInfo ];
     format = "qcow2";
     onlyNixStore = true;
+<<<<<<< HEAD
     label = nixStoreFilesystemLabel;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     partitionTableType = "none";
     installBootLoader = false;
     touchEFIVars = false;
@@ -280,6 +366,30 @@ let
     copyChannel = false;
   };
 
+<<<<<<< HEAD
+=======
+  bootConfiguration =
+    if cfg.useDefaultFilesystems
+    then
+      if cfg.useBootLoader
+      then
+        if cfg.useEFIBoot then "efi_bootloading_with_default_fs"
+        else "legacy_bootloading_with_default_fs"
+      else
+        "direct_boot_with_default_fs"
+    else
+      "custom";
+  suggestedRootDevice = {
+    "efi_bootloading_with_default_fs" = "${cfg.bootLoaderDevice}2";
+    "legacy_bootloading_with_default_fs" = "${cfg.bootLoaderDevice}1";
+    "direct_boot_with_default_fs" = cfg.bootLoaderDevice;
+    # This will enforce a NixOS module type checking error
+    # to ask explicitly the user to set a rootDevice.
+    # As it will look like `rootDevice = lib.mkDefault null;` after
+    # all "computations".
+    "custom" = null;
+  }.${bootConfiguration};
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 in
 
 {
@@ -346,18 +456,29 @@ in
     virtualisation.bootLoaderDevice =
       mkOption {
         type = types.path;
+<<<<<<< HEAD
         default = "/dev/disk/by-id/virtio-${rootDriveSerialAttr}";
         defaultText = literalExpression ''/dev/disk/by-id/virtio-${rootDriveSerialAttr}'';
         example = "/dev/disk/by-id/virtio-boot-loader-device";
         description =
           lib.mdDoc ''
             The path (inside th VM) to the device to boot from when legacy booting.
+=======
+        default = lookupDriveDeviceName "root" cfg.qemu.drives;
+        defaultText = literalExpression ''lookupDriveDeviceName "root" cfg.qemu.drives'';
+        example = "/dev/vda";
+        description =
+          lib.mdDoc ''
+            The disk to be used for the boot filesystem.
+            By default, it is the same disk as the root filesystem.
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           '';
         };
 
     virtualisation.bootPartition =
       mkOption {
         type = types.nullOr types.path;
+<<<<<<< HEAD
         default = if cfg.useEFIBoot then "/dev/disk/by-label/${espFilesystemLabel}" else null;
         defaultText = literalExpression ''if cfg.useEFIBoot then "/dev/disk/by-label/${espFilesystemLabel}" else null'';
         example = "/dev/disk/by-label/esp";
@@ -367,18 +488,42 @@ in
 
             If you are *not* booting from a UEFI firmware, this value is, by
             default, `null`. The ESP is mounted under `/boot`.
+=======
+        default = if cfg.useEFIBoot then "${cfg.bootLoaderDevice}1" else null;
+        defaultText = literalExpression ''if cfg.useEFIBoot then "''${cfg.bootLoaderDevice}1" else null'';
+        example = "/dev/vda1";
+        description =
+          lib.mdDoc ''
+            The boot partition to be used to mount /boot filesystem.
+            In legacy boots, this should be null.
+            By default, in EFI boot, it is the first partition of the boot device.
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           '';
       };
 
     virtualisation.rootDevice =
       mkOption {
         type = types.nullOr types.path;
+<<<<<<< HEAD
         default = "/dev/disk/by-label/${rootFilesystemLabel}";
         defaultText = literalExpression ''/dev/disk/by-label/${rootFilesystemLabel}'';
         example = "/dev/disk/by-label/nixos";
         description =
           lib.mdDoc ''
             The path (inside the VM) to the device containing the root filesystem.
+=======
+        example = "/dev/vda2";
+        description =
+          lib.mdDoc ''
+            The disk or partition to be used for the root filesystem.
+            By default (read the source code for more details):
+
+            - under EFI with a bootloader: 2nd partition of the boot disk
+            - in legacy boot with a bootloader: 1st partition of the boot disk
+            - in direct boot (i.e. without a bootloader): whole disk
+
+            In case you are not using a default boot device or a default filesystem, you have to set explicitly your root device.
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           '';
       };
 
@@ -560,8 +705,12 @@ in
     virtualisation.vlans =
       mkOption {
         type = types.listOf types.ints.unsigned;
+<<<<<<< HEAD
         default = if config.virtualisation.interfaces == {} then [ 1 ] else [ ];
         defaultText = lib.literalExpression ''if config.virtualisation.interfaces == {} then [ 1 ] else [ ]'';
+=======
+        default = [ 1 ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         example = [ 1 2 ];
         description =
           lib.mdDoc ''
@@ -576,6 +725,7 @@ in
           '';
       };
 
+<<<<<<< HEAD
     virtualisation.interfaces = mkOption {
       default = {};
       example = {
@@ -605,6 +755,8 @@ in
       });
     };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     virtualisation.writableStore =
       mkOption {
         type = types.bool;
@@ -656,7 +808,11 @@ in
       package =
         mkOption {
           type = types.package;
+<<<<<<< HEAD
           default = hostPkgs.qemu_kvm;
+=======
+          default = cfg.host.pkgs.qemu_kvm;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           defaultText = literalExpression "config.virtualisation.host.pkgs.qemu_kvm";
           example = literalExpression "pkgs.qemu_test";
           description = lib.mdDoc "QEMU package to use.";
@@ -709,6 +865,10 @@ in
         mkOption {
           type = types.listOf (types.submodule driveOpts);
           description = lib.mdDoc "Drives passed to qemu.";
+<<<<<<< HEAD
+=======
+          apply = addDeviceNames;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         };
 
       diskInterface =
@@ -767,6 +927,7 @@ in
         '';
       };
 
+<<<<<<< HEAD
     virtualisation.directBoot = {
       enable =
         mkOption {
@@ -801,17 +962,28 @@ in
         };
     };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     virtualisation.useBootLoader =
       mkOption {
         type = types.bool;
         default = false;
         description =
           lib.mdDoc ''
+<<<<<<< HEAD
             Use a boot loader to boot the system.
             This allows, among other things, testing the boot loader.
 
             If disabled, the kernel and initrd are directly booted,
             forgoing any bootloader.
+=======
+            If enabled, the virtual machine will be booted using the
+            regular boot loader (i.e., GRUB 1 or 2).  This allows
+            testing of the boot loader.  If
+            disabled (the default), the VM directly boots the NixOS
+            kernel and initial ramdisk, bypassing the boot loader
+            altogether.
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           '';
       };
 
@@ -887,6 +1059,10 @@ in
           '';
       };
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     virtualisation.bios =
       mkOption {
         type = types.nullOr types.package;
@@ -899,6 +1075,7 @@ in
           '';
       };
 
+<<<<<<< HEAD
     virtualisation.useHostCerts =
       mkOption {
         type = types.bool;
@@ -910,6 +1087,8 @@ in
           '';
       };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   config = {
@@ -931,6 +1110,7 @@ in
                   The address must be in the default VLAN (10.0.2.0/24).
               '';
           }
+<<<<<<< HEAD
         ])) ++ [
           { assertion = pkgs.stdenv.hostPlatform.is32bit -> cfg.memorySize < 2047;
             message = ''
@@ -950,6 +1130,9 @@ in
               '';
           }
         ];
+=======
+        ]));
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     warnings =
       optional (
@@ -969,11 +1152,14 @@ in
           Otherwise, we recommend
 
             ${opt.writableStore} = false;
+<<<<<<< HEAD
             ''
       ++ optional (cfg.directBoot.enable && cfg.useBootLoader)
         ''
           You enabled direct boot and a bootloader, QEMU will not boot your bootloader, rendering
           `useBootLoader` useless. You might want to disable one of those options.
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         '';
 
     # In UEFI boot, we use a EFI-only partition table layout, thus GRUB will fail when trying to install
@@ -982,11 +1168,35 @@ in
     # FIXME: make a sense of this mess wrt to multiple ESP present in the system, probably use boot.efiSysMountpoint?
     boot.loader.grub.device = mkVMOverride (if cfg.useEFIBoot then "nodev" else cfg.bootLoaderDevice);
     boot.loader.grub.gfxmodeBios = with cfg.resolution; "${toString x}x${toString y}";
+<<<<<<< HEAD
+=======
+    virtualisation.rootDevice = mkDefault suggestedRootDevice;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     boot.initrd.kernelModules = optionals (cfg.useNixStoreImage && !cfg.writableStore) [ "erofs" ];
 
     boot.loader.supportsInitrdSecrets = mkIf (!cfg.useBootLoader) (mkVMOverride false);
 
+<<<<<<< HEAD
+=======
+    boot.initrd.extraUtilsCommands = lib.mkIf (cfg.useDefaultFilesystems && !config.boot.initrd.systemd.enable)
+      ''
+        # We need mke2fs in the initrd.
+        copy_bin_and_libs ${pkgs.e2fsprogs}/bin/mke2fs
+      '';
+
+    boot.initrd.postDeviceCommands = lib.mkIf (cfg.useDefaultFilesystems && !config.boot.initrd.systemd.enable)
+      ''
+        # If the disk image appears to be empty, run mke2fs to
+        # initialise.
+        FSTYPE=$(blkid -o value -s TYPE ${cfg.rootDevice} || true)
+        PARTTYPE=$(blkid -o value -s PTTYPE ${cfg.rootDevice} || true)
+        if test -z "$FSTYPE" -a -z "$PARTTYPE"; then
+            mke2fs -t ext4 ${cfg.rootDevice}
+        fi
+      '';
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     boot.initrd.postMountCommands = lib.mkIf (!config.boot.initrd.systemd.enable)
       ''
         # Mark this as a NixOS machine.
@@ -1044,6 +1254,7 @@ in
         source = ''"''${SHARED_DIR:-$TMPDIR/xchg}"'';
         target = "/tmp/shared";
       };
+<<<<<<< HEAD
       certs = mkIf cfg.useHostCerts {
         source = ''"$TMPDIR"/certs'';
         target = "/etc/ssl/certs";
@@ -1052,6 +1263,10 @@ in
 
     security.pki.installCACerts = mkIf cfg.useHostCerts false;
 
+=======
+    };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     virtualisation.qemu.networkingOptions =
       let
         forwardingOptions = flip concatMapStrings cfg.forwardPorts
@@ -1069,6 +1284,10 @@ in
         "-netdev user,id=user.0,${forwardingOptions}${restrictNetworkOption}\"$QEMU_NET_OPTS\""
       ];
 
+<<<<<<< HEAD
+=======
+    # FIXME: Consolidate this one day.
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     virtualisation.qemu.options = mkMerge [
       (mkIf cfg.qemu.virtioKeyboard [
         "-device virtio-keyboard"
@@ -1083,9 +1302,15 @@ in
         alphaNumericChars = lowerChars ++ upperChars ++ (map toString (range 0 9));
         # Replace all non-alphanumeric characters with underscores
         sanitizeShellIdent = s: concatMapStrings (c: if builtins.elem c alphaNumericChars then c else "_") (stringToCharacters s);
+<<<<<<< HEAD
       in mkIf cfg.directBoot.enable [
         "-kernel \${NIXPKGS_QEMU_KERNEL_${sanitizeShellIdent config.system.name}:-${config.system.build.toplevel}/kernel}"
         "-initrd ${cfg.directBoot.initrd}"
+=======
+      in mkIf (!cfg.useBootLoader) [
+        "-kernel \${NIXPKGS_QEMU_KERNEL_${sanitizeShellIdent config.system.name}:-${config.system.build.toplevel}/kernel}"
+        "-initrd ${config.system.build.toplevel}/initrd"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         ''-append "$(cat ${config.system.build.toplevel}/kernel-params) init=${config.system.build.toplevel}/init regInfo=${regInfo}/registration ${consoles} $QEMU_KERNEL_PARAMS"''
       ])
       (mkIf cfg.useEFIBoot [
@@ -1107,7 +1332,10 @@ in
         driveExtraOpts.cache = "writeback";
         driveExtraOpts.werror = "report";
         deviceExtraOpts.bootindex = "1";
+<<<<<<< HEAD
         deviceExtraOpts.serial = rootDriveSerialAttr;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       }])
       (mkIf cfg.useNixStoreImage [{
         name = "nix-store";
@@ -1121,12 +1349,23 @@ in
       }) cfg.emptyDiskImages)
     ];
 
+<<<<<<< HEAD
     # Use mkVMOverride to enable building test VMs (e.g. via `nixos-rebuild
     # build-vm`) of a system configuration, where the regular value for the
     # `fileSystems' attribute should be disregarded (since those filesystems
     # don't necessarily exist in the VM).
     fileSystems = mkVMOverride cfg.fileSystems;
 
+=======
+    fileSystems = mkVMOverride cfg.fileSystems;
+
+    # Mount the host filesystem via 9P, and bind-mount the Nix store
+    # of the host into our own filesystem.  We use mkVMOverride to
+    # allow this module to be applied to "normal" NixOS system
+    # configuration, where the regular value for the `fileSystems'
+    # attribute should be disregarded for the purpose of building a VM
+    # test image (since those filesystems don't exist in the VM).
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     virtualisation.fileSystems = let
       mkSharedDir = tag: share:
         {
@@ -1150,6 +1389,10 @@ in
         } else {
           device = cfg.rootDevice;
           fsType = "ext4";
+<<<<<<< HEAD
+=======
+          autoFormat = true;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         });
         "/tmp" = lib.mkIf config.boot.tmp.useTmpfs {
           device = "tmpfs";
@@ -1159,7 +1402,11 @@ in
           options = [ "mode=1777" "strictatime" "nosuid" "nodev" "size=${toString config.boot.tmp.tmpfsSize}" ];
         };
         "/nix/${if cfg.writableStore then ".ro-store" else "store"}" = lib.mkIf cfg.useNixStoreImage {
+<<<<<<< HEAD
           device = "/dev/disk/by-label/${nixStoreFilesystemLabel}";
+=======
+          device = "${lookupDriveDeviceName "nix-store" cfg.qemu.drives}";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           neededForBoot = true;
           options = [ "ro" ];
         };
@@ -1169,7 +1416,11 @@ in
           neededForBoot = true;
         };
         "/boot" = lib.mkIf (cfg.useBootLoader && cfg.bootPartition != null) {
+<<<<<<< HEAD
           device = cfg.bootPartition;
+=======
+          device = cfg.bootPartition; # 1 for e.g. `vda1`, as created in `systemImage`
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           fsType = "vfat";
           noCheck = true; # fsck fails on a r/o filesystem
         };
@@ -1208,14 +1459,22 @@ in
 
     services.qemuGuest.enable = cfg.qemu.guestAgent.enable;
 
+<<<<<<< HEAD
     system.build.vm = hostPkgs.runCommand "nixos-vm" {
+=======
+    system.build.vm = cfg.host.pkgs.runCommand "nixos-vm" {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       preferLocalBuild = true;
       meta.mainProgram = "run-${config.system.name}-vm";
     }
       ''
         mkdir -p $out/bin
         ln -s ${config.system.build.toplevel} $out/system
+<<<<<<< HEAD
         ln -s ${hostPkgs.writeScript "run-nixos-vm" startVM} $out/bin/run-${config.system.name}-vm
+=======
+        ln -s ${cfg.host.pkgs.writeScript "run-nixos-vm" startVM} $out/bin/run-${config.system.name}-vm
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       '';
 
     # When building a regular system configuration, override whatever

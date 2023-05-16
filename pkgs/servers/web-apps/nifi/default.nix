@@ -2,18 +2,30 @@
 
 stdenv.mkDerivation rec {
   pname = "nifi";
+<<<<<<< HEAD
   version = "1.23.2";
 
   src = fetchzip {
     url = "mirror://apache/nifi/${version}/nifi-${version}-bin.zip";
     hash = "sha256-NRX0lEE5/HsYnZXtLDlPUpgWMsg/2Z3cRUnJwKDGxfw=";
+=======
+  version = "1.21.0";
+
+  src = fetchzip {
+    url = "mirror://apache/nifi/${version}/nifi-${version}-bin.zip";
+    sha256 = "sha256-AnDvZ9SV+VFdsP6KoqZIPNinAe2erT/IBY4c6i+2iTQ=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ jdk11 ];
 
   installPhase = ''
+<<<<<<< HEAD
     cp -r ../$sourceRoot $out
+=======
+    mv ../$sourceRoot $out
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     rm -f $out/bin/*bat
     rm -rf $out/extensions
     mkdir -p $out/share/nifi
@@ -40,7 +52,10 @@ stdenv.mkDerivation rec {
     license = licenses.asl20;
     homepage = "https://nifi.apache.org";
     platforms = [ "x86_64-linux" ];
+<<<<<<< HEAD
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     maintainers = with maintainers; [ izorkin ];
   };
 }

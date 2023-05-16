@@ -7,7 +7,10 @@
 , email-validator
 , flask
 , flask-babel
+<<<<<<< HEAD
 , flask-limiter
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , flask-login
 , flask-openid
 , flask-sqlalchemy
@@ -27,7 +30,11 @@
 
 buildPythonPackage rec {
   pname = "flask-appbuilder";
+<<<<<<< HEAD
   version = "4.3.1";
+=======
+  version = "4.2.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -35,7 +42,11 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "Flask-AppBuilder";
     inherit version;
+<<<<<<< HEAD
     hash = "sha256-FP92HEGOsufHtaIySqDiScD3QUu3iQhWdtvkOecUvuI=";
+=======
+    hash = "sha256-rZbu0Bif5pOa/zu6MCrbGJpkqUdYzWyVgp6tqRzGyIc=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [
@@ -45,7 +56,10 @@ buildPythonPackage rec {
     email-validator
     flask
     flask-babel
+<<<<<<< HEAD
     flask-limiter
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     flask-login
     flask-openid
     flask-sqlalchemy
@@ -83,7 +97,11 @@ buildPythonPackage rec {
     homepage = "https://github.com/dpgaspar/flask-appbuilder/";
     changelog = "https://github.com/dpgaspar/Flask-AppBuilder/blob/v${version}/CHANGELOG.rst";
     license = licenses.bsd3;
+<<<<<<< HEAD
     maintainers = with maintainers; [ ];
+=======
+    maintainers = with maintainers; [ costrouc ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     # Support for flask-sqlalchemy >= 3.0 is missing, https://github.com/dpgaspar/Flask-AppBuilder/pull/1940
     broken = true;
   };

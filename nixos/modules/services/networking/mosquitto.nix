@@ -42,15 +42,22 @@ let
       };
 
       passwordFile = mkOption {
+<<<<<<< HEAD
         type = uniq (nullOr path);
+=======
+        type = uniq (nullOr types.path);
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         example = "/path/to/file";
         default = null;
         description = lib.mdDoc ''
           Specifies the path to a file containing the
           clear text password for the MQTT user.
+<<<<<<< HEAD
           The file is securely passed to mosquitto by
           leveraging systemd credentials. No special
           permissions need to be set on this file.
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         '';
       };
 
@@ -67,7 +74,11 @@ let
       };
 
       hashedPasswordFile = mkOption {
+<<<<<<< HEAD
         type = uniq (nullOr path);
+=======
+        type = uniq (nullOr types.path);
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         example = "/path/to/file";
         default = null;
         description = mdDoc ''
@@ -76,9 +87,12 @@ let
           To generate hashed password install the `mosquitto`
           package and use `mosquitto_passwd`, then remove the
           `username:` prefix from the generated file.
+<<<<<<< HEAD
           The file is securely passed to mosquitto by
           leveraging systemd credentials. No special
           permissions need to be set on this file.
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         '';
       };
 
@@ -108,6 +122,7 @@ let
         message = "Cannot set more than one password option for user ${n} in ${prefix}";
       }) users;
 
+<<<<<<< HEAD
   listenerScope = index: "listener-${toString index}";
   userScope = prefix: index: "${prefix}-user-${toString index}";
   credentialID = prefix: credential: "${prefix}-${credential}";
@@ -145,6 +160,17 @@ let
         ++ mapAttrsToList
           (name: user: ''addFile ${escapeShellArg name} "''${CREDENTIALS_DIRECTORY}/${credentialID user.scope file}"'')
           (filterAttrs (_: user: user.${file} != null) scopedUsers);
+=======
+  makePasswordFile = users: path:
+    let
+      makeLines = store: file:
+        mapAttrsToList
+          (n: u: "addLine ${escapeShellArg n} ${escapeShellArg u.${store}}")
+          (filterAttrs (_: u: u.${store} != null) users)
+        ++ mapAttrsToList
+          (n: u: "addFile ${escapeShellArg n} ${escapeShellArg "${u.${file}}"}")
+          (filterAttrs (_: u: u.${file} != null) users);
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       plainLines = makeLines "password" "passwordFile";
       hashedLines = makeLines "hashedPassword" "hashedPasswordFile";
     in
@@ -615,6 +641,7 @@ in
         ExecStart = "${cfg.package}/bin/mosquitto -c ${configFile}";
         ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
 
+<<<<<<< HEAD
         # Credentials
         SetCredential = let
           listenerCredentials = listenerScope: listener:
@@ -628,6 +655,8 @@ in
         in
           systemdCredentials cfg.listeners listenerCredentials;
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         # Hardening
         CapabilityBoundingSet = "";
         DevicePolicy = "closed";
@@ -700,7 +729,11 @@ in
         concatStringsSep
           "\n"
           (imap0
+<<<<<<< HEAD
             (idx: listener: makePasswordFile (listenerScope idx) listener.users "${cfg.dataDir}/passwd-${toString idx}")
+=======
+            (idx: listener: makePasswordFile listener.users "${cfg.dataDir}/passwd-${toString idx}")
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
             cfg.listeners);
     };
 

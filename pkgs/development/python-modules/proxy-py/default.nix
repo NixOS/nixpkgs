@@ -3,7 +3,10 @@
 , bash
 , buildPythonPackage
 , fetchFromGitHub
+<<<<<<< HEAD
 , fetchpatch
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , gnumake
 , httpx
 , openssl
@@ -14,7 +17,10 @@
 , pythonOlder
 , setuptools-scm
 , typing-extensions
+<<<<<<< HEAD
 , wheel
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 buildPythonPackage rec {
@@ -31,6 +37,7 @@ buildPythonPackage rec {
     hash = "sha256-dA7a9RicBFCSf6IoGX/CdvI8x/xMOFfNtyuvFn9YmHI=";
   };
 
+<<<<<<< HEAD
   patches = [
     # this patch is so that the one following it applies cleanly
     # https://github.com/abhinavsingh/proxy.py/pull/1209
@@ -47,6 +54,8 @@ buildPythonPackage rec {
     })
   ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   postPatch = ''
     substituteInPlace Makefile \
     --replace "SHELL := /bin/bash" "SHELL := ${bash}/bin/bash"
@@ -58,7 +67,10 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     setuptools-scm
+<<<<<<< HEAD
     wheel
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   propagatedBuildInputs = [

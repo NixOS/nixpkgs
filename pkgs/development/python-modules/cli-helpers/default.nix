@@ -2,6 +2,10 @@
 , buildPythonPackage
 , fetchPypi
 , pythonOlder
+<<<<<<< HEAD
+=======
+, backports_csv
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , configobj
 , mock
 , pytestCheckHook

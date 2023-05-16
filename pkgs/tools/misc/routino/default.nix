@@ -2,11 +2,19 @@
 
 stdenv.mkDerivation rec {
   pname = "routino";
+<<<<<<< HEAD
   version = "3.4.1";
 
   src = fetchurl {
     url = "https://routino.org/download/${pname}-${version}.tgz";
     hash = "sha256-C6qNKljRdV0ProbgSxfrZLgZH+Pl8kcpKmTb83GLhSs=";
+=======
+  version = "3.3.3";
+
+  src = fetchurl {
+    url = "https://routino.org/download/${pname}-${version}.tgz";
+    sha256 = "1xa7l2bjn832nk6bc7b481nv8hd2gj41jwhg0d2qy10lqdvjpn5b";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   patchFlags = [ "-p0" ];
@@ -38,7 +46,10 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "http://www.routino.org/";
+<<<<<<< HEAD
     changelog = "http://routino.org/software/NEWS.txt";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     description = "OpenStreetMap Routing Software";
     license = licenses.agpl3Plus;
     maintainers = with maintainers; [ dotlambda ];

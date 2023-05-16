@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 { stdenv, linuxHeaders, sourceProg, debug ? false }:
+=======
+{ stdenv, linuxHeaders, parentWrapperDir, debug ? false }:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 # For testing:
 # $ nix-build -E 'with import <nixpkgs> {}; pkgs.callPackage ./wrapper.nix { parentWrapperDir = "/run/wrappers"; debug = true; }'
 stdenv.mkDerivation {
@@ -7,7 +11,11 @@ stdenv.mkDerivation {
   dontUnpack = true;
   hardeningEnable = [ "pie" ];
   CFLAGS = [
+<<<<<<< HEAD
     ''-DSOURCE_PROG="${sourceProg}"''
+=======
+    ''-DWRAPPER_DIR="${parentWrapperDir}"''
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ] ++ (if debug then [
     "-Werror" "-Og" "-g"
   ] else [

@@ -25,13 +25,21 @@
 
 stdenv.mkDerivation rec {
   pname = "cinnamon-session";
+<<<<<<< HEAD
   version = "5.8.1";
+=======
+  version = "5.6.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = pname;
     rev = version;
+<<<<<<< HEAD
     hash = "sha256-NVoP1KYh/z96NKMi9LjL4RgkjJg32oSy5WHJ91+70DI=";
+=======
+    hash = "sha256-lyASp0jFwaPLPQ3Jnow6eTpUBybwhSEmQUK/20fsh7I=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   patches = [

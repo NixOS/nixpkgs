@@ -15,11 +15,19 @@
 
 stdenv.mkDerivation rec {
   pname = "gst-rtsp-server";
+<<<<<<< HEAD
   version = "1.22.5";
 
   src = fetchurl {
     url = "https://gstreamer.freedesktop.org/src/${pname}/${pname}-${version}.tar.xz";
     hash = "sha256-80PrVJZOvU2MBxvl7srVhvKP6wFW4DbgaxSNDn/rscA=";
+=======
+  version = "1.22.2";
+
+  src = fetchurl {
+    url = "https://gstreamer.freedesktop.org/src/${pname}/${pname}-${version}.tar.xz";
+    hash = "sha256-K+Suz7iHEBAOpxFe0CFkA+gJQ0Tr8UYJQnG41Nc4KL8=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   outputs = [
@@ -41,6 +49,10 @@ stdenv.mkDerivation rec {
   buildInputs = [
     gst-plugins-base
     gst-plugins-bad
+<<<<<<< HEAD
+=======
+    gobject-introspection
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   mesonFlags = [
@@ -61,6 +73,10 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.lgpl2Plus;
     platforms = platforms.unix;
+<<<<<<< HEAD
     maintainers = with maintainers; [ bkchr lilyinstarlight ];
+=======
+    maintainers = with maintainers; [ bkchr ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

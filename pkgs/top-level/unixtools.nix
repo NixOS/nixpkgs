@@ -61,7 +61,11 @@ let
     };
     column = {
       linux = pkgs.util-linux;
+<<<<<<< HEAD
       darwin = pkgs.darwin.text_cmds;
+=======
+      darwin = pkgs.netbsd.column;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
     eject = {
       linux = pkgs.util-linux;
@@ -72,7 +76,11 @@ let
       darwin = pkgs.darwin.system_cmds;
     };
     getent = {
+<<<<<<< HEAD
       linux = if stdenv.hostPlatform.libc == "glibc" then pkgs.stdenv.cc.libc.getent
+=======
+      linux = if stdenv.hostPlatform.libc == "glibc" then pkgs.stdenv.cc.libc
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
               else pkgs.netbsd.getent;
       darwin = pkgs.netbsd.getent;
     };
@@ -106,7 +114,11 @@ let
     };
     locale = {
       linux = pkgs.glibc;
+<<<<<<< HEAD
       darwin = pkgs.darwin.adv_cmds;
+=======
+      darwin = pkgs.netbsd.locale;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
     logger = {
       linux = pkgs.util-linux;

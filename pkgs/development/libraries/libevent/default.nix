@@ -20,8 +20,11 @@ stdenv.mkDerivation rec {
     })
   ];
 
+<<<<<<< HEAD
   configureFlags = lib.optional (!sslSupport) "--disable-openssl";
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   preConfigure = lib.optionalString (lib.versionAtLeast stdenv.hostPlatform.darwinMinVersion "11") ''
     MACOSX_DEPLOYMENT_TARGET=10.16
   '';

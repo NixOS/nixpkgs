@@ -1,5 +1,9 @@
 { lib
 , fetchFromGitHub
+<<<<<<< HEAD
+=======
+, callPackage
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , semgrep-core
 , buildPythonApplication
 , pythonPackages
@@ -10,6 +14,7 @@
 }:
 
 let
+<<<<<<< HEAD
   common = import ./common.nix { inherit lib; };
 in
 buildPythonApplication rec {
@@ -24,6 +29,14 @@ buildPythonApplication rec {
 
   # prepare a subset of the submodules as we only need a handful
   # and there are many many submodules total
+=======
+  common = callPackage ./common.nix { };
+in
+buildPythonApplication rec {
+  pname = "semgrep";
+  inherit (common) src version;
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   postPatch = (lib.concatStringsSep "\n" (lib.mapAttrsToList
     (
       path: submodule: ''
@@ -34,7 +47,11 @@ buildPythonApplication rec {
         ln -s ${submodule}/ ${path}
       ''
     )
+<<<<<<< HEAD
     passthru.submodulesSubset)) + ''
+=======
+    common.submodules)) + ''
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     cd cli
   '';
 
@@ -102,6 +119,7 @@ buildPythonApplication rec {
     makeWrapperArgs+=(--prefix PATH : ${lib.makeBinPath [ semgrep-core ]})
   '';
 
+<<<<<<< HEAD
   postInstall = ''
     chmod +x $out/bin/{,py}semgrep
   '';
@@ -109,11 +127,18 @@ buildPythonApplication rec {
   passthru = {
     inherit common;
     submodulesSubset = lib.mapAttrs (k: args: fetchFromGitHub args) common.submodules;
+=======
+  passthru = {
+    inherit common;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     updateScript = ./update.sh;
   };
 
   meta = common.meta // {
     description = common.meta.description + " - cli";
+<<<<<<< HEAD
     inherit (semgrep-core.meta) platforms;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

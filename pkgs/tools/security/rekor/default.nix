@@ -4,13 +4,21 @@ let
   generic = { pname, packageToBuild, description }:
     buildGoModule rec {
       inherit pname;
+<<<<<<< HEAD
       version = "1.2.2";
+=======
+      version = "1.1.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
       src = fetchFromGitHub {
         owner = "sigstore";
         repo = "rekor";
         rev = "v${version}";
+<<<<<<< HEAD
         hash = "sha256-U7KxkPYVAy3/olXsEgPMX/kzg0KvYMovLO4LWw8guE4=";
+=======
+        hash = "sha256-/zNDruJsnLlqHud67S8/QpNEPLfFcboA+2SWLB1jzbM=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         # populate values that require us to use git. By doing this in postFetch we
         # can delete .git afterwards and maintain better reproducibility of the src.
         leaveDotGit = true;
@@ -23,7 +31,11 @@ let
         '';
       };
 
+<<<<<<< HEAD
       vendorHash = "sha256-hZyoVlNrPKE6ub94jVEOLGvxWoXKxFYcsEZyRrZuNkQ=";
+=======
+      vendorHash = "sha256-iQBVMYt5hXSp7y0gzKCMae3gHCvS6CN+/mDWmt1yPh8=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
       nativeBuildInputs = [ installShellFiles ];
 

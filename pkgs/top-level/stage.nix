@@ -8,6 +8,7 @@
    arguments. Normal users should not import this directly but instead
    import `pkgs/default.nix` or `default.nix`. */
 
+<<<<<<< HEAD
 let
   # An overlay to auto-call packages in ../by-name.
   # By defining it at the top of the file,
@@ -15,6 +16,8 @@ let
   # thanks to Nix's import-value cache.
   autoCalledPackages = import ./by-name-overlay.nix ../by-name;
 in
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 { ## Misc parameters kept the same for all stages
   ##
@@ -266,12 +269,19 @@ let
       overlays = [ (self': super': {
         pkgsStatic = super';
       })] ++ overlays;
+<<<<<<< HEAD
       crossSystem = {
         isStatic = true;
         parsed =
           if stdenv.isLinux
           then makeMuslParsedPlatform stdenv.hostPlatform.parsed
           else stdenv.hostPlatform.parsed;
+=======
+    } // lib.optionalAttrs stdenv.hostPlatform.isLinux {
+      crossSystem = {
+        isStatic = true;
+        parsed = makeMuslParsedPlatform stdenv.hostPlatform.parsed;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       } // lib.optionalAttrs (stdenv.hostPlatform.system == "powerpc64-linux") {
         gcc.abi = "elfv2";
       };
@@ -286,7 +296,10 @@ let
     stdenvAdapters
     trivialBuilders
     splice
+<<<<<<< HEAD
     autoCalledPackages
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     allPackages
     otherPackageSets
     aliases

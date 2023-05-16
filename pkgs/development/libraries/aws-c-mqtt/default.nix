@@ -13,13 +13,21 @@
 
 stdenv.mkDerivation rec {
   pname = "aws-c-mqtt";
+<<<<<<< HEAD
   version = "0.8.14";
+=======
+  version = "0.8.8";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "awslabs";
     repo = "aws-c-mqtt";
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-LPhd4ygh/3BtqDZwWtigXWUGZ0fzkcWkFl6dpJIspow=";
+=======
+    sha256 = "sha256-bt5Qjw+CqgTfi/Ibhc4AwmJxr22Q6m3ygpmeMhvQTT0=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

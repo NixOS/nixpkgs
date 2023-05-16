@@ -54,6 +54,10 @@ rustPlatform.buildRustPackage rec {
       code is appropriate.
     '';
     license = with licenses; [ asl20 /* or */ mit ];
+<<<<<<< HEAD
     maintainers = with maintainers; [ evanjs jk matthiasbeyer ];
+=======
+    maintainers = with maintainers; [ evanjs jk ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

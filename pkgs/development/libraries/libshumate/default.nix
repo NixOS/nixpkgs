@@ -18,7 +18,11 @@
 
 stdenv.mkDerivation rec {
   pname = "libshumate";
+<<<<<<< HEAD
   version = "1.0.5";
+=======
+  version = "1.0.3";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   outputs = [ "out" "dev" "devdoc" ];
   outputBin = "devdoc"; # demo app
@@ -28,7 +32,11 @@ stdenv.mkDerivation rec {
     owner = "GNOME";
     repo = "libshumate";
     rev = version;
+<<<<<<< HEAD
     sha256 = "mHfhCKzLfP1BkqM+FiLUlo/I0TCe3G8C0lmO6007pMY=";
+=======
+    sha256 = "gT6jpFN0mkSdDs+8GQa0qKuL5KLzxanBMGwA4EATW7Y=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

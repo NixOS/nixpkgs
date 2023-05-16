@@ -2,11 +2,19 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "source-serif";
+<<<<<<< HEAD
   version = "4.005";
 
   src = fetchzip {
     url = "https://github.com/adobe-fonts/source-serif/archive/refs/tags/${version}R.zip";
     hash = "sha256-djeRJWcKqirkHus52JSeZJXeB7yMTnUXpkPxyzgRC04=";
+=======
+  version = "4.004";
+
+  src = fetchzip {
+    url = "https://github.com/adobe-fonts/source-serif/releases/download/${version}R/source-serif-${version}.zip";
+    hash = "sha256-tGSMOwYBEZat7MI78wkPr6lgJdsOdOaIZb+IAOoOlq4=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   installPhase = ''

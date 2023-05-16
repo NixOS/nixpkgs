@@ -13,7 +13,11 @@
 
 buildPythonPackage rec {
   pname = "lsprotocol";
+<<<<<<< HEAD
   version = "2023.0.0a2";
+=======
+  version = "2023.0.0a1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -22,7 +26,11 @@ buildPythonPackage rec {
     owner = "microsoft";
     repo = pname;
     rev = "refs/tags/${version}";
+<<<<<<< HEAD
     hash = "sha256-AEvs2fb8nhWEFMyLvwNv9HoxxxE50/KW3TGZ5pDf4dc=";
+=======
+    hash = "sha256-gfsqn9NtO7meMks4dUhrTYVlr69Ffh339GD9FvCJvJM=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

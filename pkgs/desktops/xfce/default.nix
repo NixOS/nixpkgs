@@ -2,12 +2,28 @@
 , lib
 , pkgs
 , generateSplicesForMkScope
+<<<<<<< HEAD
 , makeScopeWithSplicing'
 }:
 
 makeScopeWithSplicing' {
   otherSplices = generateSplicesForMkScope "xfce";
   f = (self:
+=======
+, makeScopeWithSplicing
+}:
+
+let
+  keep = _self: { };
+  extra = _spliced0: { };
+
+in
+makeScopeWithSplicing
+  (generateSplicesForMkScope "xfce")
+  keep
+  extra
+  (self:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     let
       inherit (self) callPackage;
     in
@@ -170,5 +186,9 @@ makeScopeWithSplicing' {
       thunar-bare = self.thunar.override { thunarPlugins = [ ]; }; # added 2019-11-04
 
       xfce4-hardware-monitor-plugin = throw "xfce.xfce4-hardware-monitor-plugin has been removed: abandoned by upstream and does not build"; # added 2023-01-15
+<<<<<<< HEAD
     });
 }
+=======
+    })
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)

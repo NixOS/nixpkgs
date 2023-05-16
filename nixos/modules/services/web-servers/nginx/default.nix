@@ -261,6 +261,26 @@ let
 
       ${proxyCachePathConfig}
 
+<<<<<<< HEAD
+=======
+      ${optionalString cfg.statusPage ''
+        server {
+          listen ${toString cfg.defaultHTTPListenPort};
+          ${optionalString enableIPv6 "listen [::]:${toString cfg.defaultHTTPListenPort};" }
+
+          server_name localhost;
+
+          location /nginx_status {
+            stub_status on;
+            access_log off;
+            allow 127.0.0.1;
+            ${optionalString enableIPv6 "allow ::1;"}
+            deny all;
+          }
+        }
+      ''}
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       ${vhosts}
 
       ${cfg.appendHttpConfig}
@@ -292,6 +312,7 @@ let
         onlySSL = vhost.onlySSL || vhost.enableSSL;
         hasSSL = onlySSL || vhost.addSSL || vhost.forceSSL;
 
+<<<<<<< HEAD
         # First evaluation of defaultListen based on a set of listen lines.
         mkDefaultListenVhost = listenLines:
           # If this vhost has SSL or is a SSL rejection host.
@@ -316,38 +337,68 @@ let
             let addrs = if vhost.listenAddresses != [] then vhost.listenAddresses else cfg.defaultListenAddresses;
             in mkDefaultListenVhost (map (addr: { inherit addr; }) addrs);
 
+=======
+        defaultListen =
+          if vhost.listen != [] then vhost.listen
+          else
+            let addrs = if vhost.listenAddresses != [] then vhost.listenAddresses else cfg.defaultListenAddresses;
+            in optionals (hasSSL || vhost.rejectSSL) (map (addr: { inherit addr; port = cfg.defaultSSLListenPort; ssl = true; }) addrs)
+              ++ optionals (!onlySSL) (map (addr: { inherit addr; port = cfg.defaultHTTPListenPort; ssl = false; }) addrs);
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
         hostListen =
           if vhost.forceSSL
             then filter (x: x.ssl) defaultListen
             else defaultListen;
 
+<<<<<<< HEAD
         listenString = { addr, port, ssl, proxyProtocol ? false, extraParameters ? [], ... }:
+=======
+        listenString = { addr, port, ssl, extraParameters ? [], ... }:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           # UDP listener for QUIC transport protocol.
           (optionalString (ssl && vhost.quic) ("
             listen ${addr}:${toString port} quic "
           + optionalString vhost.default "default_server "
           + optionalString vhost.reuseport "reuseport "
+<<<<<<< HEAD
           + optionalString (extraParameters != []) (concatStringsSep " "
             (let inCompatibleParameters = [ "ssl" "proxy_protocol" "http2" ];
+=======
+          + optionalString (extraParameters != []) (concatStringsSep " " (
+            let inCompatibleParameters = [ "ssl" "proxy_protocol" "http2" ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
                 isCompatibleParameter = param: !(any (p: p == param) inCompatibleParameters);
             in filter isCompatibleParameter extraParameters))
           + ";"))
           + "
+<<<<<<< HEAD
             listen ${addr}:${toString port} "
           + optionalString (ssl && vhost.http2 && oldHTTP2) "http2 "
           + optionalString ssl "ssl "
           + optionalString vhost.default "default_server "
           + optionalString vhost.reuseport "reuseport "
           + optionalString proxyProtocol "proxy_protocol "
+=======
+
+            listen ${addr}:${toString port} "
+          + optionalString (ssl && vhost.http2) "http2 "
+          + optionalString ssl "ssl "
+          + optionalString vhost.default "default_server "
+          + optionalString vhost.reuseport "reuseport "
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           + optionalString (extraParameters != []) (concatStringsSep " " extraParameters)
           + ";";
 
         redirectListen = filter (x: !x.ssl) defaultListen;
 
+<<<<<<< HEAD
         # The acme-challenge location doesn't need to be added if we are not using any automated
         # certificate provisioning and can also be omitted when we use a certificate obtained via a DNS-01 challenge
         acmeLocation = optionalString (vhost.enableACME || (vhost.useACMEHost != null && config.security.acme.certs.${vhost.useACMEHost}.dnsProvider == null)) ''
+=======
+        acmeLocation = optionalString (vhost.enableACME || vhost.useACMEHost != null) ''
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           # Rule for legitimate ACME Challenge requests (like /.well-known/acme-challenge/xxxxxxxxx)
           # We use ^~ here, so that we don't check any regexes (which could
           # otherwise easily override this intended match accidentally).
@@ -380,9 +431,12 @@ let
         server {
           ${concatMapStringsSep "\n" listenString hostListen}
           server_name ${vhost.serverName} ${concatStringsSep " " vhost.serverAliases};
+<<<<<<< HEAD
           ${optionalString (hasSSL && vhost.http2 && !oldHTTP2) ''
             http2 on;
           ''}
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           ${optionalString (hasSSL && vhost.quic) ''
             http3 ${if vhost.http3 then "on" else "off"};
             http3_hq ${if vhost.http3_hq then "on" else "off"};
@@ -466,8 +520,11 @@ let
   );
 
   mkCertOwnershipAssertion = import ../../../security/acme/mk-cert-ownership-assertion.nix;
+<<<<<<< HEAD
 
   oldHTTP2 = versionOlder cfg.package.version "1.25.1";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 in
 
 {
@@ -547,6 +604,7 @@ in
         '';
       };
 
+<<<<<<< HEAD
       defaultListen = mkOption {
         type = with types; listOf (submodule {
           options = {
@@ -592,6 +650,8 @@ in
         '';
       };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       defaultListenAddresses = mkOption {
         type = types.listOf types.str;
         default = [ "0.0.0.0" ] ++ optional enableIPv6 "[::0]";
@@ -599,7 +659,10 @@ in
         example = literalExpression ''[ "10.0.0.12" "[2002:a00:1::]" ]'';
         description = lib.mdDoc ''
           If vhosts do not specify listenAddresses, use these addresses by default.
+<<<<<<< HEAD
           This is akin to writing `defaultListen = [ { addr = "0.0.0.0" } ]`.
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         '';
       };
 
@@ -705,7 +768,11 @@ in
           Configuration lines appended to the generated Nginx
           configuration file. Commonly used by different modules
           providing http snippets. {option}`appendConfig`
+<<<<<<< HEAD
           can be specified more than once and its value will be
+=======
+          can be specified more than once and it's value will be
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           concatenated (contrary to {option}`config` which
           can be set only once).
         '';
@@ -1132,6 +1199,7 @@ in
           which can be achieved by setting `services.nginx.package = pkgs.nginxQuic;`.
         '';
       }
+<<<<<<< HEAD
 
       {
         # The idea is to understand whether there is a virtual host with a listen configuration
@@ -1158,6 +1226,8 @@ in
           to answer to ACME requests.
         '';
       }
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     ] ++ map (name: mkCertOwnershipAssertion {
       inherit (cfg) group user;
       cert = config.security.acme.certs.${name};
@@ -1167,6 +1237,7 @@ in
     services.nginx.additionalModules = optional cfg.recommendedBrotliSettings pkgs.nginxModules.brotli
       ++ lib.optional cfg.recommendedZstdSettings pkgs.nginxModules.zstd;
 
+<<<<<<< HEAD
     services.nginx.virtualHosts.localhost = mkIf cfg.statusPage {
       listenAddresses = lib.mkDefault ([
         "0.0.0.0"
@@ -1182,6 +1253,8 @@ in
       };
     };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     systemd.services.nginx = {
       description = "Nginx Web Server";
       wantedBy = [ "multi-user.target" ];

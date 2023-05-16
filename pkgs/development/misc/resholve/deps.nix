@@ -2,7 +2,10 @@
 , callPackage
 , fetchFromGitHub
 , python27
+<<<<<<< HEAD
 , fetchPypi
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , ...
 }:
 
@@ -48,7 +51,11 @@ rec {
     pname = "six";
     version = "1.16.0";
 
+<<<<<<< HEAD
     src = fetchPypi {
+=======
+    src = python27.pkgs.fetchPypi {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       inherit pname version;
       sha256 = "1e61c37477a1626458e36f7b1d82aa5c9b094fa4802892072e49de9c60c4c926";
     };
@@ -65,7 +72,11 @@ rec {
     pname = "typing";
     version = "3.10.0.0";
 
+<<<<<<< HEAD
     src = fetchPypi {
+=======
+    src = python27.pkgs.fetchPypi {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       inherit pname version;
       sha256 = "13b4ad211f54ddbf93e5901a9967b1e07720c1d1b78d596ac6a439641aa1b130";
     };

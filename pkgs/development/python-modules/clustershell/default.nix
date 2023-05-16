@@ -98,7 +98,11 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
+<<<<<<< HEAD
     broken = stdenv.isDarwin;
+=======
+    broken = (stdenv.isLinux && stdenv.isAarch64) || stdenv.isDarwin;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     description = "Scalable Python framework for cluster administration";
     homepage = "https://cea-hpc.github.io/clustershell";
     license = licenses.lgpl21;

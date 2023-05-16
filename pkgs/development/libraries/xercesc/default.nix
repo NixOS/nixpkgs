@@ -1,8 +1,12 @@
+<<<<<<< HEAD
 { stdenv
 , lib
 , fetchurl
 , curl
 }:
+=======
+{ lib, stdenv, fetchurl }:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 stdenv.mkDerivation rec {
   pname = "xerces-c";
@@ -13,6 +17,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-PY7Bx/lOOP7g5Mpa0eHZ2yPL86ELumJva0r6Le2v5as=";
   };
 
+<<<<<<< HEAD
   buildInputs = [
     curl
   ];
@@ -23,6 +28,10 @@ stdenv.mkDerivation rec {
     "--enable-netaccessor-curl"
   ];
 
+=======
+  # Disable SSE2 extensions on platforms for which they are not enabled by default
+  configureFlags = [ "--disable-sse2" ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   enableParallelBuilding = true;
 
   meta = {

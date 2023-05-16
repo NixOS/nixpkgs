@@ -32,7 +32,11 @@ stdenv.mkDerivation rec {
         bin = "source/macos/fasmg";
         asm = "source/macos/fasmg.asm";
       };
+<<<<<<< HEAD
     }.${system} or (throw "Unsupported system: ${system}");
+=======
+    }.${system} or (throw "Unsopported system: ${system}");
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   in ''
     chmod +x ${path.bin}

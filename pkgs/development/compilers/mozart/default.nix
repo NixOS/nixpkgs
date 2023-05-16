@@ -1,10 +1,20 @@
 { lib
+<<<<<<< HEAD
 , fetchurl
 , fetchpatch
 , cmake
 , unzip
 , makeWrapper
 , boost
+=======
+, fetchFromGitHub
+, fetchurl
+, cmake
+, unzip
+, makeWrapper
+, boost169
+, pinnedBoost ? boost169
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , llvmPackages
 , gmp
 , emacs
@@ -32,6 +42,7 @@ in stdenv.mkDerivation rec {
     sha256 = "1hgh1a8hgzgr6781as4c4rc52m2wbazdlw3646s57c719g5xphjz";
   };
 
+<<<<<<< HEAD
   patches = [
     ./patch-limits.diff
     (fetchpatch {
@@ -40,6 +51,9 @@ in stdenv.mkDerivation rec {
       hash = "sha256-AnOrBnxoCxqis+RdCsq8EKBg//jcNHSOFYUvf7vh+Hc=";
     })
   ];
+=======
+  patches = [ ./patch-limits.diff ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   postConfigure = ''
     cp ${bootcompiler} bootcompiler/bootcompiler.jar
@@ -61,7 +75,11 @@ in stdenv.mkDerivation rec {
   '';
 
   buildInputs = [
+<<<<<<< HEAD
     boost
+=======
+    pinnedBoost
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     gmp
     emacs
     jre_headless
@@ -74,9 +92,12 @@ in stdenv.mkDerivation rec {
     maintainers = with maintainers; [ layus h7x4 ];
     license = licenses.bsd2;
     homepage = "https://mozart.github.io";
+<<<<<<< HEAD
     platforms = platforms.all;
     # Trace/BPT trap: 5
     broken = stdenv.isDarwin;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
 }

@@ -10,6 +10,7 @@
 , CoreAudio
 }:
 
+<<<<<<< HEAD
 let
   # TODO: recheck after 1.59
   miniaudio' = miniaudio.overrideAttrs (oldAttrs: rec {
@@ -24,6 +25,11 @@ in
 buildPythonPackage rec {
   pname = "miniaudio";
   version = "1.59";
+=======
+buildPythonPackage rec {
+  pname = "miniaudio";
+  version = "1.56";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   disabled = pythonOlder "3.6";
 
@@ -33,12 +39,20 @@ buildPythonPackage rec {
     owner = "irmen";
     repo = "pyminiaudio";
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-tMQOGqEThtownW3cnNpCzWye0Uo/Es7E8abVySo1QnQ=";
+=======
+    hash = "sha256-vNh9BupU6T+Gfa8fdt8r3/vqtTtfVDyrxM9GkFUcDcI=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   postPatch = ''
     rm -r miniaudio
+<<<<<<< HEAD
     ln -s ${miniaudio'} miniaudio
+=======
+    ln -s ${miniaudio} miniaudio
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     substituteInPlace build_ffi_module.py \
       --replace "miniaudio/stb_vorbis.c" "miniaudio/extras/stb_vorbis.c";
     substituteInPlace miniaudio.c \

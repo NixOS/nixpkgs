@@ -3,6 +3,10 @@
 , fetchPypi
 , hatchling
 , isPy3k
+<<<<<<< HEAD
+=======
+, backports_functools_lru_cache
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 buildPythonPackage rec {

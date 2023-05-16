@@ -1,7 +1,10 @@
 { lib
 , stdenv
 , fetchFromGitHub
+<<<<<<< HEAD
 , fetchpatch
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , cmake
 , example-robot-data
 , pinocchio
@@ -9,6 +12,7 @@
 , python3Packages
 }:
 
+<<<<<<< HEAD
 stdenv.mkDerivation (finalAttrs: {
   pname = "crocoddyl";
   version = "2.0.1";
@@ -19,6 +23,18 @@ stdenv.mkDerivation (finalAttrs: {
     rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
     hash = "sha256-h7rzLSvmWOZCP8rvmUEhFeMEiPhojfbvkt+fNKpgoXo=";
+=======
+stdenv.mkDerivation rec {
+  pname = "crocoddyl";
+  version = "1.9.0";
+
+  src = fetchFromGitHub {
+    owner = "loco-3d";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "sha256-IQ+8ZZXVTTRFa4uGetpylRab4P9MSTU2YtytYA3z6ys=";
+    fetchSubmodules = true;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   strictDeps = true;
@@ -40,6 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-DBUILD_PYTHON_INTERFACE=OFF"
   ];
 
+<<<<<<< HEAD
   prePatch = ''
     substituteInPlace \
       examples/CMakeLists.txt \
@@ -55,11 +72,20 @@ stdenv.mkDerivation (finalAttrs: {
     python3Packages.scipy
   ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   meta = with lib; {
     description = "Crocoddyl optimal control library";
     homepage = "https://github.com/loco-3d/crocoddyl";
     license = licenses.bsd3;
+<<<<<<< HEAD
     maintainers = with maintainers; [ nim65s wegank ];
     platforms = platforms.unix;
   };
 })
+=======
+    maintainers = with maintainers; [ wegank ];
+    platforms = platforms.unix;
+  };
+}
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)

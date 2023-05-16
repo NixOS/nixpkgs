@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 { lib, stdenv, buildGoModule, fetchFromGitHub, git, Cocoa, Virtualization, sigtool, testers, linuxkit }:
+=======
+{ lib, stdenv, buildGoModule, fetchFromGitHub, git, Virtualization, testers, linuxkit }:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 buildGoModule rec {
   pname = "linuxkit";
@@ -15,6 +19,7 @@ buildGoModule rec {
 
   modRoot = "./src/cmd/linuxkit";
 
+<<<<<<< HEAD
   patches = [
     ./darwin-os-version.patch
     ./support-apple-11-sdk.patch
@@ -26,6 +31,9 @@ buildGoModule rec {
   #   authority.
   nativeBuildInputs = lib.optionals stdenv.isDarwin [ sigtool ];
   buildInputs = lib.optionals stdenv.isDarwin [ Cocoa Virtualization ];
+=======
+  buildInputs = lib.optionals stdenv.isDarwin [ Virtualization ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   ldflags = [
     "-s"
@@ -35,6 +43,7 @@ buildGoModule rec {
 
   nativeCheckInputs = [ git ];
 
+<<<<<<< HEAD
   # - Because this package definition doesn't build using the source's Makefile,
   #   we must manually call the sign target.
   # - The binary stripping that nixpkgs does by default in the
@@ -46,6 +55,8 @@ buildGoModule rec {
   postFixup = lib.optionalString stdenv.isDarwin ''
     make sign LOCAL_TARGET=$out/bin/linuxkit
   '';
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   passthru.tests.version = testers.testVersion {
     package = linuxkit;
     command = "linuxkit version";
@@ -56,5 +67,9 @@ buildGoModule rec {
     license = licenses.asl20;
     homepage = "https://github.com/linuxkit/linuxkit";
     maintainers = with maintainers; [ nicknovitski ];
+<<<<<<< HEAD
+=======
+    platforms = platforms.unix;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

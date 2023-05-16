@@ -7,7 +7,10 @@ let
     isPath
     split
     match
+<<<<<<< HEAD
     typeOf
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     ;
 
   inherit (lib.lists)
@@ -19,8 +22,11 @@ let
     all
     concatMap
     foldl'
+<<<<<<< HEAD
     take
     drop
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     ;
 
   inherit (lib.strings)
@@ -103,6 +109,7 @@ let
     # An empty string is not a valid relative path, so we need to return a `.` when we have no components
     (if components == [] then "." else concatStringsSep "/" components);
 
+<<<<<<< HEAD
   # Type: Path -> { root :: Path, components :: [ String ] }
   #
   # Deconstruct a path value type into:
@@ -133,6 +140,15 @@ in /* No rec! Add dependencies on this file at the top. */ {
     - Not influenced by subpath [normalisation](#function-library-lib.path.subpath.normalise):
 
           append p s == append p (subpath.normalise s)
+=======
+in /* No rec! Add dependencies on this file at the top. */ {
+
+  /* Append a subpath string to a path.
+
+    Like `path + ("/" + string)` but safer, because it errors instead of returning potentially surprising results.
+    More specifically, it checks that the first argument is a [path value type](https://nixos.org/manual/nix/stable/language/values.html#type-path"),
+    and that the second argument is a valid subpath string (see `lib.path.subpath.isValid`).
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     Type:
       append :: Path -> String -> Path
@@ -175,6 +191,7 @@ in /* No rec! Add dependencies on this file at the top. */ {
           ${subpathInvalidReason subpath}'';
     path + ("/" + subpath);
 
+<<<<<<< HEAD
   /*
     Whether the first path is a component-wise prefix of the second path.
 
@@ -361,6 +378,45 @@ in /* No rec! Add dependencies on this file at the top. */ {
       # Doesn't need to be normalised
       subpath.isValid "./foo//bar/"
       => true
+=======
+  /* Whether a value is a valid subpath string.
+
+  - The value is a string
+
+  - The string is not empty
+
+  - The string doesn't start with a `/`
+
+  - The string doesn't contain any `..` path components
+
+  Type:
+    subpath.isValid :: String -> Bool
+
+  Example:
+    # Not a string
+    subpath.isValid null
+    => false
+
+    # Empty string
+    subpath.isValid ""
+    => false
+
+    # Absolute path
+    subpath.isValid "/foo"
+    => false
+
+    # Contains a `..` path component
+    subpath.isValid "../foo"
+    => false
+
+    # Valid subpath
+    subpath.isValid "foo/bar"
+    => true
+
+    # Doesn't need to be normalised
+    subpath.isValid "./foo//bar/"
+    => true
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   */
   subpath.isValid =
     # The value to check
@@ -368,6 +424,7 @@ in /* No rec! Add dependencies on this file at the top. */ {
     subpathInvalidReason value == null;
 
 
+<<<<<<< HEAD
   /*
     Join subpath strings together using `/`, returning a normalised subpath string.
 
@@ -378,6 +435,17 @@ in /* No rec! Add dependencies on this file at the top. */ {
     - The result gets [normalised](#function-library-lib.path.subpath.normalise).
 
     - The edge case of an empty list gets properly handled by returning the neutral subpath `"./."`.
+=======
+  /* Join subpath strings together using `/`, returning a normalised subpath string.
+
+    Like `concatStringsSep "/"` but safer, specifically:
+
+    - All elements must be valid subpath strings, see `lib.path.subpath.isValid`
+
+    - The result gets normalised, see `lib.path.subpath.normalise`
+
+    - The edge case of an empty list gets properly handled by returning the neutral subpath `"./."`
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     Laws:
 
@@ -391,12 +459,21 @@ in /* No rec! Add dependencies on this file at the top. */ {
           subpath.join [ (subpath.normalise p) "./." ] == subpath.normalise p
           subpath.join [ "./." (subpath.normalise p) ] == subpath.normalise p
 
+<<<<<<< HEAD
     - Normalisation - the result is [normalised](#function-library-lib.path.subpath.normalise):
 
           subpath.join ps == subpath.normalise (subpath.join ps)
 
     - For non-empty lists, the implementation is equivalent to [normalising](#function-library-lib.path.subpath.normalise) the result of `concatStringsSep "/"`.
       Note that the above laws can be derived from this one:
+=======
+    - Normalisation - the result is normalised according to `lib.path.subpath.normalise`:
+
+          subpath.join ps == subpath.normalise (subpath.join ps)
+
+    - For non-empty lists, the implementation is equivalent to normalising the result of `concatStringsSep "/"`.
+      Note that the above laws can be derived from this one.
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
           ps != [] -> subpath.join ps == subpath.normalise (concatStringsSep "/" ps)
 
@@ -443,6 +520,7 @@ in /* No rec! Add dependencies on this file at the top. */ {
               ${subpathInvalidReason path}''
       ) 0 subpaths;
 
+<<<<<<< HEAD
   /*
     Split [a subpath](#function-library-lib.path.subpath.isValid) into its path component strings.
     Throw an error if the subpath isn't valid.
@@ -547,6 +625,80 @@ in /* No rec! Add dependencies on this file at the top. */ {
       # error on absolute path
       subpath.normalise "/foo"
       => <error>
+=======
+  /* Normalise a subpath. Throw an error if the subpath isn't valid, see
+  `lib.path.subpath.isValid`
+
+  - Limit repeating `/` to a single one
+
+  - Remove redundant `.` components
+
+  - Remove trailing `/` and `/.`
+
+  - Add leading `./`
+
+  Laws:
+
+  - Idempotency - normalising multiple times gives the same result:
+
+        subpath.normalise (subpath.normalise p) == subpath.normalise p
+
+  - Uniqueness - there's only a single normalisation for the paths that lead to the same file system node:
+
+        subpath.normalise p != subpath.normalise q -> $(realpath ${p}) != $(realpath ${q})
+
+  - Don't change the result when appended to a Nix path value:
+
+        base + ("/" + p) == base + ("/" + subpath.normalise p)
+
+  - Don't change the path according to `realpath`:
+
+        $(realpath ${p}) == $(realpath ${subpath.normalise p})
+
+  - Only error on invalid subpaths:
+
+        builtins.tryEval (subpath.normalise p)).success == subpath.isValid p
+
+  Type:
+    subpath.normalise :: String -> String
+
+  Example:
+    # limit repeating `/` to a single one
+    subpath.normalise "foo//bar"
+    => "./foo/bar"
+
+    # remove redundant `.` components
+    subpath.normalise "foo/./bar"
+    => "./foo/bar"
+
+    # add leading `./`
+    subpath.normalise "foo/bar"
+    => "./foo/bar"
+
+    # remove trailing `/`
+    subpath.normalise "foo/bar/"
+    => "./foo/bar"
+
+    # remove trailing `/.`
+    subpath.normalise "foo/bar/."
+    => "./foo/bar"
+
+    # Return the current directory as `./.`
+    subpath.normalise "."
+    => "./."
+
+    # error on `..` path components
+    subpath.normalise "foo/../bar"
+    => <error>
+
+    # error on empty string
+    subpath.normalise ""
+    => <error>
+
+    # error on absolute path
+    subpath.normalise "/foo"
+    => <error>
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   */
   subpath.normalise =
     # The subpath string to normalise

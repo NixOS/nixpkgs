@@ -39,7 +39,11 @@ rustPlatform.buildRustPackage rec {
     description = "A fast line-oriented regex search tool, similar to ag and ack";
     homepage = "https://github.com/BurntSushi/ripgrep";
     license = licenses.unlicense;
+<<<<<<< HEAD
     maintainers = [];
+=======
+    maintainers = [ maintainers.tailhook ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }
 ```
@@ -558,7 +562,11 @@ buildPythonPackage rec {
     hash = "sha256-miW//pnOmww2i6SOGbkrAIdc/JMDT4FJLqdMFojZeoY=";
   };
 
+<<<<<<< HEAD
   sourceRoot = "${src.name}/bindings/python";
+=======
+  sourceRoot = "source/bindings/python";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nativeBuildInputs = [
     cargo
@@ -926,7 +934,11 @@ rustPlatform.buildRustPackage rec {
     description = "A fast line-oriented regex search tool, similar to ag and ack";
     homepage = "https://github.com/BurntSushi/ripgrep";
     license = with licenses; [ mit unlicense ];
+<<<<<<< HEAD
     maintainers = with maintainers; [];
+=======
+    maintainers = with maintainers; [ tailhook ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }
 ```

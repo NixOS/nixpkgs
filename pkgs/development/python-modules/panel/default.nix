@@ -16,7 +16,11 @@
 
 buildPythonPackage rec {
   pname = "panel";
+<<<<<<< HEAD
   version = "1.2.2";
+=======
+  version = "0.14.4";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   format = "wheel";
 
@@ -25,7 +29,11 @@ buildPythonPackage rec {
   # tries to fetch even more artifacts
   src = fetchPypi {
     inherit pname version format;
+<<<<<<< HEAD
     hash = "sha256-RMRjxcUp6MTs001wdNfC/e6diOcgtqrSaVIOSQfPgTs=";
+=======
+    hash = "sha256-3U/PL8cnbNPw3xEM56YZesQEDXTE79yMCSsjdxwfUU0=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [
@@ -61,6 +69,10 @@ buildPythonPackage rec {
     homepage = "https://github.com/holoviz/panel";
     changelog = "https://github.com/holoviz/panel/releases/tag/v${version}";
     license = licenses.bsd3;
+<<<<<<< HEAD
     maintainers = with maintainers; [ ];
+=======
+    maintainers = with maintainers; [ costrouc ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

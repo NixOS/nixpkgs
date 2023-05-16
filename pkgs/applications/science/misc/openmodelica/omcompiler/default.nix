@@ -46,8 +46,13 @@ mkOpenModelicaDerivation ({
 
   preFixup = ''
     for entry in $(find $out -name libipopt.so); do
+<<<<<<< HEAD
       patchelf --shrink-rpath --allowed-rpath-prefixes "$NIX_STORE" "$entry"
       patchelf --set-rpath '$ORIGIN':"$(patchelf --print-rpath $entry)" "$entry"
+=======
+      patchelf --shrink-rpath --allowed-rpath-prefixes /nix/store $entry
+      patchelf --set-rpath '$ORIGIN':"$(patchelf --print-rpath $entry)" $entry
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     done
   '';
 

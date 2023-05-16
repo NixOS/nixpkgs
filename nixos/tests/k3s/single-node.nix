@@ -62,12 +62,18 @@ import ../make-test-python.nix ({ pkgs, lib, k3s, ... }:
       start_all()
 
       machine.wait_for_unit("k3s")
+<<<<<<< HEAD
       machine.succeed("kubectl cluster-info")
       machine.fail("sudo -u noprivs kubectl cluster-info")
+=======
+      machine.succeed("k3s kubectl cluster-info")
+      machine.fail("sudo -u noprivs k3s kubectl cluster-info")
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       '' # Fix-Me: Tests fail for 'aarch64-linux' as: "CONFIG_CGROUP_FREEZER: missing (fail)"
       + lib.optionalString (!pkgs.stdenv.isAarch64) ''machine.succeed("k3s check-config")'' + ''
 
       machine.succeed(
+<<<<<<< HEAD
           "${pauseImage} | ctr image import -"
       )
 
@@ -76,6 +82,16 @@ import ../make-test-python.nix ({ pkgs, lib, k3s, ... }:
       machine.succeed("kubectl apply -f ${testPodYaml}")
       machine.succeed("kubectl wait --for 'condition=Ready' pod/test")
       machine.succeed("kubectl delete -f ${testPodYaml}")
+=======
+          "${pauseImage} | k3s ctr image import -"
+      )
+
+      # Also wait for our service account to show up; it takes a sec
+      machine.wait_until_succeeds("k3s kubectl get serviceaccount default")
+      machine.succeed("k3s kubectl apply -f ${testPodYaml}")
+      machine.succeed("k3s kubectl wait --for 'condition=Ready' pod/test")
+      machine.succeed("k3s kubectl delete -f ${testPodYaml}")
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
       # regression test for #176445
       machine.fail("journalctl -o cat -u k3s.service | grep 'ipset utility not found'")

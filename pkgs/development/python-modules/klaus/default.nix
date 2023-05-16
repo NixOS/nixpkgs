@@ -2,13 +2,21 @@
 
 buildPythonPackage rec {
   pname = "klaus";
+<<<<<<< HEAD
   version = "2.0.3";
+=======
+  version = "2.0.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "jonashaag";
     repo = pname;
     rev = version;
+<<<<<<< HEAD
     hash = "sha256-VAwIdmwdo/Rim2sVlR605Wo5/zkNOMiGkh40qLrENmU=";
+=======
+    hash = "sha256-kQcza2beyekJhRT9RwSdMIkeyapcUDtjgkapK3rocvg=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   prePatch = ''

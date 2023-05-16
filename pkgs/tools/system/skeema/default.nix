@@ -2,13 +2,21 @@
 
 buildGoModule rec {
   pname = "skeema";
+<<<<<<< HEAD
   version = "1.10.1";
+=======
+  version = "1.10.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "skeema";
     repo = "skeema";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-t0UACavJaDorAgxm2gA6FEsMfQ8UQEY/CZbFIFHwfIQ=";
+=======
+    hash = "sha256-JhOQKfJCaZc5PlDWPuYe1Ag9AHkw9RjEQ4N9MSda4rY=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   vendorHash = null;

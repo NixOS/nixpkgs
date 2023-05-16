@@ -11,13 +11,21 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "nicotine-plus";
+<<<<<<< HEAD
   version = "3.2.9";
+=======
+  version = "3.2.8";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "nicotine-plus";
     repo = "nicotine-plus";
     rev = "refs/tags/${version}";
+<<<<<<< HEAD
     sha256 = "sha256-PxtHsBbrzcIAcLyQKD9DV8yqf3ljzGS7gT/ZRfJ8qL4=";
+=======
+    sha256 = "sha256-/l31w7ohBgjeE+Ywuo7aaDZBzVNLFD3dqMRr/P3ge+s=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ gettext wrapGAppsHook gobject-introspection ];

@@ -158,6 +158,7 @@ in
         Docker package to be used in the module.
       '';
     };
+<<<<<<< HEAD
 
     extraPackages = mkOption {
       type = types.listOf types.package;
@@ -167,6 +168,8 @@ in
         Extra packages to add to PATH for the docker daemon process.
       '';
     };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   ###### implementation
@@ -203,8 +206,12 @@ in
         };
 
         path = [ pkgs.kmod ] ++ optional (cfg.storageDriver == "zfs") pkgs.zfs
+<<<<<<< HEAD
           ++ optional cfg.enableNvidia pkgs.nvidia-docker
           ++ cfg.extraPackages;
+=======
+          ++ optional cfg.enableNvidia pkgs.nvidia-docker;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       };
 
       systemd.sockets.docker = {
@@ -236,8 +243,13 @@ in
       };
 
       assertions = [
+<<<<<<< HEAD
         { assertion = cfg.enableNvidia && pkgs.stdenv.isx86_64 -> config.hardware.opengl.driSupport32Bit or false;
           message = "Option enableNvidia on x86_64 requires 32bit support libraries";
+=======
+        { assertion = cfg.enableNvidia -> config.hardware.opengl.driSupport32Bit or false;
+          message = "Option enableNvidia requires 32bit support libraries";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         }];
 
       virtualisation.docker.daemon.settings = {

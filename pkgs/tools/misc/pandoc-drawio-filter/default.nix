@@ -5,7 +5,14 @@
 , pandoc
 , pandocfilters
 , runCommand
+<<<<<<< HEAD
 , texlive
+=======
+, runtimeShell
+, texlive
+, writeScriptBin
+, xvfb-run
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 let

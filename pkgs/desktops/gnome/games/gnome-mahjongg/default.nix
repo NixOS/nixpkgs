@@ -1,11 +1,19 @@
 { stdenv
 , lib
 , fetchurl
+<<<<<<< HEAD
 , pkg-config
 , gnome
 , gtk4
 , wrapGAppsHook4
 , libadwaita
+=======
+, fetchpatch
+, pkg-config
+, gnome
+, gtk3
+, wrapGAppsHook
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , librsvg
 , gettext
 , itstool
@@ -19,6 +27,7 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-mahjongg";
+<<<<<<< HEAD
   version = "3.40.0";
 
   src = fetchurl {
@@ -26,23 +35,54 @@ stdenv.mkDerivation rec {
     sha256 = "WorIbXY8VmDdkCX3vAgxC5IjRvp+Lfe2SMmJTa4/GD8=";
   };
 
+=======
+  version = "3.38.3";
+
+  src = fetchurl {
+    url = "mirror://gnome/sources/gnome-mahjongg/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "144ia3zn9rhwa1xbdkvsz6m0dsysl6mxvqw9bnrlh845hmyy9cfj";
+  };
+
+  patches = [
+    # Fix build with meson 0.61
+    # data/meson.build:24:0: ERROR: Function does not take positional arguments.
+    # data/meson.build:45:0: ERROR: Function does not take positional arguments.
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/gnome-mahjongg/-/commit/a2037b0747163601a5d5b57856d037eecf3a4db7.patch";
+      sha256 = "Wcder6Y9H6c1f8I+IPDvST3umaCU21HgxfXn809JDz0=";
+    })
+  ];
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nativeBuildInputs = [
     meson
     ninja
     vala
     desktop-file-utils
     pkg-config
+<<<<<<< HEAD
     libxml2
     itstool
     gettext
     wrapGAppsHook4
+=======
+    gnome.adwaita-icon-theme
+    libxml2
+    itstool
+    gettext
+    wrapGAppsHook
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     glib # for glib-compile-schemas
   ];
 
   buildInputs = [
     glib
+<<<<<<< HEAD
     gtk4
     libadwaita
+=======
+    gtk3
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     librsvg
   ];
 

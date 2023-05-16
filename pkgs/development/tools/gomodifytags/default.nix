@@ -11,7 +11,11 @@ buildGoModule rec {
     sha256 = "1yhkn9mdvsn9i5v03c5smz32zlhkylnxhkcbjb7llafxzbhzgfm6";
   };
 
+<<<<<<< HEAD
   vendorHash = "sha256-8efqJfu+gtoFbhdlDZfb8NsXV9hBDI2pvAQNH18VVhU=";
+=======
+  vendorSha256 = "sha256-8efqJfu+gtoFbhdlDZfb8NsXV9hBDI2pvAQNH18VVhU=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   meta = {
     description = "Go tool to modify struct field tags";

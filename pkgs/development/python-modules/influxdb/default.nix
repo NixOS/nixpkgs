@@ -23,6 +23,7 @@ buildPythonPackage rec {
     sha256 = "0ymjv322mv6y424fmpd70f87152w55mbwwj6i7p3sjzf0ixmxy26";
   };
 
+<<<<<<< HEAD
   postPatch = ''
     for f in influxdb/tests/dataframe_client_test.py influxdb/tests/influxdb08/dataframe_client_test.py; do
       substituteInPlace "$f" \
@@ -30,6 +31,8 @@ buildPythonPackage rec {
     done
   '';
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   propagatedBuildInputs = [
     requests
     python-dateutil
@@ -38,8 +41,11 @@ buildPythonPackage rec {
     msgpack
   ];
 
+<<<<<<< HEAD
   __darwinAllowLocalNetworking = true;
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nativeCheckInputs = [
     pytestCheckHook
     requests-mock
@@ -58,9 +64,12 @@ buildPythonPackage rec {
     "test_write_points_from_dataframe_with_tags_and_nan_json"
     # Reponse is not empty but `s = '孝'` and the JSON decoder chokes on that
     "test_query_with_empty_result"
+<<<<<<< HEAD
     # Pandas API changes cause it to no longer infer datetimes in the expected manner
     "test_multiquery_into_dataframe"
     "test_multiquery_into_dataframe_dropna"
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   pythonImportsCheck = [ "influxdb" ];

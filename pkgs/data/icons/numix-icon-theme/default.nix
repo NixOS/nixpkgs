@@ -11,13 +11,21 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "numix-icon-theme";
+<<<<<<< HEAD
   version = "23.04.26";
+=======
+  version = "22.11.17";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "numixproject";
     repo = pname;
     rev = version;
+<<<<<<< HEAD
     sha256 = "sha256-6tkE23G67nH/aZjDEtW64RcZsBrcd9iNj1r9lDlUFsk=";
+=======
+    sha256 = "sha256-B6Yg9NkPBpByMMV4GcEBmOlSKx1s0MClGWL2RWIJMwA=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

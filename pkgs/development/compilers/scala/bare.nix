@@ -1,12 +1,20 @@
 { lib, stdenv, fetchurl, makeWrapper, jre, ncurses }:
 
 stdenv.mkDerivation rec {
+<<<<<<< HEAD
   version = "3.3.0";
+=======
+  version = "3.2.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pname = "scala-bare";
 
   src = fetchurl {
     url = "https://github.com/lampepfl/dotty/releases/download/${version}/scala3-${version}.tar.gz";
+<<<<<<< HEAD
     hash = "sha256-Bk7lCKjjucaYQxAsg2qomJQUgCK/N688JqlGTfoQFHU=";
+=======
+    hash = "sha256-t8Xt70LozePoDXE3IHejWOTWCEYcOZytRDKz/QxgmZg=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [ jre ncurses.dev ] ;

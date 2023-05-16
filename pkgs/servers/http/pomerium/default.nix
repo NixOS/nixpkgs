@@ -14,15 +14,26 @@ let
 in
 buildGoModule rec {
   pname = "pomerium";
+<<<<<<< HEAD
   version = "0.22.2";
+=======
+  version = "0.21.3";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   src = fetchFromGitHub {
     owner = "pomerium";
     repo = "pomerium";
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-EcAzj2VLbBPu5afKZcf2fGBbw2kTOYGgSemD70msrqw=";
   };
 
   vendorHash = "sha256-xe8as7OY1+tTSqgpwk2Q1jcBnn89latJpMyx4KG7zg8=";
+=======
+    sha256 = "sha256-OB44/6ha72882SzaMpotchU8RrU10rvUL58sCiCKcok=";
+  };
+
+  vendorSha256 = "sha256-8g3jhxKIT0EGUXh0hrvDbw3i04khqlAfGzM6k4q3O8g=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   ui = mkYarnPackage {
     inherit version;
@@ -37,7 +48,11 @@ buildGoModule rec {
     buildPhase = ''
       runHook preBuild
       yarn --offline build
+<<<<<<< HEAD
       runHook postBuild
+=======
+      runHook postbuild
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     '';
 
     installPhase = ''

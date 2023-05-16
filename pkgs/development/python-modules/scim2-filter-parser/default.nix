@@ -1,7 +1,10 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+<<<<<<< HEAD
 , fetchpatch
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , poetry-core
 , django
 , sly
@@ -21,6 +24,7 @@ buildPythonPackage rec {
     hash = "sha256-QEPTYpWlRPWO6Evyt4zoqUST4ousF67GmiOpD7WUqcI=";
   };
 
+<<<<<<< HEAD
   patches = [
     # https://github.com/15five/scim2-filter-parser/pull/43
     (fetchpatch {
@@ -30,6 +34,8 @@ buildPythonPackage rec {
     })
   ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nativeBuildInputs = [
     poetry-core
   ];

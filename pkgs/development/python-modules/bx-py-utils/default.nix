@@ -1,5 +1,8 @@
 { lib
+<<<<<<< HEAD
 , stdenv
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , buildPythonPackage
 , pythonOlder
 , fetchFromGitHub
@@ -14,7 +17,11 @@
 
 buildPythonPackage rec {
   pname = "bx-py-utils";
+<<<<<<< HEAD
   version = "80";
+=======
+  version = "78";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   disabled = pythonOlder "3.9";
 
@@ -24,6 +31,7 @@ buildPythonPackage rec {
     owner = "boxine";
     repo = "bx_py_utils";
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-ih0tqT+3fTTgncXz4bneo4OGT0jVhybdADTy1de5VqI=";
   };
 
@@ -31,6 +39,11 @@ buildPythonPackage rec {
     rm bx_py_utils_tests/publish.py
   '';
 
+=======
+    hash = "sha256-dMcbv/qf+8Qzu47MVFU2QUviT/vjKsHp+45F/6NOlWo=";
+  };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nativeBuildInputs = [
     poetry-core
   ];
@@ -65,6 +78,7 @@ buildPythonPackage rec {
     requests-mock
   ];
 
+<<<<<<< HEAD
   disabledTests = [
     # too closely affected by bs4 updates
     "test_pretty_format_html"
@@ -77,12 +91,19 @@ buildPythonPackage rec {
     # processify() doesn't work under darwin
     # https://github.com/boxine/bx_py_utils/issues/80
     "bx_py_utils_tests/tests/test_processify.py"
+=======
+  disabledTestPaths = [
+    "bx_py_utils_tests/tests/test_project_setup.py"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   meta = {
     description = "Various Python utility functions";
     homepage = "https://github.com/boxine/bx_py_utils";
+<<<<<<< HEAD
     changelog = "https://github.com/boxine/bx_py_utils/releases/tag/${src.rev}";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
   };

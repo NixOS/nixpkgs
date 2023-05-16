@@ -11,7 +11,11 @@
 
 stdenv.mkDerivation rec {
   pname = "belle-sip";
+<<<<<<< HEAD
   version = "5.2.98";
+=======
+  version = "5.2.37";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitLab {
     domain = "gitlab.linphone.org";
@@ -19,7 +23,11 @@ stdenv.mkDerivation rec {
     group = "BC";
     repo = pname;
     rev = version;
+<<<<<<< HEAD
     hash = "sha256-PZnAB+LOlwkiJO0ICqYqn0TgqQY2KdUbgGJRFSzGxdE=";
+=======
+    sha256 = "sha256-e5CwLzpvW5ktv5R8PZkNmSXAi/SaTltJs9LY26iKsLo=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ cmake ];

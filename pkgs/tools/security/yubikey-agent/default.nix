@@ -21,7 +21,11 @@ buildGoModule rec {
     substituteInPlace main.go --replace 'notify-send' ${libnotify}/bin/notify-send
   '';
 
+<<<<<<< HEAD
   vendorHash = "sha256-+IRPs3wm3EvIgfQRpzcVpo2JBaFQlyY/RI1G7XfVS84=";
+=======
+  vendorSha256 = "sha256-+IRPs3wm3EvIgfQRpzcVpo2JBaFQlyY/RI1G7XfVS84=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   doCheck = false;
 

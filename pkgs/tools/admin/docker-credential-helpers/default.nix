@@ -2,16 +2,27 @@
 
 buildGoModule rec {
   pname = "docker-credential-helpers";
+<<<<<<< HEAD
   version = "0.8.0";
+=======
+  version = "0.7.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "docker";
     repo = pname;
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-3zWlYW+2LA/JK/lv/OTzMlF2HlQPID0WYks0dQrP3GY=";
   };
 
   vendorHash = null;
+=======
+    sha256 = "sha256-KtDWrtd88s4Al3iWxIYE+YlhZTzf8/YDVYE2AwxH8ho=";
+  };
+
+  vendorSha256 = null;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nativeBuildInputs = lib.optionals stdenv.isLinux [ pkg-config ];
 

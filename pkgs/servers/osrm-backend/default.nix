@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 {lib, stdenv, fetchFromGitHub, cmake, pkg-config, bzip2, libxml2, libzip, boost179, lua, luabind, tbb, expat}:
+=======
+{lib, stdenv, fetchFromGitHub, cmake, pkg-config, bzip2, libxml2, libzip, boost, lua, luabind, tbb, expat}:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 stdenv.mkDerivation rec {
   pname = "osrm-backend";
@@ -13,7 +17,11 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake pkg-config ];
 
+<<<<<<< HEAD
   buildInputs = [ bzip2 libxml2 libzip boost179 lua luabind tbb expat ];
+=======
+  buildInputs = [ bzip2 libxml2 libzip boost lua luabind tbb expat ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   patches = [ ./darwin.patch ];
 

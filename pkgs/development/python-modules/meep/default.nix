@@ -4,7 +4,10 @@
 , fetchFromGitHub
 , autoreconfHook
 , pkg-config
+<<<<<<< HEAD
 , mpiCheckPhaseHook
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , gfortran
 , mpi
 , blas
@@ -109,12 +112,25 @@ buildPythonPackage rec {
   errors can be caught.
   */
   doCheck = true;
+<<<<<<< HEAD
   nativeCheckInputs = [ mpiCheckPhaseHook openssh ];
   checkPhase = ''
     runHook preCheck
 
     export PYTHONPATH="$out/lib/${python.libPrefix}/site-packages:$PYTHONPATH"
 
+=======
+  checkPhase = ''
+    export PATH=$PATH:${openssh}/bin
+    export PYTHONPATH="$out/lib/${python.libPrefix}/site-packages:$PYTHONPATH"
+
+    export OMP_NUM_THREADS=1
+
+    # Fix to make mpich run in a sandbox
+    export HYDRA_IFACE=lo
+    export OMPI_MCA_rmaps_base_oversubscribe=1
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     # Generate a python test script
     cat > test.py << EOF
     import meep as mp
@@ -136,8 +152,11 @@ buildPythonPackage rec {
     EOF
 
     ${mpi}/bin/mpiexec -np 2 python3 test.py
+<<<<<<< HEAD
 
     runHook postCheck
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '';
 
   meta = with lib; {

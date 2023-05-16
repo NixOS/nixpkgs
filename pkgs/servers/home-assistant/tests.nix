@@ -39,6 +39,7 @@ let
   };
 
   extraDisabledTests = {
+<<<<<<< HEAD
     mqtt = [
       # Assert None is not None
       "test_handle_logging_on_writing_the_entity_state"
@@ -47,6 +48,8 @@ let
       # tries to retrieve file from github
       "test_non_text_stdout_capture"
     ];
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     vesync = [
       # homeassistant.components.vesync:config_validation.py:863 The 'vesync' option has been removed, please remove it from your configuration
       "test_async_get_config_entry_diagnostics__single_humidifier"
@@ -55,9 +58,12 @@ let
   };
 
   extraPytestFlagsArray = {
+<<<<<<< HEAD
     conversation = [
       "--deselect tests/components/conversation/test_init.py::test_get_agent_list"
     ];
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     dnsip = [
       # Tries to resolve DNS entries
       "--deselect tests/components/dnsip/test_config_flow.py::test_options_flow"
@@ -66,12 +72,15 @@ let
       # Flaky: AssertionError: assert '0.0' == '12.0'
       "--deselect tests/components/history_stats/test_sensor.py::test_end_time_with_microseconds_zeroed"
     ];
+<<<<<<< HEAD
     jellyfin = [
       # AssertionError: assert 'audio/x-flac' == 'audio/flac'
       "--deselect tests/components/jellyfin/test_media_source.py::test_resolve"
       # AssertionError: assert [+ received] == [- snapshot]
       "--deselect tests/components/jellyfin/test_media_source.py::test_music_library"
     ];
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     modbus = [
       # homeassistant.components.modbus.modbus:modbus.py:317 Pymodbus: modbusTest: Modbus Error: test connect exception
       "--deselect tests/components/modbus/test_init.py::test_pymodbus_connect_fail"
@@ -80,15 +89,19 @@ let
       # aioserial mock produces wrong state
       "--deselect tests/components/modem_callerid/test_init.py::test_setup_entry"
     ];
+<<<<<<< HEAD
     sonos = [
       # KeyError: 'sonos_media_player'
       "--deselect tests/components/sonos/test_init.py::test_async_poll_manual_hosts_warnings"
       "--deselect tests/components/sonos/test_init.py::test_async_poll_manual_hosts_3"
     ];
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     unifiprotect = [
       # "TypeError: object Mock can't be used in 'await' expression
       "--deselect tests/components/unifiprotect/test_repairs.py::test_ea_warning_fix"
     ];
+<<<<<<< HEAD
     xiaomi_ble = [
       # assert 0 == 1"
       "--deselect tests/components/xiaomi_ble/test_sensor.py::test_xiaomi_consumable"
@@ -97,6 +110,8 @@ let
       "--deselect tests/components/zha/test_config_flow.py::test_formation_strategy_restore_manual_backup_non_ezsp"
       "--deselect tests/components/zha/test_config_flow.py::test_formation_strategy_restore_automatic_backup_non_ezsp"
     ];
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 in lib.listToAttrs (map (component: lib.nameValuePair component (
   home-assistant.overridePythonAttrs (old: {
@@ -117,6 +132,10 @@ in lib.listToAttrs (map (component: lib.nameValuePair component (
     dontUsePytestXdist = true;
 
     pytestFlagsArray = lib.remove "tests" old.pytestFlagsArray
+<<<<<<< HEAD
+=======
+      ++ [ "--numprocesses=2" ]
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       ++ extraPytestFlagsArray.${component} or [ ]
       ++ [ "tests/components/${component}" ];
 

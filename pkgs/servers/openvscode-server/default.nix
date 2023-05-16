@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 { lib
 , stdenv
 , fetchFromGitHub
@@ -21,12 +22,24 @@
 , cctools
 , nixosTests
 }:
+=======
+{ lib, stdenv, fetchFromGitHub, buildGoModule, makeWrapper
+, cacert, moreutils, jq, git, pkg-config, yarn, python3
+, esbuild, nodejs_16, libsecret, xorg, ripgrep
+, AppKit, Cocoa, Security, cctools }:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 let
   system = stdenv.hostPlatform.system;
 
+<<<<<<< HEAD
   yarn' = yarn.override { inherit nodejs; };
   defaultYarnOpts = [ "frozen-lockfile" "non-interactive" "no-progress" ];
+=======
+  nodejs = nodejs_16;
+  yarn' = yarn.override { inherit nodejs; };
+  defaultYarnOpts = [ "frozen-lockfile" "non-interactive" "no-progress"];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   vsBuildTarget = {
     x86_64-linux = "linux-x64";
@@ -49,20 +62,32 @@ let
   };
 
   # replaces esbuild's download script with a binary from nixpkgs
+<<<<<<< HEAD
   patchEsbuild = path: version: ''
+=======
+  patchEsbuild = path : version : ''
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     mkdir -p ${path}/node_modules/esbuild/bin
     jq "del(.scripts.postinstall)" ${path}/node_modules/esbuild/package.json | sponge ${path}/node_modules/esbuild/package.json
     sed -i 's/${version}/${esbuild'.version}/g' ${path}/node_modules/esbuild/lib/main.js
     ln -s -f ${esbuild'}/bin/esbuild ${path}/node_modules/esbuild/bin/esbuild
   '';
+<<<<<<< HEAD
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "openvscode-server";
   version = "1.79.2";
+=======
+
+in stdenv.mkDerivation rec {
+  pname = "openvscode-server";
+  version = "1.78.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "gitpod-io";
     repo = "openvscode-server";
+<<<<<<< HEAD
     rev = "openvscode-server-v${finalAttrs.version}";
     hash = "sha256-u5LuDcKTN4CEpRnFCeEbni6hiDDwTV9LUEmXaQYJvJw=";
   };
@@ -70,6 +95,15 @@ stdenv.mkDerivation (finalAttrs: {
   yarnCache = stdenv.mkDerivation {
     name = "${finalAttrs.pname}-${finalAttrs.version}-${system}-yarn-cache";
     inherit (finalAttrs) src;
+=======
+    rev = "openvscode-server-v${version}";
+    sha256 = "sha256-5sizNPVr2iA5wCfU7dig08ErPGmSeab8UcCbOfaXI2Q=";
+  };
+
+  yarnCache = stdenv.mkDerivation {
+    name = "${pname}-${version}-${system}-yarn-cache";
+    inherit src;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     nativeBuildInputs = [ cacert yarn' git ];
     buildPhase = ''
       export HOME=$PWD
@@ -87,6 +121,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     outputHashMode = "recursive";
     outputHashAlgo = "sha256";
+<<<<<<< HEAD
     outputHash = "sha256-P6mzeE3HnS/KoP7kCXJlDkFWkTKiGjJkOUXfGOru/xE=";
   };
 
@@ -109,6 +144,19 @@ stdenv.mkDerivation (finalAttrs: {
     Security
     cctools
   ];
+=======
+    outputHash = "sha256-sq5dc39qjrVBXAZU7TeZYYs3BcZlD+2nKSVPaTu/DLg=";
+  };
+
+  nativeBuildInputs = [
+    nodejs yarn' python3 pkg-config makeWrapper git jq moreutils
+  ];
+  buildInputs = lib.optionals (!stdenv.isDarwin) [ libsecret ]
+    ++ (with xorg; [ libX11 libxkbfile ])
+    ++ lib.optionals stdenv.isDarwin [
+      AppKit Cocoa Security cctools
+    ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   patches = [
     # Patch out remote download of nodejs from build script
@@ -130,14 +178,18 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   configurePhase = ''
+<<<<<<< HEAD
     runHook preConfigure
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     # set default yarn opts
     ${lib.concatMapStrings (option: ''
       yarn --offline config set ${option}
     '') defaultYarnOpts}
 
     # set offline mirror to yarn cache we created in previous steps
+<<<<<<< HEAD
     yarn --offline config set yarn-offline-mirror "${finalAttrs.yarnCache}"
 
     # set nodedir, so we can build binaries later
@@ -149,6 +201,15 @@ stdenv.mkDerivation (finalAttrs: {
   buildPhase = ''
     runHook preBuild
 
+=======
+    yarn --offline config set yarn-offline-mirror "${yarnCache}"
+
+    # set nodedir, so we can build binaries later
+    npm config set nodedir "${nodejs}"
+  '';
+
+  buildPhase = ''
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     # install dependencies
     yarn --offline --ignore-scripts
 
@@ -191,6 +252,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     # build and minify
     yarn --offline gulp vscode-reh-web-${vsBuildTarget}-min
+<<<<<<< HEAD
 
     runHook postBuild
   '';
@@ -210,15 +272,34 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
+=======
+  '';
+
+  installPhase = ''
+    mkdir -p $out
+    cp -R -T ../vscode-reh-web-${vsBuildTarget} $out
+    ln -s ${nodejs}/bin/node $out
+  '';
+
+  meta = with lib; {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     description = "Run VS Code on a remote machine";
     longDescription = ''
       Run upstream VS Code on a remote machine with access through a modern web
       browser from any device, anywhere.
     '';
     homepage = "https://github.com/gitpod-io/openvscode-server";
+<<<<<<< HEAD
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dguenther ghuntley emilytrau ];
     platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
     mainProgram = "openvscode-server";
   };
 })
+=======
+    license = licenses.mit;
+    maintainers = with maintainers; [ dguenther ghuntley emilytrau ];
+    platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
+  };
+}
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)

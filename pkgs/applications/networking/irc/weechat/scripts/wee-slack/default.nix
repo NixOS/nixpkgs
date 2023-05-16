@@ -2,13 +2,21 @@
 
 stdenv.mkDerivation rec {
   pname = "wee-slack";
+<<<<<<< HEAD
   version = "2.10.0";
+=======
+  version = "2.9.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     repo = "wee-slack";
     owner = "wee-slack";
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-SxmMCD7FdkmZ0ccDbuY2XUGcLxHlv62x4Pj55Wzf0AA=";
+=======
+    sha256 = "sha256-f5CRJmvNZlKOE1XsU214R42dYo0s5xSRXC8TKOniEf4=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   patches = [

@@ -25,13 +25,22 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "reaper";
+<<<<<<< HEAD
   version = "6.81";
+=======
+  version = "6.79";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchurl {
     url = url_for_platform version stdenv.hostPlatform.qemuArch;
     hash = {
+<<<<<<< HEAD
       x86_64-linux = "sha256-Zzt/g96yAztE0NjVa4uaWXBckSvnGxP0K87Hmq82Mi0=";
       aarch64-linux = "sha256-PNUUm7xNpPRyQaZm9YDXysJ1yo/IzxUz+kqI6/Z6fpo=";
+=======
+      x86_64-linux = "sha256-Bpsc09y5R/zyVXiDAqRF6n09qKOrBTLjk84z+noeko0=";
+      aarch64-linux = "sha256-jbyXXeVtFmt7xoIWd4YKFu4AUM6W9LzeIiGoGyaO2lU=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     }.${stdenv.hostPlatform.system};
   };
 

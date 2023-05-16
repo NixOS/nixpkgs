@@ -1,12 +1,19 @@
 { lib
 , stdenv
 , callPackage
+<<<<<<< HEAD
 , pkg-config
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , swift
 , swiftpm
 , swiftpm2nix
 , Foundation
 , XCTest
+<<<<<<< HEAD
+=======
+, pkg-config
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , sqlite
 , ncurses
 , CryptoKit
@@ -28,6 +35,7 @@ stdenv.mkDerivation {
   inherit (sources) version;
   src = sources.sourcekit-lsp;
 
+<<<<<<< HEAD
   nativeBuildInputs = [ pkg-config swift swiftpm ];
   buildInputs = [
     Foundation
@@ -35,6 +43,17 @@ stdenv.mkDerivation {
     sqlite
     ncursesInput
   ] ++ lib.optionals stdenv.isDarwin [ CryptoKit LocalAuthentication ];
+=======
+  nativeBuildInputs = [ swift swiftpm ];
+  buildInputs = [
+    Foundation
+    XCTest
+    pkg-config
+    sqlite
+    ncursesInput
+  ]
+    ++ lib.optionals stdenv.isDarwin [ CryptoKit LocalAuthentication ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   configurePhase = generated.configure + ''
     swiftpmMakeMutable indexstore-db

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 { lib, fetchurl, appimageTools }:
 
 let
@@ -7,6 +8,17 @@ let
   src = fetchurl {
     url = "https://github.com/MuhammedKalkan/OpenLens/releases/download/v${version}/OpenLens-${version}.x86_64.AppImage";
     sha256 = "sha256-ZAltAS/U/xh4kCT7vQ+NHAzWV7z0uE5GMQICHKSdj8k=";
+=======
+{ lib, fetchurl, appimageTools, wrapGAppsHook }:
+
+let
+  pname = "openlens";
+  version = "6.4.15";
+
+  src = fetchurl {
+    url = "https://github.com/MuhammedKalkan/OpenLens/releases/download/v${version}/OpenLens-${version}.x86_64.AppImage";
+    sha256 = "sha256-Q7Vh+/SKbnQ7HbDlx1XqBXg1U2DaIvY139VrIIdOX5E=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   appimageContents = appimageTools.extractType2 {

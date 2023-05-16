@@ -35,7 +35,11 @@ mkDerivation {
     homepage = "http://www.kde.org";
     description = "KDE document viewer";
     license = with licenses; [ gpl2Plus lgpl21Plus fdl12Plus bsd3 ];
+<<<<<<< HEAD
     maintainers = with maintainers; [ ttuegel ];
+=======
+    maintainers = with maintainers; [ ttuegel turion ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     platforms = lib.platforms.linux;
   };
 }

@@ -10,16 +10,27 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "pueue";
+<<<<<<< HEAD
   version = "3.2.0";
+=======
+  version = "3.1.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "Nukesor";
     repo = "pueue";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-Fk31k0JIe1KJW7UviA8yikjfwlcdRD92wehNbuEoH2w=";
   };
 
   cargoHash = "sha256-eVJuebau0Y9oelniCzvOk9riMMZ9cS7E/G6KinbQa6k=";
+=======
+    hash = "sha256-Q9NHkVOWVWAty6iIhN0GmUkKB+nDqmxiPVnhbQvup9M=";
+  };
+
+  cargoHash = "sha256-YSD7RXU3eBlELx76gU5eNOGkSoK9SRQZOV+7lil1fyQ=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nativeBuildInputs = [
     installShellFiles

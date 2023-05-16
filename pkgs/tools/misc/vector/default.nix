@@ -1,8 +1,15 @@
 { stdenv
 , lib
 , fetchFromGitHub
+<<<<<<< HEAD
 , rustPlatform
 , pkg-config
+=======
+, fetchpatch
+, rustPlatform
+, pkg-config
+, llvmPackages
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , openssl
 , protobuf
 , rdkafka
@@ -19,21 +26,35 @@
   # nix has a problem with the `?` in the feature list
   # enabling kafka will produce a vector with no features at all
 , enableKafka ? false
+<<<<<<< HEAD
   # TODO investigate adding various "vendor-*"
   # "disk-buffer" is using leveldb TODO: investigate how useful
   # it would be, perhaps only for massive scale?
 , features ? ([ "api" "api-client" "enrichment-tables" "sinks" "sources" "sources-dnstap" "transforms" "component-validation-runner" ]
+=======
+  # TODO investigate adding "vrl-cli" and various "vendor-*"
+  # "disk-buffer" is using leveldb TODO: investigate how useful
+  # it would be, perhaps only for massive scale?
+, features ? ([ "api" "api-client" "enrichment-tables" "sinks" "sources" "transforms" "vrl-cli" ]
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     # the second feature flag is passed to the rdkafka dependency
     # building on linux fails without this feature flag (both x86_64 and AArch64)
     ++ lib.optionals enableKafka [ "rdkafka?/gssapi-vendored" ]
     ++ lib.optional stdenv.targetPlatform.isUnix "unix")
+<<<<<<< HEAD
 , nixosTests
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , nix-update-script
 }:
 
 let
   pname = "vector";
+<<<<<<< HEAD
   version = "0.31.0";
+=======
+  version = "0.29.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 in
 rustPlatform.buildRustPackage {
   inherit pname version;
@@ -42,6 +63,7 @@ rustPlatform.buildRustPackage {
     owner = "vectordotdev";
     repo = pname;
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-+ATOHx+LQLQV4nMdj1FRRvDTqGCTbX9kl290AbY9Vw0=";
   };
 
@@ -58,11 +80,28 @@ rustPlatform.buildRustPackage {
       "heim-0.1.0-rc.1" = "sha256-ODKEQ1udt7FlxI5fvoFMG7C2zmM45eeEYDUEaLTsdYo=";
       "nix-0.26.2" = "sha256-uquYvRT56lhupkrESpxwKEimRFhmYvri10n3dj0f2yg=";
       "ntapi-0.3.7" = "sha256-G6ZCsa3GWiI/FeGKiK9TWkmTxen7nwpXvm5FtjNtjWU=";
+=======
+    sha256 = "sha256-4WqO7i1xthUU2bTzaS5poTh+wemjvqNAUFIDN73f7kw=";
+  };
+
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "azure_core-0.5.0" = "sha256-fojO7dhntpymMjV58TtYb7N4UN6rOp30D54x09RDXfQ=";
+      "chrono-0.4.24" = "sha256-SVPRfixSt0m14MmOcmBVseC/moj1DIA3B+m0pvT41K0=";
+      "datadog-filter-0.1.0" = "sha256-CNAIoDyJJo+D2Qzt6Fb2FwpQpzX02XurT8j1gHkz1bE=";
+      "heim-0.1.0-rc.1" = "sha256-ODKEQ1udt7FlxI5fvoFMG7C2zmM45eeEYDUEaLTsdYo=";
+      "nix-0.26.2" = "sha256-uquYvRT56lhupkrESpxwKEimRFhmYvri10n3dj0f2yg=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       "tokio-util-0.7.4" = "sha256-rAzj44O+GOZhG+o6FVN5qCcG/NWxW8fUpScm+xsRjIs=";
       "tracing-0.2.0" = "sha256-YAxeEofFA43PX2hafh3RY+C81a2v6n1fGzYz2FycC3M=";
     };
   };
+<<<<<<< HEAD
   nativeBuildInputs = [ pkg-config cmake perl git rustPlatform.bindgenHook ];
+=======
+  nativeBuildInputs = [ pkg-config cmake perl git ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   buildInputs = [ oniguruma openssl protobuf rdkafka zstd ]
     ++ lib.optionals stdenv.isDarwin [ Security libiconv coreutils CoreServices ];
 
@@ -70,6 +109,10 @@ rustPlatform.buildRustPackage {
   PROTOC = "${protobuf}/bin/protoc";
   PROTOC_INCLUDE = "${protobuf}/include";
   RUSTONIG_SYSTEM_LIBONIG = true;
+<<<<<<< HEAD
+=======
+  LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   TZDIR = "${tzdata}/share/zoneinfo";
 
@@ -116,7 +159,10 @@ rustPlatform.buildRustPackage {
 
   passthru = {
     inherit features;
+<<<<<<< HEAD
     tests = { inherit (nixosTests) vector; };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     updateScript = nix-update-script { };
   };
 
@@ -126,6 +172,9 @@ rustPlatform.buildRustPackage {
     license = licenses.mpl20;
     maintainers = with maintainers; [ thoughtpolice happysalada ];
     platforms = with platforms; all;
+<<<<<<< HEAD
     mainProgram = "vector";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

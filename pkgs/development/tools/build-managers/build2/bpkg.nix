@@ -1,6 +1,9 @@
 { lib, stdenv
 , build2
+<<<<<<< HEAD
 , fetchpatch
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , fetchurl
 , git
 , libbpkg
@@ -23,6 +26,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-3F4Pv8YX++cNa6aKhPM67mrt/5oE1IeoZUSmljHqBfI=";
   };
 
+<<<<<<< HEAD
   patches = [
     # Patch git tests for git v2.38+
     # Remove when bumping to v0.16.0 or greater
@@ -32,6 +36,8 @@ stdenv.mkDerivation rec {
     })
   ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   strictDeps = true;
   nativeBuildInputs = [
     build2

@@ -8,7 +8,11 @@ DRV_DIR="$PWD"
 OLD_VERSION="$(sed -nE 's/\s*version = "(.*)".*/\1/p' ./default.nix)"
 # The best_release.json is not always up-to-date
 # In those cases you can force the version by calling `./update.sh <newer_version>`
+<<<<<<< HEAD
 NEW_VERSION="${1:-$(curl -H "Accept: application/json" 'https://sourceforge.net/projects/sevenzip/best_release.json' | jq '.platform_releases.linux.filename' -r | cut -d/ -f3)}"
+=======
+NEW_VERSION="${1:-$(curl 'https://sourceforge.net/projects/sevenzip/best_release.json' | jq '.platform_releases.linux.filename' -r | cut -d/ -f3)}"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 echo "comparing versions $OLD_VERSION => $NEW_VERSION"
 if [[ "$OLD_VERSION" == "$NEW_VERSION" ]]; then

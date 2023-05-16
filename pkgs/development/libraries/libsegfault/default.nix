@@ -19,8 +19,11 @@ stdenv.mkDerivation rec {
     sha256 = "vKtY6ZEkyK2K+BzJCSo30f9MpERpPlUnarFIlvJ1Giw=";
   };
 
+<<<<<<< HEAD
   env.NIX_CFLAGS_COMPILE = lib.optionalString (stdenv.isDarwin) "-DBOOST_STACKTRACE_GNU_SOURCE_NOT_REQUIRED=1";
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nativeBuildInputs = [
     meson
     ninja

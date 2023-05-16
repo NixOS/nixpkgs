@@ -21,7 +21,11 @@ buildDotnetModule rec {
 
   projectFile = [ "src/NuGet/Microsoft.Net.Compilers.Toolset/Microsoft.Net.Compilers.Toolset.Package.csproj" ];
 
+<<<<<<< HEAD
   nugetDeps = ./deps.nix;
+=======
+  nugetDeps = ./extended-deps.nix;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   dontDotnetFixup = true;
 
@@ -62,6 +66,10 @@ buildDotnetModule rec {
     description = ".NET C# and Visual Basic compiler";
     homepage = "https://github.com/dotnet/roslyn";
     mainProgram = "csc";
+<<<<<<< HEAD
+=======
+    platforms = platforms.linux;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     license = licenses.mit;
     maintainers = with maintainers; [ corngood ];
   };

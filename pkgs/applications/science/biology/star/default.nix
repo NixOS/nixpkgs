@@ -11,7 +11,11 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-58Y4lzqXwBhRlXcionUg2IhAg5znNUuyr/FsuNZd+5Q=";
   };
 
+<<<<<<< HEAD
   sourceRoot = "${src.name}/source";
+=======
+  sourceRoot = "source/source";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   postPatch = ''
     substituteInPlace Makefile --replace "/bin/rm" "rm"

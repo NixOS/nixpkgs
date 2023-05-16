@@ -7,7 +7,11 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "voutilad";
     repo = "virtio_vmmci";
+<<<<<<< HEAD
     rev = version;
+=======
+    rev = "${version}";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     hash = "sha256-ZHslYYZFjM3wp0W5J3/WwCtQ2wDzT1jNc26Z/giTC8g=";
   };
 

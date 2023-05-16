@@ -14,7 +14,11 @@ buildPythonApplication rec {
     rev = version;
     sha256 = "126zk248s9r72qk9b8j27yvb8gglw49kazwz0sd69b5kkxvhz2dh";
   };
+<<<<<<< HEAD
   sourceRoot = "${src.name}/cli";
+=======
+  sourceRoot = "source/cli";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   # some tests are designed to run against code in the source directory - adapt to run against
   # *installed* code

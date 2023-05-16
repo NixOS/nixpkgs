@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 { lib, stdenv, fetchurl, pkg-config, nettle
+=======
+{ lib, stdenv, fetchurl, pkg-config, nettle, fetchpatch
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , libidn, libnetfilter_conntrack, buildPackages
 , dbusSupport ? stdenv.isLinux
 , dbus
@@ -90,7 +94,10 @@ stdenv.mkDerivation rec {
     description = "An integrated DNS, DHCP and TFTP server for small networks";
     homepage = "https://www.thekelleys.org.uk/dnsmasq/doc.html";
     license = licenses.gpl2;
+<<<<<<< HEAD
     mainProgram = "dnsmasq";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     platforms = with platforms; linux ++ darwin;
     maintainers = with maintainers; [ eelco fpletz globin ];
   };

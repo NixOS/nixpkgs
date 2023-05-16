@@ -6,13 +6,21 @@
 
 stdenv.mkDerivation rec {
   pname = "ctre";
+<<<<<<< HEAD
   version = "3.8";
+=======
+  version = "3.7.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "hanickadot";
     repo = "compile-time-regular-expressions";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-oGJHSyvcgvBJh5fquK6dU70czVg4txcGTuicvrTK2hc=";
+=======
+    hash = "sha256-pO6PW4oZsCA2xaMCsaJz2Bu203zyMUkbjO3OOBEbSiw=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ cmake ];

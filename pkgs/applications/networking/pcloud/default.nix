@@ -38,6 +38,7 @@
 
 let
   pname = "pcloud";
+<<<<<<< HEAD
   version = "1.14.0";
   code = "XZpL8AVZAqfCXz5TebJ2gcvAiHi15pYFKPey";
 
@@ -45,6 +46,14 @@ let
   src = fetchzip {
     url = "https://api.pcloud.com/getpubzip?code=${code}&filename=${pname}-${version}.zip";
     hash = "sha256-uirj/ASOrJyE728q+SB7zq0O9O58XDNzhokvNyca+2c=";
+=======
+  version = "1.12.0";
+  code = "XZyc9wVZAbFzyV8ElP71D5v170CvEmVtmrB7";
+  # Archive link's codes: https://www.pcloud.com/release-notes/linux.html
+  src = fetchzip {
+    url = "https://api.pcloud.com/getpubzip?code=${code}&filename=${pname}-${version}.zip";
+    hash = "sha256-QzBlpF+qtNdSZFv3gU0mQhpVyPTWdGH3c+UHKKGfvKc=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   appimageContents = appimageTools.extractType2 {

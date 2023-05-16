@@ -2,13 +2,21 @@
 
 buildGoModule rec {
   pname = "gvproxy";
+<<<<<<< HEAD
   version = "0.7.0";
+=======
+  version = "0.6.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "gvisor-tap-vsock";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-BCRUMAM/OeFf4gftYwLrRmeCkRGplYaF9QZ1ZI2YLLY=";
+=======
+    hash = "sha256-LkSKJVnWwqWSId/qdb7hTIiryxdazjW4oluZZN47orQ=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   vendorHash = null;

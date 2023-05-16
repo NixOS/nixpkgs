@@ -40,7 +40,11 @@ in
             (cfg.configFile != null)
             ''-c "${cfg.configFile}"''
             ;
+<<<<<<< HEAD
         in "${cfg.package}/bin/herbstluftwm ${configFileClause} &";
+=======
+        in "${cfg.package}/bin/herbstluftwm ${configFileClause}";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
     environment.systemPackages = [ cfg.package ];
   };

@@ -12,6 +12,7 @@
 }:
 with writers;
 let
+<<<<<<< HEAD
   expectSuccess = test:
     runCommand "run-${test.name}" {} ''
       if [[ "$(${test})" != success ]]; then
@@ -68,6 +69,31 @@ lib.recurseIntoAttrs {
     '');
 
     haskell = expectSuccessBin (writeHaskellBin "test-writers-haskell-bin" { libraries = [ haskellPackages.acme-default ]; } ''
+=======
+
+  bin = {
+    bash = writeBashBin "test-writers-bash-bin" ''
+     if [[ "test" == "test" ]]; then echo "success"; fi
+    '';
+
+    dash = writeDashBin "test-writers-dash-bin" ''
+     test '~' = '~' && echo 'success'
+    '';
+
+    fish = writeFishBin "test-writers-fish-bin" ''
+      if test "test" = "test"
+        echo "success"
+      end
+    '';
+
+    rust = writeRustBin "test-writers-rust-bin" {} ''
+      fn main(){
+        println!("success")
+      }
+    '';
+
+    haskell = writeHaskellBin "test-writers-haskell-bin" { libraries = [ haskellPackages.acme-default ]; } ''
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       import Data.Default
 
       int :: Int
@@ -77,9 +103,15 @@ lib.recurseIntoAttrs {
       main = case int of
         18871 -> putStrLn $ id "success"
         _ -> print "fail"
+<<<<<<< HEAD
     '');
 
     js = expectSuccessBin (writeJSBin "test-writers-js-bin" { libraries = [ nodePackages.semver ]; } ''
+=======
+    '';
+
+    js = writeJSBin "test-writers-js-bin" { libraries = [ nodePackages.semver ]; } ''
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       var semver = require('semver');
 
       if (semver.valid('1.2.3')) {
@@ -87,6 +119,7 @@ lib.recurseIntoAttrs {
       } else {
         console.log('fail')
       }
+<<<<<<< HEAD
     '');
 
     perl = expectSuccessBin (writePerlBin "test-writers-perl-bin" { libraries = [ perlPackages.boolean ]; } ''
@@ -138,6 +171,61 @@ lib.recurseIntoAttrs {
     '');
 
     haskell = expectSuccess (writeHaskell "test-writers-haskell" { libraries = [ haskellPackages.acme-default ]; } ''
+=======
+    '';
+
+    perl = writePerlBin "test-writers-perl-bin" { libraries = [ perlPackages.boolean ]; } ''
+      use boolean;
+      print "success\n" if true;
+    '';
+
+    pypy2 = writePyPy2Bin "test-writers-pypy2-bin" { libraries = [ pypy2Packages.enum ]; } ''
+      from enum import Enum
+
+
+      class Test(Enum):
+          a = "success"
+
+
+      print Test.a
+    '';
+
+    python3 = writePython3Bin "test-writers-python3-bin" { libraries = [ python3Packages.pyyaml ]; } ''
+      import yaml
+
+      y = yaml.load("""
+        - test: success
+      """)
+      print(y[0]['test'])
+    '';
+
+    pypy3 = writePyPy3Bin "test-writers-pypy3-bin" { libraries = [ pypy3Packages.pyyaml ]; } ''
+      import yaml
+
+      y = yaml.load("""
+        - test: success
+      """)
+      print(y[0]['test'])
+    '';
+  };
+
+  simple = {
+    bash = writeBash "test-writers-bash" ''
+     if [[ "test" == "test" ]]; then echo "success"; fi
+    '';
+
+    dash = writeDash "test-writers-dash" ''
+     test '~' = '~' && echo 'success'
+    '';
+
+    fish = writeFish "test-writers-fish" ''
+      if test "test" = "test"
+        echo "success"
+      end
+    '';
+
+    haskell = writeHaskell "test-writers-haskell" { libraries = [ haskellPackages.acme-default ]; } ''
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       import Data.Default
 
       int :: Int
@@ -147,9 +235,15 @@ lib.recurseIntoAttrs {
       main = case int of
         18871 -> putStrLn $ id "success"
         _ -> print "fail"
+<<<<<<< HEAD
     '');
 
     js = expectSuccess (writeJS "test-writers-js" { libraries = [ nodePackages.semver ]; } ''
+=======
+    '';
+
+    js = writeJS "test-writers-js" { libraries = [ nodePackages.semver ]; } ''
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       var semver = require('semver');
 
       if (semver.valid('1.2.3')) {
@@ -157,6 +251,7 @@ lib.recurseIntoAttrs {
       } else {
         console.log('fail')
       }
+<<<<<<< HEAD
     '');
 
     perl = expectSuccess (writePerl "test-writers-perl" { libraries = [ perlPackages.boolean ]; } ''
@@ -192,6 +287,45 @@ lib.recurseIntoAttrs {
     '');
 
     fsharp = expectSuccess (makeFSharpWriter {
+=======
+    '';
+
+    perl = writePerl "test-writers-perl" { libraries = [ perlPackages.boolean ]; } ''
+      use boolean;
+      print "success\n" if true;
+    '';
+
+    pypy2 = writePyPy2 "test-writers-pypy2" { libraries = [ pypy2Packages.enum ]; } ''
+      from enum import Enum
+
+
+      class Test(Enum):
+          a = "success"
+
+
+      print Test.a
+    '';
+
+    python3 = writePython3 "test-writers-python3" { libraries = [ python3Packages.pyyaml ]; } ''
+      import yaml
+
+      y = yaml.load("""
+        - test: success
+      """)
+      print(y[0]['test'])
+    '';
+
+    pypy3 = writePyPy3 "test-writers-pypy3" { libraries = [ pypy3Packages.pyyaml ]; } ''
+      import yaml
+
+      y = yaml.load("""
+        - test: success
+      """)
+      print(y[0]['test'])
+    '';
+
+    fsharp = makeFSharpWriter {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       libraries = { fetchNuGet }: [
         (fetchNuGet { pname = "FSharp.SystemTextJson"; version = "0.17.4"; sha256 = "1bplzc9ybdqspii4q28l8gmfvzpkmgq5l1hlsiyg2h46w881lwg2"; })
       ];
@@ -212,6 +346,7 @@ lib.recurseIntoAttrs {
       then "success"
       else "failed"
       |> printfn "%s"
+<<<<<<< HEAD
     '');
 
     pypy2NoLibs = expectSuccess (writePyPy2 "test-writers-pypy2-no-libs" {} ''
@@ -237,6 +372,33 @@ lib.recurseIntoAttrs {
     ''));
 
     haskell = expectSuccess (writeHaskell "test-writers-haskell-path" { libraries = [ haskellPackages.acme-default ]; } (writeText "test" ''
+=======
+    '';
+
+    pypy2NoLibs = writePyPy2 "test-writers-pypy2-no-libs" {} ''
+      print("success")
+    '';
+
+    python3NoLibs = writePython3 "test-writers-python3-no-libs" {} ''
+      print("success")
+    '';
+
+    pypy3NoLibs = writePyPy3 "test-writers-pypy3-no-libs" {} ''
+      print("success")
+    '';
+
+    fsharpNoNugetDeps = writeFSharp "test-writers-fsharp-no-nuget-deps" ''
+      printfn "success"
+    '';
+  };
+
+
+  path = {
+    bash = writeBash "test-writers-bash-path" (writeText "test" ''
+      if [[ "test" == "test" ]]; then echo "success"; fi
+    '');
+    haskell = writeHaskell "test-writers-haskell-path" { libraries = [ haskellPackages.acme-default ]; } (writeText "test" ''
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       import Data.Default
 
       int :: Int
@@ -246,6 +408,7 @@ lib.recurseIntoAttrs {
       main = case int of
         18871 -> putStrLn $ id "success"
         _ -> print "fail"
+<<<<<<< HEAD
     ''));
   };
 
@@ -270,3 +433,28 @@ lib.recurseIntoAttrs {
     };
   };
 }
+=======
+    '');
+  };
+
+  writeTest = expectedValue: name: test:
+    writeDash "run-${name}" ''
+      if test "$(${test})" != "${expectedValue}"; then
+        echo 'test ${test} failed'
+        exit 1
+      fi
+    '';
+
+in runCommand "test-writers" {
+  passthru = { inherit writeTest bin simple path; };
+  meta.platforms = lib.platforms.all;
+} ''
+  ${lib.concatMapStringsSep "\n" (test: writeTest "success" test.name "${test}/bin/${test.name}") (lib.attrValues bin)}
+  ${lib.concatMapStringsSep "\n" (test: writeTest "success" test.name test) (lib.attrValues simple)}
+  ${lib.concatMapStringsSep "\n" (test: writeTest "success" test.name test) (lib.attrValues path)}
+
+  echo 'nix-writers successfully tested' >&2
+  touch $out
+''
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)

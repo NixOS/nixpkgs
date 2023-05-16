@@ -5,6 +5,10 @@
 , fetchpatch
 , pkg-config
 , cmake
+<<<<<<< HEAD
+=======
+, llvmPackages
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , expat
 , freetype
 , libxcb
@@ -44,6 +48,7 @@ rustPlatform.buildRustPackage rec {
     };
   };
 
+<<<<<<< HEAD
   buildInputs = [ expat freetype fira-code fontconfig harfbuzz ]
     ++ lib.optionals stdenv.isLinux [ libxcb ]
     ++ lib.optionals stdenv.isDarwin [ libiconv AppKit CoreText Security ];
@@ -51,6 +56,17 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [ cmake pkg-config rustPlatform.bindgenHook ]
     ++ lib.optionals stdenv.isLinux [ python3 ];
 
+=======
+  buildInputs = [ llvmPackages.libclang expat freetype fira-code fontconfig harfbuzz ]
+    ++ lib.optionals stdenv.isLinux [ libxcb ]
+    ++ lib.optionals stdenv.isDarwin [ libiconv AppKit CoreText Security ];
+
+  nativeBuildInputs = [ cmake pkg-config ]
+    ++ lib.optionals stdenv.isLinux [ python3 ];
+
+  LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   preCheck = ''
     export HOME=$TMPDIR
   '';

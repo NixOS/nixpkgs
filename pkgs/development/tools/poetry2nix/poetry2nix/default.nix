@@ -4,7 +4,11 @@
 }:
 let
   # Poetry2nix version
+<<<<<<< HEAD
   version = "1.42.1";
+=======
+  version = "1.41.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   inherit (poetryLib) isCompatible readTOML normalizePackageName normalizePackageSet;
 
@@ -17,7 +21,11 @@ let
   toPluginAble = (import ./plugins.nix { inherit pkgs lib; }).toPluginAble;
 
   # List of known build systems that are passed through from nixpkgs unmodified
+<<<<<<< HEAD
   knownBuildSystems = builtins.fromJSON (builtins.readFile ./known-build-systems.json);
+=======
+  knownBuildSystems = lib.importJSON ./known-build-systems.json;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nixpkgsBuildSystems = lib.subtractLists [ "poetry" "poetry-core" ] knownBuildSystems;
 
   mkInputAttrs =
@@ -324,7 +332,10 @@ lib.makeScope pkgs.newScope (self: {
     , editablePackageSources ? { }
     , extraPackages ? ps: [ ]
     , groups ? [ "dev" ]
+<<<<<<< HEAD
     , checkGroups ? [ "dev" ]
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     , extras ? [ "*" ]
     }:
     let
@@ -358,7 +369,11 @@ lib.makeScope pkgs.newScope (self: {
         excludedEditablePackageNames;
 
       poetryPython = self.mkPoetryPackages {
+<<<<<<< HEAD
         inherit pyproject poetrylock overrides python pwd preferWheels pyProject groups checkGroups extras;
+=======
+        inherit pyproject poetrylock overrides python pwd preferWheels pyProject groups extras;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         editablePackageSources = editablePackageSources';
       };
 

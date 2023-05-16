@@ -18,11 +18,19 @@ let
   availableBinaries = {
     x86_64-linux = {
       platform = "linux-x64";
+<<<<<<< HEAD
       checksum = "sha256-9f5Ewd63pLpMbewtQ0u4WsRnZQEn1lfh6b/jZ8yDSMU=";
     };
     aarch64-linux = {
       platform = "linux-arm64";
       checksum = "sha256-aW3cUZqAdiOLzOC9BQM/bTkDVyw24Dx9nBSXgbiKe4c=";
+=======
+      checksum = "sha256-ozyQya2WxnDK6of1VfxlDlXo6IDGxAXkCjFt3DqRM4k=";
+    };
+    aarch64-linux = {
+      platform = "linux-arm64";
+      checksum = "sha256-UxceWQ/eIGPFXNFIPSzBe431qqp54GwDbs9p7cqLosA=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
   };
   inherit (stdenv.hostPlatform) system;
@@ -30,7 +38,11 @@ let
   inherit (binary) platform checksum;
 in stdenv.mkDerivation rec {
   pname = "cypress";
+<<<<<<< HEAD
   version = "12.17.4";
+=======
+  version = "12.9.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchzip {
     url = "https://cdn.cypress.io/desktop/${version}/${platform}/cypress.zip";

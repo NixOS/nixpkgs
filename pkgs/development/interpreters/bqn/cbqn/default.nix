@@ -6,8 +6,14 @@
 , fixDarwinDylibNames
 , genBytecode ? false
 , bqn-path ? null
+<<<<<<< HEAD
 , mbqn-source
 , enableReplxx ? false
+=======
+, mbqn-source ? null
+, enableReplxx ? false
+, enableSingeli ? stdenv.hostPlatform.avx2Support
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , enableLibcbqn ? ((stdenv.hostPlatform.isLinux || stdenv.hostPlatform.isDarwin) && !enableReplxx)
 , libffi
 , pkg-config
@@ -23,13 +29,21 @@ assert genBytecode -> ((bqn-path != null) && (mbqn-source != null));
 
 stdenv.mkDerivation rec {
   pname = "cbqn" + lib.optionalString (!genBytecode) "-standalone";
+<<<<<<< HEAD
   version = "0.3.0";
+=======
+  version = "0.2.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "dzaima";
     repo = "CBQN";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-LoxwNxuadbYJgIkr1+bZoErTc9WllN2siAsKnxoom3Y=";
+=======
+    hash = "sha256-M9GTsm65DySLcMk9QDEhImHnUvWtYGPwiG657wHg3KA=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [
@@ -41,7 +55,10 @@ stdenv.mkDerivation rec {
   ];
 
   dontConfigure = true;
+<<<<<<< HEAD
   doInstallCheck = true;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   postPatch = ''
     sed -i '/SHELL =.*/ d' makefile
@@ -54,11 +71,16 @@ stdenv.mkDerivation rec {
 
   buildFlags = [
     # interpreter binary
+<<<<<<< HEAD
     "o3"
     "notui=1" # display build progress in a plain-text format
     "REPLXX=${if enableReplxx then "1" else "0"}"
   ] ++ lib.optionals stdenv.hostPlatform.avx2Support [
     "has=avx2"
+=======
+    (lib.flatten (if enableSingeli then ["o3n-singeli" "f='-mavx2'"] else ["o3"]))
+    "REPLXX=${if enableReplxx then "1" else "0"}"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ] ++ lib.optionals enableLibcbqn [
     # embeddable interpreter as a shared lib
     "shared-o3"
@@ -67,7 +89,10 @@ stdenv.mkDerivation rec {
   preBuild = ''
     # Purity: avoids git downloading bytecode files
     mkdir -p build/bytecodeLocal/gen
+<<<<<<< HEAD
     cp -r ${singeli-submodule}/dev/* build/singeliLocal/
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '' + (if genBytecode then ''
     ${bqn-path} ./build/genRuntime ${mbqn-source} build/bytecodeLocal/
   '' else ''
@@ -75,7 +100,14 @@ stdenv.mkDerivation rec {
   '')
   + lib.optionalString enableReplxx ''
     cp -r ${replxx-submodule}/dev/* build/replxxLocal/
+<<<<<<< HEAD
   '';
+=======
+  ''
+  + lib.optionalString enableSingeli ''
+    cp -r ${singeli-submodule}/dev/* build/singeliLocal/
+ '';
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   outputs = [
     "out"
@@ -101,6 +133,7 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   installCheckPhase = ''
     runHook preInstallCheck
 
@@ -121,6 +154,8 @@ stdenv.mkDerivation rec {
     runHook postInstallCheck
   '';
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   meta = with lib; {
     homepage = "https://github.com/dzaima/CBQN/";
     description = "BQN implementation in C";
@@ -129,3 +164,7 @@ stdenv.mkDerivation rec {
     platforms = platforms.all;
   };
 }
+<<<<<<< HEAD
+=======
+# TODO: test suite
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)

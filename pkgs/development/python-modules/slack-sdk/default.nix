@@ -5,6 +5,10 @@
 , boto3
 , buildPythonPackage
 , codecov
+<<<<<<< HEAD
+=======
+, databases
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , fetchFromGitHub
 , flake8
 , flask-sockets
@@ -20,7 +24,11 @@
 
 buildPythonPackage rec {
   pname = "slack-sdk";
+<<<<<<< HEAD
   version = "3.21.3";
+=======
+  version = "3.20.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -29,7 +37,11 @@ buildPythonPackage rec {
     owner = "slackapi";
     repo = "python-slack-sdk";
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-begpT/DaDqOi8HZE10FCuIIv18KSU/i5G/Z5DXKUT7Y=";
+=======
+    hash = "sha256-2MPXV+rVXZYMTZe11T8x8GKQmHZwUlkwarCkheVkERo=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [
@@ -43,6 +55,10 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     codecov
+<<<<<<< HEAD
+=======
+    databases
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     flake8
     flask-sockets
     moto
@@ -65,7 +81,10 @@ buildPythonPackage rec {
     "test_start_raises_an_error_if_rtm_ws_url_is_not_returned"
     "test_org_installation"
     "test_interactions"
+<<<<<<< HEAD
     "test_issue_690_oauth_access"
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   pythonImportsCheck = [

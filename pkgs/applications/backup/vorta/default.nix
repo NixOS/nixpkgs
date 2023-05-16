@@ -4,7 +4,10 @@
 , wrapQtAppsHook
 , borgbackup
 , qt5
+<<<<<<< HEAD
 , stdenv
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -20,10 +23,13 @@ python3Packages.buildPythonApplication rec {
 
   nativeBuildInputs = [ wrapQtAppsHook ];
 
+<<<<<<< HEAD
   buildInputs = lib.optionals stdenv.isLinux [
     qt5.qtwayland
   ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   propagatedBuildInputs = with python3Packages; [
     peewee
     pyqt5
@@ -34,6 +40,11 @@ python3Packages.buildPythonApplication rec {
     appdirs
     setuptools
     platformdirs
+<<<<<<< HEAD
+=======
+  ] ++ lib.optionals stdenv.isLinux [
+    qt5.qtwayland
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   postPatch = ''
@@ -42,6 +53,10 @@ python3Packages.buildPythonApplication rec {
     --replace pytest-runner ""
 
     substituteInPlace src/vorta/assets/metadata/com.borgbase.Vorta.desktop \
+<<<<<<< HEAD
+=======
+    --replace Exec=vorta "Exec=$out/bin/vorta" \
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     --replace com.borgbase.Vorta "com.borgbase.Vorta-symbolic"
   '';
 

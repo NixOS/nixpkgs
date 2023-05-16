@@ -5,6 +5,10 @@
 , bootstrapHashes
 , selectRustPackage
 , rustcPatches ? []
+<<<<<<< HEAD
+=======
+, llvmBootstrapForDarwin
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , llvmShared
 , llvmSharedForBuild
 , llvmSharedForHost
@@ -15,15 +19,22 @@
 , buildPackages
 , newScope, callPackage
 , CoreFoundation, Security, SystemConfiguration
+<<<<<<< HEAD
 , pkgsBuildBuild
+=======
+, pkgsBuildTarget, pkgsBuildBuild
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , makeRustPlatform
 }:
 
 let
   # Use `import` to make sure no packages sneak in here.
   lib' = import ../../../build-support/rust/lib { inherit lib; };
+<<<<<<< HEAD
   # Allow faster cross compiler generation by reusing Build artifacts
   fastCross = (stdenv.buildPlatform == stdenv.hostPlatform) && (stdenv.hostPlatform != stdenv.targetPlatform);
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 in
 {
   lib = lib';
@@ -51,10 +62,14 @@ in
       # Like `buildRustPackages`, but may also contain prebuilt binaries to
       # break cycle. Just like `bootstrapTools` for nixpkgs as a whole,
       # nothing in the final package set should refer to this.
+<<<<<<< HEAD
       bootstrapRustPackages = if fastCross
       then pkgsBuildBuild.rustPackages
       else
         self.buildRustPackages.overrideScope (_: _:
+=======
+      bootstrapRustPackages = self.buildRustPackages.overrideScope' (_: _:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         lib.optionalAttrs (stdenv.buildPlatform == stdenv.hostPlatform)
           (selectRustPackage buildPackages).packages.prebuilt);
       bootRustPlatform = makeRustPlatform bootstrapRustPackages;
@@ -67,22 +82,43 @@ in
         version = rustcVersion;
         sha256 = rustcSha256;
         inherit enableRustcDev;
+<<<<<<< HEAD
         inherit llvmShared llvmSharedForBuild llvmSharedForHost llvmSharedForTarget llvmPackages fastCross;
+=======
+        inherit llvmShared llvmSharedForBuild llvmSharedForHost llvmSharedForTarget llvmPackages;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
         patches = rustcPatches;
 
         # Use boot package set to break cycle
         inherit (bootstrapRustPackages) cargo rustc;
+<<<<<<< HEAD
+=======
+        rustPlatform = bootRustPlatform;
+      } // lib.optionalAttrs (stdenv.cc.isClang && stdenv.hostPlatform == stdenv.buildPlatform) {
+        stdenv = llvmBootstrapForDarwin.stdenv;
+        pkgsBuildBuild = pkgsBuildBuild // { targetPackages.stdenv = llvmBootstrapForDarwin.stdenv; };
+        pkgsBuildHost = pkgsBuildBuild // { targetPackages.stdenv = llvmBootstrapForDarwin.stdenv; };
+        pkgsBuildTarget = pkgsBuildTarget // { targetPackages.stdenv = llvmBootstrapForDarwin.stdenv; };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       });
       rustfmt = self.callPackage ./rustfmt.nix {
         inherit Security;
         inherit (self.buildRustPackages) rustc;
       };
+<<<<<<< HEAD
       cargo = if (!fastCross) then self.callPackage ./cargo.nix {
         # Use boot package set to break cycle
         rustPlatform = bootRustPlatform;
         inherit CoreFoundation Security;
       } else self.callPackage ./cargo_cross.nix {};
+=======
+      cargo = self.callPackage ./cargo.nix {
+        # Use boot package set to break cycle
+        rustPlatform = bootRustPlatform;
+        inherit CoreFoundation Security;
+      };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       cargo-auditable = self.callPackage ./cargo-auditable.nix { };
       cargo-auditable-cargo-wrapper = self.callPackage ./cargo-auditable-cargo-wrapper.nix { };
       clippy = self.callPackage ./clippy.nix {

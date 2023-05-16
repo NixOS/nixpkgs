@@ -16,20 +16,35 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "cloud-init";
+<<<<<<< HEAD
   version = "23.2.2";
+=======
+  version = "23.1.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   namePrefix = "";
 
   src = fetchFromGitHub {
     owner = "canonical";
     repo = "cloud-init";
     rev = "refs/tags/${version}";
+<<<<<<< HEAD
     hash = "sha256-lOeLVgT/qTB6JhRcLv9QIfNLMnMyNlUp3dMCqva9Tes=";
+=======
+    hash = "sha256-tn4flcrf04hVWhqkmK4qDenXcnV93pP+C+8J63b6FXQ=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   patches = [
     ./0001-add-nixos-support.patch
+<<<<<<< HEAD
     # upstream: https://github.com/canonical/cloud-init/pull/4190
     ./0002-Add-Udhcpc-support.patch
+=======
+    # upstream: https://github.com/canonical/cloud-init/pull/2125
+    ./0002-Add-Udhcpc-support.patch
+    # upstream: https://github.com/canonical/cloud-init/pull/2151
+    ./0003-vultr-remove-check_route-check.patch
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   prePatch = ''
@@ -127,7 +142,10 @@ python3.pkgs.buildPythonApplication rec {
   meta = with lib; {
     homepage = "https://github.com/canonical/cloud-init";
     description = "Provides configuration and customization of cloud instance";
+<<<<<<< HEAD
     changelog = "https://github.com/canonical/cloud-init/raw/${version}/ChangeLog";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     license = with licenses; [ asl20 gpl3Plus ];
     maintainers = with maintainers; [ illustris jfroche ];
     platforms = platforms.all;

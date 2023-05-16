@@ -57,7 +57,11 @@ in {
     # Send the key to our local keyserver
     machine.succeed("GNUPGHOME=/tmp/GNUPGHOME gpg --keyserver hkp://127.0.0.1:11371 --send-keys " + keyId)
 
+<<<<<<< HEAD
     # Receive the key from our local keyserver to a separate directory
+=======
+    # Recieve the key from our local keyserver to a separate directory
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     machine.succeed("GNUPGHOME=$(mktemp -d) gpg --keyserver hkp://127.0.0.1:11371 --recv-keys " + keyId)
   '';
 })

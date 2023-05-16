@@ -15,5 +15,9 @@ if [[ "$latestVersion" == "$currentVersion" ]]; then
 fi
 
 update-source-version github-runner "$latestVersion"
+<<<<<<< HEAD
 $(nix-build -A github-runner.fetch-deps --no-out-link)
+=======
+$(nix-build -A github-runner.fetch-deps --no-out-link) "$(dirname "$BASH_SOURCE")/deps.nix"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 

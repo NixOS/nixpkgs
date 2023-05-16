@@ -27,11 +27,19 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "PortfolioPerformance";
+<<<<<<< HEAD
   version = "0.65.3";
 
   src = fetchurl {
     url = "https://github.com/buchen/portfolio/releases/download/${version}/PortfolioPerformance-${version}-linux.gtk.x86_64.tar.gz";
     hash = "sha256-xAbfyjQ0MPNDC6UJthCLtu8nfI/AdtludvejA32/dIQ=";
+=======
+  version = "0.62.1";
+
+  src = fetchurl {
+    url = "https://github.com/buchen/portfolio/releases/download/${version}/PortfolioPerformance-${version}-linux.gtk.x86_64.tar.gz";
+    hash = "sha256-tENX2F+kZSrltvaZm3ZaUld3es8Bt8LCpEVGxAOFVm0=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

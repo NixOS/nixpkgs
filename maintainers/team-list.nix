@@ -152,7 +152,10 @@ with lib.maintainers; {
   cuda = {
     members = [
       connorbaker
+<<<<<<< HEAD
       samuela
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       SomeoneSerge
     ];
     scope = "Maintain CUDA-enabled packages";
@@ -181,6 +184,7 @@ with lib.maintainers; {
     shortName = "Cosmopolitan";
   };
 
+<<<<<<< HEAD
   dotnet = {
     members = [
       ivar
@@ -194,6 +198,8 @@ with lib.maintainers; {
     shortName = "dotnet";
   };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   deepin = {
     members = [
       rewine
@@ -206,11 +212,18 @@ with lib.maintainers; {
   deshaw = {
     # Verify additions to this team with at least one already existing member of the team.
     members = [
+<<<<<<< HEAD
       de11n
       invokes-su
     ];
     scope = "Group registration for D. E. Shaw employees who collectively maintain packages.";
     shortName = "D. E. Shaw employees";
+=======
+      limeytexan
+    ];
+    scope = "Group registration for D. E. Shaw employees who collectively maintain packages.";
+    shortName = "Shaw employees";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   determinatesystems = {
@@ -227,7 +240,11 @@ with lib.maintainers; {
 
   dhall = {
     members = [
+<<<<<<< HEAD
       Gabriella439
+=======
+      Gabriel439
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       ehmry
     ];
     scope = "Maintain Dhall and related packages.";
@@ -286,6 +303,7 @@ with lib.maintainers; {
     enableFeatureFreezePing = true;
   };
 
+<<<<<<< HEAD
   flutter = {
     members = [ gilice mkg20001 RossComputerGuy FlafyDev hacker1024 ];
     scope = "Maintain Flutter and Dart-related packages and build tools";
@@ -305,6 +323,8 @@ with lib.maintainers; {
     shortName = "Flying Circus employees";
   };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   freedesktop = {
     members = [ jtojnar ];
     scope = "Maintain Freedesktop.org packages for graphical desktop.";
@@ -325,13 +345,17 @@ with lib.maintainers; {
     members = [
       imincik
       sikmir
+<<<<<<< HEAD
       nh2
       willcohen
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     ];
     scope = "Maintain geospatial packages.";
     shortName = "Geospatial";
   };
 
+<<<<<<< HEAD
   gitlab = {
     members = [
       globin
@@ -344,6 +368,8 @@ with lib.maintainers; {
     shortName = "gitlab";
   };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   golang = {
     members = [
       kalbasit
@@ -365,7 +391,11 @@ with lib.maintainers; {
       hedning
       jtojnar
       dasj19
+<<<<<<< HEAD
       amaxine
+=======
+      maxeaubrey
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     ];
     githubTeams = [
       "gnome"
@@ -430,11 +460,16 @@ with lib.maintainers; {
     members = [
       cleeyv
       ryantm
+<<<<<<< HEAD
+=======
+      yuka
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     ];
     scope = "Maintain Jitsi.";
     shortName = "Jitsi";
   };
 
+<<<<<<< HEAD
   jupyter = {
     members = [
       GaetanLepage
@@ -444,12 +479,18 @@ with lib.maintainers; {
     shortName = "Jupyter";
   };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   kubernetes = {
     members = [
       johanot
       offline
       saschagrunert
       srhb
+<<<<<<< HEAD
+=======
+      zowoq
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     ];
     scope = "Maintain the Kubernetes package and module";
     shortName = "Kubernetes";
@@ -522,6 +563,7 @@ with lib.maintainers; {
     enableFeatureFreezePing = true;
   };
 
+<<<<<<< HEAD
   lomiri = {
     members = [
       OPNA2608
@@ -531,6 +573,8 @@ with lib.maintainers; {
     enableFeatureFreezePing = true;
   };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   lumiguide = {
     # Verify additions by approval of an already existing member of the team.
     members = [
@@ -586,7 +630,10 @@ with lib.maintainers; {
 
   mate = {
     members = [
+<<<<<<< HEAD
       bobby285271
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       j03
       romildo
     ];
@@ -600,15 +647,23 @@ with lib.maintainers; {
       ma27
       fadenb
       mguentner
+<<<<<<< HEAD
       ralith
       dandellion
       sumnerevans
       nickcao
+=======
+      ekleog
+      ralith
+      dandellion
+      sumnerevans
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     ];
     scope = "Maintain the ecosystem around Matrix, a decentralized messenger.";
     shortName = "Matrix";
   };
 
+<<<<<<< HEAD
   minimal-bootstrap = {
     members = [
       artturin
@@ -630,6 +685,8 @@ with lib.maintainers; {
     shortName = "Mercury Employees";
   };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   mobile = {
     members = [
       samueldr
@@ -640,6 +697,10 @@ with lib.maintainers; {
 
   nix = {
     members = [
+<<<<<<< HEAD
+=======
+      Profpatsch
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       eelco
       grahamc
       pierron
@@ -666,6 +727,10 @@ with lib.maintainers; {
       lilyinstarlight
       marsam
       winter
+<<<<<<< HEAD
+=======
+      yuka
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     ];
     scope = "Maintain Node.js runtimes and build tooling.";
     shortName = "Node.js";
@@ -686,12 +751,17 @@ with lib.maintainers; {
 
   openstack = {
     members = [
+<<<<<<< HEAD
+=======
+      emilytrau
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       SuperSandro2000
     ];
     scope = "Maintain the ecosystem around OpenStack";
     shortName = "OpenStack";
   };
 
+<<<<<<< HEAD
   ororatech = {
     # email: nixdevs@ororatech.com
     shortName = "OroraTech GmbH. employees";
@@ -703,6 +773,8 @@ with lib.maintainers; {
     ];
   };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pantheon = {
     members = [
       davidak
@@ -747,6 +819,10 @@ with lib.maintainers; {
       adisbladis
       saschagrunert
       vdemeester
+<<<<<<< HEAD
+=======
+      zowoq
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     ];
     githubTeams = [
       "podman"
@@ -768,7 +844,10 @@ with lib.maintainers; {
       fridh
       hexa
       jonringer
+<<<<<<< HEAD
       tjni
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     ];
     scope = "Maintain the Python interpreter and related packages.";
     shortName = "Python";
@@ -865,7 +944,13 @@ with lib.maintainers; {
   };
 
   sphinx = {
+<<<<<<< HEAD
     members = [ ];
+=======
+    members = [
+      SuperSandro2000
+    ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     scope = "Maintain Sphinx related packages.";
     shortName = "Sphinx";
   };
@@ -918,6 +1003,7 @@ with lib.maintainers; {
     shortName = "Vim/Neovim";
   };
 
+<<<<<<< HEAD
   wdz = {
     members = [
       n0emis
@@ -933,6 +1019,10 @@ with lib.maintainers; {
   xfce = {
     members = [
       bobby285271
+=======
+  xfce = {
+    members = [
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       romildo
       muscaln
     ];
@@ -940,6 +1030,7 @@ with lib.maintainers; {
     shortName = "Xfce";
     enableFeatureFreezePing = true;
   };
+<<<<<<< HEAD
 
   zig = {
     members = [
@@ -950,4 +1041,6 @@ with lib.maintainers; {
     shortName = "Zig";
     enableFeatureFreezePing = true;
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }

@@ -5,6 +5,10 @@
 , xorg
 , pkg-config
 , wrapGAppsHook
+<<<<<<< HEAD
+=======
+, ibus
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , gtk3
 , go
 }:

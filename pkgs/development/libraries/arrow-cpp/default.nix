@@ -39,8 +39,16 @@
 , enableShared ? !stdenv.hostPlatform.isStatic
 , enableFlight ? true
 , enableJemalloc ? !stdenv.isDarwin
+<<<<<<< HEAD
 , enableS3 ? true
 , enableGcs ? !stdenv.isDarwin
+=======
+  # boost/process is broken in 1.69 on darwin, but fixed in 1.70 and
+  # non-existent in older versions
+  # see https://github.com/boostorg/process/issues/55
+, enableS3 ? (!stdenv.isDarwin) || (lib.versionOlder boost.version "1.69" || lib.versionAtLeast boost.version "1.70")
+, enableGcs ? (!stdenv.isDarwin) && (lib.versionAtLeast grpc.cxxStandard "17") # google-cloud-cpp is not supported on darwin, needs to support C++17
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 assert lib.asserts.assertMsg
@@ -78,11 +86,19 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "arrow-cpp";
+<<<<<<< HEAD
   version = "13.0.0";
 
   src = fetchurl {
     url = "mirror://apache/arrow/arrow-${version}/apache-arrow-${version}.tar.gz";
     hash = "sha256-Nd/aGRJip1a+k07viv7o0JdiytJQIdqmJuskniUayeY=";
+=======
+  version = "12.0.0";
+
+  src = fetchurl {
+    url = "mirror://apache/arrow/arrow-${version}/apache-arrow-${version}.tar.gz";
+    hash = "sha256-3dg0eIJ3XlOvfQlloZArfY/NCgMP0U94PU+F6CE1LVI=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   sourceRoot = "apache-arrow-${version}/cpp";
@@ -120,8 +136,13 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
+<<<<<<< HEAD
     # Protobuf switched to lower case project name.
     ./cmake-find-protobuf.patch
+=======
+    # patch to fix python-test
+    ./darwin.patch
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   nativeBuildInputs = [
@@ -169,7 +190,10 @@ stdenv.mkDerivation rec {
   '';
 
   cmakeFlags = [
+<<<<<<< HEAD
     "-DCMAKE_FIND_PACKAGE_PREFER_CONFIG=ON"
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "-DARROW_BUILD_SHARED=${if enableShared then "ON" else "OFF"}"
     "-DARROW_BUILD_STATIC=${if enableShared then "OFF" else "ON"}"
     "-DARROW_BUILD_TESTS=ON"

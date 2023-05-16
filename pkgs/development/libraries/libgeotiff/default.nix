@@ -22,7 +22,11 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
+<<<<<<< HEAD
   sourceRoot = "${src.name}/libgeotiff";
+=======
+  sourceRoot = "source/libgeotiff";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   configureFlags = [
     "--with-jpeg=${libjpeg.dev}"

@@ -24,7 +24,10 @@
 , with3d ? true
 , withI18n ? true
 , srcs ? { }
+<<<<<<< HEAD
 , symlinkJoin
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 # The `srcs` parameter can be used to override the kicad source code
@@ -137,6 +140,7 @@ stdenv.mkDerivation rec {
     ++ optionals (withScripting)
     [ python.pkgs.wrapPython ];
 
+<<<<<<< HEAD
   # KICAD7_TEMPLATE_DIR only works with a single path (it does not handle : separated paths)
   # but it's used to find both the templates and the symbol/footprint library tables
   # https://gitlab.com/kicad/code/kicad/-/issues/14792
@@ -148,6 +152,8 @@ stdenv.mkDerivation rec {
       "${symbols}/share/kicad/template"
     ];
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   # We are emulating wrapGAppsHook, along with other variables to the wrapper
   makeWrapperArgs = with passthru.libraries; [
     "--prefix XDG_DATA_DIRS : ${base}/share"
@@ -162,7 +168,13 @@ stdenv.mkDerivation rec {
     "--set-default MOZ_DBUS_REMOTE 1"
     "--set-default KICAD7_FOOTPRINT_DIR ${footprints}/share/kicad/footprints"
     "--set-default KICAD7_SYMBOL_DIR ${symbols}/share/kicad/symbols"
+<<<<<<< HEAD
     "--set-default KICAD7_TEMPLATE_DIR ${template_dir}"
+=======
+    "--set-default KICAD7_TEMPLATE_DIR ${templates}/share/kicad/template"
+    "--prefix KICAD7_TEMPLATE_DIR : ${symbols}/share/kicad/template"
+    "--prefix KICAD7_TEMPLATE_DIR : ${footprints}/share/kicad/template"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ]
   ++ optionals (with3d)
   [
@@ -229,9 +241,24 @@ stdenv.mkDerivation rec {
       The Programs handle Schematic Capture, and PCB Layout with Gerber output.
     '';
     license = lib.licenses.gpl3Plus;
+<<<<<<< HEAD
     maintainers = with lib.maintainers; [ evils ];
     platforms = lib.platforms.all;
     broken = stdenv.isDarwin;
+=======
+    maintainers = with lib.maintainers; [ evils kiwi ];
+    # kicad is cross platform
+    platforms = lib.platforms.all;
+    broken = stdenv.isDarwin;
+
+    hydraPlatforms = if (with3d) then [ ] else platforms;
+    # We can't download the 3d models on Hydra,
+    # they are a ~1 GiB download and they occupy ~5 GiB in store.
+    # as long as the base and libraries (minus 3d) are build,
+    # this wrapper does not need to get built
+    # the kicad-*small "packages" cause this to happen
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     mainProgram = "kicad";
   };
 }

@@ -1,8 +1,15 @@
+<<<<<<< HEAD
 { stdenv, lib, haskellPackages, haskell, removeReferencesTo }:
 
 let
   # Since pandoc 3.0 the pandoc binary resides in the pandoc-cli package.
   static = haskell.lib.compose.justStaticExecutables haskellPackages.pandoc-cli;
+=======
+{ stdenv, lib, haskellPackages, fetchpatch, haskell, removeReferencesTo }:
+
+let
+  static = haskell.lib.compose.justStaticExecutables haskellPackages.pandoc;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 in
   (haskell.lib.compose.overrideCabal (drv: {

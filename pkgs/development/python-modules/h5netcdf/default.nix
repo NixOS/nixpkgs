@@ -21,11 +21,17 @@ buildPythonPackage rec {
     hash = "sha256-kyw7Vzvtc3Dr/J6ALNYPGk2lI277EbNu7/iXMk12v1Y=";
   };
 
+<<<<<<< HEAD
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   nativeBuildInputs = [
     setuptools-scm
   ];
+=======
+ nativeBuildInputs = [
+   setuptools-scm
+ ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   propagatedBuildInputs = [
     h5py

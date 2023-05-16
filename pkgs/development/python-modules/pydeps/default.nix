@@ -6,12 +6,19 @@
 , pytestCheckHook
 , pythonOlder
 , pyyaml
+<<<<<<< HEAD
 , toml
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 buildPythonPackage rec {
   pname = "pydeps";
+<<<<<<< HEAD
   version = "1.12.17";
+=======
+  version = "1.12.3";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -20,7 +27,11 @@ buildPythonPackage rec {
     owner = "thebjorn";
     repo = pname;
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-DVSZeNuDz/y0jh/HimV+jFgNFevMhUKOu6EhZytMMqQ=";
+=======
+    hash = "sha256-Zw5LGsNie2BAsJUWfL16HRdATpb5twkB5trBbIHNCc4=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   buildInputs = [
@@ -35,7 +46,10 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     pyyaml
+<<<<<<< HEAD
     toml
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   postPatch = ''

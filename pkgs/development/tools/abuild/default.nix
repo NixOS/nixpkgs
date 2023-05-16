@@ -14,14 +14,22 @@
 
 stdenv.mkDerivation rec {
   pname = "abuild";
+<<<<<<< HEAD
   version = "3.11.21";
+=======
+  version = "3.10.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitLab {
     domain = "gitlab.alpinelinux.org";
     owner = "alpine";
     repo = pname;
     rev = version;
+<<<<<<< HEAD
     sha256 = "sha256-M88JPQKBkixAsWfGUirFsjFwB7m8/x63dpnoEHZpQTE=";
+=======
+    sha256 = "sha256-pCimOI3pxlpd+yqKIRq6frbaX0s9bjZZf/eaDA4fd2M=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   buildInputs = [

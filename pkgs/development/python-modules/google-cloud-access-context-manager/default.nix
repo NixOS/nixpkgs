@@ -35,6 +35,10 @@ buildPythonPackage rec {
     homepage = "https://github.com/googleapis/python-access-context-manager";
     changelog = "https://github.com/googleapis/python-access-context-manager/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
+<<<<<<< HEAD
     maintainers = with maintainers; [ austinbutler ];
+=======
+    maintainers = with maintainers; [ austinbutler SuperSandro2000 ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

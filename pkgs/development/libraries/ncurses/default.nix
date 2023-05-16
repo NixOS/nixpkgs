@@ -139,6 +139,7 @@ stdenv.mkDerivation (finalAttrs: {
       done
     done
 
+<<<<<<< HEAD
     # add pkg-config aliases for libraries that are built-in to libncurses(w)
     for library in tinfo tic; do
       for suffix in "" w; do
@@ -146,6 +147,8 @@ stdenv.mkDerivation (finalAttrs: {
       done
     done
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     # move some utilities to $bin
     # these programs are used at runtime and don't really belong in $dev
     moveToOutput "bin/clear" "$out"

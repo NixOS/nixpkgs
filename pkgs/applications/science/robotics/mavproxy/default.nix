@@ -4,11 +4,19 @@
 
 buildPythonApplication rec {
   pname = "MAVProxy";
+<<<<<<< HEAD
   version = "1.8.66";
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-tIwXiDHEmFHF5Jdv25hPkzEqAdig+i5h4fW6SGIrZDM=";
+=======
+  version = "1.8.59";
+
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "sha256-XY0d9q4nSuPflN4ZX+nT4RKFy6i4Cd2lNWvWaJQzWW8=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   postPatch = ''

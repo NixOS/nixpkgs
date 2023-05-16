@@ -17,7 +17,11 @@
 
 buildPythonPackage rec {
   pname = "cssutils";
+<<<<<<< HEAD
   version = "2.7.1";
+=======
+  version = "2.6.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   disabled = pythonOlder "3.7";
 
@@ -25,7 +29,11 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
+<<<<<<< HEAD
     hash = "sha256-NA7P2YNdId+PmFAPDfzqCu5By04Z7Lws+U8KbTbXy2w=";
+=======
+    hash = "sha256-99zSPBzskJ/fNjDeNG4UE7eyVVk23sFLouu5kTvwgY4=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

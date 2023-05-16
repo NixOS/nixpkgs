@@ -2,16 +2,27 @@
 
 buildGoModule rec {
   pname = "amazon-ecr-credential-helper";
+<<<<<<< HEAD
   version = "0.7.1";
+=======
+  version = "0.6.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "awslabs";
     repo = "amazon-ecr-credential-helper";
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-Q+YAfCsq4/PoSzYMFhLDAsAfxlU7XR/vouHo42/D2eM=";
   };
 
   vendorHash = null;
+=======
+    sha256 = "sha256-lkc8plWWmth8SjeWBCf1HTnCfg09QNIsN3xPePqnv6Y=";
+  };
+
+  vendorSha256 = null;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   modRoot = "./ecr-login";
 

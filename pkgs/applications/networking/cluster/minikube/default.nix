@@ -12,9 +12,15 @@
 
 buildGoModule rec {
   pname = "minikube";
+<<<<<<< HEAD
   version = "1.31.2";
 
   vendorHash = "sha256-5ChPdSIRI+Q3OLW+joukMpIFbUjU4TKpXT4wAARVVP8=";
+=======
+  version = "1.30.1";
+
+  vendorHash = "sha256-616T47H+8FdXU37MDvAHRyM59JXurU45uz8c/TNxkkc=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   doCheck = false;
 
@@ -22,7 +28,11 @@ buildGoModule rec {
     owner = "kubernetes";
     repo = "minikube";
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-Ha0liXc2oXJ3dLty1veN5xN5BUKIiNXe8NTGqWDbTD0=";
+=======
+    sha256 = "sha256-dw+aFckp5Q9i6bNKPetw2WlslrpKAgEzXI+aGAwDurU=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ installShellFiles pkg-config which makeWrapper ];
@@ -50,5 +60,9 @@ buildGoModule rec {
     description = "A tool that makes it easy to run Kubernetes locally";
     license = licenses.asl20;
     maintainers = with maintainers; [ ebzzry copumpkin vdemeester atkinschang Chili-Man ];
+<<<<<<< HEAD
+=======
+    platforms = platforms.unix;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

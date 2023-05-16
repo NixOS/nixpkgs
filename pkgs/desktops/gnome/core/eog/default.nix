@@ -31,13 +31,21 @@
 
 stdenv.mkDerivation rec {
   pname = "eog";
+<<<<<<< HEAD
   version = "44.3";
+=======
+  version = "44.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
+<<<<<<< HEAD
     sha256 = "sha256-1rLXD0tDL/jPSUyPkCmyYh0I54F5ODF9ZAY65sTanYw=";
+=======
+    sha256 = "sha256-4slj8jL+WhCR3MGL7CWnMOkbAq9uRmYB76VeUAzXTKs=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   patches = [

@@ -57,6 +57,9 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.AndersonTorres ];
     platforms = lib.platforms.unix;
+<<<<<<< HEAD
     mainProgram = "2048";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 })

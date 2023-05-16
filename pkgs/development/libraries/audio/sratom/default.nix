@@ -43,6 +43,7 @@ stdenv.mkDerivation rec {
     "-Ddocs=disabled"
   ];
 
+<<<<<<< HEAD
   postFixup = ''
     # remove once updated to 0.6.15 or above
     for f in $dev/lib/pkgconfig/*; do
@@ -50,6 +51,8 @@ stdenv.mkDerivation rec {
     done
   '';
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   passthru = {
     updateScript = writeScript "update-sratom" ''
       #!/usr/bin/env nix-shell

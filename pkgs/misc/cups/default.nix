@@ -1,5 +1,9 @@
 { lib, stdenv
 , fetchurl
+<<<<<<< HEAD
+=======
+, fetchpatch
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , pkg-config
 , removeReferencesTo
 , zlib
@@ -23,11 +27,19 @@
 
 stdenv.mkDerivation rec {
   pname = "cups";
+<<<<<<< HEAD
   version = "2.4.6";
 
   src = fetchurl {
     url = "https://github.com/OpenPrinting/cups/releases/download/v${version}/cups-${version}-source.tar.gz";
     sha256 = "sha256-WOlwzxlV4cyH0IR8MlJtnCzO4zXl8OOIKygxOLoOcmI=";
+=======
+  version = "2.4.2";
+
+  src = fetchurl {
+    url = "https://github.com/OpenPrinting/cups/releases/download/v${version}/cups-${version}-source.tar.gz";
+    sha256 = "sha256-8DzLQLCH0eMJQKQOAUHcu6Jj85l0wg658lIQZsnGyQg=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   outputs = [ "out" "lib" "dev" "man" ];
@@ -40,9 +52,12 @@ stdenv.mkDerivation rec {
       # service would stop the socket and break subsequent socket activations.
       # See https://github.com/apple/cups/issues/6005
       sed -i '/PartOf=cups.service/d' scheduler/cups.socket.in
+<<<<<<< HEAD
   '' + lib.optionalString (stdenv.isDarwin && lib.versionOlder stdenv.targetPlatform.darwinSdkVersion "12") ''
     substituteInPlace backend/usb-darwin.c \
       --replace "kIOMainPortDefault" "kIOMasterPortDefault"
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '';
 
   nativeBuildInputs = [ pkg-config removeReferencesTo ];
@@ -136,12 +151,16 @@ stdenv.mkDerivation rec {
         --replace "Exec=htmlview" "Exec=xdg-open"
     '';
 
+<<<<<<< HEAD
   passthru.tests = {
     inherit (nixosTests)
       printing-service
       printing-socket
     ;
   };
+=======
+  passthru.tests.nixos = nixosTests.printing;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   meta = with lib; {
     homepage = "https://openprinting.github.io/cups/";

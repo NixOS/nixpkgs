@@ -12,7 +12,11 @@ buildPythonPackage {
 
   disabled = !isPy3k;
 
+<<<<<<< HEAD
   sourceRoot = "${olm.src.name}/python";
+=======
+  sourceRoot = "source/python";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   buildInputs = [ olm ];
 
   preBuild = ''

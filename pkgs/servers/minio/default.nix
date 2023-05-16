@@ -15,16 +15,27 @@ let
 in
 buildGoModule rec {
   pname = "minio";
+<<<<<<< HEAD
   version = "2023-08-16T20-17-30Z";
+=======
+  version = "2023-05-04T21-44-30Z";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "minio";
     repo = "minio";
     rev = "RELEASE.${version}";
+<<<<<<< HEAD
     sha256 = "sha256-VY07ITsR2ISM0V4NgwpayDLakU425JCIjxEJ6YKEzXY=";
   };
 
   vendorHash = "sha256-KYbfHYls77OH8IWCnO9dSevrJ+2fZmpRQPCKfKCyXME=";
+=======
+    sha256 = "sha256-CSB7QFKb96QVgcBlfP+ghVlLlPGkcI0um6hC2rp+CWc=";
+  };
+
+  vendorHash = "sha256-EthPqudNGnXTixnDRbRXdgOfJHIrIYZ8IHy5BZLSwJQ=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   doCheck = false;
 
@@ -45,6 +56,10 @@ buildGoModule rec {
     description = "An S3-compatible object storage server";
     changelog = "https://github.com/minio/minio/releases/tag/RELEASE.${version}";
     maintainers = with maintainers; [ eelco bachp ];
+<<<<<<< HEAD
+=======
+    platforms = platforms.unix;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     license = licenses.agpl3Plus;
   };
 }

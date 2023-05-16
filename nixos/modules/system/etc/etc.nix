@@ -173,7 +173,11 @@ in
           config = {
             target = mkDefault name;
             source = mkIf (config.text != null) (
+<<<<<<< HEAD
               let name' = "etc-" + lib.replaceStrings ["/"] ["-"] name;
+=======
+              let name' = "etc-" + baseNameOf name;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
               in mkDerivedConfig options.text (pkgs.writeText name')
             );
           };

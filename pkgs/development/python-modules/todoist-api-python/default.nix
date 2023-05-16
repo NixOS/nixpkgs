@@ -1,4 +1,8 @@
 { lib
+<<<<<<< HEAD
+=======
+, attrs
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , buildPythonPackage
 , fetchFromGitHub
 , fetchpatch
@@ -12,16 +16,27 @@
 
 buildPythonPackage rec {
   pname = "todoist-api-python";
+<<<<<<< HEAD
   version = "2.1.3";
   format = "pyproject";
 
   disabled = pythonOlder "3.11";
+=======
+  version = "2.0.2";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.7";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "Doist";
     repo = pname;
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-Xi3B/Nl5bMbW0lYwrkEbBgFTEl07YkFyN18kN0WyGyw=";
+=======
+    hash = "sha256-CKOsUb35+7WjSNf4Xo0SK5loIqWJbEnHdmhw9QXWFAI=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   patches = [
@@ -38,6 +53,10 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
+<<<<<<< HEAD
+=======
+    attrs
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     requests
   ];
 

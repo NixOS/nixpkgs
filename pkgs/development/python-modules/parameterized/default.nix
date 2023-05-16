@@ -2,20 +2,32 @@
 , buildPythonPackage
 , fetchPypi
 , mock
+<<<<<<< HEAD
 , pytestCheckHook
 , pythonOlder
 , setuptools
+=======
+, nose
+, pytestCheckHook
+, pythonOlder
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 buildPythonPackage rec {
   pname = "parameterized";
+<<<<<<< HEAD
   version = "0.9.0";
   format = "pyproject";
+=======
+  version = "0.8.1";
+  format = "setuptools";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
+<<<<<<< HEAD
     hash = "sha256-f8kFJyzvpPNkwaNCnLvpwPmLeTmI77W/kKrIDwjbCbE=";
   };
 
@@ -32,6 +44,14 @@ buildPythonPackage rec {
 
   checkInputs = [
     mock
+=======
+    hash = "sha256-Qbv/N9YYZDD3f5ANd35btqJJKKHEb7HeaS+LUriDO1w=";
+  };
+
+  checkInputs = [
+    mock
+    nose
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     pytestCheckHook
   ];
 
@@ -39,6 +59,17 @@ buildPythonPackage rec {
     "parameterized/test.py"
   ];
 
+<<<<<<< HEAD
+=======
+  disabledTests = [
+    # Tests seem outdated
+    "test_method"
+    "test_with_docstring_0_value1"
+    "test_with_docstring_1_v_l_"
+    "testCamelCaseMethodC"
+  ];
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pythonImportsCheck = [
     "parameterized"
   ];

@@ -108,6 +108,10 @@ dont-distribute-packages:
  - FComp
  - FM-SBLEX
  - FTPLine
+<<<<<<< HEAD
+=======
+ - Facts
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  - FailureT
  - FermatsLastMargin
  - FieldTrip
@@ -154,7 +158,10 @@ dont-distribute-packages:
  - GtkTV
  - GuiHaskell
  - GuiTV
+<<<<<<< HEAD
  - H
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  - HAppS-Data
  - HAppS-IxSet
  - HAppS-Server
@@ -205,7 +212,10 @@ dont-distribute-packages:
  - HaTeX-meta
  - HaTeX-qq
  - HaVSA
+<<<<<<< HEAD
  - HaXPath
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  - Hach
  - HarmTrace
  - HasGP
@@ -229,7 +239,10 @@ dont-distribute-packages:
  - HsParrot
  - HsWebots
  - Hsed
+<<<<<<< HEAD
  - Hungarian-Munkres
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  - Hydrogen
  - INblobs
  - IORefCAS
@@ -242,7 +255,11 @@ dont-distribute-packages:
  - JsContracts
  - JsonGrammar
  - JuPyTer-notebook
+<<<<<<< HEAD
  - JuicyPixels-repa
+=======
+ - JuicyPixels-scale-dct
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  - JunkDB-driver-gdbm
  - JunkDB-driver-hashtables
  - KiCS
@@ -282,7 +299,10 @@ dont-distribute-packages:
  - MonadLab
  - Monaris
  - Monatron-IO
+<<<<<<< HEAD
  - Mondrian
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  - Monocle
  - MuCheck-HUnit
  - MuCheck-Hspec
@@ -290,7 +310,10 @@ dont-distribute-packages:
  - MuCheck-SmallCheck
  - MutationOrder
  - NGLess
+<<<<<<< HEAD
  - NTRU
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  - NaperianNetCDF
  - NaturalLanguageAlphabets
  - NearContextAlgebra
@@ -333,7 +356,10 @@ dont-distribute-packages:
  - RNAdraw
  - RNAlien
  - RNAwolf
+<<<<<<< HEAD
  - Raincat
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  - Ranka
  - ReplaceUmlaut
  - RollingDirectory
@@ -454,11 +480,18 @@ dont-distribute-packages:
  - adhoc-network
  - adict
  - adp-multi-monadiccp
+<<<<<<< HEAD
  - aeson-extra_0_5_1_3
  - aeson-native
  - aeson-pretty_0_8_10
  - affine
  - afv
+=======
+ - aeson-native
+ - affine
+ - afv
+ - ag-pictgen
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  - agda-server
  - agda-snippets-hakyll
  - agentx
@@ -623,8 +656,11 @@ dont-distribute-packages:
  - amby
  - ampersand
  - amqp-streamly
+<<<<<<< HEAD
  - amqp-utils_0_6_4_0
  - amqp_0_22_2
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  - anatomy
  - animate-example
  - animate-frames
@@ -647,8 +683,11 @@ dont-distribute-packages:
  - antiope-sqs
  - antiope-swf
  - antlrc
+<<<<<<< HEAD
  - apecs-gloss
  - apecs-physics-gloss
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  - apelsin
  - api-rpc-accumulate
  - api-rpc-pegnet
@@ -670,9 +709,15 @@ dont-distribute-packages:
  - apiary-websockets
  - apis
  - apotiki
+<<<<<<< HEAD
  - approx-rand-test
  - arbor-monad-metric-datadog
  - archive-libarchive
+=======
+ - appendful-persistent
+ - approx-rand-test
+ - arbor-monad-metric-datadog
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  - archive-tar-bytestring
  - archlinux-web
  - arduino-copilot
@@ -684,6 +729,7 @@ dont-distribute-packages:
  - arithmetic-circuits
  - array-forth
  - arraylist
+<<<<<<< HEAD
  - ascii
  - ascii-cows
  - ascii-numbers
@@ -691,6 +737,15 @@ dont-distribute-packages:
  - ascii-table
  - ascii-th
  - asic
+=======
+ - ascii-cows
+ - ascii-superset_1_3_0_0
+ - ascii-table
+ - ascii-th_1_2_0_0
+ - ascii_1_7_0_0
+ - asic
+ - asil
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  - assert4hs-hspec
  - assert4hs-tasty
  - assimp
@@ -702,6 +757,10 @@ dont-distribute-packages:
  - atom-msp430
  - atomic-primops-foreign
  - atp
+<<<<<<< HEAD
+=======
+ - ats-format
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  - attoparsec-enumerator
  - attoparsec-iteratee
  - attoparsec-text-enumerator
@@ -710,7 +769,10 @@ dont-distribute-packages:
  - aura
  - authoring
  - autodocodec-openapi3
+<<<<<<< HEAD
  - autodocodec-servant-multipart
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  - automata
  - autonix-deps-kf5
  - avers
@@ -773,8 +835,11 @@ dont-distribute-packages:
  - battleships
  - bayes-stack
  - bbi
+<<<<<<< HEAD
  - bcp47
  - bcp47-orphans
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  - bdcs
  - bdcs-api
  - beam-automigrate
@@ -785,7 +850,10 @@ dont-distribute-packages:
  - bein
  - belka
  - bff
+<<<<<<< HEAD
  - bglib
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  - bidirectionalization-combined
  - bifunctor
  - billboard-parser
@@ -814,7 +882,10 @@ dont-distribute-packages:
  - bip32
  - birch-beer
  - bird
+<<<<<<< HEAD
  - bisc
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  - biscuit-servant
  - bit-array
  - bitcoin-address
@@ -824,6 +895,10 @@ dont-distribute-packages:
  - bitcoin-tx
  - bitcoin-types
  - bitcoind-regtest
+<<<<<<< HEAD
+=======
+ - bitfield
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  - bitly-cli
  - bitmaps
  - bittorrent
@@ -837,8 +912,11 @@ dont-distribute-packages:
  - ble
  - blink1
  - blip
+<<<<<<< HEAD
  - blockfrost-client
  - blockfrost-client-core
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  - blogination
  - bloodhound-amazonka-auth
  - bloxorz
@@ -855,7 +933,10 @@ dont-distribute-packages:
  - bookhound-format
  - bookkeeper
  - bookkeeper-permissions
+<<<<<<< HEAD
  - bookkeeping-jp
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  - boomslang
  - boots-app
  - boots-cloud
@@ -888,19 +969,29 @@ dont-distribute-packages:
  - bv-sized
  - bv-sized-lens
  - bytable
+<<<<<<< HEAD
  - bytehash
  - bytelog
  - bytepatch
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  - bytestring-builder-varword
  - bytestring-read
  - ca
  - cabal-bounds
  - cabal-cache
  - cabal-cargs
+<<<<<<< HEAD
  - cabal-flatpak
  - cabal-query
  - cabal-test
  - cabal2arch
+=======
+ - cabal-query
+ - cabal-test
+ - cabal2arch
+ - cabal2json
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  - cabalmdvrpm
  - cabalrpmdeps
  - caffegraph
@@ -908,7 +999,10 @@ dont-distribute-packages:
  - cakyrespa
  - cal3d-examples
  - cal3d-opengl
+<<<<<<< HEAD
  - calamity
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  - calc
  - calculator
  - caldims
@@ -967,12 +1061,17 @@ dont-distribute-packages:
  - chapelure
  - charade
  - chart-cli
+<<<<<<< HEAD
  - chart-svg
  - chart-svg-various
  - chart-unit
  - chassis
  - cheapskate-highlight
  - cheapskate-lucid
+=======
+ - chart-svg-various
+ - chart-unit
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  - cheapskate-terminal
  - check-pvp
  - chevalier-common
@@ -1010,6 +1109,7 @@ dont-distribute-packages:
  - clashilator
  - classify-frog
  - classy-miso
+<<<<<<< HEAD
  - clckwrks
  - clckwrks-cli
  - clckwrks-dot-com
@@ -1019,12 +1119,19 @@ dont-distribute-packages:
  - clckwrks-plugin-redirect
  - clckwrks-theme-bootstrap
  - cleff-plugin
+=======
+ - clckwrks-dot-com
+ - clckwrks-plugin-ircbot
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  - cless
  - cleveland
  - click-clack
  - clickhouse-haskell
  - clifford
+<<<<<<< HEAD
  - climb
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  - clippings
  - cloud-haskell
  - cloud-seeder
@@ -1038,8 +1145,11 @@ dont-distribute-packages:
  - cmv
  - cnc-spec-compiler
  - co-feldspar
+<<<<<<< HEAD
  - co-log
  - co-log-polysemy-formatting
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  - cobot-io
  - codec
  - codec-libevent
@@ -1048,7 +1158,10 @@ dont-distribute-packages:
  - coformat
  - cognimeta-utils
  - coinbase-exchange
+<<<<<<< HEAD
  - coincident-root-loci
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  - colada
  - collapse-duplication
  - collection-json
@@ -1068,6 +1181,7 @@ dont-distribute-packages:
  - compact-mutable
  - compact-mutable-vector
  - compact-socket
+<<<<<<< HEAD
  - compdata-automata
  - compdata-dags
  - compdata-param
@@ -1089,6 +1203,13 @@ dont-distribute-packages:
  - composite-tuple
  - composite-xml
  - composite-xstep
+=======
+ - compactable
+ - compdata-automata
+ - compdata-dags
+ - compdata-param
+ - complexity
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  - comprehensions-ghc
  - compstrat
  - comptrans
@@ -1104,14 +1225,20 @@ dont-distribute-packages:
  - conduit-throttle
  - conduit-vfs-zip
  - confcrypt
+<<<<<<< HEAD
  - conferer-aeson
  - conferer-hedis
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  - conferer-provider-dhall
  - conferer-provider-yaml
  - conferer-source-dhall
  - conferer-source-yaml
+<<<<<<< HEAD
  - conferer-warp
  - conferer-yaml
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  - conffmt
  - config-select
  - configifier
@@ -1147,8 +1274,11 @@ dont-distribute-packages:
  - coroutine-iteratee
  - couch-simple
  - couchdb-enumerator
+<<<<<<< HEAD
  - country
  - country_0_2_4_0
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  - cpkg
  - cprng-aes-effect
  - cql-io-tinylog
@@ -1159,6 +1289,10 @@ dont-distribute-packages:
  - cqrs-test
  - cqrs-testkit
  - crackNum
+<<<<<<< HEAD
+=======
+ - crackNum_3_4
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  - craft
  - craftwerk-cairo
  - craftwerk-gtk
@@ -1170,6 +1304,10 @@ dont-distribute-packages:
  - crf-chain2-generic
  - crf-chain2-tiers
  - criu-rpc
+<<<<<<< HEAD
+=======
+ - crockford
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  - cron-compat
  - crypto-classical
  - crypto-conduit
@@ -1179,7 +1317,10 @@ dont-distribute-packages:
  - cryptoids
  - cryptoids-class
  - cryptol
+<<<<<<< HEAD
  - cryptonite-cd
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  - crystalfontz
  - csound-catalog
  - csound-controllers
@@ -1191,6 +1332,10 @@ dont-distribute-packages:
  - csv-enumerator
  - ctpl
  - cube
+<<<<<<< HEAD
+=======
+ - cuckoo
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  - cv-combinators
  - cypher
  - daino
@@ -1260,8 +1405,11 @@ dont-distribute-packages:
  - delimiter-separated
  - delta
  - delta-h
+<<<<<<< HEAD
  - dep-t-advice
  - dependent-literals
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  - dependent-literals-plugin
  - dependent-state
  - depends
@@ -1280,6 +1428,10 @@ dont-distribute-packages:
  - dia-functions
  - diagrams-haddock
  - diagrams-html5
+<<<<<<< HEAD
+=======
+ - diagrams-input
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  - diagrams-pandoc
  - diagrams-reflex
  - diagrams-wx
@@ -1321,11 +1473,18 @@ dont-distribute-packages:
  - distributed-process-systest
  - distributed-process-task
  - distributed-process-tests
+<<<<<<< HEAD
+=======
+ - distributed-process-zookeeper
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  - distributed-static
  - distribution-plot
  - dixi
  - dl-fedora
+<<<<<<< HEAD
  - dl-fedora_0_9_5_1
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  - dmenu-pkill
  - dmenu-pmount
  - dmenu-search
@@ -1339,6 +1498,10 @@ dont-distribute-packages:
  - doc-review
  - domain
  - domain-aeson
+<<<<<<< HEAD
+=======
+ - domain-aeson_0_1_1_1
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  - domain-cereal
  - domaindriven
  - dormouse-client
@@ -1369,7 +1532,10 @@ dont-distribute-packages:
  - ec2-unikernel
  - eccrypto-ed25519-bindings
  - ecdsa
+<<<<<<< HEAD
  - ecta
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  - edenskel
  - edentv
  - edge
@@ -1386,18 +1552,27 @@ dont-distribute-packages:
  - ekg
  - ekg-carbon
  - ekg-cloudwatch
+<<<<<<< HEAD
  - ekg-prometheus-adapter
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  - ekg-wai
  - elasticsearch-interchange
  - electrs-client
  - elerea-examples
  - elliptic-curve
  - elsa
+<<<<<<< HEAD
  - ema-extra
  - emacs-keys
  - email
  - emailparse
  - emanote
+=======
+ - emacs-keys
+ - email
+ - emailparse
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  - embroidery
  - emd
  - engine-io-growler
@@ -1420,7 +1595,10 @@ dont-distribute-packages:
  - errors-ext
  - ersatz-toysat
  - esotericbot
+<<<<<<< HEAD
  - esqueleto-streaming
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  - essence-of-live-coding-PortMidi
  - essence-of-live-coding-gloss
  - essence-of-live-coding-gloss-example
@@ -1459,6 +1637,10 @@ dont-distribute-packages:
  - eventuo11y-otel
  - eventuo11y-prometheus
  - every-bit-counts
+<<<<<<< HEAD
+=======
+ - ewe
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  - exference
  - exinst-aeson
  - exinst-base
@@ -1485,7 +1667,10 @@ dont-distribute-packages:
  - fair
  - fallingblocks
  - family-tree
+<<<<<<< HEAD
  - fast-arithmetic
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  - fast-bech32
  - fastcdc
  - fastcgi
@@ -1508,7 +1693,10 @@ dont-distribute-packages:
  - feature-flipper-postgres
  - fedora-composes
  - fedora-img-dl
+<<<<<<< HEAD
  - fedora-repoquery
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  - feed-gipeda
  - feed-translator
  - feed2lj
@@ -1522,14 +1710,20 @@ dont-distribute-packages:
  - fei-nn
  - feldspar-compiler
  - festung
+<<<<<<< HEAD
  - fficxx
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  - ffmpeg-tutorials
  - ficketed
  - filepath-crypto
  - filepath-io-access
  - filesystem-abstractions
  - filesystem-enumerator
+<<<<<<< HEAD
  - fin-int
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  - find-clumpiness
  - findhttp
  - finitary
@@ -1559,8 +1753,13 @@ dont-distribute-packages:
  - fluent-logger-conduit
  - fmt-for-rio
  - foldable1
+<<<<<<< HEAD
  - foldl-transduce-attoparsec
  - follower
+=======
+ - follower
+ - fontconfig-pure
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  - foo
  - format
  - format-status
@@ -1577,6 +1776,10 @@ dont-distribute-packages:
  - fpnla-examples
  - frame-markdown
  - freckle-app
+<<<<<<< HEAD
+=======
+ - freckle-app_1_9_0_0
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  - free-functors
  - free-game
  - free-theorems-counterexamples
@@ -1587,7 +1790,10 @@ dont-distribute-packages:
  - freelude
  - freer-converse
  - fresnel-fused-effects
+<<<<<<< HEAD
  - friday-juicypixels
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  - front
  - frpnow-gloss
  - frpnow-gtk
@@ -1599,13 +1805,20 @@ dont-distribute-packages:
  - ftshell
  - funbot
  - funbot-git-hook
+<<<<<<< HEAD
  - funcons-simple
  - funcons-tools
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  - function-combine
  - functor
  - functor-combo
  - funflow
  - funflow-nix
+<<<<<<< HEAD
+=======
+ - fungll-combinators
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  - funion
  - funnyprint
  - funsat
@@ -1616,7 +1829,10 @@ dont-distribute-packages:
  - g2q
  - gact
  - galois-fft
+<<<<<<< HEAD
  - gargoyle-postgresql
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  - gargoyle-postgresql-connect
  - gbu
  - gdax
@@ -1641,13 +1857,27 @@ dont-distribute-packages:
  - geni-util
  - geniconvert
  - geniserver
+<<<<<<< HEAD
  - genvalidity-network-uri
+=======
+ - genvalidity-appendful
+ - genvalidity-dirforest
+ - genvalidity-network-uri
+ - genvalidity-sydtest
+ - genvalidity-sydtest-aeson
+ - genvalidity-sydtest-hashable
+ - genvalidity-sydtest-lens
+ - genvalidity-sydtest-persistent
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  - geo-uk
  - geodetic
  - geolite-csv
  - getemx
  - gf
+<<<<<<< HEAD
  - ghc-dump-util
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  - ghc-imported-from
  - ghc-instances
  - ghc-mod
@@ -1687,14 +1917,20 @@ dont-distribute-packages:
  - glazier-react
  - glazier-react-examples
  - glazier-react-widget
+<<<<<<< HEAD
  - glirc
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  - global
  - global-config
  - glome-hs
  - gloss-accelerate
  - gloss-devil
+<<<<<<< HEAD
  - gloss-examples
  - gloss-raster
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  - gloss-raster-accelerate
  - gloss-sodium
  - gltf-loader
@@ -1927,8 +2163,11 @@ dont-distribute-packages:
  - graphtype
  - greencard-lib
  - grenade
+<<<<<<< HEAD
  - greskell
  - greskell-websocket
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  - gridbounds
  - gridland
  - grisette
@@ -1946,7 +2185,10 @@ dont-distribute-packages:
  - grpc-haskell-core
  - gruff
  - gruff-examples
+<<<<<<< HEAD
  - gsc-weighting
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  - gscholar-rss
  - gsl-random-fu
  - gsmenu
@@ -1962,9 +2204,13 @@ dont-distribute-packages:
  - gtkimageview
  - gtkrsync
  - guarded-rewriting
+<<<<<<< HEAD
  - hArduino
  - hOff-display
  - hOpenPGP
+=======
+ - hOff-display
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  - hPDB
  - hPDB-examples
  - habit
@@ -1992,7 +2238,10 @@ dont-distribute-packages:
  - haddock
  - haddock_2_23_1
  - haddocset
+<<<<<<< HEAD
  - hadolint
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  - hadoop-tools
  - haggis
  - hailgun-send
@@ -2002,8 +2251,11 @@ dont-distribute-packages:
  - hakyll-ogmarkup
  - hakyll-shortcut-links
  - halberd
+<<<<<<< HEAD
  - halide-JuicyPixels
  - halide-arrayfire
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  - hall-symbols
  - halma-gui
  - halma-telegram-bot
@@ -2015,7 +2267,10 @@ dont-distribute-packages:
  - happs-hsp-template
  - happs-tutorial
  - happstack-auth
+<<<<<<< HEAD
  - happstack-authenticate
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  - happstack-contrib
  - happstack-data
  - happstack-dlg
@@ -2023,7 +2278,10 @@ dont-distribute-packages:
  - happstack-fastcgi
  - happstack-fay
  - happstack-fay-ajax
+<<<<<<< HEAD
  - happstack-foundation
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  - happstack-helpers
  - happstack-ixset
  - happstack-plugins
@@ -2042,7 +2300,11 @@ dont-distribute-packages:
  - hascat-setup
  - hascat-system
  - hashable-accelerate
+<<<<<<< HEAD
  - hasherize
+=======
+ - hashes
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  - hashflare
  - hask-home
  - haskdeep
@@ -2147,6 +2409,10 @@ dont-distribute-packages:
  - hback
  - hbayes
  - hbb
+<<<<<<< HEAD
+=======
+ - hbcd
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  - hbf
  - hbro
  - hbro-contrib
@@ -2195,7 +2461,10 @@ dont-distribute-packages:
  - hesh
  - hesql
  - heterolist
+<<<<<<< HEAD
  - hetzner
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  - hevolisa
  - hevolisa-dph
  - hexpat-conduit
@@ -2204,15 +2473,22 @@ dont-distribute-packages:
  - hfiar
  - hfractal
  - hgalib
+<<<<<<< HEAD
  - hgdal
  - hgen
  - hgeometry
  - hgeometry-combinatorial
+=======
+ - hgen
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  - hgeometry-svg
  - hgithub
  - hiccup
  - hie-core
+<<<<<<< HEAD
  - hierarchical-clustering-diagrams
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  - hierarchical-env
  - hierarchical-spectral-clustering
  - highjson-swagger
@@ -2223,7 +2499,10 @@ dont-distribute-packages:
  - hinduce-examples
  - hinvaders
  - hinze-streams
+<<<<<<< HEAD
  - hip
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  - hipbot
  - hipsql-client
  - hipsql-server
@@ -2245,7 +2524,10 @@ dont-distribute-packages:
  - hls-exactprint-utils
  - hmark
  - hmatrix-backprop
+<<<<<<< HEAD
  - hmatrix-repa
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  - hmatrix-sundials
  - hmeap
  - hmeap-utils
@@ -2278,7 +2560,10 @@ dont-distribute-packages:
  - horizon-gen-nix
  - horizon-spec-lens
  - horizon-spec-pretty
+<<<<<<< HEAD
  - horizontal-rule
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  - hotswap
  - hp2any-graph
  - hp2any-manager
@@ -2333,10 +2618,21 @@ dont-distribute-packages:
  - hscassandra
  - hscope
  - hsdev
+<<<<<<< HEAD
  - hsendxmpp
  - hsfacter
  - hsinspect-lsp
  - hslogstash
+=======
+ - hsfacter
+ - hsinspect-lsp
+ - hslogstash
+ - hslua-cli
+ - hslua-module-zip
+ - hslua-objectorientation_2_3_0
+ - hslua-packaging_2_3_0
+ - hslua_2_3_0
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  - hspec-expectations-pretty
  - hspec-pg-transact
  - hspec-setup
@@ -2359,13 +2655,19 @@ dont-distribute-packages:
  - hsyslog-tcp
  - htar
  - html-kure
+<<<<<<< HEAD
  - html-parse-util
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  - htoml-parse
  - htsn-import
  - http-client-auth
  - http-client-rustls
+<<<<<<< HEAD
  - http-client-tls_0_3_6_2
  - http-conduit_2_3_8_3
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  - http-enumerator
  - http2-client-grpc
  - http2-grpc-proto-lens
@@ -2422,11 +2724,15 @@ dont-distribute-packages:
  - ideas-math
  - ideas-math-types
  - ideas-statistics
+<<<<<<< HEAD
  - identicon-style-squares
  - idris
  - ige-mac-integration
  - igrf
  - ihaskell-inline-r
+=======
+ - ige-mac-integration
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  - ihaskell-rlangqq
  - ihttp
  - imap
@@ -2454,9 +2760,15 @@ dont-distribute-packages:
  - inferno-core
  - inferno-lsp
  - inferno-vc
+<<<<<<< HEAD
  - infinity
  - inline-java
  - inliterate
+=======
+ - infernu
+ - infinity
+ - inline-java
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  - inspector-wrecker
  - instant-aeson
  - instant-bytes
@@ -2510,6 +2822,7 @@ dont-distribute-packages:
  - ivory-stdlib
  - ivy-web
  - ix
+<<<<<<< HEAD
  - ixset
  - ixset-typed-binary-instance
  - ixset-typed-cassava
@@ -2518,6 +2831,10 @@ dont-distribute-packages:
  - iyql
  - j2hs
  - jackpolynomials
+=======
+ - iyql
+ - j2hs
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  - java-bridge
  - java-bridge-extras
  - java-character
@@ -2528,6 +2845,7 @@ dont-distribute-packages:
  - jespresso
  - jmacro-rpc-happstack
  - jmacro-rpc-snap
+<<<<<<< HEAD
  - jobs-ui
  - join
  - jordan-openapi
@@ -2535,6 +2853,11 @@ dont-distribute-packages:
  - jordan-servant-client
  - jordan-servant-openapi
  - jordan-servant-server
+=======
+ - join
+ - jordan-openapi
+ - jordan-servant-openapi
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  - jot
  - jsaddle-hello
  - jsc
@@ -2548,13 +2871,19 @@ dont-distribute-packages:
  - json-pointer-hasql
  - json-query
  - json-rpc-client
+<<<<<<< HEAD
  - json-spec
  - json-spec-openapi
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  - json-togo
  - json-tokens
  - json2-hdbc
  - json2sg
+<<<<<<< HEAD
  - jsonrpc-conduit
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  - jsons-to-schema
  - jspath
  - jvm
@@ -2616,18 +2945,27 @@ dont-distribute-packages:
  - kubernetes-client
  - kure-your-boilerplate
  - kurita
+<<<<<<< HEAD
  - kvitable
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  - laborantin-hs
  - labsat
  - labyrinth
  - labyrinth-server
+<<<<<<< HEAD
  - lackey
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  - laika
  - lambda-devs
  - lambda-options
  - lambdaFeed
  - lambdaLit
+<<<<<<< HEAD
  - lambdabot-telegram-plugins
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  - lambdabot-zulip
  - lambdacat
  - lambdacms-media
@@ -2655,7 +2993,10 @@ dont-distribute-packages:
  - lapack
  - lapack-hmatrix
  - large-anon
+<<<<<<< HEAD
  - large-records
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  - lat
  - latex-formulae-hakyll
  - latex-formulae-pandoc
@@ -2680,6 +3021,10 @@ dont-distribute-packages:
  - leksah
  - leksah-server
  - lens-accelerate
+<<<<<<< HEAD
+=======
+ - lens-toml-parser
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  - lens-utils
  - levmar-chart
  - lex-applicative
@@ -2689,14 +3034,20 @@ dont-distribute-packages:
  - lhe
  - libconfig
  - libcspm
+<<<<<<< HEAD
  - libgraph
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  - liblastfm
  - liblawless
  - liblinear-enumerator
  - libmolude
  - libraft
  - librato
+<<<<<<< HEAD
  - libssh2-conduit
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  - libxml-enumerator
  - lifted-base-tf
  - lightning-haskell
@@ -2720,6 +3071,10 @@ dont-distribute-packages:
  - liquid-base
  - liquid-bytestring
  - liquid-containers
+<<<<<<< HEAD
+=======
+ - liquid-fixpoint
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  - liquid-ghc-prim
  - liquid-parallel
  - liquid-platform
@@ -2772,16 +3127,27 @@ dont-distribute-packages:
  - loli
  - longshot
  - loop-effin
+<<<<<<< HEAD
+=======
+ - looper
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  - lorentz
  - lostcities
  - loup
  - lrucaching-haxl
  - ls-usb
  - lsystem
+<<<<<<< HEAD
  - ltext
  - luachunk
  - lucid-colonnade
  - lucienne
+=======
+ - luachunk
+ - lucid-colonnade
+ - lucienne
+ - luhn
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  - lui
  - luminance-samples
  - lvish
@@ -2833,8 +3199,11 @@ dont-distribute-packages:
  - marvin
  - masakazu-bot
  - matchers
+<<<<<<< HEAD
  - math-programming-glpk
  - math-programming-tests
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  - mathblog
  - mathlink
  - matsuri
@@ -2849,7 +3218,10 @@ dont-distribute-packages:
  - mellon-web
  - memcache-conduit
  - memis
+<<<<<<< HEAD
  - memory-cd
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  - memory-hexstring
  - merkle-patricia-db
  - meta-par-accelerate
@@ -2868,7 +3240,10 @@ dont-distribute-packages:
  - minimung
  - minioperational
  - minirotate
+<<<<<<< HEAD
  - mismi-kernel
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  - miss
  - miss-porcelain
  - missing-py2
@@ -2898,8 +3273,11 @@ dont-distribute-packages:
  - monetdb-mapi
  - mongrel2-handler
  - monky
+<<<<<<< HEAD
  - monoidmap
  - monomer-hagrid
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  - monte-carlo
  - moo
  - moonshine
@@ -3008,7 +3386,10 @@ dont-distribute-packages:
  - nettle-openflow
  - network-anonymous-i2p
  - network-anonymous-tor
+<<<<<<< HEAD
  - network-conduit-tls_1_4_0
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  - network-connection
  - network-enumerator
  - network-hans
@@ -3037,7 +3418,10 @@ dont-distribute-packages:
  - nomyx-language
  - nomyx-library
  - nomyx-server
+<<<<<<< HEAD
  - nonlinear-optimization-ad
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  - nonlinear-optimization-backprop
  - notmuch-web
  - now-haskell
@@ -3049,9 +3433,13 @@ dont-distribute-packages:
  - nri-redis
  - nri-test-encoding
  - numerals-base
+<<<<<<< HEAD
  - numeric-kinds
  - numeric-ode
  - numeric-optimization-backprop
+=======
+ - numeric-ode
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  - numerical
  - numhask-hedgehog
  - numhask-range
@@ -3066,9 +3454,13 @@ dont-distribute-packages:
  - oberon0
  - obj
  - objectid
+<<<<<<< HEAD
  - objective
  - ochan
  - ochintin-daicho
+=======
+ - ochan
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  - octane
  - octohat
  - octopus
@@ -3098,12 +3490,15 @@ dont-distribute-packages:
  - openssh-github-keys
  - opentelemetry-lightstep
  - opentok
+<<<<<<< HEAD
  - opentracing-http-client
  - opentracing-jaeger
  - opentracing-wai
  - opentracing-zipkin-common
  - opentracing-zipkin-v1
  - opentracing-zipkin-v2
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  - oplang
  - optima-for-hasql
  - optimal-blocks
@@ -3120,8 +3515,15 @@ dont-distribute-packages:
  - padKONTROL
  - pairing
  - panda
+<<<<<<< HEAD
  - pandoc-highlighting-extensions
  - pandoc-japanese-filters
+=======
+ - pandoc-crossref_0_3_15_2
+ - pandoc-highlighting-extensions
+ - pandoc-japanese-filters
+ - pandoc-symreg
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  - pandora-io
  - papa
  - papa-base
@@ -3144,7 +3546,10 @@ dont-distribute-packages:
  - parsley-garnish
  - passman-cli
  - patch-image
+<<<<<<< HEAD
  - path-text-utf8_0_0_2_0
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  - patterns
  - pcap-enumerator
  - pcapng
@@ -3160,7 +3565,10 @@ dont-distribute-packages:
  - penny-lib
  - penrose
  - peparser
+<<<<<<< HEAD
  - perceptual-hash
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  - perdure
  - perf-analysis
  - perfecthash
@@ -3184,7 +3592,10 @@ dont-distribute-packages:
  - peyotls
  - peyotls-codec
  - pg-entity
+<<<<<<< HEAD
  - phatsort
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  - phladiprelio-general-shared
  - phladiprelio-general-simple
  - phladiprelio-ukrainian-shared
@@ -3229,7 +3640,10 @@ dont-distribute-packages:
  - pipes-p2p-examples
  - pisigma
  - pitchtrack
+<<<<<<< HEAD
  - piyo
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  - pkgtreediff
  - planet-mitchell
  - playlists-http
@@ -3238,32 +3652,48 @@ dont-distribute-packages:
  - plugins-auto
  - png-file
  - pngload
+<<<<<<< HEAD
+=======
+ - pocket-dns
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  - point-octree
  - pointless-lenses
  - pointless-rewrite
  - poker
  - polh-lexicon
  - polydata
+<<<<<<< HEAD
  - polyglot
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  - polysemy-RandomFu
  - polysemy-account
  - polysemy-account-api
  - polysemy-conc
  - polysemy-db
+<<<<<<< HEAD
  - polysemy-extra
  - polysemy-fskvstore
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  - polysemy-hasql
  - polysemy-hasql-test
  - polysemy-http
  - polysemy-log
  - polysemy-log-co
  - polysemy-log-di
+<<<<<<< HEAD
  - polysemy-methodology
  - polysemy-methodology-composite
  - polysemy-optics
  - polysemy-process
  - polysemy-scoped-fs
  - polysemy-uncontrolled
+=======
+ - polysemy-methodology-composite
+ - polysemy-process
+ - polysemy-scoped-fs
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  - polyseq
  - polytypeable-utils
  - pomodoro
@@ -3283,7 +3713,10 @@ dont-distribute-packages:
  - postgresql-tx-query
  - postgresql-tx-squeal
  - postgresql-tx-squeal-compat-simple
+<<<<<<< HEAD
  - postgrest
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  - postmark
  - potoki
  - potoki-cereal
@@ -3299,7 +3732,10 @@ dont-distribute-packages:
  - prefork
  - prelate
  - presto-hdbc
+<<<<<<< HEAD
  - pretty-diff
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  - prettychart
  - preview
  - primal-memory
@@ -3320,15 +3756,21 @@ dont-distribute-packages:
  - prolog-graph-lib
  - prologue
  - prolude
+<<<<<<< HEAD
  - prometheus-wai-middleware
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  - proof-assistant-bot
  - propane
  - proplang
  - prosidyc
  - proto-lens-descriptors
+<<<<<<< HEAD
  - proto-lens-protobuf-types
  - proto-lens-protoc
  - proto-lens-setup
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  - proto3-suite
  - proto3-wire
  - protobuf-native
@@ -3347,12 +3789,18 @@ dont-distribute-packages:
  - puppetresources
  - pure-cdb
  - pure-priority-queue-tests
+<<<<<<< HEAD
  - purenix
  - purescript
  - purescript-iso
  - pursuit-client
  - push-notify
  - push-notify-apn
+=======
+ - purescript-iso
+ - pursuit-client
+ - push-notify
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  - push-notify-ccs
  - push-notify-general
  - puzzle-draw-cmdline
@@ -3402,7 +3850,10 @@ dont-distribute-packages:
  - quiver-interleave
  - quiver-sort
  - qux
+<<<<<<< HEAD
  - rabocsv2qif
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  - rail-compiler-editor
  - rails-session
  - rainbow-tests
@@ -3454,10 +3905,15 @@ dont-distribute-packages:
  - records-th
  - recursion-schemes-ix
  - redHandlers
+<<<<<<< HEAD
  - redact
  - reddit
  - redis-io
  - redis-resp
+=======
+ - reddit
+ - redis-io
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  - rediscaching-haxl
  - reduce-equations
  - refh
@@ -3487,10 +3943,21 @@ dont-distribute-packages:
  - regions-monadstf
  - regions-mtl
  - registry-aeson
+<<<<<<< HEAD
  - registry-hedgehog
  - registry-hedgehog-aeson
  - registry-messagepack
  - registry-options
+=======
+ - registry-aeson_0_3_0_0
+ - registry-hedgehog
+ - registry-hedgehog-aeson
+ - registry-hedgehog-aeson_0_3_0_0
+ - registry-hedgehog_0_8_0_0
+ - registry-messagepack
+ - registry-options
+ - registry-options_0_2_0_0
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  - regular-extras
  - regular-web
  - regular-xmlpickler
@@ -3507,20 +3974,30 @@ dont-distribute-packages:
  - remote-json-client
  - remote-json-server
  - remotion
+<<<<<<< HEAD
  - repa-algorithms
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  - repa-array
  - repa-convert
  - repa-fftw
  - repa-flow
+<<<<<<< HEAD
  - repa-io
  - repa-plugin
  - repa-sndfile
+=======
+ - repa-plugin
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  - repa-stream
  - repa-v4l2
  - replicant
  - repr
  - representable-tries
+<<<<<<< HEAD
  - req_3_13_1
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  - reserve
  - resin
  - resistor-cube
@@ -3585,7 +4062,10 @@ dont-distribute-packages:
  - rose-trie
  - roshask
  - rosmsg-bin
+<<<<<<< HEAD
  - rounded-hw
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  - roundtrip-xml
  - route-generator
  - route-planning
@@ -3601,6 +4081,11 @@ dont-distribute-packages:
  - runtime-arbitrary
  - rv
  - s-expression
+<<<<<<< HEAD
+=======
+ - safe-coloured-text-gen
+ - safe-coloured-text-layout
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  - safe-coloured-text-layout-gen
  - safe-coupling
  - safe-plugins
@@ -3650,15 +4135,21 @@ dont-distribute-packages:
  - scope
  - scope-cairo
  - scotty-fay
+<<<<<<< HEAD
  - scotty-form
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  - scotty-hastache
  - scotty-haxl
  - scp-streams
  - scrabble-bot
  - scrapbook
  - scroll
+<<<<<<< HEAD
  - scubature
  - sdl2-sprite
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  - sdp-binary
  - sdp-deepseq
  - sdp-hashable
@@ -3673,8 +4164,11 @@ dont-distribute-packages:
  - secrm
  - sednaDBXML
  - seitz-symbol
+<<<<<<< HEAD
  - selda-json
  - selda-sqlite
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  - selenium-server
  - self-extract
  - semantic-source
@@ -3683,7 +4177,10 @@ dont-distribute-packages:
  - semiring-num
  - sensenet
  - sentence-jp
+<<<<<<< HEAD
  - sentiwordnet-parser
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  - seqaid
  - seqloc
  - seqloc-datafiles
@@ -3705,6 +4202,7 @@ dont-distribute-packages:
  - servant-ekg
  - servant-examples
  - servant-haxl-client
+<<<<<<< HEAD
  - servant-js
  - servant-matrix-param
  - servant-multipart
@@ -3721,15 +4219,30 @@ dont-distribute-packages:
  - servant-reason
  - servant-ruby
  - servant-serialization
+=======
+ - servant-matrix-param
+ - servant-oauth2
+ - servant-oauth2-examples
+ - servant-openapi3
+ - servant-postgresql
+ - servant-pushbullet-client
+ - servant-rate-limit
+ - servant-reason
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  - servant-server-namedargs
  - servant-snap
  - servant-streaming-client
  - servant-streaming-docs
  - servant-streaming-server
+<<<<<<< HEAD
  - servant-subscriber
  - servant-swagger-tags
  - servant-to-elm
  - servant-typescript
+=======
+ - servant-swagger-tags
+ - servant-to-elm
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  - servant-util
  - servant-util-beam-pg
  - servant-waargonaut
@@ -3746,7 +4259,10 @@ dont-distribute-packages:
  - shake-bindist
  - shake-minify-css
  - shake-pack
+<<<<<<< HEAD
  - shake-plus-extended
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  - shakebook
  - shaker
  - shapefile
@@ -3790,7 +4306,10 @@ dont-distribute-packages:
  - smallcheck-laws
  - smallcheck-lens
  - smallstring
+<<<<<<< HEAD
  - smarties
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  - smartword
  - smash-aeson
  - smash-lens
@@ -3835,7 +4354,10 @@ dont-distribute-packages:
  - snow-white
  - snowflake-core
  - snowflake-server
+<<<<<<< HEAD
  - snumber
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  - sock2stream
  - socket-io
  - socketson
@@ -3860,7 +4382,10 @@ dont-distribute-packages:
  - sphinx-cli
  - spice
  - spike
+<<<<<<< HEAD
  - spline3
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  - splines
  - sprinkles
  - sproxy
@@ -3878,7 +4403,10 @@ dont-distribute-packages:
  - squeal-postgresql-uuid-ossp
  - squeeze
  - sr-extra
+<<<<<<< HEAD
  - srt-formatting
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  - sscgi
  - sshd-lint
  - sssp
@@ -3896,14 +4424,21 @@ dont-distribute-packages:
  - stackage-setup
  - stackage-upload
  - stackage2nix
+<<<<<<< HEAD
+=======
+ - stackctl
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  - stan
  - starrover2
  - stateful-mtl
  - static-closure
  - statsd-client
  - statsdi
+<<<<<<< HEAD
  - stdcxx
  - steeloverseer
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  - stern-brocot
  - stm-actor
  - stm-supply
@@ -3914,7 +4449,10 @@ dont-distribute-packages:
  - stratux-demo
  - stratux-http
  - stratux-websockets
+<<<<<<< HEAD
  - streaming-base64
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  - streaming-fft
  - streaming-process
  - strelka
@@ -3933,6 +4471,11 @@ dont-distribute-packages:
  - structured-mongoDB
  - stunts
  - stutter
+<<<<<<< HEAD
+=======
+ - stylist
+ - stylist-traits
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  - subhask
  - substring-parser
  - sugar-data
@@ -3953,11 +4496,36 @@ dont-distribute-packages:
  - swapper
  - sweet-egison
  - switch
+<<<<<<< HEAD
  - sydtest-amqp
+=======
+ - sydtest-aeson
+ - sydtest-amqp
+ - sydtest-autodocodec
+ - sydtest-hedgehog
+ - sydtest-hedgehog_0_4_0_0
+ - sydtest-hedis
+ - sydtest-hspec
+ - sydtest-hspec_0_4_0_0
+ - sydtest-mongo
+ - sydtest-persistent
+ - sydtest-persistent-postgresql
+ - sydtest-persistent-sqlite
+ - sydtest-process
+ - sydtest-rabbitmq
+ - sydtest-servant
+ - sydtest-typed-process
+ - sydtest-wai
+ - sydtest-webdriver
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  - sydtest-webdriver-screenshot
  - sydtest-webdriver-yesod
  - sydtest-yesod
  - sylvia
+<<<<<<< HEAD
+=======
+ - sym-plot
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  - symantic-atom
  - symantic-http-demo
  - symantic-http-test
@@ -3974,7 +4542,10 @@ dont-distribute-packages:
  - syntaxnet-haskell
  - synthesizer-llvm
  - sys-process
+<<<<<<< HEAD
  - systemd-api
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  - systemstats
  - t3-client
  - ta
@@ -3997,30 +4568,42 @@ dont-distribute-packages:
  - tasty-bdd
  - tasty-checklist
  - tasty-groundhog-converters
+<<<<<<< HEAD
  - tasty-hspec_1_2_0_4
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  - tasty-integrate
  - tasty-jenkins-xml
  - tasty-laws
  - tasty-lens
+<<<<<<< HEAD
  - tasty-sugar
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  - tateti-tateti
  - tbox
  - tcache-AWS
  - tccli
  - techlab
  - telegram-bot
+<<<<<<< HEAD
  - telegram-bot-api
  - telegram-bot-simple
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  - telegram-raw-api
  - temporal-csound
  - ten-lens
  - ten-unordered-containers
+<<<<<<< HEAD
  - tensorflow
  - tensorflow-core-ops
  - tensorflow-logging
  - tensorflow-opgen
  - tensorflow-ops
  - tensorflow-proto
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  - terminal-text
  - terrahs
  - test-sandbox-compose
@@ -4041,6 +4624,10 @@ dont-distribute-packages:
  - thumbnail-polish
  - tic-tac-toe
  - tickle
+<<<<<<< HEAD
+=======
+ - tiger
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  - tighttp
  - timberc
  - time-exts
@@ -4062,11 +4649,18 @@ dont-distribute-packages:
  - tlex-encoding
  - tlex-th
  - tls-extra
+<<<<<<< HEAD
  - tmpl
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  - tn
  - to-string-instances
  - toboggan
  - todos
+<<<<<<< HEAD
+=======
+ - token-limiter-concurrent
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  - toktok
  - tomlcheck
  - tonatona
@@ -4116,7 +4710,10 @@ dont-distribute-packages:
  - tuple-append-instances
  - tuple-ops
  - turingMachine
+<<<<<<< HEAD
  - twee
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  - tweet-hs
  - twentefp-eventloop-graphics
  - twentefp-eventloop-trees
@@ -4145,7 +4742,10 @@ dont-distribute-packages:
  - typed-streams
  - typedflow
  - typelevel
+<<<<<<< HEAD
  - typesafe-precure
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  - typescript-docs
  - typson-beam
  - typson-esqueleto
@@ -4167,19 +4767,28 @@ dont-distribute-packages:
  - uni-reactor
  - uni-uDrawGraph
  - unicode-normalization
+<<<<<<< HEAD
  - unicoder
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  - uniform-http
  - uniform-io
  - uniform-latex2pdf
  - uniform-pandoc
  - uniform-shake
+<<<<<<< HEAD
  - uniform-watch
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  - uniqueness-periods
  - uniqueness-periods-vector-examples
  - uniqueness-periods-vector-filters
  - uniqueness-periods-vector-general
  - uniqueness-periods-vector-properties
+<<<<<<< HEAD
  - unitym-servant
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  - universal
  - universe
  - universe-dependent-sum
@@ -4212,6 +4821,10 @@ dont-distribute-packages:
  - uu-cco-hut-parsing
  - uu-cco-uu-parsinglib
  - uu-options
+<<<<<<< HEAD
+=======
+ - uuagc
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  - uuid-crypto
  - uvector-algorithms
  - v4l2
@@ -4222,8 +4835,11 @@ dont-distribute-packages:
  - vacuum-opengl
  - vacuum-ubigraph
  - valid
+<<<<<<< HEAD
  - variable-media-field-dhall
  - variable-media-field-optics
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  - variable-precision
  - vault-tool-server
  - vault-trans
@@ -4264,7 +4880,10 @@ dont-distribute-packages:
  - wai-devel
  - wai-dispatch
  - wai-frontend-monadcgi
+<<<<<<< HEAD
  - wai-handler-hal
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  - wai-handler-snap
  - wai-hastache
  - wai-log
@@ -4306,7 +4925,10 @@ dont-distribute-packages:
  - webcrank-wai
  - webdriver-w3c
  - webgear-openapi
+<<<<<<< HEAD
  - webgear-server
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  - webify
  - webserver
  - websockets-rpc
@@ -4323,10 +4945,13 @@ dont-distribute-packages:
  - whitespace
  - wholepixels
  - wikipedia4epub
+<<<<<<< HEAD
  - wild-bind-indicator
  - wild-bind-task-x11
  - wild-bind-x11
  - winery
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  - winio
  - wire-streams
  - wl-pprint-ansiterm
@@ -4351,7 +4976,10 @@ dont-distribute-packages:
  - wumpus-drawing
  - wumpus-microprint
  - wumpus-tree
+<<<<<<< HEAD
  - wuss_2_0_1_4
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  - wx
  - wxAsteroids
  - wxFruit
@@ -4362,10 +4990,17 @@ dont-distribute-packages:
  - wxturtle
  - wyvern
  - xdcc
+<<<<<<< HEAD
  - xdg-basedir-compliant
  - xhb-atom-cache
  - xhb-ewmh
  - xml-catalog
+=======
+ - xhb-atom-cache
+ - xhb-ewmh
+ - xml-catalog
+ - xml-conduit-stylist
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  - xml-enumerator
  - xml-enumerator-combinators
  - xml-isogen
@@ -4400,14 +5035,20 @@ dont-distribute-packages:
  - yam-web
  - yaml-rpc-scotty
  - yaml-rpc-snap
+<<<<<<< HEAD
  - yaml-streamly
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  - yarr-image-io
  - yasi
  - yavie
  - ycextra
  - yeamer
  - yeshql
+<<<<<<< HEAD
  - yesod-alerts
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  - yesod-articles
  - yesod-auth-ldap
  - yesod-colonnade
@@ -4471,4 +5112,8 @@ dont-distribute-packages:
  - zoom-cache
  - zoom-cache-pcm
  - zoom-cache-sndfile
+<<<<<<< HEAD
+=======
+ - zoovisitor
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
  - zuramaru

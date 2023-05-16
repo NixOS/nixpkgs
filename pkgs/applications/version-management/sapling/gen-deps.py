@@ -1,4 +1,5 @@
 #!/usr/bin/env nix-shell
+<<<<<<< HEAD
 #!nix-shell -i python3 -p cargo -p "python3.withPackages (ps: with ps; [ requests ])"
 import json
 import pathlib
@@ -10,10 +11,19 @@ from hashlib import sha1
 from struct import unpack
 from subprocess import run
 import subprocess
+=======
+#!nix-shell -i python3 -p "python3.withPackages (ps: with ps; [ requests ])"
+import json
+import re
+from hashlib import sha1
+from struct import unpack
+from subprocess import run
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 from requests import get
 
 # Fetch the latest stable release metadata from GitHub
+<<<<<<< HEAD
 releaseMetadata = get("https://api.github.com/repos/facebook/sapling/releases/latest").json()
 latestTag = releaseMetadata["tag_name"]
 latestTarballURL = releaseMetadata["tarball_url"]
@@ -42,6 +52,12 @@ def updateCargoLock():
         shutil.copy(tempDir / "eden" / "scm" / "Cargo.lock", "Cargo.lock")
 
 updateCargoLock()
+=======
+latestTag = get("https://api.github.com/repos/facebook/sapling/releases/latest").json()[
+    "tag_name"
+]
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 def nixPrefetchUrl(url):
     return run(
@@ -54,7 +70,13 @@ def nixPrefetchUrl(url):
 
 # Fetch the `setup.py` source and look for instances of assets being downloaded
 # from files.pythonhosted.org.
+<<<<<<< HEAD
 setupPy = (pathlib.Path(sourceDirectory) / "eden/scm/setup.py").read_text()
+=======
+setupPy = get(
+    f"https://github.com/facebook/sapling/raw/{latestTag}/eden/scm/setup.py"
+).text
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 foundUrls = re.findall(r'(https://files\.pythonhosted\.org/packages/[^\s]+)"', setupPy)
 
 dataDeps = {

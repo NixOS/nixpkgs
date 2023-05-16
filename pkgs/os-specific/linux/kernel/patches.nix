@@ -57,4 +57,21 @@
     name = "export-rt-sched-migrate";
     patch = ./export-rt-sched-migrate.patch;
   };
+<<<<<<< HEAD
+=======
+
+  fix-em-ice-bonding = {
+    name = "fix-em-ice-bonding";
+    patch = ./fix-em-ice-bonding.patch;
+  };
+
+  CVE-2023-32233 = rec {
+    name = "CVE-2023-32233";
+    patch = fetchpatch {
+      name = name + ".patch";
+      url = "https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/patch/?id=c1592a89942e9678f7d9c8030efa777c0d57edab";
+      hash = "sha256-DYPWgraXPNeFkjtuDYkFXHnCJ4yDewrukM2CCAqC2BE=";
+    };
+  };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }

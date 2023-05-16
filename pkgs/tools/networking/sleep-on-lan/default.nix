@@ -14,8 +14,13 @@ buildGoModule rec {
     sha256 = "sha256-WooFGIdXIIoJPMqmPpnT+bc+P+IARMSxa3CvXY9++mw=";
   };
 
+<<<<<<< HEAD
   sourceRoot = "${src.name}/src";
   vendorHash = "sha256-JqDDG53khtDdMLVOscwqi0oGviF+3DMkv5tkHvp1gJc=";
+=======
+  sourceRoot = "source/src";
+  vendorSha256 = "sha256-JqDDG53khtDdMLVOscwqi0oGviF+3DMkv5tkHvp1gJc=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   ldflags = [
     "-s"

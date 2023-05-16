@@ -12,7 +12,10 @@
 , minizip
 , pkg-config
 , libsForQt5
+<<<<<<< HEAD
 , wrapGAppsHook
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 let
@@ -37,6 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     pkg-config
+<<<<<<< HEAD
     wrapGAppsHook
     wrapQtAppsHook
   ];
@@ -46,6 +50,11 @@ stdenv.mkDerivation (finalAttrs: {
     qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
+=======
+    wrapQtAppsHook
+  ];
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   buildInputs = [
     SDL2
     ffmpeg
@@ -81,6 +90,9 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.mpl20;
     maintainers = with maintainers; [ MP2E AndersonTorres ];
     platforms = platforms.linux;
+<<<<<<< HEAD
     mainProgram = "mgba";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 })

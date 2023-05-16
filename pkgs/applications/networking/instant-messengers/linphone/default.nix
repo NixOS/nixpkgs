@@ -12,7 +12,11 @@
 , mkDerivation
 , qtgraphicaleffects
 , qtquickcontrols2
+<<<<<<< HEAD
 , qttools
+=======
+, qttranslations
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 # How to update Linphone? (The Qt desktop app)
@@ -33,7 +37,11 @@
 
 mkDerivation rec {
   pname = "linphone-desktop";
+<<<<<<< HEAD
   version = "5.0.16";
+=======
+  version = "5.0.8";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitLab {
     domain = "gitlab.linphone.org";
@@ -41,7 +49,11 @@ mkDerivation rec {
     group = "BC";
     repo = pname;
     rev = version;
+<<<<<<< HEAD
     hash = "sha256-zS0JyK+HGiHY7tPdl3RK6fJJOUS+fKM1u3npNxDAAYE=";
+=======
+    hash = "sha256-e/0yGHtOHMgPhaF5xELodKS9/v/mbnT3ZpE12lXAocU=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   patches = [
@@ -73,11 +85,18 @@ mkDerivation rec {
     minizip-ng
     qtgraphicaleffects
     qtquickcontrols2
+<<<<<<< HEAD
+=======
+    qttranslations
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   nativeBuildInputs = [
     cmake
+<<<<<<< HEAD
     qttools
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   cmakeFlags = [

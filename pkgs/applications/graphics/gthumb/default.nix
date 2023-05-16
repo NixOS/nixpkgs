@@ -1,6 +1,10 @@
 { stdenv
 , lib
 , fetchurl
+<<<<<<< HEAD
+=======
+, fetchpatch
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , gnome
 , pkg-config
 , meson
@@ -19,7 +23,10 @@
 , libchamplain
 , librsvg
 , libwebp
+<<<<<<< HEAD
 , libX11
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , json-glib
 , webkitgtk
 , lcms2
@@ -35,6 +42,7 @@
 
 stdenv.mkDerivation rec {
   pname = "gthumb";
+<<<<<<< HEAD
   version = "3.12.3";
 
   src = fetchurl {
@@ -42,6 +50,24 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-k9s11xQCxIoILVDPQIW7a4DkvVyLmxYaH3tRhBsQBxE=";
   };
 
+=======
+  version = "3.12.2";
+
+  src = fetchurl {
+    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "sha256-l/iv5SJTUhZUHrvx47VG0Spr6zio8OuF8m5naTSq1CU=";
+  };
+
+  patches = [
+    # Fix build with libraw 0.21, can be removed on next update
+    # https://hydra.nixos.org/build/209327709/nixlog/1
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/gthumb/-/commit/da0d3f22a5c3a141211d943e7d963d14090011ec.patch";
+      sha256 = "sha256-/l9US19rKxIUJjZ+oynGLr/9PKJPg9VUuA/VSuIT5AQ=";
+    })
+  ];
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nativeBuildInputs = [
     bison
     desktop-file-utils
@@ -77,7 +103,10 @@ stdenv.mkDerivation rec {
     libsoup
     libtiff
     libwebp
+<<<<<<< HEAD
     libX11
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     webkitgtk
   ];
 

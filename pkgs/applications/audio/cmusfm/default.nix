@@ -3,13 +3,21 @@
 
 stdenv.mkDerivation rec {
   pname = "cmusfm";
+<<<<<<< HEAD
   version = "0.5.0";
+=======
+  version = "0.4.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "Arkq";
     repo = pname;
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-CA585ZpkxMMLgzv81QB2kKMFg5R5CwKS9xAYrU+pAxs=";
+=======
+    sha256 = "1px2is80jdxchg8cpn5cizg6jvcbzyxl0qzs3bn0k3d10qjvdww5";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   configureFlags = lib.optional libnotifySupport "--enable-libnotify"

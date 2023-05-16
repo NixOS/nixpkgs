@@ -48,7 +48,11 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+<<<<<<< HEAD
   # Provide libgpm.so for compatibility
+=======
+  # Provide libgpm.so for compatability
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   postInstall = ''
     ln -sv $out/lib/libgpm.so.2 $out/lib/libgpm.so
   '';

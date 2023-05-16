@@ -42,13 +42,21 @@
 
 stdenv.mkDerivation rec {
   pname = "dde-file-manager";
+<<<<<<< HEAD
   version = "6.0.23";
+=======
+  version = "6.0.15";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
+<<<<<<< HEAD
     hash = "sha256-H+pCWZ1jj5p3gOKXYyLxSmjCMv5/BPIz5A25JGGzrR8=";
+=======
+    sha256 = "sha256-tG3Wl1AvwWhHmIIHgexv3mVVrmOwNrwn8k/sD4+WZzk=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

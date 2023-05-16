@@ -24,7 +24,11 @@ in
   config = mkIf cfg.enable {
     environment.systemPackages = with pkgs; [
       cfg.package
+<<<<<<< HEAD
       (mkIf cfg.autoStart (makeAutostartItem { name = "streamdeck-ui-noui"; package = cfg.package; }))
+=======
+      (mkIf cfg.autoStart (makeAutostartItem { name = "streamdeck-ui"; package = cfg.package; }))
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     ];
 
     services.udev.packages = [ cfg.package ];

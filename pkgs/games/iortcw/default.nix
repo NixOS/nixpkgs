@@ -2,8 +2,13 @@
 
 let
   sp = callPackage ./sp.nix {};
+<<<<<<< HEAD
   mp = sp.overrideAttrs (oldAttrs: {
     sourceRoot = "${oldAttrs.src.name}/MP";
+=======
+  mp = sp.overrideAttrs (oldAttrs: rec {
+    sourceRoot = "source/MP";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   });
 in buildEnv {
   name = "iortcw";

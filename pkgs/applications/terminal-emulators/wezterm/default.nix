@@ -22,7 +22,10 @@
 , CoreGraphics
 , Cocoa
 , Foundation
+<<<<<<< HEAD
 , System
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , libiconv
 , UserNotifications
 , nixosTests
@@ -32,14 +35,22 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "wezterm";
+<<<<<<< HEAD
   version = "20230712-072601-f4abf8fd";
+=======
+  version = "20230408-112425-69ae8472";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "wez";
     repo = pname;
     rev = version;
     fetchSubmodules = true;
+<<<<<<< HEAD
     hash = "sha256-B6AakLbTWIN123qAMQk/vFN83HHNRSNkqicNRU1GaCc=";
+=======
+    hash = "sha256-Uk6I/JtSkGCQGG95DDD1hsu40X00/k5d44WP3OJ+rn4=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   postPatch = ''
@@ -53,8 +64,12 @@ rustPlatform.buildRustPackage rec {
     lockFile = ./Cargo.lock;
     outputHashes = {
       "image-0.24.5" = "sha256-fTajVwm88OInqCPZerWcSAm1ga46ansQ3EzAmbT58Js=";
+<<<<<<< HEAD
       "xcb-1.2.1" = "sha256-zkuW5ATix3WXBAj2hzum1MJ5JTX3+uVQ01R1vL6F1rY=";
       "xcb-imdkit-0.2.0" = "sha256-L+NKD0rsCk9bFABQF4FZi9YoqBHr4VAZeKAWgsaAegw=";
+=======
+      "xcb-imdkit-0.2.0" = "sha256-QOT9HLlA26DVPUF4ViKH2ckexUsu45KZMdJwoUhW+hA=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
   };
 
@@ -83,14 +98,20 @@ rustPlatform.buildRustPackage rec {
     CoreGraphics
     Foundation
     libiconv
+<<<<<<< HEAD
     System
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     UserNotifications
   ];
 
   buildFeatures = [ "distro-defaults" ];
 
+<<<<<<< HEAD
   env.NIX_LDFLAGS = lib.optionalString stdenv.isDarwin "-framework System";
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   postInstall = ''
     mkdir -p $out/nix-support
     echo "${passthru.terminfo}" >> $out/nix-support/propagated-user-env-packages
@@ -140,7 +161,10 @@ rustPlatform.buildRustPackage rec {
     description = "GPU-accelerated cross-platform terminal emulator and multiplexer written by @wez and implemented in Rust";
     homepage = "https://wezfurlong.org/wezterm";
     license = licenses.mit;
+<<<<<<< HEAD
     mainProgram = "wezterm";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     maintainers = with maintainers; [ SuperSandro2000 mimame ];
   };
 }

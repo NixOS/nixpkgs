@@ -61,8 +61,11 @@ in {
       '';
     };
 
+<<<<<<< HEAD
     package = mkPackageOptionMD pkgs "picom" { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     fade = mkOption {
       type = types.bool;
       default = false;
@@ -303,13 +306,21 @@ in {
       };
 
       serviceConfig = {
+<<<<<<< HEAD
         ExecStart = "${getExe cfg.package} --config ${configFile}";
+=======
+        ExecStart = "${pkgs.picom}/bin/picom --config ${configFile}";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         RestartSec = 3;
         Restart = "always";
       };
     };
 
+<<<<<<< HEAD
     environment.systemPackages = [ cfg.package ];
+=======
+    environment.systemPackages = [ pkgs.picom ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   meta.maintainers = with lib.maintainers; [ rnhmjoj ];

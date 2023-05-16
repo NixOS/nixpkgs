@@ -45,6 +45,9 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/sharkdp/fd/blob/v${version}/CHANGELOG.md";
     license = with licenses; [ asl20 /* or */ mit ];
     maintainers = with maintainers; [ dywedir figsoda globin ma27 zowoq ];
+<<<<<<< HEAD
     mainProgram = "fd";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

@@ -1,7 +1,10 @@
 { lib, stdenv
 , fetchurl
 , pkgs
+<<<<<<< HEAD
 , buildPackages
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , fixDarwinDylibNames
 }:
 stdenv.mkDerivation rec {
@@ -26,10 +29,13 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = lib.optionals stdenv.targetPlatform.isDarwin [
     fixDarwinDylibNames
+<<<<<<< HEAD
 
     # Build2 needs to use lld on Darwin because it creates thin archives when it detects `llvm-ar`,
     # which ld64 does not support.
     (lib.getBin buildPackages.llvmPackages_16.lld)
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   doCheck = true;
@@ -45,10 +51,13 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   postFixup = ''
     substituteInPlace $out/nix-support/setup-hook \
       --subst-var-by isTargetDarwin '${toString stdenv.targetPlatform.isDarwin}'
   '';
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   inherit (pkgs.build2) passthru;
 }

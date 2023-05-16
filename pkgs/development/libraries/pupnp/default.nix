@@ -6,7 +6,11 @@
 
 stdenv.mkDerivation rec {
   pname = "libupnp";
+<<<<<<< HEAD
   version = "1.14.18";
+=======
+  version = "1.14.17";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   outputs = [ "out" "dev" ];
 
@@ -14,7 +18,11 @@ stdenv.mkDerivation rec {
     owner = "pupnp";
     repo = "pupnp";
     rev = "release-${version}";
+<<<<<<< HEAD
     sha256 = "sha256-eQKtZioZjI53J1fsoer032pzqebbK5IabOnkAXwBPos=";
+=======
+    sha256 = "sha256-vb540oqDn6Y+oD0LriOJckYYkI/zcHkEVc8mL/+9bps=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

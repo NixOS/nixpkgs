@@ -17,14 +17,22 @@
 
 buildPythonPackage rec {
   pname = "flit";
+<<<<<<< HEAD
   version = "3.9.0";
+=======
+  version = "3.8.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "takluyver";
     repo = "flit";
     rev = version;
+<<<<<<< HEAD
     hash = "sha256-yl2+PcKr7xRW4oIBWl+gzh/nKhSNu5GH9fWKRGgaNHU=";
+=======
+    hash = "sha256-iXf9K/xI4u+dDV0Zf6S08nbws4NqycrTEW0B8/qCjQc=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [
@@ -51,10 +59,17 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
+<<<<<<< HEAD
     changelog = "https://github.com/pypa/flit/blob/${version}/doc/history.rst";
     description = "A simple packaging tool for simple packages";
     homepage = "https://github.com/pypa/flit";
     license = licenses.bsd3;
     maintainers = with maintainers; [ fridh ];
+=======
+    description = "A simple packaging tool for simple packages";
+    homepage = "https://github.com/pypa/flit";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ fridh SuperSandro2000 ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

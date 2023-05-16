@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 { lib
 , stdenv
 , fetchFromGitHub
@@ -5,6 +6,15 @@
 , qmake
 , qttools
 , wrapQtAppsHook
+=======
+{ mkDerivation
+, lib
+, stdenv
+, fetchFromGitHub
+, qmake
+, qttools
+, qttranslations
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , gdal
 , proj
 , qtsvg
@@ -15,7 +25,11 @@
 , withZbar ? false, zbar
 }:
 
+<<<<<<< HEAD
 stdenv.mkDerivation rec {
+=======
+mkDerivation rec {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pname = "merkaartor";
   version = "0.19.0";
 
@@ -23,6 +37,7 @@ stdenv.mkDerivation rec {
     owner = "openstreetmap";
     repo = "merkaartor";
     rev = version;
+<<<<<<< HEAD
     hash = "sha256-I3QNCXzwhEFa8aOdwl3UJV8MLZ9caN9wuaaVrGFRvbQ=";
   };
 
@@ -35,6 +50,12 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [ qmake qttools wrapQtAppsHook ];
+=======
+    sha256 = "sha256-I3QNCXzwhEFa8aOdwl3UJV8MLZ9caN9wuaaVrGFRvbQ=";
+  };
+
+  nativeBuildInputs = [ qmake qttools ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   buildInputs = [ gdal proj qtsvg qtwebengine ]
     ++ lib.optional withGeoimage exiv2
@@ -47,6 +68,10 @@ stdenv.mkDerivation rec {
   '';
 
   qmakeFlags = [
+<<<<<<< HEAD
+=======
+    "TRANSDIR_SYSTEM=${qttranslations}/translations"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "USEWEBENGINE=1"
   ] ++ lib.optional withGeoimage "GEOIMAGE=1"
     ++ lib.optional withGpsdlib "GPSDLIB=1"

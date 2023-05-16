@@ -2,11 +2,19 @@
 
 stdenv.mkDerivation rec {
   pname = "apr";
+<<<<<<< HEAD
   version = "1.7.4";
 
   src = fetchurl {
     url = "mirror://apache/apr/${pname}-${version}.tar.bz2";
     sha256 = "sha256-/GSN6YPzoqbJ543qHxgGOb0vrWwG1VbUNnpwH+XDVXc=";
+=======
+  version = "1.7.2";
+
+  src = fetchurl {
+    url = "mirror://apache/apr/${pname}-${version}.tar.bz2";
+    sha256 = "sha256-ded8yGd2wDDApcQI370L8qC3Xu1TUeUtVDn6HlUJpD4=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   patches = [

@@ -2,16 +2,27 @@
 
 buildNpmPackage rec {
   pname = "uptime-kuma";
+<<<<<<< HEAD
   version = "1.23.0";
+=======
+  version = "1.21.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "louislam";
     repo = "uptime-kuma";
     rev = version;
+<<<<<<< HEAD
     hash = "sha256-868hyugz/YJaCs4dJJ4OKHi5jx/e4ScjMBxGaNGUhe0=";
   };
 
   npmDepsHash = "sha256-vULtoWNqvT4RW1Q1l0+9p65cZ0TZEUnhCw0/bANsjOo=";
+=======
+    sha256 = "sha256-Xu5mTerhLjOMnLXhjCdnw4yaznfta3h3D9VGk12JziE=";
+  };
+
+  npmDepsHash = "sha256-J00sLDfUOIy/ZJTqKrMY1dAyE3HY9Cqm9vTEm2lmLoY=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   patches = [
     # Fixes the permissions of the database being not set correctly

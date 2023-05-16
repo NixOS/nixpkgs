@@ -16,6 +16,7 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-update";
+<<<<<<< HEAD
   version = "13.0.4";
 
   src = fetchCrate {
@@ -24,6 +25,16 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoHash = "sha256-fx+LWNnzCVUz2owETXUgqjT+AUtda4RZnVXUabPX8q4=";
+=======
+  version = "13.0.2";
+
+  src = fetchCrate {
+    inherit pname version;
+    sha256 = "sha256-WaVxPfklQnd0XSsBRkSoJ/SQW3vp/0BTOtVPz25CjWg=";
+  };
+
+  cargoHash = "sha256-DC5NANbGaaGOZ36NpUSqKEd2bctbYB9YLoKYAZ4x67I=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nativeBuildInputs = [
     cmake
@@ -60,6 +71,10 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/nabijaczleweli/cargo-update";
     changelog = "https://github.com/nabijaczleweli/cargo-update/releases/tag/v${version}";
     license = licenses.mit;
+<<<<<<< HEAD
     maintainers = with maintainers; [ gerschtli Br1ght0ne johntitor matthiasbeyer ];
+=======
+    maintainers = with maintainers; [ gerschtli Br1ght0ne johntitor ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

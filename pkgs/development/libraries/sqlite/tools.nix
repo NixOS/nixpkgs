@@ -4,12 +4,20 @@ let
   archiveVersion = import ./archive-version.nix lib;
   mkTool = { pname, makeTarget, description, homepage, mainProgram }: stdenv.mkDerivation rec {
     inherit pname;
+<<<<<<< HEAD
     version = "3.42.0";
+=======
+    version = "3.41.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     # nixpkgs-update: no auto update
     src = assert version == sqlite.version; fetchurl {
       url = "https://sqlite.org/2023/sqlite-src-${archiveVersion version}.zip";
+<<<<<<< HEAD
       hash = "sha256-OMpWoxe+N/sAvZK8KA2bkgm9QAiyl9SDxB7B9geb+20=";
+=======
+      hash = "sha256-hxkfzsuLcH2aEO2xNgdoYxfXFpwIC5vcXTnQY1g3bMw=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
 
     nativeBuildInputs = [ unzip ];

@@ -16,14 +16,22 @@
 
 buildPythonPackage rec {
   pname = "lightning-utilities";
+<<<<<<< HEAD
   version = "0.9.0";
+=======
+  version = "0.8.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "Lightning-AI";
     repo = "utilities";
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-vSeHtvsIt4L4qJCVlTPVjIjd62+08JWBnr9+9+ujOfw=";
+=======
+    hash = "sha256-uwmX+/SK2zBkZQbN/t/DZ3i+XbdAJ/RM+Q649QwMUz0=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

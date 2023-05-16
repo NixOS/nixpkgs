@@ -1,6 +1,9 @@
 { lib
 , python3Packages
+<<<<<<< HEAD
 , fetchPypi
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , pkg-config
 , librsvg
 , gobject-introspection
@@ -25,7 +28,11 @@ python3Packages.buildPythonApplication rec {
 
   disabled = !python3Packages.isPy3k;
 
+<<<<<<< HEAD
   src = fetchPypi {
+=======
+  src = python3Packages.fetchPypi {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     inherit pname version;
     sha256 = "1rca19krvmycdhmi1vb4ixwq0cagmrkhbqry4f19b725nlp8cv0q";
   };

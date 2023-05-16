@@ -16,13 +16,21 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "libpinyin";
+<<<<<<< HEAD
   version = "2.8.1";
+=======
+  version = "2.6.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "libpinyin";
     repo = "libpinyin";
     rev = version;
+<<<<<<< HEAD
     hash = "sha256-3+CBbjCaY0Ubyphf0uCfYvF2rtc9fF1eEAM1doonjHg=";
+=======
+    sha256 = "sha256-hafetjKWqImg3Jr1tSXjY0RwbBQ7LccXqx0OdtKCy/c=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   postUnpack = ''

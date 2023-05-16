@@ -11,7 +11,11 @@
 
 buildPythonPackage rec {
   pname = "frigidaire";
+<<<<<<< HEAD
   version = "0.18.13";
+=======
+  version = "0.18.12";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -20,7 +24,11 @@ buildPythonPackage rec {
     owner = "bm1549";
     repo = pname;
     rev = "refs/tags/${version}";
+<<<<<<< HEAD
     hash = "sha256-FikBV4KjutQfupGPXcVT1h+BfQ099WRrmbrEJOaVCQI=";
+=======
+    hash = "sha256-U6ko6P5/ANGy84GQDuSQq+YArou0TrXH5SIc5x4euvU=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   postPatch = ''

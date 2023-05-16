@@ -82,7 +82,10 @@ stdenv.mkDerivation rec {
     description = "NetworkManager control applet for GNOME";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ ];
+<<<<<<< HEAD
     mainProgram = "nm-applet";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     platforms = platforms.linux;
   };
 }

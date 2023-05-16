@@ -41,7 +41,11 @@ python3Packages.buildPythonApplication rec {
     src = sample_documents;
   };
 
+<<<<<<< HEAD
   sourceRoot = "${src.name}/paperwork-gtk";
+=======
+  sourceRoot = "source/paperwork-gtk";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   # Patch out a few paths that assume that we're using the FHS:
   postPatch = ''
@@ -66,9 +70,13 @@ python3Packages.buildPythonApplication rec {
 
   postInstall = ''
     # paperwork-shell needs to be re-wrapped with access to paperwork
+<<<<<<< HEAD
     for exe in paperwork-cli paperwork-json; do
       cp ${python3Packages.paperwork-shell}/bin/.$exe-wrapped $out/bin/$exe
     done
+=======
+    cp ${python3Packages.paperwork-shell}/bin/.paperwork-cli-wrapped $out/bin/paperwork-cli
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     # install desktop files and icons
     XDG_DATA_HOME=$out/share $out/bin/paperwork-gtk install --user
 
@@ -122,9 +130,12 @@ python3Packages.buildPythonApplication rec {
       --config-file=${dbus}/share/dbus-1/session.conf \
       $out/bin/paperwork-gtk chkdeps
 
+<<<<<<< HEAD
     $out/bin/paperwork-cli chkdeps
     $out/bin/paperwork-json chkdeps
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     # content of make test, without the dep on make install
     python -m unittest discover --verbose -s tests
 

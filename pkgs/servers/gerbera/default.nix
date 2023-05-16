@@ -1,7 +1,10 @@
 { lib
 , stdenv
 , fetchFromGitHub
+<<<<<<< HEAD
 , fetchpatch
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , cmake
 , pkg-config
 , nixosTests
@@ -75,6 +78,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-j5J0u0zIjHY2kP5P8IzN2h+QQSCwsel/iTspad6V48s=";
   };
 
+<<<<<<< HEAD
   patches = [
     # Can be removed on the next bump, see:
     # https://github.com/gerbera/gerbera/pull/2840.
@@ -85,6 +89,8 @@ stdenv.mkDerivation rec {
     })
   ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   postPatch = lib.optionalString enableMysql ''
     substituteInPlace cmake/FindMySQL.cmake \
       --replace /usr/include/mysql ${lib.getDev libmysqlclient}/include/mariadb \

@@ -2,13 +2,21 @@
 
 mkDerivation rec {
   pname = "libarchive-qt";
+<<<<<<< HEAD
   version = "2.0.8";
+=======
+  version = "2.0.7";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitLab {
     owner = "marcusbritanicus";
     repo = pname;
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-31a6DsxObSJWyLfT6mVtyjloT26IwFHpH53iuyC2mco=";
+=======
+    sha256 = "sha256-KRywB+Op44N00q9tgO2WNCliRgUDRvrCms1O8JYt62o=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

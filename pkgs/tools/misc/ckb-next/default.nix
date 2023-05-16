@@ -50,7 +50,10 @@ mkDerivation rec {
     homepage = "https://github.com/ckb-next/ckb-next";
     license = licenses.gpl2;
     platforms = platforms.linux;
+<<<<<<< HEAD
     mainProgram = "ckb-next";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     maintainers = with maintainers; [ ];
   };
 }

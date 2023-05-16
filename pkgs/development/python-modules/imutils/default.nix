@@ -30,6 +30,10 @@ buildPythonPackage rec {
     homepage = "https://github.com/jrosebr1/imutils";
     description = "A series of convenience functions to make basic image processing functions";
     license = licenses.mit;
+<<<<<<< HEAD
     maintainers = [ ];
+=======
+    maintainers = [ maintainers.costrouc ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

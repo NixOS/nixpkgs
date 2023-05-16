@@ -2,14 +2,22 @@
 
 let
   pname = "phpunit";
+<<<<<<< HEAD
   version = "10.3.3";
+=======
+  version = "10.1.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 in
 stdenv.mkDerivation {
   inherit pname version;
 
   src = fetchurl {
     url = "https://phar.phpunit.de/phpunit-${version}.phar";
+<<<<<<< HEAD
     hash = "sha256-fhgsP/sA2nQXBQ34V2/Zvc+SPiDYWfkEXKKHoD+Heak=";
+=======
+    hash = "sha256-X6upMANmKU2H8Qs0pOd/uRL2GdH/JPyOAQ/P8Z5yNl8=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   dontUnpack = true;

@@ -33,7 +33,11 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Zoned block device manipulation library and tools";
     homepage = "https://github.com/westerndigitalcorporation/libzbd";
+<<<<<<< HEAD
     maintainers = [ maintainers.fogti ];
+=======
+    maintainers = with maintainers; [ zseri ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     license = with licenses; [ lgpl3Plus gpl3Plus ];
     platforms = platforms.linux;
   };

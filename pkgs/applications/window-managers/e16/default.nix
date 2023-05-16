@@ -21,11 +21,19 @@
 
 stdenv.mkDerivation rec {
   pname = "e16";
+<<<<<<< HEAD
   version = "1.0.28";
 
   src = fetchurl {
     url = "mirror://sourceforge/enlightenment/e16-${version}.tar.xz";
     hash = "sha256-k3W2IoBc75DNQ2QSjChsC/yVRO/aZT3E31Tl/njgH30=";
+=======
+  version = "1.0.27";
+
+  src = fetchurl {
+    url = "mirror://sourceforge/enlightenment/e16-${version}.tar.xz";
+    hash = "sha256-Lr5OC14N6KTZNU3Ei4O9taYGL+1NZd5JmejYBmmELUE=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

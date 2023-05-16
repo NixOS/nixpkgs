@@ -90,6 +90,11 @@ in lib.makeScope pkgs.newScope (self: {")
    "clml.blas.hompack"
    ;; Fails on SBCL due to heap exhaustion
    "magicl"
+<<<<<<< HEAD
+=======
+   ;; Probably missing dependency in QL data
+   "mcclim-bezier"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
    ;; Missing dependency on c2ffi cffi extension
    "hu.dwim.zlib"
    ;; These require libRmath.so, but I don't know where to get it from

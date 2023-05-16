@@ -15,13 +15,21 @@ let
   };
 in stdenv.mkDerivation rec {
   pname = "metasploit-framework";
+<<<<<<< HEAD
   version = "6.3.33";
+=======
+  version = "6.3.15";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "rapid7";
     repo = "metasploit-framework";
     rev = version;
+<<<<<<< HEAD
     sha256 = "sha256-S/uazRDWK1AqLT2QTKiluRmcwy82PZitezQMw1Kb9no=";
+=======
+    sha256 = "sha256-cfrMVtQQKk7hFnSYAGd5dmWqGGlqtx05yv0lTSnce0Q=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ makeWrapper ];

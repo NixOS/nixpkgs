@@ -97,6 +97,10 @@ in
   };
 
   config = mkIf (cfg.provider != "libc") {
+<<<<<<< HEAD
+=======
+    boot.kernel.sysctl."vm.max_map_count" = mkIf (cfg.provider == "graphene-hardened") (mkDefault 1048576);
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     environment.etc."ld-nix.so.preload".text = ''
       ${providerLibPath}
     '';

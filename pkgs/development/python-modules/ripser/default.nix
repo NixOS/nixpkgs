@@ -53,6 +53,10 @@ buildPythonPackage rec {
     homepage = "https://ripser.scikit-tda.org";
     changelog = "https://github.com/scikit-tda/ripser.py/blob/${version}/CHANGELOG.md";
     license = licenses.mit;
+<<<<<<< HEAD
     maintainers = with maintainers; [ ];
+=======
+    maintainers = with maintainers; [ costrouc ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

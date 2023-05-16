@@ -18,7 +18,11 @@
 
 buildPythonPackage rec {
   pname = "apscheduler";
+<<<<<<< HEAD
   version = "3.10.4";
+=======
+  version = "3.10.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -26,7 +30,11 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "APScheduler";
     inherit version;
+<<<<<<< HEAD
     hash = "sha256-5t8HGyfZvomOSGvHlAp75QtK8unafAjwdEqW1L1M70o=";
+=======
+    hash = "sha256-pJ/CMmkhhBbw5BiQ7qenXtayhPEGMNz+hmq2WWIaNpY=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   buildInputs = [

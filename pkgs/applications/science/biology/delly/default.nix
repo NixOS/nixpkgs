@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 { lib
 , stdenv
 , fetchFromGitHub
@@ -12,10 +13,16 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
+=======
+{ lib, stdenv, fetchFromGitHub, htslib, zlib, bzip2, xz, ncurses, boost }:
+
+stdenv.mkDerivation rec {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pname = "delly";
   version = "1.1.6";
 
   src = fetchFromGitHub {
+<<<<<<< HEAD
     owner = "dellytools";
     repo = "delly";
     rev = "v${finalAttrs.version}";
@@ -34,6 +41,17 @@ stdenv.mkDerivation (finalAttrs: {
     "EBROOTHTSLIB=${htslib}"
     "PARALLEL=1"
   ];
+=======
+      owner = "dellytools";
+      repo = pname;
+      rev = "v${version}";
+      sha256 = "sha256-/I//7MhsC/CcBeIJblzbjXp/yOSBm83KWJsrYpl6UJk=";
+  };
+
+  buildInputs = [ zlib htslib bzip2 xz ncurses boost ];
+
+  EBROOTHTSLIB = htslib;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   installPhase = ''
     runHook preInstall
@@ -43,6 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   passthru.tests = {
     simple = runCommand "${finalAttrs.pname}-test" { } ''
       mkdir $out
@@ -52,11 +71,17 @@ stdenv.mkDerivation (finalAttrs: {
     '';
   };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   meta = with lib; {
     description = "Structural variant caller for mapped DNA sequenced data";
     license = licenses.bsd3;
     maintainers = with maintainers; [ scalavision ];
+<<<<<<< HEAD
     platforms = platforms.unix;
+=======
+    platforms = platforms.linux;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     longDescription = ''
       Delly is an integrated structural variant (SV) prediction method
       that can discover, genotype and visualize deletions, tandem duplications,
@@ -66,4 +91,8 @@ stdenv.mkDerivation (finalAttrs: {
       genomic rearrangements throughout the genome.
     '';
   };
+<<<<<<< HEAD
 })
+=======
+}
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)

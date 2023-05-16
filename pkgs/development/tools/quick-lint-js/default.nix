@@ -3,13 +3,21 @@
 
 stdenv.mkDerivation rec {
   pname = "quick-lint-js";
+<<<<<<< HEAD
   version = "2.15.0";
+=======
+  version = "2.12.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "quick-lint";
     repo = "quick-lint-js";
     rev = version;
+<<<<<<< HEAD
     sha256 = "sha256-jymn3xqFwAKskBivkm9s/pLkPLpX1haQhNuH18xgiYw=";
+=======
+    sha256 = "sha256-OxzemfWYItYb4XWpW2tNUn4yZHUIpS8MJXaP8+3z4YY=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ cmake ninja ];

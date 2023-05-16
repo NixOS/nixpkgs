@@ -20,7 +20,12 @@ while
   read -r name
   read -r url
 do
+<<<<<<< HEAD
     printf '  "%s" = "%s";\n' "${name%%.*}" "$(nix-prefetch-url "$url")" >>"$dirname/shas.nix"
 done < <(jq -r '.assets[] | select(.name | test("xz")) | .name, .browser_download_url' <<<"$latest_release")
+=======
+    printf '  "%s" = "%s";\n' "${name%.*}" "$(nix-prefetch-url "$url")" >>"$dirname/shas.nix"
+done < <(jq -r '.assets[] | .name, .browser_download_url' <<<"$latest_release")
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 printf '}\n' >> "$dirname/shas.nix"

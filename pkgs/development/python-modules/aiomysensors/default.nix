@@ -27,12 +27,15 @@ buildPythonPackage rec {
     hash = "sha256-hLUITEPUoUKGqN3AnacahnKwoKdfGN3mp34df74gsbE=";
   };
 
+<<<<<<< HEAD
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace " --cov=src --cov-report=term-missing:skip-covered" "" \
       --replace 'marshmallow = "^3.17"' 'marshmallow = "*"' \
       --replace 'awesomeversion = "^22.6"' 'awesomeversion = "*"'
   '';
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nativeBuildInputs = [
     poetry-core
   ];
@@ -51,6 +54,15 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+<<<<<<< HEAD
+=======
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace " --cov=src --cov-report=term-missing:skip-covered" "" \
+      --replace 'marshmallow = "^3.17"' 'marshmallow = "*"'
+  '';
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pythonImportsCheck = [
     "aiomysensors"
   ];

@@ -1,6 +1,10 @@
 from collections.abc import Mapping, Sequence
 from dataclasses import dataclass
+<<<<<<< HEAD
 from typing import cast
+=======
+from typing import Any, cast, Optional
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 from urllib.parse import quote
 
 from .md import Renderer
@@ -104,7 +108,11 @@ class AsciiDocRenderer(Renderer):
     def hardbreak(self, token: Token, tokens: Sequence[Token], i: int) -> str:
         return " +\n"
     def softbreak(self, token: Token, tokens: Sequence[Token], i: int) -> str:
+<<<<<<< HEAD
         return " "
+=======
+        return f" "
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     def code_inline(self, token: Token, tokens: Sequence[Token], i: int) -> str:
         self._parstack[-1].continuing = True
         return f"``{asciidoc_escape(token.content)}``"

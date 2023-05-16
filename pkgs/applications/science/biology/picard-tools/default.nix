@@ -2,11 +2,19 @@
 
 stdenv.mkDerivation rec {
   pname = "picard-tools";
+<<<<<<< HEAD
   version = "3.1.0";
 
   src = fetchurl {
     url = "https://github.com/broadinstitute/picard/releases/download/${version}/picard.jar";
     sha256 = "sha256-6nnKYnml6BjLb6aKNHbd55nH6gP/5Somo8poxx7yhVk=";
+=======
+  version = "3.0.0";
+
+  src = fetchurl {
+    url = "https://github.com/broadinstitute/picard/releases/download/${version}/picard.jar";
+    sha256 = "sha256-DV4oqzAfrTsCAw0BkjiIEpuoLF9yKsXMstQYq3asVJk=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ makeWrapper ];

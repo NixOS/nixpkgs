@@ -39,6 +39,9 @@ stdenv.mkDerivation {
     description = "A multi-paradigm functional and object-oriented programming language";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
+<<<<<<< HEAD
     broken = true; # last successful build 2020-12-11
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

@@ -15,6 +15,10 @@
 , boost # Not using boost leads to crashes with gtk3
 , gettext
 , libpng
+<<<<<<< HEAD
+=======
+, autoreconfHook
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , pkg-config
 , makeWrapper
 , libX11

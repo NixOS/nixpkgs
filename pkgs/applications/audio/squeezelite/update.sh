@@ -1,5 +1,9 @@
 #!/usr/bin/env nix-shell
+<<<<<<< HEAD
 #!nix-shell -I nixpkgs=./. -i bash -p common-updater-scripts coreutils curl gnused jq nix nix-prefetch-git nix-prefetch-github ripgrep
+=======
+#!nix-shell -i bash -p common-updater-scripts coreutils curl gnused jq nix nix-prefetch-github ripgrep
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 set -euo pipefail
 
@@ -12,7 +16,12 @@ if [[ "$currentVersion" == "$latestVersion" ]]; then
   exit 0
 fi
 
+<<<<<<< HEAD
 srcHash=$(nix-prefetch-github ralph-irving squeezelite --rev "$latestRev" | jq -r .hash)
+=======
+srcHash=$(nix-prefetch-github ralph-irving squeezelite --rev "$latestRev" | jq -r .sha256)
+srcHash=$(nix hash to-sri --type sha256 "$srcHash")
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 
 update-source-version squeezelite "$latestVersion" "$srcHash" --rev="${latestRev}"

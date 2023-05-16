@@ -20,7 +20,11 @@ buildPythonPackage rec {
     hash = "sha256-+YCHIfNq8E2rXO8b91Q1D21dVzNWnJZIKZeY4AETa7s=";
   };
 
+<<<<<<< HEAD
   sourceRoot = "${src.name}/dask-gateway";
+=======
+  sourceRoot = "source/dask-gateway";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nativeBuildInputs = [ setuptools ];
 
@@ -39,6 +43,10 @@ buildPythonPackage rec {
     description = "A client library for interacting with a dask-gateway server";
     homepage = "https://gateway.dask.org/";
     license = licenses.bsd3;
+<<<<<<< HEAD
     maintainers = with maintainers; [ ];
+=======
+    maintainers = with maintainers; [ costrouc ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

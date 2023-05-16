@@ -11,16 +11,27 @@
 , libXrandr
 , udev
 , unzip
+<<<<<<< HEAD
 , alsa-lib
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 stdenv.mkDerivation rec {
   pname = "cryptowatch-desktop";
+<<<<<<< HEAD
   version = "0.7.1";
 
   src = fetchurl {
     url = "https://cryptowat.ch/desktop/download/linux/${version}";
     hash = "sha256-ccyHfjp00CgQH+3SiDWx9yE1skOj0RWxnBomHWY/IaU=";
+=======
+  version = "0.5.0";
+
+  src = fetchurl {
+    url = "https://cryptowat.ch/desktop/download/linux/${version}";
+    sha256 = "0lr5fsd0f44b1v9f2dvx0a0lmz9dyivyz5d98qx2gcv3jkngw34v";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   unpackPhase = "unzip $src";
@@ -34,7 +45,10 @@ stdenv.mkDerivation rec {
   buildInputs = [
     dbus
     udev
+<<<<<<< HEAD
     alsa-lib
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   sourceRoot = ".";
@@ -55,6 +69,10 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
+<<<<<<< HEAD
     maintainers = with maintainers; [ livnev kashw2 ];
+=======
+    maintainers = with maintainers; [ livnev ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

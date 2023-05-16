@@ -64,6 +64,10 @@ buildPythonPackage rec {
     description = "Common API for Ethereum key operations";
     homepage = "https://github.com/ethereum/eth-keys";
     license = licenses.mit;
+<<<<<<< HEAD
     maintainers = with maintainers; [ ];
+=======
+    maintainers = with maintainers; [ SuperSandro2000 ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

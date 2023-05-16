@@ -1,5 +1,9 @@
+<<<<<<< HEAD
 { lib
 , buildPythonPackage
+=======
+{ buildPythonPackage
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , fetchPypi
 , pythonOlder
 , h5py
@@ -9,6 +13,7 @@
 , scipy
 , pandas
 , pytestCheckHook
+<<<<<<< HEAD
 }:
 
 buildPythonPackage rec {
@@ -16,6 +21,14 @@ buildPythonPackage rec {
   version = "5.0.2";
   format = "setuptools";
 
+=======
+, lib
+}:
+
+buildPythonPackage rec {
+  pname   = "hickle";
+  version = "5.0.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   disabled = pythonOlder "3.5";
 
   src = fetchPypi {
@@ -24,6 +37,7 @@ buildPythonPackage rec {
   };
 
   postPatch = ''
+<<<<<<< HEAD
     substituteInPlace tox.ini \
       --replace "--cov=./hickle" ""
   '';
@@ -62,5 +76,23 @@ buildPythonPackage rec {
     changelog = "https://github.com/telegraphic/hickle/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ bcdarwin ];
+=======
+    substituteInPlace tox.ini --replace "--cov=./hickle" ""
+  '';
+
+  propagatedBuildInputs = [ h5py numpy dill ];
+
+  nativeCheckInputs = [
+    pytestCheckHook scipy pandas astropy
+  ];
+
+  pythonImportsCheck = [ "hickle" ];
+
+  meta = {
+    description = "Serialize Python data to HDF5";
+    homepage = "https://github.com/telegraphic/hickle";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ bcdarwin ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

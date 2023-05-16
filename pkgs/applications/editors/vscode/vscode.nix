@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 { stdenv
 , lib
 , callPackage
@@ -13,6 +14,11 @@
 , sourceExecutableName ? "code" + lib.optionalString (isInsiders && stdenv.isLinux) "-insiders"
 , commandLineArgs ? ""
 , useVSCodeRipgrep ? stdenv.isDarwin
+=======
+{ stdenv, lib, callPackage, fetchurl
+, isInsiders ? false
+, commandLineArgs ? ""
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 let
@@ -30,26 +36,43 @@ let
   archive_fmt = if stdenv.isDarwin then "zip" else "tar.gz";
 
   sha256 = {
+<<<<<<< HEAD
     x86_64-linux = "1gqpsgg6fsfssn03213sn31qcb5xnfnn3hd5g8j2mxfd0dyjgyir";
     x86_64-darwin = "0h0mj3vdnwcdxk9cnss4v8mmcfhm1yknm1al8c2047wjsj8w4jmm";
     aarch64-linux = "0qrph1a0cbr7sqx0qv4v05himsphlpwd1lgyliwqxzl8yxka8nwv";
     aarch64-darwin = "0mjqy08v0idck7a05w8rinfccg7vn50z6b0jrvp2m5q2122c0rcc";
     armv7l-linux = "1gp29rzc2iyl7vw2hlfjn5770mfpa6n9vc3f776msdxwrsia6xg9";
+=======
+    x86_64-linux = "11ibgnpcs0qvirgjnk799zkb63zp0nbc8y636l5g9nay6jm8lr8s";
+    x86_64-darwin = "0wg2xbvg3v20w4dh9vf27xcf95r5dv2l118vxxjfz2chfxmkk1qw";
+    aarch64-linux = "1gff1ildisczwb0dx7a0jvhj8rgn60n93rzcj1d7lihkgd00zjg6";
+    aarch64-darwin = "1zmfg1lv6izv1dmhawmnjs108pg99kq37pi6adyqnfw9yssn0ar5";
+    armv7l-linux = "10gr9p5vf0wcc9dgyc79p20vip12ja15qas4i3kwdp9lp4hzh1ss";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   }.${system} or throwSystem;
 in
   callPackage ./generic.nix rec {
     # Please backport all compatible updates to the stable release.
     # This is important for the extension ecosystem.
+<<<<<<< HEAD
     version = "1.82.0";
     pname = "vscode" + lib.optionalString isInsiders "-insiders";
 
     # This is used for VS Code - Remote SSH test
     rev = "8b617bd08fd9e3fc94d14adb8d358b56e3f72314";
+=======
+    version = "1.78.0";
+    pname = "vscode";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     executableName = "code" + lib.optionalString isInsiders "-insiders";
     longName = "Visual Studio Code" + lib.optionalString isInsiders " - Insiders";
     shortName = "Code" + lib.optionalString isInsiders " - Insiders";
+<<<<<<< HEAD
     inherit commandLineArgs useVSCodeRipgrep sourceExecutableName;
+=======
+    inherit commandLineArgs;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     src = fetchurl {
       name = "VSCode_${version}_${plat}.${archive_fmt}";
@@ -62,6 +85,7 @@ in
 
     sourceRoot = "";
 
+<<<<<<< HEAD
     # As tests run without networking, we need to download this for the Remote SSH server
     vscodeServer = srcOnly {
       name = "vscode-server-${rev}.tar.gz";
@@ -74,6 +98,8 @@ in
 
     tests = { inherit (nixosTests) vscode-remote-ssh; };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     updateScript = ./update-vscode.sh;
 
     # Editing the `code` binary within the app bundle causes the bundle's signature
@@ -97,7 +123,11 @@ in
       homepage = "https://code.visualstudio.com/";
       downloadPage = "https://code.visualstudio.com/Updates";
       license = licenses.unfree;
+<<<<<<< HEAD
       maintainers = with maintainers; [ eadwu synthetica amaxine bobby285271 Enzime ];
+=======
+      maintainers = with maintainers; [ eadwu synthetica maxeaubrey bobby285271 ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-darwin" "aarch64-linux" "armv7l-linux" ];
     };
   }

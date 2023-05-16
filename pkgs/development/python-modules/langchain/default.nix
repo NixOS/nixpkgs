@@ -1,4 +1,5 @@
 { lib
+<<<<<<< HEAD
 , bash
 , buildPythonPackage
 , fetchFromGitHub
@@ -82,11 +83,81 @@
 , responses
 , syrupy
 , toml
+=======
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, poetry-core
+, numpy
+, pyyaml
+, sqlalchemy
+, requests
+, async-timeout
+, aiohttp
+, numexpr
+, openapi-schema-pydantic
+, dataclasses-json
+, tqdm
+, tenacity
+, bash
+  # optional dependencies
+, anthropic
+, cohere
+, openai
+, nlpcloud
+, huggingface-hub
+, manifest-ml
+, torch
+, transformers
+, qdrant-client
+, sentence-transformers
+, azure-identity
+, azure-cosmos
+, azure-core
+, elasticsearch
+, opensearch-py
+, faiss
+, spacy
+, nltk
+, beautifulsoup4
+, tiktoken
+, jinja2
+, pinecone-client
+, weaviate-client
+, redis
+, google-api-python-client
+, pypdf
+, networkx
+, psycopg2
+, boto3
+, pyowm
+, pytesseract
+, html2text
+, atlassian-python-api
+, duckduckgo-search
+, lark
+, jq
+, protobuf
+  # test dependencies
+, pytest-vcr
+, pytest-asyncio
+, pytest-mock
+, pandas
+, toml
+, freezegun
+, responses
+, pexpect
+, pytestCheckHook
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 buildPythonPackage rec {
   pname = "langchain";
+<<<<<<< HEAD
   version = "0.0.285";
+=======
+  version = "0.0.166";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -95,11 +166,17 @@ buildPythonPackage rec {
     owner = "hwchase17";
     repo = "langchain";
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-3vOfwn8qvPd9dPRnsX14bVSLQQKHLPS5r15S8yAQFpw=";
   };
 
   sourceRoot = "${src.name}/libs/langchain";
 
+=======
+    hash = "sha256-i6CvboYZigky49a7X8RuQH2EfcucJPtEtFEzZxaNJG8=";
+  };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   postPatch = ''
     substituteInPlace langchain/utilities/bash.py \
       --replace '"env", ["-i", "bash", ' '"${lib.getExe bash}", ['
@@ -109,7 +186,10 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     poetry-core
+<<<<<<< HEAD
     pythonRelaxDepsHook
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   buildInputs = [
@@ -117,6 +197,7 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
+<<<<<<< HEAD
     pydantic
     sqlalchemy
     requests
@@ -131,27 +212,51 @@ buildPythonPackage rec {
   ] ++ lib.optionals (pythonOlder "3.11") [
     async-timeout
   ];
+=======
+    numpy
+    pyyaml
+    sqlalchemy
+    requests
+    aiohttp
+    numexpr
+    openapi-schema-pydantic
+    dataclasses-json
+    tqdm
+    tenacity
+  ] ++ lib.optionals (pythonOlder "3.11") [
+    async-timeout
+  ] ++ passthru.optional-dependencies.all;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   passthru.optional-dependencies = {
     llms = [
       anthropic
+<<<<<<< HEAD
       clarifai
       cohere
       openai
       # openllm
       # openlm
+=======
+      cohere
+      openai
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       nlpcloud
       huggingface-hub
       manifest-ml
       torch
       transformers
+<<<<<<< HEAD
       # xinference
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     ];
     qdrant = [
       qdrant-client
     ];
     openai = [
       openai
+<<<<<<< HEAD
       tiktoken
     ];
     text_helpers = [
@@ -159,10 +264,13 @@ buildPythonPackage rec {
     ];
     clarifai = [
       clarifai
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     ];
     cohere = [
       cohere
     ];
+<<<<<<< HEAD
     docarray = [
       # docarray
     ];
@@ -172,11 +280,17 @@ buildPythonPackage rec {
     javascript = [
       esprima
     ];
+=======
+    embeddings = [
+      sentence-transformers
+    ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     azure = [
       azure-identity
       azure-cosmos
       openai
       azure-core
+<<<<<<< HEAD
       # azure-ai-formrecognizer
       # azure-ai-vision
       # azure-cognitiveservices-speech
@@ -185,6 +299,11 @@ buildPythonPackage rec {
     all = [
       anthropic
       clarifai
+=======
+    ];
+    all = [
+      anthropic
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       cohere
       openai
       nlpcloud
@@ -193,13 +312,21 @@ buildPythonPackage rec {
       manifest-ml
       elasticsearch
       opensearch-py
+<<<<<<< HEAD
       google-search-results
+=======
+      # google-search-results
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       faiss
       sentence-transformers
       transformers
       spacy
       nltk
+<<<<<<< HEAD
       wikipedia
+=======
+      # wikipedia
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       beautifulsoup4
       tiktoken
       torch
@@ -209,7 +336,10 @@ buildPythonPackage rec {
       weaviate-client
       redis
       google-api-python-client
+<<<<<<< HEAD
       google-auth
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       # wolframalpha
       qdrant-client
       # tensorflow-text
@@ -218,27 +348,41 @@ buildPythonPackage rec {
       # nomic
       # aleph-alpha-client
       # deeplake
+<<<<<<< HEAD
       # libdeeplake
       pgvector
       psycopg2
+=======
+      # pgvector
+      psycopg2
+      boto3
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       pyowm
       pytesseract
       html2text
       atlassian-python-api
+<<<<<<< HEAD
       gptcache
+=======
+      # gptcache
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       duckduckgo-search
       # arxiv
       azure-identity
       # clickhouse-connect
       azure-cosmos
       # lancedb
+<<<<<<< HEAD
       # langkit
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       lark
       pexpect
       # pyvespa
       # O365
       jq
       # docarray
+<<<<<<< HEAD
       steamship
       pdfminer-six
       lxml
@@ -260,10 +404,15 @@ buildPythonPackage rec {
       # xinference
       librosa
       python-arango
+=======
+      protobuf
+      # hnswlib
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     ];
   };
 
   nativeCheckInputs = [
+<<<<<<< HEAD
     freezegun
     markdownify
     pandas
@@ -280,15 +429,33 @@ buildPythonPackage rec {
   pytestFlagsArray = [
     # integration_tests have many network, db access and require `OPENAI_API_KEY`, etc.
     "tests/unit_tests"
+=======
+    pytestCheckHook
+    pytest-vcr
+    pytest-mock
+    pytest-asyncio
+    pandas
+    toml
+    freezegun
+    responses
+  ];
+
+  pytestFlagsArray = [
+    # integration_tests have many network, db access and require `OPENAI_API_KEY`, etc.
+    "--ignore=tests/integration_tests"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   disabledTests = [
     # these tests have db access
     "test_table_info"
     "test_sql_database_run"
+<<<<<<< HEAD
 
     # these tests have network access
     "test_socket_disabled"
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   meta = with lib; {

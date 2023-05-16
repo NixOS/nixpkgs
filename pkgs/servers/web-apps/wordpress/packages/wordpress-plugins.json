@@ -14,7 +14,10 @@
 , "jetpack"
 , "jetpack-lite"
 , "lightbox-photoswipe"
+<<<<<<< HEAD
 , "login-lockdown"
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , "mailpoet"
 , "merge-minify-refresh"
 , "opengraph"
@@ -29,7 +32,10 @@
 , "wp-gdpr-compliance"
 , "wp-mail-smtp"
 , "wp-statistics"
+<<<<<<< HEAD
 , "wp-swiper"
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , "wp-user-avatars"
 , "wpforms-lite"
 ]

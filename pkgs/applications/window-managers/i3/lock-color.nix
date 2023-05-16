@@ -4,14 +4,22 @@
 }:
 
 stdenv.mkDerivation rec {
+<<<<<<< HEAD
   version = "2.13.c.5";
+=======
+  version = "2.13.c.4";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pname = "i3lock-color";
 
   src = fetchFromGitHub {
     owner = "PandorasFox";
     repo = "i3lock-color";
     rev = version;
+<<<<<<< HEAD
     sha256 = "sha256-fuLeglRif2bruyQRqiL3nm3q6qxoHcPdVdL+QjGBR/k=";
+=======
+    sha256 = "sha256-bbjkvgSKD57sdOtPYGLAKpQoIsJnF6s6ySq4dTWC3tI=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];

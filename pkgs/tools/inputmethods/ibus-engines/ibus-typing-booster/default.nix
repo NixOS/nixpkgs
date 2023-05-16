@@ -13,13 +13,21 @@ in
 
 stdenv.mkDerivation rec {
   pname = "ibus-typing-booster";
+<<<<<<< HEAD
   version = "2.24.0";
+=======
+  version = "2.22.4";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "mike-fabian";
     repo = "ibus-typing-booster";
     rev = version;
+<<<<<<< HEAD
     hash = "sha256-C9RUkA/gb3jhRGfYXX6rzCnYenSkAVdNvR1+O0u9Av8=";
+=======
+    hash = "sha256-AOCFdjQ5xz/B5Nx0+QVv5GdJyQEo0eH3in5Yaak9Sww=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config wrapGAppsHook gobject-introspection ];

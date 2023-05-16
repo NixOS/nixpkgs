@@ -26,11 +26,15 @@ let
       category-theory = callPackage ../development/coq-modules/category-theory { };
       ceres = callPackage ../development/coq-modules/ceres {};
       Cheerios = callPackage ../development/coq-modules/Cheerios {};
+<<<<<<< HEAD
       CoLoR = callPackage ../development/coq-modules/CoLoR (
         (lib.optionalAttrs (lib.versions.isEq self.coq.coq-version "8.13") {
           bignums = self.bignums.override { version = "8.13.0"; };
         })
       );
+=======
+      CoLoR = callPackage ../development/coq-modules/CoLoR {};
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       compcert = callPackage ../development/coq-modules/compcert {
         inherit fetchpatch makeWrapper coq2html lib stdenv;
       };
@@ -40,11 +44,15 @@ let
       coq-haskell = callPackage ../development/coq-modules/coq-haskell { };
       coq-lsp = callPackage ../development/coq-modules/coq-lsp {};
       coq-record-update = callPackage ../development/coq-modules/coq-record-update { };
+<<<<<<< HEAD
       coqeal = callPackage ../development/coq-modules/coqeal (
         (lib.optionalAttrs (lib.versions.range "8.13" "8.14" self.coq.coq-version) {
           bignums = self.bignums.override { version = "${self.coq.coq-version}.0"; };
         })
       );
+=======
+      coqeal = callPackage ../development/coq-modules/coqeal {};
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       coqhammer = callPackage ../development/coq-modules/coqhammer {};
       coqide = callPackage ../development/coq-modules/coqide {};
       coqprime = callPackage ../development/coq-modules/coqprime {};
@@ -126,10 +134,14 @@ let
         (lib.versionAtLeast self.coq.version "8.14") {
           compcert = self.compcert.override { version = "3.11"; };
         }) // (lib.optionalAttrs (lib.versions.isEq self.coq.coq-version "8.13") {
+<<<<<<< HEAD
           ITree = self.ITree.override {
             version = "4.0.0";
             paco = self.paco.override { version = "4.1.2"; };
           };
+=======
+          ITree = self.ITree.override { version = "4.0.0"; };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
        }));
       zorns-lemma = callPackage ../development/coq-modules/zorns-lemma {};
       filterPackages = doesFilter: if doesFilter then filterCoqPackages self else self;
@@ -181,7 +193,10 @@ in rec {
   coq_8_15 = mkCoq "8.15";
   coq_8_16 = mkCoq "8.16";
   coq_8_17 = mkCoq "8.17";
+<<<<<<< HEAD
   coq_8_18 = mkCoq "8.18";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   coqPackages_8_5 = mkCoqPackages coq_8_5;
   coqPackages_8_6 = mkCoqPackages coq_8_6;
@@ -196,7 +211,10 @@ in rec {
   coqPackages_8_15 = mkCoqPackages coq_8_15;
   coqPackages_8_16 = mkCoqPackages coq_8_16;
   coqPackages_8_17 = mkCoqPackages coq_8_17;
+<<<<<<< HEAD
   coqPackages_8_18 = mkCoqPackages coq_8_18;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   coqPackages = recurseIntoAttrs coqPackages_8_17;
   coq = coqPackages.coq;
 

@@ -1,5 +1,8 @@
 { buildPythonApplication
+<<<<<<< HEAD
 , python3
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , poetry-core
 , yubikey-manager
 , fido2
@@ -17,6 +20,7 @@ buildPythonApplication {
   pname = "yubioath-flutter-helper";
   inherit src version meta;
 
+<<<<<<< HEAD
   sourceRoot = "${src.name}/helper";
   format = "pyproject";
 
@@ -30,6 +34,16 @@ buildPythonApplication {
     substituteInPlace pyproject.toml \
       --replace "authenticator-helper" "yubioath-flutter-helper" \
       --replace "0.1.0" "${version}"
+=======
+  sourceRoot = "source/helper";
+  format = "pyproject";
+
+  postPatch = ''
+    sed -i \
+      -e 's,zxing-cpp = .*,zxing-cpp = "*",g' \
+      -e 's,mss = .*,mss = "*",g' \
+      pyproject.toml
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '';
 
   postInstall = ''

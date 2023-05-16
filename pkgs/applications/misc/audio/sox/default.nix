@@ -1,7 +1,11 @@
 { config
 , lib
 , stdenv
+<<<<<<< HEAD
 , fetchgit
+=======
+, fetchzip
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , autoreconfHook
 , autoconf-archive
 , pkg-config
@@ -39,6 +43,7 @@ stdenv.mkDerivation rec {
   pname = "sox";
   version = "unstable-2021-05-09";
 
+<<<<<<< HEAD
   src = fetchgit {
     # not really needed, but when this src was updated from `fetchurl ->
     # fetchgit`, we spared the mass rebuild by changing this `name` and
@@ -46,6 +51,10 @@ stdenv.mkDerivation rec {
     name = "source";
     url = "https://git.code.sf.net/p/sox/code";
     rev = "42b3557e13e0fe01a83465b672d89faddbe65f49";
+=======
+  src = fetchzip {
+    url = "https://sourceforge.net/code-snapshots/git/s/so/sox/code.git/sox-code-42b3557e13e0fe01a83465b672d89faddbe65f49.zip";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     hash = "sha256-9cpOwio69GvzVeDq79BSmJgds9WU5kA/KUlAkHcpN5c=";
   };
 

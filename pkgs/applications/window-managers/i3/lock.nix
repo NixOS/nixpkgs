@@ -25,7 +25,10 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://i3wm.org/i3lock/";
     maintainers = with maintainers; [ malyn domenkozar ];
+<<<<<<< HEAD
     mainProgram = "i3lock";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     license = licenses.bsd3;
     platforms = platforms.all;
   };

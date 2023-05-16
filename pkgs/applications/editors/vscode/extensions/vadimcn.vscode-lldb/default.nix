@@ -1,11 +1,19 @@
 { pkgs, lib, stdenv, fetchFromGitHub, runCommand, rustPlatform, makeWrapper, llvmPackages
+<<<<<<< HEAD
 , buildNpmPackage, cmake, nodejs, unzip, python3, pkg-config, libsecret, darwin
+=======
+, nodePackages, cmake, nodejs, unzip, python3, pkg-config, libsecret
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 assert lib.versionAtLeast python3.version "3.5";
 let
   publisher = "vadimcn";
   pname = "vscode-lldb";
+<<<<<<< HEAD
   version = "1.9.2";
+=======
+  version = "1.8.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   vscodeExtUniqueId = "${publisher}.${pname}";
   vscodeExtPublisher = publisher;
@@ -15,7 +23,11 @@ let
     owner = "vadimcn";
     repo = "vscode-lldb";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-6QmYRlSv8jY3OE3RcYuZt+c3z6GhFc8ESETVfCfF5RI=";
+=======
+    sha256 = "sha256-5wrw8LNH14WAyIKIRGFbvrISb5RUXeD5Uh/weja9p4Q=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   # need to build a custom version of lldb and llvm for enhanced rust support
@@ -25,7 +37,11 @@ let
     pname = "${pname}-adapter";
     inherit version src;
 
+<<<<<<< HEAD
     cargoHash = "sha256-Qq2igtH1XIB+NAEES6hdNZcMbEmaFN69qIJ+gTYupvQ=";
+=======
+    cargoSha256 = "sha256-Lpo2jaDMaZGwSrpQBvBCscVbWi2Db1Cx1Tv84v1H4Es=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     nativeBuildInputs = [ makeWrapper ];
 
@@ -38,12 +54,16 @@ let
       "--bin=codelldb"
     ];
 
+<<<<<<< HEAD
     patches = [ ./adapter-output-shared_object.patch ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     # Tests are linked to liblldb but it is not available here.
     doCheck = false;
   };
 
+<<<<<<< HEAD
   nodeDeps = buildNpmPackage {
     pname = "${pname}-node-deps";
     inherit version src;
@@ -73,6 +93,17 @@ let
       runHook postInstall
     '';
   };
+=======
+  nodeDeps = ((import ./build-deps/default.nix {
+    inherit pkgs nodejs;
+    inherit (stdenv.hostPlatform) system;
+  }).nodeDependencies.override (old: {
+    inherit src version;
+    nativeBuildInputs = [ pkg-config ];
+    buildInputs = [libsecret];
+    dontNpmInstall = true;
+  }));
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 in stdenv.mkDerivation {
   pname = "vscode-extension-${publisher}-${pname}";
@@ -85,7 +116,11 @@ in stdenv.mkDerivation {
   patches = [ ./cmake-build-extension-only.patch ];
 
   postConfigure = ''
+<<<<<<< HEAD
     cp -r ${nodeDeps}/lib/node_modules .
+=======
+    cp -r ${nodeDeps}/lib/{node_modules,package-lock.json} .
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '';
 
   cmakeFlags = [
@@ -94,10 +129,13 @@ in stdenv.mkDerivation {
   ];
   makeFlags = [ "vsix_bootstrap" ];
 
+<<<<<<< HEAD
   preBuild = lib.optionalString stdenv.isDarwin ''
     export HOME=$TMPDIR
   '';
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   installPhase = ''
     ext=$out/$installPrefix
     runHook preInstall
@@ -106,8 +144,12 @@ in stdenv.mkDerivation {
 
     mkdir -p $ext/{adapter,formatters}
     mv -t $ext vsix-extracted/extension/*
+<<<<<<< HEAD
     cp -t $ext/adapter ${adapter}/{bin,lib}/*
     cp -r ../adapter/scripts $ext/adapter
+=======
+    cp -t $ext/adapter ${adapter}/{bin,lib}/* ../adapter/*.py
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     wrapProgram $ext/adapter/codelldb \
       --set-default LLDB_DEBUGSERVER_PATH "${lldb.out}/bin/lldb-server"
     cp -t $ext/formatters ../formatters/*.py

@@ -7,7 +7,11 @@
 
 buildPythonPackage rec {
   pname = "pyxbe";
+<<<<<<< HEAD
   version = "1.0.3";
+=======
+  version = "1.0.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -16,7 +20,11 @@ buildPythonPackage rec {
     owner = "mborgerson";
     repo = pname;
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-iLzGGgizUbaEG1xrNq4WDaWrGtcaLwAYgn4NGYiSDBo=";
+=======
+    hash = "sha256-oOY0g1F5sxGUxXAT19Ygq5q7pnxEhIAKmyYELR1PHEA=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeCheckInputs = [
@@ -26,7 +34,11 @@ buildPythonPackage rec {
   # Update location for run with pytest
   preCheck = ''
     substituteInPlace tests/test_load.py \
+<<<<<<< HEAD
       --replace '"xbefiles"' '"tests/xbefiles"'
+=======
+      --replace "'xbefiles'" "'tests/xbefiles'"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '';
 
   pythonImportsCheck = [

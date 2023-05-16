@@ -1,5 +1,6 @@
 { lib, stdenv, fetchurl, fetchFromGitHub, openssl, libbsd }:
 
+<<<<<<< HEAD
 let
   version = "332.25";
 
@@ -16,19 +17,38 @@ stdenv.mkDerivation rec {
   pname = "hfsprogs";
   inherit version;
 
+=======
+stdenv.mkDerivation rec {
+  version = "332.25";
+  pname = "hfsprogs";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   srcs = [
     (fetchurl {
       url = "http://ftp.de.debian.org/debian/pool/main/h/hfsprogs/hfsprogs_${version}-11.debian.tar.gz";
       sha256 = "62d9b8599c66ebffbc57ce5d776e20b41341130d9b27341d63bda08460ebde7c";
     })
+<<<<<<< HEAD
     apple_src
+=======
+    (fetchFromGitHub {
+      owner = "apple-oss-distributions";
+      repo = "diskdev_cmds";
+      rev = "diskdev_cmds-${version}";
+      hash = "sha256-cycPGPx2Gbjn4FKGKuQKJkh+dWGbJfy6C+LTz8rrs0A=";
+      name = sourceRoot;
+    })
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   postPatch = ''
     sed -ie '/sys\/sysctl.h/d' newfs_hfs.tproj/makehfs.c
   '';
 
+<<<<<<< HEAD
   sourceRoot = apple_src.name;
+=======
+  sourceRoot = "diskdev_cmds-" + version;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   patches = [ "../debian/patches/*.patch" ];
 
   buildInputs = [ openssl libbsd ];

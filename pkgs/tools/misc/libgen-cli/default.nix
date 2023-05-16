@@ -2,13 +2,21 @@
 
 buildGoModule rec {
   pname = "libgen-cli";
+<<<<<<< HEAD
   version = "1.0.11";
+=======
+  version = "1.0.10";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "ciehanski";
     repo = pname;
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-EscXn+di1BXJSoc1Eml654/ieRuIOfryd5b7f+vcAOA=";
+=======
+    sha256 = "sha256-hxfJ6zELUERLn/Dez41K0dpFXmsUZPIP/rqxufcX5HQ=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   vendorHash = "sha256-WAGFZ2HKnhS5gStJW8orF45vsrHaTmUomzbHqFuAsFE=";

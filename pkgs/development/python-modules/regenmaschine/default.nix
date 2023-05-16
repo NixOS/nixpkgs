@@ -3,7 +3,10 @@
 , aresponses
 , buildPythonPackage
 , fetchFromGitHub
+<<<<<<< HEAD
 , fetchpatch
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , poetry-core
 , pytest-aiohttp
 , pytest-asyncio
@@ -15,7 +18,11 @@
 
 buildPythonPackage rec {
   pname = "regenmaschine";
+<<<<<<< HEAD
   version = "2023.08.0";
+=======
+  version = "2022.11.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -24,6 +31,7 @@ buildPythonPackage rec {
     owner = "bachya";
     repo = pname;
     rev = "refs/tags/${version}";
+<<<<<<< HEAD
     hash = "sha256-2czpPLTJOUxjzG0+aOyY01jfwlcRgoHiQdB6ybQ6gWg=";
   };
 
@@ -41,6 +49,11 @@ buildPythonPackage rec {
     })
   ];
 
+=======
+    hash = "sha256-0ih0qlN9NxkYkcRl990gVyZF33ymSNUJoNFzpcnqu1o=";
+  };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nativeBuildInputs = [
     poetry-core
   ];

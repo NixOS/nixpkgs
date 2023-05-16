@@ -1,7 +1,10 @@
 { lib
 , stdenv
 , python3
+<<<<<<< HEAD
 , fetchFromGitHub
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , installShellFiles
 }:
 
@@ -25,6 +28,7 @@ let
 in buildPythonApplication rec {
   pname = "pipenv";
   version = "2023.2.4";
+<<<<<<< HEAD
   format = "pyproject";
 
   src = fetchFromGitHub {
@@ -41,6 +45,17 @@ in buildPythonApplication rec {
     setuptools
     wheel
   ];
+=======
+
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "sha256-GKPrpRnjbVnw1af5xCvSaFIeS5t7PRvWrc8TFWkyMnU=";
+  };
+
+  LC_ALL = "en_US.UTF-8";
+
+  nativeBuildInputs = [ installShellFiles ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   postPatch = ''
     # pipenv invokes python in a subprocess to create a virtualenv
@@ -53,6 +68,7 @@ in buildPythonApplication rec {
 
   propagatedBuildInputs = runtimeDeps python3.pkgs;
 
+<<<<<<< HEAD
   preCheck = ''
     export HOME="$TMPDIR"
   '';
@@ -74,6 +90,8 @@ in buildPythonApplication rec {
     "tests/integration"
   ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   postInstall = ''
     installShellCompletion --cmd pipenv \
       --bash <(_PIPENV_COMPLETE=bash_source $out/bin/pipenv) \
@@ -81,6 +99,16 @@ in buildPythonApplication rec {
       --fish <(_PIPENV_COMPLETE=fish_source $out/bin/pipenv)
   '';
 
+<<<<<<< HEAD
+=======
+  doCheck = true;
+  checkPhase = ''
+    export HOME=$(mktemp -d)
+    cp -r --no-preserve=mode ${wheel.src} $HOME/wheel-src
+    $out/bin/pipenv install $HOME/wheel-src
+  '';
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   meta = with lib; {
     description = "Python Development Workflow for Humans";
     license = licenses.mit;

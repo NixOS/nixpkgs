@@ -192,8 +192,11 @@ with pkgs;
     meta.platforms = lib.platforms.linux;
   } ../build-support/setup-hooks/auto-patchelf.sh;
 
+<<<<<<< HEAD
   tomato-c = callPackage ../applications/misc/tomato-c { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   appflowy = callPackage ../applications/office/appflowy { };
 
   appimageTools = callPackage ../build-support/appimage { };
@@ -236,15 +239,24 @@ with pkgs;
 
   align = callPackage ../tools/text/align { };
 
+<<<<<<< HEAD
   alire = callPackage ../development/tools/build-managers/alire { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   althttpd = callPackage ../servers/althttpd { };
 
   amqpcat = callPackage ../development/tools/amqpcat { };
 
   anders = callPackage ../applications/science/logic/anders { };
 
+<<<<<<< HEAD
   ankisyncd = callPackage ../servers/ankisyncd { };
+=======
+  ankisyncd = callPackage ../servers/ankisyncd {
+    python3 = python39;
+  };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   ariang = callPackage ../servers/ariang { };
 
@@ -252,8 +264,11 @@ with pkgs;
 
   ani-cli = callPackage ../applications/video/ani-cli { };
 
+<<<<<<< HEAD
   dra-cla = callPackage ../applications/video/dra-cla { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   anime-downloader = callPackage ../applications/video/anime-downloader { };
 
   aocd = with python3Packages; toPythonApplication aocd;
@@ -264,22 +279,30 @@ with pkgs;
 
   alterx = callPackage ../tools/security/alterx { };
 
+<<<<<<< HEAD
   altserver-linux = callPackage ../tools/misc/altserver-linux { };
 
   asciicam = callPackage ../applications/video/asciicam { };
 
   asitop = pkgs.python3Packages.callPackage ../os-specific/darwin/asitop { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   asn = callPackage ../applications/networking/asn { };
 
   asnmap = callPackage ../tools/security/asnmap { };
 
+<<<<<<< HEAD
   ast-grep = callPackage ../development/tools/misc/ast-grep { };
 
   astrolog = callPackage ../applications/science/astronomy/astrolog { };
 
   astronomer = callPackage ../tools/misc/astronomer { };
 
+=======
+  astrolog = callPackage ../applications/science/astronomy/astrolog { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   atkinson-hyperlegible = callPackage ../data/fonts/atkinson-hyperlegible { };
 
   _0x =  callPackage ../tools/misc/0x { };
@@ -300,8 +323,11 @@ with pkgs;
 
   apko = callPackage ../development/tools/apko { };
 
+<<<<<<< HEAD
   melange = callPackage ../development/tools/melange { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   appthreat-depscan = callPackage ../development/tools/appthreat-depscan { };
 
   activate-linux = callPackage ../applications/misc/activate-linux { };
@@ -316,8 +342,11 @@ with pkgs;
 
   asn1c = callPackage ../development/compilers/asn1c { };
 
+<<<<<<< HEAD
   assemblyscript = callPackage ../development/compilers/assemblyscript { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   authy = callPackage ../applications/misc/authy { };
 
   authz0 = callPackage ../tools/security/authz0 { };
@@ -326,8 +355,11 @@ with pkgs;
 
   atomic-operator = callPackage ../tools/security/atomic-operator { };
 
+<<<<<<< HEAD
   atomic-swap = callPackage ../applications/blockchains/atomic-swap { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   avro-tools = callPackage ../development/tools/avro-tools { };
 
   bacnet-stack = callPackage ../tools/networking/bacnet-stack { };
@@ -336,6 +368,7 @@ with pkgs;
 
   banana-accounting = callPackage ../applications/office/banana-accounting { };
 
+<<<<<<< HEAD
   beebeep = libsForQt5.callPackage ../applications/office/beebeep { };
 
   beeper = qt5.callPackage ../applications/networking/instant-messengers/beeper { };
@@ -344,13 +377,23 @@ with pkgs;
 
   bearer = callPackage ../development/tools/bearer { };
 
+=======
+  beebeep = libsForQt5.callPackage ../applications/office/beebeep {};
+
+  bakelite = callPackage ../tools/backup/bakelite { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   benthos = callPackage ../development/tools/benthos { };
 
   beyond-identity = callPackage ../tools/security/beyond-identity { };
 
+<<<<<<< HEAD
   bibtex-tidy = callPackage ../tools/typesetting/bibtex-tidy { };
 
   bililiverecorder = callPackage ../servers/bililiverecorder { };
+=======
+  bibtex-tidy = nodePackages.bibtex-tidy;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   binbloom = callPackage ../tools/security/binbloom { };
 
@@ -362,12 +405,15 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) CoreServices;
   };
 
+<<<<<<< HEAD
   blst = callPackage ../development/libraries/blst { };
 
   bloodhound-py = callPackage ../tools/security/bloodhound-py { };
 
   bodyclose = callPackage ../development/tools/bodyclose { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   bootstrap-studio = callPackage ../development/web/bootstrap-studio { };
 
   breakpad = callPackage ../development/misc/breakpad { };
@@ -382,8 +428,11 @@ with pkgs;
 
   circumflex = callPackage ../applications/networking/circumflex { };
 
+<<<<<<< HEAD
   citron = callPackage ../tools/misc/citron { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   cxx-rs = callPackage ../development/libraries/cxx-rs { };
 
   elfcat = callPackage ../tools/misc/elfcat { };
@@ -413,20 +462,28 @@ with pkgs;
 
   c64-debugger = callPackage ../applications/emulators/c64-debugger { };
 
+<<<<<<< HEAD
   camunda-modeler = callPackage ../applications/misc/camunda-modeler { };
 
   caroline = callPackage ../development/libraries/caroline { };
 
   cartridges = callPackage ../applications/misc/cartridges { };
 
+=======
+  caroline = callPackage ../development/libraries/caroline { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   castget = callPackage ../applications/networking/feedreaders/castget { };
 
   castxml = callPackage ../development/tools/castxml { };
 
   catatonit = callPackage ../applications/virtualization/catatonit { };
 
+<<<<<<< HEAD
   catppuccin-catwalk = callPackage ../development/tools/misc/catppuccin-catwalk { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   catppuccin-gtk = callPackage ../data/themes/catppuccin-gtk { };
 
   catppuccin-kde = callPackage ../data/themes/catppuccin-kde { };
@@ -435,42 +492,58 @@ with pkgs;
 
   catppuccin-papirus-folders = callPackage ../data/icons/catppuccin-papirus-folders { };
 
+<<<<<<< HEAD
   catppuccin-plymouth = callPackage ../data/themes/catppuccin-plymouth { };
 
   catppuccin-sddm-corners = callPackage ../data/themes/catppuccin-sddm-corners { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   btdu = callPackage ../tools/misc/btdu { };
 
   ccal = callPackage ../tools/misc/ccal { };
 
+<<<<<<< HEAD
   cereal = cereal_1_3_0;
   cereal_1_3_0 = callPackage ../development/libraries/cereal/1.3.0.nix { };
   cereal_1_3_2 = callPackage ../development/libraries/cereal/1.3.2.nix { };
+=======
+  cereal = callPackage ../development/libraries/cereal { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   cdecrypt = callPackage ../development/tools/cdecrypt { };
 
   certgraph = callPackage ../tools/security/certgraph { };
 
+<<<<<<< HEAD
   certsync = callPackage ../tools/security/certsync { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   cewl = callPackage ../tools/security/cewl { };
 
   chatgpt-cli = callPackage ../tools/misc/chatgpt-cli { };
 
   chatgpt-retrieval-plugin = callPackage ../servers/chatgpt-retrieval-plugin { };
 
+<<<<<<< HEAD
   mswatch = callPackage ../applications/networking/mailreaders/mswatch { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   chef-cli = callPackage ../tools/misc/chef-cli { };
 
   checkov = callPackage ../development/tools/analysis/checkov {
     python3 = python311;
   };
 
+<<<<<<< HEAD
   checkpwn = callPackage ../tools/misc/checkpwn { };
 
   banana-vera = callPackage ../development/tools/analysis/banana-vera { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   chrysalis = callPackage ../applications/misc/chrysalis { };
 
   ciel = callPackage ../tools/package-management/ciel { };
@@ -499,10 +572,13 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
+<<<<<<< HEAD
   codeberg-cli = callPackage ../applications/version-management/codeberg-cli {
     inherit (darwin.apple_sdk.frameworks) Security CoreServices;
   };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   conftest = callPackage ../development/tools/conftest { };
 
   coldsnap = callPackage ../tools/admin/coldsnap {
@@ -511,8 +587,11 @@ with pkgs;
 
   colemak-dh = callPackage ../data/misc/colemak-dh { };
 
+<<<<<<< HEAD
   collision = callPackage ../applications/misc/collision { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   colmena = callPackage ../tools/admin/colmena { };
 
   colorz = callPackage ../tools/misc/colorz { };
@@ -521,12 +600,16 @@ with pkgs;
 
   colorpicker = callPackage ../tools/misc/colorpicker { };
 
+<<<<<<< HEAD
   colorstorm = callPackage ../applications/misc/colorstorm { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   comedilib = callPackage ../development/libraries/comedilib {  };
 
   commix = callPackage ../tools/security/commix { };
 
+<<<<<<< HEAD
   comodoro = callPackage ../applications/misc/comodoro { };
 
   compdb = callPackage ../tools/misc/compdb { };
@@ -537,22 +620,34 @@ with pkgs;
 
   containerlab = callPackage ../tools/networking/containerlab { };
 
+=======
+  compdb = callPackage ../tools/misc/compdb { };
+
+  conserver = callPackage ../tools/misc/conserver { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   containerpilot = callPackage ../applications/networking/cluster/containerpilot { };
 
   coost = callPackage ../development/libraries/coost { };
 
   crc = callPackage ../applications/networking/cluster/crc { };
 
+<<<<<<< HEAD
   confetty = callPackage ../applications/misc/confetty { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   confy = callPackage ../applications/misc/confy { };
 
   coordgenlibs  = callPackage ../development/libraries/coordgenlibs { };
 
   copilot-cli = callPackage ../tools/admin/copilot-cli { };
 
+<<<<<<< HEAD
   cp210x-program = callPackage ../tools/misc/cp210x-program { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   cp437 = callPackage ../tools/misc/cp437 { };
 
   cpm-cmake = callPackage ../development/tools/cpm-cmake { };
@@ -573,10 +668,13 @@ with pkgs;
 
   databricks-sql-cli = python3Packages.callPackage ../applications/misc/databricks-sql-cli { };
 
+<<<<<<< HEAD
   dbip-country-lite = callPackage ../data/misc/dbip-country-lite { };
 
   dcgm = callPackage ../os-specific/linux/dcgm { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   dhallDirectoryToNix = callPackage ../build-support/dhall/directory-to-nix.nix { };
 
   dhallPackageToNix = callPackage ../build-support/dhall/package-to-nix.nix { };
@@ -585,10 +683,13 @@ with pkgs;
 
   dinghy = with python3Packages; toPythonApplication dinghy;
 
+<<<<<<< HEAD
   djgpp = djgpp_i586;
   djgpp_i586 = callPackage ../development/compilers/djgpp { targetArchitecture = "i586"; };
   djgpp_i686 = lowPrio (callPackage ../development/compilers/djgpp { targetArchitecture = "i686"; });
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   djhtml = python3Packages.callPackage ../development/tools/djhtml { };
 
   deadcode = callPackage ../development/tools/deadcode { };
@@ -597,6 +698,7 @@ with pkgs;
 
   dec-decode = callPackage ../development/tools/dec-decode { };
 
+<<<<<<< HEAD
   devour-flake = callPackage ../tools/nix/devour-flake { };
 
   dnf5 = callPackage ../tools/package-management/dnf5 { };
@@ -612,6 +714,13 @@ with pkgs;
   dufs = callPackage ../servers/http/dufs { };
 
   dynein = callPackage ../development/tools/database/dynein {
+=======
+  dsq = callPackage ../tools/misc/dsq { };
+
+  dtv-scan-tables = callPackage ../data/misc/dtv-scan-tables { };
+
+  dufs = callPackage ../servers/http/dufs {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
@@ -619,6 +728,7 @@ with pkgs;
 
   each = callPackage ../tools/text/each { };
 
+<<<<<<< HEAD
   ebusd = callPackage ../servers/ebusd { };
 
   eclipse-mat = callPackage ../development/tools/eclipse-mat { };
@@ -634,10 +744,15 @@ with pkgs;
     };
   };
 
+=======
+  eclipse-mat = callPackage ../development/tools/eclipse-mat { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   edgedb = callPackage ../tools/networking/edgedb {
     inherit (darwin.apple_sdk.frameworks) CoreServices Security;
   };
 
+<<<<<<< HEAD
   edge-runtime = callPackage ../development/web/edge-runtime { };
 
   efficient-compression-tool = callPackage ../tools/compression/efficient-compression-tool { };
@@ -650,36 +765,53 @@ with pkgs;
 
   enumer = callPackage ../tools/misc/enumer { };
 
+=======
+  efficient-compression-tool = callPackage ../tools/compression/efficient-compression-tool { };
+
+  enumer = callPackage ../tools/misc/enumer {
+    buildGoModule = buildGo119Module; # go 1.20 build failure
+  };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   evans = callPackage ../development/tools/evans { };
 
   evhz = callPackage ../tools/misc/evhz { };
 
   expressvpn = callPackage ../applications/networking/expressvpn { };
 
+<<<<<<< HEAD
   faq = callPackage ../development/tools/faq { };
 
   femtolisp = callPackage ../development/interpreters/femtolisp { };
 
   fh = callPackage ../tools/nix/fh { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   figma-agent = callPackage ../applications/graphics/figma-agent { };
 
   figma-linux = callPackage ../applications/graphics/figma-linux { };
 
   firefly-desktop = callPackage ../applications/misc/firefly-desktop { };
 
+<<<<<<< HEAD
   flaca = callPackage ../applications/graphics/flaca { };
 
   frece = callPackage ../development/tools/frece { };
 
   frida-tools = callPackage ../tools/security/frida-tools { };
 
+=======
+  frece = callPackage ../development/tools/frece { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   frink = callPackage ../development/tools/frink { };
 
   frugal = callPackage ../development/tools/frugal { };
 
   functiontrace-server = callPackage ../development/tools/functiontrace-server { };
 
+<<<<<<< HEAD
   gendef = callPackage ../development/tools/gendef { };
 
   glade = callPackage ../development/tools/glade { };
@@ -692,17 +824,26 @@ with pkgs;
 
   gokrazy = callPackage ../development/misc/gokrazy { };
 
+=======
+  glade = callPackage ../development/tools/glade { };
+
+  goda = callPackage ../development/tools/goda { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   gojq = callPackage ../development/tools/gojq { };
 
   govulncheck = callPackage ../tools/security/govulncheck { };
 
   gpick = callPackage ../tools/misc/gpick { };
 
+<<<<<<< HEAD
   gradescope-submit = callPackage ../tools/misc/gradescope-submit { };
 
   gridlock = callPackage ../tools/nix/gridlock { };
   inherit (gridlock) nyarr;
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   hwatch = callPackage ../tools/misc/hwatch { };
 
   hobbes = callPackage ../development/tools/hobbes { stdenv = gcc10StdenvCompat; };
@@ -715,7 +856,11 @@ with pkgs;
 
   buildcatrust = with python3.pkgs; toPythonApplication buildcatrust;
 
+<<<<<<< HEAD
   probe-rs = callPackage ../development/tools/rust/probe-rs {
+=======
+  probe-rs-cli = callPackage ../development/tools/rust/probe-rs-cli {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     inherit (darwin.apple_sdk.frameworks) AppKit;
     inherit (darwin) DarwinTools;
   };
@@ -741,8 +886,11 @@ with pkgs;
 
   proto-contrib = callPackage ../development/tools/proto-contrib { };
 
+<<<<<<< HEAD
   protoc-gen-dart = callPackage ../development/tools/protoc-gen-dart { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   protoc-gen-doc = callPackage ../development/tools/protoc-gen-doc { };
 
   protoc-gen-entgrpc = callPackage ../development/tools/protoc-gen-entgrpc { };
@@ -753,6 +901,7 @@ with pkgs;
 
   protoc-gen-go-vtproto = callPackage ../development/tools/protoc-gen-go-vtproto { };
 
+<<<<<<< HEAD
   protoc-gen-grpc-web = callPackage ../development/tools/protoc-gen-grpc-web {
     protobuf = protobuf3_21;
   };
@@ -769,6 +918,14 @@ with pkgs;
 
   protoc-gen-tonic = callPackage ../development/tools/protoc-gen-tonic { };
 
+=======
+  protoc-gen-grpc-web = callPackage ../development/tools/protoc-gen-grpc-web { };
+
+  protoc-gen-connect-go = callPackage ../development/tools/protoc-gen-connect-go { };
+
+  protoc-gen-rust = callPackage ../development/tools/protoc-gen-rust { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   protoc-gen-twirp = callPackage ../development/tools/protoc-gen-twirp { };
 
   protoc-gen-twirp_php = callPackage ../development/tools/protoc-gen-twirp_php { };
@@ -805,10 +962,13 @@ with pkgs;
 
   erosmb = callPackage ../tools/security/erosmb { };
 
+<<<<<<< HEAD
   eslint_d = callPackage ../development/tools/eslint_d { };
 
   oauth2c = callPackage ../tools/security/oauth2c { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   octosuite = callPackage ../tools/security/octosuite { };
 
   octosql = callPackage ../tools/misc/octosql { };
@@ -817,14 +977,20 @@ with pkgs;
 
   oletools = with python3.pkgs; toPythonApplication oletools;
 
+<<<<<<< HEAD
   ollama = callPackage ../tools/misc/ollama {  };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ots = callPackage ../tools/security/ots {  };
 
   credential-detector = callPackage ../tools/security/credential-detector { };
 
+<<<<<<< HEAD
   creds = callPackage ../tools/security/creds { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   credslayer = callPackage ../tools/security/credslayer { };
 
   device-tree_rpi = callPackage ../os-specific/linux/device-tree/raspberrypi.nix { };
@@ -849,9 +1015,13 @@ with pkgs;
     autoreconfHook = buildPackages.autoreconfHook269;
   };
 
+<<<<<<< HEAD
   gretl = callPackage ../applications/science/math/gretl {
     inherit (darwin.apple_sdk.frameworks) Accelerate;
   };
+=======
+  gretl = callPackage ../applications/science/math/gretl { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   grsync = callPackage ../applications/misc/grsync { };
 
@@ -871,8 +1041,11 @@ with pkgs;
 
   docker-slim = callPackage ../applications/virtualization/docker-slim { };
 
+<<<<<<< HEAD
   doc2go = callPackage ../development/tools/doc2go { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   docker-sync = callPackage ../tools/misc/docker-sync { };
 
   undocker = callPackage ../tools/misc/undocker { };
@@ -881,14 +1054,20 @@ with pkgs;
 
   docui = callPackage ../tools/misc/docui { };
 
+<<<<<<< HEAD
   done = callPackage ../applications/misc/done { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   dotfiles = callPackage ../applications/misc/dotfiles { };
 
   # Dotnet
 
+<<<<<<< HEAD
   csharp-ls = callPackage ../development/tools/language-servers/csharp-ls { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   dotnetCorePackages = recurseIntoAttrs (callPackage ../development/compilers/dotnet {});
 
   dotnet-sdk_2 = dotnetCorePackages.sdk_2_1;
@@ -915,6 +1094,7 @@ with pkgs;
   mkNugetSource = callPackage ../build-support/dotnet/make-nuget-source { };
   mkNugetDeps = callPackage ../build-support/dotnet/make-nuget-deps { };
 
+<<<<<<< HEAD
   buildDotnetGlobalTool = callPackage ../build-support/dotnet/build-dotnet-global-tool { };
 
   fsautocomplete = callPackage ../development/tools/fsautocomplete { };
@@ -923,6 +1103,8 @@ with pkgs;
 
   fable = callPackage ../development/tools/fable { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   dotnetenv = callPackage ../build-support/dotnet/dotnetenv {
     dotnetfx = dotnetfx40;
   };
@@ -953,8 +1135,11 @@ with pkgs;
 
   edwin = callPackage ../data/fonts/edwin { };
 
+<<<<<<< HEAD
   edwood = callPackage ../applications/editors/edwood { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   etBook = callPackage ../data/fonts/et-book { };
 
   fntsample = callPackage ../tools/misc/fntsample { };
@@ -998,8 +1183,11 @@ with pkgs;
 
   fetchMavenArtifact = callPackage ../build-support/fetchmavenartifact { };
 
+<<<<<<< HEAD
   fetchpijul = callPackage ../build-support/fetchpijul { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   inherit (callPackage ../build-support/node/fetch-yarn-deps { })
     prefetch-yarn-deps
     fetchYarnDeps;
@@ -1016,18 +1204,26 @@ with pkgs;
 
   gomi = callPackage ../tools/misc/gomi { };
 
+<<<<<<< HEAD
   go-ios = callPackage ../tools/misc/go-ios { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   graph-easy = callPackage ../tools/graphics/graph-easy { };
 
   mangal = callPackage ../applications/misc/mangal { };
 
+<<<<<<< HEAD
   mermaid-filter = callPackage ../tools/misc/mermaid-filter { };
 
   graphw00f = callPackage ../tools/security/graphw00f { };
 
   graphite-cursors = callPackage ../data/icons/graphite-cursors { };
 
+=======
+  graphw00f = callPackage ../tools/security/graphw00f { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   opendrop = python3Packages.callPackage ../tools/networking/opendrop { };
 
   owl = callPackage ../tools/networking/owl { };
@@ -1040,12 +1236,15 @@ with pkgs;
 
   packr = callPackage ../development/libraries/packr { };
 
+<<<<<<< HEAD
   pacproxy = callPackage ../tools/networking/pacproxy { };
 
   pacup = callPackage ../tools/package-management/pacup { };
 
   patcher9x = callPackage ../development/tools/patcher9x { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   perseus-cli = callPackage ../development/tools/perseus-cli {
     inherit (darwin.apple_sdk.frameworks) CoreServices;
   };
@@ -1066,17 +1265,26 @@ with pkgs;
 
   mod = callPackage ../development/tools/mod { };
 
+<<<<<<< HEAD
   mods = callPackage ../tools/misc/mods { };
 
   mongosh = callPackage ../development/tools/mongosh { };
 
   mya = callPackage ../applications/misc/mya { };
 
+=======
+  mongosh = callPackage ../development/tools/mongosh { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   mysql-shell = callPackage ../development/tools/mysql-shell {
     inherit (darwin) cctools developer_cmds DarwinTools;
     inherit (darwin.apple_sdk.frameworks) CoreServices;
     antlr = antlr4_10;
     boost = boost177; # Configure checks for specific version.
+<<<<<<< HEAD
+=======
+    protobuf = protobuf3_19;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     icu =  icu69;
   };
 
@@ -1187,11 +1395,14 @@ with pkgs;
       tests = pkgs.tests.fetchzip;
     };
 
+<<<<<<< HEAD
   fetchDebianPatch = callPackage ../build-support/fetchdebianpatch { }
     // {
       tests = pkgs.tests.fetchDebianPatch;
     };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   fetchCrate = callPackage ../build-support/rust/fetchcrate.nix { };
 
   fetchFromGitea = callPackage ../build-support/fetchgitea { };
@@ -1208,8 +1419,11 @@ with pkgs;
 
   fetchFromGitiles = callPackage ../build-support/fetchgitiles { };
 
+<<<<<<< HEAD
   fetchFrom9Front = callPackage ../build-support/fetch9front { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   fetchFromRepoOrCz = callPackage ../build-support/fetchrepoorcz { };
 
   fetchgx = callPackage ../build-support/fetchgx { };
@@ -1234,8 +1448,11 @@ with pkgs;
 
   libredirect = callPackage ../build-support/libredirect { };
 
+<<<<<<< HEAD
   livecaptions = callPackage ../applications/misc/livecaptions { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   madonctl = callPackage ../applications/misc/madonctl { };
 
   copyDesktopItems = makeSetupHook {
@@ -1314,8 +1531,11 @@ with pkgs;
 
   closureInfo = callPackage ../build-support/closure-info.nix { };
 
+<<<<<<< HEAD
   sensible-utils = callPackage ../tools/misc/sensible-utils { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   serverspec = callPackage ../tools/misc/serverspec { };
 
   setupSystemdUnits = callPackage ../build-support/setup-systemd-units.nix { };
@@ -1327,8 +1547,11 @@ with pkgs;
 
   singularity-tools = callPackage ../build-support/singularity-tools { };
 
+<<<<<<< HEAD
   stacktile = callPackage ../tools/wayland/stacktile { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   sirula = callPackage ../tools/wayland/sirula { };
 
   sitelen-seli-kiwen = callPackage ../data/fonts/sitelen-seli-kiwen { };
@@ -1409,7 +1632,11 @@ with pkgs;
     makeWrapper = makeBinaryWrapper;
   };
 
+<<<<<<< HEAD
   wrapGAppsHook4 = wrapGAppsHook.override { gtk3 = __splicedPackages.gtk4; };
+=======
+  wrapGAppsHook4 = wrapGAppsHook.override { gtk3 = gtk4; };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   wrapGAppsNoGuiHook = wrapGAppsHook.override { isGraphical = false; };
 
@@ -1459,16 +1686,22 @@ with pkgs;
 
   _9pfs = callPackage ../tools/filesystems/9pfs { };
 
+<<<<<<< HEAD
   _9ptls = callPackage ../os-specific/linux/9ptls { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   aaa = callPackage ../tools/misc/aaa { };
 
   aardvark-dns = callPackage ../tools/networking/aardvark-dns { };
 
   a2ps = callPackage ../tools/text/a2ps { };
 
+<<<<<<< HEAD
   abbreviate = callPackage ../tools/text/abbreviate { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   abcm2ps = callPackage ../tools/audio/abcm2ps { };
 
   abcmidi = callPackage ../tools/audio/abcmidi { };
@@ -1481,12 +1714,20 @@ with pkgs;
 
   accuraterip-checksum = callPackage ../tools/audio/accuraterip-checksum { };
 
+<<<<<<< HEAD
   acme-dns = callPackage ../servers/dns/acme-dns/default.nix { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   acme-sh = callPackage ../tools/admin/acme-sh { };
 
   acousticbrainz-client = callPackage ../tools/audio/acousticbrainz-client { };
 
+<<<<<<< HEAD
+=======
+  acoustidFingerprinter = callPackage ../tools/audio/acoustid-fingerprinter { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   alsaequal = callPackage ../tools/audio/alsaequal { };
 
   acpica-tools = callPackage ../tools/system/acpica-tools { };
@@ -1517,7 +1758,13 @@ with pkgs;
     type = "OPN";
   };
 
+<<<<<<< HEAD
   arc_unpacker = callPackage ../tools/archivers/arc_unpacker { };
+=======
+  arc_unpacker = callPackage ../tools/archivers/arc_unpacker {
+    boost = boost16x; # checkPhase fails with Boost 1.77
+  };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   adminer = callPackage ../servers/adminer { };
 
@@ -1574,9 +1821,15 @@ with pkgs;
   };
 
   aflplusplus = callPackage ../tools/security/aflplusplus {
+<<<<<<< HEAD
     clang = clang_15;
     llvm = llvm_15;
     llvmPackages = llvmPackages_15;
+=======
+    clang = clang_9;
+    llvm = llvm_9;
+    python = python3;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     wine = null;
   };
 
@@ -1610,17 +1863,28 @@ with pkgs;
 
   aide = callPackage ../tools/security/aide { };
 
+<<<<<<< HEAD
   ain = callPackage ../tools/networking/ain { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   aioblescan = with python3Packages; toPythonApplication aioblescan;
 
   aiodnsbrute = callPackage ../tools/security/aiodnsbrute { };
 
   aircrack-ng = callPackage ../tools/networking/aircrack-ng { };
 
+<<<<<<< HEAD
   airgeddon = callPackage ../tools/networking/airgeddon { };
 
   apache-airflow = callPackage ../servers/apache-airflow { };
+=======
+  airfield = callPackage ../tools/networking/airfield { };
+
+  airgeddon = callPackage ../tools/networking/airgeddon { };
+
+  apache-airflow = with python3.pkgs; toPythonApplication apache-airflow;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   apachetomcatscanner = callPackage ../tools/security/apachetomcatscanner { };
 
@@ -1643,9 +1907,13 @@ with pkgs;
 
   akku = callPackage ../tools/package-management/akku { };
 
+<<<<<<< HEAD
   albert = qt6Packages.callPackage ../applications/misc/albert { };
 
   alice-lg = callPackage ../servers/alice-lg{ };
+=======
+  albert = libsForQt5.callPackage ../applications/misc/albert { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   alice-tools = callPackage ../tools/games/alice-tools {
     withGUI = false;
@@ -1673,12 +1941,16 @@ with pkgs;
 
   amidst = callPackage ../tools/games/minecraft/amidst { };
 
+<<<<<<< HEAD
   asar = callPackage ../tools/compression/asar { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   askalono = callPackage ../tools/misc/askalono { };
 
   asleap = callPackage ../tools/networking/asleap { };
 
+<<<<<<< HEAD
   awsbck = callPackage ../tools/backup/awsbck {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
@@ -1689,12 +1961,19 @@ with pkgs;
 
   btc-rpc-explorer = callPackage ../tools/misc/btc-rpc-explorer { };
 
+=======
+  balena-cli = callPackage ../tools/admin/balena-cli { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   butler = callPackage ../games/itch/butler.nix {
     inherit (darwin.apple_sdk.frameworks) Cocoa;
   };
 
+<<<<<<< HEAD
   carbon-now-cli = callPackage ../tools/typesetting/carbon-now-cli { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   cf-vault = callPackage ../tools/admin/cf-vault { };
 
   cfonts = callPackage ../tools/misc/cfonts { };
@@ -1707,6 +1986,7 @@ with pkgs;
 
   clematis = callPackage ../tools/misc/clematis { };
 
+<<<<<<< HEAD
   clubhouse-cli = callPackage ../tools/misc/clubhouse-cli { };
 
   colorless = callPackage ../tools/misc/colorless { };
@@ -1719,12 +1999,19 @@ with pkgs;
 
   ejs = callPackage ../development/tools/ejs { };
 
+=======
+  colorless = callPackage ../tools/misc/colorless { };
+
+  cope = callPackage ../tools/misc/cope { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ejson2env = callPackage ../tools/admin/ejson2env { };
 
   davinci-resolve = callPackage ../applications/video/davinci-resolve { };
 
   dolbybcsoftwaredecode = callPackage ../applications/audio/dolbybcsoftwaredecode { };
 
+<<<<<<< HEAD
   donkey = callPackage ../tools/security/donkey { };
 
   dualsensectl = callPackage ../tools/games/dualsensectl { };
@@ -1745,6 +2032,12 @@ with pkgs;
 
   fscan = callPackage ../tools/security/fscan { };
 
+=======
+  dwarfs = callPackage ../tools/filesystems/dwarfs { };
+
+  etlegacy = callPackage ../games/etlegacy { lua = lua5_4; };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   copier = callPackage ../tools/misc/copier { };
 
   gabutdm = callPackage ../applications/networking/gabutdm { };
@@ -1773,10 +2066,13 @@ with pkgs;
 
   gen6dns = callPackage ../tools/networking/gen6dns { };
 
+<<<<<<< HEAD
   gen-license = callPackage ../development/tools/gen-license {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   github-copilot-cli = callPackage ../tools/misc/github-copilot-cli { };
 
   gfshare = callPackage ../tools/security/gfshare { };
@@ -1803,28 +2099,39 @@ with pkgs;
 
   goflow = callPackage ../tools/networking/goflow { };
 
+<<<<<<< HEAD
   goflow2 = callPackage ../tools/networking/goflow2 { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   gofu = callPackage ../applications/misc/gofu { };
 
   godns = callPackage ../tools/networking/godns { };
 
   godspeed = callPackage ../tools/networking/godspeed { };
 
+<<<<<<< HEAD
   goose = callPackage ../tools/misc/goose { };
 
   gp-saml-gui = python3Packages.callPackage ../tools/networking/gp-saml-gui { };
 
   grizzly = callPackage ../tools/misc/grizzly { };
 
+=======
+  gp-saml-gui = python3Packages.callPackage ../tools/networking/gp-saml-gui { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   guestfs-tools = callPackage ../tools/virtualization/guestfs-tools { };
 
   fabs = callPackage ../tools/backup/fabs { };
 
+<<<<<<< HEAD
   fm = callPackage ../applications/file-managers/fm { };
 
   fm-tune = callPackage ../applications/radio/fm-tune { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   fwbuilder = libsForQt5.callPackage ../tools/security/fwbuilder { };
 
   hblock = callPackage ../tools/networking/hblock { };
@@ -1833,6 +2140,7 @@ with pkgs;
 
   headset-charge-indicator = callPackage ../tools/audio/headset-charge-indicator { };
 
+<<<<<<< HEAD
   heh = callPackage ../applications/editors/heh { };
 
   hexdiff = callPackage ../tools/misc/hexdiff { };
@@ -1849,6 +2157,12 @@ with pkgs;
 
   immich-cli = callPackage ../tools/misc/immich-cli { };
 
+=======
+  hexdiff = callPackage ../tools/misc/hexdiff { };
+
+  httm = darwin.apple_sdk_11_0.callPackage ../tools/filesystems/httm { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   inherit (callPackage ../tools/networking/ivpn/default.nix {}) ivpn ivpn-service;
 
   jobber = callPackage ../tools/system/jobber { };
@@ -1859,10 +2173,13 @@ with pkgs;
 
   kaufkauflist = callPackage ../applications/misc/kaufkauflist { };
 
+<<<<<<< HEAD
   kdocker = libsForQt5.callPackage ../tools/X11/kdocker { };
 
   kicli = callPackage ../tools/misc/kicli { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ksmbd-tools = callPackage ../os-specific/linux/ksmbd-tools { };
 
   ksnip = libsForQt5.callPackage ../tools/misc/ksnip { };
@@ -1871,10 +2188,13 @@ with pkgs;
 
   kubevirt = callPackage ../tools/virtualization/kubevirt { };
 
+<<<<<<< HEAD
   lektor = callPackage ../tools/misc/lektor { };
 
   licenseclassifier = callPackage ../development/tools/misc/licenseclassifier { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   license-cli = callPackage ../tools/misc/license-cli { };
 
   license-generator = callPackage ../tools/misc/license-generator { };
@@ -1883,6 +2203,7 @@ with pkgs;
 
   linux-router-without-wifi = linux-router.override { useWifiDependencies = false; };
 
+<<<<<<< HEAD
   markdownlint-cli = callPackage ../tools/text/markdownlint-cli { };
 
   markdownlint-cli2 = callPackage ../tools/text/markdownlint-cli2 { };
@@ -1895,6 +2216,10 @@ with pkgs;
     };
   };
 
+=======
+  mbidled = callPackage ../tools/networking/mbidled { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   metapixel = callPackage ../tools/graphics/metapixel { };
 
   memos = callPackage ../servers/memos { };
@@ -1905,6 +2230,7 @@ with pkgs;
 
   mnc = callPackage ../tools/misc/mnc { };
 
+<<<<<<< HEAD
   mgmt = callPackage ../applications/system/mgmt { };
 
   mkosi = python3Packages.callPackage ../tools/virtualization/mkosi { inherit systemd; };
@@ -1913,10 +2239,19 @@ with pkgs;
 
   mpremote = python3Packages.callPackage ../tools/misc/mpremote { };
 
+=======
+  mgmt = callPackage ../applications/system/mgmt {
+    buildGoModule = buildGo119Module; # go 1.20 build failure
+  };
+
+  monica = callPackage ../servers/web-apps/monica { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   mprocs = callPackage ../tools/misc/mprocs { };
 
   mpy-utils = python3Packages.callPackage ../tools/misc/mpy-utils { };
 
+<<<<<<< HEAD
   mymcplus = python3Packages.callPackage ../tools/games/mymcplus { };
 
   near-cli = callPackage ../tools/misc/near-cli { };
@@ -1939,14 +2274,23 @@ with pkgs;
 
   osquery = callPackage ../tools/system/osquery { };
 
+=======
+  nominatim = callPackage ../servers/nominatim { };
+
+  ocs-url = libsForQt5.callPackage ../tools/misc/ocs-url { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   paperview = callPackage ../tools/X11/paperview { };
 
   pferd = callPackage ../tools/misc/pferd { };
 
+<<<<<<< HEAD
   pocket-updater-utility = callPackage ../tools/games/pocket-updater-utility { };
 
   polygon-cli = callPackage ../tools/networking/polygon-cli { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   proycon-wayout = callPackage ../tools/wayland/proycon-wayout { };
 
   q = callPackage ../tools/networking/q { };
@@ -1955,28 +2299,39 @@ with pkgs;
 
   quich = callPackage ../tools/misc/quich { } ;
 
+<<<<<<< HEAD
   rabtap = callPackage ../tools/networking/rabtap { } ;
 
   redfang = callPackage ../tools/networking/redfang { };
 
   ronin = callPackage ../tools/security/ronin { };
 
+=======
+  redfang = callPackage ../tools/networking/redfang { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   s0ix-selftest-tool = callPackage ../tools/system/s0ix-selftest-tool { };
 
   scarab = callPackage ../tools/games/scarab { };
 
   sdbus-cpp = callPackage ../development/libraries/sdbus-cpp { };
 
+<<<<<<< HEAD
   basu = callPackage ../development/libraries/basu { };
 
   sdlookup = callPackage ../tools/security/sdlookup { };
 
   sdkmanager = with python3Packages; toPythonApplication sdkmanager;
 
+=======
+  sdlookup = callPackage ../tools/security/sdlookup { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   sgrep = callPackage ../tools/text/sgrep { };
 
   shell-genie = callPackage  ../applications/misc/shell-genie { };
 
+<<<<<<< HEAD
   sloth = callPackage ../tools/misc/sloth { };
 
   snagboot = python3.pkgs.callPackage  ../applications/misc/snagboot { };
@@ -1995,6 +2350,12 @@ with pkgs;
     python3 = python311;
   };
 
+=======
+  simple-dlna-browser = callPackage ../tools/networking/simple-dlna-browser { };
+
+  sorted-grep = callPackage ../tools/text/sorted-grep { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   smbmap = callPackage ../tools/security/smbmap { };
 
   smbscan = callPackage ../tools/security/smbscan { };
@@ -2005,9 +2366,13 @@ with pkgs;
 
   speedtest-rs = callPackage ../tools/networking/speedtest-rs { };
 
+<<<<<<< HEAD
   stargazer = callPackage ../servers/gemini/stargazer {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
+=======
+  stargazer = callPackage ../servers/gemini/stargazer { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   steamtinkerlaunch = callPackage ../tools/games/steamtinkerlaunch { };
 
@@ -2017,15 +2382,22 @@ with pkgs;
 
   systeroid = callPackage ../tools/system/systeroid { };
 
+<<<<<<< HEAD
   tailwindcss = callPackage ../development/tools/tailwindcss { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   tauon = callPackage ../applications/audio/tauon { };
 
   tere = callPackage ../tools/misc/tere { };
 
+<<<<<<< HEAD
   termusic = darwin.apple_sdk_11_0.callPackage ../applications/audio/termusic {
     inherit (darwin.apple_sdk_11_0.frameworks) AppKit CoreAudio CoreGraphics Foundation IOKit MediaPlayer Security;
   };
+=======
+  termusic = callPackage ../applications/audio/termusic { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   tfk8s = callPackage ../tools/misc/tfk8s { };
 
@@ -2039,20 +2411,26 @@ with pkgs;
 
   topicctl = callPackage ../tools/misc/topicctl { };
 
+<<<<<<< HEAD
   transmission-rss = callPackage ../tools/networking/transmission-rss { };
 
   trigger-control = callPackage ../tools/games/trigger-control { };
 
   trimage = callPackage ../applications/graphics/trimage { inherit (qt5) wrapQtAppsHook; };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ttchat = callPackage ../tools/misc/ttchat { };
 
   ukmm = callPackage ../tools/games/ukmm { };
 
   unflac = callPackage ../tools/audio/unflac { };
 
+<<<<<<< HEAD
   valeronoi = qt6Packages.callPackage ../tools/misc/valeronoi { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   veikk-linux-driver-gui = libsForQt5.callPackage ../tools/misc/veikk-linux-driver-gui { };
 
   ventoy = callPackage ../tools/cd-dvd/ventoy { };
@@ -2069,12 +2447,15 @@ with pkgs;
 
   vopono = callPackage ../tools/networking/vopono { };
 
+<<<<<<< HEAD
   vrc-get = callPackage ../tools/misc/vrc-get {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
   vrrtest = callPackage ../tools/video/vrrtest { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   winbox = callPackage ../tools/admin/winbox {
     wine = wineWowPackages.staging;
   };
@@ -2091,6 +2472,11 @@ with pkgs;
 
   xrootd = callPackage ../tools/networking/xrootd { };
 
+<<<<<<< HEAD
+=======
+  xtrt = callPackage ../tools/archivers/xtrt { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   yabridge = callPackage ../tools/audio/yabridge {
     wine = wineWowPackages.staging;
   };
@@ -2103,10 +2489,13 @@ with pkgs;
     stdenv = clangStdenv;
   };
 
+<<<<<<< HEAD
   yarn-lock-converter = callPackage ../tools/package-management/yarn-lock-converter { };
 
   zsh-history-to-fish = callPackage ../tools/misc/zsh-history-to-fish { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   archi = callPackage ../tools/misc/archi { };
 
   breitbandmessung = callPackage ../applications/networking/breitbandmessung { };
@@ -2174,9 +2563,15 @@ with pkgs;
 
   darcs-to-git = callPackage ../applications/version-management/darcs-to-git { };
 
+<<<<<<< HEAD
   degit = callPackage ../applications/version-management/degit { };
 
   delta = darwin.apple_sdk_11_0.callPackage ../applications/version-management/delta { };
+=======
+  delta = callPackage ../applications/version-management/delta {
+    inherit (darwin.apple_sdk.frameworks) DiskArbitration Foundation Security;
+  };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   diff-so-fancy = callPackage ../applications/version-management/diff-so-fancy { };
 
@@ -2188,8 +2583,13 @@ with pkgs;
 
   gita = python3Packages.callPackage ../applications/version-management/gita { };
 
+<<<<<<< HEAD
   gitoxide = darwin.apple_sdk_11_0.callPackage ../applications/version-management/gitoxide {
     inherit (darwin.apple_sdk_11_0.frameworks) Security SystemConfiguration;
+=======
+  gitoxide = callPackage ../applications/version-management/gitoxide {
+    inherit (darwin.apple_sdk.frameworks) Security SystemConfiguration;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   gg-scm = callPackage ../applications/version-management/gg { };
@@ -2216,6 +2616,10 @@ with pkgs;
   git-annex-remote-dbx = callPackage ../applications/version-management/git-annex-remote-dbx {
     inherit (python3Packages)
     buildPythonApplication
+<<<<<<< HEAD
+=======
+    fetchPypi
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     dropbox
     annexremote
     humanfriendly;
@@ -2224,6 +2628,10 @@ with pkgs;
   git-annex-remote-googledrive = callPackage ../applications/version-management/git-annex-remote-googledrive {
     inherit (python3Packages)
     buildPythonApplication
+<<<<<<< HEAD
+=======
+    fetchPypi
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     annexremote
     drivelib
     gitpython
@@ -2239,16 +2647,22 @@ with pkgs;
 
   git-archive-all = python3.pkgs.callPackage ../applications/version-management/git-archive-all { };
 
+<<<<<<< HEAD
   git-backdate = callPackage ../applications/version-management/git-backdate { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   git-backup = callPackage ../applications/version-management/git-backup {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
   git-big-picture = callPackage ../applications/version-management/git-big-picture { };
 
+<<<<<<< HEAD
   git-bars = callPackage ../applications/version-management/git-bars { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   git-branchless = callPackage ../applications/version-management/git-branchless {
     inherit (darwin.apple_sdk.frameworks) Security SystemConfiguration;
   };
@@ -2283,10 +2697,13 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) DiskArbitration Foundation;
   };
 
+<<<<<<< HEAD
   git-credential-manager = callPackage ../applications/version-management/git-credential-manager { };
 
   git-credential-oauth = callPackage ../applications/version-management/git-credential-oauth { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   git-crypt = callPackage ../applications/version-management/git-crypt { };
 
   git-delete-merged-branches = callPackage ../applications/version-management/git-delete-merged-branches { };
@@ -2307,8 +2724,11 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
+<<<<<<< HEAD
   git-graph = callPackage ../applications/version-management/git-graph { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   git-hound = callPackage ../applications/version-management/git-hound { };
 
   git-hub = callPackage ../applications/version-management/git-hub { };
@@ -2323,8 +2743,11 @@ with pkgs;
 
   git-lfs = lowPrio (callPackage ../applications/version-management/git-lfs { });
 
+<<<<<<< HEAD
   git-mit = callPackage ../applications/version-management/git-mit { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   git-my = callPackage ../applications/version-management/git-my { };
 
   git-machete = python3Packages.callPackage ../applications/version-management/git-machete { };
@@ -2355,8 +2778,11 @@ with pkgs;
     util-linux = if stdenv.isLinux then util-linuxMinimal else util-linux;
   };
 
+<<<<<<< HEAD
   git-relevant-history = callPackage ../applications/version-management/git-relevant-history { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   git-remote-codecommit = python3Packages.callPackage ../applications/version-management/git-remote-codecommit { };
 
   gitRepo = git-repo;
@@ -2436,8 +2862,11 @@ with pkgs;
 
   gitnuro = callPackage ../applications/version-management/gitnuro { };
 
+<<<<<<< HEAD
   gitnr = callPackage ../applications/version-management/gitnr { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   gitprompt-rs = callPackage ../applications/version-management/gitprompt-rs/default.nix { };
 
   gitsign = callPackage ../applications/version-management/gitsign { };
@@ -2460,8 +2889,11 @@ with pkgs;
 
   glitter = callPackage ../applications/version-management/glitter { };
 
+<<<<<<< HEAD
   globalping-cli = callPackage ../tools/networking/globalping-cli { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   gst = callPackage ../applications/version-management/gst { };
 
   gut = callPackage ../applications/version-management/gut { };
@@ -2476,22 +2908,31 @@ with pkgs;
 
   lab = callPackage ../applications/version-management/lab { };
 
+<<<<<<< HEAD
   labctl = callPackage ../tools/networking/labctl { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   lefthook = callPackage ../applications/version-management/lefthook { };
 
   legit = callPackage ../applications/version-management/legit { };
 
+<<<<<<< HEAD
   legit-web = callPackage ../applications/version-management/legit-web { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   lucky-commit = callPackage ../applications/version-management/lucky-commit {
     inherit (darwin.apple_sdk.frameworks) OpenCL;
   };
 
+<<<<<<< HEAD
   merge-fmt = callPackage ../applications/version-management/merge-fmt {
     inherit (ocamlPackages) buildDunePackage cmdliner base stdio;
    };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pass-git-helper = python3Packages.callPackage ../applications/version-management/pass-git-helper { };
 
   qgit = qt5.callPackage ../applications/version-management/qgit { };
@@ -2525,8 +2966,11 @@ with pkgs;
 
   transcrypt = callPackage ../applications/version-management/transcrypt { };
 
+<<<<<<< HEAD
   ungit = callPackage ../applications/version-management/ungit { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   inherit (haskellPackages) git-annex;
 
   inherit (haskellPackages) git-brunch;
@@ -2551,6 +2995,14 @@ with pkgs;
 
   basiliskii = callPackage ../applications/emulators/basiliskii { };
 
+<<<<<<< HEAD
+=======
+  bochs = callPackage ../applications/emulators/bochs {
+    inherit (darwin) libobjc;
+    wxGTK = wxGTK32;
+  };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   box64 = callPackage ../applications/emulators/box64 {
     hello-x86_64 = if stdenv.hostPlatform.isx86_64 then
       hello
@@ -2572,8 +3024,11 @@ with pkgs;
 
   citations = callPackage ../applications/misc/citations { };
 
+<<<<<<< HEAD
   webfontkitgenerator = callPackage ../applications/misc/webfontkitgenerator { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   citra-canary = callPackage ../applications/emulators/citra {
     branch = "canary";
   };
@@ -2597,7 +3052,10 @@ with pkgs;
   dlx = callPackage ../applications/emulators/dlx { };
 
   dosbox = callPackage ../applications/emulators/dosbox {
+<<<<<<< HEAD
     inherit (darwin.apple_sdk.frameworks ) OpenGL;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     SDL = if stdenv.isDarwin then SDL else SDL_compat;
   };
 
@@ -2622,14 +3080,18 @@ with pkgs;
 
   flix = callPackage ../development/compilers/flix { };
 
+<<<<<<< HEAD
   fleng = callPackage ../development/compilers/fleng { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   fsrx = callPackage ../tools/misc/fsrx { };
 
   fsuae = callPackage ../applications/emulators/fs-uae { };
 
   fsuae-launcher = libsForQt5.callPackage ../applications/emulators/fs-uae/launcher.nix { };
 
+<<<<<<< HEAD
   fuc = callPackage ../tools/misc/fuc { };
 
   fuse-emulator = callPackage ../applications/emulators/fuse-emulator { };
@@ -2637,6 +3099,13 @@ with pkgs;
   fusesoc = python3Packages.callPackage ../tools/package-management/fusesoc { };
 
   fw = callPackage ../tools/misc/fw { };
+=======
+  fuse-emulator = callPackage ../applications/emulators/fuse-emulator { };
+
+  fw = callPackage ../tools/misc/fw {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   g810-led = callPackage ../misc/g810-led { };
 
@@ -2644,9 +3113,13 @@ with pkgs;
 
   gensgs = pkgsi686Linux.callPackage ../applications/emulators/gens-gs { };
 
+<<<<<<< HEAD
   goldberg-emu = callPackage ../applications/emulators/goldberg-emu {
     protobuf = protobuf3_21;
   };
+=======
+  goldberg-emu = callPackage ../applications/emulators/goldberg-emu { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   gopsuinfo = callPackage ../tools/system/gopsuinfo { };
 
@@ -2674,9 +3147,12 @@ with pkgs;
 
   mainsail = callPackage ../applications/misc/mainsail { };
 
+<<<<<<< HEAD
   # Does not build with default Haskell version because upstream uses a newer Cabal version.
   mailctl = haskell.packages.ghc94.callPackage ../tools/networking/mailctl { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   mame = libsForQt5.callPackage ../applications/emulators/mame { };
 
   mame-tools = lib.addMetaAttrs {
@@ -2699,8 +3175,11 @@ with pkgs;
 
   np2kai = callPackage ../applications/emulators/np2kai { };
 
+<<<<<<< HEAD
   nuked-md = callPackage ../applications/emulators/nuked-md { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   oberon-risc-emu = callPackage ../applications/emulators/oberon-risc-emu { };
 
   openmsx = callPackage ../applications/emulators/openmsx { };
@@ -2709,7 +3188,13 @@ with pkgs;
 
   pcem = callPackage ../applications/emulators/pcem { };
 
+<<<<<<< HEAD
   pcsx2 = qt6Packages.callPackage ../applications/emulators/pcsx2 { };
+=======
+  pcsx2 = callPackage ../applications/emulators/pcsx2 {
+    wxGTK = wxGTK32;
+  };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   pcsxr = callPackage ../applications/emulators/pcsxr { };
 
@@ -2733,7 +3218,13 @@ with pkgs;
 
   punes-qt6 = qt6Packages.callPackage ../applications/emulators/punes { };
 
+<<<<<<< HEAD
   py65 = with python3.pkgs; toPythonApplication py65;
+=======
+  py65 = python3Packages.callPackage ../applications/emulators/py65 { };
+
+  resim = callPackage ../applications/emulators/resim { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   retrofe = callPackage ../applications/emulators/retrofe { };
 
@@ -2763,8 +3254,11 @@ with pkgs;
 
   stella = callPackage ../applications/emulators/stella { };
 
+<<<<<<< HEAD
   tamatool = callPackage ../applications/emulators/tamatool { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   termtekst = callPackage ../applications/emulators/termtekst { };
 
   tilem = callPackage ../applications/emulators/tilem { };
@@ -2810,7 +3304,11 @@ with pkgs;
     inherit (darwin.apple_sdk_11_0.frameworks) CoreBluetooth ForceFeedback IOBluetooth IOKit OpenGL VideoToolbox;
     inherit (darwin) moltenvk;
     stdenv =
+<<<<<<< HEAD
       if stdenv.isDarwin then darwin.apple_sdk_11_0.llvmPackages_14.stdenv
+=======
+      if stdenv.isDarwin && stdenv.isAarch64 then llvmPackages_14.stdenv
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       else stdenv;
   };
 
@@ -2830,6 +3328,7 @@ with pkgs;
       (builtins.attrValues libretro);
   };
 
+<<<<<<< HEAD
   wrapRetroArch = { retroarch, settings ? {} }:
     callPackage ../applications/emulators/retroarch/wrapper.nix
       { inherit retroarch settings; };
@@ -2840,15 +3339,28 @@ with pkgs;
       assets_directory = "${retroarch-assets}/share/retroarch/assets";
       joypad_autoconfig_dir = "${retroarch-joypad-autoconfig}/share/libretro/autoconfig";
       libretro_info_path = "${libretro-core-info}/share/retroarch/cores";
+=======
+  wrapRetroArch = { retroarch }:
+    callPackage ../applications/emulators/retroarch/wrapper.nix
+      { inherit retroarch; };
+
+  retroarch = wrapRetroArch {
+    retroarch = retroarchBare.override {
+      withAssets = true;
+      withCoreInfo = true;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
   };
 
   retroarch-assets = callPackage ../applications/emulators/retroarch/retroarch-assets.nix { };
 
+<<<<<<< HEAD
   retroarch-joypad-autoconfig = callPackage ../applications/emulators/retroarch/retroarch-joypad-autoconfig.nix { };
 
   libretranslate = with python3.pkgs; toPythonApplication libretranslate;
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   libretro = recurseIntoAttrs
     (callPackage ../applications/emulators/retroarch/cores.nix {
       retroarch = retroarchBare;
@@ -2861,6 +3373,7 @@ with pkgs;
 
   ### APPLICATIONS/EMULATORS/YUZU
 
+<<<<<<< HEAD
   yuzu-mainline = import ../applications/emulators/yuzu {
     inherit qt6Packages fetchFromGitHub fetchgit fetchurl fetchzip runCommand gnutar;
     branch = "mainline";
@@ -2868,6 +3381,13 @@ with pkgs;
 
   yuzu-early-access = import ../applications/emulators/yuzu {
     inherit qt6Packages fetchFromGitHub fetchgit fetchurl fetchzip runCommand gnutar;
+=======
+  yuzu-mainline = qt6Packages.callPackage ../applications/emulators/yuzu {
+    branch = "mainline";
+  };
+
+  yuzu-early-access = qt6Packages.callPackage ../applications/emulators/yuzu {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     branch = "early-access";
   };
 
@@ -2887,8 +3407,11 @@ with pkgs;
 
   ### APPLICATIONS/FILE-MANAGERS
 
+<<<<<<< HEAD
   browsr = callPackage ../applications/file-managers/browsr { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   cfm = callPackage ../applications/file-managers/cfm { };
 
   clex = callPackage ../applications/file-managers/clex { };
@@ -2901,7 +3424,13 @@ with pkgs;
 
   felix-fm = callPackage ../applications/file-managers/felix-fm { };
 
+<<<<<<< HEAD
   joshuto = callPackage ../applications/file-managers/joshuto { };
+=======
+  joshuto = callPackage ../applications/file-managers/joshuto {
+    inherit (darwin.apple_sdk.frameworks) SystemConfiguration Foundation;
+  };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   krusader = libsForQt5.callPackage ../applications/file-managers/krusader { };
 
@@ -2911,6 +3440,11 @@ with pkgs;
 
   ctpv = callPackage ../applications/file-managers/lf/ctpv.nix { };
 
+<<<<<<< HEAD
+=======
+  llama = callPackage ../applications/file-managers/llama { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   mc = callPackage ../applications/file-managers/mc {
     inherit (darwin) autoSignDarwinBinariesHook;
   };
@@ -2946,8 +3480,11 @@ with pkgs;
     inherit lib udisks2 python3;
   };
 
+<<<<<<< HEAD
   walk = callPackage ../applications/file-managers/walk { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   worker = callPackage ../applications/file-managers/worker { };
 
   xfe = callPackage ../applications/file-managers/xfe {
@@ -2960,10 +3497,13 @@ with pkgs;
 
   ytree = callPackage ../applications/file-managers/ytree { };
 
+<<<<<<< HEAD
   johnny-reborn-engine = callPackage ../applications/misc/johnny-reborn { };
 
   johnny-reborn = callPackage ../applications/misc/johnny-reborn/with-data.nix { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ### APPLICATIONS/TERMINAL-EMULATORS
 
   alacritty = callPackage ../applications/terminal-emulators/alacritty {
@@ -2978,12 +3518,20 @@ with pkgs;
 
   ctx = callPackage ../applications/terminal-emulators/ctx { };
 
+<<<<<<< HEAD
   darklua = callPackage ../development/tools/darklua { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   darktile = callPackage ../applications/terminal-emulators/darktile { };
 
   dterm = callPackage ../applications/terminal-emulators/dterm { };
 
+<<<<<<< HEAD
+=======
+  eterm = callPackage ../applications/terminal-emulators/eterm { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   foot = callPackage ../applications/terminal-emulators/foot { };
 
   germinal = callPackage ../applications/terminal-emulators/germinal { };
@@ -3079,7 +3627,11 @@ with pkgs;
   wayst = callPackage ../applications/terminal-emulators/wayst { };
 
   wezterm = darwin.apple_sdk_11_0.callPackage ../applications/terminal-emulators/wezterm {
+<<<<<<< HEAD
     inherit (darwin.apple_sdk_11_0.frameworks) Cocoa CoreGraphics Foundation UserNotifications System;
+=======
+    inherit (darwin.apple_sdk_11_0.frameworks) Cocoa CoreGraphics Foundation UserNotifications;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   x3270 = callPackage ../applications/terminal-emulators/x3270 { };
@@ -3096,8 +3648,11 @@ with pkgs;
 
   lifecycled = callPackage ../tools/misc/lifecycled { };
 
+<<<<<<< HEAD
   lil-pwny = callPackage ../tools/security/lil-pwny { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   lilo = callPackage ../tools/misc/lilo { };
 
   logseq = callPackage ../applications/misc/logseq { };
@@ -3108,8 +3663,11 @@ with pkgs;
 
   pikchr = callPackage ../tools/graphics/pikchr { };
 
+<<<<<<< HEAD
   poop = callPackage ../tools/misc/poop { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   popl = callPackage ../development/libraries/popl { };
 
   popsicle = callPackage ../tools/misc/popsicle { };
@@ -3122,8 +3680,11 @@ with pkgs;
 
   twine = with python3Packages; toPythonApplication twine;
 
+<<<<<<< HEAD
   abracadabra = qt6Packages.callPackage ../applications/radio/abracadabra { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   accelergy = callPackage ../applications/science/computer-architecture/accelergy { };
 
   aldo = callPackage ../applications/radio/aldo { };
@@ -3169,8 +3730,11 @@ with pkgs;
 
   android-tools = lowPrio (darwin.apple_sdk_11_0.callPackage ../tools/misc/android-tools { });
 
+<<<<<<< HEAD
   anew = callPackage ../tools/text/anew { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   anewer = callPackage ../tools/text/anewer { };
 
   angle-grinder = callPackage ../tools/text/angle-grinder { };
@@ -3183,8 +3747,11 @@ with pkgs;
 
   apfsprogs = callPackage ../tools/filesystems/apfsprogs { };
 
+<<<<<<< HEAD
   api-linter = callPackage ../development/tools/api-linter { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   apk-tools = callPackage ../tools/package-management/apk-tools {
     lua = lua5_3;
   };
@@ -3197,7 +3764,13 @@ with pkgs;
 
   apksigner = callPackage ../development/tools/apksigner { };
 
+<<<<<<< HEAD
   apktool = callPackage ../development/tools/apktool { };
+=======
+  apktool = callPackage ../development/tools/apktool {
+    inherit (androidenv.androidPkgs_9_0) build-tools;
+  };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   appimage-run = callPackage ../tools/package-management/appimage-run { };
   appimage-run-tests = callPackage ../tools/package-management/appimage-run/test.nix {
@@ -3226,7 +3799,12 @@ with pkgs;
 
   arangodb = callPackage ../servers/nosql/arangodb { };
 
+<<<<<<< HEAD
   arcanist = callPackage ../development/tools/misc/arcanist { php = php81; };
+=======
+  # arcanist currently crashes with some workflows on php8.1, use 8.0
+  arcanist = callPackage ../development/tools/misc/arcanist { php = php80; };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   arduino = arduino-core.override { withGui = true; };
 
@@ -3241,8 +3819,11 @@ with pkgs;
 
   arduino-mk = callPackage ../development/embedded/arduino/arduino-mk { };
 
+<<<<<<< HEAD
   arduinoOTA = callPackage ../development/embedded/arduino/arduinoOTA { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   apio = python3Packages.callPackage ../development/embedded/fpga/apio { };
 
   apitrace = libsForQt5.callPackage ../applications/graphics/apitrace { };
@@ -3274,8 +3855,11 @@ with pkgs;
 
   owl-lisp = callPackage ../development/compilers/owl-lisp { };
 
+<<<<<<< HEAD
   otus-lisp = callPackage ../development/compilers/otus-lisp { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ascii = callPackage ../tools/text/ascii { };
 
   asciinema = callPackage ../tools/misc/asciinema { };
@@ -3294,7 +3878,11 @@ with pkgs;
 
   astc-encoder = callPackage ../tools/graphics/astc-encoder { };
 
+<<<<<<< HEAD
   asymptote = libsForQt5.callPackage ../tools/graphics/asymptote {
+=======
+  asymptote = callPackage ../tools/graphics/asymptote {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     texLive = texlive.combine { inherit (texlive) scheme-small epsf cm-super texinfo media9 ocgx2 collection-latexextra; };
   };
 
@@ -3332,16 +3920,22 @@ with pkgs;
 
   awscli2 = callPackage ../tools/admin/awscli2 { };
 
+<<<<<<< HEAD
   okta-aws-cli = callPackage ../tools/admin/okta-aws-cli { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   awsebcli = callPackage ../tools/virtualization/awsebcli { };
 
   awslimitchecker = callPackage ../tools/admin/awslimitchecker { };
 
   awslogs = callPackage ../tools/admin/awslogs { };
 
+<<<<<<< HEAD
   awsume = python3Packages.callPackage ../tools/admin/awsume { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   aws-assume-role = callPackage ../tools/admin/aws-assume-role { };
 
   aws-lambda-rie = callPackage ../tools/admin/aws-lambda-runtime-interface-emulator { };
@@ -3370,8 +3964,11 @@ with pkgs;
 
   iam-policy-json-to-terraform = callPackage ../tools/misc/iam-policy-json-to-terraform { };
 
+<<<<<<< HEAD
   azeret-mono = callPackage ../data/fonts/azeret-mono { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   azure-cli = callPackage ../tools/admin/azure-cli { };
 
   azure-functions-core-tools = callPackage ../development/tools/azure-functions-core-tools { };
@@ -3380,8 +3977,11 @@ with pkgs;
 
   azure-storage-azcopy = callPackage ../development/tools/azcopy { };
 
+<<<<<<< HEAD
   bark = callPackage ../tools/audio/bark { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   bashblog = callPackage ../tools/text/bashblog { };
 
   berglas = callPackage ../tools/admin/berglas { };
@@ -3398,10 +3998,13 @@ with pkgs;
 
   blanket = callPackage ../applications/audio/blanket { };
 
+<<<<<<< HEAD
   blisp = darwin.apple_sdk_11_0.callPackage ../development/embedded/blisp {
     inherit (darwin.apple_sdk_11_0.frameworks) IOKit;
   };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   brakeman = callPackage ../development/tools/analysis/brakeman { };
 
   brewtarget = libsForQt5.callPackage ../applications/misc/brewtarget { } ;
@@ -3476,7 +4079,11 @@ with pkgs;
     httpServer = true;
   };
 
+<<<<<<< HEAD
   antennas = callPackage ../servers/antennas { };
+=======
+  antennas = nodePackages.antennas;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   apg = callPackage ../tools/security/apg { };
 
@@ -3522,7 +4129,11 @@ with pkgs;
 
   bitwarden = callPackage ../tools/security/bitwarden { };
 
+<<<<<<< HEAD
   bitwarden-cli = callPackage ../tools/security/bitwarden/cli.nix { };
+=======
+  inherit (nodePackages) bitwarden-cli;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   bitwarden-menu = python3Packages.callPackage ../applications/misc/bitwarden-menu { };
 
@@ -3530,20 +4141,28 @@ with pkgs;
 
   bklk = callPackage ../applications/misc/bklk { };
 
+<<<<<<< HEAD
   bkt = callPackage ../tools/misc/bkt {  };
 
   bkyml = callPackage ../tools/misc/bkyml { };
 
   blackmagic-desktop-video = callPackage ../tools/video/blackmagic-desktop-video { };
 
+=======
+  bkyml = callPackage ../tools/misc/bkyml { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   blockbench-electron = callPackage ../applications/graphics/blockbench-electron { };
 
   blocksat-cli = with python3Packages; toPythonApplication blocksat-cli;
 
   bmap-tools = callPackage ../tools/misc/bmap-tools { };
 
+<<<<<<< HEAD
   bolliedelayxt-lv2 = callPackage ../applications/audio/bolliedelayxt.lv2 { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   bonnmotion = callPackage ../development/tools/misc/bonnmotion { };
 
   bonnie = callPackage ../tools/filesystems/bonnie {
@@ -3554,9 +4173,15 @@ with pkgs;
 
   botamusique = callPackage ../tools/audio/botamusique { };
 
+<<<<<<< HEAD
   boulder = callPackage ../tools/admin/boulder { };
 
   btrfs-assistant = libsForQt5.callPackage ../tools/misc/btrfs-assistant { };
+=======
+  boulder = callPackage ../tools/admin/boulder {
+    buildGoModule = buildGo119Module; # go 1.20 build failure
+  };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   btrfs-heatmap = callPackage ../tools/filesystems/btrfs-heatmap { };
 
@@ -3577,13 +4202,21 @@ with pkgs;
 
   calls = callPackage ../applications/networking/calls { };
 
+<<<<<<< HEAD
   castnow = callPackage ../tools/networking/castnow { };
+=======
+  inherit (nodePackages) castnow;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   castty = callPackage ../tools/misc/castty { };
 
   certigo = callPackage ../tools/admin/certigo { };
 
+<<<<<<< HEAD
   certipy = with python3Packages; toPythonApplication certipy-ad;
+=======
+  certipy = callPackage ../tools/security/certipy { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   catcli = python3Packages.callPackage ../tools/filesystems/catcli { };
 
@@ -3636,10 +4269,13 @@ with pkgs;
 
   codespell = callPackage ../development/tools/codespell { };
 
+<<<<<<< HEAD
   codux = callPackage ../applications/editors/codux { };
 
   conjure = callPackage ../applications/graphics/conjure { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   coolreader = libsForQt5.callPackage ../applications/misc/coolreader { };
 
   corsair = with python3Packages; toPythonApplication corsair-scan;
@@ -3648,8 +4284,11 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) PCSC;
   };
 
+<<<<<<< HEAD
   coze = callPackage ../tools/security/coze { } ;
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   cozy = callPackage ../applications/audio/cozy { };
 
   cpptoml = callPackage ../development/libraries/cpptoml { };
@@ -3688,8 +4327,11 @@ with pkgs;
 
   dcap = callPackage ../tools/networking/dcap { };
 
+<<<<<<< HEAD
   dark-mode-notify = callPackage ../os-specific/darwin/dark-mode-notify { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   deltachat-cursed = callPackage ../applications/networking/instant-messengers/deltachat-cursed { };
 
   delayarchitect = callPackage ../applications/audio/delayarchitect { };
@@ -3722,8 +4364,11 @@ with pkgs;
 
   dkimpy = with python3Packages; toPythonApplication dkimpy;
 
+<<<<<<< HEAD
   dl-librescore = callPackage ../tools/audio/dl-librescore { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   dontgo403 = callPackage ../tools/security/dontgo403 { };
 
   dpt-rp1-py = callPackage ../tools/misc/dpt-rp1-py { };
@@ -3774,6 +4419,7 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
+<<<<<<< HEAD
   fedifetcher = callPackage ../tools/misc/fedifetcher { };
 
   flavours = callPackage ../applications/misc/flavours { };
@@ -3783,6 +4429,15 @@ with pkgs;
   };
 
   flood = callPackage ../applications/networking/p2p/flood { };
+=======
+  fitnesstrax = callPackage ../applications/misc/fitnesstrax { };
+
+  flavours = callPackage ../applications/misc/flavours { };
+
+  flirc = libsForQt5.callPackage ../applications/video/flirc { };
+
+  flood = nodePackages.flood;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   font-config-info = callPackage ../tools/misc/font-config-info { };
 
@@ -3812,7 +4467,11 @@ with pkgs;
 
   gamecube-tools = callPackage ../development/tools/gamecube-tools { };
 
+<<<<<<< HEAD
   gammaray = qt6Packages.callPackage ../development/tools/gammaray { };
+=======
+  gammaray = libsForQt5.callPackage ../development/tools/gammaray { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   gams = callPackage ../tools/misc/gams (config.gams or {});
 
@@ -3822,9 +4481,16 @@ with pkgs;
 
   github-commenter = callPackage ../development/tools/github-commenter { };
 
+<<<<<<< HEAD
   github-copilot-intellij-agent = callPackage ../development/tools/github-copilot-intellij-agent { };
 
   github-desktop = callPackage ../applications/version-management/github-desktop { };
+=======
+  github-desktop = callPackage ../applications/version-management/github-desktop {
+    openssl = openssl_1_1;
+    curl = curl.override { openssl = openssl_1_1; };
+  };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   github-to-sqlite = with python3Packages; toPythonApplication github-to-sqlite;
 
@@ -3844,8 +4510,11 @@ with pkgs;
 
   glaxnimate = libsForQt5.callPackage ../applications/video/glaxnimate { };
 
+<<<<<<< HEAD
   gluesql = callPackage ../servers/sql/gluesql { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   gmid = callPackage ../servers/gemini/gmid { };
 
   gmni = callPackage ../applications/networking/browsers/gmni { };
@@ -3859,8 +4528,11 @@ with pkgs;
   };
   go2tv-lite = go2tv.override { withGui = false; };
 
+<<<<<<< HEAD
   go2rtc = callPackage ../tools/video/go2rtc { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   goimapnotify = callPackage ../tools/networking/goimapnotify { };
 
   gojsontoyaml = callPackage ../development/tools/gojsontoyaml { };
@@ -3909,8 +4581,11 @@ with pkgs;
 
   hakrawler = callPackage ../tools/security/hakrawler { };
 
+<<<<<<< HEAD
   harsh = callPackage ../applications/misc/harsh { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   harvid = callPackage ../tools/video/harvid { };
 
   headset = callPackage ../applications/audio/headset { };
@@ -3963,8 +4638,11 @@ with pkgs;
 
   kavita = callPackage ../servers/web-apps/kavita { };
 
+<<<<<<< HEAD
   keka = callPackage ../tools/compression/keka { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   kord = callPackage ../applications/misc/kord { };
 
   lastpass-cli = callPackage ../tools/security/lastpass-cli { };
@@ -3973,8 +4651,11 @@ with pkgs;
 
   lesspass-cli = callPackage ../tools/security/lesspass-cli { };
 
+<<<<<<< HEAD
   livebook = callPackage ../servers/web-apps/livebook { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   lsix = callPackage ../tools/graphics/lsix { };
 
   mdr = callPackage ../tools/misc/mdr { };
@@ -3985,8 +4666,11 @@ with pkgs;
 
   pacparser = callPackage ../tools/networking/pacparser { };
 
+<<<<<<< HEAD
   pairdrop = callPackage ../applications/misc/pairdrop { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   opencbm = callPackage ../tools/misc/opencbm { };
 
   parquet-tools = callPackage ../tools/misc/parquet-tools { };
@@ -4039,7 +4723,13 @@ with pkgs;
 
   gospider = callPackage ../tools/security/gospider { };
 
+<<<<<<< HEAD
   browserpass = callPackage ../tools/security/browserpass { };
+=======
+  browserpass = callPackage ../tools/security/browserpass {
+    buildGoModule = buildGo119Module; # go 1.20 build failure
+  };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   passff-host = callPackage ../tools/security/passff-host { };
 
@@ -4049,8 +4739,11 @@ with pkgs;
 
   grandperspective = callPackage ../os-specific/darwin/grandperspective { };
 
+<<<<<<< HEAD
   hexfiend = callPackage ../os-specific/darwin/hexfiend { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   grb = callPackage ../applications/misc/grb { };
 
   kerf   = kerf_1; /* kerf2 is WIP */
@@ -4087,8 +4780,13 @@ with pkgs;
 
   reattach-to-user-namespace = callPackage ../os-specific/darwin/reattach-to-user-namespace { };
 
+<<<<<<< HEAD
   skhd = darwin.apple_sdk_11_0.callPackage ../os-specific/darwin/skhd {
     inherit (darwin.apple_sdk_11_0.frameworks) Carbon Cocoa;
+=======
+  skhd = callPackage ../os-specific/darwin/skhd {
+    inherit (darwin.apple_sdk.frameworks) Carbon;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   qes = callPackage ../os-specific/darwin/qes {
@@ -4097,8 +4795,11 @@ with pkgs;
 
   waydroid = callPackage ../os-specific/linux/waydroid { };
 
+<<<<<<< HEAD
   wgo = callPackage ../development/tools/wgo { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   wiiload = callPackage ../development/tools/wiiload { };
 
   winhelpcgi = callPackage ../development/tools/winhelpcgi {
@@ -4111,12 +4812,17 @@ with pkgs;
 
   xc = callPackage ../development/tools/xc { };
 
+<<<<<<< HEAD
   ios-webkit-debug-proxy = callPackage ../development/mobile/ios-webkit-debug-proxy { };
 
   xcodeenv = callPackage ../development/mobile/xcodeenv { };
 
   xcodes = callPackage ../development/tools/xcodes { };
 
+=======
+  xcodeenv = callPackage ../development/mobile/xcodeenv { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   gomobile = callPackage ../development/mobile/gomobile { };
 
   ssh-agents = callPackage ../tools/networking/ssh-agents { };
@@ -4125,7 +4831,11 @@ with pkgs;
 
   ssh-key-confirmer = callPackage ../tools/networking/ssh-key-confirmer { };
 
+<<<<<<< HEAD
   ssh-mitm = callPackage ../tools/security/ssh-mitm { };
+=======
+  ssh-mitm = with python3Packages; toPythonApplication ssh-mitm;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   sshchecker = callPackage ../tools/security/sshchecker { };
 
@@ -4133,10 +4843,13 @@ with pkgs;
 
   supergfxctl = callPackage ../applications/system/supergfxctl { };
 
+<<<<<<< HEAD
   titanium = callPackage ../development/mobile/titanium { };
 
   titanium-alloy = callPackage ../development/mobile/titanium-alloy { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   titaniumenv = callPackage ../development/mobile/titaniumenv { };
 
   abootimg = callPackage ../development/mobile/abootimg { };
@@ -4149,9 +4862,13 @@ with pkgs;
 
   amoco = callPackage ../tools/security/amoco { };
 
+<<<<<<< HEAD
   anbox = callPackage ../os-specific/linux/anbox {
     protobuf = protobuf3_21;
   };
+=======
+  anbox = callPackage ../os-specific/linux/anbox { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   androidenv = callPackage ../development/mobile/androidenv { };
 
@@ -4200,8 +4917,11 @@ with pkgs;
 
   atftp = callPackage ../tools/networking/atftp { };
 
+<<<<<<< HEAD
   atlas = callPackage ../development/tools/database/atlas { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   authoscope = callPackage ../tools/security/authoscope {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
@@ -4264,8 +4984,11 @@ with pkgs;
 
   babelfish = callPackage ../shells/fish/babelfish.nix { };
 
+<<<<<<< HEAD
   baboossh = callPackage ../tools/security/baboossh { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   badchars = python3Packages.callPackage ../tools/security/badchars { };
 
   badvpn = callPackage ../tools/networking/badvpn { };
@@ -4288,7 +5011,11 @@ with pkgs;
     inherit (plasma5Packages) breeze-icons;
   };
 
+<<<<<<< HEAD
   beautysh = with python3.pkgs; toPythonApplication beautysh;
+=======
+  beautysh = callPackage ../development/tools/beautysh { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   bc = callPackage ../tools/misc/bc { };
 
@@ -4305,13 +5032,19 @@ with pkgs;
   bchunk = callPackage ../tools/cd-dvd/bchunk { };
 
   inherit (callPackages ../misc/logging/beats/7.x.nix { })
+<<<<<<< HEAD
     auditbeat7
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     filebeat7
     heartbeat7
     metricbeat7
     packetbeat7;
 
+<<<<<<< HEAD
   auditbeat = auditbeat7;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   filebeat = filebeat7;
   heartbeat = heartbeat7;
   metricbeat = metricbeat7;
@@ -4319,8 +5052,11 @@ with pkgs;
 
   bfr = callPackage ../tools/misc/bfr { };
 
+<<<<<<< HEAD
   bfscripts = callPackage ../tools/misc/bfscripts { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   bibtool = callPackage ../tools/misc/bibtool { };
 
   bibutils = callPackage ../tools/misc/bibutils { };
@@ -4374,7 +5110,11 @@ with pkgs;
   libtensorflow = python3.pkgs.tensorflow.libtensorflow;
 
   libtorch-bin = callPackage ../development/libraries/science/math/libtorch/bin.nix {
+<<<<<<< HEAD
     inherit (config) cudaSupport;
+=======
+    cudaSupport = config.cudaSupport or false;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   tensorflow-lite = callPackage ../development/libraries/science/math/tensorflow-lite { };
@@ -4391,8 +5131,11 @@ with pkgs;
 
   bless = callPackage ../applications/editors/bless { };
 
+<<<<<<< HEAD
   blink = darwin.apple_sdk_11_0.callPackage ../applications/emulators/blink { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   blink1-tool = callPackage ../tools/misc/blink1-tool { };
 
   blis = callPackage ../development/libraries/science/math/blis { };
@@ -4471,16 +5214,22 @@ with pkgs;
 
   btrfs-snap = callPackage ../tools/filesystems/btrfs-snap { };
 
+<<<<<<< HEAD
   ssdfs-utils = callPackage ../tools/filesystems/ssdfs-utils { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   btlejack = python3Packages.callPackage ../applications/radio/btlejack { };
 
   btrbk = callPackage ../tools/backup/btrbk { };
 
   buildpack = callPackage ../development/tools/buildpack { };
 
+<<<<<<< HEAD
   bonk = callPackage ../tools/misc/bonk { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   bottom-rs = callPackage ../tools/misc/bottom-rs { };
 
   bsp-layout = callPackage ../tools/misc/bsp-layout { };
@@ -4495,8 +5244,11 @@ with pkgs;
 
   bwbasic = callPackage ../development/interpreters/bwbasic { };
 
+<<<<<<< HEAD
   bws = callPackage ../tools/security/bws { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   byobu = callPackage ../tools/misc/byobu {
     # Choices: [ tmux screen ];
     textual-window-manager = tmux;
@@ -4561,8 +5313,11 @@ with pkgs;
 
   traefik-certs-dumper = callPackage ../tools/misc/traefik-certs-dumper { };
 
+<<<<<<< HEAD
   caffeine = callPackage ../tools/misc/caffeine { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   calamares = libsForQt5.callPackage ../tools/misc/calamares {
     python = python3;
     boost = boost.override { enablePython = true; python = python3; };
@@ -4601,6 +5356,11 @@ with pkgs;
 
   cardpeek = callPackage ../applications/misc/cardpeek { inherit (darwin.apple_sdk.frameworks) PCSC; };
 
+<<<<<<< HEAD
+=======
+  cawbird = callPackage ../applications/networking/cawbird { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   cde = callPackage ../tools/package-management/cde { };
 
   cdxgen = callPackage ../tools/security/cdxgen { };
@@ -4623,8 +5383,11 @@ with pkgs;
                           { inherit (haskellPackages) alex happy Agda ghcWithPackages;
                           };
 
+<<<<<<< HEAD
   cel-go = callPackage ../development/interpreters/cel-go { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   cfdyndns = callPackage ../applications/networking/dyndns/cfdyndns { };
 
   cf-terraforming = callPackage ../tools/misc/cf-terraforming { };
@@ -4637,9 +5400,17 @@ with pkgs;
 
   cht-sh = callPackage ../tools/misc/cht.sh { };
 
+<<<<<<< HEAD
   cinny = callPackage ../applications/networking/instant-messengers/cinny { };
 
   cinny-desktop = callPackage ../applications/networking/instant-messengers/cinny-desktop { };
+=======
+  cinny = callPackage ../applications/networking/instant-messengers/cinny { stdenv = stdenvNoCC; };
+
+  cinny-desktop = callPackage ../applications/networking/instant-messengers/cinny-desktop {
+    openssl = openssl_1_1;
+  };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   ckbcomp = callPackage ../tools/X11/ckbcomp { };
 
@@ -4647,9 +5418,13 @@ with pkgs;
 
   map-cmd = callPackage ../tools/misc/map { };
 
+<<<<<<< HEAD
   clash = callPackage ../tools/networking/clash {
     buildGoModule = buildGo121Module;
   };
+=======
+  clash = callPackage ../tools/networking/clash { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   clash-geoip = callPackage ../data/misc/clash-geoip { };
 
@@ -4679,7 +5454,13 @@ with pkgs;
 
   cloudbrute = callPackage ../tools/security/cloudbrute { };
 
+<<<<<<< HEAD
   cloudflared = callPackage ../applications/networking/cloudflared { };
+=======
+  cloudflared = callPackage ../applications/networking/cloudflared {
+    buildGoModule = buildGo119Module; # go 1.20 build failure
+  };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   cloudflare-dyndns = callPackage ../applications/networking/cloudflare-dyndns { };
 
@@ -4703,6 +5484,7 @@ with pkgs;
 
   comma = callPackage ../tools/package-management/comma { };
 
+<<<<<<< HEAD
   commitizen = callPackage ../applications/version-management/commitizen { };
 
   common-licenses = callPackage ../data/misc/common-licenses { };
@@ -4710,6 +5492,13 @@ with pkgs;
   compactor = callPackage ../applications/networking/compactor {
     protobuf = protobuf3_21;
   };
+=======
+  commitizen = python3Packages.callPackage ../applications/version-management/commitizen { };
+
+  common-licenses = callPackage ../data/misc/common-licenses { };
+
+  compactor = callPackage ../applications/networking/compactor { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   consul = callPackage ../servers/consul { };
 
@@ -4739,6 +5528,7 @@ with pkgs;
 
   cowsay = callPackage ../tools/misc/cowsay { };
 
+<<<<<<< HEAD
   fw-ectool = callPackage ../os-specific/linux/fw-ectool { };
 
   czkawka = callPackage ../tools/misc/czkawka {
@@ -4746,6 +5536,9 @@ with pkgs;
   };
 
   chayang = callPackage ../tools/wayland/chayang { };
+=======
+  czkawka = callPackage ../tools/misc/czkawka { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   cherrytree = callPackage ../applications/misc/cherrytree { };
 
@@ -4753,8 +5546,11 @@ with pkgs;
 
   chopchop = callPackage ../tools/security/chopchop { };
 
+<<<<<<< HEAD
   clapboard = callPackage ../tools/wayland/clapboard { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   cliphist = callPackage ../tools/wayland/cliphist { };
 
   clipman = callPackage ../tools/wayland/clipman { };
@@ -4765,8 +5561,11 @@ with pkgs;
 
   oguri = callPackage  ../tools/wayland/oguri { };
 
+<<<<<<< HEAD
   shikane = callPackage ../tools/wayland/shikane { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   shotman = callPackage ../tools/wayland/shotman { };
 
   slurp = callPackage ../tools/wayland/slurp { };
@@ -4793,8 +5592,11 @@ with pkgs;
 
   wayland-proxy-virtwl = callPackage ../tools/wayland/wayland-proxy-virtwl { };
 
+<<<<<<< HEAD
   waylogout = callPackage ../tools/wayland/waylogout { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   waynergy = callPackage ../tools/wayland/waynergy { };
 
   wayout = callPackage ../tools/wayland/wayout { };
@@ -4807,10 +5609,13 @@ with pkgs;
 
   wdt = callPackage ../applications/networking/sync/wdt { };
 
+<<<<<<< HEAD
   wlay = callPackage ../tools/wayland/wlay { };
 
   wl-clip-persist = callPackage ../tools/wayland/wl-clip-persist { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   wl-clipboard = callPackage ../tools/wayland/wl-clipboard { };
 
   wl-clipboard-x11 = callPackage ../tools/wayland/wl-clipboard-x11 { };
@@ -4819,10 +5624,13 @@ with pkgs;
 
   wl-mirror = callPackage ../tools/wayland/wl-mirror { };
 
+<<<<<<< HEAD
   wl-screenrec = callPackage ../tools/wayland/wl-screenrec { };
 
   wleave = callPackage ../tools/wayland/wleave { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   wlogout = callPackage ../tools/wayland/wlogout { };
 
   wlopm = callPackage ../tools/wayland/wlopm { };
@@ -4831,15 +5639,22 @@ with pkgs;
 
   wlr-randr = callPackage ../tools/wayland/wlr-randr { };
 
+<<<<<<< HEAD
   wlr-which-key = callPackage ../tools/wayland/wlr-which-key { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   wlrctl = callPackage ../tools/wayland/wlrctl { };
 
   wlsunset = callPackage ../tools/wayland/wlsunset { };
 
+<<<<<<< HEAD
   wl-gammactl = callPackage ../tools/wayland/wl-gammactl {
     wlroots = wlroots_0_15;
   };
+=======
+  wl-gammactl = callPackage ../tools/wayland/wl-gammactl { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   wluma = callPackage ../tools/wayland/wluma {  };
 
@@ -4855,8 +5670,11 @@ with pkgs;
 
   cambalache = callPackage ../development/tools/cambalache { };
 
+<<<<<<< HEAD
   cambrinary = python3Packages.callPackage ../applications/misc/cambrinary { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   changedetection-io = callPackage ../servers/web-apps/changedetection-io { };
 
   clini = callPackage ../tools/misc/clini { };
@@ -4918,8 +5736,11 @@ with pkgs;
 
   crunch = callPackage ../tools/security/crunch { };
 
+<<<<<<< HEAD
   crunchy-cli = callPackage ../applications/video/crunchy-cli { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   crudini = callPackage ../tools/misc/crudini { };
 
   csv2odf = callPackage ../applications/office/csv2odf { };
@@ -4966,14 +5787,20 @@ with pkgs;
 
   dapr-cli = callPackage ../development/tools/dapr/cli { };
 
+<<<<<<< HEAD
   das = callPackage ../tools/security/das { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   dasel = callPackage ../applications/misc/dasel { };
 
   dasher = callPackage ../applications/accessibility/dasher { };
 
+<<<<<<< HEAD
   dataclass-wizard = with python3Packages; toPythonApplication dataclass-wizard;
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   datafusion-cli = callPackage ../development/misc/datafusion { };
 
   datamash = callPackage ../tools/misc/datamash { };
@@ -5000,8 +5827,11 @@ with pkgs;
 
   dduper = callPackage ../tools/filesystems/dduper { };
 
+<<<<<<< HEAD
   deck = callPackage ../applications/networking/deck { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   dedup = callPackage ../tools/backup/dedup { };
 
   deheader = callPackage ../development/tools/misc/deheader { };
@@ -5020,8 +5850,11 @@ with pkgs;
 
   dbus-broker = callPackage ../os-specific/linux/dbus-broker { };
 
+<<<<<<< HEAD
   dblab = callPackage ../development/tools/database/dblab { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   dbx = callPackage ../applications/misc/dbx { };
 
   ioport = callPackage ../os-specific/linux/ioport { };
@@ -5048,8 +5881,11 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
+<<<<<<< HEAD
   diesel-cli-ext = callPackage ../development/tools/diesel-cli-ext { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   refinery-cli = callPackage ../development/tools/refinery-cli { };
 
   digitemp = callPackage ../tools/misc/digitemp { };
@@ -5087,8 +5923,11 @@ with pkgs;
 
   disk-filltest = callPackage ../tools/system/disk-filltest { };
 
+<<<<<<< HEAD
   disk-inventory-x = callPackage ../tools/filesystems/disk-inventory-x { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   diskscan = callPackage ../tools/misc/diskscan { };
 
   disorderfs = callPackage ../tools/filesystems/disorderfs {
@@ -5108,8 +5947,11 @@ with pkgs;
     gst-plugins-good = gst_all_1.gst-plugins-good.override { gtkSupport = true; };
   };
 
+<<<<<<< HEAD
   djot-js = callPackage ../tools/text/djot-js { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   djv = callPackage ../applications/graphics/djv { };
 
   dnschef = python3Packages.callPackage ../tools/networking/dnschef { };
@@ -5128,8 +5970,11 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
+<<<<<<< HEAD
   dotool = callPackage ../tools/dotool { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   inherit (ocamlPackages) dot-merlin-reader;
 
   dozenal = callPackage ../applications/misc/dozenal { };
@@ -5159,9 +6004,15 @@ with pkgs;
 
   duperemove = callPackage ../tools/filesystems/duperemove { };
 
+<<<<<<< HEAD
   dvc = with python3.pkgs; toPythonApplication dvc;
 
   dvc-with-remotes = dvc.override {
+=======
+  dvc = callPackage ../applications/version-management/dvc { };
+
+  dvc-with-remotes = callPackage ../applications/version-management/dvc {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     enableGoogle = true;
     enableAWS = true;
     enableAzure = true;
@@ -5182,8 +6033,11 @@ with pkgs;
 
   earlyoom = callPackage ../os-specific/linux/earlyoom { };
 
+<<<<<<< HEAD
   easyabc = callPackage ../applications/audio/easyabc { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   easycrypt = callPackage ../applications/science/logic/easycrypt { };
 
   easycrypt-runtest = callPackage ../applications/science/logic/easycrypt/runtest.nix { };
@@ -5200,10 +6054,13 @@ with pkgs;
 
   eggdrop = callPackage ../tools/networking/eggdrop { };
 
+<<<<<<< HEAD
   egglog = callPackage ../applications/science/logic/egglog { };
 
   ego = callPackage ../tools/misc/ego { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ekam = callPackage ../development/tools/build-managers/ekam { };
 
   eksctl = callPackage ../tools/admin/eksctl { };
@@ -5216,7 +6073,11 @@ with pkgs;
 
   element-desktop = callPackage ../applications/networking/instant-messengers/element/element-desktop.nix {
     inherit (darwin.apple_sdk.frameworks) Security AppKit CoreServices;
+<<<<<<< HEAD
     electron = electron_25;
+=======
+    electron = electron_24;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
   element-desktop-wayland = writeScriptBin "element-desktop" ''
     #!/bin/sh
@@ -5241,7 +6102,11 @@ with pkgs;
 
   enca = callPackage ../tools/text/enca { };
 
+<<<<<<< HEAD
   encpipe = callPackage ../tools/misc/encpipe { };
+=======
+  engage = callPackage ../tools/misc/engage { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   ent = callPackage ../tools/misc/ent { };
 
@@ -5262,12 +6127,17 @@ with pkgs;
   eschalot = callPackage ../tools/security/eschalot { };
 
   espanso = callPackage ../applications/office/espanso {
+<<<<<<< HEAD
     inherit (darwin.apple_sdk.frameworks) AppKit Cocoa Foundation IOKit Kernel AVFoundation Carbon QTKit AVKit WebKit;
   };
   espanso-wayland = espanso.override {
     x11Support = false;
     waylandSupport = true;
     espanso = espanso-wayland;
+=======
+    inherit (darwin.apple_sdk.frameworks) AppKit Cocoa Foundation;
+    openssl = openssl_1_1;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   esphome = callPackage ../tools/misc/esphome { };
@@ -5306,6 +6176,11 @@ with pkgs;
 
   facedetect = callPackage ../tools/graphics/facedetect { };
 
+<<<<<<< HEAD
+=======
+  findimagedupes = callPackage ../tools/graphics/findimagedupes { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   facter = callPackage ../tools/system/facter { };
 
   faketty = callPackage ../tools/misc/faketty { };
@@ -5328,14 +6203,20 @@ with pkgs;
 
   fd = callPackage ../tools/misc/fd { };
 
+<<<<<<< HEAD
   fdroidcl = pkgs.callPackage ../development/mobile/fdroidcl { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   fdroidserver = python3Packages.callPackage ../development/tools/fdroidserver { };
 
   fetch-scm = callPackage ../tools/misc/fetch-scm { };
 
+<<<<<<< HEAD
   fiano = callPackage ../tools/misc/fiano { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   filebench = callPackage ../tools/misc/filebench { };
 
   filebot = callPackage ../applications/video/filebot { };
@@ -5356,20 +6237,28 @@ with pkgs;
 
   flitter = callPackage ../tools/misc/flitter { };
 
+<<<<<<< HEAD
   flowgger = callPackage ../tools/misc/flowgger {
     inherit (darwin.apple_sdk.frameworks) CoreServices;
   };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   frangipanni = callPackage ../tools/text/frangipanni { };
 
   frawk = callPackage ../tools/text/frawk { };
 
+<<<<<<< HEAD
   fre = callPackage ../tools/misc/fre { };
 
   frei = callPackage ../tools/misc/frei { };
 
   frogmouth = callPackage ../tools/text/frogmouth { };
 
+=======
+  frei = callPackage ../tools/misc/frei { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   fselect = callPackage ../tools/misc/fselect { };
 
   fsmon = callPackage ../tools/misc/fsmon { };
@@ -5378,8 +6267,11 @@ with pkgs;
 
   fsql = callPackage ../tools/misc/fsql { };
 
+<<<<<<< HEAD
   kitty-img = callPackage ../tools/misc/kitty-img { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ### TOOLS/TYPESETTING/TEX
 
   advi = callPackage ../tools/typesetting/tex/advi { };
@@ -5457,15 +6349,23 @@ with pkgs;
 
   flashfocus = callPackage ../misc/flashfocus { };
 
+<<<<<<< HEAD
   qt-video-wlr = libsForQt5.callPackage ../applications/misc/qt-video-wlr {
     wlroots = wlroots_0_15;
   };
+=======
+  qt-video-wlr = libsForQt5.callPackage ../applications/misc/qt-video-wlr { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   fwup = callPackage ../tools/misc/fwup {
     inherit (darwin.apple_sdk.frameworks) DiskArbitration;
   };
 
+<<<<<<< HEAD
   fx-cast-bridge = callPackage ../tools/misc/fx-cast-bridge { };
+=======
+  fx_cast_bridge = callPackage ../tools/misc/fx_cast { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   fzf = callPackage ../tools/misc/fzf { };
 
@@ -5483,8 +6383,11 @@ with pkgs;
 
   gdrive = callPackage ../applications/networking/gdrive { };
 
+<<<<<<< HEAD
   gdrive3 = callPackage ../applications/networking/gdrive3 { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   gdu = callPackage ../tools/system/gdu { };
 
   gfxreconstruct = callPackage ../tools/graphics/gfxreconstruct { };
@@ -5502,10 +6405,13 @@ with pkgs;
 
   go-neb = callPackage ../applications/networking/instant-messengers/go-neb { };
 
+<<<<<<< HEAD
   go-thumbnailer = callPackage ../applications/misc/go-thumbnailer { };
 
   google-cursor = callPackage ../data/icons/google-cursor { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   geckodriver = callPackage ../development/tools/geckodriver {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
@@ -5525,9 +6431,14 @@ with pkgs;
 
   ghdorker = callPackage ../tools/security/ghdorker { };
 
+<<<<<<< HEAD
   ghidra = darwin.apple_sdk_11_0.callPackage ../tools/security/ghidra/build.nix {
     protobuf = protobuf3_21;
   };
+=======
+  ghidra = if stdenv.isDarwin then darwin.apple_sdk_11_0.callPackage ../tools/security/ghidra/build.nix {}
+  else callPackage ../tools/security/ghidra/build.nix { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   ghidra-bin = callPackage ../tools/security/ghidra { };
 
@@ -5539,8 +6450,11 @@ with pkgs;
 
   gir-rs = callPackage ../development/tools/gir { };
 
+<<<<<<< HEAD
   girsh = callPackage ../tools/networking/girsh { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   gist = callPackage ../tools/text/gist { };
 
   gitjacker = callPackage ../tools/security/gitjacker { };
@@ -5578,8 +6492,11 @@ with pkgs;
 
   gorilla-bin = callPackage ../tools/security/gorilla-bin { };
 
+<<<<<<< HEAD
   gorilla-cli = callPackage ../tools/llm/gorilla-cli { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   godu = callPackage ../tools/misc/godu { };
 
   goss = callPackage ../tools/misc/goss { };
@@ -5626,12 +6543,17 @@ with pkgs;
 
   gti = callPackage ../tools/misc/gti { };
 
+<<<<<<< HEAD
   has = callPackage ../applications/misc/has { };
 
   hdate = callPackage ../applications/misc/hdate { };
 
   headache = callPackage ../development/tools/headache { };
 
+=======
+  hdate = callPackage ../applications/misc/hdate { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   heatseeker = callPackage ../tools/misc/heatseeker { };
 
   hebcal = callPackage ../tools/misc/hebcal { };
@@ -5658,6 +6580,7 @@ with pkgs;
 
   home-manager = callPackage ../tools/package-management/home-manager { };
 
+<<<<<<< HEAD
   homepage-dashboard = callPackage ../servers/homepage-dashboard {
     inherit (darwin) cctools;
     inherit (darwin.apple_sdk.frameworks) IOKit;
@@ -5665,6 +6588,12 @@ with pkgs;
 
   hostsblock = callPackage ../tools/misc/hostsblock { };
 
+=======
+  hostsblock = callPackage ../tools/misc/hostsblock { };
+
+  hottext = callPackage ../tools/text/hottext { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   hopper = qt5.callPackage ../development/tools/analysis/hopper { };
 
   hr = callPackage ../applications/misc/hr { };
@@ -5678,21 +6607,28 @@ with pkgs;
   hypr = callPackage ../applications/window-managers/hyprwm/hypr {
     cairo = cairo.override { xcbSupport = true; };  };
 
+<<<<<<< HEAD
   hyprdim = callPackage ../applications/misc/hyprdim { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   hyprland = callPackage ../applications/window-managers/hyprwm/hyprland {
     wlroots = pkgs.callPackage ../applications/window-managers/hyprwm/hyprland/wlroots.nix { };
     udis86 = pkgs.callPackage ../applications/window-managers/hyprwm/hyprland/udis86.nix { };
   };
 
+<<<<<<< HEAD
   hyprland-autoname-workspaces = callPackage ../applications/misc/hyprland-autoname-workspaces { };
 
   hyprland-per-window-layout = callPackage ../tools/wayland/hyprland-per-window-layout { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   hyprland-protocols = callPackage ../applications/window-managers/hyprwm/hyprland-protocols { };
 
   hyprland-share-picker = libsForQt5.callPackage ../applications/window-managers/hyprwm/xdg-desktop-portal-hyprland/hyprland-share-picker.nix { };
 
+<<<<<<< HEAD
   hyprnome = callPackage ../applications/misc/hyprnome { };
 
   hyprpaper = callPackage ../applications/window-managers/hyprwm/hyprpaper { };
@@ -5702,6 +6638,11 @@ with pkgs;
   };
 
   hyprshade = python311Packages.callPackage ../applications/window-managers/hyprwm/hyprshade { };
+=======
+  hyprpaper = callPackage ../applications/window-managers/hyprwm/hyprpaper { };
+
+  hyprpicker = callPackage ../applications/window-managers/hyprwm/hyprpicker { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   hysteria = callPackage ../tools/networking/hysteria { };
 
@@ -5709,8 +6650,11 @@ with pkgs;
 
   icdiff = callPackage ../tools/text/icdiff { };
 
+<<<<<<< HEAD
   ictree = callPackage ../tools/misc/ictree { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   inchi = callPackage ../development/libraries/inchi { };
 
   icon-slicer = callPackage ../tools/X11/icon-slicer { };
@@ -5729,8 +6673,11 @@ with pkgs;
 
   interlock = callPackage ../servers/interlock { };
 
+<<<<<<< HEAD
   invoice = callPackage ../tools/misc/invoice { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   invoiceplane = callPackage ../servers/web-apps/invoiceplane { };
 
   iotas = callPackage ../applications/office/iotas { };
@@ -5749,6 +6696,11 @@ with pkgs;
 
   jellyfin-media-player = libsForQt5.callPackage ../applications/video/jellyfin-media-player {
     inherit (darwin.apple_sdk.frameworks) CoreFoundation Cocoa CoreAudio MediaPlayer;
+<<<<<<< HEAD
+=======
+    # Disable pipewire to avoid segfault, see https://github.com/jellyfin/jellyfin-media-player/issues/341
+    mpv = wrapMpv (mpv-unwrapped.override { pipewireSupport = false; }) { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   jellyfin-mpv-shim = python3Packages.callPackage ../applications/video/jellyfin-mpv-shim { };
@@ -5767,10 +6719,13 @@ with pkgs;
 
   joystickwake = callPackage ../tools/games/joystickwake { };
 
+<<<<<<< HEAD
   juce = darwin.apple_sdk_11_0.callPackage ../development/misc/juce { };
 
   jumppad = callPackage ../tools/virtualization/jumppad { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   jwt-cli = callPackage ../tools/security/jwt-cli {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
@@ -5805,14 +6760,20 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
+<<<<<<< HEAD
   klipperscreen = callPackage ../applications/misc/klipperscreen { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   klog = qt5.callPackage ../applications/radio/klog { };
 
   komga = callPackage ../servers/komga { };
 
+<<<<<<< HEAD
   komorebi = callPackage ../applications/graphics/komorebi { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   krapslog = callPackage ../tools/misc/krapslog { };
 
   krelay = callPackage ../applications/networking/cluster/krelay { };
@@ -5830,10 +6791,13 @@ with pkgs;
 
   languagetool = callPackage ../tools/text/languagetool {  };
 
+<<<<<<< HEAD
   languagetool-rust = callPackage ../tools/text/languagetool-rust {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ldtk = callPackage ../applications/editors/ldtk { };
 
   lepton = callPackage ../tools/graphics/lepton { };
@@ -5844,8 +6808,11 @@ with pkgs;
 
   lexicon = callPackage ../tools/admin/lexicon { };
 
+<<<<<<< HEAD
   lenpaste = callPackage ../servers/lenpaste { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   lief = callPackage ../development/libraries/lief {
     python = python3;
   };
@@ -5860,8 +6827,11 @@ with pkgs;
 
   libxnd = callPackage ../development/libraries/libxnd { };
 
+<<<<<<< HEAD
   libz = callPackage ../development/libraries/libz { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   libzbc = callPackage ../os-specific/linux/libzbc { };
 
   libzbd = callPackage ../os-specific/linux/libzbd { };
@@ -5870,8 +6840,11 @@ with pkgs;
 
   limitcpu = callPackage ../tools/misc/limitcpu { };
 
+<<<<<<< HEAD
   lineselect = callPackage ../tools/misc/lineselect { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   link-grammar = callPackage ../tools/text/link-grammar { };
 
   linuxptp = callPackage ../os-specific/linux/linuxptp { };
@@ -5892,8 +6865,11 @@ with pkgs;
 
   long-shebang = callPackage ../misc/long-shebang { };
 
+<<<<<<< HEAD
   lssecret = callPackage ../misc/lssecret {};
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   lowdown = callPackage ../tools/typesetting/lowdown { };
 
   numatop = callPackage ../os-specific/linux/numatop { };
@@ -5920,8 +6896,11 @@ with pkgs;
 
   mandown = callPackage ../tools/misc/mandown { };
 
+<<<<<<< HEAD
   mantra = callPackage ../tools/security/mantra { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   mapcidr = callPackage ../tools/misc/mapcidr { };
 
   maple-mono = (callPackage ../data/fonts/maple-font { }).Mono;
@@ -5929,14 +6908,20 @@ with pkgs;
   maple-mono-SC-NF = (callPackage ../data/fonts/maple-font { }).SC-NF;
   maple-mono-otf = (callPackage ../data/fonts/maple-font { }).opentype;
   maple-mono-woff2 = (callPackage ../data/fonts/maple-font { }).woff2;
+<<<<<<< HEAD
   maple-mono-autohint = (callPackage ../data/fonts/maple-font { }).autohint;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   marl = callPackage ../development/libraries/marl { };
 
   marlin-calc = callPackage ../tools/misc/marlin-calc { };
 
+<<<<<<< HEAD
   marp-cli = callPackage ../tools/typesetting/marp { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   masscan = callPackage ../tools/security/masscan { };
 
   massren = callPackage ../tools/misc/massren { };
@@ -5945,8 +6930,11 @@ with pkgs;
 
   maxcso = callPackage ../tools/archivers/maxcso { };
 
+<<<<<<< HEAD
   measureme = callPackage ../development/tools/rust/measureme { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   medusa = callPackage ../tools/security/medusa { };
 
   megasync = libsForQt5.callPackage ../applications/misc/megasync {
@@ -5968,6 +6956,7 @@ with pkgs;
   # example of an error which this fixes
   # [Errno 8] Exec format error: './gdk3-scan'
   mesonEmulatorHook =
+<<<<<<< HEAD
     makeSetupHook
       {
         name = "mesonEmulatorHook";
@@ -5985,6 +6974,20 @@ with pkgs;
         ../development/tools/build-managers/meson/emulator-hook.sh
        else
          throw "mesonEmulatorHook may only be added to nativeBuildInputs when the target binaries can't be executed; however you are attempting to use it in a situation where ${stdenv.hostPlatform.config} can execute ${stdenv.targetPlatform.config}. Consider only adding mesonEmulatorHook according to a conditional based canExecute in your package expression.");
+=======
+    if (!stdenv.buildPlatform.canExecute stdenv.targetPlatform) then
+      makeSetupHook
+        {
+          name = "mesonEmulatorHook";
+          substitutions = {
+            crossFile = writeText "cross-file.conf" ''
+              [binaries]
+              exe_wrapper = ${lib.escapeShellArg (stdenv.targetPlatform.emulator buildPackages)}
+            '';
+          };
+        } ../development/tools/build-managers/meson/emulator-hook.sh
+    else throw "mesonEmulatorHook has to be in a conditional to check if the target binaries can be executed i.e. (!stdenv.buildPlatform.canExecute stdenv.hostPlatform)";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   meson-tools = callPackage ../misc/meson-tools { };
 
@@ -5993,7 +6996,11 @@ with pkgs;
   };
 
   micropad = callPackage ../applications/office/micropad {
+<<<<<<< HEAD
     electron = electron_25;
+=======
+    electron = electron_23;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   midicsv = callPackage ../tools/audio/midicsv { };
@@ -6012,10 +7019,13 @@ with pkgs;
 
   moar = callPackage ../tools/misc/moar { };
 
+<<<<<<< HEAD
   mobilizon = callPackage ../servers/mobilizon {
     mobilizon-frontend = callPackage ../servers/mobilizon/frontend.nix { };
   };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   molly-brown = callPackage ../servers/gemini/molly-brown { };
 
   monetdb = callPackage ../servers/sql/monetdb { };
@@ -6048,12 +7058,21 @@ with pkgs;
 
   mpdris2 = callPackage ../tools/audio/mpdris2 { };
 
+<<<<<<< HEAD
   mpd-discord-rpc = callPackage ../tools/audio/mpd-discord-rpc { };
 
   mpd-mpris = callPackage ../tools/audio/mpd-mpris { };
 
   mpd-notification = callPackage ../tools/audio/mpd-notification { };
 
+=======
+  mpd-discord-rpc = callPackage ../tools/audio/mpd-discord-rpc {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
+  mpd-mpris = callPackage ../tools/audio/mpd-mpris { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   mpd-sima = python3Packages.callPackage ../tools/audio/mpd-sima { };
 
   mpris-scrobbler = callPackage ../tools/audio/mpris-scrobbler { };
@@ -6062,7 +7081,11 @@ with pkgs;
 
   mq-cli = callPackage ../tools/system/mq-cli { };
 
+<<<<<<< HEAD
   mrkd = callPackage ../tools/text/mrkd { };
+=======
+  mrkd = with python3Packages; toPythonApplication mrkd;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   naproche = callPackage ../applications/science/logic/naproche { };
 
@@ -6094,8 +7117,11 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
+<<<<<<< HEAD
   nltk-data = callPackage ../tools/text/nltk_data { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nodepy-runtime = with python3.pkgs; toPythonApplication nodepy-runtime;
 
   nixpkgs-pytools = with python3.pkgs; toPythonApplication nixpkgs-pytools;
@@ -6142,9 +7168,13 @@ with pkgs;
 
   onboard = callPackage ../applications/misc/onboard { };
 
+<<<<<<< HEAD
   oneshot = callPackage ../tools/networking/oneshot {
     buildGoModule = buildGo121Module;
   };
+=======
+  oneshot = callPackage ../tools/networking/oneshot { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   orjail = callPackage ../tools/security/orjail { };
 
@@ -6153,7 +7183,11 @@ with pkgs;
   online-judge-tools = with python3.pkgs; toPythonApplication online-judge-tools;
 
   onnxruntime = callPackage ../development/libraries/onnxruntime {
+<<<<<<< HEAD
     inherit (darwin.apple_sdk.frameworks) Foundation;
+=======
+    protobuf = protobuf3_19;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   xkbd = callPackage ../applications/misc/xkbd { };
@@ -6166,23 +7200,30 @@ with pkgs;
 
   obinskit = callPackage ../applications/misc/obinskit { };
 
+<<<<<<< HEAD
   ockam = callPackage ../tools/networking/ockam {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
   odoo = callPackage ../applications/finance/odoo { };
   odoo15 = callPackage ../applications/finance/odoo/odoo15.nix { };
+=======
+  odoo = callPackage ../applications/finance/odoo { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   odafileconverter = libsForQt5.callPackage ../applications/graphics/odafileconverter { };
 
   oil-buku = callPackage ../applications/misc/oil-buku { };
 
+<<<<<<< HEAD
   ondir = callPackage ../tools/misc/ondir { };
 
   opencomposite = callPackage ../development/libraries/opencomposite { };
 
   opencomposite-helper = callPackage ../development/libraries/opencomposite/helper.nix { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   osdlyrics = callPackage ../applications/audio/osdlyrics { };
 
   ossutil = callPackage ../tools/admin/ossutil { };
@@ -6193,8 +7234,11 @@ with pkgs;
 
   osv-scanner = callPackage ../tools/security/osv-scanner { };
 
+<<<<<<< HEAD
   otf2bdf = callPackage ../applications/misc/otf2bdf { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pastel = callPackage ../applications/misc/pastel {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
@@ -6207,11 +7251,19 @@ with pkgs;
 
   pbzx = callPackage ../tools/compression/pbzx { };
 
+<<<<<<< HEAD
   pc = callPackage ../tools/misc/pc { };
 
   pcb2gcode = callPackage ../tools/misc/pcb2gcode { };
 
   pcp = callPackage ../tools/misc/pcp { };
+=======
+  pcb2gcode = callPackage ../tools/misc/pcb2gcode { };
+
+  pcp = callPackage ../tools/misc/pcp {
+    buildGoModule = buildGo119Module; # go 1.20 build failure
+  };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   persepolis = python3Packages.callPackage ../tools/networking/persepolis {
     wrapQtAppsHook = qt5.wrapQtAppsHook;
@@ -6225,8 +7277,11 @@ with pkgs;
 
   photon = callPackage ../tools/networking/photon { };
 
+<<<<<<< HEAD
   photofield = callPackage ../servers/photofield { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   photoprism = callPackage ../servers/photoprism { };
 
   piglit = callPackage ../tools/graphics/piglit { };
@@ -6253,8 +7308,11 @@ with pkgs;
 
   pscale = callPackage ../development/tools/pscale { };
 
+<<<<<<< HEAD
   pulsarctl = callPackage ../tools/admin/pulsarctl { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   psstop = callPackage ../tools/system/psstop { };
 
   precice = callPackage ../development/libraries/precice { };
@@ -6289,21 +7347,33 @@ with pkgs;
 
   psrecord = python3Packages.callPackage ../tools/misc/psrecord { };
 
+<<<<<<< HEAD
   pyenv = callPackage ../development/tools/pyenv { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   r53-ddns = callPackage ../applications/networking/r53-ddns { };
 
   rare = python3Packages.callPackage ../games/rare { };
 
   reg = callPackage ../tools/virtualization/reg { };
 
+<<<<<<< HEAD
   retool = callPackage ../applications/misc/retool { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   rex = callPackage ../tools/system/rex { };
 
   river = callPackage ../applications/window-managers/river { };
 
+<<<<<<< HEAD
   rivercarro = callPackage ../applications/misc/rivercarro { };
+=======
+  rivercarro = callPackage ../applications/misc/rivercarro {
+    zig = buildPackages.zig_0_9;
+  };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   river-luatile = callPackage ../applications/misc/river-luatile{ };
 
@@ -6323,8 +7393,11 @@ with pkgs;
 
   scour = with python3Packages; toPythonApplication scour;
 
+<<<<<<< HEAD
   see = callPackage ../tools/misc/see { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   s2png = callPackage ../tools/graphics/s2png { };
 
   sfz = callPackage ../tools/misc/sfz { };
@@ -6351,6 +7424,11 @@ with pkgs;
 
   simdjson = callPackage ../development/libraries/simdjson { };
 
+<<<<<<< HEAD
+=======
+  shipyard = callPackage ../tools/virtualization/shipyard { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   shisho = callPackage ../tools/security/shisho { };
 
   sigslot = callPackage ../development/libraries/sigslot { };
@@ -6359,6 +7437,13 @@ with pkgs;
 
   simg2img = callPackage ../tools/filesystems/simg2img { };
 
+<<<<<<< HEAD
+=======
+  smokegen = callPackage ../development/libraries/smokegen { };
+
+  smokeqt = callPackage ../development/libraries/smokeqt { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   snazy = callPackage ../development/tools/snazy { };
 
   snippetpixie = callPackage ../tools/text/snippetpixie { };
@@ -6433,12 +7518,17 @@ with pkgs;
 
   replay-sorcery = callPackage ../tools/video/replay-sorcery { };
 
+<<<<<<< HEAD
   recyclarr = callPackage ../tools/video/recyclarr { };
 
   tsduck = callPackage ../tools/video/tsduck { };
 
   turso-cli = callPackage ../development/tools/turso-cli {};
 
+=======
+  tsduck = callPackage ../tools/video/tsduck { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ripasso-cursive = callPackage ../tools/security/ripasso/cursive.nix {
     inherit (darwin.apple_sdk.frameworks) AppKit Security;
   };
@@ -6515,18 +7605,24 @@ with pkgs;
 
   moosefs = callPackage ../tools/filesystems/moosefs { };
 
+<<<<<<< HEAD
   mountain-duck = callPackage ../tools/filesystems/mountain-duck { };
 
   mox = callPackage ../servers/mail/mox { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   mozlz4a = callPackage ../tools/compression/mozlz4a { };
 
   msr-tools = callPackage ../os-specific/linux/msr-tools { };
 
   mstflint = callPackage ../tools/misc/mstflint { };
 
+<<<<<<< HEAD
   msldapdump = callPackage ../tools/security/msldapdump { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   mslink = callPackage ../tools/misc/mslink { };
 
   mceinject = callPackage ../os-specific/linux/mceinject { };
@@ -6535,16 +7631,22 @@ with pkgs;
     util-linux = util-linuxMinimal;
   };
 
+<<<<<<< HEAD
   sqldef = callPackage ../development/tools/sqldef { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   sqlint = callPackage ../development/tools/sqlint { };
 
   squawk = callPackage ../development/tools/squawk { };
 
   antibody = callPackage ../shells/zsh/antibody { };
 
+<<<<<<< HEAD
   antidote = callPackage ../shells/zsh/antidote { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   antigen = callPackage ../shells/zsh/antigen { };
 
   apparix = callPackage ../tools/misc/apparix { };
@@ -6648,8 +7750,11 @@ with pkgs;
 
   biber = callPackage ../tools/typesetting/biber { };
 
+<<<<<<< HEAD
   biber-ms = callPackage ../tools/typesetting/biber-ms { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   biblatex-check = callPackage ../tools/typesetting/biblatex-check { };
 
   binlore = callPackage ../development/tools/analysis/binlore { };
@@ -6693,6 +7798,11 @@ with pkgs;
 
   buku = callPackage ../applications/misc/buku { };
 
+<<<<<<< HEAD
+=======
+  bukut = callPackage ../applications/misc/bukut { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   byzanz = callPackage ../applications/video/byzanz { };
 
   algolia-cli = callPackage ../development/tools/algolia-cli { };
@@ -6735,8 +7845,11 @@ with pkgs;
 
   can-utils = callPackage ../os-specific/linux/can-utils { };
 
+<<<<<<< HEAD
   cannelloni = callPackage ../os-specific/linux/cannelloni { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   caudec = callPackage ../applications/audio/caudec { };
 
   ccd2iso = callPackage ../tools/cd-dvd/ccd2iso { };
@@ -6757,9 +7870,13 @@ with pkgs;
 
   cdpr = callPackage ../tools/networking/cdpr { };
 
+<<<<<<< HEAD
   cdrdao = callPackage ../tools/cd-dvd/cdrdao {
     inherit (darwin.apple_sdk.frameworks) CoreServices IOKit;
   };
+=======
+  cdrdao = callPackage ../tools/cd-dvd/cdrdao { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   cdrkit = callPackage ../tools/cd-dvd/cdrkit { };
 
@@ -6771,8 +7888,11 @@ with pkgs;
 
   cider = callPackage ../applications/audio/cider { };
 
+<<<<<<< HEAD
   iat = callPackage ../tools/cd-dvd/iat { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   isolyzer = callPackage ../tools/cd-dvd/isolyzer { };
 
   isomd5sum = callPackage ../tools/cd-dvd/isomd5sum { };
@@ -6803,15 +7923,24 @@ with pkgs;
 
   chain-bench = callPackage ../tools/security/chain-bench { };
 
+<<<<<<< HEAD
   chainsaw = callPackage ../tools/security/chainsaw { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   checkinstall = callPackage ../tools/package-management/checkinstall { };
 
   checkmake = callPackage ../development/tools/checkmake { };
 
+<<<<<<< HEAD
   cherrybomb = callPackage ../tools/security/cherrybomb { };
 
   chit = callPackage ../development/tools/chit { };
+=======
+  chit = callPackage ../development/tools/chit {
+    openssl = openssl_1_1;
+  };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   chkrootkit = callPackage ../tools/security/chkrootkit { };
 
@@ -6835,7 +7964,11 @@ with pkgs;
   clementine = libsForQt5.callPackage ../applications/audio/clementine {
     gst_plugins =
       with gst_all_1; [ gst-plugins-base gst-plugins-good gst-plugins-ugly gst-libav ];
+<<<<<<< HEAD
     protobuf = protobuf3_21;
+=======
+    protobuf = protobuf3_19;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   mellowplayer = libsForQt5.callPackage ../applications/audio/mellowplayer { };
@@ -6844,7 +7977,11 @@ with pkgs;
 
   circleci-cli = callPackage ../development/tools/misc/circleci-cli { };
 
+<<<<<<< HEAD
   circus = with python3Packages; toPythonApplication circus;
+=======
+  circus = callPackage ../tools/networking/circus { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   cirrus-cli = callPackage ../development/tools/continuous-integration/cirrus-cli { };
 
@@ -6852,6 +7989,7 @@ with pkgs;
 
   inherit (callPackage ../applications/networking/remote/citrix-workspace { })
     citrix_workspace_23_02_0
+<<<<<<< HEAD
     citrix_workspace_23_07_0
   ;
   citrix_workspace = citrix_workspace_23_07_0;
@@ -6862,6 +8000,13 @@ with pkgs;
 
   cmospwd = callPackage ../tools/security/cmospwd { };
 
+=======
+  ;
+  citrix_workspace = citrix_workspace_23_02_0;
+
+  cmigemo = callPackage ../tools/text/cmigemo { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   cmst = libsForQt5.callPackage ../tools/networking/cmst { };
 
   cmt = callPackage ../applications/audio/cmt { };
@@ -6870,7 +8015,16 @@ with pkgs;
 
   crlfuzz = callPackage ../tools/security/crlfuzz { };
 
+<<<<<<< HEAD
   hedgedoc = callPackage ../servers/web-apps/hedgedoc { };
+=======
+  hedgedoc = callPackage ../servers/web-apps/hedgedoc {
+    inherit (callPackage ../development/tools/yarn2nix-moretea/yarn2nix {
+      nodejs = nodejs_16;
+    }) mkYarnPackage;
+    nodejs = nodejs_16;
+  };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   colord = callPackage ../tools/misc/colord { };
 
@@ -6918,11 +8072,22 @@ with pkgs;
 
   unifdef = callPackage ../development/tools/misc/unifdef { };
 
+<<<<<<< HEAD
+=======
+  uniffi-bindgen = callPackage ../development/tools/uniffi-bindgen { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   unify = with python3Packages; toPythonApplication unify;
 
   unionfs-fuse = callPackage ../tools/filesystems/unionfs-fuse { };
 
+<<<<<<< HEAD
   unparam = callPackage ../tools/misc/unparam { };
+=======
+  unparam = callPackage ../tools/misc/unparam {
+    buildGoModule = buildGo119Module; # go 1.20 build failure
+  };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   inherit (nodePackages) uppy-companion;
 
@@ -6949,8 +8114,11 @@ with pkgs;
 
   keyd = callPackage ../tools/inputmethods/keyd { };
 
+<<<<<<< HEAD
   keymapper = callPackage ../tools/inputmethods/keymapper { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   twitch-tui = callPackage ../applications/networking/instant-messengers/twitch-tui {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
@@ -7000,6 +8168,11 @@ with pkgs;
 
   ibus = callPackage ../tools/inputmethods/ibus { };
 
+<<<<<<< HEAD
+=======
+  ibus-qt = callPackage ../tools/inputmethods/ibus/ibus-qt.nix { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ibus-engines = recurseIntoAttrs {
     anthy = callPackage ../tools/inputmethods/ibus-engines/ibus-anthy { };
 
@@ -7017,7 +8190,11 @@ with pkgs;
 
     mozc = callPackage ../tools/inputmethods/ibus-engines/ibus-mozc {
       stdenv = clangStdenv;
+<<<<<<< HEAD
       protobuf = pkgs.protobuf3_21.overrideDerivation (_: { stdenv = clangStdenv; });
+=======
+      protobuf = pkgs.protobuf.overrideDerivation (_: { stdenv = clangStdenv; });
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
 
     rime = callPackage ../tools/inputmethods/ibus-engines/ibus-rime { };
@@ -7055,12 +8232,15 @@ with pkgs;
 
   agebox = callPackage ../tools/security/agebox { };
 
+<<<<<<< HEAD
   age-plugin-ledger = callPackage ../tools/security/age-plugin-ledger {
     inherit (darwin.apple_sdk.frameworks) AppKit;
   };
 
   age-plugin-tpm = callPackage ../tools/security/age-plugin-tpm { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   age-plugin-yubikey = darwin.apple_sdk_11_0.callPackage ../tools/security/age-plugin-yubikey {
     inherit (darwin.apple_sdk_11_0.frameworks) Foundation PCSC IOKit;
   };
@@ -7069,8 +8249,11 @@ with pkgs;
 
   bbin = callPackage ../development/tools/bbin { };
 
+<<<<<<< HEAD
   blacken-docs = callPackage ../tools/misc/blacken-docs { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   bore = callPackage ../tools/networking/bore {
     inherit (darwin) Libsystem;
     inherit (darwin.apple_sdk.frameworks) SystemConfiguration;
@@ -7080,18 +8263,24 @@ with pkgs;
 
   biodiff = callPackage ../development/tools/biodiff { };
 
+<<<<<<< HEAD
   biome = callPackage ../development/tools/biome { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   biosdevname = callPackage ../tools/networking/biosdevname { };
 
   bluetooth_battery = python3Packages.callPackage ../applications/misc/bluetooth_battery { };
 
+<<<<<<< HEAD
   boa = callPackage ../development/web/boa { };
 
   bombardier = callPackage ../tools/networking/bombardier { };
 
   caeml = callPackage ../applications/networking/mailreaders/caeml { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   calyx-vpn = libsForQt5.callPackage ../tools/networking/bitmask-vpn {
     provider = "calyx";
     inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
@@ -7105,8 +8294,11 @@ with pkgs;
   code-browser-gtk2 = callPackage ../applications/editors/code-browser { withGtk2 = true; };
   code-browser-gtk = callPackage ../applications/editors/code-browser { withGtk3 = true; };
 
+<<<<<<< HEAD
   certdump = callPackage ../tools/security/certdump { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   certstrap = callPackage ../tools/security/certstrap { };
 
   cfssl = callPackage ../tools/security/cfssl { };
@@ -7131,8 +8323,13 @@ with pkgs;
 
   ckb-next = libsForQt5.callPackage ../tools/misc/ckb-next { };
 
+<<<<<<< HEAD
   clamav = darwin.apple_sdk_11_0.callPackage ../tools/security/clamav {
     inherit (darwin.apple_sdk_11_0.frameworks) Foundation;
+=======
+  clamav = callPackage ../tools/security/clamav {
+    inherit (darwin.apple_sdk.frameworks) Foundation;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   client-ip-echo = callPackage ../servers/misc/client-ip-echo { };
@@ -7227,8 +8424,11 @@ with pkgs;
 
   createrepo_c = callPackage ../tools/package-management/createrepo_c { };
 
+<<<<<<< HEAD
   cringify = callPackage ../tools/text/cringify { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   cromfs = callPackage ../tools/archivers/cromfs {
     stdenv = gcc10StdenvCompat;
   };
@@ -7255,11 +8455,18 @@ with pkgs;
   cudaPackages_11_6 = callPackage ./cuda-packages.nix { cudaVersion = "11.6"; };
   cudaPackages_11_7 = callPackage ./cuda-packages.nix { cudaVersion = "11.7"; };
   cudaPackages_11_8 = callPackage ./cuda-packages.nix { cudaVersion = "11.8"; };
+<<<<<<< HEAD
   cudaPackages_11 = cudaPackages_11_8;
 
   cudaPackages_12_0 = callPackage ./cuda-packages.nix { cudaVersion = "12.0"; };
   cudaPackages_12_1 = callPackage ./cuda-packages.nix { cudaVersion = "12.1"; };
   cudaPackages_12_2 = callPackage ./cuda-packages.nix { cudaVersion = "12.2"; };
+=======
+  cudaPackages_11 = cudaPackages_11_7;
+
+  cudaPackages_12_0 = callPackage ./cuda-packages.nix { cudaVersion = "12.0"; };
+  cudaPackages_12_1 = callPackage ./cuda-packages.nix { cudaVersion = "12.1"; };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   cudaPackages_12 = cudaPackages_12_0;
 
   # TODO: try upgrading once there is a cuDNN release supporting CUDA 12. No
@@ -7288,6 +8495,10 @@ with pkgs;
     idnSupport = true;
     zstdSupport = true;
   } // lib.optionalAttrs (!stdenv.hostPlatform.isStatic) {
+<<<<<<< HEAD
+=======
+    gssSupport = true;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     brotliSupport = true;
   });
 
@@ -7295,15 +8506,22 @@ with pkgs;
 
   curlWithGnuTls = curl.override { gnutlsSupport = true; opensslSupport = false; };
 
+<<<<<<< HEAD
   curl-impersonate = darwin.apple_sdk_11_0.callPackage ../tools/networking/curl-impersonate { };
   inherit (curl-impersonate) curl-impersonate-ff curl-impersonate-chrome;
+=======
+  curl-impersonate-bin = callPackage ../tools/networking/curl-impersonate { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   curlie = callPackage ../tools/networking/curlie { };
 
   trurl = callPackage ../tools/networking/trurl { };
 
+<<<<<<< HEAD
   curv = callPackage ../applications/graphics/curv { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   cunit = callPackage ../tools/misc/cunit { };
   bcunit = callPackage ../tools/misc/bcunit { };
 
@@ -7367,8 +8585,11 @@ with pkgs;
 
   deno = callPackage ../development/web/deno { };
 
+<<<<<<< HEAD
   deqp-runner = callPackage ../tools/graphics/deqp-runner { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   detox = callPackage ../tools/misc/detox { };
 
   devilspie2 = callPackage ../applications/misc/devilspie2 {
@@ -7385,6 +8606,11 @@ with pkgs;
 
   ddcutil = callPackage ../tools/misc/ddcutil { };
 
+<<<<<<< HEAD
+=======
+  ddclient = callPackage ../tools/networking/ddclient { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   dd_rescue = callPackage ../tools/system/dd_rescue { };
 
   ddh = callPackage ../tools/system/ddh { };
@@ -7395,7 +8621,13 @@ with pkgs;
 
   ddrutility = callPackage ../tools/system/ddrutility { };
 
+<<<<<<< HEAD
   inherit (callPackages ../applications/networking/p2p/deluge { })
+=======
+  inherit (callPackages ../applications/networking/p2p/deluge {
+    libtorrent-rasterbar = libtorrent-rasterbar-1_2_x;
+  })
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     deluge-gtk
     deluged
     deluge;
@@ -7414,7 +8646,11 @@ with pkgs;
 
   djbdns = callPackage ../tools/networking/djbdns { };
 
+<<<<<<< HEAD
   dnscrypt-proxy = callPackage ../tools/networking/dnscrypt-proxy { };
+=======
+  dnscrypt-proxy2 = callPackage ../tools/networking/dnscrypt-proxy2 { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   dnscrypt-wrapper = callPackage ../tools/networking/dnscrypt-wrapper { };
 
@@ -7430,7 +8666,13 @@ with pkgs;
 
   dnspeep = callPackage ../tools/security/dnspeep { };
 
+<<<<<<< HEAD
   dnsproxy = callPackage ../tools/networking/dnsproxy { };
+=======
+  dnsproxy = callPackage ../tools/networking/dnsproxy {
+    buildGoModule = buildGo119Module; # go 1.20 build failure
+  };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   dnsperf = callPackage ../tools/networking/dnsperf { };
 
@@ -7442,18 +8684,27 @@ with pkgs;
 
   dnsx = callPackage ../tools/security/dnsx { };
 
+<<<<<<< HEAD
+=======
+  dhcp = callPackage ../tools/networking/dhcp { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   dhcpdump = callPackage ../tools/networking/dhcpdump { };
 
   dhcpcd = callPackage ../tools/networking/dhcpcd { };
 
   dhcping = callPackage ../tools/networking/dhcping { };
 
+<<<<<<< HEAD
   dotacat = callPackage ../tools/misc/dotacat { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   di = callPackage ../tools/system/di { };
 
   diction = callPackage ../tools/text/diction { };
 
+<<<<<<< HEAD
   diffoci = callPackage ../tools/misc/diffoci {
     buildGoModule = buildGo121Module;
   };
@@ -7464,6 +8715,14 @@ with pkgs;
 
   diffoscopeMinimal = diffoscope.override {
     enableBloat = false;
+=======
+  diffoscopeMinimal = callPackage ../tools/misc/diffoscope {
+    jdk = jdk8;
+  };
+
+  diffoscope = diffoscopeMinimal.override {
+    enableBloat = !stdenv.isDarwin;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   diffr = callPackage ../tools/text/diffr {
@@ -7480,7 +8739,14 @@ with pkgs;
 
   dsp = callPackage ../tools/audio/dsp { };
 
+<<<<<<< HEAD
   dirdiff = callPackage ../tools/text/dirdiff { };
+=======
+  dirdiff = callPackage ../tools/text/dirdiff {
+    tcl = tcl-8_5;
+    tk = tk-8_5;
+  };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   dwdiff = callPackage ../applications/misc/dwdiff { };
 
@@ -7537,11 +8803,17 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
+<<<<<<< HEAD
   doggo = callPackage ../tools/networking/doggo { };
 
   dq = callPackage ../tools/networking/dq { };
 
   dool = callPackage ../tools/system/dool { };
+=======
+  doggo = callPackage ../tools/networking/doggo {
+    buildGoModule = buildGo119Module; # build fails with 1.20
+  };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   dosfstools = callPackage ../tools/filesystems/dosfstools { };
 
@@ -7584,13 +8856,21 @@ with pkgs;
 
   dropbear = callPackage ../tools/networking/dropbear { };
 
+<<<<<<< HEAD
   dsview = qt6Packages.callPackage ../applications/science/electronics/dsview { };
+=======
+  dsview = libsForQt5.callPackage ../applications/science/electronics/dsview { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   dtach = callPackage ../tools/misc/dtach { };
 
   dtc = callPackage ../development/compilers/dtc { };
 
+<<<<<<< HEAD
   dt-schema = callPackage ../development/tools/dt-schema { };
+=======
+  dt-schema = with python3Packages; toPythonApplication dtschema;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   dub = callPackage ../development/tools/build-managers/dub { };
 
@@ -7604,8 +8884,11 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
+<<<<<<< HEAD
   dumpasn1 = callPackage ../tools/security/dumpasn1 { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   dumptorrent = callPackage ../tools/misc/dumptorrent { };
 
   duo-unix = callPackage ../tools/security/duo-unix { };
@@ -7636,12 +8919,17 @@ with pkgs;
 
   dvtm-unstable = callPackage ../tools/misc/dvtm/unstable.nix { };
 
+<<<<<<< HEAD
   a4term = callPackage ../tools/misc/a4term { };
 
   ecmtools = callPackage ../tools/cd-dvd/ecm-tools { };
 
   erofs-utils = callPackage ../tools/filesystems/erofs-utils { };
 
+=======
+  ecmtools = callPackage ../tools/cd-dvd/ecm-tools { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   e2tools = callPackage ../tools/filesystems/e2tools { };
 
   e2fsprogs = callPackage ../tools/filesystems/e2fsprogs { };
@@ -7688,8 +8976,11 @@ with pkgs;
 
   engauge-digitizer = libsForQt5.callPackage ../applications/science/math/engauge-digitizer { };
 
+<<<<<<< HEAD
   epub2txt2 = callPackage ../tools/text/epub2txt2 { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   epubcheck = callPackage ../tools/text/epubcheck { };
 
   evil-winrm = callPackage ../tools/security/evil-winrm { };
@@ -7728,8 +9019,11 @@ with pkgs;
 
   rar2fs = callPackage ../tools/filesystems/rar2fs { };
 
+<<<<<<< HEAD
   rune = callPackage ../development/interpreters/rune { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   s9fes = callPackage ../development/interpreters/s9fes { };
 
   s-tar = callPackage ../tools/archivers/s-tar { };
@@ -7752,7 +9046,11 @@ with pkgs;
 
   schildichat-desktop = callPackage ../applications/networking/instant-messengers/schildichat/schildichat-desktop.nix {
     inherit (darwin.apple_sdk.frameworks) Security AppKit CoreServices;
+<<<<<<< HEAD
     electron = electron_24;
+=======
+    electron = electron_22;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
   schildichat-desktop-wayland = writeScriptBin "schildichat-desktop" ''
     #!/bin/sh
@@ -7839,8 +9137,11 @@ with pkgs;
 
   wsl-open = callPackage ../tools/misc/wsl-open { };
 
+<<<<<<< HEAD
   wsl-vpnkit = callPackage ../tools/networking/wsl-vpnkit { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   xkcdpass = with python3Packages; toPythonApplication xkcdpass;
 
   xjobs = callPackage ../tools/misc/xjobs { };
@@ -7865,8 +9166,11 @@ with pkgs;
 
   zonemaster-cli = perlPackages.ZonemasterCLI;
 
+<<<<<<< HEAD
   zotero-translation-server = callPackage ../tools/misc/zotero-translation-server { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   zoxide = callPackage ../tools/misc/zoxide { };
 
   zzuf = callPackage ../tools/security/zzuf { };
@@ -7883,12 +9187,19 @@ with pkgs;
 
   d2 = callPackage ../tools/text/d2 { };
 
+<<<<<<< HEAD
   ddev = callPackage ../applications/virtualization/ddev { };
 
   easeprobe = callPackage ../tools/misc/easeprobe { };
 
   emscripten = callPackage ../development/compilers/emscripten {
     llvmPackages = llvmPackages_16;
+=======
+  easeprobe = callPackage ../tools/misc/easeprobe { };
+
+  emscripten = callPackage ../development/compilers/emscripten {
+    llvmPackages = llvmPackages_14;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   emscriptenPackages = recurseIntoAttrs (callPackage ./emscripten-packages.nix { });
@@ -7905,7 +9216,11 @@ with pkgs;
 
   # The latest version used by elasticsearch, logstash, kibana and the the beats from elastic.
   # When updating make sure to update all plugins or they will break!
+<<<<<<< HEAD
   elk7Version = "7.17.10";
+=======
+  elk7Version = "7.17.4";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   elasticsearch7 = callPackage ../servers/search/elasticsearch/7.x.nix {
     util-linux = util-linuxMinimal;
@@ -7938,7 +9253,13 @@ with pkgs;
 
   emv = callPackage ../tools/misc/emv { };
 
+<<<<<<< HEAD
   enblend-enfuse = callPackage ../tools/graphics/enblend-enfuse { };
+=======
+  enblend-enfuse = callPackage ../tools/graphics/enblend-enfuse {
+    boost = boost172;
+  };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   enc = callPackage ../tools/security/enc { };
 
@@ -7946,7 +9267,13 @@ with pkgs;
 
   endlessh-go = callPackage ../servers/endlessh-go { };
 
+<<<<<<< HEAD
   eris-go = callPackage ../servers/eris-go { };
+=======
+  eris-go = callPackage ../servers/eris-go {
+    buildGoModule = buildGo119Module; # go 1.20 build failure
+  };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   ericw-tools = callPackage ../applications/misc/ericw-tools { stdenv = gcc10StdenvCompat; };
 
@@ -7998,6 +9325,13 @@ with pkgs;
 
   eva = callPackage ../tools/misc/eva { };
 
+<<<<<<< HEAD
+=======
+  exa = callPackage ../tools/misc/exa {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   exactaudiocopy = callPackage ../applications/audio/exact-audio-copy { };
 
   exempi = callPackage ../development/libraries/exempi { };
@@ -8026,10 +9360,13 @@ with pkgs;
 
   expliot = callPackage ../tools/security/expliot { };
 
+<<<<<<< HEAD
   eza = callPackage ../tools/misc/eza {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   f2fs-tools = callPackage ../tools/filesystems/f2fs-tools { };
 
   Fabric = with python3Packages; toPythonApplication fabric;
@@ -8218,8 +9555,11 @@ with pkgs;
 
   faraday-cli = callPackage ../tools/security/faraday-cli { };
 
+<<<<<<< HEAD
   farge = callPackage ../tools/misc/farge { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   fastlane = callPackage ../tools/admin/fastlane { };
 
   fatresize = callPackage ../tools/filesystems/fatresize { };
@@ -8232,8 +9572,11 @@ with pkgs;
 
   feedgnuplot = callPackage ../tools/graphics/feedgnuplot { };
 
+<<<<<<< HEAD
   fermyon-spin = callPackage ../development/tools/fermyon-spin { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   fbcat = callPackage ../tools/misc/fbcat { };
 
   fbv = callPackage ../tools/graphics/fbv { };
@@ -8256,6 +9599,13 @@ with pkgs;
 
   flowblade = callPackage ../applications/video/flowblade { };
 
+<<<<<<< HEAD
+=======
+  fmbt = callPackage ../development/tools/fmbt {
+    python = python2;
+  };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   fontfor = callPackage ../tools/misc/fontfor { };
 
   fontforge = lowPrio (callPackage ../tools/misc/fontforge {
@@ -8279,8 +9629,11 @@ with pkgs;
 
   forktty = callPackage ../os-specific/linux/forktty { };
 
+<<<<<<< HEAD
   fortran-fpm = callPackage ../tools/package-management/fortran-fpm { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   fortune = callPackage ../tools/misc/fortune { };
 
   fox = callPackage ../development/libraries/fox {
@@ -8293,8 +9646,11 @@ with pkgs;
 
   fpart = callPackage ../tools/misc/fpart { };
 
+<<<<<<< HEAD
   fpattern = callPackage ../development/libraries/fpattern { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   fping = callPackage ../tools/networking/fping { };
 
   fpm = callPackage ../tools/package-management/fpm { };
@@ -8323,7 +9679,13 @@ with pkgs;
 
   freeipmi = callPackage ../tools/system/freeipmi { };
 
+<<<<<<< HEAD
   freetalk = callPackage ../applications/networking/instant-messengers/freetalk { };
+=======
+  freetalk = callPackage ../applications/networking/instant-messengers/freetalk {
+    guile = guile_2_0;
+  };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   freetds = callPackage ../development/libraries/freetds { };
 
@@ -8341,8 +9703,11 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) AppKit CoreFoundation DiskArbitration Foundation IOKit;
   };
 
+<<<<<<< HEAD
   frigate = callPackage ../applications/video/frigate { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   frostwire = callPackage ../applications/networking/p2p/frostwire { };
   frostwire-bin = callPackage ../applications/networking/p2p/frostwire/frostwire-bin.nix { };
 
@@ -8364,6 +9729,7 @@ with pkgs;
 
   fusuma = callPackage ../tools/inputmethods/fusuma { };
 
+<<<<<<< HEAD
   fdbPackages = dontRecurseIntoAttrs (callPackage ../servers/foundationdb { });
 
   inherit (fdbPackages)
@@ -8376,14 +9742,36 @@ with pkgs;
 
   fuse-archive = callPackage ../tools/filesystems/fuse-archive { };
 
+=======
+  fdbPackages = dontRecurseIntoAttrs (callPackage ../servers/foundationdb {
+    openjdk = openjdk8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
+    libressl = libressl_3_4;
+  });
+
+  inherit (fdbPackages)
+    foundationdb51
+    foundationdb52
+    foundationdb60
+    foundationdb61
+    foundationdb71
+  ;
+
+  foundationdb = foundationdb61;
+
+  fuse-7z-ng = callPackage ../tools/filesystems/fuse-7z-ng { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   fuse-overlayfs = callPackage ../tools/filesystems/fuse-overlayfs { };
 
   fusee-interfacee-tk = callPackage ../applications/misc/fusee-interfacee-tk { };
 
   fusee-launcher = callPackage ../development/tools/fusee-launcher { };
 
+<<<<<<< HEAD
   fusee-nano = callPackage ../development/tools/fusee-nano { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   fverb = callPackage ../applications/audio/fverb { };
 
   fwknop = callPackage ../tools/security/fwknop {
@@ -8427,7 +9815,11 @@ with pkgs;
   })
     garage
       garage_0_7 garage_0_8
+<<<<<<< HEAD
       garage_0_7_3 garage_0_8_4;
+=======
+      garage_0_7_3 garage_0_8_2;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   garmin-plugin = callPackage ../applications/misc/garmin-plugin { };
 
@@ -8500,16 +9892,22 @@ with pkgs;
 
   ggobi = callPackage ../tools/graphics/ggobi { };
 
+<<<<<<< HEAD
   ggshield = callPackage ../tools/security/ggshield { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ghost = callPackage ../tools/security/ghost { };
 
   ghostunnel = callPackage ../tools/networking/ghostunnel { };
 
   ghz = callPackage ../tools/networking/ghz { };
 
+<<<<<<< HEAD
   gi-crystal = callPackage ../development/tools/gi-crystal { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   gibberish-detector = with python3Packages; toPythonApplication gibberish-detector;
 
   gibo = callPackage ../tools/misc/gibo { };
@@ -8533,8 +9931,11 @@ with pkgs;
 
   gitlab-clippy = callPackage ../development/tools/rust/gitlab-clippy { };
 
+<<<<<<< HEAD
   gitlab-container-registry = callPackage ../applications/version-management/gitlab/gitlab-container-registry { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   gitlab-pages = callPackage ../applications/version-management/gitlab/gitlab-pages { };
 
   gitlab-runner = callPackage ../development/tools/continuous-integration/gitlab-runner { };
@@ -8545,8 +9946,11 @@ with pkgs;
 
   gitlab-workhorse = callPackage ../applications/version-management/gitlab/gitlab-workhorse { };
 
+<<<<<<< HEAD
   gitlab-elasticsearch-indexer = callPackage ../applications/version-management/gitlab/gitlab-elasticsearch-indexer { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   gitleaks = callPackage ../tools/security/gitleaks { };
 
   gitaly = callPackage ../applications/version-management/gitlab/gitaly {
@@ -8565,8 +9969,11 @@ with pkgs;
 
   forgejo = callPackage ../applications/version-management/forgejo { };
 
+<<<<<<< HEAD
   forgejo-actions-runner = callPackage ../development/tools/continuous-integration/forgejo-actions-runner { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   gokart = callPackage ../development/tools/gokart { };
 
   gl2ps = callPackage ../development/libraries/gl2ps { };
@@ -8683,6 +10090,7 @@ with pkgs;
 
   godot_4 = callPackage ../development/tools/godot/4 { };
 
+<<<<<<< HEAD
   godot3 = callPackage ../development/tools/godot/3 { };
 
   godot3-export-templates = callPackage ../development/tools/godot/3/export-templates.nix { };
@@ -8702,6 +10110,15 @@ with pkgs;
   godot3-mono-debug-server = callPackage ../development/tools/godot/3/mono/debug-server.nix { };
 
   godot3-mono-server = callPackage ../development/tools/godot/3/mono/server.nix { };
+=======
+  godot = callPackage ../development/tools/godot/3 { };
+
+  godot-export-templates = callPackage ../development/tools/godot/3/export-templates.nix { };
+
+  godot-headless = callPackage ../development/tools/godot/3/headless.nix { };
+
+  godot-server = callPackage ../development/tools/godot/3/server.nix { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   goeland = callPackage ../applications/networking/feedreaders/goeland { };
 
@@ -8728,7 +10145,11 @@ with pkgs;
     python = python3;
   };
   google-cloud-sdk-gce = google-cloud-sdk.override {
+<<<<<<< HEAD
     python = python3;
+=======
+    python = python38;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     with-gce = true;
   };
 
@@ -8801,8 +10222,11 @@ with pkgs;
 
   gptfdisk = callPackage ../tools/system/gptfdisk { };
 
+<<<<<<< HEAD
   gql = callPackage ../applications/version-management/gql { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   grafterm = callPackage ../tools/misc/grafterm { };
 
   gradience = callPackage ../applications/misc/gradience { };
@@ -8811,6 +10235,7 @@ with pkgs;
 
   grails = callPackage ../development/web/grails { jdk = null; };
 
+<<<<<<< HEAD
   graylog-3_3 = callPackage ../tools/misc/graylog/3.3.nix { };
 
   graylog-4_0 = callPackage ../tools/misc/graylog/4.0.nix { };
@@ -8821,6 +10246,9 @@ with pkgs;
 
   graylog-5_1 = callPackage ../tools/misc/graylog/5.1.nix { };
 
+=======
+  graylog = callPackage ../tools/misc/graylog { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   graylogPlugins = recurseIntoAttrs (
     callPackage ../tools/misc/graylog/plugins.nix { }
   );
@@ -8832,6 +10260,10 @@ with pkgs;
   graphviz-nox = callPackage ../tools/graphics/graphviz {
     inherit (darwin.apple_sdk.frameworks) ApplicationServices;
     withXorg = false;
+<<<<<<< HEAD
+=======
+    libdevil = libdevil-nox;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   grass-sass = callPackage ../tools/misc/grass-sass { };
@@ -8844,10 +10276,13 @@ with pkgs;
 
   gyb = callPackage ../tools/backup/gyb { };
 
+<<<<<<< HEAD
   halftone = callPackage ../applications/graphics/halftone { };
 
   halloy = callPackage ../applications/networking/irc/halloy { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   harminv = callPackage ../development/libraries/science/chemistry/harminv { };
 
   igrep = callPackage ../tools/text/igrep {
@@ -8864,6 +10299,11 @@ with pkgs;
 
   robodoc = callPackage ../tools/text/robodoc { };
 
+<<<<<<< HEAD
+=======
+  ucg = callPackage ../tools/text/ucg { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   grive2 = callPackage ../tools/filesystems/grive2 { };
 
   groff = callPackage ../tools/text/groff { };
@@ -8889,7 +10329,21 @@ with pkgs;
 
   grpc-client-cli = callPackage ../development/tools/misc/grpc-client-cli { };
 
+<<<<<<< HEAD
   grub2 = callPackage ../tools/misc/grub/default.nix { };
+=======
+  grub2 = callPackage ../tools/misc/grub/default.nix {
+    # update breaks grub2
+    gnulib = pkgs.gnulib.overrideAttrs (_: rec {
+      version = "20200223";
+      src = fetchgit {
+        url = "https://git.savannah.gnu.org/r/gnulib.git";
+        rev = "292fd5d6ff5ecce81ec3c648f353732a9ece83c0";
+        sha256 = "0hkg3nql8nsll0vrqk4ifda0v4kpi67xz42r8daqsql6c4rciqnw";
+      };
+    });
+  };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   grub2_efi = grub2.override {
     efiSupport = true;
@@ -9015,8 +10469,11 @@ with pkgs;
 
   pixz = callPackage ../tools/compression/pixz { };
 
+<<<<<<< HEAD
   plog = callPackage ../development/libraries/plog {};
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   plplot = callPackage ../development/libraries/plplot {
     inherit (darwin.apple_sdk.frameworks) Cocoa;
   };
@@ -9048,9 +10505,13 @@ with pkgs;
 
   hashcash = callPackage ../tools/security/hashcash { };
 
+<<<<<<< HEAD
   hashcat = callPackage ../tools/security/hashcat {
     inherit (darwin.apple_sdk.frameworks) Foundation IOKit Metal OpenCL;
   };
+=======
+  hashcat = callPackage ../tools/security/hashcat { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   hashcat-utils = callPackage ../tools/security/hashcat-utils { };
 
@@ -9088,6 +10549,7 @@ with pkgs;
 
   ham = pkgs.perlPackages.ham;
 
+<<<<<<< HEAD
   hamsket = callPackage ../applications/networking/instant-messengers/hamsket { };
 
   hardinfo = callPackage ../tools/system/hardinfo { };
@@ -9095,6 +10557,11 @@ with pkgs;
   harmonia = callPackage ../tools/package-management/harmonia {
     nix = nixVersions.unstable;
   };
+=======
+  hardinfo = callPackage ../tools/system/hardinfo { };
+
+  harmonia = callPackage ../tools/package-management/harmonia { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   hayagriva = callPackage ../tools/typesetting/hayagriva { };
 
@@ -9110,8 +10577,11 @@ with pkgs;
 
   hdaps-gl = callPackage ../tools/misc/hdaps-gl { };
 
+<<<<<<< HEAD
   hddfancontrol = callPackage ../tools/system/hddfancontrol { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   hddtemp = callPackage ../tools/misc/hddtemp { };
 
   hdf4 = callPackage ../tools/misc/hdf4 { };
@@ -9234,8 +10704,11 @@ with pkgs;
 
   httpfs2 = callPackage ../tools/filesystems/httpfs { };
 
+<<<<<<< HEAD
   httprobe = callPackage ../tools/networking/httprobe { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   httpstat = callPackage ../tools/networking/httpstat { };
 
   httptunnel = callPackage ../tools/networking/httptunnel { };
@@ -9280,8 +10753,11 @@ with pkgs;
 
   ibniz = callPackage ../tools/graphics/ibniz { };
 
+<<<<<<< HEAD
   icebreaker = callPackage ../servers/icebreaker { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   icecast = callPackage ../servers/icecast { };
 
   icemon = libsForQt5.callPackage ../applications/networking/icemon { };
@@ -9319,9 +10795,15 @@ with pkgs;
   idevicerestore = callPackage ../tools/misc/idevicerestore { };
 
   inherit (callPackages ../tools/filesystems/irods rec {
+<<<<<<< HEAD
     stdenv = llvmPackages_13.libcxxStdenv;
     libcxx = llvmPackages_13.libcxx;
     boost = boost178.override { inherit stdenv; };
+=======
+    stdenv = llvmPackages.libcxxStdenv;
+    libcxx = llvmPackages.libcxx;
+    boost = boost17x.override { inherit stdenv; };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     fmt = fmt_8.override { inherit stdenv; };
     nanodbc_llvm = nanodbc.override { inherit stdenv; };
     avro-cpp_llvm = avro-cpp.override { inherit stdenv boost; };
@@ -9347,10 +10829,13 @@ with pkgs;
 
   ike-scan = callPackage ../tools/security/ike-scan { };
 
+<<<<<<< HEAD
   ilspycmd = callPackage ../development/tools/ilspycmd {
     inherit (darwin) autoSignDarwinBinariesHook;
   };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   imapsync = callPackage ../tools/networking/imapsync { };
 
   imgur-screenshot = callPackage ../tools/graphics/imgur-screenshot { };
@@ -9371,7 +10856,11 @@ with pkgs;
 
   infisical = callPackage ../development/tools/infisical { };
 
+<<<<<<< HEAD
   inform6 = darwin.apple_sdk_11_0.callPackage ../development/compilers/inform6 { };
+=======
+  inform6 = callPackage ../development/compilers/inform6 { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   inform7 = callPackage ../development/compilers/inform7 { };
 
@@ -9432,11 +10921,19 @@ with pkgs;
   iperf3 = callPackage ../tools/networking/iperf/3.nix { };
   iperf = iperf3;
 
+<<<<<<< HEAD
   iperf3d = callPackage ../tools/networking/iperf3d { };
 
   ipfetch = callPackage ../tools/networking/ipfetch { };
 
   ipfs-cluster = callPackage ../applications/networking/ipfs-cluster { };
+=======
+  ipfetch = callPackage ../tools/networking/ipfetch { };
+
+  ipfs-cluster = callPackage ../applications/networking/ipfs-cluster {
+    buildGoModule = buildGo119Module; # go 1.20 build failure
+  };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   ipfs-upload-client = callPackage ../applications/networking/ipfs-upload-client { };
 
@@ -9450,8 +10947,11 @@ with pkgs;
 
   ipmiutil = callPackage ../tools/system/ipmiutil { };
 
+<<<<<<< HEAD
   ipatool = callPackage ../applications/misc/ipatool { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ipmicfg = callPackage ../applications/misc/ipmicfg { };
 
   ipmiview = callPackage ../applications/misc/ipmiview { };
@@ -9465,8 +10965,11 @@ with pkgs;
   ipinfo = callPackage ../tools/networking/ipinfo { };
 
   ipscan = callPackage ../tools/security/ipscan { };
+<<<<<<< HEAD
   # ipscan is commonly known under the name angryipscanner
   angryipscanner = ipscan;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   ipv6calc = callPackage ../tools/networking/ipv6calc { };
 
@@ -9474,10 +10977,13 @@ with pkgs;
 
   irker = callPackage ../servers/irker { };
 
+<<<<<<< HEAD
   iroh = callPackage ../applications/networking/iroh { };
 
   irrd = callPackage ../servers/misc/irrd { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ised = callPackage ../tools/misc/ised { };
 
   isl = isl_0_20;
@@ -9487,9 +10993,17 @@ with pkgs;
   isl_0_20 = callPackage ../development/libraries/isl/0.20.0.nix { };
   isl_0_24 = callPackage ../development/libraries/isl/0.24.0.nix { };
 
+<<<<<<< HEAD
   ispike = callPackage ../development/libraries/science/robotics/ispike { };
 
   isrcsubmit = callPackage ../tools/audio/isrcsubmit { };
+=======
+  ispike = callPackage ../development/libraries/science/robotics/ispike {
+    boost = boost16x;
+  };
+
+  isrcsubmit = callPackage ../tools/audio/isrcsubmit { stdenv = gcc10StdenvCompat; };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   isync = callPackage ../tools/networking/isync {
     inherit (darwin.apple_sdk.frameworks) Security;
@@ -9517,7 +11031,13 @@ with pkgs;
     usePulseaudio = true;
   };
 
+<<<<<<< HEAD
   jaq = callPackage ../development/tools/jaq { };
+=======
+  jaq = callPackage ../development/tools/jaq {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   jasmin-compiler = callPackage ../development/compilers/jasmin-compiler { };
 
@@ -9537,6 +11057,7 @@ with pkgs;
 
   jekyll = callPackage ../applications/misc/jekyll { };
 
+<<<<<<< HEAD
   jello = with python3Packages; toPythonApplication jello;
 
   jen = callPackage ../tools/text/jen { };
@@ -9545,6 +11066,10 @@ with pkgs;
 
   jf = callPackage ../development/tools/jf { };
 
+=======
+  jet = callPackage ../development/tools/jet { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   jfmt = callPackage ../development/tools/jfmt { };
 
   jfsutils = callPackage ../tools/filesystems/jfsutils { };
@@ -9570,14 +11095,20 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) AppKit;
   };
 
+<<<<<<< HEAD
   stalwart-mail = callPackage ../servers/mail/stalwart { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   jmespath = callPackage ../development/tools/jmespath { };
 
   juicefs = callPackage ../tools/filesystems/juicefs { };
 
+<<<<<<< HEAD
   juicity = callPackage ../tools/networking/juicity { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   jmtpfs = callPackage ../tools/filesystems/jmtpfs { };
 
   jnettop = callPackage ../tools/networking/jnettop { };
@@ -9598,8 +11129,11 @@ with pkgs;
 
   jot = callPackage ../applications/misc/jot { };
 
+<<<<<<< HEAD
   jotdown = callPackage ../tools/text/jotdown { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   journaldriver = callPackage ../tools/misc/journaldriver { };
 
   jp = callPackage ../development/tools/jp { };
@@ -9638,12 +11172,17 @@ with pkgs;
 
   jsduck = callPackage ../development/tools/jsduck { };
 
+<<<<<<< HEAD
   jsluice = callPackage ../tools/security/jsluice { };
 
   json-schema-for-humans = with python3Packages; toPythonApplication json-schema-for-humans;
 
   jsonfmt = callPackage ../development/tools/misc/jsonfmt { };
 
+=======
+  json-schema-for-humans = with python3Packages; toPythonApplication json-schema-for-humans;
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   jsonwatch = callPackage ../tools/misc/jsonwatch {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
@@ -9658,12 +11197,18 @@ with pkgs;
 
   jove = callPackage ../applications/editors/jove { };
 
+<<<<<<< HEAD
+=======
+  jucipp = callPackage ../applications/editors/jucipp { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   jugglinglab = callPackage ../tools/misc/jugglinglab { };
 
   jupp = callPackage ../applications/editors/jupp { };
 
   jupyter = callPackage ../applications/editors/jupyter { };
 
+<<<<<<< HEAD
   jupyter-all = jupyter.override {
     definitions = {
       clojure = clojupyter.definition;
@@ -9674,6 +11219,8 @@ with pkgs;
 
   jupyter-console = callPackage ../applications/editors/jupyter/console.nix { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   jupyter-kernel = callPackage ../applications/editors/jupyter/kernel.nix { };
 
   justify = callPackage ../tools/text/justify { };
@@ -9731,8 +11278,11 @@ with pkgs;
 
   keepalived = callPackage ../tools/networking/keepalived { };
 
+<<<<<<< HEAD
   keepwn = callPackage ../tools/security/keepwn { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   kestrel = callPackage ../tools/security/kestrel { };
 
   kexec-tools = callPackage ../os-specific/linux/kexec-tools { };
@@ -9743,13 +11293,21 @@ with pkgs;
 
   kent = callPackage ../applications/science/biology/kent { };
 
+<<<<<<< HEAD
   keybase = darwin.apple_sdk_11_0.callPackage ../tools/security/keybase {
+=======
+  keybase = callPackage ../tools/security/keybase {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     # Reasoning for the inherited apple_sdk.frameworks:
     # 1. specific compiler errors about: AVFoundation, AudioToolbox, MediaToolbox
     # 2. the rest are added from here: https://github.com/keybase/client/blob/68bb8c893c5214040d86ea36f2f86fbb7fac8d39/go/chat/attachments/preview_darwin.go#L7
     #      #cgo LDFLAGS: -framework AVFoundation -framework CoreFoundation -framework ImageIO -framework CoreMedia  -framework Foundation -framework CoreGraphics -lobjc
     #    with the exception of CoreFoundation, due to the warning in https://github.com/NixOS/nixpkgs/blob/master/pkgs/os-specific/darwin/apple-sdk/frameworks.nix#L25
+<<<<<<< HEAD
     inherit (darwin.apple_sdk_11_0.frameworks) AVFoundation AudioToolbox ImageIO CoreMedia Foundation CoreGraphics MediaToolbox;
+=======
+    inherit (darwin.apple_sdk.frameworks) AVFoundation AudioToolbox ImageIO CoreMedia Foundation CoreGraphics MediaToolbox;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   kbfs = callPackage ../tools/security/keybase/kbfs.nix { };
@@ -9768,6 +11326,11 @@ with pkgs;
     jdk = jdk11;
   };
 
+<<<<<<< HEAD
+=======
+  kfctl = callPackage ../applications/networking/cluster/kfctl { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   kluctl = callPackage ../applications/networking/cluster/kluctl { };
 
   kibana7 = callPackage ../development/tools/misc/kibana/7.x.nix { };
@@ -9785,6 +11348,7 @@ with pkgs;
 
   klystrack = callPackage ../applications/audio/klystrack { };
 
+<<<<<<< HEAD
   knit = callPackage ../development/tools/build-managers/knit { };
 
   knockpy = callPackage ../tools/security/knockpy { };
@@ -9793,6 +11357,10 @@ with pkgs;
 
   kool = callPackage ../development/tools/misc/kool { };
 
+=======
+  knockpy = callPackage ../tools/security/knockpy { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   kore = callPackage ../development/web/kore {
     openssl = openssl_1_1;
   };
@@ -9823,7 +11391,13 @@ with pkgs;
 
   kdiff3 = libsForQt5.callPackage ../tools/text/kdiff3 { };
 
+<<<<<<< HEAD
   kube-router = callPackage ../applications/networking/cluster/kube-router { };
+=======
+  kube-router = callPackage ../applications/networking/cluster/kube-router {
+    buildGoModule = buildGo119Module; # go 1.20 build failure
+  };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   kubepug = callPackage ../development/tools/kubepug { };
 
@@ -9831,7 +11405,13 @@ with pkgs;
 
   kubergrunt = callPackage ../applications/networking/cluster/kubergrunt { };
 
+<<<<<<< HEAD
   kubo = callPackage ../applications/networking/kubo { };
+=======
+  kubo = callPackage ../applications/networking/kubo {
+    buildGoModule = buildGo119Module; # go 1.20 build failure
+  };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   kubo-migrator-all-fs-repo-migrations = callPackage ../applications/networking/kubo-migrator/all-migrations.nix { };
   kubo-migrator-unwrapped = callPackage ../applications/networking/kubo-migrator/unwrapped.nix { };
@@ -9855,15 +11435,25 @@ with pkgs;
 
   lalezar-fonts = callPackage ../data/fonts/lalezar-fonts { };
 
+<<<<<<< HEAD
   lalrpop = callPackage ../development/tools/lalrpop { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   last-resort = callPackage ../data/fonts/last-resort { };
 
   ldc = callPackage ../development/compilers/ldc { };
 
   ligo = callPackage ../development/compilers/ligo {
     coq = coq_8_14;
+<<<<<<< HEAD
     ocamlPackages = ocaml-ng.ocamlPackages_4_14_janeStreet_0_15;
+=======
+  };
+
+  ldgallery = callPackage ../tools/graphics/ldgallery {
+    inherit (darwin.apple_sdk.frameworks) CoreServices;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   lego = callPackage ../tools/admin/lego { };
@@ -9913,6 +11503,11 @@ with pkgs;
     ffmpeg = ffmpeg-full;
   };
 
+<<<<<<< HEAD
+=======
+  lfs = callPackage ../tools/filesystems/lfs { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   linuxwave = callPackage ../tools/audio/linuxwave { };
 
   littlefs-fuse = callPackage ../tools/filesystems/littlefs-fuse { };
@@ -9935,8 +11530,11 @@ with pkgs;
 
   lockfileProgs = callPackage ../tools/misc/lockfile-progs { };
 
+<<<<<<< HEAD
   loganalyzer = libsForQt5.callPackage ../development/tools/loganalyzer { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   logstash7 = callPackage ../tools/misc/logstash/7.x.nix {
     # https://www.elastic.co/support/matrix#logstash-and-jvm
     jre = jdk11_headless;
@@ -9998,14 +11596,18 @@ with pkgs;
 
   mask = callPackage ../development/tools/mask { };
 
+<<<<<<< HEAD
   maskromtool = qt6Packages.callPackage ../tools/graphics/maskromtool { };
 
   mastotool = callPackage ../tools/misc/mastotool { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   mathpix-snipping-tool = callPackage ../tools/misc/mathpix-snipping-tool { };
 
   matrix-conduit = callPackage ../servers/matrix-conduit { };
 
+<<<<<<< HEAD
   matrix-sliding-sync = callPackage ../servers/matrix-synapse/sliding-sync { };
 
   matrix-synapse = callPackage ../servers/matrix-synapse/wrapper.nix { };
@@ -10022,15 +11624,31 @@ with pkgs;
   matrix-appservice-discord = callPackage ../servers/matrix-appservice-discord {
     matrix-sdk-crypto-nodejs = matrix-sdk-crypto-nodejs-0_1_0-beta_3;
   };
+=======
+  matrix-synapse = callPackage ../servers/matrix-synapse { };
+
+  matrix-synapse-plugins = recurseIntoAttrs matrix-synapse.plugins;
+
+  matrix-synapse-tools = recurseIntoAttrs matrix-synapse.tools;
+
+  matrix-appservice-irc = callPackage ../servers/matrix-synapse/matrix-appservice-irc { };
+
+  matrix-appservice-slack = callPackage ../servers/matrix-synapse/matrix-appservice-slack { };
+
+  matrix-appservice-discord = callPackage ../servers/matrix-appservice-discord { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   matrix-corporal = callPackage ../servers/matrix-corporal { };
 
   matrix-hookshot = callPackage ../servers/matrix-synapse/matrix-hookshot { };
 
+<<<<<<< HEAD
   maubot = with python3Packages; toPythonApplication maubot;
 
   mautrix-discord = callPackage ../servers/mautrix-discord { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   mautrix-facebook = callPackage ../servers/mautrix-facebook { };
 
   mautrix-googlechat = callPackage ../servers/mautrix-googlechat { };
@@ -10067,8 +11685,11 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) CoreServices;
   };
 
+<<<<<<< HEAD
   mdbook-i18n-helpers = callPackage ../tools/text/mdbook-i18n-helpers { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   mdbook-katex = callPackage ../tools/text/mdbook-katex {
     inherit (darwin.apple_sdk.frameworks) CoreServices;
   };
@@ -10095,10 +11716,13 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) CoreServices;
   };
 
+<<<<<<< HEAD
   mdbook-toc = callPackage ../tools/text/mdbook-toc {
     inherit (darwin.apple_sdk.frameworks) CoreServices;
   };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   mdbook-admonish = callPackage ../tools/text/mdbook-admonish {
     inherit (darwin.apple_sdk.frameworks) CoreServices;
   };
@@ -10113,7 +11737,11 @@ with pkgs;
   };
 
   meilisearch = callPackage ../servers/search/meilisearch {
+<<<<<<< HEAD
     inherit (darwin.apple_sdk_11_0.frameworks) Security;
+=======
+    inherit (darwin.apple_sdk.frameworks) Security DiskArbitration Foundation;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   memtester = callPackage ../tools/system/memtester { };
@@ -10134,6 +11762,7 @@ with pkgs;
 
   ministat = callPackage ../tools/misc/ministat { };
 
+<<<<<<< HEAD
   minizign = callPackage ../tools/security/minizign { };
 
   mitm6 = callPackage ../tools/security/mitm6 { };
@@ -10141,6 +11770,9 @@ with pkgs;
   mjolnir = callPackage ../servers/mjolnir {
     matrix-sdk-crypto-nodejs = matrix-sdk-crypto-nodejs-0_1_0-beta_3;
   };
+=======
+  mjolnir = callPackage ../servers/mjolnir { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   mmutils = callPackage ../tools/X11/mmutils { };
 
@@ -10164,12 +11796,17 @@ with pkgs;
 
   multitail = callPackage ../tools/misc/multitail { };
 
+<<<<<<< HEAD
   mvebu64boot = callPackage ../tools/misc/mvebu64boot { };
 
   mx-puppet-discord = callPackage ../servers/mx-puppet-discord { };
 
   mx-takeover = callPackage ../tools/security/mx-takeover { };
 
+=======
+  mx-puppet-discord = callPackage ../servers/mx-puppet-discord { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   mxt-app = callPackage ../misc/mxt-app { };
 
   naabu = callPackage ../tools/security/naabu { };
@@ -10178,8 +11815,11 @@ with pkgs;
     pythonPackages = python3Packages;
   };
 
+<<<<<<< HEAD
   nanoemoji = python3Packages.callPackage ../tools/misc/nanoemoji { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nagelfar = callPackage ../development/tools/nagelfar { };
 
   nats-top = callPackage ../tools/system/nats-top { };
@@ -10194,15 +11834,21 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
+<<<<<<< HEAD
   nbutools = callPackage ../tools/security/nbutools { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ncrack = callPackage ../tools/security/ncrack { };
 
   nerdctl = callPackage ../applications/networking/cluster/nerdctl { };
 
   netdata = callPackage ../tools/system/netdata {
     inherit (darwin.apple_sdk.frameworks) CoreFoundation IOKit;
+<<<<<<< HEAD
     protobuf = protobuf3_21;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
   # Exposed here so the bots can auto-upgrade it
   netdata-go-plugins = callPackage ../tools/system/netdata/go.d.plugin.nix { };
@@ -10214,8 +11860,11 @@ with pkgs;
 
   netsniff-ng = callPackage ../tools/networking/netsniff-ng { };
 
+<<<<<<< HEAD
   networkminer = callPackage ../tools/security/networkminer { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nixpacks = callPackage ../applications/virtualization/nixpacks { };
 
   nkeys = callPackage ../tools/system/nkeys { };
@@ -10251,6 +11900,13 @@ with pkgs;
   nodejs-slim_18 = callPackage ../development/web/nodejs/v18.nix {
     enableNpm = false;
   };
+<<<<<<< HEAD
+=======
+  nodejs_19 = callPackage ../development/web/nodejs/v19.nix { };
+  nodejs-slim_19 = callPackage ../development/web/nodejs/v19.nix {
+    enableNpm = false;
+  };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nodejs_20 = callPackage ../development/web/nodejs/v20.nix { };
   nodejs-slim_20 = callPackage ../development/web/nodejs/v20.nix {
     enableNpm = false;
@@ -10263,8 +11919,14 @@ with pkgs;
 
   npmHooks = callPackage ../build-support/node/build-npm-package/hooks { };
 
+<<<<<<< HEAD
   inherit (callPackage ../build-support/node/fetch-npm-deps { })
     fetchNpmDeps prefetch-npm-deps;
+=======
+  inherit (callPackage ../build-support/node/fetch-npm-deps {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  }) fetchNpmDeps prefetch-npm-deps;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nodePackages_latest = dontRecurseIntoAttrs nodejs_latest.pkgs;
 
@@ -10272,10 +11934,13 @@ with pkgs;
 
   node2nix = nodePackages.node2nix;
 
+<<<<<<< HEAD
   notesnook = callPackage ../applications/misc/notesnook { };
 
   oddjob = callPackage ../os-specific/linux/oddjob { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   openipmi = callPackage ../tools/system/openipmi { };
 
   ox = callPackage ../applications/editors/ox { };
@@ -10290,8 +11955,11 @@ with pkgs;
 
   kea = callPackage ../tools/networking/kea { };
 
+<<<<<<< HEAD
   keama = callPackage ../tools/networking/keama { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   iredis = callPackage ../tools/admin/iredis { };
 
   ispell = callPackage ../tools/text/ispell { };
@@ -10300,22 +11968,37 @@ with pkgs;
 
   jbofihe = callPackage ../tools/text/jbofihe { };
 
+<<<<<<< HEAD
   jbrowse = callPackage ../applications/science/biology/jbrowse { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   jumanpp = callPackage ../tools/text/jumanpp { };
 
   jump = callPackage ../tools/system/jump { };
 
+<<<<<<< HEAD
+=======
+  larynx = callPackage ../tools/audio/larynx { };
+
+  larynx-train = with python3Packages; toPythonApplication larynx-train;
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   latex2html = callPackage ../tools/misc/latex2html { };
 
   lazycli = callPackage ../tools/misc/lazycli { };
 
+<<<<<<< HEAD
   lavat = callPackage ../tools/misc/lavat { };
 
   lcdf-typetools = callPackage ../tools/misc/lcdf-typetools { };
 
   lcsync = callPackage ../applications/networking/sync/lcsync { };
 
+=======
+  lcdf-typetools = callPackage ../tools/misc/lcdf-typetools { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ldapdomaindump = with python3Packages; toPythonApplication ldapdomaindump;
 
   ldapmonitor = callPackage ../tools/security/ldapmonitor { };
@@ -10324,7 +12007,11 @@ with pkgs;
 
   ldapvi = callPackage ../tools/misc/ldapvi { };
 
+<<<<<<< HEAD
   ldeep = callPackage ../tools/security/ldeep { };
+=======
+  ldeep = python3Packages.callPackage ../tools/security/ldeep { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   ldns = callPackage ../development/libraries/ldns { };
 
@@ -10336,9 +12023,15 @@ with pkgs;
 
   leatherman = callPackage ../development/libraries/leatherman { };
 
+<<<<<<< HEAD
   lact = callPackage ../tools/system/lact { };
 
   ledit = callPackage ../tools/misc/ledit { };
+=======
+  ledit = callPackage ../tools/misc/ledit {
+    inherit (ocaml-ng.ocamlPackages_4_12) ocaml camlp5;
+  };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   ledmon = callPackage ../tools/system/ledmon { };
 
@@ -10348,8 +12041,11 @@ with pkgs;
 
   lemmy-help = callPackage ../tools/misc/lemmy-help { };
 
+<<<<<<< HEAD
   lerpn = callPackage ../tools/misc/lerpn { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   lethe = callPackage ../tools/security/lethe {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
@@ -10455,8 +12151,11 @@ with pkgs;
 
   libtirpc = callPackage ../development/libraries/ti-rpc { };
 
+<<<<<<< HEAD
   libtickit = callPackage ../development/libraries/libtickit { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   libtins = callPackage ../development/libraries/libtins { };
 
   libtree = callPackage ../development/tools/misc/libtree { };
@@ -10471,6 +12170,11 @@ with pkgs;
 
   libmbim = callPackage ../development/libraries/libmbim { };
 
+<<<<<<< HEAD
+=======
+  libmongo-client = callPackage ../development/libraries/libmongo-client { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   libmongocrypt = callPackage ../development/libraries/libmongocrypt { };
 
   libmesode = callPackage ../development/libraries/libmesode { };
@@ -10551,8 +12255,11 @@ with pkgs;
 
   linux-exploit-suggester = callPackage ../tools/security/linux-exploit-suggester { };
 
+<<<<<<< HEAD
   linux-gpib = callPackage ../applications/science/electronics/linux-gpib/user.nix { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   linuxquota = callPackage ../tools/misc/linuxquota { };
 
   lipl = callPackage ../tools/misc/lipl { };
@@ -10561,8 +12268,11 @@ with pkgs;
 
   lmp = callPackage ../tools/security/lmp { };
 
+<<<<<<< HEAD
   localproxy = callPackage ../applications/networking/localproxy { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   localstack = with python3Packages; toPythonApplication localstack;
 
   localtime = callPackage ../tools/system/localtime { };
@@ -10623,14 +12333,21 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) CoreText;
   };
 
+<<<<<<< HEAD
   lwc = callPackage ../tools/misc/lwc { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   lxc = callPackage ../os-specific/linux/lxc {
     autoreconfHook = buildPackages.autoreconfHook269;
   };
   lxcfs = callPackage ../os-specific/linux/lxcfs { };
+<<<<<<< HEAD
   lxd = callPackage ../tools/admin/lxd/wrapper.nix { };
   lxd-unwrapped = callPackage ../tools/admin/lxd { };
+=======
+  lxd = callPackage ../tools/admin/lxd { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   lxd-image-server = callPackage ../tools/virtualization/lxd-image-server { };
 
@@ -10644,6 +12361,13 @@ with pkgs;
 
   lziprecover = callPackage ../tools/compression/lziprecover { };
 
+<<<<<<< HEAD
+=======
+  luxcorerender = callPackage ../tools/graphics/luxcorerender {
+    openimagedenoise = openimagedenoise_1_2_x;
+  };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   xz = callPackage ../tools/compression/xz { };
 
   lz4 = callPackage ../tools/compression/lz4 { };
@@ -10680,10 +12404,13 @@ with pkgs;
   );
   bubblemail = callPackage ../applications/networking/mailreaders/bubblemail { };
 
+<<<<<<< HEAD
   mailpit = callPackage ../servers/mail/mailpit {
     libtool = if stdenv.isDarwin then darwin.cctools else libtool;
   };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   mailsend = callPackage ../tools/networking/mailsend { };
 
   mailutils = callPackage ../tools/networking/mailutils {
@@ -10691,7 +12418,10 @@ with pkgs;
   };
 
   matrix-sdk-crypto-nodejs = callPackage ../development/libraries/matrix-sdk-crypto-nodejs { };
+<<<<<<< HEAD
   matrix-sdk-crypto-nodejs-0_1_0-beta_3 = callPackage ../development/libraries/matrix-sdk-crypto-nodejs/beta3.nix { };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   email = callPackage ../tools/networking/email { };
 
@@ -10751,8 +12481,11 @@ with pkgs;
 
   mediawiki = callPackage ../servers/web-apps/mediawiki { };
 
+<<<<<<< HEAD
   mediawriter = callPackage ../tools/system/mediawriter { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   memtier-benchmark = callPackage ../tools/networking/memtier-benchmark { };
 
   memtest86-efi = callPackage ../tools/misc/memtest86-efi { };
@@ -10833,7 +12566,17 @@ with pkgs;
     pythonPackages = python3Packages;
   };
 
+<<<<<<< HEAD
   mirakurun = callPackage ../applications/video/mirakurun { };
+=======
+  mirakurun = callPackage ../applications/video/mirakurun {
+    yarn = yarn.override { nodejs = nodejs_16; };
+    inherit (callPackage ../development/tools/yarn2nix-moretea/yarn2nix {
+      nodejs = nodejs_16;
+      yarn = yarn.override { nodejs = nodejs_16; };
+    }) mkYarnPackage;
+  };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   miredo = callPackage ../tools/networking/miredo { };
 
@@ -10877,8 +12620,11 @@ with pkgs;
 
   modsecurity-crs = callPackage ../tools/security/modsecurity-crs { };
 
+<<<<<<< HEAD
   molecule = with python3Packages; toPythonApplication molecule;
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   molly-guard = callPackage ../os-specific/linux/molly-guard { };
 
   molotov = callPackage ../applications/video/molotov { };
@@ -10903,6 +12649,7 @@ with pkgs;
     electron = electron_22;
   };
 
+<<<<<<< HEAD
   mosh = callPackage ../tools/networking/mosh {
     protobuf = protobuf3_21;
   };
@@ -10911,14 +12658,23 @@ with pkgs;
 
   mount-zip = callPackage ../tools/filesystems/mount-zip { };
 
+=======
+  mosh = callPackage ../tools/networking/mosh { };
+
+  motrix = callPackage ../tools/networking/motrix { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   mpage = callPackage ../tools/text/mpage { };
 
   mprime = callPackage ../tools/misc/mprime { };
 
   mpw = callPackage ../tools/security/mpw { };
 
+<<<<<<< HEAD
   mqtt_cpp = callPackage ../development/libraries/mqtt_cpp { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   mr = callPackage ../applications/version-management/mr { };
 
   mrsh = callPackage ../shells/mrsh { };
@@ -11040,7 +12796,13 @@ with pkgs;
 
   netavark = callPackage ../tools/networking/netavark { };
 
+<<<<<<< HEAD
   netcdf = callPackage ../development/libraries/netcdf { };
+=======
+  netcdf = callPackage ../development/libraries/netcdf {
+    hdf5 = hdf5.override { usev110Api = true; };
+  };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   netcdf-mpi = netcdf.override {
     hdf5 = hdf5-mpi.override { usev110Api = true; };
@@ -11073,8 +12835,11 @@ with pkgs;
   inherit (callPackage ../servers/web-apps/netbox { })
     netbox_3_3 netbox;
 
+<<<<<<< HEAD
   netbox2netshot = callPackage ../tools/admin/netbox2netshot { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   netcat = libressl.nc;
 
   netcat-gnu = callPackage ../tools/networking/netcat { };
@@ -11091,8 +12856,11 @@ with pkgs;
 
   netlify-cli = callPackage ../development/web/netlify-cli { };
 
+<<<<<<< HEAD
   netlistsvg = callPackage ../applications/science/logic/netlistsvg { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   netpbm = callPackage ../tools/graphics/netpbm { };
 
   netproc = callPackage ../tools/networking/netproc { };
@@ -11136,6 +12904,7 @@ with pkgs;
   grocy = callPackage ../servers/grocy { };
 
   inherit (callPackage ../servers/nextcloud {})
+<<<<<<< HEAD
     nextcloud24 nextcloud25 nextcloud26 nextcloud27;
 
   nextcloud24Packages = throw "Nextcloud24 is EOL!";
@@ -11148,6 +12917,17 @@ with pkgs;
   nextcloud27Packages = callPackage ../servers/nextcloud/packages {
     apps = lib.importJSON ../servers/nextcloud/packages/27.json;
   };
+=======
+    nextcloud24 nextcloud25 nextcloud26;
+
+  nextcloud24Packages = throw "Nextcloud24 is EOL!";
+  nextcloud25Packages = ( callPackage ../servers/nextcloud/packages {
+    apps = lib.importJSON ../servers/nextcloud/packages/25.json;
+  });
+  nextcloud26Packages = ( callPackage ../servers/nextcloud/packages {
+    apps = lib.importJSON ../servers/nextcloud/packages/26.json;
+  });
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nextcloud-client = libsForQt5.callPackage ../applications/networking/nextcloud-client { };
 
@@ -11167,15 +12947,25 @@ with pkgs;
 
   nifi = callPackage ../servers/web-apps/nifi { };
 
+<<<<<<< HEAD
   nitter = nim2Packages.callPackage ../servers/nitter { };
+=======
+  nitter = callPackage ../servers/nitter { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   noip = callPackage ../tools/networking/noip { };
 
   inherit (callPackage ../applications/networking/cluster/nomad { })
     nomad
+<<<<<<< HEAD
     nomad_1_4
     nomad_1_5
     nomad_1_6
+=======
+    nomad_1_2
+    nomad_1_3
+    nomad_1_4
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     ;
 
   nomad-autoscaler = callPackage ../applications/networking/cluster/nomad-autoscaler { };
@@ -11190,14 +12980,20 @@ with pkgs;
 
   nb = callPackage ../tools/misc/nb { };
 
+<<<<<<< HEAD
   nbqa = callPackage ../tools/misc/nbqa { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   kb = callPackage ../tools/misc/kb { };
 
   notable = callPackage ../applications/misc/notable { };
 
+<<<<<<< HEAD
   npm-check = callPackage ../development/tools/npm-check { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nth = with python3Packages; toPythonApplication name-that-hash;
 
   ntlmrecon = callPackage ../tools/security/ntlmrecon { };
@@ -11212,7 +13008,11 @@ with pkgs;
 
   nvidia-thrust-intel = callPackage ../development/libraries/nvidia-thrust {
     hostSystem = "TBB";
+<<<<<<< HEAD
     deviceSystem = if config.cudaSupport then "CUDA" else "TBB";
+=======
+    deviceSystem = if config.cudaSupport or false then "CUDA" else "TBB";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nvidia-thrust-cuda = callPackage ../development/libraries/nvidia-thrust {
@@ -11231,6 +13031,7 @@ with pkgs;
 
   mtm = callPackage ../tools/misc/mtm { };
 
+<<<<<<< HEAD
   op-geth = callPackage ../applications/blockchains/optimism/geth.nix {
     inherit (darwin) libobjc;
     inherit (darwin.apple_sdk.frameworks) IOKit;
@@ -11238,6 +13039,8 @@ with pkgs;
 
   optimism = callPackage ../applications/blockchains/optimism { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pa_applet = callPackage ../tools/audio/pa-applet { };
 
   pandoc-acro = python3Packages.callPackage ../tools/misc/pandoc-acro { };
@@ -11268,8 +13071,11 @@ with pkgs;
 
   pcmsolver = callPackage ../development/libraries/pcmsolver { };
 
+<<<<<<< HEAD
   pegasus-frontend = libsForQt5.callPackage ../games/pegasus-frontend {};
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pgbadger = perlPackages.callPackage ../tools/misc/pgbadger { };
 
   pffft = callPackage ../development/libraries/pffft { };
@@ -11332,6 +13138,7 @@ with pkgs;
 
   notary = callPackage ../tools/security/notary { };
 
+<<<<<<< HEAD
   notation = callPackage ../tools/security/notation { };
 
   notify-osd = callPackage ../applications/misc/notify-osd { };
@@ -11340,6 +13147,10 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Cocoa;
   };
 
+=======
+  notify-osd = callPackage ../applications/misc/notify-osd { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   notes-up = callPackage ../applications/office/notes-up { };
 
   notify-osd-customizable = callPackage ../applications/misc/notify-osd-customizable { };
@@ -11348,9 +13159,13 @@ with pkgs;
 
   nq = callPackage ../tools/system/nq { };
 
+<<<<<<< HEAD
   nsjail = callPackage ../tools/security/nsjail {
     protobuf = protobuf3_21;
   };
+=======
+  nsjail = callPackage ../tools/security/nsjail { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nss_pam_ldapd = callPackage ../tools/networking/nss-pam-ldapd { };
 
@@ -11402,10 +13217,19 @@ with pkgs;
   nylon = callPackage ../tools/networking/nylon { };
 
   nym = callPackage ../applications/networking/nym {
+<<<<<<< HEAD
     inherit (darwin.apple_sdk.frameworks) Security CoreServices;
   };
 
   nzbget = callPackage ../tools/networking/nzbget { };
+=======
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
+  nzbget = callPackage ../tools/networking/nzbget {
+    openssl = openssl_1_1;
+  };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nzbhydra2 = callPackage ../servers/nzbhydra2 {
     # You need Java (at least 8, at most 15)
@@ -11440,8 +13264,11 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
+<<<<<<< HEAD
   onthespot = libsForQt5.callPackage ../applications/misc/onthespot { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   opencorsairlink = callPackage ../tools/misc/opencorsairlink { };
 
   openfpgaloader = callPackage ../development/embedded/fpga/openfpgaloader { };
@@ -11482,9 +13309,13 @@ with pkgs;
 
   oh-my-zsh = callPackage ../shells/zsh/oh-my-zsh { };
 
+<<<<<<< HEAD
   ola = callPackage ../applications/misc/ola {
     protobuf = protobuf3_21;
   };
+=======
+  ola = callPackage ../applications/misc/ola { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   olive-editor = qt6Packages.callPackage ../applications/video/olive-editor {
     inherit (darwin.apple_sdk.frameworks) CoreFoundation;
@@ -11509,7 +13340,13 @@ with pkgs;
 
   onlykey = callPackage ../tools/security/onlykey { node_webkit = nwjs; };
 
+<<<<<<< HEAD
   ooniprobe-cli = callPackage ../tools/networking/ooniprobe-cli { };
+=======
+  ooniprobe-cli = callPackage ../tools/networking/ooniprobe-cli {
+    buildGoModule = buildGo119Module; # go 1.20 build failure
+  };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   openapi-generator-cli = callPackage ../tools/networking/openapi-generator-cli { jre = pkgs.jre_headless; };
   openapi-generator-cli-unstable = callPackage ../tools/networking/openapi-generator-cli/unstable.nix { jre = pkgs.jre_headless; };
@@ -11544,14 +13381,22 @@ with pkgs;
 
   open-ecard = callPackage ../tools/security/open-ecard { };
 
+<<<<<<< HEAD
   open-interpreter = callPackage ../tools/llm/open-interpreter { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   openjade = callPackage ../tools/text/sgml/openjade { };
 
   openhantek6022 = libsForQt5.callPackage ../applications/science/electronics/openhantek6022 { };
 
   openimagedenoise = callPackage ../development/libraries/openimagedenoise { };
 
+<<<<<<< HEAD
+=======
+  openimagedenoise_1_2_x = callPackage ../development/libraries/openimagedenoise/1_2_x.nix { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   openmvg = callPackage ../applications/science/misc/openmvg {
     inherit (llvmPackages) openmp;
   };
@@ -11655,8 +13500,11 @@ with pkgs;
 
   owncast = callPackage ../servers/owncast { };
 
+<<<<<<< HEAD
   owntracks-recorder = callPackage ../servers/owntracks-recorder { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   update-dotdee = with python3Packages; toPythonApplication update-dotdee;
 
   update-nix-fetchgit = haskell.lib.compose.justStaticExecutables haskellPackages.update-nix-fetchgit;
@@ -11697,8 +13545,11 @@ with pkgs;
     autoreconfHook = buildPackages.autoreconfHook269;
   };
 
+<<<<<<< HEAD
   org-stats = callPackage ../tools/misc/org-stats { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   orz = callPackage ../tools/compression/orz { };
 
   os-prober = callPackage ../tools/misc/os-prober { };
@@ -11706,7 +13557,11 @@ with pkgs;
   oshka = callPackage ../development/tools/oshka { };
 
   osl = libsForQt5.callPackage ../development/compilers/osl {
+<<<<<<< HEAD
     boost = boost179;
+=======
+    boost = boost17x;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   osqp = callPackage ../development/libraries/science/math/osqp { };
@@ -11717,8 +13572,11 @@ with pkgs;
 
   ostree = callPackage ../tools/misc/ostree { };
 
+<<<<<<< HEAD
   ostree-rs-ext = callPackage ../tools/misc/ostree-rs-ext { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   otel-cli = callPackage ../tools/misc/otel-cli { };
 
   otfcc = callPackage ../tools/misc/otfcc { };
@@ -11735,8 +13593,11 @@ with pkgs;
 
   oxker = callPackage ../applications/misc/oxker { };
 
+<<<<<<< HEAD
   oxlint = callPackage ../development/tools/oxlint { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ovh-ttyrec = callPackage ../tools/misc/ovh-ttyrec { };
 
   ovito = libsForQt5.callPackage ../applications/graphics/ovito {
@@ -11759,9 +13620,13 @@ with pkgs;
 
   p3x-onenote = callPackage ../applications/office/p3x-onenote { };
 
+<<<<<<< HEAD
   p4c = callPackage ../development/compilers/p4c {
     protobuf = protobuf3_21;
   };
+=======
+  p4c = callPackage ../development/compilers/p4c { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   p7zip = callPackage ../tools/archivers/p7zip { };
 
@@ -11827,10 +13692,13 @@ with pkgs;
     autoreconfHook = buildPackages.autoreconfHook269;
   };
 
+<<<<<<< HEAD
   parrot = callPackage ../applications/audio/parrot {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   patchutils = callPackage ../tools/text/patchutils { };
 
   patchutils_0_3_3 = callPackage ../tools/text/patchutils/0.3.3.nix { };
@@ -11889,7 +13757,13 @@ with pkgs;
 
   patchage = callPackage ../applications/audio/patchage { };
 
+<<<<<<< HEAD
   patchance = python3Packages.callPackage ../applications/audio/patchance { };
+=======
+  patchance = python3Packages.callPackage ../applications/audio/patchance {
+    inherit (qt5) qttools;
+  };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   patatt = callPackage ../development/tools/patatt { };
 
@@ -11931,8 +13805,11 @@ with pkgs;
 
   pdfcrack = callPackage ../tools/security/pdfcrack { };
 
+<<<<<<< HEAD
   pdfposter = callPackage ../applications/misc/pdfposter { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pdfsandwich = callPackage ../tools/typesetting/pdfsandwich { };
 
   pdftag = callPackage ../tools/graphics/pdftag { };
@@ -11945,8 +13822,11 @@ with pkgs;
 
   pdf-quench = callPackage ../applications/misc/pdf-quench { };
 
+<<<<<<< HEAD
   pdf-sign = callPackage ../tools/graphics/pdf-sign { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pdfarranger = callPackage ../applications/misc/pdfarranger { };
 
   briss = callPackage ../tools/graphics/briss { };
@@ -11986,6 +13866,7 @@ with pkgs;
 
   pfetch = callPackage ../tools/misc/pfetch { };
 
+<<<<<<< HEAD
   pfetch-rs = callPackage ../tools/misc/pfetch-rs { };
 
   pfstools = libsForQt5.callPackage ../tools/graphics/pfstools { };
@@ -11993,6 +13874,11 @@ with pkgs;
   phoc = callPackage ../applications/misc/phoc {
     wlroots = wlroots_0_15;
   };
+=======
+  pfstools = libsForQt5.callPackage ../tools/graphics/pfstools { };
+
+  phoc = callPackage ../applications/misc/phoc { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   phockup = callPackage ../applications/misc/phockup { };
 
@@ -12002,16 +13888,22 @@ with pkgs;
 
   pim6sd = callPackage ../servers/pim6sd { };
 
+<<<<<<< HEAD
   piper-phonemize = callPackage ../development/libraries/piper-phonemize { };
   piper-train = callPackage ../tools/audio/piper/train.nix { };
   piper-tts = callPackage ../tools/audio/piper { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   phosh = callPackage ../applications/window-managers/phosh { };
 
   phosh-mobile-settings = callPackage ../applications/window-managers/phosh/phosh-mobile-settings.nix { };
 
+<<<<<<< HEAD
   piknik = callPackage ../tools/networking/piknik { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pinentry = libsForQt5.callPackage ../tools/security/pinentry { };
 
   pinentry-curses = (lib.getOutput "curses" pinentry);
@@ -12113,8 +14005,11 @@ with pkgs;
 
   plotinus = callPackage ../tools/misc/plotinus { };
 
+<<<<<<< HEAD
   plots = callPackage ../applications/misc/plots { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   plotutils = callPackage ../tools/graphics/plotutils { };
 
   plowshare = callPackage ../tools/misc/plowshare { };
@@ -12193,15 +14088,27 @@ with pkgs;
 
   poretools = callPackage ../applications/science/biology/poretools { };
 
+<<<<<<< HEAD
   porsmo = callPackage ../applications/misc/porsmo { };
 
   pantum-driver = callPackage ../misc/drivers/pantum-driver { };
+=======
+  pantum-driver = callPackage ../misc/drivers/pantum-driver {
+    libjpeg8 = libjpeg.override { enableJpeg8 = true; };
+  };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   posteid-seed-extractor = callPackage ../tools/security/posteid-seed-extractor { };
 
   postscript-lexmark = callPackage ../misc/drivers/postscript-lexmark { };
 
+<<<<<<< HEAD
   povray = callPackage ../tools/graphics/povray { };
+=======
+  povray = callPackage ../tools/graphics/povray {
+    boost = boost175;
+  };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   power-profiles-daemon = callPackage ../os-specific/linux/power-profiles-daemon { };
 
@@ -12215,12 +14122,17 @@ with pkgs;
 
   pre-commit = callPackage ../tools/misc/pre-commit { };
 
+<<<<<<< HEAD
   pre-commit-hook-ensure-sops = callPackage ../tools/misc/pre-commit-hook-ensure-sops { };
 
   pretender = callPackage ../tools/security/pretender { };
 
   prettierd = callPackage ../development/tools/prettierd { };
 
+=======
+  pretender = callPackage ../tools/security/pretender { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pretty-simple = callPackage ../development/tools/pretty-simple { };
 
   prettyping = callPackage ../tools/networking/prettyping { };
@@ -12233,8 +14145,11 @@ with pkgs;
 
   profile-sync-daemon = callPackage ../tools/misc/profile-sync-daemon { };
 
+<<<<<<< HEAD
   projectable = callPackage ../applications/file-managers/projectable { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   projectlibre = callPackage ../applications/misc/projectlibre {
     jre = jre8;
     jdk = jdk8;
@@ -12248,9 +14163,16 @@ with pkgs;
 
   prototypejs = callPackage ../development/libraries/prototypejs { };
 
+<<<<<<< HEAD
   proxmark3 = libsForQt5.callPackage ../tools/security/proxmark3/default.nix {
     inherit (darwin.apple_sdk.frameworks) Foundation AppKit;
   };
+=======
+  inherit (callPackages ../tools/security/proxmark3 { gcc-arm-embedded = gcc-arm-embedded-8; })
+    proxmark3 proxmark3-unstable;
+
+  proxmark3-rrg = libsForQt5.callPackage ../tools/security/proxmark3/proxmark3-rrg.nix { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   proxychains = callPackage ../tools/networking/proxychains { };
 
@@ -12270,7 +14192,11 @@ with pkgs;
 
   cnping = callPackage ../tools/networking/cnping { };
 
+<<<<<<< HEAD
   past-time = callPackage ../tools/misc/past-time { };
+=======
+  past-time = python3Packages.callPackage ../tools/misc/past-time { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   pastebinit = callPackage ../tools/misc/pastebinit { };
 
@@ -12286,14 +14212,20 @@ with pkgs;
 
   ps3-disc-dumper = callPackage ../tools/games/ps3-disc-dumper { };
 
+<<<<<<< HEAD
   ps3iso-utils = callPackage ../tools/games/ps3iso-utils { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ps3netsrv = callPackage ../servers/ps3netsrv { };
 
   pscircle = callPackage ../os-specific/linux/pscircle { };
 
+<<<<<<< HEAD
   psitop = callPackage ../applications/system/psitop { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   psmisc = callPackage ../os-specific/linux/psmisc { };
 
   pssh = callPackage ../tools/networking/pssh { };
@@ -12304,8 +14236,11 @@ with pkgs;
 
   psutils = callPackage ../tools/typesetting/psutils { };
 
+<<<<<<< HEAD
   psudohash = callPackage ../tools/security/psudohash { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   psensor = callPackage ../tools/system/psensor {
     libXNVCtrl = linuxPackages.nvidia_x11.settings.libXNVCtrl;
   };
@@ -12350,6 +14285,7 @@ with pkgs;
 
   teapot = callPackage ../applications/office/teapot { };
 
+<<<<<<< HEAD
   ticktick = callPackage ../applications/office/ticktick { };
 
   pyditz = callPackage ../applications/misc/pyditz {
@@ -12362,6 +14298,16 @@ with pkgs;
 
   pysentation = callPackage ../applications/misc/pysentation { };
 
+=======
+  pyditz = callPackage ../applications/misc/pyditz {
+    pythonPackages = python27Packages;
+  };
+
+  py-spy = callPackage ../development/tools/py-spy { };
+
+  pydeps = with python3Packages; toPythonApplication pydeps;
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   python-launcher = callPackage ../development/tools/misc/python-launcher { };
 
   pytrainer = callPackage ../applications/misc/pytrainer { };
@@ -12370,11 +14316,23 @@ with pkgs;
 
   pystring = callPackage ../development/libraries/pystring { };
 
+<<<<<<< HEAD
   raysession = python3Packages.callPackage ../applications/audio/raysession {};
 
   revolt-desktop = callPackage ../applications/networking/instant-messengers/revolt-desktop { };
 
   rbw = callPackage ../tools/security/rbw { };
+=======
+  raysession = python3Packages.callPackage ../applications/audio/raysession {
+    inherit (qt5) qttools;
+  };
+
+  revolt-desktop = callPackage ../applications/networking/instant-messengers/revolt-desktop { };
+
+  rbw = callPackage ../tools/security/rbw {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   remarshal = with python3Packages; toPythonApplication remarshal;
 
@@ -12382,8 +14340,11 @@ with pkgs;
     inherit (darwin.apple_sdk_11_0.frameworks) Carbon Cocoa IOKit;
   };
 
+<<<<<<< HEAD
   rio = callPackage ../applications/terminal-emulators/rio { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   rig = callPackage ../tools/misc/rig { };
 
   ripdrag = callPackage ../tools/misc/ripdrag { };
@@ -12418,7 +14379,10 @@ with pkgs;
   outils = callPackage ../tools/misc/outils { };
 
   mpi = openmpi; # this attribute should used to build MPI applications
+<<<<<<< HEAD
   mpiCheckPhaseHook = callPackage ../build-support/setup-hooks/mpi-check-hook { };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   ucc = callPackage ../development/libraries/ucc { };
 
@@ -12462,8 +14426,11 @@ with pkgs;
 
   qmk = callPackage ../tools/misc/qmk { };
 
+<<<<<<< HEAD
   qmk_hid = callPackage ../tools/misc/qmk_hid { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   qmarkdowntextedit = libsForQt5.callPackage  ../development/libraries/qmarkdowntextedit { };
 
   qodem = callPackage ../tools/networking/qodem { };
@@ -12484,12 +14451,19 @@ with pkgs;
     stdenv = if stdenv.isDarwin then darwin.apple_sdk_11_0.stdenv else stdenv;
   };
 
+<<<<<<< HEAD
   qscintilla-qt6 = qt6Packages.callPackage ../development/libraries/qscintilla { };
 
   qrcp = callPackage ../tools/networking/qrcp { };
 
   qrscan = callPackage ../tools/misc/qrscan { };
 
+=======
+  qscintilla-qt4 = callPackage ../development/libraries/qscintilla-qt4 { };
+
+  qrcp = callPackage ../tools/networking/qrcp { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   qtikz = libsForQt5.callPackage ../applications/graphics/ktikz { };
 
   qtspim = libsForQt5.callPackage ../development/tools/misc/qtspim { };
@@ -12506,10 +14480,13 @@ with pkgs;
 
   quicktun = callPackage ../tools/networking/quicktun { };
 
+<<<<<<< HEAD
   quickwit = callPackage ../servers/search/quickwit {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   quilt = callPackage ../development/tools/quilt { };
 
   raider = callPackage ../applications/misc/raider { };
@@ -12550,7 +14527,11 @@ with pkgs;
 
   rarcrack = callPackage ../tools/security/rarcrack { };
 
+<<<<<<< HEAD
   rare-regex = callPackage ../tools/text/rare-regex { };
+=======
+  rarian = callPackage ../development/libraries/rarian { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   ratman = callPackage ../tools/networking/ratman { };
 
@@ -12560,8 +14541,11 @@ with pkgs;
 
   rc = callPackage ../shells/rc { };
 
+<<<<<<< HEAD
   rc-9front = callPackage ../shells/rc-9front { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   rcon = callPackage ../tools/networking/rcon { };
 
   rconc = callPackage ../tools/networking/rconc { };
@@ -12612,16 +14596,22 @@ with pkgs;
     rekor-cli
     rekor-server;
 
+<<<<<<< HEAD
   rhai-doc = callPackage ../development/tools/misc/rhai-doc { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   rich-cli = callPackage ../misc/rich-cli { };
 
   richgo = callPackage ../development/tools/richgo {  };
 
+<<<<<<< HEAD
   risor = callPackage ../development/interpreters/risor { };
 
   rlci = callPackage ../development/interpreters/rlci { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   rs = callPackage ../tools/text/rs { };
 
   rst2html5 = callPackage ../tools/text/rst2html5 { };
@@ -12645,8 +14635,11 @@ with pkgs;
 
   re-isearch = callPackage ../applications/search/re-isearch { };
 
+<<<<<<< HEAD
   reason-shell = callPackage ../applications/science/misc/reason-shell { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   reaverwps = callPackage ../tools/networking/reaver-wps { };
 
   reaverwps-t6x = callPackage ../tools/networking/reaver-wps-t6x { };
@@ -12655,8 +14648,11 @@ with pkgs;
 
   qt-box-editor = libsForQt5.callPackage ../applications/misc/qt-box-editor { };
 
+<<<<<<< HEAD
   readability-cli = callPackage ../tools/text/readability-cli { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   recutils = callPackage ../tools/misc/recutils { };
 
   recoll = libsForQt5.callPackage ../applications/search/recoll { };
@@ -12673,7 +14669,11 @@ with pkgs;
 
   remind = callPackage ../tools/misc/remind { };
 
+<<<<<<< HEAD
   remmina = darwin.apple_sdk_11_0.callPackage ../applications/networking/remote/remmina { };
+=======
+  remmina = callPackage ../applications/networking/remote/remmina { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   rename = callPackage ../tools/misc/rename { };
 
@@ -12681,8 +14681,11 @@ with pkgs;
 
   renderdoc = libsForQt5.callPackage ../development/tools/renderdoc { };
 
+<<<<<<< HEAD
   repgrep = callPackage ../tools/text/repgrep { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   replace = callPackage ../tools/text/replace { };
 
   resvg = callPackage ../tools/graphics/resvg { };
@@ -12699,12 +14702,17 @@ with pkgs;
 
   remote-touchpad = callPackage ../tools/inputmethods/remote-touchpad { };
 
+<<<<<<< HEAD
   remote-exec = python3Packages.callPackage ../tools/misc/remote-exec { };
 
   reposurgeon = callPackage ../applications/version-management/reposurgeon { };
 
   reptor = with python3.pkgs; toPythonApplication reptor;
 
+=======
+  reposurgeon = callPackage ../applications/version-management/reposurgeon { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   reptyr = callPackage ../os-specific/linux/reptyr { };
 
   rescuetime = libsForQt5.callPackage ../applications/misc/rescuetime { };
@@ -12716,7 +14724,11 @@ with pkgs;
 
   reuse = callPackage ../tools/package-management/reuse { };
 
+<<<<<<< HEAD
   reveal-md = callPackage ../tools/text/reveal-md { };
+=======
+  inherit (nodePackages) reveal-md;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   rewritefs = callPackage ../os-specific/linux/rewritefs { };
 
@@ -12764,8 +14776,11 @@ with pkgs;
 
   rnv = callPackage ../tools/text/xml/rnv { };
 
+<<<<<<< HEAD
   roam-research = callPackage ../applications/office/roam-research { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   rosie = callPackage ../tools/text/rosie { };
 
   rounded-mgenplus = callPackage ../data/fonts/rounded-mgenplus { };
@@ -12788,10 +14803,13 @@ with pkgs;
 
   rosegarden = libsForQt5.callPackage ../applications/audio/rosegarden { };
 
+<<<<<<< HEAD
   rosenpass = callPackage ../tools/networking/rosenpass  { };
 
   rot8 = callPackage ../tools/misc/rot8 { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   rowhammer-test = callPackage ../tools/system/rowhammer-test { };
 
   rpPPPoE = callPackage ../tools/networking/rp-pppoe { };
@@ -12821,8 +14839,11 @@ with pkgs;
 
   rshijack = callPackage ../tools/networking/rshijack { };
 
+<<<<<<< HEAD
   rshim-user-space = callPackage ../tools/misc/rshim-user-space { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   rsibreak = libsForQt5.callPackage ../applications/misc/rsibreak { };
 
   rslint = callPackage ../development/tools/rslint { };
@@ -12837,20 +14858,29 @@ with pkgs;
 
   rsstail = callPackage ../applications/networking/feedreaders/rsstail { };
 
+<<<<<<< HEAD
   rtz = callPackage ../tools/misc/rtz { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   rubber = callPackage ../tools/typesetting/rubber { };
 
   rubocop = rubyPackages.rubocop;
 
+<<<<<<< HEAD
   ruby-lsp = rubyPackages.ruby-lsp;
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   runningx = callPackage ../tools/X11/runningx { };
 
   rund = callPackage ../development/tools/rund { };
 
+<<<<<<< HEAD
   runme = callPackage ../development/tools/misc/runme { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   runzip = callPackage ../tools/archivers/runzip { };
 
   unzoo = callPackage ../tools/archivers/unzoo { };
@@ -12879,6 +14909,7 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
+<<<<<<< HEAD
   rustdesk-server = callPackage ../servers/rustdesk-server {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
@@ -12889,12 +14920,19 @@ with pkgs;
 
   rustywind = callPackage ../development/tools/misc/rustywind { };
 
+=======
+  rustypaste = callPackage ../servers/rustypaste { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   rw = callPackage ../tools/misc/rw { };
 
   rwc = callPackage ../tools/system/rwc { };
 
+<<<<<<< HEAD
   rwedid = callPackage ../tools/video/rwedid { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   rxp = callPackage ../tools/text/xml/rxp { };
 
   rzip = callPackage ../tools/compression/rzip { };
@@ -12917,8 +14955,11 @@ with pkgs;
 
   s4cmd = callPackage ../tools/networking/s4cmd { };
 
+<<<<<<< HEAD
   s5 = callPackage ../tools/security/s5 { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   s5cmd = callPackage ../tools/networking/s5cmd { };
 
   sacad = callPackage ../tools/misc/sacad { };
@@ -12935,8 +14976,11 @@ with pkgs;
 
   safe-rm = callPackage ../tools/system/safe-rm { };
 
+<<<<<<< HEAD
   safecloset = callPackage ../applications/misc/safecloset { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   safeeyes = callPackage ../applications/misc/safeeyes { };
 
   sagoin = callPackage ../tools/misc/sagoin { };
@@ -12967,8 +15011,11 @@ with pkgs;
 
   sasview = libsForQt5.callPackage ../applications/science/misc/sasview { };
 
+<<<<<<< HEAD
   sbs = callPackage ../tools/X11/sbs { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   schemes = callPackage ../applications/misc/schemes { };
 
   scanbd = callPackage ../tools/graphics/scanbd { };
@@ -12987,7 +15034,13 @@ with pkgs;
     inherit (darwin.apple_sdk.libs) utmp;
   };
 
+<<<<<<< HEAD
   scrcpy = callPackage ../misc/scrcpy { };
+=======
+  scrcpy = callPackage ../misc/scrcpy {
+    inherit (androidenv.androidPkgs_9_0) platform-tools;
+  };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   screen-message = callPackage ../tools/X11/screen-message { };
 
@@ -13001,8 +15054,11 @@ with pkgs;
 
   scriptaculous = callPackage ../development/libraries/scriptaculous { };
 
+<<<<<<< HEAD
   script-directory = callPackage ../tools/misc/script-directory { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   scrot = callPackage ../tools/graphics/scrot { };
 
   scrypt = callPackage ../tools/security/scrypt { };
@@ -13041,11 +15097,17 @@ with pkgs;
 
   seehecht = callPackage ../tools/text/seehecht { };
 
+<<<<<<< HEAD
   selectdefaultapplication = libsForQt5.callPackage ../applications/misc/selectdefaultapplication { };
 
   semantic-release = callPackage ../development/tools/semantic-release {
     inherit (darwin) cctools;
   };
+=======
+  seexpr = callPackage ../development/compilers/seexpr { };
+
+  selectdefaultapplication = libsForQt5.callPackage ../applications/misc/selectdefaultapplication { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   semgrep = python3.pkgs.callPackage ../tools/security/semgrep { };
   semgrep-core = callPackage ../tools/security/semgrep/semgrep-core.nix { };
@@ -13058,28 +15120,48 @@ with pkgs;
 
   seqdiag = with python3Packages; toPythonApplication seqdiag;
 
+<<<<<<< HEAD
   sequoia-sq = callPackage ../tools/security/sequoia-sq { };
 
   sequoia-sqv = callPackage ../tools/security/sequoia-sqv { };
 
   sequoia-sqop = callPackage ../tools/security/sequoia-sqop { };
+=======
+  sequoia = callPackage ../tools/security/sequoia {
+    pythonPackages = python3Packages;
+  };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   sequoia-chameleon-gnupg = callPackage ../tools/security/sequoia-chameleon-gnupg { };
 
   sewer = callPackage ../tools/admin/sewer { };
 
+<<<<<<< HEAD
   sexpp = callPackage ../development/libraries/sexpp { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   sfeed = callPackage ../tools/misc/sfeed { };
 
   sftpman = callPackage ../tools/filesystems/sftpman { };
 
+<<<<<<< HEAD
   sftpgo = callPackage ../servers/sftpgo { };
+=======
+  sftpgo = callPackage ../servers/sftpgo {
+    buildGoModule = buildGo119Module;
+  };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   screenfetch = callPackage ../tools/misc/screenfetch { };
 
   sg3_utils = callPackage ../tools/system/sg3_utils { };
 
+<<<<<<< HEAD
+=======
+  sget = callPackage ../tools/security/sget { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   sha1collisiondetection = callPackage ../tools/security/sha1collisiondetection { };
 
   shadowsocks-libev = callPackage ../tools/networking/shadowsocks-libev { };
@@ -13098,16 +15180,22 @@ with pkgs;
 
   sharutils = callPackage ../tools/archivers/sharutils { };
 
+<<<<<<< HEAD
   shell2http = callPackage ../servers/misc/shell2http { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   shelldap = callPackage ../tools/misc/shelldap { };
 
   shellspec = callPackage ../tools/misc/shellspec { };
 
   schema2ldif = callPackage ../tools/text/schema2ldif { };
 
+<<<<<<< HEAD
   schemacrawler = callPackage ../development/tools/schemacrawler { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   sharedown = callPackage ../tools/misc/sharedown { };
 
   shen-sbcl = callPackage ../development/interpreters/shen-sbcl { };
@@ -13169,7 +15257,11 @@ with pkgs;
   # aka., pgp-tools
   signing-party = callPackage ../tools/security/signing-party { };
 
+<<<<<<< HEAD
   sigtop = callPackage ../tools/backup/sigtop { };
+=======
+  signumone-ks = callPackage ../applications/misc/signumone-ks { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   silc_client = callPackage ../applications/networking/instant-messengers/silc-client { };
 
@@ -13187,8 +15279,11 @@ with pkgs;
 
   simple-mtpfs = callPackage ../tools/filesystems/simple-mtpfs { };
 
+<<<<<<< HEAD
   simplotask = callPackage ../tools/admin/simplotask { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   simpleproxy = callPackage ../tools/networking/simpleproxy { };
 
   simplescreenrecorder = libsForQt5.callPackage ../applications/video/simplescreenrecorder { };
@@ -13206,11 +15301,17 @@ with pkgs;
   sixpair = callPackage ../tools/misc/sixpair { };
 
   sketchybar = darwin.apple_sdk_11_0.callPackage ../os-specific/darwin/sketchybar {
+<<<<<<< HEAD
     inherit (darwin.apple_sdk_11_0.frameworks) AppKit CoreAudio CoreWLAN CoreVideo DisplayServices IOKit MediaRemote SkyLight;
   };
 
   sketchybar-app-font = callPackage ../data/fonts/sketchybar-app-font { };
 
+=======
+    inherit (darwin.apple_sdk_11_0.frameworks) Carbon Cocoa CoreWLAN DisplayServices SkyLight;
+  };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   skippy-xd = callPackage ../tools/X11/skippy-xd { };
 
   sks = callPackage ../servers/sks {
@@ -13237,6 +15338,7 @@ with pkgs;
 
   slides = callPackage ../applications/misc/slides { };
 
+<<<<<<< HEAD
   slippy = callPackage ../applications/misc/slippy { };
 
   slirp4netns = callPackage ../tools/networking/slirp4netns { };
@@ -13244,6 +15346,11 @@ with pkgs;
   slowlorust = callPackage ../tools/networking/slowlorust {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
+=======
+  slirp4netns = callPackage ../tools/networking/slirp4netns { };
+
+  slowlorust = callPackage ../tools/networking/slowlorust { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   slsa-verifier = callPackage ../tools/security/slsa-verifier { };
 
@@ -13310,9 +15417,13 @@ with pkgs;
   };
 
   soapui = callPackage ../applications/networking/soapui {
+<<<<<<< HEAD
     jdk = if stdenv.isDarwin
       then (jdk11.override { enableJavaFX = true; })
       else jdk11;
+=======
+    jdk = jdk11;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   sockdump = callPackage ../tools/networking/sockdump { };
@@ -13374,8 +15485,11 @@ with pkgs;
 
   sozu = callPackage ../servers/sozu { };
 
+<<<<<<< HEAD
   spacer = callPackage ../tools/misc/spacer { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   sparrow-unwrapped = callPackage ../applications/blockchains/sparrow {
     openimajgrabber = callPackage ../applications/blockchains/sparrow/openimajgrabber.nix {};
     openjdk = openjdk.override { enableJavaFX = true; };
@@ -13391,6 +15505,11 @@ with pkgs;
 
   spiped = callPackage ../tools/networking/spiped { };
 
+<<<<<<< HEAD
+=======
+  sqliteman = callPackage ../applications/misc/sqliteman { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   sqlite3-to-mysql = callPackage ../tools/misc/sqlite3-to-mysql { };
 
   sqls = callPackage ../applications/misc/sqls { };
@@ -13425,8 +15544,11 @@ with pkgs;
 
   sockperf = callPackage ../tools/networking/sockperf { };
 
+<<<<<<< HEAD
   softnet = callPackage ../tools/networking/softnet { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   solaar = callPackage ../applications/misc/solaar { };
 
   solanum = callPackage ../servers/irc/solanum {
@@ -13483,6 +15605,11 @@ with pkgs;
 
   structorizer = callPackage ../applications/graphics/structorizer { };
 
+<<<<<<< HEAD
+=======
+  structure-synth = callPackage ../tools/graphics/structure-synth { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   su-exec = callPackage ../tools/security/su-exec { };
 
   subberthehut = callPackage ../tools/misc/subberthehut { };
@@ -13493,8 +15620,11 @@ with pkgs;
 
   sudo = callPackage ../tools/security/sudo { };
 
+<<<<<<< HEAD
   sudo-rs = callPackage ../tools/security/sudo-rs { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   suidChroot = callPackage ../tools/system/suid-chroot { };
 
   sundtek = callPackage ../misc/drivers/sundtek { };
@@ -13543,10 +15673,13 @@ with pkgs;
 
   stabber = callPackage ../misc/stabber { };
 
+<<<<<<< HEAD
   stacer = libsForQt5.callPackage ../tools/system/stacer { };
 
   starcharts = callPackage ../servers/misc/starcharts { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   staticjinja = with python3.pkgs; toPythonApplication staticjinja;
 
   stevenblack-blocklist  = callPackage ../tools/networking/stevenblack-blocklist { };
@@ -13596,8 +15729,11 @@ with pkgs;
 
   surfraw = callPackage ../tools/networking/surfraw { };
 
+<<<<<<< HEAD
   swagger-cli = callPackage ../tools/networking/swagger-cli { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   swagger-codegen = callPackage ../tools/networking/swagger-codegen { };
 
   swagger-codegen3 = callPackage ../tools/networking/swagger-codegen3 { };
@@ -13669,15 +15805,21 @@ with pkgs;
 
   tagtime = callPackage ../applications/misc/tagtime { };
 
+<<<<<<< HEAD
   tailer = callPackage ../tools/misc/tailer { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   inherit (callPackages ../applications/networking/taler { })
     taler-exchange taler-merchant;
 
   tandoor-recipes = callPackage ../applications/misc/tandoor-recipes { };
 
+<<<<<<< HEAD
   tango = callPackage ../applications/misc/tango { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   tangram = callPackage ../applications/networking/instant-messengers/tangram { };
 
   t1utils = callPackage ../tools/misc/t1utils { };
@@ -13736,16 +15878,22 @@ with pkgs;
 
   tea = callPackage ../tools/misc/tea { };
 
+<<<<<<< HEAD
   teavpn2 = callPackage ../tools/networking/teavpn2 { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   inherit (nodePackages) teck-programmer;
 
   ted = callPackage ../tools/typesetting/ted { };
 
   teamviewer = libsForQt5.callPackage ../applications/networking/remote/teamviewer { };
 
+<<<<<<< HEAD
   teehee = callPackage ../applications/editors/teehee { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   teip = callPackage ../tools/text/teip { };
 
   telegraf = callPackage ../servers/monitoring/telegraf { };
@@ -13782,6 +15930,7 @@ with pkgs;
 
   tewisay = callPackage ../tools/misc/tewisay { };
 
+<<<<<<< HEAD
   texmacs = libsForQt5.callPackage ../applications/editors/texmacs {
     tex = texlive.combined.scheme-small;
     extraFonts = true;
@@ -13792,6 +15941,23 @@ with pkgs;
   texstudio = qt6Packages.callPackage ../applications/editors/texstudio { };
 
   textadept = libsForQt5.callPackage ../applications/editors/textadept { };
+=======
+  texmacs = if stdenv.isDarwin
+    then callPackage ../applications/editors/texmacs/darwin.nix {
+      inherit (darwin.apple_sdk.frameworks) CoreFoundation Cocoa;
+      tex = texlive.combined.scheme-small;
+      extraFonts = true;
+    } else libsForQt5.callPackage ../applications/editors/texmacs {
+      tex = texlive.combined.scheme-small;
+      extraFonts = true;
+    };
+
+  texmaker = libsForQt5.callPackage ../applications/editors/texmaker { };
+
+  texstudio = libsForQt5.callPackage ../applications/editors/texstudio { };
+
+  textadept = callPackage ../applications/editors/textadept { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   texworks = qt6Packages.callPackage ../applications/editors/texworks { };
 
@@ -13805,7 +15971,11 @@ with pkgs;
 
   theharvester = callPackage ../tools/security/theharvester { };
 
+<<<<<<< HEAD
   thelounge = callPackage ../applications/networking/irc/thelounge { };
+=======
+  inherit (nodePackages) thelounge;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   theLoungePlugins = with lib; let
     pkgs = filterAttrs (name: _: hasPrefix "thelounge-" name) nodePackages;
@@ -13843,14 +16013,20 @@ with pkgs;
 
   timelapse-deflicker = callPackage ../applications/graphics/timelapse-deflicker { };
 
+<<<<<<< HEAD
   timelens = callPackage ../applications/video/timelens { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   timetrap = callPackage ../applications/office/timetrap { };
 
   timetagger = callPackage ../servers/timetagger { };
 
+<<<<<<< HEAD
   timetagger_cli = callPackage ../tools/misc/timetagger_cli { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   timezonemap = callPackage ../development/libraries/timezonemap { };
 
   tzupdate = callPackage ../applications/misc/tzupdate { };
@@ -13871,6 +16047,11 @@ with pkgs;
 
   tinyfecvpn = callPackage ../tools/networking/tinyfecvpn { };
 
+<<<<<<< HEAD
+=======
+  tinygltf = callPackage ../development/libraries/tinygltf { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   tinyobjloader = callPackage ../development/libraries/tinyobjloader { };
 
   tinyprog = callPackage ../development/embedded/fpga/tinyprog { };
@@ -13891,16 +16072,22 @@ with pkgs;
 
   tldr-hs = haskellPackages.tldr;
 
+<<<<<<< HEAD
   tlsclient = callPackage ../tools/admin/tlsclient { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   tlsx = callPackage ../tools/security/tlsx { };
 
   tmate = callPackage ../tools/misc/tmate { };
 
   tmate-ssh-server = callPackage ../servers/tmate-ssh-server { };
 
+<<<<<<< HEAD
   tml = callPackage ../tools/text/tml { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   tmpwatch = callPackage ../tools/misc/tmpwatch  { };
 
   tmpmail = callPackage ../applications/networking/tmpmail { };
@@ -13921,16 +16108,23 @@ with pkgs;
 
   tmux-xpanes = callPackage ../tools/misc/tmux-xpanes { };
 
+<<<<<<< HEAD
   tmuxPlugins = recurseIntoAttrs (callPackage ../misc/tmux-plugins {
     pkgs = pkgs.__splicedPackages;
   });
+=======
+  tmuxPlugins = recurseIntoAttrs (callPackage ../misc/tmux-plugins { });
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   tmsu = callPackage ../tools/filesystems/tmsu { };
 
   tncattach = callPackage ../applications/radio/tncattach { };
 
+<<<<<<< HEAD
   to-html = callPackage ../tools/text/to-html { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   toilet = callPackage ../tools/misc/toilet { };
 
   tokei = callPackage ../development/tools/misc/tokei {
@@ -13943,8 +16137,11 @@ with pkgs;
 
   toml2nix = callPackage ../development/tools/toml2nix { };
 
+<<<<<<< HEAD
   topfew = callPackage ../tools/text/topfew { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   topfew-rs = callPackage ../tools/text/topfew-rs { };
 
   topgrade = callPackage ../tools/misc/topgrade {
@@ -14045,8 +16242,11 @@ with pkgs;
 
   transifex-cli = callPackage ../applications/misc/transifex-cli { };
 
+<<<<<<< HEAD
   translatelocally = callPackage ../applications/misc/translatelocally { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   translate-shell = callPackage ../applications/misc/translate-shell { };
 
   translatepy = with python3.pkgs; toPythonApplication translatepy;
@@ -14088,7 +16288,11 @@ with pkgs;
 
   tuntox = callPackage ../tools/networking/tuntox { };
 
+<<<<<<< HEAD
   tunwg = callPackage ../tools/networking/tunwg { };
+=======
+  omapd = callPackage ../tools/security/omapd { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   ttf2pt1 = callPackage ../tools/misc/ttf2pt1 { };
 
@@ -14121,8 +16325,11 @@ with pkgs;
 
   tuhi = callPackage ../applications/misc/tuhi { };
 
+<<<<<<< HEAD
   tui-journal = callPackage ../applications/misc/tui-journal { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   tuir = callPackage ../applications/misc/tuir { };
 
   tuifeed = callPackage ../applications/networking/feedreaders/tuifeed {
@@ -14137,9 +16344,13 @@ with pkgs;
 
   tuptime = callPackage ../tools/system/tuptime { };
 
+<<<<<<< HEAD
   turbo = callPackage ../tools/misc/turbo {
     inherit (darwin.apple_sdk_11_0.frameworks) Security IOKit CoreServices CoreFoundation;
   };
+=======
+  turbo = callPackage ../tools/misc/turbo { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   turses = callPackage ../applications/networking/instant-messengers/turses { };
 
@@ -14159,8 +16370,11 @@ with pkgs;
 
   twitch-chat-downloader = python3Packages.callPackage ../applications/misc/twitch-chat-downloader { };
 
+<<<<<<< HEAD
   twitch-dl = callPackage ../tools/misc/twitch-dl { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   twitterBootstrap = callPackage ../development/web/twitter-bootstrap { };
 
   twspace-crawler = callPackage ../tools/misc/twspace-crawler { };
@@ -14181,15 +16395,22 @@ with pkgs;
 
   tydra = callPackage ../tools/misc/tydra { };
 
+<<<<<<< HEAD
   typesense = callPackage ../servers/search/typesense { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   typos = callPackage ../development/tools/typos { };
 
   typst = callPackage ../tools/typesetting/typst { };
 
+<<<<<<< HEAD
   typstfmt = callPackage ../tools/typesetting/typstfmt { };
 
   typst-live = callPackage ../tools/typesetting/typst-live { };
+=======
+  typst-fmt = callPackage ../tools/typesetting/typst-fmt { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   tz = callPackage ../tools/misc/tz { };
 
@@ -14203,8 +16424,11 @@ with pkgs;
 
   ubi_reader = callPackage ../tools/filesystems/ubi_reader { };
 
+<<<<<<< HEAD
   ubpm = libsForQt5.callPackage ../applications/misc/ubpm { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ubridge = callPackage ../tools/networking/ubridge { };
 
   ubertooth = callPackage ../applications/radio/ubertooth { };
@@ -14229,16 +16453,22 @@ with pkgs;
 
   uftrace = callPackage ../development/tools/uftrace { };
 
+<<<<<<< HEAD
   uftpd = callPackage ../servers/ftp/uftpd {};
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   uget = callPackage ../tools/networking/uget { };
 
   uget-integrator = callPackage ../tools/networking/uget-integrator { };
 
   ugrep = callPackage ../tools/text/ugrep { };
 
+<<<<<<< HEAD
   ugs = callPackage ../tools/misc/ugs { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   uhk-agent = callPackage ../os-specific/linux/uhk-agent { };
 
   uhk-udev-rules = callPackage ../os-specific/linux/uhk-udev-rules { };
@@ -14247,18 +16477,24 @@ with pkgs;
 
   uivonim = callPackage ../applications/editors/uivonim { };
 
+<<<<<<< HEAD
   ulid = callPackage ../tools/misc/ulid { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   umlet = callPackage ../tools/misc/umlet { };
 
   unetbootin = libsForQt5.callPackage ../tools/cd-dvd/unetbootin { };
 
   unfs3 = callPackage ../servers/unfs3 { };
 
+<<<<<<< HEAD
   unfurl = callPackage ../tools/text/unfurl { };
 
   unixbench = callPackage ../development/tools/misc/unixbench { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   unoconv = callPackage ../tools/text/unoconv { };
 
   unrtf = callPackage ../tools/text/unrtf { };
@@ -14293,8 +16529,11 @@ with pkgs;
 
   urlview = callPackage ../applications/misc/urlview { };
 
+<<<<<<< HEAD
   url-parser = callPackage ../tools/misc/url-parser { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   urn-timer = callPackage ../tools/misc/urn-timer { };
 
   ursadb = callPackage ../servers/ursadb { };
@@ -14303,8 +16542,11 @@ with pkgs;
 
   usbmuxd2 = callPackage ../tools/misc/usbmuxd2 { };
 
+<<<<<<< HEAD
   usort = with python3Packages; toPythonApplication usort;
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ustreamer = callPackage ../applications/video/ustreamer { };
 
   usync = callPackage ../applications/misc/usync { };
@@ -14323,7 +16565,11 @@ with pkgs;
 
   v2ray-geoip = callPackage ../data/misc/v2ray-geoip { };
 
+<<<<<<< HEAD
   vacuum = libsForQt5.callPackage ../applications/networking/instant-messengers/vacuum {};
+=======
+  vacuum = callPackage ../applications/networking/instant-messengers/vacuum { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   validator-nu = callPackage ../tools/text/validator-nu { };
 
@@ -14361,8 +16607,11 @@ with pkgs;
 
   vcstool = callPackage ../development/tools/vcstool { };
 
+<<<<<<< HEAD
   vectorscan = callPackage ../development/libraries/vectorscan { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   verco = callPackage ../applications/version-management/verco { };
 
   verilator = callPackage ../applications/science/electronics/verilator { };
@@ -14446,15 +16695,23 @@ with pkgs;
     SDL = SDL_sixel;
   };
 
+<<<<<<< HEAD
   vtm = callPackage ../tools/misc/vtm {
     stdenv = if stdenv.isDarwin then llvmPackages_16.stdenv else stdenv;
   };
+=======
+  vtm = callPackage ../tools/misc/vtm { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   witness = callPackage ../tools/security/witness { };
 
   openconnectPackages = callPackage ../tools/networking/openconnect { };
 
+<<<<<<< HEAD
   inherit (openconnectPackages) openconnect openconnect_openssl;
+=======
+  inherit (openconnectPackages) openconnect openconnect_unstable openconnect_openssl;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   globalprotect-openconnect = libsForQt5.callPackage ../tools/networking/globalprotect-openconnect { };
 
@@ -14517,6 +16774,7 @@ with pkgs;
 
   wasm-tools = callPackage ../tools/misc/wasm-tools { };
 
+<<<<<<< HEAD
   wasmedge = darwin.apple_sdk_11_0.callPackage ../development/tools/wasmedge {
     inherit (darwin.apple_sdk_11_0.frameworks) Foundation;
   };
@@ -14525,6 +16783,13 @@ with pkgs;
 
   wasmserve = callPackage ../development/tools/wasmserve {};
 
+=======
+  wasmedge = callPackage ../development/tools/wasmedge {
+    llvmPackages = llvmPackages_12;
+    inherit (darwin.apple_sdk.frameworks) Foundation;
+  };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   welkin = callPackage ../tools/graphics/welkin { };
 
   wemux = callPackage ../tools/misc/wemux { };
@@ -14533,8 +16798,11 @@ with pkgs;
 
   whatip = callPackage ../tools/networking/whatip { };
 
+<<<<<<< HEAD
   whatsapp-chat-exporter = callPackage ../tools/misc/whatsapp-chat-exporter { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   whatweb = callPackage ../tools/security/whatweb { };
 
   whipper = callPackage ../applications/audio/whipper { };
@@ -14579,8 +16847,11 @@ with pkgs;
 
   woodpecker-pipeline-transform = callPackage ../development/tools/continuous-integration/woodpecker-pipeline-transform { };
 
+<<<<<<< HEAD
   woodpecker-plugin-git = callPackage ../development/tools/continuous-integration/woodpecker-plugin-git { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   woodpecker-server = callPackage ../development/tools/continuous-integration/woodpecker/server.nix {
     woodpecker-frontend = callPackage ../development/tools/continuous-integration/woodpecker/frontend.nix { };
   };
@@ -14593,8 +16864,11 @@ with pkgs;
 
   wpscan = callPackage ../tools/security/wpscan { };
 
+<<<<<<< HEAD
   write-good = callPackage ../tools/text/write-good { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   wsmancli = callPackage ../tools/system/wsmancli { };
 
   wstunnel = haskell.lib.compose.justStaticExecutables haskellPackages.wstunnel;
@@ -14607,8 +16881,11 @@ with pkgs;
 
   xl2tpd = callPackage ../tools/networking/xl2tpd { };
 
+<<<<<<< HEAD
   xlights = callPackage ../applications/misc/xlights/default.nix { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   xe = callPackage ../tools/system/xe { };
 
 
@@ -14657,6 +16934,11 @@ with pkgs;
 
   tweeny = callPackage ../development/libraries/tweeny { };
 
+<<<<<<< HEAD
+=======
+  qfsm = callPackage ../applications/science/electronics/qfsm { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   tkgate = callPackage ../applications/science/electronics/tkgate/1.x.nix { };
 
   tm = callPackage ../tools/system/tm { };
@@ -14667,8 +16949,13 @@ with pkgs;
 
   tre = callPackage ../development/libraries/tre { };
 
+<<<<<<< HEAD
   tremor-rs = darwin.apple_sdk_11_0.callPackage ../tools/misc/tremor-rs {
     inherit (darwin.apple_sdk_11_0.frameworks) Security;
+=======
+  tremor-rs = callPackage ../tools/misc/tremor-rs {
+    inherit (darwin.apple_sdk.frameworks) Security;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   tremor-language-server = callPackage ../tools/misc/tremor-rs/ls.nix { };
@@ -14689,8 +16976,11 @@ with pkgs;
 
   udunits = callPackage ../development/libraries/udunits { };
 
+<<<<<<< HEAD
   ufmt = with python3Packages; toPythonApplication ufmt;
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   uftp = callPackage ../servers/uftp { };
 
   uhttpmock = callPackage ../development/libraries/uhttpmock { };
@@ -14735,8 +17025,11 @@ with pkgs;
 
   unittest-cpp = callPackage ../development/libraries/unittest-cpp { };
 
+<<<<<<< HEAD
   unnaturalscrollwheels = callPackage ../tools/inputmethods/unnaturalscrollwheels { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   unrar = callPackage ../tools/archivers/unrar { };
 
   unrar-wrapper = python3Packages.callPackage ../tools/archivers/unrar-wrapper { };
@@ -14773,8 +17066,11 @@ with pkgs;
 
   xprintidle-ng = callPackage ../tools/X11/xprintidle-ng { };
 
+<<<<<<< HEAD
   xssstate = callPackage ../tools/X11/xssstate { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   xscast = callPackage ../applications/video/xscast { };
 
   xsettingsd = callPackage ../tools/X11/xsettingsd { };
@@ -14783,8 +17079,11 @@ with pkgs;
 
   xspim = callPackage ../development/tools/misc/xspim { };
 
+<<<<<<< HEAD
   xcrawl3r = callPackage ../tools/security/xcrawl3r { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   xcruiser = callPackage ../applications/misc/xcruiser { };
 
   xwallpaper = callPackage ../tools/X11/xwallpaper { };
@@ -14833,9 +17132,15 @@ with pkgs;
   valum = callPackage ../development/web/valum { };
 
   inherit (callPackages ../servers/varnish { })
+<<<<<<< HEAD
     varnish60 varnish72 varnish73;
   inherit (callPackages ../servers/varnish/packages.nix { })
     varnish60Packages varnish72Packages varnish73Packages;
+=======
+    varnish60 varnish72;
+  inherit (callPackages ../servers/varnish/packages.nix { })
+    varnish60Packages varnish72Packages;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   varnishPackages = varnish72Packages;
   varnish = varnishPackages.varnish;
@@ -14861,6 +17166,10 @@ with pkgs;
   volumeicon = callPackage ../tools/audio/volumeicon { };
 
   waf = callPackage ../development/tools/build-managers/waf { };
+<<<<<<< HEAD
+=======
+  wafHook = callPackage ../development/tools/build-managers/wafHook { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   waf-tester = callPackage ../tools/security/waf-tester { };
 
@@ -14880,24 +17189,37 @@ with pkgs;
 
   wdisplays = callPackage ../tools/graphics/wdisplays { };
 
+<<<<<<< HEAD
   weaviate = callPackage ../servers/search/weaviate { };
 
   webalizer = callPackage ../tools/networking/webalizer { };
 
   webmesh = callPackage ../servers/webmesh { };
 
+=======
+  webalizer = callPackage ../tools/networking/webalizer { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   wget = callPackage ../tools/networking/wget { };
 
   wget2 = callPackage ../tools/networking/wget2 {
     # update breaks grub2
+<<<<<<< HEAD
     gnulib = pkgs.gnulib.overrideAttrs {
+=======
+    gnulib = pkgs.gnulib.overrideAttrs (_: rec {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       version = "20210208";
       src = fetchgit {
         url = "https://git.savannah.gnu.org/r/gnulib.git";
         rev = "0b38e1d69f03d3977d7ae7926c1efeb461a8a971";
         sha256 = "06bj9y8wcfh35h653yk8j044k7h5g82d2j3z3ib69rg0gy1xagzp";
       };
+<<<<<<< HEAD
     };
+=======
+    });
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   wgpu-utils = callPackage ../tools/graphics/wgpu-utils {
@@ -14936,6 +17258,10 @@ with pkgs;
   wkhtmltopdf = libsForQt5.callPackage ../tools/graphics/wkhtmltopdf { };
 
   wkhtmltopdf-bin = callPackage ../tools/graphics/wkhtmltopdf-bin {
+<<<<<<< HEAD
+=======
+    libjpeg8 = libjpeg.override { enableJpeg8 = true; };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     openssl = openssl_1_1;
   };
 
@@ -14976,7 +17302,11 @@ with pkgs;
   xbursttools = callPackage ../tools/misc/xburst-tools {
     # It needs a cross compiler for mipsel to build the firmware it will
     # load into the Ben Nanonote
+<<<<<<< HEAD
     gccCross = pkgsCross.ben-nanonote.buildPackages.gccWithoutTargetLibc;
+=======
+    gccCross = pkgsCross.ben-nanonote.buildPackages.gccCrossStageStatic;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     autoconf = buildPackages.autoconf269;
   };
 
@@ -15045,8 +17375,11 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) AppKit;
   };
 
+<<<<<<< HEAD
   xq-xml = callPackage ../tools/text/xml/xq { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   xsecurelock = callPackage ../tools/X11/xsecurelock { };
 
   xsel = callPackage ../tools/misc/xsel { };
@@ -15056,7 +17389,11 @@ with pkgs;
   };
 
   xtreemfs = callPackage ../tools/filesystems/xtreemfs {
+<<<<<<< HEAD
     boost = boost179;
+=======
+    boost = boost17x;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   xurls = callPackage ../tools/text/xurls { };
@@ -15095,8 +17432,11 @@ with pkgs;
 
   yarn = callPackage ../development/tools/yarn  { };
 
+<<<<<<< HEAD
   yarn-berry = callPackage ../development/tools/yarn-berry { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   yarn2nix-moretea = callPackage ../development/tools/yarn2nix-moretea/yarn2nix { pkgs = pkgs.__splicedPackages; };
 
   inherit (yarn2nix-moretea)
@@ -15134,12 +17474,15 @@ with pkgs;
 
   yj = callPackage ../development/tools/yj { };
 
+<<<<<<< HEAD
   yaydl = callPackage ../tools/video/yaydl {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
   yx = callPackage ../tools/text/yx { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   zarchive = callPackage ../tools/archivers/zarchive { };
 
   zprint = callPackage ../development/tools/zprint { };
@@ -15150,12 +17493,20 @@ with pkgs;
 
   zasm = callPackage ../development/compilers/zasm { };
 
+<<<<<<< HEAD
   zbackup = callPackage ../tools/backup/zbackup {
     protobuf = protobuf3_21;
   };
 
   zbar = libsForQt5.callPackage ../tools/graphics/zbar {
     inherit (darwin.apple_sdk.frameworks) Foundation;
+=======
+  zbackup = callPackage ../tools/backup/zbackup { };
+
+  zbar = libsForQt5.callPackage ../tools/graphics/zbar {
+    inherit (darwin.apple_sdk.frameworks) Foundation;
+    autoreconfHook = buildPackages.autoreconfHook269;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   zbctl = callPackage ../tools/admin/zbctl { };
@@ -15212,7 +17563,11 @@ with pkgs;
 
   zip = callPackage ../tools/archivers/zip { };
 
+<<<<<<< HEAD
   zincsearch = callPackage ../servers/search/zincsearch { };
+=======
+  zinc = callPackage ../servers/search/zinc { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   zkfuse = callPackage ../tools/filesystems/zkfuse { };
 
@@ -15235,8 +17590,11 @@ with pkgs;
 
   zstxtns-utils = callPackage ../tools/text/zstxtns-utils { };
 
+<<<<<<< HEAD
   zsh-abbr = callPackage ../shells/zsh/zsh-abbr { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   zsh-autoenv = callPackage ../tools/misc/zsh-autoenv { };
 
   zsh-autopair = callPackage ../shells/zsh/zsh-autopair { };
@@ -15247,8 +17605,11 @@ with pkgs;
 
   zsh-clipboard = callPackage ../shells/zsh/zsh-clipboard { };
 
+<<<<<<< HEAD
   zsh-defer = callPackage ../shells/zsh/zsh-defer { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   zsh-edit = callPackage ../shells/zsh/zsh-edit { };
 
   zsh-git-prompt = callPackage ../shells/zsh/zsh-git-prompt { };
@@ -15283,8 +17644,11 @@ with pkgs;
 
   zsh-command-time = callPackage ../shells/zsh/zsh-command-time { };
 
+<<<<<<< HEAD
   zsh-fzf-history-search = callPackage ../shells/zsh/zsh-fzf-history-search { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   zsh-vi-mode = callPackage ../shells/zsh/zsh-vi-mode { };
 
   zsh-you-should-use = callPackage ../shells/zsh/zsh-you-should-use { };
@@ -15353,9 +17717,13 @@ with pkgs;
 
   undistract-me = callPackage ../shells/bash/undistract-me { };
 
+<<<<<<< HEAD
   carapace = callPackage ../shells/carapace {
     buildGoModule = buildGo121Module;
   };
+=======
+  carapace = callPackage ../shells/carapace { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   dash = callPackage ../shells/dash { };
 
@@ -15375,8 +17743,11 @@ with pkgs;
 
   fzf-git-sh = callPackage ../shells/fzf-git-sh { };
 
+<<<<<<< HEAD
   hishtory = callPackage ../shells/hishtory { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ion = callPackage ../shells/ion { };
 
   jush = callPackage ../shells/jush { };
@@ -15401,10 +17772,18 @@ with pkgs;
 
   scponly = callPackage ../shells/scponly { };
 
+<<<<<<< HEAD
   rush = callPackage ../shells/rush { };
 
   xonsh = callPackage ../shells/xonsh/wrapper.nix { };
   xonsh-unwrapped = callPackage ../shells/xonsh { };
+=======
+  tcsh = callPackage ../shells/tcsh { };
+
+  rush = callPackage ../shells/rush { };
+
+  xonsh = callPackage ../shells/xonsh { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   zsh = callPackage ../shells/zsh { };
 
@@ -15424,9 +17803,12 @@ with pkgs;
 
   _4th = callPackage ../development/compilers/4th { };
 
+<<<<<<< HEAD
   temurin-bin-20 = javaPackages.compiler.temurin-bin.jdk-20;
   temurin-jre-bin-20 = javaPackages.compiler.temurin-bin.jre-20;
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   temurin-bin-19 = javaPackages.compiler.temurin-bin.jdk-19;
   temurin-jre-bin-19 = javaPackages.compiler.temurin-bin.jre-19;
 
@@ -15524,8 +17906,11 @@ with pkgs;
 
   ats-acc = callPackage ../development/tools/ats-acc { };
 
+<<<<<<< HEAD
   august = callPackage ../development/compilers/august { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   avra = callPackage ../development/compilers/avra { };
 
   ballerina = callPackage ../development/compilers/ballerina {
@@ -15534,8 +17919,11 @@ with pkgs;
 
   beekeeper-studio = callPackage ../development/tools/database/beekeeper-studio { };
 
+<<<<<<< HEAD
   bfc = callPackage ../development/compilers/bfc { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   bigloo = callPackage ../development/compilers/bigloo { };
 
   binaryen = callPackage ../development/compilers/binaryen {
@@ -15562,11 +17950,19 @@ with pkgs;
 
   colm = callPackage ../development/compilers/colm { };
 
+<<<<<<< HEAD
   colmap = libsForQt5.callPackage ../applications/science/misc/colmap { inherit (config) cudaSupport; };
   colmapWithCuda = colmap.override { cudaSupport = true; };
 
   chickenPackages_4 = recurseIntoAttrs (callPackage ../development/compilers/chicken/4 { });
   chickenPackages_5 = recurseIntoAttrs (callPackage ../development/compilers/chicken/5 { });
+=======
+  colmap = libsForQt5.callPackage ../applications/science/misc/colmap { cudaSupport = config.cudaSupport or false; };
+  colmapWithCuda = colmap.override { cudaSupport = true; };
+
+  chickenPackages_4 = callPackage ../development/compilers/chicken/4 { };
+  chickenPackages_5 = callPackage ../development/compilers/chicken/5 { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   chickenPackages = dontRecurseIntoAttrs chickenPackages_5;
 
   inherit (chickenPackages_5)
@@ -15695,11 +18091,17 @@ with pkgs;
 
   cmdstan = callPackage ../development/compilers/cmdstan { };
 
+<<<<<<< HEAD
   coffeescript = callPackage ../development/compilers/coffeescript { };
 
   comby = callPackage ../development/tools/comby { };
 
   inherit (coqPackages) compcert;
+=======
+  comby = callPackage ../development/tools/comby { };
+
+  inherit (coqPackages_8_16) compcert;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   computecpp-unwrapped = callPackage ../development/compilers/computecpp { };
   computecpp = wrapCCWith rec {
@@ -15726,19 +18128,37 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) CoreServices;
   };
 
+<<<<<<< HEAD
   inherit (darwin.apple_sdk_11_0.callPackage ../development/compilers/crystal { })
     crystal_1_2
     crystal_1_7
     crystal_1_8
     crystal_1_9
+=======
+  inherit (callPackages ../development/compilers/crystal {
+    llvmPackages = llvmPackages_13;
+    stdenv = if stdenv.isDarwin then darwin.apple_sdk_11_0.stdenv else stdenv;
+  })
+    crystal_1_2
+    crystal_1_7;
+
+  inherit (callPackages ../development/compilers/crystal {
+    llvmPackages = llvmPackages_15;
+    stdenv = if stdenv.isDarwin then darwin.apple_sdk_11_0.stdenv else stdenv;
+  })
+    crystal_1_8
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     crystal;
 
   crystal2nix = callPackage ../development/compilers/crystal2nix { };
 
+<<<<<<< HEAD
   crystalline = callPackage ../development/tools/language-servers/crystalline {
     llvmPackages = llvmPackages_15;
   };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   icr = callPackage ../development/tools/icr { };
 
   scry = callPackage ../development/tools/scry { crystal = crystal_1_2; };
@@ -15757,7 +18177,11 @@ with pkgs;
 
   eli = callPackage ../development/compilers/eli { };
 
+<<<<<<< HEAD
   erg = callPackage ../development/compilers/erg { };
+=======
+  eql = callPackage ../development/compilers/eql { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   elm2nix = haskell.lib.compose.justStaticExecutables haskellPackages.elm2nix;
 
@@ -15783,14 +18207,26 @@ with pkgs;
 
   flasm = callPackage ../development/compilers/flasm { };
 
+<<<<<<< HEAD
   flyctl = callPackage ../development/web/flyctl { buildGoModule = buildGo121Module; };
+=======
+  flyctl = callPackage ../development/web/flyctl { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   fluidd = callPackage ../applications/misc/fluidd { };
 
   flutterPackages =
     recurseIntoAttrs (callPackage ../development/compilers/flutter { });
   flutter-unwrapped = flutterPackages.stable;
+<<<<<<< HEAD
   flutter = flutterPackages.wrapFlutter flutter-unwrapped;
+=======
+  flutter37-unwrapped = flutterPackages.v37;
+  flutter2-unwrapped = flutterPackages.v2;
+  flutter = flutterPackages.wrapFlutter flutter-unwrapped;
+  flutter37 = flutterPackages.wrapFlutter flutter37-unwrapped;
+  flutter2 = flutterPackages.wrapFlutter flutter2-unwrapped;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   fnm = callPackage ../development/tools/fnm {
     inherit (darwin.apple_sdk.frameworks) DiskArbitration Foundation Security;
@@ -15808,6 +18244,7 @@ with pkgs;
   gerbil = callPackage ../development/compilers/gerbil { };
   gerbil-unstable = callPackage ../development/compilers/gerbil/unstable.nix { };
   gerbil-support = callPackage ../development/compilers/gerbil/gerbil-support.nix { };
+<<<<<<< HEAD
   gerbilPackages-unstable = pkgs.gerbil-support.gerbilPackages-unstable; # NB: don't recurseIntoAttrs for (unstable!) libraries
   glow-lang = pkgs.gerbilPackages-unstable.glow-lang;
 
@@ -15819,6 +18256,20 @@ with pkgs;
   inherit ({
       gcc = pkgs.${"gcc${toString default-gcc-version}"};
       gccFun = callPackage ../development/compilers/gcc;
+=======
+  gerbilPackages-unstable = gerbil-support.gerbilPackages-unstable; # NB: don't recurseIntoAttrs for (unstable!) libraries
+
+  gbforth = callPackage ../development/compilers/gbforth { };
+
+  inherit (let
+      num =
+        if (with stdenv.targetPlatform; isVc4 || libc == "relibc") then 6
+        else 12;
+      numS = toString num;
+    in {
+      gcc = pkgs.${"gcc${numS}"};
+      gccFun = callPackage (../development/compilers/gcc + "/${numS}");
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     }) gcc gccFun;
   gcc-unwrapped = gcc.cc;
 
@@ -15900,11 +18351,19 @@ with pkgs;
   clangMultiStdenv = overrideCC stdenv buildPackages.clang_multi;
   multiStdenv = if stdenv.cc.isClang then clangMultiStdenv else gccMultiStdenv;
 
+<<<<<<< HEAD
   gcc_debug = lowPrio (wrapCC (gcc.cc.overrideAttrs {
     dontStrip = true;
   }));
 
   gccCrossLibcStdenv = overrideCC stdenv buildPackages.gccWithoutTargetLibc;
+=======
+  gcc_debug = lowPrio (wrapCC (gcc.cc.overrideAttrs (_: {
+    dontStrip = true;
+  })));
+
+  gccCrossLibcStdenv = overrideCC stdenv buildPackages.gccCrossStageStatic;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   crossLibcStdenv =
     if stdenv.hostPlatform.useLLVM or false || stdenv.hostPlatform.isDarwin
@@ -15913,19 +18372,27 @@ with pkgs;
 
   # The GCC used to build libc for the target platform. Normal gccs will be
   # built with, and use, that cross-compiled libc.
+<<<<<<< HEAD
   gccWithoutTargetLibc = assert stdenv.targetPlatform != stdenv.hostPlatform; let
+=======
+  gccCrossStageStatic = assert stdenv.targetPlatform != stdenv.hostPlatform; let
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     libcCross1 = binutilsNoLibc.libc;
     in wrapCCWith {
       cc = gccFun {
         # copy-pasted
         inherit noSysDirs;
+<<<<<<< HEAD
         majorMinorVersion = toString default-gcc-version;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
         reproducibleBuild = true;
         profiledCompiler = false;
 
         isl = if !stdenv.isDarwin then isl_0_20 else null;
 
+<<<<<<< HEAD
         withoutTargetLibc = true;
         langCC = false;
         libcCross = libcCross1;
@@ -15938,12 +18405,21 @@ with pkgs;
           && !stdenv.targetPlatform.isWindows
           && !(stdenv.targetPlatform.useLLVM or false)
         ;
+=======
+        # just for stage static
+        crossStageStatic = true;
+        langCC = false;
+        libcCross = libcCross1;
+        targetPackages.stdenv.cc.bintools = binutilsNoLibc;
+        enableShared = false;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       };
       bintools = binutilsNoLibc;
       libc = libcCross1;
       extraPackages = [];
   };
 
+<<<<<<< HEAD
   # This expression will be pushed into pkgs/development/compilers/gcc/common
   # once the top-level gcc/${version}/default.nix files are deduplicated.
   inherit
@@ -15980,6 +18456,147 @@ with pkgs;
       in lib.nameValuePair attrName pkg
     ) [ "4.8" "4.9" "6" "7" "8" "9" "10" "11" "12" "13" ]))
     gcc48 gcc49 gcc6 gcc7 gcc8 gcc9 gcc10 gcc11 gcc12 gcc13;
+=======
+  gcc48 = lowPrio (wrapCC (callPackage ../development/compilers/gcc/4.8 {
+    inherit noSysDirs;
+
+    reproducibleBuild = true;
+    profiledCompiler = false;
+
+    libcCross = if stdenv.targetPlatform != stdenv.buildPlatform then libcCross else null;
+    threadsCross = if stdenv.targetPlatform != stdenv.buildPlatform then threadsCross else { };
+
+    isl = if !stdenv.isDarwin then isl_0_14 else null;
+    cloog = if !stdenv.isDarwin then cloog else null;
+    texinfo = texinfo5; # doesn't validate since 6.1 -> 6.3 bump
+  }));
+
+  gcc49 = lowPrio (wrapCC (callPackage ../development/compilers/gcc/4.9 {
+    inherit noSysDirs;
+
+    reproducibleBuild = true;
+    profiledCompiler = false;
+
+    libcCross = if stdenv.targetPlatform != stdenv.buildPlatform then libcCross else null;
+    threadsCross = if stdenv.targetPlatform != stdenv.buildPlatform then threadsCross else { };
+
+    isl = if !stdenv.isDarwin then isl_0_11 else null;
+
+    cloog = if !stdenv.isDarwin then cloog_0_18_0 else null;
+
+    # Build fails on Darwin with clang
+    stdenv = if stdenv.isDarwin then gccStdenv else stdenv;
+  }));
+
+  gcc6 = lowPrio (wrapCC (callPackage ../development/compilers/gcc/6 {
+    inherit noSysDirs;
+
+    reproducibleBuild = true;
+    profiledCompiler = false;
+
+    libcCross = if stdenv.targetPlatform != stdenv.buildPlatform then libcCross else null;
+    threadsCross = if stdenv.targetPlatform != stdenv.buildPlatform then threadsCross else { };
+
+    # gcc 10 is too strict to cross compile gcc <= 8
+    stdenv = if (stdenv.targetPlatform != stdenv.buildPlatform) && stdenv.cc.isGNU then gcc7Stdenv else stdenv;
+
+    isl = if stdenv.isDarwin
+            then null
+          else if stdenv.targetPlatform.isRedox
+            then isl_0_17
+          else isl_0_14;
+  }));
+
+  gcc7 = lowPrio (wrapCC (callPackage ../development/compilers/gcc/7 {
+    inherit noSysDirs;
+
+    reproducibleBuild = true;
+    profiledCompiler = false;
+
+    libcCross = if stdenv.targetPlatform != stdenv.buildPlatform then libcCross else null;
+    threadsCross = if stdenv.targetPlatform != stdenv.buildPlatform then threadsCross else { };
+
+    # gcc 10 is too strict to cross compile gcc <= 8
+    stdenv = if (stdenv.targetPlatform != stdenv.buildPlatform) && stdenv.cc.isGNU then gcc7Stdenv else stdenv;
+
+    isl = if !stdenv.isDarwin then isl_0_17 else null;
+  }));
+
+  gcc8 = lowPrio (wrapCC (callPackage ../development/compilers/gcc/8 {
+    inherit noSysDirs;
+
+    reproducibleBuild = true;
+    profiledCompiler = false;
+
+    libcCross = if stdenv.targetPlatform != stdenv.buildPlatform then libcCross else null;
+    threadsCross = if stdenv.targetPlatform != stdenv.buildPlatform then threadsCross else { };
+
+    # gcc 10 is too strict to cross compile gcc <= 8
+    stdenv = if (stdenv.targetPlatform != stdenv.buildPlatform) && stdenv.cc.isGNU then gcc7Stdenv else stdenv;
+
+    isl = if !stdenv.isDarwin then isl_0_17 else null;
+  }));
+
+  gcc9 = lowPrio (wrapCC (callPackage ../development/compilers/gcc/9 {
+    inherit noSysDirs;
+
+    reproducibleBuild = true;
+    profiledCompiler = false;
+
+    libcCross = if stdenv.targetPlatform != stdenv.buildPlatform then libcCross else null;
+    threadsCross = if stdenv.targetPlatform != stdenv.buildPlatform then threadsCross else { };
+
+    isl = if !stdenv.isDarwin then isl_0_20 else null;
+  }));
+
+  gcc10 = lowPrio (wrapCC (callPackage ../development/compilers/gcc/10 {
+    inherit noSysDirs;
+
+    reproducibleBuild = true;
+    profiledCompiler = false;
+
+    libcCross = if stdenv.targetPlatform != stdenv.buildPlatform then libcCross else null;
+    threadsCross = if stdenv.targetPlatform != stdenv.buildPlatform then threadsCross else { };
+
+    isl = if !stdenv.isDarwin then isl_0_20 else null;
+  }));
+
+  gcc11 = lowPrio (wrapCC (callPackage ../development/compilers/gcc/11 {
+    inherit noSysDirs;
+
+    reproducibleBuild = true;
+    profiledCompiler = false;
+
+    libcCross = if stdenv.targetPlatform != stdenv.buildPlatform then libcCross else null;
+    threadsCross = if stdenv.targetPlatform != stdenv.buildPlatform then threadsCross else { };
+
+    isl = if !stdenv.isDarwin then isl_0_20 else null;
+  }));
+
+  gcc12 = lowPrio (wrapCC (callPackage ../development/compilers/gcc/12 {
+    inherit noSysDirs;
+
+    reproducibleBuild = true;
+    profiledCompiler = false;
+
+    libcCross = if stdenv.targetPlatform != stdenv.buildPlatform then libcCross else null;
+    threadsCross = if stdenv.targetPlatform != stdenv.buildPlatform then threadsCross else { };
+
+    isl = if !stdenv.isDarwin then isl_0_20 else null;
+  }));
+
+  gcc13 = lowPrio (wrapCC (callPackage ../development/compilers/gcc/13 {
+    inherit noSysDirs;
+
+    reproducibleBuild = true;
+    profiledCompiler = false;
+
+    libcCross = if stdenv.targetPlatform != stdenv.buildPlatform then libcCross else null;
+    threadsCross = if stdenv.targetPlatform != stdenv.buildPlatform then threadsCross else { };
+
+    isl = if !stdenv.isDarwin then isl_0_20 else null;
+  }));
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   gcc_latest = gcc13;
 
@@ -16225,10 +18842,16 @@ with pkgs;
   gcc-arm-embedded-12 = callPackage ../development/compilers/gcc-arm-embedded/12 { };
   gcc-arm-embedded = gcc-arm-embedded-12;
 
+<<<<<<< HEAD
   # It would be better to match the default gcc so that there are no linking errors
   # when using C/C++ libraries in D packages, but right now versions >= 12 are broken.
   gdc = gdc11;
   gdc11 = wrapCC (gcc11.cc.override {
+=======
+  # Has to match the default gcc so that there are no linking errors when
+  # using C/C++ libraries in D packages
+  gdc = wrapCC (gcc.cc.override {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     name = "gdc";
     langCC = false;
     langC = false;
@@ -16256,8 +18879,13 @@ with pkgs;
      then haskell.packages.native-bignum.ghc96
      # Prefer native-bignum to avoid linking issues with gmp
      else if stdenv.hostPlatform.isStatic
+<<<<<<< HEAD
      then haskell.packages.native-bignum.ghc94
      else haskell.packages.ghc94);
+=======
+     then haskell.packages.native-bignum.ghc92
+     else haskell.packages.ghc92);
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   # haskellPackages.ghc is build->host (it exposes the compiler used to build the
   # set, similarly to stdenv.cc), but pkgs.ghc should be host->target to be more
@@ -16270,8 +18898,13 @@ with pkgs;
   ghc = targetPackages.haskellPackages.ghc or
     # Prefer native-bignum to avoid linking issues with gmp
     (if stdenv.targetPlatform.isStatic
+<<<<<<< HEAD
        then haskell.compiler.native-bignum.ghc94
        else haskell.compiler.ghc94);
+=======
+       then haskell.compiler.native-bignum.ghc92
+       else haskell.compiler.ghc92);
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   alex = haskell.lib.compose.justStaticExecutables haskellPackages.alex;
 
@@ -16339,10 +18972,13 @@ with pkgs;
 
   hop = callPackage ../development/compilers/hop { };
 
+<<<<<<< HEAD
   hop-cli = callPackage ../tools/admin/hop-cli {
     inherit (darwin.apple_sdk.frameworks) CoreServices Security;
   };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   falcon = callPackage ../development/interpreters/falcon {
     stdenv = gcc10Stdenv;
   };
@@ -16365,14 +19001,20 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) CoreFoundation Security SystemConfiguration;
   };
 
+<<<<<<< HEAD
   goblob = callPackage ../tools/security/goblob { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   gogetdoc = callPackage ../development/tools/gogetdoc { };
 
   gox = callPackage ../development/tools/gox { };
 
+<<<<<<< HEAD
   goxlr-utility = callPackage ../tools/audio/goxlr-utility {};
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   gprolog = callPackage ../development/compilers/gprolog { };
 
   gwe = callPackage ../tools/misc/gwe {
@@ -16389,7 +19031,10 @@ with pkgs;
 
   idrisPackages = dontRecurseIntoAttrs (callPackage ../development/idris-modules {
     idris-no-deps = haskellPackages.idris;
+<<<<<<< HEAD
     pkgs = pkgs.__splicedPackages;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   });
 
   idris = idrisPackages.with-packages [ idrisPackages.base ] ;
@@ -16418,7 +19063,11 @@ with pkgs;
 
   hugs = callPackage ../development/interpreters/hugs { };
 
+<<<<<<< HEAD
   inherit (javaPackages) openjfx11 openjfx15 openjfx17 openjfx19 openjfx20;
+=======
+  inherit (javaPackages) openjfx11 openjfx15 openjfx17 openjfx19;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   openjfx = openjfx17;
 
   openjdk8-bootstrap = javaPackages.compiler.openjdk8-bootstrap;
@@ -16448,11 +19097,14 @@ with pkgs;
   jdk19 = openjdk19;
   jdk19_headless = openjdk19_headless;
 
+<<<<<<< HEAD
   openjdk20 = javaPackages.compiler.openjdk20;
   openjdk20_headless = javaPackages.compiler.openjdk20.headless;
   jdk20 = openjdk20;
   jdk20_headless = openjdk20_headless;
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   /* default JDK */
   jdk = jdk19;
   jdk_headless = jdk19_headless;
@@ -16543,8 +19195,11 @@ with pkgs;
 
   kind2 = darwin.apple_sdk_11_0.callPackage ../development/compilers/kind2 { };
 
+<<<<<<< HEAD
   kingstvis = callPackage ../applications/science/electronics/kingstvis { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   knightos-genkfs = callPackage ../development/tools/knightos/genkfs { };
 
   regenkfs = callPackage ../development/tools/knightos/regenkfs { };
@@ -16744,8 +19399,11 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) CoreServices Security;
   };
 
+<<<<<<< HEAD
   lunarml = callPackage ../development/compilers/lunarml { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   manticore = callPackage ../development/compilers/manticore { };
 
   marst = callPackage ../development/compilers/marst { };
@@ -16820,9 +19478,14 @@ with pkgs;
 
   inherit (callPackages ../development/compilers/nim
                         { inherit (darwin) Security;  }
+<<<<<<< HEAD
           ) nim-unwrapped nim-unwrapped-2 nimble-unwrapped nim nim2;
   nimPackages = recurseIntoAttrs nim.pkgs;
   nim2Packages = recurseIntoAttrs nim2.pkgs;
+=======
+          ) nim-unwrapped nimble-unwrapped nim;
+  nimPackages = recurseIntoAttrs nim.pkgs;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nrpl = callPackage ../development/tools/nrpl { };
 
@@ -16859,11 +19522,18 @@ with pkgs;
 
   ocaml-crunch = ocamlPackages.crunch.bin;
 
+<<<<<<< HEAD
   inherit (ocamlPackages)
     ocamlformat # latest version
     ocamlformat_0_19_0 ocamlformat_0_20_0 ocamlformat_0_20_1 ocamlformat_0_21_0
     ocamlformat_0_22_4 ocamlformat_0_23_0 ocamlformat_0_24_1 ocamlformat_0_25_1
     ocamlformat_0_26_0;
+=======
+  inherit (callPackage ../development/tools/ocaml/ocamlformat { })
+    ocamlformat # latest version
+    ocamlformat_0_19_0 ocamlformat_0_20_0 ocamlformat_0_20_1 ocamlformat_0_21_0
+    ocamlformat_0_22_4 ocamlformat_0_23_0 ocamlformat_0_24_1;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   orc = callPackage ../development/compilers/orc { };
 
@@ -16908,8 +19578,11 @@ with pkgs;
 
   pony-corral = callPackage ../development/compilers/ponyc/pony-corral.nix { };
 
+<<<<<<< HEAD
   prqlc = callPackage ../development/tools/database/prqlc { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   qbe = callPackage ../development/compilers/qbe { };
 
   rasm = callPackage ../development/compilers/rasm { };
@@ -17121,7 +19794,11 @@ with pkgs;
     inherit (llvmPackages_rocm) llvm clang-tools-extra;
     stdenv = rocmClangStdenv;
     rocmlir = rocmlir-rock;
+<<<<<<< HEAD
     boost = boost179.override { enableStatic = true; };
+=======
+    boost = boost.override { enableStatic = true; };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   miopen-hip = miopen.override {
@@ -17143,11 +19820,19 @@ with pkgs;
     inherit (darwin) apple_sdk;
   };
 
+<<<<<<< HEAD
   rust_1_72 = callPackage ../development/compilers/rust/1_72.nix {
     inherit (darwin.apple_sdk.frameworks) CoreFoundation Security SystemConfiguration;
     llvm_16 = llvmPackages_16.libllvm;
   };
   rust = rust_1_72;
+=======
+  rust_1_69 = callPackage ../development/compilers/rust/1_69.nix {
+    inherit (darwin.apple_sdk.frameworks) CoreFoundation Security SystemConfiguration;
+    llvm_15 = llvmPackages_15.libllvm;
+  };
+  rust = rust_1_69;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   mrustc = callPackage ../development/compilers/mrustc { };
   mrustc-minicargo = callPackage ../development/compilers/mrustc/minicargo.nix { };
@@ -17155,8 +19840,13 @@ with pkgs;
     openssl = openssl_1_1;
   };
 
+<<<<<<< HEAD
   rustPackages_1_72 = rust_1_72.packages.stable;
   rustPackages = rustPackages_1_72;
+=======
+  rustPackages_1_69 = rust_1_69.packages.stable;
+  rustPackages = rustPackages_1_69;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   inherit (rustPackages) cargo cargo-auditable cargo-auditable-cargo-wrapper clippy rustc rustPlatform;
 
@@ -17168,7 +19858,11 @@ with pkgs;
   cargo2junit = callPackage ../development/tools/rust/cargo2junit { };
 
   cargo-espflash = callPackage ../development/tools/rust/cargo-espflash {
+<<<<<<< HEAD
     inherit (darwin.apple_sdk.frameworks) Security SystemConfiguration;
+=======
+    inherit (darwin.apple_sdk.frameworks) Security;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   cargo-web = callPackage ../development/tools/rust/cargo-web {
@@ -17188,7 +19882,10 @@ with pkgs;
   cargo-audit = callPackage ../development/tools/rust/cargo-audit {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
+<<<<<<< HEAD
   cargo-benchcmp = callPackage ../development/tools/rust/cargo-benchcmp { };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   cargo-binstall = callPackage ../development/tools/rust/cargo-binstall { };
   cargo-bisect-rustc = callPackage ../development/tools/rust/cargo-bisect-rustc {
     inherit (darwin.apple_sdk.frameworks) Security;
@@ -17200,9 +19897,12 @@ with pkgs;
   cargo-clone = callPackage ../development/tools/rust/cargo-clone {
     inherit (darwin.apple_sdk.frameworks) Security SystemConfiguration;
   };
+<<<<<<< HEAD
   cargo-codspeed = callPackage ../development/tools/rust/cargo-codspeed { };
   cargo-component = callPackage ../development/tools/rust/cargo-component { };
   cargo-cranky = callPackage ../development/tools/rust/cargo-cranky { };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   cargo-criterion = callPackage ../development/tools/rust/cargo-criterion { };
   cargo-cyclonedx = callPackage ../development/tools/rust/cargo-cyclonedx {
     inherit (darwin.apple_sdk.frameworks) Security SystemConfiguration CoreFoundation;
@@ -17212,12 +19912,18 @@ with pkgs;
   };
   cargo-deb = callPackage ../development/tools/rust/cargo-deb { };
   cargo-deps = callPackage ../development/tools/rust/cargo-deps { };
+<<<<<<< HEAD
   cargo-docset = callPackage ../development/tools/rust/cargo-docset { };
   cargo-duplicates = callPackage ../development/tools/rust/cargo-duplicates { };
   cargo-edit = callPackage ../development/tools/rust/cargo-edit {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
   cargo-leptos = callPackage ../development/tools/rust/cargo-leptos { };
+=======
+  cargo-edit = callPackage ../development/tools/rust/cargo-edit {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   cargo-kcov = callPackage ../development/tools/rust/cargo-kcov { };
   cargo-graph = callPackage ../development/tools/rust/cargo-graph { };
   cargo-guppy = callPackage ../development/tools/rust/cargo-guppy { };
@@ -17225,7 +19931,10 @@ with pkgs;
   cargo-license = callPackage ../development/tools/rust/cargo-license { };
   cargo-llvm-cov = callPackage ../development/tools/rust/cargo-llvm-cov { };
   cargo-llvm-lines = callPackage ../development/tools/rust/cargo-llvm-lines { };
+<<<<<<< HEAD
   cargo-local-registry = callPackage ../development/tools/rust/cargo-local-registry { };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   cargo-lock = callPackage ../development/tools/rust/cargo-lock { };
   cargo-machete = callPackage ../development/tools/rust/cargo-machete { };
   cargo-outdated = callPackage ../development/tools/rust/cargo-outdated {
@@ -17244,12 +19953,15 @@ with pkgs;
   buildPgxExtension = callPackage ../development/tools/rust/cargo-pgx/buildPgxExtension.nix {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
+<<<<<<< HEAD
   cargo-pgrx = callPackage ../development/tools/rust/cargo-pgrx/default.nix {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
   buildPgrxExtension = callPackage ../development/tools/rust/cargo-pgrx/buildPgrxExtension.nix {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   cargo-release = callPackage ../development/tools/rust/cargo-release { };
   cargo-rr = callPackage ../development/tools/rust/cargo-rr { };
   cargo-tarpaulin = callPackage ../development/tools/analysis/cargo-tarpaulin {
@@ -17279,10 +19991,24 @@ with pkgs;
   cargo-dephell = callPackage ../development/tools/rust/cargo-dephell { };
   cargo-diet = callPackage ../development/tools/rust/cargo-diet { };
   cargo-dist = callPackage ../development/tools/rust/cargo-dist { };
+<<<<<<< HEAD
+=======
+  cargo-embed = callPackage ../development/tools/rust/cargo-embed {
+    inherit (darwin.apple_sdk.frameworks) AppKit;
+    inherit (darwin) DarwinTools;
+  };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   cargo-espmonitor = callPackage ../development/tools/rust/cargo-espmonitor { };
   cargo-expand = callPackage ../development/tools/rust/cargo-expand { };
   cargo-hakari = callPackage ../development/tools/rust/cargo-hakari { };
   cargo-feature = callPackage ../development/tools/rust/cargo-feature { };
+<<<<<<< HEAD
+=======
+  cargo-flash = callPackage ../development/tools/rust/cargo-flash {
+    inherit (darwin.apple_sdk.frameworks) AppKit;
+    inherit (darwin) DarwinTools;
+  };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   cargo-fund = callPackage ../development/tools/rust/cargo-fund {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
@@ -17301,17 +20027,28 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) CoreServices Security;
   };
   cargo-limit = callPackage ../development/tools/rust/cargo-limit { };
+<<<<<<< HEAD
   cargo-make = callPackage ../development/tools/rust/cargo-make { };
+=======
+  cargo-make = callPackage ../development/tools/rust/cargo-make {
+    inherit (darwin.apple_sdk.frameworks) Security SystemConfiguration;
+  };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   cargo-modules = callPackage ../development/tools/rust/cargo-modules { };
   cargo-mommy = callPackage ../development/tools/rust/cargo-mommy { };
   cargo-msrv = callPackage ../development/tools/rust/cargo-msrv {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
+<<<<<<< HEAD
   cargo-mutants = callPackage ../development/tools/rust/cargo-mutants { };
 
   cargo-ndk = callPackage ../development/tools/rust/cargo-ndk {
     inherit (darwin.apple_sdk.frameworks) CoreGraphics Foundation;
   };
+=======
+
+  cargo-ndk = callPackage ../development/tools/rust/cargo-ndk { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   cargo-nextest = callPackage ../development/tools/rust/cargo-nextest {
     inherit (darwin.apple_sdk.frameworks) Security;
@@ -17321,6 +20058,7 @@ with pkgs;
   cargo-raze = callPackage ../development/tools/rust/cargo-raze {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
+<<<<<<< HEAD
   cargo-rdme = callPackage ../by-name/ca/cargo-rdme/package.nix {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
@@ -17331,6 +20069,13 @@ with pkgs;
 
   cargo-show-asm = callPackage ../development/tools/rust/cargo-show-asm { };
   cargo-shuttle = callPackage ../development/tools/rust/cargo-shuttle { };
+=======
+  cargo-readme = callPackage ../development/tools/rust/cargo-readme { };
+  cargo-risczero = callPackage ../development/tools/rust/cargo-risczero { };
+  cargo-semver-checks = callPackage ../development/tools/rust/cargo-semver-checks { };
+
+  cargo-show-asm = callPackage ../development/tools/rust/cargo-show-asm { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   cargo-sort = callPackage ../development/tools/rust/cargo-sort { };
   cargo-spellcheck = callPackage ../development/tools/rust/cargo-spellcheck {
@@ -17341,7 +20086,10 @@ with pkgs;
   cargo-sync-readme = callPackage ../development/tools/rust/cargo-sync-readme { };
   cargo-tally = callPackage ../development/tools/rust/cargo-tally { };
   cargo-temp = callPackage ../development/tools/rust/cargo-temp { };
+<<<<<<< HEAD
   cargo-toml-lint = callPackage ../development/tools/rust/cargo-toml-lint { };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   cargo-udeps = callPackage ../development/tools/rust/cargo-udeps {
     inherit (darwin.apple_sdk.frameworks) CoreServices Security SystemConfiguration;
   };
@@ -17362,7 +20110,13 @@ with pkgs;
     inherit (darwin.apple_sdk_11_0.frameworks) Cocoa CoreServices Foundation;
   };
   cargo-wipe = callPackage ../development/tools/rust/cargo-wipe { };
+<<<<<<< HEAD
   cargo-workspaces = callPackage ../development/tools/rust/cargo-workspaces { };
+=======
+  cargo-workspaces = callPackage ../development/tools/rust/cargo-workspaces {
+    inherit (darwin.apple_sdk.frameworks) IOKit Security CoreFoundation AppKit System;
+  };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   cargo-xbuild = callPackage ../development/tools/rust/cargo-xbuild { };
   cargo-generate = callPackage ../development/tools/rust/cargo-generate { };
   cargo-bootimage = callPackage ../development/tools/rust/bootimage { };
@@ -17379,18 +20133,24 @@ with pkgs;
 
   crate2nix = callPackage ../development/tools/rust/crate2nix { };
 
+<<<<<<< HEAD
   critcmp = callPackage ../development/tools/rust/critcmp { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   convco = callPackage ../development/tools/convco {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
   devspace = callPackage ../development/tools/misc/devspace { };
 
+<<<<<<< HEAD
   djlint = callPackage ../development/tools/djlint { };
 
   leptosfmt = callPackage ../development/tools/rust/leptosfmt { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   maturin = callPackage ../development/tools/rust/maturin {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
@@ -17398,6 +20158,7 @@ with pkgs;
 
   ograc = callPackage ../development/tools/rust/ograc { };
 
+<<<<<<< HEAD
   opensmalltalk-vm = callPackage ../development/compilers/opensmalltalk-vm { };
 
   opensycl = darwin.apple_sdk_11_0.callPackage ../development/compilers/opensycl { };
@@ -17409,6 +20170,9 @@ with pkgs;
 
   ra-multiplex = callPackage ../development/tools/rust/ra-multiplex {};
 
+=======
+  ravedude = callPackage ../development/tools/rust/ravedude { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   rhack = callPackage ../development/tools/rust/rhack { };
   roogle = callPackage ../development/tools/rust/roogle { };
   rustfmt = rustPackages.rustfmt;
@@ -17430,8 +20194,11 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
   rusty-man = callPackage ../development/tools/rust/rusty-man { };
+<<<<<<< HEAD
   rustycli = callPackage ../development/tools/rust/rustycli { };
   specr-transpile = callPackage ../development/tools/rust/specr-transpile { };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   typeshare = callPackage ../development/tools/rust/typeshare { };
 
   sagittarius-scheme = callPackage ../development/compilers/sagittarius-scheme { };
@@ -17443,6 +20210,11 @@ with pkgs;
   scala_2_12 = callPackage ../development/compilers/scala/2.x.nix { majorVersion = "2.12"; };
   scala_2_13 = callPackage ../development/compilers/scala/2.x.nix { majorVersion = "2.13"; };
   scala_3 = callPackage ../development/compilers/scala { };
+<<<<<<< HEAD
+=======
+  # deprecated
+  dotty = scala_3;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   scala = scala_2_13;
   scala-runners = callPackage ../development/compilers/scala-runners {
@@ -17468,8 +20240,11 @@ with pkgs;
 
   shmig = callPackage ../development/tools/database/shmig { };
 
+<<<<<<< HEAD
   sleek = callPackage ../development/tools/database/sleek { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   smlfmt = callPackage ../development/tools/smlfmt { };
 
   # smlnjBootstrap should be redundant, now that smlnj works on Darwin natively
@@ -17480,7 +20255,13 @@ with pkgs;
 
   smlpkg = callPackage ../tools/package-management/smlpkg { };
 
+<<<<<<< HEAD
   solc = callPackage ../development/compilers/solc { };
+=======
+  solc = callPackage ../development/compilers/solc {
+    boost = boost172;
+  };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   souffle = callPackage ../development/compilers/souffle { };
 
@@ -17510,9 +20291,13 @@ with pkgs;
 
   stalin = callPackage ../development/compilers/stalin { };
 
+<<<<<<< HEAD
   stanc = callPackage ../development/compilers/stanc {
     ocamlPackages = ocaml-ng.ocamlPackages_4_14_janeStreet_0_15;
   };
+=======
+  stanc = callPackage ../development/compilers/stanc { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   metaBuildEnv = callPackage ../development/compilers/meta-environment/meta-build-env { };
 
@@ -17526,7 +20311,13 @@ with pkgs;
   swiftpm2nix = callPackage ../development/tools/swiftpm2nix { };
 
   swiProlog = callPackage ../development/compilers/swi-prolog {
+<<<<<<< HEAD
     inherit (darwin.apple_sdk.frameworks) Security;
+=======
+    openssl = openssl_1_1;
+    inherit (darwin.apple_sdk.frameworks) Security;
+    jdk = openjdk8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
   swiPrologWithGui = swiProlog.override { withGui = true; };
 
@@ -17541,9 +20332,13 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Cocoa Foundation;
   };
 
+<<<<<<< HEAD
   teyjus = callPackage ../development/compilers/teyjus {
     inherit (ocamlPackages) buildDunePackage;
   };
+=======
+  teyjus = callPackage ../development/compilers/teyjus { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   thrust = callPackage ../development/tools/thrust {
     gconf = gnome2.GConf;
@@ -17562,9 +20357,13 @@ with pkgs;
 
   tinyscheme = callPackage ../development/interpreters/tinyscheme { };
 
+<<<<<<< HEAD
   tbox = callPackage ../development/libraries/tbox { };
 
   typescript = callPackage ../development/compilers/typescript { };
+=======
+  inherit (nodePackages) typescript;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   bupc = callPackage ../development/compilers/bupc { };
 
@@ -17584,8 +20383,11 @@ with pkgs;
 
   vala-lint = callPackage ../development/tools/vala-lint { };
 
+<<<<<<< HEAD
   vcard = python3Packages.toPythonApplication python3Packages.vcard;
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   inherit (callPackage ../development/compilers/vala { })
     vala_0_48
     vala_0_54
@@ -17594,8 +20396,11 @@ with pkgs;
 
   vyper = with python3Packages; toPythonApplication vyper;
 
+<<<<<<< HEAD
   wazero = callPackage ../development/interpreters/wazero { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   wcc = callPackage ../development/compilers/wcc { };
 
   wla-dx = callPackage ../development/compilers/wla-dx { };
@@ -17616,7 +20421,11 @@ with pkgs;
       # want the C++ library to be explicitly chosen by the caller, and null by
       # default.
       libcxx ? null
+<<<<<<< HEAD
     , extraPackages ? lib.optional (cc.isGNU or false && stdenv.targetPlatform.isMinGW) ((threadsCrossFor cc.version).package)
+=======
+    , extraPackages ? lib.optional (cc.isGNU or false && stdenv.targetPlatform.isMinGW) threadsCross.package
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     , nixSupport ? {}
     , ...
     } @ extraArgs:
@@ -17652,7 +20461,11 @@ with pkgs;
     inherit (darwin) postLinkSignHook signingUtils;
   } // extraArgs; in self);
 
+<<<<<<< HEAD
   yaml-language-server = callPackage  ../development/tools/language-servers/yaml-language-server { };
+=======
+  yaml-language-server = nodePackages.yaml-language-server;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   # prolog
   yap = callPackage ../development/compilers/yap { };
@@ -17680,10 +20493,14 @@ with pkgs;
 
   angelscript = callPackage ../development/interpreters/angelscript { };
 
+<<<<<<< HEAD
   anko = callPackage ../development/interpreters/anko { };
 
   babashka-unwrapped = callPackage ../development/interpreters/babashka { };
   babashka = callPackage ../development/interpreters/babashka/wrapped.nix { };
+=======
+  babashka = callPackage ../development/interpreters/clojure/babashka.nix { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   # BQN interpreters and compilers
 
@@ -17711,6 +20528,7 @@ with pkgs;
     mbqn-source = buildPackages.mbqn.src;
 
     phase0 = callPackage ../development/interpreters/bqn/cbqn {
+<<<<<<< HEAD
       inherit (cbqn-bootstrap) mbqn-source stdenv;
       genBytecode = false;
       bqn-path = null;
@@ -17720,6 +20538,19 @@ with pkgs;
       inherit (cbqn-bootstrap) mbqn-source stdenv;
       genBytecode = false;
       bqn-path = null;
+=======
+      inherit (cbqn-bootstrap) stdenv;
+      genBytecode = false;
+      bqn-path = null;
+      mbqn-source = null;
+    };
+
+    phase0-replxx = callPackage ../development/interpreters/bqn/cbqn {
+      inherit (cbqn-bootstrap) stdenv;
+      genBytecode = false;
+      bqn-path = null;
+      mbqn-source = null;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       enableReplxx = true;
     };
 
@@ -17796,8 +20627,11 @@ with pkgs;
 
   dhall-nixpkgs = haskell.lib.compose.justStaticExecutables haskellPackages.dhall-nixpkgs;
 
+<<<<<<< HEAD
   dhall-yaml = haskell.lib.compose.justStaticExecutables haskellPackages.dhall-yaml;
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   dhallPackages = recurseIntoAttrs (callPackage ./dhall-packages.nix { });
 
   duktape = callPackage ../development/interpreters/duktape { };
@@ -17819,9 +20653,15 @@ with pkgs;
   };
 
   inherit (beam.interpreters)
+<<<<<<< HEAD
     erlang erlang_26 erlang_25 erlang_24
     erlang_odbc erlang_javac erlang_odbc_javac
     elixir elixir_1_15 elixir_1_14 elixir_1_13 elixir_1_12 elixir_1_11 elixir_1_10
+=======
+    erlang erlang_25 erlang_24 erlang_23
+    erlang_odbc erlang_javac erlang_odbc_javac
+    elixir elixir_1_14 elixir_1_13 elixir_1_12 elixir_1_11 elixir_1_10
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     elixir-ls;
 
   erlang_nox = beam_nox.interpreters.erlang;
@@ -17832,10 +20672,13 @@ with pkgs;
     fetchHex beamPackages
     lfe lfe_2_1;
 
+<<<<<<< HEAD
   expr = callPackage ../development/interpreters/expr { };
 
   genemichaels = callPackage ../development/tools/rust/genemichaels { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   gnudatalanguage = callPackage ../development/interpreters/gnudatalanguage {
     inherit (llvmPackages) openmp;
     inherit (darwin.apple_sdk.frameworks) Cocoa;
@@ -17843,16 +20686,22 @@ with pkgs;
     mpi = mpich;
   };
 
+<<<<<<< HEAD
   gpython = callPackage ../development/interpreters/gpython { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   graphql-client = callPackage ../development/tools/graphql-client {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
   graphqlmap = callPackage ../tools/security/graphqlmap { };
 
+<<<<<<< HEAD
   graphqurl = callPackage ../tools/networking/graphqurl { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   groovy = callPackage ../development/interpreters/groovy { };
 
   inherit (callPackages ../applications/networking/cluster/hadoop {
@@ -17874,7 +20723,11 @@ with pkgs;
     stdenv = clangStdenv;
   };
 
+<<<<<<< HEAD
   jacinda = haskell.lib.compose.justStaticExecutables haskellPackages.jacinda;
+=======
+  jacinda = haskell.lib.compose.justStaticExecutables haskell.packages.ghc92.jacinda;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   janet = callPackage ../development/interpreters/janet { };
 
@@ -17890,8 +20743,11 @@ with pkgs;
 
   davmail = callPackage ../applications/networking/davmail { };
 
+<<<<<<< HEAD
   kamilalisp = callPackage ../development/interpreters/kamilalisp { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   kanif = callPackage ../applications/networking/cluster/kanif { };
 
   kona = callPackage ../development/interpreters/kona { };
@@ -17909,8 +20765,11 @@ with pkgs;
   zuo = callPackage ../development/interpreters/zuo { };
 
   ### LUA interpreters
+<<<<<<< HEAD
   emilua = callPackage ../development/interpreters/emilua { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   luaInterpreters = callPackage ./../development/interpreters/lua-5 { };
   inherit (luaInterpreters) lua5_1 lua5_2 lua5_2_compat lua5_3 lua5_3_compat lua5_4 lua5_4_compat luajit_2_1 luajit_2_0 luajit_openresty;
 
@@ -17932,8 +20791,11 @@ with pkgs;
 
   luau = callPackage ../development/interpreters/luau { };
 
+<<<<<<< HEAD
   lune = callPackage ../development/interpreters/lune { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   toluapp = callPackage ../development/tools/toluapp {
     lua = lua5_1; # doesn't work with any other :(
   };
@@ -17991,6 +20853,7 @@ with pkgs;
   # PHP interpreters, packages and extensions.
   #
   # Set default PHP interpreter, extensions and packages
+<<<<<<< HEAD
   php = php82;
   phpExtensions = php.extensions;
   phpPackages = php.packages;
@@ -18005,6 +20868,12 @@ with pkgs;
   php83Extensions = recurseIntoAttrs php83.extensions;
   php83Packages = recurseIntoAttrs php83.packages;
 
+=======
+  php = php81;
+  phpExtensions = php.extensions;
+  phpPackages = php.packages;
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   # Import PHP82 interpreter, extensions and packages
   php82 = callPackage ../development/interpreters/php/8.2.nix {
     stdenv = if stdenv.cc.isClang then llvmPackages.stdenv else stdenv;
@@ -18025,6 +20894,19 @@ with pkgs;
   php81Extensions = recurseIntoAttrs php81.extensions;
   php81Packages = recurseIntoAttrs php81.packages;
 
+<<<<<<< HEAD
+=======
+  # Import PHP80 interpreter, extensions and packages
+  php80 = callPackage ../development/interpreters/php/8.0.nix {
+    stdenv = if stdenv.cc.isClang then llvmPackages.stdenv else stdenv;
+    pcre2 = pcre2.override {
+      withJitSealloc = false; # See https://bugs.php.net/bug.php?id=78927 and https://bugs.php.net/bug.php?id=78630
+    };
+  };
+  php80Extensions = recurseIntoAttrs php80.extensions;
+  php80Packages = recurseIntoAttrs php80.packages;
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   phpactor = callPackage ../development/tools/phpactor { };
 
   picoc = callPackage ../development/interpreters/picoc { };
@@ -18127,10 +21009,23 @@ with pkgs;
 
   check-jsonschema = callPackage ../development/tools/check-jsonschema { };
 
+<<<<<<< HEAD
+=======
+  pypi2nix = callPackage ../development/tools/pypi2nix { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pypi-mirror = callPackage ../development/tools/pypi-mirror { };
 
   setupcfg2nix = python3Packages.callPackage ../development/tools/setupcfg2nix { };
 
+<<<<<<< HEAD
+=======
+  # These pyside tools do not provide any Python modules and are meant to be here.
+  # See ../development/python-modules/pyside for details.
+  pysideApiextractor = callPackage ../development/python-modules/pyside/apiextractor.nix { };
+  pysideGeneratorrunner = callPackage ../development/python-modules/pyside/generatorrunner.nix { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   svg2tikz = with python3.pkgs; toPythonApplication svg2tikz;
 
   svg2pdf = callPackage ../tools/graphics/svg2pdf { };
@@ -18219,6 +21114,7 @@ with pkgs;
 
   rbenv = callPackage ../development/ruby-modules/rbenv { };
 
+<<<<<<< HEAD
   rubyfmt = darwin.apple_sdk_11_0.callPackage ../development/tools/rubyfmt {
     inherit (darwin.apple_sdk_11_0.frameworks) Foundation Security;
     inherit (darwin) libobjc;
@@ -18227,14 +21123,23 @@ with pkgs;
   inherit (darwin.apple_sdk_11_0.callPackage ../development/interpreters/ruby {
     inherit (darwin) libobjc libunwind;
     inherit (darwin.apple_sdk_11_0.frameworks) Foundation;
+=======
+  inherit (callPackage ../development/interpreters/ruby {
+    inherit (darwin) libobjc libunwind;
+    inherit (darwin.apple_sdk.frameworks) Foundation;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   })
     mkRubyVersion
     mkRuby
     ruby_2_7
     ruby_3_0
     ruby_3_1
+<<<<<<< HEAD
     ruby_3_2
     ruby_3_3;
+=======
+    ruby_3_2;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   ruby = ruby_3_1;
   rubyPackages = rubyPackages_3_1;
@@ -18243,12 +21148,18 @@ with pkgs;
   rubyPackages_3_0 = recurseIntoAttrs ruby_3_0.gems;
   rubyPackages_3_1 = recurseIntoAttrs ruby_3_1.gems;
   rubyPackages_3_2 = recurseIntoAttrs ruby_3_2.gems;
+<<<<<<< HEAD
   rubyPackages_3_3 = recurseIntoAttrs ruby_3_3.gems;
 
   mruby = callPackage ../development/compilers/mruby { };
 
   samplebrain = libsForQt5.callPackage ../applications/audio/samplebrain { };
 
+=======
+
+  mruby = callPackage ../development/compilers/mruby { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   scsh = callPackage ../development/interpreters/scsh { };
 
   scheme48 = callPackage ../development/interpreters/scheme48 { };
@@ -18260,7 +21171,11 @@ with pkgs;
   smiley-sans = callPackage ../data/fonts/smiley-sans { };
 
   inherit (callPackages ../applications/networking/cluster/spark { })
+<<<<<<< HEAD
     spark_3_4 spark_3_3 spark_3_2;
+=======
+    spark_3_4;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   spark3 = spark_3_4;
   spark = spark3;
 
@@ -18277,17 +21192,23 @@ with pkgs;
   spidermonkey_102 = callPackage ../development/interpreters/spidermonkey/102.nix {
     inherit (darwin) libobjc;
   };
+<<<<<<< HEAD
   spidermonkey_115 = callPackage ../development/interpreters/spidermonkey/115.nix {
     inherit (darwin) libobjc;
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   ssm-agent = callPackage ../applications/networking/cluster/ssm-agent { };
   ssm-session-manager-plugin = callPackage ../applications/networking/cluster/ssm-session-manager-plugin { };
 
   starlark = callPackage ../development/interpreters/starlark { };
 
+<<<<<<< HEAD
   starlark-rust = callPackage ../development/interpreters/starlark-rust { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   supercollider = libsForQt5.callPackage ../development/interpreters/supercollider {
     fftw = fftwSinglePrec;
   };
@@ -18318,6 +21239,11 @@ with pkgs;
 
   eltclsh = callPackage ../development/tools/eltclsh { };
 
+<<<<<<< HEAD
+=======
+  trealla = callPackage ../development/interpreters/trealla { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   waagent = callPackage ../applications/networking/cluster/waagent { };
 
   wapm-cli = callPackage ../tools/package-management/wapm/cli {
@@ -18328,8 +21254,11 @@ with pkgs;
 
   wasm3 = callPackage ../development/interpreters/wasm3 { };
 
+<<<<<<< HEAD
   yaegi = callPackage ../development/interpreters/yaegi { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   yex-lang = callPackage ../development/interpreters/yex-lang { };
 
   ### DEVELOPMENT / MISC
@@ -18359,8 +21288,11 @@ with pkgs;
 
   gimme-aws-creds = callPackage ../tools/admin/gimme-aws-creds { };
 
+<<<<<<< HEAD
   gimoji = callPackage ../applications/misc/gimoji { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   guile_1_8 = callPackage ../development/interpreters/guile/1.8.nix { };
 
   # Needed for autogen
@@ -18370,7 +21302,11 @@ with pkgs;
 
   guile_3_0 = callPackage ../development/interpreters/guile/3.0.nix { };
 
+<<<<<<< HEAD
   guile = guile_3_0;
+=======
+  guile = guile_2_2;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   guile-cairo = callPackage ../development/guile-modules/guile-cairo { };
 
@@ -18396,9 +21332,13 @@ with pkgs;
 
   guile-reader = callPackage ../development/guile-modules/guile-reader { };
 
+<<<<<<< HEAD
   guile-sdl = callPackage ../development/guile-modules/guile-sdl {
     guile = guile_2_2;
   };
+=======
+  guile-sdl = callPackage ../development/guile-modules/guile-sdl { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   guile-sdl2 = callPackage ../development/guile-modules/guile-sdl2 { };
 
@@ -18407,7 +21347,11 @@ with pkgs;
   guile-ssh = callPackage ../development/guile-modules/guile-ssh { };
 
   guile-xcb = callPackage ../development/guile-modules/guile-xcb {
+<<<<<<< HEAD
     guile = guile_2_2;
+=======
+    guile = guile_2_0;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   inav-blackbox-tools = callPackage ../tools/misc/inav-blackbox-tools { };
@@ -18434,7 +21378,16 @@ with pkgs;
 
   rappel = callPackage ../development/misc/rappel { };
 
+<<<<<<< HEAD
   pharo = callPackage ../development/pharo { };
+=======
+  pharo-vms = callPackage ../development/pharo/vm { };
+  pharo = pharo-vms.multi-vm-wrapper;
+  pharo-cog32 = pharo-vms.cog32;
+  pharo-spur32 = pharo-vms.spur32;
+  pharo-spur64 = assert stdenv.is64bit; pharo-vms.spur64;
+  pharo-launcher = callPackage ../development/pharo/launcher { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   protege-distribution = callPackage ../development/web/protege-distribution { };
 
@@ -18458,10 +21411,13 @@ with pkgs;
 
   asdf-vm = callPackage ../tools/misc/asdf-vm { };
 
+<<<<<<< HEAD
   rtx = callPackage ../tools/misc/rtx {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ### DEVELOPMENT / TOOLS
 
   abi-compliance-checker = callPackage ../development/tools/misc/abi-compliance-checker { };
@@ -18497,6 +21453,7 @@ with pkgs;
 
   autoadb = callPackage ../misc/autoadb { };
 
+<<<<<<< HEAD
   ansible = ansible_2_15;
   ansible_2_15 = python3Packages.toPythonApplication python3Packages.ansible-core;
   ansible_2_14 = python3Packages.toPythonApplication (python3Packages.ansible-core.overridePythonAttrs (oldAttrs: rec {
@@ -18528,6 +21485,30 @@ with pkgs;
 
   teller = callPackage ../development/tools/teller { };
 
+=======
+  ansible = ansible_2_14;
+  ansible_2_14 = python3Packages.toPythonApplication python3Packages.ansible-core;
+  ansible_2_13 = python3Packages.toPythonApplication (python3Packages.ansible-core.overridePythonAttrs (oldAttrs: rec {
+    version = "2.13.6";
+    src = oldAttrs.src.override {
+      inherit version;
+      hash = "sha256-Mf4yK2MpBnSo9zhhEN9QHwBEqkSJC+OrMTpuIluaKc8=";
+    };
+  }));
+  ansible_2_12 = python3Packages.toPythonApplication (python3Packages.ansible-core.overridePythonAttrs (oldAttrs: rec {
+    version = "2.12.10";
+    src = oldAttrs.src.override {
+      inherit version;
+      hash = "sha256-/rHfYXOM/B9eiTtCouwafeMpd9Z+hnB7Retj0MXDwjY=";
+    };
+    meta.changelog = "https://github.com/ansible/ansible/blob/v${version}/changelogs/CHANGELOG-v${lib.versions.majorMinor version}.rst";
+  }));
+
+  ansible-doctor = with python3.pkgs; toPythonApplication ansible-doctor;
+
+  phpunit = callPackage ../development/tools/misc/phpunit { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ### DEVELOPMENT / TOOLS / LANGUAGE-SERVERS
 
   ansible-language-server = callPackage ../development/tools/language-servers/ansible-language-server { };
@@ -18542,24 +21523,35 @@ with pkgs;
 
   docker-compose-language-service = callPackage ../development/tools/language-servers/docker-compose-language-service { };
 
+<<<<<<< HEAD
   dockerfile-language-server-nodejs = callPackage ../development/tools/language-servers/dockerfile-language-server-nodejs { };
 
   dot-language-server = callPackage ../development/tools/language-servers/dot-language-server { };
 
   emmet-ls = callPackage ../development/tools/language-servers/emmet-ls { };
 
+=======
+  dot-language-server = callPackage ../development/tools/language-servers/dot-language-server { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   fortls = python3.pkgs.callPackage ../development/tools/language-servers/fortls { };
 
   fortran-language-server = python3.pkgs.callPackage ../development/tools/language-servers/fortran-language-server { };
 
+<<<<<<< HEAD
   glslls = callPackage ../development/tools/language-servers/glslls { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   gopls = callPackage ../development/tools/language-servers/gopls { };
 
   helm-ls = callPackage ../development/tools/language-servers/helm-ls { };
 
+<<<<<<< HEAD
   javascript-typescript-langserver = callPackage ../development/tools/language-servers/javascript-typescript-langserver { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   jdt-language-server = callPackage ../development/tools/language-servers/jdt-language-server { };
 
   jsonnet-language-server = callPackage ../development/tools/language-servers/jsonnet-language-server { };
@@ -18568,13 +21560,17 @@ with pkgs;
 
   lua-language-server = darwin.apple_sdk_11_0.callPackage ../development/tools/language-servers/lua-language-server {
     inherit (darwin.apple_sdk_11_0.frameworks) CoreFoundation Foundation;
+<<<<<<< HEAD
     inherit (darwin) ditto;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   metals = callPackage ../development/tools/language-servers/metals { };
 
   millet = callPackage ../development/tools/language-servers/millet { };
 
+<<<<<<< HEAD
   neocmakelsp = callPackage ../development/tools/language-servers/neocmakelsp { };
 
   nil = callPackage ../development/tools/language-servers/nil { };
@@ -18601,6 +21597,13 @@ with pkgs;
   ruff-lsp = python3Packages.callPackage ../development/tools/language-servers/ruff-lsp { };
 
   rune-languageserver = callPackage ../development/tools/language-servers/rune-languageserver { };
+=======
+  nil = callPackage ../development/tools/language-servers/nil { };
+
+  pylyzer = callPackage ../development/tools/language-servers/pylyzer { };
+
+  rnix-lsp = callPackage ../development/tools/language-servers/rnix-lsp { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   svls = callPackage ../development/tools/language-servers/svls { };
 
@@ -18610,6 +21613,7 @@ with pkgs;
 
   verible = callPackage ../development/tools/language-servers/verible { };
 
+<<<<<<< HEAD
   vscode-langservers-extracted = callPackage ../development/tools/language-servers/vscode-langservers-extracted { };
 
   zls = callPackage ../development/tools/language-servers/zls { };
@@ -18617,6 +21621,15 @@ with pkgs;
   ansible-later = callPackage ../tools/admin/ansible/later.nix { };
 
   ansible-lint = callPackage ../tools/admin/ansible/lint.nix { };
+=======
+  zls = callPackage ../development/tools/language-servers/zls {
+    zig = buildPackages.zig_0_10;
+  };
+
+  ansible-later = with python3.pkgs; toPythonApplication ansible-later;
+
+  ansible-lint = with python3.pkgs; toPythonApplication ansible-lint;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   antlr2 = callPackage ../development/tools/parsing/antlr/2.7.7.nix { };
   antlr3_4 = callPackage ../development/tools/parsing/antlr/3.4.nix { };
@@ -18628,10 +21641,16 @@ with pkgs;
     antlr4_9
     antlr4_10
     antlr4_11
+<<<<<<< HEAD
     antlr4_12
     antlr4_13;
 
   antlr4 = antlr4_13;
+=======
+    antlr4_12;
+
+  antlr4 = antlr4_12;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   antlr = antlr4;
 
@@ -18639,14 +21658,21 @@ with pkgs;
   apacheAnt_1_9 = callPackage ../development/tools/build-managers/apache-ant/1.9.nix { };
   ant = apacheAnt;
 
+<<<<<<< HEAD
   apacheKafka = apacheKafka_3_5;
+=======
+  apacheKafka = apacheKafka_3_3;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   apacheKafka_2_8 = callPackage ../servers/apache-kafka { majorVersion = "2.8"; };
   apacheKafka_3_0 = callPackage ../servers/apache-kafka { majorVersion = "3.0"; };
   apacheKafka_3_1 = callPackage ../servers/apache-kafka { majorVersion = "3.1"; };
   apacheKafka_3_2 = callPackage ../servers/apache-kafka { majorVersion = "3.2"; };
   apacheKafka_3_3 = callPackage ../servers/apache-kafka { majorVersion = "3.3"; };
+<<<<<<< HEAD
   apacheKafka_3_4 = callPackage ../servers/apache-kafka { majorVersion = "3.4"; };
   apacheKafka_3_5 = callPackage ../servers/apache-kafka { majorVersion = "3.5"; };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   kt = callPackage ../tools/misc/kt { };
 
@@ -18670,6 +21696,10 @@ with pkgs;
 
   inherit (callPackages ../development/tools/electron/binary { })
     electron-bin
+<<<<<<< HEAD
+=======
+    electron_9-bin
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     electron_10-bin
     electron_11-bin
     electron_12-bin
@@ -18684,11 +21714,18 @@ with pkgs;
     electron_21-bin
     electron_22-bin
     electron_23-bin
+<<<<<<< HEAD
     electron_24-bin
     electron_25-bin
     electron_26-bin;
 
   electron = electron-bin;
+=======
+    electron_24-bin;
+
+  electron = electron-bin;
+  electron_9 = electron_9-bin;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   electron_10 = electron_10-bin;
   electron_11 = electron_11-bin;
   electron_12 = electron_12-bin;
@@ -18704,8 +21741,11 @@ with pkgs;
   electron_22 = electron_22-bin;
   electron_23 = electron_23-bin;
   electron_24 = electron_24-bin;
+<<<<<<< HEAD
   electron_25 = electron_25-bin;
   electron_26 = electron_26-bin;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   autobuild = callPackage ../development/tools/misc/autobuild { };
 
@@ -18863,7 +21903,11 @@ with pkgs;
   in     if linker == "lld"     then llvmPackages.bintools-unwrapped
     else if linker == "cctools" then darwin.binutils-unwrapped
     else if linker == "bfd"     then binutils-unwrapped
+<<<<<<< HEAD
     else if linker == "gold"    then binutils-unwrapped.override { enableGoldDefault = true; }
+=======
+    else if linker == "gold"    then binutils-unwrapped
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     else null;
   bintoolsNoLibc = wrapBintoolsWith {
     bintools = bintools-unwrapped;
@@ -18904,8 +21948,11 @@ with pkgs;
 
   buck = callPackage ../development/tools/build-managers/buck { };
 
+<<<<<<< HEAD
   buck2 = callPackage ../development/tools/build-managers/buck2 { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   build2 = callPackage ../development/tools/build-managers/build2 {
     # Break cycle by using self-contained toolchain for bootstrapping
     build2 = buildPackages.callPackage ../development/tools/build-managers/build2/bootstrap.nix { };
@@ -18947,11 +21994,20 @@ with pkgs;
   bpftools = callPackage ../os-specific/linux/bpftools { };
 
   bcc = callPackage ../os-specific/linux/bcc {
+<<<<<<< HEAD
     llvmPackages = llvmPackages_16;
   };
 
   bpftrace = callPackage ../os-specific/linux/bpftrace {
     llvmPackages = llvmPackages_16;
+=======
+    python = python3;
+    llvmPackages = llvmPackages_14;
+  };
+
+  bpftrace = callPackage ../os-specific/linux/bpftrace {
+    llvmPackages = llvmPackages_14;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   bpm-tools = callPackage ../tools/audio/bpm-tools { };
@@ -18960,12 +22016,15 @@ with pkgs;
 
   cadre = callPackage ../development/tools/cadre { };
 
+<<<<<<< HEAD
   carto = callPackage ../development/tools/carto { };
 
   catnip = callPackage ../tools/audio/catnip { };
 
   catnip-gtk4 = callPackage ../tools/audio/catnip-gtk4 { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   cbrowser = callPackage ../development/tools/misc/cbrowser { };
 
   cc-tool = callPackage ../development/embedded/cc-tool { };
@@ -19040,8 +22099,11 @@ with pkgs;
 
   cl-launch = callPackage ../development/tools/misc/cl-launch { };
 
+<<<<<<< HEAD
   clean-css-cli = callPackage ../development/tools/clean-css-cli { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   cloud-nuke = callPackage ../development/tools/cloud-nuke { };
 
   cloudcompare = libsForQt5.callPackage ../applications/graphics/cloudcompare { };
@@ -19058,20 +22120,29 @@ with pkgs;
 
   coder = callPackage ../development/tools/coder { };
 
+<<<<<<< HEAD
   codespelunker = callPackage ../development/tools/codespelunker { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   compile-daemon = callPackage ../development/tools/compile-daemon { };
 
   complexity = callPackage ../development/tools/misc/complexity { };
 
+<<<<<<< HEAD
   complgen = callPackage ../development/tools/misc/complgen { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   conan = callPackage ../development/tools/build-managers/conan { };
 
   cookiecutter = with python3Packages; toPythonApplication cookiecutter;
 
+<<<<<<< HEAD
   cordova = callPackage ../development/mobile/cordova { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   corrosion = callPackage ../development/tools/build-managers/corrosion { };
 
   corundum = callPackage ../development/tools/corundum { };
@@ -19142,7 +22213,11 @@ with pkgs;
 
   csmith = callPackage ../development/tools/misc/csmith { };
 
+<<<<<<< HEAD
   inherit (nodePackages) csslint;
+=======
+  csslint = callPackage ../development/web/csslint { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   css-html-js-minify = with python3Packages; toPythonApplication css-html-js-minify;
 
@@ -19155,8 +22230,11 @@ with pkgs;
 
   cwltool = callPackage ../applications/science/misc/cwltool { };
 
+<<<<<<< HEAD
   dbt = with python3Packages; toPythonApplication dbt-core;
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   dprint = callPackage ../development/tools/dprint {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
@@ -19168,8 +22246,11 @@ with pkgs;
 
   librarian-puppet-go = callPackage ../development/tools/librarian-puppet-go { };
 
+<<<<<<< HEAD
   libgcc = stdenv.cc.cc.libgcc or null;
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   # This is for e.g. LLVM libraries on linux.
   gccForLibs =
     if stdenv.targetPlatform == stdenv.hostPlatform && targetPackages.stdenv.cc.isGNU
@@ -19248,6 +22329,7 @@ with pkgs;
 
   dive = callPackage ../development/tools/dive { };
 
+<<<<<<< HEAD
   dioxus-cli = callPackage ../development/tools/rust/dioxus-cli { };
 
   doclifter = callPackage ../development/tools/misc/doclifter { };
@@ -19261,6 +22343,15 @@ with pkgs;
       };
     })
   );
+=======
+  dioxus-cli = callPackage ../development/tools/rust/dioxus-cli {
+    inherit (darwin.apple_sdk.frameworks) CoreServices;
+  };
+
+  doclifter = callPackage ../development/tools/misc/doclifter { };
+
+  docutils = with python3Packages; toPythonApplication docutils;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   doctl = callPackage ../development/tools/doctl { };
 
@@ -19293,8 +22384,11 @@ with pkgs;
 
   dwz = callPackage ../development/tools/misc/dwz { };
 
+<<<<<<< HEAD
   eask = callPackage ../development/tools/eask { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   easypdkprog = callPackage ../development/embedded/easypdkprog { };
 
   eclint = callPackage ../development/tools/eclint { };
@@ -19315,9 +22409,13 @@ with pkgs;
 
   electron-fiddle = callPackage ../development/tools/electron-fiddle { };
 
+<<<<<<< HEAD
   elf2uf2-rs = darwin.apple_sdk_11_0.callPackage ../development/embedded/elf2uf2-rs {
     inherit (darwin.apple_sdk_11_0.frameworks) CoreFoundation DiskArbitration Foundation;
   };
+=======
+  elf2uf2-rs = callPackage ../development/embedded/elf2uf2-rs { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   elfinfo = callPackage ../development/tools/misc/elfinfo { };
 
@@ -19329,7 +22427,13 @@ with pkgs;
 
   emma = callPackage ../development/tools/analysis/emma { };
 
+<<<<<<< HEAD
   ent-go = callPackage ../development/tools/ent { };
+=======
+  ent-go = callPackage ../development/tools/ent {
+    buildGoModule = buildGo119Module; # go 1.20 build failure
+  };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   epm = callPackage ../development/tools/misc/epm { };
 
@@ -19341,8 +22445,11 @@ with pkgs;
 
   explain = callPackage ../development/tools/explain { };
 
+<<<<<<< HEAD
   ezno = callPackage ../development/tools/misc/ezno { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   func = callPackage ../applications/networking/cluster/func { };
 
   funnelweb = callPackage ../development/tools/literate-programming/funnelweb { };
@@ -19368,16 +22475,22 @@ with pkgs;
 
   fastddsgen = callPackage ../development/tools/fastddsgen { };
 
+<<<<<<< HEAD
   fastgron = callPackage ../development/tools/fastgron { };
 
   fatcat = callPackage ../development/tools/fatcat { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   findbugs = callPackage ../development/tools/analysis/findbugs { };
 
   findnewest = callPackage ../development/tools/misc/findnewest { };
 
+<<<<<<< HEAD
   firebase-tools = callPackage ../development/tools/firebase-tools { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   flootty = callPackage ../development/tools/flootty { };
 
   fffuu = haskell.lib.compose.justStaticExecutables (haskellPackages.callPackage ../tools/misc/fffuu { });
@@ -19418,12 +22531,15 @@ with pkgs;
 
   fundoc = callPackage ../development/tools/fundoc { };
 
+<<<<<<< HEAD
   funzzy = callPackage ../development/tools/misc/funzzy { };
 
   futuresql = libsForQt5.callPackage ../development/libraries/futuresql { };
 
   fzf-make = callPackage ../development/tools/misc/fzf-make { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   gede = libsForQt5.callPackage ../development/tools/misc/gede { };
 
   gdbgui = python3Packages.callPackage ../development/tools/misc/gdbgui { };
@@ -19501,8 +22617,11 @@ with pkgs;
 
   gocd-server = callPackage ../development/tools/continuous-integration/gocd-server { };
 
+<<<<<<< HEAD
   gopatch = callPackage ../development/tools/misc/gopatch { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   goredo = callPackage ../development/tools/build-managers/goredo { };
 
   gotify-server = callPackage ../servers/gotify { };
@@ -19517,8 +22636,11 @@ with pkgs;
 
   gpuvis = callPackage ../development/tools/misc/gpuvis { };
 
+<<<<<<< HEAD
   gqlint = callPackage ../development/tools/gqlint { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   gradle-packages = import ../development/tools/build-managers/gradle {
     inherit jdk8 jdk11 jdk17;
   };
@@ -19550,8 +22672,11 @@ with pkgs;
 
   gtranslator = callPackage ../tools/text/gtranslator { };
 
+<<<<<<< HEAD
   gtree = callPackage ../tools/text/gtree { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   guff = callPackage ../tools/graphics/guff { };
 
   guile-hall = callPackage ../development/tools/guile/guile-hall { };
@@ -19561,7 +22686,11 @@ with pkgs;
   };
 
   gwrap = callPackage ../development/tools/guile/g-wrap {
+<<<<<<< HEAD
     guile = guile_2_2;
+=======
+    guile = guile_2_0;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   hadolint = haskell.lib.compose.justStaticExecutables haskellPackages.hadolint;
@@ -19578,12 +22707,19 @@ with pkgs;
 
   highlight-assertions = callPackage ../development/tools/misc/highlight-assertions { };
 
+<<<<<<< HEAD
   confluent-cli = callPackage ../development/tools/confluent-cli { };
 
   html-minifier = callPackage ../development/tools/html-minifier { };
 
   htmlhint = callPackage ../development/tools/htmlhint { };
 
+=======
+  ccloud-cli = callPackage ../development/tools/ccloud-cli { };
+
+  confluent-cli = callPackage ../development/tools/confluent-cli { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   htmlunit-driver = callPackage ../development/tools/selenium/htmlunit-driver { };
 
   hyenae = callPackage ../tools/networking/hyenae { };
@@ -19599,8 +22735,12 @@ with pkgs;
   iconnamingutils = callPackage ../development/tools/misc/icon-naming-utils { };
 
   ikos = callPackage ../development/tools/analysis/ikos {
+<<<<<<< HEAD
     inherit (llvmPackages_14) stdenv clang llvm;
     tbb = tbb_2021_8;
+=======
+    inherit (llvmPackages_9) stdenv clang llvm;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   img = callPackage ../development/tools/img { };
@@ -19625,8 +22765,11 @@ with pkgs;
 
   jacoco = callPackage ../development/tools/analysis/jacoco { };
 
+<<<<<<< HEAD
   jake = callPackage ../development/tools/jake { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   inherit (callPackage ../development/tools/build-managers/jam { })
     jam
     ftjam;
@@ -19700,7 +22843,11 @@ with pkgs;
 
   kube-prompt = callPackage ../development/tools/kube-prompt { };
 
+<<<<<<< HEAD
   kubeclarity = callPackage ../tools/security/kubeclarity { };
+=======
+  kubei = callPackage ../tools/security/kubei { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   kubemq-community = callPackage ../servers/kubemq-community { };
 
@@ -19757,8 +22904,12 @@ with pkgs;
   libwtk-sdl2 = callPackage ../development/libraries/libwtk-sdl2 { };
 
   linuxkit = callPackage ../development/tools/misc/linuxkit {
+<<<<<<< HEAD
     inherit (darwin.apple_sdk_11_0.frameworks) Cocoa Virtualization;
     inherit (darwin) sigtool;
+=======
+    inherit (darwin.apple_sdk_11_0.frameworks) Virtualization;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   listenbrainz-mpd = callPackage ../applications/audio/listenbrainz-mpd  {
@@ -19794,10 +22945,13 @@ with pkgs;
 
   lurk = callPackage ../development/tools/lurk { };
 
+<<<<<<< HEAD
   lutgen = callPackage ../applications/graphics/lutgen { };
 
   maizzle = callPackage ../development/tools/maizzle { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   malt = callPackage ../development/tools/profiling/malt { };
 
   marksman = callPackage ../development/tools/marksman { };
@@ -19806,8 +22960,11 @@ with pkgs;
 
   mastodon-archive = callPackage ../tools/backup/mastodon-archive { };
 
+<<<<<<< HEAD
   math-preview = callPackage ../tools/text/math-review { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   maven = maven3;
   maven3 = callPackage ../development/tools/build-managers/apache-maven { };
 
@@ -19840,6 +22997,7 @@ with pkgs;
 
   mockgen = callPackage ../development/tools/mockgen { };
 
+<<<<<<< HEAD
   mockoon = callPackage ../tools/networking/mockoon { };
 
   modd = callPackage ../development/tools/modd { };
@@ -19849,6 +23007,16 @@ with pkgs;
   mommy = callPackage ../tools/misc/mommy { };
 
   moon = callPackage ../development/tools/build-managers/moon/default.nix { };
+=======
+  modd = callPackage ../development/tools/modd { };
+
+  mold = callPackage ../development/tools/mold {
+    # C++20 is required, aarch64-linux has gcc 9 by default
+    stdenv = if stdenv.isLinux && stdenv.isAarch64
+      then llvmPackages_12.libcxxStdenv
+      else llvmPackages.stdenv;
+  };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   msgpack-tools = callPackage ../development/tools/msgpack-tools { };
 
@@ -19902,8 +23070,17 @@ with pkgs;
     sdk = true;
   };
 
+<<<<<<< HEAD
   nrf5-sdk = callPackage ../development/libraries/nrf5-sdk { };
 
+=======
+  nrf-command-line-tools = callPackage ../development/tools/misc/nrf-command-line-tools { };
+
+  nrf5-sdk = callPackage ../development/libraries/nrf5-sdk { };
+
+  nrfconnect = callPackage ../tools/bluetooth/nrfconnect { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nrfutil = callPackage ../development/tools/misc/nrfutil { };
 
   obelisk = callPackage ../development/tools/ocaml/obelisk { menhir = ocamlPackages.menhir; };
@@ -19922,16 +23099,24 @@ with pkgs;
 
   openai-whisper = with python3.pkgs; toPythonApplication openai-whisper;
 
+<<<<<<< HEAD
   openai-whisper-cpp = darwin.apple_sdk_11_0.callPackage ../tools/audio/openai-whisper-cpp {
     inherit (darwin.apple_sdk_11_0.frameworks) Accelerate CoreGraphics CoreML CoreVideo;
+=======
+  openai-whisper-cpp = callPackage ../tools/audio/openai-whisper-cpp {
+    inherit (darwin.apple_sdk.frameworks) Accelerate CoreGraphics CoreVideo;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   opengrok = callPackage ../development/tools/misc/opengrok { };
 
   openocd = callPackage ../development/embedded/openocd { };
 
+<<<<<<< HEAD
   openocd-rp2040 = callPackage ../development/embedded/openocd-rp2040 { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   oprofile = callPackage ../development/tools/profiling/oprofile {
     libiberty_static = libiberty.override { staticBuild = true; };
   };
@@ -19973,8 +23158,11 @@ with pkgs;
 
   picotool = callPackage ../development/tools/picotool { };
 
+<<<<<<< HEAD
   planus = callPackage ../development/tools/misc/planus { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pmccabe = callPackage ../development/tools/misc/pmccabe { };
 
   pkgconf-unwrapped = callPackage ../development/tools/misc/pkgconf { };
@@ -20033,8 +23221,11 @@ with pkgs;
 
   procodile = callPackage ../tools/system/procodile { };
 
+<<<<<<< HEAD
   protox = callPackage ../development/tools/misc/protox { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   proxmove = callPackage ../tools/admin/proxmove { };
 
   pry = callPackage ../development/tools/pry { };
@@ -20055,7 +23246,15 @@ with pkgs;
 
   qc = callPackage ../development/tools/qc { };
 
+<<<<<<< HEAD
   qtcreator = qt6Packages.callPackage ../development/tools/qtcreator {
+=======
+  qtcreator = libsForQt5.callPackage ../development/tools/qtcreator {
+    inherit (linuxPackages) perf;
+  };
+
+  qtcreator-qt6 = qt6Packages.callPackage ../development/tools/qtcreator/qt6.nix {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     inherit (linuxPackages) perf;
     stdenv = llvmPackages_14.stdenv;
     llvmPackages = llvmPackages_14;
@@ -20079,12 +23278,17 @@ with pkgs;
 
   rizin = pkgs.callPackage ../development/tools/analysis/rizin { };
 
+<<<<<<< HEAD
   rizinPlugins = recurseIntoAttrs rizin.plugins;
 
   cutter = libsForQt5.callPackage ../development/tools/analysis/rizin/cutter.nix { };
 
   cutterPlugins = recurseIntoAttrs cutter.plugins;
 
+=======
+  cutter = libsForQt5.callPackage ../development/tools/analysis/rizin/cutter.nix { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ragel = ragelStable;
 
   randoop = callPackage ../development/tools/analysis/randoop { };
@@ -20095,18 +23299,26 @@ with pkgs;
 
   hammer = callPackage ../development/tools/parsing/hammer { };
 
+<<<<<<< HEAD
   rcodesign = darwin.apple_sdk_11_0.callPackage ../development/tools/rcodesign {};
 
   rdocker = callPackage ../development/tools/rdocker { };
 
   react-static = callPackage ../development/tools/react-static { };
 
+=======
+  rdocker = callPackage ../development/tools/rdocker { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   redis-dump = callPackage ../development/tools/redis-dump { };
 
   redis-plus-plus = callPackage ../development/libraries/redis-plus-plus { };
 
+<<<<<<< HEAD
   redisinsight = callPackage ../development/tools/redisinsight { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   redo = callPackage ../development/tools/build-managers/redo { };
 
   redo-apenwarr = callPackage ../development/tools/build-managers/redo-apenwarr { };
@@ -20118,8 +23330,11 @@ with pkgs;
   regclient = callPackage ../development/tools/regclient { };
   inherit (regclient) regbot regctl regsync;
 
+<<<<<<< HEAD
   regex-cli = callPackage ../development/tools/misc/regex-cli { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   reno = callPackage ../development/tools/reno { };
 
   re2c = callPackage ../development/tools/parsing/re2c { };
@@ -20133,8 +23348,11 @@ with pkgs;
   inherit (callPackage ../development/tools/replay-io { })
     replay-io replay-node-cli;
 
+<<<<<<< HEAD
   requestly = callPackage ../tools/networking/requestly { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   reshape = callPackage ../development/tools/reshape { } ;
 
   retdec = callPackage ../development/tools/analysis/retdec {
@@ -20144,24 +23362,34 @@ with pkgs;
     withPEPatterns = true;
   };
 
+<<<<<<< HEAD
   reviewdog = callPackage ../development/tools/misc/reviewdog {
     buildGoModule = buildGo121Module;
   };
+=======
+  reviewdog = callPackage ../development/tools/misc/reviewdog { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   revive = callPackage ../development/tools/revive { };
 
   riff = callPackage ../development/tools/misc/riff { };
 
+<<<<<<< HEAD
   riffdiff = callPackage ../tools/text/riffdiff {};
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   rman = callPackage ../development/tools/misc/rman { };
 
   rnginline = with python3Packages; toPythonApplication rnginline;
 
   rolespec = callPackage ../development/tools/misc/rolespec { };
 
+<<<<<<< HEAD
   rome = callPackage ../development/tools/rome { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   rr = callPackage ../development/tools/analysis/rr { };
 
   rsass = callPackage ../development/tools/misc/rsass { };
@@ -20170,9 +23398,14 @@ with pkgs;
 
   rufo = callPackage ../development/tools/rufo { };
 
+<<<<<<< HEAD
   rye = darwin.apple_sdk_11_0.callPackage ../development/tools/rye {
     inherit (darwin.apple_sdk_11_0) Libsystem;
     inherit (darwin.apple_sdk_11_0.frameworks) SystemConfiguration;
+=======
+  rye = callPackage ../development/tools/rye {
+    inherit (darwin.apple_sdk.frameworks) SystemConfiguration;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   samurai = callPackage ../development/tools/build-managers/samurai { };
@@ -20187,8 +23420,11 @@ with pkgs;
 
   saleae-logic-2 = callPackage ../development/tools/misc/saleae-logic-2 { };
 
+<<<<<<< HEAD
   samply = callPackage ../development/tools/misc/samply { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   sauce-connect = callPackage ../development/tools/sauce-connect { };
 
   sawjap = callPackage ../development/tools/java/sawjap { };
@@ -20203,8 +23439,11 @@ with pkgs;
 
   selendroid = callPackage ../development/tools/selenium/selendroid { };
 
+<<<<<<< HEAD
   sem = callPackage ../development/tools/sem { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   semver-tool = callPackage ../development/tools/misc/semver-tool { };
 
   semantik = libsForQt5.callPackage ../applications/office/semantik { };
@@ -20228,6 +23467,11 @@ with pkgs;
 
   scss-lint = callPackage ../development/tools/scss-lint { };
 
+<<<<<<< HEAD
+=======
+  segger-jlink = callPackage ../development/tools/misc/segger-jlink { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   segger-ozone = callPackage ../development/tools/misc/segger-ozone { };
 
   selene = callPackage ../development/tools/selene { };
@@ -20254,7 +23498,11 @@ with pkgs;
 
   scenebuilder = callPackage ../development/tools/scenebuilder { };
 
+<<<<<<< HEAD
   scenic-view = callPackage ../development/tools/scenic-view { };
+=======
+  scenic-view = callPackage ../development/tools/scenic-view { jdk = jdk11; };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   shncpd = callPackage ../tools/networking/shncpd { };
 
@@ -20284,8 +23532,11 @@ with pkgs;
 
   snore = callPackage ../tools/misc/snore { };
 
+<<<<<<< HEAD
   snyk = callPackage ../development/tools/analysis/snyk { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   snzip = callPackage ../tools/archivers/snzip { };
 
   snowman = qt5.callPackage ../development/tools/analysis/snowman { };
@@ -20305,6 +23556,7 @@ with pkgs;
     flex = flex_2_5_35;
   };
 
+<<<<<<< HEAD
   spoofer = callPackage ../tools/networking/spoofer {
     protobuf = protobuf3_21;
   };
@@ -20313,6 +23565,11 @@ with pkgs;
     withGUI = true;
     protobuf = protobuf3_21;
   };
+=======
+  spoofer = callPackage ../tools/networking/spoofer { };
+
+  spoofer-gui = callPackage ../tools/networking/spoofer { withGUI = true; };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   spooles = callPackage ../development/libraries/science/math/spooles { };
 
@@ -20322,8 +23579,11 @@ with pkgs;
 
   spruce = callPackage ../development/tools/misc/spruce { };
 
+<<<<<<< HEAD
   sqlboiler-crdb = callPackage ../development/tools/database/sqlboiler-crdb { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   sqlc = callPackage ../development/tools/database/sqlc { };
 
   sqlcheck = callPackage ../development/tools/database/sqlcheck { };
@@ -20338,10 +23598,13 @@ with pkgs;
 
   sqlmap = with python3Packages; toPythonApplication sqlmap;
 
+<<<<<<< HEAD
   sqlpage = callPackage ../servers/sqlpage { };
 
   src-cli = callPackage ../development/tools/misc/src-cli { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   sselp = callPackage ../tools/X11/sselp{ };
 
   statix = callPackage ../tools/nix/statix { };
@@ -20362,8 +23625,11 @@ with pkgs;
 
   supabase-cli = callPackage ../development/tools/supabase-cli { };
 
+<<<<<<< HEAD
   surge-cli = callPackage ../development/tools/surge-cli { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   svlint = callPackage ../development/tools/analysis/svlint { };
 
   swarm = callPackage ../development/tools/analysis/swarm { };
@@ -20385,10 +23651,13 @@ with pkgs;
 
   c2ffi = callPackage ../development/tools/misc/c2ffi { };
 
+<<<<<<< HEAD
   c0 = callPackage ../development/compilers/c0 {
     stdenv = if stdenv.isDarwin then gccStdenv else stdenv;
   };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   c3c = callPackage ../development/compilers/c3c { };
 
   swfmill = callPackage ../tools/video/swfmill { stdenv = gcc10StdenvCompat; };
@@ -20411,8 +23680,11 @@ with pkgs;
 
   tcptrack = callPackage ../development/tools/misc/tcptrack { };
 
+<<<<<<< HEAD
   teensy-cmake-macros = callPackage ../development/embedded/teensy-cmake-macros { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   teensyduino = arduino-core.override { withGui = true; withTeensyduino = true; };
 
   teensy-loader-cli = callPackage ../development/embedded/teensy-loader-cli { };
@@ -20426,6 +23698,7 @@ with pkgs;
 
   terraformer = callPackage ../development/tools/misc/terraformer { };
 
+<<<<<<< HEAD
   terramate = callPackage ../development/tools/misc/terramate { };
 
   terrascan = callPackage ../tools/security/terrascan { };
@@ -20434,6 +23707,10 @@ with pkgs;
 
   tesh = callPackage ../tools/text/tesh {};
 
+=======
+  terrascan = callPackage ../tools/security/terrascan { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   texinfo413 = callPackage ../development/tools/misc/texinfo/4.13a.nix { };
   texinfo4 = texinfo413;
   texinfo5 = callPackage ../development/tools/misc/texinfo/5.2.nix { };
@@ -20486,10 +23763,13 @@ with pkgs;
 
   tweak = callPackage ../applications/editors/tweak { };
 
+<<<<<<< HEAD
   typical = callPackage ../development/tools/misc/typical { };
 
   tyson = callPackage ../development/tools/misc/tyson { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   uddup = callPackage ../tools/security/uddup { };
 
   udis86 = callPackage  ../development/tools/udis86 { };
@@ -20534,12 +23814,20 @@ with pkgs;
   };
   valgrind-light = res.valgrind.override { gdb = null; };
 
+<<<<<<< HEAD
+=======
+  valkyrie = callPackage ../development/tools/analysis/valkyrie { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   qcachegrind = libsForQt5.callPackage ../development/tools/analysis/qcachegrind { };
 
   visualvm = callPackage ../development/tools/java/visualvm { };
 
+<<<<<<< HEAD
   volta = callPackage ../development/tools/volta { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   vultr = callPackage ../development/tools/vultr { };
 
   vultr-cli = callPackage ../development/tools/vultr-cli { };
@@ -20550,8 +23838,11 @@ with pkgs;
 
   wails = callPackage ../development/tools/wails { };
 
+<<<<<<< HEAD
   wasmer-pack = callPackage ../development/tools/misc/wasmer-pack { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   whatsapp-for-linux = callPackage ../applications/networking/instant-messengers/whatsapp-for-linux { };
 
   whatstyle = callPackage ../development/tools/misc/whatstyle {
@@ -20560,6 +23851,7 @@ with pkgs;
 
   watson-ruby = callPackage ../development/tools/misc/watson-ruby { };
 
+<<<<<<< HEAD
   web-ext = callPackage ../development/tools/web-ext { };
 
   webdis = callPackage ../development/tools/database/webdis { };
@@ -20568,6 +23860,10 @@ with pkgs;
     lua = lua5_4;
   };
 
+=======
+  webdis = callPackage ../development/tools/database/webdis { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   xc3sprog = callPackage ../development/embedded/xc3sprog { stdenv = gcc10StdenvCompat; };
 
   xcb-imdkit = callPackage ../development/libraries/xcb-imdkit { };
@@ -20594,8 +23890,11 @@ with pkgs;
 
   xeus = callPackage ../development/libraries/xeus { };
 
+<<<<<<< HEAD
   xeus-zmq = callPackage ../development/libraries/xeus-zmq { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   xmlindent = callPackage ../development/web/xmlindent { };
 
   xpwn = callPackage ../development/mobile/xpwn { };
@@ -20615,10 +23914,16 @@ with pkgs;
   ycmd = callPackage ../development/tools/misc/ycmd {
     inherit (darwin.apple_sdk.frameworks) Cocoa;
     python = python3;
+<<<<<<< HEAD
   };
 
   yo = callPackage ../development/tools/yo { };
 
+=======
+    boost = boost174;
+  };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   yodl = callPackage ../development/tools/misc/yodl { };
 
   yq = python3.pkgs.toPythonApplication python3.pkgs.yq;
@@ -20639,28 +23944,41 @@ with pkgs;
 
   tockloader = callPackage ../development/tools/misc/tockloader { };
 
+<<<<<<< HEAD
   zon2nix = callPackage ../tools/nix/zon2nix { };
 
   ztags = callPackage ../development/tools/misc/ztags { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ### DEVELOPMENT / LIBRARIES
 
   a52dec = callPackage ../development/libraries/a52dec { };
 
   aalib = callPackage ../development/libraries/aalib { };
 
+<<<<<<< HEAD
   abseil-cpp_202103 = callPackage ../development/libraries/abseil-cpp/202103.nix { };
   abseil-cpp_202206 = callPackage ../development/libraries/abseil-cpp/202206.nix { };
   abseil-cpp_202301 = callPackage ../development/libraries/abseil-cpp/202301.nix { };
   abseil-cpp_202308 = callPackage ../development/libraries/abseil-cpp/202308.nix { };
   abseil-cpp = abseil-cpp_202301;
+=======
+  abseil-cpp_202111 = callPackage ../development/libraries/abseil-cpp/202111.nix { };
+  abseil-cpp_202103 = callPackage ../development/libraries/abseil-cpp/202103.nix { };
+  abseil-cpp_202206 = callPackage ../development/libraries/abseil-cpp/202206.nix { };
+  abseil-cpp = abseil-cpp_202103;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   accountsservice = callPackage ../development/libraries/accountsservice { };
 
   acl = callPackage ../development/libraries/acl { };
 
+<<<<<<< HEAD
   acltoolkit = callPackage ../tools/security/acltoolkit { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   acsccid = callPackage ../tools/security/acsccid { };
 
   activemq = callPackage ../development/libraries/apache-activemq { };
@@ -20727,7 +24045,11 @@ with pkgs;
 
   armadillo = callPackage ../development/libraries/armadillo { };
 
+<<<<<<< HEAD
   arrayfire = darwin.apple_sdk_11_0.callPackage ../development/libraries/arrayfire { };
+=======
+  arrayfire = callPackage ../development/libraries/arrayfire { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   arrow-cpp = callPackage ../development/libraries/arrow-cpp { };
 
@@ -20801,10 +24123,13 @@ with pkgs;
 
   ayatana-ido = callPackage ../development/libraries/ayatana-ido { };
 
+<<<<<<< HEAD
   ayatana-webmail = callPackage ../applications/networking/mailreaders/ayatana-webmail { };
 
   azmq = callPackage ../development/libraries/azmq { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   babl = callPackage ../development/libraries/babl { };
 
   backward-cpp = callPackage ../development/libraries/backward-cpp { };
@@ -20857,6 +24182,15 @@ with pkgs;
   boolstuff = callPackage ../development/libraries/boolstuff { };
 
   inherit (callPackage ../development/libraries/boost { inherit (buildPackages) boost-build; })
+<<<<<<< HEAD
+=======
+    boost168
+    boost169
+    boost170
+    boost172
+    boost173
+    boost174
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     boost175
     boost177
     boost178
@@ -20864,10 +24198,19 @@ with pkgs;
     boost180
     boost181
     boost182
+<<<<<<< HEAD
     boost183
   ;
 
   boost = boost181;
+=======
+  ;
+
+  boost16x = boost169;
+  boost17x = boost179;
+  boost18x = boost182;
+  boost = boost17x;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   boost_process = callPackage ../development/libraries/boost-process { };
 
@@ -20877,9 +24220,12 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) CoreServices Security;
   };
 
+<<<<<<< HEAD
   # may add CoreServices and Security again, when MacOS uses Clang 14.0+ by default.
   botan3 = callPackage ../development/libraries/botan/3.0.nix { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   box2d = callPackage ../development/libraries/box2d { };
 
   boxfort = callPackage ../development/libraries/boxfort { };
@@ -20905,8 +24251,12 @@ with pkgs;
   c-blosc = callPackage ../development/libraries/c-blosc { };
 
   # justStaticExecutables is needed due to https://github.com/NixOS/nix/issues/2990
+<<<<<<< HEAD
   # ghc94: https://discourse.haskell.org/t/facing-mmap-4096-bytes-at-nil-cannot-allocate-memory-youre-not-alone/6259
   cachix = haskell.lib.justStaticExecutables haskell.packages.ghc94.cachix;
+=======
+  cachix = haskell.lib.justStaticExecutables haskellPackages.cachix_1_3_3;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   calcium = callPackage ../development/libraries/calcium { };
 
@@ -20928,8 +24278,11 @@ with pkgs;
 
   capnproto-java = callPackage ../development/tools/capnproto-java { };
 
+<<<<<<< HEAD
   capnproto-rust = callPackage ../development/tools/capnproto-rust { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   captive-browser = callPackage ../applications/networking/browsers/captive-browser { };
 
   ndn-cxx = callPackage ../development/libraries/ndn-cxx { };
@@ -20964,13 +24317,22 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Foundation;
   };
 
+<<<<<<< HEAD
   ceedling = callPackage ../development/tools/ceedling { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   celt = callPackage ../development/libraries/celt { };
   celt_0_7 = callPackage ../development/libraries/celt/0.7.nix { };
   celt_0_5_1 = callPackage ../development/libraries/celt/0.5.1.nix { };
 
+<<<<<<< HEAD
   cegui = callPackage ../development/libraries/cegui { };
+=======
+  cegui = callPackage ../development/libraries/cegui {
+    ogre = ogre1_10;
+  };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   certbot = python3.pkgs.toPythonApplication python3.pkgs.certbot;
 
@@ -21005,8 +24367,11 @@ with pkgs;
 
   clanlib = callPackage ../development/libraries/clanlib { };
 
+<<<<<<< HEAD
   clap = callPackage ../development/libraries/clap { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   classads = callPackage ../development/libraries/classads { };
 
   clfft = callPackage ../development/libraries/clfft { };
@@ -21015,8 +24380,11 @@ with pkgs;
 
   clipper = callPackage ../development/libraries/clipper { };
 
+<<<<<<< HEAD
   clipper2 = callPackage ../development/libraries/clipper2 { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   cln = callPackage ../development/libraries/cln { };
 
   clucene_core_2 = callPackage ../development/libraries/clucene-core/2.x.nix {
@@ -21042,9 +24410,13 @@ with pkgs;
 
   cmrt = callPackage ../development/libraries/cmrt { };
 
+<<<<<<< HEAD
   codecserver = callPackage ../applications/audio/codecserver {
     protobuf = protobuf3_21;
   };
+=======
+  codecserver = callPackage ../applications/audio/codecserver { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   coeurl = callPackage ../development/libraries/coeurl { };
 
@@ -21068,8 +24440,11 @@ with pkgs;
 
   collada-dom = callPackage ../development/libraries/collada-dom { };
 
+<<<<<<< HEAD
   coloquinte = callPackage ../development/libraries/science/electronics/coloquinte { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   cog = callPackage ../development/web/cog { };
 
   cosmocc = callPackage ../development/tools/cosmocc { };
@@ -21092,12 +24467,21 @@ with pkgs;
 
   cpp-ipfs-http-client = callPackage ../development/libraries/cpp-ipfs-http-client { };
 
+<<<<<<< HEAD
   cpp-netlib = callPackage ../development/libraries/cpp-netlib { };
 
   cpp-jwt = callPackage ../development/libraries/cpp-jwt { };
 
   ctranslate2 = callPackage ../development/libraries/ctranslate2 { };
 
+=======
+  cpp-netlib = callPackage ../development/libraries/cpp-netlib {
+    boost = boost169; # fatal error: 'boost/asio/stream_socket_service.hpp' file not found
+  };
+
+  cpp-jwt = callPackage ../development/libraries/cpp-jwt { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ubus = callPackage ../development/libraries/ubus { };
 
   uci = callPackage ../development/libraries/uci { };
@@ -21160,8 +24544,11 @@ with pkgs;
     libkrb5 = if stdenv.isFreeBSD then heimdal else libkrb5;
   };
 
+<<<<<<< HEAD
   cyrus-sasl-xoauth2 = callPackage ../development/libraries/cyrus-sasl-xoauth2 { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   # Make bdb5 the default as it is the last release under the custom
   # bsd-like license
   db = db5;
@@ -21231,17 +24618,26 @@ with pkgs;
 
   dotconf = callPackage ../development/libraries/dotconf { };
 
+<<<<<<< HEAD
   draco = callPackage ../development/libraries/draco {
     tinygltf = callPackage ../development/libraries/draco/tinygltf.nix { };
   };
+=======
+  draco = callPackage ../development/libraries/draco { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   # Multi-arch "drivers" which we want to build for i686.
   driversi686Linux = recurseIntoAttrs {
     inherit (pkgsi686Linux)
       amdvlk
       intel-media-driver
+<<<<<<< HEAD
       intel-vaapi-driver
       mesa
+=======
+      mesa
+      vaapiIntel
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       libvdpau-va-gl
       vaapiVdpau
       beignet
@@ -21336,7 +24732,11 @@ with pkgs;
 
   far2l = callPackage ../applications/misc/far2l {
     stdenv = if stdenv.cc.isClang then llvmPackages.stdenv else stdenv;
+<<<<<<< HEAD
     inherit (darwin.apple_sdk.frameworks) IOKit Carbon Cocoa AudioToolbox OpenGL System;
+=======
+    inherit (darwin.apple_sdk.frameworks) IOKit Carbon Cocoa AudioToolbox OpenGL;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   farbfeld = callPackage ../development/libraries/farbfeld { };
@@ -21469,9 +24869,15 @@ with pkgs;
 
   flyway = callPackage ../development/tools/flyway { };
 
+<<<<<<< HEAD
   inherit (callPackages ../development/libraries/fmt { }) fmt_8 fmt_9 fmt_10;
 
   fmt = fmt_10;
+=======
+  inherit (callPackages ../development/libraries/fmt { }) fmt_8 fmt_9;
+
+  fmt = fmt_9;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   fplll = callPackage ../development/libraries/fplll { };
   fplll_20160331 = callPackage ../development/libraries/fplll/20160331.nix { };
@@ -21510,8 +24916,11 @@ with pkgs;
 
   folks = callPackage ../development/libraries/folks { };
 
+<<<<<<< HEAD
   fortify-headers = callPackage ../development/libraries/fortify-headers { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   makeFontsConf = let fontconfig_ = fontconfig; in {fontconfig ? fontconfig_, fontDirectories}:
     callPackage ../development/libraries/fontconfig/make-fonts-conf.nix {
       inherit fontconfig fontDirectories;
@@ -21540,8 +24949,11 @@ with pkgs;
 
   fribidi = callPackage ../development/libraries/fribidi { };
 
+<<<<<<< HEAD
   frozen = callPackage ../development/libraries/frozen { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   funambol = callPackage ../development/libraries/funambol { };
 
   function-runner = callPackage ../development/web/function-runner { };
@@ -21552,9 +24964,13 @@ with pkgs;
 
   gallia = callPackage ../tools/security/gallia { };
 
+<<<<<<< HEAD
   gamenetworkingsockets = callPackage ../development/libraries/gamenetworkingsockets {
     protobuf = protobuf3_21;
   };
+=======
+  gamenetworkingsockets = callPackage ../development/libraries/gamenetworkingsockets { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   game-music-emu = callPackage ../development/libraries/audio/game-music-emu { };
 
@@ -21583,7 +24999,11 @@ with pkgs;
   gecode_6 = qt5.callPackage ../development/libraries/gecode { };
   gecode = gecode_6;
 
+<<<<<<< HEAD
   geph = recurseIntoAttrs (callPackages ../applications/networking/geph { });
+=======
+  geph = callPackages ../applications/networking/geph { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   gephi = callPackage ../applications/science/misc/gephi { };
 
@@ -21637,10 +25057,13 @@ with pkgs;
 
   gdal = callPackage ../development/libraries/gdal { };
 
+<<<<<<< HEAD
   gdalMinimal = callPackage ../development/libraries/gdal {
     useMinimalFeatures = true;
   };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   gdcm = callPackage ../development/libraries/gdcm {
     inherit (darwin.apple_sdk.frameworks) ApplicationServices Cocoa;
   };
@@ -21661,16 +25084,22 @@ with pkgs;
 
   ghcid = haskellPackages.ghcid.bin;
 
+<<<<<<< HEAD
   gr-framework = libsForQt5.callPackage ../development/libraries/gr-framework {
     stdenv = if stdenv.isDarwin then darwin.apple_sdk_11_0.stdenv else stdenv;
   };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   graphia = libsForQt5.callPackage ../applications/science/misc/graphia { };
 
   graphinder = callPackage ../tools/security/graphinder { };
 
+<<<<<<< HEAD
   hnswlib = callPackage ../development/libraries/hnswlib { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   httplib = callPackage ../development/libraries/httplib { };
 
   icon-lang = callPackage ../development/interpreters/icon-lang { };
@@ -21679,7 +25108,11 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
+<<<<<<< HEAD
   libgit2_1_3_0 = libgit2.overrideAttrs rec {
+=======
+  libgit2_1_3_0 = libgit2.overrideAttrs (_: rec {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     version = "1.3.0";
     src = pkgs.fetchFromGitHub {
       owner = "libgit2";
@@ -21688,9 +25121,15 @@ with pkgs;
       sha256 = "sha256-7atNkOBzX+nU1gtFQEaE+EF1L+eex+Ajhq2ocoJY920=";
     };
     patches = [];
+<<<<<<< HEAD
   };
 
   libgit2_1_5 = libgit2.overrideAttrs rec {
+=======
+  });
+
+  libgit2_1_5 = libgit2.overrideAttrs (_: rec {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     version = "1.5.1";
     src = pkgs.fetchFromGitHub {
       owner = "libgit2";
@@ -21698,6 +25137,7 @@ with pkgs;
       rev = "v${version}";
       hash = "sha256-KzBMwpqn6wUFhgB3KDclBS0BvZSVcasM5AG/y+L91xM=";
     };
+<<<<<<< HEAD
     patches = [];
   };
 
@@ -21711,6 +25151,9 @@ with pkgs;
     };
     patches = [ ];
   };
+=======
+  });
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   libgit2-glib = callPackage ../development/libraries/libgit2-glib { };
 
@@ -21735,10 +25178,16 @@ with pkgs;
   glfw-wayland = glfw.override {
     waylandSupport = true;
   };
+<<<<<<< HEAD
   glfw-wayland-minecraft = callPackage ../development/libraries/glfw/3.x-wayland-minecraft.nix {};
   glfw2 = callPackage ../development/libraries/glfw/2.x.nix { };
   glfw3 = callPackage ../development/libraries/glfw/3.x.nix {
     inherit (darwin.apple_sdk.frameworks) Carbon Cocoa Kernel OpenGL;
+=======
+  glfw2 = callPackage ../development/libraries/glfw/2.x.nix { };
+  glfw3 = callPackage ../development/libraries/glfw/3.x.nix {
+    inherit (darwin.apple_sdk.frameworks) Cocoa Kernel;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   glibc = callPackage ../development/libraries/glibc {
@@ -21762,11 +25211,14 @@ with pkgs;
   # Being redundant to avoid cycles on boot. TODO: find a better way
   glibcCross = callPackage ../development/libraries/glibc {
     stdenv = gccCrossLibcStdenv; # doesn't compile without gcc
+<<<<<<< HEAD
     libgcc = callPackage ../development/libraries/gcc/libgcc {
       gcc = gccCrossLibcStdenv.cc;
       glibc = glibcCross.override { libgcc = null; };
       stdenvNoLibs = gccCrossLibcStdenv;
     };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   muslCross = musl.override {
@@ -21776,7 +25228,11 @@ with pkgs;
   # These are used when buiding compiler-rt / libgcc, prior to building libc.
   preLibcCrossHeaders = let
     inherit (stdenv.targetPlatform) libc;
+<<<<<<< HEAD
   in     if stdenv.targetPlatform.isMinGW then targetPackages.windows.mingw_w64_headers or windows.mingw_w64_headers
+=======
+  in     if libc == "msvcrt" then targetPackages.windows.mingw_w64_headers or windows.mingw_w64_headers
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     else if libc == "nblibc" then targetPackages.netbsdCross.headers or netbsdCross.headers
     else if libc == "libSystem" && stdenv.targetPlatform.isAarch64 then targetPackages.darwin.LibsystemCross or darwin.LibsystemCross
     else null;
@@ -21797,7 +25253,10 @@ with pkgs;
     else if name == "newlib-nano" then targetPackages.newlib-nanoCross or newlib-nanoCross
     else if name == "musl" then targetPackages.muslCross or muslCross
     else if name == "msvcrt" then targetPackages.windows.mingw_w64 or windows.mingw_w64
+<<<<<<< HEAD
     else if name == "ucrt" then targetPackages.windows.mingw_w64 or windows.mingw_w64
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     else if name == "libSystem" then
       if stdenv.targetPlatform.useiOSPrebuilt
       then targetPackages.darwin.iosSdkPkgs.libraries or darwin.iosSdkPkgs.libraries
@@ -21810,6 +25269,7 @@ with pkgs;
 
   libcCross = assert stdenv.targetPlatform != stdenv.buildPlatform; libcCrossChooser stdenv.targetPlatform.libc;
 
+<<<<<<< HEAD
   threadsCross = threadsCrossFor null;
   threadsCrossFor = cc_version:
     lib.optionalAttrs (stdenv.targetPlatform.isMinGW && !(stdenv.targetPlatform.useLLVM or false)) {
@@ -21821,6 +25281,15 @@ with pkgs;
         then targetPackages.windows.mcfgthreads or windows.mcfgthreads
         else targetPackages.windows.mcfgthreads_pre_gcc_13 or windows.mcfgthreads_pre_gcc_13;
     };
+=======
+  threadsCross = if stdenv.targetPlatform.isMinGW && !(stdenv.targetPlatform.useLLVM or false)
+    then {
+      # other possible values: win32 or posix
+      model = "mcf";
+      # For win32 or posix set this to null
+      package = targetPackages.windows.mcfgthreads or windows.mcfgthreads;
+    } else { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   wasilibc = callPackage ../development/libraries/wasilibc {
     stdenv = crossLibcStdenv;
@@ -21841,11 +25310,15 @@ with pkgs;
   glibcInfo = callPackage ../development/libraries/glibc/info.nix { };
 
   glibc_multi = callPackage ../development/libraries/glibc/multi.nix {
+<<<<<<< HEAD
     # The buildPackages is required for cross-compilation. The pkgsi686Linux set
     # has target and host always set to the same value based on target platform
     # of the current set. We need host to be same as build to correctly get i686
     # variant of glibc.
     glibc32 = pkgsi686Linux.buildPackages.glibc;
+=======
+    glibc32 = pkgsi686Linux.glibc;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   glm = callPackage ../development/libraries/glm { };
@@ -21932,17 +25405,38 @@ with pkgs;
 
   grilo-plugins = callPackage ../development/libraries/grilo-plugins { };
 
+<<<<<<< HEAD
   grpc = callPackage ../development/libraries/grpc { };
+=======
+  grpc = callPackage ../development/libraries/grpc {
+    # grpc builds with c++17 so abseil must also be built that way
+    abseil-cpp = abseil-cpp_202206.override {
+      cxxStandard = grpc.cxxStandard;
+    };
+  };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   gsettings-qt = libsForQt5.callPackage ../development/libraries/gsettings-qt { };
 
   gst_all_1 = recurseIntoAttrs(callPackage ../development/libraries/gstreamer {
     callPackage = newScope (gst_all_1 // { libav = pkgs.ffmpeg-headless; });
+<<<<<<< HEAD
     inherit (darwin.apple_sdk.frameworks) AudioToolbox AVFoundation Cocoa CoreFoundation CoreMedia CoreServices CoreVideo DiskArbitration Foundation IOKit MediaToolbox OpenGL Security VideoToolbox;
+=======
+    inherit (darwin.apple_sdk.frameworks) AudioToolbox AVFoundation Cocoa CoreFoundation CoreMedia CoreServices CoreVideo DiskArbitration Foundation IOKit MediaToolbox OpenGL VideoToolbox;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   });
 
   gusb = callPackage ../development/libraries/gusb { };
 
+<<<<<<< HEAD
+=======
+  qt-mobility = callPackage ../development/libraries/qt-mobility { };
+
+
+  qtstyleplugin-kvantum-qt4 = callPackage ../development/libraries/qtstyleplugin-kvantum-qt4 { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   qxmpp = libsForQt5.callPackage ../development/libraries/qxmpp { };
 
   gnet = callPackage ../development/libraries/gnet { };
@@ -21969,9 +25463,13 @@ with pkgs;
 
   pgweb = callPackage ../development/tools/database/pgweb { };
 
+<<<<<<< HEAD
   granted = callPackage ../tools/admin/granted { };
 
   grantlee = libsForQt5.callPackage ../development/libraries/grantlee { };
+=======
+  grantlee = callPackage ../development/libraries/grantlee { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   gsasl = callPackage ../development/libraries/gsasl { };
 
@@ -21990,7 +25488,11 @@ with pkgs;
   gtkimageview = callPackage ../development/libraries/gtkimageview { };
 
   glib = callPackage ../development/libraries/glib (let
+<<<<<<< HEAD
     glib-untested = glib.overrideAttrs { doCheck = false; };
+=======
+    glib-untested = glib.overrideAttrs (_: { doCheck = false; });
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   in {
     # break dependency cycles
     # these things are only used for tests, they don't get into the closure
@@ -22026,8 +25528,11 @@ with pkgs;
 
   cairo = callPackage ../development/libraries/cairo { };
 
+<<<<<<< HEAD
   cairo-lang = callPackage ../development/compilers/cairo { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   cairomm = callPackage ../development/libraries/cairomm { };
 
   cairomm_1_16 = callPackage ../development/libraries/cairomm/1.16.nix {
@@ -22062,6 +25567,11 @@ with pkgs;
 
   gnote = callPackage ../applications/office/gnote { };
 
+<<<<<<< HEAD
+=======
+  elementary-cmake-modules = callPackage ../development/libraries/elementary-cmake-modules { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   gtk2 = callPackage ../development/libraries/gtk/2.x.nix {
     inherit (darwin.apple_sdk.frameworks) AppKit Cocoa;
   };
@@ -22138,8 +25648,11 @@ with pkgs;
 
   gtk-layer-shell = callPackage ../development/libraries/gtk-layer-shell { };
 
+<<<<<<< HEAD
   gtk4-layer-shell = callPackage ../development/libraries/gtk4-layer-shell { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   gts = callPackage ../development/libraries/gts { };
 
   gumbo = callPackage ../development/libraries/gumbo { };
@@ -22171,8 +25684,11 @@ with pkgs;
 
   hawknl = callPackage ../development/libraries/hawknl { };
 
+<<<<<<< HEAD
   hax11 = callPackage ../development/libraries/hax11 { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   haxor-news = callPackage ../applications/misc/haxor-news { };
 
   hdt = callPackage ../misc/hdt { };
@@ -22203,11 +25719,17 @@ with pkgs;
 
   hound = callPackage ../development/tools/misc/hound { };
 
+<<<<<<< HEAD
   hpp-fcl = callPackage ../development/libraries/hpp-fcl { };
 
   hpx = callPackage ../development/libraries/hpx {
     boost = boost179;
     asio = asio.override { boost = boost179; };
+=======
+  hpx = callPackage ../development/libraries/hpx {
+    boost = boost17x;
+    asio = asio.override { boost = boost17x; };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   hspell = callPackage ../development/libraries/hspell { };
@@ -22218,27 +25740,40 @@ with pkgs;
 
   hstr = callPackage ../applications/misc/hstr { };
 
+<<<<<<< HEAD
   hstsparser = callPackage ../tools/security/hstsparser { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   htmlcxx = callPackage ../development/libraries/htmlcxx { };
 
   http-parser = callPackage ../development/libraries/http-parser { };
 
+<<<<<<< HEAD
   httpref = callPackage ../development/tools/misc/httpref { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   hubble = callPackage ../applications/networking/cluster/hubble { };
 
   hunspell = callPackage ../development/libraries/hunspell { };
 
   hunspellDicts = recurseIntoAttrs (callPackages ../development/libraries/hunspell/dictionaries.nix {});
 
+<<<<<<< HEAD
   hunspellDictsChromium = recurseIntoAttrs (callPackages ../development/libraries/hunspell/dictionaries-chromium.nix {});
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   hunspellWithDicts = dicts: callPackage ../development/libraries/hunspell/wrapper.nix { inherit dicts; };
 
   hwloc = callPackage ../development/libraries/hwloc { };
 
+<<<<<<< HEAD
   hydra_unstable = callPackage ../development/tools/misc/hydra/unstable.nix { nix = nixVersions.nix_2_17; };
+=======
+  hydra_unstable = callPackage ../development/tools/misc/hydra/unstable.nix { nix = nixVersions.nix_2_13; };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   hydra-cli = callPackage ../development/tools/misc/hydra-cli { };
 
@@ -22303,8 +25838,11 @@ with pkgs;
 
   imtui = callPackage ../development/libraries/imtui { };
 
+<<<<<<< HEAD
   immer = callPackage ../development/libraries/immer { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   imv = callPackage ../applications/graphics/imv { };
 
   iml = callPackage ../development/libraries/iml { };
@@ -22339,7 +25877,11 @@ with pkgs;
 
   indicator-sound-switcher = callPackage ../applications/audio/indicator-sound-switcher { };
 
+<<<<<<< HEAD
   indilib = darwin.apple_sdk_11_0.callPackage ../development/libraries/science/astronomy/indilib { };
+=======
+  indilib = callPackage ../development/libraries/science/astronomy/indilib { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   indi-full = callPackage ../development/libraries/science/astronomy/indilib/indi-full.nix { };
 
   inih = callPackage ../development/libraries/inih { };
@@ -22379,12 +25921,20 @@ with pkgs;
   isort = with python3Packages; toPythonApplication isort;
 
   ispc = callPackage ../development/compilers/ispc {
+<<<<<<< HEAD
     xcode = darwin.xcode_14;
     llvmPackages = llvmPackages_15;
   };
 
   isso = callPackage ../servers/isso {
     nodejs = nodejs_20;
+=======
+    inherit (llvmPackages) stdenv;
+  };
+
+  isso = callPackage ../servers/isso {
+    nodejs = nodejs_14;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   itk_5_2 = callPackage ../development/libraries/itk/5.2.x.nix {
@@ -22455,8 +26005,11 @@ with pkgs;
 
   judy = callPackage ../development/libraries/judy { };
 
+<<<<<<< HEAD
   kcp = callPackage ../development/libraries/kcp { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   kddockwidgets = libsForQt5.callPackage ../development/libraries/kddockwidgets { };
 
   keybinder = callPackage ../development/libraries/keybinder {
@@ -22505,8 +26058,11 @@ with pkgs;
 
   lcms2 = callPackage ../development/libraries/lcms2 { };
 
+<<<<<<< HEAD
   lcrq = callPackage ../development/libraries/lcrq { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ldacbt = callPackage ../development/libraries/ldacbt { };
 
   ldb = callPackage ../development/libraries/ldb { };
@@ -22590,8 +26146,11 @@ with pkgs;
 
   libarchive-qt = libsForQt5.callPackage ../development/libraries/libarchive-qt { };
 
+<<<<<<< HEAD
   libasn1c = callPackage ../servers/osmocom/libasn1c/default.nix { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   libasr = callPackage ../development/libraries/libasr { };
 
   libass = callPackage ../development/libraries/libass { };
@@ -22616,10 +26175,13 @@ with pkgs;
 
   libavif = callPackage ../development/libraries/libavif { };
 
+<<<<<<< HEAD
   libayatana-common = callPackage ../development/libraries/libayatana-common {
     inherit (lomiri) cmake-extras;
   };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   libb2 = callPackage ../development/libraries/libb2 { };
 
   libbacktrace = callPackage ../development/libraries/libbacktrace { };
@@ -22717,8 +26279,11 @@ with pkgs;
 
   libcrossguid = callPackage ../development/libraries/libcrossguid { };
 
+<<<<<<< HEAD
   libcs50 = callPackage ../development/libraries/libcs50 { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   libuchardet = callPackage ../development/libraries/libuchardet { };
 
   libchop = callPackage ../development/libraries/libchop { };
@@ -22727,7 +26292,13 @@ with pkgs;
 
   libcint = callPackage ../development/libraries/libcint { };
 
+<<<<<<< HEAD
   libclc = callPackage ../development/libraries/libclc { };
+=======
+  libclc = callPackage ../development/libraries/libclc {
+    llvmPackages = llvmPackages_14;
+  };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   libcli = callPackage ../development/libraries/libcli { };
 
@@ -22861,7 +26432,13 @@ with pkgs;
 
   libe57format = callPackage ../development/libraries/libe57format { };
 
+<<<<<<< HEAD
   libeatmydata = callPackage ../development/libraries/libeatmydata { };
+=======
+  libeatmydata = callPackage ../development/libraries/libeatmydata {
+    autoreconfHook = buildPackages.autoreconfHook269;
+  };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   libeb = callPackage ../development/libraries/libeb { };
 
@@ -22871,8 +26448,11 @@ with pkgs;
 
   libedit = callPackage ../development/libraries/libedit { };
 
+<<<<<<< HEAD
   libei = callPackage ../development/libraries/libei { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   libelf = callPackage ../development/libraries/libelf { };
 
   libelfin = callPackage ../development/libraries/libelfin { };
@@ -22889,8 +26469,13 @@ with pkgs;
     udev = systemdMinimal;
   };
 
+<<<<<<< HEAD
   libfilezilla = darwin.apple_sdk_11_0.callPackage ../development/libraries/libfilezilla {
     inherit (darwin.apple_sdk_11_0.frameworks) ApplicationServices;
+=======
+  libfilezilla = callPackage ../development/libraries/libfilezilla {
+    inherit (darwin.apple_sdk.frameworks) ApplicationServices;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   libfishsound = callPackage ../development/libraries/libfishsound { };
@@ -22965,8 +26550,11 @@ with pkgs;
 
   libinklevel = callPackage ../development/libraries/libinklevel { };
 
+<<<<<<< HEAD
   libkcapi = callPackage ../development/libraries/libkcapi { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   libnats-c = callPackage ../development/libraries/libnats-c { };
 
   liburing = callPackage ../development/libraries/liburing { };
@@ -22991,13 +26579,22 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) AudioUnit;
   };
 
+<<<<<<< HEAD
   libspelling = callPackage ../development/libraries/libspelling { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   libsystemtap = callPackage ../development/libraries/libsystemtap { };
 
   libgtop = callPackage ../development/libraries/libgtop { };
 
+<<<<<<< HEAD
   libLAS = callPackage ../development/libraries/libLAS { };
+=======
+  libLAS = callPackage ../development/libraries/libLAS {
+    boost = boost172;
+  };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   liblaxjson = callPackage ../development/libraries/liblaxjson { };
 
@@ -23005,7 +26602,13 @@ with pkgs;
 
   liblscp = callPackage ../development/libraries/liblscp { };
 
+<<<<<<< HEAD
   libe-book = callPackage ../development/libraries/libe-book { };
+=======
+  libe-book = callPackage ../development/libraries/libe-book {
+    icu = icu67;
+  };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   libemf2svg = callPackage ../development/libraries/libemf2svg { };
 
@@ -23031,7 +26634,11 @@ with pkgs;
 
   libfabric = callPackage ../development/libraries/libfabric { };
 
+<<<<<<< HEAD
   libfive = qt6Packages.callPackage ../development/libraries/libfive { };
+=======
+  libfive = libsForQt5.callPackage ../development/libraries/libfive { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   libfixposix = callPackage ../development/libraries/libfixposix { };
 
@@ -23218,6 +26825,7 @@ with pkgs;
 
   libplist = callPackage ../development/libraries/libplist { };
 
+<<<<<<< HEAD
   libqtdbusmock = libsForQt5.callPackage ../development/libraries/libqtdbusmock {
     inherit (lomiri) cmake-extras;
   };
@@ -23230,10 +26838,15 @@ with pkgs;
 
   librecast = callPackage ../development/libraries/librecast { };
 
+=======
+  libre = callPackage ../development/libraries/libre { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   libredwg = callPackage ../development/libraries/libredwg { };
 
   librem = callPackage ../development/libraries/librem { };
 
+<<<<<<< HEAD
   libremidi = callPackage ../development/libraries/libremidi {
       inherit (darwin.apple_sdk.frameworks)
         CoreAudio
@@ -23244,6 +26857,8 @@ with pkgs;
 
   libremines = qt6.callPackage ../games/libremines { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   librelp = callPackage ../development/libraries/librelp { };
 
   librepo = callPackage ../tools/package-management/librepo {
@@ -23254,7 +26869,13 @@ with pkgs;
 
   librevenge = callPackage ../development/libraries/librevenge { };
 
+<<<<<<< HEAD
   librime = callPackage ../development/libraries/librime { };
+=======
+  librime = callPackage ../development/libraries/librime {
+    boost = boost174;
+  };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   librsb = callPackage ../development/libraries/librsb {
     # Taken from https://build.opensuse.org/package/view_file/science/librsb/librsb.spec
@@ -23356,7 +26977,12 @@ with pkgs;
   # also known as libturbojpeg
   libjpeg_turbo = callPackage ../development/libraries/libjpeg-turbo { };
   libjpeg = libjpeg_turbo;
+<<<<<<< HEAD
   libjpeg8 = libjpeg_turbo.override { enableJpeg8 = true; };
+=======
+
+  libjreen = callPackage ../development/libraries/libjreen { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   libjson-rpc-cpp = callPackage ../development/libraries/libjson-rpc-cpp {
     libmicrohttpd = libmicrohttpd_0_9_72;
@@ -23388,7 +27014,14 @@ with pkgs;
 
   libmatchbox = callPackage ../development/libraries/libmatchbox { };
 
+<<<<<<< HEAD
   libmatheval = callPackage ../development/libraries/libmatheval { };
+=======
+  libmatheval = callPackage ../development/libraries/libmatheval {
+    autoconf = buildPackages.autoconf269;
+    guile = guile_2_0;
+  };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   libmatthew_java = callPackage ../development/libraries/java/libmatthew-java {
     jdk = jdk8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
@@ -23415,8 +27048,11 @@ with pkgs;
 
   libmkv = callPackage ../development/libraries/libmkv { };
 
+<<<<<<< HEAD
   libnut = callPackage ../development/libraries/libnut { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   libmms = callPackage ../development/libraries/libmms { };
 
   libmowgli = callPackage ../development/libraries/libmowgli { };
@@ -23449,7 +27085,13 @@ with pkgs;
 
   libndctl = callPackage ../development/libraries/libndctl { };
 
+<<<<<<< HEAD
   libnest2d = callPackage ../development/libraries/libnest2d { };
+=======
+  libnest2d = callPackage ../development/libraries/libnest2d {
+    boost = boost174;
+  };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   libnet = callPackage ../development/libraries/libnet { };
 
@@ -23505,6 +27147,7 @@ with pkgs;
 
   libosmium = callPackage ../development/libraries/libosmium { };
 
+<<<<<<< HEAD
   libosmoabis = callPackage ../servers/osmocom/libosmoabis { };
 
   libosmocore = callPackage ../servers/osmocom/libosmocore { };
@@ -23512,6 +27155,15 @@ with pkgs;
   libosmo-netif = callPackage ../servers/osmocom/libosmo-netif { };
 
   libosmo-sccp = callPackage ../servers/osmocom/libosmo-sccp { };
+=======
+  libosmocore = callPackage ../applications/misc/libosmocore { };
+
+  libosmo-abis = callPackage ../development/libraries/libosmo-abis { };
+
+  libosmo-netif = callPackage ../development/libraries/libosmo-netif { };
+
+  libosmo-sccp = callPackage ../development/libraries/libosmo-sccp { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   libosmscout = libsForQt5.callPackage ../development/libraries/libosmscout { };
 
@@ -23571,9 +27223,13 @@ with pkgs;
 
   libptytty = callPackage ../development/libraries/libptytty { };
 
+<<<<<<< HEAD
   libpulsar = callPackage ../development/libraries/libpulsar {
     protobuf = protobuf3_21;
   };
+=======
+  libpulsar = callPackage ../development/libraries/libpulsar { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   libpwquality = callPackage ../development/libraries/libpwquality {
     python = python3;
@@ -23729,8 +27385,11 @@ with pkgs;
 
   libuecc = callPackage ../development/libraries/libuecc { };
 
+<<<<<<< HEAD
   libuev = callPackage ../development/libraries/libuev {};
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   libui = callPackage ../development/libraries/libui {
     inherit (darwin.apple_sdk.frameworks) Cocoa;
   };
@@ -23910,8 +27569,12 @@ with pkgs;
   in pkgs.buildEnv { # slightly hacky
     name = "libxml2+py-${res.libxml2.version}";
     paths = with libxml2; [ dev bin py ];
+<<<<<<< HEAD
     # Avoid update.nix conflicts with libxml2.
     passthru = builtins.removeAttrs libxml2.passthru [ "updateScript" ];
+=======
+    inherit (libxml2) passthru;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     # the hook to find catalogs is hidden by buildEnv
     postBuild = ''
       mkdir "$out/nix-support"
@@ -23944,8 +27607,11 @@ with pkgs;
 
   yaml-cpp_0_3 = callPackage ../development/libraries/yaml-cpp/0.3.0.nix { };
 
+<<<<<<< HEAD
   yas = callPackage ../development/libraries/yas { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   libyang = callPackage ../development/libraries/libyang { };
 
   libcyaml = callPackage ../development/libraries/libcyaml { };
@@ -23980,11 +27646,19 @@ with pkgs;
 
   lightspark = callPackage ../misc/lightspark { };
 
+<<<<<<< HEAD
   lightstep-tracer-cpp = callPackage ../development/libraries/lightstep-tracer-cpp {
     protobuf = protobuf3_21;
   };
 
   ligolo-ng = callPackage ../tools/networking/ligolo-ng { };
+=======
+  lightstep-tracer-cpp = callPackage ../development/libraries/lightstep-tracer-cpp { };
+
+  ligolo-ng = callPackage ../tools/networking/ligolo-ng {
+    buildGoModule = buildGo119Module; # go 1.20 build failure
+  };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   linenoise = callPackage ../development/libraries/linenoise { };
 
@@ -24105,12 +27779,15 @@ with pkgs;
 
   toml-f = callPackage ../development/libraries/toml-f { };
 
+<<<<<<< HEAD
   fypp = python3Packages.callPackage ../development/python-modules/fypp { };
 
   dbcsr = callPackage ../development/libraries/science/math/dbcsr { };
 
   taco = callPackage ../development/libraries/taco { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ## libGL/libGLU/Mesa stuff
 
   # Default libGL implementation, should provide headers and
@@ -24124,10 +27801,24 @@ with pkgs;
   # Default libGLU
   libGLU = mesa_glu;
 
+<<<<<<< HEAD
   mesa = darwin.apple_sdk_11_0.callPackage ../development/libraries/mesa {
     inherit (darwin.apple_sdk_11_0.frameworks) OpenGL;
     inherit (darwin.apple_sdk_11_0.libs) Xplugin;
   };
+=======
+  # Keep Mesa 22.3 for now because 23.0 does not build on Darwin.
+  # FIXME: remove, also investigate why we even need Mesa on Darwin.
+  mesa_22_3 = darwin.apple_sdk_11_0.callPackage ../development/libraries/mesa/22.3.nix {
+    inherit (darwin.apple_sdk_11_0.frameworks) OpenGL;
+    inherit (darwin.apple_sdk_11_0.libs) Xplugin;
+  };
+  mesa_23_0 = darwin.apple_sdk_11_0.callPackage ../development/libraries/mesa/23.0.nix {
+    inherit (darwin.apple_sdk_11_0.frameworks) OpenGL;
+    inherit (darwin.apple_sdk_11_0.libs) Xplugin;
+  };
+  mesa = if stdenv.isDarwin then mesa_22_3 else mesa_23_0;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   mesa_glu =  callPackage ../development/libraries/mesa-glu {
     inherit (darwin.apple_sdk.frameworks) ApplicationServices;
@@ -24139,7 +27830,11 @@ with pkgs;
 
   mhddfs = callPackage ../tools/filesystems/mhddfs { };
 
+<<<<<<< HEAD
   microsoft-gsl = callPackage ../development/libraries/microsoft-gsl { };
+=======
+  microsoft_gsl = callPackage ../development/libraries/microsoft_gsl { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   microsoft-edge = callPackage (import ../applications/networking/browsers/microsoft-edge).stable { };
   microsoft-edge-beta = callPackage (import ../applications/networking/browsers/microsoft-edge).beta { };
@@ -24149,8 +27844,11 @@ with pkgs;
 
   markdown-anki-decks = callPackage ../tools/misc/markdown-anki-decks { };
 
+<<<<<<< HEAD
   mdslides = callPackage ../tools/misc/mdslides { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   micropython = callPackage ../development/interpreters/micropython { };
 
   MIDIVisualizer = darwin.apple_sdk_11_0.callPackage ../applications/audio/midi-visualizer {
@@ -24177,7 +27875,11 @@ with pkgs;
 
   mlc = callPackage ../tools/system/mlc { };
 
+<<<<<<< HEAD
   mlt = darwin.apple_sdk_11_0.callPackage ../development/libraries/mlt { };
+=======
+  mlt = callPackage ../development/libraries/mlt { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   mlib = callPackage ../development/libraries/mlib { };
 
@@ -24203,18 +27905,24 @@ with pkgs;
 
   mqtt-benchmark = callPackage ../tools/networking/mqtt-benchmark { };
 
+<<<<<<< HEAD
   mqttmultimeter = callPackage ../tools/networking/mqttmultimeter { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   mqttui = callPackage ../tools/networking/mqttui {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
   msgpack = callPackage ../development/libraries/msgpack { };
 
+<<<<<<< HEAD
   msgpack-c = callPackage ../development/libraries/msgpack-c { };
 
   msgpack-cxx = callPackage ../development/libraries/msgpack-cxx { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   msoffcrypto-tool = with python3.pkgs; toPythonApplication msoffcrypto-tool;
 
   msilbc = callPackage ../development/libraries/msilbc { };
@@ -24265,8 +27973,11 @@ with pkgs;
 
   nanomsg = callPackage ../development/libraries/nanomsg { };
 
+<<<<<<< HEAD
   nanosvg = callPackage ../development/libraries/nanosvg { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nanovna-saver = libsForQt5.callPackage ../applications/science/electronics/nanovna-saver { };
 
   nanotts = callPackage ../tools/audio/nanotts { };
@@ -24318,9 +28029,13 @@ with pkgs;
   ngtcp2 = callPackage ../development/libraries/ngtcp2 { };
   ngtcp2-gnutls = callPackage ../development/libraries/ngtcp2/gnutls.nix { };
 
+<<<<<<< HEAD
   nix-plugins = callPackage ../development/libraries/nix-plugins {
     nix = nixVersions.nix_2_17;
   };
+=======
+  nix-plugins = callPackage ../development/libraries/nix-plugins { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nika-fonts = callPackage ../data/fonts/nika-fonts { };
 
@@ -24351,7 +28066,11 @@ with pkgs;
 
   ntk = callPackage ../development/libraries/audio/ntk { };
 
+<<<<<<< HEAD
   numcpp = callPackage ../development/libraries/numcpp { };
+=======
+  ntrack = callPackage ../development/libraries/ntrack { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nuraft = callPackage ../development/libraries/nuraft { };
 
@@ -24361,7 +28080,10 @@ with pkgs;
   nv-codec-headers = callPackage ../development/libraries/nv-codec-headers { };
   nv-codec-headers-10 = callPackage ../development/libraries/nv-codec-headers/10_x.nix { };
   nv-codec-headers-11 = callPackage ../development/libraries/nv-codec-headers/11_x.nix { };
+<<<<<<< HEAD
   nv-codec-headers-12 = callPackage ../development/libraries/nv-codec-headers/12_x.nix { };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   mkNvidiaContainerPkg = { name, containerRuntimePath, configTemplate, additionalPaths ? [] }:
     let
@@ -24394,13 +28116,20 @@ with pkgs;
 
   nvidia-vaapi-driver = lib.hiPrio (callPackage ../development/libraries/nvidia-vaapi-driver { });
 
+<<<<<<< HEAD
   nvidia-optical-flow-sdk = callPackage ../development/libraries/nvidia-optical-flow-sdk { };
 
   nvidia-system-monitor-qt = libsForQt5.callPackage ../tools/system/nvidia-system-monitor-qt { };
+=======
+  nvidia-video-sdk = callPackage ../development/libraries/nvidia-video-sdk { };
+
+  nvidia-optical-flow-sdk = callPackage ../development/libraries/nvidia-optical-flow-sdk { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nvitop = callPackage ../tools/system/nvitop { };
 
   nvtop = callPackage ../tools/system/nvtop { };
+<<<<<<< HEAD
   nvtop-amd = (callPackage ../tools/system/nvtop {
     amd = true;
     intel = false;
@@ -24425,15 +28154,26 @@ with pkgs;
     msm = false;
     nvidia = true;
   }).overrideAttrs { pname = "nvtop-nvidia"; };
+=======
+  nvtop-nvidia = callPackage ../tools/system/nvtop { amd = false; };
+  nvtop-amd = callPackage ../tools/system/nvtop { nvidia = false; };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   ocl-icd = callPackage ../development/libraries/ocl-icd { };
 
   ode = callPackage ../development/libraries/ode { };
 
+<<<<<<< HEAD
   inherit (callPackages ../development/libraries/ogre { })
     ogre_13 ogre_14;
 
   ogre = ogre_14;
+=======
+  ogre = callPackage ../development/libraries/ogre {
+    inherit (darwin.apple_sdk.frameworks) Cocoa;
+  };
+  ogre1_10 = callPackage ../development/libraries/ogre/1.10.x.nix { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   olm = callPackage ../development/libraries/olm { };
 
@@ -24441,8 +28181,11 @@ with pkgs;
 
   oneDNN = callPackage ../development/libraries/oneDNN { };
 
+<<<<<<< HEAD
   oneDNN_2 = callPackage ../development/libraries/oneDNN/2.nix { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   onedrive = callPackage ../applications/networking/sync/onedrive { };
 
   oneko = callPackage ../applications/misc/oneko { };
@@ -24563,11 +28306,18 @@ with pkgs;
 
   openvdb = callPackage ../development/libraries/openvdb { };
 
+<<<<<<< HEAD
   openvr = callPackage ../development/libraries/openvr {
     inherit (darwin.apple_sdk.frameworks) Foundation AppKit;
   };
 
   inherit (callPackages ../development/libraries/libressl { })
+=======
+  openvr = callPackage ../development/libraries/openvr { };
+
+  inherit (callPackages ../development/libraries/libressl { })
+    libressl_3_4
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     libressl_3_6
     libressl_3_7;
 
@@ -24616,8 +28366,11 @@ with pkgs;
 
   orcania = callPackage ../development/libraries/orcania { };
 
+<<<<<<< HEAD
   orogene = callPackage ../development/tools/misc/orogene { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   osm-gps-map = callPackage ../development/libraries/osm-gps-map { };
 
   osmid = callPackage ../applications/audio/osmid { };
@@ -24648,11 +28401,17 @@ with pkgs;
 
   pcre2 = callPackage ../development/libraries/pcre2 { };
 
+<<<<<<< HEAD
   pdal = callPackage ../development/libraries/pdal { };
 
   pdf2xml = callPackage ../development/libraries/pdf2xml { };
 
   pdfhummus = libsForQt5.callPackage ../development/libraries/pdfhummus { };
+=======
+  pdal = callPackage ../development/libraries/pdal { } ;
+
+  pdf2xml = callPackage ../development/libraries/pdf2xml {} ;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   pe-parse = callPackage ../development/libraries/pe-parse { };
 
@@ -24691,8 +28450,11 @@ with pkgs;
 
   podofo = callPackage ../development/libraries/podofo { };
 
+<<<<<<< HEAD
   podofo010 = callPackage ../development/libraries/podofo/0.10.x.nix { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   polkit = callPackage ../development/libraries/polkit { };
 
   poppler = callPackage ../development/libraries/poppler { lcms = lcms2; };
@@ -24732,6 +28494,11 @@ with pkgs;
 
   primesieve = callPackage ../applications/science/math/primesieve { };
 
+<<<<<<< HEAD
+=======
+  prison = callPackage ../development/libraries/prison { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   proj = callPackage ../development/libraries/proj { };
 
   proj_7 = callPackage ../development/libraries/proj/7.nix { };
@@ -24743,12 +28510,16 @@ with pkgs;
     buildPythonApplication click future six;
   };
 
+<<<<<<< HEAD
   pyp = callPackage ../tools/text/pyp { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pru = callPackage ../tools/text/pru { };
 
   prospector = callPackage ../development/tools/prospector { };
 
+<<<<<<< HEAD
   protobuf = protobuf3_24;
 
   protobuf3_24 = callPackage ../development/libraries/protobuf/3.24.nix { };
@@ -24762,6 +28533,14 @@ with pkgs;
   protobuf3_19 = callPackage ../development/libraries/protobuf/3.19.nix {
     abseil-cpp = abseil-cpp_202103;
   };
+=======
+  protobuf = protobuf3_21;
+
+  protobuf3_21 = callPackage ../development/libraries/protobuf/3.21.nix { };
+  protobuf3_20 = callPackage ../development/libraries/protobuf/3.20.nix { };
+  protobuf3_19 = callPackage ../development/libraries/protobuf/3.19.nix { };
+  protobuf3_17 = callPackage ../development/libraries/protobuf/3.17.nix { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   protobufc = callPackage ../development/libraries/protobufc { };
 
@@ -24800,20 +28579,58 @@ with pkgs;
 
   qbs = libsForQt5.callPackage ../development/tools/build-managers/qbs { };
 
+<<<<<<< HEAD
   qdjango = libsForQt5.callPackage ../development/libraries/qdjango { };
 
   qoi = callPackage ../development/libraries/qoi { };
+=======
+  qimageblitz = callPackage ../development/libraries/qimageblitz { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   qolibri = libsForQt5.callPackage ../applications/misc/qolibri { };
 
   quarto = callPackage ../development/libraries/quarto { };
 
+<<<<<<< HEAD
   quartoMinimal = callPackage ../development/libraries/quarto { rWrapper = null; python3 = null; };
+=======
+  qt4 = qt48;
+
+  qt48 = callPackage ../development/libraries/qt-4.x/4.8 {
+    # GNOME dependencies are not used unless gtkStyle == true
+    inherit (gnome2) libgnomeui GConf gnome_vfs;
+    cups = if stdenv.isLinux then cups else null;
+
+    # XXX: mariadb doesn't built on fbsd as of nov 2015
+    libmysqlclient = if (!stdenv.isFreeBSD) then libmysqlclient else null;
+
+    inherit (darwin) libobjc;
+    inherit (darwin.apple_sdk.frameworks) ApplicationServices OpenGL Cocoa AGL;
+  };
+
+  qmake48Hook = makeSetupHook {
+    name = "qmake4.8-hook";
+    substitutions = { qt4 = qt48; };
+  } ../development/libraries/qt-4.x/4.8/qmake-hook.sh;
+
+  qmake4Hook = qmake48Hook;
+
+  qt48Full = qt48.override {
+    docs = true;
+    demos = true;
+    examples = true;
+    developerBuild = true;
+  };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   qt5 = recurseIntoAttrs (makeOverridable
     (import ../development/libraries/qt-5/5.15) {
       inherit (__splicedPackages)
+<<<<<<< HEAD
         makeScopeWithSplicing' generateSplicesForMkScope lib fetchurl fetchpatch fetchgit fetchFromGitHub makeSetupHook makeWrapper
+=======
+        makeScopeWithSplicing generateSplicesForMkScope lib fetchurl fetchpatch fetchgit fetchFromGitHub makeSetupHook makeWrapper
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         bison cups dconf harfbuzz libGL perl gtk3 python3
         darwin buildPackages;
       inherit (__splicedPackages.gst_all_1) gstreamer gst-plugins-base;
@@ -24856,6 +28673,13 @@ with pkgs;
 
   qv2ray = libsForQt5.callPackage ../applications/networking/qv2ray { };
 
+<<<<<<< HEAD
+=======
+  qwt6_qt4 = callPackage ../development/libraries/qwt/6_qt4.nix {
+    inherit (darwin.apple_sdk.frameworks) AGL;
+  };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   rabbitmq-c = callPackage ../development/libraries/rabbitmq-c { };
 
   raft-canonical = callPackage ../development/libraries/raft-canonical { };
@@ -24875,8 +28699,11 @@ with pkgs;
 
   rapidxml = callPackage ../development/libraries/rapidxml { };
 
+<<<<<<< HEAD
   rapidyaml = callPackage ../development/libraries/rapidyaml {};
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   raul = callPackage ../development/libraries/audio/raul { };
 
   raylib = callPackage ../development/libraries/raylib { };
@@ -24927,9 +28754,13 @@ with pkgs;
 
   qm-dsp = callPackage ../development/libraries/audio/qm-dsp { };
 
+<<<<<<< HEAD
   qradiolink = callPackage ../applications/radio/qradiolink {
     protobuf = protobuf3_21;
   };
+=======
+  qradiolink = callPackage ../applications/radio/qradiolink { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   qrupdate = callPackage ../development/libraries/qrupdate { };
 
@@ -24951,8 +28782,11 @@ with pkgs;
 
   restinio = callPackage ../development/libraries/restinio { };
 
+<<<<<<< HEAD
   restish = callPackage ../tools/networking/restish { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   rhino = callPackage ../development/libraries/java/rhino {
     javac = jdk8;
     jvm = jre8;
@@ -24964,6 +28798,7 @@ with pkgs;
 
   rocksdb = callPackage ../development/libraries/rocksdb { };
 
+<<<<<<< HEAD
   rocksdb_7_10 = rocksdb.overrideAttrs rec {
     pname = "rocksdb";
     version = "7.10.2";
@@ -24976,6 +28811,11 @@ with pkgs;
   };
 
   rocksdb_6_23 = rocksdb.overrideAttrs rec {
+=======
+  rocksdb_lite = rocksdb.override { enableLite = true; };
+
+  rocksdb_6_23 = rocksdb.overrideAttrs (_: rec {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     pname = "rocksdb";
     version = "6.23.3";
     src = fetchFromGitHub {
@@ -24984,7 +28824,11 @@ with pkgs;
       rev = "v${version}";
      sha256 = "sha256-SsDqhjdCdtIGNlsMj5kfiuS3zSGwcxi4KV71d95h7yk=";
    };
+<<<<<<< HEAD
   };
+=======
+  });
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   rotate-backups = callPackage ../tools/backup/rotate-backups { };
 
@@ -25002,8 +28846,11 @@ with pkgs;
 
   rshell = python3.pkgs.callPackage ../development/embedded/rshell { };
 
+<<<<<<< HEAD
   rtlcss = callPackage ../development/libraries/rtlcss { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   rttr = callPackage ../development/libraries/rttr { };
 
   rubberband = callPackage ../development/libraries/rubberband { };
@@ -25092,6 +28939,11 @@ with pkgs;
 
   SDL2_ttf = callPackage ../development/libraries/SDL2_ttf { };
 
+<<<<<<< HEAD
+=======
+  SDL2_ttf_2_0_15 = callPackage ../development/libraries/SDL2_ttf/2.0.15.nix { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   sdrplay = callPackage ../applications/radio/sdrplay { };
 
   sdrpp = callPackage ../applications/radio/sdrpp {
@@ -25118,6 +28970,11 @@ with pkgs;
 
   sfsexp = callPackage ../development/libraries/sfsexp { };
 
+<<<<<<< HEAD
+=======
+  shhgit = callPackage ../tools/security/shhgit { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   shhmsg = callPackage ../development/libraries/shhmsg { };
 
   shhopt = callPackage ../development/libraries/shhopt { };
@@ -25140,8 +28997,11 @@ with pkgs;
 
   simpleitk = callPackage ../development/libraries/simpleitk { lua = lua5_3; };
 
+<<<<<<< HEAD
   sioclient = callPackage ../development/libraries/sioclient { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   sfml = callPackage ../development/libraries/sfml {
     inherit (darwin.apple_sdk.frameworks) IOKit Foundation AppKit OpenAL;
   };
@@ -25174,7 +29034,10 @@ with pkgs;
     s6-portable-utils
     s6-portable-utils-man-pages
     s6-rc
+<<<<<<< HEAD
     s6-rc-man-pages
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     sdnotify-wrapper
     skalibs
     skalibs_2_10
@@ -25188,12 +29051,20 @@ with pkgs;
     inherit (skawarePackages) cleanPackaging;
   };
 
+<<<<<<< HEAD
   shaq = callPackage ../tools/audio/shaq { };
 
   slang = callPackage ../development/libraries/slang { };
 
   slibGuile = callPackage ../development/libraries/slib {
     scheme = guile;
+=======
+  slang = callPackage ../development/libraries/slang { };
+
+  slibGuile = callPackage ../development/libraries/slib {
+    scheme = guile_1_8;
+    texinfo = texinfo4; # otherwise erros: must be after `@defun' to use `@defunx'
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   smpeg = callPackage ../development/libraries/smpeg { };
@@ -25299,6 +29170,11 @@ with pkgs;
 
   speech-tools = callPackage ../development/libraries/speech-tools { };
 
+<<<<<<< HEAD
+=======
+  speedtest-exporter = callPackage ../development/libraries/speedtest-exporter { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   speex = callPackage ../development/libraries/speex {
     fftw = fftwFloat;
   };
@@ -25357,10 +29233,13 @@ with pkgs;
 
   stxxl = callPackage ../development/libraries/stxxl { };
 
+<<<<<<< HEAD
   sv-lang = callPackage ../applications/science/electronics/sv-lang { };
 
   sqld = callPackage ../servers/sql/sqld { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   sqlite = lowPrio (callPackage ../development/libraries/sqlite { });
 
   unqlite = lowPrio (callPackage ../development/libraries/unqlite { });
@@ -25377,8 +29256,11 @@ with pkgs;
 
   sqlite-jdbc = callPackage ../servers/sql/sqlite/jdbc { };
 
+<<<<<<< HEAD
   sregex = callPackage ../development/libraries/sregex { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   dqlite = callPackage ../development/libraries/dqlite { };
 
   sqlcipher = callPackage ../development/libraries/sqlcipher { };
@@ -25439,19 +29321,26 @@ with pkgs;
 
   taglib-sharp = callPackage ../development/libraries/taglib-sharp { };
 
+<<<<<<< HEAD
   tanidvr = callPackage ../applications/video/tanidvr { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   talloc = callPackage ../development/libraries/talloc { };
 
   tagparser = callPackage ../development/libraries/tagparser { };
 
   taskflow = callPackage ../development/libraries/taskflow { };
 
+<<<<<<< HEAD
   tclap = tclap_1_2;
 
   tclap_1_2 = callPackage ../development/libraries/tclap/1.2.nix { };
 
   tclap_1_4 = callPackage ../development/libraries/tclap/1.4.nix { };
+=======
+  tclap = callPackage ../development/libraries/tclap { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   tcllib = callPackage ../development/libraries/tcllib { };
 
@@ -25459,8 +29348,11 @@ with pkgs;
 
   tclx = callPackage ../development/libraries/tclx { };
 
+<<<<<<< HEAD
   tcl-fcgi = callPackage ../development/libraries/tcl-fcgi { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   tdb = callPackage ../development/libraries/tdb { };
 
   tdlib = callPackage ../development/libraries/tdlib { };
@@ -25596,7 +29488,11 @@ with pkgs;
 
   v8 = darwin.apple_sdk_11_0.callPackage ../development/libraries/v8 { };
 
+<<<<<<< HEAD
   intel-vaapi-driver = callPackage ../development/libraries/intel-vaapi-driver { };
+=======
+  vaapiIntel = callPackage ../development/libraries/vaapi-intel { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   vaapi-intel-hybrid = callPackage ../development/libraries/vaapi-intel-hybrid { };
 
@@ -25606,11 +29502,14 @@ with pkgs;
 
   valhalla = callPackage ../development/libraries/valhalla {
     boost = boost.override { enablePython = true; python = python38; };
+<<<<<<< HEAD
     protobuf = protobuf3_21.override {
       abseil-cpp = abseil-cpp_202103.override {
         cxxStandard = "17";
       };
     };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   vamp-plugin-sdk = callPackage ../development/libraries/audio/vamp-plugin-sdk { };
@@ -25623,10 +29522,13 @@ with pkgs;
 
   vcg = callPackage ../development/libraries/vcg { };
 
+<<<<<<< HEAD
   vencord = callPackage ../misc/vencord { };
 
   vencord-web-extension = callPackage ../misc/vencord { buildWebExtension = true; };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   vid-stab = callPackage ../development/libraries/vid-stab {
     inherit (llvmPackages) openmp;
   };
@@ -25701,7 +29603,10 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) AppKit Cocoa;
   };
   vulkan-tools-lunarg = callPackage ../tools/graphics/vulkan-tools-lunarg { };
+<<<<<<< HEAD
   vulkan-utility-libraries = callPackage ../development/libraries/vulkan-utility-libraries { };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   vulkan-validation-layers = callPackage ../development/tools/vulkan-validation-layers { };
 
   vxl = callPackage ../development/libraries/vxl { };
@@ -25713,8 +29618,11 @@ with pkgs;
 
   wangle = callPackage ../development/libraries/wangle { };
 
+<<<<<<< HEAD
   wapp = callPackage ../development/libraries/wapp { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   wavpack = callPackage ../development/libraries/wavpack { };
 
   wayland = darwin.apple_sdk_11_0.callPackage ../development/libraries/wayland { };
@@ -25747,6 +29655,7 @@ with pkgs;
 
   websocketpp = callPackage ../development/libraries/websocket++ { };
 
+<<<<<<< HEAD
   wfa2-lib = callPackage ../development/libraries/wfa2-lib { };
 
   webrtc-audio-processing_1 = callPackage ../development/libraries/webrtc-audio-processing {
@@ -25755,10 +29664,14 @@ with pkgs;
       cxxStandard = "14";
     };
   };
+=======
+  webrtc-audio-processing_1 = callPackage ../development/libraries/webrtc-audio-processing { stdenv = gcc10StdenvCompat; };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   webrtc-audio-processing_0_3 = callPackage ../development/libraries/webrtc-audio-processing/0.3.nix { };
   # bump when majoring of packages have updated
   webrtc-audio-processing = webrtc-audio-processing_0_3;
 
+<<<<<<< HEAD
   whereami = callPackage ../development/libraries/whereami { };
 
   where-is-my-sddm-theme = libsForQt5.callPackage ../data/themes/where-is-my-sddm-theme { };
@@ -25766,13 +29679,23 @@ with pkgs;
   wildmidi = callPackage ../development/libraries/wildmidi {
     inherit (darwin.apple_sdk.frameworks) OpenAL;
   };
+=======
+  wildmidi = callPackage ../development/libraries/wildmidi { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   wiredtiger = callPackage ../development/libraries/wiredtiger { };
 
   wlr-protocols = callPackage ../development/libraries/wlroots/protocols.nix { };
 
   wt = wt4;
+<<<<<<< HEAD
   inherit (libsForQt5.callPackage ../development/libraries/wt { })
+=======
+  inherit (callPackages ../development/libraries/wt {
+    boost = boost175;
+  })
+    wt3
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     wt4;
 
   wxformbuilder = callPackage ../development/tools/wxformbuilder { };
@@ -25820,12 +29743,20 @@ with pkgs;
 
   xdo = callPackage ../tools/misc/xdo { };
 
+<<<<<<< HEAD
   xdiskusage = callPackage ../tools/misc/xdiskusage { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   xed = callPackage ../development/libraries/xed { };
 
   xedit = callPackage ../applications/editors/xedit { };
 
+<<<<<<< HEAD
+=======
+  xine-lib = callPackage ../development/libraries/xine-lib { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   xautolock = callPackage ../misc/screensavers/xautolock { };
 
   xercesc = callPackage ../development/libraries/xercesc { };
@@ -25838,8 +29769,11 @@ with pkgs;
 
   xgeometry-select = callPackage ../tools/X11/xgeometry-select { };
 
+<<<<<<< HEAD
   xmake-core-sv = callPackage ../development/libraries/xmake-core-sv { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   xmlada = callPackage ../development/libraries/ada/xmlada { };
 
   xmlrpc_c = callPackage ../development/libraries/xmlrpc-c { };
@@ -25895,8 +29829,11 @@ with pkgs;
 
   yubioath-flutter = callPackage ../applications/misc/yubioath-flutter { };
 
+<<<<<<< HEAD
   yyjson = callPackage ../development/libraries/yyjson { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   zchunk = callPackage ../development/libraries/zchunk { };
 
   zeitgeist = callPackage ../development/libraries/zeitgeist { };
@@ -25921,13 +29858,18 @@ with pkgs;
   libzra = callPackage ../development/libraries/libzra { };
 
   # requires a newer Apple SDK
+<<<<<<< HEAD
   zig_0_9 = darwin.apple_sdk_11_0.callPackage ../development/compilers/zig/0.9.nix {
+=======
+  zig_0_9 = darwin.apple_sdk_11_0.callPackage ../development/compilers/zig/0.9.1.nix {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     llvmPackages = llvmPackages_13;
   };
   # requires a newer Apple SDK
   zig_0_10 = darwin.apple_sdk_11_0.callPackage ../development/compilers/zig/0.10.nix {
     llvmPackages = llvmPackages_15;
   };
+<<<<<<< HEAD
   # requires a newer Apple SDK
   zig_0_11 = darwin.apple_sdk_11_0.callPackage ../development/compilers/zig/0.11.nix {
     llvmPackages = llvmPackages_16;
@@ -25935,6 +29877,9 @@ with pkgs;
   zig = zig_0_11;
 
   zig-shell-completions = callPackage ../development/compilers/zig/shell-completions.nix { };
+=======
+  zig = zig_0_10;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   zimlib = callPackage ../development/libraries/zimlib { };
 
@@ -25944,8 +29889,11 @@ with pkgs;
 
   zita-resampler = callPackage ../development/libraries/audio/zita-resampler { };
 
+<<<<<<< HEAD
   zitadel-tools = callPackage ../tools/misc/zitadel-tools { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   zix = callPackage ../development/libraries/audio/zix { };
 
   zz = callPackage ../development/compilers/zz { };
@@ -26000,8 +29948,11 @@ with pkgs;
 
   fastjar = callPackage ../development/tools/java/fastjar { };
 
+<<<<<<< HEAD
   jextract = callPackage ../development/tools/java/jextract { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   httpunit = callPackage ../development/libraries/java/httpunit { };
 
   javaCup = callPackage ../development/libraries/java/cup {
@@ -26043,8 +29994,11 @@ with pkgs;
 
   ### DEVELOPMENT / LIBRARIES / JAVASCRIPT
 
+<<<<<<< HEAD
   nodehun = callPackage ../development/tools/nodehun { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   yuicompressor = callPackage ../development/tools/yuicompressor { };
 
   ### DEVELOPMENT / BOWER MODULES (JAVASCRIPT)
@@ -26091,6 +30045,7 @@ with pkgs;
     go = buildPackages.go_1_20;
   };
 
+<<<<<<< HEAD
   # requires a newer Apple SDK
   go_1_21 = darwin.apple_sdk_11_0.callPackage ../development/compilers/go/1.21.nix {
     inherit (darwin.apple_sdk_11_0.frameworks) Foundation Security;
@@ -26102,6 +30057,8 @@ with pkgs;
     go = buildPackages.go_1_21;
   };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   go2nix = callPackage ../development/tools/go2nix { };
 
   leaps = callPackage ../development/tools/leaps { };
@@ -26236,6 +30193,7 @@ with pkgs;
     pkg = callPackage ../development/compilers/sbcl/bootstrap.nix {};
     faslExt = "fasl";
   };
+<<<<<<< HEAD
   sbcl_2_3_7 = wrapLisp {
     pkg = callPackage ../development/compilers/sbcl/2.x.nix { version = "2.3.7"; };
     faslExt = "fasl";
@@ -26247,12 +30205,24 @@ with pkgs;
     flags = [ "--dynamic-space-size" "3000" ];
   };
   sbcl = sbcl_2_3_8;
+=======
+  sbcl_2_3_2 = wrapLisp {
+    pkg = callPackage ../development/compilers/sbcl/2.x.nix { version = "2.3.2"; };
+    faslExt = "fasl";
+  };
+  sbcl_2_3_4 = wrapLisp {
+    pkg = callPackage ../development/compilers/sbcl/2.x.nix { version = "2.3.4"; };
+    faslExt = "fasl";
+  };
+  sbcl = sbcl_2_3_4;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   sbclPackages = recurseIntoAttrs sbcl.pkgs;
 
   ### DEVELOPMENT / PERL MODULES
 
   perlInterpreters = import ../development/interpreters/perl { inherit callPackage; };
+<<<<<<< HEAD
   inherit (perlInterpreters) perl536 perl538;
 
   perl536Packages = recurseIntoAttrs perl536.pkgs;
@@ -26260,6 +30230,16 @@ with pkgs;
 
   perl = perl538;
   perlPackages = perl538Packages;
+=======
+  inherit (perlInterpreters) perl534 perl536 perldevel;
+
+  perl534Packages = recurseIntoAttrs perl534.pkgs;
+  perl536Packages = recurseIntoAttrs perl536.pkgs;
+  perldevelPackages = perldevel.pkgs;
+
+  perl = perl536;
+  perlPackages = perl536Packages;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   ack = perlPackages.ack;
 
@@ -26267,11 +30247,19 @@ with pkgs;
 
   sqitchMysql = (callPackage ../development/tools/misc/sqitch {
     mysqlSupport = true;
+<<<<<<< HEAD
   }).overrideAttrs { pname = "sqitch-mysql"; };
 
   sqitchPg = (callPackage ../development/tools/misc/sqitch {
     postgresqlSupport = true;
   }).overrideAttrs { pname = "sqitch-pg"; };
+=======
+  }).overrideAttrs (_: { pname = "sqitch-mysql"; });
+
+  sqitchPg = (callPackage ../development/tools/misc/sqitch {
+    postgresqlSupport = true;
+  }).overrideAttrs (_: { pname = "sqitch-pg"; });
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   ### DEVELOPMENT / R MODULES
 
@@ -26338,8 +30326,11 @@ with pkgs;
 
   alps = callPackage ../servers/alps { };
 
+<<<<<<< HEAD
   anuko-time-tracker = callPackage ../servers/web-apps/anuko-time-tracker { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   apache-directory-server = callPackage ../servers/ldap/apache-directory-server { };
 
   apacheHttpd_2_4 = callPackage ../servers/http/apache-httpd/2.4.nix {
@@ -26450,18 +30441,25 @@ with pkgs;
 
   bind = callPackage ../servers/dns/bind { };
   dnsutils = bind.dnsutils;
+<<<<<<< HEAD
   dig = bind.dnsutils // {
     meta = bind.dnsutils.meta // {
       mainProgram = "dig";
     };
   };
+=======
+  dig = bind.dnsutils;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   bird = callPackage ../servers/bird { };
 
   bird-lg = callPackage ../servers/bird-lg { };
 
+<<<<<<< HEAD
   birdwatcher = callPackage ../servers/birdwatcher { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   bloat = callPackage ../servers/bloat { };
 
   bosun = callPackage ../servers/monitoring/bosun { };
@@ -26477,7 +30475,14 @@ with pkgs;
   clamsmtp = callPackage ../servers/mail/clamsmtp { };
 
   clickhouse = callPackage ../servers/clickhouse {
+<<<<<<< HEAD
     llvmPackages = llvmPackages_15;
+=======
+    # upstream requires llvm12 as of v22.3.2.2
+    inherit (llvmPackages_14) clang-unwrapped lld llvm;
+    llvm-bintools = llvmPackages_14.bintools;
+    stdenv = llvmPackages_14.stdenv;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   clickhouse-cli = with python3Packages; toPythonApplication clickhouse-cli;
@@ -26492,8 +30497,11 @@ with pkgs;
 
   dcnnt = python3Packages.callPackage ../servers/dcnnt { };
 
+<<<<<<< HEAD
   deconz = qt5.callPackage ../servers/deconz { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   dendrite = callPackage ../servers/dendrite { };
 
   dex-oidc = callPackage ../servers/dex { };
@@ -26552,7 +30560,11 @@ with pkgs;
 
   ergochat = callPackage ../servers/irc/ergochat { };
 
+<<<<<<< HEAD
   etcd = etcd_3_5;
+=======
+  etcd = etcd_3_3;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   etcd_3_3 = callPackage ../servers/etcd/3.3.nix { };
   etcd_3_4 = callPackage ../servers/etcd/3.4.nix { };
   etcd_3_5 = callPackage ../servers/etcd/3.5.nix { };
@@ -26561,6 +30573,11 @@ with pkgs;
 
   exhaustive = callPackage ../development/tools/exhaustive { };
 
+<<<<<<< HEAD
+=======
+  exhibitor = callPackage ../servers/exhibitor { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   hyp = callPackage ../servers/http/hyp { };
 
   peering-manager = callPackage ../servers/web-apps/peering-manager { };
@@ -26585,12 +30602,15 @@ with pkgs;
 
   eventstore = callPackage ../servers/nosql/eventstore { };
 
+<<<<<<< HEAD
   exabgp = callPackage ../servers/networking/exabgp { };
 
   rustus = callPackage ../servers/networking/rustus {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   exim = callPackage ../servers/mail/exim { };
 
   fastnetmon-advanced = callPackage ../servers/fastnetmon-advanced { };
@@ -26609,8 +30629,11 @@ with pkgs;
 
   inherit (callPackages ../servers/firebird { }) firebird_4 firebird_3 firebird_2_5 firebird;
 
+<<<<<<< HEAD
   flashmq = callPackage ../servers/mqtt/flashmq { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   freeradius = callPackage ../servers/freeradius { };
 
   freshrss = callPackage ../servers/web-apps/freshrss { };
@@ -26627,8 +30650,11 @@ with pkgs;
 
   glabels = callPackage ../applications/graphics/glabels { };
 
+<<<<<<< HEAD
   glabels-qt = libsForQt5.callPackage ../applications/graphics/glabels-qt { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nats-server = callPackage ../servers/nats-server { };
 
   go-autoconfig = callPackage ../servers/go-autoconfig { };
@@ -26642,7 +30668,13 @@ with pkgs;
   grafana = callPackage ../servers/monitoring/grafana { };
   grafanaPlugins = callPackages ../servers/monitoring/grafana/plugins { };
 
+<<<<<<< HEAD
   grafana-agent = callPackage ../servers/monitoring/grafana-agent { };
+=======
+  grafana-agent = callPackage ../servers/monitoring/grafana-agent {
+    buildGoModule = buildGo119Module; # nixosTests.grafana-agent go 1.20 failure
+  };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   grafana-loki = callPackage ../servers/monitoring/loki { };
   promtail = callPackage ../servers/monitoring/loki/promtail.nix { };
@@ -26686,9 +30718,13 @@ with pkgs;
 
   hiawatha = callPackage ../servers/http/hiawatha { };
 
+<<<<<<< HEAD
   hiraeth = callPackage ../servers/hiraeth { };
 
   hoard = callPackage ../tools/misc/hoard { };
+=======
+  hoard = callPackage ../tools/misc/hoard { inherit (darwin) Security; };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   home-assistant = callPackage ../servers/home-assistant { };
 
@@ -26723,6 +30759,11 @@ with pkgs;
     theme-spring = callPackage ../servers/icingaweb2/theme-spring { };
   };
 
+<<<<<<< HEAD
+=======
+  irrd = callPackage ../servers/irrd { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   inspircd = callPackage ../servers/irc/inspircd { };
 
   inspircdMinimal = inspircd.override { extraModules = []; };
@@ -26757,8 +30798,11 @@ with pkgs;
 
   jitsi-videobridge = callPackage ../servers/jitsi-videobridge { };
 
+<<<<<<< HEAD
   kamailio = callPackage ../servers/sip/kamailio { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   kanidm = callPackage ../servers/kanidm { };
 
   kapowbang = callPackage ../servers/kapowbang { };
@@ -26774,14 +30818,21 @@ with pkgs;
 
   leafnode = callPackage ../servers/news/leafnode { };
 
+<<<<<<< HEAD
   leafnode1 = callPackage ../servers/news/leafnode/1.nix { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   lemmy-server = callPackage ../servers/web-apps/lemmy/server.nix {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
   lemmy-ui = callPackage ../servers/web-apps/lemmy/ui.nix {
+<<<<<<< HEAD
     nodejs = nodejs_18;
+=======
+    nodejs = nodejs_14;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   lightgbm = callPackage ../development/libraries/lightgbm { };
@@ -26814,8 +30865,11 @@ with pkgs;
 
   mastodon = callPackage ../servers/mastodon { };
 
+<<<<<<< HEAD
   gotosocial = callPackage ../servers/gotosocial { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   materialize = callPackage ../servers/sql/materialize {
     inherit (buildPackages.darwin) bootstrap_cmds;
     inherit (darwin.apple_sdk.frameworks) DiskArbitration Foundation;
@@ -26891,8 +30945,11 @@ with pkgs;
 
   mullvad-browser = callPackage ../applications/networking/browsers/mullvad-browser { };
 
+<<<<<<< HEAD
   mullvad-closest = with python3Packages; toPythonApplication mullvad-closest;
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   mycorrhiza = callPackage ../servers/mycorrhiza { };
 
   napalm = with python3Packages; toPythonApplication (
@@ -26912,7 +30969,13 @@ with pkgs;
 
   networkaudiod = callPackage ../servers/networkaudiod { };
 
+<<<<<<< HEAD
   unifiedpush-common-proxies = callPackage ../servers/unifiedpush-common-proxies { };
+=======
+  unifiedpush-common-proxies = callPackage ../servers/unifiedpush-common-proxies {
+    buildGoModule = buildGo119Module; # go 1.20 build failure
+  };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   unit = callPackage ../servers/http/unit { };
 
@@ -26966,8 +31029,11 @@ with pkgs;
 
   nix-tour = callPackage ../applications/misc/nix-tour { };
 
+<<<<<<< HEAD
   noseyparker = callPackage ../tools/security/noseyparker { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nosqli = callPackage ../tools/security/nosqli { };
 
   nsd = callPackage ../servers/dns/nsd (config.nsd or {});
@@ -26985,7 +31051,11 @@ with pkgs;
   outline = callPackage ../servers/web-apps/outline (lib.fix (super: {
     yarn2nix-moretea = yarn2nix-moretea.override { inherit (super) nodejs yarn; };
     yarn = yarn.override { inherit (super) nodejs; };
+<<<<<<< HEAD
     nodejs = nodejs_18;
+=======
+    nodejs = nodejs_16;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   }));
 
   openbgpd = callPackage ../servers/openbgpd { };
@@ -27013,9 +31083,13 @@ with pkgs;
 
   petidomo = callPackage ../servers/mail/petidomo { };
 
+<<<<<<< HEAD
   pict-rs = callPackage ../servers/web-apps/pict-rs { };
 
   pict-rs_0_3 = callPackage ../servers/web-apps/pict-rs/0.3.nix {
+=======
+  pict-rs = callPackage ../servers/web-apps/pict-rs {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     inherit (darwin.apple_sdk.frameworks) Security;
     ffmpeg = ffmpeg_4;
   };
@@ -27084,7 +31158,13 @@ with pkgs;
 
   easyeffects = callPackage ../applications/audio/easyeffects { };
 
+<<<<<<< HEAD
   pulseeffects-legacy = callPackage ../applications/audio/pulseeffects-legacy { };
+=======
+  pulseeffects-legacy = callPackage ../applications/audio/pulseeffects-legacy {
+    boost = boost172;
+  };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   soundux = callPackage ../applications/audio/soundux {
     yt-dlp = yt-dlp.override { withAlias = true; };
@@ -27100,6 +31180,7 @@ with pkgs;
 
   rpcsvc-proto = callPackage ../tools/misc/rpcsvc-proto { };
 
+<<<<<<< HEAD
   libmysqlclient = libmysqlclient_3_3;
   libmysqlclient_3_1 = mariadb-connector-c_3_1;
   libmysqlclient_3_2 = mariadb-connector-c_3_2;
@@ -27108,31 +31189,65 @@ with pkgs;
   mariadb-connector-c_3_1 = callPackage ../servers/sql/mariadb/connector-c/3_1.nix { };
   mariadb-connector-c_3_2 = callPackage ../servers/sql/mariadb/connector-c/3_2.nix { };
   mariadb-connector-c_3_3 = callPackage ../servers/sql/mariadb/connector-c/3_3.nix { };
+=======
+  libmysqlclient = libmysqlclient_3_2;
+  libmysqlclient_3_1 = mariadb-connector-c_3_1;
+  libmysqlclient_3_2 = mariadb-connector-c_3_2;
+  mariadb-connector-c = mariadb-connector-c_3_2;
+  mariadb-connector-c_3_1 = callPackage ../servers/sql/mariadb/connector-c/3_1.nix { };
+  mariadb-connector-c_3_2 = callPackage ../servers/sql/mariadb/connector-c/3_2.nix { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   mariadb-galera = callPackage ../servers/sql/mariadb/galera { };
 
   inherit (import ../servers/sql/mariadb pkgs)
+<<<<<<< HEAD
+=======
+    mariadb_104
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     mariadb_105
     mariadb_106
     mariadb_1010
     mariadb_1011
+<<<<<<< HEAD
     mariadb_110
   ;
   mariadb = mariadb_1011;
+=======
+  ;
+  mariadb = mariadb_106;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   mariadb-embedded = mariadb.override { withEmbedded = true; };
 
   mongodb = hiPrio mongodb-6_0;
 
+<<<<<<< HEAD
   mongodb-4_4 = callPackage ../servers/nosql/mongodb/4.4.nix {
     sasl = cyrus_sasl;
     boost = boost179.override { enableShared = false; };
+=======
+  mongodb-4_2 = callPackage ../servers/nosql/mongodb/v4_2.nix {
+    sasl = cyrus_sasl;
+    boost = boost169;
+    inherit (darwin) cctools;
+    inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
+  };
+
+  mongodb-4_4 = callPackage ../servers/nosql/mongodb/4.4.nix {
+    sasl = cyrus_sasl;
+    boost = boost17x.override { enableShared = false; };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     inherit (darwin) cctools;
     inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
   };
 
   mongodb-5_0 = callPackage ../servers/nosql/mongodb/5.0.nix {
     sasl = cyrus_sasl;
+<<<<<<< HEAD
     boost = boost179.override { enableShared = false; };
+=======
+    boost = boost17x.override { enableShared = false; };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     inherit (darwin) cctools;
     inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
   };
@@ -27158,8 +31273,11 @@ with pkgs;
   influxdb = callPackage ../servers/nosql/influxdb { };
   influxdb2-server = callPackage ../servers/nosql/influxdb2 { };
   influxdb2-cli = callPackage ../servers/nosql/influxdb2/cli.nix { };
+<<<<<<< HEAD
   influxdb2-token-manipulator = callPackage ../servers/nosql/influxdb2/token-manipulator.nix { };
   influxdb2-provision = callPackage ../servers/nosql/influxdb2/provision.nix { };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   # For backwards compatibility with older versions of influxdb2,
   # which bundled the server and CLI into the same derivation. Will be
   # removed in a few releases.
@@ -27169,8 +31287,14 @@ with pkgs;
     inherit (darwin) cctools developer_cmds DarwinTools;
     inherit (darwin.apple_sdk.frameworks) CoreServices;
     boost = boost177; # Configure checks for specific version.
+<<<<<<< HEAD
     icu = icu69;
     protobuf = protobuf3_21;
+=======
+    protobuf = protobuf3_19;
+    icu = icu69;
+    openssl = openssl_1_1;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   mysql_jdbc = callPackage ../servers/sql/mysql/jdbc { };
@@ -27259,8 +31383,11 @@ with pkgs;
 
   pgbouncer = callPackage ../servers/sql/pgbouncer { };
 
+<<<<<<< HEAD
   pgcat = callPackage ../servers/sql/pgcat {};
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pgpool = callPackage ../servers/sql/pgpool { };
 
   tang = callPackage ../servers/tang {
@@ -27324,7 +31451,10 @@ with pkgs;
   prometheus-cloudflare-exporter = callPackage ../servers/monitoring/prometheus/cloudflare-exporter.nix { };
   prometheus-collectd-exporter = callPackage ../servers/monitoring/prometheus/collectd-exporter.nix { };
   prometheus-consul-exporter = callPackage ../servers/monitoring/prometheus/consul-exporter.nix { };
+<<<<<<< HEAD
   prometheus-dcgm-exporter = callPackage ../servers/monitoring/prometheus/dcgm-exporter { };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   prometheus-dnsmasq-exporter = callPackage ../servers/monitoring/prometheus/dnsmasq-exporter.nix { };
   prometheus-dovecot-exporter = callPackage ../servers/monitoring/prometheus/dovecot-exporter.nix { };
   prometheus-domain-exporter = callPackage ../servers/monitoring/prometheus/domain-exporter.nix { };
@@ -27332,15 +31462,22 @@ with pkgs;
   prometheus-flow-exporter = callPackage ../servers/monitoring/prometheus/flow-exporter.nix { };
   prometheus-fritzbox-exporter = callPackage ../servers/monitoring/prometheus/fritzbox-exporter.nix { };
   prometheus-gitlab-ci-pipelines-exporter = callPackage ../servers/monitoring/prometheus/gitlab-ci-pipelines-exporter.nix { };
+<<<<<<< HEAD
   prometheus-graphite-exporter = callPackage ../servers/monitoring/prometheus/graphite-exporter.nix { };
   prometheus-haproxy-exporter = callPackage ../servers/monitoring/prometheus/haproxy-exporter.nix { };
   prometheus-idrac-exporter = callPackage ../servers/monitoring/prometheus/idrac-exporter.nix { };
+=======
+  prometheus-haproxy-exporter = callPackage ../servers/monitoring/prometheus/haproxy-exporter.nix { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   prometheus-influxdb-exporter = callPackage ../servers/monitoring/prometheus/influxdb-exporter.nix { };
   prometheus-ipmi-exporter = callPackage ../servers/monitoring/prometheus/ipmi-exporter.nix { };
   prometheus-jitsi-exporter = callPackage ../servers/monitoring/prometheus/jitsi-exporter.nix { };
   prometheus-jmx-httpserver = callPackage ../servers/monitoring/prometheus/jmx-httpserver.nix {  };
   prometheus-json-exporter = callPackage ../servers/monitoring/prometheus/json-exporter.nix { };
+<<<<<<< HEAD
   prometheus-junos-czerwonk-exporter = callPackage ../servers/monitoring/prometheus/junos-czerwonk-exporter.nix { };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   prometheus-kea-exporter = callPackage ../servers/monitoring/prometheus/kea-exporter.nix { };
   prometheus-keylight-exporter = callPackage ../servers/monitoring/prometheus/keylight-exporter.nix { };
   prometheus-knot-exporter = callPackage ../servers/monitoring/prometheus/knot-exporter.nix { };
@@ -27358,9 +31495,16 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) CoreFoundation IOKit;
   };
   prometheus-nut-exporter = callPackage ../servers/monitoring/prometheus/nut-exporter.nix { };
+<<<<<<< HEAD
   prometheus-openldap-exporter = callPackage ../servers/monitoring/prometheus/openldap-exporter.nix { } ;
   prometheus-openvpn-exporter = callPackage ../servers/monitoring/prometheus/openvpn-exporter.nix { };
   prometheus-php-fpm-exporter = callPackage ../servers/monitoring/prometheus/php-fpm-exporter.nix { };
+=======
+  prometheus-openldap-exporter = callPackage ../servers/monitoring/prometheus/openldap-exporter.nix {
+    buildGoModule = buildGo118Module; # nixosTests.prometheus-exporter.ldap fails with 1.19
+  };
+  prometheus-openvpn-exporter = callPackage ../servers/monitoring/prometheus/openvpn-exporter.nix { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   prometheus-pihole-exporter = callPackage ../servers/monitoring/prometheus/pihole-exporter.nix {  };
   prometheus-postfix-exporter = callPackage ../servers/monitoring/prometheus/postfix-exporter.nix { };
   prometheus-postgres-exporter = callPackage ../servers/monitoring/prometheus/postgres-exporter.nix { };
@@ -27376,12 +31520,22 @@ with pkgs;
   prometheus-smartctl-exporter = callPackage ../servers/monitoring/prometheus/smartctl-exporter { };
   prometheus-smokeping-prober = callPackage ../servers/monitoring/prometheus/smokeping-prober.nix { };
   prometheus-snmp-exporter = callPackage ../servers/monitoring/prometheus/snmp-exporter.nix { };
+<<<<<<< HEAD
+=======
+  prometheus-speedtest-exporter = callPackage ../servers/monitoring/prometheus/speedtest-exporter.nix { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   prometheus-statsd-exporter = callPackage ../servers/monitoring/prometheus/statsd-exporter.nix { };
   prometheus-surfboard-exporter = callPackage ../servers/monitoring/prometheus/surfboard-exporter.nix { };
   prometheus-sql-exporter = callPackage ../servers/monitoring/prometheus/sql-exporter.nix { };
   prometheus-systemd-exporter = callPackage ../servers/monitoring/prometheus/systemd-exporter.nix { };
   prometheus-tor-exporter = callPackage ../servers/monitoring/prometheus/tor-exporter.nix { };
+<<<<<<< HEAD
   prometheus-unbound-exporter = callPackage ../servers/monitoring/prometheus/unbound-exporter.nix { };
+=======
+  prometheus-unbound-exporter = callPackage ../servers/monitoring/prometheus/unbound-exporter.nix {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   prometheus-v2ray-exporter = callPackage ../servers/monitoring/prometheus/v2ray-exporter.nix { };
   prometheus-varnish-exporter = callPackage ../servers/monitoring/prometheus/varnish-exporter.nix { };
   prometheus-wireguard-exporter = callPackage ../servers/monitoring/prometheus/wireguard-exporter.nix {
@@ -27410,8 +31564,11 @@ with pkgs;
 
   qremotecontrol-server = libsForQt5.callPackage ../servers/misc/qremotecontrol-server { };
 
+<<<<<<< HEAD
   questdb = callPackage ../servers/nosql/questdb { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   rabbitmq-server = callPackage ../servers/amqp/rabbitmq-server {
     inherit (darwin.apple_sdk.frameworks) AppKit Carbon Cocoa;
     elixir = elixir_1_14;
@@ -27422,10 +31579,13 @@ with pkgs;
 
   radicale = radicale3;
 
+<<<<<<< HEAD
   qcal = callPackage ../tools/networking/qcal/default.nix { };
 
   qcard = callPackage ../tools/networking/qcard { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   rake = callPackage ../development/tools/build-managers/rake { };
 
   rakkess = callPackage ../development/tools/rakkess { };
@@ -27442,7 +31602,10 @@ with pkgs;
 
   restic = callPackage ../tools/backup/restic { };
 
+<<<<<<< HEAD
   restic-integrity = callPackage ../applications/backup/restic-integrity { };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   restic-rest-server = callPackage ../tools/backup/restic/rest-server.nix { };
 
   restya-board = callPackage ../servers/web-apps/restya-board { };
@@ -27450,11 +31613,19 @@ with pkgs;
   rethinkdb = callPackage ../servers/nosql/rethinkdb {
     stdenv = clangStdenv;
     libtool = darwin.cctools;
+<<<<<<< HEAD
     protobuf = protobuf3_21;
   };
 
   rippled = callPackage ../servers/rippled {
     boost = boost177;
+=======
+  };
+
+  # Fails to compile with boost <= 1.72
+  rippled = callPackage ../servers/rippled {
+    boost = boost172;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   rippled-validator-keys-tool = callPackage ../servers/rippled/validator-keys-tool.nix { };
@@ -27492,8 +31663,11 @@ with pkgs;
 
   scalr-cli = callPackage ../tools/admin/scalr-cli { };
 
+<<<<<<< HEAD
   scaphandre = callPackage ../servers/scaphandre { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   shairplay = callPackage ../servers/shairplay { avahi = avahi-compat; };
 
   shairport-sync = callPackage ../servers/shairport-sync { };
@@ -27530,10 +31704,14 @@ with pkgs;
 
   smcroute = callPackage ../servers/smcroute { };
 
+<<<<<<< HEAD
   snipe-it = callPackage ../servers/web-apps/snipe-it {
     php = php81;
     phpPackages = php81Packages;
   };
+=======
+  snipe-it = callPackage ../servers/web-apps/snipe-it { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   sogo = callPackage ../servers/web-apps/sogo { };
 
@@ -27554,8 +31732,11 @@ with pkgs;
 
   static-web-server = callPackage ../servers/static-web-server { };
 
+<<<<<<< HEAD
   stone = callPackage ../servers/stone { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   storm = callPackage ../servers/computing/storm { };
 
   surrealdb = callPackage ../servers/nosql/surrealdb {
@@ -27573,6 +31754,7 @@ with pkgs;
   systemd-journal2gelf = callPackage ../tools/system/systemd-journal2gelf { };
 
   tailscale = callPackage ../servers/tailscale {
+<<<<<<< HEAD
     buildGoModule = buildGo121Module;
   };
 
@@ -27581,6 +31763,19 @@ with pkgs;
   tailspin = callPackage ../tools/misc/tailspin { };
 
   thanos = callPackage ../servers/monitoring/thanos { };
+=======
+    # Version 1.38.1 requires Go >= 1.20
+    buildGoModule = buildGo120Module;
+  };
+
+  tailspin = callPackage ../tools/misc/tailspin { };
+
+  thanos = callPackage ../servers/monitoring/thanos {
+    # Fails to run with go1.20 due to go4.org/unsafe/assume-no-moving-gc not being
+    # update to be compatible with Go 1.20
+    buildGoModule = buildGo119Module;
+  };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   trafficserver = callPackage ../servers/http/trafficserver { };
 
@@ -27636,15 +31831,24 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Cocoa WebKit;
   };
 
+<<<<<<< HEAD
   unstructured-api = callPackage ../servers/unstructured-api { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   urserver = callPackage ../servers/urserver { };
 
   uxplay = callPackage ../servers/uxplay { };
 
   vouch-proxy = callPackage ../servers/vouch-proxy { };
 
+<<<<<<< HEAD
   victoriametrics = callPackage ../servers/nosql/victoriametrics { };
+=======
+  victoriametrics = callPackage ../servers/nosql/victoriametrics {
+    buildGoModule = buildGo119Module; # go 1.20 build failure
+  };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   virtiofsd = callPackage ../servers/misc/virtiofsd { };
 
@@ -27691,6 +31895,12 @@ with pkgs;
   };
 
   xorg = let
+<<<<<<< HEAD
+=======
+    keep = _self: { };
+    extra = _spliced0: { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     # Use `lib.callPackageWith __splicedPackages` rather than plain `callPackage`
     # so as not to have the newly bound xorg items already in scope,  which would
     # have created a cycle.
@@ -27705,10 +31915,18 @@ with pkgs;
 
     generatedPackages = lib.callPackageWith __splicedPackages ../servers/x11/xorg/default.nix { };
 
+<<<<<<< HEAD
     xorgPackages = makeScopeWithSplicing' {
       otherSplices = generateSplicesForMkScope "xorg";
       f = lib.extends overrides generatedPackages;
     };
+=======
+    xorgPackages = makeScopeWithSplicing
+      (generateSplicesForMkScope "xorg")
+      keep
+      extra
+      (lib.extends overrides generatedPackages);
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   in recurseIntoAttrs xorgPackages;
 
@@ -27773,8 +31991,11 @@ with pkgs;
 
   ### OS-SPECIFIC
 
+<<<<<<< HEAD
   airbuddy = callPackage ../os-specific/darwin/airbuddy { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   afuse = callPackage ../os-specific/linux/afuse { };
 
   autofs5 = callPackage ../os-specific/linux/autofs { };
@@ -27789,16 +32010,27 @@ with pkgs;
 
   acpitool = callPackage ../os-specific/linux/acpitool { };
 
+<<<<<<< HEAD
   aldente = callPackage ../os-specific/darwin/aldente { };
 
   alfred = callPackage ../os-specific/linux/batman-adv/alfred.nix { };
 
+=======
+  alfred = callPackage ../os-specific/linux/batman-adv/alfred.nix { };
+
+  alertmanager-bot = callPackage ../servers/monitoring/alertmanager-bot { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   alertmanager-irc-relay = callPackage ../servers/monitoring/alertmanager-irc-relay { };
 
   tinyalsa = callPackage ../os-specific/linux/tinyalsa { };
 
+<<<<<<< HEAD
   alsa-project = callPackage ../os-specific/linux/alsa-project { };
   inherit (alsa-project)
+=======
+  inherit (callPackage ../os-specific/linux/alsa-project { })
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     alsa-firmware
     alsa-lib
     alsa-oss
@@ -27809,8 +32041,11 @@ with pkgs;
     alsa-ucm-conf
     alsa-utils;
 
+<<<<<<< HEAD
   apparency = callPackage ../os-specific/darwin/apparency { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   arm-trusted-firmware = callPackage ../misc/arm-trusted-firmware { };
   inherit (arm-trusted-firmware)
     buildArmTrustedFirmware
@@ -27824,8 +32059,11 @@ with pkgs;
     armTrustedFirmwareS905
     ;
 
+<<<<<<< HEAD
   mlxbf-bootimages = callPackage ../misc/mlxbf-bootimages { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   microcodeAmd = callPackage ../os-specific/linux/microcode/amd.nix { };
 
   microcodeIntel = callPackage ../os-specific/linux/microcode/intel.nix { };
@@ -27846,16 +32084,22 @@ with pkgs;
   ath9k-htc-blobless-firmware-unstable =
     callPackage ../os-specific/linux/firmware/ath9k { enableUnstable = true; };
 
+<<<<<<< HEAD
   bartender = callPackage ../os-specific/darwin/bartender { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   b43Firmware_5_1_138 = callPackage ../os-specific/linux/firmware/b43-firmware/5.1.138.nix { };
 
   b43Firmware_6_30_163_46 = callPackage ../os-specific/linux/firmware/b43-firmware/6.30.163.46.nix { };
 
   b43FirmwareCutter = callPackage ../os-specific/linux/firmware/b43-firmware-cutter { };
 
+<<<<<<< HEAD
   epilys-bb = callPackage ../tools/system/epilys-bb { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   below = callPackage ../os-specific/linux/below { };
 
   bt-fw-converter = callPackage ../os-specific/linux/firmware/bt-fw-converter { };
@@ -27882,8 +32126,11 @@ with pkgs;
 
   bpf-linker = callPackage ../development/tools/bpf-linker { };
 
+<<<<<<< HEAD
   bpftune = callPackage ../os-specific/linux/bpftune { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   bpfmon = callPackage ../os-specific/linux/bpfmon { };
 
   bridge-utils = callPackage ../os-specific/linux/bridge-utils { };
@@ -27912,12 +32159,17 @@ with pkgs;
 
   cockroachdb = callPackage ../servers/sql/cockroachdb { };
 
+<<<<<<< HEAD
   cockroachdb-bin = callPackage ../servers/sql/cockroachdb/cockroachdb-bin.nix { };
 
   coconutbattery = callPackage ../os-specific/darwin/coconutbattery { };
 
   conky = callPackage ../os-specific/linux/conky ({
     lua = lua5_4;
+=======
+  conky = callPackage ../os-specific/linux/conky ({
+    lua = lua5_3_compat;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     inherit (linuxPackages.nvidia_x11.settings) libXNVCtrl;
   } // config.conky or {});
 
@@ -27940,7 +32192,11 @@ with pkgs;
   criu = callPackage ../os-specific/linux/criu { };
 
   cryptomator = callPackage ../tools/security/cryptomator {
+<<<<<<< HEAD
     jdk = jdk20.override { enableJavaFX = true; };
+=======
+    jdk = jdk.override { enableJavaFX = true; };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   cryptsetup = callPackage ../os-specific/linux/cryptsetup { };
@@ -27988,7 +32244,11 @@ with pkgs;
 
   dstat = callPackage ../os-specific/linux/dstat { };
 
+<<<<<<< HEAD
   esdm = callPackage ../os-specific/linux/esdm { };
+=======
+  erofs-utils = callPackage ../os-specific/linux/erofs-utils { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   evdev-proto = callPackage ../os-specific/bsd/freebsd/evdev-proto { };
 
@@ -28092,7 +32352,11 @@ with pkgs;
 
   gt = callPackage ../os-specific/linux/gt { };
 
+<<<<<<< HEAD
   gtop = callPackage ../tools/system/gtop { };
+=======
+  inherit (nodePackages) gtop;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   hd-idle = callPackage ../os-specific/linux/hd-idle { };
 
@@ -28114,7 +32378,11 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) AppKit;
   };
 
+<<<<<<< HEAD
   btop = darwin.apple_sdk_11_0.callPackage ../tools/system/btop {
+=======
+  btop = callPackage ../tools/system/btop {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     stdenv = gcc12Stdenv;
   };
 
@@ -28180,6 +32448,16 @@ with pkgs;
 
   iwd = callPackage ../os-specific/linux/iwd { };
 
+<<<<<<< HEAD
+=======
+  jfbview = callPackage ../os-specific/linux/jfbview {
+    imlib2 = imlib2Full;
+  };
+  jfbpdf = jfbview.override {
+    imageSupport = false;
+  };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   jool-cli = callPackage ../os-specific/linux/jool/cli.nix { };
 
   juju = callPackage ../applications/networking/juju { };
@@ -28216,8 +32494,11 @@ with pkgs;
 
   libcgroup = callPackage ../os-specific/linux/libcgroup { };
 
+<<<<<<< HEAD
   libdatachannel = callPackage ../development/libraries/libdatachannel { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   libkrun = callPackage ../development/libraries/libkrun {
     inherit (darwin.apple_sdk.frameworks) Hypervisor;
   };
@@ -28271,8 +32552,11 @@ with pkgs;
 
   smemstat = callPackage ../os-specific/linux/smemstat { };
 
+<<<<<<< HEAD
   tgpt = callPackage ../tools/misc/tgpt { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   tgt = callPackage ../tools/networking/tgt { };
 
   lkl = callPackage ../applications/virtualization/lkl { };
@@ -28281,13 +32565,21 @@ with pkgs;
   inherit (callPackages ../os-specific/linux/kernel-headers { inherit (pkgsBuildBuild) elf-header; })
     linuxHeaders makeLinuxHeaders;
 
+<<<<<<< HEAD
   linuxHeaders_5_19 = linuxHeaders.overrideAttrs rec {
+=======
+  linuxHeaders_5_19 = linuxHeaders.overrideAttrs (_: rec {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     version = "5.19.16";
     src = fetchurl {
       url = "mirror://kernel/linux/kernel/v5.x/linux-${version}.tar.xz";
       sha256 = "13g0c6ljxk3sd0ja39ndih5vrzp2ssj78qxaf8nswn8hgrkazsx1";
     };
+<<<<<<< HEAD
   };
+=======
+  });
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   klibc = callPackage ../os-specific/linux/klibc { };
 
@@ -28353,8 +32645,11 @@ with pkgs;
   linux_5_15_hardened = linuxKernel.kernels.linux_5_15_hardened;
   linuxPackages_6_1_hardened = linuxKernel.packages.linux_6_1_hardened;
   linux_6_1_hardened = linuxKernel.kernels.linux_6_1_hardened;
+<<<<<<< HEAD
   linuxPackages_6_4_hardened = linuxKernel.packages.linux_6_4_hardened;
   linux_6_4_hardened = linuxKernel.kernels.linux_6_4_hardened;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   # Hardkernel (Odroid) kernels.
   linuxPackages_hardkernel_latest = linuxKernel.packageAliases.linux_hardkernel_latest;
@@ -28398,13 +32693,20 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) ApplicationServices;
   };
 
+<<<<<<< HEAD
   libraqm = callPackage ../development/libraries/libraqm { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   libraw = callPackage ../development/libraries/libraw { };
 
   libraw1394 = callPackage ../development/libraries/libraw1394 { };
 
+<<<<<<< HEAD
   librealsense = darwin.apple_sdk_11_0.callPackage ../development/libraries/librealsense { };
+=======
+  librealsense = callPackage ../development/libraries/librealsense { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   librealsenseWithCuda = callPackage ../development/libraries/librealsense {
     cudaSupport = true;
@@ -28490,6 +32792,7 @@ with pkgs;
   minimal-bootstrap = recurseIntoAttrs (import ../os-specific/linux/minimal-bootstrap {
     inherit (stdenv) buildPlatform hostPlatform;
     inherit lib config;
+<<<<<<< HEAD
     fetchurl = import ../build-support/fetchurl/boot.nix {
       inherit (stdenv.buildPlatform) system;
     };
@@ -28497,6 +32800,9 @@ with pkgs;
   });
   minimal-bootstrap-sources = callPackage ../os-specific/linux/minimal-bootstrap/stage0-posix/bootstrap-sources.nix { };
   make-minimal-bootstrap-sources = callPackage ../os-specific/linux/minimal-bootstrap/stage0-posix/make-bootstrap-sources.nix { };
+=======
+  });
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   mingetty = callPackage ../os-specific/linux/mingetty { };
 
@@ -28528,12 +32834,19 @@ with pkgs;
     inherit (darwin.apple_sdk_11_0.frameworks) AppKit Security;
   };
 
+<<<<<<< HEAD
   nushellFull = nushell.override { additionalFeatures = p: p ++ ["dataframe" "extra"]; };
 
   nu_scripts = callPackage ../shells/nushell/nu_scripts { };
 
   nushellPlugins = callPackage ../shells/nushell/plugins {
     inherit (darwin.apple_sdk_11_0.frameworks) IOKit CoreFoundation Foundation Security;
+=======
+  nu_scripts = callPackage ../shells/nushell/nu_scripts { };
+
+  nushellPlugins = callPackage ../shells/nushell/plugins {
+    inherit (darwin.apple_sdk_11_0.frameworks) IOKit CoreFoundation;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nettools = if stdenv.isLinux
@@ -28579,8 +32892,11 @@ with pkgs;
 
   gci = callPackage ../development/tools/gci { };
 
+<<<<<<< HEAD
   gcov2lcov = callPackage ../development/tools/gcov2lcov { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ginkgo = callPackage ../development/tools/ginkgo { };
 
   gdlv = darwin.apple_sdk_11_0.callPackage ../development/tools/gdlv {
@@ -28609,8 +32925,11 @@ with pkgs;
 
   goconvey = callPackage ../development/tools/goconvey { };
 
+<<<<<<< HEAD
   go-callvis = callPackage ../development/tools/go-callvis { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   gofumpt = callPackage ../development/tools/gofumpt { };
 
   gotags = callPackage ../development/tools/gotags { };
@@ -28629,14 +32948,20 @@ with pkgs;
 
   godef = callPackage ../development/tools/godef { };
 
+<<<<<<< HEAD
   goimports-reviser = callPackage ../development/tools/goimports-reviser { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   gopkgs = callPackage ../development/tools/gopkgs { };
 
   gosec = callPackage ../development/tools/gosec { };
 
+<<<<<<< HEAD
   gotemplate = callPackage ../development/tools/gotemplate { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   gotraceui = callPackage ../development/tools/gotraceui { };
 
   govers = callPackage ../development/tools/govers { };
@@ -28663,8 +32988,11 @@ with pkgs;
 
   go-mockery = callPackage ../development/tools/go-mockery { };
 
+<<<<<<< HEAD
   go-mod-graph-chart = callPackage ../development/tools/go-mod-graph-chart { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   gomacro = callPackage ../development/tools/gomacro { };
 
   gomodifytags = callPackage ../development/tools/gomodifytags { };
@@ -28695,9 +33023,13 @@ with pkgs;
 
   octomap = callPackage ../development/libraries/octomap { };
 
+<<<<<<< HEAD
   odin = callPackage ../development/compilers/odin {
     inherit (pkgs.darwin.apple_sdk_11_0) MacOSX-SDK;
   };
+=======
+  odin = callPackage ../development/compilers/odin { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   odp-dpdk = callPackage ../os-specific/linux/odp-dpdk { };
 
@@ -28709,8 +33041,11 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
+<<<<<<< HEAD
   ols = callPackage ../development/tools/ols { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   openpam = callPackage ../development/libraries/openpam { };
 
   openbsm = callPackage ../development/libraries/openbsm { };
@@ -28723,8 +33058,11 @@ with pkgs;
 
   pam_ccreds = callPackage ../os-specific/linux/pam_ccreds { };
 
+<<<<<<< HEAD
   pam_dp9ik = callPackage ../os-specific/linux/pam_dp9ik { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pam_gnupg = callPackage ../os-specific/linux/pam_gnupg { };
 
   pam_krb5 = callPackage ../os-specific/linux/pam_krb5 { };
@@ -28739,8 +33077,11 @@ with pkgs;
 
   pam_pgsql = callPackage ../os-specific/linux/pam_pgsql { };
 
+<<<<<<< HEAD
   pam_rssh = callPackage ../os-specific/linux/pam_rssh { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pam_ssh_agent_auth = callPackage ../os-specific/linux/pam_ssh_agent_auth { };
 
   pam_tmpdir = callPackage ../os-specific/linux/pam_tmpdir { };
@@ -28763,8 +33104,11 @@ with pkgs;
 
   perf-tools = callPackage ../os-specific/linux/perf-tools { };
 
+<<<<<<< HEAD
   pgrok = callPackage ../tools/networking/pgrok { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   picoprobe-udev-rules = callPackage ../os-specific/linux/picoprobe-udev-rules { };
 
   pipes = callPackage ../misc/screensavers/pipes { };
@@ -28864,6 +33208,11 @@ with pkgs;
 
   rtl8192su-firmware = callPackage ../os-specific/linux/firmware/rtl8192su-firmware { };
 
+<<<<<<< HEAD
+=======
+  rtl8723bs-firmware = callPackage ../os-specific/linux/firmware/rtl8723bs-firmware { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   rtl8761b-firmware = callPackage ../os-specific/linux/firmware/rtl8761b-firmware { };
 
   rtw88-firmware = callPackage ../os-specific/linux/firmware/rtw88-firmware { };
@@ -28882,8 +33231,11 @@ with pkgs;
 
   schedtool = callPackage ../os-specific/linux/schedtool { };
 
+<<<<<<< HEAD
   sddm-chili-theme = libsForQt5.callPackage ../data/themes/chili-sddm { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   sdparm = callPackage ../os-specific/linux/sdparm { };
 
   sdrangel = libsForQt5.callPackage ../applications/radio/sdrangel { };
@@ -28898,9 +33250,13 @@ with pkgs;
 
   sgx-ssl = callPackage ../os-specific/linux/sgx/ssl { };
 
+<<<<<<< HEAD
   sgx-psw = callPackage ../os-specific/linux/sgx/psw {
     protobuf = protobuf3_21;
   };
+=======
+  sgx-psw = callPackage ../os-specific/linux/sgx/psw { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   shadow = callPackage ../os-specific/linux/shadow { };
 
@@ -28913,8 +33269,11 @@ with pkgs;
 
   skopeo = callPackage ../development/tools/skopeo { };
 
+<<<<<<< HEAD
   srisum = callPackage ../tools/misc/srisum { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   smem = callPackage ../os-specific/linux/smem { };
 
   smimesign = callPackage ../os-specific/darwin/smimesign { };
@@ -28989,7 +33348,10 @@ with pkgs;
     withTimesyncd = false;
     withTpm2Tss = false;
     withUserDb = false;
+<<<<<<< HEAD
     withUkify = false;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
   systemdStage1 = systemdMinimal.override {
     pname = "systemd-stage-1";
@@ -29128,8 +33490,11 @@ with pkgs;
 
   upower = callPackage ../os-specific/linux/upower { };
 
+<<<<<<< HEAD
   upscayl = callPackage ../applications/graphics/upscayl { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   usbguard = callPackage ../os-specific/linux/usbguard { };
 
   usbguard-notifier = callPackage ../os-specific/linux/usbguard-notifier { };
@@ -29145,14 +33510,25 @@ with pkgs;
 
   usermount = callPackage ../os-specific/linux/usermount { };
 
+<<<<<<< HEAD
   util-linux = callPackage ../os-specific/linux/util-linux { };
 
   util-linuxMinimal = util-linux.override {
+=======
+  util-linux = if stdenv.isLinux then callPackage ../os-specific/linux/util-linux { }
+              else unixtools.util-linux;
+
+  util-linuxMinimal = if stdenv.isLinux then util-linux.override {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     nlsSupport = false;
     ncursesSupport = false;
     systemdSupport = false;
     translateManpages = false;
+<<<<<<< HEAD
   };
+=======
+  } else util-linux;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   v4l-utils = qt5.callPackage ../os-specific/linux/v4l-utils { };
 
@@ -29164,9 +33540,13 @@ with pkgs;
 
   vdo = callPackage ../os-specific/linux/vdo { };
 
+<<<<<<< HEAD
   windmill = callPackage ../servers/windmill {};
 
   windows = callPackages ../os-specific/windows {};
+=======
+  windows = callPackages ../os-specific/windows { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   wirelesstools = callPackage ../os-specific/linux/wireless-tools { };
 
@@ -29196,12 +33576,19 @@ with pkgs;
 
   zenmonitor = callPackage ../os-specific/linux/zenmonitor { };
 
+<<<<<<< HEAD
   zfsStable = callPackage ../os-specific/linux/zfs/stable.nix {
     configFile = "user";
   };
   zfsUnstable = callPackage ../os-specific/linux/zfs/unstable.nix {
     configFile = "user";
   };
+=======
+  inherit (callPackages ../os-specific/linux/zfs {
+    configFile = "user";
+  }) zfsStable zfsUnstable;
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   zfs = zfsStable;
 
   ### DATA
@@ -29250,8 +33637,11 @@ with pkgs;
 
   ananicy-cpp = callPackage ../misc/ananicy-cpp { };
 
+<<<<<<< HEAD
   ananicy-rules-cachyos = callPackage ../misc/ananicy-rules-cachyos { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   andagii = callPackage ../data/fonts/andagii { };
 
   andika = callPackage ../data/fonts/andika { };
@@ -29295,8 +33685,11 @@ with pkgs;
 
   bakoma_ttf = callPackage ../data/fonts/bakoma-ttf { };
 
+<<<<<<< HEAD
   banana-cursor = callPackage ../data/icons/banana-cursor { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   barlow = callPackage ../data/fonts/barlow { };
 
   base16-schemes = callPackage ../data/themes/base16-schemes { };
@@ -29355,8 +33748,11 @@ with pkgs;
 
   clearlooks-phenix = callPackage ../data/themes/clearlooks-phenix { };
 
+<<<<<<< HEAD
   cnspec = callPackage ../tools/security/cnspec { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   cnstrokeorder = callPackage ../data/fonts/cnstrokeorder { };
 
   colloid-gtk-theme = callPackage ../data/themes/colloid-gtk-theme { };
@@ -29448,8 +33844,11 @@ with pkgs;
 
   combinatorial_designs = callPackage ../data/misc/combinatorial_designs { };
 
+<<<<<<< HEAD
   commit-mono = callPackage ../data/fonts/commit-mono { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   conway_polynomials = callPackage ../data/misc/conway_polynomials { };
 
   cooper-hewitt = callPackage ../data/fonts/cooper-hewitt { };
@@ -29522,9 +33921,12 @@ with pkgs;
 
   fira-code = callPackage ../data/fonts/fira-code { };
   fira-code-symbols = callPackage ../data/fonts/fira-code/symbols.nix { };
+<<<<<<< HEAD
   fira-code-nerdfont = nerdfonts.override {
     fonts = [ "FiraCode" ];
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   fira-go = callPackage ../data/fonts/fira-go { };
 
@@ -29551,8 +33953,11 @@ with pkgs;
 
   freepats = callPackage ../data/misc/freepats { };
 
+<<<<<<< HEAD
   game-devices-udev-rules = callPackage ../os-specific/linux/game-devices-udev-rules { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   garamond-libre = callPackage ../data/fonts/garamond-libre { };
 
   g15daemon = callPackage ../os-specific/linux/g15daemon { };
@@ -29649,8 +34054,11 @@ with pkgs;
     fonts = [ "Inconsolata" ];
   };
 
+<<<<<<< HEAD
   intel-one-mono = callPackage ../data/fonts/intel-one-mono {};
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   input-fonts = callPackage ../data/fonts/input-fonts { };
 
   inriafonts = callPackage ../data/fonts/inriafonts { };
@@ -29696,8 +34104,11 @@ with pkgs;
 
   kochi-substitute-naga10 = callPackage ../data/fonts/kochi-substitute-naga10 { };
 
+<<<<<<< HEAD
   kode-mono = callPackage ../data/fonts/kode-mono { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   kopia = callPackage ../tools/backup/kopia { };
 
   kora-icon-theme = callPackage ../data/icons/kora-icon-theme {
@@ -29772,8 +34183,11 @@ with pkgs;
 
   line-awesome = callPackage ../data/fonts/line-awesome { };
 
+<<<<<<< HEAD
   linearicons-free = callPackage ../data/fonts/linearicons-free { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   linja-pi-pu-lukin = callPackage ../data/fonts/linja-pi-pu-lukin { };
 
   linja-sike = callPackage ../data/fonts/linja-sike { };
@@ -29892,8 +34306,11 @@ with pkgs;
 
   mustache-spec = callPackage ../data/documentation/mustache-spec { };
 
+<<<<<<< HEAD
   mustache-tcl = callPackage ../development/libraries/mustache-tcl { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   mustache-go = callPackage ../development/tools/mustache-go { };
 
   mustache-hpp = callPackage ../development/libraries/mustache-hpp { };
@@ -29932,10 +34349,15 @@ with pkgs;
     noto-fonts-lgc-plus
     noto-fonts-cjk-sans
     noto-fonts-cjk-serif
+<<<<<<< HEAD
     noto-fonts-color-emoji
     noto-fonts-emoji-blob-bin
     noto-fonts-monochrome-emoji
     ;
+=======
+    noto-fonts-emoji
+    noto-fonts-emoji-blob-bin;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nuclear = callPackage ../applications/audio/nuclear { };
 
@@ -30012,8 +34434,11 @@ with pkgs;
 
   papirus-folders = callPackage ../data/misc/papirus-folders { };
 
+<<<<<<< HEAD
   papirus-nord = callPackage ../data/icons/papirus-nord { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   plasma-overdose-kde-theme = callPackage ../data/themes/plasma-overdose-kde-theme { };
 
   papis = with python3Packages; toPythonApplication papis;
@@ -30099,8 +34524,11 @@ with pkgs;
 
   sampradaya = callPackage ../data/fonts/sampradaya { };
 
+<<<<<<< HEAD
   sarabun-font = callPackage ../data/fonts/sarabun { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   sarasa-gothic = callPackage ../data/fonts/sarasa-gothic { };
 
   savepagenow = callPackage ../tools/misc/savepagenow { };
@@ -30173,8 +34601,11 @@ with pkgs;
 
   starfetch = callPackage ../tools/misc/starfetch { };
 
+<<<<<<< HEAD
   starry = callPackage ../tools/misc/starry { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   starship = callPackage ../tools/misc/starship {
     inherit (darwin.apple_sdk.frameworks) Security Foundation Cocoa;
   };
@@ -30270,8 +34701,11 @@ with pkgs;
     gtk = res.gtk2;
   };
 
+<<<<<<< HEAD
   tau-hydrogen = callPackage ../data/icons/tau-hydrogen { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   theme-jade1 = callPackage ../data/themes/jade1 { };
 
   theme-obsidian2 = callPackage ../data/themes/obsidian2 { };
@@ -30396,8 +34830,11 @@ with pkgs;
 
   whitesur-icon-theme = callPackage ../data/icons/whitesur-icon-theme { };
 
+<<<<<<< HEAD
   whitesur-kde = callPackage ../data/themes/whitesur-kde { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   wireless-regdb = callPackage ../data/misc/wireless-regdb { };
 
   work-sans  = callPackage ../data/fonts/work-sans { };
@@ -30429,10 +34866,15 @@ with pkgs;
   };
 
   zeal-qt5 = libsForQt5.callPackage ../data/documentation/zeal { };
+<<<<<<< HEAD
   zeal = zeal-qt5;
   zeal-qt6 = qt6Packages.callPackage ../data/documentation/zeal {
     qtx11extras = null; # Because it does not exist in qt6
   };
+=======
+  zeal-qt6 = qt6Packages.callPackage ../data/documentation/zeal { };
+  zeal = zeal-qt5;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   zilla-slab = callPackage ../data/fonts/zilla-slab { };
 
@@ -30459,9 +34901,14 @@ with pkgs;
 
   qmapshack = libsForQt5.callPackage ../applications/gis/qmapshack { };
 
+<<<<<<< HEAD
   saga = callPackage ../applications/gis/saga {
     inherit (darwin.apple_sdk.frameworks) Cocoa;
     inherit (libsForQt5) dxflib;
+=======
+  saga = libsForQt5.callPackage ../applications/gis/saga {
+    inherit (darwin.apple_sdk.frameworks) Cocoa;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   spatialite_gui = callPackage ../applications/gis/spatialite-gui {
@@ -30521,18 +34968,24 @@ with pkgs;
 
   appvm = callPackage ../applications/virtualization/appvm { };
 
+<<<<<<< HEAD
   anilibria-winmaclinux = libsForQt5.callPackage ../applications/video/anilibria-winmaclinux { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   yggdrasil = callPackage ../tools/networking/yggdrasil { };
 
   masterpdfeditor = libsForQt5.callPackage ../applications/misc/masterpdfeditor { };
 
   masterpdfeditor4 = libsForQt5.callPackage ../applications/misc/masterpdfeditor4 { };
 
+<<<<<<< HEAD
   master_me = callPackage ../applications/audio/master_me {
     inherit (darwin.apple_sdk.frameworks) Cocoa;
   };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pdfstudio2021 = callPackage ../applications/misc/pdfstudio {
     year = "2021";
   };
@@ -30545,12 +34998,15 @@ with pkgs;
     program = "pdfstudioviewer";
   };
 
+<<<<<<< HEAD
   abaddon = callPackage ../applications/networking/instant-messengers/abaddon { };
 
   acpic = callPackage ../applications/misc/acpic/default.nix { };
 
   adguardian = callPackage ../applications/networking/adguardian { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   aeolus = callPackage ../applications/audio/aeolus { };
   aeolus-stops = callPackage ../applications/audio/aeolus/stops.nix { };
 
@@ -30581,7 +35037,13 @@ with pkgs;
 
   alot = callPackage ../applications/networking/mailreaders/alot { };
 
+<<<<<<< HEAD
   alpine = callPackage ../applications/networking/mailreaders/alpine { };
+=======
+  alpine = callPackage ../applications/networking/mailreaders/alpine {
+    tcl = tcl-8_5;
+  };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   msgviewer = callPackage ../applications/networking/mailreaders/msgviewer { };
 
@@ -30598,6 +35060,11 @@ with pkgs;
     (callPackage ../applications/editors/android-studio { });
   android-studio = androidStudioPackages.stable;
 
+<<<<<<< HEAD
+=======
+  animbar = callPackage ../applications/graphics/animbar { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   antfs-cli = callPackage ../applications/misc/antfs-cli { };
 
   antimony = libsForQt5.callPackage ../applications/graphics/antimony { };
@@ -30608,8 +35075,11 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
+<<<<<<< HEAD
   anytone-emu = callPackage ../applications/radio/anytone-emu { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   anytype = callPackage ../applications/misc/anytype { };
 
   ao = libfive;
@@ -30632,6 +35102,11 @@ with pkgs;
     texlive = texlive.combined.scheme-medium;
   };
 
+<<<<<<< HEAD
+=======
+  aqemu = libsForQt5.callPackage ../applications/virtualization/aqemu { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ardour_6 = callPackage ../applications/audio/ardour/6.nix { };
   ardour = callPackage ../applications/audio/ardour { };
 
@@ -30645,6 +35120,11 @@ with pkgs;
 
   argo-rollouts = callPackage ../applications/networking/cluster/argo-rollouts { };
 
+<<<<<<< HEAD
+=======
+  arianna = libsForQt5.callPackage ../applications/misc/arianna { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ario = callPackage ../applications/audio/ario { };
 
   arion = callPackage ../applications/virtualization/arion { };
@@ -30674,12 +35154,19 @@ with pkgs;
   asap = callPackage ../tools/audio/asap { };
 
   aseprite = callPackage ../applications/editors/aseprite { };
+<<<<<<< HEAD
+=======
+  aseprite-unfree = aseprite.override { unfree = true; };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   assign-lb-ip = callPackage ../applications/networking/cluster/assign-lb-ip { };
 
   astroid = callPackage ../applications/networking/mailreaders/astroid {
     vim = vim-full.override { features = "normal"; };
+<<<<<<< HEAD
     protobuf = protobuf3_21;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   aucatctl = callPackage ../applications/audio/aucatctl { };
@@ -30736,17 +35223,24 @@ with pkgs;
 
   blocky = callPackage ../applications/networking/blocky { };
 
+<<<<<<< HEAD
   brutefir = callPackage ../applications/audio/brutefir { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   cadence = libsForQt5.callPackage ../applications/audio/cadence { };
 
   cheesecutter = callPackage ../applications/audio/cheesecutter { };
 
+<<<<<<< HEAD
   cutecapture = callPackage ../applications/video/cutecapture { };
 
   milkytracker = callPackage ../applications/audio/milkytracker {
     inherit (darwin.apple_sdk.frameworks) Cocoa CoreAudio Foundation;
   };
+=======
+  milkytracker = callPackage ../applications/audio/milkytracker { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   ptcollab = libsForQt5.callPackage ../applications/audio/ptcollab { };
 
@@ -30754,12 +35248,17 @@ with pkgs;
 
   jnetmap = callPackage ../applications/networking/jnetmap { };
 
+<<<<<<< HEAD
   jxplorer  = callPackage ../applications/networking/jxplorer {};
 
   join-desktop = callPackage ../applications/misc/join-desktop { };
 
   joincap = callPackage ../tools/security/joincap { };
 
+=======
+  join-desktop = callPackage ../applications/misc/join-desktop { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   json-plot = callPackage ../applications/graphics/json-plot { };
 
   libbitcoin = callPackage ../tools/misc/libbitcoin/libbitcoin.nix {
@@ -30834,8 +35333,13 @@ with pkgs;
 
   berry = callPackage ../applications/window-managers/berry { };
 
+<<<<<<< HEAD
   bespokesynth = darwin.apple_sdk_11_0.callPackage ../applications/audio/bespokesynth {
     inherit (darwin.apple_sdk_11_0.frameworks) Accelerate Cocoa WebKit CoreServices CoreAudioKit IOBluetooth MetalKit;
+=======
+  bespokesynth = callPackage ../applications/audio/bespokesynth {
+    inherit (darwin.apple_sdk.frameworks) Cocoa WebKit CoreServices CoreAudioKit;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   bespokesynth-with-vst2 = bespokesynth.override {
@@ -30875,6 +35379,7 @@ with pkgs;
   };
   bitwig-studio3 =  callPackage ../applications/audio/bitwig-studio/bitwig-studio3.nix { };
   bitwig-studio4 =  callPackage ../applications/audio/bitwig-studio/bitwig-studio4.nix {
+<<<<<<< HEAD
     libjpeg = libjpeg8;
   };
   bitwig-studio5 =  callPackage ../applications/audio/bitwig-studio/bitwig-studio5.nix {
@@ -30882,6 +35387,12 @@ with pkgs;
   };
 
   bitwig-studio = bitwig-studio5;
+=======
+    libjpeg = libjpeg.override { enableJpeg8 = true; };
+  };
+
+  bitwig-studio = bitwig-studio4;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   bgpdump = callPackage ../tools/networking/bgpdump { };
 
@@ -30907,8 +35418,11 @@ with pkgs;
 
   blogc = callPackage ../applications/misc/blogc { };
 
+<<<<<<< HEAD
   bloodhound = callPackage ../applications/misc/bloodhound { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   blucontrol = callPackage ../applications/misc/blucontrol/wrapper.nix {
     inherit (haskellPackages) ghcWithPackages;
   };
@@ -30918,10 +35432,14 @@ with pkgs;
   };
 
   bluej = callPackage ../applications/editors/bluej {
+<<<<<<< HEAD
     openjdk = openjdk17.override {
       enableJavaFX = true;
       openjfx = openjfx17.override { withWebKit = true; };
     };
+=======
+    jdk = jetbrains.jdk;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   bluejeans-gui = callPackage ../applications/networking/instant-messengers/bluejeans { };
@@ -30942,8 +35460,11 @@ with pkgs;
 
   bottles-unwrapped = callPackage ../applications/misc/bottles { };
 
+<<<<<<< HEAD
   buzztrax = callPackage ../applications/audio/buzztrax { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   brave = callPackage ../applications/networking/browsers/brave { };
 
   break-time = callPackage ../applications/misc/break-time { };
@@ -30981,7 +35502,11 @@ with pkgs;
   cardo = callPackage ../data/fonts/cardo { };
 
   cage = callPackage ../applications/window-managers/cage {
+<<<<<<< HEAD
     wlroots = wlroots_0_16;
+=======
+    wlroots = wlroots_0_14;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   calf = callPackage ../applications/audio/calf {
@@ -30994,9 +35519,13 @@ with pkgs;
 
   calculix = callPackage ../applications/science/math/calculix { };
 
+<<<<<<< HEAD
   calibre = qt6Packages.callPackage ../applications/misc/calibre {
     podofo = podofo010;
   };
+=======
+  calibre = qt6Packages.callPackage ../applications/misc/calibre { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   calibre-web = callPackage ../servers/calibre-web { };
 
@@ -31082,8 +35611,11 @@ with pkgs;
 
   boops = callPackage ../applications/audio/boops { };
 
+<<<<<<< HEAD
   cgif = callPackage ../tools/graphics/cgif { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ChowCentaur  = callPackage ../applications/audio/ChowCentaur { };
 
   ChowKick  = callPackage ../applications/audio/ChowKick { };
@@ -31230,8 +35762,11 @@ with pkgs;
 
   csdp = callPackage ../applications/science/math/csdp { };
 
+<<<<<<< HEAD
   csv2svg = callPackage ../tools/graphics/csv2svg { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ctop = callPackage ../tools/system/ctop { };
 
   cubicsdr = callPackage ../applications/radio/cubicsdr {
@@ -31258,10 +35793,13 @@ with pkgs;
 
   cwm = callPackage ../applications/window-managers/cwm { };
 
+<<<<<<< HEAD
   cyber = callPackage ../development/interpreters/cyber { };
 
   cyberduck = callPackage ../applications/networking/cyberduck { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   cyclone = callPackage ../applications/audio/pd-plugins/cyclone  { };
 
   dablin = callPackage ../applications/radio/dablin { };
@@ -31288,8 +35826,11 @@ with pkgs;
     extraIntegrations = extras;
   };
 
+<<<<<<< HEAD
   dayon = callPackage ../applications/networking/remote/dayon { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ddgr = callPackage ../applications/misc/ddgr { };
 
   deadbeef = callPackage ../applications/audio/deadbeef { };
@@ -31317,8 +35858,11 @@ with pkgs;
 
   dia = callPackage ../applications/graphics/dia { };
 
+<<<<<<< HEAD
   diebahn = callPackage ../applications/misc/diebahn { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   digital = callPackage ../applications/science/electronics/digital { };
 
   direwolf = callPackage ../applications/radio/direwolf {
@@ -31355,10 +35899,15 @@ with pkgs;
 
   dnd-tools = callPackage ../applications/misc/dnd-tools { };
 
+<<<<<<< HEAD
   dnglab = callPackage ../tools/graphics/dnglab { };
 
   inherit (callPackage ../applications/virtualization/docker {})
     docker_20_10 docker_24;
+=======
+  inherit (callPackage ../applications/virtualization/docker {})
+    docker_20_10;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   docker = docker_20_10;
   docker-client = docker.override { clientOnly = true; };
@@ -31385,6 +35934,7 @@ with pkgs;
   docker-buildx = callPackage ../applications/virtualization/docker/buildx.nix { };
   docker-compose = callPackage ../applications/virtualization/docker/compose.nix { };
   docker-compose_1 = python3Packages.callPackage ../applications/virtualization/docker/compose_1.nix { };
+<<<<<<< HEAD
   docker-sbom = callPackage ../applications/virtualization/docker/sbom.nix { };
 
 
@@ -31392,6 +35942,11 @@ with pkgs;
 
   dk = callPackage ../applications/window-managers/dk { };
 
+=======
+
+  amazon-ecr-credential-helper = callPackage ../tools/admin/amazon-ecr-credential-helper { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   docker-credential-gcr = callPackage ../tools/admin/docker-credential-gcr { };
 
   docker-credential-helpers = callPackage ../tools/admin/docker-credential-helpers { };
@@ -31419,8 +35974,12 @@ with pkgs;
     buildServerGui = false;
   };
 
+<<<<<<< HEAD
   drawterm = callPackage ../tools/admin/drawterm { config = "unix"; };
   drawterm-wayland = callPackage ../tools/admin/drawterm { config = "linux";  };
+=======
+  drawterm = callPackage ../tools/admin/drawterm { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   droopy = python3Packages.callPackage ../applications/networking/droopy { };
 
@@ -31443,7 +36002,11 @@ with pkgs;
   denemo = callPackage ../applications/audio/denemo { };
 
   dexed = darwin.apple_sdk_11_0.callPackage ../applications/audio/dexed {
+<<<<<<< HEAD
     inherit (darwin.apple_sdk_11_0.frameworks) Accelerate Cocoa WebKit MetalKit DiscRecording CoreAudioKit;
+=======
+    inherit (darwin.apple_sdk_11_0.frameworks) Cocoa WebKit MetalKit DiscRecording CoreAudioKit;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     inherit (darwin.apple_sdk_11_0.libs) simd;
   };
 
@@ -31459,9 +36022,13 @@ with pkgs;
 
   dyff = callPackage ../development/tools/dyff { };
 
+<<<<<<< HEAD
   dwl = callPackage ../applications/window-managers/dwl {
     wlroots = wlroots_0_16;
   };
+=======
+  dwl = callPackage ../applications/window-managers/dwl { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   dwm = callPackage ../applications/window-managers/dwm {
     # dwm is configured entirely through source modification. Allow users to
@@ -31501,8 +36068,12 @@ with pkgs;
 
   ecs-agent = callPackage ../applications/virtualization/ecs-agent { };
 
+<<<<<<< HEAD
   inherit (recurseIntoAttrs (callPackage ../applications/editors/ed { }))
     ed edUnstable;
+=======
+  ed = callPackage ../applications/editors/ed { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   edbrowse = callPackage ../applications/editors/edbrowse { };
 
@@ -31522,6 +36093,11 @@ with pkgs;
 
   electrum-ltc = libsForQt5.callPackage ../applications/misc/electrum/ltc.nix { };
 
+<<<<<<< HEAD
+=======
+  elementary-planner = callPackage ../applications/office/elementary-planner { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   elf-dissector = libsForQt5.callPackage ../applications/misc/elf-dissector {
     libdwarf = libdwarf_20210528;
   };
@@ -31536,6 +36112,7 @@ with pkgs;
 
   em = callPackage ../applications/editors/em { };
 
+<<<<<<< HEAD
   inherit (recurseIntoAttrs (darwin.apple_sdk_11_0.callPackage ../applications/editors/emacs { }))
     emacs28
     emacs28-gtk2
@@ -31554,6 +36131,47 @@ with pkgs;
   emacs-gtk = emacs28-gtk3;
   emacs-nox = emacs28-nox;
 
+=======
+  emacs = emacs28;
+  emacs-gtk = emacs28-gtk;
+  emacs-nox = emacs28-nox;
+
+  emacs28 = callPackage ../applications/editors/emacs/28.nix {
+    # use override to enable additional features
+    libXaw = xorg.libXaw;
+    gconf = null;
+    alsa-lib = null;
+    acl = null;
+    gpm = null;
+    inherit (darwin.apple_sdk.frameworks)
+      AppKit Carbon Cocoa IOKit OSAKit Quartz QuartzCore WebKit
+      ImageCaptureCore GSS ImageIO;
+    inherit (darwin) sigtool;
+  };
+
+  emacs28-gtk = emacs28.override {
+    withGTK3 = true;
+  };
+
+  emacs28-nox = lowPrio (emacs28.override {
+    withX = false;
+    withNS = false;
+    withGTK2 = false;
+    withGTK3 = false;
+  });
+
+  emacsMacport = callPackage ../applications/editors/emacs/macport.nix {
+    withMacport = true;
+
+    gconf = null;
+
+    inherit (darwin.apple_sdk.frameworks)
+      AppKit Carbon Cocoa IOKit OSAKit Quartz QuartzCore WebKit
+      ImageCaptureCore GSS ImageIO;
+    inherit (darwin) sigtool;
+  };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   emacsPackagesFor = emacs: import ./emacs-packages.nix {
     inherit (lib) makeScope makeOverridable dontRecurseIntoAttrs;
     emacs' = emacs;
@@ -31582,7 +36200,13 @@ with pkgs;
 
   epeg = callPackage ../applications/graphics/epeg { };
 
+<<<<<<< HEAD
   epgstation = callPackage ../applications/video/epgstation { };
+=======
+  epgstation = callPackage ../applications/video/epgstation {
+    nodejs = nodejs_16;
+  };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   inherit (gnome) epiphany;
 
@@ -31664,10 +36288,13 @@ with pkgs;
 
   icesl = callPackage ../applications/misc/icesl { };
 
+<<<<<<< HEAD
   input-leap = libsForQt5.callPackage ../applications/misc/input-leap {
     avahi = avahi.override { withLibdnssdCompat = true; };
   };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   karlender = callPackage ../applications/office/karlender { };
 
   keepassxc = libsForQt5.callPackage ../applications/misc/keepassxc {
@@ -31712,8 +36339,11 @@ with pkgs;
 
   f1viewer = callPackage ../applications/video/f1viewer { };
 
+<<<<<<< HEAD
   falcoctl = callPackage ../applications/networking/cluster/falcoctl { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   faircamp = callPackage ../applications/misc/faircamp { };
 
   famistudio = callPackage ../applications/audio/famistudio { };
@@ -31755,8 +36385,11 @@ with pkgs;
 
   flacon = libsForQt5.callPackage ../applications/audio/flacon { };
 
+<<<<<<< HEAD
   flamp = callPackage ../applications/radio/flamp { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   flexget = callPackage ../applications/networking/flexget { };
 
   fldigi = callPackage ../applications/radio/fldigi {
@@ -31789,7 +36422,11 @@ with pkgs;
 
   focus-stack = callPackage ../applications/graphics/focus-stack { };
 
+<<<<<<< HEAD
   focuswriter = qt6Packages.callPackage ../applications/editors/focuswriter { };
+=======
+  focuswriter = libsForQt5.callPackage ../applications/editors/focuswriter { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   foliate = callPackage ../applications/office/foliate { };
 
@@ -31797,8 +36434,11 @@ with pkgs;
 
   font-manager = callPackage ../applications/misc/font-manager { };
 
+<<<<<<< HEAD
   fontfinder = callPackage ../applications/misc/fontfinder { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   fontpreview = callPackage ../applications/misc/fontpreview { };
 
   fossil = callPackage ../applications/version-management/fossil {
@@ -31848,12 +36488,17 @@ with pkgs;
 
   geoipupdate = callPackage ../applications/misc/geoipupdate { };
 
+<<<<<<< HEAD
   glicol-cli = callPackage ../applications/audio/glicol-cli { };
 
   globe-cli = callPackage ../applications/misc/globe-cli { };
 
   gnmic = callPackage ../applications/networking/gnmic { };
 
+=======
+  globe-cli = callPackage ../applications/misc/globe-cli { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   gnss-sdr = callPackage ../applications/radio/gnss-sdr { };
 
   gnuradio = callPackage ../applications/radio/gnuradio/wrapper.nix {
@@ -31965,7 +36610,10 @@ with pkgs;
   };
 
   goldendict = libsForQt5.callPackage ../applications/misc/goldendict { };
+<<<<<<< HEAD
   goldendict-ng = qt6Packages.callPackage ../applications/misc/goldendict-ng { };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   gomuks = callPackage ../applications/networking/instant-messengers/gomuks { };
 
@@ -32029,8 +36677,11 @@ with pkgs;
 
   sherlock = callPackage ../tools/security/sherlock { };
 
+<<<<<<< HEAD
   stratovirt = callPackage ../applications/virtualization/stratovirt { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   rhythmbox = callPackage ../applications/audio/rhythmbox { };
 
   puddletag = libsForQt5.callPackage ../applications/audio/puddletag { };
@@ -32043,8 +36694,13 @@ with pkgs;
 
   welle-io = libsForQt5.callPackage ../applications/radio/welle-io { };
 
+<<<<<<< HEAD
   wireshark = qt6Packages.callPackage ../applications/networking/sniffers/wireshark {
     inherit (darwin.apple_sdk_11_0.frameworks) ApplicationServices SystemConfiguration;
+=======
+  wireshark = callPackage ../applications/networking/sniffers/wireshark {
+    inherit (darwin.apple_sdk.frameworks) ApplicationServices SystemConfiguration;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     libpcap = libpcap.override { withBluez = stdenv.isLinux; };
   };
   wireshark-qt = wireshark;
@@ -32065,8 +36721,11 @@ with pkgs;
 
   fclones = callPackage ../tools/misc/fclones { };
 
+<<<<<<< HEAD
   fclones-gui = darwin.apple_sdk_11_0.callPackage ../tools/misc/fclones/gui.nix { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   fcp = callPackage ../tools/misc/fcp { };
 
   fdupes = callPackage ../tools/misc/fdupes { };
@@ -32075,14 +36734,21 @@ with pkgs;
     imlib2 = imlib2Full;
   };
 
+<<<<<<< HEAD
   feishin = callPackage ../applications/audio/feishin { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   feishu = callPackage ../applications/networking/instant-messengers/feishu { };
 
   filezilla = callPackage ../applications/networking/ftp/filezilla { };
 
   fire = darwin.apple_sdk_11_0.callPackage ../applications/audio/fire {
+<<<<<<< HEAD
     inherit (darwin.apple_sdk_11_0.frameworks) Accelerate Cocoa WebKit CoreServices DiscRecording CoreAudioKit MetalKit;
+=======
+    inherit (darwin.apple_sdk_11_0.frameworks) Cocoa WebKit CoreServices DiscRecording CoreAudioKit MetalKit;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     inherit (darwin.apple_sdk_11_0.libs) simd;
   };
 
@@ -32093,17 +36759,27 @@ with pkgs;
   firefox-unwrapped = firefoxPackages.firefox;
   firefox-beta-unwrapped = firefoxPackages.firefox-beta;
   firefox-devedition-unwrapped = firefoxPackages.firefox-devedition;
+<<<<<<< HEAD
   firefox-esr-115-unwrapped = firefoxPackages.firefox-esr-115;
   firefox-esr-unwrapped = firefoxPackages.firefox-esr-115;
+=======
+  firefox-esr-102-unwrapped = firefoxPackages.firefox-esr-102;
+  firefox-esr-unwrapped = firefoxPackages.firefox-esr-102;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   firefox = wrapFirefox firefox-unwrapped { };
   firefox-beta = wrapFirefox firefox-beta-unwrapped { };
   firefox-devedition = wrapFirefox firefox-devedition-unwrapped { };
 
+<<<<<<< HEAD
   firefox-mobile = callPackage ../applications/networking/browsers/firefox/mobile-config.nix { };
 
   firefox-esr = firefox-esr-115;
   firefox-esr-115 = wrapFirefox firefox-esr-115-unwrapped { };
+=======
+  firefox-esr = firefox-esr-102;
+  firefox-esr-102 = wrapFirefox firefox-esr-102-unwrapped { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   firefox-bin-unwrapped = callPackage ../applications/networking/browsers/firefox-bin {
     inherit (gnome) adwaita-icon-theme;
@@ -32305,15 +36981,21 @@ with pkgs;
   gtk-pipe-viewer = perlPackages.callPackage ../applications/video/pipe-viewer { withGtk3 = true; };
 
   gum = callPackage ../applications/misc/gum { };
+<<<<<<< HEAD
   pop = callPackage ../applications/misc/pop { };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   hydrus = python3Packages.callPackage ../applications/graphics/hydrus {
     inherit miniupnpc swftools;
     inherit (qt6) wrapQtAppsHook qtbase qtcharts;
   };
 
+<<<<<<< HEAD
   kemai = qt6Packages.callPackage ../applications/misc/kemai { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   jetbrains = (recurseIntoAttrs (callPackages ../applications/editors/jetbrains {
     vmopts = config.jetbrains.vmopts or null;
     jdk = jetbrains.jdk;
@@ -32366,6 +37048,7 @@ with pkgs;
 
   molsketch = libsForQt5.callPackage ../applications/editors/molsketch { };
 
+<<<<<<< HEAD
   multiviewer-for-f1 = callPackage ../applications/video/multiviewer-for-f1 { };
 
   muzika = callPackage ../applications/audio/muzika { };
@@ -32375,6 +37058,9 @@ with pkgs;
   pattypan = callPackage ../applications/misc/pattypan {
     jdk = jdk.override { enableJavaFX = true; };
   };
+=======
+  pattypan = callPackage ../applications/misc/pattypan { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   praat = callPackage ../applications/audio/praat { };
 
@@ -32389,10 +37075,13 @@ with pkgs;
 
   svox = callPackage ../applications/audio/svox { };
 
+<<<<<<< HEAD
   g4music = callPackage ../applications/audio/g4music { };
 
   genesys = callPackage ../applications/misc/genesys { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   giada = callPackage ../applications/audio/giada { };
 
   giara = callPackage ../applications/networking/giara { };
@@ -32444,10 +37133,13 @@ with pkgs;
 
   gtkpod = callPackage ../applications/audio/gtkpod { };
 
+<<<<<<< HEAD
   guacamole-client = callPackage ../servers/guacamole-client { };
 
   guacamole-server = callPackage ../servers/guacamole-server { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   q4wine = libsForQt5.callPackage ../applications/misc/q4wine { };
 
   qrcodegen = callPackage ../development/libraries/qrcodegen { };
@@ -32526,8 +37218,11 @@ with pkgs;
 
   gspell = callPackage ../development/libraries/gspell { };
 
+<<<<<<< HEAD
   gst123 = callPackage ../applications/audio/gst123 { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   gtk2fontsel = callPackage ../applications/misc/gtk2fontsel { };
 
   gtklock = callPackage ../tools/wayland/gtklock { };
@@ -32582,6 +37277,11 @@ with pkgs;
 
   heimer = libsForQt5.callPackage ../applications/misc/heimer { };
 
+<<<<<<< HEAD
+=======
+  hello = callPackage ../applications/misc/hello { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   hello-wayland = callPackage ../applications/graphics/hello-wayland { };
 
   hello-unfree = callPackage ../applications/misc/hello-unfree { };
@@ -32602,6 +37302,7 @@ with pkgs;
 
   hexedit = callPackage ../applications/editors/hexedit { };
 
+<<<<<<< HEAD
   himalaya = callPackage ../applications/networking/mailreaders/himalaya { };
 
   hipchat = callPackage ../applications/networking/instant-messengers/hipchat { };
@@ -32612,6 +37313,14 @@ with pkgs;
     conf = config.hydrogen-web.conf or { };
   };
 
+=======
+  himalaya = callPackage ../applications/networking/mailreaders/himalaya {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
+  hipchat = callPackage ../applications/networking/instant-messengers/hipchat { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   hivelytracker = callPackage ../applications/audio/hivelytracker { };
 
   hledger = haskell.lib.compose.justStaticExecutables haskellPackages.hledger;
@@ -32622,8 +37331,11 @@ with pkgs;
   hledger-web = haskell.lib.compose.justStaticExecutables haskellPackages.hledger-web;
   hledger-utils = with python3.pkgs; toPythonApplication hledger-utils;
 
+<<<<<<< HEAD
   hmm = callPackage ../applications/misc/hmm { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   homebank = callPackage ../applications/office/homebank {
     gtk = gtk3;
   };
@@ -32662,7 +37374,11 @@ with pkgs;
 
   hue-cli = callPackage ../tools/networking/hue-cli { };
 
+<<<<<<< HEAD
   hueadm = callPackage ../tools/misc/hueadm { };
+=======
+  inherit (nodePackages) hueadm;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   hugin = callPackage ../applications/graphics/hugin {
     wxGTK = wxGTK32;
@@ -32674,17 +37390,25 @@ with pkgs;
 
   hugo = callPackage ../applications/misc/hugo { };
 
+<<<<<<< HEAD
   ghosttohugo = callPackage ../applications/misc/ghosttohugo {};
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   gatekeeper = callPackage ../applications/networking/cluster/gatekeeper { };
 
   go-org = callPackage ../applications/misc/go-org { };
 
   hushboard = python3.pkgs.callPackage ../applications/audio/hushboard { };
 
+<<<<<<< HEAD
   husky = callPackage ../development/tools/misc/husky { };
 
   hydrogen = qt5.callPackage ../applications/audio/hydrogen { };
+=======
+  hydrogen = qt5.callPackage ../applications/audio/hydrogen { };
+  hydrogen_0 = callPackage ../applications/audio/hydrogen/0.nix { }; # Old stable, has GMKit.
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   hydroxide = callPackage ../applications/networking/hydroxide { };
 
@@ -32702,9 +37426,13 @@ with pkgs;
     extra-packages = [ csound ];
   };
 
+<<<<<<< HEAD
   hyperion-ng = libsForQt5.callPackage ../applications/video/hyperion-ng {
     protobuf = protobuf3_21;
   };
+=======
+  hyperion-ng = libsForQt5.callPackage ../applications/video/hyperion-ng { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   hyperledger-fabric = callPackage ../tools/misc/hyperledger-fabric { };
 
@@ -32728,10 +37456,13 @@ with pkgs;
 
   marker = callPackage ../applications/editors/marker { };
 
+<<<<<<< HEAD
   matcha-rss-digest = callPackage ../applications/misc/matcha-rss-digest { };
 
   meek = callPackage ../tools/networking/meek { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   meerk40t = callPackage ../applications/misc/meerk40t { };
 
   meerk40t-camera = callPackage ../applications/misc/meerk40t/camera.nix { };
@@ -32746,8 +37477,11 @@ with pkgs;
 
   mt32emu-smf2wav = callPackage ../applications/audio/munt/mt32emu-smf2wav.nix { };
 
+<<<<<<< HEAD
   noson = libsForQt5.callPackage ../applications/audio/noson { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   offpunk = callPackage ../applications/networking/browsers/offpunk { };
 
   owl-compositor = callPackage ../applications/window-managers/owl { };
@@ -32760,16 +37494,22 @@ with pkgs;
 
   passky-desktop = callPackage ../applications/misc/passky-desktop { };
 
+<<<<<<< HEAD
   pat = callPackage ../applications/radio/pat { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pinboard = with python3Packages; toPythonApplication pinboard;
 
   pinboard-notes-backup = haskell.lib.compose.justStaticExecutables haskellPackages.pinboard-notes-backup;
 
   pixel2svg = python310Packages.callPackage ../tools/graphics/pixel2svg { };
 
+<<<<<<< HEAD
   pixelfed = callPackage ../servers/web-apps/pixelfed { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pixelnuke = callPackage ../applications/graphics/pixelnuke { };
 
   pixelorama = callPackage ../applications/editors/pixelorama { };
@@ -32778,16 +37518,22 @@ with pkgs;
 
   pixinsight = libsForQt5.callPackage ../applications/graphics/pixinsight { };
 
+<<<<<<< HEAD
   planner = callPackage ../applications/office/planner { };
 
   please-cli = callPackage ../applications/misc/please-cli { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   protonup-qt = python3Packages.callPackage ../applications/misc/protonup-qt { };
 
   pmbootstrap = python3Packages.callPackage ../tools/misc/pmbootstrap { };
 
+<<<<<<< HEAD
   pokeget-rs = callPackage ../tools/misc/pokeget-rs { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   popura = callPackage ../tools/networking/popura { };
 
   pureref = callPackage ../applications/graphics/pureref { };
@@ -32801,8 +37547,11 @@ with pkgs;
     singularity-overriden-nixos
     ;
 
+<<<<<<< HEAD
   sfwbar = callPackage ../applications/misc/sfwbar { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   skate = callPackage ../applications/misc/skate { };
 
   slack = callPackage ../applications/networking/instant-messengers/slack { };
@@ -32842,18 +37591,30 @@ with pkgs;
 
   srain = callPackage ../applications/networking/irc/srain { };
 
+<<<<<<< HEAD
   streamdeck-ui = callPackage ../applications/misc/streamdeck-ui { };
+=======
+  streamdeck-ui = libsForQt5.callPackage ../applications/misc/streamdeck-ui { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   super-productivity = callPackage ../applications/office/super-productivity { };
 
   inherit (callPackages ../development/libraries/wlroots {})
+<<<<<<< HEAD
+=======
+    wlroots_0_14
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     wlroots_0_15
     wlroots_0_16
     wlroots;
 
+<<<<<<< HEAD
   sway-unwrapped = callPackage ../applications/window-managers/sway {
     wlroots = wlroots_0_16;
   };
+=======
+  sway-unwrapped = callPackage ../applications/window-managers/sway { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   sway = callPackage ../applications/window-managers/sway/wrapper.nix { };
   swaybg = callPackage ../applications/window-managers/sway/bg.nix { };
   swayidle = callPackage ../applications/window-managers/sway/idle.nix { };
@@ -32881,6 +37642,7 @@ with pkgs;
 
   rlaunch = callPackage ../applications/misc/rlaunch { };
 
+<<<<<<< HEAD
   remontoire = callPackage ../applications/misc/remontoire { };
 
   rootbar = callPackage ../applications/misc/rootbar { };
@@ -32893,15 +37655,29 @@ with pkgs;
 
   waylock = callPackage ../applications/misc/waylock { };
 
+=======
+  rootbar = callPackage ../applications/misc/rootbar { };
+
+  waybar = callPackage ../applications/misc/waybar { };
+
+  waylock = callPackage ../applications/misc/waylock {
+    zig = buildPackages.zig_0_10;
+  };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   wayshot = callPackage ../tools/misc/wayshot { };
 
   waylevel = callPackage ../tools/misc/waylevel { };
 
   wbg = callPackage ../applications/misc/wbg { };
 
+<<<<<<< HEAD
   hikari = callPackage ../applications/window-managers/hikari {
     wlroots = wlroots_0_15;
   };
+=======
+  hikari = callPackage ../applications/window-managers/hikari { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   i3 = callPackage ../applications/window-managers/i3 {
     xcb-util-cursor = if stdenv.isDarwin then xcb-util-cursor-HEAD else xcb-util-cursor;
@@ -32965,11 +37741,15 @@ with pkgs;
 
   i3-wk-switch = callPackage ../applications/window-managers/i3/wk-switch.nix { };
 
+<<<<<<< HEAD
   kitti3 = python3.pkgs.callPackage ../applications/window-managers/i3/kitti3.nix { };
 
   waybox = callPackage ../applications/window-managers/waybox {
     wlroots = wlroots_0_15;
   };
+=======
+  waybox = callPackage ../applications/window-managers/waybox { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   workstyle = callPackage ../applications/window-managers/i3/workstyle.nix { };
 
@@ -32981,14 +37761,22 @@ with pkgs;
 
   i810switch = callPackage ../os-specific/linux/i810switch { };
 
+<<<<<<< HEAD
   ical2orgpy = callPackage ../tools/misc/ical2orgpy { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   icewm = callPackage ../applications/window-managers/icewm { };
 
   icon-library = callPackage ../applications/graphics/icon-library { };
 
   id3v2 = callPackage ../applications/audio/id3v2 { };
 
+<<<<<<< HEAD
+=======
+  ideamaker = libsForQt5.callPackage ../applications/misc/ideamaker { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   identity = callPackage ../applications/graphics/identity { };
 
   ifenslave = callPackage ../os-specific/linux/ifenslave { };
@@ -33016,9 +37804,13 @@ with pkgs;
     texinfo = buildPackages.texinfo6_7; # Uses @setcontentsaftertitlepage, removed in 6.8.
   };
 
+<<<<<<< HEAD
   avalonia-ilspy = callPackage ../applications/misc/avalonia-ilspy {
     inherit (darwin) autoSignDarwinBinariesHook;
   };
+=======
+  avalonia-ilspy = callPackage ../applications/misc/avalonia-ilspy { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   image-roll = callPackage ../applications/graphics/image-roll { };
 
@@ -33091,11 +37883,19 @@ with pkgs;
 
   inherit (nodePackages) imapnotify;
 
+<<<<<<< HEAD
   imdshift = callPackage ../tools/security/imdshift { };
 
   img2pdf = with python3Packages; toPythonApplication img2pdf;
 
   imgbrd-grabber = qt5.callPackage ../applications/graphics/imgbrd-grabber { };
+=======
+  img2pdf = with python3Packages; toPythonApplication img2pdf;
+
+  imgbrd-grabber = qt5.callPackage ../applications/graphics/imgbrd-grabber {
+    typescript = nodePackages.typescript;
+  };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   imgcat = callPackage ../applications/graphics/imgcat { };
 
@@ -33129,7 +37929,11 @@ with pkgs;
     lua = lua5_1;
   };
 
+<<<<<<< HEAD
   ipe = qt6Packages.callPackage ../applications/graphics/ipe {
+=======
+  ipe = libsForQt5.callPackage ../applications/graphics/ipe {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     ghostscript = ghostscriptX;
     texlive = texlive.combine { inherit (texlive) scheme-small; };
     lua5 = lua5_3;
@@ -33141,8 +37945,11 @@ with pkgs;
 
   irssi = callPackage ../applications/networking/irc/irssi { };
 
+<<<<<<< HEAD
   filebrowser = callPackage ../applications/networking/filebrowser { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   fish-irssi = callPackage ../applications/networking/irc/irssi/fish { };
 
   kirc = callPackage ../applications/networking/irc/kirc { };
@@ -33168,8 +37975,13 @@ with pkgs;
   };
 
   jabref = callPackage ../applications/office/jabref {
+<<<<<<< HEAD
     jdk = jdk20.override { enableJavaFX = true; };
     gradle = gradle_8;
+=======
+    jdk = jdk19.override { enableJavaFX = true; };
+    gradle = gradle_7;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   jack_capture = callPackage ../applications/audio/jack-capture { };
@@ -33213,8 +38025,11 @@ with pkgs;
 
   joe = callPackage ../applications/editors/joe { };
 
+<<<<<<< HEAD
   johnny = callPackage ../applications/misc/johnny { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   josm = callPackage ../applications/misc/josm { };
 
   js8call = qt5.callPackage ../applications/radio/js8call { };
@@ -33225,11 +38040,16 @@ with pkgs;
 
   k3s_1_24 = callPackage ../applications/networking/cluster/k3s/1_24 { };
   k3s_1_25 = callPackage ../applications/networking/cluster/k3s/1_25 { };
+<<<<<<< HEAD
   inherit (callPackage ../applications/networking/cluster/k3s { })
     k3s_1_26
     k3s_1_27
   ;
   k3s = k3s_1_27;
+=======
+  k3s_1_26 = callPackage ../applications/networking/cluster/k3s/1_26 { };
+  k3s = k3s_1_26;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   k3sup = callPackage ../applications/networking/cluster/k3sup { };
 
@@ -33241,8 +38061,11 @@ with pkgs;
 
   kapow = libsForQt5.callPackage ../applications/misc/kapow { };
 
+<<<<<<< HEAD
   kbt = callPackage ../applications/misc/kbt { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   kchmviewer = libsForQt5.callPackage ../applications/misc/kchmviewer { };
 
   kappanhang = callPackage ../applications/radio/kappanhang { };
@@ -33263,8 +38086,11 @@ with pkgs;
 
   keet = callPackage ../applications/networking/instant-messengers/keet { };
 
+<<<<<<< HEAD
   kepler = callPackage ../tools/security/kepler { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   kepubify = callPackage ../tools/misc/kepubify { };
 
   kermit = callPackage ../tools/misc/kermit { };
@@ -33277,8 +38103,11 @@ with pkgs;
 
   keyfinder-cli = callPackage ../applications/audio/keyfinder-cli { };
 
+<<<<<<< HEAD
   kfilt = callPackage ../applications/networking/cluster/kfilt { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   kgraphviewer = libsForQt5.callPackage ../applications/graphics/kgraphviewer { };
 
   khal = callPackage ../applications/misc/khal { };
@@ -33301,7 +38130,11 @@ with pkgs;
 
   klayout = libsForQt5.callPackage ../applications/misc/klayout { };
 
+<<<<<<< HEAD
   klee = callPackage ../applications/science/logic/klee (with llvmPackages_12; {
+=======
+  klee = callPackage ../applications/science/logic/klee (with llvmPackages_11; {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     clang = clang;
     llvm = llvm;
     stdenv = stdenv;
@@ -33315,8 +38148,11 @@ with pkgs;
 
   kn = callPackage ../applications/networking/cluster/kn { };
 
+<<<<<<< HEAD
   kns = callPackage ../applications/networking/cluster/kns { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   kondo = callPackage ../applications/misc/kondo { };
 
   kooha = callPackage ../applications/video/kooha { };
@@ -33334,10 +38170,19 @@ with pkgs;
     # telegram-desktop has random crashes when jemalloc is built with gcc.
     # Apparently, it triggers some bug due to usage of gcc's builtin
     # functions like __builtin_ffsl by jemalloc when it's built with gcc.
+<<<<<<< HEAD
     jemalloc = (jemalloc.override { stdenv = clangStdenv; }).overrideAttrs {
       # no idea how to fix the tests :(
       doCheck = false;
     };
+=======
+    jemalloc = (jemalloc.override { stdenv = clangStdenv; }).overrideAttrs(_: {
+      # no idea how to fix the tests :(
+      doCheck = false;
+    });
+
+    abseil-cpp = abseil-cpp_202111;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   kotatogram-desktop-with-webkit = callPackage ../applications/networking/instant-messengers/telegram/kotatogram-desktop/with-webkit.nix { };
@@ -33346,8 +38191,11 @@ with pkgs;
 
   krabby = callPackage ../applications/misc/krabby { };
 
+<<<<<<< HEAD
   kraft = callPackage ../applications/virtualization/kraft { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   krane = callPackage ../applications/networking/cluster/krane { };
 
   krita = libsForQt5.callPackage ../applications/graphics/krita { };
@@ -33387,8 +38235,11 @@ with pkgs;
 
   kubeseal = callPackage ../applications/networking/cluster/kubeseal { };
 
+<<<<<<< HEAD
   kubestroyer = callPackage ../tools/security/kubestroyer { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   kubernix = callPackage ../applications/networking/cluster/kubernix { };
 
   kubeconform = callPackage ../applications/networking/cluster/kubeconform { };
@@ -33399,20 +38250,29 @@ with pkgs;
 
   kuttl = callPackage ../applications/networking/cluster/kuttl { };
 
+<<<<<<< HEAD
   kubectl-cnpg = callPackage ../applications/networking/cluster/kubectl-cnpg { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   kubectl-doctor = callPackage ../applications/networking/cluster/kubectl-doctor { };
 
   kubectl-example = callPackage ../applications/networking/cluster/kubectl-example { };
 
+<<<<<<< HEAD
   kubectl-explore = callPackage ../applications/networking/cluster/kubectl-explore { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   kubectl-gadget = callPackage ../applications/networking/cluster/kubectl-gadget { };
 
   kubectl-images = callPackage ../applications/networking/cluster/kubectl-images { };
 
+<<<<<<< HEAD
   kubectl-klock = callPackage ../applications/networking/cluster/kubectl-klock { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   kubectl-ktop = callPackage ../applications/networking/cluster/kubectl-ktop { };
 
   kubectl-node-shell = callPackage ../applications/networking/cluster/kubectl-node-shell { };
@@ -33427,10 +38287,13 @@ with pkgs;
 
   kubelogin-oidc = callPackage ../applications/networking/cluster/kubelogin-oidc { };
 
+<<<<<<< HEAD
   kubevpn = callPackage ../applications/networking/cluster/kubevpn { };
 
   k8sgpt = callPackage ../applications/networking/cluster/k8sgpt { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   k9s = callPackage ../applications/networking/cluster/k9s { };
 
   kubecm = callPackage ../applications/networking/cluster/kubecm { };
@@ -33475,6 +38338,13 @@ with pkgs;
     components = ["kuma-dp"];
     pname = "kuma-dp";
   };
+<<<<<<< HEAD
+=======
+  kuma-prometheus-sd = callPackage ../applications/networking/cluster/kuma {
+    components = ["kuma-prometheus-sd"];
+    pname = "kuma-prometheus-sd";
+  };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   kile-wl = callPackage ../applications/misc/kile-wl { };
 
@@ -33510,15 +38380,22 @@ with pkgs;
     electron = electron_22;
   };
 
+<<<<<<< HEAD
   timoni = callPackage ../applications/networking/cluster/timoni { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   kvirc = libsForQt5.callPackage ../applications/networking/irc/kvirc { };
 
   lame = callPackage ../development/libraries/lame { };
 
+<<<<<<< HEAD
   labwc = callPackage ../applications/window-managers/labwc {
     wlroots = wlroots_0_16;
   };
+=======
+  labwc = callPackage ../applications/window-managers/labwc { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   larswm = callPackage ../applications/window-managers/larswm { };
 
@@ -33533,7 +38410,11 @@ with pkgs;
   ladspa-sdk = callPackage ../applications/audio/ladspa-sdk { };
 
   ladybird = qt6Packages.callPackage ../applications/networking/browsers/ladybird {
+<<<<<<< HEAD
     stdenv = if stdenv.isDarwin then darwin.apple_sdk_11_0.llvmPackages_14.stdenv else stdenv;
+=======
+    stdenv = if stdenv.isDarwin then darwin.apple_sdk_11_0.clang14Stdenv else stdenv;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   lazpaint = callPackage ../applications/graphics/lazpaint { };
@@ -33552,8 +38433,11 @@ with pkgs;
 
   lemonbar-xft = callPackage ../applications/window-managers/lemonbar/xft.nix { };
 
+<<<<<<< HEAD
   lenovo-legion = libsForQt5.callPackage ../os-specific/linux/lenovo-legion/app.nix { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   legitify = callPackage ../development/tools/legitify { };
 
   lens = callPackage ../applications/networking/cluster/lens { };
@@ -33594,7 +38478,10 @@ with pkgs;
     harfbuzz = harfbuzz.override {
       withIcu = true; withGraphite2 = true;
     };
+<<<<<<< HEAD
     boost = boost179;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   libreoffice-qt = lowPrio (callPackage ../applications/office/libreoffice/wrapper.nix {
@@ -33628,6 +38515,7 @@ with pkgs;
   libvmi = callPackage ../development/libraries/libvmi { };
 
   libutp = callPackage ../applications/networking/p2p/libutp { };
+<<<<<<< HEAD
   libutp_3_4 = callPackage ../applications/networking/p2p/libutp/3.4.nix { };
 
   lifelines = callPackage ../applications/misc/lifelines { };
@@ -33636,6 +38524,12 @@ with pkgs;
     libsoup = libsoup_3;
     webkitgtk = webkitgtk_4_1;
   };
+=======
+
+  lifelines = callPackage ../applications/misc/lifelines { };
+
+  liferea = callPackage ../applications/networking/newsreaders/liferea { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   lightworks = callPackage ../applications/video/lightworks { };
 
@@ -33706,8 +38600,11 @@ with pkgs;
 
   handlr = callPackage ../tools/misc/handlr { };
 
+<<<<<<< HEAD
   handlr-regex = callPackage ../tools/misc/handlr-regex { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   jftui = callPackage ../applications/video/jftui { };
 
   lime = callPackage ../development/libraries/lime { };
@@ -33790,11 +38687,22 @@ with pkgs;
 
   marathonctl = callPackage ../tools/virtualization/marathonctl { };
 
+<<<<<<< HEAD
+=======
+  markdown-pp = callPackage ../tools/text/markdown-pp { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   mark = callPackage ../tools/text/mark { };
 
   markets = callPackage ../applications/misc/markets { };
 
+<<<<<<< HEAD
   markscribe = callPackage ../tools/text/markscribe { };
+=======
+  markmind = callPackage ../applications/misc/markmind {
+    electron = electron_9;
+  };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   magnetico = callPackage ../applications/networking/p2p/magnetico { };
 
@@ -33812,6 +38720,11 @@ with pkgs;
 
   matrix-dl = callPackage ../applications/networking/instant-messengers/matrix-dl { };
 
+<<<<<<< HEAD
+=======
+  matrix-recorder = callPackage ../applications/networking/instant-messengers/matrix-recorder { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   iamb = callPackage ../applications/networking/instant-messengers/iamb { };
 
   mblaze = callPackage ../applications/networking/mailreaders/mblaze { };
@@ -33850,8 +38763,11 @@ with pkgs;
 
   melody = callPackage ../tools/misc/melody { };
 
+<<<<<<< HEAD
   meme-bingo-web = callPackage ../servers/web-apps/meme-bingo-web { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   meme-image-generator = callPackage ../applications/graphics/meme-image-generator { };
 
   meme-suite = callPackage ../applications/science/biology/meme-suite { };
@@ -33879,7 +38795,11 @@ with pkgs;
   merkaartor = libsForQt5.callPackage ../applications/misc/merkaartor { };
 
   mepo = callPackage ../applications/misc/mepo {
+<<<<<<< HEAD
     inherit (gnome) zenity;
+=======
+    zig = buildPackages.zig_0_9;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   meshcentral = callPackage ../tools/admin/meshcentral { };
@@ -33903,7 +38823,11 @@ with pkgs;
 
   mikmod = callPackage ../applications/audio/mikmod { };
 
+<<<<<<< HEAD
   miniaudicle = qt6Packages.callPackage ../applications/audio/miniaudicle { };
+=======
+  miniaudicle = callPackage ../applications/audio/miniaudicle { stdenv = gcc10StdenvCompat; };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   minidsp = callPackage ../applications/audio/minidsp {
     inherit (darwin.apple_sdk.frameworks) AppKit IOKit;
@@ -33927,8 +38851,11 @@ with pkgs;
 
   mimic = callPackage ../applications/audio/mimic { };
 
+<<<<<<< HEAD
   mission-center = callPackage ../applications/misc/mission-center { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   meh = callPackage ../applications/graphics/meh { };
 
   mixxx = libsForQt5.callPackage ../applications/audio/mixxx { };
@@ -33994,6 +38921,10 @@ with pkgs;
 
   monotone = callPackage ../applications/version-management/monotone {
     lua = lua5;
+<<<<<<< HEAD
+=======
+    boost = boost170;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   monotoneViz = callPackage ../applications/version-management/monotone-viz {
@@ -34011,9 +38942,14 @@ with pkgs;
   moonlight-embedded = callPackage ../applications/misc/moonlight-embedded { };
 
   moonlight-qt = libsForQt5.callPackage ../applications/misc/moonlight-qt {
+<<<<<<< HEAD
     stdenv = if stdenv.isDarwin then darwin.apple_sdk_11_0.stdenv else stdenv;
     SDL2 = buildPackages.SDL2.override {
       drmSupport = stdenv.isLinux;
+=======
+    SDL2 = buildPackages.SDL2.override {
+      drmSupport = true;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
   };
 
@@ -34042,7 +38978,10 @@ with pkgs;
     mopidy-scrobbler
     mopidy-somafm
     mopidy-soundcloud
+<<<<<<< HEAD
     mopidy-spotify
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     mopidy-subidy
     mopidy-tidal
     mopidy-tunein
@@ -34119,6 +39058,7 @@ with pkgs;
 
   rofi-pulse-select = callPackage ../applications/audio/rofi-pulse-select { };
 
+<<<<<<< HEAD
   rofi-rbw = python3Packages.callPackage ../applications/misc/rofi-rbw {
     waylandSupport = false;
     x11Support = false;
@@ -34133,6 +39073,9 @@ with pkgs;
   };
 
   rofi-screenshot = callPackage ../applications/misc/rofi-screenshot { };
+=======
+  rofi-rbw = python3Packages.callPackage ../applications/misc/rofi-rbw { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   rofi-top = callPackage ../applications/misc/rofi-top { };
 
@@ -34157,8 +39100,11 @@ with pkgs;
 
   mailspring = callPackage ../applications/networking/mailreaders/mailspring { };
 
+<<<<<<< HEAD
   memento = libsForQt5.callPackage ../applications/video/memento { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   mm = callPackage ../applications/networking/instant-messengers/mm { };
 
   mm-common = callPackage ../development/libraries/mm-common { };
@@ -34170,16 +39116,23 @@ with pkgs;
   } // (config.mplayer or {}));
 
   mpv-unwrapped = darwin.apple_sdk_11_0.callPackage ../applications/video/mpv {
+<<<<<<< HEAD
     stdenv = if stdenv.isDarwin then swiftPackages.stdenv else stdenv;
     inherit lua;
   };
 
   shaka-packager = callPackage ../applications/video/shaka-packager { };
 
+=======
+    inherit lua;
+  };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   # Wraps without triggering a rebuild
   wrapMpv = callPackage ../applications/video/mpv/wrapper.nix { };
   mpv = wrapMpv mpv-unwrapped { };
 
+<<<<<<< HEAD
   mpvpaper = callPackage ../tools/wayland/mpvpaper {
     wlroots = wlroots_0_15;
   };
@@ -34190,6 +39143,28 @@ with pkgs;
 
   mpv-shim-default-shaders = callPackage ../applications/video/mpv-shim-default-shaders { };
 
+=======
+  mpvpaper = callPackage ../tools/wayland/mpvpaper { };
+
+  mpvScripts = recurseIntoAttrs {
+    acompressor = callPackage ../applications/video/mpv/scripts/acompressor.nix {};
+    autoload = callPackage ../applications/video/mpv/scripts/autoload.nix { };
+    convert = callPackage ../applications/video/mpv/scripts/convert.nix { };
+    inhibit-gnome = callPackage ../applications/video/mpv/scripts/inhibit-gnome.nix { };
+    mpris = callPackage ../applications/video/mpv/scripts/mpris.nix { };
+    mpv-playlistmanager = callPackage ../applications/video/mpv/scripts/mpv-playlistmanager.nix { };
+    mpvacious = callPackage ../applications/video/mpv/scripts/mpvacious.nix { };
+    simple-mpv-webui = callPackage ../applications/video/mpv/scripts/simple-mpv-webui.nix { };
+    sponsorblock = callPackage ../applications/video/mpv/scripts/sponsorblock.nix { };
+    thumbnail = callPackage ../applications/video/mpv/scripts/thumbnail.nix { };
+    uosc = callPackage ../applications/video/mpv/scripts/uosc.nix { };
+    vr-reversal = callPackage ../applications/video/mpv/scripts/vr-reversal.nix { };
+    webtorrent-mpv-hook = callPackage ../applications/video/mpv/scripts/webtorrent-mpv-hook.nix { };
+    youtube-quality = callPackage ../applications/video/mpv/scripts/youtube-quality.nix { };
+    cutter = callPackage ../applications/video/mpv/scripts/cutter.nix { };
+  };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   mrpeach = callPackage ../applications/audio/pd-plugins/mrpeach { };
 
   mtpaint = callPackage ../applications/graphics/mtpaint { };
@@ -34204,14 +39179,21 @@ with pkgs;
       avahi = avahi-compat;
       pulseSupport = config.pulseaudio or false;
       iceSupport = config.murmur.iceSupport or true;
+<<<<<<< HEAD
       protobuf = protobuf3_21;
+=======
+      grpcSupport = config.murmur.grpcSupport or true;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     }).murmur;
 
   mumble = (callPackages ../applications/networking/mumble {
       avahi = avahi-compat;
       jackSupport = config.mumble.jackSupport or false;
       speechdSupport = config.mumble.speechdSupport or false;
+<<<<<<< HEAD
       protobuf = protobuf3_21;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     }).mumble;
 
   mumble_overlay = callPackage ../applications/networking/mumble/overlay.nix {
@@ -34224,9 +39206,18 @@ with pkgs;
     autoreconfHook = buildPackages.autoreconfHook269;
   };
 
+<<<<<<< HEAD
   musescore = libsForQt5.callPackage ../applications/audio/musescore { };
 
   music-player = callPackage ../applications/audio/music-player { };
+=======
+  # TODO: we should probably merge these 2
+  musescore =
+    if stdenv.isDarwin then
+      callPackage ../applications/audio/musescore/darwin.nix { }
+    else
+      libsForQt5.callPackage ../applications/audio/musescore { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   mmh = callPackage ../applications/networking/mailreaders/mmh { };
   mutt = callPackage ../applications/networking/mailreaders/mutt { };
@@ -34235,8 +39226,11 @@ with pkgs;
 
   mutt-ics = callPackage ../tools/networking/mutt-ics { };
 
+<<<<<<< HEAD
   mw = callPackage ../tools/text/mw { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   mwic = callPackage ../applications/misc/mwic {
     pythonPackages = python3Packages;
   };
@@ -34245,9 +39239,13 @@ with pkgs;
 
   neomutt = callPackage ../applications/networking/mailreaders/neomutt { };
 
+<<<<<<< HEAD
   neosay = callPackage ../applications/networking/instant-messengers/neosay { };
 
   natron = libsForQt5.callPackage ../applications/video/natron { };
+=======
+  natron = callPackage ../applications/video/natron { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   natural-docs = callPackage ../applications/misc/natural-docs { };
 
@@ -34284,6 +39282,7 @@ with pkgs;
 
   novnc = callPackage ../applications/networking/novnc { };
 
+<<<<<<< HEAD
   ns-usbloader = callPackage ../applications/misc/ns-usbloader { };
 
   nwg-bar = callPackage ../applications/misc/nwg-bar { };
@@ -34294,12 +39293,21 @@ with pkgs;
 
   nwg-dock-hyprland = callPackage ../applications/misc/nwg-dock-hyprland { };
 
+=======
+  nwg-bar = callPackage ../applications/misc/nwg-bar { };
+
+  nwg-dock = callPackage ../applications/misc/nwg-dock { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nwg-drawer = callPackage ../applications/misc/nwg-drawer { };
 
   nwg-launchers = callPackage ../applications/misc/nwg-launchers { };
 
+<<<<<<< HEAD
   nwg-look = callPackage ../applications/misc/nwg-look { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nwg-menu = callPackage ../applications/misc/nwg-menu { };
 
   nwg-panel = callPackage ../applications/misc/nwg-panel { };
@@ -34316,18 +39324,28 @@ with pkgs;
 
   okteto = callPackage ../development/tools/okteto { };
 
+<<<<<<< HEAD
   onlyoffice-bin_7_2 = callPackage ../applications/office/onlyoffice-bin/7_2.nix { };
   onlyoffice-bin_7_4 = callPackage ../applications/office/onlyoffice-bin/7_4.nix { };
   onlyoffice-bin = onlyoffice-bin_7_2;
   onlyoffice-bin_latest = onlyoffice-bin_7_4;
+=======
+  onlyoffice-bin = callPackage ../applications/office/onlyoffice-bin { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   onmetal-image = callPackage ../tools/virtualization/onmetal-image { };
 
   opcr-policy = callPackage ../development/tools/opcr-policy { };
 
+<<<<<<< HEAD
   opcua-client-gui = libsForQt5.callPackage ../misc/opcua-client-gui { };
 
   open-policy-agent = callPackage ../development/tools/open-policy-agent { };
+=======
+  open-policy-agent = callPackage ../development/tools/open-policy-agent {
+    buildGoModule = buildGo119Module; # go 1.20 build failure
+  };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   openmm = callPackage ../development/libraries/science/chemistry/openmm {
     stdenv = gcc11Stdenv;
@@ -34338,11 +39356,19 @@ with pkgs;
 
   opsdroid = callPackage ../applications/networking/opsdroid { };
 
+<<<<<<< HEAD
   osm2pgsql = callPackage ../tools/misc/osm2pgsql { };
 
   ostinato = libsForQt5.callPackage ../applications/networking/ostinato {
     protobuf = protobuf3_21;
   };
+=======
+  oroborus = callPackage ../applications/window-managers/oroborus { };
+
+  osm2pgsql = callPackage ../tools/misc/osm2pgsql { };
+
+  ostinato = libsForQt5.callPackage ../applications/networking/ostinato { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   p4 = callPackage ../applications/version-management/p4 {
     inherit (darwin.apple_sdk.frameworks) CoreServices Foundation Security;
@@ -34380,8 +39406,11 @@ with pkgs;
 
   pipe-viewer = perlPackages.callPackage ../applications/video/pipe-viewer { };
 
+<<<<<<< HEAD
   planify = callPackage ../applications/office/planify { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   plank = callPackage ../applications/misc/plank { };
 
   playonlinux = callPackage ../applications/misc/playonlinux
@@ -34407,8 +39436,11 @@ with pkgs;
 
   yambar = callPackage ../applications/misc/yambar { };
 
+<<<<<<< HEAD
   yambar-hyprland-wses = callPackage ../applications/misc/yambar-hyprland-wses { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   polyphone = libsForQt5.callPackage ../applications/audio/polyphone { };
 
   portfolio = callPackage ../applications/office/portfolio {
@@ -34429,8 +39461,11 @@ with pkgs;
 
   qemacs = callPackage ../applications/editors/qemacs { };
 
+<<<<<<< HEAD
   ragnarwm = callPackage ../applications/window-managers/ragnarwm {};
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   rime-cli = callPackage ../applications/office/rime-cli { };
 
   roxctl = callPackage ../applications/networking/cluster/roxctl {
@@ -34450,7 +39485,10 @@ with pkgs;
 
   shogun = callPackage ../applications/science/machine-learning/shogun {
     opencv = opencv3;
+<<<<<<< HEAD
     protobuf = protobuf3_21;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   smplayer = libsForQt5.callPackage ../applications/video/smplayer { };
@@ -34461,10 +39499,17 @@ with pkgs;
 
   songrec = callPackage ../applications/audio/songrec { };
 
+<<<<<<< HEAD
   storj-uplink = callPackage ../applications/networking/sync/storj-uplink {};
 
   storrent = callPackage ../applications/networking/p2p/storrent { };
 
+=======
+  storrent = callPackage ../applications/networking/p2p/storrent { };
+
+  spacegun = callPackage ../applications/networking/cluster/spacegun { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   speedread = callPackage ../applications/misc/speedread { };
 
   station = callPackage ../applications/networking/station { };
@@ -34542,8 +39587,11 @@ with pkgs;
 
   mlocate = callPackage ../tools/misc/mlocate { };
 
+<<<<<<< HEAD
   mlxbf-bootctl = callPackage ../tools/misc/mlxbf-bootctl { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   plocate = callPackage ../tools/misc/plocate { };
 
   mypaint = callPackage ../applications/graphics/mypaint { };
@@ -34566,6 +39614,11 @@ with pkgs;
 
   nanorc = callPackage ../applications/editors/nano/nanorc { };
 
+<<<<<<< HEAD
+=======
+  navipowm = callPackage ../applications/misc/navipowm { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nc4nix = callPackage ../development/tools/nc4nix { };
 
   netbeans = callPackage ../applications/editors/netbeans {
@@ -34574,7 +39627,13 @@ with pkgs;
 
   netcoredbg = callPackage ../development/tools/misc/netcoredbg { };
 
+<<<<<<< HEAD
   ncdu = callPackage ../tools/misc/ncdu { };
+=======
+  ncdu = callPackage ../tools/misc/ncdu {
+    zig = buildPackages.zig_0_10;
+  };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   ncdu_1 = callPackage ../tools/misc/ncdu/1.nix { };
 
@@ -34631,7 +39690,13 @@ with pkgs;
 
   notmuch-addrlookup = callPackage ../applications/networking/mailreaders/notmuch-addrlookup { };
 
+<<<<<<< HEAD
   nova-filters = callPackage ../applications/audio/nova-filters { };
+=======
+  nova-filters =  callPackage ../applications/audio/nova-filters {
+    boost = boost172;
+  };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nvi = callPackage ../applications/editors/nvi { };
 
@@ -34643,8 +39708,11 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Foundation;
   };
 
+<<<<<<< HEAD
   obs-cli = callPackage ../applications/misc/obs-cli { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   obs-studio = qt6Packages.callPackage ../applications/video/obs-studio {
     ffmpeg_4 = ffmpeg-full;
   };
@@ -34691,6 +39759,13 @@ with pkgs;
 
   openfx = callPackage ../development/libraries/openfx { };
 
+<<<<<<< HEAD
+=======
+  openimageio_1 = callPackage ../development/libraries/openimageio/1.x.nix {
+    boost = boost175;
+  };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   openimageio = darwin.apple_sdk_11_0.callPackage ../development/libraries/openimageio { };
 
   openjump = callPackage ../applications/misc/openjump { };
@@ -34740,7 +39815,11 @@ with pkgs;
 
   orca-c = callPackage ../applications/audio/orca-c { };
 
+<<<<<<< HEAD
   organicmaps = qt6Packages.callPackage ../applications/misc/organicmaps { };
+=======
+  organicmaps = libsForQt5.callPackage ../applications/misc/organicmaps { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   osm2xmap = callPackage ../applications/misc/osm2xmap { };
 
@@ -34762,8 +39841,11 @@ with pkgs;
 
   vieb = callPackage ../applications/networking/browsers/vieb { };
 
+<<<<<<< HEAD
   vital = callPackage ../applications/audio/vital { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   vivaldi = callPackage ../applications/networking/browsers/vivaldi { };
 
   vivaldi-ffmpeg-codecs = callPackage ../applications/networking/browsers/vivaldi/ffmpeg-codecs.nix { };
@@ -34786,6 +39868,7 @@ with pkgs;
 
   osmo = callPackage ../applications/office/osmo { };
 
+<<<<<<< HEAD
   osmo-bsc = callPackage ../servers/osmocom/osmo-bsc { };
 
   osmo-bts = callPackage ../servers/osmocom/osmo-bts { };
@@ -34818,6 +39901,11 @@ with pkgs;
     };
   };
 
+=======
+  osmscout-server = libsForQt5.callPackage ../applications/misc/osmscout-server { };
+
+  palemoon = callPackage ../applications/networking/browsers/palemoon { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   palemoon-bin = callPackage ../applications/networking/browsers/palemoon/bin.nix { };
 
   paleta = callPackage ../applications/graphics/paleta { };
@@ -34856,8 +39944,11 @@ with pkgs;
 
   metal-cli = callPackage ../development/tools/metal-cli { };
 
+<<<<<<< HEAD
   pb = callPackage ../tools/misc/pb { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pb_cli = callPackage ../tools/misc/pb_cli { };
 
   capture = callPackage ../tools/misc/capture { };
@@ -34881,8 +39972,11 @@ with pkgs;
   pencil = callPackage ../applications/graphics/pencil {
   };
 
+<<<<<<< HEAD
   pentestgpt = callPackage ../tools/security/pentestgpt { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   perseus = callPackage ../applications/science/math/perseus { };
 
   petrifoo = callPackage ../applications/audio/petrifoo {
@@ -34903,8 +39997,11 @@ with pkgs;
     stdenv = gccStdenv;
   };
 
+<<<<<<< HEAD
   peazip = libsForQt5.callPackage ../tools/archivers/peazip { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   peek = callPackage ../applications/video/peek { };
 
   peertube = callPackage ../servers/peertube {
@@ -34949,14 +40046,77 @@ with pkgs;
 
   picosnitch = callPackage ../tools/networking/picosnitch { };
 
+<<<<<<< HEAD
   pidginPackages = recurseIntoAttrs (callPackage ../applications/networking/instant-messengers/pidgin/pidgin-plugins { });
 
   inherit (pidginPackages) pidgin;
+=======
+  pidgin = callPackage ../applications/networking/instant-messengers/pidgin {
+    withOpenssl = config.pidgin.openssl or true;
+    withGnutls = config.pidgin.gnutls or false;
+    plugins = [];
+  };
+
+  pidgin-indicator = callPackage ../applications/networking/instant-messengers/pidgin-plugins/pidgin-indicator { };
+
+  pidgin-latex = callPackage ../applications/networking/instant-messengers/pidgin-plugins/pidgin-latex {
+    texLive = texlive.combined.scheme-basic;
+  };
+
+  pidgin-msn-pecan = callPackage ../applications/networking/instant-messengers/pidgin-plugins/msn-pecan { };
+
+  pidgin-mra = callPackage ../applications/networking/instant-messengers/pidgin-plugins/pidgin-mra { };
+
+  pidgin-skypeweb = callPackage ../applications/networking/instant-messengers/pidgin-plugins/pidgin-skypeweb { };
+
+  pidgin-carbons = callPackage ../applications/networking/instant-messengers/pidgin-plugins/carbons { };
+
+  pidgin-xmpp-receipts = callPackage ../applications/networking/instant-messengers/pidgin-plugins/pidgin-xmpp-receipts { };
+
+  pidgin-otr = callPackage ../applications/networking/instant-messengers/pidgin-plugins/otr { };
+
+  pidgin-osd = callPackage ../applications/networking/instant-messengers/pidgin-plugins/pidgin-osd { };
+
+  pidgin-sipe = callPackage ../applications/networking/instant-messengers/pidgin-plugins/sipe { };
+
+  pidgin-window-merge = callPackage ../applications/networking/instant-messengers/pidgin-plugins/window-merge { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   pika-backup = callPackage ../applications/backup/pika-backup { };
 
   pur = callPackage ../development/tools/pur { };
 
+<<<<<<< HEAD
+=======
+  purple-discord = callPackage ../applications/networking/instant-messengers/pidgin-plugins/purple-discord { };
+
+  purple-googlechat = callPackage ../applications/networking/instant-messengers/pidgin-plugins/purple-googlechat { };
+
+  purple-hangouts = callPackage ../applications/networking/instant-messengers/pidgin-plugins/purple-hangouts { };
+
+  purple-lurch = callPackage ../applications/networking/instant-messengers/pidgin-plugins/purple-lurch { };
+
+  purple-matrix = callPackage ../applications/networking/instant-messengers/pidgin-plugins/purple-matrix { };
+
+  purple-mm-sms = callPackage ../applications/networking/instant-messengers/pidgin-plugins/purple-mm-sms { };
+
+  purple-plugin-pack = callPackage ../applications/networking/instant-messengers/pidgin-plugins/purple-plugin-pack { };
+
+  purple-signald = callPackage ../applications/networking/instant-messengers/pidgin-plugins/purple-signald { };
+
+  purple-slack = callPackage ../applications/networking/instant-messengers/pidgin-plugins/purple-slack { };
+
+  purple-vk-plugin = callPackage ../applications/networking/instant-messengers/pidgin-plugins/purple-vk-plugin { };
+
+  purple-xmpp-http-upload = callPackage ../applications/networking/instant-messengers/pidgin-plugins/purple-xmpp-http-upload { };
+
+  tdlib-purple = callPackage ../applications/networking/instant-messengers/pidgin-plugins/tdlib-purple { };
+
+  pidgin-opensteamworks = callPackage ../applications/networking/instant-messengers/pidgin-plugins/pidgin-opensteamworks { };
+
+  purple-facebook = callPackage ../applications/networking/instant-messengers/pidgin-plugins/purple-facebook { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   purpur = callPackage ../games/purpur { };
 
   pikopixel = callPackage ../applications/graphics/pikopixel { };
@@ -34975,7 +40135,11 @@ with pkgs;
 
   pistol = callPackage ../tools/misc/pistol { };
 
+<<<<<<< HEAD
   piston-cli = callPackage ../tools/misc/piston-cli { };
+=======
+  piston-cli = callPackage ../tools/misc/piston-cli { python3Packages = python39Packages; };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   pizarra = callPackage ../applications/graphics/pizarra { };
 
@@ -35001,7 +40165,11 @@ with pkgs;
 
   polar-bookshelf1 = callPackage ../applications/misc/polar-bookshelf1 { };
 
+<<<<<<< HEAD
   poezio = callPackage ../applications/networking/instant-messengers/poezio { };
+=======
+  poezio = python3Packages.poezio;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   pommed_light = callPackage ../os-specific/linux/pommed-light { };
 
@@ -35013,14 +40181,24 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Foundation;
   };
 
+<<<<<<< HEAD
+=======
+  pomotroid = callPackage ../applications/misc/pomotroid {
+    electron = electron_9;
+  };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ponymix = callPackage ../applications/audio/ponymix { };
 
   pop-launcher = callPackage ../applications/misc/pop-launcher { };
 
   popcorntime = callPackage ../applications/video/popcorntime { };
 
+<<<<<<< HEAD
   pot = callPackage ../applications/misc/pot { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pothos = libsForQt5.callPackage ../applications/radio/pothos { };
 
   potrace = callPackage ../applications/graphics/potrace { };
@@ -35052,7 +40230,13 @@ with pkgs;
 
   proteus = callPackage ../applications/audio/proteus { };
 
+<<<<<<< HEAD
   protonmail-bridge = callPackage ../applications/networking/protonmail-bridge { };
+=======
+  protonmail-bridge = callPackage ../applications/networking/protonmail-bridge {
+    buildGoModule = buildGo119Module; # go 1.20 build failure
+  };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   protonvpn-cli = python3Packages.callPackage ../applications/networking/protonvpn-cli { };
   protonvpn-cli_2 = python3Packages.callPackage ../applications/networking/protonvpn-cli/2.nix { };
@@ -35090,11 +40274,15 @@ with pkgs;
 
   pwdsafety = callPackage ../tools/security/pwdsafety { };
 
+<<<<<<< HEAD
   pwvucontrol = callPackage ../applications/audio/pwvucontrol { };
 
   pyload-ng = callPackage ../applications/networking/pyload-ng {};
 
   pyrosimple = callPackage ../applications/networking/p2p/pyrosimple { };
+=======
+  pyrosimple = python3Packages.callPackage ../applications/networking/p2p/pyrosimple { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   qbittorrent = libsForQt5.callPackage ../applications/networking/p2p/qbittorrent { };
   qbittorrent-nox = qbittorrent.override {
@@ -35133,10 +40321,20 @@ with pkgs;
 
   qmplay2 = libsForQt5.callPackage ../applications/video/qmplay2 { };
 
+<<<<<<< HEAD
+=======
+  qmetro = callPackage ../applications/misc/qmetro { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   qmidiarp = callPackage ../applications/audio/qmidiarp { };
 
   qmidinet = libsForQt5.callPackage ../applications/audio/qmidinet { };
 
+<<<<<<< HEAD
+=======
+  qmidiroute = callPackage ../applications/audio/qmidiroute { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   qmmp = qt6Packages.callPackage ../applications/audio/qmmp { };
 
   qnotero = libsForQt5.callPackage ../applications/office/qnotero { };
@@ -35147,7 +40345,14 @@ with pkgs;
 
   qsampler = libsForQt5.callPackage ../applications/audio/qsampler { };
 
+<<<<<<< HEAD
   qscreenshot = libsForQt5.callPackage ../applications/graphics/qscreenshot { };
+=======
+  qscreenshot = callPackage ../applications/graphics/qscreenshot {
+    inherit (darwin.apple_sdk.frameworks) Carbon;
+    qt = qt4;
+  };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   qsstv = qt5.callPackage ../applications/radio/qsstv { };
 
@@ -35178,6 +40383,11 @@ with pkgs;
 
   qtractor = libsForQt5.callPackage ../applications/audio/qtractor { };
 
+<<<<<<< HEAD
+=======
+  qtscrobbler = callPackage ../applications/audio/qtscrobbler { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   quantomatic = callPackage ../applications/science/physics/quantomatic { };
 
   quassel = libsForQt5.callPackage ../applications/networking/irc/quassel {
@@ -35201,7 +40411,11 @@ with pkgs;
 
   quirc = callPackage ../tools/graphics/quirc { };
 
+<<<<<<< HEAD
   quisk = callPackage ../applications/radio/quisk { };
+=======
+  quisk = python39Packages.callPackage ../applications/radio/quisk { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   quiterss = libsForQt5.callPackage ../applications/networking/newsreaders/quiterss { };
 
@@ -35211,17 +40425,26 @@ with pkgs;
     keybinder3 = null;
     libappindicator-gtk3 = null;
     libmodplug = null;
+<<<<<<< HEAD
     libsoup = libsoup_3;
   };
 
   quodlibet-without-gst-plugins = quodlibet.override {
     libsoup = libsoup_3;
+=======
+  };
+
+  quodlibet-without-gst-plugins = quodlibet.override {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     tag = "-without-gst-plugins";
     withGstPlugins = false;
   };
 
   quodlibet-xine = quodlibet.override {
+<<<<<<< HEAD
     libsoup = libsoup_3;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     tag = "-xine";
     withGstreamerBackend = false;
     withXineBackend = true;
@@ -35233,7 +40456,10 @@ with pkgs;
     keybinder3 = keybinder3;
     libappindicator-gtk3 = libappindicator-gtk3;
     libmodplug = libmodplug;
+<<<<<<< HEAD
     libsoup = libsoup_3;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     tag = "-full";
     withDbusPython = true;
     withMusicBrainzNgs = true;
@@ -35244,13 +40470,21 @@ with pkgs;
   };
 
   quodlibet-xine-full = quodlibet-full.override {
+<<<<<<< HEAD
     libsoup = libsoup_3;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     tag = "-xine-full";
     withGstreamerBackend = false;
     withXineBackend = true;
   };
 
+<<<<<<< HEAD
   qutebrowser = callPackage ../applications/networking/browsers/qutebrowser {
+=======
+  qutebrowser = libsForQt5.callPackage ../applications/networking/browsers/qutebrowser { };
+  qutebrowser-qt6 = callPackage ../applications/networking/browsers/qutebrowser {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     inherit (qt6Packages) qtbase qtwebengine wrapQtAppsHook qtwayland;
   };
 
@@ -35308,7 +40542,10 @@ with pkgs;
 
   reaper = callPackage ../applications/audio/reaper {
     jackLibrary = libjack2; # Another option is "pipewire.jack".
+<<<<<<< HEAD
     ffmpeg = ffmpeg_4-headless;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   recapp = callPackage ../applications/video/recapp { };
@@ -35331,9 +40568,13 @@ with pkgs;
 
   rgp = libsForQt5.callPackage ../development/tools/rgp { };
 
+<<<<<<< HEAD
   ricochet = libsForQt5.callPackage ../applications/networking/instant-messengers/ricochet {
     protobuf = protobuf3_21;
   };
+=======
+  ricochet = libsForQt5.callPackage ../applications/networking/instant-messengers/ricochet { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   ries = callPackage ../applications/science/math/ries { };
 
@@ -35362,9 +40603,12 @@ with pkgs;
   };
 
   rofi-pass = callPackage ../tools/security/pass/rofi-pass.nix { };
+<<<<<<< HEAD
   rofi-pass-wayland = callPackage ../tools/security/pass/rofi-pass.nix {
     backend = "wayland";
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   rofi-menugen = callPackage ../applications/misc/rofi-menugen { };
 
@@ -35387,8 +40631,11 @@ with pkgs;
   rsync = callPackage ../applications/networking/sync/rsync (config.rsync or {});
   rrsync = callPackage ../applications/networking/sync/rsync/rrsync.nix { };
 
+<<<<<<< HEAD
   rtfm = callPackage ../applications/misc/rtfm { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   rtl_433 = callPackage ../applications/radio/rtl_433 { };
 
   rtl-ais = callPackage ../applications/radio/rtl-ais { };
@@ -35403,8 +40650,11 @@ with pkgs;
 
   runc = callPackage ../applications/virtualization/runc { };
 
+<<<<<<< HEAD
   rust-traverse = callPackage ../applications/misc/rust-traverse { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   rusty-psn = callPackage ../applications/misc/rusty-psn { };
 
   rusty-psn-gui = rusty-psn.override { withGui = true; };
@@ -35431,6 +40681,11 @@ with pkgs;
 
   sbagen = callPackage ../applications/misc/sbagen { };
 
+<<<<<<< HEAD
+=======
+  scantailor = callPackage ../applications/graphics/scantailor { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   scantailor-advanced = libsForQt5.callPackage ../applications/graphics/scantailor/advanced.nix { };
 
   sc-im = callPackage ../applications/misc/sc-im { };
@@ -35439,6 +40694,13 @@ with pkgs;
 
   scli = callPackage ../applications/misc/scli { };
 
+<<<<<<< HEAD
+=======
+  scribus_1_4 = callPackage ../applications/office/scribus/1_4.nix {
+    inherit (gnome2) libart_lgpl;
+  };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   scribus_1_5 = libsForQt5.callPackage ../applications/office/scribus/default.nix { };
   scribus = scribus_1_5;
 
@@ -35474,9 +40736,13 @@ with pkgs;
 
   shadowfox = callPackage ../tools/networking/shadowfox { };
 
+<<<<<<< HEAD
   shavee = callPackage ../applications/misc/shavee { };
 
   shell_gpt = callPackage ../tools/llm/shell_gpt { };
+=======
+  shell_gpt = callPackage ../tools/misc/shell_gpt { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   shfmt = callPackage ../tools/text/shfmt { };
 
@@ -35503,23 +40769,33 @@ with pkgs;
   sish = callPackage ../tools/networking/sish { };
 
   sky = libsForQt5.callPackage ../applications/networking/instant-messengers/sky {
+<<<<<<< HEAD
     libjpeg_turbo = libjpeg8;
+=======
+    libjpeg_turbo = libjpeg_turbo.override { enableJpeg8 = true; };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   skypeforlinux = callPackage ../applications/networking/instant-messengers/skypeforlinux { };
 
   SkypeExport = callPackage ../applications/networking/instant-messengers/SkypeExport { };
 
+<<<<<<< HEAD
   slingshot = callPackage ../tools/misc/slingshot { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   slop = callPackage ../tools/misc/slop { };
 
   slowhttptest = callPackage ../tools/security/slowhttptest { };
 
   slrn = callPackage ../applications/networking/newsreaders/slrn { };
 
+<<<<<<< HEAD
   smartcrop = callPackage ../tools/graphics/smartcrop { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   sniffnet = callPackage ../applications/networking/sniffnet { };
 
   sniproxy = callPackage ../applications/networking/sniproxy { };
@@ -35568,13 +40844,20 @@ with pkgs;
 
   sway-launcher-desktop = callPackage ../applications/misc/sway-launcher-desktop { };
 
+<<<<<<< HEAD
   tart = callPackage ../applications/virtualization/tart { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   tecoc = callPackage ../applications/editors/tecoc { };
 
   viber = callPackage ../applications/networking/instant-messengers/viber { };
 
+<<<<<<< HEAD
   wavebox = libsForQt5.callPackage ../applications/networking/instant-messengers/wavebox { };
+=======
+  wavebox = callPackage ../applications/networking/instant-messengers/wavebox { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   sonic-pi = libsForQt5.callPackage ../applications/audio/sonic-pi { };
 
@@ -35623,7 +40906,11 @@ with pkgs;
 
   insync = callPackage ../applications/networking/insync { };
 
+<<<<<<< HEAD
   lemurs = callPackage ../applications/display-managers/lemurs { };
+=======
+  insync-v3 = libsForQt5.callPackage ../applications/networking/insync/v3.nix { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   libstrangle = callPackage ../tools/X11/libstrangle {
     stdenv = stdenv_32bit;
@@ -35651,6 +40938,7 @@ with pkgs;
 
   ly = callPackage ../applications/display-managers/ly { };
 
+<<<<<<< HEAD
   slic3r = callPackage ../applications/misc/slic3r { };
 
   curaengine_stable = callPackage ../applications/misc/curaengine/stable.nix { };
@@ -35659,6 +40947,15 @@ with pkgs;
     inherit (python3.pkgs) libarcus;
     protobuf = protobuf3_21;
   };
+=======
+  slic3r = callPackage ../applications/misc/slic3r {
+    boost = boost172; # Building fails with Boost >1.72 due to boost/detail/endian.hpp missing
+  };
+
+  curaengine_stable = callPackage ../applications/misc/curaengine/stable.nix { };
+
+  curaengine = callPackage ../applications/misc/curaengine { inherit (python3.pkgs) libarcus; };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   cura = libsForQt5.callPackage ../applications/misc/cura { };
 
@@ -35701,8 +40998,11 @@ with pkgs;
     inherit (darwin.apple_sdk_11_0.frameworks) CoreServices CoreMIDI;
   };
 
+<<<<<<< HEAD
   sharpsat-td = callPackage ../applications/science/logic/sharpsat-td { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   shntool = callPackage ../applications/audio/shntool { };
 
   sipp = callPackage ../development/tools/misc/sipp { };
@@ -35717,8 +41017,11 @@ with pkgs;
 
   soulseekqt = libsForQt5.callPackage ../applications/networking/p2p/soulseekqt { };
 
+<<<<<<< HEAD
   soundsource = callPackage ../applications/audio/soundsource { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   sox = callPackage ../applications/misc/audio/sox {
     inherit (darwin.apple_sdk.frameworks) CoreAudio;
   };
@@ -35737,6 +41040,7 @@ with pkgs;
 
   psst = callPackage ../applications/audio/psst { };
 
+<<<<<<< HEAD
   squeezelite = darwin.apple_sdk_11_0.callPackage ../applications/audio/squeezelite {
     inherit (darwin.apple_sdk_11_0.frameworks) CoreVideo VideoDecodeAcceleration CoreAudio AudioToolbox AudioUnit Carbon;
   };
@@ -35746,6 +41050,11 @@ with pkgs;
 
     audioBackend = "pulse";
   };
+=======
+  squeezelite = callPackage ../applications/audio/squeezelite { audioBackend = "alsa"; };
+
+  squeezelite-pulse = callPackage ../applications/audio/squeezelite { audioBackend = "pulse"; };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   ltunify = callPackage ../tools/misc/ltunify { };
 
@@ -35754,6 +41063,13 @@ with pkgs;
     python = python3;
   };
 
+<<<<<<< HEAD
+=======
+  ssr = callPackage ../applications/audio/soundscape-renderer {
+    autoreconfHook = buildPackages.autoreconfHook269;
+  };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ssrc = callPackage ../applications/audio/ssrc { };
 
   stalonetray = callPackage ../applications/window-managers/stalonetray { };
@@ -35770,8 +41086,11 @@ with pkgs;
 
   stumpwm = sbclPackages.stumpwm;
 
+<<<<<<< HEAD
   stumpwm-unwrapped = sbclPackages.stumpwm-unwrapped;
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   sublime = callPackage ../applications/editors/sublime/2 { };
 
   sublime3Packages = recurseIntoAttrs (callPackage ../applications/editors/sublime/3/packages.nix { });
@@ -35801,8 +41120,11 @@ with pkgs;
 
   sublime-music = callPackage ../applications/audio/sublime-music { };
 
+<<<<<<< HEAD
   subtitlr = callPackage ../applications/audio/subtitlr { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   subunit = callPackage ../development/libraries/subunit { };
 
   surf = callPackage ../applications/networking/browsers/surf { gtk = gtk2; };
@@ -35842,6 +41164,10 @@ with pkgs;
 
   inherit (callPackages ../applications/networking/syncthing {
     inherit (darwin) autoSignDarwinBinariesHook;
+<<<<<<< HEAD
+=======
+    buildGoModule = buildGo119Module; # go 1.20 build failure
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
    })
     syncthing
     syncthing-discovery
@@ -35884,7 +41210,14 @@ with pkgs;
 
   tailor = callPackage ../applications/version-management/tailor { };
 
+<<<<<<< HEAD
   taizen = callPackage ../applications/misc/taizen { };
+=======
+  taizen = callPackage ../applications/misc/taizen {
+    inherit (darwin.apple_sdk.frameworks) Security;
+    openssl = openssl_1_1;
+  };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   talosctl = callPackage ../applications/networking/cluster/talosctl { };
 
@@ -35930,12 +41263,23 @@ with pkgs;
 
   taskopen = callPackage ../applications/misc/taskopen { };
 
+<<<<<<< HEAD
   telegram-desktop = qt6Packages.callPackage ../applications/networking/instant-messengers/telegram/telegram-desktop { };
+=======
+  telegram-desktop = qt6Packages.callPackage ../applications/networking/instant-messengers/telegram/telegram-desktop {
+    abseil-cpp = abseil-cpp_202206;
+  };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   telegram-bot-api = callPackage ../servers/telegram-bot-api { };
 
   tektoncd-cli = callPackage ../applications/networking/cluster/tektoncd-cli { };
 
+<<<<<<< HEAD
+=======
+  telegram-cli = callPackage ../applications/networking/instant-messengers/telegram/telegram-cli { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   tg = python3Packages.callPackage ../applications/networking/instant-messengers/telegram/tg { };
 
   telepathy-gabble = callPackage ../applications/networking/instant-messengers/telepathy/gabble { };
@@ -35966,8 +41310,11 @@ with pkgs;
 
   termdown = python3Packages.callPackage ../applications/misc/termdown { };
 
+<<<<<<< HEAD
   termimage = callPackage ../tools/graphics/termimage { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   terminal-notifier = callPackage ../applications/misc/terminal-notifier { };
 
   textpieces = callPackage ../tools/text/textpieces { };
@@ -35994,8 +41341,11 @@ with pkgs;
 
   tev = callPackage ../applications/graphics/tev { };
 
+<<<<<<< HEAD
   textual-paint = callPackage ../applications/graphics/textual-paint { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   themechanger = callPackage ../applications/misc/themechanger { };
 
   thinkingRock = callPackage ../applications/misc/thinking-rock { };
@@ -36035,6 +41385,7 @@ with pkgs;
 
   ticker = callPackage ../applications/misc/ticker { };
 
+<<<<<<< HEAD
   tickrs = callPackage ../applications/misc/tickrs { };
 
   tijolo = callPackage ../applications/editors/tijolo { };
@@ -36043,6 +41394,14 @@ with pkgs;
     protobuf = protobuf3_21;
   };
 
+=======
+  tickrs = callPackage ../applications/misc/tickrs {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
+  tilemaker = callPackage ../applications/misc/tilemaker { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   timbreid = callPackage ../applications/audio/pd-plugins/timbreid {
     fftw = fftwSinglePrec;
   };
@@ -36133,7 +41492,13 @@ with pkgs;
 
   toxic = callPackage ../applications/networking/instant-messengers/toxic { };
 
+<<<<<<< HEAD
   toxiproxy = callPackage ../development/tools/toxiproxy { };
+=======
+  toxiproxy = callPackage ../development/tools/toxiproxy {
+    buildGoModule = buildGo119Module; # go 1.20 build failure
+  };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   tqsl = callPackage ../applications/radio/tqsl {
     openssl = openssl_1_1;
@@ -36153,6 +41518,7 @@ with pkgs;
   transmission-gtk = transmission.override { enableGTK3 = true; };
   transmission-qt = transmission.override { enableQt = true; };
 
+<<<<<<< HEAD
   transmission_4 = callPackage ../applications/networking/p2p/transmission/4.nix {
     fmt = fmt_9;
     libutp = libutp_3_4;
@@ -36165,6 +41531,8 @@ with pkgs;
   transmission_4-gtk = transmission_4.override { enableGTK3 = true; };
   transmission_4-qt = transmission_4.override { enableQt = true; };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   transmission-remote-gtk = callPackage ../applications/networking/p2p/transmission-remote-gtk { };
 
   transgui = callPackage ../applications/networking/p2p/transgui { };
@@ -36243,6 +41611,7 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
+<<<<<<< HEAD
   typer = callPackage ../applications/misc/typer { };
 
   typioca = callPackage ../applications/misc/typioca { };
@@ -36255,6 +41624,16 @@ with pkgs;
 
   uefi-run = callPackage ../tools/virtualization/uefi-run { };
 
+=======
+  ueberzug = with python3Packages; toPythonApplication ueberzug;
+
+  ueberzugpp = callPackage ../tools/graphics/ueberzugpp { };
+
+  uefi-run = callPackage ../tools/virtualization/uefi-run { };
+
+  uhhyou.lv2 = callPackage ../applications/audio/uhhyou.lv2 { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   umurmur = callPackage ../applications/networking/umurmur { };
 
   udocker = callPackage ../tools/virtualization/udocker { };
@@ -36342,7 +41721,11 @@ with pkgs;
 
   macvim = callPackage ../applications/editors/vim/macvim-configurable.nix { stdenv = clangStdenv; };
 
+<<<<<<< HEAD
   vim-full = vimUtils.makeCustomizable (callPackage ../applications/editors/vim/full.nix {
+=======
+  vim-full = vimUtils.makeCustomizable (callPackage ../applications/editors/vim/configurable.nix {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     inherit (darwin.apple_sdk.frameworks) CoreServices Cocoa Foundation CoreData;
     inherit (darwin) libobjc;
   });
@@ -36354,12 +41737,20 @@ with pkgs;
         darwin = true;
       };
     };
+<<<<<<< HEAD
   }).overrideAttrs {
+=======
+  }).overrideAttrs (_: rec {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     pname = "vim-darwin";
     meta = {
       platforms = lib.platforms.darwin;
     };
+<<<<<<< HEAD
   };
+=======
+  });
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   vimacs = callPackage ../applications/editors/vim/vimacs.nix { };
 
@@ -36371,7 +41762,12 @@ with pkgs;
 
   qpdfview = libsForQt5.callPackage ../applications/office/qpdfview { };
 
+<<<<<<< HEAD
   qtile = callPackage ../development/python-modules/qtile/wrapper.nix { };
+=======
+  qtile-unwrapped = callPackage ../applications/window-managers/qtile { };
+  qtile = callPackage ../applications/window-managers/qtile/wrapper.nix { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   vimgolf = callPackage ../games/vimgolf { };
 
@@ -36409,8 +41805,11 @@ with pkgs;
 
   viw = callPackage ../applications/editors/viw { };
 
+<<<<<<< HEAD
   virter = callPackage ../applications/virtualization/virter { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   virt-viewer = callPackage ../applications/virtualization/virt-viewer { };
 
   virt-top = callPackage ../applications/virtualization/virt-top { };
@@ -36459,8 +41858,11 @@ with pkgs;
       else null;
   };
 
+<<<<<<< HEAD
   vivictpp = callPackage ../applications/video/vivictpp { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   vpcs = callPackage ../applications/virtualization/vpcs { };
 
   primusLib = callPackage ../tools/X11/primus/lib.nix {
@@ -36491,10 +41893,26 @@ with pkgs;
 
   vkeybd = callPackage ../applications/audio/vkeybd { };
 
+<<<<<<< HEAD
   vlc = libsForQt5.callPackage ../applications/video/vlc { };
 
   libvlc = vlc.override {
     withQt5 = false;
+=======
+  vlc = libsForQt5.callPackage ../applications/video/vlc {
+    # Newest libcaca changed the API, and libvlc didn't catch it. Until next
+    # version arrives, it is safer to disable it.
+    # Upstream thread: https://code.videolan.org/videolan/vlc/-/issues/26389
+    libcaca = null;
+  };
+
+  libvlc = vlc.override {
+    withQt5 = false;
+    qtbase = null;
+    qtsvg = null;
+    qtx11extras = null;
+    wrapQtAppsHook = null;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     onlyLibVLC = true;
   };
 
@@ -36516,8 +41934,11 @@ with pkgs;
     autoreconfHook = buildPackages.autoreconfHook269;
   };
 
+<<<<<<< HEAD
   vpv = callPackage ../applications/graphics/vpv { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   vsce = callPackage ../development/tools/vsce { };
 
   vscode = callPackage ../applications/editors/vscode/vscode.nix { };
@@ -36535,13 +41956,19 @@ with pkgs;
   vscodium-fhsWithPackages = vscodium.fhsWithPackages;
 
   openvscode-server = callPackage ../servers/openvscode-server {
+<<<<<<< HEAD
     nodejs = nodejs_16;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     inherit (darwin.apple_sdk.frameworks) AppKit Cocoa Security;
     inherit (darwin) cctools;
   };
 
   code-server = callPackage ../servers/code-server {
+<<<<<<< HEAD
     nodejs = nodejs_16;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     inherit (darwin.apple_sdk.frameworks) AppKit Cocoa CoreServices Security;
     inherit (darwin) cctools;
     inherit (nodePackages) node-gyp;
@@ -36568,18 +41995,24 @@ with pkgs;
 
   whispers = with python3Packages; toPythonApplication whispers;
 
+<<<<<<< HEAD
   whisper-ctranslate2 = callPackage ../tools/audio/whisper-ctranslate2 { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   waon = callPackage ../applications/audio/waon { };
 
   warp = callPackage ../applications/networking/warp { };
 
   warpd = callPackage ../applications/misc/warpd { };
 
+<<<<<<< HEAD
   watershot = callPackage ../applications/misc/watershot { };
 
   waypaper = callPackage ../applications/misc/waypaper { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   w3m = callPackage ../applications/networking/browsers/w3m { };
 
   # Should always be the version with the most features
@@ -36611,6 +42044,7 @@ with pkgs;
 
   wapiti = callPackage ../tools/security/wapiti { };
 
+<<<<<<< HEAD
   weave-gitops = callPackage ../applications/networking/cluster/weave-gitops { };
 
   wayfire = callPackage ../applications/window-managers/wayfire/default.nix {
@@ -36624,6 +42058,20 @@ with pkgs;
   wayfire-with-plugins = callPackage ../applications/window-managers/wayfire/wrapper.nix {
     plugins = with wayfirePlugins; [ wcm wf-shell ];
   };
+=======
+  wayfireApplications = wayfireApplications-unwrapped.withPlugins (plugins: [ plugins.wf-shell ]);
+  inherit (wayfireApplications) wayfire wcm;
+  wayfireApplications-unwrapped = recurseIntoAttrs (
+    (callPackage ../applications/window-managers/wayfire/applications.nix { }).
+    extend (_: _: { wlroots = wlroots_0_16; })
+  );
+  wayfirePlugins = recurseIntoAttrs (
+    callPackage ../applications/window-managers/wayfire/plugins.nix {
+      inherit (wayfireApplications-unwrapped) wayfire;
+    }
+  );
+  wf-config = callPackage ../applications/window-managers/wayfire/wf-config.nix { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   waypipe = callPackage ../applications/networking/remote/waypipe { };
 
@@ -36654,7 +42102,11 @@ with pkgs;
   weechat-unwrapped = callPackage ../applications/networking/irc/weechat {
     inherit (darwin) libobjc;
     inherit (darwin) libresolv;
+<<<<<<< HEAD
     guile = guile_3_0;
+=======
+    guile = guile_2_0;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   weechat = wrapWeechat weechat-unwrapped { };
@@ -36662,6 +42114,7 @@ with pkgs;
   weechatScripts = recurseIntoAttrs (callPackage ../applications/networking/irc/weechat/scripts { });
 
   westonLite = weston.override {
+<<<<<<< HEAD
     demoSupport = false;
     hdrSupport = false;
     jpegSupport = false;
@@ -36674,6 +42127,18 @@ with pkgs;
     vncSupport = false;
     webpSupport = false;
     xwaylandSupport = false;
+=======
+    pango = null;
+    freerdp = null;
+    libunwind = null;
+    vaapi = null;
+    libva = null;
+    libwebp = null;
+    xwayland = null;
+    pipewire = null;
+    buildDemo = false;
+    buildRemoting = false;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   chatterino2 = libsForQt5.callPackage ../applications/networking/instant-messengers/chatterino2 {
@@ -36685,12 +42150,21 @@ with pkgs;
   wgnord = callPackage ../applications/networking/wgnord/default.nix { };
 
   whalebird = callPackage ../applications/misc/whalebird {
+<<<<<<< HEAD
     electron = electron_21;
+=======
+    electron = electron_19;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   windowlab = callPackage ../applications/window-managers/windowlab { };
 
+<<<<<<< HEAD
   dockapps = callPackage ../by-name/wi/windowmaker/dockapps { };
+=======
+  windowmaker = callPackage ../applications/window-managers/windowmaker { };
+  dockapps = callPackage ../applications/window-managers/windowmaker/dockapps { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   wily = callPackage ../applications/editors/wily { };
 
@@ -36787,7 +42261,13 @@ with pkgs;
 
   xaos = libsForQt5.callPackage ../applications/graphics/xaos { };
 
+<<<<<<< HEAD
   xastir = callPackage ../applications/misc/xastir { };
+=======
+  xastir = callPackage ../applications/misc/xastir {
+    rastermagick = imagemagick6;
+  };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   xautomation = callPackage ../tools/X11/xautomation { };
 
@@ -36861,8 +42341,11 @@ with pkgs;
 
   xdg-desktop-portal-wlr = callPackage ../development/libraries/xdg-desktop-portal-wlr { };
 
+<<<<<<< HEAD
   xdg-desktop-portal-xapp = callPackage ../development/libraries/xdg-desktop-portal-xapp { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   xdg-user-dirs = callPackage ../tools/X11/xdg-user-dirs { };
 
   xdg-utils = callPackage ../tools/X11/xdg-utils {
@@ -36893,14 +42376,24 @@ with pkgs;
 
   win-spice = callPackage ../applications/virtualization/driver/win-spice { };
   win-virtio = callPackage ../applications/virtualization/driver/win-virtio { };
+<<<<<<< HEAD
   win-pvdrivers = callPackage ../applications/virtualization/driver/win-pvdrivers { };
+=======
+  win-qemu = callPackage ../applications/virtualization/driver/win-qemu { };
+  win-pvdrivers = callPackage ../applications/virtualization/driver/win-pvdrivers { };
+  win-signed-gplpv-drivers = callPackage ../applications/virtualization/driver/win-signed-gplpv-drivers { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   xfig = callPackage ../applications/graphics/xfig { };
 
   xfractint = callPackage ../applications/graphics/xfractint { };
 
+<<<<<<< HEAD
   xine-ui = callPackage ../applications/video/xine/ui.nix { };
   xine-lib = callPackage ../applications/video/xine/lib.nix { };
+=======
+  xine-ui = callPackage ../applications/video/xine-ui { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   xlsxgrep = callPackage ../applications/search/xlsxgrep { };
 
@@ -36999,8 +42492,11 @@ with pkgs;
 
   xscreensaver = callPackage ../misc/screensavers/xscreensaver { };
 
+<<<<<<< HEAD
   xsubfind3r = callPackage ../tools/security/xsubfind3r {  };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   xsuspender = callPackage ../applications/misc/xsuspender {  };
 
   xss-lock = callPackage ../misc/screensavers/xss-lock { };
@@ -37033,10 +42529,13 @@ with pkgs;
 
   xnotify = callPackage ../tools/X11/xnotify { };
 
+<<<<<<< HEAD
   xpano = callPackage ../applications/graphics/xpano { };
 
   xv = callPackage ../applications/graphics/xv { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   xygrib = libsForQt5.callPackage ../applications/misc/xygrib { };
 
   xzgv = callPackage ../applications/graphics/xzgv { };
@@ -37105,8 +42604,11 @@ with pkgs;
 
   yuview = libsForQt5.yuview;
 
+<<<<<<< HEAD
   wallust = callPackage ../applications/misc/wallust { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   zam-plugins = callPackage ../applications/audio/zam-plugins { };
 
   zammad = callPackage ../applications/networking/misc/zammad { };
@@ -37145,7 +42647,13 @@ with pkgs;
 
   zim = callPackage ../applications/office/zim { };
 
+<<<<<<< HEAD
   zine = callPackage ../applications/misc/zine { };
+=======
+  zine = callPackage ../applications/misc/zine {
+    inherit (darwin.apple_sdk.frameworks) CoreServices Security;
+  };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   zita-ajbridge = callPackage ../applications/audio/zita-ajbridge { };
 
@@ -37165,7 +42673,11 @@ with pkgs;
 
   zsteg = callPackage ../tools/security/zsteg { };
 
+<<<<<<< HEAD
   zx = callPackage ../tools/system/zx { };
+=======
+  inherit (nodePackages) zx;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   zxfer = callPackage ../applications/system/zxfer { };
 
@@ -37184,7 +42696,13 @@ with pkgs;
 
   ### BLOCKCHAINS / CRYPTOCURRENCIES / WALLETS
 
+<<<<<<< HEAD
   aeon = callPackage ../applications/blockchains/aeon { };
+=======
+  aeon = callPackage ../applications/blockchains/aeon {
+    boost = boost172;
+  };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   alfis = callPackage ../applications/blockchains/alfis {
     inherit (darwin.apple_sdk.frameworks) Cocoa Security WebKit;
@@ -37194,6 +42712,7 @@ with pkgs;
     withGui = false;
   };
 
+<<<<<<< HEAD
   aperture = callPackage ../applications/blockchains/aperture { };
 
   backdown = callPackage ../tools/misc/backdown { };
@@ -37202,16 +42721,30 @@ with pkgs;
 
   bitcoin  = libsForQt5.callPackage ../applications/blockchains/bitcoin {
     stdenv = if stdenv.isDarwin then darwin.apple_sdk_11_0.stdenv else stdenv;
+=======
+  balanceofsatoshis = nodePackages.balanceofsatoshis;
+
+  bitcoin  = libsForQt5.callPackage ../applications/blockchains/bitcoin {
+    boost = boost17x;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     withGui = true;
     inherit (darwin) autoSignDarwinBinariesHook;
   };
 
   bitcoind = callPackage ../applications/blockchains/bitcoin {
+<<<<<<< HEAD
+=======
+    boost = boost17x;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     withGui = false;
     inherit (darwin) autoSignDarwinBinariesHook;
   };
 
   bitcoind-knots = callPackage ../applications/blockchains/bitcoin-knots {
+<<<<<<< HEAD
+=======
+    boost = boost17x;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     withGui = false;
     inherit (darwin) autoSignDarwinBinariesHook;
   };
@@ -37233,12 +42766,21 @@ with pkgs;
   besu = callPackage ../applications/blockchains/besu { };
 
   bitcoin-abc  = libsForQt5.callPackage ../applications/blockchains/bitcoin-abc {
+<<<<<<< HEAD
     withGui = true;
     protobuf = protobuf3_21;
   };
   bitcoind-abc = callPackage ../applications/blockchains/bitcoin-abc {
     mkDerivation = stdenv.mkDerivation;
     protobuf = protobuf3_21;
+=======
+    boost = boost17x;
+    withGui = true;
+  };
+  bitcoind-abc = callPackage ../applications/blockchains/bitcoin-abc {
+    boost = boost17x;
+    mkDerivation = stdenv.mkDerivation;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     withGui = false;
   };
 
@@ -37259,14 +42801,25 @@ with pkgs;
 
   cryptop = python3.pkgs.callPackage ../applications/blockchains/cryptop { };
 
+<<<<<<< HEAD
   dcrctl = callPackage ../applications/blockchains/dcrctl { };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   dcrd = callPackage ../applications/blockchains/dcrd { };
   dcrwallet = callPackage ../applications/blockchains/dcrwallet { };
 
   dogecoin  = libsForQt5.callPackage ../applications/blockchains/dogecoin {
+<<<<<<< HEAD
     withGui = true;
   };
   dogecoind = callPackage ../applications/blockchains/dogecoin {
+=======
+    boost = boost17x;
+    withGui = true;
+  };
+  dogecoind = callPackage ../applications/blockchains/dogecoin {
+    boost = boost17x;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     withGui = false;
   };
 
@@ -37278,13 +42831,24 @@ with pkgs;
 
   elements  = libsForQt5.callPackage ../applications/blockchains/elements {
     withGui = true;
+<<<<<<< HEAD
+=======
+    boost = boost175;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     inherit (darwin) autoSignDarwinBinariesHook;
   };
   elementsd = callPackage ../applications/blockchains/elements {
     withGui = false;
+<<<<<<< HEAD
     inherit (darwin) autoSignDarwinBinariesHook;
   };
   elementsd-simplicity = elementsd.overrideAttrs {
+=======
+    boost = boost175;
+    inherit (darwin) autoSignDarwinBinariesHook;
+  };
+  elementsd-simplicity = elementsd.overrideAttrs (_: rec {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     version = "unstable-2023-04-18";
     src = fetchFromGitHub {
       owner = "ElementsProject";
@@ -37292,11 +42856,21 @@ with pkgs;
       rev = "ea318a45094ab3d31dd017d7781a6f28f1ffaa33"; # simplicity branch latest
       sha256 = "ooe+If3HWaJWpr2ux7DpiCTqB9Hv+aXjquEjplDjvhM=";
     };
+<<<<<<< HEAD
   };
 
   ergo = callPackage ../applications/blockchains/ergo { };
 
   erigon = callPackage ../applications/blockchains/erigon { };
+=======
+  });
+
+  ergo = callPackage ../applications/blockchains/ergo { };
+
+  erigon = callPackage ../applications/blockchains/erigon {
+    buildGoModule = buildGo119Module; # go 1.20 build failure
+  };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   exodus = callPackage ../applications/blockchains/exodus { };
 
@@ -37309,6 +42883,7 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) IOKit;
   };
 
+<<<<<<< HEAD
   go-exploitdb = callPackage ../tools/security/go-exploitdb { };
 
   gridcoin-research = libsForQt5.callPackage ../applications/blockchains/gridcoin-research {
@@ -37317,11 +42892,19 @@ with pkgs;
 
   groestlcoin  = libsForQt5.callPackage ../applications/blockchains/groestlcoin {
     stdenv = darwin.apple_sdk_11_0.stdenv;
+=======
+  groestlcoin  = libsForQt5.callPackage ../applications/blockchains/groestlcoin {
+    boost = boost17x;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     withGui = true;
     inherit (darwin) autoSignDarwinBinariesHook;
   };
 
   groestlcoind = callPackage ../applications/blockchains/groestlcoin {
+<<<<<<< HEAD
+=======
+    boost = boost17x;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     inherit (darwin) autoSignDarwinBinariesHook;
   };
 
@@ -37335,7 +42918,11 @@ with pkgs;
 
   litecoin  = libsForQt5.callPackage ../applications/blockchains/litecoin {
     inherit (darwin.apple_sdk.frameworks) AppKit;
+<<<<<<< HEAD
     boost = pkgs.boost177;
+=======
+    boost = pkgs.boost174;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
   litecoind = litecoin.override { withGui = false; };
 
@@ -37357,6 +42944,7 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) CoreData IOKit PCSC;
   };
 
+<<<<<<< HEAD
   monero-gui = libsForQt5.callPackage ../applications/blockchains/monero-gui { };
 
   oxen = callPackage ../applications/blockchains/oxen
@@ -37369,6 +42957,24 @@ with pkgs;
   nano-wallet = libsForQt5.callPackage ../applications/blockchains/nano-wallet { };
 
   namecoind = callPackage ../applications/blockchains/namecoin { };
+=======
+  monero-gui = libsForQt5.callPackage ../applications/blockchains/monero-gui {
+    boost = boost17x;
+  };
+
+  oxen = callPackage ../applications/blockchains/oxen
+    { stdenv = gcc10StdenvCompat; boost = boost17x; };
+
+  masari = callPackage ../applications/blockchains/masari { boost = boost174; };
+
+  napari = with python3Packages; toPythonApplication napari;
+
+  nano-wallet = libsForQt5.callPackage ../applications/blockchains/nano-wallet
+    { stdenv = gcc10StdenvCompat; boost = boost172; };
+
+  namecoin  = callPackage ../applications/blockchains/namecoin { withGui = true; };
+  namecoind = callPackage ../applications/blockchains/namecoin { withGui = false; };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nbxplorer = callPackage ../applications/blockchains/nbxplorer { };
 
@@ -37387,17 +42993,33 @@ with pkgs;
 
   stellar-core = callPackage ../applications/blockchains/stellar-core { };
 
+<<<<<<< HEAD
   sumokoin = callPackage ../applications/blockchains/sumokoin { };
 
   solana-cli = callPackage ../applications/blockchains/solana { };
 
   solana-validator = callPackage ../applications/blockchains/solana-validator { };
+=======
+  sumokoin = callPackage ../applications/blockchains/sumokoin {
+    boost = boost17x;
+  };
+
+  solana-cli = callPackage ../applications/blockchains/solana { };
+
+  solana-validator = callPackage ../applications/blockchains/solana-validator {
+    inherit (darwin.apple_sdk.frameworks) IOKit Security AppKit;
+  };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   snarkos = callPackage ../applications/blockchains/snarkos {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
+<<<<<<< HEAD
   taproot-assets = callPackage ../applications/blockchains/taproot-assets { };
+=======
+  taro = callPackage ../applications/blockchains/taro { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   inherit (callPackages ../applications/blockchains/teos { })
     teos
@@ -37412,9 +43034,17 @@ with pkgs;
   torq = callPackage ../applications/blockchains/torq { };
 
   vertcoin  = libsForQt5.callPackage ../applications/blockchains/vertcoin {
+<<<<<<< HEAD
     withGui = true;
   };
   vertcoind = callPackage ../applications/blockchains/vertcoin {
+=======
+    boost = boost17x;
+    withGui = true;
+  };
+  vertcoind = callPackage ../applications/blockchains/vertcoin {
+    boost = boost17x;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     withGui = false;
   };
 
@@ -37422,7 +43052,13 @@ with pkgs;
 
   wasabibackend = callPackage ../applications/blockchains/wasabibackend { };
 
+<<<<<<< HEAD
   wownero = callPackage ../applications/blockchains/wownero { };
+=======
+  wownero = callPackage ../applications/blockchains/wownero {
+    boost = boost175;
+  };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   zcash = callPackage ../applications/blockchains/zcash {
     inherit (darwin.apple_sdk.frameworks) Security;
@@ -37484,10 +43120,13 @@ with pkgs;
 
   tts = callPackage ../tools/audio/tts { };
 
+<<<<<<< HEAD
   wyoming-faster-whisper = callPackage ../tools/audio/wyoming/faster-whisper.nix { };
 
   wyoming-piper = callPackage ../tools/audio/wyoming/piper.nix { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ### GAMES
 
   _1oom = callPackage ../games/1oom { };
@@ -37510,8 +43149,11 @@ with pkgs;
 
   antsimulator = callPackage ../games/antsimulator { };
 
+<<<<<<< HEAD
   atlauncher = callPackage ../games/atlauncher { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   augustus = callPackage ../games/augustus { };
 
   ballerburg = callPackage ../games/ballerburg { } ;
@@ -37520,8 +43162,11 @@ with pkgs;
 
   colobot = callPackage ../games/colobot { };
 
+<<<<<<< HEAD
   corsix-th = callPackage ../games/corsix-th { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   enigma = callPackage ../games/enigma { };
 
   everspace = callPackage ../games/everspace { };
@@ -37534,6 +43179,7 @@ with pkgs;
 
   freenukum = callPackage ../games/freenukum { };
 
+<<<<<<< HEAD
   inherit (callPackages ../games/fteqw {})
     fteqw
     fteqw-dedicated
@@ -37541,14 +43187,20 @@ with pkgs;
 
   gamepad-tool = callPackage ../games/gamepad-tool { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   gnome-hexgl = callPackage ../games/gnome-hexgl { };
 
   gotypist = callPackage ../games/gotypist { };
 
+<<<<<<< HEAD
   heroic-unwrapped = callPackage ../games/heroic {
     # Match the version used by the upstream package.
     electron = electron_24;
   };
+=======
+  heroic-unwrapped = callPackage ../games/heroic { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   heroic = callPackage ../games/heroic/fhsenv.nix { };
 
@@ -37560,23 +43212,30 @@ with pkgs;
 
   keeperrl = callPackage ../games/keeperrl { };
 
+<<<<<<< HEAD
   shipwright = callPackage ../games/shipwright { };
 
   wipeout-rewrite = callPackage ../games/wipeout-rewrite {
     inherit (darwin.apple_sdk.frameworks) Foundation;
   };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ### GAMES/DOOM-PORTS
 
   dhewm3 = callPackage ../games/doom-ports/dhewm3 { };
 
   doomseeker = qt5.callPackage ../games/doom-ports/doomseeker { };
 
+<<<<<<< HEAD
   doomretro = callPackage ../games/doom-ports/doomretro {
     inherit (darwin.apple_sdk.frameworks) Cocoa;
   };
 
   doomrunner = qt5.callPackage ../games/doom-ports/doomrunner { };
+=======
+  doomretro = callPackage ../games/doom-ports/doomretro { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   chocolate-doom = callPackage ../games/doom-ports/chocolate-doom { };
 
@@ -37596,6 +43255,11 @@ with pkgs;
 
   rbdoom-3-bfg = callPackage ../games/doom-ports/rbdoom-3-bfg { };
 
+<<<<<<< HEAD
+=======
+  shavee = callPackage ../games/doom-ports/shavee { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   slade = callPackage ../games/doom-ports/slade {
     wxGTK = wxGTK32.override {
       withWebKit = true;
@@ -37691,7 +43355,10 @@ with pkgs;
   airstrike = callPackage ../games/airstrike { };
 
   alephone = callPackage ../games/alephone { };
+<<<<<<< HEAD
   alephone-apotheosis-x = callPackage ../games/alephone/apotheosis-x { };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   alephone-durandal = callPackage ../games/alephone/durandal { };
   alephone-eternal = callPackage ../games/alephone/eternal { };
   alephone-evil = callPackage ../games/alephone/evil { };
@@ -37702,8 +43369,11 @@ with pkgs;
   alephone-rubicon-x = callPackage ../games/alephone/rubicon-x { };
   alephone-pathways-into-darkness =
     callPackage ../games/alephone/pathways-into-darkness { };
+<<<<<<< HEAD
   alephone-yuge =
     callPackage ../games/alephone/yuge { };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   alienarena = callPackage ../games/alienarena { };
 
@@ -37754,7 +43424,13 @@ with pkgs;
     inherit (perlPackages) PathTiny;
   };
 
+<<<<<<< HEAD
   blackshades = callPackage ../games/blackshades { };
+=======
+  blackshades = callPackage ../games/blackshades {
+    zig = buildPackages.zig_0_9;
+  };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   blobby = callPackage ../games/blobby { };
 
@@ -37798,19 +43474,31 @@ with pkgs;
 
   chiaki = libsForQt5.callPackage ../games/chiaki { };
 
+<<<<<<< HEAD
   chiaki4deck = libsForQt5.callPackage ../games/chiaki4deck { };
 
   chromium-bsu = callPackage ../games/chromium-bsu { };
 
   clonehero = callPackage ../games/clonehero { };
+=======
+  chromium-bsu = callPackage ../games/chromium-bsu { };
+
+  clonehero-unwrapped = callPackage ../games/clonehero { };
+
+  clonehero = callPackage ../games/clonehero/fhs-wrapper.nix { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   vintagestory = callPackage ../games/vintagestory { };
 
   ckan = callPackage ../games/ckan { };
 
+<<<<<<< HEAD
   cockatrice = libsForQt5.callPackage ../games/cockatrice {
     protobuf = protobuf3_21;
   };
+=======
+  cockatrice = libsForQt5.callPackage ../games/cockatrice {  };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   commandergenius = callPackage ../games/commandergenius { };
 
@@ -37840,8 +43528,11 @@ with pkgs;
   curseofwar = callPackage ../games/curseofwar { SDL = null; };
   curseofwar-sdl = callPackage ../games/curseofwar { ncurses = null; };
 
+<<<<<<< HEAD
   cutechess = qt5.callPackage ../games/cutechess { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   cutemaze = qt6Packages.callPackage ../games/cutemaze { };
 
   cuyo = callPackage ../games/cuyo { };
@@ -37865,10 +43556,14 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Carbon Cocoa OpenGL Security;
   };
 
+<<<<<<< HEAD
   ddns-go = callPackage ../tools/networking/ddns-go { };
 
   devilutionx = callPackage ../games/devilutionx {
     fmt = fmt_9;
+=======
+  devilutionx = callPackage ../games/devilutionx {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     SDL2 = SDL2.override {
       withStatic = true;
     };
@@ -37894,9 +43589,13 @@ with pkgs;
     d1x-rebirth-full
     d2x-rebirth-full;
 
+<<<<<<< HEAD
   easyrpg-player = callPackage ../games/easyrpg-player {
     inherit (darwin.apple_sdk.frameworks) Foundation AudioUnit AudioToolbox;
   };
+=======
+  easyrpg-player = callPackage ../games/easyrpg-player { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   eboard = callPackage ../games/eboard { };
 
@@ -38004,7 +43703,11 @@ with pkgs;
 
   galaxis = callPackage ../games/galaxis { };
 
+<<<<<<< HEAD
   gambit-chess = callPackage ../games/gambit { };
+=======
+  gambatte = callPackage ../games/gambatte { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   garden-of-coloured-lights = callPackage ../games/garden-of-coloured-lights { allegro = allegro4; };
 
@@ -38080,12 +43783,17 @@ with pkgs;
 
   hikounomizu = callPackage ../games/hikounomizu { };
 
+<<<<<<< HEAD
   hmcl = callPackage ../games/hmcl { };
 
   hyperrogue = callPackage ../games/hyperrogue { };
 
   ibmcloud-cli = callPackage ../tools/admin/ibmcloud-cli { stdenv = stdenvNoCC; };
 
+=======
+  hyperrogue = callPackage ../games/hyperrogue { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   icbm3d = callPackage ../games/icbm3d { };
 
   infra = callPackage ../tools/admin/infra { };
@@ -38100,20 +43808,31 @@ with pkgs;
 
   instead = callPackage ../games/instead { };
 
+<<<<<<< HEAD
+=======
+  instead-launcher = callPackage ../games/instead-launcher { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   iortcw = callPackage ../games/iortcw { };
   # used as base package for iortcw forks
   iortcw_sp = callPackage ../games/iortcw/sp.nix { };
 
+<<<<<<< HEAD
   ironwail = callPackage ../games/ironwail { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ivan = callPackage ../games/ivan { };
 
   ja2-stracciatella = callPackage ../games/ja2-stracciatella {
     inherit (darwin.apple_sdk.frameworks) Carbon Cocoa;
   };
 
+<<<<<<< HEAD
   jfsw = callPackage ../games/jfsw { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   katago = callPackage ../games/katago { };
 
   katagoWithCuda = katago.override {
@@ -38184,6 +43903,7 @@ with pkgs;
     gtk = gtk2;
   };
 
+<<<<<<< HEAD
   maptool = callPackage ../games/maptool {
     # MapTool is fussy about which JRE it uses; OpenJDK will leave it hanging
     # at launch in a class initialization deadlock. MapTool ships Temurin with
@@ -38192,6 +43912,8 @@ with pkgs;
     openjfx = openjfx17;
   };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   mari0 = callPackage ../games/mari0 { };
 
   manaplus = callPackage ../games/manaplus { stdenv = gcc11Stdenv; };
@@ -38200,15 +43922,22 @@ with pkgs;
 
   mars = callPackage ../games/mars { };
 
+<<<<<<< HEAD
   mchprs = callPackage ../games/mchprs { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   megaglest = callPackage ../games/megaglest { };
 
   methane = callPackage ../games/methane { };
 
   mindustry = callPackage ../games/mindustry { };
   mindustry-wayland = callPackage ../games/mindustry {
+<<<<<<< HEAD
     enableWayland = true;
+=======
+    glew = glew-egl;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   mindustry-server = callPackage ../games/mindustry {
@@ -38223,8 +43952,11 @@ with pkgs;
   minecraftServers = import ../games/minecraft-servers { inherit callPackage lib javaPackages; };
   minecraft-server = minecraftServers.vanilla; # backwards compatibility
 
+<<<<<<< HEAD
   minesweep-rs = callPackage ../games/minesweep-rs { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   moon-buggy = callPackage ../games/moon-buggy { };
 
   inherit (callPackages ../games/minetest {
@@ -38273,8 +44005,11 @@ with pkgs;
 
   nexuiz = callPackage ../games/nexuiz { };
 
+<<<<<<< HEAD
   nile = python3Packages.callPackage ../games/nile { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ninvaders = callPackage ../games/ninvaders { };
 
   njam = callPackage ../games/njam { };
@@ -38296,7 +44031,13 @@ with pkgs;
 
   openarena = callPackage ../games/openarena { };
 
+<<<<<<< HEAD
   opendungeons = callPackage ../games/opendungeons { };
+=======
+  opendungeons = callPackage ../games/opendungeons {
+    ogre = ogre1_10;
+  };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   openlierox = callPackage ../games/openlierox { };
 
@@ -38324,6 +44065,7 @@ with pkgs;
 
   otto-matic = callPackage ../games/otto-matic { };
 
+<<<<<<< HEAD
   openraPackages_2019 = import ../games/openra_2019 {
     inherit lib;
     pkgs = pkgs.__splicedPackages;
@@ -38332,6 +44074,9 @@ with pkgs;
   openra_2019 = openraPackages_2019.engines.release;
 
   openraPackages = recurseIntoAttrs (callPackage ../games/openra {});
+=======
+  openraPackages = import ../games/openra pkgs.__splicedPackages;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   openra = openraPackages.engines.release;
 
@@ -38386,6 +44131,7 @@ with pkgs;
 
   principia = callPackage ../games/principia { };
 
+<<<<<<< HEAD
   prismlauncher-qt5-unwrapped = libsForQt5.callPackage ../games/prismlauncher {
     inherit (darwin.apple_sdk.frameworks) Cocoa;
   };
@@ -38397,16 +44143,30 @@ with pkgs;
   };
 
   prismlauncher = qt6Packages.callPackage ../games/prismlauncher/wrapper.nix { };
+=======
+  prismlauncher-qt5 = libsForQt5.callPackage ../games/prismlauncher { };
+
+  prismlauncher = qt6Packages.callPackage ../games/prismlauncher { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   pong3d = callPackage ../games/pong3d { };
 
   pokerth = libsForQt5.callPackage ../games/pokerth {
+<<<<<<< HEAD
     protobuf = protobuf3_21;
   };
 
   pokerth-server = libsForQt5.callPackage ../games/pokerth {
     target = "server";
     protobuf = protobuf3_21;
+=======
+    boost = boost16x;
+  };
+
+  pokerth-server = libsForQt5.callPackage ../games/pokerth {
+    boost = boost16x;
+    target = "server";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   pokete = callPackage ../games/pokete { };
@@ -38447,11 +44207,14 @@ with pkgs;
 
   r2mod_cli = callPackage ../games/r2mod_cli { };
 
+<<<<<<< HEAD
   r2modman = callPackage ../games/r2modman {
     # Electron 26 has regressions making applications unusable.
     electron = electron_25;
   };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   racer = callPackage ../games/racer { };
 
   randtype = callPackage ../games/randtype { };
@@ -38496,9 +44259,21 @@ with pkgs;
 
   sauerbraten = callPackage ../games/sauerbraten { };
 
+<<<<<<< HEAD
   scid = callPackage ../games/scid { };
 
   scid-vs-pc = callPackage ../games/scid-vs-pc { };
+=======
+  scid = callPackage ../games/scid {
+    tcl = tcl-8_5;
+    tk = tk-8_5;
+  };
+
+  scid-vs-pc = callPackage ../games/scid-vs-pc {
+    tcl = tcl-8_6;
+    tk = tk-8_6;
+  };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   scummvm = callPackage ../games/scummvm {
     stdenv = if (stdenv.isDarwin && stdenv.isAarch64) then llvmPackages_14.stdenv else stdenv;
@@ -38577,7 +44352,11 @@ with pkgs;
 
   stockfish = callPackage ../games/stockfish { };
 
+<<<<<<< HEAD
   steamPackages = recurseIntoAttrs (callPackage ../games/steam { });
+=======
+  steamPackages = dontRecurseIntoAttrs (callPackage ../games/steam { });
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   steam = steamPackages.steam-fhsenv;
   steam-small = steamPackages.steam-fhsenv-small;
@@ -38590,10 +44369,13 @@ with pkgs;
 
   steam-acf = callPackage ../tools/games/steam-acf { };
 
+<<<<<<< HEAD
   steamback = python311.pkgs.callPackage ../tools/games/steamback { };
 
   steamguard-cli = callPackage ../tools/security/steamguard-cli { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   protontricks = python3Packages.callPackage ../tools/package-management/protontricks {
     inherit winetricks steam-run yad;
   };
@@ -38606,7 +44388,11 @@ with pkgs;
 
   stepmania = callPackage ../games/stepmania { };
 
+<<<<<<< HEAD
   stone-kingdoms = callPackage ../games/stone-kingdoms { };
+=======
+  streamlit = python3Packages.callPackage ../applications/science/machine-learning/streamlit { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   stt = callPackage ../tools/audio/stt { };
 
@@ -38615,8 +44401,13 @@ with pkgs;
 
   superTux = callPackage ../games/supertux { };
 
+<<<<<<< HEAD
   superTuxKart = darwin.apple_sdk_11_0.callPackage ../games/super-tux-kart {
     inherit (darwin.apple_sdk_11_0.frameworks) Cocoa IOKit OpenAL IOBluetooth;
+=======
+  superTuxKart = callPackage ../games/super-tux-kart {
+    inherit (darwin.apple_sdk.frameworks) Cocoa IOKit OpenAL;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   synthv1 = libsForQt5.callPackage ../applications/audio/synthv1 { };
@@ -38631,6 +44422,11 @@ with pkgs;
 
   tcl2048 = callPackage ../games/tcl2048 { };
 
+<<<<<<< HEAD
+=======
+  the-legend-of-edgar = callPackage ../games/the-legend-of-edgar { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   the-powder-toy = callPackage ../games/the-powder-toy {
     lua = lua5_1;
     inherit (darwin.apple_sdk.frameworks) Cocoa;
@@ -38678,14 +44474,22 @@ with pkgs;
 
   trackballs = callPackage ../games/trackballs { };
 
+<<<<<<< HEAD
   try = callPackage ../tools/admin/try { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   tumiki-fighters = callPackage ../games/tumiki-fighters { };
 
   tuxpaint = callPackage ../games/tuxpaint { };
 
   tuxtype = callPackage ../games/tuxtype { };
 
+<<<<<<< HEAD
+=======
+  tworld2 = callPackage ../games/tworld2 { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   speed_dreams = callPackage ../games/speed-dreams {
     # Torcs wants to make shared libraries linked with plib libraries (it provides static).
     # i686 is the only platform I know than can do that linking without plib built with -fPIC
@@ -38698,8 +44502,11 @@ with pkgs;
 
   typespeed = callPackage ../games/typespeed { };
 
+<<<<<<< HEAD
   u2ps = callPackage ../tools/text/u2ps { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   uchess = callPackage ../games/uchess { };
 
   ufoai = callPackage ../games/ufoai { };
@@ -38773,15 +44580,25 @@ with pkgs;
 
   widelands = callPackage ../games/widelands { };
 
+<<<<<<< HEAD
   wolfstoneextract = callPackage ../games/wolfstoneextract { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   worldofgoo = callPackage ../games/worldofgoo { };
 
   xboard =  callPackage ../games/xboard { };
 
   xbomb = callPackage ../games/xbomb { };
 
+<<<<<<< HEAD
   xconq = callPackage ../games/xconq { };
+=======
+  xconq = callPackage ../games/xconq {
+    tcl = tcl-8_5;
+    tk = tk-8_5;
+  };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   xcowsay = callPackage ../games/xcowsay { };
 
@@ -38845,7 +44662,10 @@ with pkgs;
 
   zeroadPackages = recurseIntoAttrs (callPackage ../games/0ad {
     wxGTK = wxGTK32;
+<<<<<<< HEAD
     fmt = fmt_9;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   });
 
   zeroad = zeroadPackages.zeroad;
@@ -38856,8 +44676,11 @@ with pkgs;
 
   hhexen = callPackage ../games/hhexen { };
 
+<<<<<<< HEAD
   hheretic = callPackage ../games/hheretic { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   wyvern = callPackage ../games/wyvern { };
 
   hsetroot = callPackage ../tools/X11/hsetroot { };
@@ -38882,8 +44705,11 @@ with pkgs;
 
   enlightenment = recurseIntoAttrs (callPackage ../desktops/enlightenment { });
 
+<<<<<<< HEAD
   expidus = recurseIntoAttrs (callPackage ../desktops/expidus {});
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   gnome2 = recurseIntoAttrs (callPackage ../desktops/gnome-2 { });
 
   gnome = recurseIntoAttrs (callPackage ../desktops/gnome { });
@@ -38912,8 +44738,11 @@ with pkgs;
 
   gnustep = recurseIntoAttrs (callPackage ../desktops/gnustep { });
 
+<<<<<<< HEAD
   lomiri = recurseIntoAttrs (callPackage ../desktops/lomiri { });
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   lumina = recurseIntoAttrs (callPackage ../desktops/lumina { });
 
   ### DESKTOPS/LXDE
@@ -38974,7 +44803,14 @@ with pkgs;
 
   ### SCIENCE/CHEMISTY
 
+<<<<<<< HEAD
   apbs = callPackage ../applications/science/chemistry/apbs { };
+=======
+  avogadro = callPackage ../applications/science/chemistry/avogadro {
+    openbabel = openbabel2;
+    eigen = eigen2;
+  };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   avogadrolibs = libsForQt5.callPackage ../development/libraries/science/chemistry/avogadrolibs { };
 
@@ -39017,14 +44853,20 @@ with pkgs;
     gstreamerSupport = true;
   };
 
+<<<<<<< HEAD
   autodock-vina = callPackage ../applications/science/chemistry/autodock-vina { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   dkh = callPackage ../applications/science/chemistry/dkh { };
 
   openmolcas = callPackage ../applications/science/chemistry/openmolcas { };
 
+<<<<<<< HEAD
   pdb2pqr = with python3Packages; toPythonApplication pdb2pqr;
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pymol = callPackage ../applications/science/chemistry/pymol { };
 
   quantum-espresso = callPackage ../applications/science/chemistry/quantum-espresso { };
@@ -39071,8 +44913,11 @@ with pkgs;
 
   archimedes = callPackage ../applications/science/electronics/archimedes { };
 
+<<<<<<< HEAD
   bamtools = callPackage ../applications/science/biology/bamtools { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   bayescan = callPackage ../applications/science/biology/bayescan { };
 
   bedops = callPackage ../applications/science/biology/bedops { };
@@ -39113,7 +44958,13 @@ with pkgs;
     inherit (llvmPackages) openmp;
   };
 
+<<<<<<< HEAD
   ciftilib = callPackage ../development/libraries/science/biology/ciftilib { };
+=======
+  ciftilib = callPackage ../development/libraries/science/biology/ciftilib {
+    boost = boost16x;
+  };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   cmtk = callPackage ../applications/science/biology/cmtk { };
 
@@ -39131,10 +44982,13 @@ with pkgs;
 
   deepsea = callPackage ../tools/security/deepsea { };
 
+<<<<<<< HEAD
   deepsecrets = callPackage ../tools/security/deepsecrets {
     python3 = python311;
   };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   deeptools = callPackage ../applications/science/biology/deeptools { python = python3; };
 
   deep-translator = with python3Packages; toPythonApplication deep-translator;
@@ -39183,8 +45037,11 @@ with pkgs;
     neuron-version = neuron.version;
   };
 
+<<<<<<< HEAD
   kalign = callPackage ../applications/science/biology/kalign { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   kallisto = callPackage ../applications/science/biology/kallisto {
     autoconf = buildPackages.autoconf269;
   };
@@ -39197,7 +45054,11 @@ with pkgs;
 
   macse = callPackage ../applications/science/biology/macse { };
 
+<<<<<<< HEAD
   macs2 = callPackage ../applications/science/biology/macs2 { };
+=======
+  MACS2 = callPackage ../applications/science/biology/MACS2 { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   mafft = callPackage ../applications/science/biology/mafft { };
 
@@ -39205,7 +45066,13 @@ with pkgs;
 
   minia = callPackage ../applications/science/biology/minia { };
 
+<<<<<<< HEAD
   mirtk = callPackage ../development/libraries/science/biology/mirtk { };
+=======
+  mirtk = callPackage ../development/libraries/science/biology/mirtk {
+    boost = boost16x;
+  };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   muscle = callPackage ../applications/science/biology/muscle { };
 
@@ -39243,7 +45110,11 @@ with pkgs;
     inherit (llvmPackages) openmp;
   };
 
+<<<<<<< HEAD
   mosdepth = nim2Packages.callPackage ../applications/science/biology/mosdepth { };
+=======
+  mosdepth = callPackage ../applications/science/biology/mosdepth { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   niftyreg = callPackage ../applications/science/biology/niftyreg { };
 
@@ -39331,16 +45202,22 @@ with pkgs;
 
   bwa = callPackage ../applications/science/biology/bwa { };
 
+<<<<<<< HEAD
   bwa-mem2 = callPackage ../applications/science/biology/bwa-mem2 { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ### SCIENCE/MACHINE LEARNING
 
   nengo-gui = callPackage ../applications/science/machine-learning/nengo-gui { };
 
   sc2-headless = callPackage ../applications/science/machine-learning/sc2-headless { };
 
+<<<<<<< HEAD
   streamlit = with python3Packages; toPythonApplication streamlit;
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   uarmsolver = callPackage ../applications/science/machine-learning/uarmsolver { };
 
   ### SCIENCE/MATH
@@ -39373,8 +45250,11 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Accelerate CoreGraphics CoreVideo OpenCL;
   };
 
+<<<<<<< HEAD
   clblast = callPackage ../development/libraries/science/math/clblast { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   cliquer = callPackage ../development/libraries/science/math/cliquer { };
 
   coin-utils = callPackage ../development/libraries/science/math/coin-utils { };
@@ -39446,17 +45326,24 @@ with pkgs;
 
   inherit (callPackage ../development/libraries/science/math/magma {
     inherit (llvmPackages_rocm) openmp;
+<<<<<<< HEAD
   }) magma magma_2_7_2 magma_2_6_2;
+=======
+  }) magma magma_2_7_1 magma_2_6_2;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   magma-cuda = magma.override {
     cudaSupport = true;
     rocmSupport = false;
   };
 
+<<<<<<< HEAD
   magma-cuda-static = magma-cuda.override {
     static = true;
   };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   # TODO:AMD won't compile with anything newer than 2.6.2 -- it fails at the linking stage.
   magma-hip = magma_2_6_2.override {
     cudaSupport = false;
@@ -39491,10 +45378,16 @@ with pkgs;
 
   or-tools = callPackage ../development/libraries/science/math/or-tools {
     python = python3;
+<<<<<<< HEAD
     protobuf = protobuf3_21;
     # or-tools builds with -std=c++20, so abseil-cpp must
     # also be built that way
     abseil-cpp = abseil-cpp_202206.override {
+=======
+    # or-tools builds with -std=c++20, so abseil-cpp must
+    # also be built that way
+    abseil-cpp = abseil-cpp_202111.override {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       static = true;
       cxxStandard = "20";
     };
@@ -39568,11 +45461,15 @@ with pkgs;
     fftw = fftw;
   };
 
+<<<<<<< HEAD
   lammps-mpi = lowPrio (lammps.override {
     extraBuildInputs = [
       mpi
     ];
   });
+=======
+  lammps-mpi = lowPrio (lammps.override { withMPI = true; });
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   gromacs = callPackage ../applications/science/molecular-dynamics/gromacs {
     singlePrec = true;
@@ -39608,6 +45505,11 @@ with pkgs;
 
   ### SCIENCE/MEDICINE
 
+<<<<<<< HEAD
+=======
+  aliza = callPackage ../applications/science/medicine/aliza { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   dcmtk = callPackage ../applications/science/medicine/dcmtk { };
 
   xmedcon = callPackage ../applications/science/medicine/xmedcon { };
@@ -39645,7 +45547,11 @@ with pkgs;
 
   ### SCIENCE/PROGRAMMING
 
+<<<<<<< HEAD
   dafny = callPackage ../applications/science/logic/dafny { };
+=======
+  dafny = dotnetPackages.Dafny;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   groove = callPackage ../applications/science/programming/groove { };
 
@@ -39697,7 +45603,10 @@ with pkgs;
     coqPackages_8_15 coq_8_15
     coqPackages_8_16 coq_8_16
     coqPackages_8_17 coq_8_17
+<<<<<<< HEAD
     coqPackages_8_18 coq_8_18
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     coqPackages      coq
   ;
 
@@ -39747,9 +45656,13 @@ with pkgs;
 
   hol = callPackage ../applications/science/logic/hol { };
 
+<<<<<<< HEAD
   inherit (ocamlPackages) hol_light;
 
   holehe = callPackage ../tools/security/holehe { };
+=======
+  inherit (ocaml-ng.ocamlPackages_4_12) hol_light;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   hologram = callPackage ../tools/security/hologram { };
 
@@ -39762,7 +45675,11 @@ with pkgs;
   ifstat-legacy = callPackage ../tools/networking/ifstat-legacy { };
 
   isabelle = callPackage ../applications/science/logic/isabelle {
+<<<<<<< HEAD
     polyml = polyml.overrideAttrs {
+=======
+    polyml = polyml.overrideAttrs (_: {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       pname = "polyml-for-isabelle";
       version = "2022";
       configureFlags = [ "--enable-intinf-as-int" "--with-gmp" "--disable-shared" ];
@@ -39773,7 +45690,11 @@ with pkgs;
         rev = "bafe319bc3a65bf63bd98a4721a6f4dd9e0eabd6";
         sha256 = "1ygs09zzq8icq1gc8qf4sb24lxx7sbcyd5hw3vw67a3ryaki0qw2";
       };
+<<<<<<< HEAD
     };
+=======
+    });
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     java = openjdk17;
   };
@@ -39789,7 +45710,10 @@ with pkgs;
 
   lean = callPackage ../applications/science/logic/lean { };
   lean2 = callPackage ../applications/science/logic/lean2 { };
+<<<<<<< HEAD
   lean4 = callPackage ../applications/science/logic/lean4 { };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   lean3 = lean;
   elan = callPackage ../applications/science/logic/elan { };
   mathlibtools = with python3Packages; toPythonApplication mathlibtools;
@@ -39871,7 +45795,10 @@ with pkgs;
 
 
   inherit (callPackages ../applications/science/logic/z3 { python = python3; })
+<<<<<<< HEAD
     z3_4_12
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     z3_4_11
     z3_4_8
     z3_4_8_5;
@@ -39883,7 +45810,10 @@ with pkgs;
   tlaplus = callPackage ../applications/science/logic/tlaplus {
     jre = jre8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
   };
+<<<<<<< HEAD
   tlaplus18 = callPackage ../applications/science/logic/tlaplus/tlaplus18.nix {};
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   tlaps = callPackage ../applications/science/logic/tlaplus/tlaps.nix {
     inherit (ocaml-ng.ocamlPackages_4_14_unsafe_string) ocaml;
   };
@@ -39938,18 +45868,28 @@ with pkgs;
 
   diylc = callPackage ../applications/science/electronics/diylc { };
 
+<<<<<<< HEAD
   flatcam = python39.pkgs.callPackage ../applications/science/electronics/flatcam { };
+=======
+  flatcam = callPackage ../applications/science/electronics/flatcam { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   flopoco = callPackage ../applications/science/electronics/flopoco { };
 
   fparser = callPackage ../applications/science/electronics/fparser { };
 
   geda = callPackage ../applications/science/electronics/geda {
+<<<<<<< HEAD
     guile = guile_2_2;
   };
 
   gedit = callPackage ../applications/editors/gedit { };
 
+=======
+    guile = guile_2_0;
+  };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   gerbv = callPackage ../applications/science/electronics/gerbv {
     cairo = cairo.override { x11Support = true; };
   };
@@ -39966,11 +45906,17 @@ with pkgs;
 
   # this is a wrapper for kicad.base and kicad.libraries
   kicad = callPackage ../applications/science/electronics/kicad { };
+<<<<<<< HEAD
   # this is the same but without the (sizable) 3D models library
   kicad-small = kicad.override { pname = "kicad-small"; with3d = false; };
   # this is the master branch at whatever point update.sh last updated versions.nix
   kicad-unstable = kicad.override { pname = "kicad-unstable"; stable = false; };
   # and a small version of that
+=======
+  kicad-small = kicad.override { pname = "kicad-small"; with3d = false; };
+  kicad-unstable = kicad.override { pname = "kicad-unstable"; stable = false; };
+  # mostly here so the kicad-unstable components (except packages3d) get built
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   kicad-unstable-small = kicad.override {
     pname = "kicad-unstable-small";
     stable = false;
@@ -39979,9 +45925,13 @@ with pkgs;
 
   librepcb = libsForQt5.callPackage ../applications/science/electronics/librepcb { };
 
+<<<<<<< HEAD
   ngspice = libngspice.override {
     withNgshared = false;
   };
+=======
+  ngspice = callPackage ../applications/science/electronics/ngspice { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nvc = darwin.apple_sdk_11_0.callPackage ../applications/science/electronics/nvc { };
 
@@ -39995,6 +45945,11 @@ with pkgs;
 
   pcb = callPackage ../applications/science/electronics/pcb { };
 
+<<<<<<< HEAD
+=======
+  qucs = callPackage ../applications/science/electronics/qucs { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   qucs-s = qt6Packages.callPackage ../applications/science/electronics/qucs-s { };
 
   xcircuit = callPackage ../applications/science/electronics/xcircuit { };
@@ -40013,7 +45968,11 @@ with pkgs;
   ### SCIENCE / MATH
 
   caffe = callPackage ../applications/science/math/caffe ({
+<<<<<<< HEAD
     inherit (config) cudaSupport;
+=======
+    cudaSupport = config.cudaSupport or false;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     cudaPackages = cudaPackages_10_1;
     opencv3 = opencv3WithoutCuda; # Used only for image loading.
     blas = openblas;
@@ -40022,13 +45981,21 @@ with pkgs;
 
   caffeWithCuda = caffe.override { cudaSupport = true; };
 
+<<<<<<< HEAD
   caffeine-ng = callPackage ../tools/X11/caffeine-ng { };
+=======
+  caffeine-ng = python3Packages.callPackage ../tools/X11/caffeine-ng { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   cntk = callPackage ../applications/science/math/cntk {
     stdenv = gcc7Stdenv;
     inherit (linuxPackages) nvidia_x11;
     opencv3 = opencv3WithoutCuda; # Used only for image loading.
+<<<<<<< HEAD
     inherit (config) cudaSupport;
+=======
+    cudaSupport = config.cudaSupport or false;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   dap = callPackage ../applications/science/math/dap { };
@@ -40048,7 +46015,13 @@ with pkgs;
   gap-full = lowPrio (gap.override { packageSet = "full"; });
 
   geogebra = callPackage ../applications/science/math/geogebra { };
+<<<<<<< HEAD
   geogebra6 = callPackage ../applications/science/math/geogebra/geogebra6.nix { };
+=======
+  geogebra6 = callPackage ../applications/science/math/geogebra/geogebra6.nix {
+    electron = electron_14;
+   };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   maxima = callPackage ../applications/science/math/maxima {
     lisp-compiler = sbcl;
@@ -40056,6 +46029,13 @@ with pkgs;
   maxima-ecl = maxima.override {
     lisp-compiler = ecl;
   };
+<<<<<<< HEAD
+=======
+  # old version temporarily kept for sage
+  maxima-ecl-5_45 = callPackage ../applications/science/math/maxima/5.45.nix {
+    lisp-compiler = ecl;
+  };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   mxnet = callPackage ../applications/science/math/mxnet {
     inherit (linuxPackages) nvidia_x11;
@@ -40125,8 +46105,11 @@ with pkgs;
 
   boinc = callPackage ../applications/science/misc/boinc { };
 
+<<<<<<< HEAD
   boinc-headless = callPackage ../applications/science/misc/boinc { headless = true; };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   celestia = callPackage ../applications/science/astronomy/celestia {
     autoreconfHook = buildPackages.autoreconfHook269;
     inherit (gnome2) gtkglext;
@@ -40135,7 +46118,11 @@ with pkgs;
   convertall = qt5.callPackage ../applications/science/misc/convertall { };
 
   cytoscape = callPackage ../applications/science/misc/cytoscape {
+<<<<<<< HEAD
     jre = openjdk17;
+=======
+    jre = openjdk11;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   faiss = callPackage ../development/libraries/science/math/faiss {
@@ -40156,13 +46143,23 @@ with pkgs;
 
   gildas = callPackage ../applications/science/astronomy/gildas { };
 
+<<<<<<< HEAD
   gplates = libsForQt5.callPackage ../applications/science/misc/gplates { };
+=======
+  gplates = libsForQt5.callPackage ../applications/science/misc/gplates {
+    boost = boost175;
+    # build with Python 3.10 fails, because boost <= 1.78 can't find
+    # pythons with double digits in minor versions, like X.YZ
+    python3 = python39;
+  };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   grap = callPackage ../tools/security/grap { };
 
   gravit = callPackage ../applications/science/astronomy/gravit { };
 
   golly = callPackage ../applications/science/misc/golly {
+<<<<<<< HEAD
     wxGTK = wxGTK32.overrideAttrs (x: {
       configureFlags = x.configureFlags ++ [
         "--enable-webrequest"
@@ -40172,6 +46169,9 @@ with pkgs;
       ];
     });
     perl = perl536;
+=======
+    wxGTK = wxGTK32;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   megam = callPackage ../applications/science/misc/megam { };
@@ -40192,8 +46192,11 @@ with pkgs;
     stdenv = if stdenv.cc.isClang then llvmPackages_5.stdenv else stdenv;
   });
 
+<<<<<<< HEAD
   rinetd = callPackage ../servers/rinetd { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   rink = callPackage ../applications/science/misc/rink {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
@@ -40216,7 +46219,11 @@ with pkgs;
 
   tulip = libsForQt5.callPackage ../applications/science/misc/tulip { };
 
+<<<<<<< HEAD
   vite = libsForQt5.callPackage ../applications/science/misc/vite { };
+=======
+  vite = callPackage ../applications/science/misc/vite { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   xearth = callPackage ../applications/science/astronomy/xearth { };
   xplanet = callPackage ../applications/science/astronomy/xplanet { };
@@ -40313,6 +46320,15 @@ with pkgs;
 
   fn-cli = callPackage ../applications/networking/cluster/fn-cli { };
 
+<<<<<<< HEAD
+=======
+  areca = callPackage ../applications/backup/areca {
+    jdk = jdk8;
+    jre = jre8;
+    swt = swt_jdk8;
+  };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   argononed = callPackage ../misc/drivers/argononed { };
 
   autotiling = python3Packages.callPackage ../misc/autotiling { };
@@ -40377,10 +46393,13 @@ with pkgs;
 
   terminal-parrot = callPackage ../applications/misc/terminal-parrot { };
 
+<<<<<<< HEAD
   djenrandom = callPackage ../tools/misc/djenrandom { };
 
   epsonscan2 = pkgs.libsForQt5.callPackage ../misc/drivers/epsonscan2 { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   epson-alc1100 = callPackage ../misc/drivers/epson-alc1100 { };
 
   epson-escpr = callPackage ../misc/drivers/epson-escpr { };
@@ -40465,9 +46484,13 @@ with pkgs;
 
   dxvk = callPackage ../misc/dxvk { };
   dxvk_1 = callPackage ../misc/dxvk/dxvk.nix { dxvkVersion = "1.10"; };
+<<<<<<< HEAD
   dxvk_2 = callPackage ../misc/dxvk/dxvk.nix { };
 
   ec2stepshell = callPackage ../tools/security/ec2stepshell { };
+=======
+  dxvk_2 = callPackage ../misc/dxvk/dxvk.nix { dxvkVersion = "2.1"; };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   ecdsatool = callPackage ../tools/security/ecdsatool { };
 
@@ -40475,17 +46498,28 @@ with pkgs;
 
   aaphoto = callPackage ../tools/graphics/aaphoto { };
 
+<<<<<<< HEAD
   aapt = callPackage ../development/tools/aapt { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   flam3 = callPackage ../tools/graphics/flam3 { };
 
   glee = callPackage ../tools/graphics/glee { };
 
   faust = res.faust2;
 
+<<<<<<< HEAD
   faust2 = callPackage ../applications/audio/faust/faust2.nix { };
 
   faust2alqt = libsForQt5.callPackage ../applications/audio/faust/faust2alqt.nix { };
+=======
+  faust1 = callPackage ../applications/audio/faust/faust1.nix { };
+
+  faust2 = callPackage ../applications/audio/faust/faust2.nix { };
+
+  faust2alqt = callPackage ../applications/audio/faust/faust2alqt.nix { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   faust2alsa = callPackage ../applications/audio/faust/faust2alsa.nix { };
 
@@ -40499,16 +46533,29 @@ with pkgs;
 
   faust2jackrust = callPackage ../applications/audio/faust/faust2jackrust.nix { };
 
+<<<<<<< HEAD
   faust2jaqt = libsForQt5.callPackage ../applications/audio/faust/faust2jaqt.nix { };
 
   faust2ladspa = callPackage ../applications/audio/faust/faust2ladspa.nix { };
 
   faust2lv2 = libsForQt5.callPackage ../applications/audio/faust/faust2lv2.nix { };
+=======
+  faust2jaqt = callPackage ../applications/audio/faust/faust2jaqt.nix { };
+
+  faust2ladspa = callPackage ../applications/audio/faust/faust2ladspa.nix { };
+
+  faust2lv2 = callPackage ../applications/audio/faust/faust2lv2.nix { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   faustlive = callPackage ../applications/audio/faust/faustlive.nix { };
 
   faustPhysicalModeling = callPackage ../applications/audio/faustPhysicalModeling  { };
 
+<<<<<<< HEAD
+=======
+  faustStk = callPackage ../applications/audio/faustStk  { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   flockit = callPackage ../tools/backup/flockit { };
 
   fahclient = callPackage ../applications/science/misc/foldingathome/client.nix { };
@@ -40567,20 +46614,26 @@ with pkgs;
 
   gummy = callPackage ../tools/misc/gummy { };
 
+<<<<<<< HEAD
   hashpump = callPackage ../tools/misc/hashpump { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   hck = callPackage ../tools/text/hck { };
 
   helm = callPackage ../applications/audio/helm { };
 
   helmfile = callPackage ../applications/networking/cluster/helmfile { };
 
+<<<<<<< HEAD
   helmfile-wrapped = callPackage ../applications/networking/cluster/helmfile {
     inherit (kubernetes-helm-wrapped.passthru) pluginsDir;
   };
 
   helm-dashboard = callPackage ../applications/networking/cluster/helm-dashboard { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   helmsman = callPackage ../applications/networking/cluster/helmsman { };
 
   velero = callPackage ../applications/networking/cluster/velero { };
@@ -40652,11 +46705,14 @@ with pkgs;
 
   libjack2 = jack2.override { prefix = "lib"; };
 
+<<<<<<< HEAD
   jack-example-tools = callPackage ../misc/jackaudio/tools.nix {
     libopus = libopus.override { withCustomModes = true; };
     jack = jack2;
   };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   jack-autoconnect = libsForQt5.callPackage ../applications/audio/jack-autoconnect { };
   jack_autoconnect = jack-autoconnect;
 
@@ -40690,11 +46746,19 @@ with pkgs;
   # Exceptions are versions that we need to keep to allow upgrades from older NixOS releases
   inherit (callPackage ../applications/networking/cluster/kops {})
     mkKops
+<<<<<<< HEAD
     kops_1_25
     kops_1_26
     kops_1_27
     ;
   kops = kops_1_27;
+=======
+    kops_1_24
+    kops_1_25
+    kops_1_26
+    ;
+  kops = kops_1_26;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   lguf-brightness = callPackage ../misc/lguf-brightness { };
 
@@ -40735,16 +46799,23 @@ with pkgs;
 
   openzwave = callPackage ../development/libraries/openzwave { };
 
+<<<<<<< HEAD
   mongoc = darwin.apple_sdk_11_0.callPackage ../development/libraries/mongoc { };
 
   mongocxx = callPackage ../development/libraries/mongocxx/default.nix { };
+=======
+  mongoc = callPackage ../development/libraries/mongoc { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   mongoose = callPackage ../development/libraries/science/math/mongoose { };
 
   morph = callPackage ../tools/package-management/morph { };
 
+<<<<<<< HEAD
   mus = callPackage ../applications/audio/mus { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   muse = libsForQt5.callPackage ../applications/audio/muse { };
 
   museeks = callPackage ../applications/audio/museeks { };
@@ -40757,8 +46828,11 @@ with pkgs;
 
   mysides = callPackage ../os-specific/darwin/mysides { };
 
+<<<<<<< HEAD
   narrowlink = callPackage ../tools/networking/narrowlink { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nar-serve = callPackage ../tools/nix/nar-serve { };
 
   neo = callPackage ../applications/misc/neo { };
@@ -40849,10 +46923,13 @@ with pkgs;
                   then configuration
                   else [configuration]
                 );
+<<<<<<< HEAD
 
                 # The system is inherited from the current pkgs above.
                 # Set it to null, to remove the "legacy" entrypoint's non-hermetic default.
                 system = null;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
             };
       in
         c.config.system.build // c;
@@ -40885,7 +46962,11 @@ with pkgs;
   dnadd = callPackage ../tools/nix/dnadd { };
 
   nix-eval-jobs = callPackage ../tools/package-management/nix-eval-jobs {
+<<<<<<< HEAD
     nix = nixVersions.nix_2_17;
+=======
+    nix = nixVersions.nix_2_14;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nix-doc = callPackage ../tools/package-management/nix-doc { };
@@ -40894,7 +46975,10 @@ with pkgs;
 
   nix-delegate = haskell.lib.compose.justStaticExecutables haskellPackages.nix-delegate;
   nix-deploy = haskell.lib.compose.justStaticExecutables haskellPackages.nix-deploy;
+<<<<<<< HEAD
   nix-derivation = haskell.lib.compose.justStaticExecutables haskellPackages.nix-derivation;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nix-diff = haskell.lib.compose.justStaticExecutables haskellPackages.nix-diff;
 
   nix-du = callPackage ../tools/package-management/nix-du {
@@ -40915,9 +46999,13 @@ with pkgs;
 
   nix-melt = callPackage ../tools/nix/nix-melt { };
 
+<<<<<<< HEAD
   nixos-option = callPackage ../tools/nix/nixos-option {
     nix = nixVersions.nix_2_15;
   };
+=======
+  nixos-option = callPackage ../tools/nix/nixos-option { nix = nixVersions.nix_2_3; };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nix-pin = callPackage ../tools/package-management/nix-pin { };
 
@@ -40967,18 +47055,25 @@ with pkgs;
 
   alejandra = callPackage ../tools/nix/alejandra { };
 
+<<<<<<< HEAD
   nixci = callPackage ../tools/nix/nixci {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
   nixfmt = haskellPackages.nixfmt.bin;
+=======
+  nixfmt = haskell.lib.compose.justStaticExecutables haskellPackages.nixfmt;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nixpkgs-fmt = callPackage ../tools/nix/nixpkgs-fmt { };
 
   nixpkgs-hammering = callPackage ../tools/nix/nixpkgs-hammering { };
 
+<<<<<<< HEAD
   nixpkgs-lint-community = callPackage ../tools/nix/nixpkgs-lint { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   rnix-hashes = callPackage ../tools/nix/rnix-hashes { };
 
   nixos-artwork = callPackage ../data/misc/nixos-artwork { };
@@ -41010,7 +47105,11 @@ with pkgs;
   disnix = callPackage ../tools/package-management/disnix { };
 
   dysnomia = callPackage ../tools/package-management/disnix/dysnomia (config.disnix or {
+<<<<<<< HEAD
     inherit (python3Packages) supervisor;
+=======
+    inherit (python2Packages) supervisor;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   });
 
   dydisnix = callPackage ../tools/package-management/disnix/dydisnix { };
@@ -41029,8 +47128,11 @@ with pkgs;
 
   mnemonicode = callPackage ../misc/mnemonicode { };
 
+<<<<<<< HEAD
   moonfire-nvr = callPackage ../misc/moonfire-nvr { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   mysql-workbench = callPackage ../applications/misc/mysql-workbench (let mysql = mysql80; in {
     gdal = gdal.override {
       libmysqlclient = mysql;
@@ -41040,34 +47142,47 @@ with pkgs;
     jre = openjdk19; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
   });
 
+<<<<<<< HEAD
   owmods-cli = callPackage ../applications/misc/owmods-cli {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   r128gain = callPackage ../applications/audio/r128gain { };
 
   resp-app = libsForQt5.callPackage ../applications/misc/resp-app { };
 
+<<<<<<< HEAD
   responder = callPackage ../tools/security/responder { };
 
   resumed = callPackage ../applications/misc/resumed { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   robin-map = callPackage ../development/libraries/robin-map { };
 
   robo3t = callPackage ../applications/misc/robo3t { };
 
   rucksack = callPackage ../development/tools/rucksack { };
 
+<<<<<<< HEAD
   ruff = callPackage ../development/tools/ruff {
     inherit (python3.pkgs) ruff-lsp;
   };
+=======
+  ruff = callPackage ../development/tools/ruff { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   sam-ba = callPackage ../tools/misc/sam-ba { };
 
   sndio = callPackage ../misc/sndio { };
 
+<<<<<<< HEAD
   SP800-90B_EntropyAssessment = callPackage ../tools/misc/SP800-90B_EntropyAssessment { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   sticky = callPackage ../applications/misc/sticky { };
 
   stork = darwin.apple_sdk_11_0.callPackage ../applications/misc/stork {
@@ -41128,8 +47243,11 @@ with pkgs;
 
   qperf = callPackage ../os-specific/linux/qperf { };
 
+<<<<<<< HEAD
   qzdl = libsForQt5.callPackage ../games/qzdl { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   rates = callPackage ../tools/misc/rates {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
@@ -41142,7 +47260,11 @@ with pkgs;
 
   rauc = callPackage ../tools/misc/rauc { };
 
+<<<<<<< HEAD
   rbspy = darwin.apple_sdk_11_0.callPackage ../development/tools/rbspy { };
+=======
+  rbspy = callPackage ../development/tools/rbspy { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   redprl = callPackage ../applications/science/logic/redprl { };
 
@@ -41162,8 +47284,11 @@ with pkgs;
 
   rivalcfg = callPackage ../misc/rivalcfg { };
 
+<<<<<<< HEAD
   roadrunner = callPackage ../servers/roadrunner { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   rmfakecloud = callPackage ../servers/rmfakecloud { };
 
   rmfuse = callPackage ../tools/filesystems/rmfuse { };
@@ -41186,8 +47311,11 @@ with pkgs;
 
   refind = callPackage ../tools/bootloaders/refind { };
 
+<<<<<<< HEAD
   refmt = callPackage ../development/tools/refmt { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   spectra = callPackage ../development/libraries/spectra { };
 
   spectrojack = callPackage ../applications/audio/spectrojack { };
@@ -41265,8 +47393,11 @@ with pkgs;
 
   brlaser = callPackage ../misc/cups/drivers/brlaser { };
 
+<<<<<<< HEAD
   fflinuxprint = callPackage ../misc/cups/drivers/fflinuxprint { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   fxlinuxprint = callPackage ../misc/cups/drivers/fxlinuxprint { };
 
   brscan4 = callPackage ../applications/graphics/sane/backends/brscan4 { };
@@ -41316,7 +47447,11 @@ with pkgs;
 
   soundmodem = callPackage ../applications/radio/soundmodem { };
 
+<<<<<<< HEAD
   sound-of-sorting = callPackage ../misc/sound-of-sorting { };
+=======
+  soundOfSorting = callPackage ../misc/sound-of-sorting { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   sourceAndTags = callPackage ../misc/source-and-tags {
     hasktags = haskellPackages.hasktags;
@@ -41334,8 +47469,11 @@ with pkgs;
 
   steamcontroller = callPackage ../misc/drivers/steamcontroller { };
 
+<<<<<<< HEAD
   stepreduce = callPackage ../applications/misc/stepreduce { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   stern = callPackage ../applications/networking/cluster/stern { };
 
   streamripper = callPackage ../applications/audio/streamripper { };
@@ -41358,8 +47496,11 @@ with pkgs;
 
   tcat = callPackage ../tools/misc/tcat { };
 
+<<<<<<< HEAD
   tell-me-your-secrets = callPackage ../tools/security/tell-me-your-secrets { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   tellico = libsForQt5.callPackage ../applications/misc/tellico { };
 
   termpdfpy = python3Packages.callPackage ../applications/misc/termpdf.py { };
@@ -41396,8 +47537,11 @@ with pkgs;
 
   terraspace = callPackage ../applications/networking/cluster/terraspace { };
 
+<<<<<<< HEAD
   tf-summarize = callPackage ../applications/networking/cluster/tf-summarize { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   tfswitch = callPackage ../applications/networking/cluster/tfswitch { };
 
   tfupdate = callPackage ../applications/networking/cluster/tfupdate { };
@@ -41440,6 +47584,7 @@ with pkgs;
 
   tup = callPackage ../development/tools/build-managers/tup { };
 
+<<<<<<< HEAD
   turtle-build = callPackage ../development/tools/build-managers/turtle-build { };
 
   tusk = callPackage ../applications/office/tusk { };
@@ -41449,13 +47594,21 @@ with pkgs;
   };
 
   tunnelx = callPackage ../applications/gis/tunnelx { };
+=======
+  tusk = callPackage ../applications/office/tusk { };
+
+  trufflehog = callPackage ../tools/security/trufflehog { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   tvbrowser = callPackage ../applications/misc/tvbrowser { };
 
   tvheadend = callPackage ../servers/tvheadend { };
 
+<<<<<<< HEAD
   twitch-cli = callPackage ../development/tools/twitch-cli { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   twiggy = callPackage ../development/tools/twiggy { };
 
   uacme = callPackage ../tools/admin/uacme { };
@@ -41466,15 +47619,22 @@ with pkgs;
 
   unityhub = callPackage ../development/tools/unityhub { };
 
+<<<<<<< HEAD
   upspin = callPackage ../tools/filesystems/upspin { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   urbit = callPackage ../misc/urbit { };
 
   usb-reset = callPackage ../applications/misc/usb-reset { };
 
+<<<<<<< HEAD
   usql = callPackage ../applications/misc/usql {
     buildGoModule = buildGo121Module;
   };
+=======
+  usql = callPackage ../applications/misc/usql { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   utf8cpp = callPackage ../development/libraries/utf8cpp { };
 
@@ -41490,8 +47650,11 @@ with pkgs;
 
   vault-medusa = callPackage ../tools/security/vault-medusa { };
 
+<<<<<<< HEAD
   vault-ssh-plus = callPackage ../tools/security/vault-ssh-plus { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   vault-bin = callPackage ../tools/security/vault/vault-bin.nix { };
 
   vaultenv = haskell.lib.justStaticExecutables haskellPackages.vaultenv;
@@ -41507,17 +47670,24 @@ with pkgs;
 
   vazir-fonts = callPackage ../data/fonts/vazir-fonts { };
 
+<<<<<<< HEAD
   veilid = callPackage ../tools/networking/veilid {
     inherit (darwin.apple_sdk.frameworks) AppKit Security;
   };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   vhs = callPackage ../applications/misc/vhs { };
 
   vgmstream = callPackage ../applications/audio/vgmstream { };
 
   viddy = callPackage ../tools/misc/viddy { };
 
+<<<<<<< HEAD
   viennarna = callPackage ../applications/science/molecular-dynamics/viennarna { };
+=======
+  ViennaRNA = callPackage ../applications/science/molecular-dynamics/viennarna { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   viewnior = callPackage ../applications/graphics/viewnior { };
 
@@ -41548,9 +47718,13 @@ with pkgs;
 
   vivisect = with python3Packages; toPythonApplication (vivisect.override { withGui = true; });
 
+<<<<<<< HEAD
   vokoscreen = libsForQt5.callPackage ../applications/video/vokoscreen {
     ffmpeg = ffmpeg-full;
   };
+=======
+  vokoscreen = libsForQt5.callPackage ../applications/video/vokoscreen { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   vokoscreen-ng = libsForQt5.callPackage ../applications/video/vokoscreen-ng {
     inherit (gst_all_1) gstreamer gst-plugins-base gst-plugins-good gst-plugins-bad gst-plugins-ugly;
@@ -41562,6 +47736,7 @@ with pkgs;
 
   wacomtablet = libsForQt5.callPackage ../tools/misc/wacomtablet { };
 
+<<<<<<< HEAD
   wamr = callPackage ../development/interpreters/wamr { };
 
   wasmer = callPackage ../development/interpreters/wasmer {
@@ -41574,6 +47749,19 @@ with pkgs;
   yabasic = callPackage ../development/interpreters/yabasic { };
 
   wasm-pack = callPackage ../development/tools/wasm-pack { };
+=======
+  wasmer = callPackage ../development/interpreters/wasmer {
+    llvmPackages = llvmPackages_12;
+    inherit (darwin.apple_sdk.frameworks) CoreFoundation SystemConfiguration Security;
+  };
+
+  yabasic = callPackage ../development/interpreters/yabasic { };
+
+  wasm-pack = callPackage ../development/tools/wasm-pack {
+    inherit (darwin.apple_sdk.frameworks) Security;
+    libressl = libressl_3_6;
+  };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   wasynth = callPackage ../development/tools/wasynth { };
 
@@ -41613,7 +47801,10 @@ with pkgs;
   winePackages = recurseIntoAttrs (winePackagesFor (config.wine.build or "wine32"));
   wine64Packages = recurseIntoAttrs (winePackagesFor "wine64");
   wineWowPackages = recurseIntoAttrs (winePackagesFor "wineWow");
+<<<<<<< HEAD
   wineWow64Packages = recurseIntoAttrs (winePackagesFor "wineWow64");
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   wine = winePackages.full;
   wine64 = wine64Packages.full;
@@ -41743,8 +47934,11 @@ with pkgs;
 
   yadm = callPackage ../applications/version-management/yadm { };
 
+<<<<<<< HEAD
   yai = callPackage ../tools/misc/yai { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   yamale = with python3Packages; toPythonApplication yamale;
 
   yamdi = callPackage ../tools/video/yamdi { };
@@ -41859,10 +48053,13 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
+<<<<<<< HEAD
   scip = callPackage ../development/tools/misc/scip { };
 
   scriptisto = callPackage ../development/tools/misc/scriptisto { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   sequeler = callPackage ../applications/misc/sequeler { };
 
   sequelpro = callPackage ../applications/misc/sequelpro { };
@@ -41915,7 +48112,13 @@ with pkgs;
 
   NSPlist = callPackage ../development/libraries/NSPlist { };
 
+<<<<<<< HEAD
   PlistCpp = callPackage ../development/libraries/PlistCpp { };
+=======
+  PlistCpp = callPackage ../development/libraries/PlistCpp {
+    boost = boost172;
+  };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   xib2nib = callPackage ../development/tools/xib2nib { };
 
@@ -41943,13 +48146,21 @@ with pkgs;
 
   phonetisaurus = callPackage ../development/libraries/phonetisaurus {
     # https://github.com/AdolfVonKleist/Phonetisaurus/issues/70
+<<<<<<< HEAD
     openfst = openfst.overrideAttrs rec {
+=======
+    openfst = openfst.overrideAttrs (_: rec {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       version = "1.7.9";
       src = fetchurl {
         url = "http://www.openfst.org/twiki/pub/FST/FstDownload/openfst-${version}.tar.gz";
         sha256 = "1pmx1yhn2gknj0an0zwqmzgwjaycapi896244np50a8y3nrsw6ck";
       };
+<<<<<<< HEAD
     };
+=======
+    });
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   duti = callPackage ../os-specific/darwin/duti {
@@ -42056,9 +48267,13 @@ with pkgs;
 
   omnisharp-roslyn = callPackage ../development/tools/omnisharp-roslyn { };
 
+<<<<<<< HEAD
   wasmtime = callPackage ../development/interpreters/wasmtime {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
+=======
+  wasmtime = callPackage ../development/interpreters/wasmtime { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   wfuzz = with python3Packages; toPythonApplication wfuzz;
 
@@ -42070,7 +48285,13 @@ with pkgs;
 
   dapper = callPackage ../development/tools/dapper { };
 
+<<<<<<< HEAD
   k3d = callPackage ../applications/networking/cluster/k3d { };
+=======
+  k3d = callPackage ../applications/networking/cluster/k3d {
+    buildGoModule = buildGo118Module; # tests fail with 1.19
+  };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   zfs-prune-snapshots = callPackage ../tools/backup/zfs-prune-snapshots { };
 
@@ -42100,8 +48321,11 @@ with pkgs;
 
   werf = callPackage ../applications/networking/cluster/werf { };
 
+<<<<<<< HEAD
   yor = callPackage ../applications/networking/cluster/yor { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   wifi-password = callPackage ../os-specific/darwin/wifi-password { };
 
   qubes-core-vchan-xen = callPackage ../applications/qubes/qubes-core-vchan-xen { };
@@ -42147,7 +48371,10 @@ with pkgs;
   btcdeb = callPackage ../applications/blockchains/btcdeb { };
 
   jami = qt6Packages.callPackage ../applications/networking/instant-messengers/jami {
+<<<<<<< HEAD
     fmt = fmt_9;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     # TODO: remove once `udev` is `systemdMinimal` everywhere.
     udev = systemdMinimal;
     jack = libjack2;
@@ -42167,9 +48394,15 @@ with pkgs;
 
   zalgo = callPackage ../tools/misc/zalgo { };
 
+<<<<<<< HEAD
   inherit (callPackage ../applications/misc/zettlr {
     texlive = texlive.combined.scheme-medium;
   }) zettlr zettlr-beta;
+=======
+  zettlr = callPackage ../applications/misc/zettlr {
+    texlive = texlive.combined.scheme-medium;
+  };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   unpoller = callPackage ../servers/monitoring/unpoller { };
 
@@ -42193,8 +48426,11 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
   };
 
+<<<<<<< HEAD
   ldid-procursus = callPackage ../development/tools/ldid-procursus { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   xcolor = callPackage ../tools/graphics/xcolor { };
 
   xcfun = callPackage ../development/libraries/science/chemistry/xcfun { };
@@ -42243,22 +48479,31 @@ with pkgs;
 
   tuner = callPackage ../applications/audio/tuner { };
 
+<<<<<<< HEAD
   tidal-dl = python3Packages.callPackage ../tools/audio/tidal-dl { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   locate-dominating-file = callPackage ../tools/misc/locate-dominating-file { };
 
   jfrog-cli = callPackage ../tools/misc/jfrog-cli { };
 
   ov = callPackage ../tools/text/ov { };
 
+<<<<<<< HEAD
   deface = callPackage ../applications/video/deface { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   tubekit = callPackage ../applications/networking/cluster/tubekit/wrapper.nix { };
 
   tubekit-unwrapped = callPackage ../applications/networking/cluster/tubekit { };
 
+<<<<<<< HEAD
   tuic = callPackage ../tools/networking/tuic { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   resgate = callPackage ../servers/resgate { };
 
   oversteer = callPackage ../applications/misc/oversteer { };
@@ -42276,6 +48521,7 @@ with pkgs;
   zf = callPackage ../tools/misc/zf { };
 
   isolate = callPackage ../tools/security/isolate { };
+<<<<<<< HEAD
 
   dtool = callPackage ../tools/misc/dtool { };
 
@@ -42312,4 +48558,6 @@ with pkgs;
   ssl-proxy = callPackage ../tools/networking/ssl-proxy { };
 
   code-maat = callPackage ../development/tools/code-maat {};
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }

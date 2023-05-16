@@ -4,7 +4,13 @@ buildDunePackage rec {
   pname = "rdbg";
   version = "1.199.0";
 
+<<<<<<< HEAD
   minimalOCamlVersion = "4.08";
+=======
+  duneVersion = "3";
+
+  minimalOCamlVersion = "4.07";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchurl {
     url = "http://www-verimag.imag.fr/DIST-TOOLS/SYNCHRONE/pool/rdbg.v${version}.tgz";

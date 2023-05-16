@@ -8,14 +8,22 @@
 
 buildPythonPackage rec {
   pname = "annoy";
+<<<<<<< HEAD
   version = "1.17.3";
+=======
+  version = "1.17.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
+<<<<<<< HEAD
     hash = "sha256-nL/r7+Cl+EPropxr5MhNYB9PQa1N7QSG8biMOwdznBU=";
+=======
+    hash = "sha256-5nv7uDfRMG2kVVyIOGDHshXLMqhk5AAiKS1YR60foLs=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

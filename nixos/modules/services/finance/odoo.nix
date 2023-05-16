@@ -31,12 +31,15 @@ in
         description = lib.mdDoc ''
           Odoo configuration settings. For more details see <https://www.odoo.com/documentation/15.0/administration/install/deploy.html>
         '';
+<<<<<<< HEAD
         example = literalExpression ''
           options = {
             db_user = "odoo";
             db_password="odoo";
           };
         '';
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       };
 
       domain = mkOption {
@@ -118,11 +121,18 @@ in
     services.postgresql = {
       enable = true;
 
+<<<<<<< HEAD
       ensureDatabases = [ "odoo" ];
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       ensureUsers = [{
         name = "odoo";
         ensurePermissions = { "DATABASE odoo" = "ALL PRIVILEGES"; };
       }];
+<<<<<<< HEAD
+=======
+      ensureDatabases = [ "odoo" ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
   });
 }

@@ -1,28 +1,44 @@
 { lib
 , ddcutil
+<<<<<<< HEAD
 , easyeffects
 , gjs
 , glib
+=======
+, gjs
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , gnome
 , gobject-introspection
 , gsound
 , hddtemp
 , libgda
+<<<<<<< HEAD
 , libgtop
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , liquidctl
 , lm_sensors
 , netcat-gnu
 , nvme-cli
 , procps
 , pulseaudio
+<<<<<<< HEAD
+=======
+, libgtop
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , python3
 , smartmontools
 , substituteAll
 , touchegg
+<<<<<<< HEAD
 , util-linux
 , vte
 , wrapGAppsHook
 , xdg-utils
+=======
+, vte
+, wrapGAppsHook
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , xprop
 }:
 let
@@ -42,10 +58,13 @@ super: lib.trivial.pipe super [
     meta.maintainers = with lib.maintainers; [ eperuffo ];
   }))
 
+<<<<<<< HEAD
   (patchExtension "dash-to-dock@micxgx.gmail.com" (old: {
     meta.maintainers = with lib.maintainers; [ rhoriguchi ];
   }))
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   (patchExtension "ddterm@amezin.github.com" (old: {
     # Requires gjs, zenity & vte via the typelib
     nativeBuildInputs = [ gobject-introspection wrapGAppsHook ];
@@ -69,6 +88,7 @@ super: lib.trivial.pipe super [
     '';
   }))
 
+<<<<<<< HEAD
   (patchExtension "eepresetselector@ulville.github.io" (old: {
     patches = [
       # Needed to find the currently set preset
@@ -79,6 +99,8 @@ super: lib.trivial.pipe super [
     ];
   }))
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   (patchExtension "freon@UshakovVasilii_Github.yahoo.com" (old: {
     patches = [
       (substituteAll {
@@ -100,6 +122,7 @@ super: lib.trivial.pipe super [
     '';
   }))
 
+<<<<<<< HEAD
   (patchExtension "gtk4-ding@smedius.gitlab.com" (old: {
     patches = [
       (substituteAll {
@@ -112,6 +135,8 @@ super: lib.trivial.pipe super [
     ];
   }))
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   (patchExtension "pano@elhan.io" (old: {
     patches = [
       (substituteAll {

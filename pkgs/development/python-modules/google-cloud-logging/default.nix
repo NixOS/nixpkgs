@@ -21,14 +21,22 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-logging";
+<<<<<<< HEAD
   version = "3.6.0";
+=======
+  version = "3.5.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
+<<<<<<< HEAD
     hash = "sha256-QhNCI5VoUN3WSHfIgELTH3hljnsGelqOPdKCNrcfPDI=";
+=======
+    hash = "sha256-8RVEoh6jVW9w66x7wzj/qKGXkTg07N2IU9F2uHCCOqo=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [
@@ -80,6 +88,10 @@ buildPythonPackage rec {
     homepage = "https://github.com/googleapis/python-logging";
     changelog = "https://github.com/googleapis/python-logging/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
+<<<<<<< HEAD
     maintainers = with maintainers; [ ];
+=======
+    maintainers = with maintainers; [ SuperSandro2000 ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

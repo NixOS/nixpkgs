@@ -34,11 +34,14 @@ stdenv.mkDerivation rec {
     license = licenses.bsd3;
     maintainers = with maintainers; [ ttuegel ];
     platforms = platforms.all;
+<<<<<<< HEAD
     pkgConfigModules = [
       "libpcre2-posix"
       "libpcre2-8"
       "libpcre2-16"
       "libpcre2-32"
     ];
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

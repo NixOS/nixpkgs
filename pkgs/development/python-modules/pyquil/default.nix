@@ -1,6 +1,9 @@
 { lib
 , buildPythonPackage
+<<<<<<< HEAD
 , deprecated
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , fetchFromGitHub
 , importlib-metadata
 , ipython
@@ -21,15 +24,22 @@
 , retry
 , rpcq
 , scipy
+<<<<<<< HEAD
 , tenacity
 , types-deprecated
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , types-python-dateutil
 , types-retry
 }:
 
 buildPythonPackage rec {
   pname = "pyquil";
+<<<<<<< HEAD
   version = "3.5.4";
+=======
+  version = "3.3.4";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -38,7 +48,11 @@ buildPythonPackage rec {
     owner = "rigetti";
     repo = pname;
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-GQ7vzuUu0PCeLkqKWUSNJyJ01wseOwNL2jJaVTNGF9s=";
+=======
+    hash = "sha256-iHyYX9e3O611OzBMafqn4V+yR1y8y4twiJehYDYlvdg=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   pythonRelaxDeps = [
@@ -52,7 +66,10 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
+<<<<<<< HEAD
     deprecated
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     lark
     networkx
     numpy
@@ -60,8 +77,11 @@ buildPythonPackage rec {
     retry
     rpcq
     scipy
+<<<<<<< HEAD
     tenacity
     types-deprecated
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     types-python-dateutil
     types-retry
   ] ++ lib.optionals (pythonOlder "3.8") [

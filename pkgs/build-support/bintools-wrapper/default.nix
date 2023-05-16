@@ -59,12 +59,21 @@ let
   bintoolsVersion = lib.getVersion bintools;
   bintoolsName = lib.removePrefix targetPrefix (lib.getName bintools);
 
+<<<<<<< HEAD
   libc_bin = lib.optionalString (libc != null) (getBin libc);
   libc_dev = lib.optionalString (libc != null) (getDev libc);
   libc_lib = lib.optionalString (libc != null) (getLib libc);
   bintools_bin = lib.optionalString (!nativeTools) (getBin bintools);
   # The wrapper scripts use 'cat' and 'grep', so we may need coreutils.
   coreutils_bin = lib.optionalString (!nativeTools) (getBin coreutils);
+=======
+  libc_bin = if libc == null then "" else getBin libc;
+  libc_dev = if libc == null then "" else getDev libc;
+  libc_lib = if libc == null then "" else getLib libc;
+  bintools_bin = if nativeTools then "" else getBin bintools;
+  # The wrapper scripts use 'cat' and 'grep', so we may need coreutils.
+  coreutils_bin = if nativeTools then "" else getBin coreutils;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   # See description in cc-wrapper.
   suffixSalt = replaceStrings ["-" "."] ["_" "_"] targetPlatform.config;
@@ -80,8 +89,12 @@ let
     else if targetPlatform.libc == "nblibc"           then "${sharedLibraryLoader}/libexec/ld.elf_so"
     else if targetPlatform.system == "i686-linux"     then "${sharedLibraryLoader}/lib/ld-linux.so.2"
     else if targetPlatform.system == "x86_64-linux"   then "${sharedLibraryLoader}/lib/ld-linux-x86-64.so.2"
+<<<<<<< HEAD
     # ELFv1 (.1) or ELFv2 (.2) ABI
     else if targetPlatform.isPower64                  then "${sharedLibraryLoader}/lib/ld64.so.*"
+=======
+    else if targetPlatform.system == "powerpc64le-linux" then "${sharedLibraryLoader}/lib/ld64.so.2"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     # ARM with a wildcard, which can be "" or "-armhf".
     else if (with targetPlatform; isAarch32 && isLinux)   then "${sharedLibraryLoader}/lib/ld-linux*.so.3"
     else if targetPlatform.system == "aarch64-linux"  then "${sharedLibraryLoader}/lib/ld-linux-aarch64.so.1"
@@ -104,7 +117,11 @@ in
 stdenv.mkDerivation {
   pname = targetPrefix
     + (if name != "" then name else "${bintoolsName}-wrapper");
+<<<<<<< HEAD
   version = lib.optionalString (bintools != null) bintoolsVersion;
+=======
+  version = if bintools == null then "" else bintoolsVersion;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   preferLocalBuild = true;
 
@@ -266,7 +283,11 @@ stdenv.mkDerivation {
     # install the wrapper, you get tools like objdump (same for any
     # binaries of libc).
     + optionalString (!nativeTools) ''
+<<<<<<< HEAD
       printWords ${bintools_bin} ${lib.optionalString (libc != null) libc_bin} > $out/nix-support/propagated-user-env-packages
+=======
+      printWords ${bintools_bin} ${if libc == null then "" else libc_bin} > $out/nix-support/propagated-user-env-packages
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     ''
 
     ##
@@ -382,15 +403,24 @@ stdenv.mkDerivation {
     # for substitution in utils.bash
     expandResponseParams = "${expand-response-params}/bin/expand-response-params";
     shell = getBin shell + shell.shellPath or "";
+<<<<<<< HEAD
     gnugrep_bin = lib.optionalString (!nativeTools) gnugrep;
+=======
+    gnugrep_bin = if nativeTools then "" else gnugrep;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     wrapperName = "BINTOOLS_WRAPPER";
     inherit dynamicLinker targetPrefix suffixSalt coreutils_bin;
     inherit bintools_bin libc_bin libc_dev libc_lib;
   };
 
   meta =
+<<<<<<< HEAD
     let bintools_ = lib.optionalAttrs (bintools != null) bintools; in
     (lib.optionalAttrs (bintools_ ? meta) (removeAttrs bintools.meta ["priority"])) //
+=======
+    let bintools_ = if bintools != null then bintools else {}; in
+    (if bintools_ ? meta then removeAttrs bintools.meta ["priority"] else {}) //
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     { description =
         lib.attrByPath ["meta" "description"] "System binary utilities" bintools_
         + " (wrapper script)";

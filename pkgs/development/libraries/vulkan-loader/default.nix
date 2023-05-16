@@ -3,13 +3,21 @@
 
 stdenv.mkDerivation rec {
   pname = "vulkan-loader";
+<<<<<<< HEAD
   version = "1.3.261";
+=======
+  version = "1.3.249";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "Vulkan-Loader";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-5QCVHfvjE98EnL2Dr7g9fdrJAg+np1Q6hgqcuZCWReQ=";
+=======
+    hash = "sha256-v4GEZEcQP3+oiT66sgysIZ2PdLSidyYjecb3TmcHG2Y=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   patches = [ ./fix-pkgconfig.patch ];

@@ -37,6 +37,7 @@ stdenvNoCC.mkDerivation {
     # Bluetooth firmware
     cp -rv "$NIX_BUILD_TOP/bluez-firmware/broadcom/." "$out/lib/firmware/brcm"
 
+<<<<<<< HEAD
     # brcmfmac43455-stdio.bin is a symlink to the non-existent path: ../cypress/cyfmac43455-stdio.bin.
     # See https://github.com/RPi-Distro/firmware-nonfree/issues/26
     ln -s "./cyfmac43455-sdio-standard.bin" "$out/lib/firmware/cypress/cyfmac43455-sdio.bin"
@@ -48,6 +49,8 @@ stdenvNoCC.mkDerivation {
     ln -s "./brcmfmac43436-sdio.clm_blob" "$out/lib/firmware/brcm/brcmfmac43430b0-sdio.clm_blob"
     popd &>/dev/null
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     runHook postInstall
   '';
 

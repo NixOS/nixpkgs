@@ -32,8 +32,11 @@ in
     services.tarsnap = {
       enable = mkEnableOption (lib.mdDoc "periodic tarsnap backups");
 
+<<<<<<< HEAD
       package = mkPackageOption pkgs "tarsnap" { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       keyfile = mkOption {
         type = types.str;
         default = "/root/tarsnap.key";
@@ -309,7 +312,11 @@ in
         requires    = [ "network-online.target" ];
         after       = [ "network-online.target" ];
 
+<<<<<<< HEAD
         path = with pkgs; [ iputils gcfg.package util-linux ];
+=======
+        path = with pkgs; [ iputils tarsnap util-linux ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
         # In order for the persistent tarsnap timer to work reliably, we have to
         # make sure that the tarsnap server is reachable after systemd starts up
@@ -320,7 +327,11 @@ in
         '';
 
         script = let
+<<<<<<< HEAD
           tarsnap = ''${lib.getExe gcfg.package} --configfile "/etc/tarsnap/${name}.conf"'';
+=======
+          tarsnap = ''tarsnap --configfile "/etc/tarsnap/${name}.conf"'';
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           run = ''${tarsnap} -c -f "${name}-$(date +"%Y%m%d%H%M%S")" \
                         ${optionalString cfg.verbose "-v"} \
                         ${optionalString cfg.explicitSymlinks "-H"} \
@@ -357,10 +368,17 @@ in
         description = "Tarsnap restore '${name}'";
         requires    = [ "network-online.target" ];
 
+<<<<<<< HEAD
         path = with pkgs; [ iputils gcfg.package util-linux ];
 
         script = let
           tarsnap = ''${lib.getExe gcfg.package} --configfile "/etc/tarsnap/${name}.conf"'';
+=======
+        path = with pkgs; [ iputils tarsnap util-linux ];
+
+        script = let
+          tarsnap = ''tarsnap --configfile "/etc/tarsnap/${name}.conf"'';
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           lastArchive = "$(${tarsnap} --list-archives | sort | tail -1)";
           run = ''${tarsnap} -x -f "${lastArchive}" ${optionalString cfg.verbose "-v"}'';
           cachedir = escapeShellArg cfg.cachedir;
@@ -404,6 +422,10 @@ in
         { text = configFile name cfg;
         }) gcfg.archives;
 
+<<<<<<< HEAD
     environment.systemPackages = [ gcfg.package ];
+=======
+    environment.systemPackages = [ pkgs.tarsnap ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

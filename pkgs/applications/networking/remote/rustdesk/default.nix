@@ -20,6 +20,10 @@
 , libyuv
 , libopus
 , libsciter
+<<<<<<< HEAD
+=======
+, llvmPackages
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , wrapGAppsHook
 , writeText
 }:
@@ -40,6 +44,11 @@ rustPlatform.buildRustPackage rec {
     ./fix-for-rust-1.65.diff
   ];
 
+<<<<<<< HEAD
+=======
+  LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
@@ -61,7 +70,11 @@ rustPlatform.buildRustPackage rec {
     ./cargo.patch
   ];
 
+<<<<<<< HEAD
   # Manually simulate a vcpkg installation so that it can link the libraries
+=======
+  # Manually simulate a vcpkg installation so that it can link the libaries
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   # properly.
   postUnpack =
     let
@@ -95,7 +108,11 @@ rustPlatform.buildRustPackage rec {
       ln -s ${libyuv.out}/lib/* $VCPKG_ROOT/installed/${vcpkg_target}/lib/
     '';
 
+<<<<<<< HEAD
   nativeBuildInputs = [ pkg-config cmake makeWrapper copyDesktopItems yasm nasm clang wrapGAppsHook rustPlatform.bindgenHook ];
+=======
+  nativeBuildInputs = [ pkg-config cmake makeWrapper copyDesktopItems yasm nasm clang wrapGAppsHook ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   buildInputs = [ alsa-lib pulseaudio libXfixes libxcb xdotool gtk3 libvpx libopus libXtst libyuv ];
 
   # Checks require an active X display.

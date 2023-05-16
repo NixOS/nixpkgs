@@ -7,14 +7,22 @@
 
 buildPythonPackage rec {
   pname = "pysensibo";
+<<<<<<< HEAD
   version = "1.0.33";
+=======
+  version = "1.0.28";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
+<<<<<<< HEAD
     hash = "sha256-A7IzAIV8dQVSmYTEp9yeySQ8eXnLFVkiuWFS3pe2YTA=";
+=======
+    hash = "sha256-7mYYsJCiJZedbmO9fv/Zr+QZOaSE6d6ld94yWUhUmUQ=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [

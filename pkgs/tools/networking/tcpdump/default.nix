@@ -5,7 +5,11 @@ stdenv.mkDerivation rec {
   version = "4.99.4";
 
   src = fetchurl {
+<<<<<<< HEAD
     url = "https://www.tcpdump.org/release/tcpdump-${version}.tar.gz";
+=======
+    url = "http://www.tcpdump.org/release/tcpdump-${version}.tar.gz";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     hash = "sha256-AjIjG7LynWvyQm5woIp+DGOg1ZqbRIY7f14jV6bkn+o=";
   };
 
@@ -25,6 +29,9 @@ stdenv.mkDerivation rec {
     license = licenses.bsd3;
     maintainers = with maintainers; [ globin ];
     platforms = platforms.unix;
+<<<<<<< HEAD
     mainProgram = "tcpdump";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

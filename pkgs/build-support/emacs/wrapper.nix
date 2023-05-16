@@ -21,7 +21,11 @@ set which contains `emacs.pkgs.withPackages`. For example, to override
 `emacs.pkgs.emacs.pkgs.withPackages`,
 ```
 let customEmacsPackages =
+<<<<<<< HEAD
       emacs.pkgs.overrideScope (self: super: {
+=======
+      emacs.pkgs.overrideScope' (self: super: {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         # use a custom version of emacs
         emacs = ...;
         # use the unstable MELPA version of magit
@@ -32,6 +36,7 @@ in customEmacsPackages.withPackages (epkgs: [ epkgs.evil epkgs.magit ])
 
 */
 
+<<<<<<< HEAD
 { lib, lndir, makeWrapper, runCommand, gcc }:
 self:
 let
@@ -51,6 +56,36 @@ runCommand
   {
     inherit emacs explicitRequires;
     nativeBuildInputs = [ emacs lndir makeWrapper ];
+=======
+{ lib, lndir, makeWrapper, runCommand, gcc }: self:
+
+with lib;
+
+let
+
+  inherit (self) emacs;
+
+  nativeComp = emacs.nativeComp or false;
+
+  treeSitter = emacs.treeSitter or false;
+
+in
+
+packagesFun: # packages explicitly requested by the user
+
+let
+  explicitRequires =
+    if lib.isFunction packagesFun
+      then packagesFun self
+    else packagesFun;
+in
+
+runCommand
+  (appendToName "with-packages" emacs).name
+  {
+    nativeBuildInputs = [ emacs lndir makeWrapper ];
+    inherit emacs explicitRequires;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     preferLocalBuild = true;
     allowSubstitutes = false;
@@ -60,8 +95,13 @@ runCommand
     deps = runCommand "emacs-packages-deps"
       ({
         inherit explicitRequires lndir emacs;
+<<<<<<< HEAD
         nativeBuildInputs = lib.optional withNativeCompilation gcc;
       } // lib.optionalAttrs withNativeCompilation {
+=======
+        nativeBuildInputs = lib.optional nativeComp gcc;
+      } // lib.optionalAttrs nativeComp {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         inherit (emacs) LIBRARY_PATH;
       })
       ''
@@ -101,10 +141,17 @@ runCommand
         }
         mkdir -p $out/bin
         mkdir -p $out/share/emacs/site-lisp
+<<<<<<< HEAD
         ${lib.optionalString withNativeCompilation ''
           mkdir -p $out/share/emacs/native-lisp
         ''}
         ${lib.optionalString withTreeSitter ''
+=======
+        ${optionalString nativeComp ''
+          mkdir -p $out/share/emacs/native-lisp
+        ''}
+        ${optionalString treeSitter ''
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           mkdir -p $out/lib
         ''}
 
@@ -128,10 +175,17 @@ runCommand
         linkEmacsPackage() {
           linkPath "$1" "bin" "bin"
           linkPath "$1" "share/emacs/site-lisp" "share/emacs/site-lisp"
+<<<<<<< HEAD
           ${lib.optionalString withNativeCompilation ''
             linkPath "$1" "share/emacs/native-lisp" "share/emacs/native-lisp"
           ''}
           ${lib.optionalString withTreeSitter ''
+=======
+          ${optionalString nativeComp ''
+            linkPath "$1" "share/emacs/native-lisp" "share/emacs/native-lisp"
+          ''}
+          ${optionalString treeSitter ''
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
             linkPath "$1" "lib" "lib"
           ''}
         }
@@ -159,11 +213,21 @@ runCommand
         rm -f $siteStart $siteStartByteCompiled $subdirs $subdirsByteCompiled
         cat >"$siteStart" <<EOF
         (let ((inhibit-message t))
+<<<<<<< HEAD
           (load "$emacs/share/emacs/site-lisp/site-start"))
         ;; "$out/share/emacs/site-lisp" is added to load-path in wrapper.sh
         ;; "$out/share/emacs/native-lisp" is added to native-comp-eln-load-path in wrapper.sh
         (add-to-list 'exec-path "$out/bin")
         ${lib.optionalString withTreeSitter ''
+=======
+          (load-file "$emacs/share/emacs/site-lisp/site-start.el"))
+        (add-to-list 'load-path "$out/share/emacs/site-lisp")
+        (add-to-list 'exec-path "$out/bin")
+        ${optionalString nativeComp ''
+          (add-to-list 'native-comp-eln-load-path "$out/share/emacs/native-lisp/")
+        ''}
+        ${optionalString treeSitter ''
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           (add-to-list 'treesit-extra-load-path "$out/lib/")
         ''}
         EOF
@@ -178,7 +242,11 @@ runCommand
         # Byte-compiling improves start-up time only slightly, but costs nothing.
         $emacs/bin/emacs --batch -f batch-byte-compile "$siteStart" "$subdirs"
 
+<<<<<<< HEAD
         ${lib.optionalString withNativeCompilation ''
+=======
+        ${optionalString nativeComp ''
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           $emacs/bin/emacs --batch \
             --eval "(add-to-list 'native-comp-eln-load-path \"$out/share/emacs/native-lisp/\")" \
             -f batch-native-compile "$siteStart" "$subdirs"
@@ -198,7 +266,11 @@ runCommand
       substitute ${./wrapper.sh} $out/bin/$progname \
         --subst-var-by bash ${emacs.stdenv.shell} \
         --subst-var-by wrapperSiteLisp "$deps/share/emacs/site-lisp" \
+<<<<<<< HEAD
         --subst-var-by wrapperSiteLispNative "$deps/share/emacs/native-lisp" \
+=======
+        --subst-var-by wrapperSiteLispNative "$deps/share/emacs/native-lisp:" \
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         --subst-var prog
       chmod +x $out/bin/$progname
     done
@@ -217,14 +289,22 @@ runCommand
       substitute ${./wrapper.sh} $out/Applications/Emacs.app/Contents/MacOS/Emacs \
         --subst-var-by bash ${emacs.stdenv.shell} \
         --subst-var-by wrapperSiteLisp "$deps/share/emacs/site-lisp" \
+<<<<<<< HEAD
         --subst-var-by wrapperSiteLispNative "$deps/share/emacs/native-lisp" \
+=======
+        --subst-var-by wrapperSiteLispNative "$deps/share/emacs/native-lisp:" \
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         --subst-var-by prog "$emacs/Applications/Emacs.app/Contents/MacOS/Emacs"
       chmod +x $out/Applications/Emacs.app/Contents/MacOS/Emacs
     fi
 
     mkdir -p $out/share
     # Link icons and desktop files into place
+<<<<<<< HEAD
     for dir in applications icons info man; do
+=======
+    for dir in applications icons info man emacs; do
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       ln -s $emacs/share/$dir $out/share/$dir
     done
   ''

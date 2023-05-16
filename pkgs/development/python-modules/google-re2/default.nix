@@ -9,6 +9,7 @@
 
 buildPythonPackage rec {
   pname = "google-re2";
+<<<<<<< HEAD
   version = "1.1";
   format = "setuptools";
 
@@ -17,6 +18,16 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-06lGfuUrRqx3ypKPbQy+rM/ZLwPKDw9lud9qlRhPOhw=";
+=======
+  version = "1.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
+
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-IcitwpY2DeH/QmuqOMcS6tpiLChY0ZXrSH5BXZQZTpE=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [

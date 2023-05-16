@@ -14,10 +14,17 @@ buildGoModule rec {
   vendorHash = "sha256-KcNp3VdJ201oxzF0bLXY4xWHqHNz54ZrVSI96cfhU+k=";
 
   meta = with lib; {
+<<<<<<< HEAD
     maintainers = with maintainers; [ endocrimes emilylange ];
     license = licenses.unfreeRedistributable;
     homepage = "https://github.com/drone-runners/drone-runner-docker";
     description = "Drone pipeline runner that executes builds inside Docker containers";
     mainProgram = "drone-runner-docker";
+=======
+    maintainers = with maintainers; [ endocrimes indeednotjames ];
+    license = licenses.unfreeRedistributable;
+    homepage = "https://github.com/drone-runners/drone-runner-docker";
+    description = "Drone pipeline runner that executes builds inside Docker containers";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

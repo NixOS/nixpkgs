@@ -9,13 +9,21 @@
 
 stdenv.mkDerivation rec {
   pname = "codec2";
+<<<<<<< HEAD
   version = "1.1.1";
+=======
+  version = "1.1.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "drowe67";
     repo = "codec2";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-p1WMp17PCnr50bXDSd6A4Je7AfKVHuLmyEue9221zPs=";
+=======
+    hash = "sha256-7E/Iqan3DVFl9pwsY6pwWM64ug1cjN6DH+u7XzraA78=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ cmake ];

@@ -1,14 +1,28 @@
 { lib, stdenv, fetchFromGitHub, kernel }:
 
+<<<<<<< HEAD
 stdenv.mkDerivation rec {
   pname = "rtl88xxau-aircrack";
   version = "${kernel.version}-unstable-02-05-2023";
+=======
+let
+  rev = "ee299797bcd54d5b8c58d2da8576c54cea1a03a2";
+in
+stdenv.mkDerivation rec {
+  pname = "rtl88xxau-aircrack";
+  version = "${kernel.version}-${builtins.substring 0 6 rev}";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "aircrack-ng";
     repo = "rtl8812au";
+<<<<<<< HEAD
     rev = "35308f4dd73e77fa572c48867cce737449dd8548";
     hash = "sha256-0kHrNsTKRl/xTQpDkIOYqTtcHlytXhXX8h+6guvLmLI=";
+=======
+    inherit rev;
+    sha256 = "sha256-JUyUOqLMD9nSo6i87K/6Ljp+pWSqSBz/IZiFWu03rQw=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = kernel.moduleBuildDependencies;

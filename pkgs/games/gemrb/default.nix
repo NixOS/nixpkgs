@@ -27,13 +27,21 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "gemrb";
+<<<<<<< HEAD
   version = "0.9.2";
+=======
+  version = "0.9.1.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "gemrb";
     repo = "gemrb";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-riea48Jc9zYb19mf5sBunTp5l27PGRFd/B5KdCUWr6Y=";
+=======
+    hash = "sha256-pC83LgAy1aQxUhS2qa57hm03B37bj6dcRVRn7SI5I+k=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   buildInputs = [

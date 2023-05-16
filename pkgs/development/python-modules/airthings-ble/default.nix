@@ -9,7 +9,11 @@
 
 buildPythonPackage rec {
   pname = "airthings-ble";
+<<<<<<< HEAD
   version = "0.5.6-4";
+=======
+  version = "0.5.5";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -18,7 +22,11 @@ buildPythonPackage rec {
     owner = "vincegio";
     repo = pname;
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-Ft5A2ZGVH9VHoRDAqDcc0rBfnQRxoXMylCAwUSwmViE=";
+=======
+    hash = "sha256-A1YsYOquDUDGeEI4xzQSjEk1H92Jjlhsb5IPRt0lM2c=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   postPatch = ''

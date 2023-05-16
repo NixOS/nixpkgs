@@ -56,7 +56,11 @@ rec {
     # binaries. The lib.rmeta object inside the ar archive should contain an
     # .rmeta section, but it is removed. Luckily, this doesn't appear to be an
     # issue for Rust builds produced by Nix.
+<<<<<<< HEAD
     dontStrip = true;
+=======
+    dontStrip = stdenv.isDarwin;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     setupHooks = ./setup-hook.sh;
   };

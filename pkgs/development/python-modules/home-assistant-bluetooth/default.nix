@@ -11,7 +11,11 @@
 
 buildPythonPackage rec {
   pname = "home-assistant-bluetooth";
+<<<<<<< HEAD
   version = "1.10.3";
+=======
+  version = "1.10.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -20,7 +24,11 @@ buildPythonPackage rec {
     owner = "home-assistant-libs";
     repo = pname;
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-77RrqmoCftPc48fFtuuFo0KqGX3n+6aDx2RFkwGCNzQ=";
+=======
+    hash = "sha256-g8vdg7YU3rkXW85U4w9Hvb6u9uvoDphbkIlVXchCRxQ=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   postPatch = ''

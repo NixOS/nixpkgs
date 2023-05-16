@@ -3,13 +3,21 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "wpgtk";
+<<<<<<< HEAD
   version = "6.5.7";
+=======
+  version = "6.5.5";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "deviantfero";
     repo = "wpgtk";
     rev = version;
+<<<<<<< HEAD
     sha256 = "sha256-rHNni0nDghc5kI1sWHAb5ODr4buBz65eUEB1qWpbTTs=";
+=======
+    sha256 = "sha256-g3flxQNiNta+uL4t21Lhpij8b5yB78SJLGaFpTcm9fE=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

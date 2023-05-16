@@ -11,14 +11,21 @@
 , markdown
 , testers
 , tomlkit
+<<<<<<< HEAD
 , typing-extensions
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , staticjinja
 , callPackage
 }:
 
 buildPythonPackage rec {
   pname = "staticjinja";
+<<<<<<< HEAD
   version = "5.0.0";
+=======
+  version = "4.1.3";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
@@ -28,7 +35,11 @@ buildPythonPackage rec {
     owner = "staticjinja";
     repo = pname;
     rev = version;
+<<<<<<< HEAD
     hash = "sha256-LfJTQhZtnTOm39EWF1m2MP5rxz/5reE0G1Uk9L7yx0w=";
+=======
+    hash = "sha256-w6ge5MQXNRHCM43jKnagTlbquJJys7mprgBOS2uuwHQ=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [
@@ -46,7 +57,10 @@ buildPythonPackage rec {
     pytest-check
     markdown
     tomlkit
+<<<<<<< HEAD
     typing-extensions
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   # The tests need to find and call the installed staticjinja executable

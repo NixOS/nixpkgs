@@ -47,6 +47,10 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
+<<<<<<< HEAD
+=======
+    broken = (stdenv.isLinux && stdenv.isAarch64) || stdenv.isDarwin;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     description = "Chameleon template compiler for pyramid";
     homepage = "https://github.com/Pylons/pyramid_chameleon";
     license = licenses.bsd0;

@@ -2,7 +2,13 @@
 , lib
 , fetchFromGitLab
 , fetchpatch
+<<<<<<< HEAD
 , gobject-introspection
+=======
+, gnome
+, gobject-introspection
+, gtk3
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , intltool
 , python3
 , wrapGAppsHook

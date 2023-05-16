@@ -18,7 +18,11 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook pkg-config ];
   buildInputs = [ fftw speexdsp ];
 
+<<<<<<< HEAD
   # TODO: Remove this will help with immediate backward compatibility
+=======
+  # TODO: Remove this will help with immediate backward compatability
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   propagatedBuildInputs = [ speexdsp ];
 
   configureFlags = [

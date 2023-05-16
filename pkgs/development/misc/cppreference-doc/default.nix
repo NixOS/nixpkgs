@@ -2,11 +2,19 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "cppreference-doc";
+<<<<<<< HEAD
   version = "20230810";
 
   src = fetchurl {
     url = "https://github.com/PeterFeicht/${pname}/releases/download/v${version}/html-book-${version}.tar.xz";
     hash = "sha256-McCOTZnobH9j8yTT/1ME7/IDATHEoKwNHjwZxiyO1oQ=";
+=======
+  version = "20220730";
+
+  src = fetchurl {
+    url = "https://github.com/PeterFeicht/${pname}/releases/download/v${version}/html-book-${version}.tar.xz";
+    hash = "sha256-cfFQA8FouNxaAMuvGbZICps+h6t+Riqjnttj11EcAos=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   sourceRoot = ".";

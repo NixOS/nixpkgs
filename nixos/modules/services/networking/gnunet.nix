@@ -155,7 +155,11 @@ in
       description = "GNUnet";
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
+<<<<<<< HEAD
       restartTriggers = [ config.environment.etc."gnunet.conf".source ];
+=======
+      restartTriggers = [ configFile ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       path = [ cfg.package pkgs.miniupnpc ];
       serviceConfig.ExecStart = "${cfg.package}/lib/gnunet/libexec/gnunet-service-arm -c /etc/gnunet.conf";
       serviceConfig.User = "gnunet";

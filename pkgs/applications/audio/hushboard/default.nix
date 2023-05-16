@@ -26,10 +26,17 @@ buildPythonApplication {
 
   nativeBuildInputs = [
     wrapGAppsHook
+<<<<<<< HEAD
     gobject-introspection
   ];
 
   buildInputs = [
+=======
+  ];
+
+  buildInputs = [
+    gobject-introspection
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     gtk3
     libappindicator
     libpulseaudio

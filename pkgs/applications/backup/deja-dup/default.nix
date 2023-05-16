@@ -22,14 +22,24 @@
 
 stdenv.mkDerivation rec {
   pname = "deja-dup";
+<<<<<<< HEAD
   version = "44.2";
+=======
+  version = "44.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
+<<<<<<< HEAD
     repo = "deja-dup";
     rev = version;
     hash = "sha256-TnyH2tIvzG1B2hbDPyFyaTArfuMJaP6GKw6yahwsQ1Q=";
+=======
+    repo = pname;
+    rev = version;
+    sha256 = "sha256-dIH6VPgzJxvXEUtPAYQzpQ8I9R9MwsfeylV25ASfW/k=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   patches = [

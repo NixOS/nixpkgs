@@ -34,7 +34,11 @@ let
   };
 
   xrdp = stdenv.mkDerivation rec {
+<<<<<<< HEAD
     version = "0.9.23";
+=======
+    version = "0.9.21.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     pname = "xrdp";
 
     src = fetchFromGitHub {
@@ -42,7 +46,11 @@ let
       repo = "xrdp";
       rev = "v${version}";
       fetchSubmodules = true;
+<<<<<<< HEAD
       hash = "sha256-14qsRfLn+26rm+vyMmOtaBEs8mWfSTIsIVseSC2FjXc=";
+=======
+      hash = "sha256-/o052ij+Tpcw5/k1UyP6OGOzrtBwh3jRkftStIEhUF0=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
 
     nativeBuildInputs = [ pkg-config autoconf automake which libtool nasm perl ];

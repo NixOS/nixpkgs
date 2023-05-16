@@ -16,7 +16,10 @@
 , pythonOlder
 , pyyaml
 , requests
+<<<<<<< HEAD
 , rich
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , termcolor
 , testers
 , unidecode
@@ -25,7 +28,11 @@
 
 buildPythonPackage rec {
   pname = "woob";
+<<<<<<< HEAD
   version = "3.6";
+=======
+  version = "3.5";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -34,7 +41,11 @@ buildPythonPackage rec {
     owner = "woob";
     repo = pname;
     rev = version;
+<<<<<<< HEAD
     hash = "sha256-M9AjV954H1w64YGCVxDEGGSnoEbmocG3zwltob6IW04=";
+=======
+    hash = "sha256-Yb3AgUSqr9r2TIymiEUIhKThNC7yjQEkhi8GSI9fqNA=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [
@@ -54,7 +65,10 @@ buildPythonPackage rec {
     pycountry
     pyyaml
     requests
+<<<<<<< HEAD
     rich
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     termcolor
     unidecode
   ];

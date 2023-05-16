@@ -24,16 +24,36 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "mediaelch";
+<<<<<<< HEAD
   version = "2.10.4";
+=======
+  version = "2.10.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "Komet";
     repo = "MediaElch";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-gNpnmyUKDXf40+1JmJzNyEPIv/DO8b3CdJAphheEvTU=";
     fetchSubmodules = true;
   };
 
+=======
+    sha256 = "sha256-hipOOG+ibfsJZKLcnB6a5+OOvSs4WUdpEY+RiVKJc+k=";
+    fetchSubmodules = true;
+  };
+
+  patches = [
+    # https://github.com/Komet/MediaElch/issues/1557
+    # build: Fix build issue with Qt 6.5 on macOS (also other platforms)
+    (fetchpatch {
+      url = "https://github.com/Komet/MediaElch/commit/872b21decf95d70073400bedbe1ad183a8267791.patch";
+      hash = "sha256-D1Ui5xg5cpvNX4IHfXQ7wN9I7Y3SuPFOWxWidcAlLEA=";
+    })
+  ];
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nativeBuildInputs = [
     cmake
     qttools

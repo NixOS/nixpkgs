@@ -1,8 +1,14 @@
+<<<<<<< HEAD
 { stdenv
 , lib
 , buildPythonPackage
 , fetchFromGitHub
 , fetchpatch
+=======
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , numpy
 , psutil
 , pytestCheckHook
@@ -25,6 +31,7 @@ buildPythonPackage rec {
     hash = "sha256-TDU/V7kY7zVxiP4OVjGqpsRVYplpkgCly2qAOqhZONo=";
   };
 
+<<<<<<< HEAD
   patches = [
     # https://github.com/fabioz/PyDev.Debugger/pull/258
     (fetchpatch {
@@ -36,6 +43,8 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nativeCheckInputs = [
     numpy
     psutil
@@ -61,9 +70,12 @@ buildPythonPackage rec {
     # AssertionError pydevd_tracing.set_trace_to_threads(tracing_func) == 0
     "test_tracing_other_threads"
     "test_tracing_basic"
+<<<<<<< HEAD
   ] ++ lib.optionals stdenv.isDarwin [
     "test_multiprocessing_simple"
     "test_evaluate_exception_trace"
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   pythonImportsCheck = [

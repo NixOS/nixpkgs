@@ -18,13 +18,21 @@
 
 stdenv.mkDerivation rec {
   pname = "cinnamon-desktop";
+<<<<<<< HEAD
   version = "5.8.0";
+=======
+  version = "5.6.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = pname;
     rev = version;
+<<<<<<< HEAD
     hash = "sha256-rYTWtdYfMow3cIPhJdcmhyaIIU7fgVecWigbsCW0Piw=";
+=======
+    hash = "sha256-X4jf7+QFjoev1K6ywxN0n9MYUv7xI1/su+hHeesG02Y=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   outputs = [ "out" "dev" ];
@@ -41,6 +49,10 @@ stdenv.mkDerivation rec {
     xorg.libxkbfile
     xorg.libXext
     xorg.libXrandr
+<<<<<<< HEAD
+=======
+    gobject-introspection
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   nativeBuildInputs = [
@@ -50,7 +62,10 @@ stdenv.mkDerivation rec {
     wrapGAppsHook
     intltool
     pkg-config
+<<<<<<< HEAD
     gobject-introspection
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   postPatch = ''

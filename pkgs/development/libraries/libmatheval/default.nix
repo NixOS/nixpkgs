@@ -1,10 +1,18 @@
+<<<<<<< HEAD
 { lib, stdenv, fetchurl, pkg-config, guile, flex, fetchpatch }:
+=======
+{ lib, stdenv, fetchurl, pkg-config, guile, autoconf, flex, fetchpatch }:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 stdenv.mkDerivation rec {
   version = "1.1.11";
   pname = "libmatheval";
 
+<<<<<<< HEAD
   nativeBuildInputs = [ pkg-config flex ];
+=======
+  nativeBuildInputs = [ pkg-config autoconf flex ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   buildInputs = [ guile ];
 
   src = fetchurl {
@@ -14,6 +22,7 @@ stdenv.mkDerivation rec {
 
   # Patches coming from debian package
   # https://packages.debian.org/source/sid/libs/libmatheval
+<<<<<<< HEAD
   patches = [
     (fetchpatch {
       url = "https://sources.debian.org/data/main/libm/libmatheval/1.1.11%2Bdfsg-5/debian/patches/002-skip-docs.patch";
@@ -31,6 +40,21 @@ stdenv.mkDerivation rec {
 
   env.NIX_CFLAGS_COMPILE = "-I${lib.getDev guile}/include/guile/${guile.effectiveVersion}";
   env.NIX_LDFLAGS = "-L${guile}/lib -lguile-${guile.effectiveVersion}";
+=======
+  patches = [ (fetchpatch {
+                url = "https://salsa.debian.org/science-team/libmatheval/raw/debian/1.1.11+dfsg-3/debian/patches/002-skip-docs.patch";
+                sha256 = "1nnkk9aw4jj6nql46zhwq6vx74zrmr1xq5ix0xyvpawhabhgjg62";
+              } )
+              (fetchpatch {
+                url = "https://salsa.debian.org/science-team/libmatheval/raw/debian/1.1.11+dfsg-3/debian/patches/003-guile2.0.patch";
+                sha256 = "1xgfw4finfvr20kjbpr4yl2djxmyr4lmvfa11pxirfvhrdi602qj";
+               } )
+              (fetchpatch {
+                url = "https://salsa.debian.org/science-team/libmatheval/raw/debian/1.1.11+dfsg-3/debian/patches/disable_coth_test.patch";
+                sha256 = "0bai8jrd5azfz5afmjixlvifk34liq58qb7p9kb45k6kc1fqqxzm";
+               } )
+            ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   meta = {
     description = "A library to parse and evaluate symbolic expressions input as text";
@@ -44,7 +68,11 @@ stdenv.mkDerivation rec {
     homepage = "https://www.gnu.org/software/libmatheval/";
     license = lib.licenses.gpl3;
     maintainers = [ lib.maintainers.bzizou ];
+<<<<<<< HEAD
     platforms = lib.platforms.unix;
+=======
+    platforms = lib.platforms.linux;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }
 

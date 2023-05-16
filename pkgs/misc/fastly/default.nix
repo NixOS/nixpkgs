@@ -10,13 +10,21 @@
 
 buildGoModule rec {
   pname = "fastly";
+<<<<<<< HEAD
   version = "10.4.0";
+=======
+  version = "9.0.3";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "fastly";
     repo = "cli";
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-NEbQ4GoZXnFes6jvqKDg4T8eDAHHEYytJ7W7qeZSCmE=";
+=======
+    hash = "sha256-cR0XtTzdz400p/9b8NmFxWqsSMqLf3KJRekfkWbx/Zs=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     # The git commit is part of the `fastly version` original output;
     # leave that output the same in nixpkgs. Use the `.git` directory
     # to retrieve the commit SHA, and remove the directory afterwards,
@@ -33,7 +41,11 @@ buildGoModule rec {
     "cmd/fastly"
   ];
 
+<<<<<<< HEAD
   vendorHash = "sha256-mpN4YCiuL2jrZ4r/YOUhQSOBlGGHndQyrB9GT5mTAyI=";
+=======
+  vendorHash = "sha256-Ch9TT5gPC8NpwuqkwHP+3HEFocWHrCZPC0T7+3VweVc=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nativeBuildInputs = [
     installShellFiles
@@ -52,8 +64,13 @@ buildGoModule rec {
   ];
   preBuild = let
     cliConfigToml = fetchurl {
+<<<<<<< HEAD
       url = "https://web.archive.org/web/20230523192914/https://developer.fastly.com/api/internal/cli-config";
       hash = "sha256-zgZ3m69dRvuc1S7hHeLxzrM/Z/u0PKUn0XbyQOYO3es=";
+=======
+      url = "https://web.archive.org/web/20230412222811/https://developer.fastly.com/api/internal/cli-config";
+      hash = "sha256-NACjeBGOvBL6kUBZtSx4ChZgn7V69f4K2yyDCwTZsbU=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
   in ''
     cp ${cliConfigToml} ./pkg/config/config.toml

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 { lib
 , fetchFromGitHub
 , buildGoPackage
@@ -6,6 +7,17 @@
 buildGoPackage rec {
   pname = "ssm-session-manager-plugin";
   version = "1.2.497.0";
+=======
+{ stdenv
+, lib
+, fetchFromGitHub
+, buildGo120Package
+}:
+
+buildGo120Package rec {
+  pname = "ssm-session-manager-plugin";
+  version = "1.2.463.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   goPackagePath = "github.com/aws/session-manager-plugin";
 
@@ -13,7 +25,11 @@ buildGoPackage rec {
     owner = "aws";
     repo = "session-manager-plugin";
     rev = version;
+<<<<<<< HEAD
     hash = "sha256-DX+Jm7u0gNX3o0QYIbE6Vzsmqys+09lQGHpIuqBEwMI=";
+=======
+    sha256 = "sha256-0n7/3CAPf+ioSE041Zik9xeHt5qtrdHotJjBWhizExo=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   postPatch = ''

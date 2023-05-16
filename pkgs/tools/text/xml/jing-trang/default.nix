@@ -24,7 +24,11 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir -p "$out"/{share/java,bin}
+<<<<<<< HEAD
     cp ./build/*.jar ./lib/resolver.jar "$out/share/java/"
+=======
+    cp ./build/*.jar "$out/share/java/"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     for tool in jing trang; do
     cat > "$out/bin/$tool" <<EOF

@@ -16,7 +16,11 @@ stdenv.mkDerivation rec {
     hash  = "sha256-0sU2zOk5I69lQyrn1g0qsae7S/IBT6eA/911qp0GNkk=";
   };
 
+<<<<<<< HEAD
   sourceRoot = "${src.name}/src";
+=======
+  sourceRoot = "source/src";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   buildInputs = [ libedit zlib ncurses ]
     ++ lib.optionals stdenv.isDarwin ([
       Accelerate

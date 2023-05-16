@@ -5,6 +5,7 @@
 
 stdenv.mkDerivation rec {
   pname = "icon-library";
+<<<<<<< HEAD
   version = "0.0.16";
 
   src = fetchurl {
@@ -12,6 +13,25 @@ stdenv.mkDerivation rec {
     hash = "sha256-EO67foD/uRoeF+zmJyEia5Nr3eW+Se9bVjDxipMw75E=";
   };
 
+=======
+  version = "0.0.11";
+
+  src = fetchurl {
+    url = "https://gitlab.gnome.org/World/design/icon-library/uploads/93d183b17d216bbed7b03b2f3698059c/icon-library-${version}.tar.xz";
+    sha256 = "1zrcnc5dn5fgcl3vklfpbp3m0qzi2n2viw59vw5fhwkysvp670y7";
+  };
+
+  patches = [
+    # Fix build with meson 0.61
+    # data/meson.build:85:0: ERROR: gnome.compile_resources takes exactly 2 arguments, but got 3.
+    # https://gitlab.gnome.org/World/design/icon-library/-/merge_requests/54
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/World/design/icon-library/-/commit/c629dbf6670f9bb0b98ff21c17110489b58f5c85.patch";
+      sha256 = "UKC1CPaM58/z0zINN794luWZdoFx1zGxETPb8VtbO3E=";
+    })
+  ];
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nativeBuildInputs = [
     cargo desktop-file-utils meson ninja pkg-config rustc wrapGAppsHook4
   ];

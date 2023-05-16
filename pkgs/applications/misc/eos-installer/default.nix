@@ -47,7 +47,10 @@ stdenv.mkDerivation rec {
     description = "Installer UI which writes images to disk";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ qyliss ];
+<<<<<<< HEAD
     mainProgram = "gnome-image-installer";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     platforms = platforms.linux;
   };
 }

@@ -1,16 +1,28 @@
+<<<<<<< HEAD
 { stdenv, lib, makeWrapper, fetchFromGitLab, perl, flex
+=======
+{ stdenv, lib, makeWrapper, fetchFromGitLab, openjade, gnumake, perl, flex
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , gnused, coreutils, which, opensp, groff, texlive, texinfo, withLatex ? false
 }:
 
 stdenv.mkDerivation rec {
   pname = "linuxdoc-tools";
+<<<<<<< HEAD
   version = "0.9.83";
+=======
+  version = "0.9.82";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitLab {
     owner = "agmartin";
     repo = "linuxdoc-tools";
     rev = version;
+<<<<<<< HEAD
     sha256 = "sha256-1F3MDYJ9UH7ypgTSfYZV59PfLirlTmw6XBMEnz5Jtyk=";
+=======
+    sha256 = "17v9ilh79av4n94vk4m52aq57ykb9myffxd2qr8kb8b3xnq5d36z";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   outputs = [ "out" "man" "doc" ];

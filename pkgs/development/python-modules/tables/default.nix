@@ -30,6 +30,7 @@ buildPythonPackage rec {
     hash = "sha256-NPP6I2bOILGPHfVzp3wdJzBs4fKkHZ+e/2IbUZLqh4g=";
   };
 
+<<<<<<< HEAD
   patches = [
     (fetchpatch {
       name = "numpy-1.25-compatibility.patch";
@@ -38,6 +39,8 @@ buildPythonPackage rec {
     })
   ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nativeBuildInputs = [
     blosc2
     cython

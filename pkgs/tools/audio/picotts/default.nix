@@ -1,6 +1,10 @@
 { lib, stdenv, fetchFromGitHub, autoconf, automake, libtool, popt }:
 
+<<<<<<< HEAD
 stdenv.mkDerivation (finalAttrs: {
+=======
+stdenv.mkDerivation {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pname = "picotts";
   version = "unstable-2018-10-19";
 
@@ -12,7 +16,11 @@ stdenv.mkDerivation (finalAttrs: {
   };
   nativeBuildInputs = [ autoconf automake ];
   buildInputs = [ libtool popt ];
+<<<<<<< HEAD
   sourceRoot = "${finalAttrs.src.name}/pico";
+=======
+  sourceRoot = "source/pico";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   preConfigure = "./autogen.sh";
   meta = {
     description = "Text to speech voice sinthesizer from SVox";
@@ -21,4 +29,10 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = [ lib.maintainers.canndrew ];
     platforms = lib.platforms.linux;
   };
+<<<<<<< HEAD
 })
+=======
+}
+
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)

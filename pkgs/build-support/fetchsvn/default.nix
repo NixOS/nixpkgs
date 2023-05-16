@@ -2,7 +2,11 @@
 , subversion, glibcLocales, sshSupport ? true, openssh ? null
 }:
 
+<<<<<<< HEAD
 { url, rev ? "HEAD", sha256 ? "", hash ? ""
+=======
+{ url, rev ? "HEAD", md5 ? "", sha256 ? ""
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , ignoreExternals ? false, ignoreKeywords ? false, name ? null
 , preferLocalBuild ? true
 }:
@@ -32,8 +36,13 @@ let
   name_ = if name == null then "${repoName}-r${toString rev}" else name;
 in
 
+<<<<<<< HEAD
 if hash != "" && sha256 != "" then
   throw "Only one of sha256 or hash can be set"
+=======
+if md5 != "" then
+  throw "fetchsvn does not support md5 anymore, please use sha256"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 else
 stdenvNoCC.mkDerivation {
   name = name_;
@@ -43,6 +52,7 @@ stdenvNoCC.mkDerivation {
 
   SVN_SSH = if sshSupport then "${buildPackages.openssh}/bin/ssh" else null;
 
+<<<<<<< HEAD
   outputHashAlgo = if hash != "" then null else "sha256";
   outputHashMode = "recursive";
   outputHash = if hash != "" then
@@ -51,6 +61,11 @@ stdenvNoCC.mkDerivation {
     sha256
   else
     lib.fakeSha256;
+=======
+  outputHashAlgo = "sha256";
+  outputHashMode = "recursive";
+  outputHash = sha256;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   inherit url rev ignoreExternals ignoreKeywords;
 

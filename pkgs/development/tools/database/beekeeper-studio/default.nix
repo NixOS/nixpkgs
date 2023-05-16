@@ -18,7 +18,11 @@ in
 appimageTools.wrapType2 {
   inherit name src;
 
+<<<<<<< HEAD
   multiArch = false; # no 32bit needed
+=======
+  multiPkgs = null; # no 32bit needed
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   extraPkgs = pkgs: appimageTools.defaultFhsEnvArgs.multiPkgs pkgs ++ [ pkgs.bash ];
 
   extraInstallCommands = ''

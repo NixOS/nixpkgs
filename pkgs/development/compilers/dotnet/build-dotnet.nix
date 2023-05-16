@@ -122,7 +122,11 @@ stdenv.mkDerivation (finalAttrs: rec {
     export DOTNET_CLI_TELEMETRY_OPTOUT=1
   '';
 
+<<<<<<< HEAD
   passthru = {
+=======
+  passthru = rec {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     inherit icu;
     packages = packageDeps;
 

@@ -10,6 +10,7 @@ let
 in
   buildNodejs {
     inherit enableNpm;
+<<<<<<< HEAD
     # If you do upgrade here, please update in pkgs/top-level/release.nix
     # the permitted insecure version to ensure it gets cached for our users
     # and backport this to stable release (23.05).
@@ -19,5 +20,12 @@ in
       ./disable-darwin-v8-system-instrumentation.patch
       ./bypass-darwin-xcrun-node16.patch
       ./node-npm-build-npm-package-logic-node16.patch
+=======
+    version = "16.20.0";
+    sha256 = "sha256-4JkPmSI05ApR/hH5LDgWyTp34bCBFF0912LNECY0U0k=";
+    patches = [
+      ./disable-darwin-v8-system-instrumentation.patch
+      ./bypass-darwin-xcrun-node16.patch
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     ] ++ npmPatches;
   }

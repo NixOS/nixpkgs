@@ -1,10 +1,18 @@
+<<<<<<< HEAD
 { lib, python3, fetchPypi }:
+=======
+{ lib, python3 }:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 python3.pkgs.buildPythonApplication rec {
   pname = "distgen";
   version = "1.5";
 
+<<<<<<< HEAD
   src = fetchPypi {
+=======
+  src = python3.pkgs.fetchPypi {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     inherit pname version;
     sha256 = "08f9rw5irgv0gw7jizk5f9csn0yhrdnb84k40px1zbypsylvr5c5";
   };

@@ -10,13 +10,18 @@
 
 buildPythonPackage rec {
   pname = "boto3";
+<<<<<<< HEAD
   version = "1.28.9"; # N.B: if you change this, change botocore and awscli to a matching version
+=======
+  version = "1.26.79"; # N.B: if you change this, change botocore and awscli to a matching version
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "boto";
     repo = pname;
     rev = version;
+<<<<<<< HEAD
     hash = "sha256-NkNHA20yn1Q7uoq/EL1Wn8F1fpi1waQujutGIKsnxlI=";
   };
 
@@ -24,12 +29,25 @@ buildPythonPackage rec {
     setuptools
   ];
 
+=======
+    hash = "sha256-9Xsng4xZ+IGNZ3ViYVrOyKZdRH6QPSjZALj9Q3HECBU=";
+  };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   propagatedBuildInputs = [
     botocore
     jmespath
     s3transfer
+<<<<<<< HEAD
   ];
 
+=======
+    setuptools
+  ];
+
+  doCheck = true;
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nativeCheckInputs = [
     pytestCheckHook
   ];

@@ -14,14 +14,22 @@
 
 let
   pname = "pgadmin";
+<<<<<<< HEAD
   version = "7.5";
   yarnSha256 = "sha256-rEKMUZksmR2jPwtXy6drNwAJktK/3Dee6EZVFHPngWs=";
+=======
+  version = "7.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "pgadmin-org";
     repo = "pgadmin4";
     rev = "REL-${lib.versions.major version}_${lib.versions.minor version}";
+<<<<<<< HEAD
     hash = "sha256-o8jPqp4jLF/lZ0frCzPDCSxCy51Nt0mbdeNB44ZwNHI=";
+=======
+    hash = "sha256-m2mO37qNjrznpdKeFHq6yE8cZx4sHBvPB2RHUtS1Uis=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   # keep the scope, as it is used throughout the derivation and tests
@@ -29,8 +37,13 @@ let
   pythonPackages = python3.pkgs.overrideScope (final: prev: rec { });
 
   offlineCache = fetchYarnDeps {
+<<<<<<< HEAD
     yarnLock = ./yarn.lock;
     hash = yarnSha256;
+=======
+    yarnLock = src + "/web/yarn.lock";
+    hash = "sha256-cnn7CJcnT+TUeeZoeJVX3bO85vuJmVrO7CPR/CYTCS0=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
 in
@@ -63,6 +76,7 @@ pythonPackages.buildPythonApplication rec {
 
     # relax dependencies
     sed 's|==|>=|g' -i requirements.txt
+<<<<<<< HEAD
     #TODO: Can be removed once boto3>=1.28.0 and cryptography>=41 has been merged to master
     substituteInPlace requirements.txt \
       --replace "boto3>=1.28.*" "boto3>=1.26.*"
@@ -70,6 +84,11 @@ pythonPackages.buildPythonApplication rec {
       --replace "botocore>=1.31.*" "botocore>=1.29.*"
     substituteInPlace requirements.txt \
       --replace "cryptography>=41.0.*" "cryptography>=40.0.*"
+=======
+    #TODO: Can be removed once cryptography>=40 has been merged to master
+    substituteInPlace requirements.txt \
+      --replace "cryptography>=40.0.*" "cryptography>=39.0.*"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     # fix extra_require error with "*" in match
     sed 's|*|0|g' -i requirements.txt
     substituteInPlace pkg/pip/setup_pip.py \
@@ -106,10 +125,13 @@ pythonPackages.buildPythonApplication rec {
     cd web
     export HOME="$TMPDIR"
     yarn config --offline set yarn-offline-mirror "${offlineCache}"
+<<<<<<< HEAD
     # replace with converted yarn.lock file
     rm yarn.lock
     cp ${./yarn.lock} yarn.lock
     chmod +w yarn.lock
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     fixup_yarn_lock yarn.lock
     yarn install --offline --frozen-lockfile --ignore-platform --ignore-scripts --no-progress --non-interactive
     patchShebangs node_modules/
@@ -144,8 +166,13 @@ pythonPackages.buildPythonApplication rec {
     flask
     flask-gravatar
     flask-login
+<<<<<<< HEAD
     flask-mail
     flask-migrate
+=======
+    flask_mail
+    flask_migrate
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     flask-sqlalchemy
     flask-wtf
     flask-compress
@@ -189,7 +216,10 @@ pythonPackages.buildPythonApplication rec {
     speaklater3
     google-auth-oauthlib
     google-api-python-client
+<<<<<<< HEAD
     keyring
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   passthru.tests = {

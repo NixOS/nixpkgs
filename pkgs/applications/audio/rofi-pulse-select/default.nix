@@ -13,7 +13,11 @@ stdenv.mkDerivation rec {
   src = fetchFromGitLab {
     owner = "DamienCassou";
     repo = pname;
+<<<<<<< HEAD
     rev = version;
+=======
+    rev = "${version}";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     sha256 = "1405v0bh2m8ip9c23l95i8iq2gfrpanc6f4dz17nysdcff2ay2p3";
   };
 

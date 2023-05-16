@@ -16,14 +16,20 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "prefix=${placeholder "out"}"];
 
+<<<<<<< HEAD
   # causes redefinition of _FORTIFY_SOURCE
   hardeningDisable = [ "fortify3" ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   meta = with lib; {
     description = "The advanced PC speaker beeper";
     homepage = "https://github.com/spkr-beep/beep";
     license = licenses.gpl2Only;
     platforms = platforms.linux;
+<<<<<<< HEAD
     mainProgram = "beep";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

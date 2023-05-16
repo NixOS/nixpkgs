@@ -209,6 +209,7 @@ rec {
   # Legacy attribute, for compatibility with existing configs only.
   raspberrypi2 = armv7l-hf-multiplatform;
 
+<<<<<<< HEAD
   # Nvidia Bluefield 2 (w. crypto support)
   bluefield2 = {
     gcc = {
@@ -216,6 +217,8 @@ rec {
     };
   };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   zero-gravitas = {
     linux-kernel = {
       name = "zero-gravitas";

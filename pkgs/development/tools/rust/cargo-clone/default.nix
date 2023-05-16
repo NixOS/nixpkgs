@@ -36,6 +36,10 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/janlikar/cargo-clone";
     changelog = "https://github.com/janlikar/cargo-clone/blob/v${version}/CHANGELOG.md";
     license = with licenses; [ asl20 mit ];
+<<<<<<< HEAD
     maintainers = with maintainers; [ figsoda matthiasbeyer ];
+=======
+    maintainers = with maintainers; [ figsoda ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

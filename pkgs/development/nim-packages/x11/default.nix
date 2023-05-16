@@ -11,6 +11,11 @@ buildNimPackage rec {
     hash = "sha256-2XRyXiBxAc9Zx/w0zRBHRZ240qww0FJvIvOKZ8YH50A=";
   };
 
+<<<<<<< HEAD
+=======
+  doCheck = true;
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   meta = with lib;
     src.meta // {
       description = "X11 library for nim";

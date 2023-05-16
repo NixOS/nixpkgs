@@ -23,14 +23,23 @@ let
       enableOCR = true;
 
       testScript = { nodes, ... }: let
+<<<<<<< HEAD
         user = nodes.machine.users.users.alice;
+=======
+        user = nodes.machine.config.users.users.alice;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       in ''
         start_all()
         machine.wait_for_text("(?i)select your user")
         machine.screenshot("sddm")
         machine.send_chars("${user.password}\n")
+<<<<<<< HEAD
         machine.wait_for_file("/tmp/xauth_*")
         machine.succeed("xauth merge /tmp/xauth_*")
+=======
+        machine.wait_for_file("${user.home}/.Xauthority")
+        machine.succeed("xauth merge ${user.home}/.Xauthority")
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         machine.wait_for_window("^IceWM ")
       '';
     };
@@ -55,10 +64,19 @@ let
         services.xserver.windowManager.icewm.enable = true;
       };
 
+<<<<<<< HEAD
       testScript = { nodes, ... }: ''
         start_all()
         machine.wait_for_file("/tmp/xauth_*")
         machine.succeed("xauth merge /tmp/xauth_*")
+=======
+      testScript = { nodes, ... }: let
+        user = nodes.machine.config.users.users.alice;
+      in ''
+        start_all()
+        machine.wait_for_file("${user.home}/.Xauthority")
+        machine.succeed("xauth merge ${user.home}/.Xauthority")
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         machine.wait_for_window("^IceWM ")
       '';
     };

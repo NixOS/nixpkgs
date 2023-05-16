@@ -161,7 +161,10 @@ let
         outputHashAlgo = "sha256";
         outputHash = hash;
         NETRC = netrc_file;
+<<<<<<< HEAD
         passthru.isWheel = lib.strings.hasSuffix "whl" file;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       } ''
       python ${./fetch_from_legacy.py} ${url} ${pname} ${file}
       mv ${file} $out

@@ -3,17 +3,27 @@
 , buildPythonPackage
 , fetchPypi
 , pythonOlder
+<<<<<<< HEAD
 , hatchling
+=======
+, setuptools
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 buildPythonPackage rec {
   pname = "attrs";
+<<<<<<< HEAD
   version = "23.1.0";
   disabled = pythonOlder "3.7";
+=======
+  version = "22.2.0";
+  disabled = pythonOlder "3.6";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
+<<<<<<< HEAD
     hash = "sha256-YnmDbVgVE6JvG/I1+azTM7yRFWg/FPfo+uRsmPxQ4BU=";
   };
 
@@ -28,6 +38,13 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     hatchling
+=======
+    hash = "sha256-ySJ7/C8BmTwD9o2zfR0VyWkBiDI8BnxkHxo1ylgYX5k=";
+  };
+
+  nativeBuildInputs = [
+    setuptools
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   outputs = [
@@ -56,7 +73,10 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python attributes without boilerplate";
     homepage = "https://github.com/python-attrs/attrs";
+<<<<<<< HEAD
     changelog = "https://github.com/python-attrs/attrs/releases/tag/${version}";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     license = licenses.mit;
     maintainers = with maintainers; [ ];
   };

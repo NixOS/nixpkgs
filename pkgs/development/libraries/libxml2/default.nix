@@ -17,7 +17,11 @@
     (stdenv.hostPlatform == stdenv.buildPlatform || stdenv.hostPlatform.isCygwin || stdenv.hostPlatform.isLinux || stdenv.hostPlatform.isWasi)
 , icuSupport ? false
 , icu
+<<<<<<< HEAD
 , enableShared ? !stdenv.hostPlatform.isMinGW && !stdenv.hostPlatform.isStatic
+=======
+, enableShared ? stdenv.hostPlatform.libc != "msvcrt" && !stdenv.hostPlatform.isStatic
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , enableStatic ? !enableShared
 , gnome
 }:
@@ -34,7 +38,11 @@ in
 let
 libxml = stdenv.mkDerivation rec {
   pname = "libxml2";
+<<<<<<< HEAD
   version = "2.11.4";
+=======
+  version = "2.10.4";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   outputs = [ "bin" "dev" "out" "doc" ]
     ++ lib.optional pythonSupport "py"
@@ -43,9 +51,30 @@ libxml = stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/libxml2/${lib.versions.majorMinor version}/libxml2-${version}.tar.xz";
+<<<<<<< HEAD
     sha256 = "c34df4qz8TlynKE6JJT9F78w3bS3pCfPM2JSyrV/V/c=";
   };
 
+=======
+    sha256 = "7QyRxYRQCPGTZznk7uIDVTHByUdCxlQfRO5m2IWUjUU=";
+  };
+
+  patches = [
+    # Upstream bugs:
+    #   https://bugzilla.gnome.org/show_bug.cgi?id=789714
+    #   https://gitlab.gnome.org/GNOME/libxml2/issues/64
+    # Patch from https://bugzilla.opensuse.org/show_bug.cgi?id=1065270 ,
+    # but only the UTF-8 part.
+    # Can also be mitigated by fixing malformed XML inputs, such as in
+    # https://gitlab.gnome.org/GNOME/gnumeric/merge_requests/3 .
+    # Other discussion:
+    #   https://github.com/itstool/itstool/issues/22
+    #   https://github.com/NixOS/nixpkgs/pull/63174
+    #   https://github.com/NixOS/nixpkgs/pull/72342
+    ./utf8-xmlErrorFuncHandler.patch
+  ];
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   strictDeps = true;
 
   nativeBuildInputs = [

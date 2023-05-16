@@ -24,7 +24,11 @@
 
 stdenv.mkDerivation rec {
   pname = "singular";
+<<<<<<< HEAD
   version = "4.3.2p2";
+=======
+  version = "4.3.1p2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   # since the tarball does not contain tests, we fetch from GitHub.
   src = fetchFromGitHub {
@@ -33,8 +37,14 @@ stdenv.mkDerivation rec {
 
     # if a release is tagged (which sometimes does not happen), it will
     # be in the format below.
+<<<<<<< HEAD
     rev = "Release-${lib.replaceStrings ["."] ["-"] version}";
     sha256 = "sha256-dtZmN8xUCZ9eSgmtBxqfJeWsM4W5Baq7xWXuNAxNLjA=";
+=======
+    # rev = "Release-${lib.replaceStrings ["."] ["-"] version}";
+    rev = "370a87f29e7b2a3fefe287184bd4f75b793cb03c";
+    sha256 = "sha256-T2tJ5yHTLzrXdozQB/XGZn4lNhpwVd9L30ZOzKAHxWs=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     # the repository's .gitattributes file contains the lines "/Tst/
     # export-ignore" and "/doc/ export-ignore" so some directories are

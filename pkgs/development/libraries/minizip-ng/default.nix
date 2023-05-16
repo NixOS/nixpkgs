@@ -14,13 +14,21 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "minizip-ng";
+<<<<<<< HEAD
   version = "4.0.1";
+=======
+  version = "3.0.10";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "zlib-ng";
     repo = finalAttrs.pname;
     rev = finalAttrs.version;
+<<<<<<< HEAD
     sha256 = "sha256-3bCGZupdJWcwp2d+XeqKZG3GxzXFm1UftV/PiN0u5iA=";
+=======
+    sha256 = "sha256-ynYAWF570S6MpD1WXbUC3cu+chL3+AhsMHr15l+LYVg=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ cmake pkg-config ];
@@ -31,7 +39,10 @@ stdenv.mkDerivation (finalAttrs: {
     "-DMZ_OPENSSL=ON"
     "-DMZ_BUILD_TESTS=${if finalAttrs.doCheck then "ON" else "OFF"}"
     "-DMZ_BUILD_UNIT_TESTS=${if finalAttrs.doCheck then "ON" else "OFF"}"
+<<<<<<< HEAD
     "-DMZ_LIB_SUFFIX='-ng'"
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ] ++ lib.optionals stdenv.isDarwin [
     # missing header file
     "-DMZ_LIBCOMP=OFF"

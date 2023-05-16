@@ -14,7 +14,11 @@ stdenv.mkDerivation rec {
   inherit version;
 
   inherit src;
+<<<<<<< HEAD
   sourceRoot = "${src.name}/${pname}";
+=======
+  sourceRoot = "source/${pname}";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nativeBuildInputs = [ cmake perl ];
   buildInputs = [

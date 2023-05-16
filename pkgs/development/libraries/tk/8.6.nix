@@ -14,8 +14,11 @@ callPackage ./generic.nix (args // {
     sha256 = "sha256-LmX6BpojNlRAo8VsVWuGc7XjKig4ANjZslfj9YTOBnU=";
   };
 
+<<<<<<< HEAD
   patches = [
     ./tk-8_6_13-find-library.patch
   ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 })

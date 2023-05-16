@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 { lib, stdenv, buildPackages, fetchurl, fetchpatch, autoreconfHook, which, pkg-config, perl, guile_2_2, libxml2 }:
+=======
+{ lib, stdenv, buildPackages, fetchurl, fetchpatch, autoreconfHook, which, pkg-config, perl, guile, libxml2 }:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 stdenv.mkDerivation rec {
   pname = "autogen";
@@ -10,13 +14,20 @@ stdenv.mkDerivation rec {
   };
 
   patches = let
+<<<<<<< HEAD
     dp = { ver ? "1%255.18.16-5", name, sha256 }: fetchurl {
       url = "https://salsa.debian.org/debian/autogen/-/raw/debian/${ver}"
           + "/debian/patches/${name}?inline=false";
+=======
+    dp = { ver ? "1%255.18.16-4", pname, name ? (pname + ".diff"), sha256 }: fetchurl {
+      url = "https://salsa.debian.org/debian/autogen/-/raw/debian/${ver}"
+          + "/debian/patches/${pname}.diff?inline=false";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       inherit name sha256;
     };
   in [
     (dp {
+<<<<<<< HEAD
       name = "20_no_Werror.diff";
       sha256 = "08z4s2ifiqyaacjpd9pzr59w8m4j3548kkaq1bwvp2gjn29m680x";
     })
@@ -44,6 +55,19 @@ stdenv.mkDerivation rec {
       name = "40_suse_06-autogen-avoid-GCC-code-analysis-bug.patch";
       sha256 = "1d65zygzw2rpa00s0jy2y1bg29vkbhnjwlb5pv22rfv87zbk6z9q";
     })
+=======
+      pname = "20_no_Werror";
+      sha256 = "08z4s2ifiqyaacjpd9pzr59w8m4j3548kkaq1bwvp2gjn29m680x";
+    })
+    (dp {
+      pname = "30_ag_macros.m4_syntax_error";
+      sha256 = "1z8vmbwbkz3505wd33i2xx91mlf8rwsa7klndq37nw821skxwyh3";
+    })
+    (dp {
+      pname = "31_allow_overriding_AGexe_for_crossbuild";
+      sha256 = "0h9wkc9bqb509knh8mymi43hg6n6sxg2lixvjlchcx7z0j7p8xkf";
+    })
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     # Next upstream release will contain guile-3 support. We apply non-invasive
     # patch meanwhile.
     (fetchpatch {
@@ -62,7 +86,11 @@ stdenv.mkDerivation rec {
     buildPackages.buildPackages.autogen buildPackages.texinfo
   ];
   buildInputs = [
+<<<<<<< HEAD
     guile_2_2 libxml2
+=======
+    guile libxml2
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   preConfigure = ''

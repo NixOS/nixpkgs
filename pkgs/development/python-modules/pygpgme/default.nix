@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 { lib
 , buildPythonPackage
 , fetchurl
@@ -5,14 +6,22 @@
 , isPyPy
 , pythonAtLeast
 }:
+=======
+{ lib, buildPythonPackage, fetchurl, isPyPy
+, gpgme }:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 buildPythonPackage rec {
   version = "0.3";
   pname = "pygpgme";
+<<<<<<< HEAD
 
   # Native code doesn't compile against the C API of Python 3.11:
   # https://bugs.launchpad.net/pygpgme/+bug/1996122
   disabled = isPyPy || pythonAtLeast "3.11";
+=======
+  disabled = isPyPy;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchurl {
     url = "https://launchpad.net/pygpgme/trunk/${version}/+download/${pname}-${version}.tar.gz";

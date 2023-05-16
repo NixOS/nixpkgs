@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 { lib, stdenv, fetchgit, makeWrapper, coreutils }:
+=======
+{ stdenv, lib, fetchgit, fetchpatch, makeWrapper, coreutils }:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 stdenv.mkDerivation rec {
   pname = "datefudge";

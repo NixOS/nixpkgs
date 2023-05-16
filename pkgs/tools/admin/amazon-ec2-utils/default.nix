@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , fetchFromGitHub
+<<<<<<< HEAD
 , bash
 , python3
 , installShellFiles
@@ -17,17 +18,39 @@ stdenv.mkDerivation rec {
     repo = "amazon-ec2-utils";
     rev = "refs/tags/v${version}";
     hash = "sha256-Yr6pVwyvyVGV4xrjL7VFSkRH8d1w8VLPMTVjXfneJUM=";
+=======
+, curl
+, gawk
+, python3
+, installShellFiles
+}:
+stdenv.mkDerivation rec {
+  pname = "amazon-ec2-utils";
+  version = "2.0";
+
+  src = fetchFromGitHub {
+    owner = "aws";
+    repo = "amazon-ec2-utils";
+    rev = "v${version}";
+    hash = "sha256-u1rHBV8uVcCywvQNYagtDleYB12tmhyqDbXTBzt45dk=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   outputs = [ "out" "man" ];
 
   strictDeps = true;
+<<<<<<< HEAD
 
   buildInputs = [
     bash
     python3
   ];
 
+=======
+  buildInputs = [
+    python3
+  ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nativeBuildInputs = [
     installShellFiles
   ];
@@ -69,10 +92,17 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
+<<<<<<< HEAD
     changelog = "https://github.com/amazonlinux/amazon-ec2-utils/releases/tag/v${version}";
     description = "Contains a set of utilities and settings for Linux deployments in EC2";
     homepage = "https://github.com/amazonlinux/amazon-ec2-utils";
     license = licenses.mit;
     maintainers = with maintainers; [ ketzacoatl thefloweringash anthonyroussel ];
+=======
+    homepage = "https://github.com/aws/amazon-ec2-utils";
+    description = "Contains a set of utilities and settings for Linux deployments in EC2";
+    license = licenses.mit;
+    maintainers = with maintainers; [ ketzacoatl thefloweringash ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

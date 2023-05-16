@@ -1,7 +1,10 @@
 { lib
 , callPackage
 , stdenvNoCC
+<<<<<<< HEAD
 , runCommand
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , makeWrapper
 , llvmPackages_13
 , cacert
@@ -22,11 +25,15 @@
 , nativeBuildInputs ? [ ]
 , preUnpack ? ""
 , postFixup ? ""
+<<<<<<< HEAD
 , extraWrapProgramArgs ? ""
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , ...
 }@args:
 let
   flutterSetupScript = ''
+<<<<<<< HEAD
     # Pub needs SSL certificates. Dart normally looks in a hardcoded path.
     # https://github.com/dart-lang/sdk/blob/3.1.0/runtime/bin/security_context_linux.cc#L48
     #
@@ -47,6 +54,8 @@ let
         --add-flags "--root-certs-file=${cacert}/etc/ssl/certs/ca-bundle.crt"
     ''}/bin/dart"
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     export HOME="$NIX_BUILD_TOP"
     flutter config --no-analytics &>/dev/null # mute first-run
     flutter config --enable-linux-desktop >/dev/null
@@ -143,14 +152,22 @@ let
       # which is not what application authors expect.
       for f in "$out"/bin/*; do
         wrapProgram "$f" \
+<<<<<<< HEAD
           --suffix LD_LIBRARY_PATH : '${lib.makeLibraryPath finalAttrs.runtimeDependencies}' \
           ${extraWrapProgramArgs}
+=======
+          --suffix LD_LIBRARY_PATH : '${lib.makeLibraryPath finalAttrs.runtimeDependencies}'
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       done
 
       ${postFixup}
     '';
 
+<<<<<<< HEAD
     passthru = (args.passthru or {}) // {
+=======
+    passthru = {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       inherit (deps) depsListFile;
     };
   });

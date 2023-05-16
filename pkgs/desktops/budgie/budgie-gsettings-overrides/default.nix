@@ -3,8 +3,13 @@
 , budgie-desktop
 , budgie-desktop-view
 , glib
+<<<<<<< HEAD
 , gsettings-desktop-schemas
 , magpie
+=======
+, gnome
+, gsettings-desktop-schemas
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , mate
 , nixos-artwork
 , nixos-background-light ? nixos-artwork.wallpapers.nineish
@@ -32,6 +37,7 @@ let
     document-font-name="Noto Sans 10"
     monospace-font-name="Hack 10"
 
+<<<<<<< HEAD
     [org.gnome.desktop.peripherals.touchpad:Budgie]
     tap-to-click=true
 
@@ -41,6 +47,11 @@ let
     [org.gnome.mutter:Budgie]
     edge-tiling=true
 
+=======
+    [org.gnome.desktop.wm.preferences:Budgie]
+    titlebar-font="Noto Sans Bold 10"
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     [com.solus-project.budgie-menu:Budgie]
     use-default-menu-icon=true
 
@@ -63,7 +74,11 @@ let
       budgie-desktop
       budgie-desktop-view
       gsettings-desktop-schemas
+<<<<<<< HEAD
       magpie
+=======
+      gnome.mutter
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ] ++ extraGSettingsOverridePackages;
 
 in

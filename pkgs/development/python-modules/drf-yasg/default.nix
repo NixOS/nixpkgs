@@ -14,11 +14,19 @@
 
 buildPythonPackage rec {
   pname = "drf-yasg";
+<<<<<<< HEAD
   version = "1.21.7";
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-TDuTBos9/KaWmrERFV5N1vey1oC5h3jej9Rgt4N72w0=";
+=======
+  version = "1.21.5";
+
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-zu8MO13EOJeBr9eG5tw2l68qL+DYck7h9jfCPXW7xbI=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   postPatch = ''

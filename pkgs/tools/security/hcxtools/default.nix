@@ -2,13 +2,21 @@
 
 stdenv.mkDerivation rec {
   pname = "hcxtools";
+<<<<<<< HEAD
   version = "6.3.1";
+=======
+  version = "6.3.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "ZerBea";
     repo = pname;
     rev = version;
+<<<<<<< HEAD
     sha256 = "sha256-EDTxzstQwQy7MSkdi1nQis8qEm8ZPblkeOkM8B48IRE=";
+=======
+    sha256 = "sha256-p1G+Kxh0OfTRDTSBl2NxhRrQYsehGuCxmGU87CBjyW0=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ pkg-config ];

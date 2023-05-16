@@ -1,19 +1,29 @@
 { lib
 , async-timeout
 , buildPythonPackage
+<<<<<<< HEAD
 , cython_3
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , fetchFromGitHub
 , poetry-core
 , pytest-asyncio
 , pytestCheckHook
 , pythonOlder
 , setuptools
+<<<<<<< HEAD
 , wheel
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 buildPythonPackage rec {
   pname = "dbus-fast";
+<<<<<<< HEAD
   version = "2.2.0";
+=======
+  version = "1.85.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -22,6 +32,7 @@ buildPythonPackage rec {
     owner = "Bluetooth-Devices";
     repo = pname;
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-47Z8szHVBz8Sx7g+WiKfLzg3MIFTyMjPLDlgGfPb//U=";
   };
 
@@ -34,6 +45,14 @@ buildPythonPackage rec {
     poetry-core
     setuptools
     wheel
+=======
+    hash = "sha256-pl5Qs7llmUna+i85hMl14UhTDkibPEcMaRnsPM7ODFg=";
+  };
+
+  nativeBuildInputs = [
+    poetry-core
+    setuptools
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   propagatedBuildInputs = [
@@ -66,13 +85,19 @@ buildPythonPackage rec {
     "test_export_alias"
     "test_export_introspection"
     "test_export_unexport"
+<<<<<<< HEAD
     "test_fast_disconnect"
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "test_glib_big_message"
     "test_high_level_service_fd_passing"
     "test_interface_add_remove_signal"
     "test_introspectable_interface"
     "test_methods"
+<<<<<<< HEAD
     "test_multiple_flags_in_message"
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "test_name_requests"
     "test_object_manager"
     "test_peer_interface"

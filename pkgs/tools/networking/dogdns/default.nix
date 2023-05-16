@@ -41,10 +41,13 @@ rustPlatform.buildRustPackage rec {
     };
   };
 
+<<<<<<< HEAD
   dontUseJustBuild = true;
   dontUseJustCheck = true;
   dontUseJustInstall = true;
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   postPatch = ''
     # update Cargo.lock to work with openssl 3
     ln -sf ${./Cargo.lock} Cargo.lock

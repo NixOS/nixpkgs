@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 { lib, perl, buildEnv, makeBinaryWrapper
+=======
+{ lib, perl, buildEnv, makeWrapper
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , extraLibs ? []
 , extraOutputsToInstall ? []
 , postBuild ? ""
@@ -17,7 +21,11 @@ let
     inherit ignoreCollisions;
     extraOutputsToInstall = [ "out" ] ++ extraOutputsToInstall;
 
+<<<<<<< HEAD
     nativeBuildInputs = [ makeBinaryWrapper ];
+=======
+    nativeBuildInputs = [ makeWrapper ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     # we create wrapper for the binaries in the different packages
     postBuild = ''

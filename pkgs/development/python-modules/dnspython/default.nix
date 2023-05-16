@@ -9,29 +9,49 @@
 , h2
 , httpx
 , idna
+<<<<<<< HEAD
 , poetry-core
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , pytestCheckHook
 , pythonOlder
 , requests
 , requests-toolbelt
+<<<<<<< HEAD
+=======
+, setuptools-scm
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , sniffio
 , trio
 }:
 
 buildPythonPackage rec {
   pname = "dnspython";
+<<<<<<< HEAD
   version = "2.4.2";
   format = "pyproject";
+=======
+  version = "2.3.0";
+  format = "setuptools";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
+<<<<<<< HEAD
     hash = "sha256-jc+ujHRgovhLQHLibxyfQQHKIMBxZJy3w06LapPViYQ=";
   };
 
   nativeBuildInputs = [
     poetry-core
+=======
+    hash = "sha256-Ik4ysD60a+cOEu9tZOC+Ejpk5iGrTAgi/21FDVKlQLk=";
+  };
+
+  nativeBuildInputs = [
+    setuptools-scm
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   passthru.optional-dependencies = {

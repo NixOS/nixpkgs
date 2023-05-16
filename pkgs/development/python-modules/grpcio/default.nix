@@ -51,6 +51,10 @@ buildPythonPackage rec {
     description = "HTTP/2-based RPC framework";
     license = licenses.asl20;
     homepage = "https://grpc.io/grpc/python/";
+<<<<<<< HEAD
     maintainers = with maintainers; [ ];
+=======
+    maintainers = with maintainers; [ SuperSandro2000 ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

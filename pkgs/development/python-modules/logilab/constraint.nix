@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 { lib
 , buildPythonPackage
 , fetchPypi
@@ -8,17 +9,24 @@
 , pytestCheckHook
 , setuptools
 }:
+=======
+{ lib, buildPythonPackage, fetchPypi, logilab-common, six }:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 buildPythonPackage rec {
   pname = "logilab-constraint";
   version = "0.6.2";
+<<<<<<< HEAD
   format = "setuptools";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-Jk6wvvcDEeHfy7dUcjbnzFIeGBYm5tXzCI26yy+t2qs=";
   };
 
+<<<<<<< HEAD
   nativeBuildInputs = [
     importlib-metadata
     pip
@@ -52,6 +60,16 @@ buildPythonPackage rec {
     changelog = "https://forge.extranet.logilab.fr/open-source/logilab-constraint/-/blob/${version}/CHANGELOG.md";
     license = licenses.lgpl21Plus;
     maintainers = with lib.maintainers; [ ];
+=======
+  propagatedBuildInputs = [
+    logilab-common six
+  ];
+
+
+  meta = with lib; {
+    description = "logilab-database provides some classes to make unified access to different";
+    homepage = "https://www.logilab.org/project/logilab-database";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }
 

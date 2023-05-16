@@ -5,11 +5,19 @@ lib.throwIfNot (lib.versionAtLeast ocaml.version "4.08")
 
 stdenv.mkDerivation rec {
   pname = "cmdliner";
+<<<<<<< HEAD
   version = "1.2.0";
 
   src = fetchurl {
     url = "https://erratique.ch/software/${pname}/releases/${pname}-${version}.tbz";
     sha256 = "sha256-r+0QWJAoOU/W9k6XscYX4r5w3m017kfgQjXaMandAHg=";
+=======
+  version = "1.1.1";
+
+  src = fetchurl {
+    url = "https://erratique.ch/software/${pname}/releases/${pname}-${version}.tbz";
+    sha256 = "sha256-oa6Hw6eZQO+NHdWfdED3dtHckm4BmEbdMiAuRkYntfs=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ ocaml ];

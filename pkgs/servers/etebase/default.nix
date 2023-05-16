@@ -12,7 +12,10 @@
 , python-ldap
 , withPostgres ? true
 , psycopg2
+<<<<<<< HEAD
 , nix-update-script
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 buildPythonPackage rec {
@@ -48,8 +51,11 @@ buildPythonPackage rec {
     chmod +x $out/bin/etebase-server
   '';
 
+<<<<<<< HEAD
   passthru.updateScript = nix-update-script {};
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   meta = with lib; {
     homepage = "https://github.com/etesync/server";
     description = "An Etebase (EteSync 2.0) server so you can run your own";

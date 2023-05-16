@@ -1,5 +1,9 @@
 {
+<<<<<<< HEAD
   mkDerivation, fetchurl, fetchpatch, lib,
+=======
+  mkDerivation, fetchurl, lib,
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   extra-cmake-modules, kdoctools, wrapGAppsHook,
   kconfig, kinit, kjsembed, taglib, exiv2, podofo,
   kcrash
@@ -17,6 +21,7 @@ in mkDerivation rec {
     sha256 = "sha256-sjxgp93Z9ttN1/VaxV/MqKVY+miq+PpcuJ4er2kvI+0=";
   };
 
+<<<<<<< HEAD
   patches = [
     (fetchpatch {
       name = "fix-build-with-exiv2-0.28.patch";
@@ -25,6 +30,8 @@ in mkDerivation rec {
     })
   ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   buildInputs = [ taglib exiv2 podofo ];
 
   nativeBuildInputs = [ extra-cmake-modules kdoctools wrapGAppsHook ];

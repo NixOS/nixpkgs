@@ -27,8 +27,11 @@ import ./make-test-python.nix (
         };
       };
     testScript = ''
+<<<<<<< HEAD
       import os
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       start_all()
 
       # Create a fake cache with Nginx service the static files

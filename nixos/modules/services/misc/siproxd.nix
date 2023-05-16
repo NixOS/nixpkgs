@@ -60,7 +60,11 @@ in
         default = [ ];
         example = [ "192.168.1.0/24" "192.168.2.0/24" ];
         description = lib.mdDoc ''
+<<<<<<< HEAD
           Access control list for incoming SIP registrations.
+=======
+          Acess control list for incoming SIP registrations.
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         '';
       };
 
@@ -69,7 +73,11 @@ in
         default = [ ];
         example = [ "123.45.0.0/16" "123.46.0.0/16" ];
         description = lib.mdDoc ''
+<<<<<<< HEAD
           Access control list for incoming SIP traffic.
+=======
+          Acess control list for incoming SIP traffic.
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         '';
       };
 
@@ -78,7 +86,11 @@ in
         default = [ ];
         example = [ "10.0.0.0/8" "11.0.0.0/8" ];
         description = lib.mdDoc ''
+<<<<<<< HEAD
           Access control list for denying incoming
+=======
+          Acess control list for denying incoming
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           SIP registrations and traffic.
         '';
       };

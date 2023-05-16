@@ -10,7 +10,11 @@
 
 buildPythonPackage rec {
   pname = "dissect-clfs";
+<<<<<<< HEAD
   version = "1.6";
+=======
+  version = "1.4";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -19,7 +23,11 @@ buildPythonPackage rec {
     owner = "fox-it";
     repo = "dissect.clfs";
     rev = "refs/tags/${version}";
+<<<<<<< HEAD
     hash = "sha256-JdfO9KVuK1TsDyqEQkuHPJtSHDCym63imvLSHsVwQ3k=";
+=======
+    hash = "sha256-/QZuet54ws0IsjHKlv2a3hqoXhY5VaQQ0jU81J46Cyg=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;

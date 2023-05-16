@@ -21,6 +21,7 @@ let
         expr = repeatedOverrides.entangled.pname == "a-better-figlet-with-blackjack";
         expected = true;
       })
+<<<<<<< HEAD
       ({
         name = "overriding-using-only-attrset";
         expr = (pkgs.hello.overrideAttrs { pname = "hello-overriden"; }).pname == "hello-overriden";
@@ -31,6 +32,8 @@ let
         expr = ((stdenvNoCC.mkDerivation { pname = "hello-no-final-attrs"; }).overrideAttrs { pname = "hello-no-final-attrs-overridden"; }).pname == "hello-no-final-attrs-overridden";
         expected = true;
       })
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     ];
 
   addEntangled = origOverrideAttrs: f:

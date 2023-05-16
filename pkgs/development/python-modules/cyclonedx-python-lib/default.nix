@@ -22,7 +22,11 @@
 
 buildPythonPackage rec {
   pname = "cyclonedx-python-lib";
+<<<<<<< HEAD
   version = "4.1.0";
+=======
+  version = "4.0.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -31,7 +35,11 @@ buildPythonPackage rec {
     owner = "CycloneDX";
     repo = pname;
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-pRYjpmHhsw03b87YjS8YMmkQNwfcihp/bk56LFn55AU=";
+=======
+    hash = "sha256-xXtUEunPYiuVh+1o4xoFutGstZ918ju5xK5zLvgbLHc=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

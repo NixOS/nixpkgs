@@ -22,7 +22,11 @@ let
   );
 in
 stdenv.mkDerivation rec {
+<<<<<<< HEAD
   version = "0.12.4"; # also update communityModules
+=======
+  version = "0.12.3"; # also update communityModules
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pname = "prosody";
   # The following community modules are necessary for the nixos module
   # prosody module to comply with XEP-0423 and provide a working
@@ -34,7 +38,11 @@ stdenv.mkDerivation rec {
   ];
   src = fetchurl {
     url = "https://prosody.im/downloads/source/${pname}-${version}.tar.gz";
+<<<<<<< HEAD
     sha256 = "R9cSJzwvKVWMQS9s2uwHMmC7wmt92iQ9tYAzAYPWWFY=";
+=======
+    sha256 = "sha256-NdoNAx/0YECi1jjgBNQlXiSbYyP+YhLbnd12tAHbIQE=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   # A note to all those merging automated updates: Please also update this
@@ -42,8 +50,13 @@ stdenv.mkDerivation rec {
   # version.
   communityModules = fetchhg {
     url = "https://hg.prosody.im/prosody-modules";
+<<<<<<< HEAD
     rev = "7c105277a9ca";
     sha256 = "eiObn5Kw7dS+oxdQiJ8NhSC4P7EvILIOEnMoxCWIFro=";
+=======
+    rev = "3e30799deec2";
+    sha256 = "sha256-oaWs2D5z1LtvhtZMlaZPLNoNNL/1TIZLZwFfC3vtRUo=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ makeWrapper ];

@@ -42,11 +42,19 @@
 
 stdenv.mkDerivation rec {
   pname = "labplot";
+<<<<<<< HEAD
   version = "2.10.1";
 
   src = fetchurl {
     url = "https://download.kde.org/stable/labplot/labplot-${version}.tar.xz";
     sha256 = "sha256-K24YFRfPtuDf/3uJXz6yDHzjWeZzLThUXgdXya6i2u8=";
+=======
+  version = "2.10.0";
+
+  src = fetchurl {
+    url = "https://download.kde.org/stable/labplot/labplot-${version}.tar.xz";
+    sha256 = "sha256-XfxnQxCQSkOHXWnj4mCh/t2WjmwbHs2rp1WrGqOMupA=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   cmakeFlags = [

@@ -9,16 +9,27 @@
 
 buildGoModule rec {
   pname = "supabase-cli";
+<<<<<<< HEAD
   version = "1.97.1";
+=======
+  version = "1.55.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "supabase";
     repo = "cli";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-k1/6QAxQ3h5xG+2VBc/PillddYhrvsQrtJK5tXrb0sQ=";
   };
 
   vendorHash = "sha256-oEIRmkOCHIvIQJX7GQVJD/aURoEJ7V/LJFEg+oltWEY=";
+=======
+    sha256 = "sha256-bgbQw59AxroHMJJI8YQq38tyv/uvv513ekXzG7MVEP0=";
+  };
+
+  vendorSha256 = "sha256-FYQbMnBtHlW0jdIyVkmbf+b3VETfcwGhGM0yYkNMGH4=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   ldflags = [
     "-s"
@@ -51,7 +62,11 @@ buildGoModule rec {
     description = "A CLI for interacting with supabase";
     homepage = "https://github.com/supabase/cli";
     license = licenses.mit;
+<<<<<<< HEAD
     maintainers = with maintainers; [ gerschtli kashw2 ];
+=======
+    maintainers = with maintainers; [ gerschtli ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     mainProgram = "supabase";
   };
 }

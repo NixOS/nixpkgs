@@ -1,5 +1,6 @@
 { lib
 , stdenv
+<<<<<<< HEAD
 , buildPythonPackage
 , fetchFromGitHub
 , fetchpatch
@@ -33,11 +34,37 @@
 , pythonOlder
 , sanic-testing
 , uvicorn
+=======
+, aiofiles
+, beautifulsoup4
+, buildPythonPackage
+, doCheck ? !stdenv.isDarwin # on Darwin, tests fail but pkg still works
+, fetchFromGitHub
+, gunicorn
+, httptools
+, multidict
+, pytest-asyncio
+, pytestCheckHook
+, pythonOlder
+, pythonAtLeast
+, sanic-routing
+, sanic-testing
+, setuptools
+, ujson
+, uvicorn
+, uvloop
+, websockets
+, aioquic
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 buildPythonPackage rec {
   pname = "sanic";
+<<<<<<< HEAD
   version = "23.6.0";
+=======
+  version = "22.12.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -46,6 +73,7 @@ buildPythonPackage rec {
     owner = "sanic-org";
     repo = pname;
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-Ffw92mlYNV+ikb6299uw24EI1XPpl3Ju2st1Yt/YHKw=";
   };
 
@@ -61,21 +89,36 @@ buildPythonPackage rec {
   nativeBuildInputs = [
     setuptools
     wheel
+=======
+    hash = "sha256-Vj780rP5rJ+YsMWlb3BR9LTKT/nTt0C2H3J0X9sysj8=";
+  };
+
+  nativeBuildInputs = [
+    setuptools
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   propagatedBuildInputs = [
     aiofiles
+<<<<<<< HEAD
     httptools
     html5tagger
     multidict
     sanic-routing
     tracerite
     typing-extensions
+=======
+    aioquic
+    httptools
+    multidict
+    sanic-routing
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     ujson
     uvloop
     websockets
   ];
 
+<<<<<<< HEAD
   passthru.optional-dependencies = {
     ext = [
       # TODO: sanic-ext
@@ -85,6 +128,8 @@ buildPythonPackage rec {
     ];
   };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nativeCheckInputs = [
     beautifulsoup4
     gunicorn
@@ -92,7 +137,11 @@ buildPythonPackage rec {
     pytestCheckHook
     sanic-testing
     uvicorn
+<<<<<<< HEAD
   ] ++ passthru.optional-dependencies.http3;
+=======
+  ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   inherit doCheck;
 
@@ -146,8 +195,11 @@ buildPythonPackage rec {
   disabledTestPaths = [
     # We are not interested in benchmarks
     "benchmark/"
+<<<<<<< HEAD
     # We are also not interested in typing
     "typing/test_typing.py"
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     # unable to create async loop
     "test_app.py"
     "test_asgi.py"
@@ -166,6 +218,10 @@ buildPythonPackage rec {
     homepage = "https://github.com/sanic-org/sanic/";
     changelog = "https://github.com/sanic-org/sanic/releases/tag/v${version}";
     license = licenses.mit;
+<<<<<<< HEAD
     maintainers = with maintainers; [ AluisioASG ];
+=======
+    maintainers = with maintainers; [ costrouc AluisioASG ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

@@ -9,16 +9,27 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "git-stack";
+<<<<<<< HEAD
   version = "0.10.17";
+=======
+  version = "0.10.16";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "gitext-rs";
     repo = "git-stack";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-foItJSZ6jsLuWkO/c1Ejb45dSdzZ/ripieyVIYsEyy0=";
   };
 
   cargoHash = "sha256-MEhUmy4ijR/zHm/qMt4PqNGYnCfIgjNaL9SlMmXCMmc=";
+=======
+    hash = "sha256-QpRgAcbaZP5pgqMCoYAUybp8NkSkfGqNsZYXZp3Zdtc=";
+  };
+
+  cargoHash = "sha256-L+GtqbPQCgw0n1aW/2rU8ba+acC5n0sdEl9C6lveb1I=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   buildInputs = lib.optionals stdenv.isDarwin [
     Security

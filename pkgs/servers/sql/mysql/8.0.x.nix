@@ -6,11 +6,19 @@
 let
 self = stdenv.mkDerivation rec {
   pname = "mysql";
+<<<<<<< HEAD
   version = "8.0.34";
 
   src = fetchurl {
     url = "https://dev.mysql.com/get/Downloads/MySQL-${self.mysqlVersion}/${pname}-${version}.tar.gz";
     hash = "sha256-5l0Do8QmGLX7+ZBCrtMyCUAumyeqYsfIdD/9R4jY2x0=";
+=======
+  version = "8.0.33";
+
+  src = fetchurl {
+    url = "https://dev.mysql.com/get/Downloads/MySQL-${self.mysqlVersion}/${pname}-${version}.tar.gz";
+    hash = "sha256-liAC9dkG9C9AsnejnS25OTEkjB8H/49DEsKI5jgD3RI=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ bison cmake pkg-config ]

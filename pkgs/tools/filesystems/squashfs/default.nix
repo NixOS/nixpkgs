@@ -1,6 +1,10 @@
 { lib
 , stdenv
 , fetchFromGitHub
+<<<<<<< HEAD
+=======
+, fetchpatch
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , help2man
 , lz4
 , lzo
@@ -47,7 +51,10 @@ stdenv.mkDerivation rec {
     "XZ_SUPPORT=1"
     "ZSTD_SUPPORT=1"
     "LZ4_SUPPORT=1"
+<<<<<<< HEAD
     "LZMA_XZ_SUPPORT=1"
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "LZO_SUPPORT=1"
   ];
 

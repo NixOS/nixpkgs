@@ -3,6 +3,10 @@
 , buildPythonPackage
 , cargo
 , fetchFromGitHub
+<<<<<<< HEAD
+=======
+, fetchpatch
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , h5py
 , numpy
 , pythonOlder
@@ -16,7 +20,11 @@
 
 buildPythonPackage rec {
   pname = "safetensors";
+<<<<<<< HEAD
   version = "0.3.1";
+=======
+  version = "0.3.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -25,6 +33,7 @@ buildPythonPackage rec {
     owner = "huggingface";
     repo = pname;
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-RoIBD+zBKVzXE8OpI8GR371YPxceR4P8B9T1/AHc9vA=";
   };
 
@@ -35,6 +44,28 @@ buildPythonPackage rec {
   };
 
   sourceRoot = "${src.name}/bindings/python";
+=======
+    hash = "sha256-Qpb5lTw1WEME9tWEGfxC8l8dK9mGMH2rz+O+xGCrUxw";
+  };
+
+  patches = [
+    # remove after next release
+    (fetchpatch {
+      name = "commit-cargo-lockfile";
+      relative = "bindings/python";
+      url = "https://github.com/huggingface/safetensors/commit/a7061b4235b59312010b2dd6f9597381428ee9a2.patch";
+      hash = "sha256-iH4vQOL2LU93kd0dSS8/JJxKGb+kDstqnExjYSSwi78";
+    })
+  ];
+
+  cargoDeps = rustPlatform.fetchCargoTarball {
+    inherit src patches;
+    sourceRoot = "source/bindings/python";
+    hash = "sha256-tC0XawmKWNGCaByHQfJEfmHM3m/qgTuIpcRaEFJC6dM";
+  };
+
+  sourceRoot = "source/bindings/python";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nativeBuildInputs = [
     setuptools-rust

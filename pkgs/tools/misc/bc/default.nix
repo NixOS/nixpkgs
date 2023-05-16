@@ -27,7 +27,11 @@ stdenv.mkDerivation rec {
   doCheck = true; # not cross
 
   # Hack to make sure we never to the relaxation `$PATH` and hooks support for
+<<<<<<< HEAD
   # compatibility. This will be replaced with something clearer in a future
+=======
+  # compatability. This will be replaced with something clearer in a future
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   # masss-rebuild.
   strictDeps = true;
 

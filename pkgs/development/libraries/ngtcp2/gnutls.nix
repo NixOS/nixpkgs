@@ -6,13 +6,21 @@
 
 stdenv.mkDerivation rec {
   pname = "ngtcp2";
+<<<<<<< HEAD
   version = "0.19.1";
+=======
+  version = "0.13.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "ngtcp2";
     repo = "ngtcp2";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-agiQRy/e5VS+ANxajXYi5huRjQQ2M8eddH/AzmwnHdQ=";
+=======
+    sha256 = "sha256-bkTbnf7vyTxA623JVGUgrwAuXK7d8kzijOK1F4Sh4yY=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   outputs = [ "out" "dev" ];

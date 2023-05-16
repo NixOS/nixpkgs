@@ -6,16 +6,27 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "typeshare";
+<<<<<<< HEAD
   version = "1.7.0";
+=======
+  version = "1.6.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "1password";
     repo = "typeshare";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-Ftr0YMrY6tPpfg25swYntBXLWGKT00PEz79aOiSgLsU=";
   };
 
   cargoHash = "sha256-VIPIFdbyPcflqHHLkzpDugmw9+9CJRIv+Oy7PoaUZ5g=";
+=======
+    hash = "sha256-vKjSpjbjTY9YxJGtqyoat6qI9ipmou+HQt35Dhpgk4E=";
+  };
+
+  cargoHash = "sha256-dnQttsI6v90TJD8MekaLV63ltl147zBCe3mmfWj6cxs=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nativeBuildInputs = [ installShellFiles ];
 

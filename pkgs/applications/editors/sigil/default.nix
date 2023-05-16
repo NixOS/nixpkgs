@@ -5,13 +5,21 @@
 
 mkDerivation rec {
   pname = "sigil";
+<<<<<<< HEAD
   version = "2.0.1";
+=======
+  version = "1.9.30";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     repo = "Sigil";
     owner = "Sigil-Ebook";
     rev = version;
+<<<<<<< HEAD
     sha256 = "sha256-d54N6Kb+xLMxlRwqxqWXnFGQCvUmSy9z6j86aV+VioU=";
+=======
+    sha256 = "sha256-07JK3xHpNDs6CU8je8PNyTugNBi2mQ7G109R3JX4eyg=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   pythonPath = with python3Packages; [ lxml ];

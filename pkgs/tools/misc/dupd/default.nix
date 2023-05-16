@@ -6,13 +6,21 @@
 
 stdenv.mkDerivation rec {
   pname = "dupd";
+<<<<<<< HEAD
   version = "1.7.3";
+=======
+  version = "1.7.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "jvirkki";
     repo  = "dupd";
     rev   = version;
+<<<<<<< HEAD
     sha256 = "sha256-ZiQroJ5fjBCIjU+M8KRA0N3Mrg9h0NVtfYUIS4cYyhw=";
+=======
+    sha256 = "sha256-jDFPvJqIUEu0/8bvq2PaaA1NnWakApegW8bxn+NKffs=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   postPatch = ''

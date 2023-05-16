@@ -1,7 +1,10 @@
 #!@runtimeShell@
 
 set -euo pipefail
+<<<<<<< HEAD
 shopt -s nullglob
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 export PATH="@binPath@"
 # used for glob ordering of package names

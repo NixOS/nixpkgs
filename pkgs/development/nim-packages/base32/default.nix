@@ -9,6 +9,10 @@ buildNimPackage rec {
     rev = version;
     hash = "sha256-BsDly13xsY2bu4N9LGHB0OGej/JhAx3B01TDdF0M8Jk=";
   };
+<<<<<<< HEAD
+=======
+  doCheck = true;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   meta = src.meta // {
     description = "Base32 library for Nim";
     maintainers = with lib.maintainers; [ ehmry ];

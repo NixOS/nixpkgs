@@ -9,11 +9,19 @@
 
 stdenv.mkDerivation rec {
   pname = "VASSAL";
+<<<<<<< HEAD
   version = "3.6.19";
 
   src = fetchzip {
     url = "https://github.com/vassalengine/vassal/releases/download/${version}/${pname}-${version}-linux.tar.bz2";
     sha256 = "sha256-JqMX0RUx1Yndo1pkLA4YnijgkojBaelt6T7gP+CUBSI=";
+=======
+  version = "3.6.17";
+
+  src = fetchzip {
+    url = "https://github.com/vassalengine/vassal/releases/download/${version}/${pname}-${version}-linux.tar.bz2";
+    sha256 = "sha256-hm1tgkF/SYRnoq1+ZxlgriLMQm3IX+UBR2bPYpBVp5k=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   buildInputs = [

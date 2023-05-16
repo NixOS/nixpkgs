@@ -16,6 +16,10 @@ buildPythonPackage rec {
     description = "Python support for quantities with units";
     homepage = "https://bitbucket.org/adonohue/units/";
     license = licenses.psfl;
+<<<<<<< HEAD
     maintainers = [ ];
+=======
+    maintainers = [ maintainers.costrouc ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

@@ -63,6 +63,9 @@ python3Packages.buildPythonApplication rec {
     license = licenses.bsd3;
     platforms = platforms.unix;
     maintainers = [ maintainers.novoxd ];
+<<<<<<< HEAD
     mainProgram = "dupeguru";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

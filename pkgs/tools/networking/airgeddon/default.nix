@@ -29,6 +29,10 @@
 , bettercap
 , bully
 , crunch
+<<<<<<< HEAD
+=======
+, dhcp
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , dnsmasq
 , ettercap
 , hashcat
@@ -93,6 +97,10 @@ let
     wireshark-cli
   ] ++ lib.optionals supportEvilTwin [
     bettercap
+<<<<<<< HEAD
+=======
+    dhcp
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     dnsmasq
     ettercap
     hostapd

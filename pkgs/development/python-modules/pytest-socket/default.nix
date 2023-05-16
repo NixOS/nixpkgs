@@ -40,6 +40,10 @@ buildPythonPackage rec {
     description = "Pytest Plugin to disable socket calls during tests";
     homepage = "https://github.com/miketheman/pytest-socket";
     license = licenses.mit;
+<<<<<<< HEAD
     maintainers = with maintainers; [ ];
+=======
+    maintainers = with maintainers; [ costrouc ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

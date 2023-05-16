@@ -1,5 +1,6 @@
 { config, lib, pkgs, ... }:
 
+<<<<<<< HEAD
 let
   inherit
     (lib)
@@ -272,21 +273,38 @@ let
       };
     };
   });
+=======
+with lib;
+
+let
+  format = pkgs.formats.json { };
+  cfg = config.services.influxdb2;
+  configFile = format.generate "config.json" cfg.settings;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 in
 {
   options = {
     services.influxdb2 = {
+<<<<<<< HEAD
       enable = mkEnableOption (mdDoc "the influxdb2 server");
+=======
+      enable = mkEnableOption (lib.mdDoc "the influxdb2 server");
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
       package = mkOption {
         default = pkgs.influxdb2-server;
         defaultText = literalExpression "pkgs.influxdb2";
+<<<<<<< HEAD
         description = mdDoc "influxdb2 derivation to use.";
+=======
+        description = lib.mdDoc "influxdb2 derivation to use.";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         type = types.package;
       };
 
       settings = mkOption {
         default = { };
+<<<<<<< HEAD
         description = mdDoc ''configuration options for influxdb2, see <https://docs.influxdata.com/influxdb/v2.0/reference/config-options> for details.'';
         type = format.type;
       };
@@ -380,10 +398,16 @@ in
           }));
         };
       };
+=======
+        description = lib.mdDoc ''configuration options for influxdb2, see <https://docs.influxdata.com/influxdb/v2.0/reference/config-options> for details.'';
+        type = format.type;
+      };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
   };
 
   config = mkIf cfg.enable {
+<<<<<<< HEAD
     assertions =
       [
         {
@@ -427,6 +451,12 @@ in
         inherit (cfg.provision.initialSetup) passwordFile;
       };
     };
+=======
+    assertions = [{
+      assertion = !(builtins.hasAttr "bolt-path" cfg.settings) && !(builtins.hasAttr "engine-path" cfg.settings);
+      message = "services.influxdb2.config: bolt-path and engine-path should not be set as they are managed by systemd";
+    }];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     systemd.services.influxdb2 = {
       description = "InfluxDB is an open-source, distributed, time series database";
@@ -447,6 +477,7 @@ in
         LimitNOFILE = 65536;
         KillMode = "control-group";
         Restart = "on-failure";
+<<<<<<< HEAD
         LoadCredential = mkIf cfg.provision.enable [
           "admin-password:${cfg.provision.initialSetup.passwordFile}"
           "admin-token:${cfg.provision.initialSetup.tokenFile}"
@@ -483,6 +514,9 @@ in
           ${getExe pkgs.influxdb2-token-manipulator} "$STATE_DIRECTORY/influxd.bolt" ${tokenMappings}
         fi
       '';
+=======
+      };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
 
     users.extraUsers.influxdb2 = {
@@ -493,5 +527,9 @@ in
     users.extraGroups.influxdb2 = {};
   };
 
+<<<<<<< HEAD
   meta.maintainers = with lib.maintainers; [ nickcao oddlama ];
+=======
+  meta.maintainers = with lib.maintainers; [ nickcao ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }

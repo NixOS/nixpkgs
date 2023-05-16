@@ -1,13 +1,22 @@
+<<<<<<< HEAD
 { lib, stdenv, fetchFromGitHub, fetchpatch, installShellFiles, cmake }:
 
 stdenv.mkDerivation rec {
   pname = "doctest";
   version = "2.4.11";
+=======
+{ lib, stdenv, fetchFromGitHub, installShellFiles, cmake }:
+
+stdenv.mkDerivation rec {
+  pname = "doctest";
+  version = "2.4.9";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "doctest";
     repo = "doctest";
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-hotO6QVpPn8unYTaQHFgi40A3oLUd++I3aTe293e4Aw=";
   };
 
@@ -24,6 +33,13 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
+=======
+    sha256 = "sha256-ugmkeX2PN4xzxAZpWgswl4zd2u125Q/ADSKzqTfnd94=";
+  };
+
+  nativeBuildInputs = [ cmake ];
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   meta = with lib; {
     homepage = "https://github.com/doctest/doctest";
     description = "The fastest feature-rich C++11/14/17/20 single-header testing framework";

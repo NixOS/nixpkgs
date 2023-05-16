@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 { lib, stdenv, fetchFromGitHub, cmake, libpulseaudio, libX11, makeWrapper, sox }:
+=======
+{ lib, stdenv, fetchFromGitHub, cmake, libpulseaudio, libX11 }:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 stdenv.mkDerivation rec {
   pname = "multimon-ng";
@@ -13,11 +17,15 @@ stdenv.mkDerivation rec {
 
   buildInputs = lib.optionals stdenv.isLinux [ libpulseaudio libX11 ];
 
+<<<<<<< HEAD
   nativeBuildInputs = [ cmake makeWrapper ];
 
   postInstall = ''
     wrapProgram $out/bin/multimon-ng --prefix PATH : "${lib.makeBinPath [sox]}"
   '';
+=======
+  nativeBuildInputs = [ cmake ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   meta = with lib; {
     description = "Multimon is a digital baseband audio protocol decoder";

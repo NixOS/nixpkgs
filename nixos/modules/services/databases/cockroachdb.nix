@@ -164,7 +164,11 @@ in
         example = [ "--advertise-addr" "[fe80::f6f2:::]" ];
         description = lib.mdDoc ''
           Extra CLI arguments passed to {command}`cockroach start`.
+<<<<<<< HEAD
           For the full list of supported arguments, check <https://www.cockroachlabs.com/docs/stable/cockroach-start.html#flags>
+=======
+          For the full list of supported argumemnts, check <https://www.cockroachlabs.com/docs/stable/cockroach-start.html#flags>
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         '';
       };
     };

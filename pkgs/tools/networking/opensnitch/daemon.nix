@@ -13,17 +13,25 @@
 , protoc-gen-go-grpc
 , testers
 , opensnitch
+<<<<<<< HEAD
 , nixosTests
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 buildGoModule rec {
   pname = "opensnitch";
+<<<<<<< HEAD
   version = "1.6.3";
+=======
+  version = "1.5.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "evilsocket";
     repo = "opensnitch";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-C8Uuz2FC7Zu07ZmFpp+ejpNxkyC3/mM9J2dc5FUKx64=";
   };
 
@@ -43,6 +51,28 @@ buildGoModule rec {
   ];
 
   vendorHash = "sha256-bUzGWpQxeXzvkzQ7G53ljQJq6wwqiXqbi6bgeFlNvvM=";
+=======
+    sha256 = "sha256-MF7K3WasG1xLdw1kWz6xVYrdfuZW5GUq6dlS0pPOkHI=";
+  };
+
+  patches = [
+    # https://github.com/evilsocket/opensnitch/pull/384 don't require
+    # a configuration file in /etc
+    (fetchpatch {
+      name = "dont-require-config-in-etc.patch";
+      url = "https://github.com/evilsocket/opensnitch/commit/8a3f63f36aa92658217bbbf46d39e6d20b2c0791.patch";
+      sha256 = "sha256-WkwjKTQZppR0nqvRO4xiQoKZ307NvuUwoRx+boIpuTg=";
+    })
+  ];
+
+  modRoot = "daemon";
+
+  buildInputs = [ libnetfilter_queue libnfnetlink ];
+
+  nativeBuildInputs = [ pkg-config protobuf go-protobuf makeWrapper protoc-gen-go-grpc ];
+
+  vendorSha256 = "sha256-jWP0oF+jZRFMi5Y2y0SARMoP8wTKVZ8UWra9JNzdSOw=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   preBuild = ''
     # Fix inconsistent vendoring build error
@@ -57,8 +87,15 @@ buildGoModule rec {
     mv $GOPATH/bin/daemon $GOPATH/bin/opensnitchd
     mkdir -p $out/etc/opensnitchd $out/lib/systemd/system
     cp system-fw.json $out/etc/opensnitchd/
+<<<<<<< HEAD
     substitute default-config.json $out/etc/opensnitchd/default-config.json \
       --replace "/var/log/opensnitchd.log" "/dev/stdout"
+=======
+    substitute default-config.json $out/etc/default-config.json \
+      --replace "/var/log/opensnitchd.log" "/dev/stdout" \
+      --replace "iptables" "nftables" \
+      --replace "ebpf" "proc"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     substitute opensnitchd.service $out/lib/systemd/system/opensnitchd.service \
       --replace "/usr/local/bin/opensnitchd" "$out/bin/opensnitchd" \
       --replace "/etc/opensnitchd/rules" "/var/lib/opensnitch/rules" \
@@ -70,12 +107,18 @@ buildGoModule rec {
       --prefix PATH : ${lib.makeBinPath [ iptables ]}
   '';
 
+<<<<<<< HEAD
   passthru.tests = {
     inherit (nixosTests) opensnitch;
     version = testers.testVersion {
       package = opensnitch;
       command = "opensnitchd -version";
     };
+=======
+  passthru.tests.version = testers.testVersion {
+    package = opensnitch;
+    command = "opensnitchd -version";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   meta = with lib; {

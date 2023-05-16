@@ -9,13 +9,21 @@
 
 stdenv.mkDerivation rec {
   pname = "fast-downward";
+<<<<<<< HEAD
   version = "23.06.0";
+=======
+  version = "22.12.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "aibasel";
     repo = "downward";
     rev = "release-${version}";
+<<<<<<< HEAD
     sha256 = "sha256-yNaMyS47yxc/p5Rs/kHwD/pgjGXnHBdybYdo1GIEmA4=";
+=======
+    sha256 = "sha256-GwZ5BGzLRMgWNBaA7M2D2p9OxvdyWqm+sTwxGpcI/qY=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ cmake python3.pkgs.wrapPython ];

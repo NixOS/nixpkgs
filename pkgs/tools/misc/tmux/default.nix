@@ -1,12 +1,19 @@
 { lib
 , stdenv
 , fetchFromGitHub
+<<<<<<< HEAD
+=======
+, fetchpatch
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , autoreconfHook
 , bison
 , libevent
 , ncurses
 , pkg-config
+<<<<<<< HEAD
 , runCommand
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd, systemd
 , withUtf8proc ? true, utf8proc # gets Unicode updates faster than glibc
 , withUtempter ? stdenv.isLinux && !stdenv.hostPlatform.isMusl, libutempter
@@ -23,7 +30,11 @@ let
 
 in
 
+<<<<<<< HEAD
 stdenv.mkDerivation (finalAttrs: {
+=======
+stdenv.mkDerivation rec {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pname = "tmux";
   version = "3.3a";
 
@@ -32,7 +43,11 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "tmux";
     repo = "tmux";
+<<<<<<< HEAD
     rev = finalAttrs.version;
+=======
+    rev = version;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     sha256 = "sha256-SygHxTe7N4y7SdzKixPFQvqRRL57Fm8zWYHfTpW+yVY=";
   };
 
@@ -65,6 +80,7 @@ stdenv.mkDerivation (finalAttrs: {
   postInstall = ''
     mkdir -p $out/share/bash-completion/completions
     cp -v ${bashCompletion}/completions/tmux $out/share/bash-completion/completions/tmux
+<<<<<<< HEAD
   '' + lib.optionalString stdenv.isDarwin ''
     mkdir $out/nix-support
     echo "${finalAttrs.passthru.terminfo}" >> $out/nix-support/propagated-user-env-packages
@@ -84,6 +100,10 @@ stdenv.mkDerivation (finalAttrs: {
     '');
   };
 
+=======
+  '';
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   meta = {
     homepage = "https://tmux.github.io/";
     description = "Terminal multiplexer";
@@ -99,6 +119,7 @@ stdenv.mkDerivation (finalAttrs: {
         * Terminal locking, manually or after a timeout.
         * A clean, easily extended, BSD-licensed codebase, under active development.
     '';
+<<<<<<< HEAD
     changelog = "https://github.com/tmux/tmux/raw/${finalAttrs.version}/CHANGES";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.unix;
@@ -106,3 +127,11 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [ thammers fpletz srapenne ];
   };
 })
+=======
+    changelog = "https://github.com/tmux/tmux/raw/${version}/CHANGES";
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ thammers fpletz SuperSandro2000 srapenne ];
+  };
+}
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)

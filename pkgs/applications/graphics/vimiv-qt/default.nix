@@ -2,7 +2,10 @@
 , fetchFromGitHub
 , python3
 , qt5
+<<<<<<< HEAD
 , stdenv
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , installShellFiles
 }:
 
@@ -19,9 +22,13 @@ python3.pkgs.buildPythonApplication rec {
 
   nativeBuildInputs = [ installShellFiles qt5.wrapQtAppsHook python3.pkgs.setuptools ];
 
+<<<<<<< HEAD
   propagatedBuildInputs = with python3.pkgs; [ pyqt5 py3exiv2 ];
 
   buildInputs = [ qt5.qtsvg ] ++ lib.optionals stdenv.isLinux [ qt5.qtwayland ];
+=======
+  propagatedBuildInputs = with python3.pkgs; [ pyqt5 py3exiv2 qt5.qtsvg ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   postInstall = ''
     install -Dm644 misc/vimiv.desktop $out/share/applications/vimiv.desktop
@@ -38,7 +45,11 @@ python3.pkgs.buildPythonApplication rec {
   # Vimiv has to be wrapped manually because it is a non-ELF executable.
   dontWrapQtApps = true;
   preFixup = ''
+<<<<<<< HEAD
     wrapQtApp $out/bin/vimiv
+=======
+      wrapQtApp $out/bin/vimiv
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '';
 
   meta = with lib; {
@@ -46,7 +57,10 @@ python3.pkgs.buildPythonApplication rec {
     license = licenses.gpl3Plus;
     homepage = "https://github.com/karlch/vimiv-qt";
     maintainers = with maintainers; [ dschrempf ];
+<<<<<<< HEAD
     mainProgram = "vimiv";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     platforms = platforms.all;
   };
 }

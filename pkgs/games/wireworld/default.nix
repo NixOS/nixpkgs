@@ -6,7 +6,10 @@
 , makeWrapper
 , makeDesktopItem
 , copyDesktopItems
+<<<<<<< HEAD
 , strip-nondeterminism
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 stdenv.mkDerivation rec {
@@ -20,12 +23,16 @@ stdenv.mkDerivation rec {
     hash = "sha256-8BshnGLuA8lmG9g7FU349DWKP/fZvlvjrQBau/LSJ4E=";
   };
 
+<<<<<<< HEAD
   nativeBuildInputs = [
     copyDesktopItems
     makeWrapper
     strip-nondeterminism
     zip
   ];
+=======
+  nativeBuildInputs = [ makeWrapper copyDesktopItems zip ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   desktopItems = [
     (makeDesktopItem {
@@ -41,7 +48,10 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
     zip -9 -r Wireworld.love ./*
+<<<<<<< HEAD
     strip-nondeterminism --type zip Wireworld.love
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     install -Dm444 -t $out/share/games/lovegames/ Wireworld.love
     makeWrapper ${love}/bin/love $out/bin/Wireworld \
       --add-flags $out/share/games/lovegames/Wireworld.love

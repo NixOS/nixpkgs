@@ -10,16 +10,27 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "halp";
+<<<<<<< HEAD
   version = "0.1.7";
+=======
+  version = "0.1.6";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "orhun";
     repo = "halp";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-SeBponGeQWKjbiS4GL8YA7y92BqLL+ja6ZSKAI3CeRM=";
   };
 
   cargoHash = "sha256-/mzbLsIc0PW5yx/m9eq3IWYM6i1MKvmOY+17/Bwjguk=";
+=======
+    hash = "sha256-VGfZwXB2MM8dfjc89LjHBalNFTvp6B6KI0lPOlkHDOQ=";
+  };
+
+  cargoHash = "sha256-beYDb8+UKPLkkzey95Da8Ft2NwH2JZZsBLNvoW8FJN4=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   patches = [
     # patch tests to point to the correct target directory

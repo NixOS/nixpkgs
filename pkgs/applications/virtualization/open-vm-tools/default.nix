@@ -41,13 +41,21 @@
 
 stdenv.mkDerivation rec {
   pname = "open-vm-tools";
+<<<<<<< HEAD
   version = "12.2.5";
+=======
+  version = "12.2.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "vmware";
     repo = "open-vm-tools";
     rev = "stable-${version}";
+<<<<<<< HEAD
     hash = "sha256-Aa2OzY3x8yRn/uFaCbbKihpsPueup7doPp5i8I04iaQ=";
+=======
+    hash = "sha256-ikodKEvlg+QU0af8IjiMjhMyQSV6icHVUczf0rWfVaI=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   sourceRoot = "${src.name}/open-vm-tools";
@@ -145,6 +153,10 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.gpl2;
     platforms = [ "x86_64-linux" "i686-linux" "aarch64-linux" ];
+<<<<<<< HEAD
     maintainers = with maintainers; [ joamaki kjeremy ];
+=======
+    maintainers = with maintainers; [ joamaki ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

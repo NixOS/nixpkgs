@@ -1,10 +1,15 @@
 { lib
 , buildPythonPackage
+<<<<<<< HEAD
 , fetchpatch
 , fetchPypi
 , setuptools
 , setuptools-scm
 , wheel
+=======
+, fetchPypi
+, setuptools
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , numpy
 , tqdm
 , pytestCheckHook
@@ -20,6 +25,7 @@ buildPythonPackage rec {
     hash = "sha256-2HWO/iJ9RCWNVmw2slu9F/+Mchk3evB5/F8EfbuMI/Y=";
   };
 
+<<<<<<< HEAD
   patches = [
     # https://github.com/the-lay/tiler/pull/24
     (fetchpatch {
@@ -33,6 +39,10 @@ buildPythonPackage rec {
     setuptools
     setuptools-scm
     wheel
+=======
+  nativeBuildInputs = [
+    setuptools
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   propagatedBuildInputs = [

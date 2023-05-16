@@ -5,8 +5,11 @@
 , copyDesktopItems
 , makeWrapper
 , writeText
+<<<<<<< HEAD
 , wrapGAppsHook
 , callPackage
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 # Common run-time dependencies
 , zlib
@@ -78,6 +81,7 @@ let
       ++ lib.optionals mediaSupport [ ffmpeg ]
   );
 
+<<<<<<< HEAD
   version = "12.5.3";
 
   sources = {
@@ -87,6 +91,16 @@ let
         "https://github.com/mullvad/mullvad-browser/releases/download/${version}/mullvad-browser-linux64-${version}_ALL.tar.xz"
       ];
       hash = "sha256-vnxpmZSqPe7wE4USDbYGm+5k9J/nuUk2uJx4CmwFPvw=";
+=======
+  tag = "mullvad-browser-102.10.0esr-12.0-2-build2";
+  version = "12.0.5";
+  lang = "ALL";
+
+  srcs = {
+    x86_64-linux = fetchurl {
+      url = "https://github.com/mullvad/mullvad-browser/releases/download/${tag}/mullvad-browser-linux64-${version}_${lang}.tar.xz";
+      hash = "sha256-Ezs2pjJNGOinMIskBDwpj70eKSkfcV6ZCKb60I5J23w=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
   };
 
@@ -107,9 +121,15 @@ stdenv.mkDerivation rec {
   pname = "mullvad-browser";
   inherit version;
 
+<<<<<<< HEAD
   src = sources.${stdenv.hostPlatform.system} or (throw "unsupported system: ${stdenv.hostPlatform.system}");
 
   nativeBuildInputs = [ copyDesktopItems makeWrapper wrapGAppsHook ];
+=======
+  src = srcs.${stdenv.hostPlatform.system} or (throw "unsupported system: ${stdenv.hostPlatform.system}");
+
+  nativeBuildInputs = [ copyDesktopItems makeWrapper ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   preferLocalBuild = true;
   allowSubstitutes = false;
@@ -223,6 +243,7 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   passthru = {
     inherit sources;
     updateScript = callPackage ../tor-browser-bundle-bin/update.nix {
@@ -237,6 +258,14 @@ stdenv.mkDerivation rec {
     homepage = "https://mullvad.net/en/browser";
     platforms = attrNames sources;
     maintainers = with maintainers; [ felschr panicgh ];
+=======
+  meta = with lib; {
+    description = "Privacy-focused browser made in a collaboration between The Tor Project and Mullvad";
+    homepage = "https://www.mullvad.net/en/browser";
+    changelog = "https://github.com/mullvad/mullvad-browser/releases/tag/${tag}";
+    platforms = attrNames srcs;
+    maintainers = with maintainers; [ felschr ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     # MPL2.0+, GPL+, &c.  While it's not entirely clear whether
     # the compound is "libre" in a strict sense (some components place certain
     # restrictions on redistribution), it's free enough for our purposes.

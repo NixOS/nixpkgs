@@ -10,11 +10,19 @@
 
 stdenv.mkDerivation rec {
   pname = "qmidiarp";
+<<<<<<< HEAD
   version = "0.7.0";
 
   src = fetchgit {
     url = "https://git.code.sf.net/p/qmidiarp/code";
     sha256 = "sha256-oUdgff2xsXTis+C2Blv0tspWNIMGSODrKxWDpMDYnEU=";
+=======
+  version = "0.6.7";
+
+  src = fetchgit {
+    url = "https://git.code.sf.net/p/qmidiarp/code";
+    sha256 = "sha256-CxElnyREXLR086xYxCQTHZumrLP52CDYvv+ougKqJz0=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     rev = "qmidiarp-${version}";
   };
 

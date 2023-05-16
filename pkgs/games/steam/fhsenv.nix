@@ -5,7 +5,11 @@
 , extraProfile ? "" # string to append to profile
 , extraArgs ? "" # arguments to always pass to steam
 , extraEnv ? { } # Environment variables to pass to Steam
+<<<<<<< HEAD
 , withGameSpecificLibraries ? true # include game specific libraries
+=======
+, withGameSpecificLibraries ? true # exclude game specific libraries
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 let
@@ -61,11 +65,16 @@ let
 in buildFHSEnv rec {
   name = "steam";
 
+<<<<<<< HEAD
   # Steam still needs 32bit and various native games do too
   multiArch = true;
 
   targetPkgs = pkgs: with pkgs; [
     steam
+=======
+  targetPkgs = pkgs: with pkgs; [
+    steamPackages.steam
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     # License agreement
     gnome.zenity
   ] ++ commonTargetPkgs pkgs;
@@ -140,7 +149,10 @@ in buildFHSEnv rec {
 
     # SteamVR
     udev
+<<<<<<< HEAD
     dbus
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     # Other things from runtime
     glib
@@ -172,6 +184,7 @@ in buildFHSEnv rec {
     librsvg
     xorg.libXft
     libvdpau
+<<<<<<< HEAD
 
     # required by coreutils stuff to run correctly
     # Steam ends up with LD_LIBRARY_PATH=<bunch of runtime stuff>:/usr/lib:<etc>
@@ -179,6 +192,8 @@ in buildFHSEnv rec {
     # very old versions of stuff from the runtime.
     # FIXME: how do we even fix this correctly
     attr
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ] ++ lib.optionals withGameSpecificLibraries [
     # Not formally in runtime but needed by some games
     at-spi2-atk
@@ -192,8 +207,11 @@ in buildFHSEnv rec {
     libvorbis # Dead Cells
     libxcrypt # Alien Isolation, XCOM 2, Company of Heroes 2
     mono
+<<<<<<< HEAD
     ncurses # Crusader Kings III
     openssl
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     xorg.xkeyboardconfig
     xorg.libpciaccess
     xorg.libXScrnSaver # Dead Cells
@@ -201,6 +219,10 @@ in buildFHSEnv rec {
 
     # screeps dependencies
     gtk3
+<<<<<<< HEAD
+=======
+    dbus
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     zlib
     atk
     cairo
@@ -215,17 +237,27 @@ in buildFHSEnv rec {
     alsa-lib
 
     # Loop Hero
+<<<<<<< HEAD
     # FIXME: Also requires openssl_1_1, which is EOL. Either find an alternative solution, or remove these dependencies (if not needed by other games)
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     libidn2
     libpsl
     nghttp2.lib
     rtmpdump
+<<<<<<< HEAD
   ]
   # This needs to come from pkgs as the passed-in steam-runtime-wrapped may not be the same architecture
   ++ pkgs.steamPackages.steam-runtime-wrapped.overridePkgs
   ++ extraLibraries pkgs;
 
   extraInstallCommands = lib.optionalString (steam != null) ''
+=======
+  ] ++ steamPackages.steam-runtime-wrapped.overridePkgs
+  ++ extraLibraries pkgs;
+
+  extraInstallCommands = ''
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     mkdir -p $out/share/applications
     ln -s ${steam}/share/icons $out/share
     ln -s ${steam}/share/pixmaps $out/share
@@ -277,6 +309,7 @@ in buildFHSEnv rec {
     exec steam ${extraArgs} "$@"
   '';
 
+<<<<<<< HEAD
   meta =
     if steam != null
     then
@@ -286,6 +319,11 @@ in buildFHSEnv rec {
     else {
       description = "Steam dependencies (dummy package, do not use)";
     };
+=======
+  meta = steam.meta // lib.optionalAttrs (!withGameSpecificLibraries) {
+    description = steam.meta.description + " (without game specific libraries)";
+  };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   # allows for some gui applications to share IPC
   # this fixes certain issues where they don't render correctly
@@ -300,7 +338,11 @@ in buildFHSEnv rec {
     name = "steam-run";
 
     targetPkgs = commonTargetPkgs;
+<<<<<<< HEAD
     inherit multiArch multiPkgs profile extraInstallCommands;
+=======
+    inherit multiPkgs profile extraInstallCommands;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     inherit unshareIpc unsharePid;
 
     runScript = writeShellScript "steam-run" ''
@@ -319,7 +361,11 @@ in buildFHSEnv rec {
       exec -- "$run" "$@"
     '';
 
+<<<<<<< HEAD
     meta = (steam.meta or {}) // {
+=======
+    meta = steam.meta // {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       description = "Run commands in the same FHS environment that is used for Steam";
       name = "steam-run";
     };

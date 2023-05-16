@@ -1,22 +1,36 @@
+<<<<<<< HEAD
 { lib
 , stdenv
 , fetchFromGitHub
 , python3Packages
 , testers
 , stig
+=======
+{ lib, stdenv
+, fetchFromGitHub
+, python3Packages
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "stig";
   # This project has a different concept for pre release / alpha,
   # Read the project's README for details: https://github.com/rndusr/stig#stig
+<<<<<<< HEAD
   version = "0.12.5a0";
+=======
+  version = "0.12.2a0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "rndusr";
     repo = "stig";
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-e27DBzing38llFxPIsMGkZJXp2q7jjFlQdtfsqLXNHw=";
+=======
+    sha256 = "0sk4vgj3cn75nyrng2d6q0pj1h968kcmbpr9sv1lj1g8fc7g0n4f";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = with python3Packages; [
@@ -53,12 +67,15 @@ python3Packages.buildPythonApplication rec {
     "--deselect=tests/client_test/aiotransmission_test/rpc_test.py"
   ];
 
+<<<<<<< HEAD
   passthru.tests = testers.testVersion {
     package = stig;
     command = "stig -v";
     version = "stig version ${version}";
   };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   meta = with lib; {
     description = "TUI and CLI for the BitTorrent client Transmission";
     homepage = "https://github.com/rndusr/stig";

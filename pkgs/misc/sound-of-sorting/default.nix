@@ -7,6 +7,12 @@
 , darwin
 }:
 
+<<<<<<< HEAD
+=======
+let
+  inherit (darwin.apple_sdk.frameworks) Cocoa;
+in
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 stdenv.mkDerivation {
   pname = "sound-of-sorting";
   version = "unstable-2022-10-12";
@@ -15,6 +21,7 @@ stdenv.mkDerivation {
     owner = "bingmann";
     repo = "sound-of-sorting";
     rev = "5cfcaf752593c8cbcf52555dd22745599a7d8b1b";
+<<<<<<< HEAD
     hash = "sha256-cBrTvFoz6WZIsh5qPPiWxQ338Z0OfcIefiI8CZF6nn8=";
   };
 
@@ -34,5 +41,19 @@ stdenv.mkDerivation {
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ AndersonTorres ];
     platforms = lib.platforms.unix;
+=======
+    sha256 = "sha256-cBrTvFoz6WZIsh5qPPiWxQ338Z0OfcIefiI8CZF6nn8=";
+  };
+
+  nativeBuildInputs = [ pkg-config ];
+
+  buildInputs = [ wxGTK32 SDL2 ] ++ lib.optionals stdenv.isDarwin [ Cocoa ];
+
+  meta = with lib; {
+    description = "Audibilization and Visualization of Sorting Algorithms";
+    homepage = "https://panthema.net/2013/sound-of-sorting/";
+    license = with licenses; gpl3Plus;
+    maintainers = with maintainers; [ AndersonTorres ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

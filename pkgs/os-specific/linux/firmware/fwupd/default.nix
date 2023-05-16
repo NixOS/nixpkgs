@@ -58,7 +58,10 @@
 
 let
   python = python3.withPackages (p: with p; [
+<<<<<<< HEAD
     jinja2
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     pygobject3
     setuptools
   ]);
@@ -123,7 +126,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "fwupd";
+<<<<<<< HEAD
   version = "1.9.4";
+=======
+  version = "1.8.14";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   # libfwupd goes to lib
   # daemon, plug-ins and libfwupdplugin go to out
@@ -134,7 +141,11 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "fwupd";
     repo = "fwupd";
     rev = finalAttrs.version;
+<<<<<<< HEAD
     hash = "sha256-xjN6nHqg7sQzgojClySQEjLQBdI5291TxPhgLjKzKvk=";
+=======
+    hash = "sha256-xq9J44yhnF3bTutlkOLIMFM96XHMmoCL8i37tSxgPp0=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   patches = [
@@ -212,6 +223,12 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dplugin_dummy=true"
     # We are building the official releases.
     "-Dsupported_build=enabled"
+<<<<<<< HEAD
+=======
+    # Would dlopen libsoup to preserve compatibility with clients linking against older fwupd.
+    # https://github.com/fwupd/fwupd/commit/173d389fa59d8db152a5b9da7cc1171586639c97
+    "-Dsoup_session_compat=false"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "-Dudevdir=lib/udev"
     "-Dsystemd_root_prefix=${placeholder "out"}"
     "-Dinstalled_test_prefix=${placeholder "installedTests"}"
@@ -259,7 +276,10 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     patchShebangs \
       contrib/generate-version-script.py \
+<<<<<<< HEAD
       contrib/generate-man.py \
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       po/test-deps
 
     substituteInPlace data/installed-tests/fwupdmgr-p2p.sh \
@@ -336,11 +356,19 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = {
     filesInstalledToEtc = [
       "fwupd/bios-settings.d/README.md"
+<<<<<<< HEAD
       "fwupd/fwupd.conf"
+=======
+      "fwupd/daemon.conf"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       "fwupd/remotes.d/lvfs-testing.conf"
       "fwupd/remotes.d/lvfs.conf"
       "fwupd/remotes.d/vendor.conf"
       "fwupd/remotes.d/vendor-directory.conf"
+<<<<<<< HEAD
+=======
+      "fwupd/uefi_capsule.conf"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       "pki/fwupd/GPG-KEY-Linux-Foundation-Firmware"
       "pki/fwupd/GPG-KEY-Linux-Vendor-Firmware-Service"
       "pki/fwupd/LVFS-CA.pem"
@@ -350,6 +378,15 @@ stdenv.mkDerivation (finalAttrs: {
       "grub.d/35_fwupd"
     ] ++ lib.optionals haveDell [
       "fwupd/remotes.d/dell-esrt.conf"
+<<<<<<< HEAD
+=======
+    ] ++ lib.optionals haveRedfish [
+      "fwupd/redfish.conf"
+    ] ++ lib.optionals haveMSR [
+      "fwupd/msr.conf"
+    ] ++ lib.optionals isx86 [
+      "fwupd/thunderbolt.conf"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     ];
 
     # DisabledPlugins key in fwupd/daemon.conf
@@ -384,7 +421,11 @@ stdenv.mkDerivation (finalAttrs: {
           assert len(passthru_etc - package_etc) == 0, f'fwupd package lists the following paths in passthru.filesInstalledToEtc that are not contained in /etc: {passthru_etc - package_etc}'
 
           config = configparser.RawConfigParser()
+<<<<<<< HEAD
           config.read('${finalAttrs.finalPackage}/etc/fwupd/fwupd.conf')
+=======
+          config.read('${finalAttrs.finalPackage}/etc/fwupd/daemon.conf')
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           package_disabled_plugins = config.get('fwupd', 'DisabledPlugins').rstrip(';').split(';')
           passthru_disabled_plugins = ${listToPy finalAttrs.passthru.defaultDisabledPlugins}
           assert package_disabled_plugins == passthru_disabled_plugins, f'Default disabled plug-ins in the package {package_disabled_plugins} do not match those listed in passthru.defaultDisabledPlugins {passthru_disabled_plugins}'
@@ -396,7 +437,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     homepage = "https://fwupd.org/";
+<<<<<<< HEAD
     maintainers = with maintainers; [ rvdp ];
+=======
+    maintainers = with maintainers; [ ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
   };

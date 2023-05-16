@@ -1,5 +1,9 @@
 #! /usr/bin/env nix-shell
+<<<<<<< HEAD
 #! nix-shell -i bash -p nix nix-prefetch-git gnutar curl jq unzip
+=======
+#! nix-shell -i bash -p nix nix-prefetch-git gnutar curl jq
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 set -euo pipefail
 

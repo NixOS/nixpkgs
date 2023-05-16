@@ -22,6 +22,10 @@ in {
     machine.wait_for_console_text("Unmounting '/oldroot'")
     machine.wait_for_console_text("${msg}")
     # Don't try to sync filesystems
+<<<<<<< HEAD
     machine.wait_for_shutdown()
+=======
+    machine.booted = False
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '';
 })

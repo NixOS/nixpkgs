@@ -2,7 +2,10 @@
 , buildPythonPackage
 , fetchFromGitHub
 , emcee
+<<<<<<< HEAD
 , h5netcdf
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , matplotlib
 , netcdf4
 , numba
@@ -32,7 +35,11 @@
 
 buildPythonPackage rec {
   pname = "arviz";
+<<<<<<< HEAD
   version = "0.15.1";
+=======
+  version = "0.15.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -41,11 +48,18 @@ buildPythonPackage rec {
     owner = "arviz-devs";
     repo = pname;
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-jjA+yltvpPZldIxXXqu1bXCLqpiU5/NBYTPlI9ImGVs=";
   };
 
   propagatedBuildInputs = [
     h5netcdf
+=======
+    hash = "sha256-LcdITCT9Bvycfj/taXhzkjn4IfZrxWX9MYXD6+MifOs=";
+  };
+
+  propagatedBuildInputs = [
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     matplotlib
     netcdf4
     numpy
@@ -82,6 +96,14 @@ buildPythonPackage rec {
     "arviz/tests/base_tests/"
   ];
 
+<<<<<<< HEAD
+=======
+  disabledTestPaths = [
+    # Remove tests as dependency creates a circular dependency
+    "arviz/tests/external_tests/test_data_pymc.py"
+  ];
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   disabledTests = [
     # Tests require network access
     "test_plot_separation"
@@ -91,8 +113,11 @@ buildPythonPackage rec {
     "test_plot_kde"
     "test_plot_kde_2d"
     "test_plot_pair"
+<<<<<<< HEAD
     # Array mismatch
     "test_plot_ts"
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   pythonImportsCheck = [
@@ -102,7 +127,10 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Library for exploratory analysis of Bayesian models";
     homepage = "https://arviz-devs.github.io/arviz/";
+<<<<<<< HEAD
     changelog = "https://github.com/arviz-devs/arviz/blob/v${version}/CHANGELOG.md";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     license = licenses.asl20;
     maintainers = with maintainers; [ omnipotententity ];
   };

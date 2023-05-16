@@ -23,6 +23,10 @@ buildPythonPackage rec {
     description = "Python 3 port of pyxl for writing structured and reusable inline HTML";
     homepage = "https://github.com/gvanrossum/pyxl3";
     license = licenses.asl20;
+<<<<<<< HEAD
     maintainers = [ ];
+=======
+    maintainers = [ maintainers.costrouc ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

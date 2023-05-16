@@ -16,7 +16,13 @@ stdenv.mkDerivation rec {
     unzip
   ];
 
+<<<<<<< HEAD
   sourceRoot = ".";
+=======
+  setSourceRoot = ''
+    sourceRoot=$PWD
+  '';
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   installPhase = ''
     runHook preInstall

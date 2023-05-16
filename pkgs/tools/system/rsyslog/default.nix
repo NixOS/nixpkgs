@@ -49,6 +49,10 @@
 , withRdkafka ? true
 , rdkafka
 , withMongo ? true
+<<<<<<< HEAD
+=======
+, libmongo-client
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , mongoc
 , withCzmq ? true
 , czmq
@@ -61,11 +65,19 @@
 
 stdenv.mkDerivation rec {
   pname = "rsyslog";
+<<<<<<< HEAD
   version = "8.2308.0";
 
   src = fetchurl {
     url = "https://www.rsyslog.com/files/download/rsyslog/${pname}-${version}.tar.gz";
     hash = "sha256-AghrkSHocs6mnl0PbI4tjr/zMjSzytVQNmU3jTry48k=";
+=======
+  version = "8.2304.0";
+
+  src = fetchurl {
+    url = "https://www.rsyslog.com/files/download/rsyslog/${pname}-${version}.tar.gz";
+    hash = "sha256-0JDpAoPrS4Dei0Pl/8bktZxOOXDyqpHmO+7woRcg100=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [
@@ -96,7 +108,11 @@ stdenv.mkDerivation rec {
   ++ lib.optional withNet libnet
   ++ lib.optional withHadoop hadoop
   ++ lib.optional withRdkafka rdkafka
+<<<<<<< HEAD
   ++ lib.optionals withMongo [ mongoc ]
+=======
+  ++ lib.optionals withMongo [ libmongo-client mongoc ]
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ++ lib.optional withCzmq czmq
   ++ lib.optional withRabbitmq rabbitmq-c
   ++ lib.optional withHiredis hiredis

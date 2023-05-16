@@ -23,7 +23,11 @@
 
 buildPythonPackage rec {
   pname = "mat2";
+<<<<<<< HEAD
   version = "0.13.4";
+=======
+  version = "0.13.3";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   disabled = pythonOlder "3.5";
 
@@ -34,7 +38,11 @@ buildPythonPackage rec {
     owner = "jvoisin";
     repo = "mat2";
     rev = version;
+<<<<<<< HEAD
     hash = "sha256-SuN62JjSb5O8gInvBH+elqv/Oe7j+xjCo+dmPBU7jEY=";
+=======
+    hash = "sha256-x3vGltGuFjI435lEXZU3p4eQcgRm0Oodqd6pTWO7ZX8=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   patches = [
@@ -97,7 +105,10 @@ buildPythonPackage rec {
     homepage = "https://0xacab.org/jvoisin/mat2";
     changelog = "https://0xacab.org/jvoisin/mat2/-/blob/${version}/CHANGELOG.md";
     license = licenses.lgpl3Plus;
+<<<<<<< HEAD
     mainProgram = "mat2";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     maintainers = with maintainers; [ dotlambda ];
   };
 }

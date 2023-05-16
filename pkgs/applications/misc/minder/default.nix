@@ -25,13 +25,21 @@
 
 stdenv.mkDerivation rec {
   pname = "minder";
+<<<<<<< HEAD
   version = "1.15.6";
+=======
+  version = "1.15.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "phase1geo";
     repo = pname;
     rev = version;
+<<<<<<< HEAD
     sha256 = "sha256-vxUZo68QdeuFlQxLldWplmeGtyX2NHo3AJZmt+JLCF4=";
+=======
+    sha256 = "sha256-JKbz7UUl5iQxquBH705WBN9T4q7OondTypnEUGfqBWY=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

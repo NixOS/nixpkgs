@@ -19,12 +19,15 @@ build2ConfigurePhase() {
         $build2ConfigureFlags "${build2ConfigureFlagsArray[@]}"
     )
 
+<<<<<<< HEAD
     if [ -n "@isTargetDarwin@" ]; then
         flagsArray+=("config.bin.ld=ld64-lld")
         flagsArray+=("config.cc.loptions+=-fuse-ld=lld")
         flagsArray+=("config.cc.loptions+=-headerpad_max_install_names")
     fi
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     echo 'configure flags' "${flagsArray[@]}"
 
     b configure "${flagsArray[@]}"

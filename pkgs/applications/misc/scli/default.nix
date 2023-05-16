@@ -4,8 +4,11 @@
 , dbus
 , signal-cli
 , xclip
+<<<<<<< HEAD
 , testers
 , scli
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -28,6 +31,7 @@ python3.pkgs.buildPythonApplication rec {
 
   dontBuild = true;
 
+<<<<<<< HEAD
   installPhase = ''
     runHook preInstall
 
@@ -36,12 +40,27 @@ python3.pkgs.buildPythonApplication rec {
     echo "v$version" > $out/bin/VERSION
 
     runHook postInstall
+=======
+  checkPhase = ''
+    # scli attempts to write to these directories, make sure they're writeable
+    export XDG_DATA_HOME=$(mktemp -d)
+    export XDG_CONFIG_HOME=$(mktemp -d)
+    ./scli --help > /dev/null # don't spam nix-build log
+    test $? == 0
+  '';
+
+  installPhase = ''
+    mkdir -p $out/bin
+    patchShebangs scli
+    install -m755 -D scli $out/bin/scli
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '';
 
   makeWrapperArgs = [
     "--prefix" "PATH" ":" (lib.makeBinPath [ dbus signal-cli xclip ])
   ];
 
+<<<<<<< HEAD
   passthru.tests = {
     version = testers.testVersion {
       package = scli;
@@ -49,10 +68,16 @@ python3.pkgs.buildPythonApplication rec {
     };
   };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   meta = with lib; {
     description = "Simple terminal user interface for Signal";
     homepage = "https://github.com/isamert/scli";
     license = licenses.gpl3Only;
+<<<<<<< HEAD
     maintainers = with maintainers; [ ];
+=======
+    maintainers = with maintainers; [ alexeyre ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

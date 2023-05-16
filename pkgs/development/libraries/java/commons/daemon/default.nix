@@ -1,12 +1,20 @@
 { lib, stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
+<<<<<<< HEAD
   version = "1.3.4";
+=======
+  version = "1.3.3";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pname = "commons-daemon";
 
   src = fetchurl {
     url    = "mirror://apache/commons/daemon/binaries/commons-daemon-${version}-bin.tar.gz";
+<<<<<<< HEAD
     sha256 = "sha256-n9zmdPC4nLs/Rnth9uojkc5Kg5IfgERbr08TOvENR0Q=";
+=======
+    sha256 = "sha256-FVWmj20LiigRvfK82363Wy8/ie9+wlIlRx49AwQnhOA=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   installPhase = ''

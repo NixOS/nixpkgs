@@ -1,5 +1,10 @@
 { lib
 , stdenv
+<<<<<<< HEAD
+=======
+, fetchurl
+, zlib
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , fetchFromGitHub
 , gnumake
 , gcc
@@ -13,7 +18,11 @@
 , libevdev
 }:
 
+<<<<<<< HEAD
 stdenv.mkDerivation {
+=======
+stdenv.mkDerivation rec {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pname = "midimonster";
   version = "0.6.0";
 
@@ -25,7 +34,11 @@ stdenv.mkDerivation {
     owner = "cbdevnet";
     rev = "f16f7db86662fcdbf45b6373257c90c824b0b4b0";
     sha256 = "131zs4j9asq9xl72cbyi463xpkj064ca1s7i77q5jrwqysgy52sp";
+<<<<<<< HEAD
   };
+=======
+};
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   doCheck = true;
   enableParallelBuilding = true;

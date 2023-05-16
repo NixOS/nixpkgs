@@ -10,13 +10,21 @@
 
 stdenv.mkDerivation rec {
   pname = "free42";
+<<<<<<< HEAD
   version = "3.0.21";
+=======
+  version = "3.0.20";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "thomasokken";
     repo = pname;
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-zRO0buYfKtybUisWZJRkvLJVLJYZwLcDnT04rnQWy+s=";
+=======
+    hash = "sha256-Dqrys7bAkSnpbOF0D17RDYi7q47ExlM75d5OOAnHCVU=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

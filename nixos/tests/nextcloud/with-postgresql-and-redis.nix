@@ -25,7 +25,10 @@ in {
           redis = true;
           memcached = false;
         };
+<<<<<<< HEAD
         database.createLocally = true;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         config = {
           dbtype = "pgsql";
           inherit adminuser;
@@ -60,7 +63,11 @@ in {
     withRcloneEnv = pkgs.writeScript "with-rclone-env" ''
       #!${pkgs.runtimeShell}
       export RCLONE_CONFIG_NEXTCLOUD_TYPE=webdav
+<<<<<<< HEAD
       export RCLONE_CONFIG_NEXTCLOUD_URL="http://nextcloud/remote.php/dav/files/${adminuser}"
+=======
+      export RCLONE_CONFIG_NEXTCLOUD_URL="http://nextcloud/remote.php/webdav/"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       export RCLONE_CONFIG_NEXTCLOUD_VENDOR="nextcloud"
       export RCLONE_CONFIG_NEXTCLOUD_USER="${adminuser}"
       export RCLONE_CONFIG_NEXTCLOUD_PASS="$(${pkgs.rclone}/bin/rclone obscure ${adminpass})"
@@ -89,8 +96,11 @@ in {
         "${withRcloneEnv} ${diffSharedFile}"
     )
     nextcloud.wait_until_succeeds("journalctl -u nextcloud-notify_push | grep -q \"Sending ping to ${adminuser}\"")
+<<<<<<< HEAD
 
     # redis cache should not be empty
     nextcloud.fail('test "[]" = "$(redis-cli --json KEYS "*")"')
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '';
 })) args

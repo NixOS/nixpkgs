@@ -28,9 +28,16 @@ buildPerlPackage rec {
   buildInputs = [
     ArchiveZip
     ArchiveCpio
+<<<<<<< HEAD
     SubOverride
   ];
 
+=======
+  ];
+
+  nativeCheckInputs = [ SubOverride ];
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   postPatch = ''
     substituteInPlace lib/File/StripNondeterminism.pm \
       --replace "exec('file'" "exec('${lib.getExe file}'"

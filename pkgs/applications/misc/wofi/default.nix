@@ -39,6 +39,9 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ ];
     platforms = with platforms; linux;
+<<<<<<< HEAD
     mainProgram = "wofi";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

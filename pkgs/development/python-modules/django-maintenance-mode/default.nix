@@ -1,10 +1,17 @@
 { lib
 , fetchFromGitHub
+<<<<<<< HEAD
 , fetchpatch
 , buildPythonPackage
 , django
 , python-fsutil
 , python
+=======
+, buildPythonPackage
+, pytest
+, django
+, python-fsutil
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , pythonOlder
 }:
 
@@ -22,6 +29,7 @@ buildPythonPackage rec {
     hash = "sha256-Mcj8O20hCINGf5T3PCG9jq0onSrm4R+Ke5CLMqMDmuU=";
   };
 
+<<<<<<< HEAD
   patches = [
     (fetchpatch {
       name = "fix-broken-test.patch";
@@ -30,11 +38,14 @@ buildPythonPackage rec {
     })
   ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   propagatedBuildInputs = [
     django
     python-fsutil
   ];
 
+<<<<<<< HEAD
   checkPhase = ''
     runHook preCheck
 
@@ -42,6 +53,15 @@ buildPythonPackage rec {
 
     runHook postCheck
   '';
+=======
+  nativeCheckInputs = [
+    pytest
+  ];
+
+  pythonImportsCheck = [
+    "maintenance_mode"
+  ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   meta = with lib; {
     description = "Shows a 503 error page when maintenance-mode is on";

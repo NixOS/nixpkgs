@@ -1,6 +1,10 @@
 { lib
 , rustPlatform
 , fetchFromGitHub
+<<<<<<< HEAD
+=======
+, llvmPackages
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -14,7 +18,11 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-odYhpb3FkbIF1dc2DSpz3Lg+r39lhDKml9KGmbqJAtA=";
   };
 
+<<<<<<< HEAD
   nativeBuildInputs = [ rustPlatform.bindgenHook ];
+=======
+  LIBCLANG_PATH = "${llvmPackages.libclang.lib}/lib";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   cargoSha256 = "sha256-/RKwmslhMm30QxviVV7HthDHSmTmaGZn1hdt6bNF3d4=";
 
@@ -22,6 +30,10 @@ rustPlatform.buildRustPackage rec {
     description = "Tremor Language Server (Trill)";
     homepage = "https://www.tremor.rs/docs/next/getting-started/tooling";
     license = licenses.asl20;
+<<<<<<< HEAD
+=======
+    platforms = platforms.x86_64;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     maintainers = with maintainers; [ happysalada ];
   };
 }

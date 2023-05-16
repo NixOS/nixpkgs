@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # shellcheck shell=bash
 # Run addOpenGLRunpath on all dynamically linked, ELF files
 echo "Sourcing auto-add-opengl-runpath-hook"
@@ -25,4 +26,19 @@ autoAddOpenGLRunpathPhase() (
 if [ -z "${dontUseAutoAddOpenGLRunpath-}" ]; then
   echo "Using autoAddOpenGLRunpathPhase"
   postFixupHooks+=(autoAddOpenGLRunpathPhase)
+=======
+# Run autoOpenGLRunpath on all files
+echo "Sourcing auto-add-opengl-runpath-hook"
+
+autoAddOpenGLRunpathPhase  () {
+    # TODO: support multiple outputs
+    for file in $(find ${out,lib,bin} -type f); do
+        addOpenGLRunpath $file
+    done
+}
+
+if [ -z "${dontUseAutoAddOpenGLRunpath-}" ]; then
+    echo "Using autoAddOpenGLRunpathPhase"
+    postFixupHooks+=(autoAddOpenGLRunpathPhase)
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 fi

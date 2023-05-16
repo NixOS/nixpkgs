@@ -11,8 +11,13 @@
 let
   version = {
     feature = "17";
+<<<<<<< HEAD
     interim = ".0.7";
     build = "7";
+=======
+    interim = ".0.6";
+    build = "10";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   # when building a headless jdk, also bootstrap it with a headless jdk
@@ -26,7 +31,11 @@ let
       owner = "openjdk";
       repo = "jdk${version.feature}u";
       rev = "jdk-${version.feature}${version.interim}+${version.build}";
+<<<<<<< HEAD
       sha256 = "sha256-S6QOB4Tbi+K1yjvvywTfvwFI2eX8AiqIx5c3zfxcskc=";
+=======
+      sha256 = "sha256-zPpINi++3Ct0PCwlwlfhceh/ploMkclw+MgeI9dULdc=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
 
     nativeBuildInputs = [ pkg-config autoconf unzip ];

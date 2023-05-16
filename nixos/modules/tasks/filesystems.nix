@@ -36,6 +36,7 @@ let
         description = lib.mdDoc "Location of the mounted file system.";
       };
 
+<<<<<<< HEAD
       stratis.poolUuid = lib.mkOption {
         type = types.uniq (types.nullOr types.str);
         description = lib.mdDoc ''
@@ -45,6 +46,8 @@ let
         default = null;
       };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       device = mkOption {
         default = null;
         example = "/dev/sda";
@@ -112,9 +115,18 @@ let
       };
 
       formatOptions = mkOption {
+<<<<<<< HEAD
         visible = false;
         type = types.unspecified;
         default = null;
+=======
+        default = "";
+        type = types.str;
+        description = lib.mdDoc ''
+          If {option}`autoFormat` option is set specifies
+          extra options passed to mkfs.
+        '';
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       };
 
       autoResize = mkOption {
@@ -136,11 +148,30 @@ let
 
     };
 
+<<<<<<< HEAD
     config.options = mkMerge [
       (mkIf config.autoResize [ "x-systemd.growfs" ])
       (mkIf config.autoFormat [ "x-systemd.makefs" ])
       (mkIf (utils.fsNeededForBoot config) [ "x-initrd.mount" ])
     ];
+=======
+    config = let
+      defaultFormatOptions =
+        # -F needed to allow bare block device without partitions
+        if (builtins.substring 0 3 config.fsType) == "ext" then "-F"
+        # -q needed for non-interactive operations
+        else if config.fsType == "jfs" then "-q"
+        # (same here)
+        else if config.fsType == "reiserfs" then "-q"
+        else null;
+    in {
+      options = mkMerge [
+        (mkIf config.autoResize [ "x-nixos.autoresize" ])
+        (mkIf (utils.fsNeededForBoot config) [ "x-initrd.mount" ])
+      ];
+      formatOptions = mkIf (defaultFormatOptions != null) (mkDefault defaultFormatOptions);
+    };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   };
 
@@ -187,20 +218,34 @@ let
       skipCheck = fs: fs.noCheck || fs.device == "none" || builtins.elem fs.fsType fsToSkipCheck || isBindMount fs;
       # https://wiki.archlinux.org/index.php/fstab#Filepath_spaces
       escape = string: builtins.replaceStrings [ " " "\t" ] [ "\\040" "\\011" ] string;
+<<<<<<< HEAD
     in fstabFileSystems: { rootPrefix ? "" }: concatMapStrings (fs:
+=======
+    in fstabFileSystems: { rootPrefix ? "", extraOpts ? (fs: []) }: concatMapStrings (fs:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       (optionalString (isBindMount fs) (escape rootPrefix))
       + (if fs.device != null then escape fs.device
          else if fs.label != null then "/dev/disk/by-label/${escape fs.label}"
          else throw "No device specified for mount point ‘${fs.mountPoint}’.")
       + " " + escape fs.mountPoint
       + " " + fs.fsType
+<<<<<<< HEAD
       + " " + escape (builtins.concatStringsSep "," fs.options)
+=======
+      + " " + escape (builtins.concatStringsSep "," (fs.options ++ (extraOpts fs)))
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       + " 0 " + (if skipCheck fs then "0" else if fs.mountPoint == "/" then "1" else "2")
       + "\n"
     ) fstabFileSystems;
 
     initrdFstab = pkgs.writeText "initrd-fstab" (makeFstabEntries (filter utils.fsNeededForBoot fileSystems) {
       rootPrefix = "/sysroot";
+<<<<<<< HEAD
+=======
+      extraOpts = fs:
+        (optional fs.autoResize "x-systemd.growfs")
+        ++ (optional fs.autoFormat "x-systemd.makefs");
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     });
 
 in
@@ -302,6 +347,7 @@ in
 
     assertions = let
       ls = sep: concatMapStringsSep sep (x: x.mountPoint);
+<<<<<<< HEAD
       resizableFSes = [
         "ext3"
         "ext4"
@@ -309,6 +355,9 @@ in
         "xfs"
       ];
       notAutoResizable = fs: fs.autoResize && !(builtins.elem fs.fsType resizableFSes);
+=======
+      notAutoResizable = fs: fs.autoResize && !(hasPrefix "ext" fs.fsType || fs.fsType == "f2fs");
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     in [
       { assertion = ! (fileSystems' ? cycle);
         message = "The ‘fileSystems’ option can't be topologically sorted: mountpoint dependency path ${ls " -> " fileSystems'.cycle} loops to ${ls ", " fileSystems'.loops}";
@@ -316,6 +365,7 @@ in
       { assertion = ! (any notAutoResizable fileSystems);
         message = let
           fs = head (filter notAutoResizable fileSystems);
+<<<<<<< HEAD
         in ''
           Mountpoint '${fs.mountPoint}': 'autoResize = true' is not supported for 'fsType = "${fs.fsType}"'
           ${optionalString (fs.fsType == "auto") "fsType has to be explicitly set and"}
@@ -331,6 +381,10 @@ in
           systemd-makefs does not support any way to provide formatting
           options.
         '';
+=======
+        in
+          "Mountpoint '${fs.mountPoint}': 'autoResize = true' is not supported for 'fsType = \"${fs.fsType}\"':${optionalString (fs.fsType == "auto") " fsType has to be explicitly set and"} only the ext filesystems and f2fs support it.";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       }
     ];
 
@@ -379,7 +433,41 @@ in
         wants = [ "local-fs.target" "remote-fs.target" ];
       };
 
+<<<<<<< HEAD
     systemd.services = {
+=======
+    systemd.services =
+
+    # Emit systemd services to format requested filesystems.
+      let
+        formatDevice = fs:
+          let
+            mountPoint' = "${escapeSystemdPath fs.mountPoint}.mount";
+            device'  = escapeSystemdPath fs.device;
+            device'' = "${device'}.device";
+          in nameValuePair "mkfs-${device'}"
+          { description = "Initialisation of Filesystem ${fs.device}";
+            wantedBy = [ mountPoint' ];
+            before = [ mountPoint' "systemd-fsck@${device'}.service" ];
+            requires = [ device'' ];
+            after = [ device'' ];
+            path = [ pkgs.util-linux ] ++ config.system.fsPackages;
+            script =
+              ''
+                if ! [ -e "${fs.device}" ]; then exit 1; fi
+                # FIXME: this is scary.  The test could be more robust.
+                type=$(blkid -p -s TYPE -o value "${fs.device}" || true)
+                if [ -z "$type" ]; then
+                  echo "creating ${fs.fsType} filesystem on ${fs.device}..."
+                  mkfs.${fs.fsType} ${fs.formatOptions} "${fs.device}"
+                fi
+              '';
+            unitConfig.RequiresMountsFor = [ "${dirOf fs.device}" ];
+            unitConfig.DefaultDependencies = false; # needed to prevent a cycle
+            serviceConfig.Type = "oneshot";
+          };
+      in listToAttrs (map formatDevice (filter (fs: fs.autoFormat && !(utils.fsNeededForBoot fs)) fileSystems)) // {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     # Mount /sys/fs/pstore for evacuating panic logs and crashdumps from persistent storage onto the disk using systemd-pstore.
     # This cannot be done with the other special filesystems because the pstore module (which creates the mount point) is not loaded then.
         "mount-pstore" = {

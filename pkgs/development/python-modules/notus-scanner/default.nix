@@ -14,7 +14,11 @@
 
 buildPythonPackage rec {
   pname = "notus-scanner";
+<<<<<<< HEAD
   version = "22.6.0";
+=======
+  version = "22.5.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -23,7 +27,11 @@ buildPythonPackage rec {
     owner = "greenbone";
     repo = pname;
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-Ih6Uz7dTVMNCBsLcDsslyIzttg+IDBW3B+Ixpp7sz1Y=";
+=======
+    hash = "sha256-h+jZWjDvTfW9XjoGhWYX08hgJ/Qp64MEaqHHwnahnC4=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   pythonRelaxDeps = [

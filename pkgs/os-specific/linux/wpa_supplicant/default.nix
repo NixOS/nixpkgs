@@ -48,7 +48,10 @@ stdenv.mkDerivation rec {
     CONFIG_HS20=y
     CONFIG_HT_OVERRIDES=y
     CONFIG_IEEE80211AC=y
+<<<<<<< HEAD
     CONFIG_IEEE80211AX=y
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     CONFIG_IEEE80211N=y
     CONFIG_IEEE80211R=y
     CONFIG_IEEE80211W=y
@@ -57,7 +60,10 @@ stdenv.mkDerivation rec {
     CONFIG_LIBNL32=y
     CONFIG_OWE=y
     CONFIG_P2P=y
+<<<<<<< HEAD
     CONFIG_SAE_PK=y
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     CONFIG_TDLS=y
     CONFIG_TLS=openssl
     CONFIG_TLSV11=y

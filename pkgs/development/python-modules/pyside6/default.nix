@@ -2,6 +2,10 @@
 , stdenv
 , cmake
 , ninja
+<<<<<<< HEAD
+=======
+, qt6
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , python
 , moveBuildTree
 , shiboken6
@@ -13,7 +17,11 @@ stdenv.mkDerivation rec {
 
   inherit (shiboken6) version src;
 
+<<<<<<< HEAD
   sourceRoot = "pyside-setup-everywhere-src-${version}/sources/${pname}";
+=======
+  sourceRoot = "pyside-setup-everywhere-src-${lib.versions.majorMinor version}/sources/${pname}";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   # FIXME: cmake/Macros/PySideModules.cmake supposes that all Qt frameworks on macOS
   # reside in the same directory as QtCore.framework, which is not true for Nix.
@@ -33,12 +41,18 @@ stdenv.mkDerivation rec {
     moveBuildTree
   ];
 
+<<<<<<< HEAD
   buildInputs = with python.pkgs.qt6; [
     # required
     qtbase
     python.pkgs.ninja
     python.pkgs.packaging
     python.pkgs.setuptools
+=======
+  buildInputs = with qt6; [
+    # required
+    qtbase
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ] ++ lib.optionals stdenv.isLinux [
     # optional
     qt3d
@@ -71,12 +85,15 @@ stdenv.mkDerivation rec {
 
   dontWrapQtApps = true;
 
+<<<<<<< HEAD
   postInstall = ''
     cd ../../..
     ${python.pythonForBuild.interpreter} setup.py egg_info --build-type=pyside6
     cp -r PySide6.egg-info $out/${python.sitePackages}/
   '';
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   meta = with lib; {
     description = "Python bindings for Qt";
     license = with licenses; [ lgpl3Only gpl2Only gpl3Only ];

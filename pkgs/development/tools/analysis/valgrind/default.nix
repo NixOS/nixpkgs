@@ -6,11 +6,19 @@
 
 stdenv.mkDerivation rec {
   pname = "valgrind";
+<<<<<<< HEAD
   version = "3.21.0";
 
   src = fetchurl {
     url = "https://sourceware.org/pub/${pname}/${pname}-${version}.tar.bz2";
     hash = "sha256-EM4WGLs+M/rRbreVUrCj4SEXYkSKDX/OEcimJDuayXE=";
+=======
+  version = "3.20.0";
+
+  src = fetchurl {
+    url = "https://sourceware.org/pub/${pname}/${pname}-${version}.tar.bz2";
+    sha256 = "sha256-hTbAMdvgeNNC8SH6iBqezSBctaeOY5AFrVcAEb2588Y=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   patches = [

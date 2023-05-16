@@ -419,7 +419,11 @@ in
         Group = cfg.group;
         TimeoutSec = "300";
         WorkingDirectory = "${cfg.package}/share/redmine";
+<<<<<<< HEAD
         ExecStart="${bundle} exec rails server -u webrick -e production -p ${toString cfg.port} -P '${cfg.stateDir}/redmine.pid'";
+=======
+        ExecStart="${bundle} exec rails server webrick -e production -p ${toString cfg.port} -P '${cfg.stateDir}/redmine.pid'";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       };
 
     };

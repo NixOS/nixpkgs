@@ -27,11 +27,18 @@ stdenv.mkDerivation rec {
     autoreconfHook
     pkg-config
     python3
+<<<<<<< HEAD
     gobject-introspection
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   buildInputs = [
     glib
+<<<<<<< HEAD
+=======
+    gobject-introspection
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     gtk-doc
     libtool
     libxml2

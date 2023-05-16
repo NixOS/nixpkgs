@@ -23,6 +23,7 @@ in
   config = mkIf cfg.enable {
     systemd.packages = [ pkgs.cfs-zen-tweaks ];
 
+<<<<<<< HEAD
     systemd.services.set-cfs-tweaks.wantedBy = [
       "multi-user.target"
       "suspend.target"
@@ -30,5 +31,8 @@ in
       "hybrid-sleep.target"
       "suspend-then-hibernate.target"
     ];
+=======
+    systemd.services.set-cfs-tweak.wantedBy = [ "multi-user.target" "suspend.target" "hibernate.target" "hybrid-sleep.target" "suspend-then-hibernate.target" ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

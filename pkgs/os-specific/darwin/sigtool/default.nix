@@ -15,6 +15,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ openssl ];
 
   installFlags = [ "PREFIX=$(out)" ];
+<<<<<<< HEAD
 
   meta = with lib; {
     description = "A tool for working with embedded signatures in Mach-O files";
@@ -22,4 +23,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     platforms = platforms.unix;
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }

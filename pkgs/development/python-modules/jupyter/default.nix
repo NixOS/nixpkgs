@@ -3,7 +3,11 @@
 , fetchPypi
 , notebook
 , qtconsole
+<<<<<<< HEAD
 , jupyter-console
+=======
+, jupyter_console
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , nbconvert
 , ipykernel
 , ipywidgets
@@ -18,7 +22,11 @@ buildPythonPackage rec {
     sha256 = "d9dc4b3318f310e34c82951ea5d6683f67bed7def4b259fafbfe4f1beb1d8e5f";
   };
 
+<<<<<<< HEAD
   propagatedBuildInputs = [ notebook qtconsole jupyter-console nbconvert ipykernel ipywidgets ];
+=======
+  propagatedBuildInputs = [ notebook qtconsole jupyter_console nbconvert ipykernel ipywidgets ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   # Meta-package, no tests
   doCheck = false;

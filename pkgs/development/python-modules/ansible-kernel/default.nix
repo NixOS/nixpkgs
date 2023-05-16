@@ -55,6 +55,10 @@ buildPythonPackage rec {
     description = "An Ansible kernel for Jupyter";
     homepage = "https://github.com/ansible/ansible-jupyter-kernel";
     license = licenses.asl20;
+<<<<<<< HEAD
     maintainers = [ ];
+=======
+    maintainers = [ maintainers.costrouc ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

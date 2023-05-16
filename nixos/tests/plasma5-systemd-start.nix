@@ -23,11 +23,21 @@ import ./make-test-python.nix ({ pkgs, ...} :
     };
   };
 
+<<<<<<< HEAD
   testScript = { nodes, ... }: ''
     with subtest("Wait for login"):
         start_all()
         machine.wait_for_file("/tmp/xauth_*")
         machine.succeed("xauth merge /tmp/xauth_*")
+=======
+  testScript = { nodes, ... }: let
+    user = nodes.machine.config.users.users.alice;
+  in ''
+    with subtest("Wait for login"):
+        start_all()
+        machine.wait_for_file("${user.home}/.Xauthority")
+        machine.succeed("xauth merge ${user.home}/.Xauthority")
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     with subtest("Check plasmashell started"):
         machine.wait_until_succeeds("pgrep plasmashell")

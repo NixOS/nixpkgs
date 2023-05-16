@@ -18,6 +18,7 @@ assert (doCheck && stdenv.isLinux) -> glibcLocales != null;
 
 stdenv.mkDerivation rec {
   pname = "gawk" + lib.optionalString interactive "-interactive";
+<<<<<<< HEAD
   version = "5.2.2";
 
   src = fetchurl {
@@ -25,6 +26,21 @@ stdenv.mkDerivation rec {
     hash = "sha256-PB/OFEa0y+4c0nO9fsZLyH2J9hU3RxzT4F4zqWWiUOk=";
   };
 
+=======
+  version = "5.2.1";
+
+  src = fetchurl {
+    url = "mirror://gnu/gawk/gawk-${version}.tar.xz";
+    hash = "sha256-ZzVTuR+eGMxXku1RB1341RDJBA9VCm904Jya3SQ6fk8=";
+  };
+
+  patches = [
+    # Pull upstream fix for aarch64-darwin where pma does not work.
+    # Can be removed after next gawk release.
+    ./darwin-no-pma.patch
+  ];
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   # PIE is incompatible with the "persistent malloc" ("pma") feature.
   # While build system attempts to pass -no-pie to gcc. nixpkgs' `ld`
   # wrapped still passes `-pie` flag to linker and breaks linkage.
@@ -82,6 +98,9 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     platforms = platforms.unix ++ platforms.windows;
     maintainers = [ ];
+<<<<<<< HEAD
     mainProgram = "gawk";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

@@ -1,5 +1,8 @@
 { coreutils, db, fetchurl, openssl, pcre2, perl, pkg-config, lib, stdenv
+<<<<<<< HEAD
 , procps, killall
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , enableLDAP ? false, openldap
 , enableMySQL ? false, libmysqlclient, zlib
 , enableAuthDovecot ? false, dovecot
@@ -96,11 +99,14 @@ stdenv.mkDerivation rec {
       #/^\s*$/d
     ' < src/EDITME > Local/Makefile
 
+<<<<<<< HEAD
     {
       echo EXIWHAT_PS_CMD=${procps}/bin/ps
       echo EXIWHAT_MULTIKILL_CMD=${killall}/bin/killall
     } >> Local/Makefile
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     runHook postConfigure
   '';
 
@@ -128,7 +134,10 @@ stdenv.mkDerivation rec {
     homepage = "https://exim.org/";
     description = "A mail transfer agent (MTA)";
     license = with licenses; [ gpl2Plus bsd3 ];
+<<<<<<< HEAD
     mainProgram = "exim";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     platforms = platforms.linux;
     maintainers = with maintainers; [ tv ajs124 das_j ];
     changelog = "https://github.com/Exim/exim/blob/exim-${version}/doc/doc-txt/ChangeLog";

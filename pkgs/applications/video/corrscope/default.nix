@@ -2,7 +2,10 @@
 , mkDerivationWith
 , python3Packages
 , fetchFromGitHub
+<<<<<<< HEAD
 , fetchpatch
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , wrapQtAppsHook
 , ffmpeg
 , qtbase
@@ -19,6 +22,7 @@ mkDerivationWith python3Packages.buildPythonApplication rec {
     owner = "corrscope";
     repo = "corrscope";
     rev = version;
+<<<<<<< HEAD
     hash = "sha256-pS7upOYZAjgR3lWxny8TNZEj3Rrbg+L90ANZWFO9UPQ=";
   };
 
@@ -31,6 +35,11 @@ mkDerivationWith python3Packages.buildPythonApplication rec {
     })
   ];
 
+=======
+    sha256 = "sha256-pS7upOYZAjgR3lWxny8TNZEj3Rrbg+L90ANZWFO9UPQ=";
+  };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pythonRelaxDeps = [ "attrs" ];
 
   nativeBuildInputs = [

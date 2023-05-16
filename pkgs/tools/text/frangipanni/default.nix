@@ -11,7 +11,11 @@ buildGoModule rec {
     sha256 = "sha256-jIXyqwZWfCBSDTTodHTct4V5rjYv7h4Vcw7cXOFk17w=";
   };
 
+<<<<<<< HEAD
   vendorHash = "sha256-TSN5M/UCTtfoTf1hDCfrJMCFdSwL/NVXssgt4aefom8=";
+=======
+  vendorSha256 = "sha256-TSN5M/UCTtfoTf1hDCfrJMCFdSwL/NVXssgt4aefom8=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   meta = with lib; {
     description = "Convert lines of text into a tree structure";

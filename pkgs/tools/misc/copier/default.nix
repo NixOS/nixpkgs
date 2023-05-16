@@ -2,7 +2,11 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "copier";
+<<<<<<< HEAD
   version = "8.1.0";
+=======
+  version = "7.0.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "pyproject";
 
   src = fetchFromGitHub {
@@ -13,7 +17,11 @@ python3.pkgs.buildPythonApplication rec {
     postFetch = ''
       rm $out/tests/demo/doc/ma*ana.txt
     '';
+<<<<<<< HEAD
     hash = "sha256-PxyXlmEZ9cqZgDWcdeNznEC4F1J4NFMiwy0D7g+YZUs=";
+=======
+    hash = "sha256-i8HqMW36YtRxu/DLJWNiCfw6+ce3Gw8r8VBBo9l9aDI=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   POETRY_DYNAMIC_VERSIONING_BYPASS = version;
@@ -25,9 +33,13 @@ python3.pkgs.buildPythonApplication rec {
 
   propagatedBuildInputs = with python3.pkgs; [
     colorama
+<<<<<<< HEAD
     decorator
     dunamai
     funcy
+=======
+    dunamai
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     iteration-utilities
     jinja2
     jinja2-ansible-filters

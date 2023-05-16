@@ -1614,7 +1614,11 @@ in
 
         The following property holds: switching to a configuration
         (`switch-to-configuration`) that changes the prometheus
+<<<<<<< HEAD
         configuration only finishes successfully when prometheus has finished
+=======
+        configuration only finishes successully when prometheus has finished
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         loading the new configuration.
       '';
     };

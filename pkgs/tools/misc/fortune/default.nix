@@ -2,13 +2,21 @@
 
 stdenv.mkDerivation rec {
   pname = "fortune-mod";
+<<<<<<< HEAD
   version = "3.20.0";
+=======
+  version = "3.18.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   # We use fetchurl instead of fetchFromGitHub because the release pack has some
   # special files.
   src = fetchurl {
     url = "https://github.com/shlomif/fortune-mod/releases/download/${pname}-${version}/${pname}-${version}.tar.xz";
+<<<<<<< HEAD
     sha256 = "sha256-MQG+lfuJxISNSD5ykw2o0D9pJXN6I9eIA9a1XEL+IJQ=";
+=======
+    sha256 = "sha256-xaaB8aJgG3GG0fYS0vOnxC4RifQybxejS8ysqYE0xCs=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ cmake perl rinutils ];

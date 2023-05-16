@@ -19,6 +19,7 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DBUILD_SHARED_LIBS=ON"
+<<<<<<< HEAD
     # glog's custom FindUnwind.cmake module detects LLVM's unwind in case
     # stdenv.cc is clang. But the module doesn't get installed, causing
     # consumers of the CMake config file to fail at the configuration step.
@@ -28,17 +29,28 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
+=======
+  ];
+
+  # TODO: Re-enable Darwin tests once we're on a release that has https://github.com/google/glog/issues/709#issuecomment-960381653 fixed
+  doCheck = !stdenv.isDarwin;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   # There are some non-thread safe tests that can fail
   enableParallelChecking = false;
   nativeCheckInputs = [ perl ];
 
+<<<<<<< HEAD
   env.GTEST_FILTER =
+=======
+  GTEST_FILTER =
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     let
       filteredTests = lib.optionals stdenv.hostPlatform.isMusl [
         "Symbolize.SymbolizeStackConsumption"
         "Symbolize.SymbolizeWithDemanglingStackConsumption"
       ] ++ lib.optionals stdenv.hostPlatform.isStatic [
         "LogBacktraceAt.DoesBacktraceAtRightLineWhenEnabled"
+<<<<<<< HEAD
       ] ++ lib.optionals stdenv.cc.isClang [
         # Clang optimizes an expected allocation away.
         # See https://github.com/google/glog/issues/937
@@ -63,6 +75,11 @@ stdenv.mkDerivation rec {
       ctest -E "${excludedTestsRegex}" --output-on-failure
       runHook postCheck
     '';
+=======
+      ];
+    in
+    lib.optionalString doCheck "-${builtins.concatStringsSep ":" filteredTests}";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   meta = with lib; {
     homepage = "https://github.com/google/glog";

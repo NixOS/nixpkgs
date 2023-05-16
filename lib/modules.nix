@@ -21,6 +21,10 @@ let
     isBool
     isFunction
     isList
+<<<<<<< HEAD
+=======
+    isPath
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     isString
     length
     mapAttrs
@@ -133,6 +137,14 @@ let
             ${if prefix == []
               then null  # unset => visible
               else "internal"} = true;
+<<<<<<< HEAD
+=======
+            # TODO: hidden during the markdown transition to not expose downstream
+            # users of the docs infra to markdown if they're not ready for it.
+            # we don't make this visible conditionally because it can impact
+            # performance (https://github.com/NixOS/nixpkgs/pull/208407#issuecomment-1368246192)
+            visible = false;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
             # TODO: Change the type of this option to a submodule with a
             # freeformType, so that individual arguments can be documented
             # separately
@@ -539,6 +551,7 @@ let
 
   mergeModules' = prefix: options: configs:
     let
+<<<<<<< HEAD
       # an attrset 'name' => list of submodules that declare ‘name’.
       declsByName =
         zipAttrsWith
@@ -607,6 +620,61 @@ let
                 module.config
             )
             checkedConfigs);
+=======
+     /* byName is like foldAttrs, but will look for attributes to merge in the
+        specified attribute name.
+
+        byName "foo" (module: value: ["module.hidden=${module.hidden},value=${value}"])
+        [
+          {
+            hidden="baz";
+            foo={qux="bar"; gla="flop";};
+          }
+          {
+            hidden="fli";
+            foo={qux="gne"; gli="flip";};
+          }
+        ]
+        ===>
+        {
+          gla = [ "module.hidden=baz,value=flop" ];
+          gli = [ "module.hidden=fli,value=flip" ];
+          qux = [ "module.hidden=baz,value=bar" "module.hidden=fli,value=gne" ];
+        }
+      */
+      byName = attr: f: modules:
+        zipAttrsWith (n: concatLists)
+          (map (module: let subtree = module.${attr}; in
+              if !(builtins.isAttrs subtree) then
+                throw (if attr == "config" then ''
+                  You're trying to define a value of type `${builtins.typeOf subtree}'
+                  rather than an attribute set for the option
+                  `${builtins.concatStringsSep "." prefix}'!
+
+                  This usually happens if `${builtins.concatStringsSep "." prefix}' has option
+                  definitions inside that are not matched. Please check how to properly define
+                  this option by e.g. referring to `man 5 configuration.nix'!
+                '' else ''
+                  An option declaration for `${builtins.concatStringsSep "." prefix}' has type
+                  `${builtins.typeOf subtree}' rather than an attribute set.
+                  Did you mean to define this outside of `options'?
+                '')
+              else
+                mapAttrs (n: f module) subtree
+              ) modules);
+      # an attrset 'name' => list of submodules that declare ‘name’.
+      declsByName = byName "options" (module: option:
+          [{ inherit (module) _file; options = option; }]
+        ) options;
+      # an attrset 'name' => list of submodules that define ‘name’.
+      defnsByName = byName "config" (module: value:
+          map (config: { inherit (module) file; inherit config; }) (pushDownProperties value)
+        ) configs;
+      # extract the definitions for each loc
+      defnsByName' = byName "config" (module: value:
+          [{ inherit (module) file; inherit value; }]
+        ) configs;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
       # Convert an option tree decl to a submodule option decl
       optionTreeToOption = decl:
@@ -628,6 +696,7 @@ let
         # We're descending into attribute ‘name’.
         let
           loc = prefix ++ [name];
+<<<<<<< HEAD
           defns = pushedDownDefinitionsByName.${name} or [];
           defns' = rawDefinitionsByName.${name} or [];
           optionDecls = filter
@@ -637,6 +706,11 @@ let
                 )
             )
             decls;
+=======
+          defns = defnsByName.${name} or [];
+          defns' = defnsByName'.${name} or [];
+          optionDecls = filter (m: isOption m.options) decls;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         in
           if length optionDecls == length decls then
             let opt = fixupOptionType loc (mergeOptionDecls loc decls);
@@ -645,7 +719,11 @@ let
               unmatchedDefns = [];
             }
           else if optionDecls != [] then
+<<<<<<< HEAD
               if all (x: x.options.type.name or null == "submodule") optionDecls
+=======
+              if all (x: x.options.type.name == "submodule") optionDecls
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
               # Raw options can only be merged into submodules. Merging into
               # attrsets might be nice, but ambiguous. Suppose we have
               # attrset as a `attrsOf submodule`. User declares option
@@ -678,7 +756,11 @@ let
         # Propagate all unmatched definitions from nested option sets
         mapAttrs (n: v: v.unmatchedDefns) resultsByName
         # Plus the definitions for the current prefix that don't have a matching option
+<<<<<<< HEAD
         // removeAttrs rawDefinitionsByName (attrNames matchedOptions);
+=======
+        // removeAttrs defnsByName' (attrNames matchedOptions);
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     in {
       inherit matchedOptions;
 
@@ -698,6 +780,7 @@ let
           ) unmatchedDefnsByName);
     };
 
+<<<<<<< HEAD
   throwDeclarationTypeError = loc: actualTag: file:
     let
       name = lib.strings.escapeNixIdentifier (lib.lists.last loc);
@@ -724,6 +807,8 @@ let
     in
     throw (concatStringsSep "\n\n" paragraphs);
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   /* Merge multiple option declarations into a single declaration.  In
      general, there should be only one declaration of each option.
      The exception is the ‘options’ attribute, which specifies
@@ -951,6 +1036,7 @@ let
     else opt // { type = opt.type.substSubModules opt.options; options = []; };
 
 
+<<<<<<< HEAD
   /*
     Merge an option's definitions in a way that preserves the priority of the
     individual attributes in the option value.
@@ -985,6 +1071,8 @@ let
                   })
                 defsByAttr;
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   /* Properties. */
 
   mkIf = condition: content:
@@ -1221,11 +1309,22 @@ let
     use = id;
   };
 
+<<<<<<< HEAD
   /* Transitional version of mkAliasOptionModule that uses MD docs.
 
      This function is no longer necessary and merely an alias of `mkAliasOptionModule`.
   */
   mkAliasOptionModuleMD = mkAliasOptionModule;
+=======
+  /* Transitional version of mkAliasOptionModule that uses MD docs. */
+  mkAliasOptionModuleMD = from: to: doRename {
+    inherit from to;
+    visible = true;
+    warn = false;
+    use = id;
+    markdown = true;
+  };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   /* mkDerivedConfig : Option a -> (a -> Definition b) -> Definition b
 
@@ -1247,7 +1346,11 @@ let
       (opt.highestPrio or defaultOverridePriority)
       (f opt.value);
 
+<<<<<<< HEAD
   doRename = { from, to, visible, warn, use, withPriority ? true }:
+=======
+  doRename = { from, to, visible, warn, use, withPriority ? true, markdown ? false }:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     { config, options, ... }:
     let
       fromOpt = getAttrFromPath from options;
@@ -1258,7 +1361,13 @@ let
     {
       options = setAttrByPath from (mkOption {
         inherit visible;
+<<<<<<< HEAD
         description = "Alias of {option}`${showOption to}`.";
+=======
+        description = if markdown
+          then lib.mdDoc "Alias of {option}`${showOption to}`."
+          else "Alias of <option>${showOption to}</option>.";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         apply = x: use (toOf config);
       } // optionalAttrs (toType != null) {
         type = toType;
@@ -1326,7 +1435,10 @@ private //
     importJSON
     importTOML
     mergeDefinitions
+<<<<<<< HEAD
     mergeAttrDefinitionsWithPrio
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     mergeOptionDecls  # should be private?
     mkAfter
     mkAliasAndWrapDefinitions

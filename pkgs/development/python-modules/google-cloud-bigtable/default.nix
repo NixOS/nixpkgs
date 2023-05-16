@@ -15,14 +15,22 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-bigtable";
+<<<<<<< HEAD
   version = "2.21.0";
+=======
+  version = "2.17.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
+<<<<<<< HEAD
     hash = "sha256-2fDvv5QMo5LwfRN4f8LadtHhaN7a+uD48bQgjgwRMtw=";
+=======
+    hash = "sha256-wysLs0seCRDadYj9aRowebq6+kMi7RZp/DITC4lqsVY=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [
@@ -65,6 +73,10 @@ buildPythonPackage rec {
     homepage = "https://github.com/googleapis/python-bigtable";
     changelog = "https://github.com/googleapis/python-bigtable/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
+<<<<<<< HEAD
     maintainers = with maintainers; [ ];
+=======
+    maintainers = with maintainers; [ costrouc ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

@@ -19,9 +19,12 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "DESTDIR=$(out)" "LIBDIR=/lib" ];
 
+<<<<<<< HEAD
   # causes redefinition of _FORTIFY_SOURCE
   hardeningDisable = [ "fortify3" ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   meta = with lib; {
     description = "ChromiumOS libevdev. Renamed to avoid conflicts with the standard libevdev found in Linux distros";
     license = licenses.bsd3;

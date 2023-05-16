@@ -23,11 +23,19 @@
 
 buildPythonPackage rec {
   pname = "py3status";
+<<<<<<< HEAD
   version = "3.51";
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-x4MftAC1TyR4FEvl+ytwCYg2cm5qAG/X/MJUhJRGlkU=";
+=======
+  version = "3.50";
+
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-LUFLc7GNEoPIAsTQDhVTt0/NqhwaZHBRLoHF+2nqTUg=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [

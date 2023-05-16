@@ -1,5 +1,9 @@
 { lib, stdenv, fetchurl, alsa-lib, fftw, libjack2, libsamplerate
+<<<<<<< HEAD
 , libsndfile, pkg-config, python3, waf
+=======
+, libsndfile, pkg-config, python3, wafHook
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 stdenv.mkDerivation rec {
@@ -11,7 +15,11 @@ stdenv.mkDerivation rec {
     sha256 = "1npks71ljc48w6858l9bq30kaf5nph8z0v61jkfb70xb9np850nl";
   };
 
+<<<<<<< HEAD
   nativeBuildInputs = [ pkg-config python3 waf.hook ];
+=======
+  nativeBuildInputs = [ pkg-config python3 wafHook ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   buildInputs = [ alsa-lib fftw libjack2 libsamplerate libsndfile ];
 
   strictDeps = true;

@@ -62,7 +62,11 @@ config.security.apparmor.includes = {
     include "${pkgs.apparmor-profiles}/etc/apparmor.d/abstractions/base"
     r ${pkgs.stdenv.cc.libc}/share/locale/**,
     r ${pkgs.stdenv.cc.libc}/share/locale.alias,
+<<<<<<< HEAD
     r ${config.i18n.glibcLocales}/lib/locale/locale-archive,
+=======
+    ${lib.optionalString (pkgs.glibcLocales != null) "r ${pkgs.glibcLocales}/lib/locale/locale-archive,"}
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     ${etcRule "localtime"}
     r ${pkgs.tzdata}/share/zoneinfo/**,
     r ${pkgs.stdenv.cc.libc}/share/i18n/**,
@@ -72,7 +76,11 @@ config.security.apparmor.includes = {
 
     # bash inspects filesystems at startup
     # and /etc/mtab is linked to /proc/mounts
+<<<<<<< HEAD
     r @{PROC}/mounts,
+=======
+    @{PROC}/mounts
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     # system-wide bash configuration
     '' + lib.concatMapStringsSep "\n" etcRule [
@@ -211,9 +219,12 @@ config.security.apparmor.includes = {
   "abstractions/nis" = ''
     include "${pkgs.apparmor-profiles}/etc/apparmor.d/abstractions/nis"
   '';
+<<<<<<< HEAD
   "abstractions/nss-systemd" = ''
     include "${pkgs.apparmor-profiles}/etc/apparmor.d/abstractions/nss-systemd"
   '';
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   "abstractions/nvidia" = ''
     include "${pkgs.apparmor-profiles}/etc/apparmor.d/abstractions/nvidia"
     ${etcRule "vdpau_wrapper.cfg"}
@@ -282,8 +293,11 @@ config.security.apparmor.includes = {
     r /var/lib/acme/*/chain.pem,
     r /var/lib/acme/*/fullchain.pem,
 
+<<<<<<< HEAD
     r /etc/pki/tls/certs/,
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     '' + lib.concatMapStringsSep "\n" etcRule [
       "ssl/certs/ca-certificates.crt"
       "ssl/certs/ca-bundle.crt"

@@ -10,14 +10,22 @@ index de91167c5..1c9965678 100644
 +ExecStart=@gsettings@ set org.gnome.shell disable-user-extensions true
  Restart=no
 diff --git a/js/ui/extensionDownloader.js b/js/ui/extensionDownloader.js
+<<<<<<< HEAD
 index 197cc1c1c..dd74aa167 100644
 --- a/js/ui/extensionDownloader.js
 +++ b/js/ui/extensionDownloader.js
 @@ -110,7 +110,7 @@ async function extractExtensionArchive(bytes, dir) {
+=======
+index 8bf4646a6..59e88bb4c 100644
+--- a/js/ui/extensionDownloader.js
++++ b/js/ui/extensionDownloader.js
+@@ -114,7 +114,7 @@ async function extractExtensionArchive(bytes, dir) {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
      stream.close_async(GLib.PRIORITY_DEFAULT, null);
  
      const unzip = Gio.Subprocess.new(
 -        ['unzip', '-uod', dir.get_path(), '--', file.get_path()],
+<<<<<<< HEAD
 +        ['@unzip@', '-uod', dir.get_path(), '--', file.get_path()],
          Gio.SubprocessFlags.NONE);
      await unzip.wait_check_async(null);
@@ -69,3 +77,21 @@ index f2cfcd51a..2a9a7efdf 100644
  
    if (!g_subprocess_wait_check (proc, NULL, error))
      return FALSE;
+=======
++        ['@unzip@/bin/unzip', '-uod', dir.get_path(), '--', file.get_path()],
+         Gio.SubprocessFlags.NONE);
+     await unzip.wait_check_async(null);
+ }
+diff --git a/js/ui/status/keyboard.js b/js/ui/status/keyboard.js
+index bc50f3d37..868eb5abf 100644
+--- a/js/ui/status/keyboard.js
++++ b/js/ui/status/keyboard.js
+@@ -1080,6 +1080,6 @@ class InputSourceIndicator extends PanelMenu.Button {
+         if (xkbVariant.length > 0)
+             description = '%s\t%s'.format(description, xkbVariant);
+ 
+-        Util.spawn(['gkbd-keyboard-display', '-l', description]);
++        Util.spawn(['@libgnomekbd@/bin/gkbd-keyboard-display', '-l', description]);
+     }
+ });
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)

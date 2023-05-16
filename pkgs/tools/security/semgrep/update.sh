@@ -1,5 +1,9 @@
 #!/usr/bin/env nix-shell
+<<<<<<< HEAD
 #!nix-shell -i bash -p curl gnused jq nix-prefetch
+=======
+#!nix-shell -i bash -p curl gnused jq
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 set -euxo pipefail
 
@@ -15,6 +19,10 @@ fi
 
 ROOT="$(dirname "$(readlink -f "$0")")"
 NIXPKGS_ROOT="$ROOT/../../../.."
+<<<<<<< HEAD
+=======
+NIX_DRV="$ROOT/default.nix"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 COMMON_FILE="$ROOT/common.nix"
 
@@ -32,7 +40,11 @@ NEW_VERSION=$(
 )
 # trim v prefix
 NEW_VERSION="${NEW_VERSION:1}"
+<<<<<<< HEAD
 OLD_VERSION="$(instantiateClean semgrep.passthru.common.version)"
+=======
+OLD_VERSION="$(instantiateClean semgrep.common.version)"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 if [[ "$OLD_VERSION" == "$NEW_VERSION" ]]; then
     echo "Already up to date"
@@ -49,6 +61,7 @@ fetchgithub() {
     set -eo pipefail
 }
 
+<<<<<<< HEAD
 fetch_arch() {
   VERSION=$1
   PLATFORM=$2
@@ -62,22 +75,37 @@ fetchPypi rec {
   platform = \"$PLATFORM\";
 }
 "
+=======
+fetchzip() {
+    set +eo pipefail
+    nix-build -E "with import $NIXPKGS_ROOT {}; fetchzip {url = \"$1\"; sha256 = lib.fakeSha256; }" 2>&1 >/dev/null | grep "got:" | cut -d':' -f2 | sed 's| ||g'
+    set -eo pipefail
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }
 
 replace "$OLD_VERSION" "$NEW_VERSION" "$COMMON_FILE"
 
 echo "Updating src"
 
+<<<<<<< HEAD
 OLD_HASH="$(instantiateClean semgrep.passthru.common.srcHash)"
 echo "Old hash $OLD_HASH"
 TMP_HASH="sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="
 replace "$OLD_HASH" "$TMP_HASH" "$COMMON_FILE"
 NEW_HASH="$(fetchgithub semgrep.src)"
+=======
+OLD_HASH="$(instantiateClean semgrep.common.src.outputHash)"
+echo "Old hash $OLD_HASH"
+TMP_HASH="sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="
+replace "$OLD_HASH" "$TMP_HASH" "$COMMON_FILE"
+NEW_HASH="$(fetchgithub semgrep.common.src)"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 echo "New hash $NEW_HASH"
 replace "$TMP_HASH" "$NEW_HASH" "$COMMON_FILE"
 
 echo "Updated src"
 
+<<<<<<< HEAD
 
 update_core_platform() {
     SYSTEM=$1
@@ -97,6 +125,25 @@ update_core_platform() {
 update_core_platform "x86_64-linux"
 update_core_platform "x86_64-darwin"
 update_core_platform "aarch64-darwin"
+=======
+# loop through platforms for core
+nix-instantiate -E "with import $NIXPKGS_ROOT {}; builtins.attrNames semgrep.common.core.data" --eval --strict --json \
+| jq '.[]' -r \
+| while read -r PLATFORM; do
+    echo "Updating core for $PLATFORM"
+    SUFFIX=$(instantiateClean semgrep.common.core.data."$PLATFORM".suffix)
+    OLD_HASH=$(instantiateClean semgrep.common.core.data."$PLATFORM".sha256)
+    echo "Old hash $OLD_HASH"
+
+    NEW_URL="https://github.com/returntocorp/semgrep/releases/download/v$NEW_VERSION/semgrep-v$NEW_VERSION$SUFFIX"
+    NEW_HASH="$(fetchzip "$NEW_URL")"
+    echo "New hash $NEW_HASH"
+
+    replace "$OLD_HASH" "$NEW_HASH" "$COMMON_FILE"
+
+    echo "Updated core for $PLATFORM"
+done
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 OLD_PWD=$PWD
 TMPDIR="$(mktemp -d)"
@@ -119,7 +166,11 @@ nix-instantiate -E "with import $NIXPKGS_ROOT {}; builtins.attrNames semgrep.pas
     echo "Updating $SUBMODULE"
     OLD_REV=$(instantiateClean semgrep.passthru.common.submodules."$SUBMODULE".rev)
     echo "Old commit $OLD_REV"
+<<<<<<< HEAD
     OLD_HASH=$(instantiateClean semgrep.passthru.common.submodules."$SUBMODULE".hash)
+=======
+    OLD_HASH=$(instantiateClean semgrep.passthru.common.submodules."$SUBMODULE".outputHash)
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     echo "Old hash $OLD_HASH"
 
     NEW_REV=$(get_submodule_commit "$SUBMODULE")
@@ -130,10 +181,20 @@ nix-instantiate -E "with import $NIXPKGS_ROOT {}; builtins.attrNames semgrep.pas
       continue
     fi
 
+<<<<<<< HEAD
     TMP_HASH="sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="
     replace "$OLD_REV" "$NEW_REV" "$COMMON_FILE"
     replace "$OLD_HASH" "$TMP_HASH" "$COMMON_FILE"
     NEW_HASH="$(fetchgithub semgrep.passthru.submodulesSubset."$SUBMODULE")"
+=======
+    NEW_URL=$(instantiateClean semgrep.passthru.common.submodules."$SUBMODULE".url | sed "s@$OLD_REV@$NEW_REV@g")
+    NEW_HASH=$(nix --experimental-features nix-command hash to-sri "sha256:$(nix-prefetch-url "$NEW_URL")")
+
+    TMP_HASH="sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="
+    replace "$OLD_REV" "$NEW_REV" "$COMMON_FILE"
+    replace "$OLD_HASH" "$TMP_HASH" "$COMMON_FILE"
+    NEW_HASH="$(fetchgithub semgrep.passthru.common.submodules."$SUBMODULE")"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     echo "New hash $NEW_HASH"
     replace "$TMP_HASH" "$NEW_HASH" "$COMMON_FILE"
 

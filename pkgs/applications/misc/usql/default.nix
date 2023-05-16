@@ -10,29 +10,49 @@
 
 buildGoModule rec {
   pname = "usql";
+<<<<<<< HEAD
   version = "0.15.0";
+=======
+  version = "0.14.5";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "xo";
     repo = "usql";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-YjRbrhJSbX1OLEc7A72ubg1KtzJSWY0KphD4d8dAKQ8=";
+=======
+    hash = "sha256-WjQdRSucp9iwjUisaz4V/d4JVuFOmYwQA6f3DK5GskU=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   buildInputs = [ unixODBC icu ];
 
+<<<<<<< HEAD
   vendorHash = "sha256-OZ/eui+LR+Gn1nmu9wryGmz3jiUMuDScmTZ5G8UKWP8=";
   proxyVendor = true;
 
   # Exclude broken genji, hive & impala drivers (bad group)
+=======
+  vendorHash = "sha256-kGq+IrdhyFEoaqUeXTKRXziQnFfzG49GIMAsljnWQPA=";
+  proxyVendor = true;
+
+  # Exclude broken impala & hive driver
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   # These drivers break too often and are not used.
   #
   # See https://github.com/xo/usql/pull/347
   #
   excludedPackages = [
+<<<<<<< HEAD
     "genji"
     "hive"
     "impala"
+=======
+    "impala"
+    "hive"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   # These tags and flags are copied from build-release.sh

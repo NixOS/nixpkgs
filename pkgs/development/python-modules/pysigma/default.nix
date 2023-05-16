@@ -2,7 +2,10 @@
 , buildPythonPackage
 , fetchFromGitHub
 , fetchpatch
+<<<<<<< HEAD
 , jinja2
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , packaging
 , poetry-core
 , pyparsing
@@ -15,7 +18,11 @@
 
 buildPythonPackage rec {
   pname = "pysigma";
+<<<<<<< HEAD
   version = "0.10.5";
+=======
+  version = "0.9.9";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -24,6 +31,7 @@ buildPythonPackage rec {
     owner = "SigmaHQ";
     repo = "pySigma";
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-iiE6XHj5632sBlivUHz7HiNRjNpEh+OMqcJ65o2km6I=";
   };
 
@@ -31,13 +39,26 @@ buildPythonPackage rec {
     "packaging"
   ];
 
+=======
+    hash = "sha256-N3BHIec1j4G5bVQu5KKTzmxr4fFjTWIZdmtp1pSfdSg=";
+  };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nativeBuildInputs = [
     poetry-core
     pythonRelaxDepsHook
   ];
 
+<<<<<<< HEAD
   propagatedBuildInputs = [
     jinja2
+=======
+  pythonRelaxDeps = [
+    "packaging"
+  ];
+
+  propagatedBuildInputs = [
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     packaging
     pyparsing
     pyyaml

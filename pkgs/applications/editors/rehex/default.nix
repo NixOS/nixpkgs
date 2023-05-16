@@ -19,13 +19,21 @@
 
 stdenv.mkDerivation rec {
   pname = "rehex";
+<<<<<<< HEAD
   version = "0.60.1";
+=======
+  version = "0.5.4";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "solemnwarning";
     repo = pname;
     rev = version;
+<<<<<<< HEAD
     hash = "sha256-oF8XtxKqyo6c2lNH6WDq6aEPeZw8RqBinDVhPpaDAWg=";
+=======
+    hash = "sha256-UgwCfy2ssaPuSWeN2SXHBDXv/uLdrDoGr/Q9wXiuCnc=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ pkg-config which zip ]

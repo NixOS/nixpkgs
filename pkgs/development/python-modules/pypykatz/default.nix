@@ -13,14 +13,22 @@
 
 buildPythonPackage rec {
   pname = "pypykatz";
+<<<<<<< HEAD
   version = "0.6.8";
+=======
+  version = "0.6.6";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
+<<<<<<< HEAD
     hash = "sha256-uOOPDVlx8EKgkCJmZOQxIlI0UBMNzuh/ESoIoa2TmNM=";
+=======
+    hash = "sha256-fPeEKTfRL142RIMSQxpByIAy09sXlmDjIATikc82Iuw=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [

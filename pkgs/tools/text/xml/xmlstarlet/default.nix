@@ -12,11 +12,14 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libxml2 libxslt ];
 
+<<<<<<< HEAD
   patches = [
     # Fixes an incompatible function pointer error with clang 16.
     ./fix-incompatible-function-pointer.patch
   ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   preConfigure =
     ''
       export LIBXSLT_PREFIX=${libxslt.dev}
@@ -34,7 +37,10 @@ stdenv.mkDerivation rec {
     description = "A command line tool for manipulating and querying XML data";
     homepage = "https://xmlstar.sourceforge.net/";
     license = lib.licenses.mit;
+<<<<<<< HEAD
     mainProgram = "xmlstarlet";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     platforms = lib.platforms.unix;
   };
 }

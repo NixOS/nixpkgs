@@ -1,6 +1,7 @@
 { stdenv
 , lib
 , fetchFromGitHub
+<<<<<<< HEAD
 , fetchFromGitLab
 , fetchpatch
 , fetchurl
@@ -79,20 +80,72 @@ in
 stdenv.mkDerivation rec {
   pname = "onnxruntime";
   version = "1.15.1";
+=======
+, fetchpatch
+, fetchurl
+, pkg-config
+, cmake
+, python3Packages
+, libpng
+, zlib
+, eigen
+, protobuf
+, howard-hinnant-date
+, nlohmann_json
+, boost
+, oneDNN
+, abseil-cpp_202111
+, gtest
+, pythonSupport ? false
+, nsync
+, flatbuffers
+}:
+
+# Python Support
+#
+# When enabling Python support a wheel is made and stored in a `dist` output.
+# This wheel is then installed in a separate derivation.
+
+assert pythonSupport -> lib.versionOlder protobuf.version "3.20";
+
+stdenv.mkDerivation rec {
+  pname = "onnxruntime";
+  version = "1.13.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "onnxruntime";
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-SnHo2sVACc++fog7Tg6f2LK/Sv/EskFzN7RZS7D113s=";
     fetchSubmodules = true;
   };
 
+=======
+    sha256 = "sha256-paaeq6QeiOzwiibbz0GkYZxEI/V80lvYNYTm6AuyAXQ=";
+    fetchSubmodules = true;
+  };
+
+  patches = [
+    # Use dnnl from nixpkgs instead of submodules
+    (fetchpatch {
+      name = "system-dnnl.patch";
+      url = "https://aur.archlinux.org/cgit/aur.git/plain/system-dnnl.diff?h=python-onnxruntime&id=9c392fb542979981fe0026e0fe3cc361a5f00a36";
+      sha256 = "sha256-+kedzJHLFU1vMbKO9cn8fr+9A5+IxIuiqzOfR2AfJ0k=";
+    })
+  ];
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nativeBuildInputs = [
     cmake
     pkg-config
     python3Packages.python
+<<<<<<< HEAD
     protobuf3_21
+=======
+    gtest
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ] ++ lib.optionals pythonSupport (with python3Packages; [
     setuptools
     wheel
@@ -103,6 +156,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     libpng
     zlib
+<<<<<<< HEAD
     nlohmann_json
     nsync
     re2
@@ -123,6 +177,20 @@ stdenv.mkDerivation rec {
     onnx
   ]);
 
+=======
+    howard-hinnant-date
+    nlohmann_json
+    boost
+    oneDNN
+    protobuf
+  ] ++ lib.optionals pythonSupport [
+    nsync
+    python3Packages.numpy
+    python3Packages.pybind11
+    python3Packages.packaging
+  ];
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   # TODO: build server, and move .so's to lib output
   # Python's wheel is stored in a separate dist output
   outputs = [ "out" "dev" ] ++ lib.optionals pythonSupport [ "dist" ];
@@ -132,6 +200,7 @@ stdenv.mkDerivation rec {
   cmakeDir = "../cmake";
 
   cmakeFlags = [
+<<<<<<< HEAD
     "-DABSL_ENABLE_INSTALL=ON"
     "-DCMAKE_BUILD_TYPE=RELEASE"
     "-DFETCHCONTENT_FULLY_DISCONNECTED=ON"
@@ -151,6 +220,17 @@ stdenv.mkDerivation rec {
     "-Donnxruntime_BUILD_UNIT_TESTS=ON"
     "-Donnxruntime_ENABLE_LTO=ON"
     "-Donnxruntime_USE_FULL_PROTOBUF=OFF"
+=======
+    "-Donnxruntime_PREFER_SYSTEM_LIB=ON"
+    "-Donnxruntime_BUILD_SHARED_LIB=ON"
+    "-Donnxruntime_ENABLE_LTO=ON"
+    "-Donnxruntime_BUILD_UNIT_TESTS=ON"
+    "-Donnxruntime_USE_PREINSTALLED_EIGEN=ON"
+    "-Donnxruntime_USE_MPI=ON"
+    "-Deigen_SOURCE_PATH=${eigen.src}"
+    "-DFETCHCONTENT_SOURCE_DIR_ABSEIL_CPP=${abseil-cpp_202111.src}"
+    "-Donnxruntime_USE_DNNL=YES"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ] ++ lib.optionals pythonSupport [
     "-Donnxruntime_ENABLE_PYTHON=ON"
   ];
@@ -160,9 +240,12 @@ stdenv.mkDerivation rec {
   postPatch = ''
     substituteInPlace cmake/libonnxruntime.pc.cmake.in \
       --replace '$'{prefix}/@CMAKE_INSTALL_ @CMAKE_INSTALL_
+<<<<<<< HEAD
   '' + lib.optionalString (stdenv.hostPlatform.system == "aarch64-linux") ''
     # https://github.com/NixOS/nixpkgs/pull/226734#issuecomment-1663028691
     rm -v onnxruntime/test/optimizer/nhwc_transformer_test.cc
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '';
 
   postBuild = lib.optionalString pythonSupport ''
@@ -178,7 +261,11 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
+<<<<<<< HEAD
     protobuf = protobuf3_21;
+=======
+    inherit protobuf;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     tests = lib.optionalAttrs pythonSupport {
       python = python3Packages.onnxruntime;
     };
@@ -200,6 +287,10 @@ stdenv.mkDerivation rec {
     # https://github.com/microsoft/onnxruntime/blob/master/BUILD.md#architectures
     platforms = platforms.unix;
     license = licenses.mit;
+<<<<<<< HEAD
     maintainers = with maintainers; [ jonringer puffnfresh ck3d cbourjau ];
+=======
+    maintainers = with maintainers; [ jonringer puffnfresh ck3d ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

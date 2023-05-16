@@ -13,16 +13,27 @@
 
 buildGoModule rec {
   pname = "chart-testing";
+<<<<<<< HEAD
   version = "3.9.0";
+=======
+  version = "3.8.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "helm";
     repo = pname;
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-H9Pw4HPffFmRJXGh+e2hcddYfhgmvnUOxezQ6Zc8NwY=";
   };
 
   vendorHash = "sha256-9XdLSTr9FKuatJzpWM8AwrPtYDS+LC14bpz6evvJRuQ=";
+=======
+    hash = "sha256-ccP3t+Q4aZviYw8by2JDiuKHt7o6EKFxBxlhEntmV5A=";
+  };
+
+  vendorHash = "sha256-4x/8uDCfrERC+ww+iyP+dHIQ820IOARXj60KnjqeDkM=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   postPatch = ''
     substituteInPlace pkg/config/config.go \

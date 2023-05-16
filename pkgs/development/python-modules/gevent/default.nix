@@ -4,11 +4,16 @@
 , isPyPy
 , python
 , libev
+<<<<<<< HEAD
 , cffi
 , cython_3
 , greenlet
 , setuptools
 , wheel
+=======
+, greenlet
+, setuptools
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , zope_event
 , zope_interface
 , pythonOlder
@@ -27,11 +32,15 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [
+<<<<<<< HEAD
     cython_3
     setuptools
     wheel
   ] ++ lib.optionals (!isPyPy) [
     cffi
+=======
+    setuptools
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   buildInputs = [

@@ -11,7 +11,11 @@ buildGoModule rec {
     sha256 = "sha256-7lVNbqQv6MNIhHMFbH8VFVIjKiuTCbeVkAKeGprzrkw=";
   };
 
+<<<<<<< HEAD
   vendorHash = "sha256-Pz/TtGjwGHaDSueBEHMtHjyAxYO5V+8jzXCowHcUW/4=";
+=======
+  vendorSha256 = "sha256-Pz/TtGjwGHaDSueBEHMtHjyAxYO5V+8jzXCowHcUW/4=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   ui = callPackage ./webui.nix { inherit version src; };
 

@@ -7,22 +7,37 @@
 , redisSupport ? false, hiredis
 , mysqlSupport ? false, libmysqlclient, mariadb }:
 
+<<<<<<< HEAD
 stdenv.mkDerivation (finalAttrs: {
   pname = "drogon";
   version = "1.8.6";
+=======
+stdenv.mkDerivation rec {
+  pname = "drogon";
+  version = "1.8.3";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "drogonframework";
     repo = "drogon";
+<<<<<<< HEAD
     rev = "v${finalAttrs.version}";
     sha256 = "sha256-BYZoMesDquXaphZvnf2Vd/RuOC9jsOjZsGNbDmQ3u+c=";
+=======
+    rev = "v${version}";
+    sha256 = "sha256-I3f/8TMGm1G4CFMJJLyiVYso9yTHjeLefS5eaGySvC4=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     fetchSubmodules = true;
   };
 
   nativeBuildInputs = [ cmake ];
 
   cmakeFlags = [
+<<<<<<< HEAD
     "-DBUILD_TESTING=${if finalAttrs.finalPackage.doInstallCheck then "ON" else "OFF"}"
+=======
+    "-DBUILD_TESTING=${if doInstallCheck then "ON" else "OFF"}"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "-DBUILD_EXAMPLES=OFF"
   ];
 
@@ -43,10 +58,20 @@ stdenv.mkDerivation (finalAttrs: {
     # this part of the test would normally fail because it attempts to configure a CMake project that uses find_package on itself
     # this patch makes drogon and trantor visible to the test
     ./fix_find_package.patch
+<<<<<<< HEAD
+=======
+
+    # see https://github.com/drogonframework/drogon/issues/1491
+    (fetchpatch {
+      url = "https://github.com/drogonframework/drogon/commit/7d87d7e0b264ce53aa5ee006fb022d3516c9d666.patch";
+      sha256 = "sha256-C4zH9oNMfhkaeVNvZuBuzu1v2vNgg/t+YPitbrmHg+Y=";
+    })
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   # modifying PATH here makes drogon_ctl visible to the test
   installCheckPhase = ''
+<<<<<<< HEAD
     (
       cd ..
       PATH=$PATH:$out/bin $SHELL test.sh
@@ -56,6 +81,13 @@ stdenv.mkDerivation (finalAttrs: {
   # this excludes you, pkgsStatic (cmake wants to run built binaries
   # in the buildPhase)
   doInstallCheck = stdenv.buildPlatform == stdenv.hostPlatform;
+=======
+    cd ..
+    PATH=$PATH:$out/bin bash test.sh
+  '';
+
+  doInstallCheck = true;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   meta = with lib; {
     homepage = "https://github.com/drogonframework/drogon";
@@ -64,4 +96,8 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with maintainers; [ urlordjames ];
     platforms = platforms.all;
   };
+<<<<<<< HEAD
 })
+=======
+}
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)

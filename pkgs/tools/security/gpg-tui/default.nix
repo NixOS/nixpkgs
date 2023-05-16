@@ -17,16 +17,27 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "gpg-tui";
+<<<<<<< HEAD
   version = "0.10.0";
+=======
+  version = "0.9.5";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "orhun";
     repo = "gpg-tui";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-zTFWIIqIDMI77lg2CB1ug+GeKPVIT1OQ1p80x6tLgGg=";
   };
 
   cargoHash = "sha256-5qLrmU/SfUfiQOOpECTEn8K142STnbhqE3XbJFxKPZg=";
+=======
+    hash = "sha256-WBOjdcqBHvXYAFEsv0249W7HrABDsZe9pfc3jM9LUSA=";
+  };
+
+  cargoHash = "sha256-0xNCQQG9S2sqxfc3MIZnftCSrVsrk4DO/cIM0iW33oI=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nativeBuildInputs = [
     gpgme # for gpgme-config

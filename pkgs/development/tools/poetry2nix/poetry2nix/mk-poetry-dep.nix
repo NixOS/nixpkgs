@@ -174,16 +174,25 @@ pythonPackages.callPackage
           (
             builtins.fetchGit ({
               inherit (source) url;
+<<<<<<< HEAD
+=======
+              submodules = true;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
               rev = source.resolved_reference or source.reference;
               ref = sourceSpec.branch or (if sourceSpec ? tag then "refs/tags/${sourceSpec.tag}" else "HEAD");
             } // (
               lib.optionalAttrs ((sourceSpec ? rev) && (lib.versionAtLeast builtins.nixVersion "2.4")) {
                 allRefs = true;
+<<<<<<< HEAD
               }) // (
               lib.optionalAttrs (lib.versionAtLeast builtins.nixVersion "2.4") {
                 submodules = true;
               })
             )
+=======
+              }
+            ))
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           )
         else if isWheelUrl then
           builtins.fetchurl

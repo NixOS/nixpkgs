@@ -2,6 +2,10 @@
 , buildPythonPackage
 , fetchFromGitHub
 , fetchpatch
+<<<<<<< HEAD
+=======
+, fetchPypi
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , pythonOlder
 , rapidjson
 , pytestCheckHook
@@ -11,12 +15,21 @@
 
 let
   rapidjson' = rapidjson.overrideAttrs (old: {
+<<<<<<< HEAD
     version = "unstable-2023-03-06";
     src = fetchFromGitHub {
       owner = "Tencent";
       repo = "rapidjson";
       rev = "5e17dbed34eef33af8f3e734820b5dc547a2a3aa";
       hash = "sha256-CTy42X6P6+Gz4WbJ3tCpAw3qqlJ+mU1PaWW9LGG+6nU=";
+=======
+    version = "unstable-2022-05-24";
+    src = fetchFromGitHub {
+      owner = "Tencent";
+      repo = "rapidjson";
+      rev = "232389d4f1012dddec4ef84861face2d2ba85709";
+      hash = "sha256-RLvDcInUa8E8DRA4U/oXEE8+TZ0SDXXDU/oWvpfDWjw=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
     patches = [
       (fetchpatch {
@@ -29,6 +42,7 @@ let
     cmakeFlags = old.cmakeFlags ++ [ "-DCMAKE_CTEST_ARGUMENTS=-E;valgrind_unittest" ];
   });
 in buildPythonPackage rec {
+<<<<<<< HEAD
   version = "1.11";
   pname = "python-rapidjson";
   disabled = pythonOlder "3.7";
@@ -40,6 +54,15 @@ in buildPythonPackage rec {
     repo = "python-rapidjson";
     rev = "refs/tags/v${version}";
     hash = "sha256-Jnnr4MCopx2YJTqbHqSCzPBzUl0T8SqcznRGSI14d2Q=";
+=======
+  version = "1.9";
+  pname = "python-rapidjson";
+  disabled = pythonOlder "3.7";
+
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-vn01HHES2sYIEzoj9g6VOVZo0JgaB/QDf2Pg6Ir88Bo=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   setupPyBuildFlags = [
@@ -56,10 +79,17 @@ in buildPythonPackage rec {
   ];
 
   meta = with lib; {
+<<<<<<< HEAD
     changelog = "https://github.com/python-rapidjson/python-rapidjson/blob/${src.rev}/CHANGES.rst";
     homepage = "https://github.com/python-rapidjson/python-rapidjson";
     description = "Python wrapper around rapidjson";
     license = licenses.mit;
     maintainers = with maintainers; [ dotlambda ];
+=======
+    homepage = "https://github.com/python-rapidjson/python-rapidjson";
+    description = "Python wrapper around rapidjson";
+    license = licenses.mit;
+    maintainers = with maintainers; [ costrouc dotlambda ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

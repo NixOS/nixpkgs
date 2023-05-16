@@ -1,5 +1,9 @@
 { lib, buildPythonPackage, fetchFromGitHub, pythonOlder
+<<<<<<< HEAD
 , trio, async-generator, hypothesis, outcome, pytest }:
+=======
+, trio, async_generator, hypothesis, outcome, pytest }:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 buildPythonPackage rec {
   pname = "pytest-trio";
@@ -17,7 +21,11 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     trio
+<<<<<<< HEAD
     async-generator
+=======
+    async_generator
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     outcome
   ];
 

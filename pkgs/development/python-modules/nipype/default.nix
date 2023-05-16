@@ -42,13 +42,21 @@
 
 buildPythonPackage rec {
   pname = "nipype";
+<<<<<<< HEAD
   version = "1.8.6";
+=======
+  version = "1.8.5";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   disabled = pythonOlder "3.7";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
+<<<<<<< HEAD
     hash = "sha256-l3sTFej3D5QWPsB+MeVXG+g/Kt1gIxQcWgascAEm+NE=";
+=======
+    hash = "sha256-44QnQ/tmBGTdKd5z3Pye9m0nO+ELzGQFn/Ic1e8ellU=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   postPatch = ''

@@ -1,7 +1,13 @@
 import ./make-test-python.nix ({ pkgs, lib, ... }: {
   name = "budgie";
 
+<<<<<<< HEAD
   meta.maintainers = [ lib.maintainers.federicoschonborn ];
+=======
+  meta = with lib; {
+    maintainers = [ maintainers.federicoschonborn ];
+  };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nodes.machine = { ... }: {
     imports = [
@@ -32,6 +38,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
     in
     ''
       with subtest("Wait for login"):
+<<<<<<< HEAD
           # wait_for_x() checks graphical-session.target, which is expected to be
           # inactive on Budgie before #228946 (i.e. systemd managed gnome-session) is
           # done on upstream.
@@ -41,6 +48,9 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
           # changed in #233981 (we have Budgie:GNOME in XDG_CURRENT_DESKTOP).
           # machine.wait_for_x()
           machine.wait_until_succeeds('journalctl -t gnome-session-binary --grep "Entering running state"')
+=======
+          machine.wait_for_x()
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           machine.wait_for_file("${user.home}/.Xauthority")
           machine.succeed("xauth merge ${user.home}/.Xauthority")
 
@@ -52,16 +62,22 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
           machine.wait_for_window("budgie-daemon")
           machine.wait_until_succeeds("pgrep budgie-panel")
           machine.wait_for_window("budgie-panel")
+<<<<<<< HEAD
           # We don't check xwininfo for this one.
           # See https://github.com/NixOS/nixpkgs/pull/216737#discussion_r1155312754
           machine.wait_until_succeeds("pgrep budgie-wm")
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
       with subtest("Open MATE terminal"):
           machine.succeed("su - ${user.name} -c 'DISPLAY=:0 mate-terminal >&2 &'")
           machine.wait_for_window("Terminal")
+<<<<<<< HEAD
 
       with subtest("Check if budgie-wm has ever coredumped"):
           machine.fail("coredumpctl --json=short | grep budgie-wm")
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           machine.sleep(20)
           machine.screenshot("screen")
     '';

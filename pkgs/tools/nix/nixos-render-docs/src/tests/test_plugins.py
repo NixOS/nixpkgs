@@ -501,6 +501,7 @@ def test_example() -> None:
     with pytest.raises(RuntimeError) as exc:
         c._parse("::: {.example}\n### foo\n### bar\n:::")
     assert exc.value.args[0] == 'unexpected non-title heading in example in line 3'
+<<<<<<< HEAD
 
 def test_footnotes() -> None:
     c = Converter({})
@@ -526,3 +527,5 @@ def test_footnotes() -> None:
         Token(type='footnote_close', tag='', nesting=-1),
         Token(type='footnote_block_close', tag='', nesting=-1),
     ]
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)

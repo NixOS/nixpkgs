@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 { lib
 , writeShellScript
 , buildFHSEnvBubblewrap
@@ -22,6 +23,39 @@ let
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     maintainers = with maintainers; [ hellwolf ];
+=======
+{ lib, stdenv, fetchurl, makeWrapper, autoPatchelfHook }:
+
+stdenv.mkDerivation rec {
+  pname = "insync";
+  version = "1.5.7.37371";
+  src =
+    if stdenv.hostPlatform.system == "x86_64-linux" then
+      fetchurl {
+        url = "http://s.insynchq.com/builds/insync-portable_${version}_amd64.tar.bz2";
+        sha256 = "1cm3q6y2crw6pcsvh21sbkmh1hin7xl4fyslc96nbyql8rxsky5n";
+      }
+    else
+      throw "${pname}-${version} is not supported on ${stdenv.hostPlatform.system}";
+
+  nativeBuildInputs = [ makeWrapper autoPatchelfHook ];
+
+  postPatch = ''
+    patchelf --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" client/insync-portable
+  '';
+
+  installPhase = ''
+    mkdir -p $out/bin
+    cp -a client $out/client
+    makeWrapper $out/client/insync-portable $out/bin/insync --set LC_TIME C
+  '';
+
+  meta = {
+    platforms = ["x86_64-linux"];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.unfree;
+    maintainers = [ ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     homepage = "https://www.insynchq.com";
     description = "Google Drive sync and backup with multiple account support";
     longDescription = ''
@@ -31,6 +65,7 @@ let
      and built in sharing.
 
      There is a 15-day free trial, and it is a paid application after that.
+<<<<<<< HEAD
 
      Known bug(s):
 
@@ -122,4 +157,10 @@ in buildFHSEnvBubblewrap {
   unshareCgroup = false;
   # Since "insync start" command starts a daemon, this daemon should die with it.
   dieWithParent = false;
+=======
+    '';
+    # download URL removed
+    broken = true;
+  };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }

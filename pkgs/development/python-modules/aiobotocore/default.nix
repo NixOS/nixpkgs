@@ -14,7 +14,11 @@
 
 buildPythonPackage rec {
   pname = "aiobotocore";
+<<<<<<< HEAD
   version = "2.5.2";
+=======
+  version = "2.4.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -23,7 +27,11 @@ buildPythonPackage rec {
     owner = "aio-libs";
     repo = pname;
     rev = "refs/tags/${version}";
+<<<<<<< HEAD
     hash = "sha256-twIo5qJht7oZye5lbiPwLFa/5dCwgCm+OkwuCuWU0cU=";
+=======
+    hash = "sha256-IHVplle73JVLbz9R9uPyleL9Occ723EE9Ogl059TcPg=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   # Relax version constraints: aiobotocore works with newer botocore versions

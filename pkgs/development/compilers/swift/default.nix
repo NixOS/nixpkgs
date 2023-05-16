@@ -2,14 +2,20 @@
 , pkgs
 , newScope
 , darwin
+<<<<<<< HEAD
 , llvmPackages
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , llvmPackages_15
 , overrideCC
 }:
 
 let
+<<<<<<< HEAD
   swiftLlvmPackages = llvmPackages_15;
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   self = rec {
 
     callPackage = newScope self;
@@ -27,6 +33,7 @@ let
     # used in Swift, and applies the same libc overrides as `apple_sdk.stdenv`.
     clang = if pkgs.stdenv.isDarwin
       then
+<<<<<<< HEAD
         swiftLlvmPackages.clang.override rec {
           libc = apple_sdk.Libsystem;
           bintools = pkgs.bintools.override { inherit libc; };
@@ -46,6 +53,14 @@ let
         }
       else
         swiftLlvmPackages.clang;
+=======
+        llvmPackages_15.clang.override rec {
+          libc = apple_sdk.Libsystem;
+          bintools = pkgs.bintools.override { inherit libc; };
+        }
+      else
+        llvmPackages_15.clang;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     # Overrides that create a useful environment for swift packages, allowing
     # packaging with `swiftPackages.callPackage`. These are similar to

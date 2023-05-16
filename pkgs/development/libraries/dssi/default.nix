@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 { lib, stdenv, fetchurl, ladspaH, libjack2, liblo, alsa-lib, libX11, libsndfile, libSM
+=======
+{ lib, stdenv, fetchurl, ladspaH, libjack2, liblo, alsa-lib, qt4, libX11, libsndfile, libSM
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , libsamplerate, libtool, autoconf, automake, xorgproto, libICE, pkg-config
 }:
 
@@ -13,7 +17,11 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoconf automake pkg-config ];
   buildInputs =
+<<<<<<< HEAD
     [ ladspaH libjack2 liblo alsa-lib libX11 libsndfile libSM
+=======
+    [ ladspaH libjack2 liblo alsa-lib qt4 libX11 libsndfile libSM
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       libsamplerate libtool xorgproto libICE
     ];
 

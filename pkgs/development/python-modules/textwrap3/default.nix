@@ -22,6 +22,10 @@ buildPythonPackage rec {
     description = "Textwrap from Python 3.6 backport plus a few tweaks";
     homepage = "https://github.com/jonathaneunice/textwrap3";
     license = licenses.psfl;
+<<<<<<< HEAD
     maintainers = [ ];
+=======
+    maintainers = [ maintainers.costrouc ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

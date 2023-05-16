@@ -11,13 +11,18 @@
 
 buildPythonPackage rec {
   pname = "ipyniivue";
+<<<<<<< HEAD
   version = "1.1.0";
+=======
+  version = "1.0.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
+<<<<<<< HEAD
     hash = "sha256-kym7949VI6C+62p3IOQ2QIzWnuSBcrmySb83oqUwhjI=";
   };
 
@@ -33,6 +38,12 @@ buildPythonPackage rec {
     hatchling
     hatch-jupyter-builder
   ];
+=======
+    hash = "sha256-vFbEV/ZMXvKZeQUR536OZQ/5uIkt4tOWcCGRPMdc34I";
+  };
+
+  nativeBuildInputs = [ hatchling hatch-jupyter-builder ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   propagatedBuildInputs = [ ipywidgets jupyter-ui-poll ];
 

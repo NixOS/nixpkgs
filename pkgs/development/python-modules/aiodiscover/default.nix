@@ -13,7 +13,11 @@
 
 buildPythonPackage rec {
   pname = "aiodiscover";
+<<<<<<< HEAD
   version = "1.5.1";
+=======
+  version = "1.4.16";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -22,7 +26,11 @@ buildPythonPackage rec {
     owner = "bdraco";
     repo = pname;
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-rFypv0gCj+Jskk+dlRNJ2ufj2sDud7AuJzj3cl4bB4Y=";
+=======
+    hash = "sha256-umHw9DFLIsoxBNlUSuSmaRy5O270lP0tLZ8rilw0oWg=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [

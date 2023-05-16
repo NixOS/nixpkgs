@@ -1,14 +1,18 @@
 # Setup hook to use for pip projects
 echo "Sourcing pip-build-hook"
 
+<<<<<<< HEAD
 declare -a pipBuildFlags
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 pipBuildPhase() {
     echo "Executing pipBuildPhase"
     runHook preBuild
 
     mkdir -p dist
     echo "Creating a wheel..."
+<<<<<<< HEAD
     @pythonInterpreter@ -m pip wheel \
        --verbose \
        --no-index \
@@ -17,6 +21,9 @@ pipBuildPhase() {
        --no-build-isolation \
        --wheel-dir dist \
        $pipBuildFlags .
+=======
+    @pythonInterpreter@ -m pip wheel --verbose --no-index --no-deps --no-clean --no-build-isolation --wheel-dir dist .
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     echo "Finished creating a wheel..."
 
     runHook postBuild

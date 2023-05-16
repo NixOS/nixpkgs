@@ -1,15 +1,25 @@
 { config, pkgs, lib, ... }:
+<<<<<<< HEAD
 
 let
   inherit (lib) literalMD mkEnableOption mkIf mkOption types;
   cfg = config.services.quake3-server;
 
+=======
+with lib;
+
+let
+  cfg = config.services.quake3-server;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   configFile = pkgs.writeText "q3ds-extra.cfg" ''
     set net_port ${builtins.toString cfg.port}
 
     ${cfg.extraConfig}
   '';
+<<<<<<< HEAD
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   defaultBaseq3 = pkgs.requireFile rec {
     name = "baseq3";
     hashMode = "recursive";
@@ -27,7 +37,10 @@ let
       $services.quake3-server.baseq3/.q3a/
     '';
   };
+<<<<<<< HEAD
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   home = pkgs.runCommand "quake3-home" {} ''
       mkdir -p $out/.q3a/baseq3
 
@@ -41,7 +54,10 @@ in {
   options = {
     services.quake3-server = {
       enable = mkEnableOption (lib.mdDoc "Quake 3 dedicated server");
+<<<<<<< HEAD
       package = lib.mkPackageOptionMD pkgs "ioquake3" { };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
       port = mkOption {
         type = types.port;
@@ -107,10 +123,18 @@ in {
         ReadOnlyPaths = if baseq3InStore then home else cfg.baseq3;
         ExecStartPre = optionalString (!baseq3InStore) "+${pkgs.coreutils}/bin/cp ${configFile} ${cfg.baseq3}/.q3a/baseq3/nix.cfg";
 
+<<<<<<< HEAD
         ExecStart = "${cfg.package}/bin/ioq3ded +exec nix.cfg";
+=======
+        ExecStart = "${pkgs.ioquake3}/ioq3ded.x86_64 +exec nix.cfg";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       };
     };
   };
 
+<<<<<<< HEAD
   meta.maintainers = with lib.maintainers; [ f4814n ];
+=======
+  meta.maintainers = with maintainers; [ f4814n ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }

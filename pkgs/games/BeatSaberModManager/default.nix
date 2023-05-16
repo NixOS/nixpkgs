@@ -13,8 +13,11 @@
   libICE,
   libSM,
   fontconfig,
+<<<<<<< HEAD
 
   xdg-utils,
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 buildDotnetModule rec {
@@ -49,11 +52,14 @@ buildDotnetModule rec {
     fontconfig
   ];
 
+<<<<<<< HEAD
   # Required for OneClick
   makeWrapperArgs = [
     ''--suffix PATH : "${lib.makeBinPath [ xdg-utils ]}"''
   ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   meta = with lib; {
     description = "Yet another mod installer for Beat Saber, heavily inspired by ModAssistant";
     homepage = "https://github.com/affederaffe/BeatSaberModManager";

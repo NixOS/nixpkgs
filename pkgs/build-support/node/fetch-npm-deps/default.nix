@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 { lib, stdenvNoCC, rustPlatform, makeWrapper, pkg-config, curl, gnutar, gzip, nix, testers, fetchurl, cacert, prefetch-npm-deps, fetchNpmDeps }:
+=======
+{ lib, stdenvNoCC, rustPlatform, makeWrapper, Security, gnutar, gzip, nix, testers, fetchurl, prefetch-npm-deps, fetchNpmDeps }:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 {
   prefetch-npm-deps = rustPlatform.buildRustPackage {
@@ -16,8 +20,13 @@
 
     cargoLock.lockFile = ./Cargo.lock;
 
+<<<<<<< HEAD
     nativeBuildInputs = [ makeWrapper pkg-config ];
     buildInputs = [ curl ];
+=======
+    nativeBuildInputs = [ makeWrapper ];
+    buildInputs = lib.optional stdenvNoCC.isDarwin Security;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     postInstall = ''
       wrapProgram "$out/bin/prefetch-npm-deps" --prefix PATH : ${lib.makeBinPath [ gnutar gzip nix ]}
@@ -115,7 +124,11 @@
 
     meta = with lib; {
       description = "Prefetch dependencies from npm (for use with `fetchNpmDeps`)";
+<<<<<<< HEAD
       maintainers = with maintainers; [ lilyinstarlight winter ];
+=======
+      maintainers = with maintainers; [ winter ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       license = licenses.mit;
     };
   };
@@ -165,6 +178,7 @@
 
       dontInstall = true;
 
+<<<<<<< HEAD
       # NIX_NPM_TOKENS environment variable should be a JSON mapping in the shape of:
       # `{ "registry.example.com": "example-registry-bearer-token", ... }`
       impureEnvVars = lib.fetchers.proxyImpureEnvVars ++ [ "NIX_NPM_TOKENS" ];
@@ -173,6 +187,8 @@
         then "${cacert}/etc/ssl/certs/ca-bundle.crt"
         else "/no-cert-file.crt";
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       outputHashMode = "recursive";
     } // hash_ // forceGitDeps_);
 }

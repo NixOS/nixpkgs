@@ -2,11 +2,19 @@
 
 stdenv.mkDerivation rec {
   pname = "bdf2psf";
+<<<<<<< HEAD
   version = "1.222";
 
   src = fetchurl {
     url = "mirror://debian/pool/main/c/console-setup/bdf2psf_${version}_all.deb";
     sha256 = "sha256-zGd2t2Qtec8Up1SHAizZp8l/fhFpa0Y1UJbB8XanX6Q=";
+=======
+  version = "1.218";
+
+  src = fetchurl {
+    url = "mirror://debian/pool/main/c/console-setup/bdf2psf_${version}_all.deb";
+    sha256 = "sha256-pHL3Q/qOLq8AAmMuNoGRzz+c1xQxJk/6+t6u3EdWqMY=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ dpkg ];

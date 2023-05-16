@@ -10,13 +10,21 @@
 
 stdenv.mkDerivation rec {
   pname = "sambamba";
+<<<<<<< HEAD
   version = "1.0.1";
+=======
+  version = "1.0.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "biod";
     repo = "sambamba";
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-3O9bHGpMuCgdR2Wm7Dv1VUjMT1QTn8K1hdwgjvwhFDw=";
+=======
+    sha256 = "sha256-HwAzsbT71Q35Io6H7Hzs4RTatpRpdHqV0cwPYAlsf6c=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     fetchSubmodules = true;
   };
 

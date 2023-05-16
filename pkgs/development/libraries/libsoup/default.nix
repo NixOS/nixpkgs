@@ -99,9 +99,12 @@ stdenv.mkDerivation rec {
     homepage = "https://wiki.gnome.org/Projects/libsoup";
     license = lib.licenses.lgpl2Plus;
     inherit (glib.meta) maintainers platforms;
+<<<<<<< HEAD
     pkgConfigModules = [
       "libsoup-2.4"
       "libsoup-gnome-2.4"
     ];
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

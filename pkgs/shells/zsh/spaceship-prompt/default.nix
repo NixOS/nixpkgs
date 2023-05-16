@@ -2,13 +2,21 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "spaceship-prompt";
+<<<<<<< HEAD
   version = "4.14.0";
+=======
+  version = "4.13.3";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "denysdovhan";
     repo = pname;
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-aoifMAjJvv1WAlINNkMwCCop6znxyivoD3vQDo/ZbfQ=";
+=======
+    sha256 = "sha256-uFmGld5paCLNnE9yWgBLtthEBfwwMzlGCJFX6KqGJdw=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   strictDeps = true;

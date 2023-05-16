@@ -11,7 +11,11 @@
 
 buildPythonPackage rec {
   pname = "dissect-ntfs";
+<<<<<<< HEAD
   version = "3.7";
+=======
+  version = "3.4";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -20,7 +24,11 @@ buildPythonPackage rec {
     owner = "fox-it";
     repo = "dissect.ntfs";
     rev = "refs/tags/${version}";
+<<<<<<< HEAD
     hash = "sha256-bnFimn5ektIKiX73NZ+1Iz3Uoew138a0nFJgypffC4o=";
+=======
+    hash = "sha256-n6FPdsObzHLhhkfyxTiCDR4PpIQqRJU+QpAYtxk1Snc=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;

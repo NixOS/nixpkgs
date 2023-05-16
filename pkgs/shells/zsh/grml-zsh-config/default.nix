@@ -5,13 +5,21 @@ with lib;
 
 stdenv.mkDerivation rec {
   pname = "grml-zsh-config";
+<<<<<<< HEAD
   version = "0.19.6";
+=======
+  version = "0.19.5";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "grml";
     repo = "grml-etc-core";
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-31BD5jUA54oLSsL4NzGaGAiOXMcZwy7uX65pD+jtE4M=";
+=======
+    sha256 = "sha256-/phoIi8amqdO+OK26+CE2OXwHTE71PaV9NIXEnGl6Co=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   strictDeps = true;

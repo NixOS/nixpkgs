@@ -2,13 +2,21 @@
 
 stdenv.mkDerivation rec {
   pname = "portmidi";
+<<<<<<< HEAD
   version = "2.0.4";
+=======
+  version = "2.0.3";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-uqBeh9vBP6+V+FN4lfeGxePQcpZMDYUuAo/d9a5rQxU=";
+=======
+    sha256 = "sha256-bLGqi3b9FHBA43baNDT8jkPBQSXAUDfurQSJHLcy3AE=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   cmakeFlags = [

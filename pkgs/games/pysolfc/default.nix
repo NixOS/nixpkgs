@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 { lib
 , fetchzip
 , buildPythonApplication
@@ -37,6 +38,30 @@ buildPythonApplication rec {
     pygame
     freecell-solver
     pillow
+=======
+{ lib, fetchzip, buildPythonApplication, python3Packages
+  , desktop-file-utils, freecell-solver }:
+
+buildPythonApplication rec {
+  pname = "PySolFC";
+  version = "2.16.0";
+
+  src = fetchzip {
+    url = "https://versaweb.dl.sourceforge.net/project/pysolfc/PySolFC/PySolFC-${version}/PySolFC-${version}.tar.xz";
+    sha256 = "sha256-kklB16IrDicxqMee1kbxtoqgwcSrMjCV4HP6GtnZxo8=";
+  };
+
+  cardsets = fetchzip {
+    url = "https://versaweb.dl.sourceforge.net/project/pysolfc/PySolFC-Cardsets/PySolFC-Cardsets-2.1/PySolFC-Cardsets-2.1.tar.bz2";
+    sha256 = "sha256-0ji6jY7zJFaaaJdInaULKUou+u934RMzYjxVDGVHbE0=";
+  };
+
+  propagatedBuildInputs = with python3Packages; [
+    tkinter six random2 configobj
+    pysol-cards attrs pycotap
+    # optional :
+    pygame freecell-solver pillow
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   patches = [
@@ -52,7 +77,10 @@ buildPythonApplication rec {
   postInstall = ''
     mkdir $out/share/PySolFC/cardsets
     cp -r $cardsets/* $out/share/PySolFC/cardsets
+<<<<<<< HEAD
     cp -r $music/data/music $out/share/PySolFC
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '';
 
   # No tests in archive

@@ -2,13 +2,21 @@
 
 stdenv.mkDerivation rec {
   pname = "audiowaveform";
+<<<<<<< HEAD
   version = "1.8.1";
+=======
+  version = "1.7.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "bbc";
     repo = "audiowaveform";
     rev = version;
+<<<<<<< HEAD
     sha256 = "sha256-MbOQY1Yvtwuy6IPV1BfwwRBhEQIzQ7mPzedE74xsQSk=";
+=======
+    sha256 = "sha256-DxVEAe9j4BAMrfMiaxDfkGvL6CCT/v5oKTrxmgkHuyM=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ cmake gtest ];

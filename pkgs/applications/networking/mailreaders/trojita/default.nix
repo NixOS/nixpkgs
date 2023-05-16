@@ -16,6 +16,11 @@
 , qtkeychain
 , qttools
 , qtwebkit
+<<<<<<< HEAD
+=======
+, qttranslations
+, substituteAll
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , withI18n ? false
 }:
 
@@ -37,6 +42,15 @@ in mkDerivation rec {
     sha256 = "sha256-15G9YjT3qBKbeOKfb/IgXOO+DaJaTULP9NJn/MFYZS8=";
   };
 
+<<<<<<< HEAD
+=======
+  patches = (substituteAll {
+    # See https://github.com/NixOS/nixpkgs/issues/86054
+    src = ./fix-qttranslations-path.patch;
+    inherit qttranslations;
+  });
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   buildInputs = [
     akonadi-contacts
     gpgme

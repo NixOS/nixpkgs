@@ -1,5 +1,8 @@
 { fetchurl
+<<<<<<< HEAD
 , fetchpatch
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , lzwolf
 , SDL2_mixer
 , timidity
@@ -13,6 +16,7 @@ SDL2_mixer.overrideAttrs(oa: rec {
     sha256 = "0694vsz5bjkcdgfdra6x9fq8vpzrl8m6q96gh58df7065hw5mkxl";
   };
 
+<<<<<<< HEAD
   patches = [
     # These patches fix incompatible function pointer conversion errors with clang 16.
     (fetchpatch {
@@ -24,6 +28,8 @@ SDL2_mixer.overrideAttrs(oa: rec {
     ./SDL_mixer-2.0-incompatible-pointer-comparison-fix.patch
   ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   # fix default path to timidity.cfg so MIDI files could be played
   postPatch = ''
     substituteInPlace timidity/options.h \

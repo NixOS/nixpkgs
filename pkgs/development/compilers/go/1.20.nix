@@ -46,11 +46,19 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "go";
+<<<<<<< HEAD
   version = "1.20.7";
 
   src = fetchurl {
     url = "https://go.dev/dl/go${version}.src.tar.gz";
     hash = "sha256-LF7pyeweczsNu8K9/tP2IwblHYFyvzj09OVCsnUg9Zc=";
+=======
+  version = "1.20.4";
+
+  src = fetchurl {
+    url = "https://go.dev/dl/go${version}.src.tar.gz";
+    hash = "sha256-nzSs4Sh2S3o6SyOLgFhWzBshhDBN+eVpCCWwcQ9CAtY=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   strictDeps = true;
@@ -158,8 +166,12 @@ stdenv.mkDerivation rec {
     runHook preInstall
     mkdir -p $GOROOT_FINAL
     cp -a bin pkg src lib misc api doc $GOROOT_FINAL
+<<<<<<< HEAD
     mkdir -p $out/bin
     ln -s $GOROOT_FINAL/bin/* $out/bin
+=======
+    ln -s $GOROOT_FINAL/bin $out/bin
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     runHook postInstall
   '';
 

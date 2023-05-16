@@ -4,7 +4,11 @@
 , python
 , cairocffi
 , django
+<<<<<<< HEAD
 , django-tagging
+=======
+, django_tagging
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , fetchFromGitHub
 , fetchpatch
 , gunicorn
@@ -49,7 +53,11 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     cairocffi
     django
+<<<<<<< HEAD
     django-tagging
+=======
+    django_tagging
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     gunicorn
     pyparsing
     python-memcached

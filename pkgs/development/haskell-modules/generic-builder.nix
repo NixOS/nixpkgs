@@ -7,7 +7,11 @@ let
   isCross = stdenv.buildPlatform != stdenv.hostPlatform;
   inherit (buildPackages)
     fetchurl removeReferencesTo
+<<<<<<< HEAD
     pkg-config coreutils gnugrep glibcLocales;
+=======
+    pkg-config coreutils gnugrep gnused glibcLocales;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 in
 
 { pname
@@ -15,7 +19,11 @@ in
 # ghc.isGhcjs implies that we are using ghcjs, a project separate from GHC.
 # (mere) stdenv.hostPlatform.isGhcjs means that we are using GHC's JavaScript
 # backend. The latter is a normal cross compilation backend and needs little
+<<<<<<< HEAD
 # special accommodation.
+=======
+# special accomodation.
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , dontStrip ? (ghc.isGhcjs or false || stdenv.hostPlatform.isGhcjs)
 , version, revision ? null
 , sha256 ? null
@@ -31,9 +39,15 @@ in
 , doBenchmark ? false
 , doHoogle ? true
 , doHaddockQuickjump ? doHoogle && lib.versionAtLeast ghc.version "8.6"
+<<<<<<< HEAD
 , doInstallIntermediates ? false
 , editedCabalFile ? null
 , enableLibraryProfiling ? !(ghc.isGhcjs or false)
+=======
+, editedCabalFile ? null
+# aarch64 outputs otherwise exceed 2GB limit
+, enableLibraryProfiling ? !(ghc.isGhcjs or stdenv.targetPlatform.isAarch64 or false)
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , enableExecutableProfiling ? false
 , profilingDetail ? "exported-functions"
 # TODO enable shared libs for cross-compiling
@@ -84,7 +98,10 @@ in
 , enableSeparateBinOutput ? false
 , enableSeparateDataOutput ? false
 , enableSeparateDocOutput ? doHaddock
+<<<<<<< HEAD
 , enableSeparateIntermediatesOutput ? false
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , # Don't fail at configure time if there are multiple versions of the
   # same package in the (recursive) dependencies of the package being
   # built. Will delay failures, if any, to compile time.
@@ -94,6 +111,7 @@ in
   # This can make it slightly faster to load this library into GHCi, but takes
   # extra disk space and compile time.
   enableLibraryForGhci ? false
+<<<<<<< HEAD
   # Set this to a previous build of this same package to reuse the intermediate
   # build products from that prior build as a starting point for accelerating
   # this build
@@ -114,6 +132,8 @@ in
   # of `meta.pkgConfigModules`. This option defaults to false for now, since
   # this metadata is far from complete in nixpkgs.
   __onlyPropagateKnownPkgConfigModules ? false
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 } @ args:
 
 assert editedCabalFile != null -> revision != null;
@@ -261,17 +281,24 @@ let
     "--ghc-options=-haddock"
   ];
 
+<<<<<<< HEAD
   postPhases = optional doInstallIntermediates "installIntermediatesPhase";
 
   setupCompileFlags = [
     (optionalString (!coreSetup) "-${nativePackageDbFlag}=$setupPackageConfDir")
     (optionalString enableParallelBuilding parallelBuildingFlags)
+=======
+  setupCompileFlags = [
+    (optionalString (!coreSetup) "-${nativePackageDbFlag}=$setupPackageConfDir")
+    (optionalString enableParallelBuilding (parallelBuildingFlags))
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "-threaded"       # https://github.com/haskell/cabal/issues/2398
     "-rtsopts"        # allow us to pass RTS flags to the generated Setup executable
   ];
 
   isHaskellPkg = x: x ? isHaskellLibrary;
 
+<<<<<<< HEAD
   # Work around a Cabal bug requiring pkg-config --static --libs to work even
   # when linking dynamically, affecting Cabal 3.8 and 3.9.
   # https://github.com/haskell/cabal/issues/8455
@@ -313,6 +340,10 @@ let
   allPkgconfigDepends' =
     pkg-configDepends ++ libraryPkgconfigDepends ++ executablePkgconfigDepends ++
     optionals doCheck testPkgconfigDepends ++ optionals doBenchmark benchmarkPkgconfigDepends;
+=======
+  allPkgconfigDepends = pkg-configDepends ++ libraryPkgconfigDepends ++ executablePkgconfigDepends ++
+                        optionals doCheck testPkgconfigDepends ++ optionals doBenchmark benchmarkPkgconfigDepends;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   depsBuildBuild = [ nativeGhc ]
     # CC_FOR_BUILD may be necessary if we have no C preprocessor for the host
@@ -323,7 +354,11 @@ let
     optionals doCheck testToolDepends ++
     optionals doBenchmark benchmarkToolDepends;
   nativeBuildInputs =
+<<<<<<< HEAD
     [ ghc removeReferencesTo ] ++ optional (allPkgconfigDepends != []) (assert pkg-config != null; pkg-config) ++
+=======
+    [ ghc removeReferencesTo ] ++ optional (allPkgconfigDepends != []) pkg-config ++
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     setupHaskellDepends ++ collectedToolDepends;
   propagatedBuildInputs = buildDepends ++ libraryHaskellDepends ++ executableHaskellDepends ++ libraryFrameworkDepends;
   otherBuildInputsHaskell =
@@ -368,19 +403,30 @@ let
       continue
     fi
   '';
+<<<<<<< HEAD
 
   intermediatesDir = "share/haskell/${ghc.version}/${pname}-${version}/dist";
 in lib.fix (drv:
 
+=======
+in lib.fix (drv:
+
+assert allPkgconfigDepends != [] -> pkg-config != null;
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 stdenv.mkDerivation ({
   inherit pname version;
 
   outputs = [ "out" ]
          ++ (optional enableSeparateDataOutput "data")
          ++ (optional enableSeparateDocOutput "doc")
+<<<<<<< HEAD
          ++ (optional enableSeparateBinOutput "bin")
          ++ (optional enableSeparateIntermediatesOutput "intermediates");
 
+=======
+         ++ (optional enableSeparateBinOutput "bin");
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   setOutputFlags = false;
 
   pos = builtins.unsafeGetAttrPos "pname" args;
@@ -457,6 +503,7 @@ stdenv.mkDerivation ({
   # only use the links hack if we're actually building dylibs. otherwise, the
   # "dynamic-library-dirs" point to nonexistent paths, and the ln command becomes
   # "ln -s $out/lib/links", which tries to recreate the links dir and fails
+<<<<<<< HEAD
   #
   # Note: We need to disable this work-around when using intermediate build
   # products from a prior build because otherwise Nix will change permissions on
@@ -464,6 +511,9 @@ stdenv.mkDerivation ({
   # dist directory has already been exported, which triggers an unnecessary
   # rebuild of modules included in the exported dist directory.
   + (optionalString (stdenv.isDarwin && (enableSharedLibraries || enableSharedExecutables) && !enableSeparateIntermediatesOutput) ''
+=======
+  + (optionalString (stdenv.isDarwin && (enableSharedLibraries || enableSharedExecutables)) ''
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     # Work around a limit in the macOS Sierra linker on the number of paths
     # referenced by any one dynamic library:
     #
@@ -541,6 +591,7 @@ stdenv.mkDerivation ({
     runHook postConfigure
   '';
 
+<<<<<<< HEAD
   buildPhase =
       ''
       runHook preBuild
@@ -557,6 +608,13 @@ stdenv.mkDerivation ({
       ${setupCommand} build ${buildTarget}${crossCabalFlagsString}${buildFlagsString}
       runHook postBuild
       '';
+=======
+  buildPhase = ''
+    runHook preBuild
+    ${setupCommand} build ${buildTarget}${crossCabalFlagsString}${buildFlagsString}
+    runHook postBuild
+  '';
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   inherit doCheck;
 
@@ -639,6 +697,7 @@ stdenv.mkDerivation ({
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   ${if doInstallIntermediates then "installIntermediatesPhase" else null} = ''
     runHook preInstallIntermediates
     intermediatesOutput=${if enableSeparateIntermediatesOutput then "$intermediates" else "$out"}
@@ -648,6 +707,8 @@ stdenv.mkDerivation ({
     runHook postInstallIntermediates
   '';
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   passthru = passthru // rec {
 
     inherit pname version;
@@ -750,7 +811,11 @@ stdenv.mkDerivation ({
           lib.optionals (!isCross) setupHaskellDepends);
 
         ghcCommandCaps = lib.toUpper ghcCommand';
+<<<<<<< HEAD
       in stdenv.mkDerivation {
+=======
+      in stdenv.mkDerivation ({
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         inherit name shellHook;
 
         depsBuildBuild = lib.optional isCross ghcEnvForBuild;
@@ -770,7 +835,11 @@ stdenv.mkDerivation ({
         "NIX_${ghcCommandCaps}_LIBDIR" = if ghc.isHaLVM or false
           then "${ghcEnv}/lib/HaLVM-${ghc.version}"
           else "${ghcEnv}/${ghcLibdir}";
+<<<<<<< HEAD
       };
+=======
+      });
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     env = envFunc { };
 
@@ -809,7 +878,10 @@ stdenv.mkDerivation ({
 // optionalAttrs (args ? preFixup)               { inherit preFixup; }
 // optionalAttrs (args ? postFixup)              { inherit postFixup; }
 // optionalAttrs (args ? dontStrip)              { inherit dontStrip; }
+<<<<<<< HEAD
 // optionalAttrs (postPhases != [])              { inherit postPhases; }
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 // optionalAttrs (stdenv.buildPlatform.libc == "glibc"){ LOCALE_ARCHIVE = "${glibcLocales}/lib/locale/locale-archive"; }
 )
 )

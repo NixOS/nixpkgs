@@ -2,7 +2,11 @@
 
 {pkgs ? import <nixpkgs> {
     inherit system;
+<<<<<<< HEAD
   }, system ? builtins.currentSystem, nodejs ? pkgs."nodejs_18"}:
+=======
+  }, system ? builtins.currentSystem, nodejs ? pkgs."nodejs_16"}:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 let
   nodeEnv = import ./node-env.nix {

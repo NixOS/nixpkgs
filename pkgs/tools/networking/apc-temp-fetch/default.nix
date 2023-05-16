@@ -30,6 +30,10 @@ buildPythonApplication rec {
     description = "unified temperature fetcher interface to several UPS network adapters";
     homepage = "https://github.com/YZITE/APC_Temp_fetch";
     license = licenses.asl20;
+<<<<<<< HEAD
     maintainers = [ maintainers.fogti ];
+=======
+    maintainers = [ maintainers.zseri ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

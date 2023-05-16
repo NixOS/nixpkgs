@@ -54,6 +54,7 @@ let
 
     atdgen-runtime = callPackage ../development/ocaml-modules/atdgen/runtime.nix { };
 
+<<<<<<< HEAD
     awa = callPackage ../development/ocaml-modules/awa { mtime = mtime_1; };
 
     awa-mirage = callPackage ../development/ocaml-modules/awa/mirage.nix { mtime = mtime_1; };
@@ -61,6 +62,19 @@ let
     ### B ###
 
     bap = janeStreet_0_15.bap;
+=======
+    awa = callPackage ../development/ocaml-modules/awa { };
+
+    awa-lwt = callPackage ../development/ocaml-modules/awa/lwt.nix { };
+
+    awa-mirage = callPackage ../development/ocaml-modules/awa/mirage.nix { };
+
+    ### B ###
+
+    bap = callPackage ../development/ocaml-modules/bap {
+      inherit (pkgs.llvmPackages) llvm;
+    };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     base64 = callPackage ../development/ocaml-modules/base64 { };
 
@@ -84,7 +98,11 @@ let
 
     biniou = callPackage ../development/ocaml-modules/biniou { };
 
+<<<<<<< HEAD
     biocaml = janeStreet_0_15.biocaml;
+=======
+    biocaml = callPackage ../development/ocaml-modules/biocaml { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     bisect_ppx = callPackage ../development/ocaml-modules/bisect_ppx { };
 
@@ -100,6 +118,10 @@ let
 
     bls12-381 = callPackage ../development/ocaml-modules/bls12-381 { };
     bls12-381-gen = callPackage ../development/ocaml-modules/bls12-381/gen.nix { };
+<<<<<<< HEAD
+=======
+    bls12-381-hash = callPackage ../development/ocaml-modules/bls12-381-hash { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     bls12-381-signature = callPackage ../development/ocaml-modules/bls12-381-signature { };
 
@@ -151,6 +173,10 @@ let
       if lib.versionOlder "4.02" ocaml.version
       then callPackage ../development/ocaml-modules/camomile { }
       else callPackage ../development/ocaml-modules/camomile/0.8.5.nix { };
+<<<<<<< HEAD
+=======
+    camomile_0_8_2 = callPackage ../development/ocaml-modules/camomile/0.8.2.nix { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     caqti = callPackage ../development/ocaml-modules/caqti { };
 
@@ -190,8 +216,11 @@ let
 
     class_group_vdf = callPackage ../development/ocaml-modules/class_group_vdf { };
 
+<<<<<<< HEAD
     cmarkit = callPackage ../development/ocaml-modules/cmarkit { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     # The 1.1.0 release broke a lot of packages and is not compatible with
     # OCaml < 4.08.
     cmdliner =
@@ -315,11 +344,19 @@ let
 
     dns-certify =  callPackage ../development/ocaml-modules/dns/certify.nix { };
 
+<<<<<<< HEAD
     dns-cli =  callPackage ../development/ocaml-modules/dns/cli.nix { mtime = mtime_1; };
 
     dns-client =  callPackage ../development/ocaml-modules/dns/client.nix { mtime = mtime_1; };
 
     dns-client-lwt = callPackage ../development/ocaml-modules/dns/client-lwt.nix { mtime = mtime_1; };
+=======
+    dns-cli =  callPackage ../development/ocaml-modules/dns/cli.nix { };
+
+    dns-client =  callPackage ../development/ocaml-modules/dns/client.nix { };
+
+    dns-client-lwt = callPackage ../development/ocaml-modules/dns/client-lwt.nix { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     dns-client-mirage = callPackage ../development/ocaml-modules/dns/client-mirage.nix { };
 
@@ -339,6 +376,7 @@ let
 
     dolog = callPackage ../development/ocaml-modules/dolog { };
 
+<<<<<<< HEAD
     domain-local-await = callPackage ../development/ocaml-modules/domain-local-await { };
 
     domain-local-timeout = callPackage ../development/ocaml-modules/domain-local-timeout { };
@@ -347,6 +385,10 @@ let
 
     domain_shims = callPackage ../development/ocaml-modules/domain_shims { };
 
+=======
+    domain-name = callPackage ../development/ocaml-modules/domain-name { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     domainslib = callPackage ../development/ocaml-modules/domainslib { };
 
     dose3 = callPackage ../development/ocaml-modules/dose3 { };
@@ -417,11 +459,14 @@ let
 
     eigen = callPackage ../development/ocaml-modules/eigen { };
 
+<<<<<<< HEAD
     eio = callPackage ../development/ocaml-modules/eio { };
     eio_linux = callPackage ../development/ocaml-modules/eio/linux.nix { };
     eio_main = callPackage ../development/ocaml-modules/eio/main.nix { };
     eio_posix = callPackage ../development/ocaml-modules/eio/posix.nix { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     either = callPackage ../development/ocaml-modules/either { };
 
     elina = callPackage ../development/ocaml-modules/elina { };
@@ -576,7 +621,10 @@ let
 
     git-unix = callPackage ../development/ocaml-modules/git/unix.nix {
       git-binary = pkgs.git;
+<<<<<<< HEAD
       mtime = mtime_1;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
 
     github = callPackage ../development/ocaml-modules/github {  };
@@ -628,12 +676,21 @@ let
 
     happy-eyeballs = callPackage ../development/ocaml-modules/happy-eyeballs { };
 
+<<<<<<< HEAD
     happy-eyeballs-lwt = callPackage ../development/ocaml-modules/happy-eyeballs/lwt.nix { mtime = mtime_1; };
+=======
+    happy-eyeballs-lwt = callPackage ../development/ocaml-modules/happy-eyeballs/lwt.nix { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     happy-eyeballs-mirage = callPackage ../development/ocaml-modules/happy-eyeballs/mirage.nix { };
 
     hashcons = callPackage ../development/ocaml-modules/hashcons { };
 
+<<<<<<< HEAD
+=======
+    headache = callPackage ../development/ocaml-modules/headache { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     hex = callPackage ../development/ocaml-modules/hex { };
 
     hidapi = callPackage ../development/ocaml-modules/hidapi { };
@@ -658,7 +715,11 @@ let
 
     imagelib = callPackage ../development/ocaml-modules/imagelib { };
 
+<<<<<<< HEAD
     index = callPackage ../development/ocaml-modules/index { mtime = mtime_1; };
+=======
+    index = callPackage ../development/ocaml-modules/index { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     inifiles = callPackage ../development/ocaml-modules/inifiles { };
 
@@ -668,8 +729,11 @@ let
 
     integers_stubs_js = callPackage ../development/ocaml-modules/integers_stubs_js { };
 
+<<<<<<< HEAD
     iomux = callPackage ../development/ocaml-modules/iomux { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     io-page = callPackage ../development/ocaml-modules/io-page { };
 
     ipaddr = callPackage ../development/ocaml-modules/ipaddr { };
@@ -680,6 +744,7 @@ let
 
     iri = callPackage ../development/ocaml-modules/iri { };
 
+<<<<<<< HEAD
     irmin = callPackage ../development/ocaml-modules/irmin { mtime = mtime_1; };
 
     irmin-chunk = callPackage ../development/ocaml-modules/irmin/chunk.nix { };
@@ -689,6 +754,17 @@ let
     irmin-fs = callPackage ../development/ocaml-modules/irmin/fs.nix { };
 
     irmin-git = callPackage ../development/ocaml-modules/irmin/git.nix { mtime = mtime_1; };
+=======
+    irmin = callPackage ../development/ocaml-modules/irmin { };
+
+    irmin-chunk = callPackage ../development/ocaml-modules/irmin/chunk.nix { };
+
+    irmin-containers = callPackage ../development/ocaml-modules/irmin/containers.nix { };
+
+    irmin-fs = callPackage ../development/ocaml-modules/irmin/fs.nix { };
+
+    irmin-git = callPackage ../development/ocaml-modules/irmin/git.nix { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     irmin-graphql = callPackage ../development/ocaml-modules/irmin/graphql.nix { };
 
@@ -700,9 +776,15 @@ let
 
     irmin-mirage-graphql = callPackage ../development/ocaml-modules/irmin/mirage-graphql.nix { };
 
+<<<<<<< HEAD
     irmin-pack = callPackage ../development/ocaml-modules/irmin/pack.nix { mtime = mtime_1; };
 
     irmin-test = callPackage ../development/ocaml-modules/irmin/test.nix { mtime = mtime_1; };
+=======
+    irmin-pack = callPackage ../development/ocaml-modules/irmin/pack.nix { };
+
+    irmin-test = callPackage ../development/ocaml-modules/irmin/test.nix { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     irmin-tezos = callPackage ../development/ocaml-modules/irmin/tezos.nix { };
 
@@ -716,9 +798,13 @@ let
 
     # Jane Street
     janePackage =
+<<<<<<< HEAD
       if lib.versionOlder "4.13.1" ocaml.version
       then callPackage ../development/ocaml-modules/janestreet/janePackage_0_16.nix {}
       else if lib.versionOlder "4.10.2" ocaml.version
+=======
+      if lib.versionOlder "4.10.2" ocaml.version
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       then callPackage ../development/ocaml-modules/janestreet/janePackage_0_15.nix {}
       else if lib.versionOlder "4.08" ocaml.version
       then callPackage ../development/ocaml-modules/janestreet/janePackage_0_14.nix {}
@@ -727,12 +813,16 @@ let
       else callPackage ../development/ocaml-modules/janestreet/janePackage.nix {};
 
     janeStreet =
+<<<<<<< HEAD
       if lib.versionOlder "4.13.1" ocaml.version
       then import ../development/ocaml-modules/janestreet/0.16.nix {
         inherit self;
         inherit (pkgs) bash fetchpatch fzf lib openssl zstd krb5;
       }
       else if lib.versionOlder "4.10.2" ocaml.version
+=======
+      if lib.versionOlder "4.10.2" ocaml.version
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       then import ../development/ocaml-modules/janestreet/0.15.nix {
         inherit self;
         inherit (pkgs) bash fetchpatch fzf lib openssl zstd;
@@ -756,6 +846,7 @@ let
         inherit (pkgs) openssl;
       };
 
+<<<<<<< HEAD
     janeStreet_0_15 = (lib.makeScope self.newScope (self': with self'; {
 
       # ocamlPackages that janestreet v0.15 packages depend on.
@@ -825,6 +916,8 @@ let
       ppx_bap = callPackage ../development/ocaml-modules/ppx_bap { };
     })).overrideScope' liftJaneStreet;
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     janeStreet_0_9_0 = import ../development/ocaml-modules/janestreet/old.nix {
       self = self.janeStreet_0_9_0;
       super = self // {
@@ -875,8 +968,11 @@ let
 
     kafka_lwt = callPackage ../development/ocaml-modules/kafka/lwt.nix { };
 
+<<<<<<< HEAD
     kcas = callPackage ../development/ocaml-modules/kcas { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     ke = callPackage ../development/ocaml-modules/ke { };
 
     kicadsch = callPackage ../development/ocaml-modules/kicadsch { };
@@ -950,6 +1046,11 @@ let
 
     lo = callPackage ../development/ocaml-modules/lo { };
 
+<<<<<<< HEAD
+=======
+    lockfree = callPackage ../development/ocaml-modules/lockfree { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     logs = callPackage ../development/ocaml-modules/logs { };
 
     lru = callPackage ../development/ocaml-modules/lru { };
@@ -1004,7 +1105,11 @@ let
 
     magic-mime = callPackage ../development/ocaml-modules/magic-mime { };
 
+<<<<<<< HEAD
     magic-trace = janeStreet_0_15.magic-trace;
+=======
+    magic-trace = callPackage ../development/ocaml-modules/magic-trace { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     mariadb = callPackage ../development/ocaml-modules/mariadb {
       inherit (pkgs) mariadb;
@@ -1018,8 +1123,11 @@ let
 
     mec = callPackage ../development/ocaml-modules/mec { };
 
+<<<<<<< HEAD
     memtrace = callPackage ../development/ocaml-modules/memtrace { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     menhir = callPackage ../development/ocaml-modules/menhir { };
 
     menhirLib = callPackage ../development/ocaml-modules/menhir/lib.nix { };
@@ -1045,7 +1153,10 @@ let
 
     metrics-unix = callPackage ../development/ocaml-modules/metrics/unix.nix {
       inherit (pkgs) gnuplot;
+<<<<<<< HEAD
       mtime = mtime_1;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
 
     mew = callPackage ../development/ocaml-modules/mew { };
@@ -1078,7 +1189,11 @@ let
 
     mirage-clock = callPackage ../development/ocaml-modules/mirage-clock { };
 
+<<<<<<< HEAD
     mirage-clock-solo5 = callPackage ../development/ocaml-modules/mirage-clock/solo5.nix { };
+=======
+    mirage-clock-freestanding = callPackage ../development/ocaml-modules/mirage-clock/freestanding.nix { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     mirage-clock-unix = callPackage ../development/ocaml-modules/mirage-clock/unix.nix { };
 
@@ -1092,11 +1207,19 @@ let
 
     mirage-crypto-pk = callPackage ../development/ocaml-modules/mirage-crypto/pk.nix { };
 
+<<<<<<< HEAD
     mirage-crypto-rng = callPackage ../development/ocaml-modules/mirage-crypto/rng.nix { mtime = mtime_1; };
 
     mirage-crypto-rng-async = callPackage ../development/ocaml-modules/mirage-crypto/rng-async.nix { };
 
     mirage-crypto-rng-lwt = callPackage ../development/ocaml-modules/mirage-crypto/rng-lwt.nix { mtime = mtime_1; };
+=======
+    mirage-crypto-rng = callPackage ../development/ocaml-modules/mirage-crypto/rng.nix { };
+
+    mirage-crypto-rng-async = callPackage ../development/ocaml-modules/mirage-crypto/rng-async.nix { };
+
+    mirage-crypto-rng-lwt = callPackage ../development/ocaml-modules/mirage-crypto/rng-lwt.nix { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     mirage-crypto-rng-mirage = callPackage ../development/ocaml-modules/mirage-crypto/rng-mirage.nix { };
 
@@ -1130,6 +1253,11 @@ let
 
     mirage-runtime = callPackage ../development/ocaml-modules/mirage/runtime.nix { };
 
+<<<<<<< HEAD
+=======
+    mirage-stack = callPackage ../development/ocaml-modules/mirage-stack { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     mirage-time = callPackage ../development/ocaml-modules/mirage-time { };
 
     mirage-time-unix = callPackage ../development/ocaml-modules/mirage-time/unix.nix { };
@@ -1156,7 +1284,10 @@ let
 
     mrmime = callPackage ../development/ocaml-modules/mrmime { };
 
+<<<<<<< HEAD
     mtime_1 =  callPackage ../development/ocaml-modules/mtime/1_x.nix { };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     mtime =  callPackage ../development/ocaml-modules/mtime { };
 
     multipart-form-data =  callPackage ../development/ocaml-modules/multipart-form-data { };
@@ -1193,7 +1324,14 @@ let
 
     ocaml_cryptgps = callPackage ../development/ocaml-modules/cryptgps { };
 
+<<<<<<< HEAD
     ocaml_expat = callPackage ../development/ocaml-modules/expat { };
+=======
+    ocaml_expat =
+      if lib.versionAtLeast ocaml.version "4.02"
+        then callPackage ../development/ocaml-modules/expat { }
+        else callPackage ../development/ocaml-modules/expat/0.9.nix { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     ocaml-freestanding = callPackage ../development/ocaml-modules/ocaml-freestanding { };
 
@@ -1225,8 +1363,11 @@ let
 
     ocaml-protoc = callPackage ../development/ocaml-modules/ocaml-protoc { };
 
+<<<<<<< HEAD
     ocaml-protoc-plugin = callPackage ../development/ocaml-modules/ocaml-protoc-plugin { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     ocaml-r = callPackage ../development/ocaml-modules/ocaml-r { };
 
     ocaml-recovery-parser = callPackage ../development/tools/ocaml/ocaml-recovery-parser { };
@@ -1248,6 +1389,7 @@ let
 
     ocamlc-loc = callPackage ../development/ocaml-modules/ocamlc-loc { };
 
+<<<<<<< HEAD
     # Older versions of OCamlformat should be removed when their usage decrease
     # This script scraps Github looking for OCamlformat's options and versions usage:
     #  https://gist.github.com/Julow/110dc94308d6078225e0665e3eccd433
@@ -1266,6 +1408,9 @@ let
     ocamlformat-lib = callPackage ../development/ocaml-modules/ocamlformat/ocamlformat-lib.nix { };
 
     ocamlformat-rpc-lib = callPackage ../development/ocaml-modules/ocamlformat/ocamlformat-rpc-lib.nix { };
+=======
+    ocamlformat-rpc-lib = callPackage ../development/ocaml-modules/ocamlformat-rpc-lib { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     ocamlfuse = callPackage ../development/ocaml-modules/ocamlfuse { };
 
@@ -1352,7 +1497,11 @@ let
       inherit (pkgs) unzip;
     };
 
+<<<<<<< HEAD
     opium = callPackage ../development/ocaml-modules/opium { mtime = mtime_1; };
+=======
+    opium = callPackage ../development/ocaml-modules/opium { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     opti = callPackage ../development/ocaml-modules/opti { };
 
@@ -1406,7 +1555,11 @@ let
 
     pgsolver = callPackage ../development/ocaml-modules/pgsolver { };
 
+<<<<<<< HEAD
     phylogenetics = janeStreet_0_15.phylogenetics;
+=======
+    phylogenetics = callPackage ../development/ocaml-modules/phylogenetics { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     piaf = callPackage ../development/ocaml-modules/piaf { };
 
@@ -1438,11 +1591,17 @@ let
 
     pp = callPackage ../development/ocaml-modules/pp { };
 
+<<<<<<< HEAD
     pp_loc = callPackage ../development/ocaml-modules/pp_loc { };
 
     pprint = callPackage ../development/ocaml-modules/pprint { };
 
     ppx_bap = janeStreet_0_15.ppx_bap;
+=======
+    pprint = callPackage ../development/ocaml-modules/pprint { };
+
+    ppx_bap = callPackage ../development/ocaml-modules/ppx_bap { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     ppx_bitstring = callPackage ../development/ocaml-modules/bitstring/ppx.nix { };
 
@@ -1478,8 +1637,11 @@ let
 
     ppx_repr = callPackage ../development/ocaml-modules/repr/ppx.nix { };
 
+<<<<<<< HEAD
     ppx_show = callPackage ../development/ocaml-modules/ppx_show { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     ppx_tools =
       if lib.versionAtLeast ocaml.version "4.02"
       then callPackage ../development/ocaml-modules/ppx_tools {}
@@ -1505,7 +1667,11 @@ let
 
     prometheus = callPackage ../development/ocaml-modules/prometheus { };
 
+<<<<<<< HEAD
     progress = callPackage ../development/ocaml-modules/progress { mtime = mtime_1; };
+=======
+    progress = callPackage ../development/ocaml-modules/progress { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     promise_jsoo = callPackage ../development/ocaml-modules/promise_jsoo { };
 
@@ -1513,10 +1679,14 @@ let
 
     psq = callPackage ../development/ocaml-modules/psq { };
 
+<<<<<<< HEAD
     ptime =
       if lib.versionAtLeast ocaml.version "4.08"
       then callPackage ../development/ocaml-modules/ptime { }
       else null;
+=======
+    ptime = callPackage ../development/ocaml-modules/ptime { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     ptmap = callPackage ../development/ocaml-modules/ptmap { };
 
@@ -1538,6 +1708,7 @@ let
 
     qcheck-core = callPackage ../development/ocaml-modules/qcheck/core.nix { };
 
+<<<<<<< HEAD
     qcheck-lin = callPackage ../development/ocaml-modules/qcheck/lin.nix { };
 
     qcheck-multicoretests-util = callPackage ../development/ocaml-modules/qcheck/multicoretests-util.nix { };
@@ -1546,6 +1717,10 @@ let
 
     qcheck-stm = callPackage ../development/ocaml-modules/qcheck/stm.nix { };
 
+=======
+    qcheck-ounit = callPackage ../development/ocaml-modules/qcheck/ounit.nix { };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     qtest = callPackage ../development/ocaml-modules/qtest { };
 
     ### R ###
@@ -1611,10 +1786,13 @@ let
 
     samplerate = callPackage ../development/ocaml-modules/samplerate { };
 
+<<<<<<< HEAD
     saturn = callPackage ../development/ocaml-modules/saturn { };
 
     saturn_lockfree = callPackage ../development/ocaml-modules/saturn/lockfree.nix { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     sawja = callPackage ../development/ocaml-modules/sawja { };
 
     secp256k1 = callPackage ../development/ocaml-modules/secp256k1 {
@@ -1625,16 +1803,22 @@ let
 
     sedlex = callPackage ../development/ocaml-modules/sedlex { };
 
+<<<<<<< HEAD
     sel = callPackage ../development/ocaml-modules/sel {};
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     semaphore-compat = callPackage ../development/ocaml-modules/semaphore-compat { };
 
     semver = callPackage ../development/ocaml-modules/semver { };
 
     seq = callPackage ../development/ocaml-modules/seq { };
 
+<<<<<<< HEAD
     seqes = callPackage ../development/ocaml-modules/seqes { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     sha = callPackage ../development/ocaml-modules/sha { };
 
     shared-memory-ring = callPackage ../development/ocaml-modules/shared-memory-ring { };
@@ -1695,16 +1879,23 @@ let
 
     tar = callPackage ../development/ocaml-modules/tar { };
 
+<<<<<<< HEAD
     tar-unix = callPackage ../development/ocaml-modules/tar/unix.nix {
       inherit (pkgs) git;
     };
+=======
+    tar-unix = callPackage ../development/ocaml-modules/tar/unix.nix { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     tcpip = callPackage ../development/ocaml-modules/tcpip { };
 
     tcslib = callPackage ../development/ocaml-modules/tcslib { };
 
+<<<<<<< HEAD
     tdigest = callPackage ../development/ocaml-modules/tdigest { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     telegraml = callPackage ../development/ocaml-modules/telegraml { };
 
     terminal = callPackage ../development/ocaml-modules/terminal { };
@@ -1713,9 +1904,19 @@ let
 
     tezos-base58 = callPackage ../development/ocaml-modules/tezos-base58 { };
 
+<<<<<<< HEAD
     theora = callPackage ../development/ocaml-modules/theora { };
 
     thread-table = callPackage ../development/ocaml-modules/thread-table { };
+=======
+    tezos-bls12-381-polynomial = callPackage ../development/ocaml-modules/tezos-bls12-381-polynomial { };
+
+    tezos-plompiler = callPackage ../development/ocaml-modules/tezos-bls12-381-polynomial/plompiler.nix { };
+
+    tezos-plonk = callPackage ../development/ocaml-modules/tezos-bls12-381-polynomial/plonk.nix { };
+
+    theora = callPackage ../development/ocaml-modules/theora { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     timed = callPackage ../development/ocaml-modules/timed { };
 
@@ -1737,10 +1938,13 @@ let
       inherit (pkgs.python3Packages) torch;
     };
 
+<<<<<<< HEAD
     trace = callPackage ../development/ocaml-modules/trace { };
 
     trace-tef = callPackage ../development/ocaml-modules/trace/tef.nix { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     trie = callPackage ../development/ocaml-modules/trie { };
 
     tsdl = callPackage ../development/ocaml-modules/tsdl {
@@ -1893,7 +2097,11 @@ let
 
     ### End ###
 
+<<<<<<< HEAD
   })).overrideScope liftJaneStreet;
+=======
+  })).overrideScope' liftJaneStreet;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 in let inherit (pkgs) callPackage; in rec
 {
@@ -1931,12 +2139,16 @@ in let inherit (pkgs) callPackage; in rec
 
   ocamlPackages_5_0 = mkOcamlPackages (callPackage ../development/compilers/ocaml/5.0.nix { });
 
+<<<<<<< HEAD
   ocamlPackages_5_1 = mkOcamlPackages (callPackage ../development/compilers/ocaml/5.1.nix { });
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ocamlPackages_latest = ocamlPackages_5_0;
 
   ocamlPackages = ocamlPackages_4_14;
 
+<<<<<<< HEAD
   # This is a nasty way to replace toplevel janestreet attributes in the scope,
   # so that modules outside of ocamlPackages that depend on JS OCaml libraries
   # *and* non-JS OCaml libraries can pull in the same version of JS transitive
@@ -1944,6 +2156,8 @@ in let inherit (pkgs) callPackage; in rec
   # janestreet 0.16 libraries.
   ocamlPackages_4_14_janeStreet_0_15 = ocamlPackages_4_14.overrideScope' (self: super: super // super.janeStreet_0_15);
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   # We still have packages that rely on unsafe-string, which is deprecated in OCaml 4.06.0.
   # Below are aliases for porting them to the latest versions of the OCaml 4 series.
   ocamlPackages_4_14_unsafe_string = mkOcamlPackages (callPackage ../development/compilers/ocaml/4.14.nix {

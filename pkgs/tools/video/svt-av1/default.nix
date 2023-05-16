@@ -8,13 +8,21 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "svt-av1";
+<<<<<<< HEAD
   version = "1.6.0";
+=======
+  version = "1.4.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitLab {
     owner = "AOMediaCodec";
     repo = "SVT-AV1";
     rev = "v${finalAttrs.version}";
+<<<<<<< HEAD
     sha256 = "sha256-rGe4h3d2Ql8tB/5vKFJGPkhmjMHnqgMUpnGzeh+PasA=";
+=======
+    sha256 = "sha256-jmr5egbuqLnBW7OFuaQk3F4s5xqTpXhWcJAfZySGWeU=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [
@@ -22,10 +30,13 @@ stdenv.mkDerivation (finalAttrs: {
     nasm
   ];
 
+<<<<<<< HEAD
   cmakeFlags = [
     "-DSVT_AV1_LTO=ON"
   ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   passthru.updateScript = gitUpdater {
     rev-prefix = "v";
   };
@@ -47,5 +58,10 @@ stdenv.mkDerivation (finalAttrs: {
     license = with licenses; [ aom bsd3 ];
     maintainers = with maintainers; [ Madouura ];
     platforms = platforms.unix;
+<<<<<<< HEAD
+=======
+    # error: use of undeclared identifier 'kCVPixelFormatType_444YpCbCr16BiPlanarVideoRange'
+    broken = stdenv.isAarch64 && stdenv.isDarwin;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 })

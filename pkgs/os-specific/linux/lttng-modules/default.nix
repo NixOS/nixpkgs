@@ -2,13 +2,21 @@
 
 stdenv.mkDerivation rec {
   pname = "lttng-modules-${kernel.version}";
+<<<<<<< HEAD
   version = "2.13.10";
+=======
+  version = "2.13.8";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "lttng";
     repo = "lttng-modules";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-R5qwB1ayw0KueMBSSxm0TwINt78N6w356kY7WGBX0zM=";
+=======
+    hash = "sha256-6ohWsGUGFz7QlHkKWyW5edpSsBTE9DFS3v6EsH9wNZo=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = kernel.moduleBuildDependencies;

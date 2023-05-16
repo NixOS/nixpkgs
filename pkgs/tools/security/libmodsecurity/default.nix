@@ -6,13 +6,21 @@
 
 stdenv.mkDerivation rec {
   pname = "libmodsecurity";
+<<<<<<< HEAD
   version = "3.0.10";
+=======
+  version = "3.0.9";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "SpiderLabs";
     repo = "ModSecurity";
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-VaoPpJ0twuGWU7G9AvKK4kq9Ed0BeG2J7B81sOuJVrE=";
+=======
+    sha256 = "sha256-7tA1fqKK5aGOhWBifLAjDmQ80ven4+OcwAzAowPStzA=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     fetchSubmodules = true;
   };
 

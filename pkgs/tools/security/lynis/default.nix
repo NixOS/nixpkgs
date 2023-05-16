@@ -2,13 +2,21 @@
 
 stdenv.mkDerivation rec {
   pname = "lynis";
+<<<<<<< HEAD
   version = "3.0.9";
+=======
+  version = "3.0.8";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "CISOfy";
     repo = pname;
     rev = version;
+<<<<<<< HEAD
     sha256 = "sha256-Qf5YVvsw4o2ZS3KjrHPJt8+iPr7G97egdDRN+peL8eU=";
+=======
+    sha256 = "sha256-fPQX/Iz+dc3nF3xMPt0bek4JC2XSHe4aC4O0tZwLf6Y=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ installShellFiles makeWrapper ];

@@ -27,6 +27,10 @@ buildPythonPackage rec {
     description = "Draws ASCII trees";
     homepage = "https://github.com/mbr/asciitree";
     license = licenses.mit;
+<<<<<<< HEAD
     maintainers = [ ];
+=======
+    maintainers = [ maintainers.costrouc ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

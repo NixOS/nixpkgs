@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 { stdenv
 , lib
 , fetchurl
@@ -31,6 +32,16 @@
 
 let
   deps = [
+=======
+{ stdenv, lib, fetchurl, dpkg
+, alsa-lib, atk, cairo, cups, dbus, expat, fontconfig, freetype
+, gdk-pixbuf, glib, pango, nspr, nss, gtk3, mesa
+, libGL, wayland, xorg, autoPatchelfHook, systemd, libnotify, libappindicator
+, makeWrapper
+}:
+
+let deps = [
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     alsa-lib
     atk
     cairo
@@ -64,6 +75,7 @@ let
     systemd
   ];
 
+<<<<<<< HEAD
   version = "2023.4";
 
   selectSystem = attrs: attrs.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
@@ -86,6 +98,17 @@ stdenv.mkDerivation {
   src = fetchurl {
     url = "https://github.com/mullvad/mullvadvpn-app/releases/download/${version}/MullvadVPN-${version}_${platform}.deb";
     inherit hash;
+=======
+in
+
+stdenv.mkDerivation rec {
+  pname = "mullvad-vpn";
+  version = "2023.3";
+
+  src = fetchurl {
+    url = "https://github.com/mullvad/mullvadvpn-app/releases/download/${version}/MullvadVPN-${version}_amd64.deb";
+    sha256 = "sha256-+XK9xUeSs93egmtsQ7qATug/n9taeQkmc4ZgObPYvn4=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [
@@ -115,9 +138,13 @@ stdenv.mkDerivation {
     ln -s $out/share/mullvad/mullvad-{gui,vpn} $out/bin/
     ln -sf $out/share/mullvad/resources/mullvad-problem-report $out/bin/mullvad-problem-report
 
+<<<<<<< HEAD
     wrapProgram $out/bin/mullvad-vpn \
       --set MULLVAD_DISABLE_UPDATE_NOTIFICATION 1 \
       --prefix PATH : ${lib.makeBinPath [ coreutils gnugrep ]}
+=======
+    wrapProgram $out/bin/mullvad-vpn --set MULLVAD_DISABLE_UPDATE_NOTIFICATION 1
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     wrapProgram $out/bin/mullvad-daemon \
         --set-default MULLVAD_RESOURCE_DIR "$out/share/mullvad/resources"
@@ -127,15 +154,22 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
+<<<<<<< HEAD
   passthru.updateScript = ./update.sh;
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   meta = with lib; {
     homepage = "https://github.com/mullvad/mullvadvpn-app";
     description = "Client for Mullvad VPN";
     changelog = "https://github.com/mullvad/mullvadvpn-app/blob/${version}/CHANGELOG.md";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.gpl3Only;
+<<<<<<< HEAD
     platforms = [ "x86_64-linux" "aarch64-linux" ];
+=======
+    platforms = [ "x86_64-linux" ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     maintainers = with maintainers; [ Br1ght0ne ymarkus ataraxiasjel ];
   };
 

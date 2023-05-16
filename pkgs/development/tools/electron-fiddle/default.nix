@@ -1,13 +1,23 @@
 { buildFHSEnv
+<<<<<<< HEAD
 , electron_24
 , fetchFromGitHub
 , fetchYarnDeps
 , fetchurl
+=======
+, electron_22
+, fetchFromGitHub
+, fetchYarnDeps
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , fixup_yarn_lock
 , git
 , lib
 , makeDesktopItem
+<<<<<<< HEAD
 , nodejs_18
+=======
+, nodejs_16
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , stdenvNoCC
 , util-linux
 , zip
@@ -15,14 +25,21 @@
 
 let
   pname = "electron-fiddle";
+<<<<<<< HEAD
   version = "0.32.6";
   electron = electron_24;
   nodejs = nodejs_18;
+=======
+  version = "0.32.1";
+  electron = electron_22;
+  nodejs = nodejs_16;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "electron";
     repo = "fiddle";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-Iuss2xwts1aWy2rKYG7J2EvFdH8Bbedn/uZG2bi9UHw=";
   };
 
@@ -32,12 +49,19 @@ let
   releasesJson = fetchurl {
     url = "https://raw.githubusercontent.com/electron/fiddle/v0.32.4~18/static/releases.json";
     hash = "sha256-1sxd3eJ6/WjXS6XQbrgKUTNUmrhuc1dAvy+VAivGErg=";
+=======
+    hash = "sha256-k+cbg03mwvobyazIUqm+TO9OMYVFQICy4CtkUZmvkr8=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   inherit (nodejs.pkgs) yarn;
   offlineCache = fetchYarnDeps {
     yarnLock = "${src}/yarn.lock";
+<<<<<<< HEAD
     hash = "sha256-dwhwUWwv6RYKEMdhRBvKVXvM8n1r+Qo0D3/uFsWIOpw=";
+=======
+    hash = "sha256-3vM+YPIA3zeWBaEFXU5lFl+VaGmAY0Qdg4pSA6mIKl0=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   electronDummyMirror = "https://electron.invalid/";
@@ -61,11 +85,17 @@ let
       patchShebangs node_modules
 
       mkdir -p ~/.cache/electron/${electronDummyHash}
+<<<<<<< HEAD
       cp -ra '${electron}/libexec/electron' "$TMPDIR/electron"
       chmod -R u+w "$TMPDIR/electron"
       (cd "$TMPDIR/electron" && zip -0Xr ~/.cache/electron/${electronDummyHash}/${electronDummyFilename} .)
 
       ln -s ${releasesJson} static/releases.json
+=======
+      cp -ra '${electron}/lib/electron' "$TMPDIR/electron"
+      chmod -R u+w "$TMPDIR/electron"
+      (cd "$TMPDIR/electron" && zip -0Xr ~/.cache/electron/${electronDummyHash}/${electronDummyFilename} .)
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     '';
 
     buildPhase = ''

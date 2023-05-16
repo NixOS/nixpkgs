@@ -19,13 +19,21 @@ assert withOpenCL -> ocl-icd != null;
 
 mkDerivation rec {
   pname = "mandelbulber";
+<<<<<<< HEAD
   version = "2.30";
+=======
+  version = "2.29";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "buddhi1980";
     repo = "mandelbulber2";
     rev = version;
+<<<<<<< HEAD
     sha256 = "sha256-xDW1Fk0GpjJQWE4ljbYXanp5N4wJYJUCRxKUCi7yJm0=";
+=======
+    sha256 = "sha256-PVyJnPPNehQ5qzhuoUsDRQ+V3azauEkIk26XfLZOmXg=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

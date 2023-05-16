@@ -76,11 +76,16 @@ let
   # only available on Carla unstable as of 2023-02-24.
   carla-unstable = carla.overrideAttrs (oldAttrs: rec {
     pname = "carla";
+<<<<<<< HEAD
     version = "unstable-2023-05-12";
+=======
+    version = "unstable-2023-02-24";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     src = fetchFromGitHub {
       owner = "falkTX";
       repo = pname;
+<<<<<<< HEAD
       rev = "0175570f1d41285f39efe0ee32234458e0ed941c";
       hash = "sha256-yfVzZV8G4AUDM8+yS9finzobpOb1PUEPgBWFhEY4nFQ=";
     };
@@ -89,12 +94,25 @@ in
 stdenv.mkDerivation rec {
   pname = "zrythm";
   version = "1.0.0-beta.4.9.1";
+=======
+      rev = "33a142f447925f55d00532933a1f28e9745c13eb";
+      hash = "sha256-hQj0HlcOYfwsxG05pq/qcuKcOwDMV1ED+YdxBToBzvk=";
+    };
+  });
+in stdenv.mkDerivation rec {
+  pname = "zrythm";
+  version = "1.0.0-beta.4.6.3";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromSourcehut {
     owner = "~alextee";
     repo = pname;
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-U3IUqNbHu20uyWfkTsLOOlUZjcUL4QdHilB3srSsebw=";
+=======
+    hash = "sha256-5GBr8N+GzbptrvP/NisBXT0dsl9vn537B4InB00/N+A=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [
@@ -173,8 +191,11 @@ stdenv.mkDerivation rec {
   # Zrythm uses meson to build, but requires cmake for dependency detection.
   dontUseCmakeConfigure = true;
 
+<<<<<<< HEAD
   dontWrapQtApps = true;
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   mesonFlags = [
     "-Db_lto=false"
     "-Dcarla=enabled"

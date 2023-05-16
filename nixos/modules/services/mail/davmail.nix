@@ -91,6 +91,7 @@ in
           Restart = "on-failure";
           DynamicUser = "yes";
           LogsDirectory = "davmail";
+<<<<<<< HEAD
 
           CapabilityBoundingSet = [ "" ];
           DeviceAllow = [ "" ];
@@ -118,6 +119,8 @@ in
           SystemCallErrorNumber = "EPERM";
           UMask = "0077";
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         };
       };
 

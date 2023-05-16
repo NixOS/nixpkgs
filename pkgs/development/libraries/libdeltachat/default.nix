@@ -19,13 +19,21 @@
 
 stdenv.mkDerivation rec {
   pname = "libdeltachat";
+<<<<<<< HEAD
   version = "1.121.0";
+=======
+  version = "1.114.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "deltachat";
     repo = "deltachat-core-rust";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-QefBchXitDcbn1o7jgmvWdacLT8OP+W/dL32+pYsaEA=";
+=======
+    hash = "sha256-fonrf4DZI5HhUY08yZmAHp2SKJYA2OywVBa31W7O1qU=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   patches = [

@@ -32,6 +32,10 @@ buildPythonPackage rec {
     description = "Brcrypt hashing for Flask";
     homepage = "https://github.com/maxcountryman/flask-bcrypt";
     license = licenses.bsd3;
+<<<<<<< HEAD
     maintainers = [ ];
+=======
+    maintainers = [ maintainers.costrouc ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

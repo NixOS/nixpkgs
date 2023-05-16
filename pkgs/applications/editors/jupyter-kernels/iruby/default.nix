@@ -2,6 +2,7 @@
 , bundlerApp
 }:
 
+<<<<<<< HEAD
 # Jupyter console:
 # nix run --impure --expr 'with import <nixpkgs> {}; jupyter-console.withSingleKernel iruby.definition'
 
@@ -40,3 +41,18 @@ let
 in
 
 self
+=======
+bundlerApp {
+  pname = "iruby";
+  gemdir = ./.;
+  exes = [ "iruby" ];
+
+  meta = with lib; {
+    description = "Ruby kernel for Jupyter";
+    homepage    = "https://github.com/SciRuby/iruby";
+    license     = licenses.mit;
+    maintainers = [ maintainers.costrouc ];
+    platforms   = platforms.unix;
+  };
+}
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)

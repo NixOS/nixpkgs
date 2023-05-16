@@ -1,6 +1,9 @@
 { lib
 , python3
+<<<<<<< HEAD
 , fetchPypi
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -8,7 +11,11 @@ python3.pkgs.buildPythonApplication rec {
   version = "3.1.5";
   format = "setuptools";
 
+<<<<<<< HEAD
   src = fetchPypi {
+=======
+  src = python3.pkgs.fetchPypi {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     inherit pname version;
     sha256 = "sha256-lmixfUP+pq0RdyXeY6MmUQOx1sMLHqojOKUK1mivbaU=";
   };
@@ -29,7 +36,10 @@ python3.pkgs.buildPythonApplication rec {
 
   nativeCheckInputs = with python3.pkgs; [
     requests
+<<<<<<< HEAD
     testtools
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   pythonImportsCheck = [ "pifpaf" ];

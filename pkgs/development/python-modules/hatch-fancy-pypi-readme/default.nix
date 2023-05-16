@@ -11,7 +11,11 @@
 
 buildPythonPackage rec {
   pname = "hatch-fancy-pypi-readme";
+<<<<<<< HEAD
   version = "23.1.0";
+=======
+  version = "22.8.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -19,7 +23,11 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "hatch_fancy_pypi_readme";
     inherit version;
+<<<<<<< HEAD
     hash = "sha256-sd9EBjCUrx6CSM6s1HqSyc8xPWuYI79mr4qSfDlgKH0=";
+=======
+    hash = "sha256-2pEoLKCWAcGK3tjjeNr4tXjHAhSGbwlxFW7pu5zmwmo=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

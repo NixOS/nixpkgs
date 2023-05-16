@@ -14,14 +14,22 @@
 
 buildPythonPackage rec {
   pname = "geoip2";
+<<<<<<< HEAD
   version = "4.7.0";
+=======
+  version = "4.6.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
+<<<<<<< HEAD
     hash = "sha256-O93kmU9ryRfq+rW1Hnctc3sq4AA3pbhQAfsG3Gj3ed8=";
+=======
+    hash = "sha256-8OgLzoCwa7OL0Iv0h31ahONU6TIJXmzPtNJ7tZj6T4M=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [

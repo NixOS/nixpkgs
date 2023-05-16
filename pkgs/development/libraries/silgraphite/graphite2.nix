@@ -17,18 +17,24 @@ stdenv.mkDerivation rec {
     sha256 = "1790ajyhk0ax8xxamnrk176gc9gvhadzy78qia4rd8jzm89ir7gr";
   };
 
+<<<<<<< HEAD
   outputs = [ "out" "dev" ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nativeBuildInputs = [ pkg-config cmake ];
   buildInputs = [ freetype ];
 
   patches = lib.optionals stdenv.isDarwin [ ./macosx.patch ];
+<<<<<<< HEAD
   postPatch = ''
     # disable broken 'nametabletest' test, fails on gcc-13:
     #   https://github.com/silnrsi/graphite/pull/74
     substituteInPlace tests/CMakeLists.txt \
       --replace 'add_subdirectory(nametabletest)' '#add_subdirectory(nametabletest)'
   '';
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   cmakeFlags = lib.optionals static [
     "-DBUILD_SHARED_LIBS=OFF"

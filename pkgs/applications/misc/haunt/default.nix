@@ -1,8 +1,11 @@
 { lib
 , stdenv
 , fetchurl
+<<<<<<< HEAD
 , fetchpatch
 , autoreconfHook
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , guile
 , guile-commonmark
 , guile-reader
@@ -19,6 +22,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-vPKLQ9hDJdimEAXwIBGgRRlefM8/77xFQoI+0J/lkNs=";
   };
 
+<<<<<<< HEAD
   # Symbol not found: inotify_init
   patches = [
     (fetchpatch {
@@ -37,6 +41,9 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     autoreconfHook
+=======
+  nativeBuildInputs = [
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     makeWrapper
     pkg-config
   ];
@@ -49,11 +56,23 @@ stdenv.mkDerivation rec {
   # Test suite is non-determinisitic in later versions
   doCheck = false;
 
+<<<<<<< HEAD
   postInstall = ''
     wrapProgram $out/bin/haunt \
       --prefix GUILE_LOAD_PATH : "$out/${guile.siteDir}:$GUILE_LOAD_PATH" \
       --prefix GUILE_LOAD_COMPILED_PATH : "$out/${guile.siteCcacheDir}:$GUILE_LOAD_COMPILED_PATH"
   '';
+=======
+  postInstall =
+    let
+      guileVersion = lib.versions.majorMinor guile.version;
+    in
+    ''
+      wrapProgram $out/bin/haunt \
+        --prefix GUILE_LOAD_PATH : "$out/share/guile/site/${guileVersion}:$GUILE_LOAD_PATH" \
+        --prefix GUILE_LOAD_COMPILED_PATH : "$out/lib/guile/${guileVersion}/site-ccache:$GUILE_LOAD_COMPILED_PATH"
+    '';
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   doInstallCheck = true;
   installCheckPhase = ''

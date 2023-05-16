@@ -12,7 +12,11 @@
 , gdbm
 , gnutls
 , gss
+<<<<<<< HEAD
 , guile_2_2
+=======
+, guile
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , libmysqlclient
 , mailcap
 , nettools
@@ -31,11 +35,19 @@
 
 stdenv.mkDerivation rec {
   pname = "mailutils";
+<<<<<<< HEAD
   version = "3.16";
 
   src = fetchurl {
     url = "mirror://gnu/${pname}/${pname}-${version}.tar.xz";
     hash = "sha256-BB0VjTCMA3YYQ4jpyTbPqEGlHNwl1Nt1mEp3Gj+gAsA=";
+=======
+  version = "3.15";
+
+  src = fetchurl {
+    url = "mirror://gnu/${pname}/${pname}-${version}.tar.xz";
+    hash = "sha256-t9DChsNS/MfaeXjP1hfMZnNrIfqJGqT4iFX1FjVPLds=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   separateDebugInfo = true;
@@ -69,7 +81,11 @@ stdenv.mkDerivation rec {
     libxcrypt
   ] ++ lib.optionals stdenv.isLinux [ nettools ]
   ++ lib.optionals pythonSupport [ python3 ]
+<<<<<<< HEAD
   ++ lib.optionals guileSupport [ guile_2_2 ];
+=======
+  ++ lib.optionals guileSupport [ guile ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   patches = [
     ./fix-build-mb-len-max.patch

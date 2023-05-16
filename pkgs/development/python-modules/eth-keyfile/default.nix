@@ -42,6 +42,10 @@ buildPythonPackage rec {
     description = "Tools for handling the encrypted keyfile format used to store private keys";
     homepage = "https://github.com/ethereum/eth-keyfile";
     license = licenses.mit;
+<<<<<<< HEAD
     maintainers = with maintainers; [ ];
+=======
+    maintainers = with maintainers; [ SuperSandro2000 ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

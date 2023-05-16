@@ -42,13 +42,21 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "strawberry";
+<<<<<<< HEAD
   version = "1.0.18";
+=======
+  version = "1.0.17";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "jonaski";
     repo = pname;
     rev = version;
+<<<<<<< HEAD
     hash = "sha256-vOay9xPSwgSYurFgL9f4OdBPzGJkV4t+7lJgeCeT0c4=";
+=======
+    hash = "sha256-Z2b3/pIdSmZUO724hkdn78YrVuRiXALbTOUs+KJMjvU=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   # the big strawberry shown in the context menu is *very* much in your face, so use the grey version instead
@@ -116,6 +124,9 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ peterhoeg ];
     # upstream says darwin should work but they lack maintainers as of 0.6.6
     platforms = platforms.linux;
+<<<<<<< HEAD
     mainProgram = "strawberry";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

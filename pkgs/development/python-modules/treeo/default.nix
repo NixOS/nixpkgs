@@ -53,7 +53,10 @@ buildPythonPackage rec {
     homepage = "https://github.com/cgarciae/treeo";
     license = licenses.mit;
     maintainers = with maintainers; [ ndl ];
+<<<<<<< HEAD
     # obsolete as of 2023-02-27 and not updated for more than a year as of 2023-08
     broken = true;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

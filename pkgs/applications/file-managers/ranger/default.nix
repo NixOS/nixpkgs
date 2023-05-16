@@ -55,6 +55,9 @@ python3Packages.buildPythonApplication rec {
     license = licenses.gpl3Only;
     platforms = platforms.unix;
     maintainers = with maintainers; [ toonn magnetophon ];
+<<<<<<< HEAD
     mainProgram = "ranger";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

@@ -73,12 +73,15 @@ let
       rm test/unit/test_quadrature.py
       rm test/unit/test_reference_element.py
       rm test/unit/test_fiat.py
+<<<<<<< HEAD
 
       # Fix `np.float` deprecation in Numpy 1.20
       grep -lr 'np.float(' test/ | while read -r fn; do
         substituteInPlace "$fn" \
           --replace "np.float(" "np.float64("
       done
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     '';
     checkPhase = ''
       runHook preCheck
@@ -164,6 +167,7 @@ let
         url = "https://bitbucket.org/josef_kemetmueller/dolfin/commits/328e94acd426ebaf2243c072b806be3379fd4340/raw";
         sha256 = "1zj7k3y7vsx0hz3gwwlxhq6gdqamqpcw90d4ishwx5ps5ckcsb9r";
       })
+<<<<<<< HEAD
       (fetchpatch {
         url = "https://bitbucket.org/fenics-project/dolfin/issues/attachments/1116/fenics-project/dolfin/1602778118.04/1116/0001-Use-__BYTE_ORDER__-instead-of-removed-Boost-endian.h.patch";
         hash = "sha256-wPaDmPU+jaD3ce3nNEbvM5p8e3zBdLozamLTJ/0ai2c=";
@@ -175,6 +179,9 @@ let
       sed -i '26 a #include <algorithm>' dolfin/mesh/MeshFunction.h
       sed -i '25 a #include <cstdint>' dolfin/mesh/MeshConnectivity.h
     '';
+=======
+    ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     propagatedBuildInputs = [
       dijitso
       fiat

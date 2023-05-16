@@ -1,6 +1,10 @@
 { lib
 , aiohttp
 , asgiref
+<<<<<<< HEAD
+=======
+, backports-cached-property
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , buildPythonPackage
 , chalice
 , channels
@@ -15,8 +19,12 @@
 , freezegun
 , graphql-core
 , libcst
+<<<<<<< HEAD
 , opentelemetry-api
 , opentelemetry-sdk
+=======
+, mypy
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , poetry-core
 , pydantic
 , pygments
@@ -42,21 +50,35 @@
 
 buildPythonPackage rec {
   pname = "strawberry-graphql";
+<<<<<<< HEAD
   version = "0.205.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
+=======
+  version = "0.176.3";
+  format = "pyproject";
+
+  disabled = pythonOlder "3.7";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "strawberry-graphql";
     repo = "strawberry";
     rev = "refs/tags/${version}";
+<<<<<<< HEAD
     hash = "sha256-58pBsTQM3t5rj4AywhMqmCUzUQB4BH9FAF7J3p6Qkok=";
+=======
+    hash = "sha256-O57gCJiLlR3k45V6cRNd9AHo9EGoWd7WRMmnV/8xFyQ=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   patches = [
     (fetchpatch {
+<<<<<<< HEAD
       # https://github.com/strawberry-graphql/strawberry/pull/2199
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       name = "switch-to-poetry-core.patch";
       url = "https://github.com/strawberry-graphql/strawberry/commit/710bb96f47c244e78fc54c921802bcdb48f5f421.patch";
       hash = "sha256-ekUZ2hDPCqwXp9n0YjBikwSkhCmVKUzQk7LrPECcD7Y=";
@@ -65,7 +87,11 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
+<<<<<<< HEAD
       --replace "--emoji --mypy-ini-file=mypy.ini" "" \
+=======
+      --replace " --emoji --mypy-ini-file=mypy.ini --benchmark-disable" "" \
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '';
 
   nativeBuildInputs = [
@@ -113,10 +139,17 @@ buildPythonPackage rec {
       flask
       pytest-flask
     ];
+<<<<<<< HEAD
     opentelemetry = [
       opentelemetry-api
       opentelemetry-sdk
     ];
+=======
+    # opentelemetry = [
+    #   opentelemetry-api
+    #   opentelemetry-sdk
+    # ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     pydantic = [
       pydantic
     ];
@@ -148,6 +181,10 @@ buildPythonPackage rec {
     daphne
     email-validator
     freezegun
+<<<<<<< HEAD
+=======
+    mypy
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     pytest-asyncio
     pytest-emoji
     pytest-mock
@@ -166,14 +203,20 @@ buildPythonPackage rec {
     "tests/django/test_dataloaders.py"
     "tests/exceptions/"
     "tests/http/"
+<<<<<<< HEAD
     "tests/mypy/test_plugin.py" # avoid dependency on mypy
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "tests/schema/extensions/"
     "tests/schema/test_dataloaders.py"
     "tests/schema/test_lazy/"
     "tests/starlite/"
     "tests/test_dataloaders.py"
     "tests/utils/test_pretty_print.py"
+<<<<<<< HEAD
     "tests/websockets/test_graphql_transport_ws.py"
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   meta = with lib; {

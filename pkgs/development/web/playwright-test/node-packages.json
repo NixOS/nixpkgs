@@ -1,3 +1,7 @@
 [
+<<<<<<< HEAD
   {"@playwright/test": "1.37.0"}
+=======
+  {"@playwright/test": "1.31.1"}
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 ]

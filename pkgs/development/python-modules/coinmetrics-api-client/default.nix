@@ -5,6 +5,7 @@
 , orjson
 , pandas
 , poetry-core
+<<<<<<< HEAD
 , pytest-mock
 , pytestCheckHook
 , python-dateutil
@@ -12,13 +13,24 @@
 , pythonRelaxDepsHook
 , requests
 , tqdm
+=======
+, pytestCheckHook
+, pytest-mock
+, pythonOlder
+, python-dateutil
+, requests
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , typer
 , websocket-client
 }:
 
 buildPythonPackage rec {
   pname = "coinmetrics-api-client";
+<<<<<<< HEAD
   version = "2023.8.30.20";
+=======
+  version = "2023.5.2.20";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -28,6 +40,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit version;
     pname = "coinmetrics_api_client";
+<<<<<<< HEAD
     hash = "sha256-zi9hFpmRILfWXA9eLGbzt/+v3l1wykZz10GUuH20hzE=";
   };
 
@@ -38,6 +51,13 @@ buildPythonPackage rec {
   nativeBuildInputs = [
     poetry-core
     pythonRelaxDepsHook
+=======
+    hash = "sha256-20+qoCaSNGw4DVlW3USrSkg3fckqF77TQ7wmSsuZ3ek=";
+  };
+
+  nativeBuildInputs = [
+    poetry-core
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   propagatedBuildInputs = [
@@ -45,7 +65,10 @@ buildPythonPackage rec {
     python-dateutil
     requests
     typer
+<<<<<<< HEAD
     tqdm
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     websocket-client
   ];
 
@@ -60,9 +83,13 @@ buildPythonPackage rec {
 
   passthru = {
     optional-dependencies = {
+<<<<<<< HEAD
       pandas = [
         pandas
       ];
+=======
+      pandas = [ pandas ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
     updateScript = nix-update-script { };
   };

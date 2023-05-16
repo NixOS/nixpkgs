@@ -418,7 +418,11 @@ rec {
       forceShare = [ "man" "info" ];
 
       nativeBuildInputs = oldAttrs.nativeBuildInputs or []
+<<<<<<< HEAD
       ++ lib.optionals (stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+=======
+      ++ lib.optionals (stdenv.hostPlatform == stdenv.buildPlatform) [
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         vimCommandCheckHook vimGenDocHook
         # many neovim plugins keep using buildVimPlugin
         neovimRequireCheckHook

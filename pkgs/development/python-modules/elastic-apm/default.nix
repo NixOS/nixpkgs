@@ -30,7 +30,11 @@
 
 buildPythonPackage rec {
   pname = "elastic-apm";
+<<<<<<< HEAD
   version = "6.18.0";
+=======
+  version = "6.15.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -39,7 +43,11 @@ buildPythonPackage rec {
     owner = "elastic";
     repo = "apm-agent-python";
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-s4aM2HuagqcF2sLHHRh2kj1tglf+JZ7hXT4PcAeFStQ=";
+=======
+    hash = "sha256-s07LZeT2vTtBU/48heGFrW74D1iqkxRaLh+LTD35mu8=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [

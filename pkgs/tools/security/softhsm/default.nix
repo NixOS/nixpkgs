@@ -12,7 +12,11 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--with-crypto-backend=botan"
+<<<<<<< HEAD
     "--with-botan=${lib.getDev botan2}"
+=======
+    "--with-botan=${botan2}"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "--sysconfdir=$out/etc"
     "--localstatedir=$out/var"
     ];

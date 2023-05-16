@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 { lib, stdenv, fetchFromGitHub, ncurses, pkg-config, cmake }:
+=======
+{ lib, stdenv, fetchFromGitHub, fetchpatch, ncurses, pkg-config, cmake }:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 stdenv.mkDerivation rec {
   version = "7.0.0";

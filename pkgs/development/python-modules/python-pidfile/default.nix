@@ -6,11 +6,19 @@
 
 buildPythonPackage rec {
   pname = "python-pidfile";
+<<<<<<< HEAD
   version = "3.1.1";
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-pgQBL2iagsHMRFEKI85ZwyaIL7kcIftAy6s+lX958M0=";
+=======
+  version = "3.0.0";
+
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-HhCX30G8dfV0WZ/++J6LIO/xvfyRkdPtJkzC2ulUKdA=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [

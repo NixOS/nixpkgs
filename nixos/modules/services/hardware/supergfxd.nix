@@ -32,7 +32,11 @@ in
 
     systemd.packages = [ pkgs.supergfxctl ];
     systemd.services.supergfxd.wantedBy = [ "multi-user.target" ];
+<<<<<<< HEAD
     systemd.services.supergfxd.path = [ pkgs.kmod pkgs.pciutils ];
+=======
+    systemd.services.supergfxd.path = [ pkgs.kmod ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     services.dbus.packages = [ pkgs.supergfxctl ];
     services.udev.packages = [ pkgs.supergfxctl ];

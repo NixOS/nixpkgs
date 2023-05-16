@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 { lib
 , stdenv
 , fetchgit
@@ -10,6 +11,10 @@
 , openldap
 , libxcrypt
 , gitUpdater
+=======
+{ lib, stdenv, fetchgit, ncurses, tcl, openssl, pam, libkrb5
+, openldap, libxcrypt, gitUpdater
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 stdenv.mkDerivation rec {
@@ -22,8 +27,11 @@ stdenv.mkDerivation rec {
     hash = "sha256-cJyUBatQBjD6RG+jesJ0JRhWghPRBACc/HQl+2aCTd0=";
   };
 
+<<<<<<< HEAD
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   buildInputs = [
     ncurses tcl openssl pam libkrb5 openldap libxcrypt
   ];

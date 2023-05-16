@@ -4,6 +4,10 @@
 , fetchFromGitHub
 , future-typing
 , inflection
+<<<<<<< HEAD
+=======
+, mypy
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , orjson
 , pandas
 , pendulum
@@ -44,6 +48,10 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
+<<<<<<< HEAD
+=======
+    mypy
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     pydantic
     sqlalchemy
     pandas

@@ -2,7 +2,10 @@
 , black
 , boto3
 , buildPythonPackage
+<<<<<<< HEAD
 , cryptography
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , fetchFromGitHub
 , isort
 , jinja2
@@ -18,7 +21,11 @@
 
 buildPythonPackage rec {
   pname = "mypy-boto3-builder";
+<<<<<<< HEAD
   version = "7.19.0";
+=======
+  version = "7.14.5";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "pyproject";
 
   disabled = pythonOlder "3.10";
@@ -27,7 +34,11 @@ buildPythonPackage rec {
     owner = "youtype";
     repo = "mypy_boto3_builder";
     rev = "refs/tags/${version}";
+<<<<<<< HEAD
     hash = "sha256-Wczk1DNoOpvd7efnZFUf4FSjYqHdkMKMNwNVeQOPeEg=";
+=======
+    hash = "sha256-T8BIfopprCfcOpv92soTD3S4eYoAdT70pSMSHlFbBuE=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [
@@ -37,7 +48,10 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     black
     boto3
+<<<<<<< HEAD
     cryptography
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     isort
     jinja2
     md-toc

@@ -20,7 +20,11 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/Riey/cargo-feature";
     license = licenses.mit;
     platforms = platforms.unix;
+<<<<<<< HEAD
     maintainers = with maintainers; [ riey matthiasbeyer ];
+=======
+    maintainers = with maintainers; [ riey ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }
 

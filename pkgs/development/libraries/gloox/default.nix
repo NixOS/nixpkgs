@@ -7,11 +7,19 @@
 
 stdenv.mkDerivation rec{
   pname = "gloox";
+<<<<<<< HEAD
   version = "1.0.27";
 
   src = fetchurl {
     url = "https://camaya.net/download/gloox-${version}.tar.bz2";
     sha256 = "sha256-C4tzcUObxY2eUThLYWyWSxi3tBuHrxt4VRBDgO2ob/s=";
+=======
+  version = "1.0.26";
+
+  src = fetchurl {
+    url = "https://camaya.net/download/gloox-${version}.tar.bz2";
+    sha256 = "sha256-a0WzkNOwNGo89swRjVzK/N8Q1RvlegKwB27fBkAzq28=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   # needed since gcc12

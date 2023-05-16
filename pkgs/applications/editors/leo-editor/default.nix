@@ -2,13 +2,21 @@
 
 mkDerivation rec {
   pname = "leo-editor";
+<<<<<<< HEAD
   version = "6.7.4";
+=======
+  version = "6.7.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "leo-editor";
     repo = "leo-editor";
     rev = version;
+<<<<<<< HEAD
     sha256 = "sha256-YKK46PeCMOTNOTpMrIgem+Au70Xj+tTHxOhC8alF3ms=";
+=======
+    sha256 = "sha256-n9Ze02Dvoci3QS5slJNpb3CI3zlTq6FsdVbxvZHCJ2A=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   dontBuild = true;
@@ -60,7 +68,11 @@ mkDerivation rec {
     description = "A powerful folding editor";
     longDescription = "Leo is a PIM, IDE and outliner that accelerates the work flow of programmers, authors and web designers.";
     license = licenses.mit;
+<<<<<<< HEAD
     maintainers = with maintainers; [ leonardoce kashw2 ];
+=======
+    maintainers = with maintainers; [ leonardoce ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     mainProgram = "leo";
   };
 }

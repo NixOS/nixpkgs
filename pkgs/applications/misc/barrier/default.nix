@@ -49,6 +49,9 @@ mkDerivation rec {
     license = lib.licenses.gpl2;
     maintainers = [ lib.maintainers.phryneas ];
     platforms = lib.platforms.linux;
+<<<<<<< HEAD
     mainProgram = "barrier";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

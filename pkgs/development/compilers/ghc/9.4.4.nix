@@ -32,7 +32,12 @@
 , # If enabled, use -fPIC when compiling static libs.
   enableRelocatedStaticLibs ? stdenv.targetPlatform != stdenv.hostPlatform
 
+<<<<<<< HEAD
 , enableProfiledLibs ? true
+=======
+  # aarch64 outputs otherwise exceed 2GB limit
+, enableProfiledLibs ? !stdenv.targetPlatform.isAarch64
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 , # Whether to build dynamic libs for the standard library (on the target
   # platform). Static libs are always built.
@@ -205,6 +210,7 @@ stdenv.mkDerivation (rec {
       url = "https://gitlab.haskell.org/ghc/ghc/-/commit/10e94a556b4f90769b7fd718b9790d58ae566600.patch";
       sha256 = "0kmhfamr16w8gch0lgln2912r8aryjky1hfcda3jkcwa5cdzgjdv";
     })
+<<<<<<< HEAD
   ] ++ lib.optionals (stdenv.targetPlatform.isDarwin && stdenv.targetPlatform.isAarch64) [
     # Prevent the paths module from emitting symbols that we don't use
     # when building with separate outputs.
@@ -213,6 +219,8 @@ stdenv.mkDerivation (rec {
     # elimination on aarch64-darwin. (see
     # https://github.com/NixOS/nixpkgs/issues/140774 for details).
     ./Cabal-3.6-3.8-paths-fix-cycle-aarch64-darwin.patch
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   postPatch = "patchShebangs .";

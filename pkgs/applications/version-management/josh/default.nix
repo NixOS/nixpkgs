@@ -1,7 +1,10 @@
 { lib
 , stdenv
 , fetchFromGitHub
+<<<<<<< HEAD
 , fetchpatch
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , rustPlatform
 , libgit2
 , openssl
@@ -13,12 +16,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "josh";
+<<<<<<< HEAD
   version = "23.02.14";
   JOSH_VERSION = "r${version}";
+=======
+  version = "22.06.22";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "esrlabs";
     repo = "josh";
+<<<<<<< HEAD
     rev = JOSH_VERSION;
     sha256 = "1sqa8xi5d55zshky7gicac02f67vp944hclkdsmwy0bczk9hgssr";
   };
@@ -33,6 +41,13 @@ rustPlatform.buildRustPackage rec {
   ];
 
   cargoSha256 = "0f6cvz2s8qs53b2g6xja38m24hafqla61s4r5za0a1dyndgms7sl";
+=======
+    rev = "r" + version;
+    sha256 = "0511qv9zyjvv4zfz6zyi69ssbkrwa24n0ah5w9mb4gzd547as8pq";
+  };
+
+  cargoSha256 = "0zfjjyyz4pxar1mfkkj9aij4dnwqy3asdrmay1iy6ijjn1qd97n4";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nativeBuildInputs = [
     pkg-config

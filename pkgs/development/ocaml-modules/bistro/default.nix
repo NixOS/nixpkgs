@@ -29,8 +29,11 @@ buildDunePackage rec {
     sha256 = "0g11324j1s2631zzf7zxc8s0nqd4fwvcni0kbvfpfxg96gy2wwfm";
   };
 
+<<<<<<< HEAD
   patches = [ ./janestreet-0.16.patch ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   propagatedBuildInputs = [
     base64
     bos

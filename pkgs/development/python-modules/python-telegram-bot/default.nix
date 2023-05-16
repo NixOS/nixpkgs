@@ -14,22 +14,33 @@
 , pytestCheckHook
 , pythonOlder
 , pytz
+<<<<<<< HEAD
 , setuptools
 , wheel
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , tornado
 }:
 
 buildPythonPackage rec {
   pname = "python-telegram-bot";
+<<<<<<< HEAD
   version = "20.5";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
+=======
+  version = "20.2";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-/AdGpOl87EeVDCAZLjtan7ttE2vUL0gi1qeM18ilYEQ=";
   };
 
@@ -38,6 +49,11 @@ buildPythonPackage rec {
     wheel
   ];
 
+=======
+    hash = "sha256-OdjTlVUjlw+5K/kvL1Yx+7c/lIE52udUo6Ux18M9xmE=";
+  };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   propagatedBuildInputs = [
     aiolimiter
     apscheduler

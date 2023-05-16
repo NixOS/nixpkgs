@@ -89,7 +89,11 @@ in {
         options = {
           enable = mkEnableOption (mdDoc "GameScope Session");
           args = mkOption {
+<<<<<<< HEAD
             type = types.listOf types.str;
+=======
+            type = types.listOf types.string;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
             default = [ ];
             description = mdDoc ''
               Arguments to be passed to GameScope for the session.
@@ -97,7 +101,11 @@ in {
           };
 
           env = mkOption {
+<<<<<<< HEAD
             type = types.attrsOf types.str;
+=======
+            type = types.attrsOf types.string;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
             default = { };
             description = mdDoc ''
               Environmental variables to be passed to GameScope for the session.

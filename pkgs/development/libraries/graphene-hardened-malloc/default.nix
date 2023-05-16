@@ -7,21 +7,35 @@
 , stress-ng
 }:
 
+<<<<<<< HEAD
 stdenv.mkDerivation (finalAttrs: {
+=======
+lib.fix (self: stdenv.mkDerivation rec {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pname = "graphene-hardened-malloc";
   version = "11";
 
   src = fetchFromGitHub {
     owner = "GrapheneOS";
     repo = "hardened_malloc";
+<<<<<<< HEAD
     rev = finalAttrs.version;
+=======
+    rev = version;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     sha256 = "sha256-BbjL0W12QXFmGCzFrFYY6CZZeFbUt0elCGhM+mbL/IU=";
   };
 
   doCheck = true;
   nativeCheckInputs = [ python3 ];
   # these tests cover use as a build-time-linked library
+<<<<<<< HEAD
   checkTarget = "test";
+=======
+  checkPhase = ''
+    make test
+  '';
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   installPhase = ''
     install -Dm444 -t $out/include include/*
@@ -36,8 +50,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     ld-preload-tests = stdenv.mkDerivation {
+<<<<<<< HEAD
       name = "${finalAttrs.pname}-ld-preload-tests";
       inherit (finalAttrs) src;
+=======
+      name = "${self.name}-ld-preload-tests";
+      src = self.src;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
       nativeBuildInputs = [ makeWrapper ];
 
@@ -64,6 +83,7 @@ stdenv.mkDerivation (finalAttrs: {
       '';
     };
     tests = {
+<<<<<<< HEAD
       ld-preload = runCommand "ld-preload-test-run" { } ''
         ${finalAttrs.finalPackage}/bin/preload-hardened-malloc ${finalAttrs.passthru.ld-preload-tests}/bin/run-tests
         touch $out
@@ -71,6 +91,15 @@ stdenv.mkDerivation (finalAttrs: {
       # to compensate for the lack of tests of correct normal malloc operation
       stress = runCommand "stress-test-run" { } ''
         ${finalAttrs.finalPackage}/bin/preload-hardened-malloc ${stress-ng}/bin/stress-ng \
+=======
+      ld-preload = runCommand "ld-preload-test-run" {} ''
+        ${self}/bin/preload-hardened-malloc ${self.ld-preload-tests}/bin/run-tests
+        touch $out
+      '';
+      # to compensate for the lack of tests of correct normal malloc operation
+      stress = runCommand "stress-test-run" {} ''
+        ${self}/bin/preload-hardened-malloc ${stress-ng}/bin/stress-ng \
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           --no-rand-seed \
           --malloc 8 \
           --malloc-ops 1000000 \

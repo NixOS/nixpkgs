@@ -15,7 +15,11 @@ buildGoModule rec {
 
   proxyVendor = true; # Doesn't build otherwise
 
+<<<<<<< HEAD
   vendorHash = "sha256-65VvUy4vGTfZgsXGJVSc/yU5R5MhSKJyMMsvPOCThks=";
+=======
+  vendorSha256 = "sha256-65VvUy4vGTfZgsXGJVSc/yU5R5MhSKJyMMsvPOCThks=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   # Some tests fail
   doCheck = false;

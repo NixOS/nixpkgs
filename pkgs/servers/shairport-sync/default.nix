@@ -3,7 +3,11 @@
 , fetchFromGitHub
 , autoreconfHook
 , pkg-config
+<<<<<<< HEAD
 , openssl
+=======
+, openssl_1_1
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , avahi
 , alsa-lib
 , libplist
@@ -34,6 +38,7 @@
 , enableLibdaemon ? false
 }:
 
+<<<<<<< HEAD
 let
   inherit (lib) optional optionals;
 in
@@ -67,6 +72,23 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     openssl
+=======
+stdenv.mkDerivation rec {
+  version = "4.1.1";
+  pname = "shairport-sync";
+
+  src = fetchFromGitHub {
+    rev = version;
+    repo = "shairport-sync";
+    owner = "mikebrady";
+    hash = "sha256-EKt5mH9GmzeR4zdPDFOt26T9STpG1khVrY4DFIv5Maw=";
+  };
+
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
+
+  buildInputs = with lib; [
+    openssl_1_1
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     avahi
     popt
     libconfig
@@ -94,7 +116,11 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+<<<<<<< HEAD
   configureFlags = [
+=======
+  configureFlags = with lib; [
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "--without-configfiles"
     "--sysconfdir=/etc"
     "--with-ssl=openssl"
@@ -114,8 +140,11 @@ stdenv.mkDerivation rec {
   ++ optional enableLibdaemon "--with-libdaemon"
   ++ optional enableAirplay2 "--with-airplay-2";
 
+<<<<<<< HEAD
   strictDeps = true;
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   meta = with lib; {
     homepage = "https://github.com/mikebrady/shairport-sync";
     description = "Airtunes server and emulator with multi-room capabilities";

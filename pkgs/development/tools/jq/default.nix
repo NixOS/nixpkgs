@@ -2,7 +2,10 @@
 , stdenv
 , fetchurl
 , autoreconfHook
+<<<<<<< HEAD
 , bison
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , onigurumaSupport ? true
 , oniguruma
 }:
@@ -39,6 +42,7 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs = lib.optionals onigurumaSupport [ oniguruma ];
+<<<<<<< HEAD
   nativeBuildInputs = [ autoreconfHook bison ];
 
   # Darwin requires _REENTRANT be defined to use functions like `lgamma_r`.
@@ -49,6 +53,9 @@ stdenv.mkDerivation rec {
     "-D_REENTRANT=1"
     "-D_DARWIN_C_SOURCE=1"
   ]);
+=======
+  nativeBuildInputs = [ autoreconfHook ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   configureFlags = [
     "--bindir=\${bin}/bin"
@@ -76,6 +83,9 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ raskin globin artturin ];
     platforms = platforms.unix;
     downloadPage = "https://stedolan.github.io/jq/download/";
+<<<<<<< HEAD
     mainProgram = "jq";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

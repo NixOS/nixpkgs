@@ -14,7 +14,11 @@
 
 buildPythonPackage rec {
   pname = "graphtage";
+<<<<<<< HEAD
   version = "0.3.0";
+=======
+  version = "0.2.7";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   disabled = pythonOlder "3.6";
 
@@ -22,7 +26,11 @@ buildPythonPackage rec {
     owner = "trailofbits";
     repo = pname;
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-rzX5pSSPm3CjpnCm0gxsgUaeXho9dP7WTanCzBK6Yps=";
+=======
+    hash = "sha256-3PJSjK8citdsfTyTLtDOlLeXWhkOW/4ajLC+j8F0BZw=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   postPatch = ''

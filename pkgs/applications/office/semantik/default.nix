@@ -3,7 +3,11 @@
 , mkDerivation
 , fetchFromGitLab
 , fetchpatch
+<<<<<<< HEAD
 , waf
+=======
+, wafHook
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , pkg-config
 , cmake
 , qtbase
@@ -65,7 +69,11 @@ mkDerivation rec {
       --replace /usr/include/KF5/KDELibs4Support "${lib.getDev kdelibs4support}/include/KF5/KDELibs4Support"
   '';
 
+<<<<<<< HEAD
   nativeBuildInputs = [ (lib.getDev qtsvg) (lib.getLib qtsvg) python3 pkg-config waf.hook cmake ];
+=======
+  nativeBuildInputs = [ (lib.getDev qtsvg) (lib.getLib qtsvg) python3 pkg-config wafHook cmake ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   buildInputs = [
     qtbase

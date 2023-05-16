@@ -15,13 +15,21 @@
 
 stdenv.mkDerivation rec {
   pname = "lastpass-cli";
+<<<<<<< HEAD
   version = "1.3.6";
+=======
+  version = "1.3.4";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "lastpass";
     repo = pname;
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-ntUBwZ0bVkkpvWK/jQBkLNpCYEDI14/ki0cLwYpEWXk=";
+=======
+    sha256 = "sha256-bPAENorvj48cyRpnMLmyENXlipSGhTLW+XVoyrPogTE=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   patches = [

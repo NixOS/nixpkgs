@@ -19,13 +19,21 @@
 , stdenv
 , wayland
 
+<<<<<<< HEAD
+=======
+, mods ? [ ]
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , mods-dat ? null
 , versionsJson ? ./versions.json
 , username ? ""
 , token ? "" # get/reset token at https://factorio.com/profile
 , experimental ? false # true means to always use the latest branch
+<<<<<<< HEAD
 , ...
 } @ args:
+=======
+}:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 assert releaseType == "alpha"
   || releaseType == "headless"
@@ -35,8 +43,11 @@ let
 
   inherit (lib) importJSON;
 
+<<<<<<< HEAD
   mods = args.mods or [ ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   helpMsg = ''
 
     ===FETCH FAILED===

@@ -10,6 +10,7 @@
 
 let
   py = python3 // {
+<<<<<<< HEAD
     pkgs = python3.pkgs.overrideScope (final: prev: {
       ruamel-yaml = prev.ruamel-yaml.overridePythonAttrs (prev: {
         src = prev.src.override {
@@ -17,18 +18,27 @@ let
           hash = "sha256-i3zml6LyEnUqNcGsQURx3BbEJMlXO+SSa1b/P10jt68=";
         };
       });
+=======
+    pkgs = python3.pkgs.overrideScope (self: super: {
+      # nothing right now
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     });
   };
 
 in
 with py.pkgs; buildPythonApplication rec {
   pname = "awscli2";
+<<<<<<< HEAD
   version = "2.13.15"; # N.B: if you change this, check if overrides are still up-to-date
+=======
+  version = "2.11.15"; # N.B: if you change this, check if overrides are still up-to-date
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "aws-cli";
+<<<<<<< HEAD
     rev = "refs/tags/${version}";
     hash = "sha256-wxuuEya2uUquRmRmh9M2wJ6dcvCx8kyzk71og9OAJ+c=";
   };
@@ -47,6 +57,15 @@ with py.pkgs; buildPythonApplication rec {
     # with a configure script, but we don't as we provide all of the packages
     # through PYTHONPATH
     sed -i '/pip>=/d' requirements/bootstrap.txt
+=======
+    rev = version;
+    hash = "sha256-2FE5PJxdTqSrAIgkaZPf91B6bI6Bj9tbJjXg2nAaLdo=";
+  };
+
+  postPatch = ''
+    substituteInPlace requirements/bootstrap.txt \
+      --replace "pip>=22.0.0,<23.0.0" "pip>=22.0.0,<24.0.0"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '';
 
   nativeBuildInputs = [
@@ -56,18 +75,31 @@ with py.pkgs; buildPythonApplication rec {
   propagatedBuildInputs = [
     awscrt
     bcdoc
+<<<<<<< HEAD
     botocore
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     colorama
     cryptography
     distro
     docutils
     groff
+<<<<<<< HEAD
     jmespath
     less
     prompt-toolkit
     python-dateutil
     pyyaml
     ruamel-yaml
+=======
+    less
+    prompt-toolkit
+    pyyaml
+    rsa
+    ruamel-yaml
+    python-dateutil
+    jmespath
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     urllib3
   ];
 
@@ -90,6 +122,11 @@ with py.pkgs; buildPythonApplication rec {
     rm $out/bin/aws.cmd
   '';
 
+<<<<<<< HEAD
+=======
+  doCheck = true;
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   preCheck = ''
     export PATH=$PATH:$out/bin
     export HOME=$(mktemp -d)
@@ -121,14 +158,24 @@ with py.pkgs; buildPythonApplication rec {
     tests.version = testers.testVersion {
       package = awscli2;
       command = "aws --version";
+<<<<<<< HEAD
       inherit version;
+=======
+      version = version;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
   };
 
   meta = with lib; {
+<<<<<<< HEAD
     description = "Unified tool to manage your AWS services";
     homepage = "https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2.html";
     changelog = "https://github.com/aws/aws-cli/blob/${version}/CHANGELOG.rst";
+=======
+    homepage = "https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2.html";
+    changelog = "https://github.com/aws/aws-cli/blob/${version}/CHANGELOG.rst";
+    description = "Unified tool to manage your AWS services";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     license = licenses.asl20;
     maintainers = with maintainers; [ bhipple davegallant bryanasdev000 devusb anthonyroussel ];
     mainProgram = "aws";

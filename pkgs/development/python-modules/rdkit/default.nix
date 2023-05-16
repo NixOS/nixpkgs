@@ -1,5 +1,8 @@
 { lib
+<<<<<<< HEAD
 , stdenv
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , buildPythonPackage
 , fetchFromGitHub
 , cmake
@@ -16,7 +19,10 @@
 , numpy
 , pandas
 , pillow
+<<<<<<< HEAD
 , memorymappingHook
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 let
   external = {
@@ -42,7 +48,11 @@ let
 in
 buildPythonPackage rec {
   pname = "rdkit";
+<<<<<<< HEAD
   version = "2023.03.3";
+=======
+  version = "2023.03.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "other";
 
   src =
@@ -53,7 +63,11 @@ buildPythonPackage rec {
       owner = pname;
       repo = pname;
       rev = "Release_${versionTag}";
+<<<<<<< HEAD
       hash = "sha256-5M7nDUWORbepDGaf2G6Cd79Hu0au3DNRc9KuONoCWK0=";
+=======
+      hash = "sha256-hiDaPWDAWzALRf3+SAfzghu2K706rcajeZ69tMFplhU=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
 
   unpackPhase = ''
@@ -84,8 +98,11 @@ buildPythonPackage rec {
   buildInputs = [
     boost
     cairo
+<<<<<<< HEAD
   ] ++ lib.optionals (stdenv.system == "x86_64-darwin") [
     memorymappingHook
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   propagatedBuildInputs = [
@@ -153,9 +170,15 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Open source toolkit for cheminformatics";
+<<<<<<< HEAD
     maintainers = with maintainers; [ rmcgibbo natsukium ];
     license = licenses.bsd3;
     homepage = "https://www.rdkit.org";
     changelog = "https://github.com/rdkit/rdkit/releases/tag/${src.rev}";
+=======
+    maintainers = [ maintainers.rmcgibbo ];
+    license = licenses.bsd3;
+    homepage = "https://www.rdkit.org";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

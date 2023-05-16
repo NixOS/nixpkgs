@@ -2,18 +2,30 @@
 
 buildGoModule rec {
   pname = "docker-buildx";
+<<<<<<< HEAD
   version = "0.11.2";
+=======
+  version = "0.10.4";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "docker";
     repo = "buildx";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-FPqXfIxuqwsnvsuWN5baIIn6o7ucP/Zgn+OsHfI61zU=";
+=======
+    sha256 = "sha256-hYEFboZa6RGiy0wr7NEWaf5KCz/O7KGXTc6c9hMmoXk=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   doCheck = false;
 
+<<<<<<< HEAD
   vendorHash = null;
+=======
+  vendorSha256 = null;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   ldflags = [
     "-w" "-s"

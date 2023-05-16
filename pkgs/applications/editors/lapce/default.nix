@@ -7,6 +7,11 @@
 , pkg-config
 , perl
 , fontconfig
+<<<<<<< HEAD
+=======
+, copyDesktopItems
+, makeDesktopItem
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , glib
 , gtk3
 , openssl
@@ -22,19 +27,32 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "lapce";
+<<<<<<< HEAD
   version = "0.2.8";
+=======
+  version = "0.2.7";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "lapce";
     repo = pname;
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-cfQQ+PaInUB6B61sZ9iS/zt3L6Vc/vPOJTtEwR0BLco=";
+=======
+    sha256 = "sha256-xq/xLoVvETGp+Yxlh3wbg74R+U9eqjFOKJyt/AUybvU=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
       "druid-0.7.0" = "sha256-PJH+Y5PScM6KnPeb5lBLKpqe9nbG3bXIJK2y4V1IM9o=";
+<<<<<<< HEAD
+=======
+      "druid-derive-0.4.0" = "sha256-PJH+Y5PScM6KnPeb5lBLKpqe9nbG3bXIJK2y4V1IM9o=";
+      "druid-shell-0.7.0" = "sha256-PJH+Y5PScM6KnPeb5lBLKpqe9nbG3bXIJK2y4V1IM9o=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       "font-kit-0.11.0" = "sha256-MsUbFhWd3GdqchzwrRPuzpz3mNYde00HwA9EIRBc2SQ=";
       "fount-0.1.0" = "sha256-ptPnisGuzip3tQUuwtPU+ETiIzxMvIgAvlIGyGw/4wI=";
       "human-sort-0.2.2" = "sha256-tebgIJGXOY7pwWRukboKAzXY47l4Cn//0xMKQTaGu8w=";
@@ -82,14 +100,21 @@ rustPlatform.buildRustPackage rec {
     };
   };
 
+<<<<<<< HEAD
   postPatch = ''
     substituteInPlace lapce-ui/Cargo.toml --replace ", \"lapce-data/updater\"" ""
   '';
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nativeBuildInputs = [
     cmake
     pkg-config
     perl
+<<<<<<< HEAD
+=======
+    copyDesktopItems
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     wrapGAppsHook # FIX: No GSettings schemas are installed on the system
     gobject-introspection
   ];
@@ -113,10 +138,26 @@ rustPlatform.buildRustPackage rec {
   ];
 
   postInstall = ''
+<<<<<<< HEAD
     install -Dm0644 $src/extra/images/logo.svg $out/share/icons/hicolor/scalable/apps/dev.lapce.lapce.svg
     install -Dm0644 $src/extra/linux/dev.lapce.lapce.desktop $out/share/applications/lapce.desktop
   '';
 
+=======
+    install -Dm0644 $src/extra/images/logo.svg $out/share/icons/hicolor/scalable/apps/lapce.svg
+  '';
+
+  desktopItems = [ (makeDesktopItem {
+    name = "lapce";
+    exec = "lapce %F";
+    icon = "lapce";
+    desktopName = "Lapce";
+    comment = meta.description;
+    genericName = "Code Editor";
+    categories = [ "Development" "Utility" "TextEditor" ];
+  }) ];
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   passthru.updateScript = nix-update-script { };
 
   meta = with lib; {

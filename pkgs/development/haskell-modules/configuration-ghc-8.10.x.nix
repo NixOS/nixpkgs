@@ -46,6 +46,7 @@ self: super: {
   unix = null;
   # GHC only bundles the xhtml library if haddock is enabled, check if this is
   # still the case when updating: https://gitlab.haskell.org/ghc/ghc/-/blob/0198841877f6f04269d6050892b98b5c3807ce4c/ghc.mk#L463
+<<<<<<< HEAD
   xhtml = if self.ghc.hasHaddock or true then null else self.xhtml_3000_3_0_0;
 
   # Need the Cabal-syntax-3.6.0.0 fake package for Cabal < 3.8 to allow callPackage and the constraint solver to work
@@ -53,10 +54,14 @@ self: super: {
   # These core package only exist for GHC >= 9.4. The best we can do is feign
   # their existence to callPackages, but their is no shim for lower GHC versions.
   system-cxx-std-lib = null;
+=======
+  xhtml = if self.ghc.hasHaddock or true then null else self.xhtml_3000_2_2_1;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   # Additionally depends on OneTuple for GHC < 9.0
   base-compat-batteries = addBuildDepend self.OneTuple super.base-compat-batteries;
 
+<<<<<<< HEAD
   # For GHC < 9.4, some packages need data-array-byte as an extra dependency
   primitive = addBuildDepends [ self.data-array-byte ] super.primitive;
   hashable = addBuildDepends [
@@ -67,6 +72,15 @@ self: super: {
   # Pick right versions for GHC-specific packages
   ghc-api-compat = doDistribute (unmarkBroken self.ghc-api-compat_8_10_7);
 
+=======
+  # Pick right versions for GHC-specific packages
+  ghc-api-compat = doDistribute (unmarkBroken self.ghc-api-compat_8_10_7);
+
+  # ghc versions which don’t match the ghc-lib-parser-ex version need the
+  # additional dependency to compile successfully.
+  ghc-lib-parser-ex = addBuildDepend self.ghc-lib-parser super.ghc-lib-parser-ex;
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   # Needs to use ghc-lib due to incompatible GHC
   ghc-tags = doDistribute (addBuildDepend self.ghc-lib self.ghc-tags_1_5);
 
@@ -111,6 +125,7 @@ self: super: {
   in addBuildDepends additionalDeps (super.haskell-language-server.overrideScope (lself: lsuper: {
     Cabal = lself.Cabal_3_6_3_0;
     aeson = lself.aeson_1_5_6_0;
+<<<<<<< HEAD
     lens-aeson = doJailbreak lself.lens-aeson_1_1_3;
     lsp-types = doJailbreak lsuper.lsp-types; # Checks require aeson >= 2.0
     hls-overloaded-record-dot-plugin = null;
@@ -128,6 +143,12 @@ self: super: {
   hlint = self.hlint_3_4_1;
   stylish-haskell = doJailbreak self.stylish-haskell_0_14_3_0;
 
+=======
+    lens-aeson = lself.lens-aeson_1_1_3;
+    lsp-types = doJailbreak lsuper.lsp-types; # Checks require aeson >= 2.0
+  }));
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   hls-tactics-plugin = unmarkBroken (addBuildDepends (with self.hls-tactics-plugin.scope; [
     aeson extra fingertree generic-lens ghc-exactprint ghc-source-gen ghcide
     hls-graph hls-plugin-api hls-refactor-plugin hyphenation lens lsp megaparsec
@@ -151,6 +172,7 @@ self: super: {
 
   mime-string = disableOptimization super.mime-string;
 
+<<<<<<< HEAD
   # weeder 2.3.* no longer supports GHC 8.10
   weeder = doDistribute (doJailbreak self.weeder_2_2_0);
   # Unnecessarily strict upper bound on lens
@@ -166,6 +188,17 @@ self: super: {
   ] (super.OneTuple.override {
     ghc-prim = self.hashable;
   });
+=======
+  # weeder 2.3.0 no longer supports GHC 8.10
+  weeder = doDistribute (doJailbreak self.weeder_2_2_0);
+
+  # OneTuple needs hashable instead of ghc-prim for GHC < 9
+  OneTuple = super.OneTuple.override {
+    ghc-prim = self.hashable;
+  };
+
+  hashable = addBuildDepend self.base-orphans super.hashable;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   # Doesn't build with 9.0, see https://github.com/yi-editor/yi/issues/1125
   yi-core = doDistribute (markUnbroken super.yi-core);
@@ -208,7 +241,10 @@ self: super: {
 
   # Needs OneTuple for ghc < 9.2
   binary-orphans = addBuildDepends [ self.OneTuple ] super.binary-orphans;
+<<<<<<< HEAD
 
   # Requires GHC < 9.4
   ghc-source-gen = doDistribute (unmarkBroken super.ghc-source-gen);
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }

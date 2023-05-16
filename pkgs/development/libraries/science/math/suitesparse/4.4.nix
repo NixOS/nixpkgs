@@ -1,6 +1,10 @@
 { lib, stdenv, fetchurl, gfortran, blas, lapack
+<<<<<<< HEAD
 , config
 , enableCuda ? config.cudaSupport, cudatoolkit
+=======
+, enableCuda ? false, cudatoolkit
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 let

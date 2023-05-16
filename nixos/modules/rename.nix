@@ -1,10 +1,15 @@
 { lib, pkgs, ... }:
 
+<<<<<<< HEAD
 let
   inherit (lib)
     mkAliasOptionModuleMD
     mkRemovedOptionModule;
 in
+=======
+with lib;
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 {
   imports = [
     /*
@@ -54,9 +59,13 @@ in
     (mkRemovedOptionModule [ "services" "chronos" ] "The corresponding package was removed from nixpkgs.")
     (mkRemovedOptionModule [ "services" "couchpotato" ] "The corresponding package was removed from nixpkgs.")
     (mkRemovedOptionModule [ "services" "dd-agent" ] "dd-agent was removed from nixpkgs in favor of the newer datadog-agent.")
+<<<<<<< HEAD
     (mkRemovedOptionModule [ "services" "ddclient" ] "ddclient has been removed on the request of the upstream maintainer because it is unmaintained and has bugs. Please switch to a different software like `inadyn` or `knsupdate`.") # Added 2023-07-04
     (mkRemovedOptionModule [ "services" "dnscrypt-proxy" ] "Use services.dnscrypt-proxy2 instead")
     (mkRemovedOptionModule [ "services" "exhibitor" ] "The corresponding package was removed from nixpkgs.")
+=======
+    (mkRemovedOptionModule [ "services" "dnscrypt-proxy" ] "Use services.dnscrypt-proxy2 instead")
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     (mkRemovedOptionModule [ "services" "firefox" "syncserver" ] "The corresponding package was removed from nixpkgs.")
     (mkRemovedOptionModule [ "services" "flashpolicyd" ] "The flashpolicyd module has been removed. Adobe Flash Player is deprecated.")
     (mkRemovedOptionModule [ "services" "fourStore" ] "The fourStore module has been removed")
@@ -72,6 +81,10 @@ in
     (mkRemovedOptionModule [ "services" "mesos" ] "The corresponding package was removed from nixpkgs.")
     (mkRemovedOptionModule [ "services" "moinmoin" ] "The corresponding package was removed from nixpkgs.")
     (mkRemovedOptionModule [ "services" "mwlib" ] "The corresponding package was removed from nixpkgs.")
+<<<<<<< HEAD
+=======
+    (mkRemovedOptionModule [ "services" "osquery" ] "The osquery module has been removed")
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     (mkRemovedOptionModule [ "services" "pantheon" "files" ] ''
       This module was removed, please add pkgs.pantheon.elementary-files to environment.systemPackages directly.
     '')
@@ -113,6 +126,7 @@ in
     (mkRemovedOptionModule [ "services" "cryptpad" ] "The corresponding package was removed from nixpkgs.")
     (mkRemovedOptionModule [ "services" "rtsp-simple-server" ] "Package has been completely rebranded by upstream as mediamtx, and thus the service and the package were renamed in NixOS as well.")
 
+<<<<<<< HEAD
     (mkRemovedOptionModule [ "i18n" "inputMethod" "fcitx" ] "The fcitx module has been removed. Please use fcitx5 instead")
     (mkRemovedOptionModule [ "services" "dhcpd4" ] ''
       The dhcpd4 module has been removed because ISC DHCP reached its end of life.
@@ -124,6 +138,9 @@ in
       See https://www.isc.org/blogs/isc-dhcp-eol/ for details.
       Please switch to a different implementation like kea or dnsmasq.
     '')
+=======
+    (mkRemovedOptionModule [ "i18n" "inputMethod" "fcitx" ] "The fcitx module has been removed. Plesae use fcitx5 instead")
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     # Do NOT add any option renames here, see top of the file
   ];

@@ -2,14 +2,22 @@
 
 stdenv.mkDerivation rec {
   pname = "cmdstan";
+<<<<<<< HEAD
   version = "2.32.2";
+=======
+  version = "2.32.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "stan-dev";
     repo = pname;
     rev = "v${version}";
     fetchSubmodules = true;
+<<<<<<< HEAD
     hash = "sha256-obV+R1ZjBgunXndCNry+MEne1nQawo81IV2DWwYbbIQ=";
+=======
+    hash = "sha256-VFZ8YOJMGKlROYsmfiQxAgYvz4zPMdzfRfAgStbRSJg=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ stanc ];

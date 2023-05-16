@@ -1,5 +1,8 @@
 { lib
+<<<<<<< HEAD
 , nixosTests
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , vscode-utils
 , useLocalExtensions ? false
 }:
@@ -10,6 +13,11 @@
 let
   inherit (vscode-utils) buildVscodeMarketplaceExtension;
 
+<<<<<<< HEAD
+=======
+  nodeVersion = "16";
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   # As VS Code executes this code on the remote machine
   # we test to see if we can build Node from Nixpkgs
   # otherwise we check if the globally installed Node
@@ -22,6 +30,7 @@ let
     serverNode="$serverDir/node"
     echo "VS Code Node: $serverNode"
 
+<<<<<<< HEAD
     # Check if Node included with VS Code Server runs
     if ! nodeVersion=$($serverNode -v); then
       echo "VS Code Node Version: $nodeVersion"
@@ -53,13 +62,45 @@ let
       fi
 
       rm "$serverDir/patchelf"
+=======
+    # Check if VS Code Server has a non-working Node or the wrong version of Node
+    if ! nodeVersion=$($serverNode -v) || [ "\''${nodeVersion:1:2}" != "${nodeVersion}" ]; then
+      echo "VS Code Node Version: $nodeVersion"
+
+      if nix-build "<nixpkgs>" -A nodejs-${nodeVersion}_x --out-link "$serverDir/nix" && [ -e "$serverDir/nix/bin/node" ]; then
+        nodePath="$serverDir/nix/bin/node"
+      fi
+
+      echo "Node from Nix: $nodePath"
+
+      nodeVersion=$($nodePath -v)
+      echo "Node from Nix Version: $nodeVersion"
+
+      if [ "\''${nodeVersion:1:2}" != "${nodeVersion}" ]; then
+        echo "Getting Node from Nix failed, use Local Node instead"
+        nodePath=$(which node)
+        echo "Local Node: $nodePath"
+        nodeVersion=$($nodePath -v)
+        echo "Local Node Version: $nodeVersion"
+      fi
+
+      if [ "\''${nodeVersion:1:2}" == "${nodeVersion}" ]; then
+        echo PATCH: replacing $serverNode with $nodePath
+        ln -sf $nodePath $serverNode
+      fi
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     fi
 
     nodeVersion=$($serverNode -v)
     echo "VS Code Node Version: $nodeVersion"
 
+<<<<<<< HEAD
     if ! nodeVersion=$($serverNode -v); then
       echo "Unable to fix Node binary, quitting"
+=======
+    if [ "\''${nodeVersion:1:2}" != "${nodeVersion}" ]; then
+      echo "Unsupported VS Code Node version: $nodeVersion", quitting
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       fail_with_exitcode ''${o.InstallExitCode.ServerTransferFailed}
     fi
 
@@ -92,11 +133,18 @@ buildVscodeMarketplaceExtension {
       --replace '# Start the server\n' '${patch}'
   '';
 
+<<<<<<< HEAD
   passthru.tests = { inherit (nixosTests) vscode-remote-ssh; };
 
   meta = {
     description = "Use any remote machine with a SSH server as your development environment.";
     license = lib.licenses.unfree;
     maintainers = [ lib.maintainers.tbenst ];
+=======
+  meta = {
+    description = "Use any remote machine with a SSH server as your development environment.";
+    license = lib.licenses.unfree;
+    maintainers = [ lib.maintainers.SuperSandro2000 lib.maintainers.tbenst ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

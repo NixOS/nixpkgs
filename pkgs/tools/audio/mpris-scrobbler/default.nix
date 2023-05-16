@@ -70,7 +70,11 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
+<<<<<<< HEAD
     description = "Minimalistic scrobbler for ListenBrainz, libre.fm, & last.fm";
+=======
+    description = "Minimalistic scrobbler for libre.fm & last.fm";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     homepage = "https://github.com/mariusor/mpris-scrobbler";
     license = licenses.mit;
     maintainers = with maintainers; [ emantor ];

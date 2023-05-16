@@ -1,5 +1,10 @@
+<<<<<<< HEAD
 { fetchurl, fetchpatch, lib, stdenv, libxml2, libxslt
 , docbook_xml_dtd_45, docbook_xsl, flex, w3m
+=======
+{ fetchurl, lib, stdenv, libxml2, libxslt
+, docbook_xml_dtd_45, docbook_xsl, w3m
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , bash, getopt, makeWrapper }:
 
 stdenv.mkDerivation rec {
@@ -10,6 +15,7 @@ stdenv.mkDerivation rec {
     sha256 = "0xhj8b2pwp4vhl9y16v3dpxpsakkflfamr191mprzsspg4xdyc0i";
   };
 
+<<<<<<< HEAD
   # Note: These patches modify `xmlif/xmlif.l`, which requires `flex` to be rerun.
   patches = [
     # Fixes implicit `int` on `main`, which is an error with clang 16.
@@ -24,6 +30,8 @@ stdenv.mkDerivation rec {
     })
   ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   postPatch = ''
     patchShebangs xmlif/test/run-test
 
@@ -37,7 +45,11 @@ stdenv.mkDerivation rec {
 
   # `libxml2' provides `xmllint', needed at build-time and run-time.
   # `libxslt' provides `xsltproc', used by `xmlto' at run-time.
+<<<<<<< HEAD
   nativeBuildInputs = [ makeWrapper flex getopt ];
+=======
+  nativeBuildInputs = [ makeWrapper getopt ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   buildInputs = [ libxml2 libxslt docbook_xml_dtd_45 docbook_xsl ];
 
   postInstall = ''

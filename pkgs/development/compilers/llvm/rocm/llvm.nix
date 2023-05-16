@@ -39,7 +39,10 @@
   )
 )]
 , extraPostInstall ? ""
+<<<<<<< HEAD
 , requiredSystemFeatures ? [ ]
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , extraLicenses ? [ ]
 , isBroken ? false
 }:
@@ -159,8 +162,11 @@ in stdenv.mkDerivation (finalAttrs: {
     };
   };
 
+<<<<<<< HEAD
   inherit requiredSystemFeatures;
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   meta = with lib; {
     description = "ROCm fork of the LLVM compiler infrastructure";
     homepage = "https://github.com/RadeonOpenCompute/llvm-project";

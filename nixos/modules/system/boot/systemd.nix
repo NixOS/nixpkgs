@@ -395,9 +395,13 @@ in
       description = lib.mdDoc ''
         The amount of time which can elapse after a reboot has been triggered
         before a watchdog hardware device will automatically reboot the system.
+<<<<<<< HEAD
         Valid time units include "ms", "s", "min", "h", "d", and "w". If left
         `null`, systemd will use its default of `10min`; see also {command}`man
         5 systemd-system.conf`.
+=======
+        Valid time units include "ms", "s", "min", "h", "d", and "w".
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       '';
     };
 
@@ -589,6 +593,7 @@ in
     # Some overrides to upstream units.
     systemd.services."systemd-backlight@".restartIfChanged = false;
     systemd.services."systemd-fsck@".restartIfChanged = false;
+<<<<<<< HEAD
     systemd.services."systemd-fsck@".path = [ pkgs.util-linux ] ++ config.system.fsPackages;
     systemd.services."systemd-makefs@" = {
       restartIfChanged = false;
@@ -604,6 +609,9 @@ in
       path = [ pkgs.util-linux ];
       overrideStrategy = "asDropin";
     };
+=======
+    systemd.services."systemd-fsck@".path = [ config.system.path ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     systemd.services.systemd-random-seed.restartIfChanged = false;
     systemd.services.systemd-remount-fs.restartIfChanged = false;
     systemd.services.systemd-update-utmp.restartIfChanged = false;

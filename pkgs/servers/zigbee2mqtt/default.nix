@@ -8,16 +8,27 @@
 
 buildNpmPackage rec {
   pname = "zigbee2mqtt";
+<<<<<<< HEAD
   version = "1.33.0";
+=======
+  version = "1.30.4";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "Koenkk";
     repo = "zigbee2mqtt";
     rev = version;
+<<<<<<< HEAD
     hash = "sha256-DdRcDSvgFf+NSDpWT4MnAOLNJ5sfqvJqKBhfPwTHd/g=";
   };
 
   npmDepsHash = "sha256-ov1ftDqJtxLCu3xgtGcg+Q2OMkOsHrwk1SNNfdlUieY=";
+=======
+    hash = "sha256-jS5O52frZY+OVLtMZkjZQskKuHs5T8zKTwjGKh77EAo=";
+  };
+
+  npmDepsHash = "sha256-71BbMBt0vXsuL8senZ7IvT3Y3OtvewQtWk1bzKUBtjI=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nativeBuildInputs = [
     python3

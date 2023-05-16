@@ -20,11 +20,19 @@
 
 buildPythonPackage rec {
   pname = "python-ironicclient";
+<<<<<<< HEAD
   version = "5.4.0";
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-Q9yGuYf9TS7RCo9aV1hnNSrHoll7AOUiSpzRYxi+JXU=";
+=======
+  version = "5.1.0";
+
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-yYmzZuwZSasN6g6Bosivexe5oOy3dP+l/cD5TkXC87g=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [

@@ -11,6 +11,7 @@
 
 buildPythonPackage rec {
   pname = "pytest-md-report";
+<<<<<<< HEAD
   version = "0.4.0";
   format = "setuptools";
 
@@ -19,6 +20,16 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-iabj6WuS6+65O4ztagT1/H+U8/SKySQ9bQiOfvln1AQ=";
+=======
+  version = "0.3.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.6";
+
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-ra88WXG6+xHSjOcy6tdYjvpKpNlvu6lq+sZckLadAlU=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [

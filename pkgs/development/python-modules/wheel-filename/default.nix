@@ -1,11 +1,17 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+<<<<<<< HEAD
 , fetchpatch
 , pytestCheckHook
 , pythonOlder
 , setuptools
 , wheel
+=======
+, pytestCheckHook
+, pythonOlder
+, setuptools
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 buildPythonPackage rec {
@@ -22,6 +28,7 @@ buildPythonPackage rec {
     hash = "sha256-M3XGHG733X5qKuMS6mvFSFHYOwWPaBMXw+w0eYo6ByE=";
   };
 
+<<<<<<< HEAD
   patches = [
     (fetchpatch {
       name = "remove-wheel-dependency-constraint.patch";
@@ -33,6 +40,10 @@ buildPythonPackage rec {
   nativeBuildInputs = [
     setuptools
     wheel
+=======
+  nativeBuildInputs = [
+    setuptools
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   nativeCheckInputs = [

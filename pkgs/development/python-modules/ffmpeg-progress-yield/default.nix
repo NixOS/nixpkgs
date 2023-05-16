@@ -11,14 +11,22 @@
 
 buildPythonPackage rec {
   pname = "ffmpeg-progress-yield";
+<<<<<<< HEAD
   version = "0.7.8";
+=======
+  version = "0.7.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
+<<<<<<< HEAD
     hash = "sha256-muauX4Mq58ew9lGPE0H+bu4bqPydNADLocujjy6qRh4=";
+=======
+    hash = "sha256-wK33h+Qg737hSv+2HF4hvfBDDsJpI+7mGbRgUQvrZb0=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [ colorama tqdm ];

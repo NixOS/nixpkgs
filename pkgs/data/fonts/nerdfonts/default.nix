@@ -1,6 +1,10 @@
 { stdenv
 , fetchurl
 , lib
+<<<<<<< HEAD
+=======
+, unzip
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 # To select only certain fonts, put a list of strings to `fonts`: every key in
 # ./shas.nix is an optional font
 , fonts ? []
@@ -31,7 +35,11 @@ let
     fName:
     fSha:
     (fetchurl {
+<<<<<<< HEAD
       url = "https://github.com/ryanoasis/nerd-fonts/releases/download/v${version}/${fName}.tar.xz";
+=======
+      url = "https://github.com/ryanoasis/nerd-fonts/releases/download/v${version}/${fName}.zip";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       sha256 = fSha;
     })
   ) selectedFontsShas;
@@ -41,7 +49,15 @@ stdenv.mkDerivation rec {
   inherit version;
   inherit srcs;
   pname = "nerdfonts";
+<<<<<<< HEAD
   sourceRoot = ".";
+=======
+  nativeBuildInputs = [
+    unzip
+  ];
+  sourceRoot = ".";
+  unpackCmd = "unzip -o $curSrc";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   buildPhase = ''
     echo "selected fonts are ${toString selectedFonts}"
     ls *.otf *.ttf

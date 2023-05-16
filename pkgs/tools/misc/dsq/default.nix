@@ -1,7 +1,16 @@
 { lib
+<<<<<<< HEAD
 , fetchFromGitHub
 , buildGoModule
 , nix-update-script
+=======
+, stdenv
+, fetchFromGitHub
+, buildGoModule
+, runCommand
+, nix-update-script
+, fetchurl
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , testers
 , python3
 , curl
@@ -21,7 +30,11 @@ buildGoModule rec {
     hash = "sha256-FZBJe+2y4HV3Pgeap4yvD0a8M/j+6pAJEFpoQVVE1ec=";
   };
 
+<<<<<<< HEAD
   vendorHash = "sha256-MbBR+OC1OGhZZGcZqc+Jzmabdc5ZfFEwzqP5YMrj6mY=";
+=======
+  vendorSha256 = "sha256-MbBR+OC1OGhZZGcZqc+Jzmabdc5ZfFEwzqP5YMrj6mY=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   ldflags = [ "-X" "main.Version=${version}" ];
 
@@ -49,7 +62,10 @@ buildGoModule rec {
   };
 
   meta = with lib; {
+<<<<<<< HEAD
     mainProgram = "dsq";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     description = "Commandline tool for running SQL queries against JSON, CSV, Excel, Parquet, and more";
     homepage = "https://github.com/multiprocessio/dsq";
     license = licenses.asl20;

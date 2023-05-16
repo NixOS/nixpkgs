@@ -18,7 +18,11 @@ buildGoModule rec {
     sha256 = "sha256-gti2W1y0iFNyDxKjS7joJn3FkZ9AadYsImu4VEdErS4=";
   };
 
+<<<<<<< HEAD
   vendorHash = "sha256-xh/ndjhvSz0atJqOeajAm4nw5/TmMrOdOgTauKAsAcA=";
+=======
+  vendorSha256 = "sha256-xh/ndjhvSz0atJqOeajAm4nw5/TmMrOdOgTauKAsAcA=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   ldflags = [
     "-s" "-w" "-X moul.io/assh/v2/pkg/version.Version=${version}"

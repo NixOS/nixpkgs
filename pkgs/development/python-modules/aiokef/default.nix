@@ -2,7 +2,13 @@
 , async-timeout
 , buildPythonPackage
 , fetchFromGitHub
+<<<<<<< HEAD
 , pytestCheckHook
+=======
+, pytest-cov
+, pytestCheckHook
+, pytest-mypy
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , pythonOlder
 , tenacity
 }:
@@ -19,18 +25,26 @@ buildPythonPackage rec {
     sha256 = "0ms0dwrpj80w55svcppbnp7vyl5ipnjfp1c436k5c7pph4q5pxk9";
   };
 
+<<<<<<< HEAD
   postPatch = ''
     substituteInPlace tox.ini \
       --replace "--cov --cov-append --cov-fail-under=30 --cov-report=" "" \
       --replace "--mypy" ""
   '';
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   propagatedBuildInputs = [
     async-timeout
     tenacity
   ];
 
   nativeCheckInputs = [
+<<<<<<< HEAD
+=======
+    pytest-cov
+    pytest-mypy
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     pytestCheckHook
   ];
 

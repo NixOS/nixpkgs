@@ -11,8 +11,13 @@
 let
   major = "11";
   minor = "0";
+<<<<<<< HEAD
   update = "19";
   build = "7";
+=======
+  update = "18";
+  build = "10";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   # when building a headless jdk, also bootstrap it with a headless jdk
   openjdk-bootstrap = openjdk11-bootstrap.override { gtkSupport = !headless; };
@@ -25,7 +30,11 @@ let
       owner = "openjdk";
       repo = "jdk${major}u";
       rev = "jdk-${version}";
+<<<<<<< HEAD
       sha256 = "sha256-mp8toB1dWcwOtMqNFd7UwRg8pLJckovqD/LD5p9zUoA=";
+=======
+      sha256 = "sha256-QGOpMIrWwOtIcUY/CLbTRDvcVTG2xioZu46v+n+IIQ4=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
 
     nativeBuildInputs = [ pkg-config autoconf unzip ];

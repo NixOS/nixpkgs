@@ -281,9 +281,14 @@ in package-set { inherit pkgs lib callPackage; } self // {
     # GHC is setup with a package database with all the specified Haskell packages.
     #
     # ghcWithPackages :: (HaskellPkgSet -> [ HaskellPkg ]) -> Derivation
+<<<<<<< HEAD
     ghcWithPackages = buildHaskellPackages.callPackage ./with-packages-wrapper.nix {
       haskellPackages = self;
       inherit (self) hoogleWithPackages;
+=======
+    ghcWithPackages = self.callPackage ./with-packages-wrapper.nix {
+      haskellPackages = self;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
 
 

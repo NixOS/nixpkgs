@@ -4,14 +4,20 @@
 , extra-cmake-modules
 , wrapGAppsHook
 
+<<<<<<< HEAD
 , futuresql
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , gst_all_1
 , kcoreaddons
 , kcrash
 , ki18n
 , kirigami2
 , kirigami-addons
+<<<<<<< HEAD
 , qcoro
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , qtimageformats
 , qtmultimedia
 , qtquickcontrols2
@@ -29,13 +35,19 @@ mkDerivation rec {
   ];
 
   buildInputs = [
+<<<<<<< HEAD
     futuresql
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     kcoreaddons
     kcrash
     ki18n
     kirigami2
     kirigami-addons
+<<<<<<< HEAD
     qcoro
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     qtimageformats
     qtmultimedia
     qtquickcontrols2

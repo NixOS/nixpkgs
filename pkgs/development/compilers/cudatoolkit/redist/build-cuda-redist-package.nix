@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Type Aliases
 #
 # See ./extension.nix:
@@ -5,12 +6,15 @@
 # - ReleaseFeaturesAttrs
 #
 # General callPackage-supplied arguments
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 { lib
 , stdenv
 , backendStdenv
 , fetchurl
 , autoPatchelfHook
 , autoAddOpenGLRunpathHook
+<<<<<<< HEAD
 , markForCudatoolkitRootHook
 , lndir
 , symlinkJoin
@@ -64,6 +68,25 @@ backendStdenv.mkDerivation {
   # We do need some other phases, like configurePhase, so the multiple-output setup hook works.
   dontBuild = true;
 
+=======
+}:
+
+pname:
+attrs:
+
+let
+  arch = "linux-x86_64";
+in
+backendStdenv.mkDerivation {
+  inherit pname;
+  inherit (attrs) version;
+
+  src = assert (lib.hasAttr arch attrs); fetchurl {
+    url = "https://developer.download.nvidia.com/compute/cuda/redist/${attrs.${arch}.relative_path}";
+    inherit (attrs.${arch}) sha256;
+  };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nativeBuildInputs = [
     autoPatchelfHook
     # This hook will make sure libcuda can be found
@@ -71,7 +94,10 @@ backendStdenv.mkDerivation {
     # directory to the rpath of all ELF binaries.
     # Check e.g. with `patchelf --print-rpath path/to/my/binary
     autoAddOpenGLRunpathHook
+<<<<<<< HEAD
     markForCudatoolkitRootHook
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   buildInputs = [
@@ -88,6 +114,7 @@ backendStdenv.mkDerivation {
     "$ORIGIN"
   ];
 
+<<<<<<< HEAD
   installPhase = with releaseFeaturesAttrs;
     # Pre-install hook
     ''
@@ -170,5 +197,25 @@ backendStdenv.mkDerivation {
     # Force the use of the default, fat output by default (even though `dev` exists, which
     # causes Nix to prefer that output over the others if outputSpecified isn't set).
     outputsToInstall = [ "out" ];
+=======
+  dontBuild = true;
+
+  # TODO: choose whether to install static/dynamic libs
+  installPhase = ''
+    runHook preInstall
+    rm LICENSE
+    mkdir -p $out
+    mv * $out
+    runHook postInstall
+  '';
+
+  passthru.stdenv = backendStdenv;
+
+  meta = {
+    description = attrs.name;
+    license = lib.licenses.unfree;
+    maintainers = lib.teams.cuda.members;
+    platforms = lib.optionals (lib.hasAttr arch attrs) [ "x86_64-linux" ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

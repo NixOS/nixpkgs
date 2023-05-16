@@ -2,17 +2,29 @@
 
 stdenv.mkDerivation rec {
   pname = "mediainfo";
+<<<<<<< HEAD
   version = "23.07";
 
   src = fetchurl {
     url = "https://mediaarea.net/download/source/mediainfo/${version}/mediainfo_${version}.tar.xz";
     hash = "sha256-ttfanimZX9NKIhAIJbhD50wyx7xnrbARZrG+7epJ9dA=";
+=======
+  version = "23.04";
+
+  src = fetchurl {
+    url = "https://mediaarea.net/download/source/mediainfo/${version}/mediainfo_${version}.tar.xz";
+    sha256 = "sha256-Uiut1rHk6LV+giW6e0nvgn35ffTLaLbU/HkQ92xf32k=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];
   buildInputs = [ libzen libmediainfo zlib ];
 
+<<<<<<< HEAD
   sourceRoot = "MediaInfo/Project/GNU/CLI";
+=======
+  sourceRoot = "./MediaInfo/Project/GNU/CLI/";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   configureFlags = [ "--with-libmediainfo=${libmediainfo}" ];
 
@@ -28,6 +40,9 @@ stdenv.mkDerivation rec {
     license = licenses.bsd2;
     platforms = platforms.unix;
     maintainers = [ maintainers.devhell ];
+<<<<<<< HEAD
     mainProgram = "mediainfo";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

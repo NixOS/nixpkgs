@@ -5,13 +5,21 @@
 
 stdenv.mkDerivation rec {
   pname = "keepalived";
+<<<<<<< HEAD
   version = "2.2.8";
+=======
+  version = "2.2.7";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "acassen";
     repo = "keepalived";
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-QkebGQCYE4ccUvcxKG3qQ4wqC+RzxGHim8kgHQbIr5Q=";
+=======
+    sha256 = "sha256-erpYC4klkgvZ9D+4qM/qIHajsyOGKRbX7lhs6lfWFTQ=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   buildInputs = [

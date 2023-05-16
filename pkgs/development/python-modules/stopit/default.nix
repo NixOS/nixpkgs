@@ -1,8 +1,11 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+<<<<<<< HEAD
 , setuptools
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 buildPythonPackage rec {
@@ -17,10 +20,13 @@ buildPythonPackage rec {
     hash = "sha256-uXJUA70JOGWT2NmS6S7fPrTWAJZ0mZ/hICahIUzjfbw=";
   };
 
+<<<<<<< HEAD
   propagatedBuildInputs = [
     setuptools # for pkg_resources
   ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pythonImportsCheck = [ "stopit" ];
 
   meta = with lib; {

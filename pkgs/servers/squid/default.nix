@@ -5,11 +5,19 @@
 
 stdenv.mkDerivation rec {
   pname = "squid";
+<<<<<<< HEAD
   version = "5.9";
 
   src = fetchurl {
     url = "http://www.squid-cache.org/Versions/v5/${pname}-${version}.tar.xz";
     hash = "sha256-P+XCAH2idXRGr5G275dPFUsggSCpo5OW6mgeXEq7BLU=";
+=======
+  version = "5.8";
+
+  src = fetchurl {
+    url = "http://www.squid-cache.org/Versions/v5/${pname}-${version}.tar.xz";
+    hash = "sha256-fpafjI31acuGRtZ+5Z/b8mJ76toSlUwwHnwanBwRc08=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ pkg-config ];

@@ -1,6 +1,10 @@
 { lib
 , stdenv
 , fetchFromGitHub
+<<<<<<< HEAD
+=======
+, fetchpatch
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , cargo
 , cmake
 , ninja
@@ -34,19 +38,31 @@
 
 stdenv.mkDerivation rec {
   pname = "ddnet";
+<<<<<<< HEAD
   version = "17.2.1";
+=======
+  version = "16.9";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "ddnet";
     repo = pname;
     rev = version;
+<<<<<<< HEAD
     hash = "sha256-FJnwabNEEGZDM9wNWMGclFv2IMlXg4Ob3PEbGiGQKKc=";
+=======
+    hash = "sha256-DOP2v82346YQtL55Ix0gn9cTpvbO1ooeCIGRpgEMFpA=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     name = "${pname}-${version}";
     inherit src;
+<<<<<<< HEAD
     hash = "sha256-hUrsumBiKovSD7xT1PgH2Q+7HYgyxnFnz33YJPdd5+c=";
+=======
+    hash = "sha256-xTB8wg4PIdg7MB3545zN83/41fUsqFE2Sk5aTXrGhps=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

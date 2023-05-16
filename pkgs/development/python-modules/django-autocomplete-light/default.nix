@@ -7,7 +7,11 @@
 , django-debug-toolbar
 , django-extensions
 , django-taggit
+<<<<<<< HEAD
 , django-tagging
+=======
+, django_tagging
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , mock
 , pytest-django
 , selenium
@@ -41,7 +45,11 @@ buildPythonPackage rec {
     django-debug-toolbar
     django-extensions
     django-taggit
+<<<<<<< HEAD
     django-tagging
+=======
+    django_tagging
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     mock
     pytest-django
     selenium

@@ -7,13 +7,21 @@
 stdenv.mkDerivation rec {
   pname = "secp256k1";
 
+<<<<<<< HEAD
   version = "0.3.2";
+=======
+  version = "0.3.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "bitcoin-core";
     repo = "secp256k1";
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-9nJJVENMXjXEJZzw8DHzin1DkFkF8h9m/c6PuM7Uk4s=";
+=======
+    sha256 = "sha256-0Xb/hot88HRDzwP1hJq47nrUbKVJFzsIKCQxLznQkrM=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ autoreconfHook ];

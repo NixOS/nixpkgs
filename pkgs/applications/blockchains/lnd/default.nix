@@ -6,16 +6,27 @@
 
 buildGoModule rec {
   pname = "lnd";
+<<<<<<< HEAD
   version = "0.16.3-beta";
+=======
+  version = "0.16.2-beta";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "lightningnetwork";
     repo = "lnd";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-/seSpWnlQmeU4vQtlHMOSedPXP9HJp1GyxcB1LqHayA=";
   };
 
   vendorHash = "sha256-obrSVMqTwHe7231wa0OuoT6ANBqkQbkHIy93J2f68Zk=";
+=======
+    sha256 = "sha256-s0m/aS99uB6LZb0+73SQ++mF0Ukg6IYIL+jbEi8ezW0=";
+  };
+
+  vendorSha256 = "sha256-7Ydl56Z6aOMBQ1RamFzjD/yp3zgQLkF5WEoOQe1Urv0=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   subPackages = [ "cmd/lncli" "cmd/lnd" ];
 

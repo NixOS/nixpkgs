@@ -30,6 +30,10 @@ buildPythonPackage rec {
     description = "A sqlalchemy plugin that allows postgres use of CITEXT";
     homepage = "https://github.com/mahmoudimus/sqlalchemy-citext";
     license = licenses.mit;
+<<<<<<< HEAD
     maintainers = [ ];
+=======
+    maintainers = [ maintainers.costrouc ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

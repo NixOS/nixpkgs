@@ -142,7 +142,11 @@ in {
 
       user = mkOption {
         default = "maddy";
+<<<<<<< HEAD
         type = with types; uniq str;
+=======
+        type = with types; uniq string;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         description = lib.mdDoc ''
           User account under which maddy runs.
 
@@ -156,7 +160,11 @@ in {
 
       group = mkOption {
         default = "maddy";
+<<<<<<< HEAD
         type = with types; uniq str;
+=======
+        type = with types; uniq string;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         description = lib.mdDoc ''
           Group account under which maddy runs.
 
@@ -170,7 +178,11 @@ in {
 
       hostname = mkOption {
         default = "localhost";
+<<<<<<< HEAD
         type = with types; uniq str;
+=======
+        type = with types; uniq string;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         example = ''example.com'';
         description = lib.mdDoc ''
           Hostname to use. It should be FQDN.
@@ -179,7 +191,11 @@ in {
 
       primaryDomain = mkOption {
         default = "localhost";
+<<<<<<< HEAD
         type = with types; uniq str;
+=======
+        type = with types; uniq string;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         example = ''mail.example.com'';
         description = lib.mdDoc ''
           Primary MX domain to use. It should be FQDN.
@@ -206,7 +222,11 @@ in {
           Server configuration, see
           [https://maddy.email](https://maddy.email) for
           more information. The default configuration of this module will setup
+<<<<<<< HEAD
           minimal Maddy instance for mail transfer without TLS encryption.
+=======
+          minimal maddy instance for mail transfer without TLS encryption.
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
           ::: {.note}
           This should not be used in a production environment.
@@ -216,6 +236,7 @@ in {
 
       tls = {
         loader = mkOption {
+<<<<<<< HEAD
           type = with types; nullOr (enum [ "off" "file" "acme" ]);
           default = "off";
           description = lib.mdDoc ''
@@ -234,6 +255,15 @@ in {
             plaintext. Instead the `secrets` option can be used to read secrets
             at runtime as environment variables. Secrets can be referenced with
             `{env:VAR}`.
+=======
+          type = with types; nullOr (enum [ "file" "off" ]);
+          default = "off";
+          description = lib.mdDoc ''
+            TLS certificates are obtained by modules called "certificate
+            loaders". Currently only the file loader is supported which reads
+            certificates from files specifying the options `keyPaths` and
+            `certPaths`.
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           '';
         };
 
@@ -272,6 +302,7 @@ in {
         extraConfig = mkOption {
           type = with types; nullOr lines;
           description = lib.mdDoc ''
+<<<<<<< HEAD
             Arguments for the specified certificate loader.
 
             In case the `tls` loader is set, the defaults are considered secure
@@ -279,6 +310,13 @@ in {
             For available options see [upstream manual](https://maddy.email/reference/tls/).
 
             For ACME configuration, see [following page](https://maddy.email/reference/tls-acme).
+=======
+            Arguments for the specific certificate loader. Note that Maddy uses
+            secure defaults for the TLS configuration so there is no need to
+            change anything in most cases.
+            See [upstream manual](https://maddy.email/reference/tls/) for
+            available options.
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           '';
           default = "";
         };
@@ -334,6 +372,7 @@ in {
         });
       };
 
+<<<<<<< HEAD
       secrets = lib.mkOption {
         type = with types; listOf path;
         description = lib.mdDoc ''
@@ -344,11 +383,14 @@ in {
         default = [ ];
       };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
   };
 
   config = mkIf cfg.enable {
 
+<<<<<<< HEAD
     assertions = [
       {
         assertion = cfg.tls.loader == "file" -> cfg.tls.certificates != [];
@@ -370,6 +412,17 @@ in {
         '';
       }
     ];
+=======
+    assertions = [{
+      assertion = cfg.tls.loader == "file" -> cfg.tls.certificates != [];
+      message = ''
+        If maddy is configured to use TLS, tls.certificates with attribute sets
+        of certPath and keyPath must be provided.
+        Read more about obtaining TLS certificates here:
+        https://maddy.email/tutorials/setting-up/#tls-certificates
+      '';
+    }];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     systemd = {
 
@@ -380,7 +433,10 @@ in {
             User = cfg.user;
             Group = cfg.group;
             StateDirectory = [ "maddy" ];
+<<<<<<< HEAD
             EnvironmentFile = cfg.secrets;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           };
           restartTriggers = [ config.environment.etc."maddy/maddy.conf".source ];
           wantedBy = [ "multi-user.target" ];
@@ -427,12 +483,15 @@ in {
           ) cfg.tls.certificates)} ${optionalString (cfg.tls.extraConfig != "") ''
             { ${cfg.tls.extraConfig} }
           ''}
+<<<<<<< HEAD
         '' else if (cfg.tls.loader == "acme") then ''
           tls {
             loader acme {
               ${cfg.tls.extraConfig}
             }
           }
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         '' else if (cfg.tls.loader == "off") then ''
           tls off
         '' else ""}

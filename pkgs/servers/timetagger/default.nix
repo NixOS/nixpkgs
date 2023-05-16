@@ -1,4 +1,10 @@
+<<<<<<< HEAD
 { python3
+=======
+{ lib
+, python3
+, fetchFromGitHub
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 , addr ? "127.0.0.1"
 , port ? 8082
@@ -22,10 +28,16 @@ python3.pkgs.buildPythonApplication {
   installPhase = ''
     mkdir -p $out/bin
     echo "#!${python3.interpreter}" >> $out/bin/timetagger
+<<<<<<< HEAD
     cat timetagger/__main__.py >> $out/bin/timetagger
     chmod +x $out/bin/timetagger
     wrapProgram $out/bin/timetagger \
       --set TIMETAGGER_BIND "${addr}:${toString port}"
+=======
+    cat run.py >> $out/bin/timetagger
+    sed -Ei 's,0\.0\.0\.0:80,${addr}:${toString port},' $out/bin/timetagger
+    chmod +x $out/bin/timetagger
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '';
 }
 

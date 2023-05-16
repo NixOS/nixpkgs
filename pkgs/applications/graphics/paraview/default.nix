@@ -6,7 +6,11 @@
 }:
 
 let
+<<<<<<< HEAD
   version = "5.11.1";
+=======
+  version = "5.11.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   docFiles = [
     (fetchurl {
@@ -35,7 +39,11 @@ in stdenv.mkDerivation rec {
     owner = "paraview";
     repo = "paraview";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-LatNHfiAqB2kqzERRnYae0WIXBb4nXQ79Be4kuh8NFQ=";
+=======
+    sha256 = "sha256-WvkKGl5lG+apX6m4ULVZZVtDsSUjEVXe/seh95b+LmI=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     fetchSubmodules = true;
   };
 

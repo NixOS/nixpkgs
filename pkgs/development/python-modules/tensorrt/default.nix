@@ -38,7 +38,11 @@ buildPythonPackage rec {
     cudaPackages.tensorrt
   ];
 
+<<<<<<< HEAD
   pythonImportsCheck = [
+=======
+  pythonCheckImports = [
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "tensorrt"
   ];
 

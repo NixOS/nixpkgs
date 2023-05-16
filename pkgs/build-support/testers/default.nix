@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 { pkgs, buildPackages, lib, callPackage, runCommand, stdenv, substituteAll, testers }:
+=======
+{ pkgs, buildPackages, lib, callPackage, runCommand, stdenv, substituteAll, }:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 # Documentation is in doc/builders/testers.chapter.md
 {
   # See https://nixos.org/manual/nixpkgs/unstable/#tester-testBuildFailure
@@ -61,7 +65,11 @@
       version ? package.version,
     }: runCommand "${package.name}-test-version" { nativeBuildInputs = [ package ]; meta.timeout = 60; } ''
       if output=$(${command} 2>&1); then
+<<<<<<< HEAD
         if grep -Fw -- "${version}" - <<< "$output"; then
+=======
+        if grep -Fw "${version}" - <<< "$output"; then
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           touch $out
         else
           echo "Version string '${version}' not found!" >&2
@@ -97,9 +105,13 @@
   # See doc/builders/testers.chapter.md or
   # https://nixos.org/manual/nixpkgs/unstable/#tester-runNixOSTest
   runNixOSTest =
+<<<<<<< HEAD
     let nixos = import ../../../nixos/lib {
       inherit lib;
     };
+=======
+    let nixos = import ../../../nixos/lib {};
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     in testModule:
         nixos.runTest {
           _file = "pkgs.runNixOSTest implementation";
@@ -137,6 +149,7 @@
         in
           nixosTesting.simpleTest calledTest;
 
+<<<<<<< HEAD
   hasPkgConfigModule =
     { moduleName, ... }@args:
     lib.warn "testers.hasPkgConfigModule has been deprecated in favor of testers.hasPkgConfigModules. It accepts a list of strings via the moduleNames argument instead of a single moduleName." (
@@ -145,6 +158,9 @@
       })
     );
   hasPkgConfigModules = callPackage ./hasPkgConfigModules/tester.nix { };
+=======
+  hasPkgConfigModule = callPackage ./hasPkgConfigModule/tester.nix { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   testMetaPkgConfig = callPackage ./testMetaPkgConfig/tester.nix { };
 }

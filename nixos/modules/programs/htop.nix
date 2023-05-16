@@ -9,8 +9,12 @@ let
   fmt = value:
     if isList value then concatStringsSep " " (map fmt value) else
     if isString value then value else
+<<<<<<< HEAD
     if isBool value then if value then "1" else "0" else
     if isInt value then toString value else
+=======
+    if isBool value || isInt value then toString value else
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     throw "Unrecognized type ${typeOf value} in htop settings";
 
 in

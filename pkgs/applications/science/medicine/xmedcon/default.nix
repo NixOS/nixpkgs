@@ -6,7 +6,10 @@
 , pkg-config
 , libpng
 , zlib
+<<<<<<< HEAD
 , wrapGAppsHook
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 stdenv.mkDerivation rec {
@@ -25,11 +28,19 @@ stdenv.mkDerivation rec {
     zlib
   ];
 
+<<<<<<< HEAD
   nativeBuildInputs = [ pkg-config wrapGAppsHook ];
 
   meta = with lib; {
     description = "An open source toolkit for medical image conversion ";
     homepage = "https://xmedcon.sourceforge.net/";
+=======
+  nativeBuildInputs = [ pkg-config ];
+
+  meta = with lib; {
+    description = "An open source toolkit for medical image conversion ";
+    homepage = "https://xmedcon.sourceforge.io/Main/HomePage";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     license = licenses.lgpl2Plus;
     maintainers = with maintainers; [ arianvp flokli ];
     platforms = platforms.darwin ++ platforms.linux;

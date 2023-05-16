@@ -6,7 +6,11 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "rafa-dot-el";
     repo = "talib";
+<<<<<<< HEAD
     rev = version;
+=======
+    rev = "${version}";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     sha256 = "sha256-bIzN8f9ZiOLaVzGAXcZUHUh/v9z1U+zY+MnyjJr1lSw=";
   };
 

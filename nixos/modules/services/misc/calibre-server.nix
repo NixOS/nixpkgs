@@ -6,6 +6,7 @@ let
 
   cfg = config.services.calibre-server;
 
+<<<<<<< HEAD
   documentationLink = "https://manual.calibre-ebook.com";
   generatedDocumentationLink = documentationLink + "/generated/en/calibre-server.html";
 
@@ -17,6 +18,8 @@ let
       "--userdb" = cfg.auth.userDb;
     }) ++ [(optionalString (cfg.auth.enable == true) "--enable-auth")])
   );
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 in
 
 {
@@ -29,10 +32,16 @@ in
     )
   ];
 
+<<<<<<< HEAD
+=======
+  ###### interface
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   options = {
     services.calibre-server = {
 
       enable = mkEnableOption (lib.mdDoc "calibre-server");
+<<<<<<< HEAD
       package = lib.mkPackageOptionMD pkgs "calibre" { };
 
       libraries = mkOption {
@@ -122,6 +131,47 @@ in
       };
 
     };
+=======
+
+      libraries = mkOption {
+        description = lib.mdDoc ''
+          The directories of the libraries to serve. They must be readable for the user under which the server runs.
+        '';
+        type = types.listOf types.path;
+      };
+
+      user = mkOption {
+        description = lib.mdDoc "The user under which calibre-server runs.";
+        type = types.str;
+        default = "calibre-server";
+      };
+
+      group = mkOption {
+        description = lib.mdDoc "The group under which calibre-server runs.";
+        type = types.str;
+        default = "calibre-server";
+      };
+
+    };
+  };
+
+
+  ###### implementation
+
+  config = mkIf cfg.enable {
+
+    systemd.services.calibre-server = {
+        description = "Calibre Server";
+        after = [ "network.target" ];
+        wantedBy = [ "multi-user.target" ];
+        serviceConfig = {
+          User = cfg.user;
+          Restart = "always";
+          ExecStart = "${pkgs.calibre}/bin/calibre-server ${lib.concatStringsSep " " cfg.libraries}";
+        };
+
+      };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     environment.systemPackages = [ pkgs.calibre ];
 
@@ -142,5 +192,8 @@ in
 
   };
 
+<<<<<<< HEAD
   meta.maintainers = with lib.maintainers; [ gaelreyrol ];
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }

@@ -28,7 +28,11 @@ in
         type = types.package;
         default = pkgs.xonsh;
         defaultText = literalExpression "pkgs.xonsh";
+<<<<<<< HEAD
         example = literalExpression "pkgs.xonsh.override { extraPackages = ps: [ ps.requests ]; }";
+=======
+        example = literalExpression "pkgs.xonsh.override { configFile = \"/path/to/xonshrc\"; }";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         description = lib.mdDoc ''
           xonsh package to use.
         '';
@@ -83,3 +87,7 @@ in
   };
 
 }
+<<<<<<< HEAD
+=======
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)

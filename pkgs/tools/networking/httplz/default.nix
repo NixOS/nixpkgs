@@ -12,15 +12,26 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "httplz";
+<<<<<<< HEAD
   version = "1.13.2";
+=======
+  version = "1.12.6";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchCrate {
     inherit version;
     pname = "https";
+<<<<<<< HEAD
     hash = "sha256-uxEMgSrcxMZD/3GQuH9S/oYtMUPzgMR61ZzLcb65zXU=";
   };
 
   cargoHash = "sha256-8cH8QrnkfPF0Di7+Ns/P/8cFe0jej/v7m4fkkfTFdvs=";
+=======
+    sha256 = "sha256-qkhou4Rmv31zwyL8aM7U0YUZwOb3KQMHdOQsOrRI1TA=";
+  };
+
+  cargoSha256 = "sha256-BuNCKtK9ePV0d9o/DlW098Y4DWTIl0YKyryXMv09Woc=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nativeBuildInputs = [
     installShellFiles
@@ -46,7 +57,10 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "A basic http server for hosting a folder fast and simply";
     homepage = "https://github.com/thecoshman/http";
+<<<<<<< HEAD
     changelog = "https://github.com/thecoshman/http/releases/tag/v${version}";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     license = licenses.mit;
     maintainers = with maintainers; [ figsoda ];
   };

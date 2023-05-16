@@ -34,7 +34,13 @@ stdenv.mkDerivation rec {
 
   src = srcs.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
+<<<<<<< HEAD
   sourceRoot = ".";
+=======
+  setSourceRoot = ''
+    sourceRoot=$PWD
+  '';
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   dontBuild = true;
   dontConfigure = true;

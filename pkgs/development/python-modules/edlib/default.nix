@@ -13,7 +13,11 @@ buildPythonPackage {
 
   disabled = pythonOlder "3.6";
 
+<<<<<<< HEAD
   sourceRoot = "${edlib.src.name}/bindings/python";
+=======
+  sourceRoot = "source/bindings/python";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   preBuild = ''
     ln -s ${edlib.src}/edlib .

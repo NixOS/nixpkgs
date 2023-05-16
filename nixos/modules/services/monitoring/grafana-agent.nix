@@ -65,6 +65,10 @@ in
             agent.enabled = true;
             agent.scrape_integration = true;
             node_exporter.enabled = true;
+<<<<<<< HEAD
+=======
+            replace_instance_label = true;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           };
         }
       '';
@@ -121,6 +125,10 @@ in
         agent.enabled = mkDefault true;
         agent.scrape_integration = mkDefault true;
         node_exporter.enabled = mkDefault true;
+<<<<<<< HEAD
+=======
+        replace_instance_label = mkDefault true;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       };
     };
 

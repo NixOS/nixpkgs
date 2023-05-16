@@ -6,14 +6,21 @@
 , lxml
 , paramiko
 , poetry-core
+<<<<<<< HEAD
 , pontos
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , pytestCheckHook
 , pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "python-gvm";
+<<<<<<< HEAD
   version = "23.5.1";
+=======
+  version = "23.4.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -22,7 +29,11 @@ buildPythonPackage rec {
     owner = "greenbone";
     repo = pname;
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-jdfrmFpWOuQgYwV2NrRyRDwAZThWdBFgfLByVIZ5HhQ=";
+=======
+    hash = "sha256-ONCPC05NYyymTKiJZaDTdcShLLy4+K+JwROVVXBkz+o=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [
@@ -33,7 +44,10 @@ buildPythonPackage rec {
     defusedxml
     lxml
     paramiko
+<<<<<<< HEAD
     pontos
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   nativeCheckInputs = [

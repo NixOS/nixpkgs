@@ -17,8 +17,13 @@ branchName=$NIX_PREFETCH_GIT_BRANCH_NAME
 out=${out:-}
 http_proxy=${http_proxy:-}
 
+<<<<<<< HEAD
 # allow overwriting cacert's ca-bundle.crt with a custom one
 # this can be done by setting NIX_GIT_SSL_CAINFO and NIX_SSL_CERT_FILE environment variables for the nix-daemon
+=======
+# allow overwritting cacert's ca-bundle.crt with a custom one
+# this can be done by setting NIX_GIT_SSL_CAINFO and NIX_SSL_CERT_FILE enviroment variables for the nix-daemon
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 GIT_SSL_CAINFO=${NIX_GIT_SSL_CAINFO:-$GIT_SSL_CAINFO}
 
 # populated by clone_user_rev()
@@ -161,7 +166,10 @@ checkout_hash(){
         hash=$(hash_from_ref "$ref")
     fi
 
+<<<<<<< HEAD
     [[ -z "$deepClone" ]] && \
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     clean_git fetch ${builder:+--progress} --depth=1 origin "$hash" || \
     clean_git fetch -t ${builder:+--progress} origin || return 1
 
@@ -207,7 +215,31 @@ checkout_ref(){
 
 # Update submodules
 init_submodules(){
+<<<<<<< HEAD
     clean_git submodule update --init --recursive -j ${NIX_BUILD_CORES:-1}
+=======
+    # Add urls into .git/config file
+    clean_git submodule init
+
+    # list submodule directories and their hashes
+    git submodule status |
+    while read -r l; do
+        local hash
+        local dir
+        local name
+        local url
+
+        # checkout each submodule
+        hash=$(echo "$l" | awk '{print $1}' | tr -d '-')
+        dir=$(echo "$l" | sed -n 's/^.[0-9a-f]\+ \(.*[^)]*\)\( (.*)\)\?$/\1/p')
+        name=$(
+            git config -f .gitmodules --get-regexp submodule\..*\.path |
+            sed -n "s,^\(.*\)\.path $dir\$,\\1,p")
+        url=$(git config --get "${name}.url")
+
+        clone "$dir" "$url" "$hash" ""
+    done
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }
 
 clone(){
@@ -296,7 +328,11 @@ clone_user_rev() {
         tmpHomePath="$(mktemp -d "${TMPDIR:-/tmp}/nix-prefetch-git-tmp-home-XXXXXXXXXX")"
         exit_handlers+=(remove_tmpHomePath)
         HOME="$tmpHomePath"
+<<<<<<< HEAD
         clean_git lfs install
+=======
+        git lfs install
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     fi
 
     # Perform the checkout.
@@ -391,7 +427,10 @@ print_results() {
   "date": "$(json_escape "$commitDateStrict8601")",
   "path": "$(json_escape "$finalPath")",
   "$(json_escape "$hashType")": "$(json_escape "$hash")",
+<<<<<<< HEAD
   "hash": "$(nix-hash --to-sri --type $hashType $hash)",
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   "fetchLFS": $([[ -n "$fetchLFS" ]] && echo true || echo false),
   "fetchSubmodules": $([[ -n "$fetchSubmodules" ]] && echo true || echo false),
   "deepClone": $([[ -n "$deepClone" ]] && echo true || echo false),

@@ -14,12 +14,20 @@ in {
     client = { ... }: {
       services.davfs2.enable = true;
       system.activationScripts.davfs2-secrets = ''
+<<<<<<< HEAD
         echo "http://nextcloud/remote.php/dav/files/${adminuser} ${adminuser} ${adminpass}" > /tmp/davfs2-secrets
+=======
+        echo "http://nextcloud/remote.php/webdav/ ${adminuser} ${adminpass}" > /tmp/davfs2-secrets
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         chmod 600 /tmp/davfs2-secrets
       '';
       virtualisation.fileSystems = {
         "/mnt/dav" = {
+<<<<<<< HEAD
           device = "http://nextcloud/remote.php/dav/files/${adminuser}";
+=======
+          device = "http://nextcloud/remote.php/webdav/";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           fsType = "davfs";
           options = let
             davfs2Conf = (pkgs.writeText "davfs2.conf" "secrets /tmp/davfs2-secrets");
@@ -43,7 +51,10 @@ in {
         enable = true;
         datadir = "/var/lib/nextcloud-data";
         hostName = "nextcloud";
+<<<<<<< HEAD
         database.createLocally = true;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         config = {
           # Don't inherit adminuser since "root" is supposed to be the default
           adminpassFile = "${pkgs.writeText "adminpass" adminpass}"; # Don't try this at home!
@@ -70,7 +81,11 @@ in {
     withRcloneEnv = pkgs.writeScript "with-rclone-env" ''
       #!${pkgs.runtimeShell}
       export RCLONE_CONFIG_NEXTCLOUD_TYPE=webdav
+<<<<<<< HEAD
       export RCLONE_CONFIG_NEXTCLOUD_URL="http://nextcloud/remote.php/dav/files/${adminuser}"
+=======
+      export RCLONE_CONFIG_NEXTCLOUD_URL="http://nextcloud/remote.php/webdav/"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       export RCLONE_CONFIG_NEXTCLOUD_VENDOR="nextcloud"
       export RCLONE_CONFIG_NEXTCLOUD_USER="${adminuser}"
       export RCLONE_CONFIG_NEXTCLOUD_PASS="$(${pkgs.rclone}/bin/rclone obscure ${adminpass})"
@@ -90,8 +105,13 @@ in {
       test -e graph
       grep "$what" graph >$out || true
     '';
+<<<<<<< HEAD
     nextcloudUsesImagick = findInClosure "imagick" nodes.nextcloud.system.build.vm;
     nextcloudWithoutDoesntUseIt = findInClosure "imagick" nodes.nextcloudWithoutMagick.system.build.vm;
+=======
+    nextcloudUsesImagick = findInClosure "imagick" nodes.nextcloud.config.system.build.vm;
+    nextcloudWithoutDoesntUseIt = findInClosure "imagick" nodes.nextcloudWithoutMagick.config.system.build.vm;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   in ''
     assert open("${nextcloudUsesImagick}").read() != ""
     assert open("${nextcloudWithoutDoesntUseIt}").read() == ""

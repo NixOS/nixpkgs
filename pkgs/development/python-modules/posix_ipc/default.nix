@@ -18,7 +18,11 @@ buildPythonPackage rec {
     hash = "sha256-xK5CkThqVFVMIxBtgUfHIRNRfmBxKa/DWBYQg7QHl/M=";
   };
 
+<<<<<<< HEAD
   pythonImportsCheck = [
+=======
+  pythonImportsCheckHook = [
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "posix_ipc"
   ];
 

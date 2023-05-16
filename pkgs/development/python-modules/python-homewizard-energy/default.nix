@@ -13,7 +13,11 @@
 
 buildPythonPackage rec {
   pname = "python-homewizard-energy";
+<<<<<<< HEAD
   version = "2.1.0";
+=======
+  version = "2.0.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -22,7 +26,11 @@ buildPythonPackage rec {
     owner = "DCSBL";
     repo = pname;
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-+RuUNH95Txs6JeObYqg2CQl7qxF4YLVQvBDfzj5L9Bk=";
+=======
+    hash = "sha256-s3FNRpMZC/MG3s+ZDHgdsIT2AhvBDmGvJfutUPzY4wE=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [
@@ -34,8 +42,11 @@ buildPythonPackage rec {
     aiohttp
   ];
 
+<<<<<<< HEAD
   __darwinAllowLocalNetworking = true;
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nativeCheckInputs = [
     aresponses
     pytest-asyncio

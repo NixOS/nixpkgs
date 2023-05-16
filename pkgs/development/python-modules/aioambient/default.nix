@@ -3,7 +3,10 @@
 , aresponses
 , buildPythonPackage
 , fetchFromGitHub
+<<<<<<< HEAD
 , fetchpatch
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , poetry-core
 , pytest-aiohttp
 , pytest-asyncio
@@ -16,7 +19,11 @@
 
 buildPythonPackage rec {
   pname = "aioambient";
+<<<<<<< HEAD
   version = "2023.08.0";
+=======
+  version = "2023.04.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -25,6 +32,7 @@ buildPythonPackage rec {
     owner = "bachya";
     repo = pname;
     rev = "refs/tags/${version}";
+<<<<<<< HEAD
     hash = "sha256-Y8I4iPvxcK98Olb3JURNK37MKggdhcweKvNBa0ZtG6I=";
   };
 
@@ -42,6 +50,11 @@ buildPythonPackage rec {
     })
   ];
 
+=======
+    hash = "sha256-ar2UGSlVukMD5EZsEn7TFfIOovaI+B3Ym+UeGo95oks=";
+  };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   postPatch = ''
     substituteInPlace pyproject.toml \
       --replace 'websockets = ">=11.0.1"' 'websockets = "*"'
@@ -58,8 +71,11 @@ buildPythonPackage rec {
     websockets
   ];
 
+<<<<<<< HEAD
   __darwinAllowLocalNetworking = true;
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nativeCheckInputs = [
     aresponses
     pytest-aiohttp

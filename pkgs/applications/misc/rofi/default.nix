@@ -67,6 +67,9 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = with maintainers; [ bew ];
     platforms = with platforms; linux;
+<<<<<<< HEAD
     mainProgram = "rofi";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

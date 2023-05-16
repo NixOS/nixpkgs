@@ -1,9 +1,14 @@
 { lib
 , buildPythonPackage
 , sage-src
+<<<<<<< HEAD
 , jupyter-sphinx
 , sphinx
 , sphinx-copybutton
+=======
+, sphinx
+, jupyter-sphinx
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 buildPythonPackage rec {
@@ -12,9 +17,14 @@ buildPythonPackage rec {
   src = sage-src;
 
   propagatedBuildInputs = [
+<<<<<<< HEAD
     jupyter-sphinx
     sphinx
     sphinx-copybutton
+=======
+    sphinx
+    jupyter-sphinx
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   preBuild = ''

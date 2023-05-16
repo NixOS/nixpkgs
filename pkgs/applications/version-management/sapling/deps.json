@@ -73,6 +73,11 @@
       "url": "https://files.pythonhosted.org/packages/4c/76/1e41fbb365ad20b6efab2e61b0f4751518444c953b390f9b2d36cf97eea0/Cython-0.29.32.tar.gz"
     }
   ],
+<<<<<<< HEAD
   "version": "0.2.20230523-092610+f12b7eee",
   "versionHash": "11350811807294821405"
+=======
+  "version": "0.2.20230426-145232+7ea1f245",
+  "versionHash": "7478665112005955779"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }

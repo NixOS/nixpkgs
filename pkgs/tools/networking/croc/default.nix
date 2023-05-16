@@ -2,16 +2,27 @@
 
 buildGoModule rec {
   pname = "croc";
+<<<<<<< HEAD
   version = "9.6.5";
+=======
+  version = "9.6.4";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "schollz";
     repo = pname;
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-mbDpd2bkNKRhe19f8sLJJnm9DkFWZ12fPqPDGN7pvCc=";
   };
 
   vendorHash = "sha256-Nw0d/+EQlB0DJRciB2WD0MKZ4HSYY7oSv0ddMPN0CIQ=";
+=======
+    sha256 = "sha256-ksTKB/UInMHxZT7/B13jVK+w78gUF4KINv2HU1qRPgo=";
+  };
+
+  vendorHash = "sha256-d6fsy0ROKX91YkFW2aC2A+pO7dmcmMkoz076z1XcZtE=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   subPackages = [ "." ];
 

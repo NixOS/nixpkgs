@@ -12,13 +12,21 @@ assert (blas.isILP64 == arpack.isILP64);
 
 stdenv.mkDerivation rec {
   pname = "octopus";
+<<<<<<< HEAD
   version = "13.0";
+=======
+  version = "12.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitLab {
     owner = "octopus-code";
     repo = "octopus";
     rev = version;
+<<<<<<< HEAD
     sha256 = "sha256-CZ+Qmv6aBQ6w11mLvTP6QAJzaGs+vmmXuNGnSyAqVDU=";
+=======
+    sha256 = "sha256-tM3D0geOT+8X3EofI+iPR48z8LKFSxQMoO/W/be+OFg=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

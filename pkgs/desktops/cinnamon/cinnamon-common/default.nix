@@ -9,7 +9,10 @@
 , cjs
 , evolution-data-server
 , fetchFromGitHub
+<<<<<<< HEAD
 , fetchpatch
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , gdk-pixbuf
 , gettext
 , libgnomekbd
@@ -73,18 +76,27 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "cinnamon-common";
+<<<<<<< HEAD
   version = "5.8.4";
+=======
+  version = "5.6.8";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "cinnamon";
     rev = version;
+<<<<<<< HEAD
     hash = "sha256-34kOSDIU56cSZ4j0FadVfr9HLQytnK4ys88DFF7LTiM=";
+=======
+    hash = "sha256-qL8GaEH/0d4yEwwdaR55fTp0RitbyptoxKOBO3nmbic=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   patches = [
     ./use-sane-install-dir.patch
     ./libdir.patch
+<<<<<<< HEAD
 
     # Backport pillow 10.0.0 support.
     # https://github.com/linuxmint/cinnamon/issues/11746
@@ -92,6 +104,8 @@ stdenv.mkDerivation rec {
       url = "https://github.com/linuxmint/cinnamon/commit/fce9aad1ebb290802dc550e8dae6344dddf9dec1.patch";
       hash = "sha256-flt7CblfXlLieAVNeC8TBnv1TX0Zca1obPWusBMnIxE=";
     })
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   buildInputs = [
@@ -163,6 +177,7 @@ stdenv.mkDerivation rec {
       -e s,/usr/share/locale,/run/current-system/sw/share/locale,g \
       {} +
 
+<<<<<<< HEAD
     # All optional and may introduce circular dependency.
     find ./files/usr/share/cinnamon/applets -type f -exec sed -i \
       -e '/^#/!s,/usr/bin,/run/current-system/sw/bin,g' \
@@ -178,6 +193,22 @@ stdenv.mkDerivation rec {
     popd
 
     sed "s| cinnamon-session| ${cinnamon-session}/bin/cinnamon-session|g" -i ./files/usr/bin/cinnamon-session-{cinnamon,cinnamon2d}
+=======
+    sed "s|/usr/share/sounds|/run/current-system/sw/share/sounds|g" -i ./files/usr/share/cinnamon/cinnamon-settings/bin/SettingsWidgets.py
+
+    sed "s|'python3'|'${pythonEnv.interpreter}'|g" -i ./files/usr/share/cinnamon/cinnamon-settings/bin/CinnamonGtkSettings.py
+
+    sed "s|/usr/bin/cinnamon-screensaver-command|/run/current-system/sw/bin/cinnamon-screensaver-command|g" \
+      -i ./files/usr/share/cinnamon/applets/menu@cinnamon.org/applet.js -i ./files/usr/share/cinnamon/applets/user@cinnamon.org/applet.js
+
+    sed "s|\"/usr/lib\"|\"${cinnamon-control-center}/lib\"|g" -i ./files/usr/share/cinnamon/cinnamon-settings/bin/capi.py
+
+    sed 's|"lspci"|"${pciutils}/bin/lspci"|g' -i ./files/usr/share/cinnamon/cinnamon-settings/modules/cs_info.py
+
+    sed "s| cinnamon-session| ${cinnamon-session}/bin/cinnamon-session|g" -i ./files/usr/bin/cinnamon-session-cinnamon  -i ./files/usr/bin/cinnamon-session-cinnamon2d
+
+    sed "s|msgfmt|${gettext}/bin/msgfmt|g" -i ./files/usr/share/cinnamon/cinnamon-settings/bin/Spices.py
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     patchShebangs src/data-to-c.pl
   '';
@@ -188,6 +219,7 @@ stdenv.mkDerivation rec {
       --prefix XDG_DATA_DIRS : "${gnome.caribou}/share"
     )
 
+<<<<<<< HEAD
     buildPythonPath "$out ${python3.pkgs.xapp}"
 
     # https://github.com/NixOS/nixpkgs/issues/200397
@@ -198,6 +230,11 @@ stdenv.mkDerivation rec {
 
     # Called as `pkexec cinnamon-settings-users.py`.
     wrapGApp $out/share/cinnamon/cinnamon-settings-users/cinnamon-settings-users.py
+=======
+    # https://github.com/NixOS/nixpkgs/issues/129946
+    buildPythonPath "${python3.pkgs.xapp}"
+    patchPythonScript $out/share/cinnamon/cinnamon-desktop-editor/cinnamon-desktop-editor.py
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '';
 
   passthru = {

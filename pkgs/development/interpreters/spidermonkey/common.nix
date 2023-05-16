@@ -157,13 +157,19 @@ stdenv.mkDerivation (finalAttrs: rec {
     export AS=$CC
     export AC_MACRODIR=$PWD/build/autoconf/
 
+<<<<<<< HEAD
   '' + lib.optionalString (lib.versionAtLeast version "91" && lib.versionOlder version "115") ''
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     pushd js/src
     sh ../../build/autoconf/autoconf.sh --localdir=$PWD configure.in > configure
     chmod +x configure
     popd
+<<<<<<< HEAD
   '' + lib.optionalString (lib.versionAtLeast version "115") ''
     patchShebangs build/cargo-linker
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '' + ''
     # We can't build in js/src/, so create a build dir
     mkdir obj
@@ -187,7 +193,10 @@ stdenv.mkDerivation (finalAttrs: rec {
     homepage = "https://spidermonkey.dev/";
     license = licenses.mpl20; # TODO: MPL/GPL/LGPL tri-license for 78.
     maintainers = with maintainers; [ abbradar lostnet catap ];
+<<<<<<< HEAD
     broken = stdenv.isDarwin && versionAtLeast version "115"; # Requires SDK 13.3 (see #242666).
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     platforms = platforms.unix;
   };
 })

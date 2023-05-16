@@ -17,11 +17,14 @@ buildPythonPackage rec {
     hash = "sha256-M0K7pBDXlBKQ7tDlii5arbD3uXhj7EKDsoPEBu5yOig=";
   };
 
+<<<<<<< HEAD
   disabledTests = [
     # requires network connections
     "test_free_providers"
   ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pythonImportsCheck = [
     "xyzservices.providers"
   ];

@@ -14,7 +14,11 @@ buildGoModule rec {
     hash = "sha256-QjRYJyk0uFGa6FCCYK9SIJhoyam4ALsQJ26DsmbNk8s=";
   };
 
+<<<<<<< HEAD
   vendorHash = "sha256-pr4KkszyzEl+yLJousx29tr7UZDJf0arEfXBb7eumww=";
+=======
+  vendorSha256 = "sha256-pr4KkszyzEl+yLJousx29tr7UZDJf0arEfXBb7eumww=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   meta = with lib; {
     description = "Tool to search for in Javascript hidden subdomains and secrets";

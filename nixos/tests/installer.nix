@@ -11,13 +11,18 @@ let
 
   # The configuration to install.
   makeConfig = { bootLoader, grubDevice, grubIdentifier, grubUseEfi
+<<<<<<< HEAD
                , extraConfig, forceGrubReinstallCount ? 0, flake ? false
+=======
+               , extraConfig, forceGrubReinstallCount ? 0
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
                }:
     pkgs.writeText "configuration.nix" ''
       { config, lib, pkgs, modulesPath, ... }:
 
       { imports =
           [ ./hardware-configuration.nix
+<<<<<<< HEAD
             ${if flake
               then "" # Still included, but via installer/flake.nix
               else "<nixpkgs/nixos/modules/testing/test-instrumentation.nix>"}
@@ -25,6 +30,11 @@ let
 
         networking.hostName = "thatworked";
 
+=======
+            <nixpkgs/nixos/modules/testing/test-instrumentation.nix>
+          ];
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         documentation.enable = false;
 
         # To ensure that we can rebuild the grub configuration on the nixos-rebuild
@@ -71,7 +81,11 @@ let
   # partitions and filesystems.
   testScriptFun = { bootLoader, createPartitions, grubDevice, grubUseEfi
                   , grubIdentifier, preBootCommands, postBootCommands, extraConfig
+<<<<<<< HEAD
                   , testSpecialisationConfig, testFlakeSwitch
+=======
+                  , testSpecialisationConfig
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
                   }:
     let iface = "virtio";
         isEfi = bootLoader == "systemd-boot" || (bootLoader == "grub" && grubUseEfi);
@@ -90,6 +104,7 @@ let
 
       qemu_flags = {"qemuFlags": assemble_qemu_flags()}
 
+<<<<<<< HEAD
       import os
 
       image_dir = machine.state_dir
@@ -98,6 +113,11 @@ let
       hd_flags = {
           "hdaInterface": "${iface}",
           "hda": disk_image,
+=======
+      hd_flags = {
+          "hdaInterface": "${iface}",
+          "hda": "vm-state-machine/machine.qcow2",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       }
       ${optionalString isEfi ''
         hd_flags.update(
@@ -241,11 +261,14 @@ let
       machine = create_machine_named("boot-after-rebuild-switch")
       ${preBootCommands}
       machine.wait_for_unit("network.target")
+<<<<<<< HEAD
 
       # Sanity check, is it the configuration.nix we generated?
       hostname = machine.succeed("hostname").strip()
       assert hostname == "thatworked"
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       ${postBootCommands}
       machine.shutdown()
 
@@ -286,6 +309,7 @@ let
 
       ${postBootCommands}
       machine.shutdown()
+<<<<<<< HEAD
     ''
     + optionalString testFlakeSwitch ''
       ${preBootCommands}
@@ -364,6 +388,8 @@ let
 
       ${postBootCommands}
       machine.shutdown()
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     '';
 
 
@@ -374,12 +400,19 @@ let
     , grubDevice ? "/dev/vda", grubIdentifier ? "uuid", grubUseEfi ? false
     , enableOCR ? false, meta ? {}
     , testSpecialisationConfig ? false
+<<<<<<< HEAD
     , testFlakeSwitch ? false
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     }:
     makeTest {
       inherit enableOCR;
       name = "installer-" + name;
+<<<<<<< HEAD
       meta = {
+=======
+      meta = with pkgs.lib.maintainers; {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         # put global maintainers here, individuals go into makeInstallerTest fkt call
         maintainers = (meta.maintainers or []);
       };
@@ -391,6 +424,7 @@ let
             ../modules/profiles/installation-device.nix
             ../modules/profiles/base.nix
             extraInstallerConfig
+<<<<<<< HEAD
             ./common/auto-format-root-device.nix
           ];
 
@@ -398,6 +432,10 @@ let
           # root filesystem.
           virtualisation.fileSystems."/".autoFormat = systemdStage1;
 
+=======
+          ];
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           # builds stuff in the VM, needs more juice
           virtualisation.diskSize = 8 * 1024;
           virtualisation.cores = 8;
@@ -427,13 +465,22 @@ let
           # The test cannot access the network, so any packages we
           # need must be included in the VM.
           system.extraDependencies = with pkgs; [
+<<<<<<< HEAD
             bintools
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
             brotli
             brotli.dev
             brotli.lib
             desktop-file-utils
             docbook5
             docbook_xsl_ns
+<<<<<<< HEAD
+=======
+            (docbook-xsl-ns.override {
+              withManOptDedupPatch = true;
+            })
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
             kbd.dev
             kmod.dev
             libarchive.dev
@@ -481,7 +528,11 @@ let
       testScript = testScriptFun {
         inherit bootLoader createPartitions preBootCommands postBootCommands
                 grubDevice grubIdentifier grubUseEfi extraConfig
+<<<<<<< HEAD
                 testSpecialisationConfig testFlakeSwitch;
+=======
+                testSpecialisationConfig;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       };
     };
 
@@ -533,10 +584,13 @@ let
     '';
   };
 
+<<<<<<< HEAD
   simple-test-config-flake = simple-test-config // {
     testFlakeSwitch = true;
   };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   simple-uefi-grub-config = {
     createPartitions = ''
       machine.succeed(
@@ -591,8 +645,11 @@ in {
   # one big filesystem partition.
   simple = makeInstallerTest "simple" simple-test-config;
 
+<<<<<<< HEAD
   switchToFlake = makeInstallerTest "switch-to-flake" simple-test-config-flake;
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   # Test cloned configurations with the simple grub configuration
   simpleSpecialised = makeInstallerTest "simpleSpecialised" (simple-test-config // specialisation-test-extraconfig);
 
@@ -934,7 +991,11 @@ in {
         "keyctl link @u @s",
         "echo password | mkfs.bcachefs -L root --encrypted /dev/vda3",
         "echo password | bcachefs unlock /dev/vda3",
+<<<<<<< HEAD
         "echo password | mount -t bcachefs /dev/vda3 /mnt",
+=======
+        "mount -t bcachefs /dev/vda3 /mnt",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         "mkfs.ext3 -L boot /dev/vda1",
         "mkdir -p /mnt/boot",
         "mount /dev/vda1 /mnt/boot",
@@ -1091,6 +1152,7 @@ in {
       )
     '';
   };
+<<<<<<< HEAD
 } // optionalAttrs systemdStage1 {
   stratisRoot = makeInstallerTest "stratisRoot" {
     createPartitions = ''
@@ -1126,4 +1188,6 @@ in {
       };
     };
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }

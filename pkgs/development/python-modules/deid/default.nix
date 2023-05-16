@@ -36,7 +36,11 @@ let
 in
 buildPythonPackage rec {
   pname = "deid";
+<<<<<<< HEAD
   version = "0.3.22";
+=======
+  version = "0.3.21";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   format = "pyproject";
   disabled = pythonOlder "3.7";
@@ -46,8 +50,13 @@ buildPythonPackage rec {
     owner = "pydicom";
     repo = pname;
     # the github repo does not contain Pypi version tags:
+<<<<<<< HEAD
     rev = "40dc96125daeb65856d643e12c3d6dfec756be0d";
     hash = "sha256-OtxQPF29eqt8I1Q12ga8a1IjBVO+VBk6y0DQmRtCNoU=";
+=======
+    rev = "38717b8cbfd69566ba489dd0c9858bb93101e26d";
+    hash = "sha256-QqofxNjshbNfu8vZ37rB6pxj5R8q0wlUhJRhrpkKySk=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [

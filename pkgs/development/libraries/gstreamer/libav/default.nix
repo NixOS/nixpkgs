@@ -18,11 +18,19 @@
 
 stdenv.mkDerivation rec {
   pname = "gst-libav";
+<<<<<<< HEAD
   version = "1.22.5";
 
   src = fetchurl {
     url = "https://gstreamer.freedesktop.org/src/${pname}/${pname}-${version}.tar.xz";
     hash = "sha256-hYPwwfT8sB7tEfoePCESZUOovXOe1Pwdsx91alqwHZo=";
+=======
+  version = "1.22.2";
+
+  src = fetchurl {
+    url = "https://gstreamer.freedesktop.org/src/${pname}/${pname}-${version}.tar.xz";
+    hash = "sha256-/Kr5h4/o87yCMX7xOhVYgky2jfH4loxnl/VWxeM7z/0=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   outputs = [ "out" "dev" ];
@@ -57,6 +65,9 @@ stdenv.mkDerivation rec {
     homepage = "https://gstreamer.freedesktop.org";
     license = licenses.lgpl2Plus;
     platforms = platforms.unix;
+<<<<<<< HEAD
     maintainers = with maintainers; [ lilyinstarlight ];
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

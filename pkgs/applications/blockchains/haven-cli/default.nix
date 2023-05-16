@@ -1,6 +1,10 @@
 { lib, stdenv, fetchFromGitHub, fetchpatch
 , cmake, pkg-config
+<<<<<<< HEAD
 , boost179, miniupnpc, openssl, unbound
+=======
+, boost, miniupnpc, openssl, unbound
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , zeromq, pcsclite, readline, libsodium, hidapi
 , randomx, rapidjson
 , easyloggingpp
@@ -36,7 +40,11 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake pkg-config ];
 
   buildInputs = [
+<<<<<<< HEAD
     boost179 miniupnpc openssl unbound
+=======
+    boost miniupnpc openssl unbound
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     zeromq pcsclite readline
     libsodium hidapi randomx rapidjson
     protobuf

@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 { lib, stdenv, fetchFromSourcehut }:
+=======
+{ lib, stdenv, fetchFromGitHub }:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 {
   # : string
@@ -14,7 +18,11 @@
   # : license
 , license ? lib.licenses.isc
   # : string
+<<<<<<< HEAD
 , owner ? "~flexibeast"
+=======
+, owner ? "flexibeast"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   # : string
 , rev ? "v${version}"
 }:
@@ -22,7 +30,11 @@
 let
   manDir = "${placeholder "out"}/share/man";
 
+<<<<<<< HEAD
   src = fetchFromSourcehut {
+=======
+  src = fetchFromGitHub {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     inherit owner rev sha256;
     repo = pname;
   };
@@ -32,7 +44,11 @@ stdenv.mkDerivation {
   inherit pname version src;
 
   makeFlags = [
+<<<<<<< HEAD
     "MAN_DIR=${manDir}"
+=======
+    "MANPATH=${manDir}"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   dontBuild = true;

@@ -26,7 +26,11 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/jagrosh/MusicBot";
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.asl20;
+<<<<<<< HEAD
     maintainers = with maintainers; [ ];
+=======
+    maintainers = with maintainers; [ SuperSandro2000 ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     inherit (jre_headless.meta) platforms;
   };
 }

@@ -14,6 +14,10 @@ buildNimPackage rec {
   postPatch = ''
     echo {.passL: r\"$(pkg-config --libs libui)\".} >> ui/rawui.nim
   '';
+<<<<<<< HEAD
+=======
+  doCheck = true;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   meta = with lib;
     src.meta // {
       description = "Nim bindings to libui";

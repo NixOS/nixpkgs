@@ -49,6 +49,7 @@ else # Only set up Qt once.
     }
     envBuildHostHooks+=(qmakePathHook)
 
+<<<<<<< HEAD
     export QTTOOLSPATH=
 
     declare -Ag qttoolsPathSeen=()
@@ -63,6 +64,8 @@ else # Only set up Qt once.
     }
     addEnvHooks "$hostOffset" qtToolsHook
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     postPatchMkspecs() {
         # Prevent this hook from running multiple times
         dontPatchMkspecs=1

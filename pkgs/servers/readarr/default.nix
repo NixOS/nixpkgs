@@ -8,6 +8,7 @@ let
     x86_64-darwin = "x64";
   }."${stdenv.hostPlatform.system}" or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
   hash = {
+<<<<<<< HEAD
     x64-linux_hash = "sha256-0q+MHdNRzq7gmv5jiArU1q+1UBWNZx0JRgiIy2pnIAc=";
     arm64-linux_hash = "sha256-NtbzzbWfEE1thyGOuJhTYXPxhTpw9lqXcvvlfmvCMqM=";
     x64-osx_hash = "sha256-oz2Sbvr8fky0mpBUXRKYki3UL0ewA/a2hEtPISBV8Ko=";
@@ -15,6 +16,15 @@ let
 in stdenv.mkDerivation rec {
   pname = "readarr";
   version = "0.3.3.2171";
+=======
+    x64-linux_hash = "sha256-ABk2wxNse8dcFWEMpaXnsALz171/1JQaAFzmpz36we0=";
+    arm64-linux_hash = "sha256-c1eVCPE8RH9u99hYJZBiNBpanBv3WeSTVaD+Gq1yxUk=";
+    x64-osx_hash = "sha256-9UEi8YbpZ1baZ9lnG7SJcYnvJRgP7BsqcIt9Z3UdDv8=";
+  }."${arch}-${os}_hash";
+in stdenv.mkDerivation rec {
+  pname = "readarr";
+  version = "0.1.4.1596";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchurl {
     url = "https://github.com/Readarr/Readarr/releases/download/v${version}/Readarr.develop.${version}.${os}-core-${arch}.tar.gz";

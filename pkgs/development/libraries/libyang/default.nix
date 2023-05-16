@@ -15,13 +15,21 @@
 
 stdenv.mkDerivation rec {
   pname = "libyang";
+<<<<<<< HEAD
   version = "2.1.111";
+=======
+  version = "2.1.55";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "CESNET";
     repo = "libyang";
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-CJAIlEPbrjc2juYiPOQuQ0y7ggOxb/fHb7Yoo6/dYQc=";
+=======
+    sha256 = "sha256-fNVhsZPjqdMOmESy/MinjdaNE5jWMWSeVidAs9JGV38=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

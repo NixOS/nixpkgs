@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 { lib
 , fetchFromGitHub
 , python3Packages
@@ -7,16 +8,32 @@ python3Packages.buildPythonApplication rec {
   pname = "lieer";
   version = "1.4";
   format = "setuptools";
+=======
+{ lib, fetchFromGitHub, python3Packages }:
+
+python3Packages.buildPythonApplication rec {
+  pname = "lieer";
+  version = "1.3";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "gauteh";
     repo = "lieer";
+<<<<<<< HEAD
     rev = "refs/tags/v${version}";
     sha256 = "sha256-2LujfvsxMHHmYjYOnLJaLdSlzDeej+ehUr4YfVe903U=";
   };
 
   propagatedBuildInputs = with python3Packages; [
     notmuch2
+=======
+    rev = "v${version}";
+    sha256 = "12sl7d381l1gjaam419xc8gxmsprxf0hgksz1f974qmmijvr02bh";
+  };
+
+  propagatedBuildInputs = with python3Packages; [
+    notmuch
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     oauth2client
     google-api-python-client
     tqdm
@@ -25,10 +42,14 @@ python3Packages.buildPythonApplication rec {
 
   # no tests
   doCheck = false;
+<<<<<<< HEAD
 
   pythonImportsCheck = [
     "lieer"
   ];
+=======
+  pythonImportsCheck = [ "lieer" ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   meta = with lib; {
     description = "Fast email-fetching and two-way tag synchronization between notmuch and GMail";

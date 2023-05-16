@@ -22,7 +22,11 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "gjedeer";
     repo = pname;
+<<<<<<< HEAD
     rev = version;
+=======
+    rev = "${version}";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     sha256 = "sha256-c/0OxUH8iw8nRuVg4Fszf6Z/JiEV+m0B2ofzy81uFu8=";
   };
 

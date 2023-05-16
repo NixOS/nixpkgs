@@ -2,18 +2,30 @@
 , x11Support ? false
 , libX11
 , cairo
+<<<<<<< HEAD
 , config
 , enableCuda ? config.cudaSupport
+=======
+, enableCuda ? false
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , cudaPackages
 }:
 
 stdenv.mkDerivation rec {
   pname = "hwloc";
+<<<<<<< HEAD
   version = "2.9.2";
 
   src = fetchurl {
     url = "https://www.open-mpi.org/software/hwloc/v${lib.versions.majorMinor version}/downloads/hwloc-${version}.tar.bz2";
     sha256 = "sha256-Cof99nf4sAtWfSKbYyC/ayXGk+2qQ+C4UmjZmdawYM8=";
+=======
+  version = "2.9.1";
+
+  src = fetchurl {
+    url = "https://www.open-mpi.org/software/hwloc/v${lib.versions.majorMinor version}/downloads/hwloc-${version}.tar.bz2";
+    sha256 = "sha256-fMSTGiD+9Ffgkzrz83W+bq+ncD/eIeE3v7loWxQJWZ4=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   configureFlags = [

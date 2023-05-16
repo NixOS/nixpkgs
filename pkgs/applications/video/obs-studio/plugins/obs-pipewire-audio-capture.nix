@@ -15,7 +15,11 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "dimtpap";
     repo = pname;
+<<<<<<< HEAD
     rev = version;
+=======
+    rev = "${version}";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     sha256 = "sha256-gcOH8gJuP03MxhJbgl941yTtm2XIHmqHWVwkRCVATkQ=";
   };
 

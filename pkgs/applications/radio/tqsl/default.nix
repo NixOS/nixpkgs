@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 { lib, stdenv, fetchurl, cmake, expat, openssl, zlib, lmdb, curl, wxGTK32, wrapGAppsHook }:
+=======
+{ lib, stdenv, fetchurl, makeWrapper, cmake, expat, openssl, zlib, db, curl, wxGTK32 }:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 stdenv.mkDerivation rec {
   pname = "tqsl";
@@ -9,12 +13,20 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-UGPMp1mAarHWuLbZu2wWpjgCdf8ZKj0Mwkqp32U5/8w=";
   };
 
+<<<<<<< HEAD
   nativeBuildInputs = [ cmake wrapGAppsHook ];
+=======
+  nativeBuildInputs = [ cmake makeWrapper ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   buildInputs = [
     expat
     openssl
     zlib
+<<<<<<< HEAD
     lmdb
+=======
+    db
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     (curl.override { inherit openssl; })
     wxGTK32
   ];

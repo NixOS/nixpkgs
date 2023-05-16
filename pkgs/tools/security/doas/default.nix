@@ -32,10 +32,19 @@ stdenv.mkDerivation rec {
     # Allow doas to discover binaries in /run/current-system/sw/{s,}bin and
     # /run/wrappers/bin
     ./0001-add-NixOS-specific-dirs-to-safe-PATH.patch
+<<<<<<< HEAD
   ];
 
   # ./configure script does not understand `--disable-shared`
   dontAddStaticConfigureFlags = true;
+=======
+
+    # Standard environment supports "dontDisableStatic" knob, but has no
+    # equivalent for "--disable-shared", so I have to patch "configure"
+    # script instead.
+    ./disable-shared.patch
+  ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   postPatch = ''
     sed -i '/\(chown\|chmod\)/d' GNUmakefile

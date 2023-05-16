@@ -2,11 +2,19 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "alkalami";
+<<<<<<< HEAD
   version = "3.000";
 
   src = fetchzip {
     url = "https://software.sil.org/downloads/r/alkalami/Alkalami-${version}.zip";
     hash = "sha256-ra664VbUKc8XpULCWhLMVnc1mW4pqZvbvwuBvRQRhcY=";
+=======
+  version = "2.000";
+
+  src = fetchzip {
+    url = "https://software.sil.org/downloads/r/alkalami/Alkalami-${version}.zip";
+    hash = "sha256-rT0HzTFbooHr+l5BQ9GVYKxxNk7TESdkOQfWBeVpwYI=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   installPhase = ''

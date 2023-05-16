@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 { lib, buildNimPackage, fetchFromGitHub }:
 
 buildNimPackage (final: prev: {
@@ -16,3 +17,12 @@ buildNimPackage (final: prev: {
     maintainers = with lib.maintainers; [ ehmry ];
   };
 })
+=======
+{ fetchNimble }:
+
+fetchNimble {
+  pname = "nimsimd";
+  version = "1.0.0";
+  hash = "sha256-kp61fylAJ6MSN9hLYLi7CU2lxVR/lbrNCvZTe0LJLGo=";
+}
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)

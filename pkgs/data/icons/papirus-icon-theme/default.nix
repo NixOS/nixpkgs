@@ -2,13 +2,21 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "papirus-icon-theme";
+<<<<<<< HEAD
   version = "20230901";
+=======
+  version = "20230301";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "PapirusDevelopmentTeam";
     repo = pname;
     rev = version;
+<<<<<<< HEAD
     hash = "sha256-FcTNZgCdPlYjpheA3PfZBR3apOkDi4+RafQtXdqchGI=";
+=======
+    sha256 = "sha256-iIvynt8Qg9PmR2q7JsLtRlYxfHGaShMD8kbbPL89DzE=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ gtk3 papirus-folders ];

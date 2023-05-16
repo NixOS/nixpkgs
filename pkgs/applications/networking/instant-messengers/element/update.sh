@@ -20,7 +20,11 @@ version="${version#v}"
 
 # Element Web
 web_src="https://raw.githubusercontent.com/vector-im/element-web/v$version"
+<<<<<<< HEAD
 web_src_hash=$(nix-prefetch-github vector-im element-web --rev v${version} | jq -r .hash)
+=======
+web_src_hash=$(nix-prefetch-github vector-im element-web --rev v${version} | jq -r .sha256)
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 web_tmpdir=$(mktemp -d)
 trap 'rm -rf "$web_tmpdir"' EXIT
@@ -32,7 +36,11 @@ popd
 
 # Element Desktop
 desktop_src="https://raw.githubusercontent.com/vector-im/element-desktop/v$version"
+<<<<<<< HEAD
 desktop_src_hash=$(nix-prefetch-github vector-im element-desktop --rev v${version} | jq -r .hash)
+=======
+desktop_src_hash=$(nix-prefetch-github vector-im element-desktop --rev v${version} | jq -r .sha256)
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 desktop_tmpdir=$(mktemp -d)
 trap 'rm -rf "$desktop_tmpdir"' EXIT

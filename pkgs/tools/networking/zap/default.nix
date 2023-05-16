@@ -2,10 +2,17 @@
 
 stdenv.mkDerivation rec {
   pname = "zap";
+<<<<<<< HEAD
   version = "2.13.0";
   src = fetchurl {
     url = "https://github.com/zaproxy/zaproxy/releases/download/v${version}/ZAP_${version}_Linux.tar.gz";
     sha256 = "sha256-k261Kg/TkMHviQxFVCDZXOIAYv4TbsCSfgI+K69Q9Uk=";
+=======
+  version = "2.12.0";
+  src = fetchurl {
+    url = "https://github.com/zaproxy/zaproxy/releases/download/v${version}/ZAP_${version}_Linux.tar.gz";
+    sha256 = "sha256-nESTyZHLk0cGOGTSQ2o3lc87aXYGJeez20Ac00LT/FU=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   buildInputs = [ jre ];

@@ -13,13 +13,21 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "elementary-icon-theme";
+<<<<<<< HEAD
   version = "7.3.1";
+=======
+  version = "7.3.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "icons";
     rev = version;
+<<<<<<< HEAD
     sha256 = "sha256-3qvbpY1O8E3sX+66yBoZXEOeWQrgyNu2rOT6PPbli58=";
+=======
+    sha256 = "sha256-4ZXqIMXyb9MLd6EHmPn672Dbw992GYYU64oB+4p6jXY=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

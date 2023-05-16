@@ -17,8 +17,11 @@
 buildPythonPackage rec {
   pname = "jaxopt";
   version = "0.5.5";
+<<<<<<< HEAD
   format = "setuptools";
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
@@ -52,11 +55,14 @@ buildPythonPackage rec {
     "jaxopt.tree_util"
   ];
 
+<<<<<<< HEAD
   disabledTests = [
     # Stack frame issue
     "test_bisect"
   ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   meta = with lib; {
     homepage = "https://jaxopt.github.io";
     description = "Hardware accelerated, batchable and differentiable optimizers in JAX";

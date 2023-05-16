@@ -2,13 +2,21 @@
 
 buildGoModule rec {
   pname = "hubble";
+<<<<<<< HEAD
   version = "0.12.0";
+=======
+  version = "0.11.5";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "cilium";
     repo = pname;
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-QtslAJC9qPR1jnyK4SLPVv8YTxOUvrzrSA1TzEwajS8=";
+=======
+    sha256 = "sha256-OqL0L0VyYeg3Vk46LouuqHWpwYTu1vphJSVd6/hWsvA=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   vendorHash = null;
@@ -39,6 +47,10 @@ buildGoModule rec {
   '';
 
   meta = with lib; {
+<<<<<<< HEAD
+=======
+    broken = (stdenv.isLinux && stdenv.isAarch64);
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     description = "Network, Service & Security Observability for Kubernetes using eBPF";
     license = licenses.asl20;
     homepage = "https://github.com/cilium/hubble/";

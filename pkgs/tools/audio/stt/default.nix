@@ -8,8 +8,12 @@ stdenv.mkDerivation rec {
     url = "https://github.com/coqui-ai/STT/releases/download/v${version}/native_client.tflite.Linux.tar.xz";
     hash = "sha256-RVYc64pLYumQoVUEFZdxfUUaBMozaqgD0h/yiMaWN90=";
   };
+<<<<<<< HEAD
 
   sourceRoot = ".";
+=======
+  setSourceRoot = "sourceRoot=`pwd`";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nativeBuildInputs = [
     autoPatchelfHook

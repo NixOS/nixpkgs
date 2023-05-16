@@ -2,7 +2,11 @@
 
 buildGoModule rec {
   pname = "govc";
+<<<<<<< HEAD
   version = "0.30.7";
+=======
+  version = "0.30.4";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   subPackages = [ "govc" ];
 
@@ -10,10 +14,17 @@ buildGoModule rec {
     rev = "v${version}";
     owner = "vmware";
     repo = "govmomi";
+<<<<<<< HEAD
     sha256 = "sha256-8cBS92O5AEeXQyLwOTAWbjvj1oPJiHLBooRgl5pt0Mk=";
   };
 
   vendorHash = "sha256-iLmQdjN0EXJuwC3NT5FKdHhJ4KvNAvnsBGAO9bypdqg=";
+=======
+    sha256 = "sha256-lYiyZ2sY58bzUtqcM6WIsooLldQAxibASM7xXKAeqJM=";
+  };
+
+  vendorHash = "sha256-jbGqQITAhyBLoDa3cKU5gK+4WGgoGSCyFtzeoXx8e7k=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   ldflags = [
     "-s"

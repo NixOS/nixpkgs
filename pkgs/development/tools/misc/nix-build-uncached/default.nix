@@ -22,5 +22,9 @@ buildGoModule rec {
     license = licenses.mit;
     homepage = "https://github.com/Mic92/nix-build-uncached";
     maintainers = [ maintainers.mic92 ];
+<<<<<<< HEAD
+=======
+    platforms = platforms.unix;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

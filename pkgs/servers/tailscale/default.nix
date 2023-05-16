@@ -1,19 +1,31 @@
 { lib, stdenv, buildGoModule, fetchFromGitHub, makeWrapper, iptables, iproute2, procps, shadow, getent }:
 
+<<<<<<< HEAD
 let
   version = "1.48.2";
 in
 buildGoModule {
   pname = "tailscale";
   inherit version;
+=======
+buildGoModule rec {
+  pname = "tailscale";
+  version = "1.40.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "tailscale";
     repo = "tailscale";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-5Usi7W4y6JniyxBIfQid1XjDIZRS5oIw+KUMMiFRBwk=";
   };
   vendorHash = "sha256-Fr4VZcKrXnT1PZuEG110KBefjcZzRsQRBSvByELKAy4=";
+=======
+    hash = "sha256-OCKWr62peDrh6zQVAS2iPPzgB1uZb1Fev23szvNNPkE=";
+  };
+  vendorHash = "sha256-lirn07XE3JOS6oiwZBMwxzywkbXHowOJUMWWLrZtccY=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nativeBuildInputs = lib.optionals stdenv.isLinux [ makeWrapper ];
 
@@ -42,7 +54,11 @@ buildGoModule {
     homepage = "https://tailscale.com";
     description = "The node agent for Tailscale, a mesh VPN built on WireGuard";
     license = licenses.bsd3;
+<<<<<<< HEAD
     mainProgram = "tailscale";
     maintainers = with maintainers; [ danderson mbaillie twitchyliquid64 jk mfrw ];
+=======
+    maintainers = with maintainers; [ danderson mbaillie twitchyliquid64 jk ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

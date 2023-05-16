@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 { config, lib, ... }:
+=======
+{ config, lib, pkgs, ... }:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 let
   keysDirectory = "/var/keys";
@@ -21,8 +25,12 @@ in
         ../virtualisation/nixos-containers.nix
         ../services/x11/desktop-managers/xterm.nix
       ];
+<<<<<<< HEAD
       # swraid's default depends on stateVersion
       config.boot.swraid.enable = false;
+=======
+      config = { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       options.boot.isContainer = lib.mkOption { default = false; internal = true; };
     }
   ];
@@ -68,9 +76,15 @@ in
        '';
     };
     hostPort = mkOption {
+<<<<<<< HEAD
       default = 31022;
       type = types.int;
       example = 22;
+=======
+      default = 22;
+      type = types.int;
+      example = 31022;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       description = ''
         The localhost host port to forward TCP to the guest port.
       '';
@@ -140,13 +154,21 @@ in
 
         hostPkgs = config.virtualisation.host.pkgs;
 
+<<<<<<< HEAD
         script = hostPkgs.writeShellScriptBin "create-builder" (
+=======
+  script = hostPkgs.writeShellScriptBin "create-builder" (
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           # When running as non-interactively as part of a DarwinConfiguration the working directory
           # must be set to a writeable directory.
         (if cfg.workingDirectory != "." then ''
           ${hostPkgs.coreutils}/bin/mkdir --parent "${cfg.workingDirectory}"
           cd "${cfg.workingDirectory}"
+<<<<<<< HEAD
         '' else "") + ''
+=======
+  '' else "") + ''
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           KEYS="''${KEYS:-./keys}"
           ${hostPkgs.coreutils}/bin/mkdir --parent "''${KEYS}"
           PRIVATE_KEY="''${KEYS}/${user}_${keyType}"
@@ -158,7 +180,11 @@ in
           if ! ${hostPkgs.diffutils}/bin/cmp "''${PUBLIC_KEY}" ${publicKey}; then
             (set -x; sudo --reset-timestamp ${installCredentials} "''${KEYS}")
           fi
+<<<<<<< HEAD
           KEYS="$(${hostPkgs.nix}/bin/nix-store --add "$KEYS")" ${lib.getExe config.system.build.vm}
+=======
+          KEYS="$(${hostPkgs.nix}/bin/nix-store --add "$KEYS")" ${config.system.build.vm}/bin/run-nixos-vm
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         '');
 
       in
@@ -178,7 +204,11 @@ in
         Please inspect the trace of the following command to figure out which module
         has a dependency on stateVersion.
 
+<<<<<<< HEAD
           nix-instantiate --attr darwin.linux-builder --show-trace
+=======
+          nix-instantiate --attr darwin.builder --show-trace
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       '');
     };
 
@@ -235,10 +265,13 @@ in
       # This ensures that anything built on the guest isn't lost when the guest is
       # restarted.
       writableStoreUseTmpfs = false;
+<<<<<<< HEAD
 
       # Pass certificates from host to the guest otherwise when custom CA certificates
       # are required we can't use the cached builder.
       useHostCerts = true;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
   };
 }

@@ -15,11 +15,19 @@ let
     rm -f /var/lib/glusterd/secure-access
   '';
 
+<<<<<<< HEAD
   restartTriggers = optionals (cfg.tlsSettings != null) [
     config.environment.etc."ssl/glusterfs.pem".source
     config.environment.etc."ssl/glusterfs.key".source
     config.environment.etc."ssl/glusterfs.ca".source
   ];
+=======
+  restartTriggers = if (cfg.tlsSettings != null) then [
+    config.environment.etc."ssl/glusterfs.pem".source
+    config.environment.etc."ssl/glusterfs.key".source
+    config.environment.etc."ssl/glusterfs.ca".source
+  ] else [];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   cfg = config.services.glusterfs;
 

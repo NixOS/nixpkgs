@@ -5,7 +5,11 @@ with lib;
 let
 
   cfg = config.virtualisation.anbox;
+<<<<<<< HEAD
 
+=======
+  kernelPackages = config.boot.kernelPackages;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   addrOpts = v: addr: pref: name: {
     address = mkOption {
       default = addr;
@@ -25,6 +29,7 @@ let
     };
   };
 
+<<<<<<< HEAD
   finalImage = if cfg.imageModifications == "" then cfg.image else ( pkgs.callPackage (
     { runCommandNoCC, squashfsTools }:
 
@@ -47,6 +52,8 @@ let
     ''
   ) { });
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 in
 
 {
@@ -64,6 +71,7 @@ in
       '';
     };
 
+<<<<<<< HEAD
     imageModifications = mkOption {
       default = "";
       type = types.lines;
@@ -76,6 +84,8 @@ in
       '';
     };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     extraInit = mkOption {
       type = types.lines;
       default = "";
@@ -101,12 +111,18 @@ in
   config = mkIf cfg.enable {
 
     assertions = singleton {
+<<<<<<< HEAD
       assertion = with config.boot.kernelPackages; kernelAtLeast "5.5" && kernelOlder "5.18";
       message = "Anbox needs a kernel with binder and ashmem support";
+=======
+      assertion = versionAtLeast (getVersion config.boot.kernelPackages.kernel) "4.18";
+      message = "Anbox needs user namespace support to work properly";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
 
     environment.systemPackages = with pkgs; [ anbox ];
 
+<<<<<<< HEAD
     systemd.mounts = singleton {
       requiredBy = [ "anbox-container-manager.service" ];
       description = "Anbox Binder File System";
@@ -114,6 +130,12 @@ in
       where = "/dev/binderfs";
       type = "binder";
     };
+=======
+    services.udev.extraRules = ''
+      KERNEL=="ashmem", NAME="%k", MODE="0666"
+      KERNEL=="binder*", NAME="%k", MODE="0666"
+    '';
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     virtualisation.lxc.enable = true;
     networking.bridges.anbox0.interfaces = [];
@@ -124,9 +146,12 @@ in
       internalInterfaces = [ "anbox0" ];
     };
 
+<<<<<<< HEAD
     # Ensures NetworkManager doesn't touch anbox0
     networking.networkmanager.unmanaged = [ "anbox0" ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     systemd.services.anbox-container-manager = let
       anboxloc = "/var/lib/anbox";
     in {
@@ -161,13 +186,21 @@ in
         ExecStart = ''
           ${pkgs.anbox}/bin/anbox container-manager \
             --data-path=${anboxloc} \
+<<<<<<< HEAD
             --android-image=${finalImage} \
+=======
+            --android-image=${cfg.image} \
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
             --container-network-address=${cfg.ipv4.container.address} \
             --container-network-gateway=${cfg.ipv4.gateway.address} \
             --container-network-dns-servers=${cfg.ipv4.dns} \
             --use-rootfs-overlay \
+<<<<<<< HEAD
             --privileged \
             --daemon
+=======
+            --privileged
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         '';
       };
     };

@@ -5,13 +5,20 @@
 , openvdb, libXxf86vm, tbb, alembic
 , zlib, zstd, fftw, opensubdiv, freetype, jemalloc, ocl-icd, addOpenGLRunpath
 , jackaudioSupport ? false, libjack2
+<<<<<<< HEAD
 , cudaSupport ? config.cudaSupport, cudaPackages ? { }
+=======
+, cudaSupport ? config.cudaSupport or false, cudaPackages ? {}
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , hipSupport ? false, hip # comes with a significantly larger closure size
 , colladaSupport ? true, opencollada
 , spaceNavSupport ? stdenv.isLinux, libspnav
 , makeWrapper
 , pugixml, llvmPackages, SDL, Cocoa, CoreGraphics, ForceFeedback, OpenAL, OpenGL
+<<<<<<< HEAD
 , waylandSupport ? stdenv.isLinux, pkg-config, wayland, wayland-protocols, libffi, libdecor, libxkbcommon, dbus
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , potrace
 , openxr-loader
 , embree, gmp, libharu
@@ -28,6 +35,7 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "blender";
+<<<<<<< HEAD
   version = "3.6.2";
 
   src = fetchurl {
@@ -44,6 +52,19 @@ stdenv.mkDerivation rec {
     ]
     ++ lib.optionals cudaSupport [ addOpenGLRunpath ]
     ++ lib.optionals waylandSupport [ pkg-config ];
+=======
+  version = "3.5.1";
+
+  src = fetchurl {
+    url = "https://download.blender.org/source/${pname}-${version}.tar.xz";
+    hash = "sha256-vXQox+bLpakAIWJpwyER3/qrrxvbVHLyMZZeYVF0qAk=";
+  };
+
+  patches = lib.optional stdenv.isDarwin ./darwin.patch;
+
+  nativeBuildInputs = [ cmake makeWrapper python310Packages.wrapPython llvmPackages.llvm.dev ]
+    ++ lib.optionals cudaSupport [ addOpenGLRunpath ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   buildInputs =
     [ boost ffmpeg gettext glew ilmbase
       freetype libjpeg libpng libsamplerate libsndfile libtiff libwebp
@@ -57,9 +78,12 @@ stdenv.mkDerivation rec {
       libharu
       libepoxy
     ]
+<<<<<<< HEAD
     ++ lib.optionals waylandSupport [
       wayland wayland-protocols libffi libdecor libxkbcommon dbus
     ]
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     ++ lib.optionals (!stdenv.isAarch64) [
       openimagedenoise
       embree
@@ -82,6 +106,11 @@ stdenv.mkDerivation rec {
   pythonPath = with python310Packages; [ numpy requests ];
 
   postPatch = ''
+<<<<<<< HEAD
+=======
+    # allow usage of dynamically linked embree
+    rm build_files/cmake/Modules/FindEmbree.cmake
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '' +
     (if stdenv.isDarwin then ''
       : > build_files/cmake/platform/platform_apple_xcode.cmake
@@ -131,12 +160,15 @@ stdenv.mkDerivation rec {
       "-DWITH_IMAGE_OPENJPEG=ON"
       "-DWITH_OPENCOLLADA=${if colladaSupport then "ON" else "OFF"}"
     ]
+<<<<<<< HEAD
     ++ lib.optionals waylandSupport [
       "-DWITH_GHOST_WAYLAND=ON"
       "-DWITH_GHOST_WAYLAND_DBUS=ON"
       "-DWITH_GHOST_WAYLAND_DYNLOAD=OFF"
       "-DWITH_GHOST_WAYLAND_LIBDECOR=ON"
     ]
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     ++ lib.optionals stdenv.hostPlatform.isAarch64 [
       "-DWITH_CYCLES_EMBREE=OFF"
     ]
@@ -167,7 +199,10 @@ stdenv.mkDerivation rec {
     mkdir $out/Applications
     mv $out/Blender.app $out/Applications
   '' + ''
+<<<<<<< HEAD
     mv $out/share/blender/${lib.versions.majorMinor version}/python{,-ext}
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     buildPythonPath "$pythonPath"
     wrapProgram $blenderExecutable \
       --prefix PATH : $program_PATH \
@@ -184,8 +219,11 @@ stdenv.mkDerivation rec {
     done
   '';
 
+<<<<<<< HEAD
   passthru = { inherit python; };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   meta = with lib; {
     description = "3D Creation/Animation/Publishing System";
     homepage = "https://www.blender.org";
@@ -196,6 +234,9 @@ stdenv.mkDerivation rec {
     platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-linux" ];
     broken = stdenv.isDarwin;
     maintainers = with maintainers; [ goibhniu veprbl ];
+<<<<<<< HEAD
     mainProgram = "blender";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

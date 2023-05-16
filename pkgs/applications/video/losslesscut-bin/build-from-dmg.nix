@@ -31,7 +31,11 @@ stdenvNoCC.mkDerivation {
   '';
 
   meta = metaCommon // (with lib; {
+<<<<<<< HEAD
     platforms = if isAarch64 then [ "aarch64-darwin" ] else platforms.darwin;
+=======
+    platforms = singleton (if isAarch64 then "aarch64-darwin" else "x86_64-darwin");
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     mainProgram = "losslesscut";
   });
 }

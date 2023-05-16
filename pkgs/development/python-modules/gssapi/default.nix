@@ -33,10 +33,13 @@ buildPythonPackage rec {
       --replace 'get_output(f"{kc} gssapi --prefix")' '"${lib.getDev krb5}"'
   '';
 
+<<<<<<< HEAD
   env = lib.optionalAttrs (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) {
     GSSAPI_SUPPORT_DETECT = "false";
   };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nativeBuildInputs = [
     cython
     krb5

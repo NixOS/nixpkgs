@@ -22,7 +22,11 @@
 , pypugjs
 , boto3
 , moto
+<<<<<<< HEAD
 , markdown
+=======
+, mock
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , lz4
 , setuptoolsTrial
 , buildbot-worker
@@ -65,14 +69,22 @@ let
 
   package = buildPythonApplication rec {
     pname = "buildbot";
+<<<<<<< HEAD
     version = "3.9.2";
+=======
+    version = "3.8.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     format = "setuptools";
 
     disabled = pythonOlder "3.7";
 
     src = fetchPypi {
       inherit pname version;
+<<<<<<< HEAD
       hash = "sha256-7QhIMUpzmxbh8qjz0hgqzibLkWADhTV523neo1wpGSA=";
+=======
+      hash = "sha256-Z4BmC6Ed+7y4rJologiLXhkIvucXz65KEBxX3LFqExY=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
 
     propagatedBuildInputs = [
@@ -98,7 +110,11 @@ let
       pypugjs
       boto3
       moto
+<<<<<<< HEAD
       markdown
+=======
+      mock
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       lz4
       setuptoolsTrial
       buildbot-worker
@@ -120,6 +136,12 @@ let
       substituteInPlace buildbot/scripts/logwatcher.py --replace '/usr/bin/tail' "$(type -P tail)"
     '';
 
+<<<<<<< HEAD
+=======
+    # Silence the depreciation warning from SqlAlchemy
+    SQLALCHEMY_SILENCE_UBER_WARNING = 1;
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     # TimeoutErrors on slow machines -> aarch64
     doCheck = !stdenv.isAarch64;
 

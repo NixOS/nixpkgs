@@ -13,13 +13,21 @@
 
 buildPythonApplication rec {
   pname = "rare";
+<<<<<<< HEAD
   version = "1.10.3";
+=======
+  version = "1.9.4";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "Dummerle";
     repo = "Rare";
     rev = "refs/tags/${version}";
+<<<<<<< HEAD
     hash = "sha256-7KER9gCpqjEKikQTVHsvwX6efCb9L0ut6OBjjLBW2tI=";
+=======
+    sha256 = "sha256-+STwVsDdvjP7HaqmaQVug+6h0n0rw/j4LGQQSNdLVQQ=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [
@@ -36,6 +44,10 @@ buildPythonApplication rec {
   ];
 
   patches = [
+<<<<<<< HEAD
+=======
+    ./fix-instance.patch
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     # Not able to run pythonRelaxDepsHook because of https://github.com/NixOS/nixpkgs/issues/198342
     ./legendary-gl-version.patch
   ];

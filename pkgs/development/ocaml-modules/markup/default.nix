@@ -16,7 +16,11 @@ buildDunePackage rec {
   propagatedBuildInputs = [ uchar uutf ];
 
   checkInputs = [ ounit2 ];
+<<<<<<< HEAD
   doCheck = lib.versionAtLeast ocaml.version "4.08";
+=======
+  doCheck = lib.versionAtLeast ocaml.version "4.04";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   meta = with lib; {
     homepage = "https://github.com/aantron/markup.ml/";

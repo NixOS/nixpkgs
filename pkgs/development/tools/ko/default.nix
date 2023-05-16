@@ -7,16 +7,28 @@
 
 buildGoModule rec {
   pname = "ko";
+<<<<<<< HEAD
   version = "0.14.1";
+=======
+  version = "0.13.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "ko-build";
     repo = pname;
+<<<<<<< HEAD
     rev = "refs/tags/v${version}";
     hash = "sha256-jBysfeoZ9W94c07xFODBASrWGJbZRHsUODfEul9f4Ug=";
   };
 
   vendorHash = null;
+=======
+    rev = "v${version}";
+    sha256 = "sha256-KVJqqvp46BAUscG5Xj/g4ThUXKFsuJdzEB++uBskFiw=";
+  };
+
+  vendorSha256 = null;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -25,11 +37,14 @@ buildGoModule rec {
 
   ldflags = [ "-s" "-w" "-X github.com/google/ko/pkg/commands.Version=${version}" ];
 
+<<<<<<< HEAD
   checkFlags = [
     # requires docker daemon
     "-skip=TestNewPublisherCanPublish"
   ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nativeCheckInputs = [ git ];
   preCheck = ''
     # Feed in all the tests for testing

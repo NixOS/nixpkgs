@@ -5,14 +5,20 @@
 , qmake
 , qtbase
 , qtsvg
+<<<<<<< HEAD
 , qtx11extras ? null
 , kwindowsystem ? null
 , qtwayland
+=======
+, qtx11extras
+, kwindowsystem
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , libX11
 , libXext
 , qttools
 , wrapQtAppsHook
 , gitUpdater
+<<<<<<< HEAD
 
 , qt5Kvantum ? null
 }:
@@ -21,6 +27,12 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "qtstyleplugin-kvantum${lib.optionalString isQt6 "6"}";
+=======
+}:
+
+stdenv.mkDerivation rec {
+  pname = "qtstyleplugin-kvantum";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   version = "1.0.10";
 
   src = fetchFromGitHub {
@@ -39,12 +51,22 @@ stdenv.mkDerivation rec {
   buildInputs = [
     qtbase
     qtsvg
+<<<<<<< HEAD
     libX11
     libXext
   ] ++ lib.optionals (!isQt6) [ qtx11extras kwindowsystem ]
     ++ lib.optional isQt6 qtwayland;
 
   sourceRoot = "${src.name}/Kvantum";
+=======
+    qtx11extras
+    kwindowsystem
+    libX11
+    libXext
+  ];
+
+  sourceRoot = "source/Kvantum";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   patches = [
     (fetchpatch {
@@ -61,12 +83,15 @@ stdenv.mkDerivation rec {
       --replace "\$\$[QT_INSTALL_PLUGINS]" "$out/$qtPluginPrefix"
   '';
 
+<<<<<<< HEAD
   postInstall = lib.optionalString isQt6 ''
     # make default Kvantum themes available for Qt 6 apps
     mkdir -p "$out/share"
     ln -s "${qt5Kvantum}/share/Kvantum" "$out/share/Kvantum"
   '';
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   passthru.updateScript = gitUpdater {
     rev-prefix = "V";
   };
@@ -76,6 +101,10 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/tsujan/Kvantum";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
+<<<<<<< HEAD
     maintainers = with maintainers; [ romildo Scrumplex ];
+=======
+    maintainers = [ maintainers.romildo ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

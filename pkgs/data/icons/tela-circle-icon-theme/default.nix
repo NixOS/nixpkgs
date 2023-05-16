@@ -19,13 +19,21 @@ lib.checkListOfEnum "${pname}: color variants" [ "standard" "black" "blue" "brow
 
 stdenvNoCC.mkDerivation rec {
   inherit pname;
+<<<<<<< HEAD
   version = "2023-06-25";
+=======
+  version = "2023-04-16";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "vinceliuice";
     repo = pname;
     rev = version;
+<<<<<<< HEAD
     sha256 = "nob0Isx785YRP4QIj2CK+v99CUiRwtkge1dNXCCwaDs=";
+=======
+    sha256 = "OHI/kT4HMlWUTxIeGXjtuIYBzQKM3XTGXuE9cviNDTM=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

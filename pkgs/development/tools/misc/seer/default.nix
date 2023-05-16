@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 { lib, stdenv, fetchFromGitHub, cmake, gdb, qtcharts, qtbase, wrapQtAppsHook }:
+=======
+{ lib, stdenv, fetchFromGitHub, cmake, qtcharts, qtbase, wrapQtAppsHook }:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 stdenv.mkDerivation rec {
   pname = "seer";
@@ -15,11 +19,14 @@ stdenv.mkDerivation rec {
     cd src
   '';
 
+<<<<<<< HEAD
   patchPhase = ''
     substituteInPlace src/{SeerGdbConfigPage,SeerMainWindow,SeerGdbWidget}.cpp \
       --replace "/usr/bin/gdb" "${gdb}/bin/gdb"
   '';
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   buildInputs = [ qtbase qtcharts ];
   nativeBuildInputs = [ cmake wrapQtAppsHook ];
 

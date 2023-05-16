@@ -12,11 +12,19 @@ assert ldapSupport -> openldap != null;
 
 stdenv.mkDerivation rec {
   pname = "apr-util";
+<<<<<<< HEAD
   version = "1.6.3";
 
   src = fetchurl {
     url = "mirror://apache/apr/${pname}-${version}.tar.bz2";
     sha256 = "sha256-pBB243EHRjJsOUUEKZStmk/KwM4Cd92P6gdv7DyXcrU=";
+=======
+  version = "1.6.1";
+
+  src = fetchurl {
+    url = "mirror://apache/apr/${pname}-${version}.tar.bz2";
+    sha256 = "0nq3s1yn13vplgl6qfm09f7n0wm08malff9s59bqf9nid9xjzqfk";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   patches = [ ./fix-libxcrypt-build.patch ]

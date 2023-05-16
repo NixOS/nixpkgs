@@ -14,7 +14,11 @@ stdenv.mkDerivation rec {
     hash = "sha256-yp7u6qhpPYQpBw3d+VLg0GgMyZONVII8BsBCEoRZm4w=";
   };
 
+<<<<<<< HEAD
   sourceRoot = "${src.name}/src";
+=======
+  sourceRoot = "source/src";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   postPatch = ''
     sed -i '/-m64/d;/-m32/d' CMakeLists.txt

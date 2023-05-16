@@ -1,7 +1,11 @@
 { lib, stdenv
 , fetchFromGitHub
 , pkg-config
+<<<<<<< HEAD
 , waf
+=======
+, wafHook
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , python3
 , asciidoc
 , docbook_xml_dtd_45
@@ -25,7 +29,11 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     pkg-config
+<<<<<<< HEAD
     waf.hook
+=======
+    wafHook
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     python3
     asciidoc
     docbook_xml_dtd_45

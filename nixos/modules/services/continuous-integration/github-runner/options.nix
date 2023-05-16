@@ -208,6 +208,7 @@ with lib;
     '';
     default = null;
   };
+<<<<<<< HEAD
 
   nodeRuntimes = mkOption {
     type = with types; nonEmptyListOf (enum [ "node16" "node20" ]);
@@ -216,4 +217,6 @@ with lib;
       List of Node.js runtimes the runner should support.
     '';
   };
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }

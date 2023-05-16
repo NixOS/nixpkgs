@@ -38,7 +38,11 @@ import ./make-test-python.nix ({ pkgs, ... }: rec {
           priority = 2000;
           shred = true;
         };
+<<<<<<< HEAD
         # using mail somewhere should add --mail to logrotate invocation
+=======
+        # using mail somewhere should add --mail to logrotate invokation
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         sendmail = {
           mail = "user@domain.tld";
         };

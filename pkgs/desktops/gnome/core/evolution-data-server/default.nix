@@ -50,13 +50,21 @@
 
 stdenv.mkDerivation rec {
   pname = "evolution-data-server";
+<<<<<<< HEAD
   version = "3.48.4";
+=======
+  version = "3.48.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/evolution-data-server/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+<<<<<<< HEAD
     sha256 = "mX4/k7F++wr/zAF77oeAul+iwAnjZVG7yRoIrlUtbWA=";
+=======
+    sha256 = "XOYsHmfyeJNCp/SgNbEC905i7YX2DoGlt/PgQWVATf8=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   patches = [

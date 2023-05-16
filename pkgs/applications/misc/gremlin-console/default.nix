@@ -2,10 +2,17 @@
 
 stdenv.mkDerivation rec {
   pname = "gremlin-console";
+<<<<<<< HEAD
   version = "3.7.0";
   src = fetchzip {
     url = "https://downloads.apache.org/tinkerpop/${version}/apache-tinkerpop-gremlin-console-${version}-bin.zip";
     sha256 = "sha256-trdxRqQ/S7b02CPX/iZj/lDSNEtS9HqVYd77bHduOKo=";
+=======
+  version = "3.6.3";
+  src = fetchzip {
+    url = "https://downloads.apache.org/tinkerpop/${version}/apache-tinkerpop-gremlin-console-${version}-bin.zip";
+    sha256 = "sha256-+IzTCaRlYW1i4ZzEgOpEA0rXN45A2q1iddrqU9up2IA=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ makeWrapper ];

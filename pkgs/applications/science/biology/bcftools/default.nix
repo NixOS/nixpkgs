@@ -2,11 +2,19 @@
 
 stdenv.mkDerivation rec {
   pname = "bcftools";
+<<<<<<< HEAD
   version = "1.18";
 
   src = fetchurl {
     url = "https://github.com/samtools/bcftools/releases/download/${version}/${pname}-${version}.tar.bz2";
     sha256 = "sha256-2bnTYpPkzGKrdHOqJTk4nU4d55sakn1IP26R88POrH4=";
+=======
+  version = "1.17";
+
+  src = fetchurl {
+    url = "https://github.com/samtools/bcftools/releases/download/${version}/${pname}-${version}.tar.bz2";
+    sha256 = "sha256-AfddjnAdhbLHWRckEgCcwE8pthYWrOL6dRFhI95Flsw=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

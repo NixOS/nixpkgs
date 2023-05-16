@@ -7,8 +7,11 @@ self: super:
 with self; with super; {
   attrs = callPackage ../development/python2-modules/attrs { };
 
+<<<<<<< HEAD
   backports-functools-lru-cache = callPackage ../development/python2-modules/backports-functools-lru-cache { };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   bootstrapped-pip = toPythonModule (callPackage ../development/python2-modules/bootstrapped-pip { });
 
   cffi = callPackage ../development/python2-modules/cffi { inherit cffi; };
@@ -37,10 +40,13 @@ with self; with super; {
 
   more-itertools = callPackage ../development/python2-modules/more-itertools { };
 
+<<<<<<< HEAD
   # ninja python stub was created to help simplify python builds using PyPA's
   # build tool in Python 3, but it does not yet support Python 2
   ninja = pkgs.buildPackages.ninja;
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   packaging = callPackage ../development/python2-modules/packaging { };
 
   pip = callPackage ../development/python2-modules/pip { };
@@ -77,6 +83,11 @@ with self; with super; {
 
   scandir = callPackage ../development/python2-modules/scandir { };
 
+<<<<<<< HEAD
+=======
+  sequoia = disabled super.sequoia;
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   setuptools = callPackage ../development/python2-modules/setuptools { };
 
   setuptools-scm = callPackage ../development/python2-modules/setuptools-scm { };
@@ -87,10 +98,13 @@ with self; with super; {
     doCheck = false;  # circular dependency with pytest
   });
 
+<<<<<<< HEAD
   wcwidth = callPackage ../development/python2-modules/wcwidth {
     inherit wcwidth;
   };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   wheel = callPackage ../development/python2-modules/wheel { };
 
   zeek = disabled super.zeek;

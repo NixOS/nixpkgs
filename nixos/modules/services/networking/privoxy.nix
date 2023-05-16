@@ -12,7 +12,11 @@ let
     else "${name} ${toString val}\n";
 
   configType = with types;
+<<<<<<< HEAD
     let atom = oneOf [ int bool str path ];
+=======
+    let atom = oneOf [ int bool string path ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     in attrsOf (either atom (listOf atom))
     // { description = ''
           privoxy configuration type. The format consists of an attribute

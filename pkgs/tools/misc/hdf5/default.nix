@@ -26,7 +26,11 @@ assert !cppSupport || !mpiSupport;
 let inherit (lib) optional optionals; in
 
 stdenv.mkDerivation rec {
+<<<<<<< HEAD
   version = "1.14.2";
+=======
+  version = "1.14.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pname = "hdf5"
     + lib.optionalString cppSupport "-cpp"
     + lib.optionalString fortranSupport "-fortran"
@@ -34,11 +38,16 @@ stdenv.mkDerivation rec {
     + lib.optionalString threadsafe "-threadsafe";
 
   src = fetchurl {
+<<<<<<< HEAD
     url = let
         majorMinor = lib.versions.majorMinor version;
         majorMinorPatch = with lib.versions; "${major version}.${minor version}.${patch version}";
       in "https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-${majorMinor}/hdf5-${majorMinorPatch}/src/hdf5-${version}.tar.bz2";
     sha256 = "sha256-6jxeJX7zIq9ed/weUurTrWvzu0rAZIDdF+45ANeiTPs=";
+=======
+    url = "https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-${lib.versions.majorMinor version}/hdf5-${version}/src/hdf5-${version}.tar.bz2";
+    sha256 = "sha256-5OeUM0UO2uKGWkxjKBiLtFORsp10+MU47mmfCxFsK6A=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   passthru = {
@@ -94,6 +103,21 @@ stdenv.mkDerivation rec {
     moveToOutput 'bin/h5pcc' "''${!outputDev}"
   '';
 
+<<<<<<< HEAD
+=======
+  # Remove reference to /build, which get introduced
+  # into AM_CPPFLAGS since hdf5-1.14.0. Cmake of various
+  # packages using HDF5 gets confused trying access the non-existent path.
+  postFixup = ''
+    for i in h5cc h5pcc h5c++; do
+      if [ -f $dev/bin/$i ]; then
+        substituteInPlace $dev/bin/$i --replace \
+          '-I/build/hdf5-${version}/src/H5FDsubfiling' ""
+      fi
+    done
+  '';
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   enableParallelBuilding = true;
 
   passthru.tests = {

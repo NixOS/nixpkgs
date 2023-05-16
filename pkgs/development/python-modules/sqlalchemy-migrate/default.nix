@@ -4,6 +4,10 @@
 , fetchPypi
 , fetchpatch
 , python
+<<<<<<< HEAD
+=======
+, pythonAtLeast
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , scripttest
 , pytz
 , pbr
@@ -19,18 +23,33 @@ buildPythonPackage rec {
   pname = "sqlalchemy-migrate";
   version = "0.13.0";
 
+<<<<<<< HEAD
+=======
+  # using deprecated inspect.getargspec function
+  # https://bugs.launchpad.net/sqlalchemy-migrate/+bug/2003619
+  disabled = pythonAtLeast "3.11";
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   src = fetchPypi {
     inherit pname version;
     sha256 = "1y0lcqii7b4vp7yh9dyxrl4i77hi8jkkw7d06mgdw2h458ljxh0b";
   };
 
+<<<<<<< HEAD
   patches = [
     # See: https://review.openstack.org/#/c/608382/
+=======
+  # See: https://review.openstack.org/#/c/608382/
+  patches = [
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     (fetchpatch {
       url = "https://github.com/openstack/sqlalchemy-migrate/pull/18.patch";
       sha256 = "1qyfq2m7w7xqf0r9bc2x42qcra4r9k9l9g1jy5j0fvlb6bvvjj07";
     })
+<<<<<<< HEAD
     ./python3.11-comp.diff
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   postPatch = ''

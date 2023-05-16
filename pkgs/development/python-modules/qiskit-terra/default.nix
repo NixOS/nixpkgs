@@ -14,7 +14,11 @@
 , psutil
 , python-constraint
 , python-dateutil
+<<<<<<< HEAD
 , rustworkx
+=======
+, retworkx
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , scipy
 , scikit-quant ? null
 , setuptools-rust
@@ -85,7 +89,11 @@ buildPythonPackage rec {
     psutil
     python-constraint
     python-dateutil
+<<<<<<< HEAD
     rustworkx
+=======
+    retworkx
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     scipy
     scikit-quant
     stevedore

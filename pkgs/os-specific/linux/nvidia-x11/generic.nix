@@ -4,24 +4,37 @@
 , sha256_64bit
 , sha256_aarch64 ? null
 , openSha256 ? null
+<<<<<<< HEAD
 , settingsSha256 ? null
 , settingsVersion ? version
 , persistencedSha256 ? null
 , persistencedVersion ? version
 , fabricmanagerSha256 ? null
 , fabricmanagerVersion ? version
+=======
+, settingsSha256
+, settingsVersion ? version
+, persistencedSha256
+, persistencedVersion ? version
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , useGLVND ? true
 , useProfiles ? true
 , preferGtk2 ? false
 , settings32Bit ? false
+<<<<<<< HEAD
 , useSettings ? true
 , usePersistenced ? true
 , useFabricmanager ? false
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , ibtSupport ? false
 
 , prePatch ? ""
 , postPatch ? null
+<<<<<<< HEAD
 , patchFlags ? null
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , patches ? []
 , broken ? false
 , brokenOpen ? broken
@@ -38,21 +51,29 @@
   disable32Bit ? stdenv.hostPlatform.system == "aarch64-linux"
   # 32 bit libs only version of this package
 , lib32 ? null
+<<<<<<< HEAD
   # Whether to extract the GSP firmware, datacenter drivers needs to extract the
   # firmware
 , firmware ? openSha256 != null || useFabricmanager
   # Whether the user accepts the NVIDIA Software License
 , config, acceptLicense ? config.nvidia.acceptLicense or false
+=======
+  # Whether to extract the GSP firmware
+, firmware ? openSha256 != null
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 with lib;
 
 assert !libsOnly -> kernel != null;
 assert versionOlder version "391" -> sha256_32bit != null;
+<<<<<<< HEAD
 assert useSettings -> settingsSha256 != null;
 assert usePersistenced -> persistencedSha256 != null;
 assert useFabricmanager -> fabricmanagerSha256 != null;
 assert useFabricmanager -> !(useSettings || usePersistenced);
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 let
   nameSuffix = optionalString (!libsOnly) "-${kernel.version}";
@@ -62,6 +83,7 @@ let
   libPathFor = pkgs: lib.makeLibraryPath (with pkgs; [
     libdrm xorg.libXext xorg.libX11
     xorg.libXv xorg.libXrandr xorg.libxcb zlib stdenv.cc.cc
+<<<<<<< HEAD
     wayland mesa libGL openssl
     dbus # for nvidia-powerd
   ]);
@@ -88,11 +110,21 @@ let
 
   self = stdenv.mkDerivation {
     name = "nvidia-${if useFabricmanager then "dc" else "x11"}-${version}${nameSuffix}";
+=======
+    wayland mesa libGL
+  ]);
+
+  self = stdenv.mkDerivation {
+    name = "nvidia-x11-${version}${nameSuffix}";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     builder = ./builder.sh;
 
     src =
+<<<<<<< HEAD
       if !acceptLicense && (openSha256 == null) then throwLicense else
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       if stdenv.hostPlatform.system == "x86_64-linux" then
         fetchurl {
           urls = if args ? url then [ args.url ] else [
@@ -120,7 +152,11 @@ let
       else throw "nvidia-x11 does not support platform ${stdenv.hostPlatform.system}";
 
     patches = if libsOnly then null else patches;
+<<<<<<< HEAD
     inherit prePatch postPatch patchFlags;
+=======
+    inherit prePatch postPatch;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     inherit version useGLVND useProfiles;
     inherit (stdenv.hostPlatform) system;
     inherit i686bundled;
@@ -160,6 +196,7 @@ let
         nvidia_x11 = self;
         broken = brokenOpen;
       }) openSha256;
+<<<<<<< HEAD
       settings = if useSettings then
         (if settings32Bit then pkgsi686Linux.callPackage else callPackage) (import ./settings.nix self settingsSha256) {
           withGtk2 = preferGtk2;
@@ -171,6 +208,13 @@ let
       fabricmanager = if useFabricmanager then
         mapNullable (hash: callPackage (import ./fabricmanager.nix self hash) { }) fabricmanagerSha256
       else {};
+=======
+      settings = (if settings32Bit then pkgsi686Linux.callPackage else callPackage) (import ./settings.nix self settingsSha256) {
+        withGtk2 = preferGtk2;
+        withGtk3 = !preferGtk2;
+      };
+      persistenced = mapNullable (hash: callPackage (import ./persistenced.nix self hash) { }) persistencedSha256;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       inherit persistencedVersion settingsVersion;
       compressFirmware = false;
       ibtSupport = ibtSupport || (lib.versionAtLeast version "530");
@@ -180,12 +224,20 @@ let
 
     meta = with lib; {
       homepage = "https://www.nvidia.com/object/unix.html";
+<<<<<<< HEAD
       description = "${if useFabricmanager then "Data Center" else "X.org"} driver and kernel module for NVIDIA cards";
+=======
+      description = "X.org driver and kernel module for NVIDIA graphics cards";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       license = licenses.unfreeRedistributable;
       platforms = [ "x86_64-linux" ]
         ++ optionals (sha256_32bit != null) [ "i686-linux" ]
         ++ optionals (sha256_aarch64 != null) [ "aarch64-linux" ];
+<<<<<<< HEAD
       maintainers = with maintainers; [ jonringer kiskae edwtjo ];
+=======
+      maintainers = with maintainers; [ jonringer kiskae ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       priority = 4; # resolves collision with xorg-server's "lib/xorg/modules/extensions/libglx.so"
       inherit broken;
     };

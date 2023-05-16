@@ -1,6 +1,10 @@
 { lib
 , stdenv
 , fetchFromGitHub
+<<<<<<< HEAD
+=======
+, fetchpatch
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , cmake
 , ninja
 , openssl
@@ -15,19 +19,34 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "duckdb";
+<<<<<<< HEAD
   version = "0.8.1";
+=======
+  version = "0.7.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-LEv9yURkYvONObTbIA4CS+umwCRMH8gRQaDtzbCzID4=";
+=======
+    sha256 = "sha256-dCPWrB/Jqm4/kS6J/3jcQG291tFKAZSEptEYLGOZsLo=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   patches = [ ./version.patch ];
 
   postPatch = ''
     substituteInPlace CMakeLists.txt --subst-var-by DUCKDB_VERSION "v${version}"
+<<<<<<< HEAD
+=======
+    substituteInPlace tools/shell/CMakeLists.txt \
+      --replace \
+      'install(TARGETS shell RUNTIME DESTINATION "''${PROJECT_BINARY_DIR}")' \
+      'install(TARGETS shell RUNTIME DESTINATION "''${INSTALL_BIN_DIR}")'
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '';
 
   nativeBuildInputs = [ cmake ninja ];
@@ -85,6 +104,7 @@ stdenv.mkDerivation rec {
         "test/sql/copy/parquet/delta_byte_array_length_mismatch.test"
         "test/sql/function/timestamp/test_icu_strptime.test"
         "test/sql/timezone/test_icu_timezone.test"
+<<<<<<< HEAD
         "test/sql/copy/parquet/snowflake_lineitem.test"
         "test/sql/copy/parquet/test_parquet_force_download.test"
         "test/sql/copy/parquet/delta_byte_array_multiple_pages.test"
@@ -95,6 +115,8 @@ stdenv.mkDerivation rec {
         "test/common/test_cast_struct.test"
         # test is order sensitive
         "test/sql/copy/parquet/parquet_glob.test"
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         # these are only hidden if no filters are passed in
         "[!hide]"
         # this test apparently never terminates

@@ -12,14 +12,22 @@
 
 stdenv.mkDerivation rec {
   pname = "ofono";
+<<<<<<< HEAD
   version = "2.1";
+=======
+  version = "2.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   outputs = [ "out" "dev" ];
 
   src = fetchgit {
     url = "https://git.kernel.org/pub/scm/network/ofono/ofono.git";
     rev = version;
+<<<<<<< HEAD
     sha256 = "sha256-GxQfh/ps5oM9G6B1EVgnjo8LqHD1hMqdnju1PCQq3kA=";
+=======
+    sha256 = "sha256-T8rfReruvHGQCN9IDGIrFCoNjFKKMnUGPKzxo2HTZFQ=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   patches = [
@@ -61,7 +69,11 @@ stdenv.mkDerivation rec {
     homepage = "https://git.kernel.org/pub/scm/network/ofono/ofono.git";
     changelog = "https://git.kernel.org/pub/scm/network/ofono/ofono.git/plain/ChangeLog?h=${version}";
     license = licenses.gpl2Only;
+<<<<<<< HEAD
     maintainers = with maintainers; [ ];
+=======
+    maintainers = with maintainers; [ jtojnar ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     platforms = platforms.linux;
   };
 }

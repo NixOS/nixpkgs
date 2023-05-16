@@ -17,6 +17,7 @@
   platforms = {
     "aarch64-darwin" = {
       platformStr = "osx-arm64";
+<<<<<<< HEAD
       hash = "sha512-Jpj/jmDoc01f1LqcdtszZHOG87jy7p3INajhN0taVzVX6l7WnrxY9Y8VLffBffWuNJ9LZjpGVDLt4/JqyALWrw==";
     };
     "x86_64-darwin" = {
@@ -26,6 +27,17 @@
     "x86_64-linux" = {
       platformStr = "linux-x64";
       hash = "sha512-d2Ym8kofv/ik4m94D0gz3LcOQxWIDaGmXTmv4XX2zYztH/4wXC2JRr8vIpqwwX86gy3apUmTc3rCyc5Zrz2Sig==";
+=======
+      hash = "sha512-MDuyFxtjlojXyrOdgJxVY3IDMLnrDvA4rO7ujOlE5KH082GXfonNOFZSpa64M8jMPJhJ4sopHKgZVvKKygzjPg==";
+    };
+    "x86_64-darwin" = {
+      platformStr = "osx-x64";
+      hash = "sha512-fD48QFYIzq3/EvZR3o3VFCxIz3VZGSDJUo/ZwfZnFu7xt/xkQSBL+2zXOh9XZaBg42Xq3x9eFZQ00V8AbqJdKA==";
+    };
+    "x86_64-linux" = {
+      platformStr = "linux-x64";
+      hash = "sha512-PhgS2ivRn8Yhlr7+gbQd+rGSMDLGsxURh8lOE30Xk7zEubukjekxDsaPqM1tOS95k7TWM9xXyVVfmsJplrl+nw==";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
   };
 
@@ -33,7 +45,11 @@
 in
   stdenv.mkDerivation rec {
     pname = "azure-functions-core-tools";
+<<<<<<< HEAD
     version = "4.0.5095";
+=======
+    version = "4.0.4915";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     src = fetchurl {
       url = "https://github.com/Azure/${pname}/releases/download/${version}/Azure.Functions.Cli.${platformInfo.platformStr}.${version}.zip";

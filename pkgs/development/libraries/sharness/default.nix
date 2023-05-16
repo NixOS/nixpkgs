@@ -6,6 +6,7 @@
 , perlPackages
 , sharnessExtensions ? {} }:
 
+<<<<<<< HEAD
 stdenv.mkDerivation (finalAttrs: {
   pname = "sharness";
   version = "1.2.0";
@@ -15,6 +16,17 @@ stdenv.mkDerivation (finalAttrs: {
     repo = "sharness";
     rev = "v${finalAttrs.version}";
     hash = "sha256-C0HVWgTm9iXDSFyXcUVRfT0ip31YGaaZ6ZvxggK/x7o=";
+=======
+stdenv.mkDerivation rec {
+  pname = "sharness";
+  version = "1.1.0-dev";
+
+  src = fetchFromGitHub {
+    owner = "chriscool";
+    repo = pname;
+    rev = "3f238a740156dd2082f4bd60ced205e05894d367"; # 2020-12-09
+    sha256 = "FCYskpIqkrpNaWCi2LkhEkiow4/rXLe+lfEWNUthLUg=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   # Used for testing
@@ -41,8 +53,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
+<<<<<<< HEAD
   passthru.SHARNESS_TEST_SRCDIR = finalAttrs.finalPackage + "/share/sharness";
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   meta = with lib; {
     description = "Portable shell library to write, run and analyze automated tests adhering to Test Anything Protocol (TAP)";
     homepage = "https://github.com/chriscool/sharness";
@@ -50,4 +65,8 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = [ maintainers.spacefrogg ];
     platforms = platforms.unix;
   };
+<<<<<<< HEAD
 })
+=======
+}
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)

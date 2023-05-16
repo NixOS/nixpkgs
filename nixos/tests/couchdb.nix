@@ -1,8 +1,16 @@
 let
+<<<<<<< HEAD
   makeNode = couchpkg: user: passwd:
     { pkgs, ... } :
 
       { environment.systemPackages = [ pkgs.jq ];
+=======
+
+  makeNode = couchpkg: user: passwd:
+    { pkgs, ... } :
+
+      { environment.systemPackages = with pkgs; [ jq ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         services.couchdb.enable = true;
         services.couchdb.package = couchpkg;
         services.couchdb.adminUser = user;
@@ -11,11 +19,24 @@ let
   testuser = "testadmin";
   testpass = "cowabunga";
   testlogin = "${testuser}:${testpass}@";
+<<<<<<< HEAD
 in
 import ./make-test-python.nix ({ pkgs, lib, ...}:
 {
   name = "couchdb";
   meta.maintainers = [ ];
+=======
+
+in import ./make-test-python.nix ({ pkgs, lib, ...}:
+
+with lib;
+
+{
+  name = "couchdb";
+  meta = with pkgs.lib.maintainers; {
+    maintainers = [ ];
+  };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nodes = {
     couchdb3 = makeNode pkgs.couchdb3 testuser testpass;

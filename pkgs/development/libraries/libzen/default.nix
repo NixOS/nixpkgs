@@ -11,7 +11,11 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook ];
   configureFlags = [ "--enable-shared" ];
 
+<<<<<<< HEAD
   sourceRoot = "ZenLib/Project/GNU/Library";
+=======
+  sourceRoot = "./ZenLib/Project/GNU/Library/";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   preConfigure = "sh autogen.sh";
 

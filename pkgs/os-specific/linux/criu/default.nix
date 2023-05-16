@@ -1,6 +1,11 @@
 { stdenv, lib, fetchFromGitHub, fetchpatch, protobuf, protobufc, asciidoc, iptables
+<<<<<<< HEAD
 , xmlto, docbook_xsl, libpaper, libnl, libcap, libnet, pkg-config, iproute2, gzip
 , which, python3, makeWrapper, docbook_xml_dtd_45, perl, nftables, libbsd, gnutar
+=======
+, xmlto, docbook_xsl, libpaper, libnl, libcap, libnet, pkg-config, iproute2
+, which, python3, makeWrapper, docbook_xml_dtd_45, perl, nftables, libbsd
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , buildPackages
 }:
 
@@ -107,8 +112,12 @@ stdenv.mkDerivation rec {
   postFixup = ''
     wrapProgram $out/bin/criu \
       --set-default CR_IPTABLES ${iptables}/bin/iptables \
+<<<<<<< HEAD
       --set-default CR_IP_TOOL ${iproute2}/bin/ip \
       --prefix PATH : ${lib.makeBinPath [ gnutar gzip ]}
+=======
+      --set-default CR_IP_TOOL ${iproute2}/bin/ip
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     wrapPythonPrograms
   '';
 

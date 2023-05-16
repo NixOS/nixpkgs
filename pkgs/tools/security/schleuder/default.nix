@@ -2,6 +2,10 @@
 , bundlerApp
 , ruby
 , bundlerUpdateScript
+<<<<<<< HEAD
+=======
+, defaultGemConfig
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , nixosTests
 }:
 

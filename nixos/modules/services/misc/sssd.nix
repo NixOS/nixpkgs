@@ -135,7 +135,11 @@ in {
           ExecStart = "${pkgs.sssd}/libexec/sssd/sssd_kcm --uid 0 --gid 0";
         };
         restartTriggers = [
+<<<<<<< HEAD
           settingsFileUnsubstituted
+=======
+          config.environment.etc."sssd/sssd.conf".source
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         ];
       };
       systemd.sockets.sssd-kcm = {

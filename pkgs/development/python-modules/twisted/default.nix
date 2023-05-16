@@ -111,7 +111,10 @@ buildPythonPackage rec {
     echo 'ListingTests.test_oldFile.skip = "Timezone issue"'>> src/twisted/conch/test/test_cftp.py
     echo 'ListingTests.test_oldSingleDigitDayOfMonth.skip = "Timezone issue"'>> src/twisted/conch/test/test_cftp.py
 
+<<<<<<< HEAD
     echo 'WrapClientTLSParserTests.test_tls.skip = "pyopenssl update"' >> src/twisted/internet/test/test_endpoints.py
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     echo 'UNIXTestsBuilder_AsyncioSelectorReactorTests.test_sendFileDescriptorTriggersPauseProducing.skip = "sendFileDescriptor producer was not paused"'>> src/twisted/internet/test/test_unix.py
     echo 'UNIXTestsBuilder_SelectReactorTests.test_sendFileDescriptorTriggersPauseProducing.skip = "sendFileDescriptor producer was not paused"'>> src/twisted/internet/test/test_unix.py
 
@@ -160,7 +163,12 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     git
     glibcLocales
+<<<<<<< HEAD
     hypothesis
+=======
+    # "hypothesis" indirectly depends on twisted to build its documentation.
+    (hypothesis.override { enableDocumentation = false; })
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     pyhamcrest
   ]
   ++ passthru.optional-dependencies.conch
@@ -203,6 +211,10 @@ buildPythonPackage rec {
     homepage = "https://github.com/twisted/twisted";
     description = "Asynchronous networking framework written in Python";
     license = licenses.mit;
+<<<<<<< HEAD
     maintainers = with maintainers; [ ];
+=======
+    maintainers = with maintainers; [ SuperSandro2000 ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

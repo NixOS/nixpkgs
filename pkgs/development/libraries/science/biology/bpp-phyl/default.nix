@@ -23,7 +23,10 @@ stdenv.mkDerivation rec {
   doCheck = !stdenv.isDarwin;
 
   meta = bpp-core.meta // {
+<<<<<<< HEAD
     homepage = "https://github.com/BioPP/bpp-phyl";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     changelog = "https://github.com/BioPP/bpp-phyl/blob/master/ChangeLog";
   };
 }

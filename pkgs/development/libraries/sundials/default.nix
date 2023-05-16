@@ -12,13 +12,21 @@
 
 stdenv.mkDerivation rec {
   pname = "sundials";
+<<<<<<< HEAD
   version = "6.6.0";
+=======
+  version = "6.5.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   outputs = [ "out" "examples" ];
 
   src = fetchurl {
     url = "https://github.com/LLNL/sundials/releases/download/v${version}/sundials-${version}.tar.gz";
+<<<<<<< HEAD
     hash = "sha256-+QApuNqEbI+v9VMP0fpIRweRiNBAVU9VwdXR4EdD0p0=";
+=======
+    hash = "sha256-QlIwOAUXHk290ZoB5Swdz+Da/FmcPP7bClwv+wRainU=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

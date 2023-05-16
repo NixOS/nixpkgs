@@ -1,5 +1,9 @@
+<<<<<<< HEAD
 { lib, stdenv, callPackage, makeSetupHook, runCommand
 , tzdata
+=======
+{ lib, stdenv, callPackage, makeSetupHook
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 # Version specific stuff
 , release, version, src
@@ -8,7 +12,11 @@
 
 let
   baseInterp =
+<<<<<<< HEAD
     stdenv.mkDerivation rec {
+=======
+    stdenv.mkDerivation {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       pname = "tcl";
       inherit version src;
 
@@ -16,6 +24,7 @@ let
 
       setOutputFlags = false;
 
+<<<<<<< HEAD
       postPatch = ''
         substituteInPlace library/clock.tcl \
           --replace "/usr/share/zoneinfo" "${tzdata}/share/zoneinfo" \
@@ -24,6 +33,8 @@ let
           --replace "/usr/local/etc/zoneinfo" ""
       '';
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       preConfigure = ''
         cd unix
       '';
@@ -64,12 +75,15 @@ let
           name = "tcl-package-hook";
           propagatedBuildInputs = [ buildPackages.makeWrapper ];
         } ./tcl-package-hook.sh) {};
+<<<<<<< HEAD
         # verify that Tcl's clock library can access tzdata
         tests.tzdata = runCommand "${pname}-test-tzdata" {} ''
           ${baseInterp}/bin/tclsh <(echo "set t [clock scan {2004-10-30 05:00:00} \
                                         -format {%Y-%m-%d %H:%M:%S} \
                                         -timezone :America/New_York]") > $out
         '';
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       };
     };
 

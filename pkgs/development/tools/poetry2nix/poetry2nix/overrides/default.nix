@@ -76,7 +76,11 @@ lib.composeManyExtensions [
         (drv: attr: addBuildSystem {
           inherit drv self attr;
         })
+<<<<<<< HEAD
         (super.${attr} or null)
+=======
+        super.${attr}
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         systems)
       buildSystems)
 
@@ -211,7 +215,12 @@ lib.composeManyExtensions [
               [ pkgs.darwin.apple_sdk.frameworks.Security pkgs.libiconv ];
             nativeBuildInputs = with pkgs;
               (old.nativeBuildInputs or [ ])
+<<<<<<< HEAD
                 ++ lib.optionals (lib.versionAtLeast old.version "4") [ rustc cargo pkgs.rustPlatform.cargoSetupHook self.setuptools-rust ];
+=======
+                ++ lib.optionals (lib.versionAtLeast old.version "4")
+                [ rustc cargo rustPlatform.cargoSetupHook self.setuptools-rust ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           } // lib.optionalAttrs (lib.versionAtLeast old.version "4") {
             cargoDeps =
               pkgs.rustPlatform.fetchCargoTarball
@@ -383,8 +392,11 @@ lib.composeManyExtensions [
             "39.0.2" = "sha256-Admz48/GS2t8diz611Ciin1HKQEyMDEwHxTpJ5tZ1ZA=";
             "40.0.0" = "sha256-/TBANavYria9YrBpMgjtFyqg5feBcloETcYJ8fdBgkI=";
             "40.0.1" = "sha256-gFfDTc2QWBWHBCycVH1dYlCsWQMVcRZfOBIau+njtDU=";
+<<<<<<< HEAD
             "40.0.2" = "sha256-cV4GTfbVYanElXOVmynvrru2wJuWvnT1Z1tQKXdkbg0=";
             "41.0.1" = "sha256-38q81vRf8QHR8lFRM2KbH7Ng5nY7nmtWRMoPWS9VO/U=";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           }.${version} or (
             lib.warn "Unknown cryptography version: '${version}'. Please update getCargoHash." lib.fakeHash
           );
@@ -402,7 +414,12 @@ lib.composeManyExtensions [
               nativeBuildInputs = (old.nativeBuildInputs or [ ])
                 ++ lib.optionals (lib.versionAtLeast old.version "3.4") [ self.setuptools-rust ]
                 ++ lib.optional (!self.isPyPy) pyBuildPackages.cffi
+<<<<<<< HEAD
                 ++ lib.optional (lib.versionAtLeast old.version "3.5" && !isWheel) [ pkgs.rustPlatform.cargoSetupHook pkgs.cargo pkgs.rustc ]
+=======
+                ++ lib.optional (lib.versionAtLeast old.version "3.5" && !isWheel)
+                (with pkgs; [ rustPlatform.cargoSetupHook cargo rustc ])
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
                 ++ [ pkg-config ]
               ;
               buildInputs = (old.buildInputs or [ ])
@@ -431,11 +448,14 @@ lib.composeManyExtensions [
         '';
       });
 
+<<<<<<< HEAD
       cysystemd = super.cysystemd.overridePythonAttrs (old: {
         buildInputs = (old.buildInputs or [ ]) ++ [ pkgs.systemd ];
         nativeBuildInputs = (old.nativeBuildInputs or [ ]) ++ [ pkgs.pkg-config ];
       });
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       daphne = super.daphne.overridePythonAttrs (old: {
         postPatch = ''
           substituteInPlace setup.py --replace 'setup_requires=["pytest-runner"],' ""
@@ -585,8 +605,11 @@ lib.composeManyExtensions [
 
       duckdb = super.duckdb.overridePythonAttrs (old: {
         postPatch = lib.optionalString (!(old.src.isWheel or false)) ''
+<<<<<<< HEAD
           cd tools/pythonpkg
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           substituteInPlace setup.py \
             --replace 'multiprocessing.cpu_count()' "$NIX_BUILD_CORES" \
             --replace 'setuptools_scm<7.0.0' 'setuptools_scm'
@@ -602,6 +625,7 @@ lib.composeManyExtensions [
         '';
       };
 
+<<<<<<< HEAD
       eth-keyfile = super.eth-keyfile.overridePythonAttrs (old: {
         preConfigure = ''
           substituteInPlace setup.py --replace \'setuptools-markdown\' ""
@@ -609,6 +633,13 @@ lib.composeManyExtensions [
 
         propagatedBuildInputs = (old.propagatedBuildInputs or [ ]) ++ [ self.setuptools ];
       });
+=======
+      eth-keyfile = super.eth-keyfile.overridePythonAttrs {
+        preConfigure = ''
+          substituteInPlace setup.py --replace \'setuptools-markdown\' ""
+        '';
+      };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
       eth-keys = super.eth-keys.overridePythonAttrs {
         preConfigure = ''
@@ -616,8 +647,20 @@ lib.composeManyExtensions [
         '';
       };
 
+<<<<<<< HEAD
       # FIXME: this is a workaround for https://github.com/nix-community/poetry2nix/issues/1161
       eth-utils = super.eth-utils.override { preferWheel = true; };
+=======
+      # remove eth-hash dependency because eth-hash also depends on eth-utils causing a cycle.
+      eth-utils = super.eth-utils.overridePythonAttrs (old: {
+        propagatedBuildInputs =
+          builtins.filter (i: i.pname != "eth-hash") old.propagatedBuildInputs;
+        preConfigure = ''
+          ${old.preConfigure or ""}
+          sed -i '/eth-hash/d' setup.py
+        '';
+      });
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
       evdev = super.evdev.overridePythonAttrs (old: {
         preConfigure = ''
@@ -986,6 +1029,7 @@ lib.composeManyExtensions [
         ];
       });
 
+<<<<<<< HEAD
       jsondiff =
         if lib.versionOlder "2.0.0"
         then
@@ -1001,6 +1045,16 @@ lib.composeManyExtensions [
               }
             )
         else super.jsondiff;
+=======
+      jsondiff = super.jsondiff.overridePythonAttrs (
+        old: {
+          preBuild = (old.preBuild or "") + ''
+            substituteInPlace setup.py \
+              --replace "'jsondiff=jsondiff.cli:main_deprecated'," ""
+          '';
+        }
+      );
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
       jsonslicer = super.jsonslicer.overridePythonAttrs (old: {
         nativeBuildInputs = (old.nativeBuildInputs or [ ]) ++ [ pkgs.pkgconfig ];
@@ -1094,6 +1148,7 @@ lib.composeManyExtensions [
         }
       );
 
+<<<<<<< HEAD
       llama-cpp-python = super.llama-cpp-python.overridePythonAttrs (
         old: {
           buildInputs = with pkgs; lib.optionals stdenv.isDarwin [
@@ -1126,6 +1181,31 @@ lib.composeManyExtensions [
         {
           inherit llvm;
           nativeBuildInputs = (old.nativeBuildInputs or [ ]) ++ [ self.llvmlite.llvm ];
+=======
+      llvmlite = super.llvmlite.overridePythonAttrs (
+        old:
+        let
+          llvm =
+            if lib.versionAtLeast old.version "0.37.0" then
+              pkgs.llvmPackages_11.llvm
+            else if (lib.versionOlder old.version "0.37.0" && lib.versionAtLeast old.version "0.34.0") then
+              pkgs.llvmPackages_10.llvm
+            else if (lib.versionOlder old.version "0.34.0" && lib.versionAtLeast old.version "0.33.0") then
+              pkgs.llvmPackages_9.llvm
+            else if (lib.versionOlder old.version "0.33.0" && lib.versionAtLeast old.version "0.29.0") then
+              pkgs.llvmPackages_8.llvm
+            else if (lib.versionOlder old.version "0.28.0" && lib.versionAtLeast old.version "0.27.0") then
+              pkgs.llvmPackages_7.llvm
+            else if (lib.versionOlder old.version "0.27.0" && lib.versionAtLeast old.version "0.23.0") then
+              pkgs.llvmPackages_6.llvm or throw "LLVM6 has been removed from nixpkgs; upgrade llvmlite or use older nixpkgs"
+            else if (lib.versionOlder old.version "0.23.0" && lib.versionAtLeast old.version "0.21.0") then
+              pkgs.llvmPackages_5.llvm or throw "LLVM5 has been removed from nixpkgs; upgrade llvmlite or use older nixpkgs"
+            else
+              pkgs.llvm; # Likely to fail.
+        in
+        {
+          nativeBuildInputs = (old.nativeBuildInputs or [ ]) ++ [ pkgs.llvm ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
           # Disable static linking
           # https://github.com/numba/llvmlite/issues/93
@@ -1164,6 +1244,7 @@ lib.composeManyExtensions [
         }
       );
 
+<<<<<<< HEAD
       markdown-it-py = super.markdown-it-py.overridePythonAttrs (
         old: {
           propagatedBuildInputs = builtins.filter (i: i.pname != "mdit-py-plugins") old.propagatedBuildInputs;
@@ -1175,6 +1256,8 @@ lib.composeManyExtensions [
         }
       );
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       markupsafe = super.markupsafe.overridePythonAttrs (
         old: {
           src = old.src.override { pname = builtins.replaceStrings [ "markupsafe" ] [ "MarkupSafe" ] old.pname; };
@@ -1314,6 +1397,7 @@ lib.composeManyExtensions [
             buildInputs = (old.buildInputs or [ ]) ++ [ self.setuptools self.setuptools-scm self.setuptools-scm-git-archive ];
           });
 
+<<<<<<< HEAD
       munch = super.munch.overridePythonAttrs (
         old: {
           # Latest version of pypi imports pkg_resources at runtime, so setuptools is needed at runtime. :(
@@ -1322,6 +1406,8 @@ lib.composeManyExtensions [
         }
       );
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       mpi4py = super.mpi4py.overridePythonAttrs (
         old:
         let
@@ -1354,13 +1440,24 @@ lib.composeManyExtensions [
       );
 
       mypy = super.mypy.overridePythonAttrs (
+<<<<<<< HEAD
         old:
         let
+=======
+        old: {
+          buildInputs = (old.buildInputs or [ ]) ++ [
+            self.types-typed-ast
+            self.types-setuptools
+          ]
+            ++ lib.optional (lib.strings.versionAtLeast old.version "0.990") self.types-psutil
+          ;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           # Compile mypy with mypyc, which makes mypy about 4 times faster. The compiled
           # version is also the default in the wheels on Pypi that include binaries.
           # is64bit: unfortunately the build would exhaust all possible memory on i686-linux.
           MYPY_USE_MYPYC = stdenv.buildPlatform.is64bit;
 
+<<<<<<< HEAD
           envAttrs =
             if old ? env
             then { env = old.env // { inherit MYPY_USE_MYPYC; }; }
@@ -1378,6 +1475,12 @@ lib.composeManyExtensions [
           # (default is 3)
           # MYPYC_OPT_LEVEL = 1;
         } // envAttrs // lib.optionalAttrs (old.format != "wheel") {
+=======
+          # when testing reduce optimisation level to drastically reduce build time
+          # (default is 3)
+          # MYPYC_OPT_LEVEL = 1;
+        } // lib.optionalAttrs (old.format != "wheel") {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           # FIXME: Remove patch after upstream has decided the proper solution.
           #        https://github.com/python/mypy/pull/11143
           patches = (old.patches or [ ]) ++ lib.optionals ((lib.strings.versionAtLeast old.version "0.900") && lib.strings.versionOlder old.version "0.940") [
@@ -1466,6 +1569,7 @@ lib.composeManyExtensions [
         }
       );
 
+<<<<<<< HEAD
       # The following are dependencies of torch >= 2.0.0.
       # torch doesn't officially support system CUDA, unless you build it yourself.
       nvidia-cudnn-cu11 = super.nvidia-cudnn-cu11.overridePythonAttrs (attrs: {
@@ -1497,6 +1601,8 @@ lib.composeManyExtensions [
         ];
       });
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       omegaconf = super.omegaconf.overridePythonAttrs (
         old: {
           nativeBuildInputs = (old.nativeBuildInputs or [ ]) ++ [ pkgs.jdk ];
@@ -1549,7 +1655,10 @@ lib.composeManyExtensions [
           buildInputs = [
             self.scikit-build
           ] ++ lib.optionals stdenv.isDarwin (with pkgs.darwin.apple_sdk.frameworks; [
+<<<<<<< HEAD
             Accelerate
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
             AVFoundation
             Cocoa
             CoreMedia
@@ -1599,12 +1708,19 @@ lib.composeManyExtensions [
             "3.8.6" = "sha256-8T//q6nQoZhh8oJWDCeQf3gYRew58dXAaxkYELY4CJM=";
             "3.8.7" = "sha256-JBO8nl0sC+XIn17vI7hC8+nA1HYI9jfvZrl9nCE3k1s=";
             "3.8.8" = "sha256-AK4HtqPKg2O2FeLHCbY9o+N1BV4QFMNaHVE1NaFYHa4=";
+<<<<<<< HEAD
             "3.8.10" = "sha256-AcrTEHv7GYtGe4fXYsM24ElrzfhnOxLYlaon1ZrlD4A=";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           }.${version} or (
             lib.warn "Unknown orjson version: '${version}'. Please update getCargoHash." lib.fakeHash
           );
         in
+<<<<<<< HEAD
         super.orjson.overridePythonAttrs (old: if old.src.isWheel or false then { } else {
+=======
+        super.orjson.overridePythonAttrs (old: {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           cargoDeps = pkgs.rustPlatform.fetchCargoTarball {
             inherit (old) src;
             name = "${old.pname}-${old.version}";
@@ -1654,10 +1770,13 @@ lib.composeManyExtensions [
         '';
       });
 
+<<<<<<< HEAD
       pao = super.pao.overridePythonAttrs (old: {
         propagatedBuildInputs = old.propagatedBuildInputs or [ ] ++ [ self.pyutilib ];
       });
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       paramiko = super.paramiko.overridePythonAttrs (old: {
         doCheck = false; # requires networking
       });
@@ -1836,10 +1955,13 @@ lib.composeManyExtensions [
                   pkgs.cmake
                 ];
 
+<<<<<<< HEAD
                 buildInputs = (old.buildInputs or [ ]) ++ [
                   _arrow-cpp
                 ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
                 preBuild = ''
                   export PYARROW_PARALLEL=$NIX_BUILD_CORES
                 '';
@@ -1987,10 +2109,13 @@ lib.composeManyExtensions [
         }
       );
 
+<<<<<<< HEAD
       pynetbox = super.pynetbox.overridePythonAttrs (old: {
         propagatedBuildInputs = (old.propagatedBuildInputs or [ ]) ++ [ self.setuptools ];
       });
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       pynput = super.pynput.overridePythonAttrs (old: {
         nativeBuildInputs = (old.nativeBuildInputs or [ ])
           ++ [ self.sphinx ];
@@ -2097,7 +2222,10 @@ lib.composeManyExtensions [
         '';
       });
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       pytoml = super.pytoml.overridePythonAttrs (
         old: {
           doCheck = false;
@@ -2239,6 +2367,7 @@ lib.composeManyExtensions [
         }
       );
 
+<<<<<<< HEAD
       python-pam = super.python-pam.overridePythonAttrs (
         old: {
           postPatch = ''
@@ -2249,6 +2378,8 @@ lib.composeManyExtensions [
         }
       );
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       python-snappy = super.python-snappy.overridePythonAttrs (
         old: {
           buildInputs = (old.buildInputs or [ ]) ++ [ pkgs.snappy ];
@@ -2593,6 +2724,7 @@ lib.composeManyExtensions [
         preferWheel = true;
       };
 
+<<<<<<< HEAD
       torch = super.torch.overridePythonAttrs (old: {
         # torch has an auto-magical way to locate the cuda libraries from site-packages.
         autoPatchelfIgnoreMissingDeps = true;
@@ -2620,6 +2752,63 @@ lib.composeManyExtensions [
         propagatedBuildInputs = builtins.filter (e: e.pname != "torch") old.propagatedBuildInputs;
         pipInstallFlags = [ "--no-deps" ];
       });
+=======
+      torch = lib.makeOverridable
+        ({ enableCuda ? false
+         , cudatoolkit ? pkgs.cudatoolkit_10_1
+         , pkg ? super.torch
+         }: pkg.overrideAttrs (old:
+          {
+            preConfigure =
+              if (!enableCuda) then ''
+                export USE_CUDA=0
+              '' else ''
+                export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:${cudatoolkit}/targets/x86_64-linux/lib"
+              '';
+            preFixup = lib.optionalString (!enableCuda) ''
+              # For some reason pytorch retains a reference to libcuda even if it
+              # is explicitly disabled with USE_CUDA=0.
+              find $out -name "*.so" -exec ${pkgs.patchelf}/bin/patchelf --remove-needed libcuda.so.1 {} \;
+            '';
+            buildInputs =
+              (old.buildInputs or [ ])
+              ++ [ self.typing-extensions ]
+              ++ lib.optionals enableCuda [
+                pkgs.linuxPackages.nvidia_x11
+                pkgs.nccl.dev
+                pkgs.nccl.out
+              ];
+            propagatedBuildInputs = [
+              self.numpy
+              self.future
+              self.typing-extensions
+            ];
+          })
+        )
+        { };
+
+      torchvision = lib.makeOverridable
+        ({ enableCuda ? false
+         , cudatoolkit ? pkgs.cudatoolkit_10_1
+         , pkg ? super.torchvision
+         }: pkg.overrideAttrs (old: {
+
+          # without that autoPatchelfHook will fail because cudatoolkit is not in LD_LIBRARY_PATH
+          autoPatchelfIgnoreMissingDeps = true;
+          buildInputs = (old.buildInputs or [ ])
+            ++ [ self.torch ]
+            ++ lib.optionals enableCuda [
+            cudatoolkit
+          ];
+          preConfigure =
+            if (enableCuda) then ''
+              export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:${self.torch}/${self.python.sitePackages}/torch/lib:${lib.makeLibraryPath [ cudatoolkit "${cudatoolkit}" ]}"
+            '' else ''
+              export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:${self.torch}/${self.python.sitePackages}/torch/lib"
+            '';
+        }))
+        { };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
       typed_ast = super.typed-ast.overridePythonAttrs (old: {
         nativeBuildInputs = (old.nativeBuildInputs or [ ]) ++ [
@@ -2738,12 +2927,24 @@ lib.composeManyExtensions [
         }
       );
 
+<<<<<<< HEAD
       wheel = if self.python.isPy2 then
         super.wheel.override {
           inherit (self) bootstrapped-pip;
         }
       else
         super.wheel;
+=======
+      wheel = ((
+        pkgs.python3.pkgs.override {
+          python = self.python;
+        }
+      ).wheel.override {
+        inherit (self) buildPythonPackage bootstrapped-pip setuptools;
+      }).overrideAttrs (old: {
+        inherit (super.wheel) pname name version src;
+      });
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
       zipp = if super.zipp == null then null else
       super.zipp.overridePythonAttrs (
@@ -2754,6 +2955,23 @@ lib.composeManyExtensions [
         }
       );
 
+<<<<<<< HEAD
+=======
+      packaging =
+        let
+          old = super.packaging;
+        in
+        # From 20.5 until 20.7, packaging used flit for packaging (heh)
+          # See https://github.com/pypa/packaging/pull/352 and https://github.com/pypa/packaging/pull/367
+        if (lib.versionAtLeast old.version "20.5" && lib.versionOlder old.version "20.8") then
+          addBuildSystem
+            {
+              inherit self;
+              drv = old;
+              attr = "flit-core";
+            } else old;
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       psutil = super.psutil.overridePythonAttrs (
         old: {
           buildInputs = (old.buildInputs or [ ]) ++
@@ -2946,7 +3164,13 @@ lib.composeManyExtensions [
           });
 
       wcwidth = super.wcwidth.overridePythonAttrs (old: {
+<<<<<<< HEAD
         propagatedBuildInputs = (old.propagatedBuildInputs or [ ]);
+=======
+        propagatedBuildInputs = (old.propagatedBuildInputs or [ ]) ++
+          lib.optional self.isPy27 (self.backports-functools-lru-cache or self.backports_functools_lru_cache)
+        ;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       });
 
       wtforms = super.wtforms.overridePythonAttrs (old: {
@@ -3013,11 +3237,14 @@ lib.composeManyExtensions [
             }
         );
 
+<<<<<<< HEAD
       flake8-mutable = super.flake8-mutable.overridePythonAttrs
         (old: { buildInputs = old.buildInputs or [ ] ++ [ self.pytest-runner ]; });
       pydantic = super.pydantic.overridePythonAttrs
         (old: { buildInputs = old.buildInputs or [ ] ++ [ pkgs.libxcrypt ]; });
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       y-py = super.y-py.override {
         preferWheel = true;
       };

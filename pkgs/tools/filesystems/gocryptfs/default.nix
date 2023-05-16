@@ -1,4 +1,8 @@
 { lib
+<<<<<<< HEAD
+=======
+, stdenv
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , buildGoModule
 , fetchFromGitHub
 , fuse
@@ -11,16 +15,27 @@
 
 buildGoModule rec {
   pname = "gocryptfs";
+<<<<<<< HEAD
   version = "2.4.0";
+=======
+  version = "2.3.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "rfjakob";
     repo = pname;
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-lStaMj2f8lQZx2E42o4ikPmFQzydlN3PFKwFvUx37SI=";
   };
 
   vendorHash = "sha256-ir7FR7ndbPhzUOCVPrYO0SEe03wDFIP74I4X6HJxtE8=";
+=======
+    sha256 = "sha256-1+g8n6n2i7UKr4C5ZLNF5ceqdu3EYx4R6rQALVoGwTs=";
+  };
+
+  vendorHash = "sha256-7eAyuyqAvFQjkvsrkJEvop0veX7sGGX6xXAdUNuOXWU=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nativeBuildInputs = [
     makeWrapper

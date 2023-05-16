@@ -13,6 +13,7 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-LogI9sJHvLN5WHJGdW47D09XZInKln/I2hNmG62d1JU=";
   };
 
+<<<<<<< HEAD
   postPatch = ''
     sed -i '/name = "zeekscript"/a version = "${version}"' pyproject.toml
   '';
@@ -20,6 +21,10 @@ python3.pkgs.buildPythonApplication rec {
   nativeBuildInputs = with python3.pkgs; [
     setuptools
     wheel
+=======
+  nativeBuildInputs = with python3.pkgs; [
+    setuptools
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   propagatedBuildInputs = with python3.pkgs; [

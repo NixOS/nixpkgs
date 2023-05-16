@@ -3,7 +3,11 @@ import ./versions.nix ({version, sha256}:
   buildGoModule {
   pname = "honeytail";
   inherit version;
+<<<<<<< HEAD
   vendorHash = "sha256-LtiiLGLjhbfT49A6Fw5CbSbnmTHMxtcUssr+ayCVrvY=";
+=======
+  vendorSha256 = "sha256-LtiiLGLjhbfT49A6Fw5CbSbnmTHMxtcUssr+ayCVrvY=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "honeycombio";

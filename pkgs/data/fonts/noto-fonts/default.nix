@@ -35,13 +35,21 @@ rec {
     }:
     stdenvNoCC.mkDerivation rec {
       inherit pname;
+<<<<<<< HEAD
       version = "23.8.1";
+=======
+      version = "23.5.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
       src = fetchFromGitHub {
         owner = "notofonts";
         repo = "notofonts.github.io";
         rev = "noto-monthly-release-${version}";
+<<<<<<< HEAD
         hash = "sha256-TYCJzioZcNFV8N5wLr7Fo69g/p5GQF/tbGgYoLUV7Us=";
+=======
+        hash = "sha256-tIzn9xBDVFT7h9+p2NltA0v0mvB1OH9rX9+eXvIPhv0=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       };
 
       _variants = map (variant: builtins.replaceStrings [ " " ] [ "" ] variant) variants;
@@ -164,7 +172,11 @@ rec {
     sha256 = "sha256-y1103SS0qkZMhEL5+7kQZ+OBs5tRaqkqOcs4796Fzhg=";
   };
 
+<<<<<<< HEAD
   noto-fonts-color-emoji =
+=======
+  noto-fonts-emoji =
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     let
       version = "2.038";
       emojiPythonEnv =
@@ -217,7 +229,11 @@ rec {
       '';
 
       meta = with lib; {
+<<<<<<< HEAD
         description = "Color emoji font";
+=======
+        description = "Color and Black-and-White emoji fonts";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         homepage = "https://github.com/googlefonts/noto-emoji";
         license = with licenses; [ ofl asl20 ];
         platforms = platforms.all;
@@ -225,6 +241,7 @@ rec {
       };
     };
 
+<<<<<<< HEAD
   noto-fonts-monochrome-emoji =
     # Metadata fetched from
     #  https://www.googleapis.com/webfonts/v1/webfonts?key=${GOOGLE_FONTS_TOKEN}&family=Noto+Emoji
@@ -273,13 +290,23 @@ rec {
     let
       pname = "noto-fonts-emoji-blob-bin";
       version = "15.0";
+=======
+  noto-fonts-emoji-blob-bin =
+    let
+      pname = "noto-fonts-emoji-blob-bin";
+      version = "14.0.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     in
     stdenvNoCC.mkDerivation {
       inherit pname version;
 
       src = fetchurl {
         url = "https://github.com/C1710/blobmoji/releases/download/v${version}/Blobmoji.ttf";
+<<<<<<< HEAD
         hash = "sha256-3MPWZ1A2ups171dNIiFTJ3C1vZiGy6I8ZF70aUfrePk=";
+=======
+        hash = "sha256-w9s7uF6E6nomdDmeKB4ATcGB/5A4sTwDvwHT3YGXz8g=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       };
 
       dontUnpack = true;

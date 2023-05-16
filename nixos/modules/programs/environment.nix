@@ -51,6 +51,16 @@ in
 
     environment.extraInit =
       ''
+<<<<<<< HEAD
+=======
+         unset ASPELL_CONF
+         for i in ${concatStringsSep " " (reverseList cfg.profiles)} ; do
+           if [ -d "$i/lib/aspell" ]; then
+             export ASPELL_CONF="dict-dir $i/lib/aspell"
+           fi
+         done
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
          export NIX_USER_PROFILE_DIR="/nix/var/nix/profiles/per-user/$USER"
          export NIX_PROFILES="${concatStringsSep " " (reverseList cfg.profiles)}"
       '';

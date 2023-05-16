@@ -21,7 +21,11 @@
 
 stdenv.mkDerivation rec {
   pname = "roc-toolkit";
+<<<<<<< HEAD
   version = "0.2.5";
+=======
+  version = "0.2.3";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   outputs = [ "out" "dev" ];
 
@@ -29,7 +33,11 @@ stdenv.mkDerivation rec {
     owner = "roc-streaming";
     repo = "roc-toolkit";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-vosw4H3YTTCXdDOnQQYRNZgufPo1BxUtfg6jutArzTI=";
+=======
+    hash = "sha256-wwcc2r1hrM9zryMJp+DOifSh0g6T/gdZJMpVdhqhjR8=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

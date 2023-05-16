@@ -58,6 +58,10 @@ toPythonModule (stdenv.mkDerivation rec {
     description = "Parallel optimisation for Python";
     homepage = "https://github.com/esa/pygmo2";
     license = licenses.gpl3Plus;
+<<<<<<< HEAD
     maintainers = [ ];
+=======
+    maintainers = [ maintainers.costrouc ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 })

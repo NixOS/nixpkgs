@@ -11,7 +11,11 @@ buildGoModule {
     sha256 = "sha256-YRrD2gW+gzxD2JwadCbF/SBSsHeeGPsa8kKZHHAytVo=";
   };
 
+<<<<<<< HEAD
   vendorHash = "sha256-H3Zf4VNJVX9C3GTeqU4YhNqCIQz1R55MfhrygDgJTxc=";
+=======
+  vendorSha256 = "sha256-H3Zf4VNJVX9C3GTeqU4YhNqCIQz1R55MfhrygDgJTxc=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nativeBuildInputs = [ makeWrapper ];
 
@@ -26,5 +30,9 @@ buildGoModule {
     homepage = "https://github.com/leijurv/gb";
     license = licenses.agpl3Only;
     maintainers = with maintainers; [ babbaj ];
+<<<<<<< HEAD
+=======
+    platforms = platforms.unix;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

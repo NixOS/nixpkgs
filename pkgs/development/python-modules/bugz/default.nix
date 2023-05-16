@@ -20,7 +20,11 @@ buildPythonPackage {
     homepage = "https://github.com/williamh/pybugz";
     description = "Command line interface for Bugzilla";
     license = licenses.gpl2;
+<<<<<<< HEAD
     maintainers = [ ];
+=======
+    maintainers = [ maintainers.costrouc ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
 }

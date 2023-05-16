@@ -9,12 +9,20 @@
 
 buildPythonPackage rec {
   pname = "azure-mgmt-dns";
+<<<<<<< HEAD
   version = "8.1.0";
+=======
+  version = "8.0.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
+<<<<<<< HEAD
     sha256 = "sha256-2DedS7kZS4G3nlKE2HX6bfgHBzRvLLtcVJGiDzUmb9A=";
+=======
+    sha256 = "407c2dacb33513ffbe9ca4be5addb5e9d4bae0cb7efa613c3f7d531ef7bf8de8";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [

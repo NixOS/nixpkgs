@@ -30,7 +30,11 @@ you first need to add documents to an index before you can search for documents.
 
 - The default nixos package doesn't come with the [dashboard](https://docs.meilisearch.com/learn/getting_started/quick_start.html#search), since the dashboard features makes some assets downloads at compile time.
 
+<<<<<<< HEAD
 - Anonymized Analytics sent to meilisearch are disabled by default.
+=======
+- Anonimized Analytics sent to meilisearch are disabled by default.
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 - Default deployment is development mode. It doesn't require a secret master key. All routes are not protected and accessible.
 

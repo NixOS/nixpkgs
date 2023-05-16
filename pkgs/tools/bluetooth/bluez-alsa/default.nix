@@ -11,13 +11,21 @@
 
 stdenv.mkDerivation rec {
   pname = "bluez-alsa";
+<<<<<<< HEAD
   version = "4.1.1";
+=======
+  version = "4.0.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "Arkq";
     repo = "bluez-alsa";
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-oGaYiSkOhqfjUl+mHTs3gqFcxli3cgkRtT6tbjy3ht0=";
+=======
+    sha256 = "sha256-Dp3O41nzo7j5rqxDEkR4bFPv0CNGOO4kWXAf8iy+jDg=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ pkg-config autoreconfHook ];

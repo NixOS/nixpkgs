@@ -1,6 +1,9 @@
 { lib
 , python3
+<<<<<<< HEAD
 , fetchPypi
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 let
@@ -8,14 +11,27 @@ let
     packageOverrides = self: super: {
       sqlalchemy = super.sqlalchemy.overridePythonAttrs (oldAttrs: rec {
         version = "1.4.46";
+<<<<<<< HEAD
         src = fetchPypi {
+=======
+        src = super.fetchPypi {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           pname = "SQLAlchemy";
           inherit version;
           hash = "sha256-aRO4JH2KKS74MVFipRkx4rQM6RaB8bbxj2lwRSAMSjA=";
         };
+<<<<<<< HEAD
         disabledTestPaths = [
            "test/aaa_profiling"
            "test/ext/mypy"
+=======
+        nativeCheckInputs = oldAttrs.nativeCheckInputs ++ (with super; [
+          pytest-xdist
+        ]);
+        disabledTestPaths = (oldAttrs.disabledTestPaths or []) ++ [
+          "test/aaa_profiling"
+          "test/ext/mypy"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         ];
       });
     };
@@ -26,7 +42,11 @@ python.pkgs.buildPythonApplication rec {
   version = "1.1.1";
   format = "setuptools";
 
+<<<<<<< HEAD
   src = fetchPypi {
+=======
+  src = python.pkgs.fetchPypi {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     inherit pname version;
     hash = "sha256-vt23t49rIq2+1urVrV3kv7Md0sVfMhGyorO2VSkEkiM=";
   };
@@ -36,7 +56,10 @@ python.pkgs.buildPythonApplication rec {
     agate-excel
     agate-dbf
     agate-sql
+<<<<<<< HEAD
     setuptools # csvsql imports pkg_resources
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   nativeCheckInputs = with python.pkgs; [

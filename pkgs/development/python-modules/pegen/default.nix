@@ -2,7 +2,10 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pytestCheckHook
+<<<<<<< HEAD
 , pythonAtLeast
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , pythonOlder
 , setuptools
 , setuptools-scm
@@ -37,11 +40,14 @@ buildPythonPackage rec {
     "pegen"
   ];
 
+<<<<<<< HEAD
   disabledTests = lib.optionals (pythonAtLeast "3.11") [
     # https://github.com/we-like-parsers/pegen/issues/89
     "test_invalid_def_stmt"
   ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   meta = with lib; {
     description = "Library to generate PEG parsers";
     homepage = "https://github.com/we-like-parsers/pegen";

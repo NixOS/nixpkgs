@@ -13,14 +13,22 @@
 
 buildPythonPackage rec {
   pname = "google-api-python-client";
+<<<<<<< HEAD
   version = "2.97.0";
+=======
+  version = "2.84.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
+<<<<<<< HEAD
     hash = "sha256-SCdykYlIdqHKftQSfgVegfgeY0PO0bVEpyAK4sEZ3Nc=";
+=======
+    hash = "sha256-w5j9b56tC+I6reOycExyxRRt8OM1LY/5EBKGB34bAQo=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [

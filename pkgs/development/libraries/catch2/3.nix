@@ -7,13 +7,21 @@
 
 stdenv.mkDerivation rec {
   pname = "catch2";
+<<<<<<< HEAD
   version = "3.4.0";
+=======
+  version = "3.3.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "catchorg";
     repo = "Catch2";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-DqGGfNjKPW9HFJrX9arFHyNYjB61uoL6NabZatTWrr0=";
+=======
+    hash = "sha256-t/4iCrzPeDZNNlgibVqx5rhe+d3lXwm1GmBMDDId0VQ=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

@@ -35,7 +35,10 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/nickclyde/rofi-bluetooth";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ MoritzBoehme ];
+<<<<<<< HEAD
     mainProgram = "rofi-bluetooth";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     platforms = platforms.linux;
   };
 })

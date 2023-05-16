@@ -13,7 +13,11 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-+8DU1QT3Lgqf1AIReVnXQ2Lq6R6eBb8VjdkJfAn/Rtc=";
   };
 
+<<<<<<< HEAD
   sourceRoot = "${src.name}/Quake";
+=======
+  sourceRoot = "source/Quake";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nativeBuildInputs = [
     makeWrapper

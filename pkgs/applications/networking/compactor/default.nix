@@ -6,14 +6,22 @@
 
 stdenv.mkDerivation rec {
   pname = "compactor";
+<<<<<<< HEAD
   version = "1.2.3";
+=======
+  version = "1.2.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "dns-stats";
     repo = pname;
     rev = version;
     fetchSubmodules = true;
+<<<<<<< HEAD
     hash = "sha256-5Z14suhO5ghhmZsSj4DsSoKm+ct2gQFO6qxhjmx4Xm4=";
+=======
+    hash = "sha256-SgmtlbYOrSMzVfzsrbg4qs+yGkXQialiJTI99EBsUjQ=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

@@ -21,7 +21,11 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "man" ];
 
+<<<<<<< HEAD
   sourceRoot = "${src.name}/src";
+=======
+  sourceRoot = "source/src";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nativeBuildInputs = [ makeWrapper ];
 
@@ -66,7 +70,10 @@ stdenv.mkDerivation rec {
     homepage = "https://www.wireguard.com/";
     license = licenses.gpl2;
     maintainers = with maintainers; [ ericsagnes zx2c4 globin ma27 d-xo ];
+<<<<<<< HEAD
     mainProgram = "wg";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     platforms = platforms.unix;
   };
 }

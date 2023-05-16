@@ -28,6 +28,10 @@ rustPlatform.buildRustPackage rec {
     description = "A fast git core.fsmonitor hook written in Rust";
     homepage = "https://github.com/jgavris/rs-git-fsmonitor";
     license = licenses.mit;
+<<<<<<< HEAD
     maintainers = [ ];
+=======
+    maintainers = [ maintainers.SuperSandro2000 ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

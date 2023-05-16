@@ -14,9 +14,13 @@ let
       # taken from https://github.com/python/cpython/blob/05cb728d68a278d11466f9a6c8258d914135c96c/Lib/re.py#L251-L266
       special = [
         "(" ")" "[" "]" "{" "}" "?" "*" "+" "-" "|" "^" "$" "\\" "." "&" "~"
+<<<<<<< HEAD
         "#" " " "\t" "\n" "\r"
         "" # \v / 0x0B
         "" # \f / 0x0C
+=======
+        "#" " " "\t" "\n" "\r" "\v" "\f"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       ];
     in
       replaceStrings special (map (c: "\\${c}") special);

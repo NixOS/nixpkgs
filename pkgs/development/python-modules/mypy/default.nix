@@ -32,7 +32,11 @@
 
 buildPythonPackage rec {
   pname = "mypy";
+<<<<<<< HEAD
   version = "1.4.1";
+=======
+  version = "1.0.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -41,6 +45,7 @@ buildPythonPackage rec {
     owner = "python";
     repo = "mypy";
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-2PeE/L9J6J0IuUpHZasemM8xxefNJrdzYnutgJjevWQ=";
   };
 
@@ -49,6 +54,23 @@ buildPythonPackage rec {
       # pytest 7.4 compat
       url = "https://github.com/python/mypy/commit/0a020fa73cf5339a80d81c5b44e17116a5c5307e.patch";
       hash = "sha256-3HQPo+V7T8Gr92clXAt5QJUJPmhjnGjQgFq0qR0whfw=";
+=======
+    hash = "sha256-vxPEUDC6fkYYiOl5nHf0qwMgPDC+9Vw56eTUQ174raQ=";
+  };
+
+  patches = [
+    # Fix compatibility with setupptools>=67.4.0
+    (fetchpatch {
+      # https://github.com/python/mypy/pull/14781
+      url = "https://github.com/python/mypy/commit/ab7b69a0532a5fe976c9c2a1b713d82d630692a4.patch";
+      hash = "sha256-dtzmoOZP3tOtxrBVhgqpdv+rnrTjTKHxQhBieuJXRtA=";
+    })
+    (fetchpatch {
+      # https://github.com/python/mypy/pull/14787
+      url = "https://github.com/python/mypy/commit/243f584d43e6eb316920f3155067ce7c1b65d473.patch";
+      hash = "sha256-uuh3S5ZyuJeTXyMvav2uSEao2qq23xMjK8rJjkY8RCY=";
+      includes = [ "mypyc/build.py" ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     })
   ];
 
@@ -117,15 +139,22 @@ buildPythonPackage rec {
     "mypy/test/testdaemon.py"
     # fails to find setuptools
     "mypyc/test/test_commandline.py"
+<<<<<<< HEAD
     # fails to find hatchling
     "mypy/test/testpep561.py"
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   meta = with lib; {
     description = "Optional static typing for Python";
     homepage = "https://www.mypy-lang.org";
     license = licenses.mit;
+<<<<<<< HEAD
     mainProgram = "mypy";
     maintainers = with maintainers; [ martingms lnl7 ];
+=======
+    maintainers = with maintainers; [ martingms lnl7 SuperSandro2000 ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

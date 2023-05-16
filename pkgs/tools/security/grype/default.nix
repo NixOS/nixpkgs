@@ -7,13 +7,21 @@
 
 buildGoModule rec {
   pname = "grype";
+<<<<<<< HEAD
   version = "0.66.0";
+=======
+  version = "0.61.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "anchore";
     repo = pname;
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-oZSXUwWucSyd2JYx0TkYfxgP6NZjjA2bhTrlOJSNh8c=";
+=======
+    hash = "sha256-ey0g7iog7PHxqgVaJROA2Myi4hGRe14RuA8tBTSc7Ok=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.
     leaveDotGit = true;
@@ -28,7 +36,11 @@ buildGoModule rec {
 
   proxyVendor = true;
 
+<<<<<<< HEAD
   vendorHash = "sha256-Ur68es1eXsIldXqZjBbtMoK2fjvTIZ+ae2cWaiNzfBg=";
+=======
+  vendorHash = "sha256-NMKdMW/DRod/C5nL8GZR0pKTRzF58dARoWQD1o+i3Y4=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nativeBuildInputs = [
     installShellFiles
@@ -38,16 +50,26 @@ buildGoModule rec {
     openssl
   ];
 
+<<<<<<< HEAD
   subPackages = [ "cmd/grype" ];
+=======
+  subPackages = [ "." ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   excludedPackages = "test/integration";
 
   ldflags = [
     "-s"
     "-w"
+<<<<<<< HEAD
     "-X=github.com/anchore/grype/internal/version.version=${version}"
     "-X=github.com/anchore/grype/internal/version.gitDescription=v${version}"
     "-X=github.com/anchore/grype/internal/version.gitTreeState=clean"
+=======
+    "-X github.com/anchore/grype/internal/version.version=${version}"
+    "-X github.com/anchore/grype/internal/version.gitDescription=v${version}"
+    "-X github.com/anchore/grype/internal/version.gitTreeState=clean"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   preBuild = ''
@@ -80,7 +102,12 @@ buildGoModule rec {
       --replace "TestRegistryAuth" "SkipRegistryAuth"
     substituteInPlace test/cli/sbom_input_test.go \
       --replace "TestSBOMInput_FromStdin" "SkipSBOMInput_FromStdin" \
+<<<<<<< HEAD
       --replace "TestSBOMInput_AsArgument" "SkipSBOMInput_AsArgument"
+=======
+      --replace "TestSBOMInput_AsArgument" "SkipSBOMInput_AsArgument" \
+      --replace "TestAttestationInput_AsArgument" "SkipAttestationInput_AsArgument"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     substituteInPlace test/cli/subprocess_test.go \
       --replace "TestSubprocessStdin" "SkipSubprocessStdin"
 
@@ -104,6 +131,10 @@ buildGoModule rec {
       container image or filesystem to find known vulnerabilities.
     '';
     license = with licenses; [ asl20 ];
+<<<<<<< HEAD
     maintainers = with maintainers; [ fab jk kashw2 ];
+=======
+    maintainers = with maintainers; [ fab jk ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

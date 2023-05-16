@@ -4,13 +4,20 @@
 , fetchurl, fetchpatch, pkg-config, perl, texinfo, setupDebugInfoDirs, buildPackages
 
 # Run time
+<<<<<<< HEAD
 , ncurses, readline, gmp, mpfr, expat, libipt, zlib, zstd, dejagnu, sourceHighlight, libiconv
+=======
+, ncurses, readline, gmp, mpfr, expat, libipt, zlib, zstd, dejagnu, sourceHighlight
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 , pythonSupport ? stdenv.hostPlatform == stdenv.buildPlatform && !stdenv.hostPlatform.isCygwin, python3 ? null
 , enableDebuginfod ? lib.meta.availableOn stdenv.hostPlatform elfutils, elfutils
 , guile ? null
 , hostCpuOnly ? false
+<<<<<<< HEAD
 , enableSim ? false
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , safePaths ? [
    # $debugdir:$datadir/auto-load are whitelisted by default by GDB
    "$debugdir" "$datadir/auto-load"
@@ -30,11 +37,19 @@ assert pythonSupport -> python3 != null;
 
 stdenv.mkDerivation rec {
   pname = targetPrefix + basename + lib.optionalString hostCpuOnly "-host-cpu-only";
+<<<<<<< HEAD
   version = "13.2";
 
   src = fetchurl {
     url = "mirror://gnu/gdb/${basename}-${version}.tar.xz";
     hash = "sha256-/Vvrt74YM6vbbgI8L0mKNUSYKB350FUj2JFbq+uJPwo=";
+=======
+  version = "13.1";
+
+  src = fetchurl {
+    url = "mirror://gnu/gdb/${basename}-${version}.tar.xz";
+    hash = "sha256-EVrVwY1ppr4qsViC02XdoqIhHBT0gLNQLG66V24ulaA=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   postPatch = lib.optionalString stdenv.isDarwin ''
@@ -49,6 +64,15 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./debug-info-from-env.patch
+<<<<<<< HEAD
+=======
+
+    # Backport musl fix
+    (fetchpatch {
+      url = "https://sourceware.org/git/?p=binutils-gdb.git;a=patch;h=2e977d9901393ea1bacbe1896af0929e968bc811";
+      hash = "sha256-/+UYjiOxrszJy1x8xavs63/ptNZ+ISIAQhG+i86VDpA=";
+    })
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ] ++ lib.optionals stdenv.isDarwin [
     ./darwin-target-match.patch
   ];
@@ -58,8 +82,12 @@ stdenv.mkDerivation rec {
   buildInputs = [ ncurses readline gmp mpfr expat libipt zlib zstd guile sourceHighlight ]
     ++ lib.optional pythonSupport python3
     ++ lib.optional doCheck dejagnu
+<<<<<<< HEAD
     ++ lib.optional enableDebuginfod (elfutils.override { enableDebuginfod = true; })
     ++ lib.optional stdenv.isDarwin libiconv;
+=======
+    ++ lib.optional enableDebuginfod (elfutils.override { enableDebuginfod = true; });
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   propagatedNativeBuildInputs = [ setupDebugInfoDirs ];
 
@@ -114,8 +142,12 @@ stdenv.mkDerivation rec {
   ] ++ lib.optional (!pythonSupport) "--without-python"
     ++ lib.optional stdenv.hostPlatform.isMusl "--disable-nls"
     ++ lib.optional stdenv.hostPlatform.isStatic "--disable-inprocess-agent"
+<<<<<<< HEAD
     ++ lib.optional enableDebuginfod "--with-debuginfod=yes"
     ++ lib.optional (!enableSim) "--disable-sim";
+=======
+    ++ lib.optional enableDebuginfod "--with-debuginfod=yes";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   postInstall =
     '' # Remove Info files already provided by Binutils and other packages.

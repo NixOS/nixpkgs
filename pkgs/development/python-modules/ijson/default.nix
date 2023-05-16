@@ -8,11 +8,19 @@
 
 buildPythonPackage rec {
   pname = "ijson";
+<<<<<<< HEAD
   version = "3.2.3";
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-EClOm/ictxPaBbxHkL3/YWYQQy21YZZIJwdImOF0+Rc=";
+=======
+  version = "3.2.0.post0";
+
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-gKW9fpkjyrIAcB9nrSNyEEMouZ3fJJ276INBAshS0xY=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   buildInputs = [

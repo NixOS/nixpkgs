@@ -9,13 +9,21 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "polkadot";
+<<<<<<< HEAD
   version = "1.0.0";
+=======
+  version = "0.9.41";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "paritytech";
     repo = "polkadot";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-izm0rpLzwlhpp3dciQ1zj1boWxhgGnNMG5ceZoZQGEE=";
+=======
+    hash = "sha256-wjV/+2n9B617S6MxC48vtpbBBKGCWBEjRj7K6m630Mo=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     # the build process of polkadot requires a .git folder in order to determine
     # the git commit hash that is being built and add it to the version string.
@@ -34,11 +42,16 @@ rustPlatform.buildRustPackage rec {
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
+<<<<<<< HEAD
       "binary-merkle-tree-4.0.0-dev" = "sha256-J09SHQVOLGStMGONdreI5QZlk+uNNKzWRZpGiNJ+lrk=";
+=======
+      "binary-merkle-tree-4.0.0-dev" = "sha256-ngtW11MGs+fcuCp9J5NH+dYJeK4YM5vWpRk0OuLYHus=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       "sub-tokens-0.1.0" = "sha256-GvhgZhOIX39zF+TbQWtTCgahDec4lQjH+NqamLFLUxM=";
     };
   };
 
+<<<<<<< HEAD
   # NOTE: the build process currently tries to read some files to generate
   # documentation from hardcoded paths that aren't compatible with the cargo
   # vendoring strategy, so we need to manually put them in their expected place.
@@ -52,6 +65,8 @@ rustPlatform.buildRustPackage rec {
     cp -r $FAST_UNSTAKE_DIR/src $FAST_UNSTAKE_DOCIFY_DIR
   '';
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   buildInputs = lib.optionals stdenv.isDarwin [ Security SystemConfiguration ];
 
   nativeBuildInputs = [ rustPlatform.bindgenHook ];

@@ -1,16 +1,38 @@
+<<<<<<< HEAD
 { lib, fetchFromGitHub, buildPythonPackage, six, pyudev, pygobject3 }:
 
 buildPythonPackage rec {
   pname = "rtslib";
   version = "2.1.76";
+=======
+{ lib, fetchFromGitHub, fetchpatch, buildPythonPackage, six, pyudev, pygobject3 }:
+
+buildPythonPackage rec {
+  pname = "rtslib";
+  version = "2.1.75";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "open-iscsi";
     repo = "${pname}-fb";
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-z9fpSVyv96ZoJaP0ch2A3bX/o/K23ooEpxa/OAhY6Z4=";
   };
 
+=======
+    hash = "sha256-qBlr4K+LeJIC6Hwy6dN9n/VjHIUYCy8pLlRtPvooWyE=";
+  };
+
+  patches = [
+    # <https://github.com/open-iscsi/rtslib-fb/pull/187>
+    (fetchpatch {
+      url = "https://github.com/zhaofengli/rtslib-fb/commit/1c3c8257940a88e65676f4333363ddf259a06723.patch";
+      hash = "sha256-nDzL8pUKwKIej+6rOg7Om5AkwkClKk6qKlImbpoufz4=";
+    })
+  ];
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   propagatedBuildInputs = [ six pyudev pygobject3 ];
 
   meta = with lib; {

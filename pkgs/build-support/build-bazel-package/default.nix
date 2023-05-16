@@ -10,12 +10,18 @@ args@{
 , bazelFlags ? []
 , bazelBuildFlags ? []
 , bazelTestFlags ? []
+<<<<<<< HEAD
 , bazelRunFlags ? []
 , runTargetFlags ? []
 , bazelFetchFlags ? []
 , bazelTargets ? []
 , bazelTestTargets ? []
 , bazelRunTarget ? null
+=======
+, bazelFetchFlags ? []
+, bazelTargets
+, bazelTestTargets ? []
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , buildAttrs
 , fetchAttrs
 
@@ -49,6 +55,7 @@ args@{
 
 let
   fArgs = removeAttrs args [ "buildAttrs" "fetchAttrs" "removeRulesCC" ] // {
+<<<<<<< HEAD
     inherit
       name
       bazelFlags
@@ -66,6 +73,19 @@ let
   fBuildAttrs = fArgs // buildAttrs;
   fFetchAttrs = fArgs // removeAttrs fetchAttrs [ "sha256" ];
   bazelCmd = { cmd, additionalFlags, targets, targetRunFlags ? [ ] }:
+=======
+    name = name;
+    bazelFlags = bazelFlags;
+    bazelBuildFlags = bazelBuildFlags;
+    bazelTestFlags = bazelTestFlags;
+    bazelFetchFlags = bazelFetchFlags;
+    bazelTestTargets = bazelTestTargets;
+    dontAddBazelOpts = dontAddBazelOpts;
+  };
+  fBuildAttrs = fArgs // buildAttrs;
+  fFetchAttrs = fArgs // removeAttrs fetchAttrs [ "sha256" ];
+  bazelCmd = { cmd, additionalFlags, targets }:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     lib.optionalString (targets != [ ]) ''
       # See footnote called [USER and BAZEL_USE_CPP_ONLY_TOOLCHAIN variables]
       BAZEL_USE_CPP_ONLY_TOOLCHAIN=1 \
@@ -82,8 +102,12 @@ let
         "''${host_linkopts[@]}" \
         $bazelFlags \
         ${lib.strings.concatStringsSep " " additionalFlags} \
+<<<<<<< HEAD
         ${lib.strings.concatStringsSep " " targets} \
         ${lib.optionalString (targetRunFlags != []) " -- " + lib.strings.concatStringsSep " " targetRunFlags}
+=======
+        ${lib.strings.concatStringsSep " " targets}
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     '';
   # we need this to chmod dangling symlinks on darwin, gnu coreutils refuses to do so:
   # chmod: cannot operate on dangling symlink '$symlink'
@@ -272,6 +296,7 @@ stdenv.mkDerivation (fBuildAttrs // {
         targets = fBuildAttrs.bazelTargets;
       }
     }
+<<<<<<< HEAD
     ${
       bazelCmd {
         cmd = "run";
@@ -281,6 +306,8 @@ stdenv.mkDerivation (fBuildAttrs // {
         targetRunFlags = fBuildAttrs.runTargetFlags;
       }
     }
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     runHook postBuild
   '';
 })

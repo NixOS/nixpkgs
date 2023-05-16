@@ -5,13 +5,21 @@
 
 stdenv.mkDerivation rec {
   pname = "malt";
+<<<<<<< HEAD
   version = "1.2.2";
+=======
+  version = "1.2.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "memtt";
     repo = "malt";
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-6GGIdBaw/JSc2Qexy+P1NON27EBBRltthyQpMPZwi+8=";
+=======
+    sha256 = "1yh9gmf7cggf3mx15cwmm99dha34aibkzhnpd0ckl0fkc6w17xqg";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   postPatch = ''

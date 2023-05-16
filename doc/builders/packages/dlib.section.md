@@ -1,6 +1,10 @@
 # DLib {#dlib}
 
+<<<<<<< HEAD
 [DLib](http://dlib.net/) is a modern, C++\-based toolkit which provides several machine learning algorithms.
+=======
+[DLib](http://dlib.net/) is a modern, C++-based toolkit which provides several machine learning algorithms.
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 ## Compiling without AVX support {#compiling-without-avx-support}
 

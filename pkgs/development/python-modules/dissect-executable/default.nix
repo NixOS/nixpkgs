@@ -10,7 +10,11 @@
 
 buildPythonPackage rec {
   pname = "dissect-executable";
+<<<<<<< HEAD
   version = "1.4";
+=======
+  version = "1.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -19,7 +23,11 @@ buildPythonPackage rec {
     owner = "fox-it";
     repo = "dissect.executable";
     rev = "refs/tags/${version}";
+<<<<<<< HEAD
     hash = "sha256-h9eOTWJR0Bd3DY8WDYWqLCl1jYJcqP6cRTgWubf/rKI=";
+=======
+    hash = "sha256-I/LwIGce1bebAvjVuFE0rJAuJ/65xMTIim6M0BJR6TI=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;

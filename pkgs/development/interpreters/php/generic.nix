@@ -9,7 +9,11 @@ let
     , nixosTests
     , tests
     , fetchurl
+<<<<<<< HEAD
     , makeBinaryWrapper
+=======
+    , makeWrapper
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     , symlinkJoin
     , writeText
     , autoconf
@@ -85,7 +89,11 @@ let
 
           php-packages = (callPackage ../../../top-level/php-packages.nix {
             phpPackage = phpWithExtensions;
+<<<<<<< HEAD
           }).overrideScope packageOverrides;
+=======
+          }).overrideScope' packageOverrides;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
           allExtensionFunctions = prevExtensionFunctions ++ [ extensions ];
           enabledExtensions =
@@ -141,7 +149,11 @@ let
           phpWithExtensions = symlinkJoin {
             name = "php-with-extensions-${version}";
             inherit (php) version;
+<<<<<<< HEAD
             nativeBuildInputs = [ makeBinaryWrapper ];
+=======
+            nativeBuildInputs = [ makeWrapper ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
             passthru = php.passthru // {
               buildEnv = mkBuildEnv allArgs allExtensionFunctions;
               withExtensions = mkWithExtensions allArgs allExtensionFunctions;
@@ -247,7 +259,12 @@ let
             ++ lib.optional (!ipv6Support) "--disable-ipv6"
             ++ lib.optional systemdSupport "--with-fpm-systemd"
             ++ lib.optional valgrindSupport "--with-valgrind=${valgrind.dev}"
+<<<<<<< HEAD
             ++ lib.optional ztsSupport "--enable-zts"
+=======
+            ++ lib.optional (ztsSupport && (lib.versionOlder version "8.0")) "--enable-maintainer-zts"
+            ++ lib.optional (ztsSupport && (lib.versionAtLeast version "8.0")) "--enable-zts"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 
             # Sendmail
@@ -271,8 +288,13 @@ let
 
               ./buildconf --copy --force
 
+<<<<<<< HEAD
               if [ -f "scripts/dev/genfiles" ]; then
                 ./scripts/dev/genfiles
+=======
+              if test -f $src/genfiles; then
+                ./genfiles
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
               fi
             '' + lib.optionalString stdenv.isDarwin ''
               substituteInPlace configure --replace "-lstdc++" "-lc++"

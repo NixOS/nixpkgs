@@ -1,5 +1,9 @@
 {
+<<<<<<< HEAD
   mkDerivation, lib, stdenv, fetchpatch,
+=======
+  mkDerivation,
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   extra-cmake-modules, docbook_xml_dtd_45, docbook_xsl_ns,
   karchive, ki18n, qtbase,
   perl, perlPackages
@@ -20,6 +24,7 @@ mkDerivation {
   ];
   buildInputs = [ karchive ki18n ];
   outputs = [ "out" "dev" ];
+<<<<<<< HEAD
   patches = [ ./kdoctools-no-find-docbook-xml.patch ]
     # kf.doctools.core: Error: Could not find kdoctools catalogs
     ++ lib.optionals stdenv.isDarwin [
@@ -29,6 +34,9 @@ mkDerivation {
       hash = "sha256-MlokdrabXavWHGXYmdz9zZDJQIwAdNxebJBSAH2Z3vI=";
     })
   ];
+=======
+  patches = [ ./kdoctools-no-find-docbook-xml.patch ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   cmakeFlags = [
     "-DDocBookXML4_DTD_DIR=${docbook_xml_dtd_45}/xml/dtd/docbook"
     "-DDocBookXSL_DIR=${docbook_xsl_ns}/xml/xsl/docbook"

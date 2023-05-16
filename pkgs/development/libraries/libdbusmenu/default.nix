@@ -27,10 +27,13 @@ stdenv.mkDerivation (finalAttrs: {
       "3" = gtk3;
     }.${gtkVersion} or (throw "unknown GTK version ${gtkVersion}");
 
+<<<<<<< HEAD
   patches = [
     ./requires-glib.patch
   ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   postPatch = ''
     for f in {configure,ltmain.sh,m4/libtool.m4}; do
       substituteInPlace $f \

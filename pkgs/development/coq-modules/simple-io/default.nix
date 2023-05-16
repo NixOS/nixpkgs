@@ -1,15 +1,25 @@
 { lib, callPackage, mkCoqDerivation, coq, coq-ext-lib, version ? null }:
 
+<<<<<<< HEAD
 (mkCoqDerivation {
+=======
+mkCoqDerivation {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pname = "simple-io";
   owner = "Lysxia";
   repo = "coq-simple-io";
   inherit version;
   defaultVersion = with lib.versions; lib.switch coq.coq-version [
+<<<<<<< HEAD
     { case = range "8.11" "8.18"; out = "1.8.0"; }
     { case = range "8.7"  "8.13"; out = "1.3.0"; }
   ] null;
   release."1.8.0".sha256 = "sha256-3ADNeXrBIpYRlfUW+LkLHUWV1w1HFrVc/TZISMuwvRY=";
+=======
+    { case = range "8.11" "8.16"; out = "1.7.0"; }
+    { case = range "8.7"  "8.13"; out = "1.3.0"; }
+  ] null;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   release."1.7.0".sha256 = "sha256:1a1q9x2abx71hqvjdai3n12jxzd49mhf3nqqh3ya2ssl2lj609ci";
   release."1.3.0".sha256 = "1yp7ca36jyl9kz35ghxig45x6cd0bny2bpmy058359p94wc617ax";
   mlPlugin = true;
@@ -27,7 +37,11 @@
     license = licenses.mit;
     maintainers = [ maintainers.vbgl ];
   };
+<<<<<<< HEAD
 }).overrideAttrs (o: lib.optionalAttrs (lib.versionAtLeast o.version "1.8.0" || o.version == "dev") {
   doCheck = false;
   useDune = true;
 })
+=======
+}
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)

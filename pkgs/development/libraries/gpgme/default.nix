@@ -26,11 +26,19 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "gpgme";
+<<<<<<< HEAD
   version = "1.21.0";
 
   src = fetchurl {
     url = "mirror://gnupg/gpgme/${pname}-${version}.tar.bz2";
     hash = "sha256-QW4XThZXNNhIBiU/jJa9opk/0H8ljDqtXwU6bv1GPog=";
+=======
+  version = "1.20.0";
+
+  src = fetchurl {
+    url = "mirror://gnupg/gpgme/${pname}-${version}.tar.bz2";
+    hash = "sha256-JaV4Wl2jVmiQAUQJJrlOln0C4TxJ63dD417wzyLkJ1A=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   patches = [

@@ -47,6 +47,10 @@ buildPythonPackage rec {
     homepage = "https://github.com/tgalal/yowsup";
     description = "The python WhatsApp library";
     license = licenses.gpl3Plus;
+<<<<<<< HEAD
     maintainers = with maintainers; [ ];
+=======
+    maintainers = with maintainers; [ SuperSandro2000 ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

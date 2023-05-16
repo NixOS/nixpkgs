@@ -12,14 +12,20 @@
 , pandas
 , pymc
 , scipy
+<<<<<<< HEAD
 , setuptools
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 buildPythonPackage rec {
   pname = "bambi";
   version = "0.10.0";
+<<<<<<< HEAD
   format = "pyproject";
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
@@ -29,10 +35,13 @@ buildPythonPackage rec {
     hash = "sha256-D04eTAlckEqgKA+59BRljlyneHYoqqZvLYmt/gBLHcU=";
   };
 
+<<<<<<< HEAD
   nativeBuildInputs = [
     setuptools
   ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   propagatedBuildInputs = [
     arviz
     formulae
@@ -42,9 +51,13 @@ buildPythonPackage rec {
     scipy
   ];
 
+<<<<<<< HEAD
   preCheck = ''
     export HOME=$(mktemp -d)
   '';
+=======
+  preCheck = ''export HOME=$(mktemp -d)'';
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nativeCheckInputs = [
     blackjax
@@ -52,6 +65,7 @@ buildPythonPackage rec {
     numpyro
     pytestCheckHook
   ];
+<<<<<<< HEAD
 
   disabledTests = [
     # Tests require network access
@@ -70,6 +84,15 @@ buildPythonPackage rec {
   pythonImportsCheck = [
     "bambi"
   ];
+=======
+  disabledTests = [
+    # attempt to fetch data:
+    "test_data_is_copied"
+    "test_predict_offset"
+  ];
+
+  pythonImportsCheck = [ "bambi" ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   meta = with lib; {
     homepage = "https://bambinos.github.io/bambi";

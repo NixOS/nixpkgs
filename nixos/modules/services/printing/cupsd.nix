@@ -4,7 +4,11 @@ with lib;
 
 let
 
+<<<<<<< HEAD
   inherit (pkgs) cups cups-pk-helper cups-filters xdg-utils;
+=======
+  inherit (pkgs) cups cups-pk-helper cups-filters;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   cfg = config.services.printing;
 
@@ -313,9 +317,13 @@ in
         description = "CUPS printing services";
       };
 
+<<<<<<< HEAD
     # We need xdg-open (part of xdg-utils) for the desktop-file to proper open the users default-browser when opening "Manage Printing"
     # https://github.com/NixOS/nixpkgs/pull/237994#issuecomment-1597510969
     environment.systemPackages = [ cups.out xdg-utils ] ++ optional polkitEnabled cups-pk-helper;
+=======
+    environment.systemPackages = [ cups.out ] ++ optional polkitEnabled cups-pk-helper;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     environment.etc.cups.source = "/var/lib/cups";
 
     services.dbus.packages = [ cups.out ] ++ optional polkitEnabled cups-pk-helper;

@@ -515,10 +515,13 @@ in
                     in [ extraConfig ] ++ (map (x: x.value) defs);
                   prefix = [ "containers" name ];
                   inherit (config) specialArgs;
+<<<<<<< HEAD
 
                   # The system is inherited from the host above.
                   # Set it to null, to remove the "legacy" entrypoint's non-hermetic default.
                   system = null;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
                 }).config;
               };
             };
@@ -800,14 +803,22 @@ in
       # declarative containers
       ++ (mapAttrsToList (name: cfg: nameValuePair "container@${name}" (let
           containerConfig = cfg // (
+<<<<<<< HEAD
           optionalAttrs cfg.enableTun
+=======
+          if cfg.enableTun then
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
             {
               allowedDevices = cfg.allowedDevices
                 ++ [ { node = "/dev/net/tun"; modifier = "rw"; } ];
               additionalCapabilities = cfg.additionalCapabilities
                 ++ [ "CAP_NET_ADMIN" ];
             }
+<<<<<<< HEAD
           );
+=======
+          else {});
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         in
           recursiveUpdate unit {
             preStart = preStartScript containerConfig;
@@ -817,7 +828,11 @@ in
             unitConfig.RequiresMountsFor = lib.optional (!containerConfig.ephemeral) "${stateDirectory}/%i";
             environment.root = if containerConfig.ephemeral then "/run/nixos-containers/%i" else "${stateDirectory}/%i";
           } // (
+<<<<<<< HEAD
           optionalAttrs containerConfig.autoStart
+=======
+          if containerConfig.autoStart then
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
             {
               wantedBy = [ "machines.target" ];
               wants = [ "network.target" ];
@@ -828,7 +843,11 @@ in
               ];
               restartIfChanged = true;
             }
+<<<<<<< HEAD
           )
+=======
+          else {})
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       )) config.containers)
     ));
 

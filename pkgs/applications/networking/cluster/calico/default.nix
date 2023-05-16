@@ -2,16 +2,27 @@
 
 builtins.mapAttrs (pname: { doCheck ? true, mainProgram ? pname, subPackages }: buildGoModule rec {
   inherit pname;
+<<<<<<< HEAD
   version = "3.26.1";
+=======
+  version = "3.25.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "projectcalico";
     repo = "calico";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-QSebSc4V8DFSKufSB6M4YSuwDJ9rn/6IR6Fr38F8BBQ=";
   };
 
   vendorHash = "sha256-SuV7OEt0ZlVt0i8L5rgQd0HJn63XuDHi7+pe+bq+6Yw=";
+=======
+    hash = "sha256-msXTukje7tS8rovhbZs8CBsfIiDOCx6wkWHoDdhxK+8=";
+  };
+
+  vendorHash = "sha256-aJdzizXtW1wI9ZdQVTW8RyGFTXDdtLxpZ4oxXP/0gP0=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   inherit doCheck subPackages;
 
@@ -23,7 +34,10 @@ builtins.mapAttrs (pname: { doCheck ? true, mainProgram ? pname, subPackages }: 
     description = "Cloud native networking and network security";
     license = licenses.asl20;
     maintainers = with maintainers; [ urandom ];
+<<<<<<< HEAD
     platforms = platforms.linux;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     inherit mainProgram;
   };
 }) {

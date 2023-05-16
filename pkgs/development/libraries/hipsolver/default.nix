@@ -78,7 +78,11 @@ stdenv.mkDerivation (finalAttrs: {
   '' + lib.optionalString buildSamples ''
     mkdir -p $sample/bin
     mv clients/staging/example-* $sample/bin
+<<<<<<< HEAD
     patchelf $sample/bin/example-* --shrink-rpath --allowed-rpath-prefixes "$NIX_STORE"
+=======
+    patchelf $sample/bin/example-* --shrink-rpath --allowed-rpath-prefixes /nix/store
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '' + lib.optionalString (buildTests || buildBenchmarks) ''
     rmdir $out/bin
   '';

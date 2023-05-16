@@ -1,5 +1,9 @@
 { stdenv, lib, fetchFromGitHub, glib, readline
+<<<<<<< HEAD
 , bison, flex, pkg-config, autoreconfHook
+=======
+, bison, flex, pkg-config, autoreconfHook, libxslt, makeWrapper
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , txt2man, which
 }:
 

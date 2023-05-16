@@ -20,7 +20,11 @@ buildGoModule (rec {
       --replace "all: server" ""
   '';
 
+<<<<<<< HEAD
   vendorHash = "sha256-VOqY/nStqGyfWOXnJSZX8UYyp2kzcibQM2NRNysHYEc=";
+=======
+  vendorSha256 = "sha256-VOqY/nStqGyfWOXnJSZX8UYyp2kzcibQM2NRNysHYEc=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   postInstall = ''
     mkdir -p $out/share/sql/

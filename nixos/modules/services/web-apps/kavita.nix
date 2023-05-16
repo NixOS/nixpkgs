@@ -35,7 +35,11 @@ in {
     ipAdresses = lib.mkOption {
       default = ["0.0.0.0" "::"];
       type = lib.types.listOf lib.types.str;
+<<<<<<< HEAD
       description = lib.mdDoc "IP Addresses to bind to. The default is to bind
+=======
+      description = lib.mdDoc "IP Adresses to bind to. The default is to bind
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       to all IPv4 and IPv6 addresses.";
     };
   };

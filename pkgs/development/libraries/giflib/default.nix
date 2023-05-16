@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 { stdenv
 , lib
 , fetchurl
@@ -5,11 +6,17 @@
 , fixDarwinDylibNames
 , pkgsStatic
 }:
+=======
+{ lib, stdenv, fetchurl, fetchpatch, xmlto, docbook_xml_dtd_412, docbook_xsl, libxml2, fixDarwinDylibNames, pkgsStatic }:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 stdenv.mkDerivation rec {
   pname = "giflib";
   version = "5.2.1";
+<<<<<<< HEAD
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   src = fetchurl {
     url = "mirror://sourceforge/giflib/giflib-${version}.tar.gz";
     sha256 = "1gbrg03z1b6rlrvjyc6d41bc8j1bsr7rm8206gb1apscyii5bnii";
@@ -21,13 +28,20 @@ stdenv.mkDerivation rec {
       url = "https://src.fedoraproject.org/rpms/giflib/raw/2e9917bf13df114354163f0c0211eccc00943596/f/CVE-2022-28506.patch";
       sha256 = "sha256-TBemEXkuox8FdS9RvjnWcTWPaHRo4crcwSR9czrUwBY=";
     })
+<<<<<<< HEAD
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # https://sourceforge.net/p/giflib/bugs/133/
     (fetchpatch {
+=======
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin
+    (fetchpatch {
+      # https://sourceforge.net/p/giflib/bugs/133/
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       name = "darwin-soname.patch";
       url = "https://sourceforge.net/p/giflib/bugs/_discuss/thread/4e811ad29b/c323/attachment/Makefile.patch";
       sha256 = "12afkqnlkl3n1hywwgx8sqnhp3bz0c5qrwcv8j9hifw1lmfhv67r";
       extraPrefix = "./";
+<<<<<<< HEAD
     })
   ] ++ lib.optionals stdenv.hostPlatform.isMinGW [
     # Build dll libraries.
@@ -50,12 +64,23 @@ stdenv.mkDerivation rec {
 
   postPatch = lib.optionalString stdenv.hostPlatform.isStatic ''
     # Upstream build system does not support NOT building shared libraries.
+=======
+    });
+
+  postPatch = ''
+    substituteInPlace Makefile \
+      --replace 'PREFIX = /usr/local' 'PREFIX = ${builtins.placeholder "out"}'
+  ''
+  # Upstream build system does not support NOT building shared libraries.
+  + lib.optionalString stdenv.hostPlatform.isStatic ''
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     sed -i '/all:/ s/libgif.so//' Makefile
     sed -i '/all:/ s/libutil.so//' Makefile
     sed -i '/-m 755 libgif.so/ d' Makefile
     sed -i '/ln -sf libgif.so/ d' Makefile
   '';
 
+<<<<<<< HEAD
   passthru.tests = {
     static = pkgsStatic.giflib;
   };
@@ -63,6 +88,14 @@ stdenv.mkDerivation rec {
   meta = {
     description = "A library for reading and writing gif images";
     homepage = "https://giflib.sourceforge.net/";
+=======
+  nativeBuildInputs = lib.optionals stdenv.isDarwin [ fixDarwinDylibNames ];
+
+  passthru.tests.static = pkgsStatic.giflib;
+
+  meta = {
+    description = "A library for reading and writing gif images";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     platforms = lib.platforms.unix;
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ ];

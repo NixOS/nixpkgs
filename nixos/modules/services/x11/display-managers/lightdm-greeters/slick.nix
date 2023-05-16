@@ -142,7 +142,11 @@ in
       theme
     ];
 
+<<<<<<< HEAD
     fonts.packages = [ font ];
+=======
+    fonts.fonts = [ font ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     environment.etc."lightdm/slick-greeter.conf".source = slickGreeterConf;
   };

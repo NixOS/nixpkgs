@@ -16,13 +16,21 @@
 
 stdenv.mkDerivation rec {
   pname = "sidplayfp";
+<<<<<<< HEAD
   version = "2.5.0";
+=======
+  version = "2.4.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "libsidplayfp";
     repo = "sidplayfp";
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-ECHtHJrkJ5Y0YvDNdMM3VB+s7I/8JCPZiwsPYLM/oig=";
+=======
+    sha256 = "sha256-15KG+LkPkCLFsnWHUAQpQbqol/izAn/HRinszVRB5Ao=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ autoreconfHook perl pkg-config ];

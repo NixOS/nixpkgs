@@ -48,7 +48,11 @@ buildPythonPackage rec {
     description = "A fast native implementation of diff algorithm with a pure Python fallback";
     homepage = "https://github.com/syrusakbary/fastdiff";
     license = licenses.mit;
+<<<<<<< HEAD
     maintainers = with maintainers; [ ];
+=======
+    maintainers = with maintainers; [ SuperSandro2000 ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     # resulting compiled object panics at import
     broken = stdenv.is32bit;
   };

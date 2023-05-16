@@ -1,4 +1,9 @@
+<<<<<<< HEAD
 # autoPatchelfHook {#setup-hook-autopatchelfhook}
+=======
+
+### autoPatchelfHook {#setup-hook-autopatchelfhook}
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 This is a special setup hook which helps in packaging proprietary software in that it automatically tries to find missing shared library dependencies of ELF files based on the given `buildInputs` and `nativeBuildInputs`.
 

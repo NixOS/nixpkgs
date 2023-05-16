@@ -11,7 +11,11 @@
 
 buildPythonPackage rec {
   pname = "dissect-thumbcache";
+<<<<<<< HEAD
   version = "1.5";
+=======
+  version = "1.3";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -20,7 +24,11 @@ buildPythonPackage rec {
     owner = "fox-it";
     repo = "dissect.thumbcache";
     rev = "refs/tags/${version}";
+<<<<<<< HEAD
     hash = "sha256-xWwmkvBKKVCISL5RKzPkdPGo/ganNydymp4FaE9Mr7w=";
+=======
+    hash = "sha256-HO2s9AxDRmL4TNRYCdkYpWry3i4GNR0K9i5D2Pz3mVQ=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;

@@ -31,13 +31,21 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fvwm3";
+<<<<<<< HEAD
   version = "1.0.7";
+=======
+  version = "1.0.6a";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "fvwmorg";
     repo = "fvwm3";
     rev = finalAttrs.version;
+<<<<<<< HEAD
     hash = "sha256-CPEGwZuYDh0zDXVKLn806c4DfZZJVaMlmIsVAZl20S4=";
+=======
+    hash = "sha256-uYkIuMzhaWeCZm5aJF4oBYD72OLgwCBuUhDqpg6HQUM=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

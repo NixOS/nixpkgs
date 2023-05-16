@@ -23,7 +23,11 @@ stdenv.mkDerivation rec {
   strictDeps = true;
   nativeBuildInputs = [ autoreconfHook ];
 
+<<<<<<< HEAD
   # tests are super flaky unfortunately, and regularly break.
+=======
+  # tests are super flaky unfortunately, and regularily break.
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   # let's disable them for now.
   doCheck = false;
   nativeCheckInputs = [

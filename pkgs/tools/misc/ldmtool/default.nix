@@ -31,9 +31,15 @@ stdenv.mkDerivation rec {
 
   configureScript = "sh autogen.sh";
 
+<<<<<<< HEAD
   nativeBuildInputs = [ pkg-config autoconf automake gobject-introspection ];
   buildInputs = [ gtk-doc lvm2 libxslt.bin
     libtool readline json-glib libuuid
+=======
+  nativeBuildInputs = [ pkg-config autoconf automake ];
+  buildInputs = [ gtk-doc lvm2 libxslt.bin
+    libtool readline gobject-introspection json-glib libuuid
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   meta = with lib; {

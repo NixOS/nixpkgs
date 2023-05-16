@@ -7,7 +7,11 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "deadlinks";
     repo = pname;
+<<<<<<< HEAD
     rev = version;
+=======
+    rev = "${version}";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     sha256 = "0s5q9aghncsk9834azn5cgnn5ms3zzyjan2rq06kaqcgzhld4cjh";
   };
 
@@ -27,6 +31,10 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/deadlinks/cargo-deadlinks";
     changelog = "https://github.com/deadlinks/cargo-deadlinks/blob/${version}/CHANGELOG.md";
     license = with licenses; [ asl20 /* or */ mit ];
+<<<<<<< HEAD
     maintainers = with maintainers; [ newam matthiasbeyer ];
+=======
+    maintainers = with maintainers; [ newam ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

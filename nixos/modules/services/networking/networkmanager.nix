@@ -5,7 +5,11 @@ with lib;
 let
   cfg = config.networking.networkmanager;
 
+<<<<<<< HEAD
   delegateWireless = config.networking.wireless.enable == true && cfg.unmanaged != [ ];
+=======
+  delegateWireless = config.networking.wireless.enable == true && cfg.unmanaged != [];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   enableIwd = cfg.wifi.backend == "iwd";
 
@@ -40,7 +44,11 @@ let
     })
     (mkSection "keyfile" {
       unmanaged-devices =
+<<<<<<< HEAD
         if cfg.unmanaged == [ ] then null
+=======
+        if cfg.unmanaged == [] then null
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         else lib.concatStringsSep ";" cfg.unmanaged;
     })
     (mkSection "logging" {
@@ -103,7 +111,11 @@ let
   };
 
   macAddressOpt = mkOption {
+<<<<<<< HEAD
     type = types.either types.str (types.enum [ "permanent" "preserve" "random" "stable" ]);
+=======
+    type = types.either types.str (types.enum ["permanent" "preserve" "random" "stable"]);
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     default = "preserve";
     example = "00:11:22:33:44:55";
     description = lib.mdDoc ''
@@ -126,8 +138,12 @@ let
     pkgs.wpa_supplicant
   ];
 
+<<<<<<< HEAD
 in
 {
+=======
+in {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   meta = {
     maintainers = teams.freedesktop.members;
@@ -157,7 +173,11 @@ in
           int
           str
         ]));
+<<<<<<< HEAD
         default = { };
+=======
+        default = {};
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         description = lib.mdDoc ''
           Configuration for the [connection] section of NetworkManager.conf.
           Refer to
@@ -187,7 +207,11 @@ in
 
       unmanaged = mkOption {
         type = types.listOf types.str;
+<<<<<<< HEAD
         default = [ ];
+=======
+        default = [];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         description = lib.mdDoc ''
           List of interfaces that will not be managed by NetworkManager.
           Interface name can be specified here, but if you need more fidelity,
@@ -252,7 +276,11 @@ in
 
       appendNameservers = mkOption {
         type = types.listOf types.str;
+<<<<<<< HEAD
         default = [ ];
+=======
+        default = [];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         description = lib.mdDoc ''
           A list of name servers that should be appended
           to the ones configured in NetworkManager or received by DHCP.
@@ -261,7 +289,11 @@ in
 
       insertNameservers = mkOption {
         type = types.listOf types.str;
+<<<<<<< HEAD
         default = [ ];
+=======
+        default = [];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         description = lib.mdDoc ''
           A list of name servers that should be inserted before
           the ones configured in NetworkManager or received by DHCP.
@@ -337,6 +369,7 @@ in
             };
           };
         });
+<<<<<<< HEAD
         default = [ ];
         example = literalExpression ''
           [ {
@@ -352,6 +385,23 @@ in
               ''';
               type = "basic";
           } ]'';
+=======
+        default = [];
+        example = literalExpression ''
+        [ {
+              source = pkgs.writeText "upHook" '''
+
+                if [ "$2" != "up" ]; then
+                    logger "exit: event $2 != up"
+                    exit
+                fi
+
+                # coreutils and iproute are in PATH too
+                logger "Device $DEVICE_IFACE coming up"
+            ''';
+            type = "basic";
+        } ]'';
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         description = lib.mdDoc ''
           A list of scripts which will be executed in response to  network  events.
         '';
@@ -370,6 +420,7 @@ in
         '';
       };
 
+<<<<<<< HEAD
       fccUnlockScripts = mkOption {
         type = types.listOf (types.submodule {
           options = {
@@ -388,6 +439,16 @@ in
         description = lib.mdDoc ''
           List of FCC unlock scripts to enable on the system, behaving as described in
           https://modemmanager.org/docs/modemmanager/fcc-unlock/#integration-with-third-party-fcc-unlock-tools.
+=======
+      enableFccUnlock = mkOption {
+        type = types.bool;
+        default = false;
+        description = lib.mdDoc ''
+          Enable FCC unlock procedures. Since release 1.18.4, the ModemManager daemon no longer
+          automatically performs the FCC unlock procedure by default. See
+          [the docs](https://modemmanager.org/docs/modemmanager/fcc-unlock/)
+          for more details.
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         '';
       };
     };
@@ -398,6 +459,7 @@ in
       [ "networking" "networkmanager" "packages" ]
       [ "networking" "networkmanager" "plugins" ])
     (mkRenamedOptionModule [ "networking" "networkmanager" "useDnsmasq" ] [ "networking" "networkmanager" "dns" ])
+<<<<<<< HEAD
     (mkRemovedOptionModule [ "networking" "networkmanager" "enableFccUnlock" ] ''
       This option was removed, because using bundled FCC unlock scripts is risky,
       might conflict with vendor-provided unlock scripts, and should
@@ -406,6 +468,9 @@ in
       `networking.networkmanager.fccUnlockScripts` option.
     '')
     (mkRemovedOptionModule [ "networking" "networkmanager" "dynamicHosts" ] ''
+=======
+    (mkRemovedOptionModule ["networking" "networkmanager" "dynamicHosts"] ''
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       This option was removed because allowing (multiple) regular users to
       override host entries affecting the whole system opens up a huge attack
       vector. There seem to be very rare cases where this might be useful.
@@ -421,8 +486,12 @@ in
   config = mkIf cfg.enable {
 
     assertions = [
+<<<<<<< HEAD
       {
         assertion = config.networking.wireless.enable == true -> cfg.unmanaged != [ ];
+=======
+      { assertion = config.networking.wireless.enable == true -> cfg.unmanaged != [];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
         message = ''
           You can not use networking.networkmanager with networking.wireless.
           Except if you mark some interfaces as <literal>unmanaged</literal> by NetworkManager.
@@ -433,6 +502,7 @@ in
     hardware.wirelessRegulatoryDatabase = true;
 
     environment.etc = {
+<<<<<<< HEAD
       "NetworkManager/NetworkManager.conf".source = configFile;
     }
     // builtins.listToAttrs (map
@@ -456,6 +526,27 @@ in
           value = { mode = "0544"; inherit (s) source; };
         })
       cfg.dispatcherScripts);
+=======
+        "NetworkManager/NetworkManager.conf".source = configFile;
+      }
+      // builtins.listToAttrs (map (pkg: nameValuePair "NetworkManager/${pkg.networkManagerPlugin}" {
+        source = "${pkg}/lib/NetworkManager/${pkg.networkManagerPlugin}";
+      }) cfg.plugins)
+      // optionalAttrs cfg.enableFccUnlock
+         {
+           "ModemManager/fcc-unlock.d".source =
+             "${pkgs.modemmanager}/share/ModemManager/fcc-unlock.available.d/*";
+         }
+      // optionalAttrs (cfg.appendNameservers != [] || cfg.insertNameservers != [])
+         {
+           "NetworkManager/dispatcher.d/02overridedns".source = overrideNameserversScript;
+         }
+      // listToAttrs (lib.imap1 (i: s:
+         {
+            name = "NetworkManager/dispatcher.d/${dispatcherTypesSubdirMap.${s.type}}03userscript${lib.fixedWidthNumber 4 i}";
+            value = { mode = "0544"; inherit (s) source; };
+         }) cfg.dispatcherScripts);
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
     environment.systemPackages = packages;
 
@@ -484,8 +575,11 @@ in
       "d /var/lib/NetworkManager-fortisslvpn 0700 root root -"
 
       "d /var/lib/misc 0755 root root -" # for dnsmasq.leases
+<<<<<<< HEAD
       # ppp isn't able to mkdir that directory at runtime
       "d /run/pppd/lock 0700 root root -"
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     ];
 
     systemd.services.NetworkManager = {

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 { lib
 , buildGoModule
 , fetchFromGitHub
@@ -7,15 +8,29 @@
 buildGoModule rec {
   pname = "eksctl";
   version = "0.156.0";
+=======
+{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
+
+buildGoModule rec {
+  pname = "eksctl";
+  version = "0.140.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "weaveworks";
     repo = pname;
     rev = version;
+<<<<<<< HEAD
     hash = "sha256-E50MtMrZy2lnMjoYV4MJF+0YGLmGEioOF74rldXdOPU=";
   };
 
   vendorHash = "sha256-maMORSR6ZAasUxAy4kXvua4C+/dWdZbDde2VIKSV8w4=";
+=======
+    hash = "sha256-Y7OrEbPIDnUri5LXOpyNI/fZ+Cxxxj9hTqEXGyVHwOw=";
+  };
+
+  vendorHash = "sha256-xS8MiH9ij+lKpew02pFNpYDhLRVGRzBBy3uMhyiJ0+U=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   doCheck = false;
 
@@ -44,6 +59,9 @@ buildGoModule rec {
     homepage = "https://github.com/weaveworks/eksctl";
     license = licenses.asl20;
     maintainers = with maintainers; [ xrelkd Chili-Man ];
+<<<<<<< HEAD
     mainProgram = "eksctl";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

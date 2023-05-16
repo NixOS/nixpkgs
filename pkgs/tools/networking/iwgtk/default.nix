@@ -37,8 +37,13 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/j-lentz/iwgtk";
     changelog = "https://github.com/j-lentz/iwgtk/blob/v${version}/CHANGELOG";
     license = licenses.gpl3Only;
+<<<<<<< HEAD
     maintainers = with maintainers; [ figsoda ];
     platforms = platforms.linux;
     mainProgram = "iwgtk";
+=======
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ figsoda ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

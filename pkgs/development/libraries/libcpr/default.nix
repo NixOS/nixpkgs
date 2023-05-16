@@ -1,6 +1,10 @@
 { lib, stdenv, fetchFromGitHub, cmake, curl }:
 
+<<<<<<< HEAD
 let version = "1.10.4"; in
+=======
+let version = "1.10.2"; in
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 stdenv.mkDerivation {
   pname = "libcpr";
   inherit version;
@@ -10,13 +14,22 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "libcpr";
     repo = "cpr";
+<<<<<<< HEAD
     rev = version;
     hash = "sha256-8qRNlZgBB71t/FSFPnxFhr02OuD2erLVeoc6wAx3LKk=";
+=======
+    rev = "1.10.2";
+    hash = "sha256-F+ZIyFwWHn2AcVnKOaRlB7DjZzfmn8Iat/m3uknC8uA=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ cmake ];
 
+<<<<<<< HEAD
   propagatedBuildInputs = [ curl ];
+=======
+  buildInputs = [ curl ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   cmakeFlags = [
     "-DCPR_USE_SYSTEM_CURL=ON"

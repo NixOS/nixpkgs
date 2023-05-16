@@ -1,7 +1,10 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+<<<<<<< HEAD
 , fetchpatch
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , mako
 , parse
 , parse-type
@@ -9,6 +12,10 @@
 , pytest
 , pytestCheckHook
 , pythonOlder
+<<<<<<< HEAD
+=======
+, setuptools
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , typing-extensions
 }:
 
@@ -26,6 +33,7 @@ buildPythonPackage rec {
     hash = "sha256-+76jIgfDQPdIoesTr1+QUu8wmOnrdf4KT+TJr9F2Hqk=";
   };
 
+<<<<<<< HEAD
   patches = [
     (fetchpatch {
       name = "remove-setuptools.patch";
@@ -34,6 +42,8 @@ buildPythonPackage rec {
     })
   ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nativeBuildInputs = [
     poetry-core
   ];
@@ -51,6 +61,10 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
+<<<<<<< HEAD
+=======
+    setuptools
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   preCheck = ''

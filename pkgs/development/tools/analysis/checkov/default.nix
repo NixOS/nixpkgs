@@ -22,14 +22,22 @@ with py.pkgs;
 
 buildPythonApplication rec {
   pname = "checkov";
+<<<<<<< HEAD
   version = "2.4.33";
+=======
+  version = "2.3.237";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "bridgecrewio";
     repo = pname;
     rev = "refs/tags/${version}";
+<<<<<<< HEAD
     hash = "sha256-lbJlv1D3PvZlvjawkItBt9STdMMJwC5QQAYdUG0HjTI=";
+=======
+    hash = "sha256-7ugTfWv6CRj5vsrT1DvfaR39Ytct3tse+2210WBHP9g=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   patches = [
@@ -37,12 +45,20 @@ buildPythonApplication rec {
   ];
 
   pythonRelaxDeps = [
+<<<<<<< HEAD
     "bc-detect-secrets"
     "bc-python-hcl2"
     "dpath"
     "license-expression"
     "networkx"
     "pycep-parser"
+=======
+    "dpath"
+    "bc-detect-secrets"
+    "bc-python-hcl2"
+    "pycep-parser"
+    "networkx"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   nativeBuildInputs = [
@@ -75,7 +91,10 @@ buildPythonApplication rec {
     jmespath
     jsonschema
     junit-xml
+<<<<<<< HEAD
     license-expression
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     networkx
     openai
     packaging
@@ -84,7 +103,10 @@ buildPythonApplication rec {
     pycep-parser
     pyyaml
     semantic-version
+<<<<<<< HEAD
     spdx-tools
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     tabulate
     termcolor
     tqdm
@@ -124,7 +146,10 @@ buildPythonApplication rec {
     "test_secret_value_in_keyword"
     "test_runner_verify_secrets_skip_invalid_suppressed"
     "test_runner_verify_secrets_skip_all_no_effect"
+<<<<<<< HEAD
     "test_runner"
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   disabledTestPaths = [

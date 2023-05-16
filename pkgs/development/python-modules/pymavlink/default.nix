@@ -2,11 +2,19 @@
 
 buildPythonPackage rec {
   pname = "pymavlink";
+<<<<<<< HEAD
   version = "2.4.40";
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-PWpVKtNEof/54MgRNhrJ2LuCAc9qrK1yJNUW+gN8yzA=";
+=======
+  version = "2.4.37";
+
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-dU561/kOBW++mrfzX/kqNVPgi7m/QniBrCJxBD/fZ1Y=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [ future lxml ];

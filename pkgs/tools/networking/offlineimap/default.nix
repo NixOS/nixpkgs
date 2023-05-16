@@ -7,8 +7,11 @@
 , installShellFiles
 , libxml2
 , libxslt
+<<<<<<< HEAD
 , testers
 , offlineimap
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -60,13 +63,19 @@ python3.pkgs.buildPythonApplication rec {
     "offlineimap"
   ];
 
+<<<<<<< HEAD
   passthru.tests.version = testers.testVersion { package = offlineimap; };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   meta = with lib; {
     description = "Synchronize emails between two repositories, so that you can read the same mailbox from multiple computers";
     homepage = "http://offlineimap.org";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ endocrimes ];
+<<<<<<< HEAD
     mainProgram = "offlineimap";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

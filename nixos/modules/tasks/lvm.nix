@@ -25,12 +25,17 @@ in {
     boot.vdo.enable = mkEnableOption (lib.mdDoc "support for booting from VDOLVs");
   };
 
+<<<<<<< HEAD
   options.boot.initrd.services.lvm.enable = mkEnableOption (lib.mdDoc "booting from LVM2 in the initrd") // {
     description = lib.mdDoc ''
       *This will only be used when systemd is used in stage 1.*
 
       Whether to enable booting from LVM2 in the initrd.
     '';
+=======
+  options.boot.initrd.services.lvm.enable = (mkEnableOption (lib.mdDoc "enable booting from LVM2 in the initrd")) // {
+    visible = false;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   config = mkMerge [
@@ -44,6 +49,7 @@ in {
       systemd.packages = [ cfg.package ];
 
       services.udev.packages = [ cfg.package.out ];
+<<<<<<< HEAD
     })
     (mkIf config.boot.initrd.services.lvm.enable {
       # We need lvm2 for the device-mapper rules
@@ -51,6 +57,14 @@ in {
       # The device-mapper rules want to call tools from lvm2
       boot.initrd.systemd.initrdBin = [ cfg.package ];
       boot.initrd.services.udev.binPackages = [ cfg.package ];
+=======
+
+      # We need lvm2 for the device-mapper rules
+      boot.initrd.services.udev.packages = lib.mkIf config.boot.initrd.services.lvm.enable [ cfg.package ];
+      # The device-mapper rules want to call tools from lvm2
+      boot.initrd.systemd.initrdBin = lib.mkIf config.boot.initrd.services.lvm.enable [ cfg.package ];
+      boot.initrd.services.udev.binPackages = lib.mkIf config.boot.initrd.services.lvm.enable [ cfg.package ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     })
     (mkIf cfg.dmeventd.enable {
       systemd.sockets."dm-event".wantedBy = [ "sockets.target" ];

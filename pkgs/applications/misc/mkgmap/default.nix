@@ -15,12 +15,20 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "mkgmap";
+<<<<<<< HEAD
   version = "4910";
+=======
+  version = "4907";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchsvn {
     url = "https://svn.mkgmap.org.uk/mkgmap/mkgmap/trunk";
     rev = version;
+<<<<<<< HEAD
     sha256 = "sha256-t4SyvDvwNdqKh95MRmHxlX6q84dN0y4ANPIXqS7ynBA=";
+=======
+    sha256 = "sha256-2DwIH6GNsK2XwaVxzPvN1qt4XRSi5fCQDwltBCBg4gI=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   patches = [

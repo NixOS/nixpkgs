@@ -29,6 +29,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit version;
     pname = "Quandl";
+<<<<<<< HEAD
     hash = "sha256-bguC+8eGFhCzV3xTlyd8QiDgZe7g/tTkbNa2AhZVtkw=";
   };
 
@@ -36,6 +37,11 @@ buildPythonPackage rec {
     ./pandas2-datetime-removal.patch
   ];
 
+=======
+    sha256 = "6e0b82fbc7861610b3577c5397277c4220e065eee0fed4e46cd6b6021655b64c";
+  };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   propagatedBuildInputs = [
     pandas
     numpy

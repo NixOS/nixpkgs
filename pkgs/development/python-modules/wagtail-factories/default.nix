@@ -8,13 +8,22 @@
 
 buildPythonPackage rec {
   pname = "wagtail-factories";
+<<<<<<< HEAD
   version = "4.1.0";
+=======
+  version = "4.0.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     repo = pname;
     owner = "wagtail";
+<<<<<<< HEAD
     rev = "refs/tags/v${version}";
     sha256 = "sha256-xNLHJ/8IZt3pzHAzr9swcL6GcIQyIjIFfoeHUW1i76U=";
+=======
+    rev = version;
+    sha256 = "sha256-JmFWf+TODQNsSSxYD/JYVhWc82o6rJL13j5J23r8J9A=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [

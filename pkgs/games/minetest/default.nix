@@ -14,7 +14,10 @@
 , openal
 , libvorbis
 , sqlite
+<<<<<<< HEAD
 , lua5_1
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , luajit
 , freetype
 , gettext
@@ -94,9 +97,14 @@ let
     nativeBuildInputs = [ cmake doxygen graphviz ninja ];
 
     buildInputs = [
+<<<<<<< HEAD
       irrlichtmtInput jsoncpp gettext freetype sqlite curl bzip2 ncurses
       gmp libspatialindex
     ] ++ [ (if lib.meta.availableOn stdenv.hostPlatform luajit then luajit else lua5_1) ] ++ [
+=======
+      irrlichtmtInput luajit jsoncpp gettext freetype sqlite curl bzip2 ncurses
+      gmp libspatialindex
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     ] ++ optionals stdenv.isDarwin [
       libiconv OpenGL OpenAL Carbon Cocoa
     ] ++ optionals buildClient [

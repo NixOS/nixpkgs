@@ -1,6 +1,10 @@
 { stdenv, lib, fetchFromGitHub, cmake
 , libGL, libXrandr, libXinerama, libXcursor, libX11, libXi, libXext
+<<<<<<< HEAD
 , Carbon, Cocoa, Kernel, OpenGL, fixDarwinDylibNames
+=======
+, Cocoa, Kernel, fixDarwinDylibNames
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , waylandSupport ? false, extra-cmake-modules, wayland
 , wayland-protocols, libxkbcommon
 }:
@@ -19,7 +23,11 @@ stdenv.mkDerivation rec {
   # Fix linkage issues on X11 (https://github.com/NixOS/nixpkgs/issues/142583)
   patches = lib.optional (!waylandSupport) ./x11.patch;
 
+<<<<<<< HEAD
   propagatedBuildInputs = [ (if stdenv.isDarwin then OpenGL else libGL) ];
+=======
+  propagatedBuildInputs = [ libGL ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nativeBuildInputs = [ cmake ]
     ++ lib.optional stdenv.isDarwin fixDarwinDylibNames
@@ -29,7 +37,11 @@ stdenv.mkDerivation rec {
     if waylandSupport
     then [ wayland wayland-protocols libxkbcommon ]
     else [ libX11 libXrandr libXinerama libXcursor libXi libXext ]
+<<<<<<< HEAD
          ++ lib.optionals stdenv.isDarwin [ Carbon Cocoa Kernel ];
+=======
+         ++ lib.optionals stdenv.isDarwin [ Cocoa Kernel ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   cmakeFlags = [
     "-DBUILD_SHARED_LIBS=ON"

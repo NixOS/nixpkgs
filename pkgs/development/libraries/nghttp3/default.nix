@@ -6,13 +6,21 @@
 
 stdenv.mkDerivation rec {
   pname = "nghttp3";
+<<<<<<< HEAD
   version = "0.14.0";
+=======
+  version = "0.10.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "ngtcp2";
     repo = pname;
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-DqqT8rgGlbV0upe0E37AR8bk3SIsoyCXt8xJzIkz9xc=";
+=======
+    hash = "sha256-V0g/d1B9uMn7KZU6ShzyPGXOSAYCbz4ZubnhAwz+Qsc=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   outputs = [ "out" "dev" "doc" ];

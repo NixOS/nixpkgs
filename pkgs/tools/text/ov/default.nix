@@ -4,18 +4,26 @@
 , installShellFiles
 , pandoc
 , makeWrapper
+<<<<<<< HEAD
 , testers
 , ov
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 buildGoModule rec {
   pname = "ov";
+<<<<<<< HEAD
   version = "0.31.0";
+=======
+  version = "0.15.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "noborus";
     repo = "ov";
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-UtYFr5eFdEU/oZqwy84W/GQiFrMPWRIomqgJY3P52Ws=";
   };
 
@@ -26,6 +34,16 @@ buildGoModule rec {
     "-w"
     "-X=main.Version=v${version}"
     "-X=main.Revision=${src.rev}"
+=======
+    hash = "sha256-gL2Gz7ziy6YfAiGuvyg7P9wUBST/Hy6/vmpQN9tdv3g=";
+  };
+
+  vendorHash = "sha256-BM9XnjAiX3qAukqwbl3Aij1scKU2+txx4SHC8aHaS/Q=";
+
+  ldflags = [
+    "-X main.Version=v${version}"
+    "-X main.Revision=${src.rev}"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   subPackages = [ "." ];
@@ -54,6 +72,7 @@ buildGoModule rec {
     cp $src/ov.yaml $doc/share/$name/sample-config.yaml
   '';
 
+<<<<<<< HEAD
   passthru.tests = {
     version = testers.testVersion {
       package = ov;
@@ -67,5 +86,13 @@ buildGoModule rec {
     changelog = "https://github.com/noborus/ov/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ farcaller figsoda ];
+=======
+  meta = with lib; {
+    description = "Feature-rich terminal-based text viewer";
+    homepage = "https://noborus.github.io/ov";
+    license = licenses.mit;
+    platforms = platforms.linux ++ platforms.darwin;
+    maintainers = with maintainers; [ farcaller ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

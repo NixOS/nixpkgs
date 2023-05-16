@@ -23,7 +23,11 @@
 
 stdenv.mkDerivation rec {
   pname = "mediastreamer2";
+<<<<<<< HEAD
   version = "5.2.98";
+=======
+  version = "5.2.16";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   dontWrapQtApps = true;
 
@@ -33,7 +37,11 @@ stdenv.mkDerivation rec {
     group = "BC";
     repo = pname;
     rev = version;
+<<<<<<< HEAD
     hash = "sha256-02e1nGSwlhEHwQH6WqBSKBlWQWAYa7lKdZaZ8/0SAxs=";
+=======
+    hash = "sha256-K4EBZC3zuLKF9Qw4i24f0hYKlOgRM7MR4Ck2ZoTYi6I=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   patches = [

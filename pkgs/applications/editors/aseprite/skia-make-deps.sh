@@ -2,7 +2,11 @@
 
 FILTER=$1
 OUT=skia-deps.nix
+<<<<<<< HEAD
 REVISION=861e4743af6d9bf6077ae6dda7274e5a136ee4e2
+=======
+REVISION=89e4ca4352d05adc892f5983b108433f29b2c0c2
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 DEPS=$(curl -s https://raw.githubusercontent.com/aseprite/skia/$REVISION/DEPS)
 THIRD_PARTY_DEPS=$(echo "$DEPS" | grep third_party | grep "#" -v | sed 's/"//g')
 

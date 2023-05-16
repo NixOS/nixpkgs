@@ -134,7 +134,10 @@ in
           ProtectProc = "invisible";
           ProcSubset = "pid";
           RestrictAddressFamilies = [
+<<<<<<< HEAD
             "AF_UNIX"
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
             "AF_INET"
             "AF_INET6"
           ];

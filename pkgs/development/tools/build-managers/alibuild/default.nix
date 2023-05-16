@@ -1,10 +1,18 @@
+<<<<<<< HEAD
 { lib, python, fetchPypi }:
+=======
+{ lib, python }:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 python.pkgs.buildPythonApplication rec {
   pname = "alibuild";
   version = "1.11.2";
 
+<<<<<<< HEAD
   src = fetchPypi {
+=======
+  src = python.pkgs.fetchPypi {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     inherit pname version;
     hash = "sha256-wq2H2inUf2CjPD45krCNdjw2s4FXsEDlfOHqW8VaVKg=";
   };

@@ -2,7 +2,10 @@
 , buildPythonPackage
 , pythonOlder
 , fetchPypi
+<<<<<<< HEAD
 , fetchpatch, isPy311
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , pytestCheckHook
 }:
 
@@ -19,6 +22,7 @@ buildPythonPackage rec {
     hash = "sha256-7IsnamtgvYDe/tJa3X5DmIHBnmSFCv2bNGKD1BZf0P0=";
   };
 
+<<<<<<< HEAD
   patches = lib.optional isPy311 # could be made unconditional on rebuild
     (fetchpatch {
       name = "tests-py311.patch";
@@ -27,6 +31,8 @@ buildPythonPackage rec {
     })
   ;
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nativeCheckInputs = [
     pytestCheckHook
   ];

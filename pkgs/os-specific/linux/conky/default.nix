@@ -51,7 +51,11 @@ assert luaImlib2Support    -> luaSupport && imlib2Support
 assert luaCairoSupport     -> luaSupport && toluapp != null
                                          && cairo   != null;
 assert luaCairoSupport || luaImlib2Support
+<<<<<<< HEAD
                            -> lua.luaversion == "5.4";
+=======
+                           -> lua.luaversion == "5.3";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 assert wirelessSupport     -> wirelesstools != null;
 assert nvidiaSupport       -> libXNVCtrl != null;
@@ -67,29 +71,47 @@ with lib;
 
 stdenv.mkDerivation rec {
   pname = "conky";
+<<<<<<< HEAD
   version = "1.19.4";
+=======
+  version = "1.13.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "brndnmtthws";
     repo = "conky";
     rev = "v${version}";
+<<<<<<< HEAD
     hash = "sha256-XptnokBWtBx0W2k2C9jVwIYH8pOrDUbuQLvh8JrW/w8=";
+=======
+    sha256 = "sha256-3eCRzjfHGFiKuxmRHvnzqAg/+ApUKnHhsumWnio/Qxg=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   postPatch = ''
     sed -i -e '/include.*CheckIncludeFile)/i include(CheckIncludeFiles)' \
       cmake/ConkyPlatformChecks.cmake
   '' + optionalString docsSupport ''
+<<<<<<< HEAD
+=======
+    # Drop examples, since they contain non-ASCII characters that break docbook2x :(
+    sed -i 's/ Example: .*$//' doc/config_settings.xml
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     substituteInPlace cmake/Conky.cmake --replace "# set(RELEASE true)" "set(RELEASE true)"
 
     cp ${catch2}/include/catch2/catch.hpp tests/catch2/catch.hpp
   '';
 
+<<<<<<< HEAD
   env = {
     # For some reason -Werror is on by default, causing the project to fail compilation.
     NIX_CFLAGS_COMPILE = "-Wno-error";
     NIX_LDFLAGS = "-lgcc_s";
   };
+=======
+  NIX_LDFLAGS = "-lgcc_s";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nativeBuildInputs = [ cmake pkg-config ];
   buildInputs = [ glib libXinerama ]
@@ -138,8 +160,12 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   meta = with lib; {
+<<<<<<< HEAD
     homepage = "https://conky.cc";
     changelog = "https://github.com/brndnmtthws/conky/releases/tag/v${version}";
+=======
+    homepage = "https://conky.sourceforge.net/";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     description = "Advanced, highly configurable system monitor based on torsmo";
     maintainers = [ maintainers.guibert ];
     license = licenses.gpl3Plus;

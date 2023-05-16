@@ -14,7 +14,11 @@
 
 buildPythonPackage rec {
   pname = "dropbox";
+<<<<<<< HEAD
   version = "11.36.2";
+=======
+  version = "11.36.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -24,7 +28,11 @@ buildPythonPackage rec {
     owner = "dropbox";
     repo = "dropbox-sdk-python";
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-d++lxsbwPxnz1JPguWkImHXB+GQpMa9Uo3JNIxIe2ok=";
+=======
+    hash = "sha256-J2AaGkD4TMDcVzTtdcNH0bgy6de+BRjYdtTaRL3lYrs=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [
@@ -42,7 +50,14 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
+<<<<<<< HEAD
       --replace "'pytest-runner == 5.2.0'," ""
+=======
+      --replace ">= 2.*" ">= 2.0" \
+      --replace "'pytest-runner == 5.2.0'," ""
+    substituteInPlace test/requirements.txt \
+      --replace ">=2.*" ">=2.0"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   '';
 
   doCheck = true;
@@ -50,7 +65,10 @@ buildPythonPackage rec {
   pythonImportsCheck = [
     "dropbox"
   ];
+<<<<<<< HEAD
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nativeBuildInputs = [ sphinxHook ];
 
   # Set SCOPED_USER_DROPBOX_TOKEN environment variable to a valid value.

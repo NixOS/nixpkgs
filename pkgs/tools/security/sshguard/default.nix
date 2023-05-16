@@ -1,12 +1,20 @@
 { lib, stdenv, fetchurl, autoreconfHook, bison, flex}:
 
 stdenv.mkDerivation rec {
+<<<<<<< HEAD
   version = "2.4.3";
+=======
+  version = "2.4.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pname = "sshguard";
 
   src = fetchurl {
     url = "mirror://sourceforge/sshguard/${pname}-${version}.tar.gz";
+<<<<<<< HEAD
     sha256 = "sha256-ZAKd7/bekP3u+x9JfUFPDkBFB2aTqR2hpw63WV6X7+s=";
+=======
+    sha256 = "1s1prqdbxjrd1n3j4x8ggy9gl2j0ax6xhkzcvyzajw7awmvbfw17";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   doCheck = true;

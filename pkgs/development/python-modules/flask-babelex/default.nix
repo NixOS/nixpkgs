@@ -50,6 +50,10 @@ buildPythonPackage rec {
     description = "Adds i18n/l10n support to Flask applications";
     homepage = "https://github.com/mrjoes/flask-babelex";
     license = licenses.bsd3;
+<<<<<<< HEAD
     maintainers = [ ];
+=======
+    maintainers = [ maintainers.costrouc ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

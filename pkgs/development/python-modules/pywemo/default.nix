@@ -1,7 +1,10 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
+<<<<<<< HEAD
 , hypothesis
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , ifaddr
 , lxml
 , poetry-core
@@ -14,7 +17,11 @@
 
 buildPythonPackage rec {
   pname = "pywemo";
+<<<<<<< HEAD
   version = "1.3.0";
+=======
+  version = "0.9.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -23,7 +30,11 @@ buildPythonPackage rec {
     owner = pname;
     repo = pname;
     rev = "refs/tags/${version}";
+<<<<<<< HEAD
     hash = "sha256-+AdNT7ClT8JkYLkwk+IVNWgXGS04WNtENOtqmbjv7nQ=";
+=======
+    hash = "sha256-mrLZ8W7imM/ysJhd4OcqZFzx2z/KG8k5bOPFb4ldYzE=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [
@@ -37,10 +48,14 @@ buildPythonPackage rec {
     lxml
   ];
 
+<<<<<<< HEAD
   __darwinAllowLocalNetworking = true;
 
   nativeCheckInputs = [
     hypothesis
+=======
+  nativeCheckInputs = [
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     pytest-vcr
     pytestCheckHook
   ];

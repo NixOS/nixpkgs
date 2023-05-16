@@ -12,7 +12,10 @@ SCRIPT_PATH = Path(__file__).absolute().parent
 HASHES_PATH = SCRIPT_PATH / "hashes.json"
 GET_REPO_THREADS = int(os.environ.get("GET_REPO_THREADS", 8))
 CORES = {
+<<<<<<< HEAD
     "2048": {"repo": "libretro-2048"},
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "atari800": {"repo": "libretro-atari800"},
     "beetle-gba": {"repo": "beetle-gba-libretro"},
     "beetle-lynx": {"repo": "beetle-lynx-libretro"},
@@ -36,7 +39,10 @@ CORES = {
     "desmume2015": {"repo": "desmume2015"},
     "dolphin": {"repo": "dolphin"},
     "dosbox": {"repo": "dosbox-libretro"},
+<<<<<<< HEAD
     "dosbox-pure": {"repo": "dosbox-pure", "owner": "schellingb"},
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "eightyone": {"repo": "81-libretro"},
     "fbalpha2012": {"repo": "fbalpha2012"},
     "fbneo": {"repo": "fbneo"},
@@ -44,7 +50,10 @@ CORES = {
     "flycast": {"repo": "flycast"},
     "fmsx": {"repo": "fmsx-libretro"},
     "freeintv": {"repo": "freeintv"},
+<<<<<<< HEAD
     "fuse": {"repo": "fuse-libretro"},
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "gambatte": {"repo": "gambatte-libretro"},
     "genesis-plus-gx": {"repo": "Genesis-Plus-GX"},
     "gpsp": {"repo": "gpsp"},
@@ -81,7 +90,10 @@ CORES = {
     "puae": {"repo": "libretro-uae"},
     "quicknes": {"repo": "QuickNES_Core"},
     "sameboy": {"repo": "sameboy"},
+<<<<<<< HEAD
     "same_cdi": {"repo": "same_cdi"},
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "scummvm": {"repo": "scummvm"},
     "smsplus-gx": {"repo": "smsplus-gx"},
     "snes9x": {"repo": "snes9x", "owner": "snes9xgit"},

@@ -6,7 +6,11 @@ let
 
   cfg = config.services.fcron;
 
+<<<<<<< HEAD
   queuelen = optionalString (cfg.queuelen != null) "-q ${toString cfg.queuelen}";
+=======
+  queuelen = if cfg.queuelen == null then "" else "-q ${toString cfg.queuelen}";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   # Duplicate code, also found in cron.nix. Needs deduplication.
   systemCronJobs =

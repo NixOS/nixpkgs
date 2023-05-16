@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 { stdenvNoCC, fetchurl, unzip, lib }:
 
 { pname, version, zipHash, meta ? {}, passthru ? {}, ... }@args:
@@ -22,6 +23,19 @@ let plat = stdenvNoCC.targetPlatform.system; in stdenvNoCC.mkDerivation ({
       url = "https://grafana.com/api/plugins/${pname}/versions/${version}/download";
     }
   ;
+=======
+{ stdenvNoCC, fetchurl, unzip }:
+
+{ pname, version, zipHash, meta ? {}, passthru ? {}, ... }@args:
+stdenvNoCC.mkDerivation ({
+  inherit pname version;
+
+  src = fetchurl {
+    name = "${pname}-${version}.zip";
+    url = "https://grafana.com/api/plugins/${pname}/versions/${version}/download";
+    hash = zipHash;
+  };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nativeBuildInputs = [ unzip ];
 
@@ -38,4 +52,8 @@ let plat = stdenvNoCC.targetPlatform.system; in stdenvNoCC.mkDerivation ({
   meta = {
     homepage = "https://grafana.com/grafana/plugins/${pname}";
   } // meta;
+<<<<<<< HEAD
 } // (builtins.removeAttrs args [ "zipHash" "pname" "version" "sha256" "meta" ]))
+=======
+} // (builtins.removeAttrs args [ "pname" "version" "sha256" "meta" ]))
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)

@@ -35,16 +35,28 @@ in
 assert lib.subtractLists [ "ncurses" "qt5" ] uiToolkits == [];
 # Minimal, bootstrap cmake does not have toolkits
 assert isBootstrap -> (uiToolkits == []);
+<<<<<<< HEAD
 stdenv.mkDerivation (finalAttrs: {
+=======
+stdenv.mkDerivation rec {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pname = "cmake"
     + lib.optionalString isBootstrap "-boot"
     + lib.optionalString cursesUI "-cursesUI"
     + lib.optionalString qt5UI "-qt5UI";
+<<<<<<< HEAD
   version = "3.26.4";
 
   src = fetchurl {
     url = "https://cmake.org/files/v${lib.versions.majorMinor finalAttrs.version}/cmake-${finalAttrs.version}.tar.gz";
     hash = "sha256-MTtogMKRvU/jHAqlHW5iZZKCpSHmlfMNXMDSWrvVwgg=";
+=======
+  version = "3.25.3";
+
+  src = fetchurl {
+    url = "https://cmake.org/files/v${lib.versions.majorMinor version}/cmake-${version}.tar.gz";
+    sha256 = "sha256-zJlXAdWQym3rxCRemYmTkJnKUoJ91GtdNZLwk6/hkBw=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   patches = [
@@ -71,7 +83,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 
+<<<<<<< HEAD
   nativeBuildInputs = finalAttrs.setupHooks ++ [
+=======
+  nativeBuildInputs = setupHooks ++ [
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     pkg-config
   ]
   ++ lib.optionals buildDocs [ texinfo ]
@@ -106,7 +122,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   configureFlags = [
     "CXXFLAGS=-Wno-elaborated-enum-base"
+<<<<<<< HEAD
     "--docdir=share/doc/${finalAttrs.pname}-${finalAttrs.version}"
+=======
+    "--docdir=share/doc/${pname}${version}"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ] ++ (if useSharedLibraries
         then [ "--no-system-jsoncpp" "--system-libs" ]
         else [ "--no-system-libs" ]) # FIXME: cleanup
@@ -154,7 +174,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = false; # fails
 
+<<<<<<< HEAD
   meta = {
+=======
+  meta = with lib; {
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     homepage = "https://cmake.org/";
     description = "Cross-platform, open-source build system generator";
     longDescription = ''
@@ -164,6 +188,7 @@ stdenv.mkDerivation (finalAttrs: {
       configuration files, and generate native makefiles and workspaces that can
       be used in the compiler environment of your choice.
     '';
+<<<<<<< HEAD
     changelog = "https://cmake.org/cmake/help/v${lib.versions.majorMinor finalAttrs.version}/release/${lib.versions.majorMinor finalAttrs.version}.html";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ ttuegel lnl7 AndersonTorres ];
@@ -171,3 +196,12 @@ stdenv.mkDerivation (finalAttrs: {
     broken = (qt5UI && stdenv.isDarwin);
   };
 })
+=======
+    changelog = "https://cmake.org/cmake/help/v${lib.versions.majorMinor version}/release/${lib.versions.majorMinor version}.html";
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ ttuegel lnl7 AndersonTorres ];
+    platforms = platforms.all;
+    broken = (qt5UI && stdenv.isDarwin);
+  };
+}
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)

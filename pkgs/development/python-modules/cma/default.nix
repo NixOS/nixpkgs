@@ -37,6 +37,10 @@ buildPythonPackage rec {
     description = "Library for Covariance Matrix Adaptation Evolution Strategy for non-linear numerical optimization";
     homepage = "https://github.com/CMA-ES/pycma";
     license = licenses.bsd3;
+<<<<<<< HEAD
     maintainers = with maintainers; [ ];
+=======
+    maintainers = with maintainers; [ costrouc ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

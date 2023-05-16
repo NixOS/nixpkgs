@@ -1,6 +1,10 @@
 {
   "name": "rust-analyzer",
+<<<<<<< HEAD
   "version": "0.3.1607",
+=======
+  "version": "0.3.1426",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   "dependencies": {
     "anser": "^2.1.1",
     "d3": "^7.6.1",

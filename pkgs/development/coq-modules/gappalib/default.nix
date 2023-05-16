@@ -6,8 +6,12 @@ mkCoqDerivation {
   owner = "gappa";
   domain = "gitlab.inria.fr";
   inherit version;
+<<<<<<< HEAD
   defaultVersion = if lib.versions.range "8.8" "8.17" coq.coq-version then "1.5.3" else null;
   release."1.5.3".sha256 = "sha256-SuMopX5sm4jh2uBuE7zr6vhWhHYZYnab+epjqYJqg+s=";
+=======
+  defaultVersion = if lib.versions.range "8.8" "8.16" coq.coq-version then "1.5.2" else null;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   release."1.5.2".sha256 = "sha256-A021Bhqz5r2CZBayfjIiWrCIfUlejcQAfbTmOaf6QTM=";
   release."1.5.1".sha256 = "1806bq1z6q5rq2ma7d5kfbqfyfr755hjg0dq7b2llry8fx9cxjsg";
   release."1.5.0".sha256 = "1i1c0gakffxqqqqw064cbvc243yl325hxd50jmczr6mk18igk41n";

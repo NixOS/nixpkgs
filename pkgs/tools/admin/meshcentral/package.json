@@ -1,6 +1,10 @@
 {
   "name": "meshcentral",
+<<<<<<< HEAD
   "version": "1.1.6",
+=======
+  "version": "1.1.5",
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   "keywords": [
     "Remote Device Management",
     "Remote Device Monitoring",

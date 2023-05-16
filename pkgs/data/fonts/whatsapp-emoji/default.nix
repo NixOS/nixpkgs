@@ -11,13 +11,21 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "whatsapp-emoji-linux";
+<<<<<<< HEAD
   version = "2.23.2.72-1";
+=======
+  version = "2.22.8.79-1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     rev = "refs/tags/${version}";
     owner = "dmlls";
     repo = "whatsapp-emoji-linux";
+<<<<<<< HEAD
     hash = "sha256-dwX+y8jCpR+SyiH13Os9VeXLDwmAYB7ARW2lAMl/7RE=";
+=======
+    hash = "sha256-AYdyNZYskBNT3v2wl+M0BAYi5piwmrVIDfucSZ3nfTE=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   makeFlags = [

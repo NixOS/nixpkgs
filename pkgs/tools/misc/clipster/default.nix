@@ -14,8 +14,12 @@ stdenv.mkDerivation  rec {
 
   pythonEnv = python3.withPackages(ps: with ps; [ pygobject3 ]);
 
+<<<<<<< HEAD
   nativeBuildInputs = [ gobject-introspection ];
   buildInputs =  [ pythonEnv gtk3 libwnck wrapGAppsHook ];
+=======
+  buildInputs =  [ pythonEnv gtk3 libwnck gobject-introspection wrapGAppsHook ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   installPhase = ''
     sed -i 's/python/python3/g' clipster

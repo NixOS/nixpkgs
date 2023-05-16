@@ -26,6 +26,10 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake pkg-config ];
 
   cmakeFlags = [
+<<<<<<< HEAD
+=======
+    "-DCMAKE_CXX_FLAGS=-std=c++11"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     "-DOpenMVG_BUILD_EXAMPLES=${if enableExamples then "ON" else "OFF"}"
     "-DOpenMVG_BUILD_DOC=${if enableDocs then "ON" else "OFF"}"
     "-DTARGET_ARCHITECTURE=generic"

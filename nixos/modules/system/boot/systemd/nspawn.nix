@@ -11,7 +11,11 @@ let
     (assertOnlyFields [
       "Boot" "ProcessTwo" "Parameters" "Environment" "User" "WorkingDirectory"
       "PivotRoot" "Capability" "DropCapability" "NoNewPrivileges" "KillSignal"
+<<<<<<< HEAD
       "Personality" "MachineID" "PrivateUsers" "NotifyReady" "SystemCallFilter"
+=======
+      "Personality" "MachineId" "PrivateUsers" "NotifyReady" "SystemCallFilter"
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       "LimitCPU" "LimitFSIZE" "LimitDATA" "LimitSTACK" "LimitCORE" "LimitRSS"
       "LimitNOFILE" "LimitAS" "LimitNPROC" "LimitMEMLOCK" "LimitLOCKS"
       "LimitSIGPENDING" "LimitMSGQUEUE" "LimitNICE" "LimitRTPRIO" "LimitRTTIME"

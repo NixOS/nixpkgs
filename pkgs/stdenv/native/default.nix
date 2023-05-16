@@ -152,10 +152,14 @@ in
     inherit config overlays;
     stdenv = makeStdenv {
       inherit (prevStage) cc fetchurl;
+<<<<<<< HEAD
       overrides = prev: final: { inherit (prevStage) fetchurl; };
     } // {
       inherit (prevStage) fetchurl;
     };
+=======
+    } // { inherit (prevStage) fetchurl; };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   })
 
   # Using that, build a stdenv that adds the ‘xz’ command (which most systems
@@ -165,7 +169,11 @@ in
     stdenv = makeStdenv {
       inherit (prevStage.stdenv) cc fetchurl;
       extraPath = [ prevStage.xz ];
+<<<<<<< HEAD
       overrides = self: super: { inherit (prevStage) fetchurl xz; };
+=======
+      overrides = self: super: { inherit (prevStage) xz; };
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       extraNativeBuildInputs = if localSystem.isLinux then [ prevStage.patchelf ] else [];
     };
   })

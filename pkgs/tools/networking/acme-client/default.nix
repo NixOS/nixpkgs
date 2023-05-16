@@ -8,11 +8,19 @@
 
 stdenv.mkDerivation rec {
   pname = "acme-client";
+<<<<<<< HEAD
   version = "1.3.2";
 
   src = fetchurl {
     url = "https://data.wolfsden.cz/sources/acme-client-${version}.tar.gz";
     hash = "sha256-nVB0VIT6mwKwSTY+wDcuxMtpEjtZ9Z0ke0lJ7SzdsJ0=";
+=======
+  version = "1.3.1";
+
+  src = fetchurl {
+    url = "https://data.wolfsden.cz/sources/acme-client-${version}.tar.gz";
+    hash = "sha256-lMCDis4CZQF6YwZGzdWD92/S1yT2cEAXXlTAipYYxro=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [

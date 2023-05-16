@@ -20,12 +20,20 @@
 
 buildPythonPackage rec {
   pname = "urllib3";
+<<<<<<< HEAD
   version = "1.26.16";
+=======
+  version = "1.26.14";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
+<<<<<<< HEAD
     hash = "sha256-jxNfZQJ1a95rKpsomJ31++h8mXDOyqaQQe3M5/BYmxQ=";
+=======
+    hash = "sha256-B2kHv4/TVc3ndyhHExZiWk0vfnE8El9RlTu1s+7PT3I=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   # FIXME: remove backwards compatbility hack

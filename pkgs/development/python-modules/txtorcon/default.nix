@@ -20,14 +20,22 @@
 
 buildPythonPackage rec {
   pname = "txtorcon";
+<<<<<<< HEAD
   version = "23.5.0";
+=======
+  version = "23.0.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
+<<<<<<< HEAD
     hash = "sha256-k/2Aqd1QX2mNCGT+k9uLapwRRLX+uRUwggtw7YmCZRw=";
+=======
+    hash = "sha256-AiX/rWdokTeEmtmtNK21abDYj5rwRQMABnpfkB6ZQyU=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [

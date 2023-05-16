@@ -23,7 +23,11 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ ncurses libX11 libXaw libXt libXext libXmu ];
 
+<<<<<<< HEAD
   sourceRoot = "${src.name}/Sil/src";
+=======
+  sourceRoot = "source/Sil/src";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   makefile = "Makefile.std";
 

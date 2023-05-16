@@ -23,7 +23,10 @@
 , setuptools-scm
 , scikit-build
 , cmake
+<<<<<<< HEAD
 , ninja
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , antlr4_9
 , libxml2
 , pytestCheckHook
@@ -48,7 +51,10 @@ buildPythonPackage rec {
     setuptools-scm
     scikit-build
     cmake
+<<<<<<< HEAD
     ninja
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   buildInputs = [

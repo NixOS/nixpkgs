@@ -6,7 +6,10 @@
 , SDL2
 , SDL2_image
 , SDL2_mixer
+<<<<<<< HEAD
 , Cocoa
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -29,8 +32,11 @@ stdenv.mkDerivation (finalAttrs: {
     SDL2
     SDL2_image
     SDL2_mixer
+<<<<<<< HEAD
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     Cocoa
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   meta = {

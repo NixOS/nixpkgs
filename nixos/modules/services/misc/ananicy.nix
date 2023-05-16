@@ -5,9 +5,13 @@ with lib;
 let
   cfg = config.services.ananicy;
   configFile = pkgs.writeText "ananicy.conf" (generators.toKeyValue { } cfg.settings);
+<<<<<<< HEAD
   extraRules = pkgs.writeText "extraRules" (concatMapStringsSep "\n" (l: builtins.toJSON l) cfg.extraRules);
   extraTypes = pkgs.writeText "extraTypes" (concatMapStringsSep "\n" (l: builtins.toJSON l) cfg.extraTypes);
   extraCgroups = pkgs.writeText "extraCgroups" (concatMapStringsSep "\n" (l: builtins.toJSON l) cfg.extraCgroups);
+=======
+  extraRules = pkgs.writeText "extraRules" cfg.extraRules;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   servicename = if ((lib.getName cfg.package) == (lib.getName pkgs.ananicy-cpp)) then "ananicy-cpp" else "ananicy";
 in
 {
@@ -25,6 +29,7 @@ in
         '';
       };
 
+<<<<<<< HEAD
       rulesProvider = mkOption {
         type = types.package;
         default = pkgs.ananicy;
@@ -35,6 +40,8 @@ in
         '';
       };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       settings = mkOption {
         type = with types; attrsOf (oneOf [ int bool str ]);
         default = { };
@@ -47,6 +54,7 @@ in
       };
 
       extraRules = mkOption {
+<<<<<<< HEAD
         type = with types; listOf attrs;
         default = [ ];
         description = lib.mdDoc ''
@@ -81,6 +89,22 @@ in
         example = [
           { cgroup = "cpu80"; CPUQuota = 80; }
         ];
+=======
+        type = types.str;
+        default = "";
+        description = lib.mdDoc ''
+          Extra rules in json format on separate lines. See:
+          <https://github.com/Nefelim4ag/Ananicy#configuration>
+          <https://gitlab.com/ananicy-cpp/ananicy-cpp/#global-configuration>
+        '';
+        example = literalExpression ''
+          '''
+            { "name": "eog", "type": "Image-View" }
+            { "name": "fdupes", "type": "BG_CPUIO" }
+          '''
+        '';
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       };
     };
   };
@@ -91,6 +115,7 @@ in
       etc."ananicy.d".source = pkgs.runCommandLocal "ananicyfiles" { } ''
         mkdir -p $out
         # ananicy-cpp does not include rules or settings on purpose
+<<<<<<< HEAD
         if [[ -d "${cfg.rulesProvider}/etc/ananicy.d/00-default" ]]; then
           cp -r ${cfg.rulesProvider}/etc/ananicy.d/* $out
         else
@@ -103,6 +128,12 @@ in
         ${optionalString (cfg.extraRules != [ ]) "cp ${extraRules} $out/nixRules.rules"}
         ${optionalString (cfg.extraTypes != [ ]) "cp ${extraTypes} $out/nixTypes.types"}
         ${optionalString (cfg.extraCgroups != [ ]) "cp ${extraCgroups} $out/nixCgroups.cgroups"}
+=======
+        cp -r ${pkgs.ananicy}/etc/ananicy.d/* $out
+        rm $out/ananicy.conf
+        cp ${configFile} $out/ananicy.conf
+        ${optionalString (cfg.extraRules != "") "cp ${extraRules} $out/nixRules.rules"}
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       '';
     };
 
@@ -125,7 +156,10 @@ in
         # https://gitlab.com/ananicy-cpp/ananicy-cpp/-/blob/master/src/config.cpp#L12
         loglevel = mkOD "warn"; # default is info but its spammy
         cgroup_realtime_workaround = mkOD config.systemd.enableUnifiedCgroupHierarchy;
+<<<<<<< HEAD
         log_applied_rule = mkOD false;
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       } else {
         # https://github.com/Nefelim4ag/Ananicy/blob/master/ananicy.d/ananicy.conf
         check_disks_schedulers = mkOD true;

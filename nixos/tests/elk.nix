@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 # To run the test on the unfree ELK use the following command:
+=======
+# To run the test on the unfree ELK use the folllowing command:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 # cd path/to/nixpkgs
 # NIXPKGS_ALLOW_UNFREE=1 nix-build -A nixosTests.elk.unfree.ELK-6
 

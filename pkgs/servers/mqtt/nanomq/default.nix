@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 { lib
 , stdenv
 , fetchFromGitHub
@@ -43,12 +44,25 @@ let
 in stdenv.mkDerivation (finalAttrs: {
   pname = "nanomq";
   version = "0.18.2";
+=======
+{ lib, stdenv, fetchFromGitHub, cmake, ninja, pkg-config
+, cyclonedds, libmysqlclient, mariadb, mbedtls, sqlite, zeromq
+}:
+
+stdenv.mkDerivation (finalAttrs: {
+  pname = "nanomq";
+  version = "0.16.3";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   src = fetchFromGitHub {
     owner = "emqx";
     repo = "nanomq";
     rev = finalAttrs.version;
+<<<<<<< HEAD
     hash = "sha256-XGJBBuRSL3InXUMGxOttdbt0zmI1APFlc4IvwC2up8g=";
+=======
+    hash = "sha256-9w4afVxuJbYrkagpAe1diftDnjrRjunyhJdJ0BZq3K0=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     fetchSubmodules = true;
   };
 
@@ -57,7 +71,11 @@ in stdenv.mkDerivation (finalAttrs: {
       --replace "DESTINATION /etc" "DESTINATION $out/etc"
   '';
 
+<<<<<<< HEAD
   nativeBuildInputs = [ cmake ninja pkg-config idl-serial ];
+=======
+  nativeBuildInputs = [ cmake ninja pkg-config ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   buildInputs = [ cyclonedds libmysqlclient mariadb mbedtls sqlite zeromq ];
 
@@ -73,6 +91,7 @@ in stdenv.mkDerivation (finalAttrs: {
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-return-type";
 
+<<<<<<< HEAD
   # disabled by default - not 100% reliable and making nanomq depend on
   # mosquitto would annoy people
   doInstallCheck = false;
@@ -100,6 +119,8 @@ in stdenv.mkDerivation (finalAttrs: {
     withInstallChecks = finalAttrs.finalPackage.overrideAttrs (_: { doInstallCheck = true; });
   };
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   meta = with lib; {
     description = "An ultra-lightweight and blazing-fast MQTT broker for IoT edge";
     homepage = "https://nanomq.io/";

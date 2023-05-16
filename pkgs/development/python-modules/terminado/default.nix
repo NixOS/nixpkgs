@@ -31,13 +31,20 @@ buildPythonPackage rec {
     "terminado"
   ];
 
+<<<<<<< HEAD
   __darwinAllowLocalNetworking = true;
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nativeCheckInputs = [
     pytest-timeout
     pytestCheckHook
   ];
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   meta = with lib; {
     description = "Terminals served by Tornado websockets";
     homepage = "https://github.com/jupyter/terminado";

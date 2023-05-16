@@ -2,9 +2,23 @@
 
 {
   options.programs.clash-verge = {
+<<<<<<< HEAD
     enable = lib.mkEnableOption (lib.mdDoc "Clash Verge");
     autoStart = lib.mkEnableOption (lib.mdDoc "Clash Verge auto launch");
     tunMode = lib.mkEnableOption (lib.mdDoc "Clash Verge TUN mode");
+=======
+    enable = lib.mkEnableOption (lib.mdDoc ''
+      Clash Verge.
+    '');
+
+    autoStart = lib.mkEnableOption (lib.mdDoc ''
+      Clash Verge Auto Launch.
+    '');
+
+    tunMode = lib.mkEnableOption (lib.mdDoc ''
+      Clash Verge Tun Mode.
+    '');
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   config =

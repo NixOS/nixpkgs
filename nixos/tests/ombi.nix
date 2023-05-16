@@ -1,8 +1,16 @@
 import ./make-test-python.nix ({ lib, ... }:
 
+<<<<<<< HEAD
 {
   name = "ombi";
   meta.maintainers = with lib.maintainers; [ woky ];
+=======
+with lib;
+
+{
+  name = "ombi";
+  meta.maintainers = with maintainers; [ woky ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nodes.machine =
     { pkgs, ... }:

@@ -6,14 +6,22 @@
 }:
 
 stdenv.mkDerivation rec {
+<<<<<<< HEAD
   version = "1.4.4";
+=======
+  version = "1.4.3";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   pname = "rhash";
 
   src = fetchFromGitHub {
     owner = "rhash";
     repo = "RHash";
     rev = "v${version}";
+<<<<<<< HEAD
     sha256 = "sha256-3CW41ULdXoID4cOgrcG2j85tgIJ/sz5hU7A83qpuxf4=";
+=======
+    sha256 = "sha256-R+dHYG0DBI1uo+yF/pxoTv/V9WSfph043bH6erZjeCE=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ which ];

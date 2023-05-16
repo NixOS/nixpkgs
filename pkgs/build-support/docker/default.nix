@@ -5,7 +5,11 @@
 , closureInfo
 , coreutils
 , e2fsprogs
+<<<<<<< HEAD
 , proot
+=======
+, fakechroot
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , fakeNss
 , fakeroot
 , go
@@ -487,7 +491,11 @@ rec {
       '';
     };
 
+<<<<<<< HEAD
   buildLayeredImage = lib.makeOverridable ({ name, ... }@args:
+=======
+  buildLayeredImage = { name, ... }@args:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     let
       stream = streamLayeredImage args;
     in
@@ -496,8 +504,12 @@ rec {
         inherit (stream) imageName;
         passthru = { inherit (stream) imageTag; };
         nativeBuildInputs = [ pigz ];
+<<<<<<< HEAD
       } "${stream} | pigz -nTR > $out"
   );
+=======
+      } "${stream} | pigz -nTR > $out";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   # 1. extract the base image
   # 2. create the layer
@@ -505,7 +517,11 @@ rec {
   # 4. compute the layer id
   # 5. put the layer in the image
   # 6. repack the image
+<<<<<<< HEAD
   buildImage = lib.makeOverridable (
+=======
+  buildImage =
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     args@{
       # Image name.
       name
@@ -595,7 +611,11 @@ rec {
           nativeBuildInputs = [ jshon pigz jq moreutils ];
           # Image name must be lowercase
           imageName = lib.toLower name;
+<<<<<<< HEAD
           imageTag = lib.optionalString (tag != null) tag;
+=======
+          imageTag = if tag == null then "" else tag;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           inherit fromImage baseJson;
           layerClosure = writeReferencesToFile layer;
           passthru.buildArgs = args;
@@ -752,8 +772,12 @@ rec {
       '';
 
     in
+<<<<<<< HEAD
     checked result
   );
+=======
+    checked result;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   # Merge the tarballs of images built with buildImage into a single
   # tarball that contains all images. Running `docker load` on the resulting
@@ -779,7 +803,11 @@ rec {
       fi
     done
     # Copy all layers from input images to output image directory
+<<<<<<< HEAD
     cp -R --update=none inputs/*/* image/
+=======
+    cp -R --no-clobber inputs/*/* image/
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     # Merge repositories objects and manifests
     jq -s add "''${repos[@]}" > repositories
     jq -s add "''${manifests[@]}" > manifest.json
@@ -839,7 +867,11 @@ rec {
     })
   );
 
+<<<<<<< HEAD
   streamLayeredImage = lib.makeOverridable (
+=======
+  streamLayeredImage =
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     {
       # Image Name
       name
@@ -889,6 +921,7 @@ rec {
         });
 
         contentsList = if builtins.isList contents then contents else [ contents ];
+<<<<<<< HEAD
         bind-paths = builtins.toString (builtins.map (path: "--bind=${path}:${path}!") [
           "/dev/"
           "/proc/"
@@ -896,6 +929,8 @@ rec {
           "${builtins.storeDir}/"
           "$out/layer.tar"
         ]);
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
         # We store the customisation layer as a tarball, to make sure that
         # things like permissions set on 'extraCommands' are not overridden
@@ -907,14 +942,29 @@ rec {
           nativeBuildInputs = [
             fakeroot
           ] ++ optionals enableFakechroot [
+<<<<<<< HEAD
             proot
+=======
+            fakechroot
+            # for chroot
+            coreutils
+            # fakechroot needs getopt, which is provided by util-linux
+            util-linux
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
           ];
           postBuild = ''
             mv $out old_out
             (cd old_out; eval "$extraCommands" )
 
             mkdir $out
+<<<<<<< HEAD
             ${optionalString enableFakechroot ''proot -r $PWD/old_out ${bind-paths} --pwd=/ ''}fakeroot bash -c '
+=======
+            ${optionalString enableFakechroot ''
+              export FAKECHROOT_EXCLUDE_PATH=/dev:/proc:/sys:${builtins.storeDir}:$out/layer.tar
+            ''}
+            ${optionalString enableFakechroot ''fakechroot chroot $PWD/old_out ''}fakeroot bash -c '
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
               source $stdenv/setup
               ${optionalString (!enableFakechroot) ''cd old_out''}
               eval "$fakeRootCommands"
@@ -1048,8 +1098,12 @@ rec {
           makeWrapper ${streamScript} $out --add-flags ${conf}
         '';
       in
+<<<<<<< HEAD
       result
   );
+=======
+      result;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   # This function streams a docker image that behaves like a nix-shell for a derivation
   streamNixShellImage =

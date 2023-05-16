@@ -6,7 +6,11 @@ stdenv.mkDerivation {
 
   src = freebsd.ports;
 
+<<<<<<< HEAD
   sourceRoot = "${freebsd.ports.name}/devel/evdev-proto";
+=======
+  sourceRoot = "source/devel/evdev-proto";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   useTempPrefix = true;
 

@@ -30,14 +30,22 @@
 
 buildPythonPackage rec {
   pname = "tempest";
+<<<<<<< HEAD
   version = "35.0.0";
+=======
+  version = "34.1.0";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
+<<<<<<< HEAD
     hash = "sha256-TKGgOAOqa+1f3yXIkWxt2bVx4UT/IfQpc9rNB4fLkw0=";
+=======
+    hash = "sha256-VLcTyiJ+ce2VqhD1OYRUa+ep34ry/mb61qntiqVsTCQ=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [

@@ -1,8 +1,16 @@
 import ./make-test-python.nix ({ lib, ... }:
 
+<<<<<<< HEAD
 {
   name = "komga";
   meta.maintainers = with lib.maintainers; [ govanify ];
+=======
+with lib;
+
+{
+  name = "komga";
+  meta.maintainers = with maintainers; [ govanify ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   nodes.machine =
     { pkgs, ... }:

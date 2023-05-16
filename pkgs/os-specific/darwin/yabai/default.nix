@@ -3,6 +3,10 @@
 , stdenvNoCC
 , fetchFromGitHub
 , fetchzip
+<<<<<<< HEAD
+=======
+, writeShellScript
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , installShellFiles
 , testers
 , yabai
@@ -17,7 +21,11 @@
 
 let
   pname = "yabai";
+<<<<<<< HEAD
   version = "5.0.7";
+=======
+  version = "5.0.2";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   test-version = testers.testVersion {
     package = yabai;
@@ -36,12 +44,18 @@ let
     changelog = "https://github.com/koekeishiya/yabai/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
     platforms = platforms.darwin;
+<<<<<<< HEAD
     mainProgram = "yabai";
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     maintainers = with maintainers; [
       cmacrae
       shardy
       ivar
+<<<<<<< HEAD
       khaneliman
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     ];
   };
 in
@@ -53,7 +67,11 @@ in
 
     src = fetchzip {
       url = "https://github.com/koekeishiya/yabai/releases/download/v${version}/yabai-v${version}.tar.gz";
+<<<<<<< HEAD
       hash = "sha256-6RtA3xFOVwTYrfHE72Qa65kDSwv/3/NQ8z4bVCsm9Fc=";
+=======
+      sha256 = "sha256-wL6N2+mfFISrOFn4zaCQI+oH6ixwUMRKRi1dAOigBro=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
 
     nativeBuildInputs = [
@@ -89,7 +107,11 @@ in
       owner = "koekeishiya";
       repo = "yabai";
       rev = "v${version}";
+<<<<<<< HEAD
       hash = "sha256-wFrMMiy+K+bnEeVyY3RGVZBoxiKQ69Q+Bp1xa+IcWas=";
+=======
+      sha256 = "sha256-/HS8TDzDA4Zvmm56ZZeMXyCKHRRTcucd7qDHT0qbrQg=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     };
 
     nativeBuildInputs = [

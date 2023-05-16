@@ -29,6 +29,10 @@ buildPythonPackage rec {
     description = "OpenID support for Flask";
     homepage = "https://pythonhosted.org/Flask-OpenID/";
     license = licenses.bsd3;
+<<<<<<< HEAD
     maintainers = [ ];
+=======
+    maintainers = [ maintainers.costrouc ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 }

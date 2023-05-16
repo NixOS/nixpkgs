@@ -1,4 +1,5 @@
 { lib, stdenv, fetchurl, dpkg, autoPatchelfHook, makeWrapper, electron
+<<<<<<< HEAD
 , asar, alsa-lib, gtk3, libxshmfence, mesa, nss }:
 
 stdenv.mkDerivation rec {
@@ -8,13 +9,28 @@ stdenv.mkDerivation rec {
   src = fetchurl {
     url = "https://download.todesktop.com/210203cqcj00tw1/morgen-${version}.deb";
     sha256 = "sha256-6d1KYUlXv+bHPITt2zs++AtyaAT8SSCG9T8ZsgOKDiw=";
+=======
+, nodePackages, alsa-lib, gtk3, libxshmfence, mesa, nss }:
+
+stdenv.mkDerivation rec {
+  pname = "morgen";
+  version = "2.6.7";
+
+  src = fetchurl {
+    url = "https://download.todesktop.com/210203cqcj00tw1/morgen-${version}.deb";
+    sha256 = "sha256-DlwAMA/YEnB9Z6Ry1Hvu9R9TgTw737PLtZfAVEKLjPY=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [
     dpkg
     autoPatchelfHook
     makeWrapper
+<<<<<<< HEAD
     asar
+=======
+    nodePackages.asar
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   ];
 
   buildInputs = [ alsa-lib gtk3 libxshmfence mesa nss ];

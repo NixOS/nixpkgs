@@ -12,19 +12,30 @@
 , pytestCheckHook
 , python-socks
 , pythonOlder
+<<<<<<< HEAD
 , setuptools
 , sniffio
 , starlette
 , tiny-proxy
 , trio
 , trustme
+=======
+, sniffio
+, starlette
+, trio
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , yarl
 }:
 
 buildPythonPackage rec {
   pname = "httpx-socks";
+<<<<<<< HEAD
   version = "0.7.6";
   format = "pyproject";
+=======
+  version = "0.7.5";
+  format = "setuptools";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   disabled = pythonOlder "3.7";
 
@@ -32,6 +43,7 @@ buildPythonPackage rec {
     owner = "romis2012";
     repo = pname;
     rev = "refs/tags/v${version}";
+<<<<<<< HEAD
     hash = "sha256-rLcYC8IO2eCWAL4QIiUg/kyigybq6VNTUjNDXx4KPHc=";
   };
 
@@ -39,6 +51,11 @@ buildPythonPackage rec {
     setuptools
   ];
 
+=======
+    hash = "sha256-HwLJ2pScgiNmM/l14aKp47MMuGW1qSaIq7ujpCSRtqA=";
+  };
+
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   propagatedBuildInputs = [
     httpx
     httpcore
@@ -54,8 +71,11 @@ buildPythonPackage rec {
     ];
   };
 
+<<<<<<< HEAD
   __darwinAllowLocalNetworking = true;
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nativeCheckInputs = [
     flask
     hypercorn
@@ -63,8 +83,11 @@ buildPythonPackage rec {
     pytest-trio
     pytestCheckHook
     starlette
+<<<<<<< HEAD
     tiny-proxy
     trustme
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
     yarl
   ];
 

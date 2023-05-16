@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 { lib, stdenv, fetchFromGitHub, fetchpatch, autoreconfHook }:
+=======
+{ lib, stdenv, fetchFromGitHub, autoreconfHook }:
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
 stdenv.mkDerivation rec {
   pname = "libcpuid";
@@ -11,6 +15,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-lhoHqdS5tke462guORg+PURjVmjAgviT5KJHp6PyvUA=";
   };
 
+<<<<<<< HEAD
   patches = [
     # Fixes cross-compilation to NetBSD
     # https://github.com/anrieff/libcpuid/pull/190
@@ -21,6 +26,8 @@ stdenv.mkDerivation rec {
     })
   ];
 
+=======
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   nativeBuildInputs = [ autoreconfHook ];
 
   meta = with lib; {

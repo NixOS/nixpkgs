@@ -2,7 +2,11 @@
 , perl # used to generate help tags
 , pkg-config
 , ncurses, libX11
+<<<<<<< HEAD
 , file, which, groff
+=======
+, util-linux, file, which, groff
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   # adds support for handling removable media (vifm-media). Linux only!
 , mediaSupport ? false, python3 ? null, udisks2 ? null, lib ? null
@@ -20,7 +24,11 @@ in stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ perl pkg-config makeWrapper ];
+<<<<<<< HEAD
   buildInputs = [ ncurses libX11 file which groff ];
+=======
+  buildInputs = [ ncurses libX11 util-linux file which groff ];
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   postPatch = ''
     # Avoid '#!/usr/bin/env perl' references to build help.

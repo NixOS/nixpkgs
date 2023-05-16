@@ -1,5 +1,9 @@
 { lib, stdenv, fetchurl, fetchpatch, makeDesktopItem
+<<<<<<< HEAD
 , libX11, libXt, libXft, libXrender, libXext
+=======
+, libX11, libXt, libXft, libXrender
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 , ncurses, fontconfig, freetype
 , pkg-config, gdk-pixbuf, perl
 , libptytty
@@ -12,7 +16,11 @@
 
 let
   pname = "rxvt-unicode";
+<<<<<<< HEAD
   version = "9.31";
+=======
+  version = "9.30";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   description = "A clone of the well-known terminal emulator rxvt";
 
   desktopItem = makeDesktopItem {
@@ -41,7 +49,11 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "http://dist.schmorp.de/rxvt-unicode/Attic/rxvt-unicode-${version}.tar.bz2";
+<<<<<<< HEAD
     sha256 = "qqE/y8FJ/g8/OR+TMnlYD3Spb9MS1u0GuP8DwtRmcug=";
+=======
+    sha256 = "0badnkjsn3zps24r5iggj8k5v4f00npc77wqg92pcn1q5z8r677y";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -49,7 +61,11 @@ stdenv.mkDerivation {
     [ libX11 libXt libXft ncurses  # required to build the terminfo file
       fontconfig freetype libXrender
       libptytty
+<<<<<<< HEAD
     ] ++ optionals perlSupport [ perl libXext ]
+=======
+    ] ++ optional perlSupport perl
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
       ++ optional gdkPixbufSupport gdk-pixbuf;
 
   outputs = [ "out" "terminfo" ];
@@ -73,12 +89,16 @@ stdenv.mkDerivation {
     ./patches/9.06-font-width.patch
   ]) ++ [
     ./patches/256-color-resources.patch
+<<<<<<< HEAD
   ] ++ optional (perlSupport && versionAtLeast perl.version "5.38") (fetchpatch {
     name = "perl538-locale-c.patch";
     url = "https://github.com/exg/rxvt-unicode/commit/16634bc8dd5fc4af62faf899687dfa8f27768d15.patch";
     excludes = [ "Changes" ];
     sha256 = "sha256-JVqzYi3tcWIN2j5JByZSztImKqbbbB3lnfAwUXrumHM=";
   }) ++ optional stdenv.isDarwin ./patches/makefile-phony.patch;
+=======
+  ]++ optional stdenv.isDarwin ./patches/makefile-phony.patch;
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
 
   configureFlags = [
     "--with-terminfo=${placeholder "terminfo"}/share/terminfo"

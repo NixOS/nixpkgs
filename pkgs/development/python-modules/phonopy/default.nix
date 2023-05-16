@@ -13,14 +13,22 @@
 
 buildPythonPackage rec {
   pname = "phonopy";
+<<<<<<< HEAD
   version = "2.20.0";
+=======
+  version = "2.17.1";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
+<<<<<<< HEAD
     hash = "sha256-peL50b1u+tBRxt/U2SloRvS9LTeMXEjrF5F3ZWhJmZ4=";
+=======
+    hash = "sha256-t+1i1S8UVd0s9/Fda0H2kaouDDBVS+x6G40Meb2rLYc=";
+>>>>>>> 903308adb4b (Improved error handling, differentiate nix/non-nix networks)
   };
 
   propagatedBuildInputs = [
