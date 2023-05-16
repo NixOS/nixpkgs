@@ -1,6 +1,8 @@
 { lib
 , buildGoModule
 , fetchFromGitHub
+, testers
+, mermerd
 }:
 
 buildGoModule rec {
@@ -25,6 +27,13 @@ buildGoModule rec {
 
   # the tests expect a database to be running
   doCheck = false;
+
+  passthru.tests = {
+    version = testers.testVersion {
+      package = mermerd;
+      command = "mermerd version";
+    };
+  };
 
   meta = with lib; {
     description = "Create Mermaid-Js ERD diagrams from existing tables";
