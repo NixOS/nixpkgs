@@ -11728,7 +11728,11 @@ with pkgs;
 
   redpanda = callPackage ../servers/redpanda { };
 
-  redpanda-server = redpanda.server;
+  redpanda-console = callPackage ../servers/redpanda/console.nix { };
+
+  redpanda-rpk = callPackage ../servers/redpanda-rpk { };
+
+  redpanda-server = redpanda-rpk.server;
 
   redsocks = callPackage ../tools/networking/redsocks { };
 
