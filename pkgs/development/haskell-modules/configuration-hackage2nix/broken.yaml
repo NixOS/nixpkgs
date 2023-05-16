@@ -5021,7 +5021,6 @@ broken-packages:
   - sqlvalue-list
   - srcinst
   - srt-dhall
-  - srtree # dependency missing in job https://hydra.nixos.org/build/219208055 at 2023-05-10
   - sscan
   - ssh
   - ssh-tunnel

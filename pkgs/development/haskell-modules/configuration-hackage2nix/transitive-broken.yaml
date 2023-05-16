@@ -1283,7 +1283,6 @@ dont-distribute-packages:
  - doc-review
  - domain
  - domain-aeson
- - domain-aeson_0_1_1_1
  - domain-cereal
  - domaindriven
  - dormouse-client
@@ -1448,6 +1447,7 @@ dont-distribute-packages:
  - feature-flipper-postgres
  - fedora-composes
  - fedora-img-dl
+ - fedora-repoquery
  - feed-gipeda
  - feed-translator
  - feed2lj
@@ -1514,7 +1514,7 @@ dont-distribute-packages:
  - fpnla-examples
  - frame-markdown
  - freckle-app
- - freckle-app_1_9_0_0
+ - freckle-app_1_9_0_1
  - free-functors
  - free-game
  - free-theorems-counterexamples
@@ -3007,7 +3007,6 @@ dont-distribute-packages:
  - pandoc-crossref_0_3_15_2
  - pandoc-highlighting-extensions
  - pandoc-japanese-filters
- - pandoc-symreg
  - pandora-io
  - papa
  - papa-base
