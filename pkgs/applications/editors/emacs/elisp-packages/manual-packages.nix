@@ -73,6 +73,8 @@ in
 
   tree-sitter-langs = callPackage ./manual-packages/tree-sitter-langs { final = self; };
 
+  treesit-grammars = callPackage ./manual-packages/treesit-grammars { };
+
   tsc = callPackage ./manual-packages/tsc { };
 
   urweb-mode = callPackage ./manual-packages/urweb-mode { };
