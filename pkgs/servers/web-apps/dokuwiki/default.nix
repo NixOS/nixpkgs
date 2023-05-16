@@ -11,6 +11,15 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-gtWEtc3kbMokKycTx71XXblkDF39i926uN2kU3oOeVw=";
   };
 
+  patches = [
+    # Manually backported fix for a high severity vulnerability, allowing to inject
+    # arbitrary HTML and thus cross site scripting via RSS feeds.
+    # For reference see:
+    # https://github.com/dokuwiki/dokuwiki/commit/53df38b0e4465894a67a5890f74a6f5f82e827de
+    # https://huntr.dev/bounties/c6119106-1a5c-464c-94dd-ee7c5d0bece0/
+    ./backport-rss-xss-fix.patch
+  ];
+
   preload = writeText "preload.php" ''
   <?php
 
