@@ -17495,22 +17495,21 @@ with pkgs;
 
   autoadb = callPackage ../misc/autoadb { };
 
-  ansible = ansible_2_14;
-  ansible_2_14 = python3Packages.toPythonApplication python3Packages.ansible-core;
-  ansible_2_13 = python3Packages.toPythonApplication (python3Packages.ansible-core.overridePythonAttrs (oldAttrs: rec {
-    version = "2.13.6";
+  ansible = ansible_2_15;
+  ansible_2_15 = python3Packages.toPythonApplication python3Packages.ansible-core;
+  ansible_2_14 = python3Packages.toPythonApplication (python3Packages.ansible-core.overridePythonAttrs (oldAttrs: rec {
+    version = "2.14.5";
     src = oldAttrs.src.override {
       inherit version;
-      hash = "sha256-Mf4yK2MpBnSo9zhhEN9QHwBEqkSJC+OrMTpuIluaKc8=";
+      hash = "sha256-jE7tds5Fi0o3M0oIAt8pSI7Pn4rzjDERBpyWsXsgVTA=";
     };
   }));
-  ansible_2_12 = python3Packages.toPythonApplication (python3Packages.ansible-core.overridePythonAttrs (oldAttrs: rec {
-    version = "2.12.10";
+  ansible_2_13 = python3Packages.toPythonApplication (python3Packages.ansible-core.overridePythonAttrs (oldAttrs: rec {
+    version = "2.13.9";
     src = oldAttrs.src.override {
       inherit version;
-      hash = "sha256-/rHfYXOM/B9eiTtCouwafeMpd9Z+hnB7Retj0MXDwjY=";
+      hash = "sha256-nDGeygqcU83m8XSBLd1xFO2x5dDrXh30e9DY/v7ax2w=";
     };
-    meta.changelog = "https://github.com/ansible/ansible/blob/v${version}/changelogs/CHANGELOG-v${lib.versions.majorMinor version}.rst";
   }));
 
   ansible-doctor = callPackage ../tools/admin/ansible/doctor.nix { };
