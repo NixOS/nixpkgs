@@ -30,9 +30,9 @@
     ]
   },
   "deck": {
-    "sha256": "0r0kymlfbgbss7888rbi8z67ww5yxc8xvwhk7niaqhi8aggzxgn0",
-    "url": "https://github.com/nextcloud-releases/deck/releases/download/v1.8.3/deck-v1.8.3.tar.gz",
-    "version": "1.8.3",
+    "sha256": "1rsfyl6p6myy36mv4x9ci3g53k4ndbwqmss4pfk3sh1y6vik8hcn",
+    "url": "https://github.com/nextcloud-releases/deck/releases/download/v1.8.5/deck-v1.8.5.tar.gz",
+    "version": "1.8.5",
     "description": "Deck is a kanban style organization tool aimed at personal planning and project organization for teams integrated with Nextcloud.\n\n\n- 📥 Add your tasks to cards and put them in order\n- 📄 Write down additional notes in Markdown\n- 🔖 Assign labels for even better organization\n- 👥 Share with your team, friends or family\n- 📎 Attach files and embed them in your Markdown description\n- 💬 Discuss with your team using comments\n- ⚡ Keep track of changes in the activity stream\n- 🚀 Get your project organized",
     "homepage": "https://github.com/nextcloud/deck",
     "licenses": [
@@ -70,9 +70,9 @@
     ]
   },
   "groupfolders": {
-    "sha256": "1qvzlqislzzpz6knhdd8xnpd3psrq6xf61j25rnpsn7jd5qg5za7",
-    "url": "https://github.com/nextcloud-releases/groupfolders/releases/download/v13.1.2/groupfolders-v13.1.2.tar.gz",
-    "version": "13.1.2",
+    "sha256": "19lahgbi26lkyy3hlrhq5jj8y7rk0ybwfpv6icni7m9h6z18sl2r",
+    "url": "https://github.com/nextcloud-releases/groupfolders/releases/download/v13.1.3/groupfolders-v13.1.3.tar.gz",
+    "version": "13.1.3",
     "description": "Admin configured folders shared with everyone in a group.\n\nFolders can be configured from *Group folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more groups, control their write/sharing permissions and assign a quota for the folder.\n\nNote: Encrypting the contents of group folders is currently not supported.",
     "homepage": "https://github.com/nextcloud/groupfolders",
     "licenses": [
@@ -110,9 +110,9 @@
     ]
   },
   "news": {
-    "sha256": "1zyn6rs24f5dsb4z65dzx2mdkw8gy8n3adk9dgyyd4cjjhhixhsm",
-    "url": "https://github.com/nextcloud/news/releases/download/21.2.0-beta3/news.tar.gz",
-    "version": "21.2.0-beta3",
+    "sha256": "0fr72j4al8mi6fr7cdsyvvnp5cc39mphaaf3bcpkxy4a2v2hn2k0",
+    "url": "https://github.com/nextcloud/news/releases/download/21.2.0/news.tar.gz",
+    "version": "21.2.0",
     "description": "📰 A RSS/Atom Feed reader App for Nextcloud\n\n- 📲 Synchronize your feeds with multiple mobile or desktop [clients](https://nextcloud.github.io/news/clients/)\n- 🔄 Automatic updates of your news feeds\n- 🆓 Free and open source under AGPLv3, no ads or premium functions\n\n**System Cron is currently required for this app to work**\n\nRequirements can be found [here](https://nextcloud.github.io/news/install/#dependencies)\n\nThe Changelog is available [here](https://github.com/nextcloud/news/blob/master/CHANGELOG.md)\n\nCreate a [bug report](https://github.com/nextcloud/news/issues/new/choose)\n\nCreate a [feature request](https://github.com/nextcloud/news/discussions/new)\n\nReport a [feed issue](https://github.com/nextcloud/news/discussions/new)",
     "homepage": "https://github.com/nextcloud/news",
     "licenses": [
@@ -130,9 +130,9 @@
     ]
   },
   "notify_push": {
-    "sha256": "1fz6wi5nb4c2w33vp9ry2mk4lmv7aa3axyfxzldf5w4glfzaymzw",
-    "url": "https://github.com/nextcloud-releases/notify_push/releases/download/v0.6.2/notify_push-v0.6.2.tar.gz",
-    "version": "0.6.2",
+    "sha256": "0hdxnkar2ibis5p0gp3yr1i6894la9wxq4pzrbqdrq2cgvsj6a18",
+    "url": "https://github.com/nextcloud-releases/notify_push/releases/download/v0.6.3/notify_push-v0.6.3.tar.gz",
+    "version": "0.6.3",
     "description": "Push update support for desktop app.\n\nOnce the app is installed, the push binary needs to be setup. You can either use the setup wizard with `occ notify_push:setup` or see the [README](http://github.com/nextcloud/notify_push) for detailed setup instructions",
     "homepage": "",
     "licenses": [
@@ -150,9 +150,9 @@
     ]
   },
   "polls": {
-    "sha256": "1zzsjzfihcxb6rpi4fmpndif90bqzvyb9yv8n7lcbwsmik8xw6ar",
-    "url": "https://github.com/nextcloud/polls/releases/download/v5.0.3/polls.tar.gz",
-    "version": "5.0.3",
+    "sha256": "10906dzlswi352gbshvh86h6yyhwm8b54nkzqgwzpbg9h6yqp1w9",
+    "url": "https://github.com/nextcloud/polls/releases/download/v5.0.5/polls.tar.gz",
+    "version": "5.0.5",
     "description": "A polls app, similar to Doodle/Dudle with the possibility to restrict access (members, certain groups/users, hidden and public).",
     "homepage": "https://github.com/nextcloud/polls",
     "licenses": [
@@ -200,9 +200,9 @@
     ]
   },
   "twofactor_nextcloud_notification": {
-    "sha256": "13afyhiy7yk0fcf32792dwabjcixnw5b4hkxykw0xby3hnh0m3l2",
-    "url": "https://github.com/nextcloud-releases/twofactor_nextcloud_notification/releases/download/v3.6.0/twofactor_nextcloud_notification-v3.6.0.tar.gz",
-    "version": "3.6.0",
+    "sha256": "03fp8wcwhyp8ivrcf20klgg17sxc9fia5sa44rbrv3cicmwmw50b",
+    "url": "https://github.com/nextcloud-releases/twofactor_nextcloud_notification/releases/download/v3.7.0/twofactor_nextcloud_notification-v3.7.0.tar.gz",
+    "version": "3.7.0",
     "description": "Allows using any of your logged in devices as second factor",
     "homepage": "https://github.com/nextcloud/twofactor_nextcloud_notification",
     "licenses": [
@@ -220,9 +220,9 @@
     ]
   },
   "twofactor_webauthn": {
-    "sha256": "1f5zamydsl7lr91md2qmz0wzsfvs8q05qpn96x6i7c6886vx18xf",
-    "url": "https://github.com/nextcloud-releases/twofactor_webauthn/releases/download/v1.1.2/twofactor_webauthn-v1.1.2.tar.gz",
-    "version": "1.1.2",
+    "sha256": "1lqcw74rsnl8c4sirw9208ra3c8zl8zp93scs7y8fv2n4n60l465",
+    "url": "https://github.com/nextcloud-releases/twofactor_webauthn/releases/download/v1.2.0/twofactor_webauthn-v1.2.0.tar.gz",
+    "version": "1.2.0",
     "description": "A two-factor provider for WebAuthn devices",
     "homepage": "https://github.com/nextcloud/twofactor_webauthn#readme",
     "licenses": [
