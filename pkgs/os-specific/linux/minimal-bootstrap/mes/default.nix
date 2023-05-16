@@ -131,13 +131,13 @@ let
 
   CC = toString ([ cc ] ++ ccArgs);
 
-  replaceExt = ext: source:
+  stripExt = source:
     lib.replaceStrings
       [ ".c" ]
-      [ ext ]
+      [ "" ]
       (builtins.baseNameOf source);
 
-  compile = source: kaem.runCommand (replaceExt "" source) {} ''
+  compile = source: kaem.runCommand (stripExt source) {} ''
     mkdir ''${out}
     cd ''${out}
     ${CC} -c ${srcPrefix}/${source}
