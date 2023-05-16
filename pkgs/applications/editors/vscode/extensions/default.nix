@@ -861,7 +861,7 @@ let
           name = "phptools-vscode";
           publisher = "devsense";
           version = "1.33.13032";
-        } // sources.${stdenv.system};
+        } // sources.${stdenv.system} or throw "Unsupported system: ${stdenv.system}";
 
         nativeBuildInputs = [
           autoPatchelfHook
