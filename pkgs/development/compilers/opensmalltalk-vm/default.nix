@@ -119,7 +119,7 @@ let
         vmName = "squeak.cog.spur";
         scriptName = "squeak";
         configureFlagsArray = ''(
-          CFLAGS="-march=armv8-a -mtune=cortex-a72 -g -O2 -DNDEBUG -DDEBUGVM=0 -DMUSL -D_GNU_SOURCE -DUSEEVDEV -DCOGMTVM=0 -DDUAL_MAPPED_CODE_ZONE=1"
+          CFLAGS="-DNDEBUG -DDEBUGVM=0 -DMUSL -D_GNU_SOURCE -DUSEEVDEV -DCOGMTVM=0 -DDUAL_MAPPED_CODE_ZONE=1"
           LIBS="-lrt"
         )'';
         configureFlags = [
@@ -135,8 +135,7 @@ let
         vmName = "squeak.stack.spur";
         scriptName = "squeak";
         configureFlagsArray = ''(
-          CFLAGS="-g -O2 -DNDEBUG -DDEBUGVM=0 -DMUSL -D_GNU_SOURCE -DUSEEVDEV -D__ARM_ARCH_ISA_A64 -DARM64 -D__arm__ -D__arm64__ -D__aarch64__"
-          TARGET_ARCH="-march=armv8-a"
+          CFLAGS="-DNDEBUG -DDEBUGVM=0 -DMUSL -D_GNU_SOURCE -DUSEEVDEV -D__ARM_ARCH_ISA_A64 -DARM64 -D__arm__ -D__arm64__ -D__aarch64__"
         )'';
         configureFlags = [
           "--with-vmversion=5.0"
@@ -153,8 +152,7 @@ let
         vmName = "newspeak.cog.spur";
         scriptName = "newspeak";
         configureFlagsArray = ''(
-          CFLAGS="-g -O2 -DNDEBUG -DDEBUGVM=0 -msse2"
-          TARGET_ARCH="-m64"
+          CFLAGS="-DNDEBUG -DDEBUGVM=0 -msse2"
         )'';
         configureFlags = [
           "--with-vmversion=5.0"
@@ -169,8 +167,7 @@ let
         vmName = "squeak.cog.spur";
         scriptName = "squeak";
         configureFlagsArray = ''(
-          CFLAGS="-g -O2 -DNDEBUG -DDEBUGVM=0 -msse2 -DCOGMTVM=0"
-          TARGET_ARCH="-m64"
+          CFLAGS="-DNDEBUG -DDEBUGVM=0 -msse2 -DCOGMTVM=0"
         )'';
         configureFlags = [
           "--with-vmversion=5.0"
