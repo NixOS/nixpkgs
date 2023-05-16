@@ -36,17 +36,6 @@ stdenv.mkDerivation rec {
   unpackCmd = "dpkg -x $src .";
   sourceRoot = ".";
 
-  postUnpack = ''
-    # distribution is missing libkappessframework.so, so we should not let
-    # autoPatchelfHook fail on the following dead libraries
-    rm -r opt/kingsoft/wps-office/office6/addons/pdfbatchcompression
-
-    # Remove the following libraries because they depend on qt4
-    rm -r opt/kingsoft/wps-office/office6/{librpcetapi.so,librpcwpsapi.so,librpcwppapi.so,libavdevice.so.58.10.100,libmediacoder.so}
-    rm -r opt/kingsoft/wps-office/office6/addons/wppcapturer/libwppcapturer.so
-    rm -r opt/kingsoft/wps-office/office6/addons/wppencoder/libwppencoder.so
-  '';
-
   nativeBuildInputs = [
     dpkg
     autoPatchelfHook
@@ -69,6 +58,7 @@ stdenv.mkDerivation rec {
     xorg.libXtst
     xorg.libXrandr
     xorg.libXcomposite
+    xorg.libXv
     cups
     pango
   ];
@@ -78,6 +68,15 @@ stdenv.mkDerivation rec {
   runtimeDependencies = map lib.getLib [
     cups
     pango
+  ];
+
+  autoPatchelfIgnoreMissingDeps = [
+    # distribution is missing libkappessframework.so
+    "libkappessframework.so"
+    # qt4 support is deprecated
+    "libQtCore.so.4"
+    "libQtNetwork.so.4"
+    "libQtXml.so.4"
   ];
 
   installPhase = ''
@@ -99,7 +98,7 @@ stdenv.mkDerivation rec {
 
   preFixup = ''
     # The following libraries need libtiff.so.5, but nixpkgs provides libtiff.so.6
-    patchelf --replace-needed libtiff.so.5 libtiff.so $out/opt/kingsoft/wps-office/office6/{libpdfmain.so,libqpdfpaint.so,qt/plugins/imageformats/libqtiff.so}
+    patchelf --replace-needed libtiff.so.5 libtiff.so $out/opt/kingsoft/wps-office/office6/{libpdfmain.so,libqpdfpaint.so,qt/plugins/imageformats/libqtiff.so,addons/pdfbatchcompression/libpdfbatchcompressionapp.so}
     # dlopen dependency
     patchelf --add-needed libudev.so.1 $out/opt/kingsoft/wps-office/office6/addons/cef/libcef.so
   '';
