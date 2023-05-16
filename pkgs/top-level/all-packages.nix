@@ -2376,6 +2376,9 @@ with pkgs;
 
   mainsail = callPackage ../applications/misc/mainsail { };
 
+  # Does not build with default Haskell version because upstream uses a newer Cabal version.
+  mailctl = haskell.packages.ghc94.callPackage ../tools/networking/mailctl { };
+
   mame = libsForQt5.callPackage ../applications/emulators/mame { };
 
   mame-tools = lib.addMetaAttrs {
