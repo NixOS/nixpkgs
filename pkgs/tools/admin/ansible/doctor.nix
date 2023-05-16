@@ -1,27 +1,12 @@
 { lib
-, anyconfig
-, appdirs
-, buildPythonPackage
-, colorama
-, environs
 , fetchFromGitHub
-, jinja2
-, jsonschema
-, nested-lookup
-, pathspec
-, poetry-core
-, python-json-logger
-, pythonOlder
-, pythonRelaxDepsHook
-, ruamel-yaml
+, python3
 }:
 
-buildPythonPackage rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "ansible-doctor";
   version = "2.0.4";
   format = "pyproject";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "thegeeklab";
@@ -37,12 +22,12 @@ buildPythonPackage rec {
       --replace 'version = "0.0.0"' 'version = "${version}"'
   '';
 
-  nativeBuildInputs = [
+  nativeBuildInputs = with python3.pkgs; [
     poetry-core
     pythonRelaxDepsHook
   ];
 
-  propagatedBuildInputs = [
+  propagatedBuildInputs = with python3.pkgs; [
     anyconfig
     appdirs
     colorama
