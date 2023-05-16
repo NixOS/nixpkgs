@@ -47,25 +47,14 @@ let
       inherit src;
 
       postPatch =
-        let
-          inherit (builtins) substring;
-          year = substring 0 4 version;
-          month = substring 4 2 version;
-          day = substring 6 2 version;
-          hour = substring 8 2 version;
-          minute = substring 10 2 version;
-          date = "${year}-${month}-${day}T${hour}:${minute}+0000";
-          abbrevHash = substring 0 12 commitHash;
-        in
         ''
-          vmVersionDate=$(date -u '+%a %b %-d %T %Y %z' -d "${date}")
           vmVersionFiles=$(sed -n 's/^versionfiles="\(.*\)"/\1/p' ./scripts/updateSCCSVersions)
           for vmVersionFile in $vmVersionFiles; do
             substituteInPlace "$vmVersionFile" \
-              --replace "\$Date\$" "\$Date: ''${vmVersionDate} \$" \
+              --replace "\$Date\$" "\$Date: Thu Jan 1 00:00:00 1970 +0000 \$" \
               --replace "\$URL\$" "\$URL: ${src.url} \$" \
               --replace "\$Rev\$" "\$Rev: ${version} \$" \
-              --replace "\$CommitHash\$" "\$CommitHash: ${abbrevHash} \$"
+              --replace "\$CommitHash\$" "\$CommitHash: ${builtins.substring 0 12 commitHash} \$"
           done
           patchShebangs --build ./building/${platformDir} scripts
           substituteInPlace ./platforms/unix/config/mkmf \
