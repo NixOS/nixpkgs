@@ -5,7 +5,7 @@
 , numpy
 , pytestCheckHook
 , pythonOlder
-, scikitimage
+, scikit-image
 , slicerator
 }:
 
@@ -31,7 +31,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
-    scikitimage
+    scikit-image
   ];
 
   pythonImportsCheck = [

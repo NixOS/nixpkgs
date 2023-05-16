@@ -6,17 +6,17 @@
 
 buildGoModule rec {
   pname = "kubescape";
-  version = "2.3.1";
+  version = "2.3.2";
 
   src = fetchFromGitHub {
     owner = "kubescape";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-TMK+9C1L+pNIjWg/lahVQk1G4CdfgRLH68XKAfszTys=";
+    hash = "sha256-yzuez5yFarybEW/AtWifdL4DTxGFD/zgSHEVBn0ug24=";
     fetchSubmodules = true;
   };
 
-  vendorHash = "sha256-SPIMI9HJRF9r5wZfdynwcTTZiZ7SxuJjfcfPg6dMsGo=";
+  vendorHash = "sha256-tHFwseR6vQ78MX+YOiShW5/mQ7dyG2JxGOluy/Vo8ME=";
 
   nativeBuildInputs = [
     installShellFiles

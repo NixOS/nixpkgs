@@ -60,6 +60,12 @@ buildPythonPackage rec {
     requests-mock
   ];
 
+  disabledTests = [
+    # too closely affected by bs4 updates
+    "test_pretty_format_html"
+    "test_assert_html_snapshot_by_css_selector"
+  ];
+
   disabledTestPaths = [
     "bx_py_utils_tests/tests/test_project_setup.py"
   ];

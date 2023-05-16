@@ -15918,7 +15918,7 @@
     "cython",
     "setuptools"
   ],
-  "scikitimage": [
+  "scikit-image": [
     "cython",
     "setuptools"
   ],

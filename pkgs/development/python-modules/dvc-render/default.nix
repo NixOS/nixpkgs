@@ -2,6 +2,7 @@
 , stdenv
 , buildPythonPackage
 , fetchFromGitHub
+, flatten-dict
 , funcy
 , matplotlib
 , tabulate
@@ -14,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "dvc-render";
-  version = "0.4.0";
+  version = "0.5.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -23,7 +24,7 @@ buildPythonPackage rec {
     owner = "iterative";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-bt2jqjhgtGmJsyfYNSzETQZUHFKni/poyeqpQzIJX08=";
+    hash = "sha256-x9vb8X7p4MOMZwr91ronXB/bPZD3PqYhbzLccRewyco=";
   };
 
   SETUPTOOLS_SCM_PRETEND_VERSION = version;
@@ -34,6 +35,7 @@ buildPythonPackage rec {
 
   passthru.optional-dependencies = {
     table = [
+      flatten-dict
       tabulate
     ];
     markdown = [
