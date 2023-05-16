@@ -776,7 +776,7 @@ in
         xorg.xf86inputevdev.out
       ];
 
-    system.extraDependencies = singleton (pkgs.runCommand "xkb-validated" {
+    system.checks = singleton (pkgs.runCommand "xkb-validated" {
       inherit (cfg) xkbModel layout xkbVariant xkbOptions;
       nativeBuildInputs = with pkgs.buildPackages; [ xkbvalidate ];
       preferLocalBuild = true;

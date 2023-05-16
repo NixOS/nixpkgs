@@ -1639,6 +1639,10 @@ with pkgs;
 
   mpy-utils = python3Packages.callPackage ../tools/misc/mpy-utils { };
 
+  networkd-notify = python3Packages.callPackage ../tools/networking/networkd-notify {
+    systemd = pkgs.systemd;
+  };
+
   nominatim = callPackage ../servers/nominatim { };
 
   ocs-url = libsForQt5.callPackage ../tools/misc/ocs-url { };
@@ -32900,6 +32904,8 @@ with pkgs;
   diffuse = callPackage ../applications/misc/diffuse { };
 
   mlocate = callPackage ../tools/misc/mlocate { };
+
+  mlxbf-bootctl = callPackage ../tools/misc/mlxbf-bootctl { };
 
   plocate = callPackage ../tools/misc/plocate { };
 

@@ -13,7 +13,7 @@
 , pyyaml
 , scipy
 , requests
-, scikitimage
+, scikit-image
 , six
 , tabulate
 , torch
@@ -52,7 +52,7 @@ buildPythonPackage rec {
     pyyaml
     scipy
     requests
-    scikitimage
+    scikit-image
     tabulate
     torch
     torchvision
