@@ -1,0 +1,39 @@
+diff --git a/ext/glfw.cmake b/ext/glfw.cmake
+index 5487f32..feeb89f 100644
+--- a/ext/glfw.cmake
++++ b/ext/glfw.cmake
+@@ -1,18 +1,2 @@
+-include(FetchContent)
+-
+-set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
+-set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
+-set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
+-set(GLFW_INSTALL OFF CACHE BOOL "" FORCE)
+-
+-FetchContent_Declare(
+-        glfw3_ext
+-        URL "https://github.com/minecraft-linux/glfw/archive/fce9121962bc0a21c39e2d6f8e08bad30c566c72.zip"
+-)
+-
+-FetchContent_GetProperties(glfw3_ext)
+-if(NOT glfw3_ext_POPULATED)
+-  FetchContent_Populate(glfw3_ext)
+-  add_subdirectory(${glfw3_ext_SOURCE_DIR} ${glfw3_ext_BINARY_DIR})
+-endif()
+-add_library(glfw3 ALIAS glfw)
+\ No newline at end of file
++add_library(glfw3 INTERFACE IMPORTED)
++#add_library(glfw3 ALIAS glfw)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 4a8bbfa..a359a66 100644
+--- a/game-window/CMakeLists.txt
++++ b/game-window/CMakeLists.txt
+@@ -18,4 +18,5 @@ if (GAMEWINDOW_SYSTEM STREQUAL "EGLUT")
+ elseif (GAMEWINDOW_SYSTEM STREQUAL "GLFW")
+     target_sources(gamewindow PRIVATE ${GAMEWINDOW_SOURCES_GLFW})
+     target_link_libraries(gamewindow PUBLIC glfw3)
+-endif()
+\ No newline at end of file
++    target_include_directories(gamewindow PUBLIC glfw3)
++endif()

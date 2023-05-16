@@ -36529,6 +36529,8 @@ with pkgs;
 
   mars = callPackage ../games/mars { };
 
+  mcpelauncher-client = libsForQt5.callPackage ../games/mcpelauncher/client.nix { };
+
   mcpelauncher-ui-qt = libsForQt5.callPackage ../games/mcpelauncher/ui.nix { };
 
   megaglest = callPackage ../games/megaglest { };
