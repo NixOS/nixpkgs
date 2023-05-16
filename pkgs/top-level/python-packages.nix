@@ -11443,8 +11443,6 @@ self: super: with self; {
 
   sseclient-py = callPackage ../development/python-modules/sseclient-py { };
 
-  ssh-mitm = callPackage ../development/python-modules/ssh-mitm { };
-
   sshfs = callPackage ../development/python-modules/sshfs { };
 
   sshpubkeys = callPackage ../development/python-modules/sshpubkeys { };
