@@ -1185,6 +1185,8 @@ self: super: with self; {
 
   bandit = callPackage ../development/python-modules/bandit { };
 
+  bangla = callPackage ../development/python-modules/bangla { };
+
   bap = callPackage ../development/python-modules/bap {
     inherit (pkgs.ocaml-ng.ocamlPackages) bap;
   };
@@ -1403,6 +1405,10 @@ self: super: with self; {
   bme280spi = callPackage ../development/python-modules/bme280spi { };
 
   bme680 = callPackage ../development/python-modules/bme680 { };
+
+  bnnumerizer = callPackage ../development/python-modules/bnnumerizer { };
+
+  bnunicodenormalizer = callPackage ../development/python-modules/bnunicodenormalizer { };
 
   boa-api = callPackage ../development/python-modules/boa-api { };
 
