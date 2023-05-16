@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, glfw, freetype, openssl, makeWrapper, upx, pkgsStatic, xorg, binaryen }:
+{ lib, stdenv, fetchFromGitHub, glfw, freetype, openssl, makeWrapper, upx, pkgsStatic, xorg, binaryen, darwin }:
 
 let
   version = "weekly.2023.19";
@@ -33,6 +33,9 @@ let
     rev = "6e970bd0a7459ad7798588f1ace4aa46c5e789a2";
     hash = "sha256-hFf7c8ZNMU1j7fgmDakuO7tBVr12Wq0dgQddJnkMajE=";
   };
+  boehmgcStatic = pkgsStatic.boehmgc.override {
+    enableStatic = stdenv.isDarwin;
+  };
 in
 stdenv.mkDerivation {
   pname = "vlang";
@@ -50,14 +53,16 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ makeWrapper ];
 
+  buildInputs = lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.Cocoa;
+
   makeFlags = [
     "local=1"
   ];
 
   env.VC = vc;
   env.VFLAGS = if stdenv.isDarwin then
-    # on darwin we need to add a manual link to libgc since it doesn't have a libgc.a
-    "-cg -cc ${pkgsStatic.clang}/bin/clang -no-retry-compilation -ldflags -L${pkgsStatic.boehmgc}/lib -ldflags -lgc -ldflags -L${binaryen}/lib"
+    # on darwin we need to add a manual link to libgc
+    "-cc ${stdenv.cc}/bin/cc -no-retry-compilation -ldflags -L${boehmgcStatic}/lib -ldflags -lgc -ldflags -L${binaryen}/lib"
   else
     # libX11.dev and xorg.xorgproto are needed because of
     # builder error: Header file <X11/Xlib.h>, needed for module `clipboard.x11` was not found. Please install a package with the X11 development headers, for example: `apt-get install libx11-dev`.
@@ -68,23 +73,25 @@ stdenv.mkDerivation {
   preBuild = ''
     export HOME=$(mktemp -d)
     mkdir -p ./thirdparty/tcc/lib
-    # this step is not needed it's just to silence a warning
-    # we don't use tcc at all since it fails on a missing libatomic
+    cp -r ${boehmgcStatic}/lib/* ./thirdparty/tcc/lib
+  ''
+  # this step is not needed it's just to silence a warning
+  # we don't use tcc at all since it fails on a missing libatomic
+  + lib.optionalString stdenv.isLinux ''
     ln -s ${pkgsStatic.tinycc}/bin/tcc ./thirdparty/tcc/tcc.exe
-    cp -r ${pkgsStatic.boehmgc}/lib/* ./thirdparty/tcc/lib
-  '' + lib.optionalString stdenv.isDarwin ''
-    # this file isn't used by clang, but it's just to silence a warning
-    # the compiler complains on an empty file, so this makes it "close" to real
-    substituteInPlace vlib/builtin/builtin_d_gcboehm.c.v \
-        --replace "libgc.a" "libgc.la"
   '';
 
   # vcreate_test.v requires git, so we must remove it when building the tools.
-  # vtest.v fails on Darwin, so let's just disable it for now.
   preInstall = ''
     mv cmd/tools/vcreate/vcreate_test.v $HOME/vcreate_test.v
-  '' + lib.optionalString stdenv.isDarwin ''
-    mv cmd/tools/vtest.v $HOME/vtest.v
+  ''
+  # builder error: Header file <Cocoa/Cocoa.h>, needed for module `clipboard` was not found.
+  + lib.optionalString stdenv.isDarwin ''
+    for flag in $NIX_CFLAGS_COMPILE; do
+      if [[ $flag == /*/Library/Frameworks ]]; then
+        VFLAGS+=" -ldflags -F$flag"
+      fi
+    done
   '';
 
   installPhase = ''
@@ -110,8 +117,6 @@ stdenv.mkDerivation {
   # Return vcreate_test.v and vtest.v, so the user can use it.
   postInstall = ''
     cp $HOME/vcreate_test.v $out/lib/cmd/tools/vcreate_test.v
-  '' + lib.optionalString stdenv.isDarwin ''
-    cp $HOME/vtest.v $out/lib/cmd/tools/vtest.v
   '';
 
   meta = with lib; {
