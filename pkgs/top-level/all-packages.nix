@@ -4843,6 +4843,8 @@ with pkgs;
 
   frei = callPackage ../tools/misc/frei { };
 
+  frogmouth = callPackage ../tools/text/frogmouth { };
+
   fselect = callPackage ../tools/misc/fselect { };
 
   fsmon = callPackage ../tools/misc/fsmon { };

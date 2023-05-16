@@ -69,6 +69,8 @@ buildPythonPackage rec {
     "textual"
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   meta = with lib; {
     description = "TUI framework for Python inspired by modern web development";
     homepage = "https://github.com/Textualize/textual";
