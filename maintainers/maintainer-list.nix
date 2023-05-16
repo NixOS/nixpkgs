@@ -302,6 +302,12 @@
     githubId = 2321000;
     name = "Ruslan Babayev";
   };
+  abustany = {
+    email = "adrien@bustany.org";
+    github = "abustany";
+    githubId = 2526296;
+    name = "Adrien Bustany";
+  };
   acairncross = {
     email = "acairncross@gmail.com";
     github = "acairncross";
