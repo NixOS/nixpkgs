@@ -3,32 +3,29 @@
 , fetchPypi
 , buildPythonPackage
 , python
-, llvm
 , pythonOlder
-, isPyPy
-, enum34
-, isPy3k
+, llvm
 }:
 
 buildPythonPackage rec {
   pname = "llvmlite";
-  version = "0.39.1";
+  version = "0.40.0";
+  format = "setuptools";
 
-  disabled = isPyPy || !isPy3k;
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-tDq9fILoBSYcQl1QM1vppsT4QmTjTW1uR1IHMAAF1XI=";
+    hash = "sha256-yRC4+/1nuOnQsQ68ASsjzWfL7O8blvANOR3dKY1xZxw=";
   };
 
-  nativeBuildInputs = [ llvm ];
-  propagatedBuildInputs = lib.optional (pythonOlder "3.4") enum34;
+  nativeBuildInputs = [
+    llvm
+  ];
 
-  # Disable static linking
-  # https://github.com/numba/llvmlite/issues/93
+  env.LLVMLITE_CXX_STATIC_LINK = 0;
+
   postPatch = ''
-    substituteInPlace ffi/Makefile.linux --replace "-static-libstdc++" ""
-
     substituteInPlace llvmlite/tests/test_binding.py --replace "test_linux" "nope"
   '';
 
@@ -38,7 +35,9 @@ buildPythonPackage rec {
   '';
 
   checkPhase = ''
+    runHook preCheck
     ${python.executable} runtests.py
+    runHook postCheck
   '';
 
   __impureHostDeps = lib.optionals stdenv.isDarwin [ "/usr/lib/libm.dylib" ];
@@ -46,6 +45,7 @@ buildPythonPackage rec {
   passthru.llvm = llvm;
 
   meta = with lib; {
+    changelog = "https://github.com/numba/llvmlite/blob/v${version}/CHANGE_LOG";
     description = "A lightweight LLVM python binding for writing JIT compilers";
     homepage = "http://llvmlite.pydata.org/";
     license = licenses.bsd2;
