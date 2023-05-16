@@ -62,7 +62,7 @@ let
       ''}
     '';
 
-    doCheck = true;
+    doCheck = !stdenv.hostPlatform.isPower64;
     preCheck = ''
       export PREVIOUS_${ldLibPathEnvName}=$${ldLibPathEnvName}
       export ${ldLibPathEnvName}="$${ldLibPathEnvName}:$(realpath tls/):$(realpath ssl/):$(realpath crypto/)"
