@@ -112,72 +112,76 @@ let
       };
     };
 
+  vmsByPlatform = {
+    "aarch64-linux" = {
+      "squeak-cog-spur" = buildVM {
+        platformDir = "linux64ARMv8";
+        vmName = "squeak.cog.spur";
+        scriptName = "squeak";
+        configureFlagsArray = ''(
+          CFLAGS="-march=armv8-a -mtune=cortex-a72 -g -O2 -DNDEBUG -DDEBUGVM=0 -DMUSL -D_GNU_SOURCE -DUSEEVDEV -DCOGMTVM=0 -DDUAL_MAPPED_CODE_ZONE=1"
+          LIBS="-lrt"
+        )'';
+        configureFlags = [
+          "--with-vmversion=5.0"
+          "--with-src=src/spur64.cog"
+          "--without-npsqueak"
+          "--enable-fast-bitblt"
+        ];
+      };
+
+      "squeak-stack-spur" = buildVM {
+        platformDir = "linux64ARMv8";
+        vmName = "squeak.stack.spur";
+        scriptName = "squeak";
+        configureFlagsArray = ''(
+          CFLAGS="-g -O2 -DNDEBUG -DDEBUGVM=0 -DMUSL -D_GNU_SOURCE -DUSEEVDEV -D__ARM_ARCH_ISA_A64 -DARM64 -D__arm__ -D__arm64__ -D__aarch64__"
+          TARGET_ARCH="-march=armv8-a"
+        )'';
+        configureFlags = [
+          "--with-vmversion=5.0"
+          "--with-src=src/spur64.stack"
+          "--disable-cogit"
+          "--without-npsqueak"
+        ];
+      };
+    };
+
+    "x86_64-linux" = {
+      "newspeak-cog-spur" = buildVM {
+        platformDir = "linux64x64";
+        vmName = "newspeak.cog.spur";
+        scriptName = "newspeak";
+        configureFlagsArray = ''(
+          CFLAGS="-g -O2 -DNDEBUG -DDEBUGVM=0 -msse2"
+          TARGET_ARCH="-m64"
+        )'';
+        configureFlags = [
+          "--with-vmversion=5.0"
+          "--with-src=src/spur64.cog.newspeak"
+          "--without-vm-display-fbdev"
+          "--without-npsqueak"
+        ];
+      };
+
+      "squeak.cog.spur" = buildVM {
+        platformDir = "linux64x64";
+        vmName = "squeak.cog.spur";
+        scriptName = "squeak";
+        configureFlagsArray = ''(
+          CFLAGS="-g -O2 -DNDEBUG -DDEBUGVM=0 -msse2 -DCOGMTVM=0"
+          TARGET_ARCH="-m64"
+        )'';
+        configureFlags = [
+          "--with-vmversion=5.0"
+          "--with-src=src/spur64.cog"
+          "--without-npsqueak"
+        ];
+      };
+    };
+  };
+
+  platform = stdenv.targetPlatform.system;
 in
-if stdenv.targetPlatform.system == "aarch64-linux" then
-  {
-    "squeak-cog-spur" = buildVM rec {
-      platformDir = "linux64ARMv8";
-      vmName = "squeak.cog.spur";
-      scriptName = "squeak";
-      configureFlagsArray = ''(
-        CFLAGS="-march=armv8-a -mtune=cortex-a72 -g -O2 -DNDEBUG -DDEBUGVM=0 -DMUSL -D_GNU_SOURCE -DUSEEVDEV -DCOGMTVM=0 -DDUAL_MAPPED_CODE_ZONE=1"
-        LIBS="-lrt"
-      )'';
-      configureFlags = [
-        "--with-vmversion=5.0"
-        "--with-src=src/spur64.cog"
-        "--without-npsqueak"
-        "--enable-fast-bitblt"
-      ];
-    };
-    "squeak-stack-spur" = buildVM {
-      platformDir = "linux64ARMv8";
-      vmName = "squeak.stack.spur";
-      scriptName = "squeak";
-      configureFlagsArray = ''(
-        CFLAGS="-g -O2 -DNDEBUG -DDEBUGVM=0 -DMUSL -D_GNU_SOURCE -DUSEEVDEV -D__ARM_ARCH_ISA_A64 -DARM64 -D__arm__ -D__arm64__ -D__aarch64__"
-        TARGET_ARCH="-march=armv8-a"
-      )'';
-      configureFlags = [
-        "--with-vmversion=5.0"
-        "--with-src=src/spur64.stack"
-        "--disable-cogit"
-        "--without-npsqueak"
-      ];
-    };
-  }
-else if stdenv.targetPlatform.system == "x86_64-linux" then {
-  "newspeak-cog-spur" = buildVM {
-    platformDir = "linux64x64";
-    vmName = "newspeak.cog.spur";
-    scriptName = "newspeak";
-    configureFlagsArray = ''(
-        CFLAGS="-g -O2 -DNDEBUG -DDEBUGVM=0 -msse2"
-        TARGET_ARCH="-m64"
-      )'';
-    configureFlags = [
-      "--with-vmversion=5.0"
-      "--with-src=src/spur64.cog.newspeak"
-      "--without-vm-display-fbdev"
-      "--without-npsqueak"
-    ];
-  };
-  "squeak.cog.spur" = buildVM {
-    platformDir = "linux64x64";
-    vmName = "squeak.cog.spur";
-    scriptName = "squeak";
-    configureFlagsArray = ''(
-        CFLAGS="-g -O2 -DNDEBUG -DDEBUGVM=0 -msse2 -DCOGMTVM=0"
-        TARGET_ARCH="-m64"
-      )'';
-    configureFlags = [
-      "--with-vmversion=5.0"
-      "--with-src=src/spur64.cog"
-      "--without-npsqueak"
-    ];
-  };
-} else
-  throw "Unsupported platform: only the following platforms are supported.
-    - aarch64-linux
-    - x86_64-linux
-  "
+  vmsByPlatform.${platform} or
+    (throw "Unsupported platform ${platform}: only the following platforms are supported: ${builtins.attrNames vmsByPlatform}")
