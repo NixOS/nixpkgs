@@ -13,8 +13,7 @@ let
   update = ".0.2";
   build = "-ga";
 
-  # when building a headless jdk, also bootstrap it with a headless jdk
-  openjdk-bootstrap = openjdk13-bootstrap.override { gtkSupport = !headless; };
+  openjdk-bootstrap = openjdk13-bootstrap;
 
   openjdk = stdenv.mkDerivation rec {
     pname = "openjdk" + lib.optionalString headless "-headless";

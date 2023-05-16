@@ -16,8 +16,7 @@ let
     __toString = self: "${self.major}${self.update}${self.build}";
   };
 
-  # when building a headless jdk, also bootstrap it with a headless jdk
-  openjdk-bootstrap = openjdk15-bootstrap.override { gtkSupport = !headless; };
+  openjdk-bootstrap = openjdk15-bootstrap;
 
   openjdk = stdenv.mkDerivation {
     pname = "openjdk" + lib.optionalString headless "-headless";

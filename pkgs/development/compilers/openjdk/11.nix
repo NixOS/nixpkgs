@@ -14,8 +14,7 @@ let
   update = "18";
   build = "10";
 
-  # when building a headless jdk, also bootstrap it with a headless jdk
-  openjdk-bootstrap = openjdk11-bootstrap.override { gtkSupport = !headless; };
+  openjdk-bootstrap = openjdk11-bootstrap;
 
   openjdk = stdenv.mkDerivation rec {
     pname = "openjdk" + lib.optionalString headless "-headless";
