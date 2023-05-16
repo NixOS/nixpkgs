@@ -100,6 +100,8 @@ let self = rec {
 
   vfs-libarchive = callPackage ../applications/video/kodi/addons/vfs-libarchive { };
 
+  visualization-goom = callPackage ../applications/video/kodi/addons/visualization-goom { };
+
   visualization-matrix = callPackage ../applications/video/kodi/addons/visualization-matrix { };
 
   visualization-pictureit = callPackage ../applications/video/kodi/addons/visualization-pictureit { };
