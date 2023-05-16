@@ -53,30 +53,22 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ makeWrapper ];
 
-  buildInputs = lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.Cocoa;
+  buildInputs = [
+    binaryen
+  ] ++ lib.optionals stdenv.isDarwin [
+    darwin.apple_sdk.frameworks.Cocoa
+  ] ++ lib.optionals stdenv.isLinux [
+    xorg.libX11
+    xorg.libXau
+    xorg.libXdmcp
+    xorg.xorgproto
+  ];
 
   makeFlags = [
     "local=1"
   ];
 
   env.VC = vc;
-  env.VFLAGS = toString ([
-    "-cc ${stdenv.cc}/bin/cc"
-    "-no-retry-compilation"
-    "-ldflags -L${binaryen}/lib"
-  ]
-  # builder error: Header file <X11/Xlib.h>, needed for module `clipboard.x11` was not found.
-  ++ lib.optionals stdenv.isLinux [
-    "-cflags -I${xorg.libX11.dev}/include"
-    "-cflags -I${xorg.xorgproto}/include"
-    "-ldflags -L${xorg.libX11}/lib"
-    "-ldflags -L${xorg.libxcb}/lib"
-    "-ldflags -lxcb"
-    "-ldflags -L${xorg.libXau}/lib"
-    "-ldflags -lXau"
-    "-ldflags -L${xorg.libXdmcp}/lib"
-    "-ldflags -lXdmcp"
-  ]);
 
   preBuild = ''
     export HOME=$(mktemp -d)
@@ -87,14 +79,6 @@ stdenv.mkDerivation {
   # vcreate_test.v requires git, so we must remove it when building the tools.
   preInstall = ''
     mv cmd/tools/vcreate/vcreate_test.v $HOME/vcreate_test.v
-  ''
-  # builder error: Header file <Cocoa/Cocoa.h>, needed for module `clipboard` was not found.
-  + lib.optionalString stdenv.isDarwin ''
-    for flag in $NIX_CFLAGS_COMPILE; do
-      if [[ $flag == /*/Library/Frameworks ]]; then
-        VFLAGS+=" -ldflags -F$flag"
-      fi
-    done
   '';
 
   installPhase = ''
