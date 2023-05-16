@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "notify_push";
-  version = "0.6.2";
+  version = "0.6.3";
 
   src = fetchFromGitHub {
     owner = "nextcloud";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-YCIXpCNKqdCSvq7CSPSwoPc2gpCnnda8S7I4FzpezMc=";
+    hash = "sha256-5Vd8fD0nB2POtxDFNVtkJfVEe+O8tjnwlwYosDJjIDA=";
   };
 
-  cargoHash = "sha256-l6gMz/iJeLl+RLjOiR9U1m6V/rK+RWM84bQiz4jCFtY=";
+  cargoHash = "sha256-TF4rL7KXsbfYiEOfkKRyr3PCvyocq6tg90OZURZh8f8=";
 
   passthru = {
     test_client = rustPlatform.buildRustPackage {
