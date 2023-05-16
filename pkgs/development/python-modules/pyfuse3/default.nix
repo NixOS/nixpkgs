@@ -4,6 +4,7 @@
 , fetchFromGitHub
 , cython
 , pkg-config
+, setuptools
 , fuse3
 , trio
 , python
@@ -14,17 +15,17 @@
 
 buildPythonPackage rec {
   pname = "pyfuse3";
-  version = "3.2.2";
+  version = "3.2.3";
 
-  disabled = pythonOlder "3.5";
+  disabled = pythonOlder "3.6";
 
-  format = "setuptools";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "libfuse";
     repo = "pyfuse3";
     rev = "refs/tags/${version}";
-    hash = "sha256-Y9Haz3MMhTXkvYFOGNWJnoGNnvoK6wiQ+s3AwJhBD8Q=";
+    hash = "sha256-2YrVapCojcFRaljqNeWPMWz3hEgSutKPy2u8FXp0fME=";
   };
 
   postPatch = ''
@@ -35,6 +36,7 @@ buildPythonPackage rec {
   nativeBuildInputs = [
     cython
     pkg-config
+    setuptools
   ];
 
   buildInputs = [ fuse3 ];
@@ -61,6 +63,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
+    changelog = "https://github.com/libfuse/pyfuse3/blob/${src.rev}/Changes.rst";
     description = "Python 3 bindings for libfuse 3 with async I/O support";
     homepage = "https://github.com/libfuse/pyfuse3";
     license = licenses.lgpl2Plus;
