@@ -17565,7 +17565,7 @@ with pkgs;
     zig = buildPackages.zig_0_10;
   };
 
-  ansible-later = with python3.pkgs; toPythonApplication ansible-later;
+  ansible-later = callPackage ../tools/admin/ansible/later.nix { };
 
   ansible-lint = callPackage ../tools/admin/ansible/lint.nix { };
 

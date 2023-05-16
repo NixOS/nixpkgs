@@ -496,8 +496,6 @@ self: super: with self; {
 
   ansible-kernel = callPackage ../development/python-modules/ansible-kernel { };
 
-  ansible-later = callPackage ../development/python-modules/ansible-later { };
-
   ansible-runner = callPackage ../development/python-modules/ansible-runner { };
 
   ansi = callPackage ../development/python-modules/ansi { };

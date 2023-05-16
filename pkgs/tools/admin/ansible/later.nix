@@ -1,33 +1,12 @@
 { lib
-, ansible
-, ansible-core
-, anyconfig
-, appdirs
-, buildPythonPackage
-, colorama
 , fetchFromGitHub
-, flake8
-, jsonschema
-, nested-lookup
-, pathspec
-, poetry-core
-, pytest-mock
-, python-json-logger
-, pytestCheckHook
-, pythonRelaxDepsHook
-, pythonOlder
-, pyyaml
-, toolz
-, unidiff
-, yamllint
+, python3
 }:
 
-buildPythonPackage rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "ansible-later";
   version = "3.3.1";
   format = "pyproject";
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "thegeeklab";
@@ -53,12 +32,12 @@ buildPythonPackage rec {
     "yamllint"
   ];
 
-  nativeBuildInputs = [
+  nativeBuildInputs = with python3.pkgs; [
     poetry-core
     pythonRelaxDepsHook
   ];
 
-  propagatedBuildInputs = [
+  propagatedBuildInputs = with python3.pkgs; [
     ansible
     ansible-core
     anyconfig
@@ -75,7 +54,7 @@ buildPythonPackage rec {
     yamllint
   ];
 
-  nativeCheckInputs = [
+  nativeCheckInputs = with python3.pkgs; [
     pytest-mock
     pytestCheckHook
   ];
