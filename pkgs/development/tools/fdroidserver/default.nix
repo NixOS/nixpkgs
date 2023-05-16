@@ -11,7 +11,7 @@ python.pkgs.buildPythonApplication rec {
   src = fetchFromGitLab {
     owner = "fdroid";
     repo = "fdroidserver";
-    rev = version;
+    rev = "refs/tags/${version}";
     sha256 = "0qg4vxjcgm05dqk3kyj8lry9wh5bxy0qwz70fiyxb5bi1kwai9ss";
   };
 
@@ -57,12 +57,15 @@ python.pkgs.buildPythonApplication rec {
   # no tests
   doCheck = false;
 
-  pythonImportsCheck = [ "fdroidserver" ];
+  pythonImportsCheck = [
+    "fdroidserver"
+  ];
 
   meta = with lib; {
-    homepage = "https://f-droid.org";
+    homepage = "https://github.com/f-droid/fdroidserver";
+    changelog = "https://github.com/f-droid/fdroidserver/blob/${version}/CHANGELOG.md";
     description = "Server and tools for F-Droid, the Free Software repository system for Android";
-    license = licenses.agpl3;
+    license = licenses.agpl3Plus;
     maintainers = with maintainers; [ obfusk ];
   };
 
