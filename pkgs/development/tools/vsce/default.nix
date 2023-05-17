@@ -1,5 +1,4 @@
 { lib
-, stdenv
 , buildNpmPackage
 , fetchFromGitHub
 , pkg-config
@@ -11,16 +10,16 @@
 
 buildNpmPackage rec {
   pname = "vsce";
-  version = "2.15.0";
+  version = "2.19.0";
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "vscode-vsce";
     rev = "v${version}";
-    hash = "sha256-WDKOHQV6J22l0ELmXwl5BC5x7MsI6TAMeU3oBFpwqx4=";
+    hash = "sha256-U3ZsM18bijQ+WPC0MrXifMGV2ceNkzGdzLs3TWtMaO4=";
   };
 
-  npmDepsHash = "sha256-i2LpQ/4MwkUGTUhih0ybLv5np45j7m4kCx9IOBIgtXo=";
+  npmDepsHash = "sha256-KIokSqoBFOQ3Ei5aAeSvWYiv1QdFwUYZJDsza/MypAg=";
 
   postPatch = ''
     substituteInPlace package.json --replace '"version": "0.0.0"' '"version": "${version}"'

@@ -42,6 +42,15 @@ rec {
     openSha256 = "sha256-etbtw6LMRUcFoZC9EDDRrTDekV8JFRYmkp3idLaMk5g=";
     settingsSha256 = "sha256-8KB6T9f+gWl8Ni+uOyrJKiiH5mNx9eyfCcW/RjPTQQA=";
     persistencedSha256 = "sha256-zrstlt/0YVGnsPGUuBbR9ULutywi2wNDVxh7OhJM7tM=";
+
+    patchFlags = [ "-p1" "-d" "kernel" ];
+    patches = [
+      # source: https://gist.github.com/joanbm/77f0650d45747b9a4dc8e330ade2bf5c
+      (fetchpatch {
+        url = "https://gist.github.com/joanbm/77f0650d45747b9a4dc8e330ade2bf5c/raw/688b612624945926676de28059fe749203b4b549/nvidia-470xx-fix-linux-6.4.patch";
+        hash = "sha256-OyRmezyzqAi7mSJHDjsWQVocSsgJPTW5DvHDFVNX7Dk=";
+      })
+    ];
   });
 
   beta = selectHighestVersion latest (generic {
@@ -78,14 +87,17 @@ rec {
     settingsSha256 = "sha256-TRKQ4brLnCbBZt1smGSIHTfwW+wEFPWWPEwDxjVXN7s=";
     persistencedSha256 = "sha256-fSJMx49z9trdNxx0iPI45oG57smvvhaqVNxsRnfXKCI=";
 
-    prePatch = "pushd kernel";
-    postPatch = "popd";
-
+    patchFlags = [ "-p1" "-d" "kernel" ];
     patches = [
       # source: https://gist.github.com/joanbm/d10e9cbbbb8e245b6e7e27b2db338faf
       (fetchpatch {
         url = "https://gist.github.com/joanbm/d10e9cbbbb8e245b6e7e27b2db338faf/raw/f5d5238bdbaa16cd4008658a0f82b9dd84f1b38f/nvidia-470xx-fix-linux-6.3.patch";
         hash = "sha256-mR+vXDHgVhWC0JeLgGlbNVCH8XTs7XnhEJS6BV75tI8=";
+      })
+      # source: https://gist.github.com/joanbm/77f0650d45747b9a4dc8e330ade2bf5c
+      (fetchpatch {
+        url = "https://gist.github.com/joanbm/77f0650d45747b9a4dc8e330ade2bf5c/raw/688b612624945926676de28059fe749203b4b549/nvidia-470xx-fix-linux-6.4.patch";
+        hash = "sha256-OyRmezyzqAi7mSJHDjsWQVocSsgJPTW5DvHDFVNX7Dk=";
       })
     ];
   };
@@ -97,6 +109,8 @@ rec {
     sha256_64bit = "sha256-W+u8puj+1da52BBw+541HxjtxTSVJVPL3HHo/QubMoo=";
     settingsSha256 = "sha256-uJZO4ak/w/yeTQ9QdXJSiaURDLkevlI81de0q4PpFpw=";
     persistencedSha256 = "sha256-NuqUQbVt80gYTXgIcu0crAORfsj9BCRooyH3Gp1y1ns=";
+
+    broken = kernel.kernelAtLeast "6.2";
   };
 
   legacy_340 = let
@@ -104,8 +118,8 @@ rec {
     aurPatches = fetchFromGitHub {
       owner = "archlinux-jerry";
       repo = "nvidia-340xx";
-      rev = "fe2b38e66f2199777bcede6eb35c5df0210f15dc";
-      hash = "sha256-hPFfzWGo2jF/DLm1OkP+BBnRY69N8kKUZ1EGkoHJlKA=";
+      rev = "f472f9297fe2ae285b954cd3f88abd8e2e255e4f";
+      hash = "sha256-tMA69Wlhi14DMS3O3nfwMX3EiT8pKa6McLxFpAayoEI=";
     };
     patchset = [
       "0001-kernel-5.7.patch"
@@ -119,6 +133,8 @@ rec {
       "0009-kernel-5.17.patch"
       "0010-kernel-5.18.patch"
       "0011-kernel-6.0.patch"
+      "0012-kernel-6.2.patch"
+      "0013-kernel-6.3.patch"
     ];
   in generic {
     version = "340.108";
@@ -128,7 +144,7 @@ rec {
     persistencedSha256 = "1ax4xn3nmxg1y6immq933cqzw6cj04x93saiasdc0kjlv0pvvnkn";
     useGLVND = false;
 
-    broken = kernel.kernelAtLeast "6.2";
+    broken = kernel.kernelAtLeast "6.4";
     patches = map (patch: "${aurPatches}/${patch}") patchset;
   };
 }

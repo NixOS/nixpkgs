@@ -1767,6 +1767,8 @@ with pkgs;
     stdenv = clangStdenv;
   };
 
+  yarn-lock-converter = callPackage ../tools/package-management/yarn-lock-converter { };
+
   archi = callPackage ../tools/misc/archi { };
 
   breitbandmessung = callPackage ../applications/networking/breitbandmessung { };
@@ -4842,6 +4844,8 @@ with pkgs;
   frawk = callPackage ../tools/text/frawk { };
 
   frei = callPackage ../tools/misc/frei { };
+
+  frogmouth = callPackage ../tools/text/frogmouth { };
 
   fselect = callPackage ../tools/misc/fselect { };
 
@@ -11608,6 +11612,8 @@ with pkgs;
 
   qmk = callPackage ../tools/misc/qmk { };
 
+  qmk_hid = callPackage ../tools/misc/qmk_hid { };
+
   qmarkdowntextedit = libsForQt5.callPackage  ../development/libraries/qmarkdowntextedit { };
 
   qodem = callPackage ../tools/networking/qodem { };
@@ -12094,6 +12100,8 @@ with pkgs;
   scraper = callPackage ../tools/text/scraper { };
 
   scriptaculous = callPackage ../development/libraries/scriptaculous { };
+
+  script-directory = callPackage ../tools/misc/script-directory { };
 
   scrot = callPackage ../tools/graphics/scrot { };
 
@@ -13289,6 +13297,8 @@ with pkgs;
   unetbootin = libsForQt5.callPackage ../tools/cd-dvd/unetbootin { };
 
   unfs3 = callPackage ../servers/unfs3 { };
+
+  unixbench = callPackage ../development/tools/misc/unixbench { };
 
   unoconv = callPackage ../tools/text/unoconv { };
 
@@ -16375,6 +16385,7 @@ with pkgs;
   cargo-semver-checks = callPackage ../development/tools/rust/cargo-semver-checks { };
 
   cargo-show-asm = callPackage ../development/tools/rust/cargo-show-asm { };
+  cargo-shuttle = callPackage ../development/tools/rust/cargo-shuttle { };
 
   cargo-sort = callPackage ../development/tools/rust/cargo-sort { };
   cargo-spellcheck = callPackage ../development/tools/rust/cargo-spellcheck {
@@ -17491,25 +17502,24 @@ with pkgs;
 
   autoadb = callPackage ../misc/autoadb { };
 
-  ansible = ansible_2_14;
-  ansible_2_14 = python3Packages.toPythonApplication python3Packages.ansible-core;
-  ansible_2_13 = python3Packages.toPythonApplication (python3Packages.ansible-core.overridePythonAttrs (oldAttrs: rec {
-    version = "2.13.6";
+  ansible = ansible_2_15;
+  ansible_2_15 = python3Packages.toPythonApplication python3Packages.ansible-core;
+  ansible_2_14 = python3Packages.toPythonApplication (python3Packages.ansible-core.overridePythonAttrs (oldAttrs: rec {
+    version = "2.14.5";
     src = oldAttrs.src.override {
       inherit version;
-      hash = "sha256-Mf4yK2MpBnSo9zhhEN9QHwBEqkSJC+OrMTpuIluaKc8=";
+      hash = "sha256-jE7tds5Fi0o3M0oIAt8pSI7Pn4rzjDERBpyWsXsgVTA=";
     };
   }));
-  ansible_2_12 = python3Packages.toPythonApplication (python3Packages.ansible-core.overridePythonAttrs (oldAttrs: rec {
-    version = "2.12.10";
+  ansible_2_13 = python3Packages.toPythonApplication (python3Packages.ansible-core.overridePythonAttrs (oldAttrs: rec {
+    version = "2.13.9";
     src = oldAttrs.src.override {
       inherit version;
-      hash = "sha256-/rHfYXOM/B9eiTtCouwafeMpd9Z+hnB7Retj0MXDwjY=";
+      hash = "sha256-nDGeygqcU83m8XSBLd1xFO2x5dDrXh30e9DY/v7ax2w=";
     };
-    meta.changelog = "https://github.com/ansible/ansible/blob/v${version}/changelogs/CHANGELOG-v${lib.versions.majorMinor version}.rst";
   }));
 
-  ansible-doctor = with python3.pkgs; toPythonApplication ansible-doctor;
+  ansible-doctor = callPackage ../tools/admin/ansible/doctor.nix { };
 
   phpunit = callPackage ../development/tools/misc/phpunit { };
 
@@ -17569,9 +17579,9 @@ with pkgs;
     zig = buildPackages.zig_0_10;
   };
 
-  ansible-later = with python3.pkgs; toPythonApplication ansible-later;
+  ansible-later = callPackage ../tools/admin/ansible/later.nix { };
 
-  ansible-lint = with python3.pkgs; toPythonApplication ansible-lint;
+  ansible-lint = callPackage ../tools/admin/ansible/lint.nix { };
 
   antlr2 = callPackage ../development/tools/parsing/antlr/2.7.7.nix { };
   antlr3_4 = callPackage ../development/tools/parsing/antlr/3.4.nix { };
@@ -32563,6 +32573,7 @@ with pkgs;
     mpvacious = callPackage ../applications/video/mpv/scripts/mpvacious.nix { };
     simple-mpv-webui = callPackage ../applications/video/mpv/scripts/simple-mpv-webui.nix { };
     sponsorblock = callPackage ../applications/video/mpv/scripts/sponsorblock.nix { };
+    thumbfast = callPackage ../applications/video/mpv/scripts/thumbfast.nix { };
     thumbnail = callPackage ../applications/video/mpv/scripts/thumbnail.nix { };
     uosc = callPackage ../applications/video/mpv/scripts/uosc.nix { };
     vr-reversal = callPackage ../applications/video/mpv/scripts/vr-reversal.nix { };
@@ -33413,7 +33424,7 @@ with pkgs;
 
   polar-bookshelf1 = callPackage ../applications/misc/polar-bookshelf1 { };
 
-  poezio = python3Packages.poezio;
+  poezio = callPackage ../applications/networking/instant-messengers/poezio { };
 
   pommed_light = callPackage ../os-specific/linux/pommed-light { };
 

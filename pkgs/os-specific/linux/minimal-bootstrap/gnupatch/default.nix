@@ -70,7 +70,7 @@ in
 kaem.runCommand "${pname}-${version}" {
   inherit pname version;
 
-  nativeBuildInputs = [ tinycc ];
+  nativeBuildInputs = [ tinycc.compiler ];
 
   meta = with lib; {
     description = "GNU Patch, a program to apply differences to files";
@@ -91,7 +91,7 @@ kaem.runCommand "${pname}-${version}" {
   catm config.h
 
   # Build
-  alias CC="tcc ${lib.concatStringsSep " " CFLAGS}"
+  alias CC="tcc -B ${tinycc.libs}/lib ${lib.concatStringsSep " " CFLAGS}"
   ${lib.concatMapStringsSep "\n" (f: "CC -c ${f}") sources}
 
   # Link

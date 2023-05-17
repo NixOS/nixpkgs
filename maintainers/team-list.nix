@@ -152,6 +152,7 @@ with lib.maintainers; {
   cuda = {
     members = [
       connorbaker
+      samuela
       SomeoneSerge
     ];
     scope = "Maintain CUDA-enabled packages";
@@ -522,6 +523,7 @@ with lib.maintainers; {
 
   mate = {
     members = [
+      bobby285271
       j03
       romildo
     ];
@@ -828,6 +830,7 @@ with lib.maintainers; {
 
   xfce = {
     members = [
+      bobby285271
       romildo
       muscaln
     ];

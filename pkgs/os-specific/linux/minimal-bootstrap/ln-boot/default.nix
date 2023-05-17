@@ -20,7 +20,8 @@ kaem.runCommand "${pname}-${version}" {
   };
 } ''
   mkdir -p ''${out}/bin
-  ${mes}/bin/mes --no-auto-compile -e main ${mes}/bin/mescc.scm -- \
+  ${mes.compiler}/bin/mes --no-auto-compile -e main ${mes.srcPost.bin}/bin/mescc.scm -- \
+    -L ${mes.libs}/lib \
     -lc+tcc \
     -o ''${out}/bin/ln \
     ${src}

@@ -1,35 +1,17 @@
 { lib
-, buildPythonPackage
+, python3
 , fetchPypi
-, setuptools-scm
-, ansible-compat
-, ansible-core
-, black
-, enrich
-, filelock
-, flaky
-, jsonschema
-, pythonOlder
-, pytest
-, pytest-xdist
-, pytestCheckHook
-, pyyaml
-, rich
-, ruamel-yaml
-, wcmatch
-, yamllint
+, ansible
 }:
 
-buildPythonPackage rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "ansible-lint";
-  version = "6.15.0";
+  version = "6.16.1";
   format = "pyproject";
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-TOeQzwAGdgugHYuUbYAwNwL8dFS9GcazB53ZjUBRfm8=";
+    hash = "sha256-Hyt5Y3n4bi3Ffxv+QoikbJdqHUBtYiHuRuOsgwf3PKM=";
   };
 
   postPatch = ''
@@ -38,21 +20,22 @@ buildPythonPackage rec {
       --replace "sys.exit(1)" ""
   '';
 
-  nativeBuildInputs = [
+  nativeBuildInputs = with python3.pkgs; [
+    setuptools
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
-    ansible-compat
+  propagatedBuildInputs = with python3.pkgs; [
+    # https://github.com/ansible/ansible-lint/blob/master/.config/requirements.in
     ansible-core
     black
-    enrich
     filelock
     jsonschema
-    pytest # yes, this is an actual runtime dependency
+    packaging
     pyyaml
     rich
     ruamel-yaml
+    subprocess-tee
     wcmatch
     yamllint
   ];
@@ -60,7 +43,7 @@ buildPythonPackage rec {
   # tests can't be easily run without installing things from ansible-galaxy
   doCheck = false;
 
-  nativeCheckInputs = [
+  nativeCheckInputs = with python3.pkgs; [
     flaky
     pytest-xdist
     pytestCheckHook
@@ -69,7 +52,7 @@ buildPythonPackage rec {
   preCheck = ''
     # ansible wants to write to $HOME and crashes if it can't
     export HOME=$(mktemp -d)
-    export PATH=$PATH:${lib.makeBinPath [ ansible-core ]}
+    export PATH=$PATH:${lib.makeBinPath [ ansible ]}
 
     # create a working ansible-lint executable
     export PATH=$PATH:$PWD/src/ansiblelint
@@ -95,7 +78,7 @@ buildPythonPackage rec {
     "test_discover_lintables_umlaut"
   ];
 
-  makeWrapperArgs = [ "--prefix PATH : ${lib.makeBinPath [ ansible-core ]}" ];
+  makeWrapperArgs = [ "--prefix PATH : ${lib.makeBinPath [ ansible ]}" ];
 
   meta = with lib; {
     description = "Best practices checker for Ansible";
