@@ -1,4 +1,4 @@
-{ config, lib, ... }:
+{ config, lib, pkgs, ... }:
 
 with lib;
 
@@ -20,6 +20,10 @@ in
   options = {
     programs.chromium = {
       enable = mkEnableOption (lib.mdDoc "{command}`chromium` policies");
+
+      enablePlasmaBrowserIntegration = mkEnableOption (lib.mdDoc "Native Messaging Host for Plasma Browser Integration");
+
+      plasmaBrowserIntegrationPackage = mkPackageOption pkgs "plasma5Packages.plasma-browser-integration" { };
 
       extensions = mkOption {
         type = with types; nullOr (listOf str);
@@ -102,9 +106,13 @@ in
   config = {
     environment.etc = lib.mkIf cfg.enable {
       # for chromium
+      "chromium/native-messaging-hosts/org.kde.plasma.browser_integration.json" = lib.mkIf cfg.enablePlasmaBrowserIntegration
+        { source = "${cfg.plasmaBrowserIntegrationPackage}/etc/chromium/native-messaging-hosts/org.kde.plasma.browser_integration.json"; };
       "chromium/policies/managed/default.json" = lib.mkIf (defaultProfile != {}) { text = builtins.toJSON defaultProfile; };
       "chromium/policies/managed/extra.json" = lib.mkIf (cfg.extraOpts != {}) { text = builtins.toJSON cfg.extraOpts; };
       # for google-chrome https://www.chromium.org/administrators/linux-quick-start
+      "opt/chrome/native-messaging-hosts/org.kde.plasma.browser_integration.json" = lib.mkIf cfg.enablePlasmaBrowserIntegration
+        { source = "${cfg.plasmaBrowserIntegrationPackage}/etc/opt/chrome/native-messaging-hosts/org.kde.plasma.browser_integration.json"; };
       "opt/chrome/policies/managed/default.json" = lib.mkIf (defaultProfile != {}) { text = builtins.toJSON defaultProfile; };
       "opt/chrome/policies/managed/extra.json" = lib.mkIf (cfg.extraOpts != {}) { text = builtins.toJSON cfg.extraOpts; };
       # for brave
