@@ -4206,6 +4206,8 @@ self: super: with self; {
 
   google-resumable-media = callPackage ../development/python-modules/google-resumable-media { };
 
+  google-search-results = callPackage ../development/python-modules/google-search-results { };
+
   googletrans = callPackage ../development/python-modules/googletrans { };
 
   gorilla = callPackage ../development/python-modules/gorilla { };
