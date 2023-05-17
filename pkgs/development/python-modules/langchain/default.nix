@@ -55,6 +55,7 @@
 , protobuf
 , steamship
 , pdfminer-six
+, lxml
   # test dependencies
 , pytest-vcr
 , pytest-asyncio
@@ -69,7 +70,7 @@
 
 buildPythonPackage rec {
   pname = "langchain";
-  version = "0.0.168";
+  version = "0.0.170";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -78,7 +79,7 @@ buildPythonPackage rec {
     owner = "hwchase17";
     repo = "langchain";
     rev = "refs/tags/v${version}";
-    hash = "sha256-2L5yFkXr6dioEP1QAMXWX6x+IRbGUIW3cxLLxJJjkMI=";
+    hash = "sha256-0hV8X1c+vMJlynNud//hb164oTYmYlsmeSM4dKwC0G4=";
   };
 
   postPatch = ''
@@ -198,6 +199,7 @@ buildPythonPackage rec {
       # hnswlib
       steamship
       pdfminer-six
+      lxml
     ];
   };
 

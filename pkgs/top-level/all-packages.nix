@@ -8833,6 +8833,8 @@ with pkgs;
 
   jet = callPackage ../development/tools/jet { };
 
+  jf = callPackage ../development/tools/jf { };
+
   jfmt = callPackage ../development/tools/jfmt { };
 
   jfsutils = callPackage ../tools/filesystems/jfsutils { };
@@ -37937,7 +37939,7 @@ with pkgs;
 
   ### SCIENCE/PROGRAMMING
 
-  dafny = dotnetPackages.Dafny;
+  dafny = callPackage ../applications/science/logic/dafny { };
 
   groove = callPackage ../applications/science/programming/groove { };
 

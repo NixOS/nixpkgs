@@ -6397,6 +6397,8 @@ self: super: with self; {
 
   msal-extensions = callPackage ../development/python-modules/msal-extensions { };
 
+  mscerts = callPackage ../development/python-modules/mscerts { };
+
   msgpack = callPackage ../development/python-modules/msgpack { };
 
   msgpack-numpy = callPackage ../development/python-modules/msgpack-numpy { };
@@ -9731,8 +9733,6 @@ self: super: with self; {
   python-json-logger = callPackage ../development/python-modules/python-json-logger { };
 
   python-jsonrpc-server = callPackage ../development/python-modules/python-jsonrpc-server { };
-
-  python_keyczar = callPackage ../development/python-modules/python_keyczar { };
 
   python-ldap = callPackage ../development/python-modules/python-ldap {
     inherit (pkgs) openldap cyrus_sasl;

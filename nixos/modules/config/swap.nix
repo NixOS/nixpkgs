@@ -275,12 +275,11 @@ in
                 ''}
                 ${optionalString sw.randomEncryption.enable ''
                   cryptsetup plainOpen -c ${sw.randomEncryption.cipher} -d ${sw.randomEncryption.source} \
-                '' + concatMapStrings (arg: arg + " \\\n") (flatten [
-                  (optional (sw.randomEncryption.sectorSize != null) "--sector-size=${toString sw.randomEncryption.sectorSize}")
-                  (optional (sw.randomEncryption.keySize != null) "--key-size=${toString sw.randomEncryption.keySize}")
-                  (optional sw.randomEncryption.allowDiscards "--allow-discards")
-                ]) + ''
-                  ${sw.device} ${sw.deviceName}
+                  ${concatStringsSep " \\\n" (flatten [
+                    (optional (sw.randomEncryption.sectorSize != null) "--sector-size=${toString sw.randomEncryption.sectorSize}")
+                    (optional (sw.randomEncryption.keySize != null) "--key-size=${toString sw.randomEncryption.keySize}")
+                    (optional sw.randomEncryption.allowDiscards "--allow-discards")
+                  ])} ${sw.device} ${sw.deviceName}
                   mkswap ${sw.realDevice}
                 ''}
               '';

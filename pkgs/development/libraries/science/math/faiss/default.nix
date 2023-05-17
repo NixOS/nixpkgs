@@ -131,7 +131,7 @@ stdenv.mkDerivation {
   '';
 
   # Need buildPythonPackage for this one
-  # pythonCheckImports = [
+  # pythonImportsCheck = [
   #   "faiss"
   # ];
 
