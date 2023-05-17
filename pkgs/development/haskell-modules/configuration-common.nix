@@ -729,6 +729,10 @@ self: super: {
   # https://github.com/commercialhaskell/stackage/issues/6584#issuecomment-1326522815
   tasty-discover = assert super.tasty-discover.version == "4.2.2"; dontCheck super.tasty-discover;
 
+  # Too strict lower bound on tasty-hedgehog
+  # https://github.com/qfpl/tasty-hedgehog/issues/70
+  tasty-sugar = doJailbreak super.tasty-sugar;
+
   # Known issue with nondeterministic test suite failure
   # https://github.com/nomeata/tasty-expected-failure/issues/21
   tasty-expected-failure = dontCheck super.tasty-expected-failure;
