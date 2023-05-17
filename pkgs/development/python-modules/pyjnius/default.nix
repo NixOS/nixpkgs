@@ -8,11 +8,11 @@
 
 buildPythonPackage rec {
   pname = "pyjnius";
-  version = "1.4.2";
+  version = "1.5.0";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-/AY3zaSuEo7EqWrDJ9NS6H6oZnZLAdliZyhwvlOana4=";
+    hash = "sha256-ZjRuJk8eIghrh8XINonqvP7xRQrGR2/YVr6kmLLhNz4=";
   };
   propagatedBuildInputs = [
     six
