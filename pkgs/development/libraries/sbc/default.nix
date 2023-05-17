@@ -9,6 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "1jal98pnrjkzxlkiqy0ykh4qmgnydz9bmsp1jn581p5kddpg92si";
   };
 
+  outputs = [ "out" "dev" ];
+
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libsndfile ];
 
