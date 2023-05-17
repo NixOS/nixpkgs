@@ -10,12 +10,17 @@ in {
     services.syncthing = {
       enable = true;
       settings = {
+        options.crashReportingEnabled = false;
         devices.testDevice = {
           id = testId;
         };
         folders.testFolder = {
           path = "/tmp/test";
           devices = [ "testDevice" ];
+          versioning = {
+            type = "simple";
+            params.keep = "10";
+          };
         };
         gui.user = "guiUser";
       };
