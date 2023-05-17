@@ -1,6 +1,6 @@
-{ buildGoModule
+{ lib
+, buildGoModule
 , fetchFromGitHub
-, lib
 }:
 
 buildGoModule rec {
