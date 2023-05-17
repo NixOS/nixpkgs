@@ -19744,7 +19744,7 @@ with pkgs;
   c-blosc = callPackage ../development/libraries/c-blosc { };
 
   # justStaticExecutables is needed due to https://github.com/NixOS/nix/issues/2990
-  cachix = haskell.lib.justStaticExecutables haskellPackages.cachix_1_3_3;
+  cachix = haskell.lib.justStaticExecutables haskellPackages.cachix;
 
   calcium = callPackage ../development/libraries/calcium { };
 
