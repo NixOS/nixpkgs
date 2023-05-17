@@ -16,7 +16,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs = [ curl ];
+  propagatedBuildInputs = [ curl ];
 
   cmakeFlags = [
     "-DCPR_USE_SYSTEM_CURL=ON"
