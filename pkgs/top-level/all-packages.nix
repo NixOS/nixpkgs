@@ -9488,10 +9488,6 @@ with pkgs;
   nodejs-slim_18 = callPackage ../development/web/nodejs/v18.nix {
     enableNpm = false;
   };
-  nodejs_19 = callPackage ../development/web/nodejs/v19.nix { };
-  nodejs-slim_19 = callPackage ../development/web/nodejs/v19.nix {
-    enableNpm = false;
-  };
   nodejs_20 = callPackage ../development/web/nodejs/v20.nix { };
   nodejs-slim_20 = callPackage ../development/web/nodejs/v20.nix {
     enableNpm = false;
