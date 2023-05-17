@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "jupyter-ydoc";
-  version = "0.3.4";
+  version = "1.0.2";
 
   format = "pyproject";
 
   src = fetchPypi {
     pname = "jupyter_ydoc";
     inherit version;
-    hash = "sha256-WiJi5wvwBLgsxs5xZ16TMKoFj+MNsuh82BJa1N0a5OE=";
+    hash = "sha256-D5W+3j8eCB4H1cV8A8ZY46Ukfg7xiIkHT776IN0+ylM=";
   };
 
   nativeBuildInputs = [
