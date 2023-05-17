@@ -16,7 +16,7 @@ let
 
     x86_64-darwin = fetchurl {
       url = "https://www.scootersoftware.com/files/BCompareOSX-${version}.zip";
-      hash = "sha256-HORBhCRyaDwvij79wEkL0q749CLT7ZUuIxm8TTOxkck=";
+      hash = "sha256-hUzJfUgfCuvB6ADHbsgmEXXgntm01hPnfSjwl7jI70c=";
     };
 
     aarch64-darwin = srcs.x86_64-darwin;
