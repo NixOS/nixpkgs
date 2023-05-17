@@ -43,7 +43,7 @@ buildPythonPackage rec {
       # https://github.com/dpgaspar/Flask-AppBuilder/pull/1734
       name = "flask-appbuilder-wtf3.patch";
       url = "https://github.com/dpgaspar/Flask-AppBuilder/commit/bccb3d719cd3ceb872fe74a9ab304d74664fbf43.patch";
-      hash = "sha256-24mlS3HIs77wKOlwdHah5oks31OOmCBHmcafZT2ITOc=";
+      sha256 = "sha256-24mlS3HIs77wKOlwdHah5oks31OOmCBHmcafZT2ITOc=";
       excludes = [
         "requirements.txt"
         "setup.py"
