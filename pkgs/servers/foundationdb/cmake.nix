@@ -43,7 +43,6 @@ let
           ++ lib.optionals useClang [ llvmPackages.lld ];
 
         separateDebugInfo = true;
-        dontFixCmake = true;
 
         cmakeFlags =
           [ (lib.optionalString officialRelease "-DFDB_RELEASE=TRUE")

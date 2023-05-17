@@ -46,8 +46,6 @@ gcc10Stdenv.mkDerivation rec {
 
   buildInputs = [ openssl zlib snappy lzo ];
 
-  # prevent failing with "cmake-3.13.4/nix-support/setup-hook: line 10: ./3rdParty/rocksdb/RocksDBConfig.cmake.in: No such file or directory"
-  dontFixCmake = true;
   env.NIX_CFLAGS_COMPILE = "-Wno-error";
 
   postPatch = ''

@@ -39,11 +39,6 @@ mkDerivation rec {
     hash = "sha256-IYUkPGgFGI6889IyromMBobIoqSZtALVsSswQ7O1Bp0=";
   };
 
-  patches = [
-    # Fix file cannot create directory: /var/empty/share/polkit-1/actions
-    ./0001-fix-install-phase.patch
-  ];
-
   nativeBuildInputs = [
     cmake
     ninja

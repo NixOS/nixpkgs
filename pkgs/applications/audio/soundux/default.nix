@@ -109,15 +109,10 @@ stdenv.mkDerivation rec {
 
   NIX_CFLAGS_COMPILE = [ "-Wno-error=deprecated-declarations" ];
 
-  # Somehow some of the install destination paths in the build system still
-  # gets transformed to point to /var/empty/share, even though they are at least
-  # relative to the nix output directory with our earlier patching.
   postInstall = ''
-    mv "$out/var/empty/share" "$out"
-    rm -rf "$out/var"
     mkdir "$out/bin"
     ln -s "$out/opt/soundux" "$out/bin"
-    substituteInPlace "$out/share/applications/soundux.desktop" \
+    substituteInPlace "$out/usr/share/applications/soundux.desktop" \
       --replace "/opt/soundux/soundux" "soundux"
   '';
 
