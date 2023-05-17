@@ -55,6 +55,7 @@ let
   inherit (cudaPackages) cudatoolkit cudaFlags cudnn nccl;
 in
 
+assert cudaSupport -> stdenv.isLinux;
 assert cudaSupport -> (cudaPackages.cudaMajorVersion == "11");
 
 # confirm that cudatoolkits are sync'd across dependencies
