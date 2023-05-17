@@ -4,19 +4,19 @@
 
 let
   pname = "bcompare";
-  version = "4.4.4.27058";
+  version = "4.4.6.27348";
 
   throwSystem = throw "Unsupported system: ${stdenv.hostPlatform.system}";
 
   srcs = {
     x86_64-linux = fetchurl {
-      url = "https://www.scootersoftware.com/${pname}-${version}_amd64.deb";
-      sha256 = "sha256-8wJzCCfekr/mrDJCDgoIqMRz21wWjfp5c5sPavZma3g=";
+      url = "https://www.scootersoftware.com/files/${pname}-${version}_amd64.deb";
+      hash = "sha256-PdriIn6eh1maESAAGBI+wgc6JVg85ZTZz9gB/+RiDK0=";
     };
 
     x86_64-darwin = fetchurl {
-      url = "https://www.scootersoftware.com/BCompareOSX-${version}.zip";
-      sha256 = "sha256-UopkyKHvbIZb9rNAJ+l3dEmOX33lQwakNypWCgYDT04=";
+      url = "https://www.scootersoftware.com/files/BCompareOSX-${version}.zip";
+      hash = "sha256-HORBhCRyaDwvij79wEkL0q749CLT7ZUuIxm8TTOxkck=";
     };
 
     aarch64-darwin = srcs.x86_64-darwin;
