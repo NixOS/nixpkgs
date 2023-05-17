@@ -76,12 +76,12 @@ let
       ++ lib.optionals mediaSupport [ ffmpeg ]
   );
 
-  version = "12.0.5";
+  version = "12.0.6";
 
   srcs = {
     x86_64-linux = fetchurl {
       url = "https://cdn.mullvad.net/browser/${version}/mullvad-browser-linux64-${version}_ALL.tar.xz";
-      hash = "sha256-Ezs2pjJNGOinMIskBDwpj70eKSkfcV6ZCKb60I5J23w=";
+      hash = "sha256-XE6HFU38FhnikxGHRHxIGS3Z3Y2JNWH0yq2NejqbROI=";
     };
   };
 
