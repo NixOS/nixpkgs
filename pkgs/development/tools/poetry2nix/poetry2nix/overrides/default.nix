@@ -2670,7 +2670,7 @@ lib.composeManyExtensions [
           python = self.python;
         }
       ).wheel.override {
-        inherit (self) buildPythonPackage bootstrapped-pip setuptools;
+        inherit (self) buildPythonPackage bootstrapped-pip;
       }).overrideAttrs (old: {
         inherit (super.wheel) pname name version src;
       });
