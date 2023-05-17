@@ -7,16 +7,16 @@
 
 buildPythonPackage rec {
   pname = "xlsxwriter";
-  version = "3.0.3";
+  version = "3.1.0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "jmcnamara";
     repo = "XlsxWriter";
     rev = "RELEASE_${version}";
-    hash = "sha256-9fIxNkOdM+Bz1F9AWq02H3LLQnefxGSAtp9kM2OtJ9M=";
+    hash = "sha256-wlNtJQPX7oHUzscZP6TKoJz0aCPreyDLl51XI1i4IsY=";
   };
 
   nativeCheckInputs = [
