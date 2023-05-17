@@ -17,6 +17,7 @@
 , tzdata
 , cmake
 , perl
+, git
   # nix has a problem with the `?` in the feature list
   # enabling kafka will produce a vector with no features at all
 , enableKafka ? false
@@ -28,12 +29,12 @@
     # building on linux fails without this feature flag (both x86_64 and AArch64)
     ++ lib.optionals enableKafka [ "rdkafka?/gssapi-vendored" ]
     ++ lib.optional stdenv.targetPlatform.isUnix "unix")
+, nix-update-script
 }:
 
 let
   pname = "vector";
-  pinData = lib.importJSON ./pin.json;
-  version = pinData.version;
+  version = "0.29.1";
 in
 rustPlatform.buildRustPackage {
   inherit pname version;
@@ -42,16 +43,22 @@ rustPlatform.buildRustPackage {
     owner = "vectordotdev";
     repo = pname;
     rev = "v${version}";
-    sha256 = pinData.sha256;
+    sha256 = "sha256-4WqO7i1xthUU2bTzaS5poTh+wemjvqNAUFIDN73f7kw=";
   };
 
-  patches = [
-    # replace with https://github.com/vectordotdev/vector/pull/15093 when ready
-    ./fix-for-rust-1.66.diff
-  ];
-
-  cargoSha256 = pinData.cargoSha256;
-  nativeBuildInputs = [ pkg-config cmake perl ];
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "azure_core-0.5.0" = "sha256-fojO7dhntpymMjV58TtYb7N4UN6rOp30D54x09RDXfQ=";
+      "chrono-0.4.24" = "sha256-SVPRfixSt0m14MmOcmBVseC/moj1DIA3B+m0pvT41K0=";
+      "datadog-filter-0.1.0" = "sha256-CNAIoDyJJo+D2Qzt6Fb2FwpQpzX02XurT8j1gHkz1bE=";
+      "heim-0.1.0-rc.1" = "sha256-ODKEQ1udt7FlxI5fvoFMG7C2zmM45eeEYDUEaLTsdYo=";
+      "nix-0.26.2" = "sha256-uquYvRT56lhupkrESpxwKEimRFhmYvri10n3dj0f2yg=";
+      "tokio-util-0.7.4" = "sha256-rAzj44O+GOZhG+o6FVN5qCcG/NWxW8fUpScm+xsRjIs=";
+      "tracing-0.2.0" = "sha256-YAxeEofFA43PX2hafh3RY+C81a2v6n1fGzYz2FycC3M=";
+    };
+  };
+  nativeBuildInputs = [ pkg-config cmake perl git ];
   buildInputs = [ oniguruma openssl protobuf rdkafka zstd ]
     ++ lib.optionals stdenv.isDarwin [ Security libiconv coreutils CoreServices ];
 
@@ -102,23 +109,18 @@ rustPlatform.buildRustPackage {
   postPatch = ''
     substituteInPlace ./src/dns.rs \
       --replace "#[tokio::test]" ""
-
-    ${lib.optionalString (!builtins.elem "transforms-geoip" features) ''
-        substituteInPlace ./Cargo.toml --replace '"transforms-geoip",' ""
-    ''}
   '';
 
   passthru = {
     inherit features;
-    updateScript = ./update.sh;
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {
-    description = "A high-performance logs, metrics, and events router";
-    homepage = "https://github.com/timberio/vector";
-    license = with licenses; [ asl20 ];
+    description = "A high-performance observability data pipeline";
+    homepage = "https://github.com/vectordotdev/vector";
+    license = licenses.mpl20;
     maintainers = with maintainers; [ thoughtpolice happysalada ];
     platforms = with platforms; all;
   };
 }
-

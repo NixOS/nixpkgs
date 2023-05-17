@@ -7,11 +7,11 @@
 
 stdenv.mkDerivation rec {
   pname = "acpica-tools";
-  version = "20220331";
+  version = "20230331";
 
   src = fetchurl {
     url = "https://acpica.org/sites/acpica/files/acpica-unix-${version}.tar.gz";
-    hash = "sha256-rK/2ixTx4IBOu/xLlyaKTMvvz6BTsC7Zkk8rFNipjiE=";
+    hash = "sha256-DF1pXWBaqmFwnzxj9XoambiQIpFyOZhEawgTtXrDEOI=";
   };
 
   nativeBuildInputs = [ bison flex ];
@@ -27,9 +27,19 @@ stdenv.mkDerivation rec {
     "iasl"
   ];
 
-  NIX_CFLAGS_COMPILE = "-O3";
+  env.NIX_CFLAGS_COMPILE = toString ([
+    "-O3"
+  ] ++ lib.optionals (stdenv.cc.isGNU) [
+    # Needed with GCC 12
+    "-Wno-dangling-pointer"
+  ]);
 
   enableParallelBuilding = true;
+
+  # i686 builds fail with hardening enabled (due to -Wformat-overflow). Disable
+  # -Werror altogether to make this derivation less fragile to toolchain
+  # updates.
+  NOWERROR = "TRUE";
 
   # We can handle stripping ourselves.
   # Unless we are on Darwin. Upstream makefiles degrade coreutils install to cp if _APPLE is detected.

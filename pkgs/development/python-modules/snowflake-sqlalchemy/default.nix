@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "snowflake-sqlalchemy";
-  version = "1.4.5";
+  version = "1.4.6";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-clUDElZ17xxbrJ+O0oplzVAxL1afWDwdk/g5ZofEhOs=";
+    hash = "sha256-xkx8QlabOCodqj4tRYxpln0z+HHVwYdqlXkaitzmKx8=";
   };
 
   propagatedBuildInputs = [
@@ -38,5 +38,8 @@ buildPythonPackage rec {
     homepage = "https://github.com/snowflakedb/snowflake-sqlalchemy";
     license = licenses.asl20;
     maintainers = [ ];
+
+    # https://github.com/snowflakedb/snowflake-sqlalchemy/issues/380
+    broken = versionAtLeast sqlalchemy.version "2";
   };
 }

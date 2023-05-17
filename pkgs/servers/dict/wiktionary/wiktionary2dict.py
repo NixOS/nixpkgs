@@ -2,7 +2,6 @@
 # Based on code from wiktiondict by Greg Hewgill
 import re
 import sys
-import codecs
 import os
 import textwrap
 import time
@@ -48,7 +47,7 @@ class Delimiter:
         return self.c
 
 def Tokenise(s):
-    s = unicode(s)
+    s = str(s)
     stack = []
     last = 0
     i = 0
@@ -109,17 +108,17 @@ def Tokenise(s):
         yield s[last:i]
 
 def processSub(templates, tokens, args):
-    t = tokens.next()
-    if not isinstance(t, unicode):
+    t = next(tokens)
+    if not isinstance(t, str):
         raise SyntaxError
     name = t
-    t = tokens.next()
+    t = next(tokens)
     default = None
     if isinstance(t, Delimiter) and t.c == '|':
         default = ""
         while True:
-            t = tokens.next()
-            if isinstance(t, unicode):
+            t = next(tokens)
+            if isinstance(t, str):
                 default += t
             elif isinstance(t, OpenDouble):
                 default += processTemplateCall(templates, tokens, args)
@@ -128,7 +127,7 @@ def processSub(templates, tokens, args):
             elif isinstance(t, CloseTriple):
                 break
             else:
-                print "Unexpected:", t
+                print("Unexpected:", t)
                 raise SyntaxError()
     if name in args:
         return args[name]
@@ -142,14 +141,14 @@ def processTemplateCall(templates, tokens, args):
     template = tokens.next().strip().lower()
     args = {}
     a = 1
-    t = tokens.next()
+    t = next(tokens)
     while True:
         if isinstance(t, Delimiter):
-            name = unicode(a)
+            name = str(a)
             arg = ""
             while True:
-                t = tokens.next()
-                if isinstance(t, unicode):
+                t = next(tokens)
+                if isinstance(t, str):
                     arg += t
                 elif isinstance(t, OpenDouble):
                     arg += processTemplateCall(templates, tokens, args)
@@ -163,9 +162,9 @@ def processTemplateCall(templates, tokens, args):
                 name = arg.strip()
                 arg = ""
                 while True:
-                    t = tokens.next()
-                    if isinstance(t, (unicode, Equals)):
-                        arg += unicode(t)
+                    t = next(tokens)
+                    if isinstance(t, (str, Equals)):
+                        arg += str(t)
                     elif isinstance(t, OpenDouble):
                         arg += processTemplateCall(templates, tokens, args)
                     elif isinstance(t, OpenTriple):
@@ -181,7 +180,7 @@ def processTemplateCall(templates, tokens, args):
         elif isinstance(t, CloseDouble):
             break
         else:
-            print "Unexpected:", t
+            print("Unexpected:", t)
             raise SyntaxError
     #print template, args
     if template[0] == '#':
@@ -208,7 +207,7 @@ def processTemplateCall(templates, tokens, args):
             else:
                 return ""
         else:
-            print "Unknown ParserFunction:", template
+            print("Unknown ParserFunction:", template)
             sys.exit(1)
     if template not in templates:
         return "{{%s}}" % template
@@ -225,13 +224,13 @@ def process(templates, s, args = {}):
     tokens = Tokenise(s)
     try:
         while True:
-            t = tokens.next()
+            t = next(tokens)
             if isinstance(t, OpenDouble):
                 r += processTemplateCall(templates, tokens, args)
             elif isinstance(t, OpenTriple):
                 r += processSub(templates, tokens, args)
             else:
-                r += unicode(t)
+                r += str(t)
     except StopIteration:
         pass
     return r
@@ -250,11 +249,11 @@ def test():
         't6': "t2demo|a",
     }
     def t(text, expected):
-        print "text:", text
+        print("text:", text)
         s = process(templates, text)
         if s != expected:
-            print "got:", s
-            print "expected:", expected
+            print("got:", s)
+            print("expected:", expected)
             sys.exit(1)
     t("{{Name-example}}", "I am a template example, my first name is '''{{{firstName}}}''' and my last name is '''{{{lastName}}}'''. You can reference my page at [[{{{lastName}}}, {{{firstName}}}]].")
     t("{{Name-example | firstName=John | lastName=Smith }}", "I am a template example, my first name is '''John''' and my last name is '''Smith'''. You can reference my page at [[Smith, John]].")
@@ -463,7 +462,7 @@ Parts = {
     'Verbal noun': "v.n.",
 }
 PartsUsed = {}
-for p in Parts.keys():
+for p in list(Parts.keys()):
     PartsUsed[p] = 0
 
 def encode(s):
@@ -641,7 +640,7 @@ def formatNormal(word, doc):
                 #    r += "  "*(depth-1) + word + " (" + p + ")\n\n"
                 r += "  "*(depth-1) + section.heading + "\n\n"
             else:
-                print >>errors, "Unknown part: (%s) %s" % (word, section.heading)
+                print("Unknown part: (%s) %s" % (word, section.heading), file=errors)
                 return ""
         elif depth > posdepth:
             return ""
@@ -709,8 +708,8 @@ class WikiHandler(xml.sax.ContentHandler):
         if self.element == "text":
             if self.page:
                 if self.page in self.long:
-                    print self.page, len(self.text)
-                    print
+                    print(self.page, len(self.text))
+                    print()
                 self.doPage(self.page, self.text)
                 self.page = None
             self.text = ""
@@ -760,8 +759,7 @@ info = """   This file was converted from the original database on:
   Wiktionary is available under the GNU Free Documentation License.
 """ % (time.ctime(), os.path.basename(fn))
 
-errors = codecs.open("mkdict.err", "w", "utf_8")
-e = codecs.getencoder("utf_8")
+errors = open("mkdict.err", "w")
 
 Templates = {}
 f = os.popen("bunzip2 -c %s" % fn, "r")
@@ -769,10 +767,9 @@ xml.sax.parse(f, TemplateHandler())
 f.close()
 
 f = os.popen("bunzip2 -c %s" % fn, "r")
-out = codecs.getwriter("utf_8")(
-        os.popen("dictfmt -p wiktionary-en --locale en_US.UTF-8 --columns 0 -u http://en.wiktionary.org", "w"))
+out = os.popen("dictfmt -p wiktionary-en --locale en_US.UTF-8 --columns 0 -u http://en.wiktionary.org", "w")
 
-out.write(("%%h English Wiktionary\n%s" % info).encode('utf-8'))
+out.write("%%h English Wiktionary\n%s" % info)
 xml.sax.parse(f, WordHandler())
 f.close()
 out.close()

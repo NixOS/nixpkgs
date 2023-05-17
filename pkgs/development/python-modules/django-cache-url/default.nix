@@ -20,7 +20,7 @@ buildPythonPackage rec {
     sed -i '/--cov/d' setup.cfg
   '';
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {
     homepage = "https://github.com/epicserve/django-cache-url";

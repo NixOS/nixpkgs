@@ -12,7 +12,7 @@
 , meta
 }:
 
-buildPythonApplication rec {
+buildPythonApplication {
   pname = "yubioath-flutter-helper";
   inherit src version meta;
 
@@ -23,6 +23,8 @@ buildPythonApplication rec {
     sed -i \
       -e 's,zxing-cpp = .*,zxing-cpp = "*",g' \
       -e 's,mss = .*,mss = "*",g' \
+      -e 's,yubikey-manager = .*,yubikey-manager = "*",g' \
+      -e 's,Pillow = .*,Pillow = "*",g' \
       pyproject.toml
   '';
 

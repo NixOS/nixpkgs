@@ -15,10 +15,10 @@ buildPythonPackage rec {
     owner = "kplindegaard";
     repo = pname;
     rev = "refs/tags/${version}";
-    sha256 = "sha256-6JzFbhUq8XR1nYkadPeYqItcLZDIFAwTe3BriEW2nVI=";
+    hash = "sha256-6JzFbhUq8XR1nYkadPeYqItcLZDIFAwTe3BriEW2nVI=";
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     nose
   ];
 

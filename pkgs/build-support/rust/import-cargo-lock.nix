@@ -1,4 +1,4 @@
-{ fetchgit, fetchurl, lib, runCommand, cargo, jq }:
+{ fetchgit, fetchurl, lib, writers, python3Packages, runCommand, cargo, jq }:
 
 {
   # Cargo lock file
@@ -6,6 +6,18 @@
 
   # Cargo lock file contents as string
 , lockFileContents ? null
+
+  # Allow `builtins.fetchGit` to be used to not require hashes for git dependencies
+, allowBuiltinFetchGit ? false
+
+  # Additional registries to pull sources from
+  #   { "https://<registry index URL>" = "https://<registry download URL>"; }
+  # where:
+  # - "index URL" is the "index" value of the configuration entry for that registry
+  #   https://doc.rust-lang.org/cargo/reference/registries.html#using-an-alternate-registry
+  # - "download URL" is the "dl" value of its associated index configuration
+  #   https://doc.rust-lang.org/cargo/reference/registry-index.html#index-configuration
+, extraRegistries ? {}
 
   # Hashes for git dependencies.
 , outputHashes ? {}
@@ -33,19 +45,21 @@ let
     then builtins.readFile lockFile
     else args.lockFileContents;
 
-  packages = (builtins.fromTOML lockFileContents).package;
+  parsedLockFile = builtins.fromTOML lockFileContents;
+
+  packages = parsedLockFile.package;
 
   # There is no source attribute for the source package itself. But
   # since we do not want to vendor the source package anyway, we can
   # safely skip it.
-  depPackages = (builtins.filter (p: p ? "source") packages);
+  depPackages = builtins.filter (p: p ? "source") packages;
 
   # Create dependent crates from packages.
   #
   # Force evaluation of the git SHA -> hash mapping, so that an error is
   # thrown if there are stale hashes. We cannot rely on gitShaOutputHash
   # being evaluated otherwise, since there could be no git dependencies.
-  depCrates = builtins.deepSeq (gitShaOutputHash) (builtins.map mkCrate depPackages);
+  depCrates = builtins.deepSeq gitShaOutputHash (builtins.map mkCrate depPackages);
 
   # Map package name + version to git commit SHA for packages with a git source.
   namesGitShas = builtins.listToAttrs (
@@ -75,34 +89,43 @@ let
 
   # We can't use the existing fetchCrate function, since it uses a
   # recursive hash of the unpacked crate.
-  fetchCrate = pkg:
-    assert lib.assertMsg (pkg ? checksum) ''
+  fetchCrate = pkg: downloadUrl:
+    let
+      checksum = pkg.checksum or parsedLockFile.metadata."checksum ${pkg.name} ${pkg.version} (${pkg.source})";
+    in
+    assert lib.assertMsg (checksum != null) ''
       Package ${pkg.name} does not have a checksum.
-      Please note that the Cargo.lock format where checksums used to be listed
-      under [metadata] is not supported.
-      If that is the case, running `cargo update` with a recent toolchain will
-      automatically update the format along with the crate's depenendencies.
     '';
     fetchurl {
       name = "crate-${pkg.name}-${pkg.version}.tar.gz";
-      url = "https://crates.io/api/v1/crates/${pkg.name}/${pkg.version}/download";
-      sha256 = pkg.checksum;
+      url = "${downloadUrl}/${pkg.name}/${pkg.version}/download";
+      sha256 = checksum;
     };
+
+  registries = {
+    "https://github.com/rust-lang/crates.io-index" = "https://crates.io/api/v1/crates";
+  } // extraRegistries;
+
+  # Replaces values inherited by workspace members.
+  replaceWorkspaceValues = writers.writePython3 "replace-workspace-values"
+    { libraries = with python3Packages; [ tomli tomli-w ]; flakeIgnore = [ "E501" ]; }
+    (builtins.readFile ./replace-workspace-values.py);
 
   # Fetch and unpack a crate.
   mkCrate = pkg:
     let
       gitParts = parseGit pkg.source;
+      registryIndexUrl = lib.removePrefix "registry+" pkg.source;
     in
-      if pkg.source == "registry+https://github.com/rust-lang/crates.io-index" then
+      if lib.hasPrefix "registry+" pkg.source && builtins.hasAttr registryIndexUrl registries then
       let
-        crateTarball = fetchCrate pkg;
+        crateTarball = fetchCrate pkg registries.${registryIndexUrl};
       in runCommand "${pkg.name}-${pkg.version}" {} ''
         mkdir $out
         tar xf "${crateTarball}" -C $out --strip-components=1
 
         # Cargo is happy with largely empty metadata.
-        printf '{"files":{},"package":"${pkg.checksum}"}' > "$out/.cargo-checksum.json"
+        printf '{"files":{},"package":"${crateTarball.outputHash}"}' > "$out/.cargo-checksum.json"
       ''
       else if gitParts != null then
       let
@@ -117,12 +140,22 @@ let
           If you use `buildRustPackage`, you can add this attribute to the `cargoLock`
           attribute set.
         '';
-        sha256 = gitShaOutputHash.${gitParts.sha} or missingHash;
-        tree = fetchgit {
-          inherit sha256;
-          inherit (gitParts) url;
-          rev = gitParts.sha; # The commit SHA is always available.
-        };
+        tree =
+          if gitShaOutputHash ? ${gitParts.sha} then
+            fetchgit {
+              inherit (gitParts) url;
+              rev = gitParts.sha; # The commit SHA is always available.
+              sha256 = gitShaOutputHash.${gitParts.sha};
+            }
+          else if allowBuiltinFetchGit then
+            builtins.fetchGit {
+              inherit (gitParts) url;
+              rev = gitParts.sha;
+              allRefs = true;
+              submodules = true;
+            }
+          else
+            missingHash;
       in runCommand "${pkg.name}-${pkg.version}" {} ''
         tree=${tree}
 
@@ -155,8 +188,13 @@ let
         echo Found crate ${pkg.name} at $crateCargoTOML
         tree=$(dirname $crateCargoTOML)
 
-        cp -prvd "$tree/" $out
+        cp -prvL "$tree/" $out
         chmod u+w $out
+
+        if grep -q workspace "$out/Cargo.toml"; then
+          chmod u+w "$out/Cargo.toml"
+          ${replaceWorkspaceValues} "$out/Cargo.toml" "${tree}/Cargo.toml"
+        fi
 
         # Cargo is happy with empty metadata.
         printf '{"files":{},"package":null}' > "$out/.cargo-checksum.json"
@@ -171,10 +209,15 @@ let
       ''
       else throw "Cannot handle crate source: ${pkg.source}";
 
-  vendorDir = runCommand "cargo-vendor-dir" (lib.optionalAttrs (lockFile == null) {
-    inherit lockFileContents;
-    passAsFile = [ "lockFileContents" ];
-  }) ''
+  vendorDir = runCommand "cargo-vendor-dir"
+    (if lockFile == null then {
+      inherit lockFileContents;
+      passAsFile = [ "lockFileContents" ];
+    } else {
+      passthru = {
+        inherit lockFile;
+      };
+    }) ''
     mkdir -p $out/.cargo
 
     ${
@@ -184,14 +227,23 @@ let
     }
 
     cat > $out/.cargo/config <<EOF
-    [source.crates-io]
-    replace-with = "vendored-sources"
+[source.crates-io]
+replace-with = "vendored-sources"
 
-    [source.vendored-sources]
-    directory = "cargo-vendor-dir"
-    EOF
+[source.vendored-sources]
+directory = "cargo-vendor-dir"
+EOF
 
     declare -A keysSeen
+
+    for registry in ${toString (builtins.attrNames extraRegistries)}; do
+      cat >> $out/.cargo/config <<EOF
+
+[source."$registry"]
+registry = "$registry"
+replace-with = "vendored-sources"
+EOF
+    done
 
     for crate in ${toString depCrates}; do
       # Link the crate directory, removing the output path hash from the destination.

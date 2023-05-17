@@ -137,7 +137,7 @@ repo="$(echo "${provider_source_url}" | cut -d '/' -f 5)"
 update_attr repo "${repo}"
 
 if [[ ${spdx} == 1 ]]; then
-  spdx="$(curl -L -s "https://api.github.com/repos/${org}/${repo}/license" | jq -r '.license.spdx_id')"
+  spdx="$(curl -L -s ${GITHUB_TOKEN:+-u ":${GITHUB_TOKEN}"} "https://api.github.com/repos/${org}/${repo}/license" | jq -r '.license.spdx_id')"
   update_attr spdx "${spdx}"
 fi
 

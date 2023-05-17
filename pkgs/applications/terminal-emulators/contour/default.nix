@@ -13,7 +13,7 @@
 , fmt
 , microsoft_gsl
 , range-v3
-, libyamlcpp
+, yaml-cpp
 , ncurses
 , file
 , darwin
@@ -64,7 +64,7 @@ mkDerivation rec {
     fmt
     microsoft_gsl
     range-v3
-    libyamlcpp
+    yaml-cpp
   ] ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.libs.utmp ];
 
   preConfigure = ''

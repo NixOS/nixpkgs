@@ -8,12 +8,12 @@
 }:
 
 let
-  version = "1.10.3";
+  version = "1.10.8";
   pname = "session-desktop";
 
   src = fetchurl {
     url = "https://github.com/oxen-io/session-desktop/releases/download/v${version}/session-desktop-linux-x86_64-${version}.AppImage";
-    sha256 = "sha256-I9YyzfI8EqH8LZe5E5BnD9lGPAdQo++l3yRClfN7+pY=";
+    sha256 = "sha256-r/MQlZ3dmQmQZ/FCYIIF2sh9+VXwG97PFfTIXIQijx8=";
   };
   appimage = appimageTools.wrapType2 {
     inherit version pname src;
@@ -61,5 +61,6 @@ stdenvNoCC.mkDerivation {
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ alexnortung ];
     platforms = [ "x86_64-linux" ];
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
   };
 }

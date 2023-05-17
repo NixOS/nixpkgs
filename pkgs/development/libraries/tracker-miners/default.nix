@@ -46,11 +46,11 @@
 
 stdenv.mkDerivation rec {
   pname = "tracker-miners";
-  version = "3.4.2";
+  version = "3.5.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "EB42CPHCi/7YriVSL3pyC1WfiJp24oCvvlCk2LBk+Sw=";
+    sha256 = "F5ZmA9xDKphSa0kFhqSKzX+fWZNfeJXfxRcppGppAaM=";
   };
 
   nativeBuildInputs = [
@@ -116,6 +116,7 @@ stdenv.mkDerivation rec {
     # to be safe due to the general state of the project
     "-Dminer_rss=false"
   ] ++ lib.optionals (!stdenv.isLinux) [
+    "-Dbattery_detection=none"
     "-Dnetwork_manager=disabled"
     "-Dsystemd_user_services=false"
   ];

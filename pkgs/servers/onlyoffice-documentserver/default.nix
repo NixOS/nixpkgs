@@ -1,6 +1,6 @@
 { lib
 , stdenv
-, buildFHSUserEnvBubblewrap
+, buildFHSEnv
 , corefonts
 , dejavu_fonts
 , dpkg
@@ -15,11 +15,11 @@ let
   # var/www/onlyoffice/documentserver/server/DocService/docservice
   onlyoffice-documentserver = stdenv.mkDerivation rec {
     pname = "onlyoffice-documentserver";
-    version = "7.2.2";
+    version = "7.3.3";
 
     src = fetchurl {
       url = "https://github.com/ONLYOFFICE/DocumentServer/releases/download/v${lib.concatStringsSep "." (lib.take 3 (lib.splitVersion version))}/onlyoffice-documentserver_amd64.deb";
-      sha256 = "sha256-4MJLvc2ExIAwGnEkBvMJSINp+7SxOyhtKnNNA9QVxMk=";
+      sha256 = "sha256-WeDXIDrjICGDVnpkdGLyA9plW50Kz3bHXU48DdHReHM=";
     };
 
     preferLocalBuild = true;
@@ -57,7 +57,7 @@ let
     dontStrip = true;
 
     passthru = {
-      fhs = buildFHSUserEnvBubblewrap {
+      fhs = buildFHSEnv {
         name = "onlyoffice-wrapper";
 
         targetPkgs = pkgs: [
@@ -144,7 +144,7 @@ let
       homepage = "ONLYOFFICE Document Server is an online office suite comprising viewers and editors";
       license = licenses.agpl3;
       platforms = [ "x86_64-linux" ];
-      sourceProvenance = sourceTypes.binaryNativeCode;
+      sourceProvenance = [ sourceTypes.binaryNativeCode ];
       maintainers = with maintainers; [ SuperSandro2000 ];
     };
   };

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, ffmpeg, libebur128
+{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, ffmpeg_4, libebur128
 , libresample, taglib, zlib }:
 
 stdenv.mkDerivation rec {
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake pkg-config ];
-  buildInputs = [ ffmpeg libebur128 libresample taglib zlib ];
+  buildInputs = [ ffmpeg_4 libebur128 libresample taglib zlib ];
 
   postInstall = ''
     sed -e "1aPATH=$out/bin:\$PATH" -i "$out/bin/rgbpm"

@@ -20,7 +20,12 @@ rustPlatform.buildRustPackage rec {
     ./fix-for-rust-1.65.diff
   ];
 
-  cargoHash = "sha256-xF1J2Pr4qtNFcd2kec4tnbdYxoLK+jRnzp8p+cmNOcI=";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "fd-0.2.3" = "sha256-Xps5s30urCZ8FZYce41nOZGUAk7eRyvObUS/mMx6Tfg=";
+    };
+  };
 
   nativeBuildInputs = [ pkg-config ];
 

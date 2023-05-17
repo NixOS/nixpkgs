@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   # gcc-10. Otherwise build fails as:
   #   ld: tui.o:/build/iftop-1.0pre4/ui_common.h:41: multiple definition of `service_hash';
   #     iftop.o:/build/iftop-1.0pre4/ui_common.h:41: first defined here
-  NIX_CFLAGS_COMPILE = "-fcommon";
+  env.NIX_CFLAGS_COMPILE = "-fcommon";
 
   passthru.tests = { inherit (nixosTests) iftop; };
 

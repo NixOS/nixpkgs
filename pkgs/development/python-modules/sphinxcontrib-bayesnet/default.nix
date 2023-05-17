@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "sphinxcontrib-bayesnet";
-  version = "0.1";
+  version = "0.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0x1kisvj7221cxfzmwplx3xlwbavl636fpncnjh7gghp1af71clw";
+    hash = "sha256-+M+K8WzQqxQUGgAgGPK+isf3gKK7HOrdI6nNW/V8Wv0=";
   };
 
   propagatedBuildInputs = [ sphinx sphinxcontrib-tikz ];

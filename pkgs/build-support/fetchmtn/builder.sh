@@ -1,3 +1,4 @@
+if [ -e .attrs.sh ]; then source .attrs.sh; fi
 source $stdenv/setup
 
 set -x
@@ -7,7 +8,7 @@ if ! [ -f "$cacheDB" ]; then
     mtn --db "$cacheDB" db init
 fi
 
-header "getting revision $selector";
+echo "getting revision $selector";
 
 done=;
 for source in $dbs; do
@@ -31,9 +32,7 @@ for source in $dbs; do
     fi;
 done;
 
-stopNest;
-
-header "checking out the revision $revision";
+echo "checking out the revision $revision";
 
 if test -n "$done"; then
     mtn checkout --db "$cacheDB" -r "$revision" "$out" -b "${branch}"
@@ -42,10 +41,6 @@ else
     exit 1;
 fi;
 
-stopNest
-
-header "clearing _MTN in the output"
+echo "clearing _MTN in the output"
 
 rm -rf "$out/_MTN"
-
-stopNest

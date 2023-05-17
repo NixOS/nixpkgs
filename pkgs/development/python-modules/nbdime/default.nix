@@ -20,6 +20,7 @@
 , tornado
 , requests
 , gitpython
+, jupyter-server
 , jupyter-server-mathjax
 , notebook
 , jinja2
@@ -27,14 +28,14 @@
 
 buildPythonPackage rec {
   pname = "nbdime";
-  version = "3.1.1";
+  version = "3.2.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Z3ZzIOlxN09wGhdapZq9OlVHIwOdOfrpCOctFjMNZIs=";
+    hash = "sha256-MUCaMPhI/8azJUBpfoLVoKG4TcwycWynTni8xLRXxFM=";
   };
 
   nativeBuildInputs = [
@@ -57,7 +58,7 @@ buildPythonPackage rec {
     jinja2
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     hypothesis
     pytest-timeout
     pytest-tornado

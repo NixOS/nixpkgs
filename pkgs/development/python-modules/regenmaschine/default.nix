@@ -1,7 +1,6 @@
 { lib
 , aiohttp
 , aresponses
-, asynctest
 , buildPythonPackage
 , fetchFromGitHub
 , poetry-core
@@ -15,16 +14,16 @@
 
 buildPythonPackage rec {
   pname = "regenmaschine";
-  version = "2022.11.2";
+  version = "2023.05.0";
   format = "pyproject";
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "bachya";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-0ih0qlN9NxkYkcRl990gVyZF33ymSNUJoNFzpcnqu1o=";
+    hash = "sha256-u6GHDiTGa7v9tK/4VTVPQL/2kjomo0x/EGC7LD8lMvM=";
   };
 
   nativeBuildInputs = [
@@ -36,9 +35,8 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     aresponses
-    asynctest
     pytest-aiohttp
     pytest-asyncio
     pytest-mock

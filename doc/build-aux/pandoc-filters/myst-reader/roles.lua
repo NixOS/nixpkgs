@@ -17,9 +17,16 @@ function Inlines(inlines)
     if correct_tags then
       -- docutils supports alphanumeric strings separated by [-._:]
       -- We are slightly more liberal for simplicity.
-      local role = first.text:match('^{([-._+:%w]+)}$')
-      if role ~= nil then
-        inlines:remove(i)
+      -- Allow preceding punctuation (eg '('), otherwise '({file}`...`)'
+      -- does not match. Also allow anything followed by a non-breaking space
+      -- since pandoc emits those after certain abbreviations (e.g. e.g.).
+      local prefix, role = first.text:match('^(.*){([-._+:%w]+)}$')
+      if role ~= nil and (prefix == '' or prefix:match("^.*[%p ]$") ~= nil) then
+        if prefix == '' then
+          inlines:remove(i)
+        else
+          first.text = prefix
+        end
         second.attributes['role'] = role
         second.classes:insert('interpreted-text')
       end

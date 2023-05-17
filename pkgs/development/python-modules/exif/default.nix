@@ -9,12 +9,12 @@ buildPythonPackage rec {
     owner = "TNThieding";
     repo = "exif";
     rev = "v${version}";
-    sha256 = "sha256-XSORawioXo8oPVZ3Jnxqa6GFIxnQZMT0vJitdmpBj0E=";
+    hash = "sha256-XSORawioXo8oPVZ3Jnxqa6GFIxnQZMT0vJitdmpBj0E=";
   };
 
   propagatedBuildInputs = [ plum-py ];
 
-  checkInputs = [ pytestCheckHook baseline ];
+  nativeCheckInputs = [ pytestCheckHook baseline ];
 
   pythonImportsCheck = [ "exif" ];
 

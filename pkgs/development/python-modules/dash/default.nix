@@ -21,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "dash";
-  version = "2.6.2";
+  version = "2.9.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -30,16 +30,16 @@ buildPythonPackage rec {
     owner = "plotly";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-d2p3ahOqBA4n8XhMR6juluEGNM5EyT+GQFlDcuHZMqs=";
+    hash = "sha256-bxWSYDKKnsWs/bTRkIsNJ2hOIoHS2xhl4IIW+uEnbMU=";
   };
 
   propagatedBuildInputs = [
-    plotly
-    flask
-    flask-compress
     dash-core-components
     dash-html-components
     dash-table
+    flask
+    flask-compress
+    plotly
   ];
 
   passthru.optional-dependencies = {
@@ -54,10 +54,10 @@ buildPythonPackage rec {
     ];
   };
 
-  checkInputs = [
-    pytestCheckHook
-    pytest-mock
+  nativeCheckInputs = [
     mock
+    pytest-mock
+    pytestCheckHook
     pyyaml
   ];
 
@@ -67,6 +67,11 @@ buildPythonPackage rec {
     "tests/integration"
   ];
 
+  disabledTests = [
+    # Failed: DID NOT RAISE <class 'ImportError'>
+    "test_missing_flask_compress_raises"
+  ];
+
   pythonImportsCheck = [
     "dash"
   ];
@@ -74,6 +79,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python framework for building analytical web applications";
     homepage = "https://dash.plot.ly/";
+    changelog = "https://github.com/plotly/dash/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ antoinerg ];
   };

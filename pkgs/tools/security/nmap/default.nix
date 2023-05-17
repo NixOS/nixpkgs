@@ -6,8 +6,6 @@
 , withLua ? true
 }:
 
-with lib;
-
 stdenv.mkDerivation rec {
   pname = "nmap";
   version = "7.93";
@@ -18,7 +16,7 @@ stdenv.mkDerivation rec {
   };
 
   patches = [ ./zenmap.patch ]
-    ++ optionals stdenv.cc.isClang [(
+    ++ lib.optionals stdenv.cc.isClang [(
       # Fixes a compile error due an ambiguous reference to bind(2) in
       # nping/EchoServer.cc, which is otherwise resolved to std::bind.
       # https://github.com/nmap/nmap/pull/1363
@@ -29,7 +27,7 @@ stdenv.mkDerivation rec {
       }
     )];
 
-  prePatch = optionalString stdenv.isDarwin ''
+  prePatch = lib.optionalString stdenv.isDarwin ''
     substituteInPlace libz/configure \
         --replace /usr/bin/libtool ar \
         --replace 'AR="libtool"' 'AR="ar"' \
@@ -43,7 +41,7 @@ stdenv.mkDerivation rec {
     "--without-zenmap"
   ];
 
-  makeFlags = optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+  makeFlags = lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
     "AR=${stdenv.cc.bintools.targetPrefix}ar"
     "RANLIB=${stdenv.cc.bintools.targetPrefix}ranlib"
     "CC=${stdenv.cc.targetPrefix}gcc"
@@ -56,7 +54,7 @@ stdenv.mkDerivation rec {
 
   doCheck = false; # fails 3 tests, probably needs the net
 
-  meta = {
+  meta = with lib; {
     description = "A free and open source utility for network discovery and security auditing";
     homepage    = "http://www.nmap.org";
     license     = licenses.gpl2;

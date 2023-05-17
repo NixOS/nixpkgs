@@ -3,17 +3,17 @@
 }:
 
 buildPythonPackage rec {
-  version = "4.26.0";
+  version = "4.28.0";
   pname = "mt-940";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-HL56TXZNkjVnap0XIhBT/xDA2N80NLCLpvuXkxXu6zE=";
+    hash = "sha256-ydTOaijDmA2ogIONzRMMoz+5jr99qxWM1zzGGzg7f2Q=";
   };
 
   propagatedBuildInputs = lib.optional (!isPy3k) enum34;
 
-  checkInputs = [ pyyaml pytest ];
+  nativeCheckInputs = [ pyyaml pytest ];
 
   # requires tests files that are not present
   doCheck = false;

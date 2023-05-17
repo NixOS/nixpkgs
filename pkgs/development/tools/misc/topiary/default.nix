@@ -2,16 +2,24 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "topiary";
-  version = "unstable-2022-12-02";
+  version = "0.1.0";
 
   src = fetchFromGitHub {
     owner = "tweag";
     repo = pname;
-    rev = "ae861a30097bd6297f553eb0ea2597f86f16d156";
-    sha256 = "sha256-WVrl+LxWSbHkbFGbkUhmw4Klwg6CzfnLAz8F0mF0kb8=";
+    rev = "v${version}";
+    sha256 = "sha256-Gm6AzzVLUXZi2jzJ1b/c4yjIvRRA2e5mC2CMVyly2X8=";
   };
 
-  cargoSha256 = "sha256-qoCOcYp1NYz/YhIBP6AkCCudVLpqhztRehc2xZoYp9A=";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "tree-sitter-bash-0.19.0" = "sha256-5gBH0tBnNevAdBwlsLQAI9JOyz2lDY7Gb54HVCD4+Zs=";
+      "tree-sitter-nickel-0.0.1" = "sha256-D/RRwXsWyHMxoU7Z8VVJ6jn7zUFKaKusLT/ofON7sOE=";
+      "tree-sitter-ocaml-0.20.1" = "sha256-5X2c2Deb8xNlp0LPQKFWIT3jwxKuuKdFlp9b3iA818Y=";
+      "tree-sitter-query-0.0.1" = "sha256-dWWof8rYFTto3A4BfbKTKcNieRbwFdF6xDXW9tQvAqQ=";
+    };
+  };
 
   postInstall = ''
     install -Dm444 languages/* -t $out/share/languages

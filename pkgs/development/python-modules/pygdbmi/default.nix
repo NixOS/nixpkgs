@@ -3,20 +3,21 @@
 , buildPythonPackage
 , fetchFromGitHub
 , gdb
+, pytest
 }:
 
 buildPythonPackage rec {
   pname = "pygdbmi";
-  version = "0.10.0.0";
+  version = "0.11.0.0";
 
   src = fetchFromGitHub {
     owner = "cs01";
     repo = "pygdbmi";
-    rev = version;
-    sha256 = "0a6b3zyxwdcb671c6lrwxm8fhvsbjh0m8hf1r18m9dha86laimjr";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-JqEDN8Pg/JttyYQbwkxKkLYuxVnvV45VlClD23eaYyc=";
   };
 
-  checkInputs = [ gdb ];
+  nativeCheckInputs = [ gdb pytest ];
 
   # tests require gcc for some reason
   doCheck = !stdenv.hostPlatform.isDarwin;

@@ -5,14 +5,21 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "certipy";
-  version = "2.0.9";
+  version = "4.4.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "ly4k";
     repo = "Certipy";
-    rev = version;
-    hash = "sha256-84nGRKZ0UlMDAZ1Wo5Hgy9XSAyEh0Tio9+3OZVFZG5k=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-llLGr9IpuXQYIN2WaOkvfE2dAZb3PMVlNmketUpuyDI=";
   };
+
+  postPatch = ''
+    # pin does not apply because our ldap3 contains a patch to fix pyasn1 compability
+    substituteInPlace setup.py \
+      --replace "pyasn1==0.4.8" "pyasn1"
+  '';
 
   propagatedBuildInputs = with python3.pkgs; [
     asn1crypto
@@ -22,6 +29,7 @@ python3.pkgs.buildPythonApplication rec {
     ldap3
     pyasn1
     pycryptodome
+    requests_ntlm
   ];
 
   # Project has no tests
@@ -34,6 +42,7 @@ python3.pkgs.buildPythonApplication rec {
   meta = with lib; {
     description = "Tool to enumerate and abuse misconfigurations in Active Directory Certificate Services";
     homepage = "https://github.com/ly4k/Certipy";
+    changelog = "https://github.com/ly4k/Certipy/releases/tag/${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };

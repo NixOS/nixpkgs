@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "keycloak-metrics-spi";
-  version = "2.5.3";
+  version = "3.0.0";
 
   src = fetchurl {
     url = "https://github.com/aerogear/keycloak-metrics-spi/releases/download/${version}/keycloak-metrics-spi-${version}.jar";
-    sha256 = "15lsy8wjw6nlfdfhllc45z9l5474p0lsghrwzzsssvd68bw54gwv";
+    sha256 = "1r06xjnvd7wxl64jqpms6jnl4csfwigb9n9lxcjpkgh2jzfs43sp";
   };
 
   dontUnpack = true;

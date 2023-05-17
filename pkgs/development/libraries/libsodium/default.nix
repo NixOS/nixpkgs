@@ -1,11 +1,13 @@
-{ lib, stdenv, fetchurl, autoreconfHook }:
+{ lib, stdenv, fetchurl, autoreconfHook
+, testers
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libsodium";
   version = "1.0.18";
 
   src = fetchurl {
-    url = "https://download.libsodium.org/libsodium/releases/${pname}-${version}.tar.gz";
+    url = "https://download.libsodium.org/libsodium/releases/${finalAttrs.pname}-${finalAttrs.version}.tar.gz";
     sha256 = "1h9ncvj23qbbni958knzsli8dvybcswcjbx0qjjgi922nf848l3g";
   };
 
@@ -26,11 +28,14 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
+  passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+
   meta = with lib; {
     description = "A modern and easy-to-use crypto library";
     homepage = "http://doc.libsodium.org/";
     license = licenses.isc;
     maintainers = with maintainers; [ raskin ];
+    pkgConfigModules = [ "libsodium" ];
     platforms = platforms.all;
   };
-}
+})

@@ -8,7 +8,7 @@ in
 {
   options = {
     services.atuin = {
-      enable = mkEnableOption (mdDoc "Enable server for shell history sync with atuin.");
+      enable = mkEnableOption (mdDoc "Enable server for shell history sync with atuin");
 
       openRegistration = mkOption {
         type = types.bool;
@@ -26,6 +26,12 @@ in
         type = types.str;
         default = "127.0.0.1";
         description = mdDoc "The host address the atuin server should listen on.";
+      };
+
+      maxHistoryLength = mkOption {
+        type = types.int;
+        default = 8192;
+        description = mdDoc "The max length of each history item the atuin server should store.";
       };
 
       port = mkOption {
@@ -72,6 +78,7 @@ in
       environment = {
         ATUIN_HOST = cfg.host;
         ATUIN_PORT = toString cfg.port;
+        ATUIN_MAX_HISTORY_LENGTH = toString cfg.maxHistoryLength;
         ATUIN_OPEN_REGISTRATION = boolToString cfg.openRegistration;
         ATUIN_DB_URI = "postgresql:///atuin";
         ATUIN_PATH = cfg.path;

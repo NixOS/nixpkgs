@@ -2,8 +2,6 @@
 , runCommand, runCommandCC, makeWrapper, recurseIntoAttrs
 # this package (through the fixpoint glass)
 , bazel_self
-# needed only for the updater
-, bazel_4
 , lr, xe, zip, unzip, bash, writeCBin, coreutils
 , which, gawk, gnused, gnutar, gnugrep, gzip, findutils
 # updater
@@ -26,22 +24,25 @@
 }:
 
 let
-  version = "6.0.0-pre.20220720.3";
+  version = "6.2.0";
   sourceRoot = ".";
 
   src = fetchurl {
     url = "https://github.com/bazelbuild/bazel/releases/download/${version}/bazel-${version}-dist.zip";
-    hash = "sha256-i8d4yLSq8fL+YT11wYmBvLDLSprq1gVfyjsKBYci1bk=";
+    hash = "sha256-8ej3iGN6xXTUcdYZ0glrqsoEoZtXoDQ5ngeWM9tEGUU=";
   };
 
-  # Update with `eval $(nix-build -A bazel_5.updater)`,
-  # then add new dependencies from the dict in ./src-deps.json as required.
+  # Update with
+  # 1. export BAZEL_SELF=$(nix-build -A bazel_6)
+  # 2. update version and hash for sources above
+  # 3. `eval $(nix-build -A bazel_6.updater)`
+  # 4. add new dependencies from the dict in ./src-deps.json if required by failing build
   srcDeps = lib.attrsets.attrValues srcDepsSet;
   srcDepsSet =
     let
       srcs = lib.importJSON ./src-deps.json;
       toFetchurl = d: lib.attrsets.nameValuePair d.name (fetchurl {
-        urls = d.urls;
+        urls = d.urls or [d.url];
         sha256 = d.sha256;
       });
     in builtins.listToAttrs (map toFetchurl [
@@ -54,8 +55,8 @@ let
       srcs.remote_java_tools_for_testing
       srcs."coverage_output_generator-v2.6.zip"
       srcs.build_bazel_rules_nodejs
-      srcs."android_tools_pkg-0.26.0.tar.gz"
-      srcs."zulu11.56.19-ca-jdk11.0.15-linux_x64.tar.gz"
+      srcs.android_tools_for_testing
+      srcs.openjdk_linux_vanilla
       srcs.bazel_toolchains
       srcs.com_github_grpc_grpc
       srcs.upb
@@ -69,6 +70,9 @@ let
       srcs.com_google_absl
       srcs.com_googlesource_code_re2
       srcs.com_github_cares_cares
+      srcs.com_envoyproxy_protoc_gen_validate
+      srcs.com_google_googleapis
+      srcs.bazel_gazelle
     ]);
 
   distDir = runCommand "bazel-deps" {} ''
@@ -333,8 +337,8 @@ stdenv.mkDerivation rec {
     #!${runtimeShell}
     (cd "${src_for_updater}" &&
         BAZEL_USE_CPP_ONLY_TOOLCHAIN=1 \
-        "${bazel_4}"/bin/bazel \
-            query 'kind(http_archive, //external:all) + kind(http_file, //external:all) + kind(distdir_tar, //external:all) + kind(git_repository, //external:all)' \
+        "$BAZEL_SELF"/bin/bazel \
+            query 'kind(http_archive, //external:*) + kind(http_file, //external:*) + kind(distdir_tar, //external:*) + kind(git_repository, //external:*)' \
             --loading_phase_threads=1 \
             --output build) \
     | "${python3}"/bin/python3 "${./update-srcDeps.py}" \
@@ -386,10 +390,11 @@ stdenv.mkDerivation rec {
       sed -i -e 's;_find_generic(repository_ctx, "gcc", "CC", overriden_tools);_find_generic(repository_ctx, "clang", "CC", overriden_tools);g' tools/cpp/unix_cc_configure.bzl
 
       sed -i -e 's;"/usr/bin/libtool";_find_generic(repository_ctx, "libtool", "LIBTOOL", overriden_tools);g' tools/cpp/unix_cc_configure.bzl
-      wrappers=( tools/cpp/osx_cc_wrapper.sh tools/cpp/osx_cc_wrapper.sh.tpl )
+      wrappers=( tools/cpp/osx_cc_wrapper.sh.tpl )
       for wrapper in "''${wrappers[@]}"; do
         sed -i -e "s,/usr/bin/gcc,${stdenv.cc}/bin/clang,g" $wrapper
         sed -i -e "s,/usr/bin/install_name_tool,${cctools}/bin/install_name_tool,g" $wrapper
+        sed -i -e "s,/usr/bin/xcrun install_name_tool,${cctools}/bin/install_name_tool,g" $wrapper
       done
     '';
 

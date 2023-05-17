@@ -28,16 +28,17 @@ let
     version = "7.1.2";
     src = old.src.override {
       inherit version;
-      sha256 = "d2b5255c7c6349bc1bd1e59e08cd12acbbd63ce649f2588755783aa94dfb6b1a";
+      hash = "sha256-0rUlXHxjSbwb0eWeCM0SrLvWPOZJ8liHVXg6qU37axo=";
     };
   });
 in buildPythonApplication rec {
   pname = "caffeine-ng";
   version = "4.0.2";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-umIjXJ0et6Pi5Ejj96Q+ZhiKS+yj7bsgb4uQW6Ym6rU=";
+    hash = "sha256-umIjXJ0et6Pi5Ejj96Q+ZhiKS+yj7bsgb4uQW6Ym6rU=";
   };
 
   nativeBuildInputs = [ wrapGAppsHook glib gobject-introspection setuptools-scm ];

@@ -1,13 +1,12 @@
 diff --git a/conftest.py b/conftest.py
-index 9e146cd..8dbc9a5 100644
+index 4426e02..1f84096 100644
 --- a/conftest.py
 +++ b/conftest.py
-@@ -61,17 +61,12 @@ def mysql_db_user():
- 
+@@ -73,17 +73,12 @@ def mysql_db_user():
  @pytest.fixture
  def postgresql_dsn(postgresql_db_user, postgresql_db_password, postgresql_db_host,
                     db_name):
--    return 'postgresql://{0}:{1}@{2}/{3}'.format(
+-    return 'postgresql://{}:{}@{}/{}'.format(
 -        postgresql_db_user,
 -        postgresql_db_password,
 -        postgresql_db_host,
@@ -18,83 +17,18 @@ index 9e146cd..8dbc9a5 100644
  
  @pytest.fixture
  def mysql_dsn(mysql_db_user, db_name):
--    return 'mysql+pymysql://{0}@localhost/{1}'.format(mysql_db_user, db_name)
+-    return f'mysql+pymysql://{mysql_db_user}@localhost/{db_name}'
 +    pytest.skip()
  
  
  @pytest.fixture
-@@ -108,8 +104,7 @@ def mssql_db_driver():
+@@ -121,8 +116,7 @@ def mssql_db_driver():
  
  @pytest.fixture
  def mssql_dsn(mssql_db_user, mssql_db_password, mssql_db_driver, db_name):
--    return 'mssql+pyodbc://{0}:{1}@localhost/{2}?driver={3}'\
+-    return 'mssql+pyodbc://{}:{}@localhost/{}?driver={}'\
 -        .format(mssql_db_user, mssql_db_password, db_name, mssql_db_driver)
 +    pytest.skip()
  
  
  @pytest.fixture
-diff --git a/tests/functions/test_database.py b/tests/functions/test_database.py
-index 0ad6721..83f208d 100644
---- a/tests/functions/test_database.py
-+++ b/tests/functions/test_database.py
-@@ -76,28 +76,6 @@ class TestDatabasePostgres(DatabaseTest):
-                 "TEMPLATE my_template") in str(excinfo.value)
- 
- 
--class TestDatabasePostgresPg8000(DatabaseTest):
--
--    @pytest.fixture
--    def dsn(self, postgresql_db_user, postgresql_db_password):
--        return 'postgresql+pg8000://{0}:{1}@localhost/{2}'.format(
--            postgresql_db_user,
--            postgresql_db_password,
--            'db_to_test_create_and_drop_via_pg8000_driver'
--        )
--
--
--class TestDatabasePostgresPsycoPG2CFFI(DatabaseTest):
--
--    @pytest.fixture
--    def dsn(self, postgresql_db_user, postgresql_db_password):
--        return 'postgresql+psycopg2cffi://{0}:{1}@localhost/{2}'.format(
--            postgresql_db_user,
--            postgresql_db_password,
--            'db_to_test_create_and_drop_via_psycopg2cffi_driver'
--        )
--
--
- @pytest.mark.usefixtures('postgresql_dsn')
- class TestDatabasePostgresWithQuotedName(DatabaseTest):
- 
-@@ -116,31 +94,6 @@ class TestDatabasePostgresWithQuotedName(DatabaseTest):
-                 'TEMPLATE "my-template"') in str(excinfo.value)
- 
- 
--class TestDatabasePostgresCreateDatabaseCloseConnection:
--    def test_create_database_twice(
--        self,
--        postgresql_db_user,
--        postgresql_db_password
--    ):
--        dsn_list = [
--            'postgresql://{0}:{1}@localhost/db_test_sqlalchemy-util-a'.format(
--                postgresql_db_user,
--                postgresql_db_password
--            ),
--            'postgresql://{0}:{1}@localhost/db_test_sqlalchemy-util-b'.format(
--                postgresql_db_user,
--                postgresql_db_password
--            ),
--        ]
--        for dsn_item in dsn_list:
--            assert not database_exists(dsn_item)
--            create_database(dsn_item, template="template1")
--            assert database_exists(dsn_item)
--        for dsn_item in dsn_list:
--            drop_database(dsn_item)
--            assert not database_exists(dsn_item)
--
--
- @pytest.mark.usefixtures('mssql_dsn')
- class TestDatabaseMssql(DatabaseTest):
- 

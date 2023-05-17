@@ -16,14 +16,14 @@ buildPythonPackage rec {
     owner = "click-contrib";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-ur7ycioZmgWMp4N+MURj1ggYMzs2eauteg1B5eLkSvc=";
+    hash = "sha256-ur7ycioZmgWMp4N+MURj1ggYMzs2eauteg1B5eLkSvc=";
   };
 
   propagatedBuildInputs = [
     click
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

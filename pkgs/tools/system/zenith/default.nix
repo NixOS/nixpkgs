@@ -8,18 +8,31 @@
 , llvmPackages
 }:
 
+assert nvidiaSupport -> stdenv.isLinux;
+
 rustPlatform.buildRustPackage rec {
   pname = "zenith";
-  version = "0.13.1";
+  version = "0.14.0";
 
   src = fetchFromGitHub {
     owner = "bvaisvil";
     repo = pname;
     rev = version;
-    sha256 = "sha256-N/DvPVYGM/DjTvKvOlR60q6rvNyfAQlnvFnFG5nbUmQ=";
+    sha256 = "sha256-GrrdE9Ih8x8N2HN+1NfxfthfHbufLAT/Ac+ZZWW5Zg8=";
   };
 
-  cargoSha256 = "sha256-Y/vvRJpv82Uc+Bu3lbZxRsu4TL6sAjz5AWHAHkwh98Y=";
+  # remove cargo config so it can find the linker on aarch64-linux
+  postPatch = ''
+    rm .cargo/config
+  '';
+
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "heim-0.1.0-rc.1" = "sha256-TKEG0YxF44wLz+qxpS/VfRKucqyl97t3PDxjPajbD58=";
+      "sysinfo-0.15.1" = "sha256-faMxXEHL7DFQLYrAJ+yBL6yiepZotofPF2+SizGQj4A=";
+    };
+  };
 
   nativeBuildInputs = [ llvmPackages.clang ] ++ lib.optional nvidiaSupport makeWrapper;
   buildInputs = [ llvmPackages.libclang ] ++ lib.optionals stdenv.isDarwin [ IOKit ];
@@ -39,8 +52,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/bvaisvil/zenith";
     license = licenses.mit;
     maintainers = with maintainers; [ bbigras ];
-    # doesn't build on aarch64 https://github.com/bvaisvil/zenith/issues/19
-    # see https://github.com/NixOS/nixpkgs/pull/88616
-    platforms = platforms.x86;
+    platforms = platforms.unix;
   };
 }

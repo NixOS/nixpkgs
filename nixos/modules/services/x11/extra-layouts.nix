@@ -106,9 +106,9 @@ in
       description = lib.mdDoc ''
         Extra custom layouts that will be included in the xkb configuration.
         Information on how to create a new layout can be found here:
-        [](https://www.x.org/releases/current/doc/xorg-docs/input/XKB-Enhancing.html#Defining_New_Layouts).
+        <https://www.x.org/releases/current/doc/xorg-docs/input/XKB-Enhancing.html#Defining_New_Layouts>.
         For more examples see
-        [](https://wiki.archlinux.org/index.php/X_KeyBoard_extension#Basic_examples)
+        <https://wiki.archlinux.org/index.php/X_KeyBoard_extension#Basic_examples>
       '';
     };
 
@@ -121,7 +121,7 @@ in
     environment.sessionVariables = {
       # runtime override supported by multiple libraries e. g. libxkbcommon
       # https://xkbcommon.org/doc/current/group__include-path.html
-      XKB_CONFIG_ROOT = "${xkb_patched}/etc/X11/xkb";
+      XKB_CONFIG_ROOT = config.services.xserver.xkbDir;
     };
 
     services.xserver = {

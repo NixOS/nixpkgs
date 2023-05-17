@@ -1,4 +1,4 @@
-{ lib, buildDunePackage, fetchFromGitHub, cppo }:
+{ lib, buildDunePackage, fetchFromGitHub, ocaml, cppo }:
 
 buildDunePackage rec {
   version = "1.2";
@@ -10,6 +10,11 @@ buildDunePackage rec {
     rev = version;
     sha256 = "sha256-THTlhOfXAPaqTt1qBkht+D67bw6M175QLvXoUMgjks4=";
   };
+
+  postPatch = lib.optionalString (lib.versionAtLeast ocaml.version "5.0") ''
+    substituteInPlace src/dune \
+      --replace "libraries ocplib_endian bigarray" "libraries ocplib_endian"
+  '';
 
   minimalOCamlVersion = "4.03";
 

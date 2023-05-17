@@ -1,7 +1,5 @@
 { lib, stdenv, fetchFromGitHub, autoreconfHook, fetchpatch }:
 
-with lib;
-
 stdenv.mkDerivation rec {
   pname = "libspf2";
   version = "2.2.12";
@@ -35,7 +33,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = {
+  meta = with lib; {
     description = "Implementation of the Sender Policy Framework for SMTP " +
                   "authorization (Helsinki Systems fork)";
     homepage = "https://github.com/helsinki-systems/libspf2";

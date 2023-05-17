@@ -26,7 +26,7 @@ buildPythonPackage rec {
     typeguard
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

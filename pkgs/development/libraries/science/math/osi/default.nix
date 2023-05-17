@@ -1,19 +1,21 @@
-{ stdenv, lib, fetchurl, gfortran, pkg-config
-, blas, zlib, bzip2
+{ stdenv, lib, fetchFromGitHub, gfortran, pkg-config
+, blas, zlib, bzip2, coin-utils
 , withGurobi ? false, gurobi
 , withCplex ? false, cplex }:
 
 stdenv.mkDerivation rec {
   pname = "osi";
-  version = "0.108.6";
+  version = "0.108.8";
 
-  src = fetchurl {
-    url = "https://www.coin-or.org/download/source/Osi/Osi-${version}.tgz";
-    sha256 = "1n2jlpq4aikbp0ncs16f7q1pj7yk6kny1bh4fmjaqnwrjw63zvsp";
+  src = fetchFromGitHub {
+    owner = "coin-or";
+    repo = "Osi";
+    rev = "releases/${version}";
+    hash = "sha256-Wyxeyn49QWzGvW6bMwCp39iLkB1eMQUEpIxUgpLcxgA=";
   };
 
   buildInputs =
-    [ blas zlib bzip2 ]
+    [ blas zlib bzip2 coin-utils ]
     ++ lib.optional withGurobi gurobi
     ++ lib.optional withCplex cplex;
   nativeBuildInputs = [ gfortran pkg-config ];
@@ -25,7 +27,7 @@ stdenv.mkDerivation rec {
     lib.optionalString withCplex "-L${cplex}/cplex/bin/${cplex.libArch}";
 
   # Compile errors
-  NIX_CFLAGS_COMPILE = "-Wno-cast-qual";
+  env.NIX_CFLAGS_COMPILE = "-Wno-cast-qual";
   hardeningDisable = [ "format" ];
 
   enableParallelBuilding = true;
@@ -35,7 +37,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "An abstract base class to a generic linear programming (LP) solver";
     homepage = "https://github.com/coin-or/Osi";
-    license = licenses.epl10;
+    license = licenses.epl20;
     platforms = platforms.unix;
     maintainers = with maintainers; [ abbradar ];
   };

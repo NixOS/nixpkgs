@@ -12,7 +12,7 @@ buildPythonPackage rec {
     repo = "pyheatshrink";
     rev = version;
     fetchSubmodules = true;
-    sha256 = "sha256-P3IofGbW4x+erGCyxIPvD9aNHIJ/GjjWgno4n95SQoQ=";
+    hash = "sha256-P3IofGbW4x+erGCyxIPvD9aNHIJ/GjjWgno4n95SQoQ=";
   };
 
   pythonImportsCheck = [ "heatshrink2" ];

@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "pynamodb";
-  version = "5.3.4";
+  version = "5.5.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "pynamodb";
     repo = "PynamoDB";
     rev = "refs/tags/${version}";
-    hash = "sha256-qg/aFK7rt2a/ZcLm+VSlq8UYBh6zS0/VVLqRAN7kLus=";
+    hash = "sha256-sbGrFTpupBP0VQWR9gUVoCiw6D61s6GsmBvjgD1u99g=";
   };
 
   propagatedBuildInputs = [
@@ -38,7 +38,7 @@ buildPythonPackage rec {
     ];
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-mock
     pytestCheckHook
   ] ++ passthru.optional-dependencies.signal;

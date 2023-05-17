@@ -21,9 +21,11 @@
 , docbook_xml_dtd_412
 , gtk-doc
 , coreutils
-, useSystemd ? stdenv.isLinux
+, useSystemd ? lib.meta.availableOn stdenv.hostPlatform systemdMinimal
 , systemdMinimal
 , elogind
+, buildPackages
+, withIntrospection ? stdenv.hostPlatform.emulatorAvailable buildPackages
 # A few tests currently fail on musl (polkitunixusertest, polkitunixgrouptest, polkitidentitytest segfault).
 # Not yet investigated; it may be due to the "Make netgroup support optional"
 # patch not updating the tests correctly yet, or doing something wrong,
@@ -65,32 +67,25 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     glib
-    gtk-doc
     pkg-config
     gettext
     meson
     ninja
     perl
     rsync
-    gobject-introspection
-    (python3.pythonForBuild.withPackages (pp: with pp; [
-      dbus-python
-      (python-dbusmock.overridePythonAttrs (attrs: {
-        # Avoid dependency cycle.
-        doCheck = false;
-      }))
-    ]))
 
     # man pages
     libxslt
     docbook-xsl-nons
     docbook_xml_dtd_412
-  ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+  ] ++ lib.optionals withIntrospection [
+    gobject-introspection
+    gtk-doc
+  ] ++ lib.optionals (withIntrospection && !stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
     mesonEmulatorHook
   ];
 
   buildInputs = [
-    gobject-introspection
     expat
     pam
     dbus
@@ -104,8 +99,15 @@ stdenv.mkDerivation rec {
     glib # in .pc Requires
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     dbus
+    (python3.pythonForBuild.withPackages (pp: with pp; [
+      dbus-python
+      (python-dbusmock.overridePythonAttrs (attrs: {
+        # Avoid dependency cycle.
+        doCheck = false;
+      }))
+    ]))
   ];
 
   mesonFlags = [
@@ -114,7 +116,9 @@ stdenv.mkDerivation rec {
     "-Dsystemdsystemunitdir=${placeholder "out"}/lib/systemd/system"
     "-Dpolkitd_user=polkituser" #TODO? <nixos> config.ids.uids.polkituser
     "-Dos_type=redhat" # only affects PAM includes
+    "-Dintrospection=${lib.boolToString withIntrospection}"
     "-Dtests=${lib.boolToString doCheck}"
+    "-Dgtk_doc=${lib.boolToString withIntrospection}"
     "-Dman=true"
   ] ++ lib.optionals stdenv.isLinux [
     "-Dsession_tracking=${if useSystemd then "libsystemd-login" else "libelogind"}"
@@ -167,7 +171,7 @@ stdenv.mkDerivation rec {
     rsync --archive "${DESTDIR}${system}"/* "$out"
     rm --recursive "${DESTDIR}${system}"/*
     rmdir --parents --ignore-fail-on-non-empty "${DESTDIR}${system}"
-    for o in $outputs; do
+    for o in $(getAllOutputNames); do
         rsync --archive "${DESTDIR}/''${!o}" "$(dirname "''${!o}")"
         rm --recursive "${DESTDIR}/''${!o}"
     done

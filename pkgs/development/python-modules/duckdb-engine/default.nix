@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "duckdb-engine";
-  version = "0.6.6";
+  version = "0.7.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     repo = "duckdb_engine";
     owner = "Mause";
     rev = "refs/tags/v${version}";
-    hash = "sha256-OpVkMkZt5h4Rp615wx42cR/NFbv6dwsklqM8/xRswtw=";
+    hash = "sha256-qLQjFkud9DivLQ9PignLrXlUVOAxsd28s7+2GdC5jKE=";
   };
 
   nativeBuildInputs = [
@@ -43,7 +43,7 @@ buildPythonPackage rec {
     "test_preload_extension"
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     hypothesis
     ipython-sql

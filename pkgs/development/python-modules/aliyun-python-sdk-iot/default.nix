@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "aliyun-python-sdk-iot";
-  version = "8.47.0";
+  version = "8.53.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-4NcobMGamIhBnACEQJ9Kvdvj9k4XjJx/Urx38nslAa8=";
+    hash = "sha256-dRNrbdFASkh1wWa1Z2VaUPijbyqUyIlVYSKvqR9N1js=";
   };
 
   propagatedBuildInputs = [

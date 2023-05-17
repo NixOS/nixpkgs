@@ -34,7 +34,7 @@ buildPythonPackage rec {
     export OMP_NUM_THREADS=2
   '';
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {
     description = "Geometry optimization code for molecular structures";

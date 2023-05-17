@@ -52,7 +52,7 @@ stdenvNoCC.mkDerivation rec {
   '';
 
   installPhase = ''
-    for outputName in $outputs ; do
+    for outputName in $(getAllOutputNames) ; do
       if [ $outputName != out ]; then
         local outputDir=''${!outputName};
         local iconsDir=$outputDir/share/icons

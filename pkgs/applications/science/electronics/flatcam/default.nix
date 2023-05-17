@@ -1,10 +1,36 @@
 { lib
-, python3Packages
+, stdenv
+, python3
 , fetchFromBitbucket
 , fetchpatch
+, substituteAll
+, geos
 }:
 
-python3Packages.buildPythonApplication rec {
+let
+  python = python3.override {
+    packageOverrides = self: super: {
+      shapely = super.shapely.overridePythonAttrs (old: rec {
+        version = "1.8.4";
+        src = self.fetchPypi {
+          pname = "Shapely";
+          inherit version;
+          hash = "sha256-oZXlHKr6IYKR8suqP+9p/TNTyT7EtlsqRyLEz0DDGYw=";
+        };
+        # Environment variable used in shapely/_buildcfg.py
+        GEOS_LIBRARY_PATH = "${geos}/lib/libgeos_c${stdenv.hostPlatform.extensions.sharedLibrary}";
+        patches = [
+          # Patch to search form GOES .so/.dylib files in a Nix-aware way
+          (substituteAll {
+            src = ./shapely-library-paths.patch;
+            libgeos_c = GEOS_LIBRARY_PATH;
+            libc = lib.optionalString (!stdenv.isDarwin) "${stdenv.cc.libc}/lib/libc${stdenv.hostPlatform.extensions.sharedLibrary}.6";
+          })
+        ];
+      });
+    };
+  };
+in python.pkgs.buildPythonApplication rec {
   pname = "flatcam";
   version = "8.5";
 
@@ -15,12 +41,12 @@ python3Packages.buildPythonApplication rec {
     sha256 = "199kiiml18k34z1zhk2hbhibphmnv0kb11kxiajq52alps0mjb3m";
   };
 
-  propagatedBuildInputs = with python3Packages; [
+  propagatedBuildInputs = with python.pkgs; [
     matplotlib
     numpy
     packaging
     pyqt4
-    Rtree
+    rtree
     scipy
     setuptools
     shapely

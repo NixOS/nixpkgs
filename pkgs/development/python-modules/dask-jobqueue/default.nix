@@ -29,7 +29,7 @@ buildPythonPackage rec {
     docrep
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     cryptography
     pytest-asyncio
     pytestCheckHook

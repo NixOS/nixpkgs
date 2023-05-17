@@ -1,4 +1,4 @@
-{ lib, stdenvNoCC, rustPlatform, makeWrapper, Security, gnutar, gzip, testers, fetchurl, prefetch-npm-deps, fetchNpmDeps }:
+{ lib, stdenvNoCC, rustPlatform, makeWrapper, Security, gnutar, gzip, nix, testers, fetchurl, prefetch-npm-deps, fetchNpmDeps }:
 
 {
   prefetch-npm-deps = rustPlatform.buildRustPackage {
@@ -20,7 +20,7 @@
     buildInputs = lib.optional stdenvNoCC.isDarwin Security;
 
     postInstall = ''
-      wrapProgram "$out/bin/prefetch-npm-deps" --prefix PATH : ${lib.makeBinPath [ gnutar gzip ]}
+      wrapProgram "$out/bin/prefetch-npm-deps" --prefix PATH : ${lib.makeBinPath [ gnutar gzip nix ]}
     '';
 
     passthru.tests =
@@ -36,8 +36,8 @@
           '';
         };
 
-        makeTest = { name, src, hash }: testers.invalidateFetcherByDrvHash fetchNpmDeps {
-          inherit name hash;
+        makeTest = { name, src, hash, forceGitDeps ? false }: testers.invalidateFetcherByDrvHash fetchNpmDeps {
+          inherit name hash forceGitDeps;
 
           src = makeTestSrc { inherit name src; };
         };
@@ -108,6 +108,8 @@
           };
 
           hash = "sha256-+KA8/orSBJ4EhuSyQO8IKSxsN/FAsYU3lOzq+awuxNQ=";
+
+          forceGitDeps = true;
         };
       };
 
@@ -121,6 +123,7 @@
   fetchNpmDeps =
     { name ? "npm-deps"
     , hash ? ""
+    , forceGitDeps ? false
     , ...
     } @ args:
     let
@@ -131,6 +134,8 @@
           outputHash = "";
           outputHashAlgo = "sha256";
         };
+
+      forceGitDeps_ = lib.optionalAttrs forceGitDeps { FORCE_GIT_DEPS = true; };
     in
     stdenvNoCC.mkDerivation (args // {
       inherit name;
@@ -161,5 +166,5 @@
       dontInstall = true;
 
       outputHashMode = "recursive";
-    } // hash_);
+    } // hash_ // forceGitDeps_);
 }

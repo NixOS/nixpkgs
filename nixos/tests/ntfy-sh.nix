@@ -12,6 +12,8 @@ import ./make-test-python.nix {
 
     machine.wait_for_unit("multi-user.target")
 
+    machine.wait_for_open_port(80)
+
     machine.succeed(f"curl -d '{msg}' localhost:80/test")
 
     notif = json.loads(machine.succeed("curl -s localhost:80/test/json?poll=1"))

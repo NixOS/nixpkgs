@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "aws-rotate-key";
-  version = "1.0.8";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "Fullscreen";
     repo = "aws-rotate-key";
     rev = "v${version}";
-    sha256 = "sha256-5kV87uQDSc/qpm79Pd2nXo/EcbMlhZqFYaw+gJQa2uo=";
+    sha256 = "sha256-PZ7+GC4P4bkT+DWOhW70KkhUCUjn4gIG+OKoOBSc/8c=";
   };
 
-  vendorSha256 = "sha256-h7tmJx/Um1Cy/ojiFjoKCH/LcOwhGU8ADb5WwmrkkJM=";
+  vendorHash = "sha256-Asfbv7avT+L8/WNQ6NS7gFcjA9MiTCu5PzsuA/PT6/k=";
 
   ldflags = [ "-s" "-w" ];
 

@@ -11,11 +11,13 @@
 , pygtrie
 , pythonOlder
 , setuptools
+, setuptools-scm
+, shortuuid
 }:
 
 buildPythonPackage rec {
   pname = "scmrepo";
-  version = "0.1.4";
+  version = "1.0.3";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -24,17 +26,14 @@ buildPythonPackage rec {
     owner = "iterative";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-E9uQ8EMLncF9nkOBl1rQLt6I2wEhtv4Z1I1IpCYgorg=";
+    hash = "sha256-Ne0iN1rVbdxyoN8XiM9Xj8uyzlEL6WHPUZbFWt/qH40=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace "asyncssh>=2.7.1,<2.9" "asyncssh>=2.7.1" \
-      --replace "pathspec>=0.9.0,<0.10.0" "pathspec"
-  '';
+  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   nativeBuildInputs = [
     setuptools
+    setuptools-scm
   ];
 
   propagatedBuildInputs = [
@@ -46,6 +45,7 @@ buildPythonPackage rec {
     pathspec
     pygit2
     pygtrie
+    shortuuid
   ];
 
   # Requires a running Docker instance

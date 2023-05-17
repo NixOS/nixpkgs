@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "An assembler for the Java Virtual Machine";
-    homepage = "http://jasmin.sourceforge.net/";
+    homepage = "https://jasmin.sourceforge.net/";
     downloadPage = "https://sourceforge.net/projects/jasmin/files/latest/download";
     license = licenses.bsd3;
     maintainers = with maintainers; [ fgaz ];

@@ -2,7 +2,7 @@ diff --git a/Makefile b/Makefile
 index a9a989e..4da737b 100644
 --- a/Makefile
 +++ b/Makefile
-@@ -579,8 +579,8 @@ install:	all $(DATA) $(REDO) $(MANS)
+@@ -606,8 +606,8 @@ install:	all $(DATA) $(REDO) $(MANS)
  			-t '$(DESTDIR)$(TZDEFAULT)'
  		cp -f $(TABDATA) '$(DESTDIR)$(TZDIR)/.'
  		cp tzselect '$(DESTDIR)$(BINDIR)/.'

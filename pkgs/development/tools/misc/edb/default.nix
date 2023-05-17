@@ -30,6 +30,8 @@ mkDerivation rec {
 
     # Change default optional terminal program path to one that is more likely to work on NixOS.
     substituteInPlace ./src/Configuration.cpp --replace "/usr/bin/xterm" "xterm";
+
+    sed '1i#include <memory>' -i include/{RegisterViewModelBase,State,IState}.h # gcc12
   '';
 
   meta = with lib; {

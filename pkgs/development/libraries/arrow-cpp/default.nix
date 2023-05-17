@@ -43,7 +43,7 @@
   # non-existent in older versions
   # see https://github.com/boostorg/process/issues/55
 , enableS3 ? (!stdenv.isDarwin) || (lib.versionOlder boost.version "1.69" || lib.versionAtLeast boost.version "1.70")
-, enableGcs ? !stdenv.isDarwin # google-cloud-cpp is not supported on darwin
+, enableGcs ? (!stdenv.isDarwin) && (lib.versionAtLeast grpc.cxxStandard "17") # google-cloud-cpp is not supported on darwin, needs to support C++17
 }:
 
 assert lib.asserts.assertMsg
@@ -52,28 +52,42 @@ assert lib.asserts.assertMsg
 
 let
   arrow-testing = fetchFromGitHub {
+    name = "arrow-testing";
     owner = "apache";
     repo = "arrow-testing";
-    rev = "5bab2f264a23f5af68f69ea93d24ef1e8e77fc88";
-    hash = "sha256-Pxx8ohUpXb5u1995IvXmxQMqWiDJ+7LAll/AjQP7ph8=";
+    rev = "47f7b56b25683202c1fd957668e13f2abafc0f12";
+    hash = "sha256-ZDznR+yi0hm5O1s9as8zq5nh1QxJ8kXCRwbNQlzXpnI=";
   };
 
   parquet-testing = fetchFromGitHub {
+    name = "parquet-testing";
     owner = "apache";
     repo = "parquet-testing";
-    rev = "aafd3fc9df431c2625a514fb46626e5614f1d199";
-    hash = "sha256-cO5t/mgsbBhbSefx8EMGTyxmgTjhZ8mFujkFQ3p/JS0=";
+    rev = "b2e7cc755159196e3a068c8594f7acbaecfdaaac";
+    hash = "sha256-IFvGTOkaRSNgZOj8DziRj88yH5JRF+wgSDZ5N0GNvjk=";
+  };
+
+  aws-sdk-cpp-arrow = aws-sdk-cpp.override {
+    apis = [
+      "cognito-identity"
+      "config"
+      "identity-management"
+      "s3"
+      "sts"
+      "transfer"
+    ];
   };
 
 in
 stdenv.mkDerivation rec {
   pname = "arrow-cpp";
-  version = "9.0.0";
+  version = "12.0.0";
 
   src = fetchurl {
     url = "mirror://apache/arrow/arrow-${version}/apache-arrow-${version}.tar.gz";
-    hash = "sha256-qaAz8KNJAomZj0WGgNGVec8HkRcXumWv3my4AHD3qbU=";
+    hash = "sha256-3dg0eIJ3XlOvfQlloZArfY/NCgMP0U94PU+F6CE1LVI=";
   };
+
   sourceRoot = "apache-arrow-${version}/cpp";
 
   # versions are all taken from
@@ -97,15 +111,15 @@ stdenv.mkDerivation rec {
   ARROW_XSIMD_URL = fetchFromGitHub {
     owner = "xtensor-stack";
     repo = "xsimd";
-    rev = "8.1.0";
-    hash = "sha256-Aqs6XJkGjAjGAp0PprabSM4m+32M/UXpSHppCHdzaZk=";
+    rev = "9.0.1";
+    hash = "sha256-onALN6agtrHWigtFlCeefD9CiRZI4Y690XTzy2UDnrk=";
   };
 
   ARROW_SUBSTRAIT_URL = fetchFromGitHub {
     owner = "substrait-io";
     repo = "substrait";
-    rev = "v0.6.0";
-    hash = "sha256-hxCBomL4Qg9cHLRg9ZiO9k+JVOZXn6f4ikPtK+V9tno=";
+    rev = "v0.20.0";
+    hash = "sha256-71hAwJ0cGvpwK/ibeeQt82e9uqxcu9sM1rPtPENMPfs=";
   };
 
   patches = [
@@ -137,18 +151,17 @@ stdenv.mkDerivation rec {
     utf8proc
     zlib
     zstd
-  ] ++ lib.optionals enableShared [
-    python3.pkgs.python
-    python3.pkgs.numpy
   ] ++ lib.optionals enableFlight [
     grpc
     openssl
     protobuf
-  ] ++ lib.optionals enableS3 [ aws-sdk-cpp openssl ]
+    sqlite
+  ] ++ lib.optionals enableS3 [ aws-sdk-cpp-arrow openssl ]
   ++ lib.optionals enableGcs [
     crc32c
     curl
-    google-cloud-cpp grpc
+    google-cloud-cpp
+    grpc
     nlohmann_json
   ];
 
@@ -172,16 +185,12 @@ stdenv.mkDerivation rec {
     "-DARROW_COMPUTE=ON"
     "-DARROW_CSV=ON"
     "-DARROW_DATASET=ON"
-    "-DARROW_ENGINE=ON"
     "-DARROW_FILESYSTEM=ON"
     "-DARROW_FLIGHT_SQL=${if enableFlight then "ON" else "OFF"}"
     "-DARROW_HDFS=ON"
     "-DARROW_IPC=ON"
     "-DARROW_JEMALLOC=${if enableJemalloc then "ON" else "OFF"}"
     "-DARROW_JSON=ON"
-    "-DARROW_PLASMA=ON"
-    # Disable Python for static mode because openblas is currently broken there.
-    "-DARROW_PYTHON=${if enableShared then "ON" else "OFF"}"
     "-DARROW_USE_GLOG=ON"
     "-DARROW_WITH_BACKTRACE=ON"
     "-DARROW_WITH_BROTLI=ON"
@@ -192,21 +201,21 @@ stdenv.mkDerivation rec {
     "-DARROW_WITH_ZLIB=ON"
     "-DARROW_WITH_ZSTD=ON"
     "-DARROW_MIMALLOC=ON"
-    # Parquet options:
-    "-DARROW_PARQUET=ON"
     "-DARROW_SUBSTRAIT=ON"
-    "-DPARQUET_BUILD_EXECUTABLES=ON"
     "-DARROW_FLIGHT=${if enableFlight then "ON" else "OFF"}"
     "-DARROW_FLIGHT_TESTING=${if enableFlight then "ON" else "OFF"}"
     "-DARROW_S3=${if enableS3 then "ON" else "OFF"}"
     "-DARROW_GCS=${if enableGcs then "ON" else "OFF"}"
+    # Parquet options:
+    "-DARROW_PARQUET=ON"
+    "-DPARQUET_BUILD_EXECUTABLES=ON"
+    "-DPARQUET_REQUIRE_ENCRYPTION=ON"
   ] ++ lib.optionals (!enableShared) [
     "-DARROW_TEST_LINKAGE=static"
   ] ++ lib.optionals stdenv.isDarwin [
     "-DCMAKE_INSTALL_RPATH=@loader_path/../lib" # needed for tools executables
-  ] ++ lib.optional (!stdenv.isx86_64) "-DARROW_USE_SIMD=OFF"
-  ++ lib.optional enableS3 "-DAWSSDK_CORE_HEADER_FILE=${aws-sdk-cpp}/include/aws/core/Aws.h"
-  ++ lib.optionals enableGcs [ "-DCMAKE_CXX_STANDARD=${grpc.cxxStandard}" ];
+  ] ++ lib.optionals (!stdenv.isx86_64) [ "-DARROW_USE_SIMD=OFF" ]
+  ++ lib.optionals enableS3 [ "-DAWSSDK_CORE_HEADER_FILE=${aws-sdk-cpp-arrow}/include/aws/core/Aws.h" ];
 
   doInstallCheck = true;
   ARROW_TEST_DATA = lib.optionalString doInstallCheck "${arrow-testing}/data";
@@ -226,28 +235,35 @@ stdenv.mkDerivation rec {
         "TestMinioServer.Connect"
         "TestS3FS.*"
         "TestS3FSGeneric.*"
+      ] ++ lib.optionals stdenv.isDarwin [
+        # TODO: revisit at 12.0.0 or when
+        # https://github.com/apache/arrow/commit/295c6644ca6b67c95a662410b2c7faea0920c989
+        # is available, see
+        # https://github.com/apache/arrow/pull/15288#discussion_r1071244661
+        "ExecPlanExecution.StressSourceSinkStopped"
       ];
     in
-    lib.optionalString doInstallCheck "-${builtins.concatStringsSep ":" filteredTests}";
+    lib.optionalString doInstallCheck "-${lib.concatStringsSep ":" filteredTests}";
+
   __darwinAllowLocalNetworking = true;
-  installCheckInputs = [ perl which sqlite ] ++ lib.optional enableS3 minio;
-  installCheckPhase =
-    let
-      excludedTests = lib.optionals stdenv.isDarwin [
-        # Some plasma tests need to be patched to use a shorter AF_UNIX socket
-        # path on Darwin. See https://github.com/NixOS/nix/pull/1085
-        "plasma-external-store-tests"
-        "plasma-client-tests"
-      ] ++ [ "arrow-gcsfs-test" ];
-    in
-    ''
-      runHook preInstallCheck
 
-      ctest -L unittest \
-        --exclude-regex '^(${builtins.concatStringsSep "|" excludedTests})$'
+  nativeInstallCheckInputs = [ perl which sqlite ]
+    ++ lib.optionals enableS3 [ minio ]
+    ++ lib.optionals enableFlight [ python3 ];
 
-      runHook postInstallCheck
-    '';
+  disabledTests = [
+    # requires networking
+    "arrow-gcsfs-test"
+    "arrow-flight-integration-test"
+  ];
+
+  installCheckPhase = ''
+    runHook preInstallCheck
+
+    ctest -L unittest --exclude-regex '^(${lib.concatStringsSep "|" disabledTests})$'
+
+    runHook postInstallCheck
+  '';
 
   meta = with lib; {
     description = "A cross-language development platform for in-memory data";

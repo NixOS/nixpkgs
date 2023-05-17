@@ -1,6 +1,11 @@
 import ../make-test-python.nix ({ pkgs, ...}: let
-  adminpass = "hunter2";
-  adminuser = "custom-admin-username";
+  username = "custom_admin_username";
+  # This will be used both for redis and postgresql
+  pass = "hunter2";
+  # Don't do this at home, use a file outside of the nix store instead
+  passFile = toString (pkgs.writeText "pass-file" ''
+    ${pass}
+  '');
 in {
   name = "nextcloud-with-declarative-redis";
   meta = with pkgs.lib.maintainers; {
@@ -22,15 +27,15 @@ in {
           redis = true;
           memcached = false;
         };
+        # This test also validates that we can use an "external" database
+        database.createLocally = false;
         config = {
           dbtype = "pgsql";
           dbname = "nextcloud";
-          dbuser = "nextcloud";
-          dbhost = "/run/postgresql";
-          inherit adminuser;
-          adminpassFile = toString (pkgs.writeText "admin-pass-file" ''
-            ${adminpass}
-          '');
+          dbuser = username;
+          dbpassFile = passFile;
+          adminuser = username;
+          adminpassFile = passFile;
         };
         secretFile = "/etc/nextcloud-secrets.json";
 
@@ -52,20 +57,20 @@ in {
 
       systemd.services.nextcloud-setup= {
         requires = ["postgresql.service"];
-        after = [
-          "postgresql.service"
-        ];
+        after = [ "postgresql.service" ];
       };
 
       services.postgresql = {
         enable = true;
-        ensureDatabases = [ "nextcloud" ];
-        ensureUsers = [
-          { name = "nextcloud";
-            ensurePermissions."DATABASE nextcloud" = "ALL PRIVILEGES";
-          }
-        ];
       };
+      systemd.services.postgresql.postStart = pkgs.lib.mkAfter ''
+        password=$(cat ${passFile})
+        ${config.services.postgresql.package}/bin/psql <<EOF
+          CREATE ROLE ${username} WITH LOGIN PASSWORD '$password' CREATEDB;
+          CREATE DATABASE nextcloud;
+          GRANT ALL PRIVILEGES ON DATABASE nextcloud TO ${username};
+        EOF
+      '';
 
       # This file is meant to contain secret options which should
       # not go into the nix store. Here it is just used to set the
@@ -86,8 +91,8 @@ in {
       export RCLONE_CONFIG_NEXTCLOUD_TYPE=webdav
       export RCLONE_CONFIG_NEXTCLOUD_URL="http://nextcloud/remote.php/webdav/"
       export RCLONE_CONFIG_NEXTCLOUD_VENDOR="nextcloud"
-      export RCLONE_CONFIG_NEXTCLOUD_USER="${adminuser}"
-      export RCLONE_CONFIG_NEXTCLOUD_PASS="$(${pkgs.rclone}/bin/rclone obscure ${adminpass})"
+      export RCLONE_CONFIG_NEXTCLOUD_USER="${username}"
+      export RCLONE_CONFIG_NEXTCLOUD_PASS="$(${pkgs.rclone}/bin/rclone obscure ${pass})"
       "''${@}"
     '';
     copySharedFile = pkgs.writeScript "copy-shared-file" ''

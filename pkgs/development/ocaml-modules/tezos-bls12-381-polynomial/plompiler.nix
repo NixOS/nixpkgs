@@ -2,7 +2,9 @@
 , buildDunePackage
 , hacl-star
 , bls12-381
+, bls12-381-hash
 , tezos-bls12-381-polynomial
+, polynomial
 , data-encoding
 , hex
 , stdint
@@ -22,12 +24,14 @@ buildDunePackage rec {
   propagatedBuildInputs = [
     hacl-star
     bls12-381
+    bls12-381-hash
     tezos-bls12-381-polynomial
     data-encoding
     hex
     stdint
     ff
     mec
+    polynomial
   ];
 
   checkInputs = [ alcotest qcheck-alcotest bisect_ppx ];

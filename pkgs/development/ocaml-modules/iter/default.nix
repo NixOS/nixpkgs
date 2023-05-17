@@ -7,6 +7,8 @@ buildDunePackage rec {
   pname = "iter";
   version = "1.6";
 
+  duneVersion = "3";
+
   src = fetchFromGitHub {
     owner = "c-cube";
     repo = pname;
@@ -18,7 +20,8 @@ buildDunePackage rec {
   propagatedBuildInputs = [ result seq ];
 
   doCheck = lib.versionAtLeast ocaml.version "4.08";
-  checkInputs = [ mdx.bin ounit2 qcheck-core ];
+  nativeCheckInputs = [ mdx.bin ];
+  checkInputs = [ ounit2 qcheck-core ];
 
   meta = {
     homepage = "https://github.com/c-cube/sequence";

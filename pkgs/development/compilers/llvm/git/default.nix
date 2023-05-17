@@ -1,10 +1,11 @@
-{ lowPrio, newScope, pkgs, lib, stdenv, cmake
+{ lowPrio, newScope, pkgs, lib, stdenv, cmake, ninja
 , gccForLibs, preLibcCrossHeaders
-, libxml2, python3, isl, fetchFromGitHub, overrideCC, wrapCCWith, wrapBintoolsWith
+, libxml2, python3, fetchFromGitHub, overrideCC, wrapCCWith, wrapBintoolsWith
 , buildLlvmTools # tools, but from the previous stage, for cross
 , targetLlvmLibraries # libraries, but from the next stage, for cross
+, targetLlvm
 # This is the default binutils, but with *this* version of LLD rather
-# than the default LLVM verion's, if LLD is the choice. We use these for
+# than the default LLVM version's, if LLD is the choice. We use these for
 # the `useLLVM` bootstrapping below.
 , bootBintoolsNoLibc ?
     if stdenv.targetPlatform.linker == "lld"
@@ -15,32 +16,91 @@
     then null
     else pkgs.bintools
 , darwin
+# LLVM release information; specify one of these but not both:
+, gitRelease ? null
+  # i.e.:
+  # {
+  #   version = /* i.e. "15.0.0" */;
+  #   rev = /* commit SHA */;
+  #   rev-version = /* human readable version; i.e. "unstable-2022-26-07" */;
+  #   sha256 = /* checksum for this release, can omit if specifying your own `monorepoSrc` */;
+  # }
+, officialRelease ? { version = "15.0.7"; sha256 = "sha256-wjuZQyXQ/jsmvy6y1aksCcEDXGBjuhpgngF3XQJ/T4s="; }
+  # i.e.:
+  # {
+  #   version = /* i.e. "15.0.0" */;
+  #   candidate = /* optional; if specified, should be: "rcN" */
+  #   sha256 = /* checksum for this release, can omit if specifying your own `monorepoSrc` */;
+  # }
+# By default, we'll try to fetch a release from `github:llvm/llvm-project`
+# corresponding to the `gitRelease` or `officialRelease` specified.
+#
+# You can provide your own LLVM source by specifying this arg but then it's up
+# to you to make sure that the LLVM repo given matches the release configuration
+# specified.
+, monorepoSrc ? null
 }:
-
+assert let
+  int = a: if a then 1 else 0;
+  xor = a: b: ((builtins.bitXor (int a) (int b)) == 1);
+in
+  lib.assertMsg
+    (xor
+      (gitRelease != null)
+      (officialRelease != null))
+    ("must specify `gitRelease` or `officialRelease`" +
+      (lib.optionalString (gitRelease != null) " — not both"));
 let
-  release_version = "15.0.0";
-  candidate = ""; # empty or "rcN"
-  dash-candidate = lib.optionalString (candidate != "") "-${candidate}";
-  rev = "a5640968f2f7485b2aa4919f5fa68fd8f23e2d1f"; # When using a Git commit
-  rev-version = "unstable-2022-26-07"; # When using a Git commit
-  version = if rev != "" then rev-version else "${release_version}${dash-candidate}";
-  targetConfig = stdenv.targetPlatform.config;
+  monorepoSrc' = monorepoSrc;
+in let
+  releaseInfo = if gitRelease != null then rec {
+    original = gitRelease;
+    release_version = original.version;
+    version = gitRelease.rev-version;
+  } else rec {
+    original = officialRelease;
+    release_version = original.version;
+    version = if original ? candidate then
+      "${release_version}-${original.candidate}"
+    else
+      release_version;
+  };
 
-  monorepoSrc = fetchFromGitHub {
+  monorepoSrc = if monorepoSrc' != null then
+    monorepoSrc'
+  else let
+    sha256 = releaseInfo.original.sha256;
+    rev = if gitRelease != null then
+      gitRelease.rev
+    else
+      "llvmorg-${releaseInfo.version}";
+  in fetchFromGitHub {
     owner = "llvm";
     repo = "llvm-project";
-    rev = if rev != "" then rev else "llvmorg-${version}";
-    sha256 = "1sh5xihdfdn2hp7ds3lkaq1bfrl4alj36gl1aidmhlw65p5rdvl7";
+    inherit rev sha256;
   };
+
+  inherit (releaseInfo) release_version version;
 
   llvm_meta = {
     license     = lib.licenses.ncsa;
-    maintainers = with lib.maintainers; [ lovek323 raskin dtzWill primeos ];
-    platforms   = lib.platforms.all;
+    maintainers = lib.teams.llvm.members;
+
+    # See llvm/cmake/config-ix.cmake.
+    platforms   =
+      lib.platforms.aarch64 ++
+      lib.platforms.arm ++
+      lib.platforms.m68k ++
+      lib.platforms.mips ++
+      lib.platforms.power ++
+      lib.platforms.riscv ++
+      lib.platforms.s390x ++
+      lib.platforms.wasi ++
+      lib.platforms.x86;
   };
 
   tools = lib.makeExtensible (tools: let
-    callPackage = newScope (tools // { inherit stdenv cmake libxml2 python3 isl release_version version monorepoSrc buildLlvmTools; });
+    callPackage = newScope (tools // { inherit stdenv cmake ninja libxml2 python3 release_version version monorepoSrc buildLlvmTools; });
     mkExtraBuildCommands0 = cc: ''
       rsrc="$out/resource-root"
       mkdir "$rsrc"
@@ -69,13 +129,13 @@ let
 
     # `llvm` historically had the binaries.  When choosing an output explicitly,
     # we need to reintroduce `outputSpecified` to get the expected behavior e.g. of lib.get*
-    llvm = tools.libllvm.out // { outputSpecified = false; };
+    llvm = tools.libllvm;
 
     libclang = callPackage ./clang {
       inherit llvm_meta;
     };
 
-    clang-unwrapped = tools.libclang.out // { outputSpecified = false; };
+    clang-unwrapped = tools.libclang;
 
     llvm-manpages = lowPrio (tools.libllvm.override {
       enableManpages = true;
@@ -95,7 +155,8 @@ let
 
     # pick clang appropriate for package set we are targeting
     clang =
-      /**/ if stdenv.targetPlatform.useLLVM or false then tools.clangUseLLVM
+      /**/ if stdenv.targetPlatform.libc == null then tools.clangNoLibc
+      else if stdenv.targetPlatform.useLLVM or false then tools.clangUseLLVM
       else if (pkgs.targetPackages.stdenv or stdenv).cc.isGNU then tools.libstdcxxClang
       else tools.libcxxClang;
 
@@ -113,7 +174,7 @@ let
       cc = tools.clang-unwrapped;
       libcxx = targetLlvmLibraries.libcxx;
       extraPackages = [
-        targetLlvmLibraries.libcxxabi
+        libcxx.cxxabi
         targetLlvmLibraries.compiler-rt
       ];
       extraBuildCommands = mkExtraBuildCommands cc;
@@ -153,7 +214,7 @@ let
       libcxx = targetLlvmLibraries.libcxx;
       bintools = bintools';
       extraPackages = [
-        targetLlvmLibraries.libcxxabi
+        libcxx.cxxabi
         targetLlvmLibraries.compiler-rt
       ] ++ lib.optionals (!stdenv.targetPlatform.isWasm) [
         targetLlvmLibraries.libunwind
@@ -166,7 +227,7 @@ let
         ]
         ++ lib.optional (!stdenv.targetPlatform.isWasm) "--unwindlib=libunwind"
         ++ lib.optional
-          (!stdenv.targetPlatform.isWasm && !stdenv.targetPlatform.isFreeBSD && stdenv.targetPlatform.useLLVM or false)
+          (!stdenv.targetPlatform.isWasm && stdenv.targetPlatform.useLLVM or false)
           "-lunwind"
         ++ lib.optional stdenv.targetPlatform.isWasm "-fno-exceptions";
     };
@@ -220,7 +281,7 @@ let
   });
 
   libraries = lib.makeExtensible (libraries: let
-    callPackage = newScope (libraries // buildLlvmTools // { inherit stdenv cmake libxml2 python3 isl release_version version monorepoSrc; });
+    callPackage = newScope (libraries // buildLlvmTools // { inherit stdenv cmake ninja libxml2 python3 release_version version monorepoSrc; });
   in {
 
     compiler-rt-libc = callPackage ./compiler-rt {
@@ -246,25 +307,37 @@ let
 
     libcxxStdenv = overrideCC stdenv buildLlvmTools.libcxxClang;
 
-    libcxx = callPackage ./libcxx {
-      inherit llvm_meta;
-      stdenv = if stdenv.hostPlatform.useLLVM or false
-               then overrideCC stdenv buildLlvmTools.clangNoLibcxx
-               else stdenv;
-    };
-
     libcxxabi = let
-      stdenv_ = if stdenv.hostPlatform.useLLVM or false
-               then overrideCC stdenv buildLlvmTools.clangNoLibcxx
-               else stdenv;
+      # CMake will "require" a compiler capable of compiling C++ programs
+      # cxx-header's build does not actually use one so it doesn't really matter
+      # what stdenv we use here, as long as CMake is happy.
       cxx-headers = callPackage ./libcxx {
         inherit llvm_meta;
-        stdenv = stdenv_;
         headersOnly = true;
       };
+
+      # `libcxxabi` *doesn't* need a compiler with a working C++ stdlib but it
+      # *does* need a relatively modern C++ compiler (see:
+      # https://releases.llvm.org/15.0.0/projects/libcxx/docs/index.html#platform-and-compiler-support).
+      #
+      # So, we use the clang from this LLVM package set, like libc++
+      # "boostrapping builds" do:
+      # https://releases.llvm.org/15.0.0/projects/libcxx/docs/BuildingLibcxx.html#bootstrapping-build
+      #
+      # We cannot use `clangNoLibcxx` because that contains `compiler-rt` which,
+      # on macOS, depends on `libcxxabi`, thus forming a cycle.
+      stdenv_ = overrideCC stdenv buildLlvmTools.clangNoCompilerRtWithLibc;
     in callPackage ./libcxxabi {
       stdenv = stdenv_;
       inherit llvm_meta cxx-headers;
+    };
+
+    # Like `libcxxabi` above, `libcxx` requires a fairly modern C++ compiler,
+    # so: we use the clang from this LLVM package set instead of the regular
+    # stdenv's compiler.
+    libcxx = callPackage ./libcxx {
+      inherit llvm_meta;
+      stdenv = overrideCC stdenv buildLlvmTools.clangNoLibcxx;
     };
 
     libunwind = callPackage ./libunwind {
@@ -273,7 +346,7 @@ let
     };
 
     openmp = callPackage ./openmp {
-      inherit llvm_meta;
+      inherit llvm_meta targetLlvm;
     };
   });
 

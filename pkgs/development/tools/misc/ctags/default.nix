@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
       alternatively, the index entry created for that object).  Many
       programming languages are supported.
     '';
-    homepage = "http://ctags.sourceforge.net/";
+    homepage = "https://ctags.sourceforge.net/";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
 

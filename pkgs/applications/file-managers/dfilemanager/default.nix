@@ -2,13 +2,13 @@
 
 mkDerivation {
   pname = "dfilemanager";
-  version = "unstable-2020-09-04";
+  version = "unstable-2021-02-20";
 
   src = fetchFromGitHub {
     owner = "probonopd";
     repo = "dfilemanager";
-    rev = "c592d643d76942dc2c2ccb6e4bfdf53f5e805e48";
-    sha256 = "7hIgaWjjOck5i4QbeVeQK7yrjK4yDoAZ5qY9RhM5ABY=";
+    rev = "61179500a92575e05cf9a71d401c388726bfd73d";
+    sha256 = "sha256-BHd2dZDVxy82vR6PyXIS5M6zBGJ4bQfOhdBCdOww4kc=";
   };
 
   nativeBuildInputs = [ cmake ];

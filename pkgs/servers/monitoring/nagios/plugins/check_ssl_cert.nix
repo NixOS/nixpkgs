@@ -1,29 +1,29 @@
 { lib
 , stdenv
+, bc
+, bind # host and dig binary
+, coreutils # date and timeout binary
+, curl
 , fetchFromGitHub
 , file
-, openssl
-, makeWrapper
-, which
-, curl
-, bc
-, coreutils # date and timeout binary
-, bind # host and dig binary
-, nmap
 , iproute2
+, makeWrapper
 , netcat-gnu
+, nmap
+, openssl
 , python3
+, which
 }:
 
 stdenv.mkDerivation rec {
   pname = "check_ssl_cert";
-  version = "2.57.0";
+  version = "2.69.0";
 
   src = fetchFromGitHub {
     owner = "matteocorti";
     repo = "check_ssl_cert";
-    rev = "v${version}";
-    hash = "sha256-N+VkdVeJ6UdRPFUFmIpZoL/Mc8MkTd+hAPjha5pimt8=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-85bm/CvD5Kp9HKpf9czkqSEDYwmm8W+zd/uc88fWzPQ=";
   };
 
   nativeBuildInputs = [

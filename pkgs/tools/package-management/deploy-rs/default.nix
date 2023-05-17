@@ -6,18 +6,18 @@
 , SystemConfiguration
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "deploy-rs";
-  version = "unstable-2022-11-18";
+  version = "unstable-2023-05-05";
 
   src = fetchFromGitHub {
     owner = "serokell";
     repo = "deploy-rs";
-    rev = "2a3c5f70eee04a465aa534d8bd4fcc9bb3c4a8ce";
-    hash = "sha256-0w6iD3GSSQbIeSFVDzAAQZB+hDq670ZTms3d9XI+BtM=";
+    rev = "6b0b6a1c2527e8b1ef370a308b6ef8903004ac47";
+    hash = "sha256-UUxpb5PMkFfP2JGoPMEUvKbxv+wCkTWy4uZs1MyyCes=";
   };
 
-  cargoHash = "sha256-Ki9/mYNLUq74v3u+e3aM139+06CTrvPLJv0O+qHL9dA=";
+  cargoHash = "sha256-6/VSfCNBstr+fQPdpMl5b2MwNxRjSJvTDuTGKySPGsk=";
 
   buildInputs = lib.optionals stdenv.isDarwin [
     CoreServices

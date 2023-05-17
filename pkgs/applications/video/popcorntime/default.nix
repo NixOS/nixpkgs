@@ -49,6 +49,17 @@ stdenv.mkDerivation rec {
     "--prefix PATH : ${lib.makeBinPath [ stdenv.cc ]}"
   ];
 
+  desktopItem = makeDesktopItem {
+      name = pname;
+      exec = pname;
+      icon = pname;
+      comment = meta.description;
+      genericName = meta.description;
+      type = "Application";
+      desktopName = "Popcorn-Time";
+      categories = [ "Video" "AudioVideo" ];
+    };
+
   # Extract and copy executable in $out/bin
   installPhase = ''
     mkdir -p $out/share/applications $out/bin $out/opt/bin $out/share/icons/hicolor/scalable/apps/
@@ -60,6 +71,8 @@ stdenv.mkDerivation rec {
     ln -s $out/opt/popcorntime/Popcorn-Time $out/bin/popcorntime
 
     ln -s $out/opt/popcorntime/src/app/images/icon.png $out/share/icons/hicolor/scalable/apps/popcorntime.png
+
+    ln -s ${desktopItem}/share/applications/popcorntime.desktop $out/share/applications/popcorntime.desktop
   '';
 
   # GSETTINGS_SCHEMAS_PATH is not set in installPhase

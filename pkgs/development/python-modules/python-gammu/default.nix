@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "gammu";
     repo = pname;
     rev = version;
-    sha256 = "sha256-lFQBrKWwdvUScwsBva08izZVeVDn1u+ldzixtL9YTpA=";
+    hash = "sha256-lFQBrKWwdvUScwsBva08izZVeVDn1u+ldzixtL9YTpA=";
   };
 
   nativeBuildInputs = [
@@ -30,7 +30,7 @@ buildPythonPackage rec {
   ];
 
   # Check with the next release if tests could be run with pytest
-  # checkInputs = [ pytestCheckHook ];
+  # nativeCheckInputs = [ pytestCheckHook ];
   # Don't run tests for now
   doCheck = false;
 

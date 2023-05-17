@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "json-schema-for-humans";
-  version = "0.44";
+  version = "0.44.5";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     owner = "coveooss";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-LsZPf5PVXPSyHNgfBdjH4hG4OFIdSprO5uj3saPDqzo=";
+    hash = "sha256-+RsJdlGMrjW2GFFLUcQBMwBnBlhST0knCleh2e3d10A=";
   };
 
   postPatch = ''
@@ -51,7 +51,7 @@ buildPythonPackage rec {
     requests
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     beautifulsoup4
     pytestCheckHook
   ];

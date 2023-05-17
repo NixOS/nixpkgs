@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "pyramid_chameleon";
     inherit version;
-    sha256 = "sha256-0XZ5KlDrAV14ZbRL2bJKe9BIn6mlzrvRe54FBIzvkBc=";
+    hash = "sha256-0XZ5KlDrAV14ZbRL2bJKe9BIn6mlzrvRe54FBIzvkBc=";
   };
 
   patches = [
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     (fetchpatch {
       name = "support-later-limiter.patch";
       url = "https://github.com/Pylons/pyramid_chameleon/commit/36348bf4c01f52c3461e7ba4d20b1edfc54dba50.patch";
-      sha256 = "sha256-cPS7JhcS8nkBS1T0OdZke25jvWHT0qkPFjyPUDKHBGU=";
+      hash = "sha256-cPS7JhcS8nkBS1T0OdZke25jvWHT0qkPFjyPUDKHBGU=";
     })
   ];
 
@@ -38,7 +38,7 @@ buildPythonPackage rec {
     zope_interface
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

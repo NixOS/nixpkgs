@@ -15,6 +15,19 @@ let
     inherit (kubo-migrator-unwrapped) src;
     sourceRoot = "source/${pname}";
     vendorSha256 = null;
+    # Fix build on Go 1.17 and later: panic: qtls.ClientHelloInfo doesn't match
+    # See https://github.com/ipfs/fs-repo-migrations/pull/163
+    postPatch = lib.optionalString (lib.elem pname [ "fs-repo-10-to-11" "fs-repo-11-to-12" ]) ''
+      substituteInPlace 'vendor/github.com/marten-seemann/qtls-go1-15/common.go' \
+        --replace \
+          '"container/list"' \
+          '"container/list"
+          "context"' \
+        --replace \
+          'config *Config' \
+          'config *Config
+          ctx context.Context'
+    '';
     doCheck = false;
     meta = kubo-migrator-unwrapped.meta // {
       mainProgram = pname;
@@ -23,8 +36,9 @@ let
   };
 
   # Concatenation of the latest repo version and the version of that migration
-  version = "12.1.0.2";
+  version = "13.1.0.0";
 
+  fs-repo-12-to-13 = fs-repo-common "fs-repo-12-to-13" "1.0.0";
   fs-repo-11-to-12 = fs-repo-common "fs-repo-11-to-12" "1.0.2";
   fs-repo-10-to-11 = fs-repo-common "fs-repo-10-to-11" "1.0.1";
   fs-repo-9-to-10  = fs-repo-common "fs-repo-9-to-10"  "1.0.1";
@@ -39,6 +53,7 @@ let
   fs-repo-0-to-1   = fs-repo-common "fs-repo-0-to-1"   "1.0.1";
 
   all-migrations = [
+    fs-repo-12-to-13
     fs-repo-11-to-12
     fs-repo-10-to-11
     fs-repo-9-to-10

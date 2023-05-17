@@ -38,7 +38,7 @@ buildPythonPackage rec {
     zict
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     confluent-kafka
     distributed
     flaky

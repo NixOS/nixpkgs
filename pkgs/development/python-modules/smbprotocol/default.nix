@@ -28,7 +28,7 @@ buildPythonPackage rec {
     pyspnego
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-mock
     pytestCheckHook
   ];

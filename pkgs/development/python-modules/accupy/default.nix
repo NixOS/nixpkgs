@@ -40,7 +40,7 @@ buildPythonPackage rec {
     pyfma
   ] ++ lib.optional (pythonOlder "3.8") importlib-metadata;
 
-  checkInputs = [
+  nativeCheckInputs = [
     perfplot
     pytestCheckHook
     matplotlib

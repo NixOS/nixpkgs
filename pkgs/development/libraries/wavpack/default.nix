@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   nativeBuildInputs = [ autoreconfHook ];
-  buildInputs = lib.optional stdenv.isDarwin libiconv;
+  buildInputs = [ libiconv ];
 
   # autogen.sh:9
   preAutoreconf = "cp ${gettext}/share/gettext/config.rpath .";
@@ -18,6 +18,8 @@ stdenv.mkDerivation rec {
     rev = version;
     hash = "sha256-4QDtLywu0PT+YsMV26M74bL2P7p4s1tk8ZBQtQcubaU=";
   };
+
+  outputs = [ "out" "dev" "doc" "man" ];
 
   meta = with lib; {
     description = "Hybrid audio compression format";

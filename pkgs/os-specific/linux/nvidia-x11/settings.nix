@@ -25,7 +25,7 @@ let
       cd src/libXNVCtrl
     '';
 
-    makeFlags = nvidia_x11.makeFlags ++ [
+    makeFlags = [
       "OUTPUTDIR=." # src/libXNVCtrl
     ];
 
@@ -59,7 +59,7 @@ stdenv.mkDerivation {
   '';
 
   enableParallelBuilding = true;
-  makeFlags = nvidia_x11.makeFlags ++ [ "NV_USE_BUNDLED_LIBJANSSON=0" ];
+  makeFlags = [ "NV_USE_BUNDLED_LIBJANSSON=0" ];
 
   preBuild = ''
     if [ -e src/libXNVCtrl/libXNVCtrl.a ]; then

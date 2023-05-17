@@ -17,7 +17,7 @@ import ../pillow/generic.nix (rec {
     owner = "uploadcare";
     repo = "pillow-simd";
     rev = "v${version}";
-    sha256 = "sha256-qTZYhgHjVMXqoYl3mG1xVrFaWrPidSY8HlyFQizV27Y=";
+    hash = "sha256-qTZYhgHjVMXqoYl3mG1xVrFaWrPidSY8HlyFQizV27Y=";
   };
 
   meta = with lib; {

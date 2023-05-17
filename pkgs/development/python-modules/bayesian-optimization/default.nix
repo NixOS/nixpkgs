@@ -31,12 +31,12 @@ buildPythonPackage rec {
     # https://github.com/fmfn/BayesianOptimization/issues/300
     (fetchpatch {
       url = "https://github.com/fmfn/BayesianOptimization/commit/b4e09a25842985a4a0acea0c0f5c8789b7be125e.patch";
-      sha256 = "sha256-PfcifCFd4GRNTA+4+T+6A760QAgyZxhDCTyzNn2crdM=";
+      hash = "sha256-PfcifCFd4GRNTA+4+T+6A760QAgyZxhDCTyzNn2crdM=";
       name = "scipy_18_fix.patch";
     })
   ];
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   disabledTests = [
     # New sklearn broke one test

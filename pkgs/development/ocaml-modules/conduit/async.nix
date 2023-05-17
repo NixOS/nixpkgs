@@ -1,4 +1,4 @@
-{ lib, buildDunePackage, async, async_ssl, ppx_sexp_conv, ppx_here, uri, conduit
+{ lib, buildDunePackage, async, async_ssl ? null, ppx_sexp_conv, ppx_here, uri, conduit
 , core, ipaddr, ipaddr-sexp, sexplib
 }:
 
@@ -8,6 +8,8 @@ buildDunePackage {
     version
     src
     ;
+
+  duneVersion = "3";
 
   buildInputs = [ ppx_sexp_conv ppx_here ];
 

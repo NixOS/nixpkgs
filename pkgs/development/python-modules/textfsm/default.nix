@@ -16,7 +16,7 @@ buildPythonPackage rec {
     owner = "google";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-IHgKG8v0X+LSK6purWBdwDnI/BCs5XA12ZJixuqqXWg=";
+    hash = "sha256-IHgKG8v0X+LSK6purWBdwDnI/BCs5XA12ZJixuqqXWg=";
   };
 
   propagatedBuildInputs = [
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     future
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

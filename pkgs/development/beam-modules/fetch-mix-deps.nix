@@ -45,7 +45,7 @@ stdenvNoCC.mkDerivation (attrs // {
 
   installPhase = attrs.installPhase or ''
     runHook preInstall
-    mix deps.get --only ${mixEnv}
+    mix deps.get ''${MIX_ENV:+--only $MIX_ENV}
     find "$TEMPDIR/deps" -path '*/.git/*' -a ! -name HEAD -exec rm -rf {} +
     cp -r --no-preserve=mode,ownership,timestamps $TEMPDIR/deps $out
     runHook postInstall

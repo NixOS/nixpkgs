@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   pname = "love";
-  version = "11.4";
+  version = "0.10.2";
 
   src = fetchFromGitHub {
     owner = "love2d";
     repo = "love";
     rev = version;
-    sha256 = "sha256-C/Ifd0KjmaM5Y2fxBiDNz1GQoT4GeH/vyUCiira57U4=";
+    sha256 = "19yfmlcx6w8yi4ndm5lni8lrsvnn77bxw5py0dc293nzzlaqa9ym";
   };
 
   nativeBuildInputs = [ pkg-config autoconf automake ];
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     "--with-lua=luajit"
   ];
 
-  NIX_CFLAGS_COMPILE = "-DluaL_reg=luaL_Reg"; # needed since luajit-2.1.0-beta3
+  env.NIX_CFLAGS_COMPILE = "-DluaL_reg=luaL_Reg"; # needed since luajit-2.1.0-beta3
 
   meta = {
     homepage = "https://love2d.org";

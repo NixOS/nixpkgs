@@ -1060,6 +1060,20 @@ let
       '';
     };
 
+    shelly = {
+      exporterConfig = {
+        enable = true;
+        metrics-file = "${pkgs.writeText "test.json" ''{}''}";
+      };
+      exporterTest = ''
+        wait_for_unit("prometheus-shelly-exporter.service")
+        wait_for_open_port(9784)
+        wait_until_succeeds(
+            "curl -sSf 'localhost:9784/metrics'"
+        )
+      '';
+    };
+
     script = {
       exporterConfig = {
         enable = true;
@@ -1382,7 +1396,10 @@ let
       '';
     };
 
-    wireguard = let snakeoil = import ./wireguard/snakeoil-keys.nix; in
+    wireguard = let
+      snakeoil = import ./wireguard/snakeoil-keys.nix;
+      publicKeyWithoutNewlines = replaceStrings [ "\n" ] [ "" ] snakeoil.peer1.publicKey;
+    in
       {
         exporterConfig.enable = true;
         metricProvider = {
@@ -1404,7 +1421,7 @@ let
           wait_for_unit("prometheus-wireguard-exporter.service")
           wait_for_open_port(9586)
           wait_until_succeeds(
-              "curl -sSf http://localhost:9586/metrics | grep '${snakeoil.peer1.publicKey}'"
+              "curl -sSf http://localhost:9586/metrics | grep '${publicKeyWithoutNewlines}'"
           )
         '';
       };

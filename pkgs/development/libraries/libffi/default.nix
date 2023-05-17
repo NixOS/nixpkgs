@@ -44,6 +44,7 @@ stdenv.mkDerivation rec {
 
   preCheck = ''
     # The tests use -O0 which is not compatible with -D_FORTIFY_SOURCE.
+    NIX_HARDENING_ENABLE=''${NIX_HARDENING_ENABLE/fortify3/}
     NIX_HARDENING_ENABLE=''${NIX_HARDENING_ENABLE/fortify/}
   '';
 
@@ -51,12 +52,10 @@ stdenv.mkDerivation rec {
 
   inherit doCheck;
 
-  checkInputs = [ dejagnu ];
+  nativeCheckInputs = [ dejagnu ];
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = pname;
-    };
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {

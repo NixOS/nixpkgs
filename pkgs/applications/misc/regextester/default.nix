@@ -11,18 +11,19 @@
 , ninja
 , gobject-introspection
 , gsettings-desktop-schemas
+, desktop-file-utils
 , pantheon
 , wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "regextester";
-  version = "1.0.1";
+  version = "1.1.1";
 
   src = fetchFromGitHub {
     owner = "artemanufrij";
     repo = "regextester";
     rev = version;
-    sha256 = "1xwwv1hccni1mrbl58f7ly4qfq6738vn24bcbl2q346633cd7kx3";
+    hash = "sha256-5+gU8DeB99w2h/4vMal2eHkR0305dmRYiY6fsLZzlnc=";
   };
 
   nativeBuildInputs = [
@@ -34,6 +35,7 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     wrapGAppsHook
+    desktop-file-utils
   ];
 
   buildInputs = [

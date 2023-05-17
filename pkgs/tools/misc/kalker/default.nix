@@ -1,25 +1,33 @@
 { lib
-, fetchFromGitHub
-, gcc
-, gmp, mpfr, libmpc
 , rustPlatform
+, fetchFromGitHub
+, gmp
+, mpfr
+, libmpc
 }:
+
 rustPlatform.buildRustPackage rec {
   pname = "kalker";
-  version = "2.0.0";
+  version = "2.0.3";
 
   src = fetchFromGitHub {
     owner = "PaddiM8";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-D7FlX72fcbeVtQ/OtK2Y3P1hZ5Bmowa04up5rTTXDDU=";
+    sha256 = "sha256-Pj3rcjEbUt+pnmbOZlv2JIvUhVdeiXYDKc5FED6qO7E=";
   };
 
-  cargoSha256 = "sha256-r20kQG6YeNGGb7ovYaAx+4DGijZSmf5YoIYh3z5zOpk=";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+  };
 
   buildInputs = [ gmp mpfr libmpc ];
 
   outputs = [ "out" "lib" ];
+
+  postPatch = ''
+    ln -s ${./Cargo.lock} Cargo.lock
+  '';
 
   postInstall = ''
     moveToOutput "lib" "$lib"
@@ -36,6 +44,6 @@ rustPlatform.buildRustPackage rec {
       variables, functions, derivation, integration, and complex numbers
     '';
     license = licenses.mit;
-    maintainers = with maintainers; [ lovesegfault ];
+    maintainers = with maintainers; [ figsoda lovesegfault ];
   };
 }

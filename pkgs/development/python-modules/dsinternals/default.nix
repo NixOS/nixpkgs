@@ -26,7 +26,7 @@ buildPythonPackage rec {
     pycryptodomex
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

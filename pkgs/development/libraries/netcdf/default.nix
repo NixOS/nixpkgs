@@ -1,6 +1,11 @@
 { lib, stdenv
 , fetchurl, unzip
 , hdf5
+, bzip2
+, libzip
+, zstd
+, szipSupport ? false
+, szip
 , libxml2
 , m4
 , curl # for DAP
@@ -34,7 +39,10 @@ in stdenv.mkDerivation rec {
     hdf5
     libxml2
     mpi
-  ];
+    bzip2
+    libzip
+    zstd
+  ] ++ lib.optional szipSupport szip;
 
   passthru = {
     inherit mpiSupport mpi;
@@ -45,8 +53,11 @@ in stdenv.mkDerivation rec {
       "--enable-dap"
       "--enable-shared"
       "--disable-dap-remote-tests"
+      "--with-plugin-dir=${placeholder "out"}/lib/hdf5-plugins"
   ]
   ++ (lib.optionals mpiSupport [ "--enable-parallel-tests" "CC=${mpi}/bin/mpicc" ]);
+
+  enableParallelBuilding = true;
 
   disallowedReferences = [ stdenv.cc ];
 
@@ -55,7 +66,7 @@ in stdenv.mkDerivation rec {
   '';
 
   doCheck = !(mpiSupport || (stdenv.isDarwin && stdenv.isAarch64));
-  checkInputs = [ unzip ];
+  nativeCheckInputs = [ unzip ];
 
   preCheck = ''
     export HOME=$TEMP

@@ -26,11 +26,9 @@ python3Packages.buildPythonApplication rec {
 
   doCheck = false;
 
-  pythonimportsCheck = [ "apt-offline" ];
+  pythonImportsCheck = [ "apt_offline_core" ];
 
-  passthru.updateScript = nix-update-script {
-    attrPath = pname;
-  };
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     homepage = "https://github.com/rickysarraf/apt-offline";

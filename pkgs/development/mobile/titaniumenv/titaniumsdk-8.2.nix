@@ -105,10 +105,9 @@ stdenv.mkDerivation {
       ''
         patchelf --set-interpreter ${stdenv.cc.libc}/lib/ld-linux.so.2 android/titanium_prep.linux32
       ''
-      else if stdenv.system == "x86_64-linux" then
-      ''
+      else lib.optionalString (stdenv.system == "x86_64-linux") ''
         patchelf --set-interpreter ${stdenv.cc.libc}/lib/ld-linux-x86-64.so.2 android/titanium_prep.linux64
       ''
-      else ""}
+    }
   '';
 }

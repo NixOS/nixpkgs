@@ -16,9 +16,11 @@ In the following is an example expression using `buildGoModule`, the following a
   `vendorHash` can also be set to `null`.
   In that case, rather than fetching the dependencies and vendoring them, the dependencies vendored in the source repo will be used.
 
-  To avoid updating this field when dependencies change, run `go mod vendor` in your source repo and set `vendorHash = null;`  
+  To avoid updating this field when dependencies change, run `go mod vendor` in your source repo and set `vendorHash = null;`
+
   To obtain the actual hash, set `vendorHash = lib.fakeSha256;` and run the build ([more details here](#sec-source-hashes)).
 - `proxyVendor`: Fetches (go mod download) and proxies the vendor directory. This is useful if your code depends on c code and go mod tidy does not include the needed sources to build or if any dependency has case-insensitive conflicts which will produce platform dependant `vendorHash` checksums.
+- `modPostBuild`: Shell commands to run after the build of the go-modules executes `go mod vendor`, and before calculating fixed output derivation's `vendorHash` (or `vendorSha256`). Note that if you change this attribute, you need to update `vendorHash` (or `vendorSha256`) attribute.
 
 ```nix
 pet = buildGoModule rec {
@@ -113,7 +115,16 @@ done
 
 ## Attributes used by the builders {#ssec-go-common-attributes}
 
-Both `buildGoModule` and `buildGoPackage` can be tweaked to behave slightly differently, if the following attributes are used:
+Many attributes [controlling the build phase](#variables-controlling-the-build-phase) are respected by both `buildGoModule` and `buildGoPackage`. Note that `buildGoModule` reads the following attributes also when building the `vendor/` go-modules fixed output derivation as well:
+
+- [`sourceRoot`](#var-stdenv-sourceRoot)
+- [`prePatch`](#var-stdenv-prePatch)
+- [`patches`](#var-stdenv-patches)
+- [`patchFlags`](#var-stdenv-patchFlags)
+- [`postPatch`](#var-stdenv-postPatch)
+- [`preBuild`](#var-stdenv-preBuild)
+
+In addition to the above attributes, and the many more variables respected also by `stdenv.mkDerivation`, both `buildGoModule` and `buildGoPackage` respect Go-specific attributes that tweak them to behave slightly differently:
 
 ### `ldflags` {#var-go-ldflags}
 

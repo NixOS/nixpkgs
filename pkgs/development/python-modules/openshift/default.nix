@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "openshift";
     repo = "openshift-restclient-python";
     rev = "v${version}";
-    sha256 = "sha256-9mMHih2xuQve8hEnc5x4f9Pd4wX7IMy3vrxxGFCG+8o=";
+    hash = "sha256-9mMHih2xuQve8hEnc5x4f9Pd4wX7IMy3vrxxGFCG+8o=";
   };
 
   postPatch = ''
@@ -38,7 +38,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = ["openshift"];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-bdd
     pytestCheckHook
   ];

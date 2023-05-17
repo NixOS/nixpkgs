@@ -9,7 +9,7 @@ stdenv.mkDerivation {
 
   # ...
 
-  checkInputs = [
+  nativeCheckInputs = [
     postgresql
     postgresqlTestHook
   ];
@@ -45,6 +45,12 @@ Bash-only variables:
  - `postgresqlTestSetupCommands`: bash commands to run after database start, defaults to running `$postgresqlTestSetupSQL` as database administrator.
  - `postgresqlEnableTCP`: set to `1` to enable TCP listening. Flaky; not recommended.
  - `postgresqlStartCommands`: defaults to `pg_ctl start`.
+
+## Hooks {#sec-postgresqlTestHook-hooks}
+
+A number of additional hooks are ran in postgresqlTestHook
+
+ - `postgresqlTestSetupPost`: ran after postgresql has been set up.
 
 ## TCP and the Nix sandbox {#sec-postgresqlTestHook-tcp}
 

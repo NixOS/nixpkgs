@@ -1,13 +1,13 @@
 if [[ -n "${__nix_qtbase-}" ]]; then
     # Throw an error if a different version of Qt was already set up.
-    if [[ "$__nix_qtbase" != "@dev@" ]]; then
+    if [[ "$__nix_qtbase" != "@out@" ]]; then
         echo >&2 "Error: detected mismatched Qt dependencies:"
-        echo >&2 "    @dev@"
+        echo >&2 "    @out@"
         echo >&2 "    $__nix_qtbase"
         exit 1
     fi
 else # Only set up Qt once.
-    __nix_qtbase="@dev@"
+    __nix_qtbase="@out@"
 
     qtPluginPrefix=@qtPluginPrefix@
     qtQmlPrefix=@qtQmlPrefix@
@@ -30,7 +30,7 @@ else # Only set up Qt once.
     fi
 
     # Build tools are often confused if QMAKE is unset.
-    export QMAKE=@dev@/bin/qmake
+    export QMAKE=@out@/bin/qmake
 
     export QMAKEPATH=
 
@@ -53,23 +53,21 @@ else # Only set up Qt once.
         # Prevent this hook from running multiple times
         dontPatchMkspecs=1
 
-        local bin="${!outputBin}"
-        local dev="${!outputDev}"
-        local doc="${!outputDoc}"
         local lib="${!outputLib}"
+        local dev="${!outputDev}"
 
-        moveToOutput "mkspecs" "$dev"
+        moveToOutput "mkspecs/modules" "$dev"
 
         if [ -d "$dev/mkspecs/modules" ]; then
             fixQtModulePaths "$dev/mkspecs/modules"
         fi
 
-        if [ -d "$dev/mkspecs" ]; then
-            fixQtBuiltinPaths "$dev/mkspecs" '*.pr?'
+        if [ -d "$lib/mkspecs" ]; then
+            fixQtBuiltinPaths "$lib/mkspecs" '*.pr?'
         fi
 
-        if [ -d "$lib" ]; then
-            fixQtBuiltinPaths "$lib" '*.pr?'
+        if [ -d "$lib/lib" ]; then
+            fixQtBuiltinPaths "$lib/lib" '*.pr?'
         fi
     }
     if [ -z "${dontPatchMkspecs-}" ]; then

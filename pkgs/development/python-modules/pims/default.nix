@@ -5,7 +5,7 @@
 , numpy
 , pytestCheckHook
 , pythonOlder
-, scikitimage
+, scikit-image
 , slicerator
 }:
 
@@ -29,9 +29,9 @@ buildPythonPackage rec {
     numpy
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
-    scikitimage
+    scikit-image
   ];
 
   pythonImportsCheck = [
@@ -53,5 +53,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/soft-matter/pims";
     license = licenses.bsd3;
     maintainers = with maintainers; [ costrouc ];
+    broken = true;
   };
 }

@@ -4,7 +4,7 @@
 , fetchPypi
 , glibcLocales
 , hypothesis
-, PyICU
+, pyicu
 , pytest-mock
 , pytestCheckHook
 , pythonOlder
@@ -12,22 +12,22 @@
 
 buildPythonPackage rec {
   pname = "natsort";
-  version = "8.2.0";
+  version = "8.3.1";
   format = "setuptools";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-V/hbcsaIsJ4FPNrDAt1bW1PfX3OuILSHT8v/2L94PRE=";
+    hash = "sha256-UXWVSS3eVwpP1ranb2REQMG6UeIzjIpnHX8Edf2o+f0=";
   };
 
   propagatedBuildInputs = [
     fastnumbers
-    PyICU
+    pyicu
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     glibcLocales
     hypothesis
     pytest-mock
@@ -41,6 +41,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Natural sorting for Python";
     homepage = "https://github.com/SethMMorton/natsort";
+    changelog = "https://github.com/SethMMorton/natsort/blob/${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ ];
   };

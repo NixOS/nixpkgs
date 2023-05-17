@@ -78,7 +78,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  NIX_CFLAGS_COMPILE = "-D_GNU_SOURCE";
+  env.NIX_CFLAGS_COMPILE = "-D_GNU_SOURCE";
 
   hardeningDisable = [ "format" ];
 

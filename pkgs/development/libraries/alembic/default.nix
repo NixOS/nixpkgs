@@ -1,37 +1,61 @@
-{ lib, stdenv, fetchFromGitHub, unzip, cmake, openexr, hdf5-threadsafe }:
+{ lib, stdenv, fetchFromGitHub, cmake, openexr, hdf5-threadsafe, ilmbase }:
 
 stdenv.mkDerivation rec
 {
   pname = "alembic";
-  version = "1.8.3";
+  version = "1.8.5";
 
   src = fetchFromGitHub {
     owner = "alembic";
     repo = "alembic";
     rev = version;
-    sha256 = "sha256-QnqUD8KmMDmEZ1REoKN70SwVICOdyGPZsB/lU9nojj4=";
+    sha256 = "sha256-wJVx0rwK0Qk07jlP0DyEAZUrAD+47qcVXSnTh5ngZG8=";
   };
 
+  # note: out is unused (but required for outputDoc anyway)
   outputs = [ "bin" "dev" "out" "lib" ];
 
-  nativeBuildInputs = [ unzip cmake ];
-  buildInputs = [ openexr hdf5-threadsafe ];
+  # Prevent cycle between bin and dev (only occurs on Darwin for some reason)
+  propagatedBuildOutputs = [ "lib" ];
 
-  buildPhase = ''
-    cmake -DUSE_HDF5=ON -DCMAKE_INSTALL_PREFIX=$out/ -DUSE_TESTS=OFF .
+  nativeBuildInputs = [ cmake ];
 
-    mkdir $out
-    mkdir -p $bin/bin
-    mkdir -p $dev/include
-    mkdir -p $lib/lib
+  # NOTE: Alembic also support imath instead of ilmbase, but some users of Alembic (e.g. Blender)
+  # are incompatible with the imath version of Alembic
+  buildInputs = [ openexr hdf5-threadsafe ilmbase ];
+
+  # Downstream packages trying to use Alembic via CMake need ilmbase as well
+  # For some reason this won't be picked up correctly otherwise
+  propagatedBuildInputs = [ ilmbase ];
+
+  # These flags along with the postPatch step ensure that all artifacts end up
+  # in the correct output without needing to move anything
+  #
+  # - bin: Uses CMAKE_INSTALL_BINDIR (set via CMake setup hooK)
+  # - lib (contains shared libraries): Uses ALEMBIC_LIB_INSTALL_DIR
+  # - dev (headers): Uses CMAKE_INSTALL_PREFIX
+  #   (this works because every other install rule uses an absolute DESTINATION)
+  # - dev (CMake files): Uses ConfigPackageLocation
+
+  cmakeFlags = [
+    "-DUSE_HDF5=ON"
+    "-DUSE_TESTS=ON"
+    "-DALEMBIC_LIB_INSTALL_DIR=${placeholder "lib"}/lib"
+    "-DConfigPackageLocation=${placeholder "dev"}/lib/cmake/Alembic"
+    "-DCMAKE_INSTALL_PREFIX=${placeholder "dev"}"
+    "-DQUIET=ON"
+  ];
+
+  postPatch = ''
+    find bin/ -type f -name CMakeLists.txt -print -exec \
+      sed -i 's/INSTALL(TARGETS \([a-zA-Z ]*\) DESTINATION bin)/INSTALL(TARGETS \1)/' {} \;
   '';
 
-  installPhase = ''
-    make install
-
-    mv $out/bin $bin/
-    mv $out/lib $lib/
-    mv $out/include $dev/
+  doCheck = true;
+  checkPhase = ''
+    runHook preCheck
+    ctest -j 1
+    runHook postCheck
   '';
 
   meta = with lib; {
@@ -39,6 +63,6 @@ stdenv.mkDerivation rec
     homepage = "http://alembic.io/";
     license = licenses.bsd3;
     platforms = platforms.all;
-    maintainers = [ maintainers.guibou ];
+    maintainers = with maintainers; [ guibou tmarkus ];
   };
 }

@@ -1,24 +1,24 @@
-{ lib, fetchzip }:
+{ lib, stdenvNoCC, fetchzip }:
 
-let version = "20030809";
-in
-fetchzip {
-  name = "kochi-substitute-naga10-${version}";
+stdenvNoCC.mkDerivation rec {
+  pname = "kochi-substitute-naga10";
+  version = "20030809";
 
-  url = "mirror://osdn/efont/5411/kochi-substitute-${version}.tar.bz2";
+  src = fetchzip {
+    url = "mirror://osdn/efont/5411/kochi-substitute-${version}.tar.bz2";
+    stripRoot = false;
+    hash = "sha256-dRJAxeVGYcNjLWqJJ+9Z2FW3BHrgyGRzlgM2x5YG3AM=";
+  };
 
-  stripRoot = false;
+  installPhase = ''
+    runHook preInstall
 
-  postFetch = ''
     mkdir -p $out/share/fonts/truetype
-    mv $out/*/kochi-gothic-subst.ttf $out/share/fonts/truetype/kochi-gothic-subst-naga10.ttf
-    mv $out/*/kochi-mincho-subst.ttf $out/share/fonts/truetype/kochi-mincho-subst-naga10.ttf
-    shopt -s extglob dotglob
-    rm -rf $out/!(share)
-    shopt -u extglob dotglob
-  '';
+    mv */kochi-gothic-subst.ttf $out/share/fonts/truetype/kochi-gothic-subst-naga10.ttf
+    mv */kochi-mincho-subst.ttf $out/share/fonts/truetype/kochi-mincho-subst-naga10.ttf
 
-  sha256 = "sha256-SZ7ZJYuCYU0NxWHlEszbvFmyZxWeBtmPL204PjIrS64=";
+    runHook postInstall
+  '';
 
   meta = {
     description = "Japanese font, non-free replacement for MS Gothic and MS Mincho";

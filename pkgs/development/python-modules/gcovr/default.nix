@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "gcovr";
-  version = "5.2";
+  version = "6.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-IXGVCF7JQ0YpGoe3sebZz97u5WKz4PmjKyXJUws7zo8=";
+    hash = "sha256-hjjV9E3vEOOOMWbIozvvZkPsIEaH4Kx9NFzkGpjFdQs=";
   };
 
   propagatedBuildInputs = [
@@ -39,6 +39,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python script for summarizing gcov data";
     homepage = "https://www.gcovr.com/";
+    changelog = "https://github.com/gcovr/gcovr/blob/${version}/CHANGELOG.rst";
     license = licenses.bsd0;
     maintainers = with maintainers; [ ];
   };

@@ -52,6 +52,7 @@
 , libspatialite
 , sqlite
 , libtiff
+, useTiledb ? !(stdenv.isDarwin && stdenv.isx86_64)
 , tiledb
 , libwebp
 , xercesc
@@ -61,13 +62,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gdal";
-  version = "3.6.1";
+  version = "3.6.4";
 
   src = fetchFromGitHub {
     owner = "OSGeo";
     repo = "gdal";
     rev = "v${version}";
-    hash = "sha256-hWuV73b7czmbxpnd82V2FHM+ak9JviDHVodVXAHh/pc=";
+    hash = "sha256-pGdZmQBUuNCk9/scUvq4vduINu5gqtCRLaz7QE2e6WU=";
   };
 
   nativeBuildInputs = [
@@ -86,11 +87,13 @@ stdenv.mkDerivation rec {
     "-DGEOTIFF_INCLUDE_DIR=${lib.getDev libgeotiff}/include"
     "-DGEOTIFF_LIBRARY_RELEASE=${lib.getLib libgeotiff}/lib/libgeotiff${stdenv.hostPlatform.extensions.sharedLibrary}"
     "-DMYSQL_INCLUDE_DIR=${lib.getDev libmysqlclient}/include/mysql"
-    "-DMYSQL_LIBRARY=${lib.getLib libmysqlclient}/lib/mysql/libmysqlclient${stdenv.hostPlatform.extensions.sharedLibrary}"
+    "-DMYSQL_LIBRARY=${lib.getLib libmysqlclient}/lib/${lib.optionalString (libmysqlclient.pname != "mysql") "mysql/"}libmysqlclient${stdenv.hostPlatform.extensions.sharedLibrary}"
   ] ++ lib.optionals (!stdenv.isDarwin) [
     "-DCMAKE_SKIP_BUILD_RPATH=ON" # without, libgdal.so can't find libmariadb.so
   ] ++ lib.optionals stdenv.isDarwin [
     "-DCMAKE_BUILD_WITH_INSTALL_NAME_DIR=ON"
+  ] ++ lib.optionals (!useTiledb) [
+    "-DGDAL_USE_TILEDB=OFF"
   ];
 
   buildInputs = [
@@ -135,7 +138,9 @@ stdenv.mkDerivation rec {
     libspatialite
     sqlite
     libtiff
+  ] ++ lib.optionals useTiledb [
     tiledb
+  ] ++ [
     libwebp
     zlib
     zstd
@@ -163,7 +168,7 @@ stdenv.mkDerivation rec {
     export HOME=$(mktemp -d)
     export PYTHONPATH="$out/${python3.sitePackages}:$PYTHONPATH"
   '';
-  installCheckInputs = with python3.pkgs; [
+  nativeInstallCheckInputs = with python3.pkgs; [
     pytestCheckHook
     pytest-env
     lxml
@@ -183,6 +188,8 @@ stdenv.mkDerivation rec {
     "test_osr_ct_options_area_of_interest"
     # ZIP does not support timestamps before 1980
     " test_sentinel2_zipped"
+    # tries to call unwrapped executable
+    "test_SetPROJAuxDbPaths"
   ] ++ lib.optionals (!stdenv.isx86_64) [
     # likely precision-related expecting x87 behaviour
     "test_jp2openjpeg_22"
@@ -196,10 +203,12 @@ stdenv.mkDerivation rec {
     popd # ../autotest
   '';
 
+  __darwinAllowLocalNetworking = true;
+
   meta = {
     description = "Translator library for raster geospatial data formats";
     homepage = "https://www.gdal.org/";
-    changelog = "https://docs.unidata.ucar.edu/netcdf-c/${src.rev}/RELEASE_NOTES.html";
+    changelog = "https://github.com/OSGeo/gdal/blob/${src.rev}/NEWS.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ marcweber dotlambda ];
     platforms = lib.platforms.unix;

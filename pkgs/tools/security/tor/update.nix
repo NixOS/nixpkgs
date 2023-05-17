@@ -10,8 +10,6 @@
 , nix
 }:
 
-with lib;
-
 let
   downloadPageUrl = "https://dist.torproject.org";
 
@@ -28,7 +26,7 @@ writeScript "update-tor" ''
 
 set -eu -o pipefail
 
-export PATH=${makeBinPath [
+export PATH=${lib.makeBinPath [
   common-updater-scripts
   coreutils
   curl
@@ -63,7 +61,7 @@ sigFile=''${sigUrl##*/}
 export GNUPGHOME=$PWD/gnupg
 mkdir -m 700 -p "$GNUPGHOME"
 
-gpg --batch --recv-keys ${concatStringsSep " " (map (x: "'${x}'") signingKeys)}
+gpg --batch --recv-keys ${lib.concatStringsSep " " (map (x: "'${x}'") signingKeys)}
 gpg --batch --verify "$sigFile" "$checksumFile"
 
 sha256sum -c "$checksumFile"

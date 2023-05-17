@@ -20,18 +20,15 @@ name that has the same encoding in each normal form.
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/tests/test_bdist_wheel.py b/tests/test_bdist_wheel.py
-index 651c034..9b94ac8 100644
+index 5a6db16..42cf121 100644
 --- a/tests/test_bdist_wheel.py
 +++ b/tests/test_bdist_wheel.py
-@@ -58,7 +58,7 @@ def test_unicode_record(wheel_paths):
+@@ -69,7 +69,7 @@ def test_unicode_record(wheel_paths):
      with ZipFile(path) as zf:
-         record = zf.read('unicode.dist-0.1.dist-info/RECORD')
+         record = zf.read("unicode.dist-0.1.dist-info/RECORD")
  
--    assert u'åäö_日本語.py'.encode('utf-8') in record
-+    assert u'æɐø_日本價.py'.encode('utf-8') in record
+-    assert "åäö_日本語.py".encode() in record
++    assert "æɐø_日本價.py".encode() in record
  
  
- def test_licenses_default(dummy_dist, monkeypatch, tmpdir):
--- 
-2.17.2 (Apple Git-113)
-
+ UTF8_PKG_INFO = """\

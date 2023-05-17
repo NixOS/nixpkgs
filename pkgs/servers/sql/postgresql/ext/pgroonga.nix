@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "pgroonga";
-  version = "2.4.0";
+  version = "3.0.1";
 
   src = fetchurl {
     url = "https://packages.groonga.org/source/${pname}/${pname}-${version}.tar.gz";
-    sha256 = "sha256-W6quDn2B+BZ+J46aNMbtVq7OizT1q5jyKMZECAk0F7M=";
+    sha256 = "sha256-lsUtM6AM/AVjDGP9vSzj7Vxx+3+IS4cr7ctmU4C6Ml8=";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -35,6 +35,6 @@ stdenv.mkDerivation rec {
     homepage = "https://pgroonga.github.io/";
     license = licenses.postgresql;
     platforms = postgresql.meta.platforms;
-    maintainers = with maintainers; [ DerTim1 ivan ];
+    maintainers = with maintainers; [ DerTim1 ];
   };
 }

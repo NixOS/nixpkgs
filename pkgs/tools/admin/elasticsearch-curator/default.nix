@@ -7,7 +7,7 @@ let
         version = "7.1.2";
         src = old.src.override {
           inherit version;
-          sha256 = "d2b5255c7c6349bc1bd1e59e08cd12acbbd63ce649f2588755783aa94dfb6b1a";
+          hash = "sha256-0rUlXHxjSbwb0eWeCM0SrLvWPOZJ8liHVXg6qU37axo=";
         };
       });
       requests-aws4auth = super.requests-aws4auth.overridePythonAttrs (old: {
@@ -49,7 +49,7 @@ in python.pkgs.buildPythonApplication rec {
     six
   ];
 
-  checkInputs = with python.pkgs; [
+  nativeCheckInputs = with python.pkgs; [
     mock
     pytestCheckHook
   ];

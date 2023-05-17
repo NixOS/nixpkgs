@@ -12,20 +12,33 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
-  buildInputs = [ vala gobject-introspection zlib gpgme libidn2 libunistring ];
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [ pkg-config gobject-introspection vala ];
+  buildInputs = [
+    zlib
+    gpgme
+    libidn2
+    libunistring
+    vala # for share/vala/Makefile.vapigen
+  ];
   propagatedBuildInputs = [ glib ];
   configureFlags = [
     "--enable-introspection=yes"
     "--enable-vala=yes"
-  ];
+  ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [ "ac_cv_have_iconv_detect_h=yes" ];
 
   postPatch = ''
     substituteInPlace tests/testsuite.c \
       --replace /bin/rm rm
   '';
 
-  checkInputs = [ gnupg ];
+  preConfigure = ''
+    PKG_CONFIG_VAPIGEN_VAPIGEN="$(type -p vapigen)"
+    export PKG_CONFIG_VAPIGEN_VAPIGEN
+  '' + lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
+    cp ${if stdenv.hostPlatform.isMusl then ./musl-iconv-detect.h else ./iconv-detect.h} ./iconv-detect.h
+  '';
+
+  nativeCheckInputs = [ gnupg ];
 
   doCheck = true;
 

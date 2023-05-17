@@ -37,20 +37,18 @@ rec {
   );
   nativeBuildInputs = lib.flatten (lib.mapAttrsToList (
     feat: info: (
-      if hasFeature feat then
-        (if builtins.hasAttr "native" info then info.native else []) ++
-        (if builtins.hasAttr "pythonNative" info then info.pythonNative else [])
-      else
-        []
+      lib.optionals (hasFeature feat) (
+        (lib.optionals (builtins.hasAttr "native" info) info.native) ++
+        (lib.optionals (builtins.hasAttr "pythonNative" info) info.pythonNative)
+      )
     )
   ) featuresInfo);
   buildInputs = lib.flatten (lib.mapAttrsToList (
     feat: info: (
-      if hasFeature feat then
-        (if builtins.hasAttr "runtime" info then info.runtime else []) ++
-        (if builtins.hasAttr "pythonRuntime" info then info.pythonRuntime else [])
-      else
-        []
+      lib.optionals (hasFeature feat) (
+        (lib.optionals (builtins.hasAttr "runtime" info) info.runtime) ++
+        (lib.optionals (builtins.hasAttr "pythonRuntime" info) info.pythonRuntime)
+      )
     )
   ) featuresInfo);
   cmakeFlags = lib.mapAttrsToList (

@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "fe25519";
-  version = "1.3.0";
+  version = "1.4.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-/grXAiWERDeTCWgFnNC1Ok8D5I9MBlwd1501TW0yK5c=";
+    hash = "sha256-VwCw/sS8Pzhscoa6yCRGbB9X+CtRVn8xyBEpKfGyhhY=";
   };
 
   nativeBuildInputs = [
@@ -31,7 +31,7 @@ buildPythonPackage rec {
     parts
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

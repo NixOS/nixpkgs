@@ -63,6 +63,7 @@ in
     (mkRemovedOptionModule [ "services" "kubernetes" "kubelet" "cadvisorPort" ] "")
     (mkRemovedOptionModule [ "services" "kubernetes" "kubelet" "allowPrivileged" ] "")
     (mkRemovedOptionModule [ "services" "kubernetes" "kubelet" "networkPlugin" ] "")
+    (mkRemovedOptionModule [ "services" "kubernetes" "kubelet" "containerRuntime" ] "")
   ];
 
   ###### interface
@@ -134,19 +135,13 @@ in
       };
     };
 
-    containerRuntime = mkOption {
-      description = lib.mdDoc "Which container runtime type to use";
-      type = enum ["docker" "remote"];
-      default = "remote";
-    };
-
     containerRuntimeEndpoint = mkOption {
       description = lib.mdDoc "Endpoint at which to find the container runtime api interface/socket";
       type = str;
       default = "unix:///run/containerd/containerd.sock";
     };
 
-    enable = mkEnableOption (lib.mdDoc "Kubernetes kubelet.");
+    enable = mkEnableOption (lib.mdDoc "Kubernetes kubelet");
 
     extraOpts = mkOption {
       description = lib.mdDoc "Kubernetes kubelet extra command line options.";
@@ -331,7 +326,6 @@ in
             ${optionalString (cfg.tlsKeyFile != null)
               "--tls-private-key-file=${cfg.tlsKeyFile}"} \
             ${optionalString (cfg.verbosity != null) "--v=${toString cfg.verbosity}"} \
-            --container-runtime=${cfg.containerRuntime} \
             --container-runtime-endpoint=${cfg.containerRuntimeEndpoint} \
             --cgroup-driver=systemd \
             ${cfg.extraOpts}

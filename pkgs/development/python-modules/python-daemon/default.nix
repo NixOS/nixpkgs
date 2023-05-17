@@ -33,7 +33,7 @@ buildPythonPackage rec {
     lockfile
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     testscenarios
     testtools
@@ -43,11 +43,11 @@ buildPythonPackage rec {
     # Should be fixed in the next release
     (fetchpatch {
       url = "https://src.fedoraproject.org/rpms/python-daemon/raw/rawhide/f/python-daemon-safe_hasattr.patch";
-      sha256 = "sha256-p5epAlM/sdel01oZkSI1vahUZYX8r90WCJuvBnfMaus=";
+      hash = "sha256-p5epAlM/sdel01oZkSI1vahUZYX8r90WCJuvBnfMaus=";
     })
     (fetchpatch {
       url = "https://src.fedoraproject.org/rpms/python-daemon/raw/rawhide/f/tests-remove-duplicate-mocking.patch";
-      sha256 = "sha256-5b/dFR3Z8xaPw8AZU95apDZd4ZfmMQhAmavWkVaJog8=";
+      hash = "sha256-5b/dFR3Z8xaPw8AZU95apDZd4ZfmMQhAmavWkVaJog8=";
     })
   ];
 

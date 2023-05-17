@@ -13,12 +13,12 @@ let
       owner = "grantjenks";
       repo = "python-sortedcontainers";
       rev = "v${version}";
-      sha256 = "sha256-YRbSM2isWi7AzfquFvuZBlpEMNUnBJTBLBn0/XYVHKQ=";
+      hash = "sha256-YRbSM2isWi7AzfquFvuZBlpEMNUnBJTBLBn0/XYVHKQ=";
     };
 
     doCheck = false;
 
-    checkInputs = [
+    nativeCheckInputs = [
       pytestCheckHook
     ];
 

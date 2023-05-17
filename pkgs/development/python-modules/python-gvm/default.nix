@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "python-gvm";
-  version = "22.9.1";
+  version = "23.5.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "greenbone";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-V9xfPYwDDoCGJPstzYsC/ikUp45uiaZE0Bg4i9tRNhU=";
+    hash = "sha256-84MTr9aTMB5MUj84bqbSGfX8JLA1KQ8pRE8Nr2RmoJw=";
   };
 
   nativeBuildInputs = [
@@ -34,7 +34,7 @@ buildPythonPackage rec {
     paramiko
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 
@@ -52,6 +52,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Collection of APIs that help with remote controlling a Greenbone Security Manager";
     homepage = "https://github.com/greenbone/python-gvm";
+    changelog = "https://github.com/greenbone/python-gvm/releases/tag/v${version}";
     license = with licenses; [ gpl3Plus ];
     maintainers = with maintainers; [ fab ];
   };

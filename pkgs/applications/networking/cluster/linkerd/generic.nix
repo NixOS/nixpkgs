@@ -20,6 +20,11 @@ buildGoModule rec {
     env GOFLAGS="" go generate ./jaeger/static
     env GOFLAGS="" go generate ./multicluster/static
     env GOFLAGS="" go generate ./viz/static
+
+    # Necessary for building Musl
+    if [[ $NIX_HARDENING_ENABLE =~ "pie" ]]; then
+        export GOFLAGS="-buildmode=pie $GOFLAGS"
+    fi
   '';
 
   tags = [

@@ -1,5 +1,6 @@
 { lib
 , buildPythonPackage
+, isPyPy
 , fetchFromGitHub
 , attrs
 , exceptiongroup
@@ -9,11 +10,19 @@
 , pytest-xdist
 , sortedcontainers
 , pythonOlder
+, sphinxHook
+, sphinx-rtd-theme
+, sphinx-hoverxref
+, sphinx-codeautolink
+, tzdata
+# Used to break internal dependency loop.
+, enableDocumentation ? true
 }:
 
 buildPythonPackage rec {
   pname = "hypothesis";
-  version = "6.54.5";
+  version = "6.68.2";
+  outputs = [ "out" ] ++ lib.optional enableDocumentation "doc";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -22,10 +31,30 @@ buildPythonPackage rec {
     owner = "HypothesisWorks";
     repo = "hypothesis";
     rev = "hypothesis-python-${version}";
-    hash = "sha256-mr8ctmAzRgWNVpW+PZlOhaQ0l28P0U8PxvjoVjfHX78=";
+    hash = "sha256-SgX8esTyC3ulFIv9mZJUoBA5hiv7Izr2hyD+NOudkpE=";
   };
 
+  # I tried to package sphinx-selective-exclude, but it throws
+  # error about "module 'sphinx' has no attribute 'directives'".
+  #
+  # It probably has to do with monkey-patching internals of Sphinx.
+  # On bright side, this extension does not introduces new commands,
+  # only changes "::only" command, so we probably okay with stock
+  # implementation.
+  #
+  # I wonder how upstream of "hypothesis" builds documentation.
+  postPatch = ''
+    sed -i -e '/sphinx_selective_exclude.eager_only/ d' docs/conf.py
+  '';
+
   postUnpack = "sourceRoot=$sourceRoot/hypothesis-python";
+
+  nativeBuildInputs = lib.optionals enableDocumentation [
+    sphinxHook
+    sphinx-rtd-theme
+    sphinx-hoverxref
+    sphinx-codeautolink
+  ];
 
   propagatedBuildInputs = [
     attrs
@@ -34,10 +63,12 @@ buildPythonPackage rec {
     exceptiongroup
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pexpect
     pytest-xdist
     pytestCheckHook
+  ] ++ lib.optionals (isPyPy) [
+    tzdata
   ];
 
   inherit doCheck;
@@ -58,6 +89,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Library for property based testing";
     homepage = "https://github.com/HypothesisWorks/hypothesis";
+    changelog = "https://hypothesis.readthedocs.io/en/latest/changes.html#v${lib.replaceStrings [ "." ] [ "-" ] version}";
     license = licenses.mpl20;
     maintainers = with maintainers; [ SuperSandro2000 ];
   };

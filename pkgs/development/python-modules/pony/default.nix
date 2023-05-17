@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , pytestCheckHook
 , pythonOlder
+, pythonAtLeast
 }:
 
 buildPythonPackage rec {
@@ -10,7 +11,7 @@ buildPythonPackage rec {
   version = "0.7.16";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.7" || pythonAtLeast "3.11";
 
   src = fetchFromGitHub {
     owner = "ponyorm";
@@ -19,7 +20,7 @@ buildPythonPackage rec {
     hash = "sha256-yATIsX2nKsW5DBwg9/LznQqf+XPY3q46WZut18Sr0v0=";
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

@@ -6,21 +6,23 @@
 , libiconv
 , Security
 , SystemConfiguration
+, xvfb-run
 , nixosTests
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "atuin";
-  version = "12.0.0";
+  version = "14.0.1";
 
   src = fetchFromGitHub {
     owner = "ellie";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-kt0Xu95E3MayUybSh1mU5frJoU7BF41Hnjqqrz/cVHE=";
+    hash = "sha256-mfeHgUCnt/DkdKxFlYx/t2LLjiqDX5mBMHto9A4mj78=";
   };
 
-  cargoSha256 = "sha256-WAAelEFtHlFGDk0AI381OS5bxN58Z46kyMAuL+XX/Ac=";
+  # TODO: unify this to one hash because updater do not support this
+  cargoHash = if stdenv.isLinux then "sha256-oaBTj+ZSJ36AFwIrB6d0cZppoAzV4QDr3+EylYqY7cw=" else "sha256-UNuoW/EOGtuNROm1qZJ4afDfMlecziVsem1m3Z1ZsOU=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -33,6 +35,16 @@ rustPlatform.buildRustPackage rec {
       --zsh <($out/bin/atuin gen-completions -s zsh)
   '';
 
+  nativeCheckInputs = lib.optionals xvfb-run.meta.available [
+    xvfb-run
+  ];
+
+  checkPhase = lib.optionalString xvfb-run.meta.available ''
+    runHook preCheck
+    xvfb-run cargo test
+    runHook postCheck
+  '';
+
   passthru.tests = {
     inherit (nixosTests) atuin;
   };
@@ -41,6 +53,6 @@ rustPlatform.buildRustPackage rec {
     description = "Replacement for a shell history which records additional commands context with optional encrypted synchronization between machines";
     homepage = "https://github.com/ellie/atuin";
     license = licenses.mit;
-    maintainers = with maintainers; [ onsails SuperSandro2000 sciencentistguy ];
+    maintainers = with maintainers; [ SuperSandro2000 sciencentistguy _0x4A6F ];
   };
 }

@@ -4,17 +4,17 @@
 
 buildPythonPackage rec {
   pname = "django-mailman3";
-  version = "1.3.7";
+  version = "1.3.9";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "6ea8c24c13e7afe744f18e18e4d19d0e74223e0d9bd5d782deea85dcb865feb7";
+    hash = "sha256-GpI1W0O9aJpLF/mcS23ktJDZsP69S2zQy7drOiWBnTM=";
   };
 
   propagatedBuildInputs = [
     django-gravatar2 django-compressor django-allauth mailmanclient
   ];
-  checkInputs = [ django mock ];
+  nativeCheckInputs = [ django mock ];
 
   checkPhase = ''
     cd $NIX_BUILD_TOP/$sourceRoot

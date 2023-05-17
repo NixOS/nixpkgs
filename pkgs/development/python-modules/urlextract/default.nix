@@ -29,7 +29,7 @@ buildPythonPackage rec {
     uritools
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     dnspython
     pytestCheckHook
   ];

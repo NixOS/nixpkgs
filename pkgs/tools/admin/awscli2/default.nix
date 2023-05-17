@@ -9,31 +9,29 @@
 }:
 
 let
-  py = python3.override {
-    packageOverrides = self: super: {
-      prompt-toolkit = super.prompt-toolkit.overridePythonAttrs (oldAttrs: rec {
-        version = "3.0.28";
-        src = self.fetchPypi {
-          pname = "prompt_toolkit";
-          inherit version;
-          hash = "sha256-nxzRax6GwpaPJRnX+zHdnWaZFvUVYSwmnRTp7VK1FlA=";
-        };
-      });
-    };
+  py = python3 // {
+    pkgs = python3.pkgs.overrideScope (self: super: {
+      # nothing right now
+    });
   };
 
 in
 with py.pkgs; buildPythonApplication rec {
   pname = "awscli2";
-  version = "2.9.8"; # N.B: if you change this, check if overrides are still up-to-date
+  version = "2.11.15"; # N.B: if you change this, check if overrides are still up-to-date
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "aws-cli";
     rev = version;
-    hash = "sha256-Q1iHGwkFg0rkunwEgWQIqLEPAGfOLfqA1UpjmCe2x8M=";
+    hash = "sha256-2FE5PJxdTqSrAIgkaZPf91B6bI6Bj9tbJjXg2nAaLdo=";
   };
+
+  postPatch = ''
+    substituteInPlace requirements/bootstrap.txt \
+      --replace "pip>=22.0.0,<23.0.0" "pip>=22.0.0,<24.0.0"
+  '';
 
   nativeBuildInputs = [
     flit-core
@@ -57,18 +55,11 @@ with py.pkgs; buildPythonApplication rec {
     urllib3
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     jsonschema
     mock
     pytestCheckHook
   ];
-
-  postPatch = ''
-    sed -i pyproject.toml \
-      -e 's/colorama.*/colorama",/' \
-      -e 's/cryptography.*/cryptography",/' \
-      -e 's/distro.*/distro",/'
-  '';
 
   postInstall = ''
     mkdir -p $out/${python3.sitePackages}/awscli/data
@@ -110,7 +101,6 @@ with py.pkgs; buildPythonApplication rec {
   passthru = {
     python = py; # for aws_shell
     updateScript = nix-update-script {
-      attrPath = pname;
       # Excludes 1.x versions from the Github tags list
       extraArgs = [ "--version-regex" "^(2\.(.*))" ];
     };

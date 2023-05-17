@@ -1,11 +1,11 @@
 { lib, mkCoqDerivation, coq, Cheerios, InfSeqExt, ssreflect, version ? null }:
 
 
-with lib; mkCoqDerivation {
+mkCoqDerivation {
   pname = "verdi";
   owner = "uwplse";
   inherit version;
-  defaultVersion = with versions; switch coq.coq-version [
+  defaultVersion = with lib.versions; lib.switch coq.coq-version [
     { case = range "8.7" "8.16"; out = "20211026"; }
     { case = range "8.7" "8.14"; out = "20210524"; }
     { case = range "8.7" "8.13"; out = "20200131"; }

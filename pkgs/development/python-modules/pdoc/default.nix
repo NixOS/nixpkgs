@@ -2,8 +2,8 @@
 , stdenv
 , buildPythonPackage
 , pythonOlder
-, fetchPypi
 , fetchFromGitHub
+, setuptools
 , jinja2
 , pygments
 , markupsafe
@@ -14,16 +14,22 @@
 
 buildPythonPackage rec {
   pname = "pdoc";
-  version = "12.0.2";
+  version = "13.0.0";
   disabled = pythonOlder "3.7";
+
+  format = "pyproject";
 
   # the Pypi version does not include tests
   src = fetchFromGitHub {
     owner = "mitmproxy";
     repo = "pdoc";
     rev = "v${version}";
-    sha256 = "FVfPO/QoHQQqg7QU05GMrrad0CbRR5AQVYUpBhZoRi0=";
+    hash = "sha256-UzUAprvBimk2POi0QZdFuRWEeGDp+MLmdUYR0UiIubs=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     jinja2
@@ -31,23 +37,26 @@ buildPythonPackage rec {
     markupsafe
   ] ++ lib.optional (pythonOlder "3.9") astunparse;
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     hypothesis
   ];
-  disabledTests = [
-    # Failing "test_snapshots" parametrization: Output does not match the stored snapshot
-    # This test seems to be sensitive to ordering of dictionary items and the version of dependencies.
-    # the only difference between the stored snapshot and the produced documentation is a debug javascript comment
-    "html-demopackage_dir"
+  disabledTestPaths = [
+    # "test_snapshots" tries to match generated output against stored snapshots.
+    # They are highly sensitive dep versions, which we unlike upstream do not pin.
+    "test/test_snapshot.py"
   ];
+
   pytestFlagsArray = [
     ''-m "not slow"'' # skip tests marked slow
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   pythonImportsCheck = [ "pdoc" ];
 
   meta = with lib; {
+    changelog = "https://github.com/mitmproxy/pdoc/blob/${src.rev}/CHANGELOG.md";
     homepage = "https://pdoc.dev/";
     description = "API Documentation for Python Projects";
     license = licenses.unlicense;

@@ -4,8 +4,12 @@
 , rustPlatform
 , pkg-config
 , openssl
+, darwin
 }:
 
+let
+  inherit (darwin.apple_sdk.frameworks) CoreServices;
+in
 rustPlatform.buildRustPackage rec {
   pname = "rojo";
   version = "7.2.1";
@@ -26,7 +30,12 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [
     openssl
+  ] ++ lib.optionals stdenv.isDarwin [
+    CoreServices
   ];
+
+  # tests flaky on darwin on hydra
+  doCheck = !stdenv.isDarwin;
 
   meta = with lib; {
     description = "Project management tool for Roblox";
@@ -38,7 +47,5 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/rojo-rbx/rojo/raw/v${version}/CHANGELOG.md";
     license = licenses.mpl20;
     maintainers = with maintainers; [ wackbyte ];
-    # never built on aarch64-darwin, x86_64-darwin since first introduction in nixpkgs
-    broken = stdenv.isDarwin;
   };
 }

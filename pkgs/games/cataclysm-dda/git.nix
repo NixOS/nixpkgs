@@ -24,7 +24,7 @@ let
 
     patches = [
       # Unconditionally look for translation files in $out/share/locale
-      ./locale-path-git.patch
+      ./locale-path.patch
     ];
 
     makeFlags = common.makeFlags ++ [

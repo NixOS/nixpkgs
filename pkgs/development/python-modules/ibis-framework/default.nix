@@ -5,17 +5,23 @@
 , pythonOlder
 , pytestCheckHook
 , atpublic
-, click
+, bidict
+, black
 , clickhouse-cityhash
 , clickhouse-driver
 , dask
 , datafusion
+, db-dtypes
 , duckdb
 , duckdb-engine
 , filelock
 , geoalchemy2
 , geopandas
+, google-cloud-bigquery
+, google-cloud-bigquery-storage
 , graphviz-nox
+, hypothesis
+, importlib-resources
 , lz4
 , multipledispatch
 , numpy
@@ -23,106 +29,130 @@
 , pandas
 , parsy
 , poetry-core
-, poetry-dynamic-versioning
+, polars
+, pooch
 , psycopg2
 , pyarrow
-, pydantic
+, pydata-google-auth
+, pydruid
 , pymysql
 , pyspark
 , pytest-benchmark
-, pytest-randomly
+, pytest-httpserver
 , pytest-mock
+, pytest-randomly
+, pytest-snapshot
 , pytest-xdist
-, python
+, python-dateutil
 , pytz
 , regex
 , rich
 , rsync
 , shapely
+, snowflake-connector-python
+, snowflake-sqlalchemy
 , sqlalchemy
+, sqlalchemy-views
 , sqlglot
 , sqlite
 , toolz
+, trino-python-client
+, typing-extensions
 }:
 let
-  testBackends = [
-    "datafusion"
-    "duckdb"
-    "pandas"
-    "sqlite"
-  ];
+  testBackends = [ "datafusion" "duckdb" "pandas" "sqlite" ];
 
   ibisTestingData = fetchFromGitHub {
+    name = "ibis-testing-data";
     owner = "ibis-project";
     repo = "testing-data";
-    rev = "3c39abfdb4b284140ff481e8f9fbb128b35f157a";
-    sha256 = "sha256-BZWi4kEumZemQeYoAtlUSw922p+R6opSWp/bmX0DjAo=";
+    rev = "8a59df99c01fa217259554929543e71c3bbb1761";
+    hash = "sha256-NbgEe0w/qf9hCr9rRfIpyaH9pv25I8x0ykY7EJxDOuk=";
   };
 in
 
 buildPythonPackage rec {
   pname = "ibis-framework";
-  version = "3.2.0";
+  version = "5.1.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
+    name = "ibis-source";
     repo = "ibis";
     owner = "ibis-project";
-    rev = version;
-    hash = "sha256-YRP1nGJs4btqXQirm0GfEDKNPCVXexVrwQ6sE8JtD2o=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-u3BBGdhWajZ5WtoBvNxmx76+orfHY6LX3IWAq/x2/9A=";
   };
 
-  nativeBuildInputs = [ poetry-core ];
+  patches = [
+    # fixes a small bug in the datafusion backend to reorder predicates
+    (fetchpatch {
+      name = "fix-datafusion-compilation.patch";
+      url = "https://github.com/ibis-project/ibis/commit/009230421b2bc1f86591e8b850d37a489e8e4f06.patch";
+      hash = "sha256-5NHkgc8d2bkOMpbY1vme1XgNfyHSr0f7BrR3JTTjjPI=";
+    })
+  ];
+
+  nativeBuildInputs = [
+    poetry-core
+  ];
 
   propagatedBuildInputs = [
     atpublic
+    bidict
     multipledispatch
     numpy
-    packaging
     pandas
     parsy
-    poetry-dynamic-versioning
-    pydantic
+    pooch
+    python-dateutil
     pytz
-    regex
     rich
+    sqlglot
     toolz
-  ];
+    typing-extensions
+  ] ++ lib.optionals (pythonOlder "3.9") [ importlib-resources ]
+  ++ pooch.optional-dependencies.progress
+  ++ pooch.optional-dependencies.xxhash;
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
-    click
     filelock
+    hypothesis
     pytest-benchmark
+    pytest-httpserver
     pytest-mock
     pytest-randomly
+    pytest-snapshot
     pytest-xdist
     rsync
   ] ++ lib.concatMap (name: passthru.optional-dependencies.${name}) testBackends;
-
-  preBuild = ''
-    # setup.py exists only for developer convenience and is automatically generated
-    # it gets in the way in nixpkgs so we remove it
-    rm setup.py
-  '';
 
   pytestFlagsArray = [
     "--dist=loadgroup"
     "-m"
     "'${lib.concatStringsSep " or " testBackends} or core'"
-    # this test fails on nixpkgs datafusion version (0.4.0), but works on
-    # datafusion 0.6.0
-    "-k"
-    "'not datafusion-no_op'"
+    # sqlalchemy2 breakage
+    "--deselect=ibis/tests/sql/test_sqlalchemy.py::test_tpc_h17"
+    # tries to download duckdb extensions
+    "--deselect=ibis/backends/duckdb/tests/test_register.py::test_register_sqlite"
+    "--deselect=ibis/backends/duckdb/tests/test_register.py::test_read_sqlite"
   ];
+
+  # patch out tests that check formatting with black
+  postPatch = ''
+    find ibis/tests -type f -name '*.py' -exec sed -i \
+      -e '/^ *assert_decompile_roundtrip/d' \
+      -e 's/^\( *\)code = ibis.decompile(expr, format=True)/\1code = ibis.decompile(expr)/g' {} +
+  '';
 
   preCheck = ''
     set -eo pipefail
 
-    export IBIS_TEST_DATA_DIRECTORY
-    IBIS_TEST_DATA_DIRECTORY="ci/ibis-testing-data"
+    HOME="$TMPDIR"
+    export IBIS_TEST_DATA_DIRECTORY="ci/ibis-testing-data"
 
     mkdir -p "$IBIS_TEST_DATA_DIRECTORY"
 
@@ -140,23 +170,30 @@ buildPythonPackage rec {
 
   passthru = {
     optional-dependencies = {
-      clickhouse = [ clickhouse-cityhash clickhouse-driver lz4 sqlglot ];
-      dask = [ dask pyarrow ];
+      bigquery = [ db-dtypes google-cloud-bigquery google-cloud-bigquery-storage pydata-google-auth ];
+      clickhouse = [ clickhouse-cityhash clickhouse-driver lz4 sqlalchemy ];
+      dask = [ dask pyarrow regex ];
       datafusion = [ datafusion ];
-      duckdb = [ duckdb duckdb-engine pyarrow sqlalchemy sqlglot ];
+      druid = [ pydruid sqlalchemy ];
+      duckdb = [ duckdb duckdb-engine packaging pyarrow sqlalchemy sqlalchemy-views ];
       geospatial = [ geoalchemy2 geopandas shapely ];
-      mysql = [ sqlalchemy pymysql sqlglot ];
-      pandas = [ ];
-      postgres = [ psycopg2 sqlalchemy sqlglot ];
-      pyspark = [ pyarrow pyspark ];
-      sqlite = [ sqlalchemy sqlite sqlglot ];
+      mysql = [ sqlalchemy pymysql sqlalchemy-views ];
+      pandas = [ regex ];
+      polars = [ polars pyarrow ];
+      postgres = [ psycopg2 sqlalchemy sqlalchemy-views ];
+      pyspark = [ pyarrow pyspark sqlalchemy ];
+      snowflake = [ snowflake-connector-python snowflake-sqlalchemy sqlalchemy-views ];
+      sqlite = [ regex sqlalchemy sqlite sqlalchemy-views ];
+      trino = [ trino-python-client sqlalchemy sqlalchemy-views ];
       visualization = [ graphviz-nox ];
+      decompiler = [ black ];
     };
   };
 
   meta = with lib; {
     description = "Productivity-centric Python Big Data Framework";
     homepage = "https://github.com/ibis-project/ibis";
+    changelog = "https://github.com/ibis-project/ibis/blob/${version}/docs/release_notes.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ costrouc cpcloud ];
   };

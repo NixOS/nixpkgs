@@ -1,19 +1,33 @@
 { lib
-, python3Packages
+, python3
 , fetchFromGitHub
 }:
 
-python3Packages.buildPythonApplication rec {
+let
+  python = python3.override {
+    packageOverrides = self: super: {
+      sqlalchemy = super.sqlalchemy.overridePythonAttrs (old: rec {
+        version = "1.4.48";
+        src = self.fetchPypi {
+          pname = "SQLAlchemy";
+          inherit version;
+          hash = "sha256-tHvChwltmJoIOM6W99jpZpFKJNqHftQadTHUS1XNuN8=";
+        };
+      });
+    };
+  };
+in
+python.pkgs.buildPythonApplication rec {
   pname = "flexget";
-  version = "3.5.13";
+  version = "3.7.0";
   format = "pyproject";
 
   # Fetch from GitHub in order to use `requirements.in`
   src = fetchFromGitHub {
-    owner = "flexget";
-    repo = "flexget";
+    owner = "Flexget";
+    repo = "Flexget";
     rev = "refs/tags/v${version}";
-    hash = "sha256-0yO4prnYJkD7eiyrEOPHlDTsgGgRhQujsp8k2FsLYKI=";
+    hash = "sha256-H+R2NPHJbpQToKI1Op+DqPt82+w2xHxHC9NPpiF3aF0=";
   };
 
   postPatch = ''
@@ -28,12 +42,13 @@ python3Packages.buildPythonApplication rec {
   # ~400 failures
   doCheck = false;
 
-  propagatedBuildInputs = with python3Packages; [
+  propagatedBuildInputs = with python.pkgs; [
     # See https://github.com/Flexget/Flexget/blob/master/requirements.txt
-    APScheduler
+    apscheduler
     beautifulsoup4
     click
     colorama
+    commonmark
     feedparser
     guessit
     html5lib
@@ -44,7 +59,7 @@ python3Packages.buildPythonApplication rec {
     packaging
     psutil
     pynzb
-    PyRSS2Gen
+    pyrss2gen
     python-dateutil
     pyyaml
     rebulk
@@ -68,6 +83,11 @@ python3Packages.buildPythonApplication rec {
 
     # Plugins requirements
     transmission-rpc
+  ];
+
+  pythonImportsCheck = [
+    "flexget"
+    "flexget.plugins.clients.transmission"
   ];
 
   meta = with lib; {

@@ -4,19 +4,19 @@
 , perl
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xa";
-  version = "2.3.13";
+  version = "2.3.14";
 
   src = fetchurl {
     urls = [
-      "https://www.floodgap.com/retrotech/xa/dists/${pname}-${version}.tar.gz"
-      "https://www.floodgap.com/retrotech/xa/dists/unsupported/${pname}-${version}.tar.gz"
+      "https://www.floodgap.com/retrotech/xa/dists/xa-${finalAttrs.version}.tar.gz"
+      "https://www.floodgap.com/retrotech/xa/dists/unsupported/xa-${finalAttrs.version}.tar.gz"
     ];
-    hash = "sha256-qUd68VC2yKkc09QeHPjJ31UtODMmSVV2gwJxykRnvYY=";
+    hash = "sha256-G5u6vdvY07lBC4UuUKEo7qQeaBM55vdsPoB2+lQg8C4=";
   };
 
-  checkInputs = [ perl ];
+  nativeCheckInputs = [ perl ];
 
   dontConfigure = true;
 
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
     patchShebangs tests
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.floodgap.com/retrotech/xa/";
     description = "Andre Fachat's open-source 6502 cross assembler";
     longDescription = ''
@@ -62,8 +62,8 @@ stdenv.mkDerivation rec {
         suite, as well as "bare" plain binary object files
       - block structure for label scoping
     '';
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ AndersonTorres ];
-    platforms = with platforms; unix;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ AndersonTorres ];
+    platforms = with lib.platforms; unix;
   };
-}
+})

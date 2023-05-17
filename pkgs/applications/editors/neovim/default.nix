@@ -1,8 +1,11 @@
 { lib, stdenv, fetchFromGitHub, cmake, gettext, msgpack, libtermkey, libiconv
+, fetchpatch
 , libuv, lua, ncurses, pkg-config
 , unibilium, gperf
 , libvterm-neovim
 , tree-sitter
+, fetchurl
+, treesitter-parsers ? import ./treesitter-parsers.nix { inherit fetchurl; }
 , CoreServices
 , glibcLocales ? null, procps ? null
 
@@ -19,18 +22,28 @@ let
         nvim-client luv coxpcall busted luafilesystem penlight inspect
       ]
     ));
+  codegenLua =
+    if lua.pkgs.isLuaJIT
+      then
+        let deterministicLuajit =
+          lua.override {
+            deterministicStringIds = true;
+            self = deterministicLuajit;
+          };
+        in deterministicLuajit.withPackages(ps: [ ps.mpack ps.lpeg ])
+      else lua;
 
   pyEnv = python3.withPackages(ps: with ps; [ pynvim msgpack ]);
 in
   stdenv.mkDerivation rec {
     pname = "neovim-unwrapped";
-    version = "0.8.1";
+    version = "0.9.0";
 
     src = fetchFromGitHub {
       owner = "neovim";
       repo = "neovim";
       rev = "v${version}";
-      sha256 = "sha256-B2ZpwhdmdvPOnxVyJDfNzUT5rTVuBhJXyMwwzCl9Fac=";
+      hash = "sha256-4uCPWnjSMU7ac6Q3LT+Em8lVk1MuSegxHMLGQRtFqAs=";
     };
 
     patches = [
@@ -38,6 +51,14 @@ in
       # necessary so that nix can handle `UpdateRemotePlugins` for the plugins
       # it installs. See https://github.com/neovim/neovim/issues/9413.
       ./system_rplugin_manifest.patch
+
+      # fix bug with the gsub directive
+      # https://github.com/neovim/neovim/pull/23015
+      (fetchpatch {
+        name = "use-the-correct-replacement-args-for-gsub-directive.patch";
+        url = "https://github.com/neovim/neovim/commit/ccc0980f86c6ef9a86b0e5a3a691f37cea8eb776.patch";
+        hash = "sha256-sZWM6M8jCL1e72H0bAc51a6FrH0mFFqTV1gGLwKT7Zo=";
+      })
     ];
 
     dontFixCmake = true;
@@ -78,7 +99,7 @@ in
     ];
 
     # extra programs test via `make functionaltest`
-    checkInputs = [
+    nativeCheckInputs = [
       fish
       nodejs
       pyEnv      # for src/clint.py
@@ -89,7 +110,7 @@ in
       substituteInPlace src/nvim/version.c --replace NVIM_VERSION_CFLAGS "";
     '';
     # check that the above patching actually works
-    disallowedReferences = [ stdenv.cc ];
+    disallowedReferences = [ stdenv.cc ] ++ lib.optional (lua != codegenLua) codegenLua;
 
     cmakeFlags = [
       # Don't use downloaded dependencies. At the end of the configurePhase one
@@ -101,13 +122,31 @@ in
     ++ lib.optional (!lua.pkgs.isLuaJIT) "-DPREFER_LUA=ON"
     ;
 
-    preConfigure = lib.optionalString stdenv.isDarwin ''
+    preConfigure = lib.optionalString lua.pkgs.isLuaJIT ''
+      cmakeFlagsArray+=(
+        "-DLUAC_PRG=${codegenLua}/bin/luajit -b -s %s -"
+        "-DLUA_GEN_PRG=${codegenLua}/bin/luajit"
+      )
+    '' + lib.optionalString stdenv.isDarwin ''
       substituteInPlace src/nvim/CMakeLists.txt --replace "    util" ""
-    '';
+    '' + ''
+      mkdir -p $out/lib/nvim/parser
+    '' + lib.concatStrings (lib.mapAttrsToList
+      (language: src: ''
+        ln -s \
+          ${tree-sitter.buildGrammar {
+            inherit language src;
+            version = "neovim-${version}";
+          }}/parser \
+          $out/lib/nvim/parser/${language}.so
+      '')
+      treesitter-parsers);
 
     shellHook=''
       export VIMRUNTIME=$PWD/runtime
     '';
+
+    separateDebugInfo = true;
 
     meta = with lib; {
       description = "Vim text editor fork focused on extensibility and agility";

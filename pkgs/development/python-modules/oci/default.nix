@@ -7,22 +7,32 @@
 , pyopenssl
 , python-dateutil
 , pythonOlder
+, pythonRelaxDepsHook
 , pytz
 }:
 
 buildPythonPackage rec {
   pname = "oci";
-  version = "2.85.0";
+  version = "2.100.0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "oracle";
     repo = "oci-python-sdk";
     rev = "refs/tags/v${version}";
-    hash = "sha256-NaVD7oWdKrUC0wjoFTbRg02tCFMlRyNIRHciTtyra7w=";
+    hash = "sha256-hzuuYRf9D0nWSyAPC66umDD2fKYZ+khHd6281UW6u9M=";
   };
+
+  pythonRelaxDeps = [
+    "cryptography"
+    "pyOpenSSL"
+  ];
+
+  nativeBuildInputs = [
+    pythonRelaxDepsHook
+  ];
 
   propagatedBuildInputs = [
     certifi
@@ -33,13 +43,6 @@ buildPythonPackage rec {
     pytz
   ];
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "configparser==4.0.2 ; python_version < '3'" "" \
-      --replace "cryptography>=3.2.1,<=37.0.2" "cryptography" \
-      --replace "pyOpenSSL>=17.5.0,<=22.0.0" "pyOpenSSL"
-  '';
-
   # Tests fail: https://github.com/oracle/oci-python-sdk/issues/164
   doCheck = false;
 
@@ -49,7 +52,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Oracle Cloud Infrastructure Python SDK";
-    homepage = "https://oracle-cloud-infrastructure-python-sdk.readthedocs.io/";
+    homepage = "https://github.com/oracle/oci-python-sdk";
+    changelog = "https://github.com/oracle/oci-python-sdk/blob/v${version}/CHANGELOG.rst";
     license = with licenses; [ asl20 /* or */ upl ];
     maintainers = with maintainers; [ ilian ];
   };

@@ -1,6 +1,7 @@
 { lib, stdenv, nodejs-slim, mkYarnPackage, fetchFromGitHub, bundlerEnv, nixosTests
 , yarn, callPackage, imagemagick, ffmpeg, file, ruby_3_0, writeShellScript
 , fetchYarnDeps, fixup_yarn_lock
+, brotli
 
   # Allow building a fork or custom version of Mastodon:
 , pname ? "mastodon"
@@ -16,7 +17,7 @@ stdenv.mkDerivation rec {
   # Putting the callPackage up in the arguments list also does not work.
   src = if srcOverride != null then srcOverride else callPackage ./source.nix {};
 
-  mastodon-gems = bundlerEnv {
+  mastodonGems = bundlerEnv {
     name = "${pname}-gems-${version}";
     inherit version;
     ruby = ruby_3_0;
@@ -36,16 +37,16 @@ stdenv.mkDerivation rec {
     '';
   };
 
-  mastodon-modules = stdenv.mkDerivation {
+  mastodonModules = stdenv.mkDerivation {
     pname = "${pname}-modules";
     inherit src version;
 
     yarnOfflineCache = fetchYarnDeps {
       yarnLock = "${src}/yarn.lock";
-      sha256 = "sha256-fuU92fydoazSXBHwA+DG//gRgWVYQ1M3m2oNS2iwv4I=";
+      sha256 = "sha256-e3rl/WuKXaUdeDEYvo1sSubuIwtBjkbguCYdAijwXOA=";
     };
 
-    nativeBuildInputs = [ fixup_yarn_lock nodejs-slim yarn mastodon-gems mastodon-gems.wrappedRuby ];
+    nativeBuildInputs = [ fixup_yarn_lock nodejs-slim yarn mastodonGems mastodonGems.wrappedRuby brotli ];
 
     RAILS_ENV = "production";
     NODE_ENV = "production";
@@ -69,6 +70,15 @@ stdenv.mkDerivation rec {
         rails assets:precompile
       yarn cache clean --offline
       rm -rf ~/node_modules/.cache
+
+      # Create missing static gzip and brotli files
+      gzip --best --keep ~/public/assets/500.html
+      gzip --best --keep ~/public/packs/report.html
+      find ~/public/assets -maxdepth 1 -type f -name '.*.json' \
+        -exec gzip --best --keep --force {} ';'
+      brotli --best --keep ~/public/packs/report.html
+      find ~/public/assets -type f -regextype posix-extended -iregex '.*\.(css|js|json|html)' \
+        -exec brotli --best --keep {} ';'
     '';
 
     installPhase = ''
@@ -79,21 +89,38 @@ stdenv.mkDerivation rec {
     '';
   };
 
-  propagatedBuildInputs = [ imagemagick ffmpeg file mastodon-gems.wrappedRuby ];
-  buildInputs = [ mastodon-gems nodejs-slim ];
+  propagatedBuildInputs = [ imagemagick ffmpeg file mastodonGems.wrappedRuby ];
+  buildInputs = [ mastodonGems nodejs-slim ];
 
   buildPhase = ''
-    ln -s ${mastodon-modules}/node_modules node_modules
-    ln -s ${mastodon-modules}/public/assets public/assets
-    ln -s ${mastodon-modules}/public/packs public/packs
+    ln -s $mastodonModules/node_modules node_modules
+    ln -s $mastodonModules/public/assets public/assets
+    ln -s $mastodonModules/public/packs public/packs
 
     patchShebangs bin/
-    for b in $(ls ${mastodon-gems}/bin/)
+    for b in $(ls $mastodonGems/bin/)
     do
       if [ ! -f bin/$b ]; then
-        ln -s ${mastodon-gems}/bin/$b bin/$b
+        ln -s $mastodonGems/bin/$b bin/$b
       fi
     done
+
+    # Remove execute permissions
+    chmod 0444 public/emoji/*.svg
+
+    # Create missing static gzip and brotli files
+    find public -maxdepth 1 -type f -regextype posix-extended -iregex '.*\.(css|js|svg|txt|xml)' \
+      -exec gzip --best --keep --force {} ';' \
+      -exec brotli --best --keep {} ';'
+    find public/emoji -type f -name '.*.svg' \
+      -exec gzip --best --keep --force {} ';' \
+      -exec brotli --best --keep {} ';'
+    ln -s assets/500.html.gz public/500.html.gz
+    ln -s assets/500.html.br public/500.html.br
+    ln -s packs/sw.js.gz public/sw.js.gz
+    ln -s packs/sw.js.br public/sw.js.br
+    ln -s packs/sw.js.map.gz public/sw.js.map.gz
+    ln -s packs/sw.js.map.br public/sw.js.map.br
 
     rm -rf log
     ln -s /var/log/mastodon log

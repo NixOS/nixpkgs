@@ -8,7 +8,7 @@
 }:
 
 buildPythonPackage rec {
-  pname = "opytimizer";
+  pname = "opytimark";
   version = "1.0.8";
   format = "setuptools";
 
@@ -32,7 +32,7 @@ buildPythonPackage rec {
     numpy
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

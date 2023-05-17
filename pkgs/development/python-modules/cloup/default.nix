@@ -9,13 +9,13 @@
 
 buildPythonPackage rec {
   pname = "cloup";
-  version = "1.0.1";
+  version = "2.0.0.post1";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-iQfpz2rl7Y3PJIG2aO+Cu1khx2g68XfOwhkRoENqsTg=";
+    hash = "sha256-FDDJB1Bi4Jy2TNhKt6/l1azSit9WHWqzEJ6xl1u9e2s=";
   };
 
   nativeBuildInputs = [
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     click
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

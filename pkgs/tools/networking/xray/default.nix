@@ -20,16 +20,16 @@ let
 in
 buildGoModule rec {
   pname = "xray";
-  version = "1.6.6-2";
+  version = "1.8.1";
 
   src = fetchFromGitHub {
     owner = "XTLS";
     repo = "Xray-core";
     rev = "v${version}";
-    sha256 = "sha256-nNG1HNsV/ITWdM9a4KkV44Oq/P92yD/oQjO7+pSBX38=";
+    sha256 = "sha256-yvfBrMQPvIzuLT9wAvQ9QdAIfjzFt7B+L4N8q9SwufA=";
   };
 
-  vendorSha256 = "sha256-64pyrhPplki0R+rsjh6pi+PCOzWVbES40r0Z1Vhk44o=";
+  vendorSha256 = "sha256-mr07woy6QXRz8iM4Yzl1Wv5+jlG7ws/fDAnuHjNiUPc=";
 
   nativeBuildInputs = [ makeWrapper ];
 
@@ -51,13 +51,12 @@ buildGoModule rec {
 
   postFixup = ''
     wrapProgram $out/bin/xray \
+      --suffix V2RAY_LOCATION_ASSET : $assetsDrv/share/v2ray \
       --suffix XRAY_LOCATION_ASSET : $assetsDrv/share/v2ray
   '';
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = pname;
-    };
+    updateScript = nix-update-script { };
   };
 
   meta = {

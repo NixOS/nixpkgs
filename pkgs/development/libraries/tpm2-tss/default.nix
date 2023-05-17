@@ -24,6 +24,8 @@ stdenv.mkDerivation rec {
     sha256 = "1jijxnvjcsgz5yw4i9fj7ycdnnz90r3l0zicpwinswrw47ac3yy5";
   };
 
+  outputs = [ "out" "man" "dev" ];
+
   nativeBuildInputs = [
     autoreconfHook autoconf-archive pkg-config doxygen perl
     shadow
@@ -38,7 +40,7 @@ stdenv.mkDerivation rec {
     cmocka
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     cmocka which openssl procps_pkg iproute2 ibm-sw-tpm2
   ];
 

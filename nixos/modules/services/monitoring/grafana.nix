@@ -56,7 +56,7 @@ let
   provisionConfDir = pkgs.runCommand "grafana-provisioning" { nativeBuildInputs = [ pkgs.xorg.lndir ]; } ''
     mkdir -p $out/{datasources,dashboards,notifiers,alerting}
     ${ln { src = datasourceFileOrDir;    dir = "datasources"; filename = "datasource"; }}
-    ${ln { src = dashboardFileOrDir;     dir = "dashboards";  filename = "dashbaord"; }}
+    ${ln { src = dashboardFileOrDir;     dir = "dashboards";  filename = "dashboard"; }}
     ${ln { src = notifierFileOrDir;      dir = "notifiers";   filename = "notifier"; }}
     ${ln { src = rulesFileOrDir;         dir = "alerting";    filename = "rules"; }}
     ${ln { src = contactPointsFileOrDir; dir = "alerting";    filename = "contactPoints"; }}
@@ -91,17 +91,6 @@ let
   # http://docs.grafana.org/administration/provisioning/#datasources
   grafanaTypes.datasourceConfig = types.submodule {
     freeformType = provisioningSettingsFormat.type;
-
-    imports = [
-      (mkRemovedOptionModule [ "password" ] ''
-        `services.grafana.provision.datasources.settings.datasources.<name>.password` has been removed
-        in Grafana 9. Use `secureJsonData` instead.
-      '')
-      (mkRemovedOptionModule [ "basicAuthPassword" ] ''
-        `services.grafana.provision.datasources.settings.datasources.<name>.basicAuthPassword` has been removed
-        in Grafana 9. Use `secureJsonData` instead.
-      '')
-    ];
 
     options = {
       name = mkOption {
@@ -364,9 +353,15 @@ in {
             };
 
             http_addr = mkOption {
-              description = lib.mdDoc "Listening address.";
-              default = "";
               type = types.str;
+              default = "127.0.0.1";
+              description = lib.mdDoc ''
+                Listening address.
+
+                ::: {.note}
+                This setting intentionally varies from upstream's default to be a bit more secure by default.
+                :::
+              '';
             };
 
             http_port = mkOption {
@@ -597,7 +592,6 @@ in {
                   description = lib.mdDoc "List of datasources to insert/update.";
                   default = [];
                   type = types.listOf grafanaTypes.datasourceConfig;
-                  apply = map (flip builtins.removeAttrs [ "password" "basicAuthPassword" ]);
                 };
 
                 deleteDatasources = mkOption {
@@ -1294,7 +1288,7 @@ in {
         SystemCallFilter = [
           "@system-service"
           "~@privileged"
-        ] ++ lib.optional (cfg.settings.server.protocol == "socket") [ "@chown" ];
+        ] ++ lib.optionals (cfg.settings.server.protocol == "socket") [ "@chown" ];
         UMask = "0027";
       };
       preStart = ''

@@ -238,7 +238,7 @@ in
           PORTUNUS_SERVER_BINARY = "${cfg.package}/bin/portunus-server";
           PORTUNUS_SERVER_GROUP = cfg.group;
           PORTUNUS_SERVER_USER = cfg.user;
-          PORTUNUS_SERVER_HTTP_LISTEN = "[::]:${toString cfg.port}";
+          PORTUNUS_SERVER_HTTP_LISTEN = "127.0.0.1:${toString cfg.port}";
           PORTUNUS_SERVER_STATE_DIR = cfg.stateDir;
           PORTUNUS_SLAPD_BINARY = "${cfg.ldap.package}/libexec/slapd";
           PORTUNUS_SLAPD_GROUP = cfg.ldap.group;

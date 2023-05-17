@@ -1,14 +1,19 @@
-{ lib, stdenv, fetchurl, openjdk17, makeWrapper, autoPatchelfHook
+{ lib, stdenv, fetchurl, coreutils, openjdk17, makeWrapper, autoPatchelfHook
 , zlib, libzen, libmediainfo, curlWithGnuTls, libmms, glib
 }:
 
-stdenv.mkDerivation rec {
+let
+  lanterna = fetchurl {
+    url = "https://search.maven.org/remotecontent?filepath=com/googlecode/lanterna/lanterna/3.1.1/lanterna-3.1.1.jar";
+    hash = "sha256-7zxCeXYW5v9ritnvkwRpPKdgSptCmkT3HJOaNgQHUmQ=";
+  };
+in stdenv.mkDerivation rec {
   pname = "filebot";
-  version = "4.9.6";
+  version = "5.0.2";
 
   src = fetchurl {
-    url = "https://web.archive.org/web/20220305095926/https://get.filebot.net/filebot/FileBot_${version}/FileBot_${version}-portable.tar.xz";
-    sha256 = "sha256-3j0WmmamE9KUNwjOVZvrdFH5dS/9FHSdbLfcAsOzQOo=";
+    url = "https://web.archive.org/web/20230418205553/https://get.filebot.net/filebot/FileBot_${version}/FileBot_${version}-portable.tar.xz";
+    hash = "sha256-XnzBXZy/gNA8qf7XairoviRmdQiXHbW19BgbHL52SP0=";
   };
 
   unpackPhase = "tar xvf $src";
@@ -16,6 +21,11 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper autoPatchelfHook ];
 
   buildInputs = [ zlib libzen libmediainfo curlWithGnuTls libmms glib ];
+
+  postPatch = ''
+    # replace lanterna.jar to be able to specify `com.googlecode.lanterna.terminal.UnixTerminal.sttyCommand`
+    cp ${lanterna} jar/lanterna.jar
+  '';
 
   dontBuild = true;
   installPhase = ''
@@ -25,7 +35,8 @@ stdenv.mkDerivation rec {
     # Filebot writes to $APP_DATA, which fails due to read-only filesystem. Using current user .local directory instead.
     substituteInPlace $out/opt/filebot.sh \
       --replace 'APP_DATA="$FILEBOT_HOME/data/$(id -u)"' 'APP_DATA=''${XDG_DATA_HOME:-$HOME/.local/share}/filebot/data' \
-      --replace '$FILEBOT_HOME/data/.license' '$APP_DATA/.license'
+      --replace '$FILEBOT_HOME/data/.license' '$APP_DATA/.license' \
+      --replace '-jar "$FILEBOT_HOME/jar/filebot.jar"' '-Dcom.googlecode.lanterna.terminal.UnixTerminal.sttyCommand=${coreutils}/bin/stty -jar "$FILEBOT_HOME/jar/filebot.jar"'
     wrapProgram $out/opt/filebot.sh \
       --prefix PATH : ${lib.makeBinPath [ openjdk17 ]}
     # Expose the binary in bin to make runnable.

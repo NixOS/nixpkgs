@@ -10,7 +10,7 @@
 , fmt
 , gsl-lite
 , howard-hinnant-date
-, libyamlcpp
+, yaml-cpp
 , ninja
 , nlohmann_json
 , openssl
@@ -75,7 +75,7 @@ stdenv.mkDerivation rec {
     fmt
     gsl-lite
     howard-hinnant-date
-    libyamlcpp
+    yaml-cpp
     nlohmann_json
     openssl
     re2

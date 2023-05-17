@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A MIPS32 simulator";
-    homepage = "http://spimsimulator.sourceforge.net/";
+    homepage = "https://spimsimulator.sourceforge.net/";
     license = licenses.bsdOriginal;
     maintainers = with maintainers; [ emilytrau ];
     platforms = platforms.linux;

@@ -14,7 +14,7 @@ buildPythonPackage rec {
     owner = "pradyunsg";
     repo = "sphinx-basic-ng";
     rev = version;
-    sha256 = "sha256-Zh9KvKs4js+AVSfIk0pAj6Kzq/O2m/MGTF+HCwYJTXk=";
+    hash = "sha256-Zh9KvKs4js+AVSfIk0pAj6Kzq/O2m/MGTF+HCwYJTXk=";
   };
 
   propagatedBuildInputs = [

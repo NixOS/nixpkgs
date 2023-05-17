@@ -12,19 +12,20 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-etzEXbILje+CrfJxIhH7jthEMoSJdS6O33QoG8HrLvI=";
   };
 
+  strictDeps = true;
   nativeBuildInputs = [
     makeWrapper
     menhir
-  ];
-
-  buildInputs = [
+    ocaml
+    menhir
     cppo
     dune_3
     findlib
+  ];
+
+  buildInputs = [
     fix
-    menhir
     menhirSdk
-    ocaml
     ppxlib
     utop
   ] ++ lib.optional (lib.versionOlder ocaml.version "4.07") ncurses;

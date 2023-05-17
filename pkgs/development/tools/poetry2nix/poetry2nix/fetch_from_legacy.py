@@ -60,6 +60,12 @@ context = ssl.create_default_context()
 context.check_hostname = False
 context.verify_mode = ssl.CERT_NONE
 
+# Extract out username/password from index_url, if present.
+parsed_url = urlparse(index_url)
+username = parsed_url.username or username
+password = parsed_url.password or password
+index_url = parsed_url._replace(netloc=parsed_url.netloc.rpartition("@")[-1]).geturl()
+
 req = urllib.request.Request(index_url)
 if username and password:
     import base64

@@ -2,16 +2,16 @@
 
 stdenv.mkDerivation rec {
   pname = "libudev-zero";
-  version = "1.0.1";
+  version = "1.0.2";
 
   src = fetchFromGitHub {
     owner = "illiliti";
     repo = "libudev-zero";
     rev = version;
-    sha256 = "1dg6zqy8w3gxca8clz6hhv4jyvz8jdwvpmn9y289nrms1zx1jcs5";
+    sha256 = "sha256-SU1pPmLLeTWZe5ybhmDplFw6O/vpEjFAKgfKDl0RS4U=";
   };
 
-  makeFlags = [ "PREFIX=$(out)" ];
+  makeFlags = [ "PREFIX=$(out)" "AR=${stdenv.cc.targetPrefix}ar" ];
 
   # Just let the installPhase build stuff, because there's no
   # non-install target that builds everything anyway.

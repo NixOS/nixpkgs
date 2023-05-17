@@ -1,4 +1,4 @@
-{ config, lib, pkgs, utils, ... }:
+{ config, lib, pkgs, ... }:
 let
   cfg = config.virtualisation.containers;
 
@@ -136,7 +136,7 @@ in
 
     environment.etc."containers/policy.json".source =
       if cfg.policy != { } then pkgs.writeText "policy.json" (builtins.toJSON cfg.policy)
-      else utils.copyFile "${pkgs.skopeo.src}/default-policy.json";
+      else "${pkgs.skopeo.policy}/default-policy.json";
   };
 
 }

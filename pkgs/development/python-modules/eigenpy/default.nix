@@ -9,14 +9,14 @@
 
 stdenv.mkDerivation rec {
   pname = "eigenpy";
-  version = "2.8.1";
+  version = "3.0.0";
 
   src = fetchFromGitHub {
     owner = "stack-of-tasks";
     repo = pname;
     rev = "v${version}";
     fetchSubmodules = true;
-    sha256 = "sha256-nofB5TDvEArhPcYe/Pb1LQBC+W6MrE3NuapaZmKIO68=";
+    hash = "sha256-xaeMsn3G4x5DS6gXc6mbZvi96K1Yu8CuzjcGnYJYrvs=";
   };
 
   strictDeps = true;
@@ -37,6 +37,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Bindings between Numpy and Eigen using Boost.Python";
     homepage = "https://github.com/stack-of-tasks/eigenpy";
+    changelog = "https://github.com/stack-of-tasks/eigenpy/releases/tag/v${version}";
     license = licenses.bsd2;
     maintainers = with maintainers; [ wegank ];
     platforms = platforms.unix;

@@ -2,7 +2,7 @@
 name: Unreproducible package
 about: A package that does not produce a bit-by-bit reproducible result each time it is built
 title: ''
-labels: '0.kind: enhancement', '6.topic: reproducible builds'
+labels: [ '0.kind: enhancement', '6.topic: reproducible builds' ]
 assignees: ''
 
 ---

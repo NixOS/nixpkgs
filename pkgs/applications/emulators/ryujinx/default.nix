@@ -29,13 +29,13 @@
 
 buildDotnetModule rec {
   pname = "ryujinx";
-  version = "1.1.373"; # Based off of the official github actions builds: https://github.com/Ryujinx/Ryujinx/actions/workflows/release.yml
+  version = "1.1.733"; # Based off of the official github actions builds: https://github.com/Ryujinx/Ryujinx/actions/workflows/release.yml
 
   src = fetchFromGitHub {
     owner = "Ryujinx";
     repo = "Ryujinx";
-    rev = "567c64e149f1ec3487dea34abdffc7bfa2f55400";
-    sha256 = "0b4c3dmvnx4m7mzhm3kzw3bjnw53rwi3qr2p4i9kyxbb2790bmsb";
+    rev = "9f12e50a546b15533778ed0d8290202af91c10a2";
+    sha256 = "1d1hg2sv0h56a56xnarcfp73df3rbw3iax85g258l6w2kxhkc42a";
   };
 
   dotnet-sdk = dotnetCorePackages.sdk_7_0;
@@ -79,16 +79,12 @@ buildDotnetModule rec {
     SDL2
   ];
 
-  patches = [
-    ./appdir.patch # Ryujinx attempts to write to the nix store. This patch redirects it to "~/.config/Ryujinx" on Linux.
-  ];
-
   projectFile = "Ryujinx.sln";
   testProjectFile = "Ryujinx.Tests/Ryujinx.Tests.csproj";
   doCheck = true;
 
   dotnetFlags = [
-    "/p:ExtraDefineConstants=DISABLE_UPDATER"
+    "/p:ExtraDefineConstants=DISABLE_UPDATER%2CFORCE_EXTERNAL_BASE_DIR"
   ];
 
   executables = [
@@ -113,11 +109,11 @@ buildDotnetModule rec {
     mkdir -p $out/share/{applications,icons/hicolor/scalable/apps,mime/packages}
     pushd ${src}/distribution/linux
 
-    install -D ./ryujinx.desktop $out/share/applications/ryujinx.desktop
-    install -D ./ryujinx-mime.xml $out/share/mime/packages/ryujinx-mime.xml
-    install -D ./ryujinx-logo.svg $out/share/icons/hicolor/scalable/apps/ryujinx.svg
+    install -D ./Ryujinx.desktop $out/share/applications/Ryujinx.desktop
+    install -D ./mime/Ryujinx.xml $out/share/mime/packages/Ryujinx.xml
+    install -D ../misc/Logo.svg $out/share/icons/hicolor/scalable/apps/Ryujinx.svg
 
-    substituteInPlace $out/share/applications/ryujinx.desktop \
+    substituteInPlace $out/share/applications/Ryujinx.desktop \
       --replace "Exec=Ryujinx" "Exec=$out/bin/Ryujinx"
 
     ln -s $out/bin/Ryujinx $out/bin/ryujinx

@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "dulitz";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-yCI5UCRDhw+dJoTKyjmHbAGBm3by2AyxHKlqCywnLcs=";
+    hash = "sha256-yCI5UCRDhw+dJoTKyjmHbAGBm3by2AyxHKlqCywnLcs=";
   };
 
   nativeBuildInputs = [

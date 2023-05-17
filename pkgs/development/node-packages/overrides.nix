@@ -1,4 +1,4 @@
-# Do not use overrides in this file to add  `meta.mainProgram` to packges. Use `./main-programs.nix`
+# Do not use overrides in this file to add  `meta.mainProgram` to packages. Use `./main-programs.nix`
 # instead.
 { pkgs, nodejs }:
 
@@ -176,6 +176,10 @@ final: prev: {
     '';
   };
 
+  firebase-tools = prev.firebase-tools.override {
+    nativeBuildInputs = lib.optionals stdenv.isDarwin  [ pkgs.xcbuild ];
+  };
+
   flood = prev.flood.override {
     buildInputs = [ final.node-pre-gyp ];
   };
@@ -188,10 +192,12 @@ final: prev: {
   graphite-cli = prev."@withgraphite/graphite-cli".override {
     name = "graphite-cli";
     nativeBuildInputs = [ pkgs.installShellFiles ];
+    # 'gt completion' auto-detects zshell from environment variables:
+    # https://github.com/yargs/yargs/blob/2b6ba3139396b2e623aed404293f467f16590039/lib/completion.ts#L45
     postInstall = ''
       installShellCompletion --cmd gt \
         --bash <($out/bin/gt completion) \
-        --zsh <($out/bin/gt completion)
+        --zsh <(ZSH_NAME=zsh $out/bin/gt completion)
     '';
   };
 
@@ -261,6 +267,8 @@ final: prev: {
       pixman
       cairo
       pango
+    ] ++ lib.optionals stdenv.isDarwin [
+      darwin.apple_sdk.frameworks.CoreText
     ];
   };
 
@@ -268,27 +276,9 @@ final: prev: {
     nativeBuildInputs = [ pkgs.buildPackages.makeWrapper ];
     postFixup = ''
       wrapProgram "$out/bin/makam" --prefix PATH : ${lib.makeBinPath [ nodejs ]}
-      ${
-        if stdenv.isLinux
-          then "patchelf --set-interpreter ${stdenv.cc.libc}/lib/ld-linux-x86-64.so.2 \"$out/lib/node_modules/makam/makam-bin-linux64\""
-          else ""
-      }
+      ${lib.optionalString stdenv.isLinux "patchelf --set-interpreter ${stdenv.cc.libc}/lib/ld-linux-x86-64.so.2 \"$out/lib/node_modules/makam/makam-bin-linux64\""}
     '';
   };
-
-  manta = prev.manta.override ( oldAttrs: {
-    nativeBuildInputs = with pkgs; [ nodejs-14_x installShellFiles ];
-    postInstall = ''
-      # create completions, following upstream procedure https://github.com/joyent/node-manta/blob/v5.2.3/Makefile#L85-L91
-      completion_cmds=$(find ./bin -type f -printf "%f\n")
-
-      node ./lib/create_client.js
-      for cmd in $completion_cmds; do
-        installShellCompletion --cmd $cmd --bash <(./bin/$cmd --completion)
-      done
-    '';
-    meta = oldAttrs.meta // { maintainers = with lib.maintainers; [ teutat3s ]; };
-  });
 
   mermaid-cli = prev."@mermaid-js/mermaid-cli".override (
   if stdenv.isDarwin
@@ -337,19 +327,26 @@ final: prev: {
     src = fetchFromGitHub {
       owner = "svanderburg";
       repo = "node2nix";
-      rev = "026360084db8a27095aafdac7125d7f1a93046c8";
-      sha256 = "sha256-zO/xGG10v7HGv58RLX5SFd7QOXAL2vRxCRM8IfRZ8JA=";
+      rev = "315e1b85a6761152f57a41ccea5e2570981ec670";
+      sha256 = "sha256-8OxTOkwBPcnjyhXhxQEDd8tiaQoHt91zUJX5Ka+IXco=";
     };
     nativeBuildInputs = [ pkgs.buildPackages.makeWrapper ];
     postInstall = let
-      # Needed to fix Node.js 16+ - PR svanderburg/node2nix#302
-      npmPatch = fetchpatch {
-        name = "emit-lockfile-v2-and-fix-bin-links-with-npmv7.patch";
-        url = "https://github.com/svanderburg/node2nix/commit/375a055041b5ee49ca5fb3f74a58ca197c90c7d5.patch";
-        hash = "sha256-uVYrXptJILojeur9s2O+J/f2vyPNCaZMn1GM/NoC5n8=";
-      };
+      patches = [
+        # Needed to fix packages with DOS line-endings after above patch - PR svanderburg/node2nix#314
+        (fetchpatch {
+          name = "convert-crlf-for-script-bin-files.patch";
+          url = "https://github.com/svanderburg/node2nix/commit/91aa511fe7107938b0409a02ab8c457a6de2d8ca.patch";
+          hash = "sha256-ISiKYkur/o8enKDzJ8mQndkkSC4yrTNlheqyH+LiXlU=";
+        })
+        # fix nodejs attr names
+        (fetchpatch {
+          url = "https://github.com/svanderburg/node2nix/commit/3b63e735458947ef39aca247923f8775633363e5.patch";
+          hash = "sha256-pe8Xm4mjPh9oKXugoMY6pRl8YYgtdw0sRXN+TienalU=";
+        })
+      ];
     in ''
-      patch -d $out/lib/node_modules/node2nix -p1 < ${npmPatch}
+      ${lib.concatStringsSep "\n" (map (patch: "patch -d $out/lib/node_modules/node2nix -p1 < ${patch}") patches)}
       wrapProgram "$out/bin/node2nix" --prefix PATH : ${lib.makeBinPath [ pkgs.nix ]}
     '';
   };
@@ -359,10 +356,6 @@ final: prev: {
     preRebuild = ''
       sed -i -e "s|#!/usr/bin/env node|#! ${nodejs}/bin/node|" node_modules/node-gyp-build/bin.js
     '';
-  };
-
-  photoprism-frontend = prev."photoprism-frontend-../../servers/photoprism".override {
-    meta.broken = true; # use the top-level package instead
   };
 
   pnpm = prev.pnpm.override {
@@ -410,14 +403,13 @@ final: prev: {
 
     src = fetchurl {
       url = "https://registry.npmjs.org/prisma/-/prisma-${version}.tgz";
-      sha512 = "sha512-DWIhxvxt8f4h6MDd35mz7BJff+fu7HItW3WPDIEpCR3RzcOWyiHBbLQW5/DOgmf+pRLTjwXQob7kuTZVYUAw5w==";
+      hash = "sha512-L9mqjnSmvWIRCYJ9mQkwCtj4+JDYYTdhoyo8hlsHNDXaZLh/b4hR0IoKIBbTKxZuyHQzLopb/+0Rvb69uGV7uA==";
     };
     postInstall = with pkgs; ''
       wrapProgram "$out/bin/prisma" \
         --set PRISMA_MIGRATION_ENGINE_BINARY ${prisma-engines}/bin/migration-engine \
         --set PRISMA_QUERY_ENGINE_BINARY ${prisma-engines}/bin/query-engine \
         --set PRISMA_QUERY_ENGINE_LIBRARY ${lib.getLib prisma-engines}/lib/libquery_engine.node \
-        --set PRISMA_INTROSPECTION_ENGINE_BINARY ${prisma-engines}/bin/introspection-engine \
         --set PRISMA_FMT_BINARY ${prisma-engines}/bin/prisma-fmt
     '';
 
@@ -440,6 +432,26 @@ final: prev: {
     '';
   };
 
+  readability-cli = prev.readability-cli.override (oldAttrs: {
+    # Wrap src to fix this build error:
+    # > readability-cli/readable.ts: unsupported interpreter directive "#!/usr/bin/env -S deno..."
+    #
+    # Need to wrap the source, instead of patching in patchPhase, because
+    # buildNodePackage only unpacks sources in the installPhase.
+    src = pkgs.srcOnly {
+      src = oldAttrs.src;
+      name = oldAttrs.name;
+      patchPhase = "chmod a-x readable.ts";
+    };
+
+    nativeBuildInputs = [ pkgs.pkg-config ];
+    buildInputs = with pkgs; [
+      pixman
+      cairo
+      pango
+    ];
+  });
+
   reveal-md = prev.reveal-md.override (
     lib.optionalAttrs (!stdenv.isDarwin) {
       nativeBuildInputs = [ pkgs.buildPackages.makeWrapper ];
@@ -452,6 +464,10 @@ final: prev: {
       '';
     }
   );
+
+  rush = prev."@microsoft/rush".override {
+    name = "rush";
+  };
 
   ssb-server = prev.ssb-server.override (oldAttrs: {
     buildInputs = [ pkgs.automake pkgs.autoconf final.node-gyp-build ];
@@ -530,14 +546,6 @@ final: prev: {
     '';
   };
 
-  triton = prev.triton.override (oldAttrs: {
-    nativeBuildInputs = [ pkgs.installShellFiles ];
-    postInstall = ''
-      installShellCompletion --cmd triton --bash <($out/bin/triton completion)
-    '';
-    meta = oldAttrs.meta // { maintainers = with lib.maintainers; [ teutat3s ]; };
-  });
-
   ts-node = prev.ts-node.override {
     nativeBuildInputs = [ pkgs.buildPackages.makeWrapper ];
     postInstall = ''
@@ -557,8 +565,7 @@ final: prev: {
   typescript-language-server = prev.typescript-language-server.override {
     nativeBuildInputs = [ pkgs.buildPackages.makeWrapper ];
     postInstall = ''
-      wrapProgram "$out/bin/typescript-language-server" \
-        --suffix PATH : ${lib.makeBinPath [ final.typescript ]}
+      ${pkgs.xorg.lndir}/bin/lndir ${final.typescript} $out
     '';
   };
 
@@ -595,11 +602,16 @@ final: prev: {
       };
   };
 
+  volar = final."@volar/vue-language-server".override {
+    name = "volar";
+  };
+
   wavedrom-cli = prev.wavedrom-cli.override {
     nativeBuildInputs = [ pkgs.pkg-config final.node-pre-gyp ];
     # These dependencies are required by
     # https://github.com/Automattic/node-canvas.
     buildInputs = with pkgs; [
+      giflib
       pixman
       cairo
       pango

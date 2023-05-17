@@ -9,7 +9,7 @@
 , fetchpatch
 , scipy
 , scikit-learn
-, scikitimage
+, scikit-image
 , threadpoolctl
 }:
 
@@ -33,7 +33,7 @@ buildPythonPackage rec {
     pillow
     scipy
     scikit-learn
-    scikitimage
+    scikit-image
     threadpoolctl
   ];
 
@@ -43,7 +43,7 @@ buildPythonPackage rec {
       --replace '"unittest2",' ""
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

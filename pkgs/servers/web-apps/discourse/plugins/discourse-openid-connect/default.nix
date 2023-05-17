@@ -6,8 +6,8 @@ mkDiscoursePlugin {
   src = fetchFromGitHub {
     owner = "discourse";
     repo = "discourse-openid-connect";
-    rev = "43a30dde4a64a01250f4447e74806db65ee7ae1a";
-    sha256 = "sha256-/3AE5cDELKfKwEY+XqaZ6SzJp6XAnW83r67kzLGaV2M=";
+    rev = "a16d5edd386f4099064753a4eed72ecb9c1bb1a8";
+    sha256 = "sha256-9Fuu/UFmU4Gpkm5cRKOgDK0bt7nD545X18wtue+IrN8=";
   };
   meta = with lib; {
     homepage = "https://github.com/discourse/discourse-openid-connect";

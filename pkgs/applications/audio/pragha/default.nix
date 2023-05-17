@@ -83,7 +83,7 @@ mkDerivation rec {
 
   CFLAGS = [ "-DHAVE_PARANOIA_NEW_INCLUDES" ];
 
-  NIX_CFLAGS_COMPILE = "-I${lib.getDev gst_all_1.gst-plugins-base}/include/gstreamer-1.0";
+  env.NIX_CFLAGS_COMPILE = "-I${lib.getDev gst_all_1.gst-plugins-base}/include/gstreamer-1.0";
 
   postInstall = ''
     qtWrapperArgs+=(--prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "$GST_PLUGIN_SYSTEM_PATH_1_0")

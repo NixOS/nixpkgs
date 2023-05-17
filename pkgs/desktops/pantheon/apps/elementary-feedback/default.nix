@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-feedback";
-  version = "6.1.2";
+  version = "7.0.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "feedback";
     rev = version;
-    sha256 = "sha256-vZTc6n7SHtHTCmC/RsCibVHcj67ksbghDosHBZfOIHM=";
+    sha256 = "sha256-QvqyaI9szZuYuE3D6o4zjr5J6mvEzNHqTBWii+gjyMc=";
   };
 
   patches = [
@@ -59,9 +59,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {

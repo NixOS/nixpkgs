@@ -1,14 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, substituteAll, swaybg
+{ lib, stdenv, fetchFromGitHub, fetchpatch, substituteAll, swaybg
 , meson, ninja, pkg-config, wayland-scanner, scdoc
-, wayland, libxkbcommon, pcre, json_c, libevdev
+, wayland, libxkbcommon, pcre2, json_c, libevdev
 , pango, cairo, libinput, libcap, pam, gdk-pixbuf, librsvg
-, wlroots, wayland-protocols, libdrm
+, wlroots_0_16, wayland-protocols, libdrm
 , nixosTests
 # Used by the NixOS module:
 , isNixOS ? false
-
-, enableXWayland ? true
-, systemdSupport ? stdenv.isLinux
+, enableXWayland ? true, xorg
+, systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd, systemd
 , dbusSupport ? true
 , dbus
 , trayEnabled ? systemdSupport && dbusSupport
@@ -23,13 +22,13 @@ let sd-bus-provider = if systemdSupport then "libsystemd" else "basu"; in
 
 stdenv.mkDerivation rec {
   pname = "sway-unwrapped";
-  version = "1.7";
+  version = "1.8.1";
 
   src = fetchFromGitHub {
     owner = "swaywm";
     repo = "sway";
     rev = version;
-    sha256 = "0ss3l258blyf2d0lwd7pi7ga1fxfj8pxhag058k7cmjhs3y30y5l";
+    hash = "sha256-WxnT+le9vneQLFPz2KoBduOI+zfZPhn1fKlaqbPL6/g=";
   };
 
   patches = [
@@ -38,6 +37,12 @@ stdenv.mkDerivation rec {
     (substituteAll {
       src = ./fix-paths.patch;
       inherit swaybg;
+    })
+
+    (fetchpatch {
+      name = "LIBINPUT_CONFIG_ACCEL_PROFILE_CUSTOM.patch";
+      url = "https://github.com/swaywm/sway/commit/dee032d0a0ecd958c902b88302dc59703d703c7f.diff";
+      hash = "sha256-dx+7MpEiAkxTBnJcsT3/1BO8rYRfNLecXmpAvhqGMD0=";
     })
   ] ++ lib.optionals (!isNixOS) [
     # References to /nix/store/... will get GC'ed which causes problems when
@@ -59,12 +64,14 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    wayland libxkbcommon pcre json_c libevdev
+    wayland libxkbcommon pcre2 json_c libevdev
     pango cairo libinput libcap pam gdk-pixbuf librsvg
     wayland-protocols libdrm
-    (wlroots.override { inherit enableXWayland; })
+    (wlroots_0_16.override { inherit enableXWayland; })
   ] ++ lib.optionals dbusSupport [
     dbus
+  ] ++ lib.optionals enableXWayland [
+    xorg.xcbutilwm
   ];
 
   mesonFlags =

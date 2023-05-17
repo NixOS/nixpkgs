@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   '';
 
   # Fix build on Linux kernel >= 5.18
-  NIX_CFLAGS_COMPILE = [ "-Wno-error=implicit-fallthrough" ];
+  env.NIX_CFLAGS_COMPILE = toString [ "-Wno-error=implicit-fallthrough" ];
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
 

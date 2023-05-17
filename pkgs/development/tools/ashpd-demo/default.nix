@@ -2,9 +2,11 @@
 , lib
 , fetchFromGitHub
 , nix-update-script
+, cargo
 , meson
 , ninja
 , rustPlatform
+, rustc
 , pkg-config
 , glib
 , libshumate
@@ -44,9 +46,9 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
-    rustPlatform.rust.cargo
+    cargo
     rustPlatform.cargoSetupHook
-    rustPlatform.rust.rustc
+    rustc
     wrapGAppsHook4
     rustPlatform.bindgenHook
     desktop-file-utils
@@ -64,10 +66,12 @@ stdenv.mkDerivation rec {
     libshumate
   ];
 
+  # FIXME: workaround for Pipewire 0.3.64 deprecated API change, remove when fixed upstream
+  # https://gitlab.freedesktop.org/pipewire/pipewire-rs/-/issues/55
+  env.NIX_CFLAGS_COMPILE = toString [ "-DPW_ENABLE_DEPRECATED" ];
+
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = pname;
-    };
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {

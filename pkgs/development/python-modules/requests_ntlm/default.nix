@@ -1,20 +1,35 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, ntlm-auth
+, setuptools
+, cryptography
+, pyspnego
 , requests
 }:
 
 buildPythonPackage rec {
-  pname = "requests_ntlm";
-  version = "1.1.0";
+  pname = "requests-ntlm";
+  version = "1.2.0";
+
+  format = "pyproject";
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "9189c92e8c61ae91402a64b972c4802b2457ce6a799d658256ebf084d5c7eb71";
+    pname = "requests_ntlm";
+    inherit version;
+    hash = "sha256-M8KF9QdOMXy90zjRma+kanwBEy5cER02vUFVNOm5Fqg=";
   };
 
-  propagatedBuildInputs = [ ntlm-auth requests ];
+  nativeBuildInputs = [
+    setuptools
+  ];
+
+  propagatedBuildInputs = [
+    cryptography
+    pyspnego
+    requests
+  ];
+
+  pythonImportsCheck = [ "requests_ntlm" ];
 
   # Tests require networking
   doCheck = false;
@@ -22,6 +37,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "HTTP NTLM authentication support for python-requests";
     homepage = "https://github.com/requests/requests-ntlm";
+    changelog = "https://github.com/requests/requests-ntlm/releases/tag/v${version}";
     license = licenses.isc;
     maintainers = with maintainers; [ elasticdog ];
     platforms = platforms.all;

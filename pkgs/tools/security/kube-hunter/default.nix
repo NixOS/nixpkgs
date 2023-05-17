@@ -14,6 +14,8 @@ python3.pkgs.buildPythonApplication rec {
     sha256 = "sha256-+M8P/VSF9SKPvq+yNPjokyhggY7hzQ9qLLhkiTNbJls=";
   };
 
+  SETUPTOOLS_SCM_PRETEND_VERSION = version;
+
   nativeBuildInputs = with python3.pkgs; [
     setuptools-scm
   ];
@@ -31,7 +33,7 @@ python3.pkgs.buildPythonApplication rec {
     kubernetes
   ];
 
-  checkInputs = with python3.pkgs; [
+  nativeCheckInputs = with python3.pkgs; [
     pytestCheckHook
     requests-mock
   ];
@@ -45,6 +47,11 @@ python3.pkgs.buildPythonApplication rec {
 
   pythonImportsCheck = [
     "kube_hunter"
+  ];
+
+  disabledTests = [
+    # Test is out-dated
+    "test_K8sCveHunter"
   ];
 
   meta = with lib; {

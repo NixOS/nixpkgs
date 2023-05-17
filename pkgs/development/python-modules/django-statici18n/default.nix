@@ -30,7 +30,7 @@ buildPythonPackage rec {
 
   DJANGO_SETTINGS_MODULE = "tests.test_project.project.settings";
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-django
     pytestCheckHook
   ];

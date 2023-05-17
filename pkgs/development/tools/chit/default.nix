@@ -1,10 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, pkg-config, openssl
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, pkg-config
+, stdenv
+, openssl
 , darwin
 }:
 
-with rustPlatform;
-
-buildRustPackage rec {
+rustPlatform.buildRustPackage rec {
   pname = "chit";
   version = "0.1.15";
 
@@ -15,13 +18,22 @@ buildRustPackage rec {
     sha256 = "0iixczy3cad44j2d7zzj8f3lnmp4jwnb0snmwfgiq3vj9wrn28pz";
   };
 
-  cargoSha256 = "1y6k24p4m67v5773rzid2r0jwxp9piggrp0462z446hbcam2r4gd";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+  };
 
   nativeBuildInputs = lib.optionals stdenv.isLinux [ pkg-config ];
-  buildInputs = []
-  ++ lib.optionals stdenv.isLinux [ openssl ]
-  ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [ CoreFoundation CoreServices Security ])
-  ;
+
+  buildInputs = lib.optionals stdenv.isLinux [
+    openssl
+  ] ++ lib.optionals stdenv.isDarwin [
+    darwin.apple_sdk.frameworks.Security
+  ];
+
+  # update Carg.lock to work with openssl 3
+  postPatch = ''
+    ln -sf ${./Cargo.lock} Cargo.lock
+  '';
 
   meta = with lib; {
     description = "Crate help in terminal: A tool for looking up details about rust crates without going to crates.io";
@@ -38,6 +50,6 @@ buildRustPackage rec {
     '';
     homepage = "https://github.com/peterheesterman/chit";
     license = licenses.mit;
-    maintainers = [ maintainers.lilyball ];
+    maintainers = with maintainers; [ figsoda lilyball ];
   };
 }

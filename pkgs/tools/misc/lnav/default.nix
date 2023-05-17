@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
     '';
     downloadPage = "https://github.com/tstack/lnav/releases";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ dochang ma27 ];
+    maintainers = with maintainers; [ dochang ];
     platforms = platforms.unix;
   };
 

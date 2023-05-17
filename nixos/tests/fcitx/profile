@@ -1,4 +1,0 @@
-[Profile]
-IMName=zhengma-large
-EnabledIMList=fcitx-keyboard-us:True,zhengma-large:True,m17n_sa_harvard-kyoto:True
-PreeditStringInClientWindow=False

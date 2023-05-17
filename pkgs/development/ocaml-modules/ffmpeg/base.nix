@@ -1,15 +1,15 @@
 { lib, fetchFromGitHub }:
 
 rec {
-  version = "1.1.6";
+  version = "1.1.7";
 
-  useDune2 = true;
+  duneVersion = "3";
 
   src = fetchFromGitHub {
     owner = "savonet";
     repo = "ocaml-ffmpeg";
     rev = "v${version}";
-    sha256 = "sha256-NlWmt98QwuGFNP8FHnAR3C0DIiSfJ1ZJXeVFFZiOSXs=";
+    sha256 = "sha256-0QDy0ZUAtojYIuNliiDV2uywBnWxtKUhZ/LPqkfSOZ4=";
   };
 
   meta = with lib; {

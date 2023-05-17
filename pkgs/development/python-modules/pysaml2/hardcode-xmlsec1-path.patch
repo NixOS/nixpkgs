@@ -6,12 +6,12 @@ index 59fe2dee..0c24fbcc 100644
      :return: full name of the xmlsec1 binary found. If no binaries are
          found then an exception is raised.
      """
--    if os.name == 'posix':
--        bin_name = ['xmlsec1']
--    elif os.name == 'nt':
--        bin_name = ['xmlsec.exe', 'xmlsec1.exe']
+-    if os.name == "posix":
+-        bin_name = ["xmlsec1"]
+-    elif os.name == "nt":
+-        bin_name = ["xmlsec.exe", "xmlsec1.exe"]
 -    else:  # Default !?
--        bin_name = ['xmlsec1']
+-        bin_name = ["xmlsec1"]
 -
 -    if paths:
 -        for bname in bin_name:
@@ -23,7 +23,7 @@ index 59fe2dee..0c24fbcc 100644
 -                except OSError:
 -                    pass
 -
--    for path in os.environ['PATH'].split(os.pathsep):
+-    for path in os.environ["PATH"].split(os.pathsep):
 -        for bname in bin_name:
 -            fil = os.path.join(path, bname)
 -            try:
@@ -32,7 +32,7 @@ index 59fe2dee..0c24fbcc 100644
 -            except OSError:
 -                pass
 -
--    raise SigverError('Cannot find {binary}'.format(binary=bin_name))
+-    raise SigverError(f"Cannot find {bin_name}")
 +    return '@xmlsec@/bin/xmlsec1'
  
  

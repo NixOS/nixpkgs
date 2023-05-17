@@ -12,15 +12,27 @@
 , perl
 }:
 
+let
+  versionReplace = {
+    easybind = {
+      snapshot = "2.2.1-SNAPSHOT";
+      pin = "2.2.1-20230117.075740-16";
+    };
+    afterburner = {
+      snapshot = "testmoduleinfo-SNAPSHOT";
+      pin = "0e337d8773";
+    };
+  };
+in
 stdenv.mkDerivation rec {
-  version = "5.7";
+  version = "5.9";
   pname = "jabref";
 
   src = fetchFromGitHub {
     owner = "JabRef";
     repo = "jabref";
     rev = "v${version}";
-    hash = "sha256-wzBaAaxGsMPh64uW+bBOiycYfVCW9H5FCn06r6XdxeE=";
+    hash = "sha256-uACmXas5L1NcxLwllkcbgCCt9bRicpQkiJkhkkVWDDY=";
   };
 
   desktopItems = [
@@ -39,27 +51,36 @@ stdenv.mkDerivation rec {
 
   deps = stdenv.mkDerivation {
     pname = "${pname}-deps";
-    inherit src version;
+    inherit src version postPatch;
 
     nativeBuildInputs = [ gradle perl ];
     buildPhase = ''
       export GRADLE_USER_HOME=$(mktemp -d)
-      gradle --no-daemon downloadDependencies
+      gradle --no-daemon downloadDependencies -Dos.arch=amd64
+      gradle --no-daemon downloadDependencies -Dos.arch=aarch64
     '';
     # perl code mavenizes pathes (com.squareup.okio/okio/1.13.0/a9283170b7305c8d92d25aff02a6ab7e45d06cbe/okio-1.13.0.jar -> com/squareup/okio/okio/1.13.0/okio-1.13.0.jar)
     installPhase = ''
       find $GRADLE_USER_HOME/caches/modules-2 -type f -regex '.*\.\(jar\|pom\)' \
         | perl -pe 's#(.*/([^/]+)/([^/]+)/([^/]+)/[0-9a-f]{30,40}/([^/\s]+))$# ($x = $2) =~ tr|\.|/|; "install -Dm444 $1 \$out/$x/$3/$4/''${\($5 =~ s/-jvm//r)}" #e' \
         | sh
+      mv $out/com/tobiasdiez/easybind/${versionReplace.easybind.pin} \
+        $out/com/tobiasdiez/easybind/${versionReplace.easybind.snapshot}
     '';
     # Don't move info to share/
     forceShare = [ "dummy" ];
     outputHashMode = "recursive";
-    outputHash = {
-      x86_64-linux = "sha256-OicHJVFxHGPE76bEDoLhkEhVcAJmplqjoh2I3nnVaLA=";
-      aarch64-linux = "sha256-8QWmweptL/+pSO6DhfBLaLcBrfKd4TDsDoXs4TgXvew=";
-    }.${stdenv.hostPlatform.system} or (throw "Unsupported system ${stdenv.hostPlatform.system}");
+    outputHash = "sha256-s6GA8iT3UEVuELBgpBvzPJlVX+9DpfOQrEd3KIth8eA=";
   };
+
+  postPatch = ''
+    # Pin the version
+    substituteInPlace build.gradle \
+      --replace 'com.github.JabRef:afterburner.fx:${versionReplace.afterburner.snapshot}' \
+        'com.github.JabRef:afterburner.fx:${versionReplace.afterburner.pin}' \
+      --replace 'com.tobiasdiez:easybind:${versionReplace.easybind.snapshot}' \
+        'com.tobiasdiez:easybind:${versionReplace.easybind.pin}'
+  '';
 
   preBuild = ''
     # Include CSL styles and locales in our build
@@ -114,9 +135,13 @@ stdenv.mkDerivation rec {
     # Resources in the jar can't be found, workaround copied from AUR
     cp -r build/resources $out/share/java/jabref
 
-    # workaround for https://github.com/NixOS/nixpkgs/issues/162064
     tar xf build/distributions/JabRef-${version}.tar -C $out --strip-components=1
-    unzip $out/lib/javafx-web-*-linux${lib.optionalString stdenv.isAarch64 "-aarch64"}.jar libjfxwebkit.so -d $out/lib/
+
+    # remove openjfx libs for other platforms
+    rm $out/lib/javafx-*-win.jar ${lib.optionalString stdenv.isAarch64 "$out/lib/javafx-*-linux.jar"}
+
+    # workaround for https://github.com/NixOS/nixpkgs/issues/162064
+    unzip $out/lib/javafx-web-*.jar libjfxwebkit.so -d $out/lib/
 
     DEFAULT_JVM_OPTS=$(sed -n -E "s/^DEFAULT_JVM_OPTS='(.*)'$/\1/p" $out/bin/JabRef | sed -e "s|\$APP_HOME|$out|g" -e 's/"//g')
     rm $out/bin/*
@@ -141,7 +166,7 @@ stdenv.mkDerivation rec {
       binaryBytecode # source bundles dependencies as jars
       binaryNativeCode # source bundles dependencies as jars
     ];
-    license = licenses.gpl2;
+    license = licenses.mit;
     platforms = [ "x86_64-linux" "aarch64-linux" ];
     maintainers = with maintainers; [ gebner linsui ];
   };

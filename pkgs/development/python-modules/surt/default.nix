@@ -14,7 +14,7 @@ buildPythonPackage rec {
     owner = "internetarchive";
     repo = "surt";
     rev = "6934c321b3e2f66af9c001d882475949f00570c5"; # Has no git tag
-    sha256 = "sha256-pSMNpFfq2V0ANWNFPcb1DwPHccbfddo9P4xZ+ghwbz4=";
+    hash = "sha256-pSMNpFfq2V0ANWNFPcb1DwPHccbfddo9P4xZ+ghwbz4=";
   };
 
   propagatedBuildInputs = [
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     tldextract
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

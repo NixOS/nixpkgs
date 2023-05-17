@@ -9,7 +9,9 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-F5eVN5ATYo9Ivpi2eYh96ktuTWUeoqgWMR4BqHu8EFs=";
   };
 
-  buildInputs = [ ocaml ];
+  strictDeps = true;
+
+  nativeBuildInputs = [ ocaml ];
 
   /* Fix up the frontend to load the 'default' cryptoverif library
   ** from under $out/libexec. By default, it expects to find the files

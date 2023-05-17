@@ -1,4 +1,4 @@
-From fc3e14155b3c4300b691ab46579830e725457a54 Mon Sep 17 00:00:00 2001
+From 1adc542ca1d7f60067febd692596eb6e8f334f9c Mon Sep 17 00:00:00 2001
 From: Maximilian Bosch <maximilian@mbosch.me>
 Date: Sat, 10 Sep 2022 15:18:05 +0200
 Subject: [PATCH] Setup: remove custom dbuser creation behavior
@@ -25,15 +25,15 @@ user to operate Nextcloud (which is a good thing in fact).
 
 [1] https://github.com/nextcloud/server/pull/33513
 ---
- lib/private/Setup/MySQL.php      | 53 --------------------------------
- lib/private/Setup/PostgreSQL.php | 37 ----------------------
- 2 files changed, 90 deletions(-)
+ lib/private/Setup/MySQL.php      | 56 --------------------------------
+ lib/private/Setup/PostgreSQL.php | 37 ---------------------
+ 2 files changed, 93 deletions(-)
 
 diff --git a/lib/private/Setup/MySQL.php b/lib/private/Setup/MySQL.php
-index e3004c269bc..bc958e84e44 100644
+index caa73edccec..bc958e84e44 100644
 --- a/lib/private/Setup/MySQL.php
 +++ b/lib/private/Setup/MySQL.php
-@@ -141,59 +141,6 @@ class MySQL extends AbstractDatabase {
+@@ -141,62 +141,6 @@ class MySQL extends AbstractDatabase {
  		$rootUser = $this->dbUser;
  		$rootPassword = $this->dbPassword;
  
@@ -79,6 +79,9 @@ index e3004c269bc..bc958e84e44 100644
 -						$i++;
 -					}
 -				}
+-			} else {
+-				// Reuse existing password if a database config is already present
+-				$this->dbPassword = $rootPassword;
 -			}
 -		} catch (\Exception $ex) {
 -			$this->logger->info('Can not create a new MySQL user, will continue with the provided user.', [
@@ -135,12 +138,12 @@ index af816c7ad04..e49e5508e15 100644
 -				// Therefore we assume that the database is only used by one user/service which is Nextcloud
 -				// Additional services should get installed in a separate database in order to stay secure
 -				// Also see https://www.postgresql.org/docs/15/ddl-schemas.html#DDL-SCHEMAS-PATTERNS
--				$connectionMainDatabase->executeQuery('GRANT CREATE ON SCHEMA public TO ' . addslashes($this->dbUser));
+-				$connectionMainDatabase->executeQuery('GRANT CREATE ON SCHEMA public TO "' . addslashes($this->dbUser) . '"');
 -				$connectionMainDatabase->close();
 -			}
  
  			$this->config->setValues([
  				'dbuser' => $this->dbUser,
 -- 
-2.38.1
+2.39.1
 

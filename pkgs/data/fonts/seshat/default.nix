@@ -1,24 +1,29 @@
-{ lib,  fetchzip }:
+{ lib, stdenvNoCC, fetchzip }:
 
 let
   majorVersion = "0";
   minorVersion = "100";
-  pname = "seshat";
 in
+stdenvNoCC.mkDerivation (finalAttrs: {
+  pname = "seshat";
+  version = "${majorVersion}.${minorVersion}";
 
-fetchzip {
-  name = "${pname}-font-${majorVersion}.${minorVersion}";
+  src = fetchzip {
+    url = "https://dotcolon.net/download/fonts/${finalAttrs.pname}_${majorVersion}${minorVersion}.zip";
+    hash = "sha256-XgprDhzAbcTzZw2QOwpCnzusYheYmSlM+ApU+Y0wO2Q=";
+    stripRoot = false;
+  };
 
-  url = "http://dotcolon.net/DL/font/${pname}.zip";
-  sha256 = "1zzgc2d0jrris92p3irmxjhdq8aj99alz0z7dlz25qf37lcilrir";
+  installPhase = ''
+    runHook preInstall
 
-  postFetch = ''
-    mkdir -p $out/share/fonts/opentype/${pname}
-    unzip -j $downloadedFile \*.otf  -d $out/share/fonts/opentype/${pname}
+    install -D -m444 -t $out/share/fonts/opentype $src/*.otf
+
+    runHook postInstall
   '';
 
   meta = with lib; {
-    homepage = "http://dotcolon.net/font/${pname}/";
+    homepage = "http://dotcolon.net/font/${finalAttrs.pname}/";
     description = "Roman body font designed for main text by Sora Sagano";
     longDescription = ''
       Seshat is a Roman body font designed for the main text. By
@@ -31,7 +36,7 @@ fetchzip {
       It incorporates symbols and ligatures used in the European region.
     '';
     platforms = platforms.all;
-    maintainers = with maintainers; [ leenaars ];
+    maintainers = with maintainers; [ leenaars minijackson ];
     license = licenses.cc0;
   };
-}
+})

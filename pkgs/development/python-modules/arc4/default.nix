@@ -7,7 +7,7 @@
 
 buildPythonPackage rec {
   pname = "arc4";
-  version = "0.3.0";
+  version = "0.4.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -16,10 +16,10 @@ buildPythonPackage rec {
     owner = "manicmaniac";
     repo = pname;
     rev = version;
-    hash = "sha256-z8zj46/xX/gXtWzlmnHuAsnK3xYCL4NM5/xpYcH+Qlo=";
+    hash = "sha256-DlZIygf5v3ZNY2XFmrKOA15ccMo3Rv0kf6hZJ0CskeQ=";
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

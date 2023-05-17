@@ -46,5 +46,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ auchter ];
     inherit (hare.meta) platforms badPlatforms;
+    broken = true;
   };
 }

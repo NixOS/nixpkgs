@@ -11,11 +11,11 @@
 
 stdenv.mkDerivation rec {
   pname = "cutemaze";
-  version = "1.3.1";
+  version = "1.3.2";
 
   src = fetchurl {
-    url = "https://gottcode.org/cutemaze/${pname}-${version}-src.tar.bz2";
-    sha256 = "6944931cd39e9ef202c11483b7b2b7409a068c52fa5fd4419ff938b1158c72ab";
+    url = "https://gottcode.org/cutemaze/${pname}-${version}.tar.bz2";
+    hash = "sha256-hjDlY18O+VDJR68vwrIZwsQAa40xU+V3bCAA4GFHJEQ=";
   };
 
   nativeBuildInputs = [
@@ -26,18 +26,25 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     qtbase
-    qtwayland
     qtsvg
+  ] ++ lib.optionals stdenv.isLinux [
+    qtwayland
   ];
 
-  postInstall = lib.optionalString stdenv.isDarwin ''
+  installPhase = if stdenv.isDarwin then ''
+    runHook preInstall
+
     mkdir -p $out/Applications
     mv CuteMaze.app $out/Applications
-  '';
+    makeWrapper $out/Applications/CuteMaze.app/Contents/MacOS/CuteMaze $out/bin/cutemaze
+
+    runHook postInstall
+  '' else null;
 
   meta = with lib; {
-    homepage = "https://gottcode.org/cutemaze/";
+    changelog = "https://github.com/gottcode/cutemaze/blob/v${version}/ChangeLog";
     description = "Simple, top-down game in which mazes are randomly generated";
+    homepage = "https://gottcode.org/cutemaze/";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ dotlambda ];
     platforms = platforms.unix;

@@ -5,6 +5,9 @@
 , runtimeShell
 , symlinkJoin
 , writeScriptBin
+
+  # command line arguments which are always set e.g "--disable-gpu"
+, commandLineArgs ? [ ]
 }:
 
 let
@@ -43,9 +46,12 @@ let
 
   script = writeScriptBin name ''
     #!${runtimeShell}
-    exec ${google-chrome}/bin/${google-chrome.meta.mainProgram} \
+    exec ${google-chrome}/bin/${google-chrome.meta.mainProgram} ${lib.escapeShellArgs commandLineArgs} \
       --app=https://netflix.com \
-      --no-first-run --no-default-browser-check --no-crash-upload
+      --no-first-run \
+      --no-default-browser-check \
+      --no-crash-upload \
+      "$@"
   '';
 
 in

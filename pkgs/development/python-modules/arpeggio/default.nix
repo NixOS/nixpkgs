@@ -11,7 +11,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "Arpeggio";
     inherit version;
-    sha256 = "sha256-1rA4OQGbuKaHhfkpLuajaxlU64S5JbhKa4peHibT7T0=";
+    hash = "sha256-1rA4OQGbuKaHhfkpLuajaxlU64S5JbhKa4peHibT7T0=";
   };
 
   postPatch = ''
@@ -19,7 +19,7 @@ buildPythonPackage rec {
       --replace "pytest-runner" ""
   '';
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "arpeggio" ];
 

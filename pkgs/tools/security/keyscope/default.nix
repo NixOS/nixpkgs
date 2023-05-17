@@ -12,16 +12,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "keyscope";
-  version = "1.2.3";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "spectralops";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-RKeEumj9HuifEXE8g5G7EsIalGD1vLRawh59s/ykUmg=";
+    sha256 = "sha256-SrBtgirg52q7gM3GZsJsV8ASACvb4sYv5HDbyItpjbk=";
   };
 
-  cargoSha256 = "sha256-8lTwczuOgPhzwGcQ2KoqK5Zf3HS3uwsok036l+12Xb0=";
+  cargoSha256 = "sha256-MFP3AqlfaclmZxRwaWFw6hsZwCQMRKJEyFEyUN+QLqo=";
 
   nativeBuildInputs = [ pkg-config ];
 

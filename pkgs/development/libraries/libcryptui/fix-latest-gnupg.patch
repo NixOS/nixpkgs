@@ -17,7 +17,7 @@ index 4486e7b2..be5b28b4 100644
  
  if test	"$DO_CHECK" = "yes"; then
 -	accepted_versions="1.2 1.4 2.0"
-+	accepted_versions="1.2 1.4 2.0 2.2 2.3"
++	accepted_versions="1.2 1.4 2.0 2.2 2.3 2.4"
  	AC_PATH_PROGS(GNUPG, [gpg gpg2], no)
  	AC_DEFINE_UNQUOTED(GNUPG, "$GNUPG", [Path to gpg executable.])
  	ok="no"

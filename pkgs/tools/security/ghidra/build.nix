@@ -3,7 +3,7 @@
 , fetchurl
 , fetchFromGitHub
 , lib
-, gradle
+, gradle_7
 , perl
 , makeWrapper
 , openjdk17
@@ -19,14 +19,16 @@
 let
   pkg_path = "$out/lib/ghidra";
   pname = "ghidra";
-  version = "10.2.2";
+  version = "10.2.3";
 
   src = fetchFromGitHub {
     owner = "NationalSecurityAgency";
     repo = "Ghidra";
     rev = "Ghidra_${version}_build";
-    sha256 = "sha256-AiyY6mGM+jHu9n39t/cYj+I5CE+a3vA4P0THNEFoZrk=";
+    sha256 = "sha256-YhjKRlFlF89H05NsTS69SB108rNiiWijvZZY9fR+Ebc=";
   };
+
+  gradle = gradle_7;
 
   desktopItem = makeDesktopItem {
     name = "ghidra";

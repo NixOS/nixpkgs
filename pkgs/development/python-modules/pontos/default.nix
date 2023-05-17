@@ -7,24 +7,26 @@
 , packaging
 , poetry-core
 , pytestCheckHook
-, typing-extensions
+, python-dateutil
 , pythonOlder
+, semver
 , rich
 , tomlkit
+, typing-extensions
 }:
 
 buildPythonPackage rec {
   pname = "pontos";
-  version = "22.12.0";
+  version = "23.5.1";
   format = "pyproject";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "greenbone";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-8enSKOVEkYPI/2d2nzDkf1GO15kpMI6xDktroK9Ti2s=";
+    hash = "sha256-nUVJjBebHOY0/oN/Cl2HdaLGnDVgLsUK7Yd+johP1PM=";
   };
 
   nativeBuildInputs = [
@@ -35,6 +37,8 @@ buildPythonPackage rec {
     colorful
     httpx
     packaging
+    python-dateutil
+    semver
     rich
     typing-extensions
     tomlkit
@@ -42,7 +46,7 @@ buildPythonPackage rec {
     typing-extensions
   ] ++ httpx.optional-dependencies.http2;
 
-  checkInputs = [
+  nativeCheckInputs = [
     git
     pytestCheckHook
   ];

@@ -46,6 +46,6 @@ let
 
 in
   overrideMeta shellcheck (old: {
-    maintainers = with lib.maintainers; [ Profpatsch ];
+    maintainers = with lib.maintainers; [ Profpatsch zowoq ];
     outputsToInstall = [ "bin" "man" "doc" ];
   })

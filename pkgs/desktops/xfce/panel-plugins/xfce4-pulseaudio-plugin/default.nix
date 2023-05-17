@@ -16,8 +16,8 @@
 mkXfceDerivation {
   category = "panel-plugins";
   pname = "xfce4-pulseaudio-plugin";
-  version = "0.4.5";
-  sha256 = "sha256-oRkvKSDEEepNwWIMDYLH/a034xxFhhOx+vp8O2UfTos=";
+  version = "0.4.6";
+  sha256 = "sha256-P1ln0cBskRAPsIygKAZeQLvt51xgMOnm0WZoR5sRvsM=";
 
   nativeBuildInputs = [
     automakeAddFlags

@@ -19,29 +19,31 @@
 
 buildPythonPackage rec {
   pname = "flask";
-  version = "2.2.2";
+  version = "2.2.3";
 
   src = fetchPypi {
     pname = "Flask";
     inherit version;
-    sha256 = "sha256-ZCxFDRnErUgvlnKb0qj20yVUqh4jH09rTn5SZLFsyis=";
+    hash = "sha256-frNzmEvxx3ACP86dsWTtDDNTzQtT8TD0aT2gynVqLm0=";
   };
 
   propagatedBuildInputs = [
-    asgiref
-    python-dotenv
     click
     itsdangerous
     jinja2
     werkzeug
   ] ++ lib.optional (pythonOlder "3.10") importlib-metadata;
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 
   passthru.tests = {
     inherit flask-limiter flask-restful flask-restx moto;
+  };
+  passthru.optional-dependencies = {
+    dotenv = [ python-dotenv ];
+    async = [ asgiref ];
   };
 
   meta = with lib; {

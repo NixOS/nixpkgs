@@ -17,14 +17,14 @@ buildPythonPackage rec {
     owner = "hukkin";
     repo = pname;
     rev = version;
-    sha256 = "sha256-wxV8DKeTwKpFTUBuGTQXaVHc0eW1//Y+2V8Kgs85TDM=";
+    hash = "sha256-wxV8DKeTwKpFTUBuGTQXaVHc0eW1//Y+2V8Kgs85TDM=";
   };
 
   nativeBuildInputs = [
     flit-core
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

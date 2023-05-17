@@ -1,3 +1,9 @@
+{ system ? builtins.currentSystem
+, config ? {}
+, pkgs ? import ../.. { inherit system config; }
+, systemdStage1 ? false
+}:
+
 import ../make-test-python.nix ({ lib, ...}:
 
 {
@@ -22,11 +28,12 @@ import ../make-test-python.nix ({ lib, ...}:
       minimalboot =
         { ... }:
         {
+          boot.initrd.systemd.enable = systemdStage1;
           boot.initrd.network = {
             enable = true;
             openvpn = {
               enable = true;
-              configuration = "/dev/null";
+              configuration = builtins.toFile "initrd.ovpn" "";
             };
           };
         };
@@ -39,6 +46,17 @@ import ../make-test-python.nix ({ lib, ...}:
           virtualisation.vlans = [ 1 ];
 
           boot.initrd = {
+            systemd.enable = systemdStage1;
+            systemd.extraBin.nc = "${pkgs.busybox}/bin/nc";
+            systemd.services.nc = {
+              requiredBy = ["initrd.target"];
+              after = ["network.target"];
+              serviceConfig = {
+                ExecStart = "/bin/nc -p 1234 -lke /bin/echo TESTVALUE";
+                Type = "oneshot";
+              };
+            };
+
             # This command does not fork to keep the VM in the state where
             # only the initramfs is loaded
             preLVMCommands =
@@ -91,6 +109,7 @@ import ../make-test-python.nix ({ lib, ...}:
             config = ''
               dev tun0
               ifconfig 10.8.0.1 10.8.0.2
+              cipher AES-256-CBC
               ${secretblock}
             '';
           };

@@ -4,11 +4,11 @@ let
   configOverrides = writeText "cinny-config-overrides.json" (builtins.toJSON conf);
 in stdenv.mkDerivation rec {
   pname = "cinny";
-  version = "2.2.2";
+  version = "2.2.6";
 
   src = fetchurl {
     url = "https://github.com/ajbura/cinny/releases/download/v${version}/cinny-v${version}.tar.gz";
-    sha256 = "sha256-MNmU6MvDwGbFNQt7qe08klXjy1n2LiABlPkARGvjVJU=";
+    hash = "sha256-AvYM8++PqKmm7CJN5hmg9GSC72IoHX+rRxuT3GflvjU=";
   };
 
   installPhase = ''

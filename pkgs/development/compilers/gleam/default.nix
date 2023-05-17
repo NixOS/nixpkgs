@@ -1,22 +1,22 @@
-{ lib, stdenv, rustPlatform, fetchFromGitHub, pkg-config, openssl, Security, libiconv }:
+{ lib, stdenv, rustPlatform, fetchFromGitHub, git, pkg-config, openssl, Security, libiconv }:
 
 rustPlatform.buildRustPackage rec {
   pname = "gleam";
-  version = "0.25.3";
+  version = "0.28.3";
 
   src = fetchFromGitHub {
     owner = "gleam-lang";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-JT9NUca+DaqxT36heaNKijIuqdnSvrYCfY2uM7wTOGo=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-3uHR6W2Vbqen9e6OXEFFl91/LzXCix4alnprFB36yes=";
   };
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [ git pkg-config ];
 
   buildInputs = [ openssl ] ++
     lib.optionals stdenv.isDarwin [ Security libiconv ];
 
-  cargoSha256 = "sha256-YPyGCd4//yta3jy5tWB4C5yRgxNbfG+hGF5/QSch/6M=";
+  cargoHash = "sha256-3+Jb/POABFIBkKpaTD9JDc1vrDzsJe9mGRBQR3UnDAg=";
 
   meta = with lib; {
     description = "A statically typed language for the Erlang VM";

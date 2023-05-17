@@ -9,16 +9,21 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "shotman";
-  version = "0.2.0";
+  version = "0.4.1";
 
   src = fetchFromSourcehut {
     owner = "~whynothugo";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-QNRQInFZcB1nqzESTAqYWwqJ0oiJa6UMCpjY3aHBiyA=";
+    hash = "sha256-u8vnRNxi7wLn0M2VZu9YTZuSAM/0afHRP01vve9tD9c=";
   };
 
-  cargoHash = "sha256-BfH1HhBbgdCA1IqKNdl4/FEzZxHgJmoSKNVMJUrSHCA=";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "smithay-client-toolkit-0.16.0" = "sha256-n+s+qH39tna0yN44D6GGlQGZHjsr9FBpp+NZItyqwaE=";
+    };
+  };
 
   nativeBuildInputs = [ pkg-config makeWrapper ];
 

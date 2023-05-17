@@ -31,7 +31,7 @@ perlPackages.buildPerlPackage {
 
   # Workaround build failure on -fno-common toolchains:
   #   ld: iselect_browse.o:(.bss+0x2020): multiple definition of `Line'; iselect_main.o:(.bss+0x100000): first defined here
-  NIX_CFLAGS_COMPILE = "-fcommon";
+  env.NIX_CFLAGS_COMPILE = "-fcommon";
 
   hardeningDisable = [ "format" ];
 

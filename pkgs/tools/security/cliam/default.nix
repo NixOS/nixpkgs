@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "cliam";
-  version = "2.0.0";
+  version = "2.2.0";
 
   src = fetchFromGitHub {
     owner = "securisec";
     repo = pname;
     rev = version;
-    hash = "sha256-TEpAY1yY5AFTg5yUZMvTFdZiQ7yBi0rjYgCCksiMfDU=";
+    hash = "sha256-59nPoH0+k1umMwFg95hQHOr/SRGKqr1URFG7xtVRiTs=";
   };
 
-  vendorSha256 = "sha256-VCai9rxpnlpviN5W/VIRcNGvPljE2gbFnxA1OKhVElk=";
+  vendorHash = "sha256-Tcz8W/PX+9WE+0iFVhqHuElJI7qWD+AdwOKdTc7FQTE=";
 
   nativeBuildInputs = [
     installShellFiles

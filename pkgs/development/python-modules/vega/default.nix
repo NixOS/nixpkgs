@@ -1,5 +1,5 @@
 { lib, buildPythonPackage , fetchPypi, pythonOlder
-, jupyter_core, pandas, ipywidgets, jupyter }:
+, jupyter-core, pandas, ipywidgets, jupyter }:
 
 buildPythonPackage rec {
   pname = "vega";
@@ -8,10 +8,10 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-cO+7Ynbv/+uoNUOPQvDNZji04llHUBlm95Cyfy+Ny80=";
+    hash = "sha256-cO+7Ynbv/+uoNUOPQvDNZji04llHUBlm95Cyfy+Ny80=";
   };
 
-  propagatedBuildInputs = [ jupyter jupyter_core pandas ipywidgets ];
+  propagatedBuildInputs = [ jupyter jupyter-core pandas ipywidgets ];
 
   # currently, recommonmark is broken on python3
   doCheck = false;

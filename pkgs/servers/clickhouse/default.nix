@@ -8,7 +8,7 @@
 
 stdenv.mkDerivation rec {
   pname = "clickhouse";
-  version = "22.8.5.29";
+  version = "22.8.16.32";
 
   broken = stdenv.buildPlatform.is32bit; # not supposed to work on 32-bit https://github.com/ClickHouse/ClickHouse/pull/23959#issuecomment-835343685
 
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     repo   = "ClickHouse";
     rev    = "v${version}-lts";
     fetchSubmodules = true;
-    sha256 = "sha256-JRdZb5YgaumTnjJEYIXh9o3NSv67DAdl9gizVKvGTJI=";
+    sha256 = "sha256-LArHbsu2iaEP+GrCxdTrfpGDDfwcg1mlvbAceXNZyz8=";
   };
 
   nativeBuildInputs = [ cmake libtool llvm-bintools ninja ];
@@ -57,6 +57,8 @@ stdenv.mkDerivation rec {
       $out/etc/clickhouse-server/config.xml
     substituteInPlace $out/etc/clickhouse-server/config.xml \
       --replace "<errorlog>/var/log/clickhouse-server/clickhouse-server.err.log</errorlog>" "<console>1</console>"
+    substituteInPlace $out/etc/clickhouse-server/config.xml \
+      --replace "<level>trace</level>" "<level>warning</level>"
   '';
 
   hardeningDisable = [ "format" ];

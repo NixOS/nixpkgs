@@ -3,13 +3,13 @@
 , cacert
 , curl
 , runCommandLocal
-, targetPlatform
 , unzip
 , appimage-run
 , addOpenGLRunpath
 , libGLU
 , xorg
-, buildFHSUserEnv
+, buildFHSEnv
+, buildFHSEnvChroot
 , bash
 , writeText
 , ocl-icd
@@ -18,6 +18,7 @@
 , libarchive
 , libxcrypt
 , python2
+, aprutil
 }:
 
 let
@@ -26,7 +27,11 @@ let
       pname = "davinci-resolve";
       version = "17.4.3";
 
-      nativeBuildInputs = [ unzip appimage-run addOpenGLRunpath ];
+      nativeBuildInputs = [
+        unzip
+        (appimage-run.override { buildFHSEnv = buildFHSEnvChroot; } )
+        addOpenGLRunpath
+      ];
 
       # Pretty sure, there are missing dependencies ...
       buildInputs = [ libGLU xorg.libXxf86vm ];
@@ -49,7 +54,7 @@ let
           SITEURL = "https://www.blackmagicdesign.com/api/register/us/download/${DOWNLOADID}";
 
           USERAGENT = builtins.concatStringsSep " " [
-            "User-Agent: Mozilla/5.0 (X11; Linux ${targetPlatform.linuxArch})"
+            "User-Agent: Mozilla/5.0 (X11; Linux ${stdenv.targetPlatform.linuxArch})"
             "AppleWebKit/537.36 (KHTML, like Gecko)"
             "Chrome/77.0.3865.75"
             "Safari/537.36"
@@ -128,11 +133,12 @@ let
             addOpenGLRunpath "$program"
           fi
         done
+        ln -s $out/libs/libcrypto.so.1.1 $out/libs/libcrypt.so.1
       '';
     }
   );
 in
-buildFHSUserEnv {
+buildFHSEnv {
   name = "davinci-resolve";
   targetPkgs = pkgs: with pkgs; [
     librsvg
@@ -160,12 +166,14 @@ buildFHSUserEnv {
     python2
     # currently they want python 3.6 which is EOL
     #python3
+    aprutil
   ];
 
   runScript = "${bash}/bin/bash ${
     writeText "davinci-wrapper"
     ''
     export QT_XKB_CONFIG_ROOT="${xkeyboard_config}/share/X11/xkb"
+    export QT_PLUGIN_PATH="${davinci}/libs/plugins:$QT_PLUGIN_PATH"
     export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:${davinci}/libs
     ${davinci}/bin/resolve
     ''

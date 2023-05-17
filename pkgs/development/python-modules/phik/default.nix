@@ -31,7 +31,7 @@ buildPythonPackage rec {
     hash = "sha256-9o3EDhgmne2J1QfzjjNQc1mUcyCzoVrCnWXqjWkiZU0=";
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     nbconvert
     jupyter

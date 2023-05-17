@@ -23,12 +23,16 @@ in
   config = lib.mkIf cfg.enable {
     environment.systemPackages = [ pkgs.supergfxctl ];
 
-    environment.etc."supergfxd.conf" = lib.mkIf (cfg.settings != null) { source = json.generate "supergfxd.conf" cfg.settings; };
+    environment.etc."supergfxd.conf" = lib.mkIf (cfg.settings != null) {
+      source = json.generate "supergfxd.conf" cfg.settings;
+      mode = "0644";
+    };
 
     services.dbus.enable = true;
 
     systemd.packages = [ pkgs.supergfxctl ];
     systemd.services.supergfxd.wantedBy = [ "multi-user.target" ];
+    systemd.services.supergfxd.path = [ pkgs.kmod ];
 
     services.dbus.packages = [ pkgs.supergfxctl ];
     services.udev.packages = [ pkgs.supergfxctl ];

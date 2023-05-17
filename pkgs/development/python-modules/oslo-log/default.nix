@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "oslo-log";
-  version = "5.0.2";
+  version = "5.2.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "oslo.log";
     inherit version;
-    hash = "sha256-5F5zEqpxUooWc2zkUVK+PxrxI/XvYqqB2gRoBVhPzKM=";
+    hash = "sha256-YiYzbVtu4YhfBXtl2+3oTEqcXk5K51oOjn84PBY+xIA=";
   };
 
   propagatedBuildInputs = [
@@ -39,7 +39,7 @@ buildPythonPackage rec {
     pyinotify
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     eventlet
     oslotest
     pytestCheckHook

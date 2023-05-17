@@ -13,7 +13,7 @@
 , pango
 , gst-python
 , kiss-headers
-, Logbook
+, logbook
 , pillow
 , poetry-core
 , pygobject3
@@ -47,7 +47,7 @@ buildPythonApplication rec {
   propagatedBuildInputs = [
     gst-python
     kiss-headers
-    Logbook
+    logbook
     pillow
     poetry-core
     pygobject3
@@ -67,7 +67,7 @@ buildPythonApplication rec {
     pango
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

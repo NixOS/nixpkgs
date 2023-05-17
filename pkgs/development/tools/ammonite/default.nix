@@ -1,8 +1,6 @@
 { lib, stdenv, fetchurl, jre, writeScript, common-updater-scripts, git, nixfmt
 , nix, coreutils, gnused, disableRemoteLogging ? true }:
 
-with lib;
-
 let
   repo = "git@github.com:lihaoyi/Ammonite.git";
 
@@ -22,7 +20,7 @@ let
       installPhase = ''
         install -Dm755 $src $out/bin/amm
         sed -i '0,/java/{s|java|${jre}/bin/java|}' $out/bin/amm
-      '' + optionalString (disableRemoteLogging) ''
+      '' + lib.optionalString (disableRemoteLogging) ''
         sed -i "0,/ammonite.Main/{s|ammonite.Main'|ammonite.Main' --no-remote-logging|}" $out/bin/amm
         sed -i '1i #!/bin/sh' $out/bin/amm
       '';
@@ -66,7 +64,7 @@ let
         runHook postInstallCheck
       '';
 
-      meta = {
+      meta = with lib; {
         description = "Improved Scala REPL";
         longDescription = ''
           The Ammonite-REPL is an improved Scala REPL, re-implemented from first principles.

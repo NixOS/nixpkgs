@@ -24,7 +24,7 @@ buildPythonPackage rec {
 
   # testscenarios has a circular dependency on testtools
   doCheck = false;
-  checkInputs = [ testscenarios ];
+  nativeCheckInputs = [ testscenarios ];
 
   pythonRemoveDeps = [ "fixtures" ];
 

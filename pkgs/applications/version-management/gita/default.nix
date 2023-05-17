@@ -33,7 +33,7 @@ buildPythonApplication rec {
     done
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     git
     pytest
   ];

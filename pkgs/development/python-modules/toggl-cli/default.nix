@@ -28,7 +28,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "togglCli";
     inherit version;
-    sha256 = "sha256-ncMwiMwYivaFu5jrAsm1oCuXP/PZ2ALT+M+CmV6dtFo=";
+    hash = "sha256-ncMwiMwYivaFu5jrAsm1oCuXP/PZ2ALT+M+CmV6dtFo=";
   };
 
   nativeBuildInputs = [
@@ -48,7 +48,7 @@ buildPythonPackage rec {
     validate-email
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     pytest-mock
     faker

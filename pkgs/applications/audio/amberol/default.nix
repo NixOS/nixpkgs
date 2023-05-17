@@ -2,12 +2,14 @@
 , stdenv
 , fetchFromGitLab
 , rustPlatform
+, cargo
 , desktop-file-utils
 , appstream-glib
 , meson
 , ninja
 , pkg-config
 , reuse
+, rustc
 , m4
 , wrapGAppsHook4
 , glib
@@ -19,20 +21,20 @@
 
 stdenv.mkDerivation rec {
   pname = "amberol";
-  version = "0.9.2";
+  version = "0.10.2";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = pname;
     rev = version;
-    hash = "sha256-L8yHKwtCAZC1myIouL0Oq3lj0QPWn5dVe0g3nkyAKI8=";
+    hash = "sha256-edYLdsXlk+3YGyG6bxR8E8q1bzaXWk04v/NxfaxcNhI=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-0XuWBUG37GNHRXgjz0/Vv6VSqaPG36xTj7oN0ukFIJY=";
+    hash = "sha256-bhB1hFFLYf+TH3pDCyx/hJqPxBdoPjtPBluK9yygpTk=";
   };
 
   postPatch = ''
@@ -48,11 +50,10 @@ stdenv.mkDerivation rec {
     reuse
     m4
     wrapGAppsHook4
-  ] ++ (with rustPlatform; [
-    cargoSetupHook
-    rust.cargo
-    rust.rustc
-  ]);
+    rustPlatform.cargoSetupHook
+    cargo
+    rustc
+  ];
 
   buildInputs = [
     glib

@@ -27,7 +27,7 @@ buildPythonPackage rec {
     python-utils
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     freezegun
     pytestCheckHook
   ];

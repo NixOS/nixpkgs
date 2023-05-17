@@ -51,6 +51,10 @@ in {
 
       enable = mkEnableOption (lib.mdDoc "installing proxychains configuration");
 
+      package = mkPackageOptionMD pkgs "proxychains" {
+        example = "pkgs.proxychains-ng";
+      };
+
       chain = {
         type = mkOption {
           type = types.enum [ "dynamic" "strict" "random" ];
@@ -86,7 +90,7 @@ in {
         description = lib.mdDoc "Proxy DNS requests - no leak for DNS data.";
       };
 
-      quietMode = mkEnableOption (lib.mdDoc "Quiet mode (no output from the library).");
+      quietMode = mkEnableOption (lib.mdDoc "Quiet mode (no output from the library)");
 
       remoteDNSSubnet = mkOption {
         type = types.enum [ 10 127 224 ];
@@ -159,7 +163,7 @@ in {
       };
 
     environment.etc."proxychains.conf".text = configFile;
-    environment.systemPackages = [ pkgs.proxychains ];
+    environment.systemPackages = [ cfg.package ];
   };
 
 }

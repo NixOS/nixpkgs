@@ -3,7 +3,7 @@
 , fetchurl
 , pkg-config
 , expat
-, enableSystemd ? stdenv.isLinux && !stdenv.hostPlatform.isStatic
+, enableSystemd ? lib.meta.availableOn stdenv.hostPlatform systemdMinimal
 , systemdMinimal
 , audit
 , libapparmor
@@ -19,11 +19,11 @@
 
 stdenv.mkDerivation rec {
   pname = "dbus";
-  version = "1.14.4";
+  version = "1.14.6";
 
   src = fetchurl {
     url = "https://dbus.freedesktop.org/releases/dbus/dbus-${version}.tar.xz";
-    sha256 = "sha256-fA+bjl7A/yR5OD5iwAhKOimvme3xUU6fZZuBsw1ONT4=";
+    sha256 = "sha256-/SvfG7idw2WkZTG/9jFTbyKw0cbVzixcXlm1UmWz1ms=";
   };
 
   patches = lib.optional stdenv.isSunOS ./implement-getgrouplist.patch;

@@ -1,12 +1,12 @@
-{ appleDerivation, xcbuildHook, CoreSymbolication
-, xnu, bison, flex, darling, stdenv, fixDarwinDylibNames }:
+{ appleDerivation, xcbuildHook, CoreSymbolication, apple_sdk
+, xnu, bison, flex, stdenv, fixDarwinDylibNames }:
 
 appleDerivation {
   nativeBuildInputs = [ xcbuildHook flex bison fixDarwinDylibNames ];
-  buildInputs = [ CoreSymbolication darling xnu ];
+  buildInputs = [ CoreSymbolication apple_sdk.frameworks.CoreSymbolication xnu ];
   # -fcommon: workaround build failure on -fno-common toolchains:
   #   duplicate symbol '_kCSRegionMachHeaderName' in: libproc.o dt_module_apple.o
-  NIX_CFLAGS_COMPILE = "-DCTF_OLD_VERSIONS -DPRIVATE -DYYDEBUG=1 -I${xnu}/Library/Frameworks/System.framework/Headers -Wno-error=implicit-function-declaration -fcommon";
+  env.NIX_CFLAGS_COMPILE = "-DCTF_OLD_VERSIONS -DPRIVATE -DYYDEBUG=1 -I${xnu}/Library/Frameworks/System.framework/Headers -Wno-error=implicit-function-declaration -fcommon";
   NIX_LDFLAGS = "-L./Products/Release";
   xcbuildFlags = [ "-target" "dtrace_frameworks" "-target" "dtrace" ];
 
@@ -21,6 +21,8 @@ appleDerivation {
       --replace /usr/bin/ld ${stdenv.cc.bintools.bintools}/bin/ld \
       --replace /usr/lib/dtrace/dt_cpp.h $out/include/dt_cpp.h \
       --replace /usr/lib/dtrace $out/lib/dtrace
+    substituteInPlace libproc/libproc.c \
+      --replace "#include <sandbox/rootless.h>" ""
   '';
 
   # hack to handle xcbuild's broken lex handling

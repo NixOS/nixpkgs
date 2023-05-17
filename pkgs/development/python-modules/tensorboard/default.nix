@@ -3,6 +3,7 @@
 , buildPythonPackage
 , pythonOlder
 , pythonAtLeast
+, pythonRelaxDepsHook
 , numpy
 , wheel
 , werkzeug
@@ -23,7 +24,7 @@
 
 buildPythonPackage rec {
   pname = "tensorboard";
-  version = "2.10.0";
+  version = "2.11.0";
   format = "wheel";
   disabled = pythonOlder "3.6" || pythonAtLeast "3.11";
 
@@ -31,23 +32,17 @@ buildPythonPackage rec {
     inherit pname version format;
     dist = "py3";
     python = "py3";
-    hash = "sha256-dskaXolZzSIIzDLLF6DLACutq7ZqBqwq8Cp4EPSaWeM=";
+    hash = "sha256-oOWS7oeWLhevPw3Of6rj+70jkDAVnp5iXM6BC341xT0=";
   };
 
-  postPatch = ''
-    chmod u+rwx -R ./dist
-    pushd dist
-    wheel unpack --dest unpacked ./*.whl
-    pushd unpacked/tensorboard-${version}
+  nativeBuildInputs = [
+    pythonRelaxDepsHook
+  ];
 
-    substituteInPlace tensorboard-${version}.dist-info/METADATA \
-      --replace "google-auth-oauthlib (<0.5,>=0.4.1)" "google-auth-oauthlib (<1.0,>=0.4.1)" \
-      --replace "protobuf (<3.20,>=3.9.2)" "protobuf (>=3.9.2)"
-
-    popd
-    wheel pack ./unpacked/tensorboard-${version}
-    popd
-  '';
+  pythonRelaxDeps = [
+    "google-auth-oauthlib"
+    "protobuf"
+  ];
 
   propagatedBuildInputs = [
     absl-py

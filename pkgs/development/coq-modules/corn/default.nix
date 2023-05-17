@@ -1,9 +1,9 @@
 { lib, mkCoqDerivation, coq, bignums, math-classes, version ? null }:
 
-with lib; mkCoqDerivation rec {
+mkCoqDerivation rec {
   pname = "corn";
   inherit version;
-  defaultVersion = with versions; switch coq.coq-version [
+  defaultVersion = with lib.versions; lib.switch coq.coq-version [
     { case = "8.6"; out = "8.8.1"; }
     { case = (range "8.11" "8.16"); out = "8.16.0"; }
     { case = (range "8.7"  "8.15"); out = "8.13.0"; }
@@ -21,7 +21,7 @@ with lib; mkCoqDerivation rec {
 
   propagatedBuildInputs = [ bignums math-classes ];
 
-  meta = {
+  meta =  with lib; {
     homepage = "http://c-corn.github.io/";
     license = licenses.gpl2;
     description = "A Coq library for constructive analysis";

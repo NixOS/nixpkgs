@@ -1,11 +1,25 @@
 { callPackage
 , nixosTests
 , python3
+, fetchFromGitHub
+, fetchpatch
 }:
 let
   python = python3.override {
     packageOverrides = self: super: {
       django = super.django_4;
+
+      django-crispy-forms = super.django-crispy-forms.overridePythonAttrs (_: rec {
+        version = "1.14.0";
+        format = "setuptools";
+
+        src = fetchFromGitHub {
+          owner = "django-crispy-forms";
+          repo = "django-crispy-forms";
+          rev = "refs/tags/${version}";
+          hash = "sha256-NZ2lWxsQHc7Qc4HDoWgjJTZ/bJHmjpBf3q1LVLtzA+8=";
+        };
+      });
 
       # Tests are incompatible with Django 4
       django-js-reverse = super.django-js-reverse.overridePythonAttrs (_: {
@@ -28,6 +42,12 @@ python.pkgs.pythonPackages.buildPythonPackage rec {
   patches = [
     # Allow setting MEDIA_ROOT through environment variable
     ./media-root.patch
+    # Address CVE-2023-31047 on Django 4.2.1+
+    (fetchpatch {
+      name = "fix-multiple-file-field";
+      url = "https://github.com/TandoorRecipes/recipes/pull/2458/commits/6b04c922977317354a367487427b15a8ed619be9.patch";
+      hash = "sha256-KmfjJSrB/4tOWtU7zrDJ/AOG4XlmWy/halw8IEEXdZ0=";
+    })
   ];
 
   propagatedBuildInputs = with python.pkgs; [
@@ -88,8 +108,10 @@ python.pkgs.pythonPackages.buildPythonPackage rec {
   buildPhase = ''
     runHook preBuild
 
-    # Avoid dependency on django debug toolbar
+    # Disable debug logging
     export DEBUG=0
+    # Avoid dependency on django debug toolbar
+    export DEBUG_TOOLBAR=0
 
     # See https://github.com/TandoorRecipes/recipes/issues/2043
     mkdir cookbook/static/themes/maps/
@@ -118,7 +140,7 @@ python.pkgs.pythonPackages.buildPythonPackage rec {
     runHook postInstall
   '';
 
-  checkInputs = with python.pkgs; [
+  nativeCheckInputs = with python.pkgs; [
     pytestCheckHook
     pytest-django
     pytest-factoryboy

@@ -59,7 +59,7 @@ buildPythonPackage rec {
     export SETUPTOOLS_SCM_PRETEND_VERSION="${version}"
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     mock
     psutil
     pytestCheckHook

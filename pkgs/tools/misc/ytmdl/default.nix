@@ -19,6 +19,7 @@ python3Packages.buildPythonApplication rec {
       --replace "bs4" "beautifulsoup4" \
       --replace "/etc/bash_completion.d" "share/bash-completion/completions" \
       --replace "/usr/share/zsh/functions/Completion/Unix" "share/zsh/site-functions"
+    sed -i '/python_requires=/d' setup.py
   '';
 
   propagatedBuildInputs = with python3Packages; [

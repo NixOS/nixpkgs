@@ -144,7 +144,7 @@ in {
         interface. If unset no authentication will be required.
 
         The file must contain user names and password hashes in the format
-        `username:hash `, one for each line.  Usernames must
+        `username:hash`, one for each line.  Usernames must
         start with a lowecase ([a-z]) ASCII character, might contain
         non-consecutive underscores except at the end, and consists of
         small-case a-z characters and digits 0-9.

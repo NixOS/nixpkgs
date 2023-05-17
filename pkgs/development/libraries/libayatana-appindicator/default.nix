@@ -8,7 +8,7 @@
 
 stdenv.mkDerivation rec {
   pname = "libayatana-appindicator";
-  version = "0.5.91";
+  version = "0.5.92";
 
   outputs = [ "out" "dev" ];
 
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     owner = "AyatanaIndicators";
     repo = "libayatana-appindicator";
     rev = version;
-    sha256 = "sha256-hOMnpBF0VaFLYvbiKp8n88F14wIeLqSCsT6GFR3ATys=";
+    sha256 = "sha256-NzaWQBb2Ez1ik23wCgW1ZQh1/rY7GcPlLvaSgV7uXrA=";
   };
 
   nativeBuildInputs = [ pkg-config cmake gtk-doc vala gobject-introspection ];

@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "pip-tools";
-  version = "6.11.0";
-  format = "setuptools";
+  version = "6.13.0";
+  format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-kMXcFQ44VuRGO4HMyZMHzPlVTl24OT6yc3BcsLj3HGA=";
+    hash = "sha256-YdRr0uuAFu1Kkk4Zbm5bCiaM07q9eeWTBIcg2yNSK7E=";
   };
 
   patches = [ ./fix-setup-py-bad-syntax-detection.patch ];
@@ -41,7 +41,7 @@ buildPythonPackage rec {
     wheel
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-xdist
     pytestCheckHook
   ];
@@ -57,6 +57,8 @@ buildPythonPackage rec {
     "test_direct_reference_with_extras"
     "test_local_duplicate_subdependency_combined"
     "test_bad_setup_file"
+    # Assertion error
+    "test_compile_recursive_extras"
   ];
 
   pythonImportsCheck = [

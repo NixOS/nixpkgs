@@ -27,9 +27,14 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-7HXJspebluQeejKYmVA7sy/F3dtU1gc4eAbKiPexMMA=";
   };
 
-  cargoSha256 = "sha256-R6ScpLYbEJAu7+CyJsMdljtXq7wsMojHK5O1lH+E/E8=";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "tree-sitter-bash-0.19.0" = "sha256-gTsA874qpCI/N5tmBI5eT8KDaM25gXM4VbcCbUU2EeI=";
+    };
+  };
 
-  checkInputs = [ custom ];
+  nativeCheckInputs = [ custom ];
 
   # see comment on `custom`
   postPatch = ''

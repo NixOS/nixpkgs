@@ -2,7 +2,6 @@
 , fetchFromGitHub
 , pythonOlder
 , pytestCheckHook
-, albumentations
 , dill
 , h5py
 , hickle
@@ -10,12 +9,11 @@
 , opencv4
 , pandas
 , pillow
-, prodict
 , pycm
 , pyyaml
 , scipy
 , requests
-, scikitimage
+, scikit-image
 , six
 , tabulate
 , torch
@@ -43,7 +41,6 @@ buildPythonPackage rec {
   '';
 
   propagatedBuildInputs = [
-    albumentations
     dill
     h5py
     hickle
@@ -51,12 +48,11 @@ buildPythonPackage rec {
     opencv4
     pandas
     pillow
-    prodict
     pycm
     pyyaml
     scipy
     requests
-    scikitimage
+    scikit-image
     tabulate
     torch
     torchvision
@@ -65,12 +61,13 @@ buildPythonPackage rec {
     yacs
   ];
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = {
     description = "High-level training framework for Pytorch";
     homepage = "https://github.com/achaiah/pywick";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ bcdarwin ];
+    broken = true;  # Nixpkgs missing `albumentations` and `prodict`
   };
 }

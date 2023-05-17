@@ -34,7 +34,7 @@ To add a package to Nixpkgs:
 
    - Apache HTTPD: [`pkgs/servers/http/apache-httpd/2.4.nix`](https://github.com/NixOS/nixpkgs/blob/master/pkgs/servers/http/apache-httpd/2.4.nix). A bunch of optional features, variable substitutions in the configure flags, a post-install hook, and miscellaneous hackery.
 
-   - Thunderbird: [`pkgs/applications/networking/mailreaders/thunderbird/default.nix`](https://github.com/NixOS/nixpkgs/blob/master/pkgs/applications/networking/mailreaders/thunderbird/default.nix). Lots of dependencies.
+   - buildMozillaMach: [`pkgs/applications/networking/browser/firefox/common.nix`](https://github.com/NixOS/nixpkgs/blob/master/pkgs/applications/networking/browsers/firefox/common.nix). A reusable build function for Firefox, Thunderbird and Librewolf.
 
    - JDiskReport, a Java utility: [`pkgs/tools/misc/jdiskreport/default.nix`](https://github.com/NixOS/nixpkgs/blob/master/pkgs/tools/misc/jdiskreport/default.nix). Nixpkgs doesn’t have a decent `stdenv` for Java yet so this is pretty ad-hoc.
 

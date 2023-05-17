@@ -2,7 +2,6 @@ import ./make-test-python.nix ({ pkgs, ...}: {
   name = "haproxy";
   nodes = {
     machine = { ... }: {
-      imports = [ ../modules/profiles/minimal.nix ];
       services.haproxy = {
         enable = true;
         config = ''

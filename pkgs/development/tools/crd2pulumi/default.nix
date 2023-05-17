@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "crd2pulumi";
-  version = "1.2.3";
+  version = "1.2.4";
 
   src = fetchFromGitHub {
     owner = "pulumi";
     repo = "crd2pulumi";
     rev = "v${version}";
-    sha256 = "sha256-0+83etSRk7nAaIrA5qu+BL7BfzBkjO7gsExQJ255ZOY=";
+    sha256 = "sha256-2Lr6TMTZLxBisb8IZNIib4rQEvxj9KmljSQ5JGoeTEw=";
   };
 
-  vendorSha256 = "sha256-QnmqhXfE/999i+idAZbREMzNi62164uq5nGKb1nauwk=";
+  vendorHash = "sha256-iWFZ20U4S2utIqhoXgLtT4pp5e9h8IpbveIKHPe0AAw=";
 
   ldflags = [ "-s" "-w" "-X github.com/pulumi/crd2pulumi/gen.Version=${src.rev}" ];
 

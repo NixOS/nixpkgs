@@ -10,13 +10,13 @@
 }:
 mkDerivation rec {
   pname = "echidna";
-  version = "2.0.4";
+  version = "2.0.5";
 
   src = fetchFromGitHub {
     owner = "crytic";
     repo = "echidna";
     rev = "v${version}";
-    sha256 = "sha256-DiEZGbd08QLP8zgrIssGYL6h18AprcWZSYp1mMu9TRw=";
+    sha256 = "sha256-8bChe+qA4DowfuwsR5wLckb56fXi102g8vL2gAH/kYE=";
   };
 
   isLibrary = true;

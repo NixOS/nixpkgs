@@ -1,16 +1,19 @@
-{ lib, stdenv
-, fetchurl
+{ lib
+, stdenv
+, fetchFromGitLab
 , fetchpatch
+, nix-update-script
 
 , autoreconfHook
 , pkg-config
+, sphinx
 
 , libdeflate
 , libjpeg
 , xz
 , zlib
 
-# for passthru.tests
+  # for passthru.tests
 , libgeotiff
 , python3Packages
 , imagemagick
@@ -18,16 +21,17 @@
 , gdal
 , openimageio
 , freeimage
-, imlib
 }:
 
 stdenv.mkDerivation rec {
   pname = "libtiff";
-  version = "4.4.0";
+  version = "4.5.0";
 
-  src = fetchurl {
-    url = "https://download.osgeo.org/libtiff/tiff-${version}.tar.gz";
-    sha256 = "1vdbk3sc497c58kxmp02irl6nqkfm9rjs3br7g59m59qfnrj6wli";
+  src = fetchFromGitLab {
+    owner = "libtiff";
+    repo = "libtiff";
+    rev = "v${version}";
+    hash = "sha256-KG6rB940JMjFUTAgtkzg+Zh75gylPY6Q7/4gEbL0Hcs=";
   };
 
   patches = [
@@ -37,30 +41,30 @@ stdenv.mkDerivation rec {
     # `version` in the project's include paths
     ./rename-version.patch
     (fetchpatch {
-      name = "CVE-2022-34526.patch";
-      url = "https://gitlab.com/libtiff/libtiff/-/commit/275735d0354e39c0ac1dc3c0db2120d6f31d1990.patch";
-      sha256 = "sha256-faKsdJjvQwNdkAKjYm4vubvZvnULt9zz4l53zBFr67s=";
+      name = "CVE-2022-48281.patch";
+      url = "https://gitlab.com/libtiff/libtiff/-/commit/d1b6b9c1b3cae2d9e37754506c1ad8f4f7b646b5.diff";
+      sha256 = "sha256-FWUlyJyHXac6fuM5f9PG33kcF5Bm4fyFmYnaDal46iM=";
     })
     (fetchpatch {
-      name = "CVE-2022-2953.patch";
-      url = "https://gitlab.com/libtiff/libtiff/-/commit/48d6ece8389b01129e7d357f0985c8f938ce3da3.patch";
-      sha256 = "sha256-h9hulV+dnsUt/2Rsk4C1AKdULkvweM2ypIJXYQ3BqQU=";
+      name = "CVE-2023-0800.CVE-2023-0801.CVE-2023-0802.CVE-2023-0803.CVE-2023-0804.patch";
+      url = "https://gitlab.com/libtiff/libtiff/-/commit/33aee1275d9d1384791d2206776eb8152d397f00.patch";
+      sha256 = "sha256-wNSa1D9EWObTs331utjIKgo9p9PUWqTM54qG+1Hhm1A=";
     })
     (fetchpatch {
-      name = "CVE-2022-3626.CVE-2022-3627.CVE-2022-3597.patch";
-      url = "https://gitlab.com/libtiff/libtiff/-/commit/236b7191f04c60d09ee836ae13b50f812c841047.patch";
-      excludes = [ "doc/tools/tiffcrop.rst" ];
-      sha256 = "sha256-L2EMmmfMM4oEYeLapO93wvNS+HlO0yXsKxijXH+Wuas=";
+      name = "CVE-2023-0795.CVE-2023-0796.CVE-2023-0797.CVE-2023-0798.CVE-2023-0799.prerequisite-0.patch";
+      url = "https://gitlab.com/libtiff/libtiff/-/commit/9c22495e5eeeae9e00a1596720c969656bb8d678.patch";
+      sha256 = "sha256-NTs+dCUweKddQDzJLqbdIdvNbaSweGG0cSVt57tntoI=";
     })
     (fetchpatch {
-      name = "CVE-2022-3598.CVE-2022-3570.patch";
-      url = "https://gitlab.com/libtiff/libtiff/-/commit/cfbb883bf6ea7bedcb04177cc4e52d304522fdff.patch";
-      sha256 = "sha256-SLq2+JaDEUOPZ5mY4GPB6uwhQOG5cD4qyL5o9i8CVVs=";
+      name = "CVE-2023-0795.CVE-2023-0796.CVE-2023-0797.CVE-2023-0798.CVE-2023-0799.prerequisite-1.patch";
+      url = "https://gitlab.com/libtiff/libtiff/-/commit/d63de61b1ec3385f6383ef9a1f453e4b8b11d536.patch";
+      includes = [ "tools/tiffcrop.c" ];
+      sha256 = "sha256-VHg5aAcHKwRkDFDyC1rLjCjj1rMzcq/2SUR/r1fQubQ=";
     })
     (fetchpatch {
-      name = "CVE-2022-3970.patch";
-      url = "https://gitlab.com/libtiff/libtiff/-/commit/227500897dfb07fb7d27f7aa570050e62617e3be.patch";
-      sha256 = "sha256-pgItgS+UhMjoSjkDJH5y7iGFZ+yxWKqlL7BdT2mFcH0=";
+      name = "CVE-2023-0795.CVE-2023-0796.CVE-2023-0797.CVE-2023-0798.CVE-2023-0799.patch";
+      url = "https://gitlab.com/libtiff/libtiff/-/commit/afaabc3e50d4e5d80a94143f7e3c997e7e410f68.patch";
+      sha256 = "sha256-9+oXKVJEeaIuMBdtvhNlUBNpw9uzg31s+zxt4GJo6Lo=";
     })
   ];
 
@@ -71,26 +75,34 @@ stdenv.mkDerivation rec {
   outputs = [ "bin" "dev" "dev_private" "out" "man" "doc" ];
 
   postFixup = ''
-    moveToOutput include/tif_dir.h $dev_private
     moveToOutput include/tif_config.h $dev_private
+    moveToOutput include/tif_dir.h $dev_private
+    moveToOutput include/tif_hash_set.h $dev_private
     moveToOutput include/tiffiop.h $dev_private
   '';
 
   # If you want to change to a different build system, please make
   # sure cross-compilation works first!
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
+  nativeBuildInputs = [ autoreconfHook pkg-config sphinx ];
 
-  propagatedBuildInputs = [ libjpeg xz zlib ]; #TODO: opengl support (bogus configure detection)
-
-  buildInputs = [ libdeflate ];
+  # TODO: opengl support (bogus configure detection)
+  propagatedBuildInputs = [
+    libdeflate
+    libjpeg
+    xz
+    zlib
+  ];
 
   enableParallelBuilding = true;
 
   doCheck = true;
 
-  passthru.tests = {
-    inherit libgeotiff imagemagick graphicsmagick gdal openimageio freeimage imlib;
-    inherit (python3Packages) pillow imread;
+  passthru = {
+    tests = {
+      inherit libgeotiff imagemagick graphicsmagick gdal openimageio freeimage;
+      inherit (python3Packages) pillow imread;
+    };
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {

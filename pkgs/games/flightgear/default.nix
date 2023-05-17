@@ -6,7 +6,7 @@
 }:
 
 let
-  version = "2020.3.13";
+  version = "2020.3.18";
   shortVersion = builtins.substring 0 6 version;
   data = stdenv.mkDerivation rec {
     pname = "flightgear-data";
@@ -14,7 +14,7 @@ let
 
     src = fetchurl {
       url = "mirror://sourceforge/flightgear/release-${shortVersion}/FlightGear-${version}-data.txz";
-      sha256 = "sha256-C3iUVA7IJQ77OdXcaBnSpDphMFjmFZmn0nozQvdxSJM=";
+      sha256 = "sha256-U8lsHrw40Xo6a3jZw6GiPnOALvvg9PdecVAdkZewUjg=";
     };
 
     dontUnpack = true;
@@ -27,12 +27,12 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "flightgear";
-   # inheriting data for `nix-prefetch-url -A pkgs.flightgear.data.src`
+  # inheriting data for `nix-prefetch-url -A pkgs.flightgear.data.src`
   inherit version data;
 
   src = fetchurl {
     url = "mirror://sourceforge/flightgear/release-${shortVersion}/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-Zhq/r0davIz9G6tXVZRp76ZivG0D9Y6Nl3OFAD/lqow=";
+    sha256 = "sha256-OajjGj/Bgqg8H/6PjXkwJHwbSQqtzbQ1b3Xwk3aI3jc=";
   };
 
   # Of all the files in the source and data archives, there doesn't seem to be

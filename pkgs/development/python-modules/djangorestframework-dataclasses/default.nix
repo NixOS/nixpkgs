@@ -2,18 +2,24 @@
 , buildPythonPackage
 , fetchFromGitHub
 , djangorestframework
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "djangorestframework-dataclasses";
-  version = "1.1.1";
+  version = "1.2.0";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "oxan";
     repo = "djangorestframework-dataclasses";
-    rev = "v${version}";
-    sha256 = "sha256-wXgA/4Dik6yG0nKl9GbrHgb2lhrPsgS23+cEyaD9MRY=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-PTX5huYdusPV6xCBW+8sFwusuPtZBH1vVApvcQU7Dlc=";
   };
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   postPatch = ''
     patchShebangs manage.py

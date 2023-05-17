@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "deezer-python";
-  version = "5.8.1";
+  version = "5.12.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -22,14 +22,14 @@ buildPythonPackage rec {
     owner = "browniebroke";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-M6icdvD412qeURAIkywUliUM9QAgG/b+yBMZVYatvyQ=";
+    hash = "sha256-fJRGtes5EdGHiTJ5SDOyZT9NEnghbu+7I9OD2h4JOjw=";
   };
 
   nativeBuildInputs = [
     poetry-core
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     environs
     pytest-mock
     pytest-vcr

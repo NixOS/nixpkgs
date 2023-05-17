@@ -1,33 +1,47 @@
 { lib
 , rustPlatform
 , fetchCrate
-, pkg-config
-, openssl
+, fetchpatch
 , stdenv
-, Security
+, darwin
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "hvm";
-  version = "0.1.89";
+  version = "1.0.8";
 
   src = fetchCrate {
     inherit pname version;
-    sha256 = "sha256-xPF8HW4QFXLLjg2HO5Pl+uQ44XCdAHc6koVpVXxN6dE=";
+    hash = "sha256-dPO3GWDojuz7nilOr09xC6tPhBZ95wjAk0ErItzAbxw=";
   };
 
-  cargoSha256 = "sha256-dDSmiMwDbVDfStXamQvOMBBO5MiuDFhgzWPx0oYwzcM=";
+  cargoHash = "sha256-XsKVXlceg3HHGalHcXfmJPKhAQm4DqdsJ2c+NF+AOI4=";
 
-  nativeBuildInputs = [ pkg-config ];
+  patches = [
+    # see https://github.com/higherorderco/hvm/pull/220
+    # this commit removes the feature to fix build with rust nightly
+    # but this feature is required with rust stable
+    (fetchpatch {
+      name = "revert-fix-remove-feature-automic-mut-ptr.patch";
+      url = "https://github.com/higherorderco/hvm/commit/c0e35c79b4e31c266ad33beadc397c428e4090ee.patch";
+      hash = "sha256-9xxu7NOtz3Tuzf5F0Mi4rw45Xnyh7h9hbTrzq4yfslg=";
+      revert = true;
+    })
+  ];
 
-  buildInputs = [ openssl ] ++ lib.optional stdenv.isDarwin Security;
+  buildInputs = lib.optionals stdenv.isDarwin [
+    darwin.apple_sdk_11_0.frameworks.IOKit
+  ];
 
-  # memory allocation of 34359738368 bytes failed
+  # tests are broken
   doCheck = false;
+
+  # enable nightly features
+  RUSTC_BOOTSTRAP = true;
 
   meta = with lib; {
     description = "A pure functional compile target that is lazy, non-garbage-collected, and parallel";
-    homepage = "https://github.com/kindelia/hvm";
+    homepage = "https://github.com/higherorderco/hvm";
     license = licenses.mit;
     maintainers = with maintainers; [ figsoda ];
   };

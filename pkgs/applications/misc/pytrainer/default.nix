@@ -1,5 +1,5 @@
 { lib
-, python3
+, python310
 , fetchFromGitHub
 , gdk-pixbuf
 , gnome
@@ -17,11 +17,19 @@
 }:
 
 let
-  python = python3.override {
+  python = python310.override {
     packageOverrides = (self: super: {
       matplotlib = super.matplotlib.override {
         enableGtk3 = true;
       };
+      sqlalchemy = super.sqlalchemy.overridePythonAttrs (old: rec {
+        version = "1.4.46";
+        src = self.fetchPypi {
+          pname = "SQLAlchemy";
+          inherit version;
+          hash = "sha256-aRO4JH2KKS74MVFipRkx4rQM6RaB8bbxj2lwRSAMSjA=";
+        };
+      });
     });
   };
 in python.pkgs.buildPythonApplication rec {
@@ -63,7 +71,7 @@ in python.pkgs.buildPythonApplication rec {
     "--prefix" "PATH" ":" (lib.makeBinPath [ perl gpsbabel ])
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     glibcLocales
     perl
     xvfb-run
@@ -77,7 +85,7 @@ in python.pkgs.buildPythonApplication rec {
       TZ=Europe/Kaliningrad \
       LC_ALL=en_US.UTF-8 \
       xvfb-run -s '-screen 0 800x600x24' \
-      ${python3.interpreter} setup.py test
+      ${python.interpreter} setup.py test
   '';
 
   meta = with lib; {

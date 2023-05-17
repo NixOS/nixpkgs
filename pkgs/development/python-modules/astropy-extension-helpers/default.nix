@@ -25,7 +25,7 @@ buildPythonPackage rec {
 
   patches = [ ./permissions.patch ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     findutils
     pytestCheckHook
   ];

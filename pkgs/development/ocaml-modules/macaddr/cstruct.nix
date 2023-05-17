@@ -7,6 +7,8 @@ buildDunePackage {
 
   inherit (macaddr) version src;
 
+  duneVersion = "3";
+
   propagatedBuildInputs = [ macaddr cstruct ];
 
   doCheck = true;

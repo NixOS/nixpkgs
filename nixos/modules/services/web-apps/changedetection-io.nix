@@ -214,7 +214,7 @@ in
           };
         })
       ];
-      podman.defaultNetwork.dnsname.enable = true;
+      podman.defaultNetwork.settings.dns_enabled = true;
     };
   };
 }

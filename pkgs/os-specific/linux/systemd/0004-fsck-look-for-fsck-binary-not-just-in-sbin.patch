@@ -1,0 +1,152 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Florian Klink <flokli@flokli.de>
+Date: Thu, 13 Apr 2023 22:54:54 +0200
+Subject: [PATCH] fsck: look for fsck binary not just in /sbin
+
+This removes remaining hardcoded occurences of `/sbin/fsck`, and instead
+uses `find_executable` to find `fsck`.
+
+We also use `fsck_exists_for_fstype` to check for the `fsck.*`
+executable, which also checks in `$PATH`, so it's fair to assume fsck
+itself is also available.
+---
+ man/systemd-fsck@.service.xml |  8 ++++----
+ src/fsck/fsck.c               |  9 ++++++++-
+ src/home/homework-luks.c      | 11 ++++++++++-
+ src/shared/dissect-image.c    | 13 +++++++++++--
+ 4 files changed, 33 insertions(+), 8 deletions(-)
+
+diff --git a/man/systemd-fsck@.service.xml b/man/systemd-fsck@.service.xml
+index e928aebdb3..403286829e 100644
+--- a/man/systemd-fsck@.service.xml
++++ b/man/systemd-fsck@.service.xml
+@@ -51,17 +51,17 @@
+     <para><filename>systemd-fsck</filename> does not know any details
+     about specific filesystems, and simply executes file system
+     checkers specific to each filesystem type
+-    (<filename>/sbin/fsck.<replaceable>type</replaceable></filename>). These checkers will decide if
++    (<filename>fsck.<replaceable>type</replaceable></filename>). These checkers will decide if
+     the filesystem should actually be checked based on the time since
+     last check, number of mounts, unclean unmount, etc.</para>
+ 
+     <para><filename>systemd-fsck-root.service</filename> and <filename>systemd-fsck-usr.service</filename>
+-    will activate <filename>reboot.target</filename> if <filename>/sbin/fsck</filename> returns the "System
+-    should reboot" condition, or <filename>emergency.target</filename> if <filename>/sbin/fsck</filename>
++    will activate <filename>reboot.target</filename> if <filename>fsck</filename> returns the "System
++    should reboot" condition, or <filename>emergency.target</filename> if <filename>fsck</filename>
+     returns the "Filesystem errors left uncorrected" condition.</para>
+ 
+     <para><filename>systemd-fsck@.service</filename> will fail if
+-    <filename>/sbin/fsck</filename> returns with either "System should reboot"
++    <filename>fsck</filename> returns with either "System should reboot"
+     or "Filesystem errors left uncorrected" conditions. For filesystems
+     listed in <filename>/etc/fstab</filename> without <literal>nofail</literal>
+     or <literal>noauto</literal> options, <literal>local-fs.target</literal>
+diff --git a/src/fsck/fsck.c b/src/fsck/fsck.c
+index e25c5d5efa..0e0e73c9ac 100644
+--- a/src/fsck/fsck.c
++++ b/src/fsck/fsck.c
+@@ -351,6 +351,7 @@ static int run(int argc, char *argv[]) {
+         if (r == 0) {
+                 char dash_c[STRLEN("-C") + DECIMAL_STR_MAX(int) + 1];
+                 int progress_socket = -1;
++                _cleanup_free_ char *fsck_path = NULL;
+                 const char *cmdline[9];
+                 int i = 0;
+ 
+@@ -371,7 +372,13 @@ static int run(int argc, char *argv[]) {
+                 } else
+                         dash_c[0] = 0;
+ 
+-                cmdline[i++] = "/sbin/fsck";
++                r = find_executable("fsck", &fsck_path);
++                if (r < 0) {
++                        log_error_errno(r, "Cannot find fsck binary: %m");
++                        _exit(FSCK_OPERATIONAL_ERROR);
++                }
++
++                cmdline[i++] = fsck_path;
+                 cmdline[i++] =  arg_repair;
+                 cmdline[i++] = "-T";
+ 
+diff --git a/src/home/homework-luks.c b/src/home/homework-luks.c
+index 2ea9887853..e267457b8e 100644
+--- a/src/home/homework-luks.c
++++ b/src/home/homework-luks.c
+@@ -215,6 +215,7 @@ static int block_get_size_by_path(const char *path, uint64_t *ret) {
+ static int run_fsck(const char *node, const char *fstype) {
+         int r, exit_status;
+         pid_t fsck_pid;
++        _cleanup_free_ char *fsck_path = NULL;
+ 
+         assert(node);
+         assert(fstype);
+@@ -227,6 +228,14 @@ static int run_fsck(const char *node, const char *fstype) {
+                 return 0;
+         }
+ 
++        r = find_executable("fsck", &fsck_path);
++        /* We proceed anyway if we can't determine whether the fsck
++         * binary for some specific fstype exists,
++         * but the lack of the main fsck binary should be considered
++         * an error. */
++        if (r < 0)
++                return log_error_errno(r, "Cannot find fsck binary: %m");
++
+         r = safe_fork("(fsck)",
+                       FORK_RESET_SIGNALS|FORK_RLIMIT_NOFILE_SAFE|FORK_DEATHSIG|FORK_LOG|FORK_STDOUT_TO_STDERR|FORK_CLOSE_ALL_FDS,
+                       &fsck_pid);
+@@ -234,7 +243,7 @@ static int run_fsck(const char *node, const char *fstype) {
+                 return r;
+         if (r == 0) {
+                 /* Child */
+-                execl("/sbin/fsck", "/sbin/fsck", "-aTl", node, NULL);
++                execl(fsck_path, fsck_path, "-aTl", node, NULL);
+                 log_open();
+                 log_error_errno(errno, "Failed to execute fsck: %m");
+                 _exit(FSCK_OPERATIONAL_ERROR);
+diff --git a/src/shared/dissect-image.c b/src/shared/dissect-image.c
+index 4749bdd230..2b6e1418dd 100644
+--- a/src/shared/dissect-image.c
++++ b/src/shared/dissect-image.c
+@@ -1423,6 +1423,7 @@ static int is_loop_device(const char *path) {
+ static int run_fsck(int node_fd, const char *fstype) {
+         int r, exit_status;
+         pid_t pid;
++        _cleanup_free_ char *fsck_path = NULL;
+ 
+         assert(node_fd >= 0);
+         assert(fstype);
+@@ -1437,6 +1438,14 @@ static int run_fsck(int node_fd, const char *fstype) {
+                 return 0;
+         }
+ 
++        r = find_executable("fsck", &fsck_path);
++        /* We proceed anyway if we can't determine whether the fsck
++         * binary for some specific fstype exists,
++         * but the lack of the main fsck binary should be considered
++         * an error. */
++        if (r < 0)
++                return log_error_errno(r, "Cannot find fsck binary: %m");
++
+         r = safe_fork_full(
+                         "(fsck)",
+                         &node_fd, 1, /* Leave the node fd open */
+@@ -1446,7 +1455,7 @@ static int run_fsck(int node_fd, const char *fstype) {
+                 return log_debug_errno(r, "Failed to fork off fsck: %m");
+         if (r == 0) {
+                 /* Child */
+-                execl("/sbin/fsck", "/sbin/fsck", "-aT", FORMAT_PROC_FD_PATH(node_fd), NULL);
++                execl(fsck_path, fsck_path, "-aT", FORMAT_PROC_FD_PATH(node_fd), NULL);
+                 log_open();
+                 log_debug_errno(errno, "Failed to execl() fsck: %m");
+                 _exit(FSCK_OPERATIONAL_ERROR);
+@@ -1454,7 +1463,7 @@ static int run_fsck(int node_fd, const char *fstype) {
+ 
+         exit_status = wait_for_terminate_and_check("fsck", pid, 0);
+         if (exit_status < 0)
+-                return log_debug_errno(exit_status, "Failed to fork off /sbin/fsck: %m");
++                return log_debug_errno(exit_status, "Failed to fork off %s: %m", fsck_path);
+ 
+         if ((exit_status & ~FSCK_ERROR_CORRECTED) != FSCK_SUCCESS) {
+                 log_debug("fsck failed with exit status %i.", exit_status);

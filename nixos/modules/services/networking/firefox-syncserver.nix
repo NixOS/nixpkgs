@@ -304,6 +304,10 @@ in
         forceSSL = cfg.singleNode.enableTLS;
         locations."/" = {
           proxyPass = "http://127.0.0.1:${toString cfg.settings.port}";
+          # We need to pass the Host header that matches the original Host header. Otherwise,
+          # Hawk authentication will fail (because it assumes that the client and server see
+          # the same value of the Host header).
+          recommendedProxySettings = true;
         };
       };
     };
@@ -311,8 +315,6 @@ in
 
   meta = {
     maintainers = with lib.maintainers; [ pennae ];
-    # Don't edit the docbook xml directly, edit the md and generate it:
-    # `pandoc firefox-syncserver.md -t docbook --top-level-division=chapter --extract-media=media -f markdown+smart > firefox-syncserver.xml`
-    doc = ./firefox-syncserver.xml;
+    doc = ./firefox-syncserver.md;
   };
 }

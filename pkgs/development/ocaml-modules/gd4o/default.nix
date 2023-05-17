@@ -12,6 +12,9 @@ stdenv.mkDerivation rec {
   buildInputs = [ ocaml findlib libjpeg libpng ];
   propagatedBuildInputs = [ gd zlib freetype ];
 
+  makeFlags = [
+    "CC=${stdenv.cc.targetPrefix}cc"
+  ];
 
   preInstall = ''
     mkdir -p $OCAMLFIND_DESTDIR/stublibs

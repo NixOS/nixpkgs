@@ -1,8 +1,18 @@
+From 63b1c7332bee6080bffecf9ce9d75ff15d799166 Mon Sep 17 00:00:00 2001
+From: Natanael Copa <ncopa@alpinelinux.org>
+Date: Wed, 16 Nov 2022 10:42:39 +0100
+Subject: [PATCH] fix stdio usage
+
+---
+ lib/commands/toolcontext.c | 4 ++--
+ tools/lvmcmdline.c         | 6 +++---
+ 2 files changed, 5 insertions(+), 5 deletions(-)
+
 diff --git a/lib/commands/toolcontext.c b/lib/commands/toolcontext.c
-index 296618686..96343eeb7 100644
+index b630554a9..f20080d18 100644
 --- a/lib/commands/toolcontext.c
 +++ b/lib/commands/toolcontext.c
-@@ -1619,7 +1619,7 @@ struct cmd_context *create_toolcontext(unsigned is_clvmd,
+@@ -1667,7 +1667,7 @@ struct cmd_context *create_toolcontext(unsigned is_clvmd,
  	/* FIXME Make this configurable? */
  	reset_lvm_errno(1);
  
@@ -11,20 +21,20 @@ index 296618686..96343eeb7 100644
  	/* Set in/out stream buffering before glibc */
  	if (set_buffering
  #ifdef SYS_gettid
-@@ -2006,7 +2006,7 @@ void destroy_toolcontext(struct cmd_context *cmd)
+@@ -2045,7 +2045,7 @@ void destroy_toolcontext(struct cmd_context *cmd)
+ 		dm_hash_destroy(cmd->cft_def_hash);
  
- 	if (cmd->pending_delete_mem)
- 		dm_pool_destroy(cmd->pending_delete_mem);
+ 	dm_device_list_destroy(&cmd->cache_dm_devs);
 -#ifndef VALGRIND_POOL
 +#if !defined(VALGRIND_POOL) && defined(__GLIBC__)
  	if (cmd->linebuffer) {
  		/* Reset stream buffering to defaults */
  		if (is_valid_fd(STDIN_FILENO) &&
 diff --git a/tools/lvmcmdline.c b/tools/lvmcmdline.c
-index d97ff5720..bbbda82bd 100644
+index a5bb6a5c5..0ebfa375c 100644
 --- a/tools/lvmcmdline.c
 +++ b/tools/lvmcmdline.c
-@@ -3342,7 +3342,7 @@ static int _check_standard_fds(void)
+@@ -3422,7 +3422,7 @@ static int _check_standard_fds(void)
  	int err = is_valid_fd(STDERR_FILENO);
  
  	if (!is_valid_fd(STDIN_FILENO) &&
@@ -33,7 +43,7 @@ index d97ff5720..bbbda82bd 100644
  		if (err)
  			perror("stdin stream open");
  		else
-@@ -3352,7 +3352,7 @@ static int _check_standard_fds(void)
+@@ -3432,7 +3432,7 @@ static int _check_standard_fds(void)
  	}
  
  	if (!is_valid_fd(STDOUT_FILENO) &&
@@ -42,7 +52,7 @@ index d97ff5720..bbbda82bd 100644
  		if (err)
  			perror("stdout stream open");
  		/* else no stdout */
-@@ -3360,7 +3360,7 @@ static int _check_standard_fds(void)
+@@ -3440,7 +3440,7 @@ static int _check_standard_fds(void)
  	}
  
  	if (!is_valid_fd(STDERR_FILENO) &&
@@ -51,3 +61,6 @@ index d97ff5720..bbbda82bd 100644
  		printf("stderr stream open: %s\n",
  		       strerror(errno));
  		return 0;
+-- 
+2.38.1
+

@@ -65,7 +65,7 @@ let
     };
   };
 
-  filterDTBs = src: if isNull cfg.filter
+  filterDTBs = src: if cfg.filter == null
     then "${src}/dtbs"
     else
       pkgs.runCommand "dtbs-filtered" {} ''
@@ -93,8 +93,8 @@ let
   # Fill in `dtboFile` for each overlay if not set already.
   # Existence of one of these is guarded by assertion below
   withDTBOs = xs: flip map xs (o: o // { dtboFile =
-    if isNull o.dtboFile then
-      if !isNull o.dtsFile then compileDTS o.name o.dtsFile
+    if o.dtboFile == null then
+      if o.dtsFile != null then compileDTS o.name o.dtsFile
       else compileDTS o.name (pkgs.writeText "dts" o.dtsText)
     else o.dtboFile; } );
 
@@ -181,7 +181,7 @@ in
   config = mkIf (cfg.enable) {
 
     assertions = let
-      invalidOverlay = o: isNull o.dtsFile && isNull o.dtsText && isNull o.dtboFile;
+      invalidOverlay = o: (o.dtsFile == null) && (o.dtsText == null) && (o.dtboFile == null);
     in lib.singleton {
       assertion = lib.all (o: !invalidOverlay o) cfg.overlays;
       message = ''

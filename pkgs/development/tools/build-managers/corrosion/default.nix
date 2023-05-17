@@ -1,20 +1,22 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, cargo
 , cmake
 , rustPlatform
+, rustc
 , libiconv
 }:
 
 stdenv.mkDerivation rec {
   pname = "corrosion";
-  version = "0.3.0";
+  version = "0.3.5";
 
   src = fetchFromGitHub {
     owner = "corrosion-rs";
     repo = "corrosion";
     rev = "v${version}";
-    hash = "sha256-HZdKnS0M8q4C42b7J93LZBXJycxYVahy2ywT6rISOzo=";
+    hash = "sha256-r/jrck4RiQynH1+Hx4GyIHpw/Kkr8dHe1+vTHg+fdRs=";
   };
 
   cargoRoot = "generator";
@@ -23,18 +25,17 @@ stdenv.mkDerivation rec {
     inherit src;
     sourceRoot = "${src.name}/${cargoRoot}";
     name = "${pname}-${version}";
-    hash = "sha256-vrAK5BrMSC8FMLvtP0rxw4sHRU9ySbnrZM50oXMJV1Q=";
+    hash = "sha256-d4ep2v1aMQJUiMwwM0QWZo8LQosJoSeVIEx7JXkXHt8=";
   };
 
   buildInputs = lib.optional stdenv.isDarwin libiconv;
 
   nativeBuildInputs = [
     cmake
-  ] ++ (with rustPlatform; [
-    cargoSetupHook
-    rust.cargo
-    rust.rustc
-  ]);
+    rustPlatform.cargoSetupHook
+    cargo
+    rustc
+  ];
 
   meta = with lib; {
     description = "Tool for integrating Rust into an existing CMake project";

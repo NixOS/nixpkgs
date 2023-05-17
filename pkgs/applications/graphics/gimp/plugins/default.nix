@@ -31,26 +31,27 @@ let
         install -Dt "$pluginDir" "$@"
       }
     '';
-
-    # Override installation paths.
-    PKG_CONFIG_GIMP_2_0_GIMPLIBDIR = "${placeholder "out"}/${gimp.targetLibDir}";
-    PKG_CONFIG_GIMP_2_0_GIMPDATADIR = "${placeholder "out"}/${gimp.targetDataDir}";
   }
   // attrs
   // {
-      name = "${gimp.pname}-plugin-${name}";
-      buildInputs = [
-        gimp
-        gimp.gtk
-        glib
-      ] ++ (attrs.buildInputs or []);
+    name = "${gimp.pname}-plugin-${name}";
+    buildInputs = [
+      gimp
+      gimp.gtk
+      glib
+    ] ++ (attrs.buildInputs or []);
 
-      nativeBuildInputs = [
-        pkg-config
-        intltool
-      ] ++ (attrs.nativeBuildInputs or []);
-    }
-  );
+    nativeBuildInputs = [
+      pkg-config
+      intltool
+    ] ++ (attrs.nativeBuildInputs or []);
+
+    # Override installation paths.
+    env = {
+      PKG_CONFIG_GIMP_2_0_GIMPLIBDIR = "${placeholder "out"}/${gimp.targetLibDir}";
+      PKG_CONFIG_GIMP_2_0_GIMPDATADIR = "${placeholder "out"}/${gimp.targetDataDir}";
+    } // attrs.env or { };
+  });
 
   scriptDerivation = {src, ...}@attrs : pluginDerivation ({
     prePhases = "extraLib";
@@ -109,13 +110,20 @@ in
     /* menu:
        Video
     */
-    name = "gap-2.6.0";
+    pname = "gap";
+    version = "2.6.0";
+
     src = fetchurl {
       url = "https://ftp.gimp.org/pub/gimp/plug-ins/v2.6/gap/gimp-gap-2.6.0.tar.bz2";
       sha256 = "1jic7ixcmsn4kx2cn32nc5087rk6g8xsrz022xy11yfmgvhzb0ql";
     };
-    NIX_LDFLAGS = "-lm";
+
     hardeningDisable = [ "format" ];
+
+    env = {
+      NIX_LDFLAGS = "-lm";
+    };
+
     meta = with lib; {
       description = "The GIMP Animation Package";
       homepage = "https://www.gimp.org";
@@ -206,6 +214,10 @@ in
       rev = "v${version}";
       sha256 = "1jwc8bhhm21xhrgw56nzbma6fwg59gc8anlmyns7jdiw83y0zx3j";
     };
+
+    meta = {
+      broken = !gimp.python2Support;
+    };
   };
 
   texturize = pluginDerivation {
@@ -228,16 +240,22 @@ in
     /* menu:
       Filters/Enhance/Wavelet sharpen
     */
-    name = "wavelet-sharpen-0.1.2";
-    # Workaround build failure on -fno-common toolchains like upstream
-    # gcc-10. Otherwise build fails as:
-    #   ld: interface.o:(.bss+0xe0): multiple definition of `fimg'; plugin.o:(.bss+0x40): first defined here
-    NIX_CFLAGS_COMPILE = "-fcommon";
-    NIX_LDFLAGS = "-lm";
+    pname = "wavelet-sharpen";
+    version = "0.1.2";
+
     src = fetchurl {
       url = "https://github.com/pixlsus/registry.gimp.org_static/raw/master/registry.gimp.org/files/wavelet-sharpen-0.1.2.tar.gz";
       sha256 = "0vql1k67i21g5ivaa1jh56rg427m0icrkpryrhg75nscpirfxxqw";
     };
+
+    env = {
+      # Workaround build failure on -fno-common toolchains like upstream
+      # gcc-10. Otherwise build fails as:
+      #   ld: interface.o:(.bss+0xe0): multiple definition of `fimg'; plugin.o:(.bss+0x40): first defined here
+      NIX_CFLAGS_COMPILE = "-fcommon";
+      NIX_LDFLAGS = "-lm";
+    };
+
     installPhase = "installPlugin src/wavelet-sharpen"; # TODO translations are not copied .. How to do this on nix?
   };
 
@@ -271,7 +289,7 @@ in
 
   gimplensfun = pluginDerivation rec {
     version = "unstable-2018-10-21";
-    name = "gimplensfun-${version}";
+    pname = "gimplensfun";
 
     src = fetchFromGitHub {
       owner = "seebk";

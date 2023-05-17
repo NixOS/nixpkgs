@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   #   ld: libengine_gui.a(gui_menu.o):(.bss+0x0): multiple definition of
   #     `menu_t'; objs.release/action.o:(.bss+0x20): first defined here
   # TODO: remove it for 1.7.7+ release as it was fixed upstream.
-  NIX_CFLAGS_COMPILE = "-fcommon";
+  env.NIX_CFLAGS_COMPILE = "-fcommon";
 
   buildFlags = [ "PREFIX=${placeholder "out"}" "CFG=release" ];
 

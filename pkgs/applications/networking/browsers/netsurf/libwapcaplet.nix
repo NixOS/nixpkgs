@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     "NSSHARED=${buildsystem}/share/netsurf-buildsystem"
   ];
 
-  NIX_CFLAGS_COMPILE = "-Wno-error=cast-function-type";
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=cast-function-type";
 
   meta = with lib; {
     homepage = "https://www.netsurf-browser.org/projects/${libname}/";

@@ -65,5 +65,5 @@ writeTextFile {
   name = "${name}.pc";
   destination = "/lib/pkgconfig/${name}.pc";
   text = builtins.concatStringsSep "\n" content;
-  checkPhase = ''${buildPackages.pkg-config}/bin/pkg-config --validate "$target"'';
+  checkPhase = ''${buildPackages.pkg-config}/bin/${buildPackages.pkg-config.targetPrefix}pkg-config --validate "$target"'';
 }

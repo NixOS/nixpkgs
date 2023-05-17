@@ -107,6 +107,8 @@ in
 
       with subtest("Network is up"):
           alice.wait_until_succeeds("ping -c1 bob")
+          alice.succeed("systemctl restart ipsec")
+          bob.succeed("systemctl restart ipsec")
 
       with subtest("Eve can eavesdrop cleartext traffic"):
           eavesdrop()

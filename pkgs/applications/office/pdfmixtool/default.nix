@@ -13,13 +13,13 @@
 
 mkDerivation rec {
   pname = "pdfmixtool";
-  version = "1.1";
+  version = "1.1.1";
 
   src = fetchFromGitLab {
     owner = "scarpetta";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-S8hhWZ6nHyIWPwsfl+o9XnljLD3aE/vthCLuWEbm5nc=";
+    hash = "sha256-fgtRKUG6J/CM6cXUTHWAPemqL8loWZT3wZmGdRHldq8=";
   };
 
   nativeBuildInputs = [
@@ -36,12 +36,11 @@ mkDerivation rec {
   ];
 
   patches = [
-    # fix incompatibility with qpdf11
+    # fix incompatibility with qpdf11.3.0 usage of c++17 - delete this patch when we reach pdfmixtool version > v1.1.1
     (fetchpatch {
-      url = "https://gitlab.com/scarpetta/pdfmixtool/-/commit/81f7e96f6e68dfeba3cd4e00d8553dfdd2d7f2fa.diff";
-      hash = "sha256-uBchYjUIqL7dJR7U/TSxhSGu1qY742cFUIv0XKU6L2g=";
+      url = "https://gitlab.com/scarpetta/pdfmixtool/-/commit/bd5f78c3a4d977d9b0c74302ce2521c737189b43.diff";
+      hash = "sha256-h2g5toFqgEEnObd2TYQms1a1WFTgN7VsIHyy0Uyq4/I=";
     })
-
   ];
 
   meta = with lib; {

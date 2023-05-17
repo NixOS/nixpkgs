@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-shell-extension-pop-shell";
-  version = "unstable-2022-10-11";
+  version = "unstable-2023-04-27";
 
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "shell";
-    rev = "886a069c0582b371e90ac3602b1747ea5fba616c";
-    hash = "sha256-DwJ3IFhYuEW0LQrmN/mOspEiudj4X5BCLhdOyP74EVs=";
+    rev = "b5acccefcaa653791d25f70a22c0e04f1858d96e";
+    hash = "sha256-w6EBHKWJ4L3ZRVmFqZhCqHGumbElQXk9udYSnwjIl6c=";
   };
 
   nativeBuildInputs = [ glib nodePackages.typescript gjs ];

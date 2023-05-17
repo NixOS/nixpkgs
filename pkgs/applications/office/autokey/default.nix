@@ -25,7 +25,6 @@ python3Packages.buildPythonApplication rec {
   nativeBuildInputs = [ wrapGAppsHook gobject-introspection ];
 
   buildInputs = [
-    gobject-introspection
     gtksourceview3
     libappindicator-gtk3
     libnotify

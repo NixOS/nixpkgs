@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "frenck";
     repo = "python-ambee";
     rev = "v${version}";
-    sha256 = "sha256-2wX2CLr6kdVw2AGPW6DmYI2OBfQFI/iWVorok2d3wx4=";
+    hash = "sha256-2wX2CLr6kdVw2AGPW6DmYI2OBfQFI/iWVorok2d3wx4=";
   };
 
   nativeBuildInputs = [
@@ -32,7 +32,7 @@ buildPythonPackage rec {
     yarl
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     aresponses
     pytest-asyncio
     pytestCheckHook

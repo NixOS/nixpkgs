@@ -135,7 +135,7 @@ let
 
   fish = stdenv.mkDerivation rec {
     pname = "fish";
-    version = "3.5.1";
+    version = "3.6.1";
 
     src = fetchurl {
       # There are differences between the release tarball and the tarball GitHub
@@ -145,7 +145,7 @@ let
       # --version`), as well as the local documentation for all builtins (and
       # maybe other things).
       url = "https://github.com/fish-shell/fish-shell/releases/download/${version}/${pname}-${version}.tar.xz";
-      sha256 = "sha256-ptRbPcWkXdMXcuf439/sq8BjmG6PZ9YL18pgzIHbaSg=";
+      hash = "sha256-VUArtHymc52KuiXkF4CQW1zhvOCl4N0X3KkItbwLSbI=";
     };
 
     # Fix FHS paths in tests
@@ -181,6 +181,10 @@ let
       rm tests/pexpects/exit.py
       rm tests/pexpects/job_summary.py
       rm tests/pexpects/signals.py
+
+      # pexpect tests are flaky in general
+      # See https://github.com/fish-shell/fish-shell/issues/8789
+      rm tests/pexpects/bind.py
     '' + lib.optionalString stdenv.isLinux ''
       # pexpect tests are flaky on aarch64-linux (also x86_64-linux)
       # See https://github.com/fish-shell/fish-shell/issues/8789
@@ -227,7 +231,7 @@ let
 
     doCheck = true;
 
-    checkInputs = [
+    nativeCheckInputs = [
       coreutils
       (python3.withPackages (ps: [ ps.pexpect ]))
       procps
@@ -327,7 +331,7 @@ let
             ${fish}/bin/fish ${fishScript} && touch $out
           '';
       };
-      updateScript = nix-update-script { attrPath = pname; };
+      updateScript = nix-update-script { };
     };
   };
 in

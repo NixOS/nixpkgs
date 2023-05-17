@@ -9,14 +9,14 @@
 
 stdenv.mkDerivation rec {
   pname = "deheader";
-  version = "1.8";
+  version = "1.10";
   outputs = [ "out" "man" ];
 
   src = fetchFromGitLab {
     owner = "esr";
     repo = "deheader";
     rev = version;
-    sha256 = "sha256-sjxgUtdsi/sfxOViDj7l8591TSYwtCzDQcHsk9ClXuM=";
+    sha256 = "sha256-dYTHvFWlt3aM/fdZFge7GBdd9bfCrEcp7ULJuBl71Xs=";
   };
 
   buildInputs = [ python3 ];

@@ -1,24 +1,36 @@
-{ lib, fetchFromGitHub
-, rustPackages, pkg-config, docutils
+{ lib
+, rustPlatform
+, fetchCrate
+, docutils
+, installShellFiles
 }:
 
-rustPackages.rustPlatform.buildRustPackage rec {
-
+rustPlatform.buildRustPackage rec {
   pname = "mdevctl";
   version = "1.2.0";
 
-  src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
-    rev = "v" + version;
-    hash = "sha256-Hgl+HsWAYIdabHJdPbCaBNnhY49vpuIjR3l6z2CAmx0=";
+  src = fetchCrate {
+    inherit pname version;
+    hash = "sha256-0X/3DWNDPOgSNNTqcj44sd7DNGFt+uGBjkc876dSgU8=";
   };
 
-  cargoPatches = [ ./lock.patch ];
+  cargoHash = "sha256-TmumQBWuH5fJOe2qzcDtEGbmCs2G9Gfl8mH7xifzRGc=";
 
-  cargoHash = "sha256-PXVc7KUMPze06gCnD2gqzlySwPumOw/z31CTd0UHp9w=";
+  nativeBuildInputs = [
+    docutils
+    installShellFiles
+  ];
 
-  nativeBuildInputs = [ pkg-config docutils ];
+  postInstall = ''
+    ln -s mdevctl $out/bin/lsmdev
+
+    install -Dm444 60-mdevctl.rules -t $out/lib/udev/rules.d
+
+    installManPage $releaseDir/build/mdevctl-*/out/mdevctl.8
+    ln -s mdevctl.8 $out/share/man/man8/lsmdev.8
+
+    installShellCompletion $releaseDir/build/mdevctl-*/out/{lsmdev,mdevctl}.bash
+  '';
 
   meta = with lib; {
     homepage = "https://github.com/mdevctl/mdevctl";

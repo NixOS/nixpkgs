@@ -1,8 +1,8 @@
 { lib
 , buildPythonPackage
+, pythonOlder
 , fetchFromGitHub
 , poetry-core
-, setuptools
 
 # propagates
 , importlib-resources
@@ -22,29 +22,30 @@
 
 buildPythonPackage rec {
   pname = "openapi-spec-validator";
-  version = "0.5.1";
+  version = "0.5.6";
   format = "pyproject";
+
+  disabled = pythonOlder "3.7";
 
   # no tests via pypi sdist
   src = fetchFromGitHub {
     owner = "p1c2u";
     repo = pname;
-    rev = version;
-    hash = "sha256-8VhD57dNG0XrPUdcq39GEfHUAgdDwJ8nv+Lp57OpTLg=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-BIGHaZhrEc7wcIesBIXdVRzozllCNOz67V+LmQfZ8oY=";
   };
 
   nativeBuildInputs = [
     poetry-core
-    setuptools
   ];
 
   propagatedBuildInputs = [
-    importlib-resources
     jsonschema
     jsonschema-spec
     lazy-object-proxy
     openapi-schema-validator
-    pyyaml
+  ] ++ lib.optionals (pythonOlder "3.9") [
+    importlib-resources
   ];
 
   passthru.optional-dependencies.requests = [
@@ -55,7 +56,7 @@ buildPythonPackage rec {
     sed -i '/--cov/d' pyproject.toml
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

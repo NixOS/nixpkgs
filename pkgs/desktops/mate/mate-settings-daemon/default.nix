@@ -21,11 +21,11 @@
 
 stdenv.mkDerivation rec {
   pname = "mate-settings-daemon";
-  version = "1.26.0";
+  version = "1.26.1";
 
   src = fetchurl {
     url = "https://pub.mate-desktop.org/releases/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0hbdwqagxh1mdpxfdqr1ps3yqvk0v0c5zm0bwk56y6l1zwbs0ymp";
+    sha256 = "aX6mW1QpIcK3ZhRSktJo0wCcwtqDFtKnhphpBV5LGFk=";
   };
 
   nativeBuildInputs = [
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = lib.optional pulseaudioSupport "--enable-pulse";
 
-  NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
+  env.NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
 
   enableParallelBuilding = true;
 

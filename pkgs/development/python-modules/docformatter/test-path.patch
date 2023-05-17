@@ -1,0 +1,29 @@
+diff --git a/tests/conftest.py b/tests/conftest.py
+index 5f5a9aa..3289222 100644
+--- a/tests/conftest.py
++++ b/tests/conftest.py
+@@ -92,21 +92,9 @@ def run_docformatter(arguments, temporary_file):
+ 
+     Return subprocess object.
+     """
+-    if "DOCFORMATTER_COVERAGE" in os.environ and int(
+-            os.environ["DOCFORMATTER_COVERAGE"]
+-    ):
+-        DOCFORMATTER_COMMAND = [
+-            "coverage",
+-            "run",
+-            "--branch",
+-            "--parallel",
+-            "--omit=*/site-packages/*",
+-            os.environ["VIRTUAL_ENV"] + "/bin/docformatter",
+-        ]
+-    else:
+-        DOCFORMATTER_COMMAND = [
+-            os.environ["VIRTUAL_ENV"] + "/bin/docformatter",
+-        ]  # pragma: no cover
++    DOCFORMATTER_COMMAND = [
++        "@docformatter@"
++    ]
+ 
+     if "-" not in arguments:
+         arguments.append(temporary_file)

@@ -33,8 +33,8 @@ in
 
     services.unifi.unifiPackage = mkOption {
       type = types.package;
-      default = pkgs.unifiLTS;
-      defaultText = literalExpression "pkgs.unifiLTS";
+      default = pkgs.unifi5;
+      defaultText = literalExpression "pkgs.unifi5";
       description = lib.mdDoc ''
         The unifi package to use.
       '';
@@ -42,10 +42,10 @@ in
 
     services.unifi.mongodbPackage = mkOption {
       type = types.package;
-      default = pkgs.mongodb;
+      default = pkgs.mongodb-4_2;
       defaultText = literalExpression "pkgs.mongodb";
       description = lib.mdDoc ''
-        The mongodb package to use.
+        The mongodb package to use. Please note: unifi7 officially only supports mongodb up until 3.6 but works with 4.2.
       '';
     };
 
@@ -194,5 +194,5 @@ in
     (mkRenamedOptionModule [ "services" "unifi" "openPorts" ] [ "services" "unifi" "openFirewall" ])
   ];
 
-  meta.maintainers = with lib.maintainers; [ erictapen pennae ];
+  meta.maintainers = with lib.maintainers; [ pennae ];
 }

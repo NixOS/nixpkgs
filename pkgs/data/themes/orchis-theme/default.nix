@@ -6,29 +6,33 @@
 , gtk-engine-murrine
 , sassc
 , border-radius ? null # Suggested: 2 < value < 16
-, tweaks ? [ ] # can be "solid" "compact" "black" "primary"
+, tweaks ? [ ] # can be "solid" "compact" "black" "primary" "macos" "submenu" "nord|dracula"
 , withWallpapers ? false
 }:
 
 let
-  validTweaks = [ "solid" "compact" "black" "primary" ];
-  unknownTweaks = lib.subtractLists validTweaks tweaks;
+  pname = "orchis-theme";
+
+  validTweaks = [ "solid" "compact" "black" "primary" "macos" "submenu" "nord" "dracula" ];
+
+  nordXorDracula = with builtins; lib.assertMsg (!(elem "nord" tweaks) || !(elem "dracula" tweaks)) ''
+    ${pname}: dracula and nord cannot be mixed. Tweaks ${toString tweaks}
+  '';
 in
-assert lib.assertMsg (unknownTweaks == [ ]) ''
-  You entered wrong tweaks: ${toString unknownTweaks}
-  Valid tweaks are: ${toString validTweaks}
-'';
+
+assert nordXorDracula;
+lib.checkListOfEnum "${pname}: theme tweaks" validTweaks tweaks
 
 stdenvNoCC.mkDerivation
 rec {
-  pname = "orchis-theme";
-  version = "2022-10-19";
+  inherit pname;
+  version = "2023-04-08";
 
   src = fetchFromGitHub {
     repo = "Orchis-theme";
     owner = "vinceliuice";
     rev = version;
-    sha256 = "sha256-1lJUrWkb8IoUyCMn8J4Lwvs/pWsibrY0pSXrepuQcug=";
+    hash = "sha256-/X4Hr2M/7pf6JxTUvPoG5VkQd+rweEPeTNe9glSLh78=";
   };
 
   nativeBuildInputs = [ gtk3 sassc ];
@@ -45,7 +49,7 @@ rec {
     runHook preInstall
     bash install.sh -d $out/share/themes -t all \
       ${lib.optionalString (tweaks != []) "--tweaks " + builtins.toString tweaks} \
-      ${lib.optionalString (!isNull border-radius) ("--round " + builtins.toString border-radius + "px")}
+      ${lib.optionalString (border-radius != null) ("--round " + builtins.toString border-radius + "px")}
     ${lib.optionalString withWallpapers ''
       mkdir -p $out/share/backgrounds
       cp src/wallpaper/{1080p,2k,4k}.jpg $out/share/backgrounds

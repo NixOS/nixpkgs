@@ -1,6 +1,12 @@
 { supportedSystems, nixpkgs, pkgs, nix }:
 
-pkgs.runCommand "nixpkgs-release-checks" { src = nixpkgs; buildInputs = [nix]; } ''
+pkgs.runCommand "nixpkgs-release-checks"
+  {
+    src = nixpkgs;
+    buildInputs = [ nix ];
+    requiredSystemFeatures = [ "big-parallel" ]; # 1 thread but ~10G RAM; see #227945
+  }
+  ''
     set -o pipefail
 
     export NIX_STORE_DIR=$TMPDIR/store
@@ -32,7 +38,7 @@ pkgs.runCommand "nixpkgs-release-checks" { src = nixpkgs; buildInputs = [nix]; }
 
     # Check that all-packages.nix evaluates on a number of platforms without any warnings.
     for platform in ${pkgs.lib.concatStringsSep " " supportedSystems}; do
-        header "checking Nixpkgs on $platform"
+        echo "checking Nixpkgs on $platform"
 
         # To get a call trace; see https://nixos.org/manual/nixpkgs/stable/#function-library-lib.trivial.warn
         # Relies on impure eval

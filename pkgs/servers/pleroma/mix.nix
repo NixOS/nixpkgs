@@ -281,6 +281,19 @@ let
       beamDeps = [ ecto ];
     };
 
+    crypt = buildRebar3 rec {
+      name = "crypt";
+      version = "1.0.1";
+
+      src = fetchHex {
+        pkg = "${name}";
+        version = "${version}";
+        sha256 = "10ir7nsa0dkn5jr0w9x2m38jc73aym7llz2pnkwxk9f747izz3cn";
+      };
+
+      beamDeps = [];
+    };
+
     custom_base = buildMix rec {
       name = "custom_base";
       version = "0.2.1";
@@ -335,12 +348,12 @@ let
 
     earmark = buildMix rec {
       name = "earmark";
-      version = "1.4.18";
+      version = "1.4.22";
 
       src = fetchHex {
         pkg = "${name}";
         version = "${version}";
-        sha256 = "0q15ypgdr94z425dxb3blp6wqzrphsg1b6wscsfd13lmldnkpb2p";
+        sha256 = "1yzx2j48cxny7l8ap1jgq2qiz1kiq6q8cwiismvgshjscr2m3bqw";
       };
 
       beamDeps = [ earmark_parser ];
@@ -348,12 +361,12 @@ let
 
     earmark_parser = buildMix rec {
       name = "earmark_parser";
-      version = "1.4.17";
+      version = "1.4.29";
 
       src = fetchHex {
         pkg = "${name}";
         version = "${version}";
-        sha256 = "08r06hp1wwfbfpalqqxwpq9lsd42pwvmhjr6bcb1r9pckyfchfpr";
+        sha256 = "00rmqvf3hkxfvkijqd624n0hn1xqims8h211xmm02fdi7qdsy0j9";
       };
 
       beamDeps = [];
@@ -816,12 +829,12 @@ let
 
     linkify = buildMix rec {
       name = "linkify";
-      version = "0.5.2";
+      version = "0.5.3";
 
       src = fetchHex {
         pkg = "${name}";
         version = "${version}";
-        sha256 = "11mbbqm7yi6rhza5d2hd4fxkhdy3ik5n7sybj0n9bn0q09lsqwcd";
+        sha256 = "0xw14ls480jzha9fx4lxd40dff4xx82w1h87dr82az6lfw9mmwry";
       };
 
       beamDeps = [];

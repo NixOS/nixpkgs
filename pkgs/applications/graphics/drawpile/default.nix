@@ -25,7 +25,7 @@
 # optional server deps
 , libmicrohttpd
 , libsodium
-, withSystemd ? stdenv.isLinux
+, withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
 , systemd ? null
 
 # options
@@ -103,6 +103,7 @@ in mkDerivation rec {
     license = licenses.gpl3;
     maintainers = with maintainers; [ fgaz ];
     platforms = platforms.unix;
+    broken = stdenv.isDarwin;
   };
 }
 

@@ -1,21 +1,22 @@
-{ lib, fetchzip }:
+{ lib, stdenvNoCC, fetchzip }:
 
-let
-  major = "1";
-  minor = "102";
-  version = "${major}.${minor}";
-in fetchzip rec {
-  name = "gentium-book-basic-${version}";
+stdenvNoCC.mkDerivation rec {
+  pname = "gentium-book-basic";
+  version = "1.102";
 
-  url = "http://software.sil.org/downloads/r/gentium/GentiumBasic_${major}${minor}.zip";
+  src = fetchzip {
+    url = "http://software.sil.org/downloads/r/gentium/GentiumBasic_${lib.versions.major version}${lib.versions.minor version}.zip";
+    hash = "sha256-oCmpl95MJRfCV25cg/4cf8AwQWnoymXasSss1ziOPoE=";
+  };
 
-  postFetch = ''
-    mkdir -p $out/share/{doc,fonts}
-    unzip -j $downloadedFile \*.ttf                            -d $out/share/fonts/truetype
-    unzip -j $downloadedFile \*/FONTLOG.txt \*/GENTIUM-FAQ.txt -d $out/share/doc/${name}
+  installPhase = ''
+    runHook preInstall
+
+    install -Dm644 *.ttf                       -t $out/share/fonts/truetype
+    install -Dm644 FONTLOG.txt GENTIUM-FAQ.txt -t $out/share/doc/${pname}-${version}
+
+    runHook postInstall
   '';
-
-  sha256 = "0598zr5f7d6ll48pbfbmmkrybhhdks9b2g3m2g67wm40070ffzmd";
 
   meta = with lib; {
     homepage = "https://software.sil.org/gentium/";

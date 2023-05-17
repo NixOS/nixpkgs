@@ -20,7 +20,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ future ];
 
-  checkInputs = [ unittestCheckHook lxml glibcLocales ];
+  nativeCheckInputs = [ unittestCheckHook lxml glibcLocales ];
 
   unittestFlagsArray = [ "-v" ];
 

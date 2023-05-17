@@ -11,6 +11,7 @@
 , fabulous
 , getkey
 , psutil
+, shared-mime-info
 
 , pkgs
 }:
@@ -38,7 +39,8 @@ buildPythonPackage rec {
     psutil
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
+    shared-mime-info
     openpaperwork-gtk
   ];
 

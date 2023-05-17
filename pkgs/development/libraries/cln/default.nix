@@ -1,6 +1,6 @@
-{ lib, stdenv, fetchurl, gmp }:
+{ lib, gccStdenv, fetchurl, gmp }:
 
-stdenv.mkDerivation rec {
+gccStdenv.mkDerivation rec {
   pname = "cln";
   version = "1.3.6";
 

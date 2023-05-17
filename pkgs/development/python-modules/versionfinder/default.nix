@@ -27,7 +27,7 @@ buildPythonPackage rec {
     backoff
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     requests
   ];

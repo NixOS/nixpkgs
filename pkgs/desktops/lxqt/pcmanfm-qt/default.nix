@@ -17,13 +17,13 @@
 
 mkDerivation rec {
   pname = "pcmanfm-qt";
-  version = "1.2.0";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    sha256 = "3N+4rhmvVUvQ6svtyOMY0+eP2Kz7EpkmZ3Ua+W4gg0Y=";
+    sha256 = "qqvjsZRG+ImKHr+XLNNHhnAe1kBWh47/nFcKB1MTSJo=";
   };
 
   nativeBuildInputs = [
@@ -38,7 +38,6 @@ mkDerivation rec {
     qttools
     qtx11extras
     qtimageformats # add-on module to support more image file formats
-    libfm-qt
     libfm-qt
     menu-cache
     lxmenu-data

@@ -32,7 +32,7 @@ buildPythonPackage rec {
     cd tests
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

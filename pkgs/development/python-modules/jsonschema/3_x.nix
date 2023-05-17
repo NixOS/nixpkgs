@@ -22,7 +22,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ setuptools-scm ];
   propagatedBuildInputs = [ attrs importlib-metadata functools32 pyrsistent ];
-  checkInputs = [ nose mock pyperf twisted vcversioner ];
+  nativeCheckInputs = [ nose mock pyperf twisted vcversioner ];
 
   # zope namespace collides on py27
   doCheck = !isPy27;

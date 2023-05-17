@@ -2,6 +2,7 @@
 , callPackage
 , fetchPypi
 , buildPythonPackage
+, pythonRelaxDepsHook
 , torch
 , pythonOlder
 , spacy
@@ -12,15 +13,19 @@
 
 buildPythonPackage rec {
   pname = "spacy-transformers";
-  version = "1.1.8";
+  version = "1.2.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-e7YuBEq2yggW5G2pJ0Rjw9z3c1jqgRKCifYSfnzblVs=";
+    hash = "sha256-oNdH0oZNo8XWx+bbzwZs7iXD0Af6zx1k6wBYksgtp4w=";
   };
+
+  nativeBuildInputs = [
+    pythonRelaxDepsHook
+  ];
 
   propagatedBuildInputs = [
     torch
@@ -30,10 +35,9 @@ buildPythonPackage rec {
     transformers
   ];
 
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace "transformers>=3.4.0,<4.22.0" "transformers>=3.4.0 # ,<4.22.0"
-  '';
+  pythonRelaxDeps = [
+    "transformers"
+  ];
 
   # Test fails due to missing arguments for trfs2arrays().
   doCheck = false;
@@ -47,6 +51,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "spaCy pipelines for pretrained BERT, XLNet and GPT-2";
     homepage = "https://github.com/explosion/spacy-transformers";
+    changelog = "https://github.com/explosion/spacy-transformers/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ ];
   };

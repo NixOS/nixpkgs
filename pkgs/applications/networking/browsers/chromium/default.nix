@@ -1,6 +1,7 @@
 { newScope, config, stdenv, fetchurl, makeWrapper
-, llvmPackages_14, ed, gnugrep, coreutils, xdg-utils
-, glib, gtk3, gnome, gsettings-desktop-schemas, gn, fetchgit
+, llvmPackages_16
+, ed, gnugrep, coreutils, xdg-utils
+, glib, gtk3, gtk4, gnome, gsettings-desktop-schemas, gn, fetchgit
 , libva, pipewire, wayland
 , gcc, nspr, nss, runCommand
 , lib, libkrb5
@@ -17,7 +18,7 @@
 }:
 
 let
-  llvmPackages = llvmPackages_14;
+  llvmPackages = llvmPackages_16;
   stdenv = llvmPackages.stdenv;
 
   upstream-info = (lib.importJSON ./upstream-info.json).${channel};
@@ -165,7 +166,7 @@ in stdenv.mkDerivation {
 
   buildInputs = [
     # needed for GSETTINGS_SCHEMAS_PATH
-    gsettings-desktop-schemas glib gtk3
+    gsettings-desktop-schemas glib gtk3 gtk4
 
     # needed for XDG_ICON_DIRS
     gnome.adwaita-icon-theme
@@ -178,7 +179,7 @@ in stdenv.mkDerivation {
 
   buildCommand = let
     browserBinary = "${chromiumWV}/libexec/chromium/chromium";
-    libPath = lib.makeLibraryPath [ libva pipewire wayland gtk3 libkrb5 ];
+    libPath = lib.makeLibraryPath [ libva pipewire wayland gtk3 gtk4 libkrb5 ];
 
   in with lib; ''
     mkdir -p "$out/bin"
@@ -196,6 +197,9 @@ in stdenv.mkDerivation {
     else
       export CHROME_DEVEL_SANDBOX="$sandbox/bin/${sandboxExecutableName}"
     fi
+
+    # Make generated desktop shortcuts have a valid executable name.
+    export CHROME_WRAPPER='chromium'
 
   '' + lib.optionalString (libPath != "") ''
     # To avoid loading .so files from cwd, LD_LIBRARY_PATH here must not
@@ -231,6 +235,5 @@ in stdenv.mkDerivation {
     inherit (chromium) upstream-info browser;
     mkDerivation = chromium.mkChromiumDerivation;
     inherit chromeSrc sandboxExecutableName;
-    updateScript = ./update.py;
   };
 }

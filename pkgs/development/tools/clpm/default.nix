@@ -2,9 +2,19 @@
 , stdenv
 , fetchgit
 , wrapLisp
-, sbcl
 , openssl
+, sbcl
 }:
+
+# Broken on newer versions:
+# "https://gitlab.common-lisp.net/clpm/clpm/-/issues/51". Once that bug is
+# fixed, remove this, and all 2.1.9 references from the SBCL build file.
+with rec {
+  sbcl_2_1_9 = sbcl.override (_: {
+    version = "2.1.9";
+  });
+};
+
 
 stdenv.mkDerivation rec {
   pname = "clpm";
@@ -16,10 +26,6 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
     sha256 = "sha256-UhaLmbdsIPj6O+s262HUMxuz/5t43JR+TlOjq8Y2CDs=";
   };
-
-  buildInputs = [
-    (wrapLisp sbcl)
-  ];
 
   propagatedBuildInputs = [
     openssl
@@ -40,7 +46,7 @@ stdenv.mkDerivation rec {
     # ld to complaing about `impure path used in link`.
     export HOME=$TMP
 
-    common-lisp.sh --script scripts/build-release.lisp
+    ${sbcl_2_1_9}/bin/sbcl --script scripts/build-release.lisp
 
     runHook postBuild
   '';
@@ -54,8 +60,8 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  # fixupPhase results in fatal error in SBCL, `Can't find sbcl.core`
-  dontFixup = true;
+  # Stripping binaries results in fatal error in SBCL, `Can't find sbcl.core`
+  dontStrip = true;
 
   meta = with lib; {
     description = "Common Lisp Package Manager";

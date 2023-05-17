@@ -77,9 +77,6 @@ let
   # These are the providers that don't fall in line with the default model
   special-providers =
     {
-      netlify = automated-providers.netlify.overrideAttrs (o: { meta = o.meta // { broken = stdenv.isDarwin; }; });
-      pass = automated-providers.pass.overrideAttrs (o: { meta = o.meta // { broken = stdenv.isDarwin; }; });
-      tencentcloud = automated-providers.tencentcloud.overrideAttrs (o: { meta = o.meta // { broken = stdenv.isDarwin; }; });
       # github api seems to be broken, doesn't just fail to recognize the license, it's ignored entirely.
       checkly = automated-providers.checkly.override { spdx = "MIT"; };
       gitlab = automated-providers.gitlab.override { mkProviderFetcher = fetchFromGitLab; owner = "gitlab-org"; };
@@ -98,6 +95,7 @@ let
       b2 = removed "b2" "2022/06";
       checkpoint = removed "checkpoint" "2022/11";
       dome9 = removed "dome9" "2022/08";
+      ksyun = removed "ksyun" "2023/04";
       logicmonitor = license "logicmonitor" "2022/11";
       ncloud = removed "ncloud" "2022/08";
       nsxt = license "nsxt" "2022/11";

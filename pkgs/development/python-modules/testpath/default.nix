@@ -13,16 +13,22 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-LxuX5kQsAmgevgG9hPUxAop8rqGvOCUAD1I0XDAoXg8=";
+    hash = "sha256-LxuX5kQsAmgevgG9hPUxAop8rqGvOCUAD1I0XDAoXg8=";
   };
 
   nativeBuildInputs = [
     flit-core
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
+
+  # exe are only required when testpath is used on windows
+  # https://github.com/jupyter/testpath/blob/de8ca59539eb23b9781e55848b7d2646c8c61df9/testpath/commands.py#L128
+  preBuild = lib.optionalString (!stdenv.targetPlatform.isWindows) ''
+    rm testpath/cli-32.exe testpath/cli-64.exe
+  '';
 
   preCheck = lib.optionalString stdenv.isDarwin ''
     # Work around https://github.com/jupyter/testpath/issues/24

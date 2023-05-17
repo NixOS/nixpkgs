@@ -9,7 +9,7 @@ let
     owner = "editorconfig";
     repo = "editorconfig-core-test";
     rev = "e407c1592df0f8e91664835324dea85146f20189";
-    sha256 = "sha256-9WSEkMJOewPqJjB6f7J6Ir0L+U712hkaN+GszjnGw7c=";
+    hash = "sha256-9WSEkMJOewPqJjB6f7J6Ir0L+U712hkaN+GszjnGw7c=";
   };
 in
 buildPythonPackage rec {
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "editorconfig";
     repo = "editorconfig-core-py";
     rev = "v${version}";
-    sha256 = "sha256-ZwoTMgk18+BpPNtXKQUMXGcl2Lp+1RQVyPHgk6gHWh8=";
+    hash = "sha256-ZwoTMgk18+BpPNtXKQUMXGcl2Lp+1RQVyPHgk6gHWh8=";
     # workaround until https://github.com/editorconfig/editorconfig-core-py/pull/40 is merged
     # fetchSubmodules = true;
   };
@@ -30,7 +30,7 @@ buildPythonPackage rec {
     chmod +w -R source/tests
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     cmake
   ];
 

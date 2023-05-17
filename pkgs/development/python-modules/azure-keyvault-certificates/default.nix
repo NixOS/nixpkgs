@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "azure-keyvault-certificates";
-  version = "4.6.0";
+  version = "4.7.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    hash = "sha256-5wkbBhGgOCxXxMb8enRYyZ8QqMoN1PnYNlgxjOxxOZ4=";
+    hash = "sha256-nkfZp0gl5QKxPVSByZwYIEDE9Ucj9DNx4AhZQ23888o=";
   };
 
   propagatedBuildInputs = [

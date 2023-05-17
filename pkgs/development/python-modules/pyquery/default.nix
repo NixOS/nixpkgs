@@ -3,28 +3,52 @@
 , cssselect
 , fetchPypi
 , lxml
+, pytestCheckHook
 , pythonOlder
+, requests
+, webob
+, webtest
 }:
 
 buildPythonPackage rec {
   pname = "pyquery";
-  version = "1.4.3";
-  disabled = pythonOlder "3.5";
+  version = "2.0.0";
+  disabled = pythonOlder "3.7";
+
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    extension = "zip";
-    sha256 = "00p6f1dfma65192hc72dxd506491lsq3g5wgxqafi1xpg2w1xia6";
+    hash = "sha256-lj6NTpAmL/bY3sBy6pcoXcN0ovacrXd29AgqvPah2K4=";
   };
+
+  # https://github.com/gawel/pyquery/issues/248
+  postPatch = ''
+    substituteInPlace tests/test_pyquery.py \
+      --replace test_selector_html skip_test_selector_html
+  '';
 
   propagatedBuildInputs = [
     cssselect
     lxml
   ];
 
-  # circular dependency on webtest
-  doCheck = false;
   pythonImportsCheck = [ "pyquery" ];
+
+  checkInputs = [
+    pytestCheckHook
+    requests
+    webob
+    (webtest.overridePythonAttrs (_: {
+      # circular dependency
+      doCheck = false;
+    }))
+  ];
+
+  pytestFlagsArray = [
+    # requires network
+    "--deselect=tests/test_pyquery.py::TestWebScrappingEncoding::test_get"
+  ];
 
   meta = with lib; {
     description = "A jquery-like library for Python";

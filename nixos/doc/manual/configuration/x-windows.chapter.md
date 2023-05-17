@@ -69,7 +69,7 @@ Wine, you should also set the following:
 hardware.opengl.driSupport32Bit = true;
 ```
 
-## Auto-login {#sec-x11-auto-login .unnumbered}
+## Auto-login {#sec-x11-auto-login}
 
 The x11 login screen can be skipped entirely, automatically logging you
 into your window manager and desktop environment when you boot your
@@ -81,7 +81,7 @@ second password to login can be redundant.
 
 To enable auto-login, you need to define your default window manager and
 desktop environment. If you wanted no desktop environment and i3 as your
-your window manager, you\'d define:
+your window manager, you'd define:
 
 ```nix
 services.xserver.displayManager.defaultSession = "none+i3";
@@ -96,7 +96,7 @@ services.xserver.displayManager.autoLogin.enable = true;
 services.xserver.displayManager.autoLogin.user = "alice";
 ```
 
-## Intel Graphics drivers {#sec-x11--graphics-cards-intel .unnumbered}
+## Intel Graphics drivers {#sec-x11--graphics-cards-intel}
 
 There are two choices for Intel Graphics drivers in X.org: `modesetting`
 (included in the xorg-server itself) and `intel` (provided by the
@@ -110,7 +110,7 @@ maintained but may perform worse in some cases (like in old chipsets).
 
 The second driver, `intel`, is specific to Intel GPUs, but not
 recommended by most distributions: it lacks several modern features (for
-example, it doesn\'t support Glamor) and the package hasn\'t been
+example, it doesn't support Glamor) and the package hasn't been
 officially updated since 2015.
 
 The results vary depending on the hardware, so you may have to try both
@@ -136,7 +136,7 @@ services.xserver.deviceSection = ''
 Note that this will likely downgrade the performance compared to
 `modesetting` or `intel` with DRI 3 (default).
 
-## Proprietary NVIDIA drivers {#sec-x11-graphics-cards-nvidia .unnumbered}
+## Proprietary NVIDIA drivers {#sec-x11-graphics-cards-nvidia}
 
 NVIDIA provides a proprietary driver for its graphics cards that has
 better 3D performance than the X.org drivers. It is not enabled by
@@ -158,11 +158,11 @@ services.xserver.videoDrivers = [ "nvidiaLegacy304" ];
 You may need to reboot after enabling this driver to prevent a clash
 with other kernel modules.
 
-## Proprietary AMD drivers {#sec-x11--graphics-cards-amd .unnumbered}
+## Proprietary AMD drivers {#sec-x11--graphics-cards-amd}
 
 AMD provides a proprietary driver for its graphics cards that is not
 enabled by default because it's not Free Software, is often broken in
-nixpkgs and as of this writing doesn\'t offer more features or
+nixpkgs and as of this writing doesn't offer more features or
 performance. If you still want to use it anyway, you need to explicitly
 set:
 
@@ -173,7 +173,7 @@ services.xserver.videoDrivers = [ "amdgpu-pro" ];
 You will need to reboot after enabling this driver to prevent a clash
 with other kernel modules.
 
-## Touchpads {#sec-x11-touchpads .unnumbered}
+## Touchpads {#sec-x11-touchpads}
 
 Support for Synaptics touchpads (found in many laptops such as the Dell
 Latitude series) can be enabled as follows:
@@ -192,19 +192,19 @@ services.xserver.libinput.touchpad.tapping = false;
 Note: the use of `services.xserver.synaptics` is deprecated since NixOS
 17.09.
 
-## GTK/Qt themes {#sec-x11-gtk-and-qt-themes .unnumbered}
+## GTK/Qt themes {#sec-x11-gtk-and-qt-themes}
 
 GTK themes can be installed either to user profile or system-wide (via
 `environment.systemPackages`). To make Qt 5 applications look similar to
 GTK ones, you can use the following configuration:
 
 ```nix
-qt5.enable = true;
-qt5.platformTheme = "gtk2";
-qt5.style = "gtk2";
+qt.enable = true;
+qt.platformTheme = "gtk2";
+qt.style = "gtk2";
 ```
 
-## Custom XKB layouts {#custom-xkb-layouts .unnumbered}
+## Custom XKB layouts {#custom-xkb-layouts}
 
 It is possible to install custom [ XKB
 ](https://en.wikipedia.org/wiki/X_keyboard_extension) keyboard layouts
@@ -215,7 +215,7 @@ US layout, with an additional layer to type some greek symbols by
 pressing the right-alt key.
 
 Create a file called `us-greek` with the following content (under a
-directory called `symbols`; it\'s an XKB peculiarity that will help with
+directory called `symbols`; it's an XKB peculiarity that will help with
 testing):
 
 ```nix
@@ -249,7 +249,7 @@ The name (after `extraLayouts.`) should match the one given to the
 
 Applying this customization requires rebuilding several packages, and a
 broken XKB file can lead to the X session crashing at login. Therefore,
-you\'re strongly advised to **test your layout before applying it**:
+you're strongly advised to **test your layout before applying it**:
 
 ```ShellSession
 $ nix-shell -p xorg.xkbcomp
@@ -313,8 +313,8 @@ prefer to keep the layout definitions inside the NixOS configuration.
 
 Unfortunately, the Xorg server does not (currently) support setting a
 keymap directly but relies instead on XKB rules to select the matching
-components (keycodes, types, \...) of a layout. This means that
-components other than symbols won\'t be loaded by default. As a
+components (keycodes, types, ...) of a layout. This means that
+components other than symbols won't be loaded by default. As a
 workaround, you can set the keymap using `setxkbmap` at the start of the
 session with:
 
@@ -323,7 +323,7 @@ services.xserver.displayManager.sessionCommands = "setxkbmap -keycodes media";
 ```
 
 If you are manually starting the X server, you should set the argument
-`-xkbdir /etc/X11/xkb`, otherwise X won\'t find your layout files. For
+`-xkbdir /etc/X11/xkb`, otherwise X won't find your layout files. For
 example with `xinit` run
 
 ```ShellSession

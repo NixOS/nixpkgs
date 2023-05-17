@@ -5,6 +5,7 @@
 , cmake
 , python3
 , libffi
+, enableGoldPlugin ? libbfd.hasPluginAPI
 , libbfd
 , libpfm
 , libxml2
@@ -15,6 +16,8 @@
 , which
 , buildLlvmTools
 , debugVersion ? false
+, doCheck ? stdenv.isLinux && (!stdenv.isx86_32) && (!stdenv.hostPlatform.isMusl)
+  && (stdenv.hostPlatform == stdenv.buildPlatform)
 , enableManpages ? false
 , enableSharedLibraries ? !stdenv.hostPlatform.isStatic
 # broken for Ampere eMAG 8180 (c2.large.arm on Packet) #56245
@@ -30,6 +33,29 @@ let
   shortVersion = with lib;
     concatStringsSep "." (take 1 (splitString "." release_version));
 
+  # Ordinarily we would just the `doCheck` and `checkDeps` functionality
+  # `mkDerivation` gives us to manage our test dependencies (instead of breaking
+  # out `doCheck` as a package level attribute).
+  #
+  # Unfortunately `lit` does not forward `$PYTHONPATH` to children processes, in
+  # particular the children it uses to do feature detection.
+  #
+  # This means that python deps we add to `checkDeps` (which the python
+  # interpreter is made aware of via `$PYTHONPATH` – populated by the python
+  # setup hook) are not picked up by `lit` which causes it to skip tests.
+  #
+  # Adding `python3.withPackages (ps: [ ... ])` to `checkDeps` also doesn't work
+  # because this package is shadowed in `$PATH` by the regular `python3`
+  # package.
+  #
+  # So, we "manually" assemble one python derivation for the package to depend
+  # on, taking into account whether checks are enabled or not:
+  python = if doCheck then
+    let
+      checkDeps = ps: with ps; [ psutil ];
+    in python3.withPackages checkDeps
+  else python3;
+
 in stdenv.mkDerivation (rec {
   pname = "llvm";
   inherit version;
@@ -39,7 +65,7 @@ in stdenv.mkDerivation (rec {
 
   outputs = [ "out" "lib" "dev" "python" ];
 
-  nativeBuildInputs = [ cmake python3 ]
+  nativeBuildInputs = [ cmake python ]
     ++ optionals enableManpages [ python3.pkgs.sphinx python3.pkgs.recommonmark ];
 
   buildInputs = [ libxml2 libffi ]
@@ -48,7 +74,7 @@ in stdenv.mkDerivation (rec {
   propagatedBuildInputs = optionals (stdenv.hostPlatform == stdenv.buildPlatform) [ ncurses ]
     ++ [ zlib ];
 
-  checkInputs = [ which ];
+  nativeCheckInputs = [ which ];
 
   patches = [
     # When cross-compiling we configure llvm-config-native with an approximation
@@ -64,6 +90,13 @@ in stdenv.mkDerivation (rec {
       url = "https://raw.githubusercontent.com/archlinux/svntogit-packages/4764a4f8c920912a2bfd8b0eea57273acfe0d8a8/trunk/no-strict-aliasing-DwarfCompileUnit.patch";
       sha256 = "18l6mrvm2vmwm77ckcnbjvh6ybvn72rhrb799d4qzwac4x2ifl7g";
       stripLen = 1;
+    })
+
+    # Fix musl build.
+    (fetchpatch {
+      url = "https://github.com/llvm/llvm-project/commit/5cd554303ead0f8891eee3cd6d25cb07f5a7bf67.patch";
+      relative = "llvm";
+      hash = "sha256-XPbvNJ45SzjMGlNUgt/IgEvM2dHQpDOe6woUJY+nUYA=";
     })
   ] ++ lib.optional enablePolly ./gnu-install-dirs-polly.patch;
 
@@ -153,7 +186,7 @@ in stdenv.mkDerivation (rec {
     "-DSPHINX_OUTPUT_MAN=ON"
     "-DSPHINX_OUTPUT_HTML=OFF"
     "-DSPHINX_WARNINGS_AS_ERRORS=OFF"
-  ] ++ optionals (!isDarwin) [
+  ] ++ optionals (enableGoldPlugin) [
     "-DLLVM_BINUTILS_INCDIR=${libbfd.dev}/include"
   ] ++ optionals isDarwin [
     "-DLLVM_ENABLE_LIBCXX=ON"
@@ -216,8 +249,7 @@ in stdenv.mkDerivation (rec {
     cp NATIVE/bin/llvm-config $dev/bin/llvm-config-native
   '';
 
-  doCheck = stdenv.isLinux && (!stdenv.isx86_32) && (!stdenv.hostPlatform.isMusl)
-    && (stdenv.hostPlatform == stdenv.buildPlatform);
+  inherit doCheck;
 
   checkTarget = "check-all";
 

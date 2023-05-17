@@ -27,7 +27,7 @@ let
 
       propagatedBuildInputs = with pypkgs; [
         twisted
-        Mako
+        mako
         chardet
         pyxdg
         pyopenssl
@@ -57,7 +57,7 @@ let
         wrapGAppsHook
       ];
 
-      checkInputs = with pypkgs; [
+      nativeCheckInputs = with pypkgs; [
         pytestCheckHook
         pytest-twisted
         pytest-cov

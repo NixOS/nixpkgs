@@ -1,6 +1,19 @@
 # Testers {#chap-testers}
 This chapter describes several testing builders which are available in the <literal>testers</literal> namespace.
 
+## `hasPkgConfigModule` {#tester-hasPkgConfigModule}
+
+Checks whether a package exposes a certain `pkg-config` module.
+
+Example:
+
+```nix
+passthru.tests.pkg-config = testers.hasPkgConfigModule {
+  package = finalAttrs.finalPackage;
+  moduleName = "libfoo";
+}
+```
+
 ## `testVersion` {#tester-testVersion}
 
 Checks the command output contains the specified version
@@ -62,7 +75,7 @@ runCommand "example" {
 '';
 ```
 
-While `testBuildFailure` is designed to keep changes to the original builder's 
+While `testBuildFailure` is designed to keep changes to the original builder's
 environment to a minimum, some small changes are inevitable.
 
  - The file `$TMPDIR/testBuildFailure.log` is present. It should not be deleted.
@@ -151,6 +164,26 @@ tests.fetchgit = testers.invalidateFetcherByDrvHash fetchgit {
 };
 ```
 
+## `runNixOSTest` {#tester-runNixOSTest}
+
+A helper function that behaves exactly like the NixOS `runTest`, except it also assigns this Nixpkgs package set as the `pkgs` of the test and makes the `nixpkgs.*` options read-only.
+
+If your test is part of the Nixpkgs repository, or if you need a more general entrypoint, see ["Calling a test" in the NixOS manual](https://nixos.org/manual/nixos/stable/index.html#sec-calling-nixos-tests).
+
+Example:
+
+```nix
+pkgs.testers.runNixOSTest ({ lib, ... }: {
+  name = "hello";
+  nodes.machine = { pkgs, ... }: {
+    environment.systemPackages = [ pkgs.hello ];
+  };
+  testScript = ''
+    machine.succeed("hello")
+  '';
+})
+```
+
 ## `nixosTest` {#tester-nixosTest}
 
 Run a NixOS VM network test using this evaluation of Nixpkgs.
@@ -165,7 +198,7 @@ letting NixOS invoke Nixpkgs anew.
 If a test machine needs to set NixOS options under `nixpkgs`, it must set only the
 `nixpkgs.pkgs` option.
 
-### Parameter
+### Parameter {#tester-nixosTest-parameter}
 
 A [NixOS VM test network](https://nixos.org/nixos/manual/index.html#sec-nixos-tests), or path to it. Example:
 
@@ -187,7 +220,7 @@ A [NixOS VM test network](https://nixos.org/nixos/manual/index.html#sec-nixos-te
 }
 ```
 
-### Result
+### Result {#tester-nixosTest-result}
 
 A derivation that runs the VM test.
 

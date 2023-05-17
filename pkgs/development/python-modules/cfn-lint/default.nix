@@ -19,13 +19,13 @@
 
 buildPythonPackage rec {
   pname = "cfn-lint";
-  version = "0.61.2";
+  version = "0.73.2";
 
   src = fetchFromGitHub {
     owner = "aws-cloudformation";
     repo = "cfn-python-lint";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-282h1fBWhAfwqCuP+dU3ajn0gQtmOcPNTMKZ0a2+vHU=";
+    hash = "sha256-CNB5LrXllGxy99NjCrbjkUXUpJ72U3pUnWqrqkOiCG8=";
   };
 
   postPatch = ''
@@ -45,7 +45,7 @@ buildPythonPackage rec {
     six
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     mock
     pydot
     pytestCheckHook

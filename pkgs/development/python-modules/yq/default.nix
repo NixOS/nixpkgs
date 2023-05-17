@@ -13,11 +13,11 @@
 
 buildPythonPackage rec {
   pname = "yq";
-  version = "3.1.0";
+  version = "3.1.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-MKhKoiSGx0m6JpJWvVhsC803C34qcedsOSTq1IZ+dPI=";
+    hash = "sha256-hT80KxVi3e6XkDjsjs7lQFzdm2p8uB7WzbgBjJ6AJjM=";
   };
 
   patches = [
@@ -38,7 +38,7 @@ buildPythonPackage rec {
     argcomplete
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
    pytestCheckHook
   ];
 

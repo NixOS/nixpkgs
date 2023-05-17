@@ -24,11 +24,11 @@ let
 in
 mkDerivation rec {
   pname = "ffado";
-  version = "2.4.3";
+  version = "2.4.7";
 
   src = fetchurl {
     url = "http://www.ffado.org/files/libffado-${version}.tgz";
-    sha256 = "08bygzv1k6ai0572gv66h7gfir5zxd9klfy74z2pxqp6s5hms58r";
+    sha256 = "0vsn3y52g6f77lqh9qfkd7dslmb7bbgy46cv5idynx4frqscc23s";
   };
 
   prePatch = ''

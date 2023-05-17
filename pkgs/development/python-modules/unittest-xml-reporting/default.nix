@@ -2,6 +2,7 @@
 , fetchFromGitHub
 , buildPythonPackage
 , lxml
+, pythonAtLeast
 , pythonOlder
 , pytestCheckHook
 }:
@@ -15,15 +16,21 @@ buildPythonPackage rec {
     owner = "xmlrunner";
     repo = "unittest-xml-reporting";
     rev = version;
-    sha256 = "sha256-lOJ/+8CVJUXdIaZLLF5PpPkG0DzlNgo46kRZ1Xy7Ju0=";
+    hash = "sha256-lOJ/+8CVJUXdIaZLLF5PpPkG0DzlNgo46kRZ1Xy7Ju0=";
   };
 
   propagatedBuildInputs = [
     lxml
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
+  ];
+
+  pytestFlagsArray = lib.optionals (pythonAtLeast "3.11") [
+    # AttributeError: 'tuple' object has no attribute 'shortDescription'
+    "--deselect=tests/testsuite.py::XMLTestRunnerTestCase::test_basic_unittest_constructs"
+    "--deselect=tests/testsuite.py::XMLTestRunnerTestCase::test_unexpected_success"
   ];
 
   pythonImportsCheck = [ "xmlrunner" ];

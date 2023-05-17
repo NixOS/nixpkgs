@@ -24,7 +24,7 @@ in rec {
         }
         ''
           name=${shellEscape name}
-          mkdir -p "$out/$(dirname "$name")"
+          mkdir -p "$out/$(dirname -- "$name")"
           echo -n "$text" > "$out/$name"
         ''
     else

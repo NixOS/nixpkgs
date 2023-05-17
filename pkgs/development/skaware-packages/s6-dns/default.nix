@@ -4,8 +4,8 @@ with skawarePackages;
 
 buildPackage {
   pname = "s6-dns";
-  version = "2.3.5.4";
-  sha256 = "sha256-dq8iJHLEdU+DzcWa01QlXOGx5vaDOgWTKEY/jlH020M=";
+  version = "2.3.5.5";
+  sha256 = "VpebXVElw4BxqAtePfDUprKnxSu4Y6JBC249eX/+Hug=";
 
   description = "A suite of DNS client programs and libraries for Unix systems";
 

@@ -12,31 +12,24 @@
 
 buildPythonPackage rec {
   pname = "accuweather";
-  version = "0.4.0";
+  version = "0.5.1";
   format = "setuptools";
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "bieniu";
     repo = pname;
-    rev = version;
-    hash = "sha256-NnDpSOEIqPuPLIr0Ty6yjrs9WRKyhykcdyiRPB/cHEw=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-kWhb9tDp7/p5iCXTpf4/fjSo1ceuA9I2eqSprt50rWU=";
   };
-
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "pytest-runner" ""
-    substituteInPlace setup.cfg \
-      --replace "--cov --cov-report term-missing" ""
-  '';
 
   propagatedBuildInputs = [
     aiohttp
     orjson
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     aioresponses
     pytest-asyncio
     pytest-error-for-skips
@@ -50,6 +43,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python wrapper for getting weather data from AccuWeather servers";
     homepage = "https://github.com/bieniu/accuweather";
+    changelog = "https://github.com/bieniu/accuweather/releases/tag/${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ jamiemagee ];
   };

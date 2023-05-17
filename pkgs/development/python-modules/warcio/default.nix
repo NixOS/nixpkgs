@@ -19,14 +19,14 @@ buildPythonPackage rec {
     owner = "webrecorder";
     repo = "warcio";
     rev = "aa702cb321621b233c6e5d2a4780151282a778be"; # Repo has no git tags, see https://github.com/webrecorder/warcio/issues/126
-    sha256 = "sha256-wn2rd73wRfOqHu9H0GIn76tmEsERBBCQatnk4b/JToU=";
+    hash = "sha256-wn2rd73wRfOqHu9H0GIn76tmEsERBBCQatnk4b/JToU=";
   };
 
   patches = [
     (fetchpatch {
       name = "add-offline-option.patch";
       url = "https://github.com/webrecorder/warcio/pull/135/commits/2546fe457c57ab0b391764a4ce419656458d9d07.patch";
-      sha256 = "sha256-3izm9LvAeOFixiIUUqmd5flZIxH92+NxL7jeu35aObQ=";
+      hash = "sha256-3izm9LvAeOFixiIUUqmd5flZIxH92+NxL7jeu35aObQ=";
     })
   ];
 
@@ -35,7 +35,7 @@ buildPythonPackage rec {
     setuptools
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     httpbin
     requests

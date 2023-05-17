@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   postPatch = "sed -i /tini-static/d CMakeLists.txt";
 
-  NIX_CFLAGS_COMPILE = "-DPR_SET_CHILD_SUBREAPER=36 -DPR_GET_CHILD_SUBREAPER=37";
+  env.NIX_CFLAGS_COMPILE = "-DPR_SET_CHILD_SUBREAPER=36 -DPR_GET_CHILD_SUBREAPER=37";
 
   nativeBuildInputs = [ cmake ];
 

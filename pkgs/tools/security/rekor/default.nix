@@ -4,13 +4,13 @@ let
   generic = { pname, packageToBuild, description }:
     buildGoModule rec {
       inherit pname;
-      version = "1.0.1";
+      version = "1.1.1";
 
       src = fetchFromGitHub {
         owner = "sigstore";
         repo = "rekor";
         rev = "v${version}";
-        sha256 = "sha256-WVAIhsbxwwvUyuLQLTcMHx9B5UsJxBvmS9MXYxVNiNs=";
+        hash = "sha256-/zNDruJsnLlqHud67S8/QpNEPLfFcboA+2SWLB1jzbM=";
         # populate values that require us to use git. By doing this in postFetch we
         # can delete .git afterwards and maintain better reproducibility of the src.
         leaveDotGit = true;
@@ -23,7 +23,7 @@ let
         '';
       };
 
-      vendorSha256 = "sha256-RtlSf34l68XzxJB7G/aSjpu3BBtV556sRauWj591fIk=";
+      vendorHash = "sha256-iQBVMYt5hXSp7y0gzKCMae3gHCvS6CN+/mDWmt1yPh8=";
 
       nativeBuildInputs = [ installShellFiles ];
 
@@ -54,7 +54,7 @@ let
         homepage = "https://github.com/sigstore/rekor";
         changelog = "https://github.com/sigstore/rekor/releases/tag/v${version}";
         license = licenses.asl20;
-        maintainers = with maintainers; [ lesuisse jk ];
+        maintainers = with maintainers; [ lesuisse jk developer-guy ];
       };
     };
 in {

@@ -23,6 +23,7 @@
 , wrapGAppsHook
 , librsvg
 , webp-pixbuf-loader
+, libheif
 , libexif
 , gobject-introspection
 , gi-docgen
@@ -30,13 +31,13 @@
 
 stdenv.mkDerivation rec {
   pname = "eog";
-  version = "43.1";
+  version = "44.1";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-/tef88oZusYvJxVcm91p7vh1hwuXHm3LCqOMCT0TGXE=";
+    sha256 = "sha256-4slj8jL+WhCR3MGL7CWnMOkbAq9uRmYB76VeUAzXTKs=";
   };
 
   patches = [
@@ -86,6 +87,7 @@ stdenv.mkDerivation rec {
       extraLoaders = [
         librsvg
         webp-pixbuf-loader
+        libheif.out
       ];
     }}"
   '';
@@ -117,7 +119,5 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     maintainers = teams.gnome.members;
     platforms = platforms.unix;
-    # requires <gio/gdesktopappinfo.h>
-    broken = stdenv.isDarwin;
   };
 }

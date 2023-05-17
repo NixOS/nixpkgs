@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "yunstanford";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-82Xq/jyxTXyZVHqn7G+S9K++InDdORCO9oFqgaIgY7s=";
+    hash = "sha256-82Xq/jyxTXyZVHqn7G+S9K++InDdORCO9oFqgaIgY7s=";
   };
 
   buildInputs = [
@@ -33,7 +33,7 @@ buildPythonPackage rec {
     websockets
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     sanic
     pytestCheckHook
   ];

@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   # Workaround build failure on -fno-common toolchains:
   #   ld: mpris-interface.o:src/playlist.h:32: multiple definition of
   #     `plclose'; gui.o:src/playlist.h:32: first defined here
-  NIX_CFLAGS_COMPILE = "-fcommon";
+  env.NIX_CFLAGS_COMPILE = "-fcommon";
 
   meta = with lib; {
     description = "Gnome MPlayer, a simple GUI for MPlayer";

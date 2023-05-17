@@ -16,7 +16,7 @@ buildPythonPackage rec {
     owner = "Stranger6667";
     repo = "pytest-click";
     rev = "v${version}";
-    sha256 = "sha256-A/RF+SgPu2yYF3eHEFiZwKJW2VwQ185Ln6S3wn2cS0k=";
+    hash = "sha256-A/RF+SgPu2yYF3eHEFiZwKJW2VwQ185Ln6S3wn2cS0k=";
   };
 
   buildInputs = [ pytest ];
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     click
   ];
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {
     description = "pytest plugin for click";

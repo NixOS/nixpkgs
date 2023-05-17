@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "cloudsplaining";
-  version = "0.5.0";
+  version = "0.5.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -25,8 +25,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "salesforce";
     repo = pname;
-    rev = version;
-    hash = "sha256-HdZHRK/Q544z9ySbjNIjqiXzel0UTsnb9tuXawbkwZg=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-L7sEv0xe8+riJb7DW2N6+MsoXBXJNzK96oGkpAkAyLU=";
   };
 
   propagatedBuildInputs = [
@@ -42,7 +42,7 @@ buildPythonPackage rec {
     schema
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

@@ -1,23 +1,29 @@
 { lib
+, stdenv
+, darwin
 , buildGoModule
 , fetchFromGitHub
 , installShellFiles
 , lima
+, lima-bin
 , makeWrapper
 , qemu
 , testers
 , colima
+  # use lima-bin on darwin to support native macOS virtualization
+  # https://github.com/NixOS/nixpkgs/pull/209171
+, lima-drv ? if stdenv.isDarwin then lima-bin else lima
 }:
 
 buildGoModule rec {
   pname = "colima";
-  version = "0.5.0";
+  version = "0.5.4";
 
   src = fetchFromGitHub {
     owner = "abiosoft";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-Ey/h9W1WFMJdO5U9IeHhVTYDEJi8w18h2PY0lB0S/BU=";
+    sha256 = "sha256-oCYHQFajtZXVAVeJ8zvJABlmwmOUgisvVg9eLT7wd0M=";
     # We need the git revision
     leaveDotGit = true;
     postFetch = ''
@@ -26,9 +32,14 @@ buildGoModule rec {
     '';
   };
 
-  nativeBuildInputs = [ installShellFiles makeWrapper ];
+  nativeBuildInputs = [ installShellFiles makeWrapper ]
+    ++ lib.optionals stdenv.isDarwin [ darwin.DarwinTools ];
 
-  vendorSha256 = "sha256-v0U7TorUwOtBzBQ/OQQSAX6faDI1IX/IDIJnY8UFsu8=";
+  vendorHash = "sha256-bEgC7j8WvCgrJ2Ahye4mfWVEmo6Y/OO64mDIJXvtaiE=";
+
+  # disable flaky Test_extractZones
+  # https://hydra.nixos.org/build/212378003/log
+  excludedPackages = "gvproxy";
 
   CGO_ENABLED = 1;
 
@@ -37,11 +48,9 @@ buildGoModule rec {
     -X github.com/abiosoft/colima/config.revision=$(cat .git-revision)"
   '';
 
-  subPackages = [ "cmd/colima" ];
-
   postInstall = ''
     wrapProgram $out/bin/colima \
-      --prefix PATH : ${lib.makeBinPath [ lima qemu ]}
+      --prefix PATH : ${lib.makeBinPath [ lima-drv qemu ]}
 
     installShellCompletion --cmd colima \
       --bash <($out/bin/colima completion bash) \

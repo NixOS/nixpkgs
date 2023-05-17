@@ -24,6 +24,10 @@ symlinkJoin {
         --set "NEMO_PYTHON_EXTENSION_DIR" "$out/share/nemo-python/extensions"
     done
 
+    # Don't populate the same nemo actions twice when having this globally installed
+    # https://github.com/NixOS/nixpkgs/issues/190781#issuecomment-1365601853
+    rm -r $out/share/nemo/actions
+
     # Point to wrapped binary in all service files
     for file in "share/dbus-1/services/nemo.FileManager1.service" \
       "share/dbus-1/services/nemo.service"

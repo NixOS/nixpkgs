@@ -1,6 +1,15 @@
 { lib, buildDunePackage, dune-configurator, pkg-config, fetchFromGitHub, callPackage
+, AppKit
+, AudioToolbox
+, AVFoundation
+, Cocoa
+, CoreImage
+, ForceFeedback
 , ffmpeg-base ? callPackage ./base.nix { }
 , ffmpeg-av, ffmpeg
+, OpenGL
+, stdenv
+, VideoToolbox
 }:
 
 buildDunePackage {
@@ -8,10 +17,21 @@ buildDunePackage {
 
   minimalOCamlVersion = "4.08";
 
-  inherit (ffmpeg-base) version src useDune2;
+  inherit (ffmpeg-base) version src duneVersion;
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ dune-configurator ];
+  buildInputs = [ dune-configurator ]
+  ++ lib.optionals stdenv.isDarwin [
+    AppKit
+    AudioToolbox
+    AVFoundation
+    Cocoa
+    CoreImage
+    ForceFeedback
+    OpenGL
+    VideoToolbox
+  ];
+
   propagatedBuildInputs = [ ffmpeg-av ffmpeg.dev ];
 
   doCheck = true;

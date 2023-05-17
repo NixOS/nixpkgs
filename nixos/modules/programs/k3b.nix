@@ -28,7 +28,7 @@ with lib;
       k3b
       dvdplusrwtools
       cdrdao
-      cdrkit
+      cdrtools
     ];
 
     security.wrappers = {
@@ -44,7 +44,7 @@ with lib;
         owner = "root";
         group = "cdrom";
         permissions = "u+wrx,g+x";
-        source = "${pkgs.cdrkit}/bin/cdrecord";
+        source = "${pkgs.cdrtools}/bin/cdrecord";
       };
     };
 

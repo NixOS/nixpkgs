@@ -66,7 +66,7 @@ buildPythonPackage rec {
     rm -r atomman
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     ase
     phonopy
     pymatgen

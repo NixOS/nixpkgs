@@ -31,6 +31,6 @@ stdenv.mkDerivation rec {
     description = "OpenSMTPD filter for DKIM signing";
     homepage = "http://imperialat.at/dev/filter-dkimsign/";
     license = licenses.isc;
-    maintainers = with maintainers; [ malvo ];
+    maintainers = with maintainers; [ malte-v ];
   };
 }

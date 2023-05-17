@@ -26,27 +26,20 @@
 , UserNotifications
 , nixosTests
 , runCommand
+, vulkan-loader
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "wezterm";
-  version = "20221119-145034-49b9839f";
+  version = "20230408-112425-69ae8472";
 
   src = fetchFromGitHub {
     owner = "wez";
     repo = pname;
     rev = version;
     fetchSubmodules = true;
-    sha256 = "sha256-1gnP2Dn4nkhxelUsXMay2VGvgvMjkdEKhFK5AAST++s=";
+    hash = "sha256-Uk6I/JtSkGCQGG95DDD1hsu40X00/k5d44WP3OJ+rn4=";
   };
-
-  # Rust 1.65 does better at enum packing (according to
-  # 40e08fafe2f6e5b0c70d55996a0814d6813442ef), but Nixpkgs doesn't have 1.65
-  # yet (still in staging), so skip these tests for now.
-  checkFlags = [
-    "--skip=escape::action_size"
-    "--skip=surface::line::storage::test::memory_usage"
-  ];
 
   postPatch = ''
     echo ${version} > .tag
@@ -55,7 +48,13 @@ rustPlatform.buildRustPackage rec {
     rm -r wezterm-ssh/tests
   '';
 
-  cargoSha256 = "sha256-D6/biuLsXaCr0KSiopo9BuAVmniF8opAfDH71C3dtt0=";
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "image-0.24.5" = "sha256-fTajVwm88OInqCPZerWcSAm1ga46ansQ3EzAmbT58Js=";
+      "xcb-imdkit-0.2.0" = "sha256-QOT9HLlA26DVPUF4ViKH2ckexUsu45KZMdJwoUhW+hA=";
+    };
+  };
 
   nativeBuildInputs = [
     installShellFiles
@@ -105,7 +104,10 @@ rustPlatform.buildRustPackage rec {
   '';
 
   preFixup = lib.optionalString stdenv.isLinux ''
-    patchelf --add-needed "${libGL}/lib/libEGL.so.1" $out/bin/wezterm-gui
+    patchelf \
+      --add-needed "${libGL}/lib/libEGL.so.1" \
+      --add-needed "${vulkan-loader}/lib/libvulkan.so.1" \
+      $out/bin/wezterm-gui
   '' + lib.optionalString stdenv.isDarwin ''
     mkdir -p "$out/Applications"
     OUT_APP="$out/Applications/WezTerm.app"
@@ -122,9 +124,7 @@ rustPlatform.buildRustPackage rec {
     };
     terminfo = runCommand "wezterm-terminfo"
       {
-        nativeBuildInputs = [
-          ncurses
-        ];
+        nativeBuildInputs = [ ncurses ];
       } ''
       mkdir -p $out/share/terminfo $out/nix-support
       tic -x -o $out/share/terminfo ${src}/termwiz/data/wezterm.terminfo
@@ -132,10 +132,9 @@ rustPlatform.buildRustPackage rec {
   };
 
   meta = with lib; {
-    description = "A GPU-accelerated cross-platform terminal emulator and multiplexer written by @wez and implemented in Rust";
+    description = "GPU-accelerated cross-platform terminal emulator and multiplexer written by @wez and implemented in Rust";
     homepage = "https://wezfurlong.org/wezterm";
     license = licenses.mit;
-    maintainers = with maintainers; [ SuperSandro2000 ];
-    platforms = platforms.unix;
+    maintainers = with maintainers; [ SuperSandro2000 mimame ];
   };
 }

@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation rec {
   pname = "haguichi";
-  version = "1.4.5";
+  version = "1.4.6";
 
   src = fetchFromGitHub {
     owner = "ztefn";
     repo = "haguichi";
     rev = version;
-    sha256 = "1kgjl9g9lyg00cfx4x28s4xyqsqk5057xv6k2cj6ckg9lkxaixvc";
+    hash = "sha256-H/Aw8zJOioOLWxiM/pMb+QSIoEp3zIkLb26S6QN3hv0=";
   };
 
   nativeBuildInputs = [
@@ -43,6 +43,8 @@ stdenv.mkDerivation rec {
   postPatch = ''
     patchShebangs meson_post_install.py
   '';
+
+  passthru.updateScript = ./update.sh;
 
   meta = with lib; {
     description = "Graphical frontend for Hamachi on Linux";

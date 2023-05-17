@@ -19,13 +19,13 @@ lib.checkListOfEnum "${pname}: color variants" [ "standard" "black" "blue" "brow
 
 stdenvNoCC.mkDerivation rec {
   inherit pname;
-  version = "2022-11-06";
+  version = "2023-04-16";
 
   src = fetchFromGitHub {
     owner = "vinceliuice";
     repo = pname;
     rev = version;
-    sha256 = "ybp+r0Ru2lJg1WipFHIowvRO5XjppI0cUxKc6kPn0lM=";
+    sha256 = "OHI/kT4HMlWUTxIeGXjtuIYBzQKM3XTGXuE9cviNDTM=";
   };
 
   nativeBuildInputs = [

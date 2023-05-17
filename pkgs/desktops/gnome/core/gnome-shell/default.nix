@@ -36,7 +36,7 @@
 , gdm
 , upower
 , ibus
-, libnma
+, libnma-gtk4
 , libgnomekbd
 , gnome-desktop
 , gsettings-desktop-schemas
@@ -62,19 +62,18 @@
 , mesa
 }:
 
-# http://sources.gentoo.org/cgi-bin/viewvc.cgi/gentoo-x86/gnome-base/gnome-shell/gnome-shell-3.10.2.1.ebuild?revision=1.3&view=markup
 let
   pythonEnv = python3.withPackages (ps: with ps; [ pygobject3 ]);
 in
 stdenv.mkDerivation rec {
   pname = "gnome-shell";
-  version = "43.2";
+  version = "44.1";
 
   outputs = [ "out" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-shell/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    sha256 = "52/UvpNCQQ7p+9zday2Bxv8GDnyMxaDxyuanq6JdGGA=";
+    sha256 = "C/vkOU0mdiUVTQjQFGe9vZnoFXUS/I30XVwC3bdVHKY=";
   };
 
   patches = [
@@ -165,7 +164,7 @@ stdenv.mkDerivation rec {
 
     # not declared at build time, but typelib is needed at runtime
     libgweather
-    libnma
+    libnma-gtk4
 
     # for gnome-extension tool
     bash-completion
@@ -178,6 +177,7 @@ stdenv.mkDerivation rec {
 
   mesonFlags = [
     "-Dgtk_doc=true"
+    "-Dtests=false"
   ];
 
   postPatch = ''

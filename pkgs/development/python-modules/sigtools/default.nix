@@ -30,7 +30,7 @@ buildPythonPackage rec {
     attrs
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     mock
     repeated-test
     sphinx

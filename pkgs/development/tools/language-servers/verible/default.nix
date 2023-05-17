@@ -13,18 +13,21 @@ let
 in
 buildBazelPackage rec {
   pname = "verible";
-  version = "0.0-2472-ga80124e1";
 
   # These environment variables are read in bazel/build-version.py to create
-  # a build string. Otherwise it would attempt to extract it from .git/.
-  GIT_DATE = "2022-10-21";
-  GIT_VERSION = version;
+  # a build string shown in the tools --version output.
+  # If env variables not set, it would attempt to extract it from .git/.
+  GIT_DATE = "2023-04-14";
+  GIT_VERSION = "v0.0-3179-g525ffaf7";
+
+  # Derive nix package version from GIT_VERSION: "v1.2-345-abcde" -> "1.2.345"
+  version = builtins.concatStringsSep "." (lib.take 3 (lib.drop 1 (builtins.splitVersion GIT_VERSION)));
 
   src = fetchFromGitHub {
     owner = "chipsalliance";
     repo = "verible";
-    rev = "v${version}";
-    sha256 = "sha256:0jpdxqhnawrl80pbc8544pyggdp5s3cbc7byc423d5v0sri2f96v";
+    rev = "${GIT_VERSION}";
+    sha256 = "sha256-IXS8yeyryBNpPkCpMcOUsdIlKo447d0a8aZKroFJOzM=";
   };
 
   patches = [
@@ -46,8 +49,8 @@ buildBazelPackage rec {
     # of the output derivation ? Is there a more robust way to do this ?
     # (Hashes extracted from the ofborg build logs)
     sha256 = {
-      aarch64-linux = "sha256-6Udp7sZKGU8gcy6+5WPhkSWunf1sVkha8l5S1UQsC04=";
-      x86_64-linux = "sha256-WfhgbJFaM/ipdd1dRjPeVZ1mK2hotb0wLmKjO7e+BO4=";
+      aarch64-linux = "sha256-BrJyFeq3BB4sHIXMMxRIaYV+VJAfTs2bvK7pnw6faBY=";
+      x86_64-linux = "sha256-G6tqHWeQBi2Ph3IDFNu2sp+UU2BO93+lcyJ+kvpuRJo=";
     }.${system} or (throw "No hash for system: ${system}");
   };
 
@@ -62,19 +65,16 @@ buildBazelPackage rec {
       bazel/build-version.py \
       bazel/sh_test_with_runfiles_lib.sh \
       common/lsp/dummy-ls_test.sh \
-      common/parser/move_yacc_stack_symbols.sh \
-      common/parser/record_syntax_error.sh \
       common/tools/patch_tool_test.sh \
       common/tools/verible-transform-interactive.sh \
       common/tools/verible-transform-interactive-test.sh \
-      common/util/create_version_header.sh \
       kythe-browse.sh \
       verilog/tools
   '';
 
   bazel = bazel_4;
   removeRulesCC = false;
-  bazelTarget = ":install-binaries";
+  bazelTargets = [ ":install-binaries" ];
   bazelTestTargets = [ "//..." ];
   bazelBuildFlags = [
     "-c opt"

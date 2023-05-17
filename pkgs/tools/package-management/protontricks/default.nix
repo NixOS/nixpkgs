@@ -14,13 +14,13 @@
 
 buildPythonApplication rec {
   pname = "protontricks";
-  version = "1.7.0";
+  version = "1.10.1";
 
   src = fetchFromGitHub {
     owner = "Matoking";
     repo = pname;
     rev = version;
-    sha256 = "sha256-StI9UdSILcCUmViQnxteOJr6xLSz+EgtxRpJis57lBY=";
+    sha256 = "sha256-gKrdUwX5TzeHHXuwhUyI4REPE6TNiZ6lhonyMCHcBCA=";
   };
 
   patches = [
@@ -46,7 +46,7 @@ buildPythonApplication rec {
     ]}"
   ];
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   # From 1.6.0 release notes (https://github.com/Matoking/protontricks/releases/tag/1.6.0):
   # In most cases the script is unnecessary and should be removed as part of the packaging process.
@@ -56,9 +56,7 @@ buildPythonApplication rec {
 
   pythonImportsCheck = [ "protontricks" ];
 
-  passthru.updateScript = nix-update-script {
-    attrPath = pname;
-  };
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "A simple wrapper for running Winetricks commands for Proton-enabled games";

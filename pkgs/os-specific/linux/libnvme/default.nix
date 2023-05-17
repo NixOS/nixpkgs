@@ -1,5 +1,6 @@
 { fetchFromGitHub
 , json_c
+, keyutils
 , lib
 , meson
 , ninja
@@ -8,12 +9,13 @@
 , pkg-config
 , python3
 , stdenv
+, swig
 , systemd
 }:
 
 stdenv.mkDerivation rec {
   pname = "libnvme";
-  version = "1.2";
+  version = "1.4";
 
   outputs = [ "out" "man" ];
 
@@ -21,7 +23,7 @@ stdenv.mkDerivation rec {
     owner = "linux-nvme";
     repo = "libnvme";
     rev = "v${version}";
-    sha256 = "sha256-U9Fj3OcBe32C0PKhI05eF/6jikHAvdyvXH16IY0rWxI=";
+    sha256 = "sha256-8DlEQ4LH6UhIHr0znJGqkuCosLHqA6hkJjmiCawNE1k=";
   };
 
   postPatch = ''
@@ -35,19 +37,26 @@ stdenv.mkDerivation rec {
     ninja
     perl # for kernel-doc
     pkg-config
-    python3
+    python3.pythonForBuild
+    swig
   ];
 
   buildInputs = [
+    keyutils
     json_c
     openssl
     systemd
+    python3
   ];
 
   mesonFlags = [
     "-Ddocs=man"
     "-Ddocs-build=true"
   ];
+
+  preConfigure = ''
+    export KBUILD_BUILD_TIMESTAMP="$(date -u -d @$SOURCE_DATE_EPOCH)"
+  '';
 
   doCheck = true;
 

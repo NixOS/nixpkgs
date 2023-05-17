@@ -196,12 +196,16 @@ stdenv.mkDerivation {
     '';
 
   passthru.updateScript = import ./../../browsers/firefox-bin/update.nix {
-    inherit writeScript xidel coreutils gnused gnugrep curl gnupg runtimeShell;
+    inherit lib writeScript xidel coreutils gnused gnugrep curl gnupg runtimeShell;
     pname = "thunderbird-bin";
     baseName = "thunderbird";
     channel = "release";
     basePath = "pkgs/applications/networking/mailreaders/thunderbird-bin";
     baseUrl = "http://archive.mozilla.org/pub/thunderbird/releases/";
+  };
+
+  passthru = {
+    binaryName = "thunderbird";
   };
 
   meta = with lib; {

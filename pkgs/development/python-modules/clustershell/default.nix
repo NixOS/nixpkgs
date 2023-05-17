@@ -12,11 +12,11 @@
 
 buildPythonPackage rec {
   pname = "ClusterShell";
-  version = "1.8.4";
+  version = "1.9.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "ff6fba688a06e5e577315d899f0dab3f4fe479cef99d444a4e651af577b7d081";
+    hash = "sha256-bwqzyhQbUI2gPOGb1S8eXo0pdz/DBi1782RQqCIH7Bs=";
   };
 
   postPatch = ''
@@ -47,7 +47,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ pyyaml ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     bc
     hostname
     nose

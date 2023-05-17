@@ -4,41 +4,51 @@
 , SDL2
 , cmake
 , ffmpeg
-, imagemagick
 , libedit
 , libelf
 , libepoxy
 , libzip
-, lua
+, lua5_4
 , minizip
 , pkg-config
-, qtbase
-, qtmultimedia
-, qttools
-, wrapQtAppsHook
+, libsForQt5
+, wrapGAppsHook
 }:
 
+let
+    lua = lua5_4;
+    inherit (libsForQt5)
+      qtbase
+      qtmultimedia
+      qttools
+      wrapQtAppsHook;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "mgba";
-  version = "0.10.0";
+  version = "0.10.2";
 
   src = fetchFromGitHub {
     owner = "mgba-emu";
     repo = "mgba";
     rev = finalAttrs.version;
-    hash = "sha256-2thc2v3aD8t1PrREZIjzRuYfP7b3BA7uFb6R95zxsZI=";
+    hash = "sha256-+AwIYhnqp984Banwb7zmB5yzenExfLLU1oGJSxeTl/M=";
   };
 
   nativeBuildInputs = [
     cmake
     pkg-config
+    wrapGAppsHook
     wrapQtAppsHook
   ];
+
+  dontWrapGApps = true;
+  preFixup = ''
+    qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
 
   buildInputs = [
     SDL2
     ffmpeg
-    imagemagick
     libedit
     libelf
     libepoxy

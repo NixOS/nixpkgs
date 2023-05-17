@@ -8,13 +8,13 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "firefox_decrypt";
-  version = "unstable-2021-12-29";
+  version = "unstable-2022-12-21";
 
   src = fetchFromGitHub {
     owner = "unode";
     repo = pname;
-    rev = "a3daadc09603a6cf8c4b7e49a59776340bc885e7";
-    sha256 = "0g219zqbdnhh9j09d9a0b81vr6j44zzk13ckl5fzkr10gqndiscc";
+    rev = "84bb368cc2f8d2055a8374ab1a40c403e0486859";
+    sha256 = "sha256-dyQTf6fgsQEmp++DeXl85nvyezm0Lq9onyfIdhQoGgI=";
   };
 
   nativeBuildInputs = [ wrapPython ];
@@ -36,7 +36,6 @@ stdenvNoCC.mkDerivation rec {
   '';
 
   passthru.updateScript = nix-update-script {
-    attrPath = pname;
     extraArgs = [ "--version=branch" ];
   };
 

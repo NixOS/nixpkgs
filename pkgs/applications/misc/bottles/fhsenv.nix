@@ -1,5 +1,5 @@
 { lib
-, buildFHSUserEnvBubblewrap
+, buildFHSEnv
 , symlinkJoin
 , bottles-unwrapped
 , gst_all_1
@@ -52,6 +52,7 @@ let fhsEnv = {
       gst_all_1.gst-plugins-good
       gst_all_1.gst-plugins-ugly
       gst_all_1.gst-plugins-bad
+      gst_all_1.gst-libav
       libgphoto2
       libjpeg_turbo
       libkrb5
@@ -91,18 +92,15 @@ let fhsEnv = {
     ++ extraLibraries pkgs;
 
   profile = ''
-    # Remove if merged https://github.com/bottlesdevs/Bottles/pull/2415
-    export BOTTLES_USE_SYSTEM_GSTREAMER=1
-    # Dirty hack, may be related with https://github.com/NixOS/nixpkgs/issues/148007
-    export GST_PLUGIN_PATH=${ lib.makeSearchPath "lib/gstreamer-1.0" (with gst_all_1; [ gstreamer gst-plugins-base gst-plugins-good gst-plugins-ugly gst-plugins-bad ]) }
+    export GST_PLUGIN_PATH=/usr/lib32/gstreamer-1.0:/usr/lib64/gstreamer-1.0
   '';
 };
 in
 symlinkJoin {
   name = "bottles";
   paths = [
-    (buildFHSUserEnvBubblewrap (fhsEnv // { name = "bottles"; runScript = "bottles"; }))
-    (buildFHSUserEnvBubblewrap (fhsEnv // { name = "bottles-cli"; runScript = "bottles-cli"; }))
+    (buildFHSEnv (fhsEnv // { name = "bottles"; runScript = "bottles"; }))
+    (buildFHSEnv (fhsEnv // { name = "bottles-cli"; runScript = "bottles-cli"; }))
   ];
   postBuild = ''
     mkdir -p $out/share

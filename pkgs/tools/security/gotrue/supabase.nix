@@ -1,26 +1,37 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, testers
+, gotrue-supabase
+}:
 
 buildGoModule rec {
   pname = "gotrue";
-  version = "2.35.0";
+  version = "2.47.1";
 
   src = fetchFromGitHub {
     owner = "supabase";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-uFE2pcEpGhrl8LcZLvYEMlq8sgRmFkltf3H8huZzXpM=";
+    hash = "sha256-GBrdYlWvtlz/A/5Tn58EPYBL3X73D44GzbN1OrzwU8U=";
   };
 
-  vendorHash = "sha256-uchgHxUczb4IIUkUdHWyeXWr2LXda6eWwjQxUBcPDoA=";
+  vendorHash = "sha256-FIl30sKmdcXayK8KWGFl+N+lYExl4ibKZ2tcvelw8zo=";
 
   ldflags = [
     "-s"
     "-w"
-    "-X=github.com/netlify/gotrue/utilities.Version=${version}"
+    "-X=github.com/netlify/gotrue/internal/utilities.Version=${version}"
   ];
 
   # integration tests require network to connect to postgres database
   doCheck = false;
+
+  passthru.tests.version = testers.testVersion {
+    package = gotrue-supabase;
+    command = "gotrue version";
+    inherit version;
+  };
 
   meta = with lib; {
     homepage = "https://github.com/supabase/gotrue";

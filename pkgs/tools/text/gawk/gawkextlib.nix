@@ -6,7 +6,7 @@
 let
   buildExtension = lib.makeOverridable
     ({ name, gawkextlib, extraBuildInputs ? [ ], doCheck ? true }:
-      let is_extension = !isNull gawkextlib;
+      let is_extension = gawkextlib != null;
       in stdenv.mkDerivation rec {
         pname = "gawkextlib-${name}";
         version = "unstable-2019-11-21";
@@ -38,7 +38,7 @@ let
         inherit gawk;
 
         inherit doCheck;
-        checkInputs = [ more ];
+        nativeCheckInputs = [ more ];
 
         meta = with lib; {
           homepage = "https://sourceforge.net/projects/gawkextlib/";

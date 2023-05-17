@@ -29,7 +29,7 @@ mkDerivation rec {
 
   qmakeFlags = [ "INSTALLROOT=$(out)" ];
 
-  NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations";
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations";
 
   postPatch = ''
     patchShebangs .

@@ -1,8 +1,8 @@
-{ lib, stdenv, curl, jq, xorg, alsa-lib, freetype, p7zip, autoPatchelfHook, writeShellScript, zlib, libjack2, makeWrapper }:
+{ lib, stdenv, curl, jq, htmlq, xorg, alsa-lib, freetype, p7zip, autoPatchelfHook, writeShellScript, zlib, libjack2, makeWrapper }:
 let
   versionForFile = v: builtins.replaceStrings ["."] [""] v;
 
-  mkPianoteq = { name, src, version, archdir, ... }:
+  mkPianoteq = { name, src, version, archdir ? if (stdenv.hostPlatform.system == "aarch64-linux") then "arm-64bit" else "x86-64bit", ... }:
     stdenv.mkDerivation rec {
       inherit src version;
 
@@ -47,7 +47,7 @@ let
         homepage = "https://www.modartt.com/pianoteq";
         description = "Software synthesizer that features real-time MIDI-control of digital physically modeled pianos and related instruments";
         license = licenses.unfree;
-        platforms = [ "x86_64-linux" ]; # TODO extract binary according to each platform?
+        platforms = [ "x86_64-linux" "aarch64-linux" ];
         maintainers = [ maintainers.mausch ];
       };
     };
@@ -93,26 +93,32 @@ let
     fetchWithCurlScript {
       inherit name sha256;
       script = ''
+        html=$(
+          "''${curl[@]}" --silent --request GET \
+            --cookie cookies \
+            --header "accept: */*" \
+            'https://www.modartt.com/try?file=${name}'
+        )
+
+        signature="$(echo "$html" | ${htmlq}/bin/htmlq '#download-form' --attribute action | cut -f2 -d'&' | cut -f2 -d=)"
+
+        json=$(
           "''${curl[@]}" --silent --request POST \
-            --cookie cookies \
-            --header "modartt-json: request" \
-            --header "origin: https://www.modartt.com" \
-            --header "content-type: application/json; charset=UTF-8" \
-            --header "accept: application/json, text/javascript, */*" \
-            --data-raw '{"file": "${name}", "get": "url"}' \
-            https://www.modartt.com/json/download -o /dev/null
-          json=$(
-            "''${curl[@]}" --silent --request POST \
-            --cookie cookies \
-            --header "modartt-json: request" \
-            --header "origin: https://www.modartt.com" \
-            --header "content-type: application/json; charset=UTF-8" \
-            --header "accept: application/json, text/javascript, */*" \
-            --data-raw '{"file": "${name}", "get": "url"}' \
-            https://www.modartt.com/json/download
-          )
-          url=$(echo $json | ${jq}/bin/jq -r .url)
-          "''${curl[@]}" --progress-bar --cookie cookies -o $out "$url"
+          --cookie cookies \
+          --header "modartt-json: request" \
+          --header "origin: https://www.modartt.com" \
+          --header "content-type: application/json; charset=UTF-8" \
+          --header "accept: application/json, text/javascript, */*" \
+          --data-raw '{"file": "${name}", "get": "url", "signature": "'"$signature"'"}' \
+          https://www.modartt.com/api/0/download
+        )
+
+        url=$(echo $json | ${jq}/bin/jq -r .url)
+        if [ "$url" == "null"  ]; then
+          echo "Could not get download URL, open an issue on https://github.com/NixOS/nixpkgs"
+          return 1
+        fi
+        "''${curl[@]}" --progress-bar --cookie cookies -o $out "$url"
       '';
     };
 
@@ -140,7 +146,7 @@ let
           --header "content-type: application/json; charset=UTF-8" \
           --header "accept: application/json, text/javascript, */*" \
           --data @login.json \
-          https://www.modartt.com/json/session
+          https://www.modartt.com/api/0/session
 
         json=$(
           "''${curl[@]}" --silent --request POST \
@@ -150,10 +156,10 @@ let
           --header "content-type: application/json; charset=UTF-8" \
           --header "accept: application/json, text/javascript, */*" \
           --data-raw '{"file": "${name}", "get": "url"}' \
-          https://www.modartt.com/json/download
+          https://www.modartt.com/api/0/download
         )
-        url=$(echo $json | ${jq}/bin/jq -r .url)
 
+        url=$(echo $json | ${jq}/bin/jq -r .url)
         "''${curl[@]}" --progress-bar --cookie cookies -o $out "$url"
       '';
     };
@@ -162,26 +168,24 @@ in {
   # TODO currently can't install more than one because `lame` clashes
   stage-trial = mkPianoteq rec {
     name = "stage-trial";
-    version = "7.5.4";
-    archdir = "x86-64bit";
+    version = "8.0.8";
     src = fetchPianoteqTrial {
       name = "pianoteq_stage_linux_trial_v${versionForFile version}.7z";
-      sha256 = "sha256-ybtq+hjnaQxpLxv2KE0ZcbQXtn5DJJsnMwCmh3rlrIc=";
+      sha256 = "sha256-dp0bTzzh4aQ2KQ3z9zk+3meKQY4YRYQ86rccHd3+hAQ=";
     };
   };
   standard-trial = mkPianoteq rec {
     name = "standard-trial";
-    version = "7.5.4";
-    archdir = "x86-64bit";
+    version = "8.0.8";
     src = fetchPianoteqTrial {
       name = "pianoteq_linux_trial_v${versionForFile version}.7z";
-      sha256 = "sha256-3a3+SKTEhvDtqK5Kg4E6KiLvn5+j6JN6ntIb72u2bdQ=";
+      sha256 = "sha256-LSrnrjkEhsX9TirUUFs9tNqH2A3cTt3I7YTfcTT6EP8=";
     };
   };
   stage-6 = mkPianoteq rec {
     name = "stage-6";
     version = "6.7.3";
-    archdir = "amd64";
+    archdir = if (stdenv.hostPlatform.system == "aarch64-linux") then throw "Pianoteq stage-6 is not supported on aarch64-linux" else "amd64";
     src = fetchPianoteqWithLogin {
       name = "pianoteq_stage_linux_v${versionForFile version}.7z";
       sha256 = "0jy0hkdynhwv0zhrqkby0hdphgmcc09wxmy74rhg9afm1pzl91jy";
@@ -190,7 +194,6 @@ in {
   stage-7 = mkPianoteq rec {
     name = "stage-7";
     version = "7.3.0";
-    archdir = "x86-64bit";
     src = fetchPianoteqWithLogin {
       name = "pianoteq_stage_linux_v${versionForFile version}.7z";
       sha256 = "05w7sv9v38r6ljz9xai816w5z2qqwx88hcfjm241fvgbs54125hx";

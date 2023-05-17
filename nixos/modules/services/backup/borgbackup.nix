@@ -66,6 +66,7 @@ let
       ${mkKeepArgs cfg} \
       ${optionalString (cfg.prune.prefix != null) "--glob-archives ${escapeShellArg "${cfg.prune.prefix}*"}"} \
       $extraPruneArgs
+    borg compact $extraArgs $extraCompactArgs
     ${cfg.postPrune}
   '');
 
@@ -108,7 +109,7 @@ let
       };
       environment = {
         BORG_REPO = cfg.repo;
-        inherit (cfg) extraArgs extraInitArgs extraCreateArgs extraPruneArgs;
+        inherit (cfg) extraArgs extraInitArgs extraCreateArgs extraPruneArgs extraCompactArgs;
       } // (mkPassEnv cfg) // cfg.environment;
     };
 
@@ -150,8 +151,9 @@ let
         # Ensure that the home directory already exists
         # We can't assert createHome == true because that's not the case for root
         cd "${config.users.users.${cfg.user}.home}"
-        ${install} -d .config/borg
-        ${install} -d .cache/borg
+        # Create each directory separately to prevent root owned parent dirs
+        ${install} -d .config .config/borg
+        ${install} -d .cache .cache/borg
       '' + optionalString (isLocalPath cfg.repo && !cfg.removableDevice) ''
         ${install} -d ${escapeShellArg cfg.repo}
       ''));
@@ -225,7 +227,7 @@ let
 
 in {
   meta.maintainers = with maintainers; [ dotlambda ];
-  meta.doc = ./borgbackup.xml;
+  meta.doc = ./borgbackup.md;
 
   ###### interface
 
@@ -637,6 +639,15 @@ in {
             example = "--save-space";
           };
 
+          extraCompactArgs = mkOption {
+            type = types.str;
+            description = lib.mdDoc ''
+              Additional arguments for {command}`borg compact`.
+              Can also be set at runtime using `$extraCompactArgs`.
+            '';
+            default = "";
+            example = "--cleanup-commits";
+          };
         };
       }
     ));

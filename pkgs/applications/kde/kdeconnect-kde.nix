@@ -16,6 +16,7 @@
 , libXtst
 , libfakekey
 , makeWrapper
+, modemmanager-qt
 , pulseaudio-qt
 , qca-qt5
 , qqc2-desktop-style
@@ -26,6 +27,7 @@
 , breeze-icons
 , sshfs
 , wayland
+, wayland-protocols
 , wayland-scanner
 , plasma-wayland-protocols
 }:
@@ -47,6 +49,7 @@ mkDerivation {
     kwayland
     libXtst
     libfakekey
+    modemmanager-qt
     pulseaudio-qt
     qca-qt5
     qqc2-desktop-style
@@ -55,6 +58,7 @@ mkDerivation {
     qtquickcontrols2
     qtx11extras
     wayland
+    wayland-protocols
     wayland-scanner
     plasma-wayland-protocols
     # otherwise buttons are blank on non-kde

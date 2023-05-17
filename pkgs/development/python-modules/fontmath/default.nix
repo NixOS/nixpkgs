@@ -10,14 +10,14 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-alOHy3/rEFlY2y9c7tyHhRPMNb83FeJiCQ8FV74MGxw=";
+    hash = "sha256-alOHy3/rEFlY2y9c7tyHhRPMNb83FeJiCQ8FV74MGxw=";
     extension = "zip";
   };
 
   nativeBuildInputs = [ setuptools-scm ];
 
   propagatedBuildInputs = [ fonttools ];
-  checkInputs = [ pytest pytest-runner ];
+  nativeCheckInputs = [ pytest pytest-runner ];
 
   meta = with lib; {
     description = "A collection of objects that implement fast font, glyph, etc. math";

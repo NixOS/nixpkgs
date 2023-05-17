@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "Edinburgh-Genome-Foundry";
     repo = "DnaChisel";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-YlNOvK7ZXUHYdRX1NFEdZ646NGLtGXU1YgAjN6RY2QE=";
+    hash = "sha256-YlNOvK7ZXUHYdRX1NFEdZ646NGLtGXU1YgAjN6RY2QE=";
   };
 
   propagatedBuildInputs = [
@@ -33,7 +33,7 @@ buildPythonPackage rec {
     python-codon-tables
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     primer3
     genome-collector
     matplotlib

@@ -13,13 +13,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "sssd";
-  version = "2.8.1";
+  version = "2.9.0";
 
   src = fetchFromGitHub {
     owner = "SSSD";
     repo = pname;
     rev = version;
-    sha256 = "sha256-TbeofUQAQNM/Nxzgl8GP2+Y4iR7bVXm4dQaPkYMSdqc=";
+    sha256 = "sha256-H9Snh2RzbnjGPqvC9fJHeZvAkGX/O/vmVsl143yb194=";
   };
 
   postPatch = ''
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   '';
 
   # Something is looking for <libxml/foo.h> instead of <libxml2/libxml/foo.h>
-  NIX_CFLAGS_COMPILE = "-I${libxml2.dev}/include/libxml2";
+  env.NIX_CFLAGS_COMPILE = "-I${libxml2.dev}/include/libxml2";
 
   preConfigure = ''
     export SGML_CATALOG_FILES="${docbookFiles}"
@@ -54,6 +54,9 @@ stdenv.mkDerivation rec {
   '';
 
   enableParallelBuilding = true;
+  # Disable parallel install due to missing depends:
+  #   libtool:   error: error: relink '_py3sss.la' with the above command before installing i
+  enableParallelInstalling = false;
   nativeBuildInputs = [ autoreconfHook makeWrapper pkg-config doxygen ];
   buildInputs = [ augeas dnsutils c-ares curl cyrus_sasl ding-libs libnl libunistring nss
                   samba nfs-utils p11-kit python3 popt

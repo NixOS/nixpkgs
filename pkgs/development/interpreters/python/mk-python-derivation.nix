@@ -39,6 +39,7 @@
 # Dependencies needed for running the checkPhase.
 # These are added to buildInputs when doCheck = true.
 , checkInputs ? []
+, nativeCheckInputs ? []
 
 # propagate build dependencies so in case we have A -> B -> C,
 # C can import package A propagated by B
@@ -100,12 +101,6 @@
 
 , ... } @ attrs:
 
-
-# Keep extra attributes from `attrs`, e.g., `patchPhase', etc.
-if disabled
-then throw "${name} not supported for interpreter ${python.executable}"
-else
-
 let
   inherit (python) stdenv;
 
@@ -113,8 +108,62 @@ let
 
   name_ = name;
 
+  validatePythonMatches = attrName: let
+    isPythonModule = drv:
+      # all pythonModules have the pythonModule attribute
+      (drv ? "pythonModule")
+      # Some pythonModules are turned in to a pythonApplication by setting the field to false
+      && (!builtins.isBool drv.pythonModule);
+    isMismatchedPython = drv: drv.pythonModule != python;
+
+    optionalLocation = let
+        pos = builtins.unsafeGetAttrPos (if attrs ? "pname" then "pname" else "name") attrs;
+      in if pos == null then "" else " at ${pos.file}:${toString pos.line}:${toString pos.column}";
+
+    leftPadName = name: against: let
+        len = lib.max (lib.stringLength name) (lib.stringLength against);
+      in lib.strings.fixedWidthString len " " name;
+
+    throwMismatch = drv: let
+      myName = "'${namePrefix}${name}'";
+      theirName = "'${drv.name}'";
+    in throw ''
+      Python version mismatch in ${myName}:
+
+      The Python derivation ${myName} depends on a Python derivation
+      named ${theirName}, but the two derivations use different versions
+      of Python:
+
+          ${leftPadName myName theirName} uses ${python}
+          ${leftPadName theirName myName} uses ${toString drv.pythonModule}
+
+      Possible solutions:
+
+        * If ${theirName} is a Python library, change the reference to ${theirName}
+          in the ${attrName} of ${myName} to use a ${theirName} built from the same
+          version of Python
+
+        * If ${theirName} is used as a tool during the build, move the reference to
+          ${theirName} in ${myName} from ${attrName} to nativeBuildInputs
+
+        * If ${theirName} provides executables that are called at run time, pass its
+          bin path to makeWrapperArgs:
+
+              makeWrapperArgs = [ "--prefix PATH : ''${lib.makeBinPath [ ${lib.getName drv } ] }" ];
+
+      ${optionalLocation}
+    '';
+
+    checkDrv = drv:
+      if (isPythonModule drv) && (isMismatchedPython drv)
+      then throwMismatch drv
+      else drv;
+
+    in inputs: builtins.map (checkDrv) inputs;
+
+  # Keep extra attributes from `attrs`, e.g., `patchPhase', etc.
   self = toPythonModule (stdenv.mkDerivation ((builtins.removeAttrs attrs [
-    "disabled" "checkPhase" "checkInputs" "doCheck" "doInstallCheck" "dontWrapPythonPrograms" "catchConflicts" "format"
+    "disabled" "checkPhase" "checkInputs" "nativeCheckInputs" "doCheck" "doInstallCheck" "dontWrapPythonPrograms" "catchConflicts" "format"
     "disabledTestPaths" "outputs"
   ]) // {
 
@@ -153,14 +202,14 @@ let
       pythonOutputDistHook
     ] ++ nativeBuildInputs;
 
-    buildInputs = buildInputs ++ pythonPath;
+    buildInputs = validatePythonMatches "buildInputs" (buildInputs ++ pythonPath);
 
-    propagatedBuildInputs = propagatedBuildInputs ++ [
+    propagatedBuildInputs = validatePythonMatches "propagatedBuildInputs" (propagatedBuildInputs ++ [
       # we propagate python even for packages transformed with 'toPythonApplication'
       # this pollutes the PATH but avoids rebuilds
       # see https://github.com/NixOS/nixpkgs/issues/170887 for more context
       python
-    ];
+    ]);
 
     inherit strictDeps;
 
@@ -169,13 +218,14 @@ let
     # Python packages don't have a checkPhase, only an installCheckPhase
     doCheck = false;
     doInstallCheck = attrs.doCheck or true;
-    installCheckInputs = [
+    nativeInstallCheckInputs = [
     ] ++ lib.optionals (format == "setuptools") [
       # Longer-term we should get rid of this and require
       # users of this function to set the `installCheckPhase` or
       # pass in a hook that sets it.
       setuptoolsCheckHook
-    ] ++ checkInputs;
+    ] ++ nativeCheckInputs;
+    installCheckInputs = checkInputs;
 
     postFixup = lib.optionalString (!dontWrapPythonPrograms) ''
       wrapPythonPrograms
@@ -202,4 +252,7 @@ let
   passthru.updateScript = let
       filename = builtins.head (lib.splitString ":" self.meta.position);
     in attrs.passthru.updateScript or [ update-python-libraries filename ];
-in lib.extendDerivation true passthru self
+in lib.extendDerivation
+  (disabled -> throw "${name} not supported for interpreter ${python.executable}")
+  passthru
+  self

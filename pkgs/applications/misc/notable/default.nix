@@ -1,4 +1,4 @@
-{ appimageTools, fetchurl, lib }:
+{ appimageTools, makeWrapper, fetchurl, lib }:
 
 let
   pname = "notable";
@@ -16,10 +16,11 @@ let
     inherit name src;
   };
 
+  nativeBuildInputs = [ makeWrapper ];
 in
 appimageTools.wrapType2 rec {
 
-  inherit name src;
+  inherit pname version src;
 
   profile = ''
     export LC_ALL=C.UTF-8
@@ -34,6 +35,9 @@ appimageTools.wrapType2 rec {
       $out/share/icons/hicolor/1024x1024/apps/notable.png
     substituteInPlace $out/share/applications/notable.desktop \
       --replace 'Exec=AppRun' 'Exec=${pname}'
+    source "${makeWrapper}/nix-support/setup-hook"
+    wrapProgram "$out/bin/${pname}" \
+      --add-flags "--disable-seccomp-filter-sandbox"
   '';
 
   meta = with lib; {

@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "samuelcolvin";
     repo = "python-${pname}";
     rev = "v${version}";
-    sha256 = "sha256-x9dL/FE94OixMAmjnmfzZUcYJBqE5P2AAIFsNJF0Fxo=";
+    hash = "sha256-x9dL/FE94OixMAmjnmfzZUcYJBqE5P2AAIFsNJF0Fxo=";
   };
 
   nativeBuildInputs = [
@@ -34,7 +34,7 @@ buildPythonPackage rec {
     pygments
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     pytest-mock
   ];
@@ -60,6 +60,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python's missing debug print command and other development tools";
     homepage = "https://python-devtools.helpmanual.io/";
+    changelog = "https://github.com/samuelcolvin/python-devtools/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ jdahm ];
   };

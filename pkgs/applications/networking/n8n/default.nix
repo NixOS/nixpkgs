@@ -1,4 +1,4 @@
-{ pkgs, nodejs-16_x, stdenv, lib, nixosTests }:
+{ pkgs, stdenv, lib, nixosTests }:
 
 let
   nodePackages = import ./node-composition.nix {
@@ -13,6 +13,7 @@ nodePackages.n8n.override {
 
   buildInputs = [
     pkgs.postgresql
+    pkgs.libmongocrypt
   ];
 
   # Oracle's official package on npm is binary only (WHY?!) and doesn't provide binaries for aarch64.
@@ -24,6 +25,9 @@ nodePackages.n8n.override {
     rm -rf node_modules/oracledb
   '';
 
+  # makes libmongocrypt bindings not look for static libraries in completely wrong places
+  BUILD_TYPE = "dynamic";
+
   dontNpmInstall = true;
 
   passthru = {
@@ -32,7 +36,7 @@ nodePackages.n8n.override {
   };
 
   meta = with lib; {
-    description = "Free and open fair-code licensed node based Workflow Automation Tool";
+    description = "Free and source-available fair-code licensed workflow automation tool. Easily automate tasks across different services.";
     maintainers = with maintainers; [ freezeboy k900 ];
     license = {
       fullName = "Sustainable Use License";

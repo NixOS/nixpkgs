@@ -13,7 +13,7 @@ stdenv.mkDerivation {
 
   # -Wnarrowing is enabled by default in recent GCC versions,
   # causing compilation to fail.
-  NIX_CFLAGS_COMPILE = "-Wno-narrowing";
+  env.NIX_CFLAGS_COMPILE = "-Wno-narrowing";
 
   nativeBuildInputs = [ cmake pkg-config ];
   buildInputs = [ pcre zlib sqlite ];

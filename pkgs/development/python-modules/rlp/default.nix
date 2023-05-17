@@ -14,7 +14,7 @@ buildPythonPackage rec {
     owner = "ethereum";
     repo = "pyrlp";
     rev = "v${version}";
-    sha256 = "sha256-GRCq4FU38e08fREg5fweig5Y60jLT2k3Yj1Jk8OA6XY=";
+    hash = "sha256-GRCq4FU38e08fREg5fweig5Y60jLT2k3Yj1Jk8OA6XY=";
   };
 
   postPatch = ''
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     eth-utils
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     hypothesis
     pytestCheckHook
   ];

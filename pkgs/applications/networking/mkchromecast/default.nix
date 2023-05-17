@@ -39,7 +39,7 @@ python3Packages.buildPythonApplication rec {
   };
 
   propagatedBuildInputs = with python3Packages; ([
-    PyChromecast
+    pychromecast
     psutil
     mutagen
     flask

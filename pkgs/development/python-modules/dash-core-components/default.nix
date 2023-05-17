@@ -10,7 +10,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "dash_core_components";
     inherit version;
-    sha256 = "sha256-xnM4dK+XXlUvlaE5ihbC7n3xTOQ/pguzcYo8bgtj/+4=";
+    hash = "sha256-xnM4dK+XXlUvlaE5ihbC7n3xTOQ/pguzcYo8bgtj/+4=";
   };
 
   # No tests in archive

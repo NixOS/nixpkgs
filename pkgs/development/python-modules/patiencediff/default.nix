@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "patiencediff";
-  version = "0.2.11";
+  version = "0.2.13";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -17,14 +17,14 @@ buildPythonPackage rec {
     owner = "breezy-team";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-JUcqODJo4F+gIa9kznWyUW65MGkSrVRlOWvjBNQip3A=";
+    hash = "sha256-Hst/2hRqH8AIKD2EXtJo8m3diOxPBWAmNhtS3TUYT3I=";
   };
 
   nativeBuildInputs = [
     setuptools
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, buildPackages, libiconv, skktools }:
+{ lib, stdenv, fetchurl, buildPackages, iconv, skktools }:
 
 let
   # kana to kanji
@@ -25,15 +25,13 @@ let
     url = "https://raw.githubusercontent.com/skk-dev/dict/8b35d07a7d2044d48b063d2774d9f9d00bb7cb48/SKK-JISYO.assoc";
     sha256 = "1smcbyv6srrhnpl7ic9nqds9nz3g2dgqngmhzkrdlwmvcpvakp1v";
   };
-
-  iconvBin = if stdenv.isDarwin then libiconv else  buildPackages.stdenv.cc.libc;
 in
 
 stdenv.mkDerivation {
   pname = "skk-dicts-unstable";
   version = "2020-03-24";
   srcs = [ small medium large edict assoc ];
-  nativeBuildInputs = [ skktools ] ++ lib.optional stdenv.isDarwin libiconv;
+  nativeBuildInputs = [ iconv skktools ];
 
   strictDeps = true;
 
@@ -51,8 +49,7 @@ stdenv.mkDerivation {
     for src in $srcs; do
       dst=$out/share/$(dictname $src)
       echo ";;; -*- coding: utf-8 -*-" > $dst  # libskk requires this on the first line
-      ${lib.getBin iconvBin}/bin/iconv \
-        -f EUC-JP -t UTF-8 $src | skkdic-expr2 >> $dst
+      iconv -f EUC-JP -t UTF-8 $src | skkdic-expr2 >> $dst
     done
 
     # combine .L .edict and .assoc for convenience

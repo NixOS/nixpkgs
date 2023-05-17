@@ -82,61 +82,68 @@ boot.kernel.sysctl."net.ipv4.tcp_keepalive_time" = 120;
 sets the kernel's TCP keepalive time to 120 seconds. To see the
 available parameters, run `sysctl -a`.
 
-## Customize your kernel {#sec-linux-config-customizing}
+## Building a custom kernel {#sec-linux-config-customizing}
 
-The first step before compiling the kernel is to generate an appropriate
-`.config` configuration. Either you pass your own config via the
-`configfile` setting of `linuxKernel.manualConfig`:
+You can customize the default kernel configuration by overriding the arguments for your kernel package:
 
 ```nix
-custom-kernel = let base_kernel = linuxKernel.kernels.linux_4_9;
-  in super.linuxKernel.manualConfig {
-    inherit (super) stdenv hostPlatform;
-    inherit (base_kernel) src;
-    version = "${base_kernel.version}-custom";
-
-    configfile = /home/me/my_kernel_config;
-    allowImportFromDerivation = true;
-};
-```
-
-You can edit the config with this snippet (by default `make
-   menuconfig` won\'t work out of the box on nixos):
-
-```ShellSession
-nix-shell -E 'with import <nixpkgs> {}; kernelToOverride.overrideAttrs (o: {nativeBuildInputs=o.nativeBuildInputs ++ [ pkg-config ncurses ];})'
-```
-
-or you can let nixpkgs generate the configuration. Nixpkgs generates it
-via answering the interactive kernel utility `make config`. The answers
-depend on parameters passed to
-`pkgs/os-specific/linux/kernel/generic.nix` (which you can influence by
-overriding `extraConfig, autoModules,
-   modDirVersion, preferBuiltin, extraConfig`).
-
-```nix
-mptcp93.override ({
-  name="mptcp-local";
-
+pkgs.linux_latest.override {
   ignoreConfigErrors = true;
   autoModules = false;
   kernelPreferBuiltin = true;
+  extraStructuredConfig = with lib.kernel; {
+    DEBUG_KERNEL = yes;
+    FRAME_POINTER = yes;
+    KGDB = yes;
+    KGDB_SERIAL_CONSOLE = yes;
+    DEBUG_INFO = yes;
+  };
+}
+```
 
-  enableParallelBuilding = true;
+See `pkgs/os-specific/linux/kernel/generic.nix` for details on how these arguments
+affect the generated configuration. You can also build a custom version of Linux by calling
+`pkgs.buildLinux` directly, which requires the `src` and `version` arguments to be specified.
 
-  extraConfig = ''
-    DEBUG_KERNEL y
-    FRAME_POINTER y
-    KGDB y
-    KGDB_SERIAL_CONSOLE y
-    DEBUG_INFO y
-  '';
-});
+To use your custom kernel package in your NixOS configuration, set
+
+```nix
+boot.kernelPackages = pkgs.linuxPackagesFor yourCustomKernel;
+```
+
+Note that this method will use the common configuration defined in `pkgs/os-specific/linux/kernel/common-config.nix`,
+which is suitable for a NixOS system.
+
+If you already have a generated configuration file, you can build a kernel that uses it with `pkgs.linuxManualConfig`:
+
+```nix
+let
+  baseKernel = pkgs.linux_latest;
+in pkgs.linuxManualConfig {
+  inherit (baseKernel) src modDirVersion;
+  version = "${baseKernel.version}-custom";
+  configfile = ./my_kernel_config;
+  allowImportFromDerivation = true;
+}
+```
+
+::: {.note}
+The build will fail if `modDirVersion` does not match the source's `kernel.release` file,
+so `modDirVersion` should remain tied to `src`.
+:::
+
+To edit the `.config` file for Linux X.Y, proceed as follows:
+
+```ShellSession
+$ nix-shell '<nixpkgs>' -A linuxKernel.kernels.linux_X_Y.configEnv
+$ unpackPhase
+$ cd linux-*
+$ make nconfig
 ```
 
 ## Developing kernel modules {#sec-linux-config-developing-modules}
 
-When developing kernel modules it\'s often convenient to run
+When developing kernel modules it's often convenient to run
 edit-compile-run loop as quickly as possible. See below snippet as an
 example of developing `mellanox` drivers.
 

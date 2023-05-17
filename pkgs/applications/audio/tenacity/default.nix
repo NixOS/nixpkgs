@@ -1,6 +1,6 @@
 { stdenv
 , lib
-, fetchFromGitHub
+, fetchFromGitea
 , fetchpatch
 , cmake
 , wxGTK32
@@ -30,7 +30,7 @@
 , expat
 , libid3tag
 , libopus
-, ffmpeg
+, ffmpeg_5
 , soundtouch
 , pcre
 , portaudio
@@ -49,32 +49,27 @@
 
 stdenv.mkDerivation rec {
   pname = "tenacity";
-  version = "unstable-2022-06-30";
+  version = "1.3-beta2";
 
-  src = fetchFromGitHub {
+  src = fetchFromGitea {
+    domain = "codeberg.org";
     owner = "tenacityteam";
     repo = pname;
-    rev = "91f8b4340b159af551fff94a284c6b0f704a7932";
-    sha256 = "sha256-4VWckXzqo2xspw9eUloDvjxQYbsHn6ghEDw+hYqJcCE=";
+    rev = "v${version}";
+    sha256 = "sha256-9gWoqFa87neIvRnezWI3RyCAOU4wKEHPn/Hgj3/fol0=";
   };
 
-  patches = [
-    (fetchpatch {
-      url = "https://aur.archlinux.org/cgit/aur.git/plain/wxwidgets-gtk3-3.1.6-plus.patch?h=tenacity-wxgtk3-git&id=c2503538fa7d7001181905988179952d09f69659";
-      postFetch = "echo >> $out";
-      sha256 = "sha256-xRY1tizBJ9CBY6e9oZVz4CWx7DWPGD9A9Ysol4prBww=";
-    })
-  ];
-
   postPatch = ''
-    touch src/RevisionIdent.h
+    mkdir -p build/src/private
+    touch build/src/private/RevisionIdent.h
 
-    substituteInPlace src/FileNames.cpp \
-      --replace /usr/include/linux/magic.h ${linuxHeaders}/include/linux/magic.h
+    substituteInPlace libraries/lib-files/FileNames.cpp \
+         --replace /usr/include/linux/magic.h \
+                   ${linuxHeaders}/include/linux/magic.h
   '';
 
   postFixup = ''
-    rm $out/tenacity
+    rm $out/audacity
     wrapProgram "$out/bin/tenacity" \
       --suffix AUDACITY_PATH : "$out/share/tenacity" \
       --suffix AUDACITY_MODULES_PATH : "$out/lib/tenacity/modules" \
@@ -82,7 +77,7 @@ stdenv.mkDerivation rec {
       --prefix XDG_DATA_DIRS : "$out/share:$GSETTINGS_SCHEMAS_PATH"
   '';
 
-  NIX_CFLAGS_COMPILE = "-D GIT_DESCRIBE=\"\"";
+  env.NIX_CFLAGS_COMPILE = "-D GIT_DESCRIBE=\"\"";
 
   # tenacity only looks for ffmpeg at runtime, so we need to link it in manually
   NIX_LDFLAGS = toString [
@@ -90,7 +85,6 @@ stdenv.mkDerivation rec {
     "-lavdevice"
     "-lavfilter"
     "-lavformat"
-    "-lavresample"
     "-lavutil"
     "-lpostproc"
     "-lswresample"
@@ -110,7 +104,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     alsa-lib
     expat
-    ffmpeg
+    ffmpeg_5
     file
     flac
     glib

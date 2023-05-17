@@ -1,54 +1,51 @@
-{ stdenv, lib, fetchurl, makeDesktopItem, copyDesktopItems, cmake, pkg-config, zlib, bzip2, libjpeg, SDL, SDL_mixer, gtk2 }:
+{ stdenv
+, lib
+, fetchFromBitbucket
+, cmake
+, copyDesktopItems
+, pkg-config
+, makeWrapper
+, zlib
+, bzip2
+, libjpeg
+, SDL2
+, SDL2_net
+, SDL2_mixer
+, gtk3
+}:
 
 stdenv.mkDerivation rec {
   pname = "ecwolf";
-  version = "1.3.3";
+  version = "1.4.1";
 
-  src = fetchurl {
-    url = "https://maniacsvault.net/ecwolf/files/ecwolf/1.x/${pname}-${version}-src.tar.xz";
-    sha256 = "1sbdv672dz47la5a5qwmdi1v258k9kc5dkx7cdj2b6gk8nbm2srl";
+  src = fetchFromBitbucket {
+    owner = pname;
+    repo = pname;
+    rev = version;
+    sha256 = "V2pSP8i20zB50WtUMujzij+ISSupdQQ/oCYYrOaTU1g=";
   };
 
-  nativeBuildInputs = [ cmake copyDesktopItems pkg-config ];
-  buildInputs = [ zlib bzip2 libjpeg SDL SDL_mixer gtk2 ];
+  nativeBuildInputs = [ cmake copyDesktopItems pkg-config ]
+    ++ lib.optionals stdenv.isDarwin [ makeWrapper ];
+  buildInputs = [ zlib bzip2 libjpeg SDL2 SDL2_net SDL2_mixer gtk3 ];
 
-  desktopItems = [
-    (makeDesktopItem {
-      name = "ecwolf";
-      exec = "ecwolf";
-      comment = "Enhanced Wolfenstein 3D port";
-      desktopName = "Wolfenstein 3D";
-      categories = [ "Game" ];
-    })
-  ];
+  NIX_LDFLAGS = lib.optionalString stdenv.isDarwin "-framework AppKit";
 
-  # Change the location where the ecwolf executable looks for the ecwolf.pk3
-  # file.
-  #
-  # By default, it expects the PK3 file to reside in the same directory as the
-  # executable, which is not desirable.
-  # We will adjust the code so that it can be retrieved from the share/
-  # directory.
-
-  preConfigure = ''
-    sed -i -e "s|ecwolf.pk3|$out/share/ecwolf/ecwolf.pk3|" src/version.h
-  ''
-  # Disable app bundle creation on Darwin. It fails, and it is not needed to run it from the Nix store
-  + lib.optionalString stdenv.isDarwin ''
-    sed -i -e "s|include(\''${CMAKE_CURRENT_SOURCE_DIR}/macosx/install.txt)||" src/CMakeLists.txt
-  '';
-
-  # Install the required PK3 file in the required data directory
-  postInstall = ''
-    mkdir -p $out/share/ecwolf
-    cp ecwolf.pk3 $out/share/ecwolf
+  # ECWolf installs its binary to the games/ directory, but Nix only adds bin/
+  # directories to the PATH.
+  postInstall = lib.optionalString stdenv.isLinux ''
+    mv "$out/games" "$out/bin"
+  '' + lib.optionalString stdenv.isDarwin ''
+    mkdir -p $out/{Applications,bin}
+    cp -R ecwolf.app $out/Applications
+    makeWrapper $out/{Applications/ecwolf.app/Contents/MacOS,bin}/ecwolf
   '';
 
   meta = with lib; {
     description = "Enhanched SDL-based port of Wolfenstein 3D for various platforms";
     homepage = "https://maniacsvault.net/ecwolf/";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ sander ];
+    maintainers = with maintainers; [ jayman2000 sander ];
     platforms = platforms.all;
   };
 }

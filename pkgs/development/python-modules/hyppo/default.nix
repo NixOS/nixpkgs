@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "neurodata";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-DQ5DrQrFBJ3dnGAjD1c/7GCJeR3g+aL2poR4hwOvmPA=";
+    hash = "sha256-DQ5DrQrFBJ3dnGAjD1c/7GCJeR3g+aL2poR4hwOvmPA=";
   };
 
   propagatedBuildInputs = [
@@ -33,7 +33,7 @@ buildPythonPackage rec {
     scipy
   ];
 
-  checkInputs = [ pytestCheckHook matplotlib seaborn ];
+  nativeCheckInputs = [ pytestCheckHook matplotlib seaborn ];
   disabledTestPaths = [
     "docs"
     "benchmarks"

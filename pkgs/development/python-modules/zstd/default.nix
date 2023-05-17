@@ -4,11 +4,11 @@
 
 buildPythonPackage rec {
   pname = "zstd";
-  version = "1.5.2.6";
+  version = "1.5.4.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-9ECFjRmIkOX/UX3/MtFejDG7c1BqiW+br20BTv5i9/w=";
+    hash = "sha256-oNEd9wqXhSk0G1duaaTwsqI+dGaG4k+bkCYKM85JBC0=";
   };
 
   postPatch = ''
@@ -31,7 +31,7 @@ buildPythonPackage rec {
   VERSION = zstd.version;
   PKG_VERSION = version;
 
-  checkInputs = [ pytest ];
+  nativeCheckInputs = [ pytest ];
   checkPhase = ''
     pytest
   '';

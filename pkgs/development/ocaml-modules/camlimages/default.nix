@@ -1,4 +1,4 @@
-{ lib, fetchFromGitLab, buildDunePackage, dune-configurator, cppo
+{ lib, fetchFromGitLab, buildDunePackage, findlib, dune-configurator, cppo
 , graphics, lablgtk, stdio
 }:
 
@@ -6,9 +6,9 @@ buildDunePackage rec {
   pname = "camlimages";
   version = "5.0.4";
 
-  useDune2 = true;
+  duneVersion = "3";
 
-  minimumOCamlVersion = "4.07";
+  minimalOCamlVersion = "4.07";
 
   src = fetchFromGitLab {
     owner = "camlspotter";
@@ -17,10 +17,8 @@ buildDunePackage rec {
     sha256 = "1m2c76ghisg73dikz2ifdkrbkgiwa0hcmp21f2fm2rkbf02rq3f4";
   };
 
-  strictDeps = true;
-
   nativeBuildInputs = [ cppo ];
-  buildInputs = [ dune-configurator graphics lablgtk stdio ];
+  buildInputs = [ dune-configurator findlib graphics lablgtk stdio ];
 
   meta = with lib; {
     branch = "5.0";

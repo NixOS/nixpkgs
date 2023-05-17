@@ -1,14 +1,3 @@
-diff --git a/configure.ac b/configure.ac
---- a/configure.ac
-+++ b/configure.ac
-@@ -475,6 +475,7 @@
- 
- 
- AC_CONFIG_FILES([ data/gsmartcontrol.desktop data/gsmartcontrol.appdata.xml \
-+	data/org.gsmartcontrol.policy \
- 	data/nsis/distribution.txt data/nsis/gsmartcontrol.nsi \
- 	debian.dist/changelog \
- 	src/gsc_winres.rc src/gsmartcontrol.exe.manifest \
 diff --git a/data/gsmartcontrol-root.in b/data/gsmartcontrol-root.in
 --- a/data/gsmartcontrol-root.in
 +++ b/data/gsmartcontrol-root.in
@@ -29,20 +18,6 @@ diff --git a/data/gsmartcontrol-root.in b/data/gsmartcontrol-root.in
 +EXTRA_PATHS="/usr/bin:/usr/sbin:/usr/local/sbin:@prefix@/bin";
  export PATH="$EXTRA_PATHS:$PATH"
  
- 
-diff --git a/data/org.gsmartcontrol.policy b/data/org.gsmartcontrol.policy.in
-rename from data/org.gsmartcontrol.policy
-rename to data/org.gsmartcontrol.policy.in
---- a/data/org.gsmartcontrol.policy
-+++ b/data/org.gsmartcontrol.policy.in
-@@ -12,7 +12,7 @@
-       <allow_inactive>auth_admin</allow_inactive>
-       <allow_active>auth_admin</allow_active>
-     </defaults>
--    <annotate key="org.freedesktop.policykit.exec.path">/usr/sbin/gsmartcontrol</annotate>
-+    <annotate key="org.freedesktop.policykit.exec.path">@prefix@/bin/gsmartcontrol</annotate>
-     <annotate key="org.freedesktop.policykit.exec.allow_gui">true</annotate>
-   </action>
  
 diff --git a/src/Makefile.am b/src/Makefile.am
 --- a/src/Makefile.am

@@ -1,14 +1,24 @@
-{ lib, stdenv, fetchFromGitHub,
-  qmake, qtbase, qtxmlpatterns, qtsvg, qtscxml, qtquick1, libGLU }:
+{ lib, stdenv, fetchFromGitHub, qmake, qtbase, qtxmlpatterns, qtsvg, qtscxml
+, qtquick1, libGLU }:
 
 stdenv.mkDerivation rec {
-  pname = "qxmledit" ;
-  version = "0.9.15" ;
-  src = fetchFromGitHub ( lib.importJSON ./qxmledit.json ) ;
-  nativeBuildInputs = [ qmake ] ;
-  buildInputs = [ qtbase qtxmlpatterns qtsvg qtscxml qtquick1 libGLU ] ;
-  qmakeFlags = [ "CONFIG+=release" ] ;
-  outputs = [ "out" "doc" ] ;
+  pname = "qxmledit";
+  version = "0.9.17";
+
+  outputs = [ "out" "doc" ];
+
+  src = fetchFromGitHub {
+    owner = "lbellonda";
+    repo = pname;
+    rev = version;
+    hash = "sha256-UzN5U+aC/uKokSdeUG2zv8+mkaH4ndYZ0sfzkpQ3l1M=";
+  };
+
+  nativeBuildInputs = [ qmake ];
+
+  buildInputs = [ qtbase qtxmlpatterns qtsvg qtscxml qtquick1 libGLU ];
+
+  qmakeFlags = [ "CONFIG+=release" ];
 
   preConfigure = ''
     export QXMLEDIT_INST_DATA_DIR="$out/share/data"
@@ -23,9 +33,10 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     broken = stdenv.isDarwin;
-    description = "Simple XML editor based on qt libraries" ;
+    description = "Simple XML editor based on qt libraries";
     homepage = "https://sourceforge.net/projects/qxmledit";
     license = licenses.lgpl2;
-    platforms = platforms.all;
-  } ;
+    platforms = platforms.unix;
+    changelog = "https://github.com/lbellonda/qxmledit/blob/${version}/NEWS";
+  };
 }

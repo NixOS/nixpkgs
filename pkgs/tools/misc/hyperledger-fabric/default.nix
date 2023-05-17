@@ -5,20 +5,22 @@
 
 buildGoModule rec {
   pname = "hyperledger-fabric";
-  version = "2.4.6";
+  version = "2.4.9";
 
   src = fetchFromGitHub {
     owner = "hyperledger";
     repo = "fabric";
     rev = "v${version}";
-    sha256 = "sha256-Q0qrDPih3M4YCzjhLFBy51qVvoICwwn1LJf63rYiUUg=";
+    hash = "sha256-tHchOki5xlu87onUCqdK/OQxJ6lcvhlUlLcQM6Fap+A=";
   };
 
-  vendorSha256 = null;
+  vendorHash = null;
 
   postPatch = ''
     # Broken
     rm cmd/peer/main_test.go
+    # Requires network
+    rm cmd/osnadmin/main_test.go
   '';
 
   subPackages = [

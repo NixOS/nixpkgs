@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "qualysclient";
-  version = "0.0.4.8.2";
+  version = "0.0.4.8.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -23,9 +23,14 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "woodtechie1428";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "0hrbp5ci1l06j709k5y3z3ad9dryvrkvmc2wyb4a01gw7qzry7ys";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-+SZICysgSC4XeXC9CCl6Yxb47V9c1eMp7KcpH8J7kK0=";
   };
+
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "version=__version__," 'version="${version}",'
+  '';
 
   propagatedBuildInputs = [
     certifi
@@ -36,7 +41,7 @@ buildPythonPackage rec {
     urllib3
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-mock
     pytestCheckHook
     responses
@@ -49,6 +54,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python SDK for interacting with the Qualys API";
     homepage = "https://qualysclient.readthedocs.io/";
+    changelog = "https://github.com/woodtechie1428/qualysclient/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };

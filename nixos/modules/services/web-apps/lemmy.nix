@@ -6,9 +6,7 @@ let
 in
 {
   meta.maintainers = with maintainers; [ happysalada ];
-  # Don't edit the docbook xml directly, edit the md and generate it:
-  # `pandoc lemmy.md -t docbook --top-level-division=chapter --extract-media=media -f markdown+smart > lemmy.xml`
-  meta.doc = ./lemmy.xml;
+  meta.doc = ./lemmy.md;
 
   imports = [
     (mkRemovedOptionModule [ "services" "lemmy" "jwtSecretPath" ] "As of v0.13.0, Lemmy auto-generates the JWT secret.")
@@ -158,8 +156,8 @@ in
         };
 
         documentation = [
-          "https://join-lemmy.org/docs/en/administration/from_scratch.html"
-          "https://join-lemmy.org/docs"
+          "https://join-lemmy.org/docs/en/admins/from_scratch.html"
+          "https://join-lemmy.org/docs/en/"
         ];
 
         wantedBy = [ "multi-user.target" ];
@@ -187,8 +185,8 @@ in
         };
 
         documentation = [
-          "https://join-lemmy.org/docs/en/administration/from_scratch.html"
-          "https://join-lemmy.org/docs"
+          "https://join-lemmy.org/docs/en/admins/from_scratch.html"
+          "https://join-lemmy.org/docs/en/"
         ];
 
         wantedBy = [ "multi-user.target" ];

@@ -3,39 +3,67 @@
 , stdenv
 , rustPlatform
 , fetchCrate
-, nasm
+, pkg-config
 , cargo-c
+, libgit2
+, nasm
+, zlib
 , libiconv
 , Security
+, buildPackages
 }:
 
 let
   rustTargetPlatformSpec = rust.toRustTargetSpec stdenv.hostPlatform;
+
+  # TODO: if another package starts using cargo-c (seems likely),
+  # factor this out into a makeCargoChook expression in
+  # pkgs/build-support/rust/hooks/default.nix
+  ccForBuild = "${buildPackages.stdenv.cc}/bin/${buildPackages.stdenv.cc.targetPrefix}cc";
+  cxxForBuild = "${buildPackages.stdenv.cc}/bin/${buildPackages.stdenv.cc.targetPrefix}c++";
+  ccForHost = "${stdenv.cc}/bin/${stdenv.cc.targetPrefix}cc";
+  cxxForHost = "${stdenv.cc}/bin/${stdenv.cc.targetPrefix}c++";
+  rustBuildPlatform = rust.toRustTarget stdenv.buildPlatform;
+  rustTargetPlatform = rust.toRustTarget stdenv.hostPlatform;
+  setEnvVars = ''
+    env \
+      "CC_${rustBuildPlatform}"="${ccForBuild}" \
+      "CXX_${rustBuildPlatform}"="${cxxForBuild}" \
+      "CC_${rustTargetPlatform}"="${ccForHost}" \
+      "CXX_${rustTargetPlatform}"="${cxxForHost}" \
+  '';
+
 in rustPlatform.buildRustPackage rec {
   pname = "rav1e";
-  version = "0.6.1";
+  version = "0.6.4";
 
   src = fetchCrate {
     inherit pname version;
-    sha256 = "sha256-70O9/QRADaEYVvZjEfuBOxPF8lCZ138L2fbFWpj3VUw=";
+    sha256 = "sha256-G7o82MAZmMOfs1wp3AVUgXxDW6Txuc0qTm5boRpXF6g=";
   };
 
-  cargoHash = "sha256-iHOmItooNsGq6iTIb9M5IPXMwYh2nQ03qfjomkgCdgw=";
+  cargoHash = "sha256-12bePpI8z35gzCHGKDpaGUVvosQqijP60NCgElHDsyw=";
 
-  nativeBuildInputs = [ nasm cargo-c ];
+  depsBuildBuild = [ pkg-config ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [
+  nativeBuildInputs = [ cargo-c libgit2 nasm ];
+
+  buildInputs = [
+    zlib
+  ] ++ lib.optionals stdenv.isDarwin [
     libiconv
     Security
   ];
 
   checkType = "debug";
 
-  postBuild = ''
+  postBuild =  ''
+    ${setEnvVars} \
     cargo cbuild --release --frozen --prefix=${placeholder "out"} --target ${rustTargetPlatformSpec}
   '';
 
   postInstall = ''
+    ${setEnvVars} \
     cargo cinstall --release --frozen --prefix=${placeholder "out"} --target ${rustTargetPlatformSpec}
   '';
 

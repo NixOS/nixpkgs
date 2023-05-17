@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "rhoas";
-  version = "0.51.7";
+  version = "0.53.0";
 
   src = fetchFromGitHub {
     owner = "redhat-developer";
     repo = "app-services-cli";
     rev = "v${version}";
-    sha256 = "sha256-sgAr9v3nkMZ8linvR5AhYZV0NQuVqMnueGOo/KLqPc0=";
+    sha256 = "sha256-9fydRgp2u1LWf0lEDMi1OxxFURd14oKCBDKACqrgWII=";
   };
 
-  vendorSha256 = null;
+  vendorHash = null;
 
   ldflags = [
     "-s"

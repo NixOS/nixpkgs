@@ -10,22 +10,30 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "mozphab";
-  version = "1.1.0";
-  format = "setuptools";
+  version = "1.4.3";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "mozilla-conduit";
     repo = "review";
     rev = "refs/tags/${version}";
-    hash = "sha256-vLHikGjTYOeXd6jDRsoCkq3i0eh6Ttd4KdvlixjzdZ4=";
+    hash = "sha256-FUHT4MPzSxO3MCNYWodNxvFR2kL0P4eGmSHPtCt0Cug=";
   };
 
   postPatch = ''
-    substituteInPlace setup.py \
+    substituteInPlace pyproject.toml \
       --replace "glean-sdk>=50.0.1,==50.*" "glean-sdk"
   '';
 
+  nativeBuildInputs = with python3.pkgs; [
+    setuptools
+    setuptools-scm
+  ];
+
+  env.SETUPTOOLS_SCM_PRETEND_VERSION = version;
+
   propagatedBuildInputs = with python3.pkgs; [
+    colorama
     distro
     glean-sdk
     packaging
@@ -34,7 +42,7 @@ python3.pkgs.buildPythonApplication rec {
     setuptools
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     git
     mercurial
     patch

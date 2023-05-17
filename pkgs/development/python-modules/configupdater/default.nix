@@ -12,7 +12,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit version;
     pname = "ConfigUpdater";
-    sha256 = "sha256-RvDHTXPvpyN3Z2S0PJc59oBSSV3T1zQxnB0OtYUR8Vs=";
+    hash = "sha256-RvDHTXPvpyN3Z2S0PJc59oBSSV3T1zQxnB0OtYUR8Vs=";
   };
 
   postPatch = ''
@@ -24,7 +24,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "configupdater" ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

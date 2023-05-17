@@ -11,7 +11,7 @@ buildPythonPackage rec {
     owner = "Ultimaker";
     repo = "libArcus";
     rev = version;
-    sha256 = "sha256-X33ptwYj9YkVWqUDPP+Ic+hoIb+rwsLdQXvHLA9z+3w=";
+    hash = "sha256-X33ptwYj9YkVWqUDPP+Ic+hoIb+rwsLdQXvHLA9z+3w=";
   };
 
   patches = [

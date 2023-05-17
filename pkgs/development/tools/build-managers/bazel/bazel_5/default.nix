@@ -2,8 +2,6 @@
 , runCommand, runCommandCC, makeWrapper, recurseIntoAttrs
 # this package (through the fixpoint glass)
 , bazel_self
-# needed only for the updater
-, bazel_4
 , lr, xe, zip, unzip, bash, writeCBin, coreutils
 , which, gawk, gnused, gnutar, gnugrep, gzip, findutils
 # updater
@@ -26,16 +24,19 @@
 }:
 
 let
-  version = "5.2.0";
+  version = "5.4.1";
   sourceRoot = ".";
 
   src = fetchurl {
     url = "https://github.com/bazelbuild/bazel/releases/download/${version}/bazel-${version}-dist.zip";
-    sha256 = "sha256-ggqU27FAce1tjCZs8MCA7LJlpe6mUwdXlInEZiwtWCo=";
+    hash = "sha256-3P9pNXVqp6yk/Fabsr0m4VN/Cx9tG9pfKyAPqDXMUH8=";
   };
 
-  # Update with `eval $(nix-build -A bazel_5.updater)`,
-  # then add new dependencies from the dict in ./src-deps.json as required.
+  # Update with
+  # 1. export BAZEL_SELF=$(nix-build -A bazel_5)
+  # 2. update version and hash for sources above
+  # 3. `eval $(nix-build -A bazel_5.updater)`
+  # 4. add new dependencies from the dict in ./src-deps.json if required by failing build
   srcDeps = lib.attrsets.attrValues srcDepsSet;
   srcDepsSet =
     let
@@ -326,8 +327,8 @@ stdenv.mkDerivation rec {
     #!${runtimeShell}
     (cd "${src_for_updater}" &&
         BAZEL_USE_CPP_ONLY_TOOLCHAIN=1 \
-        "${bazel_4}"/bin/bazel \
-            query 'kind(http_archive, //external:all) + kind(http_file, //external:all) + kind(distdir_tar, //external:all) + kind(git_repository, //external:all)' \
+        "$BAZEL_SELF"/bin/bazel \
+            query 'kind(http_archive, //external:*) + kind(http_file, //external:*) + kind(distdir_tar, //external:*) + kind(git_repository, //external:*)' \
             --loading_phase_threads=1 \
             --output build) \
     | "${python3}"/bin/python3 "${./update-srcDeps.py}" \
@@ -621,6 +622,7 @@ stdenv.mkDerivation rec {
     }
 
     cd ./bazel_src
+    rm .bazelversion # this doesn't necessarily match the version we built
 
     # test whether $WORKSPACE_ROOT/tools/bazel works
 

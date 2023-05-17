@@ -9,7 +9,7 @@ Index: grantlee-5.1.0/templates/lib/templateloader.cpp
 -    if (file.exists()
 -        && !fi.canonicalFilePath().contains(
 -            QDir(d->m_templateDirs.at(i)).canonicalPath()))
--      return Template();
+-      return {};
      ++i;
    }
 

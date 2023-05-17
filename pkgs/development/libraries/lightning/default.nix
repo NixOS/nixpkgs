@@ -6,14 +6,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lightning";
-  version = "2.2.0";
+  version = "2.2.2";
 
   src = fetchurl {
     url = "mirror://gnu/lightning/${finalAttrs.pname}-${finalAttrs.version}.tar.gz";
-    hash = "sha256-TjmE/xzPC6MKmFIR1A/FwGsl8BTr3z2A0P49DIDdfA4=";
+    hash = "sha256-CsqCQt6tF9YhF7z8sHjmqeqFbMgXQoE8noOUvM5zs+I=";
   };
 
-  checkInputs = [ libopcodes ];
+  nativeCheckInputs = [ libopcodes ];
 
   doCheck = true;
 

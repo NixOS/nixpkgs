@@ -1,6 +1,7 @@
 { lib, stdenv
 , fetchurl
 , makeDesktopItem
+, writeText
 
 # Common run-time dependencies
 , zlib
@@ -26,6 +27,7 @@
 , pulseaudioSupport ? mediaSupport
 , libpulseaudio
 , apulse
+, alsa-lib
 
 # Media support (implies audio support)
 , mediaSupport ? true
@@ -53,12 +55,11 @@
 , extraPrefs ? ""
 }:
 
-with lib;
-
 let
-  libPath = makeLibraryPath libPkgs;
+  libPath = lib.makeLibraryPath libPkgs;
 
   libPkgs = [
+    alsa-lib
     atk
     cairo
     dbus
@@ -78,18 +79,18 @@ let
     stdenv.cc.libc
     zlib
   ]
-  ++ optionals pulseaudioSupport [ libpulseaudio ]
-  ++ optionals mediaSupport [
+  ++ lib.optionals pulseaudioSupport [ libpulseaudio ]
+  ++ lib.optionals mediaSupport [
     ffmpeg
   ];
 
   # Library search path for the fte transport
-  fteLibPath = makeLibraryPath [ stdenv.cc.cc gmp ];
+  fteLibPath = lib.makeLibraryPath [ stdenv.cc.cc gmp ];
 
   # Upstream source
-  version = "11.5.8";
+  version = "12.0.6";
 
-  lang = "en-US";
+  lang = "ALL";
 
   srcs = {
     x86_64-linux = fetchurl {
@@ -99,7 +100,7 @@ let
         "https://tor.eff.org/dist/torbrowser/${version}/tor-browser-linux64-${version}_${lang}.tar.xz"
         "https://tor.calyxinstitute.org/dist/torbrowser/${version}/tor-browser-linux64-${version}_${lang}.tar.xz"
       ];
-      sha256 = "sha256-/KK9oTijk5dEziAwp5966NaM2V4k1mtBjTJq88Ct7N0=";
+      hash = "sha256-MLy/T8A+udasITWYSzaqXSFhA3PJsG7DnKJG0b9UYvA=";
     };
 
     i686-linux = fetchurl {
@@ -109,9 +110,22 @@ let
         "https://tor.eff.org/dist/torbrowser/${version}/tor-browser-linux32-${version}_${lang}.tar.xz"
         "https://tor.calyxinstitute.org/dist/torbrowser/${version}/tor-browser-linux32-${version}_${lang}.tar.xz"
       ];
-      sha256 = "sha256-TGdJ5yIeo0YQ4XSsb9lv3vuW6qEjhFe7KBmkjYO6fAc=";
+      hash = "sha256-njJB5k7rQxRyL7foU8fLCQxy43dJvV26oKvQ+fw6U0o=";
     };
   };
+
+  distributionIni = writeText "distribution.ini" (lib.generators.toINI {} {
+    # Some light branding indicating this build uses our distro preferences
+    Global = {
+      id = "nixos";
+      version = "1.0";
+      about = "Tor Browser for NixOS";
+    };
+  });
+
+  policiesJson = writeText "policies.json" (builtins.toJSON {
+    policies.DisableAppUpdate = true;
+  });
 in
 stdenv.mkDerivation rec {
   pname = "tor-browser-bundle-bin";
@@ -132,7 +146,9 @@ stdenv.mkDerivation rec {
     categories = [ "Network" "WebBrowser" "Security" ];
   };
 
-  buildCommand = ''
+  buildPhase = ''
+    runHook preBuild
+
     # For convenience ...
     TBB_IN_STORE=$out/share/tor-browser
     interp=$(< $NIX_CC/nix-support/dynamic-linker)
@@ -156,7 +172,7 @@ stdenv.mkDerivation rec {
     libPath=${libPath}:$TBB_IN_STORE:$TBB_IN_STORE/TorBrowser/Tor
 
     # apulse uses a non-standard library path.  For now special-case it.
-    ${optionalString (audioSupport && !pulseaudioSupport) ''
+    ${lib.optionalString (audioSupport && !pulseaudioSupport) ''
       libPath=${apulse}/lib/apulse:$libPath
     ''}
 
@@ -209,7 +225,7 @@ stdenv.mkDerivation rec {
 
     // Insist on using IPC for communicating with Tor
     //
-    // Defaults to creating \$TBB_HOME/TorBrowser/Data/Tor/{socks,control}.socket
+    // Defaults to creating \$XDG_RUNTIME_DIR/Tor/{socks,control}.socket
     lockPref("extensions.torlauncher.control_port_use_ipc", true);
     lockPref("extensions.torlauncher.socks_port_use_ipc", true);
 
@@ -224,7 +240,7 @@ stdenv.mkDerivation rec {
       clearPref("security.sandbox.content.write_path_whitelist");
     ''}
 
-    ${optionalString (extraPrefs != "") ''
+    ${lib.optionalString (extraPrefs != "") ''
       ${extraPrefs}
     ''}
     EOF
@@ -251,14 +267,14 @@ stdenv.mkDerivation rec {
     GeoIPv6File $TBB_IN_STORE/TorBrowser/Data/Tor/geoip6
     EOF
 
-    WRAPPER_LD_PRELOAD=${optionalString useHardenedMalloc
+    WRAPPER_LD_PRELOAD=${lib.optionalString useHardenedMalloc
       "${graphene-hardened-malloc}/lib/libhardened_malloc.so"}
 
-    WRAPPER_XDG_DATA_DIRS=${concatMapStringsSep ":" (x: "${x}/share") [
+    WRAPPER_XDG_DATA_DIRS=${lib.concatMapStringsSep ":" (x: "${x}/share") [
       gnome.adwaita-icon-theme
       shared-mime-info
     ]}
-    WRAPPER_XDG_DATA_DIRS+=":"${concatMapStringsSep ":" (x: "${x}/share/gsettings-schemas/${x.name}") [
+    WRAPPER_XDG_DATA_DIRS+=":"${lib.concatMapStringsSep ":" (x: "${x}/share/gsettings-schemas/${x.name}") [
       glib
       gsettings-desktop-schemas
       gtk3
@@ -270,12 +286,12 @@ stdenv.mkDerivation rec {
     #! ${runtimeShell}
     set -o errexit -o nounset
 
-    PATH=${makeBinPath [ coreutils ]}
+    PATH=${lib.makeBinPath [ coreutils ]}
     export LC_ALL=C
     export LOCALE_ARCHIVE=${glibcLocales}/lib/locale/locale-archive
 
     # Enter local state directory.
-    REAL_HOME=\$HOME
+    REAL_HOME=\''${HOME%/}
     TBB_HOME=\''${TBB_HOME:-''${XDG_DATA_HOME:-\$REAL_HOME/.local/share}/tor-browser}
     HOME=\$TBB_HOME
 
@@ -293,13 +309,9 @@ stdenv.mkDerivation rec {
     # TBB will fail if ownership is too permissive
     chmod 0700 "\$HOME/TorBrowser/Data/Tor"
 
-    # Initialize the browser profile state.  Note that the only data
-    # copied from the Store payload is the initial bookmark file, which is
-    # never updated once created.  All other files under user's profile
-    # dir are generated by TBB.
+    # Initialize the browser profile state.
+    # All files under user's profile dir are generated by TBB.
     mkdir -p "\$HOME/TorBrowser/Data/Browser/profile.default"
-    cp -u --no-preserve=mode,owner "$TBB_IN_STORE/TorBrowser/Data/Browser/profile.default/bookmarks.html" \
-      "\$HOME/TorBrowser/Data/Browser/profile.default/bookmarks.html"
 
     # Clear some files if the last known store path is different from the new one
     : "\''${KNOWN_STORE_PATH:=\$HOME/known-store-path}"
@@ -317,7 +329,7 @@ stdenv.mkDerivation rec {
     : "\''${XDG_RUNTIME_DIR:=/run/user/\$(id -u)}"
     : "\''${XDG_CONFIG_HOME:=\$REAL_HOME/.config}"
 
-    ${optionalString pulseaudioSupport ''
+    ${lib.optionalString pulseaudioSupport ''
       # Figure out some envvars for pulseaudio
       : "\''${PULSE_SERVER:=\$XDG_RUNTIME_DIR/pulse/native}"
       : "\''${PULSE_COOKIE:=\$XDG_CONFIG_HOME/pulse/cookie}"
@@ -327,11 +339,15 @@ stdenv.mkDerivation rec {
     # chance that TBB would continue using old font files.
     rm -rf "\$HOME/.cache/fontconfig"
 
+    # Workaround a bug in 12.0.X that Tor directories are not cleaned up and tor gets confused where its socket is
+    rm -rf \$XDG_RUNTIME_DIR/Tor*
+
     # Manually specify data paths (by default TB attempts to create these in the store)
     {
       echo "user_pref(\"extensions.torlauncher.toronionauthdir_path\", \"\$HOME/TorBrowser/Data/Tor/onion-auth\");"
       echo "user_pref(\"extensions.torlauncher.torrc_path\", \"\$HOME/TorBrowser/Data/Tor/torrc\");"
       echo "user_pref(\"extensions.torlauncher.tordatadir_path\", \"\$HOME/TorBrowser/Data/Tor\");"
+      echo "user_pref(\"network.proxy.socks\", \"file://\$XDG_RUNTIME_DIR/Tor/socks.socket\");"
     } >> "\$HOME/TorBrowser/Data/Browser/profile.default/prefs.js"
 
     # Lift-off
@@ -376,7 +392,11 @@ stdenv.mkDerivation rec {
       APULSE_PLAYBACK_DEVICE="\''${APULSE_PLAYBACK_DEVICE:-plug:dmix}" \
       \
       TOR_SKIP_LAUNCH="\''${TOR_SKIP_LAUNCH:-}" \
+      TOR_CONTROL_HOST="\''${TOR_CONTROL_HOST:-}" \
       TOR_CONTROL_PORT="\''${TOR_CONTROL_PORT:-}" \
+      TOR_CONTROL_COOKIE_AUTH_FILE="\''${TOR_CONTROL_COOKIE_AUTH_FILE:-}" \
+      TOR_CONTROL_PASSWD="\''${TOR_CONTROL_PASSWD:-}" \
+      TOR_SOCKS_HOST="\''${TOR_SOCKS_HOST:-}" \
       TOR_SOCKS_PORT="\''${TOR_SOCKS_PORT:-}" \
       \
       FONTCONFIG_FILE="$FONTCONFIG_FILE" \
@@ -413,6 +433,18 @@ stdenv.mkDerivation rec {
     echo "Checking tor-browser wrapper ..."
       TBB_HOME=$(mktemp -d) \
       $out/bin/tor-browser --version >/dev/null
+
+    runHook postBuild
+  '';
+
+  installPhase = ''
+    runHook preInstall
+
+    # Install distribution customizations
+    install -Dvm644 ${distributionIni} $out/share/tor-browser/distribution/distribution.ini
+    install -Dvm644 ${policiesJson} $out/share/tor-browser/distribution/policies.json
+
+    runHook postInstall
   '';
 
   meta = with lib; {

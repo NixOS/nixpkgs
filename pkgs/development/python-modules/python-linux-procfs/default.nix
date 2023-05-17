@@ -7,7 +7,7 @@ buildPythonPackage rec {
   src = fetchgit {
     url = "https://git.kernel.org/pub/scm/libs/python/${pname}/${pname}.git";
     rev = "v${version}";
-    sha256 = "sha256-PPgMlL9oj4HYUsr444ZrGo1LSZBl9hL5SE98IASUpbc=";
+    hash = "sha256-PPgMlL9oj4HYUsr444ZrGo1LSZBl9hL5SE98IASUpbc=";
   };
 
   propagatedBuildInputs = [ six ];

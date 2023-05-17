@@ -8,6 +8,7 @@
 , pytestCheckHook
 , pythonOlder
 , setuptools-scm
+, six
 , typecode
 }:
 
@@ -23,6 +24,12 @@ buildPythonPackage rec {
     hash = "sha256-gIGTkum8+BKfdNiQT+ipjA3+0ngjVoQnNygsAoMRPYg=";
   };
 
+  postPatch = ''
+    # PEP440 support was removed in newer setuptools, https://github.com/nexB/extractcode/pull/46
+    substituteInPlace setup.cfg \
+      --replace ">=3.6.*" ">=3.6"
+  '';
+
   dontConfigure = true;
 
   nativeBuildInputs = [
@@ -34,9 +41,10 @@ buildPythonPackage rec {
     patch
     extractcode-libarchive
     extractcode-7z
+    six
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     pytest-xdist
   ];
@@ -58,6 +66,8 @@ buildPythonPackage rec {
     "test_get_extractor_qcow2"
     # WARNING  patch:patch.py:450 inconsistent line ends in patch hunks
     "test_patch_info_patch_patches_windows_plugin_explorer_patch"
+    # AssertionError: assert [['linux-2.6...._end;', ...]]] == [['linux-2.6...._end;', ...]]]
+    "test_patch_info_patch_patches_misc_linux_st710x_patches_motorola_rootdisk_c_patch"
   ];
 
   pythonImportsCheck = [
@@ -65,9 +75,10 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "Universal archive extractor using z7zip, libarchve, other libraries and the Python standard library";
+    description = "Universal archive extractor using z7zip, libarchive, other libraries and the Python standard library";
     homepage = "https://github.com/nexB/extractcode";
+    changelog = "https://github.com/nexB/extractcode/releases/tag/v${version}";
     license = licenses.asl20;
-    maintainers = teams.determinatesystems.members;
+    maintainers = [ ];
   };
 }

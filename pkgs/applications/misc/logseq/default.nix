@@ -1,12 +1,20 @@
-{ lib, stdenv, fetchurl, appimageTools, makeWrapper, electron, git }:
+{ lib
+, stdenv
+, fetchurl
+, appimageTools
+, makeWrapper
+, electron
+, git
+, nix-update-script
+}:
 
 stdenv.mkDerivation rec {
   pname = "logseq";
-  version = "0.8.12";
+  version = "0.9.6";
 
   src = fetchurl {
     url = "https://github.com/logseq/logseq/releases/download/${version}/logseq-linux-x64-${version}.AppImage";
-    sha256 = "sha256-I1jGPNGlZ53N3ZlN9nN/GSgQIfdoUeclyuMl+PpNVY4=";
+    hash = "sha256-YC6oUKD48mKlX/bHWPMKm+0Ub0/5dnXmBFnVIGqzb/g=";
     name = "${pname}-${version}.AppImage";
   };
 
@@ -33,9 +41,12 @@ stdenv.mkDerivation rec {
     rm -rf $out/share/${pname}/resources/app/node_modules/dugite/git
     chmod -w $out/share/${pname}/resources/app/node_modules/dugite
 
+    mkdir -p $out/share/pixmaps
+    ln -s $out/share/${pname}/resources/app/icons/logseq.png $out/share/pixmaps/${pname}.png
+
     substituteInPlace $out/share/applications/${pname}.desktop \
       --replace Exec=Logseq Exec=${pname} \
-      --replace Icon=Logseq Icon=$out/share/${pname}/resources/app/icons/logseq.png
+      --replace Icon=Logseq Icon=${pname}
 
     runHook postInstall
   '';
@@ -44,16 +55,18 @@ stdenv.mkDerivation rec {
     # set the env "LOCAL_GIT_DIRECTORY" for dugite so that we can use the git in nixpkgs
     makeWrapper ${electron}/bin/electron $out/bin/${pname} \
       --set "LOCAL_GIT_DIRECTORY" ${git} \
-      --add-flags $out/share/${pname}/resources/app
+      --add-flags $out/share/${pname}/resources/app \
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"
   '';
 
-  passthru.updateScript = ./update.sh;
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "A local-first, non-linear, outliner notebook for organizing and sharing your personal knowledge base";
     homepage = "https://github.com/logseq/logseq";
+    changelog = "https://github.com/logseq/logseq/releases/tag/${version}";
     license = licenses.agpl3Plus;
-    maintainers = with maintainers; [ weihua ];
+    maintainers = with maintainers; [ ];
     platforms = [ "x86_64-linux" ];
   };
 }

@@ -11,13 +11,13 @@
 
 buildPythonPackage rec {
   pname = "mkdocs-minify";
-  version = "0.5.0";
+  version = "0.6.3";
 
   src = fetchFromGitHub {
     owner = "byrnereese";
     repo = "${pname}-plugin";
-    rev = version;
-    sha256 = "sha256-7v4uX711KAKuXFeVdLuIdGQi2i+dL4WX7+Zd4H1L3lM=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-ajXkEKLBC86Y8YzDCZXd6x6QtLLrCDJkb6kDrRE536o=";
   };
 
   propagatedBuildInputs = [
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     mkdocs
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     mkdocs
     pytestCheckHook
   ];

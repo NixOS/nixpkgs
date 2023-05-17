@@ -34,7 +34,7 @@ buildPythonPackage rec {
     six
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     freezegun
     pytest-mock
     pytestCheckHook

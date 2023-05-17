@@ -17,8 +17,6 @@
 , libdrm
 , libjpeg_turbo
 , libopus
-, withLibsoup2 ? false
-, libsoup
 , libsoup_3
 , libusb1
 , lz4
@@ -27,7 +25,6 @@
 , ninja
 , openssl
 , perl
-, phodav_2_0
 , phodav
 , pixman
 , pkg-config
@@ -43,7 +40,7 @@
 }:
 
 # If this package is built with polkit support (withPolkit=true),
-# usb redirection reqires spice-client-glib-usb-acl-helper to run setuid root.
+# usb redirection requires spice-client-glib-usb-acl-helper to run setuid root.
 # The helper confirms via polkit that the user has an active session,
 # then adds a device acl entry for that user.
 # Example NixOS config to create a setuid wrapper for the helper:
@@ -65,24 +62,14 @@
 
 stdenv.mkDerivation rec {
   pname = "spice-gtk";
-  version = "0.41";
+  version = "0.42";
 
   outputs = [ "out" "dev" "devdoc" "man" ];
 
   src = fetchurl {
     url = "https://www.spice-space.org/download/gtk/${pname}-${version}.tar.xz";
-    sha256 = "sha256-2Pi1y+qRhHAu64zCdqZ9cqzbbjbnxzNJ+4RF5byglp8=";
+    sha256 = "sha256-k4ARfxgRrR+qGBLLZgJHm2KQ1KDYzEQtREJ/f2wOelg=";
   };
-
-  postPatch = ''
-    # get rid of absolute path to helper in store so we can use a setuid wrapper
-    substituteInPlace src/usb-acl-helper.c \
-      --replace 'ACL_HELPER_PATH"/' '"'
-    # don't try to setcap/suid in a nix builder
-    substituteInPlace src/meson.build \
-      --replace "meson.add_install_script('../build-aux/setcap-or-suid'," \
-      "# meson.add_install_script('../build-aux/setcap-or-suid',"
-  '';
 
   depsBuildBuild = [
     pkg-config
@@ -120,11 +107,11 @@ stdenv.mkDerivation rec {
     libcacard
     libjpeg_turbo
     libopus
-    (if withLibsoup2 then libsoup else libsoup_3)
+    libsoup_3
     libusb1
     lz4
     openssl
-    (if withLibsoup2 then phodav_2_0 else phodav)
+    phodav
     pixman
     spice-protocol
     usbredir
@@ -148,9 +135,22 @@ stdenv.mkDerivation rec {
     "-Dpolkit=disabled"
   ] ++ lib.optionals (!stdenv.isLinux) [
     "-Dlibcap-ng=disabled"
+    "-Degl=disabled"
   ] ++ lib.optionals stdenv.hostPlatform.isMusl [
     "-Dcoroutine=gthread" # Fixes "Function missing:makecontext"
   ];
+
+  postPatch = ''
+    # get rid of absolute path to helper in store so we can use a setuid wrapper
+    substituteInPlace src/usb-acl-helper.c \
+      --replace 'ACL_HELPER_PATH"/' '"'
+    # don't try to setcap/suid in a nix builder
+    substituteInPlace src/meson.build \
+      --replace "meson.add_install_script('../build-aux/setcap-or-suid'," \
+      "# meson.add_install_script('../build-aux/setcap-or-suid',"
+
+    patchShebangs subprojects/keycodemapdb/tools/keymap-gen
+  '';
 
   meta = with lib; {
     description = "GTK 3 SPICE widget";

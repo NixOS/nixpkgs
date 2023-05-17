@@ -1,16 +1,16 @@
-{ lib, buildDunePackage, fetchurl, mirage-protocols }:
+{ lib, buildDunePackage, fetchurl, tcpip }:
 
 buildDunePackage rec {
   pname = "mirage-stack";
-  version = "2.2.0";
-  useDune2 = true;
+  version = "4.0.0";
+  duneVersion = "3";
 
   src = fetchurl {
     url = "https://github.com/mirage/mirage-stack/releases/download/v${version}/mirage-stack-v${version}.tbz";
-    sha256 = "1qhi0ghcj4j3hw7yqn085ac6n18b6b66z5ih3k8p79m4cvn7cdq0";
+    hash = "sha256-q70zGQvT5KTqvL37bZjSD8Su0P72KCUesyfWJcI8zPw=";
   };
 
-  propagatedBuildInputs = [ mirage-protocols ];
+  propagatedBuildInputs = [ tcpip ];
 
   meta = {
     description = "MirageOS signatures for network stacks";

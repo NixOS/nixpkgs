@@ -1,19 +1,17 @@
 { lib
-, stdenv
 , fetchFromGitHub
-, fetchzip
 , mkYarnPackage
 , baseUrl ? null
 }:
 
 mkYarnPackage rec {
   pname = "synapse-admin";
-  version = "0.8.5";
+  version = "0.8.7";
   src = fetchFromGitHub {
     owner = "Awesome-Technologies";
     repo = pname;
     rev = version;
-    sha256 = "sha256-0miHtEJ5e8MaqGc4ezPvwhGjoCZyOE7md0DUCC/ZOfk=";
+    sha256 = "sha256-kvQBzrCu1sgDccKhr0i2DgDmO5z6u6s+vw5KymttoK4=";
   };
 
   yarnNix = ./yarn.nix;

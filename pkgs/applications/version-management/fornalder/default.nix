@@ -1,29 +1,29 @@
-{ fetchFromGitHub, rustPlatform, lib }:
+{ lib, rustPlatform, fetchFromGitHub, makeWrapper, gnuplot }:
 
 rustPlatform.buildRustPackage rec {
   pname = "fornalder";
-  version = "unstable-2022-07-23";
+  version = "unstable-2022-12-25";
 
   src = fetchFromGitHub {
     owner = "hpjansson";
     repo = pname;
-    rev = "44129f01910a9f16d97d0a3d8b1b376bf3338ea6";
-    sha256 = "sha256-YODgR98SnpL6SM2nKrnzhpsEzYQFqduqigua/SXhazk=";
+    rev = "3248128fe320d88183d17a65e936092e07d6529b";
+    sha256 = "sha256-IPSxVWJs4EhyBdA1NXpD8v3fusewt1ELpn/kbZt7c5Q=";
   };
 
-  cargoLock.lockFile = ./Cargo.lock;
+  cargoSha256 = "sha256-eK+oQbOQj8pKiOTXzIgRjzVB7Js8MMa9V6cF9D98Ftc=";
 
-  postPatch = ''
-    ln -s ${./Cargo.lock} Cargo.lock
+  nativeBuildInputs = [ makeWrapper ];
+
+  postInstall = ''
+    wrapProgram $out/bin/fornalder \
+      --suffix PATH : ${lib.makeBinPath [ gnuplot ]}
   '';
-
-  # tests don't typecheck
-  doCheck = false;
 
   meta = with lib; {
     description = "Visualize long-term trends in collections of Git repositories";
     homepage = "https://github.com/hpjansson/fornalder";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ astro ];
+    maintainers = with maintainers; [ astro figsoda ];
   };
 }

@@ -4,17 +4,19 @@
 , installShellFiles
 , buildGoModule
 , go
+, makeWrapper
+, viceroy
 }:
 
 buildGoModule rec {
   pname = "fastly";
-  version = "4.5.0";
+  version = "9.0.3";
 
   src = fetchFromGitHub {
     owner = "fastly";
     repo = "cli";
     rev = "refs/tags/v${version}";
-    hash = "sha256-l/EnlyrSofuk4/69R2VUdP6MyKOVAOI7cIOW1TLeBww=";
+    hash = "sha256-cR0XtTzdz400p/9b8NmFxWqsSMqLf3KJRekfkWbx/Zs=";
     # The git commit is part of the `fastly version` original output;
     # leave that output the same in nixpkgs. Use the `.git` directory
     # to retrieve the commit SHA, and remove the directory afterwards,
@@ -31,10 +33,11 @@ buildGoModule rec {
     "cmd/fastly"
   ];
 
-  vendorHash = "sha256-cXO5zhc9RZlweoU6pva2sBvcjNWBeFSUz+k9BbQpUX0=";
+  vendorHash = "sha256-Ch9TT5gPC8NpwuqkwHP+3HEFocWHrCZPC0T7+3VweVc=";
 
   nativeBuildInputs = [
     installShellFiles
+    makeWrapper
   ];
 
   # Flags as provided by the build automation of the project:
@@ -49,12 +52,17 @@ buildGoModule rec {
   ];
   preBuild = let
     cliConfigToml = fetchurl {
-      url = "https://web.archive.org/web/20221224152051/https://developer.fastly.com/api/internal/cli-config";
-      hash = "sha256-IjakfeqjHshlGoamRJTnhUC8cTVMIY63F3vO6I/ZHO4=";
+      url = "https://web.archive.org/web/20230412222811/https://developer.fastly.com/api/internal/cli-config";
+      hash = "sha256-NACjeBGOvBL6kUBZtSx4ChZgn7V69f4K2yyDCwTZsbU=";
     };
   in ''
     cp ${cliConfigToml} ./pkg/config/config.toml
     ldflags+=" -X github.com/fastly/cli/pkg/revision.GitCommit=$(cat COMMIT)"
+  '';
+
+  preFixup = ''
+    wrapProgram $out/bin/fastly --prefix PATH : ${lib.makeBinPath [ viceroy ]} \
+      --set FASTLY_VICEROY_USE_PATH 1
   '';
 
   postInstall = ''

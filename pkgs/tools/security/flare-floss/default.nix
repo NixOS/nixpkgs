@@ -10,7 +10,7 @@ let
         version = "4.4.2";
         src = o.src.override {
           inherit version;
-          sha256 = "sha256-46YvBSAXJEDKDcyCN0kxk4Ljd/N/FAoLme9F/suEv+c=";
+          hash = "sha256-46YvBSAXJEDKDcyCN0kxk4Ljd/N/FAoLme9F/suEv+c=";
         };
       });
 
@@ -19,7 +19,7 @@ let
         version = "2.5.1";
         src = o.src.override {
           inherit version;
-          sha256 = "sha256-EJzVhcrEEpf3EQPDxCrG73N58peI61TLdRvlpmO7I1o=";
+          hash = "sha256-EJzVhcrEEpf3EQPDxCrG73N58peI61TLdRvlpmO7I1o=";
         };
       });
     };
@@ -34,7 +34,7 @@ py.pkgs.buildPythonPackage rec {
     repo = "flare-floss";
     rev = "v${version}";
     fetchSubmodules = true; # for tests
-    sha256 = "sha256-V4OWYcISyRdjf8x93B6h2hJwRgmRmk32hr8TrgRDu8Q=";
+    hash = "sha256-V4OWYcISyRdjf8x93B6h2hJwRgmRmk32hr8TrgRDu8Q=";
   };
 
   postPatch = ''
@@ -55,7 +55,7 @@ py.pkgs.buildPythonPackage rec {
     vivisect
   ] ++ viv-utils.optional-dependencies.flirt;
 
-  checkInputs = with py.pkgs; [
+  nativeCheckInputs = with py.pkgs; [
     pytest-sugar
     pytestCheckHook
     pyyaml
@@ -70,6 +70,6 @@ py.pkgs.buildPythonPackage rec {
     description = "Automatically extract obfuscated strings from malware";
     homepage = "https://github.com/mandiant/flare-floss";
     license = licenses.asl20;
-    maintainers = teams.determinatesystems.members;
+    maintainers = [ ];
   };
 }

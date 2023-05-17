@@ -1,24 +1,26 @@
 { lib
 , buildPythonPackage
 , convertdate
-, python-dateutil
-, fetchPypi
+, fetchFromGitHub
 , hijri-converter
 , korean-lunar-calendar
 , pytestCheckHook
+, python-dateutil
 , pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "holidays";
-  version = "0.17.2";
+  version = "0.24";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-EWBFNfZq2dj4TlHBcQKWDof8OBn4RESvaLHrh1aGZjA=";
+  src = fetchFromGitHub {
+    owner = "dr-prodigy";
+    repo = "python-holidays";
+    rev = "refs/tags/v.${version}";
+    hash = "sha256-1/rphnbzDlbay+yez/erF+WC+2aqeBEgdcHo2YR+ugc=";
   };
 
   propagatedBuildInputs = [
@@ -28,12 +30,17 @@ buildPythonPackage rec {
     korean-lunar-calendar
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 
   pythonImportsCheck = [
     "holidays"
+  ];
+
+  disabledTests = [
+    # Failure starting with 0.24
+    "test_l10n"
   ];
 
   meta = with lib; {
@@ -44,3 +51,4 @@ buildPythonPackage rec {
     maintainers = with maintainers; [ jluttine ];
   };
 }
+

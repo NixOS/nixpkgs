@@ -35,7 +35,7 @@ python3.pkgs.buildPythonApplication rec {
     zulip
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     glibcLocales
   ] ++ (with python3.pkgs; [
     pytestCheckHook

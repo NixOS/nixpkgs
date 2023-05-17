@@ -9,7 +9,7 @@ buildPythonPackage rec {
     sha256 = "0avqpswfmw5b08xx3ib6zchc5bis390fn1v74vg7nnrkf1pb3qbd";
   };
 
-  checkInputs = [ pytest ];
+  nativeCheckInputs = [ pytest ];
 
   meta = with lib; {
     description = "C implementation of Python3 lru_cache for Python 2 and 3";

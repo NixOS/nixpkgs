@@ -1,17 +1,24 @@
-{ lib, buildDunePackage, fetchurl, duration, ipaddr, mirage-device, mirage-flow }:
+{ lib
+, buildDunePackage
+, fetchurl
+, arp
+, ethernet
+, ipaddr
+, tcpip
+}:
 
 buildDunePackage rec {
   pname = "mirage-protocols";
-  version = "5.0.0";
+  version = "8.0.0";
 
-  useDune2 = true;
+  duneVersion = "3";
 
   src = fetchurl {
     url = "https://github.com/mirage/mirage-protocols/releases/download/v${version}/mirage-protocols-v${version}.tbz";
-    sha256 = "1bd6zgxhq2qliyzzarfvaj3ksr20ryghxq6h24i2hha7rwim63bk";
+    hash = "sha256-UDCR4Jq3tw9P/Ilw7T4+3+yi9Q7VFqnHhXeSCvg9dyw=";
   };
 
-  propagatedBuildInputs = [ duration ipaddr mirage-device mirage-flow ];
+  propagatedBuildInputs = [ arp ethernet ipaddr tcpip ];
 
   meta = {
     description = "MirageOS signatures for network protocols";

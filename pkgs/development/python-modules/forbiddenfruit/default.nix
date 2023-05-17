@@ -15,7 +15,7 @@ buildPythonPackage rec {
     sha256 = "16chhrxbbmg6lfbzm532fq0v00z8qihcsj0kg2b5jlgnb6qijwn8";
   };
 
-  checkInputs = [ nose ];
+  nativeCheckInputs = [ nose ];
 
   preBuild = ''
     export FFRUIT_EXTENSION="true";

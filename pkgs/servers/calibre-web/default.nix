@@ -2,30 +2,46 @@
 , fetchFromGitHub
 , nixosTests
 , python3
+, fetchpatch
 }:
 
-python3.pkgs.buildPythonApplication rec {
+let
+  python = python3.override {
+    packageOverrides = self: super: {
+      sqlalchemy = super.sqlalchemy.overridePythonAttrs (old: rec {
+        version = "1.4.46";
+        src = self.fetchPypi {
+          pname = "SQLAlchemy";
+          inherit version;
+          hash = "sha256-aRO4JH2KKS74MVFipRkx4rQM6RaB8bbxj2lwRSAMSjA=";
+        };
+      });
+    };
+  };
+in
+python.pkgs.buildPythonApplication rec {
   pname = "calibre-web";
-  version = "0.6.19";
+  version = "0.6.20";
 
   src = fetchFromGitHub {
     owner = "janeczku";
     repo = "calibre-web";
     rev = version;
-    hash = "sha256-mNYLQ+3u6xRaoZ5oH6HdylFfgz1fq1ZB86AWk9vULWQ=";
+    hash = "sha256-0lArY1aTpO4sgIVDSqClYMGlip92f9hE/L2UouTLK8Q=";
   };
 
-  propagatedBuildInputs = with python3.pkgs; [
-    APScheduler
+  propagatedBuildInputs = with python.pkgs; [
+    apscheduler
     advocate
     chardet
     flask-babel
     flask-login
     flask_principal
     flask-wtf
+    flask-limiter
     iso-639
     lxml
-    pypdf3
+    pypdf
     requests
     sqlalchemy
     tornado
@@ -57,13 +73,15 @@ python3.pkgs.buildPythonApplication rec {
 
     substituteInPlace setup.cfg \
       --replace "cps = calibreweb:main" "calibre-web = calibreweb:main" \
+      --replace "APScheduler>=3.6.3,<3.10.0" "APScheduler>=3.6.3" \
       --replace "chardet>=3.0.0,<4.1.0" "chardet>=3.0.0,<6" \
       --replace "Flask>=1.0.2,<2.1.0" "Flask>=1.0.2" \
+      --replace "Flask-Babel>=0.11.1,<3.1.0" "Flask-Babel>=0.11.1" \
       --replace "Flask-Login>=0.3.2,<0.6.2" "Flask-Login>=0.3.2" \
       --replace "flask-wtf>=0.14.2,<1.1.0" "flask-wtf>=0.14.2" \
       --replace "lxml>=3.8.0,<4.9.0" "lxml>=3.8.0" \
       --replace "tornado>=4.1,<6.2" "tornado>=4.1,<7" \
-      --replace "PyPDF3>=1.0.0,<1.0.7" "PyPDF3>=1.0.0" \
+      --replace "PyPDF>=3.0.0,<3.6.0" "PyPDF>=3.0.0" \
       --replace "requests>=2.11.1,<2.28.0" "requests" \
       --replace "unidecode>=0.04.19,<1.4.0" "unidecode>=0.04.19" \
       --replace "werkzeug<2.1.0" ""

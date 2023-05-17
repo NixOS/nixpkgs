@@ -38,60 +38,50 @@ stdenv.mkDerivation {
   buildInputs = [ libkrb5 ];
 
   patches = [
-    # Import of code from autoconf-archive
+    # LINUX: Run the 'sparse' checker if available
     (fetchpatch {
-      url = "https://git.openafs.org/?p=openafs.git;a=patch;h=d8205bbb482554812fbe66afa3c337d991a247b6";
-      hash = "sha256-ohkjSux+S3+6slh6uZIw5UJXlvhy9UUDpDlP0YFRwmw=";
+      url = "https://git.openafs.org/?p=openafs.git;a=patch;h=2cf76b31ce4c912b1151c141818f6e8c5cddcab2";
+      hash = "sha256-//7HSlotx70vWDEMB8P8or4ZmmXZthgioUOkvOcJpgk=";
     })
-    # Use autoconf-archive m4 from src/external
+    # cf: Detect how to pass CFLAGS to linux kbuild
+    (fetchpatch {
+      url = "https://git.openafs.org/?p=openafs.git;a=patch;h=57df4dff496ca9bea04510759b8fdd9cd2cc0009";
+      hash = "sha256-pJnW9bVz2ZQZUvZ+PcZ5gEgCL5kcbTGxsyMNvM2IseU=";
+    })
+    # cf: Handle autoconf linux checks with -Werror
+    (fetchpatch {
+      url = "https://git.openafs.org/?p=openafs.git;a=patch;h=b17625959386459059f6f43875d8817383554481";
+      hash = "sha256-Kqx5QEX1p4UoIsWxqvJVX4IyCQFiWxtAOgvAtk+ULuQ=";
+    })
+    # Linux: Fix functions without prototypes
+    (fetchpatch {
+      url = "https://git.openafs.org/?p=openafs.git;a=patch;h=3084117f10bd62acb1182cb54fc85b1d96738f70";
+      hash = "sha256-nNyqDQfS9zzlS2i3dbfud2tQOaTQ1x/rZcQEsaLu3qc=";
+    })
+    # Linux: Check for block_dirty_folio
+    (fetchpatch {
+      url = "https://git.openafs.org/?p=openafs.git;a=patch;h=f0fee2c7752d18ff183d60bcfba4c98c3348cd5f";
+      hash = "sha256-tnNlVjZ5exC+jo78HC/y8yp0L8KQroFvVRzTC+O6vlY=";
+    })
+    # Linux: Replace lru_cache_add with folio_add_lru
+    (fetchpatch {
+      url = "https://git.openafs.org/?p=openafs.git;a=patch;h=b885159cc2bc6c746aec1d54cdd8a515d1115d14";
+      hash = "sha256-ptPALSbZPSGu8PMmZiOkHUd5x0UItqIM7U7wJlxtSL8=";
+    })
+    # LINUX 5.13: set .proc_lseek in proc_ops
+    (fetchpatch {
+      url = "https://git.openafs.org/?p=openafs.git;a=patch;h=cba2b88851c3ae0ab1b18ea3ce77f7f5e8200b2f";
+      hash = "sha256-suj7n0U0odHXZHLPqeB/k96gyBh52uoS3AuHvOzPyd8=";
+    })
+    # Linux 6.3: Include linux/filelock.h if available
     (fetchBase64Patch {
-      url = "https://gerrit.openafs.org/changes/14944/revisions/ea2a0e128d71802f61b8da2e44de3c6325c5f328/patch";
-      hash = "sha256-PAUk/MXL5p8xwhn40/UGmo3UIhvl1PB2FwgqhmqsjJ4=";
+      url = "https://gerrit.openafs.org/changes/15388/revisions/ddb99d32012c43c76ae37f6a7563f1ca32f0e964/patch";
+      hash = "sha256-0Cql4+0ISfW4J4D7PhlSYNfIKAeDVWEz57PHOu5TRXg=";
     })
-    # cf: Use common macro to test compiler flags
-    (fetchpatch {
-      url = "https://git.openafs.org/?p=openafs.git;a=patch;h=790824ff749b6ee01c4d7101493cbe8773ef41c6";
-      hash = "sha256-Zc7AjCsH7eTmZJWCrx7ci1tBjEAgcFXS9lY1YBeboLA=";
-    })
-    # Linux-5.17: kernel func complete_and_exit renamed
+    # Linux 6.3: Use mnt_idmap for inode op functions
     (fetchBase64Patch {
-      url = "https://gerrit.openafs.org/changes/14945/revisions/a714e865efe41aa1112f6f9c8479112660dacd6f/patch";
-      hash = "sha256-zvyR/GOPJeAbG6ySRRMp44oT5tPujUwybyU0XR/5Xyc=";
-    })
-    # Linux-5.17: Kernel build uses -Wcast-function-type
-    (fetchBase64Patch {
-      url = "https://gerrit.openafs.org/changes/14946/revisions/449d1faf87e2841e80be38cf2b4a5cf5ff4df2d8/patch";
-      hash = "sha256-3bRTHYeMRIleLhob56m2Xt0dWzIMDo3QrytY0K1/q7c=";
-    })
-    # afs: Introduce afs_IsDCacheFresh
-    (fetchpatch {
-      url = "https://git.openafs.org/?p=openafs.git;a=patch;h=0d8ce846ab2e6c45166a61f04eb3af271cbd27db";
-      hash = "sha256-+xgRYVXz8XpT5c4Essc4VEn9Fj53vasAYhcFkK0oCBc=";
-    })
-    # LINUX: Don't panic on some file open errors
-    (fetchpatch {
-      url = "https://git.openafs.org/?p=openafs.git;a=patch;h=af73b9a3b1fc625694807287c0897391feaad52d";
-      hash = "sha256-k0d+Gav1LApU24SaMI0pmR3gGfWyicqdCpTpVJLcx7U=";
-    })
-    # Linux-5.18 replace set_page_dirty with dirty_folio
-    (fetchpatch {
-      url = "https://git.openafs.org/?p=openafs.git;a=patch;h=6aa129e743e882cf30c35afd67eabf82274c5fca";
-      hash = "sha256-8R0rdKYs7+Zl1sdizOZzpBjy6e9J+42R9HzsNUa/PQ4=";
-    })
-    # afs: introduce afs_alloc_ncr/afs_free_ncr
-    (fetchpatch {
-      url = "https://git.openafs.org/?p=openafs.git;a=patch;h=209eb92448001e59525413610356070d8e4f10a0";
-      hash = "sha256-t455gTaK5U+m0qcyKjTqnWTOb4qz6VN/JYZzRAAV8kM=";
-    })
-    # afs: introduce get_dcache_readahead
-    (fetchpatch {
-      url = "https://git.openafs.org/?p=openafs.git;a=patch;h=44e24ae5d7dc41e54d23638d5f64ab2e81e43ad0";
-      hash = "sha256-gtUNDSHAq+RY1Rm17YcxcUALy7FEBQf9k8/ELQlPORU=";
-    })
-    # Linux-5.18: replace readpages with readahead
-    (fetchBase64Patch {
-      url = "https://gerrit.openafs.org/changes/14953/revisions/0497b0cd7bffb6335ab9bcbf5a1310b8c6a4b299/patch";
-      hash = "sha256-a5pd+CHHPr1mGxsF7tSlaBqoiKw2IGr1mJ7EaDHDJSw=";
+      url = "https://gerrit.openafs.org/changes/15389/revisions/ff0d53d2fb38fc3b262f02fb1c5f49b286ff13dd/patch";
+      hash = "sha256-KyVAI/A+/lNrLyKY6O8DgMKzgnF6P5sOfSq3qcs6Qq0=";
     })
   ];
 
@@ -102,7 +92,6 @@ stdenv.mkDerivation {
     "--sysconfdir=/etc"
     "--localstatedir=/var"
     "--with-gssapi"
-    "--disable-linux-d_splice-alias-extra-iput"
   ];
 
   preConfigure = ''
@@ -133,6 +122,6 @@ stdenv.mkDerivation {
     license = licenses.ipl10;
     platforms = platforms.linux;
     maintainers = with maintainers; [ andersk maggesi spacefrogg ];
-    broken = kernel.isHardened || kernel.kernelAtLeast "5.19";
+    broken = kernel.isHardened;
   };
 }

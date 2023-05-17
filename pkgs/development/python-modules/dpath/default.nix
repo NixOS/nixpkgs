@@ -2,36 +2,44 @@
 , buildPythonPackage
 , fetchPypi
 , hypothesis
-, isPy27
+, pythonOlder
 , mock
-, nose
+, nose2
 , pytestCheckHook
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "dpath";
-  version = "2.0.6";
+  version = "2.1.5";
+  format = "setuptools";
 
-  disabled = isPy27; # uses python3 imports
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-Wh3a5SIz+8jvgbFfuFBzqBEmu0NpjT86G2qvVhpGzcA=";
+    hash = "sha256-zNlk24ObqtSqggYStLhzGwn0CiRdQBtyMVbOTvRbIrc=";
   };
 
-  # use pytest as nosetests hangs
-  checkInputs = [
+  nativeBuildInputs = [
+    setuptools
+  ];
+
+  nativeCheckInputs = [
     hypothesis
     mock
-    nose
+    nose2
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [ "dpath" ];
+  pythonImportsCheck = [
+    "dpath"
+  ];
 
   meta = with lib; {
     description = "Python library for accessing and searching dictionaries via /slashed/paths ala xpath";
     homepage = "https://github.com/akesterson/dpath-python";
+    changelog = "https://github.com/dpath-maintainers/dpath-python/releases/tag/v${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ mmlb ];
   };

@@ -16,11 +16,11 @@
 
 stdenv.mkDerivation rec {
   pname = "lasso";
-  version = "2.8.0";
+  version = "2.8.2";
 
   src = fetchurl {
     url = "https://dev.entrouvert.org/lasso/lasso-${version}.tar.gz";
-    hash = "sha256-/8vVhR2YWGx+HK9DutZhZCEaO2HRK/hgoFmESP+fKzg=";
+    hash = "sha256-ahgxv9v49CTHUIq6R7BF1RNB7A/ekSLziwuGsJbvUz4=";
   };
 
   nativeBuildInputs = [
@@ -51,6 +51,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://lasso.entrouvert.org/";
     description = "Liberty Alliance Single Sign-On library";
+    changelog = "https://git.entrouvert.org/entrouvert/lasso/raw/tag/v${version}/ChangeLog";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ womfoo ];

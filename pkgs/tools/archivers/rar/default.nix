@@ -1,24 +1,26 @@
 { lib, stdenv, fetchurl, autoPatchelfHook, installShellFiles }:
 
 let
-  version = "6.12";
+  version = "6.21";
   downloadVersion = lib.replaceStrings [ "." ] [ "" ] version;
+  # Use `nix store prefetch-file <url>` to generate the hashes for the other systems
+  # TODO: create update script
   srcUrl = {
     i686-linux = {
       url = "https://www.rarlab.com/rar/rarlinux-x32-${downloadVersion}.tar.gz";
-      hash = "sha256-Vh8Hyd3Y2tDapXY+xZ+6W+X7SQGDsy1x61L28sieYKw=";
+      hash = "sha256-mDeRmLTjF0ZLv4JoLrgI8YBFFulBSKfOPb6hrxDZIkU=";
     };
     x86_64-linux = {
       url = "https://www.rarlab.com/rar/rarlinux-x64-${downloadVersion}.tar.gz";
-      hash = "sha256-ZaGn5OzqVzDojJn8bTrbRh1wvYXM7SK91jl96mbNAeA=";
+      hash = "sha256-3fr5aVkh/r6OfBEcZULJSZp5ydakJOLRPlgzMdlwGTM=";
     };
     aarch64-darwin = {
       url = "https://www.rarlab.com/rar/rarmacos-arm-${downloadVersion}.tar.gz";
-      hash = "sha256-SR80VxKgLrJqO0JGWMMGUuIuIgGgxcVH+5fCWnVqJks=";
+      hash = "sha256-OR9HBlRteTzuyQ06tyXTSrFTBHFwmZ41kUfvgflogT4=";
     };
     x86_64-darwin = {
       url = "https://www.rarlab.com/rar/rarmacos-x64-${downloadVersion}.tar.gz";
-      hash = "sha256-9gfKEr3DE4hMWm9QT79mKgURvzn+BKmyppTJhs00u2c=";
+      hash = "sha256-UN3gmEuIpCXwmw3/l+KdarAYLy1DxGoPAOB2bfJTGbw=";
     };
   }.${stdenv.system} or (throw "Unsupported system: ${stdenv.system}");
   manSrc = fetchurl {

@@ -13,9 +13,7 @@ in
 
 assert (x11Support && usesX11) -> xclip != null || xsel != null;
 
-with rustPlatform;
-
-buildRustPackage rec {
+rustPlatform.buildRustPackage rec {
   pname = "ffsend";
   version = "0.2.76";
 

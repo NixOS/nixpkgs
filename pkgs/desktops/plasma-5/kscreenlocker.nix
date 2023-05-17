@@ -1,5 +1,4 @@
 { mkDerivation
-, lib
 , extra-cmake-modules
 , kdoctools
 , kcmutils
@@ -7,11 +6,11 @@
 , kdeclarative
 , kglobalaccel
 , kidletime
+, libkscreen
 , kwayland
 , libXcursor
 , pam
 , plasma-framework
-, qtbase
 , qtdeclarative
 , qtx11extras
 , wayland
@@ -27,6 +26,7 @@ mkDerivation {
     kdeclarative
     kglobalaccel
     kidletime
+    libkscreen
     kwayland
     libXcursor
     pam

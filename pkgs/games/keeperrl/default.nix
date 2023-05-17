@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
     openal curl libogg libvorbis libtheora SDL2 SDL2_image zlib clang
   ];
 
-  NIX_CFLAGS_COMPILE = [
+  env.NIX_CFLAGS_COMPILE = toString [
     "-I${SDL2.dev}/include/SDL2"
   ];
 

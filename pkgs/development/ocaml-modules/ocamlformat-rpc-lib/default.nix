@@ -21,8 +21,8 @@ buildDunePackage rec {
     inherit (source) sha256;
   };
 
-  minimumOCamlVersion = "4.08";
-  useDune2 = true;
+  minimalOCamlVersion = "4.08";
+  duneVersion = "3";
 
   propagatedBuildInputs = [ csexp sexplib0 ];
 

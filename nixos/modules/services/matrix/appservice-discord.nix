@@ -5,7 +5,6 @@ with lib;
 let
   dataDir = "/var/lib/matrix-appservice-discord";
   registrationFile = "${dataDir}/discord-registration.yaml";
-  appDir = "${pkgs.matrix-appservice-discord}/${pkgs.matrix-appservice-discord.passthru.nodeAppDir}";
   cfg = config.services.matrix-appservice-discord;
   opt = options.services.matrix-appservice-discord;
   # TODO: switch to configGen.json once RFC42 is implemented
@@ -15,6 +14,15 @@ in {
   options = {
     services.matrix-appservice-discord = {
       enable = mkEnableOption (lib.mdDoc "a bridge between Matrix and Discord");
+
+      package = mkOption {
+        type = types.package;
+        default = pkgs.matrix-appservice-discord;
+        defaultText = literalExpression "pkgs.matrix-appservice-discord";
+        description = lib.mdDoc ''
+          Which package of matrix-appservice-discord to use.
+        '';
+      };
 
       settings = mkOption rec {
         # TODO: switch to types.config.json as prescribed by RFC42 once it's implemented
@@ -114,7 +122,7 @@ in {
 
       preStart = ''
         if [ ! -f '${registrationFile}' ]; then
-          ${pkgs.matrix-appservice-discord}/bin/matrix-appservice-discord \
+          ${cfg.package}/bin/matrix-appservice-discord \
             --generate-registration \
             --url=${escapeShellArg cfg.url} \
             ${optionalString (cfg.localpart != null) "--localpart=${escapeShellArg cfg.localpart}"} \
@@ -135,13 +143,13 @@ in {
 
         DynamicUser = true;
         PrivateTmp = true;
-        WorkingDirectory = appDir;
+        WorkingDirectory = "${cfg.package}/${cfg.package.passthru.nodeAppDir}";
         StateDirectory = baseNameOf dataDir;
         UMask = "0027";
         EnvironmentFile = cfg.environmentFile;
 
         ExecStart = ''
-          ${pkgs.matrix-appservice-discord}/bin/matrix-appservice-discord \
+          ${cfg.package}/bin/matrix-appservice-discord \
             --file='${registrationFile}' \
             --config='${settingsFile}' \
             --port='${toString cfg.port}'

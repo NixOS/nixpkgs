@@ -75,7 +75,7 @@ python3Packages.buildPythonApplication rec {
     HOME=$TMPDIR
   '';
 
-  checkInputs = [ glibcLocales git ] ++
+  nativeCheckInputs = [ glibcLocales git ] ++
     (with python3Packages; [ pyte pytestCheckHook pytest-mock pytest-subprocess ]);
 
   propagatedBuildInputs = with python3Packages; [ ply prompt-toolkit pygments ];
@@ -85,7 +85,7 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://xon.sh/";
     changelog = "https://github.com/xonsh/xonsh/raw/${version}/CHANGELOG.rst";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ spwhitt vrthra ];
+    maintainers = with maintainers; [ vrthra ];
   };
 
   passthru = {

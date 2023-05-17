@@ -3,6 +3,7 @@
 , fetchFromGitHub
 , toolz
 , multipledispatch
+, py
 , pytestCheckHook
 , pytest-html
 , pytest-benchmark
@@ -16,7 +17,7 @@ buildPythonPackage rec {
     owner = "pythological";
     repo = "unification";
     rev = "707cf4a39e27a4a8bf06b7e7dce7223085574e65";
-    sha256 = "sha256-3wqO0pWWFRQeoGNvbSDdLNYFyjNnv+O++F7+vTBUJoI=";
+    hash = "sha256-3wqO0pWWFRQeoGNvbSDdLNYFyjNnv+O++F7+vTBUJoI=";
   };
 
   propagatedBuildInputs = [
@@ -24,7 +25,8 @@ buildPythonPackage rec {
     multipledispatch
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
+    py
     pytestCheckHook
     pytest-html
     pytest-benchmark  # Needed for the `--benchmark-skip` flag

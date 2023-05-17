@@ -6,20 +6,15 @@
 
 let chia = python3Packages.buildPythonApplication rec {
   pname = "chia";
-  version = "1.6.0";
+  version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "Chia-Network";
     repo = "chia-blockchain";
     rev = version;
     fetchSubmodules = true;
-    hash = "sha256-TNaHPvN19fkRqkQHtqdeEDwhqbntcVhxXhY8TNIScEg=";
+    hash = "sha256-hsh2HHpm103JfUTPwk+8zIkhVrglIP8xMovFIibn8+g=";
   };
-
-  patches = [
-    # chia tries to put lock files in the python modules directory
-    ./dont_lock_in_store.patch
-  ];
 
   postPatch = ''
     substituteInPlace setup.py \
@@ -59,6 +54,7 @@ let chia = python3Packages.buildPythonApplication rec {
     fasteners
     filelock
     keyrings-cryptfile
+    psutil
     pyyaml
     setproctitle
     setuptools # needs pkg_resources at runtime
@@ -68,7 +64,7 @@ let chia = python3Packages.buildPythonApplication rec {
     zstd
   ];
 
-  checkInputs = with python3Packages; [
+  nativeCheckInputs = with python3Packages; [
     pytestCheckHook
   ];
 

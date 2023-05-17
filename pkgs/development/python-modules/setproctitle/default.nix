@@ -13,10 +13,10 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-ufuXkHyDDSYPoGWO1Yr9SKhrK4iqxSETXDUv9/00d/0=";
+    hash = "sha256-ufuXkHyDDSYPoGWO1Yr9SKhrK4iqxSETXDUv9/00d/0=";
   };
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   # tries to compile programs with dependencies that aren't available
   pytestFlagsArray = [ "--ignore=tests/setproctitle_test.py" ];

@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "ics-py";
     repo = "ics-py";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-hdtnET7YfSb85+TGwpwzoxOfxPT7VSj9eKSiV6AXUS8=";
+    hash = "sha256-hdtnET7YfSb85+TGwpwzoxOfxPT7VSj9eKSiV6AXUS8=";
   };
 
   propagatedBuildInputs = [
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     tatsu
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-flakes
     pytestCheckHook
   ];

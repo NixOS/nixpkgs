@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "crownstone";
     repo = "crownstone-lib-python-sse";
     rev = version;
-    sha256 = "sha256-z/z8MmydHkHubwuX02gGbOcOEZ+FHX4i82vAK5gAl+c=";
+    hash = "sha256-z/z8MmydHkHubwuX02gGbOcOEZ+FHX4i82vAK5gAl+c=";
   };
 
   propagatedBuildInputs = [

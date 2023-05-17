@@ -111,7 +111,7 @@ stdenv.mkDerivation rec {
     # notably texlive, and we don't want texlive to become a runtime
     # dependency
     for file in $(find $out -name Makefile) ; do
-      sed -i "s@/nix/store/[^/]*/bin/@@" "$file" ;
+      sed -i "s@${builtins.storeDir}/[^/]*/bin/@@" "$file" ;
     done;
 
     # reference cycle

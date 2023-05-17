@@ -34,7 +34,7 @@ buildPythonPackage rec {
     requests
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     cachelib
     flask
     flask-sqlalchemy

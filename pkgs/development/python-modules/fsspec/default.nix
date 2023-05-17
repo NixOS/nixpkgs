@@ -13,11 +13,23 @@
 , requests
 , smbprotocol
 , tqdm
+, adlfs
+, dask
+, distributed
+, dropbox
+, fusepy
+, gcsfs
+, libarchive-c
+, ocifs
+, panel
+, pyarrow
+, pygit2
+, s3fs
 }:
 
 buildPythonPackage rec {
   pname = "fsspec";
-  version = "2022.10.0";
+  version = "2023.4.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -26,7 +38,7 @@ buildPythonPackage rec {
     owner = "fsspec";
     repo = "filesystem_spec";
     rev = version;
-    hash = "sha256-+lPt/zqI3Mkt+QRNXq+Dxm3h/ryZJsfrmayVi/BTtbg=";
+    hash = "sha256-qkvhmXJNxA8v+kbZ6ulxJAQr7ReQpb+JkbhOUnL59KM=";
   };
 
   propagatedBuildInputs = [
@@ -37,7 +49,76 @@ buildPythonPackage rec {
     tqdm
   ];
 
-  checkInputs = [
+  passthru.optional-dependencies = {
+    entrypoints = [
+    ];
+    abfs = [
+      adlfs
+    ];
+    adl = [
+      adlfs
+    ];
+    dask = [
+      dask
+      distributed
+    ];
+    dropbox = [
+      # missing dropboxdrivefs
+      requests
+      dropbox
+    ];
+    gcs = [
+      gcsfs
+    ];
+    git = [
+      pygit2
+    ];
+    github = [
+      requests
+    ];
+    gs = [
+      gcsfs
+    ];
+    hdfs = [
+      pyarrow
+    ];
+    arrow = [
+      pyarrow
+    ];
+    http = [
+      aiohttp
+      requests
+    ];
+    sftp = [
+      paramiko
+    ];
+    s3 = [
+      s3fs
+    ];
+    oci = [
+      ocifs
+    ];
+    smb = [
+      smbprotocol
+    ];
+    ssh = [
+      paramiko
+    ];
+    fuse = [
+      fusepy
+    ];
+    libarchive = [
+      libarchive-c
+    ];
+    gui = [
+      panel
+    ];
+    tqdm = [
+      tqdm
+    ];
+  };
+
+  nativeCheckInputs = [
     numpy
     pytest-asyncio
     pytest-mock
@@ -54,6 +135,9 @@ buildPythonPackage rec {
     # test accesses this remote ftp server:
     # https://ftp.fau.de/debian-cd/current/amd64/log/success
     "test_find"
+    # Tests want to access S3
+    "test_urlpath_inference_errors"
+    "test_mismatch"
   ] ++ lib.optionals (stdenv.isDarwin) [
     # works locally on APFS, fails on hydra with AssertionError comparing timestamps
     # darwin hydra builder uses HFS+ and has only one second timestamp resolution

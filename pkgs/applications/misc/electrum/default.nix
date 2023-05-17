@@ -7,20 +7,11 @@
 , zbar
 , secp256k1
 , enableQt ? true
-# for updater.nix
-, writeScript
-, common-updater-scripts
-, bash
-, coreutils
-, curl
-, gnugrep
-, gnupg
-, gnused
-, nix
+, callPackage
 }:
 
 let
-  version = "4.3.2";
+  version = "4.4.0";
 
   libsecp256k1_name =
     if stdenv.isLinux then "libsecp256k1.so.0"
@@ -37,7 +28,7 @@ let
     owner = "spesmilo";
     repo = "electrum";
     rev = version;
-    sha256 = "sha256-z2/UamKmBq/5a0PTbHdAqGK617Lc8xRhHRpbCc7jeZo=";
+    sha256 = "sha256-lXMz0U7zgtCApBCGZcpOHvLcyOeGG0yJE/gr7Gv+yBQ=";
 
     postFetch = ''
       mv $out ./all
@@ -53,7 +44,7 @@ python3.pkgs.buildPythonApplication {
 
   src = fetchurl {
     url = "https://download.electrum.org/${version}/Electrum-${version}.tar.gz";
-    sha256 = "sha256-vTZArTwbKcf6/vPQOvjubPecsg+h+QlZ6rdbl6qNfs0=";
+    sha256 = "sha256-SHV+fCDhfgIh7s8L7eDbKj8bkHSVm7J2PPQ4CQpp6cI=";
   };
 
   postUnpack = ''
@@ -80,7 +71,8 @@ python3.pkgs.buildPythonApplication {
     requests
     tlslite-ng
     # plugins
-    btchip
+    btchip-python
+    ledger-bitcoin
     ckcc-protocol
     keepkey
     trezor
@@ -92,7 +84,7 @@ python3.pkgs.buildPythonApplication {
   postPatch = ''
     # make compatible with protobuf4 by easing dependencies ...
     substituteInPlace ./contrib/requirements/requirements.txt \
-      --replace "protobuf>=3.12,<4" "protobuf>=3.12"
+      --replace "protobuf>=3.20,<4" "protobuf>=3.20"
     # ... and regenerating the paymentrequest_pb2.py file
     protoc --python_out=. electrum/paymentrequest.proto
 
@@ -117,7 +109,7 @@ python3.pkgs.buildPythonApplication {
     wrapQtApp $out/bin/electrum
   '';
 
-  checkInputs = with python3.pkgs; [ pytestCheckHook pyaes pycryptodomex ];
+  nativeCheckInputs = with python3.pkgs; [ pytestCheckHook pyaes pycryptodomex ];
 
   pytestFlagsArray = [ "electrum/tests" ];
 
@@ -125,23 +117,10 @@ python3.pkgs.buildPythonApplication {
     $out/bin/electrum help >/dev/null
   '';
 
-  passthru.updateScript = import ./update.nix {
-    inherit lib;
-    inherit
-      writeScript
-      common-updater-scripts
-      bash
-      coreutils
-      curl
-      gnupg
-      gnugrep
-      gnused
-      nix
-    ;
-  };
+  passthru.updateScript = callPackage ./update.nix { };
 
   meta = with lib; {
-    description = "A lightweight Bitcoin wallet";
+    description = "Lightweight Bitcoin wallet";
     longDescription = ''
       An easy-to-use Bitcoin client featuring wallets generated from
       mnemonic seeds (in addition to other, more advanced, wallet options)

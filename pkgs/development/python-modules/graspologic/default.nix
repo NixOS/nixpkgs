@@ -15,15 +15,15 @@
 
 buildPythonPackage rec {
   pname = "graspologic";
-  version = "1.0.0";
+  version = "2.0.1";
 
   disabled = isPy27;
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "graspologic";
-    rev = "v${version}";
-    sha256 = "sha256-mzJ3eFo77gnOh/Vs9u68yFDZW3ilXtcCCwKahKyRRmc=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-EmbCA4JpY2OIwXrRWjBxA4iNm0ddQODjoGmHIYgvAWs=";
   };
 
   propagatedBuildInputs = [
@@ -36,7 +36,7 @@ buildPythonPackage rec {
     seaborn
   ];
 
-  checkInputs = [ pytestCheckHook pytest-cov ];
+  nativeCheckInputs = [ pytestCheckHook pytest-cov ];
   pytestFlagsArray = [ "tests" "--ignore=docs" "--ignore=tests/test_sklearn.py" ];
   disabledTests = [ "gridplot_outputs" ];
 

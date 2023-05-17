@@ -26,12 +26,15 @@ in stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" "lib" ] ++ lib.optional withDevdoc "devdoc";
 
+  strictDeps = true;
   nativeBuildInputs = [
     autoconf automake docbook_xsl libtool libxslt pkg-config
 
     docbook_xml_dtd_42 # for the man pages
   ] ++ lib.optionals withDevdoc [ docbook_xml_dtd_43 gtk-doc ];
-  buildInputs = [ xz zstd ];
+  buildInputs = [ xz zstd ]
+    # gtk-doc is looked for with pkg-config
+    ++ lib.optionals withDevdoc [ gtk-doc ];
 
   preConfigure = ''
     ./autogen.sh

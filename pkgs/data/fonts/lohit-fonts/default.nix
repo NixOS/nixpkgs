@@ -1,35 +1,38 @@
-{ fetchzip, lib }:
+{ lib, stdenvNoCC, fetchurl }:
 let
   fonts = {
-    assamese        = { label = "Assamese";          version = "2.91.5"; sha256 = "06cw416kgw0m6883n5ixmpniinsd747rdmacf06z83w1hqwj2js6"; };
-    bengali         = { label = "Bengali";           version = "2.91.5"; sha256 = "1j7gfmkzzyk9mivy09a9yfqxpidw52hw48dyh4qkci304mspcbvr"; };
-    devanagari      = { label = "Devanagari script"; version = "2.95.4"; sha256 = "1c17xirzx5rf7xpmkrm94jf9xrzckyagwnqn3pyag28lyj8x67m5"; };
-    gujarati        = { label = "Gujarati";          version = "2.92.4"; sha256 = "0xdgmkikz532zxj239wr73l24qnzxhra88f52146x7fsb7gpvfb1"; };
-    gurmukhi        = { label = "Gurmukhi script";   version = "2.91.2"; sha256 = "1xk1qvc0xwcmjcavj9zmy4bbphffdlv7sldmqlk30ch5fy5r0ypb"; }; # renamed from Punjabi
-    kannada         = { label = "Kannada";           version = "2.5.4" ; sha256 = "0sax56xg98p2nf0nsvba42hhz946cs7q0gidiz9zfpb6pbgwxdgg"; };
-    malayalam       = { label = "Malayalam";         version = "2.92.2"; sha256 = "18sca59fj9zvqhagbix35i4ld2n4mwv57q04pijl5gvpyfb1abs8"; };
-    marathi         = { label = "Marathi";           version = "2.94.2"; sha256 = "0cjjxxlhqmdmhr35s4ak0ma89456daik5rqrn6pdzj39098lmci7"; };
-    nepali          = { label = "Nepali";            version = "2.94.2"; sha256 = "1p7lif136xakfqkbv6p1lb56rs391b25vn4bxrjdfvsk0r0h0ry3"; };
-    odia            = { label = "Odia";              version = "2.91.2"; sha256 = "0z5rc4f9vfrfm8h2flzf5yx44x50jqdmmzifkmjwczib3hpg2ila"; }; # renamed from Oriya
-    tamil-classical = { label = "Classical Tamil";   version = "2.5.4" ; sha256 = "0svmj3dhk0195mhdwjhi3qgwa83223irb32fp12782sj9njdvyi2"; };
-    tamil           = { label = "Tamil";             version = "2.91.3"; sha256 = "0qyw9p8alyvjryyw8a25q3gfyrhby49mjb0ydgggf5ckd07kblcm"; };
-    telugu          = { label = "Telugu";            version = "2.5.5" ; sha256 = "07p41686ypmclj9d3njp01lvrgssqxa4s5hsbrqfjrnwd3rjspzr"; };
+    assamese        = { label = "Assamese";          version = "2.91.5"; hash = "sha256-Oo/hHHFg/Nu3eaZLMdBclY90lKU2AMFUclyXHxGaAgg="; };
+    bengali         = { label = "Bengali";           version = "2.91.5"; hash = "sha256-QGf94TdQS2c9+wSSDK4Mknw5ubCGTuvg0xoNaJdirBc="; };
+    devanagari      = { label = "Devanagari script"; version = "2.95.4"; hash = "sha256-6CbOCqOei5eO1zwNQZvB+fFDkqxvJnK82z+zmClhRAE="; };
+    gujarati        = { label = "Gujarati";          version = "2.92.4"; hash = "sha256-BpwibF0/HXDvXpDEek0fj73cxo2QC1hSfQ49Q/ZOZg8="; };
+    gurmukhi        = { label = "Gurmukhi script";   version = "2.91.2"; hash = "sha256-5iLFW2FEE5LBqoALi+3sUjwC0ADntsp259TP+bYwR9g="; }; # renamed from Punjabi
+    kannada         = { label = "Kannada";           version = "2.5.4" ; hash = "sha256-7y2u0tBdNYCeY7Y+aqhxXP7Qv6GglJeVO1wvM9CzyIQ="; };
+    malayalam       = { label = "Malayalam";         version = "2.92.2"; hash = "sha256-SzM38vuAlP9OMC8kUuHQylmH8TUjCeg1y/Zcu2I2bjA="; };
+    marathi         = { label = "Marathi";           version = "2.94.2"; hash = "sha256-jK1Gwcr5gqzRNkbIxs4V/OYgUlUEpU0OYzKDTkiMlqM="; };
+    nepali          = { label = "Nepali";            version = "2.94.2"; hash = "sha256-OX1ekxeSbVGOrdbZ3Jvu4nii0zkgbuij10JIzqRcFx4="; };
+    odia            = { label = "Odia";              version = "2.91.2"; hash = "sha256-3/eczBGGZj4QPs7KY0as9zk5HaBfhgz6YgU0qmwpVcA="; }; # renamed from Oriya
+    tamil-classical = { label = "Classical Tamil";   version = "2.5.4" ; hash = "sha256-6SsddTCEUHMoF7X4+i7eXimmMuktfFAl8uz95RwM+yg="; };
+    tamil           = { label = "Tamil";             version = "2.91.3"; hash = "sha256-8lcNw87o9lhQsKwCqwBSfx7rhcrH/eEqac7EsA9/w/E="; };
+    telugu          = { label = "Telugu";            version = "2.5.5" ; hash = "sha256-cZh93NfEB+5S1JeEowtBMJ0nbZsFGpbEp2WAtzxrA8A="; };
   };
   gplfonts = {
     # GPL fonts removed from later releases
-    kashmiri        = { label = "Kashmiri";          version = "2.4.3" ; sha256 = "0c6whklad9bscymrlcbxj4fdvh4cdf40vb61ykbp6mapg6dqxwhn"; };
-    konkani         = { label = "Konkani";           version = "2.4.3" ; sha256 = "0pcb5089dabac1k6ymqnbnlyk7svy2wnb5glvhsd8glycjhrcp70"; };
-    maithili        = { label = "Maithili";          version = "2.4.3" ; sha256 = "1yfwv7pcj7k4jryz0s6mb56bq7fs15g56y7pi5yd89q1f8idk6bc"; };
-    sindhi          = { label = "Sindhi";            version = "2.4.3" ; sha256 = "1iywzyy185bvfsfi5pp11c8bzrp40kni2cpwcmxqwha7c9v8brlc"; };
+    kashmiri        = { label = "Kashmiri";          version = "2.4.3" ; hash = "sha256-6T2QaWnt3+e5nr4vbk44FouqmeWKzia1lSf8S/bvqCs="; };
+    konkani         = { label = "Konkani";           version = "2.4.3" ; hash = "sha256-hVy2rxrUTPDeNnugi3Bk7z0JqGmk4/yeUsAoI/4R7A8="; };
+    maithili        = { label = "Maithili";          version = "2.4.3" ; hash = "sha256-ikDcpJqdizAYRpgoebzqxOEeodJ6C3fO2rsqGzC0HCs="; };
+    sindhi          = { label = "Sindhi";            version = "2.4.3" ; hash = "sha256-wU3B9fh+8E1bFBMnakzmajY7eNKzed9+eYL5AOxyNQI="; };
   };
 
-  mkpkg = license: name: {label, version, sha256}: fetchzip {
-    name = "lohit-${name}-${version}";
+  mkpkg = license: pname: {label, version, hash}: stdenvNoCC.mkDerivation {
+    inherit pname version;
 
-    url = "https://releases.pagure.org/lohit/lohit-${name}-ttf-${version}.tar.gz";
+    src = fetchurl {
+      url = "https://releases.pagure.org/lohit/lohit-${pname}-ttf-${version}.tar.gz";
+      inherit hash;
+    };
 
-    postFetch = ''
-      tar -xzf $downloadedFile --strip-components=1
+    installPhase = ''
+      runHook preInstall
 
       mkdir -p $out/share/fonts/truetype
       cp -v *.ttf $out/share/fonts/truetype/
@@ -37,11 +40,11 @@ let
       mkdir -p $out/etc/fonts/conf.d
       cp -v *.conf $out/etc/fonts/conf.d
 
-      mkdir -p "$out/share/doc/lohit-${name}"
-      cp -v ChangeLog* COPYRIGHT* "$out/share/doc/lohit-${name}/"
-    '';
+      mkdir -p "$out/share/doc/lohit-${pname}"
+      cp -v ChangeLog* COPYRIGHT* "$out/share/doc/lohit-${pname}/"
 
-    inherit sha256;
+      runHook postInstall
+    '';
 
     meta = {
       inherit license;

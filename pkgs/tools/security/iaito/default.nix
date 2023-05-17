@@ -13,14 +13,14 @@
 
 stdenv.mkDerivation rec {
   pname = "iaito";
-  version = "5.8.0";
+  version = "5.8.4";
 
   srcs = [
     (fetchFromGitHub rec {
       owner = "radareorg";
       repo = "iaito";
       rev = version;
-      hash = "sha256-LqJu30Bp+JgB+y3MDyPVuFmEoXTpfA7K2pxv1ZCABx0=";
+      hash = "sha256-pt2vq+JN+Ccv+9o8s2y87xTVeQp2WJ0UfKdoWGsBkUI=";
       name = repo;
     })
     (fetchFromGitHub rec {
@@ -57,11 +57,11 @@ stdenv.mkDerivation rec {
   ];
 
   # the radare2 binary package seems to not install all necessary headers.
-  NIX_CFLAGS_COMPILE = [ "-I" "${radare2.src}/shlr/sdb/include/sdb" ];
+  env.NIX_CFLAGS_COMPILE = toString [ "-I" "${radare2.src}/shlr/sdb/include/sdb" ];
 
   postBuild = ''
     pushd ../../../iaito-translations
-    make build PREFIX=$out
+    make build -j$NIX_BUILD_CORES PREFIX=$out
     popd
   '';
 
@@ -74,7 +74,7 @@ stdenv.mkDerivation rec {
     install -m644 -Dt $out/share/pixmaps ../img/iaito-o.svg
 
     pushd ../../../iaito-translations
-    make install PREFIX=$out -j$NIX_BUILD_CORES
+    make install -j$NIX_BUILD_CORES PREFIX=$out
     popd
 
     runHook postInstall

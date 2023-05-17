@@ -35,7 +35,7 @@ in stdenv.mkDerivation {
   # Workaround build failure on -fno-common toolchains:
   #   ld: initc.o:(.bss+0x28): multiple definition of `HacksDisable'; cfg.o:(.bss+0x59e3): first defined here
   # Use pre-c++17 standard (c++17 forbids throw annotations)
-  NIX_CFLAGS_COMPILE = "-fcommon -std=c++14";
+  env.NIX_CFLAGS_COMPILE = "-fcommon -std=c++14";
 
   preConfigure = ''
     cd src

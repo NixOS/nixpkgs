@@ -11,11 +11,11 @@ buildGoModule rec {
     sha256 = "ahsNiac/3I2+PUqc90E73Brb99M68ewh9nWXoupfE3g=";
   };
 
-  vendorSha256 = "pQpattmS9VmO3ZIQUFn66az8GSmB4IvYhTTCFn6SUmo=";
+  vendorSha256 = null;
 
   # Avoid building example
   subPackages = [ "." "fs" ];
-  # Tests are checking that the files embeded are preserving
+  # Tests are checking that the files embedded are preserving
   # their meta data like dates etc, but it assumes to be in 2048
   # which is not the case once entered the nix store
   doCheck = false;

@@ -2,6 +2,7 @@
 , stdenv
 , rustPlatform
 , fetchFromGitHub
+, fetchpatch
 , pkg-config
 , cmake
 , llvmPackages
@@ -29,7 +30,20 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-RuzaRJr1n21MbHSeHBt8CjEm5AwbDbvX9Nw5PeBTl+w=";
   };
 
-  cargoSha256 = "sha256-q+CoXoNZOxDmEJ+q1vPWxBJsfHQiCxAMlCZo8C49aQA=";
+  patches = [
+   # fix build on aarch64-linux, see https://github.com/Aloxaf/silicon/pull/210
+    (fetchpatch {
+      url = "https://github.com/Aloxaf/silicon/commit/f666c95d3dab85a81d60067e2f25d29ee8ab59e7.patch";
+      hash = "sha256-L6tF9ndC38yVn5ZNof1TMxSImmaqZ6bJ/NYhb0Ebji4=";
+    })
+  ];
+
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "pathfinder_simd-0.5.1" = "sha256-jQCa8TpGHLWvDT9kXWmlw51QtpKImPlWi082Va721cE=";
+    };
+  };
 
   buildInputs = [ llvmPackages.libclang expat freetype fira-code fontconfig harfbuzz ]
     ++ lib.optionals stdenv.isLinux [ libxcb ]

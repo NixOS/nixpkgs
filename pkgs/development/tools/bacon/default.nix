@@ -1,24 +1,32 @@
-{ lib, stdenv, rustPlatform, fetchFromGitHub, CoreServices }:
+{ lib
+, stdenv
+, rustPlatform
+, fetchFromGitHub
+, CoreServices
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "bacon";
-  version = "2.2.8";
+  version = "2.8.1";
 
   src = fetchFromGitHub {
     owner = "Canop";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-UFuU3y+v1V7Llc+IrWbh7kz8uUyCsxJO2zJhE6zwjSg=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-3LoqG7t2InDBrfOk0vve/6C5Vjifq5L+Tt8ulMGuASg=";
   };
 
-  cargoSha256 = "sha256-CPugHGkYbJG6WrguuGt/CnHq6NvRZ2fP2hgPIuIGGqc=";
+  cargoHash = "sha256-k41hF7qhT9Y7IBp7rzpRP9pTIf1ZQsEyslaHmss+NhE=";
 
-  buildInputs = lib.optional stdenv.isDarwin CoreServices;
+  buildInputs = lib.optionals stdenv.isDarwin [
+    CoreServices
+  ];
 
   meta = with lib; {
     description = "Background rust code checker";
     homepage = "https://github.com/Canop/bacon";
+    changelog = "https://github.com/Canop/bacon/blob/v${version}/CHANGELOG.md";
     license = licenses.agpl3Only;
-    maintainers = [ maintainers.FlorianFranzen ];
+    maintainers = with maintainers; [ FlorianFranzen ];
   };
 }

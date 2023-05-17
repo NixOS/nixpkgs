@@ -5,6 +5,7 @@
 , x11Support ? graphicsSupport, libX11
 , mouseSupport ? !stdenv.isDarwin, gpm-ncurses
 , perl, man, pkg-config, buildPackages, w3m
+, testers
 }:
 
 let
@@ -19,13 +20,13 @@ let
   };
 in stdenv.mkDerivation rec {
   pname = "w3m";
-  version = "0.5.3+git20220429";
+  version = "0.5.3+git20230121";
 
   src = fetchFromGitHub {
     owner = "tats";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-aPPLZjjL3A5Tk0hv0NoAwJnjemC7a5RUoubhUr3lQE4=";
+    hash = "sha256-upb5lWqhC1jRegzTncIz5e21v4Pw912FyVn217HucFs=";
   };
 
   NIX_LDFLAGS = lib.optionalString stdenv.isSunOS "-lsocket -lnsl";
@@ -84,11 +85,19 @@ in stdenv.mkDerivation rec {
   # see: https://bbs.archlinux.org/viewtopic.php?id=196093
   LIBS = lib.optionalString x11Support "-lX11";
 
+  passthru.tests.version = testers.testVersion {
+    inherit version;
+    package = w3m;
+    command = "w3m -version";
+  };
+
   meta = with lib; {
-    homepage = "http://w3m.sourceforge.net/";
+    homepage = "https://w3m.sourceforge.net/";
+    changelog = "https://github.com/tats/w3m/blob/v${version}/ChangeLog";
     description = "A text-mode web browser";
     maintainers = with maintainers; [ cstrahan anthonyroussel ];
     platforms = platforms.unix;
     license = licenses.mit;
+    mainProgram = "w3m";
   };
 }

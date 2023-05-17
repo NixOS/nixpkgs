@@ -1,94 +1,117 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, fetchFromGitLab
-, cmake
+, pkg-config
+, meson
+, ninja
+, cairo
+, git
+, hyprland-protocols
+, jq
 , libdrm
 , libinput
 , libxcb
 , libxkbcommon
 , mesa
 , pango
-, pkg-config
+, pciutils
+, systemd
+, udis86
 , wayland
 , wayland-protocols
 , wayland-scanner
 , wlroots
 , xcbutilwm
+, xwayland
+, debug ? false
+, enableXWayland ? true
+, hidpiXWayland ? false
+, legacyRenderer ? false
+, nvidiaPatches ? false
+, withSystemd ? true
 }:
-
+let
+  assertXWayland = lib.assertMsg (hidpiXWayland -> enableXWayland) ''
+    Hyprland: cannot have hidpiXWayland when enableXWayland is false.
+  '';
+in
+assert assertXWayland;
 stdenv.mkDerivation (finalAttrs: {
-  pname = "hyprland";
-  version = "0.6.1beta";
+  pname = "hyprland" + lib.optionalString debug "-debug";
+  version = "0.25.0";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
-    repo = "Hyprland";
+    repo = finalAttrs.pname;
     rev = "v${finalAttrs.version}";
-    hash = "sha256-0Msqe2ErAJvnO1zHoB2k6TkDhTYnHRGkvJrfSG12dTU=";
+    hash = "sha256-Npf48UUfywneFYGEc7NQ59xudwvw7EJjwweT4tHguIY=";
   };
 
+  patches = [
+    # make meson use the provided dependencies instead of the git submodules
+    "${finalAttrs.src}/nix/meson-build.patch"
+  ];
+
+  postPatch = ''
+    # Fix hardcoded paths to /usr installation
+    sed -i "s#/usr#$out#" src/render/OpenGL.cpp
+    substituteInPlace meson.build \
+      --replace "@GIT_COMMIT_HASH@" '${finalAttrs.src.rev}' \
+      --replace "@GIT_DIRTY@" ""
+  '';
+
   nativeBuildInputs = [
-    cmake
+    jq
+    meson
+    ninja
     pkg-config
     wayland-scanner
   ];
 
-  buildInputs = [
-    libdrm
-    libinput
-    libxcb
-    libxkbcommon
-    mesa
-    pango
-    wayland
-    wayland-protocols
-    xcbutilwm
-  ]
-  ++ [
-    # INFO: When updating src, remember to synchronize this wlroots with the
-    # exact commit used by upstream
-    (wlroots.overrideAttrs (_: {
-      version = "unstable-2022-06-07";
-      src = fetchFromGitLab {
-        domain = "gitlab.freedesktop.org";
-        owner = "wlroots";
-        repo = "wlroots";
-        rev = "b89ed9015c3fbe8d339e9d65cf70fdca6e5645bc";
-        hash = "sha256-8y3u8CoigjoZOVbA2wCWBHlDNEakv0AVxU46/cOC00s=";
-      };
-    }))
+  outputs = [
+    "out"
+    "man"
+    "dev"
   ];
 
-  # build with system wlroots
-  postPatch = ''
-    sed -Ei 's|"\.\./wlroots/include/([a-zA-Z0-9./_-]+)"|<\1>|g' src/includes.hpp
-  '';
+  buildInputs =
+    [
+      cairo
+      git
+      hyprland-protocols
+      libdrm
+      libinput
+      libxkbcommon
+      mesa
+      udis86
+      wayland
+      wayland-protocols
+      pango
+      pciutils
+      (wlroots.override { inherit enableXWayland hidpiXWayland nvidiaPatches; })
+    ]
+    ++ lib.optionals enableXWayland [ libxcb xcbutilwm xwayland ]
+    ++ lib.optionals withSystemd [ systemd ];
 
-  preConfigure = ''
-    make protocols
-  '';
+  mesonBuildType =
+    if debug
+    then "debug"
+    else "release";
 
-  postBuild = ''
-    pushd ../hyprctl
-    ${stdenv.cc.targetPrefix}c++ -std=c++20 -w ./main.cpp -o ./hyprctl
-    popd
-  '';
+  mesonFlags = builtins.concatLists [
+    (lib.optional (!enableXWayland) "-Dxwayland=disabled")
+    (lib.optional legacyRenderer "-DLEGACY_RENDERER:STRING=true")
+    (lib.optional withSystemd "-Dsystemd=enabled")
+  ];
 
-  installPhase = ''
-    runHook preInstall
-
-    install -Dm755 ../hyprctl/hyprctl ./Hyprland -t $out/bin
-
-    runHook postInstall
-  '';
+  passthru.providedSessions = [ "hyprland" ];
 
   meta = with lib; {
-    inherit (finalAttrs.src.meta) homepage;
+    homepage = "https://github.com/vaxerski/Hyprland";
     description = "A dynamic tiling Wayland compositor that doesn't sacrifice on its looks";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ wozeparrot ];
-    inherit (wayland.meta) platforms;
+    maintainers = with maintainers; [ wozeparrot fufexan ];
     mainProgram = "Hyprland";
+    platforms = wlroots.meta.platforms;
   };
 })

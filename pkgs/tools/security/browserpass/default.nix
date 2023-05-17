@@ -1,20 +1,27 @@
-{ lib, buildGoModule, fetchFromGitHub, makeWrapper, gnupg }:
+{ lib
+, stdenv
+, buildGoModule
+, fetchFromGitHub
+, gnupg
+, makeWrapper
+}:
+
 buildGoModule rec {
   pname = "browserpass";
-  version = "3.0.10";
+  version = "3.1.0";
 
   src = fetchFromGitHub {
     owner = "browserpass";
     repo = "browserpass-native";
     rev = version;
-    sha256 = "8eAwUwcRTnhVDkQc3HsvTP0TqC4LfVrUelxdbJxe9t0=";
+    sha256 = "sha256-UZzOPRRiCUIG7uSSp9AEPMDN/+4cgyK47RhrI8oUx8U=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
 
-  vendorSha256 = "gWXcYyIp86b/Pn6vj7qBj/VZS9rTr4weVw0YWmg+36c=";
+  vendorHash = "sha256-CjuH4ANP2bJDeA+o+1j+obbtk5/NVLet/OFS3Rms4r0=";
 
-  doCheck = false;
+  doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 
   postPatch = ''
     # Because this Makefile will be installed to be used by the user, patch
@@ -32,8 +39,10 @@ buildGoModule rec {
   '';
 
   buildPhase = ''
-    make
+    make browserpass
   '';
+
+  checkTarget = "test";
 
   installPhase = ''
     make install

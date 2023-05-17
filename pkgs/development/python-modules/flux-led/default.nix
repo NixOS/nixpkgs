@@ -1,4 +1,5 @@
 { lib
+, async-timeout
 , buildPythonPackage
 , fetchFromGitHub
 , webcolors
@@ -8,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "flux-led";
-  version = "0.28.34";
+  version = "0.28.37";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -17,14 +18,15 @@ buildPythonPackage rec {
     owner = "Danielhiversen";
     repo = "flux_led";
     rev = "refs/tags/${version}";
-    hash = "sha256-bIL9ivjCLKeTLK3n0ytgGkXQggsuDiMCY7kAtE81qfY=";
+    hash = "sha256-3SlgYENtyv0JdUwGFpT3lWUDOciAKThYGz/RV8z+tac=";
   };
 
   propagatedBuildInputs = [
+    async-timeout
     webcolors
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

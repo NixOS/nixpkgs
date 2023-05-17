@@ -24,19 +24,19 @@ let
 
 in buildPythonPackage rec {
   pname = "cython";
-  version = "0.29.32";
+  version = "0.29.34";
 
   src = fetchPypi {
     pname = "Cython";
     inherit version;
-    hash = "sha256-hzPPR1i3kwTypOOev6xekjQbzke8zrJsElQ5iy+MGvc=";
+    hash = "sha256-GQloj117Uhpgw5bSC7qeR6Gy0nhL+whUAeHh59KaKag=";
   };
 
   nativeBuildInputs = [
     pkg-config
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     gdb numpy ncurses
   ];
 
@@ -46,11 +46,7 @@ in buildPythonPackage rec {
     # backport Cython 3.0 trashcan support (https://github.com/cython/cython/pull/2842) to 0.X series.
     # it does not affect Python code unless the code explicitly uses the feature.
     # trashcan support is needed to avoid stack overflows during object deallocation in sage (https://trac.sagemath.org/ticket/27267)
-    (fetchpatch {
-      name = "trashcan.patch";
-      url = "https://github.com/cython/cython/commit/f781880b6780117660b2026caadf4a6d7905722f.patch";
-      sha256 = "sha256-SnjaJdBZxm3O5gJ5Dxut6+eeVtZv+ygUUNwAwgoiFxg=";
-    })
+    ./trashcan.patch
     # The above commit introduces custom trashcan macros, as well as
     # compiler changes to use them in Cython-emitted code. The latter
     # change is still useful, but the former has been upstreamed as of
@@ -61,7 +57,7 @@ in buildPythonPackage rec {
     (fetchpatch {
       name = "disable-trashcan.patch";
       url = "https://github.com/cython/cython/commit/e337825cdcf5e94d38ba06a0cb0188e99ce0cc92.patch";
-      sha256 = "sha256-q0f63eetKrDpmP5Z4v8EuGxg26heSyp/62OYqhRoSso=";
+      hash = "sha256-q0f63eetKrDpmP5Z4v8EuGxg26heSyp/62OYqhRoSso=";
     })
   ];
 
@@ -78,7 +74,12 @@ in buildPythonPackage rec {
   doCheck = false;
   # doCheck = !stdenv.isDarwin;
 
+  # force regeneration of generated code in source distributions
+  # https://github.com/cython/cython/issues/5089
+  setupHook = ./setup-hook.sh;
+
   meta = {
+    changelog = "https://github.com/cython/cython/blob/${version}/CHANGES.rst";
     description = "An optimising static compiler for both the Python programming language and the extended Cython programming language";
     homepage = "https://cython.org";
     license = lib.licenses.asl20;

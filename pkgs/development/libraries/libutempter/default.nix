@@ -1,7 +1,5 @@
 { stdenv, fetchurl, lib, glib }:
 
-with lib;
-
 stdenv.mkDerivation rec {
   pname = "libutempter";
   version = "1.2.1";
@@ -28,7 +26,7 @@ stdenv.mkDerivation rec {
     "mandir=\${out}/share/man"
   ];
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/altlinux/libutempter";
     description = "Interface for terminal emulators such as screen and xterm to record user sessions to utmp and wtmp files";
     longDescription = ''

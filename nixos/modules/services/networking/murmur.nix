@@ -42,6 +42,8 @@ let
     ${if cfg.sslKey  == "" then "" else "sslKey="+cfg.sslKey}
     ${if cfg.sslCa   == "" then "" else "sslCA="+cfg.sslCa}
 
+    ${lib.optionalString (cfg.dbus != null) "dbus=${cfg.dbus}"}
+
     ${cfg.extraConfig}
   '';
 in
@@ -282,6 +284,12 @@ in
           `murmur` is running.
         '';
       };
+
+      dbus = mkOption {
+        type = types.enum [ null "session" "system" ];
+        default = null;
+        description = lib.mdDoc "Enable D-Bus remote control. Set to the bus you want Murmur to connect to.";
+      };
     };
   };
 
@@ -325,5 +333,27 @@ in
         Group = "murmur";
       };
     };
+
+    # currently not included in upstream package, addition requested at
+    # https://github.com/mumble-voip/mumble/issues/6078
+    services.dbus.packages = mkIf (cfg.dbus == "system") [(pkgs.writeTextFile {
+      name = "murmur-dbus-policy";
+      text = ''
+        <!DOCTYPE busconfig PUBLIC
+          "-//freedesktop//DTD D-BUS Bus Configuration 1.0//EN"
+          "http://www.freedesktop.org/standards/dbus/1.0/busconfig.dtd">
+        <busconfig>
+          <policy user="murmur">
+            <allow own="net.sourceforge.mumble.murmur"/>
+          </policy>
+
+          <policy context="default">
+            <allow send_destination="net.sourceforge.mumble.murmur"/>
+            <allow receive_sender="net.sourceforge.mumble.murmur"/>
+          </policy>
+        </busconfig>
+      '';
+      destination = "/share/dbus-1/system.d/murmur.conf";
+    })];
   };
 }

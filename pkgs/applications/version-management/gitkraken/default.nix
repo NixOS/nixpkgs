@@ -10,24 +10,24 @@ with lib;
 
 let
   pname = "gitkraken";
-  version = "9.0.0";
+  version = "9.3.0";
 
   throwSystem = throw "Unsupported system: ${stdenv.hostPlatform.system}";
 
   srcs = {
     x86_64-linux = fetchzip {
       url = "https://release.axocdn.com/linux/GitKraken-v${version}.tar.gz";
-      sha256 = "sha256-I6iIg+RBTz5HyommAvDuQBBURjMm04t31o5OZNCrYGc=";
+      sha256 = "sha256-OX/taX+eYHPWTNNGfZhoiBEG8pFSnjCaTshM+z6MhDU=";
     };
 
     x86_64-darwin = fetchzip {
       url = "https://release.axocdn.com/darwin/GitKraken-v${version}.zip";
-      sha256 = "1dhswjzyjrfz4psjji53fjpvb8845lv44qqc6ncfv1ljx9ky828r";
+      sha256 = "sha256-miUcV35HX73b5YnwMnkqYdQtxfSHJaMdMcgVVBkZs6A=";
     };
 
     aarch64-darwin = fetchzip {
       url = "https://release.axocdn.com/darwin-arm64/GitKraken-v${version}.zip";
-      sha256 = "0jzcwx1z240rr08qc6vbasn51bcadz2jl3vm3jwgjpfdwypnsvk1";
+      sha256 = "sha256-yAwvuwxtGQh7/bV/7wShdCVHgZCtRCfmXrdT4dI6+cM=";
     };
   };
 
@@ -122,7 +122,9 @@ let
 
     postFixup = ''
       pushd $out/share/${pname}
-      patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" ${pname}
+      for file in ${pname} chrome-sandbox chrome_crashpad_handler; do
+        patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" $file
+      done
 
       for file in $(find . -type f \( -name \*.node -o -name ${pname} -o -name \*.so\* \) ); do
         patchelf --set-rpath ${libPath}:$out/share/${pname} $file || true

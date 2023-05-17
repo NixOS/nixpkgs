@@ -27,6 +27,10 @@ let
     , system-sendmail
     , valgrind
     , xcbuild
+    , writeShellScript
+    , common-updater-scripts
+    , curl
+    , jq
 
     , version
     , hash
@@ -48,7 +52,7 @@ let
     , cgotoSupport ? false
     , embedSupport ? false
     , ipv6Support ? true
-    , systemdSupport ? stdenv.isLinux
+    , systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd
     , valgrindSupport ? !stdenv.isDarwin && lib.meta.availableOn stdenv.hostPlatform valgrind
     , ztsSupport ? apxs2Support
     }@args:
@@ -166,19 +170,19 @@ let
               ln -s ${extraInit} $out/lib/php.ini
 
               if test -e $out/bin/php; then
-                wrapProgram $out/bin/php --set PHP_INI_SCAN_DIR $out/lib
+                wrapProgram $out/bin/php --set-default PHP_INI_SCAN_DIR $out/lib
               fi
 
               if test -e $out/bin/php-fpm; then
-                wrapProgram $out/bin/php-fpm --set PHP_INI_SCAN_DIR $out/lib
+                wrapProgram $out/bin/php-fpm --set-default PHP_INI_SCAN_DIR $out/lib
               fi
 
               if test -e $out/bin/phpdbg; then
-                wrapProgram $out/bin/phpdbg --set PHP_INI_SCAN_DIR $out/lib
+                wrapProgram $out/bin/phpdbg --set-default PHP_INI_SCAN_DIR $out/lib
               fi
 
               if test -e $out/bin/php-cgi; then
-                wrapProgram $out/bin/php-cgi --set PHP_INI_SCAN_DIR $out/lib
+                wrapProgram $out/bin/php-cgi --set-default PHP_INI_SCAN_DIR $out/lib
               fi
             '';
           };
@@ -300,6 +304,19 @@ let
           outputs = [ "out" "dev" ];
 
           passthru = {
+            updateScript =
+              let
+                script = writeShellScript "php${lib.versions.major version}${lib.versions.minor version}-update-script" ''
+                  set -o errexit
+                  PATH=${lib.makeBinPath [ common-updater-scripts curl jq ]}
+                  new_version=$(curl --silent "https://www.php.net/releases/active" | jq --raw-output '."${lib.versions.major version}"."${lib.versions.majorMinor version}".version')
+                  update-source-version "$UPDATE_NIX_ATTR_PATH.unwrapped" "$new_version" "--file=$1"
+                '';
+              in [
+                script
+                # Passed as an argument so that update.nix can ensure it does not become a store path.
+                (./. + "/${lib.versions.majorMinor version}.nix")
+              ];
             buildEnv = mkBuildEnv { } [ ];
             withExtensions = mkWithExtensions { } [ ];
             overrideAttrs =
@@ -316,6 +333,7 @@ let
             description = "An HTML-embedded scripting language";
             homepage = "https://www.php.net/";
             license = licenses.php301;
+            mainProgram = "php";
             maintainers = teams.php.members;
             platforms = platforms.all;
             outputsToInstall = [ "out" "dev" ];

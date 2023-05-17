@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
   };
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ libjack2 ladspaH gtk2 alsa-lib libxml2 lrdf ];
-  NIX_LDFLAGS = "-ldl -lm -lpthread";
+  NIX_LDFLAGS = "-lm -lpthread";
 
   meta = {
     description = ''An effects "rack" for the JACK low latency audio API'';
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
       be controlled using the ALSA sequencer. It's phat; it turns your
       computer into an effects box.
     '';
-    homepage = "http://jack-rack.sourceforge.net/";
+    homepage = "https://jack-rack.sourceforge.net/";
     license = lib.licenses.gpl2Plus;
     maintainers = [ lib.maintainers.astsmtl ];
     platforms = lib.platforms.linux;

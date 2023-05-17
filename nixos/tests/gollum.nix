@@ -9,6 +9,6 @@ import ./make-test-python.nix ({ pkgs, ... }: {
 
   testScript = { nodes, ... }: ''
     webserver.wait_for_unit("gollum")
-    webserver.wait_for_open_port(${toString nodes.webserver.config.services.gollum.port})
+    webserver.wait_for_open_port(${toString nodes.webserver.services.gollum.port})
   '';
 })

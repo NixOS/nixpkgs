@@ -11,12 +11,12 @@
 
 buildPythonPackage rec {
   pname = "chat-downloader";
-  version = "0.2.3";
+  version = "0.2.5";
   format = "setuptools";
 
   src = fetchPypi {
     inherit version pname;
-    sha256 = "e19f961480b14b55d03d4d4aaa766d46131bdf2ea8a79b47d20037dfd980201a";
+    hash = "sha256-nxk1VcZr5teuev4cFrtUSIeZNQ8ynpk0n0obGTxqepA=";
   };
 
   propagatedBuildInputs = [
@@ -30,7 +30,7 @@ buildPythonPackage rec {
   # Tests try to access the network.
   doCheck = false;
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "chat_downloader" ];
 

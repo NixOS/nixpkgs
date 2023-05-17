@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
   # gcc-10. Otherwise build fails as:
   #   ld: main.o:/build/source/Sil/src/externs.h:57: multiple definition of
   #     `mini_screenshot_char'; variable.o:/build/source/Sil/src/externs.h:57: first defined here
-  NIX_CFLAGS_COMPILE = "-fcommon";
+  env.NIX_CFLAGS_COMPILE = "-fcommon";
 
   installPhase = ''
     runHook preInstall

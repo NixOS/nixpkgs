@@ -44,7 +44,7 @@ stdenv.mkDerivation {
   '';
 
   makeFlags = [
-    "PREFIX=$(out)" "LANGUAGES=all" "RUNTESTS=0"
+    "PREFIX=$(out)" "LANGUAGES=all"
     (if useXdgDir then "USE_XDG_DIR=1" else "USE_HOME_DIR=1")
   ] ++ optionals (!debug) [
     "RELEASE=1"

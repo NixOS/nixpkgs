@@ -21,11 +21,11 @@ let
 in
 (if withQt then mkDerivation else stdenv.mkDerivation) rec {
   pname = "gnuplot";
-  version = "5.4.5";
+  version = "5.4.6";
 
   src = fetchurl {
     url = "mirror://sourceforge/gnuplot/${pname}-${version}.tar.gz";
-    sha256 = "sha256-ZvZ5EV3TBVnhEEmPyU2SaUnU03C0mZoELnJLjpEO5Hg=";
+    sha256 = "sha256-AvwnkYIA7WTY8MO4T+gblbWc1HrZnycJOa5JfBnydBk=";
   };
 
   nativeBuildInputs = [ makeWrapper pkg-config texinfo ] ++ lib.optional withQt qttools;
@@ -53,11 +53,16 @@ in
 
   CXXFLAGS = lib.optionalString (stdenv.isDarwin && withQt) "-std=c++11";
 
+  # we'll wrap things ourselves
+  dontWrapGApps = true;
+  dontWrapQtApps = true;
+
+  # binary wrappers don't support --run
   postInstall = lib.optionalString withX ''
-    wrapProgram $out/bin/gnuplot \
-       --prefix PATH : '${gnused}/bin' \
-       --prefix PATH : '${coreutils}/bin' \
-       --prefix PATH : '${fontconfig.bin}/bin' \
+    wrapProgramShell $out/bin/gnuplot \
+       --prefix PATH : '${lib.makeBinPath [ gnused coreutils fontconfig.bin ]}' \
+       "''${gappsWrapperArgs[@]}" \
+       "''${qtWrapperArgs[@]}" \
        --run '. ${./set-gdfontpath-from-fontconfig.sh}'
   '';
 

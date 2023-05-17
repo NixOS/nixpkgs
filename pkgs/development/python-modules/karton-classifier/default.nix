@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "CERT-Polska";
     repo = pname;
-    rev = "v${version}";
+    rev = "refs/tags/v${version}";
     hash = "sha256-TRmAin0TAOIwR5EBMwTOJ9QaHO+mOx/eAjgqvyQZDj4=";
   };
 
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     python-magic
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 
@@ -51,6 +51,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "File type classifier for the Karton framework";
     homepage = "https://github.com/CERT-Polska/karton-classifier";
+    changelog = "https://github.com/CERT-Polska/karton-classifier/releases/tag/v${version}";
     license = with licenses; [ bsd3 ];
     maintainers = with maintainers; [ fab ];
   };

@@ -37,8 +37,7 @@ in rec {
   build = stdenv.mkDerivation {
     name = "stdenv-bootstrap-tools";
 
-    nativeBuildInputs = [ buildPackages.nukeReferences buildPackages.cpio ]
-      ++ lib.optionals targetPlatform.isAarch64 [ buildPackages.darwin.sigtool ];
+    nativeBuildInputs = [ nukeReferences dumpnar ];
 
     buildCommand = ''
       mkdir -p $out/bin $out/lib $out/lib/system $out/lib/darwin
@@ -49,20 +48,21 @@ in rec {
 
         # Resolv is actually a link to another package, so let's copy it properly
         cp -L ${lib.getLib darwin.Libsystem}/lib/libresolv.9.dylib $out/lib
-
-        cp -rL ${darwin.Libsystem}/include $out
-        chmod -R u+w $out/include
-        cp -rL ${darwin.ICU}/include*             $out/include
-        cp -rL ${libiconv}/include/*       $out/include
-        cp -rL ${gnugrep.pcre.dev}/include/*   $out/include
-        mv $out/include $out/include-Libsystem
       ''}
+
+      cp -rL ${darwin.Libsystem}/include $out
+      chmod -R u+w $out/include
+      cp -rL ${darwin.ICU}/include* $out/include
+      cp -rL ${libiconv}/include/* $out/include
+      cp -rL ${lib.getDev gnugrep.pcre}/include/* $out/include
+      mv $out/include $out/include-Libsystem
 
       # Copy coreutils, bash, etc.
       cp ${coreutils_}/bin/* $out/bin
       (cd $out/bin && rm vdir dir sha*sum pinky factor pathchk runcon shuf who whoami shred users)
 
       cp ${bash}/bin/bash $out/bin
+      ln -s bash $out/bin/sh
       cp ${findutils}/bin/find $out/bin
       cp ${findutils}/bin/xargs $out/bin
       cp -d ${diffutils}/bin/* $out/bin
@@ -71,11 +71,13 @@ in rec {
       cp ${gawk}/bin/gawk $out/bin
       cp -d ${gawk}/bin/awk $out/bin
       cp ${gnutar}/bin/tar $out/bin
-      cp ${gzip}/bin/gzip $out/bin
+      cp ${gzip}/bin/.gzip-wrapped $out/bin/gzip
       cp ${bzip2_.bin}/bin/bzip2 $out/bin
+      ln -s bzip2 $out/bin/bunzip2
       cp -d ${gnumake}/bin/* $out/bin
       cp -d ${patch}/bin/* $out/bin
       cp -d ${xz.bin}/bin/xz $out/bin
+      cp ${cpio}/bin/cpio $out/bin
 
       # This used to be in-nixpkgs, but now is in the bundle
       # because I can't be bothered to make it partially static
@@ -114,11 +116,9 @@ in rec {
       cp -d ${lib.getLib pkgs.xar}/lib/libxar*.dylib $out/lib
       cp -d ${pkgs.bzip2.out}/lib/libbz2*.dylib $out/lib
 
-      ${lib.optionalString targetPlatform.isAarch64 ''
-        # copy sigtool
-        cp -d ${pkgs.darwin.sigtool}/bin/sigtool $out/bin
-        cp -d ${pkgs.darwin.sigtool}/bin/codesign $out/bin
-      ''}
+      # copy sigtool
+      cp -d ${pkgs.darwin.sigtool}/bin/sigtool $out/bin
+      cp -d ${pkgs.darwin.sigtool}/bin/codesign $out/bin
 
       cp -d ${lib.getLib darwin.ICU}/lib/libicu*.dylib $out/lib
       cp -d ${zlib.out}/lib/libz.*       $out/lib
@@ -132,8 +132,9 @@ in rec {
 
       cp -d ${lib.getLib darwin.libtapi}/lib/libtapi* $out/lib
 
-      ${lib.optionalString targetPlatform.isx86_64 ''
-        cp -rd ${pkgs.darwin.CF}/Library $out
+      cp -rd ${pkgs.darwin.CF}/Library $out
+      ${lib.optionalString stdenv.targetPlatform.isAarch64 ''
+        cp -rd ${pkgs.darwin.libobjc}/lib/* $out/lib/
       ''}
 
       chmod -R u+w $out
@@ -150,46 +151,44 @@ in rec {
 
       # Strip executables even further
       for i in $out/bin/*; do
-        if test -x $i -a ! -L $i; then
+        if [[ ! -L $i ]]; then
           chmod +w $i
           ${stdenv.cc.targetPrefix}strip $i || true
         fi
       done
 
-      for i in $out/bin/* $out/lib/*.dylib $out/lib/darwin/*.dylib $out/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation; do
-        if test -x "$i" -a ! -L "$i"; then
-          echo "Adding rpath to $i"
+      for i in $out/bin/* $out/lib/*.dylib $out/lib/darwin/*.dylib; do
+        if [[ ! -L "$i" ]]; then
           rpathify $i
         fi
       done
 
       for i in $out/bin/*; do
-        if test -x "$i" -a ! -L "$i"; then
-          echo "Adding @executable_path to rpath in $i"
+        if [[ ! -L "$i" ]]; then
           ${stdenv.cc.targetPrefix}install_name_tool -add_rpath '@executable_path/../lib' $i
         fi
       done
 
+      ${if stdenv.targetPlatform.isx86_64 then ''
+        rpathify $out/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation
+      '' else ''
+        sed -i -e 's|/nix/store/.*/libobjc.A.dylib|@executable_path/../libobjc.A.dylib|g' \
+          $out/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation.tbd
+      ''}
+
       nuke-refs $out/lib/*
       nuke-refs $out/lib/system/*
       nuke-refs $out/lib/darwin/*
-      nuke-refs $out/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation
+      ${lib.optionalString stdenv.targetPlatform.isx86_64 ''
+        nuke-refs $out/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation
+      ''}
 
       mkdir $out/.pack
       mv $out/* $out/.pack
       mv $out/.pack $out/pack
 
       mkdir $out/on-server
-      cp ${stdenv.shell} $out/on-server/sh
-      cp ${cpio}/bin/cpio $out/on-server
-      cp ${coreutils_}/bin/mkdir $out/on-server
-      cp ${bzip2_.bin}/bin/bzip2 $out/on-server
-
-      chmod u+w $out/on-server/*
-      ${stdenv.cc.targetPrefix}strip $out/on-server/*
-      nuke-refs $out/on-server/*
-
-      (cd $out/pack && (find | cpio -o -H newc)) | bzip2 > $out/on-server/bootstrap-tools.cpio.bz2
+      dumpnar $out/pack | ${xz}/bin/xz > $out/on-server/bootstrap-tools.nar.xz
     '';
 
     allowedReferences = [];
@@ -204,98 +203,42 @@ in rec {
 
     buildCommand = ''
       mkdir -p $out/nix-support
-      echo "file tarball ${build}/on-server/bootstrap-tools.cpio.bz2" >> $out/nix-support/hydra-build-products
-      echo "file sh ${build}/on-server/sh" >> $out/nix-support/hydra-build-products
-      echo "file cpio ${build}/on-server/cpio" >> $out/nix-support/hydra-build-products
-      echo "file mkdir ${build}/on-server/mkdir" >> $out/nix-support/hydra-build-products
-      echo "file bzip2 ${build}/on-server/bzip2" >> $out/nix-support/hydra-build-products
+      echo "file tools ${build}/on-server/bootstrap-tools.nar.xz" >> $out/nix-support/hydra-build-products
     '';
   };
 
   bootstrapLlvmVersion = llvmPackages.llvm.version;
 
   bootstrapFiles = {
-    sh      = "${build}/on-server/sh";
-    bzip2   = "${build}/on-server/bzip2";
-    mkdir   = "${build}/on-server/mkdir";
-    cpio    = "${build}/on-server/cpio";
-    tarball = "${build}/on-server/bootstrap-tools.cpio.bz2";
+    tools = "${build}/pack";
   };
 
-  unpack = stdenv.mkDerivation (bootstrapFiles // {
-    name = "unpack";
+  bootstrapTools = derivation {
+    inherit system;
 
-    # This is by necessity a near-duplicate of unpack-bootstrap-tools.sh. If we refer to it directly,
+    name = "bootstrap-tools";
+    builder = "${bootstrapFiles.tools}/bin/bash";
+
+    # This is by necessity a near-duplicate of patch-bootstrap-tools.sh. If we refer to it directly,
     # we can't make any changes to it due to our testing stdenv depending on it. Think of this as the
-    # unpack-bootstrap-tools.sh for the next round of bootstrap tools.
-    # TODO: think through alternate designs, such as hosting this script as an output of the process.
-    buildCommand = ''
-      # Unpack the bootstrap tools tarball.
-      echo Unpacking the bootstrap tools...
-      $mkdir $out
-      $bzip2 -d < $tarball | (cd $out && $cpio -i)
+    # patch-bootstrap-tools.sh for the next round of bootstrap tools.
+    args = [ ./patch-bootstrap-tools-next.sh ];
 
-      # Set the ELF interpreter / RPATH in the bootstrap binaries.
-      echo Patching the tools...
-
-      export PATH=$out/bin
-
-      for i in $out/bin/*; do
-        if ! test -L $i; then
-          echo patching $i
-          install_name_tool -add_rpath $out/lib $i || true
-        fi
-      done
-
-      ln -s libresolv.9.dylib $out/lib/libresolv.dylib
-
-      for i in $out/lib/*.dylib $out/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation; do
-        if test ! -L "$i" -a "$i" != "$out/lib/libSystem*.dylib"; then
-          echo "Patching $i"
-
-          id=$(otool -D "$i" | tail -n 1)
-          install_name_tool -id "$(dirname $i)/$(basename $id)" $i
-
-          libs=$(otool -L "$i" | tail -n +2 | grep -v libSystem | cat)
-          if [ -n "$libs" ]; then
-            install_name_tool -add_rpath $out/lib $i
-          fi
-        fi
-      done
-
-      ln -s bash $out/bin/sh
-      ln -s bzip2 $out/bin/bunzip2
-
-      # Provide a gunzip script.
-      cat > $out/bin/gunzip <<EOF
-      #!$out/bin/sh
-      exec $out/bin/gzip -d "\$@"
-      EOF
-      chmod +x $out/bin/gunzip
-
-      # Provide fgrep/egrep.
-      echo "#! $out/bin/sh" > $out/bin/egrep
-      echo "exec $out/bin/grep -E \"\$@\"" >> $out/bin/egrep
-      echo "#! $out/bin/sh" > $out/bin/fgrep
-      echo "exec $out/bin/grep -F \"\$@\"" >> $out/bin/fgrep
-
-      cat >$out/bin/dsymutil << EOF
-      #!$out/bin/sh
-      EOF
-
-      chmod +x $out/bin/egrep $out/bin/fgrep $out/bin/dsymutil
-    '';
+    inherit (bootstrapFiles) tools;
 
     allowedReferences = [ "out" ];
-  });
+  };
 
   test = stdenv.mkDerivation {
     name = "test";
 
-    realBuilder = "${unpack}/bin/bash";
+    realBuilder = "${bootstrapTools}/bin/bash";
 
+    tools = bootstrapTools;
     buildCommand = ''
-      export PATH=${unpack}/bin
+      # Create a pure environment where we use just what's in the bootstrap tools.
+      export PATH=$tools/bin
+
       ls -l
       mkdir $out
       mkdir $out/bin
@@ -313,14 +256,12 @@ in rec {
       # an SSL-capable curl
       curl --version | grep SSL
 
-      ${build}/on-server/sh -c 'echo Hello World'
-
       # This approximates a bootstrap version of libSystem can that be
       # assembled via fetchurl. Adapted from main libSystem expression.
       mkdir libSystem-boot
       cp -vr \
-        ${darwin.darwin-stubs}/usr/lib/libSystem.B.tbd \
-        ${darwin.darwin-stubs}/usr/lib/system \
+        ${stdenv.cc.libc_dev}/lib/libSystem.B.tbd \
+        ${stdenv.cc.libc_dev}/lib/system \
         libSystem-boot
 
       substituteInPlace libSystem-boot/libSystem.B.tbd \
@@ -328,28 +269,38 @@ in rec {
       ln -s libSystem.B.tbd libSystem-boot/libSystem.tbd
       # End of bootstrap libSystem
 
-      export flags="-idirafter ${unpack}/include-Libsystem --sysroot=${unpack} -L${unpack}/lib -L$PWD/libSystem-boot"
+      export flags="-idirafter $tools/include-Libsystem --sysroot=$tools -L$tools/lib -L$PWD/libSystem-boot"
 
       export CPP="clang -E $flags"
-      export CC="clang $flags -Wl,-rpath,${unpack}/lib -Wl,-v -Wl,-sdk_version,10.10"
-      export CXX="clang++ $flags --stdlib=libc++ -lc++abi -isystem${unpack}/include/c++/v1 -Wl,-rpath,${unpack}/lib -Wl,-v -Wl,-sdk_version,10.10"
+      export CC="clang $flags -rpath $tools/lib"
+      export CXX="clang++ $flags --stdlib=libc++ -lc++abi -isystem$tools/include/c++/v1 -rpath $tools/lib"
 
-      echo '#include <stdio.h>' >> foo.c
-      echo '#include <float.h>' >> foo.c
-      echo '#include <limits.h>' >> foo.c
-      echo 'int main() { printf("Hello World\n"); return 0; }' >> foo.c
-      $CC -o $out/bin/foo foo.c
-      $out/bin/foo
+      # NOTE: These tests do a separate 'install' step (using cp), because
+      # having clang write directly to the final location apparently will make
+      # running the executable fail signature verification. (SIGKILL'd)
+      #
+      # Suspect this is creating a corrupt entry in the kernel cache, but it is
+      # unique to cctools ld. (The problem goes away with `-fuse-ld=lld`.)
 
-      echo '#include <CoreFoundation/CoreFoundation.h>' >> bar.c
-      echo 'int main() { CFShow(CFSTR("Hullo")); return 0; }' >> bar.c
-      $CC -F${unpack}/Library/Frameworks -framework CoreFoundation -o $out/bin/bar bar.c
-      $out/bin/bar
+      echo '#include <stdio.h>' >> hello1.c
+      echo '#include <float.h>' >> hello1.c
+      echo '#include <limits.h>' >> hello1.c
+      echo 'int main() { printf("Hello World\n"); return 0; }' >> hello1.c
+      $CC -o hello1 hello1.c
+      cp hello1 $out/bin/
+      $out/bin/hello1
 
-      echo '#include <iostream>' >> bar.cc
-      echo 'int main() { std::cout << "Hello World\n"; }' >> bar.cc
-      $CXX -v -o $out/bin/bar bar.cc
-      $out/bin/bar
+      echo '#include <CoreFoundation/CoreFoundation.h>' >> hello2.c
+      echo 'int main() { CFShow(CFSTR("Hullo")); return 0; }' >> hello2.c
+      $CC -F$tools/Library/Frameworks -framework CoreFoundation -o hello2 hello2.c
+      cp hello2 $out/bin/
+      $out/bin/hello2
+
+      echo '#include <iostream>' >> hello3.cc
+      echo 'int main() { std::cout << "Hello World\n"; }' >> hello3.cc
+      $CXX -v -o hello3 hello3.cc
+      cp hello3 $out/bin/
+      $out/bin/hello3
 
       tar xvf ${hello.src}
       cd hello-*
@@ -357,7 +308,6 @@ in rec {
       am_cv_func_iconv=no ./configure --prefix=$out
       make
       make install
-
       $out/bin/hello
     '';
   };

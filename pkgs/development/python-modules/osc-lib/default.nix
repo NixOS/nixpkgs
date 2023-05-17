@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "openstack";
     repo = "osc-lib";
     rev = "65c73fd5030276e34f3d52c03ddb9d27cd8ec6f5";
-    sha256 = "sha256-CLE9lrMMlvVrihe+N4wvIKe8t9IZ1TpHHVdn2dnvAOI=";
+    hash = "sha256-CLE9lrMMlvVrihe+N4wvIKe8t9IZ1TpHHVdn2dnvAOI=";
   };
 
   # fake version to make pbr.packaging happy and not reject it...
@@ -38,7 +38,7 @@ buildPythonPackage rec {
     simplejson
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     requests-mock
     stestr
   ];
@@ -56,7 +56,6 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "osc_lib" ];
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
     description = "OpenStackClient Library";
     homepage = "https://github.com/openstack/osc-lib";
     license = licenses.asl20;

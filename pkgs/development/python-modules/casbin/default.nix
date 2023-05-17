@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "casbin";
-  version = "1.17.5";
+  version = "1.18.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = pname;
     repo = "pycasbin";
     rev = "refs/tags/v${version}";
-    hash = "sha256-PLtIxA3XD9Mi33zRfciocJUml1HqGsWGITlLUKAJUss=";
+    hash = "sha256-oI+w9EoNgKnR+7pgvwTmsRpOQI0TxzCx8TjfSEmO7mc=";
   };
 
   propagatedBuildInputs = [
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     wcmatch
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

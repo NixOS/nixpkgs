@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "troposphere";
-  version = "4.2.0";
+  version = "4.3.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -20,8 +20,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "cloudtools";
     repo = pname;
-    rev = version;
-    hash = "sha256-4flnV4WxK21NNd9FXizkw6FoGffSL27Tq/Jc87vYJbc=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-8vIpwZBUdU9gD1Ya0+L1phMDMcAABtuyRx4quDfQWGA=";
   };
 
   propagatedBuildInputs = [
@@ -30,7 +30,7 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     awacs
   ];
 

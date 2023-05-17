@@ -22,9 +22,9 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "man" "doc" ];
 
-  nativeBuildInputs = [ makeWrapper xorg.libXt ];
+  nativeBuildInputs = [ makeWrapper ];
 
-  buildInputs = [ xorg.libX11 xorg.libXinerama imlib2 libjpeg libpng curl libexif ];
+  buildInputs = [ xorg.libXt xorg.libX11 xorg.libXinerama imlib2 libjpeg libpng curl libexif ];
 
   makeFlags = [
     "PREFIX=${placeholder "out"}" "exif=1"
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
                                --add-flags '--theme=feh'
   '';
 
-  checkInputs = lib.singleton (perl.withPackages (p: [ p.TestCommand ]));
+  nativeCheckInputs = lib.singleton (perl.withPackages (p: [ p.TestCommand ]));
   doCheck = true;
 
   meta = with lib; {

@@ -87,5 +87,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ qknight domenkozar sorki ];
     platforms = [ "x86_64-linux" ];
+    broken = true;
   };
 }

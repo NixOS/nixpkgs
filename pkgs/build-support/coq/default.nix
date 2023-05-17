@@ -52,7 +52,7 @@ let
       inherit release releaseRev;
       location = { inherit domain owner repo; };
     } // optionalAttrs (args?fetcher) {inherit fetcher;});
-  fetched = fetch (if !isNull version then version else defaultVersion);
+  fetched = fetch (if version != null then version else defaultVersion);
   display-pkg = n: sep: v:
     let d = displayVersion.${n} or (if sep == "" then ".." else true); in
     n + optionalString (v != "" && v != null) (switch d [
@@ -84,9 +84,9 @@ stdenv.mkDerivation (removeAttrs ({
   inherit (fetched) version src;
 
   nativeBuildInputs = args.overrideNativeBuildInputs
-    or ([ which coq.ocamlPackages.findlib ]
+    or ([ which ]
         ++ optional useDune coq.ocamlPackages.dune_3
-        ++ optional (useDune || mlPlugin) coq.ocamlPackages.ocaml
+        ++ optionals (useDune || mlPlugin) [ coq.ocamlPackages.ocaml coq.ocamlPackages.findlib ]
         ++ (args.nativeBuildInputs or []) ++ extraNativeBuildInputs);
   buildInputs = args.overrideBuildInputs
     or ([ coq ] ++ (args.buildInputs or []) ++ extraBuildInputs);

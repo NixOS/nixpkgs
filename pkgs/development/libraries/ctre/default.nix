@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ctre";
-  version = "3.7.1";
+  version = "3.7.2";
 
   src = fetchFromGitHub {
     owner = "hanickadot";
     repo = "compile-time-regular-expressions";
     rev = "v${version}";
-    hash = "sha256-KqYBSY45x8FDQ0YgjrKoZdOiuhf33gv5w160/dSsSsg=";
+    hash = "sha256-pO6PW4oZsCA2xaMCsaJz2Bu203zyMUkbjO3OOBEbSiw=";
   };
 
   nativeBuildInputs = [ cmake ];

@@ -1,34 +1,36 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, substituteAll
 , libpcap
 , libxcrypt
+, pkg-config
+, autoreconfHook
 , openssl
 , bash
 , nixosTests
+, writeTextDir
 }:
 
 stdenv.mkDerivation rec {
-  version = "2.4.9";
+  version = "2.5.0";
   pname = "ppp";
 
   src = fetchFromGitHub {
     owner = "ppp-project";
     repo = pname;
-    rev = "${pname}-${version}";
-    sha256 = "sha256-8+nbqRNfKPLDx+wmuKSkv+BSeG72hKJI4dNqypqeEK4=";
+    rev = "ppp-${version}";
+    sha256 = "sha256-J7udiLiJiJ1PzNxD+XYAUPXZ+ABGXt2U3hSFUWJXe94=";
   };
 
-  patches = [
-    (substituteAll {
-      src = ./nix-purity.patch;
-      glibc = stdenv.cc.libc.dev or stdenv.cc.libc;
-      openssl_dev = openssl.dev;
-      openssl_lib = lib.getLib openssl;
-    })
-    # Without nonpriv.patch, pppd --version doesn't work when not run as root.
-    ./nonpriv.patch
+  configureFlags = [
+    "--localstatedir=/var"
+    "--sysconfdir=/etc"
+    "--with-openssl=${openssl.dev}"
+  ];
+
+  nativeBuildInputs = [
+    pkg-config
+    autoreconfHook
   ];
 
   buildInputs = [
@@ -47,18 +49,20 @@ stdenv.mkDerivation rec {
       scripts/{pon,poff,plog}
   '';
 
+  enableParallelBuilding = true;
+
   makeFlags = [
     "CC=${stdenv.cc.targetPrefix}cc"
   ];
 
   NIX_LDFLAGS = "-lcrypt";
 
-  installPhase = ''
-    runHook preInstall
-    mkdir -p $out/bin
-    make install
-    install -D -m 755 scripts/{pon,poff,plog} $out/bin
-    runHook postInstall
+  installFlags = [
+    "sysconfdir=$(out)/etc"
+  ];
+
+  postInstall = ''
+    install -Dm755 -t $out/bin scripts/{pon,poff,plog}
   '';
 
   postFixup = ''

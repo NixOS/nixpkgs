@@ -7,7 +7,7 @@
 
 buildPythonPackage rec {
   pname = "markupsafe";
-  version = "2.1.1";
+  version = "2.1.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -15,10 +15,10 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "MarkupSafe";
     inherit version;
-    sha256 = "sha256-f5EZfMnkj5idEuTm+8RklcRGY238gbnM9Quw7HS5HUs=";
+    hash = "sha256-q8q8jCsmA21i1MdGOBpvfPYKr8xlMZitZ4MGmGsJRQ0=";
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

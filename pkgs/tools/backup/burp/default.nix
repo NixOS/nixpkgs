@@ -1,15 +1,15 @@
 { lib, stdenv, fetchFromGitHub, fetchpatch, autoreconfHook, pkg-config
-, acl, librsync, ncurses, openssl, zlib, uthash }:
+, acl, librsync, ncurses, openssl_legacy, zlib, uthash }:
 
 stdenv.mkDerivation rec {
   pname = "burp";
-  version = "2.2.18";
+  version = "2.4.0";
 
   src = fetchFromGitHub {
     owner = "grke";
     repo = "burp";
     rev = version;
-    sha256 = "1zhq240kz881vs2s620qp0kifmgr582caalm85ls789w9rmdkhjl";
+    sha256 = "sha256-y6kRd1jD6t+Q6d5t7W9MDuk+m2Iq1THQkP50PJwI7Nc=";
   };
 
   patches = [
@@ -22,7 +22,9 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];
-  buildInputs = [ librsync ncurses openssl zlib uthash ]
+  # use openssl_legacy due to burp-2.4.0 not supporting file encryption with openssl 3.0
+  # replace with 'openssl' once burp-3.x has been declared stable and this package upgraded
+  buildInputs = [ librsync ncurses openssl_legacy zlib uthash ]
     ++ lib.optional (!stdenv.isDarwin) acl;
 
   configureFlags = [ "--localstatedir=/var" ];
@@ -33,7 +35,7 @@ stdenv.mkDerivation rec {
     description = "BURP - BackUp and Restore Program";
     homepage    = "https://burp.grke.org";
     license     = licenses.agpl3;
-    maintainers = with maintainers; [ tokudan ];
+    maintainers = with maintainers; [ arjan-s ];
     platforms   = platforms.all;
   };
 }

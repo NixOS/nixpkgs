@@ -1,28 +1,26 @@
-{ buildGoModule
+{ lib
+, buildGoModule
 , fetchFromGitHub
-, lib
-, writeScript
 }:
 
-let
-  otelcontribcol = writeScript "otelcontribcol" ''
-    echo 'ERROR: otelcontribcol is now in `pkgs.opentelemetry-collector-contrib`, call the collector with `otelcorecol` or move to `pkgs.opentelemetry-collector-contrib`' >&2
-    exit 1
-  '';
-in
 buildGoModule rec {
   pname = "opentelemetry-collector";
-  version = "0.66.0";
+  version = "0.77.0";
 
   src = fetchFromGitHub {
     owner = "open-telemetry";
     repo = "opentelemetry-collector";
     rev = "v${version}";
-    sha256 = "sha256-EvDdZTMq2Z8nFlQCiIuF+9SSnj4Lfsa03a7luzc9ynU=";
+    hash = "sha256-koPkEOtB5KnePdx67hJ/WNBojNDqKvf9kqYb59bwh8k=";
   };
   # there is a nested go.mod
   sourceRoot = "source/cmd/otelcorecol";
-  vendorSha256 = "sha256-D2/7Ubt1Zpb60CNRRQiMbxJXGF2CWmdeBc/XRxFzIjs=";
+  vendorHash = "sha256-CXXv0GnMpebw2BWJz7Vvx7JfzPUIZ/zCrsmTgtMuvEw=";
+
+  # upstream strongly recommends disabling CGO
+  # additionally dependencies have had issues when GCO was enabled that weren't caught upstream
+  # https://github.com/open-telemetry/opentelemetry-collector/blob/main/CONTRIBUTING.md#using-cgo
+  CGO_ENABLED = 0;
 
   preBuild = ''
     # set the build version, can't be done via ldflags
@@ -31,14 +29,10 @@ buildGoModule rec {
 
   ldflags = [ "-s" "-w" ];
 
-  postInstall = ''
-    cp ${otelcontribcol} $out/bin/otelcontribcol
-  '';
-
   meta = with lib; {
     homepage = "https://github.com/open-telemetry/opentelemetry-collector";
     changelog = "https://github.com/open-telemetry/opentelemetry-collector/blob/v${version}/CHANGELOG.md";
-    description = "OpenTelemetry Collector offers a vendor-agnostic implementation on how to receive, process and export telemetry data";
+    description = "A vendor-agnostic implementation on how to receive, process and export telemetry data";
     longDescription = ''
       The OpenTelemetry Collector offers a vendor-agnostic implementation on how
       to receive, process and export telemetry data. In addition, it removes the

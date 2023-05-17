@@ -22,14 +22,14 @@ buildGoModule rec {
   ldflags = [ "-s" "-w" "-X main.version=${version}" ];
 
   postInstall = ''
-    # make xdg-open overrideable at runtime
-    wrapProgram $out/bin/lab \
-      --prefix PATH ":" "${lib.makeBinPath [ git ]}" \
-      --suffix PATH ":" "${lib.makeBinPath [ xdg-utils ]}"
+    # create shell completions before wrapProgram so that lab detects the right path for itself
     installShellCompletion --cmd lab \
       --bash <($out/bin/lab completion bash) \
       --fish <($out/bin/lab completion fish) \
       --zsh <($out/bin/lab completion zsh)
+    # make xdg-open overrideable at runtime
+    wrapProgram $out/bin/lab \
+      --suffix PATH ":" "${lib.makeBinPath [ git xdg-utils ]}"
   '';
 
   meta = with lib; {

@@ -1,22 +1,18 @@
-{ lib, fetchFromGitHub, fetchpatch, buildDunePackage
+{ lib, fetchFromGitHub, buildDunePackage
 , iso8601, menhir
 }:
 
 buildDunePackage rec {
   pname = "toml";
-  version = "7.0.0";
+  version = "7.1.0";
+  minimalOCamlVersion = "4.08";
+  duneVersion = "3";
 
   src = fetchFromGitHub {
     owner = "ocaml-toml";
     repo = "to.ml";
     rev = version;
-    sha256 = "sha256-VEZQTFPwAGShCBGbKUiNOIY1zA/JdTpXU0ZIGNWopnQ=";
-  };
-
-  # Ensure compatibility with menhir ≥ 20211215
-  patches = fetchpatch {
-    url = "https://github.com/ocaml-toml/To.ml/commit/41172b739dff43424a12f7c1f0f64939e3660648.patch";
-    sha256 = "sha256:1333xkmm9qp5m3pp4y5w17k6rvmb30v62qyra6rfk1km2v28hqqq";
+    hash = "sha256-uk14Py7lEEDJhFsRRtStXqKlJLtx0o8eS9DEIes4SHw=";
   };
 
   nativeBuildInputs = [ menhir ];

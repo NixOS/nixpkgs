@@ -446,6 +446,15 @@ let
         };
       };
 
+      zfs = mkOption {
+        default = config.security.pam.zfs.enable;
+        defaultText = literalExpression "config.security.pam.zfs.enable";
+        type = types.bool;
+        description = lib.mdDoc ''
+          Enable unlocking and mounting of encrypted ZFS home dataset at login.
+        '';
+      };
+
       text = mkOption {
         type = types.nullOr types.lines;
         description = lib.mdDoc "Contents of the PAM service file.";
@@ -487,6 +496,9 @@ let
           optionalString cfg.googleOsLoginAccountVerification ''
             account [success=ok ignore=ignore default=die] ${pkgs.google-guest-oslogin}/lib/security/pam_oslogin_login.so
             account [success=ok default=ignore] ${pkgs.google-guest-oslogin}/lib/security/pam_oslogin_admin.so
+          '' +
+          optionalString config.services.homed.enable ''
+            account sufficient ${config.systemd.package}/lib/security/pam_systemd_home.so
           '' +
           # The required pam_unix.so module has to come after all the sufficient modules
           # because otherwise, the account lookup will fail if the user does not exist
@@ -541,8 +553,10 @@ let
           # after it succeeds. Certain modules need to run after pam_unix
           # prompts the user for password so we run it once with 'optional' at an
           # earlier point and it will run again with 'sufficient' further down.
-          # We use try_first_pass the second time to avoid prompting password twice
-          (optionalString (cfg.unixAuth &&
+          # We use try_first_pass the second time to avoid prompting password twice.
+          #
+          # The same principle applies to systemd-homed
+          (optionalString ((cfg.unixAuth || config.services.homed.enable) &&
             (config.security.pam.enableEcryptfs
               || config.security.pam.enableFscrypt
               || cfg.pamMount
@@ -551,9 +565,13 @@ let
               || cfg.googleAuthenticator.enable
               || cfg.gnupg.enable
               || cfg.failDelay.enable
-              || cfg.duoSecurity.enable))
+              || cfg.duoSecurity.enable
+              || cfg.zfs))
             (
-              ''
+              optionalString config.services.homed.enable ''
+                auth optional ${config.systemd.package}/lib/security/pam_systemd_home.so
+              '' +
+              optionalString cfg.unixAuth ''
                 auth optional pam_unix.so ${optionalString cfg.allowNullPassword "nullok"} ${optionalString cfg.nodelay "nodelay"} likeauth
               '' +
               optionalString config.security.pam.enableEcryptfs ''
@@ -561,6 +579,9 @@ let
               '' +
               optionalString config.security.pam.enableFscrypt ''
                 auth optional ${pkgs.fscrypt-experimental}/lib/security/pam_fscrypt.so
+              '' +
+              optionalString cfg.zfs ''
+                auth optional ${config.boot.zfs.package}/lib/security/pam_zfs_key.so homes=${config.security.pam.zfs.homes}
               '' +
               optionalString cfg.pamMount ''
                 auth optional ${pkgs.pam_mount}/lib/security/pam_mount.so disable_interactive
@@ -584,6 +605,9 @@ let
                 auth required ${pkgs.duo-unix}/lib/security/pam_duo.so
               ''
             )) +
+          optionalString config.services.homed.enable ''
+            auth sufficient ${config.systemd.package}/lib/security/pam_systemd_home.so
+          '' +
           optionalString cfg.unixAuth ''
             auth sufficient pam_unix.so ${optionalString cfg.allowNullPassword "nullok"} ${optionalString cfg.nodelay "nodelay"} likeauth try_first_pass
           '' +
@@ -605,13 +629,20 @@ let
             auth required pam_deny.so
 
             # Password management.
-            password sufficient pam_unix.so nullok sha512
+          '' +
+          optionalString config.services.homed.enable ''
+            password sufficient ${config.systemd.package}/lib/security/pam_systemd_home.so
+          '' + ''
+            password sufficient pam_unix.so nullok yescrypt
           '' +
           optionalString config.security.pam.enableEcryptfs ''
             password optional ${pkgs.ecryptfs}/lib/security/pam_ecryptfs.so
           '' +
           optionalString config.security.pam.enableFscrypt ''
             password optional ${pkgs.fscrypt-experimental}/lib/security/pam_fscrypt.so
+          '' +
+          optionalString cfg.zfs ''
+            password optional ${config.boot.zfs.package}/lib/security/pam_zfs_key.so homes=${config.security.pam.zfs.homes}
           '' +
           optionalString cfg.pamMount ''
             password optional ${pkgs.pam_mount}/lib/security/pam_mount.so
@@ -623,7 +654,7 @@ let
             password sufficient ${pkgs.pam_mysql}/lib/security/pam_mysql.so config_file=/etc/security/pam_mysql.conf
           '' +
           optionalString config.services.sssd.enable ''
-            password sufficient ${pkgs.sssd}/lib/security/pam_sss.so use_authtok
+            password sufficient ${pkgs.sssd}/lib/security/pam_sss.so
           '' +
           optionalString config.security.pam.krb5.enable ''
             password sufficient ${pam_krb5}/lib/security/pam_krb5.so use_first_pass
@@ -650,6 +681,9 @@ let
           ++ optional (cfg.ttyAudit.enablePattern != null) "enable=${cfg.ttyAudit.enablePattern}"
           ++ optional (cfg.ttyAudit.disablePattern != null) "disable=${cfg.ttyAudit.disablePattern}"
           )) +
+          optionalString config.services.homed.enable ''
+            session required ${config.systemd.package}/lib/security/pam_systemd_home.so
+          '' +
           optionalString cfg.makeHomeDir ''
             session required ${pkgs.pam}/lib/security/pam_mkhomedir.so silent skel=${config.security.pam.makeHomeDir.skelDirectory} umask=0077
           '' +
@@ -666,6 +700,10 @@ let
             # See also https://github.com/google/fscrypt/issues/95
             session [success=1 default=ignore] pam_succeed_if.so service = systemd-user
             session optional ${pkgs.fscrypt-experimental}/lib/security/pam_fscrypt.so
+          '' +
+          optionalString cfg.zfs ''
+            session [success=1 default=ignore] pam_succeed_if.so service = systemd-user
+            session optional ${config.boot.zfs.package}/lib/security/pam_zfs_key.so homes=${config.security.pam.zfs.homes} ${optionalString config.security.pam.zfs.noUnmount "nounmount"}
           '' +
           optionalString cfg.pamMount ''
             session optional ${pkgs.pam_mount}/lib/security/pam_mount.so disable_interactive
@@ -775,7 +813,7 @@ let
     };
   }));
 
-  motd = if isNull config.users.motdFile
+  motd = if config.users.motdFile == null
          then pkgs.writeText "motd" config.users.motd
          else config.users.motdFile;
 
@@ -1184,6 +1222,34 @@ in
       };
     };
 
+    security.pam.zfs = {
+      enable = mkOption {
+        default = false;
+        type = types.bool;
+        description = lib.mdDoc ''
+          Enable unlocking and mounting of encrypted ZFS home dataset at login.
+        '';
+      };
+
+      homes = mkOption {
+        example = "rpool/home";
+        default = "rpool/home";
+        type = types.str;
+        description = lib.mdDoc ''
+          Prefix of home datasets. This value will be concatenated with
+          `"/" + <username>` in order to determine the home dataset to unlock.
+        '';
+      };
+
+      noUnmount = mkOption {
+        default = false;
+        type = types.bool;
+        description = lib.mdDoc ''
+          Do not unmount home dataset on logout.
+        '';
+      };
+    };
+
     security.pam.enableEcryptfs = mkEnableOption (lib.mdDoc "eCryptfs PAM module (mounting ecryptfs home directory on login)");
     security.pam.enableFscrypt = mkEnableOption (lib.mdDoc ''
       Enables fscrypt to automatically unlock directories with the user's login password.
@@ -1215,9 +1281,15 @@ in
   config = {
     assertions = [
       {
-        assertion = isNull config.users.motd || isNull config.users.motdFile;
+        assertion = config.users.motd == null || config.users.motdFile == null;
         message = ''
           Only one of users.motd and users.motdFile can be set.
+        '';
+      }
+      {
+        assertion = config.security.pam.zfs.enable -> (config.boot.zfs.enabled || config.boot.zfs.enableUnstable);
+        message = ''
+          `security.pam.zfs.enable` requires enabling ZFS (`boot.zfs.enabled` or `boot.zfs.enableUnstable`).
         '';
       }
     ];
@@ -1360,7 +1432,13 @@ in
         mr ${pkgs.plasma5Packages.kwallet-pam}/lib/security/pam_kwallet5.so,
       '' +
       optionalString config.virtualisation.lxc.lxcfs.enable ''
-        mr ${pkgs.lxc}/lib/security/pam_cgfs.so
+        mr ${pkgs.lxc}/lib/security/pam_cgfs.so,
+      '' +
+      optionalString (isEnabled (cfg: cfg.zfs)) ''
+        mr ${config.boot.zfs.package}/lib/security/pam_zfs_key.so,
+      '' +
+      optionalString config.services.homed.enable ''
+        mr ${config.systemd.package}/lib/security/pam_systemd_home.so
       '';
   };
 

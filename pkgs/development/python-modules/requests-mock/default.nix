@@ -14,7 +14,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-WcnDJBmp+xroPsJC2Y6InEW9fXpl1IN1zCQ+wIRBZYs=";
+    hash = "sha256-WcnDJBmp+xroPsJC2Y6InEW9fXpl1IN1zCQ+wIRBZYs=";
   };
 
   patchPhase = ''
@@ -23,7 +23,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ requests six ];
 
-  checkInputs = [ mock purl testrepository testtools pytest ];
+  nativeCheckInputs = [ mock purl testrepository testtools pytest ];
 
   meta = with lib; {
     description = "Mock out responses from the requests package";

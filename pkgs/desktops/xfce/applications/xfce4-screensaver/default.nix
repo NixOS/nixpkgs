@@ -8,6 +8,7 @@
 , libXrandr
 , libwnck
 , libxfce4ui
+, libxfce4util
 , libxklavier
 , pam
 , systemd
@@ -18,9 +19,9 @@
 mkXfceDerivation {
   category = "apps";
   pname = "xfce4-screensaver";
-  version = "4.16.0";
+  version = "4.18.1";
 
-  sha256 = "1vblqhhzhv85yd5bz1xg14yli82ys5qrjdcabg3l53glbk61n99p";
+  sha256 = "sha256-d72m2dW8jvM/EjgNSVaKsP5Ip7ioguB61/hy2cWw+dw=";
 
   buildInputs = [
     dbus-glib
@@ -32,6 +33,7 @@ mkXfceDerivation {
     libXrandr
     libwnck
     libxfce4ui
+    libxfce4util
     libxklavier
     pam
     systemd

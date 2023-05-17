@@ -4,7 +4,7 @@ This package is an ibus-based completion method to speed up typing.
 
 ## Activating the engine {#sec-ibus-typing-booster-activate}
 
-IBus needs to be configured accordingly to activate `typing-booster`. The configuration depends on the desktop manager in use. For detailed instructions, please refer to the [upstream docs](https://mike-fabian.github.io/ibus-typing-booster/documentation.html).
+IBus needs to be configured accordingly to activate `typing-booster`. The configuration depends on the desktop manager in use. For detailed instructions, please refer to the [upstream docs](https://mike-fabian.github.io/ibus-typing-booster/).
 
 On NixOS, you need to explicitly enable `ibus` with given engines before customizing your desktop to use `typing-booster`. This can be achieved using the `ibus` module:
 

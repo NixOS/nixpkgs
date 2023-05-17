@@ -170,11 +170,11 @@ let
         --setenv HOST_PORT="$HOST_PORT" \
         --setenv PATH="$PATH" \
         ${optionalString cfg.ephemeral "--ephemeral"} \
-        ${if cfg.additionalCapabilities != null && cfg.additionalCapabilities != [] then
-          ''--capability="${concatStringsSep "," cfg.additionalCapabilities}"'' else ""
+        ${optionalString (cfg.additionalCapabilities != null && cfg.additionalCapabilities != [])
+          ''--capability="${concatStringsSep "," cfg.additionalCapabilities}"''
         } \
-        ${if cfg.tmpfs != null && cfg.tmpfs != [] then
-          ''--tmpfs=${concatStringsSep " --tmpfs=" cfg.tmpfs}'' else ""
+        ${optionalString (cfg.tmpfs != null && cfg.tmpfs != [])
+          ''--tmpfs=${concatStringsSep " --tmpfs=" cfg.tmpfs}''
         } \
         ${containerInit cfg} "''${SYSTEM_PATH:-/nix/var/nix/profiles/system}/init"
     '';
@@ -514,6 +514,11 @@ in
                       };
                     in [ extraConfig ] ++ (map (x: x.value) defs);
                   prefix = [ "containers" name ];
+                  inherit (config) specialArgs;
+
+                  # The system is inherited from the host above.
+                  # Set it to null, to remove the "legacy" entrypoint's non-hermetic default.
+                  system = null;
                 }).config;
               };
             };
@@ -552,6 +557,16 @@ in
                 Setting `config.nixpkgs.pkgs = pkgs` speeds up the container evaluation
                 by reusing the system pkgs, but the `nixpkgs.config` option in the
                 container config is ignored in this case.
+              '';
+            };
+
+            specialArgs = mkOption {
+              type = types.attrsOf types.unspecified;
+              default = {};
+              description = lib.mdDoc ''
+                A set of special arguments to be passed to NixOS modules.
+                This will be merged into the `specialArgs` used to evaluate
+                the NixOS configurations.
               '';
             };
 

@@ -36,6 +36,17 @@ let
         description = lib.mdDoc "Addresses who may request zone transfers.";
         default = [ ];
       };
+      allowQuery = mkOption {
+        type = types.listOf types.str;
+        description = lib.mdDoc ''
+          List of address ranges allowed to query this zone. Instead of the address(es), this may instead
+          contain the single string "any".
+
+          NOTE: This overrides the global-level `allow-query` setting, which is set to the contents
+          of `cachenetworks`.
+        '';
+        default = [ "any" ];
+      };
       extraConfig = mkOption {
         type = types.str;
         description = lib.mdDoc "Extra zone config to be appended at the end of the zone section.";
@@ -69,7 +80,7 @@ let
       ${cfg.extraConfig}
 
       ${ concatMapStrings
-          ({ name, file, master ? true, slaves ? [], masters ? [], extraConfig ? "" }:
+          ({ name, file, master ? true, slaves ? [], masters ? [], allowQuery ? [], extraConfig ? "" }:
             ''
               zone "${name}" {
                 type ${if master then "master" else "slave"};
@@ -87,7 +98,7 @@ let
                      };
                    ''
                 }
-                allow-query { any; };
+                allow-query { ${concatMapStrings (ip: "${ip}; ") allowQuery}};
                 ${extraConfig}
               };
             '')
@@ -120,7 +131,9 @@ in
         description = lib.mdDoc ''
           What networks are allowed to use us as a resolver.  Note
           that this is for recursive queries -- all networks are
-          allowed to query zones configured with the `zones` option.
+          allowed to query zones configured with the `zones` option
+          by default (although this may be overridden within each
+          zone's configuration, via the `allowQuery` option).
           It is recommended that you limit cacheNetworks to avoid your
           server being used for DNS amplification attacks.
         '';

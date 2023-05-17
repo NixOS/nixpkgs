@@ -22,11 +22,11 @@ let
     "x86_64-solaris"
 
     # JS
-    "js-ghcjs"
+    "javascript-ghcjs"
 
     # Linux
     "aarch64-linux" "armv5tel-linux" "armv6l-linux" "armv7a-linux"
-    "armv7l-linux" "i686-linux" "m68k-linux" "microblaze-linux"
+    "armv7l-linux" "i686-linux" "loongarch64-linux" "m68k-linux" "microblaze-linux"
     "microblazeel-linux" "mipsel-linux" "mips64el-linux" "powerpc64-linux"
     "powerpc64le-linux" "riscv32-linux" "riscv64-linux" "s390-linux"
     "s390x-linux" "x86_64-linux"
@@ -68,6 +68,7 @@ in {
   none = [];
 
   arm           = filterDoubles predicates.isAarch32;
+  armv7         = filterDoubles predicates.isArmv7;
   aarch64       = filterDoubles predicates.isAarch64;
   x86           = filterDoubles predicates.isx86;
   i686          = filterDoubles predicates.isi686;
@@ -75,6 +76,7 @@ in {
   microblaze    = filterDoubles predicates.isMicroBlaze;
   mips          = filterDoubles predicates.isMips;
   mmix          = filterDoubles predicates.isMmix;
+  power         = filterDoubles predicates.isPower;
   riscv         = filterDoubles predicates.isRiscV;
   riscv32       = filterDoubles predicates.isRiscV32;
   riscv64       = filterDoubles predicates.isRiscV64;
@@ -83,6 +85,8 @@ in {
   or1k          = filterDoubles predicates.isOr1k;
   m68k          = filterDoubles predicates.isM68k;
   s390          = filterDoubles predicates.isS390;
+  s390x         = filterDoubles predicates.isS390x;
+  loongarch64   = filterDoubles predicates.isLoongArch64;
   js            = filterDoubles predicates.isJavaScript;
 
   bigEndian     = filterDoubles predicates.isBigEndian;

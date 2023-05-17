@@ -71,6 +71,10 @@ stdenv.mkDerivation {
     install -m 644 ../include/${if stdenv.isDarwin then "*" else "cxxabi.h"} "$dev/include"
   '';
 
+  passthru = {
+    libName = "c++abi";
+  };
+
   meta = llvm_meta // {
     homepage = "https://libcxxabi.llvm.org/";
     description = "Provides C++ standard library support";

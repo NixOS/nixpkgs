@@ -6,6 +6,7 @@
 , elfutils
 , zlib
 , libpcap
+, bpftools
 , llvmPackages
 , pkg-config
 , m4
@@ -15,14 +16,22 @@
 }:
 stdenv.mkDerivation rec {
   pname = "xdp-tools";
-  version = "1.2.8";
+  version = "1.3.1";
 
   src = fetchFromGitHub {
     owner = "xdp-project";
     repo = "xdp-tools";
     rev = "v${version}";
-    sha256 = "7QYlC0YBQsXH2VxjgBbmTgEvp83lXloTLCHY2fTrZuQ=";
+    sha256 = "ctggXzc3qA+m2/nJ9lmR/pERj0YyPko3MTttm8e85cU=";
   };
+
+  patches = [
+    # Fix function detection for btf__type_cnt()
+    (fetchpatch {
+      url = "https://github.com/xdp-project/xdp-tools/commit/a7df567634af77381832a2212c5f5099b07734f3.patch";
+      sha256 = "n6qG/bojSGUowrAaJWxecYpWdv9OceHkoaGlhbl81hA=";
+    })
+  ];
 
   outputs = [ "out" "lib" ];
 
@@ -33,15 +42,18 @@ stdenv.mkDerivation rec {
     zlib
   ];
 
+  depsBuildBuild = [
+    emacs-nox # to generate man pages from .org
+  ];
   nativeBuildInputs = [
+    bpftools
     llvmPackages.clang
     llvmPackages.llvm
     pkg-config
     m4
-    emacs-nox # to generate man pages from .org
     nukeReferences
   ];
-  checkInputs = [
+  nativeCheckInputs = [
     wireshark-cli # for tshark
   ];
 

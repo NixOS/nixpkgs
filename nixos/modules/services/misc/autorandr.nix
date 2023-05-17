@@ -254,6 +254,12 @@ in {
         '';
       };
 
+      ignoreLid = mkOption {
+        default = false;
+        type = types.bool;
+        description = lib.mdDoc "Treat outputs as connected even if their lids are closed";
+      };
+
       hooks = mkOption {
         type = hooksModule;
         description = lib.mdDoc "Global hook scripts";
@@ -340,7 +346,13 @@ in {
       startLimitIntervalSec = 5;
       startLimitBurst = 1;
       serviceConfig = {
-        ExecStart = "${pkgs.autorandr}/bin/autorandr --batch --change --default ${cfg.defaultTarget}";
+        ExecStart = ''
+          ${pkgs.autorandr}/bin/autorandr \
+            --batch \
+            --change \
+            --default ${cfg.defaultTarget} \
+            ${optionalString cfg.ignoreLid "--ignore-lid"}
+        '';
         Type = "oneshot";
         RemainAfterExit = false;
         KillMode = "process";

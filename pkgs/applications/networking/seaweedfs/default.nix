@@ -7,16 +7,16 @@
 
 buildGoModule rec {
   pname = "seaweedfs";
-  version = "3.34";
+  version = "3.50";
 
   src = fetchFromGitHub {
-    owner = "chrislusf";
+    owner = "seaweedfs";
     repo = "seaweedfs";
-    rev = version;
-    hash = "sha256-lOCZHkLJCDvaT3CcHUBbsybdy0H6BfKKGpd/73cxcWA=";
+    rev = "9204ee2d2dfd421753dad9fcc80c2b5ce3ea5326";
+    hash = "sha256-ahCe2tutRhhbGQyytgR+0i+Tdh/2mU6L8e7G9DNIII4=";
   };
 
-  vendorHash = "sha256-1RUWONkXArXYg8gQogKUhMSGdIYyT3lq5qWuUQBsFig=";
+  vendorHash = "sha256-JkKJ0WFtaKSoBukE0XhN6dhE9+5Ny1kSIoh0GpALAKk=";
 
   subPackages = [ "weed" ];
 
@@ -38,8 +38,13 @@ buildGoModule rec {
     export GODEBUG=http2client=0
   '';
 
-  # There are no tests.
-  doCheck = false;
+  preCheck = ''
+    # Test all targets.
+    unset subPackages
+
+    # Remove unmaintained tests ahd those that require additional services.
+    rm -rf unmaintained test/s3
+  '';
 
   passthru.tests.version = testers.testVersion {
     package = seaweedfs;
@@ -49,7 +54,7 @@ buildGoModule rec {
   meta = with lib; {
     description = "Simple and highly scalable distributed file system";
     homepage = "https://github.com/chrislusf/seaweedfs";
-    maintainers = with maintainers; [ azahi cmacrae ];
+    maintainers = with maintainers; [ azahi cmacrae wozeparrot ];
     mainProgram = "weed";
     license = licenses.asl20;
   };

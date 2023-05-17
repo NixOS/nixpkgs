@@ -14,7 +14,7 @@ buildPythonPackage rec {
     owner = "drj11";
     repo = "pypng";
     rev = "refs/tags/${pname}-${version}";
-    sha256 = "sha256-JU1GCSTm2s6Kczn6aRcF5DizPJVpizNtnAMJxTBi9vo=";
+    hash = "sha256-JU1GCSTm2s6Kczn6aRcF5DizPJVpizNtnAMJxTBi9vo=";
   };
 
   nativeBuildInputs = [
@@ -23,7 +23,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "png" ];
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {
     description = "Pure Python library for PNG image encoding/decoding";

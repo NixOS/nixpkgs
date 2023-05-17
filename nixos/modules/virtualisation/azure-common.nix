@@ -12,7 +12,6 @@ with lib;
 
   # Generate a GRUB menu.
   boot.loader.grub.device = "/dev/sda";
-  boot.loader.grub.version = 2;
   boot.loader.timeout = 0;
 
   boot.growPartition = true;
@@ -30,10 +29,8 @@ with lib;
   # Allow root logins only using the SSH key that the user specified
   # at instance creation time, ping client connections to avoid timeouts
   services.openssh.enable = true;
-  services.openssh.permitRootLogin = "prohibit-password";
-  services.openssh.extraConfig = ''
-    ClientAliveInterval 180
-  '';
+  services.openssh.settings.PermitRootLogin = "prohibit-password";
+  services.openssh.settings.ClientAliveInterval = 180;
 
   # Force getting the hostname from Azure
   networking.hostName = mkDefault "";

@@ -1,9 +1,0 @@
-diff -Nuar ocaml-3.11.1/ocamldoc/remove_DEBUG ocaml-3.11.1-nixpkgs/ocamldoc/remove_DEBUG
---- ocaml-3.11.1/ocamldoc/remove_DEBUG	2004-04-15 18:18:52.000000000 +0200
-+++ ocaml-3.11.1-nixpkgs/ocamldoc/remove_DEBUG	2011-01-01 17:37:07.000000000 +0100
-@@ -18,4 +18,4 @@
- # respecting the cpp # line annotation conventions
- 
- echo "# 1 \"$1\""
--LC_ALL=C sed -e '/DEBUG/s/.*//' "$1"
-+grep -v 'DEBUG' "$1"

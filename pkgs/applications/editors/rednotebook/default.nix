@@ -5,13 +5,13 @@
 
 buildPythonApplication rec {
   pname = "rednotebook";
-  version = "2.26";
+  version = "2.29.3";
 
   src = fetchFromGitHub {
     owner = "jendrikseipp";
     repo = "rednotebook";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-QKK0bHy6pe+elPhnQlYAwmFP93LwCGxqRtBy10vj4i4=";
+    sha256 = "sha256-2qgWJ/bIravil/SuApA7pNXkxS5xUcdFpjVGO/ogDpw=";
   };
 
   # We have not packaged tests.
@@ -29,10 +29,6 @@ buildPythonApplication rec {
     "--prefix XDG_DATA_DIRS : $out/share"
     "--suffix XDG_DATA_DIRS : $XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH"
   ];
-
-  # Until gobject-introspection in nativeBuildInputs is supported.
-  # https://github.com/NixOS/nixpkgs/issues/56943#issuecomment-472568643
-  strictDeps = false;
 
   meta = with lib; {
     homepage = "https://rednotebook.sourceforge.io/";

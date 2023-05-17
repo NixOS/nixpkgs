@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gtkmm";
-  version = "4.8.0";
+  version = "4.10.0";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "yCeG1G4rBzRrY5fKfxkp2VL0ki+lyds97ghJi5oTbPU=";
+    sha256 = "4bEJdxVX7MU8upFagLbt6Cf/29AEnGL9+L1/p5r8xus=";
   };
 
   nativeBuildInputs = [
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
     pangomm_2_48
   ];
 
-  checkInputs = lib.optionals (!stdenv.isDarwin)[
+  nativeCheckInputs = lib.optionals (!stdenv.isDarwin)[
     xvfb-run
   ];
 

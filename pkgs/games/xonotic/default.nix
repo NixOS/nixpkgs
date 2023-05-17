@@ -1,7 +1,7 @@
 { lib, stdenv, fetchurl, fetchzip, makeWrapper, runCommand, makeDesktopItem
 , xonotic-data, copyDesktopItems
 , # required for both
-  unzip, libjpeg, zlib, libvorbis, curl
+  unzip, libjpeg, zlib, libvorbis, curl, freetype, libpng, libtheora
 , # glx
   libX11, libGLU, libGL, libXpm, libXext, libXxf86vm, alsa-lib
 , # sdl
@@ -121,14 +121,22 @@ let
       patchelf \
           --add-needed ${curl.out}/lib/libcurl.so \
           --add-needed ${libvorbis}/lib/libvorbisfile.so \
+          --add-needed ${libvorbis}/lib/libvorbisenc.so \
           --add-needed ${libvorbis}/lib/libvorbis.so \
           --add-needed ${libGL.out}/lib/libGL.so \
+          --add-needed ${freetype}/lib/libfreetype.so \
+          --add-needed ${libpng}/lib/libpng.so \
+          --add-needed ${libtheora}/lib/libtheora.so \
           $out/bin/xonotic-glx
     '' + lib.optionalString withSDL ''
       patchelf \
           --add-needed ${curl.out}/lib/libcurl.so \
           --add-needed ${libvorbis}/lib/libvorbisfile.so \
+          --add-needed ${libvorbis}/lib/libvorbisenc.so \
           --add-needed ${libvorbis}/lib/libvorbis.so \
+          --add-needed ${freetype}/lib/libfreetype.so \
+          --add-needed ${libpng}/lib/libpng.so \
+          --add-needed ${libtheora}/lib/libtheora.so \
           $out/bin/xonotic-sdl
     '';
   };

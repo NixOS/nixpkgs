@@ -14,11 +14,11 @@ buildPythonPackage rec {
     owner = "asweigart";
     repo = "pyscreeze";
     rev = "28ab707dceecbdd135a9491c3f8effd3a69680af";
-    sha256 = "sha256-gn3ydjf/msdhIhngGlhK+jhEyFy0qGeDr58E7kM2YZs=";
+    hash = "sha256-gn3ydjf/msdhIhngGlhK+jhEyFy0qGeDr58E7kM2YZs=";
   };
 
   pythonImportsCheck = [ "pyscreeze" ];
-  checkInputs = [ scrot xlib xvfb-run ];
+  nativeCheckInputs = [ scrot xlib xvfb-run ];
   checkPhase = ''
     python -m unittest tests.test_pillow_unavailable
     xvfb-run python -m unittest tests.test_pyscreeze

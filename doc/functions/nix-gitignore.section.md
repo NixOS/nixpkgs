@@ -4,7 +4,7 @@
 
 ## Usage {#sec-pkgs-nix-gitignore-usage}
 
-`pkgs.nix-gitignore` exports a number of functions, but you\'ll most likely need either `gitignoreSource` or `gitignoreSourcePure`. As their first argument, they both accept either 1. a file with gitignore lines or 2. a string with gitignore lines, or 3. a list of either of the two. They will be concatenated into a single big string.
+`pkgs.nix-gitignore` exports a number of functions, but you'll most likely need either `gitignoreSource` or `gitignoreSourcePure`. As their first argument, they both accept either 1. a file with gitignore lines or 2. a string with gitignore lines, or 3. a list of either of the two. They will be concatenated into a single big string.
 
 ```nix
 { pkgs ? import <nixpkgs> {} }:
@@ -30,7 +30,7 @@ gitignoreSourcePure = gitignoreFilterSourcePure (_: _: true);
 gitignoreSource = gitignoreFilterSource (_: _: true);
 ```
 
-Those filter functions accept the same arguments the `builtins.filterSource` function would pass to its filters, thus `fn: gitignoreFilterSourcePure fn ""` should be extensionally equivalent to `filterSource`. The file is blacklisted if it\'s blacklisted by either your filter or the gitignoreFilter.
+Those filter functions accept the same arguments the `builtins.filterSource` function would pass to its filters, thus `fn: gitignoreFilterSourcePure fn ""` should be extensionally equivalent to `filterSource`. The file is blacklisted if it's blacklisted by either your filter or the gitignoreFilter.
 
 If you want to make your own filter from scratch, you may use
 

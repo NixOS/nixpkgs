@@ -7,7 +7,6 @@
 , testpath
 , responses
 , flit-core
-, tomli
 , tomli-w
 }:
 
@@ -18,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "flit";
-  version = "3.7.1";
+  version = "3.8.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "takluyver";
     repo = "flit";
     rev = version;
-    sha256 = "sha256-zKgaeK3fskz2TuHvIWlxBrdZIWfIJHhaqopZ3+V36wY=";
+    hash = "sha256-iXf9K/xI4u+dDV0Zf6S08nbws4NqycrTEW0B8/qCjQc=";
   };
 
   nativeBuildInputs = [
@@ -36,15 +35,19 @@ buildPythonPackage rec {
     docutils
     requests
     flit-core
-    tomli
     tomli-w
   ];
 
-  checkInputs = [ pytestCheckHook testpath responses ];
+  nativeCheckInputs = [ pytestCheckHook testpath responses ];
 
   disabledTests = [
     # needs some ini file.
     "test_invalid_classifier"
+    # calls pip directly. disabled for PEP 668
+    "test_install_data_dir"
+    "test_install_module_pep621"
+    "test_symlink_data_dir"
+    "test_symlink_module_pep621"
   ];
 
   meta = with lib; {

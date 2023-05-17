@@ -10,12 +10,12 @@
 
 buildPythonPackage rec {
   pname = "feedgenerator";
-  version = "2.0.0";
+  version = "2.1.0";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "6836d456b8b0edbc5b6d3a42d1be852cebd43d2f28af4ff51789eb295f1860e2";
+    sha256 = "sha256-8HXyPyj9In8JfDayEhYcbPAS4cbKr3/1PV1rsCzUK50=";
   };
 
   postPatch = ''
@@ -33,7 +33,7 @@ buildPythonPackage rec {
     six
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

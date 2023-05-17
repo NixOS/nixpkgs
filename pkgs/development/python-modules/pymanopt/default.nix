@@ -12,17 +12,17 @@
 
 buildPythonPackage rec {
   pname = "pymanopt";
-  version = "2.0.1";
+  version = "2.1.1";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "refs/tags/${version}";
-    sha256 = "sha256-VwCUqKI1PkR8nUVaa73bkTw67URKPaza3VU9g+rB+Mg=";
+    hash = "sha256-nbSxqMmYWi71s74bbB9LAlPKEslTqG/j266cLfNHrwg=";
   };
 
   propagatedBuildInputs = [ numpy scipy torch ];
-  checkInputs = [ nose2 autograd matplotlib tensorflow ];
+  nativeCheckInputs = [ nose2 autograd matplotlib tensorflow ];
 
   checkPhase = ''
     runHook preCheck

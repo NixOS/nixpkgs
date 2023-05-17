@@ -3,33 +3,37 @@
 , fetchFromGitHub
 , installShellFiles
 , stdenv
-, Security
+, darwin
+, curl
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "miniserve";
-  version = "0.22.0";
+  version = "0.23.2";
 
   src = fetchFromGitHub {
     owner = "svenstaro";
     repo = "miniserve";
     rev = "v${version}";
-    hash = "sha256-pi+dBJE+EqQpyZAkIV7duK1g378J6BgjIiFcjV5H1fQ=";
+    hash = "sha256-nHcJw5RwvXoBQRS/AtUqCuoFRc9FnYtehkMSWn7GiKI=";
   };
 
-  cargoSha256 = "sha256-nRTGKW33NO2vRkvpNVk4pT1DrHPEsSfhwf8y5pJ+n9U=";
+  cargoHash = "sha256-97eNe+gmRXhmfw+pkHAfG8TTxOgBZOPPuXeKT0fWGr4=";
 
   nativeBuildInputs = [
     installShellFiles
   ];
 
   buildInputs = lib.optionals stdenv.isDarwin [
-    Security
+    darwin.apple_sdk.frameworks.Security
+  ];
+
+  nativeCheckInputs = [
+    curl
   ];
 
   checkFlags = [
     "--skip=bind_ipv4_ipv6::case_2"
-    "--skip=cant_navigate_up_the_root"
     "--skip=qrcode_hidden_in_tty_when_disabled"
     "--skip=qrcode_shown_in_tty_when_enabled"
   ];
@@ -43,6 +47,8 @@ rustPlatform.buildRustPackage rec {
       --fish <($out/bin/miniserve --print-completions fish) \
       --zsh <($out/bin/miniserve --print-completions zsh)
   '';
+
+  __darwinAllowLocalNetworking = true;
 
   meta = with lib; {
     description = "CLI tool to serve files and directories over HTTP";

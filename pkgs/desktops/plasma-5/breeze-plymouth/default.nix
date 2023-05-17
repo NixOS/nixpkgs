@@ -2,7 +2,6 @@
 , lib
 , extra-cmake-modules
 , plymouth
-, nixos-icons
 , imagemagick
 , netpbm
 , perl

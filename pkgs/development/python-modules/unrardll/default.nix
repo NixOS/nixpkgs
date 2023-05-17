@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "unrardll";
-  version = "0.1.5";
+  version = "0.1.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "8bebb480b96cd49d4290d814914f39cff75cf0fa0514c4790bb32b1757227c78";
+    sha256 = "sha256-4QZ/4nu03iBO+PNpLyPZPF07QpL3iyksb8fcT3V0n3Y=";
   };
 
   buildInputs = [ unrar ];

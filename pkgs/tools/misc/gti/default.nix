@@ -1,4 +1,8 @@
-{ lib, stdenv, fetchFromGitHub }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, installShellFiles
+}:
 
 stdenv.mkDerivation rec {
   pname = "gti";
@@ -15,10 +19,16 @@ stdenv.mkDerivation rec {
     substituteInPlace Makefile --replace 'CC=cc' 'CC=${stdenv.cc.targetPrefix}cc'
   '';
 
+  nativeBuildInputs = [
+    installShellFiles
+  ];
+
   installPhase = ''
-    mkdir -p $out/bin $out/share/man/man6
-    cp gti $out/bin
-    cp gti.6 $out/share/man/man6
+    install -D gti $out/bin/gti
+    installManPage gti.6
+    installShellCompletion --cmd gti \
+      --bash completions/gti.bash \
+      --zsh completions/gti.zsh
   '';
 
   meta = with lib; {

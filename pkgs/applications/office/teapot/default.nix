@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
   ];
 
   # By no known reason libtirpc is not detected
-  NIX_CFLAGS_COMPILE = [ "-I${libtirpc.dev}/include/tirpc" ];
+  env.NIX_CFLAGS_COMPILE = toString [ "-I${libtirpc.dev}/include/tirpc" ];
   NIX_LDFLAGS = [ "-ltirpc" ];
 
   cmakeConfigureFlags = [

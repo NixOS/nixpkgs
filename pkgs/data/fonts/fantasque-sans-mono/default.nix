@@ -1,21 +1,23 @@
-{ lib, fetchzip }:
+{ lib, stdenvNoCC, fetchzip }:
 
-let
+stdenvNoCC.mkDerivation rec {
+  pname = "fantasque-sans-mono";
   version = "1.8.0";
-in
 
-fetchzip rec {
-  name = "fantasque-sans-mono-${version}";
+  src = fetchzip {
+    url = "https://github.com/belluzj/fantasque-sans/releases/download/v${version}/FantasqueSansMono-Normal.zip";
+    stripRoot = false;
+    hash = "sha256-MNXZoDPi24xXHXGVADH16a3vZmFhwX0Htz02+46hWFc=";
+  };
 
-  url = "https://github.com/belluzj/fantasque-sans/releases/download/v${version}/FantasqueSansMono-Normal.zip";
+  installPhase = ''
+    runHook preInstall
 
-  postFetch = ''
-    mkdir -p $out/share/{doc,fonts}
-    unzip -j $downloadedFile \*.otf    -d $out/share/fonts/opentype
-    unzip -j $downloadedFile README.md -d $out/share/doc/${name}
+    install -Dm644 OTF/*.otf -t $out/share/fonts/opentype
+    install -Dm644 README.md -t $out/share/doc/${pname}-${version}
+
+    runHook postInstall
   '';
-
-  sha256 = "07y2w6xzkbaj6vr95fvvnmwq1pw9jib4z02xf8937dx812yic9ni";
 
   meta = with lib; {
     homepage = "https://github.com/belluzj/fantasque-sans";

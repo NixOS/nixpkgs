@@ -4,7 +4,7 @@
 , makeWrapper
 , makeDesktopItem
 , copyDesktopItems
-, undmg
+, _7zz
 , jdk
 }:
 
@@ -12,9 +12,7 @@ let
   inherit (stdenv.hostPlatform) system;
   pname = "jprofiler";
 
-  # 11.1.4 is the last version which can be unpacked by undmg
-  # See: https://github.com/matthewbauer/undmg/issues/9
-  version = if stdenv.isLinux then "13.0.2" else "11.1.4";
+  version = "13.0.6";
   nameApp = "JProfiler";
 
   meta = with lib; {
@@ -30,15 +28,15 @@ let
 
   src = if stdenv.isLinux then fetchurl {
     url = "https://download-gcdn.ej-technologies.com/jprofiler/jprofiler_linux_${lib.replaceStrings ["."] ["_"]  version}.tar.gz";
-    sha256 = "sha256-x9I7l2ctquCqUymtlQpFXE6+u0Yg773qE6MvAxvCaEE=";
+    hash = "sha256-orjBSaC7NvKcak+RSEa9V05oL3EZIBnp7TyaX/8XFyg=";
   } else fetchurl {
     url = "https://download-gcdn.ej-technologies.com/jprofiler/jprofiler_macos_${lib.replaceStrings ["."] ["_"]  version}.dmg";
-    sha256 = "sha256-WDMGrDsMdY1//WMHgr+/YKSxHWt6A1dD1Pd/MuDOaz8=";
+    hash = "sha256-OI6NSPqYws5Rv25U5jIPzkyJtB8LF04qHB3NPR9XBWg=";
   };
 
   srcIcon = fetchurl {
     url = "https://www.ej-technologies.com/assets/content/header-product-jprofiler@2x-24bc4d84bd2a4eb641a5c8531758ff7c.png";
-    sha256 = "sha256-XUmuqhnNv7mZ3Gb4A0HLSlfiJd5xbCExVsw3hmXHeVE=";
+    hash = "sha256-XUmuqhnNv7mZ3Gb4A0HLSlfiJd5xbCExVsw3hmXHeVE=";
   };
 
   desktopItems = makeDesktopItem {
@@ -80,15 +78,20 @@ let
   darwin = stdenv.mkDerivation {
     inherit pname version src;
 
-    # Archive extraction via undmg fails for this particular version.
-    nativeBuildInputs = [ makeWrapper undmg ];
+    nativeBuildInputs = [ makeWrapper _7zz ];
 
-    sourceRoot = "${nameApp}.app";
+    unpackPhase = ''
+      runHook preUnpack
+      7zz x $src -x!JProfiler/\[\]
+      runHook postUnpack
+    '';
+
+    sourceRoot = "${nameApp}";
 
     installPhase = ''
       runHook preInstall
-      mkdir -p $out/{Applications/${nameApp}.app,bin}
-      cp -R . $out/Applications/${nameApp}.app
+      mkdir -p $out/{Applications,bin}
+      cp -R ${nameApp}.app $out/Applications/
       makeWrapper $out/Applications/${nameApp}.app/Contents/MacOS/JavaApplicationStub $out/bin/${pname}
       runHook postInstall
     '';

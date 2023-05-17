@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     sed -i '/management/d' CMakeLists.txt
   '';
 
-  NIX_CFLAGS_COMPILE = toString ([
+  env.NIX_CFLAGS_COMPILE = toString ([
     "-Wno-error=maybe-uninitialized"
   ] ++ lib.optionals stdenv.cc.isGNU [
     "-Wno-error=deprecated-copy"

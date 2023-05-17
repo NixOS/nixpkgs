@@ -25,7 +25,7 @@
 , pythonOlder
 , qdarkstyle
 , qimage2ndarray
-, scikitimage
+, scikit-image
 , scipy
 , tables
 }:
@@ -57,7 +57,7 @@ buildPythonPackage rec {
     pandas
     tables
     git
-    scikitimage
+    scikit-image
     matplotlib
     qdarkstyle
     gitpython
@@ -73,7 +73,7 @@ buildPythonPackage rec {
     av
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     nose
     pytestCheckHook
     pyserial

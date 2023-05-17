@@ -9,7 +9,11 @@ stdenv.mkDerivation rec {
     sha256 = "0kq940wqs9j8qjnl58d6l3zhx0jaszci356xprx23l6nvdfld6dk";
   };
 
-  nativeBuildInputs = [ pkg-config ];
+  strictDeps = true;
+  nativeBuildInputs = [
+    pkg-config
+    dbus-glib # required for dbus-binding-tool
+  ];
   buildInputs = [ libusb-compat-0_1 glib dbus-glib bluez openobex dbus ];
 
   patches = [ ./obex-data-server-0.4.6-build-fixes-1.patch ];

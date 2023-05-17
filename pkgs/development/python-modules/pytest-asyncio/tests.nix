@@ -19,7 +19,7 @@ buildPythonPackage rec {
     pytest-asyncio
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     flaky
     hypothesis
     pytest-trio

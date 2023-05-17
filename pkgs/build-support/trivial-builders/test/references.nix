@@ -45,10 +45,8 @@ testers.nixosTest {
       """)
     '';
   meta = {
-    license = lib.licenses.mit; # nixpkgs license
     maintainers = with lib.maintainers; [
       roberth
     ];
-    description = "Run the Nixpkgs trivial builders tests";
   };
 }

@@ -147,5 +147,5 @@ in {
 
   };
   meta.maintainers = with lib.maintainers; [ ninjatrappeur ];
-  meta.doc = ./pleroma.xml;
+  meta.doc = ./pleroma.md;
 }

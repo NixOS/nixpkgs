@@ -10,20 +10,29 @@
 buildPythonPackage rec {
   pname = "bucketstore";
   version = "0.2.2";
+  format = "setuptools";
+
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "jpetrucciani";
     repo = "bucketstore";
-    rev = version;
-    sha256 = "sha256-BtoyGqFbeBhGQeXnmeSfiuJLZtXFrK26WO0SDlAtKG4=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-BtoyGqFbeBhGQeXnmeSfiuJLZtXFrK26WO0SDlAtKG4=";
   };
 
-  propagatedBuildInputs = [ boto3 ];
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "version=__version__," 'version="${version}",'
+  '';
 
-  checkInputs = [
-    pytestCheckHook
+  propagatedBuildInputs = [
+    boto3
+  ];
+
+  nativeCheckInputs = [
     moto
+    pytestCheckHook
   ];
 
   pythonImportsCheck = [
@@ -33,6 +42,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Library for interacting with Amazon S3";
     homepage = "https://github.com/jpetrucciani/bucketstore";
+    changelog = "https://github.com/jpetrucciani/bucketstore/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ jpetrucciani ];
   };

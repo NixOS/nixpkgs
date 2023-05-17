@@ -12,7 +12,7 @@ buildPythonPackage rec {
   version = "0.10.0";
   src = python.pkgs.fetchPypi {
     inherit pname version;
-    sha256 = "sha256-10qBS/2gEIXbGorZC+PLJ9ryOlGrawPn4p7IEfoq6Fk=";
+    hash = "sha256-10qBS/2gEIXbGorZC+PLJ9ryOlGrawPn4p7IEfoq6Fk=";
   };
 
   disabled = python.pythonOlder "3.4";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  checkInputs = [ pytest mock ];
+  nativeCheckInputs = [ pytest mock ];
 
   checkPhase = "pytest tests";
 

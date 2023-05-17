@@ -6,15 +6,21 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "dbx";
-  version = "0.7.6";
+  version = "0.8.11";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "databrickslabs";
     repo = "dbx";
-    rev = "v${version}";
-    hash = "sha256-P/cniy0xYaDoUbKdvV7KCubCpmOAhYp3cg2VBRA+a6I=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-dArR1z3wkGDd3Y1WHK0sLjhuaKHAcsx6cCH2rgVdUGs=";
   };
+
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "mlflow-skinny>=1.28.0,<3.0.0" "mlflow" \
+      --replace "rich==12.6.0" "rich"
+  '';
 
   propagatedBuildInputs = with python3.pkgs; [
     aiohttp
@@ -30,11 +36,25 @@ python3.pkgs.buildPythonApplication rec {
     requests
     retry
     rich
+    tenacity
     typer
     watchdog
   ] ++ typer.optional-dependencies.all;
 
-  checkInputs = [
+  passthru.optional-dependencies = with python3.pkgs; {
+    aws = [
+      boto3
+    ];
+    azure = [
+      azure-storage-blob
+      azure-identity
+    ];
+    gcp = [
+      google-cloud-storage
+    ];
+  };
+
+  nativeCheckInputs = [
     git
   ] ++ (with python3.pkgs; [
     pytest-asyncio
@@ -42,12 +62,6 @@ python3.pkgs.buildPythonApplication rec {
     pytest-timeout
     pytestCheckHook
   ]);
-
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "mlflow-skinny>=1.28.0,<=2.0.0" "mlflow" \
-      --replace "rich==12.5.1" "rich"
-  '';
 
   preCheck = ''
     export HOME=$(mktemp -d)
@@ -73,6 +87,7 @@ python3.pkgs.buildPythonApplication rec {
   meta = with lib; {
     description = "CLI tool for advanced Databricks jobs management";
     homepage = "https://github.com/databrickslabs/dbx";
+    changelog = "https://github.com/databrickslabs/dbx/blob/v${version}/CHANGELOG.md";
     license = licenses.databricks-dbx;
     maintainers = with maintainers; [ GuillaumeDesforges ];
   };

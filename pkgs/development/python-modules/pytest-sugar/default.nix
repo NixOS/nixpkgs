@@ -5,32 +5,39 @@
 , pytest
 , packaging
 , pytestCheckHook
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "pytest-sugar";
-  version = "0.9.5";
+  version = "0.9.7";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-7qeLbxW2NSd9PZAoDNOG2P7qHKsPm+dZR6Ym6LArR30=";
+    hash = "sha256-8edMGr+lX3JBz3CIAytuN4Vm8WuTjz8IkF4s9ElO3UY=";
   };
 
-  buildInputs = [ pytest ];
+  buildInputs = [
+    pytest
+  ];
 
   propagatedBuildInputs = [
     termcolor
     packaging
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 
   meta = with lib; {
-    description = "A plugin that changes the default look and feel of py.test";
+    description = "A plugin that changes the default look and feel of pytest";
     homepage = "https://github.com/Frozenball/pytest-sugar";
+    changelog = "https://github.com/Teemu/pytest-sugar/releases/tag/v${version}";
     license = licenses.bsd3;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = with maintainers; [ costrouc ];
   };
 }

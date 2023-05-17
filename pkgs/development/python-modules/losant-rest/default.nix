@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "losant-rest";
-  version = "1.17.0";
+  version = "1.17.4";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -18,14 +18,14 @@ buildPythonPackage rec {
     owner = "Losant";
     repo = "losant-rest-python";
     rev = "v${version}";
-    hash = "sha256-nR7ZKKpqiCrQbXsS+znmNht1OvcYL6hSQxHMcJ+/yKA=";
+    hash = "sha256-/7k2IYoP4z9ub89wNzDfzyA520CNzn3L68yMWgApz34=";
   };
 
   propagatedBuildInputs = [
     requests
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     requests-mock
   ];

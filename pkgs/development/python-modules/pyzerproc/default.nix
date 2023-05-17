@@ -1,5 +1,4 @@
 { lib
-, asynctest
 , bleak
 , click
 , buildPythonPackage
@@ -12,16 +11,16 @@
 
 buildPythonPackage rec {
   pname = "pyzerproc";
-  version = "0.4.11";
+  version = "0.4.12";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "emlove";
     repo = pname;
-    rev = version;
-    sha256 = "sha256-FNiq/dbh5PMTxnKCKDSHEvllehAEUYvWZS+OyP3lSW8=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-vS0sk/KjDhWispZvCuGlmVLLfeFymHqxwNzNqNRhg6k=";
   };
 
   postPatch = ''
@@ -33,12 +32,10 @@ buildPythonPackage rec {
     click
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-asyncio
     pytest-mock
     pytestCheckHook
-  ] ++ lib.optionals (pythonOlder "3.8") [
-    asynctest
   ];
 
   pythonImportsCheck = [

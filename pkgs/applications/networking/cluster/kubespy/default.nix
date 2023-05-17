@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "kubespy";
-  version = "0.6.1";
+  version = "0.6.2";
 
   src = fetchFromGitHub {
     rev = "v${version}";
     owner = "pulumi";
     repo = "kubespy";
-    sha256 = "sha256-ChHrDAmPUjdyiF+XQONQMDN3UZQMM80BR+m+E8o3gnw=";
+    sha256 = "sha256-eSQl8K+a9YcKXE80bl25+alHoBG8T+LCYOd4Bd9QSdY=";
   };
 
-  vendorSha256 = "sha256-HmMh5jrRGs4rtN9GLddS9IwITyvVmOrL5TShhQeyxKU=";
+  vendorHash = "sha256-brs4QIo4QoLHU95llBHN51zYcgQgN7kbMJDMy2OYOsk=";
 
   nativeBuildInputs = [ installShellFiles ];
 

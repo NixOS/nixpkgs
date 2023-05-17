@@ -3,15 +3,15 @@
 , fetchFromGitHub
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation {
   pname = "gnome-shell-extension-paperwm";
-  version = "38.2";
+  version = "unstable-2023-04-20";
 
   src = fetchFromGitHub {
     owner = "paperwm";
     repo = "PaperWM";
-    rev = finalAttrs.version;
-    hash = "sha256-Unhz2+MOygOog6B5sOLtYTpdeodQH+/CMI93gC5nDvI=";
+    rev = "1130b663806d6daba1c8355c4b99c287d237e918";
+    hash = "sha256-JlamW5DznVZ8G0REqXcxEt/IlHa3GMN184WFpeclhd4=";
   };
 
   dontConfigure = true;
@@ -33,4 +33,4 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   passthru.extensionUuid = "paperwm@hedning:matrix.org";
-})
+}

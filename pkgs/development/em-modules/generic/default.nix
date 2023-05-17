@@ -1,12 +1,20 @@
 { pkgs, lib, emscripten, python3 }:
 
+argsFun:
+
+let
+  wrapDerivation = f:
+    pkgs.stdenv.mkDerivation (finalAttrs:
+      f (lib.toFunction argsFun finalAttrs)
+    );
+in
+wrapDerivation (
 { buildInputs ? [], nativeBuildInputs ? []
 
 , enableParallelBuilding ? true
 
 , meta ? {}, ... } @ args:
 
-pkgs.stdenv.mkDerivation (
   args //
   {
 

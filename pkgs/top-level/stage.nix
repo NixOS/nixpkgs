@@ -101,9 +101,9 @@ let
     };
 
   trivialBuilders = self: super:
-    import ../build-support/trivial-builders.nix {
+    import ../build-support/trivial-builders {
       inherit lib;
-      inherit (self) runtimeShell stdenv stdenvNoCC;
+      inherit (self) runtimeShell stdenv stdenvNoCC haskell;
       inherit (self.pkgsBuildHost) shellcheck;
       inherit (self.pkgsBuildHost.xorg) lndir;
     };
@@ -136,14 +136,6 @@ let
     targetPackages = self.pkgsTargetTarget;
 
     inherit stdenv;
-  };
-
-  # The old identifiers for cross-compiling. These should eventually be removed,
-  # and the packages that rely on them refactored accordingly.
-  platformCompat = self: super: let
-    inherit (super.stdenv) buildPlatform hostPlatform targetPlatform;
-  in {
-    inherit buildPlatform hostPlatform targetPlatform;
   };
 
   splice = self: super: import ./splice.nix lib self (adjacentPackages != null);
@@ -207,8 +199,8 @@ let
 
     # All packages built with the Musl libc. This will override the
     # default GNU libc on Linux systems. Non-Linux systems are not
-    # supported.
-    pkgsMusl = if stdenv.hostPlatform.isLinux then nixpkgsFun {
+    # supported. 32-bit is also not supported.
+    pkgsMusl = if stdenv.hostPlatform.isLinux && stdenv.buildPlatform.is64bit then nixpkgsFun {
       overlays = [ (self': super': {
         pkgsMusl = super';
       })] ++ overlays;
@@ -216,7 +208,7 @@ let
         then "localSystem" else "crossSystem"} = {
         parsed = makeMuslParsedPlatform stdenv.hostPlatform.parsed;
       };
-    } else throw "Musl libc only supports Linux systems.";
+    } else throw "Musl libc only supports 64-bit Linux systems.";
 
     # All packages built for i686 Linux.
     # Used by wine, firefox with debugging version of Flash, ...
@@ -282,7 +274,6 @@ let
   # previous bootstrapping phases which have already been overlayed.
   toFix = lib.foldl' (lib.flip lib.extends) (self: {}) ([
     stdenvBootstappingAndPlatforms
-    platformCompat
     stdenvAdapters
     trivialBuilders
     splice

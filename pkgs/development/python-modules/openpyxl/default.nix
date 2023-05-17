@@ -10,15 +10,15 @@
 
 buildPythonPackage rec {
   pname = "openpyxl";
-  version = "3.0.10";
+  version = "3.1.1";
   disabled = isPy27; # 2.6.4 was final python2 release
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-5HgFYnrrz4YO207feYexMJwbNjLzdQU47ZYrvMO9dEk=";
+    hash = "sha256-8G1E4slzeBBovOXs+GCgm82xx/XOH6zV6aqCySyTrnI=";
   };
 
-  checkInputs = [ pytest ];
+  nativeCheckInputs = [ pytest ];
   propagatedBuildInputs = [ jdcal et_xmlfile lxml ];
 
   postPatch = ''

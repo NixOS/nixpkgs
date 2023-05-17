@@ -158,7 +158,7 @@ stdenv.mkDerivation rec {
     Foundation
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     gdb
   ] ++ lib.optionals (lib.versionOlder version "2.089.0") [
     unzip
@@ -213,7 +213,7 @@ stdenv.mkDerivation rec {
     NIX_ENFORCE_PURITY= \
       make -C phobos -f posix.mak unittest $checkFlags -j$checkJobs DFLAGS="-version=TZDatabaseDir -version=LibcurlPath -J$PWD"
 
-    runHook postBuild
+    runHook postCheck
   '';
 
   installPhase = ''

@@ -48,11 +48,11 @@
 
 stdenv.mkDerivation rec {
   pname = "unbound";
-  version = "1.17.0";
+  version = "1.17.1";
 
   src = fetchurl {
     url = "https://nlnetlabs.nl/downloads/unbound/unbound-${version}.tar.gz";
-    hash = "sha256-3LyV14kdn5EMZuTtyfHy/eTeou7Bjjr591rtRKAvE0E=";
+    hash = "sha256-7kCFzszhJYTmAPPYFKKPqCLfqs7B+UyEv9Z/ilVxpfQ=";
   };
 
   outputs = [ "out" "lib" "man" ]; # "dev" would only split ~20 kB
@@ -64,6 +64,8 @@ stdenv.mkDerivation rec {
     ++ lib.optionals withSystemd [ systemd ]
     ++ lib.optionals withDoH [ libnghttp2 ]
     ++ lib.optionals withPythonModule [ python ];
+
+  enableParallelBuilding = true;
 
   configureFlags = [
     "--with-ssl=${openssl.dev}"
@@ -108,7 +110,7 @@ stdenv.mkDerivation rec {
     sed -E '/CONFCMDLINE/ s;${storeDir}/[a-z0-9]{32}-;${storeDir}/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-;g' -i config.h
   '';
 
-  checkInputs = [ bison ];
+  nativeCheckInputs = [ bison ];
 
   doCheck = true;
 

@@ -59,6 +59,10 @@ in
         systemPackages = [ cfg.package ];
       };
 
+      services.ntfy-sh.settings = {
+        auth-file = mkDefault "/var/lib/ntfy-sh/user.db";
+      };
+
       systemd.services.ntfy-sh = {
         description = "Push notifications server";
 
@@ -68,6 +72,7 @@ in
         serviceConfig = {
           ExecStart = "${cfg.package}/bin/ntfy serve -c ${configuration}";
           User = cfg.user;
+          StateDirectory = "ntfy-sh";
 
           AmbientCapabilities = "CAP_NET_BIND_SERVICE";
           PrivateTmp = true;

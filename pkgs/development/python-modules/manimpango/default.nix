@@ -39,7 +39,7 @@ buildPythonPackage rec {
     cython
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 
@@ -49,7 +49,7 @@ buildPythonPackage rec {
   '';
 
   preBuild = ''
-    ${python.interpreter} setup.py build_ext --inplace
+    ${python.pythonForBuild.interpreter} setup.py build_ext --inplace
   '';
 
   pythonImportsCheck = [

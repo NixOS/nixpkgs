@@ -1,17 +1,21 @@
-{ lib, rustPlatform, fetchFromGitHub }:
+{ lib, rustPlatform, fetchFromGitHub, stdenv, darwin }:
 
 rustPlatform.buildRustPackage rec {
   pname = "rustypaste";
-  version = "0.8.2";
+  version = "0.8.4";
 
   src = fetchFromGitHub{
     owner = "orhun";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-EKW/Cik4La66bI7EVbFnhivk1o0nIudJdBW7F5dbQaI=";
+    sha256 = "sha256-tx2ipgvYDdCwcWFeZ/qgGXyKe+kHLuOgDAz/8vf2zEs=";
   };
 
-  cargoSha256 = "sha256-zIrvBHPthPAzReojmBLb0odDQGcGwZS10rP15qb/zgs=";
+  cargoHash = "sha256-/zji2sFaOweBo666LqfNRpO/0vi1eAGgOReeuvQIaEQ=";
+
+  buildInputs = lib.optionals stdenv.isDarwin [
+    darwin.apple_sdk.frameworks.CoreServices
+  ];
 
   # Some tests need network
   checkFlags = [

@@ -11,7 +11,7 @@ buildPythonPackage rec {
     owner = "jaseg";
     repo = "python-mpv";
     rev = "v${version}";
-    sha256 = "sha256-UCJ1PknnWQiFciTEMxTUqDzz0Z8HEWycLuQqYeyQhoM=";
+    hash = "sha256-UCJ1PknnWQiFciTEMxTUqDzz0Z8HEWycLuQqYeyQhoM=";
   };
 
   buildInputs = [ mpv ];
@@ -23,7 +23,8 @@ buildPythonPackage rec {
   '';
 
   # tests impure, will error if it can't load libmpv.so
-  checkPhase = "${python.interpreter} -c 'import mpv'";
+  doCheck = false;
+  pythonImportsCheck = [ "mpv" ];
 
   meta = with lib; {
     description = "A python interface to the mpv media player";

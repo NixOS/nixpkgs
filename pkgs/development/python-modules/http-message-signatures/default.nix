@@ -34,7 +34,7 @@ buildPythonPackage rec {
     http-sfv
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     requests
   ];

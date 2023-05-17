@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "ethereum";
     repo = "py_ecc";
     rev = "v${version}";
-    sha256 = "sha256-638otYA3e/Ld4mcM69yrqHQnGoK/Sfl/UA9FWnjgO/U=";
+    hash = "sha256-638otYA3e/Ld4mcM69yrqHQnGoK/Sfl/UA9FWnjgO/U=";
   };
 
   propagatedBuildInputs = [
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     mypy-extensions
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

@@ -1,12 +1,12 @@
-{ stdenv, lib, fetchurl, autoPatchelfHook }:
+{ stdenv, lib, fetchurl, autoPatchelfHook, bzip2, xz }:
 
 stdenv.mkDerivation rec {
   pname = "stt";
-  version = "0.9.3";
+  version = "1.4.0";
 
   src = fetchurl {
-    url = "https://github.com/coqui-ai/STT/releases/download/v${version}/native_client.tf.Linux.tar.xz";
-    sha256 = "0axwys8vis4f0m7d1i2r3dfqlc8p3yj2nisvc7pdi5qs741xgy8w";
+    url = "https://github.com/coqui-ai/STT/releases/download/v${version}/native_client.tflite.Linux.tar.xz";
+    hash = "sha256-RVYc64pLYumQoVUEFZdxfUUaBMozaqgD0h/yiMaWN90=";
   };
   setSourceRoot = "sourceRoot=`pwd`";
 
@@ -15,12 +15,16 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    bzip2
+    xz
     stdenv.cc.cc.lib
   ];
 
   installPhase = ''
     install -D stt $out/bin/stt
     install -D coqui-stt.h $out/include/coqui-stt.h
+    install -D libkenlm.so $out/lib/libkenlm.so
+    install -D libsox.so.3 $out/lib/libsox.so.3
     install -D libstt.so $out/lib/libstt.so
   '';
 

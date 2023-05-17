@@ -2,16 +2,13 @@
 , lib, fetchurl, fetchpatch, fetchFromGitHub
 
 , cmake, ninja, which, findutils, m4, gawk
-, python2, python3, openjdk, mono, libressl, boost168
+, python2, python3, openjdk, mono, libressl, openssl, boost168, boost178
+, pkg-config, msgpack, toml11
 }@args:
 
 let
   vsmakeBuild = import ./vsmake.nix args;
-  cmakeBuild = import ./cmake.nix (args // {
-    gccStdenv    = gccStdenv;
-    llvmPackages = llvmPackages;
-    boost        = boost168;
-  });
+  cmakeBuild = import ./cmake.nix args;
 
   python3-six-patch = fetchpatch {
     name   = "update-python-six.patch";
@@ -79,8 +76,9 @@ in with builtins; {
 
   foundationdb61 = cmakeBuild {
     version = "6.1.13";
-    branch  = "release-6.1";
     sha256  = "10vd694dcnh2pp91mri1m80kfbwjanhiy50c53c5ncqfa6pwvk00";
+    boost   = boost168;
+    ssl     = libressl;
 
     patches = [
       ./patches/clang-libcxx.patch
@@ -90,4 +88,17 @@ in with builtins; {
     ];
   };
 
+  foundationdb71 = cmakeBuild {
+    version = "7.1.30";
+    sha256  = "sha256-dAnAE1m2NZLHgP4QJvURBPcxArXvWWdhqEYwh3tU+tU";
+    boost   = boost178;
+    ssl     = openssl;
+
+    patches = [
+      ./patches/disable-flowbench.patch
+      ./patches/don-t-run-tests-requiring-doctest.patch
+      ./patches/don-t-use-static-boost-libs.patch
+      ./patches/fix-open-with-O_CREAT.patch
+    ];
+  };
 }

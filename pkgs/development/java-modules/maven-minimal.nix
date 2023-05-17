@@ -1,6 +1,5 @@
 { lib, pkgs }:
 
-with lib;
 with pkgs.javaPackages;
 
 let
@@ -10,7 +9,7 @@ let
   poms = import ./poms.nix { inherit fetchMaven; };
 in {
   # Maven needs all of these to function
-  mavenMinimal = flatten
+  mavenMinimal = lib.flatten
     collections.mavenLibs_2_0_6
     ++ collections.mavenLibs_2_0_9
     ++ collections.mavenLibs_2_2_1

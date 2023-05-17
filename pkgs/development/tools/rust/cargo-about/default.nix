@@ -9,30 +9,26 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-about";
-  version = "0.5.2";
+  version = "0.5.6";
 
   src = fetchFromGitHub {
     owner = "EmbarkStudios";
     repo = "cargo-about";
     rev = version;
-    sha256 = "sha256-8476jJK1oiXVX9G09NSL+xvXZdZ+h7grCHC6R0XXewo=";
+    sha256 = "sha256-nlumcRcL5HwRJTNqLJ9+UkSg88HuE96Rg8Tgc+ZcK2M=";
   };
 
-  cargoPatches = [
-    # update mimalloc to fix build with older apple sdks
-    ./update-mimalloc.patch
-
-    # enable pkg-config feature of zstd
-    ./zstd-pkg-config.patch
-  ];
-
-  cargoSha256 = "sha256-EFpkBWQSWYyMrUa9Dh+n9kDNmXL/2yuEmFN3DcPeE7U=";
+  cargoSha256 = "sha256-Fa1DGXzHDR3EAZyFg0g2aKFynQlC/LL+Tg5LKpOUzmM=";
 
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ zstd ] ++ lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.Security
   ];
+
+  env = {
+    ZSTD_SYS_USE_PKG_CONFIG = true;
+  };
 
   meta = with lib; {
     description = "Cargo plugin to generate list of all licenses for a crate";

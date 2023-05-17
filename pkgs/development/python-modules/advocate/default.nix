@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "JordanMilne";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-opObkjkad+yrLE2b7DULHjGuNeVhu4fEmSavgA39YPw=";
+    hash = "sha256-opObkjkad+yrLE2b7DULHjGuNeVhu4fEmSavgA39YPw=";
   };
 
   propagatedBuildInputs = [

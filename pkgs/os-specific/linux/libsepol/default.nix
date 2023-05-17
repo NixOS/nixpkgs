@@ -2,14 +2,14 @@
 
 stdenv.mkDerivation rec {
   pname = "libsepol";
-  version = "3.3";
+  version = "3.5";
   se_url = "https://github.com/SELinuxProject/selinux/releases/download";
 
   outputs = [ "bin" "out" "dev" "man" ];
 
   src = fetchurl {
     url = "${se_url}/${version}/libsepol-${version}.tar.gz";
-    sha256 = "12r39ygn7aa1kz52wibfr4520m0cp75hlrn3i6rnjqa6p0zdz5rd";
+    sha256 = "sha256-eP2vaZJNt4C6x4VG5D2cRAdLrXmMLEFdC5u5bQZe6KI=";
   };
 
   postPatch = lib.optionalString stdenv.hostPlatform.isStatic ''
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     "SHLIBDIR=$(out)/lib"
   ];
 
-  NIX_CFLAGS_COMPILE = "-Wno-error";
+  env.NIX_CFLAGS_COMPILE = "-Wno-error";
 
   enableParallelBuilding = true;
 

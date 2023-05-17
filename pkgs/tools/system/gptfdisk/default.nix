@@ -13,7 +13,6 @@ stdenv.mkDerivation rec {
 
   patches = [
     # issues with popt 1.19 (from upstream but not yet released):
-    # https://sourceforge.net/p/gptfdisk/code/ci/5d5e76d369a412bfb3d2cebb5fc0a7509cef878d/
     # https://github.com/rpm-software-management/popt/issues/80
     ./popt-1-19.patch
 
@@ -31,9 +30,13 @@ stdenv.mkDerivation rec {
     substituteInPlace Makefile.mac --replace \
       " -arch i386" ""
     substituteInPlace Makefile.mac --replace \
+      "-arch x86_64" ""
+    substituteInPlace Makefile.mac --replace \
+      "-arch arm64" ""
+    substituteInPlace Makefile.mac --replace \
       " -I/opt/local/include -I /usr/local/include -I/opt/local/include" ""
     substituteInPlace Makefile.mac --replace \
-      "/opt/local/lib/libncurses.a" "${ncurses.out}/lib/libncurses.dylib"
+      "/usr/local/Cellar/ncurses/6.2/lib/libncurses.dylib" "${ncurses.out}/lib/libncurses.dylib"
   '';
 
   buildPhase = lib.optionalString stdenv.isDarwin "make -f Makefile.mac";
@@ -54,7 +57,6 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
     description = "Set of text-mode partitioning tools for Globally Unique Identifier (GUID) Partition Table (GPT) disks";
     license = licenses.gpl2;
     homepage = "https://www.rodsbooks.com/gdisk/";

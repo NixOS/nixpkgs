@@ -21,6 +21,6 @@ buildGoModule {
     description = "A sensitive data detection tool capable of scanning source code repositories for passwords, key files, and more";
     homepage = "https://github.com/americanexpress/earlybird";
     license = licenses.asl20;
-    maintainers = teams.determinatesystems.members;
+    maintainers = [ ];
   };
 }

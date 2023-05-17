@@ -38,11 +38,15 @@ Below is a short excerpt of some points in there:
     The old config generation system used impure shell scripts and could break in specific circumstances (see #1234).
 
 * `meta.description` should:
+  * Be short, just one sentence.
   * Be capitalized.
   * Not start with the package name.
-  * Not have a period at the end.
+    * More generally, it should not refer to the package name.
+  * Not end with a period (or any punctuation for that matter).
+  * Aim to inform while avoiding subjective language.
 * `meta.license` must be set and fit the upstream license.
   * If there is no upstream license, `meta.license` should default to `lib.licenses.unfree`.
+  * If in doubt, try to contact the upstream developers for clarification.
 * `meta.maintainers` must be set.
 
 See the nixpkgs manual for more details on [standard meta-attributes](https://nixos.org/nixpkgs/manual/#sec-standard-meta-attributes).
@@ -125,14 +129,17 @@ Anything that does not cause user or downstream dependency regressions can be ba
 - Security critical applications (E.g. `firefox`)
 
 ## Generating 23.05 Release Notes
+<!--
+note: title unchanged even though we don't need regeneration because extant
+PRs will link here. definitely change the title for 23.11 though.
+-->
 
-Documentation in nixpkgs is transitioning to a markdown-centric workflow. Release notes now require a translation step to convert from markdown to a compatible docbook document.
+Documentation in nixpkgs is transitioning to a markdown-centric workflow. In the past release notes required a translation step to convert from markdown to a compatible docbook document, but this is no longer necessary.
 
 Steps for updating 23.05 Release notes:
 
 1. Edit `nixos/doc/manual/release-notes/rl-2305.section.md` with the desired changes
-2. Run `./nixos/doc/manual/md-to-db.sh` to render `nixos/doc/manual/from_md/release-notes/rl-2305.section.xml`
-3. Include changes to `rl-2305.section.md` and `rl-2305.section.xml` in the same commit.
+2. Commit changes to `rl-2305.section.md`.
 
 ## Reviewing contributions
 

@@ -24,10 +24,11 @@ rustPlatform.buildRustPackage {
 
   nativeBuildInputs = [ pkg-config ];
 
-  meta = {
+  meta = with lib; {
     description = "An xrandr-like CLI for configuring displays on GNOME/Wayland, on distros that don't support `wlr-randr`";
     homepage = "https://github.com/maxwellainatchi/gnome-randr-rust";
-    license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.roberth ];
+    license = licenses.mit;
+    maintainers = [ maintainers.roberth ];
+    platforms = platforms.linux;
   };
 }

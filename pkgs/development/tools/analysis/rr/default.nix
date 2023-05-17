@@ -1,5 +1,6 @@
 { lib, stdenv, fetchFromGitHub, fetchpatch
-, cmake, libpfm, zlib, pkg-config, python3Packages, which, procps, gdb, capnproto
+, cmake, pkg-config, which, makeWrapper
+, libpfm, zlib, python3Packages, procps, gdb, capnproto
 }:
 
 stdenv.mkDerivation rec {
@@ -24,6 +25,7 @@ stdenv.mkDerivation rec {
   postPatch = ''
     substituteInPlace src/Command.cc --replace '_BSD_SOURCE' '_DEFAULT_SOURCE'
     sed '7i#include <math.h>' -i src/Scheduler.cc
+    sed '1i#include <ctime>' -i src/test-monitor/test-monitor.cc
     patchShebangs .
   '';
 
@@ -37,19 +39,17 @@ stdenv.mkDerivation rec {
   # See also https://github.com/NixOS/nixpkgs/pull/110846
   preConfigure = ''substituteInPlace CMakeLists.txt --replace "-flto" ""'';
 
-  nativeBuildInputs = [ cmake pkg-config which ];
+  nativeBuildInputs = [ cmake pkg-config which makeWrapper ];
   buildInputs = [
     libpfm zlib python3Packages.python python3Packages.pexpect procps gdb capnproto
+    libpfm zlib python3Packages.python python3Packages.pexpect procps capnproto
   ];
-  propagatedBuildInputs = [ gdb ]; # needs GDB to replay programs at runtime
   cmakeFlags = [
-    "-DCMAKE_C_FLAGS_RELEASE:STRING="
-    "-DCMAKE_CXX_FLAGS_RELEASE:STRING="
     "-Ddisable32bit=ON"
   ];
 
   # we turn on additional warnings due to hardening
-  NIX_CFLAGS_COMPILE = "-Wno-error";
+  env.NIX_CFLAGS_COMPILE = "-Wno-error";
 
   hardeningDisable = [ "fortify" ];
 
@@ -57,6 +57,14 @@ stdenv.mkDerivation rec {
   #doCheck = true;
 
   preCheck = "export HOME=$TMPDIR";
+
+  # needs GDB to replay programs at runtime
+  preFixup = ''
+    wrapProgram "$out/bin/rr" \
+      --prefix PATH ":" "${lib.makeBinPath [
+        gdb
+      ]}";
+  '';
 
   meta = {
     homepage = "https://rr-project.org/";

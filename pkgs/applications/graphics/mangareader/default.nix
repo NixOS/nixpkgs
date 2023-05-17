@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation rec {
   pname = "mangareader";
-  version = "2.0.4";
+  version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "g-fb";
     repo = pname;
     rev = version;
-    hash = "sha256-j5b2O5OgDRaaxNssknTTgVscudk1+mFlGQN5KE6CwcU=";
+    hash = "sha256-YZZcp+HS/P/GxWYyOpO35nByJSzv4HahzzrZSVRcCRs=";
   };
 
   nativeBuildInputs = [
@@ -41,9 +41,7 @@ stdenv.mkDerivation rec {
     kconfigwidgets
   ];
 
-  passthru.updateScript = nix-update-script {
-    attrPath = pname;
-  };
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Qt manga reader for local files";

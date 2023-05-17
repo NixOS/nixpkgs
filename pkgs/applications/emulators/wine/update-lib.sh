@@ -14,9 +14,9 @@ set_source_attr() {
     sed_exprs+=(-e "${line}s@[^ ].*\$@$name = $value;@")
 }
 
-set_version_and_sha256() {
+set_version_and_hash() {
     set_source_attr "$1" version "\"$2\""
-    set_source_attr "$1" sha256 "\"$(to_sri "$3")\""
+    set_source_attr "$1" hash "\"$(to_sri "$3")\""
 }
 
 get_latest_wine_version() {
@@ -39,7 +39,7 @@ autobump() {
     version=$(get_source_attr "$attr.version")
     if [[ "$version" != "$latest" ]]; then
         url=$(get_source_attr "$attr.url")
-        set_version_and_sha256 "$attr" "$latest" "$($fetcher "${url//$version/$latest}")"
+        set_version_and_hash "$attr" "$latest" "$($fetcher "${url//$version/$latest}")"
         [[ -z "$more" ]] || $more "$version" "$latest"
     fi
 }

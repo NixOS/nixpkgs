@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "pysigma-pipeline-crowdstrike";
-  version = "0.1.8";
+  version = "1.0.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "SigmaHQ";
     repo = "pySigma-pipeline-crowdstrike";
     rev = "refs/tags/v${version}";
-    hash = "sha256-ZSTnQmdLcMa1XwbQxGpE734yN92zDy72SX9feTL9wjI=";
+    hash = "sha256-KHHs39RGksE7Rww8nHHo73+WOUzZaNiD4sZMhBPqqYQ=";
   };
 
   nativeBuildInputs = [
@@ -29,7 +29,7 @@ buildPythonPackage rec {
     pysigma
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

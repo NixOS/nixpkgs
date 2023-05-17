@@ -24,7 +24,7 @@ rustPlatform.buildRustPackage rec {
   cargoSha256 = "sha256-DX0jpp1ujaeesW7iQWZ5/xAzGndOQqBmQZbBpMEI9u0=";
 
   doCheck = true;
-  checkInputs = [ nix graphviz ];
+  nativeCheckInputs = [ nix graphviz ];
 
   buildInputs = [
     boost

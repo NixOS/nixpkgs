@@ -11,17 +11,17 @@
 , patchPpdFilesHook
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "foomatic-db";
-  version = "unstable-2022-10-03";
+  version = "unstable-2023-03-30";
 
   src = fetchFromGitHub {
     # there is also a daily snapshot at the `downloadPage`,
     # but it gets deleted quickly and would provoke 404 errors
     owner = "OpenPrinting";
     repo = "foomatic-db";
-    rev = "2a3c4d1bf7eadc42f936ce8989c1dd2973ea9669";
-    hash = "sha256-in0/j1nAQvM0NowBIBx3jj5WVMPIfZAeAk1SkuA3tjA=";
+    rev = "d883a215dc062e478c64d4e2eee9b0e39e6c629d";
+    hash = "sha256-eFgHTbj4pNfLG2ftU29FQ8rgRMbX+44UytfoZ4vdgZ4=";
   };
 
   buildInputs = [ cups cups-filters ghostscript gnused perl ];
@@ -79,6 +79,7 @@ stdenv.mkDerivation {
   '';
 
   meta = {
+    changelog = "https://github.com/OpenPrinting/foomatic-db/blob/${src.rev}/ChangeLog";
     description = "OpenPrinting printer support database (free content)";
     downloadPage = "https://www.openprinting.org/download/foomatic/";
     homepage = "https://openprinting.github.io/projects/02-foomatic/";
@@ -93,7 +94,7 @@ stdenv.mkDerivation {
       PPD files generated from the XML files in this package
       are contained in the package 'foomatic-db-ppds'.
       Besides the XML files, this package contains
-      about 6,600 PPD files, for printers from
+      about 6,700 PPD files, for printers from
       Brother, Canon, Epson, Gestetner, HP, InfoPrint,
       Infotec, KONICA_MINOLTA, Kyocera, Lanier, Lexmark, NRG,
       Oce, Oki, Ricoh, Samsung, Savin, Sharp, Toshiba and Utax.

@@ -2,7 +2,7 @@
 ##  - export ELECTRON_SKIP_BINARY_DOWNLOAD=1
 ##  - jq "del(.scripts.preinstall)" node_modules/shellcheck/package.json | sponge node_modules/shellcheck/package.json
 {
-  lib, stdenv, buildFHSUserEnvBubblewrap, runCommand, writeScript, fetchurl, fetchzip
+  lib, stdenv, buildFHSEnv, runCommand, writeScript, fetchurl, fetchzip
 }:
 let
   pname = "webtorrent-desktop";
@@ -20,7 +20,7 @@ runCommand "${pname}-${version}" rec {
     else
       throw "Webtorrent is not currently supported on ${stdenv.hostPlatform.system}";
 
-  fhs = buildFHSUserEnvBubblewrap rec {
+  fhs = buildFHSEnv rec {
     name = "fhsEnterWebTorrent";
     runScript = "${src}/WebTorrent";
     ## use the trampoline, if you need to shell into the fhsenv

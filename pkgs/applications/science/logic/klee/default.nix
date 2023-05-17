@@ -69,13 +69,13 @@ in stdenv.mkDerivation rec {
     cmake
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     gtest
 
     # Should appear BEFORE lit, since lit passes through python rather
     # than the python environment we make.
     kleePython
-    (lit.override { python3 = kleePython; })
+    (lit.override { python = kleePython; })
   ];
 
   cmakeFlags = let
@@ -96,7 +96,7 @@ in stdenv.mkDerivation rec {
   ];
 
   # Silence various warnings during the compilation of fortified bitcode.
-  NIX_CFLAGS_COMPILE = ["-Wno-macro-redefined"];
+  env.NIX_CFLAGS_COMPILE = toString ["-Wno-macro-redefined"];
 
   prePatch = ''
     patchShebangs .

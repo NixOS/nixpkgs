@@ -19,17 +19,17 @@ in
 lib.checkListOfEnum "${pname}: theme variants" [ "default" "purple" "pink" "red" "orange" "yellow" "green" "teal" "grey" "all" ] themeVariants
 lib.checkListOfEnum "${pname}: color variants" [ "standard" "light" "dark" ] colorVariants
 lib.checkListOfEnum "${pname}: size variants" [ "standard" "compact" ] sizeVariants
-lib.checkListOfEnum "${pname}: tweaks" [ "nord" "black" "dracula" "rimless" "normal" ] tweaks
+lib.checkListOfEnum "${pname}: tweaks" [ "nord" "black" "dracula" "gruvbox" "rimless" "normal" ] tweaks
 
 stdenvNoCC.mkDerivation rec {
   inherit pname;
-  version = "2022-07-18";
+  version = "2023.04.11";
 
   src = fetchFromGitHub {
     owner = "vinceliuice";
     repo = pname;
     rev = version;
-    hash = "sha256-dWYRTwfQRMBdg+htxpWatF325rToaovF/43LxX6I1GI=";
+    hash = "sha256-lVHDQmu9GLesasmI2GQ0hx4f2NtgaM4IlJk/hXe2XzY=";
   };
 
   nativeBuildInputs = [
@@ -46,7 +46,7 @@ stdenvNoCC.mkDerivation rec {
   ];
 
   postPatch = ''
-    patchShebangs install.sh clean-old-theme.sh
+    patchShebangs install.sh
   '';
 
   installPhase = ''
@@ -59,7 +59,7 @@ stdenvNoCC.mkDerivation rec {
       ${lib.optionalString (tweaks != []) "--tweaks " + builtins.toString tweaks} \
       --dest $out/share/themes
 
-    jdupes --link-soft --recurse $out/share
+    jdupes --quiet --link-soft --recurse $out/share
 
     runHook postInstall
   '';

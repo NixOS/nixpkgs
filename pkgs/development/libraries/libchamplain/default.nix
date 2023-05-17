@@ -1,5 +1,4 @@
 { fetchurl
-, fetchpatch
 , lib
 , stdenv
 , meson
@@ -23,24 +22,15 @@
 
 stdenv.mkDerivation rec {
   pname = "libchamplain";
-  version = "0.12.20";
+  version = "0.12.21";
+
+  outputs = [ "out" "dev" ]
+    ++ lib.optionals (stdenv.buildPlatform == stdenv.hostPlatform) [ "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0rihpb0npqpihqcdz4w03rq6xl7jdckfqskvv9diq2hkrnzv8ch2";
+    sha256 = "qRXNFyoMUpRMVXn8tGg/ioeMVxv16SglS12v78cn5ac=";
   };
-
-  patches = lib.optionals withLibsoup3 [
-    # Port to libsoup3
-    # https://gitlab.gnome.org/GNOME/libchamplain/-/merge_requests/13
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/libchamplain/-/commit/1cbaf3193c2b38e447fbc383d4c455c3dcac6db8.patch";
-      excludes = [ ".gitlab-ci.yml" ];
-      sha256 = "uk38gExnUgeUKwhDsqRU77hGWhJ+8fG5dSiV2MAWLFk=";
-    })
-  ];
-
-  outputs = [ "out" "dev" "devdoc" ];
 
   nativeBuildInputs = [
     meson
@@ -48,6 +38,7 @@ stdenv.mkDerivation rec {
     pkg-config
     gobject-introspection
     vala
+  ] ++ lib.optionals (stdenv.buildPlatform == stdenv.hostPlatform) [
     gtk-doc
     docbook_xsl
     docbook_xml_dtd_412
@@ -66,8 +57,9 @@ stdenv.mkDerivation rec {
   ];
 
   mesonFlags = [
-    "-Dgtk_doc=true"
+    (lib.mesonBool "gtk_doc" (stdenv.buildPlatform == stdenv.hostPlatform))
     "-Dvapi=true"
+    (lib.mesonBool "libsoup3" withLibsoup3)
   ];
 
   passthru = {

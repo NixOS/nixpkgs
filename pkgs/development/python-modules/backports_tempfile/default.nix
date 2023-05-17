@@ -22,7 +22,7 @@ buildPythonPackage rec {
   # requires https://pypi.org/project/backports.test.support
   doCheck = false;
 
-  checkInputs = [ unittestCheckHook ];
+  nativeCheckInputs = [ unittestCheckHook ];
 
   unittestFlagsArray = [ "-s" "tests" ];
 

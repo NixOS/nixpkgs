@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "sephii";
     repo = "taxi";
     rev = version;
-    sha256 = "sha256-iIy3odDX3QzVG80AFp81m8AYKES4JjlDp49GGpuIHLI=";
+    hash = "sha256-iIy3odDX3QzVG80AFp81m8AYKES4JjlDp49GGpuIHLI=";
   };
 
   propagatedBuildInputs = [
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     setuptools
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     freezegun
     pytestCheckHook
   ];

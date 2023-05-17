@@ -2,7 +2,10 @@
 , stdenv
 , buildPythonPackage
 , fetchPypi
+, fetchpatch
 , pythonOlder
+# build_requires
+, setuptools
 # install_requires
 , attrs
 , charset-normalizer
@@ -13,7 +16,7 @@
 , aiosignal
 , aiodns
 , brotli
-, cchardet
+, faust-cchardet
 , asynctest
 , typing-extensions
 , idna-ssl
@@ -29,17 +32,34 @@
 
 buildPythonPackage rec {
   pname = "aiohttp";
-  version = "3.8.3";
+  version = "3.8.4";
+  format = "pyproject";
+
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "3828fb41b7203176b82fe5d699e0d845435f2374750a44b480ea6b930f6be269";
+    hash = "sha256-vy4akWLB5EG/gFof0WbiSdV0ygTgOzT5fikodp6Rq1w=";
   };
+
+  patches = [
+    (fetchpatch {
+      # https://github.com/aio-libs/aiohttp/pull/7178
+      url = "https://github.com/aio-libs/aiohttp/commit/5718879cdb6a98bf48810a994b78bc02abaf3e07.patch";
+      hash = "sha256-4UynkTZOzWzusQ2+MPZszhFA8I/PJNLeT/hHF/fASy8=";
+    })
+  ];
 
   postPatch = ''
     sed -i '/--cov/d' setup.cfg
+
+    substituteInPlace setup.cfg \
+      --replace "charset-normalizer >=2.0, < 3.0" "charset-normalizer >=2.0, < 4.0"
   '';
+
+  nativeBuildInputs = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     attrs
@@ -52,7 +72,7 @@ buildPythonPackage rec {
     aiosignal
     aiodns
     brotli
-    cchardet
+    faust-cchardet
   ] ++ lib.optionals (pythonOlder "3.8") [
     asynctest
     typing-extensions
@@ -60,7 +80,8 @@ buildPythonPackage rec {
     idna-ssl
   ];
 
-  checkInputs = [
+  # NOTE: pytest-xdist cannot be added because it is flaky. See https://github.com/NixOS/nixpkgs/issues/230597 for more info.
+  nativeCheckInputs = [
     async_generator
     freezegun
     gunicorn
@@ -102,9 +123,10 @@ buildPythonPackage rec {
   '' + lib.optionalString stdenv.isDarwin ''
     # Work around "OSError: AF_UNIX path too long"
     export TMPDIR="/tmp"
-   '';
+  '';
 
   meta = with lib; {
+    changelog = "https://github.com/aio-libs/aiohttp/blob/v${version}/CHANGES.rst";
     description = "Asynchronous HTTP Client/Server for Python and asyncio";
     license = licenses.asl20;
     homepage = "https://github.com/aio-libs/aiohttp";

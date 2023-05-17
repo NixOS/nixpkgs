@@ -21,7 +21,7 @@ buildPythonPackage rec {
     pname = "skia-pathops";
     inherit version;
     extension = "zip";
-    sha256 = "sha256-Ci/e6Ht62wGMv6bpXvnkKZ7WOwCAvidnejD/77ypE1A=";
+    hash = "sha256-Ci/e6Ht62wGMv6bpXvnkKZ7WOwCAvidnejD/77ypE1A=";
   };
 
   postPatch = ''
@@ -44,7 +44,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ setuptools ];
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "pathops" ];
 

@@ -9,16 +9,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-guppy";
-  version = "unstable-2022-12-05";
+  version = "unstable-2023-04-15";
 
   src = fetchFromGitHub {
     owner = "guppy-rs";
     repo = "guppy";
-    rev = "4dad33053d3047293da35ade33158b709fe8bb23";
-    sha256 = "sha256-CWyXNBBo+yyF2s6BT6FFu6CI7xId38vsyg0uSezsusc=";
+    rev = "e93f51ca56dc9cc310004931a906b6b486b93058";
+    sha256 = "sha256-kg1iWku+zAXG9cCYCD4rqKzKNtDt0hMCnE5QyhJpLq8=";
   };
 
-  cargoSha256 = "sha256-jwfZ5FH2qlzmxKT9LTXkmvwL5fhKljUPYwYXXqDRDXc=";
+  cargoSha256 = "sha256-XKAre9L2mk31CgXbP53zR8mr92Jh9qVSx+sMkhqq/M4=";
 
   nativeBuildInputs = [ pkg-config ];
 

@@ -43,11 +43,11 @@ stdenv.mkDerivation rec {
   # -fcommon: workaround build failure on -fno-common toolchains:
   #   ld: ./libgclp.a(user_match.o):(.bss+0x18): multiple definition of
   #     `tf'; ./libpre_gcl.a(main.o):(.bss+0x326d90): first defined here
-  NIX_CFLAGS_COMPILE = "-fgnu89-inline -fcommon";
+  env.NIX_CFLAGS_COMPILE = "-fgnu89-inline -fcommon";
 
   meta = with lib; {
     description = "GNU Common Lisp compiler working via GCC";
-    maintainers = [ maintainers.raskin ];
+    maintainers = lib.teams.lisp.members;
     license = licenses.gpl2;
     platforms = platforms.linux;
   };

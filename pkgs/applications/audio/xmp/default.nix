@@ -1,15 +1,8 @@
-{ lib, stdenv, fetchurl, pkg-config, alsa-lib, libxmp }:
+{ lib, stdenv, fetchurl, pkg-config, alsa-lib, libxmp, AudioUnit, CoreAudio }:
 
 stdenv.mkDerivation rec {
   pname = "xmp";
   version = "4.1.0";
-
-  meta = with lib; {
-    description = "Extended module player";
-    homepage    = "http://xmp.sourceforge.net/";
-    license     = licenses.gpl2Plus;
-    platforms   = platforms.linux;
-  };
 
   src = fetchurl {
     url = "mirror://sourceforge/${pname}/${pname}/${pname}-${version}.tar.gz";
@@ -17,5 +10,14 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ alsa-lib libxmp ];
+  buildInputs = [ libxmp ]
+    ++ lib.optionals stdenv.isLinux [ alsa-lib ]
+    ++ lib.optionals stdenv.isDarwin [ AudioUnit CoreAudio ];
+
+  meta = with lib; {
+    description = "Extended module player";
+    homepage    = "https://xmp.sourceforge.net/";
+    license     = licenses.gpl2Plus;
+    platforms   = platforms.unix;
+  };
 }

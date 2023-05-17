@@ -5,6 +5,8 @@
 , ninja
 , pkg-config
 , gobject-introspection
+, buildPackages
+, withIntrospection ? stdenv.hostPlatform.emulatorAvailable buildPackages
 , gsettings-desktop-schemas
 , makeWrapper
 , dbus
@@ -16,25 +18,28 @@
 , libXi
 , libXext
 , gnome
+, systemd
 }:
 
 stdenv.mkDerivation rec {
   pname = "at-spi2-core";
-  version = "2.46.0";
+  version = "2.48.0";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "qgyGx596jWe65JpbelqwhDDGCM/+bjO/R6cvQasDw9A=";
+    sha256 = "kFpbbxeQto7oA7/6n1+rTOtZH7T64LL4xhLFTx1OijA=";
   };
 
   nativeBuildInputs = [
+    glib
     meson
     ninja
     pkg-config
-    gobject-introspection
     makeWrapper
+  ] ++ lib.optionals withIntrospection [
+    gobject-introspection
   ];
 
   buildInputs = [
@@ -45,6 +50,9 @@ stdenv.mkDerivation rec {
     libXi
     # libXext is a transitive dependency of libXi
     libXext
+  ] ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform systemd) [
+    # libsystemd is a needed for dbus-broker support
+    systemd
   ];
 
   # In atspi-2.pc dbus-1 glib-2.0
@@ -58,12 +66,14 @@ stdenv.mkDerivation rec {
   doCheck = false;
 
   mesonFlags = [
-    "-Dintrospection=yes"
     # Provide dbus-daemon fallback when it is not already running when
     # at-spi2-bus-launcher is executed. This allows us to avoid
     # including the entire dbus closure in libraries linked with
     # the at-spi2-core libraries.
     "-Ddbus_daemon=/run/current-system/sw/bin/dbus-daemon"
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
+    # Same as the above, but for dbus-broker
+    "-Ddbus_broker=/run/current-system/sw/bin/dbus-broker-launch"
   ];
 
   passthru = {

@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "PREFIX=${placeholder "out"}" "BINDIR=" ];
 
-  checkInputs = [ bash ];
+  nativeCheckInputs = [ bash ];
   doCheck = true;
 
   meta = {

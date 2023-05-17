@@ -84,13 +84,19 @@ in clangStdenv.mkDerivation rec {
   '';
 
   buildPhase = ''
+    runHook preBuild
+
     python build_mozc.py build -c Release \
       server/server.gyp:mozc_server \
       gui/gui.gyp:mozc_tool \
       unix/fcitx5/fcitx5.gyp:fcitx5-mozc
+
+    runHook postBuild
   '';
 
   installPhase = ''
+    runHook preInstall
+
     export PREFIX=$out
     export _bldtype=Release
     ../scripts/install_server
@@ -101,6 +107,12 @@ in clangStdenv.mkDerivation rec {
     install -d $out/share/fcitx5/inputmethod
     install -d $out/lib/fcitx5
     ../scripts/install_fcitx5
+
+    runHook postInstall
+  '';
+
+  preFixup = ''
+    wrapQtApp $out/lib/mozc/mozc_tool
   '';
 
   meta = with lib; {

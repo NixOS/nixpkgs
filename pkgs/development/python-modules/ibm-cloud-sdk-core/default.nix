@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "ibm-cloud-sdk-core";
-  version = "3.16.0";
+  version = "3.16.5";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-MfWZGWbU0k586EYY0uhHHo2LuhQSmCfgs9Lz50Ds5Hc=";
+    hash = "sha256-wEBD1AILyVGK+ofQf/zZTu7keBUphVZ5HyOMbugvA+Y=";
   };
 
   propagatedBuildInputs = [
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     requests
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     responses
   ];
@@ -56,6 +56,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Client library for the IBM Cloud services";
     homepage = "https://github.com/IBM/python-sdk-core";
+    changelog = "https://github.com/IBM/python-sdk-core/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ globin ];
   };

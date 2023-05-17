@@ -14,7 +14,7 @@
 , pytestCheckHook
 , pythonOlder
 , reproject
-, scikitimage
+, scikit-image
 , shapely
 }:
 
@@ -44,11 +44,11 @@ buildPythonPackage rec {
     pyavm
     pyregion
     reproject
-    scikitimage
+    scikit-image
     shapely
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest-astropy
     pytestCheckHook
   ];

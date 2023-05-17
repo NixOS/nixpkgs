@@ -17,24 +17,21 @@
 , pytest-aiohttp
 , requests-mock
 , pytestCheckHook
-# Flags to add to the library
-, extraPubkeyAlgsSupport ? false
+
+# optionals
+, defusedxml
 , oscrypto
-, opentypeSupport ? false
 , fonttools
 , uharfbuzz
-, imageSupport ? false
 , pillow
 , python-barcode
-, pkcs11Support ? false
 , python-pkcs11
-, asyncHttpSupport ? false
 , aiohttp
 }:
 
 buildPythonPackage rec {
   pname = "pyhanko";
-  version = "0.12.1";
+  version = "0.17.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -43,38 +40,51 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "MatthiasValvekens";
     repo = "pyHanko";
-    rev = version;
-    sha256 = "sha256-W60NTKEtCqJ/QdtNiieKUsrl2jIjIH86Wych68R3mBc=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-tvb2zdmIN6MkezmLNkyCcP8EfqxrbPg/FEqgW16Ka6Q=";
   };
 
   propagatedBuildInputs = [
+    asn1crypto
     click
+    cryptography
     pyhanko-certvalidator
     pytz
     pyyaml
     qrcode
+    requests
     tzlocal
-  ] ++ lib.optionals (extraPubkeyAlgsSupport) [
-    oscrypto
-  ] ++ lib.optionals (opentypeSupport) [
-    fonttools
-    uharfbuzz
-  ] ++ lib.optionals (imageSupport) [
-    pillow
-    python-barcode
-  ] ++ lib.optionals (pkcs11Support) [
-    python-pkcs11
-  ] ++ lib.optionals (asyncHttpSupport) [
-    aiohttp
   ];
+
+  passthru.optional-dependencies = {
+    extra_pubkey_algs = [
+      oscrypto
+    ];
+    xmp = [
+      defusedxml
+    ];
+    opentype = [
+      fonttools
+      uharfbuzz
+    ];
+    image-support = [
+      pillow
+      python-barcode
+    ];
+    pkcs11 = [
+      python-pkcs11
+    ];
+    async_http = [
+      aiohttp
+    ];
+  };
 
   postPatch = ''
     substituteInPlace setup.py \
       --replace ", 'pytest-runner'" "" \
-      --replace "pytest-aiohttp~=0.3.0" "pytest-aiohttp~=1.0.3"
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     aiohttp
     certomancer
     freezegun
@@ -82,15 +92,11 @@ buildPythonPackage rec {
     pytest-aiohttp
     requests-mock
     pytestCheckHook
-  ];
+  ] ++ lib.flatten (lib.attrValues passthru.optional-dependencies);
 
-  disabledTestPaths = lib.optionals (!opentypeSupport) [
-    "pyhanko_tests/test_stamp.py"
-    "pyhanko_tests/test_text.py"
-  ] ++ lib.optionals (!imageSupport) [
-    "pyhanko_tests/test_barcode.py"
-  ] ++ lib.optionals (!pkcs11Support) [
-    "pyhanko_tests/test_pkcs11.py"
+  disabledTestPaths = [
+    # ModuleNotFoundError: No module named 'csc_dummy'
+    "pyhanko_tests/test_csc.py"
   ];
 
   disabledTests = [

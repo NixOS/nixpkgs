@@ -1,13 +1,24 @@
-{ lib, mkXfceDerivation, exo, garcon, gtk3, glib
-, libnotify, libxfce4ui, libxfce4util, libxklavier
-, upower, xfconf, xf86inputlibinput }:
+{ lib
+, mkXfceDerivation
+, exo
+, garcon
+, gtk3
+, glib
+, libnotify
+, libxfce4ui
+, libxfce4util
+, libxklavier
+, upower
+, xfconf
+, xf86inputlibinput
+}:
 
 mkXfceDerivation {
   category = "xfce";
   pname = "xfce4-settings";
-  version = "4.18.0";
+  version = "4.18.2";
 
-  sha256 = "sha256-T0sPcsyGqa0hEXIb/mhxb29OnuLmHey6Tt/iB4nQvoM=";
+  sha256 = "sha256-u8xto4tP9fsaPaY6dzv4Bj/C6qvltT5wXJlV+TzP5uE=";
 
   postPatch = ''
     for f in xfsettingsd/pointers.c dialogs/mouse-settings/main.c; do

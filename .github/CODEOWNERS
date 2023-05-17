@@ -22,18 +22,19 @@
 /.editorconfig @Mic92 @zowoq
 
 # Libraries
-/lib                        @edolstra @nbp @infinisil
-/lib/systems                @alyssais @nbp @ericson2314 @matthewbauer
-/lib/generators.nix         @edolstra @nbp @Profpatsch
-/lib/cli.nix                @edolstra @nbp @Profpatsch
-/lib/debug.nix              @edolstra @nbp @Profpatsch
-/lib/asserts.nix            @edolstra @nbp @Profpatsch
+/lib                        @edolstra @infinisil
+/lib/systems                @alyssais @ericson2314 @matthewbauer
+/lib/generators.nix         @edolstra @Profpatsch
+/lib/cli.nix                @edolstra @Profpatsch
+/lib/debug.nix              @edolstra @Profpatsch
+/lib/asserts.nix            @edolstra @Profpatsch
+/lib/path.*                 @infinisil @fricklerhandwerk
 
 # Nixpkgs Internals
-/default.nix                                     @nbp
-/pkgs/top-level/default.nix                      @nbp @Ericson2314
-/pkgs/top-level/impure.nix                       @nbp @Ericson2314
-/pkgs/top-level/stage.nix                        @nbp @Ericson2314 @matthewbauer
+/default.nix                                     @Ericson2314
+/pkgs/top-level/default.nix                      @Ericson2314
+/pkgs/top-level/impure.nix                       @Ericson2314
+/pkgs/top-level/stage.nix                        @Ericson2314 @matthewbauer
 /pkgs/top-level/splice.nix                       @Ericson2314 @matthewbauer
 /pkgs/top-level/release-cross.nix                @Ericson2314 @matthewbauer
 /pkgs/stdenv/generic                             @Ericson2314 @matthewbauer
@@ -44,9 +45,14 @@
 /pkgs/build-support/setup-hooks                  @Ericson2314
 /pkgs/build-support/setup-hooks/auto-patchelf.sh @layus
 /pkgs/build-support/setup-hooks/auto-patchelf.py @layus
+/pkgs/pkgs-lib                                   @infinisil
 
 # Nixpkgs build-support
 /pkgs/build-support/writers @lassulus @Profpatsch
+
+# Nixpkgs make-disk-image
+/doc/builders/images/makediskimage.section.md  @raitobezarius
+/nixos/lib/make-disk-image.nix                 @raitobezarius
 
 # Nixpkgs documentation
 /maintainers/scripts/db-to-md.sh @jtojnar @ryantm
@@ -61,28 +67,18 @@
 /doc/using @fricklerhandwerk
 
 # NixOS Internals
-/nixos/default.nix          @nbp @infinisil
-/nixos/lib/from-env.nix     @nbp @infinisil
-/nixos/lib/eval-config.nix  @nbp @infinisil
-/nixos/doc/manual/configuration/abstractions.xml      @nbp
-/nixos/doc/manual/configuration/config-file.xml       @nbp
-/nixos/doc/manual/configuration/config-syntax.xml     @nbp
-/nixos/doc/manual/configuration/modularity.xml        @nbp
-/nixos/doc/manual/development/assertions.xml          @nbp
-/nixos/doc/manual/development/meta-attributes.xml     @nbp
-/nixos/doc/manual/development/option-declarations.xml @nbp
-/nixos/doc/manual/development/option-def.xml          @nbp
-/nixos/doc/manual/development/option-types.xml        @nbp
-/nixos/doc/manual/development/replace-modules.xml     @nbp
-/nixos/doc/manual/development/writing-modules.xml     @nbp
-/nixos/doc/manual/man-nixos-option.xml                @nbp
-/nixos/modules/installer/tools/nixos-option.sh        @nbp
+/nixos/default.nix                                    @infinisil
+/nixos/lib/from-env.nix                               @infinisil
+/nixos/lib/eval-config.nix                            @infinisil
 /nixos/modules/system                                 @dasJ
 /nixos/modules/system/activation/bootspec.nix         @grahamc @cole-h @raitobezarius
 /nixos/modules/system/activation/bootspec.cue         @grahamc @cole-h @raitobezarius
 
 # NixOS integration test driver
 /nixos/lib/test-driver  @tfc
+
+# NixOS QEMU virtualisation
+/nixos/virtualisation/qemu-vm.nix           @raitobezarius
 
 # Systemd
 /nixos/modules/system/boot/systemd.nix      @NixOS/systemd
@@ -99,10 +95,8 @@
 
 # Python-related code and docs
 /maintainers/scripts/update-python-libraries	              @FRidh
-/pkgs/top-level/python-packages.nix                         @FRidh @jonringer
 /pkgs/development/interpreters/python                       @FRidh
-/pkgs/development/python-modules                            @FRidh @jonringer
-/doc/languages-frameworks/python.section.md                 @FRidh
+/doc/languages-frameworks/python.section.md                 @FRidh @mweinelt
 /pkgs/development/tools/poetry2nix                          @adisbladis
 /pkgs/development/interpreters/python/hooks                 @FRidh @jonringer
 
@@ -129,11 +123,13 @@
 /pkgs/development/ruby-modules      @marsam
 
 # Rust
-/pkgs/development/compilers/rust @Mic92 @LnL7 @zowoq
+/pkgs/development/compilers/rust @Mic92 @zowoq @winterqt @figsoda
+/pkgs/build-support/rust @zowoq @winterqt @figsoda
+/doc/languages-frameworks/rust.section.md @zowoq @winterqt @figsoda
 
 # C compilers
 /pkgs/development/compilers/gcc @matthewbauer
-/pkgs/development/compilers/llvm @matthewbauer
+/pkgs/development/compilers/llvm @matthewbauer @RaitoBezarius
 
 # Compatibility stuff
 /pkgs/top-level/unix-tools.nix @matthewbauer
@@ -304,3 +300,8 @@ pkgs/development/python-modules/buildcatrust/ @ajs124 @lukegb @mweinelt
 /pkgs/build-support/node/build-npm-package      @winterqt
 /pkgs/build-support/node/fetch-npm-deps         @winterqt
 /doc/languages-frameworks/javascript.section.md @winterqt
+
+# OCaml
+/pkgs/build-support/ocaml           @romildo @ulrikstrid
+/pkgs/development/compilers/ocaml   @romildo @ulrikstrid
+/pkgs/development/ocaml-modules     @romildo @ulrikstrid

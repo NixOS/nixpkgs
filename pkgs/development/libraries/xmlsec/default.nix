@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
   doCheck = true;
-  checkInputs = [ nss.tools ];
+  nativeCheckInputs = [ nss.tools ];
   preCheck = ''
     substituteInPlace tests/testrun.sh \
       --replace 'timestamp=`date +%Y%m%d_%H%M%S`' 'timestamp=19700101_000000' \

@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "cue";
-  version = "0.4.3";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "cue-lang";
     repo = "cue";
     rev = "v${version}";
-    sha256 = "sha256-v9MYrijnbtJpTgRZ4hmkaekisOyujldGewCRNbkVzWw=";
+    hash = "sha256-4E50VrekIkVXhzHVNehgm6/DbkofvqlNSgX9oK9SLu4=";
   };
 
   postPatch = ''
@@ -16,7 +16,7 @@ buildGoModule rec {
     rm -f cmd/cue/cmd/script_test.go
   '';
 
-  vendorSha256 = "sha256-jTfV8DJlr5LxS3HjOEBkVzBvZKiySrmINumXSUIq2mI=";
+  vendorHash = "sha256-0N0bZdimGHu3vkLe+eGKBTm/YeSQOnp+Pxhz3LVniTk=";
 
   excludedPackages = [ "internal/ci/updatetxtar" "internal/cmd/embedpkg" "internal/cmd/qgo" "pkg/gen" ];
 

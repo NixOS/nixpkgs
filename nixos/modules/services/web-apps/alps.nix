@@ -84,7 +84,7 @@ in {
         "-addr" "${cfg.bindIP}:${toString cfg.port}"
         "-theme" "${cfg.theme}"
         "imaps://${cfg.imaps.host}:${toString cfg.imaps.port}"
-        "smpts://${cfg.smtps.host}:${toString cfg.smtps.port}"
+        "smtps://${cfg.smtps.host}:${toString cfg.smtps.port}"
       ];
     };
   };

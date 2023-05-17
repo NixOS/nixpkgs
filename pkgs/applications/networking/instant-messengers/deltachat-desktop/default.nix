@@ -1,7 +1,7 @@
 { lib
 , buildNpmPackage
 , copyDesktopItems
-, electron_18
+, electron_22
 , buildGoModule
 , esbuild
 , fetchFromGitHub
@@ -21,17 +21,21 @@
 
 let
   libdeltachat' = libdeltachat.overrideAttrs (old: rec {
-    version = "1.104.0";
+    version = "1.112.8";
     src = fetchFromGitHub {
       owner = "deltachat";
       repo = "deltachat-core-rust";
-      rev = version;
-      hash = "sha256-+FQ6XE+CtvSNSgpEr8h0mcr9DCC6TvGgLrYGdw0Ve2o=";
+      rev = "v${version}";
+      hash = "sha256-bvXZtgFZx94Sw9Tst620HAhi9kmG8PjtWnghdw2ZF84=";
     };
-    cargoDeps = rustPlatform.fetchCargoTarball {
-      inherit src;
-      name = "${old.pname}-${version}";
-      hash = "sha256-c3tt+nYZksI/VhJk4bNHu9ZXeDTaA2aLAQo1BmuF+2g=";
+    cargoDeps = rustPlatform.importCargoLock {
+      lockFile = ./Cargo.lock;
+      outputHashes = {
+        "email-0.0.21" = "sha256-Ys47MiEwVZenRNfenT579Rb17ABQ4QizVFTWUq3+bAY=";
+        "encoded-words-0.2.0" = "sha256-KK9st0hLFh4dsrnLd6D8lC6pRFFs8W+WpZSGMGJcosk=";
+        "lettre-0.9.2" = "sha256-+hU1cFacyyeC9UGVBpS14BWlJjHy90i/3ynMkKAzclk=";
+        "quinn-proto-0.9.2" = "sha256-N1gD5vMsBEHO4Fz4ZYEKZA8eE/VywXNXssGcK6hjvpg=";
+      };
     };
   });
   esbuild' = esbuild.override {
@@ -43,21 +47,21 @@ let
         rev = "v${version}";
         hash = "sha256-qCtpy69ROCspRgPKmCV0YY/EOSWiNU/xwDblU0bQp4w=";
       };
-      vendorSha256 = "sha256-+BfxCyg0KkDQpHt/wycy/8CTG6YBA/VJvJFhhzUnSiQ=";
+      vendorHash = "sha256-+BfxCyg0KkDQpHt/wycy/8CTG6YBA/VJvJFhhzUnSiQ=";
     });
   };
 in buildNpmPackage rec {
   pname = "deltachat-desktop";
-  version = "1.34.1";
+  version = "1.36.4";
 
   src = fetchFromGitHub {
     owner = "deltachat";
     repo = "deltachat-desktop";
     rev = "v${version}";
-    hash = "sha256-/F1fU54eTM9mUaQe/Ex9DnTDb+fzl/1HNyYvLWE2BBU=";
+    hash = "sha256-nJF8DPauhEoKC7mibpMJCGsgt9HnwkZp/jiWEEhShBs=";
   };
 
-  npmDepsHash = "sha256-3wzN7G27IGTlFZUE9RzQXfApVfaTc92Sbb+jjH/zeoc=";
+  npmDepsHash = "sha256-cTvNU4LO74pcw4Ybo9iftEis2yDA2SqGtrs4v+xAi5c=";
 
   nativeBuildInputs = [
     makeWrapper
@@ -73,10 +77,12 @@ in buildNpmPackage rec {
     CoreServices
   ];
 
-  ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
-  ESBUILD_BINARY_PATH = "${esbuild'}/bin/esbuild";
-  USE_SYSTEM_LIBDELTACHAT = "true";
-  VERSION_INFO_GIT_REF = src.rev;
+  env = {
+    ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
+    ESBUILD_BINARY_PATH = "${esbuild'}/bin/esbuild";
+    USE_SYSTEM_LIBDELTACHAT = "true";
+    VERSION_INFO_GIT_REF = src.rev;
+  };
 
   preBuild = ''
     rm -r node_modules/deltachat-node/node/prebuilds
@@ -105,7 +111,7 @@ in buildNpmPackage rec {
         $out/lib/node_modules/deltachat-desktop/html-dist/fonts
     done
 
-    makeWrapper ${electron_18}/bin/electron $out/bin/deltachat \
+    makeWrapper ${electron_22}/bin/electron $out/bin/deltachat \
       --set LD_PRELOAD ${sqlcipher}/lib/libsqlcipher${stdenv.hostPlatform.extensions.sharedLibrary} \
       --add-flags $out/lib/node_modules/deltachat-desktop
 
@@ -128,8 +134,6 @@ in buildNpmPackage rec {
       "x-scheme-handler/mailto"
     ];
   });
-
-  passthru.updateScript = ./update.sh;
 
   meta = with lib; {
     description = "Email-based instant messaging for Desktop";

@@ -5,7 +5,8 @@ let
     packageOverrides = self: super: {
       sqlalchemy = super.sqlalchemy.overridePythonAttrs (oldAttrs: rec {
         version = "1.3.24";
-        src = oldAttrs.src.override {
+        src = super.fetchPypi {
+          inherit (oldAttrs) pname;
           inherit version;
           hash = "sha256-67t3fL+TEjWbiXv4G6ANrg9ctp+6KhgmXcwYpvXvdRk=";
         };
@@ -40,7 +41,7 @@ with python.pkgs; buildPythonApplication rec {
     autobahn
     fb-re2
     websockets
-    cchardet
+    faust-cchardet
   ];
 
   checkPhase = ''

@@ -1,3 +1,10 @@
+# This test verifies DHCPv4 interaction between a client and a router.
+# For successful DHCP allocations a dynamic update request is sent
+# towards a nameserver to allocate a name in the lan.nixos.test zone.
+# We then verify whether client and router can ping each other, and
+# that the nameserver can resolve the clients fqdn to the correct IP
+# address.
+
 import ./make-test-python.nix ({ pkgs, lib, ...}: {
   meta.maintainers = with lib.maintainers; [ hexa ];
 
@@ -8,17 +15,17 @@ import ./make-test-python.nix ({ pkgs, lib, ...}: {
       virtualisation.vlans = [ 1 ];
 
       networking = {
-        useNetworkd = true;
         useDHCP = false;
         firewall.allowedUDPPorts = [ 67 ];
       };
 
       systemd.network = {
+        enable = true;
         networks = {
           "01-eth1" = {
             name = "eth1";
             networkConfig = {
-              Address = "10.0.0.1/30";
+              Address = "10.0.0.1/29";
             };
           };
         };
@@ -45,13 +52,115 @@ import ./make-test-python.nix ({ pkgs, lib, ...}: {
           };
 
           subnet4 = [ {
-            subnet = "10.0.0.0/30";
+            subnet = "10.0.0.0/29";
             pools = [ {
-              pool = "10.0.0.2 - 10.0.0.2";
+              pool = "10.0.0.3 - 10.0.0.3";
             } ];
           } ];
+
+          # Enable communication between dhcp4 and a local dhcp-ddns
+          # instance.
+          # https://kea.readthedocs.io/en/kea-2.2.0/arm/dhcp4-srv.html#ddns-for-dhcpv4
+          dhcp-ddns = {
+            enable-updates = true;
+          };
+
+          ddns-send-updates = true;
+          ddns-qualifying-suffix = "lan.nixos.test.";
         };
       };
+
+      services.kea.dhcp-ddns = {
+        enable = true;
+        settings = {
+          forward-ddns = {
+            # Configure updates of a forward zone named `lan.nixos.test`
+            # hosted at the nameserver at 10.0.0.2
+            # https://kea.readthedocs.io/en/kea-2.2.0/arm/ddns.html#adding-forward-dns-servers
+            ddns-domains = [ {
+              name = "lan.nixos.test.";
+              # Use a TSIG key in production!
+              key-name = "";
+              dns-servers = [ {
+                ip-address = "10.0.0.2";
+                port = 53;
+              } ];
+            } ];
+          };
+        };
+      };
+    };
+
+    nameserver = { config, pkgs, ... }: {
+      virtualisation.vlans = [ 1 ];
+
+      networking = {
+        useDHCP = false;
+        firewall.allowedUDPPorts = [ 53 ];
+      };
+
+      systemd.network = {
+        enable = true;
+        networks = {
+          "01-eth1" = {
+            name = "eth1";
+            networkConfig = {
+              Address = "10.0.0.2/29";
+            };
+          };
+        };
+      };
+
+      services.resolved.enable = false;
+
+      # Set up an authoritative nameserver, serving the `lan.nixos.test`
+      # zone and configure an ACL that allows dynamic updates from
+      # the router's ip address.
+      # This ACL is likely insufficient for production usage. Please
+      # use TSIG keys.
+      services.knot = let
+        zone = pkgs.writeTextDir "lan.nixos.test.zone" ''
+          @ SOA ns.nixos.test nox.nixos.test 0 86400 7200 3600000 172800
+          @ NS nameserver
+          nameserver A 10.0.0.3
+          router A 10.0.0.1
+        '';
+        zonesDir = pkgs.buildEnv {
+          name = "knot-zones";
+          paths = [ zone ];
+        };
+      in {
+        enable = true;
+        extraArgs = [
+          "-v"
+        ];
+        extraConfig = ''
+          server:
+              listen: 0.0.0.0@53
+
+          log:
+            - target: syslog
+              any: debug
+
+          acl:
+            - id: dhcp_ddns
+              address: 10.0.0.1
+              action: update
+
+          template:
+            - id: default
+              storage: ${zonesDir}
+              zonefile-sync: -1
+              zonefile-load: difference-no-serial
+              journal-content: all
+
+          zone:
+            - domain: lan.nixos.test
+              file: lan.nixos.test.zone
+              acl: [dhcp_ddns]
+        '';
+      };
+
     };
 
     client = { config, pkgs, ... }: {
@@ -70,6 +179,7 @@ import ./make-test-python.nix ({ pkgs, lib, ...}: {
     router.wait_for_unit("kea-dhcp4-server.service")
     client.wait_for_unit("systemd-networkd-wait-online.service")
     client.wait_until_succeeds("ping -c 5 10.0.0.1")
-    router.wait_until_succeeds("ping -c 5 10.0.0.2")
+    router.wait_until_succeeds("ping -c 5 10.0.0.3")
+    nameserver.wait_until_succeeds("kdig +short client.lan.nixos.test @10.0.0.2 | grep -q 10.0.0.3")
   '';
 })

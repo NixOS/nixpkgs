@@ -2,14 +2,17 @@
 , fetchFromGitHub
 , cmake
 , pkg-config
-, qt5
-, gnuradio3_8Minimal
+, qtbase
+, qtsvg
+, qtwayland
+, gnuradioMinimal
 , thrift
 , mpir
 , fftwFloat
 , alsa-lib
 , libjack2
 , wrapGAppsHook
+, wrapQtAppsHook
 # drivers (optional):
 , rtl-sdr
 , hackrf
@@ -22,38 +25,39 @@ assert portaudioSupport -> portaudio != null;
 # audio backends are mutually exclusive
 assert !(pulseaudioSupport && portaudioSupport);
 
-gnuradio3_8Minimal.pkgs.mkDerivation rec {
+gnuradioMinimal.pkgs.mkDerivation rec {
   pname = "gqrx";
-  version = "2.15.9";
+  version = "2.16";
 
   src = fetchFromGitHub {
     owner = "gqrx-sdr";
     repo = "gqrx";
     rev = "v${version}";
-    sha256 = "sha256-KQBtYVEfOXpzfxNMgTu6Hup7XpjubrpvZazcFlml4Kg=";
+    hash = "sha256-14MVimOxM7upq6vpEhvVRnrverBuFToE2ktNhG59LKE=";
   };
 
   nativeBuildInputs = [
     cmake
     pkg-config
-    qt5.wrapQtAppsHook
+    wrapQtAppsHook
     wrapGAppsHook
   ];
   buildInputs = [
-    gnuradio3_8Minimal.unwrapped.log4cpp
+    gnuradioMinimal.unwrapped.logLib
     mpir
     fftwFloat
     alsa-lib
     libjack2
-    gnuradio3_8Minimal.unwrapped.boost
-    qt5.qtbase
-    qt5.qtsvg
-    gnuradio3_8Minimal.pkgs.osmosdr
+    gnuradioMinimal.unwrapped.boost
+    qtbase
+    qtsvg
+    qtwayland
+    gnuradioMinimal.pkgs.osmosdr
     rtl-sdr
     hackrf
-  ] ++ lib.optionals (gnuradio3_8Minimal.hasFeature "gr-ctrlport") [
+  ] ++ lib.optionals (gnuradioMinimal.hasFeature "gr-ctrlport") [
     thrift
-    gnuradio3_8Minimal.unwrapped.python.pkgs.thrift
+    gnuradioMinimal.unwrapped.python.pkgs.thrift
   ] ++ lib.optionals pulseaudioSupport [ libpulseaudio ]
     ++ lib.optionals portaudioSupport [ portaudio ];
 

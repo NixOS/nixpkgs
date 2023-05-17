@@ -1,11 +1,11 @@
 { lib, stdenv, fetchurl, autoreconfHook }:
 
 stdenv.mkDerivation rec {
-  version = "0.4.39";
+  version = "0.4.41";
   pname = "libzen";
   src = fetchurl {
     url = "https://mediaarea.net/download/source/libzen/${version}/libzen_${version}.tar.bz2";
-    sha256 = "1rwaxmid9iv65n0y6xlcyxxydsvihjni9ldxpg6pbqz43amp49xx";
+    sha256 = "sha256-6yN9fT3Kbca6BocZQgon3gk0p4PMrrKGdWKzWvOQHi0=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];

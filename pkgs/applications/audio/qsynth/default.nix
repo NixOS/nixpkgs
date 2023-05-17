@@ -16,6 +16,10 @@ mkDerivation  rec {
   buildInputs = [ alsa-lib fluidsynth libjack2 qtbase qttools qtx11extras ];
 
   enableParallelBuilding = true;
+  # Missing install depends:
+  #   lrelease error: Parse error at src/translations/qsynth_ru.ts:1503:33: Premature end of document.
+  #   make: *** [Makefile:107: src/translations/qsynth_ru.qm] Error 1
+  enableParallelInstalling = false;
 
   meta = with lib; {
     description = "Fluidsynth GUI";

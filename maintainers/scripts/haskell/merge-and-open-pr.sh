@@ -85,7 +85,8 @@ echo "Updating Stackage..."
 echo "Updating Hackage hashes..."
 ./maintainers/scripts/haskell/update-hackage.sh --do-commit
 echo "Regenerating Hackage packages..."
-./maintainers/scripts/haskell/regenerate-hackage-packages.sh --do-commit
+# Using fast here because after the hackage-update eval errors will likely break the transitive dependencies check.
+./maintainers/scripts/haskell/regenerate-hackage-packages.sh --fast --do-commit
 
 # Push these new commits to the haskell-updates branch
 echo "Pushing commits just created to the remote haskell-updates branch..."
@@ -111,6 +112,8 @@ The short version is this:
 * We aim at at least one merge of \`haskell-updates\` into \`master\` every two weeks.
 * We only do the merge if the [\`mergeable\`](https://hydra.nixos.org/job/nixpkgs/haskell-updates/mergeable) job is succeeding on hydra.
 * If a [\`maintained\`](https://hydra.nixos.org/job/nixpkgs/haskell-updates/maintained) package is still broken at the time of merge, we will only merge if the maintainer has been pinged 7 days in advance. (If you care about a Haskell package, become a maintainer!)
+
+More information about Haskell packages in nixpkgs can be found [in the nixpkgs manual](https://nixos.org/manual/nixpkgs/unstable/#haskell).
 
 ---
 

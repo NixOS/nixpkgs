@@ -1,5 +1,6 @@
 { lib, stdenv, llvm_meta, src, cmake, python3, fixDarwinDylibNames, version
-, libcxxabi
+, cxxabi ? if stdenv.hostPlatform.isFreeBSD then libcxxrt else libcxxabi
+, libcxxabi, libcxxrt
 , enableShared ? !stdenv.hostPlatform.isStatic
 
 # If headersOnly is true, the resulting package would only include the headers.
@@ -9,6 +10,8 @@
 # https://reviews.llvm.org/rG1687f2bbe2e2aaa092f942d4a97d41fad43eedfb
 , headersOnly ? false
 }:
+
+assert stdenv.isDarwin -> cxxabi.pname == "libcxxabi";
 
 stdenv.mkDerivation rec {
   pname = if headersOnly then "cxx-headers" else "libcxx";
@@ -32,9 +35,9 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake python3 ]
     ++ lib.optional stdenv.isDarwin fixDarwinDylibNames;
 
-  buildInputs = lib.optionals (!headersOnly) [ libcxxabi ];
+  buildInputs = lib.optionals (!headersOnly) [ cxxabi ];
 
-  cmakeFlags = [ "-DLIBCXX_CXX_ABI=libcxxabi" ]
+  cmakeFlags = [ "-DLIBCXX_CXX_ABI=${cxxabi.pname}" ]
     ++ lib.optional (stdenv.hostPlatform.isMusl || stdenv.hostPlatform.isWasi) "-DLIBCXX_HAS_MUSL_LIBC=1"
     ++ lib.optional (stdenv.hostPlatform.useLLVM or false) "-DLIBCXX_USE_COMPILER_RT=ON"
     ++ lib.optionals stdenv.hostPlatform.isWasm [
@@ -55,7 +58,7 @@ stdenv.mkDerivation rec {
       abiName=$(echo "$baseName" | sed -e 's/libc++/libc++abi/')
 
       for other in $(${stdenv.cc.targetPrefix}otool -L $file | awk '$1 ~ "/libc\\+\\+abi" { print $1 }'); do
-        ${stdenv.cc.targetPrefix}install_name_tool -change $other ${libcxxabi}/lib/$abiName $file
+        ${stdenv.cc.targetPrefix}install_name_tool -change $other ${cxxabi}/lib/$abiName $file
       done
     done
   '';
@@ -71,6 +74,7 @@ stdenv.mkDerivation rec {
 
   passthru = {
     isLLVM = true;
+    inherit cxxabi;
   };
 
   meta = llvm_meta // {

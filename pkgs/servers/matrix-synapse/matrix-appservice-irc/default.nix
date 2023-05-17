@@ -9,16 +9,16 @@
 
 buildNpmPackage rec {
   pname = "matrix-appservice-irc";
-  version = "0.36.0";
+  version = "0.38.0";
 
   src = fetchFromGitHub {
     owner = "matrix-org";
     repo = "matrix-appservice-irc";
     rev = "refs/tags/${version}";
-    hash = "sha256-8/jLONqf+0JRAK/SLj3qlG6Dm0VRl4h6YWeZnz4pVXc=";
+    hash = "sha256-rV4B9OQl1Ht26X4e7sqCe1PR5RpzIcjj4OvWG6udJWo=";
   };
 
-  npmDepsHash = "sha256-fGft7au5js9DRoXYccBPdJyaZ3zfsuCwUwWPOxwAodo=";
+  npmDepsHash = "sha256-iZuPr3a1BPtRfkEoxOs4oRL/nCfy3PLx5T9dX49/B0s=";
 
   nativeBuildInputs = [
     python3
@@ -30,9 +30,7 @@ buildNpmPackage rec {
   '';
 
   passthru.tests.matrix-appservice-irc = nixosTests.matrix-appservice-irc;
-  passthru.updateScript = nix-update-script {
-    attrPath = pname;
-  };
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Node.js IRC bridge for Matrix";

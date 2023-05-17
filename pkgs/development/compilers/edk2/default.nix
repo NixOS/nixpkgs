@@ -17,6 +17,8 @@ targetArch = if stdenv.isi686 then
   "IA32"
 else if stdenv.isx86_64 then
   "X64"
+else if stdenv.isAarch32 then
+  "ARM"
 else if stdenv.isAarch64 then
   "AARCH64"
 else
@@ -63,7 +65,7 @@ edk2 = buildStdenv.mkDerivation {
   makeFlags = [ "-C BaseTools" ]
     ++ lib.optionals (stdenv.cc.isClang) [ "CXX=llvm BUILD_AR=ar BUILD_CC=clang BUILD_CXX=clang++ BUILD_AS=clang BUILD_LD=ld" ];
 
-  NIX_CFLAGS_COMPILE = "-Wno-return-type" + lib.optionalString (stdenv.cc.isGNU) " -Wno-error=stringop-truncation";
+  env.NIX_CFLAGS_COMPILE = "-Wno-return-type" + lib.optionalString (stdenv.cc.isGNU) " -Wno-error=stringop-truncation";
 
   hardeningDisable = [ "format" "fortify" ];
 
@@ -83,7 +85,7 @@ edk2 = buildStdenv.mkDerivation {
     description = "Intel EFI development kit";
     homepage = "https://github.com/tianocore/tianocore.github.io/wiki/EDK-II/";
     license = licenses.bsd2;
-    platforms = [ "x86_64-linux" "i686-linux" "aarch64-linux" "x86_64-darwin" ];
+    platforms = with platforms; aarch64 ++ arm ++ i686 ++ x86_64;
   };
 
   passthru = {
@@ -114,7 +116,7 @@ edk2 = buildStdenv.mkDerivation {
 
       buildPhase = ''
         runHook preBuild
-        build -a ${targetArch} -b RELEASE -t ${buildType} -p ${projectDscPath} -n $NIX_BUILD_CORES $buildFlags
+        build -a ${targetArch} -b ${attrs.buildConfig or "RELEASE"} -t ${buildType} -p ${projectDscPath} -n $NIX_BUILD_CORES $buildFlags
         runHook postBuild
       '';
 

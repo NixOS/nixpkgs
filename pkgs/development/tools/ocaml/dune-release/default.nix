@@ -11,6 +11,7 @@ let runtimeInputs = [ opam findlib git mercurial bzip2 gnutar coreutils ];
 in buildDunePackage rec {
   pname = "dune-release";
   version = "1.6.2";
+  duneVersion = "3";
 
   minimalOCamlVersion = "4.06";
 
@@ -19,9 +20,10 @@ in buildDunePackage rec {
     sha256 = "sha256-oJ5SL7qNM5izoEpr+nTjbT+YmmNIoy7QgSNse3wNIA4=";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ] ++ runtimeInputs;
   buildInputs = [ curly fmt cmdliner re opam-format opam-state opam-core
                   rresult logs odoc bos yojson astring fpath ];
+  nativeCheckInputs = [ odoc ];
   checkInputs = [ alcotest ] ++ runtimeInputs;
   doCheck = true;
 

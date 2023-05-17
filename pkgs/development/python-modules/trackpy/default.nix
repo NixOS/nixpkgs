@@ -2,38 +2,42 @@
 , stdenv
 , buildPythonPackage
 , fetchFromGitHub
-, numpy
-, scipy
-, six
-, pandas
-, pyyaml
+, looseversion
 , matplotlib
 , numba
+, numpy
+, pandas
 , pytestCheckHook
+, pythonOlder
+, pyyaml
+, scipy
 }:
 
 buildPythonPackage rec {
   pname = "trackpy";
-  version = "0.5.0";
+  version = "0.6.1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "soft-matter";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "0if069f4sjyjl7wvzyzk8k9q9qjixswcc6aszrrgfb4a4mix3h1g";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-NG1TOppqRbIZHLxJjlaXD4icYlAUkSxtmmC/fsS/pXo=";
   };
 
   propagatedBuildInputs = [
-    numpy
-    scipy
-    six
-    pandas
-    pyyaml
+    looseversion
     matplotlib
     numba
+    numpy
+    pandas
+    pyyaml
+    scipy
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 
@@ -44,11 +48,16 @@ buildPythonPackage rec {
     echo "backend: ps" > $HOME/.matplotlib/matplotlibrc
   '';
 
+  pythonImportsCheck = [
+    "trackpy"
+  ];
+
   meta = with lib; {
-    broken = (stdenv.isLinux && stdenv.isAarch64);
     description = "Particle-tracking toolkit";
     homepage = "https://github.com/soft-matter/trackpy";
+    changelog = "https://github.com/soft-matter/trackpy/releases/tag/v${version}";
     license = licenses.bsd3;
-    maintainers = [ maintainers.costrouc ];
+    maintainers = with maintainers; [ costrouc ];
+    broken = (stdenv.isLinux && stdenv.isAarch64);
   };
 }

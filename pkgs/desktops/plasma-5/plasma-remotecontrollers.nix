@@ -8,6 +8,7 @@
 , kdeclarative
 , kcmutils
 , kpackage
+, kscreenlocker
 , kwindowsystem
 , wayland
 , pkg-config
@@ -29,6 +30,7 @@ mkDerivation {
     kdeclarative
     kcmutils
     kpackage
+    kscreenlocker
     kwindowsystem
     wayland
     libcec

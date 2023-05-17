@@ -17,5 +17,7 @@ stdenv.mkDerivation (args // {
   installPhase = "cp -r . $out";
   outputs = [ "out" ];
   separateDebugInfo = false;
+  dontUnpack = false;
+  dontInstall = false;
   phases = ["unpackPhase" "patchPhase" "installPhase"];
 })

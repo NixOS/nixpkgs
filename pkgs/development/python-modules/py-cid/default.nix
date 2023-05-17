@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "ipld";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-aN7ee25ghKKa90+FoMDCdGauToePc5AzDLV3tONvh4U=";
+    hash = "sha256-aN7ee25ghKKa90+FoMDCdGauToePc5AzDLV3tONvh4U=";
   };
 
   postPatch = ''
@@ -38,7 +38,7 @@ buildPythonPackage rec {
     py-multihash
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     hypothesis
   ];

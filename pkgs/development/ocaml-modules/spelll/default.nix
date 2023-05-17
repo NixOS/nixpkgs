@@ -1,21 +1,22 @@
 { lib, fetchFromGitHub, buildDunePackage
 , seq
+, stdlib-shims
 }:
 
 buildDunePackage rec {
   pname = "spelll";
-  version = "0.3";
+  version = "0.4";
 
-  useDune2 = true;
+  duneVersion = "3";
 
   src = fetchFromGitHub {
     owner = "c-cube";
     repo = pname;
     rev = "v${version}";
-    sha256 = "03adqisgsazsxdkrypp05k3g91hydfgcif2014il63gdbd9nhzlh";
+    hash = "sha256-nI8fdArYynR70PUJIgyogGBCe4gFhfVzuRdZzFGKqOc=";
   };
 
-  propagatedBuildInputs = [ seq ];
+  propagatedBuildInputs = [ seq stdlib-shims ];
 
   meta = {
     inherit (src.meta) homepage;

@@ -33,6 +33,9 @@ stdenv.mkDerivation rec {
     "-DWITH_SYMENGINE_THREAD_SAFE=yes"
     "-DWITH_MPC=yes"
     "-DBUILD_FOR_DISTRIBUTION=yes"
+  ] ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
+    # error: unrecognized instruction mnemonic, did you mean: bit, cnt, hint, ins, not?
+    "-DBUILD_TESTS=OFF"
   ];
 
   doCheck = true;

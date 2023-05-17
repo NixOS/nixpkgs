@@ -167,6 +167,6 @@ in {
 
   meta = {
     maintainers = with maintainers; [ ma27 ];
-    doc = ./grocy.xml;
+    doc = ./grocy.md;
   };
 }

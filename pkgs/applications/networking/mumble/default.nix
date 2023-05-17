@@ -20,6 +20,11 @@ let
     pname = overrides.type;
     version = source.version;
 
+    patches = [
+      ./0001-BUILD-crypto-Migrate-to-OpenSSL-3.0-compatible-API.patch
+      ./0002-FIX-positional-audio-Force-8-bytes-alignment-for-CCa.patch
+    ];
+
     nativeBuildInputs = [ cmake pkg-config python3 qt5.wrapQtAppsHook qt5.qttools ]
       ++ (overrides.nativeBuildInputs or [ ]);
 
@@ -71,7 +76,7 @@ let
       ++ lib.optional (!pipewireSupport) "-D pipewire=OFF"
       ++ lib.optional jackSupport "-D alsa=OFF -D jackaudio=ON";
 
-    NIX_CFLAGS_COMPILE = lib.optional speechdSupport "-I${speechd}/include/speech-dispatcher";
+    env.NIX_CFLAGS_COMPILE = lib.optionalString speechdSupport "-I${speechd}/include/speech-dispatcher";
 
     postFixup = ''
       wrapProgram $out/bin/mumble \

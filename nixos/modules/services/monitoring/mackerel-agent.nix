@@ -11,7 +11,7 @@ in {
 
     # the upstream package runs as root, but doesn't seem to be strictly
     # necessary for basic functionality
-    runAsRoot = mkEnableOption (lib.mdDoc "Whether to run as root.");
+    runAsRoot = mkEnableOption (lib.mdDoc "Whether to run as root");
 
     autoRetirement = mkEnableOption (lib.mdDoc ''
       Whether to automatically retire the host upon OS shutdown.

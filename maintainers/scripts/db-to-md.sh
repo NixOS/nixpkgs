@@ -41,7 +41,7 @@ pandoc_flags=(
     # - diagram-generator.lua (we do not support that in NixOS manual to limit dependencies)
     # - media extraction (was only required for diagram generator)
     # - myst-reader/roles.lua (only relevant for MyST → DocBook)
-    # - link-unix-man-references.lua (links should only be added to display output)
+    # - link-manpages.lua (links should only be added to display output)
     # - docbook-writer/rst-roles.lua (only relevant for → DocBook)
     # - docbook-writer/labelless-link-is-xref.lua (only relevant for → DocBook)
     "--lua-filter=$DIR/../../doc/build-aux/pandoc-filters/docbook-reader/citerefentry-to-rst-role.lua"

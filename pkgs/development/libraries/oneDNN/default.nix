@@ -21,6 +21,15 @@ stdenv.mkDerivation rec {
   # Tests fail on some Hydra builders, because they do not support SSE4.2.
   doCheck = false;
 
+  # Fixup bad cmake paths
+  postInstall = ''
+    substituteInPlace $out/lib/cmake/dnnl/dnnl-config.cmake \
+      --replace "\''${PACKAGE_PREFIX_DIR}/" ""
+
+    substituteInPlace $out/lib/cmake/dnnl/dnnl-targets.cmake \
+      --replace "\''${_IMPORT_PREFIX}/" ""
+  '';
+
   meta = with lib; {
     description = "oneAPI Deep Neural Network Library (oneDNN)";
     homepage = "https://01.org/oneDNN";

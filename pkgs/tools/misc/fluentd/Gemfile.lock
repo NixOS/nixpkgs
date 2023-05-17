@@ -4,29 +4,29 @@ GEM
     addressable (2.8.1)
       public_suffix (>= 2.0.2, < 6.0)
     aws-eventstream (1.2.0)
-    aws-partitions (1.661.0)
-    aws-sdk-cloudwatchlogs (1.56.0)
+    aws-partitions (1.677.0)
+    aws-sdk-cloudwatchlogs (1.58.0)
       aws-sdk-core (~> 3, >= 3.165.0)
       aws-sigv4 (~> 1.1)
-    aws-sdk-core (3.167.0)
+    aws-sdk-core (3.168.4)
       aws-eventstream (~> 1, >= 1.0.2)
       aws-partitions (~> 1, >= 1.651.0)
       aws-sigv4 (~> 1.5)
       jmespath (~> 1, >= 1.6.1)
-    aws-sdk-firehose (1.49.0)
+    aws-sdk-firehose (1.50.0)
       aws-sdk-core (~> 3, >= 3.165.0)
       aws-sigv4 (~> 1.1)
     aws-sdk-kinesis (1.42.0)
       aws-sdk-core (~> 3, >= 3.165.0)
       aws-sigv4 (~> 1.1)
-    aws-sdk-kms (1.59.0)
+    aws-sdk-kms (1.61.0)
       aws-sdk-core (~> 3, >= 3.165.0)
       aws-sigv4 (~> 1.1)
-    aws-sdk-s3 (1.117.1)
+    aws-sdk-s3 (1.117.2)
       aws-sdk-core (~> 3, >= 3.165.0)
       aws-sdk-kms (~> 1)
       aws-sigv4 (~> 1.4)
-    aws-sdk-sqs (1.52.0)
+    aws-sdk-sqs (1.52.1)
       aws-sdk-core (~> 3, >= 3.165.0)
       aws-sigv4 (~> 1.1)
     aws-sigv4 (1.5.2)
@@ -39,12 +39,12 @@ GEM
     elastic-transport (8.1.0)
       faraday (< 3)
       multi_json
-    elasticsearch (8.5.1)
+    elasticsearch (8.5.2)
       elastic-transport (~> 8)
-      elasticsearch-api (= 8.5.1)
-    elasticsearch-api (8.5.1)
+      elasticsearch-api (= 8.5.2)
+    elasticsearch-api (8.5.2)
       multi_json
-    excon (0.94.0)
+    excon (0.95.0)
     faraday (1.10.2)
       faraday-em_http (~> 1.0)
       faraday-em_synchrony (~> 1.0)
@@ -73,6 +73,8 @@ GEM
     fluent-plugin-cloudwatch-logs (0.14.3)
       aws-sdk-cloudwatchlogs (~> 1.0)
       fluentd (>= 1.8.0)
+    fluent-plugin-concat (2.5.0)
+      fluentd (>= 0.14.0, < 2)
     fluent-plugin-elasticsearch (5.2.4)
       elasticsearch
       excon
@@ -114,16 +116,16 @@ GEM
       tzinfo-data (~> 1.0)
       webrick (>= 1.4.2, < 1.8.0)
       yajl-ruby (~> 1.0)
-    google-protobuf (3.21.9)
+    google-protobuf (3.21.12)
     http_parser.rb (0.8.0)
-    jmespath (1.6.1)
+    jmespath (1.6.2)
     ltsv (0.1.2)
-    mongo (2.18.1)
+    mongo (2.18.2)
       bson (>= 4.14.1, < 5.0.0)
     msgpack (1.6.0)
     multi_json (1.15.0)
     multipart-post (2.2.3)
-    public_suffix (5.0.0)
+    public_suffix (5.0.1)
     rake (13.0.6)
     ruby-kafka (1.5.0)
       digest-crc
@@ -134,7 +136,7 @@ GEM
     strptime (0.2.5)
     tzinfo (2.0.5)
       concurrent-ruby (~> 1.0)
-    tzinfo-data (1.2022.6)
+    tzinfo-data (1.2022.7)
       tzinfo (>= 1.0.0)
     webhdfs (0.10.2)
       addressable
@@ -146,6 +148,7 @@ PLATFORMS
 
 DEPENDENCIES
   fluent-plugin-cloudwatch-logs
+  fluent-plugin-concat
   fluent-plugin-elasticsearch
   fluent-plugin-kafka
   fluent-plugin-kinesis
@@ -157,4 +160,4 @@ DEPENDENCIES
   fluentd
 
 BUNDLED WITH
-   2.3.24
+   2.3.26

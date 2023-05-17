@@ -17,10 +17,10 @@ buildPythonPackage rec {
     owner = "python-lsp";
     repo = "python-lsp-black";
     rev = "v${version}";
-    sha256 = "sha256-qNA6Bj1VI0YEtRuvcMQZGWakQNNrJ2PqhozrLmQHPAg=";
+    hash = "sha256-qNA6Bj1VI0YEtRuvcMQZGWakQNNrJ2PqhozrLmQHPAg=";
   };
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   propagatedBuildInputs = [ black python-lsp-server toml ];
 

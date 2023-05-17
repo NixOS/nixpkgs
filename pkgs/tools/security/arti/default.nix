@@ -10,7 +10,7 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "arti";
-  version = "1.1.0";
+  version = "1.1.4";
 
   src = fetchFromGitLab {
     domain = "gitlab.torproject.org";
@@ -18,10 +18,10 @@ rustPlatform.buildRustPackage rec {
     owner = "core";
     repo = "arti";
     rev = "arti-v${version}";
-    sha256 = "sha256-fvRSx/I4SM9xWhooPPKFuRLSCYOxE+scqi6jRsGFOXo=";
+    sha256 = "sha256-+gd/3CKdZkH/zDqGGTna7S7LkadfpzfHlX2XfemZpoE=";
   };
 
-  cargoSha256 = "sha256-5wXeFomQs/aEbImmlyUzmYyDRXFp3qZSFOzk0g7pNEo=";
+  cargoHash = "sha256-YD7KAiZM3iG9FXXHo5c1WanF7tsJBAnGvb36gxEcV5k=";
 
   nativeBuildInputs = lib.optionals stdenv.isLinux [ pkg-config ];
 

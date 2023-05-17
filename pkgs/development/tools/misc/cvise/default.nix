@@ -16,14 +16,14 @@
 
 buildPythonApplication rec {
   pname = "cvise";
-  version = "2.7.0";
+  version = "2.8.0";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "marxin";
     repo = "cvise";
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-j4s1xH0vO+/NNafQf1Jei7fgebSQ53WJKA+kYxuG2zQ=";
+    hash = "sha256-9HFCFgpRXqefFJLulwvi6nx0fl0G6IXI9gSinekJXRU=";
   };
 
   patches = [
@@ -65,7 +65,7 @@ buildPythonApplication rec {
     psutil
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     unifdef
   ];

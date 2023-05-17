@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "aioqsw";
-  version = "0.3.1";
+  version = "0.3.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "Noltari";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-8WfQTaa9BiMHDLxCZNqcFmi0ifEC2xgyN2cDBBtBDdI=";
+    hash = "sha256-Z7Q9b+ameddvGu9KJUNsaqOHiu0qXnpzuiZwg+/0+64=";
   };
 
   propagatedBuildInputs = [

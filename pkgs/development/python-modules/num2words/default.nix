@@ -12,12 +12,12 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-fnwLDwgEBao6HdnTKxypCzvwO6sXuOVNsF4beDAaCYg=";
+    hash = "sha256-fnwLDwgEBao6HdnTKxypCzvwO6sXuOVNsF4beDAaCYg=";
   };
 
   propagatedBuildInputs = [ docopt ];
 
-  checkInputs = [ delegator-py pytest ];
+  nativeCheckInputs = [ delegator-py pytest ];
 
   checkPhase = ''
     pytest -k 'not cli_with_lang'

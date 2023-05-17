@@ -21,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "dateparser";
-  version = "1.1.4";
+  version = "1.1.8";
 
   disabled = pythonOlder "3.7";
 
@@ -30,8 +30,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "scrapinghub";
     repo = "dateparser";
-    rev = "v${version}";
-    sha256 = "sha256-r13WNI+T2NtTwjnGOqX3ZOqPhvr8fBdXGULW7IXszlo=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-52g8defF5bsisBv2QoyUymXcf0sljOI9PjeR4l0Pw6k=";
   };
 
   propagatedBuildInputs = [
@@ -47,7 +47,7 @@ buildPythonPackage rec {
     langdetect = [ langdetect ];
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     parameterized
     pytestCheckHook
     gitpython

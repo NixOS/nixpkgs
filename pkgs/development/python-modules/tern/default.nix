@@ -19,14 +19,14 @@
 
 buildPythonPackage rec {
   pname = "tern";
-  version = "2.10.1";
+  version = "2.12.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-MMsq8/Obe3ogQSjiP8EebYseUJGcchMOczUrxE9jht4=";
+    hash = "sha256-XvhKe7mf09Nr3sbpMOKOO63HQ+9thgluU02iEIdWSpg=";
   };
 
   preBuild = ''
@@ -64,6 +64,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/tern-tools/tern";
     changelog = "https://github.com/tern-tools/tern/releases/tag/v${version}";
     license = licenses.bsd2;
-    maintainers = teams.determinatesystems.members;
+    maintainers = [ ];
   };
 }

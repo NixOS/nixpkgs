@@ -24,6 +24,9 @@ stdenv.mkDerivation rec {
   '';
 
   installTargets = [ "install" "install-otb" "fontdir" ];
+  # fontdir depends on the previous two targets, but this is not known
+  # to make, so we need to disable parallelism:
+  enableParallelInstalling = false;
 
   meta = with lib; {
     description = "A clean fixed width font";
@@ -39,7 +42,7 @@ stdenv.mkDerivation rec {
       16x32. The styles are normal and bold (except for 6x12), plus
       EGA/VGA-bold for 8x14 and 8x16.
     '';
-    homepage = "http://terminus-font.sourceforge.net/";
+    homepage = "https://terminus-font.sourceforge.net/";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ astsmtl ];
   };

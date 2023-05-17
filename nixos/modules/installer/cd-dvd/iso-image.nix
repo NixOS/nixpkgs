@@ -22,8 +22,8 @@ let
       (option: ''
         menuentry '${defaults.name} ${
         # Name appended to menuentry defaults to params if no specific name given.
-        option.name or (if option ? params then "(${option.params})" else "")
-        }' ${if option ? class then " --class ${option.class}" else ""} {
+        option.name or (optionalString (option ? params) "(${option.params})")
+        }' ${optionalString (option ? class) " --class ${option.class}"} {
           linux ${defaults.image} \''${isoboot} ${defaults.params} ${
             option.params or ""
           }
@@ -52,7 +52,7 @@ let
   buildMenuAdditionalParamsGrub2 = additional:
   let
     finalCfg = {
-      name = "NixOS ${config.system.nixos.label}${config.isoImage.appendToMenuLabel}";
+      name = "${config.system.nixos.distroName} ${config.system.nixos.label}${config.isoImage.appendToMenuLabel}";
       params = "init=${config.system.build.toplevel}/init ${additional} ${toString config.boot.kernelParams}";
       image = "/boot/${config.system.boot.loader.kernelFile}";
       initrd = "/boot/initrd";
@@ -76,6 +76,14 @@ let
       35996
     else
       config.boot.loader.timeout * 10;
+
+  # Timeout in grub is in seconds.
+  # null means max timeout (infinity)
+  # 0 means disable timeout
+  grubEfiTimeout = if config.boot.loader.timeout == null then
+      -1
+    else
+      config.boot.loader.timeout;
 
   # The configuration file for syslinux.
 
@@ -101,35 +109,35 @@ let
     DEFAULT boot
 
     LABEL boot
-    MENU LABEL NixOS ${config.system.nixos.label}${config.isoImage.appendToMenuLabel}
+    MENU LABEL ${config.system.nixos.distroName} ${config.system.nixos.label}${config.isoImage.appendToMenuLabel}
     LINUX /boot/${config.system.boot.loader.kernelFile}
     APPEND init=${config.system.build.toplevel}/init ${toString config.boot.kernelParams}
     INITRD /boot/${config.system.boot.loader.initrdFile}
 
     # A variant to boot with 'nomodeset'
     LABEL boot-nomodeset
-    MENU LABEL NixOS ${config.system.nixos.label}${config.isoImage.appendToMenuLabel} (nomodeset)
+    MENU LABEL ${config.system.nixos.distroName} ${config.system.nixos.label}${config.isoImage.appendToMenuLabel} (nomodeset)
     LINUX /boot/${config.system.boot.loader.kernelFile}
     APPEND init=${config.system.build.toplevel}/init ${toString config.boot.kernelParams} nomodeset
     INITRD /boot/${config.system.boot.loader.initrdFile}
 
     # A variant to boot with 'copytoram'
     LABEL boot-copytoram
-    MENU LABEL NixOS ${config.system.nixos.label}${config.isoImage.appendToMenuLabel} (copytoram)
+    MENU LABEL ${config.system.nixos.distroName} ${config.system.nixos.label}${config.isoImage.appendToMenuLabel} (copytoram)
     LINUX /boot/${config.system.boot.loader.kernelFile}
     APPEND init=${config.system.build.toplevel}/init ${toString config.boot.kernelParams} copytoram
     INITRD /boot/${config.system.boot.loader.initrdFile}
 
     # A variant to boot with verbose logging to the console
     LABEL boot-debug
-    MENU LABEL NixOS ${config.system.nixos.label}${config.isoImage.appendToMenuLabel} (debug)
+    MENU LABEL ${config.system.nixos.distroName} ${config.system.nixos.label}${config.isoImage.appendToMenuLabel} (debug)
     LINUX /boot/${config.system.boot.loader.kernelFile}
     APPEND init=${config.system.build.toplevel}/init ${toString config.boot.kernelParams} loglevel=7
     INITRD /boot/${config.system.boot.loader.initrdFile}
 
     # A variant to boot with a serial console enabled
     LABEL boot-serial
-    MENU LABEL NixOS ${config.system.nixos.label}${config.isoImage.appendToMenuLabel} (serial console=ttyS0,115200n8)
+    MENU LABEL ${config.system.nixos.distroName} ${config.system.nixos.label}${config.isoImage.appendToMenuLabel} (serial console=ttyS0,115200n8)
     LINUX /boot/${config.system.boot.loader.kernelFile}
     APPEND init=${config.system.build.toplevel}/init ${toString config.boot.kernelParams} console=ttyS0,115200n8
     INITRD /boot/${config.system.boot.loader.initrdFile}
@@ -284,7 +292,7 @@ let
     if serial; then set with_serial=yes ;fi
     export with_serial
     clear
-    set timeout=10
+    set timeout=${toString grubEfiTimeout}
 
     # This message will only be viewable when "gfxterm" is not used.
     echo ""
@@ -450,7 +458,7 @@ in
     };
 
     isoImage.isoBaseName = mkOption {
-      default = "nixos";
+      default = config.system.nixos.distroId;
       description = lib.mdDoc ''
         Prefix of the name of the generated ISO image file.
       '';
@@ -465,7 +473,7 @@ in
     };
 
     isoImage.squashfsCompression = mkOption {
-      default = with pkgs.stdenv.targetPlatform; "xz -Xdict-size 100% "
+      default = with pkgs.stdenv.hostPlatform; "xz -Xdict-size 100% "
                 + lib.optionalString isx86 "-Xbcj x86"
                 # Untested but should also reduce size for these platforms
                 + lib.optionalString isAarch "-Xbcj arm"
@@ -475,6 +483,7 @@ in
         Compression settings to use for the squashfs nix store.
       '';
       example = "zstd -Xcompression-level 6";
+      type = types.str;
     };
 
     isoImage.edition = mkOption {
@@ -527,10 +536,17 @@ in
       '';
     };
 
+    isoImage.makeBiosBootable = mkOption {
+      default = false;
+      description = lib.mdDoc ''
+        Whether the ISO image should be a BIOS-bootable disk.
+      '';
+    };
+
     isoImage.makeEfiBootable = mkOption {
       default = false;
       description = lib.mdDoc ''
-        Whether the ISO image should be an efi-bootable volume.
+        Whether the ISO image should be an EFI-bootable volume.
       '';
     };
 
@@ -571,7 +587,7 @@ in
 
     isoImage.syslinuxTheme = mkOption {
       default = ''
-        MENU TITLE NixOS
+        MENU TITLE ${config.system.nixos.distroName}
         MENU RESOLUTION 800 600
         MENU CLEAR
         MENU ROWS 6
@@ -678,14 +694,12 @@ in
       }
     ];
 
-    boot.loader.grub.version = 2;
-
     # Don't build the GRUB menu builder script, since we don't need it
     # here and it causes a cyclic dependency.
     boot.loader.grub.enable = false;
 
     environment.systemPackages =  [ grubPkgs.grub2 grubPkgs.grub2_efi ]
-      ++ optional canx86BiosBoot pkgs.syslinux
+      ++ optional (config.isoImage.makeBiosBootable && canx86BiosBoot) pkgs.syslinux
     ;
 
     # In stage 1 of the boot, mount the CD as the root FS by label so
@@ -736,7 +750,7 @@ in
         { source = pkgs.writeText "version" config.system.nixos.label;
           target = "/version.txt";
         }
-      ] ++ optionals canx86BiosBoot [
+      ] ++ optionals (config.isoImage.makeBiosBootable && canx86BiosBoot) [
         { source = config.isoImage.splashImage;
           target = "/isolinux/background.png";
         }
@@ -763,7 +777,7 @@ in
         { source = config.isoImage.efiSplashImage;
           target = "/EFI/boot/efi-background.png";
         }
-      ] ++ optionals (config.boot.loader.grub.memtest86.enable && canx86BiosBoot) [
+      ] ++ optionals (config.boot.loader.grub.memtest86.enable && config.isoImage.makeBiosBootable && canx86BiosBoot) [
         { source = "${pkgs.memtest86plus}/memtest.bin";
           target = "/boot/memtest.bin";
         }
@@ -778,10 +792,10 @@ in
     # Create the ISO image.
     system.build.isoImage = pkgs.callPackage ../../../lib/make-iso9660-image.nix ({
       inherit (config.isoImage) isoName compressImage volumeID contents;
-      bootable = canx86BiosBoot;
+      bootable = config.isoImage.makeBiosBootable && canx86BiosBoot;
       bootImage = "/isolinux/isolinux.bin";
-      syslinux = if canx86BiosBoot then pkgs.syslinux else null;
-    } // optionalAttrs (config.isoImage.makeUsbBootable && canx86BiosBoot) {
+      syslinux = if config.isoImage.makeBiosBootable && canx86BiosBoot then pkgs.syslinux else null;
+    } // optionalAttrs (config.isoImage.makeUsbBootable && config.isoImage.makeBiosBootable && canx86BiosBoot) {
       usbBootable = true;
       isohybridMbrImage = "${pkgs.syslinux}/share/syslinux/isohdpfx.bin";
     } // optionalAttrs config.isoImage.makeEfiBootable {

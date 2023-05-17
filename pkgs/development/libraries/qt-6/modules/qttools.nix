@@ -14,7 +14,11 @@ qtModule {
   patches = [
     ../patches/qttools-paths.patch
   ];
-  NIX_CFLAGS_COMPILE = [
-    "-DNIX_OUTPUT_DEV=\"${placeholder "dev"}\""
+  env.NIX_CFLAGS_COMPILE = toString [
+    "-DNIX_OUTPUT_OUT=\"${placeholder "out"}\""
   ];
+  postInstall = ''
+    mkdir -p "$dev"
+    ln -s "$out/bin" "$dev/bin"
+  '';
 }

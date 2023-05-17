@@ -2,17 +2,17 @@
 
 buildGoModule rec {
   pname = "lux";
-  version = "0.16.0";
+  version = "0.18.0";
   src = fetchFromGitHub {
     owner = "iawia002";
     repo = "lux";
     rev = "v${version}";
-    sha256 = "sha256-kB625R6Qlo9sw0iz8MbaCFOjxpMyH+9ugC6JDn7L7eM=";
+    sha256 = "sha256-A3DDKpoaZlDUpafAGs5zCknhTeCuwMPnyBHtxke0Bi8=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
 
-  vendorSha256 = "sha256-2cH5xVz3k9PPjzoMjWch3o8VBfP4nWAvakNwZNQLOeI=";
+  vendorHash = "sha256-7wgGJYiIsVTRSuSb4a9LgYCkkayGhNMKqcIKoDxMuAM=";
 
   ldflags = [ "-s" "-w" ];
 
@@ -28,6 +28,6 @@ buildGoModule rec {
     homepage = "https://github.com/iawia002/lux";
     changelog = "https://github.com/iawia002/lux/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ candyc1oud ];
+    maintainers = [];
   };
 }

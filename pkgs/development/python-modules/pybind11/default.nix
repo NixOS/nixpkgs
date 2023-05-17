@@ -11,17 +11,26 @@
 , numpy
 , pytestCheckHook
 , libxcrypt
-}:
-
-buildPythonPackage rec {
+, makeSetupHook
+}: let
+  setupHook = makeSetupHook {
+    name = "pybind11-setup-hook";
+    substitutions = {
+      out = placeholder "out";
+      pythonInterpreter = python.pythonForBuild.interpreter;
+      pythonIncludeDir = "${python}/include/python${python.pythonVersion}";
+      pythonSitePackages = "${python}/${python.sitePackages}";
+    };
+  } ./setup-hook.sh;
+in buildPythonPackage rec {
   pname = "pybind11";
-  version = "2.10.1";
+  version = "2.10.4";
 
   src = fetchFromGitHub {
     owner = "pybind";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-9NS0/fLW2zEmEXhI9GfNN3C/CeI5xibFHwMoUebI90U=";
+    hash = "sha256-n7nLEG2+sSR9wnxM+C8FWc2B+Mx74Pan1+IQf+h2bGU=";
   };
 
   postPatch = ''
@@ -30,6 +39,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ cmake ];
   buildInputs = lib.optionals (pythonOlder "3.9") [ libxcrypt ];
+  propagatedBuildInputs = [ setupHook ];
 
   dontUseCmakeBuildDir = true;
 
@@ -43,7 +53,6 @@ buildPythonPackage rec {
   cmakeFlags = [
     "-DBoost_INCLUDE_DIR=${lib.getDev boost}/include"
     "-DEIGEN3_INCLUDE_DIR=${lib.getDev eigen}/include/eigen3"
-    "-DPYTHON_EXECUTABLE:FILEPATH=${python.pythonForBuild.interpreter}"
   ] ++ lib.optionals (python.isPy3k && !stdenv.cc.isClang) [
     "-DPYBIND11_CXX_STANDARD=-std=c++17"
   ];
@@ -60,7 +69,7 @@ buildPythonPackage rec {
     ln -sf $out/include/pybind11 $out/include/${python.libPrefix}/pybind11
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     catch
     numpy
     pytestCheckHook
@@ -76,6 +85,12 @@ buildPythonPackage rec {
     "tests/extra_python_package/test_files.py"
     # tests that try to parse setuptools stdout
     "tests/extra_setuptools/test_setuphelper.py"
+  ];
+
+  disabledTests = lib.optionals (stdenv.isDarwin) [
+    # expects KeyError, gets RuntimeError
+    # https://github.com/pybind/pybind11/issues/4243
+    "test_cross_module_exception_translator"
   ];
 
   meta = with lib; {

@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "harec";
-  version = "unstable-2022-07-02";
+  version = "unstable-2023-02-18";
 
   src = fetchFromSourcehut {
     owner = "~sircmpwn";
     repo = "harec";
-    rev = "56359312644f76941de1878d33a1a0b840be8056";
-    hash = "sha256-8SFYRJSvX8hmsHBgaLUfhLUV7d54im22ETZds1eASc4=";
+    rev = "dd50ca7740408e3c6e41c0ca48b59b9f7f5911f2";
+    hash = "sha256-616mPMdy4yHHuwGcq+aDdEOteEiWgufRzreXHGhmHr0=";
   };
 
   nativeBuildInputs = [
@@ -30,15 +30,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "http://harelang.org/";
     description = "Bootstrapping Hare compiler written in C for POSIX systems";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ AndersonTorres ];
+    license = lib.licenses.gpl3Only;
+    maintainers = [ lib.maintainers.AndersonTorres ];
     # The upstream developers do not like proprietary operating systems; see
     # https://harelang.org/platforms/
-    platforms = with platforms;
+    platforms = with lib.platforms;
       lib.intersectLists (freebsd ++ linux) (aarch64 ++ x86_64 ++ riscv64);
-    badPlatforms = with platforms; darwin;
+    badPlatforms = lib.platforms.darwin;
   };
 })

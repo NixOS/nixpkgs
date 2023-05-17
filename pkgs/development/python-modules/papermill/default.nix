@@ -11,7 +11,7 @@
 , nbclient
 , nbformat
 , pyarrow
-, PyGithub
+, pygithub
 , pytest-mock
 , pytestCheckHook
 , pythonOlder
@@ -54,7 +54,7 @@ buildPythonPackage rec {
       gcsfs
     ];
     github = [
-      PyGithub
+      pygithub
     ];
     hdfs = [
       pyarrow
@@ -64,7 +64,7 @@ buildPythonPackage rec {
     ];
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
     pytest-mock
   ];

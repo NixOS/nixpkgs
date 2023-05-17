@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "aeppl";
-  version = "0.0.39";
+  version = "0.1.4";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "aesara-devs";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-ILyE3tqoDHNmrKpHPBUJ02jrGevsU5864rjhgmgjwvo=";
+    hash = "sha256-y2JQxHztLEORoqVikOD/pSF5+WJRo/f8XyZKVDx2Ybs=";
   };
 
   propagatedBuildInputs = [
@@ -29,7 +29,7 @@ buildPythonPackage rec {
     scipy
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     numdifftools
     pytestCheckHook
   ];
@@ -50,6 +50,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Library for an Aesara-based PPL";
     homepage = "https://github.com/aesara-devs/aeppl";
+    changelog = "https://github.com/aesara-devs/aeppl/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };

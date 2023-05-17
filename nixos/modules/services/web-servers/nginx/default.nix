@@ -4,7 +4,7 @@ with lib;
 
 let
   cfg = config.services.nginx;
-  certs = config.security.acme.certs;
+  inherit (config.security.acme) certs;
   vhostsConfigs = mapAttrsToList (vhostName: vhostConfig: vhostConfig) virtualHosts;
   acmeEnabledVhosts = filter (vhostConfig: vhostConfig.enableACME || vhostConfig.useACMEHost != null) vhostsConfigs;
   dependentCertNames = unique (map (hostOpts: hostOpts.certName) acmeEnabledVhosts);
@@ -27,7 +27,44 @@ let
                               else "${certs.${certName}.directory}/chain.pem";
     })
   ) cfg.virtualHosts;
-  enableIPv6 = config.networking.enableIPv6;
+  inherit (config.networking) enableIPv6;
+
+  # Mime.types values are taken from brotli sample configuration - https://github.com/google/ngx_brotli
+  # and Nginx Server Configs - https://github.com/h5bp/server-configs-nginx
+  # "text/html" is implicitly included in {brotli,gzip,zstd}_types
+  compressMimeTypes = [
+    "application/atom+xml"
+    "application/geo+json"
+    "application/json"
+    "application/ld+json"
+    "application/manifest+json"
+    "application/rdf+xml"
+    "application/vnd.ms-fontobject"
+    "application/wasm"
+    "application/x-rss+xml"
+    "application/x-web-app-manifest+json"
+    "application/xhtml+xml"
+    "application/xliff+xml"
+    "application/xml"
+    "font/collection"
+    "font/otf"
+    "font/ttf"
+    "image/bmp"
+    "image/svg+xml"
+    "image/vnd.microsoft.icon"
+    "text/cache-manifest"
+    "text/calendar"
+    "text/css"
+    "text/csv"
+    "text/javascript"
+    "text/markdown"
+    "text/plain"
+    "text/vcard"
+    "text/vnd.rim.location.xloc"
+    "text/vtt"
+    "text/x-component"
+    "text/xml"
+  ];
 
   defaultFastcgiParams = {
     SCRIPT_FILENAME   = "$document_root$fastcgi_script_name";
@@ -65,22 +102,36 @@ let
     proxy_set_header        X-Forwarded-Server $host;
   '';
 
+  proxyCachePathConfig = concatStringsSep "\n" (mapAttrsToList (name: proxyCachePath: ''
+    proxy_cache_path ${concatStringsSep " " [
+      "/var/cache/nginx/${name}"
+      "keys_zone=${proxyCachePath.keysZoneName}:${proxyCachePath.keysZoneSize}"
+      "levels=${proxyCachePath.levels}"
+      "use_temp_path=${if proxyCachePath.useTempPath then "on" else "off"}"
+      "inactive=${proxyCachePath.inactive}"
+      "max_size=${proxyCachePath.maxSize}"
+    ]};
+  '') (filterAttrs (name: conf: conf.enable) cfg.proxyCachePath));
+
+  toUpstreamParameter = key: value:
+    if builtins.isBool value
+    then lib.optionalString value key
+    else "${key}=${toString value}";
+
   upstreamConfig = toString (flip mapAttrsToList cfg.upstreams (name: upstream: ''
     upstream ${name} {
       ${toString (flip mapAttrsToList upstream.servers (name: server: ''
-        server ${name} ${optionalString server.backup "backup"};
+        server ${name} ${concatStringsSep " " (mapAttrsToList toUpstreamParameter server)};
       ''))}
       ${upstream.extraConfig}
     }
   ''));
 
   commonHttpConfig = ''
-      # The mime type definitions included with nginx are very incomplete, so
-      # we use a list of mime types from the mailcap package, which is also
-      # used by most other Linux distributions by default.
-      include ${pkgs.mailcap}/etc/nginx/mime.types;
+      # Load mime types.
+      include ${cfg.defaultMimeTypes};
       # When recommendedOptimisation is disabled nginx fails to start because the mailmap mime.types database
-      # contains 1026 enries and the default is only 1024. Setting to a higher number to remove the need to
+      # contains 1026 entries and the default is only 1024. Setting to a higher number to remove the need to
       # overwrite it because nginx does not allow duplicated settings.
       types_hash_max_size 4096;
 
@@ -112,7 +163,7 @@ let
       ''}
       ${upstreamConfig}
 
-      ${optionalString (cfg.recommendedOptimisation) ''
+      ${optionalString cfg.recommendedOptimisation ''
         # optimisation
         sendfile on;
         tcp_nopush on;
@@ -124,7 +175,7 @@ let
       ${optionalString (cfg.sslCiphers != null) "ssl_ciphers ${cfg.sslCiphers};"}
       ${optionalString (cfg.sslDhparam != null) "ssl_dhparam ${cfg.sslDhparam};"}
 
-      ${optionalString (cfg.recommendedTlsSettings) ''
+      ${optionalString cfg.recommendedTlsSettings ''
         # Keep in sync with https://ssl-config.mozilla.org/#server=nginx&config=intermediate
 
         ssl_session_timeout 1d;
@@ -140,30 +191,44 @@ let
         ssl_stapling_verify on;
       ''}
 
-      ${optionalString (cfg.recommendedGzipSettings) ''
-        gzip on;
-        gzip_proxied any;
-        gzip_comp_level 5;
-        gzip_types
-          application/atom+xml
-          application/javascript
-          application/json
-          application/xml
-          application/xml+rss
-          image/svg+xml
-          text/css
-          text/javascript
-          text/plain
-          text/xml;
-        gzip_vary on;
+      ${optionalString cfg.recommendedBrotliSettings ''
+        brotli on;
+        brotli_static on;
+        brotli_comp_level 5;
+        brotli_window 512k;
+        brotli_min_length 256;
+        brotli_types ${lib.concatStringsSep " " compressMimeTypes};
       ''}
 
-      ${optionalString (cfg.recommendedProxySettings) ''
+      ${optionalString cfg.recommendedGzipSettings
+        # https://docs.nginx.com/nginx/admin-guide/web-server/compression/
+      ''
+        gzip on;
+        gzip_static on;
+        gzip_vary on;
+        gzip_comp_level 5;
+        gzip_min_length 256;
+        gzip_proxied expired no-cache no-store private auth;
+        gzip_types ${lib.concatStringsSep " " compressMimeTypes};
+      ''}
+
+      ${optionalString cfg.recommendedZstdSettings ''
+        zstd on;
+        zstd_comp_level 9;
+        zstd_min_length 256;
+        zstd_static on;
+        zstd_types ${lib.concatStringsSep " " compressMimeTypes};
+      ''}
+
+      ${optionalString cfg.recommendedProxySettings ''
         proxy_redirect          off;
         proxy_connect_timeout   ${cfg.proxyTimeout};
         proxy_send_timeout      ${cfg.proxyTimeout};
         proxy_read_timeout      ${cfg.proxyTimeout};
         proxy_http_version      1.1;
+        # don't let clients close the keep-alive connection to upstream. See the nginx blog for details:
+        # https://www.nginx.com/blog/avoiding-top-10-nginx-configuration-mistakes/#no-keepalives
+        proxy_set_header        "Connection" "";
         include ${recommendedProxyConfig};
       ''}
 
@@ -192,17 +257,9 @@ let
 
       server_tokens ${if cfg.serverTokens then "on" else "off"};
 
-      ${optionalString (cfg.proxyCache.enable) ''
-        proxy_cache_path /var/cache/nginx keys_zone=${cfg.proxyCache.keysZoneName}:${cfg.proxyCache.keysZoneSize}
-                                          levels=${cfg.proxyCache.levels}
-                                          use_temp_path=${if cfg.proxyCache.useTempPath then "on" else "off"}
-                                          inactive=${cfg.proxyCache.inactive}
-                                          max_size=${cfg.proxyCache.maxSize};
-      ''}
-
       ${cfg.commonHttpConfig}
 
-      ${vhosts}
+      ${proxyCachePathConfig}
 
       ${optionalString cfg.statusPage ''
         server {
@@ -220,6 +277,8 @@ let
           }
         }
       ''}
+
+      ${vhosts}
 
       ${cfg.appendHttpConfig}
     }''}
@@ -241,7 +300,7 @@ let
 
   configPath = if cfg.enableReload
     then "/etc/nginx/nginx.conf"
-    else finalConfigFile;
+    else configFile;
 
   execCommand = "${cfg.package}/bin/nginx -c '${configPath}'";
 
@@ -263,13 +322,16 @@ let
             else defaultListen;
 
         listenString = { addr, port, ssl, extraParameters ? [], ... }:
-          (if ssl && vhost.http3 then "
-          # UDP listener for **QUIC+HTTP/3
-          listen ${addr}:${toString port} http3 "
+          # UDP listener for QUIC transport protocol.
+          (optionalString (ssl && vhost.quic) ("
+            listen ${addr}:${toString port} quic "
           + optionalString vhost.default "default_server "
           + optionalString vhost.reuseport "reuseport "
-          + optionalString (extraParameters != []) (concatStringsSep " " extraParameters)
-          + ";" else "")
+          + optionalString (extraParameters != []) (concatStringsSep " " (
+            let inCompatibleParameters = [ "ssl" "proxy_protocol" "http2" ];
+                isCompatibleParameter = param: !(any (p: p == param) inCompatibleParameters);
+            in filter isCompatibleParameter extraParameters))
+          + ";"))
           + "
 
             listen ${addr}:${toString port} "
@@ -315,6 +377,10 @@ let
         server {
           ${concatMapStringsSep "\n" listenString hostListen}
           server_name ${vhost.serverName} ${concatStringsSep " " vhost.serverAliases};
+          ${optionalString (hasSSL && vhost.quic) ''
+            http3 ${if vhost.http3 then "on" else "off"};
+            http3_hq ${if vhost.http3_hq then "on" else "off"};
+          ''}
           ${acmeLocation}
           ${optionalString (vhost.root != null) "root ${vhost.root};"}
           ${optionalString (vhost.globalRedirect != null) ''
@@ -336,9 +402,10 @@ let
             ssl_conf_command Options KTLS;
           ''}
 
-          ${optionalString (hasSSL && vhost.http3) ''
+          ${optionalString (hasSSL && vhost.quic && vhost.http3)
             # Advertise that HTTP/3 is available
-            add_header Alt-Svc 'h3=":443"; ma=86400' always;
+          ''
+            add_header Alt-Svc 'h3=":$server_port"; ma=86400';
           ''}
 
           ${mkBasicAuth vhostName vhost}
@@ -393,38 +460,6 @@ let
   );
 
   mkCertOwnershipAssertion = import ../../../security/acme/mk-cert-ownership-assertion.nix;
-
-  snakeOilCert = pkgs.runCommand "nginx-config-validate-cert" { nativeBuildInputs = [ pkgs.openssl.bin ]; } ''
-    mkdir $out
-    openssl genrsa -des3 -passout pass:xxxxx -out server.pass.key 2048
-    openssl rsa -passin pass:xxxxx -in server.pass.key -out $out/server.key
-    openssl req -new -key $out/server.key -out server.csr \
-    -subj "/C=UK/ST=Warwickshire/L=Leamington/O=OrgName/OU=IT Department/CN=example.com"
-    openssl x509 -req -days 1 -in server.csr -signkey $out/server.key -out $out/server.crt
-  '';
-  validatedConfigFile = pkgs.runCommand "validated-nginx.conf" { nativeBuildInputs = [ cfg.package ]; } ''
-    # nginx absolutely wants to read the certificates even when told to only validate config, so let's provide fake certs
-    sed ${configFile} \
-    -e "s|ssl_certificate .*;|ssl_certificate ${snakeOilCert}/server.crt;|g" \
-    -e "s|ssl_trusted_certificate .*;|ssl_trusted_certificate ${snakeOilCert}/server.crt;|g" \
-    -e "s|ssl_certificate_key .*;|ssl_certificate_key ${snakeOilCert}/server.key;|g" \
-    > conf
-
-    LD_PRELOAD=${pkgs.libredirect}/lib/libredirect.so \
-      NIX_REDIRECTS="/etc/resolv.conf=/dev/null" \
-      nginx -t -c $(readlink -f ./conf) > out 2>&1 || true
-    if ! grep -q "syntax is ok" out; then
-      echo nginx config validation failed.
-      echo config was ${configFile}.
-      echo 'in case of false positive, set `services.nginx.validateConfig` to false.'
-      echo nginx output:
-      cat out
-      exit 1
-    fi
-    cp ${configFile} $out
-  '';
-
-  finalConfigFile = if cfg.validateConfig then validatedConfigFile else configFile;
 in
 
 {
@@ -456,11 +491,34 @@ in
         '';
       };
 
+      recommendedBrotliSettings = mkOption {
+        default = false;
+        type = types.bool;
+        description = lib.mdDoc ''
+          Enable recommended brotli settings.
+          Learn more about compression in Brotli format [here](https://github.com/google/ngx_brotli/).
+
+          This adds `pkgs.nginxModules.brotli` to `services.nginx.additionalModules`.
+        '';
+      };
+
       recommendedGzipSettings = mkOption {
         default = false;
         type = types.bool;
         description = lib.mdDoc ''
           Enable recommended gzip settings.
+          Learn more about compression in Gzip format [here](https://docs.nginx.com/nginx/admin-guide/web-server/compression/).
+        '';
+      };
+
+      recommendedZstdSettings = mkOption {
+        default = false;
+        type = types.bool;
+        description = lib.mdDoc ''
+          Enable recommended zstd settings.
+          Learn more about compression in Zstd format [here](https://github.com/tokers/zstd-nginx-module).
+
+          This adds `pkgs.nginxModules.zstd` to `services.nginx.additionalModules`.
         '';
       };
 
@@ -509,12 +567,24 @@ in
         '';
       };
 
+      defaultMimeTypes = mkOption {
+        type = types.path;
+        default = "${pkgs.mailcap}/etc/nginx/mime.types";
+        defaultText = literalExpression "$''{pkgs.mailcap}/etc/nginx/mime.types";
+        example = literalExpression "$''{pkgs.nginx}/conf/mime.types";
+        description = lib.mdDoc ''
+          Default MIME types for NGINX, as MIME types definitions from NGINX are very incomplete,
+          we use by default the ones bundled in the mailcap package, used by most of the other
+          Linux distributions.
+        '';
+      };
+
       package = mkOption {
         default = pkgs.nginxStable;
         defaultText = literalExpression "pkgs.nginxStable";
         type = types.package;
         apply = p: p.override {
-          modules = p.modules ++ cfg.additionalModules;
+          modules = lib.unique (p.modules ++ cfg.additionalModules);
         };
         description = lib.mdDoc ''
           Nginx package to use. This defaults to the stable version. Note
@@ -523,25 +593,13 @@ in
         '';
       };
 
-      validateConfig = mkOption {
-        # FIXME: re-enable if we can make of the configurations work.
-        #default = pkgs.stdenv.hostPlatform == pkgs.stdenv.buildPlatform;
-        default = false;
-        defaultText = literalExpression "pkgs.stdenv.hostPlatform == pkgs.stdenv.buildPlatform";
-        type = types.bool;
-        description = lib.mdDoc ''
-          Validate the generated nginx config at build time. The check is not very robust and can be disabled in case of false positives. This is notably the case when cross-compiling or when using `include` with files outside of the store.
-        '';
-      };
-
       additionalModules = mkOption {
         default = [];
         type = types.listOf (types.attrsOf types.anything);
-        example = literalExpression "[ pkgs.nginxModules.brotli ]";
+        example = literalExpression "[ pkgs.nginxModules.echo ]";
         description = lib.mdDoc ''
           Additional [third-party nginx modules](https://www.nginx.com/resources/wiki/modules/)
-          to install. Packaged modules are available in
-          `pkgs.nginxModules`.
+          to install. Packaged modules are available in `pkgs.nginxModules`.
         '';
       };
 
@@ -760,10 +818,10 @@ in
           '';
       };
 
-      proxyCache = mkOption {
-        type = types.submodule {
+      proxyCachePath = mkOption {
+        type = types.attrsOf (types.submodule ({ ... }: {
           options = {
-            enable = mkEnableOption (lib.mdDoc "Enable proxy cache");
+            enable = mkEnableOption (lib.mdDoc "this proxy cache path entry");
 
             keysZoneName = mkOption {
               type = types.str;
@@ -821,9 +879,12 @@ in
               description = lib.mdDoc "Set maximum cache size";
             };
           };
-        };
+        }));
         default = {};
-        description = lib.mdDoc "Configure proxy cache";
+        description = lib.mdDoc ''
+          Configure a proxy cache path entry.
+          See <http://nginx.org/en/docs/http/ngx_http_proxy_module.html#proxy_cache_path> for documentation.
+        '';
       };
 
       resolver = mkOption {
@@ -866,6 +927,7 @@ in
           options = {
             servers = mkOption {
               type = types.attrsOf (types.submodule {
+                freeformType = types.attrsOf (types.oneOf [ types.bool types.int types.str ]);
                 options = {
                   backup = mkOption {
                     type = types.bool;
@@ -879,9 +941,11 @@ in
               });
               description = lib.mdDoc ''
                 Defines the address and other parameters of the upstream servers.
+                See [the documentation](https://nginx.org/en/docs/http/ngx_http_upstream_module.html#server)
+                for the available parameters.
               '';
               default = {};
-              example = { "127.0.0.1:8000" = {}; };
+              example = lib.literalMD "see [](#opt-services.nginx.upstreams)";
             };
             extraConfig = mkOption {
               type = types.lines;
@@ -896,14 +960,23 @@ in
           Defines a group of servers to use as proxy target.
         '';
         default = {};
-        example = literalExpression ''
-          "backend_server" = {
-            servers = { "127.0.0.1:8000" = {}; };
-            extraConfig = ''''
+        example = {
+          "backend" = {
+            servers = {
+              "backend1.example.com:8080" = { weight = 5; };
+              "backend2.example.com" = { max_fails = 3; fail_timeout = "30s"; };
+              "backend3.example.com" = {};
+              "backup1.example.com" = { backup = true; };
+              "backup2.example.com" = { backup = true; };
+            };
+            extraConfig = ''
               keepalive 16;
-            '''';
+            '';
           };
-        '';
+          "memcached" = {
+            servers."unix:/run//memcached/memcached.sock" = {};
+          };
+        };
       };
 
       virtualHosts = mkOption {
@@ -934,11 +1007,15 @@ in
       The Nginx log directory has been moved to /var/log/nginx, the cache directory
       to /var/cache/nginx. The option services.nginx.stateDir has been removed.
     '')
+    (mkRenamedOptionModule [ "services" "nginx" "proxyCache" "inactive" ] [ "services" "nginx" "proxyCachePath" "" "inactive" ])
+    (mkRenamedOptionModule [ "services" "nginx" "proxyCache" "useTempPath" ] [ "services" "nginx" "proxyCachePath" "" "useTempPath" ])
+    (mkRenamedOptionModule [ "services" "nginx" "proxyCache" "levels" ] [ "services" "nginx" "proxyCachePath" "" "levels" ])
+    (mkRenamedOptionModule [ "services" "nginx" "proxyCache" "keysZoneSize" ] [ "services" "nginx" "proxyCachePath" "" "keysZoneSize" ])
+    (mkRenamedOptionModule [ "services" "nginx" "proxyCache" "keysZoneName" ] [ "services" "nginx" "proxyCachePath" "" "keysZoneName" ])
+    (mkRenamedOptionModule [ "services" "nginx" "proxyCache" "enable" ] [ "services" "nginx" "proxyCachePath" "" "enable" ])
   ];
 
   config = mkIf cfg.enable {
-    # TODO: test user supplied config file pases syntax test
-
     warnings =
     let
       deprecatedSSL = name: config: optional config.enableSSL
@@ -993,11 +1070,22 @@ in
           services.nginx.virtualHosts.<name>.useACMEHost are mutually exclusive.
         '';
       }
+
+      {
+        assertion = cfg.package.pname != "nginxQuic" -> all (host: !host.quic) (attrValues virtualHosts);
+        message = ''
+          services.nginx.service.virtualHosts.<name>.quic requires using nginxQuic package,
+          which can be achieved by setting `services.nginx.package = pkgs.nginxQuic;`.
+        '';
+      }
     ] ++ map (name: mkCertOwnershipAssertion {
       inherit (cfg) group user;
       cert = config.security.acme.certs.${name};
       groups = config.users.groups;
     }) dependentCertNames;
+
+    services.nginx.additionalModules = optional cfg.recommendedBrotliSettings pkgs.nginxModules.brotli
+      ++ lib.optional cfg.recommendedZstdSettings pkgs.nginxModules.zstd;
 
     systemd.services.nginx = {
       description = "Nginx Web Server";
@@ -1072,7 +1160,7 @@ in
     };
 
     environment.etc."nginx/nginx.conf" = mkIf cfg.enableReload {
-      source = finalConfigFile;
+      source = configFile;
     };
 
     # This service waits for all certificates to be available
@@ -1084,14 +1172,14 @@ in
       sslServices = map (certName: "acme-${certName}.service") dependentCertNames;
       sslTargets = map (certName: "acme-finished-${certName}.target") dependentCertNames;
     in mkIf (cfg.enableReload || sslServices != []) {
-      wants = optionals (cfg.enableReload) [ "nginx.service" ];
+      wants = optionals cfg.enableReload [ "nginx.service" ];
       wantedBy = sslServices ++ [ "multi-user.target" ];
       # Before the finished targets, after the renew services.
       # This service might be needed for HTTP-01 challenges, but we only want to confirm
       # certs are updated _after_ config has been reloaded.
       before = sslTargets;
       after = sslServices;
-      restartTriggers = optionals (cfg.enableReload) [ finalConfigFile ];
+      restartTriggers = optionals cfg.enableReload [ configFile ];
       # Block reloading if not all certs exist yet.
       # Happens when config changes add new vhosts/certs.
       unitConfig.ConditionPathExists = optionals (sslServices != []) (map (certName: certs.${certName}.directory + "/fullchain.pem") dependentCertNames);

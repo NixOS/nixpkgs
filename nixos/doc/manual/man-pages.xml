@@ -14,12 +14,33 @@
   <copyright><year>2007-2022</year><holder>Eelco Dolstra and the Nixpkgs/NixOS contributors</holder>
   </copyright>
  </info>
- <xi:include href="man-configuration.xml" />
- <xi:include href="man-nixos-build-vms.xml" />
- <xi:include href="man-nixos-generate-config.xml" />
- <xi:include href="man-nixos-install.xml" />
- <xi:include href="man-nixos-enter.xml" />
- <xi:include href="man-nixos-option.xml" />
- <xi:include href="man-nixos-rebuild.xml" />
- <xi:include href="man-nixos-version.xml" />
+ <refentry>
+  <refmeta>
+   <refentrytitle><filename>configuration.nix</filename>
+   </refentrytitle><manvolnum>5</manvolnum>
+   <refmiscinfo class="source">NixOS</refmiscinfo>
+ <!-- <refmiscinfo class="version"><xi:include href="version.txt" parse="text"/></refmiscinfo> -->
+  </refmeta>
+  <refnamediv>
+   <refname><filename>configuration.nix</filename></refname>
+   <refpurpose>NixOS system configuration specification</refpurpose>
+  </refnamediv>
+  <refsection>
+   <title>Description</title>
+   <para>
+    The file <filename>/etc/nixos/configuration.nix</filename> contains the
+    declarative specification of your NixOS system configuration. The command
+    <command>nixos-rebuild</command> takes this file and realises the system
+    configuration specified therein.
+   </para>
+  </refsection>
+  <refsection>
+   <title>Options</title>
+   <para>
+    You can use the following options in <filename>configuration.nix</filename>.
+   </para>
+   <xi:include href="./generated/options-db.xml"
+             xpointer="configuration-variable-list" />
+  </refsection>
+ </refentry>
 </reference>

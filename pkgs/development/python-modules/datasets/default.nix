@@ -21,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "datasets";
-  version = "2.6.1";
+  version = "2.12.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -30,16 +30,8 @@ buildPythonPackage rec {
     owner = "huggingface";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-5j8HT/DzHH8xssv97g/9kpSgtpaY6daWOGwjasD1psg=";
+    hash = "sha256-o/LUzRmpM4tjiCh31KoQXzU1Z/p/91uamh7G4SGnxQM=";
   };
-
-  patches = [
-    (fetchpatch {
-      # Backport support for dill<3.7
-      url = "https://github.com/huggingface/datasets/pull/5166.patch";
-      hash = "sha256-QigpXKHi2B60M/iIWSqvBU9hW5vBu6IHGML22aCMevo=";
-    })
-  ];
 
   postPatch = ''
     substituteInPlace setup.py \

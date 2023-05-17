@@ -2,16 +2,21 @@
 
 stdenv.mkDerivation rec {
   pname = "fnc";
-  version = "0.13";
+  version = "0.15";
 
   src = fetchurl {
     url = "https://fnc.bsdbox.org/tarball/${version}/fnc-${version}.tar.gz";
-    sha256 = "126aklsjfqmrj0f9p1g6sdlqhwnbfhyn0lq2c9pidfnhppa7sz95";
+    sha256 = "sha256-8up844ekIOMcPlfB2DJzR/GgJY9s/sBeYpG+YtdauvU=";
   };
 
   buildInputs = [ libiconv ncurses zlib ];
 
   makeFlags = [ "PREFIX=$(out)" ];
+
+  env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.cc.isGNU [
+    # Needed with GCC 12
+    "-Wno-error=maybe-uninitialized"
+  ]);
 
   preInstall = ''
     mkdir -p $out/bin

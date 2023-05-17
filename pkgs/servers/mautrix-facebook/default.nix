@@ -1,9 +1,9 @@
-{ enableSystemd ? stdenv.isLinux
+{ lib
+, stdenv
 , fetchFromGitHub
 , fetchpatch
-, lib
 , python3
-, stdenv
+, enableSystemd ? lib.meta.availableOn stdenv.hostPlatform python3.pkgs.systemd
 }:
 
 python3.pkgs.buildPythonPackage rec {
@@ -18,9 +18,10 @@ python3.pkgs.buildPythonPackage rec {
   };
 
   propagatedBuildInputs = with python3.pkgs; [
-    CommonMark
+    commonmark
     aiohttp
     asyncpg
+    commonmark
     mautrix
     paho-mqtt
     pillow

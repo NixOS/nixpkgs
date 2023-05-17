@@ -674,6 +674,6 @@ in
           mkIf createLocalMySQL (mkDefault dbPkg);
       };
 
-  meta.doc = ./keycloak.xml;
+  meta.doc = ./keycloak.md;
   meta.maintainers = [ maintainers.talyz ];
 }

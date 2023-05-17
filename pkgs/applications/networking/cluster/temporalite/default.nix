@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "temporalite";
-  version = "0.2.0";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "temporalio";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-rLEkWg5LNVb7i/2IARKGuP9ugaVJA9pwYbKLm0QLmOc=";
+    sha256 = "sha256-IEB9AFEt8U2zXYfbChfL/UH1rNSLPnfS396/cPE8UdE=";
   };
 
-  vendorSha256 = "sha256-vjuwh/HRRYfB6J49rfJxif12nYPnbBodWF9hTiGygS8=";
+  vendorSha256 = "sha256-w86/XCMRGBmXM+oQ5+0qiX0fdwiKXvsmEkApuRLUOiA=";
 
   subPackages = [ "cmd/temporalite" ];
 

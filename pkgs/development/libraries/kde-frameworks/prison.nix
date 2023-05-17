@@ -1,13 +1,13 @@
 {
   mkDerivation,
   extra-cmake-modules,
-  libdmtx, qrencode, qtbase,
+  libdmtx, qrencode, qtbase, qtmultimedia, zxing-cpp
 }:
 
 mkDerivation {
   pname = "prison";
   nativeBuildInputs = [ extra-cmake-modules ];
-  buildInputs = [ libdmtx qrencode ];
-  propagatedBuildInputs = [ qtbase ];
+  buildInputs = [ libdmtx qrencode zxing-cpp ];
+  propagatedBuildInputs = [ qtbase qtmultimedia ];
   outputs = [ "out" "dev" ];
 }

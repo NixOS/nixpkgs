@@ -8,10 +8,10 @@ buildGoModule rec {
     owner = "gsamokovarov";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-nlCuotEiAX2+xx7T8jWZo2p4LNLhWXDdcU6DxJprgx0=";
+    hash = "sha256-nlCuotEiAX2+xx7T8jWZo2p4LNLhWXDdcU6DxJprgx0=";
   };
 
-  vendorSha256 = "sha256-nMUqZWdq//q/DNthvpKiYLq8f95O0QoItyX5w4vHzSA=";
+  vendorHash = "sha256-nMUqZWdq//q/DNthvpKiYLq8f95O0QoItyX5w4vHzSA=";
 
   nativeBuildInputs = [ installShellFiles ];
 

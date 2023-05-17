@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "protoscope";
-  version = "unstable-2022-10-04";
+  version = "unstable-2022-11-09";
 
   src = fetchFromGitHub {
     owner = "protocolbuffers";
     repo = "protoscope";
-    rev = "8b1d63939ee1a5d922b38f3976e1e58cae525163";
-    sha256 = "sha256-/vt02rvKVsryJZ+Bw4QLaGzDErGI04/4NUbSBkbbN3Y=";
+    rev = "8e7a6aafa2c9958527b1e0747e66e1bfff045819";
+    hash = "sha256-+VIy+CD6bKJzwtpHXRr9MqmsPE2MJ1dRdtvSMUkCh5I=";
   };
 
-  vendorSha256 = "sha256-mK8eGo6oembs4nofvROn4g0+oO5E5/zQrmPKMe3xXik=";
+  vendorHash = "sha256-mK8eGo6oembs4nofvROn4g0+oO5E5/zQrmPKMe3xXik=";
 
   ldflags = [ "-s" "-w" ];
 

@@ -23,7 +23,7 @@ buildPythonPackage rec {
       --replace "--cov pyisbn --cov-report term-missing --no-cov-on-fail" ""
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     hypothesis
     pytestCheckHook
   ];

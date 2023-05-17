@@ -1,16 +1,21 @@
-{ lib, fetchzip }:
+{ lib, stdenvNoCC, fetchzip }:
 
-fetchzip {
-  name = "fira-code-symbols-20160811";
+stdenvNoCC.mkDerivation {
+  pname = "fira-code-symbols";
+  version = "20160811";
 
-  url = "https://github.com/tonsky/FiraCode/files/412440/FiraCode-Regular-Symbol.zip";
+  src = fetchzip {
+    url = "https://github.com/tonsky/FiraCode/files/412440/FiraCode-Regular-Symbol.zip";
+    hash = "sha256-7y51blEn0Osf8azytK08zJgtfVX/CIWQkiOoRzYKIa4=";
+  };
 
-  postFetch = ''
-    mkdir -p $out/share/fonts
-    unzip -j $downloadedFile -d $out/share/fonts/opentype
+  installPhase = ''
+    runHook preInstall
+
+    install -Dm644 *.otf -t $out/share/fonts/opentype
+
+    runHook postInstall
   '';
-
-  sha256 = "19krsp22rin74ix0i19v4bh1c965g18xkmz1n55h6n6qimisnbkm";
 
   meta = with lib; {
     description = "FiraCode unicode ligature glyphs in private use area";

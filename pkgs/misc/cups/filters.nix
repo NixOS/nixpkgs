@@ -75,6 +75,9 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "CUPS_SERVERBIN=$(out)/lib/cups" "CUPS_DATADIR=$(out)/share/cups" "CUPS_SERVERROOT=$(out)/etc/cups" ];
 
+  # https://github.com/OpenPrinting/cups-filters/issues/512
+  env.NIX_CFLAGS_COMPILE = "-std=c++17";
+
   postConfigure =
     ''
       # Ensure that bannertopdf can find the PDF templates in

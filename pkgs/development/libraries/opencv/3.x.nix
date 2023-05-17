@@ -15,14 +15,14 @@
 , enableContrib   ? true
 
 , enableCuda      ? (config.cudaSupport or false) &&
-                    stdenv.hostPlatform.isx86_64, cudatoolkit
-
+                    stdenv.hostPlatform.isx86_64
+, cudaPackages ? { }
 , enableUnfree    ? false
 , enableIpp       ? false
 , enablePython    ? false, pythonPackages ? null
 , enableGtk2      ? false, gtk2
 , enableGtk3      ? false, gtk3
-, enableVtk       ? false, vtk
+, enableVtk       ? false, vtk_8
 , enableFfmpeg    ? false, ffmpeg
 , enableGStreamer ? false, gst_all_1
 , enableTesseract ? false, tesseract, leptonica
@@ -32,7 +32,7 @@
 , enableDC1394    ? false, libdc1394
 , enableDocs      ? false, doxygen, graphviz-nox
 
-, AVFoundation, Cocoa, VideoDecodeAcceleration, bzip2
+, AVFoundation, Cocoa, VideoDecodeAcceleration, bzip2, CoreMedia, MediaToolbox, Accelerate
 }:
 
 assert blas.implementation == "openblas" && lapack.implementation == "openblas";
@@ -40,6 +40,9 @@ assert blas.implementation == "openblas" && lapack.implementation == "openblas";
 assert enablePython -> pythonPackages != null;
 
 let
+  inherit (cudaPackages) cudatoolkit;
+  inherit (cudaPackages.cudaFlags) cudaCapabilities;
+
   version = "3.4.18";
 
   src = fetchFromGitHub {
@@ -188,7 +191,7 @@ stdenv.mkDerivation {
     ++ lib.optional enablePython pythonPackages.python
     ++ lib.optional enableGtk2 gtk2
     ++ lib.optional enableGtk3 gtk3
-    ++ lib.optional enableVtk vtk
+    ++ lib.optional enableVtk vtk_8
     ++ lib.optional enableJPEG libjpeg
     ++ lib.optional enablePNG libpng
     ++ lib.optional enableTIFF libtiff
@@ -208,7 +211,9 @@ stdenv.mkDerivation {
     # tesseract & leptonica.
     ++ lib.optionals enableTesseract [ tesseract leptonica ]
     ++ lib.optional enableTbb tbb
-    ++ lib.optionals stdenv.isDarwin [ bzip2 AVFoundation Cocoa VideoDecodeAcceleration ]
+    ++ lib.optionals stdenv.isDarwin [
+      bzip2 AVFoundation Cocoa VideoDecodeAcceleration CoreMedia MediaToolbox Accelerate
+    ]
     ++ lib.optionals enableDocs [ doxygen graphviz-nox ];
 
   propagatedBuildInputs = lib.optional enablePython pythonPackages.numpy
@@ -216,7 +221,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ cmake pkg-config unzip ];
 
-  NIX_CFLAGS_COMPILE = lib.optionalString enableEXR "-I${ilmbase.dev}/include/OpenEXR";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString enableEXR "-I${ilmbase.dev}/include/OpenEXR";
 
   # Configure can't find the library without this.
   OpenBLAS_HOME = lib.optionalString enableOpenblas openblas;
@@ -242,10 +247,11 @@ stdenv.mkDerivation {
     "-DCUDA_FAST_MATH=ON"
     "-DCUDA_HOST_COMPILER=${cudatoolkit.cc}/bin/cc"
     "-DCUDA_NVCC_FLAGS=--expt-relaxed-constexpr"
+    "-DCUDA_ARCH_BIN=${lib.concatStringsSep ";" cudaCapabilities}"
+    "-DCUDA_ARCH_PTX=${lib.last cudaCapabilities}"
   ] ++ lib.optionals stdenv.isDarwin [
     "-DWITH_OPENCL=OFF"
     "-DWITH_LAPACK=OFF"
-    "-DBUILD_opencv_videoio=OFF"
   ] ++ lib.optionals enablePython [
     "-DOPENCV_SKIP_PYTHON_LOADER=ON"
   ] ++ lib.optionals enableEigen [

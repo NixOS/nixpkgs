@@ -70,9 +70,19 @@ let
         })
 
         (self: super: {
-          certifi = super.certifi.overridePythonAttrs (old: {
+          cryptography = super.cryptography.overridePythonAttrs (old: {
             meta = old.meta // {
-              knownVulnerabilities = [ "CVE-2022-23491" ];
+              knownVulnerabilities = old.meta.knownVulnerabilities or [ ]
+                ++ lib.optionals (lib.versionOlder old.version "39.0.1") [
+                  "CVE-2022-4304"
+                  "CVE-2023-0215"
+                  "CVE-2023-0216"
+                  "CVE-2023-0217"
+                  "CVE-2023-0401"
+                  "CVE-2022-4203"
+                  "CVE-2022-4450"
+                  "CVE-2023-23931"
+                ];
             };
           });
         })

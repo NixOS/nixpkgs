@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "cen64";
-  version = "unstable-2021-03-12";
+  version = "unstable-2022-10-02";
 
   src = fetchFromGitHub {
     owner = "n64dev";
     repo = "cen64";
-    rev = "1b31ca9b3c3bb783391ab9773bd26c50db2056a8";
-    sha256 = "0x1fz3z4ffl5xssiyxnmbhpjlf0k0fxsqn4f2ikrn17742dx4c0z";
+    rev = "ee6db7d803a77b474e73992fdc25d76b9723d806";
+    sha256 = "sha256-/CraSu/leNA0dl8NVgFjvKdOWrC9/namAz5NSxtPr+I=";
   };
 
   nativeBuildInputs = [ cmake ];

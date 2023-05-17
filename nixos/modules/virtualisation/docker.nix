@@ -100,7 +100,7 @@ in
 
     logDriver =
       mkOption {
-        type = types.enum ["none" "json-file" "syslog" "journald" "gelf" "fluentd" "awslogs" "splunk" "etwlogs" "gcplogs"];
+        type = types.enum ["none" "json-file" "syslog" "journald" "gelf" "fluentd" "awslogs" "splunk" "etwlogs" "gcplogs" "local"];
         default = "journald";
         description =
           lib.mdDoc ''
@@ -163,7 +163,7 @@ in
   ###### implementation
 
   config = mkIf cfg.enable (mkMerge [{
-      boot.kernelModules = [ "bridge" "veth" ];
+      boot.kernelModules = [ "bridge" "veth" "br_netfilter" "xt_nat" ];
       boot.kernel.sysctl = {
         "net.ipv4.conf.all.forwarding" = mkOverride 98 true;
         "net.ipv4.conf.default.forwarding" = mkOverride 98 true;

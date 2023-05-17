@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   ];
 
   # https://sourceforge.net/p/libgaminggear/discussion/general/thread/b43a776b3a/
-  NIX_CFLAGS_COMPILE = [ "-I${harfbuzz.dev}/include/harfbuzz" ];
+  env.NIX_CFLAGS_COMPILE = toString [ "-I${harfbuzz.dev}/include/harfbuzz" ];
 
   postFixup = ''
     moveToOutput bin "$bin"

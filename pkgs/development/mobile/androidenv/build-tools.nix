@@ -1,4 +1,4 @@
-{deployAndroidPackage, lib, package, os, autoPatchelfHook, makeWrapper, pkgs, pkgsi686Linux}:
+{deployAndroidPackage, lib, package, os, autoPatchelfHook, makeWrapper, pkgs, pkgsi686Linux, postInstall}:
 
 deployAndroidPackage {
   inherit package os;
@@ -19,6 +19,8 @@ deployAndroidPackage {
       wrapProgram $PWD/mainDexClasses \
         --prefix PATH : ${pkgs.jdk8}/bin
     ''}
-  '';
+
+    cd $out/libexec/android-sdk
+  '' + postInstall;
   noAuditTmpdir = true; # The checker script gets confused by the build-tools path that is incorrectly identified as a reference to /build
 }

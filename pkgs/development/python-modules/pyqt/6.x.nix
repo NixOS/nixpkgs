@@ -20,18 +20,20 @@
 #, withLocation ? true
 # Not currently part of PyQt6
 #, withConnectivity ? true
+, withPrintSupport ? true
+, cups
 }:
 
 buildPythonPackage rec {
   pname = "PyQt6";
-  version = "6.4.0";
+  version = "6.5.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-kTkkab4fSRkF+p54+k5AWaiathbd8uz9UlvB1lwmu5M=";
+    hash = "sha256-uXy0vpssiZeQTqZozzsKSuWCIZb3eSWQ0F7N5iFqn7w=";
   };
 
   patches = [
@@ -59,7 +61,7 @@ buildPythonPackage rec {
   # pkgs/development/interpreters/python/hooks/pip-build-hook.sh
   # does not use the enableParallelBuilding flag
   postUnpack = ''
-    export MAKEFLAGS+=" -j$NIX_BUILD_CORES -l$NIX_BUILD_CORES"
+    export MAKEFLAGS+="''${enableParallelBuilding:+-j$NIX_BUILD_CORES}"
   '';
 
   outputs = [ "out" "dev" ];
@@ -102,6 +104,10 @@ buildPythonPackage rec {
     dbus-python
     pyqt6-sip
     setuptools
+  ]
+  # ld: library not found for -lcups
+  ++ lib.optionals (withPrintSupport && stdenv.isDarwin) [
+    cups
   ];
 
   passthru = {
@@ -135,7 +141,5 @@ buildPythonPackage rec {
     license = licenses.gpl3Only;
     platforms = platforms.mesaPlatforms;
     maintainers = with maintainers; [ LunNova ];
-    # python3Packages.pyqt-builder needs to be patched
-    broken = stdenv.isDarwin;
   };
 }

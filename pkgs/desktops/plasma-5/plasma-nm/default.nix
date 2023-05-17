@@ -1,5 +1,4 @@
 { mkDerivation
-, lib
 , substituteAll
 , extra-cmake-modules
 , kdoctools
@@ -29,7 +28,6 @@
 , modemmanager-qt
 , networkmanager-qt
 , qca-qt5
-, qtbase
 , qtdeclarative
 , qttools
 }:

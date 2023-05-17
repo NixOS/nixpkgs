@@ -5,6 +5,7 @@
 , buildGoModule
 , buildVimPluginFrom2Nix
 , fetchFromGitHub
+, fetchFromSourcehut
 , fetchpatch
 , fetchurl
 , substituteAll
@@ -24,6 +25,7 @@
 , git
 , gnome
 , himalaya
+, htop
 , jq
 , khard
 , languagetool
@@ -31,14 +33,17 @@
 , meson
 , nim
 , nodePackages
+, openscad
 , pandoc
 , parinfer-rust
+, phpactor
 , ripgrep
 , skim
 , sqlite
 , statix
 , stylish-haskell
 , tabnine
+, taskwarrior
 , tmux
 , tup
 , vim
@@ -49,6 +54,7 @@
 , nodejs
 , xdotool
 , xorg
+, zathura
 , zsh
 
   # command-t dependencies
@@ -68,6 +74,9 @@
   # nvim-treesitter dependencies
 , callPackage
 
+  # sg.nvim dependencies
+, darwin
+
   # sved dependencies
 , glib
 , gobject-introspection
@@ -82,9 +91,7 @@
 , makeWrapper
 , procps
 
-  # vim-clap dependencies
-, libgit2
-, libiconv
+  # sg-nvim dependencies
 , openssl
 , pkg-config
 
@@ -107,13 +114,21 @@
 , iferr
 , impl
 , reftools
+
+# hurl dependencies
+, hurl
+
   # must be lua51Packages
 , luaPackages
 }:
 
 self: super: {
 
-  barbecue-nvim = super.vimshell-vim.overrideAttrs (old: {
+  autosave-nvim = super.autosave-nvim.overrideAttrs(old: {
+    dependencies = with super; [ plenary-nvim ];
+  });
+
+  barbecue-nvim = super.barbecue-nvim.overrideAttrs (old: {
     dependencies = with self; [ nvim-lspconfig nvim-navic nvim-web-devicons ];
     meta = {
       description = "A VS Code like winbar for Neovim";
@@ -291,6 +306,14 @@ self: super: {
 
   completion-treesitter = super.completion-treesitter.overrideAttrs (old: {
     dependencies = with self; [ completion-nvim nvim-treesitter ];
+  });
+
+  copilot-vim = super.copilot-vim.overrideAttrs (old: {
+    postInstall = ''
+      substituteInPlace $out/autoload/copilot/agent.vim \
+        --replace "  let node = get(g:, 'copilot_node_command', ''\'''\')" \
+                  "  let node = get(g:, 'copilot_node_command', '${nodejs}/bin/node')"
+    '';
   });
 
   cpsm = super.cpsm.overrideAttrs (old: {
@@ -484,18 +507,28 @@ self: super: {
     dependencies = with self; [ plenary-nvim ];
   });
 
-  gruvbox-nvim = super.gruvbox-nvim.overrideAttrs (old: {
-    dependencies = with self; [ lush-nvim ];
+  harpoon = super.harpoon.overrideAttrs (old: {
+    dependencies = with self; [ plenary-nvim ];
   });
 
   himalaya-vim = super.himalaya-vim.overrideAttrs (old: {
-    postPatch = ''
-      substituteInPlace plugin/himalaya.vim \
-        --replace "if !executable('himalaya')" "if v:false"
-      substituteInPlace autoload/himalaya/request.vim \
-        --replace "'himalaya" "'${himalaya}/bin/himalaya"
-    '';
+    buildInputs = [ himalaya ];
+    src = fetchFromSourcehut {
+      owner = "~soywod";
+      repo = "himalaya-vim";
+      rev = "v${himalaya.version}";
+      sha256 = "W+91hnNeS6WkDiR9r1s7xPTK9JlCWiVkI/nXVYbepY0=";
+    };
   });
+  # https://hurl.dev/
+  hurl = buildVimPluginFrom2Nix {
+    pname = "hurl";
+    version = hurl.version;
+    # dontUnpack = true;
+
+    src = "${hurl.src}/contrib/vim";
+
+  };
 
   jedi-vim = super.jedi-vim.overrideAttrs (old: {
     # checking for python3 support in vim would be neat, too, but nobody else seems to care
@@ -504,6 +537,10 @@ self: super: {
       description = "code-completion for python using python-jedi";
       license = lib.licenses.mit;
     };
+  });
+
+  jellybeans-nvim = super.jellybeans-nvim.overrideAttrs (old: {
+    dependencies = with self; [ lush-nvim ];
   });
 
   LanguageClient-neovim =
@@ -575,6 +612,29 @@ self: super: {
     dependencies = with self; [ plenary-nvim ];
   });
 
+  magma-nvim-goose = buildVimPluginFrom2Nix {
+    pname = "magma-nvim-goose";
+    version = "2023-03-13";
+    src = fetchFromGitHub {
+      owner = "WhiteBlackGoose";
+      repo = "magma-nvim-goose";
+      rev = "5d916c39c1852e09fcd39eab174b8e5bbdb25f8f";
+      sha256 = "10d6dh0czdpgfpzqs5vzxfffkm0460qjzi2mfkacgghqf3iwkbja";
+    };
+    passthru.python3Dependencies = ps: with ps; [
+      pynvim
+      jupyter-client
+      ueberzug
+      pillow
+      cairosvg
+      plotly
+      ipykernel
+      pyperclip
+      pnglatex
+    ];
+    meta.homepage = "https://github.com/WhiteBlackGoose/magma-nvim-goose/";
+  };
+
   markdown-preview-nvim = super.markdown-preview-nvim.overrideAttrs (old: let
     # We only need its dependencies `node-modules`.
     nodeDep = nodePackages."markdown-preview-nvim-../../applications/editors/vim/plugins/markdown-preview-nvim".overrideAttrs (old: {
@@ -596,6 +656,14 @@ self: super: {
     installCheckPhase = ''
       node $out/app/index.js --version
     '';
+  });
+
+  mason-lspconfig-nvim = super.mason-lspconfig-nvim.overrideAttrs (old: {
+    dependencies = with self; [ mason-nvim nvim-lspconfig ];
+  });
+
+  mason-tool-installer-nvim = super.mason-tool-installer-nvim.overrideAttrs (old: {
+    dependencies = with self; [ mason-nvim ];
   });
 
   meson = buildVimPluginFrom2Nix {
@@ -650,7 +718,7 @@ self: super: {
   });
 
   noice-nvim = super.noice-nvim.overrideAttrs(old: {
-    dependencies = with self; [ nui-nvim nvim-notify ];
+    dependencies = with self; [ nui-nvim ];
   });
 
   null-ls-nvim = super.null-ls-nvim.overrideAttrs (old: {
@@ -669,13 +737,29 @@ self: super: {
     dontBuild = true;
   });
 
+  vim-mediawiki-editor = super.vim-mediawiki-editor.overrideAttrs (old: {
+    passthru.python3Dependencies = [ python3.pkgs.mwclient ];
+  });
+
   nvim-spectre = super.nvim-spectre.overrideAttrs (old: {
     dependencies = with self; [ plenary-nvim ];
+  });
+
+  nvim-teal-maker = super.nvim-teal-maker.overrideAttrs (old: {
+    postPatch = ''
+      substituteInPlace lua/tealmaker/init.lua \
+        --replace cyan ${luaPackages.cyan}/bin/cyan
+    '';
+    vimCommandCheck = "TealBuild";
   });
 
   nvim-treesitter = super.nvim-treesitter.overrideAttrs (old:
     callPackage ./nvim-treesitter/overrides.nix { } self super
   );
+
+  nvim-ufo = super.nvim-ufo.overrideAttrs (old: {
+    dependencies = with self; [ promise-async ];
+  });
 
   octo-nvim = super.octo-nvim.overrideAttrs (old: {
     dependencies = with self; [ telescope-nvim plenary-nvim ];
@@ -685,7 +769,41 @@ self: super: {
     configurePhase = "cd vim";
   });
 
+  # The plugin depends on either skim-vim or fzf-vim, but we don't want to force the user so we
+  # avoid choosing one of them and leave it to the user
+  openscad-nvim = super.openscad-nvim.overrideAttrs (old: {
+    buildInputs = [ zathura htop openscad ];
+
+    patches = [
+      (substituteAll {
+        src = ./patches/openscad.nvim/program_paths.patch;
+        htop = lib.getExe htop;
+        openscad = lib.getExe openscad;
+        zathura = lib.getExe zathura;
+      })
+    ];
+  });
+
+  orgmode = super.orgmode.overrideAttrs (old: {
+    dependencies = with self; [ (nvim-treesitter.withPlugins (p: [ p.org ])) ];
+  });
+
   inherit parinfer-rust;
+
+  phpactor = buildVimPluginFrom2Nix {
+    inherit (phpactor) pname src meta version;
+    postPatch = ''
+      substituteInPlace plugin/phpactor.vim \
+        --replace "g:phpactorpath = expand('<sfile>:p:h') . '/..'" "g:phpactorpath = '${phpactor}'"
+    '';
+  };
+
+  playground = super.playground.overrideAttrs (old: {
+    dependencies = with self; [
+      # we need the 'query' grammer to make
+      (nvim-treesitter.withPlugins (p: [ p.query ]))
+    ];
+  });
 
   plenary-nvim = super.plenary-nvim.overrideAttrs (old: {
     postPatch = ''
@@ -707,8 +825,39 @@ self: super: {
 
   # needs  "http" and "json" treesitter grammars too
   rest-nvim = super.rest-nvim.overrideAttrs (old: {
-    dependencies = with self; [ plenary-nvim ];
+    dependencies = with self; [
+      plenary-nvim
+      (nvim-treesitter.withPlugins (p: [ p.http p.json ]))
+    ];
   });
+
+  sg-nvim = super.sg-nvim.overrideAttrs (old:
+    let
+      sg-nvim-rust = rustPlatform.buildRustPackage {
+        pname = "sg-nvim-rust";
+        inherit (old) version src;
+
+        cargoHash = "sha256-gnQNQlW/c1vzyR+HbYn7rpxZ1C6WXFcqpylIOTUMZ6g=";
+
+        nativeBuildInputs = [ pkg-config ];
+
+        buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [
+          darwin.apple_sdk.frameworks.Security
+        ];
+
+        cargoBuildFlags = [ "--workspace" ];
+
+        # tests are broken
+        doCheck = false;
+      };
+    in
+    {
+      dependencies = with self; [ plenary-nvim ];
+      postInstall = ''
+        mkdir -p $out/target/debug
+        ln -s ${sg-nvim-rust}/{bin,lib}/* $out/target/debug
+      '';
+    });
 
   skim = buildVimPluginFrom2Nix {
     pname = "skim";
@@ -722,18 +871,18 @@ self: super: {
 
   sniprun =
     let
-      version = "1.1.2";
+      version = "1.3.1";
       src = fetchFromGitHub {
         owner = "michaelb";
         repo = "sniprun";
         rev = "v${version}";
-        sha256 = "sha256-WL0eXwiPhcndI74wtFox2tSnZn1siE86x2MLkfpxxT4=";
+        hash = "sha256-grrrqvdqoYTBtlU+HLrSQJsAmMA/+OHbuoVvOwHYPnk=";
       };
       sniprun-bin = rustPlatform.buildRustPackage {
         pname = "sniprun-bin";
         inherit version src;
 
-        cargoSha256 = "sha256-1WbgnsjoFdvko6VRKY+IjafMNqvJvyIZCDk8I9GV3GM=";
+        cargoSha256 = "sha256-hmZXYJFIeKgYyhT6mSrmX+7M9GQQHHzliYHjsBoHgOc=";
 
         nativeBuildInputs = [ makeWrapper ];
 
@@ -756,6 +905,19 @@ self: super: {
 
       propagatedBuildInputs = [ sniprun-bin ];
     };
+
+  # The GitHub repository returns 404, which breaks the update script
+  Spacegray-vim = buildVimPluginFrom2Nix {
+    pname = "Spacegray.vim";
+    version = "2021-07-06";
+    src = fetchFromGitHub {
+      owner = "ackyshake";
+      repo = "Spacegray.vim";
+      rev = "c699ca10ed421c462bd1c87a158faaa570dc8e28";
+      sha256 = "0ma8w6p5jh6llka49x5j5ql8fmhv0bx5hhsn5b2phak79yqg1k61";
+    };
+    meta.homepage = "https://github.com/ackyshake/Spacegray.vim/";
+  };
 
   sqlite-lua = super.sqlite-lua.overrideAttrs (old: {
     postPatch = let
@@ -821,6 +983,10 @@ self: super: {
       };
     });
 
+  taskwarrior = buildVimPluginFrom2Nix {
+    inherit (taskwarrior) version pname;
+    src = "${taskwarrior.src}/scripts/vim";
+  };
   telescope-cheat-nvim = super.telescope-cheat-nvim.overrideAttrs (old: {
     dependencies = with self; [ sqlite-lua telescope-nvim ];
   });
@@ -876,6 +1042,10 @@ self: super: {
     dependencies = with self; [ telescope-nvim ];
   });
 
+  telescope-undo-nvim = super.telescope-undo-nvim.overrideAttrs (old: {
+    dependencies = with self; [ telescope-nvim ];
+  });
+
   telescope-z-nvim = super.telescope-z-nvim.overrideAttrs (old: {
     dependencies = with self; [ telescope-nvim ];
   });
@@ -925,6 +1095,11 @@ self: super: {
         ${vim}/bin/vim --cmd ":set rtp^=$PWD" -c 'ru plugin/unicode.vim' -c 'UnicodeCache' -c ':echohl Normal' -c ':q' > /dev/null
       '';
     });
+
+  unison = super.unison.overrideAttrs (old: {
+    # Editor stuff isn't at top level
+    postPatch = "cd editor-support/vim";
+  });
 
   vCoolor-vim = super.vCoolor-vim.overrideAttrs (old: {
     # on linux can use either Zenity or Yad.
@@ -998,35 +1173,7 @@ self: super: {
     passthru.python3Dependencies = ps: with ps; [ beancount ];
   });
 
-  vim-clap = super.vim-clap.overrideAttrs (old: {
-    preFixup =
-      let
-        maple-bin = rustPlatform.buildRustPackage {
-          name = "maple";
-          inherit (old) src;
-
-          nativeBuildInputs = [
-            pkg-config
-          ];
-
-          buildInputs = [
-            openssl
-          ] ++ lib.optionals stdenv.isDarwin [
-            CoreServices
-            curl
-            libgit2
-            libiconv
-          ];
-
-          cargoSha256 = "sha256-MzacdTuCaBIAyWxH+Uza1KToGZgGPcwMCe5JtQ+68/M=";
-        };
-      in
-      ''
-        ln -s ${maple-bin}/bin/maple $target/bin/maple
-      '';
-
-    meta.platforms = lib.platforms.all;
-  });
+  vim-clap = callPackage ./vim-clap { };
 
   vim-codefmt = super.vim-codefmt.overrideAttrs (old: {
     dependencies = with self; [ vim-maktaba ];
@@ -1040,6 +1187,10 @@ self: super: {
         rm $out/colors/darkBlue.vim
       '';
     });
+  });
+
+  vim-dadbod-ui = super.vim-dadbod-ui.overrideAttrs (old: {
+    dependencies = with self; [ vim-dadbod ];
   });
 
   vim-dasht = super.vim-dasht.overrideAttrs (old: {
@@ -1124,7 +1275,7 @@ self: super: {
         hexokinase = buildGoModule {
           name = "hexokinase";
           src = old.src + "/hexokinase";
-          vendorSha256 = "pQpattmS9VmO3ZIQUFn66az8GSmB4IvYhTTCFn6SUmo=";
+          vendorSha256 = null;
         };
       in
       ''
@@ -1198,6 +1349,13 @@ self: super: {
 
   vim-wakatime = super.vim-wakatime.overrideAttrs (old: {
     buildInputs = [ python3 ];
+    patchPhase = ''
+      substituteInPlace plugin/wakatime.vim \
+        --replace 'autocmd BufEnter,VimEnter' \
+                  'autocmd VimEnter' \
+        --replace 'autocmd CursorMoved,CursorMovedI' \
+                  'autocmd CursorMoved,CursorMovedI,BufEnter'
+    '';
   });
 
   vim-xdebug = super.vim-xdebug.overrideAttrs (old: {
@@ -1241,6 +1399,19 @@ self: super: {
       maintainers = with lib.maintainers; [ millerjason ];
     };
   });
+
+  # The GitHub repository returns 404, which breaks the update script
+  VimCompletesMe = buildVimPluginFrom2Nix {
+    pname = "VimCompletesMe";
+    version = "2022-02-18";
+    src = fetchFromGitHub {
+      owner = "ackyshake";
+      repo = "VimCompletesMe";
+      rev = "9adf692d7ae6424038458a89d4a411f0a27d1388";
+      sha256 = "1sndgb3291dyifaa8adri2mb8cgbinbar3nw1fnf67k9ahwycaz0";
+    };
+    meta.homepage = "https://github.com/ackyshake/VimCompletesMe/";
+  };
 
   vimsence = super.vimsence.overrideAttrs (old: {
     meta = with lib; {

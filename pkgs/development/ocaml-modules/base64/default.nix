@@ -1,17 +1,18 @@
-{ lib, fetchurl, buildDunePackage, ocaml, alcotest, bos, rresult }:
+{ lib, fetchurl, buildDunePackage, ocaml, findlib, alcotest, bos, rresult }:
 
 buildDunePackage rec {
   pname = "base64";
-  version = "3.5.0";
+  version = "3.5.1";
 
-  minimumOCamlVersion = "4.03";
-
-  useDune2 = true;
+  minimalOCamlVersion = "4.03";
+  duneVersion = "3";
 
   src = fetchurl {
-    url = "https://github.com/mirage/ocaml-base64/releases/download/v${version}/base64-v${version}.tbz";
-    sha256 = "sha256-WJ3pwAV46/54QZismBjTWGxHSyMWts0+HEbMsfYq46Q=";
+    url = "https://github.com/mirage/ocaml-base64/releases/download/v${version}/base64-${version}.tbz";
+    hash = "sha256-2P7apZvRL+rnrMCLWSjdR4qsUj9MqNJARw0lAGUcZe0=";
   };
+
+  nativeBuildInputs = [ findlib ];
 
   # otherwise fmt breaks evaluation
   doCheck = lib.versionAtLeast ocaml.version "4.08";

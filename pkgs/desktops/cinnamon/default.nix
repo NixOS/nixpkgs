@@ -38,6 +38,8 @@ lib.makeScope pkgs.newScope (self: with self; {
   nemo-with-extensions = callPackage ./nemo/wrapper.nix { };
   mint-artwork = callPackage ./mint-artwork { };
   mint-cursor-themes = callPackage ./mint-cursor-themes { };
+  mint-l-icons = callPackage ./mint-l-icons { };
+  mint-l-theme = callPackage ./mint-l-theme { };
   mint-themes = callPackage ./mint-themes { };
   mint-x-icons = callPackage ./mint-x-icons { };
   mint-y-icons = callPackage ./mint-y-icons { };

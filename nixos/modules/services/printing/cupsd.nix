@@ -317,6 +317,7 @@ in
     environment.etc.cups.source = "/var/lib/cups";
 
     services.dbus.packages = [ cups.out ] ++ optional polkitEnabled cups-pk-helper;
+    services.udev.packages = cfg.drivers;
 
     # Allow asswordless printer admin for members of wheel group
     security.polkit.extraConfig = mkIf polkitEnabled ''
@@ -341,7 +342,7 @@ in
 
     systemd.sockets.cups = mkIf cfg.startWhenNeeded {
       wantedBy = [ "sockets.target" ];
-      listenStreams = [ "/run/cups/cups.sock" ]
+      listenStreams = [ "" "/run/cups/cups.sock" ]
         ++ map (x: replaceStrings ["localhost"] ["127.0.0.1"] (removePrefix "*:" x)) cfg.listenAddresses;
     };
 
@@ -395,10 +396,7 @@ in
             ''}
           '';
 
-          serviceConfig = {
-            PrivateTmp = true;
-            RuntimeDirectory = [ "cups" ];
-          };
+          serviceConfig.PrivateTmp = true;
       };
 
     systemd.services.cups-browsed = mkIf avahiEnabled

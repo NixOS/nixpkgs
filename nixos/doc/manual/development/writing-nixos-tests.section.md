@@ -130,6 +130,11 @@ starting them in parallel:
 start_all()
 ```
 
+If the hostname of a node contains characters that can't be used in a
+Python variable name, those characters will be replaced with
+underscores in the variable name, so `nodes.machine-a` will be exposed
+to Python as `machine_a`.
+
 ## Machine objects {#ssec-machine-objects}
 
 The following methods are available on machine objects:
@@ -165,7 +170,7 @@ The following methods are available on machine objects:
 `get_screen_text_variants`
 
 :   Return a list of different interpretations of what is currently
-    visible on the machine\'s screen using optical character
+    visible on the machine's screen using optical character
     recognition. The number and order of the interpretations is not
     specified and is subject to change, but if no exception is raised at
     least one will be returned.
@@ -177,7 +182,7 @@ The following methods are available on machine objects:
 `get_screen_text`
 
 :   Return a textual representation of what is currently visible on the
-    machine\'s screen using optical character recognition.
+    machine's screen using optical character recognition.
 
     ::: {.note}
     This requires [`enableOCR`](#test-opt-enableOCR) to be set to `true`.
@@ -273,12 +278,13 @@ The following methods are available on machine objects:
 
 `wait_for_open_port`
 
-:   Wait until a process is listening on the given TCP port (on
-    `localhost`, at least).
+:   Wait until a process is listening on the given TCP port and IP address
+    (default `localhost`).
 
 `wait_for_closed_port`
 
-:   Wait until nobody is listening on the given TCP port.
+:   Wait until nobody is listening on the given TCP port and IP address
+    (default `localhost`).
 
 `wait_for_x`
 
@@ -350,8 +356,8 @@ machine.wait_for_unit("xautolock.service", "x-session-user")
 This applies to `systemctl`, `get_unit_info`, `wait_for_unit`,
 `start_job` and `stop_job`.
 
-For faster dev cycles it\'s also possible to disable the code-linters
-(this shouldn\'t be committed though):
+For faster dev cycles it's also possible to disable the code-linters
+(this shouldn't be committed though):
 
 ```nix
 {
@@ -370,7 +376,7 @@ For faster dev cycles it\'s also possible to disable the code-linters
 
 This will produce a Nix warning at evaluation time. To fully disable the
 linter, wrap the test script in comment directives to disable the Black
-linter directly (again, don\'t commit this within the Nixpkgs
+linter directly (again, don't commit this within the Nixpkgs
 repository):
 
 ```nix
@@ -416,8 +422,7 @@ with foo_running:
 
 `seconds_interval`
 
-:
-    specifies how often the condition should be polled:
+:   specifies how often the condition should be polled:
 
 ```py
 @polling_condition(seconds_interval=10)
@@ -427,8 +432,7 @@ def foo_running():
 
 `description`
 
-:
-    is used in the log when the condition is checked. If this is not provided, the description is pulled from the docstring of the function. These two are therefore equivalent:
+:   is used in the log when the condition is checked. If this is not provided, the description is pulled from the docstring of the function. These two are therefore equivalent:
 
 ```py
 @polling_condition
@@ -471,6 +475,8 @@ In that case, `numpy` is chosen from the generic `python3Packages`.
 
 The following options can be used when writing tests.
 
-```{=docbook}
-<xi:include href="../../generated/test-options-db.xml" xpointer="test-options-list"/>
+```{=include=} options
+id-prefix: test-opt-
+list-id: test-options-list
+source: @NIXOS_TEST_OPTIONS_JSON@
 ```

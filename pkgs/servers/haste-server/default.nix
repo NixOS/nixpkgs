@@ -3,19 +3,22 @@
 , stdenv
 , fetchFromGitHub
 , makeWrapper
-, nodejs
+, nodejs_18
 , pkgs
 }:
 
+let
+  nodejs = nodejs_18;
+in
 stdenv.mkDerivation rec {
   pname = "haste-server";
-  version = "20919c946602b8151157f647e475e30687a43727";
+  version = "b52b394bad909ddf151073987671e843540d91d6";
 
   src = fetchFromGitHub {
     owner = "toptal";
     repo = "haste-server";
     rev = version;
-    hash = "sha256-IPGsddPRu4/jT1NsUNOwUjSL3+ikGzMR3X3ohY66uAk=";
+    hash = "sha256-AVoz5MY5gNxQrHtDMPbQ85IjmHii1v6C2OXpEQj9zC8=";
   };
 
   nativeBuildInputs = [

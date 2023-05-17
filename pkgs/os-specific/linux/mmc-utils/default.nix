@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation {
   pname = "mmc-utils";
-  version = "unstable-2022-09-27";
+  version = "unstable-2023-04-17";
 
   src = fetchzip rec {
     url = "https://git.kernel.org/pub/scm/utils/mmc/mmc-utils.git/snapshot/mmc-utils-${passthru.rev}.tar.gz";
-    passthru.rev = "dfc3b6ecda84d21418fb4408b39c5c71db4c6458";
-    sha256 = "G4sBwRW8NOq7CGTADvXgMbcVInStSueGfGsb4ApVaSk=";
+    passthru.rev = "145c74ab6f2e13a9a8ccdbbf1758afedb8a3965c";
+    sha256 = "cYLIO83uZHDe1COKtSN0SyFOoC3qrqMP0RNsOO9cQ70=";
   };
 
   makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" "prefix=$(out)" ];

@@ -30,17 +30,17 @@
 
 buildPythonPackage rec {
   pname = "optuna";
-  version = "2.10.1";
+  version = "3.1.0";
   disabled = isPy27;
 
   src = fetchFromGitHub {
     owner = "optuna";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-HHVEoLCZtEJEfc4xYobQrzRcDDxxeQjgL2Rw2KeVbi0=";
+    hash = "sha256-dNS3LEWP/Ul1z60iZirFEX30Frc5ZFQLNTgUkT9vLNQ=";
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytest
     mock
     bokeh
@@ -70,10 +70,10 @@ buildPythonPackage rec {
     typing
   ];
 
-  configurePhase = if !(pythonOlder "3.5") then ''
+  configurePhase = lib.optionalString (! pythonOlder "3.5") ''
     substituteInPlace setup.py \
       --replace "'typing'," ""
-  '' else "";
+  '';
 
   checkPhase = ''
     pytest --ignore tests/test_cli.py \

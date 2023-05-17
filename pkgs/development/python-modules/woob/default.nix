@@ -1,35 +1,31 @@
 { lib
 , babel
 , buildPythonPackage
-, colorama
-, cssselect
-, feedparser
 , fetchFromGitLab
-, gdata
+, fetchpatch
 , gnupg
-, google-api-python-client
 , html2text
 , libyaml
 , lxml
-, mechanize
 , nose
-, pdfminer-six
+, packaging
 , pillow
 , prettytable
-, pyqt5
+, pycountry
 , python-dateutil
 , pythonOlder
 , pyyaml
 , requests
-, simplejson
 , termcolor
+, testers
 , unidecode
+, woob
 }:
 
 buildPythonPackage rec {
   pname = "woob";
-  version = "3.0";
-  format = "setuptools";
+  version = "3.5";
+  format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
@@ -37,44 +33,31 @@ buildPythonPackage rec {
     owner = "woob";
     repo = pname;
     rev = version;
-    hash = "sha256-XLcHNidclORbxVXgcsHY6Ja/dak+EVSKTaVQmg1f/rw=";
+    hash = "sha256-Yb3AgUSqr9r2TIymiEUIhKThNC7yjQEkhi8GSI9fqNA=";
   };
 
   nativeBuildInputs = [
-    pyqt5
+    packaging
   ];
 
   propagatedBuildInputs = [
     babel
-    colorama
-    cssselect
     python-dateutil
-    feedparser
-    gdata
     gnupg
-    google-api-python-client
     html2text
     libyaml
     lxml
-    mechanize
-    pdfminer-six
+    packaging
     pillow
     prettytable
-    pyqt5
+    pycountry
     pyyaml
     requests
-    simplejson
     termcolor
     unidecode
   ];
 
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace "with-doctest = 1" "" \
-      --replace "with-coverage = 1" ""
-  '';
-
-  checkInputs = [
+  nativeCheckInputs = [
     nose
   ];
 
@@ -85,6 +68,11 @@ buildPythonPackage rec {
   pythonImportsCheck = [
     "woob"
   ];
+
+  passthru.tests.version = testers.testVersion {
+    package = woob;
+    version = "v${version}";
+  };
 
   meta = with lib; {
     description = "Collection of applications and APIs to interact with websites";

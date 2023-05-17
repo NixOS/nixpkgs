@@ -16,10 +16,10 @@ buildPythonPackage rec {
     owner = "JetBrains";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-9az7kD7nKqMF2b3/eFgF+pOKKIYLvTy2sf4TSJfHRnA=";
+    hash = "sha256-9az7kD7nKqMF2b3/eFgF+pOKKIYLvTy2sf4TSJfHRnA=";
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

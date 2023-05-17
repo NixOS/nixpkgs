@@ -2,24 +2,22 @@
 
 stdenv.mkDerivation rec {
   pname = "tcpdump";
-  version = "4.99.1";
+  version = "4.99.4";
 
   src = fetchurl {
-    url = "http://www.tcpdump.org/release/${pname}-${version}.tar.gz";
-    sha256 = "sha256-ebNphfsnAxRmGNh8Ss3j4Gi5HFU/uT8CGjN/F1/RDr4=";
+    url = "http://www.tcpdump.org/release/tcpdump-${version}.tar.gz";
+    hash = "sha256-AjIjG7LynWvyQm5woIp+DGOg1ZqbRIY7f14jV6bkn+o=";
   };
 
   postPatch = ''
     patchShebangs tests
   '';
 
-  checkInputs = [ perl ];
+  nativeCheckInputs = [ perl ];
 
   buildInputs = [ libpcap ];
 
-  configureFlags = lib.optional
-    (stdenv.hostPlatform != stdenv.buildPlatform)
-    "ac_cv_linux_vers=2";
+  configureFlags = lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) "ac_cv_linux_vers=2";
 
   meta = with lib; {
     description = "Network sniffer";

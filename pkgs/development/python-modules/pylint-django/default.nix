@@ -27,7 +27,7 @@ buildPythonPackage rec {
     pylint-plugin-utils
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     factory_boy
     pytestCheckHook
   ];

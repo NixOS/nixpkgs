@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
 
   inherit doCheck;
 
-  checkInputs = [ dejagnu ];
+  nativeCheckInputs = [ dejagnu ];
 
   meta = with lib; {
     description = "A foreign function call interface library";

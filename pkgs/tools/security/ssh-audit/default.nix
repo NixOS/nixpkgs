@@ -2,16 +2,16 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "ssh-audit";
-  version = "2.5.0";
+  version = "2.9.0";
 
   src = fetchFromGitHub {
     owner = "jtesta";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0ks1zr0ksma285sm2dyy0nsbrkpssdk4mdzc3srr4mcyd6v927jd";
+    sha256 = "sha256-WrED2cSoqR276iOma+pZq/Uu1vQWJmtJvsI73r8ivJA=";
   };
 
-  checkInputs = with python3Packages; [
+  nativeCheckInputs = with python3Packages; [
     pytestCheckHook
   ];
 

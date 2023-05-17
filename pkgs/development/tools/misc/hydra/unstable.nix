@@ -126,13 +126,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "hydra";
-  version = "unstable-2022-12-05";
+  version = "2023-03-27";
 
   src = fetchFromGitHub {
     owner = "NixOS";
     repo = "hydra";
-    rev = "d1fac69c213002721971cd983e2576b784677d40";
-    sha256 = "sha256-HVsp+BPjEDS1lR7sjplWNrNljHvYcaUiaAn8gGNAMxU=";
+    rev = "082495e34e094cae1eb49dbfc5648938e23c6355";
+    sha256 = "sha256-Nj9U0V7Zv7XoRDdO7ECphTk6jHfOgeZe6G0x4FQLpJ0=";
   };
 
   buildInputs = [
@@ -186,7 +186,7 @@ stdenv.mkDerivation rec {
     nukeReferences
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     cacert
     foreman
     glibcLocales
@@ -197,7 +197,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--with-docbook-xsl=${docbook_xsl}/xml/xsl/docbook" ];
 
-  NIX_CFLAGS_COMPILE = "-pthread";
+  env.NIX_CFLAGS_COMPILE = "-pthread";
 
   OPENLDAP_ROOT = openldap;
 

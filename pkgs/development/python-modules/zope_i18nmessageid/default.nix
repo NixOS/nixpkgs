@@ -8,16 +8,16 @@
 
 buildPythonPackage rec {
   pname = "zope.i18nmessageid";
-  version = "5.0.1";
+  version = "5.1.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "9534142b684c986f5303f469573978e5a340f05ba2eee4f872933f1c38b1b059";
+    hash = "sha256-R7djR7gOCytmxIbuZvP4bFdJOiB1uFqfuAJpD6cwvZI=";
   };
 
   propagatedBuildInputs = [ six ];
 
-  checkInputs = [ coverage zope_testrunner ];
+  nativeCheckInputs = [ coverage zope_testrunner ];
 
   meta = with lib; {
     homepage = "https://github.com/zopefoundation/zope.i18nmessageid";

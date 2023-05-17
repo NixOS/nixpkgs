@@ -1,7 +1,7 @@
 { fetchFromGitHub, fetchgit, fetchHex, rebar3Relx, buildRebar3, rebar3-proper
-, stdenv, writeScript, lib }:
+, stdenv, writeScript, lib, erlang }:
 let
-  version = "0.41.2";
+  version = "0.46.2";
   owner = "erlang-ls";
   repo = "erlang_ls";
   deps = import ./rebar-deps.nix {
@@ -24,11 +24,17 @@ rebar3Relx {
   inherit version;
   src = fetchFromGitHub {
     inherit owner repo;
-    sha256 = "sha256-LUgiQtK0OsdTmg1jEdxJ0x+39U3PXoFYsGlOv4l7/Ig=";
+    sha256 = "sha256-J0Qa8s8v/KT4/Jaj9JYsfvzviMUx8FnX0nMoeH8bkB8=";
     rev = version;
   };
   releaseType = "escript";
   beamDeps = builtins.attrValues deps;
+
+  # https://github.com/erlang-ls/erlang_ls/issues/1429
+  postPatch =  ''
+    rm apps/els_lsp/test/els_diagnostics_SUITE.erl
+  '';
+
   buildPlugins = [ rebar3-proper ];
   buildPhase = "HOME=. make";
   # based on https://github.com/erlang-ls/erlang_ls/blob/main/.github/workflows/build.yml
@@ -50,6 +56,7 @@ rebar3Relx {
     description = "The Erlang Language Server";
     platforms = platforms.unix;
     license = licenses.asl20;
+    mainProgram = "erlang_ls";
   };
   passthru.updateScript = writeScript "update.sh" ''
     #!/usr/bin/env nix-shell

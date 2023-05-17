@@ -19,12 +19,12 @@ let
 
     stdenvNoCC.mkDerivation rec {
       pname = "coreboot-toolchain-${arch}";
-      version = "4.16";
+      version = "4.20";
 
       src = fetchgit {
         url = "https://review.coreboot.org/coreboot";
-        rev = version;
-        sha256 = "sha256-PCum+IvJ136eZQLovUi9u4xTLLs17MkMP5Oc0/2mMY4=";
+        rev = "465fbbe93ee01b4576689a90b7ddbeec23cdace2";
+        hash = "sha256-vzXOl+Z8VYh9Iq6+AMNb3apMv185J3mODauKMinSOI4=";
         fetchSubmodules = false;
         leaveDotGit = true;
         postFetch = ''
@@ -70,7 +70,7 @@ let
   );
 in
 
-lib.listToAttrs (map (arch: lib.nameValuePair arch (common arch {})) [
+lib.listToAttrs (map (arch: lib.nameValuePair arch (common arch { })) [
   "i386"
   "x64"
   "arm"

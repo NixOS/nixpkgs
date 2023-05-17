@@ -18,7 +18,7 @@ buildPythonPackage rec {
     cloudflare
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

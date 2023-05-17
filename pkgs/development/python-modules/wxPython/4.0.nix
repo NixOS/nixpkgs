@@ -69,11 +69,11 @@ buildPythonPackage rec {
   '';
 
   buildPhase = ''
-    ${python.interpreter} build.py -v --use_syswx dox etg --nodoc sip build_py
+    ${python.pythonForBuild.interpreter} build.py -v --use_syswx dox etg --nodoc sip build_py
   '';
 
   installPhase = ''
-    ${python.interpreter} setup.py install --skip-build --prefix=$out
+    ${python.pythonForBuild.interpreter} setup.py install --skip-build --prefix=$out
   '';
 
   passthru = { wxWidgets = wxGTK; };
@@ -83,6 +83,7 @@ buildPythonPackage rec {
     description = "Cross platform GUI toolkit for Python, Phoenix version";
     homepage = "http://wxpython.org/";
     license = lib.licenses.wxWindows;
+    broken = true;
   };
 
 }

@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -I nixpkgs=../../../../ -i bash -p nix curl jq prefetch-yarn-deps nix-prefetch-github
+#!nix-shell -I nixpkgs=../../../../ -i bash -p nix curl jq prefetch-yarn-deps nix-prefetch-github nix-prefetch-git
 
 if [ "$#" -gt 1 ] || [[ "$1" == -* ]]; then
   echo "Regenerates packaging data for matrix-appservice-slack."

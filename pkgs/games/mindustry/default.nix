@@ -15,10 +15,13 @@
 , alsa-lib
 , alsa-plugins
 , glew
+, glew-egl
 
 # for soloud
 , libpulseaudio ? null
 , libjack2 ? null
+
+, nixosTests
 
 
 # Make the build version easily overridable.
@@ -28,46 +31,50 @@
 , makeBuildVersion ? (v: v)
 , enableClient ? true
 , enableServer ? true
+
+, enableWayland ? false
 }:
 
 let
   pname = "mindustry";
-  version = "140.4";
+  version = "143.1";
   buildVersion = makeBuildVersion version;
+
+  selectedGlew = if enableWayland then glew-egl else glew;
 
   Mindustry = fetchFromGitHub {
     owner = "Anuken";
     repo = "Mindustry";
     rev = "v${version}";
-    sha256 = "0lfDISvC5dOd76BuPPniPf+8hXWQ/wtreNHN75k2jVA=";
+    hash = "sha256-p6HxccLg+sjFW+ZGGTfo5ZvOIs6lKjub88kX/iaBres=";
   };
   Arc = fetchFromGitHub {
     owner = "Anuken";
     repo = "Arc";
     rev = "v${version}";
-    sha256 = "lZ3ACijauUC9jVRq9I/QwX9ozFF/dw+ArEMND+RMItM=";
+    hash = "sha256-fbFjelwqBRadcUmbW3/oDnhmNAjTj660qB5WwXugIIU=";
   };
   soloud = fetchFromGitHub {
     owner = "Anuken";
     repo = "soloud";
     # This is pinned in Arc's arc-core/build.gradle
     rev = "v0.9";
-    sha256 = "6KlqOtA19MxeqZttNyNrMU7pKqzlNiA4rBZKp9ekanc=";
+    hash = "sha256-6KlqOtA19MxeqZttNyNrMU7pKqzlNiA4rBZKp9ekanc=";
   };
   freetypeSource = fetchurl {
     # This is pinned in Arc's extensions/freetype/build.gradle
     url = "https://download.savannah.gnu.org/releases/freetype/freetype-2.10.4.tar.gz";
-    sha256 = "1b4dcngjcly9n80hnyr4d5s6qp8bspabfs7v3h07gb13pdg7kasy";
+    hash = "sha256-Xqt5XrsjrHcAHPtot9TVC11sdGkkewsBsslTJp9ljaw=";
   };
   glewSource = fetchurl {
     # This is pinned in Arc's backends/backend-sdl/build.gradle
     url = "https://github.com/nigels-com/glew/releases/download/glew-2.2.0/glew-2.2.0.zip";
-    sha256 = "1m702jzfjhdr76cb71qplv6amhw15nnb1h6wbq4mlfbl6y8nl159";
+    hash = "sha256-qQRqkTd0OVoJXtzAsKwtgcOqzKYXh7OYOblB6b4U4NQ=";
   };
   SDLmingwSource = fetchurl {
     # This is pinned in Arc's backends/backend-sdl/build.gradle
     url = "https://www.libsdl.org/release/SDL2-devel-2.0.20-mingw.tar.gz";
-    sha256 = "1lbbjxl3a8vdillvv7654m6mp34lfkncvig5a8iwdmjpm214s29q";
+    hash = "sha256-OAlNgqhX1sYjUuXFzex0lIxbTSXFnL0pjW0jNWiXa9E=";
   };
 
   patches = [
@@ -123,9 +130,8 @@ let
         | perl -pe 's#(.*/([^/]+)/([^/]+)/([^/]+)/[0-9a-f]{30,40}/([^/\s]+))$# ($x = $2) =~ tr|\.|/|; "install -Dm444 $1 \$out/$x/$3/$4/$5" #e' \
         | sh
     '';
-    outputHashAlgo = "sha256";
     outputHashMode = "recursive";
-    outputHash = "FbLd3kk/awFz91o8pZcwJTFozwJ7R+RlDOsMRaala5Q=";
+    outputHash = "sha256-uxnW5AqX6PazqHJYLuF/By5qpev8Se+992jCyacogSY=";
   };
 
 in
@@ -138,7 +144,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = lib.optionals enableClient [
     SDL2
-    glew
+    selectedGlew
     alsa-lib
   ];
   nativeBuildInputs = [
@@ -170,7 +176,7 @@ stdenv.mkDerivation rec {
     pushd ../Arc
     gradle --offline --no-daemon jnigenBuild -Pbuildversion=${buildVersion}
     gradle --offline --no-daemon jnigenJarNativesDesktop -Pbuildversion=${buildVersion}
-    glewlib=${lib.getLib glew}/lib/libGLEW.so
+    glewlib=${lib.getLib selectedGlew}/lib/libGLEW.so
     sdllib=${lib.getLib SDL2}/lib/libSDL2.so
     patchelf backends/backend-sdl/libs/linux64/libsdl-arc*.so \
       --add-needed $glewlib \
@@ -193,7 +199,10 @@ stdenv.mkDerivation rec {
     makeWrapper ${jdk}/bin/java $out/bin/mindustry \
       --add-flags "-jar $out/share/mindustry.jar" \
       --suffix LD_LIBRARY_PATH : ${lib.makeLibraryPath [libpulseaudio alsa-lib libjack2]} \
-      --set ALSA_PLUGIN_DIR ${alsa-plugins}/lib/alsa-lib/
+      --set ALSA_PLUGIN_DIR ${alsa-plugins}/lib/alsa-lib/'' + optionalString enableWayland '' \
+      --set SDL_VIDEODRIVER wayland \
+      --set SDL_VIDEO_WAYLAND_WMCLASS Mindustry
+    '' + ''
 
     # Retain runtime depends to prevent them from being cleaned up.
     # Since a jar is a compressed archive, nix can't figure out that the dependency is actually in there,
@@ -201,7 +210,7 @@ stdenv.mkDerivation rec {
     # This can cause issues.
     # See https://github.com/NixOS/nixpkgs/issues/109798.
     echo "# Retained runtime dependencies: " >> $out/bin/mindustry
-    for dep in ${SDL2.out} ${alsa-lib.out} ${glew.out}; do
+    for dep in ${SDL2.out} ${alsa-lib.out} ${selectedGlew.out}; do
       echo "# $dep" >> $out/bin/mindustry
     done
 
@@ -215,6 +224,10 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
+  passthru.tests = {
+    nixosTest = nixosTests.mindustry;
+  };
+
   meta = with lib; {
     homepage = "https://mindustrygame.github.io/";
     downloadPage = "https://github.com/Anuken/Mindustry/releases";
@@ -224,7 +237,7 @@ stdenv.mkDerivation rec {
       binaryBytecode  # deps
     ];
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ chkno fgaz ];
+    maintainers = with maintainers; [ chkno fgaz thekostins ];
     platforms = platforms.x86_64;
     # Hash mismatch on darwin:
     # https://github.com/NixOS/nixpkgs/pull/105590#issuecomment-737120293

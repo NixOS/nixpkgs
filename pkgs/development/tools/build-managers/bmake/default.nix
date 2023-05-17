@@ -10,11 +10,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bmake";
-  version = "20220928";
+  version = "20230414";
 
   src = fetchurl {
     url = "http://www.crufty.net/ftp/pub/sjg/${finalAttrs.pname}-${finalAttrs.version}.tar.gz";
-    hash = "sha256-yAS3feP+uOMd7ipMn7Hp7CTFo0dk56KBXIi07QFlDpA=";
+    hash = "sha256-KcsdJqrn3p3vkr2us6rUUg6JlRzpey518LibrhuVOZ8=";
   };
 
   # Make tests work with musl
@@ -88,7 +88,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
-  checkInputs = [
+  nativeCheckInputs = [
     tzdata
   ] ++ lib.optionals (stdenv.hostPlatform.libc != "musl") [
     ksh

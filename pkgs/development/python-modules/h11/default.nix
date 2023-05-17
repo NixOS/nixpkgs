@@ -15,10 +15,10 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-jxn7vpnnJCD/NcALJ6NMuZN+kCqLgQ4siDAMbwo7aZ0=";
+    hash = "sha256-jxn7vpnnJCD/NcALJ6NMuZN+kCqLgQ4siDAMbwo7aZ0=";
   };
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   # Some of the tests use localhost networking.
   __darwinAllowLocalNetworking = true;

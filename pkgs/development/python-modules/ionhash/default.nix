@@ -8,14 +8,14 @@ buildPythonPackage rec {
     owner = "amzn";
     repo = "ion-hash-python";
     rev = "v${version}";
-    sha256 = "sha256-mXOLKXauWwwIA/LnF4qyZsBiF/QM+rF9MmE2ewmozYo=";
+    hash = "sha256-mXOLKXauWwwIA/LnF4qyZsBiF/QM+rF9MmE2ewmozYo=";
     fetchSubmodules = true;
   };
 
   patches = [
     (fetchpatch {
       url = "https://github.com/amzn/ion-hash-python/commit/5cab56d694ecc176e394bb455c2d726ba1514ce0.patch";
-      sha256 = "sha256-P5QByNafgxI//e3m+b0oG00+rVymCsT/J4dOZSk3354=";
+      hash = "sha256-P5QByNafgxI//e3m+b0oG00+rVymCsT/J4dOZSk3354=";
     })
   ];
 
@@ -25,7 +25,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ amazon-ion six ];
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "ionhash" ];
 

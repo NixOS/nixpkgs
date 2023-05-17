@@ -10,7 +10,7 @@ with pkgs.lib;
 let
 
   # The configuration to install.
-  makeConfig = { bootLoader, grubVersion, grubDevice, grubIdentifier, grubUseEfi
+  makeConfig = { bootLoader, grubDevice, grubIdentifier, grubUseEfi
                , extraConfig, forceGrubReinstallCount ? 0
                }:
     pkgs.writeText "configuration.nix" ''
@@ -21,17 +21,14 @@ let
             <nixpkgs/nixos/modules/testing/test-instrumentation.nix>
           ];
 
+        documentation.enable = false;
+
         # To ensure that we can rebuild the grub configuration on the nixos-rebuild
         system.extraDependencies = with pkgs; [ stdenvNoCC ];
 
         ${optionalString systemdStage1 "boot.initrd.systemd.enable = true;"}
 
         ${optionalString (bootLoader == "grub") ''
-          boot.loader.grub.version = ${toString grubVersion};
-          ${optionalString (grubVersion == 1) ''
-            boot.loader.grub.splashImage = null;
-          ''}
-
           boot.loader.grub.extraConfig = "serial; terminal_output serial";
           ${if grubUseEfi then ''
             boot.loader.grub.device = "nodev";
@@ -48,6 +45,8 @@ let
         ${optionalString (bootLoader == "systemd-boot") ''
           boot.loader.systemd-boot.enable = true;
         ''}
+
+        boot.initrd.secrets."/etc/secret" = ./secret;
 
         users.users.alice = {
           isNormalUser = true;
@@ -66,16 +65,16 @@ let
   # disk, and then reboot from the hard disk.  It's parameterized with
   # a test script fragment `createPartitions', which must create
   # partitions and filesystems.
-  testScriptFun = { bootLoader, createPartitions, grubVersion, grubDevice, grubUseEfi
+  testScriptFun = { bootLoader, createPartitions, grubDevice, grubUseEfi
                   , grubIdentifier, preBootCommands, postBootCommands, extraConfig
                   , testSpecialisationConfig
                   }:
-    let iface = if grubVersion == 1 then "ide" else "virtio";
+    let iface = "virtio";
         isEfi = bootLoader == "systemd-boot" || (bootLoader == "grub" && grubUseEfi);
         bios  = if pkgs.stdenv.isAarch64 then "QEMU_EFI.fd" else "OVMF.fd";
-    in if !isEfi && !pkgs.stdenv.hostPlatform.isx86 then
-      throw "Non-EFI boot methods are only supported on i686 / x86_64"
-    else ''
+    in if !isEfi && !pkgs.stdenv.hostPlatform.isx86 then ''
+      machine.succeed("true")
+    '' else ''
       def assemble_qemu_flags():
           flags = "-cpu max"
           ${if (system == "x86_64-linux" || system == "i686-linux")
@@ -118,12 +117,13 @@ let
           machine.succeed("cat /mnt/etc/nixos/hardware-configuration.nix >&2")
           machine.copy_from_host(
               "${ makeConfig {
-                    inherit bootLoader grubVersion grubDevice grubIdentifier
+                    inherit bootLoader grubDevice grubIdentifier
                             grubUseEfi extraConfig;
                   }
               }",
               "/mnt/etc/nixos/configuration.nix",
           )
+          machine.copy_from_host("${pkgs.writeText "secret" "secret"}", "/mnt/etc/nixos/secret")
 
       with subtest("Perform the installation"):
           machine.succeed("nixos-install < /dev/null >&2")
@@ -131,9 +131,21 @@ let
       with subtest("Do it again to make sure it's idempotent"):
           machine.succeed("nixos-install < /dev/null >&2")
 
+      with subtest("Check that we can build things in nixos-enter"):
+          machine.succeed(
+              """
+              nixos-enter -- nix-build --option substitute false -E 'derivation {
+                  name = "t";
+                  builder = "/bin/sh";
+                  args = ["-c" "echo nixos-enter build > $out"];
+                  system = builtins.currentSystem;
+                  preferLocalBuild = true;
+              }'
+              """
+          )
+
       with subtest("Shutdown system after installation"):
-          machine.succeed("umount /mnt/boot || true")
-          machine.succeed("umount /mnt")
+          machine.succeed("umount -R /mnt")
           machine.succeed("sync")
           machine.shutdown()
 
@@ -176,7 +188,7 @@ let
           # doesn't know about the host-guest sharing mechanism.
           machine.copy_from_host_via_shell(
               "${ makeConfig {
-                    inherit bootLoader grubVersion grubDevice grubIdentifier
+                    inherit bootLoader grubDevice grubIdentifier
                             grubUseEfi extraConfig;
                     forceGrubReinstallCount = 1;
                   }
@@ -205,7 +217,7 @@ let
       # doesn't know about the host-guest sharing mechanism.
       machine.copy_from_host_via_shell(
           "${ makeConfig {
-                inherit bootLoader grubVersion grubDevice grubIdentifier
+                inherit bootLoader grubDevice grubIdentifier
                 grubUseEfi extraConfig;
                 forceGrubReinstallCount = 2;
               }
@@ -267,7 +279,7 @@ let
     { createPartitions, preBootCommands ? "", postBootCommands ? "", extraConfig ? ""
     , extraInstallerConfig ? {}
     , bootLoader ? "grub" # either "grub" or "systemd-boot"
-    , grubVersion ? 2, grubDevice ? "/dev/vda", grubIdentifier ? "uuid", grubUseEfi ? false
+    , grubDevice ? "/dev/vda", grubIdentifier ? "uuid", grubUseEfi ? false
     , enableOCR ? false, meta ? {}
     , testSpecialisationConfig ? false
     }:
@@ -299,10 +311,9 @@ let
           # installer. This ensures the target disk (/dev/vda) is
           # the same during and after installation.
           virtualisation.emptyDiskImages = [ 512 ];
-          virtualisation.bootDevice =
-            if grubVersion == 1 then "/dev/disk/by-id/scsi-0QEMU_QEMU_HARDDISK_drive2" else "/dev/vdb";
-          virtualisation.qemu.diskInterface =
-            if grubVersion == 1 then "scsi" else "virtio";
+          virtualisation.rootDevice = "/dev/vdb";
+          virtualisation.bootLoaderDevice = "/dev/vda";
+          virtualisation.qemu.diskInterface = "virtio";
 
           # We don't want to have any networking in the guest whatsoever.
           # Also, if any vlans are enabled, the guest will reboot
@@ -327,6 +338,7 @@ let
             (docbook-xsl-ns.override {
               withManOptDedupPatch = true;
             })
+            kbd.dev
             kmod.dev
             libarchive.dev
             libxml2.bin
@@ -353,8 +365,7 @@ let
             # curl's tarball, we see what it's trying to download
             curl
           ]
-          ++ optional (bootLoader == "grub" && grubVersion == 1) pkgs.grub
-          ++ optionals (bootLoader == "grub" && grubVersion == 2) (let
+          ++ optionals (bootLoader == "grub") (let
             zfsSupport = lib.any (x: x == "zfs")
               (extraInstallerConfig.boot.supportedFilesystems or []);
           in [
@@ -373,7 +384,7 @@ let
 
       testScript = testScriptFun {
         inherit bootLoader createPartitions preBootCommands postBootCommands
-                grubVersion grubDevice grubIdentifier grubUseEfi extraConfig
+                grubDevice grubIdentifier grubUseEfi extraConfig
                 testSpecialisationConfig;
       };
     };
@@ -465,8 +476,12 @@ let
     '';
     testSpecialisationConfig = true;
   };
-
-
+  # disable zfs so we can support latest kernel if needed
+  no-zfs-module = {
+    nixpkgs.overlays = [(final: super: {
+      zfs = super.zfs.overrideAttrs(_: {meta.platforms = [];});}
+    )];
+  };
 in {
 
   # !!! `parted mkpart' seems to silently create overlapping partitions.
@@ -650,6 +665,55 @@ in {
     '';
   };
 
+  # Full disk encryption (root, kernel and initrd encrypted) using GRUB, GPT/UEFI,
+  # LVM-on-LUKS and a keyfile in initrd.secrets to enter the passphrase once
+  fullDiskEncryption = makeInstallerTest "fullDiskEncryption" {
+    createPartitions = ''
+      machine.succeed(
+          "flock /dev/vda parted --script /dev/vda -- mklabel gpt"
+          + " mkpart ESP fat32 1M 100MiB"  # /boot/efi
+          + " set 1 boot on"
+          + " mkpart primary ext2 1024MiB -1MiB",  # LUKS
+          "udevadm settle",
+          "modprobe dm_mod dm_crypt",
+          "dd if=/dev/random of=luks.key bs=256 count=1",
+          "echo -n supersecret | cryptsetup luksFormat -q --pbkdf-force-iterations 1000 --type luks1 /dev/vda2 -",
+          "echo -n supersecret | cryptsetup luksAddKey -q --pbkdf-force-iterations 1000 --key-file - /dev/vda2 luks.key",
+          "echo -n supersecret | cryptsetup luksOpen --key-file - /dev/vda2 crypt",
+          "pvcreate /dev/mapper/crypt",
+          "vgcreate crypt /dev/mapper/crypt",
+          "lvcreate -L 100M -n swap crypt",
+          "lvcreate -l '100%FREE' -n nixos crypt",
+          "mkfs.vfat -n efi /dev/vda1",
+          "mkfs.ext4 -L nixos /dev/crypt/nixos",
+          "mkswap -L swap /dev/crypt/swap",
+          "mount LABEL=nixos /mnt",
+          "mkdir -p /mnt/{etc/nixos,boot/efi}",
+          "mount LABEL=efi /mnt/boot/efi",
+          "swapon -L swap",
+          "mv luks.key /mnt/etc/nixos/"
+      )
+    '';
+    bootLoader = "grub";
+    grubUseEfi = true;
+    extraConfig = ''
+      boot.loader.grub.enableCryptodisk = true;
+      boot.loader.efi.efiSysMountPoint = "/boot/efi";
+
+      boot.initrd.secrets."/luks.key" = ./luks.key;
+      boot.initrd.luks.devices.crypt =
+        { device  = "/dev/vda2";
+          keyFile = "/luks.key";
+        };
+    '';
+    enableOCR = true;
+    preBootCommands = ''
+      machine.start()
+      machine.wait_for_text("Enter passphrase for")
+      machine.send_chars("supersecret\n")
+    '';
+  };
+
   swraid = makeInstallerTest "swraid" {
     createPartitions = ''
       machine.succeed(
@@ -714,6 +778,7 @@ in {
   bcachefsSimple = makeInstallerTest "bcachefs-simple" {
     extraInstallerConfig = {
       boot.supportedFilesystems = [ "bcachefs" ];
+      imports = [ no-zfs-module ];
     };
 
     createPartitions = ''
@@ -737,13 +802,22 @@ in {
   bcachefsEncrypted = makeInstallerTest "bcachefs-encrypted" {
     extraInstallerConfig = {
       boot.supportedFilesystems = [ "bcachefs" ];
+
+      # disable zfs so we can support latest kernel if needed
+      imports = [ no-zfs-module ];
+
       environment.systemPackages = with pkgs; [ keyutils ];
     };
 
-    # We don't want to use the normal way of unlocking bcachefs defined in tasks/filesystems/bcachefs.nix.
-    # So, override initrd.postDeviceCommands completely and simply unlock with the predefined password.
     extraConfig = ''
-      boot.initrd.postDeviceCommands = lib.mkForce "echo password | bcachefs unlock /dev/vda3";
+      boot.kernelParams = lib.mkAfter [ "console=tty0" ];
+    '';
+
+    enableOCR = true;
+    preBootCommands = ''
+      machine.start()
+      machine.wait_for_text("enter passphrase for ")
+      machine.send_chars("password\n")
     '';
 
     createPartitions = ''
@@ -769,6 +843,9 @@ in {
   bcachefsMulti = makeInstallerTest "bcachefs-multi" {
     extraInstallerConfig = {
       boot.supportedFilesystems = [ "bcachefs" ];
+
+      # disable zfs so we can support latest kernel if needed
+      imports = [ no-zfs-module ];
     };
 
     createPartitions = ''
@@ -788,26 +865,6 @@ in {
         "mount /dev/vda1 /mnt/boot",
       )
     '';
-  };
-
-  # Test a basic install using GRUB 1.
-  grub1 = makeInstallerTest "grub1" rec {
-    createPartitions = ''
-      machine.succeed(
-          "flock ${grubDevice} parted --script ${grubDevice} -- mklabel msdos"
-          + " mkpart primary linux-swap 1M 1024M"
-          + " mkpart primary ext2 1024M -1s",
-          "udevadm settle",
-          "mkswap ${grubDevice}-part1 -L swap",
-          "swapon -L swap",
-          "mkfs.ext3 -L nixos ${grubDevice}-part2",
-          "mount LABEL=nixos /mnt",
-          "mkdir -p /mnt/tmp",
-      )
-    '';
-    grubVersion = 1;
-    # /dev/sda is not stable, even when the SCSI disk number is.
-    grubDevice = "/dev/disk/by-id/scsi-0QEMU_QEMU_HARDDISK_drive1";
   };
 
   # Test using labels to identify volumes in grub

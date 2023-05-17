@@ -2,28 +2,36 @@
   lib,
   python3,
   fetchFromGitHub,
-  wrapQtAppsHook,
+  fetchpatch,
+  qt6,
 }:
 python3.pkgs.buildPythonApplication rec {
   pname = "nanovna-saver";
-  version = "0.5.3";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "NanoVNA-Saver";
     repo = pname;
-    rev = "refs/tags/v${version}";
-    sha256 = "sha256-wKKjMcOx7NS2VAIk3OTAj7KWE1+CeAzctdgdidT+HMA=";
+    rev = "v${version}";
+    sha256 = "sha256-2vDjAdEL8eNje5bm/1m+Fdi+PCGxpXwpxe2KvlLYB58=";
   };
 
-  nativeBuildInputs = [ wrapQtAppsHook ];
+   nativeBuildInputs = [
+    qt6.wrapQtAppsHook
+    qt6.qtbase
+  ];
 
   propagatedBuildInputs = with python3.pkgs; [
     cython
     scipy
-    pyqt5
+    pyqt6
     pyserial
     numpy
+    setuptools
+    setuptools-scm
   ];
+
+  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   doCheck = false;
 
@@ -47,6 +55,6 @@ python3.pkgs.buildPythonApplication rec {
       generally display and analyze the resulting data.
     '';
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ zaninime ];
+    maintainers = with maintainers; [ zaninime tmarkus ];
   };
 }

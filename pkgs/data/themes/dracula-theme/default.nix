@@ -1,10 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, gtk-engine-murrine }:
+{ lib, stdenvNoCC, fetchFromGitHub, gtk-engine-murrine }:
 
 let
   themeName = "Dracula";
-  version = "3.0";
+  version = "4.0.0";
 in
-stdenv.mkDerivation {
+stdenvNoCC.mkDerivation {
   pname = "dracula-theme";
   inherit version;
 
@@ -12,7 +12,7 @@ stdenv.mkDerivation {
     owner = "dracula";
     repo = "gtk";
     rev = "v${version}";
-    sha256 = "sha256-7DUT/DfvCSo9GiJzqhqvegNCARB0eGtPQ6oUQG/Uja0=";
+    hash = "sha256-q3/uBd+jPFhiVAllyhqf486Jxa0mnCDSIqcm/jwGtJA=";
   };
 
   propagatedUserEnvPkgs = [

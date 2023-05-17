@@ -17,7 +17,7 @@ let
   # this derivation. However, we should ensure on version bumps
   # that the CUDA toolkit for `passthru.tests` is still
   # up-to-date.
-  version = "1.12.1";
+  version = "2.0.0";
   device = if cudaSupport then "cuda" else "cpu";
   srcs = import ./binary-hashes.nix version;
   unavailable = throw "libtorch is not available for this platform";
@@ -93,6 +93,7 @@ in stdenv.mkDerivation {
   meta = with lib; {
     description = "C++ API of the PyTorch machine learning framework";
     homepage = "https://pytorch.org/";
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     # Includes CUDA and Intel MKL, but redistributions of the binary are not limited.
     # https://docs.nvidia.com/cuda/eula/index.html
     # https://www.intel.com/content/www/us/en/developer/articles/license/onemkl-license-faq.html

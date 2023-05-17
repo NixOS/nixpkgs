@@ -8,7 +8,7 @@ buildPythonPackage rec {
     owner = "openstack";
     repo = "pyeclib";
     rev = "b50040969a03f7566ffcb468336e875d21486113";
-    sha256 = "sha256-nYYjocStC0q/MC6pum3J4hlXiu/R5xODwIE97Ho3iEY=";
+    hash = "sha256-nYYjocStC0q/MC6pum3J4hlXiu/R5xODwIE97Ho3iEY=";
   };
 
   postPatch = ''
@@ -29,7 +29,7 @@ buildPythonPackage rec {
 
   buildInputs = [ liberasurecode ];
 
-  checkInputs = [ six ];
+  nativeCheckInputs = [ six ];
 
   pythonImportsCheck = [ "pyeclib" ];
 

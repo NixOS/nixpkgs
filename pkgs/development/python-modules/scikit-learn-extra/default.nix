@@ -11,18 +11,18 @@
 
 buildPythonPackage rec {
   pname = "scikit-learn-extra";
-  version = "0.2.0";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "scikit-learn-contrib";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "09v7a9jdycdrlqq349m1gbn8ppzv1bl5g3l72k6ywsx2xb01qw13";
+    rev = "refs/tags/v${version}";
+    sha256 = "sha256-dHOwo6NIuhcvIehpuJQ621JEg5O3mnXycAhpTZKaxns=";
   };
 
   nativeBuildInputs = [ numpy cython ];
   propagatedBuildInputs = [ numpy scipy scikit-learn ];
-  checkInputs = [ matplotlib pytestCheckHook ];
+  nativeCheckInputs = [ matplotlib pytestCheckHook ];
 
   preCheck = ''
     # Remove the package in the build dir, because Python defaults to it and

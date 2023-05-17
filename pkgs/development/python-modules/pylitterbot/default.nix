@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "pylitterbot";
-  version = "2022.12.0";
+  version = "2023.4.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "natekspencer";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-uqiSNqM1HKNAipIKKsUHv9mPfdk01ZrNWMXIzhgxxjU=";
+    hash = "sha256-nF6njY2qNoHW2ZGNDHNeTBTjSBbitJxitPgyayLaqSE=";
   };
 
   nativeBuildInputs = [
@@ -36,18 +36,12 @@ buildPythonPackage rec {
     pyjwt
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     aioresponses
     pytest-aiohttp
     pytest-freezegun
     pytestCheckHook
   ];
-
-  postPatch = ''
-    # https://github.com/natekspencer/pylitterbot/issues/73
-    substituteInPlace pyproject.toml \
-      --replace 'deepdiff = "^5.8.1"' 'deepdiff = ">=5.8.1"'
-  '';
 
   pythonImportsCheck = [
     "pylitterbot"

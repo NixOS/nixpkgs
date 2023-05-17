@@ -34,4 +34,4 @@ buildContainer {
 
 - `mounts` specifies additional mount points chosen by the user. By default only a minimal set of necessary filesystems are mounted into the container (e.g procfs, cgroupfs)
 
-- `readonly` makes the container\'s rootfs read-only if it is set to true. The default value is false `false`.
+- `readonly` makes the container's rootfs read-only if it is set to true. The default value is false `false`.

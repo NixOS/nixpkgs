@@ -53,7 +53,7 @@ buildPythonPackage rec {
     export HOME=$TMPDIR
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     aria2
     fastapi
     pytest-xdist

@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "irqbalance";
-  version = "1.9.0";
+  version = "1.9.2";
 
   src = fetchFromGitHub {
     owner = "irqbalance";
     repo = "irqbalance";
     rev = "v${version}";
-    sha256 = "sha256-OifGlOUT/zFz5gussEmLL24w4AovGeyNfbg/yCfzerw=";
+    sha256 = "sha256-dk5gdDCXNELTlbZ34gUOVwPHvXF3N07v/ZqeNVfGTGw=";
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];

@@ -21,11 +21,11 @@ buildPythonPackage rec {
     (fetchpatch {
       name = "locally-defined-epsilon.patch";
       url = "https://github.com/bayespy/bayespy/commit/9be53bada763e19c2b6086731a6aa542ad33aad0.patch";
-      sha256 = "sha256-KYt/0GcaNWR9K9/uS2OXgK7g1Z+Bayx9+IQGU75Mpuo=";
+      hash = "sha256-KYt/0GcaNWR9K9/uS2OXgK7g1Z+Bayx9+IQGU75Mpuo=";
     })
   ];
 
-  checkInputs = [ pytestCheckHook nose glibcLocales ];
+  nativeCheckInputs = [ pytestCheckHook nose glibcLocales ];
 
   propagatedBuildInputs = [ numpy scipy matplotlib h5py ];
 

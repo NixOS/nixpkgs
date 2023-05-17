@@ -14,14 +14,14 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "PyAVM";
     inherit version;
-    sha256 = "sha256-gV78ypvYwohHmdjP3lN5F97PfmxuV91tvw5gsYeZ7i8=";
+    hash = "sha256-gV78ypvYwohHmdjP3lN5F97PfmxuV91tvw5gsYeZ7i8=";
   };
 
   propagatedBuildInputs = [
     astropy-helpers
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     astropy
     pillow
     pytestCheckHook

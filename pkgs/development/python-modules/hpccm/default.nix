@@ -15,11 +15,11 @@ buildPythonPackage rec {
     owner = "NVIDIA";
     repo = "hpc-container-maker";
     rev = "v${version}";
-    sha256 = "sha256-dLMbwtvn7HTVVlWHAzXU19ERdJxytf9NlnqMXW6ShKI=";
+    hash = "sha256-dLMbwtvn7HTVVlWHAzXU19ERdJxytf9NlnqMXW6ShKI=";
   };
 
   propagatedBuildInputs = [ six archspec ];
-  checkInputs = [ pytestCheckHook pytest-xdist ];
+  nativeCheckInputs = [ pytestCheckHook pytest-xdist ];
 
   disabledTests = [
     # tests require git

@@ -16,7 +16,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-JBs0qlxctqmImIL5QJsBgpA6LF0ZtCGL42Cc271f/fk=";
+    hash = "sha256-JBs0qlxctqmImIL5QJsBgpA6LF0ZtCGL42Cc271f/fk=";
   };
 
   propagatedBuildInputs = [
@@ -36,7 +36,7 @@ buildPythonPackage rec {
       --replace "--no-cov-on-fail" ""
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ] ++ passthru.optional-dependencies.images;
 

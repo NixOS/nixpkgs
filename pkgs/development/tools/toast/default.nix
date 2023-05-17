@@ -5,16 +5,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "toast";
-  version = "0.45.5";
+  version = "0.47.2";
 
   src = fetchFromGitHub {
     owner = "stepchowfun";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-7EF9DCT8Vg7aGOUlRG9c4Lv2EhCX/P9k4zQC6Ruqv0c=";
+    sha256 = "sha256-SWypxCtgVORYGOAiepfAfqnB4JjMwCC3e8lFZ/9tiCM=";
   };
 
-  cargoSha256 = "sha256-tyZrNUT2i9i0yOqz1KqIuFSb4PO+fx1SNa+ZVNfIGfM=";
+  cargoHash = "sha256-OaPh3/Z9mF56NeHpCehsuJHU6ClzE+beRsAG/lWIwp0=";
 
   checkFlags = [ "--skip=format::tests::code_str_display" ]; # fails
 

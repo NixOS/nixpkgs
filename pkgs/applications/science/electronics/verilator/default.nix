@@ -1,37 +1,38 @@
 { lib, stdenv, fetchFromGitHub
 , perl, flex, bison, python3, autoconf
-, which, cmake
+, which, cmake, help2man
+, makeWrapper, glibcLocales
 }:
 
 stdenv.mkDerivation rec {
   pname = "verilator";
-  version = "5.002";
+  version = "5.010";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-RNoKAEF7zl+WqqbxGP/VvdQqQP8VI3hoQku3b/g0XpU=";
+    hash = "sha256-NaWatK4sAc+MJolbQs4TDaD9TvY6VAj/KVZBkIq++sQ=";
   };
 
   enableParallelBuilding = true;
   buildInputs = [ perl ];
-  nativeBuildInputs = [ flex bison python3 autoconf ];
-  checkInputs = [ which ];
+  nativeBuildInputs = [ makeWrapper flex bison python3 autoconf help2man ];
+  nativeCheckInputs = [ which ];
 
   doCheck = stdenv.isLinux; # darwin tests are broken for now...
   checkTarget = "test";
 
   preConfigure = "autoconf";
 
-  preCheck = ''
-    patchShebangs \
-      src/flexfix \
-      src/vlcovgen \
-      bin/verilator \
-      bin/verilator_coverage \
-      test_regress/driver.pl \
-      test_regress/t/*.pl
+  postPatch = ''
+    patchShebangs bin/* src/{flexfix,vlcovgen} test_regress/{driver.pl,t/*.pl}
+  '';
+
+  postInstall = lib.optionalString stdenv.isLinux ''
+    for x in $(ls $out/bin/verilator*); do
+      wrapProgram "$x" --set LOCALE_ARCHIVE "${glibcLocales}/lib/locale/locale-archive"
+    done
   '';
 
   meta = with lib; {

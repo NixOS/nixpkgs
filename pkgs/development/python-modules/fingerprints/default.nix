@@ -8,18 +8,18 @@
 }:
 buildPythonPackage rec {
   pname = "fingerprints";
-  version = "1.0.3";
+  version = "1.1.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "cafd5f92b5b91e4ce34af2b954da9c05b448a4778947785abb19a14f363352d0";
+    hash = "sha256-GZmurg3rpD081QZW/LUKWblhsQQSS6lg9O7y/kGy4To=";
   };
 
   propagatedBuildInputs = [
     normality
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     mypy
     coverage
     nose
@@ -37,6 +37,6 @@ buildPythonPackage rec {
     description = "A library to generate entity fingerprints";
     homepage = "https://github.com/alephdata/fingerprints";
     license = licenses.mit;
-    maintainers = teams.determinatesystems.members;
+    maintainers = [ ];
   };
 }

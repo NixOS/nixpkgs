@@ -23,14 +23,13 @@
 , poppler
 , auto-multiple-choice
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: rec {
   pname = "auto-multiple-choice";
   version = "1.5.2";
   src = fetchurl {
     url = "https://download.auto-multiple-choice.net/${pname}_${version}_precomp.tar.gz";
     sha256 = "sha256-AjonJOooSe53Fww3QU6Dft95ojNqWrTuPul3nkIbctM=";
   };
-  tlType = "run";
 
   # There's only the Makefile
   dontConfigure = true;
@@ -42,7 +41,14 @@ stdenv.mkDerivation rec {
     # Relative paths.
     "BINDIR=/bin"
     "PERLDIR=/share/perl5"
-    "MODSDIR=/lib/"
+    "MODSDIR=/lib" # At runtime, AMC will test for that dir before
+    # defaulting to the "portable" strategy we use, so this test
+    # *must* fail.  *But* this variable cannot be set to anything but
+    # "/lib" , because that name is hardcoded in the main executable
+    # and this variable controls both both the path AMC will check at
+    # runtime, AND the path where the actual modules will be stored at
+    # build-time.  This has been reported upstream as
+    # https://project.auto-multiple-choice.net/issues/872
     "TEXDIR=/tex/latex/" # what texlive.combine expects
     "TEXDOCDIR=/share/doc/texmf/" # TODO where to put this?
     "MAN1DIR=/share/man/man1"
@@ -130,6 +136,11 @@ stdenv.mkDerivation rec {
     XMLWriter
   ]);
 
+  passthru = {
+    tlType = "run";
+    pkgs = [ finalAttrs.finalPackage ];
+  };
+
   meta = with lib; {
     description = "Create and manage multiple choice questionnaires with automated marking.";
     longDescription = ''
@@ -149,10 +160,7 @@ stdenv.mkDerivation rec {
         auto-multiple-choice
         (texlive.combine {
           inherit (pkgs.texlive) scheme-full;
-          extra =
-            {
-              pkgs = [ auto-multiple-choice ];
-            };
+          inherit auto-multiple-choice;
         })
       ];
       </screen>
@@ -165,4 +173,4 @@ stdenv.mkDerivation rec {
     maintainers = [ maintainers.thblt ];
     platforms = platforms.all;
   };
-}
+})

@@ -15,6 +15,7 @@ let
     cryptography
     openssl
     crcmod
+    numpy
   ] ++ lib.optional (with-gce) google-compute-engine);
 
   data = import ./data.nix { };
@@ -111,6 +112,7 @@ in stdenv.mkDerivation rec {
 
   passthru = {
     inherit components withExtraComponents;
+    updateScript = ./update.sh;
   };
 
   meta = with lib; {

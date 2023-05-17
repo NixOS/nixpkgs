@@ -1,9 +1,6 @@
 { stdenv
 , lib
 , fetchFromGitHub
-, fetchpatch
-, appstream-glib
-, clutter
 , gjs
 , glib
 , gobject-introspection
@@ -22,26 +19,18 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "43.0";
+  version = "44.0";
   pname = "gpaste";
 
   src = fetchFromGitHub {
     owner = "Keruspe";
     repo = "GPaste";
     rev = "v${version}";
-    sha256 = "sha256-F+AWTYVK145RzJ1Zldh4Q4R/hN/D7aXO3SIJ1t6ClWs=";
+    sha256 = "sha256-mYbyu3IIF6pQz1oEqEWLe7jdR99M3LxiMiRR9x7qFh8=";
   };
 
   patches = [
     ./fix-paths.patch
-
-    # Build against GCR 4.
-    # Patch was temporarily reverted.
-    # https://github.com/Keruspe/GPaste/pull/409
-    (fetchpatch {
-      url = "https://github.com/Keruspe/GPaste/commit/0378cb4a657042ce5321f1d9728cff31e55bede6.patch";
-      sha256 = "0Ngr+/fS5/wICR84GEiE0pXEXQ/f/3G59lDivH167m8=";
-    })
   ];
 
   # TODO: switch to substituteAll with placeholder
@@ -56,7 +45,6 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [
-    appstream-glib
     gobject-introspection
     meson
     ninja
@@ -67,7 +55,6 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    clutter # required by mutter-clutter
     gjs
     glib
     gtk3

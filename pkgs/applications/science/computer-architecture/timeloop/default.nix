@@ -5,7 +5,7 @@
 , libconfig
 , boost
 , libyaml
-, libyamlcpp
+, yaml-cpp
 , ncurses
 , gpm
 , enableAccelergy ? true
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     libconfig
     boost
     libyaml
-    libyamlcpp
+    yaml-cpp
     ncurses
     accelergy
    ] ++ lib.optionals stdenv.isLinux [ gpm ];
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
 
   #link-time optimization fails on darwin
   #see https://github.com/NixOS/nixpkgs/issues/19098
-  NIX_CFLAGS_COMPILE = lib.optional stdenv.isDarwin "-fno-lto";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-fno-lto";
 
   postPatch = ''
     # use nix ar/ranlib

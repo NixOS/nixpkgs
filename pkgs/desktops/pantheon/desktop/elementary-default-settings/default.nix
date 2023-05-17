@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-default-settings";
-  version = "6.0.2";
+  version = "7.0.1";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "default-settings";
     rev = version;
-    sha256 = "sha256-qaPj/Qp7RYzHgElFdM8bHV42oiPUbCMTC9Q+MUj4Q6Y=";
+    sha256 = "sha256-RPnERK93GCfWyw1sIW5BitCIo11/t1koV4r1+NF5NdI=";
   };
 
   nativeBuildInputs = [
@@ -63,9 +63,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = nix-update-script {
-      attrPath = "pantheon.${pname}";
-    };
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {

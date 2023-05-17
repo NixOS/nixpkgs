@@ -11,13 +11,13 @@
 
 let
   pname = "pydicom";
-  version = "2.3.0";
+  version = "2.3.1";
 
   src = fetchFromGitHub {
     owner = "pydicom";
     repo = "pydicom";
-    rev = "v${version}";
-    hash = "sha256-CAQWaBkzecJ1VXQ5BnAUjmBMjh0I8y+gT7I4P4o2gqI=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-xt0aK908lLgNlpcI86OSxy96Z/PZnQh7+GXzJ0VMQGA=";
   };
 
   # Pydicom needs pydicom-data to run some tests. If these files aren't downloaded
@@ -42,7 +42,7 @@ buildPythonPackage {
     setuptools
   ];
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

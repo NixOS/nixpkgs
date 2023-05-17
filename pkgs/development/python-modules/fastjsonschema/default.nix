@@ -18,10 +18,10 @@ buildPythonPackage rec {
     repo = "python-fastjsonschema";
     rev = "v${version}";
     fetchSubmodules = true;
-    sha256 = "sha256-Gojayel/xQ5gRI0nbwsroeSMdRndjb+8EniX1Qs4nbg=";
+    hash = "sha256-Gojayel/xQ5gRI0nbwsroeSMdRndjb+8EniX1Qs4nbg=";
   };
 
-  checkInputs = [
+  nativeCheckInputs = [
     pytestCheckHook
   ];
 

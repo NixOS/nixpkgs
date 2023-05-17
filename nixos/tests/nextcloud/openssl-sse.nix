@@ -9,6 +9,7 @@ args@{ pkgs, nextcloudVersion ? 25, ... }:
     services.nextcloud = {
       enable = true;
       config.adminpassFile = "${pkgs.writeText "adminpass" adminpass}";
+      database.createLocally = true;
       package = pkgs.${"nextcloud" + (toString nextcloudVersion)};
     };
   };
@@ -55,6 +56,7 @@ in {
     nextcloudwithopenssl1.wait_for_unit("multi-user.target")
     nextcloudwithopenssl1.succeed("nextcloud-occ status")
     nextcloudwithopenssl1.succeed("curl -sSf http://nextcloudwithopenssl1/login")
+    nextcloud_version = ${toString nextcloudVersion}
 
     with subtest("With OpenSSL 1 SSE can be enabled and used"):
         nextcloudwithopenssl1.succeed("nextcloud-occ app:enable encryption")
@@ -71,7 +73,9 @@ in {
         nextcloudwithopenssl1.succeed("nextcloud-occ status")
 
     with subtest("Existing encrypted files cannot be read, but new files can be added"):
-        nextcloudwithopenssl1.fail("${withRcloneEnv3} ${pkgs.rclone}/bin/rclone cat nextcloud:test-shared-file >&2")
+        # This will succed starting NC26 because of their custom implementation of openssl_seal
+        read_existing_file_test = nextcloudwithopenssl1.fail if nextcloud_version < 26 else nextcloudwithopenssl1.succeed
+        read_existing_file_test("${withRcloneEnv3} ${pkgs.rclone}/bin/rclone cat nextcloud:test-shared-file >&2")
         nextcloudwithopenssl1.succeed("nextcloud-occ encryption:disable")
         nextcloudwithopenssl1.succeed("${copySharedFile3}")
         nextcloudwithopenssl1.succeed("grep bye /var/lib/nextcloud/data/root/files/test-shared-file2")

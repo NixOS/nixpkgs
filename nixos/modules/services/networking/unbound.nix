@@ -286,6 +286,8 @@ in {
         LockPersonality = true;
         RestrictSUIDSGID = true;
 
+        ReadWritePaths = [ cfg.stateDir ];
+
         Restart = "on-failure";
         RestartSec = "5s";
       };

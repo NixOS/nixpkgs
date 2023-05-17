@@ -4,13 +4,14 @@
 , rust
 , stdenv
 , callPackage
-, cacert
-, git
 , cargoBuildHook
 , cargoCheckHook
 , cargoInstallHook
 , cargoNextestHook
 , cargoSetupHook
+, cargo
+, cargo-auditable
+, buildPackages
 , rustc
 , libiconv
 , windows
@@ -23,7 +24,9 @@
 
 , src ? null
 , srcs ? null
+, preUnpack ? null
 , unpackPhase ? null
+, postUnpack ? null
 , cargoPatches ? []
 , patches ? []
 , sourceRoot ? null
@@ -42,6 +45,8 @@
 , buildFeatures ? [ ]
 , checkFeatures ? buildFeatures
 , useNextest ? false
+, auditable ? !cargo-auditable.meta.broken
+
 , depsExtraArgs ? {}
 
 # Toggles whether a custom sysroot is created when the target is a .json file.
@@ -65,7 +70,7 @@ let
     if cargoVendorDir != null then null
     else if cargoLock != null then importCargoLock cargoLock
     else fetchCargoTarball ({
-      inherit src srcs sourceRoot unpackPhase cargoUpdateHook;
+      inherit src srcs sourceRoot preUnpack unpackPhase postUnpack cargoUpdateHook;
       name = cargoDepsName;
       patches = cargoPatches;
     } // lib.optionalAttrs (args ? cargoHash) {
@@ -115,9 +120,11 @@ stdenv.mkDerivation ((removeAttrs args [ "depsExtraArgs" "cargoUpdateHook" "carg
 
   patchRegistryDeps = ./patch-registry-deps;
 
-  nativeBuildInputs = nativeBuildInputs ++ [
-    cacert
-    git
+  nativeBuildInputs = nativeBuildInputs ++ lib.optionals auditable [
+    (buildPackages.cargo-auditable-cargo-wrapper.override {
+      inherit cargo cargo-auditable;
+    })
+  ] ++ [
     cargoBuildHook
     (if useNextest then cargoNextestHook else cargoCheckHook)
     cargoInstallHook
@@ -126,6 +133,7 @@ stdenv.mkDerivation ((removeAttrs args [ "depsExtraArgs" "cargoUpdateHook" "carg
   ];
 
   buildInputs = buildInputs
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ]
     ++ lib.optionals stdenv.hostPlatform.isMinGW [ windows.pthreads ];
 
   patches = cargoPatches ++ patches;
@@ -148,10 +156,17 @@ stdenv.mkDerivation ((removeAttrs args [ "depsExtraArgs" "cargoUpdateHook" "carg
 
   strictDeps = true;
 
-  passthru = { inherit cargoDeps; } // (args.passthru or {});
-
   meta = {
     # default to Rust's platforms
-    platforms = rustc.meta.platforms;
+    platforms = rustc.meta.platforms ++ [
+      # Platforms without host tools from
+      # https://doc.rust-lang.org/nightly/rustc/platform-support.html
+      "armv7a-darwin"
+      "armv5tel-linux" "armv6l-linux" "armv7a-linux" "m68k-linux"
+      "riscv32-linux"
+      "armv6l-netbsd"
+      "x86_64-redox"
+      "wasm32-wasi"
+    ];
   } // meta;
 })

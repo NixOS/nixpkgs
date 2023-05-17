@@ -14,7 +14,6 @@
 , mnemonic
 , pillow
 , protobuf
-, pyblake2
 , requests
 , shamir-mnemonic
 , simple-rlp
@@ -25,13 +24,13 @@
 
 buildPythonPackage rec {
   pname = "trezor";
-  version = "0.13.4";
+  version = "0.13.6";
 
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "04a77b44005971819386bbd55242a1004b1f88fbbdb829deb039a1e0028a4af1";
+    hash = "sha256-/DWcB1Yv8ViuBP0j9lY6wV3ARlhvOmw3lTbd7w95C0g=";
   };
 
   nativeBuildInputs = [ installShellFiles ];
@@ -47,7 +46,6 @@ buildPythonPackage rec {
     mnemonic
     pillow
     protobuf
-    pyblake2
     requests
     shamir-mnemonic
     simple-rlp
@@ -56,7 +54,7 @@ buildPythonPackage rec {
     trezor-udev-rules
   ];
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   disabledTestPaths = [
     "tests/test_stellar.py" # requires stellar-sdk
