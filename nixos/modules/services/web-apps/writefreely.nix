@@ -124,7 +124,7 @@ let
           --silent \
           --raw \
           --skip-column-names \
-          --execute "$1" \
+          --execute "$1"
         )
 
         echo $result
