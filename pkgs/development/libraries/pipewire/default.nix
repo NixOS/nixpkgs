@@ -73,7 +73,7 @@ let
 
   self = stdenv.mkDerivation rec {
     pname = "pipewire";
-    version = "0.3.70";
+    version = "0.3.71";
 
     outputs = [
       "out"
@@ -91,7 +91,7 @@ let
       owner = "pipewire";
       repo = "pipewire";
       rev = version;
-      sha256 = "sha256-xhJzE6JcfNcLMm+TqTIPaBEnEthEqUZiTqhWz1fO5Ng=";
+      sha256 = "sha256-NPYWl+WeI/z70gNHX1BAKslGFX634D7XrV04vuJgGOo=";
     };
 
     patches = [
@@ -99,6 +99,8 @@ let
       ./0040-alsa-profiles-use-libdir.patch
       # Change the path of the pipewire-pulse binary in the service definition.
       ./0050-pipewire-pulse-path.patch
+      # Load libjack from a known location
+      ./0060-libjack-path.patch
       # Move installed tests into their own output.
       ./0070-installed-tests-path.patch
       # Add option for changing the config install directory
