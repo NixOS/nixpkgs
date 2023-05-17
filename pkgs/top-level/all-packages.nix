@@ -2002,6 +2002,8 @@ with pkgs;
 
   near-cli = callPackage ../tools/misc/near-cli { };
 
+  netmeta = callPackage ../tools/networking/netmeta { };
+
   networkd-notify = python3Packages.callPackage ../tools/networking/networkd-notify {
     systemd = pkgs.systemd;
   };
