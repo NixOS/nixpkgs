@@ -14,8 +14,6 @@
 , gtest
 , openmp
 , rocrand
-, buildTests ? false
-, buildBenchmarks ? false
 # NOTE: Update the default GPU targets on every update
 , gpuTargets ? [
   "gfx803"
@@ -54,8 +52,6 @@ let
 
         requiredSystemFeatures = [ "big-parallel" ];
       })).override {
-        buildTests = false;
-        buildBenchmarks = false;
         gpuTargets = [ target ];
       }
     )
@@ -71,7 +67,7 @@ let
   # It's not clear why this needs to even be a db in the first place.
   # It would simplify things A LOT if we could just store these
   # pre-compiled kernels as files (but that'd need a lot of patching).
-  kernelRtcCache = (rocfft.overrideAttrs (_: {
+  kernelRtcCache = rocfft.overrideAttrs (_: {
     pname = "rocfft-kernel-cache";
 
     buildFlags = [ "rocfft_kernel_cache_target" ];
@@ -83,22 +79,11 @@ let
     '';
 
     requiredSystemFeatures = [ "big-parallel" ];
-  })).override {
-    buildTests = false;
-    buildBenchmarks = false;
-  };
+  });
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocfft";
   version = "5.4.3";
-
-  outputs = [
-    "out"
-  ] ++ lib.optionals buildTests [
-    "test"
-  ] ++ lib.optionals buildBenchmarks [
-    "benchmark"
-  ];
 
   src = fetchFromGitHub {
     owner = "ROCmSoftwarePlatform";
@@ -120,22 +105,9 @@ stdenv.mkDerivation (finalAttrs: {
     rocm-cmake
   ];
 
-  buildInputs = (lib.optionals (finalAttrs.pname == "rocfft") kernelDeviceLibs) ++ [
+  buildInputs = [
     sqlite
-  ] ++ lib.optionals buildTests [
-    gtest
-  ] ++ lib.optionals (buildTests || buildBenchmarks) [
-    boost
-    fftw
-    fftwFloat
-    openmp
-    rocrand
-  ];
-
-  propagatedBuildInputs = lib.optionals buildTests [
-    fftw
-    fftwFloat
-  ];
+  ] ++ lib.optionals (finalAttrs.pname == "rocfft") kernelDeviceLibs;
 
   cmakeFlags = [
     "-DCMAKE_C_COMPILER=hipcc"
@@ -148,36 +120,116 @@ stdenv.mkDerivation (finalAttrs: {
     "-DCMAKE_INSTALL_LIBDIR=lib"
     "-DCMAKE_INSTALL_INCLUDEDIR=include"
     "-DAMDGPU_TARGETS=${lib.concatStringsSep ";" gpuTargets}"
-  ] ++ lib.optionals buildTests [
-    "-DBUILD_CLIENTS_TESTS=ON"
-  ] ++ lib.optionals buildBenchmarks [
-    "-DBUILD_CLIENTS_RIDER=ON"
-    "-DBUILD_CLIENTS_SAMPLES=ON"
   ];
 
   postInstall = lib.optionalString (finalAttrs.pname == "rocfft") ''
     ln -s ${kernelRtcCache}/lib/rocfft_kernel_cache.db "$out/lib"
-  '' + lib.optionalString buildTests ''
-    mkdir -p $test/{bin,lib/fftw}
-    cp -a $out/bin/* $test/bin
-    ln -s ${fftw}/lib/libfftw*.so $test/lib/fftw
-    ln -s ${fftwFloat}/lib/libfftw*.so $test/lib/fftw
-    rm -r $out/lib/fftw
-    rm $test/bin/{rocfft_rtc_helper,*-rider} || true
-  '' + lib.optionalString buildBenchmarks ''
-    mkdir -p $benchmark/bin
-    cp -a $out/bin/* $benchmark/bin
-    rm $benchmark/bin/{rocfft_rtc_helper,*-test} || true
-  '' + lib.optionalString (buildTests || buildBenchmarks ) ''
-    mv $out/bin/rocfft_rtc_helper $out
-    rm -r $out/bin/*
-    mv $out/rocfft_rtc_helper $out/bin
   '';
 
-  passthru.updateScript = rocmUpdateScript {
-    name = finalAttrs.pname;
-    owner = finalAttrs.src.owner;
-    repo = finalAttrs.src.repo;
+  passthru = {
+    test = stdenv.mkDerivation {
+      pname = "${finalAttrs.pname}-test";
+      inherit (finalAttrs) version src;
+
+      sourceRoot = "source/clients/tests";
+
+      nativeBuildInputs = [
+        cmake
+        hip
+        rocm-cmake
+      ];
+
+      buildInputs = [
+        boost
+        fftw
+        fftwFloat
+        finalAttrs.finalPackage
+        gtest
+        openmp
+        rocrand
+      ];
+
+      cmakeFlags = [
+        "-DCMAKE_C_COMPILER=hipcc"
+        "-DCMAKE_CXX_COMPILER=hipcc"
+      ];
+
+      postInstall = ''
+        rm -r "$out/lib/fftw"
+        rmdir "$out/lib"
+      '';
+    };
+
+    benchmark = stdenv.mkDerivation {
+      pname = "${finalAttrs.pname}-benchmark";
+      inherit (finalAttrs) version src;
+
+      sourceRoot = "source/clients/rider";
+
+      nativeBuildInputs = [
+        cmake
+        hip
+        rocm-cmake
+      ];
+
+      buildInputs = [
+        boost
+        finalAttrs.finalPackage
+        openmp
+        (python3.withPackages (ps: with ps; [
+          pandas
+          scipy
+        ]))
+        rocrand
+      ];
+
+      cmakeFlags = [
+        "-DCMAKE_C_COMPILER=hipcc"
+        "-DCMAKE_CXX_COMPILER=hipcc"
+      ];
+
+      postInstall = ''
+        cp -a ../../../scripts/perf "$out/bin"
+      '';
+    };
+
+    samples = stdenv.mkDerivation {
+      pname = "${finalAttrs.pname}-samples";
+      inherit (finalAttrs) version src;
+
+      sourceRoot = "source/clients/samples";
+
+      nativeBuildInputs = [
+        cmake
+        hip
+        rocm-cmake
+      ];
+
+      buildInputs = [
+        boost
+        finalAttrs.finalPackage
+        openmp
+        rocrand
+      ];
+
+      cmakeFlags = [
+        "-DCMAKE_C_COMPILER=hipcc"
+        "-DCMAKE_CXX_COMPILER=hipcc"
+      ];
+
+      installPhase = ''
+        runHook preInstall
+        mkdir "$out"
+        cp -a bin "$out"
+        runHook postInstall
+      '';
+    };
+
+    updateScript = rocmUpdateScript {
+      name = finalAttrs.pname;
+      owner = finalAttrs.src.owner;
+      repo = finalAttrs.src.repo;
+    };
   };
 
   meta = with lib; {
