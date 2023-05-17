@@ -36,6 +36,15 @@ let
         description = lib.mdDoc "Location of the mounted file system.";
       };
 
+      stratis.poolUuid = lib.mkOption {
+        type = types.uniq (types.nullOr types.str);
+        description = lib.mdDoc ''
+          UUID of the stratis pool that the fs is located in
+        '';
+        example = "04c68063-90a5-4235-b9dd-6180098a20d9";
+        default = null;
+      };
+
       device = mkOption {
         default = null;
         example = "/dev/sda";

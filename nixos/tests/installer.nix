@@ -1038,12 +1038,6 @@ in {
         "mkdir -p /mnt/boot",
         "mount /dev/vda1 /mnt/boot"
       )
-
-      (header, pool_line) = machine.succeed("stratis pool list").splitlines()
-      index = header.find("UUID")
-      uuid = pool_line[index - 32: index + 4]
-      machine.succeed("mkdir -p /mnt/etc/nixos")
-      machine.succeed(f"printf %s {uuid} > /mnt/etc/nixos/rootPoolUuid.txt")
     '';
     bootLoader = "systemd-boot";
     extraInstallerConfig = { modulesPath, ...}: {
@@ -1058,6 +1052,5 @@ in {
         ];
       };
     };
-    extraConfig = "boot.stratis.rootPoolUuid = builtins.readFile ./rootPoolUuid.txt;";
   };
 }

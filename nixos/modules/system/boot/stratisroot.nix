@@ -1,19 +1,11 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, utils, ... }:
 let
   types = lib.types;
+  requiredStratisFilesystems = lib.attrsets.filterAttrs (_: x: utils.fsNeededForBoot x && x.stratis.poolUuid != null) config.fileSystems;
 in
 {
-  options.boot.stratis = {
-    rootPoolUuid = lib.mkOption {
-      type = types.uniq (types.nullOr types.str);
-      description = lib.mdDoc ''
-        UUID of the stratis pool that the root fs is located in
-      '';
-      example = "04c68063-90a5-4235-b9dd-6180098a20d9";
-      default = null;
-    };
-  };
-  config = lib.mkIf (config.boot.stratis.rootPoolUuid != null) {
+  options = {};
+  config = lib.mkIf (builtins.length (lib.attrsets.attrValues requiredStratisFilesystems) != 0) {
     assertions = [
       {
         assertion = config.boot.initrd.systemd.enable;
@@ -36,25 +28,29 @@ in
           thin_metadata_size = "${pkgs."thin-provisioning-tools"}/bin/thin_metadata_size";
           stratis-min = "${pkgs.stratisd}/bin/stratis-min";
         };
-        services = {
-          stratis-setup = {
-            description = "setup for Stratis root filesystem";
-            unitConfig.DefaultDependencies = "no";
-            conflicts = [ "shutdown.target" "initrd-switch-root.target" ];
-            onFailure = [ "emergency.target" ];
-            unitConfig.OnFailureJobMode = "isolate";
-            wants = [ "stratisd-min.service" "plymouth-start.service" ];
-            wantedBy = [ "initrd.target" ];
-            after = [ "paths.target" "plymouth-start.service" "stratisd-min.service" ];
-            before = [ "initrd.target" "shutdown.target" "initrd-switch-root.target" ];
-            environment.STRATIS_ROOTFS_UUID = config.boot.stratis.rootPoolUuid;
-            serviceConfig = {
-              Type = "oneshot";
-              ExecStart = "${pkgs.stratisd.initrd}/bin/stratis-rootfs-setup";
-              RemainAfterExit = "yes";
-            };
-          };
-        };
+        services =
+          lib.attrsets.mapAttrs' (
+            mountPoint: fileSystem: {
+              name = "stratis-setup-${fileSystem.stratis.poolUuid}";
+              value = {
+                description = "setup for Stratis root filesystem";
+                unitConfig.DefaultDependencies = "no";
+                conflicts = [ "shutdown.target" "initrd-switch-root.target" ];
+                onFailure = [ "emergency.target" ];
+                unitConfig.OnFailureJobMode = "isolate";
+                wants = [ "stratisd-min.service" "plymouth-start.service" ];
+                wantedBy = [ "initrd.target" ];
+                after = [ "paths.target" "plymouth-start.service" "stratisd-min.service" ];
+                before = [ "initrd.target" "shutdown.target" "initrd-switch-root.target" ];
+                environment.STRATIS_ROOTFS_UUID = fileSystem.stratis.poolUuid;
+                serviceConfig = {
+                  Type = "oneshot";
+                  ExecStart = "${pkgs.stratisd.initrd}/bin/stratis-rootfs-setup";
+                  RemainAfterExit = "yes";
+                };
+              };
+            }
+          ) requiredStratisFilesystems;
       };
       availableKernelModules = [ "dm-thin-pool" "dm-crypt" ] ++ [ "aes" "aes_generic" "blowfish" "twofish"
         "serpent" "cbc" "xts" "lrw" "sha1" "sha256" "sha512"
