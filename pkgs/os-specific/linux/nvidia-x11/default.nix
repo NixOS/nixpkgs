@@ -65,13 +65,13 @@ rec {
   # Vulkan developer beta driver
   # See here for more information: https://developer.nvidia.com/vulkan-driver
   vulkan_beta = generic rec {
-    version = "525.47.22";
-    persistencedVersion = "525.85.05";
-    settingsVersion = "525.85.05";
-    sha256_64bit = "sha256-y8XgeGljiR2q/Wzp2btCQ8Wa+9KvWsWxZHb+NIqfCYQ=";
-    openSha256 = "sha256-Y8XL8BJWSV2K1p4VR8T9Z2DOqySgQqkB4Dvf6E6vcxI=";
-    settingsSha256 = "sha256-ck6ra8y8nn5kA3L9/VcRR2W2RaWvfVbgBiOh2dRJr/8=";
-    persistencedSha256 = "sha256-dt/Tqxp7ZfnbLel9BavjWDoEdLJvdJRwFjTFOBYYKLI=";
+    version = "525.47.24";
+    persistencedVersion = "525.116.04";
+    settingsVersion = "525.116.04";
+    sha256_64bit = "sha256-T0yIX1I3p+QcvFvq0VkbzjyLuCZuX7oeOqtt/aNZ3WI=";
+    openSha256 = "sha256-I9MNN2f0eMWFLNtb/8MjjrB1fGv4FeBm/RcCHjAhmAM=";
+    settingsSha256 = "sha256-qNjfsT9NGV151EHnG4fgBonVFSKc4yFEVomtXg9uYD4=";
+    persistencedSha256 = "sha256-ci86XGlno6DbHw6rkVSzBpopaapfJvk0+lHcR4LDq50=";
     url = "https://developer.nvidia.com/downloads/vulkan-beta-${lib.concatStrings (lib.splitString "." version)}-linux";
   };
 
