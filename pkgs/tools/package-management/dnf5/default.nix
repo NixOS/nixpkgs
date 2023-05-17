@@ -103,8 +103,6 @@ stdenv.mkDerivation (finalAttrs: {
       --replace '/etc/bash_completion.d' "$out/etc/bash_completion.d"
   '';
 
-  dontFixCmake = true;
-
   passthru.tests = {
     version = testers.testVersion { package = finalAttrs.finalPackage; };
   };

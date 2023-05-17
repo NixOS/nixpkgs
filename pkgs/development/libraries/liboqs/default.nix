@@ -29,8 +29,6 @@ stdenv.mkDerivation rec {
     "-DOQS_BUILD_ONLY_LIB=ON"
   ];
 
-  dontFixCmake = true; # fix CMake file will give an error
-
   meta = with lib; {
     description = "C library for prototyping and experimenting with quantum-resistant cryptography";
     homepage = "https://openquantumsafe.org";

@@ -243,8 +243,6 @@ in stdenv.mkDerivation {
     done
   '';
 
-  # We invoke cmakeConfigurePhase multiple times, but only need this once.
-  dontFixCmake = true;
   # We setup custom build directories.
   dontUseCmakeBuildDir = true;
 
@@ -355,12 +353,6 @@ in stdenv.mkDerivation {
     rm swift/test/AutoDiff/compiler_crashers_fixed/issue-56649-missing-debug-scopes-in-pullback-trampoline.swift
 
     patchShebangs .
-
-    ${lib.optionalString (!stdenv.isDarwin) ''
-    # NOTE: This interferes with ABI stability on Darwin, which uses the system
-    # libraries in the hardcoded path /usr/lib/swift.
-    fixCmakeFiles .
-    ''}
   '';
 
   configurePhase = ''

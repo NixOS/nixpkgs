@@ -84,8 +84,6 @@ in {
       ./system_rplugin_manifest.patch
     ];
 
-    dontFixCmake = true;
-
     inherit lua;
     treesitter-parsers = treesitter-parsers //
       { markdown = treesitter-parsers.markdown // { location = "tree-sitter-markdown"; }; } //

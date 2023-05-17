@@ -2,16 +2,6 @@ addCMakeParams() {
     addToSearchPath CMAKE_PREFIX_PATH $1
 }
 
-fixCmakeFiles() {
-    # Replace occurences of /usr and /opt by /var/empty.
-    echo "fixing cmake files..."
-    find "$1" \( -type f -name "*.cmake" -o -name "*.cmake.in" -o -name CMakeLists.txt \) -print |
-        while read fn; do
-            sed -e 's^/usr\([ /]\|$\)^/var/empty\1^g' -e 's^/opt\([ /]\|$\)^/var/empty\1^g' < "$fn" > "$fn.tmp"
-            mv "$fn.tmp" "$fn"
-        done
-}
-
 cmakeConfigurePhase() {
     runHook preConfigure
 
@@ -21,10 +11,6 @@ cmakeConfigurePhase() {
     export CTEST_OUTPUT_ON_FAILURE=1
     if [ -n "${enableParallelChecking-1}" ]; then
         export CTEST_PARALLEL_LEVEL=$NIX_BUILD_CORES
-    fi
-
-    if [ -z "${dontFixCmake-}" ]; then
-        fixCmakeFiles .
     fi
 
     if [ -z "${dontUseCmakeBuildDir-}" ]; then

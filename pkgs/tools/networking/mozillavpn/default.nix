@@ -142,7 +142,6 @@ stdenv.mkDerivation {
     "-DQT_LUPDATE_EXECUTABLE=${qttools.dev}/bin/lupdate"
     "-DQT_LRELEASE_EXECUTABLE=${qttools.dev}/bin/lrelease"
   ];
-  dontFixCmake = true;
 
   qtWrapperArgs =
     [ "--prefix" "PATH" ":" (lib.makeBinPath [ wireguard-tools ]) ];
