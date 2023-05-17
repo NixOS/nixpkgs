@@ -37,6 +37,8 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = "01s8i64qczxqawgrzrw19asaqmcspf5l2h3203xzg56wnnhhzcw7";
   };
 
+  outputs = [ "out" "dev" ];
+
   nativeBuildInputs = [ pkg-config python makeWrapper wafHook ];
   buildInputs = [ libsamplerate libsndfile readline eigen celt
     optDbus optPythonDBus optLibffado optAlsaLib optLibopus
