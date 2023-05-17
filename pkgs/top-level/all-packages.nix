@@ -33716,7 +33716,9 @@ with pkgs;
 
   openvi = darwin.apple_sdk_11_0.callPackage ../applications/editors/openvi { };
 
-  opera = callPackage ../applications/networking/browsers/opera { };
+  opera = callPackage (import ../applications/networking/browsers/opera).stable { };
+  opera-beta = callPackage (import ../applications/networking/browsers/opera).beta { };
+  opera-dev = callPackage (import ../applications/networking/browsers/opera).developer { };
 
   oranda = callPackage ../applications/misc/oranda { };
 
