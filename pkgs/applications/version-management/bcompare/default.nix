@@ -11,7 +11,7 @@ let
   srcs = {
     x86_64-linux = fetchurl {
       url = "https://www.scootersoftware.com/files/${pname}-${version}_amd64.deb";
-      hash = "sha256-PdriIn6eh1maESAAGBI+wgc6JVg85ZTZz9gB/+RiDK0=";
+      hash = "sha256-1+f/AfyJ8Z80WR4cs1JDjTquTR1mGAUOd27vniSeA0k=";
     };
 
     x86_64-darwin = fetchurl {
