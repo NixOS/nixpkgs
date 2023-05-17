@@ -5,6 +5,7 @@
 , nodejs
 , yarn
 , yarn2nix-moretea
+, nixosTests
 }:
 
 stdenv.mkDerivation rec {
@@ -75,6 +76,10 @@ stdenv.mkDerivation rec {
 
     runHook postInstall
   '';
+
+  passthru.tests = {
+    basic-functionality = nixosTests.outline;
+  };
 
   meta = with lib; {
     description = "The fastest wiki and knowledge base for growing teams. Beautiful, feature rich, and markdown compatible";
