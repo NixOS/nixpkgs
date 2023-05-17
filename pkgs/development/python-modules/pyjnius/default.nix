@@ -3,21 +3,20 @@
 , cython
 , fetchPypi
 , jdk
-, six
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "pyjnius";
   version = "1.5.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-ZjRuJk8eIghrh8XINonqvP7xRQrGR2/YVr6kmLLhNz4=";
   };
-
-  propagatedBuildInputs = [
-    six
-  ];
 
   nativeBuildInputs = [
     jdk
