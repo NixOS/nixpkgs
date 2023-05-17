@@ -111,7 +111,6 @@ in {
         [ kernelPatches.bridge_stp_helper
           kernelPatches.request_key_helper
           kernelPatches.modinst_arg_list_too_long
-          kernelPatches.CVE-2023-32233
         ];
     };
 
@@ -120,7 +119,6 @@ in {
         kernelPatches.bridge_stp_helper
         kernelPatches.request_key_helper
         kernelPatches.rtl8761b_support
-        kernelPatches.CVE-2023-32233
       ];
     };
 
@@ -136,7 +134,6 @@ in {
       kernelPatches = [
         kernelPatches.bridge_stp_helper
         kernelPatches.request_key_helper
-        kernelPatches.CVE-2023-32233
       ];
     };
 
