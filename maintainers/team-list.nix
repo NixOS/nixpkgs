@@ -152,6 +152,7 @@ with lib.maintainers; {
   cuda = {
     members = [
       connorbaker
+      samuela
       SomeoneSerge
     ];
     scope = "Maintain CUDA-enabled packages";
