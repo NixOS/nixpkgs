@@ -3484,6 +3484,12 @@
     githubId = 1298344;
     name = "Daniel Fullmer";
   };
+  daniyalsuri6 = {
+    email = "daniyal.suri@gmail.com";
+    github = "daniyalsuri6";
+    githubId = 107034852;
+    name = "Daniyal Suri";
+  };
   dansbandit = {
     github = "dansbandit";
     githubId = 4530687;
