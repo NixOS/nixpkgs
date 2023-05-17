@@ -84,11 +84,11 @@
     };
   };
   kde-cli-tools = {
-    version = "5.27.5";
+    version = "5.27.5.1";
     src = fetchurl {
-      url = "${mirror}/stable/plasma/5.27.5/kde-cli-tools-5.27.5.tar.xz";
-      sha256 = "0rzggjsly44wxpsqqxylnzw2n3sf7s1584rf1qp1040jf0vmcx7d";
-      name = "kde-cli-tools-5.27.5.tar.xz";
+      url = "${mirror}/stable/plasma/5.27.5/kde-cli-tools-5.27.5.1.tar.xz";
+      sha256 = "sha256-E13W626S1tKdeL6Ls/ag1eBcJrPP2kmLJIB8HihEiIU=";
+      name = "kde-cli-tools-5.27.5.1.tar.xz";
     };
   };
   kde-gtk-config = {
