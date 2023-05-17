@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub, go-bindata }:
+{ lib, buildGoModule, fetchFromGitHub, go-bindata, openssl }:
 
 buildGoModule rec {
   pname = "writefreely";
@@ -14,6 +14,7 @@ buildGoModule rec {
   vendorSha256 = "sha256-IBer+8FP+IWWJPnaugr8zzQA9mSVFzP0Nofgl/PhtzQ=";
 
   nativeBuildInputs = [ go-bindata ];
+  buildInputs = [ openssl ];
 
   preBuild = ''
     make assets
@@ -29,6 +30,6 @@ buildGoModule rec {
     description = "Build a digital writing community";
     homepage = "https://github.com/writeas/writefreely";
     license = licenses.agpl3Only;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ rumpelsepp ];
   };
 }
