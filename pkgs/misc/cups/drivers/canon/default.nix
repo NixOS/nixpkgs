@@ -35,13 +35,13 @@ let
   ld64 = "${stdenv.cc}/nix-support/dynamic-linker";
   libs = pkgs: lib.makeLibraryPath buildInputs;
 
-  version = "5.40";
-  dl = "6/0100009236/10";
+  version = "5.70";
+  dl = "8/0100007658/33";
 
   versionNoDots = builtins.replaceStrings [ "." ] [ "" ] version;
   src_canon = fetchurl {
-    url = "http://gdlp01.c-wss.com/gds/${dl}/linux-UFRII-drv-v${versionNoDots}-usen-20.tar.gz";
-    sha256 = "sha256:069z6ijmql62mcdyxnzc9mf0dxa6z1107cd0ab4i1adk8kr3d75k";
+    url = "http://gdlp01.c-wss.com/gds/${dl}/linux-UFRII-drv-v${versionNoDots}-m17n-11.tar.gz";
+    hash = "sha256-d5VHlPpUPAr3RWVdQRdn42YLuVekOw1IaMFLVt1Iu7o=";
   };
 
   buildInputs = [ cups zlib jbigkit glib gtk3 gnome2.libglade libxml2 gdk-pixbuf pango cairo atk ];
@@ -54,10 +54,11 @@ stdenv.mkDerivation rec {
   postUnpack = ''
     (
       cd $sourceRoot
-      tar -xzf Sources/cnrdrvcups-lb-${version}-1.tar.gz
+      tar -xf Sources/cnrdrvcups-lb-${version}-1.11.tar.xz
       sed -ie "s@_prefix=/usr@_prefix=$out@" cnrdrvcups-common-${version}/allgen.sh
       sed -ie "s@_libdir=/usr/lib@_libdir=$out/lib@" cnrdrvcups-common-${version}/allgen.sh
       sed -ie "s@_bindir=/usr/bin@_bindir=$out/bin@" cnrdrvcups-common-${version}/allgen.sh
+      sed -ie "s@/usr@$out@" cnrdrvcups-common-${version}/{backend,rasterfilter}/Makefile.am
       sed -ie "s@etc/cngplp@$out/etc/cngplp@" cnrdrvcups-common-${version}/cngplp/Makefile.am
       sed -ie "s@usr/share/cngplp@$out/usr/share/cngplp@" cnrdrvcups-common-${version}/cngplp/src/Makefile.am
       patchShebangs cnrdrvcups-common-${version}
@@ -67,6 +68,7 @@ stdenv.mkDerivation rec {
       sed -ie "s@_bindir=/usr/bin@_bindir=$out/bin@" cnrdrvcups-lb-${version}/allgen.sh
       sed -ie '/^cd \.\.\/cngplp/,/^cd files/{/^cd files/!{d}}' cnrdrvcups-lb-${version}/allgen.sh
       sed -ie "s@cd \.\./pdftocpca@cd pdftocpca@" cnrdrvcups-lb-${version}/allgen.sh
+      sed -ie "s@/usr@$out@" cnrdrvcups-lb-${version}/pdftocpca/Makefile.am
       sed -i "/CNGPLPDIR/d" cnrdrvcups-lb-${version}/Makefile
       patchShebangs cnrdrvcups-lb-${version}
     )
