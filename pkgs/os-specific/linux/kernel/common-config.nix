@@ -77,6 +77,10 @@ let
       ACPI_APEI                        = (option yes);
       # APEI Generic Hardware Error Source
       ACPI_APEI_GHES                   = (option yes);
+
+      # Enable lazy RCUs for power savings:
+      # https://lore.kernel.org/rcu/20221019225138.GA2499943@paulmck-ThinkPad-P17-Gen-1/
+      RCU_LAZY                         = whenAtLeast "6.2" yes;
     } // optionalAttrs (stdenv.hostPlatform.isx86) {
       INTEL_IDLE                       = yes;
       INTEL_RAPL                       = whenAtLeast "5.3" module;
@@ -679,10 +683,11 @@ let
     };
 
     zram = {
-      ZRAM     = module;
-      ZSWAP    = option yes;
-      ZBUD     = option yes;
-      ZSMALLOC = module;
+      ZRAM           = module;
+      ZRAM_WRITEBACK = option yes;
+      ZSWAP          = option yes;
+      ZBUD           = option yes;
+      ZSMALLOC       = module;
     };
 
     brcmfmac = {
