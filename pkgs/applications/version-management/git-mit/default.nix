@@ -7,6 +7,9 @@
 , libssh2
 , zlib
 , pkg-config
+, AppKit
+, testers
+, git-mit
 }:
 
 let
@@ -29,7 +32,11 @@ rustPlatform.buildRustPackage {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ openssl libgit2 libssh2 zlib ];
+  buildInputs = [ openssl libgit2 libssh2 zlib ] ++ lib.optionals stdenv.isDarwin [ AppKit ];
+
+  passthru.tests.version = testers.testVersion {
+    package = git-mit;
+  };
 
   meta = {
     description = "Minimalist set of hooks to aid pairing and link commits to issues";

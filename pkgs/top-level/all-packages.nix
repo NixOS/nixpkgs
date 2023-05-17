@@ -1977,7 +1977,9 @@ with pkgs;
 
   git-lfs = lowPrio (callPackage ../applications/version-management/git-lfs { });
 
-  git-mit = callPackage ../applications/version-management/git-mit { };
+  git-mit = callPackage ../applications/version-management/git-mit {
+    inherit (darwin.apple_sdk.frameworks) AppKit;
+  };
 
   git-my = callPackage ../applications/version-management/git-my { };
 
