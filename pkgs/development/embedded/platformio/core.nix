@@ -30,6 +30,9 @@ with python3.pkgs; buildPythonApplication rec {
     substitute platformio/package/manifest/schema.py platformio/package/manifest/schema.py \
       --subst-var-by SPDX_LICENSE_LIST_DATA '${spdx-license-list-data.json}'
 
+    # Disable update checks at runtime
+    substituteInPlace platformio/maintenance.py --replace '    check_platformio_upgrade()' ""
+
     substituteInPlace setup.py \
       --replace 'aiofiles==%s" % ("0.8.0" if PY36 else "22.1.*")' 'aiofiles"' \
       --replace 'starlette==%s" % ("0.19.1" if PY36 else "0.23.*")' 'starlette"' \
