@@ -143,7 +143,7 @@ stdenv.mkDerivation {
     description = "Zammad, a web-based, open source user support/ticketing solution.";
     homepage = "https://zammad.org";
     license = licenses.agpl3Plus;
-    platforms = [ "x86_64-linux" ];
+    platforms = [ "x86_64-linux" "aarch64-linux" ];
     maintainers = with maintainers; [ n0emis garbas taeer ];
   };
 }
