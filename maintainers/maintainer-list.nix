@@ -7081,7 +7081,7 @@
   };
   jayesh-bhoot = {
     name = "Jayesh Bhoot";
-    email = "jayesh@bhoot.sh";
+    email = "jb@jayeshbhoot.com";
     github = "jayeshbhoot";
     githubId = 1915507;
   };
