@@ -532,7 +532,7 @@ in
           '';
 
         # Wait for PostgreSQL to be ready to accept connections.
-        postStart = let  
+        postStart = let
           host = if (cfg.socketDir == null) then "" else "--host=${toString cfg.socketDir}";
           in ''
             PSQL="psql --port=${toString cfg.port} ${host}"
