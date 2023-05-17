@@ -61,7 +61,7 @@ let
     };
     column = {
       linux = pkgs.util-linux;
-      darwin = pkgs.netbsd.column;
+      darwin = pkgs.darwin.text_cmds;
     };
     eject = {
       linux = pkgs.util-linux;
@@ -106,7 +106,7 @@ let
     };
     locale = {
       linux = pkgs.glibc;
-      darwin = pkgs.netbsd.locale;
+      darwin = pkgs.darwin.adv_cmds;
     };
     logger = {
       linux = pkgs.util-linux;
