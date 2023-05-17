@@ -26,7 +26,7 @@ buildPythonPackage rec {
   # Network access is needed for tests
   doCheck = false;
 
-  pythonCheckImports = [ "dvc_gs" ];
+  pythonImportsCheck = [ "dvc_gs" ];
 
   meta = with lib; {
     description = "gs plugin for dvc";
