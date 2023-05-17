@@ -384,6 +384,7 @@ in
       system.userActivationScripts.plasmaSetup = activationScript;
 
       programs.firefox.nativeMessagingHosts.packages = [ pkgs.plasma5Packages.plasma-browser-integration ];
+      programs.chromium.enablePlasmaBrowserIntegration = true;
     })
 
     (mkIf (cfg.kwinrc != {}) {
