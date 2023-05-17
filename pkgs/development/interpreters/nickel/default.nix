@@ -1,6 +1,7 @@
 { lib
 , rustPlatform
 , fetchFromGitHub
+, nix-update-script
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -15,6 +16,8 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoSha256 = "sha256-E8eIUASjCIVsZhptbU41VfK8bFmA4FTT3LVagLrgUso=";
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     homepage = "https://nickel-lang.org/";
