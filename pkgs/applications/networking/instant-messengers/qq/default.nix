@@ -6,7 +6,7 @@
 , glib
 , gtk3
 , lib
-, libappindicator
+, libayatana-appindicator
 , libdrm
 , libgcrypt
 , libkrb5
@@ -62,7 +62,6 @@ stdenv.mkDerivation {
   ];
 
   runtimeDependencies = map lib.getLib [
-    libappindicator
     systemd
   ];
 
@@ -79,6 +78,10 @@ stdenv.mkDerivation {
 
     # Remove bundled libraries
     rm -r $out/opt/QQ/resources/app/sharp-lib
+
+    # https://github.com/microcai/gentoo-zh/commit/06ad5e702327adfe5604c276635ae8a373f7d29e
+    ln -s ${libayatana-appindicator}/lib/libayatana-appindicator3.so \
+      $out/opt/QQ/libappindicator3.so
 
     runHook postInstall
   '';
