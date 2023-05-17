@@ -1,35 +1,86 @@
 { lib
 , buildPythonPackage
-, fetchPypi
-, pythonRelaxDepsHook
+, fetchFromGitHub
+
+# build-system
+, setuptools
+
+# dependencies
 , bleach
 , bokeh
+, linkify-it-py
+, markdown
+, markdown-it-py
+, mdit-py-plugins
+, pandas
 , param
 , pyviz-comms
-, markdown
-, pyct
 , requests
-, setuptools
 , tqdm
 , typing-extensions
+, xyzservices
+
+# optionals: recommended
+, jupyterlab
+, holoviews
+, matplotlib
+, pillow
+, plotly
+
+# optionals: ui
+, playwright
+, pytest-playwright
+
+# tests
+, aiohttp
+, altair
+, channels
+, croniter
+, datashader
+, django
+, fastparquet
+, folium
+, graphviz
+, hvplot
+, ipympl
+, ipyvuetify
+, ipywidgets
+, lxml
+, networkx
+, pydeck
+, pygraphviz
+, pyinstrument
+, pyvista
+, scikit-image
+, scikit-learn
+, seaborn
+, streamz
+, vega_datasets
+, vtk
+, xarray
+, xgboost
 }:
 
 buildPythonPackage rec {
   pname = "panel";
-  version = "0.14.4";
+  version = "1.1.1";
+  format = "pyproject";
 
-  format = "wheel";
-
-  # We fetch a wheel because while we can fetch the node
-  # artifacts using npm, the bundling invoked in setup.py
-  # tries to fetch even more artifacts
-  src = fetchPypi {
-    inherit pname version format;
-    hash = "sha256-3U/PL8cnbNPw3xEM56YZesQEDXTE79yMCSsjdxwfUU0=";
+  src = fetchFromGitHub {
+    owner = "holoviz";
+    repo = "panel";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-5WDaahzb3wvmxdXRFx87V6kIEipckvBuqD+yINRiJKA=";
   };
 
+  postPatch = ''
+    substituteInPlace setup.py --replace \
+      'version=get_setup_version("panel"),' \
+      'version="${version}",'
+  '';
+
   nativeBuildInputs = [
-    pythonRelaxDepsHook
+    setuptools
   ];
 
   pythonRelaxDeps = [
@@ -39,15 +90,33 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     bleach
     bokeh
+    linkify-it-py
     markdown
+    markdown-it-py
+    mdit-py-plugins
+    pandas
     param
-    pyct
     pyviz-comms
     requests
     setuptools
     tqdm
     typing-extensions
+    xyzservices
   ];
+
+  passthru.optional-dependencies = {
+    recommended = [
+      jupyterlab
+      holoviews
+      matplotlib
+      pillow
+      plotly
+    ];
+    ui = [
+      playwright
+      pytest-playwright
+    ];
+  };
 
   pythonImportsCheck = [
     "panel"
@@ -55,6 +124,38 @@ buildPythonPackage rec {
 
   # infinite recursion in test dependencies (hvplot)
   doCheck = false;
+
+  nativeCheckInputs = [
+    aiohttp
+    altair
+    channels
+    croniter
+    datashader
+    django
+    fastparquet
+    folium
+    graphviz
+    holoviews
+    hvplot
+    ipympl
+    ipyvuetify
+    ipywidgets
+    lxml
+    networkx
+    plotly
+    pydeck
+    pygraphviz
+    pyinstrument
+    pyvista
+    scikit-image
+    scikit-learn
+    seaborn
+    streamz
+    vega_datasets
+    vtk
+    xarray
+    xgboost
+  ];
 
   meta = with lib; {
     description = "A high level dashboarding library for python visualization libraries";
