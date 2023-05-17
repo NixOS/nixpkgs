@@ -612,8 +612,8 @@ let
         mktplcRef = {
           name = "chatgpt-reborn";
           publisher = "chris-hayes";
-          version = "3.16.1";
-          sha256 = "sha256-RVPA+O0QOtFArWzcuwXMZSpwB3zrPAzVCbEjOzUNH4I=";
+          version = "3.16.3";
+          sha256 = "wkitG5gmYKYKXRw/zVW04HN1dePiTjbnynFOY/bwxfI=";
         };
       };
 
