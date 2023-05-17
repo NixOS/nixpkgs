@@ -31,6 +31,7 @@
 , azure-core
 , elasticsearch
 , opensearch-py
+, google-search-results
 , faiss
 , spacy
 , nltk
@@ -147,7 +148,7 @@ buildPythonPackage rec {
       manifest-ml
       elasticsearch
       opensearch-py
-      # google-search-results
+      google-search-results
       faiss
       sentence-transformers
       transformers
