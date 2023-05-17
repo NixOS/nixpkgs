@@ -65,7 +65,6 @@ in
             agent.enabled = true;
             agent.scrape_integration = true;
             node_exporter.enabled = true;
-            replace_instance_label = true;
           };
         }
       '';
@@ -122,7 +121,6 @@ in
         agent.enabled = mkDefault true;
         agent.scrape_integration = mkDefault true;
         node_exporter.enabled = mkDefault true;
-        replace_instance_label = mkDefault true;
       };
     };
 
