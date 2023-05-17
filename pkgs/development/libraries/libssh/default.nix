@@ -22,6 +22,8 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-tg4v9/Nnue7itWNNOmMwPd/t4OahjfyojESodw5+QjQ=";
   };
 
+  outputs = [ "out" "dev" ];
+
   postPatch = ''
     # Fix headers to use libsodium instead of NaCl
     sed -i 's,nacl/,sodium/,g' ./include/libssh/curve25519.h src/curve25519.c
