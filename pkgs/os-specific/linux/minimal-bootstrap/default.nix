@@ -11,6 +11,8 @@ lib.makeScope
   (extra: lib.callPackageWith ({ inherit lib config buildPlatform hostPlatform; } // extra))
   (self: with self; {
 
+    coreutils = callPackage ./coreutils { tinycc = tinycc-mes; };
+
     gnupatch = callPackage ./gnupatch { tinycc = tinycc-mes; };
 
     gnumake = callPackage ./gnumake { tinycc = tinycc-mes; };
