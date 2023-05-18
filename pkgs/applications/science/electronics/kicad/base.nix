@@ -121,6 +121,7 @@ stdenv.mkDerivation rec {
     doxygen
     graphviz
     pkg-config
+    pcre2
   ]
   # wanted by configuration on linux, doesn't seem to affect performance
   # no effect on closure size
@@ -135,7 +136,6 @@ stdenv.mkDerivation rec {
     dbus
     at-spi2-core
     libXtst
-    pcre2
   ];
 
   buildInputs = [
