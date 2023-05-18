@@ -12924,6 +12924,8 @@ self: super: with self; {
 
   torch-cluster = callPackage ../development/python-modules/torch-cluster { };
 
+  torch-geometric = callPackage ../development/python-modules/torch-geometric { };
+
   torch-scatter = callPackage ../development/python-modules/torch-scatter { };
 
   torch-sparse = callPackage ../development/python-modules/torch-sparse { };
