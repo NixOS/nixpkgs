@@ -31,7 +31,7 @@ kaem.runCommand "${pname}-${version}" {
     description = "The Mes C Library";
     homepage = "https://www.gnu.org/software/mes";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ emilytrau ];
+    maintainers = teams.minimal-bootstrap.members;
     platforms = [ "i686-linux" ];
   };
 } ''
