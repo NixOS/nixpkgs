@@ -1,0 +1,36 @@
+From 7b5ac168892dedc5bd6be4244b18dc32d37d00fd Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?F=C3=A9lix=20Baylac-Jacqu=C3=A9?= <felix@alternativebit.fr>
+Date: Fri, 22 Apr 2022 15:26:05 +0200
+Subject: [PATCH] xep_0030: allow extra args in get_info_from_domain
+
+Aftermath of ea2d851a.
+
+http_upload from xep_0363 is now forwarding all its extra input args
+to get_info_from_domain. Sadly for us, get_info_from_domain won't
+accept any extra args passed that way and will yield a "got an
+unexpected keyword argument".
+
+Modifying get_info_from_domain to accept these extra args.
+
+I hit this bug by passing a timeout_callback argument to http_upload.
+Adding this scenario to the relevant integration test.
+---
+ itests/test_httpupload.py         | 1 +
+ slixmpp/plugins/xep_0030/disco.py | 2 +-
+ 2 files changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/slixmpp/plugins/xep_0030/disco.py b/slixmpp/plugins/xep_0030/disco.py
+index 37d453aa..9f9a45f2 100644
+--- a/slixmpp/plugins/xep_0030/disco.py
++++ b/slixmpp/plugins/xep_0030/disco.py
+@@ -307,7 +307,7 @@ class XEP_0030(BasePlugin):
+         return self.api['has_identity'](jid, node, ifrom, data)
+
+     async def get_info_from_domain(self, domain=None, timeout=None,
+-                                   cached=True, callback=None):
++                                   cached=True, callback=None, **iqkwargs):
+         """Fetch disco#info of specified domain and one disco#items level below
+         """
+
+--
+2.35.1

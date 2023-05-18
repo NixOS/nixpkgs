@@ -1,0 +1,136 @@
+From 33d928c54f4b35f8877cacd1e2c77b68b4dddc06 Mon Sep 17 00:00:00 2001
+From: Zane van Iperen <zane@zanevaniperen.com>
+Date: Sun, 7 Nov 2021 15:46:37 +1000
+Subject: [PATCH] fix build with ffmpeg 4
+
+---
+ src/arch/MovieTexture/MovieTexture_FFMpeg.cpp |  5 +----
+ src/arch/MovieTexture/MovieTexture_FFMpeg.h   | 22 +++++++++----------
+ 2 files changed, 12 insertions(+), 15 deletions(-)
+
+diff --git a/src/arch/MovieTexture/MovieTexture_FFMpeg.cpp b/src/arch/MovieTexture/MovieTexture_FFMpeg.cpp
+index bdf2356..f79fea2 100644
+--- a/src/arch/MovieTexture/MovieTexture_FFMpeg.cpp
++++ b/src/arch/MovieTexture/MovieTexture_FFMpeg.cpp
+@@ -445,7 +445,7 @@ RString MovieDecoder_FFMpeg::Open( RString sFile )
+ 		return "Couldn't find any video streams";
+ 	m_pStream = m_fctx->streams[stream_idx];
+ 
+-	if( m_pStream->codec->codec_id == avcodec::CODEC_ID_NONE )
++	if( m_pStream->codec->codec_id == avcodec::AV_CODEC_ID_NONE )
+ 		return ssprintf( "Unsupported codec %08x", m_pStream->codec->codec_tag );
+ 
+ 	RString sError = OpenCodec();
+@@ -474,9 +474,6 @@ RString MovieDecoder_FFMpeg::OpenCodec()
+ 	m_pStream->codec->idct_algo         = FF_IDCT_AUTO;
+ 	m_pStream->codec->error_concealment = 3;
+ 
+-	if( pCodec->capabilities & CODEC_CAP_DR1 )
+-		m_pStream->codec->flags |= CODEC_FLAG_EMU_EDGE;
+-
+ 	LOG->Trace("Opening codec %s", pCodec->name );
+ 
+ 	int ret = avcodec::avcodec_open2( m_pStream->codec, pCodec, NULL );
+diff --git a/src/arch/MovieTexture/MovieTexture_FFMpeg.h b/src/arch/MovieTexture/MovieTexture_FFMpeg.h
+index f4d25ef..32564e5 100644
+--- a/src/arch/MovieTexture/MovieTexture_FFMpeg.h
++++ b/src/arch/MovieTexture/MovieTexture_FFMpeg.h
+@@ -64,7 +64,7 @@ private:
+ 
+ 	avcodec::AVStream *m_pStream;
+ 	avcodec::AVFrame *m_Frame;
+-	avcodec::PixelFormat m_AVTexfmt; /* PixelFormat of output surface */
++	avcodec::AVPixelFormat m_AVTexfmt; /* PixelFormat of output surface */
+ 	avcodec::SwsContext *m_swsctx;
+ 
+ 	avcodec::AVFormatContext *m_fctx;
+@@ -90,7 +90,7 @@ static struct AVPixelFormat_t
+ {
+ 	int bpp;
+ 	uint32_t masks[4];
+-	avcodec::PixelFormat pf;
++	avcodec::AVPixelFormat pf;
+ 	bool bHighColor;
+ 	bool bByteSwapOnLittleEndian;
+ 	MovieDecoderPixelFormatYCbCr YUV;
+@@ -101,7 +101,7 @@ static struct AVPixelFormat_t
+ 		  0x00FF0000,
+ 		  0x0000FF00,
+ 		  0x000000FF },
+-		avcodec::PIX_FMT_YUYV422,
++		avcodec::AV_PIX_FMT_YUYV422,
+ 		false, /* N/A */
+ 		true,
+ 		PixelFormatYCbCr_YUYV422,
+@@ -112,7 +112,7 @@ static struct AVPixelFormat_t
+ 		  0x00FF0000,
+ 		  0xFF000000,
+ 		  0x000000FF },
+-		avcodec::PIX_FMT_BGRA,
++		avcodec::AV_PIX_FMT_BGRA,
+ 		true,
+ 		true,
+ 		PixelFormatYCbCr_Invalid,
+@@ -123,7 +123,7 @@ static struct AVPixelFormat_t
+ 		  0x0000FF00,
+ 		  0x000000FF,
+ 		  0xFF000000 },
+-		avcodec::PIX_FMT_ARGB,
++		avcodec::AV_PIX_FMT_ARGB,
+ 		true,
+ 		true,
+ 		PixelFormatYCbCr_Invalid,
+@@ -135,7 +135,7 @@ static struct AVPixelFormat_t
+ 		  0x0000FF00,
+ 		  0x00FF0000,
+ 		  0xFF000000 },
+-		avcodec::PIX_FMT_ABGR,
++		avcodec::AV_PIX_FMT_ABGR,
+ 		true,
+ 		true,
+ 		PixelFormatYCbCr_Invalid,
+@@ -146,7 +146,7 @@ static struct AVPixelFormat_t
+ 		  0x00FF0000,
+ 		  0x0000FF00,
+ 		  0x000000FF },
+-		avcodec::PIX_FMT_RGBA,
++		avcodec::AV_PIX_FMT_RGBA,
+ 		true,
+ 		true,
+ 		PixelFormatYCbCr_Invalid,
+@@ -157,7 +157,7 @@ static struct AVPixelFormat_t
+ 		  0x00FF00,
+ 		  0x0000FF,
+ 		  0x000000 },
+-		avcodec::PIX_FMT_RGB24,
++		avcodec::AV_PIX_FMT_RGB24,
+ 		true,
+ 		true,
+ 		PixelFormatYCbCr_Invalid,
+@@ -168,7 +168,7 @@ static struct AVPixelFormat_t
+ 		  0x00FF00,
+ 		  0xFF0000,
+ 		  0x000000 },
+-		avcodec::PIX_FMT_BGR24,
++		avcodec::AV_PIX_FMT_BGR24,
+ 		true,
+ 		true,
+ 		PixelFormatYCbCr_Invalid,
+@@ -179,12 +179,12 @@ static struct AVPixelFormat_t
+ 		  0x03E0,
+ 		  0x001F,
+ 		  0x0000 },
+-		avcodec::PIX_FMT_RGB555,
++		avcodec::AV_PIX_FMT_RGB555,
+ 		false,
+ 		false,
+ 		PixelFormatYCbCr_Invalid,
+ 	},
+-	{ 0, { 0,0,0,0 }, avcodec::PIX_FMT_NB, true, false, PixelFormatYCbCr_Invalid }
++	{ 0, { 0,0,0,0 }, avcodec::AV_PIX_FMT_NB, true, false, PixelFormatYCbCr_Invalid }
+ };
+ 
+ #endif
+-- 
+2.31.1
+

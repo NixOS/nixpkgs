@@ -1,0 +1,17 @@
+allow overriding system trust store location via $NIX_SSL_CERT_FILE
+
+--- a/lib/system/certs.c
++++ b/lib/system/certs.c
+@@ -404,6 +404,10 @@ gnutls_x509_trust_list_add_system_trust(gnutls_x509_trust_list_t list,
+ 					unsigned int tl_flags,
+ 					unsigned int tl_vflags)
+ {
+-	return add_system_trust(list, tl_flags | GNUTLS_TL_NO_DUPLICATES,
+-				tl_vflags);
++	tl_flags = tl_flags|GNUTLS_TL_NO_DUPLICATES;
++	const char *file = secure_getenv("NIX_SSL_CERT_FILE");
++	return file
++		? gnutls_x509_trust_list_add_trust_file(
++			list, file, NULL/*CRL*/, GNUTLS_X509_FMT_PEM, tl_flags, tl_vflags)
++		: add_system_trust(list, tl_flags, tl_vflags);
+ }

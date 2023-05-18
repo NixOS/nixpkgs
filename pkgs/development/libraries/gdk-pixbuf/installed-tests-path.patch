@@ -1,0 +1,13 @@
+--- a/tests/meson.build
++++ b/tests/meson.build
+@@ -85,8 +85,8 @@
+   'aero.gif',
+ ]
+ 
+-installed_test_bindir = join_paths(gdk_pixbuf_libexecdir, 'installed-tests', meson.project_name())
+-installed_test_datadir = join_paths(gdk_pixbuf_datadir, 'installed-tests', meson.project_name())
++installed_test_bindir = join_paths('@installedtestsprefix@', 'libexec', 'installed-tests', meson.project_name())
++installed_test_datadir = join_paths('@installedtestsprefix@', 'share', 'installed-tests', meson.project_name())
+ 
+ install_data(test_data, install_dir: installed_test_bindir)
+ install_subdir('test-images', install_dir: installed_test_bindir)

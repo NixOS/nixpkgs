@@ -1,0 +1,6 @@
+source 'https://rubygems.org'
+gem 'sensu'
+gem 'iruby'
+gem 'cztop'
+gem 'ffi-rzmq'
+gem 'rbczmq'

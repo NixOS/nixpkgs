@@ -1,0 +1,95 @@
+From b9bf46966dd7931f9f33c30ed608a21d0e71e923 Mon Sep 17 00:00:00 2001
+From: rewine <lhongxu@outlook.com>
+Date: Tue, 19 Jul 2022 13:19:10 +0800
+Subject: [PATCH 1/2] remove dependency on vendored library
+
+---
+ CuteMarkEd.pro                |  4 +---
+ app-static/app-static.pro     | 11 ++---------
+ app/app.pro                   |  2 --
+ app/cutemarkdownhighlighter.h |  2 +-
+ 4 files changed, 4 insertions(+), 15 deletions(-)
+
+diff --git a/CuteMarkEd.pro b/CuteMarkEd.pro
+index 4ee92e3..0d247a4 100644
+--- a/CuteMarkEd.pro
++++ b/CuteMarkEd.pro
+@@ -9,12 +9,10 @@ TEMPLATE = subdirs
+ CONFIG += c++14
+ 
+ SUBDIRS = \
+-    3rdparty \
+     libs \
+     app-static \
+     app \
+-    fontawesomeicon \
+-    test
++    fontawesomeicon
+ 
+ # build order: 3rdparty -> libs -> app-static -> app & test
+ #libs.depends = 3rdparty
+diff --git a/app-static/app-static.pro b/app-static/app-static.pro
+index cd3c292..560b4fc 100644
+--- a/app-static/app-static.pro
++++ b/app-static/app-static.pro
+@@ -13,7 +13,6 @@ CONFIG += c++11
+ 
+ INCLUDEPATH += $$PWD
+ # MD4C library
+-INCLUDEPATH += $$PWD/../3rdparty/md4c/src
+ 
+ SOURCES += \
+     snippets/jsonsnippettranslator.cpp \
+@@ -34,10 +33,7 @@ SOURCES += \
+     revealviewsynchronizer.cpp \
+     htmlpreviewcontroller.cpp \
+     htmlviewsynchronizer.cpp \
+-    yamlheaderchecker.cpp \
+-    $$PWD/../3rdparty/md4c/src/md4c.c \
+-    $$PWD/../3rdparty/md4c/src/entity.c \
+-    $$PWD/../3rdparty/md4c/src/md4c-html.c
++    yamlheaderchecker.cpp
+ 
+ HEADERS += \
+     snippets/snippet.h \
+@@ -64,10 +60,7 @@ HEADERS += \
+     revealviewsynchronizer.h \
+     htmlpreviewcontroller.h \
+     htmlviewsynchronizer.h \
+-    yamlheaderchecker.h \
+-    $$PWD/../3rdparty/md4c/src/md4c.h \
+-    $$PWD/../3rdparty/md4c/src/entity.h \
+-    $$PWD/../3rdparty/md4c/src/md4c-html.h
++    yamlheaderchecker.h
+ 
+ 
+ #unix:!symbian {
+diff --git a/app/app.pro b/app/app.pro
+index 4827673..ab961cf 100644
+--- a/app/app.pro
++++ b/app/app.pro
+@@ -40,8 +40,6 @@ macx {
+ }
+ 
+ #qmarkdowntextedit
+-include(../3rdparty/qmarkdowntextedit/qmarkdowntextedit.pri)
+-include(../3rdparty/hunspell/hunspell.pri)
+ INCLUDEPATH += $$PWD
+ 
+ SOURCES += \
+diff --git a/app/cutemarkdownhighlighter.h b/app/cutemarkdownhighlighter.h
+index c99ab56..78f2be6 100644
+--- a/app/cutemarkdownhighlighter.h
++++ b/app/cutemarkdownhighlighter.h
+@@ -19,7 +19,7 @@
+ 
+ #include <QSyntaxHighlighter>
+ 
+-#include "../3rdparty/qmarkdowntextedit/markdownhighlighter.h"
++#include <QMarkdownTextedit/markdownhighlighter.h>
+ 
+ namespace hunspell {
+ class SpellChecker;
+-- 
+2.36.1
+

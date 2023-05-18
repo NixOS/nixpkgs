@@ -1,0 +1,553 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 846b4448..b4900ead 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -39,6 +39,7 @@ option (PRINT_UNSYMBOLIZED_STACK_TRACES
+   "Print file offsets in traces instead of symbolizing" OFF)
+ option (WITH_CUSTOM_PREFIX "Enable support for user-generated message prefixes" ON)
+ option (WITH_GFLAGS "Use gflags" ON)
++option (WITH_ABSL "Use absl flags" OFF)
+ option (WITH_GTEST "Use Google Test" ON)
+ option (WITH_PKGCONFIG "Enable pkg-config support" ON)
+ option (WITH_SYMBOLIZE "Enable symbolize module" ON)
+@@ -87,6 +88,13 @@ if (WITH_GFLAGS)
+   endif (gflags_FOUND)
+ endif (WITH_GFLAGS)
+ 
++if (WITH_ABSL)
++  set (HAVE_ABSL_FLAGS 1)
++  set (ac_cv_have_abslflags 1)
++else (WITH_ABSL)
++set (ac_cv_have_abslflags 0)
++endif (WITH_ABSL)
++
+ find_package (Threads)
+ find_package (Unwind)
+ 
+@@ -1025,7 +1033,7 @@ write_basic_package_version_file (
+   ${CMAKE_CURRENT_BINARY_DIR}/glog-config-version.cmake
+   COMPATIBILITY SameMajorVersion)
+ 
+-export (TARGETS glog NAMESPACE glog:: FILE glog-targets.cmake)
++# export (TARGETS glog NAMESPACE glog:: FILE glog-targets.cmake)
+ export (PACKAGE glog)
+ 
+ get_filename_component (_PREFIX "${CMAKE_INSTALL_PREFIX}" ABSOLUTE)
+diff --git a/src/base/commandlineflags.h b/src/base/commandlineflags.h
+index bcb12dea..1c9d9294 100644
+--- a/src/base/commandlineflags.h
++++ b/src/base/commandlineflags.h
+@@ -57,6 +57,25 @@
+ 
+ #include <gflags/gflags.h>
+ 
++#else
++#ifdef HAVE_ABSL_FLAGS
++#include <absl/flags/flag.h>
++
++#define FLAG(name) absl::GetFlag(FLAGS_##name)
++
++#define DEFINE_bool(name, value, meaning) \
++  ABSL_FLAG(bool, name, value, meaning)
++
++#define DEFINE_int32(name, value, meaning) \
++  ABSL_FLAG(GOOGLE_NAMESPACE::int32, name, value, meaning)
++
++#define DEFINE_uint32(name, value, meaning) \
++  ABSL_FLAG(GOOGLE_NAMESPACE::uint32, name, value, meaning)
++
++#define DEFINE_string(name, value, meaning) \
++  ABSL_FLAG(std::string, name, value, meaning)
++
++
+ #else
+ 
+ #include <glog/logging.h>
+@@ -108,6 +127,7 @@
+   }                                                           \
+   using fLS::FLAGS_##name
+ 
++#endif
+ #endif  // HAVE_LIB_GFLAGS
+ 
+ // Define GLOG_DEFINE_* using DEFINE_* . By using these macros, we
+diff --git a/src/base/mutex.h b/src/base/mutex.h
+index e82c597f..a58c1412 100644
+--- a/src/base/mutex.h
++++ b/src/base/mutex.h
+@@ -319,11 +319,6 @@ class WriterMutexLock {
+   void operator=(const WriterMutexLock&);
+ };
+ 
+-// Catch bug where variable name is omitted, e.g. MutexLock (&mu);
+-#define MutexLock(x) COMPILE_ASSERT(0, mutex_lock_decl_missing_var_name)
+-#define ReaderMutexLock(x) COMPILE_ASSERT(0, rmutex_lock_decl_missing_var_name)
+-#define WriterMutexLock(x) COMPILE_ASSERT(0, wmutex_lock_decl_missing_var_name)
+-
+ }  // namespace MUTEX_NAMESPACE
+ 
+ using namespace MUTEX_NAMESPACE;
+diff --git a/src/config.h.cmake.in b/src/config.h.cmake.in
+index b225b7ec..a4c58c96 100644
+--- a/src/config.h.cmake.in
++++ b/src/config.h.cmake.in
+@@ -34,6 +34,8 @@
+ /* define if you have google gflags library */
+ #cmakedefine HAVE_LIB_GFLAGS
+ 
++#cmakedefine HAVE_ABSL_FLAGS
++
+ /* define if you have google gmock library */
+ #cmakedefine HAVE_LIB_GMOCK
+ 
+diff --git a/src/glog/logging.h.in b/src/glog/logging.h.in
+index 95a573b1..54cd838f 100644
+--- a/src/glog/logging.h.in
++++ b/src/glog/logging.h.in
+@@ -89,6 +89,10 @@
+ #include <gflags/gflags.h>
+ #endif
+ 
++#if @ac_cv_have_abslflags@
++#include <absl/flags/declare.h>
++#endif
++
+ #if @ac_cv_cxx11_atomic@ && __cplusplus >= 201103L
+ #include <atomic>
+ #elif defined(GLOG_OS_WINDOWS)
+@@ -395,6 +399,14 @@ typedef void(*CustomPrefixCallback)(std::ostream& s, const LogMessageInfo& l, vo
+ #undef DECLARE_uint32
+ #endif
+ 
++#if @ac_cv_have_abslflags@
++#define DECLARE_VARIABLE 1
++#define DECLARE_bool(name) ABSL_DECLARE_FLAG(bool, name)
++#define DECLARE_int32(name) ABSL_DECLARE_FLAG(@ac_google_namespace@::int32, name)
++#define DECLARE_uint32(name) ABSL_DECLARE_FLAG(@ac_google_namespace@::uint32, name)
++#define DECLARE_string(name) ABSL_DECLARE_FLAG(std::string, name)
++#endif
++
+ #ifndef DECLARE_VARIABLE
+ #define DECLARE_VARIABLE(type, shorttype, name, tn)                     \
+   namespace fL##shorttype {                                             \
+diff --git a/src/glog/vlog_is_on.h.in b/src/glog/vlog_is_on.h.in
+index 7526fc34..16e60f46 100644
+--- a/src/glog/vlog_is_on.h.in
++++ b/src/glog/vlog_is_on.h.in
+@@ -64,6 +64,14 @@
+ #include <glog/log_severity.h>
+ 
+ #if defined(__GNUC__)
++
++#if @ac_cv_have_abslflags@
++  extern int32_t absl_proxy_v;
++  #define VLEVEL (@ac_google_namespace@::absl_proxy_v)
++#else
++  #define VLEVEL (FLAGS_v)
++#endif
++
+ // We emit an anonymous static int* variable at every VLOG_IS_ON(n) site.
+ // (Normally) the first time every VLOG_IS_ON(n) site is hit,
+ // we determine what variable will dynamically control logging at this site:
+@@ -74,7 +82,7 @@
+   __extension__  \
+   ({ static @ac_google_namespace@::SiteFlag vlocal__ = {NULL, NULL, 0, NULL};       \
+      @ac_google_namespace@::int32 verbose_level__ = (verboselevel);                    \
+-     (vlocal__.level == NULL ? @ac_google_namespace@::InitVLOG3__(&vlocal__, &FLAGS_v, \
++     (vlocal__.level == NULL ? @ac_google_namespace@::InitVLOG3__(&vlocal__, &VLEVEL, \
+                         __FILE__, verbose_level__) : *vlocal__.level >= verbose_level__); \
+   })
+ #else
+diff --git a/src/logging.cc b/src/logging.cc
+index 4028ccc0..fc618d3a 100644
+--- a/src/logging.cc
++++ b/src/logging.cc
+@@ -103,7 +103,9 @@ using std::fdopen;
+ #endif
+ 
+ // There is no thread annotation support.
++#ifndef EXCLUSIVE_LOCKS_REQUIRED
+ #define EXCLUSIVE_LOCKS_REQUIRED(mu)
++#endif
+ 
+ static bool BoolFromEnv(const char *varname, bool defval) {
+   const char* const valstr = getenv(varname);
+@@ -351,8 +353,9 @@ static const char* GetAnsiColorCode(GLogColor color) {
+ 
+ // Safely get max_log_size, overriding to 1 if it somehow gets defined as 0
+ static uint32 MaxLogSize() {
+-  return (FLAGS_max_log_size > 0 && FLAGS_max_log_size < 4096
+-              ? FLAGS_max_log_size
++  uint32 maxlogsize = FLAG(max_log_size);
++  return (maxlogsize > 0 && maxlogsize < 4096
++              ? maxlogsize
+               : 1);
+ }
+ 
+@@ -721,7 +724,7 @@ inline void LogDestination::SetStderrLogging(LogSeverity min_severity) {
+   // Prevent any subtle race conditions by wrapping a mutex lock around
+   // all this stuff.
+   MutexLock l(&log_mutex);
+-  FLAGS_stderrthreshold = min_severity;
++  absl::SetFlag(&FLAGS_stderrthreshold, min_severity);
+ }
+ 
+ inline void LogDestination::LogToStderr() {
+@@ -747,8 +750,8 @@ static void ColoredWriteToStderrOrStdout(FILE* output, LogSeverity severity,
+                                          const char* message, size_t len) {
+   bool is_stdout = (output == stdout);
+   const GLogColor color = (LogDestination::terminal_supports_color() &&
+-                           ((!is_stdout && FLAGS_colorlogtostderr) ||
+-                            (is_stdout && FLAGS_colorlogtostdout)))
++                           ((!is_stdout && FLAG(colorlogtostderr)) ||
++                            (is_stdout && FLAG(colorlogtostdout))))
+                               ? SeverityToColor(severity)
+                               : COLOR_DEFAULT;
+ 
+@@ -789,7 +792,7 @@ static void ColoredWriteToStdout(LogSeverity severity, const char* message,
+   FILE* output = stdout;
+   // We also need to send logs to the stderr when the severity is
+   // higher or equal to the stderr threshold.
+-  if (severity >= FLAGS_stderrthreshold) {
++  if (severity >= FLAG(stderrthreshold)) {
+     output = stderr;
+   }
+   ColoredWriteToStderrOrStdout(output, severity, message, len);
+@@ -808,7 +811,7 @@ static void WriteToStderr(const char* message, size_t len) {
+ 
+ inline void LogDestination::MaybeLogToStderr(LogSeverity severity,
+ 					     const char* message, size_t message_len, size_t prefix_len) {
+-  if ((severity >= FLAGS_stderrthreshold) || FLAGS_alsologtostderr) {
++  if ((severity >= FLAG(stderrthreshold)) || FLAG(alsologtostderr)) {
+     ColoredWriteToStderr(severity, message, message_len);
+ #ifdef GLOG_OS_WINDOWS
+     (void) prefix_len;
+@@ -835,8 +838,8 @@ inline void LogDestination::MaybeLogToStderr(LogSeverity severity,
+ inline void LogDestination::MaybeLogToEmail(LogSeverity severity,
+ 					    const char* message, size_t len) {
+   if (severity >= email_logging_severity_ ||
+-      severity >= FLAGS_logemaillevel) {
+-    string to(FLAGS_alsologtoemail);
++      severity >= FLAG(logemaillevel)) {
++    string to(FLAG(alsologtoemail));
+     if (!addresses_.empty()) {
+       if (!to.empty()) {
+         to += ",";
+@@ -862,7 +865,7 @@ inline void LogDestination::MaybeLogToLogfile(LogSeverity severity,
+                                               time_t timestamp,
+ 					      const char* message,
+ 					      size_t len) {
+-  const bool should_flush = severity > FLAGS_logbuflevel;
++  const bool should_flush = severity > FLAG(logbuflevel);
+   LogDestination* destination = log_destination(severity);
+   destination->logger_->Write(should_flush, timestamp, message, len);
+ }
+@@ -871,9 +874,9 @@ inline void LogDestination::LogToAllLogfiles(LogSeverity severity,
+                                              time_t timestamp,
+                                              const char* message,
+                                              size_t len) {
+-  if (FLAGS_logtostdout) {  // global flag: never log to file
++  if (FLAG(logtostdout)) {  // global flag: never log to file
+     ColoredWriteToStdout(severity, message, len);
+-  } else if (FLAGS_logtostderr) {  // global flag: never log to file
++  } else if (FLAG(logtostderr)) {  // global flag: never log to file
+     ColoredWriteToStderr(severity, message, len);
+   } else {
+     for (int i = severity; i >= 0; --i) {
+@@ -1032,25 +1035,25 @@ void LogFileObject::FlushUnlocked(){
+     bytes_since_flush_ = 0;
+   }
+   // Figure out when we are due for another flush.
+-  const int64 next = (FLAGS_logbufsecs
++  const int64 next = (FLAG(logbufsecs)
+                       * static_cast<int64>(1000000));  // in usec
+   next_flush_time_ = CycleClock_Now() + UsecToCycles(next);
+ }
+ 
+ bool LogFileObject::CreateLogfile(const string& time_pid_string) {
+   string string_filename = base_filename_;
+-  if (FLAGS_timestamp_in_logfile_name) {
++  if (FLAG(timestamp_in_logfile_name)) {
+     string_filename += time_pid_string;
+   }
+   string_filename += filename_extension_;
+   const char* filename = string_filename.c_str();
+   //only write to files, create if non-existant.
+   int flags = O_WRONLY | O_CREAT;
+-  if (FLAGS_timestamp_in_logfile_name) {
++  if (FLAG(timestamp_in_logfile_name)) {
+     //demand that the file is unique for our timestamp (fail if it exists).
+     flags = flags | O_EXCL;
+   }
+-  int fd = open(filename, flags, FLAGS_logfile_mode);
++  int fd = open(filename, flags, FLAG(logfile_mode));
+   if (fd == -1) return false;
+ #ifdef HAVE_FCNTL
+   // Mark the file close-on-exec. We don't really care if this fails
+@@ -1083,7 +1086,7 @@ bool LogFileObject::CreateLogfile(const string& time_pid_string) {
+   file_ = fdopen(fd, "a");  // Make a FILE*.
+   if (file_ == NULL) {  // Man, we're screwed!
+     close(fd);
+-    if (FLAGS_timestamp_in_logfile_name) {
++    if (FLAG(timestamp_in_logfile_name)) {
+       unlink(filename);  // Erase the half-baked evidence: an unusable log file, only if we just created it.
+     }
+     return false;
+@@ -1125,8 +1128,8 @@ bool LogFileObject::CreateLogfile(const string& time_pid_string) {
+ 
+     // Make an additional link to the log file in a place specified by
+     // FLAGS_log_link, if indicated
+-    if (!FLAGS_log_link.empty()) {
+-      linkpath = FLAGS_log_link + "/" + linkname;
++    if (!FLAG(log_link).empty()) {
++      linkpath = FLAG(log_link) + "/" + linkname;
+       unlink(linkpath.c_str());                  // delete old one if it exists
+       if (symlink(filename, linkpath.c_str()) != 0) {
+         // silently ignore failures
+@@ -1165,7 +1168,7 @@ void LogFileObject::Write(bool force_flush,
+     rollover_attempt_ = 0;
+ 
+     struct ::tm tm_time;
+-    if (FLAGS_log_utc_time) {
++    if (FLAG(log_utc_time)) {
+       gmtime_r(&timestamp, &tm_time);
+     } else {
+       localtime_r(&timestamp, &tm_time);
+@@ -1253,14 +1256,14 @@ void LogFileObject::Write(bool force_flush,
+                        << ' '
+                        << setw(2) << tm_time.tm_hour << ':'
+                        << setw(2) << tm_time.tm_min << ':'
+-                       << setw(2) << tm_time.tm_sec << (FLAGS_log_utc_time ? " UTC\n" : "\n")
++                       << setw(2) << tm_time.tm_sec << (FLAG(log_utc_time) ? " UTC\n" : "\n")
+                        << "Running on machine: "
+                        << LogDestination::hostname() << '\n';
+ 
+     if(!g_application_fingerprint.empty()) {
+       file_header_stream << "Application fingerprint: " << g_application_fingerprint << '\n';
+     }
+-    const char* const date_time_format = FLAGS_log_year_in_prefix
++    const char* const date_time_format = FLAG(log_year_in_prefix)
+                                              ? "yyyymmdd hh:mm:ss.uuuuuu"
+                                              : "mmdd hh:mm:ss.uuuuuu";
+     file_header_stream << "Running duration (h:mm:ss): "
+@@ -1284,7 +1287,7 @@ void LogFileObject::Write(bool force_flush,
+     // greater than 4096, thereby indicating an error.
+     errno = 0;
+     fwrite(message, 1, message_len, file_);
+-    if ( FLAGS_stop_logging_if_full_disk &&
++    if ( FLAG(stop_logging_if_full_disk) &&
+          errno == ENOSPC ) {  // disk full, stop writing to disk
+       stop_writing = true;  // until the disk is
+       return;
+@@ -1307,7 +1310,7 @@ void LogFileObject::Write(bool force_flush,
+     FlushUnlocked();
+ #ifdef GLOG_OS_LINUX
+     // Only consider files >= 3MiB
+-    if (FLAGS_drop_log_memory && file_length_ >= (3U << 20U)) {
++    if (FLAG(drop_log_memory) && file_length_ >= (3U << 20U)) {
+       // Don't evict the most recent 1-2MiB so as not to impact a tailer
+       // of the log file and to avoid page rounding issue on linux < 4.7
+       uint32 total_drop_length =
+@@ -1348,7 +1351,7 @@ void LogCleaner::Disable() {
+ }
+ 
+ void LogCleaner::UpdateCleanUpTime() {
+-  const int64 next = (FLAGS_logcleansecs
++  const int64 next = (FLAG(logcleansecs)
+                       * 1000000);  // in usec
+   next_cleanup_time_ = CycleClock_Now() + UsecToCycles(next);
+ }
+@@ -1664,7 +1667,7 @@ void LogMessage::Init(const char* file,
+   //    I20201018 160715 f5d4fbb0 logging.cc:1153]
+   //    (log level, GMT year, month, date, time, thread_id, file basename, line)
+   // We exclude the thread_id for the default thread.
+-  if (FLAGS_log_prefix && (line != kNoLogPrefix)) {
++  if (FLAG(log_prefix) && (line != kNoLogPrefix)) {
+       std::ios saved_fmt(NULL);
+       saved_fmt.copyfmt(stream());
+       stream().fill('0');
+@@ -1672,7 +1675,7 @@ void LogMessage::Init(const char* file,
+       if (custom_prefix_callback == NULL) {
+     #endif
+           stream() << LogSeverityNames[severity][0];
+-          if (FLAGS_log_year_in_prefix) {
++          if (FLAG(log_year_in_prefix)) {
+             stream() << setw(4) << 1900 + logmsgtime_.year();
+           }
+           stream() << setw(2) << 1 + logmsgtime_.month()
+@@ -1703,11 +1706,11 @@ void LogMessage::Init(const char* file,
+   }
+   data_->num_prefix_chars_ = data_->stream_.pcount();
+ 
+-  if (!FLAGS_log_backtrace_at.empty()) {
++  if (!FLAG(log_backtrace_at).empty()) {
+     char fileline[128];
+     snprintf(fileline, sizeof(fileline), "%s:%d", data_->basename_, line);
+ #ifdef HAVE_STACKTRACE
+-    if (FLAGS_log_backtrace_at == fileline) {
++    if (FLAG(log_backtrace_at) == fileline) {
+       string stacktrace;
+       DumpStackTraceToString(&stacktrace);
+       stream() << " (stacktrace:\n" << stacktrace << ") ";
+@@ -1746,7 +1749,7 @@ ostream& LogMessage::stream() {
+ // Flush buffered message, called by the destructor, or any other function
+ // that needs to synchronize the log.
+ void LogMessage::Flush() {
+-  if (data_->has_been_flushed_ || data_->severity_ < FLAGS_minloglevel) {
++  if (data_->has_been_flushed_ || data_->severity_ < FLAG(minloglevel)) {
+     return;
+   }
+ 
+@@ -1808,7 +1811,7 @@ static char fatal_message[256];
+ void ReprintFatalMessage() {
+   if (fatal_message[0]) {
+     const size_t n = strlen(fatal_message);
+-    if (!FLAGS_logtostderr) {
++    if (!FLAG(logtostderr)) {
+       // Also write to stderr (don't color to avoid terminal checks)
+       WriteToStderr(fatal_message, n);
+     }
+@@ -1837,8 +1840,8 @@ void LogMessage::SendToLog() EXCLUSIVE_LOCKS_REQUIRED(log_mutex) {
+   // global flag: never log to file if set.  Also -- don't log to a
+   // file if we haven't parsed the command line flags to get the
+   // program name.
+-  if (FLAGS_logtostderr || FLAGS_logtostdout || !IsGoogleLoggingInitialized()) {
+-    if (FLAGS_logtostdout) {
++  if (FLAG(logtostderr) || FLAG(logtostdout) || !IsGoogleLoggingInitialized()) {
++    if (FLAG(logtostdout)) {
+       ColoredWriteToStdout(data_->severity_, data_->message_text_,
+                            data_->num_chars_to_log_);
+     } else {
+@@ -1891,7 +1894,7 @@ void LogMessage::SendToLog() EXCLUSIVE_LOCKS_REQUIRED(log_mutex) {
+       fatal_time = logmsgtime_.timestamp();
+     }
+ 
+-    if (!FLAGS_logtostderr && !FLAGS_logtostdout) {
++    if (!FLAG(logtostderr) && !FLAG(logtostdout)) {
+       for (int i = 0; i < NUM_SEVERITIES; ++i) {
+         if (LogDestination::log_destinations_[i]) {
+           LogDestination::log_destinations_[i]->logger_->Write(true, 0, "", 0);
+@@ -2238,7 +2241,7 @@ static bool SendEmailInternal(const char*dest, const char *subject,
+               subject, body, dest);
+     }
+ 
+-    string logmailer = FLAGS_logmailer;
++    string logmailer = FLAG(logmailer);
+     if (logmailer.empty()) {
+         logmailer = "/bin/mail";
+     }
+@@ -2338,9 +2341,9 @@ const vector<string>& GetLoggingDirectories() {
+   if (logging_directories_list == NULL) {
+     logging_directories_list = new vector<string>;
+ 
+-    if ( !FLAGS_log_dir.empty() ) {
++    if ( !FLAG(log_dir).empty() ) {
+       // A dir was specified, we should use it
+-      logging_directories_list->push_back(FLAGS_log_dir);
++      logging_directories_list->push_back(FLAG(log_dir));
+     } else {
+       GetTempDirectories(logging_directories_list);
+ #ifdef GLOG_OS_WINDOWS
+@@ -2654,7 +2657,7 @@ LogMessageTime::LogMessageTime(std::tm t) {
+ 
+ LogMessageTime::LogMessageTime(std::time_t timestamp, WallTime now) {
+   std::tm t;
+-  if (FLAGS_log_utc_time)
++  if (FLAG(log_utc_time))
+     gmtime_r(&timestamp, &t);
+   else
+     localtime_r(&timestamp, &t);
+@@ -2673,7 +2676,7 @@ void LogMessageTime::init(const std::tm& t, std::time_t timestamp,
+ void LogMessageTime::CalcGmtOffset() {
+   std::tm gmt_struct;
+   int isDst = 0;
+-  if ( FLAGS_log_utc_time ) {
++  if ( FLAG(log_utc_time )) {
+     localtime_r(&timestamp_, &gmt_struct);
+     isDst = gmt_struct.tm_isdst;
+     gmt_struct = time_struct_;
+diff --git a/src/raw_logging.cc b/src/raw_logging.cc
+index 43159832..8532362b 100644
+--- a/src/raw_logging.cc
++++ b/src/raw_logging.cc
+@@ -123,8 +123,8 @@ static char crash_buf[kLogBufSize + 1] = { 0 };  // Will end in '\0'
+ GLOG_ATTRIBUTE_FORMAT(printf, 4, 5)
+ void RawLog__(LogSeverity severity, const char* file, int line,
+               const char* format, ...) {
+-  if (!(FLAGS_logtostdout || FLAGS_logtostderr ||
+-        severity >= FLAGS_stderrthreshold || FLAGS_alsologtostderr ||
++  if (!(FLAG(logtostdout) || FLAG(logtostderr) ||
++        severity >= FLAG(stderrthreshold) || FLAG(alsologtostderr) ||
+         !IsGoogleLoggingInitialized())) {
+     return;  // this stderr log message is suppressed
+   }
+diff --git a/src/utilities.cc b/src/utilities.cc
+index a332f1a1..a9d5102a 100644
+--- a/src/utilities.cc
++++ b/src/utilities.cc
+@@ -141,7 +141,7 @@ static void DumpStackTrace(int skip_count, DebugWriter *writerfn, void *arg) {
+   int depth = GetStackTrace(stack, ARRAYSIZE(stack), skip_count+1);
+   for (int i = 0; i < depth; i++) {
+ #if defined(HAVE_SYMBOLIZE)
+-    if (FLAGS_symbolize_stacktrace) {
++    if (FLAG(symbolize_stacktrace)) {
+       DumpPCAndSymbol(writerfn, arg, stack[i], "    ");
+     } else {
+       DumpPC(writerfn, arg, stack[i], "    ");
+diff --git a/src/vlog_is_on.cc b/src/vlog_is_on.cc
+index e478a366..4b7a5cae 100644
+--- a/src/vlog_is_on.cc
++++ b/src/vlog_is_on.cc
+@@ -43,14 +43,24 @@
+ #include <glog/logging.h>
+ #include <glog/raw_logging.h>
+ #include "base/googleinit.h"
++#include "config.h"
+ 
+ // glog doesn't have annotation
+ #define ANNOTATE_BENIGN_RACE(address, description)
+ 
+ using std::string;
+ 
++#ifdef HAVE_ABSL_FLAGS
++
++ABSL_FLAG(int32_t, v, 0, "Show all VLOG(m) messages for m <= this."
++" Overridable by --vmodule.").OnUpdate([] {
++      GOOGLE_NAMESPACE::absl_proxy_v = absl::GetFlag(FLAGS_v);
++    });
++
++#else
+ GLOG_DEFINE_int32(v, 0, "Show all VLOG(m) messages for m <= this."
+ " Overridable by --vmodule.");
++#endif
+ 
+ GLOG_DEFINE_string(vmodule, "", "per-module verbose level."
+ " Argument is a comma-separated list of <module name>=<log level>."
+@@ -60,6 +70,8 @@ GLOG_DEFINE_string(vmodule, "", "per-module verbose level."
+ 
+ _START_GOOGLE_NAMESPACE_
+ 
++int32_t absl_proxy_v = 0;
++
+ namespace glog_internal_namespace_ {
+ 
+ // Used by logging_unittests.cc so can't make it static here.
+@@ -132,7 +144,8 @@ static void VLOG2Initializer() {
+   // Can now parse --vmodule flag and initialize mapping of module-specific
+   // logging levels.
+   inited_vmodule = false;
+-  const char* vmodule = FLAGS_vmodule.c_str();
++  string vmodule_str = FLAG(vmodule);
++  const char* vmodule = vmodule_str.c_str();
+   const char* sep;
+   VModuleInfo* head = NULL;
+   VModuleInfo* tail = NULL;
+@@ -164,7 +177,7 @@ static void VLOG2Initializer() {
+ 
+ // This can be called very early, so we use SpinLock and RAW_VLOG here.
+ int SetVLOGLevel(const char* module_pattern, int log_level) {
+-  int result = FLAGS_v;
++  int result = FLAG(v);
+   size_t const pattern_len = strlen(module_pattern);
+   bool found = false;
+   {

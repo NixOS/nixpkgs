@@ -1,0 +1,17 @@
+diff --git a/qt/aqt/__init__.py b/qt/aqt/__init__.py
+index 352848cfd..3fd5d0769 100644
+--- a/qt/aqt/__init__.py
++++ b/qt/aqt/__init__.py
+@@ -402,12 +402,6 @@ def parseArgs(argv: list[str]) -> tuple[argparse.Namespace, list[str]]:
+ def setupGL(pm: aqt.profiles.ProfileManager) -> None:
+     driver = pm.video_driver()
+
+-    # work around pyqt loading wrong GL library
+-    if is_lin:
+-        import ctypes
+-
+-        ctypes.CDLL("libGL.so.1", ctypes.RTLD_GLOBAL)
+-
+     # catch opengl errors
+     def msgHandler(category: Any, ctx: Any, msg: Any) -> None:
+         if category == QtMsgType.QtDebugMsg:

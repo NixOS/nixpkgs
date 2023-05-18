@@ -1,0 +1,46 @@
+diff --git a/libgnucash/app-utils/gnc-quotes.cpp b/libgnucash/app-utils/gnc-quotes.cpp
+index 3003fca71f..e01cb10b50 100644
+--- a/libgnucash/app-utils/gnc-quotes.cpp
++++ b/libgnucash/app-utils/gnc-quotes.cpp
+@@ -122,7 +122,6 @@ private:
+ 
+ class GncFQQuoteSource final : public GncQuoteSource
+ {
+-    const bfs::path c_cmd;
+     std::string c_fq_wrapper;
+     std::string m_version;
+     StrVec m_sources;
+@@ -145,7 +144,6 @@ static std::string parse_quotesource_error(const std::string& line);
+ static const std::string empty_string{};
+ 
+ GncFQQuoteSource::GncFQQuoteSource() :
+-c_cmd{bp::search_path("perl")},
+ m_version{}, m_sources{}, m_api_key{}
+ {
+     char *bindir = gnc_path_get_bindir();
+@@ -197,7 +195,7 @@ m_version{}, m_sources{}, m_api_key{}
+ QuoteResult
+ GncFQQuoteSource::get_quotes(const std::string& json_str) const
+ {
+-    StrVec args{"-w", c_fq_wrapper, "-f" };
++    StrVec args{"-f" };
+     return run_cmd(args, json_str);
+ }
+ 
+@@ -215,13 +213,13 @@ GncFQQuoteSource::run_cmd (const StrVec& args, const std::string& json_string) c
+         auto input_buf = bp::buffer (json_string);
+ 	bp::child process;
+ 	if (m_api_key.empty())
+-	    process = bp::child(c_cmd, args,
++	    process = bp::child(c_fq_wrapper, args,
+ 				bp::std_out > out_buf,
+ 				bp::std_err > err_buf,
+ 				bp::std_in < input_buf,
+ 				svc);
+ 	else
+-	    process = bp::child(c_cmd, args,
++	    process = bp::child(c_fq_wrapper, args,
+ 				bp::std_out > out_buf,
+ 				bp::std_err > err_buf,
+ 				bp::std_in < input_buf,
+
