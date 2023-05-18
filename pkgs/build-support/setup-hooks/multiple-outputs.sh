@@ -2,6 +2,7 @@
 preConfigureHooks+=(_multioutConfig)
 preFixupHooks+=(_multioutDocs)
 preFixupHooks+=(_multioutDevs)
+preFixupHooks+=(_multioutStatics)
 postFixupHooks+=(_multioutPropagateDev)
 
 # _assignFirst varName otherVarNames*
@@ -53,6 +54,10 @@ _overrideFirst outputInclude "$outputDev"
 
 # so-libs are often among the main things to keep, and so go to $out
 _overrideFirst outputLib "lib" "out"
+
+# static library files shouldn't be installed adjacent to dynamic libs, since
+# they are only ever used at build-time. Put them in $dev.
+_overrideFirst outputStatic "static" "$outputDev"
 
 _overrideFirst outputDoc "doc" "out"
 _overrideFirst outputDevdoc "devdoc" REMOVE # documentation for developers
@@ -177,6 +182,25 @@ _multioutDevs() {
         echo "Patching '$f' includedir to output ${!outputInclude}"
         sed -i "/^includedir=/s,=\${prefix},=${!outputInclude}," "$f"
     done
+}
+
+# Move static libraries to the desired outputs.
+_multioutStatics() {
+    if [ "$(getAllOutputNames)" = "out" ] || [ -z "${moveToStatic-1}" ]; then return; fi;
+
+    moveToOutput "lib/*.a" "${!outputStatic}"
+
+    local as=`find "${!outputStatic}/lib" -name "*.a" -type f`
+    local acount=`echo -n "$as" | wc -l`
+    if [ $acount != 0 ]; then
+        # Some of *.a files are linker scripts where moving broke the paths.
+        local output
+        for output in $outputs; do
+            if [ "${!output}" = "${!outputStatic}" ]; then continue; fi
+            sed "/^GROUP/s|${!output}/lib/lib|${!outputStatic}/lib/lib|g" \
+              -i $as
+        done
+    fi
 }
 
 # Make the "dev" propagate other outputs needed for development.
