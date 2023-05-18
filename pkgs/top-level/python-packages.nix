@@ -9669,6 +9669,8 @@ self: super: with self; {
 
   pytest-httpx = callPackage ../development/python-modules/pytest-httpx { };
 
+  pytest-image-diff = callPackage ../development/python-modules/pytest-image-diff { };
+
   pytest-instafail = callPackage ../development/python-modules/pytest-instafail { };
 
   pytest-isort = callPackage ../development/python-modules/pytest-isort { };
