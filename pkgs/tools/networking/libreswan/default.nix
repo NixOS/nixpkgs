@@ -59,6 +59,11 @@ stdenv.mkDerivation rec {
       url = "https://libreswan.org/security/CVE-2023-23009/CVE-2023-23009-libreswan-4.4-4.9.patch";
       sha256 = "sha256-HJyp7y7ROfMVg5/e/JyOHlXTyVkw0dAVmNHwTAqlFmQ=";
     })
+    (fetchpatch {
+      name = "CVE-2023-30570.patch";
+      url = "https://libreswan.org/security/CVE-2023-30570/CVE-2023-30570-libreswan-4.x.patch";
+      sha256 = "sha256-/GeD1REob9cNwAJm7twxC4hhfT+nXq5m3lG82Ztl/5w=";
+    })
   ];
 
   strictDeps = true;
