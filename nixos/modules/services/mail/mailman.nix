@@ -503,6 +503,7 @@ in {
         path = with pkgs; [ jq ];
         after = optional withPostgresql "postgresql.service";
         requires = optional withPostgresql "postgresql.service";
+        serviceConfig.RemainAfterExit = true;
         serviceConfig.Type = "oneshot";
         script = ''
           install -m0750 -o mailman -g mailman ${mailmanCfgFile} /etc/mailman.cfg
