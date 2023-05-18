@@ -101,6 +101,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Web framework for building APIs";
     homepage = "https://github.com/tiangolo/fastapi";
+    changelog = "https://github.com/tiangolo/fastapi/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ wd15 ];
   };
