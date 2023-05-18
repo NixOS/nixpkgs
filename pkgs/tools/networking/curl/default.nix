@@ -73,6 +73,10 @@ stdenv.mkDerivation (finalAttrs: {
     ./CVE-2023-27536.patch
     ./CVE-2023-27537.patch
     ./CVE-2023-27538.patch
+    # curl 8.1.0 fixes
+    ./CVE-2023-28320.patch
+    ./CVE-2023-28321.patch
+    ./CVE-2023-28322.patch    
   ];
 
   outputs = [ "bin" "dev" "out" "man" "devdoc" ];
