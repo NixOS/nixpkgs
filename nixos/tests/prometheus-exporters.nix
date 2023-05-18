@@ -328,7 +328,7 @@ let
         systemd.services.prometheus-jitsi-exporter.after = [ "jitsi-videobridge2.service" ];
         services.jitsi-videobridge = {
           enable = true;
-          apis = [ "colibri" "rest" ];
+          colibriRestApi = true;
         };
       };
       exporterTest = ''
