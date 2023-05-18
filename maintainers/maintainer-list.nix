@@ -8268,6 +8268,12 @@
     githubId = 16481032;
     name = "Kiba Fox";
   };
+  kidanger = {
+    email = "angerj.dev@gmail.com";
+    github = "kidanger";
+    githubId = 297479;
+    name = "Jérémy Anger";
+  };
   kidd = {
     email = "raimonster@gmail.com";
     github = "kidd";
