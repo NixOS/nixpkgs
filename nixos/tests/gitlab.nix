@@ -11,8 +11,6 @@
 
 { pkgs, lib, ... }:
 
-with lib;
-
 let
   inherit (import ./ssh-keys.nix pkgs) snakeOilPrivateKey snakeOilPublicKey;
   initialRootPassword = "notproduction";
@@ -30,9 +28,7 @@ let
   bobProjectId = "3";
 in {
   name = "gitlab";
-  meta = with pkgs.lib.maintainers; {
-    maintainers = [ globin yayayayaka ];
-  };
+  meta.maintainers = with lib.maintainers; [ globin yayayayaka ];
 
   nodes = {
     gitlab = { ... }: {
@@ -43,10 +39,10 @@ in {
       virtualisation.useNixStoreImage = true;
       virtualisation.writableStore = false;
 
-      systemd.services.gitlab.serviceConfig.Restart = mkForce "no";
-      systemd.services.gitlab-workhorse.serviceConfig.Restart = mkForce "no";
-      systemd.services.gitaly.serviceConfig.Restart = mkForce "no";
-      systemd.services.gitlab-sidekiq.serviceConfig.Restart = mkForce "no";
+      systemd.services.gitlab.serviceConfig.Restart = lib.mkForce "no";
+      systemd.services.gitlab-workhorse.serviceConfig.Restart = lib.mkForce "no";
+      systemd.services.gitaly.serviceConfig.Restart = lib.mkForce "no";
+      systemd.services.gitlab-sidekiq.serviceConfig.Restart = lib.mkForce "no";
 
       services.nginx = {
         enable = true;
@@ -195,7 +191,7 @@ in {
         gitlab.succeed(
             "echo \"Authorization: Bearer $(curl -X POST -H 'Content-Type: application/json' -d @${auth} http://gitlab/oauth/token | ${pkgs.jq}/bin/jq -r '.access_token')\" >/tmp/headers"
         )
-      '' + optionalString doSetup ''
+      '' + lib.optionalString doSetup ''
         with subtest("Create user Alice"):
             gitlab.succeed(
                 """[ "$(curl -o /dev/null -w '%{http_code}' -X POST -H 'Content-Type: application/json' -H @/tmp/headers -d @${createUserAlice} http://gitlab/api/v4/users)" = "201" ]"""

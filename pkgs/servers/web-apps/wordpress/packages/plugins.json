@@ -96,10 +96,10 @@
     "version": "2.06"
   },
   "mailpoet": {
-    "path": "mailpoet/tags/4.15.0",
-    "rev": "2910098",
-    "sha256": "1qqm784ikq5jdvnas1a67xzrj6hq8aa54bi1xh20fq9b9jwpv5na",
-    "version": "4.15.0"
+    "path": "mailpoet/tags/4.16.0",
+    "rev": "2912930",
+    "sha256": "0ij8g9bnni0ki4ks5sdq83pd8nqqfj3yf6by1v44splq2a5ix81g",
+    "version": "4.16.0"
   },
   "merge-minify-refresh": {
     "path": "merge-minify-refresh/trunk",
