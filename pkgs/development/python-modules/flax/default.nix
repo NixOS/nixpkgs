@@ -85,6 +85,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Neural network library for JAX";
     homepage = "https://github.com/google/flax";
+    changelog = "https://github.com/google/flax/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ ndl ];
   };
