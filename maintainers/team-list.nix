@@ -546,6 +546,17 @@ with lib.maintainers; {
     shortName = "Matrix";
   };
 
+  minimal-bootstrap = {
+    members = [
+      artturin
+      emilytrau
+      ericson2314
+      jk
+    ];
+    scope = "Maintain the minimal-bootstrap toolchain and related packages.";
+    shortName = "Minimal Bootstrap";
+  };
+
   mobile = {
     members = [
       samueldr

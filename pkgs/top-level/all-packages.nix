@@ -19748,7 +19748,7 @@ with pkgs;
   c-blosc = callPackage ../development/libraries/c-blosc { };
 
   # justStaticExecutables is needed due to https://github.com/NixOS/nix/issues/2990
-  cachix = haskell.lib.justStaticExecutables haskellPackages.cachix_1_3_3;
+  cachix = haskell.lib.justStaticExecutables haskellPackages.cachix;
 
   calcium = callPackage ../development/libraries/calcium { };
 
@@ -33199,7 +33199,6 @@ with pkgs;
 
   osmscout-server = libsForQt5.callPackage ../applications/misc/osmscout-server { };
 
-  palemoon = callPackage ../applications/networking/browsers/palemoon { };
   palemoon-bin = callPackage ../applications/networking/browsers/palemoon/bin.nix { };
 
   paleta = callPackage ../applications/graphics/paleta { };

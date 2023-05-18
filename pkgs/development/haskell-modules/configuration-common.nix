@@ -1717,9 +1717,6 @@ self: super: {
   servant-swagger-ui-core = doJailbreak super.servant-swagger-ui-core;
 
   hercules-ci-agent = lib.pipe super.hercules-ci-agent [
-    (pkg: pkg.override (_: {
-      cachix = super.cachix_1_3_3;
-    }))
     (self.generateOptparseApplicativeCompletions [ "hercules-ci-agent" ])
   ];
 
