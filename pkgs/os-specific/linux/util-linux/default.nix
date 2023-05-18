@@ -16,11 +16,11 @@
 
 stdenv.mkDerivation rec {
   pname = "util-linux" + lib.optionalString (!nlsSupport && !ncursesSupport && !systemdSupport) "-minimal";
-  version = "2.38.1";
+  version = "2.39";
 
   src = fetchurl {
     url = "mirror://kernel/linux/utils/util-linux/v${lib.versions.majorMinor version}/util-linux-${version}.tar.xz";
-    hash = "sha256-YEkqGbRObPmj3f9oMlszO4tStsWc4+vWoOyqTFEX6E8=";
+    hash = "sha256-MrMKM2zakDGC7WH+s+m5CLdipeZv4U5D77iNNxYgdcs=";
   };
 
   patches = [
