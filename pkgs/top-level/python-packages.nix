@@ -3115,6 +3115,8 @@ self: super: with self; {
 
   editorconfig = callPackage ../development/python-modules/editorconfig { };
 
+  edk2-pytool-library = callPackage ../development/python-modules/edk2-pytool-library { };
+
   edlib = callPackage ../development/python-modules/edlib {
     inherit (pkgs) edlib;
   };
