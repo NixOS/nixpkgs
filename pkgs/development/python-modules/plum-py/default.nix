@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "plum-py";
-  version = "0.8.5";
+  version = "0.8.6";
   disabled = !isPy3k;
 
   src = fetchFromGitLab {
     owner = "dangass";
     repo = "plum";
     rev = version;
-    hash = "sha256-jCZUNT1HpSr0khHsjnxEzN2LCzcDV6W27PjVkwFJHUg=";
+    hash = "sha256-gZSRqijKdjqOZe1+4aeycpCPsh6HC5sRbyVjgK+g4wM=";
   };
 
   postPatch = ''
