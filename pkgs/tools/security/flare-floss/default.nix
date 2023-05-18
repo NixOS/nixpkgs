@@ -72,6 +72,7 @@ py.pkgs.buildPythonPackage rec {
     homepage = "https://github.com/mandiant/flare-floss";
     changelog = "https://github.com/mandiant/flare-floss/releases/tag/v${version}";
     license = licenses.asl20;
-    maintainers = [ ];
+    mainProgram = "floss";
+    maintainers = with maintainers; [ fab ];
   };
 }
