@@ -615,7 +615,7 @@ in {
           ];
         };
       };
-      syncthing-init = mkIf (cfg.settings != {}) {
+      syncthing-init = mkIf (cfg.settings != {} && cfg.systemService) {
         description = "Syncthing configuration updater";
         requisite = [ "syncthing.service" ];
         after = [ "syncthing.service" ];
