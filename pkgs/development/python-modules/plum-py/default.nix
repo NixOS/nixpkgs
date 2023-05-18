@@ -1,20 +1,22 @@
 { lib
+, baseline
 , buildPythonPackage
 , fetchFromGitLab
-, isPy3k
 , pytestCheckHook
-, baseline
+, pythonOlder
 }:
 
 buildPythonPackage rec {
   pname = "plum-py";
   version = "0.8.6";
-  disabled = !isPy3k;
+  format = "setuptools";
+
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitLab {
     owner = "dangass";
     repo = "plum";
-    rev = version;
+    rev = "refs/tags/${version}";
     hash = "sha256-gZSRqijKdjqOZe1+4aeycpCPsh6HC5sRbyVjgK+g4wM=";
   };
 
@@ -23,11 +25,13 @@ buildPythonPackage rec {
     sed -i "/python_requires =/d" setup.cfg
   '';
 
-  pythonImportsCheck = [ "plum" ];
-
   nativeCheckInputs = [
     baseline
     pytestCheckHook
+  ];
+
+  pythonImportsCheck = [
+    "plum"
   ];
 
   pytestFlagsArray = [
@@ -36,7 +40,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Classes and utilities for packing/unpacking bytes";
-    homepage = "https://plum-py.readthedocs.io/en/latest/index.html";
+    homepage = "https://plum-py.readthedocs.io/";
+    changelog = "https://gitlab.com/dangass/plum/-/blob/${version}/docs/release_notes.rst";
     license = licenses.mit;
     maintainers = with maintainers; [ dnr ];
   };
