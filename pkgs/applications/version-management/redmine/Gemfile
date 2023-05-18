@@ -55,6 +55,8 @@ group :common_mark do
   gem 'deckar01-task_list', '2.3.2'
 end
 
+# webrick
+gem 'webrick'
 
 # Include database gems for the database adapters NixOS supports
 require 'erb'
