@@ -19,20 +19,20 @@ Co-Authored-By: Brian Gianforcaro <bgianf@serenityos.org>
 Co-Authored-By: Philip Herron <herron.philip@googlemail.com>
 Co-Authored-By: Shannon Booth <shannon.ml.booth@gmail.com>
 ---
- gcc/config.gcc             | 20 +++++++++++++++
+ gcc/config.gcc             | 19 ++++++++++++++
  gcc/config/i386/serenity.h |  7 ++++++
  gcc/config/serenity.h      | 51 ++++++++++++++++++++++++++++++++++++++
  gcc/config/serenity.opt    | 35 ++++++++++++++++++++++++++
- 4 files changed, 113 insertions(+)
+ 4 files changed, 112 insertions(+)
  create mode 100644 gcc/config/i386/serenity.h
  create mode 100644 gcc/config/serenity.h
  create mode 100644 gcc/config/serenity.opt
 
 diff --git a/gcc/config.gcc b/gcc/config.gcc
-index c5064dd376660c192d5573997b4fc86b6b3e3838..f8a468c6f86c559eda37f780cf592245e42c78ac 100644
+index 6fd1594480a1d2054f499573b498781dfafd1d93..8e3d6c378796f324b904a7c58b274472362600fb 100644
 --- a/gcc/config.gcc
 +++ b/gcc/config.gcc
-@@ -673,6 +673,13 @@ x86_cpus="generic intel"
+@@ -690,6 +690,18 @@ x86_cpus="generic intel"
  
  # Common parts for widely ported systems.
  case ${target} in
@@ -42,29 +42,28 @@ index c5064dd376660c192d5573997b4fc86b6b3e3838..f8a468c6f86c559eda37f780cf592245
 +  default_use_cxa_atexit=yes
 +  extra_options="${extra_options} serenity.opt"
 +  tmake_file="t-slibgcc"
++  case ${target} in
++    aarch64*-* | x86_64-*)
++      default_gnu_indirect_function=yes
++      ;;
++  esac
 +  ;;
  *-*-darwin*)
    tmake_file="t-darwin "
    tm_file="${tm_file} darwin.h"
-@@ -1087,6 +1094,19 @@ case ${target} in
+@@ -1126,6 +1138,13 @@ case ${target} in
  esac
  
  case ${target} in
-+i[34567]86-*-serenity*)
-+    default_gnu_indirect_function=yes
-+    tm_file="${tm_file} i386/unix.h i386/att.h dbxelf.h elfos.h glibc-stdint.h i386/i386elf.h serenity.h i386/serenity.h"
-+    ;;
 +x86_64-*-serenity*)
-+    default_gnu_indirect_function=yes
-+    tm_file="${tm_file} i386/unix.h i386/att.h dbxelf.h elfos.h glibc-stdint.h i386/i386elf.h i386/x86-64.h serenity.h i386/serenity.h"
-+    ;;
-+aarch64-*-serenity*)
-+    default_gnu_indirect_function=yes
-+    tm_file="${tm_file} dbxelf.h elfos.h aarch64/aarch64-elf.h glibc-stdint.h serenity.h"
-+    tmake_file="${tmake_file} aarch64/t-aarch64"
-+    ;;
++	tm_file="${tm_file} i386/unix.h i386/att.h elfos.h glibc-stdint.h i386/i386elf.h i386/x86-64.h serenity.h i386/serenity.h"
++	;;
++aarch64*-*-serenity*)
++	tm_file="${tm_file} elfos.h glibc-stdint.h aarch64/aarch64-elf.h serenity.h"
++	tmake_file="${tmake_file} aarch64/t-aarch64"
++	;;
  aarch64*-*-elf | aarch64*-*-fuchsia* | aarch64*-*-rtems*)
- 	tm_file="${tm_file} dbxelf.h elfos.h newlib-stdint.h"
+ 	tm_file="${tm_file} elfos.h newlib-stdint.h"
  	tm_file="${tm_file} aarch64/aarch64-elf.h aarch64/aarch64-errata.h aarch64/aarch64-elf-raw.h"
 diff --git a/gcc/config/i386/serenity.h b/gcc/config/i386/serenity.h
 new file mode 100644
@@ -81,7 +80,7 @@ index 0000000000000000000000000000000000000000..53a4b8e93b74b4808a4bfed91c4d5558
 +#define PTRDIFF_TYPE    (TARGET_64BIT ? "long int" : "int")
 diff --git a/gcc/config/serenity.h b/gcc/config/serenity.h
 new file mode 100644
-index 0000000000000000000000000000000000000000..17551aaa1a07e6c0b7365f98899375122ba12529
+index 0000000000000000000000000000000000000000..b1fc4bb63facc9514bf300a84edbaefe56fee324
 --- /dev/null
 +++ b/gcc/config/serenity.h
 @@ -0,0 +1,51 @@
@@ -177,7 +176,7 @@ index 0000000000000000000000000000000000000000..2756a5575480449a2c46b9fdfde541ba
 +Driver
 +
 +; This comment is to ensure we retain the blank line above.
--- 
+--
 2.17.0
 
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
@@ -206,7 +205,7 @@ index df90720b716f2386f343f5ba46a2d8d706188dd5..a45cdd0de6833a1e632292722387be45
      i?86-*-cygwin* | \
      i?86-*-mingw32* | \
      x86_64-*-mingw32* | \
--- 
+--
 2.17.0
 
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
@@ -231,10 +230,10 @@ Co-Authored-By: Shannon Booth <shannon.ml.booth@gmail.com>
  3 files changed, 25 insertions(+)
 
 diff --git a/gcc/configure b/gcc/configure
-index 5ce0557719a9fe0acf9a0f0ffaf949e9eeba0eb1..2deaac5bc85815a7e3efc47a935fb81fca9b24da 100755
+index c7b26d1927de62d7b3a49ea9ac0a998979659cf2..5fcfaa3cfff30d2e8d1cdf3f62bf2125e2f99179 100755
 --- a/gcc/configure
 +++ b/gcc/configure
-@@ -31608,6 +31608,9 @@ case "$target" in
+@@ -31377,6 +31377,9 @@ case "$target" in
    *-linux-musl*)
      gcc_cv_target_dl_iterate_phdr=yes
      ;;
@@ -245,10 +244,10 @@ index 5ce0557719a9fe0acf9a0f0ffaf949e9eeba0eb1..2deaac5bc85815a7e3efc47a935fb81f
  
  if test x$gcc_cv_target_dl_iterate_phdr = xyes; then
 diff --git a/libgcc/config.host b/libgcc/config.host
-index 8c56fcae5d2fdfcc8d1f9b2614f0c41ad44f258f..f5855cfa66d7950c3d7565ad938b4e4727d7b46d 100644
+index b9975de902357576003cf391850fef2dc336aee1..7b1f6775b989410ccd6766f50740a288c6934794 100644
 --- a/libgcc/config.host
 +++ b/libgcc/config.host
-@@ -1534,6 +1534,22 @@ nvptx-*)
+@@ -1507,6 +1507,22 @@ nvptx-*)
  	tmake_file="$tmake_file nvptx/t-nvptx"
  	extra_parts="crt0.o"
  	;;
@@ -272,7 +271,7 @@ index 8c56fcae5d2fdfcc8d1f9b2614f0c41ad44f258f..f5855cfa66d7950c3d7565ad938b4e47
  	echo "*** Configuration ${host} not supported" 1>&2
  	exit 1
 diff --git a/libgcc/unwind-dw2-fde-dip.c b/libgcc/unwind-dw2-fde-dip.c
-index 7f9be5e6b021a539278570ad202f1f9c45311ca1..817c3fe219252ab3e1707913ebd53dfd97616b58 100644
+index 6223f5f18a23038c30654f191c63b9ae8baca26a..87813e9b249e7add5915ca310c86443a712caa05 100644
 --- a/libgcc/unwind-dw2-fde-dip.c
 +++ b/libgcc/unwind-dw2-fde-dip.c
 @@ -57,6 +57,12 @@
@@ -288,7 +287,7 @@ index 7f9be5e6b021a539278570ad202f1f9c45311ca1..817c3fe219252ab3e1707913ebd53dfd
  #if !defined(inhibit_libc) && defined(HAVE_LD_EH_FRAME_HDR) \
      && defined(TARGET_DL_ITERATE_PHDR) \
      && defined(__linux__)
--- 
+--
 2.17.0
 
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
@@ -310,7 +309,7 @@ Co-Authored-By: Shannon Booth <shannon.ml.booth@gmail.com>
  1 file changed, 1 deletion(-)
 
 diff --git a/libgcc/config/t-slibgcc b/libgcc/config/t-slibgcc
-index 4efd7b43dff96b6adb87993e4c66cbcb5ae144dc..932fa0cfbdeff6bb029fcf4b44d93d126d1ecd5f 100644
+index 29765bce8021a69980bbd3e283fe812f22c63242..3f18082dd0542c2161637ceeaef9d4738c4f18c4 100644
 --- a/libgcc/config/t-slibgcc
 +++ b/libgcc/config/t-slibgcc
 @@ -26,7 +26,6 @@ SHLIB_MAP = @shlib_map_file@
@@ -321,7 +320,7 @@ index 4efd7b43dff96b6adb87993e4c66cbcb5ae144dc..932fa0cfbdeff6bb029fcf4b44d93d12
  SHLIB_MAKE_SOLINK = $(LN_S) $(SHLIB_SONAME) $(SHLIB_DIR)/$(SHLIB_SOLINK)
  SHLIB_INSTALL_SOLINK = $(LN_S) $(SHLIB_SONAME) \
  	$(DESTDIR)$(slibdir)$(SHLIB_SLIBDIR_QUAL)/$(SHLIB_SOLINK)
--- 
+--
 2.17.0
 
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
@@ -337,10 +336,10 @@ has the effect of setting -fno-math-errno by default.
  1 file changed, 4 insertions(+)
 
 diff --git a/gcc/common/config/i386/i386-common.cc b/gcc/common/config/i386/i386-common.cc
-index 07fdd045f3032a445a0be45fa62eab9636c3ce2f..6e241956311fbcee3d7e04c7a30f4b73cd61877f 100644
+index d90c558311bb4fab0821faaf07c27d21c5a7ec64..defb2e650250441b22664065dceb80c6cb8bbb9b 100644
 --- a/gcc/common/config/i386/i386-common.cc
 +++ b/gcc/common/config/i386/i386-common.cc
-@@ -1707,6 +1707,10 @@ ix86_option_init_struct (struct gcc_options *opts)
+@@ -1854,6 +1854,10 @@ ix86_option_init_struct (struct gcc_options *opts)
         avoid calling them when that's the only reason we would.  */
      opts->x_flag_errno_math = 0;
  
@@ -351,7 +350,7 @@ index 07fdd045f3032a445a0be45fa62eab9636c3ce2f..6e241956311fbcee3d7e04c7a30f4b73
    opts->x_flag_pcc_struct_return = 2;
    opts->x_flag_asynchronous_unwind_tables = 2;
  }
--- 
+--
 2.17.0
 
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
@@ -383,10 +382,10 @@ Co-Authored-By: Shannon Booth <shannon.ml.booth@gmail.com>
  4 files changed, 14 insertions(+), 6 deletions(-)
 
 diff --git a/libstdc++-v3/acinclude.m4 b/libstdc++-v3/acinclude.m4
-index e3cc3a8e867d3428d34f2b4db9c47104a0385450..6e30c391dac74101321a52ca17d8215c05f87844 100644
+index 5136c0571e8cb14fd7fd37ac0301a28f32289cc7..6dec4849fb3d86891818b1abac495cf729af64c5 100644
 --- a/libstdc++-v3/acinclude.m4
 +++ b/libstdc++-v3/acinclude.m4
-@@ -1374,7 +1374,7 @@ AC_DEFUN([GLIBCXX_ENABLE_LIBSTDCXX_TIME], [
+@@ -1381,7 +1381,7 @@ AC_DEFUN([GLIBCXX_ENABLE_LIBSTDCXX_TIME], [
          ac_has_nanosleep=yes
          ac_has_sched_yield=yes
          ;;
@@ -395,7 +394,7 @@ index e3cc3a8e867d3428d34f2b4db9c47104a0385450..6e30c391dac74101321a52ca17d8215c
          ac_has_clock_monotonic=yes
          ac_has_clock_realtime=yes
          ac_has_nanosleep=yes
-@@ -2421,7 +2421,7 @@ AC_DEFUN([GLIBCXX_ENABLE_CLOCALE], [
+@@ -2418,7 +2418,7 @@ AC_DEFUN([GLIBCXX_ENABLE_CLOCALE], [
        dragonfly* | freebsd*)
  	enable_clocale_flag=dragonfly
  	;;
@@ -405,10 +404,10 @@ index e3cc3a8e867d3428d34f2b4db9c47104a0385450..6e30c391dac74101321a52ca17d8215c
  	;;
        *)
 diff --git a/libstdc++-v3/configure b/libstdc++-v3/configure
-index eac6039212168e1cd33e1b6c2b938324fd403f12..11d23dba48e5799c31335f71911e1c4dca65a245 100755
+index 68ee94c9e28e4b2f5390cc9b4bd76b0a84f8f7c7..6c3fd42ddf43baa5e2ca5ccca515c306169afe53 100755
 --- a/libstdc++-v3/configure
 +++ b/libstdc++-v3/configure
-@@ -11914,6 +11914,11 @@ else
+@@ -11910,6 +11910,11 @@ else
      lt_cv_dlopen_libs=
      ;;
  
@@ -420,7 +419,7 @@ index eac6039212168e1cd33e1b6c2b938324fd403f12..11d23dba48e5799c31335f71911e1c4d
    darwin*)
    # if libdl is installed we need to link against it
      { $as_echo "$as_me:${as_lineno-$LINENO}: checking for dlopen in -ldl" >&5
-@@ -16478,7 +16483,7 @@ fi
+@@ -16514,7 +16519,7 @@ fi
        dragonfly* | freebsd*)
  	enable_clocale_flag=dragonfly
  	;;
@@ -429,7 +428,7 @@ index eac6039212168e1cd33e1b6c2b938324fd403f12..11d23dba48e5799c31335f71911e1c4d
  	enable_clocale_flag=newlib
  	;;
        *)
-@@ -20569,7 +20574,7 @@ fi
+@@ -20609,7 +20614,7 @@ fi
          ac_has_nanosleep=yes
          ac_has_sched_yield=yes
          ;;
@@ -438,7 +437,7 @@ index eac6039212168e1cd33e1b6c2b938324fd403f12..11d23dba48e5799c31335f71911e1c4d
          ac_has_clock_monotonic=yes
          ac_has_clock_realtime=yes
          ac_has_nanosleep=yes
-@@ -29245,7 +29250,7 @@ case "${host}" in
+@@ -29295,7 +29300,7 @@ case "${host}" in
      # This is a freestanding configuration; there is nothing to do here.
      ;;
  
@@ -462,7 +461,7 @@ index ec32980aa0db898623804980af65dad588e4d9f5..e060300f3777fbd38795954ca75e9c48
      os_include_dir="os/solaris"
      ;;
 diff --git a/libstdc++-v3/crossconfig.m4 b/libstdc++-v3/crossconfig.m4
-index ae5283b7ad378934b409455e7409ac9cac26a20a..b9fc96e942cba64aa76de1decc0daa9999fd53e9 100644
+index b3269cb88e077425be95bfe6c424b08106cab93f..3bba9653675c98ae76caf6cb77bbc483886dc80b 100644
 --- a/libstdc++-v3/crossconfig.m4
 +++ b/libstdc++-v3/crossconfig.m4
 @@ -9,7 +9,7 @@ case "${host}" in
@@ -474,6 +473,6 @@ index ae5283b7ad378934b409455e7409ac9cac26a20a..b9fc96e942cba64aa76de1decc0daa99
      AC_DEFINE(HAVE_ACOSF)
      AC_DEFINE(HAVE_ASINF)
      AC_DEFINE(HAVE_ATAN2F)
--- 
+--
 2.17.0
 

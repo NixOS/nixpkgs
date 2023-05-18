@@ -8,9 +8,9 @@
 , patchelf
 }:
 let
-  rev = "4d87072201efc4ef9086588255fbb1bb993872ab";
+  rev = "0bbd9040efbe97850a18a49a9cea25498d727f13";
 
-  version = "unstable-2023-04-03";
+  version = "unstable-2023-05-18";
 
   # Fetch Serenity source and patch shebangs
   src = buildPackages.stdenvNoCC.mkDerivation {
@@ -20,7 +20,7 @@ let
     src = buildPackages.fetchFromGitHub {
       owner = "SerenityOS";
       repo = "serenity";
-      sha256 = "Yb3j/eiGfARLFh1LFySnAFN/Z0xis6erphsLZLyUw9o=";
+      sha256 = "ene8HLOtch4uGZ4nv61woDpRegRm9eLUl3n4V5jt0tA=";
       inherit rev;
     };
 
