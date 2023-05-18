@@ -9,9 +9,18 @@
 , gnused
 , jq
 , mpv
+, ueberzug
 , ueberzugpp
 , yt-dlp
 }:
+
+let
+  ueberzug' =
+    if ueberzugpp.meta.broken then
+      ueberzug
+    else
+      ueberzugpp;
+in
 
 stdenv.mkDerivation rec {
   pname = "ytfzf";
@@ -38,7 +47,7 @@ stdenv.mkDerivation rec {
   postInstall = ''
     wrapProgram "$out/bin/ytfzf" \
       --prefix PATH : ${lib.makeBinPath [
-        coreutils curl dmenu fzf gnused jq mpv ueberzugpp yt-dlp
+        coreutils curl dmenu fzf gnused jq mpv ueberzug' yt-dlp
       ]} \
       --set YTFZF_SYSTEM_ADDON_DIR "$out/share/ytfzf/addons"
   '';
