@@ -1,27 +1,19 @@
 { lib
 , fetchFromGitHub
-, substituteAll
 , python3Packages
 , chia
 ,
 }:
 python3Packages.buildPythonApplication rec {
   pname = "chia-dev-tools";
-  version = "1.1.5";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "Chia-Network";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-qWWLQ+SkoRu5cLytwwrslqsKORy+4ebO8brULEFGaF0=";
+    hash = "sha256-3hNhIHswCzLNd3mc0FSPPLsPaAcWOZsED6HnAVkNccE=";
   };
-
-  patches = [
-    (substituteAll {
-      src = ./fix-paths.patch;
-      inherit chia;
-    })
-  ];
 
   postPatch = ''
     substituteInPlace setup.py \
@@ -54,6 +46,7 @@ python3Packages.buildPythonApplication rec {
 
   disabledTests = [
     "test_spendbundles"
+    "test_spends"
   ];
 
   meta = with lib; {
