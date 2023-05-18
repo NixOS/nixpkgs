@@ -9,13 +9,13 @@
 
 buildPythonPackage rec {
   pname = "colout";
-  version = "0.12.0";
+  version = "1.1";
 
   src = fetchFromGitHub {
     owner = "nojhan";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-5ETKNo3KfncnnLTClA6BnQA7SN5KwwsLdQoozI9li7I=";
+    sha256 = "sha256-7Dtf87erBElqVgqRx8BYHYOWv1uI84JJ0LHrcneczCI=";
   };
 
   nativeBuildInputs = [
