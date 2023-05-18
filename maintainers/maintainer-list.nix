@@ -11275,6 +11275,11 @@
     github = "NickCao";
     githubId = 15247171;
   };
+  nickgerace = {
+    name = "Nick Gerace";
+    github = "nickgerace";
+    githubId = 39320683;
+  };
   nickhu = {
     email = "me@nickhu.co.uk";
     github = "NickHu";
