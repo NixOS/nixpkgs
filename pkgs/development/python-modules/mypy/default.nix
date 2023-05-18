@@ -101,7 +101,7 @@ buildPythonPackage rec {
     "mypy.types"
     "mypyc"
     "mypyc.analysis"
-  ] ++ lib.optionals (!stdenv.hostPlatform.isi686) [
+  ] ++ lib.optionals (!(stdenv.hostPlatform.isi686 || stdenv.hostPlatform.isAarch32)) [
     # ImportError: cannot import name 'map_instance_to_supertype' from partially initialized module 'mypy.maptype' (most likely due to a circular import)
     "mypy.report"
   ];
