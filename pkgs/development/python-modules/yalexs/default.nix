@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "yalexs";
-  version = "1.3.3";
+  version = "1.4.6";
   format = "setuptools";
 
   disabled = pythonOlder "3.9";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "bdraco";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-dUiaz1adXsiVji1YZYkYN6NCFGzAWIBPjVTeyvUaiqU=";
+    hash = "sha256-c5/CGny3s6ta/nVSx6a5i0Sd3MVBnbiGaAqQ/j4iHi8=";
   };
 
   propagatedBuildInputs = [
