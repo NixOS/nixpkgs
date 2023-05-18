@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "geventhttpclient";
-  version = "2.0.8";
+  version = "2.0.9";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-X3gsQZZD90vk0JGMDStjlW723ceiEn8Hy7gDOnWrNm8=";
+    hash = "sha256-irw500bpI71qe0BdON0B4ZFGWUtjBAMvOC7aiw9jFRM=";
   };
 
   propagatedBuildInputs = [
