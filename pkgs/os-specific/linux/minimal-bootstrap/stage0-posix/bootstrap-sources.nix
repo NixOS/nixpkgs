@@ -15,8 +15,7 @@ rec {
     executable = true;
   };
 
-  # Packaged resources required for the first bootstrapping stage.
-  # Contains source code and 256-byte hex0 binary seed.
+  # Packaged source files for the first bootstrapping stage.
   #
   # We don't have access to utilities such as fetchgit and fetchzip since this
   # is this is part of the bootstrap process and would introduce a circular
@@ -25,10 +24,25 @@ rec {
   # tarballs to be repackaged.
   #
   # To build see `make-bootstrap-sources.nix`
+
+  #
+  # Files came from this Hydra build:
+  #
+  #   https://hydra.nixos.org/build/<placeholder>
+  #
+  # Which used nixpkgs revision <placeholder>
+  # to instantiate:
+  #
+  #   /nix/store/<placeholder>.drv
+  #
+  # and then built:
+  #
+  #   /nix/store/<placeholder>
+  #
   src = import <nix/fetchurl.nix> {
     inherit name;
-    url = "https://github.com/emilytrau/bootstrap-tools-nar-mirror/releases/download/2023-05-02/${name}.nar.xz";
-    hash = "sha256-ZRG0k49MxL1UTZhuMTvPoEprdSpJRNVy8QhLE6k+etg=";
+    url = "https://github.com/emilytrau/bootstrap-tools-nar-mirror/releases/download/2023-05-18/${name}.nar.xz";
+    hash = "sha256-FpMp7z+B3cR3LkQ+PooH/b1/NlxH8NHVJNWifaPWt4U=";
     unpack = true;
   };
 }

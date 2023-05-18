@@ -27102,6 +27102,7 @@ with pkgs;
     inherit (stdenv) buildPlatform hostPlatform;
     inherit lib config;
   });
+  minimal-bootstrap-sources = callPackage ../os-specific/linux/minimal-bootstrap/stage0-posix/make-bootstrap-sources.nix { };
 
   mingetty = callPackage ../os-specific/linux/mingetty { };
 
