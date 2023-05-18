@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "crocoddyl";
-  version = "1.9.0";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "loco-3d";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-IQ+8ZZXVTTRFa4uGetpylRab4P9MSTU2YtytYA3z6ys=";
+    sha256 = "sha256-wDHCHTJXmJjU7mhQ2huUVdEc9ap7PMeqlHPrKm//jBQ=";
     fetchSubmodules = true;
   };
 
