@@ -137,14 +137,15 @@ let
         awkCmd = "${pkgs.gawk}/bin/awk";
         inherit cfgZfs;
       }) + ''
-        poolImported "${pool}" && exit
-        echo -n "importing ZFS pool \"${pool}\"..."
-        # Loop across the import until it succeeds, because the devices needed may not be discovered yet.
-        for trial in `seq 1 60`; do
-          poolReady "${pool}" && poolImport "${pool}" && break
-          sleep 1
-        done
-        poolImported "${pool}" || poolImport "${pool}"  # Try one last time, e.g. to import a degraded pool.
+        if ! poolImported "${pool}"; then
+          echo -n "importing ZFS pool \"${pool}\"..."
+          # Loop across the import until it succeeds, because the devices needed may not be discovered yet.
+          for trial in `seq 1 60`; do
+            poolReady "${pool}" && poolImport "${pool}" && break
+            sleep 1
+          done
+          poolImported "${pool}" || poolImport "${pool}"  # Try one last time, e.g. to import a degraded pool.
+        fi
         if poolImported "${pool}"; then
           ${optionalString keyLocations.hasKeys ''
             ${keyLocations.command} | while IFS=$'\t' read ds kl ks; do
@@ -159,7 +160,7 @@ let
                   tries=3
                   success=false
                   while [[ $success != true ]] && [[ $tries -gt 0 ]]; do
-                    ${systemd}/bin/systemd-ask-password "Enter key for $ds:" | ${cfgZfs.package}/sbin/zfs load-key "$ds" \
+                    ${systemd}/bin/systemd-ask-password --timeout=${toString cfgZfs.passwordTimeout} "Enter key for $ds:" | ${cfgZfs.package}/sbin/zfs load-key "$ds" \
                       && success=true \
                       || tries=$((tries - 1))
                   done
@@ -310,6 +311,16 @@ in
           are requested. To only decrypt selected datasets supply a list of dataset
           names instead. For root pools the encryption key can be supplied via both
           an interactive prompt (keylocation=prompt) and from a file (keylocation=file://).
+        '';
+      };
+
+      passwordTimeout = mkOption {
+        type = types.int;
+        default = 0;
+        description = lib.mdDoc ''
+          Timeout in seconds to wait for password entry for decrypt at boot.
+
+          Defaults to 0, which waits forever.
         '';
       };
     };
