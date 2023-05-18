@@ -7,7 +7,7 @@ let
 
     inherit ruby;
     gemdir = ./.;
-    groups = [ "development" "ldap" "markdown" "minimagick" "test" ];
+    groups = [ "development" "ldap" "markdown" "common_mark" "minimagick" "test" ];
   };
 in
   stdenv.mkDerivation rec {
@@ -47,7 +47,7 @@ in
     meta = with lib; {
       homepage = "https://www.redmine.org/";
       platforms = platforms.linux;
-      maintainers = with maintainers; [ aanderse felixsinger ];
+      maintainers = with maintainers; [ aanderse felixsinger megheaiulian ];
       license = licenses.gpl2;
     };
   }
