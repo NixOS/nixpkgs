@@ -81,6 +81,7 @@ stdenv.mkDerivation rec {
     homepage    = "https://github.com/lkl/linux/";
     platforms   = platforms.linux; # Darwin probably works too but I haven't tested it
     license     = licenses.gpl2;
+    broken      = stdenv.is686; # No one really maintain it on i686 and it blocks all NixOS tests.
     maintainers = with maintainers; [ copumpkin raitobezarius ];
   };
 }
