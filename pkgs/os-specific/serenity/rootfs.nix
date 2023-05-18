@@ -4,16 +4,16 @@
 , runCommand
 , pkgsBuildBuild
 , buildPackages
+, src
+, version
 }:
 
 let
-  inherit (callPackage ./common.nix { }) src version;
-
   cpuArch = stdenv.targetPlatform.parsed.cpu.name;
 in
 stdenv.mkDerivation rec {
   inherit src version;
-  pname = "serenitylibc";
+  pname = "serenity-rootfs";
 
   postPatch = ''
     substituteInPlace Toolchain/CMake/GNUToolchain.txt.in \
@@ -70,9 +70,8 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/lib
-    cp Build/${cpuArch}/Root/usr/lib/{crt*,libc.*,libdl.*,libm.*,libpthread.*,libssp.*,libsystem.*,Loader.*} $out/lib
-    cp -r ${passthru.headers}/include $out/include
+    mkdir $out
+    cp -r Build/${cpuArch}/Root/usr/{lib,include} $out
 
     runHook postInstall
   '';
@@ -96,7 +95,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "Compatible C Library for SerenityOS";
+    description = "Graphical Unix-like operating system for desktop computers";
     homepage = "https://serenityos.org";
     license = licenses.bsd2;
     maintainers = with maintainers; [ emilytrau ];

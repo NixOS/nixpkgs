@@ -10,6 +10,7 @@
 , stdenvNoCC
 , bintools ? null, libc ? null, coreutils ? null, shell ? stdenvNoCC.shell, gnugrep ? null
 , netbsd ? null, netbsdCross ? null
+, serenity ? null, serenityCross ? null
 , sharedLibraryLoader ?
   if libc == null then
     null
@@ -18,6 +19,13 @@
       netbsd.ld_elf_so
     else if libc != targetPackages.netbsdCross.headers then
       targetPackages.netbsdCross.ld_elf_so
+    else
+      null
+  else if stdenvNoCC.targetPlatform.isSerenity then
+    if !(targetPackages ? serenityCross) then
+      serenity.DynamicLoader
+    else if libc != targetPackages.serenityCross.serenity-headers then
+      targetPackages.serenityCross.DynamicLoader
     else
       null
   else
