@@ -5335,6 +5335,8 @@ self: super: with self; {
 
   hijri-converter = callPackage ../development/python-modules/hijri-converter { };
 
+  hikari = callPackage ../development/python-modules/hikari { };
+
   hikvision = callPackage ../development/python-modules/hikvision { };
 
   hiredis = callPackage ../development/python-modules/hiredis { };
