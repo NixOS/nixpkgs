@@ -22000,6 +22000,14 @@ with pkgs;
 
   librem = callPackage ../development/libraries/librem { };
 
+  libremidi = callPackage ../development/libraries/libremidi {
+      inherit (darwin.apple_sdk.frameworks)
+        CoreAudio
+        CoreFoundation
+        CoreMIDI
+        CoreServices;
+  };
+
   librelp = callPackage ../development/libraries/librelp { };
 
   librepo = callPackage ../tools/package-management/librepo {
