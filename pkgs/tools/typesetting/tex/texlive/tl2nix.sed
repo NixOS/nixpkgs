@@ -16,8 +16,9 @@ $a}
 # form an attrmap per package
 # ignore packages whose name contains "." (such as binaries) except for texlive.infra
 /^name ([^.]+|texlive\.infra)$/,/^$/{
-  # quote package names, as some start with a number :-/
-  s/^name (.*)$/"\1" = {/p
+  # quote invalid names
+  s/^name ([0-9].*|texlive\.infra)$/"\1" = {/p
+  s/^name (.*)$/\1 = {/p
 
   # extract revision
   s/^revision ([0-9]*)$/  revision = \1;/p
