@@ -21,6 +21,7 @@ pythonPackages.buildPythonApplication rec {
     gst-plugins-base
     gst-plugins-good
     gst-plugins-ugly
+    gst-plugins-rs
   ];
 
   propagatedBuildInputs = [
