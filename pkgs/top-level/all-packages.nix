@@ -21643,6 +21643,8 @@ with pkgs;
 
   libedit = callPackage ../development/libraries/libedit { };
 
+  libei = callPackage ../development/libraries/libei { };
+
   libelf = callPackage ../development/libraries/libelf { };
 
   libelfin = callPackage ../development/libraries/libelfin { };
