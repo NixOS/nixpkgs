@@ -1,7 +1,12 @@
-{ lib, python39Packages, fetchPypi
-, fftw, alsa-lib, pulseaudio, pyusb, wxPython_4_2 }:
+{ lib
+, python3
+, fetchPypi
+, fftw
+, alsa-lib
+, pulseaudio
+}:
 
-python39Packages.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "quisk";
   version = "4.2.17";
 
@@ -10,9 +15,16 @@ python39Packages.buildPythonApplication rec {
     sha256 = "sha256-eF/3++wRG0JulVTT+GvtqleBPkzLSZeu+RfHDI1xfOY=";
   };
 
-  buildInputs = [ fftw alsa-lib pulseaudio ];
+  buildInputs = [
+    fftw
+    alsa-lib
+    pulseaudio
+  ];
 
-  propagatedBuildInputs = [ pyusb wxPython_4_2 ];
+  propagatedBuildInputs = with python3.pkgs; [
+    pyusb
+    wxPython_4_2
+  ];
 
   doCheck = false;
 
