@@ -80,7 +80,10 @@ let
 
       # Enable lazy RCUs for power savings:
       # https://lore.kernel.org/rcu/20221019225138.GA2499943@paulmck-ThinkPad-P17-Gen-1/
-      RCU_LAZY                         = whenAtLeast "6.2" yes;
+      # RCU_LAZY depends on RCU_NOCB_CPU depends on NO_HZ_FULL
+      # depends on HAVE_VIRT_CPU_ACCOUNTING_GEN depends on 64BIT,
+      # so we can't force-enable this
+      RCU_LAZY                         = whenAtLeast "6.2" (option yes);
     } // optionalAttrs (stdenv.hostPlatform.isx86) {
       INTEL_IDLE                       = yes;
       INTEL_RAPL                       = whenAtLeast "5.3" module;
@@ -128,7 +131,8 @@ let
 
     timer = {
       # Enable Full Dynticks System.
-      NO_HZ_FULL = mkIf stdenv.is64bit yes; # TODO: more precise condition?
+      # NO_HZ_FULL depends on HAVE_VIRT_CPU_ACCOUNTING_GEN depends on 64BIT
+      NO_HZ_FULL = mkIf stdenv.is64bit yes;
     };
 
     # Enable NUMA.
