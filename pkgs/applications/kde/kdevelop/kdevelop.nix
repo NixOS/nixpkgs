@@ -62,7 +62,7 @@ mkDerivation rec {
         A free, opensource IDE (Integrated Development Environment)
         for MS Windows, Mac OsX, Linux, Solaris and FreeBSD. It is a
         feature-full, plugin extendable IDE for C/C++ and other
-        programing languages. It is based on KDevPlatform, KDE and Qt
+        programming languages. It is based on KDevPlatform, KDE and Qt
         libraries and is under development since 1998.
       '';
     homepage = "https://www.kdevelop.org";

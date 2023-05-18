@@ -26,6 +26,7 @@ in {
           redis = false;
           memcached = true;
         };
+        database.createLocally = true;
         config = {
           dbtype = "mysql";
           # Don't inherit adminuser since "root" is supposed to be the default

@@ -54,10 +54,10 @@
     "version": "1.0.1"
   },
   "gutenberg": {
-    "path": "gutenberg/tags/15.6.2",
-    "rev": "2902464",
-    "sha256": "0y7j46qxv1x3b9av80f0xx0wv13g3rzcsnsi6ckd800pvnsp4506",
-    "version": "15.6.2"
+    "path": "gutenberg/tags/15.7.1",
+    "rev": "2910291",
+    "sha256": "0g8fp819hhnlva603cd2sqa0g4v5h0nszx73765yiijks1xy7vbk",
+    "version": "15.7.1"
   },
   "hello-dolly": {
     "path": "hello-dolly/tags/1.7.2",
@@ -89,11 +89,17 @@
     "sha256": "1imzrav4a9848imkhvldm9x4cnw57vi5agllqw614j36kkxk1fpg",
     "version": "5.0.35"
   },
+  "login-lockdown": {
+    "path": "login-lockdown/tags/2.06",
+    "rev": "2911341",
+    "sha256": "1xg2q76m96vyfk4sc9fqi0x7b2ddb3jbv0hm0iawxckv9baxh2gl",
+    "version": "2.06"
+  },
   "mailpoet": {
-    "path": "mailpoet/tags/4.14.0",
-    "rev": "2906897",
-    "sha256": "14ivmrl4h78nrmmii6aci1xwm3c1hp9yld8iadrfl69k1fif1814",
-    "version": "4.14.0"
+    "path": "mailpoet/tags/4.16.0",
+    "rev": "2912930",
+    "sha256": "0ij8g9bnni0ki4ks5sdq83pd8nqqfj3yf6by1v44splq2a5ix81g",
+    "version": "4.16.0"
   },
   "merge-minify-refresh": {
     "path": "merge-minify-refresh/trunk",
@@ -132,10 +138,10 @@
     "version": "0.25.6"
   },
   "wordpress-seo": {
-    "path": "wordpress-seo/tags/20.6",
-    "rev": "2904263",
-    "sha256": "1wwwilapiw0dd80ng5k573rgqa0fz9bf2h43cxp77ksapskvw1j7",
-    "version": "20.6"
+    "path": "wordpress-seo/tags/20.7",
+    "rev": "2909990",
+    "sha256": "187lkzb9p889xj8s9cwp3r7pjbzq3nv34ix2hcy8a7sr4380518w",
+    "version": "20.7"
   },
   "worker": {
     "path": "worker/tags/4.9.17",

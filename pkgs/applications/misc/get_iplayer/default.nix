@@ -2,19 +2,19 @@
 
 perlPackages.buildPerlPackage rec {
   pname = "get_iplayer";
-  version = "3.27";
+  version = "3.31";
 
   src = fetchFromGitHub {
     owner = "get-iplayer";
     repo = "get_iplayer";
     rev = "v${version}";
-    sha256 = "077y31gg020wjpx5pcivqgkqawcjxh5kjnvq97x2gd7i3wwc30qi";
+    sha256 = "+ChCF27nmPKbqaZVxsZ6TlbzSdEz6RfMs87NE8xaSRw=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ perl ];
   propagatedBuildInputs = with perlPackages; [
-    HTMLParser HTTPCookies LWP LWPProtocolHttps XMLLibXML XMLSimple
+    HTMLParser HTTPCookies LWP LWPProtocolHttps XMLLibXML XMLSimple Mojolicious
   ];
 
   preConfigure = "touch Makefile.PL";

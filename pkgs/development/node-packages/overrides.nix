@@ -1,4 +1,4 @@
-# Do not use overrides in this file to add  `meta.mainProgram` to packges. Use `./main-programs.nix`
+# Do not use overrides in this file to add  `meta.mainProgram` to packages. Use `./main-programs.nix`
 # instead.
 { pkgs, nodejs }:
 
@@ -229,7 +229,11 @@ final: prev: {
   });
 
   joplin = prev.joplin.override {
-    nativeBuildInputs = [ pkgs.pkg-config ];
+    nativeBuildInputs = [
+      pkgs.pkg-config
+    ] ++ lib.optionals stdenv.isDarwin [
+      pkgs.xcbuild
+    ];
     buildInputs = with pkgs; [
       # required by sharp
       # https://sharp.pixelplumbing.com/install

@@ -116,6 +116,7 @@ in buildFHSEnv rec {
     SDL2
     libusb1
     dbus-glib
+    gsettings-desktop-schemas
     ffmpeg
     libudev0-shim
 
@@ -205,7 +206,6 @@ in buildFHSEnv rec {
     libidn2
     libpsl
     nghttp2.lib
-    openssl_1_1
     rtmpdump
   ] ++ steamPackages.steam-runtime-wrapped.overridePkgs
   ++ extraLibraries pkgs;

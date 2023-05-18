@@ -61,15 +61,15 @@ self: super: {
           # not solvable short of recompiling GHC. Instead of adding
           # allowInconsistentDependencies for all reverse dependencies of hspec-core,
           # just upgrade to an hspec version without the offending dependency.
-          hspec-core = cself.hspec-core_2_11_0;
-          hspec-discover = cself.hspec-discover_2_11_0;
-          hspec = cself.hspec_2_11_0;
+          hspec-core = cself.hspec-core_2_11_0_1;
+          hspec-discover = cself.hspec-discover_2_11_0_1;
+          hspec = cself.hspec_2_11_0_1;
 
           # hspec-discover and hspec-core depend on hspec-meta for testing which
           # we need to avoid since it depends on ghc as well. Since hspec*_2_10*
           # are overridden to take the versioned attributes as inputs, we need
           # to make sure to override the versioned attribute with this fix.
-          hspec-discover_2_11_0 = dontCheck csuper.hspec-discover_2_11_0;
+          hspec-discover_2_11_0_1 = dontCheck csuper.hspec-discover_2_11_0_1;
 
           # Prevent dependency on doctest which causes an inconsistent dependency
           # due to depending on ghc which depends on directory etc.
@@ -85,7 +85,7 @@ self: super: {
         (super.guardian.overrideScope (self: super:
           cabalInstallOverlay self super // {
             # Needs at least path-io 1.8.0 due to canonicalizePath changes
-            path-io = self.path-io_1_8_0;
+            path-io = self.path-io_1_8_1;
           }
         ))
         [
@@ -193,6 +193,10 @@ self: super: {
   # For -f-auto see cabal.project in haskell-language-server.
   ghc-lib-parser-ex = addBuildDepend self.ghc-lib-parser (disableCabalFlag "auto" super.ghc-lib-parser-ex);
 
+  # Test ldap server test/ldap.js is missing from sdist
+  # https://github.com/supki/ldap-client/issues/18
+  ldap-client-og = dontCheck super.ldap-client-og;
+
   # For -fghc-lib see cabal.project in haskell-language-server.
   stylish-haskell = if lib.versionAtLeast super.ghc.version "9.2"
     then enableCabalFlag "ghc-lib"
@@ -204,6 +208,9 @@ self: super: {
   ###########################################
   ### END HASKELL-LANGUAGE-SERVER SECTION ###
   ###########################################
+
+  # Remove when Stackage LTS advances to this version, should be LTS-20.20
+  utility-ht = doDistribute self.utility-ht_0_0_17;
 
   vector = overrideCabal (old: {
     # Too strict bounds on doctest which isn't used, but is part of the configuration
@@ -408,6 +415,22 @@ self: super: {
   # 2022-01-29: Tests fail: https://github.com/psibi/streamly-bytestring/issues/27
   # 2022-02-14: Strict upper bound: https://github.com/psibi/streamly-bytestring/issues/30
   streamly-bytestring = dontCheck (doJailbreak super.streamly-bytestring);
+
+  # The package requires streamly == 0.9.*.
+  # (We can remove this once the assert starts failing.)
+  streamly-archive = super.streamly-archive.override {
+    streamly =
+      assert (builtins.compareVersions pkgs.haskellPackages.streamly.version "0.9.0" < 0);
+        pkgs.haskellPackages.streamly_0_9_0;
+  };
+
+  # The package requires streamly == 0.9.*.
+  # (We can remove this once the assert starts failing.)
+  streamly-lmdb = super.streamly-lmdb.override {
+    streamly =
+      assert (builtins.compareVersions pkgs.haskellPackages.streamly.version "0.9.0" < 0);
+        pkgs.haskellPackages.streamly_0_9_0;
+  };
 
   # base bound
   digit = doJailbreak super.digit;
@@ -629,10 +652,6 @@ self: super: {
       sha256 = "sha256-qHEQ8FFagXGxvtblBvo7xivRARzXlaMLw8nt0068nt0=";
     })
   ] (dontCheck super.snappy);
-
-  # 2023-04-22: omfort-fftw 0.0.0.1 contains fixes to the tests. We can drop
-  # this override as soon as stackage advances.
-  comfort-fftw = doDistribute super.comfort-fftw_0_0_0_1;
 
   # https://github.com/vincenthz/hs-crypto-pubkey/issues/20
   crypto-pubkey = dontCheck super.crypto-pubkey;
@@ -1005,12 +1024,12 @@ self: super: {
     testHaskellDepends = drv.testHaskellDepends or [] ++ [ self.hspec-meta_2_10_5 ];
     testToolDepends = drv.testToolDepends or [] ++ [ pkgs.git ];
   }) (super.sensei.override {
-    hspec = self.hspec_2_11_0;
+    hspec = self.hspec_2_11_0_1;
     hspec-wai = self.hspec-wai.override {
-      hspec = self.hspec_2_11_0;
+      hspec = self.hspec_2_11_0_1;
     };
     hspec-contrib = self.hspec-contrib.override {
-      hspec-core = self.hspec-core_2_11_0;
+      hspec-core = self.hspec-core_2_11_0_1;
     };
     fsnotify = self.fsnotify_0_4_1_0;
   });
@@ -1474,7 +1493,7 @@ self: super: {
     ]
           (doDistribute (unmarkBroken (dontCheck (doJailbreak super.reflex-dom-core))))));
 
-  # Tests disabled because they assume to run in the whole jsaddle repo and not the hackage tarbal of jsaddle-warp.
+  # Tests disabled because they assume to run in the whole jsaddle repo and not the hackage tarball of jsaddle-warp.
   jsaddle-warp = dontCheck super.jsaddle-warp;
 
   # 2020-06-24: Jailbreaking because of restrictive test dep bounds
@@ -1604,6 +1623,7 @@ self: super: {
   # Also, we need QuickCheck-2.14.x to build the test suite, which isn't easy in LTS-16.x.
   # So let's not go there and just disable the tests altogether.
   hspec-core = dontCheck super.hspec-core;
+  hspec-core_2_7_10 = doDistribute (dontCheck super.hspec-core_2_7_10);
 
   # tests seem to require a different version of hspec-core
   hspec-contrib = dontCheck super.hspec-contrib;
@@ -1674,16 +1694,16 @@ self: super: {
   servant-openapi3 = dontCheck super.servant-openapi3;
 
   # Give hspec 2.10.* correct dependency versions without overrideScope
-  hspec_2_11_0 = doDistribute (super.hspec_2_11_0.override {
-    hspec-discover = self.hspec-discover_2_11_0;
-    hspec-core = self.hspec-core_2_11_0;
+  hspec_2_11_0_1 = doDistribute (super.hspec_2_11_0_1.override {
+    hspec-discover = self.hspec-discover_2_11_0_1;
+    hspec-core = self.hspec-core_2_11_0_1;
   });
-  hspec-discover_2_11_0 = doDistribute (super.hspec-discover_2_11_0.override {
+  hspec-discover_2_11_0_1 = doDistribute (super.hspec-discover_2_11_0_1.override {
     hspec-meta = self.hspec-meta_2_10_5;
   });
-  # Need to disable tests to prevent an infinite recursion if hspec-core_2_11_0
+  # Need to disable tests to prevent an infinite recursion if hspec-core_2_11_0_1
   # is overlayed to hspec-core.
-  hspec-core_2_11_0 = doDistribute (dontCheck (super.hspec-core_2_11_0.override {
+  hspec-core_2_11_0_1 = doDistribute (dontCheck (super.hspec-core_2_11_0_1.override {
     hspec-meta = self.hspec-meta_2_10_5;
   }));
 
@@ -1867,7 +1887,7 @@ self: super: {
   # Issue reported upstream, no bug tracker url yet.
   darcs = doJailbreak super.darcs;
 
-  # Too strict verion bounds on cryptonite and github.
+  # Too strict version bounds on cryptonite and github.
   # PRs are merged, will be fixed next release or Hackage revision.
   nix-thunk = appendPatches [
     (fetchpatch {
@@ -2632,4 +2652,13 @@ self: super: {
 
   # libfuse3 fails to mount fuse file systems within the build environment
   libfuse3 = dontCheck super.libfuse3;
+
+  # Tests fail due to the newly-build fourmolu not being in PATH
+  # https://github.com/fourmolu/fourmolu/issues/231
+  fourmolu_0_12_0_0 = dontCheck (super.fourmolu_0_12_0_0.overrideScope (lself: lsuper: {
+    Cabal-syntax = lself.Cabal-syntax_3_10_1_0;
+    ghc-lib-parser = lself.ghc-lib-parser_9_6_1_20230312;
+    parsec = lself.parsec_3_1_16_1;
+    text = lself.text_2_0_2;
+  }));
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super

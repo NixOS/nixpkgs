@@ -8,11 +8,11 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "blueman";
-  version = "2.3.4";
+  version = "2.3.5";
 
   src = fetchurl {
     url = "https://github.com/blueman-project/blueman/releases/download/${version}/${pname}-${version}.tar.xz";
-    sha256 = "sha256-wgYzghQ38yydPRkOzXDR4vclXXSn1pefInEb3C5WAVI=";
+    sha256 = "sha256-stIa/fd6Bs2G2vVAJAb30qU0WYF+KeC+vEkR1PDc/aE=";
   };
 
   nativeBuildInputs = [
@@ -55,6 +55,7 @@ in stdenv.mkDerivation rec {
     description = "GTK-based Bluetooth Manager";
     license = licenses.gpl3;
     platforms = platforms.linux;
+    changelog = "https://github.com/blueman-project/blueman/releases/tag/${version}";
     maintainers = with maintainers; [ abbradar ];
   };
 }

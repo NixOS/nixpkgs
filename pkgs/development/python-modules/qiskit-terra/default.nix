@@ -3,7 +3,9 @@
 , pythonOlder
 , buildPythonPackage
 , fetchFromGitHub
+, cargo
 , rustPlatform
+, rustc
   # Python requirements
 , dill
 , numpy
@@ -12,7 +14,7 @@
 , psutil
 , python-constraint
 , python-dateutil
-, retworkx
+, rustworkx
 , scipy
 , scikit-quant ? null
 , setuptools-rust
@@ -67,7 +69,7 @@ buildPythonPackage rec {
     hash = "sha256-imktzBpgP+lq6FsVWIUK82+t76gKTgt53kPfKOnsseQ=";
   };
 
-  nativeBuildInputs = [ setuptools-rust ] ++ (with rustPlatform; [ rust.rustc rust.cargo cargoSetupHook ]);
+  nativeBuildInputs = [ setuptools-rust rustc cargo rustPlatform.cargoSetupHook ];
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
@@ -83,7 +85,7 @@ buildPythonPackage rec {
     psutil
     python-constraint
     python-dateutil
-    retworkx
+    rustworkx
     scipy
     scikit-quant
     stevedore

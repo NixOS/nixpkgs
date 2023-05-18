@@ -62,7 +62,7 @@ let
       ''}
     '';
 
-    doCheck = true;
+    doCheck = !stdenv.hostPlatform.isPower64;
     preCheck = ''
       export PREVIOUS_${ldLibPathEnvName}=$${ldLibPathEnvName}
       export ${ldLibPathEnvName}="$${ldLibPathEnvName}:$(realpath tls/):$(realpath ssl/):$(realpath crypto/)"
@@ -107,22 +107,13 @@ in {
     ];
   };
 
-  libressl_3_5 = generic {
-    version = "3.5.4";
-    hash = "sha256-A3naE0Si9xrUpOO+MO+dgu7N3Of43CrmZjGh3+FDQ6w=";
-
-    patches = [
-      # Fix endianness detection on aarch64-darwin, issue #181187
-      (fetchpatch {
-        name = "fix-endian-header-detection.patch";
-        url = "https://patch-diff.githubusercontent.com/raw/libressl-portable/portable/pull/771.patch";
-        sha256 = "sha256-in5U6+sl0HB9qMAtUL6Py4X2rlv0HsqRMIQhhM1oThE=";
-      })
-    ];
-  };
-
   libressl_3_6 = generic {
     version = "3.6.2";
     hash = "sha256-S+gP/wc3Rs9QtKjlur4nlayumMaxMqngJRm0Rd+/0DM=";
+  };
+
+  libressl_3_7 = generic {
+    version = "3.7.2";
+    hash = "sha256-sGqlOP78nGszxNtJMaCaX1LZ0jVyGa/L/32T/hLr9vc=";
   };
 }

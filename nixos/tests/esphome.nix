@@ -4,10 +4,9 @@ let
   testPort = 6052;
   unixSocket = "/run/esphome/esphome.sock";
 in
-with lib;
 {
   name = "esphome";
-  meta.maintainers = with pkgs.lib.maintainers; [ oddlama ];
+  meta.maintainers = with lib.maintainers; [ oddlama ];
 
   nodes = {
     esphomeTcp = { ... }:

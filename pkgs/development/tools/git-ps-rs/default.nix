@@ -12,13 +12,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "git-ps-rs";
-  version = "6.6.0";
+  version = "6.7.0";
 
   src = fetchFromGitHub {
     owner = "uptech";
     repo = "git-ps-rs";
     rev = version;
-    hash = "sha256-pWad/OCSoszdEQb6Mb6fD4vsZRagbYa3TKft4IyGg94=";
+    hash = "sha256-yBZ+YJxiVO8+rI7FLtI0xse8hoirjt5Bc2KxPeBidd0=";
   };
 
   cargoLock = {
@@ -33,7 +33,7 @@ rustPlatform.buildRustPackage rec {
     gpgme # gpgme runs a small script at build time so has to go here
   ];
 
-  buildInputs = [ openssl dbus libgpg-error ]
+  buildInputs = [ openssl dbus libgpg-error gpgme ]
     ++ lib.optionals stdenv.isDarwin [ Security ];
 
   meta = with lib; {

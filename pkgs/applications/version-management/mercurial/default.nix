@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl, fetchpatch, python3Packages, makeWrapper, gettext, installShellFiles
 , re2Support ? true
-, rustSupport ? stdenv.hostPlatform.isLinux, rustPlatform
+, rustSupport ? stdenv.hostPlatform.isLinux, cargo, rustPlatform, rustc
 , fullBuild ? false
 , gitSupport ? fullBuild
 , guiSupport ? fullBuild, tk
@@ -21,11 +21,11 @@ let
 
   self = python3Packages.buildPythonApplication rec {
     pname = "mercurial${lib.optionalString fullBuild "-full"}";
-    version = "6.4.2";
+    version = "6.4.3";
 
     src = fetchurl {
       url = "https://mercurial-scm.org/release/mercurial-${version}.tar.gz";
-      sha256 = "sha256-W59qPDX05GlchU73FCjPlGHKGlKfaRwG3G97SOe7MzU=";
+      sha256 = "sha256-p3+2LTJZNKg6ALL8bbEJ9ExnuGdo/EBJA2b1E2QMf2Q=";
     };
 
     format = "other";
@@ -35,7 +35,7 @@ let
     cargoDeps = if rustSupport then rustPlatform.fetchCargoTarball {
       inherit src;
       name = "mercurial-${version}";
-      sha256 = "sha256-dRajIqM91fESEm4EEa9qvS8h6/HlLZIJZztVGoS/G+M=";
+      sha256 = "sha256-nm9RZZHtmPfeJ7StHZmfxcFqKeJHACQQeA/Evv3wYD8=";
       sourceRoot = "mercurial-${version}/rust";
     } else null;
     cargoRoot = if rustSupport then "rust" else null;
@@ -44,11 +44,11 @@ let
       ++ lib.optional gitSupport pygit2
       ++ lib.optional highlightSupport pygments;
     nativeBuildInputs = [ makeWrapper gettext installShellFiles ]
-      ++ lib.optionals rustSupport (with rustPlatform; [
-           cargoSetupHook
-           rust.cargo
-           rust.rustc
-         ]);
+      ++ lib.optionals rustSupport [
+           rustPlatform.cargoSetupHook
+           cargo
+           rustc
+         ];
     buildInputs = [ docutils ]
       ++ lib.optionals stdenv.isDarwin [ ApplicationServices ];
 

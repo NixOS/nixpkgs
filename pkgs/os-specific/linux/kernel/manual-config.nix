@@ -141,7 +141,7 @@ stdenv.mkDerivation ({
   postPatch = ''
     sed -i Makefile -e 's|= depmod|= ${buildPackages.kmod}/bin/depmod|'
 
-    # fixup for pre-5.4 kernels using the $(cd $foo && /bin/pwd) pattern
+    # fixup for pre-4.15 kernels using the $(cd $foo && /bin/pwd) pattern
     # FIXME: remove when no longer needed
     substituteInPlace Makefile tools/scripts/Makefile.include --replace /bin/pwd pwd
 

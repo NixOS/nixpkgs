@@ -2,7 +2,7 @@
 , fetchurl, fetchpatch, fetchFromSavannah, fetchFromGitHub
 , zlib, gdbm, ncurses, readline, groff, libyaml, libffi, jemalloc, autoreconfHook, bison
 , autoconf, libiconv, libobjc, libunwind, Foundation
-, buildEnv, bundler, bundix, rustPlatform
+, buildEnv, bundler, bundix, cargo, rustPlatform, rustc
 , makeBinaryWrapper, buildRubyGem, defaultGemConfig, removeReferencesTo
 , openssl, openssl_1_1
 , linuxPackages, libsystemtap
@@ -48,7 +48,7 @@ let
       #     $(nix-build -A ruby)/lib/ruby/2.6.0/x86_64-linux/rbconfig.rb
       # - In $out/lib/libruby.so and/or $out/lib/libruby.dylib
       , removeReferencesTo, jitSupport ? yjitSupport
-      , rustPlatform, yjitSupport ? yjitSupported
+      , cargo, rustPlatform, rustc, yjitSupport ? yjitSupported
       , autoreconfHook, bison, autoconf
       , buildEnv, bundler, bundix
       , libiconv, libobjc, libunwind, Foundation
@@ -78,14 +78,14 @@ let
         nativeBuildInputs = [ autoreconfHook bison ]
           ++ (op docSupport groff)
           ++ (ops (dtraceSupport && stdenv.isLinux) [ systemtap libsystemtap ])
-          ++ ops yjitSupport [ rustPlatform.cargoSetupHook rustPlatform.rust.cargo rustPlatform.rust.rustc ]
+          ++ ops yjitSupport [ rustPlatform.cargoSetupHook cargo rustc ]
           ++ op useBaseRuby baseRuby;
         buildInputs = [ autoconf ]
           ++ (op fiddleSupport libffi)
           ++ (ops cursesSupport [ ncurses readline ])
           ++ (op zlibSupport zlib)
-          ++ (op (lib.versionOlder ver.majMin "3.0" && opensslSupport) openssl_1_1)
-          ++ (op (atLeast30 && opensslSupport) openssl_1_1)
+          ++ (op (!atLeast31 && opensslSupport) openssl_1_1)
+          ++ (op (atLeast31 && opensslSupport) openssl)
           ++ (op gdbmSupport gdbm)
           ++ (op yamlSupport libyaml)
           # Looks like ruby fails to build on darwin without readline even if curses

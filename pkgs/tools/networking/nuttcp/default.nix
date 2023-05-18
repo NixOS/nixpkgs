@@ -17,6 +17,8 @@ stdenv.mkDerivation rec {
     installShellFiles
   ];
 
+  makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
+
   installPhase = ''
     mkdir -p $out/bin
     cp nuttcp-${version} $out/bin/nuttcp

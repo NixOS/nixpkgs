@@ -1,7 +1,10 @@
 { lib, pkgs, ... }:
 
-with lib;
-
+let
+  inherit (lib)
+    mkAliasOptionModuleMD
+    mkRemovedOptionModule;
+in
 {
   imports = [
     /*

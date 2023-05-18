@@ -63,7 +63,7 @@ let
     # aarch64-darwin is broken because of https://github.com/bazelbuild/rules_cc/pull/136
     # however even with that fix applied, it doesn't work for everyone:
     # https://github.com/NixOS/nixpkgs/pull/184395#issuecomment-1207287129
-    broken = stdenv.isAarch64;
+    broken = stdenv.isAarch64 || stdenv.isDarwin;
   };
 
   cudatoolkit_joined = symlinkJoin {
@@ -243,9 +243,9 @@ let
 
       sha256 =
         if cudaSupport then
-          "sha256-cgsiloW77p4+TKRrYequZ/UwKwfO2jsHKtZ+aA30H7E="
+          "sha256-O6bM7Lc8eaFyO4Xzl5/hvBrbPioI+Yeqx9yNC97fvKk="
         else
-          "sha256-D7WYG3YUaWq+4APYx8WpA191VVtoHG0fth3uEHXOeos=";
+          "sha256-gLMJfJSQIdGGY2Ivx4IgDWg0hc+mxzlqY11CUkSWcjI=";
     };
 
     buildAttrs = {

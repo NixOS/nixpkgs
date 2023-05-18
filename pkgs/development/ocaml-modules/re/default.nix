@@ -26,7 +26,7 @@ buildDunePackage (rec {
 
   buildInputs = lib.optional doCheck ounit;
   propagatedBuildInputs = [ seq ];
-  doCheck = lib.versionAtLeast ocaml.version "4.04";
+  doCheck = lib.versionAtLeast ocaml.version "4.08";
 
   meta = {
     homepage = "https://github.com/ocaml/ocaml-re";

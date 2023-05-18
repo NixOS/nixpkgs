@@ -1,23 +1,24 @@
 { lib
 , fetchFromGitLab
 , imagemagick
-, flutter
+, flutter37
 , makeDesktopItem
+, gnome
 }:
 
-flutter.buildFlutterApplication rec {
-  version = "1.11.0";
+flutter37.buildFlutterApplication rec {
+  version = "1.11.2";
   name = "fluffychat";
 
   src = fetchFromGitLab {
     owner = "famedly";
     repo = "fluffychat";
     rev = "v${version}";
-    hash = "sha256-Z7BOGsirBVQxRJY4kmskCmPeZloc41/bf4/ExoO8VBk=";
+    hash = "sha256-vHzZDkSgxcZf3y/+A645hxBverm34J5xNnNwyxnSVUA=";
   };
 
   depsListFile = ./deps.json;
-  vendorHash = "sha256-axByNptbzGR7GQT4Gs2yaEyUCkCbI9RQNNOHN7CYd9A=";
+  vendorHash = "sha256-u8YI4UBnEfPpvjBfhbo4LGolb56w94EiUlnLlYITdXQ=";
 
   desktopItem = makeDesktopItem {
     name = "Fluffychat";
@@ -27,8 +28,9 @@ flutter.buildFlutterApplication rec {
     genericName = "Chat with your friends (matrix client)";
     categories = [ "Chat" "Network" "InstantMessaging" ];
   };
-  nativeBuildInputs = [ imagemagick ];
 
+  nativeBuildInputs = [ imagemagick ];
+  extraWrapProgramArgs = "--prefix PATH : ${gnome.zenity}/bin";
   postInstall = ''
     FAV=$out/app/data/flutter_assets/assets/favicon.png
     ICO=$out/share/icons

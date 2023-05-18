@@ -3,13 +3,17 @@
 , fetchPypi
 , pythonOlder
 , pytestCheckHook
+, pythonRelaxDepsHook
 , matplotlib
 , nibabel
 , numpy
+, pydicom
+, pymedio
 , scikit-fuzzy
-, scikitimage
+, scikit-image
 , scikit-learn
 , scipy
+, simpleitk
 , statsmodels
 }:
 
@@ -26,25 +30,32 @@ buildPythonPackage rec {
     hash = "sha256-Yjd4hXmbT87xNKSqc6zkKNisOVhQzQAUZI5wBiI/UBk=";
   };
 
+  postPatch = ''
+    substituteInPlace setup.cfg --replace "!=3.10.*," "" --replace "!=3.11.*" ""
+    substituteInPlace setup.cfg --replace "pytest-runner" ""
+  '';
+
+  nativeBuildInputs = [ pythonRelaxDepsHook ];
+  pythonRelaxDeps = [ "nibabel" ];
+
   propagatedBuildInputs = [
     matplotlib
     nibabel
     numpy
+    pydicom
+    pymedio
     scikit-fuzzy
-    scikitimage
+    scikit-image
     scikit-learn
     scipy
+    simpleitk
     statsmodels
   ];
 
   nativeCheckInputs = [
     pytestCheckHook
   ];
-
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace "pytest-runner" ""
-  '';
+  pytestFlagsArray = [ "tests" ];
 
   pythonImportsCheck = [
     "intensity_normalization"
@@ -53,12 +64,11 @@ buildPythonPackage rec {
     "intensity_normalization.util"
   ];
 
+
   meta = with lib; {
     homepage = "https://github.com/jcreinhold/intensity-normalization";
     description = "MRI intensity normalization tools";
     maintainers = with maintainers; [ bcdarwin ];
     license = licenses.asl20;
-    # depends on simpleitk python wrapper which is not packaged yet
-    broken = true;
   };
 }

@@ -70,7 +70,7 @@ let
     stdenv = mkStdenv stdenv;
   } // builtins.listToAttrs (map
     (v: { name = "clang${v}Stdenv"; value = mkStdenv pkgs."llvmPackages_${v}".stdenv; })
-    [ "12" "13" "14" "15" ]
+    [ "12" "13" "14" "15" "16" ]
   );
 
   callPackage = newScope (packages // pkgs.darwin // { inherit MacOSX-SDK; });

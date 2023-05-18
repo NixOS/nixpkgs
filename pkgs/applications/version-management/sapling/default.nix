@@ -4,10 +4,12 @@
 , fetchFromGitHub
 , fetchurl
 , sd
+, cargo
 , curl
 , pkg-config
 , openssl
 , rustPlatform
+, rustc
 , fetchYarnDeps
 , yarn
 , nodejs
@@ -147,11 +149,10 @@ python3Packages.buildPythonApplication {
   nativeBuildInputs = [
     curl
     pkg-config
-  ] ++ (with rustPlatform; [
     myCargoSetupHook
-    rust.cargo
-    rust.rustc
-  ]);
+    cargo
+    rustc
+  ];
 
   buildInputs = [
     openssl

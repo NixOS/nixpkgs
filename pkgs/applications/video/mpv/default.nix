@@ -69,7 +69,7 @@
 , speexSupport       ? true,           speex
 , swiftSupport       ? stdenv.isDarwin && stdenv.isAarch64, swift
 , theoraSupport      ? true,           libtheora
-, vaapiSupport       ? stdenv.isLinux, libva
+, vaapiSupport       ? x11Support || waylandSupport, libva
 , vapoursynthSupport ? false,          vapoursynth
 , vdpauSupport       ? true,           libvdpau
 , xineramaSupport    ? stdenv.isLinux, libXinerama

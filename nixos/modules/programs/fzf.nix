@@ -26,7 +26,7 @@ in
         source ${pkgs.fzf}/share/fzf/key-bindings.zsh
       '');
 
-    programs.zsh.ohMyZsh.plugins = optional (cfg.keybindings || cfg.fuzzyCompletion) [ "fzf" ];
+    programs.zsh.ohMyZsh.plugins = lib.mkIf (cfg.keybindings || cfg.fuzzyCompletion) [ "fzf" ];
   };
   meta.maintainers = with maintainers; [ laalsaas ];
 }

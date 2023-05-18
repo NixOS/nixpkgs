@@ -33,6 +33,12 @@ rustPlatform.buildRustPackage rec {
     };
   };
 
+  patches = [
+    # jumpy uses an outdated version of mimalloc
+    # which fails to build on aarch64-linux
+    ./update-mimalloc.patch
+  ];
+
   nativeBuildInputs = [
     makeWrapper
     pkg-config

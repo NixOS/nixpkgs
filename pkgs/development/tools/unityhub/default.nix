@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchurl, dpkg, makeWrapper, buildFHSEnv
+{ lib
+, stdenv
+, fetchurl
+, dpkg
+, makeWrapper
+, buildFHSEnv
 , extraPkgs ? pkgs: [ ]
 , extraLibs ? pkgs: [ ]
 }:
@@ -20,9 +25,6 @@ stdenv.mkDerivation rec {
   fhsEnv = buildFHSEnv {
     name = "${pname}-fhs-env";
     runScript = "";
-
-    # Seems to be needed for GTK filepickers to work in FHSUserEnv
-    profile = "XDG_DATA_DIRS=\"\$XDG_DATA_DIRS:/usr/share/\"";
 
     targetPkgs = pkgs: with pkgs; [
       xorg.libXrandr
@@ -65,7 +67,7 @@ stdenv.mkDerivation rec {
 
       # Unity Hub additional dependencies
       libva
-      openssl_1_1
+      openssl
       cairo
       xdg-utils
       libnotify

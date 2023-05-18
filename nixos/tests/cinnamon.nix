@@ -1,9 +1,7 @@
 import ./make-test-python.nix ({ pkgs, lib, ... }: {
   name = "cinnamon";
 
-  meta = with lib; {
-    maintainers = teams.cinnamon.members;
-  };
+  meta.maintainers = lib.teams.cinnamon.members;
 
   nodes.machine = { nodes, ... }: {
     imports = [ ./common/user-account.nix ];

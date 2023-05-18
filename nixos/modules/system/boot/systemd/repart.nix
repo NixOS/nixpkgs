@@ -72,11 +72,6 @@ in
   };
 
   config = lib.mkIf (cfg.enable || initrdCfg.enable) {
-    # Always link the definitions into /etc so that they are also included in
-    # the /nix/store of the sysroot during early userspace (i.e. while in the
-    # initrd).
-    environment.etc."repart.d".source = definitionsDirectory;
-
     boot.initrd.systemd = lib.mkIf initrdCfg.enable {
       additionalUpstreamUnits = [
         "systemd-repart.service"
@@ -86,31 +81,38 @@ in
         "${config.boot.initrd.systemd.package}/bin/systemd-repart"
       ];
 
+      contents."/etc/repart.d".source = definitionsDirectory;
+
       # Override defaults in upstream unit.
       services.systemd-repart = {
-        # Unset the conditions as they cannot be met before activation because
-        # the definition files are not stored in the expected locations.
-        unitConfig.ConditionDirectoryNotEmpty = [
-          " " # required to unset the previous value.
-        ];
+        # systemd-repart tries to create directories in /var/tmp by default to
+        # store large temporary files that benefit from persistence on disk. In
+        # the initrd, however, /var/tmp does not provide more persistence than
+        # /tmp, so we re-use it here.
+        environment."TMPDIR" = "/tmp";
         serviceConfig = {
-          # systemd-repart runs before the activation script. Thus we cannot
-          # rely on them being linked in /etc already. Instead we have to
-          # explicitly pass their location in the sysroot to the binary.
           ExecStart = [
             " " # required to unset the previous value.
+            # When running in the initrd, systemd-repart by default searches
+            # for definition files in /sysroot or /sysusr. We tell it to look
+            # in the initrd itself.
             ''${config.boot.initrd.systemd.package}/bin/systemd-repart \
-                  --definitions=/sysroot${definitionsDirectory} \
+                  --definitions=/etc/repart.d \
                   --dry-run=no
             ''
           ];
         };
-        # Because the initrd does not have the `initrd-usr-fs.target` the
-        # upestream unit runs too early in the boot process, before the sysroot
-        # is available. However, systemd-repart needs access to the sysroot to
-        # find the definition files.
+        # systemd-repart needs to run after /sysroot (or /sysuser, but we don't
+        # have it) has been mounted because otherwise it cannot determine the
+        # device (i.e disk) to operate on. If you want to run systemd-repart
+        # without /sysroot, you have to explicitly tell it which device to
+        # operate on.
         after = [ "sysroot.mount" ];
       };
+    };
+
+    environment.etc = lib.mkIf cfg.enable {
+      "repart.d".source = definitionsDirectory;
     };
 
     systemd = lib.mkIf cfg.enable {
@@ -120,4 +122,5 @@ in
     };
   };
 
+  meta.maintainers = with lib.maintainers; [ nikstur ];
 }

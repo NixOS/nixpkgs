@@ -1,21 +1,19 @@
-{ lib, mkDerivation, fetchFromGitHub, qmake, qtbase, qtscript, qtsvg,
+{ lib, mkDerivation, fetchFromGitHub, cmake, qtbase, qtscript, qtsvg,
   wrapQtAppsHook, poppler, zlib, pkg-config }:
 
 mkDerivation rec {
   pname = "texstudio";
-  version = "4.5.1";
+  version = "4.5.2";
 
   src = fetchFromGitHub {
     owner = "${pname}-org";
     repo = pname;
     rev = version;
-    hash = "sha256-QBPWelCqh8Ggp0IjH37QGYGu5Ya2fpsiSEkKh3Ee7PM=";
+    hash = "sha256-L+q4+k4XWywnxIvhfXPCBeCqnGj4E9BhAmgcAZhm7S8=";
   };
 
-  nativeBuildInputs = [ qmake wrapQtAppsHook pkg-config ];
+  nativeBuildInputs = [ cmake wrapQtAppsHook pkg-config ];
   buildInputs = [ qtbase qtscript qtsvg poppler zlib ];
-
-  qmakeFlags = [ "NO_APPDATA=True" ];
 
   meta = with lib; {
     description = "TeX and LaTeX editor";

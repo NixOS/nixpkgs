@@ -1,6 +1,5 @@
-{ stdenv
-, gcc12Stdenv
-, lib
+{ lib
+, stdenv
 , fetchFromGitHub
 , cmake
 , libpthreadstubs
@@ -9,7 +8,7 @@
 , wrapQtAppsHook
 }:
 
-gcc12Stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "qcoro";
   version = "0.9.0";
 

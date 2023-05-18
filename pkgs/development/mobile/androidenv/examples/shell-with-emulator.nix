@@ -115,7 +115,7 @@ pkgs.mkShell rec {
       echo "installed_packages_section: ''${installed_packages_section}"
 
       packages=(
-        "build-tools;33.0.1" "cmdline-tools;8.0" \
+        "build-tools;33.0.2" "cmdline-tools;9.0" \
         "emulator" "patcher;v4" "platform-tools" "platforms;android-33" \
         "system-images;android-33;google_apis;arm64-v8a" \
         "system-images;android-33;google_apis;x86_64"

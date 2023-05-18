@@ -6349,6 +6349,7 @@
     "texlive-en"
     "texlive-msg-translations"
     "texlive-scripts"
+    "texlive.infra"
     "tlshell"
     "unicode-data"
     "xdvi"
@@ -13965,9 +13966,11 @@
   deps = [
     "glyphlist"
   ];
+  postactionScript = "tlpkg/tlpostcode/dvipdfmx.pl";
   sha512.run = "6dd78f4b5cabb51c3bd9988fa46bf90a5a79b3d3293257a4c563a8a76a5a03eb167ce3ec0d4ce6ed05412a551eb201f2379a50a97ac5355ebe833f7b34cee4b4";
   sha512.doc = "00dce9b36eefd1788bbe455b2e5104efd9afc8bd891aeafb2cd9bdee406eeb25ab520e42e614e9d2363eb6a7273232bc3c4805bacd82a22099c5ffc438e852cb";
   hasRunfiles = true;
+  hasTlpkg = true;
 };
 "dvipng" = {
   revision = 62517;
@@ -18804,9 +18807,11 @@
 };
 "haranoaji" = {
   revision = 66119;
+  postactionScript = "tlpkg/tlpostcode/haranoaji-tlpost.pl";
   sha512.run = "96100a78ab4292a4dc656fb70e2973f75ece3964f3a0d85d9f9153b7052ea90c14f074b195d31e46465dc52ea0516541a16981239abf552861dbca16fac3ab1d";
   sha512.doc = "bb4161c95b760c9c103f086c134d7f7528dafd92f82623dd95322ea644b86c35e2baef05170c3c67a7f1c4905dc8a5fd40108db1c65074b558eec69f0e3c6910";
   hasRunfiles = true;
+  hasTlpkg = true;
   version = "20230223";
 };
 "haranoaji-extra" = {
@@ -31279,10 +31284,12 @@
 };
 "ptex-fontmaps" = {
   revision = 59711;
+  postactionScript = "tlpkg/tlpostcode/ptex-fontmaps-tlpost.pl";
   sha512.run = "16afa97812d830b2b98f657f67ef690da420afe63ccf6f002131101f3ce9a03ff6e5170db1b316e9db521e4cdf89c7aedf26c57be162bf1c5b48fa4226e5e029";
   sha512.doc = "affd6dde30276fa680a0d99d0a51650ee95260535dff717801d61ccb8165c5526047e46ad6478367a439e9a84721500128062b8cb6a1f33a25a65fadae4547f1";
   sha512.source = "eb450119b3897f9e8374d29a3a9512819a05263d5829c81d56dc00dd35995133d1a3cfcadc59ce2aea52ac8b5bc195d27446f159356e63b433e235d1098e93b5";
   hasRunfiles = true;
+  hasTlpkg = true;
   version = "20210625.0";
 };
 "ptex-fonts" = {
@@ -31300,9 +31307,11 @@
 };
 "ptex2pdf" = {
   revision = 64072;
+  postactionScript = "tlpkg/tlpostcode/ptex2pdf-tlpost.pl";
   sha512.run = "1893a49eb389914d7a9247dece7f67d9d6af05efca77801130726d6422b1a0150b56f29d3f133f433d70989f6ffcc2b44d209cd044c84ee0833c2f77b87f3e46";
   sha512.doc = "f193b44004b487d93f025b34b72a17cbaf4111b1a6e1ceb4ac1b69c6c07aa4dce46cde510cbd01fb71fb08c06f7bbb415a4a8051de5861f1f586b756060f386f";
   hasRunfiles = true;
+  hasTlpkg = true;
   version = "20200520.0";
 };
 "ptext" = {
@@ -32946,6 +32955,7 @@
     "hyphen-base"
     "kpathsea"
     "texlive-scripts"
+    "texlive.infra"
   ];
   sha512.run = "f3e449bf0b34deb9ae776685f386245c4ca9644f2175ae51e9c62faa00e3cfac30fa2aa07fbd83b15b21d487ca368c09a18742d2434047783350698ced3b20b9";
 };
@@ -36160,7 +36170,7 @@
 "texlive-msg-translations" = {
   revision = 65889;
   sha512.run = "03c0445d0cb0bb3722a691fd94b93c7fe9d046dbf5945ecadcce17a2333878ffc542f0b7f263ae09bd0537a68c1a59d6c04b873ce8cdc6c8b57f7ded5b6681f9";
-  hasRunfiles = true;
+  hasTlpkg = true;
 };
 "texlive-pl" = {
   revision = 62841;
@@ -36179,6 +36189,7 @@
   sha512.run = "3dbb2007ae7b80862265d6196f77a9d796f02f6914871f4dad094f8419040fe7064daf6ecf5dd611b5764dd4148d034a97d82aa22671199e8a3dc79373859c67";
   sha512.doc = "6976ba00c8ee50664aaa1f762231f297f01548a94d6a632b386845e7fa43b20b63342d58874e87869a73a9c23bba358f762f5cc3814690f870c6216679471a89";
   hasRunfiles = true;
+  hasTlpkg = true;
 };
 "texlive-scripts-extra" = {
   revision = 62517;
@@ -36197,6 +36208,13 @@
   stripPrefix = 0;
   sha512.run = "1a7e43528c2dac5c623943b1b268b99f0db6a4876f50c5386a8ea160b8b5e066604d34c0a53cee25cc3f839eb7f4be177e3d98ed51c83c77df6293c77a02e0ab";
   sha512.doc = "534c505455c5f9c73803c140a340df2882a97516e15f52c5b65695b7c626404336a0e4f6190155b5bda1b9a86d7f4d44ac294bccec791ec6701e56d13c00d71d";
+};
+"texlive.infra" = {
+  revision = 63645;
+  sha512.run = "cbc7e70f3b4d451a51f06ed640b37ce28b8ea32f0dad75b32e54856e1051934d32125f2428b074a69503fb24c943c5eded58d77168d606891ea8209bbf852c65";
+  sha512.doc = "37f37bfd17988a8897312581efcf05aff76af6fd2c30867c65e0a4445ddc1f7fb90bb86984999d5fc942159bccf5c2a188e5b552702405405c902c97ae4828ff";
+  hasRunfiles = true;
+  hasTlpkg = true;
 };
 "texliveonfly" = {
   revision = 55777;
@@ -37393,6 +37411,7 @@
   sha512.run = "285fffbc63ac1b87b1ad143d043ace7ed1f52f48c4e03a9fc78c9ff6adeb2062af0ce9b5245b77349528ca18c0fe6ee8ad44b794adb24ae62f00e4a18501d7c7";
   sha512.doc = "73962fa94f7ca3a78b6149a44b72c39096fb54263660ccb6c0bcc024023dfef665c5132b9cb78953c92ec8b7d161581294e32b0ab26c9e0e2e9eadc16aa9ff72";
   hasRunfiles = true;
+  hasTlpkg = true;
 };
 "to-be-determined" = {
   revision = 64882;
@@ -39914,9 +39933,11 @@
     "xetexconfig"
   ];
   hasFormats = true;
+  postactionScript = "tlpkg/tlpostcode/xetex.pl";
   sha512.run = "e9f0aebda0a7fb36e2cbce4dd49e965335438c4ebf2d41eb8e19eabe29617239dd67e7e3433a8c75fd40f072a2c6753a7d0762afd34fca4130929e51888aaabf";
   sha512.doc = "31f03ee1ae00bc7883109ab7b7374feedc384d86b491873e90797658eae12299dd60b95edc1c86f1faa61a0b7a952cca23993e991863b37e49c27afd6c21c034";
   hasRunfiles = true;
+  hasTlpkg = true;
 };
 "xetex-devanagari" = {
   revision = 34296;

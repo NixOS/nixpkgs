@@ -84,7 +84,7 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = lib.optionals pythonSupport (
     # requirements.txt
     let pp = python.pkgs; in ([
-      pp.numpy pp.scipy pp.scikitimage pp.h5py
+      pp.numpy pp.scipy pp.scikit-image pp.h5py
       pp.matplotlib pp.ipython pp.networkx pp.nose
       pp.pandas pp.python-dateutil pp.protobuf pp.gflags
       pp.pyyaml pp.pillow pp.six

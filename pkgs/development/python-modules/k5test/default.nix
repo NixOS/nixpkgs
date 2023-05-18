@@ -1,12 +1,11 @@
-{ stdenv
-, lib
+{ lib
 , buildPythonPackage
+, pythonOlder
 , fetchPypi
 , substituteAll
-, krb5
 , findutils
-, which
-, pythonOlder
+, krb5
+, stdenv
 }:
 
 buildPythonPackage rec {
@@ -26,7 +25,6 @@ buildPythonPackage rec {
       inherit findutils krb5;
       # krb5-config is in dev output
       krb5Dev = krb5.dev;
-      which = "${which}/bin/which";
     })
   ];
 

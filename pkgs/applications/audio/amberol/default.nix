@@ -2,12 +2,14 @@
 , stdenv
 , fetchFromGitLab
 , rustPlatform
+, cargo
 , desktop-file-utils
 , appstream-glib
 , meson
 , ninja
 , pkg-config
 , reuse
+, rustc
 , m4
 , wrapGAppsHook4
 , glib
@@ -48,11 +50,10 @@ stdenv.mkDerivation rec {
     reuse
     m4
     wrapGAppsHook4
-  ] ++ (with rustPlatform; [
-    cargoSetupHook
-    rust.cargo
-    rust.rustc
-  ]);
+    rustPlatform.cargoSetupHook
+    cargo
+    rustc
+  ];
 
   buildInputs = [
     glib

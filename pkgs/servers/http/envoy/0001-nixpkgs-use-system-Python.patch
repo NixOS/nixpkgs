@@ -1,6 +1,6 @@
-From 329ad7cb56e66464e5570bbb51dea0fd56c4d9ae Mon Sep 17 00:00:00 2001
+From 1b6ad143c0f5f96c42f603bb93a72f788b88b622 Mon Sep 17 00:00:00 2001
 From: Luke Granger-Brown <git@lukegb.com>
-Date: Sun, 19 Feb 2023 17:40:50 +0000
+Date: Fri, 12 May 2023 08:12:04 +0100
 Subject: [PATCH 1/2] nixpkgs: use system Python
 
 ---
@@ -9,11 +9,11 @@ Subject: [PATCH 1/2] nixpkgs: use system Python
  2 files changed, 1 insertion(+), 16 deletions(-)
 
 diff --git a/bazel/python_dependencies.bzl b/bazel/python_dependencies.bzl
-index a5c3283d0a..1c2c31ebf2 100644
+index 37c0183664..0bee5feb7e 100644
 --- a/bazel/python_dependencies.bzl
 +++ b/bazel/python_dependencies.bzl
-@@ -1,10 +1,8 @@
- load("@rules_python//python:pip.bzl", "pip_install", "pip_parse")
+@@ -1,24 +1,20 @@
+ load("@rules_python//python:pip.bzl", "pip_parse")
 -load("@python3_10//:defs.bzl", "interpreter")
  
  def envoy_python_dependencies():
@@ -23,13 +23,12 @@ index a5c3283d0a..1c2c31ebf2 100644
          requirements_lock = "@envoy//tools/base:requirements.txt",
          extra_pip_args = ["--require-hashes"],
      )
-@@ -12,14 +10,12 @@ def envoy_python_dependencies():
-     # TODO(phlax): switch to `pip_parse`
-     pip_install(
-         # Note: dev requirements do *not* check hashes
--        python_interpreter_target = interpreter,
+ 
+     pip_parse(
          name = "dev_pip3",
-         requirements = "@envoy//tools/dev:requirements.txt",
+-        python_interpreter_target = interpreter,
+         requirements_lock = "@envoy//tools/dev:requirements.txt",
+         extra_pip_args = ["--require-hashes"],
      )
  
      pip_parse(
@@ -68,5 +67,5 @@ index 9d1b31c5d6..ac5605eb30 100644
 -
      aspect_bazel_lib_dependencies()
 -- 
-2.39.1
+2.40.0
 

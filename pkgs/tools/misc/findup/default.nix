@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "findup";
-  version = "1.0";
+  version = "1.1";
 
   src = fetchFromGitHub {
     owner = "hiljusti";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-erlKIiYYlWnhoeD3FnKdxnHjfGmmJVXk44DUja5Unig=";
+    sha256 = "sha256-fafMBC/ibCHgC3JwCNEh74Qw/yZ+KQF//z1e+OpeGus=";
   };
 
   nativeBuildInputs = [ zig ];

@@ -15,13 +15,15 @@ let
     ];
   };
   pkgList = rec {
-    all = lib.filter pkgFilter (combinePkgs (lib.attrValues pkgSet));
+    combined = combinePkgs (lib.attrValues pkgSet);
+    all = lib.filter pkgFilter combined;
     splitBin = builtins.partition (p: p.tlType == "bin") all;
     bin = splitBin.right
       ++ lib.optional
           (lib.any (p: p.tlType == "run" && p.pname == "pdfcrop") splitBin.wrong)
           (lib.getBin ghostscript);
     nonbin = splitBin.wrong;
+    tlpkg = lib.filter (pkg: pkg.tlType == "tlpkg") combined;
 
     # extra interpreters needed for shebangs, based on 2015 schemes "medium" and "tetex"
     # (omitted tk needed in pname == "epspdf", bin/epspdftk)
@@ -35,11 +37,8 @@ let
 
   name = "texlive-${extraName}-${bin.texliveYear}${extraVersion}";
 
-  texmfroot = (buildEnv {
-    name = "${name}-texmfroot";
-
-    # the 'non-relocated' packages must live in $TEXMFROOT/texmf-dist (e.g. fmtutil, updmap look for perl modules there)
-    extraPrefix = "/texmf-dist";
+  texmfdist = (buildEnv {
+    name = "${name}-texmfdist";
 
     # remove fake derivations (without 'outPath') to avoid undesired build dependencies
     paths = lib.catAttrs "outPath" pkgList.nonbin;
@@ -48,16 +47,32 @@ let
 
     postBuild = # generate ls-R database
     ''
-      perl -I "${bin.core.out}/share/texmf-dist/scripts/texlive" \
-        -- "$out/texmf-dist/scripts/texlive/mktexlsr.pl" --sort "$out"/texmf-dist
+      perl "$out/scripts/texlive/mktexlsr.pl" --sort "$out"
     '';
   }).overrideAttrs (_: { allowSubstitutes = true; });
+
+  tlpkg = (buildEnv {
+    name = "${name}-tlpkg";
+
+    # remove fake derivations (without 'outPath') to avoid undesired build dependencies
+    paths = lib.catAttrs "outPath" pkgList.tlpkg;
+  }).overrideAttrs (_: { allowSubstitutes = true; });
+
+  # the 'non-relocated' packages must live in $TEXMFROOT/texmf-dist
+  # and sometimes look into $TEXMFROOT/tlpkg (notably fmtutil, updmap look for perl modules in both)
+  texmfroot = runCommand "${name}-texmfroot" {
+    inherit texmfdist tlpkg;
+  } ''
+    mkdir -p "$out"
+    ln -s "$texmfdist" "$out"/texmf-dist
+    ln -s "$tlpkg" "$out"/tlpkg
+  '';
 
   # expose info and man pages in usual /share/{info,man} location
   doc = buildEnv {
     name = "${name}-doc";
 
-    paths = [ (texmfroot.outPath + "/texmf-dist/doc") ];
+    paths = [ (texmfdist.outPath + "/doc") ];
     extraPrefix = "/share";
 
     pathsToLink = [
@@ -76,6 +91,9 @@ in (buildEnv {
   paths = lib.catAttrs "outPath" pkgList.bin ++ [ doc ];
   pathsToLink = [
     "/"
+    "/share/texmf-var/scripts"
+    "/share/texmf-var/tex/generic/config"
+    "/share/texmf-var/web2c"
     "/bin" # ensure these are writeable directories
   ];
 
@@ -91,9 +109,8 @@ in (buildEnv {
 
   postBuild = ''
     TEXMFROOT="${texmfroot}"
-    TEXMFDIST="${texmfroot}/texmf-dist"
+    TEXMFDIST="${texmfdist}"
     export PATH="$out/bin:$PATH"
-    export PERL5LIB="${bin.core.out}/share/texmf-dist/scripts/texlive" # modules otherwise found in tlpkg/ of texlive.infra
     TEXMFSYSCONFIG="$out/share/texmf-config"
     TEXMFSYSVAR="$out/share/texmf-var"
     export TEXMFCNF="$TEXMFSYSVAR/web2c"
@@ -199,7 +216,6 @@ in (buildEnv {
       rm "$link"
       makeWrapper "$target" "$link" \
         --prefix PATH : "${gnused}/bin:${gnugrep}/bin:${coreutils}/bin:$out/bin:${perl}/bin" \
-        --prefix PERL5LIB : "$PERL5LIB" \
         --set-default TEXMFCNF "$TEXMFCNF" \
         --set-default FONTCONFIG_FILE "${
           # neccessary for XeTeX to find the fonts distributed with texlive
@@ -232,23 +248,40 @@ in (buildEnv {
     done
     }
   '' +
+  # texlive postactions (see TeXLive::TLUtils::_do_postaction_script)
+  (lib.concatMapStrings (pkg: ''
+    postaction='${pkg.postactionScript}'
+    case "$postaction" in
+      *.pl) postInterp=perl ;;
+      *.texlua) postInterp=texlua ;;
+      *) postInterp= ;;
+    esac
+    echo "postaction install script for ${pkg.pname}: ''${postInterp:+$postInterp }$postaction install $TEXMFROOT"
+    $postInterp "$TEXMFROOT/$postaction" install "$TEXMFROOT"
+  '') (lib.filter (pkg: pkg ? postactionScript) pkgList.tlpkg)) +
   # texlive post-install actions
   ''
     ln -sf "$TEXMFDIST"/scripts/texlive/updmap.pl "$out"/bin/updmap
+    ln -sf "$TEXMFDIST"/scripts/texlive/fmtutil.pl "$out"/bin/fmtutil
   '' +
     # now hack to preserve "$0" for mktexfmt
   ''
-    cp "$TEXMFDIST"/scripts/texlive/fmtutil.pl "$out/bin/fmtutil"
-    patchShebangs "$out/bin/fmtutil"
-    ln -sf fmtutil "$out/bin/mktexfmt"
-
+    cp "$TEXMFDIST"/scripts/texlive/fmtutil.pl "$TEXMFSYSVAR"/scripts/mktexfmt
+    ln -sf "$TEXMFSYSVAR"/scripts/mktexfmt "$out"/bin/mktexfmt
+  '' +
+    # generate formats
+  ''
     texlinks "$out/bin" && wrapBin
 
     # many formats still ignore SOURCE_DATE_EPOCH even when FORCE_SOURCE_DATE=1
     # libfaketime fixes non-determinism related to timestamps ignoring FORCE_SOURCE_DATE
     # we cannot fix further randomness caused by luatex; for further details, see
     # https://salsa.debian.org/live-team/live-build/-/blob/master/examples/hooks/reproducible/2006-reproducible-texlive-binaries-fmt-files.hook.chroot#L52
-    FORCE_SOURCE_DATE=1 TZ= faketime -f '@1980-01-01 00:00:00 x0.001' fmtutil --sys --all | grep '^fmtutil' # too verbose
+    # note that calling faketime and fmtutil is fragile (faketime uses LD_PRELOAD, fmtutil calls /bin/sh, causing potential glibc issues on non-NixOS)
+    # so we patch fmtutil to use faketime, rather than calling faketime fmtutil
+    substitute "$TEXMFDIST"/scripts/texlive/fmtutil.pl fmtutil \
+      --replace 'my $cmdline = "$eng -ini ' 'my $cmdline = "faketime -f '"'"'\@1980-01-01 00:00:00 x0.001'"'"' $eng -ini '
+    FORCE_SOURCE_DATE=1 TZ= perl fmtutil --sys --all | grep '^fmtutil' # too verbose
     #texlinks "$out/bin" && wrapBin # do we need to regenerate format links?
 
     # Disable unavailable map files
@@ -276,7 +309,6 @@ in (buildEnv {
     #  * ./bin/repstopdf needs to be a symlink to be processed by wrapBin
   ''
     if [[ -e "$out"/bin/epstopdf ]]; then
-      mkdir -p "$TEXMFSYSVAR/scripts"
       cp "$out"/bin/epstopdf "$TEXMFSYSVAR"/scripts/repstopdf
       ln -s "$TEXMFSYSVAR"/scripts/repstopdf "$out"/bin/repstopdf
     fi
@@ -285,15 +317,6 @@ in (buildEnv {
   ''
     rm "$out"/bin/*-sys
     wrapBin
-  '' +
-    # Perform a small test to verify that the restricted mode get enabled when
-    # needed (detected by checking if it disallows --gscmd)
-  ''
-    if [[ -e "$out"/bin/epstopdf ]]; then
-      echo "Testing restricted mode for {,r}epstopdf"
-      ! (epstopdf --gscmd echo /dev/null 2>&1 || true) | grep forbidden
-      (repstopdf --gscmd echo /dev/null 2>&1 || true) | grep forbidden
-    fi
   '' +
   # TODO: a context trigger https://www.preining.info/blog/2015/06/debian-tex-live-2015-the-new-layout/
     # http://wiki.contextgarden.net/ConTeXt_Standalone#Unix-like_platforms_.28Linux.2FMacOS_X.2FFreeBSD.2FSolaris.29

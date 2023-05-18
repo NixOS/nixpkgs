@@ -4,6 +4,7 @@
 , fetchFromGitHub
 , fetchYarnDeps
 , fixup_yarn_lock
+, cargo
 , installShellFiles
 , lame
 , mpv-unwrapped
@@ -135,7 +136,7 @@ python3.pkgs.buildPythonApplication {
     offlineYarn
 
     installShellFiles
-    rustPlatform.rust.cargo
+    cargo
     rustPlatform.cargoSetupHook
     ninja
     qt6.wrapQtAppsHook

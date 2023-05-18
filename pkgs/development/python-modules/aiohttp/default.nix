@@ -4,6 +4,8 @@
 , fetchPypi
 , fetchpatch
 , pythonOlder
+# build_requires
+, setuptools
 # install_requires
 , attrs
 , charset-normalizer
@@ -23,7 +25,6 @@
 , freezegun
 , gunicorn
 , pytest-mock
-, pytest-xdist
 , pytestCheckHook
 , re-assert
 , trustme
@@ -56,6 +57,10 @@ buildPythonPackage rec {
       --replace "charset-normalizer >=2.0, < 3.0" "charset-normalizer >=2.0, < 4.0"
   '';
 
+  nativeBuildInputs = [
+    setuptools
+  ];
+
   propagatedBuildInputs = [
     attrs
     charset-normalizer
@@ -75,12 +80,12 @@ buildPythonPackage rec {
     idna-ssl
   ];
 
+  # NOTE: pytest-xdist cannot be added because it is flaky. See https://github.com/NixOS/nixpkgs/issues/230597 for more info.
   nativeCheckInputs = [
     async_generator
     freezegun
     gunicorn
     pytest-mock
-    pytest-xdist
     pytestCheckHook
     re-assert
   ] ++ lib.optionals (!(stdenv.isDarwin && stdenv.isAarch64)) [

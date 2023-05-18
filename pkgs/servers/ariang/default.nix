@@ -1,42 +1,24 @@
-{ lib ? pkgs.lib
+{ lib
 , stdenv
-, pkgs
 , fetchFromGitHub
-, nodejs ? pkgs.nodejs_18
+, buildNpmPackage
+, nix-update-script
 }:
 
-stdenv.mkDerivation rec {
+buildNpmPackage rec {
   pname = "ariang";
-  version = "1.3.4";
+  version = "1.3.5";
 
   src = fetchFromGitHub {
     owner = "mayswind";
     repo = "AriaNg";
     rev = version;
-    hash = "sha256-jprx1JIh+Q0Cv2NkLj9dMnGr+nR/0T08N02gXGknC1Q=";
+    hash = "sha256-Ki9W66ITdunxU+HQWVf2pG+BROlYFYUJSAySC8wsJRo=";
   };
 
-  buildPhase =
-    let
-      nodePackages = import ./node-composition.nix {
-        inherit pkgs nodejs;
-        inherit (stdenv.hostPlatform) system;
-      };
-      nodeDependencies = (nodePackages.shell.override (old: {
-        # access to path '/nix/store/...-source' is forbidden in restricted mode
-        src = src;
-        # Error: Cannot find module '/nix/store/...-node-dependencies
-        dontNpmInstall = true;
-      })).nodeDependencies;
-    in
-    ''
-      runHook preBuild
+  npmDepsHash = "sha256-FyIQinOQDJ+k612z/qkl3KW0z85sswRhQCbF6N63z8Y=";
 
-      ln -s ${nodeDependencies}/lib/node_modules ./node_modules
-      ${nodeDependencies}/bin/gulp clean build
-
-      runHook postBuild
-    '';
+  makeCacheWritable = true;
 
   installPhase = ''
     runHook preInstall
@@ -47,7 +29,7 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  passthru.updateScript = ./update.sh;
+  passthru.updateScript = nix-update-script {};
 
   meta = with lib; {
     description = "a modern web frontend making aria2 easier to use";

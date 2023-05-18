@@ -43,7 +43,7 @@
 , pyyaml
 , redis
 , requests
-, scikitimage
+, scikit-image
 , scipy
 , setproctitle
 , smart-open
@@ -57,7 +57,7 @@
 
 let
   pname = "ray";
-  version = "2.3.0";
+  version = "2.4.0";
 in
 buildPythonPackage rec {
   inherit pname version;
@@ -103,7 +103,7 @@ buildPythonPackage rec {
       gym
       lz4
       matplotlib
-      scikitimage
+      scikit-image
       pyyaml
       scipy
     ];

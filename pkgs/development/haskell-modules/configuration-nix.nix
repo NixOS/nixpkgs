@@ -514,7 +514,8 @@ self: super: builtins.intersectAttrs super {
     libraryHaskellDepends =
       (drv.libraryHaskellDepends or [])
       ++ lib.optionals (!(pkgs.stdenv.hostPlatform.isAarch64
-                          || pkgs.stdenv.hostPlatform.isx86_64)) [
+                          || pkgs.stdenv.hostPlatform.isx86_64)
+                        || (self.ghc.isGhcjs or false)) [
         self.unbounded-delays
       ];
   }) super.tasty;
@@ -906,6 +907,9 @@ self: super: builtins.intersectAttrs super {
   # Pass the correct libarchive into the package.
   streamly-archive = super.streamly-archive.override { archive = pkgs.libarchive; };
 
+  # Pass the correct lmdb into the package.
+  streamly-lmdb = super.streamly-lmdb.override { lmdb = pkgs.lmdb; };
+
   hlint = overrideCabal (drv: {
     postInstall = ''
       install -Dm644 data/hlint.1 -t "$out/share/man/man1"
@@ -1014,14 +1018,6 @@ self: super: builtins.intersectAttrs super {
     fsnotify = dontCheck super.fsnotify_0_4_1_0;
     hnix-store-core = super.hnix-store-core_0_6_1_0;
   });
-
-  hercules-ci-api-core =
-    # 2023-05-02: Work around a corrupted file on cache.nixos.org. This is a hash for x86_64-linux. Remove when it has changed.
-    if super.hercules-ci-api-core.drvPath == "/nix/store/dgy3w43zypmdswc7a7zis0njgljqvnq0-hercules-ci-api-core-0.1.5.0.drv"
-    then super.hercules-ci-api-core.overrideAttrs (_: {
-        dummyAttr = 1;
-      })
-    else super.hercules-ci-api-core;
 
   hercules-ci-agent = super.hercules-ci-agent.override { nix = self.hercules-ci-cnix-store.passthru.nixPackage; };
   hercules-ci-cnix-expr = addTestToolDepend pkgs.git (super.hercules-ci-cnix-expr.override { nix = self.hercules-ci-cnix-store.passthru.nixPackage; });
@@ -1233,5 +1229,8 @@ self: super: builtins.intersectAttrs super {
   emanote = addBuildDepend pkgs.stork super.emanote;
 
   keid-render-basic = addBuildTool pkgs.glslang super.keid-render-basic;
+
+  # Disable checks to break dependency loop with SCalendar
+  scalendar = dontCheck super.scalendar;
 
 }

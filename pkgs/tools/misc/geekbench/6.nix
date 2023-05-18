@@ -10,17 +10,19 @@
 
 stdenv.mkDerivation rec {
   pname = "geekbench";
-  version = "6.0.1";
+  version = "6.0.3";
 
   src = fetchurl {
     url = "https://cdn.geekbench.com/Geekbench-${version}-Linux.tar.gz";
-    hash = "sha256-RrfyB7RvYWkVCbjblLIPOFcZjUR/fJHk1Em1HP74kmY=";
+    hash = "sha256-08c5YBKljeFo31Y7WHEnLLiJdFJm8RfkY2Q44C2dp7k=";
   };
 
   dontConfigure = true;
   dontBuild = true;
 
   nativeBuildInputs = [ autoPatchelfHook makeWrapper ];
+
+  buildInputs = [ stdenv.cc.cc.lib ];
 
   installPhase = ''
     runHook preInstall
