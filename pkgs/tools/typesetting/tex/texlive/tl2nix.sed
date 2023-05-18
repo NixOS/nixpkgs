@@ -14,8 +14,7 @@ $a}
 }
 
 # form an attrmap per package
-# ignore packages whose name contains "." (such as binaries)
-:next-package
+# ignore packages whose name contains "." (such as binaries) except for texlive.infra
 /^name ([^.]+|texlive\.infra)$/,/^$/{
   # quote package names, as some start with a number :-/
   s/^name (.*)$/"\1" = {/p
@@ -37,33 +36,34 @@ $a}
   s/^catalogue-version_(.*)/  version = "\1";/p
 
   # extract deps
-  /^depend [^.]+$/{
-    s/^depend (.+)$/  deps = [\n    "\1"/
+  /^depend ([^.]+|texlive\.infra)$/{
+    # open a list
+    i\  deps = [
 
     # loop through following depend lines
-    :next
-      h ; N     # save & read next line
-      s/\ndepend ([^.]+|texlive\.infra)$/\n    "\1"/
-      s/\ndepend (.+)$//
-      t next    # loop if the previous lines matched
+    :next-dep
+      s/^\n?depend ([^.]+|texlive\.infra)$/    "\1"/p # print dep
+      s/^.*$//                                        # clear pattern space
+      N; /^\ndepend /b next-dep
 
-    x; s/$/\n  ];/p ; x     # print saved deps
-    s/^.*\n//   # remove deps, resume processing
+    # close the list
+    i\  ];
+    D # restart cycle from the current line
   }
 
   # detect presence of notable files
   /^runfiles /{
-    s/^runfiles .*$//  # ignore the first line
-    :next-file
-      h ; N            # save to hold space & read next line
-      s!\n (.+)$! \1!  # save file name
-      t next-file      # loop if the previous lines matched
+    s/^.*$//  # ignore the first line
 
-    x                  # work on saved lines in hold space
+    # read all files
+    :next-file
+      N
+      s/\n / /    # remove newline
+      t next-file # loop if previous line matched
+
     / (RELOC|texmf-dist)\//i\  hasRunfiles = true;
     / tlpkg\//i\  hasTlpkg = true;
-    x                  # restore pattern space
-    s/^.*\n//          # remove saved lines, resume processing
+    D # restart cycle from the current line
   }
 
   # extract postaction scripts (right now, at most one per package, so a string suffices)
@@ -75,8 +75,5 @@ $a}
   /^execute\sAddFormat/i\  hasFormats = true;
 
   # close attrmap
-  /^$/{
-    i};
-    b next-package
-  }
+  /^$/i};
 }
