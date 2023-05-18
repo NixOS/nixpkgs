@@ -34,6 +34,7 @@
 , libXtst
 , pcre2
 , libdeflate
+, CoreFoundation
 
 , swig4
 , python
@@ -136,7 +137,7 @@ stdenv.mkDerivation rec {
     dbus
     at-spi2-core
     libXtst
-  ];
+  ] + lib.optional stdenv.isDarwin CoreFoundation;
 
   buildInputs = [
     libGLU

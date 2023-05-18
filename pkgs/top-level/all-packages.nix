@@ -38256,7 +38256,9 @@ with pkgs;
   horizon-eda = callPackage ../applications/science/electronics/horizon-eda { };
 
   # this is a wrapper for kicad.base and kicad.libraries
-  kicad = callPackage ../applications/science/electronics/kicad { };
+  kicad = callPackage ../applications/science/electronics/kicad {
+    inherit (darwin.apple_sdk.frameworks) CoreFoundation;
+  };
   kicad-small = kicad.override { pname = "kicad-small"; with3d = false; };
   kicad-unstable = kicad.override { pname = "kicad-unstable"; stable = false; };
   # mostly here so the kicad-unstable components (except packages3d) get built
