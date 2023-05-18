@@ -33,6 +33,8 @@ let
 
   rootfs = callPackage ./rootfs.nix { inherit stdenv src version; };
 
+  serenity-headers = callPackage ./headers.nix { inherit src version; };
+
   mkLibrary = pname: deps:
     stdenvNoCC.mkDerivation {
       inherit pname version;
@@ -100,22 +102,6 @@ let
       platforms = platforms.serenity;
     };
   };
-
-  serenity-headers = runCommand "serenity-headers" {}
-    ''
-      cd ${src}
-      FILES=$(find \
-              AK \
-              Kernel/API \
-              Kernel/Arch \
-              Userland/Libraries/LibC \
-              -name '*.h' -print)
-      for header in $FILES; do
-        target=$(echo "$header" | sed -e "s|Userland/Libraries/LibC||")
-        mkdir -p "$(dirname "$out/include/$target")"
-        cp "$header" "$out/include/$target"
-      done
-    '';
 in
 libraries // overrides libraries // {
   inherit DynamicLoader rootfs serenity-headers;

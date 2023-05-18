@@ -76,24 +76,6 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  passthru = {
-    headers = runCommand "serenity-headers" {}
-      ''
-        cd ${src}
-        FILES=$(find \
-                AK \
-                Kernel/API \
-                Kernel/Arch \
-                Userland/Libraries/LibC \
-                -name '*.h' -print)
-        for header in $FILES; do
-          target=$(echo "$header" | sed -e "s|Userland/Libraries/LibC||")
-          mkdir -p "$(dirname "$out/include/$target")"
-          cp "$header" "$out/include/$target"
-        done
-      '';
-  };
-
   meta = with lib; {
     description = "Graphical Unix-like operating system for desktop computers";
     homepage = "https://serenityos.org";
