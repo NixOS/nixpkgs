@@ -11,7 +11,7 @@
 { lib
 , stdenv
 , program ? "pdfstudio"
-, year ? "2022"
+, year ? "2023"
 , fetchurl
 , callPackage
 , jdk11
@@ -31,13 +31,13 @@ in
 {
   pdfstudioviewer = callPackage ./common.nix rec {
     inherit desktopName pname program year;
-    version = "${year}.2.4";
+    version = "${year}.0.0";
     longDescription = ''
       PDF Studio Viewer is an easy to use, full-featured PDF editing software. This is the free edition. For the standard/pro edition, see the package pdfstudio.
     '';
     src = fetchurl {
       url = "https://download.qoppa.com/pdfstudioviewer/PDFStudioViewer_linux64.deb";
-      sha256 = "sha256-QXNsH1T+ItV3s9r8CnwgRUo1mhVbe8LkEun9gUmlVQg=";
+      sha256 = "sha256-KLEYDeuJ05Fjy022uJKpJOgntKEw+crEbihNH3TgGu0=";
     };
     jdk = jdk17;
   };
@@ -65,6 +65,16 @@ in
     extraBuildInputs = [
       (lib.getLib stdenv.cc.cc)  # for libstdc++.so.6 and libgomp.so.1
     ];
+    jdk = jdk17;
+  };
+
+  pdfstudio2023 = callPackage ./common.nix rec {
+    inherit desktopName longDescription pname program year;
+    version = "${year}.0.0";
+    src = fetchurl {
+      url = "https://download.qoppa.com/pdfstudio/v${year}/PDFStudio_v${dot2dash version}_linux64.deb";
+      sha256 = "sha256-+8CPQ2UpPWDOKkhl2ZGlg+QHo/3BH+gWEbWDxvB23+g=";
+    };
     jdk = jdk17;
   };
 }.${pname}
