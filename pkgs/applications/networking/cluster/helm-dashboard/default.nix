@@ -13,7 +13,7 @@ buildGoModule rec {
 
   vendorHash = "sha256-LJVL20CsDxaAJ/qS+2P7Pv/jhyRO6WAmhGLCR9CmQKE=";
 
-  # # disable tests that require internet access
+  # tests require internet access
   doCheck = false;
 
   ldflags = [ "-s" "-w" "-X main.version=v${version}" ];
