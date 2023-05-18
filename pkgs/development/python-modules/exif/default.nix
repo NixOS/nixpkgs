@@ -2,14 +2,14 @@
 
 buildPythonPackage rec {
   pname = "exif";
-  version = "1.3.5";
+  version = "1.6.0";
   disabled = !isPy3k;
 
   src = fetchFromGitLab {
     owner = "TNThieding";
     repo = "exif";
     rev = "v${version}";
-    hash = "sha256-XSORawioXo8oPVZ3Jnxqa6GFIxnQZMT0vJitdmpBj0E=";
+    hash = "sha256-uiHL3m0C6+YnAHRLwzMCSzffrQsSyVcuem6FBtTLxek=";
   };
 
   propagatedBuildInputs = [ plum-py ];
