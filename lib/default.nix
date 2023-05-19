@@ -54,6 +54,7 @@ let
     # Eval-time filesystem handling
     path = callLibs ./path;
     filesystem = callLibs ./filesystem.nix;
+    fileset = callLibs ./fileset.nix;
     sources = callLibs ./sources.nix;
 
     # back-compat aliases
