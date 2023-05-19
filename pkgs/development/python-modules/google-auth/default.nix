@@ -1,8 +1,8 @@
 { lib
 , stdenv
-, buildPythonPackage
 , aiohttp
 , aioresponses
+, buildPythonPackage
 , cachetools
 , cryptography
 , fetchPypi
@@ -42,6 +42,7 @@ buildPythonPackage rec {
     pyasn1-modules
     rsa
     six
+    urllib3
   ];
 
   passthru.optional-dependencies = {
@@ -75,7 +76,6 @@ buildPythonPackage rec {
     pytest-localserver
     pytestCheckHook
     responses
-    urllib3
   ] ++ passthru.optional-dependencies.aiohttp
   # `cryptography` is still required on `aarch64-darwin` for `tests/crypt/*`
   ++ (if (stdenv.isDarwin && stdenv.isAarch64) then [ cryptography ] else passthru.optional-dependencies.enterprise_cert)
