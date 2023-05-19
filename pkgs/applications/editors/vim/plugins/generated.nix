@@ -953,6 +953,18 @@ final: prev:
     meta.homepage = "https://github.com/chriskempson/base16-vim/";
   };
 
+  base46 = buildVimPluginFrom2Nix {
+    pname = "base46";
+    version = "unstable-2023-05-06";
+    src = fetchFromGitHub {
+      owner = "nvchad";
+      repo = "base46";
+      rev = "bad87b034430b0241d03868c3802c2f1a4e0b4be";
+      sha256 = "1nplnd4f5wzwkbbfw9nnpm3jdy0il4wbqh5gdnbh9xmldb3lf376";
+    };
+    meta.homepage = "https://github.com/nvchad/base46/";
+  };
+
   bat-vim = buildVimPluginFrom2Nix {
     pname = "bat.vim";
     version = "2022-11-14";
@@ -6201,6 +6213,42 @@ final: prev:
     meta.homepage = "https://github.com/ChristianChiarulli/nvcode-color-schemes.vim/";
   };
 
+  nvchad = buildVimPluginFrom2Nix {
+    pname = "nvchad";
+    version = "unstable-2023-05-18";
+    src = fetchFromGitHub {
+      owner = "nvchad";
+      repo = "nvchad";
+      rev = "262a06776aa731ad89369394f73320461d4a7e63";
+      sha256 = "1nfa1sikdrmjq8v64jsvbrfgap1dmlx8pvvpspxs4rz3i0y3scfv";
+    };
+    meta.homepage = "https://github.com/nvchad/nvchad/";
+  };
+
+  nvchad-extensions = buildVimPluginFrom2Nix {
+    pname = "nvchad-extensions";
+    version = "unstable-2023-05-14";
+    src = fetchFromGitHub {
+      owner = "nvchad";
+      repo = "extensions";
+      rev = "6025bdbbac5c14b96ba4734e61eaf28db2742676";
+      sha256 = "1dfj4a3vh8djgylcc4f7bg7hq2mmg8imizglzbqr0my74v4shd1w";
+    };
+    meta.homepage = "https://github.com/nvchad/extensions/";
+  };
+
+  nvchad-ui = buildVimPluginFrom2Nix {
+    pname = "nvchad-ui";
+    version = "unstable-2023-05-18";
+    src = fetchFromGitHub {
+      owner = "nvchad";
+      repo = "ui";
+      rev = "168ca134ae186ad977872bff3301378c0af5be71";
+      sha256 = "0xwvgbv7xj1ja7fgw14vnm083hab6q19rihv8nky93wj5v5xjkya";
+    };
+    meta.homepage = "https://github.com/nvchad/ui/";
+  };
+
   nvim-FeMaco-lua = buildVimPluginFrom2Nix {
     pname = "nvim-FeMaco.lua";
     version = "2023-04-20";
@@ -7146,6 +7194,18 @@ final: prev:
       sha256 = "00acn9iq7p00280ixwh9325wh6k4r8a1s84afwsz3a2yvsvyssrf";
     };
     meta.homepage = "https://github.com/neovim/nvimdev.nvim/";
+  };
+
+  nvterm = buildVimPluginFrom2Nix {
+    pname = "nvterm";
+    version = "unstable-2023-05-05";
+    src = fetchFromGitHub {
+      owner = "nvchad";
+      repo = "nvterm";
+      rev = "5ae78fb332e92447121d2af58a6313189a7799fb";
+      sha256 = "0rcj5njhkh1pwaa8d8d15nqqacx1h8j4ijygwhplvszi64kqb9r5";
+    };
+    meta.homepage = "https://github.com/nvchad/nvterm/";
   };
 
   oceanic-material = buildVimPluginFrom2Nix {

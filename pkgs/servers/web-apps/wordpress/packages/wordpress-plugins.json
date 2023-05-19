@@ -29,6 +29,7 @@
 , "wp-gdpr-compliance"
 , "wp-mail-smtp"
 , "wp-statistics"
+, "wp-swiper"
 , "wp-user-avatars"
 , "wpforms-lite"
 ]

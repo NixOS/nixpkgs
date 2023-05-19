@@ -232,6 +232,11 @@ in {
        else ./use-etc-ssl-certs.patch)
     ];
     withDocs = true;
+    extraMeta = {
+      knownVulnerabilities = [
+        "OpenSSL 1.1 is reaching its end of life on 2023/09/11 and cannot be supported through the NixOS 23.05 release cycle. https://www.openssl.org/blog/blog/2023/03/28/1.1.1-EOL/"
+      ];
+    };
   };
 
   openssl_3 = common {
