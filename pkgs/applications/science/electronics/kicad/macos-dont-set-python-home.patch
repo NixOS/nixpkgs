@@ -1,0 +1,27 @@
+Ordinarily `python3` and friends are put into `Frameworks/Python.framework/...`.
+This isn't the case for the kicad macOS nixpkg and so we don't want to set
+`$PYTHONHOME`.
+
+diff --git a/scripting/python_scripting.cpp b/scripting/python_scripting.cpp
+index 3dab01d..6915d8b 100644
+--- a/scripting/python_scripting.cpp
++++ b/scripting/python_scripting.cpp
+@@ -284,13 +284,18 @@ bool SCRIPTING::scriptingSetup()
+     // set $PYTHONPATH
+     wxSetEnv( wxT( "PYTHONPATH" ), pypath );
+ 
++    // not needed! we want to let the interpreter use its default python home dir
++    //
++    // if we allow `PYTHONHOME` to be set like this modules like `encoding` are not found
++    /*
+     wxString pyhome;
+ 
+     pyhome += Pgm().GetExecutablePath() +
+               wxT( "Contents/Frameworks/Python.framework/Versions/Current" );
+ 
+     // set $PYTHONHOME
+     wxSetEnv( wxT( "PYTHONHOME" ), pyhome );
++    */
+ #else
+     wxString pypath;
+ 

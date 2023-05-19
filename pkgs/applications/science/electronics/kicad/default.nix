@@ -24,6 +24,8 @@
 , with3d ? true
 , withI18n ? true
 , srcs ? { }
+
+, testers
 }:
 
 # The `srcs` parameter can be used to override the kicad source code
@@ -108,7 +110,7 @@ let
 
   inherit (lib) concatStringsSep flatten optionalString optionals;
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
 
   # Common libraries, referenced during runtime, via the wrapper.
   passthru.libraries = callPackages ./libraries.nix { inherit libSrc; };
@@ -121,9 +123,12 @@ stdenv.mkDerivation rec {
   };
 
   inherit pname;
-  version = if (stable) then kicadVersion else builtins.substring 0 10 src.src.rev;
+  version = if (stable)
+    then kicadVersion
+    else builtins.substring 0 10 finalAttrs.src.src.rev
+  ;
 
-  src = base;
+  src = finalAttrs.base;
   dontUnpack = true;
   dontConfigure = true;
   dontBuild = true;
@@ -137,8 +142,8 @@ stdenv.mkDerivation rec {
     [ python.pkgs.wrapPython ];
 
   # We are emulating wrapGAppsHook, along with other variables to the wrapper
-  makeWrapperArgs = with passthru.libraries; [
-    "--prefix XDG_DATA_DIRS : ${base}/share"
+  makeWrapperArgs = with finalAttrs.passthru.libraries; [
+    "--prefix XDG_DATA_DIRS : ${finalAttrs.base}/share"
     "--prefix XDG_DATA_DIRS : ${hicolor-icon-theme}/share"
     "--prefix XDG_DATA_DIRS : ${gnome.adwaita-icon-theme}/share"
     "--prefix XDG_DATA_DIRS : ${gtk3}/share/gsettings-schemas/${gtk3.name}"
@@ -168,7 +173,16 @@ stdenv.mkDerivation rec {
   # $out and $program_PYTHONPATH don't exist when makeWrapperArgs gets set?
   installPhase =
     let
-      bin = if stdenv.isDarwin then "*.app/Contents/MacOS" else "bin";
+      inherit (finalAttrs) base;
+      bin = toolName: if stdenv.isDarwin
+        then if toolName == "kicad"
+          # The macOS build does surface top-level symlinks for all the apps but
+          # because they search for dylibs at a relative path (and don't
+          # `realpath` argv0 first) the symlink'd apps are broken.
+          then "KiCad.app/Contents/MacOS"
+          else "KiCad.app/Contents/Applications/*.app/Contents/MacOS"
+        else "bin"
+      ;
       tools = [ "kicad" "pcbnew" "eeschema" "gerbview" "pcb_calculator" "pl_editor" "bitmap2component" ];
       utils = [ "dxf2idf" "idf2vrml" "idfcyl" "idfrect" "kicad-cli" ];
     in
@@ -180,26 +194,31 @@ stdenv.mkDerivation rec {
 
         # wrap each of the directly usable tools
         (map
-          (tool: "makeWrapper ${base}/${bin}/${tool} $out/bin/${tool} $makeWrapperArgs"
+          (tool: "makeWrapper ${base}/${bin tool}/${tool} $out/bin/${tool} $makeWrapperArgs"
             + optionalString (withScripting) " --set PYTHONPATH \"$program_PYTHONPATH\""
           )
           tools)
 
         # link in the CLI utils
-        (map (util: "ln -s ${base}/${bin}/${util} $out/bin/${util}") utils)
+        (map (util: "ln -s ${base}/${bin "kicad"}/${util} $out/bin/${util}") utils)
 
         "runHook postInstall"
       ])
     )
   ;
 
-  postInstall = ''
+  postInstall = lib.optional stdenv.hostPlatform.isLinux ''
     mkdir -p $out/share
-    ln -s ${base}/share/applications $out/share/applications
-    ln -s ${base}/share/icons $out/share/icons
-    ln -s ${base}/share/mime $out/share/mime
-    ln -s ${base}/share/metainfo $out/share/metainfo
+    ln -s ${finalAttrs.base}/share/applications $out/share/applications
+    ln -s ${finalAttrs.base}/share/icons $out/share/icons
+    ln -s ${finalAttrs.base}/share/mime $out/share/mime
+    ln -s ${finalAttrs.base}/share/metainfo $out/share/metainfo
   '';
+
+  passthru.tests.version = testers.testVersion {
+    package = finalAttrs.finalPackage;
+    command = "kicad-cli --version";
+  };
 
   # can't run this for each pname
   # stable and unstable are in the same versions.nix
@@ -222,7 +241,6 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ evils kiwi ];
     # kicad is cross platform
     platforms = lib.platforms.all;
-    broken = stdenv.isDarwin;
 
     hydraPlatforms = if (with3d) then [ ] else platforms;
     # We can't download the 3d models on Hydra,
@@ -233,4 +251,4 @@ stdenv.mkDerivation rec {
 
     mainProgram = "kicad";
   };
-}
+})

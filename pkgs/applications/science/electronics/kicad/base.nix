@@ -69,6 +69,20 @@ stdenv.mkDerivation rec {
   patches = [
     # upstream issue 12941 (attempted to upstream, but appreciably unacceptable)
     ./writable.patch
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # See the comment below.
+    #
+    # This is mostly not necessary (we handle the fixups that are actually
+    # required in the `postFixup` hook below).
+    ./macos-disable-bundle-fixup.patch
+
+    # An `ld-wrapper` hook takes care of codesigning for us.
+    ./macos-disable-codesigning.patch
+
+    # Because we're not copying/symlinking a python interpreter binary + libs
+    # into `KiCad.app/Contents/Frameworks/Python.framework/...` we want to avoid
+    # setting `$PYTHONHOME` to that location.
+    ./macos-dont-set-python-home.patch
   ];
 
   # tagged releases don't have "unknown"
@@ -79,20 +93,68 @@ stdenv.mkDerivation rec {
       --replace "unknown" "${builtins.substring 0 10 src.rev}"
   '';
 
+  # Normally `fixup_bundle` would take care of this however we patch out the
+  # calls to `fixup_bundle` because CMake seems to runs `otool -l` on every
+  # dylib dep prior to consulting `IGNORE_ITEMS` (unclear).
+  #
+  # This is problematic for us because deps like `/usr/lib/libSystem.B.dylib`
+  # don't actually exist on the file system and are instead provided by the dyld
+  # cache. Calls to `dlopen`, etc with such paths are rerouted by `otool` does
+  # not seem to be aware of this.
+  #
+  # So, we handle patching the dylib paths ourselves. Currently only the plugins
+  # end up having paths relative to the build dir. (though we should probably do
+  # something more robust here or scan the rpaths of all the binaries...)
+
+  # `cmake` rewrites the realpath of `/tmp` (i.e. `/private/tmp` on macOS
+  # builders) to `/tmp` which means we can't just use `pwd` or `NIX_BUILD_TOP`
+  # here:
+  #  - https://github.com/Kitware/CMake/blob/3f3c3d3e71f5aa4840932a96cd9ab90cf22cc9d3/Source/kwsys/SystemTools.cxx#L4926-L4927C7
+  #
+  # So, we ask `otool` for the current path of this dylib.
+  postFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    for lib in $out/KiCad.app/Contents/Plugins/**/*.so $out/KiCad.app/Contents/Plugins/*.kiface; do
+      buildLibkicad3dsgPath="$(${stdenv.cc.targetPrefix}otool -L $lib \
+        | grep build/kicad/KiCad.app/Contents/Frameworks/libkicad_3dsg \
+        | cut -d'(' -f1 \
+        | xargs
+      )" || :
+
+      if [[ -n "''${buildLibkicad3dsgPath:+x}" ]]; then
+        ${stdenv.cc.targetPrefix}install_name_tool \
+          -change "''${buildLibkicad3dsgPath}" \
+          $out/KiCad.app/Contents/Frameworks/libkicad_3dsg.dylib \
+          $lib
+      fi
+    done
+  '';
+
   makeFlags = optionals (debug) [ "CFLAGS+=-Og" "CFLAGS+=-ggdb" ];
 
   # some ngspice tests attempt to write to $HOME/.cache/
   XDG_CACHE_HOME = "$TMP";
   # failing tests still attempt to create $HOME though
 
-  cmakeFlags = [
+  cmakeFlags = let
+    excludedTests = []
+      # https://gitlab.com/kicad/code/kicad/-/issues/12491
+      # should be resolved in the next release
+      ++ lib.optionals stable ["qa_eeschema"]
+      # !!! These tests fail within the sandbox on macOS (but run fine outside of
+      # it).
+      #
+      # `qa_common` and `qa_pcbnew` fail due to wxWidget errors; same error msg
+      # as what's described here: https://gitlab.com/kicad/code/kicad/-/issues/13859
+      ++ lib.optionals stdenv.hostPlatform.isDarwin [
+        "qa_common" "qa_python" "qa_pcbnew"
+      ]
+    ;
+  in [
     "-DKICAD_USE_EGL=ON"
     "-DOCC_INCLUDE_DIR=${opencascade-occt}/include/opencascade"
   ]
-  ++ optionals (stable) [
-    # https://gitlab.com/kicad/code/kicad/-/issues/12491
-    # should be resolved in the next release
-    "-DCMAKE_CTEST_ARGUMENTS='--exclude-regex;qa_eeschema'"
+  ++ optionals (excludedTests != []) [
+    "-DCMAKE_CTEST_ARGUMENTS='--exclude-regex;\"${builtins.concatStringsSep "|" excludedTests}\"'"
   ]
   ++ optional (stable && !withNgspice) "-DKICAD_SPICE=OFF"
   ++ optionals (!withScripting) [

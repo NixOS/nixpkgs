@@ -1,0 +1,187 @@
+diff --git a/bitmap2component/CMakeLists.txt b/bitmap2component/CMakeLists.txt
+index c766530..4fbd162 100644
+--- a/bitmap2component/CMakeLists.txt
++++ b/bitmap2component/CMakeLists.txt
+@@ -68,18 +68,6 @@ if( APPLE )
+         DESTINATION ${KICAD_BIN}
+         COMPONENT binary
+         )
+-    install( CODE "
+-        # override default embedded path settings
+-        ${OSX_BUNDLE_OVERRIDE_PATHS}
+-
+-        # do all the work
+-        include( BundleUtilities )
+-        fixup_bundle( ${KICAD_BIN}/bitmap2component.app/Contents/MacOS/bitmap2component
+-            \"\"
+-            \"${PYTHON_FRAMEWORK}\"
+-            )
+-        " COMPONENT Runtime
+-        )
+ else()
+     install( TARGETS bitmap2component
+         DESTINATION ${KICAD_BIN}
+diff --git a/eeschema/CMakeLists.txt b/eeschema/CMakeLists.txt
+index 92fcfd1..269acf8 100644
+--- a/eeschema/CMakeLists.txt
++++ b/eeschema/CMakeLists.txt
+@@ -548,19 +548,6 @@ if( APPLE )
+         COMPONENT binary
+         )
+ 
+-    install( CODE "
+-            # override default embedded path settings
+-            ${OSX_BUNDLE_OVERRIDE_PATHS}
+-
+-            # do all the work
+-            include( BundleUtilities )
+-            fixup_bundle( ${KICAD_BIN}/eeschema.app/Contents/MacOS/eeschema
+-                \"\"
+-                \"${PYTHON_FRAMEWORK}\"
+-                )
+-            " COMPONENT Runtime
+-        )
+-
+     if( KICAD_SPICE )
+         # bundle libngspice and codemodels
+         get_filename_component( ABS_LIBNGSPICE ${NGSPICE_LIBRARY} ABSOLUTE )
+diff --git a/gerbview/CMakeLists.txt b/gerbview/CMakeLists.txt
+index b56d471..0715228 100644
+--- a/gerbview/CMakeLists.txt
++++ b/gerbview/CMakeLists.txt
+@@ -188,18 +188,6 @@ if( APPLE )
+         DESTINATION ${KICAD_BIN}
+         COMPONENT binary
+         )
+-    install( CODE "
+-            # override default embedded path settings
+-            ${OSX_BUNDLE_OVERRIDE_PATHS}
+-
+-            # do all the work
+-            include( BundleUtilities )
+-            fixup_bundle( ${KICAD_BIN}/gerbview.app/Contents/MacOS/gerbview
+-                \"\"
+-                \"${PYTHON_FRAMEWORK}\"
+-                )
+-            " COMPONENT Runtime
+-        )
+ else()
+     if( MSVC )
+         target_sources( gerbview_kiface PRIVATE ${CMAKE_SOURCE_DIR}/resources/msw/gerbview-dll.rc )
+diff --git a/kicad/CMakeLists.txt b/kicad/CMakeLists.txt
+index f85c5bc..f4a847d 100644
+--- a/kicad/CMakeLists.txt
++++ b/kicad/CMakeLists.txt
+@@ -227,43 +227,6 @@ if( APPLE )
+         # override default embedded path settings
+         ${OSX_BUNDLE_OVERRIDE_PATHS}
+ 
+-        # do all the work
+-
+-        if ( ${PYTHON_FRAMEWORK_HELPER} )
+-            # This idea here is to repair anything that fixup_bundle doesn't handle
+-            # properly for our setup with both Python.framework *and* symlinked subapps
+-            # that's needed for *running* here
+-
+-            # Anything that's needed strictly for packaging and making redistributable
+-            # macOS builds can be defined in kicad-mac-builder
+-
+-            # Of course, making it all work right here would be even slicker,
+-            # but if wishes were horses...
+-
+-            # It would be awesome if we find a better solution (or BundleUtilities works for our corner case better)
+-
+-            execute_process( COMMAND cp -RP ${PYTHON_FRAMEWORK} ${OSX_BUNDLE_INSTALL_LIB_DIR}/)
+-            # We're using cp -RP because CMake's COPY_RESOLVED_BUNDLE... and COPY_DIRECTORY don't handle symlinks correctly
+-
+-            # Add any .so files in the site-packages directory to the list of things to fixup during fixup_bundle
+-            file( GLOB_RECURSE PYTHON_SITE_PACKAGES_LIBS ${OSX_BUNDLE_INSTALL_PYTHON_SITE_PACKAGES_DIR}/*.so )
+-            set( BUNDLE_FIX_LIBS \${BUNDLE_FIX_LIBS} \${PYTHON_SITE_PACKAGES_LIBS} )
+-
+-            fixup_bundle( ${OSX_BUNDLE_INSTALL_BIN_DIR}/kicad
+-                \"\${BUNDLE_FIX_LIBS}\"
+-                \"\${BUNDLE_FIX_DIRS};${PYTHON_FRAMEWORK}\"
+-                IGNORE_ITEM \"Python;python;pythonw;python3;pythonw3;python3.8;pythonw3.8;python3.9;python3.9-intel64\"
+-                )
+-
+-            # BundleUtilities clobbers the rpaths and install_names that we carefully setup in Python.framework, even if
+-            # we mark Python things as IGNORE_ITEMs.  We'll refix them later.
+-        else()
+-            fixup_bundle( ${OSX_BUNDLE_INSTALL_BIN_DIR}/kicad
+-                \"\${BUNDLE_FIX_LIBS}\"
+-                \"\${BUNDLE_FIX_DIRS}\"
+-            )
+-        endif()
+-
+         if( ${SPICE_HELPER} )
+             execute_process( COMMAND install_name_tool -id @executable_path/../PlugIns/sim/libngspice.0.dylib libngspice.0.dylib
+                              WORKING_DIRECTORY ${OSX_BUNDLE_INSTALL_PLUGIN_DIR}/sim )
+diff --git a/pagelayout_editor/CMakeLists.txt b/pagelayout_editor/CMakeLists.txt
+index abb7a0a..bf487c5 100644
+--- a/pagelayout_editor/CMakeLists.txt
++++ b/pagelayout_editor/CMakeLists.txt
+@@ -145,18 +145,6 @@ if( APPLE )
+         DESTINATION ${KICAD_BIN}
+         COMPONENT binary
+         )
+-    install( CODE "
+-        # override default embedded path settings
+-        ${OSX_BUNDLE_OVERRIDE_PATHS}
+-
+-        # do all the work
+-        include( BundleUtilities )
+-        fixup_bundle( ${KICAD_BIN}/pl_editor.app/Contents/MacOS/pl_editor
+-            \"\"
+-            \"${PYTHON_FRAMEWORK}\"
+-            )
+-        " COMPONENT Runtime
+-        )
+ else()
+     if( MSVC )
+         target_sources( pl_editor_kiface PRIVATE ${CMAKE_SOURCE_DIR}/resources/msw/pl_editor-dll.rc )
+diff --git a/pcb_calculator/CMakeLists.txt b/pcb_calculator/CMakeLists.txt
+index f5000b2..8dc2811 100644
+--- a/pcb_calculator/CMakeLists.txt
++++ b/pcb_calculator/CMakeLists.txt
+@@ -143,18 +143,6 @@ if( APPLE )
+         DESTINATION ${KICAD_BIN}
+         COMPONENT binary
+         )
+-    install( CODE "
+-        # override default embedded path settings
+-        ${OSX_BUNDLE_OVERRIDE_PATHS}
+-
+-        # do all the work
+-        include( BundleUtilities )
+-        fixup_bundle( ${KICAD_BIN}/pcb_calculator.app/Contents/MacOS/pcb_calculator
+-            \"\"
+-            \"${PYTHON_FRAMEWORK}\"
+-            )
+-        " COMPONENT Runtime
+-        )
+ else()
+     if( MSVC )
+         target_sources( pcb_calculator_kiface PRIVATE ${CMAKE_SOURCE_DIR}/resources/msw/pcb_calculator-dll.rc  )
+diff --git a/pcbnew/CMakeLists.txt b/pcbnew/CMakeLists.txt
+index fb59e52..3cade84 100644
+--- a/pcbnew/CMakeLists.txt
++++ b/pcbnew/CMakeLists.txt
+@@ -742,18 +742,6 @@ if( APPLE )
+         DESTINATION ${KICAD_BIN}
+         COMPONENT binary
+         )
+-    install( CODE "
+-        # override default embedded path settings
+-        ${OSX_BUNDLE_OVERRIDE_PATHS}
+-
+-        # do all the work
+-        include( BundleUtilities )
+-        fixup_bundle( ${KICAD_BIN}/pcbnew.app/Contents/MacOS/pcbnew
+-            \"\"
+-            \"${PYTHON_FRAMEWORK}\"
+-            )
+-        " COMPONENT Runtime
+-        )
+ else()
+     if( MSVC )
+         target_sources( pcbnew_kiface PRIVATE ${CMAKE_SOURCE_DIR}/resources/msw/pcbnew-dll.rc )
