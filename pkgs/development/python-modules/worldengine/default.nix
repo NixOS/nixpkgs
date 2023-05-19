@@ -1,14 +1,15 @@
 { lib
 , buildPythonPackage
-, isPy27
 , fetchFromGitHub
+, gdal
+, h5py
 , noise
 , numpy
-, pyplatec
 , protobuf
 , purepng
-, h5py
-, gdal
+, pyplatec
+, six
+, isPy27
 , pytestCheckHook
 }:
 
@@ -34,7 +35,16 @@ buildPythonPackage rec {
     ln -s ${src-data} worldengine-data
   '';
 
-  propagatedBuildInputs = [ noise numpy pyplatec protobuf purepng h5py gdal ];
+  propagatedBuildInputs = [
+    gdal
+    h5py
+    noise
+    numpy
+    protobuf
+    purepng
+    pyplatec
+    six
+  ];
 
   prePatch = ''
     substituteInPlace setup.py \
@@ -44,6 +54,10 @@ buildPythonPackage rec {
       --replace 'protobuf==3.0.0a3' 'protobuf' \
       --replace 'noise==1.2.2' 'noise' \
       --replace 'PyPlatec==1.4.0' 'PyPlatec' \
+
+    substituteInPlace \
+      worldengine/{draw.py,hdf5_serialization.py} \
+      --replace numpy.float float
   '';
 
   doCheck = !isPy27; # google namespace clash
@@ -59,5 +73,4 @@ buildPythonPackage rec {
     license = licenses.mit;
     maintainers = with maintainers; [ rardiol ];
   };
-
 }
