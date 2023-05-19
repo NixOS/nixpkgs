@@ -18434,6 +18434,8 @@ with pkgs;
 
   gocd-server = callPackage ../development/tools/continuous-integration/gocd-server { };
 
+  gopatch = callPackage ../development/tools/misc/gopatch { };
+
   goredo = callPackage ../development/tools/build-managers/goredo { };
 
   gotify-server = callPackage ../servers/gotify { };
