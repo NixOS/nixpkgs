@@ -225,11 +225,11 @@ let
     cmd2
     colorama
   ]);
-  sitePackages = ceph-python-env.python.sitePackages;
+  inherit (ceph-python-env.python) sitePackages;
 
   version = "17.2.5";
   src = fetchurl {
-    url = "http://download.ceph.com/tarballs/ceph-${version}.tar.gz";
+    url = "https://download.ceph.com/tarballs/ceph-${version}.tar.gz";
     hash = "sha256-NiJpwUeROvh0siSaRoRrDm+C0s61CvRiIrbd7JmRspo=";
   };
 in rec {
