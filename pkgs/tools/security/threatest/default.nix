@@ -14,7 +14,8 @@ buildGoModule rec {
     hash = "sha256-xluKQXFa06ng9bs+sBkoFLeyYtQAcej4VFLMeTST6zA=";
   };
 
-  vendorHash = "sha256-tvGmSpihGwpz6TCmbttz0VKvLTChDRWNX3qxOhEpdPM=";
+  proxyVendor = true;
+  vendorHash = "sha256-UQ3GPSv7P4+oMvcu4eFlosnw0TQxG33ptlMTQA/5Lkw=";
 
   meta = with lib; {
     description = "Framework for end-to-end testing threat detection rules";
