@@ -49,7 +49,11 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ py pytestCheckHook wireshark-cli ];
 
-  disabledTests = lib.optionals stdenv.isDarwin [
+  disabledTests = [
+    # flaky
+    # KeyError: 'Packet of index 0 does not exist in capture'
+    "test_getting_packet_summary"
+  ] ++ lib.optionals stdenv.isDarwin [
     # fails on darwin
     # _pickle.PicklingError: logger cannot be pickled
     "test_iterate_empty_psml_capture"
