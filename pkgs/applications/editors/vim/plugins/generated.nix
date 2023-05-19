@@ -6225,6 +6225,18 @@ final: prev:
     meta.homepage = "https://github.com/nvchad/extensions/";
   };
 
+  nvchad-ui = buildVimPluginFrom2Nix {
+    pname = "nvchad-ui";
+    version = "unstable-2023-05-18";
+    src = fetchFromGitHub {
+      owner = "nvchad";
+      repo = "ui";
+      rev = "168ca134ae186ad977872bff3301378c0af5be71";
+      sha256 = "0xwvgbv7xj1ja7fgw14vnm083hab6q19rihv8nky93wj5v5xjkya";
+    };
+    meta.homepage = "https://github.com/nvchad/ui/";
+  };
+
   nvim-FeMaco-lua = buildVimPluginFrom2Nix {
     pname = "nvim-FeMaco.lua";
     version = "2023-04-20";
