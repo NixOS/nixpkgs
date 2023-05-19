@@ -9,7 +9,7 @@
 , numpy
 , pillow
 , pytestCheckHook
-, scikitimage
+, scikit-image
 , sphinx-rtd-theme
 , sympy
 , pandas
@@ -29,7 +29,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     pillow
-    scikitimage
+    scikit-image
     h5py
     pyhamcrest
     muscima
