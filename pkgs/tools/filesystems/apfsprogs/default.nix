@@ -17,6 +17,7 @@ stdenv.mkDerivation {
 
   buildPhase = ''
     runHook preBuild
+    make -C apfs-snap $makeFlags
     make -C apfsck $makeFlags
     make -C mkapfs $makeFlags
     runHook postBuild
@@ -24,6 +25,7 @@ stdenv.mkDerivation {
 
   installPhase = ''
     runHook preInstall
+    make -C apfs-snap install DESTDIR="$out" $installFlags
     make -C apfsck install DESTDIR="$out" $installFlags
     make -C mkapfs install DESTDIR="$out" $installFlags
     runHook postInstall
