@@ -10043,8 +10043,6 @@ self: super: with self; {
 
   pyvcd = callPackage ../development/python-modules/pyvcd { };
 
-  pyvcf = callPackage ../development/python-modules/pyvcf { };
-
   pyvera = callPackage ../development/python-modules/pyvera { };
 
   pyverilog = callPackage ../development/python-modules/pyverilog { };
