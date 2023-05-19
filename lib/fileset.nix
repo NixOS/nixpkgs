@@ -438,8 +438,8 @@ in {
       fileset :: FileSet,
     } -> {
       outPath :: String,
-      root :: String,
-      subpath :: String,
+      _root :: String,
+      _subpath :: String,
     }
   */
   importToStore = { name ? "source", base ? entryPoint, entryPoint, fileset }:
@@ -497,8 +497,8 @@ in {
       };
       components = removePrefix base entryPoint;
     in {
-      inherit root;
-      subpath = toSubpath components;
+      _root = root;
+      _subpath = toSubpath components;
       outPath =
         if components == [] then
           root
