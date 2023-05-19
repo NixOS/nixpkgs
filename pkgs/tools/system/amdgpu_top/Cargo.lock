@@ -38,13 +38,36 @@ dependencies = [
 
 [[package]]
 name = "amdgpu_top"
-version = "0.1.7"
+version = "0.1.8"
 dependencies = [
- "ctrlc",
- "cursive",
+ "amdgpu_top_gui",
+ "amdgpu_top_json",
+ "amdgpu_top_tui",
+ "libamdgpu_top",
+]
+
+[[package]]
+name = "amdgpu_top_gui"
+version = "0.1.0"
+dependencies = [
  "eframe",
- "libdrm_amdgpu_sys",
+ "libamdgpu_top",
+]
+
+[[package]]
+name = "amdgpu_top_json"
+version = "0.1.0"
+dependencies = [
+ "libamdgpu_top",
  "serde_json",
+]
+
+[[package]]
+name = "amdgpu_top_tui"
+version = "0.1.0"
+dependencies = [
+ "cursive",
+ "libamdgpu_top",
 ]
 
 [[package]]
@@ -70,6 +93,12 @@ name = "android-properties"
 version = "0.2.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "fc7eb209b1518d6bb87b283c20095f5228ecda460da70b44f0802523dea6da04"
+
+[[package]]
+name = "anyhow"
+version = "1.0.71"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "9c7d0618f0e0b7e8ff11427422b64564d5fb0be1940354bfe2e0529b18a9d9b8"
 
 [[package]]
 name = "arboard"
@@ -338,16 +367,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "2ae1b35a484aa10e07fe0638d02301c5ad24de82d310ccbd2f3693da5f09bf1c"
 dependencies = [
  "winapi",
-]
-
-[[package]]
-name = "ctrlc"
-version = "3.2.5"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "bbcf33c2a618cbe41ee43ae6e9f2e48368cd9f9db2896f10167d8d762679f639"
-dependencies = [
- "nix 0.26.2",
- "windows-sys",
 ]
 
 [[package]]
@@ -876,6 +895,14 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "e2abad23fbc42b3700f2f279844dc832adb2b2eb069b2df918f455c4e18cc646"
 
 [[package]]
+name = "libamdgpu_top"
+version = "0.1.7"
+dependencies = [
+ "anyhow",
+ "libdrm_amdgpu_sys",
+]
+
+[[package]]
 name = "libc"
 version = "0.2.141"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1038,18 +1065,6 @@ dependencies = [
  "cfg-if",
  "libc",
  "memoffset",
-]
-
-[[package]]
-name = "nix"
-version = "0.26.2"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "bfdda3d196821d6af13126e40375cdf7da646a96114af134d5f417a9a1dc8e1a"
-dependencies = [
- "bitflags",
- "cfg-if",
- "libc",
- "static_assertions",
 ]
 
 [[package]]
@@ -1511,12 +1526,6 @@ name = "stable_deref_trait"
 version = "1.2.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "a8f112729512f8e442d81f95a8a7ddf2b7c6b8a1a6f509a95864142b30cab2d3"
-
-[[package]]
-name = "static_assertions"
-version = "1.1.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a2eb9349b6444b326872e140eb1cf5e7c522154d69e7a0ffb0fb81c06b37543f"
 
 [[package]]
 name = "str-buf"
