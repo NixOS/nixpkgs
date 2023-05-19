@@ -195,7 +195,7 @@ _multioutStatics() {
     if [ $acount != 0 ]; then
         # Some of *.a files are linker scripts where moving broke the paths.
         local output
-        for output in $outputs; do
+        for output in $(getAllOutputNames); do
             if [ "${!output}" = "${!outputStatic}" ]; then continue; fi
             sed "/^GROUP/s|${!output}/lib/lib|${!outputStatic}/lib/lib|g" \
               -i $as
