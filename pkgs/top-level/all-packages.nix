@@ -25651,6 +25651,8 @@ with pkgs;
 
   osrm-backend = callPackage ../servers/osrm-backend { };
 
+  overseerr = callPackage ../servers/overseerr { };
+
   oven-media-engine = callPackage ../servers/misc/oven-media-engine { };
 
   p910nd = callPackage ../servers/p910nd { };
