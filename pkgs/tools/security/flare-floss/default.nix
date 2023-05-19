@@ -27,14 +27,15 @@ let
 in
 py.pkgs.buildPythonPackage rec {
   pname = "flare-floss";
-  version = "2.0.0";
+  version = "2.2.0";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "mandiant";
     repo = "flare-floss";
-    rev = "v${version}";
+    rev = "refs/tags/v${version}";
     fetchSubmodules = true; # for tests
-    hash = "sha256-V4OWYcISyRdjf8x93B6h2hJwRgmRmk32hr8TrgRDu8Q=";
+    hash = "sha256-Oa0DMl7RKNfA00shcc4y1sNd2OiKCf0sA0EUC5gByBI=";
   };
 
   postPatch = ''
@@ -63,13 +64,15 @@ py.pkgs.buildPythonPackage rec {
 
   postInstall = ''
     mkdir -p $out/share/flare-floss/
-    cp -r sigs $out/share/flare-floss/
+    cp -r floss/sigs $out/share/flare-floss/
   '';
 
   meta = with lib; {
     description = "Automatically extract obfuscated strings from malware";
     homepage = "https://github.com/mandiant/flare-floss";
+    changelog = "https://github.com/mandiant/flare-floss/releases/tag/v${version}";
     license = licenses.asl20;
-    maintainers = [ ];
+    mainProgram = "floss";
+    maintainers = with maintainers; [ fab ];
   };
 }

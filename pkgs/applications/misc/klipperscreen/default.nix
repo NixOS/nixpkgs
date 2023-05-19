@@ -1,28 +1,54 @@
-{ lib, stdenv, writeText, python3Packages, fetchFromGitHub, gtk3, gobject-introspection, gdk-pixbuf, wrapGAppsHook, librsvg }:
-python3Packages.buildPythonPackage rec {
+{ lib
+, python3
+, fetchFromGitHub
+, wrapGAppsHook
+, gobject-introspection
+, gitUpdater
+}: python3.pkgs.buildPythonApplication rec {
   pname = "KlipperScreen";
   version = "0.3.2";
+  format = "other";
 
   src = fetchFromGitHub {
     owner = "jordanruthe";
-    repo = pname;
+    repo = "KlipperScreen";
     rev = "v${version}";
     hash = "sha256-LweO5EVWr3OxziHrjtQDdWyUBCVUJ17afkw7RCZWgcg=";
   };
-  patches = [ ./fix-paths.diff ];
 
-  buildInputs = [ gtk3 librsvg ];
-  nativeBuildInputs = [ wrapGAppsHook gdk-pixbuf gobject-introspection ];
+  nativeBuildInputs = [
+    gobject-introspection
+    wrapGAppsHook
+  ];
 
-  propagatedBuildInputs = with python3Packages; [ jinja2 netifaces requests websocket-client pycairo pygobject3 mpv six dbus-python numpy pycairo ];
+  pythonPath = with python3.pkgs; [
+    jinja2
+    netifaces
+    requests
+    websocket-client
+    pycairo
+    pygobject3
+    mpv
+    six
+    dbus-python
+  ];
 
-  preBuild = ''
-    ln -s ${./setup.py} setup.py
+  dontWrapGApps = true;
+
+  preFixup = ''
+    mkdir -p $out/bin
+    cp -r . $out/dist
+    gappsWrapperArgs+=(--set PYTHONPATH "$PYTHONPATH")
+    wrapGApp $out/dist/screen.py
+    ln -s $out/dist/screen.py $out/bin/KlipperScreen
   '';
+
+  passthru.updateScript = gitUpdater { url = meta.homepage; };
 
   meta = with lib; {
     description = "Touchscreen GUI for the Klipper 3D printer firmware";
-    homepage = "https://github.com/jordanruthe/${pname}";
+    homepage = "https://github.com/jordanruthe/KlipperScreen";
     license = licenses.agpl3;
+    maintainers = with maintainers; [ cab404 ];
   };
 }

@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, autoreconfHook }:
 
 stdenv.mkDerivation rec {
   pname = "libcpuid";
@@ -10,6 +10,16 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     sha256 = "sha256-lhoHqdS5tke462guORg+PURjVmjAgviT5KJHp6PyvUA=";
   };
+
+  patches = [
+    # Fixes cross-compilation to NetBSD
+    # https://github.com/anrieff/libcpuid/pull/190
+    (fetchpatch {
+      name = "pass-pthread-to-linker.patch";
+      url = "https://github.com/anrieff/libcpuid/commit/c28436e7239f28dab0e2a3bcdbce95f41e1363b1.patch";
+      sha256 = "sha256-J2mB010JcE4si0rERjcrL9kJgbWHKaQCIZPDkmRvcq4=";
+    })
+  ];
 
   nativeBuildInputs = [ autoreconfHook ];
 

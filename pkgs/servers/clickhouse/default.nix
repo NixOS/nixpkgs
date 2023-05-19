@@ -7,6 +7,14 @@
 , perl
 , yasm
 , nixosTests
+
+# currently for BLAKE3 hash function
+, rustSupport ? true
+
+, corrosion
+, rustc
+, cargo
+, rustPlatform
 }:
 
 stdenv.mkDerivation rec {
@@ -29,7 +37,51 @@ stdenv.mkDerivation rec {
     perl
   ] ++ lib.optionals stdenv.isx86_64 [
     yasm
+  ] ++ lib.optionals rustSupport [
+    rustc
+    cargo
+    rustPlatform.cargoSetupHook
   ];
+
+  corrosionDeps = if rustSupport then corrosion.cargoDeps else null;
+  blake3Deps = if rustSupport then rustPlatform.fetchCargoTarball {
+    inherit src;
+    name = "blake3-deps";
+    preBuild = "cd rust/BLAKE3";
+    hash = "sha256-lDMmmsyjEbTfI5NgTgT4+8QQrcUE/oUWfFgj1i19W0Q=";
+  } else null;
+  skimDeps = if rustSupport then rustPlatform.fetchCargoTarball {
+    inherit src;
+    name = "skim-deps";
+    preBuild = "cd rust/skim";
+    hash = "sha256-gEWB+U8QrM0yYyMXpwocszJZgOemdTlbSzKNkS0NbPk=";
+  } else null;
+
+  dontCargoSetupPostUnpack = true;
+  postUnpack = lib.optionalString rustSupport ''
+    pushd source
+
+    # their vendored version is too old and missing this patch: https://github.com/corrosion-rs/corrosion/pull/205
+    rm -rf contrib/corrosion
+    cp -r --no-preserve=mode ${corrosion.src} contrib/corrosion
+
+    pushd contrib/corrosion/generator
+    cargoDeps="$corrosionDeps" cargoSetupPostUnpackHook
+    corrosionDepsCopy="$cargoDepsCopy"
+    popd
+
+    pushd rust/BLAKE3
+    cargoDeps="$blake3Deps" cargoSetupPostUnpackHook
+    blake3DepsCopy="$cargoDepsCopy"
+    popd
+
+    pushd rust/skim
+    cargoDeps="$skimDeps" cargoSetupPostUnpackHook
+    skimDepsCopy="$cargoDepsCopy"
+    popd
+
+    popd
+  '';
 
   postPatch = ''
     patchShebangs src/
@@ -44,6 +96,21 @@ stdenv.mkDerivation rec {
       --replace 'git rev-parse --show-toplevel' '$src'
     substituteInPlace utils/check-style/check-style \
       --replace 'git rev-parse --show-toplevel' '$src'
+  '' + lib.optionalString rustSupport ''
+
+    pushd contrib/corrosion/generator
+    cargoDepsCopy="$corrosionDepsCopy" cargoSetupPostPatchHook
+    popd
+
+    pushd rust/BLAKE3
+    cargoDepsCopy="$blake3DepsCopy" cargoSetupPostPatchHook
+    popd
+
+    pushd rust/skim
+    cargoDepsCopy="$skimDepsCopy" cargoSetupPostPatchHook
+    popd
+
+    cargoSetupPostPatchHook() { true; }
   '';
 
   cmakeFlags = [
