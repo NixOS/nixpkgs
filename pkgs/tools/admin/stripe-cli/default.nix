@@ -2,15 +2,15 @@
 
 buildGoModule rec {
   pname = "stripe-cli";
-  version = "1.14.1";
+  version = "1.14.6";
 
   src = fetchFromGitHub {
     owner = "stripe";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-zP5QR1K8BAga+dEqGZKpZRYrpNLIBm6RNdf9VD9PaCk=";
+    hash = "sha256-BtZQCI1mD/k3ox1HLWcK7RdPZBbejJ+0fMLo5nub8yQ=";
   };
-  vendorHash = "sha256-rjYV69BWkqIkgyeauAo4KEfbB7cxnwn3VSjLrMrCu1c=";
+  vendorHash = "sha256-DYA6cu2KzEBZ4wsT7wjcdY1endQQOZlj2aOwu6iGLew=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -29,7 +29,7 @@ buildGoModule rec {
     rm pkg/cmd/resources_test.go
     rm pkg/cmd/root_test.go
 
-    # TODO: no clue why it's broken (1.14.1), remove for now.
+    # TODO: no clue why it's broken (1.14.6), remove for now.
     rm pkg/login/client_login_test.go
     rm pkg/git/editor_test.go
     rm pkg/rpcservice/sample_create_test.go
