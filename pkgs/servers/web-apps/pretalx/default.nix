@@ -33,6 +33,7 @@ python.pkgs.buildPythonApplication rec {
 
   postPatch = ''
     substituteInPlace setup.py \
+      --replace "django-bootstrap4~=3.0.0" "django-bootstrap4" \
       --replace "django-filter==23.2" "django-filter" \
       --replace "django-formtools~=2.3.0" "django-formtools" \
       --replace "requests~=2.30.0" "requests"
