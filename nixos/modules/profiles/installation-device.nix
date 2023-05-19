@@ -72,6 +72,7 @@ with lib;
     # mounting the storage in a different system.
     services.openssh = {
       enable = true;
+      openFirewall = true;
       settings.PermitRootLogin = "yes";
     };
 

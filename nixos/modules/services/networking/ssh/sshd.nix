@@ -174,8 +174,8 @@ in
       };
 
       openFirewall = mkOption {
-        type = types.bool;
-        default = true;
+        type = types.nullOr types.bool;
+        default = null;
         description = lib.mdDoc ''
           Whether to automatically open the specified ports in the firewall.
         '';
@@ -569,7 +569,9 @@ in
       '';
 
     assertions = [{ assertion = if cfg.settings.X11Forwarding then cfgc.setXAuthLocation else true;
-                    message = "cannot enable X11 forwarding without setting xauth location";}]
+                    message = "cannot enable X11 forwarding without setting xauth location"; }
+                  { assertion = cfg.openFirewall != null;
+                    message = "set openssh.openFirewall deciding if the port is opened on all interfaces"; }]
       ++ forEach cfg.listenAddresses ({ addr, ... }: {
         assertion = addr != null;
         message = "addr must be specified in each listenAddresses entry";
