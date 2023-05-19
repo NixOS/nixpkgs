@@ -7,6 +7,7 @@ let
     isPath
     split
     match
+    typeOf
     ;
 
   inherit (lib.lists)
@@ -18,6 +19,8 @@ let
     all
     concatMap
     foldl'
+    take
+    drop
     ;
 
   inherit (lib.strings)
@@ -100,6 +103,57 @@ let
     # An empty string is not a valid relative path, so we need to return a `.` when we have no components
     (if components == [] then "." else concatStringsSep "/" components);
 
+  # Deconstruct a path value type into:
+  # - root: The filesystem root of the path, generally `/`
+  # - components: All the path's components
+  #
+  # This is similar to `splitString "/" (toString path)` but safer
+  # because it can distinguish different filesystem roots
+  deconstructPath =
+    let
+      recurse = components: path:
+        # If the parent of a path is the path itself, then it's a filesystem root
+        if path == dirOf path then { root = path; inherit components; }
+        else recurse ([ (baseNameOf path) ] ++ components) (dirOf path);
+    in recurse [];
+
+  # Used as an abstraction between `hasPrefix`, `hasProperPrefix` and `removePrefix`
+  #
+  # Takes four arguments:
+  # - context: A string describing the callee, for error messages
+  # - continue: A function with four arguments
+  # - path1: A path
+  # - path2: Another path
+  #
+  # The function checks whether `path1` is a path and computes its
+  # decomposition (`deconPath1`) before taking `path2` as an argument, which
+  # allows the computation to be cached in a thunk between multiple calls.
+  # With `path2` also provided, it checks whether it's also a path, computes
+  # the decomposition (`deconPath2`), checks whether both paths have the same
+  # filesystem root, and then calls `continue path1 deconPath1 path2 deconPath2`,
+  # allowing the caller to decide what to do with these values.
+  withTwoDeconstructedPaths = context: continue:
+    path1:
+    assert assertMsg
+      (isPath path1)
+      "${context}: First argument is of type ${typeOf path1}, but a path was expected";
+    let
+      deconPath1 = deconstructPath path1;
+    in
+      path2:
+      assert assertMsg
+        (isPath path2)
+        "${context}: Second argument is of type ${typeOf path2}, but a path was expected";
+      let
+        deconPath2 = deconstructPath path2;
+      in
+        assert assertMsg
+        (deconPath1.root == deconPath2.root) ''
+          ${context}: Filesystem roots must be the same for both paths, but paths with different roots were given:
+              first argument: "${toString path1}" (root "${toString deconPath1.root}")
+              second argument: "${toString path2}" (root "${toString deconPath2.root}")'';
+        continue path1 deconPath1 path2 deconPath2;
+
 in /* No rec! Add dependencies on this file at the top. */ {
 
   /* Append a subpath string to a path.
@@ -148,6 +202,17 @@ in /* No rec! Add dependencies on this file at the top. */ {
       lib.path.append: Second argument is not a valid subpath string:
           ${subpathInvalidReason subpath}'';
     path + ("/" + subpath);
+
+  hasPrefix = withTwoDeconstructedPaths "lib.path.hasPrefix" (prefix: deconPrefix: path: deconPath:
+    take (length deconPrefix.components) deconPath.components == deconPrefix.components
+  );
+
+  removePrefix = withTwoDeconstructedPaths "lib.path.removePrefix" (prefix: deconPrefix: path: deconPath:
+    if take (length deconPrefix.components) deconPath.components == deconPrefix.components
+    then drop (length deconPrefix.components) deconPath.components
+    else throw ''
+      lib.path.removePrefix: The first prefix path argument (${toString prefix}) is not a prefix of the second path argument (${toString path})''
+  );
 
   /* Whether a value is a valid subpath string.
 
@@ -348,4 +413,11 @@ in /* No rec! Add dependencies on this file at the top. */ {
           ${subpathInvalidReason subpath}'';
     joinRelPath (splitRelPath subpath);
 
+  deconstruct = path: deconstructPath path;
+  construct = { root, components }: root + ("/" + concatStringsSep "/" components);
+
+  components = {
+    toSubpath = joinRelPath;
+    fromSubpath = splitRelPath;
+  };
 }
