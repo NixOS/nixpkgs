@@ -4819,6 +4819,8 @@ with pkgs;
 
   fetch-scm = callPackage ../tools/misc/fetch-scm { };
 
+  fiano = callPackage ../tools/misc/fiano { };
+
   filebench = callPackage ../tools/misc/filebench { };
 
   filebot = callPackage ../applications/video/filebot { };
