@@ -14,6 +14,7 @@
 , "jetpack"
 , "jetpack-lite"
 , "lightbox-photoswipe"
+, "login-lockdown"
 , "mailpoet"
 , "merge-minify-refresh"
 , "opengraph"
