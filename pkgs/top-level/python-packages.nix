@@ -5759,6 +5759,8 @@ self: super: with self; {
 
   line_profiler = callPackage ../development/python-modules/line_profiler { };
 
+  linetable = callPackage ../development/python-modules/linetable { };
+
   lingua = callPackage ../development/python-modules/lingua { };
 
   linkify-it-py = callPackage ../development/python-modules/linkify-it-py { };
