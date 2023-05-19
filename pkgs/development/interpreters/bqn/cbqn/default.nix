@@ -8,7 +8,6 @@
 , bqn-path ? null
 , mbqn-source
 , enableReplxx ? false
-, enableSingeli ? stdenv.hostPlatform.avx2Support
 , enableLibcbqn ? ((stdenv.hostPlatform.isLinux || stdenv.hostPlatform.isDarwin) && !enableReplxx)
 , libffi
 , pkg-config
@@ -24,13 +23,13 @@ assert genBytecode -> ((bqn-path != null) && (mbqn-source != null));
 
 stdenv.mkDerivation rec {
   pname = "cbqn" + lib.optionalString (!genBytecode) "-standalone";
-  version = "0.2.0";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "dzaima";
     repo = "CBQN";
     rev = "v${version}";
-    hash = "sha256-M9GTsm65DySLcMk9QDEhImHnUvWtYGPwiG657wHg3KA=";
+    hash = "sha256-LoxwNxuadbYJgIkr1+bZoErTc9WllN2siAsKnxoom3Y=";
   };
 
   nativeBuildInputs = [
@@ -55,8 +54,11 @@ stdenv.mkDerivation rec {
 
   buildFlags = [
     # interpreter binary
-    (lib.flatten (if enableSingeli then ["o3n-singeli" "f='-mavx2'"] else ["o3"]))
+    "o3"
+    "notui=1" # display build progress in a plain-text format
     "REPLXX=${if enableReplxx then "1" else "0"}"
+  ] ++ lib.optionals stdenv.hostPlatform.avx2Support [
+    "has=avx2"
   ] ++ lib.optionals enableLibcbqn [
     # embeddable interpreter as a shared lib
     "shared-o3"
@@ -65,6 +67,7 @@ stdenv.mkDerivation rec {
   preBuild = ''
     # Purity: avoids git downloading bytecode files
     mkdir -p build/bytecodeLocal/gen
+    cp -r ${singeli-submodule}/dev/* build/singeliLocal/
   '' + (if genBytecode then ''
     ${bqn-path} ./build/genRuntime ${mbqn-source} build/bytecodeLocal/
   '' else ''
@@ -72,10 +75,7 @@ stdenv.mkDerivation rec {
   '')
   + lib.optionalString enableReplxx ''
     cp -r ${replxx-submodule}/dev/* build/replxxLocal/
-  ''
-  + lib.optionalString enableSingeli ''
-    cp -r ${singeli-submodule}/dev/* build/singeliLocal/
- '';
+  '';
 
   outputs = [
     "out"
