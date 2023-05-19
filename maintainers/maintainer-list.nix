@@ -6612,6 +6612,12 @@
     github = "Icy-Thought";
     githubId = 53710398;
   };
+  idlip = {
+    name = "Dilip";
+    email = "igoldlip@gmail.com";
+    github = "idlip";
+    githubId = 117019901;
+  };
   idontgetoutmuch = {
     email = "dominic@steinitz.org";
     github = "idontgetoutmuch";
@@ -8261,6 +8267,12 @@
     github = "KibaFox";
     githubId = 16481032;
     name = "Kiba Fox";
+  };
+  kidanger = {
+    email = "angerj.dev@gmail.com";
+    github = "kidanger";
+    githubId = 297479;
+    name = "Jérémy Anger";
   };
   kidd = {
     email = "raimonster@gmail.com";

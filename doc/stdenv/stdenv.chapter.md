@@ -257,7 +257,7 @@ propagated-dep(mapOffset(h0, t0, h1),
 ```
 let mapOffset(h, t, i) = i + (if i <= 0 then h else t - 1)
 
-dep(h0, _, A, B)
+dep(h0, t0, A, B)
 propagated-dep(h1, t1, B, C)
 h0 + h1 in {-1, 0, 1}
 h0 + t1 in {-1, 0, -1}

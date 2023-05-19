@@ -3115,6 +3115,8 @@ self: super: with self; {
 
   editorconfig = callPackage ../development/python-modules/editorconfig { };
 
+  edk2-pytool-library = callPackage ../development/python-modules/edk2-pytool-library { };
+
   edlib = callPackage ../development/python-modules/edlib {
     inherit (pkgs) edlib;
   };
@@ -6966,6 +6968,8 @@ self: super: with self; {
   onvif-zeep-async = callPackage ../development/python-modules/onvif-zeep-async { };
 
   oocsi = callPackage ../development/python-modules/oocsi { };
+
+  opcua-widgets = callPackage ../development/python-modules/opcua-widgets { };
 
   open-garage = callPackage ../development/python-modules/open-garage { };
 

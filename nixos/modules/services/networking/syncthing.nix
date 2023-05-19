@@ -24,7 +24,9 @@ let
       else
         device
     ) folder.devices;
-  }) cfg.settings.folders;
+  }) (filterAttrs (_: folder:
+    folder.enable
+  ) cfg.settings.folders);
 
   updateConfig = pkgs.writers.writeDash "merge-syncthing-config" ''
     set -efu

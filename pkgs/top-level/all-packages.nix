@@ -250,6 +250,8 @@ with pkgs;
 
   ani-cli = callPackage ../applications/video/ani-cli { };
 
+  dra-cla = callPackage ../applications/video/dra-cla { };
+
   anime-downloader = callPackage ../applications/video/anime-downloader { };
 
   aocd = with python3Packages; toPythonApplication aocd;
@@ -10907,6 +10909,8 @@ with pkgs;
 
   ostree = callPackage ../tools/misc/ostree { };
 
+  ostree-rs-ext = callPackage ../tools/misc/ostree-rs-ext { };
+
   otel-cli = callPackage ../tools/misc/otel-cli { };
 
   otfcc = callPackage ../tools/misc/otfcc { };
@@ -17567,6 +17571,8 @@ with pkgs;
 
   nil = callPackage ../development/tools/language-servers/nil { };
 
+  nls = callPackage ../development/tools/language-servers/nls { };
+
   pylyzer = callPackage ../development/tools/language-servers/pylyzer { };
 
   rnix-lsp = callPackage ../development/tools/language-servers/rnix-lsp { };
@@ -19746,7 +19752,7 @@ with pkgs;
   c-blosc = callPackage ../development/libraries/c-blosc { };
 
   # justStaticExecutables is needed due to https://github.com/NixOS/nix/issues/2990
-  cachix = haskell.lib.justStaticExecutables haskellPackages.cachix_1_3_3;
+  cachix = haskell.lib.justStaticExecutables haskellPackages.cachix;
 
   calcium = callPackage ../development/libraries/calcium { };
 
@@ -25121,10 +25127,7 @@ with pkgs;
   clamsmtp = callPackage ../servers/mail/clamsmtp { };
 
   clickhouse = callPackage ../servers/clickhouse {
-    # upstream requires llvm12 as of v22.3.2.2
-    inherit (llvmPackages_14) clang-unwrapped lld llvm;
-    llvm-bintools = llvmPackages_14.bintools;
-    stdenv = llvmPackages_14.stdenv;
+    stdenv = llvmPackages_15.stdenv;
   };
 
   clickhouse-cli = with python3Packages; toPythonApplication clickhouse-cli;
@@ -32711,6 +32714,8 @@ with pkgs;
 
   opcr-policy = callPackage ../development/tools/opcr-policy { };
 
+  opcua-client-gui = callPackage ../misc/opcua-client-gui { };
+
   open-policy-agent = callPackage ../development/tools/open-policy-agent {
     buildGoModule = buildGo119Module; # go 1.20 build failure
   };
@@ -33197,7 +33202,6 @@ with pkgs;
 
   osmscout-server = libsForQt5.callPackage ../applications/misc/osmscout-server { };
 
-  palemoon = callPackage ../applications/networking/browsers/palemoon { };
   palemoon-bin = callPackage ../applications/networking/browsers/palemoon/bin.nix { };
 
   paleta = callPackage ../applications/graphics/paleta { };
@@ -34912,6 +34916,8 @@ with pkgs;
   vorbis-tools = callPackage ../applications/audio/vorbis-tools {
     autoreconfHook = buildPackages.autoreconfHook269;
   };
+
+  vpv = callPackage ../applications/graphics/vpv { };
 
   vsce = callPackage ../development/tools/vsce { };
 
@@ -38860,6 +38866,8 @@ with pkgs;
   helm = callPackage ../applications/audio/helm { };
 
   helmfile = callPackage ../applications/networking/cluster/helmfile { };
+
+  helm-dashboard = callPackage ../applications/networking/cluster/helm-dashboard { };
 
   helmsman = callPackage ../applications/networking/cluster/helmsman { };
 
