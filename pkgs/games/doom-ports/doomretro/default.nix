@@ -6,6 +6,7 @@
 , SDL2
 , SDL2_image
 , SDL2_mixer
+, Cocoa
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -28,6 +29,8 @@ stdenv.mkDerivation (finalAttrs: {
     SDL2
     SDL2_image
     SDL2_mixer
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    Cocoa
   ];
 
   meta = {
