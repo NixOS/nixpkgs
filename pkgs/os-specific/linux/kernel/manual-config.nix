@@ -301,7 +301,10 @@ stdenv.mkDerivation ({
       else "install"))
   ];
 
-  postInstall = optionalString isModular ''
+  postInstall = ''
+      mkdir -p $out
+      cp .config $out/.config
+    '' + optionalString isModular ''
     if [ -z "''${dontStrip-}" ]; then
       installFlagsArray+=("INSTALL_MOD_STRIP=1")
     fi
