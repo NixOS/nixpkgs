@@ -15,6 +15,11 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-ed6hc7MIo/Hu1JY7yy6dYHbaTZ9S+T0dh/2H3sTT52Y=";
 
+  # error: linker `aarch64-linux-gnu-gcc` not found
+  postPatch = ''
+    rm .cargo/config.toml
+  '';
+
   meta = with lib; {
     mainProgram = "sg";
     description = "A fast and polyglot tool for code searching, linting, rewriting at large scale";
