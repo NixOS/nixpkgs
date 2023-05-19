@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation {
   pname = "apfsprogs";
-  version = "unstable-2023-03-21";
+  version = "unstable-2023-05-16";
 
   src = fetchFromGitHub {
     owner = "linux-apfs";
     repo = "apfsprogs";
-    rev = "be41cc38194bd41a41750631577e6d8b31953103";
-    hash = "sha256-9o8DKXyK5qIoVGVKMJxsinEkbJImyuDglf534kanzFE=";
+    rev = "7be75bcf1a533272bc69684b4b7d33c2adba315c";
+    hash = "sha256-WHAUrDiXy5HCwN876bZGc/OUHJITf6Fnpx4kAwAhcAs=";
   };
 
   buildPhase = ''
