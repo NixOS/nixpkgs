@@ -41,6 +41,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python wrapper for the Cloudflare v4 API";
     homepage = "https://github.com/cloudflare/python-cloudflare";
+    changelog = "https://github.com/cloudflare/python-cloudflare/blob/${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ costrouc ];
   };
