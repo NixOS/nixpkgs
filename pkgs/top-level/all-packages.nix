@@ -13571,6 +13571,8 @@ with pkgs;
 
   whatip = callPackage ../tools/networking/whatip { };
 
+  whatsapp-chat-exporter = callPackage ../tools/misc/whatsapp-chat-exporter { };
+
   whatweb = callPackage ../tools/security/whatweb { };
 
   whipper = callPackage ../applications/audio/whipper { };
