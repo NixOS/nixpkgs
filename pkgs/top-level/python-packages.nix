@@ -5997,8 +5997,6 @@ self: super: with self; {
 
   markdownsuperscript = callPackage ../development/python-modules/markdownsuperscript { };
 
-  markerlib = callPackage ../development/python-modules/markerlib { };
-
   markupsafe = callPackage ../development/python-modules/markupsafe { };
 
   markuppy = callPackage ../development/python-modules/markuppy { };
