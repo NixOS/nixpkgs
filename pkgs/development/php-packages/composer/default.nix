@@ -1,4 +1,4 @@
-{ mkDerivation, lib, fetchFromGitHub, php, makeBinaryWrapper, fetchurl, unzip }:
+{ mkDerivation, lib, fetchFromGitHub, php, makeBinaryWrapper, fetchurl, unzip, _7zz, git, openssh, curl }:
 
 php.buildComposerProject (finalAttrs: {
   pname = "composer";
@@ -19,11 +19,13 @@ php.buildComposerProject (finalAttrs: {
 
     installPhase = ''
       runHook preInstall
+
       mkdir -p $out/bin
       install -D $src $out/libexec/composer/composer.phar
       makeWrapper ${php}/bin/php $out/bin/composer \
         --add-flags "$out/libexec/composer/composer.phar" \
-        --prefix PATH : ${lib.makeBinPath [ unzip ]}
+        --prefix PATH : ${lib.makeBinPath [ _7zz unzip git curl openssh ]}
+
       runHook postInstall
     '';
 

@@ -1,3 +1,4 @@
+declare -a composerHomeDir
 declare -a composerVendorCache
 declare -a installComposerDevDependencies
 declare -a runComposerScripts
@@ -15,6 +16,10 @@ if [[ -z "${dontComposerInstallBuildHook-}" ]]; then
   preBuildHooks+=(composerInstallBuildHook)
 fi
 
+if [[ -z "${dontComposerInstallCheckHook-}" ]]; then
+  preBuildHooks+=(composerInstallCheckHook)
+fi
+
 if [[ -z "${dontComposerInstallInstallHook-}" ]]; then
   preInstallHooks+=(composerInstallInstallHook)
 fi
@@ -22,13 +27,23 @@ fi
 composerInstallConfigureHook() {
     echo "Executing composerInstallConfigureHook"
 
-    if [[ ! -e "${composerVendorCache}" ]]; then
-        echo "No composer cache found."
+    if [[ ! -e "${composerRepository}" ]]; then
+        echo "No local composer repository found."
         exit 1
     fi
 
-    cp -fr ${composerVendorCache}/. .
-    chmod +w .composer -R
+    if [[ -e "$composerLock" ]]; then
+        cp $composerLock composer.lock
+        chmod +w composer.lock
+    fi
+
+    if [[ ! -f "composer.lock" ]]; then
+        echo "No composer.lock file found"
+        exit 1
+    fi
+
+    cp ${composerRepository}/composer.json .
+    cp ${composerRepository}/composer.lock .
 
     echo "Finished composerInstallConfigureHook"
 }
@@ -36,7 +51,29 @@ composerInstallConfigureHook() {
 composerInstallBuildHook() {
     echo "Executing composerInstallBuildHook"
 
-    argstr=("--no-interaction")
+    composer --no-ansi build-local-repo -p ${composerRepository} > packages.json
+
+    COMPOSER_ROOT_VERSION="${version}" \
+    composer update --lock --no-ansi --no-install --no-plugins --no-scripts
+
+    echo "Finished composerInstallBuildHook"
+}
+
+composerInstallCheckHook() {
+    echo "Executing composerInstallCheckHook"
+
+    argstr=("--no-interaction" "--no-ansi")
+
+    composer check-platform-reqs "${argstr[@]}"
+    composer validate "${argstr[@]}"
+
+    echo "Finished composerInstallCheckHook"
+}
+
+composerInstallInstallHook() {
+    echo "Executing composerInstallInstallHook"
+
+    argstr=("--no-interaction" "--no-ansi")
 
     if [[ ! -n ${installComposerDevDependencies-} ]]; then
         argstr+=("--no-dev")
@@ -50,20 +87,11 @@ composerInstallBuildHook() {
         argstr+=("--no-plugins")
     fi
 
-    COMPOSER_DISABLE_NETWORK=1 \
-    COMPOSER_CACHE_DIR=".composer" \
-    COMPOSER_HTACCESS_PROTECT=0 \
     COMPOSER_ROOT_VERSION="${version}" \
     composer install "${argstr[@]}"
 
-    echo "Finished composerInstallBuildHook"
-}
-
-composerInstallInstallHook() {
-    echo "Executing composerInstallInstallHook"
-
+    rm packages.json
     mkdir -p $out/share/php/${pname}
-    rm -rf .composer
     cp -r . $out/share/php/${pname}/
 
     jq -r -c 'try .bin[]' composer.json | while read bin; do
@@ -73,4 +101,3 @@ composerInstallInstallHook() {
 
     echo "Finished composerInstallInstallHook"
 }
-

@@ -57,7 +57,7 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   composerHooks = callPackages ../build-support/php/hooks { };
 
-  mkComposerVendorCache = callPackage ../build-support/php/build-composer-cache.nix { };
+  mkComposerRepository = callPackage ../build-support/php/build-composer-repository.nix { };
   buildComposerProject = callPackage ../build-support/php/build-composer-project.nix { };
 
   # Wrap mkDerivation to prepend pname with "php-" to make names consistent

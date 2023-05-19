@@ -1,7 +1,7 @@
-{ stdenvNoCC, lib, writeTextDir, php }:
+{ stdenvNoCC, lib, writeTextDir, fetchFromGitHub, php }:
 
 let
-  mkComposerVendorCacheOverride =
+  mkComposerRepositoryOverride =
   /*
   We cannot destruct finalAttrs since the attrset below is used to construct it
   and Nix currently does not support lazy attribute names.
@@ -20,20 +20,23 @@ let
     phpDrv = finalAttrs.php or php;
     composer = finalAttrs.composer or phpDrv.packages.composer;
   in
-    assert (lib.assertMsg (previousAttrs ? src) "mkComposerVendorCache expects src argument.");
-    assert (lib.assertMsg (previousAttrs ? vendorHash) "mkComposerVendorCache expects vendorHash argument.");
-    assert (lib.assertMsg (previousAttrs ? version) "mkComposerVendorCache expects version argument.");
-    assert (lib.assertMsg (previousAttrs ? pname) "mkComposerVendorCache expects pname argument.");
+    assert (lib.assertMsg (previousAttrs ? src) "mkComposerRepository expects src argument.");
+    assert (lib.assertMsg (previousAttrs ? vendorHash) "mkComposerRepository expects vendorHash argument.");
+    assert (lib.assertMsg (previousAttrs ? version) "mkComposerRepository expects version argument.");
+    assert (lib.assertMsg (previousAttrs ? pname) "mkComposerRepository expects pname argument.");
+    assert (lib.assertMsg (previousAttrs ? composerHomeDir) "mkComposerRepository expects composerHomeDir argument.");
   {
-    name = "${previousAttrs.pname}-${previousAttrs.version}-composer-cache";
+    name = "${previousAttrs.pname}-${previousAttrs.version}-composer-repository";
 
     # See https://github.com/NixOS/nix/issues/6660
     dontPatchShebangs = previousAttrs.dontPatchShebangs or true;
 
     nativeBuildInputs = (previousAttrs.nativeBuildInputs or []) ++ [
       composer
-      phpDrv.composerHooks.composerSetupHook
+      phpDrv.composerHooks.composerRepositoryHook
     ];
+
+    buildInputs = previousAttrs.buildInputs or [];
 
     strictDeps = previousAttrs.strictDeps or true;
 
@@ -50,15 +53,29 @@ let
       runHook postBuild
     '';
 
+    doCheck = previousAttrs.doCheck or true;
+    checkPhase = previousAttrs.checkPhase or ''
+      runHook preCheck
+
+      runHook postCheck
+    '';
+
     installPhase = previousAttrs.installPhase or ''
       runHook preInstall
 
       runHook postInstall
     '';
 
+    COMPOSER_CACHE_DIR="/dev/null";
+    COMPOSER_PROCESS_TIMEOUT="0";
+    COMPOSER_HTACCESS_PROTECT="0";
+    COMPOSER_DISABLE_NETWORK="0";
+    COMPOSER_HOME="${finalAttrs.composerHomeDir}";
+    COMPOSER_MIRROR_PATH_REPOS="1";
+
     outputHashMode = "recursive";
     outputHashAlgo = if (finalAttrs ? vendorHash && finalAttrs.vendorHash != "") then null else "sha256";
     outputHash = finalAttrs.vendorHash or "";
   };
 in
-  args: (stdenvNoCC.mkDerivation args).overrideAttrs mkComposerVendorCacheOverride
+  args: (stdenvNoCC.mkDerivation args).overrideAttrs mkComposerRepositoryOverride
