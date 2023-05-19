@@ -3876,6 +3876,8 @@ with pkgs;
 
   bfr = callPackage ../tools/misc/bfr { };
 
+  bfscripts = callPackage ../tools/misc/bfscripts { };
+
   bibtool = callPackage ../tools/misc/bibtool { };
 
   bibutils = callPackage ../tools/misc/bibutils { };
