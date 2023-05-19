@@ -5,7 +5,7 @@
 , matplotlib
 , numpy
 , pytestCheckHook
-, scikitimage
+, scikit-image
 , scikit-learn
 }:
 
@@ -28,7 +28,7 @@ buildPythonPackage {
   propagatedBuildInputs = [
     lxml
     numpy
-    scikitimage
+    scikit-image
     scikit-learn
     matplotlib
   ];
