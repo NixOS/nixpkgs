@@ -22,7 +22,11 @@
 # release 3.9.3, options are: (xlib|win32|fb|quartz|console|wayland|sdl2|beos)
 , enableGuis ? {
   xlib = enableX11;
-  fb = stdenv.isLinux;
+  # From some reason, upstream's ./configure script disables compilation of the
+  # external tool `mlconfig` if `enableGuis.fb == true`. This behavior is not
+  # documentd in `./configure --help`, and it is reported here:
+  # https://github.com/arakiken/mlterm/issues/73
+  fb = false;
   quartz = stdenv.isDarwin;
   wayland = stdenv.isLinux;
   sdl2 = true;
