@@ -9,8 +9,8 @@ let
   };
 
   mainVariant = {
-    version = "6.3.2";
-    hash = "sha256-/+tg7fhAQZzo9iSrGi5vFXcbMqL21d+L7dTFGRp6Bo4=";
+    version = "6.3.3";
+    hash = "sha256-3vkY79dmRUITXUIStYVlrR/JVLtLH2hfH1YKCF03Wmo=";
     variant = "main";
   };
 
