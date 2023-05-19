@@ -4,6 +4,7 @@
 , fetchFromGitHub
 , git
 , httpx
+, lxml
 , packaging
 , poetry-core
 , pytestCheckHook
@@ -17,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "pontos";
-  version = "23.5.1";
+  version = "23.5.3";
   format = "pyproject";
 
   disabled = pythonOlder "3.9";
@@ -26,7 +27,7 @@ buildPythonPackage rec {
     owner = "greenbone";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-nUVJjBebHOY0/oN/Cl2HdaLGnDVgLsUK7Yd+johP1PM=";
+    hash = "sha256-QZJziSncO44KqvMTvpaQkIVAooLH8sKMt0TAC7L8UNs=";
   };
 
   nativeBuildInputs = [
@@ -36,6 +37,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     colorful
     httpx
+    lxml
     packaging
     python-dateutil
     semver
