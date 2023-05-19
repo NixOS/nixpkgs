@@ -3,35 +3,38 @@
 , buildPythonPackage
 , fetchFromGitHub
 , pygments
-, python3Packages
+, pythonOlder
 , setuptools-scm
 }:
 
 buildPythonPackage rec {
   pname = "colout";
-  version = "0.12.0";
+  version = "1.1";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "nojhan";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-5ETKNo3KfncnnLTClA6BnQA7SN5KwwsLdQoozI9li7I=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-7Dtf87erBElqVgqRx8BYHYOWv1uI84JJ0LHrcneczCI=";
   };
 
+  SETUPTOOLS_SCM_PRETEND_VERSION = version;
+
   nativeBuildInputs = [
-    babel
-    pygments
     setuptools-scm
   ];
-
-  SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   propagatedBuildInputs = [
     babel
     pygments
   ];
 
-  pythonImportsCheck = [ "colout" ];
+  pythonImportsCheck = [
+    "colout"
+  ];
 
   # This project does not have a unit test
   doCheck = false;
@@ -39,7 +42,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Color Up Arbitrary Command Output";
     homepage = "https://github.com/nojhan/colout";
-    license = licenses.gpl3;
+    license = licenses.gpl3Only;
     maintainers = with maintainers; [ badele ];
   };
 }

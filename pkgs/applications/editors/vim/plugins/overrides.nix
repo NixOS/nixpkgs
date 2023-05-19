@@ -756,6 +756,7 @@ self: super: {
   nvim-treesitter = super.nvim-treesitter.overrideAttrs (old:
     callPackage ./nvim-treesitter/overrides.nix { } self super
   );
+  nvim-treesitter-parsers = lib.recurseIntoAttrs self.nvim-treesitter.grammarPlugins;
 
   nvim-ufo = super.nvim-ufo.overrideAttrs (old: {
     dependencies = with self; [ promise-async ];
