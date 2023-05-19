@@ -26,13 +26,13 @@ let
            stdenv.mkDerivation (rec {
 
     pname = "arm-trusted-firmware${lib.optionalString (platform != null) "-${platform}"}";
-    version = "2.7";
+    version = "2.8";
 
     src = fetchFromGitHub {
       owner = "ARM-software";
       repo = "arm-trusted-firmware";
       rev = "v${version}";
-      sha256 = "sha256-WDJMMIWZHNqxxAKeHiZDxtPjfsfQAWsbYv+0o0PiJQs=";
+      hash = "sha256-WDJMMIWZHNqxxAKeHiZDxtPjfsfQAWsbYv+0o0PiJQs=";
     };
 
     patches = lib.optionals deleteHDCPBlobBeforeBuild [
@@ -89,12 +89,11 @@ in {
   armTrustedFirmwareTools = buildArmTrustedFirmware rec {
     extraMakeFlags = [
       "HOSTCC=${stdenv.cc.targetPrefix}gcc"
-      "fiptool" "certtool" "sptool"
+      "fiptool" "certtool"
     ];
     filesToInstall = [
       "tools/fiptool/fiptool"
       "tools/cert_create/cert_create"
-      "tools/sptool/sptool"
     ];
     postInstall = ''
       mkdir -p "$out/bin"
