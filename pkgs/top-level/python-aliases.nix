@@ -34,6 +34,7 @@ in
 
 mapAliases ({
   abodepy = jaraco-abode; # added 2023-02-01
+  acebinf = throw "acebinf has been removed because it is abandoned and broken."; # Added 2023-05-19
   aioh2 = throw "aioh2 has been removed because it is abandoned and broken."; # Added 2022-03-30
   ansible-base = throw "ansible-base has been removed, because it is end of life"; # added 2022-03-30
   ansible-doctor = throw "ansible-doctor has been promoted to a top-level attribute"; # Added 2023-05-16
@@ -250,6 +251,7 @@ mapAliases ({
   pytorchWithCuda = torchWithCuda; # added 2022-09-30
   pytorchWithoutCuda = torchWithoutCuda; # added 2022-09-30
   pytwitchapi = twitchapi; # added 2022-03-07
+  pyvcf = throw "pyvcf has been removed, it was using setuptools 2to3 translation feature, which has been removed in setuptools 58"; # added 2023-05-19
   PyVirtualDisplay = pyvirtualdisplay; # added 2023-02-19
   qasm2image = throw "qasm2image is no longer maintained (since November 2018), and is not compatible with the latest pythonPackages.qiskit versions."; # added 2020-12-09
   Quandl = quandl; # added 2023-02-19
