@@ -7,6 +7,7 @@ RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 NC='\033[0m' # No Color
+TMPDIR=/tmp/pgadmin-update-script
 
 ################################################################
 #         This script will update pgadmin4 in nixpkgs          #
@@ -18,11 +19,22 @@ NC='\033[0m' # No Color
 #   `yarn.lock` file, which this script will add automatically #
 ################################################################
 
+cleanup() {
+  if [ -e $TMPDIR/.done ]
+  then
+    rm -rf "$TMPDIR"
+  else
+    echo
+    read -p "Script exited prematurely. Do you want to delete the temporary directory $TMPDIR ? " -n 1 -r
+    echo
+    if [[ $REPLY =~ ^[Yy]$ ]]
+    then
+      rm -rf "$TMPDIR"
+    fi
+  fi
+}
 
-
-##################################################
-# Check for new version and download #
-##################################################
+trap cleanup EXIT
 
 scriptDir=$(cd "${BASH_SOURCE[0]%/*}" && pwd)
 nixpkgs=$(realpath "$scriptDir"/../../../..)
@@ -38,33 +50,20 @@ fi
 printf "${YELLOW}New version: $newest_version ${NC}\n"
 
 # don't use mktemp, so if a network error happens, we can resume from there
-mkdir -p /tmp/pgadmin-update-script
-pushd /tmp/pgadmin-update-script
-wget -nc $url
+mkdir -p $TMPDIR
+pushd $TMPDIR
+wget -c $url
 tar -xzf "pgadmin4-$newest_version.tar.gz"
 cd "pgadmin4-$newest_version/web"
-
-
-######################################
-# Convert the `yarn.lock` file to v1 #
-######################################
 
 printf "${YELLOW}Will now convert the v2 lockfile. This will download the npm packages to get the metadata.\n"
 printf "Please note: This will take some time!${NC}\n"
 yarn-lock-converter -i yarn.lock -o yarn_v1.lock --cache .cache
 printf "${GREEN}Conversion done${NC}\n"
 
-###########################################################################
-# Do some post-convert corrections (namely add '"' to multipackage lines) #
-###########################################################################
-
 printf "${YELLOW}Will now do some regex substitution post-processing${NC}\n"
 sed -i -E "s|(.), |\1\", \"|g" yarn_v1.lock
 printf "${GREEN}Substituion done${NC}\n"
-
-#########################################################
-# Add the github packages we lost during the conversion #
-#########################################################
 
 printf "${YELLOW}Will now add missing github packages back to the v1 yarn.lock file${NC}\n"
 # remove header
@@ -95,36 +94,20 @@ echo "" >> yarn_v1.lock
 cat adendum.lock >> yarn_v1.lock
 printf "${GREEN}Done${NC}\n"
 
-###########
-# cleanup #
-###########
-
-rm yarn.lock adendum.lock
+rm yarn.lock
 mv yarn_v1.lock yarn.lock
-
-##############################
-# Generate correct yarn hash #
-##############################
 
 printf "${YELLOW}Will now generate the hash. This will download the packages to the nix store and also take some time${NC}\n"
 YARN_HASH=$(prefetch-yarn-deps yarn.lock)
 YARN_HASH=$(nix hash to-sri --type sha256 "$YARN_HASH")
 printf "${GREEN}Done${NC}\n"
 
-##########################################
-# add the v1 `yarn.lock` file to nixpkgs #
-##########################################
-
 printf "${YELLOW}Copy files to nixpkgs${NC}\n"
 cp yarn.lock "$nixpkgs/pkgs/tools/admin/pgadmin/"
 printf "${GREEN}Done${NC}\n"
 popd
-rm -rf /tmp/pgadmin-update-script
-
-#############################################
-# Update the hashes in the default.nix file #
-#############################################
 
 sed -i -E -e "s#yarnSha256 = \".*\"#yarnSha256 = \"$YARN_HASH\"#" ${scriptDir}/default.nix
 
 update-source-version pgadmin4 "$newest_version" --print-changes
+touch $TMPDIR/.done
