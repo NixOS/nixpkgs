@@ -16378,7 +16378,9 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
-  cargo-ndk = callPackage ../development/tools/rust/cargo-ndk { };
+  cargo-ndk = callPackage ../development/tools/rust/cargo-ndk {
+    inherit (darwin.apple_sdk.frameworks) CoreGraphics Foundation;
+  };
 
   cargo-nextest = callPackage ../development/tools/rust/cargo-nextest {
     inherit (darwin.apple_sdk.frameworks) Security;
@@ -30861,7 +30863,9 @@ with pkgs;
 
   molsketch = libsForQt5.callPackage ../applications/editors/molsketch { };
 
-  pattypan = callPackage ../applications/misc/pattypan { };
+  pattypan = callPackage ../applications/misc/pattypan {
+    jdk = jdk.override { enableJavaFX = true; };
+  };
 
   praat = callPackage ../applications/audio/praat { };
 
@@ -32110,6 +32114,8 @@ with pkgs;
   };
 
   handlr = callPackage ../tools/misc/handlr { };
+
+  handlr-regex = callPackage ../tools/misc/handlr-regex { };
 
   jftui = callPackage ../applications/video/jftui { };
 
@@ -40483,4 +40489,6 @@ with pkgs;
   zf = callPackage ../tools/misc/zf { };
 
   isolate = callPackage ../tools/security/isolate { };
+
+  reindeer = callPackage ../development/tools/reindeer { };
 }

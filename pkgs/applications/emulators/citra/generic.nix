@@ -50,6 +50,8 @@ stdenv.mkDerivation rec {
     "-DCITRA_USE_BUNDLED_FFMPEG=OFF"
     "-DCITRA_USE_BUNDLED_QT=OFF"
     "-DUSE_SYSTEM_SDL2=ON"
+    "-DCMAKE_INSTALL_INCLUDEDIR=include"
+    "-DCMAKE_INSTALL_LIBDIR=lib"
 
     # We dont want to bother upstream with potentially outdated compat reports
     "-DCITRA_ENABLE_COMPATIBILITY_REPORTING=ON"

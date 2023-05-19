@@ -1,4 +1,14 @@
-{ stdenv, lib, fetchFromGitHub, fetchpatch, cmake, pkg-config, mongoc, openssl }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, cmake
+, pkg-config
+, mongoc
+, openssl
+, darwin
+}:
+
 stdenv.mkDerivation rec {
   pname = "libmongocrypt";
   version = "1.7.4";
@@ -20,7 +30,12 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [ cmake pkg-config ];
-  buildInputs = [ mongoc openssl ];
+  buildInputs = [
+    mongoc
+    openssl
+  ] ++ lib.optionals stdenv.isDarwin [
+    darwin.apple_sdk.frameworks.Security
+  ];
 
   cmakeFlags = [
     # all three of these are required to use system libbson

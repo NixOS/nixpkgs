@@ -12,7 +12,7 @@
 }:
 
 rustPlatform.buildRustPackage rec {
-  pname = "shuttle";
+  pname = "cargo-shuttle";
   version = "0.16.0";
 
   src = fetchFromGitHub {
