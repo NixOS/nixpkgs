@@ -210,6 +210,10 @@ in
       substituteInPlace "$out/etc/${projectName}/${projectName}.conf" \
         --replace "use nvidia-container-cli = no" "use nvidia-container-cli = yes"
     ''}
+    ${lib.optionalString (enableNvidiaContainerCli && projectName == "singularity") ''
+      substituteInPlace "$out/etc/${projectName}/${projectName}.conf" \
+        --replace "# nvidia-container-cli path =" "nvidia-container-cli path = ${nvidia-docker}/bin/nvidia-container-cli"
+    ''}
     ${lib.optionalString (removeCompat && (projectName != "singularity")) ''
       unlink "$out/bin/singularity"
       for file in "$out"/share/man/man?/singularity*.gz; do
