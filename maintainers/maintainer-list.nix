@@ -11211,6 +11211,16 @@
     githubId = 13920346;
     name = "Sébastien Iooss";
   };
+  networkexception = {
+    name = "networkException";
+    email = "nix@nwex.de";
+    matrix = "@networkexception:chat.upi.li";
+    github = "networkException";
+    githubId = 42888162;
+    keys = [{
+      fingerprint = "A0B9 48C5 A263 55C2 035F  8567 FBB7 2A94 52D9 1A72";
+    }];
+  };
   neverbehave = {
     email = "i@never.pet";
     github = "NeverBehave";
