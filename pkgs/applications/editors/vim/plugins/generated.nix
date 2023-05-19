@@ -953,6 +953,18 @@ final: prev:
     meta.homepage = "https://github.com/chriskempson/base16-vim/";
   };
 
+  base46 = buildVimPluginFrom2Nix {
+    pname = "base46";
+    version = "unstable-2023-05-06";
+    src = fetchFromGitHub {
+      owner = "nvchad";
+      repo = "base46";
+      rev = "bad87b034430b0241d03868c3802c2f1a4e0b4be";
+      sha256 = "1nplnd4f5wzwkbbfw9nnpm3jdy0il4wbqh5gdnbh9xmldb3lf376";
+    };
+    meta.homepage = "https://github.com/nvchad/base46/";
+  };
+
   bat-vim = buildVimPluginFrom2Nix {
     pname = "bat.vim";
     version = "2022-11-14";
