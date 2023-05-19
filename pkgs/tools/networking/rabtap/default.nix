@@ -1,4 +1,6 @@
-{ buildGoModule, fetchFromGitHub, lib }: buildGoModule rec {
+{ buildGoModule, fetchFromGitHub, lib }:
+
+buildGoModule rec {
   pname = "rabtap";
   version = "1.38.2";
 
