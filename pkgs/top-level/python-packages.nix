@@ -6441,9 +6441,13 @@ self: super: with self; {
 
   munch = callPackage ../development/python-modules/munch { };
 
+  mung = callPackage ../development/python-modules/mung { };
+
   munkres = callPackage ../development/python-modules/munkres { };
 
   murmurhash = callPackage ../development/python-modules/murmurhash { };
+
+  muscima = callPackage ../development/python-modules/muscima { };
 
   musicbrainzngs = callPackage ../development/python-modules/musicbrainzngs { };
 
@@ -6941,6 +6945,8 @@ self: super: with self; {
   omnikinverter = callPackage ../development/python-modules/omnikinverter { };
 
   omnilogic = callPackage ../development/python-modules/omnilogic { };
+
+  omrdatasettools = callPackage ../development/python-modules/omrdatasettools { };
 
   ondilo = callPackage ../development/python-modules/ondilo { };
 
