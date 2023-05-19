@@ -316,6 +316,53 @@ self: super: {
     '';
   });
 
+  coq_nvim = super.coq_nvim.overrideAttrs (old: {
+    passthru.python3Dependencies = ps: with ps; [
+      pynvim
+      pyyaml
+      (buildPythonPackage {
+        pname = "pynvim_pp";
+        version = "unstable-2023-05-17";
+        format = "pyproject";
+        propagatedBuildInputs = [ setuptools pynvim ];
+        src = fetchFromGitHub {
+          owner = "ms-jpq";
+          repo = "pynvim_pp";
+          rev = "91d91ec0cb173ce19d8c93c7999f5038cf08c046";
+          fetchSubmodules = false;
+          hash = "sha256-wycN9U3f3o0onmx60Z4Ws4DbBxsNwHjLTCB9UgjssLI=";
+        };
+        meta = with lib; {
+          homepage = "https://github.com/ms-jpq/pynvim_pp";
+          license = licenses.gpl3Plus;
+          maintainers = with maintainers; [ GaetanLepage ];
+        };
+      })
+      (buildPythonPackage {
+        pname = "std2";
+        version = "unstable-2023-05-17";
+        format = "pyproject";
+        propagatedBuildInputs = [ setuptools ];
+        src = fetchFromGitHub {
+          owner = "ms-jpq";
+          repo = "std2";
+          rev = "d6a7a719ef902e243b7bbd162defed762a27416f";
+          fetchSubmodules = false;
+          hash = "sha256-dtQaeB4Xkz+wcF0UkM+SajekSkVVPdoJs9n1hHQLR1k=";
+        };
+        doCheck = true;
+        meta = with lib; {
+          homepage = "https://github.com/ms-jpq/std2";
+          license = licenses.gpl3Plus;
+          maintainers = with maintainers; [ GaetanLepage ];
+        };
+      })
+    ];
+
+    # We need some patches so it stops complaining about not being in a venv
+    patches = [ ./patches/coq_nvim/emulate-venv.patch ];
+  });
+
   cpsm = super.cpsm.overrideAttrs (old: {
     nativeBuildInputs = [ cmake ];
     buildInputs = [

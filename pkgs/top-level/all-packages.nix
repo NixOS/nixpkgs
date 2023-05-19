@@ -3876,6 +3876,8 @@ with pkgs;
 
   bfr = callPackage ../tools/misc/bfr { };
 
+  bfscripts = callPackage ../tools/misc/bfscripts { };
+
   bibtool = callPackage ../tools/misc/bibtool { };
 
   bibutils = callPackage ../tools/misc/bibutils { };
@@ -36912,7 +36914,7 @@ with pkgs;
 
   stockfish = callPackage ../games/stockfish { };
 
-  steamPackages = dontRecurseIntoAttrs (callPackage ../games/steam { });
+  steamPackages = recurseIntoAttrs (callPackage ../games/steam { });
 
   steam = steamPackages.steam-fhsenv;
   steam-small = steamPackages.steam-fhsenv-small;
@@ -39794,6 +39796,8 @@ with pkgs;
     llvmPackages = llvmPackages_12;
     inherit (darwin.apple_sdk.frameworks) CoreFoundation SystemConfiguration Security;
   };
+
+  wavm = callPackage ../development/interpreters/wavm { };
 
   yabasic = callPackage ../development/interpreters/yabasic { };
 
