@@ -11,9 +11,10 @@
     url = "https://github.com/orbitalquark/scinterm/archive/scinterm_4.1.zip";
     sha256 = "sha256-pdgf2m5Bmmgh470G2Cx62z414YBq10qqe1+80ZGFypI=";
   };
-  "scintillua_6.1.zip" = {
-    url = "https://github.com/orbitalquark/scintillua/archive/scintillua_6.1.zip";
-    sha256 = "sha256-h2hr+SK+ahR0+KXe6HxObt1jJXZWJHA6yXuyX/JfNIo=";
+  # scintillua
+  "61900949800f9acc1238b45f4683250bd5c60755.zip" = {
+    url = "https://github.com/orbitalquark/scintillua/archive/61900949800f9acc1238b45f4683250bd5c60755.zip";
+    sha256 = "sha256-Zwg2MANNuQMW3JKY4XB1YBjGviiAIwDdrWRB5WtTPTI=";
   };
   "lua-5.4.4.tar.gz" = {
     url = "http://www.lua.org/ftp/lua-5.4.4.tar.gz";
