@@ -1,4 +1,6 @@
-{ lib, stdenv, fetchFromGitHub
+{ lib
+, stdenv
+, fetchFromGitHub
 , postgresql
 , openssl
 , zlib
@@ -8,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "repmgr";
-  version = "5.3.2";
+  version = "5.4.0";
 
   src = fetchFromGitHub {
-    owner = "2ndQuadrant";
+    owner = "EnterpriseDB";
     repo = "repmgr";
     rev = "v${version}";
-    sha256 = "sha256-M8FMin9y6nAiPYeT5pUUy0KyZ1dkuH708GshZ6GoXXw=";
+    sha256 = "sha256-QUxLqCZIopvqDncpaA8bxm9MHvO6R6jPrcd8hF8lqQs=";
   };
 
   nativeBuildInputs = [ flex ];
