@@ -31,5 +31,7 @@
     pretalx.wait_for_unit("pretalx-worker.service")
 
     pretalx.wait_until_succeeds("curl -q --fail http://talks.local/orga/")
+
+    pretalx.succeed("/var/lib/pretalx/pretalx-manage --help")
   '';
 }
