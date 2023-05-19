@@ -26453,6 +26453,8 @@ with pkgs;
     armTrustedFirmwareS905
     ;
 
+  mlxbf-bootimages = callPackage ../misc/mlxbf-bootimages { };
+
   microcodeAmd = callPackage ../os-specific/linux/microcode/amd.nix { };
 
   microcodeIntel = callPackage ../os-specific/linux/microcode/intel.nix { };
