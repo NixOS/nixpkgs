@@ -1,15 +1,15 @@
 {
-  "scintilla530.tgz" = {
-    url = "https://www.scintilla.org/scintilla530.tgz";
-    sha256 = "sha256-/VJg9W3kTMnV4tkAhuxv/nCWq73JG8nBxF9Sic1AQHs=";
+  "scintilla534.tgz" = {
+    url = "https://www.scintilla.org/scintilla534.tgz";
+    sha256 = "sha256-PwGxrvK36Y9iivLP+WWHb10V7igB2d+W3TrO2PCHy0Y=";
   };
   "lexilla510.tgz" = {
     url = "https://www.scintilla.org/lexilla510.tgz";
     sha256 = "sha256-azWVJ0AFSYZxuFTPV73uwiVJZvNxcS/POnFtl6p/P9g=";
   };
-  "scinterm_4.1.zip" = {
-    url = "https://github.com/orbitalquark/scinterm/archive/scinterm_4.1.zip";
-    sha256 = "sha256-pdgf2m5Bmmgh470G2Cx62z414YBq10qqe1+80ZGFypI=";
+  "scinterm_5.0.zip" = {
+    url = "https://github.com/orbitalquark/scinterm/archive/scinterm_5.0.zip";
+    sha256 = "sha256-l1qeLMCrhyoZA/GfmXFR20rY5EsUoO5e+1vZJtYdb24=";
   };
   # scintillua
   "61900949800f9acc1238b45f4683250bd5c60755.zip" = {
