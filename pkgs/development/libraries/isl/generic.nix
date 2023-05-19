@@ -5,7 +5,12 @@
 , patches ? []
 }:
 
-{ lib, stdenv, fetchurl, gmp, autoreconfHook
+{ lib
+, stdenv
+, fetchurl
+, gmp
+, autoreconfHook
+, buildPackages
 }:
 
 stdenv.mkDerivation {
@@ -19,6 +24,7 @@ stdenv.mkDerivation {
   inherit patches;
 
   strictDeps = true;
+  depsBuildBuild = lib.optionals (lib.versionAtLeast version "0.24") [ buildPackages.stdenv.cc ];
   nativeBuildInputs = lib.optionals (stdenv.hostPlatform.isRiscV && lib.versionOlder version "0.24") [ autoreconfHook ];
   buildInputs = [ gmp ];
 
