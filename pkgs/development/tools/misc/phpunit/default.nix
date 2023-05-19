@@ -14,14 +14,14 @@ php.buildComposerProject (finalAttrs: {
   # TODO: Open a PR against https://github.com/sebastianbergmann/phpunit
   # Missing `composer.lock` from the repository.
   composerLock = ./composer.lock;
-  vendorHash = "sha256-AWCDfZk+BB5/0Gzs73Lcl/FztiKLbZFdRhU9aRZ1bPg=";
+  vendorHash = "sha256-O5ZstTitA/4KNwuAeJg2tS+ua9qsflzaRVf3k1NerBE=";
 
-  meta = with lib; {
+  meta = {
     description = "PHP Unit Testing framework";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     homepage = "https://phpunit.de";
     changelog = "https://github.com/sebastianbergmann/phpunit/blob/${finalAttrs.version}/ChangeLog-${lib.versions.majorMinor finalAttrs.version}.md";
-    maintainers = with maintainers; [ onny ] ++ teams.php.members;
-    platforms = platforms.all;
+    maintainers = [ lib.maintainers.onny ] ++ lib.teams.php.members;
+    platforms = lib.platforms.all;
   };
 })
