@@ -14719,6 +14719,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) CoreServices;
   };
 
+  cppfront = callPackage ../development/compilers/cppfront { };
+
   inherit (callPackages ../development/compilers/crystal {
     llvmPackages = llvmPackages_13;
     stdenv = if stdenv.isDarwin then darwin.apple_sdk_11_0.stdenv else stdenv;
