@@ -48,6 +48,21 @@ stdenv.mkDerivation rec {
       url = "https://github.com/FRRouting/frr/commit/ff6db1027f8f36df657ff2e5ea167773752537ed.patch";
       sha256 = "sha256-b3nT6xco620hMSqlj/nTWTJCegf3ARAGaQbii4Yq6Ag=";
     })
+    (fetchpatch {
+      name = "CVE-2022-43681.patch";
+      url = "https://github.com/FRRouting/frr/commit/766eec1b7accffe2c04a5c9ebb14e9f487bb9f78.patch";
+      sha256 = "sha256-3XubiKvQos9QLQ4PaY89LLvLBjfYGoo6prulUgPXRgU=";
+    })
+    (fetchpatch {
+      name = "CVE-2022-40302.patch";
+      url = "https://github.com/FRRouting/frr/commit/3e46b43e3788f0f87bae56a86b54d412b4710286.patch";
+      sha256 = "sha256-GlTJcoPg2BFw3JBSFEQk2CMEGGbYfXOPqsTjIoSe8WY=";
+    })
+    (fetchpatch {
+      name = "CVE-2022-40318.patch";
+      url = "https://github.com/FRRouting/frr/commit/1117baca3c592877a4d8a13ed6a1d9bd83977487.patch";
+      sha256 = "sha256-txvpQZlqOyUl4kQ4VkLCUqSiA0lLdFt3uJdurnpJblM=";
+    })
   ];
 
   nativeBuildInputs = [
