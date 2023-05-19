@@ -1,0 +1,14 @@
+diff --git a/clblast.pc.in b/clblast.pc.in
+index c66210f1..9b4385f5 100644
+--- a/clblast.pc.in
++++ b/clblast.pc.in
+@@ -1,7 +1,7 @@
+ prefix=@CMAKE_INSTALL_PREFIX@
+ exec_prefix=${prefix}
+-includedir=${prefix}/@CMAKE_INSTALL_INCLUDEDIR@
+-libdir=${exec_prefix}/@CMAKE_INSTALL_LIBDIR@
++includedir=@CMAKE_INSTALL_INCLUDEDIR@
++libdir=@CMAKE_INSTALL_LIBDIR@
+ 
+ Name: CLBlast
+ Description: CLBlast is a modern, lightweight, performant and tunable OpenCL BLAS library written in C++11
