@@ -24544,6 +24544,8 @@ with pkgs;
 
   openjpeg = callPackage ../development/libraries/openjpeg { };
 
+  openobserve = callPackage ../servers/search/openobserve { };
+
   openpa = callPackage ../development/libraries/openpa { };
 
   openpgp-card-tools = callPackage ../tools/security/openpgp-card-tools {
