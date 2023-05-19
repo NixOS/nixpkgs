@@ -29,12 +29,12 @@ php.buildComposerProject (finalAttrs: {
       runHook postInstall
     '';
 
-    meta = with lib; {
+    meta = {
       description = "Dependency Manager for PHP, shipped from the PHAR file";
-      license = licenses.mit;
+      license = lib.licenses.mit;
       homepage = "https://getcomposer.org/";
-      changelog = "https://github.com/composer/composer/releases/tag/${version}";
-      maintainers = with maintainers; [ offline ] ++ teams.php.members;
+      changelog = "https://github.com/composer/composer/releases/tag/${finalAttrs.version}";
+      maintainers = lib.teams.php.members;
     };
   });
 
@@ -45,13 +45,14 @@ php.buildComposerProject (finalAttrs: {
     hash = "sha256-eOZVJFa0GViO/jcFIonhJxAHD2DdpLOOmOPtqGMMl2w=";
   };
 
-  vendorHash = "sha256-gv6HMd6qDf1l2jtXdI9sqfWhcxlDknU2sudhGjq9Zyw=";
+  vendorHash = "sha256-3eYFONtwmHtr5LlZi3QqDOMUWUrW/aCIaI+mc7X2dIA=";
 
-  meta = with lib; {
+  meta = {
     description = "Dependency Manager for PHP";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     homepage = "https://getcomposer.org/";
-    changelog = "https://github.com/composer/composer/releases/tag/${version}";
-    maintainers = with maintainers; [ offline ] ++ teams.php.members;
+    changelog = "https://github.com/composer/composer/releases/tag/${finalAttrs.version}";
+    maintainers = lib.teams.php.members;
+    platforms = lib.platforms.all;
   };
 })
