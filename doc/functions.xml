@@ -11,4 +11,5 @@
  <xi:include href="functions/debug.section.xml" />
  <xi:include href="functions/prefer-remote-fetch.section.xml" />
  <xi:include href="functions/nix-gitignore.section.xml" />
+ <xi:include href="functions/fileset.section.xml" />
 </chapter>
