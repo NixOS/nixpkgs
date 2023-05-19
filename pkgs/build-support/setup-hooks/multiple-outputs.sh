@@ -190,17 +190,17 @@ _multioutStatics() {
 
     moveToOutput "lib/*.a" "${!outputStatic}"
 
-    local as=`find "${!outputStatic}/lib" -name "*.a" -type f`
-    local acount=`echo -n "$as" | wc -l`
-    if [ $acount != 0 ]; then
-        # Some of *.a files are linker scripts where moving broke the paths.
-        local output
-        for output in $(getAllOutputNames); do
-            if [ "${!output}" = "${!outputStatic}" ]; then continue; fi
-            sed "/^GROUP/s|${!output}/lib/lib|${!outputStatic}/lib/lib|g" \
-              -i $as
-        done
-    fi
+    # local as=`find "${!outputStatic}/lib" -name "*.a" -type f`
+    # local acount=`echo -n "$as" | wc -l`
+    # if [ $acount != 0 ]; then
+    #     # Some of *.a files are linker scripts where moving broke the paths.
+    #     local output
+    #     for output in $(getAllOutputNames); do
+    #         if [ "${!output}" = "${!outputStatic}" ]; then continue; fi
+    #         sed "/^GROUP/s|${!output}/lib/lib|${!outputStatic}/lib/lib|g" \
+    #           -i $as
+    #     done
+    # fi
 }
 
 # Make the "dev" propagate other outputs needed for development.
