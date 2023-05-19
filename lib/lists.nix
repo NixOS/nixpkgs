@@ -612,6 +612,19 @@ rec {
     # Input list
     list: sublist count (length list) list;
 
+  commonPrefixLength = lhs: rhs:
+    let
+      minLength = min (length lhs) (length rhs);
+      recurse = index:
+        if index >= minLength || elemAt lhs index != elemAt rhs index then
+          index
+        else
+          recurse (index + 1);
+    in recurse 0;
+
+  commonPrefix = lhs: rhs:
+    take (commonPrefixLength lhs rhs) lhs;
+
   /* Return a list consisting of at most `count` elements of `list`,
      starting at index `start`.
 
