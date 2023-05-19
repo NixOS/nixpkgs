@@ -1,11 +1,10 @@
 { config, lib, pkgs, utils, ... }:
 let
-  types = lib.types;
   requiredStratisFilesystems = lib.attrsets.filterAttrs (_: x: utils.fsNeededForBoot x && x.stratis.poolUuid != null) config.fileSystems;
 in
 {
   options = {};
-  config = lib.mkIf (builtins.length (lib.attrsets.attrValues requiredStratisFilesystems) != 0) {
+  config = lib.mkIf (requiredStratisFilesystems != {}) {
     assertions = [
       {
         assertion = config.boot.initrd.systemd.enable;
