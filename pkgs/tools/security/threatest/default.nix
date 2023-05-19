@@ -1,6 +1,7 @@
 { lib
 , buildGoModule
 , fetchFromGitHub
+, installShellFiles
 }:
 
 buildGoModule rec {
@@ -16,6 +17,17 @@ buildGoModule rec {
 
   proxyVendor = true;
   vendorHash = "sha256-UQ3GPSv7P4+oMvcu4eFlosnw0TQxG33ptlMTQA/5Lkw=";
+
+  nativeBuildInputs = [
+    installShellFiles
+  ];
+
+  postInstall = ''
+    installShellCompletion --cmd threatest \
+      --bash <($out/bin/threatest completion bash) \
+      --fish <($out/bin/threatest completion fish) \
+      --zsh <($out/bin/threatest completion zsh)
+  '';
 
   meta = with lib; {
     description = "Framework for end-to-end testing threat detection rules";
