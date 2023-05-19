@@ -24,10 +24,10 @@
     "version": "2.21.08.31"
   },
   "breeze": {
-    "path": "breeze/tags/2.0.21",
-    "rev": "2906926",
-    "sha256": "11apjskzfajvz4bm06bva0pjm6z7salvvl024267l6n5hyp924zs",
-    "version": "2.0.21"
+    "path": "breeze/tags/2.0.22",
+    "rev": "2913544",
+    "sha256": "09x5ii2255cj78hamvbkzxfgj917pn7agpl7v8lgpkf0y113lvqi",
+    "version": "2.0.22"
   },
   "co-authors-plus": {
     "path": "co-authors-plus/tags/3.5.10",
@@ -178,6 +178,12 @@
     "rev": "2907012",
     "sha256": "0pb5988x1aqpdkr5ar32zl004c48c6040bvjdws6f3z6vi6i475x",
     "version": "14.1"
+  },
+  "wp-swiper": {
+    "path": "wp-swiper/trunk",
+    "rev": "2905097",
+    "sha256": "0g8m6rar78pwshyk124ww04gy18bz85z8xv0ir8b7lxx8l8rpmvd",
+    "version": "1.0.32"
   },
   "wp-user-avatars": {
     "path": "wp-user-avatars/trunk",
