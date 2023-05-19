@@ -1067,6 +1067,12 @@
     githubId = 1342360;
     name = "Andrew Morgan";
   };
+  anomalocaris = {
+    email = "duncan@anomalocaris.xyz";
+    github = "Anomalocaridid";
+    githubId = 29845794;
+    name = "Duncan Russell";
+  };
   anpin = {
     email = "pavel@anpin.fyi";
     github = "anpin";
