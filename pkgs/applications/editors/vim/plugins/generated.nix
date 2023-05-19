@@ -6213,6 +6213,18 @@ final: prev:
     meta.homepage = "https://github.com/ChristianChiarulli/nvcode-color-schemes.vim/";
   };
 
+  nvchad = buildVimPluginFrom2Nix {
+    pname = "nvchad";
+    version = "unstable-2023-05-18";
+    src = fetchFromGitHub {
+      owner = "nvchad";
+      repo = "nvchad";
+      rev = "262a06776aa731ad89369394f73320461d4a7e63";
+      sha256 = "1nfa1sikdrmjq8v64jsvbrfgap1dmlx8pvvpspxs4rz3i0y3scfv";
+    };
+    meta.homepage = "https://github.com/nvchad/nvchad/";
+  };
+
   nvchad-extensions = buildVimPluginFrom2Nix {
     pname = "nvchad-extensions";
     version = "unstable-2023-05-14";
