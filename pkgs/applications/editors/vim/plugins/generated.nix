@@ -7160,6 +7160,18 @@ final: prev:
     meta.homepage = "https://github.com/neovim/nvimdev.nvim/";
   };
 
+  nvterm = buildVimPluginFrom2Nix {
+    pname = "nvterm";
+    version = "unstable-2023-05-05";
+    src = fetchFromGitHub {
+      owner = "nvchad";
+      repo = "nvterm";
+      rev = "5ae78fb332e92447121d2af58a6313189a7799fb";
+      sha256 = "0rcj5njhkh1pwaa8d8d15nqqacx1h8j4ijygwhplvszi64kqb9r5";
+    };
+    meta.homepage = "https://github.com/nvchad/nvterm/";
+  };
+
   oceanic-material = buildVimPluginFrom2Nix {
     pname = "oceanic-material";
     version = "2022-08-17";
