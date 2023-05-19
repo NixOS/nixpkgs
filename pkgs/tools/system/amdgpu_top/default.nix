@@ -14,13 +14,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "amdgpu_top";
-  version = "0.1.7";
+  version = "0.1.8";
 
   src = fetchFromGitHub {
     owner = "Umio-Yasuno";
     repo = pname;
-    rev = "v${version}-stable";
-    hash = "sha256-cdKUj0pUlXxMNx0jypuov4hX3CISTDaSQh+KFB5R8ys=";
+    rev = "v${version}";
+    hash = "sha256-QsoOqkRtIwkLn7zg4hggGLNzyjdneYYs0XfQMdIEcCM=";
   };
 
   cargoLock.lockFile = ./Cargo.lock;

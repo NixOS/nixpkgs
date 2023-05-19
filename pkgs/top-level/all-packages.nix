@@ -17571,6 +17571,8 @@ with pkgs;
 
   nil = callPackage ../development/tools/language-servers/nil { };
 
+  nls = callPackage ../development/tools/language-servers/nls { };
+
   pylyzer = callPackage ../development/tools/language-servers/pylyzer { };
 
   rnix-lsp = callPackage ../development/tools/language-servers/rnix-lsp { };
@@ -25125,10 +25127,7 @@ with pkgs;
   clamsmtp = callPackage ../servers/mail/clamsmtp { };
 
   clickhouse = callPackage ../servers/clickhouse {
-    # upstream requires llvm12 as of v22.3.2.2
-    inherit (llvmPackages_14) clang-unwrapped lld llvm;
-    llvm-bintools = llvmPackages_14.bintools;
-    stdenv = llvmPackages_14.stdenv;
+    stdenv = llvmPackages_15.stdenv;
   };
 
   clickhouse-cli = with python3Packages; toPythonApplication clickhouse-cli;
@@ -32715,6 +32714,8 @@ with pkgs;
 
   opcr-policy = callPackage ../development/tools/opcr-policy { };
 
+  opcua-client-gui = callPackage ../misc/opcua-client-gui { };
+
   open-policy-agent = callPackage ../development/tools/open-policy-agent {
     buildGoModule = buildGo119Module; # go 1.20 build failure
   };
@@ -34915,6 +34916,8 @@ with pkgs;
   vorbis-tools = callPackage ../applications/audio/vorbis-tools {
     autoreconfHook = buildPackages.autoreconfHook269;
   };
+
+  vpv = callPackage ../applications/graphics/vpv { };
 
   vsce = callPackage ../development/tools/vsce { };
 
@@ -38863,6 +38866,8 @@ with pkgs;
   helm = callPackage ../applications/audio/helm { };
 
   helmfile = callPackage ../applications/networking/cluster/helmfile { };
+
+  helm-dashboard = callPackage ../applications/networking/cluster/helm-dashboard { };
 
   helmsman = callPackage ../applications/networking/cluster/helmsman { };
 
