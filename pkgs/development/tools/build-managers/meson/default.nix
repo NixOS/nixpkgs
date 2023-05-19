@@ -26,6 +26,12 @@ python3.pkgs.buildPythonApplication rec {
   };
 
   patches = [
+    # Fix Meson tests that fail when the Nix store is case-sensitive APFS.
+    (fetchpatch {
+      url = "https://github.com/mesonbuild/meson/pull/11820.patch";
+      sha256 = "sha256-mzSEvAQl13OpFFzSvMI4kkdnW6CXXnKz2xNlXaXduhY=";
+    })
+
     # Meson is currently inspecting fewer variables than autoconf does, which
     # makes it harder for us to use setup hooks, etc.  Taken from
     # https://github.com/mesonbuild/meson/pull/6827
