@@ -11246,6 +11246,12 @@
     githubId = 17120571;
     name = "Xinhao Luo";
   };
+  nevivurn = {
+    email = "nevivurn@nevi.dev";
+    github = "nevivurn";
+    githubId = 7698349;
+    name = "Yongun Seong";
+  };
   newam = {
     email = "alex@thinglab.org";
     github = "newAM";

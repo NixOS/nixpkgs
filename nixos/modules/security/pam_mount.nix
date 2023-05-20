@@ -47,6 +47,18 @@ in
         '';
       };
 
+      cryptMountOptions = mkOption {
+        type = types.listOf types.str;
+        default = [];
+        example = literalExpression ''
+          [ "allow_discard" ]
+        '';
+        description = lib.mdDoc ''
+          Global mount options that apply to every crypt volume.
+          You can define volume-specific options in the volume definitions.
+        '';
+      };
+
       fuseMountOptions = mkOption {
         type = types.listOf types.str;
         default = [];
@@ -157,7 +169,7 @@ in
           <!-- specify the binaries to be called -->
           <fusemount>${pkgs.fuse}/bin/mount.fuse %(VOLUME) %(MNTPT) -o ${concatStringsSep "," (cfg.fuseMountOptions ++ [ "%(OPTIONS)" ])}</fusemount>
           <fuseumount>${pkgs.fuse}/bin/fusermount -u %(MNTPT)</fuseumount>
-          <cryptmount>${pkgs.pam_mount}/bin/mount.crypt %(VOLUME) %(MNTPT)</cryptmount>
+          <cryptmount>${pkgs.pam_mount}/bin/mount.crypt -o ${concatStringsSep "," (cfg.cryptMountOptions ++ [ "%(OPTIONS)" ])} %(VOLUME) %(MNTPT)</cryptmount>
           <cryptumount>${pkgs.pam_mount}/bin/umount.crypt %(MNTPT)</cryptumount>
           <pmvarrun>${pkgs.pam_mount}/bin/pmvarrun -u %(USER) -o %(OPERATION)</pmvarrun>
           ${optionalString oflRequired "<ofl>${fake_ofl}/bin/fake_ofl %(SIGNAL) %(MNTPT)</ofl>"}
