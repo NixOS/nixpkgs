@@ -43,6 +43,7 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./enable-table-validation.patch
+    ./2.12.1-CVE-2023-2004.patch
   ] ++ lib.optional useEncumberedCode ./enable-subpixel-rendering.patch;
 
   outputs = [ "out" "dev" ];

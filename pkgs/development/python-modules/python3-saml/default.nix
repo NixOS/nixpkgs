@@ -1,4 +1,5 @@
 { lib, fetchFromGitHub, buildPythonPackage, isPy3k,
+fetchpatch,
 isodate, lxml, xmlsec, freezegun }:
 
 buildPythonPackage rec {
@@ -12,6 +13,14 @@ buildPythonPackage rec {
     rev = "v${version}";
     sha256 = "sha256-TAfVXh1fSKhNn/lsi7elq4wFyKCxCtCYUTrnH3ytBTw=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "test-expired.patch";
+      url = "https://github.com/SAML-Toolkits/python3-saml/commit/bd65578e5a21494c89320094c61c1c77250bea33.diff";
+      hash = "sha256-9Trew6R5JDjtc0NRGoklqMVDEI4IEqFOdK3ezyBU6gI=";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace setup.py \
