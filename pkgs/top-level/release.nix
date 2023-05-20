@@ -16,7 +16,7 @@
   # Strip most of attributes when evaluating to spare memory usage
 , scrubJobs ? true
   # Attributes passed to nixpkgs. Don't build packages marked as unfree.
-, nixpkgsArgs ? { config = { allowUnfree = false; inHydra = true; }; }
+, nixpkgsArgs ? { config = { allowUnfree = false; allowInsecurePredicate = x: true; inHydra = true; }; }
 }:
 
 with import ./release-lib.nix { inherit supportedSystems scrubJobs nixpkgsArgs; };
