@@ -5,12 +5,14 @@
 , coreutils
 , fetchurl
 , freeipmi
+, gd
 , i2c-tools
 , libmodbus
 , libtool
 , libusb-compat-0_1
 , makeWrapper
 , neon
+, net-snmp
 , openssl
 , pkg-config
 , substituteAll
@@ -35,19 +37,18 @@ stdenv.mkDerivation rec {
       libusb = "${libusb-compat-0_1}/lib";
       neon = "${neon}/lib";
       libmodbus = "${libmodbus}/lib";
+      netsnmp = "${net-snmp.lib}/lib";
     })
   ];
 
-  buildInputs = [ neon libusb-compat-0_1 openssl udev avahi freeipmi libmodbus i2c-tools ];
+  buildInputs = [ neon libusb-compat-0_1 openssl udev avahi freeipmi libmodbus i2c-tools net-snmp gd ];
 
   nativeBuildInputs = [ autoreconfHook libtool pkg-config makeWrapper ];
 
   configureFlags =
     [ "--with-all"
       "--with-ssl"
-      "--without-snmp" # Until we have it ...
       "--without-powerman" # Until we have it ...
-      "--without-cgi"
       "--with-systemdsystemunitdir=$(out)/lib/systemd/system"
       "--with-systemdshutdowndir=$(out)/lib/systemd/system-shutdown"
       "--with-systemdtmpfilesdir=$(out)/lib/tmpfiles.d"
