@@ -1665,5 +1665,5 @@ in {
   };
 
   meta.doc = ./gitlab.md;
-
+  meta.maintainers = teams.gitlab.members;
 }
