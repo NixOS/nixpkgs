@@ -1,4 +1,18 @@
-{ lib, stdenv, fetchFromGitLab, qmake, wrapQtAppsHook, libusb1, hidapi, pkg-config, coreutils, mbedtls_2, qtbase, qttools, symlinkJoin, openrgb }:
+{ lib
+, stdenv
+, fetchFromGitLab
+, qmake
+, wrapQtAppsHook
+, libusb1
+, hidapi
+, pkg-config
+, coreutils
+, mbedtls_2
+, qtbase
+, qttools
+, symlinkJoin
+, openrgb
+}:
 
 stdenv.mkDerivation rec {
   pname = "openrgb";
@@ -26,23 +40,25 @@ stdenv.mkDerivation rec {
   '';
 
   passthru.withPlugins = plugins:
-    let pluginsDir = symlinkJoin {
-      name = "openrgb-plugins";
-      paths = plugins;
-      # Remove all library version symlinks except one,
-      # or they will result in duplicates in the UI.
-      # We leave the one pointing to the actual library, usually the most
-      # qualified one (eg. libOpenRGBHardwareSyncPlugin.so.1.0.0).
-      postBuild = ''
-        for f in $out/lib/*; do
-          if [ "$(dirname $(readlink "$f"))" == "." ]; then
-            rm "$f"
-          fi
-        done
-      '';
-    };
-    in openrgb.overrideAttrs (old: {
-      qmakeFlags = old.qmakeFlags or [] ++ [
+    let
+      pluginsDir = symlinkJoin {
+        name = "openrgb-plugins";
+        paths = plugins;
+        # Remove all library version symlinks except one,
+        # or they will result in duplicates in the UI.
+        # We leave the one pointing to the actual library, usually the most
+        # qualified one (eg. libOpenRGBHardwareSyncPlugin.so.1.0.0).
+        postBuild = ''
+          for f in $out/lib/*; do
+            if [ "$(dirname $(readlink "$f"))" == "." ]; then
+              rm "$f"
+            fi
+          done
+        '';
+      };
+    in
+    openrgb.overrideAttrs (old: {
+      qmakeFlags = old.qmakeFlags or [ ] ++ [
         # Welcome to Escape Hell, we have backslashes
         ''DEFINES+=OPENRGB_EXTRA_PLUGIN_DIRECTORY=\\\""${lib.escape ["\\" "\"" " "] (toString pluginsDir)}/lib\\\""''
       ];
