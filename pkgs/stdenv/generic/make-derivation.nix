@@ -198,11 +198,13 @@ let
   defaultHardeningFlags = let
     # not ready for this by default
     supportedHardeningFlags' = lib.remove "fortify3" supportedHardeningFlags;
-  in if stdenv.hostPlatform.isMusl &&
-      # Except when:
-      #    - static aarch64, where compilation works, but produces segfaulting dynamically linked binaries.
-      #    - static armv7l, where compilation fails.
-      !(stdenv.hostPlatform.isAarch && stdenv.hostPlatform.isStatic)
+  in if
+      (stdenv.hostPlatform.isMusl &&
+        # Except when:
+        #    - static aarch64, where compilation works, but produces segfaulting dynamically linked binaries.
+        #    - static armv7l, where compilation fails.
+        !(stdenv.hostPlatform.isAarch && stdenv.hostPlatform.isStatic))
+      || stdenv.hostPlatform.isSerenity
     then supportedHardeningFlags'
     else lib.remove "pie" supportedHardeningFlags';
   enabledHardeningOptions =
