@@ -9857,17 +9857,18 @@ with self; {
 
   FinanceQuote = buildPerlPackage {
     pname = "Finance-Quote";
-    version = "1.49";
+    version = "1.55";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/E/EC/ECOCODE/Finance-Quote-1.49.tar.gz";
-      hash = "sha256-ldvERDumVjILNjxWYl0E83nJQ+IC9g9AoqNRUrVLv1M=";
+      url = "mirror://cpan/authors/id/B/BP/BPSCHUCK/Finance-Quote-1.55.tar.gz";
+      hash = "sha256-4uAAtnxmtq9Q1HYYWEkhEFEKVaAwqJEBfUDH3iGLdI8=";
     };
-    propagatedBuildInputs = [ CGI DateTimeFormatStrptime HTMLTableExtract JSON JSONParse LWPProtocolHttps StringUtil TextTemplate ];
-    buildInputs = [ TestPod ];
+    buildInputs = [ DateManip DateRange DateSimple DateTime DateTimeFormatISO8601 StringUtil TestKwalitee TestPerlCritic TestPod TestPodCoverage ];
+    propagatedBuildInputs = [ DateTimeFormatStrptime Encode HTMLTableExtract HTMLTokeParserSimple HTMLTree HTMLTreeBuilderXPath HTTPCookies JSON IOCompress LWPProtocolHttps Readonly StringUtil SpreadsheetXLSX TextTemplate TryTiny WebScraper XMLLibXML libwwwperl ];
     meta = {
       homepage = "https://finance-quote.sourceforge.net/";
       description = "Get stock and mutual fund quotes from various exchanges";
-      license = with lib.licenses; [gpl2 ];
+      license = with lib.licenses; [ gpl2Plus ];
+      maintainers = with lib.maintainers; [ nevivurn ];
     };
   };
 
