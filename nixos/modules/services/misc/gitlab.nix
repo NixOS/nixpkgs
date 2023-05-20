@@ -84,6 +84,9 @@ let
     };
   };
 
+  # Redis configuration file
+  resqueYml = pkgs.writeText "resque.yml" (builtins.toJSON redisConfig);
+
   gitlabConfig = {
     # These are the default settings from config/gitlab.example.yml
     production = flip recursiveUpdate cfg.extraConfig {
@@ -167,7 +170,6 @@ let
     SCHEMA = "${cfg.statePath}/db/structure.sql";
     GITLAB_UPLOADS_PATH = "${cfg.statePath}/uploads";
     GITLAB_LOG_PATH = "${cfg.statePath}/log";
-    GITLAB_REDIS_CONFIG_FILE = pkgs.writeText "redis.yml" (builtins.toJSON redisConfig);
     prometheus_multiproc_dir = "/run/gitlab";
     RAILS_ENV = "production";
     MALLOC_ARENA_MAX = "2";
@@ -1310,6 +1312,7 @@ in {
           cp -rf --no-preserve=mode ${cfg.packages.gitlab}/share/gitlab/db/* ${cfg.statePath}/db
           ln -sf ${extraGitlabRb} ${cfg.statePath}/config/initializers/extra-gitlab.rb
           ln -sf ${cableYml} ${cfg.statePath}/config/cable.yml
+          ln -sf ${resqueYml} ${cfg.statePath}/config/resque.yml
 
           ${cfg.packages.gitlab-shell}/bin/install
 
