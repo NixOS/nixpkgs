@@ -11,7 +11,7 @@ php80.buildComposerProject (finalAttrs: {
     sha256 = "sha256-nONON259eYPtuJLaBOdMfZ62NVc1e8BYHKhpsqxoLJ8=";
   };
 
-  vendorHash = "sha256-OrL/2/InvI1FLaEzEdRe3MngtFlU++RC7lZbiqdWY9k=";
+  vendorHash = "sha256-qBBJKEwZQ7Y0f61CfUCr77bVkYKJw0tF2KkzH+UbWd4=";
 
   meta = with lib; {
     description = "The swiss army knife for Magento2 developers";
@@ -19,5 +19,6 @@ php80.buildComposerProject (finalAttrs: {
     homepage = "https://magerun.net/";
     changelog = "https://magerun.net/category/magerun/";
     maintainers = teams.php.members;
+    platforms = lib.platforms.all;
   };
 })
