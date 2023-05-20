@@ -308,9 +308,15 @@ in
       ];
 
     systemd.tmpfiles.rules = [
+      "d '/var/lib/epgstation/key' - ${username} ${groupname} - -"
       "d '/var/lib/epgstation/streamfiles' - ${username} ${groupname} - -"
+      "d '/var/lib/epgstation/drop' - ${username} ${groupname} - -"
       "d '/var/lib/epgstation/recorded' - ${username} ${groupname} - -"
       "d '/var/lib/epgstation/thumbnail' - ${username} ${groupname} - -"
+      "d '/var/lib/epgstation/db/subscribers' - ${username} ${groupname} - -"
+      "d '/var/lib/epgstation/db/migrations/mysql' - ${username} ${groupname} - -"
+      "d '/var/lib/epgstation/db/migrations/postgres' - ${username} ${groupname} - -"
+      "d '/var/lib/epgstation/db/migrations/sqlite' - ${username} ${groupname} - -"
     ];
 
     systemd.services.epgstation = {
