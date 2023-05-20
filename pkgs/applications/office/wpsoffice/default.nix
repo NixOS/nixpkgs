@@ -10,10 +10,8 @@
 , nspr
 , mesa
 , libtiff
-, libxslt
 , udev
 , gtk3
-, gdk-pixbuf
 , qtbase
 , xorg
 , cups
@@ -49,18 +47,12 @@ stdenv.mkDerivation rec {
     nspr
     mesa
     libtiff
-    libxslt
     udev
     gtk3
-    gdk-pixbuf
     qtbase
     xorg.libXdamage
     xorg.libXtst
-    xorg.libXrandr
-    xorg.libXcomposite
     xorg.libXv
-    cups
-    pango
   ];
 
   dontWrapQtApps = true;
