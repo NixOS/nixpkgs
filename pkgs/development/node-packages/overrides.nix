@@ -139,20 +139,6 @@ final: prev: {
     name = "eask";
   };
 
-  # NOTE: this is a stub package to fetch npm dependencies for
-  # ../../applications/video/epgstation
-  epgstation = prev."epgstation-../../applications/video/epgstation".override (oldAttrs: {
-    buildInputs = [ pkgs.postgresql ];
-    nativeBuildInputs = [ final.node-pre-gyp final.node-gyp-build pkgs.which ];
-    meta = oldAttrs.meta // { platforms = lib.platforms.none; };
-  });
-
-  # NOTE: this is a stub package to fetch npm dependencies for
-  # ../../applications/video/epgstation/client
-  epgstation-client = prev."epgstation-client-../../applications/video/epgstation/client".override (oldAttrs: {
-    meta = oldAttrs.meta // { platforms = lib.platforms.none; };
-  });
-
   expo-cli = prev."expo-cli".override (oldAttrs: {
     # The traveling-fastlane-darwin optional dependency aborts build on Linux.
     dependencies = builtins.filter (d: d.packageName != "@expo/traveling-fastlane-${if stdenv.isLinux then "darwin" else "linux"}") oldAttrs.dependencies;
