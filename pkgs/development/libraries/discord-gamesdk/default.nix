@@ -14,9 +14,11 @@ stdenv.mkDerivation rec {
     stripRoot = false;
   };
 
-  nativeBuildInputs = [
-    autoPatchelfHook
-  ];
+  outputs = [ "out" "dev" ];
+
+  buildInputs = [ (stdenv.cc.cc.libgcc or null) ];
+
+  nativeBuildInputs = [ autoPatchelfHook ];
 
   installPhase =
     let
@@ -27,6 +29,8 @@ stdenv.mkDerivation rec {
       runHook preInstall
 
       install -Dm555 lib/${processor}/discord_game_sdk${sharedLibrary} $out/lib/discord_game_sdk${sharedLibrary}
+
+      install -Dm444 c/discord_game_sdk.h $dev/lib/include/discord_game_sdk.h
 
       runHook postInstall
     '';
