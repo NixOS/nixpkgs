@@ -5,7 +5,7 @@
 , callPackage
 , buildPackages
 , pkgsBuildBuild
-, patchelf
+, removeReferencesTo
 }:
 let
   rev = "0bbd9040efbe97850a18a49a9cea25498d727f13";
@@ -39,10 +39,15 @@ let
     stdenvNoCC.mkDerivation {
       inherit pname version;
 
-      # FIXME: rpath is not rewritten to use dependency derivations
+      dontUnpack = true;
+
       buildInputs = builtins.attrValues deps;
 
-      dontUnpack = true;
+      nativeBuildInputs = [
+        removeReferencesTo
+        pkgsBuildBuild.autoPatchelfHook
+      ];
+
       installPhase = ''
         mkdir -p $out/lib $out/include
         find ${rootfs}/lib \
@@ -53,6 +58,10 @@ let
         if [ -d $includes ] ; then
           cp -r $includes $out/include
         fi
+      '';
+
+      preFixup = ''
+        find $out/lib -type f -exec remove-references-to -t ${rootfs} {} +
       '';
 
       meta = with lib; {
