@@ -68,7 +68,7 @@ let
         description = "${pname}. A library for SerenityOS";
         homepage = "https://serenityos.org";
         license = licenses.bsd2;
-        maintainers = with maintainers; [ emilytrau ];
+        maintainers = teams.serenity.members;
         platforms = platforms.serenity;
       };
     };
@@ -107,7 +107,7 @@ let
       description = "Dynamic loader for SerenityOS";
       homepage = "https://serenityos.org";
       license = licenses.bsd2;
-      maintainers = with maintainers; [ emilytrau ];
+      maintainers = teams.serenity.members;
       platforms = platforms.serenity;
     };
   };

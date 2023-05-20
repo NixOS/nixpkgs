@@ -800,6 +800,14 @@ with lib.maintainers; {
     shortName = "SageMath";
   };
 
+  serenity = {
+    members = [
+      emilytrau
+    ];
+    scope = "Maintain SerenityOS related packages.";
+    shortName = "SerenityOS";
+  };
+
   sphinx = {
     members = [
       SuperSandro2000

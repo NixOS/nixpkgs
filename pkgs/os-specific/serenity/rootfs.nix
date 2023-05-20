@@ -80,7 +80,7 @@ stdenv.mkDerivation rec {
     description = "Graphical Unix-like operating system for desktop computers";
     homepage = "https://serenityos.org";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ emilytrau ];
+    maintainers = teams.serenity.members;
     platforms = platforms.serenity;
   };
 }

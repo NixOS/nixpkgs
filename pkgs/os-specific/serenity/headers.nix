@@ -8,7 +8,7 @@ runCommand "serenity-headers-${version}" {
     description = "Header files for the SerenityOS kernel and LibC";
     homepage = "https://serenityos.org";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ emilytrau ];
+    maintainers = teams.serenity.members;
     platforms = platforms.serenity;
   };
 }
