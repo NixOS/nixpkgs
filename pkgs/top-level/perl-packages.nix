@@ -13100,6 +13100,22 @@ with self; {
     };
   };
 
+  libwwwperl = buildPerlPackage {
+    pname = "libwww-perl";
+    version = "6.70";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/S/SI/SIMBABQUE/libwww-perl-6.70.tar.gz";
+      hash = "sha256-NPANI0R1e5wLVa01gI1T6T19kvekZOyDf+anPFH7WWk=";
+    };
+    buildInputs = [ HTTPDaemon TestFatal TestNeeds TestRequiresInternet ];
+    propagatedBuildInputs = [ EncodeLocale FileListing HTMLParser HTTPCookieJar HTTPCookies HTTPDate HTTPMessage HTTPNegotiate LWPMediaTypes NetHTTP TryTiny URI WWWRobotRules ];
+    meta = {
+      homepage = "https://github.com/libwww-perl/libwww-perl";
+      description = "The World-Wide Web library for Perl";
+      license = with lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   libxml_perl = buildPerlPackage {
     pname = "libxml-perl";
     version = "0.08";
