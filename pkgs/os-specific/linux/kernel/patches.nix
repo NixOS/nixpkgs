@@ -58,13 +58,10 @@
     patch = ./export-rt-sched-migrate.patch;
   };
 
-  make-maple-state-reusable-after-mas_empty_area = rec {
+  # https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git/patch/?id=39bf07d812b888b23983a9443ad967ca9b61551d
+  make-maple-state-reusable-after-mas_empty_area = {
     name = "make-maple-state-reusable-after-mas_empty_area";
-    patch = fetchpatch {
-      name = name + ".patch";
-      url = "https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git/patch/?id=39bf07d812b888b23983a9443ad967ca9b61551d";
-      hash = "sha256-JHEFq+Gw8Dtl0M8pXcKXpwkaHhbbl5NwTSzvV5qP4hk=";
-    };
+    patch = ./make-maple-state-reusable-after-mas_empty_area.patch;
   };
 
   fix-em-ice-bonding = {

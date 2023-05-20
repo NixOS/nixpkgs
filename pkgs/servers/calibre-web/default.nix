@@ -82,7 +82,7 @@ python.pkgs.buildPythonApplication rec {
       --replace "lxml>=3.8.0,<4.9.0" "lxml>=3.8.0" \
       --replace "tornado>=4.1,<6.2" "tornado>=4.1,<7" \
       --replace "PyPDF>=3.0.0,<3.6.0" "PyPDF>=3.0.0" \
-      --replace "requests>=2.11.1,<2.28.0" "requests" \
+      --replace "requests>=2.11.1,<2.29.0" "requests" \
       --replace "unidecode>=0.04.19,<1.4.0" "unidecode>=0.04.19" \
       --replace "werkzeug<2.1.0" ""
   '';

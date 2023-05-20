@@ -11,6 +11,7 @@
 , IOKit
 , MediaToolbox
 , OpenGL
+, Security
 , VideoToolbox
 , ipu6ep-camera-hal
 }:
@@ -29,6 +30,8 @@
   gst-plugins-ugly = callPackage ./ugly { inherit CoreFoundation DiskArbitration IOKit; };
 
   gst-plugins-viperfx = callPackage ./viperfx { };
+
+  gst-plugins-rs = callPackage ./rs { inherit Security; };
 
   gst-rtsp-server = callPackage ./rtsp-server { };
 

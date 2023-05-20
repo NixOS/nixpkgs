@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "django-context-decorator";
-  version = "1.5.0";
+  version = "1.6.0";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "rixx";
     repo = "django-context-decorator";
     rev = "v${version}";
-    hash = "sha256-wgVZadI+4gK9snLfy/9FgFJJHqMyxndcxXwqIkMH29k=";
+    hash = "sha256-/FDGWGC1Pdu+RLyazDNZv+CMf5vscXprLdN8ELjUFNo=";
   };
 
   pythonImportsCheck = [

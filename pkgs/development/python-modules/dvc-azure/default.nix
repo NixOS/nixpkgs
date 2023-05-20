@@ -2,6 +2,7 @@
 , adlfs
 , azure-identity
 , buildPythonPackage
+, dvc-objects
 , fetchPypi
 , knack
 , pythonRelaxDepsHook
@@ -23,13 +24,13 @@ buildPythonPackage rec {
   nativeBuildInputs = [ setuptools-scm pythonRelaxDepsHook ];
 
   propagatedBuildInputs = [
-    adlfs azure-identity knack
+    adlfs azure-identity dvc-objects knack
   ];
 
   # Network access is needed for tests
   doCheck = false;
 
-  pythonCheckImports = [ "dvc_azure" ];
+  pythonImportsCheck = [ "dvc_azure" ];
 
   meta = with lib; {
     description = "azure plugin for dvc";

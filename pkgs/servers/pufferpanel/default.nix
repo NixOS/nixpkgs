@@ -5,6 +5,7 @@
 , fetchzip
 , fetchpatch
 , pathDeps ? [ ]
+, nixosTests
 }:
 
 buildGoModule rec {
@@ -13,18 +14,19 @@ buildGoModule rec {
 
   patches = [
     # Bump go-sqlite3 version to avoid a GNU C compiler error.
-    # See https://github.com/PufferPanel/PufferPanel/pull/1240
     (fetchpatch {
-      url = "https://github.com/PufferPanel/PufferPanel/pull/1240/commits/3065dca2d9b05a56789971ccf0f43a7079a390b8.patch";
+      url = "https://github.com/PufferPanel/PufferPanel/commit/dd7fc80c33c7618c98311af09c78c25b77658aef.patch";
       hash = "sha256-ygMrhJoba8swoRBBii7BEiLihqOebLUtSH7os7W3s+k=";
     })
 
     # Fix errors in tests.
-    # See https://github.com/PufferPanel/PufferPanel/pull/1241
     (fetchpatch {
-      url = "https://github.com/PufferPanel/PufferPanel/pull/1241/commits/ffd21bce4bff3040c8e3e783e5b4779222e7a3a5.patch";
+      url = "https://github.com/PufferPanel/PufferPanel/commit/ad6ab4b4368e1111292fadfb3d9f058fa399fa21.patch";
       hash = "sha256-BzGfcWhzRrCHKkAhWf0uvXiiiutWqthn/ed7bN2hR8U=";
     })
+
+    # Bump sha1cd package, otherwise i686-linux fails to build.
+    ./bump-sha1cd.patch
 
     # Seems to be an anti-feature. Startup is the only place where user/group is
     # hardcoded and checked.
@@ -68,7 +70,7 @@ buildGoModule rec {
 
   nativeBuildInputs = [ makeWrapper ];
 
-  vendorHash = "sha256-fB8MxSl9E2W+BdO6i+drbCe9Z3bPHPi0MvpJEomU9co=";
+  vendorHash = "sha256-Esfk7SvqiWeiobXSI+4wYVEH9yVkB+rO7bxUQ5TzvG4=";
   proxyVendor = true;
 
   postFixup = ''
@@ -89,6 +91,10 @@ buildGoModule rec {
       --set-default PUFFER_PANEL_WEB_FILES $out/share/pufferpanel/www \
       --prefix PATH : ${lib.escapeShellArg (lib.makeBinPath pathDeps)}
   '';
+
+  passthru.tests = {
+    inherit (nixosTests) pufferpanel;
+  };
 
   meta = with lib; {
     description = "A free, open source game management panel";

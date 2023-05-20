@@ -11,6 +11,7 @@
 , spaceNavSupport ? stdenv.isLinux, libspnav
 , makeWrapper
 , pugixml, llvmPackages, SDL, Cocoa, CoreGraphics, ForceFeedback, OpenAL, OpenGL
+, waylandSupport ? stdenv.isLinux, pkg-config, wayland, wayland-protocols, libffi, libdecor, libxkbcommon, dbus
 , potrace
 , openxr-loader
 , embree, gmp, libharu
@@ -36,8 +37,11 @@ stdenv.mkDerivation rec {
 
   patches = lib.optional stdenv.isDarwin ./darwin.patch;
 
-  nativeBuildInputs = [ cmake makeWrapper python310Packages.wrapPython llvmPackages.llvm.dev ]
-    ++ lib.optionals cudaSupport [ addOpenGLRunpath ];
+  nativeBuildInputs =
+    [ cmake makeWrapper python310Packages.wrapPython llvmPackages.llvm.dev
+    ]
+    ++ lib.optionals cudaSupport [ addOpenGLRunpath ]
+    ++ lib.optionals waylandSupport [ pkg-config ];
   buildInputs =
     [ boost ffmpeg gettext glew ilmbase
       freetype libjpeg libpng libsamplerate libsndfile libtiff libwebp
@@ -50,6 +54,9 @@ stdenv.mkDerivation rec {
       potrace
       libharu
       libepoxy
+    ]
+    ++ lib.optionals waylandSupport [
+      wayland wayland-protocols libffi libdecor libxkbcommon dbus
     ]
     ++ lib.optionals (!stdenv.isAarch64) [
       openimagedenoise
@@ -123,6 +130,12 @@ stdenv.mkDerivation rec {
       "-DWITH_TBB=ON"
       "-DWITH_IMAGE_OPENJPEG=ON"
       "-DWITH_OPENCOLLADA=${if colladaSupport then "ON" else "OFF"}"
+    ]
+    ++ lib.optionals waylandSupport [
+      "-DWITH_GHOST_WAYLAND=ON"
+      "-DWITH_GHOST_WAYLAND_DBUS=ON"
+      "-DWITH_GHOST_WAYLAND_DYNLOAD=OFF"
+      "-DWITH_GHOST_WAYLAND_LIBDECOR=ON"
     ]
     ++ lib.optionals stdenv.hostPlatform.isAarch64 [
       "-DWITH_CYCLES_EMBREE=OFF"

@@ -25,6 +25,11 @@ let
       inherit buildFHSEnv;
     };
     steam-fhsenv-small = steam-fhsenv.override { withGameSpecificLibraries = false; };
+
+    # This has to exist so Hydra tries to build all of Steam's dependencies.
+    # FIXME: Maybe we should expose it as something more generic?
+    steam-fhsenv-without-steam = steam-fhsenv.override { steam = null; };
+
     steamcmd = callPackage ./steamcmd.nix { };
   };
   keep = self: { };

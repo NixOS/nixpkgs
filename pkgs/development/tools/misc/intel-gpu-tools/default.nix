@@ -1,88 +1,95 @@
 { lib
 , stdenv
-, fetchurl
-, fetchpatch
-, pkg-config
-, libdrm
-, libpciaccess
-, cairo
-, xorgproto
-, udev
-, libX11
-, libXext
-, libXv
-, libXrandr
-, glib
+, fetchFromGitLab
+
+# build time
 , bison
-, libunwind
-, python3
-, kmod
-, procps
-, utilmacros
-, gtk-doc
 , docbook_xsl
-, openssl
-, peg
-, elfutils
+, docutils
+, flex
+, gtk-doc
 , meson
 , ninja
+, pkg-config
+, utilmacros
+
+# runtime
+, alsa-lib
+, cairo
+, curl
+, elfutils
+, glib
+, gsl
+, json_c
+, kmod
+, libdrm
+, liboping
+, libpciaccess
+, libunwind
+, libX11
+, libXext
+, libXrandr
+, libXv
+, openssl
+, peg
+, procps
+, python3
+, udev
 , valgrind
 , xmlrpc_c
-, gsl
-, alsa-lib
-, curl
-, json_c
-, liboping
-, flex
-, docutils
+, xorgproto
 }:
 
 stdenv.mkDerivation rec {
   pname = "intel-gpu-tools";
-  version = "1.26";
+  version = "1.27.1";
 
-  src = fetchurl {
-    url = "https://xorg.freedesktop.org/archive/individual/app/igt-gpu-tools-${version}.tar.xz";
-    sha256 = "1dwvxh1yplsh1a7h3gpp40g91v12cfxy6yy99s1v9yr2kwxikm1n";
+  src = fetchFromGitLab {
+    domain = "gitlab.freedesktop.org";
+    owner = "drm";
+    repo = "igt-gpu-tools";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-7Z9Y7uUjtjdQbB+xV/fvO18xB18VV7fBZqw1fI7U0jQ=";
   };
 
-  patches = [
-    # fix build with meson 0.60
-    (fetchpatch {
-      url = "https://github.com/freedesktop/xorg-intel-gpu-tools/commit/963917a3565466832a3b2fc22e9285d34a0bf944.patch";
-      sha256 = "sha256-goO2N7aK2dJYMhFGS1DlvjEYMSijN6stV6Q5z/RP8Ko=";
-    })
+  nativeBuildInputs = [
+    bison
+    docbook_xsl
+    docutils
+    flex
+    gtk-doc
+    meson
+    ninja
+    pkg-config
+    utilmacros
   ];
 
-  nativeBuildInputs = [ pkg-config utilmacros meson ninja flex bison gtk-doc docutils docbook_xsl ];
   buildInputs = [
-    libdrm
-    libpciaccess
+    alsa-lib
     cairo
-    xorgproto
-    udev
-    libX11
-    kmod
-    libXext
-    libXv
-    libXrandr
+    curl
+    elfutils
     glib
+    gsl
+    json_c
+    kmod
+    libdrm
+    liboping
+    libpciaccess
     libunwind
-    python3
-    procps
+    libX11
+    libXext
+    libXrandr
+    libXv
     openssl
     peg
-    elfutils
+    procps
+    python3
+    udev
     valgrind
     xmlrpc_c
-    gsl
-    alsa-lib
-    curl
-    json_c
-    liboping
+    xorgproto
   ];
-
-  env.NIX_CFLAGS_COMPILE = toString [ "-Wno-error=array-bounds" ];
 
   preConfigure = ''
     patchShebangs tests man
@@ -91,7 +98,8 @@ stdenv.mkDerivation rec {
   hardeningDisable = [ "bindnow" ];
 
   meta = with lib; {
-    homepage = "https://01.org/linuxgraphics/";
+    changelog = "https://gitlab.freedesktop.org/drm/igt-gpu-tools/-/blob/v${version}/NEWS";
+    homepage = "https://drm.pages.freedesktop.org/igt-gpu-tools/";
     description = "Tools for development and testing of the Intel DRM driver";
     license = licenses.mit;
     platforms = [ "x86_64-linux" "i686-linux" ];

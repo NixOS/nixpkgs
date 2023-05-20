@@ -7,7 +7,7 @@
 , openjpeg
 , pytestCheckHook
 , pythonOlder
-, scikitimage
+, scikit-image
 , setuptools
 }:
 
@@ -36,7 +36,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     lxml
     pytestCheckHook
-    scikitimage
+    scikit-image
   ];
 
   postConfigure = ''

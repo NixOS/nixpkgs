@@ -37,13 +37,13 @@
 
 stdenv.mkDerivation rec {
   pname = "easyeffects";
-  version = "7.0.3";
+  version = "7.0.4";
 
   src = fetchFromGitHub {
     owner = "wwmm";
     repo = "easyeffects";
     rev = "v${version}";
-    sha256 = "sha256-vHswNRu4JrW95nZaEBs95exUqslO0dyIr41E1gJhHow=";
+    sha256 = "sha256-JaqwzCWVnvFzzGHnmzYwe3occ9iw7s9xCH54eVKEuOs=";
   };
 
   nativeBuildInputs = [

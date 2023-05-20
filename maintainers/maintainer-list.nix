@@ -50,7 +50,8 @@
     More fields may be added in the future, however, in order to comply with GDPR this file should stay as minimal as possible.
 
     When editing this file:
-     * keep the list alphabetically sorted
+     * keep the list alphabetically sorted, check with:
+         nix-instantiate --eval maintainers/scripts/check-maintainers-sorted.nix
      * test the validity of the format with:
          nix-build lib/tests/maintainers.nix
 
@@ -1066,6 +1067,12 @@
     github = "anoadragon453";
     githubId = 1342360;
     name = "Andrew Morgan";
+  };
+  anomalocaris = {
+    email = "duncan@anomalocaris.xyz";
+    github = "Anomalocaridid";
+    githubId = 29845794;
+    name = "Duncan Russell";
   };
   anpin = {
     email = "pavel@anpin.fyi";
@@ -2763,7 +2770,7 @@
     name = "Hubert Jasudowicz";
   };
   chkno = {
-    email = "chuck@intelligence.org";
+    email = "scottworley@scottworley.com";
     github = "chkno";
     githubId = 1118859;
     name = "Scott Worley";
@@ -3483,6 +3490,12 @@
     github = "danielfullmer";
     githubId = 1298344;
     name = "Daniel Fullmer";
+  };
+  daniyalsuri6 = {
+    email = "daniyal.suri@gmail.com";
+    github = "daniyalsuri6";
+    githubId = 107034852;
+    name = "Daniyal Suri";
   };
   dansbandit = {
     github = "dansbandit";
@@ -6606,6 +6619,12 @@
     github = "Icy-Thought";
     githubId = 53710398;
   };
+  idlip = {
+    name = "Dilip";
+    email = "igoldlip@gmail.com";
+    github = "idlip";
+    githubId = 117019901;
+  };
   idontgetoutmuch = {
     email = "dominic@steinitz.org";
     github = "idontgetoutmuch";
@@ -7081,7 +7100,7 @@
   };
   jayesh-bhoot = {
     name = "Jayesh Bhoot";
-    email = "jayesh@bhoot.sh";
+    email = "jb@jayeshbhoot.com";
     github = "jayeshbhoot";
     githubId = 1915507;
   };
@@ -8255,6 +8274,12 @@
     github = "KibaFox";
     githubId = 16481032;
     name = "Kiba Fox";
+  };
+  kidanger = {
+    email = "angerj.dev@gmail.com";
+    github = "kidanger";
+    githubId = 297479;
+    name = "Jérémy Anger";
   };
   kidd = {
     email = "raimonster@gmail.com";
@@ -11205,6 +11230,16 @@
     githubId = 13920346;
     name = "Sébastien Iooss";
   };
+  networkexception = {
+    name = "networkException";
+    email = "nix@nwex.de";
+    matrix = "@networkexception:chat.upi.li";
+    github = "networkException";
+    githubId = 42888162;
+    keys = [{
+      fingerprint = "A0B9 48C5 A263 55C2 035F  8567 FBB7 2A94 52D9 1A72";
+    }];
+  };
   neverbehave = {
     email = "i@never.pet";
     github = "NeverBehave";
@@ -11262,6 +11297,11 @@
     email = "nickcao@nichi.co";
     github = "NickCao";
     githubId = 15247171;
+  };
+  nickgerace = {
+    name = "Nick Gerace";
+    github = "nickgerace";
+    githubId = 39320683;
   };
   nickhu = {
     email = "me@nickhu.co.uk";

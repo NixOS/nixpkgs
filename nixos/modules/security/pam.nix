@@ -167,10 +167,10 @@ let
         type = types.bool;
         description = lib.mdDoc ''
           If true, prompt for a password before reading a fingerprint.
-          If `allowNullPassword` is also set to true, then if an
-          empty password is entered, pam will proceed to
+          If `allowNullPassword` is also set to true, then if an 
+          empty password is entered, pam will proceed to 
           fingerprint authentication. These two options combined
-          allows use of a password if you cannot `Ctrl+C`
+          allows use of a password if you cannot `Ctrl+C` 
           fingerprint authentication (due to the
           lack of a shell).
         '';

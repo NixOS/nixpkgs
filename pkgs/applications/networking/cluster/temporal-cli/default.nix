@@ -3,20 +3,20 @@
 let
   tctl-next = buildGoModule rec {
     pname = "tctl-next";
-    version = "0.8.0";
+    version = "0.9.0";
 
     src = fetchFromGitHub {
       owner = "temporalio";
       repo = "cli";
       rev = "v${version}";
-      hash = "sha256-yQnFw3uYGKrTevGFVZNgkWwKCCWiGy0qwJJOmnMpTJQ=";
+      hash = "sha256-zgi1wNx7fWf/iFGKaVffcXnC90vUz+mBT6HhCGdXMa0=";
     };
 
-    vendorHash = "sha256-ld59ADHnlgsCA2mzVhdq6Vb2aa9rApvFxs3NpHiCKxo=";
+    vendorHash = "sha256-muTNwK2Sb2+0df/6DtAzT14gwyuqa13jkG6eQaqhSKg=";
 
     nativeBuildInputs = [ installShellFiles ];
 
-    excludedPackages = [ "./cmd/docgen" ];
+    excludedPackages = [ "./cmd/docgen" "./tests" ];
 
     ldflags = [
       "-s"

@@ -620,6 +620,7 @@ broken-packages:
   - cassava-conduit
   - cassava-records
   - cassette
+  - castagnoli #  failure  in job https://hydra.nixos.org/build/219826672 at 2023-05-19
   - castle
   - catamorphism
   - Catana
@@ -5021,7 +5022,6 @@ broken-packages:
   - sqlvalue-list
   - srcinst
   - srt-dhall
-  - srtree # dependency missing in job https://hydra.nixos.org/build/219208055 at 2023-05-10
   - sscan
   - ssh
   - ssh-tunnel

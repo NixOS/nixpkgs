@@ -55,6 +55,7 @@ let
   inherit (cudaPackages) cudatoolkit cudaFlags cudnn nccl;
 in
 
+assert cudaSupport -> stdenv.isLinux;
 assert cudaSupport -> (cudaPackages.cudaMajorVersion == "11");
 
 # confirm that cudatoolkits are sync'd across dependencies
@@ -133,7 +134,7 @@ let
 in buildPythonPackage rec {
   pname = "torch";
   # Don't forget to update torch-bin to the same version.
-  version = "2.0.0";
+  version = "2.0.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.8.0";
@@ -149,7 +150,7 @@ in buildPythonPackage rec {
     repo = "pytorch";
     rev = "refs/tags/v${version}";
     fetchSubmodules = true;
-    hash = "sha256-cSw7+AYBUcZLz3UyK/+JWWjQxKwVBXcFvBq0XAcL3tE=";
+    hash = "sha256-xUj77yKz3IQ3gd/G32pI4OhL3LoN1zS7eFg0/0nZp5I=";
   };
 
   patches = lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [
@@ -414,7 +415,7 @@ in buildPythonPackage rec {
     homepage = "https://pytorch.org/";
     license = licenses.bsd3;
     maintainers = with maintainers; [ teh thoughtpolice tscholak ]; # tscholak esp. for darwin-related builds
-    platforms = with platforms; linux ++ lib.optionals (!cudaSupport || !rocmSupport) darwin;
+    platforms = with platforms; linux ++ lib.optionals (!cudaSupport && !rocmSupport) darwin;
     broken = rocmSupport && cudaSupport; # CUDA and ROCm are mutually exclusive
   };
 }

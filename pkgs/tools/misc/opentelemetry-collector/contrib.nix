@@ -23,9 +23,10 @@ buildGoModule rec {
   # there is a nested go.mod
   sourceRoot = "source/cmd/otelcontribcol";
 
-  # CGO_ENABLED=0 required for mac - "error: 'TARGET_OS_MAC' is not defined, evaluates to 0"
-  # https://github.com/shirou/gopsutil/issues/976
-  CGO_ENABLED = if stdenv.isLinux then 1 else 0;
+  # upstream strongly recommends disabling CGO
+  # additionally dependencies have had issues when GCO was enabled that weren't caught upstream
+  # https://github.com/open-telemetry/opentelemetry-collector/blob/main/CONTRIBUTING.md#using-cgo
+  CGO_ENABLED = 0;
 
   # journalctl is required in-$PATH for the journald receiver tests.
   nativeCheckInputs = lib.optionals stdenv.isLinux [ systemdMinimal ];

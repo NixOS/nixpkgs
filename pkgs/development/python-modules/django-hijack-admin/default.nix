@@ -1,5 +1,5 @@
 { lib, buildPythonPackage, fetchFromGitHub, python,
-  django_hijack, django_nose }:
+  django-hijack, django_nose }:
 buildPythonPackage rec {
   pname = "django-hijack-admin";
   version = "2.1.10";
@@ -13,7 +13,7 @@ buildPythonPackage rec {
   };
 
   nativeCheckInputs = [ django_nose ];
-  propagatedBuildInputs = [ django_hijack ];
+  propagatedBuildInputs = [ django-hijack ];
 
   checkPhase = ''
     runHook preCheck

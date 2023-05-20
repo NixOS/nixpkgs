@@ -2,14 +2,14 @@
 
 buildGoModule rec {
   pname = "velero";
-  version = "1.10.3";
+  version = "1.11.0";
 
 
   src = fetchFromGitHub {
     owner = "vmware-tanzu";
     repo = "velero";
     rev = "v${version}";
-    sha256 = "sha256-tNWFZrvq9bDV00TSM+q9D05Tc25judNzRxn0nU/RnCc=";
+    sha256 = "sha256-vrRVNVcNahTC+HSHr7Bw3WedNhe+SSX03P65C5xiUnw=";
   };
 
   ldflags = [
@@ -20,7 +20,7 @@ buildGoModule rec {
     "-X github.com/vmware-tanzu/velero/pkg/buildinfo.GitSHA=none"
   ];
 
-  vendorHash = "sha256-8yyZ6qIQqpl9PSvaCwhU/i2ZwRe171oMVGqFWeOZExo=";
+  vendorHash = "sha256-WkJk+46+9U4TegDnGtQ+EoqqV/D7githz2pJvxCbV4c=";
 
   excludedPackages = [ "issue-template-gen" "release-tools" "v1" "velero-restic-restore-helper" ];
 

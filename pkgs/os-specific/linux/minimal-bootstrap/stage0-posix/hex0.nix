@@ -17,7 +17,7 @@ derivationWithMeta {
     description = "Minimal assembler for bootstrapping";
     homepage = "https://github.com/oriansj/stage0-posix";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ emilytrau ];
+    maintainers = teams.minimal-bootstrap.members;
     platforms = [ "i686-linux" ];
   };
 
