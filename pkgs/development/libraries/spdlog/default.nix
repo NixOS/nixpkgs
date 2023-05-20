@@ -1,5 +1,8 @@
 { lib, stdenv, fetchFromGitHub, fetchpatch, cmake, fmt
 , staticBuild ? stdenv.hostPlatform.isStatic
+
+# tests
+, bear, tiledb
 }:
 
 stdenv.mkDerivation rec {
@@ -45,6 +48,10 @@ stdenv.mkDerivation rec {
   '';
 
   doCheck = true;
+
+  passthru.tests = {
+    inherit bear tiledb;
+  };
 
   meta = with lib; {
     description    = "Very fast, header only, C++ logging library";
