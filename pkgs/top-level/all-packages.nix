@@ -6243,12 +6243,7 @@ with pkgs;
 
   crlfuzz = callPackage ../tools/security/crlfuzz { };
 
-  hedgedoc = callPackage ../servers/web-apps/hedgedoc {
-    inherit (callPackage ../development/tools/yarn2nix-moretea/yarn2nix {
-      nodejs = nodejs_16;
-    }) mkYarnPackage;
-    nodejs = nodejs_16;
-  };
+  hedgedoc = callPackage ../servers/web-apps/hedgedoc { };
 
   colord = callPackage ../tools/misc/colord { };
 
