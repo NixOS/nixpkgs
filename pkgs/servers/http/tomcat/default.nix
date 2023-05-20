@@ -26,6 +26,7 @@ let
       platforms = platforms.all;
       maintainers = [ ];
       license = [ licenses.asl20 ];
+      sourceProvenance = with sourceTypes; [ binaryBytecode ];
     };
   });
 
