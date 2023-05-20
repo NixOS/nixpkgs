@@ -58,5 +58,6 @@ qtModule {
     knownVulnerabilities = [
       "QtWebkit upstream is unmaintained and receives no security updates, see https://blogs.gnome.org/mcatanzaro/2022/11/04/stop-using-qtwebkit/"
     ];
+    hydraPlatforms = [ ]; # The security risk is very high and the time to build is high.
   };
 }
