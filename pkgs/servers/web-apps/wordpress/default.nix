@@ -5,8 +5,8 @@
     hash = "sha256-eSi0qwzXoJ1wYUzi34s7QbBbwRm2hfXoyGFivhPBq5o=";
   };
   wordpress6_1 = {
-    version = "6.1.1";
-    hash = "sha256-IR6FSmm3Pd8cCHNQTH1oIaLYsEP1obVjr0bDJkD7H60=";
+    version = "6.1.2";
+    hash = "sha256-ozpuCVeni71CUylmUBk8wVo5ygZAKY7IdZ12DKbpSrw=";
   };
   wordpress6_2 = {
     version = "6.2.1";
