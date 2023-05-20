@@ -57,6 +57,7 @@ let
     deepin-terminal = callPackage ./apps/deepin-terminal { };
     deepin-reader = callPackage ./apps/deepin-reader { };
     deepin-voice-note = callPackage ./apps/deepin-voice-note { };
+    deepin-screensaver = callPackage ./apps/deepin-screensaver { };
 
     #### Go Packages
     go-lib = callPackage ./go-package/go-lib { };
