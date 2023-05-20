@@ -28575,6 +28575,8 @@ with pkgs;
 
   papirus-folders = callPackage ../data/misc/papirus-folders { };
 
+  papirus-nord = callPackage ../data/icons/papirus-nord { };
+
   plasma-overdose-kde-theme = callPackage ../data/themes/plasma-overdose-kde-theme { };
 
   papis = with python3Packages; toPythonApplication papis;
