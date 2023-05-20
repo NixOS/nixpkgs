@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "nebula";
-  version = "1.6.1";
+  version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "slackhq";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-IsLSlQsrfw3obkz4jHL23BRQY2fviGbPEvs5j0zkdX0=";
+    sha256 = "sha256-B0i980mfbfC5p4mIsW3L4v1ilajxtZbp1DQowFw3ghw=";
   };
 
-  vendorSha256 = "sha256-GvMiOEC3Y/pGG++Z+XCgLVADKymUR9shDxjx3xIz8u0=";
+  vendorHash = "sha256-VZzSdl8R1y7rCF2vz7e+5nAkb3wlJymNWCXwZZUvg4A=";
 
   subPackages = [ "cmd/nebula" "cmd/nebula-cert" ];
 
