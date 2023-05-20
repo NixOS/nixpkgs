@@ -17,7 +17,7 @@ In any manpage, commands, flags and arguments to the *current* executable should
  - Use `Cm` to mark literal string arguments, e.g. the `boot` command argument passed to `nixos-rebuild`.
  - Optional flags or arguments should be marked with `Op`. This includes optional repeating arguments.
  - Required flags or arguments should not be marked.
- - Mutually exclusive groups of arguments should be enclosed in curly brackets, preferrably created with `Bro`/`Brc` blocks.
+ - Mutually exclusive groups of arguments should be enclosed in curly brackets, preferably created with `Bro`/`Brc` blocks.
 
 When an argument is used in an example it should be marked up with `Ar` again to differentiate it from a constant. For example, a command with a `--host name` flag that calls ssh to retrieve the host's local time would signify this thusly:
 ```
@@ -45,7 +45,7 @@ Larger code blocks or those that cannot be shown inline should use indented lite
 ...
 .Ed
 ```
-Contents of code blocks may be marked up further, e.g. if they refer to arguments that will be subsituted into them:
+Contents of code blocks may be marked up further, e.g. if they refer to arguments that will be substituted into them:
 ```
 .Bd -literal -offset indent
 {

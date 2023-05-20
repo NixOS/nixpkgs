@@ -15,7 +15,7 @@ in
 # ghc.isGhcjs implies that we are using ghcjs, a project separate from GHC.
 # (mere) stdenv.hostPlatform.isGhcjs means that we are using GHC's JavaScript
 # backend. The latter is a normal cross compilation backend and needs little
-# special accomodation.
+# special accommodation.
 , dontStrip ? (ghc.isGhcjs or false || stdenv.hostPlatform.isGhcjs)
 , version, revision ? null
 , sha256 ? null

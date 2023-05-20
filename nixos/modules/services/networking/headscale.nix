@@ -393,7 +393,7 @@ in {
               type = types.nullOr types.path;
               default = null;
               description = lib.mdDoc ''
-                Path to a file containg ACL policies.
+                Path to a file containing ACL policies.
               '';
             };
           };
