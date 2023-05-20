@@ -1,12 +1,12 @@
 { lib, stdenv, fetchurl, makeWrapper, jre, graphviz }:
 
 stdenv.mkDerivation rec {
-  version = "1.2023.6";
+  version = "1.2023.7";
   pname = "plantuml";
 
   src = fetchurl {
     url = "https://github.com/plantuml/plantuml/releases/download/v${version}/plantuml-pdf-${version}.jar";
-    sha256 = "sha256-Ce9e0B+Sb8o7a5rO5RC7f1TzeEjXSC25FdZ3aPLKlu4=";
+    sha256 = "sha256-EWM3wL2TTr1r8Gb9m4PK+KnRD6YtMDGHWrXAzSkGbd0=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
