@@ -11,7 +11,7 @@ php80.buildComposerProject (finalAttrs: {
     sha256 = "sha256-/RffdYgl2cs8mlq4vHtzUZ6j0viV8Ot/cB/cB1dstFM=";
   };
 
-  vendorHash = "sha256-bVRjCM+WZX3lLBXcISM0OlNoIWU8UvD8fDzs3GNo5Ws=";
+  vendorHash = "sha256-Kc+7bqUGR7sfiUQZCgg0G9Yny9TfRo9avdhp8Ck04Ko=";
 
   meta = with lib; {
     description = "The swiss army knife for Magento1/OpenMage developers";
@@ -19,5 +19,6 @@ php80.buildComposerProject (finalAttrs: {
     homepage = "https://magerun.net/";
     changelog = "https://magerun.net/category/magerun/";
     maintainers = teams.php.members;
+    platforms = lib.platforms.all;
   };
 })
