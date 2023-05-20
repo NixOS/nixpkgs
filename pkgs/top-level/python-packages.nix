@@ -9215,8 +9215,6 @@ self: super: with self; {
 
   pysftp = callPackage ../development/python-modules/pysftp { };
 
-  pysha3 = callPackage ../development/python-modules/pysha3 { };
-
   pyshp = callPackage ../development/python-modules/pyshp { };
 
   pyside2-tools = toPythonModule (callPackage ../development/python-modules/pyside2-tools {
