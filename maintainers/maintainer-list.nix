@@ -15052,6 +15052,12 @@
     githubId = 1437166;
     name = "Xia Bin";
   };
+  sochotnicky = {
+    email = "stanislav+github@ochotnicky.com";
+    github = "sochotnicky";
+    githubId = 55726;
+    name = "Stanislav Ochotnický";
+  };
   softinio = {
     email = "code@softinio.com";
     github = "softinio";
