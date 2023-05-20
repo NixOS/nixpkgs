@@ -9,7 +9,7 @@
 , i2c-tools
 , libmodbus
 , libtool
-, libusb-compat-0_1
+, libusb1
 , makeWrapper
 , neon
 , net-snmp
@@ -34,14 +34,14 @@ stdenv.mkDerivation rec {
       src = ./hardcode-paths.patch;
       avahi = "${avahi}/lib";
       freeipmi = "${freeipmi}/lib";
-      libusb = "${libusb-compat-0_1}/lib";
+      libusb = "${libusb1}/lib";
       neon = "${neon}/lib";
       libmodbus = "${libmodbus}/lib";
       netsnmp = "${net-snmp.lib}/lib";
     })
   ];
 
-  buildInputs = [ neon libusb-compat-0_1 openssl udev avahi freeipmi libmodbus i2c-tools net-snmp gd ];
+  buildInputs = [ neon libusb1 openssl udev avahi freeipmi libmodbus i2c-tools net-snmp gd ];
 
   nativeBuildInputs = [ autoreconfHook libtool pkg-config makeWrapper ];
 
