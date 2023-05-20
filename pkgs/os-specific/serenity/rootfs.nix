@@ -20,13 +20,16 @@ stdenv.mkDerivation rec {
       --replace "gcc-ar" "ar" \
       --replace "gcc-nm" "nm" \
       --replace "gcc-ranlib" "ranlib"
+    # don't build darwin-specific host development tools
+    substituteInPlace Userland/Libraries/LibCore/CMakeLists.txt \
+      --replace "APPLE" "FALSE"
     echo "" > Userland/Libraries/LibC/stubs.cpp
     echo "" > Tests/LibELF/CMakeLists.txt
   '';
 
   depsBuildBuild =
     [
-      buildPackages.stdenv.cc
+      buildPackages.gccStdenv.cc
       pkgsBuildBuild.cmake
       pkgsBuildBuild.ninja
     ]

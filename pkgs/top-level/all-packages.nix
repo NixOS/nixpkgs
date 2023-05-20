@@ -40881,7 +40881,7 @@ with pkgs;
 
   serenity = callPackage ../os-specific/serenity { };
   serenityCross = callPackage ../os-specific/serenity {
-    stdenv = crossLibcStdenv;
+    stdenv = gccCrossLibcStdenv;
   };
 
   omnisharp-roslyn = callPackage ../development/tools/omnisharp-roslyn { };

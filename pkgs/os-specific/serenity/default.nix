@@ -4,8 +4,7 @@
 , runCommand
 , callPackage
 , buildPackages
-, pkgsBuildBuild
-, removeReferencesTo
+, patchelf
 }:
 let
   rev = "0bbd9040efbe97850a18a49a9cea25498d727f13";
@@ -41,11 +40,8 @@ let
 
       dontUnpack = true;
 
-      buildInputs = builtins.attrValues deps;
-
       nativeBuildInputs = [
-        removeReferencesTo
-        pkgsBuildBuild.autoPatchelfHook
+        patchelf
       ];
 
       installPhase = ''
@@ -61,7 +57,10 @@ let
       '';
 
       preFixup = ''
-        find $out/lib -type f -exec remove-references-to -t ${rootfs} {} +
+        for i in $out/lib/*.so*; do
+          echo "setting RPATH of $i"
+          patchelf  --set-rpath "${lib.makeLibraryPath (builtins.attrValues deps)}" $i || true
+        done
       '';
 
       meta = with lib; {
@@ -97,10 +96,16 @@ let
     pname = "DynamicLoader";
     inherit version;
 
+    nativeBuildInputs = [ patchelf ];
+
     dontUnpack = true;
     installPhase = ''
       mkdir -p $out/lib
       cp -r ${rootfs}/lib/Loader.* $out/lib
+    '';
+
+    preFixup = ''
+      patchelf --set-rpath "" $out/lib/Loader.so
     '';
 
     meta = with lib; {
