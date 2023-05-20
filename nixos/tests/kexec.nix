@@ -8,10 +8,6 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
     node1 = { ... }: {
       virtualisation.vlans = [ ];
       virtualisation.memorySize = 4 * 1024;
-      virtualisation.useBootLoader = true;
-      virtualisation.useEFIBoot = true;
-      boot.loader.systemd-boot.enable = true;
-      boot.loader.efi.canTouchEfiVariables = true;
     };
 
     node2 = { modulesPath, ... }: {
