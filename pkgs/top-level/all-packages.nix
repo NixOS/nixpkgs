@@ -35715,6 +35715,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) IOKit;
   };
 
+  go-exploitdb = callPackage ../tools/security/go-exploitdb { };
+
   groestlcoin  = libsForQt5.callPackage ../applications/blockchains/groestlcoin {
     boost = boost17x;
     withGui = true;
