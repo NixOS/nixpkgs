@@ -1,5 +1,22 @@
-{ lib, stdenv, fetchFromGitHub, cmake, gettext, pkg-config, gpgme, libsolv, openssl, check
-, json_c, libmodulemd, libsmartcols, sqlite, librepo, libyaml, rpm, zchunk }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, gettext
+, pkg-config
+, gpgme
+, libsolv
+, openssl
+, check
+, json_c
+, libmodulemd
+, libsmartcols
+, sqlite
+, librepo
+, libyaml
+, rpm
+, zchunk
+}:
 
 stdenv.mkDerivation rec {
   pname = "libdnf";
@@ -8,8 +25,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "rpm-software-management";
     repo = pname;
-    rev = version;
-    sha256 = "sha256-DQXyMzkYxqMxSIWEyBKb5vQfelfxLMy4QeHQPWJWx/o=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-DQXyMzkYxqMxSIWEyBKb5vQfelfxLMy4QeHQPWJWx/o=";
   };
 
   nativeBuildInputs = [
@@ -59,8 +76,9 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "Package management library.";
+    description = "Package management library";
     homepage = "https://github.com/rpm-software-management/libdnf";
+    changelog = "https://github.com/rpm-software-management/libdnf/releases/tag/${version}";
     license = licenses.gpl2Plus;
     platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ rb2k ];
