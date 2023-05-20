@@ -667,6 +667,8 @@ with pkgs;
 
   erosmb = callPackage ../tools/security/erosmb { };
 
+  oauth2c = callPackage ../tools/security/oauth2c { };
+
   octosuite = callPackage ../tools/security/octosuite { };
 
   octosql = callPackage ../tools/misc/octosql { };
