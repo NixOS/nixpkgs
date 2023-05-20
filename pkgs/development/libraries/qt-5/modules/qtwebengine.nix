@@ -26,6 +26,8 @@
 , pipewireSupport ? stdenv.isLinux
 , pipewire_0_2
 , postPatch ? ""
+, kerberosSupport ? true
+, libkrb5
 }:
 
 qtModule {
@@ -123,7 +125,8 @@ qtModule {
 
   qmakeFlags = [ "--" "-system-ffmpeg" ]
     ++ lib.optional pipewireSupport "-webengine-webrtc-pipewire"
-    ++ lib.optional enableProprietaryCodecs "-proprietary-codecs";
+    ++ lib.optional enableProprietaryCodecs "-proprietary-codecs"
+    ++ lib.optional kerberosSupport "-webengine-kerberos";
 
   propagatedBuildInputs = [
     # Image formats
@@ -159,6 +162,8 @@ qtModule {
   ] ++ lib.optionals pipewireSupport [
     # Pipewire
     pipewire_0_2
+  ] ++ lib.optionals kerberosSupport [
+    libkrb5
   ]
 
   # FIXME These dependencies shouldn't be needed but can't find a way
