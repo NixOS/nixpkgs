@@ -56,6 +56,15 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-jeuok3sspLQRnLCYvsmIbjhuf00eSS/4FjmzlRyzYzc=";
   };
 
+  patches = [
+    # Fix compatiblity with fmt 10.0. Remove with the next release
+    (fetchpatch {
+      url = "https://gitlab.com/mbunkus/mkvtoolnix/-/commit/24716ce95bf5b10d685611de23489045cf2ca5cc.patch";
+      hash = "sha256-vOm3FmXL3mHzs3RHCJ9gbTLSe3xhSXo8IfgA+s0cFjY=";
+      includes = [ "src/common/codec.h" ];
+    })
+  ];
+
   nativeBuildInputs = [
     autoreconfHook
     docbook_xsl
