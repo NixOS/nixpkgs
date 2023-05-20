@@ -6,6 +6,8 @@
 , zlib
 , readline
 , flex
+, curl
+, json_c
 }:
 
 stdenv.mkDerivation rec {
@@ -21,7 +23,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ flex ];
 
-  buildInputs = [ postgresql openssl zlib readline ];
+  buildInputs = [ postgresql openssl zlib readline curl json_c ];
 
   installPhase = ''
     mkdir -p $out/{bin,lib,share/postgresql/extension}
