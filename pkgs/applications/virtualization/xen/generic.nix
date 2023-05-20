@@ -261,5 +261,6 @@ stdenv.mkDerivation (rec {
     ] ++ lib.optionals (lib.versionOlder version "4.15") [
       "This version of Xen has reached its end of life. See https://xenbits.xen.org/docs/unstable/support-matrix.html"
     ];
+    hydraPlatforms = [ ]; # Do not build them until someone maintain them seriously.
   } // (config.meta or {});
 } // removeAttrs config [ "xenfiles" "buildInputs" "patches" "postPatch" "meta" ])
