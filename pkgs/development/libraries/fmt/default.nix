@@ -1,5 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
 , enableShared ? !stdenv.hostPlatform.isStatic
+
+# tests
+, mpd
+, openimageio
+, fcitx5
+, spdlog
 }:
 
 let
@@ -26,6 +35,10 @@ let
       ];
 
       doCheck = true;
+
+      passthru.tests = {
+        inherit mpd openimageio fcitx5 spdlog;
+      };
 
       meta = with lib; {
         description = "Small, safe and fast formatting library";
