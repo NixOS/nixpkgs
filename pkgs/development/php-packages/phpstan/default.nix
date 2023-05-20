@@ -11,7 +11,7 @@ php.buildComposerProject (finalAttrs: {
     hash = "sha256-Br8NTcLtkC0h64O9wlPrqqdv8IGl/kWkKgfan977epg=";
   };
 
-  vendorHash = "sha256-dQk2B+n2RS7a+DW0XUmpOu6PhlSK5eDS72R5szZx4Bo=";
+  vendorHash = "sha256-rZv0K/RDUvDi7OcRC32GipF9Tq2Ci7nsydisN1p6OQE=";
 
   meta = with lib; {
     changelog = "https://github.com/phpstan/phpstan/releases/tag/${finalAttrs.version}";
@@ -26,5 +26,6 @@ php.buildComposerProject (finalAttrs: {
     license = licenses.mit;
     homepage = "https://github.com/phpstan/phpstan";
     maintainers = teams.php.members;
+    platforms = lib.platforms.all;
   };
 })
