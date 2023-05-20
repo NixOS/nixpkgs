@@ -5966,10 +5966,6 @@ self: super: with self; {
 
   manuel = callPackage ../development/python-modules/manuel { };
 
-  manticore = callPackage ../development/python-modules/manticore {
-    inherit (pkgs) z3;
-  };
-
   mapbox = callPackage ../development/python-modules/mapbox { };
 
   mapbox-earcut = callPackage ../development/python-modules/mapbox-earcut { };
@@ -12793,8 +12789,6 @@ self: super: with self; {
   wasabi = callPackage ../development/python-modules/wasabi { };
 
   wasserstein = callPackage ../development/python-modules/wasserstein { };
-
-  wasm = callPackage ../development/python-modules/wasm { };
 
   wasmerPackages = pkgs.recurseIntoAttrs (callPackage ../development/python-modules/wasmer { });
   inherit (self.wasmerPackages) wasmer wasmer-compiler-cranelift wasmer-compiler-llvm wasmer-compiler-singlepass;
