@@ -8,14 +8,14 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "hvm";
-  version = "1.0.8";
+  version = "1.0.9";
 
   src = fetchCrate {
     inherit pname version;
-    hash = "sha256-dPO3GWDojuz7nilOr09xC6tPhBZ95wjAk0ErItzAbxw=";
+    hash = "sha256-dO0GzbMopX84AKOtJYYW6vojcs4kYcZ8LQ4tXEgUN7I=";
   };
 
-  cargoHash = "sha256-XsKVXlceg3HHGalHcXfmJPKhAQm4DqdsJ2c+NF+AOI4=";
+  cargoHash = "sha256-RQnyVRHWrqnKcI3Jy593jDTydG1nGyrScsqSNyJTDJk=";
 
   patches = [
     # see https://github.com/higherorderco/hvm/pull/220

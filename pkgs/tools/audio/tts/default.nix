@@ -8,19 +8,21 @@
 let
   python = python3.override {
     packageOverrides = self: super: {
+      torch = super.torch-bin;
+      torchvision = super.torchvision-bin;
     };
   };
 in
 python.pkgs.buildPythonApplication rec {
   pname = "tts";
-  version = "0.13.3";
+  version = "0.14.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "coqui-ai";
     repo = "TTS";
     rev = "refs/tags/v${version}";
-    hash = "sha256-cu714/XtVqqlHN2CmUObcNFG6Vdi9VqC4at/HB8euDs=";
+    hash = "sha256-AVU4ULz++t9850pYeNrG5HKNvUZcMld4O1/zu697rzk=";
   };
 
   postPatch = let
@@ -57,6 +59,7 @@ python.pkgs.buildPythonApplication rec {
     bnnumerizer
     bnunicodenormalizer
     coqpit
+    einops
     flask
     fsspec
     g2pkk
@@ -65,6 +68,7 @@ python.pkgs.buildPythonApplication rec {
     inflect
     jamo
     jieba
+    k-diffusion
     librosa
     matplotlib
     mecab-python3
@@ -81,6 +85,7 @@ python.pkgs.buildPythonApplication rec {
     torchaudio-bin
     tqdm
     trainer
+    transformers
     unidic-lite
     webrtcvad
   ];

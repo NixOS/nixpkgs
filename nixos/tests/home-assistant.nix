@@ -64,7 +64,6 @@ in {
         # include some popular integrations, that absolutely shouldn't break
         esphome = {};
         knx = {};
-        matter = {};
         shelly = {};
         zha = {};
 
