@@ -33,12 +33,19 @@ in
       }
     ];
 
-    systemd.services.nix-optimise = lib.mkIf config.nix.enable {
-      description = "Nix Store Optimiser";
-      # No point this if the nix daemon (and thus the nix store) is outside
-      unitConfig.ConditionPathIsReadWrite = "/nix/var/nix/daemon-socket";
-      serviceConfig.ExecStart = "${config.nix.package}/bin/nix-store --optimise";
-      startAt = lib.optionals cfg.automatic cfg.dates;
+    systemd = lib.mkIf config.nix.enable {
+      services.nix-optimise = {
+        description = "Nix Store Optimiser";
+        # No point this if the nix daemon (and thus the nix store) is outside
+        unitConfig.ConditionPathIsReadWrite = "/nix/var/nix/daemon-socket";
+        serviceConfig.ExecStart = "${config.nix.package}/bin/nix-store --optimise";
+        startAt = lib.optionals cfg.automatic cfg.dates;
+      };
+
+      timers.nix-optimise.timerConfig = {
+        Persistent = true;
+        RandomizedDelaySec = 1800;
+      };
     };
   };
 }
