@@ -9,7 +9,7 @@ with pkgs.lib;
 let
   # A testScript fragment that prepares a disk with some empty, unpartitioned
   # space. and uses it to boot the test with. Takes a single argument `machine`
-  # from which the diskImage is extraced.
+  # from which the diskImage is extracted.
   useDiskImage = machine: ''
     import os
     import shutil

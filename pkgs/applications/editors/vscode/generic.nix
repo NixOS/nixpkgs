@@ -192,7 +192,7 @@ let
 
     meta = meta // {
       description = ''
-        Wrapped variant of ${pname} which launches in a FHS compatible envrionment.
+        Wrapped variant of ${pname} which launches in a FHS compatible environment.
         Should allow for easy usage of extensions without nix-specific modifications.
       '';
     };

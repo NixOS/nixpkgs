@@ -207,7 +207,7 @@ in
               export LABELS_CURRENT="$(cat $LABELS_FILE 2>/dev/null || echo 0)"
 
               if [ ! -e "$INSTANCE_DIR/.runner" ] || [ "$LABELS_WANTED" != "$LABELS_CURRENT" ]; then
-                # remove existing registration file, so that changing the labels forces a re-registation
+                # remove existing registration file, so that changing the labels forces a re-registration
                 rm -v "$INSTANCE_DIR/.runner" || true
 
                 # perform the registration
