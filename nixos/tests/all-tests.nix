@@ -563,6 +563,7 @@ in {
   pacemaker = handleTest ./pacemaker.nix {};
   packagekit = handleTest ./packagekit.nix {};
   pam-file-contents = handleTest ./pam/pam-file-contents.nix {};
+  pam-fingerprint-order = handleTest ./pam/pam-fingperint-order.nix {};
   pam-oath-login = handleTest ./pam/pam-oath-login.nix {};
   pam-u2f = handleTest ./pam/pam-u2f.nix {};
   pam-ussh = handleTest ./pam/pam-ussh.nix {};

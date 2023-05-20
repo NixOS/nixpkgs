@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
   doCheck = false; # fails
 
   passthru.tests = {
-    inherit (nixosTests) pam-file-contents pam-oath-login pam-u2f pam-zfs-key shadow sssd-ldap;
+    inherit (nixosTests) pam-file-contents pam-fingerprint-order pam-oath-login pam-u2f pam-zfs-key shadow sssd-ldap;
   };
 
   meta = with lib; {
