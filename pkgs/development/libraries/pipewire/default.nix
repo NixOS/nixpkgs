@@ -224,7 +224,7 @@ let
       homepage = "https://pipewire.org/";
       license = licenses.mit;
       platforms = platforms.linux;
-      maintainers = with maintainers; [ jtojnar kranzes k900 ];
+      maintainers = with maintainers; [ kranzes k900 ];
     };
   };
 
