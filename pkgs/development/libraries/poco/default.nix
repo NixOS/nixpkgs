@@ -1,4 +1,16 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, zlib, pcre2, expat, sqlite, openssl, unixODBC, libmysqlclient }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, zlib
+, pcre2
+, expat
+, sqlite
+, openssl
+, unixODBC
+, libmysqlclient
+}:
 
 stdenv.mkDerivation rec {
   pname = "poco";
@@ -12,10 +24,23 @@ stdenv.mkDerivation rec {
     rev = "poco-${version}-release";
   };
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
 
-  buildInputs = [ unixODBC libmysqlclient ];
-  propagatedBuildInputs = [ zlib pcre2 expat sqlite openssl ];
+  buildInputs = [
+    unixODBC
+    libmysqlclient
+  ];
+
+  propagatedBuildInputs = [
+    zlib
+    pcre2
+    expat
+    sqlite
+    openssl
+  ];
 
   outputs = [ "out" "dev" ];
 
