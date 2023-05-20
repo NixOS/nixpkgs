@@ -14,7 +14,7 @@ php.buildComposerProject (finalAttrs: {
   # TODO: Open a PR against https://github.com/sebastianbergmann/phpunit
   # Missing `composer.lock` from the repository.
   composerLock = ./composer.lock;
-  vendorHash = "sha256-f4hlAaEah6u9FJ6/G7pj7pHLVnP0oAGFhdZLKpNqdQ8=";
+  vendorHash = "sha256-RkNzRWYByPs8OGPDx7WbZP+LpO56Aj7zYqP4tE5VQs8=";
 
   meta = {
     changelog = "https://github.com/vimeo/psalm/releases/tag/${finalAttrs.version}";
@@ -22,5 +22,6 @@ php.buildComposerProject (finalAttrs: {
     license = lib.licenses.mit;
     homepage = "https://github.com/vimeo/psalm";
     maintainers = lib.teams.php.members;
+    platforms = lib.platforms.all;
   };
 })
