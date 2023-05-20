@@ -1,0 +1,34 @@
+From 5ff43935d87b727fdd2a26781f22d6519bfe0fc2 Mon Sep 17 00:00:00 2001
+From: Tobias Markus <tobias@miglix.eu>
+Date: Sat, 20 May 2023 13:53:03 +0200
+Subject: [PATCH] storage_mon: Fix printf format string on i686
+
+---
+ tools/storage_mon.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/tools/storage_mon.c b/tools/storage_mon.c
+index f829c508..8af28beb 100644
+--- a/tools/storage_mon.c
++++ b/tools/storage_mon.c
+@@ -67,7 +67,7 @@ static void *test_device(const char *device, int verbose, int inject_error_perce
+ 		goto error;
+ 	}
+ 	if (verbose) {
+-		printf("%s: opened %s O_DIRECT, size=%zu\n", device, (flags & O_DIRECT)?"with":"without", devsize);
++		printf("%s: opened %s O_DIRECT, size=%llu\n", device, (flags & O_DIRECT)?"with":"without", devsize);
+ 	}
+ 
+ 	/* Don't fret about real randomness */
+@@ -120,7 +120,7 @@ static void *test_device(const char *device, int verbose, int inject_error_perce
+ 			goto error;
+ 		}
+ 		if (res < (int)sizeof(buffer)) {
+-			fprintf(stderr, "Failed to read %ld bytes from %s, got %d\n", sizeof(buffer), device, res);
++			fprintf(stderr, "Failed to read %zd bytes from %s, got %d\n", sizeof(buffer), device, res);
+ 			goto error;
+ 		}
+ 	}
+-- 
+2.40.1
+

@@ -42,6 +42,11 @@ let
       python3
     ];
 
+    patches = [
+      # See https://github.com/ClusterLabs/resource-agents/pull/1870
+      ./0001-storage_mon-Fix-printf-format-string-on-i686.patch
+    ];
+
     env.NIX_CFLAGS_COMPILE = toString (lib.optionals (stdenv.cc.isGNU && lib.versionAtLeast stdenv.cc.version "12") [
       # Needed with GCC 12 but breaks on darwin (with clang) or older gcc
       "-Wno-error=maybe-uninitialized"
