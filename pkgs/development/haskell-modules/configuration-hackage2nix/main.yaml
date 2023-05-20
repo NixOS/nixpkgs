@@ -708,6 +708,7 @@ supported-platforms:
   linux-mount:                                  [ platforms.linux ]
   linux-namespaces:                             [ platforms.linux ]
   lxc:                                          [ platforms.linux ]
+  memfd:                                        [ platforms.linux ]
   midi-alsa:                                    [ platforms.linux ] # alsa-core only supported on linux
   midisurface:                                  [ platforms.linux ] # alsa-core only supported on linux
   OrderedBits:                                  [ platforms.x86 ] # lacks implementations for non-x86: https://github.com/choener/OrderedBits/blob/401cbbe933b1635aa33e8e9b29a4a570b0a8f044/lib/Data/Bits/Ordered.hs#L316
