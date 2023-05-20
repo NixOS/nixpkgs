@@ -1,13 +1,19 @@
-{
-  lib, stdenv, buildPackages, fetchurl, fetchpatch,
-  runCommand,
-  autoreconfHook,
-  autoconf, automake, libtool, bash,
-  # Enabling python support while cross compiling would be possible, but
-  # the configure script tries executing python to gather info instead of
-  # relying on python3-config exclusively
-  enablePython ? stdenv.hostPlatform == stdenv.buildPlatform, python3, swig,
-  linuxHeaders ? stdenv.cc.libc.linuxHeaders
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, autoreconfHook
+, bash
+, buildPackages
+, libtool
+, linuxHeaders ? stdenv.cc.libc.linuxHeaders
+, python3
+, swig
+
+# Enabling python support while cross compiling would be possible, but the
+# configure script tries executing python to gather info instead of relying on
+# python3-config exclusively
+, enablePython ? stdenv.hostPlatform == stdenv.buildPlatform,
 }:
 
 stdenv.mkDerivation rec {
@@ -16,27 +22,9 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://people.redhat.com/sgrubb/audit/audit-${version}.tar.gz";
-    sha256 = "sha256-tc882rsnhsCLHeNZmjsaVH5V96n5wesgePW0TPROg3g=";
+    hash = "sha256-tc882rsnhsCLHeNZmjsaVH5V96n5wesgePW0TPROg3g=";
   };
 
-  outputs = [ "bin" "dev" "out" "man" ];
-
-  strictDeps = true;
-  depsBuildBuild = [ buildPackages.stdenv.cc ];
-  nativeBuildInputs = [ autoreconfHook ]
-    ++ lib.optionals enablePython [ python3 swig ];
-  buildInputs = [ bash ];
-
-  configureFlags = [
-    # z/OS plugin is not useful on Linux,
-    # and pulls in an extra openldap dependency otherwise
-    "--disable-zos-remote"
-    (if enablePython then "--with-python" else "--without-python")
-    "--with-arm"
-    "--with-aarch64"
-  ];
-
-  enableParallelBuilding = true;
   patches = [
     ./fix-static.patch
 
@@ -55,11 +43,43 @@ stdenv.mkDerivation rec {
       --replace "/usr/include/linux/audit.h" \
                 "${linuxHeaders}/include/linux/audit.h"
   '';
+
+  outputs = [ "bin" "dev" "out" "man" ];
+
+  strictDeps = true;
+
+  depsBuildBuild = [
+    buildPackages.stdenv.cc
+  ];
+
+  nativeBuildInputs = [
+    autoreconfHook
+  ]
+  ++ lib.optionals enablePython [
+    python3
+    swig
+  ];
+
+  buildInputs = [
+    bash
+  ];
+
+  configureFlags = [
+    # z/OS plugin is not useful on Linux, and pulls in an extra openldap
+    # dependency otherwise
+    "--disable-zos-remote"
+    "--with-arm"
+    "--with-aarch64"
+    (if enablePython then "--with-python" else "--without-python")
+  ];
+
+  enableParallelBuilding = true;
+
   meta = {
-    description = "Audit Library";
     homepage = "https://people.redhat.com/sgrubb/audit/";
-    license = lib.licenses.gpl2;
-    platforms = lib.platforms.linux;
+    description = "Audit Library";
+    license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ ];
+    platforms = lib.platforms.linux;
   };
 }
