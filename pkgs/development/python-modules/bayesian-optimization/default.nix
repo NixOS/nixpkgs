@@ -12,6 +12,8 @@
 buildPythonPackage rec {
   pname = "bayesian-optimization";
   version = "1.4.3";
+  format = "setuptools";
+
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
@@ -37,6 +39,7 @@ buildPythonPackage rec {
       A Python implementation of global optimization with gaussian processes
     '';
     homepage = "https://github.com/bayesian-optimization/BayesianOptimization";
+    changelog = "https://github.com/bayesian-optimization/BayesianOptimization/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = [ maintainers.juliendehos ];
   };
