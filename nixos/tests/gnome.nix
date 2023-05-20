@@ -39,7 +39,7 @@ import ./make-test-python.nix ({ pkgs, lib, ...} : {
     };
 
   testScript = { nodes, ... }: let
-    # Keep line widths somewhat managable
+    # Keep line widths somewhat manageable
     user = nodes.machine.config.users.users.alice;
     uid = toString user.uid;
     bus = "DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/${uid}/bus";

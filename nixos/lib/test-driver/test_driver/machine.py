@@ -133,7 +133,7 @@ def retry(fn: Callable, timeout: int = 900) -> None:
 
 
 class StartCommand:
-    """The Base Start Command knows how to append the necesary
+    """The Base Start Command knows how to append the necessary
     runtime qemu options as determined by a particular test driver
     run. Any such start command is expected to happily receive and
     append additional qemu args.
@@ -211,7 +211,7 @@ class StartCommand:
 class NixStartScript(StartCommand):
     """A start script from nixos/modules/virtualiation/qemu-vm.nix
     that also satisfies the requirement of the BaseStartCommand.
-    These Nix commands have the particular charactersitic that the
+    These Nix commands have the particular characteristic that the
     machine name can be extracted out of them via a regex match.
     (Admittedly a _very_ implicit contract, evtl. TODO fix)
     """
@@ -527,7 +527,7 @@ class Machine:
             timeout_str = f"timeout {timeout}"
 
         # While sh is bash on NixOS, this is not the case for every distro.
-        # We explicitely call bash here to allow for the driver to boot other distros as well.
+        # We explicitly call bash here to allow for the driver to boot other distros as well.
         out_command = (
             f"{timeout_str} bash -c {shlex.quote(command)} | (base64 --wrap 0; echo)\n"
         )
