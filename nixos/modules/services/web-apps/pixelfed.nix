@@ -237,7 +237,7 @@ in {
         QUEUE_DRIVER = mkDefault "redis";
         SESSION_DRIVER = mkDefault "redis";
         WEBSOCKET_REPLICATION_MODE = mkDefault "redis";
-        # Suppport phpredis and predis configuration-style.
+        # Support phpredis and predis configuration-style.
         REDIS_SCHEME = "unix";
         REDIS_HOST = config.services.redis.servers.pixelfed.unixSocket;
         REDIS_PATH = config.services.redis.servers.pixelfed.unixSocket;

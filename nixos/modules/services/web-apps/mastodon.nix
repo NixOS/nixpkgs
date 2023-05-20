@@ -508,7 +508,7 @@ in {
         type = with lib.types; listOf path;
         default = [];
         description = lib.mdDoc ''
-          Extra environment files to pass to all mastodon services. Useful for passing down environemntal secrets.
+          Extra environment files to pass to all mastodon services. Useful for passing down environmental secrets.
         '';
         example = [ "/etc/mastodon/s3config.env" ];
       };

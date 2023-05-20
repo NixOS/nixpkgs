@@ -556,7 +556,7 @@ in {
       default = config.services.nextcloud.notify_push.enable;
       defaultText = literalExpression "config.services.nextcloud.notify_push.enable";
       description = lib.mdDoc ''
-        Wether to configure nextcloud to use the recommended redis settings for small instances.
+        Whether to configure nextcloud to use the recommended redis settings for small instances.
 
         ::: {.note}
         The `notify_push` app requires redis to be configured. If this option is turned off, this must be configured manually.
