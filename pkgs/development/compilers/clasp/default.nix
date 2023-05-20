@@ -55,7 +55,7 @@ in llvmPackages_15.stdenv.mkDerivation {
     sbcl
     git
     pkg-config
-    fmt
+    fmt_9
     gmpxx
     libelf
     boost
