@@ -78,7 +78,7 @@ let
 
       ${config.system.systemBuilderCommands}
 
-      echo -n "$extraDependencies" > $out/extra-dependencies
+      cp "$extraDependenciesPath" "$out/extra-dependencies"
 
       ${optionalString (!config.boot.isContainer && config.boot.bootspec.enable) ''
         ${config.boot.bootspec.writer}
@@ -98,6 +98,7 @@ let
     name = "nixos-system-${config.system.name}-${config.system.nixos.label}";
     preferLocalBuild = true;
     allowSubstitutes = false;
+    passAsFile = [ "extraDependencies" ];
     buildCommand = systemBuilder;
 
     inherit (pkgs) coreutils;
