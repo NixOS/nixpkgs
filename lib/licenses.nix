@@ -202,6 +202,7 @@ in mkLicense lset) ({
     fullName = "Business Source License 1.1";
     url = "https://mariadb.com/bsl11";
     free = false;
+    redistributable = true;
   };
 
   caossl = {
