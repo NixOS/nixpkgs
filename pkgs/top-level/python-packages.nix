@@ -5757,6 +5757,8 @@ self: super: with self; {
 
   line_profiler = callPackage ../development/python-modules/line_profiler { };
 
+  linetable = callPackage ../development/python-modules/linetable { };
+
   lingua = callPackage ../development/python-modules/lingua { };
 
   linkify-it-py = callPackage ../development/python-modules/linkify-it-py { };
@@ -5963,10 +5965,6 @@ self: super: with self; {
   manifestparser = callPackage ../development/python-modules/marionette-harness/manifestparser.nix { };
 
   manuel = callPackage ../development/python-modules/manuel { };
-
-  manticore = callPackage ../development/python-modules/manticore {
-    inherit (pkgs) z3;
-  };
 
   mapbox = callPackage ../development/python-modules/mapbox { };
 
@@ -6439,9 +6437,13 @@ self: super: with self; {
 
   munch = callPackage ../development/python-modules/munch { };
 
+  mung = callPackage ../development/python-modules/mung { };
+
   munkres = callPackage ../development/python-modules/munkres { };
 
   murmurhash = callPackage ../development/python-modules/murmurhash { };
+
+  muscima = callPackage ../development/python-modules/muscima { };
 
   musicbrainzngs = callPackage ../development/python-modules/musicbrainzngs { };
 
@@ -6939,6 +6941,8 @@ self: super: with self; {
   omnikinverter = callPackage ../development/python-modules/omnikinverter { };
 
   omnilogic = callPackage ../development/python-modules/omnilogic { };
+
+  omrdatasettools = callPackage ../development/python-modules/omrdatasettools { };
 
   ondilo = callPackage ../development/python-modules/ondilo { };
 
@@ -12785,8 +12789,6 @@ self: super: with self; {
   wasabi = callPackage ../development/python-modules/wasabi { };
 
   wasserstein = callPackage ../development/python-modules/wasserstein { };
-
-  wasm = callPackage ../development/python-modules/wasm { };
 
   wasmerPackages = pkgs.recurseIntoAttrs (callPackage ../development/python-modules/wasmer { });
   inherit (self.wasmerPackages) wasmer wasmer-compiler-cranelift wasmer-compiler-llvm wasmer-compiler-singlepass;

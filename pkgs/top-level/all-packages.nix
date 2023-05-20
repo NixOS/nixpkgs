@@ -1048,6 +1048,8 @@ with pkgs;
 
   libredirect = callPackage ../build-support/libredirect { };
 
+  livecaptions = callPackage ../applications/misc/livecaptions { };
+
   madonctl = callPackage ../applications/misc/madonctl { };
 
   copyDesktopItems = makeSetupHook {
@@ -1664,6 +1666,8 @@ with pkgs;
   qFlipper = libsForQt5.callPackage ../tools/misc/qflipper { };
 
   quich = callPackage ../tools/misc/quich { } ;
+
+  rabtap = callPackage ../tools/networking/rabtap { } ;
 
   redfang = callPackage ../tools/networking/redfang { };
 
@@ -19577,7 +19581,7 @@ with pkgs;
 
   armadillo = callPackage ../development/libraries/armadillo { };
 
-  arrayfire = callPackage ../development/libraries/arrayfire { };
+  arrayfire = darwin.apple_sdk_11_0.callPackage ../development/libraries/arrayfire { };
 
   arrow-cpp = callPackage ../development/libraries/arrow-cpp { };
 
@@ -24412,6 +24416,8 @@ with pkgs;
   zsa-udev-rules = callPackage ../os-specific/linux/zsa-udev-rules { };
 
   wangle = callPackage ../development/libraries/wangle { };
+
+  wapp = callPackage ../development/libraries/wapp { };
 
   wavpack = callPackage ../development/libraries/wavpack { };
 
@@ -31261,6 +31267,8 @@ with pkgs;
     singularity-overriden-nixos
     ;
 
+  sfwbar = callPackage ../applications/misc/sfwbar { };
+
   skate = callPackage ../applications/misc/skate { };
 
   slack = callPackage ../applications/networking/instant-messengers/slack { };
@@ -33650,7 +33658,7 @@ with pkgs;
 
   quirc = callPackage ../tools/graphics/quirc { };
 
-  quisk = python39Packages.callPackage ../applications/radio/quisk { };
+  quisk = callPackage ../applications/radio/quisk { };
 
   quiterss = libsForQt5.callPackage ../applications/networking/newsreaders/quiterss { };
 
@@ -35955,7 +35963,9 @@ with pkgs;
 
   doomseeker = qt5.callPackage ../games/doom-ports/doomseeker { };
 
-  doomretro = callPackage ../games/doom-ports/doomretro { };
+  doomretro = callPackage ../games/doom-ports/doomretro {
+    inherit (darwin.apple_sdk.frameworks) Cocoa;
+  };
 
   chocolate-doom = callPackage ../games/doom-ports/chocolate-doom { };
 
