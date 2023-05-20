@@ -10,6 +10,9 @@
 , openssl
 , unixODBC
 , libmysqlclient
+, apr
+  # Opts
+, enableApacheSupport ? false
 }:
 
 stdenv.mkDerivation rec {
@@ -32,7 +35,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     unixODBC
     libmysqlclient
-  ];
+  ] ++ lib.optional enableApacheSupport [ apr ];
 
   propagatedBuildInputs = [
     zlib
