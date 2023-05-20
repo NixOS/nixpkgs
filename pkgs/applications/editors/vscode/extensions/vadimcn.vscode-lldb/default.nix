@@ -1,5 +1,5 @@
 { pkgs, lib, stdenv, fetchFromGitHub, runCommand, rustPlatform, makeWrapper, llvmPackages
-, nodePackages, cmake, nodejs, unzip, python3, pkg-config, libsecret
+, buildNpmPackage, cmake, nodejs, unzip, python3, pkg-config, libsecret
 }:
 assert lib.versionAtLeast python3.version "3.5";
 let
@@ -42,15 +42,32 @@ let
     doCheck = false;
   };
 
-  nodeDeps = ((import ./build-deps/default.nix {
-    inherit pkgs nodejs;
-    inherit (stdenv.hostPlatform) system;
-  }).nodeDependencies.override (old: {
-    inherit src version;
-    nativeBuildInputs = [ pkg-config ];
-    buildInputs = [libsecret];
-    dontNpmInstall = true;
-  }));
+  nodeDeps = buildNpmPackage {
+    pname = "${pname}-node-deps";
+    inherit version src;
+
+    npmDepsHash = "sha256-+LXcY3sQjZa9DyBiUK1G4BnAr6c+1ZkHMPCCSPWIDtA=";
+
+    nativeBuildInputs = [
+      python3
+      pkg-config
+    ];
+
+    buildInputs = [
+      libsecret
+    ];
+
+    dontNpmBuild = true;
+
+    installPhase = ''
+      runHook preInstall
+
+      mkdir -p $out/lib
+      cp -r node_modules $out/lib
+
+      runHook postInstall
+    '';
+  };
 
 in stdenv.mkDerivation {
   pname = "vscode-extension-${publisher}-${pname}";
@@ -63,7 +80,7 @@ in stdenv.mkDerivation {
   patches = [ ./cmake-build-extension-only.patch ];
 
   postConfigure = ''
-    cp -r ${nodeDeps}/lib/{node_modules,package-lock.json} .
+    cp -r ${nodeDeps}/lib/node_modules .
   '';
 
   cmakeFlags = [
