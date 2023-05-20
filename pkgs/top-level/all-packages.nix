@@ -5199,6 +5199,8 @@ with pkgs;
 
   maxcso = callPackage ../tools/archivers/maxcso {};
 
+  mcap-cli = callPackage ../development/tools/mcap/mcap-cli {};
+
   medusa = callPackage ../tools/security/medusa { };
 
   megasync = libsForQt5.callPackage ../applications/misc/megasync {
