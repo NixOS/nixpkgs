@@ -2663,4 +2663,12 @@ self: super: {
     parsec = lself.parsec_3_1_16_1;
     text = lself.text_2_0_2;
   }));
+
+  # Merged upstream, but never released. Allows both intel and aarch64 darwin to build.
+  # https://github.com/vincenthz/hs-gauge/pull/106
+  gauge = appendPatch (pkgs.fetchpatch {
+    name = "darwin-aarch64-fix.patch";
+    url = "https://github.com/vincenthz/hs-gauge/commit/3d7776f41187c70c4f0b4517e6a7dde10dc02309.patch";
+    hash = "sha256-4osUMo0cvTvyDTXF8lY9tQbFqLywRwsc3RkHIhqSriQ=";
+  }) super.gauge;
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
