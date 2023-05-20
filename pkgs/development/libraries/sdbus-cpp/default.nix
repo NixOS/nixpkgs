@@ -2,9 +2,9 @@
 , stdenv
 , fetchFromGitHub
 , cmake
+, expat
 , pkg-config
 , systemd
-, expat
 }:
 
 stdenv.mkDerivation rec {
@@ -24,15 +24,15 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    systemd
     expat
+    systemd
   ];
 
   cmakeFlags = [
     "-DBUILD_CODE_GEN=ON"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/Kistler-Group/sdbus-cpp";
     changelog = "https://github.com/Kistler-Group/sdbus-cpp/blob/v${version}/ChangeLog";
     description = "High-level C++ D-Bus library designed to provide easy-to-use yet powerful API";
