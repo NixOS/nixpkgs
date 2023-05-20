@@ -324,6 +324,8 @@ with pkgs;
 
   bakelite = callPackage ../tools/backup/bakelite { };
 
+  bearer = callPackage ../development/tools/bearer { };
+
   benthos = callPackage ../development/tools/benthos { };
 
   beyond-identity = callPackage ../tools/security/beyond-identity { };
