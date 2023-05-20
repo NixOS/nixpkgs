@@ -389,10 +389,10 @@ in {
             <minHomeDiskFree unit="%">1</minHomeDiskFree>
           </options>
           ```
-          corresponds to the json:
-          ```json
-          {
-            options: {
+          corresponds to the following:
+          ```nix
+          services.syncthing.settings = {
+            options = {
               listenAddresses = [
                 "default"
               ];
@@ -402,6 +402,9 @@ in {
               };
             };
           }
+          The default value is not `{}`. If you want to not apply any
+          configuration options at all, and thus disable the generated
+          `synchthing-init.service` file, simply set `settings = {}`.
           ```
         '';
         example = {
