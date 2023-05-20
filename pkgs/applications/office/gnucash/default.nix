@@ -137,7 +137,7 @@ stdenv.mkDerivation rec {
       - Financial Calculations
     '';
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ domenkozar AndersonTorres rski ];
+    maintainers = with maintainers; [ domenkozar AndersonTorres rski nevivurn ];
     platforms = platforms.unix;
   };
 }
