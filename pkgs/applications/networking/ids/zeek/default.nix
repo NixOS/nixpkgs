@@ -54,13 +54,14 @@ stdenv.mkDerivation rec {
     spicy-parser-generator
     curl
     gperftools
-    libkqueue
     libmaxminddb
     libpcap
     ncurses
     openssl
     swig
     zlib
+  ] ++ lib.optionals stdenv.isLinux [
+    libkqueue
   ] ++ lib.optionals stdenv.isDarwin [
     gettext
   ];
@@ -75,13 +76,14 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     "-DBroker_ROOT=${broker}"
     "-DSPICY_ROOT_DIR=${spicy-parser-generator}"
-    "-DLIBKQUEUE_ROOT_DIR=${libkqueue}"
     "-DENABLE_PERFTOOLS=true"
     "-DINSTALL_AUX_TOOLS=true"
     "-DZEEK_ETC_INSTALL_DIR=/etc/zeek"
     "-DZEEK_LOG_DIR=/var/log/zeek"
     "-DZEEK_STATE_DIR=/var/lib/zeek"
     "-DZEEK_SPOOL_DIR=/var/spool/zeek"
+  ] ++ lib.optionals stdenv.isLinux [
+    "-DLIBKQUEUE_ROOT_DIR=${libkqueue}"
   ];
 
   postInstall = ''
