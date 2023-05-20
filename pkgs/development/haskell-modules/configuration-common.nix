@@ -2644,7 +2644,7 @@ self: super: {
   tomland = doJailbreak super.tomland;
 
   # 2023-04-05: The last version to support libsoup-2.4, required for
-  # compatability with other gi- packages.
+  # compatibility with other gi- packages.
   # Take another look when gi-webkit2 updates as it may have become compatible with libsoup-3
   gi-soup = assert versions.major self.gi-webkit2.version == "4"; self.gi-soup_2_4_28;
 
