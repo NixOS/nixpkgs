@@ -181,4 +181,7 @@ self: super: {
 
   # Needs OneTuple for ghc < 9.2
   binary-orphans = addBuildDepends [ self.OneTuple ] super.binary-orphans;
+
+  # 2023-05-212: doesn't support Cabal >= 3.8 but GHC 9 works since it ships cabal 3.6
+  uuagc-cabal = doDistribute (unmarkBroken super.uuagc-cabal);
 }
