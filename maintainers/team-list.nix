@@ -297,6 +297,18 @@ with lib.maintainers; {
     shortName = "Geospatial";
   };
 
+  gitlab = {
+    members = [
+      globin
+      krav
+      talyz
+      yayayayaka
+      yuka
+    ];
+    scope = "Maintain gitlab packages.";
+    shortName = "gitlab";
+  };
+
   golang = {
     members = [
       kalbasit
