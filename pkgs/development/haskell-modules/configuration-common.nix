@@ -209,9 +209,6 @@ self: super: {
   ### END HASKELL-LANGUAGE-SERVER SECTION ###
   ###########################################
 
-  # Remove when Stackage LTS advances to this version, should be LTS-20.20
-  utility-ht = doDistribute self.utility-ht_0_0_17;
-
   vector = overrideCabal (old: {
     # Too strict bounds on doctest which isn't used, but is part of the configuration
     jailbreak = true;
@@ -731,6 +728,14 @@ self: super: {
   # https://github.com/haskell-works/tasty-discover/issues/9
   # https://github.com/commercialhaskell/stackage/issues/6584#issuecomment-1326522815
   tasty-discover = assert super.tasty-discover.version == "4.2.2"; dontCheck super.tasty-discover;
+
+  # Too strict lower bound on tasty-hedgehog
+  # https://github.com/qfpl/tasty-hedgehog/issues/70
+  tasty-sugar = doJailbreak super.tasty-sugar;
+
+  # Too strict lower bound on aeson
+  # https://github.com/input-output-hk/hedgehog-extras/issues/39
+  hedgehog-extras = doJailbreak super.hedgehog-extras;
 
   # Known issue with nondeterministic test suite failure
   # https://github.com/nomeata/tasty-expected-failure/issues/21
@@ -1717,9 +1722,6 @@ self: super: {
   servant-swagger-ui-core = doJailbreak super.servant-swagger-ui-core;
 
   hercules-ci-agent = lib.pipe super.hercules-ci-agent [
-    (pkg: pkg.override (_: {
-      cachix = super.cachix_1_3_3;
-    }))
     (self.generateOptparseApplicativeCompletions [ "hercules-ci-agent" ])
   ];
 

@@ -34,5 +34,6 @@ stdenv.mkDerivation rec {
     platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin"];
     maintainers = [ maintainers.matthew-levan ];
     license = licenses.mit;
+    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
   };
 }

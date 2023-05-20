@@ -1,7 +1,7 @@
 { lib, stdenv, fetchFromGitHub, buildGoModule, makeWrapper
 , cacert, moreutils, jq, git, pkg-config, yarn, python3
 , esbuild, nodejs_16, libsecret, xorg, ripgrep
-, AppKit, Cocoa, Security, cctools }:
+, AppKit, Cocoa, Security, cctools, nixosTests }:
 
 let
   system = stdenv.hostPlatform.system;
@@ -163,6 +163,10 @@ in stdenv.mkDerivation rec {
     cp -R -T ../vscode-reh-web-${vsBuildTarget} $out
     ln -s ${nodejs}/bin/node $out
   '';
+
+  passthru.tests = {
+    inherit (nixosTests) openvscode-server;
+  };
 
   meta = with lib; {
     description = "Run VS Code on a remote machine";

@@ -1,8 +1,8 @@
 { lib
 , stdenv
-, buildPythonPackage
 , aiohttp
 , aioresponses
+, buildPythonPackage
 , cachetools
 , cryptography
 , fetchPypi
@@ -27,14 +27,14 @@
 
 buildPythonPackage rec {
   pname = "google-auth";
-  version = "2.17.3";
+  version = "2.18.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-zjEeK8WLEw/d8xbfV8mzlDwqe09uwx3pZjqTM+QGTvw=";
+    hash = "sha256-16MkkCfn9GT7v9fugxmgitCdLupRV4V1xL02D/oEnMs=";
   };
 
   propagatedBuildInputs = [
@@ -42,6 +42,7 @@ buildPythonPackage rec {
     pyasn1-modules
     rsa
     six
+    urllib3
   ];
 
   passthru.optional-dependencies = {
@@ -75,7 +76,6 @@ buildPythonPackage rec {
     pytest-localserver
     pytestCheckHook
     responses
-    urllib3
   ] ++ passthru.optional-dependencies.aiohttp
   # `cryptography` is still required on `aarch64-darwin` for `tests/crypt/*`
   ++ (if (stdenv.isDarwin && stdenv.isAarch64) then [ cryptography ] else passthru.optional-dependencies.enterprise_cert)

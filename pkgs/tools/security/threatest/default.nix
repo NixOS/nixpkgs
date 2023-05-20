@@ -5,16 +5,16 @@
 
 buildGoModule rec {
   pname = "threatest";
-  version = "1.1.1";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "DataDog";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-9/TIiBp3w7NaECX929Tai5nqHKxb7YxYEr2hAl2ttsM=";
+    hash = "sha256-xluKQXFa06ng9bs+sBkoFLeyYtQAcej4VFLMeTST6zA=";
   };
 
-  vendorHash = "sha256-vTzgxByZ2BC7nuq/+LJV7LR0KsUxh1EbHFe81PwqCJc=";
+  vendorHash = "sha256-tvGmSpihGwpz6TCmbttz0VKvLTChDRWNX3qxOhEpdPM=";
 
   meta = with lib; {
     description = "Framework for end-to-end testing threat detection rules";

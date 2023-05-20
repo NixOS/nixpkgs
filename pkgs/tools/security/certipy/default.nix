@@ -15,6 +15,12 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-llLGr9IpuXQYIN2WaOkvfE2dAZb3PMVlNmketUpuyDI=";
   };
 
+  postPatch = ''
+    # pin does not apply because our ldap3 contains a patch to fix pyasn1 compability
+    substituteInPlace setup.py \
+      --replace "pyasn1==0.4.8" "pyasn1"
+  '';
+
   propagatedBuildInputs = with python3.pkgs; [
     asn1crypto
     dnspython

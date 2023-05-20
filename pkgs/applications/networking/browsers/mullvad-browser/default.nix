@@ -76,14 +76,12 @@ let
       ++ lib.optionals mediaSupport [ ffmpeg ]
   );
 
-  tag = "mullvad-browser-102.10.0esr-12.0-2-build2";
-  version = "12.0.5";
-  lang = "ALL";
+  version = "12.0.6";
 
   srcs = {
     x86_64-linux = fetchurl {
-      url = "https://github.com/mullvad/mullvad-browser/releases/download/${tag}/mullvad-browser-linux64-${version}_${lang}.tar.xz";
-      hash = "sha256-Ezs2pjJNGOinMIskBDwpj70eKSkfcV6ZCKb60I5J23w=";
+      url = "https://cdn.mullvad.net/browser/${version}/mullvad-browser-linux64-${version}_ALL.tar.xz";
+      hash = "sha256-XE6HFU38FhnikxGHRHxIGS3Z3Y2JNWH0yq2NejqbROI=";
     };
   };
 
@@ -222,8 +220,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Privacy-focused browser made in a collaboration between The Tor Project and Mullvad";
-    homepage = "https://www.mullvad.net/en/browser";
-    changelog = "https://github.com/mullvad/mullvad-browser/releases/tag/${tag}";
+    homepage = "https://mullvad.net/en/browser";
     platforms = attrNames srcs;
     maintainers = with maintainers; [ felschr ];
     # MPL2.0+, GPL+, &c.  While it's not entirely clear whether

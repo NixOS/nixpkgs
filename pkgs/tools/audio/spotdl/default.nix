@@ -19,7 +19,7 @@ let
   };
 in python.pkgs.buildPythonApplication rec {
   pname = "spotdl";
-  version = "4.1.8";
+  version = "4.1.10";
 
   format = "pyproject";
 
@@ -27,7 +27,7 @@ in python.pkgs.buildPythonApplication rec {
     owner = "spotDL";
     repo = "spotify-downloader";
     rev = "refs/tags/v${version}";
-    hash = "sha256-iE5d9enSbONqVxKW7H7N+1TmBp6nVGtiQvxJxV7R/1o=";
+    hash = "sha256-SmyUoMOlBJZTJH19NwTKbz/vo7Oh4tGHCQrW5DVZQWQ=";
   };
 
   nativeBuildInputs = with python.pkgs; [
@@ -56,7 +56,7 @@ in python.pkgs.buildPythonApplication rec {
     syncedlyrics
     typing-extensions
     setuptools # for pkg_resources
-  ];
+  ] ++ python-slugify.optional-dependencies.unidecode;
 
   nativeCheckInputs = with python.pkgs; [
     pytestCheckHook

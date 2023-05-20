@@ -152,6 +152,7 @@ with lib.maintainers; {
   cuda = {
     members = [
       connorbaker
+      samuela
       SomeoneSerge
     ];
     scope = "Maintain CUDA-enabled packages";
@@ -522,6 +523,7 @@ with lib.maintainers; {
 
   mate = {
     members = [
+      bobby285271
       j03
       romildo
     ];
@@ -542,6 +544,17 @@ with lib.maintainers; {
     ];
     scope = "Maintain the ecosystem around Matrix, a decentralized messenger.";
     shortName = "Matrix";
+  };
+
+  minimal-bootstrap = {
+    members = [
+      artturin
+      emilytrau
+      ericson2314
+      jk
+    ];
+    scope = "Maintain the minimal-bootstrap toolchain and related packages.";
+    shortName = "Minimal Bootstrap";
   };
 
   mobile = {
@@ -828,6 +841,7 @@ with lib.maintainers; {
 
   xfce = {
     members = [
+      bobby285271
       romildo
       muscaln
     ];

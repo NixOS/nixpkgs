@@ -10,8 +10,8 @@ let
     inherit tiling_wm;
   };
   stableVersion = {
-    version = "2022.2.1.18"; # "Android Studio Flamingo (2022.2.1)"
-    sha256Hash = "sha256-zdhSxEmbX3QC30Tfxp6MpBj/yaaEyqs0BHR2/SyyTvw=";
+    version = "2022.2.1.19"; # "Android Studio Flamingo (2022.2.1) Patch 1"
+    sha256Hash = "sha256-bAtPlJI3RwqQX6xpEi7S8T2IDc/39MONU3iFpfi8v3A=";
   };
   betaVersion = {
     version = "2022.3.1.12"; # "Android Studio Giraffe (2022.3.1) Beta 1"

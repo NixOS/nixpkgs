@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation rec {
   pname = "treesheets";
-  version = "unstable-2023-05-13";
+  version = "unstable-2023-05-18";
 
   src = fetchFromGitHub {
     owner = "aardappel";
     repo = "treesheets";
-    rev = "c48cc033c941fb1898e12189e96188a98df69b96";
-    sha256 = "EzLhsuDY/H3t69nuwWj/3fxJdAX6ze/IB/i5WsVJmOo=";
+    rev = "750530c925da889834a69689e067dda1a8d8cdeb";
+    sha256 = "4yN/ZS0f7En/LJzf2lJBqAB60Oy5+5UX+ROlUWAARKs=";
   };
 
   nativeBuildInputs = [

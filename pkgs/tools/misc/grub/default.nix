@@ -431,7 +431,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "GNU GRUB, the Grand Unified Boot Loader (2.x beta)";
+    description = "GNU GRUB, the Grand Unified Boot Loader";
 
     longDescription =
       '' GNU GRUB is a Multiboot boot loader. It was derived from GRUB, GRand

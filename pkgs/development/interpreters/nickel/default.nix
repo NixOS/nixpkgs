@@ -1,20 +1,23 @@
 { lib
 , rustPlatform
 , fetchFromGitHub
+, nix-update-script
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "nickel";
-  version = "0.3.1";
+  version = "1.0.0";
 
   src  = fetchFromGitHub {
     owner = "tweag";
     repo = pname;
     rev = "refs/tags/${version}"; # because pure ${version} doesn't work
-    hash = "sha256-bUUQP7ze0j8d+VEckexDOferAgAHdKZbdKR3q0TNOeE=";
+    hash = "sha256-8peoO3B5LHKiTUyDLpe0A2xg82LPI7l2vuGdyNhV478=";
   };
 
-  cargoSha256 = "sha256-E8eIUASjCIVsZhptbU41VfK8bFmA4FTT3LVagLrgUso=";
+  cargoHash = "sha256-lrRCc5kUekUHrJTznR8xRiLVgQLJ/PsMP967PS41UJU=";
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     homepage = "https://nickel-lang.org/";
@@ -29,6 +32,6 @@ rustPlatform.buildRustPackage rec {
     '';
     changelog = "https://github.com/tweag/nickel/blob/${version}/RELEASES.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [ AndersonTorres felschr ];
   };
 }

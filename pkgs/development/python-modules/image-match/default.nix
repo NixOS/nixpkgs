@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchFromGitHub, pytest-runner, scikitimage }:
+{ lib, buildPythonPackage, fetchFromGitHub, pytest-runner, scikit-image }:
 
 buildPythonPackage {
   pname = "image-match";
@@ -14,7 +14,7 @@ buildPythonPackage {
   buildInputs = [ pytest-runner ];
 
   propagatedBuildInputs = [
-    scikitimage
+    scikit-image
   ];
 
   # remove elasticsearch requirement due to version incompatibility

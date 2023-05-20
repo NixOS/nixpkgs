@@ -9,7 +9,7 @@
 , fsspec
 , numpy
 , requests
-, scikitimage
+, scikit-image
 , s3fs
 , toolz
 , zarr
@@ -44,7 +44,7 @@ buildPythonPackage rec {
     aiohttp
     requests
     s3fs
-    scikitimage
+    scikit-image
     toolz
   ];
 

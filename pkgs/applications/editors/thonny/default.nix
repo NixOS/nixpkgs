@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, python3, makeDesktopItem, copyDesktopItems }:
+{ lib, fetchFromGitHub, python3, tk, makeDesktopItem, copyDesktopItems }:
 
 with python3.pkgs;
 
@@ -42,6 +42,7 @@ buildPythonApplication rec {
 
   preFixup = ''
     wrapProgram "$out/bin/thonny" \
+       --set TK_LIBRARY "${tk}/lib/${tk.libPrefix}" \
        --prefix PYTHONPATH : $PYTHONPATH:$(toPythonPath ${python3.pkgs.jedi})
   '';
 

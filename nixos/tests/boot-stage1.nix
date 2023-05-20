@@ -107,8 +107,8 @@ import ./make-test-python.nix ({ pkgs, ... }: {
         '';
       };
 
-      copyCanaries = with lib; concatMapStrings (canary: ''
-        ${optionalString (canary ? child) ''
+      copyCanaries = lib.concatMapStrings (canary: ''
+        ${lib.optionalString (canary ? child) ''
           copy_bin_and_libs "${canary.child}/bin/${canary.child.name}"
         ''}
         copy_bin_and_libs "${canary}/bin/${canary.name}"

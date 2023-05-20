@@ -612,8 +612,8 @@ let
         mktplcRef = {
           name = "chatgpt-reborn";
           publisher = "chris-hayes";
-          version = "3.16.1";
-          sha256 = "sha256-RVPA+O0QOtFArWzcuwXMZSpwB3zrPAzVCbEjOzUNH4I=";
+          version = "3.16.3";
+          sha256 = "wkitG5gmYKYKXRw/zVW04HN1dePiTjbnynFOY/bwxfI=";
         };
       };
 
@@ -1331,8 +1331,8 @@ let
         mktplcRef = {
           name = "chatgpt-vscode";
           publisher = "genieai";
-          version = "0.0.7";
-          sha256 = "sha256-dWp9OYj9OCsNdZiYbgAWWo/OXMjBSlB7sIupdqnQTiU=";
+          version = "0.0.8";
+          sha256 = "RKvmZkegFs4y+sEVaamPRO1F1E+k4jJyI0Q9XqKowrQ=";
         };
       };
 
@@ -1340,8 +1340,8 @@ let
         mktplcRef = {
           publisher = "github";
           name = "codespaces";
-          version = "1.14.1";
-          sha256 = "sha256-oiAn/tW4jfccsY8zH6L7UzldeM7sV9tllSvgZD8c9aY=";
+          version = "1.14.7";
+          sha256 = "pcZGMxTVnMeD6rnNV0d9Wysk6MrYiYcJ+byuH9VR0ds=";
         };
         meta = { license = lib.licenses.unfree; };
       };
@@ -1350,8 +1350,8 @@ let
         mktplcRef = {
           publisher = "github";
           name = "copilot";
-          version = "1.78.9758";
-          sha256 = "sha256-qIaaM72SenMv+vtkTMBodD2JsroZLpw8qEttr5aIDQk=";
+          version = "1.86.82";
+          sha256 = "isaqjrAmu/08gnNKQPeMV4Xc8u0Hx8gB2c78WE54kYQ=";
         };
         meta = {
           description = "GitHub Copilot uses OpenAI Codex to suggest code and entire functions in real-time right from your editor.";
@@ -1404,8 +1404,8 @@ let
           # the VSCode Marketplace and use a calver scheme. We should avoid
           # using preview versions, because they can require insider versions
           # of VS Code
-          version = "0.60.0";
-          sha256 = "sha256-VAoKNRYrzUXUQSDAX8NM17aknCUxMRsTRd5adQu+w/s=";
+          version = "0.64.0";
+          sha256 = "tgQD3o5uMbWofVx7FPyWT1yaeu2e4aPxterN4yXA33U=";
         };
         meta = { license = lib.licenses.mit; };
       };
@@ -1614,8 +1614,8 @@ let
         mktplcRef = {
           name = "latex-workshop";
           publisher = "James-Yu";
-          version = "9.8.1";
-          sha256 = "sha256-89jP/kd5A6UQOcln9mb6DGvWQD8CiKcg+YYRpzZIDJQ=";
+          version = "9.10.0";
+          sha256 = "s0+8952svPSA69M4H29zuIxUWV6xNRpIqLNd8pzGJhY=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/James-Yu.latex-workshop/changelog";

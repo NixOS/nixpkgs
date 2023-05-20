@@ -994,30 +994,43 @@ self: super: builtins.intersectAttrs super {
   # won't work (or would need to patch test suite).
   domaindriven-core = dontCheck super.domaindriven-core;
 
- cachix = overrideCabal (drv: {
-    version = "1.4.2";
+  cachix-api = overrideCabal (drv: {
+    version = "1.5";
     src = pkgs.fetchFromGitHub {
       owner = "cachix";
       repo = "cachix";
-      rev = "v1.4.2";
-      sha256 = "sha256-EjfBM5O+wXJhthRU/Nd9VFue7xo5O93nx0pMt3jx0Ow=";
+      rev = "v1.5";
+      sha256 = "sha256-bt8FFtDSJpBckx3dIjW5Xdvj8aVCm78R3VTpjK5F3Ac=";
+    };
+    postUnpack = "sourceRoot=$sourceRoot/cachix-api";
+    postPatch = ''
+      sed -i 's/1.4.2/1.5/' cachix-api.cabal
+    '';
+  }) super.cachix-api;
+  cachix = overrideCabal (drv: {
+    version = "1.5";
+    src = pkgs.fetchFromGitHub {
+      owner = "cachix";
+      repo = "cachix";
+      rev = "v1.5";
+      sha256 = "sha256-bt8FFtDSJpBckx3dIjW5Xdvj8aVCm78R3VTpjK5F3Ac=";
     };
     postUnpack = "sourceRoot=$sourceRoot/cachix";
     postPatch = ''
-      sed -i 's/1.4.1/1.4.2/' cachix.cabal
+      sed -i 's/1.4.2/1.5/' cachix.cabal
     '';
-  }) (super.cachix.override {
-    fsnotify = dontCheck super.fsnotify_0_4_1_0;
-    hnix-store-core = super.hnix-store-core_0_6_1_0;
-  });
-
-  cachix_1_3_3 = overrideCabal (drv: {
-    hydraPlatforms = pkgs.lib.platforms.all;
-  }) (super.cachix_1_3_3.override {
-    nix = self.hercules-ci-cnix-store.nixPackage;
-    fsnotify = dontCheck super.fsnotify_0_4_1_0;
-    hnix-store-core = super.hnix-store-core_0_6_1_0;
-  });
+  }) (lib.pipe
+        (super.cachix.override {
+          fsnotify = dontCheck super.fsnotify_0_4_1_0;
+          hnix-store-core = super.hnix-store-core_0_6_1_0;
+        })
+        [
+         (addBuildTool self.hercules-ci-cnix-store.nixPackage)
+         (addBuildTool pkgs.pkg-config)
+         (addBuildDepend self.inline-c-cpp)
+         (addBuildDepend self.hercules-ci-cnix-store)
+        ]
+  );
 
   hercules-ci-agent = super.hercules-ci-agent.override { nix = self.hercules-ci-cnix-store.passthru.nixPackage; };
   hercules-ci-cnix-expr = addTestToolDepend pkgs.git (super.hercules-ci-cnix-expr.override { nix = self.hercules-ci-cnix-store.passthru.nixPackage; });

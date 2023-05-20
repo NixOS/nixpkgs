@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "inquirerpy";
-  version = "0.3.3";
+  version = "0.3.4";
   format = "pyproject";
 
 
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "kazhala";
     repo = "InquirerPy";
     rev = "refs/tags/${version}";
-    hash = "sha256-Ktqzxuj4aBHrgjiOyoDLuqbN0FJqwUpoyq3LuqXxt2Y=";
+    hash = "sha256-Ap0xZHEU458tjm6oEN5EtDoSRlnpZ7jvDq1L7fTlQQc=";
   };
 
   nativeBuildInputs = [

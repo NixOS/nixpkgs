@@ -49,9 +49,6 @@ beamPackages.mixRelease {
 
   nativeBuildInputs = [ nodejs ];
 
-  # https://github.com/whitfin/cachex/issues/205
-  stripDebug = false;
-
   passthru = {
     tests = { inherit (nixosTests) plausible; };
     updateScript = ./update.sh;

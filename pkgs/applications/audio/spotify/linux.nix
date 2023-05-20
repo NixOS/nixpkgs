@@ -1,6 +1,6 @@
 { fetchurl, lib, stdenv, squashfsTools, xorg, alsa-lib, makeShellWrapper, wrapGAppsHook, openssl, freetype
 , glib, pango, cairo, atk, gdk-pixbuf, gtk3, cups, nspr, nss_latest, libpng, libnotify
-, libgcrypt, systemd, fontconfig, dbus, expat, ffmpeg, curlWithGnuTls, zlib, gnome
+, libgcrypt, systemd, fontconfig, dbus, expat, ffmpeg_4, curlWithGnuTls, zlib, gnome
 , at-spi2-atk, at-spi2-core, libpulseaudio, libdrm, mesa, libxkbcommon
 , pname, meta, harfbuzz
   # High-DPI support: Spotify's --force-device-scale-factor argument
@@ -33,7 +33,7 @@ let
     curlWithGnuTls
     dbus
     expat
-    ffmpeg
+    ffmpeg_4 # Requires libavcodec < 59 as of 1.2.9.743.g85d9593d
     fontconfig
     freetype
     gdk-pixbuf
@@ -135,8 +135,8 @@ stdenv.mkDerivation {
       ln -s ${nspr.out}/lib/libnspr4.so $libdir/libnspr4.so
       ln -s ${nspr.out}/lib/libplc4.so $libdir/libplc4.so
 
-      ln -s ${ffmpeg.lib}/lib/libavcodec.so* $libdir
-      ln -s ${ffmpeg.lib}/lib/libavformat.so* $libdir
+      ln -s ${ffmpeg_4.lib}/lib/libavcodec.so* $libdir
+      ln -s ${ffmpeg_4.lib}/lib/libavformat.so* $libdir
 
       rpath="$out/share/spotify:$libdir"
 
