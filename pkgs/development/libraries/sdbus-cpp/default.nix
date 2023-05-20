@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     owner = "kistler-group";
     repo = "sdbus-cpp";
     rev = "v${version}";
-    sha256 = "sha256-EX/XLgqUwIRosLu3Jgtpp42Yt6Tf22Htj9JULoUL7ao=";
+    hash = "sha256-EX/XLgqUwIRosLu3Jgtpp42Yt6Tf22Htj9JULoUL7ao=";
   };
 
   nativeBuildInputs = [
