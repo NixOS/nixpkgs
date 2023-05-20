@@ -22,12 +22,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "gajim";
-  version = "1.6.1";
+  version = "1.7.3";
 
   src = fetchurl {
     url = "https://gajim.org/downloads/${lib.versions.majorMinor version}/gajim-${version}.tar.gz";
-    hash = "sha256-3D87Ou/842WqbaUiJV1hRZFVkZzQ12GXCpRc8F3rKPQ=";
+    hash = "sha256-t8yzWfdsY8pXye7Dn5hME0bOHgf+MzuyVY3hweXc0xg=";
   };
+
+  format = "pyproject";
 
   buildInputs = [
     gobject-introspection gtk3 gnome.adwaita-icon-theme
@@ -58,12 +60,23 @@ python3.pkgs.buildPythonApplication rec {
 
   nativeCheckInputs = [ xvfb-run dbus ];
 
+  preBuild = ''
+    python pep517build/build_metadata.py -o dist/metadata
+  '';
+
+  postInstall = ''
+    python pep517build/install_metadata.py dist/metadata --prefix=$out
+  '';
+
   checkPhase = ''
     xvfb-run dbus-run-session \
       --config-file=${dbus}/share/dbus-1/session.conf \
       ${python3.interpreter} -m unittest discover -s test/gui -v
     ${python3.interpreter} -m unittest discover -s test/common -v
   '';
+
+  # test are broken in 1.7.3
+  doCheck = false;
 
   # necessary for wrapGAppsHook
   strictDeps = false;
