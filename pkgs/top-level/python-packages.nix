@@ -4053,6 +4053,8 @@ self: super: with self; {
 
   github3_py = callPackage ../development/python-modules/github3_py { };
 
+  gitignore-parser = callPackage ../development/python-modules/gitignore-parser { };
+
   gitpython = callPackage ../development/python-modules/gitpython { };
 
   glad =  callPackage ../development/python-modules/glad { };
