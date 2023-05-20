@@ -45,9 +45,9 @@ stdenv.mkDerivation rec {
       suffers from a number of (unresolved) bugs, concurrency issues and
       inherent design complexities and limitations.
     '';
+    license = lib.licenses.lgpl2Only;
+    maintainers = [ lib.maintainers.ivar ];
+    platforms = lib.platforms.linux;
     mainProgram = "sdbus-c++-xml2cpp";
-    license = licenses.lgpl2Only;
-    maintainers = [ maintainers.ivar ];
-    platforms = platforms.linux;
   };
 }
