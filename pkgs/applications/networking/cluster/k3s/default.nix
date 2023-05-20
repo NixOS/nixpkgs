@@ -18,6 +18,10 @@ in
     containerdVersion = "1.6.19-k3s1";
     containerdSha256 = "12dwqh77wplg30kdi73d90qni23agw2cwxjd2p5lchq86mpmmwwr";
     criCtlVersion = "1.26.0-rc.0-k3s1";
-    updateScript = ./1_26/update-script.sh;
+  };
+
+  # 1_27 can be built with the same builder as 1_26
+  k3s_1_27 = (callPackage k3s_1_26_builder { }) (import ./1_27/versions.nix) // {
+    updateScript = ./1_27/update-script.sh;
   };
 }
