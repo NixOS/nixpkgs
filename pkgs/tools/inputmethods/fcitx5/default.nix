@@ -2,6 +2,7 @@
 , stdenv
 , fetchurl
 , fetchFromGitHub
+, fetchpatch
 , pkg-config
 , cmake
 , extra-cmake-modules
@@ -50,6 +51,14 @@ stdenv.mkDerivation rec {
     rev = version;
     hash = "sha256-zS25XeNtBN7QIi+Re/p1uLoH/Q4xKAsFrEmgk2LYRu8=";
   };
+
+  patches = [
+    # Fix compatiblity with fmt 10.0. Remove with the next release
+    (fetchpatch {
+      url = "https://github.com/fcitx/fcitx5/commit/7fb3a5500270877d93b61b11b2a17b9b8f6a506b.patch";
+      hash = "sha256-Z4Sqdyp/doJPTB+hEUrG9vncUP29L/b0yJ/u5ldpnds=";
+    })
+  ];
 
   prePatch = ''
     ln -s ${enDict} src/modules/spell/$(stripHash ${enDict})
