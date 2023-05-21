@@ -315,7 +315,7 @@ clone_user_rev() {
         tmpHomePath="$(mktemp -d "${TMPDIR:-/tmp}/nix-prefetch-git-tmp-home-XXXXXXXXXX")"
         exit_handlers+=(remove_tmpHomePath)
         HOME="$tmpHomePath"
-        git lfs install
+        clean_git lfs install
     fi
 
     # Perform the checkout.
