@@ -5510,6 +5510,8 @@ self: super: with self; {
 
   lazy-object-proxy = callPackage ../development/python-modules/lazy-object-proxy { };
 
+  lbmpy = callPackage ../development/python-modules/lbmpy { };
+
   lc7001 = callPackage ../development/python-modules/lc7001 { };
 
   lcgit = callPackage ../development/python-modules/lcgit { };
