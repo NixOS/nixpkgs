@@ -21,7 +21,7 @@
 
 stdenv.mkDerivation rec {
   pname = "roc-toolkit";
-  version = "0.2.3";
+  version = "0.2.4";
 
   outputs = [ "out" "dev" ];
 
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     owner = "roc-streaming";
     repo = "roc-toolkit";
     rev = "v${version}";
-    hash = "sha256-wwcc2r1hrM9zryMJp+DOifSh0g6T/gdZJMpVdhqhjR8=";
+    hash = "sha256-x4+/MIFKcos9xWhvSNWdsUQA2oLiyYS0MJE60HY/3hQ=";
   };
 
   nativeBuildInputs = [
