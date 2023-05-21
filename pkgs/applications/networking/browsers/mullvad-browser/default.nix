@@ -5,6 +5,7 @@
 , copyDesktopItems
 , makeWrapper
 , writeText
+, wrapGAppsHook
 
 # Common run-time dependencies
 , zlib
@@ -104,7 +105,7 @@ stdenv.mkDerivation rec {
 
   src = srcs.${stdenv.hostPlatform.system} or (throw "unsupported system: ${stdenv.hostPlatform.system}");
 
-  nativeBuildInputs = [ copyDesktopItems makeWrapper ];
+  nativeBuildInputs = [ copyDesktopItems makeWrapper wrapGAppsHook ];
 
   preferLocalBuild = true;
   allowSubstitutes = false;

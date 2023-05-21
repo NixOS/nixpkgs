@@ -423,6 +423,8 @@ with pkgs;
     python3 = python311;
   };
 
+  checkpwn = callPackage ../tools/misc/checkpwn { };
+
   chrysalis = callPackage ../applications/misc/chrysalis { };
 
   ciel = callPackage ../tools/package-management/ciel { };
@@ -6192,6 +6194,8 @@ with pkgs;
   checkinstall = callPackage ../tools/package-management/checkinstall { };
 
   checkmake = callPackage ../development/tools/checkmake { };
+
+  cherrybomb = callPackage ../tools/security/cherrybomb { };
 
   chit = callPackage ../development/tools/chit { };
 
@@ -18627,7 +18631,7 @@ with pkgs;
 
   kube-prompt = callPackage ../development/tools/kube-prompt { };
 
-  kubei = callPackage ../tools/security/kubei { };
+  kubeclarity = callPackage ../tools/security/kubeclarity { };
 
   kubemq-community = callPackage ../servers/kubemq-community { };
 
@@ -27242,6 +27246,8 @@ with pkgs;
 
   gosec = callPackage ../development/tools/gosec { };
 
+  gotemplate = callPackage ../development/tools/gotemplate { };
+
   gotraceui = callPackage ../development/tools/gotraceui { };
 
   govers = callPackage ../development/tools/govers { };
@@ -31422,6 +31428,8 @@ with pkgs;
   i3wsr = callPackage ../applications/window-managers/i3/wsr.nix { };
 
   i3-wk-switch = callPackage ../applications/window-managers/i3/wk-switch.nix { };
+
+  kitti3 = python3.pkgs.callPackage ../applications/window-managers/i3/kitti3.nix { };
 
   waybox = callPackage ../applications/window-managers/waybox { };
 

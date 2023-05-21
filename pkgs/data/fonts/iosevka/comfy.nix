@@ -20,12 +20,12 @@ let
     "comfy-wide-motion-fixed" # Slab   | Wide    | Monospaced | No        |
     "comfy-wide-motion-duo"   # Slab   | Wide    | Duospaced  | Yes       |
   ];
-  version = "1.2.0";
+  version = "1.3.0";
   src = fetchFromSourcehut {
     owner = "~protesilaos";
     repo = "iosevka-comfy";
     rev = version;
-    sha256 = "sha256-gHDERf3eDsb59wz+kGa2wLY7RDRWs2woi5P2rZDYjL0=";
+    sha256 = "sha256-ajzUbobNf+Je8ls9htOCLPsB0OPSiqZzrc8bO6hQvio=";
   };
   privateBuildPlan = src.outPath + "/private-build-plans.toml";
   makeIosevkaFont = set:
@@ -39,11 +39,11 @@ let
           src = fetchFromGitHub {
             owner = "be5invis";
             repo = "iosevka";
-            rev = "d3b461432137b36922e41322c2e45a2401e727a5";
-            hash = "sha256-Sm+eG6ovVLmvKvQFEZblQV3jCLQRrc9Gga3pukwteLE=";
+            rev = "7ef24b8d87fe50793444f9f84b140767f7e47029";
+            hash = "sha256-RVBgJVMNyxV1KeNniwySsJUOmLDh6sFZju8szvzKlH4=";
           };
 
-          npmDepsHash = "sha256-pikpi9eyo1a+AFLr7BMl1kegy3PgYFjzmE3QJqPXpNM=";
+          npmDepsHash = "sha256-yogUBf+yfjfK8DE4gGgoGaTaYZagW8R1pCn7y0rEPt4=";
 
           meta = with lib; {
             inherit (src.meta) homepage;
