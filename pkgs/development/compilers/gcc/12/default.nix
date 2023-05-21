@@ -55,7 +55,7 @@ with lib;
 with builtins;
 
 let majorVersion = "12";
-    version = "${majorVersion}.2.0";
+    version = "${majorVersion}.3.0";
     disableBootstrap = !stdenv.hostPlatform.isDarwin && !profiledCompiler;
 
     inherit (stdenv) buildPlatform hostPlatform targetPlatform;
@@ -206,7 +206,7 @@ lib.pipe (stdenv.mkDerivation ({
 
   src = fetchurl {
     url = "mirror://gcc/releases/gcc-${version}/gcc-${version}.tar.xz";
-    sha256 = "sha256-5UnPnPNZSgDie2WJ1DItcOByDN0hPzm+tBgeBpJiMP8=";
+    hash = "sha256-lJpdT5nnhkIak7Uysi/6tVeN5zITaZdbka7Jet/ajDs=";
   };
 
   inherit patches;
