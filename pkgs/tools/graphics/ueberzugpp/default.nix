@@ -15,22 +15,35 @@
 , nlohmann_json
 , libsixel
 , microsoft-gsl
-, opencv
-, xorg
+, chafa
 , withOpencv ? stdenv.isLinux
+, opencv
 , withX11 ? stdenv.isLinux
+, xorg
+, withoutStdRanges ? stdenv.isDarwin
+, range-v3
 }:
 
 stdenv.mkDerivation rec {
   pname = "ueberzugpp";
-  version = "2.8.3";
+  version = "2.8.4";
 
   src = fetchFromGitHub {
     owner = "jstkdng";
     repo = "ueberzugpp";
     rev = "v${version}";
-    hash = "sha256-U6jw1VQmc/E/vXBCVvjBsmLjhVf0MFuK+FK8jnEEl1M=";
+    hash = "sha256-XWT6dFZx6kn6BAv7CV0YIiAuKSBOAfZr72gC9zrSxus=";
   };
+
+  # error: no member named 'ranges' in namespace 'std'
+  postPatch = lib.optionalString withoutStdRanges ''
+    for f in src/canvas/chafa.cpp src/canvas/iterm2/iterm2.cpp; do
+      sed -i "1i #include <range/v3/algorithm/for_each.hpp>" $f
+      substituteInPlace $f \
+        --replace "#include <ranges>" "" \
+        --replace "std::ranges" "ranges"
+    done
+  '';
 
   nativeBuildInputs = [
     cmake
@@ -50,11 +63,14 @@ stdenv.mkDerivation rec {
     nlohmann_json
     libsixel
     microsoft-gsl
+    chafa
   ] ++ lib.optionals withOpencv [
     opencv
   ] ++ lib.optionals withX11 [
     xorg.libX11
     xorg.xcbutilimage
+  ] ++ lib.optionals withoutStdRanges [
+    range-v3
   ];
 
   cmakeFlags = lib.optionals (!withOpencv) [
