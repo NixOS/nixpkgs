@@ -31834,6 +31834,8 @@ with pkgs;
 
   kubeseal = callPackage ../applications/networking/cluster/kubeseal { };
 
+  kubestroyer = callPackage ../tools/security/kubestroyer { };
+
   kubernix = callPackage ../applications/networking/cluster/kubernix { };
 
   kubeconform = callPackage ../applications/networking/cluster/kubeconform { };
