@@ -3,16 +3,25 @@
 , fetchPypi
 , isPyPy
 , nose
+, pythonOlder
+, tomli
 }:
 
 buildPythonPackage rec {
   pname = "yapf";
-  version = "0.32.0";
+  version = "0.33.0";
+  format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-o/UIXTfvfj4ATEup+bPkDFT/GQHNER8FFFrjE6fGfRs=";
+    hash = "sha256-2mK9/qPfNnNVM1HmJGq+0m2f5ngOVIpa+ecPbStPW5o=";
   };
+
+  nativeBuildInputs = [
+    tomli
+  ];
 
   # nose is unavailable on pypy
   doCheck = !isPyPy;
@@ -23,6 +32,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/google/yapf";
+    changelog = "https://github.com/google/yapf/blob/v${version}/CHANGELOG";
     description = "Yet Another Python Formatter";
     longDescription = ''
       Most of the current formatters for Python --- e.g., autopep8, and pep8ify
