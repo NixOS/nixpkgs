@@ -9874,6 +9874,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) CoreText;
   };
 
+  lwc = callPackage ../tools/misc/lwc { };
+
   lxc = callPackage ../os-specific/linux/lxc {
     autoreconfHook = buildPackages.autoreconfHook269;
   };
