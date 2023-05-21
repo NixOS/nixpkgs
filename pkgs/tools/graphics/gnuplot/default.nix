@@ -66,6 +66,12 @@ in
        --run '. ${./set-gdfontpath-from-fontconfig.sh}'
   '';
 
+  # When cross-compiling, don't build docs and demos.
+  # Inspiration taken from https://sourceforge.net/p/gnuplot/gnuplot-main/merge-requests/10/
+  makeFlags = lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    "-C src"
+  ];
+
   enableParallelBuilding = true;
 
   meta = with lib; {
