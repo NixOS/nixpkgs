@@ -6191,6 +6191,8 @@ with pkgs;
 
   checkmake = callPackage ../development/tools/checkmake { };
 
+  cherrybomb = callPackage ../tools/security/cherrybomb { };
+
   chit = callPackage ../development/tools/chit { };
 
   chkrootkit = callPackage ../tools/security/chkrootkit { };
