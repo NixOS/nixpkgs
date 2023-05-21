@@ -144,6 +144,9 @@ def update_rubyenv():
         with open(rubyenv_dir / fn, 'w') as f:
             f.write(repo.get_file(fn, rev))
 
+    # patch for openssl 3.x support
+    subprocess.check_output(['sed', '-i', "s:'openssl', '2.*':'openssl', '3.0.2':g", 'Gemfile'], cwd=rubyenv_dir)
+
     # Fetch vendored dependencies temporarily in order to build the gemset.nix
     subprocess.check_output(['mkdir', '-p', 'vendor/gems'], cwd=rubyenv_dir)
     subprocess.check_output(['sh', '-c', f'curl -L https://gitlab.com/gitlab-org/gitlab/-/archive/v{version}-ee/gitlab-v{version}-ee.tar.bz2?path=vendor/gems | tar -xj --strip-components=3'], cwd=f'{rubyenv_dir}/vendor/gems')
