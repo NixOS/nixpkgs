@@ -162,7 +162,7 @@ let
         ];
       };
 
-      "squeak.cog.spur" = buildVM {
+      "squeak-cog-spur" = buildVM {
         platformDir = "linux64x64";
         vmName = "squeak.cog.spur";
         scriptName = "squeak";
