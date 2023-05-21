@@ -11246,6 +11246,12 @@
     githubId = 17120571;
     name = "Xinhao Luo";
   };
+  nevivurn = {
+    email = "nevivurn@nevi.dev";
+    github = "nevivurn";
+    githubId = 7698349;
+    name = "Yongun Seong";
+  };
   newam = {
     email = "alex@thinglab.org";
     github = "newAM";
@@ -14329,9 +14335,11 @@
     name = "Scott Hamilton";
   };
   ShamrockLee = {
-    name = "Shamrock Lee";
+    email = "shamrocklee@posteo.net";
     github = "ShamrockLee";
     githubId = 44064051;
+    matrix = "@shamrocklee:matrix.org";
+    name = "Yueh-Shun Li";
   };
   shanesveller = {
     email = "shane@sveller.dev";

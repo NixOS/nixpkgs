@@ -34,6 +34,12 @@ stdenv.mkDerivation rec {
     "sysconfdir=\${out}/etc"
   ];
 
+  patches = lib.optionals (stdenv.isDarwin) [
+    # Build checks for strlcpy being available in the system, but doesn't
+    # actually exclude its own copy from being built
+    ./darwin-strlcpy.patch
+  ];
+
   enableParallelBuilding = true;
 
   meta = with lib; {

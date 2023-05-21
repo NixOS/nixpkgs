@@ -10,7 +10,7 @@ let
   certPaths = builtins.map builtins.dirOf [ cfg.serverSettings.tls_chain cfg.serverSettings.tls_key ];
 
   # Merge bind mount paths and remove paths where a prefix is already mounted.
-  # This makes sure that if e.g. the tls_chain is in the nix store and /nix/store is alread in the mount
+  # This makes sure that if e.g. the tls_chain is in the nix store and /nix/store is already in the mount
   # paths, no new bind mount is added. Adding subpaths caused problems on ofborg.
   hasPrefixInList = list: newPath: lib.any (path: lib.hasPrefix (builtins.toString path) (builtins.toString newPath)) list;
   mergePaths = lib.foldl' (merged: newPath: let

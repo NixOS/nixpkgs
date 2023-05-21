@@ -1,24 +1,29 @@
 { lib
-, argcomplete
-, buildPythonPackage
 , fetchFromGitHub
-, pythonOlder
-, colored
-, packaging
-, paramiko
-, pytz
-, pyyaml
-, rich
-, sshpubkeys
-, pytestCheckHook
+, python3
 }:
 
-buildPythonPackage rec {
+let
+  py = python3.override {
+    packageOverrides = self: super: {
+      paramiko = super.paramiko.overridePythonAttrs (oldAttrs: rec {
+        version = "3.1.0";
+        src = oldAttrs.src.override {
+          inherit version;
+          hash = "sha256-aVD6ymgZrNMhnUrmlKI8eofuONCE9wwXJLDA27i3V2k=";
+        };
+        patches = [ ];
+        propagatedBuildInputs = oldAttrs.propagatedBuildInputs ++ [ python3.pkgs.icecream ];
+      });
+    };
+  };
+in
+with py.pkgs;
+
+buildPythonApplication rec {
   pname = "ssh-mitm";
   version = "3.0.2";
   format = "setuptools";
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = pname;
@@ -35,6 +40,7 @@ buildPythonPackage rec {
     pytz
     pyyaml
     rich
+    setuptools
     sshpubkeys
   ];
 

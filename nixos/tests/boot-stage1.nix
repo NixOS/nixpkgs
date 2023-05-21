@@ -132,7 +132,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
         '';
       })
 
-      # This canary process mimicks a storage daemon, which we do NOT want to be
+      # This canary process mimics a storage daemon, which we do NOT want to be
       # killed before going into stage 2. For more on root storage daemons, see:
       # https://www.freedesktop.org/wiki/Software/systemd/RootStorageDaemons/
       (mkCmdlineCanary {
