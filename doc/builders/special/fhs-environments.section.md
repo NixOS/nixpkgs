@@ -17,7 +17,8 @@
 - `extraInstallCommands`
         Additional commands to be executed for finalizing the derivation with runner script.
 - `runScript`
-        A command that would be executed inside the sandbox and passed all the command line arguments. It defaults to `bash`.
+        A shell command to be executed inside the sandbox. It defaults to `bash`. Command line arguments passed to the resulting wrapper are appended to this command by default.
+        This command must be escaped; i.e. `"foo app" --do-stuff --with "some file"`. See `lib.escapeShellArgs`.
 - `profile`
         Optional script for `/etc/profile` within the sandbox.
 
