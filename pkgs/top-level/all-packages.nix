@@ -19505,6 +19505,8 @@ with pkgs;
 
   acl = callPackage ../development/libraries/acl { };
 
+  acltoolkit = callPackage ../tools/security/acltoolkit { };
+
   acsccid = callPackage ../tools/security/acsccid { };
 
   activemq = callPackage ../development/libraries/apache-activemq { };
