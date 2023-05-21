@@ -411,7 +411,7 @@ with import <nixpkgs> {};
       version = "0.10.0";
       format = "setuptools";
 
-      src = python311.pkgs.fetchPypi {
+      src = fetchPypi {
         inherit pname version;
         hash = "sha256-CP3V73yWSArRHBLUct4hrNMjWZlvaaUlkpm1QP66RWA=";
       };
@@ -1229,7 +1229,7 @@ with import <nixpkgs> {};
     packageOverrides = self: super: {
       pandas = super.pandas.overridePythonAttrs(old: rec {
         version = "0.19.1";
-        src =  super.fetchPypi {
+        src =  fetchPypi {
           pname = "pandas";
           inherit version;
           hash = "sha256-JQn+rtpy/OA2deLszSKEuxyttqBzcAil50H+JDHUdCE=";
@@ -1286,6 +1286,7 @@ specifying an interpreter version), like this:
 ```nix
 { lib
 , python3
+, fetchPypi
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -1293,7 +1294,7 @@ python3.pkgs.buildPythonApplication rec {
   version = "2.7.9";
   format = "setuptools";
 
-  src = python3.pkgs.fetchPypi {
+  src = fetchPypi {
     inherit pname version;
     hash  = "sha256-Pe229rT0aHwA98s+nTHQMEFKZPo/yw6sot8MivFDvAw=";
   };

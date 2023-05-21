@@ -2277,6 +2277,8 @@ self: super: with self; {
 
   dash-table = callPackage ../development/python-modules/dash-table { };
 
+  dashing = callPackage ../development/python-modules/dashing { };
+
   dask = callPackage ../development/python-modules/dask { };
 
   dask-awkward = callPackage ../development/python-modules/dask-awkward { };
@@ -5996,8 +5998,6 @@ self: super: with self; {
   markdownify  = callPackage ../development/python-modules/markdownify { };
 
   markdownsuperscript = callPackage ../development/python-modules/markdownsuperscript { };
-
-  markerlib = callPackage ../development/python-modules/markerlib { };
 
   markupsafe = callPackage ../development/python-modules/markupsafe { };
 
