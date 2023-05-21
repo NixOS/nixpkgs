@@ -14235,7 +14235,6 @@ with pkgs;
 
   zbar = libsForQt5.callPackage ../tools/graphics/zbar {
     inherit (darwin.apple_sdk.frameworks) Foundation;
-    autoreconfHook = buildPackages.autoreconfHook269;
   };
 
   zbctl = callPackage ../tools/admin/zbctl { };
