@@ -658,6 +658,13 @@ in
       "--with-cflags=-I${ncurses.dev}/include"
       "--with-ldflags=-L${ncurses.out}/lib"
     ];
+    dontBuild = false;
+    postPatch = ''
+      substituteInPlace extconf.rb --replace 'rubyio.h' 'ruby/io.h'
+      substituteInPlace terminfo.c \
+        --replace 'rubyio.h' 'ruby/io.h' \
+        --replace 'rb_cData' 'rb_cObject'
+    '';
   };
 
   ruby-vips = attrs: {

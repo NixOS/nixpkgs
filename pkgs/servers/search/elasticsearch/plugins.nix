@@ -37,8 +37,8 @@ in
     version = esVersion;
     src = fetchurl {
       url = "https://artifacts.elastic.co/downloads/elasticsearch-plugins/${pluginName}/${pluginName}-${version}.zip";
-      sha256 =
-        if version == "7.17.9" then "sha256-70KU7aGUHEZsjykXqHUYspGyX0CCrlS1er9WdUbxxSE="
+      hash =
+        if version == "7.17.10" then "sha256-D08CVW/qHpZZaKnploM4aCJ4bunvPjVmieDYr1d6jQA="
         else throw "unsupported version ${version} for plugin ${pluginName}";
     };
     meta = with lib; {
@@ -53,8 +53,8 @@ in
     version = esVersion;
     src = fetchurl {
       url = "https://artifacts.elastic.co/downloads/elasticsearch-plugins/${pluginName}/${pluginName}-${version}.zip";
-      sha256 =
-        if version == "7.17.9" then "sha256-oRTs1eK7jpoKaMvc+6rx9qiA8wg+gYUADM0HuJU0nOY="
+      hash =
+        if version == "7.17.10" then "sha256-cpgr2zPCpsLrmshWJWoGNcGl0X+bO/K4A9bMqLv8+H8="
         else throw "unsupported version ${version} for plugin ${pluginName}";
     };
     meta = with lib; {
@@ -69,7 +69,7 @@ in
     version = esVersion;
     src = fetchurl {
       url = "https://github.com/vhyza/elasticsearch-${pluginName}/releases/download/v${version}/elasticsearch-${pluginName}-${version}-plugin.zip";
-      sha256 =
+      hash =
         if version == "7.17.9" then "sha256-iY25apDkS6s0RoR9dVL2o/hFuUo6XhMzLjl8wDSFejk="
         else throw "unsupported version ${version} for plugin ${pluginName}";
     };
@@ -77,6 +77,7 @@ in
       homepage = "https://github.com/vhyza/elasticsearch-analysis-lemmagen";
       description = "LemmaGen Analysis plugin provides jLemmaGen lemmatizer as Elasticsearch token filter";
       license = licenses.asl20;
+      broken = true; # Not released yet for ES 7.17.10
     };
   };
 
@@ -85,8 +86,8 @@ in
     version = esVersion;
     src = fetchurl {
       url = "https://artifacts.elastic.co/downloads/elasticsearch-plugins/${pluginName}/${pluginName}-${version}.zip";
-      sha256 =
-        if version == "7.17.9" then "sha256-xlEabvNiddEwRfKrHIq1QPFJFMd2gByurIZF9LOxVSs="
+      hash =
+        if version == "7.17.10" then "sha256-UmykO+hZDvlFhEbf7zL2bdw4j6NhByRBu9eH3F6/EtM="
         else throw "unsupported version ${version} for plugin ${pluginName}";
     };
     meta = with lib; {
@@ -101,8 +102,8 @@ in
     version = esVersion;
     src = fetchurl {
       url = "https://artifacts.elastic.co/downloads/elasticsearch-plugins/${pluginName}/${pluginName}-${version}.zip";
-      sha256 =
-        if version == "7.17.9" then "sha256-J1q87fhL4A5tkxPADgHflPbO2RRMGPUk58l7DEpgd94="
+      hash =
+        if version == "7.17.10" then "sha256-Y/AbLfHSdocX0NQbnKm63gTWgwzssb4kpSwRqLozD9w="
         else throw "unsupported version ${version} for plugin ${pluginName}";
     };
     meta = with lib; {
@@ -117,8 +118,8 @@ in
     version = esVersion;
     src = fetchurl {
       url = "https://artifacts.elastic.co/downloads/elasticsearch-plugins/${pluginName}/${pluginName}-${version}.zip";
-      sha256 =
-        if version == "7.17.9" then "sha256-BhJtBdsT5Xapehfn0xaTWpSrvT1W+Hhv/yqliA6dBG8="
+      hash =
+        if version == "7.17.10" then "sha256-QIYD7cGpJQg+csv/tekN6GFtdnuhYU6VyAXk7nY/uWs="
         else throw "unsupported version ${version} for plugin ${pluginName}";
     };
     meta = with lib; {
@@ -133,8 +134,8 @@ in
     version = esVersion;
     src = fetchurl {
       url = "https://artifacts.elastic.co/downloads/elasticsearch-plugins/${pluginName}/${pluginName}-${esVersion}.zip";
-      sha256 =
-        if version == "7.17.9" then "sha256-bjVMVwZfj9WyjkwTXwTJdmaqZ1sWuvOZKXh9PFTOwb8="
+      hash =
+        if version == "7.17.10" then "sha256-L8lS+EPYuhNNTnP3ImeZsBQ5a5DAncs3qBFDWGWISRI="
         else throw "unsupported version ${version} for plugin ${pluginName}";
     };
     meta = with lib; {
@@ -149,8 +150,8 @@ in
     version = esVersion;
     src = fetchurl {
       url = "https://artifacts.elastic.co/downloads/elasticsearch-plugins/${pluginName}/${pluginName}-${esVersion}.zip";
-      sha256 =
-        if version == "7.17.9" then "sha256-ZyImIHYOz5bOEA+ARtPB2CznTOSjFKsavzWXXEzfkO8="
+      hash =
+        if version == "7.17.10" then "sha256-eXstbxlyS8WzW8u5YiMFXGpILCcEWrIb/IxXVzAGFLU="
         else throw "unsupported version ${version} for plugin ${pluginName}";
     };
     meta = with lib; {
@@ -166,13 +167,13 @@ in
     pluginName = "search-guard";
     version =
       # https://docs.search-guard.com/latest/search-guard-versions
-      if esVersion == "7.17.9" then "${esVersion}-53.6.0"
+      if esVersion == "7.17.10" then "${esVersion}-53.7.0"
       else throw "unsupported version ${esVersion} for plugin ${pluginName}";
     src =
-      if esVersion == "7.17.9" then
+      if esVersion == "7.17.10" then
         fetchurl {
           url = "https://maven.search-guard.com/search-guard-suite-release/com/floragunn/search-guard-suite-plugin/${version}/search-guard-suite-plugin-${version}.zip";
-          sha256 = "sha256-HwxNvWvjqaI3ytSjNnsGcyt3omIZp69bgwxoufL2Nj8=";
+          hash = "sha256-FIF4O8z0U2giXVA2cNEdCDbpuJDJhaxHBOmv2fACucw=";
         }
       else throw "unsupported version ${version} for plugin ${pluginName}";
     meta = with lib; {

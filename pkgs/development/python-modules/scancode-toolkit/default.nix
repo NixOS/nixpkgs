@@ -16,9 +16,10 @@
 , extractcode-libarchive
 , fasteners
 , fetchPypi
+, fetchpatch
 , fingerprints
 , ftfy
-, gemfileparser
+, gemfileparser2
 , html5lib
 , importlib-metadata
 , intbitset
@@ -89,7 +90,7 @@ buildPythonPackage rec {
     fasteners
     fingerprints
     ftfy
-    gemfileparser
+    gemfileparser2
     html5lib
     importlib-metadata
     intbitset
@@ -133,13 +134,23 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  patches = [
+    (fetchpatch {
+      name = "${pname}-allow-stable-spdx-tools.patch";
+      url = "https://github.com/nexB/scancode-toolkit/commit/d89ab6584d3df6b7eb1d1394559e9d967d6db6ae.patch";
+      includes = [ "src/*" ];
+      hash = "sha256-AU3vJlOxmCy3yvkupVaAVxAKxJI3ymXEk+A5DWSkfOM=";
+    })
+  ];
+
   postPatch = ''
     substituteInPlace setup.cfg \
       --replace "pdfminer.six >= 20200101" "pdfminer.six" \
       --replace "pluggy >= 0.12.0, < 1.0" "pluggy" \
       --replace "pygmars >= 0.7.0" "pygmars" \
       --replace "license_expression >= 21.6.14" "license_expression" \
-      --replace "intbitset >= 2.3.0,  < 3.0" "intbitset"
+      --replace "intbitset >= 2.3.0,  < 3.0" "intbitset" \
+      --replace "spdx_tools == 0.7.0a3" "spdx_tools"
   '';
 
   # Importing scancode needs a writeable home, and preCheck happens in between
