@@ -88,6 +88,13 @@ stdenv.mkDerivation rec {
       sha256 = "sha256-AgJJKQA8vc5oKaTQDqMdwBR4hT4sn9+uW0jLe7GteJw=";
     })
 
+    # Fix virtual destruction
+    (fetchpatch {
+      url = "https://github.com/shogun-toolbox/shogun/commit/ef0e4dc1cc4a33c9e6b17a108fa38a436de2d7ee.patch";
+      sha256 = "sha256-a9Rm0ytqkSAgC3dguv8m3SwOSipb+VByBHHdmV0d63w=";
+    })
+    ./fix-virtual-destruction.patch
+
     # Fix compile errors with json-c
     # https://github.com/shogun-toolbox/shogun/pull/4104
     (fetchpatch {
