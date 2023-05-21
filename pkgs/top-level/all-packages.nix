@@ -3698,7 +3698,7 @@ with pkgs;
 
   ssh-key-confirmer = callPackage ../tools/networking/ssh-key-confirmer { };
 
-  ssh-mitm = with python3Packages; toPythonApplication ssh-mitm;
+  ssh-mitm = callPackage ../tools/security/ssh-mitm { };
 
   sshchecker = callPackage ../tools/security/sshchecker { };
 
@@ -7246,7 +7246,7 @@ with pkgs;
 
   # The latest version used by elasticsearch, logstash, kibana and the the beats from elastic.
   # When updating make sure to update all plugins or they will break!
-  elk7Version = "7.17.9";
+  elk7Version = "7.17.10";
 
   elasticsearch7 = callPackage ../servers/search/elasticsearch/7.x.nix {
     util-linux = util-linuxMinimal;
@@ -18434,6 +18434,8 @@ with pkgs;
   gocd-agent = callPackage ../development/tools/continuous-integration/gocd-agent { };
 
   gocd-server = callPackage ../development/tools/continuous-integration/gocd-server { };
+
+  gopatch = callPackage ../development/tools/misc/gopatch { };
 
   goredo = callPackage ../development/tools/build-managers/goredo { };
 
@@ -35712,6 +35714,8 @@ with pkgs;
     inherit (darwin) libobjc;
     inherit (darwin.apple_sdk.frameworks) IOKit;
   };
+
+  go-exploitdb = callPackage ../tools/security/go-exploitdb { };
 
   groestlcoin  = libsForQt5.callPackage ../applications/blockchains/groestlcoin {
     boost = boost17x;
