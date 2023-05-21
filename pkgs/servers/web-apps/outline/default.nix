@@ -86,7 +86,7 @@ stdenv.mkDerivation rec {
     homepage = "https://www.getoutline.com/";
     changelog = "https://github.com/outline/outline/releases";
     license = licenses.bsl11;
-    maintainers = with maintainers; [ cab404 yrd ];
+    maintainers = with maintainers; [ cab404 yrd xanderio ];
     platforms = platforms.linux;
   };
 }
