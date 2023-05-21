@@ -6,7 +6,7 @@
 , glib
 , gtk3
 , lib
-, libappindicator
+, libayatana-appindicator
 , libdrm
 , libgcrypt
 , libkrb5
@@ -22,15 +22,16 @@
 }:
 
 let
-  version = "3.1.1-11223";
+  version = "3.1.2-12912";
+  _hash = "80d33f88";
   srcs = {
     x86_64-linux = fetchurl {
-      url = "https://dldir1.qq.com/qqfile/qq/QQNT/2355235c/linuxqq_${version}_amd64.deb";
-      sha256 = "sha256-TBgQ7zV+juB3KSgIIXuvxnYmvnnM/1/wU0EkiopIqvY=";
+      url = "https://dldir1.qq.com/qqfile/qq/QQNT/${_hash}/linuxqq_${version}_amd64.deb";
+      hash = "sha256-F+zIHqYWKiCHYNJZ5hRw0rzltizjuqhVxbpzQGagoZ0=";
     };
     aarch64-linux = fetchurl {
-      url = "https://dldir1.qq.com/qqfile/qq/QQNT/2355235c/linuxqq_${version}_arm64.deb";
-      sha256 = "sha256-1ba/IA/+X/s7jUtIhh3OsBHU7MPggGrASsBPx8euBBs=";
+      url = "https://dldir1.qq.com/qqfile/qq/QQNT/${_hash}/linuxqq_${version}_arm64.deb";
+      hash = "sha256-5n4T0mlfEh9/84wUYiH437R95Qz6/SKDq/AK6baiW24=";
     };
   };
   src = srcs.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
@@ -38,8 +39,6 @@ in
 stdenv.mkDerivation {
   pname = "qq";
   inherit version src;
-
-  unpackCmd = "dpkg-deb -x $curSrc source";
 
   nativeBuildInputs = [
     autoPatchelfHook
@@ -63,7 +62,6 @@ stdenv.mkDerivation {
   ];
 
   runtimeDependencies = map lib.getLib [
-    libappindicator
     systemd
   ];
 
@@ -80,6 +78,10 @@ stdenv.mkDerivation {
 
     # Remove bundled libraries
     rm -r $out/opt/QQ/resources/app/sharp-lib
+
+    # https://github.com/microcai/gentoo-zh/commit/06ad5e702327adfe5604c276635ae8a373f7d29e
+    ln -s ${libayatana-appindicator}/lib/libayatana-appindicator3.so \
+      $out/opt/QQ/libappindicator3.so
 
     runHook postInstall
   '';
