@@ -423,6 +423,8 @@ with pkgs;
     python3 = python311;
   };
 
+  checkpwn = callPackage ../tools/misc/checkpwn { };
+
   chrysalis = callPackage ../applications/misc/chrysalis { };
 
   ciel = callPackage ../tools/package-management/ciel { };
