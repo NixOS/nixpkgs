@@ -14223,6 +14223,12 @@
     githubId = 33031;
     name = "Greg Pfeil";
   };
+  Selmer443 = {
+    email = "user55596@protonmail.com";
+    github = "selmer443";
+    githubId = 93581805;
+    name = "Selmer";
+  };
   sengaya = {
     email = "tlo@sengaya.de";
     github = "sengaya";
