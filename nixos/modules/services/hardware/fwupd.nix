@@ -13,16 +13,13 @@ let
   };
 
   customEtc = {
-    "fwupd/daemon.conf" = {
-      source = format.generate "daemon.conf" {
+    "fwupd/fwupd.conf" = {
+      source = format.generate "fwupd.conf" {
         fwupd = cfg.daemonSettings;
-      };
-    };
-
-    "fwupd/uefi_capsule.conf" = {
-      source = format.generate "uefi_capsule.conf" {
         uefi_capsule = cfg.uefiCapsuleSettings;
       };
+      # fwupd tries to chmod the file if it doesn't have the right permissions
+      mode = "0640";
     };
   };
 
