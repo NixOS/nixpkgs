@@ -31778,6 +31778,8 @@ with pkgs;
 
   inframap = callPackage ../applications/networking/cluster/inframap { };
 
+  infrastructure-agent = callPackages ../servers/monitoring/infrastructure-agent { };
+
   inkcut = libsForQt5.callPackage ../applications/misc/inkcut { };
 
   inklingreader = callPackage ../tools/misc/inklingreader { };
