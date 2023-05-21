@@ -3000,6 +3000,8 @@ self: super: with self; {
 
   dsmr-parser = callPackage ../development/python-modules/dsmr-parser { };
 
+  dsnap = callPackage ../development/python-modules/dsnap { };
+
   dtlssocket = callPackage ../development/python-modules/dtlssocket { };
 
   dtschema = callPackage ../development/python-modules/dtschema { };
