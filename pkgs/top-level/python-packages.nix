@@ -4058,6 +4058,8 @@ self: super: with self; {
 
   github3_py = callPackage ../development/python-modules/github3_py { };
 
+  gitignore-parser = callPackage ../development/python-modules/gitignore-parser { };
+
   gitpython = callPackage ../development/python-modules/gitpython { };
 
   glad =  callPackage ../development/python-modules/glad { };
@@ -11084,6 +11086,8 @@ self: super: with self; {
   simpful = callPackage ../development/python-modules/simpful { };
 
   simpy = callPackage ../development/python-modules/simpy { };
+
+  single-source = callPackage ../development/python-modules/single-source { };
 
   single-version = callPackage ../development/python-modules/single-version { };
 
