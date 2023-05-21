@@ -15,9 +15,14 @@ lib.makeScope
 
     coreutils = callPackage ./coreutils { tinycc = tinycc-mes; };
 
+    gnumake = callPackage ./gnumake { tinycc = tinycc-mes; };
+
     gnupatch = callPackage ./gnupatch { tinycc = tinycc-mes; };
 
-    gnumake = callPackage ./gnumake { tinycc = tinycc-mes; };
+    gnused = callPackage ./gnused {
+      bash = bash_2_05;
+      tinycc = tinycc-mes;
+    };
 
     ln-boot = callPackage ./ln-boot { };
 
@@ -34,9 +39,10 @@ lib.makeScope
     inherit (callPackage ./utils.nix { }) fetchurl derivationWithMeta writeTextFile writeText;
 
     test = kaem.runCommand "minimal-bootstrap-test" {} ''
+      echo ${bash_2_05.tests.get-version}
+      echo ${gnused.tests.get-version}
       echo ${mes.compiler.tests.get-version}
       echo ${tinycc-mes.compiler.tests.chain}
-      echo ${bash_2_05.tests.get-version}
       mkdir ''${out}
     '';
   })
