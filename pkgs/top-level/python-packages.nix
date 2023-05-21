@@ -2254,6 +2254,8 @@ self: super: with self; {
 
   dash-table = callPackage ../development/python-modules/dash-table { };
 
+  dashing = callPackage ../development/python-modules/dashing { };
+
   dask = callPackage ../development/python-modules/dask { };
 
   dask-awkward = callPackage ../development/python-modules/dask-awkward { };
