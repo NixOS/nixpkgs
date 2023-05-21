@@ -24071,8 +24071,6 @@ with pkgs;
 
   tclx = callPackage ../development/libraries/tclx { };
 
-  tcl-fcgi = callPackage ../development/libraries/tcl-fcgi { };
-
   tdb = callPackage ../development/libraries/tdb { };
 
   tdlib = callPackage ../development/libraries/tdlib { };
@@ -24127,6 +24125,7 @@ with pkgs;
 
   tk-8_6 = callPackage ../development/libraries/tk/8.6.nix { };
   tk-8_5 = callPackage ../development/libraries/tk/8.5.nix { tcl = tcl-8_5; };
+  tk-8_7 = callPackage ../development/libraries/tk/8.7.nix { tcl = tcl-8_7; };
 
   tkimg = callPackage ../development/libraries/tkimg { };
 
