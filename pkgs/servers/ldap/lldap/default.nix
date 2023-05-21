@@ -109,6 +109,6 @@ in rustPlatform.buildRustPackage (commonDerivationAttrs // {
     changelog = "https://github.com/lldap/lldap/blob/v${lldap.version}/CHANGELOG.md";
     license = licenses.gpl3Only;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ indeednotjames bendlas ];
+    maintainers = with maintainers; [ emilylange bendlas ];
   };
 })

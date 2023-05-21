@@ -4609,6 +4609,12 @@
     githubId = 18535642;
     name = "Emily";
   };
+  emilylange = {
+    email = "nix@emilylange.de";
+    github = "emilylange";
+    githubId = 55066419;
+    name = "Emily Lange";
+  };
   emilytrau = {
     name = "Emily Trau";
     email = "nix@angus.ws";
@@ -6774,12 +6780,6 @@
     github = "inclyc";
     githubId = 36667224;
     name = "Yingchi Long";
-  };
-  indeednotjames = {
-    email = "nix@indeednotjames.com";
-    github = "IndeedNotJames";
-    githubId = 55066419;
-    name = "Emily Lange";
   };
   indexyz = {
     email = "indexyz@pm.me";
