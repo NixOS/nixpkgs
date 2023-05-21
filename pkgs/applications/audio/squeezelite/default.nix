@@ -82,9 +82,9 @@ stdenv.mkDerivation {
     ++ optional resampleSupport "-DRESAMPLE"
     ++ optional sslSupport "-DUSE_SSL";
 
-  LDADD = if stdenv.isLinux
-          then null
-          else "-lportaudio -lpthread -ldl -lm -framework CoreVideo -framework VideoDecodeAcceleration -framework CoreAudio -framework AudioToolbox -framework AudioUnit -framework Carbon";
+  env = lib.optionalAttrs stdenv.isDarwin {
+    LDADD = "-lportaudio -lpthread";
+  };
 
   installPhase = ''
     runHook preInstall
