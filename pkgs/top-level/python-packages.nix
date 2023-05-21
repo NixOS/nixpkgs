@@ -3005,6 +3005,8 @@ self: super: with self; {
 
   dsmr-parser = callPackage ../development/python-modules/dsmr-parser { };
 
+  dsnap = callPackage ../development/python-modules/dsnap { };
+
   dtlssocket = callPackage ../development/python-modules/dtlssocket { };
 
   dtschema = callPackage ../development/python-modules/dtschema { };
@@ -6493,6 +6495,8 @@ self: super: with self; {
   mypy = callPackage ../development/python-modules/mypy { };
 
   mypy-boto3-builder = callPackage ../development/python-modules/mypy-boto3-builder { };
+
+  mypy-boto3-ebs = callPackage ../development/python-modules/mypy-boto3-ebs { };
 
   mypy-boto3-s3 = callPackage ../development/python-modules/mypy-boto3-s3 { };
 
