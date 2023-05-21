@@ -1683,6 +1683,8 @@ with pkgs;
 
   sdbus-cpp = callPackage ../development/libraries/sdbus-cpp { };
 
+  basu = callPackage ../development/libraries/basu { };
+
   sdlookup = callPackage ../tools/security/sdlookup { };
 
   sgrep = callPackage ../tools/text/sgrep { };
