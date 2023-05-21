@@ -3213,6 +3213,8 @@ with pkgs;
 
   cpuid = callPackage ../os-specific/linux/cpuid { };
 
+  cpuid2cpuflags = callPackage ../os-specific/linux/cpuid2cpuflags { };
+
   msr = callPackage ../os-specific/linux/msr { };
 
   ctre = callPackage ../development/libraries/ctre { };
