@@ -25532,7 +25532,13 @@ with pkgs;
 
   mullvad-vpn = callPackage ../applications/networking/mullvad-vpn { };
 
-  mullvad-browser = callPackage ../applications/networking/browsers/mullvad-browser { };
+  mullvad-browser-unwrapped = callPackage ../applications/networking/browsers/mullvad-browser { };
+
+  mullvad-browser = wrapFirefox mullvad-browser-unwrapped {
+    inherit (mullvad-browser-unwrapped) pname;
+    version = mullvad-browser-unwrapped.realVersion;
+    libName = mullvad-browser-unwrapped.binaryName;
+  };
 
   mycorrhiza = callPackage ../servers/mycorrhiza { };
 
