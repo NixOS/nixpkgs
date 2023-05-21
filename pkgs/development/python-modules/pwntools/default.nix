@@ -28,12 +28,12 @@ let
   debuggerName = lib.strings.getName debugger;
 in
 buildPythonPackage rec {
-  version = "4.9.0";
+  version = "4.10.0";
   pname = "pwntools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-7qZ9GC+RcEiDkpmNmy8d67dYiTgFBVAfB3B2RfrH5xI=";
+    hash = "sha256-WI6J6meFJ8C1tsru7n524xNS544vHPPdp7yaz1JuRG0=";
   };
 
   postPatch = ''
