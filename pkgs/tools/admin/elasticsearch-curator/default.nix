@@ -1,4 +1,7 @@
-{ lib, fetchFromGitHub, python3 }:
+{ lib
+, fetchFromGitHub
+, python3
+}:
 
 let
   python = python3.override {
@@ -16,7 +19,7 @@ let
     };
   };
 in python.pkgs.buildPythonApplication rec {
-  pname   = "elasticsearch-curator";
+  pname = "elasticsearch-curator";
   version = "5.8.4";
 
   format = "setuptools";
@@ -24,7 +27,7 @@ in python.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "elastic";
     repo = "curator";
-    rev = "v${version}";
+    rev = "refs/tags/v${version}";
     hash = "sha256-wSfd52jebUkgF5xhjcoUjI7j46eJF33pVb4Wrybq44g=";
   };
 
@@ -80,6 +83,7 @@ in python.pkgs.buildPythonApplication rec {
 
       * Perform various actions on the items which remain in the actionable list.
     '';
+    changelog = "https://github.com/elastic/curator/releases/tag/v${version}";
     maintainers = with maintainers; [ basvandijk ];
   };
 }
