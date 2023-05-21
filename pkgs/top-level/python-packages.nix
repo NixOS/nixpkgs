@@ -4983,6 +4983,8 @@ self: super: with self; {
 
   ipywidgets = callPackage ../development/python-modules/ipywidgets { };
 
+  ipyxact = callPackage ../development/python-modules/ipyxact { };
+
   irc = callPackage ../development/python-modules/irc { };
 
   ircrobots = callPackage ../development/python-modules/ircrobots { };
@@ -6942,6 +6944,8 @@ self: super: with self; {
   ofxtools = callPackage ../development/python-modules/ofxtools { };
 
   oemthermostat = callPackage ../development/python-modules/oemthermostat { };
+
+  okonomiyaki = callPackage ../development/python-modules/okonomiyaki { };
 
   okta = callPackage ../development/python-modules/okta { };
 
@@ -11077,6 +11081,8 @@ self: super: with self; {
 
   simplenote = callPackage ../development/python-modules/simplenote { };
 
+  simplesat = callPackage ../development/python-modules/simplesat { };
+
   simple-di = callPackage ../development/python-modules/simple-di { };
 
   simple-rest-client = callPackage ../development/python-modules/simple-rest-client { };
@@ -13291,6 +13297,8 @@ self: super: with self; {
   zigpy-znp = callPackage ../development/python-modules/zigpy-znp { };
 
   zimports = callPackage ../development/python-modules/zimports { };
+
+  zipfile2 = callPackage ../development/python-modules/zipfile2 { };
 
   zipp = callPackage ../development/python-modules/zipp { };
 
