@@ -14217,6 +14217,13 @@
     github = "sei40kr";
     githubId = 11665236;
   };
+  seirl = {
+    name = "Antoine Pietri";
+    email = "antoine.pietri1@gmail.com";
+    github = "seirl";
+    githubId = 4927883;
+    matrix = "@seirl:matrix.org";
+  };
   sellout = {
     email = "greg@technomadic.org";
     github = "sellout";
