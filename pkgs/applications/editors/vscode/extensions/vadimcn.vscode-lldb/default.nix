@@ -1,11 +1,11 @@
 { pkgs, lib, stdenv, fetchFromGitHub, runCommand, rustPlatform, makeWrapper, llvmPackages
-, buildNpmPackage, cmake, nodejs, unzip, python3, pkg-config, libsecret
+, buildNpmPackage, cmake, nodejs, unzip, python3, pkg-config, libsecret, darwin
 }:
 assert lib.versionAtLeast python3.version "3.5";
 let
   publisher = "vadimcn";
   pname = "vscode-lldb";
-  version = "1.8.1";
+  version = "1.9.1";
 
   vscodeExtUniqueId = "${publisher}.${pname}";
   vscodeExtPublisher = publisher;
@@ -15,7 +15,7 @@ let
     owner = "vadimcn";
     repo = "vscode-lldb";
     rev = "v${version}";
-    sha256 = "sha256-5wrw8LNH14WAyIKIRGFbvrISb5RUXeD5Uh/weja9p4Q=";
+    sha256 = "sha256-DqxdZtSW8TZaOFGXOZQ7a4tmgRj6iAWDppCNomdfVxY=";
   };
 
   # need to build a custom version of lldb and llvm for enhanced rust support
@@ -25,7 +25,7 @@ let
     pname = "${pname}-adapter";
     inherit version src;
 
-    cargoSha256 = "sha256-Lpo2jaDMaZGwSrpQBvBCscVbWi2Db1Cx1Tv84v1H4Es=";
+    cargoSha256 = "sha256-+hfNkr9cZbOcWdWKUWUqDj9a0PKjKeApFXYZzS1XokE=";
 
     nativeBuildInputs = [ makeWrapper ];
 
@@ -46,7 +46,7 @@ let
     pname = "${pname}-node-deps";
     inherit version src;
 
-    npmDepsHash = "sha256-+LXcY3sQjZa9DyBiUK1G4BnAr6c+1ZkHMPCCSPWIDtA=";
+    npmDepsHash = "sha256-Cdlq1jxHSCfPjXhasClc6XzEUp3vlLgkStbhYtCyc7E=";
 
     nativeBuildInputs = [
       python3
@@ -55,7 +55,10 @@ let
 
     buildInputs = [
       libsecret
-    ];
+    ] ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
+      Security
+      AppKit
+    ]);
 
     dontNpmBuild = true;
 
@@ -79,6 +82,12 @@ in stdenv.mkDerivation {
 
   patches = [ ./cmake-build-extension-only.patch ];
 
+  postPatch = ''
+    # temporary patch for forgotten version updates
+    substituteInPlace CMakeLists.txt \
+      --replace "1.9.0" ${version}
+  '';
+
   postConfigure = ''
     cp -r ${nodeDeps}/lib/node_modules .
   '';
@@ -88,6 +97,10 @@ in stdenv.mkDerivation {
     "-DVERSION_SUFFIX="
   ];
   makeFlags = [ "vsix_bootstrap" ];
+
+  preBuild = lib.optionalString stdenv.isDarwin ''
+    export HOME=$TMPDIR
+  '';
 
   installPhase = ''
     ext=$out/$installPrefix
