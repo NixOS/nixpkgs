@@ -4,16 +4,16 @@
 
 stdenv.mkDerivation rec {
   pname = "unifont";
-  version = "15.0.01";
+  version = "15.0.02";
 
   ttf = fetchurl {
     url = "mirror://gnu/unifont/${pname}-${version}/${pname}-${version}.ttf";
-    hash = "sha256-KZRZvDTpFbHBjdOGd3OfQdCyptebk/SAzRV+8k2mdas=";
+    hash = "sha256-DvWkQo+ZYWwoCCA69iyDmQtS/Qxwg7b2spLPqiSauL4=";
   };
 
   pcf = fetchurl {
     url = "mirror://gnu/unifont/${pname}-${version}/${pname}-${version}.pcf.gz";
-    hash = "sha256-77rkcU0YajAVugWHnGscaFvcFTgWm+1WPLknQZvTjN0=";
+    hash = "sha256-01yEB9We5MkeCF6uva0SDTpt+4Ln2TaNh6jkCS66PUE=";
   };
 
   nativeBuildInputs = [ libfaketime xorg.fonttosfnt xorg.mkfontscale ];
