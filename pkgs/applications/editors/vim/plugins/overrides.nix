@@ -18,6 +18,7 @@
 , Cocoa
 , code-minimap
 , dasht
+, deno
 , direnv
 , fish
 , fzf
@@ -406,6 +407,13 @@ self: super: {
 
   defx-nvim = super.defx-nvim.overrideAttrs (old: {
     dependencies = with self; [ nvim-yarp ];
+  });
+
+  denops-vim = super.denops-vim.overrideAttrs (old: {
+    postPatch = ''
+      # Use Nix's Deno instead of an arbitrary install
+      substituteInPlace ./autoload/denops.vim --replace "call denops#_internal#conf#define('denops#deno', 'deno')" "call denops#_internal#conf#define('denops#deno', '${deno}/bin/deno')"
+    '';
   });
 
   deoplete-fish = super.deoplete-fish.overrideAttrs (old: {
