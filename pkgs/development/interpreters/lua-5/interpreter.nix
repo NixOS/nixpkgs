@@ -22,6 +22,7 @@ let
   luaPackages = self.pkgs;
 
   luaversion = lib.versions.majorMinor version;
+  luaversionDotless = lib.versions.major version + lib.versions.minor version;
 
 plat = if (stdenv.isLinux && lib.versionOlder self.luaversion "5.4") then "linux"
        else if (stdenv.isLinux && lib.versionAtLeast self.luaversion "5.4") then "linux-readline"
@@ -32,6 +33,8 @@ plat = if (stdenv.isLinux && lib.versionOlder self.luaversion "5.4") then "linux
        else if stdenv.hostPlatform.isBSD then "bsd"
        else if stdenv.hostPlatform.isUnix then "posix"
        else "generic";
+
+  withReadline = builtins.elem plat [ "macos" "freebsd" "linux${lib.optionalString (lib.versionAtLeast self.luaversion "5.4") "-readline"}" ];
 
 compatFlags = if (lib.versionOlder self.luaversion "5.3") then " -DLUA_COMPAT_ALL"
               else if (lib.versionOlder self.luaversion "5.4") then " -DLUA_COMPAT_5_1 -DLUA_COMPAT_5_2"
@@ -52,7 +55,9 @@ stdenv.mkDerivation rec {
   setupHook = luaPackages.lua-setup-hook LuaPathSearchPaths LuaCPathSearchPaths;
 
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ readline ];
+  buildInputs = lib.optionals withReadline [
+    readline
+  ];
 
   inherit patches;
 
@@ -72,6 +77,9 @@ stdenv.mkDerivation rec {
         -e 's/ALL_T *= */&$(LUA_SO) /' \
         -i src/Makefile
     cat ${./lua-dso.make} >> src/Makefile
+  '' + lib.optionalString stdenv.hostPlatform.isMinGW ''
+    substituteInPlace src/Makefile \
+      --replace "RANLIB=strip" "RANLIB=${stdenv.cc.targetPrefix}strip"
   '' ;
 
   # see configurePhase for additional flags (with space)
@@ -84,6 +92,7 @@ stdenv.mkDerivation rec {
     "PLAT=${plat}"
     "CC=${stdenv.cc.targetPrefix}cc"
     "RANLIB=${stdenv.cc.targetPrefix}ranlib"
+  ] ++ lib.optionals withReadline [
     # Lua links with readline wich depends on ncurses. For some reason when
     # building pkgsStatic.lua it fails because symbols from ncurses are not
     # found. Adding ncurses here fixes the problem.
@@ -97,9 +106,25 @@ stdenv.mkDerivation rec {
       if lib.versionAtLeast luaversion "5.2" then "SYSCFLAGS" else "MYCFLAGS"})' )
     makeFlagsArray+=(${lib.optionalString stdenv.isDarwin "CC=\"$CC\""}${lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) " 'AR=${stdenv.cc.targetPrefix}ar rcu'"})
 
-    installFlagsArray=( TO_BIN="lua luac" INSTALL_DATA='cp -d' \
-      TO_LIB="${if stdenv.isDarwin then "liblua.${version}.dylib"
-                else ("liblua.a" + lib.optionalString (!staticOnly) " liblua.so liblua.so.${luaversion} liblua.so.${version}" )}" )
+    installFlagsArray=(
+      INSTALL_DATA='cp -d'
+      TO_BIN="${
+        if stdenv.hostPlatform.isMinGW then
+          "lua.exe luac.exe"
+        else
+          "lua luac"
+      }"
+      TO_LIB="${
+        if stdenv.isDarwin then
+          "liblua.${version}.dylib"
+        else if stdenv.hostPlatform.isMinGW then
+          "liblua.a"
+          + lib.optionalString (!staticOnly) " lua${luaversionDotless}.dll"
+        else
+          "liblua.a"
+          + lib.optionalString (!staticOnly) " liblua.so liblua.so.${luaversion} liblua.so.${version}"
+      }"
+    )
 
     runHook postConfigure
   '';
