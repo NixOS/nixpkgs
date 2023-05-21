@@ -5589,6 +5589,10 @@ with pkgs;
 
   obinskit = callPackage ../applications/misc/obinskit { };
 
+  ockam = callPackage ../tools/networking/ockam {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
   odoo = callPackage ../applications/finance/odoo { };
 
   odafileconverter = libsForQt5.callPackage ../applications/graphics/odafileconverter { };
