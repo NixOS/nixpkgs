@@ -5027,6 +5027,8 @@ with pkgs;
 
   gir-rs = callPackage ../development/tools/gir { };
 
+  girsh = callPackage ../tools/networking/girsh { };
+
   gist = callPackage ../tools/text/gist { };
 
   gitjacker = callPackage ../tools/security/gitjacker { };
