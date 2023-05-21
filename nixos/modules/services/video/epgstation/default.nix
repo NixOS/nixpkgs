@@ -264,6 +264,9 @@ in
       description = "EPGStation user";
       group = config.users.groups.epgstation.name;
       isSystemUser = true;
+
+      # NPM insists on creating ~/.npm
+      home = "/var/cache/epgstation";
     };
 
     users.groups.epgstation = { };
@@ -318,11 +321,14 @@ in
         ++ lib.optional config.services.mirakurun.enable "mirakurun.service"
         ++ lib.optional config.services.mysql.enable "mysql.service";
 
+      environment.NODE_ENV = "production";
+
       serviceConfig = {
         ExecStart = "${cfg.package}/bin/epgstation start";
         ExecStartPre = "+${preStartScript}";
         User = username;
         Group = groupname;
+        CacheDirectory = "epgstation";
         StateDirectory = "epgstation";
         LogsDirectory = "epgstation";
         ConfigurationDirectory = "epgstation";
