@@ -30339,6 +30339,8 @@ with pkgs;
 
   font-manager = callPackage ../applications/misc/font-manager { };
 
+  fontfinder = callPackage ../applications/misc/fontfinder { };
+
   fontpreview = callPackage ../applications/misc/fontpreview { };
 
   fossil = callPackage ../applications/version-management/fossil {
