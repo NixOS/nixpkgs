@@ -20,7 +20,19 @@ in
   config = {
     system.build.azureImage = import ../../lib/make-disk-image.nix {
       name = "azure-image";
+
+      # VHD images on Azure [1] must have virtual size aligned to 1MiB.
+      # We check image alignment and convert raw image to fixed size vhd image
       postVM = ''
+        size=$(${pkgs.vmTools.qemu}/bin/qemu-img info -f raw --output json $diskImage | ${pkgs.jq}/bin/jq '."virtual-size"')
+
+        echo "Check that image size is aligned to 1MiB (1024x1024)"
+        if (( size % (1024*1024) )); then
+          echo "ERROR: Image size have to be aligned to 1 MiB (1024x1024 bytes)"
+          exit 1
+        fi
+
+        echo "Convert raw image to vhd image"
         ${pkgs.vmTools.qemu}/bin/qemu-img convert -f raw -o subformat=fixed,force_size -O vpc $diskImage $out/disk.vhd
         rm $diskImage
       '';
@@ -74,3 +86,8 @@ in
     };
   };
 }
+
+/*
+REFERENCES
+  1. https://docs.microsoft.com/en-us/azure/virtual-machines/linux/create-upload-generic#resizing-vhds
+*/
