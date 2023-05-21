@@ -1410,6 +1410,8 @@ self: super: with self; {
 
   boa-api = callPackage ../development/python-modules/boa-api { };
 
+  boiboite-opener-framework = callPackage ../development/python-modules/boiboite-opener-framework { };
+
   bokeh = callPackage ../development/python-modules/bokeh { };
 
   boltons = callPackage ../development/python-modules/boltons { };
