@@ -18,17 +18,17 @@
 , fmt_8
 , nlohmann_json
 , yara
+, rsync
 }:
 
 let
-  # when bumping the version, check if imhex has gotten support for the capstone version in nixpkgs
-  version = "1.27.1";
+  version = "1.29.0";
 
   patterns_src = fetchFromGitHub {
     owner = "WerWolv";
     repo = "ImHex-Patterns";
     rev = "ImHex-v${version}";
-    hash = "sha256-7Aaj+W+zXjHO8A2gmWtp5Pa/i5Uk8lXzX2WHjPIPRZI=";
+    hash = "sha256-lTTXu9RxoD582lXWI789gNcWvJmxmBIlBRIiyY3DseM=";
   };
 
 in
@@ -41,10 +41,10 @@ stdenv.mkDerivation rec {
     owner = "WerWolv";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-meOx8SkufXbXuBIVefr/mO9fsUi3zeQmqmf86+aDMaI=";
+    hash = "sha256-dghyv7rpqGs5dt51ziAaeb/Ba7rGEcJ54AYKRJ2xXuk=";
   };
 
-  nativeBuildInputs = [ cmake llvm python3 perl pkg-config ];
+  nativeBuildInputs = [ cmake llvm python3 perl pkg-config rsync ];
 
   buildInputs = [
     capstone
@@ -63,8 +63,7 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DIMHEX_OFFLINE_BUILD=ON"
-    # see comment at the top about our version of capstone
-    "-DUSE_SYSTEM_CAPSTONE=OFF"
+    "-DUSE_SYSTEM_CAPSTONE=ON"
     "-DUSE_SYSTEM_CURL=ON"
     "-DUSE_SYSTEM_FMT=ON"
     "-DUSE_SYSTEM_LLVM=ON"
@@ -72,11 +71,10 @@ stdenv.mkDerivation rec {
     "-DUSE_SYSTEM_YARA=ON"
   ];
 
+  # rsync is used here so we can not copy the _schema.json files
   postInstall = ''
     mkdir -p $out/share/imhex
-    for d in ${patterns_src}/{constants,encodings,includes,magic,patterns}; do
-      cp -r $d $out/share/imhex/
-    done
+    rsync -av --exclude="*_schema.json" ${patterns_src}/{constants,encodings,includes,magic,patterns} $out/share/imhex
   '';
 
   meta = with lib; {
