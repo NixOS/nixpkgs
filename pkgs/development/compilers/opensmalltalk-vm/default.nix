@@ -152,7 +152,7 @@ let
         vmName = "newspeak.cog.spur";
         scriptName = "newspeak";
         configureFlagsArray = ''(
-          CFLAGS="-DNDEBUG -DDEBUGVM=0 -msse2"
+          CFLAGS="-DNDEBUG -DDEBUGVM=0"
         )'';
         configureFlags = [
           "--with-vmversion=5.0"
@@ -167,7 +167,7 @@ let
         vmName = "squeak.cog.spur";
         scriptName = "squeak";
         configureFlagsArray = ''(
-          CFLAGS="-DNDEBUG -DDEBUGVM=0 -msse2 -DCOGMTVM=0"
+          CFLAGS="-DNDEBUG -DDEBUGVM=0 -DCOGMTVM=0"
         )'';
         configureFlags = [
           "--with-vmversion=5.0"
