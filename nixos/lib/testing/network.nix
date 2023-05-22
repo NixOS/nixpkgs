@@ -43,7 +43,7 @@ let
         qemu-common.qemuNICFlags snd fst.vlan config.virtualisation.test.nodeNumber));
       udevRules = forEach interfacesNumbered ({ fst, snd }:
         # MAC Addresses for QEMU network devices are lowercase, and udev string comparison is case-sensitive.
-        "SUBSYSTEM==\"net\",ACTION==\"add\",ATTR{address}==\"${toLower(qemu-common.qemuNicMac fst.vlan config.virtualisation.test.nodeNumber)}\",NAME=\"${fst.name}\"");
+        ''SUBSYSTEM=="net",ACTION=="add",ATTR{address}=="${toLower(qemu-common.qemuNicMac fst.vlan config.virtualisation.test.nodeNumber)}",NAME="${fst.name}"'');
 
       networkConfig =
         {
