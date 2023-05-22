@@ -4617,7 +4617,7 @@
   };
   emilytrau = {
     name = "Emily Trau";
-    email = "nix@angus.ws";
+    email = "emily+nix@downunderctf.com";
     github = "emilytrau";
     githubId = 13267947;
   };

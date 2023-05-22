@@ -1,5 +1,4 @@
-{ lib
-, buildFHSEnv
+{ buildFHSEnv
 , heroic-unwrapped
 , extraPkgs ? pkgs: [ ]
 , extraLibraries ? pkgs: [ ]
@@ -81,7 +80,6 @@ buildFHSEnv {
     libpulseaudio
     libselinux
     libsndfile
-    libsndfile
     libsoup
     libtheora
     libtiff
@@ -107,7 +105,6 @@ buildFHSEnv {
     SDL2
     speex
     sqlite
-    udev
     udev
     unixODBC
     util-linux
