@@ -94,12 +94,15 @@ stdenv.mkDerivation rec {
     "-DENABLE_ALTIVEC=OFF" # https://bitbucket.org/multicoreware/x265_git/issues/320/fail-to-build-on-power8-le
   ];
 
+  preConfigure = ''
+    cmake -B build-10bits $cmakeFlags "''${cmakeFlagsArray[@]}" $cmakeStaticLibFlags
+    cmake -B build-12bits $cmakeFlags "''${cmakeFlagsArray[@]}" $cmakeStaticLibFlags -DMAIN12=ON
+  '';
+
   # Builds 10bits and 12bits static libs on the side if multi bit-depth is wanted
   # (we are in x265_<version>/source/build)
   preBuild = lib.optionalString multibitdepthSupport ''
-    cmake -S ../ -B ../build-10bits $cmakeFlags "''${cmakeFlagsArray[@]}" $cmakeStaticLibFlags
     make -C ../build-10bits -j $NIX_BUILD_CORES
-    cmake -S ../ -B ../build-12bits $cmakeFlags "''${cmakeFlagsArray[@]}" $cmakeStaticLibFlags -DMAIN12=ON
     make -C ../build-12bits -j $NIX_BUILD_CORES
     ln -s ../build-10bits/libx265.a ./libx265-10.a
     ln -s ../build-12bits/libx265.a ./libx265-12.a
