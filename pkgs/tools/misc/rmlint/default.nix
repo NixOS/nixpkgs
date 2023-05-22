@@ -1,7 +1,7 @@
-{ lib, stdenv
+{ lib
+, stdenv
 , cairo
 , fetchFromGitHub
-, gettext
 , glib
 , gobject-introspection
 , gtksourceview3
@@ -14,9 +14,9 @@
 , python3
 , scons
 , sphinx
-, util-linux
 , wrapGAppsHook
-, withGui ? false }:
+, withGui ? false
+}:
 
 assert withGui -> !stdenv.isDarwin;
 
@@ -49,7 +49,6 @@ stdenv.mkDerivation rec {
     glib
     json-glib
     libelf
-    util-linux
   ] ++ lib.optionals withGui [
     cairo
     gobject-introspection
