@@ -1679,6 +1679,8 @@ with pkgs;
 
   redfang = callPackage ../tools/networking/redfang { };
 
+  ronin = callPackage ../tools/security/ronin { };
+
   s0ix-selftest-tool = callPackage ../tools/system/s0ix-selftest-tool { };
 
   scarab = callPackage ../tools/games/scarab { };
