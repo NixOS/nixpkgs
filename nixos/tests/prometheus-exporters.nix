@@ -234,9 +234,7 @@ let
       exporterTest = ''
         wait_for_unit("prometheus-domain-exporter.service")
         wait_for_open_port(9222)
-        succeed(
-            "curl -sSf 'http://localhost:9222/probe?target=nixos.org' | grep 'domain_probe_success 0'"
-        )
+        succeed("curl -sSf 'http://localhost:9222/probe?target=nixos.org'")
       '';
     };
 
@@ -328,7 +326,7 @@ let
         systemd.services.prometheus-jitsi-exporter.after = [ "jitsi-videobridge2.service" ];
         services.jitsi-videobridge = {
           enable = true;
-          apis = [ "colibri" "rest" ];
+          colibriRestApi = true;
         };
       };
       exporterTest = ''
@@ -1198,13 +1196,15 @@ let
         wait_for_unit("prometheus-statsd-exporter.service")
         wait_for_open_port(9102)
         succeed("curl http://localhost:9102/metrics | grep 'statsd_exporter_build_info{'")
-        succeed(
-          "echo 'test.udp:1|c' > /dev/udp/localhost/9125",
-          "curl http://localhost:9102/metrics | grep 'test_udp 1'",
+        wait_until_succeeds(
+          "echo 'test.udp:1|c' > /dev/udp/localhost/9125 && \
+          curl http://localhost:9102/metrics | grep 'test_udp 1'",
+          timeout=10
         )
-        succeed(
-          "echo 'test.tcp:1|c' > /dev/tcp/localhost/9125",
-          "curl http://localhost:9102/metrics | grep 'test_tcp 1'",
+        wait_until_succeeds(
+          "echo 'test.tcp:1|c' > /dev/tcp/localhost/9125 && \
+          curl http://localhost:9102/metrics | grep 'test_tcp 1'",
+          timeout=10
         )
       '';
     };

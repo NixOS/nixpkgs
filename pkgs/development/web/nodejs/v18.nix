@@ -1,4 +1,4 @@
-{ callPackage, fetchpatch, openssl, python3, enableNpm ? true }:
+{ callPackage, openssl, python3, enableNpm ? true }:
 
 let
   buildNodejs = callPackage ./nodejs.nix {
@@ -15,5 +15,6 @@ buildNodejs {
     ./disable-darwin-v8-system-instrumentation.patch
     ./bypass-darwin-xcrun-node16.patch
     ./revert-arm64-pointer-auth.patch
+    ./node-npm-build-npm-package-logic.patch
   ];
 }

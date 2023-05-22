@@ -4609,6 +4609,12 @@
     githubId = 18535642;
     name = "Emily";
   };
+  emilylange = {
+    email = "nix@emilylange.de";
+    github = "emilylange";
+    githubId = 55066419;
+    name = "Emily Lange";
+  };
   emilytrau = {
     name = "Emily Trau";
     email = "nix@angus.ws";
@@ -6775,12 +6781,6 @@
     githubId = 36667224;
     name = "Yingchi Long";
   };
-  indeednotjames = {
-    email = "nix@indeednotjames.com";
-    github = "IndeedNotJames";
-    githubId = 55066419;
-    name = "Emily Lange";
-  };
   indexyz = {
     email = "indexyz@pm.me";
     github = "5aaee9";
@@ -7941,6 +7941,12 @@
     github = "JulienMalka";
     githubId = 1792886;
     name = "Julien Malka";
+  };
+  juliusrickert = {
+    email = "nixpkgs@juliusrickert.de";
+    github = "juliusrickert";
+    githubId = 5007494;
+    name = "Julius Rickert";
   };
   julm = {
     email = "julm+nixpkgs@sourcephile.fr";
@@ -14823,6 +14829,12 @@
     github = "spease";
     githubId = 2825204;
     name = "Steven Pease";
+  };
+  spectre256 = {
+    name = "Ellis Gibbons";
+    email = "egibbons256@gmail.com";
+    github = "spectre256";
+    githubId = 72505298;
   };
   spencerjanssen = {
     email = "spencerjanssen@gmail.com";

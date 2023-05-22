@@ -262,6 +262,8 @@ with pkgs;
 
   alterx = callPackage ../tools/security/alterx { };
 
+  asitop = pkgs.python3Packages.callPackage ../os-specific/darwin/asitop { };
+
   asn = callPackage ../applications/networking/asn { };
 
   asnmap = callPackage ../tools/security/asnmap { };
@@ -323,6 +325,8 @@ with pkgs;
   beebeep = libsForQt5.callPackage ../applications/office/beebeep {};
 
   bakelite = callPackage ../tools/backup/bakelite { };
+
+  bearer = callPackage ../development/tools/bearer { };
 
   benthos = callPackage ../development/tools/benthos { };
 
@@ -401,6 +405,8 @@ with pkgs;
 
   catppuccin-papirus-folders = callPackage ../data/icons/catppuccin-papirus-folders { };
 
+  catppuccin-plymouth = callPackage ../data/themes/catppuccin-plymouth { };
+
   btdu = callPackage ../tools/misc/btdu { };
 
   ccal = callPackage ../tools/misc/ccal { };
@@ -422,6 +428,8 @@ with pkgs;
   checkov = callPackage ../development/tools/analysis/checkov {
     python3 = python311;
   };
+
+  checkpwn = callPackage ../tools/misc/checkpwn { };
 
   chrysalis = callPackage ../applications/misc/chrysalis { };
 
@@ -666,6 +674,8 @@ with pkgs;
   enumerepo = callPackage ../tools/security/enumerepo {};
 
   erosmb = callPackage ../tools/security/erosmb { };
+
+  oauth2c = callPackage ../tools/security/oauth2c { };
 
   octosuite = callPackage ../tools/security/octosuite { };
 
@@ -1424,8 +1434,6 @@ with pkgs;
 
   aircrack-ng = callPackage ../tools/networking/aircrack-ng { };
 
-  airfield = callPackage ../tools/networking/airfield { };
-
   airgeddon = callPackage ../tools/networking/airgeddon { };
 
   apache-airflow = with python3.pkgs; toPythonApplication apache-airflow;
@@ -1677,6 +1685,8 @@ with pkgs;
 
   sdbus-cpp = callPackage ../development/libraries/sdbus-cpp { };
 
+  basu = callPackage ../development/libraries/basu { };
+
   sdlookup = callPackage ../tools/security/sdlookup { };
 
   sgrep = callPackage ../tools/text/sgrep { };
@@ -1697,7 +1707,9 @@ with pkgs;
 
   speedtest-rs = callPackage ../tools/networking/speedtest-rs { };
 
-  stargazer = callPackage ../servers/gemini/stargazer { };
+  stargazer = callPackage ../servers/gemini/stargazer {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   steamtinkerlaunch = callPackage ../tools/games/steamtinkerlaunch { };
 
@@ -2280,6 +2292,8 @@ with pkgs;
 
   fuse-emulator = callPackage ../applications/emulators/fuse-emulator { };
 
+  fusesoc = python3Packages.callPackage ../tools/package-management/fusesoc { };
+
   fw = callPackage ../tools/misc/fw {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
@@ -2607,6 +2621,8 @@ with pkgs;
 
   ctx = callPackage ../applications/terminal-emulators/ctx { };
 
+  darklua = callPackage ../development/tools/darklua { };
+
   darktile = callPackage ../applications/terminal-emulators/darktile { };
 
   dterm = callPackage ../applications/terminal-emulators/dterm { };
@@ -2708,7 +2724,7 @@ with pkgs;
   wayst = callPackage ../applications/terminal-emulators/wayst { };
 
   wezterm = darwin.apple_sdk_11_0.callPackage ../applications/terminal-emulators/wezterm {
-    inherit (darwin.apple_sdk_11_0.frameworks) Cocoa CoreGraphics Foundation UserNotifications;
+    inherit (darwin.apple_sdk_11_0.frameworks) Cocoa CoreGraphics Foundation UserNotifications System;
   };
 
   x3270 = callPackage ../applications/terminal-emulators/x3270 { };
@@ -3829,6 +3845,8 @@ with pkgs;
 
   babelfish = callPackage ../shells/fish/babelfish.nix { };
 
+  baboossh = callPackage ../tools/security/baboossh { };
+
   badchars = python3Packages.callPackage ../tools/security/badchars { };
 
   badvpn = callPackage ../tools/networking/badvpn { };
@@ -4765,8 +4783,12 @@ with pkgs;
   eschalot = callPackage ../tools/security/eschalot { };
 
   espanso = callPackage ../applications/office/espanso {
-    inherit (darwin.apple_sdk.frameworks) AppKit Cocoa Foundation;
-    openssl = openssl_1_1;
+    inherit (darwin.apple_sdk.frameworks) AppKit Cocoa Foundation IOKit Kernel AVFoundation Carbon QTKit AVKit WebKit;
+  };
+  espanso-wayland = espanso.override {
+    x11Support = false;
+    waylandSupport = true;
+    espanso = espanso-wayland;
   };
 
   esphome = callPackage ../tools/misc/esphome { };
@@ -5018,6 +5040,8 @@ with pkgs;
   giph = callPackage ../applications/video/giph { };
 
   gir-rs = callPackage ../development/tools/gir { };
+
+  girsh = callPackage ../tools/networking/girsh { };
 
   gist = callPackage ../tools/text/gist { };
 
@@ -6190,6 +6214,8 @@ with pkgs;
   checkinstall = callPackage ../tools/package-management/checkinstall { };
 
   checkmake = callPackage ../development/tools/checkmake { };
+
+  cherrybomb = callPackage ../tools/security/cherrybomb { };
 
   chit = callPackage ../development/tools/chit { };
 
@@ -9014,6 +9040,8 @@ with pkgs;
 
   keepalived = callPackage ../tools/networking/keepalived { };
 
+  keepwn = callPackage ../tools/security/keepwn { };
+
   kestrel = callPackage ../tools/security/kestrel { };
 
   kexec-tools = callPackage ../os-specific/linux/kexec-tools { };
@@ -9335,6 +9363,8 @@ with pkgs;
   mdbook-graphviz = callPackage ../tools/text/mdbook-graphviz {
     inherit (darwin.apple_sdk.frameworks) CoreServices;
   };
+
+  mdbook-i18n-helpers = callPackage ../tools/text/mdbook-i18n-helpers { };
 
   mdbook-katex = callPackage ../tools/text/mdbook-katex {
     inherit (darwin.apple_sdk.frameworks) CoreServices;
@@ -16753,17 +16783,15 @@ with pkgs;
     mbqn-source = buildPackages.mbqn.src;
 
     phase0 = callPackage ../development/interpreters/bqn/cbqn {
-      inherit (cbqn-bootstrap) stdenv;
+      inherit (cbqn-bootstrap) mbqn-source stdenv;
       genBytecode = false;
       bqn-path = null;
-      mbqn-source = null;
     };
 
     phase0-replxx = callPackage ../development/interpreters/bqn/cbqn {
-      inherit (cbqn-bootstrap) stdenv;
+      inherit (cbqn-bootstrap) mbqn-source stdenv;
       genBytecode = false;
       bqn-path = null;
-      mbqn-source = null;
       enableReplxx = true;
     };
 
@@ -18625,7 +18653,7 @@ with pkgs;
 
   kube-prompt = callPackage ../development/tools/kube-prompt { };
 
-  kubei = callPackage ../tools/security/kubei { };
+  kubeclarity = callPackage ../tools/security/kubeclarity { };
 
   kubemq-community = callPackage ../servers/kubemq-community { };
 
@@ -19513,6 +19541,8 @@ with pkgs;
   accountsservice = callPackage ../development/libraries/accountsservice { };
 
   acl = callPackage ../development/libraries/acl { };
+
+  acltoolkit = callPackage ../tools/security/acltoolkit { };
 
   acsccid = callPackage ../tools/security/acsccid { };
 
@@ -23475,7 +23505,6 @@ with pkgs;
   protobuf3_21 = callPackage ../development/libraries/protobuf/3.21.nix { };
   protobuf3_20 = callPackage ../development/libraries/protobuf/3.20.nix { };
   protobuf3_19 = callPackage ../development/libraries/protobuf/3.19.nix { };
-  protobuf3_17 = callPackage ../development/libraries/protobuf/3.17.nix { };
 
   protobufc = callPackage ../development/libraries/protobufc { };
 
@@ -27241,6 +27270,8 @@ with pkgs;
   gopkgs = callPackage ../development/tools/gopkgs { };
 
   gosec = callPackage ../development/tools/gosec { };
+
+  gotemplate = callPackage ../development/tools/gotemplate { };
 
   gotraceui = callPackage ../development/tools/gotraceui { };
 
@@ -31423,6 +31454,8 @@ with pkgs;
 
   i3-wk-switch = callPackage ../applications/window-managers/i3/wk-switch.nix { };
 
+  kitti3 = python3.pkgs.callPackage ../applications/window-managers/i3/kitti3.nix { };
+
   waybox = callPackage ../applications/window-managers/waybox { };
 
   workstyle = callPackage ../applications/window-managers/i3/workstyle.nix { };
@@ -31823,6 +31856,8 @@ with pkgs;
   kubent = callPackage ../applications/networking/cluster/kubent { };
 
   kubeseal = callPackage ../applications/networking/cluster/kubeseal { };
+
+  kubestroyer = callPackage ../tools/security/kubestroyer { };
 
   kubernix = callPackage ../applications/networking/cluster/kubernix { };
 
@@ -38779,6 +38814,8 @@ with pkgs;
   dxvk_1 = callPackage ../misc/dxvk/dxvk.nix { dxvkVersion = "1.10"; };
   dxvk_2 = callPackage ../misc/dxvk/dxvk.nix { dxvkVersion = "2.1"; };
 
+  ec2stepshell = callPackage ../tools/security/ec2stepshell { };
+
   ecdsatool = callPackage ../tools/security/ecdsatool { };
 
   electricsheep = callPackage ../misc/screensavers/electricsheep { };
@@ -39624,6 +39661,8 @@ with pkgs;
 
   tcat = callPackage ../tools/misc/tcat { };
 
+  tell-me-your-secrets = callPackage ../tools/security/tell-me-your-secrets { };
+
   tellico = libsForQt5.callPackage ../applications/misc/tellico { };
 
   termpdfpy = python3Packages.callPackage ../applications/misc/termpdf.py { };
@@ -39984,6 +40023,8 @@ with pkgs;
   yacreader = libsForQt5.callPackage ../applications/graphics/yacreader { };
 
   yadm = callPackage ../applications/version-management/yadm { };
+
+  yai = callPackage ../tools/misc/yai { };
 
   yamale = with python3Packages; toPythonApplication yamale;
 
