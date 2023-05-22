@@ -3466,6 +3466,8 @@ with pkgs;
   };
   go2tv-lite = go2tv.override { withGui = false; };
 
+  go2rtc = callPackage ../tools/video/go2rtc { };
+
   goimapnotify = callPackage ../tools/networking/goimapnotify { };
 
   gojsontoyaml = callPackage ../development/tools/gojsontoyaml { };
