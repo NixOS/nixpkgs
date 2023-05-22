@@ -13,6 +13,11 @@ lib.makeScope
 
     bash_2_05 = callPackage ./bash/2.nix { tinycc = tinycc-mes; };
 
+    bzip2 = callPackage ./bzip2 {
+      bash = bash_2_05;
+      tinycc = tinycc-mes;
+    };
+
     coreutils = callPackage ./coreutils { tinycc = tinycc-mes; };
 
     gawk = callPackage ./gawk {
@@ -34,6 +39,16 @@ lib.makeScope
       tinycc = tinycc-mes;
     };
 
+    gnutar = callPackage ./gnutar {
+      bash = bash_2_05;
+      tinycc = tinycc-mes;
+    };
+
+    gzip = callPackage ./gzip {
+      bash = bash_2_05;
+      tinycc = tinycc-mes;
+    };
+
     ln-boot = callPackage ./ln-boot { };
 
     mes = callPackage ./mes { };
@@ -50,9 +65,12 @@ lib.makeScope
 
     test = kaem.runCommand "minimal-bootstrap-test" {} ''
       echo ${bash_2_05.tests.get-version}
+      echo ${bzip2.tests.get-version}
       echo ${gawk.tests.get-version}
       echo ${gnugrep.tests.get-version}
       echo ${gnused.tests.get-version}
+      echo ${gnutar.tests.get-version}
+      echo ${gzip.tests.get-version}
       echo ${mes.compiler.tests.get-version}
       echo ${tinycc-mes.compiler.tests.chain}
       mkdir ''${out}
