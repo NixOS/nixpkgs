@@ -1,12 +1,12 @@
 { lib, stdenv, fetchFromGitHub, buildGoModule, makeWrapper
 , cacert, moreutils, jq, git, rsync, pkg-config, yarn, python3
-, esbuild, nodejs_16, node-gyp, libsecret, xorg, ripgrep
+, esbuild, nodejs_18, node-gyp, libsecret, xorg, ripgrep
 , AppKit, Cocoa, CoreServices, Security, cctools, xcbuild, quilt }:
 
 let
   system = stdenv.hostPlatform.system;
 
-  nodejs = nodejs_16;
+  nodejs = nodejs_18;
   python = python3;
   yarn' = yarn.override { inherit nodejs; };
   defaultYarnOpts = [ ];
@@ -34,14 +34,14 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "code-server";
-  version = "4.12.0";
+  version = "4.13.0";
 
   src = fetchFromGitHub {
     owner = "coder";
     repo = "code-server";
     rev = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-PQp5dji2Ynp+LJRWBka41umwe1/IR76C+at/wyOWGcI=";
+    hash = "sha256-4hkKGQU9G3CllD+teWXnYoHaY3YdDz25fwaMUS5OlfM=";
   };
 
   cloudAgent = buildGoModule rec {
@@ -72,7 +72,7 @@ in stdenv.mkDerivation rec {
       export HOME=$PWD
       export GIT_SSL_CAINFO="${cacert}/etc/ssl/certs/ca-bundle.crt"
 
-      yarn --cwd "./vendor" install --modules-folder modules --ignore-scripts --frozen-lockfile
+      yarn --cwd "./vendor" install --modules-folder modules --ignore-engines --ignore-scripts --frozen-lockfile
 
       yarn config set yarn-offline-mirror $out
       find "$PWD" -name "yarn.lock" -printf "%h\n" | \
@@ -88,7 +88,7 @@ in stdenv.mkDerivation rec {
     outputHashAlgo = "sha256";
 
     # to get hash values use nix-build -A code-server.prefetchYarnCache
-    outputHash = "sha256-4Vr9u3+W/IhbbTc39jyDyDNQODlmdF+M/N8oJn0Z4+w=";
+    outputHash = "sha256-xLcrOVhKC0cOPcS5XwIMyv1KiEE0azZ1z+wS9PPKjAQ=";
   };
 
   nativeBuildInputs = [
@@ -144,7 +144,7 @@ in stdenv.mkDerivation rec {
 
   buildPhase = ''
     # install code-server dependencies
-    yarn --offline --ignore-scripts
+    yarn --offline --ignore-engines --ignore-scripts
 
     # apply patches
     quilt push -a
@@ -162,7 +162,7 @@ in stdenv.mkDerivation rec {
 
     # Replicate ci/dev/postinstall.sh
     echo "----- Replicate ci/dev/postinstall.sh"
-    yarn --cwd "./vendor" install --modules-folder modules --offline --ignore-scripts --frozen-lockfile
+    yarn --cwd "./vendor" install --modules-folder modules --offline --ignore-engines --ignore-scripts --frozen-lockfile
 
     # remove all built-in extensions, as these are 3rd party extensions that
     # get downloaded from vscode marketplace
@@ -212,13 +212,13 @@ in stdenv.mkDerivation rec {
         xargs -I {} sh -c 'jq -e ".scripts.postinstall" {}/package.json >/dev/null && yarn --cwd {} postinstall --frozen-lockfile --offline || true'
 
     # build code-server
-    yarn build
+    yarn --ignore-engines build
 
     # build vscode
-    VERSION=${version} yarn build:vscode
+    VERSION=${version} yarn --ignore-engines build:vscode
 
     # create release
-    yarn release
+    yarn --ignore-engines release
   '';
 
   installPhase = ''
@@ -235,7 +235,7 @@ in stdenv.mkDerivation rec {
     ln -s "${cloudAgent}/bin/cloud-agent" $out/libexec/code-server/lib/coder-cloud-agent
 
     # create wrapper
-    makeWrapper "${nodejs_16}/bin/node" "$out/bin/code-server" \
+    makeWrapper "${nodejs}/bin/node" "$out/bin/code-server" \
       --add-flags "$out/libexec/code-server/out/node/entry.js"
   '';
 
