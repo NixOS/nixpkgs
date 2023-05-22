@@ -353,6 +353,15 @@
     "spdx": "MPL-2.0",
     "vendorHash": "sha256-XxltOTtCgmJ9wZX8Yw39HkwVVZb58kZjAH7jfKPhjKM="
   },
+  "doppler": {
+    "hash": "sha256-VwyJrgPiZW9DzAFS3SeLxV6sdVjD5MzsekOSg3ByhXk=",
+    "homepage": "https://registry.terraform.io/providers/DopplerHQ/doppler",
+    "owner": "DopplerHQ",
+    "repo": "terraform-provider-doppler",
+    "rev": "v1.2.4",
+    "spdx": "Apache-2.0",
+    "vendorHash": "sha256-Z5GKIty78BUFF3VbTcsZKi437gw/kOIHEKkAYu3uB2o="
+  },
   "elasticsearch": {
     "hash": "sha256-a6kHN3w0sQCP+0+ZtFwcg9erfVBYkhNo+yOrnwweGWo=",
     "homepage": "https://registry.terraform.io/providers/phillbaker/elasticsearch",
