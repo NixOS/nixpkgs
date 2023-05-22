@@ -156,6 +156,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://www.open62541.org";
     license = licenses.mpl20;
     maintainers = with maintainers; [ panicgh ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 })
