@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ludeeus";
     repo = pname;
-    rev = version;
+    rev = "refs/tags/${version}";
     hash = "sha256-3bHE3U4MM/fQM9zBYfoLpAObay82vchjX9FpJukMGNg=";
   };
 
@@ -41,6 +41,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python module to deal with versions";
     homepage = "https://github.com/ludeeus/awesomeversion";
+    changelog = "https://github.com/ludeeus/awesomeversion/releases/tag/${version}";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };
