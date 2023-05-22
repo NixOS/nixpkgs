@@ -9114,6 +9114,8 @@ with pkgs;
 
   knockpy = callPackage ../tools/security/knockpy { };
 
+  kool = callPackage ../development/tools/misc/kool { };
+
   kore = callPackage ../development/web/kore {
     openssl = openssl_1_1;
   };
