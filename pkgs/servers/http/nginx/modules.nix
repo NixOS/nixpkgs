@@ -662,14 +662,15 @@ let self = {
     };
   };
 
-  secure-token = {
+  secure-token = rec {
     name = "secure-token";
+    version = "1.5";
     src = fetchFromGitHub {
       name = "secure-token";
       owner = "kaltura";
       repo = "nginx-secure-token-module";
-      rev = "95bdc0d1aca06ea7fe42555f71e65910bd74914d";
-      sha256 = "19wzck1xzq4kz7nyabcwzlank1k7wi7w2wn2c1mwz374c79g8ggp";
+      rev = "refs/tags/${version}";
+      hash = "sha256-qYTjGS9pykRqMFmNls52YKxEdXYhHw+18YC2zzdjEpU=";
     };
 
     inputs = [ openssl ];
@@ -980,8 +981,8 @@ let self = {
       name = "vod";
       owner = "kaltura";
       repo = "nginx-vod-module";
-      rev = "1.29";
-      sha256 = "1z0ka0cwqbgh3fv2d5yva395sf90626rdzx7lyfrgs89gy4h9nrr";
+      rev = "1.31";
+      hash = "sha256-ZpeO8QWQ+fGkz08u/zFOq7vj4aHcodzSHNrc1SgGUyc=";
     };
 
     inputs = [ ffmpeg fdk_aac openssl libxml2 libiconv ];

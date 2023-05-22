@@ -4,6 +4,8 @@
 , dpkg
 , wrapGAppsHook
 , autoPatchelfHook
+, clash
+, clash-meta
 , openssl
 , webkitgtk
 , udev
@@ -12,14 +14,12 @@
 
 stdenv.mkDerivation rec {
   pname = "clash-verge";
-  version = "1.3.1";
+  version = "1.3.2";
 
   src = fetchurl {
     url = "https://github.com/zzzgydi/clash-verge/releases/download/v${version}/clash-verge_${version}_amd64.deb";
-    hash = "sha256-AEOFMKxrkPditf5ks++tII6zeuH72Fxw/TVtZeXS3v4=";
+    hash = "sha256-46+7P9WH85fC3m+5LQHpvZX2ggeH6djoO53fQxQJdYk=";
   };
-
-  unpackPhase = "dpkg-deb -x $src .";
 
   nativeBuildInputs = [
     dpkg
@@ -43,8 +43,14 @@ stdenv.mkDerivation rec {
 
     mkdir -p $out/bin
     mv usr/* $out
+    rm $out/bin/{clash,clash-meta}
 
     runHook postInstall
+  '';
+
+  postFixup = ''
+    ln -s ${lib.getExe clash} $out/bin/clash
+    ln -s ${lib.getExe clash-meta} $out/bin/clash-meta
   '';
 
   meta = with lib; {

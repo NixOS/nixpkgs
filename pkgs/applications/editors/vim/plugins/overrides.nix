@@ -96,6 +96,9 @@
 , openssl
 , pkg-config
 
+  # vim-agda dependencies
+, agda
+
   # vim-go dependencies
 , asmfmt
 , delve
@@ -1225,6 +1228,13 @@ self: super: {
 
   vim-addon-xdebug = super.vim-addon-xdebug.overrideAttrs (old: {
     dependencies = with self; [ webapi-vim vim-addon-mw-utils vim-addon-signs vim-addon-async ];
+  });
+
+  vim-agda = super.vim-agda.overrideAttrs (old: {
+    preFixup = ''
+      substituteInPlace "$out"/autoload/agda.vim \
+        --replace "jobstart(['agda'" "jobstart(['${agda}/bin/agda'"
+    '';
   });
 
   vim-bazel = super.vim-bazel.overrideAttrs (old: {

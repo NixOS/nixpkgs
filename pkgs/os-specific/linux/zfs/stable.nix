@@ -16,8 +16,8 @@ callPackage ./generic.nix args {
     else kernel.kernelOlder "6.2";
   latestCompatibleLinuxPackages =
     if stdenv'.isx86_64
-    then linuxKernel.packages.linux_6_1
-    else linuxKernel.packages.linux_6_2;
+    then linuxKernel.packages.linux_6_2
+    else linuxKernel.packages.linux_6_1;
 
   # this package should point to the latest release.
   version = "2.1.11";
