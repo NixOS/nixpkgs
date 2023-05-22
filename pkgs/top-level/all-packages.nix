@@ -3466,6 +3466,8 @@ with pkgs;
   };
   go2tv-lite = go2tv.override { withGui = false; };
 
+  go2rtc = callPackage ../tools/video/go2rtc { };
+
   goimapnotify = callPackage ../tools/networking/goimapnotify { };
 
   gojsontoyaml = callPackage ../development/tools/gojsontoyaml { };
@@ -5611,6 +5613,10 @@ with pkgs;
 
   obinskit = callPackage ../applications/misc/obinskit { };
 
+  ockam = callPackage ../tools/networking/ockam {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
   odoo = callPackage ../applications/finance/odoo { };
 
   odafileconverter = libsForQt5.callPackage ../applications/graphics/odafileconverter { };
@@ -7714,6 +7720,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) AppKit CoreFoundation DiskArbitration Foundation IOKit;
   };
 
+  frigate = callPackage ../applications/video/frigate { };
+
   frostwire = callPackage ../applications/networking/p2p/frostwire { };
   frostwire-bin = callPackage ../applications/networking/p2p/frostwire/frostwire-bin.nix { };
 
@@ -8871,6 +8879,8 @@ with pkgs;
   jdiskreport = callPackage ../tools/misc/jdiskreport { };
 
   jekyll = callPackage ../applications/misc/jekyll { };
+
+  jen = callPackage ../tools/text/jen { };
 
   jet = callPackage ../development/tools/jet { };
 
@@ -25279,6 +25289,8 @@ with pkgs;
 
   eventstore = callPackage ../servers/nosql/eventstore { };
 
+  exabgp = callPackage ../servers/networking/exabgp { };
+
   exim = callPackage ../servers/mail/exim { };
 
   fastnetmon-advanced = callPackage ../servers/fastnetmon-advanced { };
@@ -26492,6 +26504,8 @@ with pkgs;
     armTrustedFirmwareRK3399
     armTrustedFirmwareS905
     ;
+
+  mlxbf-bootimages = callPackage ../misc/mlxbf-bootimages { };
 
   microcodeAmd = callPackage ../os-specific/linux/microcode/amd.nix { };
 
@@ -29508,6 +29522,8 @@ with pkgs;
 
   bottles-unwrapped = callPackage ../applications/misc/bottles { };
 
+  buzztrax = callPackage ../applications/audio/buzztrax { };
+
   brave = callPackage ../applications/networking/browsers/brave { };
 
   break-time = callPackage ../applications/misc/break-time { };
@@ -32275,8 +32291,6 @@ with pkgs;
 
   matrix-dl = callPackage ../applications/networking/instant-messengers/matrix-dl { };
 
-  matrix-recorder = callPackage ../applications/networking/instant-messengers/matrix-recorder { };
-
   iamb = callPackage ../applications/networking/instant-messengers/iamb { };
 
   mblaze = callPackage ../applications/networking/mailreaders/mblaze { };
@@ -34209,9 +34223,15 @@ with pkgs;
 
   psst = callPackage ../applications/audio/psst { };
 
-  squeezelite = callPackage ../applications/audio/squeezelite { audioBackend = "alsa"; };
+  squeezelite = darwin.apple_sdk_11_0.callPackage ../applications/audio/squeezelite {
+    inherit (darwin.apple_sdk_11_0.frameworks) CoreVideo VideoDecodeAcceleration CoreAudio AudioToolbox AudioUnit Carbon;
+  };
 
-  squeezelite-pulse = callPackage ../applications/audio/squeezelite { audioBackend = "pulse"; };
+  squeezelite-pulse = darwin.apple_sdk_11_0.callPackage ../applications/audio/squeezelite {
+    inherit (darwin.apple_sdk_11_0.frameworks) CoreVideo VideoDecodeAcceleration CoreAudio AudioToolbox AudioUnit Carbon;
+
+    audioBackend = "pulse";
+  };
 
   ltunify = callPackage ../tools/misc/ltunify { };
 
@@ -40140,6 +40160,8 @@ with pkgs;
   sccache = callPackage ../development/tools/misc/sccache {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
+
+  scriptisto = callPackage ../development/tools/misc/scriptisto { };
 
   sequeler = callPackage ../applications/misc/sequeler { };
 

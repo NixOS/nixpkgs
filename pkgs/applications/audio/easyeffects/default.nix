@@ -27,7 +27,6 @@
 , pkg-config
 , rnnoise
 , rubberband
-, speex
 , speexdsp
 , tbb
 , wrapGAppsHook4
@@ -43,7 +42,7 @@ stdenv.mkDerivation rec {
     owner = "wwmm";
     repo = "easyeffects";
     rev = "v${version}";
-    sha256 = "sha256-JaqwzCWVnvFzzGHnmzYwe3occ9iw7s9xCH54eVKEuOs=";
+    hash = "sha256-JaqwzCWVnvFzzGHnmzYwe3occ9iw7s9xCH54eVKEuOs=";
   };
 
   nativeBuildInputs = [
@@ -74,7 +73,6 @@ stdenv.mkDerivation rec {
     pipewire
     rnnoise
     rubberband
-    speex
     speexdsp
     tbb
     zita-convolver

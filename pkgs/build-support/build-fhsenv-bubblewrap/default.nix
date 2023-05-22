@@ -111,7 +111,7 @@ let
   init = run: writeShellScript "${name}-init" ''
     source /etc/profile
     ${createLdConfCache}
-    exec ${lib.escapeShellArg run} "$@"
+    exec ${run} "$@"
   '';
 
   indentLines = str: lib.concatLines (map (s: "  " + s) (filter (s: s != "") (lib.splitString "\n" str)));
