@@ -198,13 +198,13 @@ let
   # null    | 2 null  | 2 attrs | 2 dir | 2 str |
   # attrs   | 3 attrs | 1 rec   | 2 dir |   -   |
   # dir     | 3 dir   | 3 dir   | 2 dir |   -   |
-  # str     | 3 str   |   -     |   -   | 3 str |
+  # str     | 3 str   |   -     |   -   | 2 str |
   _unionTree = lhs: rhs:
     # Branch 1
     if isAttrs lhs && isAttrs rhs then
       mapAttrs (name: _unionTree lhs.${name}) rhs
     # Branch 2
-    else if lhs == null || rhs == "directory" then
+    else if lhs == null || isString rhs then
       rhs
     # Branch 3
     else
@@ -218,13 +218,13 @@ let
   # null    | 2 null  | 2 null  | 2 null  | 2 null |
   # attrs   | 3 null  | 1 rec   | 2 attrs |   -    |
   # dir     | 3 null  | 3 attrs | 2 dir   |   -    |
-  # str     | 3 null  |   -     |   -     | 3 str  |
+  # str     | 3 null  |   -     |   -     | 2 str  |
   _intersectTree = lhs: rhs:
     # Branch 1
     if isAttrs lhs && isAttrs rhs then
       mapAttrs (name: _intersectTree lhs.${name}) rhs
     # Branch 2
-    else if lhs == null || rhs == "directory" then
+    else if lhs == null || isString rhs then
       lhs
     # Branch 3
     else
