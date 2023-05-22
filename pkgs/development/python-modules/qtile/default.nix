@@ -1,20 +1,33 @@
 { lib
+, buildPythonPackage
 , fetchFromGitHub
-, python3
-, python3Packages
-, mypy
+, cairocffi
+, dbus-next
+, dbus-python
 , glib
-, pango
-, pkg-config
 , libinput
 , libxkbcommon
+, mpd2
+, mypy
+, pango
+, pkg-config
+, psutil
+, pulseaudio
+, pygobject3
+, python-dateutil
+, pywayland
+, pywlroots
+, pyxdg
+, setuptools
+, setuptools-scm
 , wayland
 , wlroots
 , xcbutilcursor
-, pulseaudio
+, xcffib
+, xkbcommon
 }:
 
-python3Packages.buildPythonPackage rec {
+buildPythonPackage rec {
   pname = "qtile";
   version = "0.22.1";
 
@@ -42,14 +55,13 @@ python3Packages.buildPythonPackage rec {
 
   nativeBuildInputs = [
     pkg-config
-  ] ++ (with python3Packages; [
     setuptools-scm
-  ]);
+    setuptools
+  ];
 
-  propagatedBuildInputs = with python3Packages; [
+  propagatedBuildInputs = [
     xcffib
     (cairocffi.override { withXcffib = true; })
-    setuptools
     python-dateutil
     dbus-python
     dbus-next

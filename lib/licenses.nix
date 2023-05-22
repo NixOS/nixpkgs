@@ -618,6 +618,12 @@ in mkLicense lset) ({
     fullName = "Licence Art Libre 1.3";
   };
 
+  lens = {
+    fullName = "Lens Terms of Service Agreement";
+    url = "https://k8slens.dev/licenses/tos";
+    free = false;
+  };
+
   lgpl2Only = {
     spdxId = "LGPL-2.0-only";
     fullName = "GNU Library General Public License v2 only";

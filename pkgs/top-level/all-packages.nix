@@ -1679,6 +1679,8 @@ with pkgs;
 
   redfang = callPackage ../tools/networking/redfang { };
 
+  ronin = callPackage ../tools/security/ronin { };
+
   s0ix-selftest-tool = callPackage ../tools/system/s0ix-selftest-tool { };
 
   scarab = callPackage ../tools/games/scarab { };
@@ -13892,9 +13894,9 @@ with pkgs;
   valum = callPackage ../development/web/valum { };
 
   inherit (callPackages ../servers/varnish { })
-    varnish60 varnish72;
+    varnish60 varnish72 varnish73;
   inherit (callPackages ../servers/varnish/packages.nix { })
-    varnish60Packages varnish72Packages;
+    varnish60Packages varnish72Packages varnish73Packages;
 
   varnishPackages = varnish72Packages;
   varnish = varnishPackages.varnish;
@@ -16320,6 +16322,7 @@ with pkgs;
   cargo-edit = callPackage ../development/tools/rust/cargo-edit {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
+  cargo-leptos = callPackage ../development/tools/rust/cargo-leptos { };
   cargo-kcov = callPackage ../development/tools/rust/cargo-kcov { };
   cargo-graph = callPackage ../development/tools/rust/cargo-graph { };
   cargo-guppy = callPackage ../development/tools/rust/cargo-guppy { };
@@ -18712,7 +18715,8 @@ with pkgs;
   libwtk-sdl2 = callPackage ../development/libraries/libwtk-sdl2 { };
 
   linuxkit = callPackage ../development/tools/misc/linuxkit {
-    inherit (darwin.apple_sdk_11_0.frameworks) Virtualization;
+    inherit (darwin.apple_sdk_11_0.frameworks) Cocoa Virtualization;
+    inherit (darwin) sigtool;
   };
 
   listenbrainz-mpd = callPackage ../applications/audio/listenbrainz-mpd  {
@@ -34816,8 +34820,7 @@ with pkgs;
 
   qpdfview = libsForQt5.callPackage ../applications/office/qpdfview { };
 
-  qtile-unwrapped = callPackage ../applications/window-managers/qtile { };
-  qtile = callPackage ../applications/window-managers/qtile/wrapper.nix { };
+  qtile = callPackage ../development/python-modules/qtile/wrapper.nix { };
 
   vimgolf = callPackage ../games/vimgolf { };
 
@@ -38404,10 +38407,6 @@ with pkgs;
     lisp-compiler = sbcl;
   };
   maxima-ecl = maxima.override {
-    lisp-compiler = ecl;
-  };
-  # old version temporarily kept for sage
-  maxima-ecl-5_45 = callPackage ../applications/science/math/maxima/5.45.nix {
     lisp-compiler = ecl;
   };
 

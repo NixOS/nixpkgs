@@ -1623,6 +1623,8 @@ self: super: with self; {
     inherit (pkgs) capstone;
   };
 
+  captcha = callPackage ../development/python-modules/captcha { };
+
   capturer = callPackage ../development/python-modules/capturer { };
 
   carbon = callPackage ../development/python-modules/carbon { };
@@ -3678,6 +3680,10 @@ self: super: with self; {
   flask-seasurf = callPackage ../development/python-modules/flask-seasurf { };
 
   flask-session = callPackage ../development/python-modules/flask-session { };
+
+  flask-session-captcha = callPackage ../development/python-modules/flask-session-captcha { };
+
+  flask-sessionstore = callPackage ../development/python-modules/flask-sessionstore { };
 
   flask-security-too = callPackage ../development/python-modules/flask-security-too { };
 
@@ -10246,6 +10252,7 @@ self: super: with self; {
 
   qtconsole = callPackage ../development/python-modules/qtconsole { };
 
+  qtile = callPackage ../development/python-modules/qtile { };
   qtile-extras = callPackage ../development/python-modules/qtile-extras { };
 
   qtpy = callPackage ../development/python-modules/qtpy { };
@@ -10346,7 +10353,12 @@ self: super: with self; {
 
   rdflib = callPackage ../development/python-modules/rdflib { };
 
-  rdkit = callPackage ../development/python-modules/rdkit { };
+  rdkit = callPackage ../development/python-modules/rdkit {
+    boost = pkgs.boost182.override {
+      enablePython = true;
+      inherit python;
+    };
+  };
 
   re-assert = callPackage ../development/python-modules/re-assert { };
 
@@ -12927,6 +12939,8 @@ self: super: with self; {
   wheel-filename = callPackage ../development/python-modules/wheel-filename { };
 
   wheel-inspect = callPackage ../development/python-modules/wheel-inspect { };
+
+  wheezy-captcha = callPackage ../development/python-modules/wheezy-captcha { };
 
   wheezy-template = callPackage ../development/python-modules/wheezy-template { };
 

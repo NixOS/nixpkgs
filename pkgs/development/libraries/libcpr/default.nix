@@ -10,7 +10,7 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "libcpr";
     repo = "cpr";
-    rev = "1.10.3";
+    rev = version;
     hash = "sha256-NueZPBiICrh8GXXdCqNtVaB7PfqwtQ0WolvRij8SYbE=";
   };
 

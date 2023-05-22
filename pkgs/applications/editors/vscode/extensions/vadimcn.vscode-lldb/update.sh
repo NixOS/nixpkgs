@@ -1,5 +1,5 @@
 #! /usr/bin/env nix-shell
-#! nix-shell ../../update-shell.nix -i bash
+#! nix-shell ../../update-shell.nix -i bash -p wget prefetch-npm-deps
 
 set -eo pipefail
 cd "$(dirname "${BASH_SOURCE[0]}")"
@@ -40,6 +40,9 @@ sed -E 's#\bsha256 = ".*?"#sha256 = "'$srcHash'"#' --in-place "$nixFile"
 cargoHash=$(nix-prefetch "{ sha256 }: (import $nixpkgs {}).vscode-extensions.vadimcn.vscode-lldb.adapter.cargoDeps.overrideAttrs (_: { outputHash = sha256; })")
 sed -E 's#\bcargoSha256 = ".*?"#cargoSha256 = "'$cargoHash'"#' --in-place "$nixFile"
 
-# update node dependencies
-src="$(nix-build $nixpkgs -A vscode-extensions.vadimcn.vscode-lldb.src --no-out-link)"
-nix-shell -p node2nix -I nixpkgs=$nixpkgs --run "cd build-deps && ls -R && node2nix -14 -d -i \"$src/package.json\" -l \"$src/package-lock.json\""
+pushd $TMPDIR
+wget https://raw.githubusercontent.com/$owner/$repo/v${version}/package-lock.json
+npmDepsHash=$(prefetch-npm-deps ./package-lock.json)
+popd
+sed -E 's#\bnpmDepsHash = ".*?"#npmDepsHash = "'$npmDepsHash'"#' --in-place "$nixFile"
+
