@@ -63,7 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     # ImportFETK.cmake downloads source and builds fetk
     substituteInPlace CMakeLists.txt \
-      --replace "include(ImportFETK)" ""
+      --replace "include(ImportFETK)" "" \
       --replace 'import_fetk(''${FETK_VERSION})' ""
   '';
 
