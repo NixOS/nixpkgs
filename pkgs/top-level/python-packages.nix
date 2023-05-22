@@ -8101,6 +8101,8 @@ self: super: with self; {
 
   py-nightscout = callPackage ../development/python-modules/py-nightscout { };
 
+  py-pdf-parser = callPackage ../development/python-modules/py-pdf-parser { };
+
   py-serializable = callPackage ../development/python-modules/py-serializable { };
 
   py-synologydsm-api = callPackage ../development/python-modules/py-synologydsm-api { };
@@ -12969,8 +12971,6 @@ self: super: with self; {
   woob = callPackage ../development/python-modules/woob { };
 
   woodblock = callPackage ../development/python-modules/woodblock { };
-
-  word2vec = callPackage ../development/python-modules/word2vec { };
 
   wordcloud = callPackage ../development/python-modules/wordcloud { };
 

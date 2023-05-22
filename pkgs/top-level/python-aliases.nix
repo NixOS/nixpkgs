@@ -318,6 +318,7 @@ mapAliases ({
   weakrefmethod = throw "weakrefmethod was removed since it's not needed in Python >= 3.4"; # added 2022-12-01
   webapp2 = throw "webapp2 is unmaintained since 2012"; # added 2022-05-29
   websocket_client = websocket-client; # added 2021-06-15
+  word2vec = throw "word2vec has been removed because it is abandoned"; # added 2023-05-22
   wxPython_4_0 = throw "wxPython_4_0 has been removed, use wxPython_4_2 instead"; # added 2023-03-19
   wxPython_4_1 = throw "wxPython_4_1 has been removed, use wxPython_4_2 instead"; # added 2023-03-19
   WSME = wsme; # added 2023-02-19
