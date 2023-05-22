@@ -14,7 +14,8 @@ buildGoModule rec {
     hash = "sha256-xgDHpLnbTAC0OL7Z5JQsOWlarIHqvr7xrDBg6hlWRRw=";
   };
 
-  vendorHash = "sha256-cjM8pj3squAu2KJbeGz5cd3LRGxKX9BGxtF+lUZaFyU=";
+  proxyVendor = true;
+  vendorHash = "sha256-LlLnkJc+bIRG1s6AHBYL6r5guYXPDo0moQwMSmHX3Zg=";
 
   subPackages = [
     "apps/cnspec"
