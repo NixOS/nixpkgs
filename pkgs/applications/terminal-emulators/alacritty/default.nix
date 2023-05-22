@@ -49,16 +49,16 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "alacritty";
-  version = "0.12.0";
+  version = "0.12.1";
 
   src = fetchFromGitHub {
     owner = "alacritty";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-2MiFsOZpAlDVC4h3m3HHlMr2ytL/z47vrTwUMoHdegI=";
+    hash = "sha256-jw66pBKIhvvaQ+Q6tDV6i7ALa7Z0Pw7dp6gAVPqy5bs=";
   };
 
-  cargoSha256 = "sha256-4liPfNJ2JGniz8Os4Np+XSXCJBHND13XLPWDy3Gc/F8=";
+  cargoHash = "sha256-rDcNliuUDGsd4VA2H9k+AiJTf1ylmFyqCUzxwCtM3T8=";
 
   nativeBuildInputs = [
     cmake
