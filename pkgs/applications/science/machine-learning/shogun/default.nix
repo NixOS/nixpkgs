@@ -136,6 +136,8 @@ stdenv.mkDerivation rec {
     excludeTestsRegex = lib.concatStringsSep "|" [
       # sporadic segfault
       "TrainedModelSerialization"
+      # broken by openblas 0.3.21
+      "mathematics_lapack"
       # these take too long on CI
       "evaluation_cross_validation"
       "modelselection_combined_kernel"
