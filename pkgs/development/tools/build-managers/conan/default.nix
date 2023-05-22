@@ -53,6 +53,8 @@ python3.pkgs.buildPythonApplication rec {
     webtest
   ]);
 
+  __darwinAllowLocalNetworking = true;
+
   pythonImportsCheck = [
     "conan"
   ];
@@ -65,6 +67,17 @@ python3.pkgs.buildPythonApplication rec {
   disabledTests = [
     # Tests require network access
     "TestFTP"
+  ] ++ lib.optionals stdenv.isDarwin [
+    # Rejects paths containing nix
+    "test_conditional_os"
+    # Requires Apple Clang
+    "test_detect_default_compilers"
+    "test_detect_default_in_mac_os_using_gcc_as_default"
+    # Incompatible with darwin.xattr and xcbuild from nixpkgs
+    "test_dot_files"
+    "test_xcrun"
+    "test_xcrun_in_required_by_tool_requires"
+    "test_xcrun_in_tool_requires"
   ];
 
   disabledTestPaths = [
