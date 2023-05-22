@@ -1,3 +1,9 @@
+# builder.nix contains a "builder" expression that, given k3s version and hash
+# variables, creates a package for that version.
+# Due to variance in k3s's build process, this builder only works for k3s 1.26+
+# currently.
+# It is likely we will have to split out additional builders for additional
+# versions in the future, or customize this one further.
 { lib
 , makeWrapper
 , socat
