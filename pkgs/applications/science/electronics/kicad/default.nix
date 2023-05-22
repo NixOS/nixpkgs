@@ -24,6 +24,7 @@
 , with3d ? true
 , withI18n ? true
 , srcs ? { }
+, symlinkJoin
 }:
 
 # The `srcs` parameter can be used to override the kicad source code
@@ -136,6 +137,17 @@ stdenv.mkDerivation rec {
     ++ optionals (withScripting)
     [ python.pkgs.wrapPython ];
 
+  # KICAD7_TEMPLATE_DIR only works with a single path (it does not handle : separated paths)
+  # but it's used to find both the templates and the symbol/footprint library tables
+  # https://gitlab.com/kicad/code/kicad/-/issues/14792
+  template_dir = symlinkJoin {
+    name = "KiCad_template_dir";
+    paths = with passthru.libraries; [
+      "${templates}/share/kicad/template"
+      "${footprints}/share/kicad/template"
+      "${symbols}/share/kicad/template"
+    ];
+  };
   # We are emulating wrapGAppsHook, along with other variables to the wrapper
   makeWrapperArgs = with passthru.libraries; [
     "--prefix XDG_DATA_DIRS : ${base}/share"
@@ -150,9 +162,7 @@ stdenv.mkDerivation rec {
     "--set-default MOZ_DBUS_REMOTE 1"
     "--set-default KICAD7_FOOTPRINT_DIR ${footprints}/share/kicad/footprints"
     "--set-default KICAD7_SYMBOL_DIR ${symbols}/share/kicad/symbols"
-    "--set-default KICAD7_TEMPLATE_DIR ${templates}/share/kicad/template"
-    "--prefix KICAD7_TEMPLATE_DIR : ${symbols}/share/kicad/template"
-    "--prefix KICAD7_TEMPLATE_DIR : ${footprints}/share/kicad/template"
+    "--set-default KICAD7_TEMPLATE_DIR ${template_dir}"
   ]
   ++ optionals (with3d)
   [
