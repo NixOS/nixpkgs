@@ -12968,7 +12968,7 @@ with pkgs;
 
   theharvester = callPackage ../tools/security/theharvester { };
 
-  inherit (nodePackages) thelounge;
+  thelounge = callPackage ../applications/networking/irc/thelounge { };
 
   theLoungePlugins = with lib; let
     pkgs = filterAttrs (name: _: hasPrefix "thelounge-" name) nodePackages;
