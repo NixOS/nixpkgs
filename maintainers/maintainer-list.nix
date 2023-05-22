@@ -12497,6 +12497,12 @@
     githubId = 3737;
     name = "Peter Jones";
   };
+  pjrm = {
+    email = "pedrojrmagalhaes@gmail.com";
+    github = "pjrm";
+    githubId = 4622652;
+    name = "Pedro Magalhães";
+  };
   pkharvey = {
     email = "kayharvey@protonmail.com";
     github = "pkharvey";

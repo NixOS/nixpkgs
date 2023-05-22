@@ -39742,6 +39742,8 @@ with pkgs;
 
   terraspace = callPackage ../applications/networking/cluster/terraspace { };
 
+  tf-summarize = callPackage ../applications/networking/cluster/tf-summarize { };
+
   tfswitch = callPackage ../applications/networking/cluster/tfswitch { };
 
   tfupdate = callPackage ../applications/networking/cluster/tfupdate { };
