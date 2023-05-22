@@ -13,13 +13,13 @@
 }:
 
 let
-  spark = { pname, version, sha256, extraMeta ? {} }:
+  spark = { pname, version, hash, extraMeta ? {} }:
     stdenv.mkDerivation rec {
       inherit pname version;
       jdk = if hadoopSupport then hadoop.jdk else jdk8;
       src = fetchzip {
         url = "mirror://apache/spark/${pname}-${version}/${pname}-${version}-bin-without-hadoop.tgz";
-        sha256 = sha256;
+        inherit hash;
       };
       nativeBuildInputs = [ makeWrapper ];
       buildInputs = [ jdk python3Packages.python ]
@@ -74,6 +74,18 @@ in
   spark_3_4 = spark rec {
     pname = "spark";
     version = "3.4.0";
-    sha256 = "sha256-0y80dRYzb6Ceu6MlGQHtpMdzOob/TBg6kf8dtF6KyCk=";
+    hash = "sha256-0y80dRYzb6Ceu6MlGQHtpMdzOob/TBg6kf8dtF6KyCk=";
+  };
+  spark_3_3 = spark rec {
+    pname = "spark";
+    version = "3.3.2";
+    hash = "sha256-AeKe2QN+mhUJgZRSIgbi/DttAWlDgwC1kl9p7syEvbo=";
+    extraMeta.knownVulnerabilities = [ "CVE-2023-22946" ];
+  };
+  spark_3_2 = spark rec {
+    pname = "spark";
+    version = "3.2.4";
+    hash = "sha256-xL4W+dTWbvmmncq3/8iXmhp24rp5SftvoRfkTyxCI8E=";
+    extraMeta.knownVulnerabilities = [ "CVE-2023-22946" ];
   };
 }
