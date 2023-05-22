@@ -61,13 +61,13 @@
 
 buildPythonPackage rec {
   pname = "scancode-toolkit";
-  version = "31.2.4";
+  version = "31.2.6";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-08C3T4CoQm/6s8ERbq/m1t513zYuzVJoexlRkCvv3UY=";
+    hash = "sha256-VvhgXZpV58DHeY5+7nPbrbTTVuHkawFw5akbm4hPnBY=";
   };
 
   dontConfigure = true;
@@ -169,7 +169,8 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Tool to scan code for license, copyright, package and their documented dependencies and other interesting facts";
     homepage = "https://github.com/nexB/scancode-toolkit";
+    changelog = "https://github.com/nexB/scancode-toolkit/blob/v${version}/CHANGELOG.rst";
     license = with licenses; [ asl20 cc-by-40 ];
-    maintainers = [ ];
+    maintainers = with maintainers; [ ];
   };
 }

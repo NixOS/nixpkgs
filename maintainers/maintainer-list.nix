@@ -14830,6 +14830,12 @@
     githubId = 2825204;
     name = "Steven Pease";
   };
+  spectre256 = {
+    name = "Ellis Gibbons";
+    email = "egibbons256@gmail.com";
+    github = "spectre256";
+    githubId = 72505298;
+  };
   spencerjanssen = {
     email = "spencerjanssen@gmail.com";
     matrix = "@sjanssen:matrix.org";

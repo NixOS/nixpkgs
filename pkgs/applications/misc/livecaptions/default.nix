@@ -19,13 +19,13 @@
     owner = "abb128";
     repo = "april-asr";
     rev = "c2f138c674cad58e2708ecaddc95cc72e7f85549";
-    sha256 = "hZe2iss3BGdzeTM5FCp9wp6LaDOjtGJrZS5vB5F6uLg=";
+    hash = "sha256-hZe2iss3BGdzeTM5FCp9wp6LaDOjtGJrZS5vB5F6uLg=";
   };
 
   aprilModel = fetchurl {
-    name = "aprilv0_en-us.april";
-    url = "https://april.sapples.net/aprilv0_en-us.april";
-    sha256 = "9aMPiI55d2mxt94UPAXSySoXAsJjtbcdYv0gKM7eVic=";
+    name = "april-english-dev-01110_en.april";
+    url = "https://april.sapples.net/april-english-dev-01110_en.april";
+    hash = "sha256-d+uV0PpPdwijfoaMImUwHubELcsl5jymPuo9nLrbwfM=";
   };
 in
   stdenv.mkDerivation rec {
