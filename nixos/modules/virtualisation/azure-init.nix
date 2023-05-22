@@ -1,5 +1,5 @@
-{ config, lib, pkgs, ... }:
-{
+{ config, lib, pkgs, ... }: {
   # Azure metadata is available as a CD-ROM drive.
-  fileSystems."/metadata".device = "/dev/sr0";
+  # But only before azure-signal-ready.service have run
+  fileSystems."/metadata".device = "/dev/cdrom";
 }
