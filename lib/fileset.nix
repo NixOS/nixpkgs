@@ -141,6 +141,14 @@ let
         _create value type
       else
         # Always coerce to a directory
+        # If we don't do this we run into problems like:
+        # - What should `importToStore { base = ./default.nix; entryPoint = ./default.nix; fileset = difference ./default.nix ./default.nix; }` do?
+        #   - Importing an empty directory wouldn't make much sense because our `base` is a file
+        #   - Neither can we create a store path containing nothing at all
+        #   - The only option is to throw an error that `base` should be a directory
+        # - Should `filter (file: file.name == "default.nix") ./default.nix` run the predicate on the ./default.nix file?
+        #   - If no, should the result include or exclude ./default.nix? In any case, it would be confusing and inconsistent
+        #   - If yes, it needs to consider ./. to have influence the filesystem result, so filter would change the necessary base
         _create (dirOf value)
           (_nestTree
             (dirOf value)
@@ -483,13 +491,21 @@ in {
               localTree == "directory";
         in recurse baseComponentsLength sparseTree;
     in
-    if ! hasPrefix base entryPoint then
-      throw "lib.fileset.importToStore: The entryPoint \"${toString entryPoint}\" is not under the base \"${toString base}\"."
-    # Ensure that the entryPoint exists in the result
+    if pathType entryPoint != "directory" then
+      # This would also be caught by the `may be influenced` condition further down, because of how files always set their containing directories as the base
+      # We can catch this earlier here for a better error message
+      throw "lib.fileset.importToStore: The entryPoint \"${toString entryPoint}\" is expected to be a path pointing to a directory, but it's pointing to a file instead."
+    else if ! hasPrefix base entryPoint then
+      throw "lib.fileset.importToStore: The entryPoint \"${toString entryPoint}\" is expected to be under the base \"${toString base}\", but it's not."
+    else if ! hasPrefix base actualFileset._base then
+      throw "lib.fileset.importToStore: The fileset may be influenced by some files in \"${toString actualFileset._base}\", which is outside of the base directory \"${toString base}\"."
     else if ! inSet (deconstruct entryPoint).components then
+      # This likely indicates a mistake, catching this here also ensures we don't have to handle this special case of a potential empty directory
       throw "lib.fileset.importToStore: The fileset contains no files under the entryPoint \"${toString entryPoint}\"."
     else
     let
+      # We're not using `lib.sources`, because sources with `_subpath` and `_root` can't be composed properly with those functions
+      # The default behavior of those functions reimporting the store path is more correct
       root = builtins.path {
         inherit name;
         path = base;
