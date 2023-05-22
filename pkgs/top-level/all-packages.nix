@@ -19401,7 +19401,9 @@ with pkgs;
 
   todoist = callPackage ../applications/misc/todoist { };
 
-  todoist-electron = callPackage ../applications/misc/todoist-electron { };
+  todoist-electron = callPackage ../applications/misc/todoist-electron {
+    electron = electron_24;
+  };
 
   toil = callPackage ../applications/science/misc/toil { };
 
