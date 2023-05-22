@@ -36347,6 +36347,8 @@ with pkgs;
 
   forge-mtg = callPackage ../games/forge-mtg { };
 
+  frankendrift = callPackage ../games/frankendrift {};
+
   freecell-solver = callPackage ../games/freecell-solver { };
 
   freeciv = callPackage ../games/freeciv {

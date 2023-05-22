@@ -462,6 +462,11 @@
     githubId = 19290901;
     name = "Andrew Brooks";
   };
+  agentx3 = {
+    name="agentx3";
+    github = "agentx3";
+    githubId = 104329992;
+  };
   aherrmann = {
     email = "andreash87@gmx.ch";
     github = "aherrmann";
