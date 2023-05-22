@@ -73,6 +73,33 @@ in {
   # But only before azure-signal-ready.service have run
   fileSystems."/metadata".device = "/dev/cdrom";
 
+  systemd.services.azure-get-hostname = {
+    # TODO: Add enable option
+    # https://docs.microsoft.com/en-us/azure/virtual-machines/linux/instance-metadata-service?tabs=linux
+    description = "Get hostname from Azure";
+
+    wantedBy = [ "azure-signal-ready.service" ];
+    before = [ "azure-signal-ready.service" ];
+    after = [ "network-online.target" ];
+
+    path = [ pkgs.hostname pkgs.curl ];
+
+    unitConfig = {
+      ConditionPathExists = "!/etc/hostname";
+    };
+
+    serviceConfig = {
+      Type = "oneshot";
+      RemainAfterExit = true;
+    };
+
+    script = ''
+      AZURE_HOSTNAME=$(curl -H Metadata:true --noproxy "*" "http://169.254.169.254/metadata/instance/compute/name?api-version=2021-10-01&format=text")
+      hostname "$AZURE_HOSTNAME"
+      echo "$AZURE_HOSTNAME" > /etc/hostname
+    '';
+  };
+
   systemd.services.azure-signal-ready = {
     # TODO: Add enable option. So it can be disabled when azure agent is used
     description = "Report VM ready to Azure ";
