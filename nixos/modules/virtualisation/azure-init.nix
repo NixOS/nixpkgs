@@ -100,6 +100,55 @@ in {
     '';
   };
 
+  systemd.services.azure-create-admin-user =
+  # TODO: Add enable option
+  let
+    create-admin-user = pkgs.writeShellApplication {
+      name = "create-admin-user";
+      runtimeInputs = with pkgs; [ shadow ];
+      text = ''
+        # Metadata mounted from cdrom. Only available before signal-reday is sent.
+        OVE_ENV=/metadata/ovf-env.xml
+
+        AZURE_USER=$(grep -oP "(?<=<UserName>).*(?=</UserName>)" "$OVE_ENV")
+
+        echo "Create user $AZURE_USER from azure init config"
+        useradd --create-home "$AZURE_USER"
+
+        echo "Add user $AZURE_USER to wheel group"
+        usermod -aG wheel "$AZURE_USER"
+
+        if PASSWORD=$(grep -oP "(?<=<UserPassword>).*(?=</UserPassword>)" "$OVE_ENV");
+        then
+          echo "Set password for user $AZURE_USER from azure init config"
+          echo "$AZURE_USER:$PASSWORD" | chpasswd
+        else
+          echo "No password found for user $AZURE_USER"
+        fi
+      '';
+    };
+  in {
+    description = "Create admin user with username and passoword from azure config at vm creation";
+
+    wantedBy = [ "azure-signal-ready.service" ];
+    before = [ "azure-signal-ready.service" ];
+
+    unitConfig = {
+      ConditionPathExists = "/metadata/ovf-env.xml";
+    };
+
+    path = [ create-admin-user ];
+
+    serviceConfig = {
+      Type = "oneshot";
+      RemainAfterExit = true;
+    };
+
+    script = ''
+      create-admin-user
+    '';
+  };
+
   systemd.services.azure-signal-ready = {
     # TODO: Add enable option. So it can be disabled when azure agent is used
     description = "Report VM ready to Azure ";
