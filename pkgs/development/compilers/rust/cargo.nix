@@ -75,5 +75,7 @@ rustPlatform.buildRustPackage {
     maintainers = with maintainers; [ retrry ];
     license = [ licenses.mit licenses.asl20 ];
     platforms = platforms.unix;
+    # https://github.com/alexcrichton/nghttp2-rs/issues/2
+    broken = stdenv.hostPlatform.isx86 && stdenv.buildPlatform != stdenv.hostPlatform;
   };
 }
