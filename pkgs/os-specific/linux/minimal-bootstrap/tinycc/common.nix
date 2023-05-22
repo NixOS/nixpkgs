@@ -1,7 +1,6 @@
 { lib
 , kaem
 , mes-libc
-, ln-boot
 }:
 
 rec {
@@ -57,7 +56,6 @@ rec {
         (["-c" "-D" "TCC_TARGET_I386=1" ] ++ libtccBuildOptions);
       compiler =  kaem.runCommand "${pname}-${version}" {
         inherit pname version meta;
-        nativeBuildInputs = [ ln-boot ];
         passthru.tests = rec {
           get-version = result: kaem.runCommand "${pname}-get-version-${version}" {} ''
             ${result}/bin/tcc -version
