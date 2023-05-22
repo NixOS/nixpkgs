@@ -6299,6 +6299,8 @@ self: super: with self; {
 
   mmcv = callPackage ../development/python-modules/mmcv { };
 
+  mmengine = callPackage ../development/python-modules/mmengine { };
+
   mmh3 = callPackage ../development/python-modules/mmh3 { };
 
   mmpython = callPackage ../development/python-modules/mmpython { };
