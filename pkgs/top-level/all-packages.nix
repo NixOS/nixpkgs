@@ -18715,7 +18715,8 @@ with pkgs;
   libwtk-sdl2 = callPackage ../development/libraries/libwtk-sdl2 { };
 
   linuxkit = callPackage ../development/tools/misc/linuxkit {
-    inherit (darwin.apple_sdk_11_0.frameworks) Virtualization;
+    inherit (darwin.apple_sdk_11_0.frameworks) Cocoa Virtualization;
+    inherit (darwin) sigtool;
   };
 
   listenbrainz-mpd = callPackage ../applications/audio/listenbrainz-mpd  {
