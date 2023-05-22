@@ -8,6 +8,7 @@ let
   defaultUser = "syncthing";
   defaultGroup = defaultUser;
   settingsFormat = pkgs.formats.json { };
+  cleanedConfig = converge (filterAttrsRecursive (_: v: v != null && v != {})) cfg.settings;
 
   devices = mapAttrsToList (_: device: device // {
     deviceID = device.id;
@@ -55,7 +56,7 @@ let
     old_cfg=$(curl ${cfg.guiAddress}/rest/config)
 
     # generate the new config by merging with the NixOS config options
-    new_cfg=$(printf '%s\n' "$old_cfg" | ${pkgs.jq}/bin/jq -c ${escapeShellArg ''. * ${builtins.toJSON cfg.settings} * {
+    new_cfg=$(printf '%s\n' "$old_cfg" | ${pkgs.jq}/bin/jq -c ${escapeShellArg ''. * ${builtins.toJSON cleanedConfig} * {
         "devices": ('${escapeShellArg (builtins.toJSON devices)}'${optionalString (cfg.settings.devices == {} || ! cfg.overrideDevices) " + .devices"}),
         "folders": ('${escapeShellArg (builtins.toJSON folders)}'${optionalString (cfg.settings.folders == {} || ! cfg.overrideFolders) " + .folders"})
     }''})
@@ -131,32 +132,32 @@ in {
                 freeformType = settingsFormat.type;
                 options = {
                   localAnnounceEnabled = mkOption {
-                    type = types.bool;
-                    default = true;
+                    type = types.nullOr types.bool;
+                    default = null;
                     description = lib.mdDoc ''
                       Whether to send announcements to the local LAN, also use such announcements to find other devices.
                     '';
                   };
 
                   localAnnouncePort = mkOption {
-                    type = types.int;
-                    default = 21027;
+                    type = types.nullOr types.int;
+                    default = null;
                     description = lib.mdDoc ''
                       The port on which to listen and send IPv4 broadcast announcements to.
                     '';
                   };
 
                   relaysEnabled = mkOption {
-                    type = types.bool;
-                    default = true;
+                    type = types.nullOr types.bool;
+                    default = null;
                     description = lib.mdDoc ''
                       When true, relays will be connected to and potentially used for device to device connections.
                     '';
                   };
 
                   urAccepted = mkOption {
-                    type = types.int;
-                    default = 0;
+                    type = types.nullOr types.int;
+                    default = null;
                     description = lib.mdDoc ''
                       Whether the user has accepted to submit anonymous usage data.
                       The default, 0, mean the user has not made a choice, and Syncthing will ask at some point in the future.
@@ -165,16 +166,16 @@ in {
                   };
 
                   limitBandwidthInLan = mkOption {
-                    type = types.bool;
-                    default = false;
+                    type = types.nullOr types.bool;
+                    default = null;
                     description = lib.mdDoc ''
                       Whether to apply bandwidth limits to devices in the same broadcast domain as the local device.
                     '';
                   };
 
                   maxFolderConcurrency = mkOption {
-                    type = types.int;
-                    default = 0;
+                    type = types.nullOr types.int;
+                    default = null;
                     description = lib.mdDoc ''
                       This option controls how many folders may concurrently be in I/O-intensive operations such as syncing or scanning.
                       The mechanism is described in detail in a [separate chapter](https://docs.syncthing.net/advanced/option-max-concurrency.html).
@@ -615,7 +616,7 @@ in {
           ];
         };
       };
-      syncthing-init = mkIf (cfg.settings != {}) {
+      syncthing-init = mkIf (cleanedConfig != {}) {
         description = "Syncthing configuration updater";
         requisite = [ "syncthing.service" ];
         after = [ "syncthing.service" ];
