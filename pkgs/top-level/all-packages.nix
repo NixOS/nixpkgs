@@ -27928,6 +27928,8 @@ with pkgs;
 
   clearlooks-phenix = callPackage ../data/themes/clearlooks-phenix { };
 
+  cnspec = callPackage ../tools/security/cnspec { };
+
   cnstrokeorder = callPackage ../data/fonts/cnstrokeorder { };
 
   colloid-gtk-theme = callPackage ../data/themes/colloid-gtk-theme { };
