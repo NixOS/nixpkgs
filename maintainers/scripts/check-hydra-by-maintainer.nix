@@ -1,6 +1,8 @@
 { maintainer }:
 let
-  pkgs = import ./../../default.nix { };
+  pkgs = import ./../../default.nix {
+    config.allowAliases = false;
+  };
   maintainer_ = pkgs.lib.maintainers.${maintainer};
   packagesWith = cond: return: prefix: set:
     (pkgs.lib.flatten
