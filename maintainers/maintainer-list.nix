@@ -5836,10 +5836,14 @@
     githubId = 1618343;
   };
   foo-dogsquared = {
-    email = "foo.dogsquared@gmail.com";
+    email = "foodogsquared@foodogsquared.one";
     github = "foo-dogsquared";
     githubId = 34962634;
+    matrix = "@foodogsquared:matrix.org";
     name = "Gabriel Arazas";
+    keys = [{
+      fingerprint = "DDD7 D0BD 602E 564B AA04  FC35 1431 0D91 4115 2B92";
+    }];
   };
   fooker = {
     email = "fooker@lab.sh";
