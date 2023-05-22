@@ -37396,6 +37396,8 @@ with pkgs;
 
   ### SCIENCE/CHEMISTY
 
+  apbs = callPackage ../applications/science/chemistry/apbs { };
+
   avogadro = callPackage ../applications/science/chemistry/avogadro {
     openbabel = openbabel2;
     eigen = eigen2;
