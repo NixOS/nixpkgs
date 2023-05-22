@@ -40161,6 +40161,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
+  scip = callPackage ../development/tools/misc/scip { };
+
   scriptisto = callPackage ../development/tools/misc/scriptisto { };
 
   sequeler = callPackage ../applications/misc/sequeler { };
