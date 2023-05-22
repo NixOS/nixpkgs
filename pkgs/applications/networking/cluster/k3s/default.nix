@@ -1,11 +1,10 @@
 { lib, stdenv, callPackage }:
 
 let
-  # The 1_26 builder can compile 1.26, and hopefully newer versions
-  k3s_1_26_builder = import ./builders/1_26.nix;
+  k3s_builder = import ./builder.nix;
 in
 {
-  k3s_1_26 = (callPackage k3s_1_26_builder { }) {
+  k3s_1_26 = (callPackage k3s_builder { }) {
     k3sVersion = "1.26.4+k3s1";
     k3sCommit = "8d0255af07e95b841952563253d27b0d10bd72f0";
     k3sRepoSha256 = "0qlszdnlsvj3hzx2p0wl3zhaw908w8a62z6vlf2g69a3c75f55cs";
@@ -21,7 +20,7 @@ in
   };
 
   # 1_27 can be built with the same builder as 1_26
-  k3s_1_27 = (callPackage k3s_1_26_builder { }) (import ./1_27/versions.nix) // {
+  k3s_1_27 = (callPackage k3s_builder { }) (import ./1_27/versions.nix) // {
     updateScript = ./1_27/update-script.sh;
   };
 }
