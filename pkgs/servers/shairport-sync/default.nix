@@ -39,14 +39,14 @@ let
 in
 
 stdenv.mkDerivation rec {
-  version = "4.1.1";
+  version = "4.2";
   pname = "shairport-sync";
 
   src = fetchFromGitHub {
-    rev = version;
+    rev = "refs/tags/${version}";
     repo = "shairport-sync";
     owner = "mikebrady";
-    hash = "sha256-EKt5mH9GmzeR4zdPDFOt26T9STpG1khVrY4DFIv5Maw=";
+    hash = "sha256-ru2iaXSgS+w2ktqGLGC9SiYztkmmOQVzHaeLwMqvMzk=";
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config ];
