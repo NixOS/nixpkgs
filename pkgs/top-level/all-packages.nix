@@ -12668,6 +12668,8 @@ with pkgs;
 
   stabber = callPackage ../misc/stabber { };
 
+  starcharts = callPackage ../servers/misc/starcharts { };
+
   staticjinja = with python3.pkgs; toPythonApplication staticjinja;
 
   stevenblack-blocklist  = callPackage ../tools/networking/stevenblack-blocklist { };
