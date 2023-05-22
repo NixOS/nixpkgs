@@ -178,6 +178,11 @@ in mkLicense lset) ({
     fullName = ''BSD 3-clause "New" or "Revised" License'';
   };
 
+  bsd3Clear = {
+    spdxId = "BSD-3-Clause-Clear";
+    fullName = "BSD 3-Clause Clear License";
+  };
+
   bsdOriginal = {
     spdxId = "BSD-4-Clause";
     fullName = ''BSD 4-clause "Original" or "Old" License'';
