@@ -3,15 +3,16 @@ let
   pkgs = import ./../../default.nix {
     config.allowAliases = false;
   };
+  inherit (pkgs) lib;
   maintainer_ = pkgs.lib.maintainers.${maintainer};
   packagesWith = cond: return: prefix: set:
-    (pkgs.lib.flatten
-      (pkgs.lib.mapAttrsToList
+    (lib.flatten
+      (lib.mapAttrsToList
         (name: pkg:
           let
             result = builtins.tryEval
               (
-                if pkgs.lib.isDerivation pkg && cond name pkg then
+                if lib.isDerivation pkg && cond name pkg then
                 # Skip packages whose closure fails on evaluation.
                 # This happens for pkgs like `python27Packages.djangoql`
                 # that have disabled Python pkgs as dependencies.
@@ -44,7 +45,7 @@ let
       )
     )
     (name: name)
-    ("")
+    ""
     pkgs;
 
 in
