@@ -11848,6 +11848,8 @@ with pkgs;
 
   relic = callPackage ../development/tools/relic { };
 
+  rails  = callPackage ../development/web/rails { };
+
   remind = callPackage ../tools/misc/remind { };
 
   remmina = callPackage ../applications/networking/remote/remmina { };
