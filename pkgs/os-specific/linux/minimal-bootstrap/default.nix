@@ -34,6 +34,11 @@ lib.makeScope
       tinycc = tinycc-mes;
     };
 
+    gnutar = callPackage ./gnutar {
+      bash = bash_2_05;
+      tinycc = tinycc-mes;
+    };
+
     ln-boot = callPackage ./ln-boot { };
 
     mes = callPackage ./mes { };
@@ -53,6 +58,7 @@ lib.makeScope
       echo ${gawk.tests.get-version}
       echo ${gnugrep.tests.get-version}
       echo ${gnused.tests.get-version}
+      echo ${gnutar.tests.get-version}
       echo ${mes.compiler.tests.get-version}
       echo ${tinycc-mes.compiler.tests.chain}
       mkdir ''${out}
