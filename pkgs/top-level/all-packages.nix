@@ -1285,6 +1285,8 @@ with pkgs;
 
   a2ps = callPackage ../tools/text/a2ps { };
 
+  abbreviate = callPackage ../tools/text/abbreviate { };
+
   abcm2ps = callPackage ../tools/audio/abcm2ps { };
 
   abcmidi = callPackage ../tools/audio/abcmidi { };
