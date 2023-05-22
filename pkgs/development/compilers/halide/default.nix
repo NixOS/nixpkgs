@@ -25,12 +25,14 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-te9Yn/rmA0YSulnxXL/y5d8PFphjQPgZUDWHNn7oqMg=";
   };
 
-  cmakeFlags = [ "-DWARNINGS_AS_ERRORS=OFF" "-DWITH_PYTHON_BINDINGS=OFF" "-DTARGET_WEBASSEMBLY=OFF" ];
+  cmakeFlags = [
+    "-DWARNINGS_AS_ERRORS=OFF"
+    "-DWITH_PYTHON_BINDINGS=OFF"
+    "-DTARGET_WEBASSEMBLY=OFF"
+    # Disable performance tests since they may fail on busy machines
+    "-DWITH_TEST_PERFORMANCE=OFF"
+  ];
 
-  postPatch = ''
-    substituteInPlace test/performance/CMakeLists.txt \
-      --replace 'memcpy.cpp' '# memcpy.cpp'
-  '';
   doCheck = true;
 
   # Note: only openblas and not atlas part of this Nix expression
