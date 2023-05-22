@@ -4,7 +4,7 @@
 }:
 let
   pname = "ln-boot";
-  version = "unstable-2023-05-01";
+  version = "unstable-2023-05-22";
 
   src = ./ln.c;
 in
