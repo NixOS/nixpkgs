@@ -1951,6 +1951,12 @@
     githubId = 75972;
     name = "Ben Booth";
   };
+  benwis = {
+    name = "Ben Wishovich";
+    email = "ben@benw.is";
+    github = "benwis";
+    githubId = 6953353;
+  };
   berberman = {
     email = "berberman@yandex.com";
     matrix = "@berberman:mozilla.org";
@@ -2675,6 +2681,12 @@
         fingerprint = "669C 1D24 5A87 DB34 6BE4  3216 1A1D 58B8 6AE2 AABD";
       }
     ];
+  };
+  Ch1keen = {
+    email = "gihoong7@gmail.com";
+    github = "Ch1keen";
+    githubId = 40013212;
+    name = "Han Jeongjun";
   };
   chaduffy = {
     email = "charles@dyfis.net";
