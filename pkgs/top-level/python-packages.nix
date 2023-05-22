@@ -5969,6 +5969,8 @@ self: super: with self; {
 
   lz4 = callPackage ../development/python-modules/lz4 { };
 
+  lzallright = callPackage ../development/python-modules/lzallright { };
+
   lzstring = callPackage ../development/python-modules/lzstring { };
 
   m2crypto = callPackage ../development/python-modules/m2crypto { };
