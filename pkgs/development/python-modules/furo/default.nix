@@ -2,6 +2,7 @@
 , buildPythonPackage
 , pythonOlder
 , fetchPypi
+, pythonRelaxDepsHook
 , sphinx
 , beautifulsoup4
 , sphinx-basic-ng
@@ -9,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "furo";
-  version = "2023.3.27";
+  version = "2023.5.20";
   format = "wheel";
 
   disable = pythonOlder "3.7";
@@ -18,8 +19,16 @@ buildPythonPackage rec {
     inherit pname version format;
     dist = "py3";
     python = "py3";
-    hash = "sha256-SrK+JUotXlJ5LQynk6EsNVgt0JiXIopt1HiF2r1clSE=";
+    hash = "sha256-WUqENt3+DAcfOp6aIJwxSiGdg0Hz8a8z/ffGlUT6ueY=";
   };
+
+  nativeBuildInputs = [
+    pythonRelaxDepsHook
+  ];
+
+  pythonRelaxDeps = [
+    "sphinx"
+  ];
 
   propagatedBuildInputs = [
     sphinx
