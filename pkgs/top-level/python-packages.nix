@@ -1623,6 +1623,8 @@ self: super: with self; {
     inherit (pkgs) capstone;
   };
 
+  captcha = callPackage ../development/python-modules/captcha { };
+
   capturer = callPackage ../development/python-modules/capturer { };
 
   carbon = callPackage ../development/python-modules/carbon { };
@@ -3678,6 +3680,10 @@ self: super: with self; {
   flask-seasurf = callPackage ../development/python-modules/flask-seasurf { };
 
   flask-session = callPackage ../development/python-modules/flask-session { };
+
+  flask-session-captcha = callPackage ../development/python-modules/flask-session-captcha { };
+
+  flask-sessionstore = callPackage ../development/python-modules/flask-sessionstore { };
 
   flask-security-too = callPackage ../development/python-modules/flask-security-too { };
 
@@ -12928,6 +12934,8 @@ self: super: with self; {
   wheel-filename = callPackage ../development/python-modules/wheel-filename { };
 
   wheel-inspect = callPackage ../development/python-modules/wheel-inspect { };
+
+  wheezy-captcha = callPackage ../development/python-modules/wheezy-captcha { };
 
   wheezy-template = callPackage ../development/python-modules/wheezy-template { };
 
