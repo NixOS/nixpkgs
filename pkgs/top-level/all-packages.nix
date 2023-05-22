@@ -8878,6 +8878,8 @@ with pkgs;
 
   jekyll = callPackage ../applications/misc/jekyll { };
 
+  jen = callPackage ../tools/text/jen { };
+
   jet = callPackage ../development/tools/jet { };
 
   jf = callPackage ../development/tools/jf { };
