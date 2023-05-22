@@ -13,6 +13,11 @@ lib.makeScope
 
     bash_2_05 = callPackage ./bash/2.nix { tinycc = tinycc-mes; };
 
+    bzip2 = callPackage ./bzip2 {
+      bash = bash_2_05;
+      tinycc = tinycc-mes;
+    };
+
     coreutils = callPackage ./coreutils { tinycc = tinycc-mes; };
 
     gawk = callPackage ./gawk {
@@ -60,6 +65,7 @@ lib.makeScope
 
     test = kaem.runCommand "minimal-bootstrap-test" {} ''
       echo ${bash_2_05.tests.get-version}
+      echo ${bzip2.tests.get-version}
       echo ${gawk.tests.get-version}
       echo ${gnugrep.tests.get-version}
       echo ${gnused.tests.get-version}
