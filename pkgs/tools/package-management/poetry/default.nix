@@ -1,6 +1,7 @@
 { lib
 , python3
 , fetchFromGitHub
+, fetchPypi
 }:
 
 let
@@ -22,24 +23,28 @@ let
           self.lockfile
         ];
       });
-      platformdirs = super.platformdirs.overridePythonAttrs (old: rec {
-        version = "2.6.2";
-        src = fetchFromGitHub {
-          owner = "platformdirs";
-          repo = "platformdirs";
-          rev = "refs/tags/${version}";
-          hash = "sha256-yGpDAwn8Kt6vF2K2zbAs8+fowhYQmvsm/87WJofuhME=";
-        };
-        SETUPTOOLS_SCM_PRETEND_VERSION = version;
-      });
       poetry-core = super.poetry-core.overridePythonAttrs (old: rec {
-        version = "1.5.2";
+        version = "1.6.1";
         src = fetchFromGitHub {
           owner = "python-poetry";
           repo = "poetry-core";
           rev = version;
-          hash = "sha256-GpZ0vMByHTu5kl7KrrFFK2aZMmkNO7xOEc8NI2H9k34=";
+          hash = "sha256-Gc22Y2T4uO39jiOqEUFeOfnVCbknuDjmzFPZgk2eY74=";
         };
+        nativeCheckInputs = old.nativeCheckInputs ++ [
+          self.tomli-w
+        ];
+      });
+      virtualenv = super.virtualenv.overridePythonAttrs (old: rec {
+        version = "20.23.1";
+        src = fetchPypi {
+          inherit (old) pname;
+          inherit version;
+          hash = "sha256-j/GaOMECHHQhSO3E+By0PX+MaBbS7eKrcq9bhMdJreE=";
+        };
+        nativeCheckInputs = old.nativeCheckInputs ++ [
+          self.time-machine
+        ];
       });
     } // (plugins self);
   };
