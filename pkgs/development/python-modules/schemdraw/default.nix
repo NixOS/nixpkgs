@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , pythonOlder
-, fetchFromBitbucket
+, fetchFromGitHub
 , pyparsing
 , matplotlib
 , latex2mathml
@@ -18,7 +18,7 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.8";
 
-  src = fetchFromBitbucket {
+  src = fetchFromGitHub {
     owner = "cdelker";
     repo = pname;
     rev = version;
