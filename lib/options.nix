@@ -155,6 +155,8 @@ rec {
       # Name for the package, shown in option description
       name:
       {
+        # Whether the package can be null, for example to disable installing a package altogether.
+        nullable ? false,
         # The attribute path where the default package is located (may be omitted)
         default ? name,
         # A string or an attribute path to use as an example (may be omitted)
@@ -164,19 +166,24 @@ rec {
       }:
       let
         name' = if isList name then last name else name;
+      in mkOption ({
+        type = with lib.types; (if nullable then nullOr else lib.id) package;
+        description = "The ${name'} package to use."
+          + (if extraDescription == "" then "" else " ") + extraDescription;
+      } // (if default != null then let
         default' = if isList default then default else [ default ];
         defaultPath = concatStringsSep "." default';
         defaultValue = attrByPath default'
           (throw "${defaultPath} cannot be found in pkgs") pkgs;
-      in mkOption {
+      in {
+        default = defaultValue;
         defaultText = literalExpression ("pkgs." + defaultPath);
-        type = lib.types.package;
-        description = "The ${name'} package to use."
-          + (if extraDescription == "" then "" else " ") + extraDescription;
-        ${if default != null then "default" else null} = defaultValue;
-        ${if example != null then "example" else null} = literalExpression
+      } else if nullable then {
+        default = null;
+      } else { }) // lib.optionalAttrs (example != null) {
+        example = literalExpression
           (if isList example then "pkgs." + concatStringsSep "." example else example);
-      };
+      });
 
   /* Like mkPackageOption, but emit an mdDoc description instead of DocBook. */
   mkPackageOptionMD = pkgs: name: extra:
