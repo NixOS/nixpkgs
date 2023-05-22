@@ -170,6 +170,10 @@ let
       deprecated = (super.deprecated.override {
         sphinxHook = null;
       }).overridePythonAttrs dropDocOutput;
+      wrapt = (super.wrapt.override {
+        sphinxHook = null;
+        sphinx-rtd-theme = null;
+      }).overridePythonAttrs dropDocOutput;
     };
   };
 in
