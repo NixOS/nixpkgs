@@ -12970,8 +12970,6 @@ self: super: with self; {
 
   woodblock = callPackage ../development/python-modules/woodblock { };
 
-  word2vec = callPackage ../development/python-modules/word2vec { };
-
   wordcloud = callPackage ../development/python-modules/wordcloud { };
 
   wordfreq = callPackage ../development/python-modules/wordfreq { };
