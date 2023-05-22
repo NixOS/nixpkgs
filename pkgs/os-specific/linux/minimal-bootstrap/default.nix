@@ -15,6 +15,11 @@ lib.makeScope
 
     coreutils = callPackage ./coreutils { tinycc = tinycc-mes; };
 
+    gnugrep = callPackage ./gnugrep {
+      bash = bash_2_05;
+      tinycc = tinycc-mes;
+    };
+
     gnumake = callPackage ./gnumake { tinycc = tinycc-mes; };
 
     gnupatch = callPackage ./gnupatch { tinycc = tinycc-mes; };
@@ -40,6 +45,7 @@ lib.makeScope
 
     test = kaem.runCommand "minimal-bootstrap-test" {} ''
       echo ${bash_2_05.tests.get-version}
+      echo ${gnugrep.tests.get-version}
       echo ${gnused.tests.get-version}
       echo ${mes.compiler.tests.get-version}
       echo ${tinycc-mes.compiler.tests.chain}
