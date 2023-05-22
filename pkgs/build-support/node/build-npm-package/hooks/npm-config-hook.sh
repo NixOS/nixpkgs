@@ -7,6 +7,10 @@ npmConfigHook() {
     export NIX_NODEJS_BUILDNPMPACKAGE=1
     export prefetchNpmDeps="@prefetchNpmDeps@"
 
+    if [ -n "${npmRoot-}" ]; then
+      pushd "$npmRoot"
+    fi
+
     echo "Configuring npm"
 
     export HOME="$TMPDIR"
@@ -104,6 +108,10 @@ npmConfigHook() {
 
     rm "$CACHE_MAP_PATH"
     unset CACHE_MAP_PATH
+
+    if [ -n "${npmRoot-}" ]; then
+      popd
+    fi
 
     echo "Finished npmConfigHook"
 }

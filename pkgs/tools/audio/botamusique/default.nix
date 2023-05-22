@@ -1,31 +1,23 @@
-{ pkgs
-, lib
+{ lib
 , stdenv
 , fetchFromGitHub
 , python3Packages
 , ffmpeg
 , makeWrapper
 , nixosTests
+, nodejs
+, npmHooks
+, fetchNpmDeps
 
 # For the update script
 , coreutils
 , curl
 , nix-prefetch-git
+, prefetch-npm-deps
 , jq
-, nodePackages
+, writeShellScript
 }:
 let
-  nodejs = pkgs.nodejs_14;
-  nodeEnv = import ../../../development/node-packages/node-env.nix {
-    inherit (pkgs) stdenv lib python2 runCommand writeTextFile writeShellScript;
-    inherit pkgs nodejs;
-    libtool = if pkgs.stdenv.isDarwin then pkgs.darwin.cctools else null;
-  };
-  botamusiqueNodePackages = import ./node-packages.nix {
-    inherit (pkgs) fetchurl nix-gitignore stdenv lib fetchgit;
-    inherit nodeEnv;
-  };
-
   srcJson = lib.importJSON ./src.json;
   src = fetchFromGitHub {
     owner = "azlux";
@@ -33,18 +25,22 @@ let
     inherit (srcJson) rev sha256;
   };
 
-  nodeDependencies = (botamusiqueNodePackages.shell.override (old: {
-    src = src + "/web";
-  })).nodeDependencies;
-
   # Python needed to instantiate the html templates
   buildPython = python3Packages.python.withPackages (ps: [ ps.jinja2 ]);
 in
+
 stdenv.mkDerivation rec {
   pname = "botamusique";
   version = srcJson.version;
 
   inherit src;
+
+  npmDeps = fetchNpmDeps {
+    src = "${src}/web";
+    hash = srcJson.npmDepsHash;
+  };
+
+  npmRoot = "web";
 
   patches = [
     # botamusique by default resolves relative state paths by first checking
@@ -67,9 +63,12 @@ stdenv.mkDerivation rec {
       --replace "configuration.default.ini" "$out/share/botamusique/configuration.default.ini"
   '';
 
+  NODE_OPTIONS = "--openssl-legacy-provider";
+
   nativeBuildInputs = [
     makeWrapper
     nodejs
+    npmHooks.npmConfigHook
     python3Packages.wrapPython
   ];
 
@@ -91,9 +90,6 @@ stdenv.mkDerivation rec {
     # Generates artifacts in ./static
     (
       cd web
-      ln -s ${nodeDependencies}/lib/node_modules ./node_modules
-      export PATH="${nodeDependencies}/bin:$PATH"
-
       npm run build
     )
 
@@ -118,36 +114,26 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  passthru.updateScript = pkgs.writeShellScript "botamusique-updater" ''
-    export PATH=${lib.makeBinPath [ coreutils curl nix-prefetch-git jq nodePackages.node2nix ]}
+  passthru.updateScript = writeShellScript "botamusique-updater" ''
+    export PATH=${lib.makeBinPath [ coreutils curl nix-prefetch-git jq prefetch-npm-deps ]}
     set -ex
 
     OWNER=azlux
     REPO=botamusique
-    VERSION=$(curl https://api.github.com/repos/$OWNER/$REPO/releases/latest | jq -r '.tag_name')
+    VERSION="$(curl https://api.github.com/repos/$OWNER/$REPO/releases/latest | jq -r '.tag_name')"
 
     nix-prefetch-git --rev "$VERSION" --url https://github.com/$OWNER/$REPO | \
-      jq > ${toString ./src.json } \
+      jq > "${toString ./src.json}" \
         --arg version "$VERSION" \
         '.version |= $version'
-    path=$(jq '.path' -r < ${toString ./src.json})
+    path="$(jq '.path' -r < "${toString ./src.json}")"
 
-    tmp=$(mktemp -d)
+    tmp="$(mktemp -d)"
     trap 'rm -rf "$tmp"' exit
 
-    # botamusique doesn't have a version in its package.json
-    # But that's needed for node2nix
-    jq < "$path"/web/package.json > "$tmp/package.json" \
-      --arg version "$VERSION" \
-      '.version |= $version'
-
-    node2nix \
-      --input "$tmp"/package.json \
-      --lock "$path"/web/package-lock.json \
-      --no-copy-node-env \
-      --development \
-      --composition /dev/null \
-      --output ${toString ./node-packages.nix}
+    npmHash="$(prefetch-npm-deps $path/web/package-lock.json)"
+    jq '. + { npmDepsHash: "'"$npmHash"'" }' < "${toString ./src.json}" > "$tmp/src.json"
+    mv "$tmp/src.json" "${toString ./src.json}"
   '';
 
   passthru.tests = {
