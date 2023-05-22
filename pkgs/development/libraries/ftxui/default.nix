@@ -19,24 +19,26 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-6uPlJXuWcTUnpk+xe6EWDYvDLsfy7hGkEMO/2j3Dz0o=";
   };
 
+  strictDeps = true;
+
   nativeBuildInputs = [
     cmake
     doxygen
     graphviz
   ];
 
-  nativeCheckInputs = [
-    gbenchmark
+  checkInputs = [
     gtest
+    gbenchmark
   ];
 
   cmakeFlags = [
     "-DFTXUI_BUILD_EXAMPLES=OFF"
     "-DFTXUI_BUILD_DOCS=ON"
-    "-DFTXUI_BUILD_TESTS=ON"
+    "-DFTXUI_BUILD_TESTS=${if doCheck then "ON" else "OFF"}"
   ];
 
-  doCheck = true;
+  doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 
   meta = with lib; {
     homepage = "https://github.com/ArthurSonzogni/FTXUI";
