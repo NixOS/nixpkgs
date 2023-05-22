@@ -1,6 +1,7 @@
 { lib
 , python3
 , fetchFromGitHub
+, fetchpatch
 
 , bubblewrap
 , nix-output-monitor
@@ -22,6 +23,14 @@ python3.pkgs.buildPythonApplication rec {
     rev = version;
     sha256 = "sha256-9fdoTKaYfqsAXysRwgLq44UrmOGlr5rjF5Ge93PcHDk=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "fix-detection-of-broken-packages.patch";
+      url = "https://github.com/Mic92/nixpkgs-review/commit/1e67afb01e3a16bba617c3bb14752797c730a450.patch";
+      hash = "sha256-71pbcg+nFRUZZxpPKH93EFzyrAG3wVWMaCVIvgLaTH0=";
+    })
+  ];
 
   makeWrapperArgs =
     let
