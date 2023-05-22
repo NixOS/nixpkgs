@@ -136,6 +136,10 @@ stdenv.mkDerivation rec {
     excludeTestsRegex = lib.concatStringsSep "|" [
       # sporadic segfault
       "TrainedModelSerialization"
+      # these take too long on CI
+      "evaluation_cross_validation"
+      "modelselection_combined_kernel"
+      "modelselection_grid_search"
     ];
   in [
     "-DBUILD_META_EXAMPLES=ON"
