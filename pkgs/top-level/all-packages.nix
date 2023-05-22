@@ -25281,6 +25281,8 @@ with pkgs;
 
   eventstore = callPackage ../servers/nosql/eventstore { };
 
+  exabgp = callPackage ../servers/networking/exabgp { };
+
   exim = callPackage ../servers/mail/exim { };
 
   fastnetmon-advanced = callPackage ../servers/fastnetmon-advanced { };
