@@ -4,7 +4,6 @@
 , cargo
 , cargo-auditable ? prev.cargo-auditable
 , stdenv ? prev.stdenv
-, ...
 }:
 
 rec {
