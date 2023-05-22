@@ -1,13 +1,25 @@
-{ stdenv, lib, fetchFromGitHub, wrapGAppsHook, makeFontsConf
-, autoreconfHook, gtk-doc, intltool, libtool, pkg-config, yelp-tools, itstool
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, gtk-doc
+, intltool
+, itstool
+, libtool
+, pkg-config
+, wrapGAppsHook
+, yelp-tools
+, clutter-gtk
 , gst_all_1
-, glib, libgsf, libxml2
-, clutter-gtk, gtk2
-, orc, fluidsynth
+, glib
+, gtk2
+, libgsf
+, libxml2
+, fluidsynth
+, orc
 }:
 
 stdenv.mkDerivation {
-
   pname = "buzztrax";
   version = "unstable-2022-01-26";
 
@@ -22,29 +34,35 @@ stdenv.mkDerivation {
     touch AUTHORS
   '';
 
-  # 'g_memdup' is deprecated: Use 'g_memdup2' instead
-  env.NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations";
-
-
   nativeBuildInputs = [
-    autoreconfHook gtk-doc intltool libtool pkg-config
-    wrapGAppsHook yelp-tools itstool
+    autoreconfHook
+    gtk-doc
+    intltool
+    itstool
+    libtool
+    pkg-config
+    wrapGAppsHook
+    yelp-tools
   ];
 
   buildInputs = [
-
+    clutter-gtk
     gst_all_1.gstreamer
     gst_all_1.gst-plugins-base
     gst_all_1.gst-plugins-good
-    glib libgsf libxml2
-    clutter-gtk gtk2
-
-    ## Optional
+    glib
+    gtk2
+    libgsf
+    libxml2
+    # optional packages
+    fluidsynth
     gst_all_1.gst-plugins-bad
     gst_all_1.gst-plugins-ugly
     orc
-    fluidsynth
   ];
+
+  # 'g_memdup' is deprecated: Use 'g_memdup2' instead
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations";
 
   meta = with lib; {
     description = "Buzztrax is a modular music composer for Linux.";
@@ -53,5 +71,4 @@ stdenv.mkDerivation {
     maintainers = [ maintainers.bendlas ];
     platforms = platforms.unix;
   };
-
 }
