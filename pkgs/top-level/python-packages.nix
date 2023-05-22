@@ -10353,7 +10353,12 @@ self: super: with self; {
 
   rdflib = callPackage ../development/python-modules/rdflib { };
 
-  rdkit = callPackage ../development/python-modules/rdkit { };
+  rdkit = callPackage ../development/python-modules/rdkit {
+    boost = pkgs.boost182.override {
+      enablePython = true;
+      inherit python;
+    };
+  };
 
   re-assert = callPackage ../development/python-modules/re-assert { };
 
