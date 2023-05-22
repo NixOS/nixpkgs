@@ -12253,6 +12253,8 @@ with pkgs;
 
   sharutils = callPackage ../tools/archivers/sharutils { };
 
+  shell2http = callPackage ../servers/misc/shell2http { };
+
   shelldap = callPackage ../tools/misc/shelldap { };
 
   shellspec = callPackage ../tools/misc/shellspec { };
