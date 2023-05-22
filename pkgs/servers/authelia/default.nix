@@ -9,7 +9,9 @@ buildGoModule rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
+  ## FIXME: add swagger-ui https://github.com/authelia/authelia/blob/master/cmd/authelia-scripts/cmd/build.go#L148
   postPatch = ''
+    cp -r api internal/server/public_html
     cp -r ${web}/share/authelia-web/* internal/server/public_html
   '';
 
