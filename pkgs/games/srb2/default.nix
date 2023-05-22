@@ -68,7 +68,7 @@ in
       "-DSRB2_ASSET_DIRECTORY=${assets}/share/srb2"
       "-DGME_INCLUDE_DIR=${libgme}/include"
       "-DOPENMPT_INCLUDE_DIR=${libopenmpt.dev}/include"
-      "-DSDL2_MIXER_INCLUDE_DIR=${SDL2_mixer}/include/SDL2"
+      "-DSDL2_MIXER_INCLUDE_DIR=${SDL2_mixer.dev}/include/SDL2"
       "-DSDL2_INCLUDE_DIR=${SDL2.dev}/include/SDL2"
     ];
 
