@@ -27,6 +27,10 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [ "-DWARNINGS_AS_ERRORS=OFF" "-DWITH_PYTHON_BINDINGS=OFF" "-DTARGET_WEBASSEMBLY=OFF" ];
 
+  postPatch = ''
+    substituteInPlace test/performance/CMakeLists.txt \
+      --replace 'memcpy.cpp' '# memcpy.cpp'
+  '';
   doCheck = true;
 
   # Note: only openblas and not atlas part of this Nix expression
