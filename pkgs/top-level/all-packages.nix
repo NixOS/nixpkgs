@@ -29326,6 +29326,10 @@ with pkgs;
     year = "2022";
   };
 
+  pdfstudio2023 = callPackage ../applications/misc/pdfstudio {
+    year = "2023";
+  };
+
   pdfstudioviewer = callPackage ../applications/misc/pdfstudio {
     program = "pdfstudioviewer";
   };
