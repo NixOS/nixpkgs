@@ -55,6 +55,12 @@ in rustPlatform.buildRustPackage rec {
     Security
   ];
 
+  # Darwin uses `llvm-strip`, which results in link errors when using `-x` to strip the asm library
+  # and linking it with cctools ld64.
+  postPatch = lib.optionalString (stdenv.isDarwin && stdenv.isx86_64) ''
+    substituteInPlace build.rs --replace 'cmd.arg("-x")' 'cmd.arg("-S")'
+  '';
+
   checkType = "debug";
 
   postBuild =  ''
