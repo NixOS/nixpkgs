@@ -8975,6 +8975,8 @@ with pkgs;
 
   json-schema-for-humans = with python3Packages; toPythonApplication json-schema-for-humans;
 
+  jsonfmt = callPackage ../development/tools/misc/jsonfmt { };
+
   jsonwatch = callPackage ../tools/misc/jsonwatch {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
