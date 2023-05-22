@@ -1665,6 +1665,8 @@ with pkgs;
 
   ocs-url = libsForQt5.callPackage ../tools/misc/ocs-url { };
 
+  openbugs = pkgsi686Linux.callPackage ../applications/science/machine-learning/openbugs { };
+
   paperview = callPackage ../tools/X11/paperview { };
 
   pferd = callPackage ../tools/misc/pferd { };
