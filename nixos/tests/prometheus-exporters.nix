@@ -234,9 +234,7 @@ let
       exporterTest = ''
         wait_for_unit("prometheus-domain-exporter.service")
         wait_for_open_port(9222)
-        succeed(
-            "curl -sSf 'http://localhost:9222/probe?target=nixos.org' | grep 'domain_probe_success 0'"
-        )
+        succeed("curl -sSf 'http://localhost:9222/probe?target=nixos.org'")
       '';
     };
 

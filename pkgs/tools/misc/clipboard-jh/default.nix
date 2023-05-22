@@ -4,6 +4,7 @@
 , cmake
 , libffi
 , pkg-config
+, patchelf
 , wayland-protocols
 , wayland
 , xorg
@@ -44,6 +45,10 @@ stdenv.mkDerivation rec {
     "-Wno-dev"
     "-DINSTALL_PREFIX=${placeholder "out"}"
   ];
+
+  postFixup = lib.optionalString stdenv.isLinux ''
+    patchelf $out/bin/cb --add-rpath $out/lib
+  '';
 
   meta = with lib; {
     description = "Cut, copy, and paste anything, anywhere, all from the terminal";
