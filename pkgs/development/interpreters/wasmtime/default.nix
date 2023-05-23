@@ -1,27 +1,29 @@
-{ rustPlatform, fetchFromGitHub, lib, stdenv }:
+{ rustPlatform, fetchFromGitHub, Security, lib, stdenv }:
 
 rustPlatform.buildRustPackage rec {
   pname = "wasmtime";
-  version = "8.0.1";
+  version = "9.0.0";
 
   src = fetchFromGitHub {
     owner = "bytecodealliance";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-xSHwR2MGL49VDKjzAh+xYHbLz3FFg3KYVBjALVgKSQI=";
+    hash = "sha256-9ga7BKJoaw7naX8t4o+zNnWkjIvSII5oVRM0dYMrseo=";
     fetchSubmodules = true;
   };
 
-  cargoHash = "sha256-A2JhjRFKPltHubiJYHBXj2H4cdU43Y2x6UjEpRGPX7U=";
+  cargoHash = "sha256-GkL78aAIGdSlcxeRTIVp1jcXIg1ZtvB2LNIoPEViNcs=";
 
   cargoBuildFlags = [ "--package" "wasmtime-cli" "--package" "wasmtime-c-api" ];
 
   outputs = [ "out" "dev" ];
 
+  buildInputs = lib.optionals stdenv.isDarwin [ Security ];
+
   # SIMD tests are only executed on platforms that support all
-  # required processor features (e.g. SSE3, SSSE3, SSE4.1 and SSE4.2 on x86_64):
-  # https://github.com/bytecodealliance/wasmtime/blob/207cd1ce15ecc504dafaec490c5eae801cac4691/cranelift/codegen/src/isa/x64/mod.rs#L228
-  doCheck = with stdenv.buildPlatform; (isx86_64 -> sse3Support && ssse3Support && sse4_1Support && sse4_2Support);
+  # required processor features (e.g. SSE3, SSSE3 and SSE4.1 on x86_64):
+  # https://github.com/bytecodealliance/wasmtime/blob/v9.0.0/cranelift/codegen/src/isa/x64/mod.rs#L220
+  doCheck = with stdenv.buildPlatform; (isx86_64 -> sse3Support && ssse3Support && sse4_1Support);
   cargoTestFlags = ["--package" "wasmtime-runtime"];
 
   postInstall = ''

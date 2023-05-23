@@ -1,11 +1,11 @@
-{ stdenv, lib, fetchFromGitHub, fetchpatch, buildPythonPackage, python,
+{ stdenv, lib, fetchFromGitHub, buildPythonPackage, python,
   cudaSupport ? false, cudaPackages, magma,
   useSystemNccl ? true,
   MPISupport ? false, mpi,
   buildDocs ? false,
 
   # Native build inputs
-  cmake, util-linux, linkFarm, symlinkJoin, which, pybind11, removeReferencesTo,
+  cmake, linkFarm, symlinkJoin, which, pybind11, removeReferencesTo,
   pythonRelaxDepsHook,
 
   # Build inputs
@@ -39,7 +39,7 @@
   # dependencies for torch.utils.tensorboard
   pillow, six, future, tensorboard, protobuf,
 
-  isPy3k, pythonOlder,
+  pythonOlder,
 
   # ROCm dependencies
   rocmSupport ? false,
@@ -277,7 +277,6 @@ in buildPythonPackage rec {
 
   nativeBuildInputs = [
     cmake
-    util-linux
     which
     ninja
     pybind11

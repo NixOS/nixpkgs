@@ -1,6 +1,7 @@
 { stdenv, lib, callPackage, fetchurl
 , isInsiders ? false
 , commandLineArgs ? ""
+, useVSCodeRipgrep ? false
 }:
 
 let
@@ -34,7 +35,7 @@ in
     executableName = "code" + lib.optionalString isInsiders "-insiders";
     longName = "Visual Studio Code" + lib.optionalString isInsiders " - Insiders";
     shortName = "Code" + lib.optionalString isInsiders " - Insiders";
-    inherit commandLineArgs;
+    inherit commandLineArgs useVSCodeRipgrep;
 
     src = fetchurl {
       name = "VSCode_${version}_${plat}.${archive_fmt}";

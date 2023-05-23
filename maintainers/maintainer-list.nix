@@ -12497,6 +12497,12 @@
     githubId = 3737;
     name = "Peter Jones";
   };
+  pjrm = {
+    email = "pedrojrmagalhaes@gmail.com";
+    github = "pjrm";
+    githubId = 4622652;
+    name = "Pedro Magalhães";
+  };
   pkharvey = {
     email = "kayharvey@protonmail.com";
     github = "pkharvey";
@@ -14228,6 +14234,13 @@
     email = "sei40kr@gmail.com";
     github = "sei40kr";
     githubId = 11665236;
+  };
+  seirl = {
+    name = "Antoine Pietri";
+    email = "antoine.pietri1@gmail.com";
+    github = "seirl";
+    githubId = 4927883;
+    matrix = "@seirl:matrix.org";
   };
   sellout = {
     email = "greg@technomadic.org";
