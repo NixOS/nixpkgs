@@ -51,7 +51,7 @@
 
 buildPythonPackage rec {
   pname = "wandb";
-  version = "0.15.2";
+  version = "0.15.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -60,7 +60,7 @@ buildPythonPackage rec {
     owner = pname;
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-cAmX3r6XhCBUnC/fNNPakZUNEcDFke0DJMi2PW7sOho=";
+    hash = "sha256-i1Lo6xbkCgRTJwRjk2bXkZ5a/JRUCzFzmEuPQlPvZf4=";
   };
 
   patches = [
