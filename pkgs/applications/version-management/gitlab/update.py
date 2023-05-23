@@ -225,16 +225,7 @@ def update_gitaly():
     """Update gitaly"""
     logger.info("Updating gitaly")
     data = _get_data_json()
-    gitaly_server_version = data["passthru"]["GITALY_SERVER_VERSION"]
-    repo = GitLabRepo(repo="gitaly")
-    gitaly_dir = pathlib.Path(__file__).parent / "gitaly"
-
-    for fn in ["Gemfile.lock", "Gemfile"]:
-        with open(gitaly_dir / fn, "w") as f:
-            f.write(repo.get_file(f"ruby/{fn}", f"v{gitaly_server_version}"))
-
-    subprocess.check_output(["bundle", "lock"], cwd=gitaly_dir)
-    subprocess.check_output(["bundix"], cwd=gitaly_dir)
+    gitaly_server_version = data['passthru']['GITALY_SERVER_VERSION']
 
     _call_nix_update("gitaly", gitaly_server_version)
 
