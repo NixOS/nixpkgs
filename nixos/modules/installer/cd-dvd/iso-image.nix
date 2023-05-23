@@ -442,9 +442,6 @@ let
       fsck.vfat -vn "$out"
     ''; # */
 
-  # Syslinux (and isolinux) only supports x86-based architectures.
-  canx86BiosBoot = pkgs.stdenv.hostPlatform.isx86;
-
 in
 
 {
@@ -543,7 +540,17 @@ in
     };
 
     isoImage.makeBiosBootable = mkOption {
-      default = false;
+      # Before this option was introduced, images were BIOS-bootable if the
+      # hostPlatform was x86-based. This option is enabled by default for
+      # backwards compatibility.
+      #
+      # Also note that syslinux package currently cannot be cross-compiled from
+      # non-x86 platforms, so the default is false on non-x86 build platforms.
+      default = pkgs.stdenv.buildPlatform.isx86 && pkgs.stdenv.hostPlatform.isx86;
+      defaultText = lib.literalMD ''
+        `true` if both build and host platforms are x86-based architectures,
+        e.g. i686 and x86_64.
+      '';
       type = lib.types.bool;
       description = lib.mdDoc ''
         Whether the ISO image should be a BIOS-bootable disk.
@@ -705,6 +712,11 @@ in
   config = {
     assertions = [
       {
+        # Syslinux (and isolinux) only supports x86-based architectures.
+        assertion = config.isoImage.makeBiosBootable -> pkgs.stdenv.hostPlatform.isx86;
+        message = "BIOS boot is only supported on x86-based architectures.";
+      }
+      {
         assertion = !(stringLength config.isoImage.volumeID > 32);
         # https://wiki.osdev.org/ISO_9660#The_Primary_Volume_Descriptor
         # Volume Identifier can only be 32 bytes
@@ -722,7 +734,7 @@ in
     boot.loader.grub.enable = false;
 
     environment.systemPackages =  [ grubPkgs.grub2 grubPkgs.grub2_efi ]
-      ++ optional (config.isoImage.makeBiosBootable && canx86BiosBoot) pkgs.syslinux
+      ++ optional (config.isoImage.makeBiosBootable) pkgs.syslinux
     ;
 
     # In stage 1 of the boot, mount the CD as the root FS by label so
@@ -773,7 +785,7 @@ in
         { source = pkgs.writeText "version" config.system.nixos.label;
           target = "/version.txt";
         }
-      ] ++ optionals (config.isoImage.makeBiosBootable && canx86BiosBoot) [
+      ] ++ optionals (config.isoImage.makeBiosBootable) [
         { source = config.isoImage.splashImage;
           target = "/isolinux/background.png";
         }
@@ -800,7 +812,7 @@ in
         { source = config.isoImage.efiSplashImage;
           target = "/EFI/boot/efi-background.png";
         }
-      ] ++ optionals (config.boot.loader.grub.memtest86.enable && config.isoImage.makeBiosBootable && canx86BiosBoot) [
+      ] ++ optionals (config.boot.loader.grub.memtest86.enable && config.isoImage.makeBiosBootable) [
         { source = "${pkgs.memtest86plus}/memtest.bin";
           target = "/boot/memtest.bin";
         }
@@ -815,10 +827,10 @@ in
     # Create the ISO image.
     system.build.isoImage = pkgs.callPackage ../../../lib/make-iso9660-image.nix ({
       inherit (config.isoImage) isoName compressImage volumeID contents;
-      bootable = config.isoImage.makeBiosBootable && canx86BiosBoot;
+      bootable = config.isoImage.makeBiosBootable;
       bootImage = "/isolinux/isolinux.bin";
-      syslinux = if config.isoImage.makeBiosBootable && canx86BiosBoot then pkgs.syslinux else null;
-    } // optionalAttrs (config.isoImage.makeUsbBootable && config.isoImage.makeBiosBootable && canx86BiosBoot) {
+      syslinux = if config.isoImage.makeBiosBootable then pkgs.syslinux else null;
+    } // optionalAttrs (config.isoImage.makeUsbBootable && config.isoImage.makeBiosBootable) {
       usbBootable = true;
       isohybridMbrImage = "${pkgs.syslinux}/share/syslinux/isohdpfx.bin";
     } // optionalAttrs config.isoImage.makeEfiBootable {
