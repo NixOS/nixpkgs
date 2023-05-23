@@ -1098,20 +1098,23 @@ in
           noCheck = true; # fsck fails on a r/o filesystem
         };
       }
+      (lib.mkIf (config.boot.initrd.systemd.enable && cfg.writableStore) {
+        "/nix/store" = {
+          device = "overlay";
+          fsType = "overlay";
+          depends = ["/nix/.ro-store" "/nix/.rw-store"];
+          options = [
+            "lowerdir=/sysroot/nix/.ro-store"
+            "upperdir=/sysroot/nix/.rw-store/store"
+            "workdir=/sysroot/nix/.rw-store/work"
+            "x-systemd.requires=rw-store.service"
+            "x-systemd.after=rw-store.service"
+          ];
+        };
+      })
     ];
 
     boot.initrd.systemd = lib.mkIf (config.boot.initrd.systemd.enable && cfg.writableStore) {
-      mounts = [{
-        where = "/sysroot/nix/store";
-        what = "overlay";
-        type = "overlay";
-        options = "lowerdir=/sysroot/nix/.ro-store,upperdir=/sysroot/nix/.rw-store/store,workdir=/sysroot/nix/.rw-store/work";
-        wantedBy = ["initrd-fs.target"];
-        before = ["initrd-fs.target"];
-        requires = ["rw-store.service"];
-        after = ["rw-store.service"];
-        unitConfig.RequiresMountsFor = "/sysroot/nix/.ro-store";
-      }];
       services.rw-store = {
         unitConfig = {
           DefaultDependencies = false;

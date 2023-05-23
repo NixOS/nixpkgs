@@ -143,6 +143,9 @@ let
       options = mkMerge [
         (mkIf config.autoResize [ "x-nixos.autoresize" ])
         (mkIf (utils.fsNeededForBoot config) [ "x-initrd.mount" ])
+        (mkIf (config.depends != [])  (map
+          (x: "x-systemd.requires-mounts-for=${optionalString (utils.fsNeededForBoot config) "/sysroot" + x}")
+          config.depends))
       ];
       formatOptions = mkIf (defaultFormatOptions != null) (mkDefault defaultFormatOptions);
     };
