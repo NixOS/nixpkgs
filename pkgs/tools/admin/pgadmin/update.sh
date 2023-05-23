@@ -3,10 +3,6 @@
 
 set -eu -o pipefail
 
-RED='\033[0;31m'
-GREEN='\033[0;32m'
-YELLOW='\033[1;33m'
-NC='\033[0m' # No Color
 TMPDIR=/tmp/pgadmin-update-script
 
 ################################################################
@@ -44,10 +40,10 @@ old_version=$(nix-instantiate --eval -E "(import \"$nixpkgs\" { config = {}; ove
 url="https://ftp.postgresql.org/pub/pgadmin/pgadmin4/v${newest_version}/source/pgadmin4-${newest_version}.tar.gz"
 
 if [[ $newest_version == $old_version ]]; then
-  printf "${GREEN}Already at latest version $newest_version${NC}\n"
+  printf "Already at latest version $newest_version\n"
   exit 0
 fi
-printf "${YELLOW}New version: $newest_version ${NC}\n"
+printf "New version: $newest_version \n"
 
 # don't use mktemp, so if a network error happens, we can resume from there
 mkdir -p $TMPDIR
@@ -56,16 +52,16 @@ wget -c $url
 tar -xzf "pgadmin4-$newest_version.tar.gz"
 cd "pgadmin4-$newest_version/web"
 
-printf "${YELLOW}Will now convert the v2 lockfile. This will download the npm packages to get the metadata.\n"
-printf "Please note: This will take some time!${NC}\n"
-yarn-lock-converter -i yarn.lock -o yarn_v1.lock --cache .cache
-printf "${GREEN}Conversion done${NC}\n"
+printf "Will now convert the v2 lockfile. This will download the npm packages to get the metadata.\n"
+printf "Please note: This will take some time! For details, see the logfile ${TMPDIR}/update.log\n"
+yarn-lock-converter -i yarn.lock -o yarn_v1.lock --cache .cache > $TMPDIR/update.log
+printf "Conversion done\n"
 
-printf "${YELLOW}Will now do some regex substitution post-processing${NC}\n"
+printf "Will now do some regex substitution post-processing\n"
 sed -i -E "s|(.), |\1\", \"|g" yarn_v1.lock
-printf "${GREEN}Substituion done${NC}\n"
+printf "Substituion done\n"
 
-printf "${YELLOW}Will now add missing github packages back to the v1 yarn.lock file${NC}\n"
+printf "Will now add missing github packages back to the v1 yarn.lock file\n"
 # remove header
 tail +8 yarn.lock > yarn_mod.lock
 LENGTH=$(yq '. | with_entries(select(.value.resolution | contains("github"))) | keys | length' yarn_mod.lock)
@@ -92,19 +88,19 @@ done
 
 echo "" >> yarn_v1.lock
 cat adendum.lock >> yarn_v1.lock
-printf "${GREEN}Done${NC}\n"
+printf "Done\n"
 
 rm yarn.lock
 mv yarn_v1.lock yarn.lock
 
-printf "${YELLOW}Will now generate the hash. This will download the packages to the nix store and also take some time${NC}\n"
+printf "Will now generate the hash. This will download the packages to the nix store and also take some time\n"
 YARN_HASH=$(prefetch-yarn-deps yarn.lock)
 YARN_HASH=$(nix hash to-sri --type sha256 "$YARN_HASH")
-printf "${GREEN}Done${NC}\n"
+printf "Done\n"
 
-printf "${YELLOW}Copy files to nixpkgs${NC}\n"
+printf "Copy files to nixpkgs\n"
 cp yarn.lock "$nixpkgs/pkgs/tools/admin/pgadmin/"
-printf "${GREEN}Done${NC}\n"
+printf "Done\n"
 popd
 
 sed -i -E -e "s#yarnSha256 = \".*\"#yarnSha256 = \"$YARN_HASH\"#" ${scriptDir}/default.nix
