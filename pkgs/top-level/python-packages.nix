@@ -4090,7 +4090,9 @@ self: super: with self; {
 
   glean-parser = callPackage ../development/python-modules/glean-parser { };
 
-  glean-sdk = callPackage ../development/python-modules/glean-sdk { };
+  glean-sdk = callPackage ../development/python-modules/glean-sdk {
+    inherit (pkgs) lmdb;
+  };
 
   glfw = callPackage ../development/python-modules/glfw { };
 
