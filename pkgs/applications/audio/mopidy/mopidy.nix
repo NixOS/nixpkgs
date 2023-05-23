@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, pythonPackages, wrapGAppsHook
+{ lib, stdenv, fetchFromGitHub, pythonPackages, wrapGAppsNoGuiHook
 , gst_all_1, glib-networking, gobject-introspection
 }:
 
@@ -13,7 +13,7 @@ pythonPackages.buildPythonApplication rec {
     sha256 = "sha256-IUQe5WH2vsrAOgokhTNVVM3lnJXphT2xNGu27hWBLSo=";
   };
 
-  nativeBuildInputs = [ wrapGAppsHook ];
+  nativeBuildInputs = [ wrapGAppsNoGuiHook ];
 
   buildInputs = with gst_all_1; [
     glib-networking
@@ -45,10 +45,7 @@ pythonPackages.buildPythonApplication rec {
 
   meta = with lib; {
     homepage = "https://www.mopidy.com/";
-    description = ''
-      An extensible music server that plays music from local disk, Spotify,
-      SoundCloud, and more
-    '';
+    description = "An extensible music server that plays music from local disk, Spotify, SoundCloud, and more";
     license = licenses.asl20;
     maintainers = [ maintainers.fpletz ];
     hydraPlatforms = [];
