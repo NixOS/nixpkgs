@@ -48,5 +48,18 @@ import ./make-test-python.nix ({ pkgs, ... }: {
           "umount /tmp/mnt",
           "apfsck /dev/vdb",
       )
+    with subtest("Snapshots"):
+      machine.succeed(
+          "mkapfs /dev/vdb",
+          "mount -o cknodes,readwrite /dev/vdb /tmp/mnt",
+          "echo 'Hello World' > /tmp/mnt/test.txt",
+          "apfs-snap /tmp/mnt snap-1",
+          "rm /tmp/mnt/test.txt",
+          "umount /tmp/mnt",
+          "mount -o cknodes,readwrite,snap=snap-1 /dev/vdb /tmp/mnt",
+          "echo 'Hello World' | diff - /tmp/mnt/test.txt",
+          "umount /tmp/mnt",
+          "apfsck /dev/vdb",
+      )
   '';
 })

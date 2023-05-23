@@ -1,7 +1,7 @@
 { lib, stdenv, removeReferencesTo, pkgsBuildBuild, pkgsBuildHost, pkgsBuildTarget, targetPackages
 , llvmShared, llvmSharedForBuild, llvmSharedForHost, llvmSharedForTarget, llvmPackages
 , fetchurl, file, python3
-, darwin, cargo, cmake, rust, rustc, rustPlatform
+, darwin, cargo, cmake, rust, rustc
 , pkg-config, openssl, xz
 , libiconv
 , which, libffi

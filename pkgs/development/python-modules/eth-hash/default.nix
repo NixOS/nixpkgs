@@ -1,6 +1,7 @@
 { lib
 , fetchFromGitHub
 , buildPythonPackage
+, pythonAtLeast
 , pythonOlder
 , pytest
 , safe-pysha3
@@ -22,10 +23,14 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytest
   ] ++ passthru.optional-dependencies.pycryptodome
-  ++ passthru.optional-dependencies.pysha3;
+  # eth-hash can use either safe-pysha3 or pycryptodome;
+  # safe-pysha3 requires Python 3.9+ while pycryptodome does not.
+  # https://github.com/ethereum/eth-hash/issues/46#issuecomment-1314029211
+  ++ lib.optional (pythonAtLeast "3.9") passthru.optional-dependencies.pysha3;
 
   checkPhase = ''
     pytest tests/backends/pycryptodome/
+  '' + lib.optionalString (pythonAtLeast "3.9") ''
     pytest tests/backends/pysha3/
   '';
 

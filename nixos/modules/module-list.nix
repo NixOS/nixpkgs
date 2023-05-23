@@ -1150,6 +1150,8 @@
   ./services/ttys/gpm.nix
   ./services/ttys/kmscon.nix
   ./services/video/epgstation/default.nix
+  ./services/video/go2rtc/default.nix
+  ./services/video/frigate.nix
   ./services/video/mirakurun.nix
   ./services/video/replay-sorcery.nix
   ./services/video/mediamtx.nix

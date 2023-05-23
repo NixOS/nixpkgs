@@ -183,6 +183,8 @@ stdenv.mkDerivation rec {
     done
   '';
 
+  passthru = { inherit python; };
+
   meta = with lib; {
     description = "3D Creation/Animation/Publishing System";
     homepage = "https://www.blender.org";
