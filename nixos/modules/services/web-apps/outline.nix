@@ -586,7 +586,7 @@ in
 
       # Create an outline-sequalize wrapper (a wrapper around the wrapper) that
       # has the config file's path baked in. This is necessary because there is
-      # at least one occurrence of outline calling this from its own code.
+      # at least two occurrences of outline calling this from its own code.
       sequelize = pkgs.writeShellScriptBin "outline-sequelize" ''
         exec ${cfg.package}/bin/outline-sequelize \
           --config $RUNTIME_DIRECTORY/database.json \
@@ -687,21 +687,18 @@ in
           openssl rand -hex 32 > ${lib.escapeShellArg cfg.utilsSecretFile}
         fi
 
-        # The config file is required for the CLI, the DATABASE_URL environment
-        # variable is read by the app.
+        # The config file is required for the sequelize CLI.
         ${if (cfg.databaseUrl == "local") then ''
           cat <<EOF > $RUNTIME_DIRECTORY/database.json
           {
-            "production": {
-              "dialect": "postgres",
+            "production-ssl-disabled": {
               "host": "/run/postgresql",
               "username": null,
-              "password": null
+              "password": null,
+              "dialect": "postgres"
             }
           }
           EOF
-          export DATABASE_URL=${lib.escapeShellArg localPostgresqlUrl}
-          export PGSSLMODE=disable
         '' else ''
           cat <<EOF > $RUNTIME_DIRECTORY/database.json
           {
@@ -720,11 +717,7 @@ in
             }
           }
           EOF
-          export DATABASE_URL=${lib.escapeShellArg cfg.databaseUrl}
         ''}
-
-        cd $RUNTIME_DIRECTORY
-        ${sequelize}/bin/outline-sequelize db:migrate
       '';
 
       script = ''
@@ -781,7 +774,7 @@ in
         RuntimeDirectoryMode = "0750";
         # This working directory is required to find stuff like the set of
         # onboarding files:
-        WorkingDirectory = "${cfg.package}/share/outline/build";
+        WorkingDirectory = "${cfg.package}/share/outline";
       };
     };
   };
