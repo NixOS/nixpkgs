@@ -37,5 +37,6 @@ stdenv.mkDerivation rec {
     homepage = "https://www.limesurvey.org";
     maintainers = with maintainers; [offline];
     platforms = with platforms; unix;
+    broken = true; # Not compatible with PHP 8.1
   };
 }
