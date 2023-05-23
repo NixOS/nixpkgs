@@ -350,6 +350,8 @@ let
     '';
   });
 
+  stumpwm-unwrapped = super.stumpwm;
+
   ltk = super.ltk.overrideLispAttrs (o: {
     src = pkgs.fetchzip {
       url = "https://github.com/uthar/ltk/archive/f19162e76d6c7c2f51bd289b811d9ba20dd6555e.tar.gz";
