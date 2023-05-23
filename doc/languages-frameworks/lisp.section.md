@@ -142,17 +142,25 @@ In that file, use the `build-asdf-system` function, which is a wrapper around
 as `build-with-compile-into-pwd` for systems which create files during
 compilation.
 
-The `build-asdf-system` function is documented with comments in
-`nix-cl.nix`. Also, `packages.nix` is full of examples of how to use it.
+`build-asdf-system` takes the following arguments:
+
+- `pname`: The package name
+- `version`: The package version
+- `src`: The package source
+- `patches`: The patches to apply
+- `nativeLibs`: Native libraries, will be appended to the library path
+- `javaLibs`: Java libraries for ABCL, will be appended to the class path
+- `lispLibs`: Lisp dependencies (built with `build-asdf-system`)
+- `systems`: List of ASDF system to compile
+
+Also, `packages.nix` is full of examples of how to use it.
 
 ## Defining packages manually outside Nixpkgs {#lisp-defining-packages-outside}
 
 Lisp derivations (`abcl`, `sbcl` etc.) also export the `buildASDFSystem`
-function, which is the same as `build-asdf-system`, except for the `lisp`
-argument which is set to the given CL implementation.
-
-It can be used to define packages outside Nixpkgs, and, for example, add them
-into the package scope with `withOverrides` which will be discussed later on.
+function. It takes the same arguments as `build-asdf-system`. It can be used to
+define packages outside Nixpkgs, and, for example, add them into the package
+scope with `withOverrides` which will be discussed later on.
 
 ### Including an external package in scope {#lisp-including-external-pkg-in-scope}
 

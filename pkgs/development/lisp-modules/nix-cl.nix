@@ -109,6 +109,8 @@ let
       # TODO(kasper): use propagatedBuildInputs
       lispLibs ? [],
 
+      ## PRIVATE, don't use
+
       # Derivation containing the CL implementation package
       pkg,
 
@@ -124,6 +126,8 @@ let
       # ASDF amalgamation file to use
       # Created in build/asdf.lisp by `make` in ASDF source tree
       asdf,
+
+      ## end of PRIVATE
 
       # Some libraries have multiple systems under one project, for
       # example, cffi has cffi-grovel, cffi-toolchain etc.  By
