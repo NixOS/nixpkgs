@@ -7067,6 +7067,8 @@ with pkgs;
 
   engauge-digitizer = libsForQt5.callPackage ../applications/science/math/engauge-digitizer { };
 
+  epub2txt2 = callPackage ../tools/text/epub2txt2 { };
+
   epubcheck = callPackage ../tools/text/epubcheck { };
 
   evil-winrm = callPackage ../tools/security/evil-winrm { };
