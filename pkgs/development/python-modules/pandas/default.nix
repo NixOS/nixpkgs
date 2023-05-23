@@ -61,14 +61,14 @@
 
 buildPythonPackage rec {
   pname = "pandas";
-  version = "2.0.0";
+  version = "2.0.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-zal4nmG0RGPBxP4X73Vd53vNE7CboxyUDSDxk9Y6Xcg=";
+    hash = "sha256-GbjlJw2jK0Hr8S8OcWXvpwJEkulRP7RvtjHFAirlcJ0=";
   };
 
   nativeBuildInputs = [
