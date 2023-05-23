@@ -37,5 +37,6 @@ in {
     ] ++ extraFlags);
 
     ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
+    RestrictAddressFamilies = [ "AF_INET" "AF_INET6" "AF_UNIX" ];
   };
 }
