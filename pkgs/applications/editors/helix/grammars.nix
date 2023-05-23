@@ -47,7 +47,6 @@
         then "${source}/${grammar.source.subpath}"
         else source;
 
-      dontUnpack = true;
       dontConfigure = true;
 
       FLAGS = [
@@ -64,13 +63,13 @@
       buildPhase = ''
         runHook preBuild
 
-        if [[ -e "$src/src/scanner.cc" ]]; then
-          $CXX -c "$src/src/scanner.cc" -o scanner.o $FLAGS
-        elif [[ -e "$src/src/scanner.c" ]]; then
-          $CC -c "$src/src/scanner.c" -o scanner.o $FLAGS
+        if [[ -e "src/scanner.cc" ]]; then
+          $CXX -c "src/scanner.cc" -o scanner.o $FLAGS
+        elif [[ -e "src/scanner.c" ]]; then
+          $CC -c "src/scanner.c" -o scanner.o $FLAGS
         fi
 
-        $CC -c "$src/src/parser.c" -o parser.o $FLAGS
+        $CC -c "src/parser.c" -o parser.o $FLAGS
         $CXX -shared -o $NAME.so *.o
 
         runHook postBuild
