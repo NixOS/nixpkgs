@@ -30,5 +30,6 @@ buildGoPackage rec {
     homepage = "https://etcd.io/";
     maintainers = with maintainers; [ offline zowoq ];
     broken = stdenv.isDarwin; # outdated golang.org/x/sys
+    knownVulnerabilities = [ "CVE-2023-32082" ];
   };
 }
