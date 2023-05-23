@@ -126,7 +126,9 @@ in (kdeFrameworks // plasmaMobileGear // plasma5 // plasma5.thirdParty // kdeGea
 
   liblastfm = callPackage ../development/libraries/liblastfm { };
 
-  libopenshot = callPackage ../applications/video/openshot-qt/libopenshot.nix { };
+  libopenshot = pkgs.darwin.apple_sdk_11_0.callPackage ../applications/video/openshot-qt/libopenshot.nix {
+    inherit (libsForQt5) qtbase;
+  };
 
   packagekit-qt = callPackage ../tools/package-management/packagekit/qt.nix { };
 
