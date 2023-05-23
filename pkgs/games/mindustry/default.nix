@@ -37,7 +37,7 @@
 
 let
   pname = "mindustry";
-  version = "143.1";
+  version = "144.3";
   buildVersion = makeBuildVersion version;
 
   selectedGlew = if enableWayland then glew-egl else glew;
@@ -46,13 +46,13 @@ let
     owner = "Anuken";
     repo = "Mindustry";
     rev = "v${version}";
-    hash = "sha256-p6HxccLg+sjFW+ZGGTfo5ZvOIs6lKjub88kX/iaBres=";
+    hash = "sha256-IXwrBaj0gweaaHefO/LyqEW4a3fBLfySSYPHBhRMVo8=";
   };
   Arc = fetchFromGitHub {
     owner = "Anuken";
     repo = "Arc";
     rev = "v${version}";
-    hash = "sha256-fbFjelwqBRadcUmbW3/oDnhmNAjTj660qB5WwXugIIU=";
+    hash = "sha256-nH/sHRWMdX6ieh2EWfD0wAn87E2ZkqZX+9zt2vKYPcE=";
   };
   soloud = fetchFromGitHub {
     owner = "Anuken";
@@ -131,7 +131,7 @@ let
         | sh
     '';
     outputHashMode = "recursive";
-    outputHash = "sha256-uxnW5AqX6PazqHJYLuF/By5qpev8Se+992jCyacogSY=";
+    outputHash = "sha256-vZc8T7Hk1DLHYgqj8zxKUP2NPXumRxuheMk21Sh2TZY=";
   };
 
 in
