@@ -1,4 +1,7 @@
-{ cargo
+{ appstream-glib
+, cargo
+, citations
+, clippy
 , darwin
 , desktop-file-utils
 , fetchFromGitLab
@@ -18,26 +21,31 @@
 , testers
 , wrapGAppsHook4
 }:
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "citations";
-  version = "0.5.1";
+  version = "0.5.2";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
-    repo = finalAttrs.pname;
-    rev = finalAttrs.version;
-    hash = "sha256-QPK6Nw0tDdttUDFKMgThTYMTxGXsn5OReqf1LNAai7g=";
+    repo = "citations";
+    rev = version;
+    hash = "sha256-QofsVqulFMiyYKci2vHdQAUJoIIgnPyTRizoBDvYG+g=";
   };
 
-  cargoDeps = rustPlatform.importCargoLock {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "nom-bibtex-0.3.0" = "sha256-Dy7xauwXGnMtK/w/T5gZgqJ8fPyyd/FfZTLjvwMODFI=";
-    };
+  patches = [
+    ./Cargo.lock.patch # Fix: ERROR: The Cargo.lock contains git dependencies (nom-bibtex-0.4.0)
+  ];
+
+  cargoDeps = rustPlatform.fetchCargoTarball {
+    inherit src;
+    hash = "sha256-CeXHGFPNb1ANevFRfMf6YU4s5QWvmBaL3w3e0oF8bKo=";
   };
 
   nativeBuildInputs = [
+    appstream-glib
+    cargo
+    clippy
     desktop-file-utils
     gettext
     glib
@@ -45,7 +53,6 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
     pkg-config
     rustPlatform.cargoSetupHook
-    cargo
     rustc
     wrapGAppsHook4
   ];
@@ -60,10 +67,10 @@ stdenv.mkDerivation (finalAttrs: {
     darwin.apple_sdk.frameworks.Foundation
   ];
 
-  doCheck = true;
+  doCheck = false; # ture; -> error: no such command: `clippy` View all installed commands with `cargo --list`
 
   passthru.tests.version = testers.testVersion {
-    package = finalAttrs.finalPackage;
+    package = citations;
     command = "citations --help";
   };
 
@@ -74,4 +81,4 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with maintainers; [ benediktbroich ];
     platforms = platforms.unix;
   };
-})
+}
