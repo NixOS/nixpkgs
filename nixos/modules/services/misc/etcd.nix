@@ -15,6 +15,8 @@ in {
       type = types.bool;
     };
 
+    package = mkPackageOptionMD pkgs "etcd" { };
+
     name = mkOption {
       description = lib.mdDoc "Etcd unique node name.";
       default = config.networking.hostName;
@@ -187,13 +189,13 @@ in {
 
       serviceConfig = {
         Type = "notify";
-        ExecStart = "${pkgs.etcd}/bin/etcd";
+        ExecStart = "${cfg.package}/bin/etcd";
         User = "etcd";
         LimitNOFILE = 40000;
       };
     };
 
-    environment.systemPackages = [ pkgs.etcd ];
+    environment.systemPackages = [ cfg.package ];
 
     users.users.etcd = {
       isSystemUser = true;
