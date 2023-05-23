@@ -15,6 +15,7 @@ in
     isNormalUser = true;
     home = "/home/${username}";
     description = "Azure NixOS Test User";
+    extraGroups = [ "wheel" ];
     openssh.authorizedKeys.keys = [ (builtins.readFile ~/.ssh/id_ed25519.pub) ];
   };
   nix.settings.trusted-users = [ username ];
@@ -24,7 +25,7 @@ in
   boot.kernelPackages = pkgs.linuxPackages_latest;
 
   # test user doesn't have a password
-  services.openssh.passwordAuthentication = false;
+  services.openssh.settings.PasswordAuthentication = false;
   security.sudo.wheelNeedsPassword = false;
 
   environment.systemPackages = with pkgs; [
