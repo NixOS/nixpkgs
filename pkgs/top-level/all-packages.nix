@@ -19170,6 +19170,8 @@ with pkgs;
 
   selendroid = callPackage ../development/tools/selenium/selendroid { };
 
+  sem = callPackage ../development/tools/sem { };
+
   semver-tool = callPackage ../development/tools/misc/semver-tool { };
 
   semantik = libsForQt5.callPackage ../applications/office/semantik { };
