@@ -1605,6 +1605,8 @@ self: super: with self; {
 
   calmjs-parse = callPackage ../development/python-modules/calmjs-parse { };
 
+  calplot = callPackage ../development/python-modules/calplot { };
+
   calysto = callPackage ../development/python-modules/calysto { };
 
   calysto-scheme = callPackage ../development/python-modules/calysto-scheme { };
