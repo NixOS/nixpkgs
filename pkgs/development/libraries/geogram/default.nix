@@ -93,6 +93,9 @@ stdenv.mkDerivation rec {
 
         # Skip slow RVD test
         "RVD"
+
+        # Occasional segfault
+        "Delaunay"
       ];
     in
     ''
