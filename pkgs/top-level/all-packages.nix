@@ -7619,6 +7619,8 @@ with pkgs;
 
   feedgnuplot = callPackage ../tools/graphics/feedgnuplot { };
 
+  fermyon-spin = callPackage ../development/tools/fermyon-spin { };
+
   fbcat = callPackage ../tools/misc/fbcat { };
 
   fbv = callPackage ../tools/graphics/fbv { };
@@ -18166,7 +18168,7 @@ with pkgs;
 
   csmith = callPackage ../development/tools/misc/csmith { };
 
-  csslint = callPackage ../development/web/csslint { };
+  inherit (nodePackages) csslint;
 
   css-html-js-minify = with python3Packages; toPythonApplication css-html-js-minify;
 
@@ -19169,6 +19171,8 @@ with pkgs;
   selenium-server-standalone = callPackage ../development/tools/selenium/server { };
 
   selendroid = callPackage ../development/tools/selenium/selendroid { };
+
+  sem = callPackage ../development/tools/sem { };
 
   semver-tool = callPackage ../development/tools/misc/semver-tool { };
 
@@ -25702,7 +25706,7 @@ with pkgs;
   outline = callPackage ../servers/web-apps/outline (lib.fix (super: {
     yarn2nix-moretea = yarn2nix-moretea.override { inherit (super) nodejs yarn; };
     yarn = yarn.override { inherit (super) nodejs; };
-    nodejs = nodejs_16;
+    nodejs = nodejs_18;
   }));
 
   openbgpd = callPackage ../servers/openbgpd { };
@@ -29452,7 +29456,7 @@ with pkgs;
   berry = callPackage ../applications/window-managers/berry { };
 
   bespokesynth = callPackage ../applications/audio/bespokesynth {
-    inherit (darwin.apple_sdk.frameworks) Cocoa WebKit CoreServices CoreAudioKit;
+    inherit (darwin.apple_sdk.frameworks) Accelerate Cocoa WebKit CoreServices CoreAudioKit IOBluetooth;
   };
 
   bespokesynth-with-vst2 = bespokesynth.override {
@@ -30031,7 +30035,7 @@ with pkgs;
   denemo = callPackage ../applications/audio/denemo { };
 
   dexed = darwin.apple_sdk_11_0.callPackage ../applications/audio/dexed {
-    inherit (darwin.apple_sdk_11_0.frameworks) Cocoa WebKit MetalKit DiscRecording CoreAudioKit;
+    inherit (darwin.apple_sdk_11_0.frameworks) Accelerate Cocoa WebKit MetalKit DiscRecording CoreAudioKit;
     inherit (darwin.apple_sdk_11_0.libs) simd;
   };
 
@@ -30669,7 +30673,7 @@ with pkgs;
   filezilla = callPackage ../applications/networking/ftp/filezilla { };
 
   fire = darwin.apple_sdk_11_0.callPackage ../applications/audio/fire {
-    inherit (darwin.apple_sdk_11_0.frameworks) Cocoa WebKit CoreServices DiscRecording CoreAudioKit MetalKit;
+    inherit (darwin.apple_sdk_11_0.frameworks) Accelerate Cocoa WebKit CoreServices DiscRecording CoreAudioKit MetalKit;
     inherit (darwin.apple_sdk_11_0.libs) simd;
   };
 

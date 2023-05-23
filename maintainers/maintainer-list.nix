@@ -9012,6 +9012,12 @@
     githubId = 1769386;
     name = "Liam Diprose";
   };
+  liberatys = {
+    email = "liberatys@hey.com";
+    name = "Nick Anthony Flueckiger";
+    github = "liberatys";
+    githubId = 35100156;
+  };
   libjared = {
     email = "jared@perrycode.com";
     github = "libjared";

@@ -555,6 +555,7 @@ in {
   openstack-image-userdata = (handleTestOn ["x86_64-linux"] ./openstack-image.nix {}).userdata or {};
   opentabletdriver = handleTest ./opentabletdriver.nix {};
   owncast = handleTest ./owncast.nix {};
+  outline = handleTest ./outline.nix {};
   image-contents = handleTest ./image-contents.nix {};
   openvscode-server = handleTest ./openvscode-server.nix {};
   orangefs = handleTest ./orangefs.nix {};
