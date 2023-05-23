@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "wch-isp";
-  version = "0.2.4";
+  version = "0.2.5";
 
   src = fetchFromGitHub {
     owner = "jmaselbas";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-YjxzfDSZRMa7B+hNqtj87nRlRuQyr51VidZqHLddgwI=";
+    hash = "sha256-JF1g2Qb1gG93lSaDQvltT6jCYk/dKntsIJPkQXYUvX4=";
   };
 
   nativeBuildInputs = [ pkg-config ];
