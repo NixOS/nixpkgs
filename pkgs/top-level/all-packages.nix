@@ -280,6 +280,8 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security SystemConfiguration;
   };
 
+  atuin-graph = callPackage ../tools/misc/atuin-graph { };
+
   automatic-timezoned = callPackage ../tools/system/automatic-timezoned { };
 
   cve = with python3Packages; toPythonApplication cvelib;
