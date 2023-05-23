@@ -9,8 +9,8 @@
   nixos,
   openssh,
   runc,
-  runCommand,
   stdenv,
+  testers,
 }:
 let
   inherit (haskell.lib.compose) overrideCabal addBuildTools justStaticExecutables;
@@ -34,13 +34,11 @@ in pkg.overrideAttrs (finalAttrs: o: {
       position = toString ./default.nix + ":1";
     };
     passthru = o.passthru // {
-
       tests = {
-        help = runCommand "test-hercules-ci-agent-help" { } ''
-          (${finalAttrs.finalPackage}/bin/hercules-ci-agent --help 2>&1 || true) | grep -F -- '--config'
-          (${lib.getExe finalAttrs.finalPackage} --help 2>&1 || true) | grep -F -- '--config'
-          touch $out
-        '';
+        version = testers.testVersion {
+          package = finalAttrs.finalPackage;
+          command = "hercules-ci-agent --help";
+        };
       } // lib.optionalAttrs (stdenv.isLinux) {
         # Does not test the package, but evaluation of the related NixOS module.
         nixos-simple-config = (nixos {
