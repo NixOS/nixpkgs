@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "MacFSEvents";
-  version = "0.8.1";
+  version = "0.8.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1324b66b356051de662ba87d84f73ada062acd42b047ed1246e60a449f833e10";
+    sha256 = "sha256-v3KD8dUXdkzNyBlbIWMdu6wcUGuSC/mo6ilWsxJ2Ucs=";
   };
 
   buildInputs = [ CoreFoundation CoreServices ];
