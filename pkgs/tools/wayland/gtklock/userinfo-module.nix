@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gtklock-userinfo-module";
-  version = "2.0.0";
+  version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "jovanlanik";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-7dtw6GZ7l0fbTxRxMWH4yRj9Zqz9KB3acmwnF/8LALg=";
+    hash = "sha256-WNUX0wRoh14rZRmiyQEGZPKJRr6oNW8B6LEwhDSPcyY=";
   };
 
   nativeBuildInputs = [ pkg-config ];
