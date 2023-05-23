@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , pythonOlder
-, fetchFromBitbucket
+, fetchFromGitHub
 , ziafont
 , pytestCheckHook
 , nbval
@@ -14,7 +14,7 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.8";
 
-  src = fetchFromBitbucket {
+  src = fetchFromGitHub {
     owner = "cdelker";
     repo = pname;
     rev = version;
