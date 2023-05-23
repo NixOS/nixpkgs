@@ -1013,7 +1013,6 @@ in {
     '';
     bootLoader = "systemd-boot";
     extraInstallerConfig = { modulesPath, ...}: {
-      imports = [ (modulesPath + "/tasks/stratis.nix") ];
       config = {
         services.stratis.enable = true;
         environment.systemPackages = [
