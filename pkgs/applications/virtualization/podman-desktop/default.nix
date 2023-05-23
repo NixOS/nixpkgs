@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchurl
 , fetchYarnDeps
 , yarn
 , fixup_yarn_lock
@@ -12,26 +13,31 @@
 , makeDesktopItem
 }:
 
+let
+  countour = fetchurl {
+    url = "https://raw.githubusercontent.com/projectcontour/contour/v1.24.2/examples/render/contour.yaml";
+    hash = "sha256-52ANbg7VrFmuBTOth+9ZAkj5LmGt+0fTDCltMB8Rfag=";
+  };
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "podman-desktop";
-  version = "0.12.0";
+  version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "podman-desktop";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-gEjcI+bfETYZB/pHDXRcNxNVDsbwuqQL1E22fMkIJHI=";
+    sha256 = "sha256-HCxx/L0OOkeSMszxJPWI/0pOePZIyRh2zpROEUG1Whw=";
   };
 
   offlineCache = fetchYarnDeps {
     yarnLock = "${finalAttrs.src}/yarn.lock";
-    sha256 = "sha256-x0hqNxi6r1i3vBe1tJQl+Oht2St9VIH3Eq27MZLkojA=";
+    sha256 = "sha256-YT6v+kAtkvfaRi5O0+2Nw5mpvdUWuAqSM4hrJUUdc1I=";
   };
 
   patches = [
     # podman should be installed with nix; disable auto-installation
     ./patches/extension-no-download-podman.patch
-    ./patches/fix-yarn-lock-deterministic.patch
   ];
 
   postPatch = ''
@@ -40,6 +46,9 @@ stdenv.mkDerivation (finalAttrs: {
         --replace 'process.resourcesPath'          "'$out/share/lib/podman-desktop/resources'" \
         --replace '(process as any).resourcesPath' "'$out/share/lib/podman-desktop/resources'"
     done
+    substituteInPlace extensions/kind/scripts/download.ts \
+      --replace 'download(CONTOUR_VERSION, CONTOUR_DEPLOY_PATH, CONTOUR_DEPLOY_FILE);' '// skip download'
+    install -Dm444 ${countour} extensions/kind/src-generated/contour.yaml
   '';
 
   ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
