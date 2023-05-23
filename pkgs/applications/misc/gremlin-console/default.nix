@@ -2,10 +2,10 @@
 
 stdenv.mkDerivation rec {
   pname = "gremlin-console";
-  version = "3.6.3";
+  version = "3.6.4";
   src = fetchzip {
     url = "https://downloads.apache.org/tinkerpop/${version}/apache-tinkerpop-gremlin-console-${version}-bin.zip";
-    sha256 = "sha256-+IzTCaRlYW1i4ZzEgOpEA0rXN45A2q1iddrqU9up2IA=";
+    sha256 = "sha256-3fZA0U7dobr4Zsudin9OmwcYUw8gdltUWFTVe2l8ILw=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
