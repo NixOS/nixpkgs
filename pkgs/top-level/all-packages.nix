@@ -18415,6 +18415,8 @@ with pkgs;
 
   fundoc = callPackage ../development/tools/fundoc { };
 
+  funzzy = callPackage ../development/tools/misc/funzzy { };
+
   gede = libsForQt5.callPackage ../development/tools/misc/gede { };
 
   gdbgui = python3Packages.callPackage ../development/tools/misc/gdbgui { };
@@ -39879,6 +39881,8 @@ with pkgs;
   vttest = callPackage ../tools/misc/vttest { };
 
   wacomtablet = libsForQt5.callPackage ../tools/misc/wacomtablet { };
+
+  wamr = callPackage ../development/interpreters/wamr { };
 
   wasmer = callPackage ../development/interpreters/wasmer {
     llvmPackages = llvmPackages_12;
