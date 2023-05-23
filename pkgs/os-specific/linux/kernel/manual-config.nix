@@ -1,5 +1,5 @@
 { lib, stdenv, buildPackages, runCommand, nettools, bc, bison, flex, perl, rsync, gmp, libmpc, mpfr, openssl
-, libelf, cpio, elfutils, zstd, python3Minimal, zlib, pahole
+, libelf, cpio, elfutils, zstd, python3Minimal, zlib, pahole, rustc, rust-bindgen
 , fetchpatch
 }:
 
@@ -65,6 +65,8 @@ let
     pahole
     perl
     libelf
+    rustc
+    rust-bindgen
     # module makefiles often run uname commands to find out the kernel version
     (buildPackages.deterministic-uname.override { inherit modDirVersion; })
   ] ++ optional (lib.versionAtLeast version "5.13") zstd;
@@ -100,7 +102,9 @@ stdenv.mkDerivation ({
   inherit version src;
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
-  nativeBuildInputs = [ perl bc nettools openssl rsync gmp libmpc mpfr zstd python3Minimal ]
+  nativeBuildInputs = [
+      perl bc nettools openssl rsync gmp libmpc mpfr zstd python3Minimal rustc rust-bindgen
+    ]
       ++ optional  (kernelConf.target == "uImage") buildPackages.ubootTools
       ++ optional  (lib.versionOlder version "5.8") libelf
       ++ optionals (lib.versionAtLeast version "4.16") [ bison flex ]
@@ -139,6 +143,10 @@ stdenv.mkDerivation ({
   '';
 
   postPatch = ''
+    echo "WWAAAAAAAAAAAAAAAH"
+    make LLVM=1 rustavailable
+    # exit 1
+
     sed -i Makefile -e 's|= depmod|= ${buildPackages.kmod}/bin/depmod|'
 
     # fixup for pre-5.4 kernels using the $(cd $foo && /bin/pwd) pattern
@@ -301,7 +309,10 @@ stdenv.mkDerivation ({
       else "install"))
   ];
 
-  postInstall = optionalString isModular ''
+  postInstall = ''
+    mkdir -p $out
+    cp .config $out/.config
+    '' + optionalString isModular ''
     if [ -z "''${dontStrip-}" ]; then
       installFlagsArray+=("INSTALL_MOD_STRIP=1")
     fi
