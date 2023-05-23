@@ -16,6 +16,8 @@ stdenv.mkDerivation rec {
    sed -i Makefile -e 's!/usr!!'
   '';
 
+  makeFlags = [ "CC:=$(CC)" ];
+
   meta = {
     description = "A simple command-line utility for Linux, for extracting text from EPUB documents.";
     homepage = "https://github.com/kevinboone/epub2txt2";
