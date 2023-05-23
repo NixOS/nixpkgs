@@ -13,6 +13,7 @@
 , alsa-lib
 , Cocoa
 , WebKit
+, Accelerate
 , CoreServices
 , DiscRecording
 , CoreAudioKit
@@ -76,6 +77,7 @@ stdenv.mkDerivation rec {
     freetype
     alsa-lib
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    Accelerate
     Cocoa
     WebKit
     CoreServices
