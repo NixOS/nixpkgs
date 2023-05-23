@@ -124,7 +124,9 @@ in (kdeFrameworks // plasmaMobileGear // plasma5 // plasma5.thirdParty // kdeGea
 
   libdbusmenu = callPackage ../development/libraries/libdbusmenu-qt/qt-5.5.nix { };
 
-  liblastfm = callPackage ../development/libraries/liblastfm { };
+  liblastfm = pkgs.darwin.apple_sdk_11_0.callPackage ../development/libraries/liblastfm {
+    inherit (libsForQt5) qtbase;
+  };
 
   libopenshot = callPackage ../applications/video/openshot-qt/libopenshot.nix { };
 
