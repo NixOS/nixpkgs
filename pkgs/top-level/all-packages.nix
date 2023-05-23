@@ -40443,6 +40443,8 @@ with pkgs;
 
   werf = callPackage ../applications/networking/cluster/werf { };
 
+  yor = callPackage ../applications/networking/cluster/yor { };
+
   wifi-password = callPackage ../os-specific/darwin/wifi-password { };
 
   qubes-core-vchan-xen = callPackage ../applications/qubes/qubes-core-vchan-xen { };
