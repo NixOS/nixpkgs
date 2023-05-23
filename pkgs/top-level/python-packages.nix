@@ -8779,7 +8779,16 @@ self: super: with self; {
 
   pymailgunner = callPackage ../development/python-modules/pymailgunner { };
 
-  pymanopt = callPackage ../development/python-modules/pymanopt { };
+  scipy_1_9 = scipy.overrideAttrs(old: rec {
+    version = "1.9.3";
+    src = fetchPypi {
+      inherit version;
+      inherit (old) pname;
+      sha256 = "sha256-+8XAXIXBoCvnex/1kQh8g7xEV5xtK9n7eYu2TqXhoCc=";
+    };
+    patches = [ ];
+  });
+  pymanopt = callPackage ../development/python-modules/pymanopt { scipy = scipy_1_9; };
 
   pymarshal = callPackage ../development/python-modules/pymarshal { };
 
