@@ -54,6 +54,15 @@ stdenv.mkDerivation rec {
     text-engine
   ];
 
+  mesonFlags = let
+    packageDistributor = lib.head meta.maintainers;
+  in [
+    (lib.mesonOption "package" "Nix")
+
+    # Just hope the name doesn't come with a space.
+    (lib.mesonOption "distributor" packageDistributor.github)
+  ];
+
   meta = with lib; {
     description = "Desktop app for managing GNOME shell extensions";
     homepage = "https://github.com/mjakeman/extension-manager";
