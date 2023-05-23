@@ -11,12 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-zzcig5XNh9TqUHginsfoC47WrKavqi6k6ezir+OOMJk=";
   };
 
-  preConfigure = ''
-   sed -i Makefile -e 's!DESTDIR)!out)!'
-   sed -i Makefile -e 's!/usr!!'
-  '';
-
-  makeFlags = [ "CC:=$(CC)" ];
+  makeFlags = [ "CC:=$(CC)" "PREFIX:=$(out)" ];
 
   meta = {
     description = "A simple command-line utility for Linux, for extracting text from EPUB documents.";
@@ -24,5 +19,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.leonid ];
+    mainProgram = "epub2txt";
   };
 }
