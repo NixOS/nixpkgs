@@ -2,28 +2,33 @@
 , rustPlatform
 , fetchFromGitHub
 , installShellFiles
-, rust
-, stdenv
+, fetchpatch
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "argc";
-  version = "1.1.0";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "sigoden";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-db75OoFmsR03lK99vGg8+fHJENOyoDFo+uqQJNYmI9M=";
+    hash = "sha256-sJINgB1cGtqLPl2RmwgChwnSrJL5TWu5AU6hfLhvmE4=";
   };
 
-  cargoHash = "sha256-6TC4RWDcg4el+jkq8Jal0k+2sdNsjMkMYqP/b9wP5mU=";
+  cargoHash = "sha256-HrmqARhEKlAjrW6QieVEEKkfda6R69oLcG/6fd3rvWM=";
+
+  patches = [
+    # tests make the assumption that the compiled binary is in target/debug,
+    # which fails since `cargoBuildHook` uses `--release` and `--target`
+    (fetchpatch {
+      name = "fix-tests-with-release-or-target";
+      url = "https://github.com/sigoden/argc/commit/a4f2db46e27cad14d3251ef0b25b6f2ea9e70f0e.patch";
+      hash = "sha256-bsHSo11/RVstyzdg0BKFhjuWUTLdKO4qsWIOjTTi+HQ=";
+    })
+  ];
 
   nativeBuildInputs = [ installShellFiles ];
-
-  preCheck = ''
-    export PATH=target/${rust.toRustTarget stdenv.hostPlatform}/release:$PATH
-  '';
 
   postInstall = ''
     installShellCompletion --cmd argc \
