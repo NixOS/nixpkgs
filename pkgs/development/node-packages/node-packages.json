@@ -128,8 +128,6 @@
 , "elm-test"
 , "emoj"
 , "emojione"
-, {"epgstation": "../../applications/video/epgstation"}
-, {"epgstation-client": "../../applications/video/epgstation/client"}
 , "escape-string-regexp"
 , "eslint"
 , "eslint_d"
