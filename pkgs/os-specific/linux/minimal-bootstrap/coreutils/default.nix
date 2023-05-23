@@ -15,8 +15,8 @@ let
   };
 
   # Thanks to the live-bootstrap project!
-  # See https://github.com/fosslinux/live-bootstrap/blob/e86db47b6ee40d68e26866dd15e8637f64d6d778/sysa/coreutils-5.0/coreutils-5.0.kaem
-  liveBootstrap = "https://github.com/fosslinux/live-bootstrap/raw/e86db47b6ee40d68e26866dd15e8637f64d6d778/sysa/coreutils-5.0";
+  # See https://github.com/fosslinux/live-bootstrap/blob/a8752029f60217a5c41c548b16f5cdd2a1a0e0db/sysa/coreutils-5.0/coreutils-5.0.kaem
+  liveBootstrap = "https://github.com/fosslinux/live-bootstrap/raw/a8752029f60217a5c41c548b16f5cdd2a1a0e0db/sysa/coreutils-5.0";
 
   makefile = fetchurl {
     url = "${liveBootstrap}/mk/main.mk";
@@ -62,6 +62,11 @@ let
     (fetchurl {
       url = "${liveBootstrap}/patches/sort-locale.patch";
       sha256 = "0bdch18mpyyxyl6gyqfs0wb4pap9flr11izqdyxccx1hhz0a2i6c";
+    })
+    # don't assume fopen cannot return stdin or stdout.
+    (fetchurl {
+      url = "${liveBootstrap}/patches/uniq-fopen.patch";
+      sha256 = "0qs6shyxl9j4h34v5j5sgpxrr4gjfljd2hxzw416ghwc3xzv63fp";
     })
   ];
 in
