@@ -57,10 +57,15 @@ python3Packages.buildPythonApplication rec {
     ++ lib.optionals stdenv.isLinux [ python3Packages.pyxattr python3Packages.rpm acl cdrkit dtc ]
     ++ lib.optionals enableBloat (
       [
-        abootimg apksigcopier apksigner cbfstool colord enjarify ffmpeg fpc ghc ghostscriptX giflib gnupg gnumeric
-        hdf5 imagemagick libcaca llvm jdk mono ocaml odt2txt oggvideotools openssh pdftk poppler_utils procyon qemu R tcpdump ubootTools wabt radare2 xmlbeans
+        apksigcopier apksigner enjarify ffmpeg fpc ghc ghostscriptX giflib gnupg pdftk
+        hdf5 imagemagick libcaca llvm jdk mono ocaml odt2txt openssh
+        poppler_utils procyon qemu R tcpdump wabt radare2 xmlbeans
       ]
-      ++ (with python3Packages; [ androguard binwalk guestfs h5py pdfminer-six ])
+      ++ (with python3Packages; [ androguard binwalk h5py pdfminer-six ])
+      # oggvideotools is broken on Darwin, please put it back when it will be fixed?
+      ++ lib.optionals stdenv.isLinux [ abootimg cbfstool colord ubootTools python3Packages.guestfs oggvideotools ]
+      # This doesn't work on aarch64-darwin
+      ++ lib.optionals (stdenv.isx86_64 || stdenv.isLinux) [ gnumeric ]
       # `apktool` depend on `build-tools` which requires Android SDK acceptance, therefore, the whole thing is unfree.
       ++ lib.optionals enableUnfree [ apktool ]
     );
