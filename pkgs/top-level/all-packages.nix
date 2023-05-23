@@ -31114,7 +31114,7 @@ with pkgs;
   wrapOBS = callPackage ../applications/video/obs-studio/wrapper.nix {};
 
   obsidian = callPackage ../applications/misc/obsidian {
-    electron = electron_21;
+    electron = electron_24;
   };
 
   octoprint = callPackage ../applications/misc/octoprint { };
@@ -37754,6 +37754,8 @@ with pkgs;
   yacreader = libsForQt5.callPackage ../applications/graphics/yacreader { };
 
   yadm = callPackage ../applications/version-management/yadm { };
+
+  yai = callPackage ../tools/misc/yai { };
 
   yamale = with python3Packages; toPythonApplication yamale;
 
