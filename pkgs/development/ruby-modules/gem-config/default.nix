@@ -27,7 +27,7 @@
 , bison, flex, pango, python3, patchelf, binutils, freetds, wrapGAppsHook, atk
 , bundler, libsass, libexif, libselinux, libsepol, shared-mime-info, libthai, libdatrie
 , CoreServices, DarwinTools, cctools, libtool, discount, exiv2, libmaxminddb, libyaml
-, autoSignDarwinBinariesHook, fetchpatch
+, autoSignDarwinBinariesHook, fetchpatch, dart-sass-embedded
 }@args:
 
 let
@@ -696,6 +696,16 @@ in
     # https://github.com/NixOS/nixpkgs/issues/19098
     buildFlags = [ "--disable-lto" ];
   });
+
+  sass-embedded = _attrs: {
+    dontBuild = false;
+    # Skip sass_embedded step, replace exe path with nixpkgs' dart-sass-embedded
+    postPatch = ''
+      substituteInPlace ext/sass/Rakefile \
+        --replace "'embedded.rb' => %w[sass_embedded] " "'embedded.rb'" \
+        --replace "sass_embedded/dart-sass-embedded" "${dart-sass-embedded}/bin/dart-sass-embedded"
+    '';
+  };
 
   scrypt = attrs: lib.optionalAttrs stdenv.isDarwin {
     dontBuild = false;
