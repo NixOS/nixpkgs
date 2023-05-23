@@ -52,8 +52,9 @@
 
 let
   inherit (lib) lists strings trivial;
-  inherit (cudaPackages) cudatoolkit cudaFlags cudnn nccl;
 in
+
+with cudaPackages;
 
 let
   setBool = v: if v then "1" else "0";
@@ -96,22 +97,11 @@ let
       throw "No GPU targets specified"
   );
 
-  cudatoolkit_joined = symlinkJoin {
-    name = "${cudatoolkit.name}-unsplit";
-    # nccl is here purely for semantic grouping it could be moved to nativeBuildInputs
-    paths = [ cudatoolkit.out cudatoolkit.lib nccl.dev nccl.out ];
-  };
-
   # Normally libcuda.so.1 is provided at runtime by nvidia-x11 via
   # LD_LIBRARY_PATH=/run/opengl-driver/lib.  We only use the stub
   # libcuda.so from cudatoolkit for running tests, so that we don’t have
   # to recompile pytorch on every update to nvidia-x11 or the kernel.
-  cudaStub = linkFarm "cuda-stub" [{
-    name = "libcuda.so.1";
-    path = "${cudatoolkit}/lib/stubs/libcuda.so";
-  }];
-  cudaStubEnv = lib.optionalString cudaSupport
-    "LD_LIBRARY_PATH=${cudaStub}\${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH ";
+  cudaStubEnv = lib.optionalString cudaSupport ''addToSearchPath LD_LIBRARY_PATH "${cuda_cudart}/lib/stubs" ;'';
 
   rocmtoolkit_joined = symlinkJoin {
     name = "rocm-merged";
@@ -187,7 +177,6 @@ in buildPythonPackage rec {
 
   preConfigure = lib.optionalString cudaSupport ''
     export TORCH_CUDA_ARCH_LIST="${gpuTargetString}"
-    export CC=${cudatoolkit.cc}/bin/gcc CXX=${cudatoolkit.cc}/bin/g++
   '' + lib.optionalString (cudaSupport && cudnn != null) ''
     export CUDNN_INCLUDE_DIR=${cudnn}/include
   '' + lib.optionalString rocmSupport ''
@@ -278,7 +267,7 @@ in buildPythonPackage rec {
     pybind11
     pythonRelaxDepsHook
     removeReferencesTo
-  ] ++ lib.optionals cudaSupport [ cudatoolkit_joined ]
+  ] ++ lib.optionals cudaSupport [ cuda_nvcc ]
     ++ lib.optionals rocmSupport [ rocmtoolkit_joined ];
 
   buildInputs = [ blas blas.provider pybind11 ]
