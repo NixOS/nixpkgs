@@ -5,24 +5,25 @@
 , nodejs
 , yarn
 , yarn2nix-moretea
+, nixosTests
 }:
 
 stdenv.mkDerivation rec {
   pname = "outline";
-  version = "0.68.1";
+  version = "0.69.2";
 
   src = fetchFromGitHub {
     owner = "outline";
     repo = "outline";
     rev = "v${version}";
-    sha256 = "sha256-pln3cdozZPEodfXeUtTbBvhHb5yqE4uu0VKA95Zv6ro=";
+    hash = "sha256-XevrCUvPmAbPTysJ/o7i2xAZTQ+UFYtVal/aZKvt+Ls=";
   };
 
   nativeBuildInputs = [ makeWrapper yarn2nix-moretea.fixup_yarn_lock ];
   buildInputs = [ yarn nodejs ];
 
-  # Replace the inline call to yarn with our sequalize wrapper. This should be
-  # the only occurrence:
+  # Replace the inline calls to yarn with our sequalize wrapper. These should be
+  # the two occurrences:
   # https://github.com/outline/outline/search?l=TypeScript&q=yarn
   patches = [ ./sequelize-command.patch ];
 
@@ -43,11 +44,9 @@ stdenv.mkDerivation rec {
       --frozen-lockfile \
       --ignore-engines --ignore-scripts
     patchShebangs node_modules/
+    # apply upstream patches with `patch-package`
+    yarn run postinstall
     yarn build
-
-    pushd server
-    cp -r config migrations onboarding ../build/server/
-    popd
 
     runHook postBuild
   '';
@@ -56,16 +55,11 @@ stdenv.mkDerivation rec {
     runHook preInstall
 
     mkdir -p $out/bin $out/share/outline
-    mv public node_modules build $out/share/outline/
+    mv build server public node_modules $out/share/outline/
 
     node_modules=$out/share/outline/node_modules
     build=$out/share/outline/build
-
-    # On NixOS the WorkingDirectory is set to the build directory, as
-    # this contains files needed in the onboarding process. This folder
-    # must also contain the `public` folder for mail notifications to
-    # work, as it contains the mail templates.
-    ln -s $out/share/outline/public $build/public
+    server=$out/share/outline/server
 
     makeWrapper ${nodejs}/bin/node $out/bin/outline-server \
       --add-flags $build/server/index.js \
@@ -74,21 +68,25 @@ stdenv.mkDerivation rec {
 
     makeWrapper ${nodejs}/bin/node $out/bin/outline-sequelize \
       --add-flags $node_modules/.bin/sequelize \
-      --add-flags "--migrations-path $build/server/migrations" \
-      --add-flags "--models-path $build/server/models" \
-      --add-flags "--seeders-path $build/server/models/fixtures" \
+      --add-flags "--migrations-path $server/migrations" \
+      --add-flags "--models-path $server/models" \
+      --add-flags "--seeders-path $server/models/fixtures" \
       --set NODE_ENV production \
       --set NODE_PATH $node_modules
 
     runHook postInstall
   '';
 
+  passthru.tests = {
+    basic-functionality = nixosTests.outline;
+  };
+
   meta = with lib; {
     description = "The fastest wiki and knowledge base for growing teams. Beautiful, feature rich, and markdown compatible";
     homepage = "https://www.getoutline.com/";
     changelog = "https://github.com/outline/outline/releases";
     license = licenses.bsl11;
-    maintainers = with maintainers; [ cab404 yrd ];
+    maintainers = with maintainers; [ cab404 yrd xanderio ];
     platforms = platforms.linux;
   };
 }
