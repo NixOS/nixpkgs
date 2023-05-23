@@ -3,7 +3,7 @@
 , fetchurl
 , runCommand
 , makeWrapper
-, buildFHSEnv
+, buildFHSEnvChroot
 , libselinux
 , libarchive
 , libGL
@@ -36,7 +36,7 @@ let
       url = "https://repo.continuum.io/miniconda/Miniconda3-py39_${version}-Linux-x86_64.sh";
       sha256 = "sha256-TunDqlMynNemO0mHfAurtJsZt+WvKYB7eTp2vbHTYrQ=";
   };
-  conda = (
+  conda =
     let
       libPath = lib.makeLibraryPath [
         zlib # libz.so.1
@@ -61,9 +61,9 @@ let
             --add-flags "-p ${installationPath}" \
             --add-flags "-b"                     \
             --prefix "LD_LIBRARY_PATH" : "${libPath}"
-        '');
+        '';
 in
-  buildFHSEnv {
+  buildFHSEnvChroot {
     name = "conda-shell";
     targetPkgs = pkgs: (builtins.concatLists [ [ conda ] condaDeps extraPkgs]);
     profile = ''
