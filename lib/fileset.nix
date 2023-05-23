@@ -47,7 +47,7 @@ let
     attrValues
     ;
 
-  inherit (lib.sources)
+  inherit (lib.filesystem)
     pathType
     ;
 
