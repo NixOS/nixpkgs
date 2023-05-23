@@ -15796,6 +15796,12 @@
     github = "thielema";
     githubId = 898989;
   };
+  thilobillerbeck = {
+    name = "Thilo Billerbeck";
+    email = "thilo.billerbeck@officerent.de";
+    github = "thilobillerbeck";
+    githubId = 7442383;
+  };
   thled = {
     name = "Thomas Le Duc";
     email = "dev@tleduc.de";
