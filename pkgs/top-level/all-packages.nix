@@ -16616,6 +16616,8 @@ with pkgs;
 
   tinyscheme = callPackage ../development/interpreters/tinyscheme { };
 
+  tbox = callPackage ../development/libraries/tbox { };
+
   inherit (nodePackages) typescript;
 
   bupc = callPackage ../development/compilers/bupc { };
