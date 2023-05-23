@@ -9,8 +9,6 @@ let
   toml = pkgs.formats.toml {};
   yaml = pkgs.formats.yaml {};
 
-  ruby = cfg.packages.gitlab.ruby;
-
   postgresqlPackage = if config.services.postgresql.enable then
                         config.services.postgresql.package
                       else
@@ -46,9 +44,6 @@ let
 
     [git]
     bin_path = "${pkgs.git}/bin/git"
-
-    [gitaly-ruby]
-    dir = "${cfg.packages.gitaly.ruby}"
 
     [gitlab-shell]
     dir = "${cfg.packages.gitlab-shell}"
@@ -1464,8 +1459,6 @@ in {
         openssh
         procps  # See https://gitlab.com/gitlab-org/gitaly/issues/1562
         git
-        cfg.packages.gitaly.rubyEnv
-        cfg.packages.gitaly.rubyEnv.wrappedRuby
         gzip
         bzip2
       ];
