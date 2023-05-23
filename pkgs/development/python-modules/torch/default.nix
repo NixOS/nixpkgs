@@ -55,13 +55,6 @@ let
   inherit (cudaPackages) cudatoolkit cudaFlags cudnn nccl;
 in
 
-assert cudaSupport -> stdenv.isLinux;
-assert cudaSupport -> (cudaPackages.cudaMajorVersion == "11");
-
-# confirm that cudatoolkits are sync'd across dependencies
-assert !(MPISupport && cudaSupport) || mpi.cudatoolkit == cudatoolkit;
-assert !cudaSupport || magma.cudaPackages.cudatoolkit == cudatoolkit;
-
 let
   setBool = v: if v then "1" else "0";
 
@@ -418,6 +411,16 @@ in buildPythonPackage rec {
     license = licenses.bsd3;
     maintainers = with maintainers; [ teh thoughtpolice tscholak ]; # tscholak esp. for darwin-related builds
     platforms = with platforms; linux ++ lib.optionals (!cudaSupport && !rocmSupport) darwin;
-    broken = rocmSupport && cudaSupport; # CUDA and ROCm are mutually exclusive
+    broken =
+      let
+        mutuallyExclusiveAccelerators = rocmSupport && cudaSupport;
+        unsupportedCuda = cudaSupport && (lib.versionOlder cudaPackages.cudaVersion "11");
+        cudaUnsupportedPlatform = cudaSupport && !stdenv.isLinux;
+
+        mpiCudaSynchronized = mpi.cudatoolkit == cudaPackages.cudatoolkit;
+        magmaCudaSynchronized = magma.cudaPackages.cudatoolkit == cudaPackages.cudatoolkit;
+        cudaUnsynchronized = cudaSupport && (!mpiCudaSynchronized || !magmaCudaSynchronized);
+      in
+      mutuallyExclusiveAccelerators || unsupportedCuda || cudaUnsynchronized;
   };
 }
