@@ -572,6 +572,7 @@ in {
   nginx-etag = handleTest ./nginx-etag.nix {};
   nginx-globalredirect = handleTest ./nginx-globalredirect.nix {};
   nginx-http3 = handleTest ./nginx-http3.nix {};
+  nginx-media-types = handleTest ./nginx-media-types.nix {};
   nginx-modsecurity = handleTest ./nginx-modsecurity.nix {};
   nginx-njs = handleTest ./nginx-njs.nix {};
   nginx-proxyprotocol = handleTest ./nginx-proxyprotocol {};
