@@ -18,18 +18,19 @@
 , libgee
 , libsoup_3
 , libsecret
+, libwebp
 , gst_all_1
 , nix-update-script
 }:
 
 stdenv.mkDerivation rec {
   pname = "tuba";
-  version = "0.3.0";
+  version = "0.3.2";
   src = fetchFromGitHub {
     owner = "GeopJr";
     repo = "Tuba";
     rev = "v${version}";
-    hash = "sha256-J6oIYXLEI5FfHpQIWUH4ndRE0eGCQ4zLruaVENGG9XU=";
+    hash = "sha256-PSEPpJn/lYpeI6AN2AY73NpOcDkMm0zNqeSdELn5HvY=";
   };
 
   nativeBuildInputs = [
@@ -53,6 +54,7 @@ stdenv.mkDerivation rec {
     gtk4
     libadwaita
     libsecret
+    libwebp
   ] ++ (with gst_all_1; [
     gstreamer
     gst-libav
