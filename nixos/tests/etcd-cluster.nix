@@ -79,7 +79,7 @@ import ./make-test-python.nix ({ pkgs, ... } : let
         keyFile = etcd_key;
         certFile = etcd_cert;
         trustedCaFile = ca_pem;
-        peerClientCertAuth = true;
+        clientCertAuth = true;
         listenClientUrls = ["https://127.0.0.1:2379"];
         listenPeerUrls = ["https://0.0.0.0:2380"];
       };
