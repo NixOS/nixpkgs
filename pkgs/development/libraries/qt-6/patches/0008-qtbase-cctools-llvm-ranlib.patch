@@ -1,0 +1,25 @@
+diff --git a/cmake/QtBuild.cmake b/cmake/QtBuild.cmake
+index 1469abf176..b57dbc49e8 100644
+--- a/cmake/QtBuild.cmake
++++ b/cmake/QtBuild.cmake
+@@ -431,7 +431,7 @@ if(CMAKE_HOST_APPLE AND APPLE)
+         # We have to tell 'ar' to not run ranlib by itself, by passing the 'S' option
+         set(CMAKE_${lang}_ARCHIVE_CREATE "<CMAKE_AR> qcS <TARGET> <LINK_FLAGS> <OBJECTS>")
+         set(CMAKE_${lang}_ARCHIVE_APPEND "<CMAKE_AR> qS <TARGET> <LINK_FLAGS> <OBJECTS>")
+-        set(CMAKE_${lang}_ARCHIVE_FINISH "<CMAKE_RANLIB> -no_warning_for_no_symbols <TARGET>")
++        set(CMAKE_${lang}_ARCHIVE_FINISH "<CMAKE_RANLIB> <TARGET>")
+     endforeach()
+ endif()
+ 
+diff --git a/mkspecs/features/mac/no_warn_empty_obj_files.prf b/mkspecs/features/mac/no_warn_empty_obj_files.prf
+index 598938ab12..7d75fa566d 100644
+--- a/mkspecs/features/mac/no_warn_empty_obj_files.prf
++++ b/mkspecs/features/mac/no_warn_empty_obj_files.prf
+@@ -1,7 +1,2 @@
+-# Prevent warnings about object files without any symbols. This is a common
+-# thing in Qt as we tend to build files unconditionally, and then use ifdefs
+-# to compile out parts that are not relevant.
+-QMAKE_RANLIB += -no_warning_for_no_symbols
+-
+ # We have to tell 'ar' to not run ranlib by itself
+ QMAKE_AR += -S

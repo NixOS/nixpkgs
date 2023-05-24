@@ -48,6 +48,9 @@ let
           ./patches/0005-qtbase-deal-with-a-font-face-at-index-0-as-Regular-f.patch
           ./patches/0006-qtbase-qt-cmake-always-use-cmake-from-path.patch
           ./patches/0007-qtbase-find-qt-tools-in-QTTOOLSPATH.patch
+        ] ++ lib.optionals (stdenv.isDarwin && lib.hasPrefix "cctools-llvm" (lib.getName darwin.cctools)) [
+          # When the Darwin stdenv uses llvm-ranlib, it does not support/need -no_warning_for_no_symbols
+          ./patches/0008-qtbase-cctools-llvm-ranlib.patch
         ];
       };
       env = callPackage ./qt-env.nix { };
