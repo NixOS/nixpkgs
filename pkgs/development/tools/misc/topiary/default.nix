@@ -1,18 +1,17 @@
 { lib
 , rustPlatform
 , fetchFromGitHub
-, fetchpatch
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "topiary";
-  version = "0.2.0";
+  version = "0.2.1";
 
   src = fetchFromGitHub {
     owner = "tweag";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-OJdR+8eGbcDjirupjcczztYbGKGKaRywZnqqjv0EOSU=";
+    hash = "sha256-ShtwnxkDo/+31jZSg8XWnLLtrkLlqQQ5UiLVrPCM9ag=";
   };
 
   cargoLock = {
@@ -27,21 +26,17 @@ rustPlatform.buildRustPackage rec {
     };
   };
 
-  patches = [
-    # the versions in `Cargo.toml`s are outdated
-    (fetchpatch {
-      name = "bump-version-to-0.2.0.patch";
-      url = "https://github.com/tweag/topiary/commit/612fdb64f50ab15889a0b508bf727f159f26a112.patch";
-      hash = "sha256-MHaAnYyjXdKbh/pE3bL2iAPX6bMQkK+LUGYCL5mBM44=";
-    })
-  ];
-
   cargoBuildFlags = [ "-p" "topiary-cli" ];
   cargoTestFlags = cargoBuildFlags;
 
   env = {
     TOPIARY_LANGUAGE_DIR = "${placeholder "out"}/share/languages";
   };
+
+  # Cargo.lock is outdated
+  postPatch = ''
+    ln -sf ${./Cargo.lock} Cargo.lock
+  '';
 
   postInstall = ''
     install -Dm444 languages/* -t $out/share/languages
