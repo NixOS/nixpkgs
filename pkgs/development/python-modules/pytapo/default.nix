@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, pythonOlder
 
 # propagates
 , pycryptodome
@@ -13,6 +14,8 @@ buildPythonPackage rec {
   pname = "pytapo";
   version = "3.1.13";
   format = "setuptools";
+
+  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
@@ -34,7 +37,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    description = "Python library for communication with Tapo Cameras ";
+    description = "Python library for communication with Tapo Cameras";
     homepage = "https://github.com/JurajNyiri/pytapo";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fleaz ];
