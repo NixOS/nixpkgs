@@ -9,6 +9,7 @@ buildDunePackage rec {
   pname = "polynomial";
   version = "0.4.0";
   duneVersion = "3";
+  minimalOCamlVersion = "4.08";
   src = fetchFromGitLab {
     owner = "nomadic-labs";
     repo = "cryptography/ocaml-polynomial";
