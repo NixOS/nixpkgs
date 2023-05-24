@@ -44,31 +44,32 @@ python3Packages.buildPythonApplication rec {
   # To help figuring out what's missing from the list, run: ./pkgs/tools/misc/diffoscope/list-missing-tools.sh
   #
   # Still missing these tools: docx2txt lipo otool r2pipe
-  pythonPath = [
+  # We filter automatically all packages for the host platform (some dependencies are not supported on Darwin, aarch64, etc.).
+  pythonPath = lib.filter (lib.meta.availableOn stdenv.hostPlatform) ([
       binutils-unwrapped-all-targets bzip2 colordiff coreutils cpio db diffutils
       e2fsprogs file findutils fontforge-fonttools gettext gnutar gzip
       html2text libarchive lz4 openssl pgpdump sng sqlite squashfsTools unzip xxd
-      xz zip zstd
+      xz zip zstd cdrkit dtc
     ]
     ++ (with python3Packages; [
       argcomplete debian defusedxml jsondiff jsbeautifier libarchive-c
-      python-magic progressbar33 pypdf2 tlsh
+      python-magic progressbar33 pypdf2 tlsh pyxattr rpm
     ])
-    ++ lib.optionals stdenv.isLinux [ python3Packages.pyxattr python3Packages.rpm acl cdrkit dtc ]
     ++ lib.optionals enableBloat (
       [
         apksigcopier apksigner enjarify ffmpeg fpc ghc ghostscriptX giflib gnupg pdftk
         hdf5 imagemagick libcaca llvm jdk mono ocaml odt2txt openssh
         poppler_utils procyon qemu R tcpdump wabt radare2 xmlbeans
+        abootimg cbfstool colord ubootTools
       ]
-      ++ (with python3Packages; [ androguard binwalk h5py pdfminer-six ])
+      ++ (with python3Packages; [ androguard binwalk h5py pdfminer-six guestfs ])
       # oggvideotools is broken on Darwin, please put it back when it will be fixed?
-      ++ lib.optionals stdenv.isLinux [ abootimg cbfstool colord ubootTools python3Packages.guestfs oggvideotools ]
+      ++ lib.optionals stdenv.isLinux [ oggvideotools ]
       # This doesn't work on aarch64-darwin
-      ++ lib.optionals (stdenv.isx86_64 || stdenv.isLinux) [ gnumeric ]
+      ++ lib.optionals (stdenv.hostPlatform != "aarch64-darwin") [ gnumeric ]
       # `apktool` depend on `build-tools` which requires Android SDK acceptance, therefore, the whole thing is unfree.
       ++ lib.optionals enableUnfree [ apktool ]
-    );
+    ));
 
   nativeCheckInputs = with python3Packages; [ pytestCheckHook ] ++ pythonPath;
 
