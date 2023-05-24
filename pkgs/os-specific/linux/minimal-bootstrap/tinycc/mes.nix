@@ -25,6 +25,11 @@ let
     mkdir -p ''${out}
     cd ''${out}
     untar --file ''${NIX_BUILD_TOP}/tinycc.tar
+
+    # Patch
+    cd tinycc-${builtins.substring 0 7 rev}
+    # Static link by default
+    replace --file libtcc.c --output libtcc.c --match-on "s->ms_extensions = 1;" --replace-with "s->ms_extensions = 1; s->static_link = 1;"
   '') + "/tinycc-${builtins.substring 0 7 rev}";
 
   meta = with lib; {
@@ -39,7 +44,6 @@ let
     mkdir ''${out}
     ${tinycc-bootstrappable.compiler}/bin/tcc \
       -B ${tinycc-bootstrappable.libs}/lib \
-      -static \
       -DC2STR \
       -o c2str \
       ${src}/conftest.c
