@@ -2152,6 +2152,8 @@ with pkgs;
 
   legit = callPackage ../applications/version-management/legit { };
 
+  legit-web = callPackage ../applications/version-management/legit-web { };
+
   lucky-commit = callPackage ../applications/version-management/lucky-commit {
     inherit (darwin.apple_sdk.frameworks) OpenCL;
   };
