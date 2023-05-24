@@ -131,5 +131,9 @@ stdenv.mkDerivation rec {
     license = licenses.openldap;
     maintainers = with maintainers; [ ajs124 das_j hexa ];
     platforms = platforms.unix;
+
+    # https://bugs.openldap.org/show_bug.cgi?id=10056
+    broken = stdenv.hostPlatform.isStatic;
+    badPlatforms = [ lib.systems.inspect.platformPatterns.isStatic ];
   };
 }
