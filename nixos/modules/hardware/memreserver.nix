@@ -15,7 +15,7 @@ with lib;
     };
   };
 
-  config = mkIf hardware.memreserver.enable {
+  config = mkIf config.hardware.memreserver.enable {
     systemd.services.memreserver = {
       description = "Sleep hook which frees up RAM needed to evacuate GPU VRAM into";
       before = [ "sleep.target" ];
