@@ -642,6 +642,10 @@ self: super: {
     dependencies = with self; [ nvim-lspconfig ];
   });
 
+  lazy-nvim = super.lazy-nvim.overrideAttrs (old: {
+    patches = [ ./patches/lazy-nvim/no-helptags.patch ];
+  });
+
   lean-nvim = super.lean-nvim.overrideAttrs (old: {
     dependencies = with self; [ nvim-lspconfig plenary-nvim ];
   });
