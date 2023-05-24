@@ -7,6 +7,7 @@
 , atk
 , glib
 , gtk3-x11
+, nix-update-script
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -65,6 +66,8 @@ rustPlatform.buildRustPackage rec {
     # Requires Clear Camera mod
     "--skip=bnp::test_convert"
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "A new mod manager for The Legend of Zelda: Breath of the Wild";
