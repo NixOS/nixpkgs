@@ -17,7 +17,7 @@
 
 stdenv.mkDerivation rec {
   pname = "srsran";
-  version = "23_04";
+  version = "23.04";
 
   src = fetchFromGitHub {
     owner = "srsran";
