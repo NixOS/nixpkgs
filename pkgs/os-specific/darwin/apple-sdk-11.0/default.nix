@@ -50,16 +50,18 @@ let
     '';
   };
 
-  mkStdenv = stdenv:
-    let
-      cc = stdenv.cc.override {
+  mkCc = cc:
+    if stdenv.isAarch64 then cc
+    else
+      cc.override {
         bintools = stdenv.cc.bintools.override { libc = packages.Libsystem; };
         libc = packages.Libsystem;
       };
-    in
+
+  mkStdenv = stdenv:
     if stdenv.isAarch64 then stdenv
     else
-      (overrideCC stdenv cc).override {
+      (overrideCC stdenv (mkCc stdenv.cc)).override {
         targetPlatform = stdenv.targetPlatform // {
           darwinMinVersion = "10.12";
           darwinSdkVersion = "11.0";
@@ -108,10 +110,7 @@ let
       inherit (pkgs.callPackage ../../../build-support/rust/hooks {
         inherit (pkgs.darwin.apple_sdk_11_0) stdenv;
         inherit (pkgs) cargo rustc;
-        clang = pkgs.clang.override {
-          bintools = pkgs.clang.bintools.override { libc = packages.Libsystem; };
-          libc = packages.Libsystem;
-        };
+        clang = mkCc pkgs.clang;
       }) bindgenHook;
     };
 
