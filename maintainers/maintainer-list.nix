@@ -1957,6 +1957,16 @@
       fingerprint = "E9A3 7864 2165 28CE 507C  CA82 72EA BF75 C331 CD25";
     }];
   };
+  Benjamin-L = {
+    name = "Benjamin Lee";
+    email = "benjamin@computer.surgery";
+    matrix = "@benjamin:computer.surgery";
+    github = "Benjamin-L";
+    githubId = 6504174;
+    keys = [{
+      fingerprint = "9D84 09A0 44FC 1EEB AE2D  FA30 FB96 24E2 885D 55A4";
+    }];
+  };
   benkuhn = {
     email = "ben@ben-kuhn.com";
     github = "ben-kuhn";
