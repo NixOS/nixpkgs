@@ -84,6 +84,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   propagatedNativeBuildInputs = [ lndir ];
 
+  # libQt5Core links calls CoreFoundation APIs that call into the system ICU. Binaries linked
+  # against it will crash during build unless they can access `/usr/share/icu/icudtXXl.dat`.
+  propagatedSandboxProfile = lib.optionalString stdenv.isDarwin ''
+    (allow file-read* (subpath "/usr/share/icu"))
+  '';
+
   enableParallelBuilding = true;
 
   outputs = [ "bin" "dev" "out" ];
