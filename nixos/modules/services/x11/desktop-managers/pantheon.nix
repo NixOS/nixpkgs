@@ -92,10 +92,6 @@ in
 
   config = mkMerge [
     (mkIf cfg.enable {
-      services.xserver.desktopManager.pantheon.sessionPath = utils.removePackagesByName [
-        pkgs.pantheon.pantheon-agent-geoclue2
-      ] config.environment.pantheon.excludePackages;
-
       services.xserver.displayManager.sessionPackages = [ pkgs.pantheon.elementary-session-settings ];
 
       # Ensure lightdm is used when Pantheon is enabled
@@ -113,6 +109,7 @@ in
 
       services.xserver.displayManager.sessionCommands = ''
         if test "$XDG_CURRENT_DESKTOP" = "Pantheon"; then
+            true
             ${concatMapStrings (p: ''
               if [ -d "${p}/share/gsettings-schemas/${p.name}" ]; then
                 export XDG_DATA_DIRS=$XDG_DATA_DIRS''${XDG_DATA_DIRS:+:}${p}/share/gsettings-schemas/${p.name}
@@ -161,12 +158,9 @@ in
       services.xserver.updateDbusEnvironment = true;
       services.zeitgeist.enable = mkDefault true;
       services.geoclue2.enable = mkDefault true;
-      # pantheon has pantheon-agent-geoclue2
-      services.geoclue2.enableDemoAgent = false;
-      services.geoclue2.appConfig."io.elementary.desktop.agent-geoclue2" = {
-        isAllowed = true;
-        isSystem = true;
-      };
+      # TODO: investigate why "demo" is needed here
+      # https://github.com/elementary/seeds/pull/100#issuecomment-1562310351
+      services.geoclue2.enableDemoAgent = true;
       services.udev.packages = [
         pkgs.pantheon.gnome-settings-daemon
         # Force enable KMS modifiers for devices that require them.
@@ -216,7 +210,6 @@ in
         # Services
         elementary-capnet-assist
         elementary-notifications
-        pantheon-agent-geoclue2
         pantheon-agent-polkit
       ])) config.environment.pantheon.excludePackages;
 
