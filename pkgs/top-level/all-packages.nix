@@ -27359,6 +27359,8 @@ with pkgs;
 
   go-mockery = callPackage ../development/tools/go-mockery { };
 
+  go-mod-graph-chart = callPackage ../development/tools/go-mod-graph-chart { };
+
   gomacro = callPackage ../development/tools/gomacro { };
 
   gomodifytags = callPackage ../development/tools/gomodifytags { };
