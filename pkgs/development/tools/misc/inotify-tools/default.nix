@@ -1,4 +1,4 @@
-{ lib, stdenv, autoreconfHook, fetchFromGitHub, nix-update-script }:
+{ lib, stdenv, autoreconfHook, fetchFromGitHub, nix-update-script, fanotifySupport ? true }:
 
 stdenv.mkDerivation rec {
   pname = "inotify-tools";
@@ -10,6 +10,10 @@ stdenv.mkDerivation rec {
     rev = version;
     sha256 = "sha256-EYWVSgwoMjAlc/V5kv+2jfxEqWVW/lEoIxVd+ctEMsk=";
   };
+
+  configureFlags = [
+    (lib.enableFeature fanotifySupport "fanotify")
+  ];
 
   nativeBuildInputs = [ autoreconfHook ];
 
