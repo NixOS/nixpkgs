@@ -36,6 +36,9 @@ let
       ./qtbase.patch.d/0012-qtbase-tbd-frameworks.patch
 
       ./qtbase.patch.d/0014-aarch64-darwin.patch
+    ] ++ lib.optionals (stdenv.isDarwin && lib.hasPrefix "cctools-llvm" (lib.getName darwin.cctools)) [
+      # When the Darwin stdenv uses llvm-ranlib, it does not support/need -no_warning_for_no_symbols
+      ./qtbase.patch.d/0015-cctools-llvm-ranlib.patch
     ] ++ [
       ./qtbase.patch.d/0003-qtbase-mkspecs.patch
       ./qtbase.patch.d/0004-qtbase-replace-libdir.patch
