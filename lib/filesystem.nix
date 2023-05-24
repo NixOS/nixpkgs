@@ -1,13 +1,93 @@
-# Functions for copying sources to the Nix store.
+# Functions for querying information about the filesystem
+# without copying any files to the Nix store.
 { lib }:
 
+# Tested in lib/tests/filesystem.sh
 let
+  inherit (builtins)
+    readDir
+    pathExists
+    ;
+
   inherit (lib.strings)
     hasPrefix
+    ;
+
+  inherit (lib.filesystem)
+    pathType
     ;
 in
 
 {
+
+  /*
+    The type of a path. The path needs to exist and be accessible.
+    The result is either "directory" for a directory, "regular" for a regular file, "symlink" for a symlink, or "unknown" for anything else.
+
+    Type:
+      pathType :: Path -> String
+
+    Example:
+      pathType /.
+      => "directory"
+
+      pathType /some/file.nix
+      => "regular"
+  */
+  pathType =
+    builtins.readFileType or
+    # Nix <2.14 compatibility shim
+    (path:
+      if ! pathExists path
+      # Fail irrecoverably to mimic the historic behavior of this function and
+      # the new builtins.readFileType
+      then abort "lib.filesystem.pathType: Path ${toString path} does not exist."
+      # The filesystem root is the only path where `dirOf / == /` and
+      # `baseNameOf /` is not valid. We can detect this and directly return
+      # "directory", since we know the filesystem root can't be anything else.
+      else if dirOf path == path
+      then "directory"
+      else (readDir (dirOf path)).${baseNameOf path}
+    );
+
+  /*
+    Whether a path exists and is a directory.
+
+    Type:
+      pathIsDirectory :: Path -> Bool
+
+    Example:
+      pathIsDirectory /.
+      => true
+
+      pathIsDirectory /this/does/not/exist
+      => false
+
+      pathIsDirectory /some/file.nix
+      => false
+  */
+  pathIsDirectory = path:
+    pathExists path && pathType path == "directory";
+
+  /*
+    Whether a path exists and is a regular file, meaning not a symlink or any other special file type.
+
+    Type:
+      pathIsRegularFile :: Path -> Bool
+
+    Example:
+      pathIsRegularFile /.
+      => false
+
+      pathIsRegularFile /this/does/not/exist
+      => false
+
+      pathIsRegularFile /some/file.nix
+      => true
+  */
+  pathIsRegularFile = path:
+    pathExists path && pathType path == "regular";
+
   /*
     A map of all haskell packages defined in the given path,
     identified by having a cabal file with the same name as the

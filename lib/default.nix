@@ -117,10 +117,11 @@ let
     inherit (self.meta) addMetaAttrs dontDistribute setName updateName
       appendToName mapDerivationAttrset setPrio lowPrio lowPrioSet hiPrio
       hiPrioSet getLicenseFromSpdxId getExe;
-    inherit (self.sources) pathType pathIsDirectory cleanSourceFilter
+    inherit (self.filesystem) pathType pathIsDirectory pathIsRegularFile;
+    inherit (self.sources) cleanSourceFilter
       cleanSource sourceByRegex sourceFilesBySuffices
       commitIdFromGitRepo cleanSourceWith pathHasContext
-      canCleanSource pathIsRegularFile pathIsGitRepo;
+      canCleanSource pathIsGitRepo;
     inherit (self.modules) evalModules setDefaultModuleLocation
       unifyModuleSyntax applyModuleArgsIfFunction mergeModules
       mergeModules' mergeOptionDecls evalOptionValue mergeDefinitions
