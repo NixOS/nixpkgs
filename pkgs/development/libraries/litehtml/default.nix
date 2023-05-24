@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation rec {
   pname = "litehtml";
-  version = "0.6";
+  version = "0.8";
 
   src = fetchFromGitHub {
     owner = "litehtml";
     repo = "litehtml";
     rev = "v${version}";
-    hash = "sha256-9571d3k8RkzEpMWPuIejZ7njLmYstSwFUaSqT3sk6uQ=";
+    hash = "sha256-4zMVCLizcpVopa9BMW0DlCafEFRd/ig/B1STGSlA4oE=";
   };
 
   # Don't search for non-existant gumbo cmake config
