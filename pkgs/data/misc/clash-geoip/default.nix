@@ -27,5 +27,6 @@ stdenvNoCC.mkDerivation rec {
     homepage = "https://github.com/Dreamacro/maxmind-geoip";
     license = licenses.unfree;
     maintainers = [];
+    platforms = platforms.all;
   };
 }
