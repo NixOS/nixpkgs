@@ -6876,6 +6876,8 @@ with pkgs;
 
   deno = callPackage ../development/web/deno { };
 
+  deqp-runner = callPackage ../tools/graphics/deqp-runner { };
+
   detox = callPackage ../tools/misc/detox { };
 
   devilspie2 = callPackage ../applications/misc/devilspie2 {
