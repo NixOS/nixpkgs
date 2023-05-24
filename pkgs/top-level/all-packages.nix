@@ -1705,6 +1705,8 @@ with pkgs;
 
   shell-genie = callPackage  ../applications/misc/shell-genie { };
 
+  snagboot = python3.pkgs.callPackage  ../applications/misc/snagboot { };
+
   simple-dlna-browser = callPackage ../tools/networking/simple-dlna-browser { };
 
   sorted-grep = callPackage ../tools/text/sorted-grep { };
