@@ -104,6 +104,15 @@ let
     rustPlatform = pkgs.makeRustPlatform {
       inherit (pkgs.darwin.apple_sdk_11_0) stdenv;
       inherit (pkgs) rustc cargo;
+    } // {
+      inherit (pkgs.callPackage ../../../build-support/rust/hooks {
+        inherit (pkgs.darwin.apple_sdk_11_0) stdenv;
+        inherit (pkgs) cargo rustc;
+        clang = pkgs.clang.override {
+          bintools = pkgs.clang.bintools.override { libc = packages.Libsystem; };
+          libc = packages.Libsystem;
+        };
+      }) bindgenHook;
     };
 
     callPackage = newScope (lib.optionalAttrs stdenv.isDarwin (stdenvs // rec {
