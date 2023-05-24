@@ -10,6 +10,7 @@
 , texinfo
 , ncurses
 , pcre
+, pkg-config
 , buildPackages }:
 
 let
@@ -32,7 +33,7 @@ stdenv.mkDerivation {
   ];
 
   strictDeps = true;
-  nativeBuildInputs = [ autoreconfHook perl groff texinfo pcre]
+  nativeBuildInputs = [ autoreconfHook perl groff texinfo pkg-config ]
                       ++ lib.optionals stdenv.isLinux [ util-linux yodl ];
 
   buildInputs = [ ncurses pcre ];
@@ -55,6 +56,11 @@ stdenv.mkDerivation {
     "zsh_cv_sys_dynamic_strip_exe=yes"
     "zsh_cv_sys_dynamic_strip_lib=yes"
   ];
+
+  preConfigure = ''
+    # use pkg-config instead of pcre-config
+    configureFlagsArray+=("PCRECONF=''${PKG_CONFIG} libpcre")
+  '';
 
   # the zsh/zpty module is not available on hydra
   # so skip groups Y Z
