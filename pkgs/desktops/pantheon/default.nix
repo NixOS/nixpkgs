@@ -135,8 +135,6 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   elementary-settings-daemon = callPackage ./services/elementary-settings-daemon { };
 
-  pantheon-agent-geoclue2 = callPackage ./services/pantheon-agent-geoclue2 { };
-
   pantheon-agent-polkit = callPackage ./services/pantheon-agent-polkit { };
 
   xdg-desktop-portal-pantheon = callPackage ./services/xdg-desktop-portal-pantheon { };
@@ -249,5 +247,7 @@ lib.makeScope pkgs.newScope (self: with self; {
   file-roller = pkgs.gnome.file-roller; # added 2022-03-12
 
   notes-up = throw "The ‘pantheon.notes-up’ alias was removed on 2022-02-02, please use ‘pkgs.notes-up’ directly."; # added 2021-12-18
+
+  pantheon-agent-geoclue2 = throw "pantheon-agent-geoclue2 has been removed, portals are preferred these days."; # added 2023-05-24
 
 }
