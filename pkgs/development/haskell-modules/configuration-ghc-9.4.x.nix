@@ -187,7 +187,8 @@ in {
   servant-swagger = doJailbreak super.servant-swagger;
   servant-client-core = doJailbreak super.servant-client-core;
   servant-client = doJailbreak super.servant-client;
-  relude = doJailbreak super.relude;
+  # https://github.com/kowainik/relude/issues/436
+  relude = dontCheck (doJailbreak super.relude);
 
   # Fixes compilation failure with GHC >= 9.4 on aarch64-* due to an API change
   cborg = appendPatch (pkgs.fetchpatch {
