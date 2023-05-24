@@ -13475,6 +13475,8 @@ with pkgs;
 
   vcstool = callPackage ../development/tools/vcstool { };
 
+  vectorscan = callPackage ../development/libraries/vectorscan { };
+
   verco = callPackage ../applications/version-management/verco { };
 
   verilator = callPackage ../applications/science/electronics/verilator { };
