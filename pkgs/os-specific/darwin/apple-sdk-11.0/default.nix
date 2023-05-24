@@ -61,7 +61,9 @@ let
   mkStdenv = stdenv:
     if stdenv.isAarch64 then stdenv
     else
+
       (overrideCC stdenv (mkCc stdenv.cc)).override {
+        extraBuildInputs = [ pkgs.darwin.apple_sdk_11_0.frameworks.CoreFoundation ];
         targetPlatform = stdenv.targetPlatform // {
           darwinMinVersion = "10.12";
           darwinSdkVersion = "11.0";
