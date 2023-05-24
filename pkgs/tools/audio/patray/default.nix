@@ -29,10 +29,8 @@ python3.pkgs.buildPythonApplication rec {
 
   nativeBuildInputs = [ qt5.wrapQtAppsHook ];
   postFixup = ''
-    wrapQtApp $out/bin/patray
+    wrapQtApp $out/bin/patray --prefix QT_PLUGIN_PATH : ${qt5.qtbase}/${qt5.qtbase.qtPluginPrefix}
   '';
-
-
 
   meta = with lib; {
     description = "Yet another tray pulseaudio frontend";
