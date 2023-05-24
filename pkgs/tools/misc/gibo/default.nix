@@ -1,32 +1,35 @@
-{ lib, stdenv, fetchFromGitHub, coreutils, findutils, git }:
+{ lib, stdenv, fetchFromGitHub, coreutils, findutils, git, installShellFiles }:
 
 stdenv.mkDerivation rec {
   pname = "gibo";
-  version = "1.0.6";
+  version = "2.2.8";
 
   src = fetchFromGitHub {
     owner = "simonwhitaker";
     repo = "gibo";
     rev = version;
-    sha256 = "07j3sv9ar9l074krajw8nfmsfmdp836irsbd053dbqk2v880gfm6";
+    hash = "sha256-8Bqb1mz5C3F7EjfNfsyUwqDHnZhRH9SqW5HLA7IR6fQ=";
   };
 
-  installPhase = ''
-    mkdir -p $out/bin $out/share/bash-completion/completions
-    cp gibo $out/bin
-    cp gibo-completion.bash $out/share/bash-completion/completions
+  nativeBuildInputs = [ installShellFiles ];
 
-    sed -e 's|\<git |${git}/bin/git |g' \
+  installPhase = ''
+    mkdir -p $out/bin
+    cp gibo $out/bin
+    installShellCompletion shell-completions/*.{bash,zsh,fish}
+
+    find $out/ -type f -exec sed \
+        -e 's|\<git |${git}/bin/git |g' \
         -e 's|\<basename |${coreutils}/bin/basename |g' \
-        -i "$out/bin/gibo"
-    sed -e 's|\<find |${findutils}/bin/find |g' \
-        -i "$out/share/bash-completion/completions/gibo-completion.bash"
+        -e 's|\<find |${findutils}/bin/find |g' \
+        -i {} \;
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://github.com/simonwhitaker/gibo";
-    license = lib.licenses.publicDomain;
+    license = licenses.unlicense;
     description = "A shell script for easily accessing gitignore boilerplates";
-    platforms = lib.platforms.unix;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ whyvert ];
   };
 }
