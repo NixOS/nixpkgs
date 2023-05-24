@@ -3,7 +3,6 @@
 , llvmPackages
 , boost
 , cmake
-, gtest
 , spdlog
 , libxml2
 , libffi
@@ -45,6 +44,10 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals stdenv.isDarwin [
     "-DWASMEDGE_FORCE_DISABLE_LTO=ON"
   ];
+
+  postPatch = ''
+    echo -n $version > VERSION
+  '';
 
   meta = with lib; {
     homepage = "https://wasmedge.org/";
