@@ -98,5 +98,6 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ nagy ];
     platforms = with lib.platforms; linux;
     changelog = "https://github.com/freenet/fred/blob/build${version}/NEWS.md";
+    mainProgram = "freenet";
   };
 }
