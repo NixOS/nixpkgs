@@ -2,16 +2,16 @@
 
 stdenv.mkDerivation rec {
   pname = "alda";
-  version = "2.0.6";
+  version = "2.2.0";
 
   src_alda = fetchurl {
     url = "https://alda-releases.nyc3.digitaloceanspaces.com/${version}/client/linux-amd64/alda";
-    sha256 = "1078hywl3gim5wfgxb0xwbk1dn80ls3i7y33n76qsdd4b0x0sn7i";
+    sha256 = "0z3n81fmv3fxwgr641r6jjn1dmi5d3rw8d6r8jdfjhgpxanyi9a7";
   };
 
   src_player = fetchurl {
     url = "https://alda-releases.nyc3.digitaloceanspaces.com/${version}/player/non-windows/alda-player";
-    sha256 = "1g7k2qnh4vcw63604z7zbvhbpn7l1v3m9mx4j4vywfq6qar1r6ck";
+    sha256 = "11kji846hbn1f2w1s7rc1ing203jkamy89j1jmysajvirdpp8nha";
   };
 
   dontUnpack = true;
@@ -25,7 +25,6 @@ stdenv.mkDerivation rec {
     ''
       install -D $src_alda $out/bin/alda
       install -D $src_player $out/bin/alda-player
-
       wrapProgram $out/bin/alda --prefix PATH : $out/bin:${binPath}
       wrapProgram $out/bin/alda-player --prefix PATH : $out/bin:${binPath}
     '';
@@ -37,4 +36,5 @@ stdenv.mkDerivation rec {
     maintainers = [ maintainers.ericdallo ];
     platforms = jre.meta.platforms;
   };
+
 }
