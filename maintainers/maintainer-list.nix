@@ -11393,6 +11393,12 @@
     githubId = 1187050;
     name = "Maximilian Huber";
   };
+  maxhearnden = {
+    email = "max@hearnden.org.uk";
+    github = "MaxHearnden";
+    githubId = 8320393;
+    name = "Max Hearnden";
+  };
   maxhero = {
     email = "contact@maxhero.dev";
     github = "themaxhero";
