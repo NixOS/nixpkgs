@@ -2,16 +2,18 @@
 
 stdenv.mkDerivation rec {
   pname = "hdfview";
-  version = "3.2.0";
+  version = "3.3.0";
 
   src = fetchurl {
     url = "https://support.hdfgroup.org/ftp/HDF5/releases/HDF-JAVA/${pname}-${version}/src/${pname}-${version}.tar.gz";
-    sha256 = "sha256-08De/yy9lZUIxNqccS2nL7IE/2gYo0NPAKcHH46M8rg=";
+    sha256 = "sha256-CRYWGGHCH6jdNUtEW0jv9aU9gKXAs4PnnrZLexCOJDA=";
   };
 
   patches = [
     # Hardcode isUbuntu=false to avoid calling hostname to detect os
     ./0001-Hardcode-isUbuntu-false-to-avoid-hostname-dependency.patch
+    # Disable signing on macOS
+    ./disable-mac-signing.patch
   ];
 
   nativeBuildInputs = [
