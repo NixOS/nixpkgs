@@ -16,16 +16,19 @@
   "workspace-indicator@gnome-shell-extensions.gcampax.github.com" = "workspace-indicator";
   "horizontal-workspace-indicator@tty2.io" = "workspace-indicator-2";
 
+  "PersianCalendar@oxygenws.com" = "persian-calendar";
+  "persian-calendar@iamrezamousavi.gmail.com" = "persian-calendar-2";
+
   "clipboard-indicator@tudmotu.com" = "clipboard-indicator";
   "clipboard-indicator@Dieg0Js.github.io" = "clipboard-indicator-2";
 
   "vbox-applet@gs.eros2.info" = "virtualbox-applet";
   "vbox-applet@buba98" = "virtualbox-applet-2";
 
-  # ####### GNOME 43 #######
+  "panel-date-format@keiii.github.com" = "panel-date-format";
+  "panel-date-format@atareao.es" = "panel-date-format-2";
 
-  "PersianCalendar@oxygenws.com" = "persian-calendar";
-  "persian-calendar@iamrezamousavi.gmail.com" = "persian-calendar-2";
+  # ####### GNOME 43 #######
 
   # DEPRECATED: Use "Caffeine" instead
   "KeepAwake@jepfa.de" = "keep-awake";
@@ -48,11 +51,6 @@
 
   "lockkeys@vaina.lt" = "lock-keys";
   "lockkeys@fawtytoo" = "lock-keys-2";
-
-  "panel-date-format@keiii.github.com" = "panel-date-format";
-  "panel-date-format@atareao.es" = "panel-date-format-2";
-
-  "volume_scroller@noskoski" = "volume-scroller-3";
 
   "wireguard-indicator@gregos.me" = "wireguard-indicator-2";
   "wireguard-indicator@atareao.es" = "wireguard-indicator";
