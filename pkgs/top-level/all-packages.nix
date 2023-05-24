@@ -36293,9 +36293,7 @@ with pkgs;
 
   chromium-bsu = callPackage ../games/chromium-bsu { };
 
-  clonehero-unwrapped = callPackage ../games/clonehero { };
-
-  clonehero = callPackage ../games/clonehero/fhs-wrapper.nix { };
+  clonehero = callPackage ../games/clonehero { };
 
   vintagestory = callPackage ../games/vintagestory { };
 
