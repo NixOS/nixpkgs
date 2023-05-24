@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Gtklock module adding user info to the lockscreen";
-    homepage = "https://github.com/jovanlanik/gtklock-powerbar-module";
+    homepage = "https://github.com/jovanlanik/gtklock-userinfo-module";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ aleksana ];
     platforms = platforms.linux;
