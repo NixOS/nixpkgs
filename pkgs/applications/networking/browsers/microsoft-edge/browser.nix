@@ -142,7 +142,7 @@ stdenv.mkDerivation rec {
     cp -R opt usr/bin usr/share $out
 
     ${if channel == "stable"
-      then ""
+      then "ln -sf $out/bin/${longName} $out/bin/${baseName}-${channel}"
       else "ln -sf $out/opt/microsoft/${shortName}/${baseName}-${channel} $out/opt/microsoft/${shortName}/${baseName}"}
 
     ln -sf $out/opt/microsoft/${shortName}/${longName} $out/bin/${longName}

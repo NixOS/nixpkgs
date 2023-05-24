@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   pname = "opengrok";
-  version = "1.12.6";
+  version = "1.12.7";
 
   # binary distribution
   src = fetchurl {
     url = "https://github.com/oracle/opengrok/releases/download/${version}/${pname}-${version}.tar.gz";
-    hash = "sha256-m8yD/VEDBE2yfdNiBMhmSELp+Yy//+bTzXqBMGcVeEI=";
+    hash = "sha256-4Nq+/yr+MhY4D0yZZSzl3etQEUCGIJjcuaP6ZFGLMpY=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -28,5 +28,6 @@ stdenv.mkDerivation rec {
     homepage = "https://opengrok.github.io/OpenGrok/";
     license = licenses.cddl;
     maintainers = [ ];
+    platforms = platforms.all;
   };
 }
