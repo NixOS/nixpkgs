@@ -10954,6 +10954,8 @@ with pkgs;
     autoreconfHook = buildPackages.autoreconfHook269;
   };
 
+  org-stats = callPackage ../tools/misc/org-stats { };
+
   orz = callPackage ../tools/compression/orz { };
 
   os-prober = callPackage ../tools/misc/os-prober { };
