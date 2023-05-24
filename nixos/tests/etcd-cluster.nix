@@ -95,7 +95,7 @@ import ./make-test-python.nix ({ pkgs, ... } : let
     networking.firewall.allowedTCPPorts = [ 2380 ];
   };
 in {
-  name = "etcd";
+  name = "etcd-cluster";
 
   meta = with pkgs.lib.maintainers; {
     maintainers = [ offline ];
