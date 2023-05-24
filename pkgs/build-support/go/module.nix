@@ -2,13 +2,9 @@
 
 { name ? "${args'.pname}-${args'.version}"
 , src
-, buildInputs ? []
 , nativeBuildInputs ? []
 , passthru ? {}
 , patches ? []
-
-# Go linker flags, passed to go via -ldflags
-, ldflags ? []
 
 # Go tags, passed to go via -tag
 , tags ? []
