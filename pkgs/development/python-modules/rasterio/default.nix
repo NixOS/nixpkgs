@@ -26,7 +26,7 @@
 
 buildPythonPackage rec {
   pname = "rasterio";
-  version = "1.3.6";
+  version = "1.3.7";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -35,7 +35,7 @@ buildPythonPackage rec {
     owner = "rasterio";
     repo = "rasterio";
     rev = "refs/tags/${version}";
-    hash = "sha256-C5jenXcONNYiUNa5GQ7ATBi8m0JWvg8Dyp9+ejGX+Fs=";
+    hash = "sha256-6AtGRXGuAXMrePqS2lmNdOuPZi6LHuiWP2LJyxH3L3M=";
   };
 
   nativeBuildInputs = [
@@ -90,7 +90,10 @@ buildPythonPackage rec {
   doInstallCheck = true;
 
   installCheckPhase = ''
-    $out/bin/rio --version | grep ${version} > /dev/null
+    $out/bin/rio --show-versions | grep -E "rasterio:\s${version}" > /dev/null
+    $out/bin/rio --show-versions | grep -E "GDAL:\s[0-9]+(\.[0-9]+)*" > /dev/null
+    $out/bin/rio --show-versions | grep -E "PROJ:\s[0-9]+(\.[0-9]+)*" > /dev/null
+    $out/bin/rio --show-versions | grep -E "GEOS:\s[0-9]+(\.[0-9]+)*" > /dev/null
   '';
 
   meta = with lib; {

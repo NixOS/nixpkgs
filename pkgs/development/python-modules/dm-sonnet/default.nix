@@ -1,10 +1,11 @@
 { lib
-, absl-py
 , buildPythonPackage
+, click
 , dm-tree
 , docutils
 , etils
 , fetchFromGitHub
+, fetchpatch
 , numpy
 , pythonOlder
 , tabulate
@@ -27,6 +28,14 @@ buildPythonPackage rec {
     hash = "sha256-YSMeH5ZTfP1OdLBepsxXAVczBG/ghSjCWjoz/I+TFl8=";
   };
 
+  patches = [
+    (fetchpatch {
+      name = "replace-np-bool-with-np-bool_.patch";
+      url = "https://github.com/deepmind/sonnet/commit/df5d099d4557a9a81a0eb969e5a81ed917bcd612.patch";
+      hash = "sha256-s7abl83osD4wa0ZhqgDyjqQ3gagwGYCdQifwFqhNp34=";
+    })
+  ];
+
   propagatedBuildInputs = [
     dm-tree
     etils
@@ -42,7 +51,9 @@ buildPythonPackage rec {
   };
 
   nativeCheckInputs = [
+    click
     docutils
+    tensorflow
     tensorflow-datasets
   ];
 
