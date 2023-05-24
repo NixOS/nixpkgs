@@ -21,7 +21,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X=github.com/netlify/gotrue/internal/utilities.Version=${version}"
+    "-X github.com/supabase/gotrue/internal/utilities.Version=${version}"
   ];
 
   # integration tests require network to connect to postgres database
