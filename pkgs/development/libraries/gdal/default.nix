@@ -171,6 +171,7 @@ stdenv.mkDerivation rec {
   nativeInstallCheckInputs = with python3.pkgs; [
     pytestCheckHook
     pytest-env
+    filelock
     lxml
   ];
   disabledTestPaths = [
