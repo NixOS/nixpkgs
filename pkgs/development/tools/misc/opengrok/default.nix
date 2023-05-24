@@ -28,5 +28,6 @@ stdenv.mkDerivation rec {
     homepage = "https://opengrok.github.io/OpenGrok/";
     license = licenses.cddl;
     maintainers = [ ];
+    platforms = platforms.all;
   };
 }
