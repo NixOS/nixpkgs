@@ -1,57 +1,55 @@
-{ buildPythonPackage
-, fetchPypi
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
 , pythonOlder
-, lib
 , setuptools-scm
-, pytestCheckHook
-, typing-extensions
-, sphinxHook
 , sphinx-autodoc-typehints
 , sphinx-rtd-theme
-, glibcLocales
+, sphinxHook
+, importlib-metadata
+, typing-extensions
+, mypy
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
   pname = "typeguard";
-  version = "2.13.3";
-  disabled = pythonOlder "3.5";
+  version = "3.0.2";
+  format = "pyproject";
+  disabled = pythonOlder "3.7";
   outputs = [ "out" "doc" ];
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "00edaa8da3a133674796cf5ea87d9f4b4c367d77476e185e80251cc13dfbb8c4";
+  src = fetchFromGitHub {
+    owner = "agronholm";
+    repo = "typeguard";
+    rev = "refs/tags/${version}";
+    hash = "sha256-1Cl34HDbAEiTFMMVgYlCv9e6RtwHu7h7PgpCttuCu3c=";
   };
 
+  SETUPTOOLS_SCM_PRETEND_VERSION = version;
+
   nativeBuildInputs = [
-    glibcLocales
     setuptools-scm
-    sphinxHook
     sphinx-autodoc-typehints
     sphinx-rtd-theme
+    sphinxHook
   ];
 
-  LC_ALL = "en_US.utf-8";
-
-  postPatch = ''
-    substituteInPlace setup.cfg --replace " --cov" ""
-  '';
-
-  nativeCheckInputs = [ pytestCheckHook typing-extensions ];
-
-  disabledTestPaths = [
-    # mypy tests aren't passing with latest mypy
-    "tests/mypy"
+  propagatedBuildInputs = [
+    importlib-metadata
+    typing-extensions
   ];
 
-  disabledTests = [
-    # not compatible with python3.10
-    "test_typed_dict"
+  nativeCheckInputs = [
+    mypy
+    pytestCheckHook
   ];
 
   meta = with lib; {
-    description = "This library provides run-time type checking for functions defined with argument type annotations";
+    description = "Run-time type checker for Python";
     homepage = "https://github.com/agronholm/typeguard";
+    changelog = "https://github.com/agronholm/typeguard/releases/tag/${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ kira-bruneau ];
   };
 }
