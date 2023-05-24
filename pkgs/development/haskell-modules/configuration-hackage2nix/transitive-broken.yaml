@@ -240,7 +240,6 @@ dont-distribute-packages:
  - JsContracts
  - JsonGrammar
  - JuPyTer-notebook
- - JuicyPixels-scale-dct
  - JunkDB-driver-gdbm
  - JunkDB-driver-hashtables
  - KiCS
@@ -3377,7 +3376,6 @@ dont-distribute-packages:
  - remotion
  - repa-array
  - repa-convert
- - repa-fftw
  - repa-flow
  - repa-plugin
  - repa-stream
