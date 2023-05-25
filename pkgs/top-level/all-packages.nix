@@ -2812,6 +2812,8 @@ with pkgs;
 
   android-tools = lowPrio (darwin.apple_sdk_11_0.callPackage ../tools/misc/android-tools { });
 
+  anew = callPackage ../tools/text/anew { };
+
   anewer = callPackage ../tools/text/anewer { };
 
   angle-grinder = callPackage ../tools/text/angle-grinder { };
