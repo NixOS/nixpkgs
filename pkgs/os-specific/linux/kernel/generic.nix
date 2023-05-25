@@ -130,8 +130,6 @@ let
 
     # e.g. "defconfig"
     kernelBaseConfig = if defconfig != null then defconfig else stdenv.hostPlatform.linux-kernel.baseConfig or "defconfig";
-    # e.g. "bzImage"
-    kernelTarget = stdenv.hostPlatform.linux-kernel.target or "vmlinux";
 
     makeFlags = lib.optionals (stdenv.hostPlatform.linux-kernel ? makeFlags) stdenv.hostPlatform.linux-kernel.makeFlags
       ++ extraMakeFlags;
