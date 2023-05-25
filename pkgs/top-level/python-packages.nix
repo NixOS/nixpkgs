@@ -1850,6 +1850,8 @@ self: super: with self; {
 
   comicon = callPackage ../development/python-modules/comicon { };
 
+  command_runner = callPackage ../development/python-modules/command_runner { };
+
   connect-box = callPackage ../development/python-modules/connect_box { };
 
   connection-pool = callPackage ../development/python-modules/connection-pool { };
