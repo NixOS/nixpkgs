@@ -1,4 +1,4 @@
-{ python3Packages, lib, nrfutil, libnitrokey }:
+{ lib, python3Packages, fetchPypi, nrfutil, libnitrokey }:
 
 with python3Packages;
 

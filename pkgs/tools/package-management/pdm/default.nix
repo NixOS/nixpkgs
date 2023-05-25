@@ -1,4 +1,4 @@
-{ lib, python3, fetchFromGitHub, fetchurl }:
+{ lib, python3, fetchFromGitHub, fetchPypi }:
 let
   python = python3.override {
     # override resolvelib due to

@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , python3
+, fetchPypi
 , installShellFiles
 }:
 
