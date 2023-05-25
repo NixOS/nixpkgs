@@ -34,10 +34,8 @@ let
 in
 lib.checkListOfEnum "${pname}: accent colors" validAccents [ accent ]
 
-stdenvNoCC.mkDerivation
-{
-  inherit pname;
-  inherit version;
+stdenvNoCC.mkDerivation {
+  inherit pname version;
 
   src = fetchFromGitHub {
     owner = "adapta-projects";
