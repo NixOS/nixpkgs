@@ -50,7 +50,7 @@ bash.runCommand "${pname}-${version}" {
   cd tar-${version}
 
   # Configure
-  export CC="tcc -static -B ${tinycc.libs}/lib"
+  export CC="tcc -B ${tinycc.libs}/lib"
   bash ./configure \
     --build=${buildPlatform.config} \
     --host=${hostPlatform.config} \

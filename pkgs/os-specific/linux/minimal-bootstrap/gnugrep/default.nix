@@ -53,7 +53,7 @@ bash.runCommand "${pname}-${version}" {
   cp ${makefile} Makefile
 
   # Build
-  make CC="tcc -static -B ${tinycc.libs}/lib"
+  make CC="tcc -B ${tinycc.libs}/lib"
 
   # Install
   make install PREFIX=$out
