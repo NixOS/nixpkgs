@@ -28,13 +28,13 @@
     "vendorHash": "sha256-jK7JuARpoxq7hvq5+vTtUwcYot0YqlOZdtDwq4IqKvk="
   },
   "aiven": {
-    "hash": "sha256-WBjtrjhv3DBusE64Gu/XXOwaH4ByHoyS6tGcY6VE2iU=",
+    "hash": "sha256-adBkV3Gg75M0336GDzzxN3ONt24/KBKPC2EDDFRB7JY=",
     "homepage": "https://registry.terraform.io/providers/aiven/aiven",
     "owner": "aiven",
     "repo": "terraform-provider-aiven",
-    "rev": "v4.3.0",
+    "rev": "v4.4.0",
     "spdx": "MIT",
-    "vendorHash": "sha256-NnWYUVziSWuedgXG1jXrdYF7il8KmA5MQVlK5AEhc+U="
+    "vendorHash": "sha256-5m2ZZ/tuLz8zTt8B1TiokDZeQ9qJYeaVEhqMU04zV2s="
   },
   "akamai": {
     "hash": "sha256-P/5tLtcPqhf48DqqMKKNCOrvT+I60N9rC1W/4RdFXqY=",
@@ -428,13 +428,13 @@
     "vendorHash": null
   },
   "gitlab": {
-    "hash": "sha256-EwinLWdu7ptelUr6yNrEO8o7WiPiFGSI/tgghRSy4eA=",
+    "hash": "sha256-QH47lBtwlpW9Trb7EAmE9eNEme6PDyKUJ50QevD5GBs=",
     "homepage": "https://registry.terraform.io/providers/gitlabhq/gitlab",
     "owner": "gitlabhq",
     "repo": "terraform-provider-gitlab",
-    "rev": "v16.0.0",
+    "rev": "v16.0.2",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-g5JK0zClv7opNSHarkyrhJ1ieZeFFkzW5ctyMaObyDM="
+    "vendorHash": "sha256-KD9X7EOH1btgLtssuz1FFOGtmfNao8HBcKJDty1wtpY="
   },
   "google": {
     "hash": "sha256-lsI1hR9bhzFuepDDNKV761DXbdPJHOvm4OeHg4eVlgU=",
@@ -864,11 +864,11 @@
     "vendorHash": "sha256-2EuGZxHrpPwDicSrIf/Jx/c4LhOtE5HvTz9LkJ4xCSY="
   },
   "opsgenie": {
-    "hash": "sha256-Wbe+DyK5wKuZZX8yd3DJN+2wT8KZt+YsBwJYKnZnfcI=",
+    "hash": "sha256-vwHymj6kNTfxpqLEJixB55SeET1wtlkoN8RH8Uw0iPA=",
     "homepage": "https://registry.terraform.io/providers/opsgenie/opsgenie",
     "owner": "opsgenie",
     "repo": "terraform-provider-opsgenie",
-    "rev": "v0.6.20",
+    "rev": "v0.6.22",
     "spdx": "MPL-2.0",
     "vendorHash": null
   },
@@ -1044,13 +1044,13 @@
     "vendorHash": "sha256-NO1r/EWLgH1Gogru+qPeZ4sW7FuDENxzNnpLSKstnE8="
   },
   "spotinst": {
-    "hash": "sha256-dEHRN3JXncWC1fua293hKc27jjPdFvyO7p0Zx9YNfWk=",
+    "hash": "sha256-TAuPs8t7QsAJWxgCXfb2g3f+8pyCs5yxQFBL6U+4GSo=",
     "homepage": "https://registry.terraform.io/providers/spotinst/spotinst",
     "owner": "spotinst",
     "repo": "terraform-provider-spotinst",
-    "rev": "v1.117.0",
+    "rev": "v1.119.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-6ZxurzzOa/1TXOApQNLFUrY+Ryxc7n+JwZG76JuePGc="
+    "vendorHash": "sha256-VZlTrUcfE7ZoAU3wWrM31pZbKSsUc1Oph7b8wb6k8cY="
   },
   "stackpath": {
     "hash": "sha256-7KQUddq+M35WYyAIAL8sxBjAaXFcsczBRO1R5HURUZg=",

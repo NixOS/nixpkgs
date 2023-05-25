@@ -2,13 +2,9 @@
 
 { name ? "${args'.pname}-${args'.version}"
 , src
-, buildInputs ? []
 , nativeBuildInputs ? []
 , passthru ? {}
 , patches ? []
-
-# Go linker flags, passed to go via -ldflags
-, ldflags ? []
 
 # Go tags, passed to go via -tag
 , tags ? []
@@ -54,8 +50,6 @@
 , buildFlagsArray ? ""
 
 , ... }@args':
-
-with builtins;
 
 assert goPackagePath != "" -> throw "`goPackagePath` is not needed with `buildGoModule`";
 assert (vendorSha256 == "_unset" && vendorHash == "_unset") -> throw "either `vendorHash` or `vendorSha256` is required";

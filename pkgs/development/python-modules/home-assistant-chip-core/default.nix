@@ -11,9 +11,12 @@
 , openssl_1_1
 
 # propagates
+, aenum
 , coloredlogs
 , construct
+, cryptography
 , dacite
+, ecdsa
 , rich
 , pyyaml
 , ipdb
@@ -24,7 +27,7 @@
 
 buildPythonPackage rec {
   pname = "home-assistant-chip-core";
-  version = "2023.4.1";
+  version = "2023.5.2";
   format = "wheel";
 
   disabled = pythonOlder "3.7";
@@ -33,11 +36,11 @@ buildPythonPackage rec {
     system = {
       "aarch64-linux" = {
         name = "aarch64";
-        hash = "sha256-Rke4cVHdpJjrqqiNKWFwglerr61VyiTNKj8AhLE0+Xo=";
+        hash = "sha256-25TzM5UMkeGJe4NLUWQXeZ8TQvfdd9NAdsRIw870/0s=";
       };
       "x86_64-linux" = {
         name = "x86_64";
-        hash = "sha256-ihbbNFuR+3SLzdZgApJawpwnZeo1HPoOBWJXkY+5RSM=";
+        hash = "sha256-KfQ/Ta+BqOHCrB+6ipaPWKkM7fH/ChtkrvtZdVrNpnI=";
       };
     }.${stdenv.system} or (throw "Unsupported system");
   in fetchPypi {
@@ -59,9 +62,12 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
+    aenum
     coloredlogs
     construct
+    cryptography
     dacite
+    ecdsa
     rich
     pyyaml
     ipdb

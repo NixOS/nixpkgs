@@ -6,14 +6,14 @@
 
 buildPythonPackage rec {
   pname = "policyuniverse";
-  version = "1.5.0.20220613";
+  version = "1.5.0.20230523";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-xmsfuQd1BkOhmH60GbIRKuP5xSfAE0KVJfn6uYnJotc=";
+    hash = "sha256-dnyP9EiGD2zVI5sGcswwC15ti+lrnjEnb08w3WM/xmQ=";
   };
 
   # Tests are not shipped and there are no GitHub tags

@@ -4,9 +4,10 @@
 , substituteAll
 , esbuild
 , buildGoModule
+, buildWebExtension ? false
 }:
 buildNpmPackage rec {
-  pname = "vencord-web-extension";
+  pname = "vencord";
   version = "1.1.6";
 
   src = fetchFromGitHub {
@@ -34,7 +35,7 @@ buildNpmPackage rec {
 
   npmDepsHash = "sha256-jKSdeyQ8oHw7ZGby0XzDg4O8mtH276ykVuBcw7dU/Ls=";
   npmFlags = [ "--legacy-peer-deps" ];
-  npmBuildScript = "buildWeb";
+  npmBuildScript = if buildWebExtension then "buildWeb" else "build";
 
   prePatch = ''
     cp ${./package-lock.json} ./package-lock.json
@@ -47,14 +48,16 @@ buildNpmPackage rec {
     })
   ];
 
-  installPhase = ''
-    cp -r dist/extension-unpacked $out
+  installPhase = if buildWebExtension then ''
+    cp -r dist/extension-unpacked/ $out
+  '' else ''
+    cp -r dist/ $out
   '';
 
   meta = with lib; {
     description = "Vencord web extension";
     homepage = "https://github.com/Vendicated/Vencord";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ FlafyDev NotAShelf ];
+    maintainers = with maintainers; [ FlafyDev NotAShelf Scrumplex ];
   };
 }
