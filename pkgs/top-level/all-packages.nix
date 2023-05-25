@@ -22952,6 +22952,8 @@ with pkgs;
 
   fypp = python3Packages.callPackage ../development/python-modules/fypp { };
 
+  dbcsr = callPackage ../development/libraries/science/math/dbcsr { };
+
   ## libGL/libGLU/Mesa stuff
 
   # Default libGL implementation, should provide headers and
